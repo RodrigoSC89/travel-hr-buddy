@@ -1,15 +1,15 @@
 // @ts-nocheck
-import { useState, useEffect } from 'react';
-import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
-import { Badge } from '@/components/ui/badge';
-import { Button } from '@/components/ui/button';
-import { RefreshCw, CheckCircle, XCircle, AlertCircle, Activity } from 'lucide-react';
-import { supabase } from '@/integrations/supabase/client';
-import { toast } from 'sonner';
+import { useState, useEffect } from "react";
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import { Badge } from "@/components/ui/badge";
+import { Button } from "@/components/ui/button";
+import { RefreshCw, CheckCircle, XCircle, AlertCircle, Activity } from "lucide-react";
+import { supabase } from "@/integrations/supabase/client";
+import { toast } from "sonner";
 
 interface ServiceStatus {
   name: string;
-  status: 'healthy' | 'degraded' | 'down';
+  status: "healthy" | "degraded" | "down";
   uptime: number;
   lastError: string | null;
   lastCheck: string;
@@ -66,8 +66,8 @@ export default function SystemStatusPanel() {
       
       setLastUpdate(new Date());
     } catch (error: any) {
-      console.error('Error checking system health:', error);
-      toast.error('Failed to check system health');
+      console.error("Error checking system health:", error);
+      toast.error("Failed to check system health");
     } finally {
       setLoading(false);
     }
@@ -76,16 +76,16 @@ export default function SystemStatusPanel() {
   async function checkSupabase(): Promise<ServiceStatus> {
     const startTime = Date.now();
     try {
-      const { error } = await supabase.from('system_health').select('count').limit(1);
+      const { error } = await supabase.from("system_health").select("count").limit(1);
       const responseTime = Date.now() - startTime;
       
-      if (error && error.code !== 'PGRST116') {
+      if (error && error.code !== "PGRST116") {
         throw error;
       }
       
       return {
-        name: 'Supabase Database',
-        status: responseTime < 500 ? 'healthy' : 'degraded',
+        name: "Supabase Database",
+        status: responseTime < 500 ? "healthy" : "degraded",
         uptime: 99.9,
         lastError: null,
         lastCheck: new Date().toISOString(),
@@ -93,8 +93,8 @@ export default function SystemStatusPanel() {
       };
     } catch (error: any) {
       return {
-        name: 'Supabase Database',
-        status: 'down',
+        name: "Supabase Database",
+        status: "down",
         uptime: 0,
         lastError: error.message,
         lastCheck: new Date().toISOString(),
@@ -108,17 +108,17 @@ export default function SystemStatusPanel() {
       const isHealthy = Math.random() > 0.1;
       
       return {
-        name: 'LLM API',
-        status: isHealthy ? 'healthy' : 'degraded',
+        name: "LLM API",
+        status: isHealthy ? "healthy" : "degraded",
         uptime: 98.5,
-        lastError: isHealthy ? null : 'Rate limit exceeded',
+        lastError: isHealthy ? null : "Rate limit exceeded",
         lastCheck: new Date().toISOString(),
         responseTime: Math.floor(Math.random() * 500) + 100,
       };
     } catch (error: any) {
       return {
-        name: 'LLM API',
-        status: 'down',
+        name: "LLM API",
+        status: "down",
         uptime: 0,
         lastError: error.message,
         lastCheck: new Date().toISOString(),
@@ -131,17 +131,17 @@ export default function SystemStatusPanel() {
       const isHealthy = Math.random() > 0.15;
       
       return {
-        name: 'MQTT Broker',
-        status: isHealthy ? 'healthy' : 'degraded',
+        name: "MQTT Broker",
+        status: isHealthy ? "healthy" : "degraded",
         uptime: 97.2,
-        lastError: isHealthy ? null : 'Connection timeout',
+        lastError: isHealthy ? null : "Connection timeout",
         lastCheck: new Date().toISOString(),
         responseTime: Math.floor(Math.random() * 200) + 50,
       };
     } catch (error: any) {
       return {
-        name: 'MQTT Broker',
-        status: 'down',
+        name: "MQTT Broker",
+        status: "down",
         uptime: 0,
         lastError: error.message,
         lastCheck: new Date().toISOString(),
@@ -154,17 +154,17 @@ export default function SystemStatusPanel() {
       const isHealthy = Math.random() > 0.05;
       
       return {
-        name: 'WebSocket',
-        status: isHealthy ? 'healthy' : 'degraded',
+        name: "WebSocket",
+        status: isHealthy ? "healthy" : "degraded",
         uptime: 99.5,
-        lastError: isHealthy ? null : 'Reconnection attempt',
+        lastError: isHealthy ? null : "Reconnection attempt",
         lastCheck: new Date().toISOString(),
         responseTime: Math.floor(Math.random() * 100) + 20,
       };
     } catch (error: any) {
       return {
-        name: 'WebSocket',
-        status: 'down',
+        name: "WebSocket",
+        status: "down",
         uptime: 0,
         lastError: error.message,
         lastCheck: new Date().toISOString(),
@@ -177,17 +177,17 @@ export default function SystemStatusPanel() {
       const isHealthy = Math.random() > 0.2;
       
       return {
-        name: 'Edge Devices',
-        status: isHealthy ? 'healthy' : 'degraded',
+        name: "Edge Devices",
+        status: isHealthy ? "healthy" : "degraded",
         uptime: 95.8,
-        lastError: isHealthy ? null : 'Device offline: edge-001',
+        lastError: isHealthy ? null : "Device offline: edge-001",
         lastCheck: new Date().toISOString(),
         responseTime: Math.floor(Math.random() * 300) + 100,
       };
     } catch (error: any) {
       return {
-        name: 'Edge Devices',
-        status: 'down',
+        name: "Edge Devices",
+        status: "down",
         uptime: 0,
         lastError: error.message,
         lastCheck: new Date().toISOString(),
@@ -197,40 +197,40 @@ export default function SystemStatusPanel() {
 
   function getStatusIcon(status: string) {
     switch (status) {
-      case 'healthy':
-        return <CheckCircle className="h-5 w-5 text-green-500" />;
-      case 'degraded':
-        return <AlertCircle className="h-5 w-5 text-yellow-500" />;
-      case 'down':
-        return <XCircle className="h-5 w-5 text-red-500" />;
-      default:
-        return <Activity className="h-5 w-5 text-gray-500" />;
+    case "healthy":
+      return <CheckCircle className="h-5 w-5 text-green-500" />;
+    case "degraded":
+      return <AlertCircle className="h-5 w-5 text-yellow-500" />;
+    case "down":
+      return <XCircle className="h-5 w-5 text-red-500" />;
+    default:
+      return <Activity className="h-5 w-5 text-gray-500" />;
     }
   }
 
   function getStatusBadge(status: string) {
     switch (status) {
-      case 'healthy':
-        return <Badge className="bg-green-500">Healthy</Badge>;
-      case 'degraded':
-        return <Badge className="bg-yellow-500">Degraded</Badge>;
-      case 'down':
-        return <Badge className="bg-red-500">Down</Badge>;
-      default:
-        return <Badge>Unknown</Badge>;
+    case "healthy":
+      return <Badge className="bg-green-500">Healthy</Badge>;
+    case "degraded":
+      return <Badge className="bg-yellow-500">Degraded</Badge>;
+    case "down":
+      return <Badge className="bg-red-500">Down</Badge>;
+    default:
+      return <Badge>Unknown</Badge>;
     }
   }
 
-  function getOverallStatus(): 'healthy' | 'degraded' | 'critical' {
-    if (!health) return 'degraded';
+  function getOverallStatus(): "healthy" | "degraded" | "critical" {
+    if (!health) return "degraded";
     
     const services = Object.values(health);
-    const downCount = services.filter(s => s.status === 'down').length;
-    const degradedCount = services.filter(s => s.status === 'degraded').length;
+    const downCount = services.filter(s => s.status === "down").length;
+    const degradedCount = services.filter(s => s.status === "degraded").length;
     
-    if (downCount > 0) return 'critical';
-    if (degradedCount > 0) return 'degraded';
-    return 'healthy';
+    if (downCount > 0) return "critical";
+    if (degradedCount > 0) return "degraded";
+    return "healthy";
   }
 
   return (
@@ -238,7 +238,7 @@ export default function SystemStatusPanel() {
       <div className="flex justify-between items-center">
         <h1 className="text-3xl font-bold">System Status</h1>
         <Button onClick={checkSystemHealth} disabled={loading}>
-          <RefreshCw className={`mr-2 h-4 w-4 ${loading ? 'animate-spin' : ''}`} />
+          <RefreshCw className={`mr-2 h-4 w-4 ${loading ? "animate-spin" : ""}`} />
           Refresh
         </Button>
       </div>
@@ -321,9 +321,9 @@ export default function SystemStatusPanel() {
                   <div>
                     <div className="font-medium">{service.name}</div>
                     <div className="text-sm text-gray-600">
-                      {service.status === 'healthy' ? 'All systems operational' : 
-                       service.status === 'degraded' ? 'Performance degraded' : 
-                       'Service unavailable'}
+                      {service.status === "healthy" ? "All systems operational" : 
+                        service.status === "degraded" ? "Performance degraded" : 
+                          "Service unavailable"}
                     </div>
                   </div>
                 </div>

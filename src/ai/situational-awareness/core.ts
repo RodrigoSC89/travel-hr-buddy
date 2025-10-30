@@ -60,7 +60,7 @@ export class SituationalAwarenessCore {
    */
   public async initialize(config?: Partial<ObserverConfig>): Promise<void> {
     if (this.isInitialized) {
-      this.log('warn', 'analysis', 'Core already initialized');
+      this.log("warn", "analysis", "Core already initialized");
       return;
     }
 
@@ -77,11 +77,11 @@ export class SituationalAwarenessCore {
     }
 
     this.isInitialized = true;
-    this.log('info', 'analysis', 'Situational Awareness Core initialized', {
+    this.log("info", "analysis", "Situational Awareness Core initialized", {
       config: this.observerConfig,
     });
 
-    BridgeLink.emit('situational-awareness:initialized', 'SituationalAwareness', {
+    BridgeLink.emit("situational-awareness:initialized", "SituationalAwareness", {
       timestamp: Date.now(),
     });
   }
@@ -93,7 +93,7 @@ export class SituationalAwarenessCore {
     source: ModuleSource,
     dataSource: DataSource,
     data: Record<string, any>,
-    metadata?: ModuleContextData['metadata']
+    metadata?: ModuleContextData["metadata"]
   ): Promise<void> {
     const context: ModuleContextData = {
       source,
@@ -117,14 +117,14 @@ export class SituationalAwarenessCore {
       this.currentState.modules[source].status = this.determineModuleStatus(data);
     }
 
-    this.log('debug', 'data_collection', `Context collected from ${source}`, {
+    this.log("debug", "data_collection", `Context collected from ${source}`, {
       source,
       dataSource,
       dataKeys: Object.keys(data),
     });
 
     // Emit event
-    BridgeLink.emit('situational-awareness:context-collected', 'SituationalAwareness', {
+    BridgeLink.emit("situational-awareness:context-collected", "SituationalAwareness", {
       source,
       timestamp: context.timestamp,
     });
@@ -160,21 +160,21 @@ export class SituationalAwarenessCore {
       // Update overall status
       this.updateOverallStatus();
 
-      this.log('info', 'analysis', 'Analysis cycle completed', {
+      this.log("info", "analysis", "Analysis cycle completed", {
         insightsGenerated: insights.length,
         alertsGenerated: alerts.length,
         overallStatus: this.currentState.overall_status,
       });
 
       // Emit analysis complete event
-      BridgeLink.emit('situational-awareness:analysis-complete', 'SituationalAwareness', {
+      BridgeLink.emit("situational-awareness:analysis-complete", "SituationalAwareness", {
         timestamp: Date.now(),
         insights: insights.length,
         alerts: alerts.length,
       });
     } catch (error) {
-      this.log('error', 'analysis', 'Analysis failed', {
-        error: error instanceof Error ? error.message : 'Unknown error',
+      this.log("error", "analysis", "Analysis failed", {
+        error: error instanceof Error ? error.message : "Unknown error",
       });
     }
   }
@@ -201,13 +201,13 @@ export class SituationalAwarenessCore {
           const latest = contexts[contexts.length - 1];
           return `${source}: ${JSON.stringify(latest.data)}`;
         })
-        .join('\n');
+        .join("\n");
 
       const response = await runOpenAI({
-        model: 'gpt-4o-mini',
+        model: "gpt-4o-mini",
         messages: [
           {
-            role: 'system',
+            role: "system",
             content: `You are a maritime operations AI analyst. Analyze the following situational data and generate actionable insights. Focus on:
 - Risks and opportunities
 - System optimizations
@@ -217,7 +217,7 @@ export class SituationalAwarenessCore {
 Respond in JSON format with an array of insights, each containing: type, severity, title, description, affectedModules, confidence, suggestedActions.`,
           },
           {
-            role: 'user',
+            role: "user",
             content: `Analyze this situational data:\n${contextSummary}`,
           },
         ],
@@ -234,10 +234,10 @@ Respond in JSON format with an array of insights, each containing: type, severit
           insights.push({
             id: `insight-${Date.now()}-${index}`,
             timestamp: Date.now(),
-            type: item.type || 'risk',
-            severity: item.severity || 'medium',
-            title: item.title || 'Situational Insight',
-            description: item.description || '',
+            type: item.type || "risk",
+            severity: item.severity || "medium",
+            title: item.title || "Situational Insight",
+            description: item.description || "",
             affectedModules: item.affectedModules || [],
             confidence: item.confidence || 0.7,
             suggestedActions: item.suggestedActions || [],
@@ -249,19 +249,19 @@ Respond in JSON format with an array of insights, each containing: type, severit
         insights.push({
           id: `insight-${Date.now()}`,
           timestamp: Date.now(),
-          type: 'risk',
-          severity: 'medium',
-          title: 'AI Analysis',
+          type: "risk",
+          severity: "medium",
+          title: "AI Analysis",
           description: response.content,
           affectedModules: Object.keys(contextBySource) as ModuleSource[],
           confidence: 0.6,
-          suggestedActions: ['Review the analysis and take appropriate action'],
+          suggestedActions: ["Review the analysis and take appropriate action"],
           context: {},
         });
       }
     } catch (error) {
-      this.log('error', 'analysis', 'Failed to generate insights', {
-        error: error instanceof Error ? error.message : 'Unknown error',
+      this.log("error", "analysis", "Failed to generate insights", {
+        error: error instanceof Error ? error.message : "Unknown error",
       });
     }
 
@@ -278,13 +278,13 @@ Respond in JSON format with an array of insights, each containing: type, severit
 
     // Convert high-severity insights to alerts
     insights
-      .filter(i => i.severity === 'critical' || i.severity === 'high')
+      .filter(i => i.severity === "critical" || i.severity === "high")
       .forEach(insight => {
         const tacticalDecisions = insight.suggestedActions.map((action, index) => ({
           id: `decision-${insight.id}-${index}`,
           action,
-          priority: insight.severity === 'critical' ? 9 : 7,
-          estimatedImpact: `Address ${insight.type} in ${insight.affectedModules.join(', ')}`,
+          priority: insight.severity === "critical" ? 9 : 7,
+          estimatedImpact: `Address ${insight.type} in ${insight.affectedModules.join(", ")}`,
           implementationSteps: [action],
           risks: [],
           confidence: insight.confidence,
@@ -294,7 +294,7 @@ Respond in JSON format with an array of insights, each containing: type, severit
           id: `alert-${insight.id}`,
           timestamp: insight.timestamp,
           severity: insight.severity as AlertSeverity,
-          type: 'preventive',
+          type: "preventive",
           title: insight.title,
           description: insight.description,
           triggerConditions: [`${insight.type} detected with ${Math.round(insight.confidence * 100)}% confidence`],
@@ -349,7 +349,7 @@ Respond in JSON format with an array of insights, each containing: type, severit
       this.observerConfig.interval
     );
 
-    this.log('info', 'analysis', 'Observer mode started', {
+    this.log("info", "analysis", "Observer mode started", {
       interval: this.observerConfig.interval,
     });
   }
@@ -361,7 +361,7 @@ Respond in JSON format with an array of insights, each containing: type, severit
     if (this.observerInterval) {
       clearInterval(this.observerInterval);
       this.observerInterval = null;
-      this.log('info', 'analysis', 'Observer mode stopped');
+      this.log("info", "analysis", "Observer mode stopped");
     }
   }
 
@@ -385,77 +385,77 @@ Respond in JSON format with an array of insights, each containing: type, severit
    */
   private setupDataSourceListeners(): void {
     // Listen for navigation data
-    BridgeLink.on('navigation:update', (_source, data) => {
-      this.collectContext('navigation', 'internal', data);
+    BridgeLink.on("navigation:update", (_source, data) => {
+      this.collectContext("navigation", "internal", data);
     });
 
     // Listen for weather data
-    BridgeLink.on('weather:update', (_source, data) => {
-      this.collectContext('weather', 'internal', data);
+    BridgeLink.on("weather:update", (_source, data) => {
+      this.collectContext("weather", "internal", data);
     });
 
     // Listen for failure reports
-    BridgeLink.on('system:failure', (_source, data) => {
-      this.collectContext('failures', 'internal', data);
+    BridgeLink.on("system:failure", (_source, data) => {
+      this.collectContext("failures", "internal", data);
     });
 
     // Listen for crew updates
-    BridgeLink.on('crew:update', (_source, data) => {
-      this.collectContext('crew', 'internal', data);
+    BridgeLink.on("crew:update", (_source, data) => {
+      this.collectContext("crew", "internal", data);
     });
 
     // Listen for sensor data
-    BridgeLink.on('sensors:data', (_source, data) => {
-      this.collectContext('sensors', 'internal', data);
+    BridgeLink.on("sensors:data", (_source, data) => {
+      this.collectContext("sensors", "internal", data);
     });
 
     // Listen for mission updates
-    BridgeLink.on('mission:update', (_source, data) => {
-      this.collectContext('mission', 'internal', data);
+    BridgeLink.on("mission:update", (_source, data) => {
+      this.collectContext("mission", "internal", data);
     });
   }
 
   /**
    * Determine module status based on data
    */
-  private determineModuleStatus(data: Record<string, any>): 'healthy' | 'degraded' | 'failed' | 'unknown' {
+  private determineModuleStatus(data: Record<string, any>): "healthy" | "degraded" | "failed" | "unknown" {
     if (!data || Object.keys(data).length === 0) {
-      return 'unknown';
+      return "unknown";
     }
 
     // Check for error indicators
-    if (data.error || data.failed || data.status === 'failed') {
-      return 'failed';
+    if (data.error || data.failed || data.status === "failed") {
+      return "failed";
     }
 
-    if (data.warning || data.degraded || data.status === 'degraded') {
-      return 'degraded';
+    if (data.warning || data.degraded || data.status === "degraded") {
+      return "degraded";
     }
 
-    return 'healthy';
+    return "healthy";
   }
 
   /**
    * Update overall system status
    */
   private updateOverallStatus(): void {
-    const criticalAlerts = this.currentState.activeAlerts.filter(a => a.severity === 'critical');
-    const highAlerts = this.currentState.activeAlerts.filter(a => a.severity === 'high');
-    const failedModules = Object.values(this.currentState.modules).filter(m => m.status === 'failed');
+    const criticalAlerts = this.currentState.activeAlerts.filter(a => a.severity === "critical");
+    const highAlerts = this.currentState.activeAlerts.filter(a => a.severity === "high");
+    const failedModules = Object.values(this.currentState.modules).filter(m => m.status === "failed");
 
     if (criticalAlerts.length > 0 || failedModules.length > 0) {
-      this.currentState.overall_status = 'critical';
+      this.currentState.overall_status = "critical";
     } else if (highAlerts.length > 2) {
-      this.currentState.overall_status = 'warning';
+      this.currentState.overall_status = "warning";
     } else if (highAlerts.length > 0) {
-      this.currentState.overall_status = 'caution';
+      this.currentState.overall_status = "caution";
     } else {
-      this.currentState.overall_status = 'normal';
+      this.currentState.overall_status = "normal";
     }
 
     // Calculate system health
     const moduleStatuses = Object.values(this.currentState.modules);
-    const healthyCount = moduleStatuses.filter(m => m.status === 'healthy').length;
+    const healthyCount = moduleStatuses.filter(m => m.status === "healthy").length;
     this.currentState.systemHealth = moduleStatuses.length > 0 
       ? healthyCount / moduleStatuses.length 
       : 1.0;
@@ -465,8 +465,8 @@ Respond in JSON format with an array of insights, each containing: type, severit
    * Log a message
    */
   private log(
-    level: SituationalLogEntry['level'],
-    category: SituationalLogEntry['category'],
+    level: SituationalLogEntry["level"],
+    category: SituationalLogEntry["category"],
     message: string,
     context: Record<string, any> = {}
   ): void {
@@ -487,10 +487,10 @@ Respond in JSON format with an array of insights, each containing: type, severit
     }
 
     // Emit log event
-    BridgeLink.emit('situational-awareness:log', 'SituationalAwareness', entry);
+    BridgeLink.emit("situational-awareness:log", "SituationalAwareness", entry);
 
     // Console output for development
-    const logFn = level === 'error' ? console.error : level === 'warn' ? console.warn : console.log;
+    const logFn = level === "error" ? console.error : level === "warn" ? console.warn : console.log;
     logFn(`[SituationalAwareness] [${category}] ${message}`, context);
   }
 
@@ -501,8 +501,8 @@ Respond in JSON format with an array of insights, each containing: type, severit
     return {
       enabled: true,
       interval: 30000, // 30 seconds
-      sources: ['mqtt', 'supabase', 'websocket', 'internal'],
-      modules: ['navigation', 'weather', 'failures', 'crew', 'sensors', 'mission', 'system'],
+      sources: ["mqtt", "supabase", "websocket", "internal"],
+      modules: ["navigation", "weather", "failures", "crew", "sensors", "mission", "system"],
       alertThresholds: {
         critical: 0.9,
         high: 0.7,
@@ -516,19 +516,19 @@ Respond in JSON format with an array of insights, each containing: type, severit
    * Get initial state
    */
   private getInitialState(): SituationalState {
-    const modules: SituationalState['modules'] = {
-      navigation: { status: 'unknown', lastUpdate: 0, metrics: {} },
-      weather: { status: 'unknown', lastUpdate: 0, metrics: {} },
-      failures: { status: 'unknown', lastUpdate: 0, metrics: {} },
-      crew: { status: 'unknown', lastUpdate: 0, metrics: {} },
-      sensors: { status: 'unknown', lastUpdate: 0, metrics: {} },
-      mission: { status: 'unknown', lastUpdate: 0, metrics: {} },
-      system: { status: 'unknown', lastUpdate: 0, metrics: {} },
+    const modules: SituationalState["modules"] = {
+      navigation: { status: "unknown", lastUpdate: 0, metrics: {} },
+      weather: { status: "unknown", lastUpdate: 0, metrics: {} },
+      failures: { status: "unknown", lastUpdate: 0, metrics: {} },
+      crew: { status: "unknown", lastUpdate: 0, metrics: {} },
+      sensors: { status: "unknown", lastUpdate: 0, metrics: {} },
+      mission: { status: "unknown", lastUpdate: 0, metrics: {} },
+      system: { status: "unknown", lastUpdate: 0, metrics: {} },
     };
 
     return {
       timestamp: Date.now(),
-      overall_status: 'normal',
+      overall_status: "normal",
       modules,
       activeAlerts: [],
       recentInsights: [],
@@ -545,7 +545,7 @@ Respond in JSON format with an array of insights, each containing: type, severit
     this.logs = [];
     this.isInitialized = false;
     
-    BridgeLink.emit('situational-awareness:cleanup', 'SituationalAwareness', {
+    BridgeLink.emit("situational-awareness:cleanup", "SituationalAwareness", {
       timestamp: Date.now(),
     });
   }

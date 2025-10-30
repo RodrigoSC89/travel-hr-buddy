@@ -27,9 +27,9 @@ vi.mock("@/integrations/supabase/client", () => ({
 interface Mission {
   id: string;
   name: string;
-  type: 'tactical' | 'strategic' | 'emergency' | 'training';
-  status: 'planning' | 'active' | 'paused' | 'completed' | 'cancelled';
-  priority: 'low' | 'normal' | 'high' | 'critical';
+  type: "tactical" | "strategic" | "emergency" | "training";
+  status: "planning" | "active" | "paused" | "completed" | "cancelled";
+  priority: "low" | "normal" | "high" | "critical";
   objectives: MissionObjective[];
   resources: Resource[];
   assignedAgents: string[];
@@ -43,23 +43,23 @@ interface Mission {
 interface MissionObjective {
   id: string;
   description: string;
-  status: 'pending' | 'in_progress' | 'completed' | 'failed';
+  status: "pending" | "in_progress" | "completed" | "failed";
   priority: number;
   completionPercentage: number;
 }
 
 interface Resource {
   id: string;
-  type: 'personnel' | 'equipment' | 'vehicle' | 'system';
+  type: "personnel" | "equipment" | "vehicle" | "system";
   name: string;
   quantity: number;
-  status: 'requested' | 'allocated' | 'in_use' | 'released';
+  status: "requested" | "allocated" | "in_use" | "released";
 }
 
 interface MissionEvent {
   id: string;
   missionId: string;
-  type: 'started' | 'objective_completed' | 'resource_allocated' | 'paused' | 'resumed' | 'completed';
+  type: "started" | "objective_completed" | "resource_allocated" | "paused" | "resumed" | "completed";
   timestamp: Date;
   data: any;
 }
@@ -70,12 +70,12 @@ class MissionControlService {
   private events: MissionEvent[] = [];
   private counter = 0;
 
-  async createMission(mission: Omit<Mission, 'id' | 'status' | 'progress'>): Promise<Mission> {
+  async createMission(mission: Omit<Mission, "id" | "status" | "progress">): Promise<Mission> {
     this.counter++;
     const newMission: Mission = {
       ...mission,
       id: `MISSION-${Date.now()}-${this.counter}`,
-      status: 'planning',
+      status: "planning",
       progress: 0
     };
 
@@ -87,17 +87,17 @@ class MissionControlService {
     const mission = this.missions.get(missionId);
     if (!mission) return false;
 
-    if (mission.status !== 'planning' && mission.status !== 'paused') {
+    if (mission.status !== "planning" && mission.status !== "paused") {
       return false;
     }
 
-    mission.status = 'active';
+    mission.status = "active";
     mission.startTime = new Date();
 
     this.recordEvent({
       id: `EVENT-${Date.now()}`,
       missionId,
-      type: 'started',
+      type: "started",
       timestamp: new Date(),
       data: {}
     });
@@ -107,14 +107,14 @@ class MissionControlService {
 
   async pauseMission(missionId: string): Promise<boolean> {
     const mission = this.missions.get(missionId);
-    if (!mission || mission.status !== 'active') return false;
+    if (!mission || mission.status !== "active") return false;
 
-    mission.status = 'paused';
+    mission.status = "paused";
 
     this.recordEvent({
       id: `EVENT-${Date.now()}`,
       missionId,
-      type: 'paused',
+      type: "paused",
       timestamp: new Date(),
       data: {}
     });
@@ -124,14 +124,14 @@ class MissionControlService {
 
   async resumeMission(missionId: string): Promise<boolean> {
     const mission = this.missions.get(missionId);
-    if (!mission || mission.status !== 'paused') return false;
+    if (!mission || mission.status !== "paused") return false;
 
-    mission.status = 'active';
+    mission.status = "active";
 
     this.recordEvent({
       id: `EVENT-${Date.now()}`,
       missionId,
-      type: 'resumed',
+      type: "resumed",
       timestamp: new Date(),
       data: {}
     });
@@ -143,7 +143,7 @@ class MissionControlService {
     const mission = this.missions.get(missionId);
     if (!mission) return false;
 
-    mission.status = 'completed';
+    mission.status = "completed";
     mission.endTime = new Date();
 
     if (mission.startTime) {
@@ -154,7 +154,7 @@ class MissionControlService {
 
     // Mark all objectives as completed
     mission.objectives.forEach(obj => {
-      obj.status = 'completed';
+      obj.status = "completed";
       obj.completionPercentage = 100;
     });
 
@@ -163,7 +163,7 @@ class MissionControlService {
     this.recordEvent({
       id: `EVENT-${Date.now()}`,
       missionId,
-      type: 'completed',
+      type: "completed",
       timestamp: new Date(),
       data: {}
     });
@@ -175,7 +175,7 @@ class MissionControlService {
     const mission = this.missions.get(missionId);
     if (!mission) return false;
 
-    mission.status = 'cancelled';
+    mission.status = "cancelled";
     return true;
   }
 
@@ -186,17 +186,17 @@ class MissionControlService {
     const objective = mission.objectives.find(o => o.id === objectiveId);
     if (!objective) return false;
 
-    objective.status = status as MissionObjective['status'];
+    objective.status = status as MissionObjective["status"];
     objective.completionPercentage = percentage;
 
     // Update overall mission progress
     this.updateMissionProgress(missionId);
 
-    if (status === 'completed') {
+    if (status === "completed") {
       this.recordEvent({
         id: `EVENT-${Date.now()}`,
         missionId,
-        type: 'objective_completed',
+        type: "objective_completed",
         timestamp: new Date(),
         data: { objectiveId, description: objective.description }
       });
@@ -212,15 +212,15 @@ class MissionControlService {
     const existingResourceIndex = mission.resources.findIndex(r => r.id === resource.id);
     
     if (existingResourceIndex >= 0) {
-      mission.resources[existingResourceIndex] = { ...resource, status: 'allocated' };
+      mission.resources[existingResourceIndex] = { ...resource, status: "allocated" };
     } else {
-      mission.resources.push({ ...resource, status: 'allocated' });
+      mission.resources.push({ ...resource, status: "allocated" });
     }
 
     this.recordEvent({
       id: `EVENT-${Date.now()}`,
       missionId,
-      type: 'resource_allocated',
+      type: "resource_allocated",
       timestamp: new Date(),
       data: { resource }
     });
@@ -235,7 +235,7 @@ class MissionControlService {
     const resource = mission.resources.find(r => r.id === resourceId);
     if (!resource) return false;
 
-    resource.status = 'released';
+    resource.status = "released";
     return true;
   }
 
@@ -247,7 +247,7 @@ class MissionControlService {
     return Array.from(this.missions.values());
   }
 
-  getMissionsByStatus(status: Mission['status']): Mission[] {
+  getMissionsByStatus(status: Mission["status"]): Mission[] {
     return Array.from(this.missions.values()).filter(m => m.status === status);
   }
 
@@ -296,39 +296,39 @@ describe("Mission Control Tests", () => {
     it("should create a new mission in planning state", async () => {
       const missionData = {
         name: "Emergency Response",
-        type: 'emergency' as const,
-        priority: 'critical' as const,
+        type: "emergency" as const,
+        priority: "critical" as const,
         objectives: [
           {
-            id: 'obj-1',
-            description: 'Deploy response team',
-            status: 'pending' as const,
+            id: "obj-1",
+            description: "Deploy response team",
+            status: "pending" as const,
             priority: 1,
             completionPercentage: 0
           }
         ],
         resources: [],
-        assignedAgents: ['agent-1'],
+        assignedAgents: ["agent-1"],
         estimatedDuration: 120
       };
 
       const mission = await service.createMission(missionData);
 
-      expect(mission.status).toBe('planning');
+      expect(mission.status).toBe("planning");
       expect(mission.progress).toBe(0);
       expect(mission.id).toBeDefined();
-      expect(mission.name).toBe('Emergency Response');
+      expect(mission.name).toBe("Emergency Response");
     });
 
     it("should create mission with multiple objectives", async () => {
       const missionData = {
         name: "Tactical Operation",
-        type: 'tactical' as const,
-        priority: 'high' as const,
+        type: "tactical" as const,
+        priority: "high" as const,
         objectives: [
-          { id: 'obj-1', description: 'Objective 1', status: 'pending' as const, priority: 1, completionPercentage: 0 },
-          { id: 'obj-2', description: 'Objective 2', status: 'pending' as const, priority: 2, completionPercentage: 0 },
-          { id: 'obj-3', description: 'Objective 3', status: 'pending' as const, priority: 3, completionPercentage: 0 }
+          { id: "obj-1", description: "Objective 1", status: "pending" as const, priority: 1, completionPercentage: 0 },
+          { id: "obj-2", description: "Objective 2", status: "pending" as const, priority: 2, completionPercentage: 0 },
+          { id: "obj-3", description: "Objective 3", status: "pending" as const, priority: 3, completionPercentage: 0 }
         ],
         resources: [],
         assignedAgents: [],
@@ -338,33 +338,33 @@ describe("Mission Control Tests", () => {
       const mission = await service.createMission(missionData);
 
       expect(mission.objectives).toHaveLength(3);
-      expect(mission.objectives.every(obj => obj.status === 'pending')).toBe(true);
+      expect(mission.objectives.every(obj => obj.status === "pending")).toBe(true);
     });
 
     it("should assign agents to mission during planning", async () => {
       const missionData = {
         name: "Training Exercise",
-        type: 'training' as const,
-        priority: 'normal' as const,
+        type: "training" as const,
+        priority: "normal" as const,
         objectives: [],
         resources: [],
-        assignedAgents: ['agent-1', 'agent-2', 'agent-3'],
+        assignedAgents: ["agent-1", "agent-2", "agent-3"],
         estimatedDuration: 240
       };
 
       const mission = await service.createMission(missionData);
 
       expect(mission.assignedAgents).toHaveLength(3);
-      expect(mission.assignedAgents).toContain('agent-1');
+      expect(mission.assignedAgents).toContain("agent-1");
     });
 
     it("should set mission priority correctly", async () => {
-      const priorities: Array<'low' | 'normal' | 'high' | 'critical'> = ['low', 'normal', 'high', 'critical'];
+      const priorities: Array<"low" | "normal" | "high" | "critical"> = ["low", "normal", "high", "critical"];
 
       for (const priority of priorities) {
         const missionData = {
           name: `${priority} priority mission`,
-          type: 'tactical' as const,
+          type: "tactical" as const,
           priority,
           objectives: [],
           resources: [],
@@ -382,9 +382,9 @@ describe("Mission Control Tests", () => {
     it("should start a mission from planning state", async () => {
       const missionData = {
         name: "Test Mission",
-        type: 'tactical' as const,
-        priority: 'normal' as const,
-        objectives: [{ id: 'obj-1', description: 'Test', status: 'pending' as const, priority: 1, completionPercentage: 0 }],
+        type: "tactical" as const,
+        priority: "normal" as const,
+        objectives: [{ id: "obj-1", description: "Test", status: "pending" as const, priority: 1, completionPercentage: 0 }],
         resources: [],
         assignedAgents: [],
         estimatedDuration: 60
@@ -396,15 +396,15 @@ describe("Mission Control Tests", () => {
       expect(started).toBe(true);
       
       const updatedMission = service.getMission(mission.id);
-      expect(updatedMission?.status).toBe('active');
+      expect(updatedMission?.status).toBe("active");
       expect(updatedMission?.startTime).toBeDefined();
     });
 
     it("should not start a mission that is already active", async () => {
       const missionData = {
         name: "Test Mission",
-        type: 'tactical' as const,
-        priority: 'normal' as const,
+        type: "tactical" as const,
+        priority: "normal" as const,
         objectives: [],
         resources: [],
         assignedAgents: [],
@@ -421,8 +421,8 @@ describe("Mission Control Tests", () => {
     it("should pause an active mission", async () => {
       const missionData = {
         name: "Test Mission",
-        type: 'tactical' as const,
-        priority: 'normal' as const,
+        type: "tactical" as const,
+        priority: "normal" as const,
         objectives: [],
         resources: [],
         assignedAgents: [],
@@ -436,14 +436,14 @@ describe("Mission Control Tests", () => {
       expect(paused).toBe(true);
       
       const updatedMission = service.getMission(mission.id);
-      expect(updatedMission?.status).toBe('paused');
+      expect(updatedMission?.status).toBe("paused");
     });
 
     it("should resume a paused mission", async () => {
       const missionData = {
         name: "Test Mission",
-        type: 'tactical' as const,
-        priority: 'normal' as const,
+        type: "tactical" as const,
+        priority: "normal" as const,
         objectives: [],
         resources: [],
         assignedAgents: [],
@@ -458,14 +458,14 @@ describe("Mission Control Tests", () => {
       expect(resumed).toBe(true);
       
       const updatedMission = service.getMission(mission.id);
-      expect(updatedMission?.status).toBe('active');
+      expect(updatedMission?.status).toBe("active");
     });
 
     it("should not pause a mission that is not active", async () => {
       const missionData = {
         name: "Test Mission",
-        type: 'tactical' as const,
-        priority: 'normal' as const,
+        type: "tactical" as const,
+        priority: "normal" as const,
         objectives: [],
         resources: [],
         assignedAgents: [],
@@ -483,10 +483,10 @@ describe("Mission Control Tests", () => {
     it("should complete a mission successfully", async () => {
       const missionData = {
         name: "Test Mission",
-        type: 'tactical' as const,
-        priority: 'normal' as const,
+        type: "tactical" as const,
+        priority: "normal" as const,
         objectives: [
-          { id: 'obj-1', description: 'Objective 1', status: 'pending' as const, priority: 1, completionPercentage: 0 }
+          { id: "obj-1", description: "Objective 1", status: "pending" as const, priority: 1, completionPercentage: 0 }
         ],
         resources: [],
         assignedAgents: [],
@@ -506,7 +506,7 @@ describe("Mission Control Tests", () => {
       expect(completed).toBe(true);
       
       const updatedMission = service.getMission(mission.id);
-      expect(updatedMission?.status).toBe('completed');
+      expect(updatedMission?.status).toBe("completed");
       expect(updatedMission?.endTime).toBeDefined();
       expect(updatedMission?.progress).toBe(100);
     });
@@ -514,11 +514,11 @@ describe("Mission Control Tests", () => {
     it("should mark all objectives as completed when mission completes", async () => {
       const missionData = {
         name: "Test Mission",
-        type: 'tactical' as const,
-        priority: 'normal' as const,
+        type: "tactical" as const,
+        priority: "normal" as const,
         objectives: [
-          { id: 'obj-1', description: 'Objective 1', status: 'pending' as const, priority: 1, completionPercentage: 0 },
-          { id: 'obj-2', description: 'Objective 2', status: 'in_progress' as const, priority: 2, completionPercentage: 50 }
+          { id: "obj-1", description: "Objective 1", status: "pending" as const, priority: 1, completionPercentage: 0 },
+          { id: "obj-2", description: "Objective 2", status: "in_progress" as const, priority: 2, completionPercentage: 50 }
         ],
         resources: [],
         assignedAgents: [],
@@ -530,15 +530,15 @@ describe("Mission Control Tests", () => {
       await service.completeMission(mission.id);
 
       const updatedMission = service.getMission(mission.id);
-      expect(updatedMission?.objectives.every(obj => obj.status === 'completed')).toBe(true);
+      expect(updatedMission?.objectives.every(obj => obj.status === "completed")).toBe(true);
       expect(updatedMission?.objectives.every(obj => obj.completionPercentage === 100)).toBe(true);
     });
 
     it("should calculate actual mission duration", async () => {
       const missionData = {
         name: "Test Mission",
-        type: 'tactical' as const,
-        priority: 'normal' as const,
+        type: "tactical" as const,
+        priority: "normal" as const,
         objectives: [],
         resources: [],
         assignedAgents: [],
@@ -564,8 +564,8 @@ describe("Mission Control Tests", () => {
     it("should cancel a mission", async () => {
       const missionData = {
         name: "Test Mission",
-        type: 'tactical' as const,
-        priority: 'normal' as const,
+        type: "tactical" as const,
+        priority: "normal" as const,
         objectives: [],
         resources: [],
         assignedAgents: [],
@@ -578,7 +578,7 @@ describe("Mission Control Tests", () => {
       expect(cancelled).toBe(true);
       
       const updatedMission = service.getMission(mission.id);
-      expect(updatedMission?.status).toBe('cancelled');
+      expect(updatedMission?.status).toBe("cancelled");
     });
   });
 
@@ -586,10 +586,10 @@ describe("Mission Control Tests", () => {
     it("should update objective status and percentage", async () => {
       const missionData = {
         name: "Test Mission",
-        type: 'tactical' as const,
-        priority: 'normal' as const,
+        type: "tactical" as const,
+        priority: "normal" as const,
         objectives: [
-          { id: 'obj-1', description: 'Objective 1', status: 'pending' as const, priority: 1, completionPercentage: 0 }
+          { id: "obj-1", description: "Objective 1", status: "pending" as const, priority: 1, completionPercentage: 0 }
         ],
         resources: [],
         assignedAgents: [],
@@ -599,24 +599,24 @@ describe("Mission Control Tests", () => {
       const mission = await service.createMission(missionData);
       await service.startMission(mission.id);
       
-      const updated = await service.updateObjective(mission.id, 'obj-1', 'in_progress', 50);
+      const updated = await service.updateObjective(mission.id, "obj-1", "in_progress", 50);
 
       expect(updated).toBe(true);
       
       const updatedMission = service.getMission(mission.id);
-      const objective = updatedMission?.objectives.find(o => o.id === 'obj-1');
-      expect(objective?.status).toBe('in_progress');
+      const objective = updatedMission?.objectives.find(o => o.id === "obj-1");
+      expect(objective?.status).toBe("in_progress");
       expect(objective?.completionPercentage).toBe(50);
     });
 
     it("should update mission progress when objectives complete", async () => {
       const missionData = {
         name: "Test Mission",
-        type: 'tactical' as const,
-        priority: 'normal' as const,
+        type: "tactical" as const,
+        priority: "normal" as const,
         objectives: [
-          { id: 'obj-1', description: 'Objective 1', status: 'pending' as const, priority: 1, completionPercentage: 0 },
-          { id: 'obj-2', description: 'Objective 2', status: 'pending' as const, priority: 2, completionPercentage: 0 }
+          { id: "obj-1", description: "Objective 1", status: "pending" as const, priority: 1, completionPercentage: 0 },
+          { id: "obj-2", description: "Objective 2", status: "pending" as const, priority: 2, completionPercentage: 0 }
         ],
         resources: [],
         assignedAgents: [],
@@ -626,7 +626,7 @@ describe("Mission Control Tests", () => {
       const mission = await service.createMission(missionData);
       await service.startMission(mission.id);
       
-      await service.updateObjective(mission.id, 'obj-1', 'completed', 100);
+      await service.updateObjective(mission.id, "obj-1", "completed", 100);
 
       const updatedMission = service.getMission(mission.id);
       expect(updatedMission?.progress).toBe(50); // 1 of 2 objectives completed
@@ -635,10 +635,10 @@ describe("Mission Control Tests", () => {
     it("should record event when objective completes", async () => {
       const missionData = {
         name: "Test Mission",
-        type: 'tactical' as const,
-        priority: 'normal' as const,
+        type: "tactical" as const,
+        priority: "normal" as const,
         objectives: [
-          { id: 'obj-1', description: 'Objective 1', status: 'pending' as const, priority: 1, completionPercentage: 0 }
+          { id: "obj-1", description: "Objective 1", status: "pending" as const, priority: 1, completionPercentage: 0 }
         ],
         resources: [],
         assignedAgents: [],
@@ -647,13 +647,13 @@ describe("Mission Control Tests", () => {
 
       const mission = await service.createMission(missionData);
       await service.startMission(mission.id);
-      await service.updateObjective(mission.id, 'obj-1', 'completed', 100);
+      await service.updateObjective(mission.id, "obj-1", "completed", 100);
 
       const events = service.getMissionEvents(mission.id);
-      const objectiveEvent = events.find(e => e.type === 'objective_completed');
+      const objectiveEvent = events.find(e => e.type === "objective_completed");
       
       expect(objectiveEvent).toBeDefined();
-      expect(objectiveEvent?.data.objectiveId).toBe('obj-1');
+      expect(objectiveEvent?.data.objectiveId).toBe("obj-1");
     });
   });
 
@@ -661,8 +661,8 @@ describe("Mission Control Tests", () => {
     it("should allocate resources to mission", async () => {
       const missionData = {
         name: "Test Mission",
-        type: 'tactical' as const,
-        priority: 'normal' as const,
+        type: "tactical" as const,
+        priority: "normal" as const,
         objectives: [],
         resources: [],
         assignedAgents: [],
@@ -672,11 +672,11 @@ describe("Mission Control Tests", () => {
       const mission = await service.createMission(missionData);
       
       const resource: Resource = {
-        id: 'res-1',
-        type: 'equipment',
-        name: 'Mobile Unit',
+        id: "res-1",
+        type: "equipment",
+        name: "Mobile Unit",
         quantity: 2,
-        status: 'requested'
+        status: "requested"
       };
 
       const allocated = await service.allocateResource(mission.id, resource);
@@ -685,14 +685,14 @@ describe("Mission Control Tests", () => {
       
       const updatedMission = service.getMission(mission.id);
       expect(updatedMission?.resources).toHaveLength(1);
-      expect(updatedMission?.resources[0].status).toBe('allocated');
+      expect(updatedMission?.resources[0].status).toBe("allocated");
     });
 
     it("should release resources from mission", async () => {
       const missionData = {
         name: "Test Mission",
-        type: 'tactical' as const,
-        priority: 'normal' as const,
+        type: "tactical" as const,
+        priority: "normal" as const,
         objectives: [],
         resources: [],
         assignedAgents: [],
@@ -702,28 +702,28 @@ describe("Mission Control Tests", () => {
       const mission = await service.createMission(missionData);
       
       const resource: Resource = {
-        id: 'res-1',
-        type: 'vehicle',
-        name: 'Transport Truck',
+        id: "res-1",
+        type: "vehicle",
+        name: "Transport Truck",
         quantity: 1,
-        status: 'requested'
+        status: "requested"
       };
 
       await service.allocateResource(mission.id, resource);
-      const released = await service.releaseResource(mission.id, 'res-1');
+      const released = await service.releaseResource(mission.id, "res-1");
 
       expect(released).toBe(true);
       
       const updatedMission = service.getMission(mission.id);
-      const releasedResource = updatedMission?.resources.find(r => r.id === 'res-1');
-      expect(releasedResource?.status).toBe('released');
+      const releasedResource = updatedMission?.resources.find(r => r.id === "res-1");
+      expect(releasedResource?.status).toBe("released");
     });
 
     it("should record event when resource is allocated", async () => {
       const missionData = {
         name: "Test Mission",
-        type: 'tactical' as const,
-        priority: 'normal' as const,
+        type: "tactical" as const,
+        priority: "normal" as const,
         objectives: [],
         resources: [],
         assignedAgents: [],
@@ -733,27 +733,27 @@ describe("Mission Control Tests", () => {
       const mission = await service.createMission(missionData);
       
       const resource: Resource = {
-        id: 'res-1',
-        type: 'personnel',
-        name: 'Response Team',
+        id: "res-1",
+        type: "personnel",
+        name: "Response Team",
         quantity: 5,
-        status: 'requested'
+        status: "requested"
       };
 
       await service.allocateResource(mission.id, resource);
 
       const events = service.getMissionEvents(mission.id);
-      const resourceEvent = events.find(e => e.type === 'resource_allocated');
+      const resourceEvent = events.find(e => e.type === "resource_allocated");
       
       expect(resourceEvent).toBeDefined();
-      expect(resourceEvent?.data.resource.id).toBe('res-1');
+      expect(resourceEvent?.data.resource.id).toBe("res-1");
     });
 
     it("should update existing resource when reallocated", async () => {
       const missionData = {
         name: "Test Mission",
-        type: 'tactical' as const,
-        priority: 'normal' as const,
+        type: "tactical" as const,
+        priority: "normal" as const,
         objectives: [],
         resources: [],
         assignedAgents: [],
@@ -763,19 +763,19 @@ describe("Mission Control Tests", () => {
       const mission = await service.createMission(missionData);
       
       const resource1: Resource = {
-        id: 'res-1',
-        type: 'equipment',
-        name: 'Equipment',
+        id: "res-1",
+        type: "equipment",
+        name: "Equipment",
         quantity: 1,
-        status: 'requested'
+        status: "requested"
       };
 
       const resource2: Resource = {
-        id: 'res-1',
-        type: 'equipment',
-        name: 'Equipment',
+        id: "res-1",
+        type: "equipment",
+        name: "Equipment",
         quantity: 3,
-        status: 'requested'
+        status: "requested"
       };
 
       await service.allocateResource(mission.id, resource1);
@@ -791,8 +791,8 @@ describe("Mission Control Tests", () => {
     it("should retrieve mission by ID", async () => {
       const missionData = {
         name: "Test Mission",
-        type: 'tactical' as const,
-        priority: 'normal' as const,
+        type: "tactical" as const,
+        priority: "normal" as const,
         objectives: [],
         resources: [],
         assignedAgents: [],
@@ -809,8 +809,8 @@ describe("Mission Control Tests", () => {
     it("should retrieve all missions", async () => {
       const m1 = await service.createMission({
         name: "Mission 1",
-        type: 'tactical' as const,
-        priority: 'normal' as const,
+        type: "tactical" as const,
+        priority: "normal" as const,
         objectives: [],
         resources: [],
         assignedAgents: [],
@@ -819,8 +819,8 @@ describe("Mission Control Tests", () => {
 
       const m2 = await service.createMission({
         name: "Mission 2",
-        type: 'emergency' as const,
-        priority: 'critical' as const,
+        type: "emergency" as const,
+        priority: "critical" as const,
         objectives: [],
         resources: [],
         assignedAgents: [],
@@ -837,8 +837,8 @@ describe("Mission Control Tests", () => {
     it("should filter missions by status", async () => {
       const mission1 = await service.createMission({
         name: "Mission 1",
-        type: 'tactical' as const,
-        priority: 'normal' as const,
+        type: "tactical" as const,
+        priority: "normal" as const,
         objectives: [],
         resources: [],
         assignedAgents: [],
@@ -847,8 +847,8 @@ describe("Mission Control Tests", () => {
 
       const mission2 = await service.createMission({
         name: "Mission 2",
-        type: 'tactical' as const,
-        priority: 'normal' as const,
+        type: "tactical" as const,
+        priority: "normal" as const,
         objectives: [],
         resources: [],
         assignedAgents: [],
@@ -857,8 +857,8 @@ describe("Mission Control Tests", () => {
 
       await service.startMission(mission1.id);
 
-      const activeMissions = service.getMissionsByStatus('active');
-      const planningMissions = service.getMissionsByStatus('planning');
+      const activeMissions = service.getMissionsByStatus("active");
+      const planningMissions = service.getMissionsByStatus("planning");
 
       expect(activeMissions).toHaveLength(1);
       expect(planningMissions).toHaveLength(1);
@@ -867,10 +867,10 @@ describe("Mission Control Tests", () => {
     it("should retrieve mission events chronologically", async () => {
       const missionData = {
         name: "Test Mission",
-        type: 'tactical' as const,
-        priority: 'normal' as const,
+        type: "tactical" as const,
+        priority: "normal" as const,
         objectives: [
-          { id: 'obj-1', description: 'Objective 1', status: 'pending' as const, priority: 1, completionPercentage: 0 }
+          { id: "obj-1", description: "Objective 1", status: "pending" as const, priority: 1, completionPercentage: 0 }
         ],
         resources: [],
         assignedAgents: [],
@@ -879,14 +879,14 @@ describe("Mission Control Tests", () => {
 
       const mission = await service.createMission(missionData);
       await service.startMission(mission.id);
-      await service.updateObjective(mission.id, 'obj-1', 'completed', 100);
+      await service.updateObjective(mission.id, "obj-1", "completed", 100);
       await service.completeMission(mission.id);
 
       const events = service.getMissionEvents(mission.id);
 
       expect(events.length).toBeGreaterThan(0);
-      expect(events[0].type).toBe('started');
-      expect(events[events.length - 1].type).toBe('completed');
+      expect(events[0].type).toBe("started");
+      expect(events[events.length - 1].type).toBe("completed");
     });
   });
 
@@ -895,46 +895,46 @@ describe("Mission Control Tests", () => {
       // Create mission
       const mission = await service.createMission({
         name: "Full Lifecycle Mission",
-        type: 'tactical' as const,
-        priority: 'high' as const,
+        type: "tactical" as const,
+        priority: "high" as const,
         objectives: [
-          { id: 'obj-1', description: 'Setup', status: 'pending' as const, priority: 1, completionPercentage: 0 },
-          { id: 'obj-2', description: 'Execute', status: 'pending' as const, priority: 2, completionPercentage: 0 },
-          { id: 'obj-3', description: 'Cleanup', status: 'pending' as const, priority: 3, completionPercentage: 0 }
+          { id: "obj-1", description: "Setup", status: "pending" as const, priority: 1, completionPercentage: 0 },
+          { id: "obj-2", description: "Execute", status: "pending" as const, priority: 2, completionPercentage: 0 },
+          { id: "obj-3", description: "Cleanup", status: "pending" as const, priority: 3, completionPercentage: 0 }
         ],
         resources: [],
-        assignedAgents: ['agent-1', 'agent-2'],
+        assignedAgents: ["agent-1", "agent-2"],
         estimatedDuration: 180
       });
 
-      expect(mission.status).toBe('planning');
+      expect(mission.status).toBe("planning");
 
       // Allocate resources
       await service.allocateResource(mission.id, {
-        id: 'res-1',
-        type: 'equipment',
-        name: 'Equipment 1',
+        id: "res-1",
+        type: "equipment",
+        name: "Equipment 1",
         quantity: 2,
-        status: 'requested'
+        status: "requested"
       });
 
       // Start mission
       await service.startMission(mission.id);
-      expect(service.getMission(mission.id)?.status).toBe('active');
+      expect(service.getMission(mission.id)?.status).toBe("active");
 
       // Complete objectives one by one
-      await service.updateObjective(mission.id, 'obj-1', 'completed', 100);
+      await service.updateObjective(mission.id, "obj-1", "completed", 100);
       expect(service.getMission(mission.id)?.progress).toBe(33);
 
-      await service.updateObjective(mission.id, 'obj-2', 'completed', 100);
+      await service.updateObjective(mission.id, "obj-2", "completed", 100);
       expect(service.getMission(mission.id)?.progress).toBe(66);
 
-      await service.updateObjective(mission.id, 'obj-3', 'completed', 100);
+      await service.updateObjective(mission.id, "obj-3", "completed", 100);
       expect(service.getMission(mission.id)?.progress).toBe(100);
 
       // Complete mission
       await service.completeMission(mission.id);
-      expect(service.getMission(mission.id)?.status).toBe('completed');
+      expect(service.getMission(mission.id)?.status).toBe("completed");
 
       // Verify events
       const events = service.getMissionEvents(mission.id);
@@ -944,10 +944,10 @@ describe("Mission Control Tests", () => {
     it("should handle mission pause and resume", async () => {
       const mission = await service.createMission({
         name: "Pausable Mission",
-        type: 'tactical' as const,
-        priority: 'normal' as const,
+        type: "tactical" as const,
+        priority: "normal" as const,
         objectives: [
-          { id: 'obj-1', description: 'Task', status: 'pending' as const, priority: 1, completionPercentage: 0 }
+          { id: "obj-1", description: "Task", status: "pending" as const, priority: 1, completionPercentage: 0 }
         ],
         resources: [],
         assignedAgents: [],
@@ -955,20 +955,20 @@ describe("Mission Control Tests", () => {
       });
 
       await service.startMission(mission.id);
-      await service.updateObjective(mission.id, 'obj-1', 'in_progress', 30);
+      await service.updateObjective(mission.id, "obj-1", "in_progress", 30);
       await service.pauseMission(mission.id);
       
-      expect(service.getMission(mission.id)?.status).toBe('paused');
+      expect(service.getMission(mission.id)?.status).toBe("paused");
 
       await service.resumeMission(mission.id);
-      expect(service.getMission(mission.id)?.status).toBe('active');
+      expect(service.getMission(mission.id)?.status).toBe("active");
 
-      await service.updateObjective(mission.id, 'obj-1', 'completed', 100);
+      await service.updateObjective(mission.id, "obj-1", "completed", 100);
       await service.completeMission(mission.id);
 
       const events = service.getMissionEvents(mission.id);
-      expect(events.some(e => e.type === 'paused')).toBe(true);
-      expect(events.some(e => e.type === 'resumed')).toBe(true);
+      expect(events.some(e => e.type === "paused")).toBe(true);
+      expect(events.some(e => e.type === "resumed")).toBe(true);
     });
   });
 });

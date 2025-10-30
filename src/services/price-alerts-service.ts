@@ -12,7 +12,7 @@ export interface PriceAlert {
   is_active: boolean;
   notification_email: boolean;
   notification_push: boolean;
-  notification_frequency: 'immediate' | 'daily' | 'weekly';
+  notification_frequency: "immediate" | "daily" | "weekly";
   created_at: string;
   updated_at: string;
   last_checked_at: string | null;
@@ -27,7 +27,7 @@ export interface CreatePriceAlertInput {
   travel_date?: string;
   notification_email?: boolean;
   notification_push?: boolean;
-  notification_frequency?: 'immediate' | 'daily' | 'weekly';
+  notification_frequency?: "immediate" | "daily" | "weekly";
 }
 
 export interface UpdatePriceAlertInput {
@@ -40,7 +40,7 @@ export interface UpdatePriceAlertInput {
   is_active?: boolean;
   notification_email?: boolean;
   notification_push?: boolean;
-  notification_frequency?: 'immediate' | 'daily' | 'weekly';
+  notification_frequency?: "immediate" | "daily" | "weekly";
 }
 
 export interface PriceHistory {
@@ -65,9 +65,9 @@ class PriceAlertsService {
    */
   async getAlerts(): Promise<PriceAlert[]> {
     const { data, error } = await supabase
-      .from('price_alerts')
-      .select('*')
-      .order('created_at', { ascending: false });
+      .from("price_alerts")
+      .select("*")
+      .order("created_at", { ascending: false });
 
     if (error) throw error;
     return data as any as PriceAlert[];
@@ -78,9 +78,9 @@ class PriceAlertsService {
    */
   async getAlert(id: string): Promise<PriceAlert | null> {
     const { data, error } = await supabase
-      .from('price_alerts')
-      .select('*')
-      .eq('id', id)
+      .from("price_alerts")
+      .select("*")
+      .eq("id", id)
       .single();
 
     if (error) throw error;
@@ -92,10 +92,10 @@ class PriceAlertsService {
    */
   async createAlert(input: CreatePriceAlertInput): Promise<PriceAlert> {
     const { data: { user } } = await supabase.auth.getUser();
-    if (!user) throw new Error('User not authenticated');
+    if (!user) throw new Error("User not authenticated");
 
     const { data, error } = await supabase
-      .from('price_alerts')
+      .from("price_alerts")
       .insert({
         user_id: user.id,
         product_name: input.product_name,
@@ -106,7 +106,7 @@ class PriceAlertsService {
         travel_date: input.travel_date,
         notification_email: input.notification_email ?? true,
         notification_push: input.notification_push ?? true,
-        notification_frequency: input.notification_frequency ?? 'immediate',
+        notification_frequency: input.notification_frequency ?? "immediate",
         is_active: true
       } as any)
       .select()
@@ -121,9 +121,9 @@ class PriceAlertsService {
    */
   async updateAlert(id: string, input: UpdatePriceAlertInput): Promise<PriceAlert> {
     const { data, error } = await supabase
-      .from('price_alerts')
+      .from("price_alerts")
       .update(input as any)
-      .eq('id', id)
+      .eq("id", id)
       .select()
       .single();
 
@@ -136,9 +136,9 @@ class PriceAlertsService {
    */
   async deleteAlert(id: string): Promise<void> {
     const { error } = await supabase
-      .from('price_alerts')
+      .from("price_alerts")
       .delete()
-      .eq('id', id);
+      .eq("id", id);
 
     if (error) throw error;
   }
@@ -155,10 +155,10 @@ class PriceAlertsService {
    */
   async getPriceHistory(alertId: string): Promise<PriceHistory[]> {
     const { data, error } = await supabase
-      .from('price_history')
-      .select('*')
-      .eq('alert_id', alertId)
-      .order('checked_at', { ascending: false });
+      .from("price_history")
+      .select("*")
+      .eq("alert_id", alertId)
+      .order("checked_at", { ascending: false });
 
     if (error) throw error;
     return data as PriceHistory[];
@@ -169,7 +169,7 @@ class PriceAlertsService {
    */
   async addPriceHistory(alertId: string, price: number): Promise<PriceHistory> {
     const { data, error } = await supabase
-      .from('price_history')
+      .from("price_history")
       .insert({
         alert_id: alertId,
         price: price
@@ -186,12 +186,12 @@ class PriceAlertsService {
    */
   async getNotifications(unreadOnly: boolean = false): Promise<PriceNotification[]> {
     let query = supabase
-      .from('price_notifications')
-      .select('*')
-      .order('created_at', { ascending: false });
+      .from("price_notifications")
+      .select("*")
+      .order("created_at", { ascending: false });
 
     if (unreadOnly) {
-      query = query.eq('is_read', false);
+      query = query.eq("is_read", false);
     }
 
     const { data, error } = await query;
@@ -205,9 +205,9 @@ class PriceAlertsService {
    */
   async markNotificationAsRead(id: string): Promise<void> {
     const { error } = await supabase
-      .from('price_notifications')
+      .from("price_notifications")
       .update({ is_read: true })
-      .eq('id', id);
+      .eq("id", id);
 
     if (error) throw error;
   }
@@ -217,13 +217,13 @@ class PriceAlertsService {
    */
   async markAllNotificationsAsRead(): Promise<void> {
     const { data: { user } } = await supabase.auth.getUser();
-    if (!user) throw new Error('User not authenticated');
+    if (!user) throw new Error("User not authenticated");
 
     const { error } = await supabase
-      .from('price_notifications')
+      .from("price_notifications")
       .update({ is_read: true })
-      .eq('user_id', user.id)
-      .eq('is_read', false);
+      .eq("user_id", user.id)
+      .eq("is_read", false);
 
     if (error) throw error;
   }

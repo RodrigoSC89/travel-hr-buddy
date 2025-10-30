@@ -1,5 +1,5 @@
-import { useState, useEffect } from 'react';
-import { useToast } from '@/hooks/use-toast';
+import { useState, useEffect } from "react";
+import { useToast } from "@/hooks/use-toast";
 import { 
   priceAlertsService, 
   PriceAlert, 
@@ -7,7 +7,7 @@ import {
   UpdatePriceAlertInput,
   PriceHistory,
   PriceNotification
-} from '@/services/price-alerts-service';
+} from "@/services/price-alerts-service";
 
 export const usePriceAlerts = () => {
   const [alerts, setAlerts] = useState<PriceAlert[]>([]);
@@ -22,12 +22,12 @@ export const usePriceAlerts = () => {
       const data = await priceAlertsService.getAlerts();
       setAlerts(data);
     } catch (err) {
-      const errorMessage = err instanceof Error ? err.message : 'Failed to load alerts';
+      const errorMessage = err instanceof Error ? err.message : "Failed to load alerts";
       setError(errorMessage);
       toast({
-        title: 'Error',
+        title: "Error",
         description: errorMessage,
-        variant: 'destructive',
+        variant: "destructive",
       });
     } finally {
       setLoading(false);
@@ -43,16 +43,16 @@ export const usePriceAlerts = () => {
       const newAlert = await priceAlertsService.createAlert(input);
       setAlerts((prev) => [newAlert, ...prev]);
       toast({
-        title: 'Success',
-        description: 'Price alert created successfully',
+        title: "Success",
+        description: "Price alert created successfully",
       });
       return newAlert;
     } catch (err) {
-      const errorMessage = err instanceof Error ? err.message : 'Failed to create alert';
+      const errorMessage = err instanceof Error ? err.message : "Failed to create alert";
       toast({
-        title: 'Error',
+        title: "Error",
         description: errorMessage,
-        variant: 'destructive',
+        variant: "destructive",
       });
       throw err;
     }
@@ -65,16 +65,16 @@ export const usePriceAlerts = () => {
         prev.map((alert) => (alert.id === id ? updatedAlert : alert))
       );
       toast({
-        title: 'Success',
-        description: 'Price alert updated successfully',
+        title: "Success",
+        description: "Price alert updated successfully",
       });
       return updatedAlert;
     } catch (err) {
-      const errorMessage = err instanceof Error ? err.message : 'Failed to update alert';
+      const errorMessage = err instanceof Error ? err.message : "Failed to update alert";
       toast({
-        title: 'Error',
+        title: "Error",
         description: errorMessage,
-        variant: 'destructive',
+        variant: "destructive",
       });
       throw err;
     }
@@ -85,15 +85,15 @@ export const usePriceAlerts = () => {
       await priceAlertsService.deleteAlert(id);
       setAlerts((prev) => prev.filter((alert) => alert.id !== id));
       toast({
-        title: 'Success',
-        description: 'Price alert deleted successfully',
+        title: "Success",
+        description: "Price alert deleted successfully",
       });
     } catch (err) {
-      const errorMessage = err instanceof Error ? err.message : 'Failed to delete alert';
+      const errorMessage = err instanceof Error ? err.message : "Failed to delete alert";
       toast({
-        title: 'Error',
+        title: "Error",
         description: errorMessage,
-        variant: 'destructive',
+        variant: "destructive",
       });
       throw err;
     }
@@ -106,16 +106,16 @@ export const usePriceAlerts = () => {
         prev.map((alert) => (alert.id === id ? updatedAlert : alert))
       );
       toast({
-        title: 'Success',
-        description: `Alert ${isActive ? 'activated' : 'deactivated'} successfully`,
+        title: "Success",
+        description: `Alert ${isActive ? "activated" : "deactivated"} successfully`,
       });
       return updatedAlert;
     } catch (err) {
-      const errorMessage = err instanceof Error ? err.message : 'Failed to toggle alert';
+      const errorMessage = err instanceof Error ? err.message : "Failed to toggle alert";
       toast({
-        title: 'Error',
+        title: "Error",
         description: errorMessage,
-        variant: 'destructive',
+        variant: "destructive",
       });
       throw err;
     }
@@ -148,7 +148,7 @@ export const usePriceHistory = (alertId: string | null) => {
         const data = await priceAlertsService.getPriceHistory(alertId);
         setHistory(data);
       } catch (err) {
-        const errorMessage = err instanceof Error ? err.message : 'Failed to load history';
+        const errorMessage = err instanceof Error ? err.message : "Failed to load history";
         setError(errorMessage);
       } finally {
         setLoading(false);
@@ -174,7 +174,7 @@ export const usePriceNotifications = () => {
       const data = await priceAlertsService.getNotifications(unreadOnly);
       setNotifications(data);
     } catch (err) {
-      const errorMessage = err instanceof Error ? err.message : 'Failed to load notifications';
+      const errorMessage = err instanceof Error ? err.message : "Failed to load notifications";
       setError(errorMessage);
     } finally {
       setLoading(false);
@@ -194,11 +194,11 @@ export const usePriceNotifications = () => {
         )
       );
     } catch (err) {
-      const errorMessage = err instanceof Error ? err.message : 'Failed to mark as read';
+      const errorMessage = err instanceof Error ? err.message : "Failed to mark as read";
       toast({
-        title: 'Error',
+        title: "Error",
         description: errorMessage,
-        variant: 'destructive',
+        variant: "destructive",
       });
     }
   };
@@ -210,15 +210,15 @@ export const usePriceNotifications = () => {
         prev.map((notif) => ({ ...notif, is_read: true }))
       );
       toast({
-        title: 'Success',
-        description: 'All notifications marked as read',
+        title: "Success",
+        description: "All notifications marked as read",
       });
     } catch (err) {
-      const errorMessage = err instanceof Error ? err.message : 'Failed to mark all as read';
+      const errorMessage = err instanceof Error ? err.message : "Failed to mark all as read";
       toast({
-        title: 'Error',
+        title: "Error",
         description: errorMessage,
-        variant: 'destructive',
+        variant: "destructive",
       });
     }
   };

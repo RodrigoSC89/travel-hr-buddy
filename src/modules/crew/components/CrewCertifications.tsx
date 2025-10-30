@@ -19,27 +19,27 @@ export function CrewCertifications() {
 
   const getStatusColor = (status: string) => {
     switch (status) {
-      case "valid":
-        return "default";
-      case "expiring":
-        return "outline";
-      case "expired":
-        return "destructive";
-      default:
-        return "secondary";
+    case "valid":
+      return "default";
+    case "expiring":
+      return "outline";
+    case "expired":
+      return "destructive";
+    default:
+      return "secondary";
     }
   };
 
   const getStatusIcon = (status: string) => {
     switch (status) {
-      case "valid":
-        return <CheckCircle className="h-4 w-4 text-green-600" />;
-      case "expiring":
-        return <AlertCircle className="h-4 w-4 text-yellow-600" />;
-      case "expired":
-        return <AlertCircle className="h-4 w-4 text-red-600" />;
-      default:
-        return <Award className="h-4 w-4" />;
+    case "valid":
+      return <CheckCircle className="h-4 w-4 text-green-600" />;
+    case "expiring":
+      return <AlertCircle className="h-4 w-4 text-yellow-600" />;
+    case "expired":
+      return <AlertCircle className="h-4 w-4 text-red-600" />;
+    default:
+      return <Award className="h-4 w-4" />;
     }
   };
 

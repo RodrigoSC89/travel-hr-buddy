@@ -13,7 +13,7 @@ export const SensorPanel: React.FC<SensorPanelProps> = ({ title, sensors }) => (
     <CardHeader><CardTitle>{title}</CardTitle></CardHeader>
     <CardContent>
       <p className="text-muted-foreground">
-        {sensors.length} sensor{sensors.length !== 1 ? 's' : ''} active
+        {sensors.length} sensor{sensors.length !== 1 ? "s" : ""} active
       </p>
     </CardContent>
   </Card>

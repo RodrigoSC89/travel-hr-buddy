@@ -119,30 +119,30 @@ class MissionSyncService {
       for (const item of syncQueue) {
         try {
           switch (item.operation) {
-            case "create":
-            case "update":
-              const { error: upsertError } = await supabase
-                .from("missions")
-                .upsert({
-                  id: item.data.id,
-                  title: item.data.title,
-                  description: item.data.description,
-                  status: item.data.status,
-                  priority: item.data.priority,
-                  start_date: item.data.startDate,
-                  end_date: item.data.endDate,
-                  vessel_id: item.data.vesselId,
-                });
-              if (upsertError) throw upsertError;
-              break;
+          case "create":
+          case "update":
+            const { error: upsertError } = await supabase
+              .from("missions")
+              .upsert({
+                id: item.data.id,
+                title: item.data.title,
+                description: item.data.description,
+                status: item.data.status,
+                priority: item.data.priority,
+                start_date: item.data.startDate,
+                end_date: item.data.endDate,
+                vessel_id: item.data.vesselId,
+              });
+            if (upsertError) throw upsertError;
+            break;
 
-            case "delete":
-              const { error: deleteError } = await supabase
-                .from("missions")
-                .delete()
-                .eq("id", item.data.id);
-              if (deleteError) throw deleteError;
-              break;
+          case "delete":
+            const { error: deleteError } = await supabase
+              .from("missions")
+              .delete()
+              .eq("id", item.data.id);
+            if (deleteError) throw deleteError;
+            break;
           }
 
           // Remove from queue after successful sync

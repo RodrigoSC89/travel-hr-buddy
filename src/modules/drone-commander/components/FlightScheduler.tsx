@@ -131,10 +131,10 @@ export const FlightScheduler: React.FC<FlightSchedulerProps> = ({
                         flight.status === "in-flight"
                           ? "bg-green-500/10 text-green-500"
                           : flight.status === "scheduled"
-                          ? "bg-blue-500/10 text-blue-500"
-                          : flight.status === "completed"
-                          ? "bg-gray-500/10 text-gray-500"
-                          : "bg-red-500/10 text-red-500"
+                            ? "bg-blue-500/10 text-blue-500"
+                            : flight.status === "completed"
+                              ? "bg-gray-500/10 text-gray-500"
+                              : "bg-red-500/10 text-red-500"
                       }
                     >
                       {flight.status}

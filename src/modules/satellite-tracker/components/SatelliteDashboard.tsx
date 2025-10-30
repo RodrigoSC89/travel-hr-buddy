@@ -3,18 +3,18 @@
  * Real-time satellite tracking with position, orbit, and coverage visualization
  */
 
-import React, { useState, useEffect } from 'react';
-import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
-import { Badge } from '@/components/ui/badge';
-import { Button } from '@/components/ui/button';
-import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
-import { Satellite, Activity, Globe, AlertTriangle, RefreshCw } from 'lucide-react';
-import { satelliteTrackingService } from '../services/satellite-tracking-service';
-import { SatelliteMap } from './SatelliteMap';
-import { OrbitVisualization } from './OrbitVisualization';
-import { CoverageMap } from './CoverageMap';
-import { SatelliteAlerts } from './SatelliteAlerts';
-import { toast } from 'sonner';
+import React, { useState, useEffect } from "react";
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import { Badge } from "@/components/ui/badge";
+import { Button } from "@/components/ui/button";
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
+import { Satellite, Activity, Globe, AlertTriangle, RefreshCw } from "lucide-react";
+import { satelliteTrackingService } from "../services/satellite-tracking-service";
+import { SatelliteMap } from "./SatelliteMap";
+import { OrbitVisualization } from "./OrbitVisualization";
+import { CoverageMap } from "./CoverageMap";
+import { SatelliteAlerts } from "./SatelliteAlerts";
+import { toast } from "sonner";
 
 interface SatelliteInfo {
   id: string;
@@ -57,7 +57,7 @@ export const SatelliteDashboard: React.FC = () => {
             noradId: sat.noradId,
             name: sat.name,
             type: sat.satelliteType,
-            status: sat.isActive ? 'active' : 'inactive',
+            status: sat.isActive ? "active" : "inactive",
             position: position ? {
               latitude: position.latitude,
               longitude: position.longitude,
@@ -73,8 +73,8 @@ export const SatelliteDashboard: React.FC = () => {
         setSelectedSatellite(satellitesWithPositions[0]);
       }
     } catch (error) {
-      console.error('Failed to load satellites:', error);
-      toast.error('Falha ao carregar satélites');
+      console.error("Failed to load satellites:", error);
+      toast.error("Falha ao carregar satélites");
     } finally {
       setIsLoading(false);
     }
@@ -114,7 +114,7 @@ export const SatelliteDashboard: React.FC = () => {
         if (updated) setSelectedSatellite(updated);
       }
     } catch (error) {
-      console.error('Failed to update positions:', error);
+      console.error("Failed to update positions:", error);
     } finally {
       setIsUpdating(false);
     }
@@ -122,10 +122,10 @@ export const SatelliteDashboard: React.FC = () => {
 
   const getStatusColor = (status: string) => {
     switch (status) {
-      case 'active': return 'bg-green-500';
-      case 'inactive': return 'bg-gray-500';
-      case 'maintenance': return 'bg-yellow-500';
-      default: return 'bg-gray-500';
+    case "active": return "bg-green-500";
+    case "inactive": return "bg-gray-500";
+    case "maintenance": return "bg-yellow-500";
+    default: return "bg-gray-500";
     }
   };
 
@@ -158,7 +158,7 @@ export const SatelliteDashboard: React.FC = () => {
             Última atualização: {lastUpdate.toLocaleTimeString()}
           </span>
           <Button onClick={updatePositions} disabled={isUpdating}>
-            <RefreshCw className={`h-4 w-4 mr-2 ${isUpdating ? 'animate-spin' : ''}`} />
+            <RefreshCw className={`h-4 w-4 mr-2 ${isUpdating ? "animate-spin" : ""}`} />
             Atualizar
           </Button>
         </div>
@@ -181,7 +181,7 @@ export const SatelliteDashboard: React.FC = () => {
           </CardHeader>
           <CardContent>
             <div className="text-2xl font-bold text-green-600">
-              {satellites.filter(s => s.status === 'active').length}
+              {satellites.filter(s => s.status === "active").length}
             </div>
           </CardContent>
         </Card>
@@ -220,8 +220,8 @@ export const SatelliteDashboard: React.FC = () => {
                 key={sat.id}
                 className={`p-3 border rounded-lg cursor-pointer transition-colors ${
                   selectedSatellite?.id === sat.id
-                    ? 'bg-primary/10 border-primary'
-                    : 'hover:bg-muted'
+                    ? "bg-primary/10 border-primary"
+                    : "hover:bg-muted"
                 }`}
                 onClick={() => setSelectedSatellite(sat)}
               >
@@ -254,7 +254,7 @@ export const SatelliteDashboard: React.FC = () => {
         <Card className="lg:col-span-2">
           <CardHeader>
             <CardTitle className="text-lg">
-              {selectedSatellite ? selectedSatellite.name : 'Selecione um satélite'}
+              {selectedSatellite ? selectedSatellite.name : "Selecione um satélite"}
             </CardTitle>
           </CardHeader>
           <CardContent>

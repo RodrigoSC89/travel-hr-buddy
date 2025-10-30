@@ -87,29 +87,29 @@ export const AgentControlPanel: React.FC = () => {
 
   const getStatusColor = (status: AgentStatus): string => {
     switch (status) {
-      case "active":
-        return "bg-green-500";
-      case "idle":
-        return "bg-blue-500";
-      case "paused":
-        return "bg-yellow-500";
-      case "error":
-        return "bg-red-500";
-      default:
-        return "bg-gray-500";
+    case "active":
+      return "bg-green-500";
+    case "idle":
+      return "bg-blue-500";
+    case "paused":
+      return "bg-yellow-500";
+    case "error":
+      return "bg-red-500";
+    default:
+      return "bg-gray-500";
     }
   };
 
   const getStatusIcon = (status: AgentStatus) => {
     switch (status) {
-      case "active":
-        return <Activity className="w-4 h-4 animate-pulse" />;
-      case "idle":
-        return <Pause className="w-4 h-4" />;
-      case "error":
-        return <AlertTriangle className="w-4 h-4" />;
-      default:
-        return <CheckCircle className="w-4 h-4" />;
+    case "active":
+      return <Activity className="w-4 h-4 animate-pulse" />;
+    case "idle":
+      return <Pause className="w-4 h-4" />;
+    case "error":
+      return <AlertTriangle className="w-4 h-4" />;
+    default:
+      return <CheckCircle className="w-4 h-4" />;
     }
   };
 

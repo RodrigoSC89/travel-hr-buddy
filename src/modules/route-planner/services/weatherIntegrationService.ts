@@ -88,13 +88,13 @@ class WeatherIntegrationService {
     const temperature = 30 - Math.abs(lat) * 0.5 + Math.random() * 5;
     
     // Determine severity
-    let severity: WeatherCondition['severity'] = 'safe';
+    let severity: WeatherCondition["severity"] = "safe";
     if (windSpeed > 35 || waveHeight > 4) {
-      severity = 'critical';
+      severity = "critical";
     } else if (windSpeed > 25 || waveHeight > 3) {
-      severity = 'danger';
+      severity = "danger";
     } else if (windSpeed > 15 || waveHeight > 2) {
-      severity = 'caution';
+      severity = "caution";
     }
 
     return {
@@ -138,7 +138,7 @@ class WeatherIntegrationService {
     
     // Count hours in storm conditions
     const totalStormHours = weatherData.filter(
-      w => w.severity === 'danger' || w.severity === 'critical'
+      w => w.severity === "danger" || w.severity === "critical"
     ).length;
 
     // Calculate safety score (0-100)

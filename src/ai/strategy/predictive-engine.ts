@@ -657,17 +657,17 @@ class PredictiveStrategyEngine {
     // Update success rate based on feedback
     let adjustment = 0;
     switch (feedback.feedback) {
-      case "success":
-        adjustment = 0.05; // Increase by 5%
-        break;
-      case "partial":
-        adjustment = 0.02; // Increase by 2%
-        break;
-      case "failed":
-        adjustment = -0.05; // Decrease by 5%
-        break;
-      default:
-        adjustment = 0;
+    case "success":
+      adjustment = 0.05; // Increase by 5%
+      break;
+    case "partial":
+      adjustment = 0.02; // Increase by 2%
+      break;
+    case "failed":
+      adjustment = -0.05; // Decrease by 5%
+      break;
+    default:
+      adjustment = 0;
     }
 
     const newSuccessRate = Math.max(0.1, Math.min(0.95, currentSuccessRate + adjustment));

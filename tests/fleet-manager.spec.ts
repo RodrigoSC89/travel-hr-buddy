@@ -1,4 +1,4 @@
-import { describe, it, expect, vi, beforeEach } from 'vitest';
+import { describe, it, expect, vi, beforeEach } from "vitest";
 
 /**
  * Fleet Manager Module Tests
@@ -17,20 +17,20 @@ const mockSupabaseClient = {
   })),
 };
 
-vi.mock('@/integrations/supabase/client', () => ({
+vi.mock("@/integrations/supabase/client", () => ({
   supabase: mockSupabaseClient,
 }));
 
-describe('Fleet Manager Module', () => {
+describe("Fleet Manager Module", () => {
   beforeEach(() => {
     vi.clearAllMocks();
   });
 
-  describe('Vessel Management', () => {
-    it('should fetch fleet vessels', async () => {
+  describe("Vessel Management", () => {
+    it("should fetch fleet vessels", async () => {
       const mockVessels = [
-        { id: 1, name: 'Vessel Alpha', status: 'active', type: 'cargo' },
-        { id: 2, name: 'Vessel Beta', status: 'maintenance', type: 'tanker' },
+        { id: 1, name: "Vessel Alpha", status: "active", type: "cargo" },
+        { id: 2, name: "Vessel Beta", status: "maintenance", type: "tanker" },
       ];
 
       mockSupabaseClient.from.mockReturnValueOnce({
@@ -39,17 +39,17 @@ describe('Fleet Manager Module', () => {
         order: vi.fn(function(this: any) { return this; }),
       });
 
-      const result = await mockSupabaseClient.from('vessels').select('*');
+      const result = await mockSupabaseClient.from("vessels").select("*");
 
       expect(result.data).toHaveLength(2);
       expect(result.data).toEqual(mockVessels);
     });
 
-    it('should add new vessel to fleet', async () => {
+    it("should add new vessel to fleet", async () => {
       const newVessel = {
-        name: 'Vessel Gamma',
-        status: 'active',
-        type: 'container',
+        name: "Vessel Gamma",
+        status: "active",
+        type: "container",
         capacity: 5000,
       };
 
@@ -58,15 +58,15 @@ describe('Fleet Manager Module', () => {
         select: vi.fn(function(this: any) { return this; }),
       });
 
-      const result = await mockSupabaseClient.from('vessels').insert(newVessel);
+      const result = await mockSupabaseClient.from("vessels").insert(newVessel);
 
-      expect(result.data).toHaveProperty('id');
+      expect(result.data).toHaveProperty("id");
       expect(result.error).toBeNull();
     });
 
-    it('should update vessel status', async () => {
+    it("should update vessel status", async () => {
       const vesselId = 1;
-      const updates = { status: 'maintenance' };
+      const updates = { status: "maintenance" };
 
       mockSupabaseClient.from.mockReturnValueOnce({
         update: vi.fn(() => Promise.resolve({ data: { id: vesselId, ...updates }, error: null })),
@@ -74,34 +74,34 @@ describe('Fleet Manager Module', () => {
         select: vi.fn(function(this: any) { return this; }),
       });
 
-      const result = await mockSupabaseClient.from('vessels').update(updates);
+      const result = await mockSupabaseClient.from("vessels").update(updates);
 
       expect(result.data).toEqual({ id: vesselId, ...updates });
       expect(result.error).toBeNull();
     });
   });
 
-  describe('Fleet Analytics', () => {
-    it('should calculate fleet utilization', () => {
+  describe("Fleet Analytics", () => {
+    it("should calculate fleet utilization", () => {
       const fleet = [
-        { status: 'active' },
-        { status: 'active' },
-        { status: 'maintenance' },
-        { status: 'inactive' },
+        { status: "active" },
+        { status: "active" },
+        { status: "maintenance" },
+        { status: "inactive" },
       ];
 
-      const activeCount = fleet.filter(v => v.status === 'active').length;
+      const activeCount = fleet.filter(v => v.status === "active").length;
       const utilization = (activeCount / fleet.length) * 100;
 
       expect(utilization).toBe(50);
     });
 
-    it('should group vessels by type', () => {
+    it("should group vessels by type", () => {
       const fleet = [
-        { type: 'cargo' },
-        { type: 'tanker' },
-        { type: 'cargo' },
-        { type: 'container' },
+        { type: "cargo" },
+        { type: "tanker" },
+        { type: "cargo" },
+        { type: "container" },
       ];
 
       const grouped = fleet.reduce((acc, vessel) => {
@@ -115,8 +115,8 @@ describe('Fleet Manager Module', () => {
     });
   });
 
-  describe('Fleet Position Tracking', () => {
-    it('should track vessel positions', () => {
+  describe("Fleet Position Tracking", () => {
+    it("should track vessel positions", () => {
       const positions = [
         { vessel_id: 1, lat: 40.7128, lon: -74.0060, timestamp: new Date() },
         { vessel_id: 2, lat: 51.5074, lon: -0.1278, timestamp: new Date() },
@@ -127,7 +127,7 @@ describe('Fleet Manager Module', () => {
       expect(positions[1].vessel_id).toBe(2);
     });
 
-    it('should calculate distance between positions', () => {
+    it("should calculate distance between positions", () => {
       // Simple distance calculation (Haversine would be more accurate)
       const pos1 = { lat: 0, lon: 0 };
       const pos2 = { lat: 1, lon: 1 };
@@ -141,11 +141,11 @@ describe('Fleet Manager Module', () => {
     });
   });
 
-  describe('Maintenance Scheduling', () => {
-    it('should identify vessels due for maintenance', () => {
+  describe("Maintenance Scheduling", () => {
+    it("should identify vessels due for maintenance", () => {
       const vessels = [
-        { id: 1, last_maintenance: new Date('2024-01-01'), maintenance_interval: 90 },
-        { id: 2, last_maintenance: new Date('2025-10-01'), maintenance_interval: 90 },
+        { id: 1, last_maintenance: new Date("2024-01-01"), maintenance_interval: 90 },
+        { id: 2, last_maintenance: new Date("2025-10-01"), maintenance_interval: 90 },
       ];
 
       const now = new Date();
@@ -161,8 +161,8 @@ describe('Fleet Manager Module', () => {
     });
   });
 
-  describe('Fleet Performance', () => {
-    it('should calculate average speed', () => {
+  describe("Fleet Performance", () => {
+    it("should calculate average speed", () => {
       const vessels = [
         { current_speed: 15 },
         { current_speed: 20 },
@@ -174,7 +174,7 @@ describe('Fleet Manager Module', () => {
       expect(avgSpeed).toBeCloseTo(17.67, 1);
     });
 
-    it('should track fuel efficiency', () => {
+    it("should track fuel efficiency", () => {
       const vessel = {
         fuel_consumed: 100,
         distance_traveled: 500,
@@ -186,12 +186,12 @@ describe('Fleet Manager Module', () => {
     });
   });
 
-  describe('Data Validation', () => {
-    it('should validate vessel data structure', () => {
+  describe("Data Validation", () => {
+    it("should validate vessel data structure", () => {
       const validVessel = {
-        name: 'Test Vessel',
-        type: 'cargo',
-        status: 'active',
+        name: "Test Vessel",
+        type: "cargo",
+        status: "active",
         capacity: 1000,
       };
 
@@ -203,9 +203,9 @@ describe('Fleet Manager Module', () => {
       expect(hasRequiredFields).toBe(true);
     });
 
-    it('should reject invalid vessel types', () => {
-      const validTypes = ['cargo', 'tanker', 'container', 'passenger'];
-      const invalidType = 'spaceship';
+    it("should reject invalid vessel types", () => {
+      const validTypes = ["cargo", "tanker", "container", "passenger"];
+      const invalidType = "spaceship";
 
       expect(validTypes.includes(invalidType)).toBe(false);
     });

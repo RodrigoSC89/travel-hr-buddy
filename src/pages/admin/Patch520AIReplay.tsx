@@ -204,34 +204,34 @@ export default function Patch520AIReplay() {
     const minutes = Math.floor(seconds / 60);
     const hours = Math.floor(minutes / 60);
     
-    return `${String(hours).padStart(2, '0')}:${String(minutes % 60).padStart(2, '0')}:${String(seconds % 60).padStart(2, '0')}`;
+    return `${String(hours).padStart(2, "0")}:${String(minutes % 60).padStart(2, "0")}:${String(seconds % 60).padStart(2, "0")}`;
   };
 
   const getEventIcon = (type: string) => {
     switch (type) {
-      case "decision":
-        return <TrendingUp className="h-4 w-4" />;
-      case "milestone":
-        return <CheckCircle className="h-4 w-4" />;
-      case "deviation":
-        return <AlertCircle className="h-4 w-4" />;
-      case "action":
-        return <Activity className="h-4 w-4" />;
-      default:
-        return <Clock className="h-4 w-4" />;
+    case "decision":
+      return <TrendingUp className="h-4 w-4" />;
+    case "milestone":
+      return <CheckCircle className="h-4 w-4" />;
+    case "deviation":
+      return <AlertCircle className="h-4 w-4" />;
+    case "action":
+      return <Activity className="h-4 w-4" />;
+    default:
+      return <Clock className="h-4 w-4" />;
     }
   };
 
   const getSeverityColor = (severity: string) => {
     switch (severity) {
-      case "critical":
-        return "bg-red-500";
-      case "warning":
-        return "bg-yellow-500";
-      case "info":
-        return "bg-blue-500";
-      default:
-        return "bg-muted";
+    case "critical":
+      return "bg-red-500";
+    case "warning":
+      return "bg-yellow-500";
+    case "info":
+      return "bg-blue-500";
+    default:
+      return "bg-muted";
     }
   };
 
@@ -265,8 +265,8 @@ export default function Patch520AIReplay() {
           <div className="space-y-2">
             {validationChecklist.map((item) => (
               <div key={item.id} className="flex items-center gap-2">
-                <div className={`h-4 w-4 rounded-full ${item.completed ? 'bg-green-500' : 'bg-muted'}`} />
-                <span className={item.completed ? 'text-foreground' : 'text-muted-foreground'}>
+                <div className={`h-4 w-4 rounded-full ${item.completed ? "bg-green-500" : "bg-muted"}`} />
+                <span className={item.completed ? "text-foreground" : "text-muted-foreground"}>
                   {item.label}
                 </span>
               </div>
@@ -403,7 +403,7 @@ export default function Patch520AIReplay() {
             {visibleEvents.map((event) => (
               <Card
                 key={event.id}
-                className={`p-3 ${currentEvent?.id === event.id ? 'ring-2 ring-primary' : ''}`}
+                className={`p-3 ${currentEvent?.id === event.id ? "ring-2 ring-primary" : ""}`}
               >
                 <div className="flex items-start gap-3">
                   <div className={`mt-1 p-1 rounded-full ${getSeverityColor(event.severity)}`}>

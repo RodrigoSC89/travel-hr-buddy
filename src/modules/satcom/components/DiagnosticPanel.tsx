@@ -57,21 +57,21 @@ export const DiagnosticPanel: React.FC<DiagnosticPanelProps> = ({
 
     try {
       switch (testType) {
-        case "connection_loss":
-          await testConnectionLoss();
-          break;
-        case "failover":
-          await testFailover();
-          break;
-        case "recovery":
-          await testRecovery();
-          break;
-        case "full_cycle":
-          await testFullCycle();
-          break;
-        case "stress_test":
-          await testStress();
-          break;
+      case "connection_loss":
+        await testConnectionLoss();
+        break;
+      case "failover":
+        await testFailover();
+        break;
+      case "recovery":
+        await testRecovery();
+        break;
+      case "full_cycle":
+        await testFullCycle();
+        break;
+      case "stress_test":
+        await testStress();
+        break;
       }
 
       const duration = Date.now() - startTime;
@@ -216,31 +216,31 @@ export const DiagnosticPanel: React.FC<DiagnosticPanelProps> = ({
 
   const getTestIcon = (testType: TestType) => {
     switch (testType) {
-      case "connection_loss":
-        return XCircle;
-      case "failover":
-        return Activity;
-      case "recovery":
-        return CheckCircle;
-      case "full_cycle":
-        return PlayCircle;
-      case "stress_test":
-        return AlertTriangle;
+    case "connection_loss":
+      return XCircle;
+    case "failover":
+      return Activity;
+    case "recovery":
+      return CheckCircle;
+    case "full_cycle":
+      return PlayCircle;
+    case "stress_test":
+      return AlertTriangle;
     }
   };
 
   const getTestLabel = (testType: TestType) => {
     switch (testType) {
-      case "connection_loss":
-        return "Connection Loss";
-      case "failover":
-        return "Failover Test";
-      case "recovery":
-        return "Recovery Test";
-      case "full_cycle":
-        return "Full Cycle";
-      case "stress_test":
-        return "Stress Test";
+    case "connection_loss":
+      return "Connection Loss";
+    case "failover":
+      return "Failover Test";
+    case "recovery":
+      return "Recovery Test";
+    case "full_cycle":
+      return "Full Cycle";
+    case "stress_test":
+      return "Stress Test";
     }
   };
 

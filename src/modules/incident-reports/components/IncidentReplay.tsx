@@ -206,31 +206,31 @@ export const IncidentReplay: React.FC<IncidentReplayProps> = ({ incidentId, onCl
 
   const getSeverityColor = (severity: string) => {
     switch (severity) {
-      case "critical":
-        return "bg-red-500";
-      case "high":
-        return "bg-orange-500";
-      case "medium":
-        return "bg-yellow-500";
-      case "low":
-        return "bg-blue-500";
-      default:
-        return "bg-gray-500";
+    case "critical":
+      return "bg-red-500";
+    case "high":
+      return "bg-orange-500";
+    case "medium":
+      return "bg-yellow-500";
+    case "low":
+      return "bg-blue-500";
+    default:
+      return "bg-gray-500";
     }
   };
 
   const getEventIcon = (type: TimelineEvent["type"]) => {
     switch (type) {
-      case "creation":
-        return <FileText className="w-4 h-4" />;
-      case "comment":
-        return <User className="w-4 h-4" />;
-      case "status_change":
-        return <TrendingUp className="w-4 h-4" />;
-      case "resolution":
-        return <CheckCircle className="w-4 h-4" />;
-      default:
-        return <Clock className="w-4 h-4" />;
+    case "creation":
+      return <FileText className="w-4 h-4" />;
+    case "comment":
+      return <User className="w-4 h-4" />;
+    case "status_change":
+      return <TrendingUp className="w-4 h-4" />;
+    case "resolution":
+      return <CheckCircle className="w-4 h-4" />;
+    default:
+      return <Clock className="w-4 h-4" />;
     }
   };
 

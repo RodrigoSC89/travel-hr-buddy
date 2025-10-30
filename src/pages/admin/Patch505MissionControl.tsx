@@ -5,7 +5,7 @@ import { Rocket, CheckCircle2, XCircle, Layers, FileText, Play, Download } from 
 import { useState } from "react";
 
 export default function Patch505MissionControl() {
-  const [validationStatus, setValidationStatus] = useState<'idle' | 'running' | 'complete'>('idle');
+  const [validationStatus, setValidationStatus] = useState<"idle" | "running" | "complete">("idle");
   const [modulesIntegrated, setModulesIntegrated] = useState(false);
   const [missionExecutable, setMissionExecutable] = useState(false);
   const [reportGeneration, setReportGeneration] = useState(false);
@@ -42,7 +42,7 @@ export default function Patch505MissionControl() {
   ];
 
   const runValidation = async () => {
-    setValidationStatus('running');
+    setValidationStatus("running");
     
     await new Promise(resolve => setTimeout(resolve, 1500));
     setModulesIntegrated(true);
@@ -53,7 +53,7 @@ export default function Patch505MissionControl() {
     await new Promise(resolve => setTimeout(resolve, 1000));
     setReportGeneration(true);
     
-    setValidationStatus('complete');
+    setValidationStatus("complete");
   };
 
   const exportReport = () => {
@@ -82,9 +82,9 @@ export default function Patch505MissionControl() {
           </Badge>
           <Button 
             onClick={runValidation}
-            disabled={validationStatus === 'running'}
+            disabled={validationStatus === "running"}
           >
-            {validationStatus === 'running' ? 'Validando...' : 'Executar Validação'}
+            {validationStatus === "running" ? "Validando..." : "Executar Validação"}
           </Button>
         </div>
       </div>
@@ -213,7 +213,7 @@ export default function Patch505MissionControl() {
         </CardContent>
       </Card>
 
-      {validationStatus === 'complete' && passRate === "100" && (
+      {validationStatus === "complete" && passRate === "100" && (
         <Card className="border-green-200 bg-green-50">
           <CardHeader>
             <CardTitle className="text-green-800 flex items-center gap-2">

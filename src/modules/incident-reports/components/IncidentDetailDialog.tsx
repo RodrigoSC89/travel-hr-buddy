@@ -265,7 +265,7 @@ export const IncidentDetailDialog: React.FC<IncidentDetailDialogProps> = ({
         
         autoTable(doc, {
           startY: yPos,
-          head: [['Descrição', 'Responsável', 'Prazo', 'Status']],
+          head: [["Descrição", "Responsável", "Prazo", "Status"]],
           body: actionData,
           styles: { fontSize: 8 }
         });
@@ -298,7 +298,7 @@ export const IncidentDetailDialog: React.FC<IncidentDetailDialogProps> = ({
           
           if (sig.signature_image) {
             try {
-              doc.addImage(sig.signature_image, 'PNG', 14, yPos, 80, 30);
+              doc.addImage(sig.signature_image, "PNG", 14, yPos, 80, 30);
               yPos += 35;
             } catch (err) {
               console.error("Error adding signature image:", err);

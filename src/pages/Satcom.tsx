@@ -164,8 +164,8 @@ const SatcomPage: React.FC = () => {
                           msg.status === "delivered"
                             ? "bg-green-500/10 text-green-500"
                             : msg.status === "pending"
-                            ? "bg-yellow-500/10 text-yellow-500"
-                            : "bg-red-500/10 text-red-500"
+                              ? "bg-yellow-500/10 text-yellow-500"
+                              : "bg-red-500/10 text-red-500"
                         }
                       >
                         {msg.status}

@@ -5,7 +5,7 @@ import { Navigation, CheckCircle2, XCircle, Map, Cloud, Sparkles, Smartphone } f
 import { useState } from "react";
 
 export default function Patch502Routing() {
-  const [validationStatus, setValidationStatus] = useState<'idle' | 'running' | 'complete'>('idle');
+  const [validationStatus, setValidationStatus] = useState<"idle" | "running" | "complete">("idle");
   const [mapRendered, setMapRendered] = useState(false);
   const [aiSuggestion, setAiSuggestion] = useState(false);
   const [responsive, setResponsive] = useState(false);
@@ -42,7 +42,7 @@ export default function Patch502Routing() {
   ];
 
   const runValidation = async () => {
-    setValidationStatus('running');
+    setValidationStatus("running");
     
     // Simulate map rendering
     await new Promise(resolve => setTimeout(resolve, 1200));
@@ -56,7 +56,7 @@ export default function Patch502Routing() {
     await new Promise(resolve => setTimeout(resolve, 800));
     setResponsive(true);
     
-    setValidationStatus('complete');
+    setValidationStatus("complete");
   };
 
   const passCount = validationChecks.filter((c) => c.status === "pass").length;
@@ -81,9 +81,9 @@ export default function Patch502Routing() {
           </Badge>
           <Button 
             onClick={runValidation}
-            disabled={validationStatus === 'running'}
+            disabled={validationStatus === "running"}
           >
-            {validationStatus === 'running' ? 'Validando...' : 'Executar Validação'}
+            {validationStatus === "running" ? "Validando..." : "Executar Validação"}
           </Button>
         </div>
       </div>
@@ -177,7 +177,7 @@ export default function Patch502Routing() {
         </CardContent>
       </Card>
 
-      {validationStatus === 'complete' && passRate === "100" && (
+      {validationStatus === "complete" && passRate === "100" && (
         <Card className="border-green-200 bg-green-50">
           <CardHeader>
             <CardTitle className="text-green-800 flex items-center gap-2">

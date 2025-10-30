@@ -37,13 +37,13 @@ export const PriceAlertsList: React.FC<PriceAlertsListProps> = ({ onEdit, refres
   useEffect(() => {
     // Real-time updates
     const channel = supabase
-      .channel('price-alerts-changes')
+      .channel("price-alerts-changes")
       .on(
-        'postgres_changes',
+        "postgres_changes",
         {
-          event: '*',
-          schema: 'public',
-          table: 'price_alerts'
+          event: "*",
+          schema: "public",
+          table: "price_alerts"
         },
         () => {
           loadAlerts();

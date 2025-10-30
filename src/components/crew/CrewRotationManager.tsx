@@ -4,18 +4,18 @@
  * Enhanced crew rotation manager with drag-and-drop, alerts, and calendar integration
  */
 
-import React, { useState, useEffect, useCallback } from 'react';
-import { DndContext, DragEndEvent, useDraggable, useDroppable } from '@dnd-kit/core';
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
-import { Button } from '@/components/ui/button';
-import { Badge } from '@/components/ui/badge';
-import { Dialog, DialogContent, DialogDescription, DialogHeader, DialogTitle, DialogTrigger } from '@/components/ui/dialog';
-import { Input } from '@/components/ui/input';
-import { Label } from '@/components/ui/label';
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
-import { Textarea } from '@/components/ui/textarea';
-import { Calendar } from '@/components/ui/calendar';
-import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
+import React, { useState, useEffect, useCallback } from "react";
+import { DndContext, DragEndEvent, useDraggable, useDroppable } from "@dnd-kit/core";
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
+import { Button } from "@/components/ui/button";
+import { Badge } from "@/components/ui/badge";
+import { Dialog, DialogContent, DialogDescription, DialogHeader, DialogTitle, DialogTrigger } from "@/components/ui/dialog";
+import { Input } from "@/components/ui/input";
+import { Label } from "@/components/ui/label";
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
+import { Textarea } from "@/components/ui/textarea";
+import { Calendar } from "@/components/ui/calendar";
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { 
   Users, 
   Calendar as CalendarIcon, 
@@ -33,10 +33,10 @@ import {
   Download,
   Mail,
   RefreshCw
-} from 'lucide-react';
-import { supabase } from '@/integrations/supabase/client';
-import { toast } from 'sonner';
-import { format, parseISO, addDays, isBefore, isAfter } from 'date-fns';
+} from "lucide-react";
+import { supabase } from "@/integrations/supabase/client";
+import { toast } from "sonner";
+import { format, parseISO, addDays, isBefore, isAfter } from "date-fns";
 
 interface CrewMember {
   id: string;
@@ -44,23 +44,23 @@ interface CrewMember {
   rank: string;
   vessel_id?: string;
   vessel_name?: string;
-  status: 'onboard' | 'onshore' | 'transit';
+  status: "onboard" | "onshore" | "transit";
 }
 
 interface CrewRotation {
   id: string;
   crew_member_id: string;
   vessel_id?: string;
-  rotation_type: 'embarkation' | 'disembarkation' | 'rotation' | 'leave' | 'emergency';
+  rotation_type: "embarkation" | "disembarkation" | "rotation" | "leave" | "emergency";
   scheduled_date: string;
   actual_date?: string;
-  status: 'scheduled' | 'confirmed' | 'completed' | 'cancelled' | 'delayed';
+  status: "scheduled" | "confirmed" | "completed" | "cancelled" | "delayed";
   departure_port?: string;
   arrival_port?: string;
   transportation_method?: string;
   flight_details?: any;
   accommodation_details?: any;
-  documentation_status: 'pending' | 'verified' | 'incomplete' | 'expired';
+  documentation_status: "pending" | "verified" | "incomplete" | "expired";
   medical_clearance: boolean;
   visa_status?: string;
   notes?: string;
@@ -68,8 +68,8 @@ interface CrewRotation {
 }
 
 interface ConflictDetection {
-  type: 'scheduling' | 'documentation' | 'vessel_capacity' | 'compliance';
-  severity: 'low' | 'medium' | 'high' | 'critical';
+  type: "scheduling" | "documentation" | "vessel_capacity" | "compliance";
+  severity: "low" | "medium" | "high" | "critical";
   message: string;
   rotation_id?: string;
 }
@@ -83,9 +83,9 @@ const DraggableCrewCard: React.FC<{ member: CrewMember }> = ({ member }) => {
 
   const style = transform
     ? {
-        transform: `translate3d(${transform.x}px, ${transform.y}px, 0)`,
-        opacity: isDragging ? 0.5 : 1,
-      }
+      transform: `translate3d(${transform.x}px, ${transform.y}px, 0)`,
+      opacity: isDragging ? 0.5 : 1,
+    }
     : undefined;
 
   return (
@@ -102,7 +102,7 @@ const DraggableCrewCard: React.FC<{ member: CrewMember }> = ({ member }) => {
           <p className="font-medium text-sm">{member.name}</p>
           <p className="text-xs text-muted-foreground">{member.rank}</p>
         </div>
-        <Badge variant={member.status === 'onboard' ? 'default' : 'secondary'}>
+        <Badge variant={member.status === "onboard" ? "default" : "secondary"}>
           {member.status}
         </Badge>
       </div>
@@ -129,7 +129,7 @@ const DroppableScheduleSlot: React.FC<{
     <div
       ref={setNodeRef}
       className={`p-2 border rounded min-h-[80px] ${
-        isOver ? 'bg-primary/10 border-primary' : 'bg-muted/50'
+        isOver ? "bg-primary/10 border-primary" : "bg-muted/50"
       }`}
     >
       {slotRotations.map((rotation) => (
@@ -152,11 +152,11 @@ export const CrewRotationManager: React.FC = () => {
   const [selectedDate, setSelectedDate] = useState<Date>(new Date());
   const [loading, setLoading] = useState(true);
   const [isDialogOpen, setIsDialogOpen] = useState(false);
-  const [activeTab, setActiveTab] = useState('schedule');
+  const [activeTab, setActiveTab] = useState("schedule");
   const [newRotation, setNewRotation] = useState<Partial<CrewRotation>>({
-    rotation_type: 'embarkation',
-    status: 'scheduled',
-    documentation_status: 'pending',
+    rotation_type: "embarkation",
+    status: "scheduled",
+    documentation_status: "pending",
     medical_clearance: false,
   });
 
@@ -170,20 +170,20 @@ export const CrewRotationManager: React.FC = () => {
       
       // Load rotations with crew member details
       const { data: rotationsData, error: rotationsError } = await supabase
-        .from('crew_rotations')
+        .from("crew_rotations")
         .select(`
           *,
           crew_member:auth.users!crew_rotations_crew_member_id_fkey(id, raw_user_meta_data)
         `)
-        .order('scheduled_date', { ascending: true });
+        .order("scheduled_date", { ascending: true });
 
       if (rotationsError) throw rotationsError;
 
       // Load vessels
       const { data: vesselsData, error: vesselsError } = await supabase
-        .from('vessels')
-        .select('*')
-        .order('name');
+        .from("vessels")
+        .select("*")
+        .order("name");
 
       if (vesselsError) throw vesselsError;
 
@@ -193,8 +193,8 @@ export const CrewRotationManager: React.FC = () => {
       // Detect conflicts
       detectConflicts(rotationsData || []);
     } catch (error) {
-      console.error('Error loading data:', error);
-      toast.error('Failed to load crew rotation data');
+      console.error("Error loading data:", error);
+      toast.error("Failed to load crew rotation data");
     } finally {
       setLoading(false);
     }
@@ -210,34 +210,34 @@ export const CrewRotationManager: React.FC = () => {
         i !== index &&
         r.crew_member_id === rotation.crew_member_id &&
         r.scheduled_date === rotation.scheduled_date &&
-        r.status !== 'cancelled'
+        r.status !== "cancelled"
       );
 
       if (overlapping) {
         detectedConflicts.push({
-          type: 'scheduling',
-          severity: 'high',
+          type: "scheduling",
+          severity: "high",
           message: `Crew member has multiple rotations on ${rotation.scheduled_date}`,
           rotation_id: rotation.id,
         });
       }
 
       // Check documentation expiry
-      if (rotation.documentation_status === 'expired') {
+      if (rotation.documentation_status === "expired") {
         detectedConflicts.push({
-          type: 'documentation',
-          severity: 'critical',
+          type: "documentation",
+          severity: "critical",
           message: `Documentation expired for rotation on ${rotation.scheduled_date}`,
           rotation_id: rotation.id,
         });
       }
 
       // Check medical clearance
-      if (!rotation.medical_clearance && rotation.status !== 'cancelled') {
+      if (!rotation.medical_clearance && rotation.status !== "cancelled") {
         detectedConflicts.push({
-          type: 'compliance',
-          severity: 'medium',
-          message: `Missing medical clearance for ${rotation.crew_member?.name || 'crew member'}`,
+          type: "compliance",
+          severity: "medium",
+          message: `Missing medical clearance for ${rotation.crew_member?.name || "crew member"}`,
           rotation_id: rotation.id,
         });
       }
@@ -251,64 +251,64 @@ export const CrewRotationManager: React.FC = () => {
 
     if (!over) return;
 
-    const [date, rotationType] = over.id.toString().split('-');
+    const [date, rotationType] = over.id.toString().split("-");
     const crewMemberId = active.id;
 
     try {
       const { error } = await supabase
-        .from('crew_rotations')
+        .from("crew_rotations")
         .insert({
           crew_member_id: crewMemberId,
           rotation_type: rotationType,
           scheduled_date: date,
-          status: 'scheduled',
-          documentation_status: 'pending',
+          status: "scheduled",
+          documentation_status: "pending",
           medical_clearance: false,
         });
 
       if (error) throw error;
 
-      toast.success('Rotation scheduled successfully');
+      toast.success("Rotation scheduled successfully");
       loadData();
       
       // Generate alert
       await generateRotationAlert(crewMemberId, date, rotationType);
     } catch (error) {
-      console.error('Error scheduling rotation:', error);
-      toast.error('Failed to schedule rotation');
+      console.error("Error scheduling rotation:", error);
+      toast.error("Failed to schedule rotation");
     }
   };
 
   const generateRotationAlert = async (crewMemberId: string, date: string, type: string) => {
     try {
       // Create alert in system
-      const alertMessage = `${type === 'embarkation' ? 'Embarkation' : 'Disembarkation'} scheduled for ${format(parseISO(date), 'PPP')}`;
+      const alertMessage = `${type === "embarkation" ? "Embarkation" : "Disembarkation"} scheduled for ${format(parseISO(date), "PPP")}`;
       
-      await supabase.from('notifications').insert({
+      await supabase.from("notifications").insert({
         user_id: crewMemberId,
-        title: 'Crew Rotation Alert',
+        title: "Crew Rotation Alert",
         message: alertMessage,
-        type: 'crew_rotation',
-        priority: 'high',
-        status: 'unread',
+        type: "crew_rotation",
+        priority: "high",
+        status: "unread",
       });
 
       // Log the alert
-      toast.info('Alert generated for crew member');
+      toast.info("Alert generated for crew member");
     } catch (error) {
-      console.error('Error generating alert:', error);
+      console.error("Error generating alert:", error);
     }
   };
 
   const handleCreateRotation = async () => {
     try {
       const { error } = await supabase
-        .from('crew_rotations')
+        .from("crew_rotations")
         .insert(newRotation);
 
       if (error) throw error;
 
-      toast.success('Rotation created successfully');
+      toast.success("Rotation created successfully");
       setIsDialogOpen(false);
       loadData();
       
@@ -321,33 +321,33 @@ export const CrewRotationManager: React.FC = () => {
         );
       }
     } catch (error) {
-      console.error('Error creating rotation:', error);
-      toast.error('Failed to create rotation');
+      console.error("Error creating rotation:", error);
+      toast.error("Failed to create rotation");
     }
   };
 
   const handleUpdateRotationStatus = async (rotationId: string, newStatus: string) => {
     try {
       const { error } = await supabase
-        .from('crew_rotations')
+        .from("crew_rotations")
         .update({ status: newStatus })
-        .eq('id', rotationId);
+        .eq("id", rotationId);
 
       if (error) throw error;
 
       // Log the status change
-      await supabase.from('crew_rotation_logs').insert({
+      await supabase.from("crew_rotation_logs").insert({
         rotation_id: rotationId,
-        log_type: 'status_change',
+        log_type: "status_change",
         description: `Status changed to ${newStatus}`,
         new_status: newStatus,
       });
 
-      toast.success('Rotation status updated');
+      toast.success("Rotation status updated");
       loadData();
     } catch (error) {
-      console.error('Error updating rotation:', error);
-      toast.error('Failed to update rotation');
+      console.error("Error updating rotation:", error);
+      toast.error("Failed to update rotation");
     }
   };
 
@@ -356,8 +356,8 @@ export const CrewRotationManager: React.FC = () => {
     const event = {
       title: `${rotation.rotation_type} - ${rotation.crew_member?.name}`,
       start: rotation.scheduled_date,
-      description: rotation.notes || '',
-      location: rotation.departure_port || rotation.arrival_port || '',
+      description: rotation.notes || "",
+      location: rotation.departure_port || rotation.arrival_port || "",
     };
 
     // Create iCal content
@@ -372,25 +372,25 @@ END:VEVENT
 END:VCALENDAR`;
 
     // Download iCal file
-    const blob = new Blob([icalContent], { type: 'text/calendar' });
+    const blob = new Blob([icalContent], { type: "text/calendar" });
     const url = URL.createObjectURL(blob);
-    const a = document.createElement('a');
+    const a = document.createElement("a");
     a.href = url;
     a.download = `rotation-${rotation.id}.ics`;
     a.click();
     
-    toast.success('Calendar event exported');
+    toast.success("Calendar event exported");
   };
 
   const getStatusColor = (status: string) => {
     const colors = {
-      scheduled: 'bg-blue-500',
-      confirmed: 'bg-green-500',
-      completed: 'bg-gray-500',
-      cancelled: 'bg-red-500',
-      delayed: 'bg-yellow-500',
+      scheduled: "bg-blue-500",
+      confirmed: "bg-green-500",
+      completed: "bg-gray-500",
+      cancelled: "bg-red-500",
+      delayed: "bg-yellow-500",
     };
-    return colors[status] || 'bg-gray-500';
+    return colors[status] || "bg-gray-500";
   };
 
   if (loading) {
@@ -480,7 +480,7 @@ END:VCALENDAR`;
                   <Label>Scheduled Date</Label>
                   <Input
                     type="date"
-                    value={newRotation.scheduled_date || ''}
+                    value={newRotation.scheduled_date || ""}
                     onChange={(e) =>
                       setNewRotation({ ...newRotation, scheduled_date: e.target.value })
                     }
@@ -490,7 +490,7 @@ END:VCALENDAR`;
                   <div>
                     <Label>Departure Port</Label>
                     <Input
-                      value={newRotation.departure_port || ''}
+                      value={newRotation.departure_port || ""}
                       onChange={(e) =>
                         setNewRotation({ ...newRotation, departure_port: e.target.value })
                       }
@@ -499,7 +499,7 @@ END:VCALENDAR`;
                   <div>
                     <Label>Arrival Port</Label>
                     <Input
-                      value={newRotation.arrival_port || ''}
+                      value={newRotation.arrival_port || ""}
                       onChange={(e) =>
                         setNewRotation({ ...newRotation, arrival_port: e.target.value })
                       }
@@ -509,7 +509,7 @@ END:VCALENDAR`;
                 <div>
                   <Label>Notes</Label>
                   <Textarea
-                    value={newRotation.notes || ''}
+                    value={newRotation.notes || ""}
                     onChange={(e) =>
                       setNewRotation({ ...newRotation, notes: e.target.value })
                     }
@@ -533,7 +533,7 @@ END:VCALENDAR`;
           <CardHeader>
             <CardTitle className="flex items-center gap-2">
               <AlertTriangle className="h-5 w-5 text-destructive" />
-              {conflicts.length} Conflict{conflicts.length > 1 ? 's' : ''} Detected
+              {conflicts.length} Conflict{conflicts.length > 1 ? "s" : ""} Detected
             </CardTitle>
           </CardHeader>
           <CardContent>
@@ -559,7 +559,7 @@ END:VCALENDAR`;
           <CardContent>
             <div className="text-2xl font-bold">{rotations.length}</div>
             <p className="text-xs text-muted-foreground">
-              {rotations.filter((r) => r.status === 'scheduled').length} scheduled
+              {rotations.filter((r) => r.status === "scheduled").length} scheduled
             </p>
           </CardContent>
         </Card>
@@ -571,7 +571,7 @@ END:VCALENDAR`;
           </CardHeader>
           <CardContent>
             <div className="text-2xl font-bold">
-              {rotations.filter((r) => r.status === 'confirmed').length}
+              {rotations.filter((r) => r.status === "confirmed").length}
             </div>
             <p className="text-xs text-muted-foreground">Ready to proceed</p>
           </CardContent>
@@ -584,7 +584,7 @@ END:VCALENDAR`;
           </CardHeader>
           <CardContent>
             <div className="text-2xl font-bold">
-              {rotations.filter((r) => r.documentation_status === 'pending').length}
+              {rotations.filter((r) => r.documentation_status === "pending").length}
             </div>
             <p className="text-xs text-muted-foreground">Requires attention</p>
           </CardContent>
@@ -623,11 +623,11 @@ END:VCALENDAR`;
               <DndContext onDragEnd={handleDragEnd}>
                 <div className="grid grid-cols-7 gap-2">
                   {Array.from({ length: 7 }, (_, i) => {
-                    const date = format(addDays(selectedDate, i), 'yyyy-MM-dd');
+                    const date = format(addDays(selectedDate, i), "yyyy-MM-dd");
                     return (
                       <div key={date} className="space-y-2">
                         <div className="text-center font-medium text-sm">
-                          {format(addDays(selectedDate, i), 'EEE dd')}
+                          {format(addDays(selectedDate, i), "EEE dd")}
                         </div>
                         <div className="space-y-2">
                           <div>
@@ -671,7 +671,7 @@ END:VCALENDAR`;
                           rotation.rotation_type.slice(1)}
                       </CardTitle>
                       <CardDescription>
-                        {format(parseISO(rotation.scheduled_date), 'PPP')}
+                        {format(parseISO(rotation.scheduled_date), "PPP")}
                       </CardDescription>
                     </div>
                   </div>
@@ -693,22 +693,22 @@ END:VCALENDAR`;
                 <div className="grid grid-cols-2 gap-4 text-sm">
                   <div>
                     <p className="text-muted-foreground">Departure Port</p>
-                    <p className="font-medium">{rotation.departure_port || 'N/A'}</p>
+                    <p className="font-medium">{rotation.departure_port || "N/A"}</p>
                   </div>
                   <div>
                     <p className="text-muted-foreground">Arrival Port</p>
-                    <p className="font-medium">{rotation.arrival_port || 'N/A'}</p>
+                    <p className="font-medium">{rotation.arrival_port || "N/A"}</p>
                   </div>
                   <div>
                     <p className="text-muted-foreground">Documentation</p>
-                    <Badge variant={rotation.documentation_status === 'verified' ? 'default' : 'secondary'}>
+                    <Badge variant={rotation.documentation_status === "verified" ? "default" : "secondary"}>
                       {rotation.documentation_status}
                     </Badge>
                   </div>
                   <div>
                     <p className="text-muted-foreground">Medical Clearance</p>
-                    <Badge variant={rotation.medical_clearance ? 'default' : 'secondary'}>
-                      {rotation.medical_clearance ? 'Cleared' : 'Pending'}
+                    <Badge variant={rotation.medical_clearance ? "default" : "secondary"}>
+                      {rotation.medical_clearance ? "Cleared" : "Pending"}
                     </Badge>
                   </div>
                 </div>
@@ -744,15 +744,15 @@ END:VCALENDAR`;
                     >
                       <AlertTriangle
                         className={`h-5 w-5 ${
-                          conflict.severity === 'critical'
-                            ? 'text-red-500'
-                            : conflict.severity === 'high'
-                            ? 'text-orange-500'
-                            : 'text-yellow-500'
+                          conflict.severity === "critical"
+                            ? "text-red-500"
+                            : conflict.severity === "high"
+                              ? "text-orange-500"
+                              : "text-yellow-500"
                         }`}
                       />
                       <div className="flex-1">
-                        <p className="font-medium">{conflict.type.replace('_', ' ').toUpperCase()}</p>
+                        <p className="font-medium">{conflict.type.replace("_", " ").toUpperCase()}</p>
                         <p className="text-sm text-muted-foreground">{conflict.message}</p>
                       </div>
                       <Badge>{conflict.severity}</Badge>
@@ -773,7 +773,7 @@ END:VCALENDAR`;
             <CardContent>
               <div className="space-y-2">
                 {rotations
-                  .filter((r) => r.status === 'completed')
+                  .filter((r) => r.status === "completed")
                   .map((rotation) => (
                     <div
                       key={rotation.id}
@@ -787,7 +787,7 @@ END:VCALENDAR`;
                               rotation.rotation_type.slice(1)}
                           </p>
                           <p className="text-sm text-muted-foreground">
-                            {format(parseISO(rotation.scheduled_date), 'PPP')}
+                            {format(parseISO(rotation.scheduled_date), "PPP")}
                           </p>
                         </div>
                       </div>

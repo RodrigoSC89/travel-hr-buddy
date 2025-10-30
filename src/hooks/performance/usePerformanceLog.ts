@@ -39,7 +39,7 @@ export function usePerformanceLog({
         performance.mark(`${componentName}-end`);
         performance.measure(measureName, markName, `${componentName}-end`);
         
-        const measures = performance.getEntriesByName(measureName, 'measure');
+        const measures = performance.getEntriesByName(measureName, "measure");
         const measure = measures[measures.length - 1];
         
         if (measure) {
@@ -94,6 +94,6 @@ async function logPerformanceToDatabase(componentName: string, duration: number)
     // For now, just log to console
     console.log(`[Performance DB Log] ${componentName}: ${duration.toFixed(2)}ms`);
   } catch (error) {
-    console.error('[Performance] Failed to log to database:', error);
+    console.error("[Performance] Failed to log to database:", error);
   }
 }

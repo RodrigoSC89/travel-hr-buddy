@@ -261,19 +261,19 @@ class DeepRiskAIService {
 
       if (error) throw error;
 
-return (
-  data?.map((d: any) => ({
-    id: d.id,
-    timestamp: d.timestamp,
-    eventType: d.event_type,
-    riskScore: d.risk_score,
-    riskLevel: d.risk_level,
-    factors: d.factors,
-    recommendations: d.recommendations,
-    resolved: d.resolved,
-    notes: d.notes,
-  })) || []
-);
+      return (
+        data?.map((d: any) => ({
+          id: d.id,
+          timestamp: d.timestamp,
+          eventType: d.event_type,
+          riskScore: d.risk_score,
+          riskLevel: d.risk_level,
+          factors: d.factors,
+          recommendations: d.recommendations,
+          resolved: d.resolved,
+          notes: d.notes,
+        })) || []
+      );
     } catch (error) {
       logger.error("Failed to get risk history", error);
       return [];
@@ -313,8 +313,8 @@ return (
         avgRecent > avgOlder + 5
           ? "increasing"
           : avgRecent < avgOlder - 5
-          ? "decreasing"
-          : "stable";
+            ? "decreasing"
+            : "stable";
 
       // Simple prediction model (in production, this would use actual ML models)
       const currentScore = await this.calculateRiskScore(factors);
@@ -439,17 +439,17 @@ return (
         .order("timestamp", { ascending: false })
         .limit(50);
 
-return (
-  data?.map((d: any) => ({
-    id: d.id,
-    type: d.type,
-    severity: d.severity,
-    timestamp: d.timestamp,
-    description: d.description,
-    location: d.location,
-    resolved: d.resolved || false,
-  })) || []
-);
+      return (
+        data?.map((d: any) => ({
+          id: d.id,
+          type: d.type,
+          severity: d.severity,
+          timestamp: d.timestamp,
+          description: d.description,
+          location: d.location,
+          resolved: d.resolved || false,
+        })) || []
+      );
     } catch (error) {
       logger.error("Failed to fetch incidents", error);
       return [];

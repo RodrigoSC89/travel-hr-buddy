@@ -114,16 +114,16 @@ export function Patch602Validation() {
             <div key={layer.level}>
               <Card className={
                 layer.status === "active" ? "border-primary" :
-                layer.status === "transitioning" ? "border-yellow-500" :
-                ""
+                  layer.status === "transitioning" ? "border-yellow-500" :
+                    ""
               }>
                 <CardContent className="pt-4">
                   <div className="flex items-center justify-between mb-3">
                     <div className="flex items-center gap-2">
                       <Badge variant={
                         layer.status === "active" ? "default" :
-                        layer.status === "transitioning" ? "outline" :
-                        "secondary"
+                          layer.status === "transitioning" ? "outline" :
+                            "secondary"
                       }>
                         {layer.level}
                       </Badge>
@@ -133,8 +133,8 @@ export function Patch602Validation() {
                     </div>
                     <Badge variant="outline">
                       {layer.status === "active" ? "Active" :
-                       layer.status === "transitioning" ? "Transitioning" :
-                       "Inactive"}
+                        layer.status === "transitioning" ? "Transitioning" :
+                          "Inactive"}
                     </Badge>
                   </div>
                   

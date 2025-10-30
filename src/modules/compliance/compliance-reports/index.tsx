@@ -88,20 +88,20 @@ const ComplianceReports = () => {
   const fetchComplianceData = async () => {
     try {
       setLoading(true);
-      let query = supabase.from('compliance_items' as any).select('*');
+      let query = supabase.from("compliance_items" as any).select("*");
       
       // Apply filters if any
       if (reportConfig.categories?.length > 0) {
-        query = query.in('category', reportConfig.categories);
+        query = query.in("category", reportConfig.categories);
       }
       if (reportConfig.severities?.length > 0) {
-        query = query.in('severity', reportConfig.severities);
+        query = query.in("severity", reportConfig.severities);
       }
       if (reportConfig.dateFrom) {
-        query = query.gte('created_at', reportConfig.dateFrom);
+        query = query.gte("created_at", reportConfig.dateFrom);
       }
       if (reportConfig.dateTo) {
-        query = query.lte('created_at', reportConfig.dateTo);
+        query = query.lte("created_at", reportConfig.dateTo);
       }
 
       const { data, error } = await query;
@@ -154,7 +154,7 @@ const ComplianceReports = () => {
       
       // Add table using autoTable
       autoTable(doc, {
-        head: [['ID', 'Category', 'Severity', 'Status', 'Title', 'Date']],
+        head: [["ID", "Category", "Severity", "Status", "Title", "Date"]],
         body: tableData,
         startY: 42,
         styles: { fontSize: 8 },
@@ -162,7 +162,7 @@ const ComplianceReports = () => {
       });
       
       // Save the PDF
-      doc.save(`${reportConfig.title || 'compliance-report'}.pdf`);
+      doc.save(`${reportConfig.title || "compliance-report"}.pdf`);
       
       toast({
         title: "PDF gerado",
@@ -181,25 +181,25 @@ const ComplianceReports = () => {
   // CSV Export with Excel compatibility
   const exportToCSV = (data: any[]) => {
     try {
-      const headers = ['ID', 'Category', 'Severity', 'Status', 'Title', 'Date'];
+      const headers = ["ID", "Category", "Severity", "Status", "Title", "Date"];
       const rows = data.map(item => [
-        item.id || '',
-        item.category || '',
-        item.severity || '',
-        item.status || '',
-        (item.title || '').replace(/"/g, '""'), // Escape quotes
-        item.created_at ? format(new Date(item.created_at), "dd/MM/yyyy") : ''
+        item.id || "",
+        item.category || "",
+        item.severity || "",
+        item.status || "",
+        (item.title || "").replace(/"/g, "\"\""), // Escape quotes
+        item.created_at ? format(new Date(item.created_at), "dd/MM/yyyy") : ""
       ]);
       
       const csvContent = [
-        headers.join(','),
-        ...rows.map(row => row.map(cell => `"${cell}"`).join(','))
-      ].join('\n');
+        headers.join(","),
+        ...rows.map(row => row.map(cell => `"${cell}"`).join(","))
+      ].join("\n");
       
-      const blob = new Blob([csvContent], { type: 'text/csv;charset=utf-8;' });
-      const link = document.createElement('a');
+      const blob = new Blob([csvContent], { type: "text/csv;charset=utf-8;" });
+      const link = document.createElement("a");
       link.href = URL.createObjectURL(blob);
-      link.download = `${reportConfig.title || 'compliance-report'}.csv`;
+      link.download = `${reportConfig.title || "compliance-report"}.csv`;
       link.click();
       
       toast({
@@ -220,18 +220,18 @@ const ComplianceReports = () => {
   const exportToExcel = (data: any[]) => {
     try {
       const worksheet = XLSX.utils.json_to_sheet(data.map(item => ({
-        'ID': item.id,
-        'Category': item.category,
-        'Severity': item.severity,
-        'Status': item.status,
-        'Title': item.title,
-        'Date': item.created_at ? format(new Date(item.created_at), "dd/MM/yyyy") : ''
+        "ID": item.id,
+        "Category": item.category,
+        "Severity": item.severity,
+        "Status": item.status,
+        "Title": item.title,
+        "Date": item.created_at ? format(new Date(item.created_at), "dd/MM/yyyy") : ""
       })));
       
       const workbook = XLSX.utils.book_new();
       XLSX.utils.book_append_sheet(workbook, worksheet, "Compliance Data");
       
-      XLSX.writeFile(workbook, `${reportConfig.title || 'compliance-report'}.xlsx`);
+      XLSX.writeFile(workbook, `${reportConfig.title || "compliance-report"}.xlsx`);
       
       toast({
         title: "Excel gerado",
@@ -266,10 +266,10 @@ const ComplianceReports = () => {
         data: data
       };
       
-      const blob = new Blob([JSON.stringify(jsonData, null, 2)], { type: 'application/json' });
-      const link = document.createElement('a');
+      const blob = new Blob([JSON.stringify(jsonData, null, 2)], { type: "application/json" });
+      const link = document.createElement("a");
       link.href = URL.createObjectURL(blob);
-      link.download = `${reportConfig.title || 'compliance-report'}.json`;
+      link.download = `${reportConfig.title || "compliance-report"}.json`;
       link.click();
       
       toast({

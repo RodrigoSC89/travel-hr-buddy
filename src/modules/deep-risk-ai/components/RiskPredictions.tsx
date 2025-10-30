@@ -15,10 +15,10 @@ interface Props {
 export const RiskPredictions: React.FC<Props> = ({ predictions }) => {
   const getSeverityColor = (severity: string) => {
     switch (severity) {
-      case "critical": return "bg-red-500/20 text-red-500";
-      case "high": return "bg-orange-500/20 text-orange-500";
-      case "medium": return "bg-yellow-500/20 text-yellow-500";
-      default: return "bg-blue-500/20 text-blue-500";
+    case "critical": return "bg-red-500/20 text-red-500";
+    case "high": return "bg-orange-500/20 text-orange-500";
+    case "medium": return "bg-yellow-500/20 text-yellow-500";
+    default: return "bg-blue-500/20 text-blue-500";
     }
   };
 

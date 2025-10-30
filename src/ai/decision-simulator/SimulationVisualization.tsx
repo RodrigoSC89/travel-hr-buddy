@@ -33,16 +33,16 @@ export const SimulationVisualization: React.FC<SimulationVisualizationProps> = (
 }) => {
   const getStatusColor = (status: string) => {
     switch (status) {
-      case "completed":
-        return "bg-green-500";
-      case "running":
-        return "bg-blue-500";
-      case "failed":
-        return "bg-red-500";
-      case "cancelled":
-        return "bg-gray-500";
-      default:
-        return "bg-yellow-500";
+    case "completed":
+      return "bg-green-500";
+    case "running":
+      return "bg-blue-500";
+    case "failed":
+      return "bg-red-500";
+    case "cancelled":
+      return "bg-gray-500";
+    default:
+      return "bg-yellow-500";
     }
   };
 

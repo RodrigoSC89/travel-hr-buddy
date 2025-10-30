@@ -1,19 +1,19 @@
-import { useState, useEffect } from 'react';
-import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
-import { Button } from '@/components/ui/button';
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
-import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/components/ui/table';
-import { Badge } from '@/components/ui/badge';
-import { RefreshCw, TrendingUp, Clock, Zap, Activity } from 'lucide-react';
-import { aiLogger } from '@/lib/ai/ai-logger';
-import { toast } from 'sonner';
+import { useState, useEffect } from "react";
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import { Button } from "@/components/ui/button";
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
+import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
+import { Badge } from "@/components/ui/badge";
+import { RefreshCw, TrendingUp, Clock, Zap, Activity } from "lucide-react";
+import { aiLogger } from "@/lib/ai/ai-logger";
+import { toast } from "sonner";
 
 export default function AIAuditDashboard() {
   const [logs, setLogs] = useState<any[]>([]);
   const [metrics, setMetrics] = useState<any>(null);
   const [loading, setLoading] = useState(true);
-  const [selectedService, setSelectedService] = useState<string>('');
-  const [selectedStatus, setSelectedStatus] = useState<string>('');
+  const [selectedService, setSelectedService] = useState<string>("");
+  const [selectedStatus, setSelectedStatus] = useState<string>("");
 
   useEffect(() => {
     fetchData();
@@ -34,8 +34,8 @@ export default function AIAuditDashboard() {
       const metricsData = await aiLogger.getMetrics(selectedService || undefined);
       setMetrics(metricsData);
     } catch (error: any) {
-      console.error('Error fetching AI audit data:', error);
-      toast.error('Failed to fetch AI audit data');
+      console.error("Error fetching AI audit data:", error);
+      toast.error("Failed to fetch AI audit data");
     } finally {
       setLoading(false);
     }
@@ -43,14 +43,14 @@ export default function AIAuditDashboard() {
 
   function getStatusBadge(status: string) {
     switch (status) {
-      case 'success':
-        return <Badge className="bg-green-500">Success</Badge>;
-      case 'error':
-        return <Badge className="bg-red-500">Error</Badge>;
-      case 'timeout':
-        return <Badge className="bg-yellow-500">Timeout</Badge>;
-      default:
-        return <Badge>Unknown</Badge>;
+    case "success":
+      return <Badge className="bg-green-500">Success</Badge>;
+    case "error":
+      return <Badge className="bg-red-500">Error</Badge>;
+    case "timeout":
+      return <Badge className="bg-yellow-500">Timeout</Badge>;
+    default:
+      return <Badge>Unknown</Badge>;
     }
   }
 
@@ -59,7 +59,7 @@ export default function AIAuditDashboard() {
       <div className="flex justify-between items-center">
         <h1 className="text-3xl font-bold">AI Audit Dashboard</h1>
         <Button onClick={fetchData} disabled={loading}>
-          <RefreshCw className={`mr-2 h-4 w-4 ${loading ? 'animate-spin' : ''}`} />
+          <RefreshCw className={`mr-2 h-4 w-4 ${loading ? "animate-spin" : ""}`} />
           Refresh
         </Button>
       </div>
@@ -182,11 +182,11 @@ export default function AIAuditDashboard() {
                         <TableCell className="whitespace-nowrap">
                           {new Date(log.created_at).toLocaleString()}
                         </TableCell>
-                        <TableCell className="capitalize">{log.service.replace('_', ' ')}</TableCell>
+                        <TableCell className="capitalize">{log.service.replace("_", " ")}</TableCell>
                         <TableCell>{getStatusBadge(log.status)}</TableCell>
-                        <TableCell>{log.response_time_ms ? `${log.response_time_ms}ms` : 'N/A'}</TableCell>
-                        <TableCell>{log.tokens_used || 'N/A'}</TableCell>
-                        <TableCell className="text-xs">{log.model || 'N/A'}</TableCell>
+                        <TableCell>{log.response_time_ms ? `${log.response_time_ms}ms` : "N/A"}</TableCell>
+                        <TableCell>{log.tokens_used || "N/A"}</TableCell>
+                        <TableCell className="text-xs">{log.model || "N/A"}</TableCell>
                         <TableCell>{log.prompt_length || 0} chars</TableCell>
                       </TableRow>
                     ))

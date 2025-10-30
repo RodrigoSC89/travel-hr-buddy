@@ -156,7 +156,7 @@ export default defineConfig(({ mode }) => {
         compress: {
           drop_console: mode === "production", // Remove console em produção
           drop_debugger: true,
-          pure_funcs: mode === "production" ? ['console.log', 'console.debug', 'console.info'] : [],
+          pure_funcs: mode === "production" ? ["console.log", "console.debug", "console.info"] : [],
         },
         mangle: {
           safari10: true, // Compatibilidade

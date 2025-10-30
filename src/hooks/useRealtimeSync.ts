@@ -148,13 +148,13 @@ export function useRealtimeSync<T>({
       subscriptionRef.current = supabase
         .channel(`${table}_changes`)
         .on(
-          'postgres_changes',
-          { event: '*', schema: 'public', table },
+          "postgres_changes",
+          { event: "*", schema: "public", table },
           (payload) => {
             console.log(`[RealtimeSync] Received update for ${table}:`, payload);
             
             // Update data based on event type
-            if (payload.eventType === 'INSERT' || payload.eventType === 'UPDATE') {
+            if (payload.eventType === "INSERT" || payload.eventType === "UPDATE") {
               setData(payload.new as T);
               offlineCache.set(cacheKey, payload.new, cacheTTL);
               setSyncState(prev => ({
@@ -167,7 +167,7 @@ export function useRealtimeSync<T>({
         )
         .subscribe();
     } catch (err) {
-      console.error('[RealtimeSync] Error setting up subscription:', err);
+      console.error("[RealtimeSync] Error setting up subscription:", err);
     }
 
     // Cleanup

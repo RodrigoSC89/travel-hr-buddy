@@ -22,16 +22,16 @@ export const MissionDashboard: React.FC<MissionDashboardProps> = ({
 }) => {
   const getStatusColor = (status: ModuleStatus["status"]) => {
     switch (status) {
-      case "operational":
-        return "text-green-500 bg-green-500/10";
-      case "warning":
-        return "text-yellow-500 bg-yellow-500/10";
-      case "critical":
-        return "text-red-500 bg-red-500/10";
-      case "offline":
-        return "text-gray-500 bg-gray-500/10";
-      default:
-        return "text-gray-500 bg-gray-500/10";
+    case "operational":
+      return "text-green-500 bg-green-500/10";
+    case "warning":
+      return "text-yellow-500 bg-yellow-500/10";
+    case "critical":
+      return "text-red-500 bg-red-500/10";
+    case "offline":
+      return "text-gray-500 bg-gray-500/10";
+    default:
+      return "text-gray-500 bg-gray-500/10";
     }
   };
 
@@ -69,7 +69,7 @@ export const MissionDashboard: React.FC<MissionDashboardProps> = ({
                   {module.alerts > 0 && (
                     <div className="flex items-center gap-1 text-xs text-yellow-500">
                       <AlertCircle className="h-3 w-3" />
-                      <span>{module.alerts} alert{module.alerts > 1 ? 's' : ''}</span>
+                      <span>{module.alerts} alert{module.alerts > 1 ? "s" : ""}</span>
                     </div>
                   )}
                 </div>

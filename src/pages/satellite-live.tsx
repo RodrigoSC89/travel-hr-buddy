@@ -51,7 +51,7 @@ export default function SatelliteLivePage() {
   const [syncLogs, setSyncLogs] = useState<SyncLog[]>([]);
   const [loading, setLoading] = useState(true);
   const [syncing, setSyncing] = useState(false);
-  const [selectedOrbit, setSelectedOrbit] = useState<string>('all');
+  const [selectedOrbit, setSelectedOrbit] = useState<string>("all");
 
   useEffect(() => {
     loadSatellites();
@@ -66,9 +66,9 @@ export default function SatelliteLivePage() {
   const loadSatellites = async () => {
     try {
       const { data, error } = await supabase
-        .from('satellite_live_tracking')
-        .select('*')
-        .order('timestamp', { ascending: false });
+        .from("satellite_live_tracking")
+        .select("*")
+        .order("timestamp", { ascending: false });
 
       if (error) throw error;
       
@@ -82,8 +82,8 @@ export default function SatelliteLivePage() {
 
       setSatellites(Array.from(uniqueSatellites.values()));
     } catch (error) {
-      console.error('Error loading satellites:', error);
-      toast.error('Failed to load satellites');
+      console.error("Error loading satellites:", error);
+      toast.error("Failed to load satellites");
     } finally {
       setLoading(false);
     }
@@ -92,27 +92,27 @@ export default function SatelliteLivePage() {
   const loadSyncLogs = async () => {
     try {
       const { data, error } = await supabase
-        .from('satellite_api_sync_logs')
-        .select('*')
-        .order('timestamp', { ascending: false })
+        .from("satellite_api_sync_logs")
+        .select("*")
+        .order("timestamp", { ascending: false })
         .limit(10);
 
       if (error) throw error;
       setSyncLogs(data || []);
     } catch (error) {
-      console.error('Error loading sync logs:', error);
+      console.error("Error loading sync logs:", error);
     }
   };
 
   const initializeRealtime = () => {
     const channel = supabase
-      .channel('satellite-tracking-realtime')
+      .channel("satellite-tracking-realtime")
       .on(
-        'postgres_changes',
+        "postgres_changes",
         {
-          event: 'INSERT',
-          schema: 'public',
-          table: 'satellite_live_tracking'
+          event: "INSERT",
+          schema: "public",
+          table: "satellite_live_tracking"
         },
         () => {
           loadSatellites();
@@ -134,45 +134,45 @@ export default function SatelliteLivePage() {
       // In production, this would call N2YO, Celestrak, or similar APIs
       const mockSatellites = [
         {
-          satellite_id: 'ISS',
-          satellite_name: 'International Space Station',
+          satellite_id: "ISS",
+          satellite_name: "International Space Station",
           norad_id: 25544,
           latitude: -15.3 + Math.random() * 5,
           longitude: -48.2 + Math.random() * 5,
           altitude_km: 408 + Math.random() * 10,
           velocity_kmh: 27600 + Math.random() * 100,
-          orbit_type: 'LEO',
-          visibility: 'visible',
-          status: 'active'
+          orbit_type: "LEO",
+          visibility: "visible",
+          status: "active"
         },
         {
-          satellite_id: 'HUBBLE',
-          satellite_name: 'Hubble Space Telescope',
+          satellite_id: "HUBBLE",
+          satellite_name: "Hubble Space Telescope",
           norad_id: 20580,
           latitude: 28.5 + Math.random() * 5,
           longitude: -80.6 + Math.random() * 5,
           altitude_km: 540 + Math.random() * 10,
           velocity_kmh: 27300 + Math.random() * 100,
-          orbit_type: 'LEO',
-          visibility: 'eclipsed',
-          status: 'active'
+          orbit_type: "LEO",
+          visibility: "eclipsed",
+          status: "active"
         },
         {
-          satellite_id: 'GPS-III-1',
-          satellite_name: 'GPS III SV01',
+          satellite_id: "GPS-III-1",
+          satellite_name: "GPS III SV01",
           norad_id: 43873,
           latitude: 35.0 + Math.random() * 10,
           longitude: -95.0 + Math.random() * 10,
           altitude_km: 20200 + Math.random() * 100,
           velocity_kmh: 14000 + Math.random() * 100,
-          orbit_type: 'MEO',
-          visibility: 'visible',
-          status: 'active'
+          orbit_type: "MEO",
+          visibility: "visible",
+          status: "active"
         }
       ];
 
       const { data, error } = await supabase
-        .from('satellite_live_tracking')
+        .from("satellite_live_tracking")
         .insert(
           mockSatellites.map(sat => ({
             ...sat,
@@ -185,10 +185,10 @@ export default function SatelliteLivePage() {
       // Log the sync
       const responseTime = Date.now() - startTime;
       await supabase
-        .from('satellite_api_sync_logs')
+        .from("satellite_api_sync_logs")
         .insert({
-          api_provider: 'mock',
-          sync_type: 'realtime',
+          api_provider: "mock",
+          sync_type: "realtime",
           satellites_updated: mockSatellites.length,
           satellites_added: 0,
           satellites_removed: 0,
@@ -200,15 +200,15 @@ export default function SatelliteLivePage() {
       loadSatellites();
       loadSyncLogs();
     } catch (error) {
-      console.error('Error syncing satellites:', error);
-      toast.error('Failed to sync satellite data');
+      console.error("Error syncing satellites:", error);
+      toast.error("Failed to sync satellite data");
       
       // Log failed sync
       await supabase
-        .from('satellite_api_sync_logs')
+        .from("satellite_api_sync_logs")
         .insert({
-          api_provider: 'mock',
-          sync_type: 'realtime',
+          api_provider: "mock",
+          sync_type: "realtime",
           satellites_updated: 0,
           success: false,
           error_message: String(error),
@@ -220,24 +220,24 @@ export default function SatelliteLivePage() {
   };
 
   const filteredSatellites = satellites.filter(sat =>
-    selectedOrbit === 'all' || sat.orbit_type === selectedOrbit
+    selectedOrbit === "all" || sat.orbit_type === selectedOrbit
   );
 
   const getOrbitColor = (orbit: string) => {
     switch (orbit) {
-      case 'LEO': return 'bg-blue-500';
-      case 'MEO': return 'bg-green-500';
-      case 'GEO': return 'bg-purple-500';
-      case 'HEO': return 'bg-orange-500';
-      default: return 'bg-gray-500';
+    case "LEO": return "bg-blue-500";
+    case "MEO": return "bg-green-500";
+    case "GEO": return "bg-purple-500";
+    case "HEO": return "bg-orange-500";
+    default: return "bg-gray-500";
     }
   };
 
   const getVisibilityIcon = (visibility: string) => {
     switch (visibility) {
-      case 'visible': return <Eye className="h-4 w-4 text-green-500" />;
-      case 'eclipsed': return <Eye className="h-4 w-4 text-gray-500" />;
-      default: return <Eye className="h-4 w-4 text-yellow-500" />;
+    case "visible": return <Eye className="h-4 w-4 text-green-500" />;
+    case "eclipsed": return <Eye className="h-4 w-4 text-gray-500" />;
+    default: return <Eye className="h-4 w-4 text-yellow-500" />;
     }
   };
 
@@ -255,8 +255,8 @@ export default function SatelliteLivePage() {
           </p>
         </div>
         <Button onClick={syncSatelliteData} disabled={syncing}>
-          <RefreshCw className={`h-4 w-4 mr-2 ${syncing ? 'animate-spin' : ''}`} />
-          {syncing ? 'Syncing...' : 'Sync Data'}
+          <RefreshCw className={`h-4 w-4 mr-2 ${syncing ? "animate-spin" : ""}`} />
+          {syncing ? "Syncing..." : "Sync Data"}
         </Button>
       </div>
 
@@ -278,7 +278,7 @@ export default function SatelliteLivePage() {
           </CardHeader>
           <CardContent>
             <div className="text-2xl font-bold text-blue-500">
-              {satellites.filter(s => s.orbit_type === 'LEO').length}
+              {satellites.filter(s => s.orbit_type === "LEO").length}
             </div>
             <p className="text-xs text-muted-foreground">Low Earth Orbit</p>
           </CardContent>
@@ -290,7 +290,7 @@ export default function SatelliteLivePage() {
           </CardHeader>
           <CardContent>
             <div className="text-2xl font-bold text-green-500">
-              {satellites.filter(s => s.orbit_type === 'MEO').length}
+              {satellites.filter(s => s.orbit_type === "MEO").length}
             </div>
             <p className="text-xs text-muted-foreground">Medium Earth Orbit</p>
           </CardContent>
@@ -302,10 +302,10 @@ export default function SatelliteLivePage() {
           </CardHeader>
           <CardContent>
             <div className="text-2xl font-bold">
-              {syncLogs[0] ? new Date(syncLogs[0].timestamp).toLocaleTimeString() : '—'}
+              {syncLogs[0] ? new Date(syncLogs[0].timestamp).toLocaleTimeString() : "—"}
             </div>
             <p className="text-xs text-muted-foreground">
-              {syncLogs[0] ? `${syncLogs[0].response_time_ms}ms` : 'Never'}
+              {syncLogs[0] ? `${syncLogs[0].response_time_ms}ms` : "Never"}
             </p>
           </CardContent>
         </Card>
@@ -395,7 +395,7 @@ export default function SatelliteLivePage() {
                                   <Activity className="h-3 w-3" />
                                   Status
                                 </div>
-                                <Badge variant={satellite.status === 'active' ? 'default' : 'secondary'}>
+                                <Badge variant={satellite.status === "active" ? "default" : "secondary"}>
                                   {satellite.status}
                                 </Badge>
                               </div>
@@ -435,8 +435,8 @@ export default function SatelliteLivePage() {
                   <CardContent className="pt-4">
                     <div className="flex items-center justify-between">
                       <div className="flex items-center gap-3">
-                        <Badge variant={log.success ? 'default' : 'destructive'}>
-                          {log.success ? 'Success' : 'Failed'}
+                        <Badge variant={log.success ? "default" : "destructive"}>
+                          {log.success ? "Success" : "Failed"}
                         </Badge>
                         <span className="text-sm">
                           {log.satellites_updated} satellites from {log.api_provider}

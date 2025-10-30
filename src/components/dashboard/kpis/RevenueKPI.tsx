@@ -82,7 +82,7 @@ export function RevenueKPI() {
           <div>
             <p className="text-sm text-muted-foreground">Receita Total</p>
             <p className="text-3xl font-bold text-green-600">
-              R$ {revenue?.toLocaleString('pt-BR')}
+              R$ {revenue?.toLocaleString("pt-BR")}
             </p>
           </div>
           <TrendingUp className="h-8 w-8 text-green-600" />

@@ -24,7 +24,7 @@ import {
 import { toast } from "sonner";
 import { supabase } from "@/integrations/supabase/client";
 
-type SensorType = 'all' | 'oceanic' | 'structural' | 'ai' | 'navigation';
+type SensorType = "all" | "oceanic" | "structural" | "ai" | "navigation";
 
 interface SensorReading {
   id: string;
@@ -46,7 +46,7 @@ interface SensorConfig {
 }
 
 export default function SensorsHubPage() {
-  const [selectedType, setSelectedType] = useState<SensorType>('all');
+  const [selectedType, setSelectedType] = useState<SensorType>("all");
   const [sensors, setSensors] = useState<SensorConfig[]>([]);
   const [readings, setReadings] = useState<Map<string, SensorReading>>(new Map());
   const [loading, setLoading] = useState(true);
@@ -73,15 +73,15 @@ export default function SensorsHubPage() {
   const loadSensors = async () => {
     try {
       const { data, error } = await supabase
-        .from('sensor_config')
-        .select('*')
-        .order('sensor_name');
+        .from("sensor_config")
+        .select("*")
+        .order("sensor_name");
 
       if (error) throw error;
       setSensors(data || []);
     } catch (error) {
-      console.error('Error loading sensors:', error);
-      toast.error('Failed to load sensors');
+      console.error("Error loading sensors:", error);
+      toast.error("Failed to load sensors");
     } finally {
       setLoading(false);
     }
@@ -92,10 +92,10 @@ export default function SensorsHubPage() {
 
     try {
       const { data, error } = await supabase
-        .from('sensor_readings')
-        .select('*')
-        .in('sensor_id', sensors.map(s => s.sensor_id))
-        .order('timestamp', { ascending: false });
+        .from("sensor_readings")
+        .select("*")
+        .in("sensor_id", sensors.map(s => s.sensor_id))
+        .order("timestamp", { ascending: false });
 
       if (error) throw error;
 
@@ -109,19 +109,19 @@ export default function SensorsHubPage() {
 
       setReadings(readingsMap);
     } catch (error) {
-      console.error('Error loading readings:', error);
+      console.error("Error loading readings:", error);
     }
   };
 
   const initializeRealtime = () => {
     const channel = supabase
-      .channel('sensor-readings-realtime')
+      .channel("sensor-readings-realtime")
       .on(
-        'postgres_changes',
+        "postgres_changes",
         {
-          event: 'INSERT',
-          schema: 'public',
-          table: 'sensor_readings'
+          event: "INSERT",
+          schema: "public",
+          table: "sensor_readings"
         },
         (payload) => {
           const newReading = payload.new as SensorReading;
@@ -130,8 +130,8 @@ export default function SensorsHubPage() {
         }
       )
       .subscribe((status) => {
-        if (status === 'SUBSCRIBED') {
-          toast.success('Real-time updates enabled');
+        if (status === "SUBSCRIBED") {
+          toast.success("Real-time updates enabled");
         }
       });
 
@@ -141,26 +141,26 @@ export default function SensorsHubPage() {
   };
 
   const filteredSensors = sensors.filter(sensor => 
-    selectedType === 'all' || sensor.sensor_type === selectedType
+    selectedType === "all" || sensor.sensor_type === selectedType
   );
 
   const getSensorIcon = (type: string) => {
     switch (type) {
-      case 'oceanic': return Waves;
-      case 'structural': return Box;
-      case 'ai': return Brain;
-      case 'navigation': return Navigation;
-      default: return Activity;
+    case "oceanic": return Waves;
+    case "structural": return Box;
+    case "ai": return Brain;
+    case "navigation": return Navigation;
+    default: return Activity;
     }
   };
 
   const getStatusColor = (status: string) => {
     switch (status) {
-      case 'normal': return 'text-green-500';
-      case 'warning': return 'text-yellow-500';
-      case 'critical': return 'text-red-500';
-      case 'offline': return 'text-gray-500';
-      default: return 'text-gray-500';
+    case "normal": return "text-green-500";
+    case "warning": return "text-yellow-500";
+    case "critical": return "text-red-500";
+    case "offline": return "text-gray-500";
+    default: return "text-gray-500";
     }
   };
 
@@ -209,7 +209,7 @@ export default function SensorsHubPage() {
           </CardHeader>
           <CardContent>
             <div className="text-2xl font-bold text-green-500">
-              {Array.from(readings.values()).filter(r => r.status === 'normal').length}
+              {Array.from(readings.values()).filter(r => r.status === "normal").length}
             </div>
             <p className="text-xs text-muted-foreground">Operating normally</p>
           </CardContent>
@@ -221,7 +221,7 @@ export default function SensorsHubPage() {
           </CardHeader>
           <CardContent>
             <div className="text-2xl font-bold text-yellow-500">
-              {Array.from(readings.values()).filter(r => r.status === 'warning').length}
+              {Array.from(readings.values()).filter(r => r.status === "warning").length}
             </div>
             <p className="text-xs text-muted-foreground">Need attention</p>
           </CardContent>
@@ -233,7 +233,7 @@ export default function SensorsHubPage() {
           </CardHeader>
           <CardContent>
             <div className="text-2xl font-bold text-red-500">
-              {Array.from(readings.values()).filter(r => r.status === 'critical').length}
+              {Array.from(readings.values()).filter(r => r.status === "critical").length}
             </div>
             <p className="text-xs text-muted-foreground">Urgent action</p>
           </CardContent>
@@ -270,7 +270,7 @@ export default function SensorsHubPage() {
             <CardHeader>
               <CardTitle>Sensor Readings</CardTitle>
               <CardDescription>
-                Real-time data from {filteredSensors.length} {selectedType === 'all' ? '' : selectedType} sensors
+                Real-time data from {filteredSensors.length} {selectedType === "all" ? "" : selectedType} sensors
               </CardDescription>
             </CardHeader>
             <CardContent>
@@ -310,8 +310,8 @@ export default function SensorsHubPage() {
                               <div className="text-xs text-muted-foreground mt-1">
                                 {new Date(reading.timestamp).toLocaleString()}
                               </div>
-                              {reading.status !== 'normal' && (
-                                <Badge variant={reading.status === 'critical' ? 'destructive' : 'default'} className="mt-2">
+                              {reading.status !== "normal" && (
+                                <Badge variant={reading.status === "critical" ? "destructive" : "default"} className="mt-2">
                                   <AlertTriangle className="h-3 w-3 mr-1" />
                                   {reading.status.toUpperCase()}
                                 </Badge>

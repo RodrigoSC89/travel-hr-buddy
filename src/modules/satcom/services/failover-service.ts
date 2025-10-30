@@ -62,16 +62,16 @@ class SatcomFailoverService {
    * Log a failover event
    */
   async logFailover(entry: FailoverLogEntry): Promise<string | null> {
-try {
-  const { data, error } = await (supabase as any).rpc("log_satcom_failover", {
-    p_vessel_id: entry.vessel_id,
-    p_event_type: entry.event_type,
-    p_from_provider: entry.from_provider || null,
-    p_to_provider: entry.to_provider || null,
-    p_reason: entry.reason,
-    p_success: entry.success !== undefined ? entry.success : true,
-    p_metadata: entry.metadata || null,
-  });
+    try {
+      const { data, error } = await (supabase as any).rpc("log_satcom_failover", {
+        p_vessel_id: entry.vessel_id,
+        p_event_type: entry.event_type,
+        p_from_provider: entry.from_provider || null,
+        p_to_provider: entry.to_provider || null,
+        p_reason: entry.reason,
+        p_success: entry.success !== undefined ? entry.success : true,
+        p_metadata: entry.metadata || null,
+      });
 
       if (error) {
         logger.error("Failed to log failover event", { error: error.message });
@@ -94,16 +94,16 @@ try {
    * Update connection status
    */
   async updateConnectionStatus(status: ConnectionStatus): Promise<void> {
-try {
-  await (supabase as any).rpc("update_satcom_connection_status", {
-    p_vessel_id: status.vessel_id,
-    p_connection_id: status.connection_id,
-    p_provider: status.provider,
-    p_status: status.status,
-    p_signal_strength: status.signal_strength,
-    p_latency_ms: status.latency_ms || null,
-    p_bandwidth_kbps: status.bandwidth_kbps || null,
-  });
+    try {
+      await (supabase as any).rpc("update_satcom_connection_status", {
+        p_vessel_id: status.vessel_id,
+        p_connection_id: status.connection_id,
+        p_provider: status.provider,
+        p_status: status.status,
+        p_signal_strength: status.signal_strength,
+        p_latency_ms: status.latency_ms || null,
+        p_bandwidth_kbps: status.bandwidth_kbps || null,
+      });
 
       logger.debug("Connection status updated", {
         vesselId: status.vessel_id,
@@ -120,14 +120,14 @@ try {
    */
   async logCommunication(log: CommunicationLog): Promise<string | null> {
     try {
-const { data, error } = await (supabase as any).rpc("log_satcom_communication", {
-  p_vessel_id: log.vessel_id,
-  p_provider: log.provider || null,
-  p_message_type: log.message_type,
-  p_direction: log.direction,
-  p_message_content: log.message_content,
-  p_signal_strength: log.signal_strength || null,
-});
+      const { data, error } = await (supabase as any).rpc("log_satcom_communication", {
+        p_vessel_id: log.vessel_id,
+        p_provider: log.provider || null,
+        p_message_type: log.message_type,
+        p_direction: log.direction,
+        p_message_content: log.message_content,
+        p_signal_strength: log.signal_strength || null,
+      });
 
       if (error) {
         logger.error("Failed to log communication", { error: error.message });
@@ -154,12 +154,12 @@ const { data, error } = await (supabase as any).rpc("log_satcom_communication", 
     limit: number = 50
   ): Promise<any[]> {
     try {
-const { data, error } = await (supabase as any)
-  .from("satcom_failover_logs")
-  .select("*")
-  .eq("vessel_id", vesselId)
-  .order("timestamp", { ascending: false })
-  .limit(limit);
+      const { data, error } = await (supabase as any)
+        .from("satcom_failover_logs")
+        .select("*")
+        .eq("vessel_id", vesselId)
+        .order("timestamp", { ascending: false })
+        .limit(limit);
 
       if (error) {
         logger.error("Failed to fetch failover logs", { error: error.message });
@@ -178,11 +178,11 @@ const { data, error } = await (supabase as any)
    */
   async getConnectionStatus(vesselId: string): Promise<ConnectionStatus[]> {
     try {
-const { data, error } = await (supabase as any)
-  .from("satcom_connection_status")
-  .select("*")
-  .eq("vessel_id", vesselId)
-  .order("updated_at", { ascending: false });
+      const { data, error } = await (supabase as any)
+        .from("satcom_connection_status")
+        .select("*")
+        .eq("vessel_id", vesselId)
+        .order("updated_at", { ascending: false });
 
       if (error) {
         logger.error("Failed to fetch connection status", {
@@ -206,12 +206,12 @@ const { data, error } = await (supabase as any)
     limit: number = 100
   ): Promise<any[]> {
     try {
-const { data, error } = await (supabase as any)
-  .from("satcom_communication_logs")
-  .select("*")
-  .eq("vessel_id", vesselId)
-  .order("timestamp", { ascending: false })
-  .limit(limit);
+      const { data, error } = await (supabase as any)
+        .from("satcom_communication_logs")
+        .select("*")
+        .eq("vessel_id", vesselId)
+        .order("timestamp", { ascending: false })
+        .limit(limit);
 
       if (error) {
         logger.error("Failed to fetch communication logs", {
@@ -241,10 +241,10 @@ const { data, error } = await (supabase as any)
     most_common_provider: string;
   } | null> {
     try {
-const { data, error } = await (supabase as any).rpc("get_satcom_failover_stats", {
-  p_vessel_id: vesselId,
-  p_hours: hours,
-});
+      const { data, error } = await (supabase as any).rpc("get_satcom_failover_stats", {
+        p_vessel_id: vesselId,
+        p_hours: hours,
+      });
 
       if (error) {
         logger.error("Failed to fetch failover stats", {

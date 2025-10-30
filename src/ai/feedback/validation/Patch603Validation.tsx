@@ -65,17 +65,17 @@ export function Patch603Validation() {
 
   const getChannelIcon = (channel: string) => {
     switch (channel) {
-      case "voice": return <Mic className="h-4 w-4" />;
-      case "text": return <MessageSquare className="h-4 w-4" />;
-      case "click": return <MousePointer className="h-4 w-4" />;
+    case "voice": return <Mic className="h-4 w-4" />;
+    case "text": return <MessageSquare className="h-4 w-4" />;
+    case "click": return <MousePointer className="h-4 w-4" />;
     }
   };
 
   const getChannelColor = (channel: string) => {
     switch (channel) {
-      case "voice": return "text-blue-500";
-      case "text": return "text-green-500";
-      case "click": return "text-purple-500";
+    case "voice": return "text-blue-500";
+    case "text": return "text-green-500";
+    case "click": return "text-purple-500";
     }
   };
 

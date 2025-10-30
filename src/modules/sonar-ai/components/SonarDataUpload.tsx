@@ -20,8 +20,8 @@ export function SonarDataUpload() {
     const file = event.target.files?.[0];
     if (!file) return;
 
-    const fileType = file.name.split('.').pop()?.toUpperCase();
-    if (!['JSON', 'CSV', 'TXT'].includes(fileType || '')) {
+    const fileType = file.name.split(".").pop()?.toUpperCase();
+    if (!["JSON", "CSV", "TXT"].includes(fileType || "")) {
       toast({
         title: "Invalid file type",
         description: "Please upload a JSON, CSV, or TXT file",
@@ -46,14 +46,14 @@ export function SonarDataUpload() {
 
       // Parse data based on type
       let parsedData;
-      if (fileType === 'JSON') {
+      if (fileType === "JSON") {
         parsedData = JSON.parse(content);
-      } else if (fileType === 'CSV') {
+      } else if (fileType === "CSV") {
         // Simple CSV parsing
-        const lines = content.split('\n');
-        const headers = lines[0].split(',');
+        const lines = content.split("\n");
+        const headers = lines[0].split(",");
         parsedData = lines.slice(1).map(line => {
-          const values = line.split(',');
+          const values = line.split(",");
           return headers.reduce((obj, header, index) => {
             obj[header.trim()] = values[index]?.trim();
             return obj;
@@ -65,30 +65,30 @@ export function SonarDataUpload() {
 
       // Mock AI analysis
       const mockAnalysis = {
-        input_id: '', // Will be set by service
-        analysis_type: 'frequency_analysis',
-        ai_model: 'sonar-detect-v1',
+        input_id: "", // Will be set by service
+        analysis_type: "frequency_analysis",
+        ai_model: "sonar-detect-v1",
         confidence_score: 85 + Math.random() * 15,
         patterns_detected: {
           count: Math.floor(Math.random() * 10),
-          types: ['echo', 'noise', 'object'],
+          types: ["echo", "noise", "object"],
         },
         frequency_data: {
-          range: '20-200 kHz',
+          range: "20-200 kHz",
           peak: Math.floor(50 + Math.random() * 100),
         },
         anomalies: Math.random() > 0.7 ? { detected: true, count: Math.floor(Math.random() * 5) } : null,
-        recommendations: 'Continue monitoring frequency patterns',
+        recommendations: "Continue monitoring frequency patterns",
       };
 
       // Mock alerts
       const mockAlerts = [];
       if (mockAnalysis.anomalies) {
         mockAlerts.push({
-          analysis_id: '', // Will be set by service
-          alert_type: 'anomaly_detected',
-          severity: 'medium' as const,
-          title: 'Frequency Anomaly Detected',
+          analysis_id: "", // Will be set by service
+          alert_type: "anomaly_detected",
+          severity: "medium" as const,
+          title: "Frequency Anomaly Detected",
           description: `Detected ${mockAnalysis.anomalies.count} unusual patterns in sonar data`,
           frequency_range: mockAnalysis.frequency_data.range,
         });
@@ -98,9 +98,9 @@ export function SonarDataUpload() {
       const result = await SonarAIService.saveScanComplete(
         {
           file_name: file.name,
-          file_type: fileType as 'JSON' | 'CSV' | 'TXT',
+          file_type: fileType as "JSON" | "CSV" | "TXT",
           file_size: file.size,
-          status: 'completed',
+          status: "completed",
           raw_data: parsedData,
           metadata: {
             uploadedAt: new Date().toISOString(),
@@ -127,7 +127,7 @@ export function SonarDataUpload() {
       }, 1000);
 
     } catch (error) {
-      console.error('Upload error:', error);
+      console.error("Upload error:", error);
       toast({
         title: "Upload failed",
         description: error instanceof Error ? error.message : "Failed to process file",
@@ -140,14 +140,14 @@ export function SonarDataUpload() {
 
   const getFileIcon = (type: string) => {
     switch (type) {
-      case 'JSON':
-        return <FileJson className="h-6 w-6" />;
-      case 'CSV':
-        return <Table className="h-6 w-6" />;
-      case 'TXT':
-        return <FileText className="h-6 w-6" />;
-      default:
-        return <Upload className="h-6 w-6" />;
+    case "JSON":
+      return <FileJson className="h-6 w-6" />;
+    case "CSV":
+      return <Table className="h-6 w-6" />;
+    case "TXT":
+      return <FileText className="h-6 w-6" />;
+    default:
+      return <Upload className="h-6 w-6" />;
     }
   };
 
@@ -181,7 +181,7 @@ export function SonarDataUpload() {
               )}
               <div>
                 <p className="text-lg font-medium">
-                  {isUploading ? 'Processing...' : 'Click to upload or drag and drop'}
+                  {isUploading ? "Processing..." : "Click to upload or drag and drop"}
                 </p>
                 <p className="text-sm text-muted-foreground">
                   JSON, CSV, or TXT files (max 10MB)

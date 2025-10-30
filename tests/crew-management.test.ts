@@ -3,73 +3,73 @@
  * Tests crew member operations and assignment logic
  */
 
-import { describe, it, expect, vi } from 'vitest';
+import { describe, it, expect, vi } from "vitest";
 
 // Mock crew member type
 interface CrewMember {
   id: string;
   name: string;
   role: string;
-  status: 'active' | 'inactive' | 'on-leave';
+  status: "active" | "inactive" | "on-leave";
   certifications: string[];
   assigned_vessel?: string;
 }
 
-describe('Crew Management Module', () => {
-  describe('Crew Member Operations', () => {
-    it('should validate crew member data', () => {
+describe("Crew Management Module", () => {
+  describe("Crew Member Operations", () => {
+    it("should validate crew member data", () => {
       const crewMember: CrewMember = {
-        id: '1',
-        name: 'John Doe',
-        role: 'Captain',
-        status: 'active',
-        certifications: ['STCW', 'Master License'],
+        id: "1",
+        name: "John Doe",
+        role: "Captain",
+        status: "active",
+        certifications: ["STCW", "Master License"],
       };
 
       expect(crewMember.name).toBeTruthy();
       expect(crewMember.role).toBeTruthy();
-      expect(crewMember.status).toBe('active');
+      expect(crewMember.status).toBe("active");
     });
 
-    it('should filter active crew members', () => {
+    it("should filter active crew members", () => {
       const crew: CrewMember[] = [
         {
-          id: '1',
-          name: 'John Doe',
-          role: 'Captain',
-          status: 'active',
-          certifications: ['STCW'],
+          id: "1",
+          name: "John Doe",
+          role: "Captain",
+          status: "active",
+          certifications: ["STCW"],
         },
         {
-          id: '2',
-          name: 'Jane Smith',
-          role: 'Engineer',
-          status: 'inactive',
-          certifications: ['STCW'],
+          id: "2",
+          name: "Jane Smith",
+          role: "Engineer",
+          status: "inactive",
+          certifications: ["STCW"],
         },
         {
-          id: '3',
-          name: 'Bob Johnson',
-          role: 'Deck Officer',
-          status: 'active',
-          certifications: ['STCW'],
+          id: "3",
+          name: "Bob Johnson",
+          role: "Deck Officer",
+          status: "active",
+          certifications: ["STCW"],
         },
       ];
 
-      const activeCrew = crew.filter(member => member.status === 'active');
+      const activeCrew = crew.filter(member => member.status === "active");
       expect(activeCrew).toHaveLength(2);
     });
 
-    it('should check crew certification validity', () => {
+    it("should check crew certification validity", () => {
       const crewMember: CrewMember = {
-        id: '1',
-        name: 'John Doe',
-        role: 'Captain',
-        status: 'active',
-        certifications: ['STCW', 'Master License', 'GMDSS'],
+        id: "1",
+        name: "John Doe",
+        role: "Captain",
+        status: "active",
+        certifications: ["STCW", "Master License", "GMDSS"],
       };
 
-      const requiredCerts = ['STCW', 'Master License'];
+      const requiredCerts = ["STCW", "Master License"];
       const hasRequiredCerts = requiredCerts.every(cert =>
         crewMember.certifications.includes(cert)
       );
@@ -77,37 +77,37 @@ describe('Crew Management Module', () => {
       expect(hasRequiredCerts).toBe(true);
     });
 
-    it('should assign crew member to vessel', () => {
+    it("should assign crew member to vessel", () => {
       const crewMember: CrewMember = {
-        id: '1',
-        name: 'John Doe',
-        role: 'Captain',
-        status: 'active',
-        certifications: ['STCW'],
+        id: "1",
+        name: "John Doe",
+        role: "Captain",
+        status: "active",
+        certifications: ["STCW"],
       };
 
       const assignedMember = {
         ...crewMember,
-        assigned_vessel: 'VESSEL-001',
+        assigned_vessel: "VESSEL-001",
       };
 
-      expect(assignedMember.assigned_vessel).toBe('VESSEL-001');
+      expect(assignedMember.assigned_vessel).toBe("VESSEL-001");
     });
 
-    it('should count crew members by role', () => {
+    it("should count crew members by role", () => {
       const crew: CrewMember[] = [
-        { id: '1', name: 'John', role: 'Captain', status: 'active', certifications: [] },
-        { id: '2', name: 'Jane', role: 'Engineer', status: 'active', certifications: [] },
-        { id: '3', name: 'Bob', role: 'Engineer', status: 'active', certifications: [] },
+        { id: "1", name: "John", role: "Captain", status: "active", certifications: [] },
+        { id: "2", name: "Jane", role: "Engineer", status: "active", certifications: [] },
+        { id: "3", name: "Bob", role: "Engineer", status: "active", certifications: [] },
       ];
 
-      const engineerCount = crew.filter(m => m.role === 'Engineer').length;
+      const engineerCount = crew.filter(m => m.role === "Engineer").length;
       expect(engineerCount).toBe(2);
     });
   });
 
-  describe('Crew Assignment Logic', () => {
-    it('should validate vessel capacity', () => {
+  describe("Crew Assignment Logic", () => {
+    it("should validate vessel capacity", () => {
       const vesselCapacity = 20;
       const assignedCrew = 15;
       
@@ -115,7 +115,7 @@ describe('Crew Management Module', () => {
       expect(canAssign).toBe(true);
     });
 
-    it('should prevent over-assignment', () => {
+    it("should prevent over-assignment", () => {
       const vesselCapacity = 20;
       const assignedCrew = 20;
       
@@ -123,7 +123,7 @@ describe('Crew Management Module', () => {
       expect(canAssign).toBe(false);
     });
 
-    it('should calculate crew utilization rate', () => {
+    it("should calculate crew utilization rate", () => {
       const totalCrew = 100;
       const assignedCrew = 85;
       
@@ -132,11 +132,11 @@ describe('Crew Management Module', () => {
     });
   });
 
-  describe('Crew Scheduling', () => {
-    it('should detect scheduling conflicts', () => {
+  describe("Crew Scheduling", () => {
+    it("should detect scheduling conflicts", () => {
       const schedules = [
-        { crewId: '1', startDate: '2025-10-01', endDate: '2025-10-15' },
-        { crewId: '1', startDate: '2025-10-10', endDate: '2025-10-20' },
+        { crewId: "1", startDate: "2025-10-01", endDate: "2025-10-15" },
+        { crewId: "1", startDate: "2025-10-10", endDate: "2025-10-20" },
       ];
 
       // Check if dates overlap
@@ -144,7 +144,7 @@ describe('Crew Management Module', () => {
       expect(hasConflict).toBe(true);
     });
 
-    it('should calculate rotation periods', () => {
+    it("should calculate rotation periods", () => {
       const rotationDays = 90;
       const currentDay = 45;
       const remainingDays = rotationDays - currentDay;

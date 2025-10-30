@@ -1,4 +1,4 @@
-import { describe, it, expect, vi, beforeEach } from 'vitest';
+import { describe, it, expect, vi, beforeEach } from "vitest";
 
 /**
  * Forecast Global Module Tests
@@ -19,20 +19,20 @@ const mockSupabaseClient = {
   rpc: vi.fn(() => Promise.resolve({ data: null, error: null })),
 };
 
-vi.mock('@/integrations/supabase/client', () => ({
+vi.mock("@/integrations/supabase/client", () => ({
   supabase: mockSupabaseClient,
 }));
 
-describe('Forecast Global Module', () => {
+describe("Forecast Global Module", () => {
   beforeEach(() => {
     vi.clearAllMocks();
   });
 
-  describe('Forecast Generation', () => {
-    it('should generate forecast for given period', async () => {
+  describe("Forecast Generation", () => {
+    it("should generate forecast for given period", async () => {
       const mockForecast = {
         id: 1,
-        period: '2025-11',
+        period: "2025-11",
         predictions: {
           demand: 1500,
           capacity: 2000,
@@ -46,16 +46,16 @@ describe('Forecast Global Module', () => {
         select: vi.fn(function(this: any) { return this; }),
       });
 
-      const result = await mockSupabaseClient.from('forecasts').insert(mockForecast);
+      const result = await mockSupabaseClient.from("forecasts").insert(mockForecast);
 
       expect(result.data).toEqual(mockForecast);
       expect(result.data.confidence).toBeGreaterThan(0.8);
     });
 
-    it('should fetch historical forecasts', async () => {
+    it("should fetch historical forecasts", async () => {
       const mockForecasts = [
-        { id: 1, period: '2025-09', accuracy: 92 },
-        { id: 2, period: '2025-10', accuracy: 88 },
+        { id: 1, period: "2025-09", accuracy: 92 },
+        { id: 2, period: "2025-10", accuracy: 88 },
       ];
 
       mockSupabaseClient.from.mockReturnValueOnce({
@@ -64,15 +64,15 @@ describe('Forecast Global Module', () => {
         order: vi.fn(function(this: any) { return this; }),
       });
 
-      const result = await mockSupabaseClient.from('forecasts').select('*');
+      const result = await mockSupabaseClient.from("forecasts").select("*");
 
       expect(result.data).toHaveLength(2);
       expect(result.data).toEqual(mockForecasts);
     });
   });
 
-  describe('Trend Analysis', () => {
-    it('should identify upward trend', () => {
+  describe("Trend Analysis", () => {
+    it("should identify upward trend", () => {
       const data = [100, 120, 140, 160, 180];
       
       const diffs = data.slice(1).map((val, idx) => val - data[idx]);
@@ -83,7 +83,7 @@ describe('Forecast Global Module', () => {
       expect(avgDiff).toBe(20);
     });
 
-    it('should identify downward trend', () => {
+    it("should identify downward trend", () => {
       const data = [180, 160, 140, 120, 100];
       
       const diffs = data.slice(1).map((val, idx) => val - data[idx]);
@@ -95,8 +95,8 @@ describe('Forecast Global Module', () => {
     });
   });
 
-  describe('Accuracy Calculation', () => {
-    it('should calculate forecast accuracy', () => {
+  describe("Accuracy Calculation", () => {
+    it("should calculate forecast accuracy", () => {
       const forecasts = [
         { predicted: 100, actual: 95 },
         { predicted: 150, actual: 155 },
@@ -115,7 +115,7 @@ describe('Forecast Global Module', () => {
       expect(avgAccuracy).toBeLessThan(100);
     });
 
-    it('should identify low accuracy forecasts', () => {
+    it("should identify low accuracy forecasts", () => {
       const forecasts = [
         { id: 1, predicted: 100, actual: 95, accuracy: 95 },
         { id: 2, predicted: 150, actual: 110, accuracy: 73 },
@@ -129,8 +129,8 @@ describe('Forecast Global Module', () => {
     });
   });
 
-  describe('Seasonal Patterns', () => {
-    it('should detect seasonal peaks', () => {
+  describe("Seasonal Patterns", () => {
+    it("should detect seasonal peaks", () => {
       const monthlyData = [
         { month: 1, value: 100 },
         { month: 2, value: 110 },
@@ -146,7 +146,7 @@ describe('Forecast Global Module', () => {
       expect(peakMonth?.value).toBe(150);
     });
 
-    it('should calculate seasonal index', () => {
+    it("should calculate seasonal index", () => {
       const monthlyData = [100, 120, 140, 130, 110, 100];
       const average = monthlyData.reduce((sum, val) => sum + val, 0) / monthlyData.length;
       
@@ -157,8 +157,8 @@ describe('Forecast Global Module', () => {
     });
   });
 
-  describe('Confidence Intervals', () => {
-    it('should calculate confidence intervals', () => {
+  describe("Confidence Intervals", () => {
+    it("should calculate confidence intervals", () => {
       const forecast = {
         predicted: 150,
         stdDev: 10,
@@ -175,7 +175,7 @@ describe('Forecast Global Module', () => {
       expect(upperBound).toBeCloseTo(169.6, 0);
     });
 
-    it('should adjust for high variance', () => {
+    it("should adjust for high variance", () => {
       const lowVarianceForecast = { predicted: 100, variance: 5 };
       const highVarianceForecast = { predicted: 100, variance: 20 };
 
@@ -183,12 +183,12 @@ describe('Forecast Global Module', () => {
     });
   });
 
-  describe('Multi-Model Ensemble', () => {
-    it('should average multiple model predictions', () => {
+  describe("Multi-Model Ensemble", () => {
+    it("should average multiple model predictions", () => {
       const modelPredictions = [
-        { model: 'linear', prediction: 150 },
-        { model: 'exponential', prediction: 160 },
-        { model: 'arima', prediction: 155 },
+        { model: "linear", prediction: 150 },
+        { model: "exponential", prediction: 160 },
+        { model: "arima", prediction: 155 },
       ];
 
       const ensemble = modelPredictions.reduce((sum, m) => sum + m.prediction, 0) / modelPredictions.length;
@@ -196,11 +196,11 @@ describe('Forecast Global Module', () => {
       expect(ensemble).toBeCloseTo(155, 0);
     });
 
-    it('should weight models by accuracy', () => {
+    it("should weight models by accuracy", () => {
       const modelPredictions = [
-        { model: 'linear', prediction: 150, weight: 0.3 },
-        { model: 'exponential', prediction: 160, weight: 0.5 },
-        { model: 'arima', prediction: 155, weight: 0.2 },
+        { model: "linear", prediction: 150, weight: 0.3 },
+        { model: "exponential", prediction: 160, weight: 0.5 },
+        { model: "arima", prediction: 155, weight: 0.2 },
       ];
 
       const weightedEnsemble = modelPredictions.reduce(
@@ -212,10 +212,10 @@ describe('Forecast Global Module', () => {
     });
   });
 
-  describe('Data Validation', () => {
-    it('should validate forecast data structure', () => {
+  describe("Data Validation", () => {
+    it("should validate forecast data structure", () => {
       const validForecast = {
-        period: '2025-11',
+        period: "2025-11",
         predictions: {},
         confidence: 0.85,
         generated_at: new Date().toISOString(),
@@ -229,7 +229,7 @@ describe('Forecast Global Module', () => {
       expect(isValid).toBe(true);
     });
 
-    it('should reject invalid confidence values', () => {
+    it("should reject invalid confidence values", () => {
       const invalidConfidence = 1.5;
       const isValid = invalidConfidence >= 0 && invalidConfidence <= 1;
 

@@ -85,7 +85,7 @@ export default function TemplatesEditorValidation() {
                 Placeholder dinâmico processado corretamente
               </label>
               <p className="text-sm text-muted-foreground mt-1">
-                Variáveis {`{{var}}`} são substituídas corretamente por dados reais
+                Variáveis {"{{var}}"} são substituídas corretamente por dados reais
               </p>
             </div>
           </div>
