@@ -16,58 +16,12 @@ import { OffshoreLoader, PageSkeleton } from "@/components/LoadingStates";
 import { lazyWithPreload, preloadStrategy } from "@/lib/performance/lazy-with-preload";
 import { safeLazyImport } from "@/utils/safeLazyImport";
 
-// Detect Lovable preview environment and allow full-mode override
-const baseLovablePreview = typeof window !== "undefined" && (
-  window.location.host.includes("lovable.dev") || 
-  window.location.host.includes("lovableproject.com") ||
-  window.location.host.includes("gptengineer.app") ||
-  window.location.hash.includes("#/") ||
-  process.env.NODE_ENV === "development"
-);
-const urlParams = typeof window !== "undefined" ? new URLSearchParams(window.location.search) : null;
-const forceFullMode = typeof window !== "undefined" && (
-  (urlParams?.get("full") === "1") || localStorage.getItem("forceFullMode") === "true"
-);
-const isLovablePreview = baseLovablePreview && !forceFullMode;
-// Ultra-Light Preview Component - removes all heavy processing
-const PreviewLandingPage = () => (
-  <div className="min-h-screen p-6 flex items-center justify-center bg-background">
-    <div className="max-w-2xl w-full shadow-lg border rounded-lg p-6 space-y-4">
-      <div className="text-center">
-        <h1 className="text-2xl font-bold">🧭 Nautilus One - Preview Safe Mode</h1>
-        <p className="text-muted-foreground mt-2">Editor Lovable detectado. Renderização ultra-leve ativada.</p>
-      </div>
-      <div className="grid grid-cols-1 sm:grid-cols-3 gap-3">
-        <a href="/#/dashboard" className="w-full" onClick={(e) => { e.preventDefault(); window.location.href = '/#/dashboard'; window.location.reload(); }}>
-          <div className="w-full p-4 rounded-md border text-center hover:bg-accent/50 transition-colors font-medium">
-            📊 Dashboard Principal
-          </div>
-        </a>
-        <a href="/#/validation/preview-lite" className="w-full" onClick={(e) => { e.preventDefault(); window.location.href = '/#/validation/preview-lite'; window.location.reload(); }}>
-          <div className="w-full p-4 rounded-md border text-center hover:bg-accent/50 transition-colors font-medium">
-            ✅ Preview de Patches
-          </div>
-        </a>
-        <a href="/#/dashboard?full=1" className="w-full" onClick={(e) => { e.preventDefault(); try { localStorage.setItem('forceFullMode', 'true'); } catch {} window.location.href = '/#/dashboard?full=1'; window.location.reload(); }}>
-          <div className="w-full p-4 rounded-md border text-center hover:bg-accent/50 transition-colors font-medium">
-            🚀 Modo Completo (tudo habilitado)
-          </div>
-        </a>
-      </div>
-      <div className="p-3 bg-muted rounded-md text-sm text-muted-foreground">
-        <p>💡 <strong>Dica:</strong> O Preview Safe Mode usa navegação direta (sem React Router) para máxima estabilidade.</p>
-        <p className="mt-2">Use <code className="bg-background px-1 rounded">/validation/preview-lite</code> para teste de funcionalidades.</p>
-      </div>
-    </div>
-  </div>
-);
-
-// Full App only for production/development
+// Full App for all environments
 
 // Páginas mais usadas - carregamento prioritário
 import Index from "@/pages/Index";
-const Dashboard = isLovablePreview ? safeLazyImport(() => import("@/pages/Dashboard")) : lazyWithPreload(() => import("@/pages/Dashboard"));
-const Travel = isLovablePreview ? safeLazyImport(() => import("@/pages/Travel")) : lazyWithPreload(() => import("@/pages/Travel"));
+const Dashboard = lazyWithPreload(() => import("@/pages/Dashboard"));
+const Travel = lazyWithPreload(() => import("@/pages/Travel"));
 
 // Páginas secundárias - carregamento normal
 const PriceAlerts = safeLazyImport(() => import("@/modules/features/price-alerts"));
@@ -231,8 +185,6 @@ const QualityDashboard = safeLazyImport(() => import("@/pages/dashboard/QualityD
 const I18nDashboard = safeLazyImport(() => import("@/pages/dashboard/i18n"));
 const I18nDemo = safeLazyImport(() => import("@/pages/i18n-demo"));
 
-// PATCHES 601-615 - Validation Preview Dashboard
-const PatchesPreview = safeLazyImport(() => import("@/pages/validation/patches-preview"));
 // PATCHES 601-605 - Strategic Reasoning, Context, Feedback, Tactics & Learning Validation
 const Patches601to605 = safeLazyImport(() => import("@/pages/validation/patches-601-605"));
 // PATCHES 606-610 - AI & Voice Command Systems Validation
@@ -502,11 +454,6 @@ const RedirectHandler = () => {
 let isInitialized = false;
 
 function App() {
-  const atRoot = typeof window !== "undefined" && (window.location.pathname === "/" || window.location.pathname === "");
-  const hasHashRoute = typeof window !== "undefined" && window.location.hash?.startsWith("#/");
-  if (isLovablePreview && atRoot && !hasHashRoute) {
-    return <PreviewLandingPage />;
-  }
   // Initialize monitoring systems on app start
   useEffect(() => {
     // Evita dupla inicialização causada por React StrictMode
@@ -533,36 +480,31 @@ function App() {
       console.error("❌ Erro ao iniciar watchdog:", error);
     }
     
-    // Skip preload in Lovable preview to avoid freezes
-    if (!isLovablePreview) {
-      // Preload módulos críticos durante idle time (simplificado)
-      try {
-        if ('requestIdleCallback' in window) {
-          requestIdleCallback(() => {
-            console.log("⏳ Iniciando preload de módulos críticos...");
-            if ('preload' in Dashboard && typeof Dashboard.preload === 'function') {
-              Dashboard.preload().then(() => console.log("✅ Dashboard preloaded"));
-            }
-            if ('preload' in Travel && typeof Travel.preload === 'function') {
-              Travel.preload().then(() => console.log("✅ Travel preloaded"));
-            }
-          });
-        } else {
-          setTimeout(() => {
-            console.log("⏳ Iniciando preload de módulos críticos (fallback)...");
-            if ('preload' in Dashboard && typeof Dashboard.preload === 'function') {
-              Dashboard.preload().then(() => console.log("✅ Dashboard preloaded"));
-            }
-            if ('preload' in Travel && typeof Travel.preload === 'function') {
-              Travel.preload().then(() => console.log("✅ Travel preloaded"));
-            }
-          }, 2000);
-        }
-      } catch (error) {
-        console.error("❌ Erro no preload:", error);
+    // Preload módulos críticos durante idle time
+    try {
+      if ('requestIdleCallback' in window) {
+        requestIdleCallback(() => {
+          console.log("⏳ Iniciando preload de módulos críticos...");
+          if ('preload' in Dashboard && typeof Dashboard.preload === 'function') {
+            Dashboard.preload().then(() => console.log("✅ Dashboard preloaded"));
+          }
+          if ('preload' in Travel && typeof Travel.preload === 'function') {
+            Travel.preload().then(() => console.log("✅ Travel preloaded"));
+          }
+        });
+      } else {
+        setTimeout(() => {
+          console.log("⏳ Iniciando preload de módulos críticos (fallback)...");
+          if ('preload' in Dashboard && typeof Dashboard.preload === 'function') {
+            Dashboard.preload().then(() => console.log("✅ Dashboard preloaded"));
+          }
+          if ('preload' in Travel && typeof Travel.preload === 'function') {
+            Travel.preload().then(() => console.log("✅ Travel preloaded"));
+          }
+        }, 2000);
       }
-    } else {
-      console.log("⚡ Preview mode: preload desativado para evitar travamentos");
+    } catch (error) {
+      console.error("❌ Erro no preload:", error);
     }
     
     console.log("✅ App inicializado com sucesso");
@@ -573,9 +515,9 @@ function App() {
     };
   }, []);
 
-  // Use HashRouter in Lovable preview to avoid routing issues
-  const RouterComponent = isLovablePreview ? HashRouter : Router;
-  const routerProps = isLovablePreview ? {} : { future: { v7_startTransition: true, v7_relativeSplatPath: true } };
+  // Use Router for all environments
+  const RouterComponent = Router;
+  const routerProps = { future: { v7_startTransition: true, v7_relativeSplatPath: true } };
 
   return (
     <ErrorBoundary>
@@ -594,8 +536,6 @@ function App() {
                     <Route path="/tv/logs" element={<TVWallLogs />} />
                     <Route path="/cert/:token" element={<CertViewer />} />
                     <Route path="/unauthorized" element={<Unauthorized />} />
-                    <Route path="/validation/preview-lite" element={<PatchesPreview />} />
-                    <Route path="/preview-lite" element={<PatchesPreview />} />
                     <Route path="/validation/patches-622-626" element={<ValidationPatches622_626 />} />
                     
                     {/* All routes wrapped in SmartLayout */}
@@ -982,7 +922,6 @@ function App() {
                       <Route path="/validation/patches-586-590" element={<Patches586to590ValidationPage />} />
                       <Route path="/validation/patches-591-595" element={<Patches591to595ValidationPage />} />
                        <Route path="/validation/patches-596-600" element={<Patches596to600ValidationPage />} />
-                       <Route path="/validation/preview" element={<PatchesPreview />} />
                        <Route path="/validation/patches-601-605" element={<Patches601to605 />} />
                        <Route path="/validation/patches-606-610" element={<Patches606to610 />} />
                        <Route path="/validation/patches-611-615" element={<Patches611to615 />} />

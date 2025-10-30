@@ -9,16 +9,6 @@ import { motion } from "framer-motion";
 import { useState } from "react";
 import { Link } from "react-router-dom";
 
-// Detect Lovable preview environment to avoid heavy initial render
-const isLovablePreview = typeof window !== "undefined" && (
-  window.location.host.includes("lovable.dev") || 
-  window.location.host.includes("lovableproject.com") ||
-  window.location.host.includes("gptengineer.app") ||
-  window.location.hash.length > 0 // HashRouter indica preview mode
-);
-
-// Dados mockados
-
 // Dados mockados
 const revenueData = [
   { month: "Jan", revenue: 42000, target: 40000 },
@@ -37,38 +27,6 @@ const fleetData = [
 
 const Index = () => {
   const [activeTab, setActiveTab] = useState("overview");
-
-  // In Lovable preview, render a lightweight landing to prevent freezes
-  if (isLovablePreview) {
-    return (
-      <div className="min-h-screen p-6 flex items-center justify-center bg-background">
-        <Card className="max-w-2xl w-full shadow-lg">
-          <CardHeader className="text-center">
-            <CardTitle className="text-2xl">🧭 Nautilus One - Preview Safe Mode</CardTitle>
-            <CardDescription>Editor Lovable detectado. Renderização otimizada ativada.</CardDescription>
-          </CardHeader>
-          <CardContent className="space-y-4">
-            <div className="grid sm:grid-cols-2 gap-3">
-              <Link to="/dashboard" className="w-full">
-                <div className="w-full p-4 rounded-md border text-center hover:bg-accent/50 transition-colors font-medium">
-                  📊 Dashboard Principal
-                </div>
-              </Link>
-              <Link to="/validation/preview-lite" className="w-full">
-                <div className="w-full p-4 rounded-md border text-center hover:bg-accent/50 transition-colors font-medium">
-                  ✅ Preview de Patches
-                </div>
-              </Link>
-            </div>
-            <div className="p-3 bg-muted rounded-md text-sm text-muted-foreground">
-              <p>💡 <strong>Dica:</strong> O Preview Safe Mode desativa preload pesado e usa HashRouter para evitar travamentos no editor.</p>
-              <p className="mt-2">Use <code className="bg-background px-1 rounded">/validation/preview-lite</code> para navegação rápida.</p>
-            </div>
-          </CardContent>
-        </Card>
-      </div>
-    );
-  }
 
   return (
     <div className="space-y-6 p-6 bg-gradient-to-br from-background via-background to-primary/5 min-h-screen">
