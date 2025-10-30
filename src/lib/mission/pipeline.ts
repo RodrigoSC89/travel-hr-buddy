@@ -246,26 +246,26 @@ export class MissionPipeline {
       await new Promise(resolve => setTimeout(resolve, step.timeout || 1000));
 
       switch (step.type) {
-        case "scan":
-          return await this.executeScanStep(mission, step);
+      case "scan":
+        return await this.executeScanStep(mission, step);
         
-        case "collect":
-          return await this.executeCollectStep(mission, step);
+      case "collect":
+        return await this.executeCollectStep(mission, step);
         
-        case "transmit":
-          return await this.executeTransmitStep(mission, step);
+      case "transmit":
+        return await this.executeTransmitStep(mission, step);
         
-        case "move":
-          return await this.executeMoveStep(mission, step);
+      case "move":
+        return await this.executeMoveStep(mission, step);
         
-        case "coordinate":
-          return await this.executeCoordinateStep(mission, step);
+      case "coordinate":
+        return await this.executeCoordinateStep(mission, step);
         
-        case "wait":
-          return await this.executeWaitStep(mission, step);
+      case "wait":
+        return await this.executeWaitStep(mission, step);
         
-        default:
-          return { success: true, result: "Step completed" };
+      default:
+        return { success: true, result: "Step completed" };
       }
     } catch (error) {
       return { success: false, error };

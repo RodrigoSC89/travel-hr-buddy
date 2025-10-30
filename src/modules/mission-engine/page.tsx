@@ -212,8 +212,8 @@ export default function MissionEnginePage() {
                           <div className="font-medium">{mission.name}</div>
                           <Badge variant={
                             mission.status === "completed" ? "default" :
-                            mission.status === "failed" ? "destructive" :
-                            mission.status === "active" ? "default" : "secondary"
+                              mission.status === "failed" ? "destructive" :
+                                mission.status === "active" ? "default" : "secondary"
                           }>
                             {mission.status}
                           </Badge>
