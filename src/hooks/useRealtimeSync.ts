@@ -53,16 +53,17 @@ export function useRealtimeSync<T>({
     try {
       setLoading(true);
       
-      let query = supabase.from(table).select(select);
+      // Build query with type assertions to bypass strict typing
+      const query: any = (supabase as any).from(table).select(select);
       
       // Apply filters if provided
       if (filter) {
         Object.entries(filter).forEach(([key, value]) => {
-          query = query.eq(key, value);
+          query.eq(key, value);
         });
       }
 
-      const { data: fetchedData, error: fetchError } = await query.single();
+      const { data: fetchedData, error: fetchError } = await query.maybeSingle();
 
       if (fetchError) throw fetchError;
 
