@@ -1,41 +1,63 @@
 /**
  * Comprehensive Executive Dashboard
  * Dashboard executivo completo com informações sobre todos os módulos e sistemas
+ * Optimized for Lovable Preview with progressive loading
  */
 
+import React, { Suspense, lazy } from "react";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
-import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
-import { Progress } from "@/components/ui/progress";
 import {
-  Ship,
-  Brain,
-  Network,
-  Workflow,
-  Cpu,
-  Database,
-  Shield,
-  Users,
-  Radio,
   Layers,
-  GitBranch,
-  Activity,
-  Zap,
-  Eye,
-  Settings,
   CheckCircle,
-  AlertTriangle,
   TrendingUp,
-  BarChart3,
-  Globe,
-  Box,
-  FileText,
-  Lock,
-  Target
+  Zap,
 } from "lucide-react";
+import { ErrorBoundary } from "@/components/layout/error-boundary";
+import { PageSkeleton } from "@/components/LoadingStates";
 import nautilusLogo from "@/assets/nautilus-logo.png";
 
-const systemModules = [
+// Lazy load heavy components for progressive loading
+const SystemArchitecture = lazy(() => import("@/components/dashboard/SystemArchitecture").then(m => ({ default: m.SystemArchitecture })));
+const SystemModulesGrid = lazy(() => import("@/components/dashboard/SystemModulesGrid").then(m => ({ default: m.SystemModulesGrid })));
+const TechnologyStack = lazy(() => import("@/components/dashboard/TechnologyStack").then(m => ({ default: m.TechnologyStack })));
+
+// Simple loading skeleton for individual sections
+const SectionSkeleton = () => (
+  <Card>
+    <CardContent className="pt-6">
+      <div className="animate-pulse space-y-4">
+        <div className="h-4 bg-gray-200 rounded w-3/4"></div>
+        <div className="h-4 bg-gray-200 rounded w-1/2"></div>
+        <div className="h-4 bg-gray-200 rounded w-2/3"></div>
+      </div>
+    </CardContent>
+  </Card>
+);
+
+const getStatusColor = (status: string) => {
+  switch (status) {
+  case "operational":
+    return "bg-green-500";
+  case "degraded":
+    return "bg-yellow-500";
+  case "offline":
+    return "bg-red-500";
+  default:
+    return "bg-gray-500";
+  }
+};
+
+// Simplified module stats for KPI cards (lightweight, loads immediately)
+const moduleStats = {
+  total: 6,
+  operational: 6,
+  avgUptime: 98.9,
+  performance: "A+"
+};
+
+export function ComprehensiveExecutiveDashboard() {
+  const { total, operational, avgUptime, performance } = moduleStats;
   {
     id: "patch-216",
     name: "Context Mesh Core",
