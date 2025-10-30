@@ -4,47 +4,47 @@ import { useNavigate } from "react-router-dom";
 import { Badge } from "@/components/ui/badge";
 import { Brain, Eye, Mic, Box, GitBranch, Target, Shield, Lightbulb } from "lucide-react";
 
-const patchGroups = [
-  {
-    title: "Patches 601-605: Strategic AI Core",
-    description: "Motores de raciocínio estratégico e aprendizado adaptativo",
-    patches: [
-      { id: 601, name: "Strategic Reasoning Engine", icon: Brain, color: "bg-blue-500" },
-      { id: 602, name: "Multilevel Context Awareness", icon: Eye, color: "bg-purple-500" },
-      { id: 603, name: "Multimodal Feedback Analyzer", icon: Mic, color: "bg-green-500" },
-      { id: 604, name: "Mission Tactic Optimizer", icon: Target, color: "bg-orange-500" },
-      { id: 605, name: "Feedback-Driven Learning Loop", icon: Lightbulb, color: "bg-yellow-500" }
-    ],
-    route: "/validation/patches-601-605"
-  },
-  {
-    title: "Patches 606-610: Voice & Awareness",
-    description: "Sistemas de detecção visual e comandos distribuídos por voz",
-    patches: [
-      { id: 606, name: "Visual Situational Awareness", icon: Eye, color: "bg-cyan-500" },
-      { id: 607, name: "Anomaly Pattern Detector", icon: Shield, color: "bg-red-500" },
-      { id: 608, name: "Distributed Voice Commands", icon: Mic, color: "bg-indigo-500" },
-      { id: 609, name: "Voice Tactical Fallback", icon: Mic, color: "bg-pink-500" },
-      { id: 610, name: "Embedded Voice Feedback", icon: Mic, color: "bg-teal-500" }
-    ],
-    route: "/validation/patches-606-610"
-  },
-  {
-    title: "Patches 611-615: Advanced Operations",
-    description: "Visualização 3D, inferência por grafos e recomendação estratégica",
-    patches: [
-      { id: 611, name: "Ops 3D Visualizer Core", icon: Box, color: "bg-violet-500" },
-      { id: 612, name: "Graph-Based Inference Engine", icon: GitBranch, color: "bg-emerald-500" },
-      { id: 613, name: "Autonomous Decision Simulator", icon: Brain, color: "bg-amber-500" },
-      { id: 614, name: "Contextual Threat Monitor", icon: Shield, color: "bg-rose-500" },
-      { id: 615, name: "Joint Copilot Strategy", icon: Lightbulb, color: "bg-sky-500" }
-    ],
-    route: "/validation/patches-611-615"
-  }
-];
-
 export default function PatchesPreview() {
   const navigate = useNavigate();
+
+  const patchGroups = [
+    {
+      title: "Patches 601-605: Strategic AI Core",
+      description: "Motores de raciocínio estratégico e aprendizado adaptativo",
+      patches: [
+        { id: 601, name: "Strategic Reasoning Engine", icon: Brain, color: "bg-blue-500" },
+        { id: 602, name: "Multilevel Context Awareness", icon: Eye, color: "bg-purple-500" },
+        { id: 603, name: "Multimodal Feedback Analyzer", icon: Mic, color: "bg-green-500" },
+        { id: 604, name: "Mission Tactic Optimizer", icon: Target, color: "bg-orange-500" },
+        { id: 605, name: "Feedback-Driven Learning Loop", icon: Lightbulb, color: "bg-yellow-500" }
+      ],
+      route: "/validation/patches-601-605"
+    },
+    {
+      title: "Patches 606-610: Voice & Awareness",
+      description: "Sistemas de detecção visual e comandos distribuídos por voz",
+      patches: [
+        { id: 606, name: "Visual Situational Awareness", icon: Eye, color: "bg-cyan-500" },
+        { id: 607, name: "Anomaly Pattern Detector", icon: Shield, color: "bg-red-500" },
+        { id: 608, name: "Distributed Voice Commands", icon: Mic, color: "bg-indigo-500" },
+        { id: 609, name: "Voice Tactical Fallback", icon: Mic, color: "bg-pink-500" },
+        { id: 610, name: "Embedded Voice Feedback", icon: Mic, color: "bg-teal-500" }
+      ],
+      route: "/validation/patches-606-610"
+    },
+    {
+      title: "Patches 611-615: Advanced Operations",
+      description: "Visualização 3D, inferência por grafos e recomendação estratégica",
+      patches: [
+        { id: 611, name: "Ops 3D Visualizer Core", icon: Box, color: "bg-violet-500" },
+        { id: 612, name: "Graph-Based Inference Engine", icon: GitBranch, color: "bg-emerald-500" },
+        { id: 613, name: "Autonomous Decision Simulator", icon: Brain, color: "bg-amber-500" },
+        { id: 614, name: "Contextual Threat Monitor", icon: Shield, color: "bg-rose-500" },
+        { id: 615, name: "Joint Copilot Strategy", icon: Lightbulb, color: "bg-sky-500" }
+      ],
+      route: "/validation/patches-611-615"
+    }
+  ];
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-background via-background to-secondary/10 p-8">
