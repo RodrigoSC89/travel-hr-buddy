@@ -182,6 +182,8 @@ const QualityDashboard = safeLazyImport(() => import("@/pages/dashboard/QualityD
 const I18nDashboard = safeLazyImport(() => import("@/pages/dashboard/i18n"));
 const I18nDemo = safeLazyImport(() => import("@/pages/i18n-demo"));
 
+// PATCHES 601-615 - Validation Preview Dashboard
+const PatchesPreview = safeLazyImport(() => import("@/pages/validation/patches-preview"));
 // PATCHES 601-605 - Strategic Reasoning, Context, Feedback, Tactics & Learning Validation
 const Patches601to605 = safeLazyImport(() => import("@/pages/validation/patches-601-605"));
 // PATCHES 606-610 - AI & Voice Command Systems Validation
@@ -905,7 +907,8 @@ function App() {
                       <Route path="/validation/patches-581-585" element={<Patches581to585ValidationPage />} />
                       <Route path="/validation/patches-586-590" element={<Patches586to590ValidationPage />} />
                       <Route path="/validation/patches-591-595" element={<Patches591to595ValidationPage />} />
-                      <Route path="/validation/patches-596-600" element={<Patches596to600ValidationPage />} />
+                       <Route path="/validation/patches-596-600" element={<Patches596to600ValidationPage />} />
+                       <Route path="/validation/preview" element={<PatchesPreview />} />
                        <Route path="/validation/patches-601-605" element={<Patches601to605 />} />
                        <Route path="/validation/patches-606-610" element={<Patches606to610 />} />
                        <Route path="/validation/patches-611-615" element={<Patches611to615 />} />
