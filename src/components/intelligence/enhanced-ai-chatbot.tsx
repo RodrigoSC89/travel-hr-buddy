@@ -77,7 +77,7 @@ const EnhancedAIChatbot: React.FC = () => {
     setVoiceSupported("webkitSpeechRecognition" in window || "SpeechRecognition" in window);
     
     // Mensagem de boas-vindas com delay para efeito visual
-    setTimeout(() => {
+    const timer = setTimeout(() => {
       setMessages([
         {
           id: "welcome",
@@ -89,6 +89,8 @@ const EnhancedAIChatbot: React.FC = () => {
         }
       ]);
     }, 500);
+    
+    return () => clearTimeout(timer);
   }, []);
 
   useEffect(() => {
