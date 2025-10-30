@@ -71,6 +71,7 @@ const EnhancedAIChatbot: React.FC = () => {
   const messagesEndRef = useRef<HTMLDivElement>(null);
   const inputRef = useRef<HTMLInputElement>(null);
   const fileInputRef = useRef<HTMLInputElement>(null);
+  const timeoutsRef = useRef<NodeJS.Timeout[]>([]);
 
   useEffect(() => {
     setIsLoaded(true);
@@ -96,6 +97,14 @@ const EnhancedAIChatbot: React.FC = () => {
   useEffect(() => {
     messagesEndRef.current?.scrollIntoView({ behavior: "smooth" });
   }, [messages]);
+
+  // Cleanup all timeouts on unmount
+  useEffect(() => {
+    return () => {
+      timeoutsRef.current.forEach(timeout => clearTimeout(timeout));
+      timeoutsRef.current = [];
+    };
+  }, []);
 
   // Suporte a teclas de atalho
   useEffect(() => {
@@ -211,7 +220,7 @@ const EnhancedAIChatbot: React.FC = () => {
     setIsProcessing(true);
 
     // Simular processamento da IA com feedback visual
-    setTimeout(() => {
+    const timeout = setTimeout(() => {
       const aiResponse = generateEnhancedAIResponse(inputMessage, selectedCapability);
       const aiMessage: Message = {
         id: `ai-${Date.now()}`,
@@ -226,6 +235,7 @@ const EnhancedAIChatbot: React.FC = () => {
       setMessages(prev => [...prev, aiMessage]);
       setIsProcessing(false);
     }, Math.random() * 1000 + 1500); // Variação realística no tempo de resposta
+    timeoutsRef.current.push(timeout);
   };
 
   const generateEnhancedAIResponse = (input: string, capability: string) => {
@@ -280,7 +290,7 @@ const EnhancedAIChatbot: React.FC = () => {
     setIsVoiceActive(!isVoiceActive);
     if (!isVoiceActive) {
       // Simular reconhecimento de voz
-      setTimeout(() => {
+      const timeout = setTimeout(() => {
         const voiceCommands = [
           "Mostrar status da frota",
           "Gerar relatório de performance",
@@ -293,15 +303,17 @@ const EnhancedAIChatbot: React.FC = () => {
         setSelectedCapability("voice");
         setIsVoiceActive(false);
       }, 3000);
+      timeoutsRef.current.push(timeout);
     }
   };
 
   const handleQuickCommand = (command: string, category: string) => {
     setInputMessage(command);
     setSelectedCapability(category);
-    setTimeout(() => {
+    const timeout = setTimeout(() => {
       handleSendMessage();
     }, 100);
+    timeoutsRef.current.push(timeout);
   };
 
   const handleFileUpload = (event: React.ChangeEvent<HTMLInputElement>) => {
@@ -309,9 +321,10 @@ const EnhancedAIChatbot: React.FC = () => {
     if (file) {
       setSelectedCapability("image");
       setInputMessage(`📎 Arquivo enviado: ${file.name}`);
-      setTimeout(() => {
+      const timeout = setTimeout(() => {
         handleSendMessage();
       }, 500);
+      timeoutsRef.current.push(timeout);
     }
   };
 
