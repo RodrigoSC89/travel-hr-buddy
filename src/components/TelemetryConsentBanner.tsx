@@ -3,12 +3,12 @@
  * GDPR-compliant consent banner for telemetry
  */
 
-import React, { useState, useEffect } from 'react';
-import { ConsentManager } from '@/lib/telemetry/consent';
-import { initTelemetry } from '@/lib/telemetry';
-import { Button } from '@/components/ui/button';
-import { Card } from '@/components/ui/card';
-import { X } from 'lucide-react';
+import React, { useState, useEffect } from "react";
+import { ConsentManager } from "@/lib/telemetry/consent";
+import { initTelemetry } from "@/lib/telemetry";
+import { Button } from "@/components/ui/button";
+import { Card } from "@/components/ui/card";
+import { X } from "lucide-react";
 
 export function TelemetryConsentBanner() {
   const [showBanner, setShowBanner] = useState(false);

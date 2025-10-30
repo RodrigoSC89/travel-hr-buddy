@@ -169,27 +169,27 @@ export const PriceAlertsValidationReport: React.FC = () => {
 
   const getStatusIcon = (status: ValidationTest["status"]) => {
     switch (status) {
-      case "passed":
-        return <CheckCircle2 className="w-5 h-5 text-green-500" />;
-      case "failed":
-        return <XCircle className="w-5 h-5 text-red-500" />;
-      case "running":
-        return <RefreshCw className="w-5 h-5 text-blue-500 animate-spin" />;
-      default:
-        return <AlertCircle className="w-5 h-5 text-gray-400" />;
+    case "passed":
+      return <CheckCircle2 className="w-5 h-5 text-green-500" />;
+    case "failed":
+      return <XCircle className="w-5 h-5 text-red-500" />;
+    case "running":
+      return <RefreshCw className="w-5 h-5 text-blue-500 animate-spin" />;
+    default:
+      return <AlertCircle className="w-5 h-5 text-gray-400" />;
     }
   };
 
   const getStatusBadge = (status: ValidationTest["status"]) => {
     switch (status) {
-      case "passed":
-        return <Badge className="bg-green-500">Aprovado</Badge>;
-      case "failed":
-        return <Badge variant="destructive">Falhou</Badge>;
-      case "running":
-        return <Badge className="bg-blue-500">Executando</Badge>;
-      default:
-        return <Badge variant="secondary">Pendente</Badge>;
+    case "passed":
+      return <Badge className="bg-green-500">Aprovado</Badge>;
+    case "failed":
+      return <Badge variant="destructive">Falhou</Badge>;
+    case "running":
+      return <Badge className="bg-blue-500">Executando</Badge>;
+    default:
+      return <Badge variant="secondary">Pendente</Badge>;
     }
   };
 

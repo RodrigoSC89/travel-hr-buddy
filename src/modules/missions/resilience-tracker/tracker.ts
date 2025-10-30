@@ -83,7 +83,7 @@ export class MissionResilienceTracker {
 
     console.log(`[ResilienceTracker] Initialized for mission ${this.config.missionId}`);
     
-    BridgeLink.emit('resilience-tracker:initialized', 'ResilienceTracker', {
+    BridgeLink.emit("resilience-tracker:initialized", "ResilienceTracker", {
       missionId: this.config.missionId,
       timestamp: Date.now(),
     });
@@ -106,7 +106,7 @@ export class MissionResilienceTracker {
     // Check if alert thresholds are exceeded
     this.checkAlertThresholds();
     
-    BridgeLink.emit('resilience-tracker:failure-recorded', 'ResilienceTracker', {
+    BridgeLink.emit("resilience-tracker:failure-recorded", "ResilienceTracker", {
       missionId: this.config.missionId,
       failureId: failure.id,
       severity: failure.severity,
@@ -127,7 +127,7 @@ export class MissionResilienceTracker {
     // Recalculate resilience index
     await this.calculateResilienceIndex();
     
-    BridgeLink.emit('resilience-tracker:response-recorded', 'ResilienceTracker', {
+    BridgeLink.emit("resilience-tracker:response-recorded", "ResilienceTracker", {
       missionId: this.config.missionId,
       failureId: response.failureEventId,
       responseId: response.id,
@@ -148,7 +148,7 @@ export class MissionResilienceTracker {
     
     // Check recovery time threshold
     if (recovery.recoveryDuration && recovery.recoveryDuration > this.config.alertThresholds.maxRecoveryTime) {
-      BridgeLink.emit('resilience-tracker:recovery-threshold-exceeded', 'ResilienceTracker', {
+      BridgeLink.emit("resilience-tracker:recovery-threshold-exceeded", "ResilienceTracker", {
         missionId: this.config.missionId,
         failureId: recovery.failureEventId,
         recoveryDuration: recovery.recoveryDuration,
@@ -156,7 +156,7 @@ export class MissionResilienceTracker {
       });
     }
     
-    BridgeLink.emit('resilience-tracker:recovery-recorded', 'ResilienceTracker', {
+    BridgeLink.emit("resilience-tracker:recovery-recorded", "ResilienceTracker", {
       missionId: this.config.missionId,
       failureId: recovery.failureEventId,
       status: recovery.status,
@@ -189,22 +189,22 @@ export class MissionResilienceTracker {
     // Calculate trend
     const previousScore = this.currentIndex?.overallScore || overallScore;
     const scoreDiff = overallScore - previousScore;
-    let trend: 'improving' | 'stable' | 'declining' = 'stable';
+    let trend: "improving" | "stable" | "declining" = "stable";
     
     if (Math.abs(scoreDiff) > 5) {
-      trend = scoreDiff > 0 ? 'improving' : 'declining';
+      trend = scoreDiff > 0 ? "improving" : "declining";
     }
     
     const trendPercentage = previousScore > 0 ? (scoreDiff / previousScore) * 100 : 0;
     
     // Calculate failure statistics
     const failures = Array.from(this.failures.values());
-    const criticalFailures = failures.filter(f => f.severity === 'critical').length;
+    const criticalFailures = failures.filter(f => f.severity === "critical").length;
     
     // Calculate recovery statistics
     const recoveries = Array.from(this.recoveries.values());
-    const completedRecoveries = recoveries.filter(r => r.status === 'recovered');
-    const failedRecoveries = recoveries.filter(r => r.status === 'failed');
+    const completedRecoveries = recoveries.filter(r => r.status === "recovered");
+    const failedRecoveries = recoveries.filter(r => r.status === "failed");
     
     const averageRecoveryTime = completedRecoveries.length > 0
       ? completedRecoveries.reduce((sum, r) => sum + (r.recoveryDuration || 0), 0) / completedRecoveries.length
@@ -241,7 +241,7 @@ export class MissionResilienceTracker {
       this.resilienceHistory = this.resilienceHistory.slice(-5000);
     }
     
-    BridgeLink.emit('resilience-tracker:index-updated', 'ResilienceTracker', {
+    BridgeLink.emit("resilience-tracker:index-updated", "ResilienceTracker", {
       missionId: this.config.missionId,
       score: overallScore,
       trend,
@@ -262,7 +262,7 @@ export class MissionResilienceTracker {
     // Failure Prevention Score: based on failure frequency and severity
     const recentPeriod = Date.now() - 24 * 60 * 60 * 1000; // Last 24 hours
     const recentFailures = failures.filter(f => f.timestamp > recentPeriod);
-    const criticalRecentFailures = recentFailures.filter(f => f.severity === 'critical').length;
+    const criticalRecentFailures = recentFailures.filter(f => f.severity === "critical").length;
     
     const failurePreventionScore = Math.max(0, 100 - (recentFailures.length * 10) - (criticalRecentFailures * 20));
     
@@ -273,7 +273,7 @@ export class MissionResilienceTracker {
       : 100;
     
     // Recovery Speed Score: based on average recovery time
-    const completedRecoveries = recoveries.filter(r => r.status === 'recovered');
+    const completedRecoveries = recoveries.filter(r => r.status === "recovered");
     const avgRecoveryTime = completedRecoveries.length > 0
       ? completedRecoveries.reduce((sum, r) => sum + (r.recoveryDuration || 0), 0) / completedRecoveries.length
       : 0;
@@ -290,7 +290,7 @@ export class MissionResilienceTracker {
     const systemRedundancyScore = Math.max(0, 100 - (affectedSystems.size * 5));
     
     // Crew Readiness Score: based on crew-initiated successful responses
-    const crewResponses = allResponses.filter(r => r.initiatedBy === 'crew');
+    const crewResponses = allResponses.filter(r => r.initiatedBy === "crew");
     const successfulCrewResponses = crewResponses.filter(r => r.success).length;
     const crewReadinessScore = crewResponses.length > 0
       ? (successfulCrewResponses / crewResponses.length) * 100
@@ -370,7 +370,7 @@ export class MissionResilienceTracker {
       };
       
       const responseBonus = responses.filter(r => r.success).length * 5;
-      const recoveryBonus = recovery?.status === 'recovered' ? 10 : 0;
+      const recoveryBonus = recovery?.status === "recovered" ? 10 : 0;
       
       const resilienceImpact = severityImpact[failure.severity] + responseBonus + recoveryBonus;
       
@@ -403,7 +403,7 @@ export class MissionResilienceTracker {
     
     console.log(`[ResilienceTracker] Generated report for mission ${this.config.missionId}`);
     
-    BridgeLink.emit('resilience-tracker:report-generated', 'ResilienceTracker', {
+    BridgeLink.emit("resilience-tracker:report-generated", "ResilienceTracker", {
       missionId: this.config.missionId,
       reportId: report.id,
       eventCount: periodFailures.length,
@@ -416,7 +416,7 @@ export class MissionResilienceTracker {
   /**
    * Generate recommendations based on events
    */
-  private generateRecommendations(events: EventReport['events']): string[] {
+  private generateRecommendations(events: EventReport["events"]): string[] {
     const recommendations: string[] = [];
     
     // Check for recurring failures
@@ -440,12 +440,12 @@ export class MissionResilienceTracker {
     
     if (slowResponses.length > events.length * 0.3) {
       recommendations.push(
-        'Response times are consistently slow. Review and optimize response procedures.'
+        "Response times are consistently slow. Review and optimize response procedures."
       );
     }
     
     // Check for failed recoveries
-    const failedRecoveries = events.filter(e => e.recovery?.status === 'failed');
+    const failedRecoveries = events.filter(e => e.recovery?.status === "failed");
     
     if (failedRecoveries.length > 0) {
       recommendations.push(
@@ -454,7 +454,7 @@ export class MissionResilienceTracker {
     }
     
     // Check for critical failures
-    const criticalFailures = events.filter(e => e.failure.severity === 'critical');
+    const criticalFailures = events.filter(e => e.failure.severity === "critical");
     
     if (criticalFailures.length > 0) {
       recommendations.push(
@@ -463,7 +463,7 @@ export class MissionResilienceTracker {
     }
     
     if (recommendations.length === 0) {
-      recommendations.push('System resilience is within acceptable parameters. Continue monitoring.');
+      recommendations.push("System resilience is within acceptable parameters. Continue monitoring.");
     }
     
     return recommendations;
@@ -472,21 +472,21 @@ export class MissionResilienceTracker {
   /**
    * Export report to various formats
    */
-  public async exportReport(report: EventReport, format: 'json' | 'csv' | 'pdf'): Promise<string> {
+  public async exportReport(report: EventReport, format: "json" | "csv" | "pdf"): Promise<string> {
     switch (format) {
-      case 'json':
-        return JSON.stringify(report, null, 2);
+    case "json":
+      return JSON.stringify(report, null, 2);
       
-      case 'csv':
-        return this.exportToCsv(report);
+    case "csv":
+      return this.exportToCsv(report);
       
-      case 'pdf':
-        // PDF export would require a PDF library
-        // For now, return a placeholder
-        return `PDF export for report ${report.id} (implementation pending)`;
+    case "pdf":
+      // PDF export would require a PDF library
+      // For now, return a placeholder
+      return `PDF export for report ${report.id} (implementation pending)`;
       
-      default:
-        throw new Error(`Unsupported export format: ${format}`);
+    default:
+      throw new Error(`Unsupported export format: ${format}`);
     }
   }
 
@@ -497,7 +497,7 @@ export class MissionResilienceTracker {
     const rows: string[] = [];
     
     // Header
-    rows.push('Timestamp,Category,Severity,Description,Responses,Recovery Status,Recovery Time,Resilience Impact');
+    rows.push("Timestamp,Category,Severity,Description,Responses,Recovery Status,Recovery Time,Resilience Impact");
     
     // Data rows
     report.events.forEach(event => {
@@ -507,14 +507,14 @@ export class MissionResilienceTracker {
         event.failure.severity,
         `"${event.failure.description}"`,
         event.responses.length,
-        event.recovery?.status || 'N/A',
-        event.recovery?.recoveryDuration || 'N/A',
+        event.recovery?.status || "N/A",
+        event.recovery?.recoveryDuration || "N/A",
         event.resilienceImpact,
-      ].join(',');
+      ].join(",");
       rows.push(row);
     });
     
-    return rows.join('\n');
+    return rows.join("\n");
   }
 
   /**
@@ -535,22 +535,22 @@ export class MissionResilienceTracker {
    * Set up Situational Awareness integration
    */
   private setupSituationalAwarenessIntegration(): void {
-    BridgeLink.on('situational-awareness:analysis-complete', async (_source, data) => {
+    BridgeLink.on("situational-awareness:analysis-complete", async (_source, data) => {
       const state = situationalAwareness.getCurrentState();
       
       // Check for critical alerts that might indicate failures
       state.activeAlerts
-        .filter(alert => alert.severity === 'critical' || alert.severity === 'high')
+        .filter(alert => alert.severity === "critical" || alert.severity === "high")
         .forEach(async alert => {
           const failure: FailureEvent = {
             id: `failure-${alert.id}`,
             missionId: this.config.missionId,
             timestamp: alert.timestamp,
             severity: alert.severity as FailureSeverity,
-            category: alert.affectedSystems[0] || 'unknown',
+            category: alert.affectedSystems[0] || "unknown",
             description: alert.title,
             affectedSystems: alert.affectedSystems,
-            detected_by: 'ai',
+            detected_by: "ai",
             context: { alert },
           };
           
@@ -563,20 +563,20 @@ export class MissionResilienceTracker {
    * Set up Tactical Response integration
    */
   private setupTacticalResponseIntegration(): void {
-    BridgeLink.on('tactical-response:execution-complete', async (_source, data) => {
+    BridgeLink.on("tactical-response:execution-complete", async (_source, data) => {
       const execution = data as any;
       
-      if (execution.status === 'success' || execution.status === 'failed') {
+      if (execution.status === "success" || execution.status === "failed") {
         const response: ResponseAction = {
           id: execution.executionId,
-          failureEventId: execution.eventId || 'unknown',
+          failureEventId: execution.eventId || "unknown",
           timestamp: Date.now(),
-          initiatedBy: 'ai',
-          actionType: 'tactical_response',
+          initiatedBy: "ai",
+          actionType: "tactical_response",
           description: `Tactical response executed: ${execution.ruleId}`,
-          success: execution.status === 'success',
+          success: execution.status === "success",
           duration: execution.duration || 0,
-          effectiveness: execution.status === 'success' ? 'good' : 'poor',
+          effectiveness: execution.status === "success" ? "good" : "poor",
         };
         
         // Only record if we have a corresponding failure
@@ -626,7 +626,7 @@ export class MissionResilienceTracker {
     
     // Check critical score drop
     if (Math.abs(trendPercentage) > this.config.alertThresholds.criticalScoreDrop) {
-      BridgeLink.emit('resilience-tracker:critical-drop-alert', 'ResilienceTracker', {
+      BridgeLink.emit("resilience-tracker:critical-drop-alert", "ResilienceTracker", {
         missionId: this.config.missionId,
         score: overallScore,
         drop: trendPercentage,
@@ -636,7 +636,7 @@ export class MissionResilienceTracker {
     
     // Check minimum acceptable score
     if (overallScore < this.config.alertThresholds.minAcceptableScore) {
-      BridgeLink.emit('resilience-tracker:low-score-alert', 'ResilienceTracker', {
+      BridgeLink.emit("resilience-tracker:low-score-alert", "ResilienceTracker", {
         missionId: this.config.missionId,
         score: overallScore,
         threshold: this.config.alertThresholds.minAcceptableScore,
@@ -658,7 +658,7 @@ export class MissionResilienceTracker {
     
     MissionResilienceTracker.instances.delete(this.config.missionId);
     
-    BridgeLink.emit('resilience-tracker:cleanup', 'ResilienceTracker', {
+    BridgeLink.emit("resilience-tracker:cleanup", "ResilienceTracker", {
       missionId: this.config.missionId,
       timestamp: Date.now(),
     });

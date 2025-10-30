@@ -248,27 +248,27 @@ const ExperimentalModules = () => {
 
   const getStatusColor = (status: ExperimentalModule["status"]) => {
     switch (status) {
-      case "active":
-        return "default";
-      case "testing":
-        return "secondary";
-      case "prototype":
-        return "outline";
-      case "deprecated":
-        return "destructive";
+    case "active":
+      return "default";
+    case "testing":
+      return "secondary";
+    case "prototype":
+      return "outline";
+    case "deprecated":
+      return "destructive";
     }
   };
 
   const getStabilityColor = (stability: ExperimentalModule["stability"]) => {
     switch (stability) {
-      case "stable":
-        return "text-green-600";
-      case "beta":
-        return "text-blue-600";
-      case "alpha":
-        return "text-yellow-600";
-      case "experimental":
-        return "text-orange-600";
+    case "stable":
+      return "text-green-600";
+    case "beta":
+      return "text-blue-600";
+    case "alpha":
+      return "text-yellow-600";
+    case "experimental":
+      return "text-orange-600";
     }
   };
 

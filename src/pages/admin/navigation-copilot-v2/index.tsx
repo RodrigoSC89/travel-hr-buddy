@@ -50,10 +50,10 @@ const NavigationCopilotV2Page: React.FC = () => {
   };
 
   const addMessage = (
-    type: CopilotMessage['type'],
+    type: CopilotMessage["type"],
     text: string,
     command?: ParsedCommand,
-    status?: CopilotMessage['status']
+    status?: CopilotMessage["status"]
   ) => {
     const message: CopilotMessage = {
       id: `msg-${Date.now()}-${Math.random()}`,
@@ -79,7 +79,7 @@ const NavigationCopilotV2Page: React.FC = () => {
 
       const started = speechRecognitionService.startListening((result) => {
         if (result.containsWakeWord) {
-          addMessage('user', result.transcript, undefined, 'pending');
+          addMessage("user", result.transcript, undefined, "pending");
           processVoiceCommand(result.transcript);
         }
       });
@@ -104,7 +104,7 @@ const NavigationCopilotV2Page: React.FC = () => {
       // Parse the command
       const command = naturalLanguageParser.parseCommand(text);
       
-      addMessage('command', `Parsed: ${command.action}`, command, 'pending');
+      addMessage("command", `Parsed: ${command.action}`, command, "pending");
 
       // Execute the command
       const response = await executeCommand(command);
@@ -117,10 +117,10 @@ const NavigationCopilotV2Page: React.FC = () => {
       );
 
       addMessage(
-        'response',
+        "response",
         response.message,
         undefined,
-        response.success ? 'success' : 'error'
+        response.success ? "success" : "error"
       );
 
       if (response.success) {
@@ -132,7 +132,7 @@ const NavigationCopilotV2Page: React.FC = () => {
       await loadStats();
     } catch (error) {
       console.error("Error processing command:", error);
-      addMessage('system', 'Error processing command', undefined, 'error');
+      addMessage("system", "Error processing command", undefined, "error");
       toast.error("Failed to process command");
     } finally {
       setIsProcessing(false);
@@ -143,64 +143,64 @@ const NavigationCopilotV2Page: React.FC = () => {
     command: ParsedCommand
   ): Promise<{ success: boolean; message: string }> => {
     switch (command.action) {
-      case 'navigate':
-      case 'reroute':
-        if (typeof command.parameters.destination === 'object') {
-          const origin: Coordinates = { lat: -23.5505, lng: -46.6333 }; // Default origin
-          const routes = await navigationCopilot.calculateRoute(
-            origin,
+    case "navigate":
+    case "reroute":
+      if (typeof command.parameters.destination === "object") {
+        const origin: Coordinates = { lat: -23.5505, lng: -46.6333 }; // Default origin
+        const routes = await navigationCopilot.calculateRoute(
+          origin,
             command.parameters.destination as Coordinates,
             { avoidStorms: true }
-          );
+        );
           
-          if (routes.length > 0) {
-            setCurrentRoute(routes[0]);
-            return {
-              success: true,
-              message: `Route calculated to destination. Distance: ${routes[0].distance.toFixed(1)}nm, ETA: ${routes[0].etaWithAI}`,
-            };
-          }
+        if (routes.length > 0) {
+          setCurrentRoute(routes[0]);
+          return {
+            success: true,
+            message: `Route calculated to destination. Distance: ${routes[0].distance.toFixed(1)}nm, ETA: ${routes[0].etaWithAI}`,
+          };
         }
-        return {
-          success: false,
-          message: "Could not calculate route to destination",
-        };
+      }
+      return {
+        success: false,
+        message: "Could not calculate route to destination",
+      };
 
-      case 'find_port':
-        return {
-          success: true,
-          message: "Finding nearest port... Santos (50nm north)",
-        };
+    case "find_port":
+      return {
+        success: true,
+        message: "Finding nearest port... Santos (50nm north)",
+      };
 
-      case 'weather':
-        return {
-          success: true,
-          message: "Weather conditions: Clear skies, wind 10kn from NE, waves 1-2m",
-        };
+    case "weather":
+      return {
+        success: true,
+        message: "Weather conditions: Clear skies, wind 10kn from NE, waves 1-2m",
+      };
 
-      case 'avoid_area':
-        return {
-          success: true,
-          message: `Avoiding ${command.parameters.location} within ${command.parameters.radius}nm radius`,
-        };
+    case "avoid_area":
+      return {
+        success: true,
+        message: `Avoiding ${command.parameters.location} within ${command.parameters.radius}nm radius`,
+      };
 
-      case 'optimize_route':
-        return {
-          success: true,
-          message: `Route optimized for ${command.parameters.criteria} criteria`,
-        };
+    case "optimize_route":
+      return {
+        success: true,
+        message: `Route optimized for ${command.parameters.criteria} criteria`,
+      };
 
-      case 'unknown':
-        return {
-          success: false,
-          message: "Command not recognized. Try: 'navigate to Santos' or 'find nearest port'",
-        };
+    case "unknown":
+      return {
+        success: false,
+        message: "Command not recognized. Try: 'navigate to Santos' or 'find nearest port'",
+      };
 
-      default:
-        return {
-          success: false,
-          message: "Unsupported command",
-        };
+    default:
+      return {
+        success: false,
+        message: "Unsupported command",
+      };
     }
   };
 
@@ -209,7 +209,7 @@ const NavigationCopilotV2Page: React.FC = () => {
       return;
     }
 
-    addMessage('user', textCommand, undefined, 'pending');
+    addMessage("user", textCommand, undefined, "pending");
     processCommand(textCommand);
     setTextCommand("");
   };
@@ -295,7 +295,7 @@ const NavigationCopilotV2Page: React.FC = () => {
                     value={textCommand}
                     onChange={(e) => setTextCommand(e.target.value)}
                     onKeyPress={(e) => {
-                      if (e.key === 'Enter') {
+                      if (e.key === "Enter") {
                         handleTextCommand();
                       }
                     }}

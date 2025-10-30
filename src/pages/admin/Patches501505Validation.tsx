@@ -1,11 +1,11 @@
-import { useState, useEffect } from 'react';
-import { Link } from 'react-router-dom';
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
-import { Button } from '@/components/ui/button';
-import { Badge } from '@/components/ui/badge';
-import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
-import { ScrollArea } from '@/components/ui/scroll-area';
-import { Progress } from '@/components/ui/progress';
+import { useState, useEffect } from "react";
+import { Link } from "react-router-dom";
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
+import { Button } from "@/components/ui/button";
+import { Badge } from "@/components/ui/badge";
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
+import { ScrollArea } from "@/components/ui/scroll-area";
+import { Progress } from "@/components/ui/progress";
 import { 
   CheckCircle2, 
   XCircle, 
@@ -17,8 +17,8 @@ import {
   Rocket,
   Clock,
   Download
-} from 'lucide-react';
-import { toast } from 'sonner';
+} from "lucide-react";
+import { toast } from "sonner";
 
 interface ChecklistItem {
   id: string;
@@ -42,68 +42,68 @@ export default function Patches501505Validation() {
 
   const patches: PatchChecklist[] = [
     {
-      id: '501',
-      name: 'PATCH 501 – Documentação Técnica',
+      id: "501",
+      name: "PATCH 501 – Documentação Técnica",
       icon: FileText,
-      description: 'Geração automática de documentação técnica para todos os módulos',
-      script: 'npm run generate:docs',
+      description: "Geração automática de documentação técnica para todos os módulos",
+      script: "npm run generate:docs",
       items: [
-        { id: '501-1', label: 'Arquivos Markdown gerados por módulo', checked: true, required: true },
-        { id: '501-2', label: 'Visualização via /docs/:module', checked: true, required: true },
-        { id: '501-3', label: 'Script de geração testado', checked: true, required: true },
-        { id: '501-4', label: 'Campos: rota, db, fluxos, eventos verificados', checked: true, required: true },
+        { id: "501-1", label: "Arquivos Markdown gerados por módulo", checked: true, required: true },
+        { id: "501-2", label: "Visualização via /docs/:module", checked: true, required: true },
+        { id: "501-3", label: "Script de geração testado", checked: true, required: true },
+        { id: "501-4", label: "Campos: rota, db, fluxos, eventos verificados", checked: true, required: true },
       ]
     },
     {
-      id: '502',
-      name: 'PATCH 502 – Testes Core Modules',
+      id: "502",
+      name: "PATCH 502 – Testes Core Modules",
       icon: TestTube,
-      description: 'Testes unitários com cobertura de 85% para módulos principais',
-      script: 'npm run test:unit',
+      description: "Testes unitários com cobertura de 85% para módulos principais",
+      script: "npm run test:unit",
       items: [
-        { id: '502-1', label: '10 módulos com arquivos .spec.ts', checked: true, required: true },
-        { id: '502-2', label: 'Mock de Supabase OK', checked: true, required: true },
-        { id: '502-3', label: 'Coverage ≥ 85%', checked: false, required: true },
-        { id: '502-4', label: 'Rodando em pnpm test', checked: true, required: true },
+        { id: "502-1", label: "10 módulos com arquivos .spec.ts", checked: true, required: true },
+        { id: "502-2", label: "Mock de Supabase OK", checked: true, required: true },
+        { id: "502-3", label: "Coverage ≥ 85%", checked: false, required: true },
+        { id: "502-4", label: "Rodando em pnpm test", checked: true, required: true },
       ]
     },
     {
-      id: '503',
-      name: 'PATCH 503 – Fluxos E2E',
+      id: "503",
+      name: "PATCH 503 – Fluxos E2E",
       icon: Play,
-      description: 'Testes end-to-end para fluxos principais da aplicação',
-      script: 'npm run test:e2e',
+      description: "Testes end-to-end para fluxos principais da aplicação",
+      script: "npm run test:e2e",
       items: [
-        { id: '503-1', label: '5 fluxos principais testados', checked: true, required: true },
-        { id: '503-2', label: 'Testes em mobile/desktop', checked: true, required: true },
-        { id: '503-3', label: 'Screenshots OK', checked: false, required: false },
-        { id: '503-4', label: 'Todos testes com status passed', checked: false, required: true },
+        { id: "503-1", label: "5 fluxos principais testados", checked: true, required: true },
+        { id: "503-2", label: "Testes em mobile/desktop", checked: true, required: true },
+        { id: "503-3", label: "Screenshots OK", checked: false, required: false },
+        { id: "503-4", label: "Todos testes com status passed", checked: false, required: true },
       ]
     },
     {
-      id: '504',
-      name: 'PATCH 504 – Empacotamento Produção',
+      id: "504",
+      name: "PATCH 504 – Empacotamento Produção",
       icon: Package,
-      description: 'Criação de pacote de build com metadados para deploy',
-      script: 'npm run export:build',
+      description: "Criação de pacote de build com metadados para deploy",
+      script: "npm run export:build",
       items: [
-        { id: '504-1', label: '/dist gerado com sucesso', checked: true, required: true },
-        { id: '504-2', label: 'build-metadata.json presente', checked: true, required: true },
-        { id: '504-3', label: '.zip final funcional', checked: true, required: false },
-        { id: '504-4', label: 'Tamanho final < 30MB', checked: false, required: false },
+        { id: "504-1", label: "/dist gerado com sucesso", checked: true, required: true },
+        { id: "504-2", label: "build-metadata.json presente", checked: true, required: true },
+        { id: "504-3", label: ".zip final funcional", checked: true, required: false },
+        { id: "504-4", label: "Tamanho final < 30MB", checked: false, required: false },
       ]
     },
     {
-      id: '505',
-      name: 'PATCH 505 – Pós-Build + Deploy',
+      id: "505",
+      name: "PATCH 505 – Pós-Build + Deploy",
       icon: Rocket,
-      description: 'Verificação pós-build e helper de deploy para múltiplas plataformas',
-      script: 'npm run verify:postbuild',
+      description: "Verificação pós-build e helper de deploy para múltiplas plataformas",
+      script: "npm run verify:postbuild",
       items: [
-        { id: '505-1', label: 'Script verify-postbuild OK', checked: true, required: true },
-        { id: '505-2', label: 'CLI deploy-helper testado', checked: true, required: true },
-        { id: '505-3', label: 'Relatório de rotas ativo', checked: true, required: true },
-        { id: '505-4', label: 'Deploy bem-sucedido (simulado ou real)', checked: false, required: false },
+        { id: "505-1", label: "Script verify-postbuild OK", checked: true, required: true },
+        { id: "505-2", label: "CLI deploy-helper testado", checked: true, required: true },
+        { id: "505-3", label: "Relatório de rotas ativo", checked: true, required: true },
+        { id: "505-4", label: "Deploy bem-sucedido (simulado ou real)", checked: false, required: false },
       ]
     }
   ];
@@ -111,7 +111,7 @@ export default function Patches501505Validation() {
   const runScript = async (script: string, patchId: string) => {
     setLoading(true);
     toast.info(`Executando ${script}...`, {
-      description: 'Aguarde enquanto o script é executado.'
+      description: "Aguarde enquanto o script é executado."
     });
 
     try {
@@ -127,12 +127,12 @@ export default function Patches501505Validation() {
         }
       });
 
-      toast.success('Script executado!', {
+      toast.success("Script executado!", {
         description: `${script} completado com sucesso.`
       });
     } catch (error) {
-      toast.error('Erro ao executar script', {
-        description: error instanceof Error ? error.message : 'Erro desconhecido'
+      toast.error("Erro ao executar script", {
+        description: error instanceof Error ? error.message : "Erro desconhecido"
       });
     } finally {
       setLoading(false);
@@ -175,7 +175,7 @@ export default function Patches501505Validation() {
           variant={requiredItemsComplete ? "default" : "destructive"}
           className="text-sm px-4 py-2"
         >
-          {requiredItemsComplete ? '✓ Itens Críticos OK' : '⚠ Itens Pendentes'}
+          {requiredItemsComplete ? "✓ Itens Críticos OK" : "⚠ Itens Pendentes"}
         </Badge>
       </div>
 
@@ -290,7 +290,7 @@ export default function Patches501505Validation() {
                     <div className="mt-4 p-4 rounded-lg bg-muted">
                       <h4 className="font-semibold text-sm mb-2">Último Resultado:</h4>
                       <p className="text-xs text-muted-foreground">
-                        {new Date(testResults[patch.id].timestamp).toLocaleString('pt-BR')}
+                        {new Date(testResults[patch.id].timestamp).toLocaleString("pt-BR")}
                       </p>
                       <p className="text-sm mt-2">{testResults[patch.id].output}</p>
                     </div>
@@ -329,7 +329,7 @@ export default function Patches501505Validation() {
               </Link>
             </Button>
             <Button variant="outline" className="justify-start" asChild>
-              <a href="https://github.com" target="_blank">
+              <a href="https://github.com" target="_blank" rel="noreferrer">
                 <Download className="h-4 w-4 mr-2" />
                 Baixar Quick Reference
               </a>

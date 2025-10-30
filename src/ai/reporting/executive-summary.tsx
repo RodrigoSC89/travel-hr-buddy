@@ -838,8 +838,8 @@ async function generateNaturalLanguageInsights(
     const avgConfidence =
       completedSims > 0
         ? simulations
-            .filter(s => s.status === "completed")
-            .reduce((sum, s) => sum + s.confidenceLevel, 0) / completedSims
+          .filter(s => s.status === "completed")
+          .reduce((sum, s) => sum + s.confidenceLevel, 0) / completedSims
         : 0;
 
     insights.push(
@@ -922,8 +922,8 @@ function calculateKeyMetrics(
     avg_simulation_confidence:
       simulations.filter(s => s.status === "completed").length > 0
         ? simulations
-            .filter(s => s.status === "completed")
-            .reduce((sum, s) => sum + s.confidenceLevel, 0) /
+          .filter(s => s.status === "completed")
+          .reduce((sum, s) => sum + s.confidenceLevel, 0) /
           simulations.filter(s => s.status === "completed").length
         : 0
   };

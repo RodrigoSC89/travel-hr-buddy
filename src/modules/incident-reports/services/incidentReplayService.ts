@@ -61,19 +61,19 @@ class IncidentReplayService {
 
       return data
         ? {
-            id: data.id,
-            title: data.title || "Untitled Incident",
-            description: data.description || "",
-            severity: data.severity || "medium",
-            status: data.status || "open",
-            incidentDate: data.incident_date || data.created_at,
-            location: data.location,
-            vesselId: data.vessel_id,
-            reportedBy: data.reported_by,
-            createdAt: data.created_at,
-            updatedAt: data.updated_at,
-            metadata: data.metadata,
-          }
+          id: data.id,
+          title: data.title || "Untitled Incident",
+          description: data.description || "",
+          severity: data.severity || "medium",
+          status: data.status || "open",
+          incidentDate: data.incident_date || data.created_at,
+          location: data.location,
+          vesselId: data.vessel_id,
+          reportedBy: data.reported_by,
+          createdAt: data.created_at,
+          updatedAt: data.updated_at,
+          metadata: data.metadata,
+        }
         : null;
     } catch (error) {
       console.error("Failed to fetch incident:", error);
@@ -301,23 +301,23 @@ class IncidentReplayService {
     const recommendations = [];
 
     switch (incident.severity) {
-      case "critical":
-        recommendations.push("Ação imediata necessária - escalar para gestão superior");
-        recommendations.push("Implementar medidas de contenção urgentes");
-        recommendations.push("Notificar todas as partes interessadas");
-        break;
-      case "high":
-        recommendations.push("Priorizar resolução dentro de 24 horas");
-        recommendations.push("Alocar recursos dedicados para investigação");
-        recommendations.push("Implementar monitoramento contínuo");
-        break;
-      case "medium":
-        recommendations.push("Agendar investigação detalhada");
-        recommendations.push("Revisar procedimentos operacionais relacionados");
-        break;
-      default:
-        recommendations.push("Documentar lições aprendidas");
-        recommendations.push("Considerar medidas preventivas");
+    case "critical":
+      recommendations.push("Ação imediata necessária - escalar para gestão superior");
+      recommendations.push("Implementar medidas de contenção urgentes");
+      recommendations.push("Notificar todas as partes interessadas");
+      break;
+    case "high":
+      recommendations.push("Priorizar resolução dentro de 24 horas");
+      recommendations.push("Alocar recursos dedicados para investigação");
+      recommendations.push("Implementar monitoramento contínuo");
+      break;
+    case "medium":
+      recommendations.push("Agendar investigação detalhada");
+      recommendations.push("Revisar procedimentos operacionais relacionados");
+      break;
+    default:
+      recommendations.push("Documentar lições aprendidas");
+      recommendations.push("Considerar medidas preventivas");
     }
 
     // Add general recommendations

@@ -59,8 +59,8 @@ class PlannedRoutesService {
         waypoints: route.waypoints,
         distance_nm: route.distance,
         estimated_duration: route.estimatedDuration,
-        status: route.status || 'planned',
-        route_type: route.riskScore < 30 ? 'optimized' : route.recommended ? 'direct' : 'alternative',
+        status: route.status || "planned",
+        route_type: route.riskScore < 30 ? "optimized" : route.recommended ? "direct" : "alternative",
         risk_score: route.riskScore,
         weather_alerts: route.weatherAlerts || [],
         recommended: route.recommended,
@@ -153,9 +153,9 @@ class PlannedRoutesService {
 
       return {
         totalRoutes: routes.length,
-        plannedCount: routes.filter(r => r.status === 'planned').length,
-        activeCount: routes.filter(r => r.status === 'active').length,
-        completedCount: routes.filter(r => r.status === 'completed').length,
+        plannedCount: routes.filter(r => r.status === "planned").length,
+        activeCount: routes.filter(r => r.status === "active").length,
+        completedCount: routes.filter(r => r.status === "completed").length,
         avgDistance: routes.length > 0 
           ? routes.reduce((sum, r) => sum + r.distance_nm, 0) / routes.length 
           : 0,

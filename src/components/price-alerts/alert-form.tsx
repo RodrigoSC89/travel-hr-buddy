@@ -1,15 +1,15 @@
-import React, { useState } from 'react';
-import { Button } from '@/components/ui/button';
-import { Input } from '@/components/ui/input';
-import { Label } from '@/components/ui/label';
-import { Switch } from '@/components/ui/switch';
+import React, { useState } from "react";
+import { Button } from "@/components/ui/button";
+import { Input } from "@/components/ui/input";
+import { Label } from "@/components/ui/label";
+import { Switch } from "@/components/ui/switch";
 import {
   Select,
   SelectContent,
   SelectItem,
   SelectTrigger,
   SelectValue,
-} from '@/components/ui/select';
+} from "@/components/ui/select";
 import {
   Dialog,
   DialogContent,
@@ -17,24 +17,24 @@ import {
   DialogFooter,
   DialogHeader,
   DialogTitle,
-} from '@/components/ui/dialog';
-import { Calendar } from '@/components/ui/calendar';
+} from "@/components/ui/dialog";
+import { Calendar } from "@/components/ui/calendar";
 import {
   Popover,
   PopoverContent,
   PopoverTrigger,
-} from '@/components/ui/popover';
-import { CalendarIcon, Loader2 } from 'lucide-react';
-import { format } from 'date-fns';
-import { cn } from '@/lib/utils';
-import { CreatePriceAlertInput, PriceAlert, UpdatePriceAlertInput } from '@/services/price-alerts-service';
+} from "@/components/ui/popover";
+import { CalendarIcon, Loader2 } from "lucide-react";
+import { format } from "date-fns";
+import { cn } from "@/lib/utils";
+import { CreatePriceAlertInput, PriceAlert, UpdatePriceAlertInput } from "@/services/price-alerts-service";
 
 interface AlertFormProps {
   open: boolean;
   onOpenChange: (open: boolean) => void;
   onSubmit: (data: any) => Promise<void>;
   alert?: PriceAlert | null;
-  mode: 'create' | 'edit';
+  mode: "create" | "edit";
 }
 
 export const AlertForm: React.FC<AlertFormProps> = ({
@@ -46,15 +46,15 @@ export const AlertForm: React.FC<AlertFormProps> = ({
 }) => {
   const [loading, setLoading] = useState(false);
   const [formData, setFormData] = useState<CreatePriceAlertInput>({
-    product_name: alert?.product_name || '',
+    product_name: alert?.product_name || "",
     target_price: alert?.target_price || 0,
     current_price: alert?.current_price || undefined,
-    product_url: alert?.product_url || '',
-    route: alert?.route || '',
-    travel_date: alert?.travel_date || '',
+    product_url: alert?.product_url || "",
+    route: alert?.route || "",
+    travel_date: alert?.travel_date || "",
     notification_email: alert?.notification_email ?? true,
     notification_push: alert?.notification_push ?? true,
-    notification_frequency: alert?.notification_frequency || 'immediate',
+    notification_frequency: alert?.notification_frequency || "immediate",
   });
   const [travelDate, setTravelDate] = useState<Date | undefined>(
     alert?.travel_date ? new Date(alert.travel_date) : undefined
@@ -67,27 +67,27 @@ export const AlertForm: React.FC<AlertFormProps> = ({
     try {
       const submitData = {
         ...formData,
-        travel_date: travelDate ? format(travelDate, 'yyyy-MM-dd') : undefined,
+        travel_date: travelDate ? format(travelDate, "yyyy-MM-dd") : undefined,
       };
       await onSubmit(submitData);
       onOpenChange(false);
       // Reset form
-      if (mode === 'create') {
+      if (mode === "create") {
         setFormData({
-          product_name: '',
+          product_name: "",
           target_price: 0,
           current_price: undefined,
-          product_url: '',
-          route: '',
-          travel_date: '',
+          product_url: "",
+          route: "",
+          travel_date: "",
           notification_email: true,
           notification_push: true,
-          notification_frequency: 'immediate',
+          notification_frequency: "immediate",
         });
         setTravelDate(undefined);
       }
     } catch (error) {
-      console.error('Error submitting form:', error);
+      console.error("Error submitting form:", error);
     } finally {
       setLoading(false);
     }
@@ -98,12 +98,12 @@ export const AlertForm: React.FC<AlertFormProps> = ({
       <DialogContent className="max-w-2xl max-h-[90vh] overflow-y-auto">
         <DialogHeader>
           <DialogTitle>
-            {mode === 'create' ? 'Create New Price Alert' : 'Edit Price Alert'}
+            {mode === "create" ? "Create New Price Alert" : "Edit Price Alert"}
           </DialogTitle>
           <DialogDescription>
-            {mode === 'create'
-              ? 'Set up a new price alert to track travel prices and get notified when prices change.'
-              : 'Update the price alert settings.'}
+            {mode === "create"
+              ? "Set up a new price alert to track travel prices and get notified when prices change."
+              : "Update the price alert settings."}
           </DialogDescription>
         </DialogHeader>
 
@@ -127,7 +127,7 @@ export const AlertForm: React.FC<AlertFormProps> = ({
             <Label htmlFor="route">Route</Label>
             <Input
               id="route"
-              value={formData.route || ''}
+              value={formData.route || ""}
               onChange={(e) =>
                 setFormData({ ...formData, route: e.target.value })
               }
@@ -143,13 +143,13 @@ export const AlertForm: React.FC<AlertFormProps> = ({
                 <Button
                   variant="outline"
                   className={cn(
-                    'w-full justify-start text-left font-normal',
-                    !travelDate && 'text-muted-foreground'
+                    "w-full justify-start text-left font-normal",
+                    !travelDate && "text-muted-foreground"
                   )}
                   type="button"
                 >
                   <CalendarIcon className="mr-2 h-4 w-4" />
-                  {travelDate ? format(travelDate, 'PPP') : 'Pick a date'}
+                  {travelDate ? format(travelDate, "PPP") : "Pick a date"}
                 </Button>
               </PopoverTrigger>
               <PopoverContent className="w-auto p-0" align="start">
@@ -191,7 +191,7 @@ export const AlertForm: React.FC<AlertFormProps> = ({
                 type="number"
                 step="0.01"
                 min="0"
-                value={formData.current_price || ''}
+                value={formData.current_price || ""}
                 onChange={(e) =>
                   setFormData({
                     ...formData,
@@ -275,7 +275,7 @@ export const AlertForm: React.FC<AlertFormProps> = ({
             </Button>
             <Button type="submit" disabled={loading}>
               {loading && <Loader2 className="mr-2 h-4 w-4 animate-spin" />}
-              {mode === 'create' ? 'Create Alert' : 'Update Alert'}
+              {mode === "create" ? "Create Alert" : "Update Alert"}
             </Button>
           </DialogFooter>
         </form>

@@ -3,8 +3,8 @@
  * JWT + Refresh Token implementation with session management
  */
 
-import { supabase } from '@/integrations/supabase/client';
-import { Session, User } from '@supabase/supabase-js';
+import { supabase } from "@/integrations/supabase/client";
+import { Session, User } from "@supabase/supabase-js";
 
 interface AuthState {
   session: Session | null;
@@ -40,16 +40,16 @@ export class TokenRefreshManager {
         this.scheduleRefresh(session);
       }
     } catch (error) {
-      console.error('Error initializing refresh cycle:', error);
+      console.error("Error initializing refresh cycle:", error);
     }
 
     // Listen for auth state changes
     supabase.auth.onAuthStateChange((event, session) => {
-      if (event === 'SIGNED_IN' || event === 'TOKEN_REFRESHED') {
+      if (event === "SIGNED_IN" || event === "TOKEN_REFRESHED") {
         if (session) {
           this.scheduleRefresh(session);
         }
-      } else if (event === 'SIGNED_OUT') {
+      } else if (event === "SIGNED_OUT") {
         this.clearRefreshTimer();
       }
     });
@@ -90,22 +90,22 @@ export class TokenRefreshManager {
       const { data, error } = await supabase.auth.refreshSession();
 
       if (error) {
-        console.error('Token refresh error:', error);
+        console.error("Token refresh error:", error);
         return { success: false, error: error.message };
       }
 
       if (data.session) {
-        console.log('Token refreshed successfully');
+        console.log("Token refreshed successfully");
         this.scheduleRefresh(data.session);
         return { success: true, session: data.session };
       }
 
-      return { success: false, error: 'No session returned' };
+      return { success: false, error: "No session returned" };
     } catch (error) {
-      console.error('Exception during token refresh:', error);
+      console.error("Exception during token refresh:", error);
       return { 
         success: false, 
-        error: error instanceof Error ? error.message : 'Unknown error' 
+        error: error instanceof Error ? error.message : "Unknown error" 
       };
     }
   }
@@ -146,19 +146,19 @@ export async function secureLogout(): Promise<{ success: boolean; error?: string
       }
 
       // Clear local storage
-      localStorage.removeItem('supabase.auth.token');
+      localStorage.removeItem("supabase.auth.token");
       sessionStorage.clear();
 
-      console.log('Secure logout completed');
+      console.log("Secure logout completed");
       return { success: true };
     }
 
     return { success: true };
   } catch (error) {
-    console.error('Logout error:', error);
+    console.error("Logout error:", error);
     return { 
       success: false, 
-      error: error instanceof Error ? error.message : 'Unknown error' 
+      error: error instanceof Error ? error.message : "Unknown error" 
     };
   }
 }
@@ -185,7 +185,7 @@ export async function getActiveSession(): Promise<{
 
     return { session, expiresIn, isExpiringSoon };
   } catch (error) {
-    console.error('Error getting session:', error);
+    console.error("Error getting session:", error);
     return { session: null, expiresIn: 0, isExpiringSoon: false };
   }
 }
@@ -198,7 +198,7 @@ export async function isAuthenticated(): Promise<boolean> {
     const { data: { session } } = await supabase.auth.getSession();
     return !!session;
   } catch (error) {
-    console.error('Authentication check error:', error);
+    console.error("Authentication check error:", error);
     return false;
   }
 }
@@ -236,15 +236,15 @@ export async function getSessionMetadata(): Promise<SessionMetadata | null> {
 
     return {
       userId: session.user.id,
-      email: session.user.email || 'Unknown',
+      email: session.user.email || "Unknown",
       createdAt: new Date(session.user.created_at).toLocaleString(),
       expiresAt: new Date((session.expires_at || 0) * 1000).toLocaleString(),
       expiresIn: expiresInFormatted,
-      tokenType: 'Bearer',
+      tokenType: "Bearer",
       isExpiring: isExpiringSoon,
     };
   } catch (error) {
-    console.error('Error getting session metadata:', error);
+    console.error("Error getting session metadata:", error);
     return null;
   }
 }

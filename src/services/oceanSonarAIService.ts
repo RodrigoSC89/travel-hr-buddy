@@ -16,7 +16,7 @@ class OceanSonarAIService {
   /**
    * Simulate sonar scan data ingestion
    */
-  async ingestSonarData(scanType: SonarScanType = 'active'): Promise<SonarData | null> {
+  async ingestSonarData(scanType: SonarScanType = "active"): Promise<SonarData | null> {
     const scanId = `SCAN-${Date.now()}`;
     
     // Simulate sonar raw data
@@ -28,7 +28,7 @@ class OceanSonarAIService {
     };
 
     const { data, error } = await supabase
-      .from('sonar_data')
+      .from("sonar_data")
       .insert([{
         scan_id: scanId,
         scan_type: scanType,
@@ -75,7 +75,7 @@ class OceanSonarAIService {
 
     const processingTime = Math.round(performance.now() - startTime);
 
-    await supabase.from('sonar_ai_analysis').insert([{
+    await supabase.from("sonar_ai_analysis").insert([{
       scan_id: scanId,
       sonar_data_id: sonarDataId,
       detected_patterns: patterns,
@@ -90,7 +90,7 @@ class OceanSonarAIService {
 
     // Log significant detections
     for (const anomaly of anomalies) {
-      if (anomaly.severity === 'high' || anomaly.severity === 'critical') {
+      if (anomaly.severity === "high" || anomaly.severity === "critical") {
         await this.logDetection(scanId, anomaly);
       }
     }
@@ -110,7 +110,7 @@ class OceanSonarAIService {
 
     for (let i = 0; i < numPatterns; i++) {
       patterns.push({
-        pattern_type: ['linear', 'circular', 'irregular'][Math.floor(Math.random() * 3)],
+        pattern_type: ["linear", "circular", "irregular"][Math.floor(Math.random() * 3)],
         confidence: 70 + Math.random() * 25,
         location: {
           bearing: Math.random() * 360,
@@ -140,9 +140,9 @@ class OceanSonarAIService {
     const numAnomalies = Math.floor(Math.random() * 2);
 
     for (let i = 0; i < numAnomalies; i++) {
-      const severity = ['low', 'medium', 'high'][Math.floor(Math.random() * 3)];
+      const severity = ["low", "medium", "high"][Math.floor(Math.random() * 3)];
       anomalies.push({
-        anomaly_type: ['unexpected_object', 'unusual_pattern', 'signal_interference'][Math.floor(Math.random() * 3)],
+        anomaly_type: ["unexpected_object", "unusual_pattern", "signal_interference"][Math.floor(Math.random() * 3)],
         severity,
         confidence: 65 + Math.random() * 30,
         location: {
@@ -169,7 +169,7 @@ class OceanSonarAIService {
     anomalies.forEach((anomaly, idx) => {
       zones.push({
         zone_id: `ZONE-${Date.now()}-${idx}`,
-        priority: anomaly.severity === 'high' ? 'high' : 'medium',
+        priority: anomaly.severity === "high" ? "high" : "medium",
         area: {
           center: anomaly.location,
           radius: 50,
@@ -195,7 +195,7 @@ class OceanSonarAIService {
     }
 
     if (anomalies.length > 0) {
-      parts.push(`Found ${anomalies.length} anomal${anomalies.length === 1 ? 'y' : 'ies'} requiring investigation.`);
+      parts.push(`Found ${anomalies.length} anomal${anomalies.length === 1 ? "y" : "ies"} requiring investigation.`);
     } else {
       parts.push("No significant anomalies detected.");
     }
@@ -215,7 +215,7 @@ class OceanSonarAIService {
       return "Continue normal operations. Maintain regular scanning schedule.";
     }
 
-    const highSeverity = anomalies.filter(a => a.severity === 'high').length;
+    const highSeverity = anomalies.filter(a => a.severity === "high").length;
     
     if (highSeverity > 0) {
       return "High priority: Investigate detected anomalies immediately. Consider course adjustment if necessary.";
@@ -231,7 +231,7 @@ class OceanSonarAIService {
     scanId: string,
     anomaly: { anomaly_type: string; severity: string; confidence: number; location: any; description: string }
   ): Promise<void> {
-    await supabase.from('sonar_detection_logs').insert([{
+    await supabase.from("sonar_detection_logs").insert([{
       scan_id: scanId,
       detection_type: anomaly.anomaly_type,
       confidence: anomaly.confidence,
@@ -240,7 +240,7 @@ class OceanSonarAIService {
         severity: anomaly.severity,
         description: anomaly.description,
       },
-      status: 'new',
+      status: "new",
     }]);
   }
 
@@ -249,9 +249,9 @@ class OceanSonarAIService {
    */
   async getSonarScans(limit = 20): Promise<SonarData[]> {
     const { data, error } = await supabase
-      .from('sonar_data')
-      .select('*')
-      .order('timestamp', { ascending: false })
+      .from("sonar_data")
+      .select("*")
+      .order("timestamp", { ascending: false })
       .limit(limit);
 
     if (error) {
@@ -267,9 +267,9 @@ class OceanSonarAIService {
    */
   async getAnalysis(scanId: string): Promise<SonarAIAnalysis | null> {
     const { data, error } = await supabase
-      .from('sonar_ai_analysis')
-      .select('*')
-      .eq('scan_id', scanId)
+      .from("sonar_ai_analysis")
+      .select("*")
+      .eq("scan_id", scanId)
       .single();
 
     if (error) {
@@ -285,9 +285,9 @@ class OceanSonarAIService {
    */
   async getDetectionLogs(limit = 50): Promise<SonarDetectionLog[]> {
     const { data, error } = await supabase
-      .from('sonar_detection_logs')
-      .select('*')
-      .order('created_at', { ascending: false })
+      .from("sonar_detection_logs")
+      .select("*")
+      .order("created_at", { ascending: false })
       .limit(limit);
 
     if (error) {
@@ -315,7 +315,7 @@ class OceanSonarAIService {
     return {
       totalScans: scans.length,
       totalDetections: logs.length,
-      newDetections: logs.filter(l => l.status === 'new').length,
+      newDetections: logs.filter(l => l.status === "new").length,
       avgConfidence: logs.length > 0
         ? logs.reduce((sum, l) => sum + l.confidence, 0) / logs.length
         : 0,

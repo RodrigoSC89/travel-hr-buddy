@@ -162,39 +162,39 @@ export function UnifiedLogsPanel() {
 
   const getSeverityIcon = (level: string) => {
     switch (level) {
-      case "critical":
-      case "error":
-        return <XCircle className="w-4 h-4" />;
-      case "warning":
-        return <AlertTriangle className="w-4 h-4" />;
-      default:
-        return <Info className="w-4 h-4" />;
+    case "critical":
+    case "error":
+      return <XCircle className="w-4 h-4" />;
+    case "warning":
+      return <AlertTriangle className="w-4 h-4" />;
+    default:
+      return <Info className="w-4 h-4" />;
     }
   };
 
   const getSeverityColor = (level: string) => {
     switch (level) {
-      case "critical":
-        return "destructive";
-      case "error":
-        return "destructive";
-      case "warning":
-        return "warning";
-      default:
-        return "secondary";
+    case "critical":
+      return "destructive";
+    case "error":
+      return "destructive";
+    case "warning":
+      return "warning";
+    default:
+      return "secondary";
     }
   };
 
   const getSourceColor = (source: string) => {
     switch (source) {
-      case "access":
-        return "blue";
-      case "assistant":
-        return "purple";
-      case "system":
-        return "green";
-      default:
-        return "gray";
+    case "access":
+      return "blue";
+    case "assistant":
+      return "purple";
+    case "system":
+      return "green";
+    default:
+      return "gray";
     }
   };
 
@@ -260,10 +260,10 @@ export function UnifiedLogsPanel() {
       head: [["Time", "Source", "Level", "Message"]],
       body: filteredLogs.slice(0, 50).map((log) => [
         new Date(log.timestamp).toLocaleString("pt-BR", { 
-          month: '2-digit', 
-          day: '2-digit', 
-          hour: '2-digit', 
-          minute: '2-digit' 
+          month: "2-digit", 
+          day: "2-digit", 
+          hour: "2-digit", 
+          minute: "2-digit" 
         }),
         log.source,
         log.level,

@@ -194,7 +194,7 @@ export const RouteSuggestionCard: React.FC<RouteSuggestionProps> = ({
                 >
                   <AlertTriangle className="h-3 w-3 text-orange-500 mt-0.5" />
                   <div className="flex-1">
-                    <p className="font-medium">{alert.type.replace('_', ' ')}</p>
+                    <p className="font-medium">{alert.type.replace("_", " ")}</p>
                     <p className="text-muted-foreground">{alert.description}</p>
                   </div>
                   <Badge variant="outline" className="text-xs">

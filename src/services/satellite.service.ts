@@ -483,7 +483,7 @@ export class SatelliteService {
       }
 
       const text = await response.text();
-      const lines = text.split('\n').filter(line => line.trim());
+      const lines = text.split("\n").filter(line => line.trim());
       
       if (lines.length >= 3) {
         return {
@@ -494,7 +494,7 @@ export class SatelliteService {
       
       return null;
     } catch (error) {
-      console.error('Error fetching TLE from Celestrak:', error);
+      console.error("Error fetching TLE from Celestrak:", error);
       return null;
     }
   }
@@ -511,7 +511,7 @@ export class SatelliteService {
         `https://api.n2yo.com/rest/v1/satellite/positions/${noradId}/${observerLat}/${observerLng}/${observerAlt}/1`,
         {
           headers: {
-            'Authorization': `Bearer ${apiKey}`,
+            "Authorization": `Bearer ${apiKey}`,
           },
         }
       );
@@ -522,7 +522,7 @@ export class SatelliteService {
 
       return await response.json();
     } catch (error) {
-      console.error('Error fetching satellite position from N2YO:', error);
+      console.error("Error fetching satellite position from N2YO:", error);
       throw error;
     }
   }
@@ -532,18 +532,18 @@ export class SatelliteService {
     tle: { line1: string; line2: string }
   ): Promise<void> {
     const { error } = await supabase
-      .from('satellites')
+      .from("satellites")
       .update({
         tle_line1: tle.line1,
         tle_line2: tle.line2,
         updated_at: new Date().toISOString(),
       })
-      .eq('satellite_id', satelliteId);
+      .eq("satellite_id", satelliteId);
 
     if (error) throw error;
 
     // Log the TLE update
-    await this.logOrbitalEvent(satelliteId, 'tle_updated', {
+    await this.logOrbitalEvent(satelliteId, "tle_updated", {
       tle_line1: tle.line1,
       tle_line2: tle.line2,
     });
@@ -563,8 +563,8 @@ export class SatelliteService {
           
           // Calculate position from TLE (would use satellite.js library in production)
           // For now, we'll log that TLE was updated
-          await this.logOrbitalEvent(satellite.satellite_id, 'position_updated', {
-            source: 'celestrak',
+          await this.logOrbitalEvent(satellite.satellite_id, "position_updated", {
+            source: "celestrak",
             timestamp: new Date().toISOString(),
           });
         }
@@ -581,7 +581,7 @@ export class SatelliteService {
     eventData: Record<string, unknown>
   ): Promise<void> {
     try {
-      await supabase.from('satellite_orbital_events').insert({
+      await supabase.from("satellite_orbital_events").insert({
         satellite_id: satelliteId,
         event_type: eventType,
         event_data: eventData,
@@ -589,7 +589,7 @@ export class SatelliteService {
         created_at: new Date().toISOString(),
       });
     } catch (error) {
-      console.error('Failed to log orbital event:', error);
+      console.error("Failed to log orbital event:", error);
     }
   }
 
@@ -598,13 +598,13 @@ export class SatelliteService {
     limit = 100
   ): Promise<any[]> {
     let query = supabase
-      .from('satellite_orbital_events')
-      .select('*')
-      .order('timestamp', { ascending: false })
+      .from("satellite_orbital_events")
+      .select("*")
+      .order("timestamp", { ascending: false })
       .limit(limit);
 
     if (satelliteId) {
-      query = query.eq('satellite_id', satelliteId);
+      query = query.eq("satellite_id", satelliteId);
     }
 
     const { data, error } = await query;
@@ -617,13 +617,13 @@ export class SatelliteService {
     const satellites = await this.getSatellites(filters);
     
     // CSV header
-    let csv = 'ID,Name,Type,Operator,Status,Orbit Type,Launch Date,Tracked,Priority\n';
+    let csv = "ID,Name,Type,Operator,Status,Orbit Type,Launch Date,Tracked,Priority\n";
     
     // CSV rows
     for (const sat of satellites) {
       csv += `"${sat.satellite_id}","${sat.satellite_name}","${sat.satellite_type}",`;
-      csv += `"${sat.operator || 'N/A'}","${sat.status}","${sat.orbit_type}",`;
-      csv += `"${sat.launch_date || 'N/A'}","${sat.is_tracked}","${sat.priority}"\n`;
+      csv += `"${sat.operator || "N/A"}","${sat.status}","${sat.orbit_type}",`;
+      csv += `"${sat.launch_date || "N/A"}","${sat.is_tracked}","${sat.priority}"\n`;
     }
     
     return csv;
@@ -634,12 +634,12 @@ export class SatelliteService {
       ? await this.getPositionHistory(satelliteId, 24)
       : await this.getLatestPositions(100);
     
-    let csv = 'Satellite ID,Satellite Name,Latitude,Longitude,Altitude (km),Velocity (km/h),Timestamp\n';
+    let csv = "Satellite ID,Satellite Name,Latitude,Longitude,Altitude (km),Velocity (km/h),Timestamp\n";
     
     for (const pos of positions) {
       csv += `"${pos.satellite_id}","${pos.satellite_name}",`;
       csv += `${pos.latitude},${pos.longitude},${pos.altitude_km},`;
-      csv += `${pos.velocity_kmh || 'N/A'},"${pos.timestamp}"\n`;
+      csv += `${pos.velocity_kmh || "N/A"},"${pos.timestamp}"\n`;
     }
     
     return csv;
@@ -649,7 +649,7 @@ export class SatelliteService {
     const view = await this.getTrackingView(satelliteId);
     
     if (!view) {
-      throw new Error('Satellite not found');
+      throw new Error("Satellite not found");
     }
 
     const orbitalEvents = await this.getOrbitalEvents(satelliteId, 50);

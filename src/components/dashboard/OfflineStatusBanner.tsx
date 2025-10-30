@@ -37,7 +37,7 @@ export function OfflineStatusBanner({
           <p>Exibindo dados em cache. A conexão com o servidor está indisponível.</p>
           {lastSync && (
             <p className="text-xs mt-1">
-              Última sincronização: {lastSync.toLocaleString('pt-BR')}
+              Última sincronização: {lastSync.toLocaleString("pt-BR")}
             </p>
           )}
           {isRetrying && (
@@ -54,8 +54,8 @@ export function OfflineStatusBanner({
             className="ml-4"
             disabled={isRetrying}
           >
-            <RefreshCw className={`h-4 w-4 mr-2 ${isRetrying ? 'animate-spin' : ''}`} />
-            {isRetrying ? 'Reconectando...' : 'Tentar Agora'}
+            <RefreshCw className={`h-4 w-4 mr-2 ${isRetrying ? "animate-spin" : ""}`} />
+            {isRetrying ? "Reconectando..." : "Tentar Agora"}
           </Button>
         )}
       </AlertDescription>

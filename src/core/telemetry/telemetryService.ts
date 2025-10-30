@@ -6,7 +6,7 @@
 import { supabase } from "@/integrations/supabase/client";
 
 export interface TelemetryEvent {
-  event_type: 'performance' | 'error' | 'user_action' | 'system';
+  event_type: "performance" | "error" | "user_action" | "system";
   component: string;
   metric_name: string;
   metric_value: number;
@@ -29,7 +29,7 @@ class TelemetryService {
    */
   logPerformance(component: string, metricName: string, value: number, metadata?: Record<string, any>) {
     this.addEvent({
-      event_type: 'performance',
+      event_type: "performance",
       component,
       metric_name: metricName,
       metric_value: value,
@@ -42,9 +42,9 @@ class TelemetryService {
    */
   logError(component: string, error: Error, metadata?: Record<string, any>) {
     this.addEvent({
-      event_type: 'error',
+      event_type: "error",
       component,
-      metric_name: 'error_occurred',
+      metric_name: "error_occurred",
       metric_value: 1,
       metadata: {
         ...metadata,
@@ -59,7 +59,7 @@ class TelemetryService {
    */
   logUserAction(component: string, action: string, metadata?: Record<string, any>) {
     this.addEvent({
-      event_type: 'user_action',
+      event_type: "user_action",
       component,
       metric_name: action,
       metric_value: 1,
@@ -106,7 +106,7 @@ class TelemetryService {
       // In production, you would send to your analytics service:
       // await sendToAnalytics(events);
     } catch (error) {
-      console.error('[Telemetry] Failed to flush events:', error);
+      console.error("[Telemetry] Failed to flush events:", error);
       // Re-queue events on failure
       this.queue.unshift(...events);
     }

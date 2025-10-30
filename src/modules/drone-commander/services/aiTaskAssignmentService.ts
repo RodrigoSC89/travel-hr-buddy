@@ -12,13 +12,13 @@ export interface TaskAssignment {
   task: DroneTask;
   assignedAt: number;
   estimatedCompletion: number;
-  priority: 'low' | 'medium' | 'high' | 'critical';
-  status: 'pending' | 'assigned' | 'in_progress' | 'completed' | 'failed';
+  priority: "low" | "medium" | "high" | "critical";
+  status: "pending" | "assigned" | "in_progress" | "completed" | "failed";
 }
 
 export interface DroneTask {
   id: string;
-  type: 'patrol' | 'inspection' | 'delivery' | 'search' | 'surveillance' | 'emergency';
+  type: "patrol" | "inspection" | "delivery" | "search" | "surveillance" | "emergency";
   description: string;
   location: {
     latitude: number;
@@ -29,7 +29,7 @@ export interface DroneTask {
     minBattery: number;
     maxDistance?: number;
     requiredSensors?: string[];
-    priority: 'low' | 'medium' | 'high' | 'critical';
+    priority: "low" | "medium" | "high" | "critical";
   };
 }
 
@@ -40,7 +40,7 @@ export interface FleetSimulation {
   tasks: DroneTask[];
   assignments: TaskAssignment[];
   startTime: number;
-  status: 'pending' | 'running' | 'completed' | 'paused';
+  status: "pending" | "running" | "completed" | "paused";
   statistics: {
     totalTasks: number;
     completedTasks: number;
@@ -57,7 +57,7 @@ class AITaskAssignmentService {
   assignTasksToDrones(drones: DroneStatus[], tasks: DroneTask[]): TaskAssignment[] {
     const assignments: TaskAssignment[] = [];
     const availableDrones = [...drones].filter(d => 
-      d.status === 'idle' || d.status === 'hovering'
+      d.status === "idle" || d.status === "hovering"
     );
     const pendingTasks = [...tasks].sort((a, b) => 
       this.getPriorityScore(b.requirements.priority) - 
@@ -80,7 +80,7 @@ class AITaskAssignmentService {
           assignedAt: Date.now(),
           estimatedCompletion: Date.now() + this.estimateCompletionTime(bestDrone, task),
           priority: task.requirements.priority,
-          status: 'assigned',
+          status: "assigned",
         };
 
         assignments.push(assignment);
@@ -152,12 +152,12 @@ class AITaskAssignmentService {
     score += drone.signal * 0.3;
 
     // Status bonus
-    if (drone.status === 'idle') {
+    if (drone.status === "idle") {
       score += 20;
     }
 
     // Speed capability
-    if (task.requirements.priority === 'critical' || task.requirements.priority === 'high') {
+    if (task.requirements.priority === "critical" || task.requirements.priority === "high") {
       score += drone.speed * 0.5;
     }
 
@@ -247,7 +247,7 @@ class AITaskAssignmentService {
       tasks,
       assignments,
       startTime: Date.now(),
-      status: 'pending',
+      status: "pending",
       statistics: {
         totalTasks: tasks.length,
         completedTasks: 0,
@@ -265,11 +265,11 @@ class AITaskAssignmentService {
    */
   private generateRandomTasks(count: number): DroneTask[] {
     const tasks: DroneTask[] = [];
-    const taskTypes: DroneTask['type'][] = [
-      'patrol', 'inspection', 'delivery', 'search', 'surveillance', 'emergency'
+    const taskTypes: DroneTask["type"][] = [
+      "patrol", "inspection", "delivery", "search", "surveillance", "emergency"
     ];
-    const priorities: DroneTask['requirements']['priority'][] = [
-      'low', 'medium', 'high', 'critical'
+    const priorities: DroneTask["requirements"]["priority"][] = [
+      "low", "medium", "high", "critical"
     ];
 
     for (let i = 0; i < count; i++) {
@@ -303,28 +303,28 @@ class AITaskAssignmentService {
       const duration = assignment.estimatedCompletion - assignment.assignedAt;
       const progress = elapsed / duration;
 
-      if (progress >= 1 && assignment.status !== 'completed') {
+      if (progress >= 1 && assignment.status !== "completed") {
         return {
           ...assignment,
-          status: 'completed' as const,
+          status: "completed" as const,
         };
-      } else if (assignment.status === 'assigned') {
+      } else if (assignment.status === "assigned") {
         return {
           ...assignment,
-          status: 'in_progress' as const,
+          status: "in_progress" as const,
         };
       }
 
       return assignment;
     });
 
-    const completedTasks = updatedAssignments.filter(a => a.status === 'completed').length;
+    const completedTasks = updatedAssignments.filter(a => a.status === "completed").length;
     const allCompleted = completedTasks === simulation.tasks.length;
 
     return {
       ...simulation,
       assignments: updatedAssignments,
-      status: allCompleted ? 'completed' : simulation.status,
+      status: allCompleted ? "completed" : simulation.status,
       statistics: {
         ...simulation.statistics,
         completedTasks,

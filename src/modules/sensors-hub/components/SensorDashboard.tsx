@@ -17,51 +17,51 @@ interface SensorDashboardProps {
 export const SensorDashboard: React.FC<SensorDashboardProps> = ({ readings }) => {
   const getSensorIcon = (type: string) => {
     switch (type) {
-      case "temperature": return <Thermometer className="h-5 w-5" />;
-      case "pressure": return <Gauge className="h-5 w-5" />;
-      case "humidity": return <Droplets className="h-5 w-5" />;
-      case "wind": return <Wind className="h-5 w-5" />;
-      case "sonar": return <Waves className="h-5 w-5" />;
-      default: return <Activity className="h-5 w-5" />;
+    case "temperature": return <Thermometer className="h-5 w-5" />;
+    case "pressure": return <Gauge className="h-5 w-5" />;
+    case "humidity": return <Droplets className="h-5 w-5" />;
+    case "wind": return <Wind className="h-5 w-5" />;
+    case "sonar": return <Waves className="h-5 w-5" />;
+    default: return <Activity className="h-5 w-5" />;
     }
   };
 
   const getStatusColor = (status: string) => {
     switch (status) {
-      case "active": return "bg-green-500/20 text-green-500";
-      case "warning": return "bg-yellow-500/20 text-yellow-500";
-      case "error": return "bg-red-500/20 text-red-500";
-      default: return "bg-gray-500/20 text-gray-500";
+    case "active": return "bg-green-500/20 text-green-500";
+    case "warning": return "bg-yellow-500/20 text-yellow-500";
+    case "error": return "bg-red-500/20 text-red-500";
+    default: return "bg-gray-500/20 text-gray-500";
     }
   };
 
   const getValueColor = (type: string, value: number) => {
     switch (type) {
-      case "temperature":
-        if (value < 0 || value > 40) return "text-red-500";
-        if (value < 5 || value > 35) return "text-yellow-500";
-        return "text-green-500";
-      case "pressure":
-        if (value < 980 || value > 1030) return "text-red-500";
-        if (value < 990 || value > 1020) return "text-yellow-500";
-        return "text-green-500";
-      case "humidity":
-        if (value < 30 || value > 80) return "text-red-500";
-        if (value < 40 || value > 70) return "text-yellow-500";
-        return "text-green-500";
-      default:
-        return "text-primary";
+    case "temperature":
+      if (value < 0 || value > 40) return "text-red-500";
+      if (value < 5 || value > 35) return "text-yellow-500";
+      return "text-green-500";
+    case "pressure":
+      if (value < 980 || value > 1030) return "text-red-500";
+      if (value < 990 || value > 1020) return "text-yellow-500";
+      return "text-green-500";
+    case "humidity":
+      if (value < 30 || value > 80) return "text-red-500";
+      if (value < 40 || value > 70) return "text-yellow-500";
+      return "text-green-500";
+    default:
+      return "text-primary";
     }
   };
 
   const getUnit = (type: string) => {
     switch (type) {
-      case "temperature": return "°C";
-      case "pressure": return "hPa";
-      case "humidity": return "%";
-      case "wind": return "m/s";
-      case "sonar": return "m";
-      default: return "";
+    case "temperature": return "°C";
+    case "pressure": return "hPa";
+    case "humidity": return "%";
+    case "wind": return "m/s";
+    case "sonar": return "m";
+    default: return "";
     }
   };
 

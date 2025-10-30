@@ -32,18 +32,18 @@ export const DroneFleetOverview: React.FC<DroneFleetOverviewProps> = ({
 }) => {
   const getStatusColor = (status: string) => {
     switch (status) {
-      case "active":
-      case "in-mission":
-        return "bg-green-500/20 text-green-500";
-      case "idle":
-        return "bg-blue-500/20 text-blue-500";
-      case "offline":
-      case "error":
-        return "bg-red-500/20 text-red-500";
-      case "maintenance":
-        return "bg-yellow-500/20 text-yellow-500";
-      default:
-        return "bg-gray-500/20 text-gray-500";
+    case "active":
+    case "in-mission":
+      return "bg-green-500/20 text-green-500";
+    case "idle":
+      return "bg-blue-500/20 text-blue-500";
+    case "offline":
+    case "error":
+      return "bg-red-500/20 text-red-500";
+    case "maintenance":
+      return "bg-yellow-500/20 text-yellow-500";
+    default:
+      return "bg-gray-500/20 text-gray-500";
     }
   };
 

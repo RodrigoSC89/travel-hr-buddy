@@ -164,33 +164,33 @@ export const MissionExecutionPanel: React.FC = () => {
 
   const getStatusColor = (status: ExecutedMission["status"] | MissionStep["status"]) => {
     switch (status) {
-      case "completed":
-        return "text-green-500";
-      case "in_progress":
-        return "text-blue-500";
-      case "failed":
-        return "text-red-500";
-      case "aborted":
-        return "text-orange-500";
-      case "pending":
-        return "text-gray-500";
-      default:
-        return "text-gray-400";
+    case "completed":
+      return "text-green-500";
+    case "in_progress":
+      return "text-blue-500";
+    case "failed":
+      return "text-red-500";
+    case "aborted":
+      return "text-orange-500";
+    case "pending":
+      return "text-gray-500";
+    default:
+      return "text-gray-400";
     }
   };
 
   const getStatusIcon = (status: ExecutedMission["status"] | MissionStep["status"]) => {
     switch (status) {
-      case "completed":
-        return <CheckCircle className="h-4 w-4" />;
-      case "in_progress":
-        return <Loader2 className="h-4 w-4 animate-spin" />;
-      case "failed":
-        return <XCircle className="h-4 w-4" />;
-      case "aborted":
-        return <AlertCircle className="h-4 w-4" />;
-      default:
-        return <Clock className="h-4 w-4" />;
+    case "completed":
+      return <CheckCircle className="h-4 w-4" />;
+    case "in_progress":
+      return <Loader2 className="h-4 w-4 animate-spin" />;
+    case "failed":
+      return <XCircle className="h-4 w-4" />;
+    case "aborted":
+      return <AlertCircle className="h-4 w-4" />;
+    default:
+      return <Clock className="h-4 w-4" />;
     }
   };
 

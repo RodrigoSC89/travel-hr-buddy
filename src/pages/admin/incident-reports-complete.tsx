@@ -15,17 +15,17 @@ import { supabase } from "@/integrations/supabase/client";
 import { useToast } from "@/hooks/use-toast";
 import { formatDistanceToNow } from "date-fns";
 import { ptBR } from "date-fns/locale";
-import jsPDF from 'jspdf';
-import 'jspdf-autotable';
+import jsPDF from "jspdf";
+import "jspdf-autotable";
 
 interface IncidentReport {
   id: string;
   incident_number: string;
   title: string;
   description: string;
-  severity: 'low' | 'medium' | 'high' | 'critical';
+  severity: "low" | "medium" | "high" | "critical";
   category: string;
-  status: 'pending' | 'under_analysis' | 'resolved' | 'closed';
+  status: "pending" | "under_analysis" | "resolved" | "closed";
   reported_by: string;
   assigned_to: string;
   incident_date: string;
@@ -56,23 +56,23 @@ export default function IncidentReportsComplete() {
   const [selectedIncident, setSelectedIncident] = useState<IncidentReport | null>(null);
   const [isCreateDialogOpen, setIsCreateDialogOpen] = useState(false);
   const [isDetailDialogOpen, setIsDetailDialogOpen] = useState(false);
-  const [filterStatus, setFilterStatus] = useState<string>('all');
-  const [filterSeverity, setFilterSeverity] = useState<string>('all');
+  const [filterStatus, setFilterStatus] = useState<string>("all");
+  const [filterSeverity, setFilterSeverity] = useState<string>("all");
   
   const [newIncident, setNewIncident] = useState({
-    title: '',
-    description: '',
-    severity: 'medium',
-    category: 'operational',
-    incident_location: '',
-    impact_level: 'moderate',
+    title: "",
+    description: "",
+    severity: "medium",
+    category: "operational",
+    incident_location: "",
+    impact_level: "moderate",
     incident_date: new Date().toISOString(),
   });
   
   const [newFollowup, setNewFollowup] = useState({
-    followup_type: 'update',
-    description: '',
-    new_status: ''
+    followup_type: "update",
+    description: "",
+    new_status: ""
   });
 
   useEffect(() => {
@@ -80,11 +80,11 @@ export default function IncidentReportsComplete() {
     
     // Real-time subscription
     const channel = supabase
-      .channel('incident-changes')
-      .on('postgres_changes', { event: 'INSERT', schema: 'public', table: 'incident_reports' }, (payload) => {
+      .channel("incident-changes")
+      .on("postgres_changes", { event: "INSERT", schema: "public", table: "incident_reports" }, (payload) => {
         setIncidents(prev => [payload.new as IncidentReport, ...prev]);
       })
-      .on('postgres_changes', { event: 'UPDATE', schema: 'public', table: 'incident_reports' }, (payload) => {
+      .on("postgres_changes", { event: "UPDATE", schema: "public", table: "incident_reports" }, (payload) => {
         setIncidents(prev => prev.map(inc => inc.id === payload.new.id ? payload.new as IncidentReport : inc));
       })
       .subscribe();
@@ -97,14 +97,14 @@ export default function IncidentReportsComplete() {
   const loadIncidents = async () => {
     try {
       const { data, error } = await supabase
-        .from('incident_reports')
-        .select('*')
-        .order('created_at', { ascending: false });
+        .from("incident_reports")
+        .select("*")
+        .order("created_at", { ascending: false });
       
       if (error) throw error;
       setIncidents(data || []);
     } catch (error) {
-      console.error('Error loading incidents:', error);
+      console.error("Error loading incidents:", error);
       toast({
         title: "Erro",
         description: "Falha ao carregar incidentes",
@@ -118,27 +118,27 @@ export default function IncidentReportsComplete() {
   const loadFollowups = async (incidentId: string) => {
     try {
       const { data, error } = await supabase
-        .from('incident_followups')
-        .select('*')
-        .eq('incident_id', incidentId)
-        .order('created_at', { ascending: false });
+        .from("incident_followups")
+        .select("*")
+        .eq("incident_id", incidentId)
+        .order("created_at", { ascending: false });
       
       if (error) throw error;
       setFollowups(data || []);
     } catch (error) {
-      console.error('Error loading followups:', error);
+      console.error("Error loading followups:", error);
     }
   };
 
   const createIncident = async () => {
     try {
       const { data: { user } } = await supabase.auth.getUser();
-      if (!user) throw new Error('User not authenticated');
+      if (!user) throw new Error("User not authenticated");
 
       const incidentNumber = `INC-${Date.now()}`;
       
       const { data, error } = await supabase
-        .from('incident_reports')
+        .from("incident_reports")
         .insert({
           incident_number: incidentNumber,
           reported_by: user.id,
@@ -156,12 +156,12 @@ export default function IncidentReportsComplete() {
       
       setIsCreateDialogOpen(false);
       setNewIncident({
-        title: '',
-        description: '',
-        severity: 'medium',
-        category: 'operational',
-        incident_location: '',
-        impact_level: 'moderate',
+        title: "",
+        description: "",
+        severity: "medium",
+        category: "operational",
+        incident_location: "",
+        impact_level: "moderate",
         incident_date: new Date().toISOString(),
       });
       
@@ -169,7 +169,7 @@ export default function IncidentReportsComplete() {
       await autoRouteIncident(data);
       
     } catch (error) {
-      console.error('Error creating incident:', error);
+      console.error("Error creating incident:", error);
       toast({
         title: "Erro",
         description: "Falha ao criar incidente",
@@ -181,28 +181,28 @@ export default function IncidentReportsComplete() {
   const autoRouteIncident = async (incident: IncidentReport) => {
     // Auto-assign based on category
     const teamMapping: Record<string, string> = {
-      safety: 'safety',
-      operational: 'operations',
-      environmental: 'operations',
-      equipment: 'maintenance',
-      personnel: 'hr'
+      safety: "safety",
+      operational: "operations",
+      environmental: "operations",
+      equipment: "maintenance",
+      personnel: "hr"
     };
     
-    const assignedTeam = teamMapping[incident.category] || 'operations';
+    const assignedTeam = teamMapping[incident.category] || "operations";
     
     // Create workflow state
     try {
       await supabase
-        .from('incident_workflow_states')
+        .from("incident_workflow_states")
         .insert({
           incident_id: incident.id,
-          workflow_stage: 'reported',
+          workflow_stage: "reported",
           assigned_team: assignedTeam,
-          escalation_level: incident.severity === 'critical' ? 1 : 0,
-          sla_deadline: new Date(Date.now() + (incident.severity === 'critical' ? 4 : 24) * 60 * 60 * 1000).toISOString()
+          escalation_level: incident.severity === "critical" ? 1 : 0,
+          sla_deadline: new Date(Date.now() + (incident.severity === "critical" ? 4 : 24) * 60 * 60 * 1000).toISOString()
         });
     } catch (error) {
-      console.error('Error routing incident:', error);
+      console.error("Error routing incident:", error);
     }
   };
 
@@ -211,14 +211,14 @@ export default function IncidentReportsComplete() {
     
     try {
       const { data: { user } } = await supabase.auth.getUser();
-      if (!user) throw new Error('User not authenticated');
+      if (!user) throw new Error("User not authenticated");
 
       const { error } = await supabase
-        .from('incident_followups')
+        .from("incident_followups")
         .insert({
           incident_id: selectedIncident.id,
           created_by: user.id,
-          created_by_name: user.email?.split('@')[0] || 'Unknown',
+          created_by_name: user.email?.split("@")[0] || "Unknown",
           previous_status: selectedIncident.status,
           ...newFollowup
         });
@@ -228,13 +228,13 @@ export default function IncidentReportsComplete() {
       // Update incident status if changed
       if (newFollowup.new_status && newFollowup.new_status !== selectedIncident.status) {
         await supabase
-          .from('incident_reports')
+          .from("incident_reports")
           .update({ 
             status: newFollowup.new_status,
             updated_at: new Date().toISOString(),
-            ...(newFollowup.new_status === 'resolved' && { resolved_at: new Date().toISOString() })
+            ...(newFollowup.new_status === "resolved" && { resolved_at: new Date().toISOString() })
           })
-          .eq('id', selectedIncident.id);
+          .eq("id", selectedIncident.id);
       }
       
       toast({
@@ -244,13 +244,13 @@ export default function IncidentReportsComplete() {
       
       await loadFollowups(selectedIncident.id);
       setNewFollowup({
-        followup_type: 'update',
-        description: '',
-        new_status: ''
+        followup_type: "update",
+        description: "",
+        new_status: ""
       });
       
     } catch (error) {
-      console.error('Error adding followup:', error);
+      console.error("Error adding followup:", error);
       toast({
         title: "Erro",
         description: "Falha ao adicionar atualização",
@@ -264,7 +264,7 @@ export default function IncidentReportsComplete() {
     
     // Title
     doc.setFontSize(20);
-    doc.text('Relatório de Incidente', 20, 20);
+    doc.text("Relatório de Incidente", 20, 20);
     
     // Incident details
     doc.setFontSize(12);
@@ -273,18 +273,18 @@ export default function IncidentReportsComplete() {
     doc.text(`Severidade: ${incident.severity.toUpperCase()}`, 20, 55);
     doc.text(`Categoria: ${incident.category}`, 20, 65);
     doc.text(`Status: ${incident.status}`, 20, 75);
-    doc.text(`Local: ${incident.incident_location || 'N/A'}`, 20, 85);
-    doc.text(`Data: ${new Date(incident.incident_date).toLocaleString('pt-BR')}`, 20, 95);
+    doc.text(`Local: ${incident.incident_location || "N/A"}`, 20, 85);
+    doc.text(`Data: ${new Date(incident.incident_date).toLocaleString("pt-BR")}`, 20, 95);
     
     // Description
-    doc.text('Descrição:', 20, 110);
+    doc.text("Descrição:", 20, 110);
     const splitDescription = doc.splitTextToSize(incident.description, 170);
     doc.text(splitDescription, 20, 120);
     
     // Add followups if available
     if (followups.length > 0) {
       let yPos = 140 + (splitDescription.length * 7);
-      doc.text('Histórico de Acompanhamento:', 20, yPos);
+      doc.text("Histórico de Acompanhamento:", 20, yPos);
       yPos += 10;
       
       followups.forEach((followup, index) => {
@@ -312,29 +312,29 @@ export default function IncidentReportsComplete() {
 
   const getFilteredIncidents = () => {
     return incidents.filter(inc => {
-      const statusMatch = filterStatus === 'all' || inc.status === filterStatus;
-      const severityMatch = filterSeverity === 'all' || inc.severity === filterSeverity;
+      const statusMatch = filterStatus === "all" || inc.status === filterStatus;
+      const severityMatch = filterSeverity === "all" || inc.severity === filterSeverity;
       return statusMatch && severityMatch;
     });
   };
 
   const getSeverityColor = (severity: string) => {
     switch (severity) {
-      case 'critical': return 'destructive';
-      case 'high': return 'destructive';
-      case 'medium': return 'secondary';
-      case 'low': return 'default';
-      default: return 'default';
+    case "critical": return "destructive";
+    case "high": return "destructive";
+    case "medium": return "secondary";
+    case "low": return "default";
+    default: return "default";
     }
   };
 
   const getStatusIcon = (status: string) => {
     switch (status) {
-      case 'pending': return <Clock className="h-4 w-4" />;
-      case 'under_analysis': return <FileText className="h-4 w-4" />;
-      case 'resolved': return <CheckCircle className="h-4 w-4" />;
-      case 'closed': return <CheckCircle className="h-4 w-4" />;
-      default: return <AlertTriangle className="h-4 w-4" />;
+    case "pending": return <Clock className="h-4 w-4" />;
+    case "under_analysis": return <FileText className="h-4 w-4" />;
+    case "resolved": return <CheckCircle className="h-4 w-4" />;
+    case "closed": return <CheckCircle className="h-4 w-4" />;
+    default: return <AlertTriangle className="h-4 w-4" />;
     }
   };
 
@@ -344,9 +344,9 @@ export default function IncidentReportsComplete() {
     setIsDetailDialogOpen(true);
   };
 
-  const activeIncidents = incidents.filter(i => ['pending', 'under_analysis'].includes(i.status));
-  const resolvedIncidents = incidents.filter(i => ['resolved', 'closed'].includes(i.status));
-  const criticalIncidents = incidents.filter(i => i.severity === 'critical' && !['resolved', 'closed'].includes(i.status));
+  const activeIncidents = incidents.filter(i => ["pending", "under_analysis"].includes(i.status));
+  const resolvedIncidents = incidents.filter(i => ["resolved", "closed"].includes(i.status));
+  const criticalIncidents = incidents.filter(i => i.severity === "critical" && !["resolved", "closed"].includes(i.status));
 
   return (
     <div className="container mx-auto p-6 space-y-6">
@@ -565,7 +565,7 @@ export default function IncidentReportsComplete() {
                           {incident.description}
                         </p>
                         <div className="flex items-center gap-4 text-xs text-muted-foreground">
-                          <span>📍 {incident.incident_location || 'Não especificado'}</span>
+                          <span>📍 {incident.incident_location || "Não especificado"}</span>
                           <span>🕐 {formatDistanceToNow(new Date(incident.created_at), { addSuffix: true, locale: ptBR })}</span>
                         </div>
                       </div>
@@ -600,7 +600,7 @@ export default function IncidentReportsComplete() {
                   </Badge>
                 </DialogTitle>
                 <DialogDescription>
-                  Criado em {new Date(selectedIncident.created_at).toLocaleString('pt-BR')}
+                  Criado em {new Date(selectedIncident.created_at).toLocaleString("pt-BR")}
                 </DialogDescription>
               </DialogHeader>
               
@@ -626,11 +626,11 @@ export default function IncidentReportsComplete() {
                     </div>
                     <div>
                       <Label className="font-semibold">Local</Label>
-                      <p className="mt-1">{selectedIncident.incident_location || 'N/A'}</p>
+                      <p className="mt-1">{selectedIncident.incident_location || "N/A"}</p>
                     </div>
                     <div>
                       <Label className="font-semibold">Impacto</Label>
-                      <p className="mt-1">{selectedIncident.impact_level || 'N/A'}</p>
+                      <p className="mt-1">{selectedIncident.impact_level || "N/A"}</p>
                     </div>
                   </div>
                   <div>
@@ -738,10 +738,10 @@ export default function IncidentReportsComplete() {
                     </CardHeader>
                     <CardContent>
                       <div className="space-y-2 text-sm">
-                        <p><strong>Criado:</strong> {new Date(selectedIncident.created_at).toLocaleString('pt-BR')}</p>
-                        <p><strong>Atualizado:</strong> {new Date(selectedIncident.updated_at).toLocaleString('pt-BR')}</p>
+                        <p><strong>Criado:</strong> {new Date(selectedIncident.created_at).toLocaleString("pt-BR")}</p>
+                        <p><strong>Atualizado:</strong> {new Date(selectedIncident.updated_at).toLocaleString("pt-BR")}</p>
                         {selectedIncident.resolved_at && (
-                          <p><strong>Resolvido:</strong> {new Date(selectedIncident.resolved_at).toLocaleString('pt-BR')}</p>
+                          <p><strong>Resolvido:</strong> {new Date(selectedIncident.resolved_at).toLocaleString("pt-BR")}</p>
                         )}
                       </div>
                     </CardContent>

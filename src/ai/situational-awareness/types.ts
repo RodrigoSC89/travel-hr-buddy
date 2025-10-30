@@ -6,22 +6,22 @@
 /**
  * Source types for data collection
  */
-export type DataSource = 'mqtt' | 'supabase' | 'websocket' | 'internal';
+export type DataSource = "mqtt" | "supabase" | "websocket" | "internal";
 
 /**
  * Module context sources
  */
-export type ModuleSource = 'navigation' | 'weather' | 'failures' | 'crew' | 'sensors' | 'mission' | 'system';
+export type ModuleSource = "navigation" | "weather" | "failures" | "crew" | "sensors" | "mission" | "system";
 
 /**
  * Alert severity levels
  */
-export type AlertSeverity = 'critical' | 'high' | 'medium' | 'low' | 'info';
+export type AlertSeverity = "critical" | "high" | "medium" | "low" | "info";
 
 /**
  * Alert types
  */
-export type AlertType = 'preventive' | 'reactive' | 'predictive' | 'informational';
+export type AlertType = "preventive" | "reactive" | "predictive" | "informational";
 
 /**
  * Context data from modules
@@ -44,7 +44,7 @@ export interface ModuleContextData {
 export interface SituationalInsight {
   id: string;
   timestamp: number;
-  type: 'opportunity' | 'risk' | 'optimization' | 'alert';
+  type: "opportunity" | "risk" | "optimization" | "alert";
   severity: AlertSeverity;
   title: string;
   description: string;
@@ -88,9 +88,9 @@ export interface TacticalDecision {
  */
 export interface SituationalState {
   timestamp: number;
-  overall_status: 'normal' | 'caution' | 'warning' | 'critical';
+  overall_status: "normal" | "caution" | "warning" | "critical";
   modules: Record<ModuleSource, {
-    status: 'healthy' | 'degraded' | 'failed' | 'unknown';
+    status: "healthy" | "degraded" | "failed" | "unknown";
     lastUpdate: number;
     metrics: Record<string, any>;
   }>;
@@ -121,8 +121,8 @@ export interface ObserverConfig {
 export interface SituationalLogEntry {
   id: string;
   timestamp: number;
-  level: 'debug' | 'info' | 'warn' | 'error';
-  category: 'analysis' | 'alert' | 'decision' | 'data_collection';
+  level: "debug" | "info" | "warn" | "error";
+  category: "analysis" | "alert" | "decision" | "data_collection";
   message: string;
   context: Record<string, any>;
   moduleSource?: ModuleSource;

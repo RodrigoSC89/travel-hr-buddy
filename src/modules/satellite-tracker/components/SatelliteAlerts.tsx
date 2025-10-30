@@ -4,13 +4,13 @@
  * Displays alerts and warnings for satellites
  */
 
-import React, { useEffect, useState } from 'react';
-import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
-import { Badge } from '@/components/ui/badge';
-import { Button } from '@/components/ui/button';
-import { AlertTriangle, CheckCircle, XCircle, AlertCircle } from 'lucide-react';
-import { satelliteTrackingService } from '../services/satellite-tracking-service';
-import { toast } from 'sonner';
+import React, { useEffect, useState } from "react";
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import { Badge } from "@/components/ui/badge";
+import { Button } from "@/components/ui/button";
+import { AlertTriangle, CheckCircle, XCircle, AlertCircle } from "lucide-react";
+import { satelliteTrackingService } from "../services/satellite-tracking-service";
+import { toast } from "sonner";
 
 interface Alert {
   id: string;
@@ -40,7 +40,7 @@ export const SatelliteAlerts: React.FC<SatelliteAlertsProps> = ({ satelliteId })
       const data = await satelliteTrackingService.getAlerts({ satelliteId });
       setAlerts(data);
     } catch (error) {
-      console.error('Failed to load alerts:', error);
+      console.error("Failed to load alerts:", error);
     } finally {
       setIsLoading(false);
     }
@@ -49,37 +49,37 @@ export const SatelliteAlerts: React.FC<SatelliteAlertsProps> = ({ satelliteId })
   const handleResolve = async (alertId: string) => {
     try {
       await satelliteTrackingService.resolveAlert(alertId);
-      toast.success('Alerta resolvido');
+      toast.success("Alerta resolvido");
       loadAlerts();
     } catch (error) {
-      console.error('Failed to resolve alert:', error);
-      toast.error('Falha ao resolver alerta');
+      console.error("Failed to resolve alert:", error);
+      toast.error("Falha ao resolver alerta");
     }
   };
 
   const getSeverityIcon = (severity: string) => {
     switch (severity) {
-      case 'critical':
-        return <XCircle className="h-5 w-5 text-red-500" />;
-      case 'warning':
-        return <AlertTriangle className="h-5 w-5 text-yellow-500" />;
-      case 'info':
-        return <AlertCircle className="h-5 w-5 text-blue-500" />;
-      default:
-        return <AlertTriangle className="h-5 w-5" />;
+    case "critical":
+      return <XCircle className="h-5 w-5 text-red-500" />;
+    case "warning":
+      return <AlertTriangle className="h-5 w-5 text-yellow-500" />;
+    case "info":
+      return <AlertCircle className="h-5 w-5 text-blue-500" />;
+    default:
+      return <AlertTriangle className="h-5 w-5" />;
     }
   };
 
   const getSeverityColor = (severity: string) => {
     switch (severity) {
-      case 'critical':
-        return 'bg-red-500';
-      case 'warning':
-        return 'bg-yellow-500';
-      case 'info':
-        return 'bg-blue-500';
-      default:
-        return 'bg-gray-500';
+    case "critical":
+      return "bg-red-500";
+    case "warning":
+      return "bg-yellow-500";
+    case "info":
+      return "bg-blue-500";
+    default:
+      return "bg-gray-500";
     }
   };
 

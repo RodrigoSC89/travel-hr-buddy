@@ -147,37 +147,37 @@ export default function Patch518MissionEngine() {
 
   const getStatusColor = (status: string) => {
     switch (status) {
-      case "completed":
-        return "default";
-      case "active":
-      case "in-progress":
-        return "default";
-      case "pending":
-      case "draft":
-        return "secondary";
-      case "blocked":
-      case "paused":
-        return "destructive";
-      default:
-        return "outline";
+    case "completed":
+      return "default";
+    case "active":
+    case "in-progress":
+      return "default";
+    case "pending":
+    case "draft":
+      return "secondary";
+    case "blocked":
+    case "paused":
+      return "destructive";
+    default:
+      return "outline";
     }
   };
 
   const getStatusIcon = (status: string) => {
     switch (status) {
-      case "completed":
-        return <CheckCircle className="h-4 w-4" />;
-      case "in-progress":
-      case "active":
-        return <Play className="h-4 w-4" />;
-      case "pending":
-      case "draft":
-        return <Clock className="h-4 w-4" />;
-      case "blocked":
-      case "paused":
-        return <AlertCircle className="h-4 w-4" />;
-      default:
-        return <Clock className="h-4 w-4" />;
+    case "completed":
+      return <CheckCircle className="h-4 w-4" />;
+    case "in-progress":
+    case "active":
+      return <Play className="h-4 w-4" />;
+    case "pending":
+    case "draft":
+      return <Clock className="h-4 w-4" />;
+    case "blocked":
+    case "paused":
+      return <AlertCircle className="h-4 w-4" />;
+    default:
+      return <Clock className="h-4 w-4" />;
     }
   };
 
@@ -208,8 +208,8 @@ export default function Patch518MissionEngine() {
           <div className="space-y-2">
             {validationChecklist.map((item) => (
               <div key={item.id} className="flex items-center gap-2">
-                <div className={`h-4 w-4 rounded-full ${item.completed ? 'bg-green-500' : 'bg-muted'}`} />
-                <span className={item.completed ? 'text-foreground' : 'text-muted-foreground'}>
+                <div className={`h-4 w-4 rounded-full ${item.completed ? "bg-green-500" : "bg-muted"}`} />
+                <span className={item.completed ? "text-foreground" : "text-muted-foreground"}>
                   {item.label}
                 </span>
               </div>

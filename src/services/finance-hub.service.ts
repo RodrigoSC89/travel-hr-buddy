@@ -4,12 +4,12 @@
  * Complete financial management with transactions, budgets, and reporting
  */
 
-import { supabase } from '@/integrations/supabase/client';
+import { supabase } from "@/integrations/supabase/client";
 
 export interface Transaction {
   id: string;
   transaction_id: string;
-  type: 'income' | 'expense' | 'transfer';
+  type: "income" | "expense" | "transfer";
   category_id?: string;
   category_name?: string;
   amount: number;
@@ -21,7 +21,7 @@ export interface Transaction {
   vendor?: string;
   project_id?: string;
   department?: string;
-  status: 'pending' | 'completed' | 'cancelled';
+  status: "pending" | "completed" | "cancelled";
   created_by?: string;
   created_at: string;
   updated_at: string;
@@ -31,7 +31,7 @@ export interface Transaction {
 export interface Category {
   id: string;
   name: string;
-  type: 'income' | 'expense';
+  type: "income" | "expense";
   parent_category_id?: string;
   color?: string;
   icon?: string;
@@ -47,10 +47,10 @@ export interface Budget {
   amount: number;
   spent: number;
   remaining: number;
-  period: 'monthly' | 'quarterly' | 'yearly' | 'custom';
+  period: "monthly" | "quarterly" | "yearly" | "custom";
   start_date: string;
   end_date: string;
-  status: 'active' | 'completed' | 'exceeded';
+  status: "active" | "completed" | "exceeded";
   alert_threshold?: number; // percentage 0-100
   created_by?: string;
   created_at: string;
@@ -108,27 +108,27 @@ export class FinanceHubService {
     department?: string;
   }): Promise<Transaction[]> {
     let query = supabase
-      .from('finance_transactions')
-      .select('*, finance_categories(name)')
-      .order('date', { ascending: false });
+      .from("finance_transactions")
+      .select("*, finance_categories(name)")
+      .order("date", { ascending: false });
 
     if (filters?.type?.length) {
-      query = query.in('type', filters.type);
+      query = query.in("type", filters.type);
     }
     if (filters?.category_id) {
-      query = query.eq('category_id', filters.category_id);
+      query = query.eq("category_id", filters.category_id);
     }
     if (filters?.start_date) {
-      query = query.gte('date', filters.start_date);
+      query = query.gte("date", filters.start_date);
     }
     if (filters?.end_date) {
-      query = query.lte('date', filters.end_date);
+      query = query.lte("date", filters.end_date);
     }
     if (filters?.status?.length) {
-      query = query.in('status', filters.status);
+      query = query.in("status", filters.status);
     }
     if (filters?.department) {
-      query = query.eq('department', filters.department);
+      query = query.eq("department", filters.department);
     }
 
     const { data, error } = await query;
@@ -143,9 +143,9 @@ export class FinanceHubService {
 
   static async getTransaction(id: string): Promise<Transaction | null> {
     const { data, error } = await supabase
-      .from('finance_transactions')
-      .select('*, finance_categories(name)')
-      .eq('id', id)
+      .from("finance_transactions")
+      .select("*, finance_categories(name)")
+      .eq("id", id)
       .single();
 
     if (error) throw error;
@@ -163,12 +163,12 @@ export class FinanceHubService {
     const transactionId = `txn_${Date.now()}_${Math.random().toString(36).substring(7)}`;
 
     const { data, error } = await supabase
-      .from('finance_transactions')
+      .from("finance_transactions")
       .insert({
         transaction_id: transactionId,
         ...transaction,
-        status: transaction.status || 'completed',
-        currency: transaction.currency || 'USD',
+        status: transaction.status || "completed",
+        currency: transaction.currency || "USD",
       })
       .select()
       .single();
@@ -176,7 +176,7 @@ export class FinanceHubService {
     if (error) throw error;
 
     // Update budget if applicable
-    if (transaction.category_id && transaction.type === 'expense') {
+    if (transaction.category_id && transaction.type === "expense") {
       await this.updateBudgetSpent(transaction.category_id, transaction.amount || 0);
     }
 
@@ -190,12 +190,12 @@ export class FinanceHubService {
     const oldTransaction = await this.getTransaction(id);
     
     const { data, error } = await supabase
-      .from('finance_transactions')
+      .from("finance_transactions")
       .update({
         ...updates,
         updated_at: new Date().toISOString(),
       })
-      .eq('id', id)
+      .eq("id", id)
       .select()
       .single();
 
@@ -204,7 +204,7 @@ export class FinanceHubService {
     // Update budget if amount or category changed
     if (
       oldTransaction &&
-      oldTransaction.type === 'expense' &&
+      oldTransaction.type === "expense" &&
       (updates.amount || updates.category_id)
     ) {
       if (oldTransaction.category_id) {
@@ -225,9 +225,9 @@ export class FinanceHubService {
     const transaction = await this.getTransaction(id);
 
     const { error } = await supabase
-      .from('finance_transactions')
+      .from("finance_transactions")
       .delete()
-      .eq('id', id);
+      .eq("id", id);
 
     if (error) throw error;
 
@@ -235,7 +235,7 @@ export class FinanceHubService {
     if (
       transaction &&
       transaction.category_id &&
-      transaction.type === 'expense'
+      transaction.type === "expense"
     ) {
       await this.updateBudgetSpent(
         transaction.category_id,
@@ -245,15 +245,15 @@ export class FinanceHubService {
   }
 
   // PATCH 384: Category Management
-  static async getCategories(type?: 'income' | 'expense'): Promise<Category[]> {
+  static async getCategories(type?: "income" | "expense"): Promise<Category[]> {
     let query = supabase
-      .from('finance_categories')
-      .select('*')
-      .eq('is_active', true)
-      .order('name');
+      .from("finance_categories")
+      .select("*")
+      .eq("is_active", true)
+      .order("name");
 
     if (type) {
-      query = query.eq('type', type);
+      query = query.eq("type", type);
     }
 
     const { data, error } = await query;
@@ -263,7 +263,7 @@ export class FinanceHubService {
 
   static async createCategory(category: Partial<Category>): Promise<Category> {
     const { data, error } = await supabase
-      .from('finance_categories')
+      .from("finance_categories")
       .insert({
         ...category,
         is_active: true,
@@ -280,9 +280,9 @@ export class FinanceHubService {
     updates: Partial<Category>
   ): Promise<Category> {
     const { data, error } = await supabase
-      .from('finance_categories')
+      .from("finance_categories")
       .update(updates)
-      .eq('id', id)
+      .eq("id", id)
       .select()
       .single();
 
@@ -293,9 +293,9 @@ export class FinanceHubService {
   static async deleteCategory(id: string): Promise<void> {
     // Soft delete - mark as inactive
     const { error } = await supabase
-      .from('finance_categories')
+      .from("finance_categories")
       .update({ is_active: false })
-      .eq('id', id);
+      .eq("id", id);
 
     if (error) throw error;
   }
@@ -307,18 +307,18 @@ export class FinanceHubService {
     status?: string[];
   }): Promise<Budget[]> {
     let query = supabase
-      .from('finance_budgets')
-      .select('*, finance_categories(name)')
-      .order('start_date', { ascending: false });
+      .from("finance_budgets")
+      .select("*, finance_categories(name)")
+      .order("start_date", { ascending: false });
 
     if (filters?.category_id) {
-      query = query.eq('category_id', filters.category_id);
+      query = query.eq("category_id", filters.category_id);
     }
     if (filters?.period) {
-      query = query.eq('period', filters.period);
+      query = query.eq("period", filters.period);
     }
     if (filters?.status?.length) {
-      query = query.in('status', filters.status);
+      query = query.in("status", filters.status);
     }
 
     const { data, error } = await query;
@@ -328,12 +328,12 @@ export class FinanceHubService {
 
   static async createBudget(budget: Partial<Budget>): Promise<Budget> {
     const { data, error } = await supabase
-      .from('finance_budgets')
+      .from("finance_budgets")
       .insert({
         ...budget,
         spent: 0,
         remaining: budget.amount || 0,
-        status: 'active',
+        status: "active",
       })
       .select()
       .single();
@@ -347,12 +347,12 @@ export class FinanceHubService {
     updates: Partial<Budget>
   ): Promise<Budget> {
     const { data, error } = await supabase
-      .from('finance_budgets')
+      .from("finance_budgets")
       .update({
         ...updates,
         updated_at: new Date().toISOString(),
       })
-      .eq('id', id)
+      .eq("id", id)
       .select()
       .single();
 
@@ -367,7 +367,7 @@ export class FinanceHubService {
     // Find active budgets for this category
     const budgets = await this.getBudgets({
       category_id: categoryId,
-      status: ['active'],
+      status: ["active"],
     });
 
     for (const budget of budgets) {
@@ -382,7 +382,7 @@ export class FinanceHubService {
         
         let status = budget.status;
         if (newSpent >= budget.amount) {
-          status = 'exceeded';
+          status = "exceeded";
         }
 
         await this.updateBudget(budget.id, {
@@ -418,15 +418,15 @@ export class FinanceHubService {
       end_date: endDate,
       category_id: filters?.category_id,
       department: filters?.department,
-      status: ['completed'],
+      status: ["completed"],
     });
 
     const income = transactions
-      .filter(t => t.type === 'income')
+      .filter(t => t.type === "income")
       .reduce((sum, t) => sum + t.amount, 0);
 
     const expenses = transactions
-      .filter(t => t.type === 'expense')
+      .filter(t => t.type === "expense")
       .reduce((sum, t) => sum + t.amount, 0);
 
     // Group by category
@@ -462,16 +462,16 @@ export class FinanceHubService {
       const date = new Date(txn.date);
       const key = `${date.getFullYear()}-${date.getMonth() + 1}`;
       const existing = monthMap.get(key) || {
-        month: date.toLocaleString('default', { month: 'long' }),
+        month: date.toLocaleString("default", { month: "long" }),
         year: date.getFullYear(),
         income: 0,
         expenses: 0,
         net: 0,
       };
 
-      if (txn.type === 'income') {
+      if (txn.type === "income") {
         existing.income += txn.amount;
-      } else if (txn.type === 'expense') {
+      } else if (txn.type === "expense") {
         existing.expenses += txn.amount;
       }
 
@@ -481,12 +481,12 @@ export class FinanceHubService {
 
     // Top expenses
     const topExpenses = transactions
-      .filter(t => t.type === 'expense')
+      .filter(t => t.type === "expense")
       .sort((a, b) => b.amount - a.amount)
       .slice(0, 10);
 
     // Budget utilization
-    const budgets = await this.getBudgets({ status: ['active'] });
+    const budgets = await this.getBudgets({ status: ["active"] });
     const budgetUtilization: BudgetUtilization[] = budgets.map(b => ({
       budget_id: b.id,
       budget_name: b.name,
@@ -520,43 +520,43 @@ export class FinanceHubService {
   static async exportTransactionsToCSV(filters?: any): Promise<string> {
     const transactions = await this.getTransactions(filters);
 
-    let csv = 'Date,Type,Category,Amount,Currency,Description,Vendor,Payment Method,Status,Reference\n';
+    let csv = "Date,Type,Category,Amount,Currency,Description,Vendor,Payment Method,Status,Reference\n";
 
     for (const txn of transactions) {
-      csv += `"${txn.date}","${txn.type}","${txn.category_name || 'N/A'}",`;
-      csv += `${txn.amount},"${txn.currency}","${txn.description || ''}",`;
-      csv += `"${txn.vendor || ''}","${txn.payment_method || ''}",`;
-      csv += `"${txn.status}","${txn.reference_number || ''}"\n`;
+      csv += `"${txn.date}","${txn.type}","${txn.category_name || "N/A"}",`;
+      csv += `${txn.amount},"${txn.currency}","${txn.description || ""}",`;
+      csv += `"${txn.vendor || ""}","${txn.payment_method || ""}",`;
+      csv += `"${txn.status}","${txn.reference_number || ""}"\n`;
     }
 
     return csv;
   }
 
   static async exportReportToCSV(report: FinanceReport): Promise<string> {
-    let csv = 'Financial Report\n\n';
+    let csv = "Financial Report\n\n";
     csv += `Period:,${report.period_start} to ${report.period_end}\n`;
     csv += `Total Income:,${report.total_income}\n`;
     csv += `Total Expenses:,${report.total_expenses}\n`;
     csv += `Net Profit:,${report.net_profit}\n`;
     csv += `Transactions:,${report.transactions_count}\n`;
-    csv += '\n';
+    csv += "\n";
 
-    csv += 'By Category\n';
-    csv += 'Category,Amount,Count,Percentage\n';
+    csv += "By Category\n";
+    csv += "Category,Amount,Count,Percentage\n";
     for (const cat of report.by_category) {
       csv += `"${cat.category_name}",${cat.total_amount},${cat.transaction_count},${cat.percentage}%\n`;
     }
-    csv += '\n';
+    csv += "\n";
 
-    csv += 'By Month\n';
-    csv += 'Month,Year,Income,Expenses,Net\n';
+    csv += "By Month\n";
+    csv += "Month,Year,Income,Expenses,Net\n";
     for (const month of report.by_month) {
       csv += `"${month.month}",${month.year},${month.income},${month.expenses},${month.net}\n`;
     }
-    csv += '\n';
+    csv += "\n";
 
-    csv += 'Budget Utilization\n';
-    csv += 'Budget,Allocated,Spent,Remaining,Utilization %,Status\n';
+    csv += "Budget Utilization\n";
+    csv += "Budget,Allocated,Spent,Remaining,Utilization %,Status\n";
     for (const budget of report.budget_utilization) {
       csv += `"${budget.budget_name}",${budget.allocated},${budget.spent},`;
       csv += `${budget.remaining},${budget.utilization_percentage}%,"${budget.status}"\n`;
@@ -568,7 +568,7 @@ export class FinanceHubService {
   // PATCH 384: PDF Export Support (Data structure for PDF generation)
   static async prepareReportForPDF(report: FinanceReport): Promise<any> {
     return {
-      title: 'Financial Report',
+      title: "Financial Report",
       period: `${report.period_start} to ${report.period_end}`,
       summary: {
         total_income: report.total_income,
@@ -591,24 +591,24 @@ export class FinanceHubService {
   // PATCH 384: Role-Based Access Control Integration
   static async checkPermission(
     userId: string,
-    action: 'read' | 'create' | 'update' | 'delete',
-    resource: 'transaction' | 'category' | 'budget' | 'report'
+    action: "read" | "create" | "update" | "delete",
+    resource: "transaction" | "category" | "budget" | "report"
   ): Promise<boolean> {
     try {
       const { data, error } = await supabase
-        .from('user_permissions')
-        .select('permissions')
-        .eq('user_id', userId)
+        .from("user_permissions")
+        .select("permissions")
+        .eq("user_id", userId)
         .single();
 
       if (error || !data) return false;
 
       const permission = `finance:${resource}:${action}`;
       return data.permissions?.includes(permission) || 
-             data.permissions?.includes('finance:*:*') ||
+             data.permissions?.includes("finance:*:*") ||
              data.permissions?.includes(`finance:${resource}:*`);
     } catch (error) {
-      console.error('Permission check failed:', error);
+      console.error("Permission check failed:", error);
       return false;
     }
   }
@@ -620,26 +620,26 @@ export class FinanceHubService {
 
     const transactions = await this.getTransactions({
       start_date: startDate.toISOString(),
-      status: ['completed'],
+      status: ["completed"],
     });
 
     const income = transactions
-      .filter(t => t.type === 'income')
+      .filter(t => t.type === "income")
       .reduce((sum, t) => sum + t.amount, 0);
 
     const expenses = transactions
-      .filter(t => t.type === 'expense')
+      .filter(t => t.type === "expense")
       .reduce((sum, t) => sum + t.amount, 0);
 
-    const budgets = await this.getBudgets({ status: ['active', 'exceeded'] });
-    const budgetsExceeded = budgets.filter(b => b.status === 'exceeded').length;
+    const budgets = await this.getBudgets({ status: ["active", "exceeded"] });
+    const budgetsExceeded = budgets.filter(b => b.status === "exceeded").length;
 
     return {
       total_income: Math.round(income * 100) / 100,
       total_expenses: Math.round(expenses * 100) / 100,
       net_profit: Math.round((income - expenses) * 100) / 100,
       transactions_count: transactions.length,
-      active_budgets: budgets.filter(b => b.status === 'active').length,
+      active_budgets: budgets.filter(b => b.status === "active").length,
       budgets_exceeded: budgetsExceeded,
       avg_transaction_value: transactions.length > 0
         ? Math.round((expenses / transactions.length) * 100) / 100

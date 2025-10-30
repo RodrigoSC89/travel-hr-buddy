@@ -89,10 +89,10 @@ export const MissionExecutor: React.FC<MissionExecutorProps> = ({ missions, onEx
                           mission.priority === "critical"
                             ? "bg-red-500/10 text-red-500"
                             : mission.priority === "high"
-                            ? "bg-orange-500/10 text-orange-500"
-                            : mission.priority === "medium"
-                            ? "bg-yellow-500/10 text-yellow-500"
-                            : "bg-green-500/10 text-green-500"
+                              ? "bg-orange-500/10 text-orange-500"
+                              : mission.priority === "medium"
+                                ? "bg-yellow-500/10 text-yellow-500"
+                                : "bg-green-500/10 text-green-500"
                         }
                       >
                         {mission.priority}

@@ -135,7 +135,7 @@ const RoutePlannerV2Page: React.FC = () => {
       // Add mission ID to route metadata
       const routeWithMission = {
         ...selectedRoute,
-        description: `${selectedRoute.description || ''} | Mission ID: ${missionId || 'N/A'}`,
+        description: `${selectedRoute.description || ""} | Mission ID: ${missionId || "N/A"}`,
       };
 
       await routePlannerService.saveRoute(routeWithMission, user.id);

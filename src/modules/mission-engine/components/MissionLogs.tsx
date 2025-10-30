@@ -30,33 +30,33 @@ export const MissionLogs: React.FC<MissionLogsProps> = ({ logs, onRefresh }) => 
 
   const getLogIcon = (type: string) => {
     switch (type) {
-      case "info":
-        return <Info className="h-4 w-4 text-blue-500" />;
-      case "warning":
-        return <AlertTriangle className="h-4 w-4 text-yellow-500" />;
-      case "error":
-        return <XCircle className="h-4 w-4 text-red-500" />;
-      case "critical":
-        return <AlertCircle className="h-4 w-4 text-red-700" />;
-      case "success":
-        return <CheckCircle className="h-4 w-4 text-green-500" />;
-      default:
-        return <Info className="h-4 w-4" />;
+    case "info":
+      return <Info className="h-4 w-4 text-blue-500" />;
+    case "warning":
+      return <AlertTriangle className="h-4 w-4 text-yellow-500" />;
+    case "error":
+      return <XCircle className="h-4 w-4 text-red-500" />;
+    case "critical":
+      return <AlertCircle className="h-4 w-4 text-red-700" />;
+    case "success":
+      return <CheckCircle className="h-4 w-4 text-green-500" />;
+    default:
+      return <Info className="h-4 w-4" />;
     }
   };
 
   const getSeverityColor = (severity: string) => {
     switch (severity) {
-      case "critical":
-        return "bg-red-500/10 text-red-500";
-      case "high":
-        return "bg-orange-500/10 text-orange-500";
-      case "medium":
-        return "bg-yellow-500/10 text-yellow-500";
-      case "low":
-        return "bg-green-500/10 text-green-500";
-      default:
-        return "bg-gray-500/10 text-gray-500";
+    case "critical":
+      return "bg-red-500/10 text-red-500";
+    case "high":
+      return "bg-orange-500/10 text-orange-500";
+    case "medium":
+      return "bg-yellow-500/10 text-yellow-500";
+    case "low":
+      return "bg-green-500/10 text-green-500";
+    default:
+      return "bg-gray-500/10 text-gray-500";
     }
   };
 

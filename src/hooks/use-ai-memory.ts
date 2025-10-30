@@ -4,7 +4,7 @@
  * React hook for managing AI memory in components
  */
 
-import { useState, useCallback } from 'react';
+import { useState, useCallback } from "react";
 import { 
   storeAIMemory, 
   retrieveSimilarMemories, 
@@ -12,7 +12,7 @@ import {
   getMemoryStats,
   AIMemoryEvent,
   SimilarMemory 
-} from '@/services/ai-memory-service';
+} from "@/services/ai-memory-service";
 
 interface UseAIMemoryReturn {
   storeMemory: (memory: AIMemoryEvent) => Promise<boolean>;
@@ -38,13 +38,13 @@ export function useAIMemory(): UseAIMemoryReturn {
       const result = await storeAIMemory(memory);
       
       if (!result.success) {
-        setError(result.error || 'Failed to store memory');
+        setError(result.error || "Failed to store memory");
         return false;
       }
 
       return true;
     } catch (err) {
-      const errorMessage = err instanceof Error ? err.message : 'Unknown error';
+      const errorMessage = err instanceof Error ? err.message : "Unknown error";
       setError(errorMessage);
       return false;
     } finally {
@@ -64,7 +64,7 @@ export function useAIMemory(): UseAIMemoryReturn {
       const memories = await retrieveSimilarMemories(query, threshold, count);
       return memories;
     } catch (err) {
-      const errorMessage = err instanceof Error ? err.message : 'Unknown error';
+      const errorMessage = err instanceof Error ? err.message : "Unknown error";
       setError(errorMessage);
       return [];
     } finally {
@@ -83,7 +83,7 @@ export function useAIMemory(): UseAIMemoryReturn {
       const memories = await getRecentMemories(limit, contextType);
       return memories;
     } catch (err) {
-      const errorMessage = err instanceof Error ? err.message : 'Unknown error';
+      const errorMessage = err instanceof Error ? err.message : "Unknown error";
       setError(errorMessage);
       return [];
     } finally {
@@ -99,7 +99,7 @@ export function useAIMemory(): UseAIMemoryReturn {
       const stats = await getMemoryStats();
       return stats;
     } catch (err) {
-      const errorMessage = err instanceof Error ? err.message : 'Unknown error';
+      const errorMessage = err instanceof Error ? err.message : "Unknown error";
       setError(errorMessage);
       return { total: 0, byType: {}, avgRelevance: 0 };
     } finally {

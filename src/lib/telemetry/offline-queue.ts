@@ -3,9 +3,9 @@
  * Manages telemetry events when offline
  */
 
-import type { TelemetryEvent } from './events';
+import type { TelemetryEvent } from "./events";
 
-const QUEUE_KEY = 'telemetry_offline_queue';
+const QUEUE_KEY = "telemetry_offline_queue";
 const MAX_QUEUE_SIZE = 100;
 
 export class OfflineQueue {
@@ -29,7 +29,7 @@ export class OfflineQueue {
 
       localStorage.setItem(QUEUE_KEY, JSON.stringify(queue));
     } catch (error) {
-      console.warn('Failed to enqueue telemetry event:', error);
+      console.warn("Failed to enqueue telemetry event:", error);
     }
   }
 
@@ -41,7 +41,7 @@ export class OfflineQueue {
       const queueJson = localStorage.getItem(QUEUE_KEY);
       return queueJson ? JSON.parse(queueJson) : [];
     } catch (error) {
-      console.warn('Failed to get offline queue:', error);
+      console.warn("Failed to get offline queue:", error);
       return [];
     }
   }
@@ -53,7 +53,7 @@ export class OfflineQueue {
     try {
       localStorage.removeItem(QUEUE_KEY);
     } catch (error) {
-      console.warn('Failed to clear offline queue:', error);
+      console.warn("Failed to clear offline queue:", error);
     }
   }
 
@@ -84,7 +84,7 @@ export class OfflineQueue {
           batch.map((event) => sendFn(event))
         );
       } catch (error) {
-        console.error('Failed to process queue batch:', error);
+        console.error("Failed to process queue batch:", error);
         // Keep remaining events in queue
         const remaining = queue.slice(i);
         localStorage.setItem(QUEUE_KEY, JSON.stringify(remaining));

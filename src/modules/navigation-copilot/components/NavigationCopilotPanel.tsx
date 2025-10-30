@@ -243,29 +243,29 @@ export const NavigationCopilotPanel: React.FC = () => {
 
   const getPriorityColor = (priority: string) => {
     switch (priority) {
-      case "critical":
-        return "bg-red-500";
-      case "high":
-        return "bg-orange-500";
-      case "medium":
-        return "bg-yellow-500";
-      default:
-        return "bg-blue-500";
+    case "critical":
+      return "bg-red-500";
+    case "high":
+      return "bg-orange-500";
+    case "medium":
+      return "bg-yellow-500";
+    default:
+      return "bg-blue-500";
     }
   };
 
   const getTypeIcon = (type: string) => {
     switch (type) {
-      case "route_adjustment":
-        return <Navigation className="h-4 w-4" />;
-      case "speed_change":
-        return <TrendingUp className="h-4 w-4" />;
-      case "weather_avoidance":
-        return <Wind className="h-4 w-4" />;
-      case "fuel_optimization":
-        return <Activity className="h-4 w-4" />;
-      default:
-        return <Brain className="h-4 w-4" />;
+    case "route_adjustment":
+      return <Navigation className="h-4 w-4" />;
+    case "speed_change":
+      return <TrendingUp className="h-4 w-4" />;
+    case "weather_avoidance":
+      return <Wind className="h-4 w-4" />;
+    case "fuel_optimization":
+      return <Activity className="h-4 w-4" />;
+    default:
+      return <Brain className="h-4 w-4" />;
     }
   };
 

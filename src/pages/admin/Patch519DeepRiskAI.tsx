@@ -166,31 +166,31 @@ export default function Patch519DeepRiskAI() {
 
   const getSeverityColor = (severity: string) => {
     switch (severity) {
-      case "critical":
-        return "bg-red-500 text-white";
-      case "high":
-        return "bg-orange-500 text-white";
-      case "medium":
-        return "bg-yellow-500 text-white";
-      case "low":
-        return "bg-green-500 text-white";
-      default:
-        return "bg-muted";
+    case "critical":
+      return "bg-red-500 text-white";
+    case "high":
+      return "bg-orange-500 text-white";
+    case "medium":
+      return "bg-yellow-500 text-white";
+    case "low":
+      return "bg-green-500 text-white";
+    default:
+      return "bg-muted";
     }
   };
 
   const getImpactColor = (impact: string) => {
     switch (impact) {
-      case "critical":
-        return "text-red-500";
-      case "high":
-        return "text-orange-500";
-      case "medium":
-        return "text-yellow-500";
-      case "low":
-        return "text-green-500";
-      default:
-        return "text-muted-foreground";
+    case "critical":
+      return "text-red-500";
+    case "high":
+      return "text-orange-500";
+    case "medium":
+      return "text-yellow-500";
+    case "low":
+      return "text-green-500";
+    default:
+      return "text-muted-foreground";
     }
   };
 
@@ -221,8 +221,8 @@ export default function Patch519DeepRiskAI() {
           <div className="space-y-2">
             {validationChecklist.map((item) => (
               <div key={item.id} className="flex items-center gap-2">
-                <div className={`h-4 w-4 rounded-full ${item.completed ? 'bg-green-500' : 'bg-muted'}`} />
-                <span className={item.completed ? 'text-foreground' : 'text-muted-foreground'}>
+                <div className={`h-4 w-4 rounded-full ${item.completed ? "bg-green-500" : "bg-muted"}`} />
+                <span className={item.completed ? "text-foreground" : "text-muted-foreground"}>
                   {item.label}
                 </span>
               </div>

@@ -36,7 +36,7 @@ export const DroneMap: React.FC<DroneMapProps> = ({
               Interactive map with drone positions
             </p>
             <p className="text-xs text-muted-foreground">
-              {drones.length} drone{drones.length !== 1 ? 's' : ''} tracked
+              {drones.length} drone{drones.length !== 1 ? "s" : ""} tracked
             </p>
           </div>
         </div>

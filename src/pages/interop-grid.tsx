@@ -75,9 +75,9 @@ export default function InteropGridAIPage() {
   const loadAIInstances = async () => {
     try {
       const { data, error } = await supabase
-        .from('ai_instances')
-        .select('*')
-        .order('instance_name');
+        .from("ai_instances")
+        .select("*")
+        .order("instance_name");
 
       if (error) throw error;
       setAIInstances(data || []);
@@ -86,50 +86,50 @@ export default function InteropGridAIPage() {
         setSelectedInstance(data[0]);
       }
     } catch (error) {
-      console.error('Error loading AI instances:', error);
-      toast.error('Failed to load AI instances');
+      console.error("Error loading AI instances:", error);
+      toast.error("Failed to load AI instances");
     }
   };
 
   const loadDecisionEvents = async () => {
     try {
       const { data, error } = await supabase
-        .from('ai_decision_events')
-        .select('*')
-        .order('timestamp', { ascending: false })
+        .from("ai_decision_events")
+        .select("*")
+        .order("timestamp", { ascending: false })
         .limit(20);
 
       if (error) throw error;
       setDecisionEvents(data || []);
     } catch (error) {
-      console.error('Error loading decision events:', error);
+      console.error("Error loading decision events:", error);
     }
   };
 
   const loadKnowledgeGraph = async () => {
     try {
       const { data, error } = await supabase
-        .from('ai_knowledge_graph')
-        .select('*')
-        .order('validation_count', { ascending: false })
+        .from("ai_knowledge_graph")
+        .select("*")
+        .order("validation_count", { ascending: false })
         .limit(10);
 
       if (error) throw error;
       setKnowledgeNodes(data || []);
     } catch (error) {
-      console.error('Error loading knowledge graph:', error);
+      console.error("Error loading knowledge graph:", error);
     }
   };
 
   const initializeRealtime = () => {
     const channel = supabase
-      .channel('interop-grid-realtime')
+      .channel("interop-grid-realtime")
       .on(
-        'postgres_changes',
+        "postgres_changes",
         {
-          event: 'INSERT',
-          schema: 'public',
-          table: 'ai_decision_events'
+          event: "INSERT",
+          schema: "public",
+          table: "ai_decision_events"
         },
         () => {
           loadDecisionEvents();
@@ -137,19 +137,19 @@ export default function InteropGridAIPage() {
         }
       )
       .on(
-        'postgres_changes',
+        "postgres_changes",
         {
-          event: '*',
-          schema: 'public',
-          table: 'ai_instances'
+          event: "*",
+          schema: "public",
+          table: "ai_instances"
         },
         () => {
           loadAIInstances();
         }
       )
       .subscribe((status) => {
-        if (status === 'SUBSCRIBED') {
-          toast.success('Real-time AI sync enabled');
+        if (status === "SUBSCRIBED") {
+          toast.success("Real-time AI sync enabled");
         }
       });
 
@@ -163,76 +163,76 @@ export default function InteropGridAIPage() {
 
     try {
       const { error } = await supabase
-        .from('ai_decision_events')
+        .from("ai_decision_events")
         .insert({
           event_id: `evt_${Date.now()}`,
           source_ai_instance: selectedInstance.id,
-          event_type: 'decision',
-          decision_category: 'optimization',
+          event_type: "decision",
+          decision_category: "optimization",
           confidence_score: Math.random(),
-          priority: 'normal',
+          priority: "normal",
           context: {
             timestamp: new Date().toISOString(),
             source: selectedInstance.instance_name
           },
           decision_data: {
-            action: 'optimize_route',
-            parameters: { efficiency: 'high' }
+            action: "optimize_route",
+            parameters: { efficiency: "high" }
           },
-          reasoning: 'AI-generated optimization decision based on current conditions'
+          reasoning: "AI-generated optimization decision based on current conditions"
         });
 
       if (error) throw error;
 
       // Log audit trail
       await supabase
-        .from('ai_decision_audit_trail')
+        .from("ai_decision_audit_trail")
         .insert({
-          audit_type: 'created',
+          audit_type: "created",
           ai_instance_id: selectedInstance.id,
-          details: 'Decision event published to Interop Grid'
+          details: "Decision event published to Interop Grid"
         });
 
-      toast.success('Decision event published');
+      toast.success("Decision event published");
       loadDecisionEvents();
     } catch (error) {
-      console.error('Error publishing event:', error);
-      toast.error('Failed to publish event');
+      console.error("Error publishing event:", error);
+      toast.error("Failed to publish event");
     }
   };
 
   const getStatusColor = (status: string) => {
     switch (status) {
-      case 'active': return 'bg-green-500';
-      case 'idle': return 'bg-blue-500';
-      case 'busy': return 'bg-yellow-500';
-      case 'offline': return 'bg-gray-500';
-      case 'error': return 'bg-red-500';
-      default: return 'bg-gray-500';
+    case "active": return "bg-green-500";
+    case "idle": return "bg-blue-500";
+    case "busy": return "bg-yellow-500";
+    case "offline": return "bg-gray-500";
+    case "error": return "bg-red-500";
+    default: return "bg-gray-500";
     }
   };
 
   const getPriorityColor = (priority: string) => {
     switch (priority) {
-      case 'critical': return 'bg-red-500';
-      case 'high': return 'bg-orange-500';
-      case 'normal': return 'bg-blue-500';
-      case 'low': return 'bg-gray-500';
-      default: return 'bg-gray-500';
+    case "critical": return "bg-red-500";
+    case "high": return "bg-orange-500";
+    case "normal": return "bg-blue-500";
+    case "low": return "bg-gray-500";
+    default: return "bg-gray-500";
     }
   };
 
   const getValidationColor = (status: string) => {
     switch (status) {
-      case 'validated': return 'bg-green-500';
-      case 'pending': return 'bg-yellow-500';
-      case 'disputed': return 'bg-orange-500';
-      case 'deprecated': return 'bg-gray-500';
-      default: return 'bg-gray-500';
+    case "validated": return "bg-green-500";
+    case "pending": return "bg-yellow-500";
+    case "disputed": return "bg-orange-500";
+    case "deprecated": return "bg-gray-500";
+    default: return "bg-gray-500";
     }
   };
 
-  const activeInstances = aiInstances.filter(i => i.status === 'active').length;
+  const activeInstances = aiInstances.filter(i => i.status === "active").length;
   const recentEvents = decisionEvents.filter(e => {
     const eventTime = new Date(e.timestamp).getTime();
     const now = new Date().getTime();
@@ -306,7 +306,7 @@ export default function InteropGridAIPage() {
           </CardHeader>
           <CardContent>
             <div className="text-2xl font-bold text-green-500">
-              {knowledgeNodes.filter(n => n.validation_status === 'validated').length}
+              {knowledgeNodes.filter(n => n.validation_status === "validated").length}
             </div>
             <p className="text-xs text-muted-foreground">Verified nodes</p>
           </CardContent>
@@ -343,7 +343,7 @@ export default function InteropGridAIPage() {
                   <Card
                     key={instance.id}
                     className={`cursor-pointer transition-colors ${
-                      selectedInstance?.id === instance.id ? 'border-primary' : 'hover:border-primary'
+                      selectedInstance?.id === instance.id ? "border-primary" : "hover:border-primary"
                     }`}
                     onClick={() => setSelectedInstance(instance)}
                   >
