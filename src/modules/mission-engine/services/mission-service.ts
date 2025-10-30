@@ -1,4 +1,3 @@
-// @ts-nocheck
 /**
  * PATCH 492 - Mission Engine Service (Enhanced with Real Logic)
  * Real mission flow: create → assign → monitor → close
@@ -251,40 +250,6 @@ export class MissionEngineService {
   }
   
   // ==================== Mission Management ====================
-  
-  async createMission(mission: Omit<Mission, "id" | "createdAt">): Promise<Mission> {
-    try {
-      const { data: { user } } = await supabase.auth.getUser();
-      if (!user) throw new Error("User not authenticated");
-
-      const { data, error } = await supabase
-        .from("missions")
-        .insert({
-          code: mission.code,
-          name: mission.name,
-          type: mission.type,
-          status: mission.status,
-          priority: mission.priority,
-          description: mission.description,
-          location_lat: mission.location?.lat,
-          location_lng: mission.location?.lng,
-          assigned_vessel_id: mission.assignedVesselId,
-          assigned_agents: mission.assignedAgents || [],
-          start_time: mission.startTime,
-          end_time: mission.endTime,
-          metadata: mission.metadata || {},
-          created_by: user.id
-        })
-        .select()
-        .single();
-
-      if (error) throw error;
-      return this.mapToMission(data);
-    } catch (error) {
-      console.error("Error creating mission:", error);
-      throw error;
-    }
-  }
 
   async updateMission(id: string, mission: Partial<Mission>): Promise<Mission> {
     try {

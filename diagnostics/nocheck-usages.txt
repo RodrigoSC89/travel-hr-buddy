@@ -423,7 +423,6 @@ src/modules/weather-dashboard/components/WeatherAlerts.tsx:// @ts-nocheck
 src/modules/neural-governance/validation/Patch583Validation.tsx:// @ts-nocheck
 src/modules/beta-users/validation/Patch562Validation.tsx:// @ts-nocheck
 src/modules/voice-assistant/VoiceAssistantEnhanced.tsx:// @ts-nocheck
-src/modules/mission-engine/services/mission-service.ts:// @ts-nocheck
 src/modules/mission-engine/services/execution-service.ts:// @ts-nocheck
 src/modules/self-diagnosis/validation/Patch590Validation.tsx:// @ts-nocheck
 src/modules/mission-intelligence/validation/Patch596Validation.tsx:// @ts-nocheck
