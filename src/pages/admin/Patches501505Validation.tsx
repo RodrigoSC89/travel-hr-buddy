@@ -1,4 +1,5 @@
 import { useState, useEffect } from 'react';
+import { Link } from 'react-router-dom';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
@@ -322,10 +323,10 @@ export default function Patches501505Validation() {
         <CardContent>
           <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
             <Button variant="outline" className="justify-start" asChild>
-              <a href="/docs" target="_blank">
+              <Link to="/docs">
                 <FileText className="h-4 w-4 mr-2" />
                 Ver Documentação Gerada
-              </a>
+              </Link>
             </Button>
             <Button variant="outline" className="justify-start" asChild>
               <a href="https://github.com" target="_blank">

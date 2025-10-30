@@ -6,6 +6,7 @@
  */
 
 import React, { useState, useEffect } from "react";
+import { Link } from "react-router-dom";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
@@ -294,7 +295,7 @@ export const SessionManagementCompact: React.FC = () => {
         </div>
       </div>
       <Button variant="outline" size="sm" asChild>
-        <a href="/settings/sessions">Gerenciar</a>
+        <Link to="/settings/sessions">Gerenciar</Link>
       </Button>
     </div>
   );
