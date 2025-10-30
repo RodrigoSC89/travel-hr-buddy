@@ -1,0 +1,76 @@
+/**
+ * Dashboard Styles
+ * PATCH 625 - Optimized layout and responsiveness
+ */
+
+/* Prevent cumulative layout shift */
+.dashboard-container {
+  min-height: 100vh;
+  contain: layout style paint;
+}
+
+/* KPI Cards - Fixed dimensions to prevent CLS */
+.kpi-card {
+  min-height: 120px;
+  max-height: 200px;
+  contain: layout;
+}
+
+/* Grid optimizations */
+.dashboard-grid {
+  display: grid;
+  gap: 1rem;
+  will-change: auto;
+}
+
+/* Responsive breakpoints */
+@media (min-width: 640px) {
+  .dashboard-grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+
+@media (min-width: 1024px) {
+  .dashboard-grid {
+    grid-template-columns: repeat(4, 1fr);
+  }
+}
+
+/* Loading states */
+.kpi-loading {
+  animation: pulse 2s cubic-bezier(0.4, 0, 0.6, 1) infinite;
+}
+
+@keyframes pulse {
+  0%, 100% {
+    opacity: 1;
+  }
+  50% {
+    opacity: 0.5;
+  }
+}
+
+/* Error states */
+.kpi-error {
+  border-color: rgb(239, 68, 68);
+  background-color: rgba(239, 68, 68, 0.05);
+}
+
+/* Performance optimizations */
+.dashboard-content {
+  content-visibility: auto;
+  contain-intrinsic-size: auto 500px;
+}
+
+/* Reduce motion for accessibility */
+@media (prefers-reduced-motion: reduce) {
+  .kpi-loading {
+    animation: none;
+  }
+  
+  * {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+  }
+}
