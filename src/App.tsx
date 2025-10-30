@@ -184,6 +184,8 @@ const I18nDemo = safeLazyImport(() => import("@/pages/i18n-demo"));
 
 // PATCHES 606-610 - AI & Voice Command Systems Validation
 const Patches606to610 = safeLazyImport(() => import("@/pages/validation/patches-606-610"));
+// PATCHES 611-615 - 3D Visualizer, Inference, Decisions, Threats & Strategy Validation
+const Patches611to615 = safeLazyImport(() => import("@/pages/validation/patches-611-615"));
 
 // New Module Imports - PATCH 66.0 Updated Paths
 const FeedbackModule = React.lazy(() => import("@/modules/operations/feedback"));
@@ -902,9 +904,10 @@ function App() {
                       <Route path="/validation/patches-586-590" element={<Patches586to590ValidationPage />} />
                       <Route path="/validation/patches-591-595" element={<Patches591to595ValidationPage />} />
                       <Route path="/validation/patches-596-600" element={<Patches596to600ValidationPage />} />
-                      <Route path="/validation/patches-606-610" element={<Patches606to610 />} />
-                      
-                      {/* Additional navigation routes from config */}
+                       <Route path="/validation/patches-606-610" element={<Patches606to610 />} />
+                       <Route path="/validation/patches-611-615" element={<Patches611to615 />} />
+                       
+                       {/* Additional navigation routes from config */}
                       {NAVIGATION.map(({ path, component: Component }) => (
                         <Route key={path} path={path} element={<Suspense fallback={SuspenseFallback}><Component /></Suspense>} />
                       ))}
