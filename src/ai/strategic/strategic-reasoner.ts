@@ -306,7 +306,7 @@ export class StrategicReasoner {
     );
 
     const decision: StrategicDecision = {
-      id: `decision_${Date.now()}_${Math.random().toString(36).substr(2, 9)}`,
+      id: `decision_${Date.now()}_${Math.random().toString(36).substring(2, 11)}`,
       missionId: context.missionId,
       objectiveId: context.objective.id,
       decisionType: this.determineDecisionType(context),

@@ -157,7 +157,7 @@ export class MultimodalAnalyzer {
     const transcription = "Simulated voice transcription";
 
     const feedback: UserFeedback = {
-      id: `feedback_voice_${Date.now()}_${Math.random().toString(36).substr(2, 9)}`,
+      id: `feedback_voice_${Date.now()}_${Math.random().toString(36).substring(2, 11)}`,
       userId,
       type: "voice",
       content: {
@@ -197,7 +197,7 @@ export class MultimodalAnalyzer {
     });
 
     const feedback: UserFeedback = {
-      id: `feedback_text_${Date.now()}_${Math.random().toString(36).substr(2, 9)}`,
+      id: `feedback_text_${Date.now()}_${Math.random().toString(36).substring(2, 11)}`,
       userId,
       type: "text",
       content: { text },
@@ -233,7 +233,7 @@ export class MultimodalAnalyzer {
     }
 
     const feedback: UserFeedback = {
-      id: `feedback_click_${Date.now()}_${Math.random().toString(36).substr(2, 9)}`,
+      id: `feedback_click_${Date.now()}_${Math.random().toString(36).substring(2, 11)}`,
       userId,
       type: "click",
       content: clickData,
@@ -266,7 +266,7 @@ export class MultimodalAnalyzer {
     }
 
     const feedback: UserFeedback = {
-      id: `feedback_implicit_${Date.now()}_${Math.random().toString(36).substr(2, 9)}`,
+      id: `feedback_implicit_${Date.now()}_${Math.random().toString(36).substring(2, 11)}`,
       userId,
       type: "implicit",
       content: implicitData,
@@ -353,7 +353,7 @@ export class MultimodalAnalyzer {
     for (const [action, count] of actionFrequency.entries()) {
       if (count >= this.config.minPatternFrequency) {
         patterns.push({
-          id: `pattern_${Date.now()}_${Math.random().toString(36).substr(2, 9)}`,
+          id: `pattern_${Date.now()}_${Math.random().toString(36).substring(2, 11)}`,
           userId,
           patternType: "frequent_action",
           description: `User frequently performs action: ${action}`,
@@ -384,7 +384,7 @@ export class MultimodalAnalyzer {
 
       if (closeClicks.length >= hesitationThreshold) {
         patterns.push({
-          id: `pattern_${Date.now()}_${Math.random().toString(36).substr(2, 9)}`,
+          id: `pattern_${Date.now()}_${Math.random().toString(36).substring(2, 11)}`,
           userId,
           patternType: "hesitation",
           description: "User showing hesitation in UI interaction",
@@ -424,7 +424,7 @@ export class MultimodalAnalyzer {
     for (const pattern of userPatterns) {
       if (pattern.patternType === "frequent_action") {
         suggestions.push({
-          id: `suggestion_${Date.now()}_${Math.random().toString(36).substr(2, 9)}`,
+          id: `suggestion_${Date.now()}_${Math.random().toString(36).substring(2, 11)}`,
           userId,
           suggestionType: "shortcut",
           title: "Create Shortcut",
@@ -436,7 +436,7 @@ export class MultimodalAnalyzer {
         });
       } else if (pattern.patternType === "hesitation") {
         suggestions.push({
-          id: `suggestion_${Date.now()}_${Math.random().toString(36).substr(2, 9)}`,
+          id: `suggestion_${Date.now()}_${Math.random().toString(36).substring(2, 11)}`,
           userId,
           suggestionType: "tip",
           title: "Need Help?",

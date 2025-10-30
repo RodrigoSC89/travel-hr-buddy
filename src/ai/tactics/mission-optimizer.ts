@@ -297,7 +297,7 @@ export class MissionOptimizer {
     });
 
     const adjustment: TacticAdjustment = {
-      id: `adj_${Date.now()}_${Math.random().toString(36).substr(2, 9)}`,
+      id: `adj_${Date.now()}_${Math.random().toString(36).substring(2, 11)}`,
       missionId,
       triggeredBy,
       parameters,
@@ -406,7 +406,7 @@ export class MissionOptimizer {
 
       // Registrar no histórico
       const change: TacticChangeHistory = {
-        id: `change_${Date.now()}_${Math.random().toString(36).substr(2, 9)}`,
+        id: `change_${Date.now()}_${Math.random().toString(36).substring(2, 11)}`,
         missionId,
         adjustmentId,
         appliedAt: new Date(),
@@ -468,7 +468,7 @@ export class MissionOptimizer {
         adjustment.parameters.some(p => p.impact === "high") ? "high" : "medium";
 
       const notification: TacticNotification = {
-        id: `notif_${Date.now()}_${Math.random().toString(36).substr(2, 9)}`,
+        id: `notif_${Date.now()}_${Math.random().toString(36).substring(2, 11)}`,
         missionId: adjustment.missionId,
         operatorIds: mission.assigned_operators,
         adjustmentId: adjustment.id,

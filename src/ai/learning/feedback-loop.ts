@@ -167,7 +167,7 @@ export class FeedbackLoop {
     const value = type === "approval" ? 1 : type === "rejection" ? -1 : 0;
 
     const feedback: OperatorFeedback = {
-      id: `feedback_${Date.now()}_${Math.random().toString(36).substr(2, 9)}`,
+      id: `feedback_${Date.now()}_${Math.random().toString(36).substring(2, 11)}`,
       userId,
       decisionId,
       type,
@@ -227,7 +227,7 @@ export class FeedbackLoop {
     }
 
     const feedback: OperatorFeedback = {
-      id: `feedback_implicit_${Date.now()}_${Math.random().toString(36).substr(2, 9)}`,
+      id: `feedback_implicit_${Date.now()}_${Math.random().toString(36).substring(2, 11)}`,
       userId,
       decisionId,
       type: "implicit",
@@ -358,7 +358,7 @@ export class FeedbackLoop {
 
     // Registrar ajuste
     const adjustment: BehaviorAdjustment = {
-      id: `adj_${Date.now()}_${Math.random().toString(36).substr(2, 9)}`,
+      id: `adj_${Date.now()}_${Math.random().toString(36).substring(2, 11)}`,
       triggeredBy: feedbacks[0].id,
       adjustmentType: "weight_decrease",
       affected: affectedFactors,
@@ -411,7 +411,7 @@ export class FeedbackLoop {
 
     // Registrar ajuste
     const adjustment: BehaviorAdjustment = {
-      id: `adj_${Date.now()}_${Math.random().toString(36).substr(2, 9)}`,
+      id: `adj_${Date.now()}_${Math.random().toString(36).substring(2, 11)}`,
       triggeredBy: feedbacks[0].id,
       adjustmentType: "weight_increase",
       affected: affectedFactors,

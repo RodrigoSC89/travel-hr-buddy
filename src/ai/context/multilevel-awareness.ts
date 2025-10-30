@@ -502,7 +502,7 @@ export class MultilevelAwareness {
 
       if (prev.systemStatus !== curr.systemStatus) {
         changes.push({
-          id: `change_${Date.now()}_${Math.random().toString(36).substr(2, 9)}`,
+          id: `change_${Date.now()}_${Math.random().toString(36).substring(2, 11)}`,
           level: "global",
           changeType: "state_change",
           previousState: { systemStatus: prev.systemStatus },
@@ -516,7 +516,7 @@ export class MultilevelAwareness {
       const riskDiff = Math.abs(prev.overallRisk - curr.overallRisk);
       if (riskDiff > this.config.changeDetectionThreshold) {
         changes.push({
-          id: `change_${Date.now()}_${Math.random().toString(36).substr(2, 9)}`,
+          id: `change_${Date.now()}_${Math.random().toString(36).substring(2, 11)}`,
           level: "global",
           changeType: "risk_detected",
           previousState: { overallRisk: prev.overallRisk },
@@ -640,7 +640,7 @@ export class MultilevelAwareness {
         // Detectar anomalias
         if (this.isAnomalousValue(previousValue, sensorData.value, sensorData.type)) {
           const change: ContextChange = {
-            id: `change_${Date.now()}_${Math.random().toString(36).substr(2, 9)}`,
+            id: `change_${Date.now()}_${Math.random().toString(36).substring(2, 11)}`,
             level: "entity",
             changeType: "anomaly",
             previousState: { [sensorData.sensorId]: previousValue },
