@@ -242,7 +242,8 @@ class AdaptiveJointDecision {
       
       // Pontos positivos
       score += opt.pros.length * 2;
-      score += (1 - opt.riskLevel === 'low' ? 0 : opt.riskLevel === 'medium' ? 0.5 : 1) * 3;
+      const riskScore = opt.riskLevel === 'low' ? 0 : opt.riskLevel === 'medium' ? 0.5 : 1;
+      score -= riskScore * 3; // Subtract for higher risk
       score += opt.estimatedImpact * 5;
       
       // Pontos negativos

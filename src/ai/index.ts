@@ -122,7 +122,7 @@ export {
 export {
   distributedDecisionCore,
   type DecisionLevel,
-  type DecisionStatus,
+  type DecisionStatus as DistributedDecisionStatus,
   type DecisionContext,
   type Decision,
   type SimulationResult,
