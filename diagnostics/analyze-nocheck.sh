@@ -8,7 +8,7 @@ mkdir -p "$DIAGNOSTICS_DIR"
 
 # Count by directory
 echo "=== @ts-nocheck by Directory ===" > "$DIAGNOSTICS_DIR/nocheck-analysis.txt"
-grep -r '@ts-nocheck' src/ 2>/dev/null | cut -d':' -f1 | xargs -I {} dirname {} | sort | uniq -c | sort -rn >> "$DIAGNOSTICS_DIR/nocheck-analysis.txt"
+grep -r '@ts-nocheck' src/ 2>/dev/null | cut -d':' -f1 | while IFS= read -r file; do dirname "$file"; done | sort | uniq -c | sort -rn >> "$DIAGNOSTICS_DIR/nocheck-analysis.txt"
 
 echo "" >> "$DIAGNOSTICS_DIR/nocheck-analysis.txt"
 echo "=== @ts-nocheck by Module Type ===" >> "$DIAGNOSTICS_DIR/nocheck-analysis.txt"

@@ -72,7 +72,7 @@ echo "📦 [6/8] Analyzing bundle sizes..."
 if [ -d "dist/assets" ]; then
   {
     echo "=== Large JavaScript bundles (>1MB) ==="
-    find dist/assets -name "*.js" -size +1M -exec ls -lh {} \; 2>/dev/null || echo "No bundles over 1MB"
+    find dist/assets -name "*.js" -size +1M -printf '%s\t%p\n' 2>/dev/null | awk '{printf "%.2f MB\t%s\n", $1/1024/1024, $2}' || echo "No bundles over 1MB"
     
     echo ""
     echo "=== Total dist size ==="

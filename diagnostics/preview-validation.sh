@@ -101,7 +101,7 @@ echo "⚡ [4/4] System performance check..."
     
     echo ""
     echo "=== Largest Bundles ==="
-    find dist/assets -name '*.js' -type f -exec ls -lh {} \; | sort -k5 -hr | head -5 | awk '{print $5, $9}'
+    find dist/assets -name '*.js' -type f -printf '%s\t%p\n' 2>/dev/null | sort -rn | head -5 | awk '{printf "%.2f MB\t%s\n", $1/1024/1024, $2}'
   fi
   
   echo ""
