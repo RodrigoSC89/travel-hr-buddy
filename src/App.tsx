@@ -15,6 +15,7 @@ import { webVitalsService } from "@/services/web-vitals-service";
 import { OffshoreLoader, PageSkeleton } from "@/components/LoadingStates";
 import { lazyWithPreload, preloadStrategy } from "@/lib/performance/lazy-with-preload";
 import { safeLazyImport } from "@/utils/safeLazyImport";
+import { withTimeout } from "@/lib/utils/timeout-handler";
 
 // Detect Lovable preview environment
 const isLovablePreview = typeof window !== "undefined" && (
@@ -494,20 +495,28 @@ function App() {
           requestIdleCallback(() => {
             console.log("⏳ Iniciando preload de módulos críticos...");
             if ('preload' in Dashboard && typeof Dashboard.preload === 'function') {
-              Dashboard.preload().then(() => console.log("✅ Dashboard preloaded"));
+              withTimeout(Dashboard.preload(), 3000, "Dashboard preload timed out")
+                .then(() => console.log("✅ Dashboard preloaded"))
+                .catch((err) => console.warn("⚠️ Dashboard preload failed:", err.message));
             }
             if ('preload' in Travel && typeof Travel.preload === 'function') {
-              Travel.preload().then(() => console.log("✅ Travel preloaded"));
+              withTimeout(Travel.preload(), 3000, "Travel preload timed out")
+                .then(() => console.log("✅ Travel preloaded"))
+                .catch((err) => console.warn("⚠️ Travel preload failed:", err.message));
             }
           });
         } else {
           setTimeout(() => {
             console.log("⏳ Iniciando preload de módulos críticos (fallback)...");
             if ('preload' in Dashboard && typeof Dashboard.preload === 'function') {
-              Dashboard.preload().then(() => console.log("✅ Dashboard preloaded"));
+              withTimeout(Dashboard.preload(), 3000, "Dashboard preload timed out")
+                .then(() => console.log("✅ Dashboard preloaded"))
+                .catch((err) => console.warn("⚠️ Dashboard preload failed:", err.message));
             }
             if ('preload' in Travel && typeof Travel.preload === 'function') {
-              Travel.preload().then(() => console.log("✅ Travel preloaded"));
+              withTimeout(Travel.preload(), 3000, "Travel preload timed out")
+                .then(() => console.log("✅ Travel preloaded"))
+                .catch((err) => console.warn("⚠️ Travel preload failed:", err.message));
             }
           }, 2000);
         }

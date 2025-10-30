@@ -1,6 +1,14 @@
-import React from "react";
+import React, { Suspense } from "react";
 import { ComprehensiveExecutiveDashboard } from "@/components/dashboard/comprehensive-executive-dashboard";
+import { ErrorBoundary } from "@/components/layout/error-boundary";
+import { PageSkeleton } from "@/components/LoadingStates";
 
 export default function Dashboard() {
-  return <ComprehensiveExecutiveDashboard />;
+  return (
+    <ErrorBoundary>
+      <Suspense fallback={<PageSkeleton />}>
+        <ComprehensiveExecutiveDashboard />
+      </Suspense>
+    </ErrorBoundary>
+  );
 }

@@ -4,6 +4,7 @@
  */
 
 import { supabase } from "@/integrations/supabase/client";
+import { withTimeout } from "@/lib/utils/timeout-handler";
 
 export interface SupabaseTestResult {
   success: boolean;
@@ -30,8 +31,12 @@ export async function testSupabaseConnection(): Promise<SupabaseTestResult> {
   }
 
   try {
-    // Test 1: Check if we can get session (should not crash)
-    const { data: sessionData, error: sessionError } = await supabase.auth.getSession();
+    // Test 1: Check if we can get session (should not crash) with 5s timeout
+    const { data: sessionData, error: sessionError } = await withTimeout(
+      supabase.auth.getSession(),
+      5000,
+      "Session check timed out"
+    );
     
     if (sessionError) {
       return {
@@ -42,11 +47,12 @@ export async function testSupabaseConnection(): Promise<SupabaseTestResult> {
       };
     }
 
-    // Test 2: Try a simple database query (health check)
-    const { error: dbError } = await supabase
-      .from("profiles")
-      .select("id")
-      .limit(1);
+    // Test 2: Try a simple database query (health check) with 5s timeout
+    const { error: dbError } = await withTimeout(
+      supabase.from("profiles").select("id").limit(1),
+      5000,
+      "Database query timed out"
+    );
 
     const responseTime = Date.now() - startTime;
 
