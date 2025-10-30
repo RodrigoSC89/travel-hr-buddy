@@ -3,7 +3,7 @@
  * Debounce and throttle helpers to prevent excessive re-renders and API calls
  */
 
-import { useEffect, useRef, useCallback } from 'react';
+import { useEffect, useRef, useCallback } from "react";
 
 /**
  * Debounce function - delays execution until after wait time has elapsed
@@ -138,4 +138,4 @@ export function useThrottledCallback<T extends (...args: any[]) => any>(
   );
 }
 
-import React from 'react';
+import React from "react";
