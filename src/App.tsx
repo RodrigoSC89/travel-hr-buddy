@@ -463,6 +463,7 @@ function App() {
     
     isInitialized = true;
     console.log("🚀 Nautilus One - Inicializando sistema...");
+    console.time("⏱️ App:InitializationTime");
     
     try {
       initializeMonitoring();
@@ -479,25 +480,34 @@ function App() {
       console.error("❌ Erro ao iniciar watchdog:", error);
     }
     
-    // Preload módulos críticos durante idle time (simplificado)
+    // PATCH 621: Preload módulos críticos durante idle time (com timeout)
     try {
       if ('requestIdleCallback' in window) {
         requestIdleCallback(() => {
           console.log("⏳ Iniciando preload de módulos críticos...");
-          Dashboard.preload().then(() => console.log("✅ Dashboard preloaded"));
-          Travel.preload().then(() => console.log("✅ Travel preloaded"));
-        });
+          const preloadTimeout = setTimeout(() => {
+            console.warn("⚠️ Preload timeout - continuando sem preload");
+          }, 5000);
+          
+          Promise.all([
+            Dashboard.preload().then(() => console.log("✅ Dashboard preloaded")),
+            Travel.preload().then(() => console.log("✅ Travel preloaded"))
+          ]).finally(() => {
+            clearTimeout(preloadTimeout);
+          });
+        }, { timeout: 3000 });
       } else {
         setTimeout(() => {
           console.log("⏳ Iniciando preload de módulos críticos (fallback)...");
-          Dashboard.preload().then(() => console.log("✅ Dashboard preloaded"));
-          Travel.preload().then(() => console.log("✅ Travel preloaded"));
+          Dashboard.preload().then(() => console.log("✅ Dashboard preloaded")).catch(() => {});
+          Travel.preload().then(() => console.log("✅ Travel preloaded")).catch(() => {});
         }, 2000);
       }
     } catch (error) {
       console.error("❌ Erro no preload:", error);
     }
     
+    console.timeEnd("⏱️ App:InitializationTime");
     console.log("✅ App inicializado com sucesso");
     
     return () => {

@@ -1,9 +1,11 @@
 /**
  * Supabase Service Integration
  * Test Supabase connection and authentication
+ * PATCH 621: Added timeout protection
  */
 
 import { supabase } from "@/integrations/supabase/client";
+import { withTimeout, TimeoutError } from "@/lib/utils/timeout-handler";
 
 export interface SupabaseTestResult {
   success: boolean;
@@ -15,6 +17,7 @@ export interface SupabaseTestResult {
 
 /**
  * Test Supabase connectivity and authentication
+ * PATCH 621: Added timeout protection (10s timeout)
  */
 export async function testSupabaseConnection(): Promise<SupabaseTestResult> {
   const startTime = Date.now();
@@ -30,8 +33,12 @@ export async function testSupabaseConnection(): Promise<SupabaseTestResult> {
   }
 
   try {
-    // Test 1: Check if we can get session (should not crash)
-    const { data: sessionData, error: sessionError } = await supabase.auth.getSession();
+    // Test 1: Check if we can get session (should not crash) - with timeout
+    const { data: sessionData, error: sessionError } = await withTimeout(
+      supabase.auth.getSession(),
+      5000,
+      "Session check timed out"
+    );
     
     if (sessionError) {
       return {
@@ -42,11 +49,15 @@ export async function testSupabaseConnection(): Promise<SupabaseTestResult> {
       };
     }
 
-    // Test 2: Try a simple database query (health check)
-    const { error: dbError } = await supabase
-      .from("profiles")
-      .select("id")
-      .limit(1);
+    // Test 2: Try a simple database query (health check) - with timeout
+    const { error: dbError } = await withTimeout(
+      supabase
+        .from("profiles")
+        .select("id")
+        .limit(1),
+      5000,
+      "Database query timed out"
+    );
 
     const responseTime = Date.now() - startTime;
 
@@ -79,10 +90,22 @@ export async function testSupabaseConnection(): Promise<SupabaseTestResult> {
       },
     };
   } catch (error) {
+    const responseTime = Date.now() - startTime;
+    
+    // Handle timeout errors specifically
+    if (error instanceof TimeoutError) {
+      return {
+        success: false,
+        message: "Supabase connection timed out",
+        responseTime,
+        error: error.message,
+      };
+    }
+    
     return {
       success: false,
       message: "Failed to connect to Supabase",
-      responseTime: Date.now() - startTime,
+      responseTime,
       error: error instanceof Error ? error.message : "Unknown error",
     };
   }
