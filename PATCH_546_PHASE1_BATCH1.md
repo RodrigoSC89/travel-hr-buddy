@@ -74,15 +74,16 @@ Isso representa ~26% do codebase src/ e requer uma abordagem estratégica em bat
 
 ---
 
-## 📊 Métricas do Batch 1 + 2
+## 📊 Métricas do Batch 1 + 2 + 3
 
 | Métrica | Valor |
 |---------|-------|
-| Arquivos Corrigidos | 8/8 ✅ |
-| @ts-nocheck Removidos | 8/395 total (2%) |
+| Arquivos Corrigidos | 9/50 ✅ |
+| @ts-nocheck Removidos | 9/395 total (2.3%) |
 | Build Status | ✅ Passando |
 | Type Errors Introduzidos | 0 |
 | Interfaces TypeScript Adicionadas | 32 |
+| Revertidos (dependências) | 5 arquivos |
 
 ### ✅ Batch 1 Completo (4 arquivos)
 - `Patch606Validation.tsx` ✅
@@ -96,13 +97,33 @@ Isso representa ~26% do codebase src/ e requer uma abordagem estratégica em bat
 - `Patch611Validation.tsx` ✅
 - `Patch615Validation.tsx` ✅
 
+### 🚧 Batch 3 Parcial (1 de 6 arquivos)
+- `src/components/admin/APIStatus.tsx` ✅
+- ❌ `src/components/feedback/BetaFeedbackForm.tsx` - Requer tabela `beta_feedback`
+- ❌ `src/components/feedback/user-feedback-system.tsx` - Schema incompatível
+- ❌ `src/components/control-hub/SystemAlerts.tsx` - Tipo complexo MQTT
+- ❌ `src/components/ai/PerformanceMonitor.tsx` - Requer tabelas `ia_performance_log`, `ia_suggestions_log`, `watchdog_behavior_alerts`
+- ❌ `src/components/performance/performance-monitor.tsx` - Requer tabela `performance_metrics`
+
+### 📋 Bloqueios Identificados
+**Tabelas Faltantes no Supabase:**
+1. `beta_feedback` - Para BetaFeedbackForm
+2. `ia_performance_log` - Para AI PerformanceMonitor
+3. `ia_suggestions_log` - Para AI PerformanceMonitor
+4. `watchdog_behavior_alerts` - Para AI PerformanceMonitor
+5. `performance_metrics` - Para performance-monitor
+
+**Decisão:** Esses arquivos serão corrigidos após criação dos schemas necessários.
+
 ---
 
 ## 🎯 Meta do PATCH 546 Fase 1
 
 **Objetivo:** Remover 50 @ts-nocheck (12% do total)  
-**Progresso:** 8/50 (16%) ⚡  
+**Progresso:** 9/50 (18%) ⚡  
 **Timeline:** 2 dias
+
+**Estratégia Revisada:** Priorizar arquivos sem dependências Supabase primeiro.
 
 ### Breakdown por Batch:
 - Batch 1 (Validações): 10 arquivos
