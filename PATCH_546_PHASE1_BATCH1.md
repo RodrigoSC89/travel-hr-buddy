@@ -123,6 +123,15 @@ Isso representa ~26% do codebase src/ e requer uma abordagem estratégica em bat
 - ❌ `src/modules/auto-reconfig/validation/Patch589Validation.tsx` - Dependência de autoReconfigEngine
 - ❌ `src/modules/coordination/validation/Patch586Validation.tsx` - Dependência de multiLevelEngine
 
+### 🚧 Batch 8 (0 de 2 arquivos - REVERTIDO)
+- ❌ `src/pages/ops/system-status.tsx` - Requer tabela `system_health`
+- ❌ `src/components/ui/simple-global-search.tsx` - Problemas de tipo com ícones
+
+### 🚧 Batch 9 (0 de 3 arquivos - REVERTIDO)
+- ❌ `src/lib/sgso/submit.ts` - Requer tabelas `sgso_audits`, `sgso_audit_items`
+- ❌ `src/lib/templates/api.ts` - Requer tabela `templates`
+- ❌ `src/lib/supabase-manager.ts` - Erro de tipo com logger.warn
+
 ### 📋 Bloqueios Identificados
 **Tabelas Faltantes no Supabase:**
 1. `beta_feedback` - Para BetaFeedbackForm
@@ -130,6 +139,9 @@ Isso representa ~26% do codebase src/ e requer uma abordagem estratégica em bat
 3. `ia_suggestions_log` - Para AI PerformanceMonitor
 4. `watchdog_behavior_alerts` - Para AI PerformanceMonitor
 5. `performance_metrics` - Para performance-monitor
+6. `system_health` - Para system-status
+7. `sgso_audits`, `sgso_audit_items` - Para SGSO submit
+8. `templates` - Para templates API
 
 **Decisão:** Esses arquivos serão corrigidos após criação dos schemas necessários.
 
