@@ -1,4 +1,3 @@
-// @ts-nocheck
 import { useEffect, useState } from "react";
 import { 
   DashboardJobs, 
@@ -9,6 +8,7 @@ import {
   ComplianceByVesselTable 
 } from "@/components/bi";
 import { supabase } from "@/integrations/supabase/client";
+import { logger } from "@/lib/logger";
 
 interface JobTrendData {
   month: string;
@@ -22,16 +22,16 @@ export default function AdminBI() {
   useEffect(() => {
     async function fetchTrendData() {
       try {
-        const { data, error } = await supabase.rpc("jobs_trend_by_month");
+        const { data, error } = await (supabase as any).rpc("jobs_trend_by_month");
         
         if (error) {
-          console.error("Error fetching jobs trend:", error);
+          logger.error("Error fetching jobs trend", { error });
           setTrendData([]);
         } else {
           setTrendData(data || []);
         }
       } catch (error) {
-        console.error("Error invoking function:", error);
+        logger.error("Error invoking function", { error });
         setTrendData([]);
       }
     }

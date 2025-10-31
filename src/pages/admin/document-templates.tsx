@@ -1,4 +1,3 @@
-// @ts-nocheck
 import { useState, useEffect } from "react";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
@@ -20,6 +19,7 @@ import {
   Settings
 } from "lucide-react";
 import { supabase } from "@/integrations/supabase/client";
+import { logger } from "@/lib/logger";
 
 interface DocumentTemplate {
   id: string;
@@ -92,7 +92,7 @@ export default function DocumentTemplates() {
   const fetchTemplates = async () => {
     setLoading(true);
     try {
-      const { data, error } = await supabase
+      const { data, error } = await (supabase as any)
         .from("document_templates")
         .select("*")
         .eq("is_active", true)
@@ -101,7 +101,7 @@ export default function DocumentTemplates() {
       if (error) throw error;
       setTemplates(data || []);
     } catch (error) {
-      console.error("Error fetching templates:", error);
+      logger.error("Error fetching templates", { error });
       toast({
         title: "Error",
         description: "Failed to load templates",
@@ -114,7 +114,7 @@ export default function DocumentTemplates() {
 
   const fetchGeneratedDocuments = async () => {
     try {
-      const { data, error } = await supabase
+      const { data, error } = await (supabase as any)
         .from("generated_documents")
         .select("*")
         .order("generated_at", { ascending: false })
@@ -123,13 +123,13 @@ export default function DocumentTemplates() {
       if (error) throw error;
       setGeneratedDocs(data || []);
     } catch (error) {
-      console.error("Error fetching generated documents:", error);
+      logger.error("Error fetching generated documents", { error });
     }
   };
 
   const fetchTemplateVersions = async (templateId: string) => {
     try {
-      const { data, error } = await supabase
+      const { data, error } = await (supabase as any)
         .from("template_versions")
         .select("*")
         .eq("template_id", templateId)
@@ -138,7 +138,7 @@ export default function DocumentTemplates() {
       if (error) throw error;
       setVersions(data || []);
     } catch (error) {
-      console.error("Error fetching versions:", error);
+      logger.error("Error fetching versions", { error });
     }
   };
 
@@ -158,7 +158,7 @@ export default function DocumentTemplates() {
     if (!selectedTemplate) {
       // Create new template
       try {
-        const { error } = await supabase
+        const { error } = await (supabase as any)
           .from("document_templates")
           .insert({
             name: templateName,
@@ -177,7 +177,7 @@ export default function DocumentTemplates() {
 
         fetchTemplates();
       } catch (error) {
-        console.error("Error creating template:", error);
+        logger.error("Error creating template", { error });
         toast({
           title: "Error",
           description: "Failed to create template",
@@ -187,7 +187,7 @@ export default function DocumentTemplates() {
     } else {
       // Update existing template (create new version)
       try {
-        const { error } = await supabase.rpc("create_template_version", {
+        const { error } = await (supabase as any).rpc("create_template_version", {
           p_template_id: selectedTemplate.id,
           p_content: templateContent,
           p_variables: extractVariables(templateContent),
@@ -204,7 +204,7 @@ export default function DocumentTemplates() {
         fetchTemplates();
         fetchTemplateVersions(selectedTemplate.id);
       } catch (error) {
-        console.error("Error updating template:", error);
+        logger.error("Error updating template", { error });
         toast({
           title: "Error",
           description: "Failed to update template",
@@ -218,7 +218,7 @@ export default function DocumentTemplates() {
     if (!selectedTemplate) return;
 
     try {
-      const { data, error } = await supabase.rpc("generate_document_from_template", {
+      const { data, error } = await (supabase as any).rpc("generate_document_from_template", {
         p_template_id: selectedTemplate.id,
         p_name: `${selectedTemplate.name} - ${new Date().toLocaleDateString()}`,
         p_variable_values: variableValues,
@@ -234,7 +234,7 @@ export default function DocumentTemplates() {
 
       fetchGeneratedDocuments();
     } catch (error) {
-      console.error("Error generating document:", error);
+      logger.error("Error generating document", { error });
       toast({
         title: "Error",
         description: "Failed to generate document",
@@ -247,7 +247,7 @@ export default function DocumentTemplates() {
     if (!selectedTemplate) return;
 
     try {
-      const { error } = await supabase.rpc("rollback_template_version", {
+      const { error } = await (supabase as any).rpc("rollback_template_version", {
         p_template_id: selectedTemplate.id,
         p_version: version
       });
@@ -262,7 +262,7 @@ export default function DocumentTemplates() {
       fetchTemplates();
       fetchTemplateVersions(selectedTemplate.id);
     } catch (error) {
-      console.error("Error rolling back version:", error);
+      logger.error("Error rolling back version", { error });
       toast({
         title: "Error",
         description: "Failed to rollback version",
@@ -291,7 +291,7 @@ export default function DocumentTemplates() {
     // In production, this would trigger actual export
     // For now, just mark as exported
     try {
-      const { error } = await supabase.rpc("export_document", {
+      const { error } = await (supabase as any).rpc("export_document", {
         p_document_id: documentId,
         p_file_url: `/exports/${documentId}.${format}`
       });
@@ -305,7 +305,7 @@ export default function DocumentTemplates() {
 
       fetchGeneratedDocuments();
     } catch (error) {
-      console.error("Error exporting document:", error);
+      logger.error("Error exporting document", { error });
     }
   };
 

@@ -1,4 +1,3 @@
-// @ts-nocheck
 import React, { useState } from "react";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
@@ -15,7 +14,7 @@ export default function CronMonitorPage() {
   const { data: stats } = useQuery<CronJobStats>({
     queryKey: ["cron-stats"],
     queryFn: async () => {
-      const { data, error } = await supabase
+      const { data, error } = await (supabase as any)
         .rpc("get_cron_stats");
       
       if (error) throw error;
@@ -27,7 +26,7 @@ export default function CronMonitorPage() {
   const { data: jobs = [], isLoading, refetch } = useQuery<CronJob[]>({
     queryKey: ["cron-jobs"],
     queryFn: async () => {
-      const { data, error } = await supabase
+      const { data, error } = await (supabase as any)
         .from("cron_jobs")
         .select("*")
         .order("name", { ascending: true });
@@ -43,7 +42,7 @@ export default function CronMonitorPage() {
     queryFn: async () => {
       if (!selectedJob) return [];
 
-      const { data, error } = await supabase
+      const { data, error } = await (supabase as any)
         .from("cron_job_executions")
         .select("*")
         .eq("job_id", selectedJob)
