@@ -17,6 +17,9 @@ import { OffshoreLoader, PageSkeleton } from "@/components/LoadingStates";
 import { lazyWithPreload, preloadStrategy } from "@/lib/performance/lazy-with-preload";
 import { safeLazyImport } from "@/utils/safeLazyImport";
 
+// PATCH 540: Import bundles para reduzir lazy loading
+import * as ModulesBundle from "@/bundles/ModulesBundle";
+
 // Full App for all environments
 
 // Páginas mais usadas - carregamento prioritário
@@ -193,19 +196,27 @@ const Patches606to610 = safeLazyImport(() => import("@/pages/validation/patches-
 // PATCHES 611-615 - 3D Visualizer, Inference, Decisions, Threats & Strategy Validation
 const Patches611to615 = safeLazyImport(() => import("@/pages/validation/patches-611-615"));
 
-// New Module Imports - PATCH 66.0 Updated Paths
-const FeedbackModule = React.lazy(() => import("@/modules/operations/feedback"));
-// PATCH 191.0: Consolidated Fleet Module
-const FleetModule = React.lazy(() => import("@/modules/fleet"));
-const PerformanceModule = React.lazy(() => import("@/modules/operations/performance"));
-const ReportsModule = React.lazy(() => import("@/modules/compliance/reports"));
+// PATCH 540: Bundled modules para reduzir lazy loading (12 → 1 import)
+const FeedbackModule = ModulesBundle.FeedbackModule;
+const FleetModule = ModulesBundle.FleetModule;
+const PerformanceModule = ModulesBundle.PerformanceModule;
+const ReportsModule = ModulesBundle.ReportsModule;
+const IncidentReports = ModulesBundle.IncidentReports;
+const ComplianceHubModule = ModulesBundle.ComplianceHubModule;
+const AIInsights = ModulesBundle.AIInsights;
+const OperationsDashboard = ModulesBundle.OperationsDashboard;
+const LogisticsHub = ModulesBundle.LogisticsHub;
+const CrewManagement = ModulesBundle.CrewManagement;
+const EmergencyResponse = ModulesBundle.EmergencyResponse;
+const MissionControl = ModulesBundle.MissionControl;
+
+// Remaining individual lazy imports
 const RealTimeWorkspace = React.lazy(() => import("@/modules/workspace/real-time-workspace"));
 const ChannelManager = React.lazy(() => import("@/modules/connectivity/channel-manager"));
 const TrainingAcademy = React.lazy(() => import("@/modules/hr/training-academy"));
 const MaintenancePlanner = React.lazy(() => import("@/modules/maintenance-planner"));
 const MissionLogs = React.lazy(() => import("@/pages/MissionLogsPage"));
 const TravelManagementPage = React.lazy(() => import("@/pages/TravelManagementPage"));
-const IncidentReports = React.lazy(() => import("@/modules/incident-reports"));
 const FuelOptimizer = React.lazy(() => import("@/modules/logistics/fuel-optimizer"));
 const WeatherDashboard = React.lazy(() => import("@/modules/weather-dashboard"));
 const VoyagePlanner = React.lazy(() => import("@/modules/planning/voyage-planner"));
@@ -214,29 +225,18 @@ const AuditCenter = React.lazy(() => import("@/modules/compliance/audit-center")
 const DeveloperStatus = React.lazy(() => import("@/pages/developer/status"));
 const ModuleStatus = React.lazy(() => import("@/pages/developer/ModuleStatus"));
 const TestsDashboard = React.lazy(() => import("@/pages/developer/TestsDashboard"));
-const EmergencyResponse = React.lazy(() => import("@/modules/emergency/emergency-response"));
 const ExecutiveReport = React.lazy(() => import("@/pages/ExecutiveReport"));
-const ComplianceHubModule = React.lazy(() => import("@/modules/compliance/compliance-hub"));
-const AIInsights = React.lazy(() => import("@/modules/intelligence/ai-insights"));
 const ModuleHealth = React.lazy(() => import("@/pages/developer/module-health"));
 const WatchdogMonitor = React.lazy(() => import("@/pages/developer/watchdog-monitor"));
-// PATCH 89: Consolidated Dashboards
-const OperationsDashboard = React.lazy(() => import("@/modules/operations/operations-dashboard"));
 const PEOTRAM = React.lazy(() => import("@/pages/PEOTRAM"));
-const LogisticsHub = React.lazy(() => import("@/modules/logistics/logistics-hub"));
 const CrewWellbeing = React.lazy(() => import("@/modules/operations/crew-wellbeing"));
 const SatelliteTracker = React.lazy(() => import("@/modules/logistics/satellite-tracker"));
 const ProjectTimeline = React.lazy(() => import("@/modules/project-timeline"));
 const UserManagement = React.lazy(() => import("@/modules/user-management"));
-// PATCH 426-430: Consolidated Mission Engine
 const MissionEngine = React.lazy(() => import("@/modules/mission-engine"));
-// PATCH 427: Drone Commander
 const DroneCommander = React.lazy(() => import("@/pages/DroneCommander"));
-// PATCH 428: Sensors Hub
 const SensorsHubPage = React.lazy(() => import("@/pages/SensorsHub"));
-// PATCH 429: Satcom
 const SatcomPage = React.lazy(() => import("@/pages/Satcom"));
-const MissionControl = React.lazy(() => import("@/modules/emergency/mission-control"));
 const InsightDashboard = React.lazy(() => import("@/pages/mission-control/insight-dashboard"));
 const AutonomyConsole = React.lazy(() => import("@/pages/mission-control/autonomy"));
 const AICommandCenter = React.lazy(() => import("@/pages/mission-control/ai-command-center"));
@@ -253,8 +253,6 @@ const AnalyticsCoreModule = React.lazy(() => import("@/modules/intelligence/anal
 const VoiceAssistantModule = React.lazy(() => import("@/modules/assistants/voice-assistant"));
 const NotificationsCenterModule = React.lazy(() => import("@/modules/connectivity/notifications-center"));
 const AIModulesStatus = React.lazy(() => import("@/pages/AIModulesStatus"));
-// PATCH 466: Consolidated Crew Management (crew-management → crew)
-const CrewManagement = React.lazy(() => import("@/modules/crew"));
 // PATCH 407: Sonar AI Module
 const SonarAI = React.lazy(() => import("@/modules/sonar-ai"));
 // PATCH 524: Incident Replay AI Module
