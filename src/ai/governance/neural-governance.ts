@@ -1,4 +1,3 @@
-// @ts-nocheck
 /**
  * PATCH 583 - Neural Governance Module
  * Governance layer for autonomous AI decisions
@@ -440,7 +439,7 @@ class NeuralGovernance {
 
   private async initializeAuditTrail(): Promise<void> {
     try {
-      const { data, error } = await supabase
+      const { data, error } = await (supabase as any)
         .from("ai_governance_audit")
         .select("*")
         .order("timestamp", { ascending: false })
@@ -696,7 +695,7 @@ class NeuralGovernance {
 
     // Save to database
     try {
-      await supabase.from("ai_governance_vetoes").insert({
+      await (supabase as any).from("ai_governance_vetoes").insert({
         veto_id: veto.id,
         strategy_id: veto.strategyId,
         evaluation_id: veto.evaluationId,
@@ -714,7 +713,7 @@ class NeuralGovernance {
 
   private async saveEvaluation(evaluation: GovernanceEvaluation): Promise<void> {
     try {
-      await supabase.from("ai_governance_evaluations").insert({
+      await (supabase as any).from("ai_governance_evaluations").insert({
         evaluation_id: evaluation.id,
         strategy_id: evaluation.strategyId,
         decision: evaluation.decision,
@@ -741,7 +740,7 @@ class NeuralGovernance {
     }
 
     try {
-      await supabase.from("ai_governance_audit").insert({
+      await (supabase as any).from("ai_governance_audit").insert({
         audit_id: entry.id,
         timestamp: entry.timestamp.toISOString(),
         action: entry.action,

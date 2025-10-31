@@ -1,4 +1,3 @@
-// @ts-nocheck
 /**
  * PATCH 586: Multi-Level Coordination Engine
  * 
@@ -15,6 +14,7 @@
  */
 
 import { supabase } from "@/integrations/supabase/client";
+import { logger } from "@/lib/logger";
 
 export type DecisionLevel = "strategic" | "operational" | "tactical";
 
@@ -351,8 +351,10 @@ export class MultiLevelCoordinationEngine {
     // Check timeline conflicts
     if (decision1.constraints.deadline && decision2.constraints.deadline) {
       if (decision1.constraints.deadline < decision2.constraints.deadline) {
-        return decision1.timeHorizon + decision2.timeHorizon > 
-               decision1.constraints.maxTimeHorizon;
+        // Note: timeHorizon is not part of Decision type, using constraints instead
+        const timeHorizon1 = decision1.constraints.timeHorizon || 0;
+        const timeHorizon2 = decision2.constraints.timeHorizon || 0;
+        return timeHorizon1 + timeHorizon2 > (decision1.constraints.maxTimeHorizon || Infinity);
       }
     }
 
@@ -435,7 +437,7 @@ export class MultiLevelCoordinationEngine {
     this.logs.push(log);
 
     try {
-      await supabase.from("coordination_log").insert({
+      await (supabase as any).from("coordination_log").insert({
         level: decision.level,
         event_type: "decision",
         decision_id: decision.id,
@@ -444,7 +446,7 @@ export class MultiLevelCoordinationEngine {
         timestamp: log.timestamp,
       });
     } catch (error) {
-      console.error("Failed to log decision:", error);
+      logger.error("[MultiLevelCoordination] Failed to log decision:", error);
     }
   }
 
@@ -465,7 +467,7 @@ export class MultiLevelCoordinationEngine {
     this.logs.push(log);
 
     try {
-      await supabase.from("coordination_log").insert({
+      await (supabase as any).from("coordination_log").insert({
         level: resolution.resolution.level,
         event_type: "conflict",
         decision_id: resolution.resolution.id,
@@ -474,7 +476,7 @@ export class MultiLevelCoordinationEngine {
         timestamp: log.timestamp,
       });
     } catch (error) {
-      console.error("Failed to log conflict resolution:", error);
+      logger.error("[MultiLevelCoordination] Failed to log conflict resolution:", error);
     }
   }
 
@@ -494,7 +496,7 @@ export class MultiLevelCoordinationEngine {
     this.logs.push(log);
 
     try {
-      await supabase.from("coordination_log").insert({
+      await (supabase as any).from("coordination_log").insert({
         level,
         event_type: eventType,
         decision_id: null,
@@ -503,7 +505,7 @@ export class MultiLevelCoordinationEngine {
         timestamp: log.timestamp,
       });
     } catch (error) {
-      console.error("Failed to log event:", error);
+      logger.error("[MultiLevelCoordination] Failed to log event:", error);
     }
   }
 

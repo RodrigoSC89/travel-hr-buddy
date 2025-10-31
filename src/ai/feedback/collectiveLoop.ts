@@ -1,4 +1,3 @@
-// @ts-nocheck
 /**
  * PATCH 219 - Collective Loop Engine
  * Continuous feedback loop between operators, AI, copilot, and technical systems
@@ -333,7 +332,7 @@ class CollectiveLoopEngine {
 
   private async recordFeedback(feedback: FeedbackEvent): Promise<void> {
     try {
-      const { data, error } = await supabase
+      const { data, error } = await (supabase as any)
         .from("feedback_events")
         .insert({
           event_type: feedback.feedbackType,
