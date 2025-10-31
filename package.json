@@ -123,6 +123,7 @@
     "@supabase/ssr": "^0.7.0",
     "@supabase/supabase-js": "^2.57.4",
     "@tanstack/react-query": "^5.83.0",
+    "@tanstack/react-virtual": "^3.13.12",
     "@tensorflow-models/coco-ssd": "^2.2.3",
     "@tensorflow/tfjs": "^4.22.0",
     "@tiptap/extension-collaboration": "^2.26.3",

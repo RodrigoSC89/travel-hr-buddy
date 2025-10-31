@@ -209,6 +209,17 @@ const Patches606to610 = safeLazyImport(() => import("@/pages/validation/patches-
 // PATCHES 611-615 - 3D Visualizer, Inference, Decisions, Threats & Strategy Validation
 const Patches611to615 = safeLazyImport(() => import("@/pages/validation/patches-611-615"));
 
+// PATCH 541 - PATCHES 506-510 UI Components
+const AIMemoryDashboard = safeLazyImport(() => import("@/pages/admin/patches-506-510/ai-memory-dashboard"));
+const BackupManagement = safeLazyImport(() => import("@/pages/admin/patches-506-510/backup-management"));
+const RLSAuditDashboard = safeLazyImport(() => import("@/pages/admin/patches-506-510/rls-audit-dashboard"));
+const AIFeedbackDashboard = safeLazyImport(() => import("@/pages/admin/patches-506-510/ai-feedback-dashboard"));
+const SessionManagement = safeLazyImport(() => import("@/pages/admin/patches-506-510/session-management"));
+const Patches506510Validation = safeLazyImport(() => import("@/pages/admin/Patches506510Validation"));
+
+// PATCH 541 - Virtualized Logs Center
+const VirtualizedLogsCenter = safeLazyImport(() => import("@/modules/logs-center/VirtualizedLogsCenter"));
+
 // PATCH 540: Bundled modules para reduzir lazy loading (12 → 1 import)
 const FeedbackModule = ModulesBundle.FeedbackModule;
 const FleetModule = ModulesBundle.FleetModule;
@@ -743,6 +754,17 @@ function App() {
                       
                       {/* Validation Route - Patches 491-495 */}
                       <Route path="/admin/patches-491-495/validation" element={<Patches491495Validation />} />
+                      
+                      {/* PATCH 541 - PATCHES 506-510 UI Routes */}
+                      <Route path="/admin/patches-506-510/validation" element={<Patches506510Validation />} />
+                      <Route path="/admin/patches-506-510/ai-memory" element={<AIMemoryDashboard />} />
+                      <Route path="/admin/patches-506-510/backups" element={<BackupManagement />} />
+                      <Route path="/admin/patches-506-510/rls-audit" element={<RLSAuditDashboard />} />
+                      <Route path="/admin/patches-506-510/ai-feedback" element={<AIFeedbackDashboard />} />
+                      <Route path="/admin/patches-506-510/sessions" element={<SessionManagement />} />
+                      
+                      {/* PATCH 541 - Virtualized Logs */}
+                      <Route path="/logs-center-virtual" element={<VirtualizedLogsCenter />} />
                       
                       <Route path="/admin/documents/edit/:id" element={<CollaborativeEditor />} />
                       <Route path="/admin/documents/view/:id" element={<DocumentView />} />
