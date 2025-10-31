@@ -1,4 +1,3 @@
-// @ts-nocheck
 import React, { Suspense } from "react";
 import { Card, CardContent } from "@/components/ui/card";
 import LogisticsHubDashboard from "@/components/logistics/logistics-hub-dashboard";

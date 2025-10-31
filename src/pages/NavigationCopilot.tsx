@@ -1,4 +1,3 @@
-// @ts-nocheck
 /**
  * PATCH 425 - Navigation Copilot Page
  * AI-powered navigation with weather integration and route optimization
@@ -54,7 +53,7 @@ const NavigationCopilot: React.FC = () => {
 
   const loadSavedRoutes = async () => {
     try {
-      const { data, error } = await supabase
+      const { data, error } = await (supabase as any)
         .from("navigation_routes")
         .select("*")
         .order("created_at", { ascending: false })
@@ -113,7 +112,7 @@ const NavigationCopilot: React.FC = () => {
     setIsSaving(true);
 
     try {
-      const { data, error } = await supabase
+      const { data, error } = await (supabase as any)
         .from("navigation_routes")
         .insert({
           route_name: `${originName} to ${destName}`,
@@ -139,7 +138,7 @@ const NavigationCopilot: React.FC = () => {
       // Save associated alerts
       if (data && route.weatherAlerts.length > 0) {
         const alertsToInsert = route.weatherAlerts.map(alert => ({
-          route_id: data.id,
+          route_id: (data as any).id,
           alert_type: alert.type,
           severity: alert.severity,
           title: `Weather Alert: ${alert.type}`,
@@ -149,11 +148,11 @@ const NavigationCopilot: React.FC = () => {
           valid_until: new Date(alert.validUntil).toISOString(),
         }));
 
-        await supabase.from("navigation_alerts").insert(alertsToInsert);
+        await (supabase as any).from("navigation_alerts").insert(alertsToInsert);
       }
 
       toast.success("Route saved successfully!");
-      logger.info("Route saved to database", { routeId: data?.id });
+      logger.info("Route saved to database", { routeId: (data as any)?.id });
       loadSavedRoutes();
     } catch (error) {
       logger.error("Failed to save route", error);

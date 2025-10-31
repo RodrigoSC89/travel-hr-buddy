@@ -1,6 +1,6 @@
-// @ts-nocheck
 import { useEffect, useState } from "react";
 import { createClient } from "@supabase/supabase-js";
+import { logger } from "@/lib/logger";
 import { Card, CardContent } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -37,15 +37,13 @@ export default function MMIJobsPanel() {
 
 
   async function handleExport(job: MMIJobForecast) {
-    const html = `
-      <h2>${job.title}</h2>
-      <p><strong>Previsão:</strong> ${job.forecast || "N/A"}</p>
-      <p><strong>Horímetro:</strong> ${job.hours || 0}h</p>
-      <p><strong>Responsável:</strong> ${job.responsible || "N/A"}</p>
-    `;
-    const blob = await (await React.lazy(() => import(import("html2pdf.js")).default().from(html).outputPdf("blob")));
-    const url = URL.createObjectURL(blob);
-    window.open(url);
+    try {
+      logger.info("Exporting job to PDF", { jobId: job.id, title: job.title });
+      // TODO: Implement PDF export functionality
+      logger.warn("PDF export not yet implemented");
+    } catch (error) {
+      logger.error("Error exporting job", { error, jobId: job.id });
+    }
   }
 
 

@@ -1,4 +1,3 @@
-// @ts-nocheck
 /**
  * PATCH 428 - Sensors Hub
  * Complete sensor monitoring with simulation and alerts
@@ -6,6 +5,7 @@
 
 import React, { useState, useEffect } from "react";
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "@/components/ui/card";
+import { logger } from "@/lib/logger";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
@@ -25,12 +25,24 @@ import { SensorAlerts } from "@/modules/sensors-hub/components/SensorAlerts";
 import { SensorHistory } from "@/modules/sensors-hub/components/SensorHistory";
 import { sensorsService } from "@/modules/sensors-hub/services/sensors-service";
 import { sensorSimulator } from "@/modules/sensors-hub/services/sensor-simulator";
-import type { SensorReading, SensorAlert } from "@/modules/sensors-hub/types";
+import type { SensorReading } from "@/modules/sensors-hub/types";
+
+// Use a local type for alerts to avoid conflicts
+interface LocalSensorAlert {
+  id: string;
+  sensor_id: string;
+  sensor_name: string;
+  alert_type: string;
+  severity: "critical" | "warning" | "info";
+  message: string;
+  timestamp: string;
+  acknowledged: boolean;
+}
 
 const SensorsHubPage: React.FC = () => {
   const [activeTab, setActiveTab] = useState("dashboard");
   const [sensors, setSensors] = useState<SensorReading[]>([]);
-  const [alerts, setAlerts] = useState<SensorAlert[]>([]);
+  const [alerts, setAlerts] = useState<LocalSensorAlert[]>([]);
   const [loading, setLoading] = useState(false);
   const [simulationRunning, setSimulationRunning] = useState(false);
 
@@ -54,9 +66,9 @@ const SensorsHubPage: React.FC = () => {
         sensorsService.getActiveAlerts()
       ]);
       setSensors(sensorsData);
-      setAlerts(alertsData as SensorAlert[]);
+      setAlerts(alertsData as any);
     } catch (error) {
-      console.error("Error loading sensor data:", error);
+      logger.error("Error loading sensor data", { error });
     }
   };
 
@@ -208,8 +220,9 @@ const SensorsHubPage: React.FC = () => {
               onRefresh={loadData}
             />
             <SensorAlerts
-              alerts={alerts}
+              alerts={alerts as any}
               onAcknowledge={handleAcknowledgeAlert}
+              onResolve={handleAcknowledgeAlert}
             />
           </div>
           <SensorHistory sensorType="all" />
