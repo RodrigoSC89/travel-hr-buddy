@@ -8,6 +8,7 @@ import { OrganizationProvider } from "./contexts/OrganizationContext";
 import { SmartLayout } from "./components/layout/SmartLayout";
 import { NAVIGATION, SuspenseFallback } from "@/config/navigation";
 import { initializeMonitoring } from "@/lib/monitoring/init";
+import { logger } from "@/lib/logger";
 import { CommandPalette } from "@/components/CommandPalette";
 import { OfflineBanner } from "@/components/OfflineBanner";
 import { systemWatchdog } from "@/ai/watchdog";
@@ -394,7 +395,6 @@ const Patch535MissionConsolidation = safeLazyImport(() => import("@/pages/admin/
 
 // Loading component otimizado para offshore
 const LoadingSpinner = () => {
-  console.log("🔄 LoadingSpinner renderizado");
   return (
     <div className="flex items-center justify-center min-h-[200px]">
       <div className="flex items-center gap-3">
@@ -443,7 +443,7 @@ const RedirectHandler = () => {
       }
     } catch (error) {
       // Handle cases where sessionStorage is not available
-      console.warn("Failed to restore navigation path:", error);
+      logger.warn("Failed to restore navigation path", { error });
     }
   }, [navigate, location]);
 
@@ -453,65 +453,88 @@ const RedirectHandler = () => {
 // Flag global para evitar dupla inicialização
 let isInitialized = false;
 
+// PATCH 536: Timeout para prevenir freeze na inicialização
+const INIT_TIMEOUT_MS = 5000;
+
 function App() {
-  // Initialize monitoring systems on app start
+  // Initialize monitoring systems on app start with timeout protection
   useEffect(() => {
     // Evita dupla inicialização causada por React StrictMode
     if (isInitialized) {
-      console.log("⚠️ App já inicializado, pulando inicialização duplicada");
+      logger.info("App already initialized, skipping duplicate initialization");
       return;
     }
     
     isInitialized = true;
-    console.log("🚀 Nautilus One - Inicializando sistema...");
+    logger.info("Nautilus One - Starting system initialization");
+    
+    // PATCH 536: Timeout de segurança para inicialização
+    const initTimeout = setTimeout(() => {
+      logger.error("Initialization timeout exceeded", { timeout: INIT_TIMEOUT_MS });
+    }, INIT_TIMEOUT_MS);
     
     try {
+      performance.mark('init-start');
+      
       initializeMonitoring();
-      console.log("✅ Monitoring inicializado");
-    } catch (error) {
-      console.error("❌ Erro ao inicializar monitoring:", error);
-    }
-    
-    // PATCH 85.0 - Iniciar System Watchdog automaticamente
-    try {
+      logger.info("Monitoring initialized");
+      
+      // PATCH 85.0 - Iniciar System Watchdog automaticamente
       systemWatchdog.start();
-      console.log("✅ System Watchdog iniciado");
-    } catch (error) {
-      console.error("❌ Erro ao iniciar watchdog:", error);
-    }
-    
-    // Preload módulos críticos durante idle time
-    try {
+      logger.info("System Watchdog started");
+      
+      // Preload módulos críticos durante idle time com proteção
       if ("requestIdleCallback" in window) {
         requestIdleCallback(() => {
-          console.log("⏳ Iniciando preload de módulos críticos...");
+          logger.debug("Starting critical modules preload");
           if ("preload" in Dashboard && typeof Dashboard.preload === "function") {
-            Dashboard.preload().then(() => console.log("✅ Dashboard preloaded"));
+            Dashboard.preload()
+              .then(() => logger.debug("Dashboard preloaded"))
+              .catch((error) => logger.warn("Dashboard preload failed", { error }));
           }
           if ("preload" in Travel && typeof Travel.preload === "function") {
-            Travel.preload().then(() => console.log("✅ Travel preloaded"));
+            Travel.preload()
+              .then(() => logger.debug("Travel preloaded"))
+              .catch((error) => logger.warn("Travel preload failed", { error }));
           }
-        });
+        }, { timeout: 3000 }); // Timeout para idle callback
       } else {
         setTimeout(() => {
-          console.log("⏳ Iniciando preload de módulos críticos (fallback)...");
+          logger.debug("Starting critical modules preload (fallback)");
           if ("preload" in Dashboard && typeof Dashboard.preload === "function") {
-            Dashboard.preload().then(() => console.log("✅ Dashboard preloaded"));
+            Dashboard.preload()
+              .then(() => logger.debug("Dashboard preloaded"))
+              .catch((error) => logger.warn("Dashboard preload failed", { error }));
           }
           if ("preload" in Travel && typeof Travel.preload === "function") {
-            Travel.preload().then(() => console.log("✅ Travel preloaded"));
+            Travel.preload()
+              .then(() => logger.debug("Travel preloaded"))
+              .catch((error) => logger.warn("Travel preload failed", { error }));
           }
         }, 2000);
       }
+      
+      performance.mark('init-end');
+      performance.measure('app-initialization', 'init-start', 'init-end');
+      const initMeasure = performance.getEntriesByName('app-initialization')[0];
+      
+      logger.info("App initialized successfully", { 
+        duration: `${initMeasure?.duration.toFixed(2)}ms` 
+      });
+      
+      clearTimeout(initTimeout);
+      
     } catch (error) {
-      console.error("❌ Erro no preload:", error);
+      logger.error("Critical error during initialization", { error });
+      clearTimeout(initTimeout);
     }
-    
-    console.log("✅ App inicializado com sucesso");
     
     return () => {
       systemWatchdog.stop();
       isInitialized = false; // Reset para hot-reload em dev
+      performance.clearMarks('init-start');
+      performance.clearMarks('init-end');
+      performance.clearMeasures('app-initialization');
     };
   }, []);
 

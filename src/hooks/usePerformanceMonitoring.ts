@@ -1,7 +1,7 @@
-// @ts-nocheck
 /**
- * usePerformanceMonitoring Hook - PATCH 67.5
+ * usePerformanceMonitoring Hook - PATCH 536
  * React hook for component-level performance monitoring
+ * FIXED: Removed @ts-nocheck and fixed setMetrics bug
  */
 
 import { useEffect, useState, useRef } from "react";
@@ -45,7 +45,7 @@ export function usePerformanceMonitoring(componentName: string) {
       setMetrics(prev => ({
         ...prev,
         [metric.name]: metric,
-      }, []));
+      }));
     });
 
     return unsubscribe;
