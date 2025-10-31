@@ -47,6 +47,29 @@ export const AdminPanel: React.FC = () => {
           </Badge>
         </div>
 
+        {/* Admin Control Center Quick Access */}
+        <Card className="border-2 border-primary/20 bg-gradient-to-r from-primary/5 to-primary/10">
+          <CardHeader>
+            <div className="flex items-center justify-between">
+              <div>
+                <CardTitle className="flex items-center gap-2">
+                  <Settings className="h-5 w-5" />
+                  Admin Control Center
+                  <Badge variant="default">New</Badge>
+                </CardTitle>
+                <CardDescription>
+                  Acesso centralizado a todas as ferramentas de administração, performance e validação
+                </CardDescription>
+              </div>
+              <Button asChild>
+                <a href="/admin/control-center">
+                  Acessar Control Center
+                </a>
+              </Button>
+            </div>
+          </CardHeader>
+        </Card>
+
         {/* Estatísticas resumidas */}
         <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
           <Card>
