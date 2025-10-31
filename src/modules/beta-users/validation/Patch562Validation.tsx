@@ -1,4 +1,3 @@
-// @ts-nocheck
 import { Card } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { CheckCircle2, XCircle, AlertCircle, Users, MessageSquare, Download } from "lucide-react";
