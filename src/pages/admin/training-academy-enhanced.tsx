@@ -1,5 +1,5 @@
-// @ts-nocheck
 import React, { useState, useEffect } from "react";
+import { logger } from "@/lib/logger";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
@@ -86,12 +86,12 @@ export default function TrainingAcademyEnhanced() {
   const loadData = async () => {
     try {
       const [progressData, certificatesData, historyData] = await Promise.all([
-        supabase
+        (supabase as any)
           .from("course_enrollments")
           .select("*, courses(title, category, estimated_duration_hours)")
           .order("last_accessed_at", { ascending: false })
           .limit(100),
-        supabase
+        (supabase as any)
           .from("certifications")
           .select("*, courses(title)")
           .order("issue_date", { ascending: false })
@@ -106,7 +106,7 @@ export default function TrainingAcademyEnhanced() {
       setCertificates(certificatesData.data || []);
       setLearningHistory(historyData);
     } catch (error) {
-      console.error("Error loading data:", error);
+      logger.error("Error loading data:", error);
       toast({
         title: "Erro",
         description: "Falha ao carregar dados",
@@ -120,7 +120,7 @@ export default function TrainingAcademyEnhanced() {
   const loadLearningHistory = async () => {
     try {
       // Aggregate user learning data
-      const { data, error } = await supabase
+      const { data, error } = await (supabase as any)
         .from("course_enrollments")
         .select("user_id, enrollment_status, time_spent_minutes, average_score");
       
@@ -129,7 +129,7 @@ export default function TrainingAcademyEnhanced() {
       // Group by user
       const userMap = new Map<string, any>();
       
-      data?.forEach(enrollment => {
+      data?.forEach((enrollment: any) => {
         const userId = enrollment.user_id;
         if (!userMap.has(userId)) {
           userMap.set(userId, {
@@ -166,7 +166,7 @@ export default function TrainingAcademyEnhanced() {
 
       return history;
     } catch (error) {
-      console.error("Error loading learning history:", error);
+      logger.error("Error loading learning history:", error);
       return [];
     }
   };
@@ -176,7 +176,7 @@ export default function TrainingAcademyEnhanced() {
       const { data: { user } } = await supabase.auth.getUser();
       const certificateNumber = `CERT-${Date.now()}-${Math.random().toString(36).substr(2, 9).toUpperCase()}`;
       
-      const { data, error } = await supabase
+      const { data, error } = await (supabase as any)
         .from("certifications")
         .insert({
           user_id: enrollment.user_id,
@@ -201,7 +201,7 @@ export default function TrainingAcademyEnhanced() {
       // Refresh certificates
       loadData();
     } catch (error) {
-      console.error("Error generating certificate:", error);
+      logger.error("Error generating certificate:", error);
       toast({
         title: "Erro",
         description: "Falha ao gerar certificado",
@@ -272,7 +272,7 @@ export default function TrainingAcademyEnhanced() {
 
   const updateProgress = async (enrollmentId: string, progress: number) => {
     try {
-      const { error } = await supabase
+      const { error } = await (supabase as any)
         .from("course_enrollments")
         .update({
           overall_progress_percentage: progress,
@@ -291,7 +291,7 @@ export default function TrainingAcademyEnhanced() {
         description: `Progresso salvo: ${progress}%`
       });
     } catch (error) {
-      console.error("Error updating progress:", error);
+      logger.error("Error updating progress:", error);
       toast({
         title: "Erro",
         description: "Falha ao atualizar progresso",

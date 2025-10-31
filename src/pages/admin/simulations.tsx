@@ -1,4 +1,3 @@
-// @ts-nocheck
 import React, { useState } from "react";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
@@ -15,7 +14,7 @@ export default function SimulationsPage() {
   const { data: stats } = useQuery<SimulationStats>({
     queryKey: ["simulation-stats"],
     queryFn: async () => {
-      const { data, error } = await supabase
+      const { data, error } = await (supabase as any)
         .rpc("get_simulation_stats");
       
       if (error) throw error;
@@ -27,7 +26,7 @@ export default function SimulationsPage() {
   const { data: simulations = [], isLoading } = useQuery<SimulationExercise[]>({
     queryKey: ["simulations", selectedType],
     queryFn: async () => {
-      let query = supabase
+      let query = (supabase as any)
         .from("simulation_exercises")
         .select("*")
         .order("next_due", { ascending: true });

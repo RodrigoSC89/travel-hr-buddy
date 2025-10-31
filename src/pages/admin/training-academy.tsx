@@ -1,4 +1,3 @@
-// @ts-nocheck
 import React, { useState } from "react";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
@@ -72,7 +71,7 @@ export default function TrainingAcademyAdmin() {
   const { data: courses = [], isLoading } = useQuery<Course[]>({
     queryKey: ["admin-courses"],
     queryFn: async () => {
-      const { data, error } = await supabase
+      const { data, error } = await (supabase as any)
         .from("courses")
         .select("*")
         .order("created_at", { ascending: false });
@@ -86,7 +85,7 @@ export default function TrainingAcademyAdmin() {
   const { data: enrollments = [] } = useQuery<Enrollment[]>({
     queryKey: ["course-enrollments"],
     queryFn: async () => {
-      const { data, error } = await supabase
+      const { data, error } = await (supabase as any)
         .from("course_enrollments")
         .select("*, courses(title)")
         .order("enrolled_at", { ascending: false })
@@ -102,10 +101,10 @@ export default function TrainingAcademyAdmin() {
     queryKey: ["training-stats"],
     queryFn: async () => {
       const [coursesCount, enrollmentsCount, completedCount, certificatesCount] = await Promise.all([
-        supabase.from("courses").select("id", { count: "exact", head: true }),
-        supabase.from("course_enrollments").select("id", { count: "exact", head: true }),
-        supabase.from("course_enrollments").select("id", { count: "exact", head: true }).eq("status", "completed"),
-        supabase.from("certifications").select("id", { count: "exact", head: true }).eq("is_valid", true)
+        (supabase as any).from("courses").select("id", { count: "exact", head: true }),
+        (supabase as any).from("course_enrollments").select("id", { count: "exact", head: true }),
+        (supabase as any).from("course_enrollments").select("id", { count: "exact", head: true }).eq("status", "completed"),
+        (supabase as any).from("certifications").select("id", { count: "exact", head: true }).eq("is_valid", true)
       ]);
 
       return {
@@ -122,7 +121,7 @@ export default function TrainingAcademyAdmin() {
     mutationFn: async (courseData: typeof newCourse) => {
       const { data: { user } } = await supabase.auth.getUser();
       
-      const { data, error } = await supabase
+      const { data, error } = await (supabase as any)
         .from("courses")
         .insert({
           ...courseData,
@@ -155,7 +154,7 @@ export default function TrainingAcademyAdmin() {
   // Update course mutation
   const updateCourseMutation = useMutation({
     mutationFn: async ({ id, updates }: { id: string; updates: Partial<Course> }) => {
-      const { data, error } = await supabase
+      const { data, error } = await (supabase as any)
         .from("courses")
         .update(updates)
         .eq("id", id)
@@ -185,7 +184,7 @@ export default function TrainingAcademyAdmin() {
   // Delete course mutation
   const deleteCourseMutation = useMutation({
     mutationFn: async (courseId: string) => {
-      const { error } = await supabase
+      const { error } = await (supabase as any)
         .from("courses")
         .delete()
         .eq("id", courseId);

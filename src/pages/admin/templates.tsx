@@ -1,4 +1,3 @@
-// @ts-nocheck
 "use client";
 
 import { useState, useEffect, useCallback } from "react";
@@ -91,7 +90,7 @@ export default function TemplatesPage() {
         return;
       }
 
-      const query = supabase
+      const query = (supabase as any)
         .from("templates")
         .select("*")
         .order("created_at", { ascending: false });
@@ -253,7 +252,7 @@ export default function TemplatesPage() {
 
       if (isEditing && currentTemplateId) {
         // Update existing template
-        const { error } = await supabase
+        const { error } = await (supabase as any)
           .from("templates")
           .update({
             title: title.trim(),
@@ -269,7 +268,7 @@ export default function TemplatesPage() {
         });
       } else {
         // Create new template
-        const { error } = await supabase
+        const { error } = await (supabase as any)
           .from("templates")
           .insert({
             title: title.trim(),
@@ -303,7 +302,7 @@ export default function TemplatesPage() {
   // Toggle favorite
   const toggleFavorite = async (template: Template) => {
     try {
-      const { error } = await supabase
+      const { error } = await (supabase as any)
         .from("templates")
         .update({ is_favorite: !template.is_favorite })
         .eq("id", template.id);
@@ -329,7 +328,7 @@ export default function TemplatesPage() {
   // Toggle private
   const togglePrivate = async (template: Template) => {
     try {
-      const { error } = await supabase
+      const { error } = await (supabase as any)
         .from("templates")
         .update({ is_private: !template.is_private })
         .eq("id", template.id);
@@ -355,7 +354,7 @@ export default function TemplatesPage() {
   // Delete template
   const deleteTemplate = async (id: string) => {
     try {
-      const { error } = await supabase
+      const { error } = await (supabase as any)
         .from("templates")
         .delete()
         .eq("id", id);
