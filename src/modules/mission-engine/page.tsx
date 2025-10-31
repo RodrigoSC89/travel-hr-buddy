@@ -24,6 +24,7 @@ import {
   Loader2
 } from "lucide-react";
 import { cn } from "@/lib/utils";
+import { usePreviewSafeMode } from "@/hooks/qa/usePreviewSafeMode";
 
 const stepTypeColors: Record<MissionStepType, string> = {
   scan: "bg-blue-500",
@@ -44,6 +45,14 @@ const statusIcons = {
 };
 
 export default function MissionEnginePage() {
+  // PATCH 624 - Preview Safe Mode
+  const { isValidated, validationPassed, setSafeInterval } = usePreviewSafeMode({
+    componentName: "MissionEnginePage",
+    enableValidation: true,
+    maxRenderTime: 3000,
+    silenceErrors: true
+  });
+
   const {
     missions,
     selectedMission,

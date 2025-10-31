@@ -14,6 +14,7 @@ import { Brain } from "lucide-react";
 import { format } from "date-fns";
 import { supabase } from "@/integrations/supabase/client";
 import { toast } from "sonner";
+import { usePreviewSafeMode } from "@/hooks/qa/usePreviewSafeMode";
 
 type Incident = {
   id: string;
@@ -32,12 +33,31 @@ export default function DPIntelligencePage() {
   const [loading, setLoading] = useState(false);
   const [analyzingId, setAnalyzingId] = useState<string | null>(null);
 
+  // PATCH 624 - Preview Safe Mode
+  const { safeFetchData, createLightweightMock, shouldShowData } = usePreviewSafeMode({
+    componentName: "DPIntelligencePage",
+    enableValidation: true,
+    maxRenderTime: 3000,
+    maxDataSize: 5120,
+    silenceErrors: true
+  });
+
   useEffect(() => {
     fetchIncidents();
   }, []);
 
   async function fetchIncidents() {
-    try {
+    const fallbackIncidents = createLightweightMock({
+      id: "mock-1",
+      title: "Mock Incident",
+      vessel: "Test Vessel",
+      date: new Date().toISOString(),
+      root_cause: "Testing",
+      class_dp: "2",
+      severity: "Médio"
+    }, 3);
+
+    const fetchFn = async () => {
       setLoading(true);
       const { data, error } = await (supabase as any)
         .from("dp_incidents")
@@ -49,7 +69,7 @@ export default function DPIntelligencePage() {
         toast.error("Erro ao carregar incidentes", {
           description: error.message
         });
-        return;
+        return fallbackIncidents;
       }
 
       // Calculate severity based on root cause and class
@@ -58,13 +78,12 @@ export default function DPIntelligencePage() {
         severity: determineSeverity(inc),
       }));
 
-      setIncidents(incidentsWithSeverity);
-    } catch (error) {
-      logger.error("Unexpected error loading incidents", { error });
-      toast.error("Erro ao carregar incidentes");
-    } finally {
-      setLoading(false);
-    }
+      return incidentsWithSeverity;
+    };
+
+    const data = await safeFetchData(fetchFn, fallbackIncidents, { maxSize: 5120 });
+    setIncidents(data);
+    setLoading(false);
   }
 
   function determineSeverity(incident: Incident): string {

@@ -14,6 +14,7 @@ import { DashboardWatchdog } from "./DashboardWatchdog";
 import { OfflineStatusBanner } from "./OfflineStatusBanner";
 import { usePerformanceLog } from "@/hooks/performance/usePerformanceLog";
 import { useRealtimeSync } from "@/hooks/useRealtimeSync";
+import { usePreviewSafeMode } from "@/hooks/qa/usePreviewSafeMode";
 import nautilusLogo from "@/assets/nautilus-logo.png";
 
 // Lazy load KPI components
@@ -59,6 +60,15 @@ export function ModularizedExecutiveDashboard() {
     onSlowRender: (time) => {
       console.warn(`Dashboard took ${time}ms to render - exceeds 3s threshold`);
     }
+  });
+
+  // PATCH 624: Preview Safe Mode
+  const { isValidated, validationPassed } = usePreviewSafeMode({
+    componentName: "ModularizedExecutiveDashboard",
+    enableValidation: true,
+    maxRenderTime: 3000,
+    maxDataSize: 5120,
+    silenceErrors: true
   });
 
   // PATCH 624: Offline sync for dashboard metadata

@@ -3,11 +3,13 @@ import { ProfessionalHeader } from "@/components/dashboard/professional-header";
 import { ProfessionalKPICard } from "@/components/dashboard/professional-kpi-card";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
-import { Ship, TrendingUp, Activity, CheckCircle, DollarSign, Users, Target, AlertTriangle, BarChart3, LineChart } from "lucide-react";
+import { Button } from "@/components/ui/button";
+import { Ship, TrendingUp, Activity, CheckCircle, DollarSign, Users, Target, AlertTriangle, BarChart3, LineChart, Shield } from "lucide-react";
 import { AreaChart, Area, LineChart as RechartsLine, Line, BarChart, Bar, PieChart, Pie, Cell, ResponsiveContainer, XAxis, YAxis, CartesianGrid, Tooltip, Legend } from "recharts";
 import { motion } from "framer-motion";
 import { useState } from "react";
 import { Link } from "react-router-dom";
+import { usePreviewSafeMode } from "@/hooks/qa/usePreviewSafeMode";
 
 // Dados mockados
 const revenueData = [
@@ -27,15 +29,31 @@ const fleetData = [
 
 const Index = () => {
   const [activeTab, setActiveTab] = useState("overview");
+  
+  // PATCH 624 - Preview Safe Mode
+  const { isValidated, validationPassed, shouldShowData } = usePreviewSafeMode({
+    componentName: "Index",
+    enableValidation: true,
+    maxRenderTime: 2000,
+    silenceErrors: true
+  });
 
   return (
     <div className="space-y-6 p-6 bg-gradient-to-br from-background via-background to-primary/5 min-h-screen">
-      <ProfessionalHeader
-        title="Dashboard Executivo"
-        subtitle="Visão estratégica e métricas em tempo real - Sistema Nautilus One"
-        showLogo={true}
-        showRealTime={true}
-      />
+      <div className="flex items-center justify-between">
+        <ProfessionalHeader
+          title="Dashboard Executivo"
+          subtitle="Visão estratégica e métricas em tempo real - Sistema Nautilus One"
+          showLogo={true}
+          showRealTime={true}
+        />
+        <Link to="/qa/preview">
+          <Button variant="outline" size="sm" className="gap-2">
+            <Shield className="h-4 w-4" />
+            QA Dashboard
+          </Button>
+        </Link>
+      </div>
 
       {/* KPIs Grid */}
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
