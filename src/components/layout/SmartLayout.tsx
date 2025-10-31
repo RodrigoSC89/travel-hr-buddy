@@ -5,6 +5,7 @@ import { SmartHeader } from "@/components/layout/SmartHeader";
 import { ThemeProvider } from "@/components/layout/theme-provider";
 import { Toaster } from "@/components/ui/sonner";
 import { mobileClasses } from "@/styles/mobile-ui-kit";
+import { logger } from "@/lib/logger";
 
 // Fallback timeout para prevenir travamentos no Suspense
 const SuspenseWithTimeout = ({ children, fallback, timeout = 5000 }: { 
@@ -17,7 +18,7 @@ const SuspenseWithTimeout = ({ children, fallback, timeout = 5000 }: {
   useEffect(() => {
     const timer = setTimeout(() => {
       setTimedOut(true);
-      console.warn("⚠️ Suspense timeout - forçando fallback");
+      logger.warn("⚠️ Suspense timeout - forçando fallback");
     }, timeout);
 
     return () => clearTimeout(timer);

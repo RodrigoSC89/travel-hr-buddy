@@ -37,9 +37,25 @@ export const CognitiveDashboard: React.FC = () => {
   const [filterTimeRange, setFilterTimeRange] = useState<"1h" | "24h" | "7d" | "30d">("24h");
 
   useEffect(() => {
-    loadDashboardData();
-    const interval = setInterval(loadDashboardData, 30000); // Refresh every 30s
-    return () => clearInterval(interval);
+    let isMounted = true;
+    
+    const loadData = async () => {
+      if (isMounted) {
+        await loadDashboardData();
+      }
+    };
+    
+    loadData();
+    const interval = setInterval(() => {
+      if (isMounted) {
+        loadData();
+      }
+    }, 30000); // Refresh every 30s
+    
+    return () => {
+      isMounted = false;
+      clearInterval(interval);
+    };
   }, []);
 
   const loadDashboardData = async () => {

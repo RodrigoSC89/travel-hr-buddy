@@ -8,6 +8,7 @@ import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert";
 import { Button } from "@/components/ui/button";
 import { AlertTriangle, RefreshCw, CheckCircle } from "lucide-react";
 import { supabase } from "@/integrations/supabase/client";
+import { logger } from "@/lib/logger";
 
 interface DashboardWatchdogProps {
   onHeal?: () => void;
@@ -99,7 +100,7 @@ export function DashboardWatchdog({ onHeal }: DashboardWatchdogProps) {
     setIsHealing(true);
     
     try {
-      console.log("[Watchdog] Attempting auto-heal...");
+      logger.info("[Watchdog] Attempting auto-heal...");
       
       // Log healing attempt
       await logWatchdogEvent({
@@ -121,18 +122,18 @@ export function DashboardWatchdog({ onHeal }: DashboardWatchdogProps) {
         autoHealAttempts: prev.autoHealAttempts + 1
       }));
 
-      // Wait a bit and re-check
-      setTimeout(() => {
+      // Wait a bit and re-check - with cleanup tracking
+      const recheckTimeout = setTimeout(() => {
         const stillHasIssues = runWatchdogChecks();
         
         if (!stillHasIssues) {
-          console.log("[Watchdog] Auto-heal successful");
+          logger.info("[Watchdog] Auto-heal successful");
           logWatchdogEvent({
             action: "auto_heal_success",
             attempt_number: state.autoHealAttempts + 1
           });
         } else {
-          console.warn("[Watchdog] Auto-heal failed, issues persist");
+          logger.warn("[Watchdog] Auto-heal failed, issues persist");
           logWatchdogEvent({
             action: "auto_heal_failed",
             attempt_number: state.autoHealAttempts + 1
@@ -141,9 +142,12 @@ export function DashboardWatchdog({ onHeal }: DashboardWatchdogProps) {
         
         setIsHealing(false);
       }, 2000);
+      
+      // Store timeout ID for cleanup if needed
+      (window as any).__watchdogTimeout = recheckTimeout;
 
     } catch (error) {
-      console.error("[Watchdog] Auto-heal error:", error);
+      logger.error("[Watchdog] Auto-heal error:", error);
       setIsHealing(false);
       
       await logWatchdogEvent({
@@ -157,7 +161,7 @@ export function DashboardWatchdog({ onHeal }: DashboardWatchdogProps) {
    * Manual heal trigger
    */
   const manualHeal = useCallback(() => {
-    console.log("[Watchdog] Manual heal triggered");
+    logger.info("[Watchdog] Manual heal triggered");
     logWatchdogEvent({ action: "manual_heal_trigger" });
     attemptAutoHeal();
   }, [attemptAutoHeal]);
@@ -179,6 +183,13 @@ export function DashboardWatchdog({ onHeal }: DashboardWatchdogProps) {
 
     return () => {
       clearInterval(interval);
+      
+      // Clear any pending timeouts
+      if ((window as any).__watchdogTimeout) {
+        clearTimeout((window as any).__watchdogTimeout);
+        delete (window as any).__watchdogTimeout;
+      }
+      
       window.removeEventListener("click", updateInteractionTime);
       window.removeEventListener("keydown", updateInteractionTime);
       window.removeEventListener("scroll", updateInteractionTime);
@@ -234,7 +245,7 @@ export function DashboardWatchdog({ onHeal }: DashboardWatchdogProps) {
  */
 async function logWatchdogEvent(data: Record<string, any>) {
   try {
-    console.log("[Watchdog Event]", JSON.stringify(data, null, 2));
+    logger.info("[Watchdog Event]", data);
     
     // Store in localStorage for debugging
     try {
@@ -245,6 +256,6 @@ async function logWatchdogEvent(data: Record<string, any>) {
       // Ignore localStorage errors
     }
   } catch (error) {
-    console.error("[Watchdog] Error logging event:", error);
+    logger.error("[Watchdog] Error logging event:", error);
   }
 }
