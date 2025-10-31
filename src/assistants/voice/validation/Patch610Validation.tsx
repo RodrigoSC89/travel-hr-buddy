@@ -1,14 +1,49 @@
-// @ts-nocheck
 import { useState } from "react";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { CheckCircle2, XCircle, Loader2 } from "lucide-react";
 
+interface FeedbackEvent {
+  timestamp: number;
+  message: string;
+  realtime: boolean;
+}
+
+interface RealtimeFeedback {
+  enabled: boolean;
+  streaming: boolean;
+  latency: number;
+  feedbackEvents: FeedbackEvent[];
+}
+
+interface VoiceMetadata {
+  language: string;
+  voice: string;
+  duration: number;
+  confidence: number;
+  ttsEngine: string;
+  priority?: string;
+}
+
+interface VoiceFeedbackLog {
+  id: string;
+  timestamp: number;
+  type: string;
+  voiceResponse: string;
+  metadata: VoiceMetadata;
+  hasMetadata: boolean;
+}
+
+interface FeedbackData {
+  realtime: RealtimeFeedback;
+  logs: VoiceFeedbackLog[];
+}
+
 export function Patch610Validation() {
   const [results, setResults] = useState<Record<string, boolean>>({});
   const [loading, setLoading] = useState(false);
-  const [feedbackData, setFeedbackData] = useState<any>(null);
+  const [feedbackData, setFeedbackData] = useState<FeedbackData | null>(null);
 
   const runValidation = async () => {
     setLoading(true);
@@ -148,7 +183,7 @@ export function Patch610Validation() {
               <li>Latência: {feedbackData.realtime.latency}ms</li>
               <li>Eventos Realtime: {feedbackData.realtime.feedbackEvents.length}</li>
               <li>Logs com Metadados: {feedbackData.logs.length}</li>
-              <li>Confidence Média: {(feedbackData.logs.reduce((sum: number, l: any) => sum + l.metadata.confidence, 0) / feedbackData.logs.length * 100).toFixed(1)}%</li>
+              <li>Confidence Média: {(feedbackData.logs.reduce((sum, l) => sum + l.metadata.confidence, 0) / feedbackData.logs.length * 100).toFixed(1)}%</li>
             </ul>
           </div>
         )}

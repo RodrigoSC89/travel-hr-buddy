@@ -1,14 +1,58 @@
-// @ts-nocheck
 import { useState } from "react";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { CheckCircle2, XCircle, Loader2 } from "lucide-react";
 
+interface Strategy {
+  id: string;
+  copilot: string;
+  strategy: string;
+  basedOnData: Record<string, unknown>;
+  confidence: number;
+  hasRealData: boolean;
+}
+
+interface UserFeedback {
+  strategyId: string;
+  userId: string;
+  timestamp: number;
+  rating: number;
+  comments: string;
+  implemented: boolean;
+  outcome: string;
+  registered: boolean;
+}
+
+interface Justification {
+  primaryReason: string;
+  supportingFactors: string[];
+  confidenceScore: number;
+  dataPoints: Record<string, unknown>;
+  alternatives: string[];
+  riskAssessment: string;
+  expectedOutcome: string;
+}
+
+interface AuditLog {
+  strategyId: string;
+  copilotType: string;
+  timestamp: number;
+  justification: Justification;
+  auditable: boolean;
+  hasJustification: boolean;
+}
+
+interface StrategyData {
+  strategies: Strategy[];
+  feedback: UserFeedback[];
+  auditLogs: AuditLog[];
+}
+
 export function Patch615Validation() {
   const [results, setResults] = useState<Record<string, boolean>>({});
   const [loading, setLoading] = useState(false);
-  const [strategyData, setStrategyData] = useState<any>(null);
+  const [strategyData, setStrategyData] = useState<StrategyData | null>(null);
 
   const runValidation = async () => {
     setLoading(true);
@@ -210,10 +254,10 @@ export function Patch615Validation() {
             <p className="text-sm font-medium mb-2">Status do Strategy Recommender:</p>
             <ul className="text-xs space-y-1">
               <li>Estratégias Geradas: {strategyData.strategies.length}</li>
-              <li>Copilotos Ativos: {new Set(strategyData.strategies.map((s: any) => s.copilot)).size}</li>
+              <li>Copilotos Ativos: {new Set(strategyData.strategies.map(s => s.copilot)).size}</li>
               <li>Feedback Registrados: {strategyData.feedback.length}</li>
-              <li>Rating Médio: {(strategyData.feedback.reduce((sum: number, f: any) => sum + f.rating, 0) / strategyData.feedback.length).toFixed(1)}/5</li>
-              <li>Confidence Média: {(strategyData.strategies.reduce((sum: number, s: any) => sum + s.confidence, 0) / strategyData.strategies.length * 100).toFixed(1)}%</li>
+              <li>Rating Médio: {(strategyData.feedback.reduce((sum, f) => sum + f.rating, 0) / strategyData.feedback.length).toFixed(1)}/5</li>
+              <li>Confidence Média: {(strategyData.strategies.reduce((sum, s) => sum + s.confidence, 0) / strategyData.strategies.length * 100).toFixed(1)}%</li>
             </ul>
           </div>
         )}

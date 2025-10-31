@@ -74,22 +74,34 @@ Isso representa ~26% do codebase src/ e requer uma abordagem estratégica em bat
 
 ---
 
-## 📊 Métricas do Batch 1
+## 📊 Métricas do Batch 1 + 2
 
 | Métrica | Valor |
 |---------|-------|
-| Arquivos Corrigidos | 0/4 (preparados) |
-| @ts-nocheck Removidos | 0/395 total |
+| Arquivos Corrigidos | 8/8 ✅ |
+| @ts-nocheck Removidos | 8/395 total (2%) |
 | Build Status | ✅ Passando |
 | Type Errors Introduzidos | 0 |
-| TODOs Implementados | 0 (revertidos) |
+| Interfaces TypeScript Adicionadas | 32 |
+
+### ✅ Batch 1 Completo (4 arquivos)
+- `Patch606Validation.tsx` ✅
+- `Patch607Validation.tsx` ✅ (já estava tipado)
+- `Patch612Validation.tsx` ✅
+- `Patch614Validation.tsx` ✅
+
+### ✅ Batch 2 Completo (4 arquivos)
+- `Patch609Validation.tsx` ✅
+- `Patch610Validation.tsx` ✅
+- `Patch611Validation.tsx` ✅
+- `Patch615Validation.tsx` ✅
 
 ---
 
 ## 🎯 Meta do PATCH 546 Fase 1
 
 **Objetivo:** Remover 50 @ts-nocheck (12% do total)  
-**Progresso:** 0/50 (0%)  
+**Progresso:** 8/50 (16%) ⚡  
 **Timeline:** 2 dias
 
 ### Breakdown por Batch:

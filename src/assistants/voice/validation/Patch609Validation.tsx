@@ -1,14 +1,44 @@
-// @ts-nocheck
 import { useState } from "react";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { CheckCircle2, XCircle, Loader2 } from "lucide-react";
 
+interface FallbackActivation {
+  triggered: boolean;
+  mode: string;
+  timestamp: number;
+  reason: string;
+  fallbackSystem: string;
+}
+
+interface TacticalCommand {
+  type: string;
+  executed: boolean;
+  result: string;
+  priority: string;
+  timestamp: number;
+}
+
+interface WatchdogEvent {
+  id: string;
+  type: string;
+  timestamp: number;
+  details: string;
+  registered: boolean;
+  severity: string;
+}
+
+interface FallbackData {
+  activation: FallbackActivation;
+  commands: TacticalCommand[];
+  watchdog: WatchdogEvent[];
+}
+
 export function Patch609Validation() {
   const [results, setResults] = useState<Record<string, boolean>>({});
   const [loading, setLoading] = useState(false);
-  const [fallbackData, setFallbackData] = useState<any>(null);
+  const [fallbackData, setFallbackData] = useState<FallbackData | null>(null);
 
   const runValidation = async () => {
     setLoading(true);

@@ -1,14 +1,59 @@
-// @ts-nocheck
 import { useState } from "react";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { CheckCircle2, XCircle, Loader2 } from "lucide-react";
 
+interface Controls3D {
+  rotate: boolean;
+  zoom: boolean;
+  pan: boolean;
+}
+
+interface Scene3D {
+  objects: number;
+  lights: number;
+  cameras: number;
+}
+
+interface Interface3D {
+  available: boolean;
+  interactive: boolean;
+  controls: Controls3D;
+  renderer: string;
+  scene: Scene3D;
+}
+
+interface StatusObject {
+  id: string;
+  status: string;
+  color: string;
+  reflected: boolean;
+}
+
+interface FPSTest {
+  test: number;
+  fps: number;
+  timestamp: number;
+}
+
+interface PerformanceData {
+  totalTests: number;
+  above30fps: number;
+  percentage: number;
+  avgFps: number;
+}
+
+interface VisualizerData {
+  interface: Interface3D;
+  statusObjects: StatusObject[];
+  performance: PerformanceData;
+}
+
 export function Patch611Validation() {
   const [results, setResults] = useState<Record<string, boolean>>({});
   const [loading, setLoading] = useState(false);
-  const [visualizerData, setVisualizerData] = useState<any>(null);
+  const [visualizerData, setVisualizerData] = useState<VisualizerData | null>(null);
 
   const runValidation = async () => {
     setLoading(true);
