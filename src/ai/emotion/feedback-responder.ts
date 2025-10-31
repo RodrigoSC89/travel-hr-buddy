@@ -1,11 +1,13 @@
 /**
- * PATCH 595 - Emotion-Aware Feedback System
+ * PATCH 536 - Emotion-Aware Feedback System
  * 
  * Registra e responde a emoções explícitas e implícitas do usuário
  * 
  * @module ai/emotion/feedback-responder
  * @created 2025-01-24
  */
+
+import { logger } from "@/lib/logger";
 
 export type EmotionType = "frustration" | "relief" | "stress" | "joy" | "confusion" | "satisfaction" | "anger" | "anxiety";
 export type InputModality = "text" | "voice" | "facial" | "gesture";
@@ -170,7 +172,7 @@ class FeedbackResponder {
       this.emotionHistory.shift();
     }
 
-    console.log("[FeedbackResponder] Emotion detected:", {
+    logger.debug("Emotion detected from user input", {
       feedbackId: feedback.id,
       primaryEmotion: feedback.primaryEmotion,
       intensity: primaryEmotion.intensity.toFixed(2),
@@ -290,7 +292,7 @@ class FeedbackResponder {
       break;
     }
 
-    console.log("[FeedbackResponder] Response adjusted in real-time:", {
+    logger.debug("Response adjusted for user emotion", {
       emotion: feedback.primaryEmotion,
       adjustmentsApplied: adjustments.length,
       suggestionsAdded: suggestions.length
@@ -401,7 +403,7 @@ class FeedbackResponder {
     });
 
     const accuracy = correct / testCases.length;
-    console.log("[FeedbackResponder] Accuracy validation:", {
+    logger.info("Emotion detection accuracy validated", {
       testCases: testCases.length,
       correct,
       accuracy: (accuracy * 100).toFixed(1) + "%"

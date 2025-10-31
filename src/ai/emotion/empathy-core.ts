@@ -1,11 +1,13 @@
 /**
- * PATCH 592 - Empathy Core Engine
+ * PATCH 536 - Empathy Core Engine
  * 
  * Simula empatia operacional com base em estado físico e emocional do usuário
  * 
  * @module ai/emotion/empathy-core
  * @created 2025-01-24
  */
+
+import { logger } from "@/lib/logger";
 
 export type EmotionalState = "calm" | "stressed" | "anxious" | "focused" | "tired" | "energized";
 export type StressLevel = "low" | "moderate" | "high" | "critical";
@@ -70,7 +72,7 @@ class EmpathyCore {
       this.emotionalHistory.shift();
     }
 
-    console.log("[EmpathyCore] Emotional state interpreted:", {
+    logger.debug("Emotional state interpreted", {
       emotionalState,
       stressLevel,
       cognitiveLoad: cognitiveLoad.toFixed(2),
@@ -149,7 +151,7 @@ class EmpathyCore {
       alerts.push("🧠 Sobrecarga cognitiva detectada");
     }
 
-    console.log("[EmpathyCore] Response adjusted:", {
+    logger.debug("Response adjusted for emotional state", {
       emotionalState: context.emotionalState,
       stressLevel: context.stressLevel,
       tone,
@@ -325,7 +327,7 @@ class EmpathyCore {
       }
     }
     
-    console.log("[EmpathyCore] User feedback processed:", feedback);
+    logger.debug("User feedback processed", { feedback });
   }
 
   /**

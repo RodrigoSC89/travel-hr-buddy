@@ -1,11 +1,13 @@
 /**
- * PATCH 594 - Adaptive Joint Decision Engine
+ * PATCH 536 - Adaptive Joint Decision Engine
  * 
  * Sistema de decisão conjunta IA+humano em tempo real
  * 
  * @module ai/decision/adaptive-joint-decision
  * @created 2025-01-24
  */
+
+import { logger } from "@/lib/logger";
 
 export type DecisionType = "strategic" | "tactical" | "operational" | "critical";
 export type DecisionStatus = "proposed" | "under_review" | "accepted" | "rejected" | "modified";
@@ -106,7 +108,7 @@ class AdaptiveJointDecision {
       deadline
     };
 
-    console.log("[AdaptiveJointDecision] Decision proposed:", {
+    logger.debug("Decision proposed", {
       id: proposal.id,
       type,
       optionsCount: optionsWithIds.length,
@@ -153,7 +155,7 @@ class AdaptiveJointDecision {
       this.adjustAIConfidence(proposal.type, status === "accepted");
     }
 
-    console.log("[AdaptiveJointDecision] Decision reviewed:", {
+    logger.debug("Decision reviewed", {
       decisionId: proposal.id,
       status,
       operator,
@@ -217,7 +219,7 @@ class AdaptiveJointDecision {
       successRate
     };
 
-    console.log("[AdaptiveJointDecision] AI confidence adjusted:", {
+    logger.info("AI confidence adjusted", {
       type,
       previousConfidence,
       newConfidence,
@@ -297,7 +299,7 @@ class AdaptiveJointDecision {
       result.executionStatus = "executing";
       result.executionTime = new Date();
       
-      console.log("[AdaptiveJointDecision] Decision execution started:", {
+      logger.info("Decision execution started", {
         decisionId,
         type: result.proposal.type
       });
@@ -313,7 +315,7 @@ class AdaptiveJointDecision {
       result.executionStatus = "completed";
       result.outcome = outcome;
       
-      console.log("[AdaptiveJointDecision] Decision execution completed:", {
+      logger.info("Decision execution completed", {
         decisionId,
         outcome
       });
@@ -332,7 +334,7 @@ class AdaptiveJointDecision {
       // Ajusta confiança para baixo em caso de falha
       this.adjustAIConfidence(result.proposal.type, false);
       
-      console.log("[AdaptiveJointDecision] Decision execution failed:", {
+      logger.warn("Decision execution failed", {
         decisionId,
         outcome
       });

@@ -1,12 +1,12 @@
-// @ts-nocheck
 /**
- * PATCH 234: Self Evolution Model
+ * PATCH 536: Self Evolution Model
  * 
  * AI behavior mutation system with automatic detection of suboptimal
  * functions, generation of alternatives, A/B testing, and replacement.
  */
 
 import { supabase } from "@/integrations/supabase/client";
+import { logger } from "@/lib/logger";
 
 export interface BehaviorFunction {
   id: string;
@@ -227,7 +227,10 @@ export class SelfEvolutionModel {
     testResult: ABTestResult
   ): Promise<boolean> {
     if (testResult.winner !== "B" || testResult.confidence < 0.8) {
-      console.log("Mutation rejected: insufficient improvement or confidence");
+      logger.info("Mutation rejected due to insufficient improvement", {
+        winner: testResult.winner,
+        confidence: testResult.confidence
+      });
       await this.logMutation(original, alternative, testResult, false);
       return false;
     }
@@ -239,10 +242,13 @@ export class SelfEvolutionModel {
       // Log successful mutation
       await this.logMutation(original, alternative, testResult, true);
 
-      console.log(`✅ Mutation applied: ${original.name} → ${alternative.name}`);
+      logger.info("Mutation applied successfully", {
+        originalName: original.name,
+        alternativeName: alternative.name
+      });
       return true;
     } catch (error) {
-      console.error("Failed to apply mutation:", error);
+      logger.error("Failed to apply mutation", { error });
       return false;
     }
   }
@@ -457,7 +463,7 @@ export class SelfEvolutionModel {
     alternative: AlternativeFunction
   ): Promise<void> {
     // This would update the function registry
-    console.log(`Replacing ${originalId} with ${alternative.id}`);
+    logger.debug("Replacing behavior function", { originalId, alternativeId: alternative.id });
   }
 
   private async logMutation(
@@ -470,7 +476,9 @@ export class SelfEvolutionModel {
       this.calculateOverallScore(original.performanceMetrics);
 
     try {
-      await supabase.from("behavior_mutation_log").insert({
+      // behavior_mutation_log table is optional
+      const supabaseQuery: any = supabase;
+      await supabaseQuery.from("behavior_mutation_log").insert({
         function_id: original.id,
         function_name: original.name,
         mutation_type: alternative.mutationType,
@@ -483,13 +491,15 @@ export class SelfEvolutionModel {
         timestamp: new Date().toISOString(),
       });
     } catch (error) {
-      console.error("Failed to log mutation:", error);
+      logger.error("Failed to log mutation", { error });
     }
   }
 
   private async getLatestMutationLog(functionId: string): Promise<MutationLog | null> {
     try {
-      const { data, error } = await supabase
+      // behavior_mutation_log table is optional
+      const supabaseQuery: any = supabase;
+      const { data, error } = await supabaseQuery
         .from("behavior_mutation_log")
         .select("*")
         .eq("function_id", functionId)
@@ -513,7 +523,7 @@ export class SelfEvolutionModel {
         timestamp: data.timestamp,
       } : null;
     } catch (error) {
-      console.error("Failed to fetch mutation log:", error);
+      logger.error("Failed to fetch mutation log", { error });
       return null;
     }
   }
