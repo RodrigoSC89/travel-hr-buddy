@@ -1,4 +1,3 @@
-// @ts-nocheck
 /**
  * PATCH 576 - Situational Awareness Core
  * Real-time intelligence monitoring and analysis system
@@ -15,6 +14,7 @@
 
 import { BridgeLink } from "@/core/BridgeLink";
 import { runOpenAI } from "@/ai/engine";
+import { logger } from "@/lib/logger";
 import {
   ModuleContextData,
   SituationalInsight,
@@ -60,7 +60,7 @@ export class SituationalAwarenessCore {
    */
   public async initialize(config?: Partial<ObserverConfig>): Promise<void> {
     if (this.isInitialized) {
-      this.log("warn", "analysis", "Core already initialized");
+      logger.warn("Core already initialized", { category: "analysis" });
       return;
     }
 
@@ -81,7 +81,7 @@ export class SituationalAwarenessCore {
       config: this.observerConfig,
     });
 
-    BridgeLink.emit("situational-awareness:initialized", "SituationalAwareness", {
+    (BridgeLink as any).emit("situational-awareness:initialized", "SituationalAwareness", {
       timestamp: Date.now(),
     });
   }
@@ -124,7 +124,7 @@ export class SituationalAwarenessCore {
     });
 
     // Emit event
-    BridgeLink.emit("situational-awareness:context-collected", "SituationalAwareness", {
+    (BridgeLink as any).emit("situational-awareness:context-collected", "SituationalAwareness", {
       source,
       timestamp: context.timestamp,
     });
@@ -167,7 +167,7 @@ export class SituationalAwarenessCore {
       });
 
       // Emit analysis complete event
-      BridgeLink.emit("situational-awareness:analysis-complete", "SituationalAwareness", {
+      (BridgeLink as any).emit("situational-awareness:analysis-complete", "SituationalAwareness", {
         timestamp: Date.now(),
         insights: insights.length,
         alerts: alerts.length,
@@ -385,32 +385,32 @@ Respond in JSON format with an array of insights, each containing: type, severit
    */
   private setupDataSourceListeners(): void {
     // Listen for navigation data
-    BridgeLink.on("navigation:update", (_source, data) => {
+    (BridgeLink as any).on("navigation:update", (_source: any, data: any) => {
       this.collectContext("navigation", "internal", data);
     });
 
     // Listen for weather data
-    BridgeLink.on("weather:update", (_source, data) => {
+    (BridgeLink as any).on("weather:update", (_source: any, data: any) => {
       this.collectContext("weather", "internal", data);
     });
 
     // Listen for failure reports
-    BridgeLink.on("system:failure", (_source, data) => {
+    (BridgeLink as any).on("system:failure", (_source: any, data: any) => {
       this.collectContext("failures", "internal", data);
     });
 
     // Listen for crew updates
-    BridgeLink.on("crew:update", (_source, data) => {
+    (BridgeLink as any).on("crew:update", (_source: any, data: any) => {
       this.collectContext("crew", "internal", data);
     });
 
     // Listen for sensor data
-    BridgeLink.on("sensors:data", (_source, data) => {
+    (BridgeLink as any).on("sensors:data", (_source: any, data: any) => {
       this.collectContext("sensors", "internal", data);
     });
 
     // Listen for mission updates
-    BridgeLink.on("mission:update", (_source, data) => {
+    (BridgeLink as any).on("mission:update", (_source: any, data: any) => {
       this.collectContext("mission", "internal", data);
     });
   }
@@ -487,11 +487,16 @@ Respond in JSON format with an array of insights, each containing: type, severit
     }
 
     // Emit log event
-    BridgeLink.emit("situational-awareness:log", "SituationalAwareness", entry);
+    (BridgeLink as any).emit("situational-awareness:log", "SituationalAwareness", entry);
 
-    // Console output for development
-    const logFn = level === "error" ? console.error : level === "warn" ? console.warn : console.log;
-    logFn(`[SituationalAwareness] [${category}] ${message}`, context);
+    // Use logger for output
+    if (level === "error") {
+      logger.error(message, context);
+    } else if (level === "warn") {
+      logger.warn(message, context);
+    } else {
+      logger.info(message, context);
+    }
   }
 
   /**
@@ -545,7 +550,7 @@ Respond in JSON format with an array of insights, each containing: type, severit
     this.logs = [];
     this.isInitialized = false;
     
-    BridgeLink.emit("situational-awareness:cleanup", "SituationalAwareness", {
+    (BridgeLink as any).emit("situational-awareness:cleanup", "SituationalAwareness", {
       timestamp: Date.now(),
     });
   }

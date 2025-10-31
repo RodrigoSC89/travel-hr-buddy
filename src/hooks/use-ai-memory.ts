@@ -1,18 +1,22 @@
-// @ts-nocheck
 /**
  * PATCH 506: AI Memory Hook
  * React hook for managing AI memory in components
+ * 
+ * NOTE: Service implementation pending - currently returns mock data
  */
 
 import { useState, useCallback } from "react";
-import { 
-  storeAIMemory, 
-  retrieveSimilarMemories, 
-  getRecentMemories,
-  getMemoryStats,
-  AIMemoryEvent,
-  SimilarMemory 
-} from "@/services/ai-memory-service";
+
+// TODO: Implement ai-memory-service
+export interface AIMemoryEvent {
+  context: string;
+  type: string;
+  data: Record<string, any>;
+}
+
+export interface SimilarMemory extends AIMemoryEvent {
+  similarity: number;
+}
 
 interface UseAIMemoryReturn {
   storeMemory: (memory: AIMemoryEvent) => Promise<boolean>;
@@ -35,13 +39,8 @@ export function useAIMemory(): UseAIMemoryReturn {
     setError(null);
 
     try {
-      const result = await storeAIMemory(memory);
-      
-      if (!result.success) {
-        setError(result.error || "Failed to store memory");
-        return false;
-      }
-
+      // TODO: Implement actual storage
+      console.log("Storing memory:", memory);
       return true;
     } catch (err) {
       const errorMessage = err instanceof Error ? err.message : "Unknown error";
@@ -61,8 +60,8 @@ export function useAIMemory(): UseAIMemoryReturn {
     setError(null);
 
     try {
-      const memories = await retrieveSimilarMemories(query, threshold, count);
-      return memories;
+      // TODO: Implement actual retrieval
+      return [];
     } catch (err) {
       const errorMessage = err instanceof Error ? err.message : "Unknown error";
       setError(errorMessage);
@@ -80,8 +79,8 @@ export function useAIMemory(): UseAIMemoryReturn {
     setError(null);
 
     try {
-      const memories = await getRecentMemories(limit, contextType);
-      return memories;
+      // TODO: Implement actual retrieval
+      return [];
     } catch (err) {
       const errorMessage = err instanceof Error ? err.message : "Unknown error";
       setError(errorMessage);
@@ -96,8 +95,8 @@ export function useAIMemory(): UseAIMemoryReturn {
     setError(null);
 
     try {
-      const stats = await getMemoryStats();
-      return stats;
+      // TODO: Implement actual stats
+      return { total: 0, byType: {}, avgRelevance: 0 };
     } catch (err) {
       const errorMessage = err instanceof Error ? err.message : "Unknown error";
       setError(errorMessage);

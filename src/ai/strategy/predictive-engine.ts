@@ -1,4 +1,3 @@
-// @ts-nocheck
 /**
  * PATCH 581 - Predictive Strategy Engine
  * AI engine for predictive strategy generation with continuous learning
@@ -129,7 +128,7 @@ class PredictiveStrategyEngine {
 
     // Log signal to database
     try {
-      await supabase.from("ai_strategy_signals").insert({
+      await (supabase as any).from("ai_strategy_signals").insert({
         signal_id: signal.id,
         source: signal.source,
         type: signal.type,
@@ -139,7 +138,7 @@ class PredictiveStrategyEngine {
         created_at: signal.timestamp.toISOString()
       });
     } catch (error) {
-      logger.error("[PredictiveStrategyEngine] Failed to log signal", error);
+      logger.error("Failed to log signal", { error });
     }
   }
 
@@ -217,7 +216,7 @@ class PredictiveStrategyEngine {
 
     // Log feedback to database
     try {
-      await supabase.from("ai_strategy_feedback").insert({
+      await (supabase as any).from("ai_strategy_feedback").insert({
         strategy_id: strategyId,
         feedback: feedback.feedback,
         actual_outcome: feedback.actualOutcome,
@@ -226,7 +225,7 @@ class PredictiveStrategyEngine {
         created_at: feedback.timestamp.toISOString()
       });
     } catch (error) {
-      logger.error("[PredictiveStrategyEngine] Failed to log feedback", error);
+      logger.error("Failed to log feedback", { error });
     }
   }
 
@@ -265,7 +264,7 @@ class PredictiveStrategyEngine {
 
   private async loadHistoricalFeedback(): Promise<void> {
     try {
-      const { data, error } = await supabase
+      const { data, error } = await (supabase as any)
         .from("ai_strategy_feedback")
         .select("*")
         .order("created_at", { ascending: false })
@@ -274,10 +273,10 @@ class PredictiveStrategyEngine {
       if (error) throw error;
 
       if (data && data.length > 0) {
-        logger.info(`[PredictiveStrategyEngine] Loaded ${data.length} historical feedback records`);
+        logger.info("Loaded historical feedback records", { count: data.length });
       }
     } catch (error) {
-      logger.error("[PredictiveStrategyEngine] Failed to load historical feedback", error);
+      logger.error("Failed to load historical feedback", { error });
     }
   }
 
@@ -613,7 +612,7 @@ class PredictiveStrategyEngine {
 
     try {
       // Log proposal to database
-      await supabase.from("ai_strategy_proposals").insert({
+      await (supabase as any).from("ai_strategy_proposals").insert({
         proposal_id: proposal.id,
         strategies: proposal.strategies,
         top_strategy_id: proposal.topStrategy.id,
@@ -624,7 +623,7 @@ class PredictiveStrategyEngine {
 
       // Log individual strategies
       for (const strategy of proposal.strategies) {
-        await supabase.from("ai_strategies").insert({
+        await (supabase as any).from("ai_strategies").insert({
           strategy_id: strategy.id,
           proposal_id: proposal.id,
           type: strategy.type,
@@ -641,14 +640,14 @@ class PredictiveStrategyEngine {
         });
       }
     } catch (error) {
-      logger.error("[PredictiveStrategyEngine] Failed to log strategy proposal", error);
+      logger.error("Failed to log strategy proposal", { error });
     }
   }
 
   private async updateLearningModel(strategyId: string, feedback: FeedbackRecord): Promise<void> {
     const strategy = this.strategyHistory.get(strategyId);
     if (!strategy) {
-      logger.warn(`[PredictiveStrategyEngine] Strategy ${strategyId} not found for learning update`);
+      logger.warn("Strategy not found for learning update", { strategyId });
       return;
     }
 

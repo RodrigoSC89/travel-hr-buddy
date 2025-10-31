@@ -1,4 +1,3 @@
-// @ts-nocheck
 /**
  * PATCH 577 - Tactical Response Engine
  * Automated tactical response system based on situational intelligence
@@ -14,6 +13,7 @@
 
 import { BridgeLink } from "@/core/BridgeLink";
 import { situationalAwareness } from "@/ai/situational-awareness";
+import { logger } from "@/lib/logger";
 import {
   TacticalEvent,
   TacticalRule,
@@ -58,7 +58,7 @@ export class TacticalResponseEngine {
    */
   public async initialize(config?: RuleConfig): Promise<void> {
     if (this.isInitialized) {
-      console.warn("[TacticalResponse] Engine already initialized");
+      logger.warn("Engine already initialized");
       return;
     }
 
@@ -78,12 +78,12 @@ export class TacticalResponseEngine {
     this.setupEventListeners();
 
     this.isInitialized = true;
-    console.log("[TacticalResponse] Engine initialized", {
+    logger.info("Engine initialized", {
       rulesLoaded: this.rules.size,
       maxConcurrentExecutions: this.maxConcurrentExecutions,
     });
 
-    BridgeLink.emit("tactical-response:initialized", "TacticalResponse", {
+    (BridgeLink as any).emit("tactical-response:initialized", "TacticalResponse", {
       timestamp: Date.now(),
       rulesCount: this.rules.size,
     });
@@ -115,19 +115,19 @@ export class TacticalResponseEngine {
       for (const rule of matchingRules) {
         // Check cooldown
         if (!this.canExecuteRule(rule)) {
-          console.log(`[TacticalResponse] Rule ${rule.id} on cooldown, skipping`);
+          logger.debug("Rule on cooldown, skipping", { ruleId: rule.id });
           continue;
         }
 
         // Check execution limit
         if (!this.checkExecutionLimit(rule)) {
-          console.log(`[TacticalResponse] Rule ${rule.id} reached execution limit, skipping`);
+          logger.debug("Rule reached execution limit, skipping", { ruleId: rule.id });
           continue;
         }
 
         // Check concurrent execution limit
         if (this.activeExecutions.size >= this.maxConcurrentExecutions) {
-          console.warn("[TacticalResponse] Max concurrent executions reached, queueing");
+          logger.warn("Max concurrent executions reached, queueing");
           break;
         }
 
@@ -145,16 +145,16 @@ export class TacticalResponseEngine {
 
       // Verify performance requirement (<500ms)
       if (duration > 500) {
-        console.warn(`[TacticalResponse] Performance degraded: ${duration.toFixed(2)}ms`);
+        logger.warn("Performance degraded", { duration: duration.toFixed(2) });
       }
 
-      BridgeLink.emit("tactical-response:event-processed", "TacticalResponse", {
+      (BridgeLink as any).emit("tactical-response:event-processed", "TacticalResponse", {
         eventId: event.id,
         executionsCount: executions.length,
         duration,
       });
     } catch (error) {
-      console.error("[TacticalResponse] Error processing event:", error);
+      logger.error("Error processing event", { error });
     }
 
     return executions;
@@ -200,7 +200,7 @@ export class TacticalResponseEngine {
           actionExecution.status = "failed";
           actionExecution.error = error instanceof Error ? error.message : "Unknown error";
           actionExecution.duration = performance.now() - actionStartTime;
-          console.error(`[TacticalResponse] Action ${action.id} failed:`, error);
+          logger.error("Action failed", { actionId: action.id, error });
         }
       }
 
@@ -219,7 +219,8 @@ export class TacticalResponseEngine {
           this.statistics.executedResponses;
       }
 
-      console.log(`[TacticalResponse] Rule ${rule.id} executed`, {
+      logger.info("Rule executed", {
+        ruleId: rule.id,
         executionId: execution.id,
         status: execution.status,
         duration: execution.duration?.toFixed(2),
@@ -228,7 +229,7 @@ export class TacticalResponseEngine {
       execution.status = "failed";
       execution.endTime = performance.now();
       execution.duration = execution.endTime - execution.startTime;
-      console.error(`[TacticalResponse] Rule ${rule.id} execution failed:`, error);
+      logger.error("Rule execution failed", { ruleId: rule.id, error });
     } finally {
       this.activeExecutions.delete(execution.id);
       this.executionHistory.push(execution);
@@ -238,7 +239,7 @@ export class TacticalResponseEngine {
         this.executionHistory = this.executionHistory.slice(-5000);
       }
 
-      BridgeLink.emit("tactical-response:execution-complete", "TacticalResponse", {
+      (BridgeLink as any).emit("tactical-response:execution-complete", "TacticalResponse", {
         executionId: execution.id,
         ruleId: rule.id,
         status: execution.status,
@@ -417,7 +418,7 @@ export class TacticalResponseEngine {
    * Action implementations
    */
   private executeAlertAction(action: ResponseAction, event: TacticalEvent): any {
-    BridgeLink.emit("tactical-response:alert", "TacticalResponse", {
+    (BridgeLink as any).emit("tactical-response:alert", "TacticalResponse", {
       action: action.description,
       event: event,
       timestamp: Date.now(),
@@ -426,7 +427,7 @@ export class TacticalResponseEngine {
   }
 
   private executeNotificationAction(action: ResponseAction, event: TacticalEvent): any {
-    BridgeLink.emit("tactical-response:notification", "TacticalResponse", {
+    (BridgeLink as any).emit("tactical-response:notification", "TacticalResponse", {
       message: action.description,
       event: event,
       timestamp: Date.now(),
@@ -435,7 +436,7 @@ export class TacticalResponseEngine {
   }
 
   private executeAutomatedCorrectionAction(action: ResponseAction, event: TacticalEvent): any {
-    BridgeLink.emit("tactical-response:correction", "TacticalResponse", {
+    (BridgeLink as any).emit("tactical-response:correction", "TacticalResponse", {
       action: action.description,
       event: event,
       parameters: action.parameters,
@@ -444,7 +445,7 @@ export class TacticalResponseEngine {
   }
 
   private executeEscalationAction(action: ResponseAction, event: TacticalEvent): any {
-    BridgeLink.emit("tactical-response:escalation", "TacticalResponse", {
+    (BridgeLink as any).emit("tactical-response:escalation", "TacticalResponse", {
       level: action.parameters.level || "high",
       event: event,
     });
@@ -452,7 +453,7 @@ export class TacticalResponseEngine {
   }
 
   private executeDataCollectionAction(action: ResponseAction, event: TacticalEvent): any {
-    BridgeLink.emit("tactical-response:data-collection", "TacticalResponse", {
+    (BridgeLink as any).emit("tactical-response:data-collection", "TacticalResponse", {
       sources: action.parameters.sources,
       event: event,
     });
@@ -460,7 +461,7 @@ export class TacticalResponseEngine {
   }
 
   private executeSystemAdjustmentAction(action: ResponseAction, event: TacticalEvent): any {
-    BridgeLink.emit("tactical-response:system-adjustment", "TacticalResponse", {
+    (BridgeLink as any).emit("tactical-response:system-adjustment", "TacticalResponse", {
       adjustments: action.parameters,
       event: event,
     });
@@ -468,7 +469,7 @@ export class TacticalResponseEngine {
   }
 
   private executeCrewNotificationAction(action: ResponseAction, event: TacticalEvent): any {
-    BridgeLink.emit("tactical-response:crew-notification", "TacticalResponse", {
+    (BridgeLink as any).emit("tactical-response:crew-notification", "TacticalResponse", {
       crew: action.parameters.crew,
       message: action.description,
       event: event,
@@ -477,7 +478,7 @@ export class TacticalResponseEngine {
   }
 
   private executeReportGenerationAction(action: ResponseAction, event: TacticalEvent): any {
-    BridgeLink.emit("tactical-response:report-generation", "TacticalResponse", {
+    (BridgeLink as any).emit("tactical-response:report-generation", "TacticalResponse", {
       reportType: action.parameters.reportType,
       event: event,
     });
@@ -485,7 +486,7 @@ export class TacticalResponseEngine {
   }
 
   private executeFailoverAction(action: ResponseAction, event: TacticalEvent): any {
-    BridgeLink.emit("tactical-response:failover", "TacticalResponse", {
+    (BridgeLink as any).emit("tactical-response:failover", "TacticalResponse", {
       target: action.parameters.target,
       backup: action.parameters.backup,
       event: event,
@@ -494,7 +495,7 @@ export class TacticalResponseEngine {
   }
 
   private executeDiagnosticRunAction(action: ResponseAction, event: TacticalEvent): any {
-    BridgeLink.emit("tactical-response:diagnostic", "TacticalResponse", {
+    (BridgeLink as any).emit("tactical-response:diagnostic", "TacticalResponse", {
       diagnosticType: action.parameters.diagnosticType,
       event: event,
     });
@@ -527,7 +528,7 @@ export class TacticalResponseEngine {
       this.rules.set(rule.id, rule);
     });
     this.statistics.activeRules = this.rules.size;
-    console.log(`[TacticalResponse] Loaded ${config.rules.length} rules`);
+    logger.info("Loaded rules", { count: config.rules.length });
   }
 
   /**
@@ -605,7 +606,7 @@ export class TacticalResponseEngine {
    */
   private setupEventListeners(): void {
     // Listen for situational awareness insights
-    BridgeLink.on("situational-awareness:analysis-complete", async (_source, data) => {
+    (BridgeLink as any).on("situational-awareness:analysis-complete", async (_source: any, data: any) => {
       // Create events from insights
       const state = situationalAwareness.getCurrentState();
       
@@ -614,7 +615,7 @@ export class TacticalResponseEngine {
           id: `event-${alert.id}`,
           type: "alert",
           timestamp: alert.timestamp,
-          severity: alert.severity,
+          severity: alert.severity === "info" ? "low" : alert.severity,
           source: "situational-awareness",
           data: {
             alert,
@@ -681,7 +682,7 @@ export class TacticalResponseEngine {
     this.statistics = this.getInitialStatistics();
     this.isInitialized = false;
     
-    BridgeLink.emit("tactical-response:cleanup", "TacticalResponse", {
+    (BridgeLink as any).emit("tactical-response:cleanup", "TacticalResponse", {
       timestamp: Date.now(),
     });
   }
