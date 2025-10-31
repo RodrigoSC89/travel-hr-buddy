@@ -222,6 +222,7 @@ const VirtualizedLogsCenter = safeLazyImport(() => import("@/modules/logs-center
 
 // PATCH 541 Phase 3 - Performance Tools
 const SystemBenchmark = safeLazyImport(() => import("@/pages/admin/SystemBenchmark"));
+const SystemHealthDashboard = safeLazyImport(() => import("@/pages/admin/SystemHealth"));
 
 // PATCH 540: Bundled modules para reduzir lazy loading (12 → 1 import)
 const FeedbackModule = ModulesBundle.FeedbackModule;
@@ -771,6 +772,7 @@ function App() {
                       
                       {/* PATCH 541 Phase 3 - Performance Tools */}
                       <Route path="/admin/benchmark" element={<SystemBenchmark />} />
+                      <Route path="/admin/health-validation" element={<SystemHealthDashboard />} />
                       
                       <Route path="/admin/documents/edit/:id" element={<CollaborativeEditor />} />
                       <Route path="/admin/documents/view/:id" element={<DocumentView />} />
