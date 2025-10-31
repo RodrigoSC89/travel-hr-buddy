@@ -1,4 +1,3 @@
-// @ts-nocheck
 /**
  * PATCH 589: Auto-Reconfiguration Protocols
  * 
@@ -11,6 +10,7 @@
  */
 
 import { supabase } from "@/integrations/supabase/client";
+import { logger } from "@/lib/logger";
 
 export type ReconfigTrigger = 
   | "failure_threshold_exceeded"
@@ -532,7 +532,7 @@ export class AutoReconfigurationEngine {
    */
   private async storeConfiguration(config: SystemConfiguration): Promise<void> {
     try {
-      await supabase.from("ai_configurations").insert({
+      await (supabase as any).from("ai_configurations").insert({
         config_id: config.configId,
         model_name: config.modelName,
         parameters: config.parameters,
@@ -542,13 +542,13 @@ export class AutoReconfigurationEngine {
         timestamp: config.timestamp,
       });
     } catch (error) {
-      console.error("Failed to store configuration:", error);
+      logger.error("Failed to store configuration", { error });
     }
   }
 
   private async storeTrigger(trigger: ReconfigurationTriggerEvent): Promise<void> {
     try {
-      await supabase.from("ai_reconfig_triggers").insert({
+      await (supabase as any).from("ai_reconfig_triggers").insert({
         trigger_id: trigger.triggerId,
         trigger_type: trigger.triggerType,
         reason: trigger.reason,
@@ -558,13 +558,13 @@ export class AutoReconfigurationEngine {
         timestamp: trigger.timestamp,
       });
     } catch (error) {
-      console.error("Failed to store trigger:", error);
+      logger.error("Failed to store trigger", { error });
     }
   }
 
   private async storeAction(action: ReconfigurationAction): Promise<void> {
     try {
-      await supabase.from("ai_reconfig_actions").insert({
+      await (supabase as any).from("ai_reconfig_actions").insert({
         action_id: action.actionId,
         trigger_id: action.triggerId,
         configuration_type: action.configurationType,
@@ -575,13 +575,13 @@ export class AutoReconfigurationEngine {
         timestamp: action.timestamp,
       });
     } catch (error) {
-      console.error("Failed to store action:", error);
+      logger.error("Failed to store action", { error });
     }
   }
 
   private async storeValidation(validation: PerformanceValidation): Promise<void> {
     try {
-      await supabase.from("ai_performance_validations").insert({
+      await (supabase as any).from("ai_performance_validations").insert({
         validation_id: validation.validationId,
         action_id: validation.actionId,
         before_metrics: validation.beforeMetrics,
@@ -592,7 +592,7 @@ export class AutoReconfigurationEngine {
         timestamp: validation.timestamp,
       });
     } catch (error) {
-      console.error("Failed to store validation:", error);
+      logger.error("Failed to store validation", { error });
     }
   }
 }

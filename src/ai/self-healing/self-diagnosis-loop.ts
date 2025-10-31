@@ -1,4 +1,3 @@
-// @ts-nocheck
 /**
  * PATCH 590: Self-Diagnosis + Recovery Loop
  * 
@@ -11,6 +10,7 @@
  */
 
 import { supabase } from "@/integrations/supabase/client";
+import { logger } from "@/lib/logger";
 
 export type ModuleStatus = "healthy" | "degraded" | "failing" | "critical";
 export type AnomalyType = "performance" | "accuracy" | "availability" | "resource" | "latency";
@@ -118,7 +118,7 @@ export class SelfDiagnosisLoop {
    */
   async startDiagnosticLoop(): Promise<void> {
     if (this.isRunning) {
-      console.warn("Diagnostic loop already running");
+      logger.warn("Diagnostic loop already running");
       return;
     }
 
@@ -160,7 +160,7 @@ export class SelfDiagnosisLoop {
         setTimeout(() => this.runDiagnosticCycle(), this.scanInterval);
       }
     } catch (error) {
-      console.error("Error in diagnostic cycle:", error);
+      logger.error("Error in diagnostic cycle", { error });
       // Continue loop even on error
       if (this.isRunning) {
         setTimeout(() => this.runDiagnosticCycle(), this.scanInterval);
@@ -625,7 +625,7 @@ export class SelfDiagnosisLoop {
    */
   private async storeScan(scan: DiagnosticScan): Promise<void> {
     try {
-      await supabase.from("ai_diagnostic_scans").insert({
+      await (supabase as any).from("ai_diagnostic_scans").insert({
         scan_id: scan.scanId,
         module_id: scan.moduleId,
         status: scan.status,
@@ -635,13 +635,13 @@ export class SelfDiagnosisLoop {
         next_scan_scheduled: scan.nextScanScheduled,
       });
     } catch (error) {
-      console.error("Failed to store scan:", error);
+      logger.error("Failed to store scan", { error });
     }
   }
 
   private async storePlan(plan: RecoveryPlan): Promise<void> {
     try {
-      await supabase.from("ai_recovery_plans").insert({
+      await (supabase as any).from("ai_recovery_plans").insert({
         plan_id: plan.planId,
         scan_id: plan.scanId,
         anomalies: plan.anomalies,
@@ -653,13 +653,13 @@ export class SelfDiagnosisLoop {
         timestamp: plan.timestamp,
       });
     } catch (error) {
-      console.error("Failed to store plan:", error);
+      logger.error("Failed to store plan", { error });
     }
   }
 
   private async storeExecution(execution: RecoveryExecution): Promise<void> {
     try {
-      await supabase.from("ai_recovery_executions").insert({
+      await (supabase as any).from("ai_recovery_executions").insert({
         execution_id: execution.executionId,
         plan_id: execution.planId,
         action_id: execution.actionId,
@@ -672,7 +672,7 @@ export class SelfDiagnosisLoop {
         metrics: execution.metrics,
       });
     } catch (error) {
-      console.error("Failed to store execution:", error);
+      logger.error("Failed to store execution", { error });
     }
   }
 }

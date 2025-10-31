@@ -1,4 +1,3 @@
-// @ts-nocheck
 /**
  * PATCH 234 - Self-Evolution Model
  * 
@@ -9,6 +8,7 @@
  */
 
 import { supabase } from "@/integrations/supabase/client";
+import { logger } from "@/lib/logger";
 
 export interface Failure {
   id: string;
@@ -54,12 +54,12 @@ class SelfEvolutionModel {
    */
   startMonitoring(): void {
     if (this.monitoringActive) {
-      console.warn("[SelfEvolution] Already monitoring");
+      logger.warn("Already monitoring");
       return;
     }
 
     this.monitoringActive = true;
-    console.log("[SelfEvolution] Started failure monitoring");
+    logger.info("Started failure monitoring");
 
     // Set up global error handler
     window.addEventListener("error", (event) => {
@@ -107,11 +107,11 @@ class SelfEvolutionModel {
       existing.frequency++;
       existing.last_seen = new Date().toISOString();
       this.failures.set(existing.id, existing);
-      console.log("[SelfEvolution] Updated existing failure:", existing.id, "Frequency:", existing.frequency);
+      logger.info("Updated existing failure", { id: existing.id, frequency: existing.frequency });
       return existing;
     } else {
       this.failures.set(id, fullFailure);
-      console.log("[SelfEvolution] Recorded new failure:", id);
+      logger.info("Recorded new failure", { id });
       
       // Auto-generate alternatives for critical failures
       if (fullFailure.severity === "critical" || fullFailure.severity === "high") {
@@ -140,7 +140,7 @@ class SelfEvolutionModel {
    * Generate behavior alternatives using AI
    */
   async generateAlternatives(failure: Failure): Promise<BehaviorAlternative[]> {
-    console.log("[SelfEvolution] Generating alternatives for:", failure.id);
+    logger.info("Generating alternatives", { failureId: failure.id });
 
     const alternatives: BehaviorAlternative[] = [];
 
@@ -193,7 +193,7 @@ class SelfEvolutionModel {
     });
 
     this.alternatives.set(failure.id, alternatives);
-    console.log("[SelfEvolution] Generated", alternatives.length, "alternatives");
+    logger.info("Generated alternatives", { count: alternatives.length });
 
     return alternatives;
   }
@@ -215,7 +215,7 @@ class SelfEvolutionModel {
       return currScore > prevScore ? curr : prev;
     });
 
-    console.log("[SelfEvolution] Applying alternative:", best.id, "Success rate:", best.estimated_success_rate);
+    logger.info("Applying alternative", { id: best.id, successRate: best.estimated_success_rate });
 
     // Simulate application (in real scenario, would modify code)
     const result: MutationResult = {
@@ -239,7 +239,7 @@ class SelfEvolutionModel {
    */
   private async logMutation(result: MutationResult): Promise<void> {
     try {
-      await supabase.from("behavior_mutation_log").insert({
+      await (supabase as any).from("behavior_mutation_log").insert({
         failure_id: result.failure_id,
         alternative_id: result.alternative_applied.id,
         alternative_description: result.alternative_applied.description,
@@ -250,7 +250,7 @@ class SelfEvolutionModel {
         timestamp: result.timestamp
       });
     } catch (error) {
-      console.error("[SelfEvolution] Failed to log mutation:", error);
+      logger.error("Failed to log mutation", { error });
     }
   }
 
@@ -273,7 +273,7 @@ class SelfEvolutionModel {
    */
   async getMutationHistory(limit: number = 50): Promise<any[]> {
     try {
-      const { data, error } = await supabase
+      const { data, error } = await (supabase as any)
         .from("behavior_mutation_log")
         .select("*")
         .order("created_at", { ascending: false })
@@ -282,7 +282,7 @@ class SelfEvolutionModel {
       if (error) throw error;
       return data || [];
     } catch (error) {
-      console.error("[SelfEvolution] Failed to fetch mutation history:", error);
+      logger.error("Failed to fetch mutation history", { error });
       return [];
     }
   }

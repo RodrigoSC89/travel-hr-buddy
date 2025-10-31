@@ -1,4 +1,3 @@
-// @ts-nocheck
 /**
  * PATCH 239 - Immersive Scenario Simulator
  * 3D scenario rendering and AI-driven simulation
@@ -410,7 +409,7 @@ class ScenarioSimulator {
    */
   private async logEvent(event: SimulationEvent): Promise<void> {
     try {
-      await supabase.from("simulation_event_log").insert({
+      await (supabase as any).from("simulation_event_log").insert({
         event_id: event.id,
         event_type: event.type,
         description: event.description,
@@ -419,7 +418,7 @@ class ScenarioSimulator {
         timestamp: event.timestamp
       });
     } catch (error) {
-      logger.error("[Simulator] Failed to log event:", error);
+      logger.error("Failed to log event", { error });
     }
   }
 
@@ -430,10 +429,10 @@ class ScenarioSimulator {
     this.decisions.push(decision);
     
     try {
-      await supabase.from("simulation_decision_log").insert(decision);
-      logger.info("[Simulator] Decision logged");
+      await (supabase as any).from("simulation_decision_log").insert(decision);
+      logger.info("Decision logged");
     } catch (error) {
-      logger.error("[Simulator] Failed to log decision:", error);
+      logger.error("Failed to log decision", { error });
     }
   }
 
