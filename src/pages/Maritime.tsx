@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, lazy, Suspense } from "react";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
@@ -7,6 +7,7 @@ import { Progress } from "@/components/ui/progress";
 import { ModulePageWrapper } from "@/components/ui/module-page-wrapper";
 import { ModuleHeader } from "@/components/ui/module-header";
 import { DashboardSkeleton } from "@/components/ui/loading-skeleton";
+import { Skeleton } from "@/components/ui/skeleton";
 import { supabase } from "@/integrations/supabase/client";
 import { 
   Ship, 
@@ -27,17 +28,19 @@ import {
   Bell,
   Wrench
 } from "lucide-react";
-import { ChecklistScheduler } from "../components/maritime/checklist-scheduler";
-import { ChecklistReports } from "../components/maritime/checklist-reports";
-import { QREquipmentManager } from "../components/maritime/qr-equipment-manager";
-import { ChecklistDashboard } from "../components/maritime/checklist-dashboard";
-import { NotificationCenter } from "../components/maritime/notification-center";
-import { RealTimeFleetMonitor } from "../components/maritime/real-time-fleet-monitor";
-import { VesselPerformanceDashboard } from "../components/maritime/vessel-performance-dashboard";
-import { IoTSensorDashboard } from "../components/maritime/iot-sensor-dashboard";
-import { PredictiveMaintenanceSystem } from "../components/maritime/predictive-maintenance-system";
 import { toast } from "@/hooks/use-toast";
 import { useNavigate } from "react-router-dom";
+
+// PATCH 548 - Lazy loading de componentes pesados
+const ChecklistScheduler = lazy(() => import("../components/maritime/checklist-scheduler").then(m => ({ default: m.ChecklistScheduler })));
+const ChecklistReports = lazy(() => import("../components/maritime/checklist-reports").then(m => ({ default: m.ChecklistReports })));
+const QREquipmentManager = lazy(() => import("../components/maritime/qr-equipment-manager").then(m => ({ default: m.QREquipmentManager })));
+const ChecklistDashboard = lazy(() => import("../components/maritime/checklist-dashboard").then(m => ({ default: m.ChecklistDashboard })));
+const NotificationCenter = lazy(() => import("../components/maritime/notification-center").then(m => ({ default: m.NotificationCenter })));
+const RealTimeFleetMonitor = lazy(() => import("../components/maritime/real-time-fleet-monitor").then(m => ({ default: m.RealTimeFleetMonitor })));
+const VesselPerformanceDashboard = lazy(() => import("../components/maritime/vessel-performance-dashboard").then(m => ({ default: m.VesselPerformanceDashboard })));
+const IoTSensorDashboard = lazy(() => import("../components/maritime/iot-sensor-dashboard").then(m => ({ default: m.IoTSensorDashboard })));
+const PredictiveMaintenanceSystem = lazy(() => import("../components/maritime/predictive-maintenance-system").then(m => ({ default: m.PredictiveMaintenanceSystem })));
 
 /**
  * PATCH 191.0 - Maritime Operations Module
@@ -464,13 +467,15 @@ export default function Maritime() {
         </TabsContent>
       </Tabs>
 
-      {/* Feature Components */}
+      {/* Feature Components - PATCH 548 Optimized with Suspense */}
       {activeFeature === "dashboard" && (
         <div className="mt-6">
           <Button variant="outline" onClick={() => setActiveFeature(null)} className="mb-4">
             ← Voltar ao Dashboard
           </Button>
-          <ChecklistDashboard userId="user-123" />
+          <Suspense fallback={<Skeleton className="h-96 w-full" />}>
+            <ChecklistDashboard userId="user-123" />
+          </Suspense>
         </div>
       )}
       {activeFeature === "scheduler" && (
@@ -478,7 +483,9 @@ export default function Maritime() {
           <Button variant="outline" onClick={() => setActiveFeature(null)} className="mb-4">
             ← Voltar ao Dashboard
           </Button>
-          <ChecklistScheduler />
+          <Suspense fallback={<Skeleton className="h-96 w-full" />}>
+            <ChecklistScheduler />
+          </Suspense>
         </div>
       )}
       {activeFeature === "reports" && (
@@ -486,7 +493,9 @@ export default function Maritime() {
           <Button variant="outline" onClick={() => setActiveFeature(null)} className="mb-4">
             ← Voltar ao Dashboard
           </Button>
-          <ChecklistReports />
+          <Suspense fallback={<Skeleton className="h-96 w-full" />}>
+            <ChecklistReports />
+          </Suspense>
         </div>
       )}
       {activeFeature === "qr-equipment" && (
@@ -494,7 +503,9 @@ export default function Maritime() {
           <Button variant="outline" onClick={() => setActiveFeature(null)} className="mb-4">
             ← Voltar ao Dashboard
           </Button>
-          <QREquipmentManager />
+          <Suspense fallback={<Skeleton className="h-96 w-full" />}>
+            <QREquipmentManager />
+          </Suspense>
         </div>
       )}
       {activeFeature === "notifications" && (
@@ -502,7 +513,9 @@ export default function Maritime() {
           <Button variant="outline" onClick={() => setActiveFeature(null)} className="mb-4">
             ← Voltar ao Dashboard
           </Button>
-          <NotificationCenter userId="user-123" />
+          <Suspense fallback={<Skeleton className="h-96 w-full" />}>
+            <NotificationCenter userId="user-123" />
+          </Suspense>
         </div>
       )}
       {activeFeature === "fleet-monitor" && (
@@ -510,7 +523,9 @@ export default function Maritime() {
           <Button variant="outline" onClick={() => setActiveFeature(null)} className="mb-4">
             ← Voltar ao Dashboard
           </Button>
-          <RealTimeFleetMonitor />
+          <Suspense fallback={<Skeleton className="h-96 w-full" />}>
+            <RealTimeFleetMonitor />
+          </Suspense>
         </div>
       )}
       {activeFeature === "performance" && (
@@ -518,7 +533,9 @@ export default function Maritime() {
           <Button variant="outline" onClick={() => setActiveFeature(null)} className="mb-4">
             ← Voltar ao Dashboard
           </Button>
-          <VesselPerformanceDashboard />
+          <Suspense fallback={<Skeleton className="h-96 w-full" />}>
+            <VesselPerformanceDashboard />
+          </Suspense>
         </div>
       )}
       {activeFeature === "iot-sensors" && (
@@ -526,7 +543,9 @@ export default function Maritime() {
           <Button variant="outline" onClick={() => setActiveFeature(null)} className="mb-4">
             ← Voltar ao Dashboard
           </Button>
-          <IoTSensorDashboard />
+          <Suspense fallback={<Skeleton className="h-96 w-full" />}>
+            <IoTSensorDashboard />
+          </Suspense>
         </div>
       )}
       {activeFeature === "predictive-maintenance" && (
@@ -534,7 +553,9 @@ export default function Maritime() {
           <Button variant="outline" onClick={() => setActiveFeature(null)} className="mb-4">
             ← Voltar ao Dashboard
           </Button>
-          <PredictiveMaintenanceSystem />
+          <Suspense fallback={<Skeleton className="h-96 w-full" />}>
+            <PredictiveMaintenanceSystem />
+          </Suspense>
         </div>
       )}
     </ModulePageWrapper>
