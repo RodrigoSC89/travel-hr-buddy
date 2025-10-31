@@ -1,4 +1,3 @@
-// @ts-nocheck
 /**
  * Forecast Page
  * Main page for Forecast Global Engine with ONNX AI, MQTT sync, and WCAG 2.1 compliance
@@ -10,9 +9,9 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/com
 import { Activity, TrendingUp, Zap } from "lucide-react";
 
 // Lazy-loaded components for optimal performance
-const ForecastAI = safeLazyImport(() => import("@/components/forecast/ForecastAI"), "ForecastAI");
-const ForecastMetrics = safeLazyImport(() => import("@/components/forecast/ForecastMetrics"), "ForecastMetrics");
-const ForecastMap = safeLazyImport(() => import("@/components/forecast/ForecastMap"), "ForecastMap");
+const ForecastAI = safeLazyImport(() => import("@/components/forecast/ForecastAI"));
+const ForecastMetrics = safeLazyImport(() => import("@/components/forecast/ForecastMetrics"));
+const ForecastMap = safeLazyImport(() => import("@/components/forecast/ForecastMap"));
 
 export default function ForecastPage() {
   return (

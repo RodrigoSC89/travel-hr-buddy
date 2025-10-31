@@ -1,4 +1,3 @@
-// @ts-nocheck
 /**
  * PATCH 427 - Drone Commander UI
  * Interface and orchestration for UAV drone control
@@ -6,6 +5,7 @@
 
 import React, { useState, useEffect } from "react";
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "@/components/ui/card";
+import { logger } from "@/lib/logger";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
@@ -51,7 +51,7 @@ const DroneCommanderPage: React.FC = () => {
       setDrones(dronesData);
       setFlights(flightsData);
     } catch (error) {
-      console.error("Error loading drone data:", error);
+      logger.error("Error loading drone data", { error });
     }
   };
 
@@ -61,7 +61,7 @@ const DroneCommanderPage: React.FC = () => {
       toast.success(`Command ${command} sent to drone ${droneId}`);
       loadData();
     } catch (error) {
-      console.error("Error sending command:", error);
+      logger.error("Error sending command", { error, droneId, command });
       toast.error("Failed to send command");
     }
   };

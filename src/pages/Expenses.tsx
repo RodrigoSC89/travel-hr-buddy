@@ -1,4 +1,3 @@
-// @ts-nocheck
 import React, { useState } from "react";
 import { useExpenses } from "@/hooks/useExpenses";
 import { ExpenseForm } from "@/components/expenses/ExpenseForm";
@@ -207,7 +206,7 @@ const Expenses = () => {
             {filteredExpenses.length === 0 ? (
               <EmptyState
                 icon={Receipt}
-                title={filterStatus === "all" ? "Nenhuma despesa registrada" : `Nenhuma despesa ${statusLabels[filterStatus as keyof typeof statusLabels]?.toLowerCase()}`}
+                title={filterStatus === "all" ? "Nenhuma despesa registrada" : `Nenhuma despesa ${(statusLabels as any)[filterStatus]?.toLowerCase()}`}
                 description="Adicione uma nova despesa para começar a rastrear seus gastos"
                 actionLabel={filterStatus === "all" ? "Adicionar Despesa" : undefined}
                 onAction={filterStatus === "all" ? () => setShowForm(true) : undefined}
@@ -225,8 +224,8 @@ const Expenses = () => {
                           <h4 className="text-lg font-semibold text-foreground">
                             {expense.description}
                           </h4>
-                          <Badge className={statusColors[expense.status]}>
-                            {statusLabels[expense.status]}
+                          <Badge className={(statusColors as any)[expense.status]}>
+                            {(statusLabels as any)[expense.status]}
                           </Badge>
                         </div>
                         <div className="flex flex-wrap gap-4 text-sm text-muted-foreground">
