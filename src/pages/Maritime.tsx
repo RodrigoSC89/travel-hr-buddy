@@ -1,4 +1,4 @@
-import React, { useState, useEffect, lazy, Suspense } from "react";
+import React, { useState, useEffect, lazy, Suspense, startTransition } from "react";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
@@ -78,6 +78,8 @@ export default function Maritime() {
   const [loading, setLoading] = useState(true);
   const [vessels, setVessels] = useState<any[]>([]);
   const [activeFeature, setActiveFeature] = useState<string | null>(null);
+  const openFeature = (feature: string) => startTransition(() => setActiveFeature(feature));
+  const closeFeature = () => startTransition(() => setActiveFeature(null));
 
   useEffect(() => {
     loadDashboardData();
@@ -303,39 +305,39 @@ export default function Maritime() {
                   <Shield className="h-4 w-4 mr-2" />
                   Verificar Certificações
                 </Button>
-                <Button className="w-full justify-start" variant="outline" onClick={() => setActiveFeature("dashboard")}>
+                <Button className="w-full justify-start" variant="outline" onClick={() => openFeature("dashboard")}>
                   <BarChart3 className="h-4 w-4 mr-2" />
                   Dashboard de Checklists
                 </Button>
-                <Button className="w-full justify-start" variant="outline" onClick={() => setActiveFeature("scheduler")}>
+                <Button className="w-full justify-start" variant="outline" onClick={() => openFeature("scheduler")}>
                   <Calendar className="h-4 w-4 mr-2" />
                   Agendamento de Checklists
                 </Button>
-                <Button className="w-full justify-start" variant="outline" onClick={() => setActiveFeature("reports")}>
+                <Button className="w-full justify-start" variant="outline" onClick={() => openFeature("reports")}>
                   <FileText className="h-4 w-4 mr-2" />
                   Relatórios de Checklists
                 </Button>
-                <Button className="w-full justify-start" variant="outline" onClick={() => setActiveFeature("qr-equipment")}>
+                <Button className="w-full justify-start" variant="outline" onClick={() => openFeature("qr-equipment")}>
                   <QrCode className="h-4 w-4 mr-2" />
                   QR Equipamentos
                 </Button>
-                <Button className="w-full justify-start" variant="outline" onClick={() => setActiveFeature("notifications")}>
+                <Button className="w-full justify-start" variant="outline" onClick={() => openFeature("notifications")}>
                   <Bell className="h-4 w-4 mr-2" />
                   Central de Notificações
                 </Button>
-                <Button className="w-full justify-start" variant="outline" onClick={() => setActiveFeature("fleet-monitor")}>
+                <Button className="w-full justify-start" variant="outline" onClick={() => openFeature("fleet-monitor")}>
                   <Activity className="h-4 w-4 mr-2" />
                   Monitor Tempo Real
                 </Button>
-                <Button className="w-full justify-start" variant="outline" onClick={() => setActiveFeature("performance")}>
+                <Button className="w-full justify-start" variant="outline" onClick={() => openFeature("performance")}>
                   <TrendingUp className="h-4 w-4 mr-2" />
                   Performance de Navios
                 </Button>
-                <Button className="w-full justify-start" variant="outline" onClick={() => setActiveFeature("iot-sensors")}>
+                <Button className="w-full justify-start" variant="outline" onClick={() => openFeature("iot-sensors")}>
                   <Activity className="h-4 w-4 mr-2" />
                   Sensores IoT
                 </Button>
-                <Button className="w-full justify-start" variant="outline" onClick={() => setActiveFeature("predictive-maintenance")}>
+                <Button className="w-full justify-start" variant="outline" onClick={() => openFeature("predictive-maintenance")}>
                   <Wrench className="h-4 w-4 mr-2" />
                   Manutenção Preditiva
                 </Button>
@@ -469,8 +471,8 @@ export default function Maritime() {
 
       {/* Feature Components - PATCH 548 Optimized with Suspense */}
       {activeFeature === "dashboard" && (
-        <div className="mt-6">
-          <Button variant="outline" onClick={() => setActiveFeature(null)} className="mb-4">
+        <div className="mt-6 animate-fade-in">
+          <Button variant="outline" onClick={closeFeature} className="mb-4">
             ← Voltar ao Dashboard
           </Button>
           <Suspense fallback={<Skeleton className="h-96 w-full" />}>
@@ -479,8 +481,8 @@ export default function Maritime() {
         </div>
       )}
       {activeFeature === "scheduler" && (
-        <div className="mt-6">
-          <Button variant="outline" onClick={() => setActiveFeature(null)} className="mb-4">
+        <div className="mt-6 animate-fade-in">
+          <Button variant="outline" onClick={closeFeature} className="mb-4">
             ← Voltar ao Dashboard
           </Button>
           <Suspense fallback={<Skeleton className="h-96 w-full" />}>
@@ -489,8 +491,8 @@ export default function Maritime() {
         </div>
       )}
       {activeFeature === "reports" && (
-        <div className="mt-6">
-          <Button variant="outline" onClick={() => setActiveFeature(null)} className="mb-4">
+        <div className="mt-6 animate-fade-in">
+          <Button variant="outline" onClick={closeFeature} className="mb-4">
             ← Voltar ao Dashboard
           </Button>
           <Suspense fallback={<Skeleton className="h-96 w-full" />}>
@@ -499,8 +501,8 @@ export default function Maritime() {
         </div>
       )}
       {activeFeature === "qr-equipment" && (
-        <div className="mt-6">
-          <Button variant="outline" onClick={() => setActiveFeature(null)} className="mb-4">
+        <div className="mt-6 animate-fade-in">
+          <Button variant="outline" onClick={closeFeature} className="mb-4">
             ← Voltar ao Dashboard
           </Button>
           <Suspense fallback={<Skeleton className="h-96 w-full" />}>
@@ -509,8 +511,8 @@ export default function Maritime() {
         </div>
       )}
       {activeFeature === "notifications" && (
-        <div className="mt-6">
-          <Button variant="outline" onClick={() => setActiveFeature(null)} className="mb-4">
+        <div className="mt-6 animate-fade-in">
+          <Button variant="outline" onClick={closeFeature} className="mb-4">
             ← Voltar ao Dashboard
           </Button>
           <Suspense fallback={<Skeleton className="h-96 w-full" />}>
@@ -519,8 +521,8 @@ export default function Maritime() {
         </div>
       )}
       {activeFeature === "fleet-monitor" && (
-        <div className="mt-6">
-          <Button variant="outline" onClick={() => setActiveFeature(null)} className="mb-4">
+        <div className="mt-6 animate-fade-in">
+          <Button variant="outline" onClick={closeFeature} className="mb-4">
             ← Voltar ao Dashboard
           </Button>
           <Suspense fallback={<Skeleton className="h-96 w-full" />}>
@@ -529,8 +531,8 @@ export default function Maritime() {
         </div>
       )}
       {activeFeature === "performance" && (
-        <div className="mt-6">
-          <Button variant="outline" onClick={() => setActiveFeature(null)} className="mb-4">
+        <div className="mt-6 animate-fade-in">
+          <Button variant="outline" onClick={closeFeature} className="mb-4">
             ← Voltar ao Dashboard
           </Button>
           <Suspense fallback={<Skeleton className="h-96 w-full" />}>
@@ -539,8 +541,8 @@ export default function Maritime() {
         </div>
       )}
       {activeFeature === "iot-sensors" && (
-        <div className="mt-6">
-          <Button variant="outline" onClick={() => setActiveFeature(null)} className="mb-4">
+        <div className="mt-6 animate-fade-in">
+          <Button variant="outline" onClick={closeFeature} className="mb-4">
             ← Voltar ao Dashboard
           </Button>
           <Suspense fallback={<Skeleton className="h-96 w-full" />}>
@@ -549,8 +551,8 @@ export default function Maritime() {
         </div>
       )}
       {activeFeature === "predictive-maintenance" && (
-        <div className="mt-6">
-          <Button variant="outline" onClick={() => setActiveFeature(null)} className="mb-4">
+        <div className="mt-6 animate-fade-in">
+          <Button variant="outline" onClick={closeFeature} className="mb-4">
             ← Voltar ao Dashboard
           </Button>
           <Suspense fallback={<Skeleton className="h-96 w-full" />}>
