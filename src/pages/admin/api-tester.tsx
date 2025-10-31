@@ -1,4 +1,3 @@
-// @ts-nocheck
 import React, { useState } from "react";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
@@ -135,7 +134,7 @@ const APITester = () => {
     if (!test) return;
 
     try {
-      const result = await test.testFn();
+      const result = await test.testFn() as any;
 
       setTests((prev) =>
         prev.map((t) =>

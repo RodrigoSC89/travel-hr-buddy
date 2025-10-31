@@ -1,5 +1,5 @@
-// @ts-nocheck
 import React, { useState, useEffect } from "react";
+import { logger } from "@/lib/logger";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
@@ -69,7 +69,7 @@ export default function QuizPage() {
       setLoading(true);
 
       // Try to fetch from templates first
-      const { data: templates, error } = await supabase
+      const { data: templates, error } = await (supabase as any)
         .from("quiz_templates")
         .select("*")
         .eq("standard", quizConfig.standard)
@@ -81,7 +81,7 @@ export default function QuizPage() {
 
       if (templates && templates.length >= QUESTIONS_PER_QUIZ) {
         // Use template questions
-        const quizQuestions: Question[] = templates.map(t => ({
+        const quizQuestions: Question[] = (templates as any[]).map((t: any) => ({
           question: t.question,
           options: t.options as string[],
           correct_answer: t.correct_answer,
@@ -100,7 +100,7 @@ export default function QuizPage() {
       setQuizStarted(true);
       setStartTime(new Date());
     } catch (error) {
-      console.error("Error fetching quiz questions:", error);
+      logger.error("Error fetching quiz questions", { error });
       // Use fallback questions on error
       const fallbackQuestions = generateFallbackQuestions(
         quizConfig.standard,
@@ -198,16 +198,15 @@ export default function QuizPage() {
 
       const { data: profile } = await supabase
         .from("profiles")
-        .select("organization_id")
+        .select("id")
         .eq("id", user.id)
         .single();
 
       // Save quiz result
-      const { data: result, error } = await supabase
+      const { data: result, error } = await (supabase as any)
         .from("quiz_results")
         .insert({
           user_id: user.id,
-          organization_id: profile?.organization_id,
           standard: quizConfig.standard,
           difficulty: quizConfig.difficulty,
           questions: finalQuestions,
@@ -225,16 +224,16 @@ export default function QuizPage() {
 
       // Generate certificate if passed
       if (score >= PASSING_SCORE && result) {
-        const { data: certData } = await supabase.rpc("generate_certificate_id", {
-          p_result_id: result.id
+        const { data: certData } = await (supabase as any).rpc("generate_certificate_id", {
+          p_result_id: (result as any).id
         });
         
-        if (certData) {
+        if (certData && typeof certData === 'string') {
           setCertificateId(certData);
         }
       }
     } catch (error) {
-      console.error("Error saving quiz result:", error);
+      logger.error("Error saving quiz result", { error });
     }
   };
 

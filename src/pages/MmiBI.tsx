@@ -1,7 +1,7 @@
-// @ts-nocheck
 "use client";
 
 import { useState, useEffect } from "react";
+import { logger } from "@/lib/logger";
 import { Card, CardContent } from "@/components/ui/card";
 import { BarChart, Bar, XAxis, YAxis, Tooltip, ResponsiveContainer, Legend } from "recharts";
 import DashboardJobs from "@/components/bi/DashboardJobs";
@@ -32,16 +32,16 @@ export default function MmiBI() {
     async function fetchTrendData() {
       setLoadingTrend(true);
       try {
-        const { data: result, error } = await supabase.rpc("jobs_trend_by_month");
+        const { data: result, error } = await (supabase as any).rpc("jobs_trend_by_month");
         
         if (error) {
-          console.error("Error fetching trend data:", error);
+          logger.error("Error fetching trend data", { error });
           setTrendData([]);
         } else {
-          setTrendData(result || []);
+          setTrendData((result || []) as TrendData[]);
         }
       } catch (error) {
-        console.error("Error invoking trend function:", error);
+        logger.error("Error invoking trend function", { error });
         // Fallback to mock data
         setTrendData([
           { month: "2025-05", total_jobs: 12, monthLabel: "mai de 2025" },
@@ -89,7 +89,7 @@ export default function MmiBI() {
       <JobsTrendChart />
 
       {/* JobsForecastReport Component - Shows AI-powered forecast */}
-      <JobsForecastReport trend={trendData} onForecastUpdate={setForecastText} />
+      <JobsForecastReport trend={trendData as any} onForecastUpdate={setForecastText} />
     </div>
   );
 }

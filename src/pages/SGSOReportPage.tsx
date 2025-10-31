@@ -1,5 +1,5 @@
-// @ts-nocheck
 import { useRef, useState } from "react";
+import { logger } from "@/lib/logger";
 import html2pdf from "html2pdf.js";
 import { Button } from "@/components/ui/button";
 import { SGSOTrendChart } from "@/components/sgso/SGSOTrendChart";
@@ -69,9 +69,9 @@ export default function SGSOReportPage({
       const opt = {
         margin: 0.5,
         filename: `relatorio-sgso-${vesselName.toLowerCase().replace(/\s+/g, "-")}-${new Date().toISOString().split("T")[0]}.pdf`,
-        image: { type: "jpeg", quality: 0.98 },
+        image: { type: "jpeg" as const, quality: 0.98 },
         html2canvas: { scale: 2 },
-        jsPDF: { unit: "in", format: "a4", orientation: "portrait" }
+        jsPDF: { unit: "in", format: "a4", orientation: "portrait" as const }
       };
 
       await html2pdf().set(opt).from(element).save();
@@ -79,8 +79,8 @@ export default function SGSOReportPage({
         description: "O relatório foi baixado para seu dispositivo." 
       });
     } catch (error) {
-      console.error("Erro ao gerar PDF:", error);
-      toast.error("Erro ao gerar PDF", { 
+      logger.error("Erro ao gerar PDF", { error });
+      toast.error("Erro ao gerar PDF", {
         description: "Não foi possível gerar o relatório. Tente novamente." 
       });
     } finally {
