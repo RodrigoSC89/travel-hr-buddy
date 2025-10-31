@@ -1,4 +1,3 @@
-// @ts-nocheck
 import { useState, useEffect } from "react";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
@@ -95,8 +94,7 @@ export default function AdvancedAnalyticsDashboard() {
           schema: "public",
           table: "dashboard_widgets"
         },
-        (payload) => {
-          console.log("Widget update:", payload);
+        () => {
           fetchDashboardData();
         }
       )
@@ -111,7 +109,7 @@ export default function AdvancedAnalyticsDashboard() {
     setLoading(true);
     try {
       // Fetch widgets
-      const { data: widgetsData, error: widgetsError } = await supabase
+      const { data: widgetsData, error: widgetsError } = await (supabase as any)
         .from("dashboard_widgets")
         .select("*")
         .eq("is_active", true)
@@ -120,7 +118,7 @@ export default function AdvancedAnalyticsDashboard() {
       if (widgetsError) throw widgetsError;
 
       // Fetch KPI values
-      const { data: kpisData, error: kpisError } = await supabase
+      const { data: kpisData, error: kpisError } = await (supabase as any)
         .from("kpi_definitions")
         .select(`
           id,
@@ -137,7 +135,7 @@ export default function AdvancedAnalyticsDashboard() {
 
       if (kpisError) throw kpisError;
 
-      setWidgets(widgetsData || []);
+      setWidgets((widgetsData || []) as any);
       
       // Transform KPI data
       const transformedKpis: KPIWidget[] = (kpisData || []).map((kpi: any) => ({
@@ -151,7 +149,6 @@ export default function AdvancedAnalyticsDashboard() {
       
       setKpis(transformedKpis);
     } catch (error) {
-      console.error("Error fetching dashboard data:", error);
       toast({
         title: "Error",
         description: "Failed to load dashboard data",
@@ -164,7 +161,7 @@ export default function AdvancedAnalyticsDashboard() {
 
   const addWidget = async (widgetType: string, chartType?: string) => {
     try {
-      const { error } = await supabase
+      const { error } = await (supabase as any)
         .from("dashboard_widgets")
         .insert({
           widget_type: widgetType,
@@ -183,7 +180,6 @@ export default function AdvancedAnalyticsDashboard() {
       
       fetchDashboardData();
     } catch (error) {
-      console.error("Error adding widget:", error);
       toast({
         title: "Error",
         description: "Failed to add widget",

@@ -16,7 +16,7 @@ import {
   Info
 } from "lucide-react";
 import { useOfflineStorage } from "@/hooks/use-offline-storage";
-import { useOnlineStatus } from "@/hooks/use-online-status";
+import { useNetworkStatus } from "@/hooks/useNetworkStatus";
 import { useToast } from "@/hooks/use-toast";
 import { supabase } from "@/integrations/supabase/client";
 import { useAuth } from "@/contexts/AuthContext";
@@ -46,7 +46,7 @@ export const OfflineSyncManager: React.FC = () => {
     addPendingChange
   } = useOfflineStorage();
   
-  const onlineStatus = useOnlineStatus();
+  const networkStatus = useNetworkStatus();
   const { toast } = useToast();
   const { user } = useAuth();
 

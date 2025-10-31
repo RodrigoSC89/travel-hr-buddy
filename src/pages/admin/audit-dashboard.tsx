@@ -1,4 +1,3 @@
-// @ts-nocheck
 import { useState, useEffect } from "react";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
@@ -11,13 +10,13 @@ import { toast } from "sonner";
 
 interface AccessLog {
   id: string;
-  user_id: string;
+  user_id: string | null;
   module_accessed: string;
   timestamp: string;
   action: string;
   result: string;
-  ip_address: string;
-  user_agent: string;
+  ip_address: string | null;
+  user_agent: string | null;
   severity: string;
   details: any;
 }
@@ -71,12 +70,11 @@ export default function AuditDashboard() {
 
       if (error) throw error;
 
-      setLogs(data || []);
+      setLogs((data || []) as any);
       if (count) {
         setTotalPages(Math.ceil(count / pageSize));
       }
     } catch (error: any) {
-      console.error("Error fetching logs:", error);
       toast.error("Failed to fetch audit logs");
     } finally {
       setLoading(false);
@@ -131,7 +129,6 @@ export default function AuditDashboard() {
 
       toast.success("Logs exported successfully");
     } catch (error: any) {
-      console.error("Error exporting logs:", error);
       toast.error("Failed to export logs");
     }
   }

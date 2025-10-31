@@ -1,10 +1,10 @@
 import React from "react";
 import { AlertTriangle, Wifi, WifiOff } from "lucide-react";
 import { Alert, AlertDescription } from "@/components/ui/alert";
-import { useOnlineStatus } from "@/hooks/use-online-status";
+import { useNetworkStatus } from "@/hooks/useNetworkStatus";
 
 export const OfflineIndicator: React.FC = () => {
-  const isOnline = useOnlineStatus();
+  const { isOnline } = useNetworkStatus();
 
   if (isOnline) return null;
 

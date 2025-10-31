@@ -1,4 +1,3 @@
-// @ts-nocheck
 /**
  * PATCH 507: Backup Management Admin Panel
  * View, download, and manage system backups
@@ -52,7 +51,7 @@ export default function BackupsPage() {
   const loadBackups = async () => {
     try {
       setLoading(true);
-      const { data, error } = await supabase
+      const { data, error } = await (supabase as any)
         .from("backup_snapshots")
         .select("*")
         .is("deleted_at", null)
@@ -61,9 +60,8 @@ export default function BackupsPage() {
 
       if (error) throw error;
 
-      setBackups(data || []);
+      setBackups((data || []) as any);
     } catch (error) {
-      console.error("Error loading backups:", error);
       toast({
         title: "Error",
         description: "Failed to load backups",
@@ -76,15 +74,15 @@ export default function BackupsPage() {
 
   const loadStats = async () => {
     try {
-      const { data, error } = await supabase.rpc("get_backup_stats");
+      const { data, error } = await (supabase as any).rpc("get_backup_stats");
 
       if (error) throw error;
 
       if (data && data.length > 0) {
-        setStats(data[0]);
+        setStats(data[0] as any);
       }
     } catch (error) {
-      console.error("Error loading stats:", error);
+      // Silent fail for stats
     }
   };
 
@@ -126,7 +124,6 @@ export default function BackupsPage() {
       loadBackups();
       loadStats();
     } catch (error) {
-      console.error("Error triggering backup:", error);
       toast({
         title: "Error",
         description: error instanceof Error ? error.message : "Failed to trigger backup",
@@ -164,7 +161,6 @@ export default function BackupsPage() {
         description: "Backup downloaded successfully",
       });
     } catch (error) {
-      console.error("Error downloading backup:", error);
       toast({
         title: "Error",
         description: "Failed to download backup",

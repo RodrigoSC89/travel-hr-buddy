@@ -18,7 +18,7 @@ import {
   Info
 } from "lucide-react";
 import { useOfflineStorage } from "@/hooks/use-offline-storage";
-import { useOnlineStatus } from "@/hooks/use-online-status";
+import { useNetworkStatus } from "@/hooks/useNetworkStatus";
 import { useToast } from "@/hooks/use-toast";
 
 export const PWAStatus: React.FC = () => {
@@ -29,7 +29,7 @@ export const PWAStatus: React.FC = () => {
     clearCache, 
     getPendingChanges 
   } = useOfflineStorage();
-  const onlineStatus = useOnlineStatus();
+  const networkStatus = useNetworkStatus();
   const { toast } = useToast();
   
   const [pendingCount, setPendingCount] = React.useState(0);

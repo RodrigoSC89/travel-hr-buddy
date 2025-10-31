@@ -162,7 +162,10 @@ class SystemWatchdog {
         recorded_at: timestamp
       });
     } catch (error) {
-      console.error("Failed to persist metrics:", error);
+      if (import.meta.env.DEV) {
+        // eslint-disable-next-line no-console
+        console.error("Failed to persist metrics:", error);
+      }
     }
   }
 

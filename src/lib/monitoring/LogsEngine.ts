@@ -63,7 +63,10 @@ class LogsEngine {
    */
   error(category: string, message: string, data?: Record<string, any>, module?: string) {
     this.log("error", category, message, data, module);
-    console.error(`[${category}] ${message}`, data);
+    if (import.meta.env.DEV) {
+      // eslint-disable-next-line no-console
+      console.error(`[${category}] ${message}`, data);
+    }
   }
 
   /**
@@ -71,7 +74,10 @@ class LogsEngine {
    */
   critical(category: string, message: string, data?: Record<string, any>, module?: string) {
     this.log("critical", category, message, data, module);
-    console.error(`[CRITICAL] [${category}] ${message}`, data);
+    if (import.meta.env.DEV) {
+      // eslint-disable-next-line no-console
+      console.error(`[CRITICAL] [${category}] ${message}`, data);
+    }
     
     // Immediately flush critical errors
     this.flush();
@@ -179,7 +185,10 @@ class LogsEngine {
       // Optional: Could be adapted to use ai_insights or another table if needed
       // For now, keeping logs client-side until proper table is created
     } catch (error) {
-      console.error("Failed to flush logs:", error);
+      if (import.meta.env.DEV) {
+        // eslint-disable-next-line no-console
+        console.error("Failed to flush logs:", error);
+      }
       // Add logs back to queue
       this.logs = [...logsToFlush, ...this.logs];
     }
