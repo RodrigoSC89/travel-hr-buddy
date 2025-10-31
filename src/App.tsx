@@ -22,6 +22,9 @@ import * as ModulesBundle from "@/bundles/ModulesBundle";
 import * as AdminBundle from "@/bundles/AdminBundle";
 import * as DeveloperBundle from "@/bundles/DeveloperBundle";
 import * as DocumentBundle from "@/bundles/DocumentBundle";
+import * as MissionBundle from "@/bundles/MissionBundle";
+import * as OperationsBundle from "@/bundles/OperationsBundle";
+import * as IntelligenceBundle from "@/bundles/IntelligenceBundle";
 
 // Full App for all environments
 
@@ -220,57 +223,56 @@ const CrewManagement = ModulesBundle.CrewManagement;
 const EmergencyResponse = ModulesBundle.EmergencyResponse;
 const MissionControl = ModulesBundle.MissionControl;
 
-// Remaining individual lazy imports
-const RealTimeWorkspace = React.lazy(() => import("@/modules/workspace/real-time-workspace"));
-const ChannelManager = React.lazy(() => import("@/modules/connectivity/channel-manager"));
-const TrainingAcademy = React.lazy(() => import("@/modules/hr/training-academy"));
-const MaintenancePlanner = React.lazy(() => import("@/modules/maintenance-planner"));
-const MissionLogs = React.lazy(() => import("@/pages/MissionLogsPage"));
-const TravelManagementPage = React.lazy(() => import("@/pages/TravelManagementPage"));
-const FuelOptimizer = React.lazy(() => import("@/modules/logistics/fuel-optimizer"));
-const WeatherDashboard = React.lazy(() => import("@/modules/weather-dashboard"));
-const VoyagePlanner = React.lazy(() => import("@/modules/planning/voyage-planner"));
-const TaskAutomation = React.lazy(() => import("@/modules/task-automation"));
-const AuditCenter = React.lazy(() => import("@/modules/compliance/audit-center"));
+// PATCH 540 Fase 5: Operations bundled (15 → 1 import)
+const RealTimeWorkspace = OperationsBundle.RealTimeWorkspace;
+const ChannelManager = OperationsBundle.ChannelManager;
+const TrainingAcademy = OperationsBundle.TrainingAcademy;
+const MaintenancePlanner = OperationsBundle.MaintenancePlanner;
+const TravelManagementPage = OperationsBundle.TravelManagementPage;
+const FuelOptimizer = OperationsBundle.FuelOptimizer;
+const WeatherDashboard = OperationsBundle.WeatherDashboard;
+const VoyagePlanner = OperationsBundle.VoyagePlanner;
+const TaskAutomation = OperationsBundle.TaskAutomation;
+const AuditCenter = OperationsBundle.AuditCenter;
+const PEOTRAM = OperationsBundle.PEOTRAM;
+const CrewWellbeing = OperationsBundle.CrewWellbeing;
+const SatelliteTracker = OperationsBundle.SatelliteTracker;
+const ProjectTimeline = OperationsBundle.ProjectTimeline;
+const UserManagement = OperationsBundle.UserManagement;
 // PATCH 540 Fase 4: Developer tools already bundled above
 const DeveloperStatus = DeveloperBundle.DeveloperStatus;
 const ModuleStatus = DeveloperBundle.ModuleStatus;
 const TestsDashboard = DeveloperBundle.TestsDashboard;
-const ExecutiveReport = React.lazy(() => import("@/pages/ExecutiveReport"));
-// PATCH 540 Fase 4: Developer tools already bundled above
 const ModuleHealth = DeveloperBundle.ModuleHealth;
 const WatchdogMonitor = DeveloperBundle.WatchdogMonitor;
-const PEOTRAM = React.lazy(() => import("@/pages/PEOTRAM"));
-const CrewWellbeing = React.lazy(() => import("@/modules/operations/crew-wellbeing"));
-const SatelliteTracker = React.lazy(() => import("@/modules/logistics/satellite-tracker"));
-const ProjectTimeline = React.lazy(() => import("@/modules/project-timeline"));
-const UserManagement = React.lazy(() => import("@/modules/user-management"));
-const MissionEngine = React.lazy(() => import("@/modules/mission-engine"));
-const DroneCommander = React.lazy(() => import("@/pages/DroneCommander"));
-const SensorsHubPage = React.lazy(() => import("@/pages/SensorsHub"));
-const SatcomPage = React.lazy(() => import("@/pages/Satcom"));
-const InsightDashboard = React.lazy(() => import("@/pages/mission-control/insight-dashboard"));
-const AutonomyConsole = React.lazy(() => import("@/pages/mission-control/autonomy"));
-const AICommandCenter = React.lazy(() => import("@/pages/mission-control/ai-command-center"));
-const WorkflowEngine = React.lazy(() => import("@/pages/mission-control/workflow-engine"));
-const NautilusLLM = React.lazy(() => import("@/pages/mission-control/nautilus-llm"));
-const ThoughtChain = React.lazy(() => import("@/pages/mission-control/thought-chain"));
-const NautilusOS = React.lazy(() => import("@/pages/NautilusOS"));
-const FinanceHub = React.lazy(() => import("@/modules/finance-hub"));
-const APIGateway = React.lazy(() => import("@/modules/connectivity/api-gateway"));
-const APIGatewayDocs = React.lazy(() => import("@/pages/api-gateway-docs"));
-const AutomationModule = React.lazy(() => import("@/modules/intelligence/automation"));
-const RiskManagementModule = React.lazy(() => import("@/modules/emergency/risk-management"));
-const AnalyticsCoreModule = React.lazy(() => import("@/modules/intelligence/analytics-core"));
-const VoiceAssistantModule = React.lazy(() => import("@/modules/assistants/voice-assistant"));
-const NotificationsCenterModule = React.lazy(() => import("@/modules/connectivity/notifications-center"));
-const AIModulesStatus = React.lazy(() => import("@/pages/AIModulesStatus"));
-// PATCH 407: Sonar AI Module
-const SonarAI = React.lazy(() => import("@/modules/sonar-ai"));
-// PATCH 524: Incident Replay AI Module
-const IncidentReplayAI = React.lazy(() => import("@/modules/incident-replay"));
-// PATCH 525: AI Visual Recognition Core Module
-const AIVisionCore = React.lazy(() => import("@/modules/ai-vision-core"));
+
+// PATCH 540 Fase 5: Mission control bundled (12 → 1 import)
+const MissionLogs = MissionBundle.MissionLogs;
+const MissionEngine = MissionBundle.MissionEngine;
+const DroneCommander = MissionBundle.DroneCommander;
+const SensorsHubPage = MissionBundle.SensorsHubPage;
+const SatcomPage = MissionBundle.SatcomPage;
+const InsightDashboard = MissionBundle.InsightDashboard;
+const AutonomyConsole = MissionBundle.AutonomyConsole;
+const AICommandCenter = MissionBundle.AICommandCenter;
+const WorkflowEngine = MissionBundle.WorkflowEngine;
+const NautilusLLM = MissionBundle.NautilusLLM;
+const ThoughtChain = MissionBundle.ThoughtChain;
+const NautilusOS = MissionBundle.NautilusOS;
+// PATCH 540 Fase 5: Intelligence bundled (13 → 1 import)
+const ExecutiveReport = IntelligenceBundle.ExecutiveReport;
+const FinanceHub = IntelligenceBundle.FinanceHub;
+const APIGateway = IntelligenceBundle.APIGateway;
+const APIGatewayDocs = IntelligenceBundle.APIGatewayDocs;
+const AutomationModule = IntelligenceBundle.AutomationModule;
+const RiskManagementModule = IntelligenceBundle.RiskManagementModule;
+const AnalyticsCoreModule = IntelligenceBundle.AnalyticsCoreModule;
+const VoiceAssistantModule = IntelligenceBundle.VoiceAssistantModule;
+const NotificationsCenterModule = IntelligenceBundle.NotificationsCenterModule;
+const AIModulesStatus = IntelligenceBundle.AIModulesStatus;
+const SonarAI = IntelligenceBundle.SonarAI;
+const IncidentReplayAI = IntelligenceBundle.IncidentReplayAI;
+const AIVisionCore = IntelligenceBundle.AIVisionCore;
 // Validation Pages - Patches 401-410
 const TemplateEditorValidation = safeLazyImport(() => import("@/pages/admin/template-editor/validation"));
 
