@@ -1,6 +1,6 @@
-// @ts-nocheck
 import React, { useEffect, useState } from "react";
 import { Button } from "@/components/ui/button";
+import { logger } from "@/lib/logger";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import {
   Table,
@@ -39,13 +39,13 @@ export default function DPIntelligencePage() {
   async function fetchIncidents() {
     try {
       setLoading(true);
-      const { data, error } = await supabase
+      const { data, error } = await (supabase as any)
         .from("dp_incidents")
         .select("*")
         .order("date", { ascending: false });
 
       if (error) {
-        console.error("Error fetching incidents:", error);
+        logger.error("Error fetching incidents", { error });
         toast.error("Erro ao carregar incidentes", {
           description: error.message
         });
@@ -53,14 +53,14 @@ export default function DPIntelligencePage() {
       }
 
       // Calculate severity based on root cause and class
-      const incidentsWithSeverity = (data || []).map((inc) => ({
+      const incidentsWithSeverity = (data || []).map((inc: any) => ({
         ...inc,
         severity: determineSeverity(inc),
       }));
 
       setIncidents(incidentsWithSeverity);
     } catch (error) {
-      console.error("Unexpected error:", error);
+      logger.error("Unexpected error loading incidents", { error });
       toast.error("Erro ao carregar incidentes");
     } finally {
       setLoading(false);
@@ -102,7 +102,7 @@ export default function DPIntelligencePage() {
       });
 
       if (error) {
-        console.error("Error analyzing incident:", error);
+        logger.error("Error analyzing incident", { error });
         toast.error("Erro ao analisar incidente", {
           description: error.message || "Tente novamente mais tarde"
         });
@@ -111,7 +111,7 @@ export default function DPIntelligencePage() {
 
       // Update the incident with the analysis result
       if (data?.result) {
-        const { error: updateError } = await supabase
+        const { error: updateError } = await (supabase as any)
           .from("dp_incidents")
           .update({ 
             gpt_analysis: { result: data.result },
@@ -120,7 +120,7 @@ export default function DPIntelligencePage() {
           .eq("id", id);
 
         if (updateError) {
-          console.error("Error updating incident:", updateError);
+          logger.error("Error updating incident", { error: updateError });
           toast.error("Erro ao salvar análise");
           return;
         }
@@ -131,7 +131,7 @@ export default function DPIntelligencePage() {
         await fetchIncidents();
       }
     } catch (error) {
-      console.error("Unexpected error:", error);
+      logger.error("Unexpected error analyzing incident", { error });
       toast.error("Erro ao analisar incidente");
     } finally {
       setAnalyzingId(null);

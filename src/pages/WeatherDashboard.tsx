@@ -1,6 +1,6 @@
-// @ts-nocheck
 import React, { useState, useEffect } from "react";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
+import { logger } from "@/lib/logger";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
@@ -88,7 +88,7 @@ export default function WeatherDashboard() {
 
   const loadSavedLocations = async () => {
     try {
-      const { data, error } = await supabase
+      const { data, error } = await (supabase as any)
         .from("weather_forecast")
         .select("id, location")
         .order("captured_at", { ascending: false })
@@ -96,7 +96,7 @@ export default function WeatherDashboard() {
       
       if (error) throw error;
       
-      const locations = data?.map(item => ({
+      const locations = data?.map((item: any) => ({
         id: item.id,
         name: item.location?.name || "Unknown",
         lat: item.location?.lat || 0,
@@ -105,7 +105,7 @@ export default function WeatherDashboard() {
       
       setSavedLocations(locations);
     } catch (error: any) {
-      console.error("Error loading locations:", error);
+      logger.error("Error loading locations", { error });
     }
   };
 
@@ -151,7 +151,7 @@ export default function WeatherDashboard() {
       setWeatherData(mockWeatherData);
       
       // Save to database
-      await supabase.from("weather_forecast").insert({
+      await (supabase as any).from("weather_forecast").insert({
         location: { lat, lng: lon, name: locationName },
         forecast: mockWeatherData.current
       });

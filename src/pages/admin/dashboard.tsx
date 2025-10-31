@@ -1,4 +1,3 @@
-// @ts-nocheck
 "use client";
 
 import { useEffect, useState } from "react";
@@ -89,16 +88,16 @@ export default function AdminDashboard() {
     const fetchTrendData = async () => {
       setLoadingTrend(true);
       try {
-        const { data, error } = await supabase
+        const { data, error } = await (supabase as any)
           .rpc("get_restore_count_by_day_with_email", { 
             email_input: user?.email || "" 
           });
 
         if (error) {
-          logger.error("Error fetching trend data:", error);
+          logger.error("Error fetching trend data", { error });
         } else if (data) {
           // Transform data for chart
-          const chartData: TrendDataPoint[] = data.map((item: { day: string; count: number }) => ({
+          const chartData: TrendDataPoint[] = (data as any[]).map((item: { day: string; count: number }) => ({
             day: new Date(item.day).toLocaleDateString("pt-BR", { day: "2-digit", month: "2-digit" }),
             count: item.count
           }));
@@ -121,13 +120,13 @@ export default function AdminDashboard() {
     const fetchMonthlySummary = async () => {
       setLoadingMonthlySummary(true);
       try {
-        const { data, error } = await supabase
+        const { data, error } = await (supabase as any)
           .rpc("get_monthly_restore_summary_by_department");
 
         if (error) {
-          logger.error("Error fetching monthly summary:", error);
+          logger.error("Error fetching monthly summary", { error });
         } else if (data) {
-          setMonthlySummary(data || []);
+          setMonthlySummary((data as any) || []);
         }
       } catch (error) {
         logger.error("Error fetching monthly summary:", error);

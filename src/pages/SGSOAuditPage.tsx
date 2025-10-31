@@ -1,6 +1,6 @@
-// @ts-nocheck
 import { useState, useEffect } from "react";
 import html2pdf from "html2pdf.js";
+import { logger } from "@/lib/logger";
 import { Textarea } from "@/components/ui/textarea";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
@@ -97,7 +97,7 @@ export default function SGSOAuditPage() {
 
   const handleChange = (index: number, field: string, value: string) => {
     const updated = [...auditData];
-    updated[index][field] = value;
+    (updated[index] as any)[field] = value;
     setAuditData(updated);
   };
 
@@ -164,7 +164,7 @@ export default function SGSOAuditPage() {
         toast.error("Não foi possível gerar explicação. Verifique a configuração da API.");
       }
     } catch (error) {
-      console.error("Error explaining requirement:", error);
+      logger.error("Error explaining requirement", { error });
       toast.error("Erro ao explicar requisito com IA");
     } finally {
       setExplainLoading(null);
