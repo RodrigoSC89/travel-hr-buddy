@@ -19,6 +19,9 @@ import { safeLazyImport } from "@/utils/safeLazyImport";
 
 // PATCH 540: Import bundles para reduzir lazy loading
 import * as ModulesBundle from "@/bundles/ModulesBundle";
+import * as AdminBundle from "@/bundles/AdminBundle";
+import * as DeveloperBundle from "@/bundles/DeveloperBundle";
+import * as DocumentBundle from "@/bundles/DocumentBundle";
 
 // Full App for all environments
 
@@ -72,35 +75,42 @@ const IoT = safeLazyImport(() => import("@/pages/IoT"));
 const Blockchain = safeLazyImport(() => import("@/pages/Blockchain"));
 const Gamification = safeLazyImport(() => import("@/pages/Gamification"));
 const PredictiveAnalytics = safeLazyImport(() => import("@/pages/PredictiveAnalytics"));
+// PATCH 540 Fase 4: Admin pages bundled (17 → 1 import)
+const APITester = AdminBundle.APITester;
+const APIStatus = AdminBundle.APIStatus;
+const ControlPanel = AdminBundle.ControlPanel;
+const TestDashboard = AdminBundle.TestDashboard;
+const CIHistory = AdminBundle.CIHistory;
+const AdminAnalytics = AdminBundle.AdminAnalytics;
+const AdminBI = AdminBundle.AdminBI;
+const AdminWall = AdminBundle.AdminWall;
+const AdminChecklists = AdminBundle.AdminChecklists;
+const AdminChecklistsDashboard = AdminBundle.AdminChecklistsDashboard;
+const SystemHealth = AdminBundle.SystemHealth;
+const Forecast = AdminBundle.Forecast;
+const DocumentsAI = AdminBundle.DocumentsAI;
+const DocumentAIEditor = AdminBundle.DocumentAIEditor;
+const Assistant = AdminBundle.Assistant;
+const AssistantLogs = AdminBundle.AssistantLogs;
+const AdminCollaboration = AdminBundle.AdminCollaboration;
+
+// PATCH 540 Fase 4: Document pages bundled (7 → 1 import)
+const DocumentList = DocumentBundle.DocumentList;
+const DocumentView = DocumentBundle.DocumentView;
+const DocumentHistory = DocumentBundle.DocumentHistory;
+const DocumentEditorPage = DocumentBundle.DocumentEditorPage;
+const CollaborativeEditor = DocumentBundle.CollaborativeEditor;
+const DocumentEditorDemo = DocumentBundle.DocumentEditorDemo;
+const RestoreDashboard = DocumentBundle.RestoreDashboard;
+
+// PATCH 540 Fase 4: Developer tools bundled (8 → 1 import)
+const ExecutionLogs = DeveloperBundle.ExecutionLogs;
+const RestoreReportLogs = DeveloperBundle.RestoreReportLogs;
+const AssistantReportLogs = DeveloperBundle.AssistantReportLogs;
+
+// Remaining individual imports
 const Admin = safeLazyImport(() => import("@/pages/Admin"));
 const ControlHub = safeLazyImport(() => import("@/pages/ControlHub"));
-const APITester = safeLazyImport(() => import("@/pages/admin/api-tester"));
-const APIStatus = safeLazyImport(() => import("@/pages/admin/api-status"));
-const ControlPanel = safeLazyImport(() => import("@/pages/admin/control-panel"));
-const TestDashboard = safeLazyImport(() => import("@/pages/admin/tests"));
-const CIHistory = safeLazyImport(() => import("@/pages/admin/ci-history"));
-const AdminAnalytics = safeLazyImport(() => import("@/pages/admin/analytics"));
-const AdminBI = safeLazyImport(() => import("@/pages/admin/bi"));
-const AdminWall = safeLazyImport(() => import("@/pages/admin/wall"));
-const AdminChecklists = safeLazyImport(() => import("@/pages/admin/checklists"));
-const AdminChecklistsDashboard = safeLazyImport(() => import("@/pages/admin/checklists-dashboard"));
-const SystemHealth = safeLazyImport(() => import("@/pages/admin/system-health"));
-const Forecast = safeLazyImport(() => import("@/pages/admin/forecast"));
-const DocumentsAI = safeLazyImport(() => import("@/pages/admin/documents-ai"));
-const DocumentAIEditor = safeLazyImport(() => import("@/pages/admin/documents/ai-editor"));
-const Assistant = safeLazyImport(() => import("@/pages/admin/assistant"));
-const AssistantLogs = safeLazyImport(() => import("@/pages/admin/assistant-logs"));
-const AdminCollaboration = safeLazyImport(() => import("@/pages/admin/collaboration"));
-const DocumentList = safeLazyImport(() => import("@/pages/admin/documents/DocumentList"));
-const DocumentView = safeLazyImport(() => import("@/pages/admin/documents/DocumentView"));
-const DocumentHistory = safeLazyImport(() => import("@/pages/admin/documents/DocumentHistory"));
-const DocumentEditorPage = safeLazyImport(() => import("@/pages/admin/documents/DocumentEditorPage"));
-const CollaborativeEditor = safeLazyImport(() => import("@/pages/admin/documents/CollaborativeEditor"));
-const DocumentEditorDemo = safeLazyImport(() => import("@/pages/admin/documents/DocumentEditorDemo"));
-const RestoreDashboard = safeLazyImport(() => import("@/pages/admin/documents/restore-dashboard"));
-const ExecutionLogs = safeLazyImport(() => import("@/pages/admin/automation/execution-logs"));
-const RestoreReportLogs = safeLazyImport(() => import("@/pages/admin/reports/logs"));
-const AssistantReportLogs = safeLazyImport(() => import("@/pages/admin/reports/assistant"));
 const DashboardLogs = safeLazyImport(() => import("@/pages/admin/reports/dashboard-logs"));
 const RestoreAnalytics = safeLazyImport(() => import("@/pages/admin/reports/restore-analytics"));
 const PersonalRestoreDashboard = safeLazyImport(() => import("@/pages/admin/restore/personal"));
@@ -222,12 +232,14 @@ const WeatherDashboard = React.lazy(() => import("@/modules/weather-dashboard"))
 const VoyagePlanner = React.lazy(() => import("@/modules/planning/voyage-planner"));
 const TaskAutomation = React.lazy(() => import("@/modules/task-automation"));
 const AuditCenter = React.lazy(() => import("@/modules/compliance/audit-center"));
-const DeveloperStatus = React.lazy(() => import("@/pages/developer/status"));
-const ModuleStatus = React.lazy(() => import("@/pages/developer/ModuleStatus"));
-const TestsDashboard = React.lazy(() => import("@/pages/developer/TestsDashboard"));
+// PATCH 540 Fase 4: Developer tools already bundled above
+const DeveloperStatus = DeveloperBundle.DeveloperStatus;
+const ModuleStatus = DeveloperBundle.ModuleStatus;
+const TestsDashboard = DeveloperBundle.TestsDashboard;
 const ExecutiveReport = React.lazy(() => import("@/pages/ExecutiveReport"));
-const ModuleHealth = React.lazy(() => import("@/pages/developer/module-health"));
-const WatchdogMonitor = React.lazy(() => import("@/pages/developer/watchdog-monitor"));
+// PATCH 540 Fase 4: Developer tools already bundled above
+const ModuleHealth = DeveloperBundle.ModuleHealth;
+const WatchdogMonitor = DeveloperBundle.WatchdogMonitor;
 const PEOTRAM = React.lazy(() => import("@/pages/PEOTRAM"));
 const CrewWellbeing = React.lazy(() => import("@/modules/operations/crew-wellbeing"));
 const SatelliteTracker = React.lazy(() => import("@/modules/logistics/satellite-tracker"));
