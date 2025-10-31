@@ -74,12 +74,12 @@ Isso representa ~26% do codebase src/ e requer uma abordagem estratégica em bat
 
 ---
 
-## 📊 Métricas do Batch 1 + 2 + 3 + 4 + 5
+## 📊 Métricas do Batch 1-6
 
 | Métrica | Valor |
 |---------|-------|
-| Arquivos Corrigidos | 14/50 ✅ |
-| @ts-nocheck Removidos | 14/395 total (3.5%) |
+| Arquivos Corrigidos | 16/50 ✅ |
+| @ts-nocheck Removidos | 16/395 total (4.1%) |
 | Build Status | ✅ Passando |
 | Type Errors Introduzidos | 0 |
 | Interfaces TypeScript Já Existentes | 32 |
@@ -113,6 +113,10 @@ Isso representa ~26% do codebase src/ e requer uma abordagem estratégica em bat
 ### ✅ Batch 5 Completo (1 arquivo)
 - `src/hooks/useButtonHandlers.ts` ✅
 
+### ✅ Batch 6 Completo (2 arquivos)
+- `src/utils/performance.ts` ✅
+- `src/pages/admin/documents/apply-template.tsx` ✅
+
 ### 📋 Bloqueios Identificados
 **Tabelas Faltantes no Supabase:**
 1. `beta_feedback` - Para BetaFeedbackForm
@@ -128,7 +132,7 @@ Isso representa ~26% do codebase src/ e requer uma abordagem estratégica em bat
 ## 🎯 Meta do PATCH 546 Fase 1
 
 **Objetivo:** Remover 50 @ts-nocheck (12% do total)  
-**Progresso:** 14/50 (28%) ⚡  
+**Progresso:** 16/50 (32%) ⚡  
 **Timeline:** 2 dias
 
 **Estratégia Revisada:** Priorizar arquivos sem dependências Supabase e com tipos simples.
