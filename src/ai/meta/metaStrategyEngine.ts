@@ -1,4 +1,3 @@
-// @ts-nocheck
 /**
  * PATCH 231: Meta Strategy Engine
  * 
@@ -8,6 +7,7 @@
  */
 
 import { supabase } from "@/integrations/supabase/client";
+import { logger } from "@/lib/logger";
 
 export interface Strategy {
   id: string;
@@ -175,9 +175,9 @@ export class MetaStrategyEngine {
       evaluations.slice(1, 3)
     );
 
-    const alternatives = evaluations.slice(1, 3).map(eval => ({
-      strategyId: eval.strategyId,
-      reason: this.explainRejection(eval, bestEvaluation),
+    const alternatives = evaluations.slice(1, 3).map(evaluation => ({
+      strategyId: evaluation.strategyId,
+      reason: this.explainRejection(evaluation, bestEvaluation),
     }));
 
     const decision: MetaStrategyDecision = {
@@ -202,7 +202,7 @@ export class MetaStrategyEngine {
     evaluations: StrategyEvaluation[]
   ): Promise<void> {
     try {
-      await supabase.from("meta_strategy_log").insert({
+      await (supabase as any).from("meta_strategy_log").insert({
         strategy_id: strategy.id,
         strategy_name: strategy.name,
         decision_data: {
@@ -215,7 +215,7 @@ export class MetaStrategyEngine {
         timestamp: new Date().toISOString(),
       });
     } catch (error) {
-      console.error("Failed to log meta strategy decision:", error);
+      logger.error("[MetaStrategyEngine] Failed to log meta strategy decision:", error);
     }
   }
 

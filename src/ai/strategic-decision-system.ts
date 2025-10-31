@@ -1,4 +1,3 @@
-// @ts-nocheck
 /**
  * AI Strategic Decision System - Main Export Index
  * PATCHES 581-585

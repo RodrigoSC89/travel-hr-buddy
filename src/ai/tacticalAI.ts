@@ -1,4 +1,3 @@
-// @ts-nocheck
 /**
  * PATCH 207.0 - Tactical AI Core
  * Tactical decision system that acts on alerts, predictions or context
@@ -258,7 +257,7 @@ class TacticalAI {
     const systemLoad = Math.min(watchdogStats.totalErrors / 10, 1);
 
     // Get recent decisions
-    const { data: recentDecisionsData } = await supabase
+    const { data: recentDecisionsData } = await (supabase as any)
       .from("tactical_decisions")
       .select("*")
       .eq("module_name", moduleName)
@@ -266,19 +265,19 @@ class TacticalAI {
       .order("created_at", { ascending: false })
       .limit(10);
 
-    const recentDecisions: TacticalDecision[] = (((recentDecisionsData as any[]) || []).map((d: any) => ({
-      id: d.id,
-      timestamp: new Date(d.created_at),
-      moduleName: d.module_name,
-      action: d.action as TacticalAction,
-      priority: d.priority as DecisionPriority,
-      reason: d.reason,
-      context: d.context || {},
-      executed: d.executed || false,
-      success: d.success,
-      error: d.error,
-      manualOverride: d.manual_override,
-    }))) as TacticalDecision[];
+    const recentDecisions: TacticalDecision[] = ((recentDecisionsData || []) as any[]).map((d: any) => ({
+      id: d.id || d.decision_id || "",
+      timestamp: new Date(d.created_at || Date.now()),
+      moduleName: d.module_name || "",
+      action: (d.action_taken || "no_action") as TacticalAction,
+      priority: (d.priority || "low") as DecisionPriority,
+      reason: d.trigger_type || "Unknown",
+      context: typeof d.context === 'object' && d.context !== null ? d.context : {},
+      executed: d.executed_at != null,
+      success: d.success ?? undefined,
+      error: d.error_message ?? undefined,
+      manualOverride: d.override_by != null,
+    }));
 
     return {
       moduleName,
@@ -326,19 +325,16 @@ class TacticalAI {
    */
   private async saveDecision(decision: TacticalDecision): Promise<void> {
     try {
-      const { error } = await supabase
+      const { error } = await (supabase as any)
         .from("tactical_decisions")
         .insert({
           decision_id: decision.id,
           module_name: decision.moduleName,
-          action: decision.action,
+          action_taken: decision.action,
+          trigger_type: "ai_prediction",
           priority: decision.priority,
-          reason: decision.reason,
           context: decision.context,
-          executed: decision.executed,
           success: decision.success,
-          error: decision.error,
-          manual_override: decision.manualOverride,
           created_at: decision.timestamp.toISOString(),
         });
 
@@ -524,14 +520,12 @@ class TacticalAI {
     
     try {
       // Send notification through multiple channels
-      await supabase
+      await (supabase as any)
         .from("notifications")
         .insert({
-          type: "tactical_alert",
+          user_id: "system",
+          message: `${decision.reason} - Module: ${decision.moduleName}`,
           priority: decision.priority,
-          title: `Tactical Alert: ${decision.moduleName}`,
-          message: decision.reason,
-          data: decision.context,
           created_at: new Date().toISOString(),
         });
 
@@ -574,18 +568,18 @@ class TacticalAI {
 
       if (error) throw error;
 
-      return (data || []).map(d => ({
-        id: d.id,
-        timestamp: new Date(d.created_at),
-        moduleName: d.module_name,
-        action: d.action as TacticalAction,
-        priority: d.priority as DecisionPriority,
-        reason: d.reason,
-        context: d.context || {},
-        executed: d.executed || false,
-        success: d.success,
-        error: d.error,
-        manualOverride: d.manual_override,
+      return ((data || []) as any[]).map((d: any) => ({
+        id: d.id || d.decision_id || "",
+        timestamp: new Date(d.created_at || Date.now()),
+        moduleName: d.module_name || "",
+        action: (d.action_taken || "no_action") as TacticalAction,
+        priority: (d.priority || "low") as DecisionPriority,
+        reason: d.trigger_type || "Unknown",
+        context: typeof d.context === 'object' && d.context !== null ? d.context : {},
+        executed: d.executed_at != null,
+        success: d.success ?? undefined,
+        error: d.error_message ?? undefined,
+        manualOverride: d.override_by != null,
       }));
     } catch (error) {
       logger.error("[TacticalAI] Failed to fetch decision history:", error);

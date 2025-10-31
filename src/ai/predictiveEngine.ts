@@ -1,4 +1,3 @@
-// @ts-nocheck
 /**
  * PATCH 206.0 - Predictive Engine
  * AI engine capable of forecasting failures, overloads or demands
@@ -422,11 +421,11 @@ class PredictiveEngine {
         .select("metric_name")
         .gte("recorded_at", new Date(Date.now() - 24 * 60 * 60 * 1000).toISOString());
 
-      const uniqueModules = [...new Set(modules?.map(m => m.module_name) || [])];
+      const uniqueModules = [...new Set((modules || []).map((m: any) => m.metric_name).filter((name: any) => typeof name === 'string'))] as string[];
 
       // Predict for each module
       const predictions = await Promise.all(
-        uniqueModules.map(moduleName => this.predictModuleRisk(moduleName))
+        uniqueModules.map((moduleName: string) => this.predictModuleRisk(moduleName))
       );
 
       return predictions;
