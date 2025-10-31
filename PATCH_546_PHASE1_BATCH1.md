@@ -143,17 +143,42 @@ Isso representa ~26% do codebase src/ e requer uma abordagem estratégica em bat
 7. `sgso_audits`, `sgso_audit_items` - Para SGSO submit
 8. `templates` - Para templates API
 
+**Arquivos com Dependências Complexas:**
+9. Hooks em `src/hooks/` - Todos dependem de tabelas Supabase customizadas
+10. Contexts `OrganizationContext`, `TenantContext` - Alta complexidade, múltiplas tabelas
+11. Core modules `src/core/` - Dependências de infraestrutura avançada
+12. `src/lib/` engines - Dependem de módulos MQTT, ONNX e tabelas customizadas
+
+**Decisão:** 
+- ✅ 18 arquivos corrigidos com sucesso (validações + arquivos simples)
+- ❌ 377 arquivos restantes requerem schemas Supabase + refatoração complexa
+- 📋 Próxima fase: Criar schemas necessários antes de continuar type safety
+
 **Decisão:** Esses arquivos serão corrigidos após criação dos schemas necessários.
 
 ---
 
 ## 🎯 Meta do PATCH 546 Fase 1
 
-**Objetivo:** Remover 50 @ts-nocheck (12% do total)  
-**Progresso:** 18/50 (36%) ⚡⚡  
-**Timeline:** 2 dias
+**Objetivo Original:** Remover 50 @ts-nocheck (12% do total)  
+**Progresso Real:** 18/50 (36%) ⚡⚡  
+**Status:** ⚠️ BLOQUEADO - Restantes dependem de schemas Supabase
 
-**Estratégia Revisada:** Priorizar arquivos sem dependências Supabase e com tipos simples.
+**Arquivos Corrigidos:**
+- ✅ 8 Validações (Patches 606, 607, 609, 610, 611, 612, 614, 615)
+- ✅ 4 Componentes de sistema (error-boundary, performance-optimizer, interactive-overlay)
+- ✅ 2 Utilitários (performance.ts, logger.ts)
+- ✅ 2 Módulos de validação (Patch 600, 562)
+- ✅ 1 Hook (useButtonHandlers)
+- ✅ 1 Admin (apply-template)
+
+**Bloqueios Críticos:**
+- 95% dos arquivos restantes requerem tabelas Supabase customizadas
+- Engines complexos (MQTT, ONNX, WebRTC) requerem refatoração profunda
+- Contexts multi-tenant necessitam schema completo
+
+**Próxima Ação Recomendada:**
+Pausar PATCH 546 e priorizar criação de schemas Supabase essenciais antes de continuar type safety.
 
 ### Breakdown por Batch:
 - Batch 1 (Validações): 10 arquivos
