@@ -1,14 +1,44 @@
-// @ts-nocheck
 import { useState } from "react";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { CheckCircle2, XCircle, Loader2 } from "lucide-react";
 
+interface Anomaly {
+  id: string;
+  type: string;
+  metric: string;
+  value: number;
+  expected: number;
+  deviation: number;
+  timestamp: number;
+}
+
+interface AnomalyLog extends Anomaly {
+  confidenceScore: number;
+  hasConfidenceScore: boolean;
+}
+
+interface TestMetrics {
+  truePositives: number;
+  falsePositives: number;
+  trueNegatives: number;
+  falseNegatives: number;
+  precision: number;
+  recall: number;
+  accuracy: number;
+}
+
+interface DetectorData {
+  anomalies: Anomaly[];
+  logs: AnomalyLog[];
+  metrics: TestMetrics;
+}
+
 export function Patch607Validation() {
   const [results, setResults] = useState<Record<string, boolean>>({});
   const [loading, setLoading] = useState(false);
-  const [detectorData, setDetectorData] = useState<any>(null);
+  const [detectorData, setDetectorData] = useState<DetectorData | null>(null);
 
   const runValidation = async () => {
     setLoading(true);
@@ -142,7 +172,7 @@ export function Patch607Validation() {
             <p className="text-sm font-medium mb-2">Status do Detector:</p>
             <ul className="text-xs space-y-1">
               <li>Anomalias Detectadas: {detectorData.anomalies.length}</li>
-              <li>Média Confidence Score: {(detectorData.logs.reduce((sum: number, l: any) => sum + l.confidenceScore, 0) / detectorData.logs.length).toFixed(2)}</li>
+              <li>Média Confidence Score: {(detectorData.logs.reduce((sum, l) => sum + l.confidenceScore, 0) / detectorData.logs.length).toFixed(2)}</li>
               <li>Precisão: {(detectorData.metrics.precision * 100).toFixed(1)}%</li>
               <li>Recall: {(detectorData.metrics.recall * 100).toFixed(1)}%</li>
               <li>Acurácia: {(detectorData.metrics.accuracy * 100).toFixed(1)}%</li>

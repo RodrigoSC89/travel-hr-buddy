@@ -111,6 +111,20 @@ export default function ControlCenter() {
           icon: <Activity className="h-4 w-4" />,
           description: "Pre-deploy validation dashboard",
           badge: "Final"
+        },
+        {
+          name: "TODO Tracker",
+          path: "/admin/todo-tracker",
+          icon: <Code className="h-4 w-4" />,
+          description: "Technical debt & TODOs mapping",
+          badge: "PATCH 545"
+        },
+        {
+          name: "Labs Status",
+          path: "/admin/labs-status",
+          icon: <Activity className="h-4 w-4" />,
+          description: "Experimental modules evaluation",
+          badge: "PATCH 545"
         }
       ]
     },
@@ -279,7 +293,7 @@ export default function ControlCenter() {
             <Settings className="h-4 w-4 text-muted-foreground" />
           </CardHeader>
           <CardContent>
-            <div className="text-2xl font-bold">19</div>
+            <div className="text-2xl font-bold">21</div>
             <p className="text-xs text-muted-foreground">
               Total admin interfaces
             </p>

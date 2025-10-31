@@ -1,14 +1,49 @@
-// @ts-nocheck
 import { useState } from "react";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { CheckCircle2, XCircle, Loader2 } from "lucide-react";
 
+interface Scenario {
+  id: string;
+  name: string;
+  completed: boolean;
+  duration: number;
+  decisions: number;
+  outcome: string;
+}
+
+interface Alternative {
+  path: string[];
+  probability: number;
+  outcome: string;
+}
+
+interface AlternativePath {
+  scenarioId: string;
+  decisionPoint: string;
+  mainPath: string[];
+  alternatives: Alternative[];
+  hasAlternatives: boolean;
+}
+
+interface ExportFormat {
+  format: string;
+  available: boolean;
+  size: string;
+  content: Record<string, unknown>;
+}
+
+interface SimulatorData {
+  scenarios: Scenario[];
+  alternativePaths: AlternativePath[];
+  exports: ExportFormat[];
+}
+
 export function Patch613Validation() {
   const [results, setResults] = useState<Record<string, boolean>>({});
   const [loading, setLoading] = useState(false);
-  const [simulatorData, setSimulatorData] = useState<any>(null);
+  const [simulatorData, setSimulatorData] = useState<SimulatorData | null>(null);
 
   const runValidation = async () => {
     setLoading(true);
@@ -200,10 +235,10 @@ export function Patch613Validation() {
             <p className="text-sm font-medium mb-2">Status do Decision Simulator:</p>
             <ul className="text-xs space-y-1">
               <li>Cenários Simulados: {simulatorData.scenarios.length}</li>
-              <li>Cenários Completos: {simulatorData.scenarios.filter((s: any) => s.completed).length}</li>
-              <li>Caminhos Alternativos: {simulatorData.alternativePaths.reduce((sum: number, ap: any) => sum + ap.alternatives.length, 0)}</li>
-              <li>Formatos Export: {simulatorData.exports.map((e: any) => e.format).join(", ")}</li>
-              <li>Decisões Totais: {simulatorData.scenarios.reduce((sum: number, s: any) => sum + s.decisions, 0)}</li>
+              <li>Cenários Completos: {simulatorData.scenarios.filter(s => s.completed).length}</li>
+              <li>Caminhos Alternativos: {simulatorData.alternativePaths.reduce((sum, ap) => sum + ap.alternatives.length, 0)}</li>
+              <li>Formatos Export: {simulatorData.exports.map(e => e.format).join(", ")}</li>
+              <li>Decisões Totais: {simulatorData.scenarios.reduce((sum, s) => sum + s.decisions, 0)}</li>
             </ul>
           </div>
         )}
