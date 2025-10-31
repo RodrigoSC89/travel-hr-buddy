@@ -1,4 +1,4 @@
-import React, { useState, useEffect, lazy, Suspense, startTransition } from "react";
+import React, { useState, useEffect, lazy, Suspense, startTransition, useMemo, useCallback, memo } from "react";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
@@ -30,6 +30,7 @@ import {
 } from "lucide-react";
 import { toast } from "@/hooks/use-toast";
 import { useNavigate } from "react-router-dom";
+import { useDashboardStats } from "@/hooks/useDashboardStats";
 
 // PATCH 548 - Lazy loading de componentes pesados
 const ChecklistScheduler = lazy(() => import("../components/maritime/checklist-scheduler").then(m => ({ default: m.ChecklistScheduler })));
@@ -67,62 +68,16 @@ interface DashboardStats {
 
 export default function Maritime() {
   const navigate = useNavigate();
-  const [stats, setStats] = useState<DashboardStats>({
-    totalVessels: 0,
-    activeCrew: 0,
-    pendingCertifications: 0,
-    completedAudits: 0,
-    activeAlerts: 0,
-    complianceScore: 0
-  });
-  const [loading, setLoading] = useState(true);
-  const [vessels, setVessels] = useState<any[]>([]);
+  const { stats, vessels, loading, loadDashboardData } = useDashboardStats();
   const [activeFeature, setActiveFeature] = useState<string | null>(null);
-  const openFeature = (feature: string) => startTransition(() => setActiveFeature(feature));
-  const closeFeature = () => startTransition(() => setActiveFeature(null));
+  const openFeature = useCallback((feature: string) => startTransition(() => setActiveFeature(feature)), []);
+  const closeFeature = useCallback(() => startTransition(() => setActiveFeature(null)), []);
 
   useEffect(() => {
     loadDashboardData();
-  }, []);
+  }, [loadDashboardData]);
 
-  const loadDashboardData = async () => {
-    try {
-      setLoading(true);
-      
-      // Carregar dados dos navios
-      const { data: vesselsData, error: vesselsError } = await supabase
-        .from("vessels")
-        .select("*")
-        .eq("organization_id", "550e8400-e29b-41d4-a716-446655440000")
-        .limit(10);
-
-      if (!vesselsError && vesselsData) {
-        setVessels(vesselsData);
-        setStats(prev => ({ ...prev, totalVessels: vesselsData.length }));
-      }
-
-      // Dados demo para demonstração
-      setStats({
-        totalVessels: vesselsData?.length || 3,
-        activeCrew: 45,
-        pendingCertifications: 8,
-        completedAudits: 12,
-        activeAlerts: 3,
-        complianceScore: 87
-      });
-      
-    } catch (error) {
-      toast({
-        title: "Erro",
-        description: "Falha ao carregar dados do dashboard",
-        variant: "destructive"
-      });
-    } finally {
-      setLoading(false);
-    }
-  };
-
-  const StatCard = ({ title, value, icon: Icon, variant = "default", trend, onClick }: any) => (
+  const StatCard = memo(({ title, value, icon: Icon, variant = "default", trend, onClick }: any) => (
     <Card className={onClick ? "cursor-pointer hover:shadow-md transition-shadow" : ""} onClick={onClick}>
       <CardContent className="pt-6">
         <div className="flex items-center justify-between">
@@ -150,7 +105,7 @@ export default function Maritime() {
         </div>
       </CardContent>
     </Card>
-  );
+  ));
 
   if (loading) {
     return (
@@ -261,7 +216,7 @@ export default function Maritime() {
                 </CardDescription>
               </CardHeader>
               <CardContent className="space-y-4">
-                {vessels.map((vessel, index) => (
+                {vessels.length > 0 ? vessels.map((vessel) => (
                   <div key={vessel.id} className="flex items-center justify-between p-3 border rounded-lg">
                     <div className="flex items-center space-x-3">
                       <div className="w-3 h-3 bg-green-500 rounded-full"></div>
@@ -274,7 +229,11 @@ export default function Maritime() {
                     </div>
                     <Badge variant="outline">Operacional</Badge>
                   </div>
-                ))}
+                )) : (
+                  <div className="text-center py-4 text-muted-foreground">
+                    Carregando embarcações...
+                  </div>
+                )}
                 <Button variant="outline" className="w-full" onClick={() => navigate("/fleet-dashboard")}>
                   Ver Todas as Embarcações
                 </Button>
@@ -357,36 +316,38 @@ export default function Maritime() {
               </CardDescription>
             </CardHeader>
             <CardContent>
-              <div className="space-y-4">
-                <div className="flex items-center justify-between">
-                  <span className="text-sm font-medium">PEOTRAM</span>
-                  <div className="flex items-center space-x-2">
-                    <Progress value={87} className="w-24" />
-                    <span className="text-sm text-green-600">87%</span>
+              {useMemo(() => (
+                <div className="space-y-4">
+                  <div className="flex items-center justify-between">
+                    <span className="text-sm font-medium">PEOTRAM</span>
+                    <div className="flex items-center space-x-2">
+                      <Progress value={87} className="w-24" />
+                      <span className="text-sm text-green-600">87%</span>
+                    </div>
+                  </div>
+                  <div className="flex items-center justify-between">
+                    <span className="text-sm font-medium">ISM Code</span>
+                    <div className="flex items-center space-x-2">
+                      <Progress value={92} className="w-24" />
+                      <span className="text-sm text-green-600">92%</span>
+                    </div>
+                  </div>
+                  <div className="flex items-center justify-between">
+                    <span className="text-sm font-medium">ISPS Code</span>
+                    <div className="flex items-center space-x-2">
+                      <Progress value={78} className="w-24" />
+                      <span className="text-sm text-yellow-600">78%</span>
+                    </div>
+                  </div>
+                  <div className="flex items-center justify-between">
+                    <span className="text-sm font-medium">MARPOL</span>
+                    <div className="flex items-center space-x-2">
+                      <Progress value={95} className="w-24" />
+                      <span className="text-sm text-green-600">95%</span>
+                    </div>
                   </div>
                 </div>
-                <div className="flex items-center justify-between">
-                  <span className="text-sm font-medium">ISM Code</span>
-                  <div className="flex items-center space-x-2">
-                    <Progress value={92} className="w-24" />
-                    <span className="text-sm text-green-600">92%</span>
-                  </div>
-                </div>
-                <div className="flex items-center justify-between">
-                  <span className="text-sm font-medium">ISPS Code</span>
-                  <div className="flex items-center space-x-2">
-                    <Progress value={78} className="w-24" />
-                    <span className="text-sm text-yellow-600">78%</span>
-                  </div>
-                </div>
-                <div className="flex items-center justify-between">
-                  <span className="text-sm font-medium">MARPOL</span>
-                  <div className="flex items-center space-x-2">
-                    <Progress value={95} className="w-24" />
-                    <span className="text-sm text-green-600">95%</span>
-                  </div>
-                </div>
-              </div>
+              ), [])}
             </CardContent>
           </Card>
         </TabsContent>
