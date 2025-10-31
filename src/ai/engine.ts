@@ -1,5 +1,5 @@
 /**
- * PATCH 131.0 - Core AI Engine
+ * PATCH 536 - Core AI Engine
  * Central AI Engine with OpenAI Integration
  * 
  * This engine provides AI capabilities with module-specific context awareness
@@ -7,6 +7,7 @@
  */
 
 import { openai } from "@/lib/ai/openai-client";
+import { logger } from "@/lib/logger";
 import { getModuleContext, ModuleContext } from "./contexts/moduleContext";
 
 export interface AIEngineRequest {
@@ -38,7 +39,7 @@ export const runOpenAI = async (request: AIEngineRequest): Promise<AIEngineRespo
   const apiKey = import.meta.env.VITE_OPENAI_API_KEY;
   
   if (!apiKey || apiKey === "your_openai_api_key_here") {
-    console.warn("⚠️ OpenAI API key not configured. Returning mock response.");
+    logger.warn("OpenAI API key not configured - returning mock response");
     return {
       content: "AI engine não configurado. Configure VITE_OPENAI_API_KEY para habilitar respostas da IA.",
       model: "mock",
@@ -72,7 +73,7 @@ export const runOpenAI = async (request: AIEngineRequest): Promise<AIEngineRespo
       timestamp: new Date()
     };
   } catch (error) {
-    console.error("Error calling OpenAI API:", error);
+    logger.error("Error calling OpenAI API", { error });
     throw new Error(`AI Engine Error: ${error instanceof Error ? error.message : "Unknown error"}`);
   }
 };
@@ -94,10 +95,10 @@ const storeInteraction = async (request: AIEngineRequest, response: string): Pro
       timestamp: new Date().toISOString()
     };
     
-    console.log("AI Interaction stored:", contextData);
+    logger.debug("AI interaction logged", { module: contextData.moduleName });
     // TODO: Implement Supabase persistence for context history
   } catch (error) {
-    console.warn("Failed to store AI interaction:", error);
+    logger.warn("Failed to store AI interaction", { error });
   }
 };
 
