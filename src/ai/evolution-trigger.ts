@@ -1,4 +1,3 @@
-// @ts-nocheck
 /**
  * PATCH 570 - Weekly Evolution Trigger + Watchdog Integration
  * Automated performance monitoring and PATCH suggestion system
@@ -271,7 +270,7 @@ AI Performance Alert:
 - Suggested PATCH: ${audit.suggested_patch ? "Yes" : "No"}
     `.trim();
 
-    logger.warn("[EvolutionTrigger]", alertMessage);
+    logger.warn(alertMessage);
 
     // Save alert to storage for watchdog to pick up
     try {
@@ -293,7 +292,7 @@ AI Performance Alert:
   private saveAudits() {
     try {
       localStorage.setItem("evolution_audits", JSON.stringify(this.audits));
-      logger.info("[EvolutionTrigger] Saved", this.audits.length, "audits");
+      logger.info(`[EvolutionTrigger] Saved ${this.audits.length} audits`);
     } catch (error) {
       logger.error("[EvolutionTrigger] Error saving audits:", error);
     }
@@ -307,7 +306,7 @@ AI Performance Alert:
       const saved = localStorage.getItem("evolution_audits");
       if (saved) {
         this.audits = JSON.parse(saved);
-        logger.info("[EvolutionTrigger] Loaded", this.audits.length, "audits");
+        logger.info(`[EvolutionTrigger] Loaded ${this.audits.length} audits`);
       }
     } catch (error) {
       logger.error("[EvolutionTrigger] Error loading audits:", error);

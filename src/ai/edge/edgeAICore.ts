@@ -1,4 +1,3 @@
-// @ts-nocheck
 /**
  * PATCH 223.0 - Edge AI Operations Core
  * Executes local embedded AI (small offline models)
@@ -108,7 +107,7 @@ class EdgeAICore {
           capabilities.maxComputeWorkgroups = device.limits.maxComputeWorkgroupsPerDimension;
         }
       } catch (error) {
-        logger.warn("[EdgeAI] WebGPU not available:", error);
+        logger.warn("[EdgeAI] WebGPU not available", { error });
       }
     }
 
@@ -124,7 +123,7 @@ class EdgeAICore {
         }
       }
     } catch (error) {
-      logger.warn("[EdgeAI] WebGL not available:", error);
+      logger.warn("[EdgeAI] WebGL not available", { error });
     }
 
     return capabilities;
@@ -410,7 +409,7 @@ class EdgeAICore {
    */
   private async logInference(request: InferenceRequest, result: InferenceResult): Promise<void> {
     try {
-      await supabase
+      await (supabase as any)
         .from("system_observations")
         .insert({
           observation_type: "edge_ai_inference",

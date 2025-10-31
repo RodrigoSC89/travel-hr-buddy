@@ -1,4 +1,3 @@
-// @ts-nocheck
 /**
  * PATCH 580 - AI Incident Replayer v2
  * Enhanced incident replay with full contextual reconstruction
@@ -11,6 +10,7 @@
  * - Accessible contextual explanations
  */
 
+import { logger } from "@/lib/logger";
 import { BridgeLink } from "@/core/BridgeLink";
 import { runOpenAI } from "@/ai/engine";
 import {
@@ -61,7 +61,7 @@ export class AIIncidentReplayerV2 {
     }
 
     this.isReconstructing = true;
-    console.log(`[IncidentReplayerV2] Starting reconstruction for incident ${config.incidentId}`);
+    logger.info(`[IncidentReplayerV2] Starting reconstruction for incident ${config.incidentId}`);
 
     try {
       // Collect data from all sources
@@ -94,16 +94,21 @@ export class AIIncidentReplayerV2 {
         insights,
       };
 
-      console.log("[IncidentReplayerV2] Reconstruction completed", {
+      logger.info("[IncidentReplayerV2] Reconstruction completed", {
         events: timeline.length,
         aiDecisions: aiDecisions.length,
       });
 
-      BridgeLink.emit("incident-replay-v2:reconstructed", "IncidentReplayerV2", {
-        incidentId: config.incidentId,
-        replayId: this.replay.id,
-        timestamp: Date.now(),
-      });
+      // BridgeLink event notification
+      try {
+        (BridgeLink as any).emit("incident-replay-v2:reconstructed", "IncidentReplayerV2", {
+          incidentId: config.incidentId,
+          replayId: this.replay.id,
+          timestamp: Date.now(),
+        });
+      } catch (error) {
+        logger.warn("[IncidentReplayerV2] BridgeLink emit failed", { error });
+      }
 
       return this.replay;
     } finally {
@@ -297,7 +302,7 @@ export class AIIncidentReplayerV2 {
     }
 
     // Detect crew actions
-    if (current.data.crew?.actions && current.data.crew.actions.length > previous.data.crew?.actions?.length) {
+    if (current.data.crew?.actions && current.data.crew.actions.length > (previous.data.crew?.actions?.length || 0)) {
       const newActions = current.data.crew.actions.slice(previous.data.crew?.actions?.length || 0);
       newActions.forEach((action: string, index: number) => {
         events.push({
@@ -353,7 +358,7 @@ export class AIIncidentReplayerV2 {
         const decision = await this.explainAIDecision(event);
         aiDecisions.push(decision);
       } catch (error) {
-        console.error(`[IncidentReplayerV2] Failed to explain AI decision ${event.id}:`, error);
+        logger.error(`[IncidentReplayerV2] Failed to explain AI decision ${event.id}`, error);
       }
     }
 
@@ -716,10 +721,15 @@ Respond only with valid JSON.`,
     
     AIIncidentReplayerV2.instances.delete(this.incidentId);
     
-    BridgeLink.emit("incident-replay-v2:cleanup", "IncidentReplayerV2", {
-      incidentId: this.incidentId,
-      timestamp: Date.now(),
-    });
+    // BridgeLink cleanup notification
+    try {
+      (BridgeLink as any).emit("incident-replay-v2:cleanup", "IncidentReplayerV2", {
+        incidentId: this.incidentId,
+        timestamp: Date.now(),
+      });
+    } catch (error) {
+      logger.warn("[IncidentReplayerV2] BridgeLink cleanup emit failed", { error });
+    }
   }
 }
 

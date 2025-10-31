@@ -1,4 +1,3 @@
-// @ts-nocheck
 /**
  * PATCH 582 - Decision Simulator Core
  * Simulate impact of strategies before execution
@@ -282,7 +281,7 @@ class DecisionSimulatorCore {
    */
   async getSimulationsForMission(missionId: string): Promise<SimulationResult[]> {
     try {
-      const { data, error } = await supabase
+      const { data, error } = await (supabase as any)
         .from("ai_simulations")
         .select("*")
         .eq("mission_id", missionId)
@@ -713,7 +712,7 @@ class DecisionSimulatorCore {
     });
 
     try {
-      await supabase.from("ai_simulations").insert({
+      await (supabase as any).from("ai_simulations").insert({
         simulation_id: result.id,
         strategy_id: result.strategyId,
         status: result.status,
