@@ -3,7 +3,44 @@
  * Type definitions for multi-vessel mission coordination
  */
 
-export type MissionType = 
+export type VesselRole = "primary" | "support" | "backup" | "observer";
+
+export interface VesselAIContext {
+  vessel_id: string;
+  context_id: string;
+  local_data: Record<string, any>;
+  global_data: Record<string, any>;
+  last_sync: string;
+  model_version: string;
+  interaction_count: number;
+  created_at: string;
+  updated_at: string;
+}
+
+export interface MissionVessel {
+  id: string;
+  mission_id: string;
+  vessel_id: string;
+  role: VesselRole;
+  assigned_at: string;
+  status: "assigned" | "active" | "completed" | "withdrawn";
+  notes?: string;
+  created_at: string;
+  updated_at: string;
+}
+
+export interface MissionLog {
+  id: string;
+  mission_id: string;
+  vessel_id?: string;
+  log_type: "info" | "warning" | "error" | "status_change" | "coordination" | "ai_decision";
+  message: string;
+  metadata?: Record<string, unknown>;
+  created_by?: string;
+  created_at: string;
+}
+
+export type MissionType =
   | 'sar'
   | 'evacuation'
   | 'transport'
@@ -24,12 +61,6 @@ export type MissionPriority =
   | 'normal'
   | 'high'
   | 'critical';
-
-export type VesselRole = 
-  | 'primary'
-  | 'support'
-  | 'backup'
-  | 'observer';
 
 export interface Mission {
   id: string;

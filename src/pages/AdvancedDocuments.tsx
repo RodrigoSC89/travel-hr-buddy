@@ -1,11 +1,14 @@
-import React from "react";
+import React, { lazy, Suspense } from "react";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
-import { EnhancedDocumentScanner } from "@/components/documents/enhanced-document-scanner";
-import { AdvancedDocumentCenter } from "@/components/documents/advanced-document-center";
-import IntelligentDocumentManager from "@/components/documents/intelligent-document-manager";
 import { DocumentValidator } from "@/components/ui/document-validator";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
+import { Skeleton } from "@/components/ui/skeleton";
 import { logger } from "@/lib/logger";
+
+// Lazy load heavy components
+const EnhancedDocumentScanner = lazy(() => import("@/components/documents/enhanced-document-scanner").then(m => ({ default: m.EnhancedDocumentScanner })));
+const AdvancedDocumentCenter = lazy(() => import("@/components/documents/advanced-document-center").then(m => ({ default: m.AdvancedDocumentCenter })));
+const IntelligentDocumentManager = lazy(() => import("@/components/documents/intelligent-document-manager"));
 import {
   FileText, 
   Scan, 
@@ -120,7 +123,9 @@ const AdvancedDocumentsPage = () => {
                 </CardDescription>
               </CardHeader>
               <CardContent>
-                <EnhancedDocumentScanner />
+                <Suspense fallback={<Skeleton className="h-96 w-full" />}>
+                  <EnhancedDocumentScanner />
+                </Suspense>
               </CardContent>
             </Card>
           </TabsContent>
@@ -138,7 +143,9 @@ const AdvancedDocumentsPage = () => {
                 </CardDescription>
               </CardHeader>
               <CardContent>
-                <AdvancedDocumentCenter />
+                <Suspense fallback={<Skeleton className="h-96 w-full" />}>
+                  <AdvancedDocumentCenter />
+                </Suspense>
               </CardContent>
             </Card>
           </TabsContent>
@@ -156,7 +163,9 @@ const AdvancedDocumentsPage = () => {
                 </CardDescription>
               </CardHeader>
               <CardContent>
-                <IntelligentDocumentManager />
+                <Suspense fallback={<Skeleton className="h-96 w-full" />}>
+                  <IntelligentDocumentManager />
+                </Suspense>
               </CardContent>
             </Card>
           </TabsContent>

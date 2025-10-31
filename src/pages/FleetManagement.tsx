@@ -1,9 +1,10 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, lazy, Suspense } from "react";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Input } from "@/components/ui/input";
+import { Skeleton } from "@/components/ui/skeleton";
 import { logger } from "@/lib/logger";
 import {
   Ship, 
@@ -35,17 +36,17 @@ import ModuleActionButton from "@/components/ui/module-action-button";
 import { useToast } from "@/hooks/use-toast";
 import { supabase } from "@/integrations/supabase/client";
 
-// Components
-import FleetOverviewDashboard from "@/components/fleet/fleet-overview-dashboard";
-import VesselManagementSystem from "@/components/fleet/vessel-management-system";
-import MaintenanceManagement from "@/components/fleet/maintenance-management";
-import DocumentationCenter from "@/components/fleet/documentation-center";
-import FleetAnalytics from "@/components/fleet/fleet-analytics";
-import RealTimeTracking from "@/components/fleet/real-time-tracking";
-import IntelligentAlerts from "@/components/fleet/intelligent-alerts";
-import ComplianceCenter from "@/components/fleet/compliance-center";
-import NotificationCenter from "@/components/fleet/notification-center";
-import { FleetAIInsights } from "@/components/fleet/fleet-ai-insights";
+// Lazy load heavy components
+const FleetOverviewDashboard = lazy(() => import("@/components/fleet/fleet-overview-dashboard"));
+const VesselManagementSystem = lazy(() => import("@/components/fleet/vessel-management-system"));
+const MaintenanceManagement = lazy(() => import("@/components/fleet/maintenance-management"));
+const DocumentationCenter = lazy(() => import("@/components/fleet/documentation-center"));
+const FleetAnalytics = lazy(() => import("@/components/fleet/fleet-analytics"));
+const RealTimeTracking = lazy(() => import("@/components/fleet/real-time-tracking"));
+const IntelligentAlerts = lazy(() => import("@/components/fleet/intelligent-alerts"));
+const ComplianceCenter = lazy(() => import("@/components/fleet/compliance-center"));
+const NotificationCenter = lazy(() => import("@/components/fleet/notification-center"));
+const FleetAIInsights = lazy(() => import("@/components/fleet/fleet-ai-insights").then(m => ({ default: m.FleetAIInsights })));
 
 const MaritimeFleetManagement = () => {
   const [activeTab, setActiveTab] = useState("overview");
@@ -288,43 +289,63 @@ const MaritimeFleetManagement = () => {
           </div>
 
           <TabsContent value="overview" className="space-y-6">
-            <FleetOverviewDashboard stats={fleetStats} onRefresh={loadFleetStats} />
+            <Suspense fallback={<Skeleton className="h-96 w-full" />}>
+              <FleetOverviewDashboard stats={fleetStats} onRefresh={loadFleetStats} />
+            </Suspense>
           </TabsContent>
 
           <TabsContent value="ai-insights" className="space-y-6">
-            <FleetAIInsights vessels={vessels} />
+            <Suspense fallback={<Skeleton className="h-96 w-full" />}>
+              <FleetAIInsights vessels={vessels} />
+            </Suspense>
           </TabsContent>
 
           <TabsContent value="vessels" className="space-y-6">
-            <VesselManagementSystem onStatsUpdate={loadFleetStats} />
+            <Suspense fallback={<Skeleton className="h-96 w-full" />}>
+              <VesselManagementSystem onStatsUpdate={loadFleetStats} />
+            </Suspense>
           </TabsContent>
 
           <TabsContent value="maintenance" className="space-y-6">
-            <MaintenanceManagement />
+            <Suspense fallback={<Skeleton className="h-96 w-full" />}>
+              <MaintenanceManagement />
+            </Suspense>
           </TabsContent>
 
           <TabsContent value="documents" className="space-y-6">
-            <DocumentationCenter />
+            <Suspense fallback={<Skeleton className="h-96 w-full" />}>
+              <DocumentationCenter />
+            </Suspense>
           </TabsContent>
 
           <TabsContent value="analytics" className="space-y-6">
-            <FleetAnalytics />
+            <Suspense fallback={<Skeleton className="h-96 w-full" />}>
+              <FleetAnalytics />
+            </Suspense>
           </TabsContent>
 
           <TabsContent value="tracking" className="space-y-6">
-            <RealTimeTracking />
+            <Suspense fallback={<Skeleton className="h-96 w-full" />}>
+              <RealTimeTracking />
+            </Suspense>
           </TabsContent>
 
           <TabsContent value="alerts" className="space-y-6">
-            <IntelligentAlerts />
+            <Suspense fallback={<Skeleton className="h-96 w-full" />}>
+              <IntelligentAlerts />
+            </Suspense>
           </TabsContent>
 
           <TabsContent value="compliance" className="space-y-6">
-            <ComplianceCenter />
+            <Suspense fallback={<Skeleton className="h-96 w-full" />}>
+              <ComplianceCenter />
+            </Suspense>
           </TabsContent>
 
           <TabsContent value="notifications" className="space-y-6">
-            <NotificationCenter />
+            <Suspense fallback={<Skeleton className="h-96 w-full" />}>
+              <NotificationCenter />
+            </Suspense>
           </TabsContent>
         </Tabs>
       </div>

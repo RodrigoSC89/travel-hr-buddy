@@ -1,12 +1,15 @@
-import React from "react";
+import React, { lazy, Suspense } from "react";
 import { SidebarProvider } from "@/components/ui/sidebar";
 import { AppSidebar } from "@/components/layout/app-sidebar";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
-import { RiskManagementDashboard } from "@/components/bcp/risk-management-dashboard";
-import { BackupRecoverySystem } from "@/components/bcp/backup-recovery-system";
-import { ComplianceAuditCenter } from "@/components/bcp/compliance-audit-center";
-import { ContinuousTestingMonitoring } from "@/components/bcp/continuous-testing-monitoring";
+import { Skeleton } from "@/components/ui/skeleton";
 import { Shield } from "lucide-react";
+
+// Lazy load heavy components
+const RiskManagementDashboard = lazy(() => import("@/components/bcp/risk-management-dashboard").then(m => ({ default: m.RiskManagementDashboard })));
+const BackupRecoverySystem = lazy(() => import("@/components/bcp/backup-recovery-system").then(m => ({ default: m.BackupRecoverySystem })));
+const ComplianceAuditCenter = lazy(() => import("@/components/bcp/compliance-audit-center").then(m => ({ default: m.ComplianceAuditCenter })));
+const ContinuousTestingMonitoring = lazy(() => import("@/components/bcp/continuous-testing-monitoring").then(m => ({ default: m.ContinuousTestingMonitoring })));
 
 
 const BusinessContinuityPlan = () => {
@@ -50,19 +53,27 @@ const BusinessContinuityPlan = () => {
             </div>
 
             <TabsContent value="risks">
-              <RiskManagementDashboard />
+              <Suspense fallback={<Skeleton className="h-96 w-full" />}>
+                <RiskManagementDashboard />
+              </Suspense>
             </TabsContent>
 
             <TabsContent value="backup">
-              <BackupRecoverySystem />
+              <Suspense fallback={<Skeleton className="h-96 w-full" />}>
+                <BackupRecoverySystem />
+              </Suspense>
             </TabsContent>
 
             <TabsContent value="compliance">
-              <ComplianceAuditCenter />
+              <Suspense fallback={<Skeleton className="h-96 w-full" />}>
+                <ComplianceAuditCenter />
+              </Suspense>
             </TabsContent>
 
             <TabsContent value="testing">
-              <ContinuousTestingMonitoring />
+              <Suspense fallback={<Skeleton className="h-96 w-full" />}>
+                <ContinuousTestingMonitoring />
+              </Suspense>
             </TabsContent>
           </Tabs>
         </main>
