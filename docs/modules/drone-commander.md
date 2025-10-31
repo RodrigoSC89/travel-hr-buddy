@@ -1,48 +1,31 @@
-# Drone Commander Module
+# 🛸 Módulo: drone-commander
 
-## Visão Geral
+## 📌 Objetivo
+Emitir comandos, monitorar status e coordenar drones submarinos durante missões autônomas.
 
-O Drone Commander é o módulo de controle e coordenação de frotas de drones aéreos para inspeção, vigilância e operações de reconhecimento marítimo.
+## 📁 Estrutura de Arquivos
+- `lib/drone/command-service.ts`
+- `hooks/useDroneStatus.ts`
+- `components/DroneCommanderPanel.tsx`
 
-**Categoria**: Specialized / Operations  
-**Rota**: `/drone-commander`  
-**Status**: Ativo  
-**Versão**: 2.0
+## 🔗 Integrações
+- MQTT: `drones/+/commands`, `drones/+/status`
+- Supabase: `drone_logs`, `drone_profiles`
 
-## Componentes Principais
+## 🔄 Fluxo Operacional
+```mermaid
+graph TD
+UI --> EmitCommand --> MQTT --> Drone --> StatusUpdate --> UI
+```
 
-### FleetControl
-- Multi-drone coordination
-- Fleet status overview
-- Swarm operations
-- Mission assignment
+## 🧪 Testes
 
-### FlightPlanner
-- Flight path planning
-- No-fly zone management
-- Weather integration
-- Battery optimization
+- ✅ Comando MOVE emitido
+- ✅ Resposta em <1s
+- ✅ UI atualiza automaticamente
 
-### VideoStream
-- Live video feeds
-- Multi-camera view
-- Recording and playback
-- AI-powered analysis
+## 📋 Status Atual
 
-### DataCollection
-- Aerial photography
-- Thermal imaging
-- Sensor data collection
-- Automated reporting
-
-## Integrações
-
-- **Mission Control**: Mission coordination
-- **Weather Dashboard**: Weather data for flight planning
-- **Fleet Management**: Asset tracking
-
-## Última Atualização
-
-**Data**: 2025-10-29  
-**Versão**: 2.0  
-**Features**: Fleet control, Flight planning, Video streaming
+- ✅ UI em desenvolvimento
+- ✅ Estrutura MQTT implementada
+- ✅ Logs Supabase
