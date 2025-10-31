@@ -1,4 +1,3 @@
-// @ts-nocheck
 /**
  * Centralized Logger Utility
  * 
@@ -104,8 +103,8 @@ export const logger = {
     // Send to Sentry in production
     if (isProduction && isError(error) && typeof window !== "undefined") {
       try {
-        const Sentry = (window as unknown).Sentry;
-        if (Sentry && getSentryDsn()) {
+        const Sentry = (window as any).Sentry;
+        if (Sentry && getSentryDsn() && typeof Sentry.captureException === "function") {
           Sentry.captureException(error, { 
             extra: { message, ...context },
             tags: { source: "logger" }
@@ -141,8 +140,8 @@ export const logger = {
     // Send to Sentry in production
     if (isProduction && isError(error) && typeof window !== "undefined") {
       try {
-        const Sentry = (window as unknown).Sentry;
-        if (Sentry && getSentryDsn()) {
+        const Sentry = (window as any).Sentry;
+        if (Sentry && getSentryDsn() && typeof Sentry.captureException === "function") {
           Sentry.captureException(error, { 
             extra: { message, ...context },
             tags: { source: "logger" }

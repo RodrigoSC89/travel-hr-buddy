@@ -1,4 +1,3 @@
-// @ts-nocheck
 import React, { memo } from "react";
 import { LoadingSpinner } from "@/components/ui/loading-spinner";
 import { logger } from "@/lib/logger";
@@ -22,9 +21,9 @@ export const LazyComponent: React.FC<LazyComponentProps> = memo(({
   const Component = safeLazyImport(loader, componentName);
   
   return (
-    <Component {...props}>
-      {children}
-    </Component>
+    <React.Suspense fallback={fallback || <LoadingSpinner />}>
+      <Component {...props} />
+    </React.Suspense>
   );
 });
 
