@@ -1,4 +1,3 @@
-// @ts-nocheck
 import { useState, useEffect } from "react";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
@@ -17,6 +16,7 @@ import {
   Key
 } from "lucide-react";
 import { supabase } from "@/integrations/supabase/client";
+import { logger } from "@/lib/logger";
 
 interface IntegrationProvider {
   id: string;
@@ -72,7 +72,7 @@ export default function IntegrationsHub() {
 
   const fetchProviders = async () => {
     try {
-      const { data, error } = await supabase
+      const { data, error } = await (supabase as any)
         .from("integration_providers")
         .select("*")
         .eq("is_active", true)
@@ -81,13 +81,13 @@ export default function IntegrationsHub() {
       if (error) throw error;
       setProviders(data || []);
     } catch (error) {
-      console.error("Error fetching providers:", error);
+      logger.error("Error fetching providers", { error });
     }
   };
 
   const fetchUserIntegrations = async () => {
     try {
-      const { data, error } = await supabase
+      const { data, error } = await (supabase as any)
         .from("user_integrations")
         .select(`
           *,
@@ -98,13 +98,13 @@ export default function IntegrationsHub() {
       if (error) throw error;
       setUserIntegrations(data || []);
     } catch (error) {
-      console.error("Error fetching integrations:", error);
+      logger.error("Error fetching integrations", { error });
     }
   };
 
   const fetchLogs = async () => {
     try {
-      const { data, error } = await supabase
+      const { data, error } = await (supabase as any)
         .from("integration_logs")
         .select("*")
         .order("created_at", { ascending: false })
@@ -113,13 +113,13 @@ export default function IntegrationsHub() {
       if (error) throw error;
       setLogs(data || []);
     } catch (error) {
-      console.error("Error fetching logs:", error);
+      logger.error("Error fetching logs", { error });
     }
   };
 
   const fetchPlugins = async () => {
     try {
-      const { data, error } = await supabase
+      const { data, error } = await (supabase as any)
         .from("plugins")
         .select("*")
         .eq("is_active", true)
@@ -128,14 +128,14 @@ export default function IntegrationsHub() {
       if (error) throw error;
       setPlugins(data || []);
     } catch (error) {
-      console.error("Error fetching plugins:", error);
+      logger.error("Error fetching plugins", { error });
     }
   };
 
   const toggleIntegration = async (integrationId: string, isActive: boolean) => {
     try {
       if (isActive) {
-        const { error } = await supabase.rpc("deactivate_integration", {
+        const { error } = await (supabase as any).rpc("deactivate_integration", {
           p_integration_id: integrationId
         });
         if (error) throw error;
@@ -155,7 +155,7 @@ export default function IntegrationsHub() {
 
       fetchUserIntegrations();
     } catch (error) {
-      console.error("Error toggling integration:", error);
+      logger.error("Error toggling integration", { error });
       toast({
         title: "Error",
         description: "Failed to update integration",
@@ -166,7 +166,7 @@ export default function IntegrationsHub() {
 
   const initiateOAuth = async (providerId: string) => {
     try {
-      const { data, error } = await supabase.rpc("create_oauth_state", {
+      const { data, error } = await (supabase as any).rpc("create_oauth_state", {
         p_provider_id: providerId
       });
 
@@ -180,7 +180,7 @@ export default function IntegrationsHub() {
       // In production, would redirect to OAuth URL
       // window.location.href = data.auth_url + `?state=${data.state}`;
     } catch (error) {
-      console.error("Error initiating OAuth:", error);
+      logger.error("Error initiating OAuth", { error });
       toast({
         title: "Error",
         description: "Failed to start OAuth flow",
@@ -191,7 +191,7 @@ export default function IntegrationsHub() {
 
   const installPlugin = async (pluginId: string) => {
     try {
-      const { error } = await supabase.rpc("install_plugin", {
+      const { error } = await (supabase as any).rpc("install_plugin", {
         p_plugin_id: pluginId,
         p_configuration: {}
       });
@@ -205,7 +205,7 @@ export default function IntegrationsHub() {
 
       fetchPlugins();
     } catch (error) {
-      console.error("Error installing plugin:", error);
+      logger.error("Error installing plugin", { error });
       toast({
         title: "Error",
         description: "Failed to install plugin",

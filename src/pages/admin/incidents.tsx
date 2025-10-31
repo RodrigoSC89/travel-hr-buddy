@@ -1,4 +1,3 @@
-// @ts-nocheck
 import { useEffect, useState } from "react";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
@@ -6,6 +5,7 @@ import { supabase } from "@/integrations/supabase/client";
 import { ScrollArea } from "@/components/ui/scroll-area";
 import { formatDistanceToNow } from "date-fns";
 import { ptBR } from "date-fns/locale";
+import { logger } from "@/lib/logger";
 
 interface Incident {
   id: string;
@@ -48,7 +48,7 @@ export default function IncidentsPage() {
 
   const loadIncidents = async () => {
     try {
-      const { data, error } = await supabase
+      const { data, error } = await (supabase as any)
         .from("incidents")
         .select("*")
         .order("created_at", { ascending: false })
@@ -57,7 +57,7 @@ export default function IncidentsPage() {
       if (error) throw error;
       setIncidents(data || []);
     } catch (error) {
-      console.error("Error loading incidents:", error);
+      logger.error("Error loading incidents", { error });
     } finally {
       setLoading(false);
     }

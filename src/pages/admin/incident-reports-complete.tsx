@@ -1,4 +1,3 @@
-// @ts-nocheck
 import React, { useState, useEffect } from "react";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
@@ -17,6 +16,7 @@ import { formatDistanceToNow } from "date-fns";
 import { ptBR } from "date-fns/locale";
 import jsPDF from "jspdf";
 import "jspdf-autotable";
+import { logger } from "@/lib/logger";
 
 interface IncidentReport {
   id: string;
@@ -35,6 +35,7 @@ interface IncidentReport {
   immediate_actions: string;
   created_at: string;
   updated_at: string;
+  resolved_at?: string;
 }
 
 interface IncidentFollowup {
@@ -96,7 +97,7 @@ export default function IncidentReportsComplete() {
 
   const loadIncidents = async () => {
     try {
-      const { data, error } = await supabase
+      const { data, error } = await (supabase as any)
         .from("incident_reports")
         .select("*")
         .order("created_at", { ascending: false });
@@ -104,7 +105,7 @@ export default function IncidentReportsComplete() {
       if (error) throw error;
       setIncidents(data || []);
     } catch (error) {
-      console.error("Error loading incidents:", error);
+      logger.error("Error loading incidents", { error });
       toast({
         title: "Erro",
         description: "Falha ao carregar incidentes",
@@ -117,7 +118,7 @@ export default function IncidentReportsComplete() {
 
   const loadFollowups = async (incidentId: string) => {
     try {
-      const { data, error } = await supabase
+      const { data, error } = await (supabase as any)
         .from("incident_followups")
         .select("*")
         .eq("incident_id", incidentId)
@@ -126,7 +127,7 @@ export default function IncidentReportsComplete() {
       if (error) throw error;
       setFollowups(data || []);
     } catch (error) {
-      console.error("Error loading followups:", error);
+      logger.error("Error loading followups", { error });
     }
   };
 
@@ -137,7 +138,7 @@ export default function IncidentReportsComplete() {
 
       const incidentNumber = `INC-${Date.now()}`;
       
-      const { data, error } = await supabase
+      const { data, error } = await (supabase as any)
         .from("incident_reports")
         .insert({
           incident_number: incidentNumber,
@@ -169,7 +170,7 @@ export default function IncidentReportsComplete() {
       await autoRouteIncident(data);
       
     } catch (error) {
-      console.error("Error creating incident:", error);
+      logger.error("Error creating incident", { error });
       toast({
         title: "Erro",
         description: "Falha ao criar incidente",
@@ -192,7 +193,7 @@ export default function IncidentReportsComplete() {
     
     // Create workflow state
     try {
-      await supabase
+      await (supabase as any)
         .from("incident_workflow_states")
         .insert({
           incident_id: incident.id,
@@ -202,7 +203,7 @@ export default function IncidentReportsComplete() {
           sla_deadline: new Date(Date.now() + (incident.severity === "critical" ? 4 : 24) * 60 * 60 * 1000).toISOString()
         });
     } catch (error) {
-      console.error("Error routing incident:", error);
+      logger.error("Error routing incident", { error });
     }
   };
 
@@ -213,7 +214,7 @@ export default function IncidentReportsComplete() {
       const { data: { user } } = await supabase.auth.getUser();
       if (!user) throw new Error("User not authenticated");
 
-      const { error } = await supabase
+      const { error } = await (supabase as any)
         .from("incident_followups")
         .insert({
           incident_id: selectedIncident.id,
@@ -227,12 +228,12 @@ export default function IncidentReportsComplete() {
       
       // Update incident status if changed
       if (newFollowup.new_status && newFollowup.new_status !== selectedIncident.status) {
-        await supabase
+        await (supabase as any)
           .from("incident_reports")
           .update({ 
             status: newFollowup.new_status,
             updated_at: new Date().toISOString(),
-            ...(newFollowup.new_status === "resolved" && { resolved_at: new Date().toISOString() })
+            ...((newFollowup.new_status === "resolved" || newFollowup.new_status === "closed") && { resolved_at: new Date().toISOString() })
           })
           .eq("id", selectedIncident.id);
       }
@@ -250,7 +251,7 @@ export default function IncidentReportsComplete() {
       });
       
     } catch (error) {
-      console.error("Error adding followup:", error);
+      logger.error("Error adding followup", { error });
       toast({
         title: "Erro",
         description: "Falha ao adicionar atualização",
