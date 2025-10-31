@@ -83,7 +83,7 @@ export function useCoordination(options: UseCoordinationOptions = {}) {
     const loadAgentsFromSupabase = async () => {
       try {
         const { data, error } = await supabase
-          .from("coordination_agents")
+          .from("coordination_agents" as any)
           .select("*")
           .order("created_at", { ascending: false });
 
@@ -175,7 +175,7 @@ export function useCoordination(options: UseCoordinationOptions = {}) {
     if (enableSupabase) {
       try {
         const { error } = await supabase
-          .from("coordination_agents")
+          .from("coordination_agents" as any)
           .upsert({
             id: fullAgent.id,
             name: fullAgent.name,
@@ -217,7 +217,7 @@ export function useCoordination(options: UseCoordinationOptions = {}) {
     if (enableSupabase) {
       try {
         const { error } = await supabase
-          .from("coordination_agents")
+          .from("coordination_agents" as any)
           .update({
             ...updates,
             last_update: new Date().toISOString()
@@ -250,7 +250,7 @@ export function useCoordination(options: UseCoordinationOptions = {}) {
     if (enableSupabase) {
       try {
         const { error } = await supabase
-          .from("coordination_agents")
+          .from("coordination_agents" as any)
           .delete()
           .eq("id", agentId);
 
@@ -289,7 +289,7 @@ export function useCoordination(options: UseCoordinationOptions = {}) {
       // Log to Supabase if enabled
       if (enableSupabase && newActions.length > 0) {
         try {
-          await supabase.from("coordination_logs").insert(
+          await supabase.from("coordination_logs" as any).insert(
             newActions.map(action => ({
               agent_id: action.agentId,
               action: action.action,

@@ -66,14 +66,16 @@ export default function MissionEnginePage() {
 
   // Create sample mission
   const createSampleMission = () => {
-    const steps: Omit<MissionStep, "status" | "retryCount">[] = [
+    const steps: MissionStep[] = [
       {
         id: "step-1",
         name: "Initialize Scan",
         type: "scan",
         description: "Begin area scanning",
         timeout: 2000,
-        maxRetries: 2
+        maxRetries: 2,
+        status: "pending" as const,
+        retryCount: 0
       },
       {
         id: "step-2",
@@ -81,7 +83,9 @@ export default function MissionEnginePage() {
         type: "coordinate",
         description: "Synchronize all active agents",
         timeout: 1500,
-        dependencies: ["step-1"]
+        dependencies: ["step-1"],
+        status: "pending" as const,
+        retryCount: 0
       },
       {
         id: "step-3",
@@ -89,7 +93,9 @@ export default function MissionEnginePage() {
         type: "collect",
         description: "Gather sensor data",
         timeout: 2500,
-        dependencies: ["step-2"]
+        dependencies: ["step-2"],
+        status: "pending" as const,
+        retryCount: 0
       },
       {
         id: "step-4",
@@ -97,7 +103,9 @@ export default function MissionEnginePage() {
         type: "transmit",
         description: "Send data to base station",
         timeout: 2000,
-        dependencies: ["step-3"]
+        dependencies: ["step-3"],
+        status: "pending" as const,
+        retryCount: 0
       }
     ];
 

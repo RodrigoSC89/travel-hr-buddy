@@ -53,7 +53,7 @@ export function useDroneState(options: UseDroneStateOptions = {}) {
     const loadDronesFromSupabase = async () => {
       try {
         const { data, error } = await supabase
-          .from("drones")
+          .from("drones" as any)
           .select("*")
           .order("created_at", { ascending: false });
 
@@ -154,7 +154,7 @@ export function useDroneState(options: UseDroneStateOptions = {}) {
       // Log to Supabase if enabled
       if (enableSupabase) {
         try {
-          await supabase.from("drone_commands").insert({
+          await supabase.from("drone_commands" as any).insert({
             drone_id: droneId,
             command,
             params,

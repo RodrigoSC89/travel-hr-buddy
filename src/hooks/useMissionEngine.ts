@@ -95,7 +95,7 @@ export function useMissionEngine(options: UseMissionEngineOptions = {}) {
               agents: mission.agents,
               metadata: mission.metadata
             }
-          });
+          } as any);
 
         if (error) {
           logger.error("Error saving mission to Supabase:", error);
