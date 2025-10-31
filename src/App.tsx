@@ -204,6 +204,9 @@ const ImageOptimizationPanel = safeLazyImport(() => import("@/pages/admin/ImageO
 // PATCH 543 - Lighthouse CI Dashboard
 const LighthouseDashboard = safeLazyImport(() => import("@/pages/admin/LighthouseDashboard"));
 
+// Final - Deployment Status
+const DeploymentStatus = safeLazyImport(() => import("@/pages/admin/DeploymentStatus"));
+
 // PATCH 574 - i18n Dashboard
 const I18nDashboard = safeLazyImport(() => import("@/pages/dashboard/i18n"));
 const I18nDemo = safeLazyImport(() => import("@/pages/i18n-demo"));
@@ -789,6 +792,9 @@ function App() {
                       
                       {/* PATCH 543 - Lighthouse CI */}
                       <Route path="/admin/lighthouse-dashboard" element={<LighthouseDashboard />} />
+                      
+                      {/* Final - Deployment Status */}
+                      <Route path="/admin/deployment-status" element={<DeploymentStatus />} />
 
                       <Route path="/admin/documents/edit/:id" element={<CollaborativeEditor />} />
                       <Route path="/admin/documents/view/:id" element={<DocumentView />} />

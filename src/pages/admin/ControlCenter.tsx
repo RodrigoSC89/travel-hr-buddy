@@ -104,6 +104,13 @@ export default function ControlCenter() {
           icon: <Activity className="h-4 w-4" />,
           description: "Performance audits & Core Web Vitals",
           badge: "PATCH 543"
+        },
+        {
+          name: "Deployment Status",
+          path: "/admin/deployment-status",
+          icon: <Activity className="h-4 w-4" />,
+          description: "Pre-deploy validation dashboard",
+          badge: "Final"
         }
       ]
     },
@@ -272,7 +279,7 @@ export default function ControlCenter() {
             <Settings className="h-4 w-4 text-muted-foreground" />
           </CardHeader>
           <CardContent>
-            <div className="text-2xl font-bold">18</div>
+            <div className="text-2xl font-bold">19</div>
             <p className="text-xs text-muted-foreground">
               Total admin interfaces
             </p>
