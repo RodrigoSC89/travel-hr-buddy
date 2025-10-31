@@ -3,8 +3,8 @@
  * Real satellite tracking with external API integration
  */
 
-// @ts-nocheck
 import React, { useState, useEffect } from "react";
+import { logger } from "@/lib/logger";
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
@@ -65,7 +65,7 @@ export default function SatelliteLivePage() {
 
   const loadSatellites = async () => {
     try {
-      const { data, error } = await supabase
+      const { data, error } = await (supabase as any)
         .from("satellite_live_tracking")
         .select("*")
         .order("timestamp", { ascending: false });
@@ -82,7 +82,7 @@ export default function SatelliteLivePage() {
 
       setSatellites(Array.from(uniqueSatellites.values()));
     } catch (error) {
-      console.error("Error loading satellites:", error);
+      logger.error("Error loading satellites", { error });
       toast.error("Failed to load satellites");
     } finally {
       setLoading(false);
@@ -91,7 +91,7 @@ export default function SatelliteLivePage() {
 
   const loadSyncLogs = async () => {
     try {
-      const { data, error } = await supabase
+      const { data, error } = await (supabase as any)
         .from("satellite_api_sync_logs")
         .select("*")
         .order("timestamp", { ascending: false })
@@ -100,7 +100,7 @@ export default function SatelliteLivePage() {
       if (error) throw error;
       setSyncLogs(data || []);
     } catch (error) {
-      console.error("Error loading sync logs:", error);
+      logger.error("Error loading sync logs", { error });
     }
   };
 
@@ -171,7 +171,7 @@ export default function SatelliteLivePage() {
         }
       ];
 
-      const { data, error } = await supabase
+      const { data, error } = await (supabase as any)
         .from("satellite_live_tracking")
         .insert(
           mockSatellites.map(sat => ({
@@ -184,7 +184,7 @@ export default function SatelliteLivePage() {
 
       // Log the sync
       const responseTime = Date.now() - startTime;
-      await supabase
+      await (supabase as any)
         .from("satellite_api_sync_logs")
         .insert({
           api_provider: "mock",
@@ -200,11 +200,11 @@ export default function SatelliteLivePage() {
       loadSatellites();
       loadSyncLogs();
     } catch (error) {
-      console.error("Error syncing satellites:", error);
+      logger.error("Error syncing satellites", { error });
       toast.error("Failed to sync satellite data");
       
       // Log failed sync
-      await supabase
+      await (supabase as any)
         .from("satellite_api_sync_logs")
         .insert({
           api_provider: "mock",

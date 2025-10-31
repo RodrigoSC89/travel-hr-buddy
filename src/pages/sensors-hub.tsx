@@ -3,8 +3,8 @@
  * Advanced sensor monitoring with real-time updates, MQTT/Realtime, and filtering
  */
 
-// @ts-nocheck
 import React, { useState, useEffect } from "react";
+import { logger } from "@/lib/logger";
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
@@ -72,7 +72,7 @@ export default function SensorsHubPage() {
 
   const loadSensors = async () => {
     try {
-      const { data, error } = await supabase
+      const { data, error } = await (supabase as any)
         .from("sensor_config")
         .select("*")
         .order("sensor_name");
@@ -80,7 +80,7 @@ export default function SensorsHubPage() {
       if (error) throw error;
       setSensors(data || []);
     } catch (error) {
-      console.error("Error loading sensors:", error);
+      logger.error("Error loading sensors", { error });
       toast.error("Failed to load sensors");
     } finally {
       setLoading(false);
@@ -91,7 +91,7 @@ export default function SensorsHubPage() {
     if (sensors.length === 0) return;
 
     try {
-      const { data, error } = await supabase
+      const { data, error } = await (supabase as any)
         .from("sensor_readings")
         .select("*")
         .in("sensor_id", sensors.map(s => s.sensor_id))
@@ -109,7 +109,7 @@ export default function SensorsHubPage() {
 
       setReadings(readingsMap);
     } catch (error) {
-      console.error("Error loading readings:", error);
+      logger.error("Error loading readings", { error });
     }
   };
 
