@@ -2040,6 +2040,54 @@ export type Database = {
           },
         ]
       }
+      beta_feedback: {
+        Row: {
+          attachments: Json | null
+          created_at: string | null
+          description: string
+          feature_name: string
+          feedback_type: string
+          id: string
+          metadata: Json | null
+          priority: string | null
+          rating: number | null
+          status: string | null
+          title: string
+          updated_at: string | null
+          user_id: string | null
+        }
+        Insert: {
+          attachments?: Json | null
+          created_at?: string | null
+          description: string
+          feature_name: string
+          feedback_type: string
+          id?: string
+          metadata?: Json | null
+          priority?: string | null
+          rating?: number | null
+          status?: string | null
+          title: string
+          updated_at?: string | null
+          user_id?: string | null
+        }
+        Update: {
+          attachments?: Json | null
+          created_at?: string | null
+          description?: string
+          feature_name?: string
+          feedback_type?: string
+          id?: string
+          metadata?: Json | null
+          priority?: string | null
+          rating?: number | null
+          status?: string | null
+          title?: string
+          updated_at?: string | null
+          user_id?: string | null
+        }
+        Relationships: []
+      }
       certificate_alerts: {
         Row: {
           alert_date: string
@@ -5492,6 +5540,54 @@ export type Database = {
         }
         Relationships: []
       }
+      ia_performance_log: {
+        Row: {
+          cpu_usage_percent: number | null
+          created_at: string | null
+          error_message: string | null
+          execution_time_ms: number
+          id: string
+          input_size_bytes: number | null
+          memory_used_mb: number | null
+          metadata: Json | null
+          model_version: string | null
+          module_name: string
+          operation_type: string
+          output_size_bytes: number | null
+          success: boolean | null
+        }
+        Insert: {
+          cpu_usage_percent?: number | null
+          created_at?: string | null
+          error_message?: string | null
+          execution_time_ms: number
+          id?: string
+          input_size_bytes?: number | null
+          memory_used_mb?: number | null
+          metadata?: Json | null
+          model_version?: string | null
+          module_name: string
+          operation_type: string
+          output_size_bytes?: number | null
+          success?: boolean | null
+        }
+        Update: {
+          cpu_usage_percent?: number | null
+          created_at?: string | null
+          error_message?: string | null
+          execution_time_ms?: number
+          id?: string
+          input_size_bytes?: number | null
+          memory_used_mb?: number | null
+          metadata?: Json | null
+          model_version?: string | null
+          module_name?: string
+          operation_type?: string
+          output_size_bytes?: number | null
+          success?: boolean | null
+        }
+        Relationships: []
+      }
       ia_response_cache: {
         Row: {
           cached_response: string
@@ -5519,6 +5615,54 @@ export type Database = {
           model_used?: string | null
           prompt_hash?: string
           usage_count?: number | null
+        }
+        Relationships: []
+      }
+      ia_suggestions_log: {
+        Row: {
+          accepted: boolean | null
+          accepted_at: string | null
+          category: string | null
+          confidence_score: number | null
+          context: Json | null
+          created_at: string | null
+          feedback: string | null
+          id: string
+          impact_level: string | null
+          metadata: Json | null
+          suggestion_text: string
+          suggestion_type: string
+          user_id: string | null
+        }
+        Insert: {
+          accepted?: boolean | null
+          accepted_at?: string | null
+          category?: string | null
+          confidence_score?: number | null
+          context?: Json | null
+          created_at?: string | null
+          feedback?: string | null
+          id?: string
+          impact_level?: string | null
+          metadata?: Json | null
+          suggestion_text: string
+          suggestion_type: string
+          user_id?: string | null
+        }
+        Update: {
+          accepted?: boolean | null
+          accepted_at?: string | null
+          category?: string | null
+          confidence_score?: number | null
+          context?: Json | null
+          created_at?: string | null
+          feedback?: string | null
+          id?: string
+          impact_level?: string | null
+          metadata?: Json | null
+          suggestion_text?: string
+          suggestion_type?: string
+          user_id?: string | null
         }
         Relationships: []
       }
@@ -8628,37 +8772,67 @@ export type Database = {
       }
       performance_metrics: {
         Row: {
+          browser: string | null
           category: string
+          component: string | null
+          connection_type: string | null
           created_at: string
+          device_type: string | null
           id: string
+          metadata: Json | null
           metric_name: string
+          metric_type: string | null
           metric_unit: string
           metric_value: number
+          page_url: string | null
           recorded_at: string
+          session_id: string | null
           status: string
           target_value: number | null
+          unit: string | null
+          user_id: string | null
         }
         Insert: {
+          browser?: string | null
           category: string
+          component?: string | null
+          connection_type?: string | null
           created_at?: string
+          device_type?: string | null
           id?: string
+          metadata?: Json | null
           metric_name: string
+          metric_type?: string | null
           metric_unit: string
           metric_value: number
+          page_url?: string | null
           recorded_at?: string
+          session_id?: string | null
           status: string
           target_value?: number | null
+          unit?: string | null
+          user_id?: string | null
         }
         Update: {
+          browser?: string | null
           category?: string
+          component?: string | null
+          connection_type?: string | null
           created_at?: string
+          device_type?: string | null
           id?: string
+          metadata?: Json | null
           metric_name?: string
+          metric_type?: string | null
           metric_unit?: string
           metric_value?: number
+          page_url?: string | null
           recorded_at?: string
+          session_id?: string | null
           status?: string
           target_value?: number | null
+          unit?: string | null
+          user_id?: string | null
         }
         Relationships: []
       }
@@ -9956,6 +10130,113 @@ export type Database = {
           },
         ]
       }
+      sgso_audit_items: {
+        Row: {
+          audit_id: string
+          comment: string | null
+          completed_at: string | null
+          compliance_status: string
+          corrective_action: string | null
+          created_at: string | null
+          deadline: string | null
+          evidence: string | null
+          id: string
+          metadata: Json | null
+          requirement_number: number
+          requirement_title: string
+          responsible: string | null
+        }
+        Insert: {
+          audit_id: string
+          comment?: string | null
+          completed_at?: string | null
+          compliance_status: string
+          corrective_action?: string | null
+          created_at?: string | null
+          deadline?: string | null
+          evidence?: string | null
+          id?: string
+          metadata?: Json | null
+          requirement_number: number
+          requirement_title: string
+          responsible?: string | null
+        }
+        Update: {
+          audit_id?: string
+          comment?: string | null
+          completed_at?: string | null
+          compliance_status?: string
+          corrective_action?: string | null
+          created_at?: string | null
+          deadline?: string | null
+          evidence?: string | null
+          id?: string
+          metadata?: Json | null
+          requirement_number?: number
+          requirement_title?: string
+          responsible?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "sgso_audit_items_audit_id_fkey"
+            columns: ["audit_id"]
+            isOneToOne: false
+            referencedRelation: "sgso_audits"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      sgso_audits: {
+        Row: {
+          audit_date: string
+          audit_type: string | null
+          auditor_id: string | null
+          compliance_score: number | null
+          created_at: string | null
+          findings: string | null
+          id: string
+          metadata: Json | null
+          next_audit_date: string | null
+          non_conformities_count: number | null
+          recommendations: string | null
+          status: string | null
+          updated_at: string | null
+          vessel_id: string | null
+        }
+        Insert: {
+          audit_date: string
+          audit_type?: string | null
+          auditor_id?: string | null
+          compliance_score?: number | null
+          created_at?: string | null
+          findings?: string | null
+          id?: string
+          metadata?: Json | null
+          next_audit_date?: string | null
+          non_conformities_count?: number | null
+          recommendations?: string | null
+          status?: string | null
+          updated_at?: string | null
+          vessel_id?: string | null
+        }
+        Update: {
+          audit_date?: string
+          audit_type?: string | null
+          auditor_id?: string | null
+          compliance_score?: number | null
+          created_at?: string | null
+          findings?: string | null
+          id?: string
+          metadata?: Json | null
+          next_audit_date?: string | null
+          non_conformities_count?: number | null
+          recommendations?: string | null
+          status?: string | null
+          updated_at?: string | null
+          vessel_id?: string | null
+        }
+        Relationships: []
+      }
       sgso_plans: {
         Row: {
           approved_at: string | null
@@ -10141,6 +10422,48 @@ export type Database = {
           summary?: string | null
           system_status?: Json | null
           updated_at?: string | null
+        }
+        Relationships: []
+      }
+      system_health: {
+        Row: {
+          created_at: string | null
+          error_rate: number | null
+          id: string
+          last_check: string | null
+          last_error: string | null
+          metadata: Json | null
+          response_time_ms: number | null
+          service_name: string
+          status: string
+          updated_at: string | null
+          uptime_percentage: number | null
+        }
+        Insert: {
+          created_at?: string | null
+          error_rate?: number | null
+          id?: string
+          last_check?: string | null
+          last_error?: string | null
+          metadata?: Json | null
+          response_time_ms?: number | null
+          service_name: string
+          status: string
+          updated_at?: string | null
+          uptime_percentage?: number | null
+        }
+        Update: {
+          created_at?: string | null
+          error_rate?: number | null
+          id?: string
+          last_check?: string | null
+          last_error?: string | null
+          metadata?: Json | null
+          response_time_ms?: number | null
+          service_name?: string
+          status?: string
+          updated_at?: string | null
+          uptime_percentage?: number | null
         }
         Relationships: []
       }
@@ -10417,6 +10740,54 @@ export type Database = {
             referencedColumns: ["id"]
           },
         ]
+      }
+      templates: {
+        Row: {
+          category: string | null
+          content: Json
+          created_at: string | null
+          created_by: string | null
+          id: string
+          is_favorite: boolean | null
+          is_private: boolean | null
+          is_system: boolean | null
+          metadata: Json | null
+          tags: string[] | null
+          title: string
+          updated_at: string | null
+          version: number | null
+        }
+        Insert: {
+          category?: string | null
+          content: Json
+          created_at?: string | null
+          created_by?: string | null
+          id?: string
+          is_favorite?: boolean | null
+          is_private?: boolean | null
+          is_system?: boolean | null
+          metadata?: Json | null
+          tags?: string[] | null
+          title: string
+          updated_at?: string | null
+          version?: number | null
+        }
+        Update: {
+          category?: string | null
+          content?: Json
+          created_at?: string | null
+          created_by?: string | null
+          id?: string
+          is_favorite?: boolean | null
+          is_private?: boolean | null
+          is_system?: boolean | null
+          metadata?: Json | null
+          tags?: string[] | null
+          title?: string
+          updated_at?: string | null
+          version?: number | null
+        }
+        Relationships: []
       }
       tenant_audit_logs: {
         Row: {
@@ -12233,6 +12604,54 @@ export type Database = {
             referencedColumns: ["id"]
           },
         ]
+      }
+      watchdog_behavior_alerts: {
+        Row: {
+          actual_behavior: string | null
+          alert_type: string
+          anomaly_detected: string
+          auto_resolved: boolean | null
+          component_name: string
+          created_at: string | null
+          deviation_score: number | null
+          expected_behavior: string | null
+          id: string
+          metadata: Json | null
+          resolution_action: string | null
+          resolved_at: string | null
+          severity: string
+        }
+        Insert: {
+          actual_behavior?: string | null
+          alert_type: string
+          anomaly_detected: string
+          auto_resolved?: boolean | null
+          component_name: string
+          created_at?: string | null
+          deviation_score?: number | null
+          expected_behavior?: string | null
+          id?: string
+          metadata?: Json | null
+          resolution_action?: string | null
+          resolved_at?: string | null
+          severity: string
+        }
+        Update: {
+          actual_behavior?: string | null
+          alert_type?: string
+          anomaly_detected?: string
+          auto_resolved?: boolean | null
+          component_name?: string
+          created_at?: string | null
+          deviation_score?: number | null
+          expected_behavior?: string | null
+          id?: string
+          metadata?: Json | null
+          resolution_action?: string | null
+          resolved_at?: string | null
+          severity?: string
+        }
+        Relationships: []
       }
       watchdog_logs: {
         Row: {
