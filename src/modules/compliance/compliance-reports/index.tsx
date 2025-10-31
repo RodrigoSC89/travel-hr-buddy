@@ -191,10 +191,9 @@ const ComplianceReports = () => {
         item.created_at ? format(new Date(item.created_at), "dd/MM/yyyy") : ""
       ]);
       
-      const csvContent = [
-        headers.join(","),
-        ...rows.map(row => row.map(cell => `"${cell}"`).join(","))
-      ].join("\n");
+      // PATCH 540: Otimização - pré-processar linhas CSV
+      const csvRows = rows.map(row => row.map(cell => `"${cell}"`).join(","));
+      const csvContent = [headers.join(","), ...csvRows].join("\n");
       
       const blob = new Blob([csvContent], { type: "text/csv;charset=utf-8;" });
       const link = document.createElement("a");
