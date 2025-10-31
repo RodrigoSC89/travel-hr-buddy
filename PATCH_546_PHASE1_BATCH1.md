@@ -74,12 +74,12 @@ Isso representa ~26% do codebase src/ e requer uma abordagem estratégica em bat
 
 ---
 
-## 📊 Métricas do Batch 1 + 2 + 3 + 4
+## 📊 Métricas do Batch 1 + 2 + 3 + 4 + 5
 
 | Métrica | Valor |
 |---------|-------|
-| Arquivos Corrigidos | 13/50 ✅ |
-| @ts-nocheck Removidos | 13/395 total (3.3%) |
+| Arquivos Corrigidos | 14/50 ✅ |
+| @ts-nocheck Removidos | 14/395 total (3.5%) |
 | Build Status | ✅ Passando |
 | Type Errors Introduzidos | 0 |
 | Interfaces TypeScript Já Existentes | 32 |
@@ -110,6 +110,9 @@ Isso representa ~26% do codebase src/ e requer uma abordagem estratégica em bat
 - `src/components/ui/interactive-overlay.tsx` ✅
 - `src/lib/logger.ts` ✅
 
+### ✅ Batch 5 Completo (1 arquivo)
+- `src/hooks/useButtonHandlers.ts` ✅
+
 ### 📋 Bloqueios Identificados
 **Tabelas Faltantes no Supabase:**
 1. `beta_feedback` - Para BetaFeedbackForm
@@ -125,10 +128,10 @@ Isso representa ~26% do codebase src/ e requer uma abordagem estratégica em bat
 ## 🎯 Meta do PATCH 546 Fase 1
 
 **Objetivo:** Remover 50 @ts-nocheck (12% do total)  
-**Progresso:** 13/50 (26%) ⚡  
+**Progresso:** 14/50 (28%) ⚡  
 **Timeline:** 2 dias
 
-**Estratégia Revisada:** Priorizar arquivos sem dependências Supabase primeiro.
+**Estratégia Revisada:** Priorizar arquivos sem dependências Supabase e com tipos simples.
 
 ### Breakdown por Batch:
 - Batch 1 (Validações): 10 arquivos

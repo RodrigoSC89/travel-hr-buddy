@@ -1,8 +1,9 @@
-// @ts-nocheck
 /**
  * Unified Button Handlers Hook
  * Provides standardized handlers for all main button actions across Nautilus One modules
  */
+
+import { logger } from "@/lib/logger";
 
 export const useButtonHandlers = () => {
   /**
