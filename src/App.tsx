@@ -198,6 +198,9 @@ const SGSOManagerPage = safeLazyImport(() => import("@/components/sgso/SGSOManag
 // PATCH 565 - Quality Dashboard Integration
 const QualityDashboard = safeLazyImport(() => import("@/pages/dashboard/QualityDashboard"));
 
+// PATCH 542 - Image Optimization Panel
+const ImageOptimizationPanel = safeLazyImport(() => import("@/pages/admin/ImageOptimizationPanel"));
+
 // PATCH 574 - i18n Dashboard
 const I18nDashboard = safeLazyImport(() => import("@/pages/dashboard/i18n"));
 const I18nDemo = safeLazyImport(() => import("@/pages/i18n-demo"));
@@ -778,6 +781,9 @@ function App() {
                       <Route path="/admin/health-validation" element={<SystemHealthDashboard />} />
                       <Route path="/admin/code-health" element={<CodeHealthDashboard />} />
                       
+                      {/* PATCH 542 - Image Optimization */}
+                      <Route path="/admin/image-optimization" element={<ImageOptimizationPanel />} />
+
                       <Route path="/admin/documents/edit/:id" element={<CollaborativeEditor />} />
                       <Route path="/admin/documents/view/:id" element={<DocumentView />} />
                       <Route path="/admin/documents/history/:id" element={<DocumentHistory />} />

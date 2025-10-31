@@ -90,6 +90,13 @@ export default function ControlCenter() {
           icon: <FileText className="h-4 w-4" />,
           description: "High-performance log viewer",
           badge: "98% faster"
+        },
+        {
+          name: "Image Optimization",
+          path: "/admin/image-optimization",
+          icon: <Activity className="h-4 w-4" />,
+          description: "WebP/AVIF & CDN optimization",
+          badge: "PATCH 542"
         }
       ]
     },
@@ -258,7 +265,7 @@ export default function ControlCenter() {
             <Settings className="h-4 w-4 text-muted-foreground" />
           </CardHeader>
           <CardContent>
-            <div className="text-2xl font-bold">16</div>
+            <div className="text-2xl font-bold">17</div>
             <p className="text-xs text-muted-foreground">
               Total admin interfaces
             </p>
@@ -353,6 +360,12 @@ export default function ControlCenter() {
               <a href="/docs/PATCH_541_FINAL.md" target="_blank">
                 <FileText className="mr-2 h-4 w-4" />
                 PATCH 541 Complete Documentation
+              </a>
+            </Button>
+            <Button variant="outline" className="w-full justify-start" asChild>
+              <a href="/PATCH_542_IMAGE_OPTIMIZATION.md" target="_blank">
+                <FileText className="mr-2 h-4 w-4" />
+                PATCH 542 Image Optimization Guide
               </a>
             </Button>
             <Button variant="outline" className="w-full justify-start" asChild>
