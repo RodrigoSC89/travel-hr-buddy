@@ -1,4 +1,3 @@
-// @ts-nocheck
 "use client";
 
 import { useEffect, useState } from "react";
@@ -103,7 +102,7 @@ export default function DocumentViewPage() {
   const loadDocument = async () => {
     try {
       // Use explicit foreign key relationship for better type safety and clarity
-      const { data, error } = await supabase
+      const { data, error } = await (supabase as any)
         .from("ai_generated_documents")
         .select(`
           title, 
@@ -147,7 +146,7 @@ export default function DocumentViewPage() {
     
     setLoadingComments(true);
     try {
-      const { data, error } = await supabase
+      const { data, error } = await (supabase as any)
         .from("document_comments")
         .select(`
           id,
@@ -163,7 +162,7 @@ export default function DocumentViewPage() {
 
       // Fetch user emails for comments
       const commentsWithEmails = await Promise.all(
-        (data || []).map(async (comment) => ({
+        (data || []).map(async (comment: any) => ({
           ...comment,
           user_email: await fetchUserEmail(comment.user_id)
         }))
@@ -237,7 +236,7 @@ export default function DocumentViewPage() {
         throw new Error("User not authenticated");
       }
 
-      const { error } = await supabase
+      const { error } = await (supabase as any)
         .from("document_comments")
         .insert({
           document_id: id,
@@ -268,7 +267,7 @@ export default function DocumentViewPage() {
   const deleteComment = async (commentId: string) => {
     setDeletingCommentId(commentId);
     try {
-      const { error } = await supabase
+      const { error } = await (supabase as any)
         .from("document_comments")
         .delete()
         .eq("id", commentId);

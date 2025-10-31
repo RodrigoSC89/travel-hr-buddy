@@ -1,4 +1,3 @@
-// @ts-nocheck
 "use client";
 
 import { useEffect, useState } from "react";
@@ -98,7 +97,7 @@ export default function DocumentAIEditorPage() {
         return;
       }
 
-      const { data, error } = await supabase
+      const { data, error } = await (supabase as any)
         .from("ai_generated_documents")
         .insert({
           title: title.trim(),

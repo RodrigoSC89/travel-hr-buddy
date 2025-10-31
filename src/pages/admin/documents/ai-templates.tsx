@@ -1,4 +1,3 @@
-// @ts-nocheck
 "use client";
 
 import { useEffect, useState } from "react";
@@ -76,7 +75,7 @@ export default function AITemplatesPage() {
   const loadTemplates = async () => {
     try {
       setLoading(true);
-      const { data, error } = await supabase
+      const { data, error } = await (supabase as any)
         .from("ai_document_templates")
         .select("*")
         .order("created_at", { ascending: false });
@@ -145,7 +144,7 @@ export default function AITemplatesPage() {
 
   const handleToggleFavorite = async (template: AIDocumentTemplate) => {
     try {
-      const { error } = await supabase
+      const { error } = await (supabase as any)
         .from("ai_document_templates")
         .update({ is_favorite: !template.is_favorite })
         .eq("id", template.id);
@@ -172,7 +171,7 @@ export default function AITemplatesPage() {
 
   const handleTogglePrivate = async (template: AIDocumentTemplate) => {
     try {
-      const { error } = await supabase
+      const { error } = await (supabase as any)
         .from("ai_document_templates")
         .update({ is_private: !template.is_private })
         .eq("id", template.id);
@@ -210,7 +209,7 @@ export default function AITemplatesPage() {
     try {
       if (editingTemplate) {
         // Update existing template
-        const { error } = await supabase
+        const { error } = await (supabase as any)
           .from("ai_document_templates")
           .update({
             title: formData.title.trim(),
@@ -229,7 +228,7 @@ export default function AITemplatesPage() {
         });
       } else {
         // Create new template
-        const { error } = await supabase
+        const { error } = await (supabase as any)
           .from("ai_document_templates")
           .insert({
             title: formData.title.trim(),
@@ -266,7 +265,7 @@ export default function AITemplatesPage() {
     if (!confirm("Tem certeza que deseja excluir este template?")) return;
 
     try {
-      const { error } = await supabase
+      const { error } = await (supabase as any)
         .from("ai_document_templates")
         .delete()
         .eq("id", templateId);
