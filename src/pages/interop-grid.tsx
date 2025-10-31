@@ -3,8 +3,8 @@
  * AI interoperability network for decision synchronization and knowledge sharing
  */
 
-// @ts-nocheck
 import React, { useState, useEffect } from "react";
+import { logger } from "@/lib/logger";
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
@@ -74,7 +74,7 @@ export default function InteropGridAIPage() {
 
   const loadAIInstances = async () => {
     try {
-      const { data, error } = await supabase
+      const { data, error } = await (supabase as any)
         .from("ai_instances")
         .select("*")
         .order("instance_name");
@@ -86,14 +86,14 @@ export default function InteropGridAIPage() {
         setSelectedInstance(data[0]);
       }
     } catch (error) {
-      console.error("Error loading AI instances:", error);
+      logger.error("Error loading AI instances", error);
       toast.error("Failed to load AI instances");
     }
   };
 
   const loadDecisionEvents = async () => {
     try {
-      const { data, error } = await supabase
+      const { data, error } = await (supabase as any)
         .from("ai_decision_events")
         .select("*")
         .order("timestamp", { ascending: false })
@@ -102,13 +102,13 @@ export default function InteropGridAIPage() {
       if (error) throw error;
       setDecisionEvents(data || []);
     } catch (error) {
-      console.error("Error loading decision events:", error);
+      logger.error("Error loading decision events", error);
     }
   };
 
   const loadKnowledgeGraph = async () => {
     try {
-      const { data, error } = await supabase
+      const { data, error } = await (supabase as any)
         .from("ai_knowledge_graph")
         .select("*")
         .order("validation_count", { ascending: false })
@@ -117,7 +117,7 @@ export default function InteropGridAIPage() {
       if (error) throw error;
       setKnowledgeNodes(data || []);
     } catch (error) {
-      console.error("Error loading knowledge graph:", error);
+      logger.error("Error loading knowledge graph", error);
     }
   };
 
@@ -162,7 +162,7 @@ export default function InteropGridAIPage() {
     if (!selectedInstance) return;
 
     try {
-      const { error } = await supabase
+      const { error } = await (supabase as any)
         .from("ai_decision_events")
         .insert({
           event_id: `evt_${Date.now()}`,
@@ -185,7 +185,7 @@ export default function InteropGridAIPage() {
       if (error) throw error;
 
       // Log audit trail
-      await supabase
+      await (supabase as any)
         .from("ai_decision_audit_trail")
         .insert({
           audit_type: "created",
@@ -196,7 +196,7 @@ export default function InteropGridAIPage() {
       toast.success("Decision event published");
       loadDecisionEvents();
     } catch (error) {
-      console.error("Error publishing event:", error);
+      logger.error("Error publishing event", error);
       toast.error("Failed to publish event");
     }
   };

@@ -3,8 +3,8 @@
  * AI-assisted navigation with real-time route planning and risk assessment
  */
 
-// @ts-nocheck
 import React, { useState, useEffect } from "react";
+import { logger } from "@/lib/logger";
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -64,7 +64,7 @@ export default function NavigationCopilotPage() {
 
   const loadRoutes = async () => {
     try {
-      const { data, error } = await supabase
+      const { data, error } = await (supabase as any)
         .from("planned_routes")
         .select("*")
         .order("created_at", { ascending: false })
@@ -73,7 +73,7 @@ export default function NavigationCopilotPage() {
       if (error) throw error;
       setRoutes(data || []);
     } catch (error) {
-      console.error("Error loading routes:", error);
+      logger.error("Error loading routes", error);
       toast.error("Failed to load routes");
     }
   };
@@ -109,7 +109,7 @@ export default function NavigationCopilotPage() {
         });
       }
 
-      const { data, error } = await supabase
+      const { data, error } = await (supabase as any)
         .from("planned_routes")
         .insert({
           route_name: formData.routeName || "Unnamed Route",
@@ -135,7 +135,7 @@ export default function NavigationCopilotPage() {
       if (error) throw error;
 
       // Log AI calculation
-      await supabase
+      await (supabase as any)
         .from("navigation_ai_logs")
         .insert({
           route_id: data.id,
@@ -151,7 +151,7 @@ export default function NavigationCopilotPage() {
       setSelectedRoute(data);
       loadRoutes();
     } catch (error) {
-      console.error("Error calculating route:", error);
+      logger.error("Error calculating route", error);
       toast.error("Failed to calculate route");
     } finally {
       setIsCalculating(false);

@@ -3,8 +3,8 @@
  * Enhanced joint mission coordination with external entities and real-time sync
  */
 
-// @ts-nocheck
 import React, { useState, useEffect } from "react";
+import { logger } from "@/lib/logger";
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -75,7 +75,7 @@ export default function JointMissionsPage() {
 
   const loadEntities = async () => {
     try {
-      const { data, error } = await supabase
+      const { data, error } = await (supabase as any)
         .from("external_entities")
         .select("*")
         .order("entity_name");
@@ -83,14 +83,14 @@ export default function JointMissionsPage() {
       if (error) throw error;
       setEntities(data || []);
     } catch (error) {
-      console.error("Error loading entities:", error);
+      logger.error("Error loading entities", error);
       toast.error("Failed to load entities");
     }
   };
 
   const loadMissions = async () => {
     try {
-      const { data, error } = await supabase
+      const { data, error } = await (supabase as any)
         .from("joint_missions")
         .select("*")
         .order("created_at", { ascending: false });
@@ -102,14 +102,14 @@ export default function JointMissionsPage() {
         setSelectedMission(data[0]);
       }
     } catch (error) {
-      console.error("Error loading missions:", error);
+      logger.error("Error loading missions", error);
       toast.error("Failed to load missions");
     }
   };
 
   const loadChatMessages = async (missionId: string) => {
     try {
-      const { data, error } = await supabase
+      const { data, error } = await (supabase as any)
         .from("mission_chat")
         .select("*")
         .eq("mission_id", missionId)
@@ -118,7 +118,7 @@ export default function JointMissionsPage() {
       if (error) throw error;
       setChatMessages(data || []);
     } catch (error) {
-      console.error("Error loading chat:", error);
+      logger.error("Error loading chat", error);
     }
   };
 
@@ -160,7 +160,7 @@ export default function JointMissionsPage() {
     if (!newMessage.trim() || !selectedMission) return;
 
     try {
-      const { error } = await supabase
+      const { error } = await (supabase as any)
         .from("mission_chat")
         .insert({
           mission_id: selectedMission.id,
@@ -174,7 +174,7 @@ export default function JointMissionsPage() {
       setNewMessage("");
       toast.success("Message sent");
     } catch (error) {
-      console.error("Error sending message:", error);
+      logger.error("Error sending message", error);
       toast.error("Failed to send message");
     }
   };

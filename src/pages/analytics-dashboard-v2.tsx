@@ -1,4 +1,3 @@
-// @ts-nocheck
 /**
  * PATCH 347: Analytics Core v2 - Real-Time Dashboard
  * Real-time analytics with streaming metrics and automatic alerts
@@ -215,7 +214,7 @@ export const AnalyticsDashboardV2 = () => {
         </CardHeader>
         <CardContent>
           <div className="space-y-2">
-            {alertHistory.slice(0, 10).map((history) => (
+            {alertHistory.slice(0, 10).map((history: any) => (
               <div
                 key={history.id}
                 className="flex items-center justify-between p-2 border-b last:border-0"
