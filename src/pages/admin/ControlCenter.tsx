@@ -97,6 +97,13 @@ export default function ControlCenter() {
           icon: <Activity className="h-4 w-4" />,
           description: "WebP/AVIF & CDN optimization",
           badge: "PATCH 542"
+        },
+        {
+          name: "Lighthouse CI",
+          path: "/admin/lighthouse-dashboard",
+          icon: <Activity className="h-4 w-4" />,
+          description: "Performance audits & Core Web Vitals",
+          badge: "PATCH 543"
         }
       ]
     },
@@ -265,7 +272,7 @@ export default function ControlCenter() {
             <Settings className="h-4 w-4 text-muted-foreground" />
           </CardHeader>
           <CardContent>
-            <div className="text-2xl font-bold">17</div>
+            <div className="text-2xl font-bold">18</div>
             <p className="text-xs text-muted-foreground">
               Total admin interfaces
             </p>
@@ -366,6 +373,12 @@ export default function ControlCenter() {
               <a href="/PATCH_542_IMAGE_OPTIMIZATION.md" target="_blank">
                 <FileText className="mr-2 h-4 w-4" />
                 PATCH 542 Image Optimization Guide
+              </a>
+            </Button>
+            <Button variant="outline" className="w-full justify-start" asChild>
+              <a href="/PATCH_543_LIGHTHOUSE_CI.md" target="_blank">
+                <FileText className="mr-2 h-4 w-4" />
+                PATCH 543 Lighthouse CI Guide
               </a>
             </Button>
             <Button variant="outline" className="w-full justify-start" asChild>
