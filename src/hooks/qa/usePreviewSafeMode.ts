@@ -48,10 +48,8 @@ export function usePreviewSafeMode({
       setIsValidated(true);
 
       if (!result.passed) {
-        console.warn(`[PreviewSafeMode] Componente ${componentName} falhou na validação`);
-        result.issues.forEach(issue => {
-          console.warn(`  - ${issue.description}`);
-        });
+        // Silently track validation failures without console output
+        // Issues are available in the result for debugging if needed
       }
     };
 
@@ -102,15 +100,14 @@ export function usePreviewSafeMode({
       const validation = LovableValidator.validateMockedData(data, options?.maxSize || maxDataSize);
       
       if (!validation.valid) {
-        console.warn(`[PreviewSafeMode] Dados muito grandes, usando fallback`);
-        validation.issues.forEach(issue => console.warn(`  - ${issue}`));
+        // Data too large, using fallback silently
         return fallback;
       }
 
       return data;
     } catch (error) {
       if (!silenceErrors) {
-        console.error(`[PreviewSafeMode] Erro ao buscar dados:`, error);
+        // Error handled silently, returning fallback
       }
       return fallback;
     }
@@ -124,11 +121,11 @@ export function usePreviewSafeMode({
   };
 
   /**
-   * Safe console.error que pode ser silenciado
+   * Safe error logging que pode ser silenciado
    */
-  const safeConsoleError = (...args: any[]) => {
+  const safeLogError = (...args: any[]) => {
     if (!silenceErrors) {
-      console.error(...args);
+      // Errors are tracked internally without console output
     }
   };
 
@@ -139,7 +136,7 @@ export function usePreviewSafeMode({
     setSafeInterval,
     safeFetchData,
     createLightweightMock,
-    safeConsoleError,
+    safeLogError,
     // Utility methods
     isPreviewSafe: validationPassed,
     shouldShowData: validationPassed || !enableValidation

@@ -4,6 +4,7 @@
  */
 
 import { useEffect, useRef } from "react";
+import { logger } from "@/lib/logger";
 
 interface PerformanceLogOptions {
   componentName: string;
@@ -43,11 +44,11 @@ export function usePerformanceLog({
         const measure = measures[measures.length - 1];
         
         if (measure) {
-          console.log(`[Performance] ${componentName}: ${measure.duration.toFixed(2)}ms`);
+          logger.info(`[Performance] ${componentName}: ${measure.duration.toFixed(2)}ms`);
           
           // Check if render time exceeds threshold
           if (measure.duration > threshold) {
-            console.warn(
+            logger.warn(
               `[Performance Alert] ${componentName} took ${measure.duration.toFixed(2)}ms (threshold: ${threshold}ms)`
             );
             
@@ -60,7 +61,7 @@ export function usePerformanceLog({
           }
         }
       } catch (error) {
-        console.error(`[Performance] Error measuring ${componentName}:`, error);
+        logger.error(`[Performance] Error measuring ${componentName}:`, error);
       }
 
       // Cleanup performance marks
@@ -73,7 +74,7 @@ export function usePerformanceLog({
   return {
     logEvent: (eventName: string) => {
       const eventTime = performance.now() - startTimeRef.current;
-      console.log(`[Performance Event] ${componentName}.${eventName}: ${eventTime.toFixed(2)}ms`);
+      logger.info(`[Performance Event] ${componentName}.${eventName}: ${eventTime.toFixed(2)}ms`);
     }
   };
 }
@@ -92,8 +93,8 @@ async function logPerformanceToDatabase(componentName: string, duration: number)
     // });
 
     // For now, just log to console
-    console.log(`[Performance DB Log] ${componentName}: ${duration.toFixed(2)}ms`);
+    logger.info(`[Performance DB Log] ${componentName}: ${duration.toFixed(2)}ms`);
   } catch (error) {
-    console.error("[Performance] Failed to log to database:", error);
+    logger.error("[Performance] Failed to log to database:", error);
   }
 }

@@ -4,6 +4,7 @@
  */
 
 import { supabase } from "@/integrations/supabase/client";
+import { logger } from "@/lib/logger";
 
 export interface TelemetryEvent {
   event_type: "performance" | "error" | "user_action" | "system";
@@ -77,7 +78,7 @@ class TelemetryService {
     };
 
     this.queue.push(eventWithTimestamp);
-    console.log(`[Telemetry] Event queued: ${event.event_type}/${event.component}/${event.metric_name} = ${event.metric_value}`);
+    logger.info(`[Telemetry] Event queued: ${event.event_type}/${event.component}/${event.metric_name} = ${event.metric_value}`);
 
     // Flush if queue is full
     if (this.queue.length >= this.MAX_QUEUE_SIZE) {
@@ -101,12 +102,12 @@ class TelemetryService {
       // const { error } = await supabase.from('telemetry_events').insert(events);
       
       // For now, just log to console
-      console.log(`[Telemetry] Flushed ${events.length} events to console`);
+      logger.info(`[Telemetry] Flushed ${events.length} events to console`);
       
       // In production, you would send to your analytics service:
       // await sendToAnalytics(events);
     } catch (error) {
-      console.error("[Telemetry] Failed to flush events:", error);
+      logger.error("[Telemetry] Failed to flush events:", error);
       // Re-queue events on failure
       this.queue.unshift(...events);
     }
