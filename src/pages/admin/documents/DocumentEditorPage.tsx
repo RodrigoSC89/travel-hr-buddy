@@ -1,4 +1,3 @@
-// @ts-nocheck
 import React from "react";
 import { DocumentEditor } from "@/components/documents/DocumentEditor";
 import { RoleBasedAccess } from "@/components/auth/role-based-access";
@@ -10,7 +9,7 @@ export default function DocumentEditorPage() {
   };
 
   return (
-    <RoleBasedAccess allowedRoles={["admin", "manager"]}>
+    <RoleBasedAccess roles={["admin", "manager"]}>
       <div className="min-h-screen bg-background p-6">
         <div className="max-w-4xl mx-auto space-y-6">
           <div className="text-center space-y-2">

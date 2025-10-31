@@ -1,4 +1,3 @@
-// @ts-nocheck
 "use client";
 
 import { useEffect, useState, useMemo } from "react";
@@ -43,7 +42,7 @@ export default function DocumentHistoryPage() {
     try {
       setLoading(true);
       // Use explicit foreign key relationship for author email
-      const { data, error } = await supabase
+      const { data, error } = await (supabase as any)
         .from("document_versions")
         .select(`
           id,
@@ -59,7 +58,7 @@ export default function DocumentHistoryPage() {
       if (error) throw error;
 
       // Transform data with author email
-      const transformedData = (data || []).map((version) => {
+      const transformedData = (data || []).map((version: any) => {
         const profiles = version.profiles as unknown as { email: string } | null;
         return {
           id: version.id,
@@ -108,7 +107,7 @@ export default function DocumentHistoryPage() {
     setRestoring(versionId);
     try {
       // Update the document with the version content
-      const { error: updateError } = await supabase
+      const { error: updateError } = await (supabase as any)
         .from("ai_generated_documents")
         .update({ content: versionContent })
         .eq("id", id);
