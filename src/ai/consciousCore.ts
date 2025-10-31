@@ -1,4 +1,3 @@
-// @ts-nocheck
 /**
  * PATCH 218 - Conscious Core
  * Monitors all system flows, understands global state, and anticipates collapses or inconsistencies
@@ -462,17 +461,19 @@ class ConsciousCore {
     try {
       const { error } = await supabase.from("system_observations").insert({
         observation_type: observation.observationType,
+        module_name: observation.modulesAffected[0] || "unknown",
         severity: observation.severity,
-        modules_affected: observation.modulesAffected,
-        description: observation.description,
-        detection_data: observation.detectionData,
-        suggested_action: observation.suggestedAction,
-        auto_correction_attempted: observation.autoCorrectionAttempted,
-        auto_correction_result: observation.autoCorrectionResult,
-        escalated: observation.escalated,
-        escalation_reason: observation.escalationReason,
-        resolved: observation.resolved,
-        timestamp: observation.timestamp.toISOString()
+        message: observation.description,
+        metadata: {
+          modules_affected: observation.modulesAffected,
+          detection_data: observation.detectionData,
+          suggested_action: observation.suggestedAction,
+          auto_correction_attempted: observation.autoCorrectionAttempted,
+          auto_correction_result: observation.autoCorrectionResult,
+          escalated: observation.escalated,
+          escalation_reason: observation.escalationReason
+        },
+        resolved: observation.resolved
       });
 
       if (error) {

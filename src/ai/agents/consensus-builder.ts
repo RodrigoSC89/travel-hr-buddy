@@ -1,4 +1,3 @@
-// @ts-nocheck
 /**
  * PATCH 584 - Strategic Consensus Builder
  * Mechanism for consensus between multiple AI agents
@@ -819,7 +818,7 @@ class StrategicConsensusBuilder {
     });
 
     try {
-      await supabase.from("ai_consensus_results").insert({
+      await (supabase as any).from("ai_consensus_results").insert({
         consensus_id: result.id,
         strategy_id: result.strategyId,
         status: result.status,
@@ -847,7 +846,7 @@ class StrategicConsensusBuilder {
       this.disagreementLog.push(disagreement);
 
       try {
-        await supabase.from("ai_agent_disagreements").insert({
+        await (supabase as any).from("ai_agent_disagreements").insert({
           disagreement_id: disagreement.id,
           consensus_id: disagreement.consensusId,
           agents_involved: disagreement.agentsInvolved,

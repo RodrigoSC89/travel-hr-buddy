@@ -1,4 +1,3 @@
-// @ts-nocheck
 /**
  * PATCH 567 - AI Auto-Tuning Engine
  * Continuous learning system that adjusts AI parameters based on real usage
@@ -161,7 +160,7 @@ class AutoTuningEngine {
     try {
       const sixHoursAgo = new Date(Date.now() - 6 * 60 * 60 * 1000).toISOString();
 
-      const { data: feedback, error } = await supabase
+      const { data: feedback, error } = await (supabase as any)
         .from("ai_feedback")
         .select("*")
         .gte("created_at", sixHoursAgo);
@@ -172,11 +171,11 @@ class AutoTuningEngine {
       }
 
       const total = feedback?.length || 0;
-      const accepted = feedback?.filter(f => f.operator_action === "accepted").length || 0;
-      const rejected = feedback?.filter(f => f.operator_action === "rejected").length || 0;
+      const accepted = feedback?.filter((f: any) => f.operator_action === "accepted").length || 0;
+      const rejected = feedback?.filter((f: any) => f.operator_action === "rejected").length || 0;
       
-      const confidences = feedback?.map(f => f.confidence_score || 0.7) || [0.7];
-      const avg_confidence = confidences.reduce((a, b) => a + b, 0) / confidences.length;
+      const confidences = feedback?.map((f: any) => f.confidence_score || 0.7) || [0.7];
+      const avg_confidence = confidences.reduce((a: number, b: number) => a + b, 0) / confidences.length;
 
       return {
         total,
@@ -204,7 +203,7 @@ class AutoTuningEngine {
     try {
       const sixHoursAgo = new Date(Date.now() - 6 * 60 * 60 * 1000).toISOString();
 
-      const { data: actions, error } = await supabase
+      const { data: actions, error } = await (supabase as any)
         .from("action_logs")
         .select("*")
         .gte("created_at", sixHoursAgo);
@@ -215,8 +214,8 @@ class AutoTuningEngine {
       }
 
       const total = actions?.length || 0;
-      const accepted = actions?.filter(a => a.status === "success").length || 0;
-      const rejected = actions?.filter(a => a.status === "failed").length || 0;
+      const accepted = actions?.filter((a: any) => a.status === "success").length || 0;
+      const rejected = actions?.filter((a: any) => a.status === "failed").length || 0;
 
       return {
         total,
@@ -309,7 +308,7 @@ class AutoTuningEngine {
     // Save to localStorage
     try {
       localStorage.setItem("ai_tuning_snapshots", JSON.stringify(this.snapshots));
-      logger.info("[AutoTuning] Snapshot created:", snapshot.id, "Score:", performanceScore.toFixed(3));
+      logger.info(`[AutoTuning] Snapshot created: ${snapshot.id}, Score: ${performanceScore.toFixed(3)}`);
     } catch (error) {
       logger.error("[AutoTuning] Error saving snapshot:", error);
     }
@@ -348,7 +347,7 @@ class AutoTuningEngine {
       const savedSnapshots = localStorage.getItem("ai_tuning_snapshots");
       if (savedSnapshots) {
         this.snapshots = JSON.parse(savedSnapshots);
-        logger.info("[AutoTuning] Loaded", this.snapshots.length, "snapshots");
+        logger.info(`[AutoTuning] Loaded ${this.snapshots.length} snapshots`);
       }
     } catch (error) {
       logger.error("[AutoTuning] Error loading configuration:", error);

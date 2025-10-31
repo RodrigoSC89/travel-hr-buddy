@@ -1,4 +1,3 @@
-// @ts-nocheck
 /**
  * PATCH 240 - Contextual Response Adapter
  * Adapts AI responses based on multimodal context
@@ -343,7 +342,7 @@ class ContextualResponseAdapter {
    */
   private async logAdaptation(response: AdaptedResponse, adaptations: string[]): Promise<void> {
     try {
-      await supabase.from("response_adaptation_log").insert({
+      await (supabase as any).from("response_adaptation_log").insert({
         original_content: response.original.content,
         adapted_content: response.adapted,
         mode: response.mode,
