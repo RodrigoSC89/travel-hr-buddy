@@ -1,4 +1,3 @@
-// @ts-nocheck
 /**
  * PATCH 233: Collective Memory Hub
  * 
@@ -7,6 +6,7 @@
  */
 
 import { supabase } from "@/integrations/supabase/client";
+import { logger } from "@/lib/logger";
 
 export interface KnowledgeEntry {
   id: string;
@@ -87,7 +87,7 @@ export class CollectiveMemoryHub {
     };
 
     try {
-      const { data, error } = await supabase
+      const { data, error } = await (supabase as any)
         .from("collective_knowledge")
         .insert({
           category: entry.category,
@@ -107,7 +107,7 @@ export class CollectiveMemoryHub {
 
       return this.mapFromDatabase(data);
     } catch (error) {
-      console.error("Failed to store knowledge:", error);
+      logger.error("Failed to store knowledge", error);
       throw error;
     }
   }
@@ -117,7 +117,7 @@ export class CollectiveMemoryHub {
    */
   async get(category: string, key: string): Promise<KnowledgeEntry | null> {
     try {
-      const { data, error } = await supabase
+      const { data, error } = await (supabase as any)
         .from("collective_knowledge")
         .select("*")
         .eq("category", category)
@@ -133,7 +133,7 @@ export class CollectiveMemoryHub {
 
       return this.mapFromDatabase(data);
     } catch (error) {
-      console.error("Failed to retrieve knowledge:", error);
+      logger.error("Failed to retrieve knowledge", error);
       return null;
     }
   }
@@ -150,7 +150,7 @@ export class CollectiveMemoryHub {
     } = {}
   ): Promise<KnowledgeEntry[]> {
     try {
-      let query = supabase
+      let query = (supabase as any)
         .from("collective_knowledge")
         .select("*")
         .eq("category", category);
@@ -171,9 +171,9 @@ export class CollectiveMemoryHub {
 
       if (error) throw error;
 
-      return (data || []).map(d => this.mapFromDatabase(d));
+      return (data || []).map((d: any) => this.mapFromDatabase(d));
     } catch (error) {
-      console.error("Failed to query knowledge:", error);
+      logger.error("Failed to query knowledge", error);
       return [];
     }
   }
@@ -227,7 +227,7 @@ export class CollectiveMemoryHub {
 
       return result;
     } catch (error) {
-      console.error("Sync failed:", error);
+      logger.error("Sync failed", error);
       throw error;
     }
   }
@@ -241,7 +241,7 @@ export class CollectiveMemoryHub {
   }> {
     try {
       // Find entries to rollback
-      let query = supabase
+      let query = (supabase as any)
         .from("collective_knowledge")
         .select("*")
         .eq("source_instance_id", request.instanceId)
@@ -261,7 +261,7 @@ export class CollectiveMemoryHub {
       for (const entry of targetEntries || []) {
         // Restore this version as the current one
         await this.replicateEntry(this.mapFromDatabase(entry));
-        affectedCategories.add(entry.category);
+        affectedCategories.add((entry as any).category);
         rolledBackCount++;
       }
 
@@ -270,7 +270,7 @@ export class CollectiveMemoryHub {
         affectedCategories: Array.from(affectedCategories),
       };
     } catch (error) {
-      console.error("Rollback failed:", error);
+      logger.error("Rollback failed", error);
       throw error;
     }
   }
@@ -284,7 +284,7 @@ export class CollectiveMemoryHub {
     limit: number = 10
   ): Promise<KnowledgeEntry[]> {
     try {
-      const { data, error } = await supabase
+      const { data, error } = await (supabase as any)
         .from("collective_knowledge")
         .select("*")
         .eq("category", category)
@@ -294,9 +294,9 @@ export class CollectiveMemoryHub {
 
       if (error) throw error;
 
-      return (data || []).map(d => this.mapFromDatabase(d));
+      return (data || []).map((d: any) => this.mapFromDatabase(d));
     } catch (error) {
-      console.error("Failed to fetch history:", error);
+      logger.error("Failed to fetch history", error);
       return [];
     }
   }
@@ -323,7 +323,7 @@ export class CollectiveMemoryHub {
     sinceVersion?: number
   ): Promise<KnowledgeEntry[]> {
     try {
-      let query = supabase
+      let query = (supabase as any)
         .from("collective_knowledge")
         .select("*")
         .eq("source_instance_id", instanceId)
@@ -337,9 +337,9 @@ export class CollectiveMemoryHub {
 
       if (error) throw error;
 
-      return (data || []).map(d => this.mapFromDatabase(d));
+      return (data || []).map((d: any) => this.mapFromDatabase(d));
     } catch (error) {
-      console.error("Failed to fetch from instance:", error);
+      logger.error("Failed to fetch from instance", error);
       return [];
     }
   }
@@ -349,7 +349,7 @@ export class CollectiveMemoryHub {
    */
   private async replicateEntry(entry: KnowledgeEntry): Promise<void> {
     try {
-      await supabase.from("collective_knowledge").upsert({
+      await (supabase as any).from("collective_knowledge").upsert({
         category: entry.category,
         key: entry.key,
         value: entry.value,
@@ -361,7 +361,7 @@ export class CollectiveMemoryHub {
         metadata: entry.metadata,
       });
     } catch (error) {
-      console.error("Failed to replicate entry:", error);
+      logger.error("Failed to replicate entry", error);
       throw error;
     }
   }
@@ -424,7 +424,7 @@ export class CollectiveMemoryHub {
 
     // Log conflict for manual review if needed
     if (conflict.resolution === "manual") {
-      console.warn("Manual conflict resolution required:", conflict);
+      logger.warn("Manual conflict resolution required", { conflict });
     }
   }
 
@@ -433,7 +433,7 @@ export class CollectiveMemoryHub {
    */
   private async logSync(request: SyncRequest, result: SyncResult): Promise<void> {
     try {
-      await supabase.from("clone_sync_log").insert({
+      await (supabase as any).from("clone_sync_log").insert({
         source_instance_id: request.sourceInstanceId,
         target_instance_id: request.targetInstanceId,
         direction: "pull",
@@ -446,7 +446,7 @@ export class CollectiveMemoryHub {
         completed_at: new Date().toISOString(),
       });
     } catch (error) {
-      console.error("Failed to log sync:", error);
+      logger.error("Failed to log sync", error);
     }
   }
 

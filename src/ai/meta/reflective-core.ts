@@ -1,4 +1,3 @@
-// @ts-nocheck
 /**
  * PATCH 587: IA Reflective Core
  * 
@@ -12,6 +11,7 @@
  */
 
 import { supabase } from "@/integrations/supabase/client";
+import { logger } from "@/lib/logger";
 
 export interface DecisionRecord {
   id: string;
@@ -82,7 +82,7 @@ export class ReflectiveCore {
 
     // Store in database
     try {
-      await supabase.from("ai_decision_history").insert({
+      await (supabase as any).from("ai_decision_history").insert({
         decision_id: record.id,
         mission_id: record.missionId,
         decision_type: record.decisionType,
@@ -96,7 +96,7 @@ export class ReflectiveCore {
         timestamp: record.timestamp,
       });
     } catch (error) {
-      console.error("Failed to record decision:", error);
+      logger.error("Failed to record decision", error);
     }
 
     return record.id;
@@ -453,7 +453,7 @@ export class ReflectiveCore {
    */
   private async storeReflectionReport(report: ReflectionReport): Promise<void> {
     try {
-      await supabase.from("ai_reflection_reports").insert({
+      await (supabase as any).from("ai_reflection_reports").insert({
         mission_id: report.missionId,
         total_decisions: report.totalDecisions,
         successful_decisions: report.successfulDecisions,
@@ -466,7 +466,7 @@ export class ReflectiveCore {
 
       // Also store individual insights
       for (const insight of report.insights) {
-        await supabase.from("ai_reflection_insights").insert({
+        await (supabase as any).from("ai_reflection_insights").insert({
           insight_id: insight.id,
           mission_id: insight.missionId,
           decision_id: insight.decisionId,
@@ -479,7 +479,7 @@ export class ReflectiveCore {
         });
       }
     } catch (error) {
-      console.error("Failed to store reflection report:", error);
+      logger.error("Failed to store reflection report", error);
     }
   }
 

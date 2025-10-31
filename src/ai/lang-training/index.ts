@@ -3,7 +3,6 @@
  * Treinamento de IA com dados multilíngues
  */
 
-// @ts-nocheck
 import { logger } from "@/lib/logger";
 import { supabase } from "@/integrations/supabase/client";
 import { SupportedLanguage } from "@/core/i18n/translator";
@@ -108,7 +107,7 @@ class LangTrainingEngine {
           accuracy: Math.min(0.99, 0.6 + epoch * 0.08),
           bleu_score: Math.min(0.95, 0.5 + epoch * 0.09),
           perplexity: Math.max(1.5, 15 - epoch * 2),
-          language_scores: {},
+          language_scores: {} as Record<SupportedLanguage, number>,
         };
         for (const lang of config.languages) {
           metrics.language_scores[lang] = Math.min(0.95, 0.6 + epoch * 0.07);

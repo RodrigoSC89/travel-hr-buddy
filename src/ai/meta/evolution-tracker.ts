@@ -1,4 +1,3 @@
-// @ts-nocheck
 /**
  * PATCH 588: Evolution Tracker
  * 
@@ -11,6 +10,7 @@
  */
 
 import { supabase } from "@/integrations/supabase/client";
+import { logger } from "@/lib/logger";
 
 export interface AIVersion {
   versionId: string;
@@ -106,7 +106,7 @@ export class EvolutionTracker {
 
     // Store in database
     try {
-      await supabase.from("ai_versions").insert({
+      await (supabase as any).from("ai_versions").insert({
         version_id: version.versionId,
         version_number: version.versionNumber,
         description: version.description,
@@ -115,7 +115,7 @@ export class EvolutionTracker {
         timestamp: version.timestamp,
       });
     } catch (error) {
-      console.error("Failed to store version:", error);
+      logger.error("Failed to store version", error);
     }
 
     return version;
@@ -141,7 +141,7 @@ export class EvolutionTracker {
 
     // Store in database
     try {
-      await supabase.from("ai_performance_metrics").insert({
+      await (supabase as any).from("ai_performance_metrics").insert({
         version_id: record.versionId,
         accuracy: record.accuracy,
         precision: record.precision,
@@ -156,7 +156,7 @@ export class EvolutionTracker {
         timestamp: record.timestamp,
       });
     } catch (error) {
-      console.error("Failed to record metrics:", error);
+      logger.error("Failed to record metrics", error);
     }
   }
 
@@ -201,7 +201,7 @@ export class EvolutionTracker {
 
     // Store in database
     try {
-      await supabase.from("ai_cognitive_progress").insert({
+      await (supabase as any).from("ai_cognitive_progress").insert({
         version_id: progress.versionId,
         capability: progress.capability,
         proficiency_level: progress.proficiencyLevel,
@@ -211,7 +211,7 @@ export class EvolutionTracker {
         timestamp: progress.timestamp,
       });
     } catch (error) {
-      console.error("Failed to track progress:", error);
+      logger.error("Failed to track progress", error);
     }
   }
 
@@ -387,7 +387,7 @@ export class EvolutionTracker {
    */
   private async storeComparisonReport(report: ComparisonReport): Promise<void> {
     try {
-      await supabase.from("ai_version_comparisons").insert({
+      await (supabase as any).from("ai_version_comparisons").insert({
         version_1: report.version1,
         version_2: report.version2,
         metrics_comparison: report.metricsComparison,
@@ -396,7 +396,7 @@ export class EvolutionTracker {
         timestamp: report.timestamp,
       });
     } catch (error) {
-      console.error("Failed to store comparison report:", error);
+      logger.error("Failed to store comparison report", error);
     }
   }
 
