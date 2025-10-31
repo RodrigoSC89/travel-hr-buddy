@@ -17,18 +17,35 @@ export default function useModules() {
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
+    let cancelled = false;
+    
     async function fetchModules() {
-      const { data, error } = await supabase.from("modules").select("*");
-      if (!error && data) {
-        const typedModules: Module[] = data.map(item => ({
-          ...item,
-          status: item.status as "functional" | "pending" | "disabled"
-        }));
-        setModules(typedModules);
+      try {
+        const { data, error } = await supabase.from("modules").select("*");
+        
+        if (cancelled) return;
+        
+        if (!error && data) {
+          const typedModules: Module[] = data.map(item => ({
+            ...item,
+            status: item.status as "functional" | "pending" | "disabled"
+          }));
+          setModules(typedModules);
+        }
+      } catch (error) {
+        console.error("Failed to fetch modules:", error);
+      } finally {
+        if (!cancelled) {
+          setLoading(false);
+        }
       }
-      setLoading(false);
     }
+    
     fetchModules();
+    
+    return () => {
+      cancelled = true;
+    };
   }, []);
 
   return { modules, loading };

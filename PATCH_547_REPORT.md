@@ -24,6 +24,16 @@
 - ✅ Dados memoizados com `const` readonly
 - ✅ Code splitting dos componentes de gráficos
 
+### 3. Correção de Loops Infinitos ✅
+- ✅ Adicionado cache em `module-routes.tsx` para prevenir re-loads infinitos
+- ✅ Função `clearModuleRoutesCache()` para invalidação manual
+- ✅ Cleanup e proteção contra race conditions em `useModules` hook
+- ✅ Pattern `cancelled flag` implementado em async effects
+
+**Arquivos Corrigidos:**
+- `src/utils/module-routes.tsx` - Cache de rotas
+- `src/hooks/useModules.ts` - Race condition protection
+
 ---
 
 ## 📊 IMPACTO
@@ -37,6 +47,8 @@
 **Performance Esperada:**
 - 🎯 Render time: ~1500ms (vs 6211ms anterior)
 - 🎯 Redução de 75% no tempo de carregamento inicial
+- 🎯 Loops infinitos eliminados
+- 🎯 Module loading estável e previsível
 
 ---
 

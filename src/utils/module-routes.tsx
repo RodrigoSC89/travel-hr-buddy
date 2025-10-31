@@ -15,11 +15,20 @@ export interface ModuleRoute {
   metadata: ModuleDefinition;
 }
 
+// Cache to prevent infinite re-loading
+let cachedRoutes: ModuleRoute[] | null = null;
+
 /**
  * Get all routes from MODULE_REGISTRY
  * Only includes modules with defined routes
+ * PATCH 547: Added cache to prevent infinite loops
  */
 export function getModuleRoutes(): ModuleRoute[] {
+  // Return cached routes if available
+  if (cachedRoutes !== null) {
+    return cachedRoutes;
+  }
+
   const routes: ModuleRoute[] = [];
 
   try {
@@ -48,11 +57,22 @@ export function getModuleRoutes(): ModuleRoute[] {
     }
 
     logger.info(`Loaded ${routes.length} module routes from registry`);
+    
+    // Cache the results
+    cachedRoutes = routes;
     return routes;
   } catch (error) {
     logger.error("Failed to generate module routes", error);
     return [];
   }
+}
+
+/**
+ * Clear route cache (for testing or hot reload)
+ */
+export function clearModuleRoutesCache(): void {
+  cachedRoutes = null;
+  logger.info("Module routes cache cleared");
 }
 
 /**
