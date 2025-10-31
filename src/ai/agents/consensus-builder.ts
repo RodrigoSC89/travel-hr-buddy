@@ -500,99 +500,101 @@ class StrategicConsensusBuilder {
     const recommendations: string[] = [];
 
     switch (agent.role) {
-      case "safety":
-        if (strategy.estimatedImpact.risk > 80) {
-          vote = "strongly_oppose";
-          confidenceScore = 95;
-          reasoning = "Unacceptable risk level detected";
-          concerns.push("High risk to crew safety");
-        } else if (strategy.estimatedImpact.risk > 60) {
-          vote = "oppose";
-          confidenceScore = 85;
-          reasoning = "Elevated risk requires mitigation measures";
-          recommendations.push("Implement additional safety protocols");
-        } else {
-          vote = "support";
-          confidenceScore = agent.confidenceLevel;
-          reasoning = "Risk level acceptable with standard precautions";
-        }
-        break;
-
-      case "financial":
-        const costEfficiency = strategy.successProbability / ((strategy.estimatedImpact.cost || 1000) / 1000);
-        if (costEfficiency > 0.5) {
-          vote = "strongly_support";
-          confidenceScore = 90;
-          reasoning = "Excellent cost-benefit ratio";
-        } else if (costEfficiency > 0.3) {
-          vote = "support";
-          confidenceScore = 80;
-          reasoning = "Acceptable financial return expected";
-        } else {
-          vote = "neutral";
-          confidenceScore = 70;
-          reasoning = "Cost-benefit analysis inconclusive";
-          recommendations.push("Consider cost optimization measures");
-        }
-        break;
-
-      case "operational":
-        if (strategy.estimatedImpact.time < 24) {
-          vote = "strongly_support";
-          confidenceScore = 88;
-          reasoning = "Quick execution timeframe";
-        } else if (strategy.estimatedImpact.time < 72) {
-          vote = "support";
-          confidenceScore = 82;
-          reasoning = "Reasonable execution timeline";
-        } else {
-          vote = "neutral";
-          confidenceScore = 75;
-          reasoning = "Extended timeline may impact other operations";
-          concerns.push("Resource availability over extended period");
-        }
-        break;
-
-      case "strategic":
-        if (strategy.successProbability > 0.7) {
-          vote = "strongly_support";
-          confidenceScore = 85;
-          reasoning = "High probability of strategic success";
-        } else if (strategy.successProbability > 0.5) {
-          vote = "support";
-          confidenceScore = 78;
-          reasoning = "Moderate probability of success";
-        } else {
-          vote = "oppose";
-          confidenceScore = 80;
-          reasoning = "Low success probability concerns";
-          recommendations.push("Consider alternative strategies");
-        }
-        break;
-
-      case "risk_management":
-        const overallRisk = (strategy.estimatedImpact.risk + strategy.estimatedImpact.crewImpact) / 2;
-        if (overallRisk < 30) {
-          vote = "strongly_support";
-          confidenceScore = 92;
-          reasoning = "Low overall risk profile";
-        } else if (overallRisk < 60) {
-          vote = "support";
-          confidenceScore = 84;
-          reasoning = "Manageable risk level";
-          recommendations.push("Implement standard risk controls");
-        } else {
-          vote = "oppose";
-          confidenceScore = 88;
-          reasoning = "High risk profile requires reassessment";
-          concerns.push("Multiple risk factors identified");
-        }
-        break;
-
-      default:
-        vote = "neutral";
+    case "safety":
+      if (strategy.estimatedImpact.risk > 80) {
+        vote = "strongly_oppose";
+        confidenceScore = 95;
+        reasoning = "Unacceptable risk level detected";
+        concerns.push("High risk to crew safety");
+      } else if (strategy.estimatedImpact.risk > 60) {
+        vote = "oppose";
+        confidenceScore = 85;
+        reasoning = "Elevated risk requires mitigation measures";
+        recommendations.push("Implement additional safety protocols");
+      } else {
+        vote = "support";
         confidenceScore = agent.confidenceLevel;
-        reasoning = "Standard evaluation";
+        reasoning = "Risk level acceptable with standard precautions";
+      }
+      break;
+
+    case "financial": {
+      const costEfficiency = strategy.successProbability / ((strategy.estimatedImpact.cost || 1000) / 1000);
+      if (costEfficiency > 0.5) {
+        vote = "strongly_support";
+        confidenceScore = 90;
+        reasoning = "Excellent cost-benefit ratio";
+      } else if (costEfficiency > 0.3) {
+        vote = "support";
+        confidenceScore = 80;
+        reasoning = "Acceptable financial return expected";
+      } else {
+        vote = "neutral";
+        confidenceScore = 70;
+        reasoning = "Cost-benefit analysis inconclusive";
+        recommendations.push("Consider cost optimization measures");
+      }
+      break;
+    }
+
+    case "operational":
+      if (strategy.estimatedImpact.time < 24) {
+        vote = "strongly_support";
+        confidenceScore = 88;
+        reasoning = "Quick execution timeframe";
+      } else if (strategy.estimatedImpact.time < 72) {
+        vote = "support";
+        confidenceScore = 82;
+        reasoning = "Reasonable execution timeline";
+      } else {
+        vote = "neutral";
+        confidenceScore = 75;
+        reasoning = "Extended timeline may impact other operations";
+        concerns.push("Resource availability over extended period");
+      }
+      break;
+
+    case "strategic":
+      if (strategy.successProbability > 0.7) {
+        vote = "strongly_support";
+        confidenceScore = 85;
+        reasoning = "High probability of strategic success";
+      } else if (strategy.successProbability > 0.5) {
+        vote = "support";
+        confidenceScore = 78;
+        reasoning = "Moderate probability of success";
+      } else {
+        vote = "oppose";
+        confidenceScore = 80;
+        reasoning = "Low success probability concerns";
+        recommendations.push("Consider alternative strategies");
+      }
+      break;
+
+    case "risk_management": {
+      const overallRisk = (strategy.estimatedImpact.risk + strategy.estimatedImpact.crewImpact) / 2;
+      if (overallRisk < 30) {
+        vote = "strongly_support";
+        confidenceScore = 92;
+        reasoning = "Low overall risk profile";
+      } else if (overallRisk < 60) {
+        vote = "support";
+        confidenceScore = 84;
+        reasoning = "Manageable risk level";
+        recommendations.push("Implement standard risk controls");
+      } else {
+        vote = "oppose";
+        confidenceScore = 88;
+        reasoning = "High risk profile requires reassessment";
+        concerns.push("Multiple risk factors identified");
+      }
+      break;
+    }
+
+    default:
+      vote = "neutral";
+      confidenceScore = agent.confidenceLevel;
+      reasoning = "Standard evaluation";
     }
 
     return {
@@ -674,11 +676,11 @@ class StrategicConsensusBuilder {
 
   private voteToScore(vote: VoteValue): number {
     switch (vote) {
-      case "strongly_support": return 2;
-      case "support": return 1;
-      case "neutral": return 0;
-      case "oppose": return -1;
-      case "strongly_oppose": return -2;
+    case "strongly_support": return 2;
+    case "support": return 1;
+    case "neutral": return 0;
+    case "oppose": return -1;
+    case "strongly_oppose": return -2;
     }
   }
 

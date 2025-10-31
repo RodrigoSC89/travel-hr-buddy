@@ -125,27 +125,27 @@ const CoordinationAI = () => {
 
   const getStatusIcon = (status: ModuleStatus["status"]) => {
     switch (status) {
-      case "active":
-        return <CheckCircle2 className="w-5 h-5 text-green-600" />;
-      case "warning":
-        return <AlertTriangle className="w-5 h-5 text-yellow-600" />;
-      case "error":
-        return <XCircle className="w-5 h-5 text-red-600" />;
-      case "inactive":
-        return <XCircle className="w-5 h-5 text-gray-400" />;
+    case "active":
+      return <CheckCircle2 className="w-5 h-5 text-green-600" />;
+    case "warning":
+      return <AlertTriangle className="w-5 h-5 text-yellow-600" />;
+    case "error":
+      return <XCircle className="w-5 h-5 text-red-600" />;
+    case "inactive":
+      return <XCircle className="w-5 h-5 text-gray-400" />;
     }
   };
 
   const getStatusColor = (status: ModuleStatus["status"]) => {
     switch (status) {
-      case "active":
-        return "default";
-      case "warning":
-        return "warning";
-      case "error":
-        return "destructive";
-      case "inactive":
-        return "secondary";
+    case "active":
+      return "default";
+    case "warning":
+      return "warning";
+    case "error":
+      return "destructive";
+    case "inactive":
+      return "secondary";
     }
   };
 
@@ -157,25 +157,25 @@ const CoordinationAI = () => {
 
   const getDecisionTypeColor = (type: AIDecision["type"]) => {
     switch (type) {
-      case "optimization":
-        return "blue";
-      case "failover":
-        return "purple";
-      case "scaling":
-        return "green";
-      case "alert":
-        return "orange";
+    case "optimization":
+      return "blue";
+    case "failover":
+      return "purple";
+    case "scaling":
+      return "green";
+    case "alert":
+      return "orange";
     }
   };
 
   const getOutcomeColor = (outcome: AIDecision["outcome"]) => {
     switch (outcome) {
-      case "success":
-        return "default";
-      case "pending":
-        return "secondary";
-      case "failed":
-        return "destructive";
+    case "success":
+      return "default";
+    case "pending":
+      return "secondary";
+    case "failed":
+      return "destructive";
     }
   };
 

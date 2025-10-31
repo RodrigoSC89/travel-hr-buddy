@@ -70,11 +70,11 @@ class SensorsHubService {
       };
     });
 
-    await supabase.from('sensor_logs').insert(logs);
+    await supabase.from("sensor_logs").insert(logs);
 
     // Check for alerts
     for (const log of logs) {
-      if (log.status === 'warning' || log.status === 'critical') {
+      if (log.status === "warning" || log.status === "critical") {
         await this.createAlert(log);
       }
     }
@@ -120,9 +120,9 @@ class SensorsHubService {
     };
 
     const threshold = thresholds[type];
-    if (value >= threshold.critical) return 'critical';
-    if (value >= threshold.warning) return 'warning';
-    return 'normal';
+    if (value >= threshold.critical) return "critical";
+    if (value >= threshold.warning) return "warning";
+    return "normal";
   }
 
   /**
@@ -137,21 +137,21 @@ class SensorsHubService {
     status: SensorStatus;
   }): Promise<void> {
     const { data: existingAlert } = await supabase
-      .from('sensor_alerts')
-      .select('*')
-      .eq('sensor_id', log.sensor_id)
-      .eq('status', 'active')
+      .from("sensor_alerts")
+      .select("*")
+      .eq("sensor_id", log.sensor_id)
+      .eq("status", "active")
       .single();
 
     if (existingAlert) return; // Don't duplicate active alerts
 
-    await supabase.from('sensor_alerts').insert([{
+    await supabase.from("sensor_alerts").insert([{
       sensor_id: log.sensor_id,
       alert_type: `${log.sensor_type}_threshold`,
-      severity: log.status === 'critical' ? 'critical' : 'warning',
+      severity: log.status === "critical" ? "critical" : "warning",
       message: `${log.sensor_name} reading ${log.reading_value} ${log.reading_unit} is ${log.status}`,
       reading_value: log.reading_value,
-      status: 'active',
+      status: "active",
     }]);
   }
 
@@ -160,13 +160,13 @@ class SensorsHubService {
    */
   async getSensorLogs(limit = 100, sensorType?: SensorType): Promise<SensorLog[]> {
     let query = supabase
-      .from('sensor_logs')
-      .select('*')
-      .order('timestamp', { ascending: false })
+      .from("sensor_logs")
+      .select("*")
+      .order("timestamp", { ascending: false })
       .limit(limit);
 
     if (sensorType) {
-      query = query.eq('sensor_type', sensorType);
+      query = query.eq("sensor_type", sensorType);
     }
 
     const { data, error } = await query;
@@ -184,10 +184,10 @@ class SensorsHubService {
    */
   async getActiveAlerts(): Promise<SensorAlert[]> {
     const { data, error } = await supabase
-      .from('sensor_alerts')
-      .select('*')
-      .eq('status', 'active')
-      .order('created_at', { ascending: false });
+      .from("sensor_alerts")
+      .select("*")
+      .eq("status", "active")
+      .order("created_at", { ascending: false });
 
     if (error) {
       console.error("Error fetching alerts:", error);
@@ -204,13 +204,13 @@ class SensorsHubService {
     const { data: userData } = await supabase.auth.getUser();
 
     const { error } = await supabase
-      .from('sensor_alerts')
+      .from("sensor_alerts")
       .update({
-        status: 'acknowledged',
+        status: "acknowledged",
         acknowledged_by: userData?.user?.id,
         acknowledged_at: new Date().toISOString(),
       })
-      .eq('id', alertId);
+      .eq("id", alertId);
 
     return !error;
   }
@@ -238,7 +238,7 @@ class SensorsHubService {
       activeSensors: uniqueSensors.size, // All sensors with recent readings are active
       totalReadings: logs.length,
       activeAlerts: alerts.length,
-      criticalAlerts: alerts.filter(a => a.severity === 'critical').length,
+      criticalAlerts: alerts.filter(a => a.severity === "critical").length,
     };
   }
 
@@ -247,9 +247,9 @@ class SensorsHubService {
    */
   async getLatestReadings(): Promise<SensorLog[]> {
     const { data, error } = await supabase
-      .from('sensor_logs')
-      .select('*')
-      .order('timestamp', { ascending: false })
+      .from("sensor_logs")
+      .select("*")
+      .order("timestamp", { ascending: false })
       .limit(100);
 
     if (error) {

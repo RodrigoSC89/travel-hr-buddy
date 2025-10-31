@@ -180,7 +180,7 @@ export function Patch614Validation() {
       // Test 3: Score ajustado por situação simulada
       const situationalScores = threats.map(threat => {
         const baseScore = threat.severity === "critical" ? 90 : 
-                         threat.severity === "high" ? 70 : 50;
+          threat.severity === "high" ? 70 : 50;
         
         // Ajustar score com base em contexto
         const timeOfDayMultiplier = 1.1; // Noturno = mais suspeito

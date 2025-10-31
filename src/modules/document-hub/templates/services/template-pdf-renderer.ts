@@ -7,8 +7,8 @@
 import { supabase } from "@/integrations/supabase/client";
 
 export interface PDFRenderOptions {
-  orientation?: 'portrait' | 'landscape';
-  pageSize?: 'A4' | 'A3' | 'Letter' | 'Legal';
+  orientation?: "portrait" | "landscape";
+  pageSize?: "A4" | "A3" | "Letter" | "Legal";
   margins?: {
     top?: number;
     right?: number;
@@ -37,20 +37,20 @@ export class TemplatePDFRenderer {
     try {
       // 1. Fetch template
       const { data: template, error: templateError } = await supabase
-        .from('templates')
-        .select('*')
-        .eq('id', templateId)
+        .from("templates")
+        .select("*")
+        .eq("id", templateId)
         .single();
 
       if (templateError) throw templateError;
-      if (!template) throw new Error('Template not found');
+      if (!template) throw new Error("Template not found");
 
       // 2. Fetch template placeholders
       const { data: placeholders, error: placeholdersError } = await supabase
-        .from('template_placeholders')
-        .select('*')
-        .eq('template_id', templateId)
-        .order('display_order');
+        .from("template_placeholders")
+        .select("*")
+        .eq("template_id", templateId)
+        .order("display_order");
 
       if (placeholdersError) throw placeholdersError;
 
@@ -64,35 +64,35 @@ export class TemplatePDFRenderer {
       );
 
       if (missingRequired.length > 0) {
-        throw new Error(`Missing required placeholders: ${missingRequired.join(', ')}`);
+        throw new Error(`Missing required placeholders: ${missingRequired.join(", ")}`);
       }
 
       // 4. Substitute placeholders in content
       let renderedContent = template.content;
       for (const [key, value] of Object.entries(placeholderValues)) {
-        const placeholder = new RegExp(`{{\\s*${key}\\s*}}`, 'g');
+        const placeholder = new RegExp(`{{\\s*${key}\\s*}}`, "g");
         renderedContent = renderedContent.replace(placeholder, String(value));
       }
 
       // 5. Create rendered document record
       const { data: { user } } = await supabase.auth.getUser();
-      if (!user) throw new Error('User not authenticated');
+      if (!user) throw new Error("User not authenticated");
 
       const { data: renderedDoc, error: docError } = await supabase
-        .from('rendered_documents')
+        .from("rendered_documents")
         .insert({
           template_id: templateId,
           user_id: user.id,
-          document_name: `${template.title} - ${new Date().toISOString().split('T')[0]}`,
+          document_name: `${template.title} - ${new Date().toISOString().split("T")[0]}`,
           rendered_content: renderedContent,
           pdf_settings: {
-            orientation: options.orientation || 'portrait',
-            pageSize: options.pageSize || 'A4',
+            orientation: options.orientation || "portrait",
+            pageSize: options.pageSize || "A4",
             margins: options.margins || { top: 20, right: 20, bottom: 20, left: 20 },
             headerFooter: options.headerFooter
           },
           placeholder_values: placeholderValues,
-          status: 'draft'
+          status: "draft"
         })
         .select()
         .single();
@@ -105,9 +105,9 @@ export class TemplatePDFRenderer {
       // 7. Upload to workspace_files storage
       const fileName = `rendered-docs/${renderedDoc.id}.pdf`;
       const { data: uploadData, error: uploadError } = await supabase.storage
-        .from('workspace_files')
+        .from("workspace_files")
         .upload(fileName, pdfBlob, {
-          contentType: 'application/pdf',
+          contentType: "application/pdf",
           upsert: true
         });
 
@@ -115,17 +115,17 @@ export class TemplatePDFRenderer {
 
       // 8. Get public URL
       const { data: urlData } = supabase.storage
-        .from('workspace_files')
+        .from("workspace_files")
         .getPublicUrl(fileName);
 
       // 9. Update rendered document with PDF URL
       const { error: updateError } = await supabase
-        .from('rendered_documents')
+        .from("rendered_documents")
         .update({
           pdf_url: urlData.publicUrl,
-          status: 'final'
+          status: "final"
         })
-        .eq('id', renderedDoc.id);
+        .eq("id", renderedDoc.id);
 
       if (updateError) throw updateError;
 
@@ -134,7 +134,7 @@ export class TemplatePDFRenderer {
         documentId: renderedDoc.id
       };
     } catch (error) {
-      console.error('Error rendering template to PDF:', error);
+      console.error("Error rendering template to PDF:", error);
       throw error;
     }
   }
@@ -155,12 +155,12 @@ PDF Document
 ${htmlContent}
 
 Settings:
-- Orientation: ${options.orientation || 'portrait'}
-- Page Size: ${options.pageSize || 'A4'}
+- Orientation: ${options.orientation || "portrait"}
+- Page Size: ${options.pageSize || "A4"}
 - Margins: ${JSON.stringify(options.margins || {})}
     `;
 
-    return new Blob([pdfContent], { type: 'application/pdf' });
+    return new Blob([pdfContent], { type: "application/pdf" });
   }
 
   /**
@@ -169,15 +169,15 @@ Settings:
   async getRenderedDocument(documentId: string) {
     try {
       const { data, error } = await supabase
-        .from('rendered_documents')
-        .select('*')
-        .eq('id', documentId)
+        .from("rendered_documents")
+        .select("*")
+        .eq("id", documentId)
         .single();
 
       if (error) throw error;
       return data;
     } catch (error) {
-      console.error('Error fetching rendered document:', error);
+      console.error("Error fetching rendered document:", error);
       throw error;
     }
   }
@@ -192,16 +192,16 @@ Settings:
   }) {
     try {
       let query = supabase
-        .from('rendered_documents')
-        .select('*')
-        .order('created_at', { ascending: false });
+        .from("rendered_documents")
+        .select("*")
+        .order("created_at", { ascending: false });
 
       if (filters?.templateId) {
-        query = query.eq('template_id', filters.templateId);
+        query = query.eq("template_id", filters.templateId);
       }
 
       if (filters?.status) {
-        query = query.eq('status', filters.status);
+        query = query.eq("status", filters.status);
       }
 
       if (filters?.limit) {
@@ -213,7 +213,7 @@ Settings:
       if (error) throw error;
       return data || [];
     } catch (error) {
-      console.error('Error listing rendered documents:', error);
+      console.error("Error listing rendered documents:", error);
       throw error;
     }
   }
@@ -229,18 +229,18 @@ Settings:
       // Delete from storage if PDF exists
       if (doc.pdf_url) {
         const fileName = `rendered-docs/${documentId}.pdf`;
-        await supabase.storage.from('workspace_files').remove([fileName]);
+        await supabase.storage.from("workspace_files").remove([fileName]);
       }
 
       // Delete document record
       const { error } = await supabase
-        .from('rendered_documents')
+        .from("rendered_documents")
         .delete()
-        .eq('id', documentId);
+        .eq("id", documentId);
 
       if (error) throw error;
     } catch (error) {
-      console.error('Error deleting rendered document:', error);
+      console.error("Error deleting rendered document:", error);
       throw error;
     }
   }

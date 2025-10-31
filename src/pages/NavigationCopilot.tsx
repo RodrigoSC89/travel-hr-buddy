@@ -165,11 +165,11 @@ const NavigationCopilot: React.FC = () => {
 
   const getSeverityColor = (severity: string) => {
     switch (severity) {
-      case "low": return "text-green-400 bg-green-500/10";
-      case "medium": return "text-yellow-400 bg-yellow-500/10";
-      case "high": return "text-orange-400 bg-orange-500/10";
-      case "critical": return "text-red-400 bg-red-500/10";
-      default: return "text-gray-400 bg-gray-500/10";
+    case "low": return "text-green-400 bg-green-500/10";
+    case "medium": return "text-yellow-400 bg-yellow-500/10";
+    case "high": return "text-orange-400 bg-orange-500/10";
+    case "critical": return "text-red-400 bg-red-500/10";
+    default: return "text-gray-400 bg-gray-500/10";
     }
   };
 

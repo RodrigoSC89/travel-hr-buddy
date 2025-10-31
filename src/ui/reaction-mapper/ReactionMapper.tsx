@@ -4,13 +4,13 @@
  * Interactive visualization of multi-layer reaction system
  */
 
-import React, { useState, useEffect, useCallback, useMemo } from 'react';
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
-import { Button } from '@/components/ui/button';
-import { Badge } from '@/components/ui/badge';
-import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
-import { ScrollArea } from '@/components/ui/scroll-area';
-import { Separator } from '@/components/ui/separator';
+import React, { useState, useEffect, useCallback, useMemo } from "react";
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
+import { Button } from "@/components/ui/button";
+import { Badge } from "@/components/ui/badge";
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
+import { ScrollArea } from "@/components/ui/scroll-area";
+import { Separator } from "@/components/ui/separator";
 import { 
   Play, 
   Pause, 
@@ -23,7 +23,7 @@ import {
   AlertCircle,
   CheckCircle,
   Clock
-} from 'lucide-react';
+} from "lucide-react";
 import {
   DecisionNode,
   DecisionPath,
@@ -33,10 +33,10 @@ import {
   ReactionLayer,
   NodeStatus,
   ReactionMetrics,
-} from './types';
-import { situationalAwareness } from '@/ai/situational-awareness';
-import { tacticalResponse } from '@/ai/tactical-response';
-import { BridgeLink } from '@/core/BridgeLink';
+} from "./types";
+import { situationalAwareness } from "@/ai/situational-awareness";
+import { tacticalResponse } from "@/ai/tactical-response";
+import { BridgeLink } from "@/core/BridgeLink";
 
 /**
  * Props for ReactionMapper component
@@ -83,10 +83,10 @@ export const ReactionMapper: React.FC<ReactionMapperProps> = ({
     }
 
     const { nodes, paths } = state.currentScenario;
-    const completedLogs = state.logs.filter(l => l.status === 'completed');
+    const completedLogs = state.logs.filter(l => l.status === "completed");
 
     // Calculate layer statistics
-    const layers: ReactionLayer[] = ['crew', 'system', 'ai'];
+    const layers: ReactionLayer[] = ["crew", "system", "ai"];
     const layerStatistics = layers.map(layer => {
       const layerNodes = nodes.filter(n => n.layer === layer);
       const completedNodes = layerNodes.filter(n => state.completedNodes.has(n.id));
@@ -162,7 +162,7 @@ export const ReactionMapper: React.FC<ReactionMapperProps> = ({
 
     // Trigger simulation event
     if (integrateWithControlHub) {
-      BridgeLink.emit('reaction-mapper:simulation-started', 'ReactionMapper', {
+      BridgeLink.emit("reaction-mapper:simulation-started", "ReactionMapper", {
         scenarioId: state.currentScenario.id,
         timestamp: Date.now(),
       });
@@ -204,8 +204,8 @@ export const ReactionMapper: React.FC<ReactionMapperProps> = ({
       layer: node.layer,
       nodeId: node.id,
       event: `Executing ${node.type}: ${node.title}`,
-      actor: node.metadata.actor || 'Unknown',
-      status: 'active',
+      actor: node.metadata.actor || "Unknown",
+      status: "active",
       details: { ...node.metadata },
     };
 
@@ -220,7 +220,7 @@ export const ReactionMapper: React.FC<ReactionMapperProps> = ({
 
     // Randomly succeed or fail (90% success rate)
     const success = Math.random() > 0.1;
-    const finalStatus: NodeStatus = success ? 'completed' : 'failed';
+    const finalStatus: NodeStatus = success ? "completed" : "failed";
 
     // Update node status
     setState(prev => {
@@ -267,7 +267,7 @@ export const ReactionMapper: React.FC<ReactionMapperProps> = ({
     }));
 
     if (integrateWithControlHub) {
-      BridgeLink.emit('reaction-mapper:simulation-stopped', 'ReactionMapper', {
+      BridgeLink.emit("reaction-mapper:simulation-stopped", "ReactionMapper", {
         timestamp: Date.now(),
       });
     }
@@ -292,12 +292,12 @@ export const ReactionMapper: React.FC<ReactionMapperProps> = ({
    */
   const getLayerIcon = (layer: ReactionLayer) => {
     switch (layer) {
-      case 'crew':
-        return <Users className="h-4 w-4" />;
-      case 'system':
-        return <Cpu className="h-4 w-4" />;
-      case 'ai':
-        return <Zap className="h-4 w-4" />;
+    case "crew":
+      return <Users className="h-4 w-4" />;
+    case "system":
+      return <Cpu className="h-4 w-4" />;
+    case "ai":
+      return <Zap className="h-4 w-4" />;
     }
   };
 
@@ -306,18 +306,18 @@ export const ReactionMapper: React.FC<ReactionMapperProps> = ({
    */
   const getStatusColor = (status: NodeStatus): string => {
     switch (status) {
-      case 'active':
-        return 'text-blue-500';
-      case 'completed':
-        return 'text-green-500';
-      case 'failed':
-        return 'text-red-500';
-      case 'pending':
-        return 'text-gray-400';
-      case 'bypassed':
-        return 'text-yellow-500';
-      default:
-        return 'text-gray-400';
+    case "active":
+      return "text-blue-500";
+    case "completed":
+      return "text-green-500";
+    case "failed":
+      return "text-red-500";
+    case "pending":
+      return "text-gray-400";
+    case "bypassed":
+      return "text-yellow-500";
+    default:
+      return "text-gray-400";
     }
   };
 
@@ -326,16 +326,16 @@ export const ReactionMapper: React.FC<ReactionMapperProps> = ({
    */
   const getStatusIcon = (status: NodeStatus) => {
     switch (status) {
-      case 'active':
-        return <Activity className="h-4 w-4" />;
-      case 'completed':
-        return <CheckCircle className="h-4 w-4" />;
-      case 'failed':
-        return <AlertCircle className="h-4 w-4" />;
-      case 'pending':
-        return <Clock className="h-4 w-4" />;
-      default:
-        return <Clock className="h-4 w-4" />;
+    case "active":
+      return <Activity className="h-4 w-4" />;
+    case "completed":
+      return <CheckCircle className="h-4 w-4" />;
+    case "failed":
+      return <AlertCircle className="h-4 w-4" />;
+    case "pending":
+      return <Clock className="h-4 w-4" />;
+    default:
+      return <Clock className="h-4 w-4" />;
     }
   };
 
@@ -347,17 +347,17 @@ export const ReactionMapper: React.FC<ReactionMapperProps> = ({
     const isCompleted = state.completedNodes.has(node.id);
     const isFailed = state.failedNodes.has(node.id);
 
-    let status: NodeStatus = 'pending';
-    if (isActive) status = 'active';
-    else if (isCompleted) status = 'completed';
-    else if (isFailed) status = 'failed';
+    let status: NodeStatus = "pending";
+    if (isActive) status = "active";
+    else if (isCompleted) status = "completed";
+    else if (isFailed) status = "failed";
 
     return (
       <Card
         key={node.id}
         className={`mb-2 cursor-pointer transition-all ${
-          selectedNode?.id === node.id ? 'ring-2 ring-blue-500' : ''
-        } ${isActive ? 'border-blue-500 shadow-lg' : ''}`}
+          selectedNode?.id === node.id ? "ring-2 ring-blue-500" : ""
+        } ${isActive ? "border-blue-500 shadow-lg" : ""}`}
         onClick={() => setSelectedNode(node)}
       >
         <CardHeader className="p-3">
@@ -417,7 +417,7 @@ export const ReactionMapper: React.FC<ReactionMapperProps> = ({
           <div className="flex gap-2">
             <Button
               size="sm"
-              variant={state.simulationMode ? 'secondary' : 'default'}
+              variant={state.simulationMode ? "secondary" : "default"}
               onClick={state.simulationMode ? stopSimulation : startSimulation}
               disabled={!state.currentScenario}
             >
@@ -458,11 +458,11 @@ export const ReactionMapper: React.FC<ReactionMapperProps> = ({
             <ScrollArea className="h-[600px] pr-4">
               {state.currentScenario ? (
                 <>
-                  {renderLayer('crew')}
+                  {renderLayer("crew")}
                   <Separator className="my-4" />
-                  {renderLayer('system')}
+                  {renderLayer("system")}
                   <Separator className="my-4" />
-                  {renderLayer('ai')}
+                  {renderLayer("ai")}
                 </>
               ) : (
                 <div className="text-center text-gray-500 py-8">
@@ -574,8 +574,8 @@ export const ReactionMapper: React.FC<ReactionMapperProps> = ({
                           </p>
                           <p className="text-xs text-gray-500">{path.type}</p>
                         </div>
-                        <Badge variant={path.executed ? 'default' : 'outline'}>
-                          {path.executed ? 'Executed' : 'Not executed'}
+                        <Badge variant={path.executed ? "default" : "outline"}>
+                          {path.executed ? "Executed" : "Not executed"}
                         </Badge>
                       </div>
                     </Card>

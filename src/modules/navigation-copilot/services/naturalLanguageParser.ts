@@ -7,7 +7,7 @@ import { logger } from "@/lib/logger";
 import type { Coordinates } from "../index";
 
 export interface ParsedCommand {
-  action: 'navigate' | 'reroute' | 'find_port' | 'weather' | 'avoid_area' | 'optimize_route' | 'unknown';
+  action: "navigate" | "reroute" | "find_port" | "weather" | "avoid_area" | "optimize_route" | "unknown";
   parameters: {
     destination?: Coordinates | string;
     reason?: string;
@@ -62,12 +62,12 @@ class NaturalLanguageParser {
   };
 
   private portDatabase: Record<string, Coordinates> = {
-    'santos': { lat: -23.9614, lng: -46.3336 },
-    'rio de janeiro': { lat: -22.9068, lng: -43.1729 },
-    'paranaguá': { lat: -25.5163, lng: -48.5108 },
-    'salvador': { lat: -12.9714, lng: -38.5014 },
-    'vitória': { lat: -20.3155, lng: -40.2849 },
-    'são paulo': { lat: -23.5505, lng: -46.6333 },
+    "santos": { lat: -23.9614, lng: -46.3336 },
+    "rio de janeiro": { lat: -22.9068, lng: -43.1729 },
+    "paranaguá": { lat: -25.5163, lng: -48.5108 },
+    "salvador": { lat: -12.9714, lng: -38.5014 },
+    "vitória": { lat: -20.3155, lng: -40.2849 },
+    "são paulo": { lat: -23.5505, lng: -46.6333 },
   };
 
   public parseCommand(text: string): ParsedCommand {
@@ -79,14 +79,14 @@ class NaturalLanguageParser {
       for (const pattern of patterns) {
         const match = lowerText.match(pattern);
         if (match) {
-          return this.buildCommand(action as ParsedCommand['action'], match, lowerText);
+          return this.buildCommand(action as ParsedCommand["action"], match, lowerText);
         }
       }
     }
 
     // No pattern matched
     return {
-      action: 'unknown',
+      action: "unknown",
       parameters: {},
       confidence: 0,
       originalText: text,
@@ -95,7 +95,7 @@ class NaturalLanguageParser {
   }
 
   private buildCommand(
-    action: ParsedCommand['action'],
+    action: ParsedCommand["action"],
     match: RegExpMatchArray,
     originalText: string
   ): ParsedCommand {
@@ -108,52 +108,52 @@ class NaturalLanguageParser {
     };
 
     switch (action) {
-      case 'navigate':
-      case 'reroute':
-        if (match[1]) {
-          const destination = this.resolveLocation(match[1]);
-          command.parameters.destination = destination || undefined;
-          command.confidence = destination ? 0.9 : 0.6;
-        }
-        break;
+    case "navigate":
+    case "reroute":
+      if (match[1]) {
+        const destination = this.resolveLocation(match[1]);
+        command.parameters.destination = destination || undefined;
+        command.confidence = destination ? 0.9 : 0.6;
+      }
+      break;
 
-      case 'find_port':
-        command.parameters.location = 'nearest';
-        command.confidence = 0.95;
-        break;
+    case "find_port":
+      command.parameters.location = "nearest";
+      command.confidence = 0.95;
+      break;
 
-      case 'weather':
-        if (match[1]) {
-          const location = this.resolveLocation(match[1]);
-          command.parameters.location = location || match[1];
-          command.confidence = location ? 0.9 : 0.7;
-        } else {
-          command.parameters.location = 'current';
-          command.confidence = 0.9;
-        }
-        break;
-
-      case 'avoid_area':
-        if (match[1]) {
-          command.parameters.location = match[1];
-          command.parameters.radius = 50; // nautical miles
-          command.confidence = 0.85;
-        }
-        break;
-
-      case 'optimize_route':
-        // Check for specific optimization criteria in the text
-        if (originalText.includes('rápida')) {
-          command.parameters.criteria = 'fastest';
-        } else if (originalText.includes('curta')) {
-          command.parameters.criteria = 'shortest';
-        } else if (originalText.includes('combustível') || originalText.includes('economia')) {
-          command.parameters.criteria = 'fuel_efficient';
-        } else {
-          command.parameters.criteria = 'balanced';
-        }
+    case "weather":
+      if (match[1]) {
+        const location = this.resolveLocation(match[1]);
+        command.parameters.location = location || match[1];
+        command.confidence = location ? 0.9 : 0.7;
+      } else {
+        command.parameters.location = "current";
         command.confidence = 0.9;
-        break;
+      }
+      break;
+
+    case "avoid_area":
+      if (match[1]) {
+        command.parameters.location = match[1];
+        command.parameters.radius = 50; // nautical miles
+        command.confidence = 0.85;
+      }
+      break;
+
+    case "optimize_route":
+      // Check for specific optimization criteria in the text
+      if (originalText.includes("rápida")) {
+        command.parameters.criteria = "fastest";
+      } else if (originalText.includes("curta")) {
+        command.parameters.criteria = "shortest";
+      } else if (originalText.includes("combustível") || originalText.includes("economia")) {
+        command.parameters.criteria = "fuel_efficient";
+      } else {
+        command.parameters.criteria = "balanced";
+      }
+      command.confidence = 0.9;
+      break;
     }
 
     logger.info("Command parsed", command);

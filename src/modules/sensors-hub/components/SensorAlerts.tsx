@@ -36,10 +36,10 @@ export const SensorAlerts: React.FC<SensorAlertsProps> = ({
 }) => {
   const getSeverityColor = (severity: string) => {
     switch (severity) {
-      case "critical": return "bg-red-500/10 text-red-500 border-red-500/30";
-      case "high": return "bg-orange-500/10 text-orange-500 border-orange-500/30";
-      case "medium": return "bg-yellow-500/10 text-yellow-500 border-yellow-500/30";
-      default: return "bg-blue-500/10 text-blue-500 border-blue-500/30";
+    case "critical": return "bg-red-500/10 text-red-500 border-red-500/30";
+    case "high": return "bg-orange-500/10 text-orange-500 border-orange-500/30";
+    case "medium": return "bg-yellow-500/10 text-yellow-500 border-yellow-500/30";
+    default: return "bg-blue-500/10 text-blue-500 border-blue-500/30";
     }
   };
 

@@ -171,16 +171,16 @@ const DeepRiskAIPage: React.FC = () => {
 
   const getRiskIcon = (level: string) => {
     switch (level) {
-      case "low":
-        return <CheckCircle2 className="w-5 h-5 text-green-600" />;
-      case "medium":
-        return <Activity className="w-5 h-5 text-yellow-600" />;
-      case "high":
-        return <AlertTriangle className="w-5 h-5 text-orange-600" />;
-      case "critical":
-        return <Shield className="w-5 h-5 text-red-600" />;
-      default:
-        return <Activity className="w-5 h-5" />;
+    case "low":
+      return <CheckCircle2 className="w-5 h-5 text-green-600" />;
+    case "medium":
+      return <Activity className="w-5 h-5 text-yellow-600" />;
+    case "high":
+      return <AlertTriangle className="w-5 h-5 text-orange-600" />;
+    case "critical":
+      return <Shield className="w-5 h-5 text-red-600" />;
+    default:
+      return <Activity className="w-5 h-5" />;
     }
   };
 
@@ -421,7 +421,7 @@ const DeepRiskAIPage: React.FC = () => {
                     </CardHeader>
                     <CardContent className="space-y-4">
                       <div className="text-center py-6">
-                        <div className={`text-6xl font-bold ${currentAnalysis.level === 'low' ? 'text-green-600' : currentAnalysis.level === 'medium' ? 'text-yellow-600' : currentAnalysis.level === 'high' ? 'text-orange-600' : 'text-red-600'}`}>
+                        <div className={`text-6xl font-bold ${currentAnalysis.level === "low" ? "text-green-600" : currentAnalysis.level === "medium" ? "text-yellow-600" : currentAnalysis.level === "high" ? "text-orange-600" : "text-red-600"}`}>
                           {currentAnalysis.score.toFixed(1)}
                         </div>
                         <Badge
@@ -523,10 +523,10 @@ const DeepRiskAIPage: React.FC = () => {
                     >
                       <div className="flex items-center justify-between mb-2">
                         <div className="flex items-center gap-2">
-                          {getRiskIcon(forecast.risk_level || 'medium')}
+                          {getRiskIcon(forecast.risk_level || "medium")}
                           <h4 className="font-medium">{forecast.forecast_name}</h4>
                         </div>
-                        <Badge className={getRiskLevelColor(forecast.risk_level || 'medium')}>
+                        <Badge className={getRiskLevelColor(forecast.risk_level || "medium")}>
                           {forecast.risk_level?.toUpperCase()} - {forecast.risk_score.toFixed(1)}
                         </Badge>
                       </div>

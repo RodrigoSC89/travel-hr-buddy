@@ -1,8 +1,8 @@
-import React, { useState } from 'react';
-import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
-import { Button } from '@/components/ui/button';
-import { Badge } from '@/components/ui/badge';
-import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
+import React, { useState } from "react";
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import { Button } from "@/components/ui/button";
+import { Badge } from "@/components/ui/badge";
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { 
   Plus, 
   RefreshCw, 
@@ -12,12 +12,12 @@ import {
   Activity,
   DollarSign,
   Target
-} from 'lucide-react';
-import { usePriceAlerts, usePriceNotifications } from '@/hooks/use-price-alerts';
-import { PriceAlertsTable } from './price-alerts-table';
-import { AlertForm } from './alert-form';
-import { NotificationsPanel } from './notifications-panel';
-import { PriceAlert, CreatePriceAlertInput, UpdatePriceAlertInput } from '@/services/price-alerts-service';
+} from "lucide-react";
+import { usePriceAlerts, usePriceNotifications } from "@/hooks/use-price-alerts";
+import { PriceAlertsTable } from "./price-alerts-table";
+import { AlertForm } from "./alert-form";
+import { NotificationsPanel } from "./notifications-panel";
+import { PriceAlert, CreatePriceAlertInput, UpdatePriceAlertInput } from "@/services/price-alerts-service";
 
 export const PriceAlertsDashboard: React.FC = () => {
   const {
@@ -218,7 +218,7 @@ export const PriceAlertsDashboard: React.FC = () => {
         }}
         onSubmit={editingAlert ? handleUpdateAlert : handleCreateAlert}
         alert={editingAlert}
-        mode={editingAlert ? 'edit' : 'create'}
+        mode={editingAlert ? "edit" : "create"}
       />
     </div>
   );

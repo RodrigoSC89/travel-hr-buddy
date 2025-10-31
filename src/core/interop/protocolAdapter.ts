@@ -135,26 +135,29 @@ export async function parse(message: ProtocolMessage): Promise<ParsedMessage> {
       errors.push(...rpcResult.errors);
       break;
 
-    case "graphql":
+    case "graphql": {
       const gqlResult = parseGraphQL(message.payload);
       data = gqlResult.data;
       isValid = gqlResult.isValid;
       errors.push(...gqlResult.errors);
       break;
+    }
 
-    case "ais":
+    case "ais": {
       const aisResult = parseAIS(message.payload);
       data = aisResult.data;
       isValid = aisResult.isValid;
       errors.push(...aisResult.errors);
       break;
+    }
 
-    case "gmdss":
+    case "gmdss": {
       const gmdssResult = parseGMDSS(message.payload);
       data = gmdssResult.data;
       isValid = gmdssResult.isValid;
       errors.push(...gmdssResult.errors);
       break;
+    }
 
     case "nato-stanag":
       const stanagResult = parseStanag(message.payload);
@@ -432,7 +435,7 @@ function validateSchema(protocol: ProtocolType, data: any): string[] {
   case "graphql":
     // Additional GraphQL schema validation could go here
     break;
-  case "ais":
+  case "ais": {
     const ais = data as AisMessage;
     if (ais.latitude && (ais.latitude < -90 || ais.latitude > 90)) {
       errors.push("Latitude out of range");
@@ -441,6 +444,7 @@ function validateSchema(protocol: ProtocolType, data: any): string[] {
       errors.push("Longitude out of range");
     }
     break;
+  }
   case "gmdss":
     // GMDSS schema validation
     break;

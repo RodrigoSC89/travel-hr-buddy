@@ -57,7 +57,7 @@ export class AIIncidentReplayerV2 {
    */
   public async reconstructIncident(config: ReplayConfig): Promise<IncidentReplay> {
     if (this.isReconstructing) {
-      throw new Error('Reconstruction already in progress');
+      throw new Error("Reconstruction already in progress");
     }
 
     this.isReconstructing = true;
@@ -94,12 +94,12 @@ export class AIIncidentReplayerV2 {
         insights,
       };
 
-      console.log(`[IncidentReplayerV2] Reconstruction completed`, {
+      console.log("[IncidentReplayerV2] Reconstruction completed", {
         events: timeline.length,
         aiDecisions: aiDecisions.length,
       });
 
-      BridgeLink.emit('incident-replay-v2:reconstructed', 'IncidentReplayerV2', {
+      BridgeLink.emit("incident-replay-v2:reconstructed", "IncidentReplayerV2", {
         incidentId: config.incidentId,
         replayId: this.replay.id,
         timestamp: Date.now(),
@@ -125,7 +125,7 @@ export class AIIncidentReplayerV2 {
     for (let t = config.startTime; t <= config.endTime; t += snapshotInterval) {
       const snapshot: ContextSnapshot = {
         timestamp: t,
-        source: 'system',
+        source: "system",
         data: {},
         metadata: {
           quality: 0.9,
@@ -134,22 +134,22 @@ export class AIIncidentReplayerV2 {
       };
 
       // Add sensor data if requested
-      if (config.dataSources.includes('sensors')) {
+      if (config.dataSources.includes("sensors")) {
         snapshot.data.sensors = await this.collectSensorData(t);
       }
 
       // Add crew data if requested
-      if (config.dataSources.includes('crew')) {
+      if (config.dataSources.includes("crew")) {
         snapshot.data.crew = await this.collectCrewData(t);
       }
 
       // Add AI data if requested
-      if (config.dataSources.includes('ai')) {
+      if (config.dataSources.includes("ai")) {
         snapshot.data.ai = await this.collectAIData(t);
       }
 
       // Add system data if requested
-      if (config.dataSources.includes('system')) {
+      if (config.dataSources.includes("system")) {
         snapshot.data.system = await this.collectSystemData(t);
       }
 
@@ -182,9 +182,9 @@ export class AIIncidentReplayerV2 {
   private async collectCrewData(timestamp: number): Promise<any> {
     // In production, query actual crew logs
     return {
-      onDuty: ['Officer A', 'Engineer B', 'Navigator C'],
-      actions: ['Monitoring systems', 'Routine checks'],
-      communications: ['All systems nominal'],
+      onDuty: ["Officer A", "Engineer B", "Navigator C"],
+      actions: ["Monitoring systems", "Routine checks"],
+      communications: ["All systems nominal"],
     };
   }
 
@@ -194,9 +194,9 @@ export class AIIncidentReplayerV2 {
   private async collectAIData(timestamp: number): Promise<any> {
     // In production, query actual AI decision logs
     return {
-      analysis: 'Systems operating within normal parameters',
+      analysis: "Systems operating within normal parameters",
       confidence: 0.85,
-      recommendations: ['Continue monitoring', 'Maintain current course'],
+      recommendations: ["Continue monitoring", "Maintain current course"],
       decisions: [],
     };
   }
@@ -208,9 +208,9 @@ export class AIIncidentReplayerV2 {
     // In production, query actual system logs
     return {
       status: {
-        power: 'nominal',
-        navigation: 'nominal',
-        communication: 'nominal',
+        power: "nominal",
+        navigation: "nominal",
+        communication: "nominal",
       },
       alerts: [],
       errors: [],
@@ -228,15 +228,15 @@ export class AIIncidentReplayerV2 {
 
     // Add incident start event
     timeline.push({
-      id: `event-start`,
+      id: "event-start",
       timestamp: config.startTime,
-      type: 'incident_start',
-      title: 'Incident Started',
-      description: 'Incident detection and initial response',
-      actor: 'System',
+      type: "incident_start",
+      title: "Incident Started",
+      description: "Incident detection and initial response",
+      actor: "System",
       context: snapshots[0],
       duration: 0,
-      impact: 'critical',
+      impact: "critical",
       relatedEvents: [],
     });
 
@@ -252,15 +252,15 @@ export class AIIncidentReplayerV2 {
 
     // Add incident end event
     timeline.push({
-      id: `event-end`,
+      id: "event-end",
       timestamp: config.endTime,
-      type: 'incident_end',
-      title: 'Incident Resolved',
-      description: 'Incident successfully resolved and systems restored',
-      actor: 'System',
+      type: "incident_end",
+      title: "Incident Resolved",
+      description: "Incident successfully resolved and systems restored",
+      actor: "System",
       context: snapshots[snapshots.length - 1],
       duration: config.endTime - config.startTime,
-      impact: 'high',
+      impact: "high",
       relatedEvents: [],
     });
 
@@ -285,12 +285,12 @@ export class AIIncidentReplayerV2 {
         events.push({
           id: `event-ai-${current.timestamp}-${index}`,
           timestamp: current.timestamp,
-          type: 'ai_decision',
-          title: 'AI Decision Made',
+          type: "ai_decision",
+          title: "AI Decision Made",
           description: decision,
-          actor: 'AI System',
+          actor: "AI System",
           context: current,
-          impact: 'high',
+          impact: "high",
           relatedEvents: [],
         });
       });
@@ -303,12 +303,12 @@ export class AIIncidentReplayerV2 {
         events.push({
           id: `event-crew-${current.timestamp}-${index}`,
           timestamp: current.timestamp,
-          type: 'crew_action',
-          title: 'Crew Action',
+          type: "crew_action",
+          title: "Crew Action",
           description: action,
-          actor: current.data.crew?.onDuty?.[0] || 'Crew Member',
+          actor: current.data.crew?.onDuty?.[0] || "Crew Member",
           context: current,
-          impact: 'medium',
+          impact: "medium",
           relatedEvents: [],
         });
       });
@@ -320,12 +320,12 @@ export class AIIncidentReplayerV2 {
         events.push({
           id: `event-system-${current.timestamp}-${index}`,
           timestamp: current.timestamp,
-          type: 'system_response',
-          title: 'System Alert',
+          type: "system_response",
+          title: "System Alert",
           description: alert,
-          actor: 'Automated System',
+          actor: "Automated System",
           context: current,
-          impact: 'medium',
+          impact: "medium",
           relatedEvents: [],
         });
       });
@@ -345,7 +345,7 @@ export class AIIncidentReplayerV2 {
       return [];
     }
 
-    const aiEvents = timeline.filter(e => e.type === 'ai_decision');
+    const aiEvents = timeline.filter(e => e.type === "ai_decision");
     const aiDecisions: AIDecisionRecord[] = [];
 
     for (const event of aiEvents) {
@@ -368,10 +368,10 @@ export class AIIncidentReplayerV2 {
     const contextSummary = JSON.stringify(event.context.data, null, 2);
     
     const response = await runOpenAI({
-      model: 'gpt-4o-mini',
+      model: "gpt-4o-mini",
       messages: [
         {
-          role: 'system',
+          role: "system",
           content: `You are an AI decision analyst. Analyze the following AI decision and provide a detailed explanation in JSON format with:
 - reasoning: why this decision was made
 - alternatives: what other options were considered
@@ -382,7 +382,7 @@ export class AIIncidentReplayerV2 {
 Respond only with valid JSON.`,
         },
         {
-          role: 'user',
+          role: "user",
           content: `Explain this AI decision:\nDecision: ${event.description}\nContext: ${contextSummary}`,
         },
       ],
@@ -400,7 +400,7 @@ Respond only with valid JSON.`,
         reasoning: response.content,
         alternatives: [],
         confidence: 0.7,
-        impact: 'Analysis pending',
+        impact: "Analysis pending",
         lessons: [],
       };
     }
@@ -410,23 +410,23 @@ Respond only with valid JSON.`,
       timestamp: event.timestamp,
       context: event.context,
       decision: {
-        type: 'automated',
+        type: "automated",
         description: event.description,
-        reasoning: explanation.reasoning || 'Decision made based on current context',
+        reasoning: explanation.reasoning || "Decision made based on current context",
         alternatives: explanation.alternatives || [],
         selectedOption: event.description,
         confidence: explanation.confidence || 0.7,
       },
       outcome: {
         success: true,
-        impact: explanation.impact || 'Positive impact on incident resolution',
-        actualResult: explanation.actualResult || 'As expected',
-        expectedResult: explanation.expectedResult || 'System stabilization',
+        impact: explanation.impact || "Positive impact on incident resolution",
+        actualResult: explanation.actualResult || "As expected",
+        expectedResult: explanation.expectedResult || "System stabilization",
       },
       explanation: {
-        summary: explanation.reasoning || 'AI decision executed successfully',
-        detailedReasoning: explanation.reasoning || 'Based on situational analysis',
-        contextualFactors: explanation.contextualFactors || ['System state', 'Risk assessment'],
+        summary: explanation.reasoning || "AI decision executed successfully",
+        detailedReasoning: explanation.reasoning || "Based on situational analysis",
+        contextualFactors: explanation.contextualFactors || ["System state", "Risk assessment"],
         lessonsLearned: explanation.lessons || [],
       },
     };
@@ -438,8 +438,8 @@ Respond only with valid JSON.`,
   private async reconstructDataStreams(
     snapshots: ContextSnapshot[],
     config: ReplayConfig
-  ): Promise<IncidentReplay['reconstruction']> {
-    const reconstruction: IncidentReplay['reconstruction'] = {
+  ): Promise<IncidentReplay["reconstruction"]> {
+    const reconstruction: IncidentReplay["reconstruction"] = {
       sensorData: {},
       crewActivity: {},
       systemState: {},
@@ -470,9 +470,9 @@ Respond only with valid JSON.`,
   private calculateStatistics(
     timeline: TimelineEvent[],
     aiDecisions: AIDecisionRecord[]
-  ): IncidentReplay['statistics'] {
-    const crewActions = timeline.filter(e => e.type === 'crew_action');
-    const systemResponses = timeline.filter(e => e.type === 'system_response');
+  ): IncidentReplay["statistics"] {
+    const crewActions = timeline.filter(e => e.type === "crew_action");
+    const systemResponses = timeline.filter(e => e.type === "system_response");
     
     const eventDurations = timeline
       .filter(e => e.duration)
@@ -482,8 +482,8 @@ Respond only with valid JSON.`,
       ? eventDurations.reduce((sum, d) => sum + d, 0) / eventDurations.length
       : 0;
     
-    const incidentStart = timeline.find(e => e.type === 'incident_start');
-    const incidentEnd = timeline.find(e => e.type === 'incident_end');
+    const incidentStart = timeline.find(e => e.type === "incident_start");
+    const incidentEnd = timeline.find(e => e.type === "incident_end");
     const incidentDuration = incidentEnd && incidentStart
       ? incidentEnd.timestamp - incidentStart.timestamp
       : 0;
@@ -504,14 +504,14 @@ Respond only with valid JSON.`,
   private async generateInsights(
     timeline: TimelineEvent[],
     aiDecisions: AIDecisionRecord[]
-  ): Promise<IncidentReplay['insights']> {
-    const timelineSummary = timeline.map(e => `${e.type}: ${e.description}`).join('\n');
+  ): Promise<IncidentReplay["insights"]> {
+    const timelineSummary = timeline.map(e => `${e.type}: ${e.description}`).join("\n");
     
     const response = await runOpenAI({
-      model: 'gpt-4o-mini',
+      model: "gpt-4o-mini",
       messages: [
         {
-          role: 'system',
+          role: "system",
           content: `You are an incident analysis expert. Analyze the incident timeline and provide insights in JSON format with:
 - keyFindings: main observations
 - improvementAreas: areas for improvement
@@ -521,7 +521,7 @@ Respond only with valid JSON.`,
 Respond only with valid JSON.`,
         },
         {
-          role: 'user',
+          role: "user",
           content: `Analyze this incident:\n${timelineSummary}`,
         },
       ],
@@ -534,9 +534,9 @@ Respond only with valid JSON.`,
     } catch {
       // Fallback
       return {
-        keyFindings: ['Incident successfully resolved'],
-        improvementAreas: ['Response time optimization'],
-        successfulActions: ['Timely detection', 'Effective coordination'],
+        keyFindings: ["Incident successfully resolved"],
+        improvementAreas: ["Response time optimization"],
+        successfulActions: ["Timely detection", "Effective coordination"],
         failedActions: [],
       };
     }
@@ -547,24 +547,24 @@ Respond only with valid JSON.`,
    */
   public async exportReplay(options: ExportOptions): Promise<string> {
     if (!this.replay) {
-      throw new Error('No replay available to export');
+      throw new Error("No replay available to export");
     }
 
     switch (options.format) {
-      case 'json':
-        return this.exportToJSON(options);
+    case "json":
+      return this.exportToJSON(options);
       
-      case 'text':
-        return this.exportToText(options);
+    case "text":
+      return this.exportToText(options);
       
-      case 'pdf':
-        return this.exportToPDF(options);
+    case "pdf":
+      return this.exportToPDF(options);
       
-      case 'video':
-        return this.exportToVideo(options);
+    case "video":
+      return this.exportToVideo(options);
       
-      default:
-        throw new Error(`Unsupported export format: ${options.format}`);
+    default:
+      throw new Error(`Unsupported export format: ${options.format}`);
     }
   }
 
@@ -592,53 +592,53 @@ Respond only with valid JSON.`,
    * Export to text
    */
   private exportToText(options: ExportOptions): string {
-    if (!this.replay) return '';
+    if (!this.replay) return "";
 
     const lines: string[] = [];
     
-    lines.push(`INCIDENT REPLAY REPORT`);
+    lines.push("INCIDENT REPLAY REPORT");
     lines.push(`Incident ID: ${this.replay.incidentId}`);
     lines.push(`Generated: ${new Date(this.replay.createdAt).toISOString()}`);
     lines.push(`Duration: ${Math.round(this.replay.statistics.incidentDuration / 1000)}s`);
-    lines.push('');
+    lines.push("");
     
-    lines.push('STATISTICS:');
+    lines.push("STATISTICS:");
     lines.push(`- Total Events: ${this.replay.statistics.totalEvents}`);
     lines.push(`- AI Decisions: ${this.replay.statistics.aiDecisionsCount}`);
     lines.push(`- Crew Actions: ${this.replay.statistics.crewActionsCount}`);
     lines.push(`- System Responses: ${this.replay.statistics.systemResponsesCount}`);
     lines.push(`- Avg Response Time: ${Math.round(this.replay.statistics.averageResponseTime)}ms`);
-    lines.push('');
+    lines.push("");
     
-    lines.push('TIMELINE:');
+    lines.push("TIMELINE:");
     this.replay.timeline.forEach(event => {
       lines.push(`[${new Date(event.timestamp).toISOString()}] ${event.type}: ${event.title}`);
       lines.push(`  Actor: ${event.actor}`);
       lines.push(`  ${event.description}`);
-      lines.push('');
+      lines.push("");
     });
     
     if (options.includeAIExplanations) {
-      lines.push('AI DECISIONS:');
+      lines.push("AI DECISIONS:");
       this.replay.aiDecisions.forEach(decision => {
         lines.push(`[${new Date(decision.timestamp).toISOString()}] ${decision.decision.description}`);
         lines.push(`  Reasoning: ${decision.explanation.summary}`);
         lines.push(`  Confidence: ${Math.round(decision.decision.confidence * 100)}%`);
-        lines.push('');
+        lines.push("");
       });
     }
     
     if (options.includeRecommendations) {
-      lines.push('INSIGHTS:');
-      lines.push('Key Findings:');
+      lines.push("INSIGHTS:");
+      lines.push("Key Findings:");
       this.replay.insights.keyFindings.forEach(f => lines.push(`- ${f}`));
-      lines.push('');
-      lines.push('Improvement Areas:');
+      lines.push("");
+      lines.push("Improvement Areas:");
       this.replay.insights.improvementAreas.forEach(a => lines.push(`- ${a}`));
-      lines.push('');
+      lines.push("");
     }
     
-    return lines.join('\n');
+    return lines.join("\n");
   }
 
   /**
@@ -685,11 +685,11 @@ Respond only with valid JSON.`,
     }
 
     if (filter.includeAIOnly) {
-      filtered = filtered.filter(e => e.type === 'ai_decision');
+      filtered = filtered.filter(e => e.type === "ai_decision");
     }
 
     if (filter.includeCrewOnly) {
-      filtered = filtered.filter(e => e.type === 'crew_action');
+      filtered = filtered.filter(e => e.type === "crew_action");
     }
 
     return filtered;
@@ -716,7 +716,7 @@ Respond only with valid JSON.`,
     
     AIIncidentReplayerV2.instances.delete(this.incidentId);
     
-    BridgeLink.emit('incident-replay-v2:cleanup', 'IncidentReplayerV2', {
+    BridgeLink.emit("incident-replay-v2:cleanup", "IncidentReplayerV2", {
       incidentId: this.incidentId,
       timestamp: Date.now(),
     });

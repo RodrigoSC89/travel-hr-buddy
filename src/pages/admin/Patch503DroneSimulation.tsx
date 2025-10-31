@@ -5,7 +5,7 @@ import { Plane, CheckCircle2, XCircle, Gamepad2, Database, Activity, Video } fro
 import { useState } from "react";
 
 export default function Patch503DroneSimulation() {
-  const [validationStatus, setValidationStatus] = useState<'idle' | 'running' | 'complete'>('idle');
+  const [validationStatus, setValidationStatus] = useState<"idle" | "running" | "complete">("idle");
   const [controlPanel, setControlPanel] = useState(false);
   const [commandExecution, setCommandExecution] = useState(false);
   const [simulation, setSimulation] = useState(false);
@@ -43,7 +43,7 @@ export default function Patch503DroneSimulation() {
   ];
 
   const runValidation = async () => {
-    setValidationStatus('running');
+    setValidationStatus("running");
     
     await new Promise(resolve => setTimeout(resolve, 1000));
     setControlPanel(true);
@@ -57,7 +57,7 @@ export default function Patch503DroneSimulation() {
     await new Promise(resolve => setTimeout(resolve, 800));
     setPersistence(true);
     
-    setValidationStatus('complete');
+    setValidationStatus("complete");
   };
 
   const passCount = validationChecks.filter((c) => c.status === "pass").length;
@@ -82,9 +82,9 @@ export default function Patch503DroneSimulation() {
           </Badge>
           <Button 
             onClick={runValidation}
-            disabled={validationStatus === 'running'}
+            disabled={validationStatus === "running"}
           >
-            {validationStatus === 'running' ? 'Validando...' : 'Executar Validação'}
+            {validationStatus === "running" ? "Validando..." : "Executar Validação"}
           </Button>
         </div>
       </div>
@@ -199,7 +199,7 @@ export default function Patch503DroneSimulation() {
         </CardContent>
       </Card>
 
-      {validationStatus === 'complete' && passRate === "100" && (
+      {validationStatus === "complete" && passRate === "100" && (
         <Card className="border-green-200 bg-green-50">
           <CardHeader>
             <CardTitle className="text-green-800 flex items-center gap-2">

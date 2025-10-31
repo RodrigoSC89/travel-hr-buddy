@@ -225,11 +225,11 @@ export const SatcomTerminal: React.FC<SatcomTerminalProps> = ({
 
   const getStatusColor = (status: string) => {
     switch (status) {
-      case "success": return "bg-green-500/20 text-green-500";
-      case "degraded": return "bg-yellow-500/20 text-yellow-500";
-      case "failed": return "bg-red-500/20 text-red-500";
-      case "timeout": return "bg-orange-500/20 text-orange-500";
-      default: return "bg-gray-500/20 text-gray-500";
+    case "success": return "bg-green-500/20 text-green-500";
+    case "degraded": return "bg-yellow-500/20 text-yellow-500";
+    case "failed": return "bg-red-500/20 text-red-500";
+    case "timeout": return "bg-orange-500/20 text-orange-500";
+    default: return "bg-gray-500/20 text-gray-500";
     }
   };
 

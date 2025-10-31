@@ -3,11 +3,11 @@
  * Tests financial transactions, budgeting, and reporting
  */
 
-import { describe, it, expect } from 'vitest';
+import { describe, it, expect } from "vitest";
 
 interface FinancialTransaction {
   id: string;
-  type: 'income' | 'expense' | 'transfer';
+  type: "income" | "expense" | "transfer";
   category: string;
   amount: number;
   currency: string;
@@ -15,7 +15,7 @@ interface FinancialTransaction {
   description: string;
   vessel_id?: string;
   created_by: string;
-  status: 'pending' | 'approved' | 'rejected';
+  status: "pending" | "approved" | "rejected";
 }
 
 interface Budget {
@@ -38,168 +38,168 @@ interface FinancialReport {
   transactions_count: number;
 }
 
-describe('Finance Hub Module', () => {
-  describe('Transaction Validation', () => {
-    it('should validate transaction structure', () => {
+describe("Finance Hub Module", () => {
+  describe("Transaction Validation", () => {
+    it("should validate transaction structure", () => {
       const transaction: FinancialTransaction = {
-        id: 'tx-001',
-        type: 'expense',
-        category: 'Fuel',
+        id: "tx-001",
+        type: "expense",
+        category: "Fuel",
         amount: 5000,
-        currency: 'USD',
-        date: '2025-10-29',
-        description: 'Fuel purchase for vessel-001',
-        vessel_id: 'vessel-001',
-        created_by: 'user-001',
-        status: 'approved',
+        currency: "USD",
+        date: "2025-10-29",
+        description: "Fuel purchase for vessel-001",
+        vessel_id: "vessel-001",
+        created_by: "user-001",
+        status: "approved",
       };
 
       expect(transaction.id).toBeTruthy();
       expect(transaction.amount).toBeGreaterThan(0);
-      expect(transaction.currency).toBe('USD');
-      expect(['income', 'expense', 'transfer']).toContain(transaction.type);
+      expect(transaction.currency).toBe("USD");
+      expect(["income", "expense", "transfer"]).toContain(transaction.type);
     });
 
-    it('should validate transaction type values', () => {
-      const validTypes: Array<'income' | 'expense' | 'transfer'> = [
-        'income',
-        'expense',
-        'transfer',
+    it("should validate transaction type values", () => {
+      const validTypes: Array<"income" | "expense" | "transfer"> = [
+        "income",
+        "expense",
+        "transfer",
       ];
 
       validTypes.forEach(type => {
         const tx: FinancialTransaction = {
-          id: 'test-tx',
+          id: "test-tx",
           type,
-          category: 'Test',
+          category: "Test",
           amount: 1000,
-          currency: 'USD',
-          date: '2025-10-29',
-          description: 'Test transaction',
-          created_by: 'user',
-          status: 'pending',
+          currency: "USD",
+          date: "2025-10-29",
+          description: "Test transaction",
+          created_by: "user",
+          status: "pending",
         };
 
-        expect(['income', 'expense', 'transfer']).toContain(tx.type);
+        expect(["income", "expense", "transfer"]).toContain(tx.type);
       });
     });
 
-    it('should validate transaction status values', () => {
-      const validStatuses: Array<'pending' | 'approved' | 'rejected'> = [
-        'pending',
-        'approved',
-        'rejected',
+    it("should validate transaction status values", () => {
+      const validStatuses: Array<"pending" | "approved" | "rejected"> = [
+        "pending",
+        "approved",
+        "rejected",
       ];
 
       validStatuses.forEach(status => {
         const tx: FinancialTransaction = {
-          id: 'test-tx',
-          type: 'expense',
-          category: 'Test',
+          id: "test-tx",
+          type: "expense",
+          category: "Test",
           amount: 1000,
-          currency: 'USD',
-          date: '2025-10-29',
-          description: 'Test transaction',
-          created_by: 'user',
+          currency: "USD",
+          date: "2025-10-29",
+          description: "Test transaction",
+          created_by: "user",
           status,
         };
 
-        expect(['pending', 'approved', 'rejected']).toContain(tx.status);
+        expect(["pending", "approved", "rejected"]).toContain(tx.status);
       });
     });
   });
 
-  describe('Transaction Processing', () => {
+  describe("Transaction Processing", () => {
     const transactions: FinancialTransaction[] = [
       {
-        id: '1',
-        type: 'income',
-        category: 'Charter',
+        id: "1",
+        type: "income",
+        category: "Charter",
         amount: 50000,
-        currency: 'USD',
-        date: '2025-10-01',
-        description: 'Charter payment',
-        created_by: 'user-001',
-        status: 'approved',
+        currency: "USD",
+        date: "2025-10-01",
+        description: "Charter payment",
+        created_by: "user-001",
+        status: "approved",
       },
       {
-        id: '2',
-        type: 'expense',
-        category: 'Fuel',
+        id: "2",
+        type: "expense",
+        category: "Fuel",
         amount: 15000,
-        currency: 'USD',
-        date: '2025-10-05',
-        description: 'Fuel purchase',
-        vessel_id: 'vessel-001',
-        created_by: 'user-002',
-        status: 'approved',
+        currency: "USD",
+        date: "2025-10-05",
+        description: "Fuel purchase",
+        vessel_id: "vessel-001",
+        created_by: "user-002",
+        status: "approved",
       },
       {
-        id: '3',
-        type: 'expense',
-        category: 'Maintenance',
+        id: "3",
+        type: "expense",
+        category: "Maintenance",
         amount: 8000,
-        currency: 'USD',
-        date: '2025-10-10',
-        description: 'Engine maintenance',
-        vessel_id: 'vessel-001',
-        created_by: 'user-003',
-        status: 'approved',
+        currency: "USD",
+        date: "2025-10-10",
+        description: "Engine maintenance",
+        vessel_id: "vessel-001",
+        created_by: "user-003",
+        status: "approved",
       },
       {
-        id: '4',
-        type: 'expense',
-        category: 'Salaries',
+        id: "4",
+        type: "expense",
+        category: "Salaries",
         amount: 25000,
-        currency: 'USD',
-        date: '2025-10-15',
-        description: 'Crew salaries',
-        created_by: 'user-001',
-        status: 'pending',
+        currency: "USD",
+        date: "2025-10-15",
+        description: "Crew salaries",
+        created_by: "user-001",
+        status: "pending",
       },
     ];
 
-    it('should filter transactions by type', () => {
-      const expenses = transactions.filter(tx => tx.type === 'expense');
-      const income = transactions.filter(tx => tx.type === 'income');
+    it("should filter transactions by type", () => {
+      const expenses = transactions.filter(tx => tx.type === "expense");
+      const income = transactions.filter(tx => tx.type === "income");
 
       expect(expenses).toHaveLength(3);
       expect(income).toHaveLength(1);
     });
 
-    it('should filter transactions by status', () => {
-      const approved = transactions.filter(tx => tx.status === 'approved');
-      const pending = transactions.filter(tx => tx.status === 'pending');
+    it("should filter transactions by status", () => {
+      const approved = transactions.filter(tx => tx.status === "approved");
+      const pending = transactions.filter(tx => tx.status === "pending");
 
       expect(approved).toHaveLength(3);
       expect(pending).toHaveLength(1);
     });
 
-    it('should calculate total income', () => {
+    it("should calculate total income", () => {
       const totalIncome = transactions
-        .filter(tx => tx.type === 'income' && tx.status === 'approved')
+        .filter(tx => tx.type === "income" && tx.status === "approved")
         .reduce((sum, tx) => sum + tx.amount, 0);
 
       expect(totalIncome).toBe(50000);
     });
 
-    it('should calculate total expenses', () => {
+    it("should calculate total expenses", () => {
       const totalExpenses = transactions
-        .filter(tx => tx.type === 'expense' && tx.status === 'approved')
+        .filter(tx => tx.type === "expense" && tx.status === "approved")
         .reduce((sum, tx) => sum + tx.amount, 0);
 
       expect(totalExpenses).toBe(23000); // 15000 + 8000
     });
 
-    it('should calculate net balance', () => {
+    it("should calculate net balance", () => {
       const approvedTransactions = transactions.filter(
-        tx => tx.status === 'approved'
+        tx => tx.status === "approved"
       );
       const income = approvedTransactions
-        .filter(tx => tx.type === 'income')
+        .filter(tx => tx.type === "income")
         .reduce((sum, tx) => sum + tx.amount, 0);
       const expenses = approvedTransactions
-        .filter(tx => tx.type === 'expense')
+        .filter(tx => tx.type === "expense")
         .reduce((sum, tx) => sum + tx.amount, 0);
       const netBalance = income - expenses;
 
@@ -207,38 +207,38 @@ describe('Finance Hub Module', () => {
     });
   });
 
-  describe('Budget Management', () => {
+  describe("Budget Management", () => {
     const budgets: Budget[] = [
       {
-        id: 'budget-001',
-        name: 'Fuel Budget Q4',
-        period: '2025-Q4',
+        id: "budget-001",
+        name: "Fuel Budget Q4",
+        period: "2025-Q4",
         allocated_amount: 50000,
         spent_amount: 15000,
-        currency: 'USD',
-        category: 'Fuel',
+        currency: "USD",
+        category: "Fuel",
       },
       {
-        id: 'budget-002',
-        name: 'Maintenance Budget Q4',
-        period: '2025-Q4',
+        id: "budget-002",
+        name: "Maintenance Budget Q4",
+        period: "2025-Q4",
         allocated_amount: 30000,
         spent_amount: 25000,
-        currency: 'USD',
-        category: 'Maintenance',
+        currency: "USD",
+        category: "Maintenance",
       },
       {
-        id: 'budget-003',
-        name: 'Salaries Budget Q4',
-        period: '2025-Q4',
+        id: "budget-003",
+        name: "Salaries Budget Q4",
+        period: "2025-Q4",
         allocated_amount: 100000,
         spent_amount: 75000,
-        currency: 'USD',
-        category: 'Salaries',
+        currency: "USD",
+        category: "Salaries",
       },
     ];
 
-    it('should calculate budget utilization percentage', () => {
+    it("should calculate budget utilization percentage", () => {
       const utilization = budgets.map(budget => ({
         name: budget.name,
         percentage: (budget.spent_amount / budget.allocated_amount) * 100,
@@ -249,7 +249,7 @@ describe('Finance Hub Module', () => {
       expect(utilization[2].percentage).toBe(75); // Salaries
     });
 
-    it('should calculate remaining budget', () => {
+    it("should calculate remaining budget", () => {
       const remaining = budgets.map(budget => ({
         name: budget.name,
         remaining: budget.allocated_amount - budget.spent_amount,
@@ -260,7 +260,7 @@ describe('Finance Hub Module', () => {
       expect(remaining[2].remaining).toBe(25000); // Salaries
     });
 
-    it('should identify over-budget categories', () => {
+    it("should identify over-budget categories", () => {
       const overBudget = budgets.filter(
         budget => budget.spent_amount > budget.allocated_amount
       );
@@ -268,17 +268,17 @@ describe('Finance Hub Module', () => {
       expect(overBudget).toHaveLength(0); // None over budget in this case
     });
 
-    it('should identify near-limit budgets', () => {
+    it("should identify near-limit budgets", () => {
       const threshold = 0.8; // 80%
       const nearLimit = budgets.filter(
         budget => budget.spent_amount / budget.allocated_amount >= threshold
       );
 
       expect(nearLimit).toHaveLength(1); // Maintenance at 83.33%
-      expect(nearLimit[0].category).toBe('Maintenance');
+      expect(nearLimit[0].category).toBe("Maintenance");
     });
 
-    it('should calculate total allocated budget', () => {
+    it("should calculate total allocated budget", () => {
       const totalAllocated = budgets.reduce(
         (sum, budget) => sum + budget.allocated_amount,
         0
@@ -287,7 +287,7 @@ describe('Finance Hub Module', () => {
       expect(totalAllocated).toBe(180000); // 50000 + 30000 + 100000
     });
 
-    it('should calculate total spent amount', () => {
+    it("should calculate total spent amount", () => {
       const totalSpent = budgets.reduce(
         (sum, budget) => sum + budget.spent_amount,
         0
@@ -297,15 +297,15 @@ describe('Finance Hub Module', () => {
     });
   });
 
-  describe('Financial Reporting', () => {
-    it('should generate financial report', () => {
+  describe("Financial Reporting", () => {
+    it("should generate financial report", () => {
       const report: FinancialReport = {
-        id: 'report-001',
-        period: '2025-10',
+        id: "report-001",
+        period: "2025-10",
         total_income: 50000,
         total_expenses: 23000,
         net_balance: 27000,
-        currency: 'USD',
+        currency: "USD",
         transactions_count: 4,
       };
 
@@ -316,14 +316,14 @@ describe('Finance Hub Module', () => {
       );
     });
 
-    it('should validate report period format', () => {
+    it("should validate report period format", () => {
       const monthlyReport: FinancialReport = {
-        id: 'report-001',
-        period: '2025-10',
+        id: "report-001",
+        period: "2025-10",
         total_income: 50000,
         total_expenses: 23000,
         net_balance: 27000,
-        currency: 'USD',
+        currency: "USD",
         transactions_count: 4,
       };
 
@@ -331,14 +331,14 @@ describe('Finance Hub Module', () => {
       expect(periodRegex.test(monthlyReport.period)).toBe(true);
     });
 
-    it('should calculate profit margin', () => {
+    it("should calculate profit margin", () => {
       const report: FinancialReport = {
-        id: 'report-001',
-        period: '2025-10',
+        id: "report-001",
+        period: "2025-10",
         total_income: 50000,
         total_expenses: 23000,
         net_balance: 27000,
-        currency: 'USD',
+        currency: "USD",
         transactions_count: 4,
       };
 
@@ -349,44 +349,44 @@ describe('Finance Hub Module', () => {
     });
   });
 
-  describe('Transaction Categorization', () => {
+  describe("Transaction Categorization", () => {
     const transactions: FinancialTransaction[] = [
       {
-        id: '1',
-        type: 'expense',
-        category: 'Fuel',
+        id: "1",
+        type: "expense",
+        category: "Fuel",
         amount: 10000,
-        currency: 'USD',
-        date: '2025-10-01',
-        description: 'Fuel',
-        created_by: 'user',
-        status: 'approved',
+        currency: "USD",
+        date: "2025-10-01",
+        description: "Fuel",
+        created_by: "user",
+        status: "approved",
       },
       {
-        id: '2',
-        type: 'expense',
-        category: 'Fuel',
+        id: "2",
+        type: "expense",
+        category: "Fuel",
         amount: 5000,
-        currency: 'USD',
-        date: '2025-10-05',
-        description: 'Fuel',
-        created_by: 'user',
-        status: 'approved',
+        currency: "USD",
+        date: "2025-10-05",
+        description: "Fuel",
+        created_by: "user",
+        status: "approved",
       },
       {
-        id: '3',
-        type: 'expense',
-        category: 'Maintenance',
+        id: "3",
+        type: "expense",
+        category: "Maintenance",
         amount: 8000,
-        currency: 'USD',
-        date: '2025-10-10',
-        description: 'Maintenance',
-        created_by: 'user',
-        status: 'approved',
+        currency: "USD",
+        date: "2025-10-10",
+        description: "Maintenance",
+        created_by: "user",
+        status: "approved",
       },
     ];
 
-    it('should group transactions by category', () => {
+    it("should group transactions by category", () => {
       const grouped = transactions.reduce(
         (acc, tx) => {
           if (!acc[tx.category]) {
@@ -399,11 +399,11 @@ describe('Finance Hub Module', () => {
       );
 
       expect(Object.keys(grouped)).toHaveLength(2);
-      expect(grouped['Fuel']).toHaveLength(2);
-      expect(grouped['Maintenance']).toHaveLength(1);
+      expect(grouped["Fuel"]).toHaveLength(2);
+      expect(grouped["Maintenance"]).toHaveLength(1);
     });
 
-    it('should calculate total by category', () => {
+    it("should calculate total by category", () => {
       const totals = transactions.reduce(
         (acc, tx) => {
           if (!acc[tx.category]) {
@@ -415,8 +415,8 @@ describe('Finance Hub Module', () => {
         {} as Record<string, number>
       );
 
-      expect(totals['Fuel']).toBe(15000); // 10000 + 5000
-      expect(totals['Maintenance']).toBe(8000);
+      expect(totals["Fuel"]).toBe(15000); // 10000 + 5000
+      expect(totals["Maintenance"]).toBe(8000);
     });
   });
 });

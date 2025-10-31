@@ -19,26 +19,26 @@ export async function generateEmbedding(text: string): Promise<number[] | null> 
   const apiKey = import.meta.env.VITE_OPENAI_API_KEY;
 
   if (!apiKey) {
-    console.error('OpenAI API key not configured');
+    console.error("OpenAI API key not configured");
     return null;
   }
 
   try {
-    const response = await fetch('https://api.openai.com/v1/embeddings', {
-      method: 'POST',
+    const response = await fetch("https://api.openai.com/v1/embeddings", {
+      method: "POST",
       headers: {
-        'Content-Type': 'application/json',
-        'Authorization': `Bearer ${apiKey}`,
+        "Content-Type": "application/json",
+        "Authorization": `Bearer ${apiKey}`,
       },
       body: JSON.stringify({
-        model: 'text-embedding-ada-002',
+        model: "text-embedding-ada-002",
         input: text,
       }),
     });
 
     if (!response.ok) {
       const errorData = await response.json().catch(() => ({}));
-      console.error('OpenAI embedding error:', errorData);
+      console.error("OpenAI embedding error:", errorData);
       return null;
     }
 
@@ -50,7 +50,7 @@ export async function generateEmbedding(text: string): Promise<number[] | null> 
 
     return null;
   } catch (error) {
-    console.error('Exception generating embedding:', error);
+    console.error("Exception generating embedding:", error);
     return null;
   }
 }

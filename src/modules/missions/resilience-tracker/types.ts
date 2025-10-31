@@ -6,17 +6,17 @@
 /**
  * Failure severity levels
  */
-export type FailureSeverity = 'critical' | 'high' | 'medium' | 'low';
+export type FailureSeverity = "critical" | "high" | "medium" | "low";
 
 /**
  * Response effectiveness rating
  */
-export type ResponseEffectiveness = 'excellent' | 'good' | 'adequate' | 'poor' | 'failed';
+export type ResponseEffectiveness = "excellent" | "good" | "adequate" | "poor" | "failed";
 
 /**
  * Recovery status
  */
-export type RecoveryStatus = 'recovered' | 'recovering' | 'degraded' | 'failed';
+export type RecoveryStatus = "recovered" | "recovering" | "degraded" | "failed";
 
 /**
  * Failure event
@@ -29,7 +29,7 @@ export interface FailureEvent {
   category: string; // e.g., 'navigation', 'power', 'communication', etc.
   description: string;
   affectedSystems: string[];
-  detected_by: 'crew' | 'system' | 'ai';
+  detected_by: "crew" | "system" | "ai";
   context: Record<string, any>;
 }
 
@@ -40,7 +40,7 @@ export interface ResponseAction {
   id: string;
   failureEventId: string;
   timestamp: number;
-  initiatedBy: 'crew' | 'system' | 'ai';
+  initiatedBy: "crew" | "system" | "ai";
   actionType: string;
   description: string;
   success: boolean;
@@ -90,7 +90,7 @@ export interface MissionResilienceIndex {
   timestamp: number;
   overallScore: number; // 0-100
   components: ResilienceComponents;
-  trend: 'improving' | 'stable' | 'declining';
+  trend: "improving" | "stable" | "declining";
   trendPercentage: number;
   totalFailures: number;
   criticalFailures: number;

@@ -10,11 +10,11 @@
  * - Real-time updates via WebSocket
  */
 
-import React, { useEffect, useState } from 'react';
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
-import { Badge } from '@/components/ui/badge';
-import { Progress } from '@/components/ui/progress';
-import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
+import React, { useEffect, useState } from "react";
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
+import { Badge } from "@/components/ui/badge";
+import { Progress } from "@/components/ui/progress";
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { 
   CheckCircle2, 
   XCircle, 
@@ -25,8 +25,8 @@ import {
   Activity,
   Shield,
   Zap
-} from 'lucide-react';
-import { supabase } from '@/integrations/supabase/client';
+} from "lucide-react";
+import { supabase } from "@/integrations/supabase/client";
 
 interface QualityMetrics {
   tests: {
@@ -47,16 +47,16 @@ interface QualityMetrics {
   };
   health: {
     score: number;
-    status: 'excellent' | 'good' | 'warning' | 'critical';
+    status: "excellent" | "good" | "warning" | "critical";
   };
   risk: {
-    level: 'low' | 'medium' | 'high';
+    level: "low" | "medium" | "high";
     score: number;
     issues: number;
   };
   confidence: {
     level: number;
-    trend: 'up' | 'down' | 'stable';
+    trend: "up" | "down" | "stable";
   };
 }
 
@@ -64,10 +64,10 @@ export default function QualityDashboard() {
   const [metrics, setMetrics] = useState<QualityMetrics>({
     tests: { total: 0, passed: 0, failed: 0, successRate: 0 },
     coverage: { modules: 0, totalModules: 0, percentage: 0 },
-    feedback: { totalResponses: 0, averageRating: 0, lastUpdated: '' },
-    health: { score: 0, status: 'good' },
-    risk: { level: 'low', score: 0, issues: 0 },
-    confidence: { level: 0, trend: 'stable' },
+    feedback: { totalResponses: 0, averageRating: 0, lastUpdated: "" },
+    health: { score: 0, status: "good" },
+    risk: { level: "low", score: 0, issues: 0 },
+    confidence: { level: 0, trend: "stable" },
   });
   
   const [isLoading, setIsLoading] = useState(true);
@@ -79,9 +79,9 @@ export default function QualityDashboard() {
     
     // Setup real-time updates via WebSocket
     const channel = supabase
-      .channel('quality-metrics')
-      .on('postgres_changes', 
-        { event: '*', schema: 'public', table: 'quality_metrics' },
+      .channel("quality-metrics")
+      .on("postgres_changes", 
+        { event: "*", schema: "public", table: "quality_metrics" },
         () => {
           loadMetrics();
         }
@@ -125,7 +125,7 @@ export default function QualityDashboard() {
       setLastUpdate(new Date());
       setIsLoading(false);
     } catch (error) {
-      console.error('Error loading metrics:', error);
+      console.error("Error loading metrics:", error);
       setIsLoading(false);
     }
   }
@@ -133,7 +133,7 @@ export default function QualityDashboard() {
   async function loadTestResults() {
     // Try to load from test results file
     try {
-      const response = await fetch('/tests/results/regression-561.json');
+      const response = await fetch("/tests/results/regression-561.json");
       if (response.ok) {
         const data = await response.json();
         return {
@@ -144,7 +144,7 @@ export default function QualityDashboard() {
         };
       }
     } catch (error) {
-      console.warn('Could not load test results, using defaults');
+      console.warn("Could not load test results, using defaults");
     }
     
     // Default values if file not found
@@ -171,8 +171,8 @@ export default function QualityDashboard() {
   async function loadFeedbackData() {
     try {
       const { data, error } = await supabase
-        .from('beta_feedback')
-        .select('rating, timestamp');
+        .from("beta_feedback")
+        .select("rating, timestamp");
       
       if (error) throw error;
       
@@ -201,11 +201,11 @@ export default function QualityDashboard() {
     const feedbackScore = (feedback.averageRating / 5) * 30;
     const totalScore = testScore + coverageScore + feedbackScore;
     
-    let status: 'excellent' | 'good' | 'warning' | 'critical' = 'good';
-    if (totalScore >= 90) status = 'excellent';
-    else if (totalScore >= 70) status = 'good';
-    else if (totalScore >= 50) status = 'warning';
-    else status = 'critical';
+    let status: "excellent" | "good" | "warning" | "critical" = "good";
+    if (totalScore >= 90) status = "excellent";
+    else if (totalScore >= 70) status = "good";
+    else if (totalScore >= 50) status = "warning";
+    else status = "critical";
     
     return { score: Math.round(totalScore), status };
   }
@@ -213,9 +213,9 @@ export default function QualityDashboard() {
   function calculateRiskLevel(tests: any) {
     const failureRate = (tests.failed / tests.total) * 100;
     
-    let level: 'low' | 'medium' | 'high' = 'low';
-    if (failureRate > 20) level = 'high';
-    else if (failureRate > 10) level = 'medium';
+    let level: "low" | "medium" | "high" = "low";
+    if (failureRate > 20) level = "high";
+    else if (failureRate > 10) level = "medium";
     
     return {
       level,
@@ -231,26 +231,26 @@ export default function QualityDashboard() {
     
     return {
       level: Math.round(totalConfidence),
-      trend: totalConfidence > 80 ? 'up' : totalConfidence > 60 ? 'stable' : 'down',
+      trend: totalConfidence > 80 ? "up" : totalConfidence > 60 ? "stable" : "down",
     };
   }
 
   const getHealthColor = (status: string) => {
     switch (status) {
-      case 'excellent': return 'text-green-600';
-      case 'good': return 'text-blue-600';
-      case 'warning': return 'text-yellow-600';
-      case 'critical': return 'text-red-600';
-      default: return 'text-gray-600';
+    case "excellent": return "text-green-600";
+    case "good": return "text-blue-600";
+    case "warning": return "text-yellow-600";
+    case "critical": return "text-red-600";
+    default: return "text-gray-600";
     }
   };
 
   const getRiskColor = (level: string) => {
     switch (level) {
-      case 'low': return 'text-green-600';
-      case 'medium': return 'text-yellow-600';
-      case 'high': return 'text-red-600';
-      default: return 'text-gray-600';
+    case "low": return "text-green-600";
+    case "medium": return "text-yellow-600";
+    case "high": return "text-red-600";
+    default: return "text-gray-600";
     }
   };
 
@@ -329,7 +329,7 @@ export default function QualityDashboard() {
           <CardContent>
             <div className="text-2xl font-bold">{metrics.confidence.level}%</div>
             <p className="text-xs text-muted-foreground">
-              Tendência: {metrics.confidence.trend === 'up' ? '📈' : metrics.confidence.trend === 'down' ? '📉' : '➡️'}
+              Tendência: {metrics.confidence.trend === "up" ? "📈" : metrics.confidence.trend === "down" ? "📉" : "➡️"}
             </p>
             <Progress value={metrics.confidence.level} className="mt-2" />
           </CardContent>

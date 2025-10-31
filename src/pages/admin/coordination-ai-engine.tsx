@@ -165,17 +165,17 @@ const CoordinationAIEnginePage: React.FC = () => {
 
   const getStatusIcon = (status: TaskStatus) => {
     switch (status) {
-      case "completed":
-        return <CheckCircle2 className="w-4 h-4 text-green-500" />;
-      case "failed":
-      case "timeout":
-        return <XCircle className="w-4 h-4 text-red-500" />;
-      case "processing":
-        return <Activity className="w-4 h-4 text-purple-500 animate-pulse" />;
-      case "pending":
-        return <Clock className="w-4 h-4 text-yellow-500" />;
-      default:
-        return <PlayCircle className="w-4 h-4 text-blue-500" />;
+    case "completed":
+      return <CheckCircle2 className="w-4 h-4 text-green-500" />;
+    case "failed":
+    case "timeout":
+      return <XCircle className="w-4 h-4 text-red-500" />;
+    case "processing":
+      return <Activity className="w-4 h-4 text-purple-500 animate-pulse" />;
+    case "pending":
+      return <Clock className="w-4 h-4 text-yellow-500" />;
+    default:
+      return <PlayCircle className="w-4 h-4 text-blue-500" />;
     }
   };
 

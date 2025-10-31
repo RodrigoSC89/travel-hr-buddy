@@ -408,11 +408,11 @@ export class VoiceService {
 
   // PATCH 381: Wake Word Detection
   static startWakeWordDetection(
-    wakeWord: string = 'nautilus',
+    wakeWord: string = "nautilus",
     onDetected: (detected: boolean) => void
   ): void {
     if (!this.recognition) {
-      throw new Error('Speech recognition not available');
+      throw new Error("Speech recognition not available");
     }
 
     this.isWakeWordActive = true;
@@ -423,23 +423,23 @@ export class VoiceService {
     this.wakeWordDetector = new SpeechRecognition();
     this.wakeWordDetector.continuous = true;
     this.wakeWordDetector.interimResults = true;
-    this.wakeWordDetector.lang = 'pt-BR';
+    this.wakeWordDetector.lang = "pt-BR";
 
     this.wakeWordDetector.onresult = (event) => {
       const results = Array.from(event.results);
       const transcript = results
         .map((result: any) => result[0].transcript)
-        .join(' ')
+        .join(" ")
         .toLowerCase();
 
       if (transcript.includes(wakeWord.toLowerCase())) {
         onDetected(true);
-        this.logInteraction('wake_word_detected', { wakeWord, transcript });
+        this.logInteraction("wake_word_detected", { wakeWord, transcript });
       }
     };
 
     this.wakeWordDetector.onerror = (event) => {
-      console.error('Wake word detection error:', event.error);
+      console.error("Wake word detection error:", event.error);
       this.isWakeWordActive = false;
     };
 
@@ -470,7 +470,7 @@ export class VoiceService {
     }
   ): Promise<void> {
     if (!this.synthesis) {
-      throw new Error('Speech synthesis not available');
+      throw new Error("Speech synthesis not available");
     }
 
     return new Promise((resolve, reject) => {
@@ -487,34 +487,34 @@ export class VoiceService {
       if (!selectedVoice) {
         // Try to find a Portuguese voice with 'natural' or 'premium' in the name
         selectedVoice = voices.find(v => 
-          v.lang.startsWith('pt') && 
-          (v.name.toLowerCase().includes('natural') || 
-           v.name.toLowerCase().includes('premium') ||
-           v.name.toLowerCase().includes('enhanced'))
-        ) || voices.find(v => v.lang.startsWith('pt')) || voices[0];
+          v.lang.startsWith("pt") && 
+          (v.name.toLowerCase().includes("natural") || 
+           v.name.toLowerCase().includes("premium") ||
+           v.name.toLowerCase().includes("enhanced"))
+        ) || voices.find(v => v.lang.startsWith("pt")) || voices[0];
       }
 
       if (selectedVoice) {
         utterance.voice = selectedVoice;
       }
 
-      utterance.lang = 'pt-BR';
+      utterance.lang = "pt-BR";
       utterance.rate = options?.rate || 1.0;
       utterance.pitch = options?.pitch || 1.0;
       utterance.volume = options?.volume || 1.0;
 
       utterance.onend = () => {
-        this.logInteraction('speech_completed', { text, voice: selectedVoice?.name });
+        this.logInteraction("speech_completed", { text, voice: selectedVoice?.name });
         resolve();
       };
       
       utterance.onerror = (event) => {
-        this.logInteraction('speech_error', { text, error: event.error });
+        this.logInteraction("speech_error", { text, error: event.error });
         reject(new Error(event.error));
       };
 
       this.synthesis.speak(utterance);
-      this.logInteraction('speech_started', { text, voice: selectedVoice?.name });
+      this.logInteraction("speech_started", { text, voice: selectedVoice?.name });
     });
   }
 
@@ -526,7 +526,7 @@ export class VoiceService {
     try {
       const timestamp = new Date().toISOString();
       
-      await supabase.from('voice_interaction_logs').insert({
+      await supabase.from("voice_interaction_logs").insert({
         session_id: this.currentSessionId,
         event_type: eventType,
         event_data: data,
@@ -534,7 +534,7 @@ export class VoiceService {
         created_at: timestamp,
       });
     } catch (error) {
-      console.error('Failed to log interaction:', error);
+      console.error("Failed to log interaction:", error);
     }
   }
 
@@ -543,13 +543,13 @@ export class VoiceService {
     limit = 100
   ): Promise<any[]> {
     let query = supabase
-      .from('voice_interaction_logs')
-      .select('*')
-      .order('timestamp', { ascending: false })
+      .from("voice_interaction_logs")
+      .select("*")
+      .order("timestamp", { ascending: false })
       .limit(limit);
 
     if (sessionId) {
-      query = query.eq('session_id', sessionId);
+      query = query.eq("session_id", sessionId);
     }
 
     const { data, error } = await query;

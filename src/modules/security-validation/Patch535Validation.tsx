@@ -1,10 +1,10 @@
-import { useState, useEffect } from 'react';
-import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
-import { Badge } from '@/components/ui/badge';
-import { Button } from '@/components/ui/button';
-import { CheckCircle2, XCircle, AlertCircle, RefreshCw, Shield, Eye, FileText, Brain } from 'lucide-react';
-import { supabase } from '@/integrations/supabase/client';
-import { toast } from 'sonner';
+import { useState, useEffect } from "react";
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import { Badge } from "@/components/ui/badge";
+import { Button } from "@/components/ui/button";
+import { CheckCircle2, XCircle, AlertCircle, RefreshCw, Shield, Eye, FileText, Brain } from "lucide-react";
+import { supabase } from "@/integrations/supabase/client";
+import { toast } from "sonner";
 
 export default function Patch535Validation() {
   const [checks, setChecks] = useState({
@@ -29,16 +29,16 @@ export default function Patch535Validation() {
     setLoading(true);
     try {
       // Check if tables exist
-      const { data: aiLogs } = await supabase.from('ai_logs').select('count', { count: 'exact', head: true });
-      const { data: aiCommands } = await supabase.from('ai_commands').select('count', { count: 'exact', head: true });
-      const { data: accessLogs } = await supabase.from('access_logs').select('count', { count: 'exact', head: true });
-      const { data: auditLogs } = await supabase.from('audit_logs').select('count', { count: 'exact', head: true });
+      const { data: aiLogs } = await supabase.from("ai_logs").select("count", { count: "exact", head: true });
+      const { data: aiCommands } = await supabase.from("ai_commands").select("count", { count: "exact", head: true });
+      const { data: accessLogs } = await supabase.from("access_logs").select("count", { count: "exact", head: true });
+      const { data: auditLogs } = await supabase.from("audit_logs").select("count", { count: "exact", head: true });
 
       // Get actual counts
-      const { count: aiLogsCount } = await supabase.from('ai_logs').select('*', { count: 'exact', head: true });
-      const { count: commandsCount } = await supabase.from('ai_commands').select('*', { count: 'exact', head: true });
-      const { count: accessCount } = await supabase.from('access_logs').select('*', { count: 'exact', head: true });
-      const { count: auditCount } = await supabase.from('audit_logs').select('*', { count: 'exact', head: true });
+      const { count: aiLogsCount } = await supabase.from("ai_logs").select("*", { count: "exact", head: true });
+      const { count: commandsCount } = await supabase.from("ai_commands").select("*", { count: "exact", head: true });
+      const { count: accessCount } = await supabase.from("access_logs").select("*", { count: "exact", head: true });
+      const { count: auditCount } = await supabase.from("audit_logs").select("*", { count: "exact", head: true });
 
       setStats({
         totalAILogs: aiLogsCount || 0,
@@ -58,10 +58,10 @@ export default function Patch535Validation() {
         lgpdCompliance: true, // Anonymization implemented
       });
 
-      toast.success('Validação de segurança concluída');
+      toast.success("Validação de segurança concluída");
     } catch (error) {
-      console.error('Erro na validação:', error);
-      toast.error('Erro ao validar segurança');
+      console.error("Erro na validação:", error);
+      toast.error("Erro ao validar segurança");
     } finally {
       setLoading(false);
     }
@@ -78,9 +78,9 @@ export default function Patch535Validation() {
   };
 
   const getStatusColor = (score: number) => {
-    if (score >= 90) return 'text-green-600';
-    if (score >= 70) return 'text-yellow-600';
-    return 'text-red-600';
+    if (score >= 90) return "text-green-600";
+    if (score >= 70) return "text-yellow-600";
+    return "text-red-600";
   };
 
   const getStatusBadge = (score: number) => {
@@ -101,7 +101,7 @@ export default function Patch535Validation() {
           </p>
         </div>
         <Button onClick={validateSecurity} disabled={loading}>
-          <RefreshCw className={`mr-2 h-4 w-4 ${loading ? 'animate-spin' : ''}`} />
+          <RefreshCw className={`mr-2 h-4 w-4 ${loading ? "animate-spin" : ""}`} />
           Revalidar
         </Button>
       </div>
@@ -120,9 +120,9 @@ export default function Patch535Validation() {
               {score}%
             </div>
             <p className="text-muted-foreground mt-2">
-              {score >= 90 && '✅ Sistema totalmente seguro e auditável'}
-              {score >= 70 && score < 90 && '⚠️ Melhorias recomendadas'}
-              {score < 70 && '❌ Atenção: Problemas críticos de segurança'}
+              {score >= 90 && "✅ Sistema totalmente seguro e auditável"}
+              {score >= 70 && score < 90 && "⚠️ Melhorias recomendadas"}
+              {score < 70 && "❌ Atenção: Problemas críticos de segurança"}
             </p>
           </div>
         </CardContent>

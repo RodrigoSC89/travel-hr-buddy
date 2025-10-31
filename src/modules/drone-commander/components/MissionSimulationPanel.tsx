@@ -54,30 +54,30 @@ export const MissionSimulationPanel: React.FC<MissionSimulationPanelProps> = ({
 
   const getStatusColor = (status: string) => {
     switch (status) {
-      case 'completed': return 'text-green-500';
-      case 'in_progress': return 'text-blue-500';
-      case 'failed': return 'text-red-500';
-      case 'assigned': return 'text-yellow-500';
-      default: return 'text-gray-500';
+    case "completed": return "text-green-500";
+    case "in_progress": return "text-blue-500";
+    case "failed": return "text-red-500";
+    case "assigned": return "text-yellow-500";
+    default: return "text-gray-500";
     }
   };
 
   const getStatusBadge = (status: string) => {
     switch (status) {
-      case 'completed': return <Badge variant="default">Completed</Badge>;
-      case 'in_progress': return <Badge variant="secondary">In Progress</Badge>;
-      case 'failed': return <Badge variant="destructive">Failed</Badge>;
-      case 'assigned': return <Badge variant="outline">Assigned</Badge>;
-      default: return <Badge variant="outline">Pending</Badge>;
+    case "completed": return <Badge variant="default">Completed</Badge>;
+    case "in_progress": return <Badge variant="secondary">In Progress</Badge>;
+    case "failed": return <Badge variant="destructive">Failed</Badge>;
+    case "assigned": return <Badge variant="outline">Assigned</Badge>;
+    default: return <Badge variant="outline">Pending</Badge>;
     }
   };
 
   const getPriorityBadge = (priority: string) => {
     switch (priority) {
-      case 'critical': return <Badge variant="destructive">Critical</Badge>;
-      case 'high': return <Badge variant="destructive">High</Badge>;
-      case 'medium': return <Badge variant="secondary">Medium</Badge>;
-      default: return <Badge variant="outline">Low</Badge>;
+    case "critical": return <Badge variant="destructive">Critical</Badge>;
+    case "high": return <Badge variant="destructive">High</Badge>;
+    case "medium": return <Badge variant="secondary">Medium</Badge>;
+    default: return <Badge variant="outline">Low</Badge>;
     }
   };
 
@@ -221,7 +221,7 @@ export const MissionSimulationPanel: React.FC<MissionSimulationPanelProps> = ({
                   </div>
 
                   {/* Progress Bar */}
-                  {(assignment.status === 'in_progress' || assignment.status === 'assigned') && (
+                  {(assignment.status === "in_progress" || assignment.status === "assigned") && (
                     <div className="space-y-1">
                       <div className="flex justify-between text-sm">
                         <span className="text-muted-foreground">Progress</span>
@@ -235,8 +235,8 @@ export const MissionSimulationPanel: React.FC<MissionSimulationPanelProps> = ({
                   <div className="flex items-center gap-2 text-sm text-muted-foreground">
                     <Clock className="h-4 w-4" />
                     <span>
-                      {assignment.status === 'completed' 
-                        ? 'Completed' 
+                      {assignment.status === "completed" 
+                        ? "Completed" 
                         : `ETA: ${new Date(assignment.estimatedCompletion).toLocaleTimeString()}`
                       }
                     </span>

@@ -40,7 +40,7 @@ const createIncidentTracker = (): IncidentTracker => {
       const trackedIncident = {
         ...incident,
         id: incidentId,
-        status: 'reported',
+        status: "reported",
         timestamp: new Date().toISOString(),
         updates: []
       };
@@ -49,8 +49,8 @@ const createIncidentTracker = (): IncidentTracker => {
       histories.set(incidentId, [
         {
           timestamp: new Date().toISOString(),
-          action: 'incident_created',
-          details: 'Incident reported and tracking initiated'
+          action: "incident_created",
+          details: "Incident reported and tracking initiated"
         }
       ]);
       
@@ -68,13 +68,13 @@ const createIncidentTracker = (): IncidentTracker => {
       incident.updates.push({
         timestamp: new Date().toISOString(),
         status,
-        updatedBy: 'system'
+        updatedBy: "system"
       });
       
       const history = histories.get(incidentId) || [];
       history.push({
         timestamp: new Date().toISOString(),
-        action: 'status_updated',
+        action: "status_updated",
         details: `Status changed to ${status}`
       });
       histories.set(incidentId, history);
@@ -145,7 +145,7 @@ describe("DP Intelligence - Incident Tracking Tests", () => {
       const history = await tracker.getIncidentHistory(result.incidentId!);
       
       expect(history).toHaveLength(1);
-      expect(history[0].action).toBe('incident_created');
+      expect(history[0].action).toBe("incident_created");
     });
 
     it("should track incident metadata", async () => {
@@ -172,7 +172,7 @@ describe("DP Intelligence - Incident Tracking Tests", () => {
       const incident = { title: "Test", severity: "medium" };
       const { incidentId } = await tracker.trackIncident(incident);
       
-      const updated = await tracker.updateStatus(incidentId!, 'investigating');
+      const updated = await tracker.updateStatus(incidentId!, "investigating");
       
       expect(updated).toBe(true);
     });
@@ -181,17 +181,17 @@ describe("DP Intelligence - Incident Tracking Tests", () => {
       const incident = { title: "Test", severity: "medium" };
       const { incidentId } = await tracker.trackIncident(incident);
       
-      await tracker.updateStatus(incidentId!, 'investigating');
-      await tracker.updateStatus(incidentId!, 'resolved');
+      await tracker.updateStatus(incidentId!, "investigating");
+      await tracker.updateStatus(incidentId!, "resolved");
       
       const history = await tracker.getIncidentHistory(incidentId!);
       
       expect(history.length).toBeGreaterThan(1);
-      expect(history.some(h => h.action === 'status_updated')).toBe(true);
+      expect(history.some(h => h.action === "status_updated")).toBe(true);
     });
 
     it("should handle invalid incident ID gracefully", async () => {
-      const updated = await tracker.updateStatus('INVALID-ID', 'resolved');
+      const updated = await tracker.updateStatus("INVALID-ID", "resolved");
       
       expect(updated).toBe(false);
     });
@@ -200,7 +200,7 @@ describe("DP Intelligence - Incident Tracking Tests", () => {
       const incident = { title: "Multi-status Test", severity: "high" };
       const { incidentId } = await tracker.trackIncident(incident);
       
-      const statuses = ['investigating', 'action_taken', 'monitoring', 'resolved'];
+      const statuses = ["investigating", "action_taken", "monitoring", "resolved"];
       
       for (const status of statuses) {
         await tracker.updateStatus(incidentId!, status);
@@ -217,17 +217,17 @@ describe("DP Intelligence - Incident Tracking Tests", () => {
       const incident = { title: "History Test", severity: "low" };
       const { incidentId } = await tracker.trackIncident(incident);
       
-      await tracker.updateStatus(incidentId!, 'investigating');
-      await tracker.updateStatus(incidentId!, 'resolved');
+      await tracker.updateStatus(incidentId!, "investigating");
+      await tracker.updateStatus(incidentId!, "resolved");
       
       const history = await tracker.getIncidentHistory(incidentId!);
       
       expect(history.length).toBe(3);
-      expect(history[0].action).toBe('incident_created');
+      expect(history[0].action).toBe("incident_created");
     });
 
     it("should return empty array for non-existent incident", async () => {
-      const history = await tracker.getIncidentHistory('NON-EXISTENT');
+      const history = await tracker.getIncidentHistory("NON-EXISTENT");
       
       expect(history).toEqual([]);
     });
@@ -237,9 +237,9 @@ describe("DP Intelligence - Incident Tracking Tests", () => {
       const { incidentId } = await tracker.trackIncident(incident);
       
       await new Promise(resolve => setTimeout(resolve, 10));
-      await tracker.updateStatus(incidentId!, 'investigating');
+      await tracker.updateStatus(incidentId!, "investigating");
       await new Promise(resolve => setTimeout(resolve, 10));
-      await tracker.updateStatus(incidentId!, 'resolved');
+      await tracker.updateStatus(incidentId!, "resolved");
       
       const history = await tracker.getIncidentHistory(incidentId!);
       
@@ -254,14 +254,14 @@ describe("DP Intelligence - Incident Tracking Tests", () => {
       const incident = { title: "Detail Test", severity: "high" };
       const { incidentId } = await tracker.trackIncident(incident);
       
-      await tracker.updateStatus(incidentId!, 'investigating');
+      await tracker.updateStatus(incidentId!, "investigating");
       
       const history = await tracker.getIncidentHistory(incidentId!);
       
       history.forEach(event => {
-        expect(event).toHaveProperty('timestamp');
-        expect(event).toHaveProperty('action');
-        expect(event).toHaveProperty('details');
+        expect(event).toHaveProperty("timestamp");
+        expect(event).toHaveProperty("action");
+        expect(event).toHaveProperty("details");
       });
     });
   });
@@ -286,10 +286,10 @@ describe("DP Intelligence - Incident Tracking Tests", () => {
       });
       
       const { incidentId } = await tracker.trackIncident({ title: "Test", severity: "medium" });
-      await tracker.updateStatus(incidentId!, 'investigating');
+      await tracker.updateStatus(incidentId!, "investigating");
       
       expect(updates.length).toBeGreaterThan(1);
-      expect(updates[updates.length - 1].status).toBe('investigating');
+      expect(updates[updates.length - 1].status).toBe("investigating");
     });
 
     it("should support multiple subscribers", async () => {
@@ -317,7 +317,7 @@ describe("DP Intelligence - Incident Tracking Tests", () => {
 
   describe("Incident Filtering and Querying", () => {
     it("should track incidents with different severity levels", async () => {
-      const severities = ['critical', 'high', 'medium', 'low'];
+      const severities = ["critical", "high", "medium", "low"];
       const incidentIds: string[] = [];
       
       for (const severity of severities) {
@@ -354,7 +354,7 @@ describe("DP Intelligence - Incident Tracking Tests", () => {
       for (let i = 0; i < 10; i++) {
         promises.push(tracker.trackIncident({
           title: `Rapid Test ${i}`,
-          severity: 'low'
+          severity: "low"
         }));
       }
       
@@ -375,7 +375,7 @@ describe("DP Intelligence - Incident Tracking Tests", () => {
       for (let i = 0; i < 100; i++) {
         promises.push(tracker.trackIncident({
           title: `Incident ${i}`,
-          severity: i % 2 === 0 ? 'high' : 'low'
+          severity: i % 2 === 0 ? "high" : "low"
         }));
       }
       
@@ -392,9 +392,9 @@ describe("DP Intelligence - Incident Tracking Tests", () => {
       });
       
       const promises = [
-        tracker.updateStatus(incidentId!, 'investigating'),
-        tracker.updateStatus(incidentId!, 'action_taken'),
-        tracker.updateStatus(incidentId!, 'resolved')
+        tracker.updateStatus(incidentId!, "investigating"),
+        tracker.updateStatus(incidentId!, "action_taken"),
+        tracker.updateStatus(incidentId!, "resolved")
       ];
       
       await Promise.all(promises);

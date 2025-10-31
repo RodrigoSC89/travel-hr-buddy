@@ -6,25 +6,25 @@
 /**
  * Data source types for replay context
  */
-export type ReplayDataSource = 'sensors' | 'crew' | 'ai' | 'system' | 'logs';
+export type ReplayDataSource = "sensors" | "crew" | "ai" | "system" | "logs";
 
 /**
  * Timeline event types
  */
 export type TimelineEventType = 
-  | 'incident_start'
-  | 'detection'
-  | 'ai_decision'
-  | 'crew_action'
-  | 'system_response'
-  | 'escalation'
-  | 'resolution'
-  | 'incident_end';
+  | "incident_start"
+  | "detection"
+  | "ai_decision"
+  | "crew_action"
+  | "system_response"
+  | "escalation"
+  | "resolution"
+  | "incident_end";
 
 /**
  * Export format types
  */
-export type ExportFormat = 'video' | 'text' | 'json' | 'pdf';
+export type ExportFormat = "video" | "text" | "json" | "pdf";
 
 /**
  * Contextual data snapshot
@@ -103,7 +103,7 @@ export interface TimelineEvent {
   context: ContextSnapshot;
   aiDecision?: AIDecisionRecord;
   duration?: number;
-  impact: 'critical' | 'high' | 'medium' | 'low';
+  impact: "critical" | "high" | "medium" | "low";
   relatedEvents: string[]; // IDs of related events
 }
 
@@ -173,7 +173,7 @@ export interface ExportOptions {
  * Video export settings (for future implementation)
  */
 export interface VideoExportSettings {
-  resolution: '720p' | '1080p' | '4k';
+  resolution: "720p" | "1080p" | "4k";
   framerate: 24 | 30 | 60;
   duration: number;
   includeAudio: boolean;
@@ -187,7 +187,7 @@ export interface VideoExportSettings {
 export interface ReplayFilterOptions {
   eventTypes?: TimelineEventType[];
   actors?: string[];
-  impactLevels?: ('critical' | 'high' | 'medium' | 'low')[];
+  impactLevels?: ("critical" | "high" | "medium" | "low")[];
   timeRange?: {
     start: number;
     end: number;

@@ -21,11 +21,11 @@ export default function I18nDemo() {
   const runTests = () => {
     const results = [
       `✅ Current Language: ${language}`,
-      `✅ Common.welcome: ${t('common.welcome')}`,
-      `✅ Common.loading: ${t('common.loading')}`,
-      `✅ Common.success: ${t('common.success')}`,
-      `✅ Navigation.dashboard: ${t('navigation.dashboard')}`,
-      `✅ Maritime.vessel: ${t('maritime.vessel')}`,
+      `✅ Common.welcome: ${t("common.welcome")}`,
+      `✅ Common.loading: ${t("common.loading")}`,
+      `✅ Common.success: ${t("common.success")}`,
+      `✅ Navigation.dashboard: ${t("navigation.dashboard")}`,
+      `✅ Maritime.vessel: ${t("maritime.vessel")}`,
       `✅ Date formatting: ${formatDate(new Date())}`,
       `✅ Number formatting: ${formatNumber(12345.67)}`,
       `✅ Currency formatting: ${formatCurrency(1234.56)}`,
@@ -83,7 +83,7 @@ export default function I18nDemo() {
         </CardHeader>
         <CardContent className="space-y-4">
           <Button onClick={runTests} disabled={isLoading}>
-            {isLoading ? t('common.loading') : 'Run Translation Tests'}
+            {isLoading ? t("common.loading") : "Run Translation Tests"}
           </Button>
 
           {testResults.length > 0 && (
@@ -109,40 +109,40 @@ export default function I18nDemo() {
             <div>
               <h3 className="font-semibold mb-2">Common Translations</h3>
               <ul className="space-y-1 text-sm">
-                <li>• {t('common.welcome')}</li>
-                <li>• {t('common.loading')}</li>
-                <li>• {t('common.error')}</li>
-                <li>• {t('common.success')}</li>
-                <li>• {t('common.save')}</li>
-                <li>• {t('common.cancel')}</li>
+                <li>• {t("common.welcome")}</li>
+                <li>• {t("common.loading")}</li>
+                <li>• {t("common.error")}</li>
+                <li>• {t("common.success")}</li>
+                <li>• {t("common.save")}</li>
+                <li>• {t("common.cancel")}</li>
               </ul>
             </div>
             <div>
               <h3 className="font-semibold mb-2">Navigation</h3>
               <ul className="space-y-1 text-sm">
-                <li>• {t('navigation.dashboard')}</li>
-                <li>• {t('navigation.reports')}</li>
-                <li>• {t('navigation.settings')}</li>
-                <li>• {t('navigation.profile')}</li>
-                <li>• {t('navigation.help')}</li>
+                <li>• {t("navigation.dashboard")}</li>
+                <li>• {t("navigation.reports")}</li>
+                <li>• {t("navigation.settings")}</li>
+                <li>• {t("navigation.profile")}</li>
+                <li>• {t("navigation.help")}</li>
               </ul>
             </div>
             <div>
               <h3 className="font-semibold mb-2">Maritime</h3>
               <ul className="space-y-1 text-sm">
-                <li>• {t('maritime.vessel')}</li>
-                <li>• {t('maritime.fleet')}</li>
-                <li>• {t('maritime.compliance')}</li>
-                <li>• {t('maritime.mission_control')}</li>
+                <li>• {t("maritime.vessel")}</li>
+                <li>• {t("maritime.fleet")}</li>
+                <li>• {t("maritime.compliance")}</li>
+                <li>• {t("maritime.mission_control")}</li>
               </ul>
             </div>
             <div>
               <h3 className="font-semibold mb-2">AI & Feedback</h3>
               <ul className="space-y-1 text-sm">
-                <li>• {t('ai.cognitive_feedback')}</li>
-                <li>• {t('ai.weekly_report')}</li>
-                <li>• {t('ai.insights')}</li>
-                <li>• {t('ai.patterns')}</li>
+                <li>• {t("ai.cognitive_feedback")}</li>
+                <li>• {t("ai.weekly_report")}</li>
+                <li>• {t("ai.insights")}</li>
+                <li>• {t("ai.patterns")}</li>
               </ul>
             </div>
           </div>
@@ -159,18 +159,18 @@ export default function I18nDemo() {
             <div>
               <h3 className="font-semibold mb-2">Date Formats</h3>
               <ul className="space-y-1 text-sm">
-                <li>• Short: {formatDate(new Date(), 'short')}</li>
-                <li>• Long: {formatDate(new Date(), 'long')}</li>
-                <li>• Full: {formatDate(new Date(), 'full')}</li>
+                <li>• Short: {formatDate(new Date(), "short")}</li>
+                <li>• Long: {formatDate(new Date(), "long")}</li>
+                <li>• Full: {formatDate(new Date(), "full")}</li>
               </ul>
             </div>
             <div>
               <h3 className="font-semibold mb-2">Number Formats</h3>
               <ul className="space-y-1 text-sm">
                 <li>• Number: {formatNumber(12345.67)}</li>
-                <li>• Currency (USD): {formatCurrency(1234.56, 'USD')}</li>
-                <li>• Currency (EUR): {formatCurrency(1234.56, 'EUR')}</li>
-                <li>• Percentage: {formatNumber(0.8567, { style: 'percent' })}</li>
+                <li>• Currency (USD): {formatCurrency(1234.56, "USD")}</li>
+                <li>• Currency (EUR): {formatCurrency(1234.56, "EUR")}</li>
+                <li>• Percentage: {formatNumber(0.8567, { style: "percent" })}</li>
               </ul>
             </div>
           </div>
@@ -227,7 +227,7 @@ export default function I18nDemo() {
         </CardHeader>
         <CardContent>
           <pre className="text-sm bg-muted p-4 rounded-lg overflow-x-auto">
-{`// 1. Import the hook
+            {`// 1. Import the hook
 import { useTranslation } from '@/core/i18n/ui-hooks';
 
 // 2. Use in your component

@@ -548,8 +548,8 @@ const SonarAI: React.FC = () => {
                             detection.severity === "critical"
                               ? "destructive"
                               : detection.severity === "high"
-                              ? "destructive"
-                              : "default"
+                                ? "destructive"
+                                : "default"
                           }
                         >
                           {detection.severity.toUpperCase()}

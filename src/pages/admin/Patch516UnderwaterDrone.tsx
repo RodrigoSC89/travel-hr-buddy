@@ -122,15 +122,15 @@ export default function Patch516UnderwaterDrone() {
 
   const getStatusColor = (status: string) => {
     switch (status) {
-      case "active":
-      case "mission":
-        return "default";
-      case "idle":
-        return "secondary";
-      case "emergency":
-        return "destructive";
-      default:
-        return "outline";
+    case "active":
+    case "mission":
+      return "default";
+    case "idle":
+      return "secondary";
+    case "emergency":
+      return "destructive";
+    default:
+      return "outline";
     }
   };
 
@@ -161,8 +161,8 @@ export default function Patch516UnderwaterDrone() {
           <div className="space-y-2">
             {validationChecklist.map((item) => (
               <div key={item.id} className="flex items-center gap-2">
-                <div className={`h-4 w-4 rounded-full ${item.completed ? 'bg-green-500' : 'bg-muted'}`} />
-                <span className={item.completed ? 'text-foreground' : 'text-muted-foreground'}>
+                <div className={`h-4 w-4 rounded-full ${item.completed ? "bg-green-500" : "bg-muted"}`} />
+                <span className={item.completed ? "text-foreground" : "text-muted-foreground"}>
                   {item.label}
                 </span>
               </div>

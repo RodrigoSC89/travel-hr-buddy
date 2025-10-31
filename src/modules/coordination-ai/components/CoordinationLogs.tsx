@@ -45,31 +45,31 @@ export const CoordinationLogs: React.FC = () => {
 
   const getEventIcon = (eventType: CoordinationLog["eventType"]) => {
     switch (eventType) {
-      case "conflict":
-        return <AlertTriangle className="w-4 h-4 text-orange-500" />;
-      case "resolution":
-        return <CheckCircle className="w-4 h-4 text-green-500" />;
-      case "handoff":
-        return <ArrowRight className="w-4 h-4 text-blue-500" />;
-      case "coordination":
-        return <Activity className="w-4 h-4 text-purple-500" />;
-      default:
-        return <Activity className="w-4 h-4 text-gray-500" />;
+    case "conflict":
+      return <AlertTriangle className="w-4 h-4 text-orange-500" />;
+    case "resolution":
+      return <CheckCircle className="w-4 h-4 text-green-500" />;
+    case "handoff":
+      return <ArrowRight className="w-4 h-4 text-blue-500" />;
+    case "coordination":
+      return <Activity className="w-4 h-4 text-purple-500" />;
+    default:
+      return <Activity className="w-4 h-4 text-gray-500" />;
     }
   };
 
   const getEventColor = (eventType: CoordinationLog["eventType"]): string => {
     switch (eventType) {
-      case "conflict":
-        return "border-orange-500/30 bg-orange-500/10";
-      case "resolution":
-        return "border-green-500/30 bg-green-500/10";
-      case "handoff":
-        return "border-blue-500/30 bg-blue-500/10";
-      case "coordination":
-        return "border-purple-500/30 bg-purple-500/10";
-      default:
-        return "border-gray-500/30 bg-gray-500/10";
+    case "conflict":
+      return "border-orange-500/30 bg-orange-500/10";
+    case "resolution":
+      return "border-green-500/30 bg-green-500/10";
+    case "handoff":
+      return "border-blue-500/30 bg-blue-500/10";
+    case "coordination":
+      return "border-purple-500/30 bg-purple-500/10";
+    default:
+      return "border-gray-500/30 bg-gray-500/10";
     }
   };
 

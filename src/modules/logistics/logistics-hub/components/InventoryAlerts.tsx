@@ -183,17 +183,17 @@ export const InventoryAlerts = () => {
   const exportToExcel = () => {
     try {
       const exportData = lowStockItems.map(item => ({
-        'Item Name': item.item_name,
-        'Current Qty': item.quantity,
-        'Reorder Level': item.reorder_level || 0,
-        'Min Stock': item.min_stock_level,
-        'Unit': item.unit,
-        'Location': item.location,
-        'Alert Level': getAlertLevel(item),
-        'Stock %': item.reorder_level && item.reorder_level > 0 
+        "Item Name": item.item_name,
+        "Current Qty": item.quantity,
+        "Reorder Level": item.reorder_level || 0,
+        "Min Stock": item.min_stock_level,
+        "Unit": item.unit,
+        "Location": item.location,
+        "Alert Level": getAlertLevel(item),
+        "Stock %": item.reorder_level && item.reorder_level > 0 
           ? `${Math.round((item.quantity / item.reorder_level) * 100)}%` 
-          : 'N/A',
-        'Category': item.category || 'N/A'
+          : "N/A",
+        "Category": item.category || "N/A"
       }));
 
       const worksheet = XLSX.utils.json_to_sheet(exportData);
@@ -218,7 +218,7 @@ export const InventoryAlerts = () => {
 
   const exportToCSV = () => {
     try {
-      const headers = ['Item Name', 'Current Qty', 'Reorder Level', 'Min Stock', 'Unit', 'Location', 'Alert Level', 'Stock %'];
+      const headers = ["Item Name", "Current Qty", "Reorder Level", "Min Stock", "Unit", "Location", "Alert Level", "Stock %"];
       const rows = lowStockItems.map(item => [
         item.item_name,
         item.quantity,
@@ -229,16 +229,16 @@ export const InventoryAlerts = () => {
         getAlertLevel(item),
         item.reorder_level && item.reorder_level > 0 
           ? `${Math.round((item.quantity / item.reorder_level) * 100)}%` 
-          : 'N/A'
+          : "N/A"
       ]);
       
       const csvContent = [
-        headers.join(','),
-        ...rows.map(row => row.map(cell => `"${cell}"`).join(','))
-      ].join('\n');
+        headers.join(","),
+        ...rows.map(row => row.map(cell => `"${cell}"`).join(","))
+      ].join("\n");
       
-      const blob = new Blob([csvContent], { type: 'text/csv;charset=utf-8;' });
-      const link = document.createElement('a');
+      const blob = new Blob([csvContent], { type: "text/csv;charset=utf-8;" });
+      const link = document.createElement("a");
       link.href = URL.createObjectURL(blob);
       link.download = `inventory-alerts-${format(new Date(), "yyyy-MM-dd")}.csv`;
       link.click();
@@ -357,7 +357,7 @@ export const InventoryAlerts = () => {
                     <p className="text-xs text-muted-foreground mt-1">
                       {item.reorder_level && item.reorder_level > 0 
                         ? `${Math.round((item.quantity / item.reorder_level) * 100)}% of reorder level`
-                        : 'Reorder level not set'
+                        : "Reorder level not set"
                       }
                     </p>
                   </div>

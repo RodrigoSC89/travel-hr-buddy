@@ -4,12 +4,12 @@
  * Real-time fleet telemetry monitoring with predictive maintenance
  */
 
-import React, { useState, useEffect, useCallback } from 'react';
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
-import { Button } from '@/components/ui/button';
-import { Badge } from '@/components/ui/badge';
-import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
-import { Progress } from '@/components/ui/progress';
+import React, { useState, useEffect, useCallback } from "react";
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
+import { Button } from "@/components/ui/button";
+import { Badge } from "@/components/ui/badge";
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
+import { Progress } from "@/components/ui/progress";
 import { 
   Ship, 
   Activity, 
@@ -25,11 +25,11 @@ import {
   Settings,
   RefreshCw,
   Download
-} from 'lucide-react';
-import { supabase } from '@/integrations/supabase/client';
-import { toast } from 'sonner';
-import { format } from 'date-fns';
-import { Line, Bar } from 'react-chartjs-2';
+} from "lucide-react";
+import { supabase } from "@/integrations/supabase/client";
+import { toast } from "sonner";
+import { format } from "date-fns";
+import { Line, Bar } from "react-chartjs-2";
 import {
   Chart as ChartJS,
   CategoryScale,
@@ -40,7 +40,7 @@ import {
   Title,
   Tooltip,
   Legend,
-} from 'chart.js';
+} from "chart.js";
 
 ChartJS.register(
   CategoryScale,
@@ -61,7 +61,7 @@ interface SensorReading {
   sensor_location: string;
   value: number;
   unit: string;
-  status: 'normal' | 'warning' | 'critical' | 'offline';
+  status: "normal" | "warning" | "critical" | "offline";
   threshold_min: number;
   threshold_max: number;
   is_alert: boolean;
@@ -73,12 +73,12 @@ interface MaintenanceAlert {
   id: string;
   vessel_id: string;
   alert_type: string;
-  severity: 'low' | 'medium' | 'high' | 'critical';
+  severity: "low" | "medium" | "high" | "critical";
   message: string;
   sensor_data: any;
   predicted_failure_date?: string;
   recommended_action: string;
-  status: 'active' | 'acknowledged' | 'resolved';
+  status: "active" | "acknowledged" | "resolved";
   created_at: string;
 }
 
@@ -112,12 +112,12 @@ export const FleetTelemetryDashboard: React.FC = () => {
     
     // Set up real-time subscription
     const subscription = supabase
-      .channel('telemetry-changes')
+      .channel("telemetry-changes")
       .on(
-        'postgres_changes',
-        { event: '*', schema: 'public', table: 'iot_sensor_data' },
+        "postgres_changes",
+        { event: "*", schema: "public", table: "iot_sensor_data" },
         (payload) => {
-          console.log('Telemetry update:', payload);
+          console.log("Telemetry update:", payload);
           loadTelemetryData();
         }
       )
@@ -145,17 +145,17 @@ export const FleetTelemetryDashboard: React.FC = () => {
 
       // Load vessels
       const { data: vesselsData, error: vesselsError } = await supabase
-        .from('vessels')
-        .select('*')
-        .order('name');
+        .from("vessels")
+        .select("*")
+        .order("name");
 
       if (vesselsError) throw vesselsError;
 
       // Load recent sensor data
       const { data: sensorReadings, error: sensorError } = await supabase
-        .from('iot_sensor_data')
-        .select('*')
-        .order('reading_timestamp', { ascending: false })
+        .from("iot_sensor_data")
+        .select("*")
+        .order("reading_timestamp", { ascending: false })
         .limit(1000);
 
       if (sensorError) throw sensorError;
@@ -185,8 +185,8 @@ export const FleetTelemetryDashboard: React.FC = () => {
       // Check for alerts
       await checkAndGenerateAlerts(sensorReadings || []);
     } catch (error) {
-      console.error('Error loading telemetry:', error);
-      toast.error('Failed to load telemetry data');
+      console.error("Error loading telemetry:", error);
+      toast.error("Failed to load telemetry data");
     } finally {
       setLoading(false);
     }
@@ -219,43 +219,43 @@ export const FleetTelemetryDashboard: React.FC = () => {
         newAlerts.push({
           id: `alert-${reading.id}`,
           vessel_id: reading.vessel_id,
-          alert_type: 'threshold_exceeded',
-          severity: reading.value > reading.threshold_max * 1.2 ? 'critical' : 'high',
+          alert_type: "threshold_exceeded",
+          severity: reading.value > reading.threshold_max * 1.2 ? "critical" : "high",
           message: `${reading.sensor_type} exceeded threshold: ${reading.value}${reading.unit}`,
           sensor_data: reading,
           recommended_action: `Inspect ${reading.sensor_location} immediately`,
-          status: 'active',
+          status: "active",
           created_at: reading.reading_timestamp,
         });
       }
 
       // Check for anomalous patterns (vibration)
-      if (reading.sensor_type === 'vibration' && reading.value > 7) {
+      if (reading.sensor_type === "vibration" && reading.value > 7) {
         newAlerts.push({
           id: `alert-vibration-${reading.id}`,
           vessel_id: reading.vessel_id,
-          alert_type: 'vibration_anomaly',
-          severity: 'high',
+          alert_type: "vibration_anomaly",
+          severity: "high",
           message: `Abnormal vibration detected: ${reading.value}${reading.unit}`,
           sensor_data: reading,
           predicted_failure_date: new Date(Date.now() + 7 * 24 * 60 * 60 * 1000).toISOString(),
-          recommended_action: 'Schedule bearing inspection within 7 days',
-          status: 'active',
+          recommended_action: "Schedule bearing inspection within 7 days",
+          status: "active",
           created_at: reading.reading_timestamp,
         });
       }
 
       // Check temperature trends
-      if (reading.sensor_type === 'temperature' && reading.value > 75) {
+      if (reading.sensor_type === "temperature" && reading.value > 75) {
         newAlerts.push({
           id: `alert-temp-${reading.id}`,
           vessel_id: reading.vessel_id,
-          alert_type: 'temperature_warning',
-          severity: 'medium',
+          alert_type: "temperature_warning",
+          severity: "medium",
           message: `Elevated temperature: ${reading.value}${reading.unit}`,
           sensor_data: reading,
-          recommended_action: 'Monitor cooling system',
-          status: 'active',
+          recommended_action: "Monitor cooling system",
+          status: "active",
           created_at: reading.reading_timestamp,
         });
       }
@@ -266,7 +266,7 @@ export const FleetTelemetryDashboard: React.FC = () => {
     // Store alerts in database if any
     if (newAlerts.length > 0) {
       // Send notifications for critical alerts
-      const criticalAlerts = newAlerts.filter((a) => a.severity === 'critical');
+      const criticalAlerts = newAlerts.filter((a) => a.severity === "critical");
       if (criticalAlerts.length > 0) {
         toast.error(`${criticalAlerts.length} critical alert(s) detected!`, {
           duration: 10000,
@@ -277,11 +277,11 @@ export const FleetTelemetryDashboard: React.FC = () => {
 
   const simulateSensorReadings = async () => {
     // Simulate new sensor readings for demo purposes
-    const { data: vesselsData } = await supabase.from('vessels').select('id').limit(3);
+    const { data: vesselsData } = await supabase.from("vessels").select("id").limit(3);
 
     if (!vesselsData) return;
 
-    const sensorTypes = ['temperature', 'pressure', 'vibration', 'fuel_level', 'engine_rpm'];
+    const sensorTypes = ["temperature", "pressure", "vibration", "fuel_level", "engine_rpm"];
     const newReadings: any[] = [];
 
     vesselsData.forEach((vessel) => {
@@ -295,9 +295,9 @@ export const FleetTelemetryDashboard: React.FC = () => {
         const anomalyValue = Math.random() > 0.95 ? threshold.critical : value;
 
         const status = 
-          anomalyValue > threshold.critical ? 'critical' :
-          anomalyValue > threshold.max ? 'warning' :
-          'normal';
+          anomalyValue > threshold.critical ? "critical" :
+            anomalyValue > threshold.max ? "warning" :
+              "normal";
 
         newReadings.push({
           vessel_id: vessel.id,
@@ -305,11 +305,11 @@ export const FleetTelemetryDashboard: React.FC = () => {
           sensor_type: type,
           sensor_location: `Engine Room ${type}`,
           value: Math.round(anomalyValue * 10) / 10,
-          unit: type === 'temperature' ? '°C' : type === 'pressure' ? 'bar' : type === 'vibration' ? 'mm/s' : type === 'fuel_level' ? '%' : 'RPM',
+          unit: type === "temperature" ? "°C" : type === "pressure" ? "bar" : type === "vibration" ? "mm/s" : type === "fuel_level" ? "%" : "RPM",
           status,
           threshold_min: threshold.min,
           threshold_max: threshold.max,
-          is_alert: status !== 'normal',
+          is_alert: status !== "normal",
           reading_timestamp: new Date().toISOString(),
           metadata: {},
         });
@@ -317,10 +317,10 @@ export const FleetTelemetryDashboard: React.FC = () => {
     });
 
     try {
-      const { error } = await supabase.from('iot_sensor_data').insert(newReadings);
+      const { error } = await supabase.from("iot_sensor_data").insert(newReadings);
       if (error) throw error;
     } catch (error) {
-      console.error('Error inserting sensor data:', error);
+      console.error("Error inserting sensor data:", error);
     }
   };
 
@@ -338,12 +338,12 @@ export const FleetTelemetryDashboard: React.FC = () => {
 
   const getStatusColor = (status: string) => {
     const colors = {
-      normal: 'text-green-500',
-      warning: 'text-yellow-500',
-      critical: 'text-red-500',
-      offline: 'text-gray-500',
+      normal: "text-green-500",
+      warning: "text-yellow-500",
+      critical: "text-red-500",
+      offline: "text-gray-500",
     };
-    return colors[status] || 'text-gray-500';
+    return colors[status] || "text-gray-500";
   };
 
   const exportTelemetryData = () => {
@@ -357,18 +357,18 @@ export const FleetTelemetryDashboard: React.FC = () => {
     }));
 
     const csv = [
-      Object.keys(csvData[0]).join(','),
-      ...csvData.map((row) => Object.values(row).join(',')),
-    ].join('\n');
+      Object.keys(csvData[0]).join(","),
+      ...csvData.map((row) => Object.values(row).join(",")),
+    ].join("\n");
 
-    const blob = new Blob([csv], { type: 'text/csv' });
+    const blob = new Blob([csv], { type: "text/csv" });
     const url = URL.createObjectURL(blob);
-    const a = document.createElement('a');
+    const a = document.createElement("a");
     a.href = url;
-    a.download = `telemetry-${format(new Date(), 'yyyy-MM-dd-HH-mm')}.csv`;
+    a.download = `telemetry-${format(new Date(), "yyyy-MM-dd-HH-mm")}.csv`;
     a.click();
 
-    toast.success('Telemetry data exported');
+    toast.success("Telemetry data exported");
   };
 
   if (loading) {
@@ -397,8 +397,8 @@ export const FleetTelemetryDashboard: React.FC = () => {
             variant="outline"
             onClick={() => setAutoRefresh(!autoRefresh)}
           >
-            <RefreshCw className={`h-4 w-4 mr-2 ${autoRefresh ? 'animate-spin' : ''}`} />
-            {autoRefresh ? 'Auto' : 'Manual'}
+            <RefreshCw className={`h-4 w-4 mr-2 ${autoRefresh ? "animate-spin" : ""}`} />
+            {autoRefresh ? "Auto" : "Manual"}
           </Button>
           <Button variant="outline" onClick={exportTelemetryData}>
             <Download className="h-4 w-4 mr-2" />
@@ -434,7 +434,7 @@ export const FleetTelemetryDashboard: React.FC = () => {
           <CardContent>
             <div className="text-2xl font-bold">{sensorData.length}</div>
             <p className="text-xs text-muted-foreground">
-              {sensorData.filter((s) => s.status === 'normal').length} normal
+              {sensorData.filter((s) => s.status === "normal").length} normal
             </p>
           </CardContent>
         </Card>
@@ -447,7 +447,7 @@ export const FleetTelemetryDashboard: React.FC = () => {
           <CardContent>
             <div className="text-2xl font-bold">{alerts.length}</div>
             <p className="text-xs text-muted-foreground">
-              {alerts.filter((a) => a.severity === 'critical').length} critical
+              {alerts.filter((a) => a.severity === "critical").length} critical
             </p>
           </CardContent>
         </Card>
@@ -475,7 +475,7 @@ export const FleetTelemetryDashboard: React.FC = () => {
       </div>
 
       {/* Critical Alerts Banner */}
-      {alerts.filter((a) => a.severity === 'critical').length > 0 && (
+      {alerts.filter((a) => a.severity === "critical").length > 0 && (
         <Card className="border-destructive bg-destructive/10">
           <CardHeader>
             <CardTitle className="flex items-center gap-2 text-destructive">
@@ -486,7 +486,7 @@ export const FleetTelemetryDashboard: React.FC = () => {
           <CardContent>
             <div className="space-y-2">
               {alerts
-                .filter((a) => a.severity === 'critical')
+                .filter((a) => a.severity === "critical")
                 .map((alert) => (
                   <div key={alert.id} className="flex items-center justify-between p-2 bg-background rounded">
                     <div className="flex-1">
@@ -520,17 +520,17 @@ export const FleetTelemetryDashboard: React.FC = () => {
                     <Badge
                       variant={
                         vessel.health_score > 80
-                          ? 'default'
+                          ? "default"
                           : vessel.health_score > 60
-                          ? 'secondary'
-                          : 'destructive'
+                            ? "secondary"
+                            : "destructive"
                       }
                     >
                       {vessel.health_score}%
                     </Badge>
                   </div>
                   <CardDescription>
-                    Last update: {format(new Date(vessel.last_update), 'PPp')}
+                    Last update: {format(new Date(vessel.last_update), "PPp")}
                   </CardDescription>
                 </CardHeader>
                 <CardContent>
@@ -584,11 +584,11 @@ export const FleetTelemetryDashboard: React.FC = () => {
                         </div>
                         <Badge
                           variant={
-                            sensor.status === 'normal'
-                              ? 'default'
-                              : sensor.status === 'warning'
-                              ? 'secondary'
-                              : 'destructive'
+                            sensor.status === "normal"
+                              ? "default"
+                              : sensor.status === "warning"
+                                ? "secondary"
+                                : "destructive"
                           }
                         >
                           {sensor.status}
@@ -643,11 +643,11 @@ export const FleetTelemetryDashboard: React.FC = () => {
                     >
                       <AlertTriangle
                         className={`h-5 w-5 ${
-                          alert.severity === 'critical'
-                            ? 'text-red-500'
-                            : alert.severity === 'high'
-                            ? 'text-orange-500'
-                            : 'text-yellow-500'
+                          alert.severity === "critical"
+                            ? "text-red-500"
+                            : alert.severity === "high"
+                              ? "text-orange-500"
+                              : "text-yellow-500"
                         }`}
                       />
                       <div className="flex-1">
@@ -659,13 +659,13 @@ export const FleetTelemetryDashboard: React.FC = () => {
                             </p>
                             {alert.predicted_failure_date && (
                               <p className="text-xs text-muted-foreground mt-2">
-                                Predicted failure: {format(new Date(alert.predicted_failure_date), 'PPP')}
+                                Predicted failure: {format(new Date(alert.predicted_failure_date), "PPP")}
                               </p>
                             )}
                           </div>
                           <Badge
                             variant={
-                              alert.severity === 'critical' ? 'destructive' : 'secondary'
+                              alert.severity === "critical" ? "destructive" : "secondary"
                             }
                           >
                             {alert.severity}
@@ -749,7 +749,7 @@ export const FleetTelemetryDashboard: React.FC = () => {
                             <div>
                               <p className="font-medium">{alert.message}</p>
                               <p className="text-sm text-muted-foreground">
-                                Scheduled: {format(new Date(alert.predicted_failure_date!), 'PPP')}
+                                Scheduled: {format(new Date(alert.predicted_failure_date!), "PPP")}
                               </p>
                             </div>
                           </div>

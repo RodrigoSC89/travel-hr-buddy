@@ -222,31 +222,31 @@ export default function SystemValidationHub() {
 
   const getCategoryColor = (category: string) => {
     switch (category) {
-      case "consolidation":
-        return "bg-blue-500/10 text-blue-700 dark:text-blue-400 border-blue-500/20";
-      case "feature":
-        return "bg-green-500/10 text-green-700 dark:text-green-400 border-green-500/20";
-      case "ai":
-        return "bg-purple-500/10 text-purple-700 dark:text-purple-400 border-purple-500/20";
-      case "infrastructure":
-        return "bg-orange-500/10 text-orange-700 dark:text-orange-400 border-orange-500/20";
-      default:
-        return "bg-gray-500/10 text-gray-700 dark:text-gray-400 border-gray-500/20";
+    case "consolidation":
+      return "bg-blue-500/10 text-blue-700 dark:text-blue-400 border-blue-500/20";
+    case "feature":
+      return "bg-green-500/10 text-green-700 dark:text-green-400 border-green-500/20";
+    case "ai":
+      return "bg-purple-500/10 text-purple-700 dark:text-purple-400 border-purple-500/20";
+    case "infrastructure":
+      return "bg-orange-500/10 text-orange-700 dark:text-orange-400 border-orange-500/20";
+    default:
+      return "bg-gray-500/10 text-gray-700 dark:text-gray-400 border-gray-500/20";
     }
   };
 
   const getCategoryLabel = (category: string) => {
     switch (category) {
-      case "consolidation":
-        return "Consolidação";
-      case "feature":
-        return "Feature";
-      case "ai":
-        return "IA";
-      case "infrastructure":
-        return "Infraestrutura";
-      default:
-        return category;
+    case "consolidation":
+      return "Consolidação";
+    case "feature":
+      return "Feature";
+    case "ai":
+      return "IA";
+    case "infrastructure":
+      return "Infraestrutura";
+    default:
+      return category;
     }
   };
 

@@ -393,60 +393,60 @@ export class SelfDiagnosisLoop {
     let requiredDowntime: number;
 
     switch (anomaly.type) {
-      case "accuracy":
+    case "accuracy":
+      action = "reconfigure";
+      description = "Reconfigure module parameters to improve accuracy";
+      parameters = { adjustTemperature: true, increaseValidation: true };
+      estimatedImpact = "Improved accuracy, slight latency increase";
+      requiredDowntime = 30;
+      break;
+
+    case "latency":
+      action = "restart";
+      description = "Restart module to clear performance bottlenecks";
+      parameters = { clearCache: true, optimizeResources: true };
+      estimatedImpact = "Reduced latency, temporary unavailability";
+      requiredDowntime = 60;
+      break;
+
+    case "performance":
+      if (anomaly.severity === "critical") {
+        action = "fallback";
+        description = "Switch to fallback configuration";
+        parameters = { fallbackModel: "gpt-3.5-turbo", reducedLoad: true };
+        estimatedImpact = "Stabilized performance, reduced capabilities";
+        requiredDowntime = 120;
+      } else {
         action = "reconfigure";
-        description = `Reconfigure module parameters to improve accuracy`;
-        parameters = { adjustTemperature: true, increaseValidation: true };
-        estimatedImpact = "Improved accuracy, slight latency increase";
+        description = "Adjust parameters to reduce error rate";
+        parameters = { increaseValidation: true, addRetries: true };
+        estimatedImpact = "Lower error rate, slight performance cost";
         requiredDowntime = 30;
-        break;
+      }
+      break;
 
-      case "latency":
-        action = "restart";
-        description = `Restart module to clear performance bottlenecks`;
-        parameters = { clearCache: true, optimizeResources: true };
-        estimatedImpact = "Reduced latency, temporary unavailability";
-        requiredDowntime = 60;
-        break;
+    case "availability":
+      action = "restart";
+      description = "Restart module to restore availability";
+      parameters = { healthCheck: true, warmup: true };
+      estimatedImpact = "Restored availability";
+      requiredDowntime = 90;
+      break;
 
-      case "performance":
-        if (anomaly.severity === "critical") {
-          action = "fallback";
-          description = `Switch to fallback configuration`;
-          parameters = { fallbackModel: "gpt-3.5-turbo", reducedLoad: true };
-          estimatedImpact = "Stabilized performance, reduced capabilities";
-          requiredDowntime = 120;
-        } else {
-          action = "reconfigure";
-          description = `Adjust parameters to reduce error rate`;
-          parameters = { increaseValidation: true, addRetries: true };
-          estimatedImpact = "Lower error rate, slight performance cost";
-          requiredDowntime = 30;
-        }
-        break;
+    case "resource":
+      action = "reconfigure";
+      description = "Optimize resource allocation";
+      parameters = { reduceMemory: true, optimizeCache: true };
+      estimatedImpact = "Reduced resource usage";
+      requiredDowntime = 0;
+      break;
 
-      case "availability":
-        action = "restart";
-        description = `Restart module to restore availability`;
-        parameters = { healthCheck: true, warmup: true };
-        estimatedImpact = "Restored availability";
-        requiredDowntime = 90;
-        break;
-
-      case "resource":
-        action = "reconfigure";
-        description = `Optimize resource allocation`;
-        parameters = { reduceMemory: true, optimizeCache: true };
-        estimatedImpact = "Reduced resource usage";
-        requiredDowntime = 0;
-        break;
-
-      default:
-        action = "alert";
-        description = `Alert operators for manual intervention`;
-        parameters = { notifyAdmin: true };
-        estimatedImpact = "Manual review required";
-        requiredDowntime = 0;
+    default:
+      action = "alert";
+      description = "Alert operators for manual intervention";
+      parameters = { notifyAdmin: true };
+      estimatedImpact = "Manual review required";
+      requiredDowntime = 0;
     }
 
     return {
@@ -526,9 +526,9 @@ export class SelfDiagnosisLoop {
     const downtimeActual = action.requiredDowntime * (0.8 + Math.random() * 0.4);
 
     if (success) {
-      logs.push(`Action completed successfully`);
+      logs.push("Action completed successfully");
     } else {
-      logs.push(`Action failed: Simulated failure`);
+      logs.push("Action failed: Simulated failure");
     }
 
     const endTime = new Date().toISOString();
@@ -599,7 +599,7 @@ export class SelfDiagnosisLoop {
       actionsExecuted: number;
       successRate: number;
     };
-  } {
+    } {
     const successfulExecutions = this.executions.filter(e => e.success).length;
     const successRate = this.executions.length > 0 
       ? (successfulExecutions / this.executions.length) * 100 

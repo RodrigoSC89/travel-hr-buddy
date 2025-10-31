@@ -116,7 +116,7 @@ export const MissionReplayPanel: React.FC<MissionReplayProps> = ({ recording, on
   const formatTime = (seconds: number): string => {
     const mins = Math.floor(seconds / 60);
     const secs = Math.floor(seconds % 60);
-    return `${mins}:${secs.toString().padStart(2, '0')}`;
+    return `${mins}:${secs.toString().padStart(2, "0")}`;
   };
 
   const currentTrajectory = getCurrentTrajectory();
@@ -298,12 +298,12 @@ export const MissionReplayPanel: React.FC<MissionReplayProps> = ({ recording, on
                 className="flex items-start gap-2 p-2 rounded bg-orange-50 dark:bg-orange-950"
               >
                 <AlertTriangle className={`h-4 w-4 mt-0.5 ${
-                  point.severity === 'high' ? 'text-red-500' :
-                  point.severity === 'medium' ? 'text-orange-500' :
-                  'text-yellow-500'
+                  point.severity === "high" ? "text-red-500" :
+                    point.severity === "medium" ? "text-orange-500" :
+                      "text-yellow-500"
                 }`} />
                 <div className="flex-1 text-sm">
-                  <p className="font-medium">{point.type.replace('_', ' ')}</p>
+                  <p className="font-medium">{point.type.replace("_", " ")}</p>
                   <p className="text-muted-foreground">{point.description}</p>
                 </div>
                 <Badge variant="outline" className="text-xs">

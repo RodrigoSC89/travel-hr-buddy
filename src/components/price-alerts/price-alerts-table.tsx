@@ -1,4 +1,4 @@
-import React, { useState, useMemo } from 'react';
+import React, { useState, useMemo } from "react";
 import { 
   Table, 
   TableBody, 
@@ -6,24 +6,24 @@ import {
   TableHead, 
   TableHeader, 
   TableRow 
-} from '@/components/ui/table';
-import { Button } from '@/components/ui/button';
-import { Input } from '@/components/ui/input';
-import { Badge } from '@/components/ui/badge';
-import { Switch } from '@/components/ui/switch';
+} from "@/components/ui/table";
+import { Button } from "@/components/ui/button";
+import { Input } from "@/components/ui/input";
+import { Badge } from "@/components/ui/badge";
+import { Switch } from "@/components/ui/switch";
 import {
   Select,
   SelectContent,
   SelectItem,
   SelectTrigger,
   SelectValue,
-} from '@/components/ui/select';
+} from "@/components/ui/select";
 import {
   DropdownMenu,
   DropdownMenuContent,
   DropdownMenuItem,
   DropdownMenuTrigger,
-} from '@/components/ui/dropdown-menu';
+} from "@/components/ui/dropdown-menu";
 import { 
   ArrowUpDown, 
   Filter, 
@@ -34,9 +34,9 @@ import {
   TrendingUp,
   TrendingDown,
   Minus
-} from 'lucide-react';
-import { PriceAlert } from '@/services/price-alerts-service';
-import { format } from 'date-fns';
+} from "lucide-react";
+import { PriceAlert } from "@/services/price-alerts-service";
+import { format } from "date-fns";
 
 interface PriceAlertsTableProps {
   alerts: PriceAlert[];
@@ -46,8 +46,8 @@ interface PriceAlertsTableProps {
   onView: (alert: PriceAlert) => void;
 }
 
-type SortField = 'product_name' | 'target_price' | 'current_price' | 'created_at' | 'travel_date';
-type SortOrder = 'asc' | 'desc';
+type SortField = "product_name" | "target_price" | "current_price" | "created_at" | "travel_date";
+type SortOrder = "asc" | "desc";
 
 export const PriceAlertsTable: React.FC<PriceAlertsTableProps> = ({
   alerts,
@@ -56,10 +56,10 @@ export const PriceAlertsTable: React.FC<PriceAlertsTableProps> = ({
   onDelete,
   onView,
 }) => {
-  const [searchTerm, setSearchTerm] = useState('');
-  const [filterStatus, setFilterStatus] = useState<'all' | 'active' | 'inactive'>('all');
-  const [sortField, setSortField] = useState<SortField>('created_at');
-  const [sortOrder, setSortOrder] = useState<SortOrder>('desc');
+  const [searchTerm, setSearchTerm] = useState("");
+  const [filterStatus, setFilterStatus] = useState<"all" | "active" | "inactive">("all");
+  const [sortField, setSortField] = useState<SortField>("created_at");
+  const [sortOrder, setSortOrder] = useState<SortOrder>("desc");
 
   const filteredAndSortedAlerts = useMemo(() => {
     let filtered = alerts;
@@ -74,9 +74,9 @@ export const PriceAlertsTable: React.FC<PriceAlertsTableProps> = ({
     }
 
     // Apply status filter
-    if (filterStatus !== 'all') {
+    if (filterStatus !== "all") {
       filtered = filtered.filter((alert) =>
-        filterStatus === 'active' ? alert.is_active : !alert.is_active
+        filterStatus === "active" ? alert.is_active : !alert.is_active
       );
     }
 
@@ -85,13 +85,13 @@ export const PriceAlertsTable: React.FC<PriceAlertsTableProps> = ({
       let aValue: any = a[sortField];
       let bValue: any = b[sortField];
 
-      if (sortField === 'created_at' || sortField === 'travel_date') {
+      if (sortField === "created_at" || sortField === "travel_date") {
         aValue = aValue ? new Date(aValue).getTime() : 0;
         bValue = bValue ? new Date(bValue).getTime() : 0;
       }
 
-      if (aValue < bValue) return sortOrder === 'asc' ? -1 : 1;
-      if (aValue > bValue) return sortOrder === 'asc' ? 1 : -1;
+      if (aValue < bValue) return sortOrder === "asc" ? -1 : 1;
+      if (aValue > bValue) return sortOrder === "asc" ? 1 : -1;
       return 0;
     });
 
@@ -100,10 +100,10 @@ export const PriceAlertsTable: React.FC<PriceAlertsTableProps> = ({
 
   const handleSort = (field: SortField) => {
     if (sortField === field) {
-      setSortOrder(sortOrder === 'asc' ? 'desc' : 'asc');
+      setSortOrder(sortOrder === "asc" ? "desc" : "asc");
     } else {
       setSortField(field);
-      setSortOrder('asc');
+      setSortOrder("asc");
     }
   };
 
@@ -111,18 +111,18 @@ export const PriceAlertsTable: React.FC<PriceAlertsTableProps> = ({
     if (!alert.current_price) return null;
     
     const diff = alert.current_price - alert.target_price;
-    if (diff > 0) return 'above';
-    if (diff < 0) return 'below';
-    return 'equal';
+    if (diff > 0) return "above";
+    if (diff < 0) return "below";
+    return "equal";
   };
 
   const renderPriceTrendIcon = (alert: PriceAlert) => {
     const trend = getPriceTrend(alert);
     
-    if (trend === 'above') {
+    if (trend === "above") {
       return <TrendingUp className="w-4 h-4 text-red-500" />;
     }
-    if (trend === 'below') {
+    if (trend === "below") {
       return <TrendingDown className="w-4 h-4 text-green-500" />;
     }
     return <Minus className="w-4 h-4 text-gray-400" />;
@@ -164,7 +164,7 @@ export const PriceAlertsTable: React.FC<PriceAlertsTableProps> = ({
               <TableHead>
                 <Button
                   variant="ghost"
-                  onClick={() => handleSort('product_name')}
+                  onClick={() => handleSort("product_name")}
                   className="flex items-center gap-1 p-0 h-auto font-semibold"
                 >
                   Product
@@ -175,7 +175,7 @@ export const PriceAlertsTable: React.FC<PriceAlertsTableProps> = ({
               <TableHead>
                 <Button
                   variant="ghost"
-                  onClick={() => handleSort('target_price')}
+                  onClick={() => handleSort("target_price")}
                   className="flex items-center gap-1 p-0 h-auto font-semibold"
                 >
                   Target Price
@@ -185,7 +185,7 @@ export const PriceAlertsTable: React.FC<PriceAlertsTableProps> = ({
               <TableHead>
                 <Button
                   variant="ghost"
-                  onClick={() => handleSort('current_price')}
+                  onClick={() => handleSort("current_price")}
                   className="flex items-center gap-1 p-0 h-auto font-semibold"
                 >
                   Current Price
@@ -196,7 +196,7 @@ export const PriceAlertsTable: React.FC<PriceAlertsTableProps> = ({
               <TableHead>
                 <Button
                   variant="ghost"
-                  onClick={() => handleSort('travel_date')}
+                  onClick={() => handleSort("travel_date")}
                   className="flex items-center gap-1 p-0 h-auto font-semibold"
                 >
                   Travel Date
@@ -206,7 +206,7 @@ export const PriceAlertsTable: React.FC<PriceAlertsTableProps> = ({
               <TableHead>
                 <Button
                   variant="ghost"
-                  onClick={() => handleSort('created_at')}
+                  onClick={() => handleSort("created_at")}
                   className="flex items-center gap-1 p-0 h-auto font-semibold"
                 >
                   Created
@@ -257,13 +257,13 @@ export const PriceAlertsTable: React.FC<PriceAlertsTableProps> = ({
                   </TableCell>
                   <TableCell>
                     {alert.travel_date ? (
-                      format(new Date(alert.travel_date), 'MMM dd, yyyy')
+                      format(new Date(alert.travel_date), "MMM dd, yyyy")
                     ) : (
                       <span className="text-muted-foreground">-</span>
                     )}
                   </TableCell>
                   <TableCell className="text-sm text-muted-foreground">
-                    {format(new Date(alert.created_at), 'MMM dd, yyyy')}
+                    {format(new Date(alert.created_at), "MMM dd, yyyy")}
                   </TableCell>
                   <TableCell>
                     <DropdownMenu>

@@ -18,7 +18,7 @@ export interface TemplateApplicationResult {
 }
 
 export interface ExportOptions {
-  format: 'PDF' | 'DOCX' | 'HTML' | 'TXT';
+  format: "PDF" | "DOCX" | "HTML" | "TXT";
   filename?: string;
   metadata?: Record<string, any>;
 }
@@ -77,7 +77,7 @@ export class TemplateApplicationService {
     // Apply variable substitution
     let result = templateContent;
     for (const [varName, value] of Object.entries(variables)) {
-      const regex = new RegExp(`\\{\\{${varName}\\}\\}`, 'g');
+      const regex = new RegExp(`\\{\\{${varName}\\}\\}`, "g");
       if (regex.test(result)) {
         result = result.replace(regex, value);
         appliedVariables.push(varName);
@@ -87,8 +87,8 @@ export class TemplateApplicationService {
     // Replace remaining variables with empty string or placeholder
     const remainingVars = this.extractVariables(result);
     for (const varName of remainingVars) {
-      const regex = new RegExp(`\\{\\{${varName}\\}\\}`, 'g');
-      result = result.replace(regex, options?.strictMode ? '' : `[${varName}]`);
+      const regex = new RegExp(`\\{\\{${varName}\\}\\}`, "g");
+      result = result.replace(regex, options?.strictMode ? "" : `[${varName}]`);
     }
 
     return {
@@ -111,17 +111,17 @@ export class TemplateApplicationService {
     const closeBraces = (content.match(/\}\}/g) || []).length;
     
     if (openBraces !== closeBraces) {
-      errors.push('Unbalanced template braces');
+      errors.push("Unbalanced template braces");
     }
 
     // Check for nested variables (not supported)
     if (/\{\{[^}]*\{\{/.test(content)) {
-      errors.push('Nested variables are not supported');
+      errors.push("Nested variables are not supported");
     }
 
     // Check for empty variable names
     if (/\{\{\s*\}\}/.test(content)) {
-      errors.push('Empty variable names are not allowed');
+      errors.push("Empty variable names are not allowed");
     }
 
     return {
@@ -134,7 +134,7 @@ export class TemplateApplicationService {
    * Escape HTML characters to prevent XSS
    */
   static escapeHtml(text: string): string {
-    const div = document.createElement('div');
+    const div = document.createElement("div");
     div.textContent = text;
     return div.innerHTML;
   }
@@ -151,23 +151,23 @@ export class TemplateApplicationService {
       const filename = options.filename || `document.${options.format.toLowerCase()}`;
 
       switch (options.format) {
-        case 'TXT':
-          blob = new Blob([content], { type: 'text/plain' });
-          break;
+      case "TXT":
+        blob = new Blob([content], { type: "text/plain" });
+        break;
 
-        case 'HTML':
-          // Escape content to prevent XSS
-          const escapedLines = content.split('\n').map(line => 
-            `  <p>${this.escapeHtml(line)}</p>`
-          ).join('\n');
+      case "HTML":
+        // Escape content to prevent XSS
+        const escapedLines = content.split("\n").map(line => 
+          `  <p>${this.escapeHtml(line)}</p>`
+        ).join("\n");
           
-          const htmlContent = `
+        const htmlContent = `
 <!DOCTYPE html>
 <html lang="en">
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>${this.escapeHtml(options.metadata?.title || 'Document')}</title>
+  <title>${this.escapeHtml(options.metadata?.title || "Document")}</title>
   <style>
     body {
       font-family: Arial, sans-serif;
@@ -184,30 +184,30 @@ export class TemplateApplicationService {
 ${escapedLines}
 </body>
 </html>`;
-          blob = new Blob([htmlContent], { type: 'text/html' });
-          break;
+        blob = new Blob([htmlContent], { type: "text/html" });
+        break;
 
-        case 'PDF':
-          // For PDF, we'd typically use a library like jsPDF
-          // For now, return HTML that can be printed to PDF
-          return {
-            success: false,
-            error: 'PDF export requires additional library. Use HTML format and print to PDF.',
-          };
+      case "PDF":
+        // For PDF, we'd typically use a library like jsPDF
+        // For now, return HTML that can be printed to PDF
+        return {
+          success: false,
+          error: "PDF export requires additional library. Use HTML format and print to PDF.",
+        };
 
-        case 'DOCX':
-          // For DOCX, we'd typically use a library like docx
-          // For now, return error
-          return {
-            success: false,
-            error: 'DOCX export requires additional library. Use HTML or TXT format.',
-          };
+      case "DOCX":
+        // For DOCX, we'd typically use a library like docx
+        // For now, return error
+        return {
+          success: false,
+          error: "DOCX export requires additional library. Use HTML or TXT format.",
+        };
 
-        default:
-          return {
-            success: false,
-            error: `Unsupported format: ${options.format}`,
-          };
+      default:
+        return {
+          success: false,
+          error: `Unsupported format: ${options.format}`,
+        };
       }
 
       return {
@@ -217,7 +217,7 @@ ${escapedLines}
     } catch (error) {
       return {
         success: false,
-        error: error instanceof Error ? error.message : 'Export failed',
+        error: error instanceof Error ? error.message : "Export failed",
       };
     }
   }
@@ -227,7 +227,7 @@ ${escapedLines}
    */
   static downloadDocument(blob: Blob, filename: string): void {
     const url = URL.createObjectURL(blob);
-    const link = document.createElement('a');
+    const link = document.createElement("a");
     link.href = url;
     link.download = filename;
     document.body.appendChild(link);
@@ -241,33 +241,33 @@ ${escapedLines}
    */
   static readonly COMMON_VARIABLES = {
     // Personal information
-    nome: 'Name',
-    nome_completo: 'Full Name',
-    cargo: 'Position/Role',
-    email: 'Email',
-    telefone: 'Phone',
-    cpf: 'CPF/ID',
+    nome: "Name",
+    nome_completo: "Full Name",
+    cargo: "Position/Role",
+    email: "Email",
+    telefone: "Phone",
+    cpf: "CPF/ID",
     
     // Dates
-    data: 'Date',
-    data_atual: 'Current Date',
-    data_inicio: 'Start Date',
-    data_fim: 'End Date',
+    data: "Date",
+    data_atual: "Current Date",
+    data_inicio: "Start Date",
+    data_fim: "End Date",
     
     // Company information
-    empresa: 'Company',
-    departamento: 'Department',
-    setor: 'Sector',
+    empresa: "Company",
+    departamento: "Department",
+    setor: "Sector",
     
     // Document information
-    numero_documento: 'Document Number',
-    versao: 'Version',
-    autor: 'Author',
+    numero_documento: "Document Number",
+    versao: "Version",
+    autor: "Author",
     
     // Other
-    local: 'Location',
-    valor: 'Value',
-    quantidade: 'Quantity',
+    local: "Location",
+    valor: "Value",
+    quantidade: "Quantity",
   };
 
   /**
@@ -278,8 +278,8 @@ ${escapedLines}
     organization?: { name?: string };
   }): Record<string, string> {
     const suggestions: Record<string, string> = {
-      data_atual: new Date().toLocaleDateString('pt-BR'),
-      data: new Date().toLocaleDateString('pt-BR'),
+      data_atual: new Date().toLocaleDateString("pt-BR"),
+      data: new Date().toLocaleDateString("pt-BR"),
     };
 
     if (context?.user) {

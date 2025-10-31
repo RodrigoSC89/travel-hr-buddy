@@ -82,7 +82,7 @@ export function ApplyTemplateDialog({
       const initialVars: Record<string, string> = {};
       extractedVariables.forEach(varName => {
         // Try to use auto-fill suggestions
-        initialVars[varName] = autoFillSuggestions[varName] || '';
+        initialVars[varName] = autoFillSuggestions[varName] || "";
       });
       setVariables(initialVars);
     }
@@ -106,19 +106,19 @@ export function ApplyTemplateDialog({
     }));
   };
 
-  const handleExport = async (format: ExportOptions['format']) => {
+  const handleExport = async (format: ExportOptions["format"]) => {
     const result = await TemplateApplicationService.exportDocument(
       appliedResult.content,
       {
         format,
-        filename: `${templateName.replace(/\s+/g, '_')}.${format.toLowerCase()}`,
+        filename: `${templateName.replace(/\s+/g, "_")}.${format.toLowerCase()}`,
       }
     );
 
     if (result.success && result.data) {
       TemplateApplicationService.downloadDocument(
         result.data,
-        `${templateName.replace(/\s+/g, '_')}.${format.toLowerCase()}`
+        `${templateName.replace(/\s+/g, "_")}.${format.toLowerCase()}`
       );
       toast({
         title: "Export successful",
@@ -204,7 +204,7 @@ export function ApplyTemplateDialog({
                       </Label>
                       <Input
                         id={varName}
-                        value={variables[varName] || ''}
+                        value={variables[varName] || ""}
                         onChange={(e) => handleVariableChange(varName, e.target.value)}
                         placeholder={`Enter ${getVariableLabel(varName)}`}
                       />
@@ -232,8 +232,8 @@ export function ApplyTemplateDialog({
           <TabsContent value="preview" className="space-y-4">
             <ScrollArea className="h-[400px]">
               <div className="prose prose-sm max-w-none p-4 border rounded-lg bg-muted/30">
-                {appliedResult.content.split('\n').map((line, index) => (
-                  <p key={index} className="my-2">{line || '\u00A0'}</p>
+                {appliedResult.content.split("\n").map((line, index) => (
+                  <p key={index} className="my-2">{line || "\u00A0"}</p>
                 ))}
               </div>
             </ScrollArea>
@@ -243,7 +243,7 @@ export function ApplyTemplateDialog({
               <Button
                 variant="outline"
                 size="sm"
-                onClick={() => handleExport('TXT')}
+                onClick={() => handleExport("TXT")}
                 className="flex items-center gap-2"
               >
                 <Download className="h-4 w-4" />
@@ -252,7 +252,7 @@ export function ApplyTemplateDialog({
               <Button
                 variant="outline"
                 size="sm"
-                onClick={() => handleExport('HTML')}
+                onClick={() => handleExport("HTML")}
                 className="flex items-center gap-2"
               >
                 <Download className="h-4 w-4" />
@@ -280,11 +280,11 @@ type BadgeVariant = "default" | "secondary" | "destructive" | "outline";
 
 function getBadgeVariant(severity: string): BadgeVariant {
   switch (severity) {
-    case "critical":
-      return "destructive";
-    case "high":
-      return "outline";
-    default:
-      return "secondary";
+  case "critical":
+    return "destructive";
+  case "high":
+    return "outline";
+  default:
+    return "secondary";
   }
 }

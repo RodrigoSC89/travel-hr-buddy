@@ -163,7 +163,7 @@ class RoutePlannerService {
   }): Promise<void> {
     try {
       const { error } = await supabase
-        .from('route_ai_suggestions')
+        .from("route_ai_suggestions")
         .insert({
           origin: data.origin,
           destination: data.destination,
@@ -207,21 +207,21 @@ class RoutePlannerService {
           riskLevel: this.determineWaypointRisk(wp, navRoute.weatherAlerts),
         }));
 
-return {
-  id: navRoute.id,
-  name: navRoute.recommended ? "Rota Recomendada" : "Rota Alternativa",
-  description: `Rota ${navRoute.recommended ? "otimizada" : "alternativa"} com análise meteorológica`,
-  origin: navRoute.origin,
-  destination: navRoute.destination,
-  waypoints,
-  distance: navRoute.distance,
-  estimatedDuration: navRoute.estimatedDuration,
-  etaArrival: navRoute.etaWithAI,
-  weatherAlerts: navRoute.weatherAlerts,
-  riskScore: navRoute.riskScore,
-  status: "planned",
-  recommended: navRoute.recommended,
-};
+        return {
+          id: navRoute.id,
+          name: navRoute.recommended ? "Rota Recomendada" : "Rota Alternativa",
+          description: `Rota ${navRoute.recommended ? "otimizada" : "alternativa"} com análise meteorológica`,
+          origin: navRoute.origin,
+          destination: navRoute.destination,
+          waypoints,
+          distance: navRoute.distance,
+          estimatedDuration: navRoute.estimatedDuration,
+          etaArrival: navRoute.etaWithAI,
+          weatherAlerts: navRoute.weatherAlerts,
+          riskScore: navRoute.riskScore,
+          status: "planned",
+          recommended: navRoute.recommended,
+        };
       });
 
       return routes;
@@ -432,18 +432,18 @@ return {
     let factor = 1.0;
     alerts.forEach((alert) => {
       switch (alert.severity) {
-        case "low":
-          factor *= 1.05; // 5% delay
-          break;
-        case "medium":
-          factor *= 1.15; // 15% delay
-          break;
-        case "high":
-          factor *= 1.30; // 30% delay
-          break;
-        case "critical":
-          factor *= 1.50; // 50% delay
-          break;
+      case "low":
+        factor *= 1.05; // 5% delay
+        break;
+      case "medium":
+        factor *= 1.15; // 15% delay
+        break;
+      case "high":
+        factor *= 1.30; // 30% delay
+        break;
+      case "critical":
+        factor *= 1.50; // 50% delay
+        break;
       }
     });
 
@@ -471,14 +471,14 @@ return {
     const maxSeverity = Math.max(
       ...nearbyAlerts.map((a) => {
         switch (a.severity) {
-          case "critical":
-            return 4;
-          case "high":
-            return 3;
-          case "medium":
-            return 2;
-          default:
-            return 1;
+        case "critical":
+          return 4;
+        case "high":
+          return 3;
+        case "medium":
+          return 2;
+        default:
+          return 1;
         }
       })
     );
@@ -494,12 +494,12 @@ return {
    */
   private mapWeatherSeverityToRisk(severity: string): Waypoint["riskLevel"] {
     switch (severity) {
-      case "danger":
-        return "critical";
-      case "caution":
-        return "medium";
-      default:
-        return "low";
+    case "danger":
+      return "critical";
+    case "caution":
+      return "medium";
+    default:
+      return "low";
     }
   }
 

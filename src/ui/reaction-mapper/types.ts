@@ -6,17 +6,17 @@
 /**
  * Reaction layer types
  */
-export type ReactionLayer = 'crew' | 'system' | 'ai';
+export type ReactionLayer = "crew" | "system" | "ai";
 
 /**
  * Decision node status
  */
-export type NodeStatus = 'pending' | 'active' | 'completed' | 'failed' | 'bypassed';
+export type NodeStatus = "pending" | "active" | "completed" | "failed" | "bypassed";
 
 /**
  * Decision path types
  */
-export type PathType = 'sequential' | 'parallel' | 'conditional' | 'fallback';
+export type PathType = "sequential" | "parallel" | "conditional" | "fallback";
 
 /**
  * Decision node in the reaction tree
@@ -24,7 +24,7 @@ export type PathType = 'sequential' | 'parallel' | 'conditional' | 'fallback';
 export interface DecisionNode {
   id: string;
   layer: ReactionLayer;
-  type: 'decision' | 'action' | 'condition' | 'outcome';
+  type: "decision" | "action" | "condition" | "outcome";
   title: string;
   description: string;
   status: NodeStatus;

@@ -27,8 +27,8 @@ import {
 } from "lucide-react";
 import { supabase } from "@/integrations/supabase/client";
 import { useToast } from "@/hooks/use-toast";
-import jsPDF from 'jspdf';
-import 'jspdf-autotable';
+import jsPDF from "jspdf";
+import "jspdf-autotable";
 
 interface WizardStep {
   id: string;
@@ -92,7 +92,7 @@ const WIZARD_STEPS: WizardStep[] = [
 
 interface ValidationResult {
   field: string;
-  status: 'pass' | 'warning' | 'fail';
+  status: "pass" | "warning" | "fail";
   message: string;
 }
 
@@ -100,28 +100,28 @@ export default function PeoDpWizardComplete() {
   const { toast } = useToast();
   const [currentStep, setCurrentStep] = useState(0);
   const [formData, setFormData] = useState<Record<string, any>>({
-    vessel_name: '',
-    vessel_type: '',
-    dp_class: 'DP2',
-    operation_type: '',
-    org_structure: '',
-    dp_master: '',
-    responsibilities: '',
-    required_certs: '',
-    training_plan: '',
-    competency_matrix: '',
-    fmea: '',
-    asog: '',
-    contingency_plan: '',
-    watch_keeping: '',
-    communication: '',
-    protocols: '',
-    preventive: '',
-    predictive: '',
-    corrective: '',
-    dp_trials: '',
-    capability_plots: '',
-    validation: ''
+    vessel_name: "",
+    vessel_type: "",
+    dp_class: "DP2",
+    operation_type: "",
+    org_structure: "",
+    dp_master: "",
+    responsibilities: "",
+    required_certs: "",
+    training_plan: "",
+    competency_matrix: "",
+    fmea: "",
+    asog: "",
+    contingency_plan: "",
+    watch_keeping: "",
+    communication: "",
+    protocols: "",
+    preventive: "",
+    predictive: "",
+    corrective: "",
+    dp_trials: "",
+    capability_plots: "",
+    validation: ""
   });
   const [historicalData, setHistoricalData] = useState<any[]>([]);
   const [validationResults, setValidationResults] = useState<ValidationResult[]>([]);
@@ -136,9 +136,9 @@ export default function PeoDpWizardComplete() {
     try {
       // Load historical DP incidents, training records, and audits for inference
       const [incidentsData, trainingData, auditsData] = await Promise.all([
-        supabase.from('dp_incidents').select('*').order('created_at', { ascending: false }).limit(100),
-        supabase.from('crew_training_records').select('*').order('training_date', { ascending: false }).limit(100),
-        supabase.from('sgso_audits').select('*').order('audit_date', { ascending: false }).limit(50)
+        supabase.from("dp_incidents").select("*").order("created_at", { ascending: false }).limit(100),
+        supabase.from("crew_training_records").select("*").order("training_date", { ascending: false }).limit(100),
+        supabase.from("sgso_audits").select("*").order("audit_date", { ascending: false }).limit(50)
       ]);
 
       setHistoricalData({
@@ -150,7 +150,7 @@ export default function PeoDpWizardComplete() {
       // Run initial inference
       runInference(formData);
     } catch (error) {
-      console.error('Error loading historical data:', error);
+      console.error("Error loading historical data:", error);
     }
   };
 
@@ -167,7 +167,7 @@ export default function PeoDpWizardComplete() {
       setInferenceResults(results);
       performCrossValidation(data, results);
     } catch (error) {
-      console.error('Error running inference:', error);
+      console.error("Error running inference:", error);
     }
   };
 
@@ -175,8 +175,8 @@ export default function PeoDpWizardComplete() {
     let riskScore = 0;
 
     // Check DP class requirements
-    if (data.dp_class === 'DP3') riskScore -= 2;
-    else if (data.dp_class === 'DP2') riskScore += 0;
+    if (data.dp_class === "DP3") riskScore -= 2;
+    else if (data.dp_class === "DP2") riskScore += 0;
     else riskScore += 3;
 
     // Check training completeness
@@ -193,15 +193,15 @@ export default function PeoDpWizardComplete() {
       riskScore += Math.min(historicalData.incidents.length / 10, 5);
     }
 
-    if (riskScore <= 2) return 'LOW';
-    if (riskScore <= 5) return 'MEDIUM';
-    if (riskScore <= 8) return 'HIGH';
-    return 'CRITICAL';
+    if (riskScore <= 2) return "LOW";
+    if (riskScore <= 5) return "MEDIUM";
+    if (riskScore <= 8) return "HIGH";
+    return "CRITICAL";
   };
 
   const calculateComplianceScore = (data: any): number => {
     let score = 100;
-    const requiredFields = ['vessel_name', 'dp_class', 'dp_master', 'fmea', 'asog', 'training_plan'];
+    const requiredFields = ["vessel_name", "dp_class", "dp_master", "fmea", "asog", "training_plan"];
     
     requiredFields.forEach(field => {
       if (!data[field] || data[field].length < 10) {
@@ -232,7 +232,7 @@ export default function PeoDpWizardComplete() {
       recommendations.push("Elaborar plano de contingência para perda de posição");
     }
 
-    if (data.dp_class === 'DP1') {
+    if (data.dp_class === "DP1") {
       recommendations.push("Considerar upgrade para DP2 para maior redundância e segurança");
     }
 
@@ -263,7 +263,7 @@ export default function PeoDpWizardComplete() {
       findings.push("CRÍTICO: ASOG não disponível - requisito obrigatório IMCA M 117");
     }
 
-    if (data.dp_class === 'DP3' && !data.redundancy_analysis) {
+    if (data.dp_class === "DP3" && !data.redundancy_analysis) {
       findings.push("CRÍTICO: Análise de redundância necessária para DP3");
     }
 
@@ -281,14 +281,14 @@ export default function PeoDpWizardComplete() {
       
       if (recentTraining.length < 5) {
         validations.push({
-          field: 'training_plan',
-          status: 'warning',
-          message: 'Histórico de treinamento limitado nos últimos 12 meses'
+          field: "training_plan",
+          status: "warning",
+          message: "Histórico de treinamento limitado nos últimos 12 meses"
         });
       } else {
         validations.push({
-          field: 'training_plan',
-          status: 'pass',
+          field: "training_plan",
+          status: "pass",
           message: `${recentTraining.length} treinamentos registrados nos últimos 12 meses`
         });
       }
@@ -297,19 +297,19 @@ export default function PeoDpWizardComplete() {
     // Validate against incident history
     if (historicalData?.incidents) {
       const criticalIncidents = historicalData.incidents.filter((i: any) => 
-        i.severity === 'critical' || i.severity === 'high'
+        i.severity === "critical" || i.severity === "high"
       );
       
       if (criticalIncidents.length > 3) {
         validations.push({
-          field: 'operation',
-          status: 'fail',
+          field: "operation",
+          status: "fail",
           message: `${criticalIncidents.length} incidentes críticos identificados - revisão operacional necessária`
         });
       } else if (criticalIncidents.length > 0) {
         validations.push({
-          field: 'operation',
-          status: 'warning',
+          field: "operation",
+          status: "warning",
           message: `${criticalIncidents.length} incidentes críticos registrados`
         });
       }
@@ -318,15 +318,15 @@ export default function PeoDpWizardComplete() {
     // Validate FMEA completeness
     if (data.fmea && data.fmea.length > 500) {
       validations.push({
-        field: 'fmea',
-        status: 'pass',
-        message: 'FMEA documentada adequadamente'
+        field: "fmea",
+        status: "pass",
+        message: "FMEA documentada adequadamente"
       });
     } else {
       validations.push({
-        field: 'fmea',
-        status: 'fail',
-        message: 'FMEA insuficiente ou não documentada'
+        field: "fmea",
+        status: "fail",
+        message: "FMEA insuficiente ou não documentada"
       });
     }
 
@@ -339,29 +339,29 @@ export default function PeoDpWizardComplete() {
 
     // Title
     doc.setFontSize(18);
-    doc.text('Relatório de Auditoria PEO-DP', 20, yPos);
+    doc.text("Relatório de Auditoria PEO-DP", 20, yPos);
     yPos += 10;
 
     doc.setFontSize(10);
-    doc.text(`Gerado em: ${new Date().toLocaleString('pt-BR')}`, 20, yPos);
+    doc.text(`Gerado em: ${new Date().toLocaleString("pt-BR")}`, 20, yPos);
     yPos += 15;
 
     // Basic Information
     doc.setFontSize(14);
-    doc.text('1. Informações Básicas', 20, yPos);
+    doc.text("1. Informações Básicas", 20, yPos);
     yPos += 8;
     doc.setFontSize(10);
-    doc.text(`Embarcação: ${formData.vessel_name || 'N/A'}`, 25, yPos);
+    doc.text(`Embarcação: ${formData.vessel_name || "N/A"}`, 25, yPos);
     yPos += 6;
-    doc.text(`Classe DP: ${formData.dp_class || 'N/A'}`, 25, yPos);
+    doc.text(`Classe DP: ${formData.dp_class || "N/A"}`, 25, yPos);
     yPos += 6;
-    doc.text(`Tipo de Operação: ${formData.operation_type || 'N/A'}`, 25, yPos);
+    doc.text(`Tipo de Operação: ${formData.operation_type || "N/A"}`, 25, yPos);
     yPos += 10;
 
     // Inference Results
     if (inferenceResults) {
       doc.setFontSize(14);
-      doc.text('2. Análise de Conformidade', 20, yPos);
+      doc.text("2. Análise de Conformidade", 20, yPos);
       yPos += 8;
       doc.setFontSize(10);
       doc.text(`Nível de Risco: ${inferenceResults.risk_level}`, 25, yPos);
@@ -372,7 +372,7 @@ export default function PeoDpWizardComplete() {
       // Recommendations
       if (inferenceResults.recommendations && inferenceResults.recommendations.length > 0) {
         doc.setFontSize(14);
-        doc.text('3. Recomendações', 20, yPos);
+        doc.text("3. Recomendações", 20, yPos);
         yPos += 8;
         doc.setFontSize(10);
         inferenceResults.recommendations.forEach((rec: string, index: number) => {
@@ -396,7 +396,7 @@ export default function PeoDpWizardComplete() {
           yPos = 20;
         }
         doc.setFontSize(14);
-        doc.text('4. Achados Críticos', 20, yPos);
+        doc.text("4. Achados Críticos", 20, yPos);
         yPos += 8;
         doc.setFontSize(10);
         doc.setTextColor(255, 0, 0);
@@ -422,7 +422,7 @@ export default function PeoDpWizardComplete() {
         yPos = 20;
       }
       doc.setFontSize(14);
-      doc.text('5. Resultados de Validação', 20, yPos);
+      doc.text("5. Resultados de Validação", 20, yPos);
       yPos += 8;
       doc.setFontSize(10);
       validationResults.forEach((result: ValidationResult) => {
@@ -430,7 +430,7 @@ export default function PeoDpWizardComplete() {
           doc.addPage();
           yPos = 20;
         }
-        const statusIcon = result.status === 'pass' ? '✓' : result.status === 'warning' ? '⚠' : '✗';
+        const statusIcon = result.status === "pass" ? "✓" : result.status === "warning" ? "⚠" : "✗";
         doc.text(`${statusIcon} ${result.field}: ${result.message}`, 25, yPos);
         yPos += 6;
       });
@@ -472,7 +472,7 @@ export default function PeoDpWizardComplete() {
       const { data: { user } } = await supabase.auth.getUser();
       
       const { error } = await supabase
-        .from('peodp_audits')
+        .from("peodp_audits")
         .insert({
           ...formData,
           risk_level: inferenceResults?.risk_level,
@@ -494,7 +494,7 @@ export default function PeoDpWizardComplete() {
       // Auto-export PDF
       await exportToPDF();
     } catch (error) {
-      console.error('Error submitting audit:', error);
+      console.error("Error submitting audit:", error);
       toast({
         title: "Erro",
         description: "Falha ao salvar auditoria",
@@ -511,10 +511,10 @@ export default function PeoDpWizardComplete() {
 
   const getStatusIcon = (status: string) => {
     switch (status) {
-      case 'pass': return <CheckCircle className="h-4 w-4 text-green-500" />;
-      case 'warning': return <AlertTriangle className="h-4 w-4 text-yellow-500" />;
-      case 'fail': return <AlertTriangle className="h-4 w-4 text-red-500" />;
-      default: return null;
+    case "pass": return <CheckCircle className="h-4 w-4 text-green-500" />;
+    case "warning": return <AlertTriangle className="h-4 w-4 text-yellow-500" />;
+    case "fail": return <AlertTriangle className="h-4 w-4 text-red-500" />;
+    default: return null;
     }
   };
 
@@ -527,10 +527,10 @@ export default function PeoDpWizardComplete() {
             Sistema integrado de auditoria com inferência e validação
           </p>
         </div>
-        <Badge variant={inferenceResults?.risk_level === 'LOW' ? 'default' : 
-                        inferenceResults?.risk_level === 'MEDIUM' ? 'secondary' :
-                        inferenceResults?.risk_level === 'HIGH' ? 'destructive' : 'destructive'}>
-          {inferenceResults?.risk_level || 'CALCULANDO...'}
+        <Badge variant={inferenceResults?.risk_level === "LOW" ? "default" : 
+          inferenceResults?.risk_level === "MEDIUM" ? "secondary" :
+            inferenceResults?.risk_level === "HIGH" ? "destructive" : "destructive"}>
+          {inferenceResults?.risk_level || "CALCULANDO..."}
         </Badge>
       </div>
 
@@ -602,45 +602,45 @@ export default function PeoDpWizardComplete() {
               {currentWizardStep.fields.map((field) => (
                 <div key={field} className="space-y-2">
                   <Label htmlFor={field}>
-                    {field.replace(/_/g, ' ').replace(/\b\w/g, l => l.toUpperCase())}
+                    {field.replace(/_/g, " ").replace(/\b\w/g, l => l.toUpperCase())}
                   </Label>
-                  {field.includes('description') || field.includes('plan') || field.includes('structure') || 
-                   field.includes('matrix') || field.includes('fmea') || field.includes('asog') ? (
-                    <Textarea
-                      id={field}
-                      value={formData[field] || ''}
-                      onChange={(e) => handleFieldChange(field, e.target.value)}
-                      placeholder={`Digite ${field.replace(/_/g, ' ')}`}
-                      rows={4}
-                    />
-                  ) : field.includes('dp_class') ? (
-                    <Select value={formData[field] || ''} onValueChange={(value) => handleFieldChange(field, value)}>
-                      <SelectTrigger>
-                        <SelectValue />
-                      </SelectTrigger>
-                      <SelectContent>
-                        <SelectItem value="DP1">DP1</SelectItem>
-                        <SelectItem value="DP2">DP2</SelectItem>
-                        <SelectItem value="DP3">DP3</SelectItem>
-                      </SelectContent>
-                    </Select>
-                  ) : (
-                    <Input
-                      id={field}
-                      value={formData[field] || ''}
-                      onChange={(e) => handleFieldChange(field, e.target.value)}
-                      placeholder={`Digite ${field.replace(/_/g, ' ')}`}
-                    />
-                  )}
+                  {field.includes("description") || field.includes("plan") || field.includes("structure") || 
+                   field.includes("matrix") || field.includes("fmea") || field.includes("asog") ? (
+                      <Textarea
+                        id={field}
+                        value={formData[field] || ""}
+                        onChange={(e) => handleFieldChange(field, e.target.value)}
+                        placeholder={`Digite ${field.replace(/_/g, " ")}`}
+                        rows={4}
+                      />
+                    ) : field.includes("dp_class") ? (
+                      <Select value={formData[field] || ""} onValueChange={(value) => handleFieldChange(field, value)}>
+                        <SelectTrigger>
+                          <SelectValue />
+                        </SelectTrigger>
+                        <SelectContent>
+                          <SelectItem value="DP1">DP1</SelectItem>
+                          <SelectItem value="DP2">DP2</SelectItem>
+                          <SelectItem value="DP3">DP3</SelectItem>
+                        </SelectContent>
+                      </Select>
+                    ) : (
+                      <Input
+                        id={field}
+                        value={formData[field] || ""}
+                        onChange={(e) => handleFieldChange(field, e.target.value)}
+                        placeholder={`Digite ${field.replace(/_/g, " ")}`}
+                      />
+                    )}
                   
                   {/* Show validation for current field */}
                   {validationResults.find(v => v.field === field) && (
                     <div className="flex items-center gap-2 text-sm">
                       {getStatusIcon(validationResults.find(v => v.field === field)!.status)}
                       <span className={
-                        validationResults.find(v => v.field === field)!.status === 'pass' ? 'text-green-600' :
-                        validationResults.find(v => v.field === field)!.status === 'warning' ? 'text-yellow-600' :
-                        'text-red-600'
+                        validationResults.find(v => v.field === field)!.status === "pass" ? "text-green-600" :
+                        validationResults.find(v => v.field === field)!.status === "warning" ? "text-yellow-600" :
+                          "text-red-600"
                       }>
                         {validationResults.find(v => v.field === field)!.message}
                       </span>
@@ -673,7 +673,7 @@ export default function PeoDpWizardComplete() {
           {currentStep === WIZARD_STEPS.length - 1 ? (
             <Button onClick={handleSubmit} disabled={isSubmitting}>
               <Save className="h-4 w-4 mr-2" />
-              {isSubmitting ? 'Salvando...' : 'Finalizar Auditoria'}
+              {isSubmitting ? "Salvando..." : "Finalizar Auditoria"}
             </Button>
           ) : (
             <Button onClick={handleNext}>

@@ -1,3 +1,4 @@
+/* eslint-env serviceworker */
 /**
  * PATCH 138.0 - Firebase Cloud Messaging Service Worker
  * Handles background push notifications

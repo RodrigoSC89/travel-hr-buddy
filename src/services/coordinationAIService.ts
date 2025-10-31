@@ -18,14 +18,14 @@ class CoordinationAIService {
   /**
    * Register a new agent in the coordination system
    */
-  async registerAgent(agent: Omit<CoordinationAgent, 'id' | 'created_at' | 'updated_at' | 'last_heartbeat' | 'current_task_count'>): Promise<CoordinationAgent | null> {
+  async registerAgent(agent: Omit<CoordinationAgent, "id" | "created_at" | "updated_at" | "last_heartbeat" | "current_task_count">): Promise<CoordinationAgent | null> {
     const { data, error } = await supabase
-      .from('coordination_agents')
+      .from("coordination_agents")
       .insert([{
         agent_name: agent.agent_name,
         agent_type: agent.agent_type,
         capabilities: agent.capabilities,
-        status: agent.status || 'idle',
+        status: agent.status || "idle",
         priority_level: agent.priority_level || 5,
         max_concurrent_tasks: agent.max_concurrent_tasks || 3,
         metadata: agent.metadata || {},
@@ -34,7 +34,7 @@ class CoordinationAIService {
       .single();
 
     if (error) {
-      console.error('Error registering agent:', error);
+      console.error("Error registering agent:", error);
       return null;
     }
 
@@ -45,20 +45,20 @@ class CoordinationAIService {
    * Get all agents with optional filtering
    */
   async getAgents(filters?: { status?: AgentStatus; type?: AgentType }): Promise<CoordinationAgent[]> {
-    let query = supabase.from('coordination_agents').select('*');
+    let query = supabase.from("coordination_agents").select("*");
 
     if (filters?.status) {
-      query = query.eq('status', filters.status);
+      query = query.eq("status", filters.status);
     }
 
     if (filters?.type) {
-      query = query.eq('agent_type', filters.type);
+      query = query.eq("agent_type", filters.type);
     }
 
-    const { data, error } = await query.order('priority_level', { ascending: false });
+    const { data, error } = await query.order("priority_level", { ascending: false });
 
     if (error) {
-      console.error('Error fetching agents:', error);
+      console.error("Error fetching agents:", error);
       return [];
     }
 
@@ -70,16 +70,16 @@ class CoordinationAIService {
    */
   async updateAgentStatus(agentId: string, status: AgentStatus): Promise<boolean> {
     const { error } = await supabase
-      .from('coordination_agents')
+      .from("coordination_agents")
       .update({ 
         status, 
         last_heartbeat: new Date().toISOString(),
         updated_at: new Date().toISOString(),
       })
-      .eq('id', agentId);
+      .eq("id", agentId);
 
     if (error) {
-      console.error('Error updating agent status:', error);
+      console.error("Error updating agent status:", error);
       return false;
     }
 
@@ -89,11 +89,11 @@ class CoordinationAIService {
   /**
    * Create a new coordination task
    */
-  async createTask(task: Omit<CoordinationTask, 'id' | 'created_at' | 'updated_at' | 'status'>): Promise<CoordinationTask | null> {
+  async createTask(task: Omit<CoordinationTask, "id" | "created_at" | "updated_at" | "status">): Promise<CoordinationTask | null> {
     const { data: userData } = await supabase.auth.getUser();
 
     const { data, error } = await supabase
-      .from('coordination_tasks')
+      .from("coordination_tasks")
       .insert([{
         task_name: task.task_name,
         task_type: task.task_type,
@@ -107,7 +107,7 @@ class CoordinationAIService {
       .single();
 
     if (error) {
-      console.error('Error creating task:', error);
+      console.error("Error creating task:", error);
       return null;
     }
 
@@ -121,20 +121,20 @@ class CoordinationAIService {
    * Get tasks with optional filtering
    */
   async getTasks(filters?: { status?: TaskStatus; priority?: number }): Promise<CoordinationTask[]> {
-    let query = supabase.from('coordination_tasks').select('*');
+    let query = supabase.from("coordination_tasks").select("*");
 
     if (filters?.status) {
-      query = query.eq('status', filters.status);
+      query = query.eq("status", filters.status);
     }
 
     if (filters?.priority) {
-      query = query.gte('priority', filters.priority);
+      query = query.gte("priority", filters.priority);
     }
 
-    const { data, error } = await query.order('priority', { ascending: false }).order('created_at', { ascending: true });
+    const { data, error } = await query.order("priority", { ascending: false }).order("created_at", { ascending: true });
 
     if (error) {
-      console.error('Error fetching tasks:', error);
+      console.error("Error fetching tasks:", error);
       return [];
     }
 
@@ -147,25 +147,25 @@ class CoordinationAIService {
   async assignTask(taskId: string): Promise<boolean> {
     // Get task details
     const { data: task, error: taskError } = await supabase
-      .from('coordination_tasks')
-      .select('*')
-      .eq('id', taskId)
+      .from("coordination_tasks")
+      .select("*")
+      .eq("id", taskId)
       .single();
 
     if (taskError || !task) {
-      console.error('Error fetching task:', taskError);
+      console.error("Error fetching task:", taskError);
       return false;
     }
 
     // Find best agent
     const { data: agents } = await supabase
-      .from('coordination_agents')
-      .select('*')
-      .in('status', ['idle', 'active'])
-      .order('priority_level', { ascending: false });
+      .from("coordination_agents")
+      .select("*")
+      .in("status", ["idle", "active"])
+      .order("priority_level", { ascending: false });
 
     if (!agents || agents.length === 0) {
-      console.log('No available agents');
+      console.log("No available agents");
       return false;
     }
 
@@ -177,7 +177,7 @@ class CoordinationAIService {
     });
 
     if (capableAgents.length === 0) {
-      console.log('No agents with required capabilities');
+      console.log("No agents with required capabilities");
       return false;
     }
 
@@ -191,35 +191,35 @@ class CoordinationAIService {
 
     // Assign task
     const { error: assignError } = await supabase
-      .from('coordination_tasks')
+      .from("coordination_tasks")
       .update({
         assigned_agent_id: bestAgent.id,
-        status: 'assigned',
+        status: "assigned",
         started_at: new Date().toISOString(),
         updated_at: new Date().toISOString(),
       })
-      .eq('id', taskId);
+      .eq("id", taskId);
 
     if (assignError) {
-      console.error('Error assigning task:', assignError);
+      console.error("Error assigning task:", assignError);
       return false;
     }
 
     // Update agent task count
     await supabase
-      .from('coordination_agents')
+      .from("coordination_agents")
       .update({
         current_task_count: bestAgent.current_task_count + 1,
-        status: 'busy',
+        status: "busy",
         updated_at: new Date().toISOString(),
       })
-      .eq('id', bestAgent.id);
+      .eq("id", bestAgent.id);
 
     // Log decision
     await this.logDecision({
       task_id: taskId,
       agent_id: bestAgent.id,
-      decision_type: 'task_assignment',
+      decision_type: "task_assignment",
       decision_data: {
         agent_name: bestAgent.agent_name,
         agent_type: bestAgent.agent_type,
@@ -246,7 +246,7 @@ class CoordinationAIService {
       updated_at: new Date().toISOString(),
     };
 
-    if (status === 'completed' || status === 'failed') {
+    if (status === "completed" || status === "failed") {
       updateData.completed_at = new Date().toISOString();
     }
 
@@ -259,35 +259,35 @@ class CoordinationAIService {
     }
 
     const { data: task, error: updateError } = await supabase
-      .from('coordination_tasks')
+      .from("coordination_tasks")
       .update(updateData)
-      .eq('id', taskId)
+      .eq("id", taskId)
       .select()
       .single();
 
     if (updateError) {
-      console.error('Error updating task:', updateError);
+      console.error("Error updating task:", updateError);
       return false;
     }
 
     // If task is completed or failed, update agent task count
-    if ((status === 'completed' || status === 'failed') && task.assigned_agent_id) {
+    if ((status === "completed" || status === "failed") && task.assigned_agent_id) {
       const { data: agent } = await supabase
-        .from('coordination_agents')
-        .select('*')
-        .eq('id', task.assigned_agent_id)
+        .from("coordination_agents")
+        .select("*")
+        .eq("id", task.assigned_agent_id)
         .single();
 
       if (agent) {
         const newCount = Math.max(0, agent.current_task_count - 1);
         await supabase
-          .from('coordination_agents')
+          .from("coordination_agents")
           .update({
             current_task_count: newCount,
-            status: newCount === 0 ? 'idle' : 'active',
+            status: newCount === 0 ? "idle" : "active",
             updated_at: new Date().toISOString(),
           })
-          .eq('id', agent.id);
+          .eq("id", agent.id);
       }
     }
 
@@ -297,9 +297,9 @@ class CoordinationAIService {
   /**
    * Log a coordination decision
    */
-  async logDecision(decision: Omit<CoordinationDecision, 'id' | 'timestamp'>): Promise<boolean> {
+  async logDecision(decision: Omit<CoordinationDecision, "id" | "timestamp">): Promise<boolean> {
     const { error } = await supabase
-      .from('coordination_decisions')
+      .from("coordination_decisions")
       .insert([{
         task_id: decision.task_id,
         agent_id: decision.agent_id,
@@ -310,7 +310,7 @@ class CoordinationAIService {
       }]);
 
     if (error) {
-      console.error('Error logging decision:', error);
+      console.error("Error logging decision:", error);
       return false;
     }
 
@@ -322,13 +322,13 @@ class CoordinationAIService {
    */
   async getTaskDecisions(taskId: string): Promise<CoordinationDecision[]> {
     const { data, error } = await supabase
-      .from('coordination_decisions')
-      .select('*')
-      .eq('task_id', taskId)
-      .order('timestamp', { ascending: false });
+      .from("coordination_decisions")
+      .select("*")
+      .eq("task_id", taskId)
+      .order("timestamp", { ascending: false });
 
     if (error) {
-      console.error('Error fetching decisions:', error);
+      console.error("Error fetching decisions:", error);
       return [];
     }
 
@@ -340,13 +340,13 @@ class CoordinationAIService {
    */
   async getAllDecisions(limit = 50, offset = 0): Promise<CoordinationDecision[]> {
     const { data, error } = await supabase
-      .from('coordination_decisions')
-      .select('*')
-      .order('timestamp', { ascending: false })
+      .from("coordination_decisions")
+      .select("*")
+      .order("timestamp", { ascending: false })
       .range(offset, offset + limit - 1);
 
     if (error) {
-      console.error('Error fetching all decisions:', error);
+      console.error("Error fetching all decisions:", error);
       return [];
     }
 
@@ -371,11 +371,11 @@ class CoordinationAIService {
 
     return {
       totalAgents: agents.length,
-      activeAgents: agents.filter((a) => a.status === 'active' || a.status === 'busy').length,
+      activeAgents: agents.filter((a) => a.status === "active" || a.status === "busy").length,
       totalTasks: tasks.length,
-      pendingTasks: tasks.filter((t) => t.status === 'pending').length,
-      completedTasks: tasks.filter((t) => t.status === 'completed').length,
-      failedTasks: tasks.filter((t) => t.status === 'failed').length,
+      pendingTasks: tasks.filter((t) => t.status === "pending").length,
+      completedTasks: tasks.filter((t) => t.status === "completed").length,
+      failedTasks: tasks.filter((t) => t.status === "failed").length,
     };
   }
 
@@ -384,15 +384,15 @@ class CoordinationAIService {
    */
   async linkToMission(taskId: string, missionId: string): Promise<boolean> {
     const { error } = await supabase
-      .from('coordination_mission_links')
+      .from("coordination_mission_links")
       .insert([{
         mission_id: missionId,
         coordination_task_id: taskId,
-        integration_status: 'linked',
+        integration_status: "linked",
       }]);
 
     if (error) {
-      console.error('Error linking to mission:', error);
+      console.error("Error linking to mission:", error);
       return false;
     }
 

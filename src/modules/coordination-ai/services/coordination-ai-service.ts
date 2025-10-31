@@ -7,9 +7,9 @@
 import { supabase } from "@/integrations/supabase/client";
 
 export interface CoordinationEvent {
-  eventType: 'critical_incident' | 'satellite_alert' | 'price_alert' | 'system_health' | 'custom';
+  eventType: "critical_incident" | "satellite_alert" | "price_alert" | "system_health" | "custom";
   sourceModule: string;
-  priority: 'low' | 'medium' | 'high' | 'critical';
+  priority: "low" | "medium" | "high" | "critical";
   eventData: Record<string, any>;
   targetModules?: string[];
 }
@@ -31,12 +31,12 @@ export interface CoordinationDecision {
 
 export class CoordinationAIService {
   private readonly MODULES = [
-    'incident-reports',
-    'document-templates',
-    'satellite-tracker',
-    'price-alerts',
-    'bridgelink',
-    'watchdog'
+    "incident-reports",
+    "document-templates",
+    "satellite-tracker",
+    "price-alerts",
+    "bridgelink",
+    "watchdog"
   ];
 
   /**
@@ -64,7 +64,7 @@ export class CoordinationAIService {
 
       return decision;
     } catch (error) {
-      console.error('Error coordinating event:', error);
+      console.error("Error coordinating event:", error);
       throw error;
     }
   }
@@ -106,11 +106,11 @@ export class CoordinationAIService {
   private async getApplicableRules(event: CoordinationEvent) {
     try {
       const { data, error } = await supabase
-        .from('coordination_rules')
-        .select('*')
-        .eq('is_active', true)
-        .contains('source_modules', [event.sourceModule])
-        .order('priority', { ascending: false });
+        .from("coordination_rules")
+        .select("*")
+        .eq("is_active", true)
+        .contains("source_modules", [event.sourceModule])
+        .order("priority", { ascending: false });
 
       if (error) throw error;
 
@@ -119,7 +119,7 @@ export class CoordinationAIService {
         this.ruleConditionsMatch(rule.conditions, event)
       );
     } catch (error) {
-      console.error('Error fetching coordination rules:', error);
+      console.error("Error fetching coordination rules:", error);
       return [];
     }
   }
@@ -129,7 +129,7 @@ export class CoordinationAIService {
    */
   private ruleConditionsMatch(conditions: any, event: CoordinationEvent): boolean {
     // Simple condition matching - in production, use more sophisticated logic
-    if (!conditions || typeof conditions !== 'object') return true;
+    if (!conditions || typeof conditions !== "object") return true;
 
     for (const [key, value] of Object.entries(conditions)) {
       if (event.eventData[key] !== value && event[key as keyof CoordinationEvent] !== value) {
@@ -154,13 +154,13 @@ export class CoordinationAIService {
     });
 
     // Always include watchdog for critical events
-    if (event.priority === 'critical') {
-      targets.add('watchdog');
+    if (event.priority === "critical") {
+      targets.add("watchdog");
     }
 
     // Always include bridgelink for notifications
-    if (['critical', 'high'].includes(event.priority)) {
-      targets.add('bridgelink');
+    if (["critical", "high"].includes(event.priority)) {
+      targets.add("bridgelink");
     }
 
     return Array.from(targets);
@@ -177,12 +177,12 @@ export class CoordinationAIService {
     const actions: Array<{ module: string; action: string; parameters: Record<string, any> }> = [];
 
     // Generate actions based on event type and priority
-    if (event.eventType === 'critical_incident') {
+    if (event.eventType === "critical_incident") {
       // Create incident report if not from incident-reports
-      if (event.sourceModule !== 'incident-reports') {
+      if (event.sourceModule !== "incident-reports") {
         actions.push({
-          module: 'incident-reports',
-          action: 'create_incident',
+          module: "incident-reports",
+          action: "create_incident",
           parameters: {
             severity: event.priority,
             ...event.eventData
@@ -195,7 +195,7 @@ export class CoordinationAIService {
         if (module !== event.sourceModule) {
           actions.push({
             module,
-            action: 'notify',
+            action: "notify",
             parameters: {
               event: event.eventType,
               priority: event.priority,
@@ -205,27 +205,27 @@ export class CoordinationAIService {
           });
         }
       });
-    } else if (event.eventType === 'satellite_alert') {
+    } else if (event.eventType === "satellite_alert") {
       // Specific satellite alert handling
-      if (event.eventData.alert_type === 'collision_risk') {
+      if (event.eventData.alert_type === "collision_risk") {
         actions.push({
-          module: 'incident-reports',
-          action: 'create_incident',
+          module: "incident-reports",
+          action: "create_incident",
           parameters: {
-            title: 'Satellite Collision Risk Detected',
-            severity: 'critical',
-            type: 'satellite_alert',
+            title: "Satellite Collision Risk Detected",
+            severity: "critical",
+            type: "satellite_alert",
             ...event.eventData
           }
         });
       }
-    } else if (event.eventType === 'price_alert') {
+    } else if (event.eventType === "price_alert") {
       // Price alert notifications
       actions.push({
-        module: 'bridgelink',
-        action: 'send_notification',
+        module: "bridgelink",
+        action: "send_notification",
         parameters: {
-          channels: ['in_app', 'email'],
+          channels: ["in_app", "email"],
           ...event.eventData
         }
       });
@@ -233,20 +233,20 @@ export class CoordinationAIService {
 
     // Apply rule actions
     rules.forEach(rule => {
-      if (rule.actions && typeof rule.actions === 'object') {
+      if (rule.actions && typeof rule.actions === "object") {
         Object.entries(rule.actions).forEach(([actionKey, actionValue]) => {
-          if (actionKey === 'notify' && Array.isArray(actionValue)) {
+          if (actionKey === "notify" && Array.isArray(actionValue)) {
             actionValue.forEach((module: string) => {
               actions.push({
                 module,
-                action: 'notify',
+                action: "notify",
                 parameters: { ...event.eventData }
               });
             });
-          } else if (actionKey === 'create_incident' && actionValue === true) {
+          } else if (actionKey === "create_incident" && actionValue === true) {
             actions.push({
-              module: 'incident-reports',
-              action: 'create_incident',
+              module: "incident-reports",
+              action: "create_incident",
               parameters: { ...event.eventData }
             });
           }
@@ -292,14 +292,14 @@ export class CoordinationAIService {
       const startTime = Date.now();
 
       await supabase
-        .from('ai_coordination_decisions')
+        .from("ai_coordination_decisions")
         .insert({
           decision_id: decision.decisionId,
           event_type: decision.eventType,
           source_module: decision.sourceModule,
           target_modules: decision.targetModules,
           priority: decision.priority,
-          decision_type: 'coordinate',
+          decision_type: "coordinate",
           decision_data: {
             actions: decision.actions,
             evaluation_score: decision.evaluationScore,
@@ -308,11 +308,11 @@ export class CoordinationAIService {
           evaluation_score: decision.evaluationScore,
           rules_applied: decision.rulesApplied,
           actions_taken: decision.actions,
-          status: 'pending',
+          status: "pending",
           execution_time_ms: Date.now() - startTime
         });
     } catch (error) {
-      console.error('Error storing coordination decision:', error);
+      console.error("Error storing coordination decision:", error);
       throw error;
     }
   }
@@ -338,20 +338,20 @@ export class CoordinationAIService {
           module: action.module,
           action: action.action,
           success: false,
-          error: error instanceof Error ? error.message : 'Unknown error'
+          error: error instanceof Error ? error.message : "Unknown error"
         });
       }
     }
 
     // Update decision status
     await supabase
-      .from('ai_coordination_decisions')
+      .from("ai_coordination_decisions")
       .update({
-        status: results.every(r => r.success) ? 'completed' : 'failed',
+        status: results.every(r => r.success) ? "completed" : "failed",
         result: { actions: results },
         completed_at: new Date().toISOString()
       })
-      .eq('decision_id', decision.decisionId);
+      .eq("decision_id", decision.decisionId);
   }
 
   /**
@@ -362,22 +362,22 @@ export class CoordinationAIService {
       const { data: { user } } = await supabase.auth.getUser();
 
       await supabase
-        .from('ai_coordination_logs')
+        .from("ai_coordination_logs")
         .insert({
           user_id: user?.id,
           source_module: event.sourceModule,
           target_module: decision.targetModules[0],
-          event_type: 'coordination',
+          event_type: "coordination",
           decision_id: decision.decisionId,
           decision_type: event.eventType,
           decision_data: decision,
           confidence_score: decision.evaluationScore,
           success: true,
           context: event.eventData,
-          triggered_by: 'coordination_ai'
+          triggered_by: "coordination_ai"
         });
     } catch (error) {
-      console.error('Error logging coordination event:', error);
+      console.error("Error logging coordination event:", error);
     }
   }
 
@@ -387,13 +387,13 @@ export class CoordinationAIService {
   private async updateModuleHeartbeats(modules: string[]) {
     try {
       for (const module of modules) {
-        await supabase.rpc('update_module_heartbeat', {
+        await supabase.rpc("update_module_heartbeat", {
           p_module_name: module,
           p_health_score: 100
         });
       }
     } catch (error) {
-      console.error('Error updating module heartbeats:', error);
+      console.error("Error updating module heartbeats:", error);
     }
   }
 
@@ -408,20 +408,20 @@ export class CoordinationAIService {
   }) {
     try {
       let query = supabase
-        .from('ai_coordination_decisions')
-        .select('*')
-        .order('created_at', { ascending: false });
+        .from("ai_coordination_decisions")
+        .select("*")
+        .order("created_at", { ascending: false });
 
       if (filters?.sourceModule) {
-        query = query.eq('source_module', filters.sourceModule);
+        query = query.eq("source_module", filters.sourceModule);
       }
 
       if (filters?.priority) {
-        query = query.eq('priority', filters.priority);
+        query = query.eq("priority", filters.priority);
       }
 
       if (filters?.status) {
-        query = query.eq('status', filters.status);
+        query = query.eq("status", filters.status);
       }
 
       if (filters?.limit) {
@@ -433,7 +433,7 @@ export class CoordinationAIService {
       if (error) throw error;
       return data || [];
     } catch (error) {
-      console.error('Error fetching coordination decisions:', error);
+      console.error("Error fetching coordination decisions:", error);
       throw error;
     }
   }
@@ -444,14 +444,14 @@ export class CoordinationAIService {
   async getModuleStatuses() {
     try {
       const { data, error } = await supabase
-        .from('module_status')
-        .select('*')
-        .order('module_name');
+        .from("module_status")
+        .select("*")
+        .order("module_name");
 
       if (error) throw error;
       return data || [];
     } catch (error) {
-      console.error('Error fetching module statuses:', error);
+      console.error("Error fetching module statuses:", error);
       throw error;
     }
   }

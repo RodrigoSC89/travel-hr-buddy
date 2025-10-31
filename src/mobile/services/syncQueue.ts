@@ -122,14 +122,15 @@ class SyncQueue {
     const supabaseAny = supabase as any;
 
     switch (action) {
-    case "create":
+    case "create": {
       const { error: createError } = await supabaseAny
         .from(table)
         .insert(data);
       if (createError) throw createError;
       break;
+    }
 
-    case "update":
+    case "update": {
       const { id, ...updateData } = data;
       if (!id) throw new Error("Update requires an ID");
         
@@ -139,8 +140,9 @@ class SyncQueue {
         .eq("id", id);
       if (updateError) throw updateError;
       break;
+    }
 
-    case "delete":
+    case "delete": {
       if (!data.id) throw new Error("Delete requires an ID");
         
       const { error: deleteError } = await supabaseAny
@@ -149,6 +151,7 @@ class SyncQueue {
         .eq("id", data.id);
       if (deleteError) throw deleteError;
       break;
+    }
 
     default:
       throw new Error(`Unknown action: ${action}`);

@@ -1,4 +1,4 @@
-import { test, expect } from '@playwright/test';
+import { test, expect } from "@playwright/test";
 
 /**
  * Visual Regression Tests - Mobile/Desktop UI Validation
@@ -6,26 +6,26 @@ import { test, expect } from '@playwright/test';
  */
 
 const viewports = [
-  { name: 'mobile-small', width: 320, height: 568 },
-  { name: 'mobile-medium', width: 375, height: 667 },
-  { name: 'mobile-large', width: 414, height: 896 },
-  { name: 'tablet', width: 768, height: 1024 },
-  { name: 'desktop-small', width: 1024, height: 768 },
-  { name: 'desktop-medium', width: 1366, height: 768 },
-  { name: 'desktop-large', width: 1440, height: 900 },
-  { name: 'desktop-xl', width: 1920, height: 1080 },
+  { name: "mobile-small", width: 320, height: 568 },
+  { name: "mobile-medium", width: 375, height: 667 },
+  { name: "mobile-large", width: 414, height: 896 },
+  { name: "tablet", width: 768, height: 1024 },
+  { name: "desktop-small", width: 1024, height: 768 },
+  { name: "desktop-medium", width: 1366, height: 768 },
+  { name: "desktop-large", width: 1440, height: 900 },
+  { name: "desktop-xl", width: 1920, height: 1080 },
 ];
 
-test.describe('UI Visual Validation', () => {
+test.describe("UI Visual Validation", () => {
   for (const viewport of viewports) {
     test.describe(`${viewport.name} (${viewport.width}x${viewport.height})`, () => {
       test.beforeEach(async ({ page }) => {
         await page.setViewportSize(viewport);
       });
 
-      test('should render homepage without layout issues', async ({ page }) => {
-        await page.goto('/');
-        await page.waitForLoadState('networkidle');
+      test("should render homepage without layout issues", async ({ page }) => {
+        await page.goto("/");
+        await page.waitForLoadState("networkidle");
         
         // Check for horizontal scroll (shouldn't exist)
         const hasHorizontalScroll = await page.evaluate(() => {
@@ -41,18 +41,18 @@ test.describe('UI Visual Validation', () => {
         });
       });
 
-      test('should render dashboard without overlap', async ({ page }) => {
-        await page.goto('/');
+      test("should render dashboard without overlap", async ({ page }) => {
+        await page.goto("/");
         
         // Try to navigate to dashboard
-        const dashboardLink = page.getByRole('link', { name: /dashboard/i }).first();
+        const dashboardLink = page.getByRole("link", { name: /dashboard/i }).first();
         if (await dashboardLink.count() > 0) {
           await dashboardLink.click();
-          await page.waitForLoadState('networkidle');
+          await page.waitForLoadState("networkidle");
           
           // Check for element overlaps
           const hasOverlap = await page.evaluate(() => {
-            const elements = Array.from(document.querySelectorAll('[data-testid], [class*="card"]'));
+            const elements = Array.from(document.querySelectorAll("[data-testid], [class*=\"card\"]"));
             const rects = elements.map(el => el.getBoundingClientRect());
             
             // Check if any elements overlap significantly
@@ -87,13 +87,13 @@ test.describe('UI Visual Validation', () => {
         }
       });
 
-      test('should render DP Intelligence without breaking', async ({ page }) => {
-        await page.goto('/');
+      test("should render DP Intelligence without breaking", async ({ page }) => {
+        await page.goto("/");
         
-        const dpLink = page.getByRole('link', { name: /intelligence|dp/i }).first();
+        const dpLink = page.getByRole("link", { name: /intelligence|dp/i }).first();
         if (await dpLink.count() > 0) {
           await dpLink.click();
-          await page.waitForLoadState('networkidle');
+          await page.waitForLoadState("networkidle");
           
           // Check for broken layout
           const isBroken = await page.evaluate(() => {
@@ -109,17 +109,17 @@ test.describe('UI Visual Validation', () => {
         }
       });
 
-      test('should render Forecast page responsively', async ({ page }) => {
-        await page.goto('/');
+      test("should render Forecast page responsively", async ({ page }) => {
+        await page.goto("/");
         
-        const forecastLink = page.getByRole('link', { name: /forecast/i }).first();
+        const forecastLink = page.getByRole("link", { name: /forecast/i }).first();
         if (await forecastLink.count() > 0) {
           await forecastLink.click();
-          await page.waitForLoadState('networkidle');
+          await page.waitForLoadState("networkidle");
           
           // Check responsive elements
           const hasResponsiveClasses = await page.evaluate(() => {
-            const elements = Array.from(document.querySelectorAll('[class*="responsive"], [class*="grid"], [class*="flex"]'));
+            const elements = Array.from(document.querySelectorAll("[class*=\"responsive\"], [class*=\"grid\"], [class*=\"flex\"]"));
             return elements.length > 0;
           });
           
@@ -131,13 +131,13 @@ test.describe('UI Visual Validation', () => {
         }
       });
 
-      test('should render Document Hub without scroll issues', async ({ page }) => {
-        await page.goto('/');
+      test("should render Document Hub without scroll issues", async ({ page }) => {
+        await page.goto("/");
         
-        const docLink = page.getByRole('link', { name: /document/i }).first();
+        const docLink = page.getByRole("link", { name: /document/i }).first();
         if (await docLink.count() > 0) {
           await docLink.click();
-          await page.waitForLoadState('networkidle');
+          await page.waitForLoadState("networkidle");
           
           // Check for unintended scroll
           const scrollInfo = await page.evaluate(() => {
@@ -158,19 +158,19 @@ test.describe('UI Visual Validation', () => {
         }
       });
 
-      test('should render navigation menu properly', async ({ page }) => {
-        await page.goto('/');
-        await page.waitForLoadState('networkidle');
+      test("should render navigation menu properly", async ({ page }) => {
+        await page.goto("/");
+        await page.waitForLoadState("networkidle");
         
         // Check navigation
-        const nav = page.locator('nav').first();
+        const nav = page.locator("nav").first();
         if (await nav.count() > 0) {
           const isVisible = await nav.isVisible();
           expect(isVisible).toBe(true);
           
           // On mobile, check for hamburger menu
           if (viewport.width < 768) {
-            const mobileMenu = page.locator('[aria-label*="menu" i], button[aria-expanded]').first();
+            const mobileMenu = page.locator("[aria-label*=\"menu\" i], button[aria-expanded]").first();
             if (await mobileMenu.count() > 0) {
               await mobileMenu.click();
               await page.waitForTimeout(500);
@@ -183,14 +183,14 @@ test.describe('UI Visual Validation', () => {
         }
       });
 
-      test('should render forms without truncation', async ({ page }) => {
-        await page.goto('/');
+      test("should render forms without truncation", async ({ page }) => {
+        await page.goto("/");
         
         // Look for any forms
-        const form = page.locator('form').first();
+        const form = page.locator("form").first();
         if (await form.count() > 0) {
           // Check if form elements are visible
-          const inputs = form.locator('input, textarea, select');
+          const inputs = form.locator("input, textarea, select");
           const inputCount = await inputs.count();
           
           if (inputCount > 0) {
@@ -203,11 +203,11 @@ test.describe('UI Visual Validation', () => {
         }
       });
 
-      test('should render cards grid responsively', async ({ page }) => {
-        await page.goto('/');
+      test("should render cards grid responsively", async ({ page }) => {
+        await page.goto("/");
         
         // Look for card grids
-        const cards = page.locator('[class*="grid"], [class*="flex"]');
+        const cards = page.locator("[class*=\"grid\"], [class*=\"flex\"]");
         if (await cards.count() > 0) {
           // Check grid layout
           const gridInfo = await cards.first().evaluate(el => {
@@ -219,15 +219,15 @@ test.describe('UI Visual Validation', () => {
             };
           });
           
-          expect(['grid', 'flex', 'block'].includes(gridInfo.display)).toBe(true);
+          expect(["grid", "flex", "block"].includes(gridInfo.display)).toBe(true);
         }
       });
 
-      test('should handle tables responsively', async ({ page }) => {
-        await page.goto('/');
+      test("should handle tables responsively", async ({ page }) => {
+        await page.goto("/");
         
         // Look for tables
-        const table = page.locator('table').first();
+        const table = page.locator("table").first();
         if (await table.count() > 0) {
           // Check if table has overflow handling
           const hasOverflow = await table.evaluate(el => {
@@ -235,7 +235,7 @@ test.describe('UI Visual Validation', () => {
             if (!parent) return false;
             
             const styles = window.getComputedStyle(parent);
-            return styles.overflowX === 'auto' || styles.overflowX === 'scroll';
+            return styles.overflowX === "auto" || styles.overflowX === "scroll";
           });
           
           // On mobile, tables should have horizontal scroll
@@ -245,11 +245,11 @@ test.describe('UI Visual Validation', () => {
         }
       });
 
-      test('should render buttons with proper sizing', async ({ page }) => {
-        await page.goto('/');
+      test("should render buttons with proper sizing", async ({ page }) => {
+        await page.goto("/");
         
         // Check button sizes
-        const buttons = page.locator('button').filter({ hasText: /./});
+        const buttons = page.locator("button").filter({ hasText: /./});
         const buttonCount = await buttons.count();
         
         if (buttonCount > 0) {

@@ -324,8 +324,8 @@ class SonarAIService {
           ? "metal"
           : "rock"
         : Math.random() > 0.7
-        ? "rock"
-        : "sand";
+          ? "rock"
+          : "sand";
 
       returns.push({
         ping: {

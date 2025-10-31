@@ -291,8 +291,8 @@ export class ReflectiveCore {
       shouldHaveDone: `Consider alternative approaches for ${pattern.pattern} decisions or add pre-validation checks.`,
       learningPoints: [
         `${pattern.pattern} decisions consistently underperform`,
-        `Need to improve decision-making process for this type`,
-        `Consider adjusting confidence levels or adding safeguards`,
+        "Need to improve decision-making process for this type",
+        "Consider adjusting confidence levels or adding safeguards",
       ],
       confidenceAdjustment: -0.2 * (pattern.frequency / 10), // Reduce confidence
       timestamp: new Date().toISOString(),
@@ -319,8 +319,8 @@ export class ReflectiveCore {
       shouldHaveDone: `Continue leveraging ${pattern.pattern} approach in similar contexts.`,
       learningPoints: [
         `${pattern.pattern} decisions consistently perform well`,
-        `This approach should be prioritized in similar situations`,
-        `Consider applying similar strategy to related decision types`,
+        "This approach should be prioritized in similar situations",
+        "Consider applying similar strategy to related decision types",
       ],
       confidenceAdjustment: 0.1 * (pattern.frequency / 10), // Increase confidence
       timestamp: new Date().toISOString(),
@@ -346,9 +346,9 @@ export class ReflectiveCore {
       description: `Suboptimal choice in ${opportunity.decision.decisionType}. Performance: ${opportunity.decision.actualPerformance}%. Potential improvement: ${opportunity.potentialImprovement}%.`,
       shouldHaveDone: `Should have chosen: "${opportunity.betterAlternative}" instead of "${opportunity.decision.chosenAction}".`,
       learningPoints: [
-        `Alternative action may have yielded better results`,
-        `Need to better evaluate alternatives before committing`,
-        `Consider expanding exploration of action space`,
+        "Alternative action may have yielded better results",
+        "Need to better evaluate alternatives before committing",
+        "Consider expanding exploration of action space",
       ],
       confidenceAdjustment: -0.1,
       timestamp: new Date().toISOString(),
@@ -518,7 +518,7 @@ export class ReflectiveCore {
     decisions: DecisionRecord[];
     insights: ReflectionInsight[];
     strategies: StrategyConfidence[];
-  } {
+    } {
     return {
       decisions: this.decisionHistory,
       insights: this.insights,

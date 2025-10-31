@@ -7,40 +7,40 @@
  * Event types that trigger responses
  */
 export type EventType =
-  | 'alert'
-  | 'failure'
-  | 'warning'
-  | 'optimization'
-  | 'crew_change'
-  | 'weather_change'
-  | 'navigation_issue'
-  | 'sensor_anomaly'
-  | 'system_degradation'
-  | 'mission_critical'
-  | 'compliance_violation'
-  | 'resource_shortage'
-  | 'performance_degradation'
-  | 'security_threat';
+  | "alert"
+  | "failure"
+  | "warning"
+  | "optimization"
+  | "crew_change"
+  | "weather_change"
+  | "navigation_issue"
+  | "sensor_anomaly"
+  | "system_degradation"
+  | "mission_critical"
+  | "compliance_violation"
+  | "resource_shortage"
+  | "performance_degradation"
+  | "security_threat";
 
 /**
  * Response action types
  */
 export type ResponseActionType =
-  | 'alert'
-  | 'notification'
-  | 'automated_correction'
-  | 'escalation'
-  | 'data_collection'
-  | 'system_adjustment'
-  | 'crew_notification'
-  | 'report_generation'
-  | 'failover'
-  | 'diagnostic_run';
+  | "alert"
+  | "notification"
+  | "automated_correction"
+  | "escalation"
+  | "data_collection"
+  | "system_adjustment"
+  | "crew_notification"
+  | "report_generation"
+  | "failover"
+  | "diagnostic_run";
 
 /**
  * Rule types
  */
-export type RuleType = 'reactive' | 'predictive';
+export type RuleType = "reactive" | "predictive";
 
 /**
  * Event data structure
@@ -49,7 +49,7 @@ export interface TacticalEvent {
   id: string;
   type: EventType;
   timestamp: number;
-  severity: 'critical' | 'high' | 'medium' | 'low';
+  severity: "critical" | "high" | "medium" | "low";
   source: string;
   data: Record<string, any>;
   metadata?: {
@@ -84,7 +84,7 @@ export interface TacticalRule {
   eventTypes: EventType[];
   conditions: {
     field: string;
-    operator: 'equals' | 'not_equals' | 'greater_than' | 'less_than' | 'contains' | 'regex';
+    operator: "equals" | "not_equals" | "greater_than" | "less_than" | "contains" | "regex";
     value: any;
   }[];
   actions: ResponseAction[];
@@ -103,10 +103,10 @@ export interface ResponseExecution {
   startTime: number;
   endTime?: number;
   duration?: number;
-  status: 'pending' | 'running' | 'success' | 'failed' | 'timeout';
+  status: "pending" | "running" | "success" | "failed" | "timeout";
   actions: {
     actionId: string;
-    status: 'pending' | 'running' | 'success' | 'failed';
+    status: "pending" | "running" | "success" | "failed";
     result?: any;
     error?: string;
     duration?: number;

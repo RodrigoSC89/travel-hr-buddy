@@ -17,11 +17,11 @@ export class MissionEngineService {
    */
   subscribeMissions(callback: (missions: Mission[]) => void) {
     const channel = supabase
-      .channel('mission-updates')
-      .on('postgres_changes', {
-        event: '*',
-        schema: 'public',
-        table: 'missions'
+      .channel("mission-updates")
+      .on("postgres_changes", {
+        event: "*",
+        schema: "public",
+        table: "missions"
       }, async () => {
         const missions = await this.getMissions();
         callback(missions);
@@ -36,11 +36,11 @@ export class MissionEngineService {
    */
   subscribeLogs(callback: (logs: MissionLog[]) => void, missionId?: string) {
     const channel = supabase
-      .channel('mission-logs-updates')
-      .on('postgres_changes', {
-        event: 'INSERT',
-        schema: 'public',
-        table: 'mission_logs',
+      .channel("mission-logs-updates")
+      .on("postgres_changes", {
+        event: "INSERT",
+        schema: "public",
+        table: "mission_logs",
         filter: missionId ? `mission_id=eq.${missionId}` : undefined
       }, async () => {
         const logs = await this.getLogs(missionId ? { missionId } : undefined);
@@ -228,7 +228,7 @@ export class MissionEngineService {
       await supabase.from("mission_logs").insert({
         mission_id: missionId,
         mission_name: `Mission ${missionId}`,
-        mission_date: new Date().toISOString().split('T')[0],
+        mission_date: new Date().toISOString().split("T")[0],
         description: `Incident: ${incident.title} - ${incident.description}`,
         status: "incident",
         crew_members: [],
@@ -356,7 +356,7 @@ export class MissionEngineService {
         .insert({
           mission_id: log.missionId,
           mission_name: log.title || `Mission ${log.missionId}`,
-          mission_date: new Date(log.eventTimestamp).toISOString().split('T')[0],
+          mission_date: new Date(log.eventTimestamp).toISOString().split("T")[0],
           description: log.message,
           status: log.logType || "info",
           crew_members: [],
@@ -528,7 +528,7 @@ export class MissionEngineService {
         .insert({
           mission_id: alert.missionId,
           mission_name: `Mission ${alert.missionId}`,
-          mission_date: new Date().toISOString().split('T')[0],
+          mission_date: new Date().toISOString().split("T")[0],
           description: alert.message,
           status: "alert",
           crew_members: [],

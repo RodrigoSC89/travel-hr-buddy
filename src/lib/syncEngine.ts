@@ -92,12 +92,13 @@ class SyncEngine {
     const supabaseAny = supabase as any;
 
     switch (action) {
-    case "create":
+    case "create": {
       const { error: createError } = await supabaseAny.from(table).insert(data);
       if (createError) throw createError;
       break;
+    }
 
-    case "update":
+    case "update": {
       const { id, ...updateData } = data;
       const { error: updateError } = await supabaseAny
         .from(table)
@@ -105,14 +106,16 @@ class SyncEngine {
         .eq("id", id);
       if (updateError) throw updateError;
       break;
+    }
 
-    case "delete":
+    case "delete": {
       const { error: deleteError } = await supabaseAny
         .from(table)
         .delete()
         .eq("id", data.id);
       if (deleteError) throw deleteError;
       break;
+    }
 
     default:
       throw new Error(`Unknown action: ${action}`);

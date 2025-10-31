@@ -12,22 +12,22 @@
  * Run with: npx tsx release/v3.5/prepare-audit-package.ts
  */
 
-import * as fs from 'fs';
-import * as path from 'path';
-import * as crypto from 'crypto';
-import { exec } from 'child_process';
-import { promisify } from 'util';
+import * as fs from "fs";
+import * as path from "path";
+import * as crypto from "crypto";
+import { exec } from "child_process";
+import { promisify } from "util";
 
 const execAsync = promisify(exec);
 
-const RELEASE_VERSION = 'v3.5';
-const RELEASE_DIR = path.join(process.cwd(), 'release', RELEASE_VERSION);
+const RELEASE_VERSION = "v3.5";
+const RELEASE_DIR = path.join(process.cwd(), "release", RELEASE_VERSION);
 
 /**
  * Compile changelog from existing documentation
  */
 function compileChangelog(): string {
-  console.log('📝 Compiling changelog...');
+  console.log("📝 Compiling changelog...");
   
   const changelogContent = `# Travel HR Buddy - Release ${RELEASE_VERSION}
 ## Changelog Completo
@@ -121,14 +121,14 @@ function compileChangelog(): string {
 - SEO Score: >90
 
 ---
-**Data de Release**: ${new Date().toISOString().split('T')[0]}
+**Data de Release**: ${new Date().toISOString().split("T")[0]}
 **Versão**: ${RELEASE_VERSION}
 **Status**: Production Ready ✅
 `;
 
-  const changelogPath = path.join(RELEASE_DIR, 'CHANGELOG.md');
+  const changelogPath = path.join(RELEASE_DIR, "CHANGELOG.md");
   fs.writeFileSync(changelogPath, changelogContent);
-  console.log('   ✅ Changelog compiled\n');
+  console.log("   ✅ Changelog compiled\n");
   
   return changelogPath;
 }
@@ -137,7 +137,7 @@ function compileChangelog(): string {
  * Generate module structure documentation
  */
 function generateModuleStructure(): string {
-  console.log('🏗️  Generating module structure...');
+  console.log("🏗️  Generating module structure...");
   
   const structureContent = `# Travel HR Buddy - Module Structure ${RELEASE_VERSION}
 
@@ -267,9 +267,9 @@ See \`.env.example\` for required configuration
 **Version**: ${RELEASE_VERSION}
 `;
 
-  const structurePath = path.join(RELEASE_DIR, 'MODULE_STRUCTURE.md');
+  const structurePath = path.join(RELEASE_DIR, "MODULE_STRUCTURE.md");
   fs.writeFileSync(structurePath, structureContent);
-  console.log('   ✅ Module structure documented\n');
+  console.log("   ✅ Module structure documented\n");
   
   return structurePath;
 }
@@ -278,7 +278,7 @@ See \`.env.example\` for required configuration
  * Generate deployment manual
  */
 function generateDeploymentManual(): string {
-  console.log('📖 Generating deployment manual...');
+  console.log("📖 Generating deployment manual...");
   
   const manualContent = `# Travel HR Buddy - Deployment Manual ${RELEASE_VERSION}
 
@@ -489,13 +489,13 @@ npm run build && npm test
 
 ---
 **Document Version**: ${RELEASE_VERSION}
-**Last Updated**: ${new Date().toISOString().split('T')[0]}
+**Last Updated**: ${new Date().toISOString().split("T")[0]}
 **Status**: Production Ready ✅
 `;
 
-  const manualPath = path.join(RELEASE_DIR, 'DEPLOYMENT_MANUAL.md');
+  const manualPath = path.join(RELEASE_DIR, "DEPLOYMENT_MANUAL.md");
   fs.writeFileSync(manualPath, manualContent);
-  console.log('   ✅ Deployment manual created\n');
+  console.log("   ✅ Deployment manual created\n");
   
   return manualPath;
 }
@@ -504,7 +504,7 @@ npm run build && npm test
  * Create anonymized database export
  */
 function createAnonymizedExport(): string {
-  console.log('🗄️  Creating anonymized database export...');
+  console.log("🗄️  Creating anonymized database export...");
   
   const exportContent = `# Anonymized Database Export ${RELEASE_VERSION}
 
@@ -610,9 +610,9 @@ All personally identifiable information (PII) has been:
 **Anonymization Level**: Full
 `;
 
-  const exportPath = path.join(RELEASE_DIR, 'DATABASE_EXPORT_ANONYMIZED.md');
+  const exportPath = path.join(RELEASE_DIR, "DATABASE_EXPORT_ANONYMIZED.md");
   fs.writeFileSync(exportPath, exportContent);
-  console.log('   ✅ Database export created\n');
+  console.log("   ✅ Database export created\n");
   
   return exportPath;
 }
@@ -621,7 +621,7 @@ All personally identifiable information (PII) has been:
  * Generate README for audit package
  */
 function generateReadme(): string {
-  console.log('📄 Generating README...');
+  console.log("📄 Generating README...");
   
   const readmeContent = `# Travel HR Buddy - Audit Package ${RELEASE_VERSION}
 
@@ -641,7 +641,7 @@ This audit package contains all necessary documentation and materials for extern
 ### Package Information
 
 - **Version**: ${RELEASE_VERSION}
-- **Release Date**: ${new Date().toISOString().split('T')[0]}
+- **Release Date**: ${new Date().toISOString().split("T")[0]}
 - **Status**: Production Ready ✅
 - **Package Generated**: ${new Date().toISOString()}
 
@@ -690,9 +690,9 @@ For questions or additional information:
 **Generated**: ${new Date().toISOString()}
 `;
 
-  const readmePath = path.join(RELEASE_DIR, 'README.md');
+  const readmePath = path.join(RELEASE_DIR, "README.md");
   fs.writeFileSync(readmePath, readmeContent);
-  console.log('   ✅ README generated\n');
+  console.log("   ✅ README generated\n");
   
   return readmePath;
 }
@@ -701,21 +701,21 @@ For questions or additional information:
  * Generate integrity checksums
  */
 function generateIntegrityCheck(files: string[]): string {
-  console.log('🔐 Generating integrity checksums...');
+  console.log("🔐 Generating integrity checksums...");
   
   const checksums: string[] = [];
   
   files.forEach(filePath => {
     const content = fs.readFileSync(filePath);
-    const hash = crypto.createHash('sha256').update(content).digest('hex');
+    const hash = crypto.createHash("sha256").update(content).digest("hex");
     const filename = path.basename(filePath);
     checksums.push(`${hash}  ${filename}`);
   });
   
-  const checksumContent = checksums.join('\n') + '\n';
-  const checksumPath = path.join(RELEASE_DIR, 'INTEGRITY_CHECK.txt');
+  const checksumContent = checksums.join("\n") + "\n";
+  const checksumPath = path.join(RELEASE_DIR, "INTEGRITY_CHECK.txt");
   fs.writeFileSync(checksumPath, checksumContent);
-  console.log('   ✅ Integrity check generated\n');
+  console.log("   ✅ Integrity check generated\n");
   
   return checksumPath;
 }
@@ -724,9 +724,9 @@ function generateIntegrityCheck(files: string[]): string {
  * Create ZIP archive using native zip command
  */
 async function createZipArchive(): Promise<string> {
-  console.log('📦 Creating ZIP archive...');
+  console.log("📦 Creating ZIP archive...");
   
-  const zipPath = path.join(process.cwd(), 'release', `travel-hr-buddy-${RELEASE_VERSION}.zip`);
+  const zipPath = path.join(process.cwd(), "release", `travel-hr-buddy-${RELEASE_VERSION}.zip`);
   const releaseBasename = path.basename(RELEASE_DIR);
   const releaseParent = path.dirname(RELEASE_DIR);
   
@@ -736,8 +736,8 @@ async function createZipArchive(): Promise<string> {
       `cd "${releaseParent}" && zip -r "${zipPath}" "${releaseBasename}"`
     );
     
-    if (stderr && !stderr.includes('adding:')) {
-      console.warn('Zip warning:', stderr);
+    if (stderr && !stderr.includes("adding:")) {
+      console.warn("Zip warning:", stderr);
     }
     
     // Get file size
@@ -747,7 +747,7 @@ async function createZipArchive(): Promise<string> {
     console.log(`   ✅ Archive created: ${sizeMB} MB\n`);
     return zipPath;
   } catch (error) {
-    console.error('Failed to create zip:', error);
+    console.error("Failed to create zip:", error);
     throw error;
   }
 }
@@ -756,7 +756,7 @@ async function createZipArchive(): Promise<string> {
  * Main execution
  */
 async function main() {
-  console.log('🎯 PATCH 563 - Preparing Audit Package...\n');
+  console.log("🎯 PATCH 563 - Preparing Audit Package...\n");
   
   // Ensure release directory exists
   if (!fs.existsSync(RELEASE_DIR)) {
@@ -778,22 +778,22 @@ async function main() {
   try {
     const zipPath = await createZipArchive();
     
-    console.log('='.repeat(70));
-    console.log('✅ PATCH 563 - Audit Package Complete!');
-    console.log('='.repeat(70));
+    console.log("=".repeat(70));
+    console.log("✅ PATCH 563 - Audit Package Complete!");
+    console.log("=".repeat(70));
     console.log(`\n📦 Package Location: ${zipPath}`);
     console.log(`📁 Source Directory: ${RELEASE_DIR}`);
-    console.log('\n✅ ACCEPTANCE CRITERIA:');
-    console.log('   ✓ Changelog compiled: PASSED ✅');
-    console.log('   ✓ Database export (anonymized): PASSED ✅');
-    console.log('   ✓ README + module structure: PASSED ✅');
-    console.log('   ✓ Deployment manual: PASSED ✅');
-    console.log('   ✓ Integrity check: PASSED ✅');
-    console.log('   ✓ Package v3.5.zip generated: PASSED ✅');
-    console.log('');
+    console.log("\n✅ ACCEPTANCE CRITERIA:");
+    console.log("   ✓ Changelog compiled: PASSED ✅");
+    console.log("   ✓ Database export (anonymized): PASSED ✅");
+    console.log("   ✓ README + module structure: PASSED ✅");
+    console.log("   ✓ Deployment manual: PASSED ✅");
+    console.log("   ✓ Integrity check: PASSED ✅");
+    console.log("   ✓ Package v3.5.zip generated: PASSED ✅");
+    console.log("");
   } catch (error) {
-    console.error('❌ Failed to create ZIP archive:', error);
-    console.log('\n📁 All files are available in:', RELEASE_DIR);
+    console.error("❌ Failed to create ZIP archive:", error);
+    console.log("\n📁 All files are available in:", RELEASE_DIR);
   }
 }
 

@@ -4,13 +4,13 @@
  * Voice assistant with wake word detection, transcription, and TTS response
  */
 
-import React, { useState, useEffect, useRef, useCallback } from 'react';
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
-import { Button } from '@/components/ui/button';
-import { Badge } from '@/components/ui/badge';
-import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
-import { Progress } from '@/components/ui/progress';
-import { Slider } from '@/components/ui/slider';
+import React, { useState, useEffect, useRef, useCallback } from "react";
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
+import { Button } from "@/components/ui/button";
+import { Badge } from "@/components/ui/badge";
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
+import { Progress } from "@/components/ui/progress";
+import { Slider } from "@/components/ui/slider";
 import { 
   Mic,
   MicOff,
@@ -26,12 +26,12 @@ import {
   RefreshCw,
   Download,
   MessageSquare
-} from 'lucide-react';
-import { Label } from '@/components/ui/label';
-import { Checkbox } from '@/components/ui/checkbox';
-import { supabase } from '@/integrations/supabase/client';
-import { toast } from 'sonner';
-import { format } from 'date-fns';
+} from "lucide-react";
+import { Label } from "@/components/ui/label";
+import { Checkbox } from "@/components/ui/checkbox";
+import { supabase } from "@/integrations/supabase/client";
+import { toast } from "sonner";
+import { format } from "date-fns";
 
 interface VoiceLog {
   id: string;
@@ -41,7 +41,7 @@ interface VoiceLog {
   transcript: string;
   intent: string;
   confidence: number;
-  execution_status: 'success' | 'failed' | 'partial';
+  execution_status: "success" | "failed" | "partial";
   response_text: string;
   processing_time_ms: number;
   audio_duration_sec: number;
@@ -57,7 +57,7 @@ interface WakeWordConfig {
 }
 
 interface TTSConfig {
-  provider: 'browser' | 'google' | 'elevenlabs';
+  provider: "browser" | "google" | "elevenlabs";
   voice: string;
   speed: number;
   pitch: number;
@@ -74,18 +74,18 @@ interface RecognitionResult {
 export const VoiceAssistantSystem: React.FC = () => {
   const [isListening, setIsListening] = useState(false);
   const [wakeWordDetected, setWakeWordDetected] = useState(false);
-  const [currentTranscript, setCurrentTranscript] = useState('');
+  const [currentTranscript, setCurrentTranscript] = useState("");
   const [voiceLogs, setVoiceLogs] = useState<VoiceLog[]>([]);
-  const [sessionId, setSessionId] = useState('');
+  const [sessionId, setSessionId] = useState("");
   const [wakeWordConfig, setWakeWordConfig] = useState<WakeWordConfig>({
     enabled: true,
-    word: 'nautilus',
+    word: "nautilus",
     confidence_threshold: 0.8,
     listening_timeout: 5000,
   });
   const [ttsConfig, setTTSConfig] = useState<TTSConfig>({
-    provider: 'browser',
-    voice: 'default',
+    provider: "browser",
+    voice: "default",
     speed: 1.0,
     pitch: 1.0,
     volume: 0.8,
@@ -117,12 +117,12 @@ export const VoiceAssistantSystem: React.FC = () => {
 
   const initializeVoiceSystem = () => {
     // Initialize Web Speech API
-    if ('webkitSpeechRecognition' in window || 'SpeechRecognition' in window) {
+    if ("webkitSpeechRecognition" in window || "SpeechRecognition" in window) {
       const SpeechRecognition = (window as any).webkitSpeechRecognition || (window as any).SpeechRecognition;
       recognitionRef.current = new SpeechRecognition();
       recognitionRef.current.continuous = true;
       recognitionRef.current.interimResults = true;
-      recognitionRef.current.lang = 'en-US';
+      recognitionRef.current.lang = "en-US";
 
       recognitionRef.current.onresult = handleSpeechResult;
       recognitionRef.current.onerror = handleSpeechError;
@@ -130,12 +130,12 @@ export const VoiceAssistantSystem: React.FC = () => {
     }
 
     // Initialize Speech Synthesis
-    if ('speechSynthesis' in window) {
+    if ("speechSynthesis" in window) {
       synthesisRef.current = window.speechSynthesis;
     }
 
     // Initialize Audio Context for audio level monitoring
-    if ('AudioContext' in window || 'webkitAudioContext' in window) {
+    if ("AudioContext" in window || "webkitAudioContext" in window) {
       const AudioContext = (window as any).AudioContext || (window as any).webkitAudioContext;
       audioContextRef.current = new AudioContext();
     }
@@ -159,15 +159,15 @@ export const VoiceAssistantSystem: React.FC = () => {
   const loadVoiceLogs = async () => {
     try {
       const { data, error } = await supabase
-        .from('voice_logs')
-        .select('*')
-        .order('created_at', { ascending: false })
+        .from("voice_logs")
+        .select("*")
+        .order("created_at", { ascending: false })
         .limit(50);
 
       if (error) throw error;
       setVoiceLogs(data || []);
     } catch (error) {
-      console.error('Error loading voice logs:', error);
+      console.error("Error loading voice logs:", error);
     }
   };
 
@@ -192,11 +192,11 @@ export const VoiceAssistantSystem: React.FC = () => {
       if (recognitionRef.current) {
         recognitionRef.current.start();
         setIsListening(true);
-        toast.success('Voice assistant activated');
+        toast.success("Voice assistant activated");
       }
     } catch (error) {
-      console.error('Error starting voice recognition:', error);
-      toast.error('Failed to access microphone');
+      console.error("Error starting voice recognition:", error);
+      toast.error("Failed to access microphone");
     }
   };
 
@@ -209,8 +209,8 @@ export const VoiceAssistantSystem: React.FC = () => {
     }
     setIsListening(false);
     setWakeWordDetected(false);
-    setCurrentTranscript('');
-    toast.info('Voice assistant deactivated');
+    setCurrentTranscript("");
+    toast.info("Voice assistant deactivated");
   };
 
   const monitorAudioLevel = () => {
@@ -243,8 +243,8 @@ export const VoiceAssistantSystem: React.FC = () => {
     if (wakeWordConfig.enabled && !wakeWordDetected) {
       if (transcript.includes(wakeWordConfig.word.toLowerCase())) {
         setWakeWordDetected(true);
-        toast.success('Wake word detected!');
-        speak('Yes, how can I help you?');
+        toast.success("Wake word detected!");
+        speak("Yes, how can I help you?");
         return;
       }
     }
@@ -258,7 +258,7 @@ export const VoiceAssistantSystem: React.FC = () => {
   };
 
   const handleSpeechError = (event: any) => {
-    console.error('Speech recognition error:', event.error);
+    console.error("Speech recognition error:", event.error);
     toast.error(`Recognition error: ${event.error}`);
   };
 
@@ -294,7 +294,7 @@ export const VoiceAssistantSystem: React.FC = () => {
         intent: analysis.intent,
         response,
         processingTime,
-        status: 'success',
+        status: "success",
       });
 
       // Speak response
@@ -305,34 +305,34 @@ export const VoiceAssistantSystem: React.FC = () => {
         setWakeWordDetected(false);
       }
     } catch (error) {
-      console.error('Error processing command:', error);
-      toast.error('Failed to process command');
+      console.error("Error processing command:", error);
+      toast.error("Failed to process command");
       
       await logVoiceInteraction({
         transcript,
         confidence,
-        intent: 'unknown',
-        response: 'I apologize, I encountered an error processing your request.',
+        intent: "unknown",
+        response: "I apologize, I encountered an error processing your request.",
         processingTime: Date.now() - startTime,
-        status: 'failed',
+        status: "failed",
       });
     } finally {
       setIsProcessing(false);
-      setCurrentTranscript('');
+      setCurrentTranscript("");
     }
   };
 
   const analyzeIntent = (transcript: string): RecognitionResult => {
     // Simple intent recognition (in production, use NLP service like Dialogflow, Rasa, etc.)
     const intents = {
-      weather: ['weather', 'temperature', 'forecast'],
-      navigation: ['navigate', 'go to', 'open', 'show me'],
-      status: ['status', 'report', 'how is', 'what is'],
-      control: ['turn on', 'turn off', 'enable', 'disable'],
-      query: ['what', 'when', 'where', 'who', 'how'],
+      weather: ["weather", "temperature", "forecast"],
+      navigation: ["navigate", "go to", "open", "show me"],
+      status: ["status", "report", "how is", "what is"],
+      control: ["turn on", "turn off", "enable", "disable"],
+      query: ["what", "when", "where", "who", "how"],
     };
 
-    let detectedIntent = 'general';
+    let detectedIntent = "general";
     let maxMatches = 0;
 
     Object.entries(intents).forEach(([intent, keywords]) => {
@@ -361,14 +361,14 @@ export const VoiceAssistantSystem: React.FC = () => {
     // Extract numbers
     const numbers = transcript.match(/\d+/g);
     if (numbers) {
-      entities.push({ type: 'number', value: numbers });
+      entities.push({ type: "number", value: numbers });
     }
 
     // Extract locations (very basic)
-    const locations = ['fleet', 'vessel', 'crew', 'dashboard', 'navigation'];
+    const locations = ["fleet", "vessel", "crew", "dashboard", "navigation"];
     locations.forEach((loc) => {
       if (transcript.includes(loc)) {
-        entities.push({ type: 'location', value: loc });
+        entities.push({ type: "location", value: loc });
       }
     });
 
@@ -378,30 +378,30 @@ export const VoiceAssistantSystem: React.FC = () => {
   const executeCommand = async (analysis: RecognitionResult): Promise<string> => {
     // Execute based on intent
     switch (analysis.intent) {
-      case 'status':
-        return 'All systems are operational. Fleet health is at 95%.';
+    case "status":
+      return "All systems are operational. Fleet health is at 95%.";
       
-      case 'navigation':
-        return 'Opening the requested page.';
+    case "navigation":
+      return "Opening the requested page.";
       
-      case 'weather':
-        return 'Current weather conditions are clear with light winds.';
+    case "weather":
+      return "Current weather conditions are clear with light winds.";
       
-      case 'control':
-        return 'Command executed successfully.';
+    case "control":
+      return "Command executed successfully.";
       
-      case 'query':
-        return 'Based on current data, there are 5 active vessels and 12 crew members on rotation.';
+    case "query":
+      return "Based on current data, there are 5 active vessels and 12 crew members on rotation.";
       
-      default:
-        return 'I understand your request. How else can I assist you?';
+    default:
+      return "I understand your request. How else can I assist you?";
     }
   };
 
   const speak = async (text: string): Promise<void> => {
     return new Promise((resolve, reject) => {
       if (!synthesisRef.current) {
-        reject(new Error('Speech synthesis not available'));
+        reject(new Error("Speech synthesis not available"));
         return;
       }
 
@@ -446,7 +446,7 @@ export const VoiceAssistantSystem: React.FC = () => {
     status: string;
   }) => {
     try {
-      const { error } = await supabase.from('voice_logs').insert({
+      const { error } = await supabase.from("voice_logs").insert({
         session_id: sessionId,
         command_type: data.intent,
         transcript: data.transcript,
@@ -467,7 +467,7 @@ export const VoiceAssistantSystem: React.FC = () => {
       // Reload logs
       await loadVoiceLogs();
     } catch (error) {
-      console.error('Error logging voice interaction:', error);
+      console.error("Error logging voice interaction:", error);
     }
   };
 
@@ -482,22 +482,22 @@ export const VoiceAssistantSystem: React.FC = () => {
     }));
 
     const csv = [
-      Object.keys(csvData[0]).join(','),
-      ...csvData.map((row) => Object.values(row).join(',')),
-    ].join('\n');
+      Object.keys(csvData[0]).join(","),
+      ...csvData.map((row) => Object.values(row).join(",")),
+    ].join("\n");
 
-    const blob = new Blob([csv], { type: 'text/csv' });
+    const blob = new Blob([csv], { type: "text/csv" });
     const url = URL.createObjectURL(blob);
-    const a = document.createElement('a');
+    const a = document.createElement("a");
     a.href = url;
-    a.download = `voice-logs-${format(new Date(), 'yyyy-MM-dd-HH-mm')}.csv`;
+    a.download = `voice-logs-${format(new Date(), "yyyy-MM-dd-HH-mm")}.csv`;
     a.click();
 
-    toast.success('Voice logs exported');
+    toast.success("Voice logs exported");
   };
 
   const getStatusColor = (status: string) => {
-    return status === 'success' ? 'text-green-500' : 'text-red-500';
+    return status === "success" ? "text-green-500" : "text-red-500";
   };
 
   return (
@@ -520,7 +520,7 @@ export const VoiceAssistantSystem: React.FC = () => {
           </Button>
           <Button
             onClick={isListening ? stopListening : startListening}
-            variant={isListening ? 'destructive' : 'default'}
+            variant={isListening ? "destructive" : "default"}
           >
             {isListening ? (
               <>
@@ -550,7 +550,7 @@ export const VoiceAssistantSystem: React.FC = () => {
           </CardHeader>
           <CardContent>
             <div className="text-2xl font-bold">
-              {isListening ? 'Listening' : 'Inactive'}
+              {isListening ? "Listening" : "Inactive"}
             </div>
             {wakeWordDetected && (
               <Badge variant="default" className="mt-2">
@@ -568,7 +568,7 @@ export const VoiceAssistantSystem: React.FC = () => {
           <CardContent>
             <div className="text-2xl font-bold">{voiceLogs.length}</div>
             <p className="text-xs text-muted-foreground">
-              {voiceLogs.filter((l) => l.execution_status === 'success').length} successful
+              {voiceLogs.filter((l) => l.execution_status === "success").length} successful
             </p>
           </CardContent>
         </Card>
@@ -582,9 +582,9 @@ export const VoiceAssistantSystem: React.FC = () => {
             <div className="text-2xl font-bold">
               {voiceLogs.length > 0
                 ? Math.round(
-                    voiceLogs.reduce((sum, l) => sum + l.processing_time_ms, 0) /
+                  voiceLogs.reduce((sum, l) => sum + l.processing_time_ms, 0) /
                       voiceLogs.length
-                  )
+                )
                 : 0}
               ms
             </div>
@@ -601,9 +601,9 @@ export const VoiceAssistantSystem: React.FC = () => {
             <div className="text-2xl font-bold">
               {voiceLogs.length > 0
                 ? Math.round(
-                    (voiceLogs.reduce((sum, l) => sum + l.confidence, 0) / voiceLogs.length) *
+                  (voiceLogs.reduce((sum, l) => sum + l.confidence, 0) / voiceLogs.length) *
                       100
-                  )
+                )
                 : 0}
               %
             </div>
@@ -685,7 +685,7 @@ export const VoiceAssistantSystem: React.FC = () => {
                         <div className="flex items-center gap-4 mt-2 text-xs text-muted-foreground">
                           <span>Confidence: {Math.round(log.confidence * 100)}%</span>
                           <span>Processing: {log.processing_time_ms}ms</span>
-                          <span>{format(new Date(log.created_at), 'PPp')}</span>
+                          <span>{format(new Date(log.created_at), "PPp")}</span>
                         </div>
                       </div>
                     </div>
@@ -789,7 +789,7 @@ export const VoiceAssistantSystem: React.FC = () => {
                   step={0.1}
                 />
               </div>
-              <Button onClick={() => speak('This is a test of the text to speech system.')}>
+              <Button onClick={() => speak("This is a test of the text to speech system.")}>
                 <Play className="h-4 w-4 mr-2" />
                 Test TTS
               </Button>
@@ -808,7 +808,7 @@ export const VoiceAssistantSystem: React.FC = () => {
                 <div className="p-4 border rounded-lg">
                   <h3 className="font-medium mb-2">Intent Distribution</h3>
                   <div className="space-y-2">
-                    {['status', 'navigation', 'query', 'control', 'weather'].map((intent) => {
+                    {["status", "navigation", "query", "control", "weather"].map((intent) => {
                       const count = voiceLogs.filter((l) => l.intent === intent).length;
                       const percentage = voiceLogs.length > 0 ? (count / voiceLogs.length) * 100 : 0;
                       return (
@@ -830,15 +830,15 @@ export const VoiceAssistantSystem: React.FC = () => {
                     <div className="text-4xl font-bold">
                       {voiceLogs.length > 0
                         ? Math.round(
-                            (voiceLogs.filter((l) => l.execution_status === 'success').length /
+                          (voiceLogs.filter((l) => l.execution_status === "success").length /
                               voiceLogs.length) *
                               100
-                          )
+                        )
                         : 0}
                       %
                     </div>
                     <p className="text-sm text-muted-foreground mt-2">
-                      {voiceLogs.filter((l) => l.execution_status === 'success').length} /{' '}
+                      {voiceLogs.filter((l) => l.execution_status === "success").length} /{" "}
                       {voiceLogs.length} commands
                     </p>
                   </div>

@@ -4,13 +4,13 @@
  * Complete operations dashboard with real-time data from Supabase, MQTT, and WebSocket
  */
 
-import React, { useState, useEffect, useCallback, useRef } from 'react';
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
-import { Button } from '@/components/ui/button';
-import { Badge } from '@/components/ui/badge';
-import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
-import { Progress } from '@/components/ui/progress';
+import React, { useState, useEffect, useCallback, useRef } from "react";
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
+import { Button } from "@/components/ui/button";
+import { Badge } from "@/components/ui/badge";
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
+import { Progress } from "@/components/ui/progress";
 import {
   Activity,
   Ship,
@@ -27,10 +27,10 @@ import {
   Clock,
   MapPin,
   Thermometer
-} from 'lucide-react';
-import { supabase } from '@/integrations/supabase/client';
-import { toast } from 'sonner';
-import { format } from 'date-fns';
+} from "lucide-react";
+import { supabase } from "@/integrations/supabase/client";
+import { toast } from "sonner";
+import { format } from "date-fns";
 // Note: MQTT and Chart.js imports removed - functionality is simulated for demo
 // In production, uncomment and configure:
 // import mqtt from 'mqtt';
@@ -57,9 +57,9 @@ interface FilterConfig {
 interface RealTimeAlert {
   id: string;
   type: string;
-  severity: 'low' | 'medium' | 'high' | 'critical';
+  severity: "low" | "medium" | "high" | "critical";
   message: string;
-  source: 'supabase' | 'mqtt' | 'websocket';
+  source: "supabase" | "mqtt" | "websocket";
   timestamp: string;
   metadata: any;
 }
@@ -78,9 +78,9 @@ export const OperationsDashboardRealTime: React.FC = () => {
   const [alerts, setAlerts] = useState<RealTimeAlert[]>([]);
   const [loading, setLoading] = useState(true);
   const [filter, setFilter] = useState<FilterConfig>({
-    operation_type: 'all',
-    time_range: '24h',
-    criticality: 'all',
+    operation_type: "all",
+    time_range: "24h",
+    criticality: "all",
   });
   const [mqttConnected, setMqttConnected] = useState(false);
   const [wsConnected, setWsConnected] = useState(false);
@@ -97,8 +97,8 @@ export const OperationsDashboardRealTime: React.FC = () => {
     // Auto-refresh every 10 seconds
     const refreshInterval = autoRefresh
       ? setInterval(() => {
-          loadRealTimeData();
-        }, 10000)
+        loadRealTimeData();
+      }, 10000)
       : null;
 
     return () => {
@@ -121,35 +121,35 @@ export const OperationsDashboardRealTime: React.FC = () => {
   const setupSupabaseRealtime = () => {
     // Subscribe to multiple tables for real-time updates
     realtimeChannelRef.current = supabase
-      .channel('operations-realtime')
+      .channel("operations-realtime")
       .on(
-        'postgres_changes',
-        { event: '*', schema: 'public', table: 'iot_sensor_data' },
+        "postgres_changes",
+        { event: "*", schema: "public", table: "iot_sensor_data" },
         (payload) => {
-          console.log('Sensor data update:', payload);
-          handleSupabaseUpdate(payload, 'sensor');
+          console.log("Sensor data update:", payload);
+          handleSupabaseUpdate(payload, "sensor");
         }
       )
       .on(
-        'postgres_changes',
-        { event: '*', schema: 'public', table: 'crew_rotations' },
+        "postgres_changes",
+        { event: "*", schema: "public", table: "crew_rotations" },
         (payload) => {
-          console.log('Crew rotation update:', payload);
-          handleSupabaseUpdate(payload, 'crew');
+          console.log("Crew rotation update:", payload);
+          handleSupabaseUpdate(payload, "crew");
         }
       )
       .on(
-        'postgres_changes',
-        { event: '*', schema: 'public', table: 'vessels' },
+        "postgres_changes",
+        { event: "*", schema: "public", table: "vessels" },
         (payload) => {
-          console.log('Vessel update:', payload);
-          handleSupabaseUpdate(payload, 'vessel');
+          console.log("Vessel update:", payload);
+          handleSupabaseUpdate(payload, "vessel");
         }
       )
       .subscribe((status) => {
-        console.log('Supabase subscription status:', status);
-        if (status === 'SUBSCRIBED') {
-          toast.success('Real-time data connected');
+        console.log("Supabase subscription status:", status);
+        if (status === "SUBSCRIBED") {
+          toast.success("Real-time data connected");
         }
       });
   };
@@ -163,26 +163,26 @@ export const OperationsDashboardRealTime: React.FC = () => {
       // mqttClientRef.current.on('connect', () => setMqttConnected(true));
       // mqttClientRef.current.on('message', (topic, message) => handleMQTTMessage({ topic, payload: JSON.parse(message) }));
       
-      console.log('MQTT connection simulated for demo');
+      console.log("MQTT connection simulated for demo");
       setMqttConnected(false);
       
       // Simulate MQTT messages for demo
       simulateMQTTMessages();
     } catch (error) {
-      console.error('MQTT connection error:', error);
+      console.error("MQTT connection error:", error);
     }
   };
 
   const setupWebSocketConnection = () => {
     try {
       // In production, connect to actual WebSocket server
-      console.log('WebSocket connection would be established here');
+      console.log("WebSocket connection would be established here");
       setWsConnected(false); // Set to false for demo
       
       // Simulate WebSocket messages
       simulateWebSocketMessages();
     } catch (error) {
-      console.error('WebSocket connection error:', error);
+      console.error("WebSocket connection error:", error);
     }
   };
 
@@ -190,9 +190,9 @@ export const OperationsDashboardRealTime: React.FC = () => {
     // Simulate MQTT telemetry data
     setInterval(() => {
       const mqttData = {
-        topic: 'vessel/telemetry',
+        topic: "vessel/telemetry",
         payload: {
-          vessel_id: 'vessel-1',
+          vessel_id: "vessel-1",
           temperature: 45 + Math.random() * 10,
           pressure: 100 + Math.random() * 20,
           location: { lat: 40.7128, lon: -74.006 },
@@ -208,9 +208,9 @@ export const OperationsDashboardRealTime: React.FC = () => {
     // Simulate WebSocket alerts
     setInterval(() => {
       const wsData = {
-        type: 'alert',
-        severity: ['low', 'medium', 'high'][Math.floor(Math.random() * 3)],
-        message: 'System alert from WebSocket',
+        type: "alert",
+        severity: ["low", "medium", "high"][Math.floor(Math.random() * 3)],
+        message: "System alert from WebSocket",
         timestamp: new Date().toISOString(),
       };
       
@@ -222,9 +222,9 @@ export const OperationsDashboardRealTime: React.FC = () => {
     const newAlert: RealTimeAlert = {
       id: `alert-${Date.now()}`,
       type,
-      severity: 'medium',
+      severity: "medium",
       message: `${type} data updated`,
-      source: 'supabase',
+      source: "supabase",
       timestamp: new Date().toISOString(),
       metadata: payload,
     };
@@ -236,10 +236,10 @@ export const OperationsDashboardRealTime: React.FC = () => {
   const handleMQTTMessage = (data: any) => {
     const newAlert: RealTimeAlert = {
       id: `mqtt-${Date.now()}`,
-      type: 'telemetry',
-      severity: 'low',
+      type: "telemetry",
+      severity: "low",
       message: `MQTT telemetry update from ${data.payload.vessel_id}`,
-      source: 'mqtt',
+      source: "mqtt",
       timestamp: data.payload.timestamp,
       metadata: data.payload,
     };
@@ -250,10 +250,10 @@ export const OperationsDashboardRealTime: React.FC = () => {
   const handleWebSocketMessage = (data: any) => {
     const newAlert: RealTimeAlert = {
       id: `ws-${Date.now()}`,
-      type: 'system',
+      type: "system",
       severity: data.severity,
       message: data.message,
-      source: 'websocket',
+      source: "websocket",
       timestamp: data.timestamp,
       metadata: data,
     };
@@ -270,9 +270,9 @@ export const OperationsDashboardRealTime: React.FC = () => {
 
       // Load mission status data
       const { data: missionData, error: missionError } = await supabase
-        .from('voyage_plans')
-        .select('status')
-        .gte('created_at', timeFilter);
+        .from("voyage_plans")
+        .select("status")
+        .gte("created_at", timeFilter);
 
       if (missionError) throw missionError;
 
@@ -284,23 +284,23 @@ export const OperationsDashboardRealTime: React.FC = () => {
 
       // Load vessel health data
       const { data: vesselData, error: vesselError } = await supabase
-        .from('vessels')
-        .select('*');
+        .from("vessels")
+        .select("*");
 
       if (vesselError) throw vesselError;
 
       const vesselHealth = {
-        healthy: vesselData?.filter((v) => v.status === 'active').length || 0,
-        warning: vesselData?.filter((v) => v.status === 'maintenance').length || 0,
-        critical: vesselData?.filter((v) => v.status === 'offline').length || 0,
+        healthy: vesselData?.filter((v) => v.status === "active").length || 0,
+        warning: vesselData?.filter((v) => v.status === "maintenance").length || 0,
+        critical: vesselData?.filter((v) => v.status === "offline").length || 0,
       };
 
       // Load alert data
       const { data: sensorData, error: sensorError } = await supabase
-        .from('iot_sensor_data')
-        .select('*')
-        .gte('reading_timestamp', timeFilter)
-        .order('reading_timestamp', { ascending: false })
+        .from("iot_sensor_data")
+        .select("*")
+        .gte("reading_timestamp", timeFilter)
+        .order("reading_timestamp", { ascending: false })
         .limit(100);
 
       if (sensorError) throw sensorError;
@@ -314,9 +314,9 @@ export const OperationsDashboardRealTime: React.FC = () => {
 
       // Load crew availability
       const { data: crewData, error: crewError } = await supabase
-        .from('crew_rotations')
-        .select('*')
-        .eq('status', 'confirmed');
+        .from("crew_rotations")
+        .select("*")
+        .eq("status", "confirmed");
 
       if (crewError) throw crewError;
 
@@ -325,14 +325,14 @@ export const OperationsDashboardRealTime: React.FC = () => {
         vessel_health: vesselHealth,
         alerts_by_severity: alertsBySeverity,
         telemetry_data: sensorData || [],
-        active_operations: (missionData || []).filter((m) => m.status === 'active').length,
+        active_operations: (missionData || []).filter((m) => m.status === "active").length,
         crew_availability: crewData?.length || 0,
         system_health: calculateSystemHealth(vesselHealth, alertsBySeverity),
         last_update: new Date().toISOString(),
       });
     } catch (error) {
-      console.error('Error loading real-time data:', error);
-      toast.error('Failed to load operations data');
+      console.error("Error loading real-time data:", error);
+      toast.error("Failed to load operations data");
     } finally {
       setLoading(false);
     }
@@ -341,16 +341,16 @@ export const OperationsDashboardRealTime: React.FC = () => {
   const getTimeFilter = (range: string): string => {
     const now = new Date();
     switch (range) {
-      case '1h':
-        return new Date(now.getTime() - 60 * 60 * 1000).toISOString();
-      case '24h':
-        return new Date(now.getTime() - 24 * 60 * 60 * 1000).toISOString();
-      case '7d':
-        return new Date(now.getTime() - 7 * 24 * 60 * 60 * 1000).toISOString();
-      case '30d':
-        return new Date(now.getTime() - 30 * 24 * 60 * 60 * 1000).toISOString();
-      default:
-        return new Date(now.getTime() - 24 * 60 * 60 * 1000).toISOString();
+    case "1h":
+      return new Date(now.getTime() - 60 * 60 * 1000).toISOString();
+    case "24h":
+      return new Date(now.getTime() - 24 * 60 * 60 * 1000).toISOString();
+    case "7d":
+      return new Date(now.getTime() - 7 * 24 * 60 * 60 * 1000).toISOString();
+    case "30d":
+      return new Date(now.getTime() - 30 * 24 * 60 * 60 * 1000).toISOString();
+    default:
+      return new Date(now.getTime() - 24 * 60 * 60 * 1000).toISOString();
     }
   };
 
@@ -386,34 +386,34 @@ export const OperationsDashboardRealTime: React.FC = () => {
       timestamp: new Date().toISOString(),
     };
 
-    const blob = new Blob([JSON.stringify(csvData, null, 2)], { type: 'application/json' });
+    const blob = new Blob([JSON.stringify(csvData, null, 2)], { type: "application/json" });
     const url = URL.createObjectURL(blob);
-    const a = document.createElement('a');
+    const a = document.createElement("a");
     a.href = url;
-    a.download = `operations-dashboard-${format(new Date(), 'yyyy-MM-dd-HH-mm')}.json`;
+    a.download = `operations-dashboard-${format(new Date(), "yyyy-MM-dd-HH-mm")}.json`;
     a.click();
 
-    toast.success('Dashboard data exported');
+    toast.success("Dashboard data exported");
   };
 
   const getSeverityColor = (severity: string) => {
     const colors = {
-      low: 'text-blue-500',
-      medium: 'text-yellow-500',
-      high: 'text-orange-500',
-      critical: 'text-red-500',
+      low: "text-blue-500",
+      medium: "text-yellow-500",
+      high: "text-orange-500",
+      critical: "text-red-500",
     };
-    return colors[severity] || 'text-gray-500';
+    return colors[severity] || "text-gray-500";
   };
 
   const getSeverityBadge = (severity: string) => {
     const variants = {
-      low: 'secondary',
-      medium: 'default',
-      high: 'default',
-      critical: 'destructive',
+      low: "secondary",
+      medium: "default",
+      high: "default",
+      critical: "destructive",
     };
-    return <Badge variant={variants[severity] || 'secondary'}>{severity.toUpperCase()}</Badge>;
+    return <Badge variant={variants[severity] || "secondary"}>{severity.toUpperCase()}</Badge>;
   };
 
   if (loading) {
@@ -438,16 +438,16 @@ export const OperationsDashboardRealTime: React.FC = () => {
           </p>
           <div className="flex items-center gap-4 mt-2 text-sm">
             <div className="flex items-center gap-1">
-              <div className={`h-2 w-2 rounded-full ${true ? 'bg-green-500' : 'bg-red-500'}`} />
+              <div className={`h-2 w-2 rounded-full ${true ? "bg-green-500" : "bg-red-500"}`} />
               <span>Supabase</span>
             </div>
             <div className="flex items-center gap-1">
-              <div className={`h-2 w-2 rounded-full ${mqttConnected ? 'bg-green-500' : 'bg-gray-500'}`} />
-              <span>MQTT {!mqttConnected && '(Simulated)'}</span>
+              <div className={`h-2 w-2 rounded-full ${mqttConnected ? "bg-green-500" : "bg-gray-500"}`} />
+              <span>MQTT {!mqttConnected && "(Simulated)"}</span>
             </div>
             <div className="flex items-center gap-1">
-              <div className={`h-2 w-2 rounded-full ${wsConnected ? 'bg-green-500' : 'bg-gray-500'}`} />
-              <span>WebSocket {!wsConnected && '(Simulated)'}</span>
+              <div className={`h-2 w-2 rounded-full ${wsConnected ? "bg-green-500" : "bg-gray-500"}`} />
+              <span>WebSocket {!wsConnected && "(Simulated)"}</span>
             </div>
           </div>
         </div>
@@ -456,8 +456,8 @@ export const OperationsDashboardRealTime: React.FC = () => {
             variant="outline"
             onClick={() => setAutoRefresh(!autoRefresh)}
           >
-            <RefreshCw className={`h-4 w-4 mr-2 ${autoRefresh ? 'animate-spin' : ''}`} />
-            {autoRefresh ? 'Auto' : 'Manual'}
+            <RefreshCw className={`h-4 w-4 mr-2 ${autoRefresh ? "animate-spin" : ""}`} />
+            {autoRefresh ? "Auto" : "Manual"}
           </Button>
           <Button variant="outline" onClick={exportData}>
             <Download className="h-4 w-4 mr-2" />
@@ -536,9 +536,9 @@ export const OperationsDashboardRealTime: React.FC = () => {
                 variant="outline"
                 onClick={() =>
                   setFilter({
-                    operation_type: 'all',
-                    time_range: '24h',
-                    criticality: 'all',
+                    operation_type: "all",
+                    time_range: "24h",
+                    criticality: "all",
                   })
                 }
                 className="w-full"
@@ -561,7 +561,7 @@ export const OperationsDashboardRealTime: React.FC = () => {
             <div className="text-2xl font-bold">{metrics.system_health}%</div>
             <Progress value={metrics.system_health} className="mt-2" />
             <p className="text-xs text-muted-foreground mt-2">
-              Last updated: {format(new Date(metrics.last_update), 'HH:mm:ss')}
+              Last updated: {format(new Date(metrics.last_update), "HH:mm:ss")}
             </p>
           </CardContent>
         </Card>
@@ -699,7 +699,7 @@ export const OperationsDashboardRealTime: React.FC = () => {
                           {getSeverityBadge(alert.severity)}
                         </div>
                         <p className="text-xs text-muted-foreground mt-2">
-                          {format(new Date(alert.timestamp), 'PPpp')}
+                          {format(new Date(alert.timestamp), "PPpp")}
                         </p>
                       </div>
                     </div>
@@ -726,11 +726,11 @@ export const OperationsDashboardRealTime: React.FC = () => {
                       </span>
                       <Badge
                         variant={
-                          sensor.status === 'normal'
-                            ? 'default'
-                            : sensor.status === 'warning'
-                            ? 'secondary'
-                            : 'destructive'
+                          sensor.status === "normal"
+                            ? "default"
+                            : sensor.status === "warning"
+                              ? "secondary"
+                              : "destructive"
                         }
                       >
                         {sensor.status}
@@ -796,13 +796,13 @@ export const OperationsDashboardRealTime: React.FC = () => {
                         <span>
                           {metrics.active_operations > 0
                             ? Math.round(
-                                (metrics.active_operations /
+                              (metrics.active_operations /
                                   Object.values(metrics.mission_status).reduce(
                                     (a: any, b: any) => a + b,
                                     1
                                   )) *
                                   100
-                              )
+                            )
                             : 0}
                           %
                         </span>

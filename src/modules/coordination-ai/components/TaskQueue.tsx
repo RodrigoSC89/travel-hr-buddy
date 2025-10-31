@@ -53,31 +53,31 @@ export const TaskQueue: React.FC = () => {
 
   const getPriorityColor = (priority: TaskPriority): string => {
     switch (priority) {
-      case "critical":
-        return "bg-red-500";
-      case "high":
-        return "bg-orange-500";
-      case "medium":
-        return "bg-yellow-500";
-      case "low":
-        return "bg-blue-500";
-      default:
-        return "bg-gray-500";
+    case "critical":
+      return "bg-red-500";
+    case "high":
+      return "bg-orange-500";
+    case "medium":
+      return "bg-yellow-500";
+    case "low":
+      return "bg-blue-500";
+    default:
+      return "bg-gray-500";
     }
   };
 
   const getStatusIcon = (status: Task["status"]) => {
     switch (status) {
-      case "completed":
-        return <CheckCircle2 className="w-4 h-4 text-green-500" />;
-      case "failed":
-        return <AlertCircle className="w-4 h-4 text-red-500" />;
-      case "in_progress":
-        return <Play className="w-4 h-4 text-blue-500 animate-pulse" />;
-      case "assigned":
-        return <Clock className="w-4 h-4 text-yellow-500" />;
-      default:
-        return <Clock className="w-4 h-4 text-gray-500" />;
+    case "completed":
+      return <CheckCircle2 className="w-4 h-4 text-green-500" />;
+    case "failed":
+      return <AlertCircle className="w-4 h-4 text-red-500" />;
+    case "in_progress":
+      return <Play className="w-4 h-4 text-blue-500 animate-pulse" />;
+    case "assigned":
+      return <Clock className="w-4 h-4 text-yellow-500" />;
+    default:
+      return <Clock className="w-4 h-4 text-gray-500" />;
     }
   };
 

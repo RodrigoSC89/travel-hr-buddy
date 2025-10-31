@@ -24,8 +24,8 @@ vi.mock("@/integrations/supabase/client", () => ({
 interface IncidentLog {
   id: string;
   timestamp: Date;
-  type: 'sensor_reading' | 'alarm' | 'action' | 'status_change' | 'note';
-  severity?: 'info' | 'warning' | 'critical';
+  type: "sensor_reading" | "alarm" | "action" | "status_change" | "note";
+  severity?: "info" | "warning" | "critical";
   data: any;
 }
 
@@ -40,7 +40,7 @@ interface ReplayConfig {
 interface AIHighlight {
   id: string;
   timestamp: Date;
-  type: 'critical_event' | 'anomaly' | 'pattern' | 'root_cause';
+  type: "critical_event" | "anomaly" | "pattern" | "root_cause";
   description: string;
   confidence: number;
   relatedLogs: string[];
@@ -143,12 +143,12 @@ class IncidentReplayService {
     const highlights: AIHighlight[] = [];
 
     // Identify critical events
-    const criticalLogs = logs.filter(log => log.severity === 'critical');
+    const criticalLogs = logs.filter(log => log.severity === "critical");
     criticalLogs.forEach((log, index) => {
       highlights.push({
         id: `highlight-critical-${index}`,
         timestamp: log.timestamp,
-        type: 'critical_event',
+        type: "critical_event",
         description: `Critical event detected: ${log.type}`,
         confidence: 0.95,
         relatedLogs: [log.id]
@@ -156,7 +156,7 @@ class IncidentReplayService {
     });
 
     // Detect anomalies (simplified: rapid sequence of warnings)
-    const warningLogs = logs.filter(log => log.severity === 'warning');
+    const warningLogs = logs.filter(log => log.severity === "warning");
     if (warningLogs.length >= 3) {
       const firstWarning = warningLogs[0];
       const lastWarning = warningLogs[warningLogs.length - 1];
@@ -164,9 +164,9 @@ class IncidentReplayService {
       
       if (timeDiff < 60000) { // Within 1 minute
         highlights.push({
-          id: 'highlight-anomaly-1',
+          id: "highlight-anomaly-1",
           timestamp: firstWarning.timestamp,
-          type: 'anomaly',
+          type: "anomaly",
           description: `Anomaly detected: Rapid sequence of ${warningLogs.length} warnings`,
           confidence: 0.85,
           relatedLogs: warningLogs.map(l => l.id)
@@ -185,7 +185,7 @@ class IncidentReplayService {
         highlights.push({
           id: `highlight-pattern-${type}`,
           timestamp: logs.find(l => l.type === type)!.timestamp,
-          type: 'pattern',
+          type: "pattern",
           description: `Pattern identified: ${type} occurred ${count} times`,
           confidence: 0.75,
           relatedLogs: logs.filter(l => l.type === type).map(l => l.id)
@@ -194,7 +194,7 @@ class IncidentReplayService {
     });
 
     // Find potential root cause (first critical or series of warnings)
-    const firstCritical = logs.find(log => log.severity === 'critical');
+    const firstCritical = logs.find(log => log.severity === "critical");
     if (firstCritical) {
       const precedingLogs = logs.filter(
         log => log.timestamp < firstCritical.timestamp &&
@@ -202,10 +202,10 @@ class IncidentReplayService {
       );
 
       highlights.push({
-        id: 'highlight-root-cause',
+        id: "highlight-root-cause",
         timestamp: firstCritical.timestamp,
-        type: 'root_cause',
-        description: 'Potential root cause identified',
+        type: "root_cause",
+        description: "Potential root cause identified",
         confidence: 0.70,
         relatedLogs: [firstCritical.id, ...precedingLogs.slice(-3).map(l => l.id)]
       });
@@ -254,42 +254,42 @@ describe("Incident Replay AI Tests", () => {
   beforeEach(() => {
     service = new IncidentReplayService();
     
-    const baseTime = new Date('2025-01-01T10:00:00Z');
+    const baseTime = new Date("2025-01-01T10:00:00Z");
     sampleLogs = [
       {
-        id: 'log-1',
+        id: "log-1",
         timestamp: new Date(baseTime.getTime()),
-        type: 'sensor_reading',
-        severity: 'info',
+        type: "sensor_reading",
+        severity: "info",
         data: { temperature: 25 }
       },
       {
-        id: 'log-2',
+        id: "log-2",
         timestamp: new Date(baseTime.getTime() + 60000),
-        type: 'alarm',
-        severity: 'warning',
-        data: { type: 'temperature_high' }
+        type: "alarm",
+        severity: "warning",
+        data: { type: "temperature_high" }
       },
       {
-        id: 'log-3',
+        id: "log-3",
         timestamp: new Date(baseTime.getTime() + 120000),
-        type: 'alarm',
-        severity: 'warning',
-        data: { type: 'pressure_low' }
+        type: "alarm",
+        severity: "warning",
+        data: { type: "pressure_low" }
       },
       {
-        id: 'log-4',
+        id: "log-4",
         timestamp: new Date(baseTime.getTime() + 180000),
-        type: 'alarm',
-        severity: 'critical',
-        data: { type: 'system_failure' }
+        type: "alarm",
+        severity: "critical",
+        data: { type: "system_failure" }
       },
       {
-        id: 'log-5',
+        id: "log-5",
         timestamp: new Date(baseTime.getTime() + 240000),
-        type: 'action',
-        severity: 'info',
-        data: { action: 'emergency_shutdown' }
+        type: "action",
+        severity: "info",
+        data: { action: "emergency_shutdown" }
       }
     ];
 
@@ -298,20 +298,20 @@ describe("Incident Replay AI Tests", () => {
 
   describe("Log Loading", () => {
     it("should load incident logs successfully", async () => {
-      await service.loadIncidentLogs('incident-1', sampleLogs);
+      await service.loadIncidentLogs("incident-1", sampleLogs);
 
-      const state = service.getReplayState('incident-1');
+      const state = service.getReplayState("incident-1");
       expect(state).toBeUndefined(); // Not started yet
 
-      const logs = await service.exportReplayData('incident-1');
+      const logs = await service.exportReplayData("incident-1");
       expect(logs.logs).toHaveLength(5);
     });
 
     it("should sort logs chronologically", async () => {
       const unsortedLogs = [...sampleLogs].reverse();
-      await service.loadIncidentLogs('incident-1', unsortedLogs);
+      await service.loadIncidentLogs("incident-1", unsortedLogs);
 
-      const exported = await service.exportReplayData('incident-1');
+      const exported = await service.exportReplayData("incident-1");
       const logs = exported.logs;
 
       for (let i = 1; i < logs.length; i++) {
@@ -322,16 +322,16 @@ describe("Incident Replay AI Tests", () => {
     });
 
     it("should handle empty log array", async () => {
-      await service.loadIncidentLogs('incident-1', []);
+      await service.loadIncidentLogs("incident-1", []);
 
-      const exported = await service.exportReplayData('incident-1');
+      const exported = await service.exportReplayData("incident-1");
       expect(exported.logs).toHaveLength(0);
     });
   });
 
   describe("Replay Control", () => {
     beforeEach(async () => {
-      await service.loadIncidentLogs('incident-1', sampleLogs);
+      await service.loadIncidentLogs("incident-1", sampleLogs);
     });
 
     it("should start replay successfully", async () => {
@@ -342,11 +342,11 @@ describe("Incident Replay AI Tests", () => {
         highlightCritical: true
       };
 
-      const started = await service.startReplay('incident-1', config);
+      const started = await service.startReplay("incident-1", config);
 
       expect(started).toBe(true);
 
-      const state = service.getReplayState('incident-1');
+      const state = service.getReplayState("incident-1");
       expect(state).toBeDefined();
       expect(state?.isPlaying).toBe(true);
       expect(state?.speed).toBe(1);
@@ -360,7 +360,7 @@ describe("Incident Replay AI Tests", () => {
         highlightCritical: false
       };
 
-      const started = await service.startReplay('non-existent', config);
+      const started = await service.startReplay("non-existent", config);
 
       expect(started).toBe(false);
     });
@@ -373,12 +373,12 @@ describe("Incident Replay AI Tests", () => {
         highlightCritical: true
       };
 
-      await service.startReplay('incident-1', config);
-      const paused = service.pauseReplay('incident-1');
+      await service.startReplay("incident-1", config);
+      const paused = service.pauseReplay("incident-1");
 
       expect(paused).toBe(true);
 
-      const state = service.getReplayState('incident-1');
+      const state = service.getReplayState("incident-1");
       expect(state?.isPlaying).toBe(false);
     });
 
@@ -390,13 +390,13 @@ describe("Incident Replay AI Tests", () => {
         highlightCritical: true
       };
 
-      await service.startReplay('incident-1', config);
-      service.pauseReplay('incident-1');
-      const resumed = service.resumeReplay('incident-1');
+      await service.startReplay("incident-1", config);
+      service.pauseReplay("incident-1");
+      const resumed = service.resumeReplay("incident-1");
 
       expect(resumed).toBe(true);
 
-      const state = service.getReplayState('incident-1');
+      const state = service.getReplayState("incident-1");
       expect(state?.isPlaying).toBe(true);
     });
 
@@ -408,19 +408,19 @@ describe("Incident Replay AI Tests", () => {
         highlightCritical: true
       };
 
-      await service.startReplay('incident-1', config);
-      const stopped = service.stopReplay('incident-1');
+      await service.startReplay("incident-1", config);
+      const stopped = service.stopReplay("incident-1");
 
       expect(stopped).toBe(true);
 
-      const state = service.getReplayState('incident-1');
+      const state = service.getReplayState("incident-1");
       expect(state).toBeUndefined();
     });
   });
 
   describe("Time Control", () => {
     beforeEach(async () => {
-      await service.loadIncidentLogs('incident-1', sampleLogs);
+      await service.loadIncidentLogs("incident-1", sampleLogs);
       
       const config: ReplayConfig = {
         speed: 1,
@@ -429,15 +429,15 @@ describe("Incident Replay AI Tests", () => {
         highlightCritical: true
       };
 
-      await service.startReplay('incident-1', config);
+      await service.startReplay("incident-1", config);
     });
 
     it("should adjust replay speed", () => {
-      const speedUpdated = service.setReplaySpeed('incident-1', 2);
+      const speedUpdated = service.setReplaySpeed("incident-1", 2);
 
       expect(speedUpdated).toBe(true);
 
-      const state = service.getReplayState('incident-1');
+      const state = service.getReplayState("incident-1");
       expect(state?.speed).toBe(2);
     });
 
@@ -445,45 +445,45 @@ describe("Incident Replay AI Tests", () => {
       const speeds = [0.25, 0.5, 1, 2, 4, 8];
 
       speeds.forEach(speed => {
-        service.setReplaySpeed('incident-1', speed);
-        const state = service.getReplayState('incident-1');
+        service.setReplaySpeed("incident-1", speed);
+        const state = service.getReplayState("incident-1");
         expect(state?.speed).toBe(speed);
       });
     });
 
     it("should seek to specific time", () => {
       const targetTime = sampleLogs[2].timestamp;
-      const seeked = service.seekToTime('incident-1', targetTime);
+      const seeked = service.seekToTime("incident-1", targetTime);
 
       expect(seeked).toBe(true);
 
-      const state = service.getReplayState('incident-1');
+      const state = service.getReplayState("incident-1");
       expect(state?.currentTime).toEqual(targetTime);
     });
 
     it("should update log index when seeking", () => {
       const targetTime = sampleLogs[2].timestamp;
-      service.seekToTime('incident-1', targetTime);
+      service.seekToTime("incident-1", targetTime);
 
-      const state = service.getReplayState('incident-1');
+      const state = service.getReplayState("incident-1");
       expect(state?.currentLogIndex).toBeGreaterThanOrEqual(2);
     });
 
     it("should handle seeking beyond end time", () => {
       const futureTime = new Date(sampleLogs[sampleLogs.length - 1].timestamp.getTime() + 1000000);
-      const seeked = service.seekToTime('incident-1', futureTime);
+      const seeked = service.seekToTime("incident-1", futureTime);
 
       expect(seeked).toBe(true);
 
-      const state = service.getReplayState('incident-1');
+      const state = service.getReplayState("incident-1");
       expect(state?.currentLogIndex).toBe(sampleLogs.length - 1);
     });
 
     it("should return logs up to current time", () => {
       const midTime = sampleLogs[2].timestamp;
-      service.seekToTime('incident-1', midTime);
+      service.seekToTime("incident-1", midTime);
 
-      const currentLogs = service.getCurrentLogs('incident-1');
+      const currentLogs = service.getCurrentLogs("incident-1");
 
       expect(currentLogs.length).toBeLessThanOrEqual(3);
       currentLogs.forEach(log => {
@@ -494,32 +494,32 @@ describe("Incident Replay AI Tests", () => {
 
   describe("AI Highlights Generation", () => {
     beforeEach(async () => {
-      await service.loadIncidentLogs('incident-1', sampleLogs);
+      await service.loadIncidentLogs("incident-1", sampleLogs);
     });
 
     it("should generate AI highlights", async () => {
-      const highlights = await service.generateAIHighlights('incident-1');
+      const highlights = await service.generateAIHighlights("incident-1");
 
       expect(highlights.length).toBeGreaterThan(0);
       highlights.forEach(highlight => {
-        expect(highlight).toHaveProperty('id');
-        expect(highlight).toHaveProperty('timestamp');
-        expect(highlight).toHaveProperty('type');
-        expect(highlight).toHaveProperty('confidence');
+        expect(highlight).toHaveProperty("id");
+        expect(highlight).toHaveProperty("timestamp");
+        expect(highlight).toHaveProperty("type");
+        expect(highlight).toHaveProperty("confidence");
       });
     });
 
     it("should identify critical events", async () => {
-      const highlights = await service.generateAIHighlights('incident-1');
+      const highlights = await service.generateAIHighlights("incident-1");
 
-      const criticalHighlights = highlights.filter(h => h.type === 'critical_event');
+      const criticalHighlights = highlights.filter(h => h.type === "critical_event");
       expect(criticalHighlights.length).toBeGreaterThan(0);
     });
 
     it("should detect anomalies", async () => {
-      const highlights = await service.generateAIHighlights('incident-1');
+      const highlights = await service.generateAIHighlights("incident-1");
 
-      const anomalyHighlights = highlights.filter(h => h.type === 'anomaly');
+      const anomalyHighlights = highlights.filter(h => h.type === "anomaly");
       // May or may not detect depending on data
       expect(anomalyHighlights.length).toBeGreaterThanOrEqual(0);
     });
@@ -529,27 +529,27 @@ describe("Incident Replay AI Tests", () => {
       const moreAlarms = Array(10).fill(null).map((_, i) => ({
         id: `extra-${i}`,
         timestamp: new Date(sampleLogs[0].timestamp.getTime() + (i + 10) * 10000),
-        type: 'alarm' as const,
-        severity: 'warning' as const,
-        data: { type: 'test' }
+        type: "alarm" as const,
+        severity: "warning" as const,
+        data: { type: "test" }
       }));
 
-      await service.loadIncidentLogs('incident-2', [...sampleLogs, ...moreAlarms]);
-      const highlights = await service.generateAIHighlights('incident-2');
+      await service.loadIncidentLogs("incident-2", [...sampleLogs, ...moreAlarms]);
+      const highlights = await service.generateAIHighlights("incident-2");
 
-      const patternHighlights = highlights.filter(h => h.type === 'pattern');
+      const patternHighlights = highlights.filter(h => h.type === "pattern");
       expect(patternHighlights.length).toBeGreaterThan(0);
     });
 
     it("should identify potential root cause", async () => {
-      const highlights = await service.generateAIHighlights('incident-1');
+      const highlights = await service.generateAIHighlights("incident-1");
 
-      const rootCauseHighlights = highlights.filter(h => h.type === 'root_cause');
+      const rootCauseHighlights = highlights.filter(h => h.type === "root_cause");
       expect(rootCauseHighlights.length).toBeGreaterThan(0);
     });
 
     it("should assign confidence scores", async () => {
-      const highlights = await service.generateAIHighlights('incident-1');
+      const highlights = await service.generateAIHighlights("incident-1");
 
       highlights.forEach(highlight => {
         expect(highlight.confidence).toBeGreaterThan(0);
@@ -558,7 +558,7 @@ describe("Incident Replay AI Tests", () => {
     });
 
     it("should link highlights to related logs", async () => {
-      const highlights = await service.generateAIHighlights('incident-1');
+      const highlights = await service.generateAIHighlights("incident-1");
 
       highlights.forEach(highlight => {
         expect(highlight.relatedLogs).toBeDefined();
@@ -570,12 +570,12 @@ describe("Incident Replay AI Tests", () => {
 
   describe("Highlight Querying", () => {
     beforeEach(async () => {
-      await service.loadIncidentLogs('incident-1', sampleLogs);
-      await service.generateAIHighlights('incident-1');
+      await service.loadIncidentLogs("incident-1", sampleLogs);
+      await service.generateAIHighlights("incident-1");
     });
 
     it("should retrieve all highlights", () => {
-      const highlights = service.getHighlights('incident-1');
+      const highlights = service.getHighlights("incident-1");
 
       expect(highlights.length).toBeGreaterThan(0);
     });
@@ -584,7 +584,7 @@ describe("Incident Replay AI Tests", () => {
       const startTime = sampleLogs[1].timestamp;
       const endTime = sampleLogs[3].timestamp;
 
-      const highlights = service.getHighlightsInTimeRange('incident-1', startTime, endTime);
+      const highlights = service.getHighlightsInTimeRange("incident-1", startTime, endTime);
 
       highlights.forEach(highlight => {
         expect(highlight.timestamp.getTime()).toBeGreaterThanOrEqual(startTime.getTime());
@@ -593,7 +593,7 @@ describe("Incident Replay AI Tests", () => {
     });
 
     it("should return empty array for non-existent incident", () => {
-      const highlights = service.getHighlights('non-existent');
+      const highlights = service.getHighlights("non-existent");
 
       expect(highlights).toEqual([]);
     });
@@ -602,7 +602,7 @@ describe("Incident Replay AI Tests", () => {
       const futureStart = new Date(sampleLogs[sampleLogs.length - 1].timestamp.getTime() + 100000);
       const futureEnd = new Date(futureStart.getTime() + 100000);
 
-      const highlights = service.getHighlightsInTimeRange('incident-1', futureStart, futureEnd);
+      const highlights = service.getHighlightsInTimeRange("incident-1", futureStart, futureEnd);
 
       expect(highlights).toEqual([]);
     });
@@ -610,8 +610,8 @@ describe("Incident Replay AI Tests", () => {
 
   describe("Data Export", () => {
     beforeEach(async () => {
-      await service.loadIncidentLogs('incident-1', sampleLogs);
-      await service.generateAIHighlights('incident-1');
+      await service.loadIncidentLogs("incident-1", sampleLogs);
+      await service.generateAIHighlights("incident-1");
     });
 
     it("should export complete replay data", async () => {
@@ -622,11 +622,11 @@ describe("Incident Replay AI Tests", () => {
         highlightCritical: true
       };
 
-      await service.startReplay('incident-1', config);
+      await service.startReplay("incident-1", config);
 
-      const exported = await service.exportReplayData('incident-1');
+      const exported = await service.exportReplayData("incident-1");
 
-      expect(exported.incidentId).toBe('incident-1');
+      expect(exported.incidentId).toBe("incident-1");
       expect(exported.logs).toBeDefined();
       expect(exported.highlights).toBeDefined();
       expect(exported.replayState).toBeDefined();
@@ -634,7 +634,7 @@ describe("Incident Replay AI Tests", () => {
     });
 
     it("should export without replay state if not started", async () => {
-      const exported = await service.exportReplayData('incident-1');
+      const exported = await service.exportReplayData("incident-1");
 
       expect(exported.logs).toBeDefined();
       expect(exported.highlights).toBeDefined();
@@ -642,13 +642,13 @@ describe("Incident Replay AI Tests", () => {
     });
 
     it("should include all logs in export", async () => {
-      const exported = await service.exportReplayData('incident-1');
+      const exported = await service.exportReplayData("incident-1");
 
       expect(exported.logs).toHaveLength(sampleLogs.length);
     });
 
     it("should include all highlights in export", async () => {
-      const exported = await service.exportReplayData('incident-1');
+      const exported = await service.exportReplayData("incident-1");
 
       expect(exported.highlights.length).toBeGreaterThan(0);
     });
@@ -656,32 +656,32 @@ describe("Incident Replay AI Tests", () => {
 
   describe("Data Management", () => {
     beforeEach(async () => {
-      await service.loadIncidentLogs('incident-1', sampleLogs);
-      await service.generateAIHighlights('incident-1');
+      await service.loadIncidentLogs("incident-1", sampleLogs);
+      await service.generateAIHighlights("incident-1");
     });
 
     it("should clear incident data", () => {
-      service.clearIncidentData('incident-1');
+      service.clearIncidentData("incident-1");
 
-      const highlights = service.getHighlights('incident-1');
-      const state = service.getReplayState('incident-1');
+      const highlights = service.getHighlights("incident-1");
+      const state = service.getReplayState("incident-1");
 
       expect(highlights).toEqual([]);
       expect(state).toBeUndefined();
     });
 
     it("should handle clearing non-existent incident", () => {
-      expect(() => service.clearIncidentData('non-existent')).not.toThrow();
+      expect(() => service.clearIncidentData("non-existent")).not.toThrow();
     });
   });
 
   describe("Integration Scenarios", () => {
     it("should support complete replay workflow", async () => {
       // Load logs
-      await service.loadIncidentLogs('incident-1', sampleLogs);
+      await service.loadIncidentLogs("incident-1", sampleLogs);
 
       // Generate highlights
-      const highlights = await service.generateAIHighlights('incident-1');
+      const highlights = await service.generateAIHighlights("incident-1");
       expect(highlights.length).toBeGreaterThan(0);
 
       // Start replay
@@ -691,37 +691,37 @@ describe("Incident Replay AI Tests", () => {
         endTime: sampleLogs[sampleLogs.length - 1].timestamp,
         highlightCritical: true
       };
-      await service.startReplay('incident-1', config);
+      await service.startReplay("incident-1", config);
 
       // Pause and adjust speed
-      service.pauseReplay('incident-1');
-      service.setReplaySpeed('incident-1', 2);
+      service.pauseReplay("incident-1");
+      service.setReplaySpeed("incident-1", 2);
 
       // Resume and seek
-      service.resumeReplay('incident-1');
-      service.seekToTime('incident-1', sampleLogs[2].timestamp);
+      service.resumeReplay("incident-1");
+      service.seekToTime("incident-1", sampleLogs[2].timestamp);
 
       // Get current state
-      const currentLogs = service.getCurrentLogs('incident-1');
+      const currentLogs = service.getCurrentLogs("incident-1");
       expect(currentLogs.length).toBeGreaterThan(0);
 
       // Export data
-      const exported = await service.exportReplayData('incident-1');
+      const exported = await service.exportReplayData("incident-1");
       expect(exported.logs).toHaveLength(sampleLogs.length);
 
       // Stop replay
-      service.stopReplay('incident-1');
+      service.stopReplay("incident-1");
 
       // Clean up
-      service.clearIncidentData('incident-1');
+      service.clearIncidentData("incident-1");
     });
 
     it("should handle concurrent replays", async () => {
       const logs1 = sampleLogs.slice(0, 3);
       const logs2 = sampleLogs.slice(2, 5);
 
-      await service.loadIncidentLogs('incident-1', logs1);
-      await service.loadIncidentLogs('incident-2', logs2);
+      await service.loadIncidentLogs("incident-1", logs1);
+      await service.loadIncidentLogs("incident-2", logs2);
 
       const config: ReplayConfig = {
         speed: 1,
@@ -730,11 +730,11 @@ describe("Incident Replay AI Tests", () => {
         highlightCritical: true
       };
 
-      await service.startReplay('incident-1', config);
-      await service.startReplay('incident-2', config);
+      await service.startReplay("incident-1", config);
+      await service.startReplay("incident-2", config);
 
-      const state1 = service.getReplayState('incident-1');
-      const state2 = service.getReplayState('incident-2');
+      const state1 = service.getReplayState("incident-1");
+      const state2 = service.getReplayState("incident-2");
 
       expect(state1).toBeDefined();
       expect(state2).toBeDefined();
@@ -746,14 +746,14 @@ describe("Incident Replay AI Tests", () => {
       const manyLogs: IncidentLog[] = Array(1000).fill(null).map((_, i) => ({
         id: `log-${i}`,
         timestamp: new Date(Date.now() + i * 1000),
-        type: i % 2 === 0 ? 'sensor_reading' : 'alarm',
-        severity: i % 10 === 0 ? 'critical' : i % 5 === 0 ? 'warning' : 'info',
+        type: i % 2 === 0 ? "sensor_reading" : "alarm",
+        severity: i % 10 === 0 ? "critical" : i % 5 === 0 ? "warning" : "info",
         data: { index: i }
       }));
 
-      await service.loadIncidentLogs('large-incident', manyLogs);
+      await service.loadIncidentLogs("large-incident", manyLogs);
 
-      const highlights = await service.generateAIHighlights('large-incident');
+      const highlights = await service.generateAIHighlights("large-incident");
       expect(highlights.length).toBeGreaterThan(0);
 
       const config: ReplayConfig = {
@@ -763,7 +763,7 @@ describe("Incident Replay AI Tests", () => {
         highlightCritical: true
       };
 
-      const started = await service.startReplay('large-incident', config);
+      const started = await service.startReplay("large-incident", config);
       expect(started).toBe(true);
     });
   });
@@ -773,15 +773,15 @@ describe("Incident Replay AI Tests", () => {
       const manyLogs: IncidentLog[] = Array(100).fill(null).map((_, i) => ({
         id: `log-${i}`,
         timestamp: new Date(Date.now() + i * 1000),
-        type: 'sensor_reading',
-        severity: 'info',
+        type: "sensor_reading",
+        severity: "info",
         data: { value: i }
       }));
 
-      await service.loadIncidentLogs('perf-test', manyLogs);
+      await service.loadIncidentLogs("perf-test", manyLogs);
 
       const start = Date.now();
-      await service.generateAIHighlights('perf-test');
+      await service.generateAIHighlights("perf-test");
       const duration = Date.now() - start;
 
       expect(duration).toBeLessThan(1000); // Should complete within 1 second
@@ -791,12 +791,12 @@ describe("Incident Replay AI Tests", () => {
       const manyLogs: IncidentLog[] = Array(1000).fill(null).map((_, i) => ({
         id: `log-${i}`,
         timestamp: new Date(Date.now() + i * 1000),
-        type: 'sensor_reading',
-        severity: 'info',
+        type: "sensor_reading",
+        severity: "info",
         data: { value: i }
       }));
 
-      await service.loadIncidentLogs('seek-test', manyLogs);
+      await service.loadIncidentLogs("seek-test", manyLogs);
 
       const config: ReplayConfig = {
         speed: 1,
@@ -805,10 +805,10 @@ describe("Incident Replay AI Tests", () => {
         highlightCritical: false
       };
 
-      await service.startReplay('seek-test', config);
+      await service.startReplay("seek-test", config);
 
       const start = Date.now();
-      service.seekToTime('seek-test', manyLogs[500].timestamp);
+      service.seekToTime("seek-test", manyLogs[500].timestamp);
       const duration = Date.now() - start;
 
       expect(duration).toBeLessThan(100); // Should complete within 100ms

@@ -10,7 +10,7 @@ interface CacheEntry<T> {
 }
 
 class SupabaseOfflineCache {
-  private readonly CACHE_PREFIX = 'supabase_cache_';
+  private readonly CACHE_PREFIX = "supabase_cache_";
   private readonly DEFAULT_TTL = 3600000; // 1 hour in milliseconds
 
   /**
@@ -36,7 +36,7 @@ class SupabaseOfflineCache {
       console.log(`[Cache] Retrieved ${key} from cache (age: ${Math.floor((Date.now() - entry.timestamp) / 1000)}s)`);
       return entry.data;
     } catch (error) {
-      console.error('[Cache] Error reading from cache:', error);
+      console.error("[Cache] Error reading from cache:", error);
       return null;
     }
   }
@@ -56,9 +56,9 @@ class SupabaseOfflineCache {
       localStorage.setItem(cacheKey, JSON.stringify(entry));
       console.log(`[Cache] Stored ${key} in cache (TTL: ${ttl / 1000}s)`);
     } catch (error) {
-      console.error('[Cache] Error writing to cache:', error);
+      console.error("[Cache] Error writing to cache:", error);
       // If localStorage is full, clear old entries
-      if (error instanceof Error && error.name === 'QuotaExceededError') {
+      if (error instanceof Error && error.name === "QuotaExceededError") {
         this.clearExpired();
         // Try again
         try {
@@ -69,7 +69,7 @@ class SupabaseOfflineCache {
             expiresAt: Date.now() + ttl
           }));
         } catch (retryError) {
-          console.error('[Cache] Failed to store after clearing:', retryError);
+          console.error("[Cache] Failed to store after clearing:", retryError);
         }
       }
     }
@@ -83,7 +83,7 @@ class SupabaseOfflineCache {
       const cacheKey = this.CACHE_PREFIX + key;
       localStorage.removeItem(cacheKey);
     } catch (error) {
-      console.error('[Cache] Error removing from cache:', error);
+      console.error("[Cache] Error removing from cache:", error);
     }
   }
 
@@ -113,7 +113,7 @@ class SupabaseOfflineCache {
         }
       }
     } catch (error) {
-      console.error('[Cache] Error clearing expired entries:', error);
+      console.error("[Cache] Error clearing expired entries:", error);
     }
   }
 
@@ -128,9 +128,9 @@ class SupabaseOfflineCache {
           localStorage.removeItem(key);
         }
       }
-      console.log('[Cache] Cleared all cache');
+      console.log("[Cache] Cleared all cache");
     } catch (error) {
-      console.error('[Cache] Error clearing all cache:', error);
+      console.error("[Cache] Error clearing all cache:", error);
     }
   }
 
@@ -155,7 +155,7 @@ class SupabaseOfflineCache {
 
       return { count, totalSize };
     } catch (error) {
-      console.error('[Cache] Error getting stats:', error);
+      console.error("[Cache] Error getting stats:", error);
       return { count: 0, totalSize: 0 };
     }
   }
