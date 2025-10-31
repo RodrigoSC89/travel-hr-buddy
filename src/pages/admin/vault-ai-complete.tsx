@@ -1,5 +1,5 @@
-// @ts-nocheck
 import React, { useState, useEffect } from "react";
+import { logger } from "@/lib/logger";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -61,7 +61,7 @@ export default function VaultAIComplete() {
 
   const loadDocuments = async () => {
     try {
-      const { data, error } = await supabase
+      const { data, error } = await (supabase as any)
         .from("vault_documents")
         .select("*")
         .eq("status", "active")
@@ -71,13 +71,13 @@ export default function VaultAIComplete() {
       if (error) throw error;
       setDocuments(data || []);
     } catch (error) {
-      console.error("Error loading documents:", error);
+      logger.error("Error loading documents:", error);
     }
   };
 
   const loadSearchLogs = async () => {
     try {
-      const { data, error } = await supabase
+      const { data, error } = await (supabase as any)
         .from("vault_search_logs")
         .select("*")
         .order("created_at", { ascending: false })
@@ -86,7 +86,7 @@ export default function VaultAIComplete() {
       if (error) throw error;
       setSearchLogs(data || []);
     } catch (error) {
-      console.error("Error loading search logs:", error);
+      logger.error("Error loading search logs:", error);
     }
   };
 
@@ -115,7 +115,7 @@ export default function VaultAIComplete() {
       setSearchResults(results);
 
       // Log the search
-      await supabase
+      await (supabase as any)
         .from("vault_search_logs")
         .insert({
           query: searchQuery,
@@ -132,7 +132,7 @@ export default function VaultAIComplete() {
 
       loadSearchLogs();
     } catch (error) {
-      console.error("Error performing search:", error);
+      logger.error("Error performing search:", error);
       toast({
         title: "Erro",
         description: "Falha ao realizar busca",

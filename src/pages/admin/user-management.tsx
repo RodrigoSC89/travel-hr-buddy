@@ -1,4 +1,3 @@
-// @ts-nocheck
 import React, { useState, useEffect } from "react";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
@@ -45,7 +44,7 @@ export default function UserManagement() {
       setLoading(true);
       
       // Fetch users from profiles table joined with auth.users
-      const { data, error } = await supabase
+      const { data, error } = await (supabase as any)
         .from("profiles")
         .select(`
           id,
@@ -72,7 +71,7 @@ export default function UserManagement() {
 
   const handleRoleUpdate = async (userId: string, newRole: string) => {
     try {
-      const { error } = await supabase
+      const { error } = await (supabase as any)
         .from("profiles")
         .update({ role: newRole })
         .eq("id", userId);
@@ -91,7 +90,7 @@ export default function UserManagement() {
     const newStatus = currentStatus === "active" ? "inactive" : "active";
 
     try {
-      const { error } = await supabase
+      const { error } = await (supabase as any)
         .from("profiles")
         .update({ status: newStatus })
         .eq("id", userId);

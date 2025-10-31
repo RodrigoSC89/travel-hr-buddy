@@ -1,4 +1,3 @@
-// @ts-nocheck
 import React, { useState } from "react";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
@@ -16,7 +15,7 @@ export default function TrainingPage() {
   const { data: stats } = useQuery<CrewTrainingStats>({
     queryKey: ["training-stats"],
     queryFn: async () => {
-      const { data, error } = await supabase
+      const { data, error } = await (supabase as any)
         .rpc("get_crew_training_stats");
       
       if (error) throw error;
@@ -28,7 +27,7 @@ export default function TrainingPage() {
   const { data: modules = [], isLoading: modulesLoading } = useQuery<TrainingModuleExtended[]>({
     queryKey: ["training-modules", selectedCategory],
     queryFn: async () => {
-      let query = supabase
+      let query = (supabase as any)
         .from("training_modules")
         .select("*")
         .eq("status", "active")
@@ -48,7 +47,7 @@ export default function TrainingPage() {
   const { data: records = [], isLoading: recordsLoading } = useQuery<CrewTrainingRecord[]>({
     queryKey: ["training-records", selectedCategory],
     queryFn: async () => {
-      let query = supabase
+      let query = (supabase as any)
         .from("crew_training_records")
         .select("*")
         .order("date_completed", { ascending: false })
