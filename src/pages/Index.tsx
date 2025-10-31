@@ -1,31 +1,35 @@
-import React, { useMemo } from "react";
+import React, { useMemo, lazy, Suspense } from "react";
 import { ProfessionalHeader } from "@/components/dashboard/professional-header";
 import { ProfessionalKPICard } from "@/components/dashboard/professional-kpi-card";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Button } from "@/components/ui/button";
-import { Ship, TrendingUp, Activity, CheckCircle, DollarSign, Users, Target, AlertTriangle, BarChart3, LineChart, Shield } from "lucide-react";
-import { AreaChart, Area, LineChart as RechartsLine, Line, BarChart, Bar, PieChart, Pie, Cell, ResponsiveContainer, XAxis, YAxis, CartesianGrid, Tooltip, Legend } from "recharts";
-import { motion } from "framer-motion";
+import { Ship, Activity, CheckCircle, DollarSign, Users, Target, AlertTriangle, LineChart, Shield } from "lucide-react";
 import { useState } from "react";
 import { Link } from "react-router-dom";
 import { usePreviewSafeMode } from "@/hooks/qa/usePreviewSafeMode";
+import { Skeleton } from "@/components/ui/skeleton";
 
-// Dados mockados
-const revenueData = [
+// Lazy load dos componentes de charts para melhor performance
+const RevenueChart = lazy(() => import("@/components/dashboard/charts/RevenueChart"));
+const FleetChart = lazy(() => import("@/components/dashboard/charts/FleetChart"));
+const FinancialChart = lazy(() => import("@/components/dashboard/charts/FinancialChart"));
+
+// Dados mockados memoizados
+const REVENUE_DATA = [
   { month: "Jan", revenue: 42000, target: 40000 },
   { month: "Fev", revenue: 48000, target: 45000 },
   { month: "Mar", revenue: 52000, target: 50000 },
   { month: "Abr", revenue: 58000, target: 55000 },
   { month: "Mai", revenue: 65000, target: 60000 },
   { month: "Jun", revenue: 72000, target: 70000 },
-];
+] as const;
 
-const fleetData = [
+const FLEET_DATA = [
   { name: "Operacional", value: 20, color: "#10b981" },
   { name: "Manutenção", value: 3, color: "#f59e0b" },
   { name: "Standby", value: 1, color: "#3b82f6" },
-];
+] as const;
 
 const Index = () => {
   const [activeTab, setActiveTab] = useState("overview");
@@ -115,101 +119,41 @@ const Index = () => {
 
         <TabsContent value="overview" className="space-y-6">
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
-            {/* Revenue Chart */}
-            <motion.div
-              initial={{ opacity: 0, x: -20 }}
-              animate={{ opacity: 1, x: 0 }}
-              transition={{ delay: 0.4 }}
-            >
-              <Card className="border-primary/10">
-                <CardHeader>
-                  <CardTitle className="flex items-center gap-2">
-                    <LineChart className="h-5 w-5 text-primary" />
-                    Evolução de Receita
-                  </CardTitle>
-                  <CardDescription>Receita mensal vs meta estabelecida</CardDescription>
-                </CardHeader>
-                <CardContent>
-                  <ResponsiveContainer width="100%" height={300}>
-                    <AreaChart data={revenueData}>
-                      <defs>
-                        <linearGradient id="colorRevenue" x1="0" y1="0" x2="0" y2="1">
-                          <stop offset="5%" stopColor="#3b82f6" stopOpacity={0.8}/>
-                          <stop offset="95%" stopColor="#3b82f6" stopOpacity={0}/>
-                        </linearGradient>
-                      </defs>
-                      <CartesianGrid strokeDasharray="3 3" className="stroke-muted" />
-                      <XAxis dataKey="month" className="text-xs" />
-                      <YAxis className="text-xs" />
-                      <Tooltip />
-                      <Legend />
-                      <Area 
-                        type="monotone" 
-                        dataKey="revenue" 
-                        stroke="#3b82f6" 
-                        fillOpacity={1} 
-                        fill="url(#colorRevenue)"
-                        name="Receita (R$)"
-                      />
-                      <Line 
-                        type="monotone" 
-                        dataKey="target" 
-                        stroke="#10b981" 
-                        strokeWidth={2}
-                        name="Meta (R$)"
-                      />
-                    </AreaChart>
-                  </ResponsiveContainer>
-                </CardContent>
-              </Card>
-            </motion.div>
+            {/* Revenue Chart - Lazy Loaded */}
+            <Card className="border-primary/10">
+              <CardHeader>
+                <CardTitle className="flex items-center gap-2">
+                  <LineChart className="h-5 w-5 text-primary" />
+                  Evolução de Receita
+                </CardTitle>
+                <CardDescription>Receita mensal vs meta estabelecida</CardDescription>
+              </CardHeader>
+              <CardContent>
+                <Suspense fallback={<Skeleton className="h-[300px] w-full" />}>
+                  <RevenueChart data={REVENUE_DATA} />
+                </Suspense>
+              </CardContent>
+            </Card>
 
-            {/* Fleet Distribution */}
-            <motion.div
-              initial={{ opacity: 0, x: 20 }}
-              animate={{ opacity: 1, x: 0 }}
-              transition={{ delay: 0.5 }}
-            >
-              <Card className="border-primary/10">
-                <CardHeader>
-                  <CardTitle className="flex items-center gap-2">
-                    <Ship className="h-5 w-5 text-primary" />
-                    Status da Frota
-                  </CardTitle>
-                  <CardDescription>Distribuição atual das embarcações</CardDescription>
-                </CardHeader>
-                <CardContent>
-                  <ResponsiveContainer width="100%" height={300}>
-                    <PieChart>
-                      <Pie
-                        data={fleetData}
-                        cx="50%"
-                        cy="50%"
-                        innerRadius={60}
-                        outerRadius={100}
-                        paddingAngle={5}
-                        dataKey="value"
-                      >
-                        {fleetData.map((entry, index) => (
-                          <Cell key={`cell-${index}`} fill={entry.color} />
-                        ))}
-                      </Pie>
-                      <Tooltip />
-                      <Legend />
-                    </PieChart>
-                  </ResponsiveContainer>
-                </CardContent>
-              </Card>
-            </motion.div>
+            {/* Fleet Distribution - Lazy Loaded */}
+            <Card className="border-primary/10">
+              <CardHeader>
+                <CardTitle className="flex items-center gap-2">
+                  <Ship className="h-5 w-5 text-primary" />
+                  Status da Frota
+                </CardTitle>
+                <CardDescription>Distribuição atual das embarcações</CardDescription>
+              </CardHeader>
+              <CardContent>
+                <Suspense fallback={<Skeleton className="h-[300px] w-full" />}>
+                  <FleetChart data={FLEET_DATA} />
+                </Suspense>
+              </CardContent>
+            </Card>
           </div>
 
-          {/* Quick Stats */}
-          <motion.div
-            initial={{ opacity: 0, y: 20 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ delay: 0.6 }}
-            className="grid grid-cols-1 md:grid-cols-3 gap-6"
-          >
+          {/* Quick Stats - Sem animações pesadas */}
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
             <Card className="border-green-500/20 bg-green-500/5">
               <CardContent className="pt-6 text-center">
                 <div className="inline-flex p-4 rounded-full bg-green-500/10 mb-4">
@@ -239,7 +183,7 @@ const Index = () => {
                 <p className="text-sm text-muted-foreground">Missões em Andamento</p>
               </CardContent>
             </Card>
-          </motion.div>
+          </div>
         </TabsContent>
 
         <TabsContent value="financial">
@@ -249,17 +193,9 @@ const Index = () => {
               <CardDescription>Detalhamento de receitas e custos operacionais</CardDescription>
             </CardHeader>
             <CardContent>
-              <ResponsiveContainer width="100%" height={400}>
-                <BarChart data={revenueData}>
-                  <CartesianGrid strokeDasharray="3 3" />
-                  <XAxis dataKey="month" />
-                  <YAxis />
-                  <Tooltip />
-                  <Legend />
-                  <Bar dataKey="revenue" fill="#3b82f6" name="Receita" radius={[8, 8, 0, 0]} />
-                  <Bar dataKey="target" fill="#10b981" name="Meta" radius={[8, 8, 0, 0]} />
-                </BarChart>
-              </ResponsiveContainer>
+              <Suspense fallback={<Skeleton className="h-[400px] w-full" />}>
+                <FinancialChart data={REVENUE_DATA} />
+              </Suspense>
             </CardContent>
           </Card>
         </TabsContent>
