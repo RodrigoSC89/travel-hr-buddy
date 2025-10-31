@@ -1,4 +1,3 @@
-// @ts-nocheck
 /**
  * PATCH 231 - Meta-Strategy Engine
  * 
@@ -9,6 +8,7 @@
  */
 
 import { supabase } from "@/integrations/supabase/client";
+import { logger } from "@/lib/logger";
 
 export interface Strategy {
   id: string;
@@ -44,7 +44,7 @@ class MetaStrategyEngine {
    * Generate multiple strategic alternatives for a given context
    */
   async generateStrategies(context: StrategyContext): Promise<Strategy[]> {
-    console.log("[MetaStrategy] Generating strategies for:", context.goal);
+    logger.info("Generating strategies", { goal: context.goal });
 
     const strategies: Strategy[] = [];
 
@@ -177,7 +177,7 @@ class MetaStrategyEngine {
       timestamp: new Date().toISOString()
     };
 
-    console.log("[MetaStrategy] Selected strategy:", selected.name, "Score:", selected.score);
+    logger.info("Selected strategy", { name: selected.name, score: selected.score });
 
     // Log selection
     await this.logStrategySelection(selection);
@@ -193,7 +193,7 @@ class MetaStrategyEngine {
     strategies: Strategy[]
   ): Promise<void> {
     try {
-      await supabase.from("meta_strategy_log").insert({
+      await (supabase as any).from("meta_strategy_log").insert({
         event_type: "generation",
         context: context,
         strategies: strategies.map(s => ({
@@ -209,7 +209,7 @@ class MetaStrategyEngine {
         }
       });
     } catch (error) {
-      console.error("[MetaStrategy] Failed to log generation:", error);
+      logger.error("Failed to log generation", { error });
     }
   }
 
@@ -218,7 +218,7 @@ class MetaStrategyEngine {
    */
   private async logStrategySelection(selection: StrategySelection): Promise<void> {
     try {
-      await supabase.from("meta_strategy_log").insert({
+      await (supabase as any).from("meta_strategy_log").insert({
         event_type: "selection",
         context: selection.context,
         strategies: [selection.selected_strategy, ...selection.alternatives].map(s => ({
@@ -234,7 +234,7 @@ class MetaStrategyEngine {
         }
       });
     } catch (error) {
-      console.error("[MetaStrategy] Failed to log selection:", error);
+      logger.error("Failed to log selection", { error });
     }
   }
 
@@ -250,7 +250,7 @@ class MetaStrategyEngine {
    */
   async getStrategyLogs(limit: number = 50): Promise<any[]> {
     try {
-      const { data, error } = await supabase
+      const { data, error } = await (supabase as any)
         .from("meta_strategy_log")
         .select("*")
         .order("created_at", { ascending: false })
@@ -259,7 +259,7 @@ class MetaStrategyEngine {
       if (error) throw error;
       return data || [];
     } catch (error) {
-      console.error("[MetaStrategy] Failed to fetch logs:", error);
+      logger.error("Failed to fetch logs", { error });
       return [];
     }
   }

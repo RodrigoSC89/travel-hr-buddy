@@ -1,4 +1,3 @@
-// @ts-nocheck
 /**
  * PATCH 235: Multi-Agent Performance Scanner
  * 
@@ -7,6 +6,7 @@
  */
 
 import { supabase } from "@/integrations/supabase/client";
+import { logger } from "@/lib/logger";
 
 export interface AgentMetrics {
   agentId: string;
@@ -91,7 +91,7 @@ export class MultiAgentPerformanceScanner {
     this.isScanning = true;
     this.scan();
     setInterval(() => this.scan(), this.scanInterval);
-    console.log("🔍 Multi-Agent Performance Scanner started");
+    logger.info("Multi-Agent Performance Scanner started");
   }
 
   /**
@@ -99,7 +99,7 @@ export class MultiAgentPerformanceScanner {
    */
   stopScanning(): void {
     this.isScanning = false;
-    console.log("⏹️ Multi-Agent Performance Scanner stopped");
+    logger.info("Multi-Agent Performance Scanner stopped");
   }
 
   /**
@@ -127,7 +127,7 @@ export class MultiAgentPerformanceScanner {
       await this.updateRankings(metrics);
 
     } catch (error) {
-      console.error("Error during performance scan:", error);
+      logger.error("Error during performance scan", { error });
     }
   }
 
@@ -403,7 +403,7 @@ export class MultiAgentPerformanceScanner {
       }
 
       // Log failure
-      console.warn(`⚠️ Agent failure detected: ${failure.agentName} - ${failure.details}`);
+      logger.warn("Agent failure detected", { agentName: failure.agentName, details: failure.details });
     }
   }
 
@@ -448,12 +448,12 @@ export class MultiAgentPerformanceScanner {
       success: true,
     };
 
-    console.log(`🔄 Switching from ${fromAgentId} to ${toAgentId}: ${reason}`);
+    logger.info("Switching agents", { fromAgentId, toAgentId, reason });
 
     // Log the switch
     // In a real implementation, this would also redirect tasks
     try {
-      await supabase.from("agent_performance_metrics").insert({
+      await (supabase as any).from("agent_performance_metrics").insert({
         agent_id: toAgentId,
         metric_type: "switch",
         metric_value: 1,
@@ -461,7 +461,7 @@ export class MultiAgentPerformanceScanner {
         timestamp: switchRecord.timestamp,
       });
     } catch (error) {
-      console.error("Failed to log agent switch:", error);
+      logger.error("Failed to log agent switch", { error });
     }
   }
 
@@ -482,9 +482,9 @@ export class MultiAgentPerformanceScanner {
         timestamp: new Date().toISOString(),
       }));
 
-      await supabase.from("agent_performance_metrics").insert(records);
+      await (supabase as any).from("agent_performance_metrics").insert(records);
     } catch (error) {
-      console.error("Failed to store metrics:", error);
+      logger.error("Failed to store metrics", { error });
     }
   }
 
@@ -505,9 +505,9 @@ export class MultiAgentPerformanceScanner {
         timestamp: new Date().toISOString(),
       }));
 
-      await supabase.from("agent_performance_metrics").insert(records);
+      await (supabase as any).from("agent_performance_metrics").insert(records);
     } catch (error) {
-      console.error("Failed to update rankings:", error);
+      logger.error("Failed to update rankings", { error });
     }
   }
 

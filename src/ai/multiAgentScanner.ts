@@ -1,4 +1,3 @@
-// @ts-nocheck
 /**
  * PATCH 235 - Multi-Agent Performance Scanner
  * 
@@ -9,6 +8,7 @@
  */
 
 import { supabase } from "@/integrations/supabase/client";
+import { logger } from "@/lib/logger";
 
 export interface AIAgent {
   id: string;
@@ -56,7 +56,7 @@ class MultiAgentScanner {
    * Initialize the multi-agent scanner
    */
   async initialize(): Promise<void> {
-    console.log("[AgentScanner] Initializing");
+    logger.info("AgentScanner initializing");
     
     // Register default agents
     this.registerAgent({
@@ -125,7 +125,7 @@ class MultiAgentScanner {
       last_updated: new Date().toISOString()
     });
 
-    console.log("[AgentScanner] Registered agent:", agent.name);
+    logger.info("Registered agent", { name: agent.name });
   }
 
   /**
@@ -133,11 +133,11 @@ class MultiAgentScanner {
    */
   startScanning(intervalMs: number = 10000): void {
     if (this.scanInterval) {
-      console.warn("[AgentScanner] Already scanning");
+      logger.warn("Already scanning");
       return;
     }
 
-    console.log("[AgentScanner] Started scanning");
+    logger.info("Started scanning");
     this.scanInterval = window.setInterval(() => {
       this.scanAllAgents();
     }, intervalMs);
@@ -150,7 +150,7 @@ class MultiAgentScanner {
     if (this.scanInterval) {
       clearInterval(this.scanInterval);
       this.scanInterval = null;
-      console.log("[AgentScanner] Stopped scanning");
+      logger.info("Stopped scanning");
     }
   }
 
@@ -202,7 +202,7 @@ class MultiAgentScanner {
     const failedAgent = this.agents.get(agentId);
     if (!failedAgent) return;
 
-    console.warn("[AgentScanner] Agent failure detected:", failedAgent.name);
+    logger.warn("Agent failure detected", { name: failedAgent.name });
 
     // Mark agent as failed
     failedAgent.status = "failed";
@@ -229,7 +229,7 @@ class MultiAgentScanner {
 
     if (!fromAgent || !toAgent) return;
 
-    console.log("[AgentScanner] Failing over from", fromAgent.name, "to", toAgent.name);
+    logger.info("Failing over agents", { from: fromAgent.name, to: toAgent.name });
 
     // Update statuses
     toAgent.status = "active";
@@ -279,7 +279,9 @@ class MultiAgentScanner {
     rankings.sort((a, b) => b.overall_score - a.overall_score);
     rankings.forEach((r, idx) => r.rank = idx + 1);
 
-    console.log("[AgentScanner] Rankings updated:", rankings.map(r => `${r.rank}. ${r.agent_name} (${r.overall_score.toFixed(1)})`).join(", "));
+    logger.info("Rankings updated", { 
+      rankings: rankings.map(r => `${r.rank}. ${r.agent_name} (${r.overall_score.toFixed(1)})`).join(", ")
+    });
 
     return rankings;
   }
@@ -289,7 +291,7 @@ class MultiAgentScanner {
    */
   private async logFailoverEvent(event: FailoverEvent): Promise<void> {
     try {
-      await supabase.from("agent_failover_log").insert({
+      await (supabase as any).from("agent_failover_log").insert({
         from_agent_id: event.from_agent_id,
         to_agent_id: event.to_agent_id,
         reason: event.reason,
@@ -297,7 +299,7 @@ class MultiAgentScanner {
         success: event.success
       });
     } catch (error) {
-      console.error("[AgentScanner] Failed to log failover:", error);
+      logger.error("Failed to log failover", { error });
     }
   }
 

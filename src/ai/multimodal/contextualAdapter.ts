@@ -1,7 +1,7 @@
 import { VisualContext } from "../vision/copilotVision";
 import { IntentOutput } from "./intentEngine";
-// @ts-nocheck
 import { supabase } from "@/integrations/supabase/client";
+import { logger } from "@/lib/logger";
 
 export interface ContextData {
   visual?: VisualContext;
@@ -82,7 +82,7 @@ export class ContextualAdapter {
 
       return response;
     } catch (error) {
-      console.error("Error adapting response:", error);
+      logger.error("Error adapting response", { error });
       throw error;
     }
   }
@@ -174,7 +174,7 @@ Respond in JSON format with:
       const response = this.generateRuleBasedResponse(intent, context);
       return response;
     } catch (error) {
-      console.error("Error generating response:", error);
+      logger.error("Error generating response", { error });
       
       // Fallback response
       return {
@@ -353,7 +353,7 @@ Respond in JSON format with:
     try {
       await (supabase as any).from("ia_performance_log").insert(data);
     } catch (error) {
-      console.error("Failed to log performance:", error);
+      logger.error("Failed to log performance", { error });
     }
   }
 }
