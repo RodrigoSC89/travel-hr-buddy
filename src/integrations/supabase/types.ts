@@ -1713,6 +1713,42 @@ export type Database = {
           },
         ]
       }
+      autofix_history: {
+        Row: {
+          applied_at: string
+          applied_by: string | null
+          details: Json | null
+          file_path: string
+          fix_applied: string
+          id: string
+          issue_type: string
+          reverted_at: string | null
+          status: string | null
+        }
+        Insert: {
+          applied_at?: string
+          applied_by?: string | null
+          details?: Json | null
+          file_path: string
+          fix_applied: string
+          id?: string
+          issue_type: string
+          reverted_at?: string | null
+          status?: string | null
+        }
+        Update: {
+          applied_at?: string
+          applied_by?: string | null
+          details?: Json | null
+          file_path?: string
+          fix_applied?: string
+          id?: string
+          issue_type?: string
+          reverted_at?: string | null
+          status?: string | null
+        }
+        Relationships: []
+      }
       automated_reports: {
         Row: {
           created_at: string | null
@@ -2296,6 +2332,51 @@ export type Database = {
             referencedColumns: ["id"]
           },
         ]
+      }
+      checklist_completions: {
+        Row: {
+          approved_at: string | null
+          approved_by: string | null
+          checklist_name: string
+          completed_at: string | null
+          completed_by: string | null
+          completion_data: Json
+          id: string
+          notes: string | null
+          score: number | null
+          started_at: string
+          status: string | null
+          vessel_id: string | null
+        }
+        Insert: {
+          approved_at?: string | null
+          approved_by?: string | null
+          checklist_name: string
+          completed_at?: string | null
+          completed_by?: string | null
+          completion_data: Json
+          id?: string
+          notes?: string | null
+          score?: number | null
+          started_at?: string
+          status?: string | null
+          vessel_id?: string | null
+        }
+        Update: {
+          approved_at?: string | null
+          approved_by?: string | null
+          checklist_name?: string
+          completed_at?: string | null
+          completed_by?: string | null
+          completion_data?: Json
+          id?: string
+          notes?: string | null
+          score?: number | null
+          started_at?: string
+          status?: string | null
+          vessel_id?: string | null
+        }
+        Relationships: []
       }
       checklist_evidence: {
         Row: {
@@ -4204,6 +4285,51 @@ export type Database = {
             referencedColumns: ["id"]
           },
         ]
+      }
+      dp_incidents: {
+        Row: {
+          description: string
+          id: string
+          incident_type: string
+          location: Json | null
+          metadata: Json | null
+          reported_at: string
+          reported_by: string | null
+          resolution_notes: string | null
+          resolved_at: string | null
+          severity: string | null
+          status: string | null
+          vessel_id: string | null
+        }
+        Insert: {
+          description: string
+          id?: string
+          incident_type: string
+          location?: Json | null
+          metadata?: Json | null
+          reported_at?: string
+          reported_by?: string | null
+          resolution_notes?: string | null
+          resolved_at?: string | null
+          severity?: string | null
+          status?: string | null
+          vessel_id?: string | null
+        }
+        Update: {
+          description?: string
+          id?: string
+          incident_type?: string
+          location?: Json | null
+          metadata?: Json | null
+          reported_at?: string
+          reported_by?: string | null
+          resolution_notes?: string | null
+          resolved_at?: string | null
+          severity?: string | null
+          status?: string | null
+          vessel_id?: string | null
+        }
+        Relationships: []
       }
       dp_inference_logs: {
         Row: {
@@ -10015,6 +10141,36 @@ export type Database = {
           summary?: string | null
           system_status?: Json | null
           updated_at?: string | null
+        }
+        Relationships: []
+      }
+      system_logs: {
+        Row: {
+          action: string
+          created_at: string
+          details: Json | null
+          id: string
+          module: string
+          severity: string | null
+          user_id: string | null
+        }
+        Insert: {
+          action: string
+          created_at?: string
+          details?: Json | null
+          id?: string
+          module: string
+          severity?: string | null
+          user_id?: string | null
+        }
+        Update: {
+          action?: string
+          created_at?: string
+          details?: Json | null
+          id?: string
+          module?: string
+          severity?: string | null
+          user_id?: string | null
         }
         Relationships: []
       }
