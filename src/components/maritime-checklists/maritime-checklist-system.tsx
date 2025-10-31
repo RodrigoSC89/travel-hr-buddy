@@ -33,11 +33,11 @@ export const MaritimeChecklistSystem: React.FC<MaritimeChecklistSystemProps> = (
   };
 
   const handleSaveChecklist = async (checklist: Checklist) => {
-    // TODO: Implement save to Supabase
+    // TODO: Implement save to database
   };
 
   const handleSubmitChecklist = async (checklist: Checklist) => {
-    // TODO: Implement submit to Supabase
+    // TODO: Implement submit to database
   };
 
   const handleBackToManager = () => {

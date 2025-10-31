@@ -1,14 +1,61 @@
-// @ts-nocheck
 import { useState } from "react";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { CheckCircle2, XCircle, Loader2 } from "lucide-react";
 
+interface ThreatContext {
+  location: string;
+  time: number;
+  source: string;
+  affectedSystems: string[];
+  validated: boolean;
+}
+
+interface Threat {
+  id: string;
+  type: string;
+  severity: string;
+  context: ThreatContext;
+}
+
+interface WatchdogAlertMetadata {
+  type: string;
+  severity: string;
+  location: string;
+  source: string;
+  affectedSystemsCount: number;
+  responseTime: number;
+  hasMetadata: boolean;
+}
+
+interface WatchdogAlert {
+  threatId: string;
+  timestamp: number;
+  metadata: WatchdogAlertMetadata;
+}
+
+interface SituationalScore {
+  threatId: string;
+  baseScore: number;
+  adjustedScore: number;
+  adjustmentFactors: {
+    timeOfDay: number;
+    affectedSystems: number;
+  };
+  wasAdjusted: boolean;
+}
+
+interface ThreatData {
+  threats: Threat[];
+  watchdogAlerts: WatchdogAlert[];
+  scores: SituationalScore[];
+}
+
 export function Patch614Validation() {
   const [results, setResults] = useState<Record<string, boolean>>({});
   const [loading, setLoading] = useState(false);
-  const [threatData, setThreatData] = useState<any>(null);
+  const [threatData, setThreatData] = useState<ThreatData | null>(null);
 
   const runValidation = async () => {
     setLoading(true);

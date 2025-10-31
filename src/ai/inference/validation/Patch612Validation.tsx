@@ -1,14 +1,56 @@
-// @ts-nocheck
 import { useState } from "react";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { CheckCircle2, XCircle, Loader2 } from "lucide-react";
 
+interface GraphNode {
+  id: string;
+  type: string;
+  status: string;
+  connections: number;
+}
+
+interface GraphEdge {
+  from: string;
+  to: string;
+  weight: number;
+}
+
+interface TestScenario {
+  scenario: string;
+  inference: string;
+  validated: boolean;
+  confidence: number;
+}
+
+interface DecisionTraceability {
+  triggeredBy: string;
+  affectedNodes: string[];
+  confidenceScore: number;
+  executionPath: string[];
+}
+
+interface DecisionLog {
+  id: string;
+  timestamp: number;
+  decision: string;
+  reasoning: string[];
+  traceability: DecisionTraceability;
+  hasTraceability: boolean;
+}
+
+interface GraphData {
+  nodes: GraphNode[];
+  edges: GraphEdge[];
+  scenarios: TestScenario[];
+  logs: DecisionLog[];
+}
+
 export function Patch612Validation() {
   const [results, setResults] = useState<Record<string, boolean>>({});
   const [loading, setLoading] = useState(false);
-  const [graphData, setGraphData] = useState<any>(null);
+  const [graphData, setGraphData] = useState<GraphData | null>(null);
 
   const runValidation = async () => {
     setLoading(true);

@@ -1,14 +1,48 @@
-// @ts-nocheck
 import { useState } from "react";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { CheckCircle2, XCircle, Loader2 } from "lucide-react";
 
+interface PatternDetection {
+  dashboardPatterns: Array<{
+    type: string;
+    location: string;
+    confidence: number;
+  }>;
+  mapPatterns: Array<{
+    type: string;
+    vessels: number;
+    confidence: number;
+  }>;
+}
+
+interface VisualAlert {
+  id: string;
+  severity: string;
+  message: string;
+  context: Record<string, unknown>;
+  visualContext: boolean;
+}
+
+interface PerformanceMetrics {
+  detectionLatency: number;
+  analysisTime: number;
+  alertGenerationTime: number;
+  totalProcessingTime: number;
+  threshold: number;
+}
+
+interface EngineData {
+  patterns: PatternDetection;
+  alerts: VisualAlert[];
+  performance: PerformanceMetrics;
+}
+
 export function Patch606Validation() {
   const [results, setResults] = useState<Record<string, boolean>>({});
   const [loading, setLoading] = useState(false);
-  const [engineData, setEngineData] = useState<any>(null);
+  const [engineData, setEngineData] = useState<EngineData | null>(null);
 
   const runValidation = async () => {
     setLoading(true);

@@ -1,14 +1,45 @@
-// @ts-nocheck
 import { useState } from "react";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { CheckCircle2, XCircle, Loader2 } from "lucide-react";
 
+interface VoiceCommand {
+  command: string;
+  module: string;
+  executed: boolean;
+  result: string;
+  latency: number;
+}
+
+interface ModuleActivation {
+  name: string;
+  status: string;
+  timestamp: number;
+}
+
+interface AuditLog {
+  id: string;
+  timestamp: number;
+  command: string;
+  module: string;
+  result: string;
+  latency: number;
+  auditable: boolean;
+  hasResult: boolean;
+  hasLatency: boolean;
+}
+
+interface CommandData {
+  commands: VoiceCommand[];
+  modules: ModuleActivation[];
+  logs: AuditLog[];
+}
+
 export function Patch608Validation() {
   const [results, setResults] = useState<Record<string, boolean>>({});
   const [loading, setLoading] = useState(false);
-  const [commandData, setCommandData] = useState<any>(null);
+  const [commandData, setCommandData] = useState<CommandData | null>(null);
 
   const runValidation = async () => {
     setLoading(true);

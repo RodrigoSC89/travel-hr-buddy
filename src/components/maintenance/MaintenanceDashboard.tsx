@@ -53,13 +53,11 @@ export default function MaintenanceDashboard() {
 
   /**
    * Fetch telemetry data from APIs
-   * TODO: Replace with actual API calls when endpoints are available
+   * TODO: Implement real-time API integration
    */
   async function fetchTelemetryData(): Promise<TelemetryData> {
     // Simulated telemetry data
-    // In production, this would fetch from:
-    // - /api/dp/telemetry
-    // - /api/control/telemetry
+    // In production, this would fetch from real-time API
     return {
       generator_load: 65 + Math.random() * 20,
       position_error: 0.5 + Math.random() * 1.5,
