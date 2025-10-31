@@ -3,7 +3,7 @@
 // Unified communication hub with messageService integration
 // Features: Real-time messaging, WebSocket, persistent history, groups, radio/satellite monitoring
 
-import React, { useState, useEffect, useRef } from "react";
+import React, { useState, useEffect, useRef, useCallback, useMemo } from "react";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -87,29 +87,8 @@ export const CommunicationCenter: React.FC = () => {
     lastSync: new Date().toISOString()
   });
 
-  useEffect(() => {
-    loadChannels();
-    setupRealtimeSubscription();
-
-    return () => {
-      messageService.unsubscribeFromRealtime();
-    };
-  }, []);
-
-  useEffect(() => {
-    if (selectedChannel) {
-      loadMessages(selectedChannel.id);
-    }
-  }, [selectedChannel]);
-
-  useEffect(() => {
-    // Auto-scroll to bottom when new messages arrive
-    if (scrollRef.current) {
-      scrollRef.current.scrollTop = scrollRef.current.scrollHeight;
-    }
-  }, [messages]);
-
-  const loadChannels = async () => {
+  // PATCH 549: Wrapped in useCallback to prevent re-creation on every render
+  const loadChannels = useCallback(async () => {
     try {
       setLoading(true);
       const data = await messageService.getChannels();
@@ -127,9 +106,10 @@ export const CommunicationCenter: React.FC = () => {
     } finally {
       setLoading(false);
     }
-  };
+  }, []);
 
-  const loadMessages = async (channelId: string) => {
+  // PATCH 549: Wrapped in useCallback to prevent re-creation
+  const loadMessages = useCallback(async (channelId: string) => {
     try {
       const data = await messageService.getMessages({ channelId, limit: 100 });
       setMessages(data);
@@ -141,9 +121,10 @@ export const CommunicationCenter: React.FC = () => {
         variant: "destructive",
       });
     }
-  };
+  }, []);
 
-  const setupRealtimeSubscription = () => {
+  // PATCH 549: Wrapped in useCallback
+  const setupRealtimeSubscription = useCallback(() => {
     // Subscribe to real-time updates
     messageService.subscribeToRealtime();
 
@@ -163,7 +144,36 @@ export const CommunicationCenter: React.FC = () => {
       unsubscribeMessage();
       unsubscribeChannel();
     };
-  };
+  }, [selectedChannel, loadChannels]);
+
+  // PATCH 549: useEffect with proper dependencies and cleanup
+  useEffect(() => {
+    loadChannels();
+    const cleanup = setupRealtimeSubscription();
+
+    return () => {
+      messageService.unsubscribeFromRealtime();
+      if (cleanup) cleanup();
+    };
+  }, [loadChannels, setupRealtimeSubscription]);
+
+  // PATCH 549: useEffect with callback dependency
+  useEffect(() => {
+    if (selectedChannel) {
+      loadMessages(selectedChannel.id);
+    }
+  }, [selectedChannel, loadMessages]);
+
+  // PATCH 549: Debounced auto-scroll to prevent excessive renders
+  useEffect(() => {
+    const timeoutId = setTimeout(() => {
+      if (scrollRef.current) {
+        scrollRef.current.scrollTop = scrollRef.current.scrollHeight;
+      }
+    }, 100);
+
+    return () => clearTimeout(timeoutId);
+  }, [messages]);
 
   const handleSendMessage = async () => {
     if (!newMessage.trim() || !selectedChannel) return;

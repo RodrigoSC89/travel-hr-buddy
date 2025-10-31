@@ -4,7 +4,7 @@
  * Unified dashboard integrating all mission control sub-modules
  */
 
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, lazy, Suspense } from "react";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Button } from "@/components/ui/button";
@@ -16,10 +16,11 @@ import {
   Download,
   Plus
 } from "lucide-react";
-import { MissionPlanner } from "../components/MissionPlanner";
-import { MissionLogs } from "../components/MissionLogs";
-import { AICommander } from "../components/AICommander";
-import { KPIDashboard } from "../components/KPIDashboard";
+// PATCH 549: Lazy import Mission Control components to reduce bundle size
+const MissionPlanner = lazy(() => import("../components/MissionPlanner").then(m => ({ default: m.MissionPlanner })));
+const MissionLogs = lazy(() => import("../components/MissionLogs").then(m => ({ default: m.MissionLogs })));
+const AICommander = lazy(() => import("../components/AICommander").then(m => ({ default: m.AICommander })));
+const KPIDashboard = lazy(() => import("../components/KPIDashboard").then(m => ({ default: m.KPIDashboard })));
 import { toast } from "sonner";
 import jsPDF from "jspdf";
 import "jspdf-autotable";
@@ -184,19 +185,27 @@ export const MissionControlConsolidation: React.FC = () => {
             </TabsList>
 
             <TabsContent value="workflows" className="mt-6">
-              <MissionPlanner />
+              <Suspense fallback={<div className="flex items-center justify-center p-8"><div className="animate-spin h-8 w-8 border-4 border-primary border-t-transparent rounded-full" /></div>}>
+                <MissionPlanner />
+              </Suspense>
             </TabsContent>
 
             <TabsContent value="logs" className="mt-6">
-              <MissionLogs />
+              <Suspense fallback={<div className="flex items-center justify-center p-8"><div className="animate-spin h-8 w-8 border-4 border-primary border-t-transparent rounded-full" /></div>}>
+                <MissionLogs />
+              </Suspense>
             </TabsContent>
 
             <TabsContent value="ai-autonomy" className="mt-6">
-              <AICommander />
+              <Suspense fallback={<div className="flex items-center justify-center p-8"><div className="animate-spin h-8 w-8 border-4 border-primary border-t-transparent rounded-full" /></div>}>
+                <AICommander />
+              </Suspense>
             </TabsContent>
 
             <TabsContent value="analytics" className="mt-6">
-              <KPIDashboard />
+              <Suspense fallback={<div className="flex items-center justify-center p-8"><div className="animate-spin h-8 w-8 border-4 border-primary border-t-transparent rounded-full" /></div>}>
+                <KPIDashboard />
+              </Suspense>
             </TabsContent>
           </Tabs>
         </CardContent>
