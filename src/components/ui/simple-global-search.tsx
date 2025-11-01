@@ -111,24 +111,31 @@ export const SimpleGlobalSearch: React.FC = () => {
     try {
       setLoading(true);
       
-      // Query registered modules from the system
+      // Try to query registered modules from tenant_modules or fall back to static results
       const { data: modules, error } = await supabase
-        .from("modules")
-        .select("id, name, description, category, route, keywords")
-        .eq("is_active", true);
+        .from("tenant_modules")
+        .select("module_name, config, enabled")
+        .eq("enabled", true);
       
-      if (error) throw error;
+      if (error) {
+        console.log("No tenant_modules table available, using static results");
+        setSearchResults(staticResults);
+        return;
+      }
       
-      // Merge with static results
-      const dynamicResults: SearchResult[] = modules?.map(module => ({
-        id: module.id,
-        title: module.name,
-        description: module.description || `Módulo ${module.name}`,
-        category: module.category || "Sistema",
-        icon: BarChart3, // Default icon
-        path: module.route || `/${module.id}`,
-        keywords: module.keywords || []
-      })) || [];
+      // Merge with static results - tenant_modules augments static list
+      const dynamicResults: SearchResult[] = modules?.map(module => {
+        const config = module.config as Record<string, unknown> | null;
+        return {
+          id: module.module_name,
+          title: module.module_name,
+          description: (config?.description as string) || `Módulo ${module.module_name}`,
+          category: (config?.category as string) || "Sistema",
+          icon: BarChart3, // Default icon
+          path: (config?.route as string) || `/${module.module_name}`,
+          keywords: (config?.keywords as string[]) || []
+        };
+      }) || [];
       
       // Combine and deduplicate by id
       const allResults = [...staticResults];
@@ -141,7 +148,7 @@ export const SimpleGlobalSearch: React.FC = () => {
       setSearchResults(allResults);
     } catch (error) {
       console.error("Error loading modules:", error);
-      toast.error("Erro ao carregar módulos do sistema");
+      // Fallback to static results on error
       setSearchResults(staticResults);
     } finally {
       setLoading(false);

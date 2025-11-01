@@ -6,6 +6,9 @@ import { RefreshCw, CheckCircle, XCircle, AlertCircle, Activity } from "lucide-r
 import { supabase } from "@/integrations/supabase/client";
 import { toast } from "sonner";
 
+// PostgREST error codes
+const PGRST_NO_ROWS = "PGRST116"; // No rows returned error
+
 interface ServiceStatus {
   name: string;
   status: "healthy" | "degraded" | "down";
@@ -79,7 +82,7 @@ export default function SystemStatusPanel() {
       const { error } = await supabase.from("system_health").select("count").limit(1);
       const responseTime = Date.now() - startTime;
       
-      if (error && error.code !== "PGRST116") {
+      if (error && error.code !== PGRST_NO_ROWS) {
         throw error;
       }
       
@@ -153,13 +156,14 @@ export default function SystemStatusPanel() {
       
       const responseTime = Date.now() - startTime;
       
-      if (error && error.code !== "PGRST116") throw error;
+      if (error && error.code !== PGRST_NO_ROWS) throw error;
       
       const isHealthy = data?.status === "healthy";
+      const status = (data?.status as "healthy" | "degraded" | "down" | undefined) || "degraded";
       
       return {
         name: "MQTT Broker",
-        status: data?.status as "healthy" | "degraded" | "down" || "degraded",
+        status,
         uptime: isHealthy ? 97.2 : 85.0,
         lastError: isHealthy ? null : "Connection status unknown",
         lastCheck: data?.last_check_at || new Date().toISOString(),
