@@ -178,7 +178,7 @@ test.describe("PATCH 566: E2E Regression Tests", () => {
     // Verify metrics or cards are present
     const hasContent = await page.locator("body").textContent();
     expect(hasContent).toBeTruthy();
-    expect(hasContent!.length).toBeGreaterThan(100);
+    expect((hasContent || "").length).toBeGreaterThan(100);
   });
 
   test("should load Training Academy and display courses or empty state", async ({ page }) => {
