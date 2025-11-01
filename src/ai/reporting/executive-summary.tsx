@@ -1,6 +1,6 @@
-// @ts-nocheck
 /**
  * PATCH 585 - Executive Summary Generator AI
+ * PATCH 547 - Removed @ts-nocheck directive
  * Generate executive summaries of AI decisions and predictions
  * 
  * Features:
