@@ -1,4 +1,3 @@
-// @ts-nocheck
 /**
  * PATCH 562 - Beta Feedback System
  * 
@@ -77,7 +76,7 @@ export function BetaFeedbackForm() {
       }).catch(() => {
         // Local storage fallback
         const existing = localStorage.getItem("beta_feedback") || "[]";
-        const feedbacks = JSON.parse(existing);
+        const feedbacks = JSON.parse(existing) as FeedbackData[];
         feedbacks.push(feedbackData);
         localStorage.setItem("beta_feedback", JSON.stringify(feedbacks));
       });
@@ -99,8 +98,9 @@ export function BetaFeedbackForm() {
         suggestions: "",
         bugs: "",
       });
-    } catch (error) {
-      console.error("Error submitting feedback:", error);
+    } catch (error: unknown) {
+      const errorMessage = error instanceof Error ? error.message : "Error submitting feedback";
+      console.error("Error submitting feedback:", errorMessage);
       toast({
         title: "Erro",
         description: "Não foi possível enviar o feedback. Tente novamente.",

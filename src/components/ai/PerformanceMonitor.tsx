@@ -1,4 +1,3 @@
-// @ts-nocheck
 import { useEffect, useState } from "react";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
@@ -97,8 +96,9 @@ export function PerformanceMonitor() {
       // Fetch watchdog alerts
       await fetchWatchdogAlerts();
 
-    } catch (error) {
-      console.error("Error fetching performance data:", error);
+    } catch (error: unknown) {
+      const errorMessage = error instanceof Error ? error.message : "Error fetching performance data";
+      console.error("Error fetching performance data:", errorMessage);
       toast.error("Failed to load performance metrics");
     } finally {
       setLoading(false);
@@ -118,8 +118,23 @@ export function PerformanceMonitor() {
     }
   };
 
-  const aggregatePerformanceByModule = (data: any[]): PerformanceMetrics[] => {
-    const moduleMap = new Map<string, any>();
+  const aggregatePerformanceByModule = (data: Array<{
+    module_name: string;
+    precision_score?: number;
+    recall_score?: number;
+    response_time_ms?: number;
+    decision_accepted?: boolean;
+    decision_overridden?: boolean;
+  }>): PerformanceMetrics[] => {
+    const moduleMap = new Map<string, {
+      module_name: string;
+      precision_sum: number;
+      recall_sum: number;
+      response_time_sum: number;
+      count: number;
+      accepted: number;
+      overridden: number;
+    }>();
 
     data.forEach(record => {
       if (!moduleMap.has(record.module_name)) {
@@ -154,8 +169,15 @@ export function PerformanceMonitor() {
     }));
   };
 
-  const aggregateSuggestionsByModule = (data: any[]): SuggestionMetrics[] => {
-    const moduleMap = new Map<string, any>();
+  const aggregateSuggestionsByModule = (data: Array<{
+    module_name: string;
+    accepted_by_crew?: boolean;
+  }>): SuggestionMetrics[] => {
+    const moduleMap = new Map<string, {
+      module_name: string;
+      total: number;
+      accepted: number;
+    }>();
 
     data.forEach(record => {
       if (!moduleMap.has(record.module_name)) {
