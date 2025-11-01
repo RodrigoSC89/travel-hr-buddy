@@ -1,5 +1,5 @@
 // @ts-nocheck
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useCallback } from "react";
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "@/components/ui/card";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { ModulePageWrapper } from "@/components/ui/module-page-wrapper";
@@ -74,8 +74,7 @@ export default function OperationsDashboard() {
   });
 
   // Fetch operational data from Supabase
-  useEffect(() => {
-    const fetchOperationalData = async () => {
+  const fetchOperationalData = useCallback(async () => {
       logger.info("🚢 Operations Dashboard: Starting data fetch");
       setIsLoading(true);
       setError(null);
@@ -179,10 +178,11 @@ export default function OperationsDashboard() {
       } finally {
         setIsLoading(false);
       }
-    };
+    }, []);
 
+  useEffect(() => {
     fetchOperationalData();
-  }, []);
+  }, [fetchOperationalData]);
 
   // Loading state
   if (isLoading) {

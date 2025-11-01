@@ -140,12 +140,12 @@ const IntegratedAIAssistant = () => {
   ];
 
   useEffect(() => {
-    scrollToBottom();
+    // Debounce scroll to prevent excessive re-renders
+    const timeoutId = setTimeout(() => {
+      messagesEndRef.current?.scrollIntoView({ behavior: "smooth" });
+    }, 100);
+    return () => clearTimeout(timeoutId);
   }, [messages]);
-
-  const scrollToBottom = () => {
-    messagesEndRef.current?.scrollIntoView({ behavior: "smooth" });
-  };
 
   const handleSendMessage = async () => {
     if (!currentMessage.trim() || isLoading) return;

@@ -1,4 +1,4 @@
-import React, { useState, useEffect, lazy, Suspense } from "react";
+import React, { useState, useEffect, useCallback, lazy, Suspense } from "react";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
@@ -65,11 +65,7 @@ const MaritimeFleetManagement = () => {
   // Vessels data for AI
   const [vessels, setVessels] = useState<any[]>([]);
 
-  useEffect(() => {
-    loadFleetStats();
-  }, []);
-
-  const loadFleetStats = async () => {
+  const loadFleetStats = useCallback(async () => {
     try {
       setIsLoading(true);
       
@@ -108,7 +104,11 @@ const MaritimeFleetManagement = () => {
     } finally {
       setIsLoading(false);
     }
-  };
+  }, []);
+
+  useEffect(() => {
+    loadFleetStats();
+  }, [loadFleetStats]);
 
   const exportFleetData = async () => {
     try {

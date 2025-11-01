@@ -11,7 +11,7 @@
  * - Supabase integration for storage
  */
 
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useCallback } from "react";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -39,12 +39,7 @@ export default function DocumentHub() {
   const [previewContent, setPreviewContent] = useState<string>("");
   const [aiInsight, setAiInsight] = useState<string>("");
 
-  useEffect(() => {
-    logger.info("Document Hub initialized");
-    loadDocuments();
-  }, []);
-
-  const loadDocuments = async () => {
+  const loadDocuments = useCallback(async () => {
     try {
       logger.info("Loading document history");
       const { data, error } = await supabase
@@ -74,7 +69,12 @@ export default function DocumentHub() {
     } catch (error) {
       logger.error("Error loading documents", error);
     }
-  };
+  }, []);
+
+  useEffect(() => {
+    logger.info("Document Hub initialized");
+    loadDocuments();
+  }, [loadDocuments]);
 
   const handleFileSelect = (event: React.ChangeEvent<HTMLInputElement>) => {
     const file = event.target.files?.[0];
