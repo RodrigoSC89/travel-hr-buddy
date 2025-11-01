@@ -173,11 +173,11 @@ export default defineConfig(({ mode }) => {
       assetsInlineLimit: 4096, // Inline assets pequenos
       rollupOptions: {
         output: {
-          // Otimização agressiva para chunks menores
+          // PATCH 547: Otimização agressiva para chunks menores e melhor cache
           manualChunks: (id) => {
-            // Core vendors - carregados primeiro
+            // Core vendors - carregados primeiro (prioritário)
             if (id.includes("node_modules")) {
-              // React core - essencial
+              // React core - essencial, sempre carregado
               if (id.includes("react/") || id.includes("react-dom/")) {
                 return "core-react";
               }
@@ -188,32 +188,38 @@ export default defineConfig(({ mode }) => {
                 return "core-query";
               }
               
-              // Supabase - crítico
-              if (id.includes("@supabase/supabase-js")) {
+              // Supabase - crítico, mas pode ser otimizado
+              if (id.includes("@supabase/supabase-js") || id.includes("@supabase/ssr")) {
                 return "core-supabase";
               }
               
-              // UI Components - carregamento lazy
+              // UI Components - carregamento lazy e granular
               if (id.includes("@radix-ui")) {
-                // Separar componentes Radix por tipo
-                if (id.includes("dialog") || id.includes("sheet") || id.includes("drawer")) {
+                // Separar componentes Radix por tipo para melhor cache
+                if (id.includes("dialog") || id.includes("sheet") || id.includes("drawer") || id.includes("alert-dialog")) {
                   return "ui-modals";
                 }
-                if (id.includes("select") || id.includes("dropdown") || id.includes("popover")) {
+                if (id.includes("select") || id.includes("dropdown") || id.includes("popover") || id.includes("hover-card")) {
                   return "ui-popovers";
                 }
                 if (id.includes("tabs") || id.includes("accordion") || id.includes("collapsible")) {
                   return "ui-containers";
                 }
+                if (id.includes("toast") || id.includes("tooltip")) {
+                  return "ui-feedback";
+                }
                 return "ui-misc";
               }
               
-              // Charts - lazy loading
-              if (id.includes("recharts") || id.includes("chart.js") || id.includes("react-chartjs-2")) {
-                return "charts";
+              // Charts - lazy loading, separado por biblioteca
+              if (id.includes("recharts")) {
+                return "charts-recharts";
+              }
+              if (id.includes("chart.js") || id.includes("react-chartjs-2")) {
+                return "charts-chartjs";
               }
               
-              // Map libraries - muito pesadas, lazy
+              // Map libraries - muito pesadas, totalmente lazy
               if (id.includes("mapbox-gl")) {
                 return "map";
               }
@@ -224,7 +230,7 @@ export default defineConfig(({ mode }) => {
               }
               
               // Editor - lazy
-              if (id.includes("@tiptap")) {
+              if (id.includes("@tiptap") || id.includes("y-prosemirror") || id.includes("yjs")) {
                 return "editor";
               }
               
@@ -233,12 +239,47 @@ export default defineConfig(({ mode }) => {
                 return "motion";
               }
               
-              // MQTT - específico
+              // MQTT - específico para IoT/conectividade
               if (id.includes("mqtt")) {
                 return "mqtt";
               }
               
-              // Outros vendors agrupados
+              // AI/ML libraries - lazy, pesadas
+              if (id.includes("@tensorflow") || id.includes("onnxruntime")) {
+                return "ai-ml";
+              }
+              
+              // 3D/XR libraries - lazy, muito pesadas
+              if (id.includes("three") || id.includes("@react-three") || id.includes("webxr")) {
+                return "3d_xr";
+              }
+              
+              // PDF/Document generation - lazy
+              if (id.includes("jspdf") || id.includes("html2pdf") || id.includes("html2canvas") || id.includes("docx")) {
+                return "pdf-gen";
+              }
+              
+              // Firebase - lazy se usado
+              if (id.includes("firebase")) {
+                return "firebase";
+              }
+              
+              // Date/Time utilities
+              if (id.includes("date-fns")) {
+                return "utils-date";
+              }
+              
+              // Lodash utilities
+              if (id.includes("lodash")) {
+                return "utils-lodash";
+              }
+              
+              // Form handling
+              if (id.includes("react-hook-form") || id.includes("@hookform")) {
+                return "forms";
+              }
+              
+              // Outros vendors agrupados (reduzido ao mínimo)
               return "vendors";
             }
             
