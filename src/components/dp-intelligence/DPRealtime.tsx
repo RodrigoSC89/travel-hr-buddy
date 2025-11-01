@@ -1,8 +1,8 @@
-// @ts-nocheck
 import React, { useEffect, useState } from "react";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { subscribeDP } from "@/lib/mqtt/publisher";
 import { Wifi } from "lucide-react";
+import type { MqttClient } from "mqtt";
 
 interface TelemetryData {
   thrusters: number;
@@ -14,7 +14,7 @@ export default function DPRealtime() {
   const [telemetry, setTelemetry] = useState<TelemetryData>({ thrusters: 0, power: 0, heading: 0 });
 
   useEffect(() => {
-    const client = subscribeDP((data) => {
+    const client: MqttClient = subscribeDP((data: unknown) => {
       // Safely parse the telemetry data
       const telData = data as TelemetryData;
       setTelemetry(telData);

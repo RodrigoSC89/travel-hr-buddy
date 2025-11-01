@@ -1,4 +1,3 @@
-// @ts-nocheck
 import React, { useEffect, useState } from "react";
 import { Card, CardHeader, CardTitle, CardContent } from "@/components/ui/card";
 import * as ort from "onnxruntime-web";
@@ -24,8 +23,9 @@ export default function DPAIAnalyzer() {
           setFault(null);
         }
         setStatus("Análise concluída");
-      } catch (err) {
-        console.error("Erro ao carregar modelo ONNX:", err);
+      } catch (err: unknown) {
+        const errorMessage = err instanceof Error ? err.message : "Unknown error";
+        console.error("Erro ao carregar modelo ONNX:", errorMessage);
         setStatus("Falha ao carregar modelo ONNX");
       }
     };
