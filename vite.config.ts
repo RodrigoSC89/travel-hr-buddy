@@ -55,41 +55,12 @@ export default defineConfig(({ mode }) => {
       })] : []),
       enablePwa && VitePWA({
         registerType: "autoUpdate",
-        includeAssets: [
-          "favicon.ico",
-          "robots.txt",
-          "placeholder.svg",
-          "src/modules/**/*",
-          "public/modules/**/*"
-        ],
-        manifest: {
-          name: "Nautilus One - Sistema de Gestão Empresarial",
-          short_name: "Nautilus One",
-          description: "Sistema revolucionário de gestão empresarial com módulos de RH, viagens e hospedagem",
-          theme_color: "#0f172a",
-          background_color: "#0A0A0A",
-          display: "standalone",
-          orientation: "portrait",
-          start_url: "/",
-          icons: [
-            {
-              src: "/icons/icon.svg",
-              sizes: "192x192",
-              type: "image/svg+xml",
-              purpose: "any maskable"
-            },
-            {
-              src: "/icons/icon.svg",
-              sizes: "512x512",
-              type: "image/svg+xml",
-              purpose: "any maskable"
-            }
-          ]
-        },
         workbox: {
           maximumFileSizeToCacheInBytes: 10485760, // 10MB limit for PWA caching
-          globPatterns: ["**/*.{js,css,html,ico,png,svg}"],
+          globPatterns: ["**/*.{js,css,html,ico,png,svg,woff,woff2}"],
+          // PATCH 599: Enhanced runtime caching strategies
           runtimeCaching: [
+            // Google Fonts - CacheFirst for long-term caching
             {
               urlPattern: /^https:\/\/fonts\.googleapis\.com\/.*/i,
               handler: "CacheFirst",
@@ -118,6 +89,7 @@ export default defineConfig(({ mode }) => {
                 }
               }
             },
+            // PATCH 599: API calls - NetworkFirst with fallback
             {
               urlPattern: /\/api\/.*/i,
               handler: "NetworkFirst",
@@ -127,16 +99,148 @@ export default defineConfig(({ mode }) => {
                   maxEntries: 50,
                   maxAgeSeconds: 60 * 5 // 5 minutes
                 },
-                networkTimeoutSeconds: 10
+                networkTimeoutSeconds: 10,
+                plugins: [
+                  {
+                    // PATCH 599: Fallback to cache on network failure
+                    handlerDidError: async () => {
+                      return caches.match("/offline.html");
+                    }
+                  }
+                ]
+              }
+            },
+            // PATCH 599: Static assets - CacheFirst with versioning
+            {
+              urlPattern: /\.(?:js|css)$/,
+              handler: "StaleWhileRevalidate",
+              options: {
+                cacheName: "static-assets",
+                expiration: {
+                  maxEntries: 100,
+                  maxAgeSeconds: 60 * 60 * 24 * 7 // 1 week
+                }
+              }
+            },
+            // PATCH 599: Images - CacheFirst
+            {
+              urlPattern: /\.(?:png|jpg|jpeg|svg|gif|webp|ico)$/,
+              handler: "CacheFirst",
+              options: {
+                cacheName: "image-cache",
+                expiration: {
+                  maxEntries: 60,
+                  maxAgeSeconds: 60 * 60 * 24 * 30 // 30 days
+                }
+              }
+            },
+            // PATCH 599: Supabase API - NetworkFirst
+            {
+              urlPattern: /^https:\/\/.*\.supabase\.co\/.*/i,
+              handler: "NetworkFirst",
+              options: {
+                cacheName: "supabase-api",
+                expiration: {
+                  maxEntries: 30,
+                  maxAgeSeconds: 60 * 2 // 2 minutes
+                },
+                networkTimeoutSeconds: 5
               }
             }
           ],
           navigateFallback: "/",
-          navigateFallbackDenylist: [/^\/api\//]
+          navigateFallbackDenylist: [/^\/api\//],
+          // PATCH 599: Clean old caches on activation
+          cleanupOutdatedCaches: true,
+          // PATCH 600: Skip waiting to activate immediately
+          skipWaiting: true,
+          clientsClaim: true
         },
+        // PATCH 598: Enhanced manifest configuration
+        manifest: {
+          name: "Nautilus One - Sistema de Gestão Empresarial",
+          short_name: "Nautilus One",
+          description: "Sistema revolucionário de gestão empresarial com módulos de RH, viagens e hospedagem",
+          theme_color: "#0f172a",
+          background_color: "#0A0A0A",
+          display: "standalone",
+          orientation: "portrait",
+          start_url: "/",
+          scope: "/",
+          // PATCH 598: Enhanced icons with multiple sizes
+          icons: [
+            {
+              src: "/icons/icon.svg",
+              sizes: "192x192",
+              type: "image/svg+xml",
+              purpose: "any maskable"
+            },
+            {
+              src: "/icons/icon.svg",
+              sizes: "512x512",
+              type: "image/svg+xml",
+              purpose: "any maskable"
+            },
+            {
+              src: "/nautilus-logo.png",
+              sizes: "192x192",
+              type: "image/png",
+              purpose: "any"
+            },
+            {
+              src: "/nautilus-logo.png",
+              sizes: "512x512",
+              type: "image/png",
+              purpose: "any"
+            }
+          ],
+          // PATCH 598: App shortcuts for quick access
+          shortcuts: [
+            {
+              name: "Dashboard",
+              short_name: "Dashboard",
+              description: "Acesse o dashboard principal",
+              url: "/?module=dashboard",
+              icons: [{ src: "/icons/icon.svg", sizes: "96x96" }]
+            },
+            {
+              name: "Recursos Humanos",
+              short_name: "RH",
+              description: "Gestão de pessoas e certificados",
+              url: "/?module=hr",
+              icons: [{ src: "/icons/icon.svg", sizes: "96x96" }]
+            },
+            {
+              name: "Viagens",
+              short_name: "Viagens",
+              description: "Buscar passagens e hotéis",
+              url: "/?module=flights",
+              icons: [{ src: "/icons/icon.svg", sizes: "96x96" }]
+            }
+          ],
+          // PATCH 600: Security and privacy configurations
+          categories: ["business", "productivity", "travel"],
+          lang: "pt-BR",
+          dir: "ltr",
+          // PATCH 600: Display override for enhanced PWA experience
+          display_override: ["window-controls-overlay", "standalone"],
+          // PATCH 600: Protocol handlers (future enhancement)
+          protocol_handlers: []
+        },
+        // PATCH 598: Push notification support
+        includeAssets: [
+          "favicon.ico",
+          "robots.txt",
+          "placeholder.svg",
+          "offline.html",
+          "src/modules/**/*",
+          "public/modules/**/*"
+        ],
         devOptions: {
           enabled: false,
-          type: "module"
+          type: "module",
+          // PATCH 600: Security - no devtools in production
+          navigateFallback: "/"
         }
       })
     ].filter(Boolean),

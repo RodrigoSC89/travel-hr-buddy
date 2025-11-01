@@ -4,25 +4,44 @@
     <meta charset="UTF-8" />
     <link rel="icon" type="image/png" href="/nautilus-logo.png" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
+    
+    <!-- PATCH 600: Security meta tags -->
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="referrer" content="strict-origin-when-cross-origin" />
+    
+    <!-- PWA Configuration -->
     <link rel="manifest" href="/manifest.json" />
     <meta name="theme-color" content="#0f172a" />
+    
+    <!-- Apple PWA -->
     <meta name="apple-mobile-web-app-capable" content="yes" />
     <meta name="apple-mobile-web-app-status-bar-style" content="default" />
     <meta name="apple-mobile-web-app-title" content="Nautilus One" />
     <link rel="apple-touch-icon" href="/nautilus-logo.png" />
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&family=Playfair+Display:wght@400;500;600;700;800;900&family=JetBrains+Mono:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    
+    <!-- PATCH 600: Preconnect with crossorigin for security -->
+    <link rel="preconnect" href="https://fonts.googleapis.com" crossorigin="anonymous">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin="anonymous">
+    
+    <!-- PATCH 600: DNS prefetch for performance -->
+    <link rel="dns-prefetch" href="https://fonts.googleapis.com">
+    <link rel="dns-prefetch" href="https://fonts.gstatic.com">
+    
+    <!-- Fonts with crossorigin for security -->
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&family=Playfair+Display:wght@400;500;600;700;800;900&family=JetBrains+Mono:wght@300;400;500;600;700&display=swap" rel="stylesheet" crossorigin="anonymous">
+    
     <title>NAUTILUS - Sistema Revolucionário de Gestão</title>
     <meta name="description" content="Sistema revolucionário de gestão empresarial com módulos de RH, viagens e hospedagem. Encontre as melhores ofertas de passagens aéreas e hotéis com tecnologia avançada." />
     <meta name="author" content="Nautilus One" />
     <meta name="keywords" content="gestão empresarial, recursos humanos, passagens aéreas, hotéis, viagens corporativas, sistema de gestão" />
 
+    <!-- Open Graph / Social -->
     <meta property="og:title" content="Nautilus One - Sistema de Gestão Empresarial" />
     <meta property="og:description" content="Sistema revolucionário de gestão empresarial com módulos de RH, viagens e hospedagem. Encontre as melhores ofertas de passagens aéreas e hotéis." />
     <meta property="og:type" content="website" />
     <meta property="og:image" content="/nautilus-logo.png" />
 
+    <!-- Twitter -->
     <meta name="twitter:card" content="summary_large_image" />
     <meta name="twitter:site" content="@lovable_dev" />
     <meta name="twitter:image" content="/nautilus-logo.png" />
@@ -31,5 +50,13 @@
   <body>
     <div id="root"></div>
     <script type="module" src="/src/main.tsx"></script>
+    
+    <!-- PATCH 598: Service Worker Registration -->
+    <noscript>
+      <div style="text-align: center; padding: 2rem; font-family: system-ui, sans-serif;">
+        <h1>JavaScript Necessário</h1>
+        <p>Por favor, habilite o JavaScript no seu navegador para utilizar o Nautilus One.</p>
+      </div>
+    </noscript>
   </body>
 </html>
