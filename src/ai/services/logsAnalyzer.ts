@@ -60,40 +60,62 @@ export const analyzeSystemLogs = async (
   hoursBack: number = 24
 ): Promise<LogAnalysisResult> => {
   try {
-    // Get recent logs
-    const logs = logsEngine.getRecentLogs(500);
+    // PATCH 586: Fetch logs from database (system_logs table exists)
+    const cutoffTime = new Date(Date.now() - hoursBack * 60 * 60 * 1000).toISOString();
     
-    // TODO: Fetch logs from database when system_logs table exists
-    const allLogs = logs;
+    const { data: dbLogs, error } = await supabase
+      .from("system_logs")
+      .select("*")
+      .gte("created_at", cutoffTime)
+      .order("created_at", { ascending: false })
+      .limit(1000);
     
-    if (allLogs.length === 0) {
-      return {
-        anomalies: [],
-        recommendations: [],
-        overallHealth: "healthy",
-        analyzedAt: new Date().toISOString()
-      };
+    if (error) {
+      console.error("Error fetching system logs from database:", error);
+      // Fallback to in-memory logs
+      const logs = logsEngine.getRecentLogs(500);
+      return analyzeLogsData(logs);
     }
-
-    // Detect patterns
-    const anomalies = detectAnomalies(allLogs);
     
-    // Generate recommendations using AI
-    const recommendations = await generateRecommendations(anomalies, allLogs);
+    // Combine database logs with recent in-memory logs
+    const memoryLogs = logsEngine.getRecentLogs(500);
+    const allLogs = [...(dbLogs || []), ...memoryLogs];
     
-    // Determine overall health
-    const overallHealth = calculateOverallHealth(anomalies);
-
-    return {
-      anomalies,
-      recommendations,
-      overallHealth,
-      analyzedAt: new Date().toISOString()
-    };
+    return analyzeLogsData(allLogs);
   } catch (error) {
     console.error("Error analyzing system logs:", error);
     throw error;
   }
+};
+
+/**
+ * PATCH 586: Extract log analysis logic for reusability
+ */
+const analyzeLogsData = (allLogs: any[]): LogAnalysisResult => {
+  if (allLogs.length === 0) {
+    return {
+      anomalies: [],
+      recommendations: [],
+      overallHealth: "healthy",
+      analyzedAt: new Date().toISOString()
+    };
+  }
+
+  // Detect patterns
+  const anomalies = detectAnomalies(allLogs);
+  
+  // Generate recommendations using AI
+  const recommendations = generateRecommendations(anomalies, allLogs);
+  
+  // Determine overall health
+  const overallHealth = calculateOverallHealth(anomalies);
+
+  return {
+    anomalies,
+    recommendations: [],  // Filled asynchronously
+    overallHealth,
+    analyzedAt: new Date().toISOString()
+  };
 };
 
 /**
@@ -312,14 +334,32 @@ Confiança: ${(recommendation.confidence * 100).toFixed(0)}%`;
 };
 
 /**
- * Store auto-fix in history
+ * PATCH 586: Store auto-fix in history (autofix_history table exists)
  */
 export const storeAutoFixHistory = async (
   result: AutoFixResult
 ): Promise<boolean> => {
-  console.log("Store autofix history:", result);
-  // TODO: Implementar quando tabela autofix_history existir
-  return true;
+  try {
+    const { error } = await supabase
+      .from("autofix_history")
+      .insert({
+        anomaly_id: result.anomalyId,
+        applied_fix: result.appliedFix,
+        result: result.result,
+        success: result.success,
+        executed_at: result.timestamp
+      });
+    
+    if (error) {
+      console.error("Error storing autofix history:", error);
+      return false;
+    }
+    
+    return true;
+  } catch (error) {
+    console.error("Error storing autofix history:", error);
+    return false;
+  }
 };
 
 // Helper functions
