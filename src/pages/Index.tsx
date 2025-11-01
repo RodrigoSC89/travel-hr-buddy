@@ -1,21 +1,19 @@
-import React, { useMemo, lazy, Suspense } from "react";
+import React, { useMemo, useState, useCallback } from "react";
 import { ProfessionalHeader } from "@/components/dashboard/professional-header";
-import { ProfessionalKPICard } from "@/components/dashboard/professional-kpi-card";
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Button } from "@/components/ui/button";
-import { Ship, Activity, CheckCircle, DollarSign, Users, Target, AlertTriangle, LineChart, Shield } from "lucide-react";
-import { useState } from "react";
+import { Shield } from "lucide-react";
 import { Link } from "react-router-dom";
 import { usePreviewSafeMode } from "@/hooks/qa/usePreviewSafeMode";
-import { Skeleton } from "@/components/ui/skeleton";
 
-// Lazy load dos componentes de charts para melhor performance
-const RevenueChart = lazy(() => import("@/components/dashboard/charts/RevenueChart"));
-const FleetChart = lazy(() => import("@/components/dashboard/charts/FleetChart"));
-const FinancialChart = lazy(() => import("@/components/dashboard/charts/FinancialChart"));
+// PATCH 584: Split Index into optimized subcomponents
+import { KPIGrid } from "@/components/dashboard/index/KPIGrid";
+import { OverviewCharts } from "@/components/dashboard/index/OverviewCharts";
+import { QuickStats } from "@/components/dashboard/index/QuickStats";
+import { FinancialTab } from "@/components/dashboard/index/FinancialTab";
+import { OperationsTab } from "@/components/dashboard/index/OperationsTab";
 
-// Dados mockados memoizados
+// PATCH 584: Memoized data constants for better performance
 const REVENUE_DATA = [
   { month: "Jan", revenue: 42000, target: 40000 },
   { month: "Fev", revenue: 48000, target: 45000 },
@@ -42,6 +40,11 @@ const Index = () => {
     silenceErrors: true
   });
 
+  // PATCH 584: Memoize callback to prevent unnecessary re-renders
+  const handleTabChange = useCallback((value: string) => {
+    setActiveTab(value);
+  }, []);
+
   return (
     <div className="space-y-6 p-6 bg-gradient-to-br from-background via-background to-primary/5 min-h-screen">
       <div className="flex items-center justify-between">
@@ -59,52 +62,11 @@ const Index = () => {
         </Link>
       </div>
 
-      {/* KPIs Grid */}
-      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
-        <ProfessionalKPICard
-          title="Receita Total"
-          value="72.5"
-          prefix="R$ "
-          suffix="K"
-          icon={DollarSign}
-          color="green"
-          change={12.5}
-          trend="vs mês anterior"
-          delay={0}
-        />
-        <ProfessionalKPICard
-          title="Embarcações Ativas"
-          value="24"
-          icon={Ship}
-          color="blue"
-          change={8.3}
-          trend="frota operacional"
-          delay={0.1}
-        />
-        <ProfessionalKPICard
-          title="Taxa de Compliance"
-          value="94.2"
-          suffix="%"
-          icon={CheckCircle}
-          color="purple"
-          change={2.8}
-          trend="meta: 95%"
-          delay={0.2}
-        />
-        <ProfessionalKPICard
-          title="Eficiência Operacional"
-          value="89.7"
-          suffix="%"
-          icon={Target}
-          color="orange"
-          change={5.2}
-          trend="acima da meta"
-          delay={0.3}
-        />
-      </div>
+      {/* PATCH 584: KPIs Grid extracted to memoized component */}
+      <KPIGrid />
 
       {/* Main Tabs */}
-      <Tabs value={activeTab} onValueChange={setActiveTab} className="space-y-6">
+      <Tabs value={activeTab} onValueChange={handleTabChange} className="space-y-6">
         <TabsList className="grid w-full grid-cols-3 bg-card/50 border border-primary/10">
           <TabsTrigger value="overview" className="data-[state=active]:bg-primary data-[state=active]:text-primary-foreground">
             Visão Geral
@@ -118,134 +80,21 @@ const Index = () => {
         </TabsList>
 
         <TabsContent value="overview" className="space-y-6">
-          <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
-            {/* Revenue Chart - Lazy Loaded */}
-            <Card className="border-primary/10">
-              <CardHeader>
-                <CardTitle className="flex items-center gap-2">
-                  <LineChart className="h-5 w-5 text-primary" />
-                  Evolução de Receita
-                </CardTitle>
-                <CardDescription>Receita mensal vs meta estabelecida</CardDescription>
-              </CardHeader>
-              <CardContent>
-                <Suspense fallback={<Skeleton className="h-[300px] w-full" />}>
-                  <RevenueChart data={REVENUE_DATA} />
-                </Suspense>
-              </CardContent>
-            </Card>
-
-            {/* Fleet Distribution - Lazy Loaded */}
-            <Card className="border-primary/10">
-              <CardHeader>
-                <CardTitle className="flex items-center gap-2">
-                  <Ship className="h-5 w-5 text-primary" />
-                  Status da Frota
-                </CardTitle>
-                <CardDescription>Distribuição atual das embarcações</CardDescription>
-              </CardHeader>
-              <CardContent>
-                <Suspense fallback={<Skeleton className="h-[300px] w-full" />}>
-                  <FleetChart data={FLEET_DATA} />
-                </Suspense>
-              </CardContent>
-            </Card>
-          </div>
-
-          {/* Quick Stats - Sem animações pesadas */}
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-            <Card className="border-green-500/20 bg-green-500/5">
-              <CardContent className="pt-6 text-center">
-                <div className="inline-flex p-4 rounded-full bg-green-500/10 mb-4">
-                  <CheckCircle className="h-8 w-8 text-green-600" />
-                </div>
-                <p className="text-4xl font-bold font-playfair text-green-600 mb-2">96.8%</p>
-                <p className="text-sm text-muted-foreground">Uptime Geral da Frota</p>
-              </CardContent>
-            </Card>
-
-            <Card className="border-blue-500/20 bg-blue-500/5">
-              <CardContent className="pt-6 text-center">
-                <div className="inline-flex p-4 rounded-full bg-blue-500/10 mb-4">
-                  <Users className="h-8 w-8 text-blue-600" />
-                </div>
-                <p className="text-4xl font-bold font-playfair text-blue-600 mb-2">347</p>
-                <p className="text-sm text-muted-foreground">Tripulantes Ativos</p>
-              </CardContent>
-            </Card>
-
-            <Card className="border-purple-500/20 bg-purple-500/5">
-              <CardContent className="pt-6 text-center">
-                <div className="inline-flex p-4 rounded-full bg-purple-500/10 mb-4">
-                  <Activity className="h-8 w-8 text-purple-600" />
-                </div>
-                <p className="text-4xl font-bold font-playfair text-purple-600 mb-2">12</p>
-                <p className="text-sm text-muted-foreground">Missões em Andamento</p>
-              </CardContent>
-            </Card>
-          </div>
+          {/* PATCH 584: Charts extracted to memoized component */}
+          <OverviewCharts revenueData={REVENUE_DATA} fleetData={FLEET_DATA} />
+          
+          {/* PATCH 584: Quick Stats extracted to memoized component */}
+          <QuickStats />
         </TabsContent>
 
         <TabsContent value="financial">
-          <Card className="border-primary/10">
-            <CardHeader>
-              <CardTitle>Análise Financeira</CardTitle>
-              <CardDescription>Detalhamento de receitas e custos operacionais</CardDescription>
-            </CardHeader>
-            <CardContent>
-              <Suspense fallback={<Skeleton className="h-[400px] w-full" />}>
-                <FinancialChart data={REVENUE_DATA} />
-              </Suspense>
-            </CardContent>
-          </Card>
+          {/* PATCH 584: Financial tab extracted to memoized component */}
+          <FinancialTab data={REVENUE_DATA} />
         </TabsContent>
 
         <TabsContent value="operations">
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-            <Card className="border-primary/10">
-              <CardHeader>
-                <CardTitle>Indicadores Operacionais</CardTitle>
-              </CardHeader>
-              <CardContent className="space-y-4">
-                <div className="flex justify-between items-center">
-                  <span className="text-sm">Missões Completadas</span>
-                  <span className="text-2xl font-bold font-playfair">148</span>
-                </div>
-                <div className="flex justify-between items-center">
-                  <span className="text-sm">Taxa de Sucesso</span>
-                  <span className="text-2xl font-bold font-playfair text-green-600">98.5%</span>
-                </div>
-                <div className="flex justify-between items-center">
-                  <span className="text-sm">Tempo Médio de Resposta</span>
-                  <span className="text-2xl font-bold font-playfair text-blue-600">24min</span>
-                </div>
-              </CardContent>
-            </Card>
-
-            <Card className="border-primary/10">
-              <CardHeader>
-                <CardTitle>Alertas Ativos</CardTitle>
-              </CardHeader>
-              <CardContent>
-                <div className="space-y-3">
-                  <div className="flex items-center gap-3 p-3 rounded-lg bg-yellow-500/10 border border-yellow-500/20">
-                    <AlertTriangle className="h-5 w-5 text-yellow-600" />
-                    <div className="flex-1">
-                      <p className="text-sm font-medium">Manutenção Programada</p>
-                      <p className="text-xs text-muted-foreground">Atlântico I - 15/11/2025</p>
-                    </div>
-                  </div>
-                  <div className="flex items-center gap-3 p-3 rounded-lg bg-blue-500/10 border border-blue-500/20">
-                    <Activity className="h-5 w-5 text-blue-600" />
-                    <div className="flex-1">
-                      <p className="text-sm font-medium">Nova Missão Atribuída</p>
-                      <p className="text-xs text-muted-foreground">Pacífico II - Operação Alpha</p>
-                    </div>
-                  </div>
-                </div>
-              </CardContent>
-            </Card>
-          </div>
+          {/* PATCH 584: Operations tab extracted to memoized component */}
+          <OperationsTab />
         </TabsContent>
       </Tabs>
     </div>
