@@ -1,5 +1,89 @@
 # 📝 CHANGELOG - Nautilus One
 
+## Versão: 3.4.0 - "Stability & Recovery" (PATCHES 563-567)
+**Data:** November 1, 2025
+**Tipo:** Stability Release - UX Recovery & Testing Infrastructure
+
+### 🎯 Overview
+This release focuses on recovering lost UX functionality, hardening authentication and session management, implementing comprehensive E2E regression tests, and preparing complete release documentation.
+
+### ✅ PATCH 563 - UX Recovery & Functional Navigation
+
+#### Fixed
+- **Navigation System**: Replaced all `<a href>` tags with React Router `<Link>` components for proper SPA navigation
+  - Fixed `/admin/lighthouse-dashboard` in DeploymentStatus.tsx
+  - Fixed `/admin/control-center` in admin-panel.tsx
+- **Module Visibility**: Ensured critical modules are accessible:
+  - Forecast Global Intelligence (`/forecast-global`)
+  - Voice Assistant (`/voice-assistant`) 
+  - Training Academy Enhanced (`/admin/training-academy`)
+  - Satellite Tracker (`/satellite-tracker`)
+- **Route Registration**: Verified 100% of routes properly registered in App.tsx
+- **Error Handling**: Leveraged ErrorBoundary for graceful error recovery
+
+#### Performance
+- First Contentful Paint (FCP) < 2.5s maintained
+- Proper SPA navigation without page reloads
+
+### ✅ PATCH 564 - Module Restoration & Data Handling
+
+#### Fixed
+- **Training Academy**: Added loading states and fallback messages for empty data
+- **Satellite Tracker**: Enhanced error boundaries and empty state handling
+- **SGSO Module**: Fixed tenant_id undefined issues in Supabase queries
+- **Templates Editor**: Added comprehensive error handling and user-friendly messages
+
+#### Improved
+- Fallback UI for all empty data states ("No data available" messages)
+- Loading indicators across all async operations
+- Silent error prevention with proper user notifications
+
+### ✅ PATCH 565 - Authentication & Session Security
+
+#### Added
+- **Role-Based Access Control**: Middleware for admin, superadmin, and user roles
+- **Session Management**: Automatic cleanup for inactive sessions
+- **JWT Validation**: Token expiration checks
+- **Tenant Isolation**: RLS enforcement on frontend with tenant-specific filtering
+
+#### Security
+- Removed hardcoded authentication tokens
+- Enhanced session security
+- Improved authentication flow
+
+### ✅ PATCH 566 - E2E Regression Testing
+
+#### Added
+- Comprehensive Playwright E2E test suite (`e2e/patches-563-567.spec.ts`):
+  - UX Recovery: Navigation flow validation
+  - Module Restoration: Data loading and fallback tests
+  - Authentication: Protected routes and session handling
+  - Performance: FCP measurement
+  - Regression: Critical user flow coverage
+
+#### Test Coverage
+- Dashboard loading and metrics display
+- Training Academy module
+- Satellite Tracker rendering
+- SGSO audit submission
+- Admin authentication flows
+
+#### CI/CD
+- Integrated tests into GitHub Actions workflow
+- Automated execution on pull requests
+- Performance benchmarking in CI pipeline
+
+### ✅ PATCH 567 - Release Documentation
+
+#### Added
+- Updated CHANGELOG.md with PATCHES 563-567
+- Created RELEASE_NOTES.md (user-facing changes)
+- Comprehensive technical documentation
+- Module usage guides
+- Known issues documentation
+
+---
+
 ## Versão: 1.0.0 - "Horizon" (Production Release)
 **Data:** October 25, 2025
 **Tipo:** Major Release - Production Ready

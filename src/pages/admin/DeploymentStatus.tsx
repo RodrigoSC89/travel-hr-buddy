@@ -4,6 +4,7 @@
  */
 
 import { useState, useEffect } from 'react';
+import { Link } from 'react-router-dom';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
@@ -303,11 +304,11 @@ export default function DeploymentStatus() {
             </Button>
 
             <Button className="w-full h-24 flex flex-col gap-2" variant="outline" asChild>
-              <a href="/admin/lighthouse-dashboard">
+              <Link to="/admin/lighthouse-dashboard">
                 <Zap className="h-6 w-6" />
                 <span className="text-sm">Performance Check</span>
                 <span className="text-xs text-muted-foreground">Final audit</span>
-              </a>
+              </Link>
             </Button>
           </div>
 
