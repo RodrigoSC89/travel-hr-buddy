@@ -251,7 +251,7 @@ export default defineConfig(({ mode }) => {
               
               // 3D/XR libraries - lazy, muito pesadas
               if (id.includes("three") || id.includes("@react-three") || id.includes("webxr")) {
-                return "3d-xr";
+                return "3d_xr";
               }
               
               // PDF/Document generation - lazy

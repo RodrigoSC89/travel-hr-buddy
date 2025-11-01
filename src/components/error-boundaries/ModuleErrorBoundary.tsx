@@ -26,6 +26,9 @@ interface State {
   errorCount: number;
 }
 
+// Constants
+const MAX_ERROR_COUNT = 3;
+
 /**
  * Error Boundary specifically designed for module-level error handling
  * Features:
@@ -73,18 +76,21 @@ export class ModuleErrorBoundary extends Component<Props, State> {
     }
 
     // Report to monitoring service if configured
-    if (typeof window !== 'undefined' && (window as any).Sentry) {
-      (window as any).Sentry.captureException(error, {
-        contexts: {
-          module: {
-            name: moduleName,
-            errorCount: errorCount + 1,
+    if (typeof window !== 'undefined') {
+      const sentry = (window as any).Sentry;
+      if (sentry) {
+        sentry.captureException(error, {
+          contexts: {
+            module: {
+              name: moduleName,
+              errorCount: errorCount + 1,
+            },
+            react: {
+              componentStack: errorInfo.componentStack,
+            },
           },
-          react: {
-            componentStack: errorInfo.componentStack,
-          },
-        },
-      });
+        });
+      }
     }
   }
 
@@ -166,7 +172,7 @@ export class ModuleErrorBoundary extends Component<Props, State> {
                 <Button
                   onClick={this.handleReset}
                   className="flex-1"
-                  disabled={errorCount > 3}
+                  disabled={errorCount > MAX_ERROR_COUNT}
                 >
                   <RefreshCw className="mr-2 h-4 w-4" />
                   Tentar Novamente
