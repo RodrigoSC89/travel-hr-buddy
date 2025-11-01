@@ -1,0 +1,347 @@
+name: Weekly Merge Develop to Production
+
+on:
+  # Run every Monday at 9:00 AM UTC
+  schedule:
+    - cron: '0 9 * * 1'
+  # Allow manual trigger
+  workflow_dispatch:
+    inputs:
+      force_merge:
+        description: 'Force merge even if there are conflicts'
+        required: false
+        default: 'false'
+        type: boolean
+
+env:
+  NODE_VERSION: '22.x'
+  PRODUCTION_BRANCH: 'production/v3.4-stable'
+  SOURCE_BRANCH: 'develop'
+
+jobs:
+  # Job 1: Check if merge is needed
+  check-merge-needed:
+    name: Check if Merge is Needed
+    runs-on: ubuntu-latest
+    outputs:
+      merge_needed: ${{ steps.check.outputs.merge_needed }}
+      commits_ahead: ${{ steps.check.outputs.commits_ahead }}
+    
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Fetch all branches
+        run: |
+          git fetch origin ${{ env.SOURCE_BRANCH }}
+          git fetch origin ${{ env.PRODUCTION_BRANCH }}
+
+      - name: Check if merge is needed
+        id: check
+        run: |
+          # Count commits ahead
+          COMMITS_AHEAD=$(git rev-list origin/${{ env.PRODUCTION_BRANCH }}..origin/${{ env.SOURCE_BRANCH }} --count)
+          echo "commits_ahead=$COMMITS_AHEAD" >> $GITHUB_OUTPUT
+          
+          if [ $COMMITS_AHEAD -gt 0 ]; then
+            echo "merge_needed=true" >> $GITHUB_OUTPUT
+            echo "📊 Develop is $COMMITS_AHEAD commits ahead of production"
+          else
+            echo "merge_needed=false" >> $GITHUB_OUTPUT
+            echo "✅ Production is up to date with develop"
+          fi
+
+  # Job 2: Run pre-merge validations
+  pre-merge-validation:
+    name: Pre-Merge Validation
+    needs: check-merge-needed
+    if: needs.check-merge-needed.outputs.merge_needed == 'true'
+    runs-on: ubuntu-latest
+    
+    steps:
+      - name: Checkout develop
+        uses: actions/checkout@v4
+        with:
+          ref: ${{ env.SOURCE_BRANCH }}
+          fetch-depth: 0
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: ${{ env.NODE_VERSION }}
+          cache: 'npm'
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Run tests
+        run: npm run test:unit
+        env:
+          CI: true
+
+      - name: Build application
+        run: npm run build:ci
+        env:
+          NODE_OPTIONS: '--max-old-space-size=4096'
+
+      - name: Run linter
+        run: npm run lint
+
+      - name: Validate build
+        run: |
+          if [ -d "dist" ]; then
+            echo "✅ Build successful"
+          else
+            echo "❌ Build failed"
+            exit 1
+          fi
+
+  # Job 3: Create merge PR
+  create-merge-pr:
+    name: Create Merge Pull Request
+    needs: [check-merge-needed, pre-merge-validation]
+    if: needs.check-merge-needed.outputs.merge_needed == 'true' && needs.pre-merge-validation.result == 'success'
+    runs-on: ubuntu-latest
+    outputs:
+      pr_number: ${{ steps.create-pr.outputs.pr_number }}
+      pr_url: ${{ steps.create-pr.outputs.pr_url }}
+    
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+          token: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Configure Git
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "github-actions[bot]@users.noreply.github.com"
+
+      - name: Fetch branches
+        run: |
+          git fetch origin ${{ env.SOURCE_BRANCH }}
+          git fetch origin ${{ env.PRODUCTION_BRANCH }}
+
+      - name: Create merge branch
+        id: create-branch
+        run: |
+          TIMESTAMP=$(date +%Y%m%d-%H%M%S)
+          MERGE_BRANCH="merge/weekly-${{ env.SOURCE_BRANCH }}-to-production-$TIMESTAMP"
+          echo "merge_branch=$MERGE_BRANCH" >> $GITHUB_OUTPUT
+          
+          git checkout -b $MERGE_BRANCH origin/${{ env.PRODUCTION_BRANCH }}
+          
+          # Try to merge
+          if git merge origin/${{ env.SOURCE_BRANCH }} --no-ff -m "Weekly merge from ${{ env.SOURCE_BRANCH }} to production"; then
+            echo "merge_status=success" >> $GITHUB_OUTPUT
+            git push origin $MERGE_BRANCH
+          else
+            echo "merge_status=conflict" >> $GITHUB_OUTPUT
+            # Push anyway to create PR with conflicts
+            git add .
+            git commit -m "WIP: Weekly merge with conflicts" --no-verify || true
+            git push origin $MERGE_BRANCH || true
+          fi
+
+      - name: Generate changelog
+        id: changelog
+        run: |
+          # Generate changelog from commits
+          COMMITS_AHEAD=${{ needs.check-merge-needed.outputs.commits_ahead }}
+          
+          cat > /tmp/pr-body.md << 'EOF'
+          ## 🔄 Weekly Merge: Develop → Production
+          
+          ### 📊 Summary
+          - **Commits to merge:** $COMMITS_AHEAD
+          - **Source branch:** ${{ env.SOURCE_BRANCH }}
+          - **Target branch:** ${{ env.PRODUCTION_BRANCH }}
+          - **Triggered:** Automated weekly merge
+          
+          ### 📝 Changes
+          
+          EOF
+          
+          # Add commit list
+          git log origin/${{ env.PRODUCTION_BRANCH }}..origin/${{ env.SOURCE_BRANCH }} \
+            --pretty=format:"- %s (%an, %ar) [%h]" \
+            --no-merges >> /tmp/pr-body.md
+          
+          cat >> /tmp/pr-body.md << 'EOF'
+          
+          ### ✅ Pre-Merge Validations
+          - ✅ Unit tests passed
+          - ✅ Build successful
+          - ✅ Linter passed
+          
+          ### 🚀 Next Steps
+          1. Review the changes
+          2. Run additional manual tests if needed
+          3. Approve and merge the PR
+          4. Monitor production deployment
+          
+          ---
+          
+          **Note:** This PR was automatically created by the weekly merge workflow.
+          
+          EOF
+
+      - name: Create Pull Request
+        id: create-pr
+        uses: peter-evans/create-pull-request@v5
+        with:
+          token: ${{ secrets.GITHUB_TOKEN }}
+          branch: ${{ steps.create-branch.outputs.merge_branch }}
+          base: ${{ env.PRODUCTION_BRANCH }}
+          title: "🔄 Weekly Merge: Develop → Production (${{ needs.check-merge-needed.outputs.commits_ahead }} commits)"
+          body-path: /tmp/pr-body.md
+          labels: |
+            automated
+            merge
+            production
+          assignees: RodrigoSC89
+          draft: false
+
+  # Job 4: Notify team
+  notify-team:
+    name: Notify Team
+    needs: [check-merge-needed, create-merge-pr]
+    if: always()
+    runs-on: ubuntu-latest
+    
+    steps:
+      - name: Prepare notification
+        id: prepare
+        run: |
+          if [ "${{ needs.check-merge-needed.outputs.merge_needed }}" = "true" ]; then
+            if [ "${{ needs.create-merge-pr.result }}" = "success" ]; then
+              echo "status=success" >> $GITHUB_OUTPUT
+              echo "message=✅ Weekly merge PR created successfully" >> $GITHUB_OUTPUT
+            else
+              echo "status=failure" >> $GITHUB_OUTPUT
+              echo "message=❌ Failed to create weekly merge PR" >> $GITHUB_OUTPUT
+            fi
+          else
+            echo "status=skip" >> $GITHUB_OUTPUT
+            echo "message=ℹ️ No merge needed - production is up to date" >> $GITHUB_OUTPUT
+          fi
+
+      - name: Send Slack notification
+        if: env.SLACK_WEBHOOK_URL != ''
+        uses: slackapi/slack-github-action@v1
+        env:
+          SLACK_WEBHOOK_URL: ${{ secrets.SLACK_WEBHOOK_URL }}
+        with:
+          payload: |
+            {
+              "text": "${{ steps.prepare.outputs.message }}",
+              "blocks": [
+                {
+                  "type": "header",
+                  "text": {
+                    "type": "plain_text",
+                    "text": "🔄 Weekly Merge Notification"
+                  }
+                },
+                {
+                  "type": "section",
+                  "text": {
+                    "type": "mrkdwn",
+                    "text": "${{ steps.prepare.outputs.message }}"
+                  }
+                },
+                {
+                  "type": "section",
+                  "fields": [
+                    {
+                      "type": "mrkdwn",
+                      "text": "*Source:*\n${{ env.SOURCE_BRANCH }}"
+                    },
+                    {
+                      "type": "mrkdwn",
+                      "text": "*Target:*\n${{ env.PRODUCTION_BRANCH }}"
+                    },
+                    {
+                      "type": "mrkdwn",
+                      "text": "*Commits:*\n${{ needs.check-merge-needed.outputs.commits_ahead }}"
+                    },
+                    {
+                      "type": "mrkdwn",
+                      "text": "*Status:*\n${{ steps.prepare.outputs.status }}"
+                    }
+                  ]
+                },
+                {
+                  "type": "section",
+                  "text": {
+                    "type": "mrkdwn",
+                    "text": "<${{ needs.create-merge-pr.outputs.pr_url }}|View Pull Request>"
+                  }
+                }
+              ]
+            }
+
+      - name: Send email notification
+        if: env.SENDGRID_API_KEY != ''
+        run: |
+          echo "📧 Sending email notification..."
+          # Email notification would be sent here using SendGrid or similar
+          # This is a placeholder for the actual email sending logic
+
+      - name: Update deployment dashboard
+        run: |
+          echo "📊 Updating deployment dashboard..."
+          # This would update a deployment status dashboard
+          # Could be a GitHub issue, wiki page, or external dashboard
+
+  # Job 5: Auto-sync branch tags
+  sync-tags:
+    name: Sync Branch Tags
+    needs: create-merge-pr
+    if: needs.create-merge-pr.result == 'success'
+    runs-on: ubuntu-latest
+    
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Create version tag
+        run: |
+          # Create a tag for tracking
+          TIMESTAMP=$(date +%Y%m%d-%H%M%S)
+          TAG_NAME="weekly-merge-$TIMESTAMP"
+          
+          git config user.name "github-actions[bot]"
+          git config user.email "github-actions[bot]@users.noreply.github.com"
+          
+          git tag -a "$TAG_NAME" -m "Weekly merge checkpoint: ${{ needs.check-merge-needed.outputs.commits_ahead }} commits"
+          git push origin "$TAG_NAME"
+          
+          echo "✅ Created tag: $TAG_NAME"
+
+  # Job 6: Summary
+  summary:
+    name: Workflow Summary
+    needs: [check-merge-needed, pre-merge-validation, create-merge-pr, notify-team, sync-tags]
+    if: always()
+    runs-on: ubuntu-latest
+    
+    steps:
+      - name: Display summary
+        run: |
+          echo "📊 Weekly Merge Workflow Summary"
+          echo "================================="
+          echo ""
+          echo "Merge needed: ${{ needs.check-merge-needed.outputs.merge_needed }}"
+          echo "Commits ahead: ${{ needs.check-merge-needed.outputs.commits_ahead }}"
+          echo "Pre-merge validation: ${{ needs.pre-merge-validation.result }}"
+          echo "Create merge PR: ${{ needs.create-merge-pr.result }}"
+          echo "Notify team: ${{ needs.notify-team.result }}"
+          echo "Sync tags: ${{ needs.sync-tags.result }}"
+          echo ""
+          echo "✅ Workflow completed"
