@@ -1,4 +1,4 @@
-// @ts-nocheck
+// PATCH-601: Removed @ts-nocheck directive - types verified
 /**
  * PATCH 349: Voice Assistant v2 - Service Layer
  * Service for voice commands, sessions, and multi-platform support

@@ -1,4 +1,4 @@
-// @ts-nocheck
+// PATCH-601: Removed @ts-nocheck directive - types verified
 /**
  * MMI Forecast Storage Service
  * Handles saving forecasts to the database

@@ -1,4 +1,4 @@
-// @ts-nocheck
+// PATCH-601: Removed @ts-nocheck directive - types verified
 /**
  * PATCH 383: Mission Control - Tactical Planning Service
  * Service for mission planning, resource allocation, and real-time synchronization

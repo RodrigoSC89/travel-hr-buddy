@@ -1,4 +1,4 @@
-// @ts-nocheck
+// PATCH-601: Removed @ts-nocheck directive - types verified
 /**
  * MMI Jobs API v1.1.0
  * Enhanced with Supabase integration, vector embeddings, and graceful fallback
