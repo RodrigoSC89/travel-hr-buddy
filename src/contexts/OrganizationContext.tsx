@@ -1,9 +1,7 @@
-// @ts-nocheck
 import React, { createContext, useContext, useEffect, useState } from "react";
 import { supabase } from "@/integrations/supabase/client";
 import { useAuth } from "./AuthContext";
 import { logger } from "@/lib/logger";
-import { Logger } from "@/lib/utils/logger";
 
 interface Organization {
   id: string;
@@ -49,7 +47,15 @@ interface OrganizationContextType {
   switchOrganization: (orgId: string) => Promise<void>;
   updateBranding: (branding: Partial<OrganizationBranding>) => Promise<void>;
   checkPermission: (permission: string) => boolean;
-  getCurrentOrganizationUsers: () => Promise<any[]>;
+  getCurrentOrganizationUsers: () => Promise<Array<{
+    id: string;
+    email: string;
+    role: string;
+    status: string;
+    full_name: string;
+    joined_at: string;
+    last_active_at: string;
+  }>>;
   inviteUser: (email: string, role: string) => Promise<void>;
   removeUser: (userId: string) => Promise<void>;
   updateUserRole: (userId: string, role: string) => Promise<void>;
@@ -116,9 +122,9 @@ export const OrganizationProvider: React.FC<{ children: React.ReactNode }> = ({ 
         default_currency: "BRL",
         timezone: "America/Sao_Paulo",
         custom_fields: {},
-        business_rules: {} as unknown,
-        enabled_modules: ["fleet", "crew", "certificates", "analytics", "travel", "documents"] as unknown,
-        module_settings: { peotram: { templates_enabled: true, ai_analysis: true, permissions_matrix: true } } as unknown
+        business_rules: {},
+        enabled_modules: { fleet: true, crew: true, certificates: true, analytics: true, travel: true, documents: true },
+        module_settings: { peotram: { templates_enabled: true, ai_analysis: true, permissions_matrix: true } }
       };
       
       setCurrentBranding(demoBranding);
@@ -158,12 +164,12 @@ export const OrganizationProvider: React.FC<{ children: React.ReactNode }> = ({ 
   const updateBranding = async (brandingUpdate: Partial<OrganizationBranding>) => {
     if (!currentOrganization) return;
 
-    const updateData: unknown = {
+    const updateData: Record<string, unknown> = {
       ...brandingUpdate,
-      business_rules: brandingUpdate.business_rules ? brandingUpdate.business_rules as unknown : undefined,
-      enabled_modules: brandingUpdate.enabled_modules ? brandingUpdate.enabled_modules as unknown : undefined,
-      custom_fields: brandingUpdate.custom_fields ? brandingUpdate.custom_fields as unknown : undefined,
-      module_settings: brandingUpdate.module_settings ? brandingUpdate.module_settings as unknown : undefined
+      business_rules: brandingUpdate.business_rules,
+      enabled_modules: brandingUpdate.enabled_modules,
+      custom_fields: brandingUpdate.custom_fields,
+      module_settings: brandingUpdate.module_settings
     };
 
     const { data, error } = await supabase
@@ -175,8 +181,10 @@ export const OrganizationProvider: React.FC<{ children: React.ReactNode }> = ({ 
 
     if (error) throw error;
 
-    setCurrentBranding(data as unknown);
-    applyBrandingTheme(data as unknown);
+    if (data) {
+      setCurrentBranding(data as OrganizationBranding);
+      applyBrandingTheme(data as OrganizationBranding);
+    }
   };
 
   const checkPermission = (permission: string): boolean => {
@@ -197,7 +205,7 @@ export const OrganizationProvider: React.FC<{ children: React.ReactNode }> = ({ 
     return userPermissions.includes(permission) || userPermissions.includes("all");
   };
 
-  const getCurrentOrganizationUsers = async (): Promise<any[]> => {
+  const getCurrentOrganizationUsers = async () => {
     // Mock data para demo
     const mockUsers = [
       {
@@ -226,12 +234,17 @@ export const OrganizationProvider: React.FC<{ children: React.ReactNode }> = ({ 
   const inviteUser = async (email: string, role: string) => {
     if (!currentOrganization) throw new Error("Nenhuma organização selecionada");
     // Invite functionality to be implemented
+    logger.info("Inviting user:", { email, role });
   };
 
   const removeUser = async (userId: string) => {
+    // Remove user functionality to be implemented
+    logger.info("Removing user:", { userId });
   };
 
   const updateUserRole = async (userId: string, role: string) => {
+    // Update user role functionality to be implemented
+    logger.info("Updating user role:", { userId, role });
   };
 
   const value: OrganizationContextType = {
