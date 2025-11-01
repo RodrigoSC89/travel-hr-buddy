@@ -81,7 +81,7 @@ export const analyzeSystemLogs = async (
     const memoryLogs = logsEngine.getRecentLogs(500);
     const allLogs = [...(dbLogs || []), ...memoryLogs];
     
-    return analyzeLogsData(allLogs);
+    return await analyzeLogsData(allLogs);
   } catch (error) {
     console.error("Error analyzing system logs:", error);
     throw error;
@@ -91,7 +91,7 @@ export const analyzeSystemLogs = async (
 /**
  * PATCH 586: Extract log analysis logic for reusability
  */
-const analyzeLogsData = (allLogs: any[]): LogAnalysisResult => {
+const analyzeLogsData = async (allLogs: any[]): Promise<LogAnalysisResult> => {
   if (allLogs.length === 0) {
     return {
       anomalies: [],
@@ -105,14 +105,14 @@ const analyzeLogsData = (allLogs: any[]): LogAnalysisResult => {
   const anomalies = detectAnomalies(allLogs);
   
   // Generate recommendations using AI
-  const recommendations = generateRecommendations(anomalies, allLogs);
+  const recommendations = await generateRecommendations(anomalies, allLogs);
   
   // Determine overall health
   const overallHealth = calculateOverallHealth(anomalies);
 
   return {
     anomalies,
-    recommendations: [],  // Filled asynchronously
+    recommendations,
     overallHealth,
     analyzedAt: new Date().toISOString()
   };
