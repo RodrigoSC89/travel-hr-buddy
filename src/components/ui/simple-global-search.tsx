@@ -1,23 +1,24 @@
-// @ts-nocheck
 import { useState, useEffect } from "react";
 import { Button } from "@/components/ui/button";
-import { Input } from "@/components/ui/input";
 import { Badge } from "@/components/ui/badge";
 import { CommandDialog, CommandEmpty, CommandGroup, CommandInput, CommandItem, CommandList } from "@/components/ui/command";
-import { Search, FileText, Users, Calendar, BarChart3, Settings, Plane, Hotel, Bot, Trophy } from "lucide-react";
+import { Search, FileText, Users, Calendar, BarChart3, Settings, Plane, Hotel, Bot, Trophy, Ship, Shield, Anchor, Leaf } from "lucide-react";
 import { useNavigate } from "react-router-dom";
+import { supabase } from "@/integrations/supabase/client";
+import { toast } from "sonner";
 
 interface SearchResult {
   id: string;
   title: string;
   description: string;
   category: string;
-  icon: React.ComponentType<unknown>;
+  icon: React.ComponentType<{ className?: string }>;
   path: string;
   keywords: string[];
 }
 
-const searchResults: SearchResult[] = [
+// Static base results for core system modules
+const staticResults: SearchResult[] = [
   {
     id: "dashboard",
     title: "Dashboard Principal",
@@ -37,40 +38,40 @@ const searchResults: SearchResult[] = [
     keywords: ["funcionários", "certificados", "pessoas", "rh", "colaboradores"]
   },
   {
-    id: "flights",
-    title: "Buscar Voos",
-    description: "Pesquisar e reservar passagens aéreas",
-    category: "Viagens",
-    icon: Plane,
-    path: "/flights",
-    keywords: ["voos", "passagens", "aéreas", "aviação", "viagem"]
+    id: "peo-dp",
+    title: "PEO-DP",
+    description: "Plano de Operações com Dynamic Positioning",
+    category: "Compliance",
+    icon: Anchor,
+    path: "/peo-dp",
+    keywords: ["peo", "dp", "dynamic positioning", "operações", "imca"]
   },
   {
-    id: "hotels",
-    title: "Buscar Hotéis",
-    description: "Encontrar e reservar hospedagem",
-    category: "Viagens",
-    icon: Hotel,
-    path: "/hotels",
-    keywords: ["hotéis", "hospedagem", "quartos", "acomodação", "reserva"]
+    id: "sgso",
+    title: "SGSO",
+    description: "Sistema de Gestão de Segurança Operacional",
+    category: "Compliance",
+    icon: Shield,
+    path: "/sgso",
+    keywords: ["sgso", "segurança", "anp", "compliance", "gestão"]
   },
   {
-    id: "reservations",
-    title: "Reservas",
-    description: "Gerenciar todas as reservas do sistema",
-    category: "Gestão",
-    icon: Calendar,
-    path: "/reservations",
-    keywords: ["reservas", "agendamentos", "bookings", "agenda"]
+    id: "peotram",
+    title: "PEOTRAM",
+    description: "Plano de Emergência e Gestão Ambiental",
+    category: "Compliance",
+    icon: Leaf,
+    path: "/peotram",
+    keywords: ["peotram", "emergência", "ambiental", "esg", "meio ambiente"]
   },
   {
-    id: "reports",
-    title: "Relatórios",
-    description: "Gerar e visualizar relatórios detalhados",
-    category: "Analytics",
-    icon: FileText,
-    path: "/reports",
-    keywords: ["relatórios", "reports", "documentos", "análise"]
+    id: "vessels",
+    title: "Embarcações",
+    description: "Gestão da frota e operações marítimas",
+    category: "Operações",
+    icon: Ship,
+    path: "/vessels",
+    keywords: ["embarcações", "frota", "vessels", "navios", "operações"]
   },
   {
     id: "settings",
@@ -80,15 +81,6 @@ const searchResults: SearchResult[] = [
     icon: Settings,
     path: "/settings",
     keywords: ["configurações", "ajustes", "preferências", "settings"]
-  },
-  {
-    id: "gamification",
-    title: "Gamificação",
-    description: "Sistema de pontuação e conquistas",
-    category: "Inovação",
-    icon: Trophy,
-    path: "/gamification",
-    keywords: ["gamificação", "pontos", "conquistas", "jogos", "ranking"]
   },
   {
     id: "innovation",
@@ -104,7 +96,57 @@ const searchResults: SearchResult[] = [
 export const SimpleGlobalSearch: React.FC = () => {
   const [open, setOpen] = useState(false);
   const [search, setSearch] = useState("");
+  const [searchResults, setSearchResults] = useState<SearchResult[]>(staticResults);
+  const [loading, setLoading] = useState(false);
   const navigate = useNavigate();
+
+  // Load additional modules from database
+  useEffect(() => {
+    if (open) {
+      loadDynamicModules();
+    }
+  }, [open]);
+
+  const loadDynamicModules = async () => {
+    try {
+      setLoading(true);
+      
+      // Query registered modules from the system
+      const { data: modules, error } = await supabase
+        .from("modules")
+        .select("id, name, description, category, route, keywords")
+        .eq("is_active", true);
+      
+      if (error) throw error;
+      
+      // Merge with static results
+      const dynamicResults: SearchResult[] = modules?.map(module => ({
+        id: module.id,
+        title: module.name,
+        description: module.description || `Módulo ${module.name}`,
+        category: module.category || "Sistema",
+        icon: BarChart3, // Default icon
+        path: module.route || `/${module.id}`,
+        keywords: module.keywords || []
+      })) || [];
+      
+      // Combine and deduplicate by id
+      const allResults = [...staticResults];
+      dynamicResults.forEach(dynResult => {
+        if (!allResults.some(r => r.id === dynResult.id)) {
+          allResults.push(dynResult);
+        }
+      });
+      
+      setSearchResults(allResults);
+    } catch (error) {
+      console.error("Error loading modules:", error);
+      toast.error("Erro ao carregar módulos do sistema");
+      setSearchResults(staticResults);
+    } finally {
+      setLoading(false);
+    }
+  };
 
   // Keyboard shortcut to open search (Ctrl+K)
   useEffect(() => {

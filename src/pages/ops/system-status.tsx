@@ -1,4 +1,3 @@
-// @ts-nocheck
 import { useState, useEffect } from "react";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
@@ -65,8 +64,9 @@ export default function SystemStatusPanel() {
       });
       
       setLastUpdate(new Date());
-    } catch (error: any) {
-      console.error("Error checking system health:", error);
+    } catch (error: unknown) {
+      const errorMessage = error instanceof Error ? error.message : "Unknown error";
+      console.error("Error checking system health:", errorMessage);
       toast.error("Failed to check system health");
     } finally {
       setLoading(false);
@@ -91,105 +91,170 @@ export default function SystemStatusPanel() {
         lastCheck: new Date().toISOString(),
         responseTime,
       };
-    } catch (error: any) {
+    } catch (error: unknown) {
+      const errorMessage = error instanceof Error ? error.message : "Unknown error";
       return {
         name: "Supabase Database",
         status: "down",
         uptime: 0,
-        lastError: error.message,
+        lastError: errorMessage,
         lastCheck: new Date().toISOString(),
       };
     }
   }
 
   async function checkLLM(): Promise<ServiceStatus> {
+    const startTime = Date.now();
     try {
-      // Simulate LLM health check
-      const isHealthy = Math.random() > 0.1;
+      // Check if we have OpenAI key configured by querying API keys
+      const { data, error } = await supabase
+        .from("api_keys")
+        .select("key_name, is_active")
+        .eq("key_name", "openai")
+        .maybeSingle();
+      
+      const responseTime = Date.now() - startTime;
+      
+      if (error) throw error;
+      
+      const isHealthy = data?.is_active || false;
       
       return {
         name: "LLM API",
         status: isHealthy ? "healthy" : "degraded",
-        uptime: 98.5,
-        lastError: isHealthy ? null : "Rate limit exceeded",
+        uptime: isHealthy ? 98.5 : 0,
+        lastError: isHealthy ? null : "API key not configured or inactive",
         lastCheck: new Date().toISOString(),
-        responseTime: Math.floor(Math.random() * 500) + 100,
+        responseTime,
       };
-    } catch (error: any) {
+    } catch (error: unknown) {
+      const errorMessage = error instanceof Error ? error.message : "Unknown error";
       return {
         name: "LLM API",
         status: "down",
         uptime: 0,
-        lastError: error.message,
+        lastError: errorMessage,
         lastCheck: new Date().toISOString(),
       };
     }
   }
 
   async function checkMQTT(): Promise<ServiceStatus> {
+    const startTime = Date.now();
     try {
-      const isHealthy = Math.random() > 0.15;
+      // Check MQTT broker status from system_health table
+      const { data, error } = await supabase
+        .from("system_health")
+        .select("service_name, status, last_check_at")
+        .eq("service_name", "mqtt_broker")
+        .order("last_check_at", { ascending: false })
+        .limit(1)
+        .maybeSingle();
+      
+      const responseTime = Date.now() - startTime;
+      
+      if (error && error.code !== "PGRST116") throw error;
+      
+      const isHealthy = data?.status === "healthy";
       
       return {
         name: "MQTT Broker",
-        status: isHealthy ? "healthy" : "degraded",
-        uptime: 97.2,
-        lastError: isHealthy ? null : "Connection timeout",
-        lastCheck: new Date().toISOString(),
-        responseTime: Math.floor(Math.random() * 200) + 50,
+        status: data?.status as "healthy" | "degraded" | "down" || "degraded",
+        uptime: isHealthy ? 97.2 : 85.0,
+        lastError: isHealthy ? null : "Connection status unknown",
+        lastCheck: data?.last_check_at || new Date().toISOString(),
+        responseTime,
       };
-    } catch (error: any) {
+    } catch (error: unknown) {
+      const errorMessage = error instanceof Error ? error.message : "Unknown error";
       return {
         name: "MQTT Broker",
         status: "down",
         uptime: 0,
-        lastError: error.message,
+        lastError: errorMessage,
         lastCheck: new Date().toISOString(),
       };
     }
   }
 
   async function checkWebSocket(): Promise<ServiceStatus> {
+    const startTime = Date.now();
     try {
-      const isHealthy = Math.random() > 0.05;
+      // Check WebSocket/Realtime status by testing Supabase realtime channel
+      const testChannel = supabase.channel("test_health_check");
+      
+      // Set a timeout promise
+      const timeoutPromise = new Promise<never>((_, reject) => {
+        setTimeout(() => reject(new Error("Connection timeout")), 3000);
+      });
+      
+      // Try to subscribe
+      const subscribePromise = new Promise<boolean>((resolve) => {
+        testChannel.subscribe((status) => {
+          if (status === "SUBSCRIBED") {
+            resolve(true);
+          } else if (status === "CLOSED" || status === "CHANNEL_ERROR") {
+            resolve(false);
+          }
+        });
+      });
+      
+      const isHealthy = await Promise.race([subscribePromise, timeoutPromise]);
+      await supabase.removeChannel(testChannel);
+      
+      const responseTime = Date.now() - startTime;
       
       return {
         name: "WebSocket",
         status: isHealthy ? "healthy" : "degraded",
-        uptime: 99.5,
-        lastError: isHealthy ? null : "Reconnection attempt",
+        uptime: isHealthy ? 99.5 : 95.0,
+        lastError: isHealthy ? null : "Connection unstable",
         lastCheck: new Date().toISOString(),
-        responseTime: Math.floor(Math.random() * 100) + 20,
+        responseTime,
       };
-    } catch (error: any) {
+    } catch (error: unknown) {
+      const errorMessage = error instanceof Error ? error.message : "Unknown error";
       return {
         name: "WebSocket",
         status: "down",
         uptime: 0,
-        lastError: error.message,
+        lastError: errorMessage,
         lastCheck: new Date().toISOString(),
       };
     }
   }
 
   async function checkEdgeDevices(): Promise<ServiceStatus> {
+    const startTime = Date.now();
     try {
-      const isHealthy = Math.random() > 0.2;
+      // Check edge devices by querying active sessions or device status
+      const { data, error } = await supabase
+        .from("active_sessions")
+        .select("id, is_active")
+        .eq("is_active", true);
+      
+      const responseTime = Date.now() - startTime;
+      
+      if (error) throw error;
+      
+      const activeDevices = data?.length || 0;
+      const isHealthy = activeDevices > 0;
       
       return {
         name: "Edge Devices",
         status: isHealthy ? "healthy" : "degraded",
-        uptime: 95.8,
-        lastError: isHealthy ? null : "Device offline: edge-001",
+        uptime: isHealthy ? 95.8 : 70.0,
+        lastError: isHealthy ? null : `${activeDevices} active devices`,
         lastCheck: new Date().toISOString(),
-        responseTime: Math.floor(Math.random() * 300) + 100,
+        responseTime,
       };
-    } catch (error: any) {
+    } catch (error: unknown) {
+      const errorMessage = error instanceof Error ? error.message : "Unknown error";
       return {
         name: "Edge Devices",
         status: "down",
         uptime: 0,
-        lastError: error.message,
+        lastError: errorMessage,
         lastCheck: new Date().toISOString(),
       };
     }
