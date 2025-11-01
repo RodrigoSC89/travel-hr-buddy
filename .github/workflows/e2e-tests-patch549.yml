@@ -33,7 +33,6 @@ jobs:
 
       - name: Run E2E tests
         run: npm run test:e2e -- --reporter=list --reporter=html
-        continue-on-error: true
 
       - name: Upload test results
         uses: actions/upload-artifact@v4
@@ -109,7 +108,6 @@ jobs:
 
       - name: Run E2E tests (Firefox)
         run: npm run test:e2e -- --project=firefox --reporter=list
-        continue-on-error: true
 
       - name: Upload Firefox test results
         uses: actions/upload-artifact@v4

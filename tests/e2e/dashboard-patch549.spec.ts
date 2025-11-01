@@ -1,4 +1,10 @@
 import { test, expect } from "@playwright/test";
+import { 
+  setupConsoleErrorListener, 
+  filterCriticalErrors, 
+  validatePageLoad,
+  waitForNetworkIdle
+} from "./test-utils";
 
 /**
  * PATCH 549 - E2E Test: Dashboard Module
@@ -9,18 +15,11 @@ test.describe("Dashboard Module - PATCH 549", () => {
   test.beforeEach(async ({ page }) => {
     // Navigate to the dashboard
     await page.goto("/");
-    await page.waitForLoadState("networkidle");
+    await waitForNetworkIdle(page);
   });
 
   test("should load dashboard without errors", async ({ page }) => {
-    const consoleErrors: string[] = [];
-
-    // Listen for console errors
-    page.on("console", msg => {
-      if (msg.type() === "error") {
-        consoleErrors.push(msg.text());
-      }
-    });
+    const consoleErrors = setupConsoleErrorListener(page);
 
     // Wait for content to load
     await page.waitForSelector("body", { state: "visible", timeout: 10000 });
@@ -29,13 +28,12 @@ test.describe("Dashboard Module - PATCH 549", () => {
     const heading = await page.locator("h1, h2").first().textContent();
     expect(heading).toBeTruthy();
 
-    // Filter out non-critical errors
-    const criticalErrors = consoleErrors.filter(error => 
-      !error.includes("favicon") && 
-      !error.includes("manifest") &&
-      !error.toLowerCase().includes("warning") &&
-      !error.includes("DevTools")
-    );
+    // Validate page load
+    const { hasErrors, criticalErrors } = validatePageLoad(consoleErrors);
+    
+    if (hasErrors) {
+      console.log("Critical errors found:", criticalErrors);
+    }
 
     // Should have minimal critical errors
     expect(criticalErrors.length).toBeLessThan(3);

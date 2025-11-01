@@ -166,10 +166,12 @@ echo "🏗️  Build Validation"
 echo "--------------------"
 
 # Check if TypeScript compiles
-if npm run type-check >/dev/null 2>&1; then
-    echo -e "  ${GREEN}✅${NC} TypeScript compila sem erros"
+echo "  Checking TypeScript compilation..."
+if npm run type-check 2>&1 | tee /tmp/typecheck-output.txt | grep -q "error TS"; then
+    echo -e "  ${RED}❌${NC} TypeScript tem erros:"
+    cat /tmp/typecheck-output.txt | grep "error TS" | head -5
 else
-    echo -e "  ${RED}❌${NC} TypeScript tem erros"
+    echo -e "  ${GREEN}✅${NC} TypeScript compila sem erros"
 fi
 
 # Check @ts-nocheck count
