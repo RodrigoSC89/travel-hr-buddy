@@ -1,17 +1,9 @@
 import { useState, useEffect } from "react";
 import { useAuth } from "@/contexts/AuthContext";
 import { supabase } from "@/integrations/supabase/client";
+import type { UserRole } from "./use-users";
 
-export type UserRole = 
-  | "admin" 
-  | "hr_manager" 
-  | "hr_analyst"
-  | "department_manager"
-  | "supervisor"
-  | "coordinator"
-  | "manager"
-  | "employee"
-  | "auditor";
+export type { UserRole };
 
 export type PermissionType = "read" | "write" | "delete" | "manage";
 export type Permission = "users" | "certificates" | "reports" | "system_settings" | "analytics";

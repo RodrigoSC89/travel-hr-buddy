@@ -1,6 +1,10 @@
 import { useState, useEffect, useCallback } from "react";
 import { supabase } from "@/integrations/supabase/client";
 import { useAuth } from "@/contexts/AuthContext";
+import type { Database } from "@/integrations/supabase/types";
+
+type EmployeeCertificate = Database["public"]["Tables"]["employee_certificates"]["Row"];
+type PriceAlert = Database["public"]["Tables"]["price_alerts"]["Row"];
 
 export interface Notification {
   id: string;
@@ -40,7 +44,7 @@ export const useEnhancedNotifications = () => {
         .gte("expiry_date", new Date().toISOString())
         .lte("expiry_date", new Date(Date.now() + 30 * 24 * 60 * 60 * 1000).toISOString());
 
-      certificates?.forEach(cert => {
+      (certificates as EmployeeCertificate[] | null)?.forEach(cert => {
         const expiryDate = cert.expiry_date ? new Date(cert.expiry_date) : null;
         if (!expiryDate) return;
         
@@ -69,11 +73,12 @@ export const useEnhancedNotifications = () => {
         .eq("user_id", user.id)
         .eq("is_active", true);
 
-      if (priceAlerts && priceAlerts.length > 0) {
+      const typedPriceAlerts = priceAlerts as PriceAlert[] | null;
+      if (typedPriceAlerts && typedPriceAlerts.length > 0) {
         mockNotifications.push({
           id: "price-alerts-active",
           title: "Alertas de Preços Ativos",
-          message: `Você tem ${priceAlerts.length} alertas de preços monitorando produtos`,
+          message: `Você tem ${typedPriceAlerts.length} alertas de preços monitorando produtos`,
           type: "info",
           read: false,
           action: {
@@ -85,9 +90,9 @@ export const useEnhancedNotifications = () => {
       }
 
       // Adicionar notificações de boas-vindas para novos usuários
-      const userCreated = new Date(user.created_at || "");
+      const userCreatedAt = user.created_at ? new Date(user.created_at) : new Date();
       const daysSinceCreated = Math.ceil(
-        (new Date().getTime() - userCreated.getTime()) / (1000 * 60 * 60 * 24)
+        (new Date().getTime() - userCreatedAt.getTime()) / (1000 * 60 * 60 * 24)
       );
 
       if (daysSinceCreated <= 7) {
@@ -107,8 +112,9 @@ export const useEnhancedNotifications = () => {
 
       setNotifications(mockNotifications);
       setUnreadCount(mockNotifications.filter(n => !n.read).length);
-    } catch (error) {
-      console.error("Error fetching notifications:", error);
+    } catch (err: unknown) {
+      const errorMessage = err instanceof Error ? err.message : "Unknown error";
+      console.error("Error fetching notifications:", errorMessage);
     } finally {
       setIsLoading(false);
     }
