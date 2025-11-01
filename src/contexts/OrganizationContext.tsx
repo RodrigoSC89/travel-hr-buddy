@@ -234,17 +234,17 @@ export const OrganizationProvider: React.FC<{ children: React.ReactNode }> = ({ 
   const inviteUser = async (email: string, role: string) => {
     if (!currentOrganization) throw new Error("Nenhuma organização selecionada");
     // Invite functionality to be implemented
-    console.log("Inviting user:", email, role);
+    logger.info("Inviting user:", { email, role });
   };
 
   const removeUser = async (userId: string) => {
     // Remove user functionality to be implemented
-    console.log("Removing user:", userId);
+    logger.info("Removing user:", { userId });
   };
 
   const updateUserRole = async (userId: string, role: string) => {
     // Update user role functionality to be implemented
-    console.log("Updating user role:", userId, role);
+    logger.info("Updating user role:", { userId, role });
   };
 
   const value: OrganizationContextType = {

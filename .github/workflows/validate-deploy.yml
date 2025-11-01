@@ -141,15 +141,19 @@ jobs:
         run: npm audit --audit-level=moderate
         continue-on-error: true
         
-      - name: Check for vulnerabilities
+      - name: Check for high severity vulnerabilities
         run: |
           if npm audit --audit-level=high --json > audit.json; then
-            echo "No high severity vulnerabilities found"
+            echo "✅ No high severity vulnerabilities found"
+            exit 0
           else
-            echo "⚠️ High severity vulnerabilities detected"
+            echo "❌ High severity vulnerabilities detected"
             cat audit.json
+            echo ""
+            echo "⚠️ Please review and address high severity vulnerabilities before deployment"
+            # In production, change 'exit 0' to 'exit 1' to block deployment
+            exit 0
           fi
-        continue-on-error: true
 
   # Job 6: E2E Tests (Optional, runs on main/develop only)
   e2e:

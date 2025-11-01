@@ -53,6 +53,8 @@ CREATE TABLE IF NOT EXISTS public.ml_configurations (
   created_by UUID REFERENCES auth.users(id),
   created_at TIMESTAMPTZ DEFAULT NOW(),
   updated_at TIMESTAMPTZ DEFAULT NOW(),
+  -- Note: Only one default configuration per use_case is allowed via partial unique constraint
+  -- Multiple non-default configurations for the same use_case are permitted
   CONSTRAINT unique_active_default_per_use_case UNIQUE (use_case, is_default) WHERE is_default = true
 );
 
