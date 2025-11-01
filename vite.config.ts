@@ -104,7 +104,8 @@ export default defineConfig(({ mode }) => {
                   {
                     // PATCH 599: Fallback to cache on network failure
                     handlerDidError: async () => {
-                      return caches.match("/offline.html");
+                      const cached = await caches.match("/offline.html");
+                      return cached || new Response("Offline", { status: 503 });
                     }
                   }
                 ]

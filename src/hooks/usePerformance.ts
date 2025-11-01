@@ -3,7 +3,7 @@
  * Custom React hooks for performance monitoring and optimization
  */
 
-import { useEffect, useRef, useCallback, useMemo } from 'react';
+import React, { useEffect, useRef, useCallback } from 'react';
 import { debounce, throttle, measureWebVitals } from '@/utils/performance-utils';
 
 /**
@@ -318,6 +318,3 @@ export function useAsyncCleanup() {
 
   return runAsync;
 }
-
-// Export React import for hooks
-import React from 'react';

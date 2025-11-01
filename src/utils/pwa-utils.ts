@@ -246,6 +246,11 @@ export async function getManifest(): Promise<any> {
 
 // PATCH 600: Security - Validate service worker origin
 export function validateServiceWorkerOrigin(registration: ServiceWorkerRegistration): boolean {
-  const swUrl = new URL(registration.active?.scriptURL || '');
+  if (!registration.active) {
+    console.warn('Service worker is not active');
+    return false;
+  }
+  
+  const swUrl = new URL(registration.active.scriptURL);
   return swUrl.origin === window.location.origin;
 }
