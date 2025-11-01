@@ -88,7 +88,8 @@ export default defineConfig(({ mode }) => {
         },
         workbox: {
           maximumFileSizeToCacheInBytes: 10485760, // 10MB limit for PWA caching
-          globPatterns: ["**/*.{js,css,html,ico,png,svg}"],
+          globPatterns: ["**/*.{js,css,html,ico,png,svg,woff,woff2}"],
+          // PATCH 587: Enhanced runtime caching strategies for better offline support
           runtimeCaching: [
             {
               urlPattern: /^https:\/\/fonts\.googleapis\.com\/.*/i,
@@ -118,21 +119,89 @@ export default defineConfig(({ mode }) => {
                 }
               }
             },
+            // PATCH 587: API cache with network-first strategy
             {
               urlPattern: /\/api\/.*/i,
               handler: "NetworkFirst",
               options: {
                 cacheName: "api-cache",
                 expiration: {
-                  maxEntries: 50,
-                  maxAgeSeconds: 60 * 5 // 5 minutes
+                  maxEntries: 100, // Increased from 50
+                  maxAgeSeconds: 60 * 10 // 10 minutes
                 },
-                networkTimeoutSeconds: 10
+                networkTimeoutSeconds: 10,
+                plugins: [
+                  {
+                    cacheWillUpdate: async ({ response }) => {
+                      // Only cache successful responses
+                      if (response && response.status === 200) {
+                        return response;
+                      }
+                      return null;
+                    }
+                  }
+                ]
+              }
+            },
+            // PATCH 587: Supabase API caching for offline resilience
+            {
+              urlPattern: /^https:\/\/.*\.supabase\.co\/rest\/.*/i,
+              handler: "NetworkFirst",
+              options: {
+                cacheName: "supabase-api-cache",
+                expiration: {
+                  maxEntries: 200,
+                  maxAgeSeconds: 60 * 15 // 15 minutes
+                },
+                networkTimeoutSeconds: 8,
+                plugins: [
+                  {
+                    cacheWillUpdate: async ({ response }) => {
+                      if (response && (response.status === 200 || response.status === 304)) {
+                        return response;
+                      }
+                      return null;
+                    }
+                  }
+                ]
+              }
+            },
+            // PATCH 587: Image caching with CacheFirst for better performance
+            {
+              urlPattern: /\.(?:png|jpg|jpeg|svg|gif|webp)$/i,
+              handler: "CacheFirst",
+              options: {
+                cacheName: "images-cache",
+                expiration: {
+                  maxEntries: 100,
+                  maxAgeSeconds: 60 * 60 * 24 * 30 // 30 days
+                },
+                cacheableResponse: {
+                  statuses: [0, 200]
+                }
+              }
+            },
+            // PATCH 587: Static assets caching
+            {
+              urlPattern: /\.(?:js|css)$/i,
+              handler: "StaleWhileRevalidate",
+              options: {
+                cacheName: "static-assets-cache",
+                expiration: {
+                  maxEntries: 60,
+                  maxAgeSeconds: 60 * 60 * 24 * 7 // 7 days
+                },
+                cacheableResponse: {
+                  statuses: [0, 200]
+                }
               }
             }
           ],
           navigateFallback: "/",
-          navigateFallbackDenylist: [/^\/api\//]
+          navigateFallbackDenylist: [/^\/api\//],
+          // PATCH 587: Skip waiting for faster updates
+          skipWaiting: true,
+          clientsClaim: true
         },
         devOptions: {
           enabled: false,
