@@ -6,11 +6,13 @@ on:
       - main
       - develop
       - staging
+      - 'production/**'
   pull_request:
     branches:
       - main
       - develop
       - staging
+      - 'production/**'
   release:
     types: [published]
 
