@@ -4,7 +4,7 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/com
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { CheckCircle2, XCircle, Loader2 } from "lucide-react";
-import { decisionSimulatorCore } from "@/ai/strategic-decision-system";
+import { getDecisionSimulatorCore } from "@/ai/strategic-decision-system";
 
 export function Patch582Validation() {
   const [results, setResults] = useState<Record<string, boolean>>({});
@@ -16,6 +16,9 @@ export function Patch582Validation() {
     const testResults: Record<string, boolean> = {};
 
     try {
+      // Dynamic import to avoid build errors
+      const { decisionSimulatorCore } = await getDecisionSimulatorCore();
+      
       // Test 1: Initialize simulator
       await decisionSimulatorCore.initialize();
       testResults["simulator_init"] = true;

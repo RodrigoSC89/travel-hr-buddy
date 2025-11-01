@@ -4,7 +4,7 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/com
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { CheckCircle2, XCircle, Loader2 } from "lucide-react";
-import { neuralGovernance } from "@/ai/strategic-decision-system";
+import { getNeuralGovernance } from "@/ai/strategic-decision-system";
 
 export function Patch583Validation() {
   const [results, setResults] = useState<Record<string, boolean>>({});
@@ -16,6 +16,9 @@ export function Patch583Validation() {
     const testResults: Record<string, boolean> = {};
 
     try {
+      // Dynamic import to avoid build errors
+      const { neuralGovernance } = await getNeuralGovernance();
+      
       // Test 1: Initialize governance
       await neuralGovernance.initialize();
       testResults["governance_init"] = true;

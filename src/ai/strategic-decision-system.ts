@@ -8,61 +8,76 @@
  */
 
 // PATCH 581 - Predictive Strategy Engine
-export {
-  predictiveStrategyEngine,
-  PredictiveStrategyEngine,
-  type Signal,
-  type Strategy,
-  type StrategyProposal,
-  type FeedbackRecord,
-  type StrategyType,
-  type SignalSource,
-  type LearningFeedback
+// Export types only to avoid static/dynamic import conflicts
+export type {
+  Signal,
+  Strategy,
+  StrategyProposal,
+  FeedbackRecord,
+  StrategyType,
+  SignalSource,
+  LearningFeedback
 } from "./strategy/predictive-engine";
 
-// PATCH 582 - Decision Simulator Core
-export {
-  decisionSimulatorCore,
-  DecisionSimulatorCore,
-  type SimulationResult,
-  type SimulationParameters,
-  type SimulationMetrics,
-  type SimulationScenario,
-  type SimulationOutcome,
-  type SimulationArchive,
-  type SimulationStatus
+// PATCH 582 - Decision Simulator Core  
+export type {
+  SimulationResult,
+  SimulationParameters,
+  SimulationMetrics,
+  SimulationScenario,
+  SimulationOutcome,
+  SimulationArchive,
+  SimulationStatus
 } from "./decision-simulator";
 
+// Export UI component as it's not dynamically imported
 export { SimulationVisualization } from "./decision-simulator/SimulationVisualization";
 
 // PATCH 583 - Neural Governance Module
-export {
-  neuralGovernance,
-  NeuralGovernance,
-  type GovernanceEvaluation,
-  type GovernancePolicy,
-  type GovernanceRule,
-  type GovernanceViolation,
-  type VetoRecord,
-  type AuditEntry,
-  type GovernanceDecision,
-  type RiskCategory,
-  type ViolationType
+export type {
+  GovernanceEvaluation,
+  GovernancePolicy,
+  GovernanceRule,
+  GovernanceViolation,
+  VetoRecord,
+  AuditEntry,
+  GovernanceDecision,
+  RiskCategory,
+  ViolationType
 } from "./governance/neural-governance";
 
 // PATCH 584 - Strategic Consensus Builder
-export {
-  strategicConsensusBuilder,
-  StrategicConsensusBuilder,
-  type ConsensusResult,
-  type Agent,
-  type AgentVote,
-  type Disagreement,
-  type FallbackRule,
-  type AgentRole,
-  type VoteValue,
-  type ConsensusStatus
+export type {
+  ConsensusResult,
+  Agent,
+  AgentVote,
+  Disagreement,
+  FallbackRule,
+  AgentRole,
+  VoteValue,
+  ConsensusStatus
 } from "./agents/consensus-builder";
+
+// Runtime exports via lazy loading functions
+export async function getPredictiveStrategyEngine() {
+  const { predictiveStrategyEngine, PredictiveStrategyEngine } = await import("./strategy/predictive-engine");
+  return { predictiveStrategyEngine, PredictiveStrategyEngine };
+}
+
+export async function getDecisionSimulatorCore() {
+  const { decisionSimulatorCore, DecisionSimulatorCore } = await import("./decision-simulator");
+  return { decisionSimulatorCore, DecisionSimulatorCore };
+}
+
+export async function getNeuralGovernance() {
+  const { neuralGovernance, NeuralGovernance } = await import("./governance/neural-governance");
+  return { neuralGovernance, NeuralGovernance };
+}
+
+export async function getStrategicConsensusBuilder() {
+  const { strategicConsensusBuilder, StrategicConsensusBuilder } = await import("./agents/consensus-builder");
+  return { strategicConsensusBuilder, StrategicConsensusBuilder };
+}
 
 // PATCH 585 - Executive Summary Generator
 export {
@@ -76,10 +91,17 @@ export {
  */
 export async function initializeAIStrategicSystem(): Promise<void> {
   try {
-    const { predictiveStrategyEngine } = await import("./strategy/predictive-engine");
-    const { decisionSimulatorCore } = await import("./decision-simulator");
-    const { neuralGovernance } = await import("./governance/neural-governance");
-    const { strategicConsensusBuilder } = await import("./agents/consensus-builder");
+    const [
+      { predictiveStrategyEngine },
+      { decisionSimulatorCore },
+      { neuralGovernance },
+      { strategicConsensusBuilder }
+    ] = await Promise.all([
+      getPredictiveStrategyEngine(),
+      getDecisionSimulatorCore(),
+      getNeuralGovernance(),
+      getStrategicConsensusBuilder()
+    ]);
 
     await Promise.all([
       predictiveStrategyEngine.initialize(),

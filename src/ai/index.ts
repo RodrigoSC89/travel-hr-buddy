@@ -192,63 +192,56 @@ export {
   type FailoverEvent
 } from "./multiAgentScanner";
 
-// PATCH 591 - SocioCognitive Interaction Layer
-export {
-  socioCognitiveLayer,
-  type UrgencyLevel,
-  type ToneType,
-  type OperationalLoad,
-  type CommandInput,
-  type CommandInterpretation,
-  type SocialContext
+// PATCH 591-595 - Dynamic-only exports to avoid build warnings
+// These modules are only loaded via dynamic imports in validation components
+// Export only types to maintain type safety while avoiding chunk splitting issues
+export type {
+  UrgencyLevel,
+  ToneType,
+  OperationalLoad,
+  CommandInput,
+  CommandInterpretation,
+  SocialContext
 } from "./interface/sociocognitive-layer";
 
-// PATCH 592 - Empathy Core Engine
-export {
-  empathyCore,
-  type EmotionalState,
-  type StressLevel,
-  type BiometricSource,
-  type BiometricData,
-  type EmotionalContext,
-  type EmpathyResponse,
-  type CognitiveReliefAction
+export type {
+  EmotionalState,
+  StressLevel,
+  BiometricSource,
+  BiometricData,
+  EmotionalContext,
+  EmpathyResponse,
+  CognitiveReliefAction
 } from "./emotion/empathy-core";
 
-// PATCH 593 - Neuro-Human Interface Adapter
-export {
-  neuroHumanAdapter,
-  type InputType,
-  type InteractionState,
-  type AdaptiveReaction,
-  type UserInput,
-  type HumanContext,
-  type AdaptiveReactionOutput,
-  type HesitationDetection
+export type {
+  InputType,
+  InteractionState,
+  AdaptiveReaction,
+  UserInput,
+  HumanContext,
+  AdaptiveReactionOutput,
+  HesitationDetection
 } from "./interface/neuro-adapter";
 
-// PATCH 594 - Adaptive Joint Decision Engine
-export {
-  adaptiveJointDecision,
-  type DecisionType,
-  type DecisionStatus,
-  type ConfidenceLevel,
-  type DecisionOption,
-  type DecisionProposal,
-  type OperatorReview,
-  type DecisionResult,
-  type AIConfidenceAdjustment
+export type {
+  DecisionType,
+  DecisionStatus,
+  ConfidenceLevel,
+  DecisionOption,
+  DecisionProposal,
+  OperatorReview,
+  DecisionResult,
+  AIConfidenceAdjustment
 } from "./decision/adaptive-joint-decision";
 
-// PATCH 595 - Emotion-Aware Feedback System
-export {
-  feedbackResponder,
-  type EmotionType,
-  type InputModality,
-  type FeedbackAdjustmentType,
-  type EmotionDetection,
-  type UserFeedback,
-  type FeedbackAdjustment,
-  type EmotionAwareResponse,
-  type EmotionStats
+export type {
+  EmotionType,
+  InputModality,
+  FeedbackAdjustmentType,
+  EmotionDetection,
+  UserFeedback,
+  FeedbackAdjustment,
+  EmotionAwareResponse,
+  EmotionStats
 } from "./emotion/feedback-responder";

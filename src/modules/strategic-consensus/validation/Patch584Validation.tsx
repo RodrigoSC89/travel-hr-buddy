@@ -4,7 +4,7 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/com
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { CheckCircle2, XCircle, Loader2 } from "lucide-react";
-import { strategicConsensusBuilder } from "@/ai/strategic-decision-system";
+import { getStrategicConsensusBuilder } from "@/ai/strategic-decision-system";
 
 export function Patch584Validation() {
   const [results, setResults] = useState<Record<string, boolean>>({});
@@ -16,6 +16,9 @@ export function Patch584Validation() {
     const testResults: Record<string, boolean> = {};
 
     try {
+      // Dynamic import to avoid build errors
+      const { strategicConsensusBuilder } = await getStrategicConsensusBuilder();
+      
       // Test 1: Initialize consensus builder
       await strategicConsensusBuilder.initialize();
       testResults["consensus_init"] = true;

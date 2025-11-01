@@ -4,7 +4,7 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/com
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { CheckCircle2, XCircle, Loader2 } from "lucide-react";
-import { predictiveStrategyEngine } from "@/ai/strategic-decision-system";
+import { getPredictiveStrategyEngine } from "@/ai/strategic-decision-system";
 
 export function Patch581Validation() {
   const [results, setResults] = useState<Record<string, boolean>>({});
@@ -16,6 +16,9 @@ export function Patch581Validation() {
     const testResults: Record<string, boolean> = {};
 
     try {
+      // Dynamic import to avoid build errors
+      const { predictiveStrategyEngine } = await getPredictiveStrategyEngine();
+      
       // Test 1: Initialize engine
       await predictiveStrategyEngine.initialize();
       testResults["engine_init"] = true;
