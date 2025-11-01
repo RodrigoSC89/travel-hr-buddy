@@ -1,7 +1,7 @@
-// @ts-nocheck
 import { useState, useEffect, useCallback } from "react";
 import { supabase } from "@/integrations/supabase/client";
 import { useAuth } from "@/contexts/AuthContext";
+import type { User } from "@supabase/supabase-js";
 
 export interface Notification {
   id: string;
@@ -41,7 +41,7 @@ export const useEnhancedNotifications = () => {
         .gte("expiry_date", new Date().toISOString())
         .lte("expiry_date", new Date(Date.now() + 30 * 24 * 60 * 60 * 1000).toISOString());
 
-      certificates?.forEach(cert => {
+      certificates?.forEach((cert: { id: string; certificate_name: string; expiry_date: string }) => {
         const daysUntilExpiry = Math.ceil(
           (new Date(cert.expiry_date).getTime() - new Date().getTime()) / (1000 * 60 * 60 * 24)
         );
@@ -83,7 +83,8 @@ export const useEnhancedNotifications = () => {
       }
 
       // Adicionar notificações de boas-vindas para novos usuários
-      const userCreated = new Date(user.created_at || "");
+      const userCreatedAt = (user as User & { created_at?: string })?.created_at;
+      const userCreated = new Date(userCreatedAt || "");
       const daysSinceCreated = Math.ceil(
         (new Date().getTime() - userCreated.getTime()) / (1000 * 60 * 60 * 24)
       );

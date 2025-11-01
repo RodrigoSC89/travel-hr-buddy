@@ -1,8 +1,38 @@
-// @ts-nocheck
 import { useState, useEffect, useCallback } from "react";
 import { supabase } from "@/integrations/supabase/client";
 import { toast } from "sonner";
 import type { Checklist, ChecklistTemplate, ChecklistItem } from "@/components/maritime-checklists/checklist-types";
+
+interface ChecklistItemData {
+  id: string;
+  title: string;
+  description: string | null;
+  required: boolean;
+  order_index: number;
+  completed: boolean;
+  notes: string | null;
+  completed_at: string | null;
+}
+
+interface VesselData {
+  id: string;
+  name: string;
+  vessel_type: string | null;
+  imo_number: string | null;
+  flag_state: string | null;
+}
+
+interface OperationalChecklistData {
+  id: string;
+  title: string;
+  status: string;
+  compliance_score: number | null;
+  created_at: string;
+  updated_at: string;
+  completed_at: string | null;
+  checklist_items: ChecklistItemData[];
+  vessels: VesselData | null;
+}
 
 export const useMaritimeChecklists = (userId: string) => {
   const [checklists, setChecklists] = useState<Checklist[]>([]);
@@ -27,7 +57,7 @@ export const useMaritimeChecklists = (userId: string) => {
       if (error) throw error;
 
       // Transform data to match our Checklist interface
-      const transformedChecklists: Checklist[] = data?.map(item => ({
+      const transformedChecklists: Checklist[] = data?.map((item: OperationalChecklistData) => ({
         id: item.id,
         title: item.title,
         type: "dp" as any, // Default type, will be updated when we add proper type field
@@ -51,8 +81,8 @@ export const useMaritimeChecklists = (userId: string) => {
           phone: "+55 11 99999-9999",
           certifications: ["Maritime Inspector"]
         },
-        status: item.status as any,
-        items: item.checklist_items?.map((checklistItem: any) => ({
+        status: item.status as "draft" | "in_progress" | "pending_review" | "completed",
+        items: item.checklist_items?.map((checklistItem: ChecklistItemData) => ({
           id: checklistItem.id,
           title: checklistItem.title,
           description: checklistItem.description,
@@ -67,20 +97,21 @@ export const useMaritimeChecklists = (userId: string) => {
         })) || [],
         createdAt: item.created_at,
         updatedAt: item.updated_at,
-        completedAt: null, // Will be set when completed
-        priority: "medium" as any, // Default priority
-        estimatedDuration: 180, // Default duration
-        complianceScore: item.compliance_score,
+        completedAt: item.completed_at || null,
+        priority: "medium" as "low" | "medium" | "high",
+        estimatedDuration: 180,
+        complianceScore: item.compliance_score || undefined,
         workflow: [],
         tags: [],
         template: false,
-        syncStatus: "synced" as any
+        syncStatus: "synced" as "synced" | "pending" | "error"
       })) || [];
 
       setChecklists(transformedChecklists);
-    } catch (err) {
-      setError("Erro ao carregar checklists");
-      toast.error("Erro ao carregar checklists");
+    } catch (err: unknown) {
+      const errorMessage = err instanceof Error ? err.message : "Erro ao carregar checklists";
+      setError(errorMessage);
+      toast.error(errorMessage);
     } finally {
       setLoading(false);
     }
@@ -201,8 +232,9 @@ export const useMaritimeChecklists = (userId: string) => {
       await fetchChecklists();
       
       toast.success("Checklist salvo com sucesso!");
-    } catch (err) {
-      toast.error("Erro ao salvar checklist");
+    } catch (err: unknown) {
+      const errorMessage = err instanceof Error ? err.message : "Erro ao salvar checklist";
+      toast.error(errorMessage);
       throw err;
     }
   };
@@ -225,8 +257,9 @@ export const useMaritimeChecklists = (userId: string) => {
       await fetchChecklists();
       
       toast.success("Checklist enviado para revisão!");
-    } catch (err) {
-      toast.error("Erro ao enviar checklist");
+    } catch (err: unknown) {
+      const errorMessage = err instanceof Error ? err.message : "Erro ao enviar checklist";
+      toast.error(errorMessage);
       throw err;
     }
   };
@@ -266,8 +299,9 @@ export const useMaritimeChecklists = (userId: string) => {
       
       toast.success("Checklist criado com sucesso!");
       return checklist;
-    } catch (err) {
-      toast.error("Erro ao criar checklist");
+    } catch (err: unknown) {
+      const errorMessage = err instanceof Error ? err.message : "Erro ao criar checklist";
+      toast.error(errorMessage);
       throw err;
     }
   };

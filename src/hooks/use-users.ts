@@ -1,4 +1,3 @@
-// @ts-nocheck
 import { useState, useEffect } from "react";
 import { supabase } from "@/integrations/supabase/client";
 import { UserRole } from "./use-permissions";
@@ -65,8 +64,9 @@ export const useUsers = () => {
       );
 
       setUsers(usersWithRoles);
-    } catch (err) {
-      setError("Erro ao carregar usuários");
+    } catch (err: unknown) {
+      const errorMessage = err instanceof Error ? err.message : "Erro ao carregar usuários";
+      setError(errorMessage);
     } finally {
       setIsLoading(false);
     }
@@ -91,8 +91,9 @@ export const useUsers = () => {
       );
 
       return { success: true };
-    } catch (err) {
-      return { success: false, error: "Erro ao atualizar role do usuário" };
+    } catch (err: unknown) {
+      const errorMessage = err instanceof Error ? err.message : "Erro ao atualizar role do usuário";
+      return { success: false, error: errorMessage };
     }
   };
 
@@ -129,8 +130,9 @@ export const useUsers = () => {
       );
 
       return { success: true };
-    } catch (err) {
-      return { success: false, error: "Erro ao atualizar perfil do usuário" };
+    } catch (err: unknown) {
+      const errorMessage = err instanceof Error ? err.message : "Erro ao atualizar perfil do usuário";
+      return { success: false, error: errorMessage };
     }
   };
 

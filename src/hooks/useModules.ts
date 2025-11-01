@@ -1,4 +1,3 @@
-// @ts-nocheck
 import { useEffect, useState } from "react";
 import { supabase } from "@/integrations/supabase/client";
 
@@ -32,8 +31,9 @@ export default function useModules() {
           }));
           setModules(typedModules);
         }
-      } catch (error) {
-        console.error("Failed to fetch modules:", error);
+      } catch (error: unknown) {
+        const errorMessage = error instanceof Error ? error.message : "Failed to fetch modules";
+        console.error(errorMessage, error);
       } finally {
         if (!cancelled) {
           setLoading(false);
