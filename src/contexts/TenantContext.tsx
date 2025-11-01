@@ -1,9 +1,7 @@
-// @ts-nocheck
 import React, { createContext, useContext, useEffect, useState } from "react";
 import { supabase } from "@/integrations/supabase/client";
 import { useAuth } from "./AuthContext";
 import { logger } from "@/lib/logger";
-import { Logger } from "@/lib/utils/logger";
 
 interface SaasTenant {
   id: string;
@@ -314,16 +312,16 @@ export const TenantProvider: React.FC<{ children: React.ReactNode }> = ({ childr
         const { data: userTenants, error: tenantsError } = await Promise.race([
           fetchPromise,
           timeoutPromise
-        ]).catch(() => ({ data: null, error: null })) as { data: unknown; error: unknown };
+        ]).catch(() => ({ data: null, error: null })) as { data: Array<{ saas_tenants: SaasTenant }> | null; error: unknown };
 
         if (!tenantsError && userTenants) {
-          const tenants = (userTenants as Array<{ saas_tenants: SaasTenant }>)?.map((ut) => ut.saas_tenants).filter(Boolean) || [];
+          const tenants = userTenants.map((ut) => ut.saas_tenants).filter(Boolean);
           if (tenants.length > 0) {
-            setAvailableTenants(tenants as SaasTenant[]);
+            setAvailableTenants(tenants);
             
             // Usar primeiro tenant real se disponível
             const firstTenant = tenants[0];
-            setCurrentTenant(firstTenant as SaasTenant);
+            setCurrentTenant(firstTenant);
             
             // Tentar carregar branding, usuário e usage do tenant real
             await Promise.all([
@@ -593,14 +591,19 @@ export const TenantProvider: React.FC<{ children: React.ReactNode }> = ({ childr
   const inviteTenantUser = async (email: string, role: string) => {
     if (!currentTenant) throw new Error("Nenhum tenant selecionado");
     // Invite functionality to be implemented
+    console.log("Inviting tenant user:", email, role);
   };
 
   const updateUserRole = async (userId: string, role: string) => {
     if (!currentTenant) return;
+    // Update user role functionality to be implemented
+    console.log("Updating user role:", userId, role);
   };
 
   const removeTenantUser = async (userId: string) => {
     if (!currentTenant) return;
+    // Remove user functionality to be implemented
+    console.log("Removing tenant user:", userId);
   };
 
   const getTenantUsers = async (): Promise<TenantUser[]> => {
@@ -664,9 +667,13 @@ export const TenantProvider: React.FC<{ children: React.ReactNode }> = ({ childr
   };
 
   const upgradePlan = async (planId: string) => {
+    // Upgrade plan functionality to be implemented
+    console.log("Upgrading plan:", planId);
   };
 
   const downgradeplan = async (planId: string) => {
+    // Downgrade plan functionality to be implemented
+    console.log("Downgrading plan:", planId);
   };
 
   const formatCurrency = (amount: number): string => {

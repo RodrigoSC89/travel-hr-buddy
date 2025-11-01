@@ -1,4 +1,3 @@
-// @ts-nocheck
 import { useState, useEffect, useCallback } from "react";
 import { supabase } from "@/integrations/supabase/client";
 import { useAuth } from "@/contexts/AuthContext";
@@ -42,8 +41,11 @@ export const useEnhancedNotifications = () => {
         .lte("expiry_date", new Date(Date.now() + 30 * 24 * 60 * 60 * 1000).toISOString());
 
       certificates?.forEach(cert => {
+        const expiryDate = cert.expiry_date ? new Date(cert.expiry_date) : null;
+        if (!expiryDate) return;
+        
         const daysUntilExpiry = Math.ceil(
-          (new Date(cert.expiry_date).getTime() - new Date().getTime()) / (1000 * 60 * 60 * 24)
+          (expiryDate.getTime() - new Date().getTime()) / (1000 * 60 * 60 * 24)
         );
         
         mockNotifications.push({
@@ -106,7 +108,7 @@ export const useEnhancedNotifications = () => {
       setNotifications(mockNotifications);
       setUnreadCount(mockNotifications.filter(n => !n.read).length);
     } catch (error) {
-      // Error fetching notifications
+      console.error("Error fetching notifications:", error);
     } finally {
       setIsLoading(false);
     }
