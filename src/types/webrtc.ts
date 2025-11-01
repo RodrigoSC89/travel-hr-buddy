@@ -103,7 +103,7 @@ export interface WebRTCDataChannel {
   label: string;
   readyState: RTCDataChannelState;
   createdAt: Date;
-  messageseSent: number;
+  messagesSent: number;
   messagesReceived: number;
   bytesSent: number;
   bytesReceived: number;
