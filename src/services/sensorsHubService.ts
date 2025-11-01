@@ -1,4 +1,4 @@
-// @ts-nocheck
+// PATCH-601: Removed @ts-nocheck directive
 /**
  * PATCH 538 - Sensors Hub Service
  * Real-time sensor monitoring with MQTT/HTTP ingestion

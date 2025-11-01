@@ -1,6 +1,6 @@
-// @ts-nocheck
 /**
  * PATCH 347: Analytics Core v2 - Real-Time Service Layer
+ * PATCH-601: Removed @ts-nocheck and ensured type safety
  * Service for tracking events, managing metrics, and handling alerts
  */
 
