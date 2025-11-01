@@ -1,5 +1,5 @@
 // @ts-nocheck
-import React, { useState, useEffect, useRef } from "react";
+import React, { useState, useEffect, useRef, useCallback } from "react";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -105,6 +105,13 @@ const EnhancedAIChatbot: React.FC = () => {
     };
   }, []);
 
+  // PATCH 549: Memoized handleSendMessage to prevent re-creation
+  const handleSendMessageCallback = useCallback(() => {
+    if (inputMessage.trim()) {
+      handleSendMessage();
+    }
+  }, [inputMessage]);
+
   // Suporte a teclas de atalho
   useEffect(() => {
     const handleKeyDown = (e: KeyboardEvent) => {
@@ -116,7 +123,7 @@ const EnhancedAIChatbot: React.FC = () => {
           break;
         case "Enter":
           e.preventDefault();
-          handleSendMessage();
+          handleSendMessageCallback();
           break;
         }
       }
@@ -127,7 +134,7 @@ const EnhancedAIChatbot: React.FC = () => {
 
     window.addEventListener("keydown", handleKeyDown);
     return () => window.removeEventListener("keydown", handleKeyDown);
-  }, [inputMessage]);
+  }, [handleSendMessageCallback]);
 
   const aiCapabilities: AICapability[] = [
     {

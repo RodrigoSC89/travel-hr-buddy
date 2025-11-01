@@ -4,7 +4,7 @@
  * Displays mission execution status with live updates
  */
 
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useCallback } from "react";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { Progress } from "@/components/ui/progress";
@@ -51,6 +51,46 @@ export const RealTimeMissionDashboard = () => {
   const [lastUpdate, setLastUpdate] = useState(new Date());
   const { toast } = useToast();
 
+  // PATCH 549: Wrapped in useCallback to prevent re-creation
+  const loadMissions = useCallback(async () => {
+    try {
+      const { data, error } = await supabase
+        .from("missions")
+        .select("*")
+        .in("status", ["planning", "in_progress", "paused", "error"])
+        .order("priority", { ascending: false })
+        .order("updated_at", { ascending: false });
+
+      if (error) throw error;
+      if (data) {
+        setMissions(data as Mission[]);
+      }
+    } catch (error) {
+      console.error("Error loading missions:", error);
+    } finally {
+      setLoading(false);
+    }
+  }, []);
+
+  // PATCH 549: Wrapped in useCallback to prevent re-creation
+  const loadRecentLogs = useCallback(async () => {
+    try {
+      const { data, error } = await supabase
+        .from("mission_logs")
+        .select("*")
+        .order("timestamp", { ascending: false })
+        .limit(10);
+
+      if (error) throw error;
+      if (data) {
+        setRecentLogs(data as MissionLog[]);
+      }
+    } catch (error) {
+      console.error("Error loading logs:", error);
+    }
+  }, []);
+
+  // PATCH 549: useEffect with proper dependencies and cleanup
   useEffect(() => {
     loadMissions();
     loadRecentLogs();
@@ -104,44 +144,7 @@ export const RealTimeMissionDashboard = () => {
       supabase.removeChannel(missionsChannel);
       supabase.removeChannel(logsChannel);
     };
-  }, []);
-
-  const loadMissions = async () => {
-    try {
-      const { data, error } = await supabase
-        .from("missions")
-        .select("*")
-        .in("status", ["planning", "in_progress", "paused", "error"])
-        .order("priority", { ascending: false })
-        .order("updated_at", { ascending: false });
-
-      if (error) throw error;
-      if (data) {
-        setMissions(data as Mission[]);
-      }
-    } catch (error) {
-      console.error("Error loading missions:", error);
-    } finally {
-      setLoading(false);
-    }
-  };
-
-  const loadRecentLogs = async () => {
-    try {
-      const { data, error } = await supabase
-        .from("mission_logs")
-        .select("*")
-        .order("timestamp", { ascending: false })
-        .limit(10);
-
-      if (error) throw error;
-      if (data) {
-        setRecentLogs(data as MissionLog[]);
-      }
-    } catch (error) {
-      console.error("Error loading logs:", error);
-    }
-  };
+  }, [loadMissions, loadRecentLogs, toast]);
 
   const getStatusIcon = (status: Mission["status"]) => {
     switch (status) {
