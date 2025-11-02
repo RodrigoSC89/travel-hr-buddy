@@ -221,6 +221,10 @@ const Patches601to605 = safeLazyImport(() => import("@/pages/validation/patches-
 const Patches606to610 = safeLazyImport(() => import("@/pages/validation/patches-606-610"));
 // PATCHES 611-615 - 3D Visualizer, Inference, Decisions, Threats & Strategy Validation
 const Patches611to615 = safeLazyImport(() => import("@/pages/validation/patches-611-615"));
+// PATCHES 151-155 - Maritime Operations Validation
+const Patches151to155 = safeLazyImport(() => import("@/pages/validation/patches-151-155"));
+// Patches Validation Hub - Central validation dashboard
+const PatchesValidationHub = safeLazyImport(() => import("@/pages/validation/PatchesValidationHub"));
 
 // PATCH 541 - PATCHES 506-510 UI Components
 const AIMemoryDashboard = safeLazyImport(() => import("@/pages/admin/patches-506-510/ai-memory-dashboard"));
@@ -767,6 +771,13 @@ function App() {
                       <Route path="/admin/route-planner-v1/validation" element={<RoutePlannerV1Validation />} />
                       <Route path="/admin/satcom-v1/validation" element={<SatcomV1Validation />} />
                       <Route path="/admin/sonar-ai-detailed/validation" element={<SonarAIDetailedValidation />} />
+                      
+                      {/* Patches Validation Routes */}
+                      <Route path="/validation/patches-151-155" element={<Patches151to155 />} />
+                      <Route path="/validation/hub" element={<PatchesValidationHub />} />
+                      <Route path="/validation/patches-601-605" element={<Patches601to605 />} />
+                      <Route path="/validation/patches-606-610" element={<Patches606to610 />} />
+                      <Route path="/validation/patches-611-615" element={<Patches611to615 />} />
                       
                       {/* Validation Route - Patches 481-485 */}
                       <Route path="/admin/patches-481-485/validation" element={<Patches481485Validation />} />

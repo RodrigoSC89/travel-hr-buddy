@@ -7,6 +7,9 @@ import React, { useState } from "react";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { FileSignature, Shield, Upload } from "lucide-react";
+import { SignDocumentForm } from "./components/SignDocumentForm";
+import { VerifySignatureForm } from "./components/VerifySignatureForm";
+import { CertificatesList } from "./components/CertificatesList";
 
 export const DigitalSignature: React.FC = () => {
   const [activeTab, setActiveTab] = useState("sign");
@@ -37,51 +40,15 @@ export const DigitalSignature: React.FC = () => {
         </TabsList>
 
         <TabsContent value="sign" className="mt-6">
-          <Card>
-            <CardHeader>
-              <CardTitle>Sign Document</CardTitle>
-              <CardDescription>
-                Apply digital signature to PDF documents with legal validity
-              </CardDescription>
-            </CardHeader>
-            <CardContent>
-              <p className="text-sm text-muted-foreground">
-                Upload a certificate and sign documents with ICP-Brasil or OpenCert validation.
-              </p>
-            </CardContent>
-          </Card>
+          <SignDocumentForm />
         </TabsContent>
 
         <TabsContent value="verify" className="mt-6">
-          <Card>
-            <CardHeader>
-              <CardTitle>Verify Signature</CardTitle>
-              <CardDescription>
-                Validate digital signatures using public key verification
-              </CardDescription>
-            </CardHeader>
-            <CardContent>
-              <p className="text-sm text-muted-foreground">
-                Verify document authenticity and signature validity.
-              </p>
-            </CardContent>
-          </Card>
+          <VerifySignatureForm />
         </TabsContent>
 
         <TabsContent value="certificates" className="mt-6">
-          <Card>
-            <CardHeader>
-              <CardTitle>Digital Certificates</CardTitle>
-              <CardDescription>
-                Manage uploaded certificates and keys
-              </CardDescription>
-            </CardHeader>
-            <CardContent>
-              <p className="text-sm text-muted-foreground">
-                View and manage your digital certificates for document signing.
-              </p>
-            </CardContent>
-          </Card>
+          <CertificatesList />
         </TabsContent>
       </Tabs>
     </div>
