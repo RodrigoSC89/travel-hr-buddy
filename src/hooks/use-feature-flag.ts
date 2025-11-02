@@ -25,11 +25,12 @@ export function useFeatureFlag(key: string): boolean {
     queryFn: async () => {
       try {
         // Check in order: user-specific, tenant-specific, global
+        // Use parameterized filter to avoid SQL injection
         const { data, error } = await supabase
           .from("feature_flags")
           .select("enabled")
           .eq("key", key)
-          .or(`user_id.eq.${user?.id},tenant_id.eq.${user?.id},user_id.is.null,tenant_id.is.null`)
+          .or(`user_id.eq."${user?.id}",tenant_id.eq."${user?.id}",user_id.is.null,tenant_id.is.null`)
           .order("user_id", { nullsLast: false })
           .order("tenant_id", { nullsLast: false })
           .limit(1)

@@ -29,7 +29,7 @@ class TelemetryTracker {
   }
 
   private generateSessionId(): string {
-    return `session-${Date.now()}-${Math.random().toString(36).substr(2, 9)}`;
+    return `session-${Date.now()}-${Math.random().toString(36).substring(2, 11)}`;
   }
 
   private startFlushInterval(): void {
@@ -39,8 +39,19 @@ class TelemetryTracker {
   }
 
   private setupEventListeners(): void {
-    // Track excessive clicks
-    document.addEventListener('click', this.handleClick.bind(this), true);
+    // Track clicks with throttling to avoid performance impact
+    let lastClickTime = 0;
+    const throttleMs = 100; // Throttle to max 10 clicks per second
+    
+    const throttledClick = (event: MouseEvent) => {
+      const now = Date.now();
+      if (now - lastClickTime >= throttleMs) {
+        lastClickTime = now;
+        this.handleClick(event);
+      }
+    };
+    
+    document.addEventListener('click', throttledClick, true);
 
     // Track errors
     window.addEventListener('error', this.handleError.bind(this));
@@ -56,7 +67,11 @@ class TelemetryTracker {
 
   private handleClick(event: MouseEvent): void {
     const target = event.target as HTMLElement;
-    const elementId = target.id || target.className || 'unknown';
+    // Use data-track-id if available, fallback to id, then first class, then 'unknown'
+    const elementId = target.dataset.trackId || 
+                     target.id || 
+                     target.className.split(' ')[0] || 
+                     'unknown';
     const elementName = target.tagName.toLowerCase();
 
     this.track({

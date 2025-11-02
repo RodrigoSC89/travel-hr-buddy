@@ -99,11 +99,25 @@ class AIPluginRegistry {
       };
     }
 
-    if (plugin.validate && !plugin.validate(input)) {
-      return {
-        success: false,
-        error: `Plugin ${pluginName} input validation failed`,
-      };
+    if (plugin.validate) {
+      try {
+        const isValid = plugin.validate(input);
+        if (!isValid) {
+          return {
+            success: false,
+            error: `Plugin ${pluginName} input validation failed. Please check input parameters.`,
+            metadata: { 
+              providedInput: input,
+              expectedFormat: 'Refer to plugin documentation',
+            },
+          };
+        }
+      } catch (validationError) {
+        return {
+          success: false,
+          error: `Plugin ${pluginName} validation error: ${validationError instanceof Error ? validationError.message : 'Unknown validation error'}`,
+        };
+      }
     }
 
     try {
