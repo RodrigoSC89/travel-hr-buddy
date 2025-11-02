@@ -224,7 +224,7 @@ export function debounce<T extends (...args: any[]) => any>(
   func: T,
   wait: number
 ): (...args: Parameters<T>) => void {
-  let timeout: NodeJS.Timeout | null = null;
+  let timeout: number | null = null;
 
   return function (this: any, ...args: Parameters<T>) {
     const context = this;
@@ -236,7 +236,7 @@ export function debounce<T extends (...args: any[]) => any>(
     timeout = setTimeout(() => {
       func.apply(context, args);
       timeout = null;
-    }, wait);
+    }, wait) as unknown as number;
   };
 }
 
@@ -247,7 +247,7 @@ export function throttle<T extends (...args: any[]) => any>(
   func: T,
   wait: number
 ): (...args: Parameters<T>) => void {
-  let timeout: NodeJS.Timeout | null = null;
+  let timeout: number | null = null;
   let previous = 0;
 
   return function (this: any, ...args: Parameters<T>) {
@@ -267,13 +267,13 @@ export function throttle<T extends (...args: any[]) => any>(
         previous = Date.now();
         timeout = null;
         func.apply(context, args);
-      }, remaining);
+      }, remaining) as unknown as number;
     }
   };
 }
 
 /**
- * Measure function execution time
+ * Measure function execution time (handles both sync and async functions)
  */
 export function measureExecutionTime<T extends (...args: any[]) => any>(
   func: T,
@@ -282,11 +282,21 @@ export function measureExecutionTime<T extends (...args: any[]) => any>(
   return ((...args: Parameters<T>) => {
     const startTime = performance.now();
     const result = func(...args);
+    
+    // Handle async functions
+    if (result && typeof result === 'object' && typeof result.then === 'function') {
+      return result.then((value: any) => {
+        const endTime = performance.now();
+        const duration = endTime - startTime;
+        logger.info(`${label || func.name} execution time:`, `${duration.toFixed(2)}ms`);
+        return value;
+      });
+    }
+    
+    // Handle sync functions
     const endTime = performance.now();
     const duration = endTime - startTime;
-
     logger.info(`${label || func.name} execution time:`, `${duration.toFixed(2)}ms`);
-
     return result;
   }) as T;
 }

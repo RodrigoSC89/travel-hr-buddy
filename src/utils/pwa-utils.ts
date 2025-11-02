@@ -162,6 +162,14 @@ export async function unsubscribeFromPush(): Promise<boolean> {
   }
 }
 
+interface NetworkInformation {
+  effectiveType?: string;
+  downlink?: number;
+  rtt?: number;
+  addEventListener?: (type: string, listener: () => void) => void;
+  removeEventListener?: (type: string, listener: () => void) => void;
+}
+
 /**
  * Monitor network connectivity status
  */
@@ -173,7 +181,7 @@ export function monitorNetworkStatus(callback: (status: NetworkStatus) => void):
 
     // Add connection info if available
     if ("connection" in navigator) {
-      const conn = (navigator as any).connection;
+      const conn = (navigator as any).connection as NetworkInformation;
       status.effectiveType = conn?.effectiveType;
       status.downlink = conn?.downlink;
       status.rtt = conn?.rtt;
@@ -190,7 +198,8 @@ export function monitorNetworkStatus(callback: (status: NetworkStatus) => void):
   window.addEventListener("offline", updateStatus);
 
   if ("connection" in navigator) {
-    (navigator as any).connection?.addEventListener("change", updateStatus);
+    const conn = (navigator as any).connection as NetworkInformation;
+    conn?.addEventListener?.("change", updateStatus);
   }
 
   // Return cleanup function
@@ -198,7 +207,8 @@ export function monitorNetworkStatus(callback: (status: NetworkStatus) => void):
     window.removeEventListener("online", updateStatus);
     window.removeEventListener("offline", updateStatus);
     if ("connection" in navigator) {
-      (navigator as any).connection?.removeEventListener("change", updateStatus);
+      const conn = (navigator as any).connection as NetworkInformation;
+      conn?.removeEventListener?.("change", updateStatus);
     }
   };
 }
