@@ -79,24 +79,35 @@ export const runOpenAI = async (request: AIEngineRequest): Promise<AIEngineRespo
 };
 
 /**
- * Store AI interaction for context building
+ * PATCH 586: Store AI interaction for context building with Supabase persistence
  */
 const storeInteraction = async (request: AIEngineRequest, response: string): Promise<void> => {
   if (!request.context) return;
   
   try {
-    // Store interaction in module context for future learning
-    // This could be extended to save to Supabase for persistent learning
     const contextData = {
-      moduleName: request.context.moduleName,
-      userId: request.context.userId,
+      module_name: request.context.moduleName,
+      user_id: request.context.userId,
       input: request.messages[request.messages.length - 1]?.content,
       output: response,
-      timestamp: new Date().toISOString()
+      model: request.model || "gpt-4o-mini",
+      temperature: request.temperature ?? 0.7,
+      metadata: {
+        messageCount: request.messages.length,
+        hasSystemMessage: request.messages.some(m => m.role === "system")
+      }
     };
     
-    logger.debug("AI interaction logged", { module: contextData.moduleName });
-    // TODO: Implement Supabase persistence for context history
+    // Store in Supabase for persistent learning and analytics
+    const { error } = await supabase
+      .from("ai_interactions")
+      .insert(contextData);
+    
+    if (error) {
+      logger.warn("Failed to persist AI interaction to Supabase", { error });
+    } else {
+      logger.debug("AI interaction logged to Supabase", { module: contextData.module_name });
+    }
   } catch (error) {
     logger.warn("Failed to store AI interaction", { error });
   }

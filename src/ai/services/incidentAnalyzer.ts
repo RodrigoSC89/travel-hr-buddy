@@ -179,24 +179,70 @@ const generateFallbackAnalysis = (
 };
 
 /**
- * Store incident analysis in database
+ * PATCH 586: Store incident analysis in database (dp_incidents table exists)
  */
 export const storeIncidentAnalysis = async (
   incidentId: string,
   analysis: IncidentAnalysis
 ): Promise<boolean> => {
-  console.log("Store incident analysis:", incidentId, analysis);
-  // TODO: Implementar quando tabela dp_incidents existir
-  return true;
+  try {
+    const { error } = await supabase
+      .from("dp_incidents")
+      .update({
+        ai_analysis: {
+          probableCause: analysis.probableCause,
+          suggestedActions: analysis.suggestedActions,
+          riskLevel: analysis.riskLevel,
+          preventiveMeasures: analysis.preventiveMeasures,
+          complianceReferences: analysis.complianceReferences,
+          confidence: analysis.confidence,
+          analyzedAt: new Date().toISOString()
+        },
+        risk_level: analysis.riskLevel,
+        updated_at: new Date().toISOString()
+      })
+      .eq("id", incidentId);
+    
+    if (error) {
+      console.error("Error storing incident analysis:", error);
+      return false;
+    }
+    
+    return true;
+  } catch (error) {
+    console.error("Error storing incident analysis:", error);
+    return false;
+  }
 };
 
 /**
- * Get stored incident analysis
+ * PATCH 586: Get stored incident analysis (dp_incidents table exists)
  */
 export const getIncidentAnalysis = async (
   incidentId: string
 ): Promise<IncidentAnalysis | null> => {
-  console.log("Get incident analysis:", incidentId);
-  // TODO: Implementar quando tabela dp_incidents existir
-  return null;
+  try {
+    const { data, error } = await supabase
+      .from("dp_incidents")
+      .select("ai_analysis, risk_level")
+      .eq("id", incidentId)
+      .single();
+    
+    if (error || !data?.ai_analysis) {
+      return null;
+    }
+    
+    const analysis = data.ai_analysis as any;
+    return {
+      probableCause: analysis.probableCause || "",
+      suggestedActions: analysis.suggestedActions || [],
+      riskLevel: data.risk_level || "moderado",
+      preventiveMeasures: analysis.preventiveMeasures,
+      complianceReferences: analysis.complianceReferences,
+      confidence: analysis.confidence || 0.7
+    };
+  } catch (error) {
+    console.error("Error getting incident analysis:", error);
+    return null;
+  }
 };
