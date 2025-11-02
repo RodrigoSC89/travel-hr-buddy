@@ -84,6 +84,8 @@ export default function ExecutiveDashboard() {
   const [fleetPerformanceData, setFleetPerformanceData] = useState<FleetPerformanceData[]>([]);
   const [operationalMetrics, setOperationalMetrics] = useState<OperationalMetrics[]>([]);
   const [recentActivities, setRecentActivities] = useState<Activity[]>([]);
+  const [currentPage, setCurrentPage] = useState(0);
+  const pageSize = 50;
 
   useEffect(() => {
     if (currentOrganization?.id) {
@@ -217,12 +219,16 @@ export default function ExecutiveDashboard() {
     if (!currentOrganization?.id) return;
 
     try {
+      // PATCH 609: Add pagination using range
+      const startIndex = currentPage * pageSize;
+      const endIndex = startIndex + pageSize - 1;
+      
       const { data: logs, error } = await supabase
         .from("access_logs")
         .select("id, action, module_accessed, created_at, details")
         .eq("severity", "info")
         .order("created_at", { ascending: false })
-        .limit(4);
+        .range(startIndex, endIndex);
 
       if (error) throw error;
 

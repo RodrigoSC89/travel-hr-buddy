@@ -39,6 +39,8 @@ export function PerformanceMonitor() {
   const [suggestionData, setSuggestionData] = useState<SuggestionMetrics[]>([]);
   const [watchdogAlerts, setWatchdogAlerts] = useState<WatchdogAlert[]>([]);
   const [loading, setLoading] = useState(true);
+  const [currentPage, setCurrentPage] = useState(0);
+  const pageSize = 50;
 
   useEffect(() => {
     fetchPerformanceData();
@@ -68,12 +70,16 @@ export function PerformanceMonitor() {
 
   const fetchPerformanceData = async () => {
     try {
+      // PATCH 609: Add pagination using range
+      const startIndex = currentPage * pageSize;
+      const endIndex = startIndex + pageSize - 1;
+      
       // Fetch aggregated performance metrics
       const { data: perfData, error: perfError } = await supabase
         .from("ia_performance_log")
         .select("*")
         .order("created_at", { ascending: false })
-        .limit(1000);
+        .range(startIndex, endIndex);
 
       if (perfError) throw perfError;
 
@@ -86,7 +92,7 @@ export function PerformanceMonitor() {
         .from("ia_suggestions_log")
         .select("*")
         .order("created_at", { ascending: false })
-        .limit(1000);
+        .range(startIndex, endIndex);
 
       if (suggError) throw suggError;
 
