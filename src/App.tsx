@@ -428,6 +428,9 @@ const Patches586to590ValidationPage = safeLazyImport(() => import("@/pages/valid
 const Patches591to595ValidationPage = safeLazyImport(() => import("@/pages/validation/patches-591-595"));
 const Patches596to600ValidationPage = safeLazyImport(() => import("@/pages/validation/patches-596-600"));
 
+// PATCH 623: Health Monitor - System Health Monitoring Dashboard
+const HealthMonitor = safeLazyImport(() => import("@/pages/admin/HealthMonitor"));
+
 // PATCH 531-535: Navigation Copilot v2, Route Planner, Underwater Drone, Drone Commander, Mission Consolidation
 const Patch531NavigationCopilotV2 = safeLazyImport(() => import("@/pages/admin/Patch531NavigationCopilotV2"));
 const Patch532RoutePlannerAI = safeLazyImport(() => import("@/pages/admin/Patch532RoutePlannerAI"));
@@ -700,6 +703,7 @@ function App() {
                       <Route path="/admin/checklists" element={<AdminChecklists />} />
                       <Route path="/admin/checklists/dashboard" element={<AdminChecklistsDashboard />} />
                       <Route path="/admin/system-health" element={<SystemHealth />} />
+                      <Route path="/admin/health-monitor" element={<HealthMonitor />} />
                       <Route path="/admin/forecast" element={<Forecast />} />
                       <Route path="/admin/assistant" element={<Assistant />} />
                       <Route path="/admin/ai-assistant" element={<Assistant />} />
