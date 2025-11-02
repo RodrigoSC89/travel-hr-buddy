@@ -1,4 +1,3 @@
-// @ts-nocheck
 import { useEffect, useState } from "react";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
@@ -118,13 +117,22 @@ export function PerformanceMonitor() {
     }
   };
 
-  const aggregatePerformanceByModule = (data: any[]): PerformanceMetrics[] => {
-    const moduleMap = new Map<string, any>();
+  const aggregatePerformanceByModule = (data: Array<Record<string, unknown>>): PerformanceMetrics[] => {
+    const moduleMap = new Map<string, {
+      module_name: string;
+      precision_sum: number;
+      recall_sum: number;
+      response_time_sum: number;
+      count: number;
+      accepted: number;
+      overridden: number;
+    }>();
 
     data.forEach(record => {
-      if (!moduleMap.has(record.module_name)) {
-        moduleMap.set(record.module_name, {
-          module_name: record.module_name,
+      const moduleName = record.module_name as string;
+      if (!moduleMap.has(moduleName)) {
+        moduleMap.set(moduleName, {
+          module_name: moduleName,
           precision_sum: 0,
           recall_sum: 0,
           response_time_sum: 0,
@@ -134,10 +142,10 @@ export function PerformanceMonitor() {
         });
       }
 
-      const stats = moduleMap.get(record.module_name);
-      stats.precision_sum += record.precision_score || 0;
-      stats.recall_sum += record.recall_score || 0;
-      stats.response_time_sum += record.response_time_ms || 0;
+      const stats = moduleMap.get(moduleName)!;
+      stats.precision_sum += (record.precision_score as number) || 0;
+      stats.recall_sum += (record.recall_score as number) || 0;
+      stats.response_time_sum += (record.response_time_ms as number) || 0;
       stats.count += 1;
       if (record.decision_accepted) stats.accepted += 1;
       if (record.decision_overridden) stats.overridden += 1;
@@ -154,19 +162,24 @@ export function PerformanceMonitor() {
     }));
   };
 
-  const aggregateSuggestionsByModule = (data: any[]): SuggestionMetrics[] => {
-    const moduleMap = new Map<string, any>();
+  const aggregateSuggestionsByModule = (data: Array<Record<string, unknown>>): SuggestionMetrics[] => {
+    const moduleMap = new Map<string, {
+      module_name: string;
+      total: number;
+      accepted: number;
+    }>();
 
     data.forEach(record => {
-      if (!moduleMap.has(record.module_name)) {
-        moduleMap.set(record.module_name, {
-          module_name: record.module_name,
+      const moduleName = record.module_name as string;
+      if (!moduleMap.has(moduleName)) {
+        moduleMap.set(moduleName, {
+          module_name: moduleName,
           total: 0,
           accepted: 0,
         });
       }
 
-      const stats = moduleMap.get(record.module_name);
+      const stats = moduleMap.get(moduleName)!;
       stats.total += 1;
       if (record.accepted_by_crew) stats.accepted += 1;
     });
@@ -343,7 +356,7 @@ export function PerformanceMonitor() {
                           Module: {alert.module_name}
                         </CardDescription>
                       </div>
-                      <Badge variant={getSeverityColor(alert.severity) as any}>
+                      <Badge variant={getSeverityColor(alert.severity) as "destructive" | "default" | "secondary"}>
                         {alert.severity.toUpperCase()}
                       </Badge>
                     </div>
