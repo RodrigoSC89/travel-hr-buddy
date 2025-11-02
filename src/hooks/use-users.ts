@@ -1,21 +1,15 @@
 import { useState, useEffect } from "react";
 import { supabase } from "@/integrations/supabase/client";
-import { UserRole } from "./use-permissions";
+import type { Database } from "@/integrations/supabase/types";
 
-export interface UserWithRole {
-  id: string;
-  email: string;
-  full_name: string | null;
-  department: string | null;
-  position: string | null;
-  phone: string | null;
-  status: string;
-  employee_id: string | null;
-  hire_date: string | null;
-  manager_id: string | null;
-  created_at: string;
+type Profile = Database["public"]["Tables"]["profiles"]["Row"];
+type UserRole = Database["public"]["Enums"]["user_role"];
+
+export interface UserWithRole extends Profile {
   role: UserRole;
 }
+
+export type { UserRole };
 
 export const useUsers = () => {
   const [users, setUsers] = useState<UserWithRole[]>([]);
@@ -64,8 +58,9 @@ export const useUsers = () => {
       );
 
       setUsers(usersWithRoles);
-    } catch (err) {
-      console.error("Error fetching users:", err);
+    } catch (err: unknown) {
+      const errorMessage = err instanceof Error ? err.message : "Unknown error";
+      console.error("Error fetching users:", errorMessage);
       setError("Erro ao carregar usuários");
     } finally {
       setIsLoading(false);
@@ -91,8 +86,9 @@ export const useUsers = () => {
       );
 
       return { success: true };
-    } catch (err) {
-      console.error("Error updating user role:", err);
+    } catch (err: unknown) {
+      const errorMessage = err instanceof Error ? err.message : "Unknown error";
+      console.error("Error updating user role:", errorMessage);
       return { success: false, error: "Erro ao atualizar role do usuário" };
     }
   };
@@ -130,8 +126,9 @@ export const useUsers = () => {
       );
 
       return { success: true };
-    } catch (err) {
-      console.error("Error updating user profile:", err);
+    } catch (err: unknown) {
+      const errorMessage = err instanceof Error ? err.message : "Unknown error";
+      console.error("Error updating user profile:", errorMessage);
       return { success: false, error: "Erro ao atualizar perfil do usuário" };
     }
   };

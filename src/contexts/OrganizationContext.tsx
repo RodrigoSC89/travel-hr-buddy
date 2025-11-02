@@ -2,39 +2,10 @@ import React, { createContext, useContext, useEffect, useState } from "react";
 import { supabase } from "@/integrations/supabase/client";
 import { useAuth } from "./AuthContext";
 import { logger } from "@/lib/logger";
+import type { Database } from "@/integrations/supabase/types";
 
-interface Organization {
-  id: string;
-  name: string;
-  slug: string;
-  status: string;
-  plan_type: string;
-  max_users: number;
-  max_vessels: number;
-  max_storage_gb: number;
-  features: Record<string, unknown>;
-  trial_ends_at?: string;
-  subscription_ends_at?: string;
-  created_at: string;
-}
-
-interface OrganizationBranding {
-  id: string;
-  organization_id: string;
-  company_name: string;
-  logo_url?: string;
-  primary_color: string;
-  secondary_color: string;
-  accent_color: string;
-  theme_mode: string;
-  default_language: string;
-  default_currency: string;
-  timezone: string;
-  custom_fields: Record<string, unknown>;
-  business_rules: Record<string, unknown>;
-  enabled_modules: Record<string, unknown>;
-  module_settings: Record<string, unknown>;
-}
+type Organization = Database["public"]["Tables"]["organizations"]["Row"];
+type OrganizationBranding = Database["public"]["Tables"]["organization_branding"]["Row"];
 
 interface OrganizationContextType {
   currentOrganization: Organization | null;
@@ -124,13 +95,16 @@ export const OrganizationProvider: React.FC<{ children: React.ReactNode }> = ({ 
         custom_fields: {},
         business_rules: {},
         enabled_modules: { fleet: true, crew: true, certificates: true, analytics: true, travel: true, documents: true },
-        module_settings: { peotram: { templates_enabled: true, ai_analysis: true, permissions_matrix: true } }
+        module_settings: { peotram: { templates_enabled: true, ai_analysis: true, permissions_matrix: true } },
+        created_at: new Date().toISOString(),
+        updated_at: new Date().toISOString()
       };
       
       setCurrentBranding(demoBranding);
       applyBrandingTheme(demoBranding);
-    } catch (err) {
-      logger.error("Error loading organization:", err);
+    } catch (err: unknown) {
+      const errorMessage = err instanceof Error ? err.message : "Unknown error";
+      logger.error("Error loading organization:", errorMessage);
       setError("Erro ao carregar dados da organização");
     } finally {
       setIsLoading(false);
@@ -141,9 +115,15 @@ export const OrganizationProvider: React.FC<{ children: React.ReactNode }> = ({ 
     const root = document.documentElement;
     
     // Aplicar cores personalizadas
-    root.style.setProperty("--primary", branding.primary_color);
-    root.style.setProperty("--secondary", branding.secondary_color);
-    root.style.setProperty("--accent", branding.accent_color);
+    if (branding.primary_color) {
+      root.style.setProperty("--primary", branding.primary_color);
+    }
+    if (branding.secondary_color) {
+      root.style.setProperty("--secondary", branding.secondary_color);
+    }
+    if (branding.accent_color) {
+      root.style.setProperty("--accent", branding.accent_color);
+    }
     
     // Atualizar título da página
     if (branding.company_name) {
@@ -151,7 +131,7 @@ export const OrganizationProvider: React.FC<{ children: React.ReactNode }> = ({ 
     }
     
     // Aplicar tema escuro/claro se especificado
-    if (branding.theme_mode !== "auto") {
+    if (branding.theme_mode && branding.theme_mode !== "auto") {
       document.documentElement.classList.toggle("dark", branding.theme_mode === "dark");
     }
   };
