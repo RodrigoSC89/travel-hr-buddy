@@ -104,8 +104,16 @@ export async function checkSystemResources(): Promise<HealthCheckResult> {
   const startTime = Date.now();
   
   try {
-    // Check memory usage if available
-    const memory = (performance as any).memory;
+    // Check memory usage if available (Chrome/Edge specific API)
+    interface PerformanceMemory {
+      usedJSHeapSize: number;
+      jsHeapSizeLimit: number;
+      totalJSHeapSize: number;
+    }
+    
+    const perfWithMemory = performance as Performance & { memory?: PerformanceMemory };
+    const memory = perfWithMemory.memory;
+    
     const memoryUsage = memory 
       ? (memory.usedJSHeapSize / memory.jsHeapSizeLimit) * 100 
       : 0;
@@ -215,8 +223,24 @@ export function getOverallStatus(results: HealthCheckResult[]): ServiceStatus {
 /**
  * Log health check to database
  */
-export async function logHealthCheck(result: HealthCheckResult): Promise<void> {
+export async function logHealthCheck(result: HealthCheckResult, tenantId?: string): Promise<void> {
   try {
+    // Get current user's tenant_id if not provided
+    let tenant_id = tenantId;
+    
+    if (!tenant_id) {
+      const { data: { user } } = await supabase.auth.getUser();
+      if (user) {
+        const { data: profile } = await supabase
+          .from('profiles')
+          .select('tenant_id')
+          .eq('id', user.id)
+          .single();
+        
+        tenant_id = profile?.tenant_id;
+      }
+    }
+    
     await supabase
       .from('system_health_logs')
       .insert({
@@ -225,9 +249,11 @@ export async function logHealthCheck(result: HealthCheckResult): Promise<void> {
         response_time_ms: result.responseTime,
         error_message: result.error,
         metadata: result.metadata,
-        checked_at: result.timestamp.toISOString()
+        checked_at: result.timestamp.toISOString(),
+        tenant_id: tenant_id || null
       });
   } catch (error) {
     console.error('Failed to log health check:', error);
+    // Don't throw - logging failures shouldn't break health checks
   }
 }

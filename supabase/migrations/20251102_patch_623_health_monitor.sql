@@ -64,10 +64,21 @@ CREATE POLICY "Users can view health logs for their tenant"
     )
   );
 
-CREATE POLICY "System can insert health logs"
+-- Allow authenticated users to insert health logs for their own tenant
+-- This is safer than allowing all inserts
+CREATE POLICY "Authenticated users can insert health logs"
   ON public.system_health_logs
   FOR INSERT
-  WITH CHECK (true); -- Allow system to insert
+  WITH CHECK (
+    -- User must be authenticated
+    auth.uid() IS NOT NULL
+    AND
+    -- If tenant_id is provided, it must match user's tenant
+    (tenant_id IS NULL OR tenant_id IN (
+      SELECT tenant_id FROM public.profiles 
+      WHERE id = auth.uid()
+    ))
+  );
 
 CREATE POLICY "Admins can delete old health logs"
   ON public.system_health_logs

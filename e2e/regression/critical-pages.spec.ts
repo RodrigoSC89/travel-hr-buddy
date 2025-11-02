@@ -31,10 +31,17 @@ test.describe('Critical Pages - Regression Tests', () => {
     // Wait a bit to catch any errors
     await page.waitForTimeout(1000);
     
+    // Known non-critical error patterns (configurable)
+    const ignoredErrorPatterns = [
+      'favicon',
+      'sourcemap',
+      'ResizeObserver loop', // Common React warning
+      'Download the React DevTools' // React dev mode
+    ];
+    
     // Filter out known non-critical errors
     const criticalErrors = errors.filter(err => 
-      !err.includes('favicon') && 
-      !err.includes('sourcemap')
+      !ignoredErrorPatterns.some(pattern => err.includes(pattern))
     );
     
     expect(criticalErrors.length).toBe(0);

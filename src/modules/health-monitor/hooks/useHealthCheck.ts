@@ -38,6 +38,10 @@ export function useHealthCheck(options?: {
   // Mutation for logging health checks
   const logMutation = useMutation({
     mutationFn: logHealthCheck,
+    onError: (error) => {
+      console.error('Failed to log health check:', error);
+      // Don't show toast for logging failures to avoid spamming user
+    }
   });
 
   // Calculate overall system health
