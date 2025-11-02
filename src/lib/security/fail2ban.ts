@@ -275,8 +275,16 @@ export function getAllBlocked(): BlockedEntity[] {
 }
 
 /**
- * Get client IP address from request (for server-side use)
+ * Initialize cleanup interval
+ * Should be called once when the application starts
  */
+export function initializeCleanup(): () => void {
+  // Clean up expired blocks every minute
+  const intervalId = setInterval(cleanupExpiredBlocks, 60 * 1000);
+  
+  // Return cleanup function to clear interval
+  return () => clearInterval(intervalId);
+}
 export function getClientIp(headers: Headers): string {
   // Try various headers that might contain the real IP
   const xForwardedFor = headers.get("x-forwarded-for");
@@ -321,7 +329,5 @@ export function cleanupExpiredBlocks(): number {
   return cleaned;
 }
 
-// Run cleanup every minute
-if (typeof window !== "undefined") {
-  setInterval(cleanupExpiredBlocks, 60 * 1000);
-}
+// Note: initializeCleanup() should be called explicitly in app initialization
+// rather than at module load time to prevent memory leaks in development

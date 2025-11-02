@@ -69,8 +69,8 @@ declare module 'onnxruntime-web' {
       | 'int32'
       | 'int64'
       | 'string'
-      | 'bool'
-      | 'float16'
+      | 'bool'      // Represented as Uint8Array (0 = false, non-zero = true)
+      | 'float16'   // Represented as Uint16Array (IEEE 754 half precision)
       | 'float64'
       | 'uint32'
       | 'uint64';

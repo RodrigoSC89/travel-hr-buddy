@@ -21,13 +21,6 @@ interface PerformanceMetric {
   fps: number;
 }
 
-interface SlowComponent {
-  name: string;
-  renderTime: number;
-  count: number;
-  lastSeen: number;
-}
-
 interface PerformanceSnapshot {
   timestamp: string;
   cpu_usage: number;
@@ -36,6 +29,19 @@ interface PerformanceSnapshot {
   slow_components: SlowComponent[];
   page_load_time?: number;
   network_latency?: number;
+}
+
+const TOAST_THROTTLE_INTERVAL = 10000; // Show toast max once per 10 seconds
+const TOAST_THROTTLE_WINDOW = 3000; // Within a 3 second window
+
+interface PerformanceMemory {
+  usedJSHeapSize: number;
+  jsHeapSizeLimit: number;
+  totalJSHeapSize: number;
+}
+
+interface PerformanceWithMemory extends Performance {
+  memory?: PerformanceMemory;
 }
 
 export default function PerformanceProfiler() {
@@ -102,8 +108,9 @@ export default function PerformanceProfiler() {
     let heapSize = 0;
     let heapLimit = 0;
     
-    if ((performance as any).memory) {
-      const memory = (performance as any).memory;
+    const perfWithMemory = performance as PerformanceWithMemory;
+    if (perfWithMemory.memory) {
+      const memory = perfWithMemory.memory;
       heapSize = Math.round(memory.usedJSHeapSize / 1048576); // MB
       heapLimit = Math.round(memory.jsHeapSizeLimit / 1048576); // MB
       memoryUsage = Math.round((memory.usedJSHeapSize / memory.jsHeapSizeLimit) * 100);
@@ -202,8 +209,8 @@ export default function PerformanceProfiler() {
 
     setBottlenecks(issues);
 
-    // Show toast for critical issues
-    if (issues.length > 0 && metric.timestamp % 10000 < 3000) {
+    // Show toast for critical issues (throttled to avoid spam)
+    if (issues.length > 0 && metric.timestamp % TOAST_THROTTLE_INTERVAL < TOAST_THROTTLE_WINDOW) {
       toast.warning(`Performance issues: ${issues.length} detected`);
     }
   };

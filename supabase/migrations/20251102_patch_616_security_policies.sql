@@ -102,12 +102,12 @@ ON ia_performance_log
 FOR SELECT
 TO authenticated
 USING (
+  -- Users with explicit organization membership
   tenant_id IN (
     SELECT organization_id
     FROM organization_users
     WHERE user_id = auth.uid()
   )
-  OR NOT EXISTS (SELECT 1 FROM user_roles WHERE user_id = auth.uid())
 );
 
 -- ============================================================================

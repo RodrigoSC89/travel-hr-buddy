@@ -274,25 +274,29 @@ export async function runCrossModuleValidation(): Promise<CrossModuleValidation>
  * Log integrity issues to database
  */
 export async function logIntegrityIssues(validation: CrossModuleValidation) {
-  const issues = [
-    ...validation.ai_to_analytics.checks.filter(c => !c.passed),
-    ...validation.health_to_performance.checks.filter(c => !c.passed),
-    ...validation.crew_to_operations.checks.filter(c => !c.passed),
+  const modulesToCheck = [
+    { result: validation.ai_to_analytics, moduleName: "ai_to_analytics" },
+    { result: validation.health_to_performance, moduleName: "health_to_performance" },
+    { result: validation.crew_to_operations, moduleName: "crew_to_operations" },
   ];
-  
-  for (const issue of issues) {
-    try {
-      await supabase
-        .from("integrity_logs")
-        .insert({
-          timestamp: new Date().toISOString(),
-          module: validation.ai_to_analytics.module, // Will be improved per issue
-          error_type: issue.severity,
-          relation: issue.name,
-          message: issue.message,
-        });
-    } catch (error) {
-      console.error("Error logging integrity issue:", error);
+
+  for (const { result, moduleName } of modulesToCheck) {
+    const failedChecks = result.checks.filter(c => !c.passed);
+    
+    for (const issue of failedChecks) {
+      try {
+        await supabase
+          .from("integrity_logs")
+          .insert({
+            timestamp: new Date().toISOString(),
+            module: moduleName,
+            error_type: issue.severity,
+            relation: issue.name,
+            message: issue.message,
+          });
+      } catch (error) {
+        console.error("Error logging integrity issue:", error);
+      }
     }
   }
 }
