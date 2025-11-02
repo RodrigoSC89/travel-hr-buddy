@@ -1429,6 +1429,62 @@ button,
   border-radius: 4px;
 }
 
+/* PATCH 620: Nautilus Theme - Maritime Blue Theme */
+.nautilus {
+  /* Deep ocean blue theme */
+  --background: 210 50% 5%;                    /* #050A14 - Deep ocean */
+  --foreground: 180 100% 95%;                  /* #EBFFFE - Aqua white */
+  
+  --card: 210 45% 8%;                          /* #0A1220 - Dark blue card */
+  --card-foreground: 180 100% 95%;             /* #EBFFFE - Aqua white */
+  
+  --popover: 210 45% 10%;
+  --popover-foreground: 180 100% 95%;
+  
+  /* Nautilus primary - bright ocean blue */
+  --primary: 195 100% 50%;                     /* #00BFFF - Bright cyan */
+  --primary-foreground: 210 50% 5%;            /* Dark text on bright */
+  --primary-light: 195 100% 60%;
+  --primary-dark: 195 100% 40%;
+  
+  --secondary: 195 30% 15%;                    /* Dark teal */
+  --secondary-foreground: 180 100% 95%;
+  
+  --accent: 170 100% 45%;                      /* Turquoise accent */
+  --accent-foreground: 210 50% 5%;
+  
+  --muted: 210 35% 12%;
+  --muted-foreground: 195 20% 60%;
+  
+  --destructive: 0 80% 50%;
+  --destructive-foreground: 0 0% 100%;
+  
+  --border: 195 30% 20%;
+  --input: 195 30% 15%;
+  --ring: 195 100% 50%;
+  
+  /* Nautilus specific colors */
+  --nautical: 195 100% 45%;
+  --nautical-foreground: 210 50% 5%;
+  --ocean-blue: 195 100% 50%;
+  --ocean-deep: 210 100% 25%;
+  --sea-foam: 180 100% 70%;
+  
+  /* Links */
+  --link: 195 100% 60%;
+  --link-hover: 195 100% 70%;
+  
+  /* Status colors */
+  --success: 145 80% 42%;
+  --success-foreground: 0 0% 100%;
+  --warning: 35 95% 55%;
+  --warning-foreground: 210 50% 5%;
+  --danger: 0 80% 50%;
+  --danger-foreground: 0 0% 100%;
+  --info: 195 100% 50%;
+  --info-foreground: 210 50% 5%;
+}
+
 /* High Contrast Mode Specific */
 .high-contrast {
   --background: 0 0% 0%;

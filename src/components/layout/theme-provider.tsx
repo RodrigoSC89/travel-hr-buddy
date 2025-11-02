@@ -1,6 +1,7 @@
 import { createContext, useContext, useEffect, useState } from "react";
 
-type Theme = "dark" | "light" | "system";
+// PATCH 620: Extended theme support with nautilus theme
+type Theme = "dark" | "light" | "system" | "nautilus" | "high-contrast";
 
 type ThemeProviderProps = {
   children: React.ReactNode;
@@ -33,7 +34,8 @@ export function ThemeProvider({
   useEffect(() => {
     const root = window.document.documentElement;
 
-    root.classList.remove("light", "dark");
+    // PATCH 620: Remove all theme classes
+    root.classList.remove("light", "dark", "nautilus", "high-contrast");
 
     if (theme === "system") {
       const systemTheme = window.matchMedia("(prefers-color-scheme: dark)")
@@ -45,6 +47,7 @@ export function ThemeProvider({
       return;
     }
 
+    // PATCH 620: Apply selected theme
     root.classList.add(theme);
   }, [theme]);
 
