@@ -1,8 +1,8 @@
-// @ts-nocheck
 /**
  * Weather Service
  * Integrates with OpenWeatherMap API for maritime weather data
  * Implements 1-hour caching in weather_logs table
+ * PATCH-601: Removed @ts-nocheck and fixed all type issues
  */
 
 import { supabase } from "@/integrations/supabase/client";
@@ -39,6 +39,57 @@ interface WeatherAlert {
   start: string;
   end: string;
   severity: string;
+}
+
+interface OpenWeatherMapMain {
+  temp: number;
+  feels_like: number;
+  humidity: number;
+  pressure: number;
+}
+
+interface OpenWeatherMapWind {
+  speed: number;
+  deg: number;
+}
+
+interface OpenWeatherMapWeatherItem {
+  description: string;
+  icon: string;
+}
+
+interface OpenWeatherMapResponse {
+  main: OpenWeatherMapMain;
+  wind: OpenWeatherMapWind;
+  weather: OpenWeatherMapWeatherItem[];
+  visibility: number;
+  waves?: {
+    height: number;
+    sea_state: string;
+  };
+}
+
+interface OpenWeatherMapForecastItem {
+  dt_txt: string;
+  main: OpenWeatherMapMain;
+  weather: OpenWeatherMapWeatherItem[];
+  wind: OpenWeatherMapWind;
+}
+
+interface OpenWeatherMapForecastResponse {
+  list: OpenWeatherMapForecastItem[];
+}
+
+interface OpenWeatherMapAlert {
+  event: string;
+  description: string;
+  start: number;
+  end: number;
+  tags?: string[];
+}
+
+interface OpenWeatherMapAlertsResponse {
+  alerts?: OpenWeatherMapAlert[];
 }
 
 const API_KEY = import.meta.env.VITE_OPENWEATHER_API_KEY;
@@ -118,7 +169,7 @@ export async function getCurrentWeather(
       throw new Error(`OpenWeatherMap API error: ${response.statusText}`);
     }
 
-    const data = await response.json();
+    const data = (await response.json()) as OpenWeatherMapResponse;
 
     const weatherData: WeatherData = {
       temperature: data.main.temp,
@@ -173,12 +224,12 @@ export async function getWeatherForecast(
       throw new Error(`OpenWeatherMap API error: ${response.statusText}`);
     }
 
-    const data = await response.json();
+    const data = (await response.json()) as OpenWeatherMapForecastResponse;
 
     // Group forecasts by day and get daily aggregates
-    const dailyForecasts = new Map<string, any[]>();
+    const dailyForecasts = new Map<string, OpenWeatherMapForecastItem[]>();
     
-    data.list.forEach((item: any) => {
+    data.list.forEach((item) => {
       const date = item.dt_txt.split(" ")[0];
       if (!dailyForecasts.has(date)) {
         dailyForecasts.set(date, []);
@@ -233,13 +284,13 @@ export async function getWeatherAlerts(
       throw new Error(`OpenWeatherMap API error: ${response.statusText}`);
     }
 
-    const data = await response.json();
+    const data = (await response.json()) as OpenWeatherMapAlertsResponse;
 
     if (!data.alerts || data.alerts.length === 0) {
       return [];
     }
 
-    const alerts: WeatherAlert[] = data.alerts.map((alert: any) => ({
+    const alerts: WeatherAlert[] = data.alerts.map((alert) => ({
       event: alert.event,
       description: alert.description,
       start: new Date(alert.start * 1000).toISOString(),

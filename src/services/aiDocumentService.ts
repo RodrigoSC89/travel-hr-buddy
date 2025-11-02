@@ -1,4 +1,4 @@
-// @ts-nocheck
+// PATCH-601: Removed @ts-nocheck directive - types verified
 /**
  * PATCH 297: AI Document Service
  * Tesseract.js integration for OCR with entity extraction

@@ -1,4 +1,4 @@
-// @ts-nocheck
+// PATCH-601: Removed @ts-nocheck directive - types verified
 /**
  * PATCH 346: Integrations Hub v2 - Service Layer
  * Service for managing webhooks, OAuth connections, and integration plugins

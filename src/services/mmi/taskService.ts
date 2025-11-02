@@ -1,4 +1,4 @@
-// @ts-nocheck
+// PATCH-601: Removed @ts-nocheck directive - types verified
 /**
  * MMI Task Service
  * Automatic task and work order creation from AI forecasts

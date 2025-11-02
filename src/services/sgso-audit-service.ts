@@ -1,4 +1,4 @@
-// @ts-nocheck
+// PATCH-601: Removed @ts-nocheck directive - types verified
 import { supabase } from "@/integrations/supabase/client";
 
 /**

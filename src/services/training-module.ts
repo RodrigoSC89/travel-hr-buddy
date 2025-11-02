@@ -1,4 +1,4 @@
-// @ts-nocheck
+// PATCH-601: Removed @ts-nocheck directive
 import { supabase } from "@/integrations/supabase/client";
 import type {
   TrainingModule,

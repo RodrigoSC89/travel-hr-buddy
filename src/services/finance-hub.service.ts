@@ -1,4 +1,4 @@
-// @ts-nocheck
+// PATCH-601: Removed @ts-nocheck directive
 /**
  * PATCH 384: Finance Hub - CRUD + Reports Service
  * Complete financial management with transactions, budgets, and reporting
