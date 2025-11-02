@@ -4,6 +4,8 @@ import { Badge } from "@/components/ui/badge";
 import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert";
 import { Button } from "@/components/ui/button";
 import { Separator } from "@/components/ui/separator";
+import { Progress } from "@/components/ui/progress";
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { 
   CheckCircle2, 
   XCircle, 
@@ -13,10 +15,18 @@ import {
   Key,
   FileText,
   Code,
-  MapPin
+  MapPin,
+  Shield,
+  Activity
 } from "lucide-react";
 import { runSystemValidation, type SystemValidationReport } from "@/utils/system-validator";
 import { useToast } from "@/hooks/use-toast";
+import { 
+  runCrossModuleValidation, 
+  logIntegrityIssues, 
+  type CrossModuleValidation 
+} from "@/lib/validators/cross-module-validator";
+import { useSystemStats } from "@/hooks/useSystemStats";
 
 interface SystemStatus {
   supabase: boolean;
@@ -30,8 +40,10 @@ interface SystemStatus {
 export default function SystemHealthPage() {
   const [status, setStatus] = useState<SystemStatus | null>(null);
   const [validationReport, setValidationReport] = useState<SystemValidationReport | null>(null);
+  const [crossValidation, setCrossValidation] = useState<CrossModuleValidation | null>(null);
   const [loading, setLoading] = useState(true);
   const { toast } = useToast();
+  const { stats } = useSystemStats();
 
   const validateSystem = async () => {
     setLoading(true);
@@ -39,6 +51,11 @@ export default function SystemHealthPage() {
       // Run comprehensive system validation
       const report = await runSystemValidation();
       setValidationReport(report);
+      
+      // PATCH 611: Run cross-module validation
+      const crossReport = await runCrossModuleValidation();
+      setCrossValidation(crossReport);
+      await logIntegrityIssues(crossReport);
 
       // Build simplified status object
       const supabaseStatus = report.results.find(r => r.category === "Database")?.status === "success";
