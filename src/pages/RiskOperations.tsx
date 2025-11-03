@@ -6,6 +6,7 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/com
 import { Badge } from '@/components/ui/badge';
 import { RiskOpsService } from '@/services/risk-ops.service';
 import type { RiskOperation, RiskStatistics, RiskHeatmapCell } from '@/types/risk-ops';
+import { RISK_SEVERITIES, RISK_LIKELIHOODS } from '@/types/risk-ops';
 import { toast } from 'sonner';
 
 const RiskOperations: React.FC = () => {
@@ -186,10 +187,10 @@ const RiskOperations: React.FC = () => {
             <div className="text-xs font-semibold text-center">Likely</div>
             <div className="text-xs font-semibold text-center">Almost Certain</div>
 
-            {['critical', 'high', 'medium', 'low'].map(severity => (
+            {RISK_SEVERITIES.map(severity => (
               <>
                 <div className="text-xs font-semibold flex items-center">{severity}</div>
-                {['unlikely', 'possible', 'likely', 'almost_certain'].map(likelihood => {
+                {RISK_LIKELIHOODS.map(likelihood => {
                   const cell = heatmap.find(
                     h => h.severity === severity && h.likelihood === likelihood
                   );

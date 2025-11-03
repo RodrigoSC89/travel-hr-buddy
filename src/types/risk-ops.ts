@@ -6,6 +6,10 @@ export type RiskLikelihood = 'unlikely' | 'possible' | 'likely' | 'almost_certai
 export type RiskStatus = 'open' | 'mitigated' | 'closed';
 export type TrendDirection = 'improving' | 'stable' | 'degrading';
 
+// Constants for UI rendering
+export const RISK_SEVERITIES: RiskSeverity[] = ['critical', 'high', 'medium', 'low'];
+export const RISK_LIKELIHOODS: RiskLikelihood[] = ['unlikely', 'possible', 'likely', 'almost_certain'];
+
 export interface RiskOperation {
   id: string;
   title: string;

@@ -60,6 +60,7 @@ CREATE INDEX IF NOT EXISTS idx_risk_operations_module ON risk_operations(module)
 CREATE INDEX IF NOT EXISTS idx_risk_operations_type ON risk_operations(risk_type);
 CREATE INDEX IF NOT EXISTS idx_risk_operations_severity ON risk_operations(severity);
 CREATE INDEX IF NOT EXISTS idx_risk_operations_status ON risk_operations(status);
+CREATE INDEX IF NOT EXISTS idx_risk_operations_heatmap ON risk_operations(vessel_id, status, severity, likelihood) WHERE status = 'open';
 CREATE INDEX IF NOT EXISTS idx_risk_assessments_risk ON risk_assessments(risk_id);
 CREATE INDEX IF NOT EXISTS idx_risk_trends_period ON risk_trends(period_start, period_end);
 CREATE INDEX IF NOT EXISTS idx_risk_trends_vessel ON risk_trends(vessel_id);

@@ -29,6 +29,7 @@ CREATE INDEX IF NOT EXISTS idx_scheduled_tasks_due_date ON scheduled_tasks(due_d
 CREATE INDEX IF NOT EXISTS idx_scheduled_tasks_assigned_to ON scheduled_tasks(assigned_to);
 CREATE INDEX IF NOT EXISTS idx_scheduled_tasks_vessel_id ON scheduled_tasks(vessel_id);
 CREATE INDEX IF NOT EXISTS idx_scheduled_tasks_ai_generated ON scheduled_tasks(ai_generated);
+CREATE INDEX IF NOT EXISTS idx_scheduled_tasks_recurrence ON scheduled_tasks(recurrence_pattern, status) WHERE recurrence_pattern IS NOT NULL;
 
 -- Enable RLS
 ALTER TABLE scheduled_tasks ENABLE ROW LEVEL SECURITY;
