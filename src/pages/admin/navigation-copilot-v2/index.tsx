@@ -18,12 +18,12 @@ import {
   History,
 } from "lucide-react";
 import { toast } from "sonner";
-import { speechRecognitionService } from "./services/speechRecognitionService";
-import { naturalLanguageParser } from "./services/naturalLanguageParser";
-import { navigationAILogsService } from "./services/navigationAILogsService";
-import { CopilotFeedbackPanel, type CopilotMessage } from "./components/CopilotFeedbackPanel";
+import { speechRecognitionService } from "@/modules/navigation-copilot/services/speechRecognitionService";
+import { naturalLanguageParser } from "@/modules/navigation-copilot/services/naturalLanguageParser";
+import { navigationAILogsService } from "@/modules/navigation-copilot/services/navigationAILogsService";
+import { CopilotFeedbackPanel, type CopilotMessage } from "@/modules/navigation-copilot/components/CopilotFeedbackPanel";
 import { navigationCopilot, type Coordinates, type NavigationRoute } from "./index";
-import type { ParsedCommand } from "./services/naturalLanguageParser";
+import type { ParsedCommand } from "@/modules/navigation-copilot/services/naturalLanguageParser";
 
 const NavigationCopilotV2Page: React.FC = () => {
   const [isListening, setIsListening] = useState(false);
