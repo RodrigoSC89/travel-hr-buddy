@@ -20,8 +20,8 @@ interface ValidationResult {
   recommendations: string[];
 }
 
-// Mock function to simulate image loading
-function loadImageFixture(filename: string): string {
+// Mock function to simulate image loading for tests
+function getMockImageData(filename: string): string {
   // In real tests, this would load actual image data
   return `mock-image-data-${filename}`;
 }
@@ -77,28 +77,28 @@ const validateChecklistEvidence = (imageData: string | Buffer): ValidationResult
 
 describe("validateChecklistEvidence", () => {
   it("should classify invalid evidence as NÃO CONFORME", () => {
-    const input = loadImageFixture("invalid-hatch.jpg");
+    const input = getMockImageData("invalid-hatch.jpg");
     const result = validateChecklistEvidence(input);
     
     expect(result.status).toBe("NÃO CONFORME");
   });
 
   it("should classify valid evidence as CONFORME", () => {
-    const input = loadImageFixture("valid-equipment.jpg");
+    const input = getMockImageData("valid-equipment.jpg");
     const result = validateChecklistEvidence(input);
     
     expect(result.status).toBe("CONFORME");
   });
 
   it("should classify partial evidence as PARCIAL", () => {
-    const input = loadImageFixture("partial-documentation.jpg");
+    const input = getMockImageData("partial-documentation.jpg");
     const result = validateChecklistEvidence(input);
     
     expect(result.status).toBe("PARCIAL");
   });
 
   it("should provide confidence score", () => {
-    const input = loadImageFixture("test-image.jpg");
+    const input = getMockImageData("test-image.jpg");
     const result = validateChecklistEvidence(input);
     
     expect(result.confidence).toBeDefined();
@@ -107,7 +107,7 @@ describe("validateChecklistEvidence", () => {
   });
 
   it("should include findings in result", () => {
-    const input = loadImageFixture("inspection-photo.jpg");
+    const input = getMockImageData("inspection-photo.jpg");
     const result = validateChecklistEvidence(input);
     
     expect(result.findings).toBeDefined();
@@ -116,7 +116,7 @@ describe("validateChecklistEvidence", () => {
   });
 
   it("should provide recommendations for non-compliant evidence", () => {
-    const input = loadImageFixture("invalid-safety-gear.jpg");
+    const input = getMockImageData("invalid-safety-gear.jpg");
     const result = validateChecklistEvidence(input);
     
     expect(result.recommendations).toBeDefined();
@@ -129,9 +129,9 @@ describe("validateChecklistEvidence", () => {
 
   it("should handle different image formats", () => {
     const inputs = [
-      loadImageFixture("photo.jpg"),
-      loadImageFixture("scan.png"),
-      loadImageFixture("document.pdf"),
+      getMockImageData("photo.jpg"),
+      getMockImageData("scan.png"),
+      getMockImageData("document.pdf"),
     ];
     
     inputs.forEach(input => {
@@ -142,7 +142,7 @@ describe("validateChecklistEvidence", () => {
   });
 
   it("should return consistent results for same input", () => {
-    const input = loadImageFixture("consistent-test.jpg");
+    const input = getMockImageData("consistent-test.jpg");
     const result1 = validateChecklistEvidence(input);
     const result2 = validateChecklistEvidence(input);
     

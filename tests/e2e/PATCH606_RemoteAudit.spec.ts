@@ -43,11 +43,12 @@ test.describe("PATCH 606 - Remote Audit with AI", () => {
     // Look for file input - it might be hidden
     const fileInput = page.locator('input[type="file"]').first();
     
-    // Check if file input exists or modal opened
+    // Check if modal opened OR file input is visible
     const modalOpened = await page.getByText(/Select|Selecionar|Choose/i).count();
     const fileInputVisible = await fileInput.count();
     
-    expect(modalOpened + fileInputVisible).toBeGreaterThan(0);
+    // At least one should be present (modal OR file input)
+    expect(modalOpened > 0 || fileInputVisible > 0).toBe(true);
   });
 
   test("checklist validation interface exists", async ({ page }) => {
