@@ -217,6 +217,9 @@ const LabsStatus = safeLazyImport(() => import("@/pages/admin/LabsStatus"));
 const I18nDashboard = safeLazyImport(() => import("@/pages/dashboard/i18n"));
 const I18nDemo = safeLazyImport(() => import("@/pages/i18n-demo"));
 
+// PATCHES 603, 605, 606 - Epics Board
+const EpicsBoard = safeLazyImport(() => import("@/pages/admin/epics-board"));
+
 // PATCHES 601-605 - Strategic Reasoning, Context, Feedback, Tactics & Learning Validation
 const Patches601to605 = safeLazyImport(() => import("@/pages/validation/patches-601-605"));
 // PATCHES 606-610 - AI & Voice Command Systems Validation
@@ -698,6 +701,7 @@ function App() {
                       <Route path="/predictive" element={<PredictiveAnalytics />} />
                       <Route path="/admin" element={<Admin />} />
                       <Route path="/admin/dashboard" element={<AdminDashboard />} />
+                      <Route path="/admin/epics-board" element={<EpicsBoard />} />
                       <Route path="/admin/api-tester" element={<APITester />} />
                       <Route path="/admin/api-status" element={<APIStatus />} />
                       <Route path="/admin/control-panel" element={<ControlPanel />} />
