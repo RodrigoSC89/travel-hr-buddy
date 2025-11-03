@@ -284,7 +284,7 @@ export function measureExecutionTime<T extends (...args: any[]) => any>(
     const result = func(...args);
     
     // Handle async functions
-    if (result && typeof result === 'object' && typeof result.then === 'function') {
+    if (result && typeof result === "object" && typeof result.then === "function") {
       return result.then((value: any) => {
         const endTime = performance.now();
         const duration = endTime - startTime;

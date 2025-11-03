@@ -75,110 +75,110 @@ export default function OperationsDashboard() {
 
   // Fetch operational data from Supabase
   const fetchOperationalData = useCallback(async () => {
-      logger.info("🚢 Operations Dashboard: Starting data fetch");
-      setIsLoading(true);
-      setError(null);
+    logger.info("🚢 Operations Dashboard: Starting data fetch");
+    setIsLoading(true);
+    setError(null);
 
-      try {
-        // Fetch vessels data
-        const { data: vessels, error: vesselsError } = await supabase
-          .from("vessels")
-          .select("id, name, status, type");
+    try {
+      // Fetch vessels data
+      const { data: vessels, error: vesselsError } = await supabase
+        .from("vessels")
+        .select("id, name, status, type");
 
-        if (vesselsError) {
-          throw new Error(`Failed to fetch vessels: ${vesselsError.message}`);
-        }
-
-        // Fetch crew data
-        const { data: crew, error: crewError } = await supabase
-          .from("crew_members")
-          .select("id, name, status");
-
-        if (crewError) {
-          throw new Error(`Failed to fetch crew: ${crewError.message}`);
-        }
-
-        // Fetch voyages (completed today)
-        const today = new Date();
-        today.setHours(0, 0, 0, 0);
-        const { data: voyages, error: voyagesError } = await supabase
-          .from("voyages")
-          .select("id, status")
-          .gte("created_at", today.toISOString());
-
-        if (voyagesError) {
-          logger.warn("⚠️ Operations Dashboard: Could not fetch voyages", { error: voyagesError.message });
-        }
-
-        // Fetch operational alerts
-        const { data: alerts, error: alertsError } = await supabase
-          .from("operational_alerts")
-          .select("id, severity, status")
-          .eq("status", "active");
-
-        if (alertsError) {
-          logger.warn("⚠️ Operations Dashboard: Could not fetch alerts", { error: alertsError.message });
-        }
-
-        // Calculate metrics
-        const activeVessels = vessels?.filter(v => v.status === "active" || v.status === "operational").length || 0;
-        const vesselsInOperation = vessels?.filter(v => v.status === "operational").length || 0;
-        const vesselsAtPort = vessels?.filter(v => v.status === "at_port" || v.status === "docked").length || 0;
-        const vesselsInMaintenance = vessels?.filter(v => v.status === "maintenance").length || 0;
-        const activeCrew = crew?.filter(c => c.status === "active" || c.status === "onboard").length || 0;
-        const completedVoyages = voyages?.filter(v => v.status === "completed").length || 0;
-
-        const operationsData: OperationsData = {
-          activeVessels,
-          totalVessels: vessels?.length || 0,
-          crewMembers: crew?.length || 0,
-          activeCrew,
-          completedVoyages,
-          activeAlerts: alerts?.length || 0,
-          fleetEfficiency: activeVessels > 0 ? Math.round((activeVessels / (vessels?.length || 1)) * 100 * 10) / 10 : 0,
-          vesselsInOperation,
-          vesselsAtPort,
-          vesselsInMaintenance,
-        };
-
-        setData(operationsData);
-
-        logger.info("✅ Operations Dashboard: Data loaded successfully", {
-          vessels: vessels?.length,
-          crew: crew?.length,
-          voyages: voyages?.length,
-        });
-
-        // Run AI context for insights
-        try {
-          logger.info("🤖 Operations Dashboard: Requesting AI context");
-          await runAIContext({
-            module: "operations-dashboard",
-            action: "analyze_operations",
-            context: {
-              vessels: vessels?.length || 0,
-              activeVessels,
-              crew: crew?.length || 0,
-              activeCrew,
-              completedVoyages,
-              alerts: alerts?.length || 0,
-              efficiency: operationsData.fleetEfficiency,
-            },
-          });
-          logger.info("✅ Operations Dashboard: AI context executed successfully");
-        } catch (aiError) {
-          logger.error("❌ Operations Dashboard: AI context failed", aiError);
-          // Don't fail the entire dashboard if AI fails
-        }
-
-      } catch (err) {
-        const errorMessage = err instanceof Error ? err.message : "Unknown error occurred";
-        logger.error("❌ Operations Dashboard: Failed to load data", err);
-        setError(errorMessage);
-      } finally {
-        setIsLoading(false);
+      if (vesselsError) {
+        throw new Error(`Failed to fetch vessels: ${vesselsError.message}`);
       }
-    }, []);
+
+      // Fetch crew data
+      const { data: crew, error: crewError } = await supabase
+        .from("crew_members")
+        .select("id, name, status");
+
+      if (crewError) {
+        throw new Error(`Failed to fetch crew: ${crewError.message}`);
+      }
+
+      // Fetch voyages (completed today)
+      const today = new Date();
+      today.setHours(0, 0, 0, 0);
+      const { data: voyages, error: voyagesError } = await supabase
+        .from("voyages")
+        .select("id, status")
+        .gte("created_at", today.toISOString());
+
+      if (voyagesError) {
+        logger.warn("⚠️ Operations Dashboard: Could not fetch voyages", { error: voyagesError.message });
+      }
+
+      // Fetch operational alerts
+      const { data: alerts, error: alertsError } = await supabase
+        .from("operational_alerts")
+        .select("id, severity, status")
+        .eq("status", "active");
+
+      if (alertsError) {
+        logger.warn("⚠️ Operations Dashboard: Could not fetch alerts", { error: alertsError.message });
+      }
+
+      // Calculate metrics
+      const activeVessels = vessels?.filter(v => v.status === "active" || v.status === "operational").length || 0;
+      const vesselsInOperation = vessels?.filter(v => v.status === "operational").length || 0;
+      const vesselsAtPort = vessels?.filter(v => v.status === "at_port" || v.status === "docked").length || 0;
+      const vesselsInMaintenance = vessels?.filter(v => v.status === "maintenance").length || 0;
+      const activeCrew = crew?.filter(c => c.status === "active" || c.status === "onboard").length || 0;
+      const completedVoyages = voyages?.filter(v => v.status === "completed").length || 0;
+
+      const operationsData: OperationsData = {
+        activeVessels,
+        totalVessels: vessels?.length || 0,
+        crewMembers: crew?.length || 0,
+        activeCrew,
+        completedVoyages,
+        activeAlerts: alerts?.length || 0,
+        fleetEfficiency: activeVessels > 0 ? Math.round((activeVessels / (vessels?.length || 1)) * 100 * 10) / 10 : 0,
+        vesselsInOperation,
+        vesselsAtPort,
+        vesselsInMaintenance,
+      };
+
+      setData(operationsData);
+
+      logger.info("✅ Operations Dashboard: Data loaded successfully", {
+        vessels: vessels?.length,
+        crew: crew?.length,
+        voyages: voyages?.length,
+      });
+
+      // Run AI context for insights
+      try {
+        logger.info("🤖 Operations Dashboard: Requesting AI context");
+        await runAIContext({
+          module: "operations-dashboard",
+          action: "analyze_operations",
+          context: {
+            vessels: vessels?.length || 0,
+            activeVessels,
+            crew: crew?.length || 0,
+            activeCrew,
+            completedVoyages,
+            alerts: alerts?.length || 0,
+            efficiency: operationsData.fleetEfficiency,
+          },
+        });
+        logger.info("✅ Operations Dashboard: AI context executed successfully");
+      } catch (aiError) {
+        logger.error("❌ Operations Dashboard: AI context failed", aiError);
+        // Don't fail the entire dashboard if AI fails
+      }
+
+    } catch (err) {
+      const errorMessage = err instanceof Error ? err.message : "Unknown error occurred";
+      logger.error("❌ Operations Dashboard: Failed to load data", err);
+      setError(errorMessage);
+    } finally {
+      setIsLoading(false);
+    }
+  }, []);
 
   useEffect(() => {
     fetchOperationalData();

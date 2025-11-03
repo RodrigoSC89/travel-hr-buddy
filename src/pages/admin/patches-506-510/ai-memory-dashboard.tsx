@@ -63,9 +63,9 @@ const AIMemoryDashboard = () => {
 
     if (searchTerm) {
       filtered = filtered.filter(e => 
-        (e.context?.toLowerCase() || '').includes(searchTerm.toLowerCase()) ||
+        (e.context?.toLowerCase() || "").includes(searchTerm.toLowerCase()) ||
         e.event_type.toLowerCase().includes(searchTerm.toLowerCase()) ||
-        (e.user_id?.toLowerCase() || '').includes(searchTerm.toLowerCase())
+        (e.user_id?.toLowerCase() || "").includes(searchTerm.toLowerCase())
       );
     }
 
@@ -84,12 +84,12 @@ const AIMemoryDashboard = () => {
 
   const exportEvents = () => {
     const dataStr = JSON.stringify(filteredEvents, null, 2);
-    const dataUri = 'data:application/json;charset=utf-8,'+ encodeURIComponent(dataStr);
+    const dataUri = "data:application/json;charset=utf-8,"+ encodeURIComponent(dataStr);
     const exportFileDefaultName = `ai-memory-events-${new Date().toISOString()}.json`;
     
-    const linkElement = document.createElement('a');
-    linkElement.setAttribute('href', dataUri);
-    linkElement.setAttribute('download', exportFileDefaultName);
+    const linkElement = document.createElement("a");
+    linkElement.setAttribute("href", dataUri);
+    linkElement.setAttribute("download", exportFileDefaultName);
     linkElement.click();
   };
 

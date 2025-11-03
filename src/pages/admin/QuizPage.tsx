@@ -228,7 +228,7 @@ export default function QuizPage() {
           p_result_id: (result as any).id
         });
         
-        if (certData && typeof certData === 'string') {
+        if (certData && typeof certData === "string") {
           setCertificateId(certData);
         }
       }

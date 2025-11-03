@@ -7,8 +7,8 @@ import type {
   WebRTCConfig,
   WebRTCPeerConnection,
   WebRTCDataChannel
-} from '@/types/ai-core';
-import { logger } from '@/lib/logger';
+} from "@/types/ai-core";
+import { logger } from "@/lib/logger";
 
 export class WebRTCConnectionWrapper implements WebRTCPeerConnection {
   private pc: RTCPeerConnection;
@@ -23,15 +23,15 @@ export class WebRTCConnectionWrapper implements WebRTCPeerConnection {
 
     // Setup event listeners
     this.setupEventListeners();
-    logger.info('[WebRTC] Peer connection created');
+    logger.info("[WebRTC] Peer connection created");
   }
 
   private setupEventListeners(): void {
     this.pc.onicecandidate = (event) => {
       if (event.candidate) {
-        logger.debug('[WebRTC] ICE candidate generated');
+        logger.debug("[WebRTC] ICE candidate generated");
       } else {
-        logger.debug('[WebRTC] ICE gathering complete');
+        logger.debug("[WebRTC] ICE gathering complete");
       }
     };
 
@@ -71,10 +71,10 @@ export class WebRTCConnectionWrapper implements WebRTCPeerConnection {
   async createOffer(options?: RTCOfferOptions): Promise<RTCSessionDescriptionInit> {
     try {
       const offer = await this.pc.createOffer(options);
-      logger.info('[WebRTC] Offer created');
+      logger.info("[WebRTC] Offer created");
       return offer;
     } catch (error) {
-      logger.error('[WebRTC] Failed to create offer:', error);
+      logger.error("[WebRTC] Failed to create offer:", error);
       throw error;
     }
   }
@@ -82,10 +82,10 @@ export class WebRTCConnectionWrapper implements WebRTCPeerConnection {
   async createAnswer(options?: RTCAnswerOptions): Promise<RTCSessionDescriptionInit> {
     try {
       const answer = await this.pc.createAnswer(options);
-      logger.info('[WebRTC] Answer created');
+      logger.info("[WebRTC] Answer created");
       return answer;
     } catch (error) {
-      logger.error('[WebRTC] Failed to create answer:', error);
+      logger.error("[WebRTC] Failed to create answer:", error);
       throw error;
     }
   }
@@ -93,9 +93,9 @@ export class WebRTCConnectionWrapper implements WebRTCPeerConnection {
   async setLocalDescription(description: RTCSessionDescriptionInit): Promise<void> {
     try {
       await this.pc.setLocalDescription(description);
-      logger.info('[WebRTC] Local description set');
+      logger.info("[WebRTC] Local description set");
     } catch (error) {
-      logger.error('[WebRTC] Failed to set local description:', error);
+      logger.error("[WebRTC] Failed to set local description:", error);
       throw error;
     }
   }
@@ -103,9 +103,9 @@ export class WebRTCConnectionWrapper implements WebRTCPeerConnection {
   async setRemoteDescription(description: RTCSessionDescriptionInit): Promise<void> {
     try {
       await this.pc.setRemoteDescription(description);
-      logger.info('[WebRTC] Remote description set');
+      logger.info("[WebRTC] Remote description set");
     } catch (error) {
-      logger.error('[WebRTC] Failed to set remote description:', error);
+      logger.error("[WebRTC] Failed to set remote description:", error);
       throw error;
     }
   }
@@ -113,9 +113,9 @@ export class WebRTCConnectionWrapper implements WebRTCPeerConnection {
   async addIceCandidate(candidate: RTCIceCandidateInit): Promise<void> {
     try {
       await this.pc.addIceCandidate(candidate);
-      logger.debug('[WebRTC] ICE candidate added');
+      logger.debug("[WebRTC] ICE candidate added");
     } catch (error) {
-      logger.error('[WebRTC] Failed to add ICE candidate:', error);
+      logger.error("[WebRTC] Failed to add ICE candidate:", error);
       throw error;
     }
   }
@@ -128,12 +128,12 @@ export class WebRTCConnectionWrapper implements WebRTCPeerConnection {
 
   removeTrack(sender: RTCRtpSender): void {
     this.pc.removeTrack(sender);
-    logger.info('[WebRTC] Track removed');
+    logger.info("[WebRTC] Track removed");
   }
 
   close(): void {
     this.pc.close();
-    logger.info('[WebRTC] Connection closed');
+    logger.info("[WebRTC] Connection closed");
   }
 
   addEventListener(type: string, listener: EventListener): void {
@@ -190,7 +190,7 @@ class WebRTCDataChannelWrapper implements WebRTCDataChannel {
   }
 
   send(data: string | Blob | ArrayBuffer | ArrayBufferView): void {
-    if (this.channel.readyState !== 'open') {
+    if (this.channel.readyState !== "open") {
       logger.warn(`[WebRTC DataChannel] Attempted to send data on non-open channel: ${this.channel.label}`);
       return;
     }
@@ -199,7 +199,7 @@ class WebRTCDataChannelWrapper implements WebRTCDataChannel {
       this.channel.send(data as any);
       logger.debug(`[WebRTC DataChannel] Sent data on ${this.channel.label}`);
     } catch (error) {
-      logger.error(`[WebRTC DataChannel] Failed to send data:`, error);
+      logger.error("[WebRTC DataChannel] Failed to send data:", error);
       throw error;
     }
   }

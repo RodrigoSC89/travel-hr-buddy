@@ -41,26 +41,26 @@ export interface MissionLog {
 }
 
 export type MissionType =
-  | 'sar'
-  | 'evacuation'
-  | 'transport'
-  | 'patrol'
-  | 'training'
-  | 'emergency'
-  | 'custom';
+  | "sar"
+  | "evacuation"
+  | "transport"
+  | "patrol"
+  | "training"
+  | "emergency"
+  | "custom";
 
 export type MissionStatus = 
-  | 'planned'
-  | 'active'
-  | 'completed'
-  | 'cancelled'
-  | 'failed';
+  | "planned"
+  | "active"
+  | "completed"
+  | "cancelled"
+  | "failed";
 
 export type MissionPriority = 
-  | 'low'
-  | 'normal'
-  | 'high'
-  | 'critical';
+  | "low"
+  | "normal"
+  | "high"
+  | "critical";
 
 export interface Mission {
   id: string;
@@ -84,7 +84,7 @@ export interface VesselAssignment {
   vesselId: string;
   vesselName: string;
   role: VesselRole;
-  status: 'assigned' | 'en_route' | 'on_scene' | 'completed' | 'unavailable';
+  status: "assigned" | "en_route" | "on_scene" | "completed" | "unavailable";
   assignedTasks: string[];
   position?: GeoPosition;
   eta?: string;
@@ -105,16 +105,16 @@ export interface MissionObjective {
   id: string;
   description: string;
   priority: MissionPriority;
-  status: 'pending' | 'in_progress' | 'completed' | 'failed';
+  status: "pending" | "in_progress" | "completed" | "failed";
   assignedTo?: string[];
   deadline?: string;
   metrics?: Record<string, number>;
 }
 
 export interface MissionConstraint {
-  type: 'time' | 'resource' | 'weather' | 'safety' | 'regulation';
+  type: "time" | "resource" | "weather" | "safety" | "regulation";
   description: string;
-  severity: 'advisory' | 'warning' | 'critical';
+  severity: "advisory" | "warning" | "critical";
   impact: string;
   mitigation?: string;
 }
@@ -134,12 +134,12 @@ export interface CoordinationPlan {
 export interface TimelineEvent {
   id: string;
   time: string;
-  type: 'departure' | 'arrival' | 'waypoint' | 'action' | 'checkpoint';
+  type: "departure" | "arrival" | "waypoint" | "action" | "checkpoint";
   description: string;
   vesselId?: string;
   location?: GeoPosition;
   dependencies?: string[];
-  status: 'pending' | 'completed' | 'missed';
+  status: "pending" | "completed" | "missed";
 }
 
 export interface FallbackPlan {
@@ -152,14 +152,14 @@ export interface FallbackPlan {
 }
 
 export interface RiskAssessment {
-  overall: 'low' | 'medium' | 'high' | 'critical';
+  overall: "low" | "medium" | "high" | "critical";
   factors: RiskFactor[];
   mitigations: string[];
   updatedAt: string;
 }
 
 export interface RiskFactor {
-  type: 'weather' | 'technical' | 'crew' | 'logistics' | 'external';
+  type: "weather" | "technical" | "crew" | "logistics" | "external";
   description: string;
   probability: number;
   impact: number;
@@ -167,7 +167,7 @@ export interface RiskFactor {
 }
 
 export interface CoordinationUpdate {
-  updateType: 'status' | 'position' | 'resource' | 'emergency';
+  updateType: "status" | "position" | "resource" | "emergency";
   vesselId: string;
   data: Record<string, unknown>;
   timestamp: string;

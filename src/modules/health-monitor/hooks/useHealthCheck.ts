@@ -1,13 +1,13 @@
 // PATCH 623: Health Monitor Hook
-import { useState, useEffect, useCallback } from 'react';
-import { useQuery, useMutation } from '@tanstack/react-query';
+import { useState, useEffect, useCallback } from "react";
+import { useQuery, useMutation } from "@tanstack/react-query";
 import { 
   runAllHealthChecks, 
   getOverallStatus, 
   logHealthCheck 
-} from '../services/health-service';
-import type { HealthCheckResult, SystemHealth, ServiceStatus } from '../types';
-import { toast } from 'sonner';
+} from "../services/health-service";
+import type { HealthCheckResult, SystemHealth, ServiceStatus } from "../types";
+import { toast } from "sonner";
 
 export function useHealthCheck(options?: { 
   autoRefresh?: boolean;
@@ -20,7 +20,7 @@ export function useHealthCheck(options?: {
     showToasts = true
   } = options || {};
   
-  const [lastOverallStatus, setLastOverallStatus] = useState<ServiceStatus>('healthy');
+  const [lastOverallStatus, setLastOverallStatus] = useState<ServiceStatus>("healthy");
 
   // Query for health checks
   const { 
@@ -29,7 +29,7 @@ export function useHealthCheck(options?: {
     error,
     refetch: runHealthCheck 
   } = useQuery({
-    queryKey: ['health-check'],
+    queryKey: ["health-check"],
     queryFn: runAllHealthChecks,
     refetchInterval: autoRefresh ? refreshInterval : false,
     staleTime: 30000, // 30 seconds
@@ -39,7 +39,7 @@ export function useHealthCheck(options?: {
   const logMutation = useMutation({
     mutationFn: logHealthCheck,
     onError: (error) => {
-      console.error('Failed to log health check:', error);
+      console.error("Failed to log health check:", error);
       // Don't show toast for logging failures to avoid spamming user
     }
   });
@@ -58,18 +58,18 @@ export function useHealthCheck(options?: {
       
       // Only toast if status changed
       if (currentStatus !== lastOverallStatus) {
-        if (currentStatus === 'down') {
-          toast.error('System Health Critical', {
-            description: 'Multiple services are experiencing issues'
+        if (currentStatus === "down") {
+          toast.error("System Health Critical", {
+            description: "Multiple services are experiencing issues"
           });
-        } else if (currentStatus === 'degraded') {
-          toast.warning('System Performance Degraded', {
-            description: 'Some services are running slowly'
+        } else if (currentStatus === "degraded") {
+          toast.warning("System Performance Degraded", {
+            description: "Some services are running slowly"
           });
-        } else if (lastOverallStatus !== 'healthy') {
+        } else if (lastOverallStatus !== "healthy") {
           // Recovered
-          toast.success('System Health Restored', {
-            description: 'All services are operating normally'
+          toast.success("System Health Restored", {
+            description: "All services are operating normally"
           });
         }
         

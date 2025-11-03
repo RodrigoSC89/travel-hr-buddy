@@ -3,10 +3,10 @@
  * PATCH 545 - Evaluation of experimental features
  */
 
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
-import { Badge } from '@/components/ui/badge';
-import { Button } from '@/components/ui/button';
-import { Alert, AlertDescription, AlertTitle } from '@/components/ui/alert';
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
+import { Badge } from "@/components/ui/badge";
+import { Button } from "@/components/ui/button";
+import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert";
 import {
   AlertTriangle,
   Beaker,
@@ -18,20 +18,20 @@ import {
   Mic,
   Activity,
   XCircle
-} from 'lucide-react';
+} from "lucide-react";
 
 interface ExperimentalModule {
   name: string;
   path: string;
   icon: React.ReactNode;
-  status: 'ready' | 'beta' | 'incomplete' | 'disabled';
+  status: "ready" | "beta" | "incomplete" | "disabled";
   tests: {
     coreLogic: boolean;
     supabase: boolean;
     ui: boolean;
     aiIntegration: boolean;
   };
-  recommendation: 'promote' | 'keep-beta' | 'disable';
+  recommendation: "promote" | "keep-beta" | "disable";
   description: string;
   lastUpdated: string;
 }
@@ -39,147 +39,147 @@ interface ExperimentalModule {
 export default function LabsStatus() {
   const modules: ExperimentalModule[] = [
     {
-      name: 'Coordination AI',
-      path: '/coordination-ai',
+      name: "Coordination AI",
+      path: "/coordination-ai",
       icon: <Activity className="h-5 w-5" />,
-      status: 'ready',
+      status: "ready",
       tests: {
         coreLogic: true,
         supabase: true,
         ui: true,
         aiIntegration: true
       },
-      recommendation: 'promote',
-      description: 'Multi-level coordination engine with AI agents',
-      lastUpdated: '2025-10-29'
+      recommendation: "promote",
+      description: "Multi-level coordination engine with AI agents",
+      lastUpdated: "2025-10-29"
     },
     {
-      name: 'Edge AI Core',
-      path: '/edge-ai',
+      name: "Edge AI Core",
+      path: "/edge-ai",
       icon: <Cpu className="h-5 w-5" />,
-      status: 'beta',
+      status: "beta",
       tests: {
         coreLogic: true,
         supabase: true,
         ui: true,
         aiIntegration: false
       },
-      recommendation: 'keep-beta',
-      description: 'On-device AI processing with WebGPU',
-      lastUpdated: '2025-10-25'
+      recommendation: "keep-beta",
+      description: "On-device AI processing with WebGPU",
+      lastUpdated: "2025-10-25"
     },
     {
-      name: 'Gamification',
-      path: '/gamification',
+      name: "Gamification",
+      path: "/gamification",
       icon: <Gamepad2 className="h-5 w-5" />,
-      status: 'beta',
+      status: "beta",
       tests: {
         coreLogic: true,
         supabase: false,
         ui: true,
         aiIntegration: false
       },
-      recommendation: 'keep-beta',
-      description: 'Crew engagement through gamification',
-      lastUpdated: '2025-10-20'
+      recommendation: "keep-beta",
+      description: "Crew engagement through gamification",
+      lastUpdated: "2025-10-20"
     },
     {
-      name: 'AR (Augmented Reality)',
-      path: '/ar',
+      name: "AR (Augmented Reality)",
+      path: "/ar",
       icon: <Glasses className="h-5 w-5" />,
-      status: 'incomplete',
+      status: "incomplete",
       tests: {
         coreLogic: true,
         supabase: false,
         ui: false,
         aiIntegration: false
       },
-      recommendation: 'disable',
-      description: 'Augmented reality for maintenance',
-      lastUpdated: '2025-09-15'
+      recommendation: "disable",
+      description: "Augmented reality for maintenance",
+      lastUpdated: "2025-09-15"
     },
     {
-      name: 'Blockchain',
-      path: '/blockchain',
+      name: "Blockchain",
+      path: "/blockchain",
       icon: <Blocks className="h-5 w-5" />,
-      status: 'incomplete',
+      status: "incomplete",
       tests: {
         coreLogic: false,
         supabase: false,
         ui: true,
         aiIntegration: false
       },
-      recommendation: 'disable',
-      description: 'Blockchain-based audit trail',
-      lastUpdated: '2025-08-30'
+      recommendation: "disable",
+      description: "Blockchain-based audit trail",
+      lastUpdated: "2025-08-30"
     },
     {
-      name: 'Voice Assistant Advanced',
-      path: '/voice',
+      name: "Voice Assistant Advanced",
+      path: "/voice",
       icon: <Mic className="h-5 w-5" />,
-      status: 'beta',
+      status: "beta",
       tests: {
         coreLogic: true,
         supabase: true,
         ui: true,
         aiIntegration: true
       },
-      recommendation: 'keep-beta',
-      description: 'Advanced voice commands with AI',
-      lastUpdated: '2025-10-28'
+      recommendation: "keep-beta",
+      description: "Advanced voice commands with AI",
+      lastUpdated: "2025-10-28"
     },
     {
-      name: 'Drone Commander',
-      path: '/drone-commander',
+      name: "Drone Commander",
+      path: "/drone-commander",
       icon: <Activity className="h-5 w-5" />,
-      status: 'incomplete',
+      status: "incomplete",
       tests: {
         coreLogic: false,
         supabase: false,
         ui: true,
         aiIntegration: false
       },
-      recommendation: 'disable',
-      description: 'Drone operations management',
-      lastUpdated: '2025-07-10'
+      recommendation: "disable",
+      description: "Drone operations management",
+      lastUpdated: "2025-07-10"
     }
   ];
 
   const getStatusBadge = (status: string) => {
     switch (status) {
-      case 'ready':
-        return <Badge variant="default">Ready</Badge>;
-      case 'beta':
-        return <Badge variant="secondary">Beta</Badge>;
-      case 'incomplete':
-        return <Badge variant="destructive">Incomplete</Badge>;
-      case 'disabled':
-        return <Badge variant="outline">Disabled</Badge>;
-      default:
-        return null;
+    case "ready":
+      return <Badge variant="default">Ready</Badge>;
+    case "beta":
+      return <Badge variant="secondary">Beta</Badge>;
+    case "incomplete":
+      return <Badge variant="destructive">Incomplete</Badge>;
+    case "disabled":
+      return <Badge variant="outline">Disabled</Badge>;
+    default:
+      return null;
     }
   };
 
   const getRecommendationBadge = (rec: string) => {
     switch (rec) {
-      case 'promote':
-        return <Badge variant="default" className="bg-green-600">Promote to Production</Badge>;
-      case 'keep-beta':
-        return <Badge variant="secondary">Keep as Beta</Badge>;
-      case 'disable':
-        return <Badge variant="destructive">Disable</Badge>;
-      default:
-        return null;
+    case "promote":
+      return <Badge variant="default" className="bg-green-600">Promote to Production</Badge>;
+    case "keep-beta":
+      return <Badge variant="secondary">Keep as Beta</Badge>;
+    case "disable":
+      return <Badge variant="destructive">Disable</Badge>;
+    default:
+      return null;
     }
   };
 
   const stats = {
     total: modules.length,
-    ready: modules.filter(m => m.status === 'ready').length,
-    beta: modules.filter(m => m.status === 'beta').length,
-    incomplete: modules.filter(m => m.status === 'incomplete').length,
-    promoteRecommended: modules.filter(m => m.recommendation === 'promote').length,
-    disableRecommended: modules.filter(m => m.recommendation === 'disable').length
+    ready: modules.filter(m => m.status === "ready").length,
+    beta: modules.filter(m => m.status === "beta").length,
+    incomplete: modules.filter(m => m.status === "incomplete").length,
+    promoteRecommended: modules.filter(m => m.recommendation === "promote").length,
+    disableRecommended: modules.filter(m => m.recommendation === "disable").length
   };
 
   return (
@@ -327,12 +327,12 @@ export default function LabsStatus() {
                   <Button size="sm" variant="outline" asChild>
                     <a href={module.path}>View Module</a>
                   </Button>
-                  {module.recommendation === 'promote' && (
+                  {module.recommendation === "promote" && (
                     <Button size="sm" variant="default">
                       Promote
                     </Button>
                   )}
-                  {module.recommendation === 'disable' && (
+                  {module.recommendation === "disable" && (
                     <Button size="sm" variant="destructive">
                       Disable
                     </Button>

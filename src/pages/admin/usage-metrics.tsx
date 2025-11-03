@@ -34,12 +34,12 @@ export default function UsageMetrics() {
     queryFn: async () => {
       // TODO: Implement actual module access tracking
       return [
-        { module: 'Dashboard', count: 1247, avgTime: 245 },
-        { module: 'Checklists', count: 892, avgTime: 312 },
-        { module: 'Documents', count: 678, avgTime: 189 },
-        { module: 'Fleet', count: 534, avgTime: 421 },
-        { module: 'Incidents', count: 423, avgTime: 276 },
-        { module: 'Reports', count: 367, avgTime: 198 },
+        { module: "Dashboard", count: 1247, avgTime: 245 },
+        { module: "Checklists", count: 892, avgTime: 312 },
+        { module: "Documents", count: 678, avgTime: 189 },
+        { module: "Fleet", count: 534, avgTime: 421 },
+        { module: "Incidents", count: 423, avgTime: 276 },
+        { module: "Reports", count: 367, avgTime: 198 },
       ];
     },
   });
@@ -49,16 +49,16 @@ export default function UsageMetrics() {
     queryFn: async () => {
       // TODO: Implement actual peak hours analysis
       return [
-        { hour: '08:00', requests: 145 },
-        { hour: '09:00', requests: 234 },
-        { hour: '10:00', requests: 312 },
-        { hour: '11:00', requests: 289 },
-        { hour: '12:00', requests: 178 },
-        { hour: '13:00', requests: 156 },
-        { hour: '14:00', requests: 267 },
-        { hour: '15:00', requests: 298 },
-        { hour: '16:00', requests: 245 },
-        { hour: '17:00', requests: 189 },
+        { hour: "08:00", requests: 145 },
+        { hour: "09:00", requests: 234 },
+        { hour: "10:00", requests: 312 },
+        { hour: "11:00", requests: 289 },
+        { hour: "12:00", requests: 178 },
+        { hour: "13:00", requests: 156 },
+        { hour: "14:00", requests: 267 },
+        { hour: "15:00", requests: 298 },
+        { hour: "16:00", requests: 245 },
+        { hour: "17:00", requests: 189 },
       ];
     },
   });
@@ -80,15 +80,15 @@ export default function UsageMetrics() {
     if (!moduleAccess) return;
 
     const csv = [
-      ['Module', 'Access Count', 'Average Time (s)'],
+      ["Module", "Access Count", "Average Time (s)"],
       ...moduleAccess.map(m => [m.module, m.count, m.avgTime])
-    ].map(row => row.join(',')).join('\n');
+    ].map(row => row.join(",")).join("\n");
 
-    const blob = new Blob([csv], { type: 'text/csv' });
+    const blob = new Blob([csv], { type: "text/csv" });
     const url = URL.createObjectURL(blob);
-    const a = document.createElement('a');
+    const a = document.createElement("a");
     a.href = url;
-    a.download = `usage-metrics-${new Date().toISOString().split('T')[0]}.csv`;
+    a.download = `usage-metrics-${new Date().toISOString().split("T")[0]}.csv`;
     a.click();
     URL.revokeObjectURL(url);
   };
@@ -105,9 +105,9 @@ export default function UsageMetrics() {
     labels: moduleAccess?.map(m => m.module) || [],
     datasets: [
       {
-        label: 'Access Count',
+        label: "Access Count",
         data: moduleAccess?.map(m => m.count) || [],
-        backgroundColor: 'rgba(53, 162, 235, 0.5)',
+        backgroundColor: "rgba(53, 162, 235, 0.5)",
       },
     ],
   };
@@ -116,9 +116,9 @@ export default function UsageMetrics() {
     labels: peakHours?.map(h => h.hour) || [],
     datasets: [
       {
-        label: 'Requests',
+        label: "Requests",
         data: peakHours?.map(h => h.requests) || [],
-        backgroundColor: 'rgba(255, 99, 132, 0.5)',
+        backgroundColor: "rgba(255, 99, 132, 0.5)",
       },
     ],
   };

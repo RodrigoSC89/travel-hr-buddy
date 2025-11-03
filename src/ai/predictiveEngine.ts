@@ -421,7 +421,7 @@ class PredictiveEngine {
         .select("metric_name")
         .gte("recorded_at", new Date(Date.now() - 24 * 60 * 60 * 1000).toISOString());
 
-      const uniqueModules = [...new Set((modules || []).map((m: any) => m.metric_name).filter((name: any) => typeof name === 'string'))] as string[];
+      const uniqueModules = [...new Set((modules || []).map((m: any) => m.metric_name).filter((name: any) => typeof name === "string"))] as string[];
 
       // Predict for each module
       const predictions = await Promise.all(

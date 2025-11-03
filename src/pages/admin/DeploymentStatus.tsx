@@ -3,12 +3,12 @@
  * Final validation before production deploy
  */
 
-import { useState, useEffect } from 'react';
-import { Link } from 'react-router-dom';
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
-import { Badge } from '@/components/ui/badge';
-import { Button } from '@/components/ui/button';
-import { Alert, AlertDescription, AlertTitle } from '@/components/ui/alert';
+import { useState, useEffect } from "react";
+import { Link } from "react-router-dom";
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
+import { Badge } from "@/components/ui/badge";
+import { Button } from "@/components/ui/button";
+import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert";
 import {
   CheckCircle2,
   XCircle,
@@ -20,11 +20,11 @@ import {
   Shield,
   FileText,
   Activity
-} from 'lucide-react';
+} from "lucide-react";
 
 interface ValidationCheck {
   name: string;
-  status: 'pass' | 'fail' | 'warning';
+  status: "pass" | "fail" | "warning";
   message: string;
   category: string;
 }
@@ -41,124 +41,124 @@ export default function DeploymentStatus() {
     const validationChecks: ValidationCheck[] = [
       // PATCH 541
       {
-        name: 'Admin Control Center',
-        status: 'pass',
-        message: 'Accessible at /admin/control-center',
-        category: 'PATCH 541'
+        name: "Admin Control Center",
+        status: "pass",
+        message: "Accessible at /admin/control-center",
+        category: "PATCH 541"
       },
       {
-        name: 'CPU Benchmark',
-        status: 'pass',
-        message: 'Performance testing operational',
-        category: 'PATCH 541'
+        name: "CPU Benchmark",
+        status: "pass",
+        message: "Performance testing operational",
+        category: "PATCH 541"
       },
       {
-        name: 'System Health Validator',
-        status: 'pass',
-        message: 'Automated checks functional',
-        category: 'PATCH 541'
+        name: "System Health Validator",
+        status: "pass",
+        message: "Automated checks functional",
+        category: "PATCH 541"
       },
       {
-        name: 'Virtualized Logs',
-        status: 'pass',
-        message: '98% faster rendering confirmed',
-        category: 'PATCH 541'
+        name: "Virtualized Logs",
+        status: "pass",
+        message: "98% faster rendering confirmed",
+        category: "PATCH 541"
       },
       
       // PATCH 542
       {
-        name: 'OptimizedImage Component',
-        status: 'pass',
-        message: 'WebP/AVIF support active',
-        category: 'PATCH 542'
+        name: "OptimizedImage Component",
+        status: "pass",
+        message: "WebP/AVIF support active",
+        category: "PATCH 542"
       },
       {
-        name: 'Image Optimization Hooks',
-        status: 'pass',
-        message: 'All hooks implemented',
-        category: 'PATCH 542'
+        name: "Image Optimization Hooks",
+        status: "pass",
+        message: "All hooks implemented",
+        category: "PATCH 542"
       },
       {
-        name: 'CDN Manager',
-        status: 'pass',
-        message: 'Supabase CDN configured',
-        category: 'PATCH 542'
+        name: "CDN Manager",
+        status: "pass",
+        message: "Supabase CDN configured",
+        category: "PATCH 542"
       },
       
       // PATCH 543
       {
-        name: 'Lighthouse CI Workflow',
-        status: 'pass',
-        message: 'GitHub Actions configured',
-        category: 'PATCH 543'
+        name: "Lighthouse CI Workflow",
+        status: "pass",
+        message: "GitHub Actions configured",
+        category: "PATCH 543"
       },
       {
-        name: 'Lighthouse Configuration',
-        status: 'pass',
-        message: 'lighthouserc.json present',
-        category: 'PATCH 543'
+        name: "Lighthouse Configuration",
+        status: "pass",
+        message: "lighthouserc.json present",
+        category: "PATCH 543"
       },
       {
-        name: 'Performance Scores',
-        status: 'pass',
-        message: 'All targets met (92% Performance)',
-        category: 'PATCH 543'
+        name: "Performance Scores",
+        status: "pass",
+        message: "All targets met (92% Performance)",
+        category: "PATCH 543"
       },
       
       // Environment
       {
-        name: 'Supabase Connection',
-        status: import.meta.env.VITE_SUPABASE_URL ? 'pass' : 'warning',
-        message: import.meta.env.VITE_SUPABASE_URL ? 'Configured' : 'Environment variable missing',
-        category: 'Environment'
+        name: "Supabase Connection",
+        status: import.meta.env.VITE_SUPABASE_URL ? "pass" : "warning",
+        message: import.meta.env.VITE_SUPABASE_URL ? "Configured" : "Environment variable missing",
+        category: "Environment"
       },
       {
-        name: 'Build Configuration',
-        status: 'pass',
-        message: 'Vite build config optimized',
-        category: 'Build'
+        name: "Build Configuration",
+        status: "pass",
+        message: "Vite build config optimized",
+        category: "Build"
       }
     ];
 
     setChecks(validationChecks);
     
-    const hasFailures = validationChecks.some(c => c.status === 'fail');
+    const hasFailures = validationChecks.some(c => c.status === "fail");
     setIsReady(!hasFailures);
   };
 
   const getStatusIcon = (status: string) => {
     switch (status) {
-      case 'pass':
-        return <CheckCircle2 className="h-5 w-5 text-green-600" />;
-      case 'fail':
-        return <XCircle className="h-5 w-5 text-red-600" />;
-      case 'warning':
-        return <AlertTriangle className="h-5 w-5 text-yellow-600" />;
-      default:
-        return null;
+    case "pass":
+      return <CheckCircle2 className="h-5 w-5 text-green-600" />;
+    case "fail":
+      return <XCircle className="h-5 w-5 text-red-600" />;
+    case "warning":
+      return <AlertTriangle className="h-5 w-5 text-yellow-600" />;
+    default:
+      return null;
     }
   };
 
   const getStatusBadge = (status: string) => {
     switch (status) {
-      case 'pass':
-        return <Badge variant="default">Pass</Badge>;
-      case 'fail':
-        return <Badge variant="destructive">Fail</Badge>;
-      case 'warning':
-        return <Badge variant="secondary">Warning</Badge>;
-      default:
-        return null;
+    case "pass":
+      return <Badge variant="default">Pass</Badge>;
+    case "fail":
+      return <Badge variant="destructive">Fail</Badge>;
+    case "warning":
+      return <Badge variant="secondary">Warning</Badge>;
+    default:
+      return null;
     }
   };
 
-  const categories = ['PATCH 541', 'PATCH 542', 'PATCH 543', 'Environment', 'Build'];
+  const categories = ["PATCH 541", "PATCH 542", "PATCH 543", "Environment", "Build"];
   
   const stats = {
     total: checks.length,
-    passed: checks.filter(c => c.status === 'pass').length,
-    failed: checks.filter(c => c.status === 'fail').length,
-    warnings: checks.filter(c => c.status === 'warning').length
+    passed: checks.filter(c => c.status === "pass").length,
+    failed: checks.filter(c => c.status === "fail").length,
+    warnings: checks.filter(c => c.status === "warning").length
   };
 
   return (
@@ -251,7 +251,7 @@ export default function DeploymentStatus() {
             <CardHeader>
               <CardTitle>{category}</CardTitle>
               <CardDescription>
-                {categoryChecks.filter(c => c.status === 'pass').length} / {categoryChecks.length} checks passed
+                {categoryChecks.filter(c => c.status === "pass").length} / {categoryChecks.length} checks passed
               </CardDescription>
             </CardHeader>
             <CardContent>

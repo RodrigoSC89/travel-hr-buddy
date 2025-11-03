@@ -58,12 +58,12 @@ const AIFeedbackDashboard = () => {
     try {
       const exported = await AIFeedbackService.exportScores();
       const dataStr = JSON.stringify(exported, null, 2);
-      const dataUri = 'data:application/json;charset=utf-8,'+ encodeURIComponent(dataStr);
+      const dataUri = "data:application/json;charset=utf-8,"+ encodeURIComponent(dataStr);
       const exportFileDefaultName = `ai-feedback-scores-${new Date().toISOString()}.json`;
       
-      const linkElement = document.createElement('a');
-      linkElement.setAttribute('href', dataUri);
-      linkElement.setAttribute('download', exportFileDefaultName);
+      const linkElement = document.createElement("a");
+      linkElement.setAttribute("href", dataUri);
+      linkElement.setAttribute("download", exportFileDefaultName);
       linkElement.click();
 
       toast({
@@ -181,8 +181,8 @@ const AIFeedbackDashboard = () => {
           <ResponsiveContainer width="100%" height={300}>
             <LineChart data={chartData}>
               <CartesianGrid strokeDasharray="3 3" />
-              <XAxis dataKey="index" label={{ value: 'Sequência', position: 'insideBottom', offset: -5 }} />
-              <YAxis label={{ value: 'Score (%)', angle: -90, position: 'insideLeft' }} />
+              <XAxis dataKey="index" label={{ value: "Sequência", position: "insideBottom", offset: -5 }} />
+              <YAxis label={{ value: "Score (%)", angle: -90, position: "insideLeft" }} />
               <Tooltip />
               <Legend />
               <Line 
@@ -286,9 +286,9 @@ const AIFeedbackDashboard = () => {
                       <div className="mt-2 h-2 bg-muted rounded-full overflow-hidden">
                         <div
                           className={`h-full ${
-                            avgTypeScore >= 0.8 ? 'bg-green-500' :
-                            avgTypeScore >= 0.5 ? 'bg-yellow-500' :
-                            'bg-red-500'
+                            avgTypeScore >= 0.8 ? "bg-green-500" :
+                              avgTypeScore >= 0.5 ? "bg-yellow-500" :
+                                "bg-red-500"
                           }`}
                           style={{ width: `${avgTypeScore * 100}%` }}
                         />

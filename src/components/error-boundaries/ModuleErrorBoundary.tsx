@@ -4,12 +4,12 @@
  * Prevents cascade failures and provides recovery options
  */
 
-import React, { Component, ReactNode, ErrorInfo } from 'react';
-import { AlertTriangle, RefreshCw, Home } from 'lucide-react';
-import { Button } from '@/components/ui/button';
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
-import { Alert, AlertDescription } from '@/components/ui/alert';
-import { logger } from '@/lib/logger';
+import React, { Component, ReactNode, ErrorInfo } from "react";
+import { AlertTriangle, RefreshCw, Home } from "lucide-react";
+import { Button } from "@/components/ui/button";
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
+import { Alert, AlertDescription } from "@/components/ui/alert";
+import { logger } from "@/lib/logger";
 
 interface Props {
   children: ReactNode;
@@ -76,7 +76,7 @@ export class ModuleErrorBoundary extends Component<Props, State> {
     }
 
     // Report to monitoring service if configured
-    if (typeof window !== 'undefined') {
+    if (typeof window !== "undefined") {
       const sentry = (window as any).Sentry;
       if (sentry) {
         sentry.captureException(error, {
@@ -103,7 +103,7 @@ export class ModuleErrorBoundary extends Component<Props, State> {
   };
 
   handleGoHome = () => {
-    window.location.href = '/';
+    window.location.href = "/";
   };
 
   render() {

@@ -4,7 +4,7 @@
  */
 
 export interface CDNConfig {
-  provider: 'cloudflare' | 'vercel' | 'supabase' | 'local';
+  provider: "cloudflare" | "vercel" | "supabase" | "local";
   baseUrl: string;
   enabled: boolean;
   transformations: {
@@ -17,8 +17,8 @@ export interface CDNConfig {
 
 const CDN_CONFIGS: Record<string, CDNConfig> = {
   local: {
-    provider: 'local',
-    baseUrl: '',
+    provider: "local",
+    baseUrl: "",
     enabled: false,
     transformations: {
       webp: false,
@@ -28,8 +28,8 @@ const CDN_CONFIGS: Record<string, CDNConfig> = {
     },
   },
   supabase: {
-    provider: 'supabase',
-    baseUrl: import.meta.env.VITE_SUPABASE_URL || '',
+    provider: "supabase",
+    baseUrl: import.meta.env.VITE_SUPABASE_URL || "",
     enabled: !!import.meta.env.VITE_SUPABASE_URL,
     transformations: {
       webp: true,
@@ -39,8 +39,8 @@ const CDN_CONFIGS: Record<string, CDNConfig> = {
     },
   },
   cloudflare: {
-    provider: 'cloudflare',
-    baseUrl: import.meta.env.VITE_CLOUDFLARE_CDN_URL || '',
+    provider: "cloudflare",
+    baseUrl: import.meta.env.VITE_CLOUDFLARE_CDN_URL || "",
     enabled: !!import.meta.env.VITE_CLOUDFLARE_CDN_URL,
     transformations: {
       webp: true,
@@ -50,8 +50,8 @@ const CDN_CONFIGS: Record<string, CDNConfig> = {
     },
   },
   vercel: {
-    provider: 'vercel',
-    baseUrl: import.meta.env.VITE_VERCEL_URL || '',
+    provider: "vercel",
+    baseUrl: import.meta.env.VITE_VERCEL_URL || "",
     enabled: !!import.meta.env.VITE_VERCEL_URL,
     transformations: {
       webp: true,
@@ -103,27 +103,27 @@ class CDNManager {
       width?: number;
       height?: number;
       quality?: number;
-      format?: 'webp' | 'avif' | 'auto';
+      format?: "webp" | "avif" | "auto";
     } = {}
   ): string {
     if (!this.config.enabled) {
       return originalUrl;
     }
 
-    const { width, height, quality, format = 'auto' } = options;
+    const { width, height, quality, format = "auto" } = options;
 
     switch (this.config.provider) {
-      case 'supabase':
-        return this.transformSupabaseUrl(originalUrl, { width, height, quality });
+    case "supabase":
+      return this.transformSupabaseUrl(originalUrl, { width, height, quality });
 
-      case 'cloudflare':
-        return this.transformCloudflareUrl(originalUrl, { width, height, quality, format });
+    case "cloudflare":
+      return this.transformCloudflareUrl(originalUrl, { width, height, quality, format });
 
-      case 'vercel':
-        return this.transformVercelUrl(originalUrl, { width, height, quality, format });
+    case "vercel":
+      return this.transformVercelUrl(originalUrl, { width, height, quality, format });
 
-      default:
-        return originalUrl;
+    default:
+      return originalUrl;
     }
   }
 
@@ -131,14 +131,14 @@ class CDNManager {
     url: string,
     options: { width?: number; height?: number; quality?: number }
   ): string {
-    if (!url.includes('supabase.co/storage')) {
+    if (!url.includes("supabase.co/storage")) {
       return url;
     }
 
     const params = new URLSearchParams();
-    if (options.width) params.set('width', options.width.toString());
-    if (options.height) params.set('height', options.height.toString());
-    if (options.quality) params.set('quality', options.quality.toString());
+    if (options.width) params.set("width", options.width.toString());
+    if (options.height) params.set("height", options.height.toString());
+    if (options.quality) params.set("quality", options.quality.toString());
 
     return `${url}?${params.toString()}`;
   }
@@ -148,10 +148,10 @@ class CDNManager {
     options: { width?: number; height?: number; quality?: number; format?: string }
   ): string {
     const params = new URLSearchParams();
-    if (options.width) params.set('w', options.width.toString());
-    if (options.height) params.set('h', options.height.toString());
-    if (options.quality) params.set('q', options.quality.toString());
-    if (options.format && options.format !== 'auto') params.set('f', options.format);
+    if (options.width) params.set("w", options.width.toString());
+    if (options.height) params.set("h", options.height.toString());
+    if (options.quality) params.set("q", options.quality.toString());
+    if (options.format && options.format !== "auto") params.set("f", options.format);
 
     return `${this.config.baseUrl}/cdn-cgi/image/${params.toString()}/${url}`;
   }
@@ -161,11 +161,11 @@ class CDNManager {
     options: { width?: number; height?: number; quality?: number; format?: string }
   ): string {
     const params = new URLSearchParams();
-    params.set('url', url);
-    if (options.width) params.set('w', options.width.toString());
-    if (options.height) params.set('h', options.height.toString());
-    if (options.quality) params.set('q', options.quality.toString());
-    if (options.format && options.format !== 'auto') params.set('fm', options.format);
+    params.set("url", url);
+    if (options.width) params.set("w", options.width.toString());
+    if (options.height) params.set("h", options.height.toString());
+    if (options.quality) params.set("q", options.quality.toString());
+    if (options.format && options.format !== "auto") params.set("fm", options.format);
 
     return `/_next/image?${params.toString()}`;
   }
@@ -173,7 +173,7 @@ class CDNManager {
   /**
    * Generate multiple CDN URLs for srcset
    */
-  generateSrcSet(originalUrl: string, widths: number[], format?: 'webp' | 'avif'): string {
+  generateSrcSet(originalUrl: string, widths: number[], format?: "webp" | "avif"): string {
     return widths
       .map((width) => {
         const url = this.transformUrl(originalUrl, {
@@ -183,7 +183,7 @@ class CDNManager {
         });
         return `${url} ${width}w`;
       })
-      .join(', ');
+      .join(", ");
   }
 }
 

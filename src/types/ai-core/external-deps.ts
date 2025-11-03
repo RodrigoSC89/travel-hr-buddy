@@ -8,7 +8,7 @@
 export interface MQTTConfig {
   host: string;
   port: number;
-  protocol: 'mqtt' | 'mqtts' | 'ws' | 'wss';
+  protocol: "mqtt" | "mqtts" | "ws" | "wss";
   clientId?: string;
   username?: string;
   password?: string;
@@ -85,19 +85,19 @@ export interface WebRTCDataChannel {
 
 export interface ONNXConfig {
   executionProviders: ONNXExecutionProvider[];
-  graphOptimizationLevel?: 'disabled' | 'basic' | 'extended' | 'all';
+  graphOptimizationLevel?: "disabled" | "basic" | "extended" | "all";
   enableCpuMemArena?: boolean;
   enableMemPattern?: boolean;
-  executionMode?: 'sequential' | 'parallel';
+  executionMode?: "sequential" | "parallel";
   logSeverityLevel?: 0 | 1 | 2 | 3 | 4;
 }
 
 export type ONNXExecutionProvider = 
-  | 'cpu'
-  | 'cuda'
-  | 'webgl'
-  | 'webgpu'
-  | 'wasm';
+  | "cpu"
+  | "cuda"
+  | "webgl"
+  | "webgpu"
+  | "wasm";
 
 export interface ONNXModel {
   inputNames: string[];
@@ -116,12 +116,12 @@ export interface ONNXTensor {
 }
 
 export type ONNXTensorType = 
-  | 'float32'
-  | 'int32'
-  | 'uint8'
-  | 'int64'
-  | 'string'
-  | 'bool';
+  | "float32"
+  | "int32"
+  | "uint8"
+  | "int64"
+  | "string"
+  | "bool";
 
 export interface ONNXInferenceSession {
   loadModel(modelPath: string): Promise<ONNXModel>;
@@ -132,7 +132,7 @@ export interface ONNXInferenceSession {
 // ==================== TensorFlow Types ====================
 
 export interface TensorFlowConfig {
-  backend: 'cpu' | 'webgl' | 'wasm';
+  backend: "cpu" | "webgl" | "wasm";
   flags?: Record<string, boolean | number | string>;
 }
 

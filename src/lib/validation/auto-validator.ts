@@ -3,13 +3,13 @@
  * PATCH 541 - Validates system health, performance, security
  */
 
-import { cpuBenchmark, BenchmarkReport } from '@/lib/performance/cpu-benchmark';
-import { memoryMonitor, MemoryLeakReport } from '@/lib/performance/memory-monitor';
-import { LovableValidator } from '@/lib/qa/LovableValidator';
+import { cpuBenchmark, BenchmarkReport } from "@/lib/performance/cpu-benchmark";
+import { memoryMonitor, MemoryLeakReport } from "@/lib/performance/memory-monitor";
+import { LovableValidator } from "@/lib/qa/LovableValidator";
 
 export interface ValidationReport {
   timestamp: Date;
-  overallStatus: 'pass' | 'warning' | 'fail';
+  overallStatus: "pass" | "warning" | "fail";
   categories: {
     performance: CategoryResult;
     memory: CategoryResult;
@@ -21,7 +21,7 @@ export interface ValidationReport {
 }
 
 export interface CategoryResult {
-  status: 'pass' | 'warning' | 'fail';
+  status: "pass" | "warning" | "fail";
   score: number;
   details: string;
   checks: CheckResult[];
@@ -31,7 +31,7 @@ export interface CheckResult {
   name: string;
   passed: boolean;
   message: string;
-  severity: 'info' | 'warning' | 'critical';
+  severity: "info" | "warning" | "critical";
 }
 
 class AutoValidator {
@@ -39,7 +39,7 @@ class AutoValidator {
    * Run complete system validation
    */
   async runFullValidation(): Promise<ValidationReport> {
-    console.log('[AutoValidator] Starting full system validation...');
+    console.log("[AutoValidator] Starting full system validation...");
 
     const results = await Promise.all([
       this.validatePerformance(),
@@ -56,10 +56,10 @@ class AutoValidator {
     // Collect critical issues
     [performance, memory, security, qa].forEach(category => {
       category.checks.forEach(check => {
-        if (!check.passed && check.severity === 'critical') {
+        if (!check.passed && check.severity === "critical") {
           criticalIssues.push(`${category.details}: ${check.message}`);
         }
-        if (!check.passed && check.severity === 'warning') {
+        if (!check.passed && check.severity === "warning") {
           recommendations.push(`${category.details}: ${check.message}`);
         }
       });
@@ -86,10 +86,10 @@ class AutoValidator {
       const benchmark = await cpuBenchmark.runBenchmark();
       
       checks.push({
-        name: 'CPU Performance',
+        name: "CPU Performance",
         passed: benchmark.totalScore >= 60,
         message: `Overall score: ${benchmark.totalScore}/100`,
-        severity: benchmark.totalScore < 40 ? 'critical' : benchmark.totalScore < 60 ? 'warning' : 'info'
+        severity: benchmark.totalScore < 40 ? "critical" : benchmark.totalScore < 60 ? "warning" : "info"
       });
 
       benchmark.tests.forEach(test => {
@@ -97,28 +97,28 @@ class AutoValidator {
           name: test.testName,
           passed: test.score >= 60,
           message: `${test.executionTime}ms (${test.status})`,
-          severity: test.status === 'poor' ? 'critical' : test.status === 'acceptable' ? 'warning' : 'info'
+          severity: test.status === "poor" ? "critical" : test.status === "acceptable" ? "warning" : "info"
         });
       });
 
       const avgScore = benchmark.totalScore;
       
       return {
-        status: avgScore >= 70 ? 'pass' : avgScore >= 50 ? 'warning' : 'fail',
+        status: avgScore >= 70 ? "pass" : avgScore >= 50 ? "warning" : "fail",
         score: avgScore,
-        details: 'Performance',
+        details: "Performance",
         checks
       };
     } catch (error) {
       return {
-        status: 'fail',
+        status: "fail",
         score: 0,
-        details: 'Performance',
+        details: "Performance",
         checks: [{
-          name: 'Benchmark Execution',
+          name: "Benchmark Execution",
           passed: false,
-          message: 'Failed to run performance benchmark',
-          severity: 'critical'
+          message: "Failed to run performance benchmark",
+          severity: "critical"
         }]
       };
     }
@@ -137,42 +137,42 @@ class AutoValidator {
       const report = memoryMonitor.stopMonitoring();
 
       checks.push({
-        name: 'Memory Leak Detection',
+        name: "Memory Leak Detection",
         passed: !report.hasLeak,
         message: report.hasLeak 
           ? `Leak detected: ${report.growthRate} MB/min growth`
-          : 'No memory leaks detected',
-        severity: report.severity === 'critical' || report.severity === 'high' ? 'critical' : 'info'
+          : "No memory leaks detected",
+        severity: report.severity === "critical" || report.severity === "high" ? "critical" : "info"
       });
 
       const currentMemory = memoryMonitor.getCurrentMemory();
       if (currentMemory) {
         checks.push({
-          name: 'Memory Usage',
+          name: "Memory Usage",
           passed: currentMemory.percentUsed < 80,
           message: `${currentMemory.percentUsed.toFixed(1)}% of heap used`,
-          severity: currentMemory.percentUsed > 90 ? 'critical' : currentMemory.percentUsed > 80 ? 'warning' : 'info'
+          severity: currentMemory.percentUsed > 90 ? "critical" : currentMemory.percentUsed > 80 ? "warning" : "info"
         });
       }
 
       const hasLeak = report.hasLeak;
       
       return {
-        status: hasLeak ? 'fail' : 'pass',
+        status: hasLeak ? "fail" : "pass",
         score: hasLeak ? 50 : 100,
-        details: 'Memory',
+        details: "Memory",
         checks
       };
     } catch (error) {
       return {
-        status: 'warning',
+        status: "warning",
         score: 50,
-        details: 'Memory',
+        details: "Memory",
         checks: [{
-          name: 'Memory Monitoring',
+          name: "Memory Monitoring",
           passed: false,
-          message: 'Memory API not available or monitoring failed',
-          severity: 'warning'
+          message: "Memory API not available or monitoring failed",
+          severity: "warning"
         }]
       };
     }
@@ -186,18 +186,18 @@ class AutoValidator {
 
     // Check for common security issues
     checks.push({
-      name: 'HTTPS',
-      passed: window.location.protocol === 'https:' || window.location.hostname === 'localhost',
-      message: window.location.protocol === 'https:' ? 'Using HTTPS' : 'Using HTTP (development)',
-      severity: window.location.protocol === 'http:' && window.location.hostname !== 'localhost' ? 'critical' : 'info'
+      name: "HTTPS",
+      passed: window.location.protocol === "https:" || window.location.hostname === "localhost",
+      message: window.location.protocol === "https:" ? "Using HTTPS" : "Using HTTP (development)",
+      severity: window.location.protocol === "http:" && window.location.hostname !== "localhost" ? "critical" : "info"
     });
 
     // Check for console.log statements (potential data leaks)
     checks.push({
-      name: 'Console Logging',
+      name: "Console Logging",
       passed: true, // Placeholder - would need static analysis
-      message: 'Manual review recommended for production',
-      severity: 'warning'
+      message: "Manual review recommended for production",
+      severity: "warning"
     });
 
     // Check localStorage usage
@@ -206,18 +206,18 @@ class AutoValidator {
     );
     
     checks.push({
-      name: 'Local Storage Security',
+      name: "Local Storage Security",
       passed: localStorageSize < 5 * 1024 * 1024, // 5MB limit
       message: `${(localStorageSize / 1024).toFixed(2)} KB stored`,
-      severity: localStorageSize > 5 * 1024 * 1024 ? 'warning' : 'info'
+      severity: localStorageSize > 5 * 1024 * 1024 ? "warning" : "info"
     });
 
-    const failedChecks = checks.filter(c => !c.passed && c.severity === 'critical').length;
+    const failedChecks = checks.filter(c => !c.passed && c.severity === "critical").length;
     
     return {
-      status: failedChecks > 0 ? 'fail' : 'pass',
+      status: failedChecks > 0 ? "fail" : "pass",
       score: Math.round(((checks.length - failedChecks) / checks.length) * 100),
-      details: 'Security',
+      details: "Security",
       checks
     };
   }
@@ -230,17 +230,17 @@ class AutoValidator {
 
     // Run Lovable validator on key components
     try {
-      const result = await LovableValidator.run('SystemValidation', {
+      const result = await LovableValidator.run("SystemValidation", {
         maxRenderTime: 3000,
         maxDataSize: 3072,
         maxReRenders: 10
       });
 
       checks.push({
-        name: 'Component Validation',
+        name: "Component Validation",
         passed: result.passed,
         message: `${result.issues.length} issues found`,
-        severity: result.issues.some(i => i.severity === 'critical') ? 'critical' : 'info'
+        severity: result.issues.some(i => i.severity === "critical") ? "critical" : "info"
       });
 
       result.issues.forEach(issue => {
@@ -248,24 +248,24 @@ class AutoValidator {
           name: issue.component,
           passed: false,
           message: `${issue.type}: ${issue.description}`,
-          severity: issue.severity === 'critical' || issue.severity === 'high' ? 'critical' : 'warning'
+          severity: issue.severity === "critical" || issue.severity === "high" ? "critical" : "warning"
         });
       });
     } catch (error) {
       checks.push({
-        name: 'QA Validation',
+        name: "QA Validation",
         passed: false,
-        message: 'QA validation failed to execute',
-        severity: 'warning'
+        message: "QA validation failed to execute",
+        severity: "warning"
       });
     }
 
-    const criticalIssues = checks.filter(c => !c.passed && c.severity === 'critical').length;
+    const criticalIssues = checks.filter(c => !c.passed && c.severity === "critical").length;
     
     return {
-      status: criticalIssues === 0 ? 'pass' : 'fail',
+      status: criticalIssues === 0 ? "pass" : "fail",
       score: Math.round(((checks.length - criticalIssues) / checks.length) * 100),
-      details: 'QA',
+      details: "QA",
       checks
     };
   }
@@ -273,13 +273,13 @@ class AutoValidator {
   /**
    * Calculate overall system status
    */
-  private calculateOverallStatus(categories: CategoryResult[]): 'pass' | 'warning' | 'fail' {
-    const hasFail = categories.some(c => c.status === 'fail');
-    const hasWarning = categories.some(c => c.status === 'warning');
+  private calculateOverallStatus(categories: CategoryResult[]): "pass" | "warning" | "fail" {
+    const hasFail = categories.some(c => c.status === "fail");
+    const hasWarning = categories.some(c => c.status === "warning");
 
-    if (hasFail) return 'fail';
-    if (hasWarning) return 'warning';
-    return 'pass';
+    if (hasFail) return "fail";
+    if (hasWarning) return "warning";
+    return "pass";
   }
 
   /**
@@ -289,14 +289,14 @@ class AutoValidator {
     const currentMemory = memoryMonitor.getCurrentMemory();
     
     if (!currentMemory) {
-      return { healthy: true, message: 'System running (memory API unavailable)' };
+      return { healthy: true, message: "System running (memory API unavailable)" };
     }
 
     if (currentMemory.percentUsed > 90) {
-      return { healthy: false, message: 'Critical: Memory usage above 90%' };
+      return { healthy: false, message: "Critical: Memory usage above 90%" };
     }
 
-    return { healthy: true, message: 'System healthy' };
+    return { healthy: true, message: "System healthy" };
   }
 }
 

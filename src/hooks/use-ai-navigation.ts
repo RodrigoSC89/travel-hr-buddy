@@ -29,22 +29,22 @@ export function useAINavigation() {
       if (!user) return;
 
       const currentPath = window.location.pathname;
-      const previousPath = sessionStorage.getItem('previousPath');
+      const previousPath = sessionStorage.getItem("previousPath");
 
       if (previousPath && previousPath !== currentPath) {
         try {
-          await supabase.from('navigation_history').insert({
+          await supabase.from("navigation_history").insert({
             user_id: user.id,
             from_path: previousPath,
             to_path: currentPath,
             timestamp: new Date().toISOString(),
           });
         } catch (error) {
-          console.error('Failed to track navigation:', error);
+          console.error("Failed to track navigation:", error);
         }
       }
 
-      sessionStorage.setItem('previousPath', currentPath);
+      sessionStorage.setItem("previousPath", currentPath);
     };
 
     trackNavigation();
@@ -59,17 +59,17 @@ export function useAINavigation() {
       try {
         // Get user's navigation history
         const { data: history, error } = await supabase
-          .from('navigation_history')
-          .select('*')
-          .eq('user_id', user.id)
-          .order('timestamp', { ascending: false })
+          .from("navigation_history")
+          .select("*")
+          .eq("user_id", user.id)
+          .order("timestamp", { ascending: false })
           .limit(100);
 
         if (error) throw error;
 
         return analyzePatternsAndSuggest(history || []);
       } catch (error) {
-        console.error('Failed to get navigation suggestions:', error);
+        console.error("Failed to get navigation suggestions:", error);
         return [];
       }
     },
@@ -126,13 +126,13 @@ export function useRecordModuleAccess(moduleName: string) {
 
     const recordAccess = async () => {
       try {
-        await supabase.from('module_access_log').insert({
+        await supabase.from("module_access_log").insert({
           user_id: user.id,
           module_name: moduleName,
           accessed_at: new Date().toISOString(),
         });
       } catch (error) {
-        console.error('Failed to record module access:', error);
+        console.error("Failed to record module access:", error);
       }
     };
 

@@ -4,18 +4,18 @@
  */
 
 export type FeedbackType = 
-  | 'positive'
-  | 'negative'
-  | 'neutral'
-  | 'correction'
-  | 'suggestion';
+  | "positive"
+  | "negative"
+  | "neutral"
+  | "correction"
+  | "suggestion";
 
 export type FeedbackSource = 
-  | 'user'
-  | 'system'
-  | 'agent'
-  | 'monitor'
-  | 'automatic';
+  | "user"
+  | "system"
+  | "agent"
+  | "monitor"
+  | "automatic";
 
 export interface Feedback {
   id: string;
@@ -23,7 +23,7 @@ export interface Feedback {
   source: FeedbackSource;
   sourceId?: string;
   targetId: string;
-  targetType: 'agent' | 'decision' | 'action' | 'prediction';
+  targetType: "agent" | "decision" | "action" | "prediction";
   rating?: number;
   comment?: string;
   context: FeedbackContext;
@@ -37,14 +37,14 @@ export interface FeedbackContext {
   decisionId?: string;
   userId?: string;
   tenantId?: string;
-  environment: 'development' | 'staging' | 'production';
+  environment: "development" | "staging" | "production";
   variables: Record<string, unknown>;
 }
 
 export interface LearningRecord {
   id: string;
   agentId?: string;
-  type: 'reinforcement' | 'supervised' | 'unsupervised' | 'transfer';
+  type: "reinforcement" | "supervised" | "unsupervised" | "transfer";
   input: unknown;
   output: unknown;
   expected?: unknown;
@@ -57,7 +57,7 @@ export interface LearningRecord {
 
 export interface AdaptationEvent {
   id: string;
-  type: 'parameter_update' | 'model_retrain' | 'strategy_change' | 'threshold_adjust';
+  type: "parameter_update" | "model_retrain" | "strategy_change" | "threshold_adjust";
   target: string;
   before: unknown;
   after: unknown;

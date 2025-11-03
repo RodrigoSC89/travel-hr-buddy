@@ -42,15 +42,15 @@ class ChatOpsEngine {
 
   private async processNaturalLanguage(input: string): Promise<ChatResponse> {
     // Simple keyword matching for natural language fallback
-    if (input.includes('status') || input.includes('health')) {
+    if (input.includes("status") || input.includes("health")) {
       return await this.getSystemStatus();
     }
 
-    if (input.includes('open') || input.includes('go to') || input.includes('navigate')) {
+    if (input.includes("open") || input.includes("go to") || input.includes("navigate")) {
       return await this.suggestNavigation(input);
     }
 
-    if (input.includes('restart') || input.includes('reload')) {
+    if (input.includes("restart") || input.includes("reload")) {
       return this.suggestRestart();
     }
 
@@ -65,14 +65,14 @@ class ChatOpsEngine {
       success: true,
       message: "System Status: All systems operational ✓",
       data: {
-        status: 'healthy',
-        uptime: '24h',
+        status: "healthy",
+        uptime: "24h",
         activeUsers: 15,
       },
       actions: [
         {
-          label: 'View Details',
-          action: () => window.location.href = '/admin/system-health',
+          label: "View Details",
+          action: () => window.location.href = "/admin/system-health",
         },
       ],
     };
@@ -80,12 +80,12 @@ class ChatOpsEngine {
 
   private async suggestNavigation(input: string): Promise<ChatResponse> {
     const modules = [
-      'dashboard',
-      'checklists',
-      'documents',
-      'fleet',
-      'incidents',
-      'reports',
+      "dashboard",
+      "checklists",
+      "documents",
+      "fleet",
+      "incidents",
+      "reports",
     ];
 
     const matchedModule = modules.find(m => input.includes(m));
@@ -105,7 +105,7 @@ class ChatOpsEngine {
 
     return {
       success: false,
-      message: "Module not found. Available modules: " + modules.join(', '),
+      message: "Module not found. Available modules: " + modules.join(", "),
     };
   }
 
@@ -115,7 +115,7 @@ class ChatOpsEngine {
       message: "Restart options available",
       actions: [
         {
-          label: 'Reload Page',
+          label: "Reload Page",
           action: () => window.location.reload(),
         },
       ],
@@ -132,8 +132,8 @@ export const chatOps = new ChatOpsEngine();
 
 // Register default commands
 chatOps.register({
-  command: '/open',
-  description: 'Open a module',
+  command: "/open",
+  description: "Open a module",
   pattern: /^\/open\s+(.+)$/,
   handler: async ([moduleName]) => ({
     success: true,
@@ -148,28 +148,28 @@ chatOps.register({
 });
 
 chatOps.register({
-  command: '/status',
-  description: 'Check system status',
+  command: "/status",
+  description: "Check system status",
   pattern: /^\/status(?:\s+(.+))?$/,
   handler: async ([system]) => ({
     success: true,
     message: system 
       ? `Status of ${system}: Operational ✓`
-      : 'All systems operational ✓',
-    data: { status: 'healthy' },
+      : "All systems operational ✓",
+    data: { status: "healthy" },
   }),
 });
 
 chatOps.register({
-  command: '/restart',
-  description: 'Restart a system component',
+  command: "/restart",
+  description: "Restart a system component",
   pattern: /^\/restart\s+(.+)$/,
   handler: async ([component]) => ({
     success: true,
     message: `Restarting ${component}...`,
     actions: [
       {
-        label: 'Confirm Restart',
+        label: "Confirm Restart",
         action: () => console.log(`Restarting ${component}`),
       },
     ],
@@ -177,14 +177,14 @@ chatOps.register({
 });
 
 chatOps.register({
-  command: '/help',
-  description: 'Show available commands',
+  command: "/help",
+  description: "Show available commands",
   pattern: /^\/help$/,
   handler: async () => {
     const commands = chatOps.listCommands();
     const commandList = commands
       .map(c => `${c.command} - ${c.description}`)
-      .join('\n');
+      .join("\n");
 
     return {
       success: true,

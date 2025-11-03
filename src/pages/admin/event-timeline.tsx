@@ -33,10 +33,10 @@ export default function EventTimelinePage() {
     );
   }
 
-  const loginEvents = events?.filter(e => e.event_type === 'login') || [];
-  const failureEvents = events?.filter(e => e.severity === 'error') || [];
-  const adminEvents = events?.filter(e => e.event_category === 'admin_action') || [];
-  const deployEvents = events?.filter(e => e.event_type === 'deploy') || [];
+  const loginEvents = events?.filter(e => e.event_type === "login") || [];
+  const failureEvents = events?.filter(e => e.severity === "error") || [];
+  const adminEvents = events?.filter(e => e.event_category === "admin_action") || [];
+  const deployEvents = events?.filter(e => e.event_type === "deploy") || [];
 
   return (
     <div className="container mx-auto py-8 space-y-6">

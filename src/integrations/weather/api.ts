@@ -35,19 +35,19 @@ interface WeatherAPIResponse {
   };
   visibility: number;
   clouds: { all: number };
-  rain?: { '1h': number };
+  rain?: { "1h": number };
   name: string;
 }
 
-const OPENWEATHER_API_KEY = import.meta.env.VITE_OPENWEATHER_API_KEY || '';
-const OPENWEATHER_BASE_URL = 'https://api.openweathermap.org/data/2.5';
+const OPENWEATHER_API_KEY = import.meta.env.VITE_OPENWEATHER_API_KEY || "";
+const OPENWEATHER_BASE_URL = "https://api.openweathermap.org/data/2.5";
 
 /**
  * Fetch current weather for a specific location
  */
 export async function fetchWeather(lat: number, lon: number): Promise<WeatherData> {
   if (!OPENWEATHER_API_KEY) {
-    throw new Error('OpenWeather API key not configured');
+    throw new Error("OpenWeather API key not configured");
   }
 
   const url = `${OPENWEATHER_BASE_URL}/weather?lat=${lat}&lon=${lon}&units=metric&appid=${OPENWEATHER_API_KEY}`;
@@ -71,11 +71,11 @@ export async function fetchWeather(lat: number, lon: number): Promise<WeatherDat
     pressure: data.main.pressure,
     windSpeed: data.wind.speed,
     windDirection: data.wind.deg,
-    condition: data.weather[0]?.main || 'Unknown',
-    description: data.weather[0]?.description || '',
+    condition: data.weather[0]?.main || "Unknown",
+    description: data.weather[0]?.description || "",
     visibility: data.visibility,
     cloudCoverage: data.clouds.all,
-    precipitation: data.rain?.['1h'] || 0,
+    precipitation: data.rain?.["1h"] || 0,
   };
 }
 
@@ -99,11 +99,11 @@ export async function fetchMaritimeWeather(locations: Array<{ lat: number; lon: 
  * Common maritime locations for weather monitoring
  */
 export const MARITIME_LOCATIONS = [
-  { lat: -23.5505, lon: -46.6333, name: 'Port of Santos' },
-  { lat: -22.9068, lon: -43.1729, name: 'Port of Rio de Janeiro' },
-  { lat: -3.7319, lon: -38.5267, name: 'Port of Fortaleza' },
-  { lat: -12.9714, lon: -38.5014, name: 'Port of Salvador' },
-  { lat: -25.4284, lon: -49.2733, name: 'Port of Paranaguá' },
+  { lat: -23.5505, lon: -46.6333, name: "Port of Santos" },
+  { lat: -22.9068, lon: -43.1729, name: "Port of Rio de Janeiro" },
+  { lat: -3.7319, lon: -38.5267, name: "Port of Fortaleza" },
+  { lat: -12.9714, lon: -38.5014, name: "Port of Salvador" },
+  { lat: -25.4284, lon: -49.2733, name: "Port of Paranaguá" },
 ];
 
 /**
@@ -114,19 +114,19 @@ export function getWeatherSeverity(weather: WeatherData): string {
   const { windSpeed, visibility, condition } = weather;
 
   // Dangerous conditions
-  if (windSpeed > 25 || visibility < 1000 || ['Thunderstorm', 'Tornado'].includes(condition)) {
-    return 'danger';
+  if (windSpeed > 25 || visibility < 1000 || ["Thunderstorm", "Tornado"].includes(condition)) {
+    return "danger";
   }
 
   // Warning conditions
-  if (windSpeed > 15 || visibility < 5000 || ['Storm', 'Squall'].includes(condition)) {
-    return 'warning';
+  if (windSpeed > 15 || visibility < 5000 || ["Storm", "Squall"].includes(condition)) {
+    return "warning";
   }
 
   // Caution conditions
-  if (windSpeed > 10 || visibility < 10000 || ['Rain', 'Snow', 'Fog'].includes(condition)) {
-    return 'caution';
+  if (windSpeed > 10 || visibility < 10000 || ["Rain", "Snow", "Fog"].includes(condition)) {
+    return "caution";
   }
 
-  return 'safe';
+  return "safe";
 }

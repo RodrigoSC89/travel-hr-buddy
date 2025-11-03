@@ -4,20 +4,20 @@
  */
 
 export type PipelineStage = 
-  | 'input'
-  | 'preprocessing'
-  | 'analysis'
-  | 'reasoning'
-  | 'decision'
-  | 'action'
-  | 'feedback';
+  | "input"
+  | "preprocessing"
+  | "analysis"
+  | "reasoning"
+  | "decision"
+  | "action"
+  | "feedback";
 
 export type PipelineStatus = 
-  | 'idle'
-  | 'running'
-  | 'paused'
-  | 'completed'
-  | 'failed';
+  | "idle"
+  | "running"
+  | "paused"
+  | "completed"
+  | "failed";
 
 export interface CognitivePipeline {
   id: string;
@@ -55,7 +55,7 @@ export interface PipelineExecution {
 
 export interface StageExecution {
   stage: PipelineStage;
-  status: 'pending' | 'running' | 'completed' | 'failed' | 'skipped';
+  status: "pending" | "running" | "completed" | "failed" | "skipped";
   input?: unknown;
   output?: unknown;
   error?: string;

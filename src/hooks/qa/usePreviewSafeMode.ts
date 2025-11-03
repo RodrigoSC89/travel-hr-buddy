@@ -3,8 +3,8 @@
  * PATCH 624 - Hook para componentes rodarem em modo seguro no preview
  */
 
-import { useEffect, useRef, useState } from 'react';
-import { LovableValidator } from '@/lib/qa/LovableValidator';
+import { useEffect, useRef, useState } from "react";
+import { LovableValidator } from "@/lib/qa/LovableValidator";
 
 interface PreviewSafeModeOptions {
   componentName: string;

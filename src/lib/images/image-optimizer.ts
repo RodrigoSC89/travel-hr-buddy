@@ -5,7 +5,7 @@
 
 export interface ImageOptimizationConfig {
   quality: number;
-  format: 'webp' | 'avif' | 'original';
+  format: "webp" | "avif" | "original";
   width?: number;
   height?: number;
   generateBlurPlaceholder?: boolean;
@@ -25,9 +25,9 @@ class ImageOptimizer {
   private ctx: CanvasRenderingContext2D | null = null;
 
   constructor() {
-    if (typeof window !== 'undefined') {
-      this.canvas = document.createElement('canvas');
-      this.ctx = this.canvas.getContext('2d');
+    if (typeof window !== "undefined") {
+      this.canvas = document.createElement("canvas");
+      this.ctx = this.canvas.getContext("2d");
     }
   }
 
@@ -40,11 +40,11 @@ class ImageOptimizer {
   ): Promise<string> {
     return new Promise((resolve, reject) => {
       const img = new Image();
-      img.crossOrigin = 'anonymous';
+      img.crossOrigin = "anonymous";
       
       img.onload = () => {
         if (!this.canvas || !this.ctx) {
-          reject(new Error('Canvas not available'));
+          reject(new Error("Canvas not available"));
           return;
         }
 
@@ -56,11 +56,11 @@ class ImageOptimizer {
         this.ctx.drawImage(img, 0, 0, blurSize, blurSize);
 
         // Get base64 data URL
-        const blurDataURL = this.canvas.toDataURL('image/jpeg', 0.1);
+        const blurDataURL = this.canvas.toDataURL("image/jpeg", 0.1);
         resolve(blurDataURL);
       };
 
-      img.onerror = () => reject(new Error('Failed to load image'));
+      img.onerror = () => reject(new Error("Failed to load image"));
       img.src = imageUrl;
     });
   }
@@ -69,24 +69,24 @@ class ImageOptimizer {
    * Check if browser supports WebP
    */
   supportsWebP(): boolean {
-    if (typeof window === 'undefined') return false;
+    if (typeof window === "undefined") return false;
     
-    const canvas = document.createElement('canvas');
+    const canvas = document.createElement("canvas");
     canvas.width = 1;
     canvas.height = 1;
     
-    return canvas.toDataURL('image/webp').indexOf('data:image/webp') === 0;
+    return canvas.toDataURL("image/webp").indexOf("data:image/webp") === 0;
   }
 
   /**
    * Check if browser supports AVIF
    */
   async supportsAVIF(): Promise<boolean> {
-    if (typeof window === 'undefined') return false;
+    if (typeof window === "undefined") return false;
 
     return new Promise((resolve) => {
       const avif = new Image();
-      avif.src = 'data:image/avif;base64,AAAAIGZ0eXBhdmlmAAAAAGF2aWZtaWYxbWlhZk1BMUIAAADybWV0YQAAAAAAAAAoaGRscgAAAAAAAAAAcGljdAAAAAAAAAAAAAAAAGxpYmF2aWYAAAAADnBpdG0AAAAAAAEAAAAeaWxvYwAAAABEAAABAAEAAAABAAABGgAAAB0AAAAoaWluZgAAAAAAAQAAABppbmZlAgAAAAABAABhdjAxQ29sb3IAAAAAamlwcnAAAABLaXBjbwAAABRpc3BlAAAAAAAAAAIAAAACAAAAEHBpeGkAAAAAAwgICAAAAAxhdjFDgQ0MAAAAABNjb2xybmNseAACAAIAAYAAAAAXaXBtYQAAAAAAAAABAAEEAQKDBAAAACVtZGF0EgAKCBgANogQEAwgMg8f8D///8WfhwB8+ErK42A=';
+      avif.src = "data:image/avif;base64,AAAAIGZ0eXBhdmlmAAAAAGF2aWZtaWYxbWlhZk1BMUIAAADybWV0YQAAAAAAAAAoaGRscgAAAAAAAAAAcGljdAAAAAAAAAAAAAAAAGxpYmF2aWYAAAAADnBpdG0AAAAAAAEAAAAeaWxvYwAAAABEAAABAAEAAAABAAABGgAAAB0AAAAoaWluZgAAAAAAAQAAABppbmZlAgAAAAABAABhdjAxQ29sb3IAAAAAamlwcnAAAABLaXBjbwAAABRpc3BlAAAAAAAAAAIAAAACAAAAEHBpeGkAAAAAAwgICAAAAAxhdjFDgQ0MAAAAABNjb2xybmNseAACAAIAAYAAAAAXaXBtYQAAAAAAAAABAAEEAQKDBAAAACVtZGF0EgAKCBgANogQEAwgMg8f8D///8WfhwB8+ErK42A=";
       avif.onload = () => resolve(true);
       avif.onerror = () => resolve(false);
     });
@@ -95,14 +95,14 @@ class ImageOptimizer {
   /**
    * Get optimal image format based on browser support
    */
-  async getOptimalFormat(): Promise<'avif' | 'webp' | 'jpeg'> {
+  async getOptimalFormat(): Promise<"avif" | "webp" | "jpeg"> {
     const supportsAVIF = await this.supportsAVIF();
-    if (supportsAVIF) return 'avif';
+    if (supportsAVIF) return "avif";
     
     const supportsWebP = this.supportsWebP();
-    if (supportsWebP) return 'webp';
+    if (supportsWebP) return "webp";
     
-    return 'jpeg';
+    return "jpeg";
   }
 
   /**
@@ -111,7 +111,7 @@ class ImageOptimizer {
   generateSrcSet(baseUrl: string, widths: number[]): string {
     return widths
       .map(width => `${baseUrl}?w=${width} ${width}w`)
-      .join(', ');
+      .join(", ");
   }
 
   /**
@@ -128,7 +128,7 @@ class ImageOptimizer {
    */
   estimateSizeReduction(
     originalFormat: string,
-    targetFormat: 'webp' | 'avif',
+    targetFormat: "webp" | "avif",
     originalSize: number
   ): number {
     const reductionFactors = {
@@ -147,7 +147,7 @@ class ImageOptimizer {
     return new Promise((resolve, reject) => {
       const img = new Image();
       img.onload = () => resolve({ width: img.width, height: img.height });
-      img.onerror = () => reject(new Error('Failed to load image'));
+      img.onerror = () => reject(new Error("Failed to load image"));
       img.src = url;
     });
   }
@@ -161,7 +161,7 @@ class ImageOptimizer {
   ): Promise<OptimizedImageResult> {
     const defaultConfig: ImageOptimizationConfig = {
       quality: 0.8,
-      format: 'webp',
+      format: "webp",
       generateBlurPlaceholder: true,
       ...config
     };
@@ -173,7 +173,7 @@ class ImageOptimizer {
       try {
         blurDataURL = await this.generateBlurPlaceholder(imageUrl);
       } catch (error) {
-        console.warn('Failed to generate blur placeholder:', error);
+        console.warn("Failed to generate blur placeholder:", error);
       }
     }
 

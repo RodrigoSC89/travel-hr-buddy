@@ -35,22 +35,22 @@ export const OrganizationStatsCards: React.FC = () => {
 
       // Fetch active users count
       const { count: usersCount } = await supabase
-        .from('organization_users')
-        .select('*', { count: 'exact', head: true })
-        .eq('organization_id', currentOrganization.id)
-        .eq('status', 'active');
+        .from("organization_users")
+        .select("*", { count: "exact", head: true })
+        .eq("organization_id", currentOrganization.id)
+        .eq("status", "active");
 
       // Fetch vessels count
       const { count: vesselsCount } = await supabase
-        .from('vessels')
-        .select('*', { count: 'exact', head: true })
-        .eq('organization_id', currentOrganization.id);
+        .from("vessels")
+        .select("*", { count: "exact", head: true })
+        .eq("organization_id", currentOrganization.id);
 
       // Fetch storage usage
       const { data: usageData } = await supabase
-        .from('tenant_usage')
-        .select('storage_used_gb')
-        .eq('tenant_id', currentOrganization.id)
+        .from("tenant_usage")
+        .select("storage_used_gb")
+        .eq("tenant_id", currentOrganization.id)
         .maybeSingle();
 
       setStats({

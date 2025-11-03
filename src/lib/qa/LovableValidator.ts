@@ -11,8 +11,8 @@ interface ValidationResult {
 }
 
 interface ValidationIssue {
-  severity: 'critical' | 'high' | 'medium' | 'low';
-  type: 'infinite-loop' | 'memory-leak' | 'heavy-data' | 'missing-fallback' | 'console-spam';
+  severity: "critical" | "high" | "medium" | "low";
+  type: "infinite-loop" | "memory-leak" | "heavy-data" | "missing-fallback" | "console-spam";
   component: string;
   description: string;
   fix?: string;
@@ -71,7 +71,7 @@ class LovableValidatorClass {
     const endTime = performance.now();
     const totalTime = endTime - startTime;
 
-    const passed = this.issues.filter(i => i.severity === 'critical' || i.severity === 'high').length === 0;
+    const passed = this.issues.filter(i => i.severity === "critical" || i.severity === "high").length === 0;
 
     const result: ValidationResult = {
       passed,
@@ -86,7 +86,7 @@ class LovableValidatorClass {
     };
 
     console.log(`[LovableValidator] Validação concluída em ${totalTime.toFixed(2)}ms`);
-    console.log(`[LovableValidator] Status: ${passed ? '✅ PASS' : '❌ FAIL'}`);
+    console.log(`[LovableValidator] Status: ${passed ? "✅ PASS" : "❌ FAIL"}`);
     console.log(`[LovableValidator] Issues: ${this.issues.length} | Warnings: ${this.warnings.length}`);
 
     return result;
@@ -107,11 +107,11 @@ class LovableValidatorClass {
       
       if (timeDiff < 1000) {
         this.addIssue({
-          severity: 'critical',
-          type: 'infinite-loop',
+          severity: "critical",
+          type: "infinite-loop",
           component: componentName,
           description: `Detectado loop infinito: ${currentCount} renders em ${timeDiff}ms`,
-          fix: 'Verifique useEffect dependencies e atualizações de estado'
+          fix: "Verifique useEffect dependencies e atualizações de estado"
         });
       }
     }
@@ -192,11 +192,11 @@ class LovableValidatorClass {
     
     if (renderCount > maxReRenders) {
       this.addIssue({
-        severity: 'critical',
-        type: 'infinite-loop',
+        severity: "critical",
+        type: "infinite-loop",
         component: componentName,
         description: `Componente renderizou ${renderCount} vezes (limite: ${maxReRenders})`,
-        fix: 'Adicione dependências corretas ao useEffect ou use useCallback/useMemo'
+        fix: "Adicione dependências corretas ao useEffect ou use useCallback/useMemo"
       });
     }
   }
@@ -206,11 +206,11 @@ class LovableValidatorClass {
     
     if (renderTime > maxRenderTime) {
       this.addIssue({
-        severity: 'high',
-        type: 'memory-leak',
+        severity: "high",
+        type: "memory-leak",
         component: componentName,
         description: `Render time excedeu ${maxRenderTime}ms: ${renderTime.toFixed(2)}ms`,
-        fix: 'Otimize computações pesadas com useMemo e divida componente'
+        fix: "Otimize computações pesadas com useMemo e divida componente"
       });
     }
 
@@ -222,7 +222,7 @@ class LovableValidatorClass {
     let totalSize = 0;
     
     try {
-      for (let key in localStorage) {
+      for (const key in localStorage) {
         if (localStorage.hasOwnProperty(key)) {
           totalSize += localStorage[key].length + key.length;
         }
@@ -230,15 +230,15 @@ class LovableValidatorClass {
 
       if (totalSize > maxDataSize) {
         this.addIssue({
-          severity: 'medium',
-          type: 'heavy-data',
-          component: 'Global',
+          severity: "medium",
+          type: "heavy-data",
+          component: "Global",
           description: `Dados mockados excedem ${maxDataSize} bytes: ${totalSize} bytes`,
-          fix: 'Reduza quantidade de dados mockados ou use paginação'
+          fix: "Reduza quantidade de dados mockados ou use paginação"
         });
       }
     } catch (error) {
-      this.warnings.push('Não foi possível verificar tamanho de dados mockados');
+      this.warnings.push("Não foi possível verificar tamanho de dados mockados");
     }
 
     return totalSize;
@@ -247,11 +247,11 @@ class LovableValidatorClass {
   private checkUncleanedIntervals() {
     if (this.intervals.size > 0) {
       this.addIssue({
-        severity: 'high',
-        type: 'memory-leak',
-        component: 'Global',
+        severity: "high",
+        type: "memory-leak",
+        component: "Global",
         description: `${this.intervals.size} intervals não foram limpos`,
-        fix: 'Use clearInterval no cleanup do useEffect'
+        fix: "Use clearInterval no cleanup do useEffect"
       });
     }
   }
@@ -259,7 +259,7 @@ class LovableValidatorClass {
   private checkConsoleSpam() {
     // Hook into console.error to detect spam
     // Este é um placeholder - implementação real requer override de console
-    this.warnings.push('Console spam check não implementado (requer override de console)');
+    this.warnings.push("Console spam check não implementado (requer override de console)");
   }
 
   private getMemoryUsage(): number | undefined {
@@ -270,7 +270,7 @@ class LovableValidatorClass {
   }
 
   private getObjectDepth(obj: any, depth = 0): number {
-    if (obj === null || typeof obj !== 'object') return depth;
+    if (obj === null || typeof obj !== "object") return depth;
     
     const depths = Object.values(obj).map(value => 
       this.getObjectDepth(value, depth + 1)
@@ -282,9 +282,9 @@ class LovableValidatorClass {
   private addIssue(issue: ValidationIssue) {
     this.issues.push(issue);
     
-    const emoji = issue.severity === 'critical' ? '🔴' : 
-                  issue.severity === 'high' ? '🟠' : 
-                  issue.severity === 'medium' ? '🟡' : '🟢';
+    const emoji = issue.severity === "critical" ? "🔴" : 
+      issue.severity === "high" ? "🟠" : 
+        issue.severity === "medium" ? "🟡" : "🟢";
     
     console.warn(`${emoji} [${issue.severity.toUpperCase()}] ${issue.component}: ${issue.description}`);
     if (issue.fix) {

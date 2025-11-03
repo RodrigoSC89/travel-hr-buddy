@@ -6,7 +6,7 @@
 export interface CodeHealthReport {
   timestamp: Date;
   overallScore: number;
-  grade: 'A' | 'B' | 'C' | 'D' | 'F';
+  grade: "A" | "B" | "C" | "D" | "F";
   categories: {
     architecture: CategoryScore;
     performance: CategoryScore;
@@ -20,13 +20,13 @@ export interface CodeHealthReport {
 
 export interface CategoryScore {
   score: number;
-  grade: 'A' | 'B' | 'C' | 'D' | 'F';
+  grade: "A" | "B" | "C" | "D" | "F";
   issues: string[];
   strengths: string[];
 }
 
 export interface TechnicalDebtItem {
-  severity: 'low' | 'medium' | 'high' | 'critical';
+  severity: "low" | "medium" | "high" | "critical";
   category: string;
   description: string;
   estimatedEffort: string;
@@ -69,14 +69,14 @@ class CodeHealthAnalyzer {
     const strengths: string[] = [];
 
     // Check for proper separation of concerns
-    strengths.push('Modular architecture with clear separation (modules/, pages/, components/)');
-    strengths.push('Centralized context management (@/contexts)');
-    strengths.push('Dedicated services layer for business logic');
+    strengths.push("Modular architecture with clear separation (modules/, pages/, components/)");
+    strengths.push("Centralized context management (@/contexts)");
+    strengths.push("Dedicated services layer for business logic");
 
     // Check for potential issues
     const hasLargeComponents = false; // Would need static analysis
     if (hasLargeComponents) {
-      issues.push('Some components exceed 300 lines - consider splitting');
+      issues.push("Some components exceed 300 lines - consider splitting");
     }
 
     const score = this.calculateScore(strengths.length, issues.length, 10);
@@ -96,15 +96,15 @@ class CodeHealthAnalyzer {
     const issues: string[] = [];
     const strengths: string[] = [];
 
-    strengths.push('List virtualization implemented (98% performance gain)');
-    strengths.push('Lazy loading with React.lazy() and Suspense');
-    strengths.push('Image optimization with lazy loading');
-    strengths.push('Code splitting by route');
+    strengths.push("List virtualization implemented (98% performance gain)");
+    strengths.push("Lazy loading with React.lazy() and Suspense");
+    strengths.push("Image optimization with lazy loading");
+    strengths.push("Code splitting by route");
 
     // Check for potential issues
     const hasHeavyInitialBundle = false; // Would need bundle analysis
     if (hasHeavyInitialBundle) {
-      issues.push('Initial bundle size exceeds 500KB');
+      issues.push("Initial bundle size exceeds 500KB");
     }
 
     const score = this.calculateScore(strengths.length, issues.length, 8);
@@ -124,13 +124,13 @@ class CodeHealthAnalyzer {
     const issues: string[] = [];
     const strengths: string[] = [];
 
-    strengths.push('TypeScript for type safety');
-    strengths.push('Consistent design system with semantic tokens');
-    strengths.push('Reusable UI components (shadcn/ui)');
-    strengths.push('Clear naming conventions');
+    strengths.push("TypeScript for type safety");
+    strengths.push("Consistent design system with semantic tokens");
+    strengths.push("Reusable UI components (shadcn/ui)");
+    strengths.push("Clear naming conventions");
 
     // Check for code duplication
-    issues.push('Some duplicate logic could be extracted to shared utilities');
+    issues.push("Some duplicate logic could be extracted to shared utilities");
 
     const score = this.calculateScore(strengths.length, issues.length, 8);
 
@@ -149,12 +149,12 @@ class CodeHealthAnalyzer {
     const issues: string[] = [];
     const strengths: string[] = [];
 
-    strengths.push('E2E tests with Playwright');
-    strengths.push('Unit tests with Vitest');
-    strengths.push('Dedicated test environment setup');
+    strengths.push("E2E tests with Playwright");
+    strengths.push("Unit tests with Vitest");
+    strengths.push("Dedicated test environment setup");
 
-    issues.push('Test coverage could be expanded for critical business logic');
-    issues.push('Integration tests needed for complex workflows');
+    issues.push("Test coverage could be expanded for critical business logic");
+    issues.push("Integration tests needed for complex workflows");
 
     const score = this.calculateScore(strengths.length, issues.length, 6);
 
@@ -173,13 +173,13 @@ class CodeHealthAnalyzer {
     const issues: string[] = [];
     const strengths: string[] = [];
 
-    strengths.push('Comprehensive module documentation (docs/modules/)');
-    strengths.push('PATCH tracking with detailed changelogs');
-    strengths.push('JSDoc comments on key functions');
-    strengths.push('README files for complex modules');
+    strengths.push("Comprehensive module documentation (docs/modules/)");
+    strengths.push("PATCH tracking with detailed changelogs");
+    strengths.push("JSDoc comments on key functions");
+    strengths.push("README files for complex modules");
 
-    issues.push('Some older modules lack updated documentation');
-    issues.push('API documentation could be more detailed');
+    issues.push("Some older modules lack updated documentation");
+    issues.push("API documentation could be more detailed");
 
     const score = this.calculateScore(strengths.length, issues.length, 7);
 
@@ -202,11 +202,11 @@ class CodeHealthAnalyzer {
     // Critical debt items
     if (categories.testCoverage.score < 70) {
       debt.push({
-        severity: 'high',
-        category: 'Testing',
-        description: 'Test coverage below 70% increases risk of regressions',
-        estimatedEffort: '2-3 weeks',
-        impact: 'High - affects reliability and confidence in changes'
+        severity: "high",
+        category: "Testing",
+        description: "Test coverage below 70% increases risk of regressions",
+        estimatedEffort: "2-3 weeks",
+        impact: "High - affects reliability and confidence in changes"
       });
     }
 
@@ -214,22 +214,22 @@ class CodeHealthAnalyzer {
     Object.entries(categories).forEach(([category, data]) => {
       if (data.issues.length > 2) {
         debt.push({
-          severity: 'medium',
+          severity: "medium",
           category: category.charAt(0).toUpperCase() + category.slice(1),
           description: `${data.issues.length} issues identified in ${category}`,
-          estimatedEffort: '1-2 weeks',
-          impact: 'Medium - affects maintainability'
+          estimatedEffort: "1-2 weeks",
+          impact: "Medium - affects maintainability"
         });
       }
     });
 
     // Low priority improvements
     debt.push({
-      severity: 'low',
-      category: 'Optimization',
-      description: 'Further bundle size optimization opportunities',
-      estimatedEffort: '3-5 days',
-      impact: 'Low - incremental performance improvements'
+      severity: "low",
+      category: "Optimization",
+      description: "Further bundle size optimization opportunities",
+      estimatedEffort: "3-5 days",
+      impact: "Low - incremental performance improvements"
     });
 
     return debt.sort((a, b) => {
@@ -248,28 +248,28 @@ class CodeHealthAnalyzer {
     const recommendations: string[] = [];
 
     // Priority recommendations based on technical debt
-    const criticalDebt = debt.filter(d => d.severity === 'critical' || d.severity === 'high');
+    const criticalDebt = debt.filter(d => d.severity === "critical" || d.severity === "high");
     if (criticalDebt.length > 0) {
       recommendations.push(`Address ${criticalDebt.length} high-priority technical debt items`);
     }
 
     // Category-specific recommendations
     if (categories.testCoverage.score < 80) {
-      recommendations.push('Increase test coverage to 80%+ for critical paths');
+      recommendations.push("Increase test coverage to 80%+ for critical paths");
     }
 
     if (categories.performance.score < 85) {
-      recommendations.push('Run Lighthouse audit to identify performance bottlenecks');
+      recommendations.push("Run Lighthouse audit to identify performance bottlenecks");
     }
 
     if (categories.documentation.score < 85) {
-      recommendations.push('Update documentation for recently modified modules');
+      recommendations.push("Update documentation for recently modified modules");
     }
 
     // Best practices
-    recommendations.push('Schedule weekly code quality reviews');
-    recommendations.push('Implement automated quality gates in CI/CD');
-    recommendations.push('Consider pair programming for complex features');
+    recommendations.push("Schedule weekly code quality reviews");
+    recommendations.push("Implement automated quality gates in CI/CD");
+    recommendations.push("Consider pair programming for complex features");
 
     return recommendations.slice(0, 5); // Top 5 recommendations
   }
@@ -296,12 +296,12 @@ class CodeHealthAnalyzer {
   /**
    * Convert score to letter grade
    */
-  private scoreToGrade(score: number): 'A' | 'B' | 'C' | 'D' | 'F' {
-    if (score >= 90) return 'A';
-    if (score >= 80) return 'B';
-    if (score >= 70) return 'C';
-    if (score >= 60) return 'D';
-    return 'F';
+  private scoreToGrade(score: number): "A" | "B" | "C" | "D" | "F" {
+    if (score >= 90) return "A";
+    if (score >= 80) return "B";
+    if (score >= 70) return "C";
+    if (score >= 60) return "D";
+    return "F";
   }
 }
 

@@ -28,11 +28,11 @@ export function Patch151Validation() {
         vesselName: "Test Vessel",
         imoNumber: "IMO1234567",
         issuedBy: "Test Authority",
-        expiryDate: new Date(Date.now() + 365 * 24 * 60 * 60 * 1000).toISOString().split('T')[0],
+        expiryDate: new Date(Date.now() + 365 * 24 * 60 * 60 * 1000).toISOString().split("T")[0],
         portName: "Test Port",
         operationType: "Safety Inspection",
         inspectorName: "John Doe",
-        inspectionDate: new Date().toISOString().split('T')[0],
+        inspectionDate: new Date().toISOString().split("T")[0],
         findings: ["All systems operational", "Safety protocols verified"],
         status: "compliant" as const
       };
@@ -44,7 +44,7 @@ export function Patch151Validation() {
       testResults["sha256_hash"] = !!(issuedCert.hash && issuedCert.hash.length === 64);
       
       // Test 3: QR code generation
-      testResults["qr_code_generation"] = !!(issuedCert.qrCode && issuedCert.qrCode.startsWith('data:image'));
+      testResults["qr_code_generation"] = !!(issuedCert.qrCode && issuedCert.qrCode.startsWith("data:image"));
       
       // Test 4: Certificate validation
       const validation = await validateCertificate(issuedCert.id, issuedCert.hash);

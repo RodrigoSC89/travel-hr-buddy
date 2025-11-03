@@ -44,7 +44,7 @@ const fetcher = async (): Promise<SystemStats> => {
 
     // Calculate system health (0-100)
     const systemHealth = healthData?.status === "healthy" ? 95 : 
-                         healthData?.status === "degraded" ? 70 : 50;
+      healthData?.status === "degraded" ? 70 : 50;
 
     // Count active modules
     const { count: activeModules } = await supabase

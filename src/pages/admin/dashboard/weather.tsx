@@ -59,16 +59,16 @@ export default function WeatherDashboard() {
     labels: weatherData?.map(w => w.location.name) || [],
     datasets: [
       {
-        label: 'Temperature (°C)',
+        label: "Temperature (°C)",
         data: weatherData?.map(w => w.temperature) || [],
-        borderColor: 'rgb(255, 99, 132)',
-        backgroundColor: 'rgba(255, 99, 132, 0.5)',
+        borderColor: "rgb(255, 99, 132)",
+        backgroundColor: "rgba(255, 99, 132, 0.5)",
       },
       {
-        label: 'Wind Speed (m/s)',
+        label: "Wind Speed (m/s)",
         data: weatherData?.map(w => w.windSpeed) || [],
-        borderColor: 'rgb(53, 162, 235)',
-        backgroundColor: 'rgba(53, 162, 235, 0.5)',
+        borderColor: "rgb(53, 162, 235)",
+        backgroundColor: "rgba(53, 162, 235, 0.5)",
       },
     ],
   };
@@ -89,10 +89,10 @@ export default function WeatherDashboard() {
         {weatherData?.map((weather) => {
           const severity = getWeatherSeverity(weather);
           const severityColor = {
-            safe: 'default',
-            caution: 'secondary',
-            warning: 'outline',
-            danger: 'destructive',
+            safe: "default",
+            caution: "secondary",
+            warning: "outline",
+            danger: "destructive",
           }[severity] as any;
 
           return (

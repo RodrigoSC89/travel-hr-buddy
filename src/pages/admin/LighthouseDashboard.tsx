@@ -3,11 +3,11 @@
  * PATCH 543 - Monitor Lighthouse CI scores & Core Web Vitals
  */
 
-import { useState } from 'react';
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
-import { Badge } from '@/components/ui/badge';
-import { Button } from '@/components/ui/button';
-import { Alert, AlertDescription, AlertTitle } from '@/components/ui/alert';
+import { useState } from "react";
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
+import { Badge } from "@/components/ui/badge";
+import { Button } from "@/components/ui/button";
+import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert";
 import { 
   Activity,
   AlertCircle,
@@ -17,7 +17,7 @@ import {
   Smartphone,
   TrendingUp,
   Zap
-} from 'lucide-react';
+} from "lucide-react";
 
 interface LighthouseScore {
   category: string;
@@ -31,117 +31,117 @@ interface WebVital {
   name: string;
   value: string;
   target: string;
-  status: 'good' | 'needs-improvement' | 'poor';
+  status: "good" | "needs-improvement" | "poor";
   description: string;
 }
 
 export default function LighthouseDashboard() {
   const [scores] = useState<LighthouseScore[]>([
     {
-      category: 'Performance',
+      category: "Performance",
       score: 92,
       target: 85,
       icon: <Zap className="h-5 w-5" />,
-      description: 'Overall page speed & optimization'
+      description: "Overall page speed & optimization"
     },
     {
-      category: 'Accessibility',
+      category: "Accessibility",
       score: 95,
       target: 90,
       icon: <Activity className="h-5 w-5" />,
-      description: 'WCAG compliance & screen readers'
+      description: "WCAG compliance & screen readers"
     },
     {
-      category: 'Best Practices',
+      category: "Best Practices",
       score: 88,
       target: 85,
       icon: <CheckCircle className="h-5 w-5" />,
-      description: 'Security, HTTPS, console errors'
+      description: "Security, HTTPS, console errors"
     },
     {
-      category: 'SEO',
+      category: "SEO",
       score: 96,
       target: 90,
       icon: <TrendingUp className="h-5 w-5" />,
-      description: 'Search engine optimization'
+      description: "Search engine optimization"
     },
     {
-      category: 'PWA',
+      category: "PWA",
       score: 85,
       target: 80,
       icon: <Smartphone className="h-5 w-5" />,
-      description: 'Progressive Web App features'
+      description: "Progressive Web App features"
     }
   ]);
 
   const [webVitals] = useState<WebVital[]>([
     {
-      name: 'LCP',
-      value: '1.8s',
-      target: '< 2.5s',
-      status: 'good',
-      description: 'Largest Contentful Paint - Main content load time'
+      name: "LCP",
+      value: "1.8s",
+      target: "< 2.5s",
+      status: "good",
+      description: "Largest Contentful Paint - Main content load time"
     },
     {
-      name: 'FID',
-      value: '45ms',
-      target: '< 100ms',
-      status: 'good',
-      description: 'First Input Delay - Interactivity responsiveness'
+      name: "FID",
+      value: "45ms",
+      target: "< 100ms",
+      status: "good",
+      description: "First Input Delay - Interactivity responsiveness"
     },
     {
-      name: 'CLS',
-      value: '0.05',
-      target: '< 0.1',
-      status: 'good',
-      description: 'Cumulative Layout Shift - Visual stability'
+      name: "CLS",
+      value: "0.05",
+      target: "< 0.1",
+      status: "good",
+      description: "Cumulative Layout Shift - Visual stability"
     },
     {
-      name: 'FCP',
-      value: '1.2s',
-      target: '< 1.8s',
-      status: 'good',
-      description: 'First Contentful Paint - First element render'
+      name: "FCP",
+      value: "1.2s",
+      target: "< 1.8s",
+      status: "good",
+      description: "First Contentful Paint - First element render"
     },
     {
-      name: 'TTFB',
-      value: '350ms',
-      target: '< 600ms',
-      status: 'good',
-      description: 'Time to First Byte - Server response time'
+      name: "TTFB",
+      value: "350ms",
+      target: "< 600ms",
+      status: "good",
+      description: "Time to First Byte - Server response time"
     },
     {
-      name: 'TBT',
-      value: '180ms',
-      target: '< 300ms',
-      status: 'good',
-      description: 'Total Blocking Time - Main thread blocking'
+      name: "TBT",
+      value: "180ms",
+      target: "< 300ms",
+      status: "good",
+      description: "Total Blocking Time - Main thread blocking"
     }
   ]);
 
   const getScoreColor = (score: number, target: number): string => {
-    if (score >= target) return 'text-green-600';
-    if (score >= target - 10) return 'text-yellow-600';
-    return 'text-red-600';
+    if (score >= target) return "text-green-600";
+    if (score >= target - 10) return "text-yellow-600";
+    return "text-red-600";
   };
 
   const getScoreBadge = (score: number, target: number): string => {
-    if (score >= target) return 'default';
-    if (score >= target - 10) return 'secondary';
-    return 'destructive';
+    if (score >= target) return "default";
+    if (score >= target - 10) return "secondary";
+    return "destructive";
   };
 
   const getVitalStatusColor = (status: string): string => {
     switch (status) {
-      case 'good': return 'text-green-600';
-      case 'needs-improvement': return 'text-yellow-600';
-      case 'poor': return 'text-red-600';
-      default: return 'text-muted-foreground';
+    case "good": return "text-green-600";
+    case "needs-improvement": return "text-yellow-600";
+    case "poor": return "text-red-600";
+    default: return "text-muted-foreground";
     }
   };
 
   const runLocalAudit = () => {
-    window.open('/docs/LIGHTHOUSE_GUIDE.md', '_blank');
+    window.open("/docs/LIGHTHOUSE_GUIDE.md", "_blank");
   };
 
   return (
@@ -205,7 +205,7 @@ export default function LighthouseDashboard() {
                     </p>
                   </div>
                   <Badge variant={getScoreBadge(score.score, score.target) as any}>
-                    {score.score >= score.target ? 'Passing' : 'Needs Work'}
+                    {score.score >= score.target ? "Passing" : "Needs Work"}
                   </Badge>
                   <p className="text-xs text-muted-foreground">
                     {score.description}
@@ -237,7 +237,7 @@ export default function LighthouseDashboard() {
               >
                 <div className="flex items-center justify-between">
                   <div className="font-bold text-lg">{vital.name}</div>
-                  <Badge variant={vital.status === 'good' ? 'default' : 'secondary'}>
+                  <Badge variant={vital.status === "good" ? "default" : "secondary"}>
                     {vital.status}
                   </Badge>
                 </div>
