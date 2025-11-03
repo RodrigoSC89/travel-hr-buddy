@@ -119,9 +119,10 @@ export async function analyzeFlightOffers(
 
 /**
  * Parse duration string to minutes
+ * Handles formats like "2h", "2h 30m", "2h30m"
  */
 function parseDuration(duration: string): number {
-  const matches = duration.match(/(\d+)h\s*(\d+)?m?/);
+  const matches = duration.match(/(\d+)h(?:\s*(\d+)m)?/);
   if (!matches) return 0;
   
   const hours = parseInt(matches[1]) || 0;
@@ -131,6 +132,8 @@ function parseDuration(duration: string): number {
 
 /**
  * Calculate combined score for an offer
+ * Weighted combination: 40% price, 40% duration, 20% stops
+ * This provides balanced recommendations unless user specifies preference
  */
 function calculateScore(
   offer: FlightOffer,
@@ -141,7 +144,7 @@ function calculateScore(
   const durationScore = 1 - (parseDuration(offer.duration) - bestDurationMinutes) / bestDurationMinutes;
   const stopScore = offer.stops === 0 ? 1 : 1 / (offer.stops + 1);
   
-  // Weighted combination: 40% price, 40% duration, 20% stops
+  // Note: Weights can be adjusted based on user preferences in future versions
   return priceScore * 0.4 + durationScore * 0.4 + stopScore * 0.2;
 }
 

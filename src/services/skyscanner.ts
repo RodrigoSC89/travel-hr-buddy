@@ -41,6 +41,61 @@ export interface FlightSearchResult {
 }
 
 /**
+ * Skyscanner API v3 Response Types
+ */
+interface SkyscannerItinerary {
+  id: string;
+  legs?: Array<{
+    carriers?: {
+      marketing?: Array<{ name: string }>;
+    };
+    durationInMinutes?: number;
+    stopCount?: number;
+    departure?: string;
+    arrival?: string;
+  }>;
+  pricingOptions?: Array<{
+    price: {
+      amount: number;
+      unit: string;
+    };
+    items?: Array<{
+      deepLink?: string;
+    }>;
+  }>;
+}
+
+interface SkyscannerSearchResponse {
+  content?: {
+    results?: {
+      itineraries?: Record<string, SkyscannerItinerary>;
+    };
+  };
+}
+
+/**
+ * Helper function to parse date string into components
+ */
+function parseDateToComponents(dateString: string): { year: number; month: number; day: number } | null {
+  const parts = dateString.split('-');
+  if (parts.length !== 3) {
+    console.error('Invalid date format. Expected YYYY-MM-DD');
+    return null;
+  }
+  
+  const year = parseInt(parts[0]);
+  const month = parseInt(parts[1]);
+  const day = parseInt(parts[2]);
+  
+  if (isNaN(year) || isNaN(month) || isNaN(day)) {
+    console.error('Invalid date components');
+    return null;
+  }
+  
+  return { year, month, day };
+}
+
+/**
  * Test Skyscanner API connectivity
  * Note: Skyscanner requires RapidAPI key
  */
@@ -160,24 +215,46 @@ export async function searchFlights(params: FlightSearchParams): Promise<FlightS
         market: 'BR',
         locale: 'pt-BR',
         currency: 'BRL',
-        queryLegs: [
-          {
-            originPlaceId: { iata: origin },
-            destinationPlaceId: { iata: destination },
-            date: { year: parseInt(departureDate.split('-')[0]), month: parseInt(departureDate.split('-')[1]), day: parseInt(departureDate.split('-')[2]) },
-          },
-        ],
+        queryLegs: [] as Array<{
+          originPlaceId: { iata: string };
+          destinationPlaceId: { iata: string };
+          date: { year: number; month: number; day: number };
+        }>,
         cabinClass: cabinClass.toUpperCase(),
         adults,
         children,
       },
     };
 
+    const departureComponents = parseDateToComponents(departureDate);
+    if (!departureComponents) {
+      return {
+        success: false,
+        offers: [],
+        error: 'Invalid departure date format. Use YYYY-MM-DD.',
+      };
+    }
+
+    requestBody.query.queryLegs.push({
+      originPlaceId: { iata: origin },
+      destinationPlaceId: { iata: destination },
+      date: departureComponents,
+    });
+
     if (returnDate) {
+      const returnComponents = parseDateToComponents(returnDate);
+      if (!returnComponents) {
+        return {
+          success: false,
+          offers: [],
+          error: 'Invalid return date format. Use YYYY-MM-DD.',
+        };
+      }
+      
       requestBody.query.queryLegs.push({
         originPlaceId: { iata: destination },
         destinationPlaceId: { iata: origin },
-        date: { year: parseInt(returnDate.split('-')[0]), month: parseInt(returnDate.split('-')[1]), day: parseInt(returnDate.split('-')[2]) },
+        date: returnComponents,
       });
     }
 
@@ -199,13 +276,13 @@ export async function searchFlights(params: FlightSearchParams): Promise<FlightS
       };
     }
 
-    const data = await response.json();
+    const data: SkyscannerSearchResponse = await response.json();
     
-    // Parse Skyscanner response (structure may vary)
+    // Parse Skyscanner response
     const offers: FlightOffer[] = [];
     
     if (data.content?.results?.itineraries) {
-      Object.values(data.content.results.itineraries).forEach((itinerary: any) => {
+      Object.values(data.content.results.itineraries).forEach((itinerary: SkyscannerItinerary) => {
         if (itinerary.pricingOptions && itinerary.pricingOptions.length > 0) {
           const pricing = itinerary.pricingOptions[0];
           offers.push({

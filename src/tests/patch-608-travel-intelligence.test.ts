@@ -100,7 +100,6 @@ describe('PATCH 608 - Deep Link Builder', () => {
 describe('PATCH 608 - LLM Flight Advisor', () => {
   it('should identify best price offer', async () => {
     const { analyzeFlightOffers } = await import('@/lib/travel/LLMFlightAdvisor');
-    const { FlightOffer } = await import('@/services/skyscanner');
 
     const mockOffers: any[] = [
       {

@@ -40,6 +40,36 @@ export interface HotelSearchResult {
 }
 
 /**
+ * Booking.com API Response Types
+ */
+interface BookingDestination {
+  dest_id: string;
+  dest_type: string;
+  name: string;
+}
+
+interface BookingHotel {
+  hotel_id: string;
+  hotel_name: string;
+  min_total_price?: number;
+  price_breakdown?: {
+    gross_price?: {
+      value?: number;
+    };
+  };
+  currency_code?: string;
+  class?: number;
+  review_score?: number;
+  address?: string;
+  main_photo_url?: string;
+  url?: string;
+}
+
+interface BookingSearchResponse {
+  result?: BookingHotel[];
+}
+
+/**
  * Test Booking.com API connectivity
  * Note: Booking.com requires RapidAPI key or official API access
  */
@@ -173,7 +203,7 @@ export async function searchHotels(params: HotelSearchParams): Promise<HotelSear
       };
     }
 
-    const destData = await destResponse.json();
+    const destData: BookingDestination[] = await destResponse.json();
     const destId = destData[0]?.dest_id;
 
     if (!destId) {
@@ -213,13 +243,13 @@ export async function searchHotels(params: HotelSearchParams): Promise<HotelSear
       };
     }
 
-    const data = await response.json();
+    const data: BookingSearchResponse = await response.json();
     
     // Parse Booking.com response
     const offers: HotelOffer[] = [];
     
     if (data.result) {
-      data.result.forEach((hotel: any) => {
+      data.result.forEach((hotel: BookingHotel) => {
         offers.push({
           id: hotel.hotel_id,
           name: hotel.hotel_name,
