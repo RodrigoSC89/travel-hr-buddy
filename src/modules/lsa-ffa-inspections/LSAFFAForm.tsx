@@ -147,7 +147,11 @@ export function LSAFFAForm({ inspection, vesselId, vesselName, onSave, onCancel 
 
   const handleSave = async () => {
     if (!inspector.trim()) {
-      alert("Please enter inspector name");
+      toast({
+        title: "Validation Error",
+        description: "Please enter inspector name",
+        variant: "destructive",
+      });
       return;
     }
 
@@ -174,7 +178,11 @@ export function LSAFFAForm({ inspection, vesselId, vesselName, onSave, onCancel 
       await onSave(inspectionData);
     } catch (error) {
       console.error("Failed to save inspection:", error);
-      alert("Failed to save inspection");
+      toast({
+        title: "Save Error",
+        description: error instanceof Error ? error.message : "Failed to save inspection",
+        variant: "destructive",
+      });
     } finally {
       setSaving(false);
     }
@@ -182,7 +190,11 @@ export function LSAFFAForm({ inspection, vesselId, vesselName, onSave, onCancel 
 
   const handleExportPDF = async () => {
     if (!inspection) {
-      alert("Please save the inspection first");
+      toast({
+        title: "Export Error",
+        description: "Please save the inspection first",
+        variant: "destructive",
+      });
       return;
     }
 
@@ -190,7 +202,11 @@ export function LSAFFAForm({ inspection, vesselId, vesselName, onSave, onCancel 
       await downloadInspectionReport(inspection, vesselName);
     } catch (error) {
       console.error("Failed to export PDF:", error);
-      alert("Failed to export PDF");
+      toast({
+        title: "Export Error",
+        description: "Failed to export PDF report",
+        variant: "destructive",
+      });
     }
   };
 

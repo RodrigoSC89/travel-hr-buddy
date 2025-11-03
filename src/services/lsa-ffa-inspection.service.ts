@@ -34,7 +34,11 @@ class LSAFFAInspectionService {
       .single();
 
     if (error) {
-      if (error.code === "PGRST116") return null; // Not found
+      if (error.code === "PGRST116") {
+        console.warn(`Inspection not found: ${id}`);
+        return null; // Not found
+      }
+      console.error(`Failed to fetch inspection ${id}:`, error);
       throw error;
     }
 
@@ -216,7 +220,9 @@ class LSAFFAInspectionService {
     issueId: string
   ): Promise<LSAFFAInspection> {
     const inspection = await this.getInspectionById(inspectionId);
-    if (!inspection) throw new Error("Inspection not found");
+    if (!inspection) {
+      throw new Error(`Inspection not found: ${inspectionId}`);
+    }
 
     const updatedIssues = inspection.issues_found.map((issue) =>
       issue.id === issueId

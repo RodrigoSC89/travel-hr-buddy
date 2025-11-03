@@ -378,7 +378,14 @@ export async function downloadInspectionReport(
   const url = URL.createObjectURL(blob);
   const link = document.createElement("a");
   link.href = url;
-  link.download = `${inspection.type}-Inspection-${vesselName}-${new Date(inspection.date).toISOString().split("T")[0]}.pdf`;
+  
+  // Sanitize vessel name for filename
+  const sanitizedVesselName = vesselName
+    .replace(/[^a-z0-9]/gi, "_")
+    .replace(/_+/g, "_")
+    .substring(0, 50);
+  
+  link.download = `${inspection.type}-Inspection-${sanitizedVesselName}-${new Date(inspection.date).toISOString().split("T")[0]}.pdf`;
   link.click();
   URL.revokeObjectURL(url);
 }

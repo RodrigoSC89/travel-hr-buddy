@@ -34,15 +34,29 @@ export function validateSignatureFormat(signatureData: string): boolean {
 
 /**
  * Create signature hash for verification
+ * Uses Web Crypto API for secure hashing
  */
-export function createSignatureHash(
+export async function createSignatureHash(
   inspectionId: string,
   inspector: string,
   timestamp: string
-): string {
+): Promise<string> {
   const data = `${inspectionId}:${inspector}:${timestamp}`;
   
-  // Simple hash function (in production, use crypto.subtle.digest)
+  // Use crypto.subtle.digest for production
+  if (typeof window !== "undefined" && window.crypto && window.crypto.subtle) {
+    try {
+      const encoder = new TextEncoder();
+      const dataBuffer = encoder.encode(data);
+      const hashBuffer = await window.crypto.subtle.digest("SHA-256", dataBuffer);
+      const hashArray = Array.from(new Uint8Array(hashBuffer));
+      return hashArray.map((b) => b.toString(16).padStart(2, "0")).join("");
+    } catch (error) {
+      console.warn("Crypto API not available, using fallback hash");
+    }
+  }
+  
+  // Fallback for environments without crypto.subtle
   let hash = 0;
   for (let i = 0; i < data.length; i++) {
     const char = data.charCodeAt(i);

@@ -93,7 +93,7 @@ Format your response as JSON with this structure:
 }`;
 
       const response = await openai.chat.completions.create({
-        model: "gpt-4-turbo-preview",
+        model: import.meta.env.VITE_OPENAI_MODEL || "gpt-4-turbo-preview",
         messages: [
           {
             role: "system",
