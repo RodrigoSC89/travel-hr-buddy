@@ -17,10 +17,15 @@ describe('Travel Intelligence Module', () => {
     // Click on Flights tab
     cy.contains('Flights').click();
     
+    // Use future date for testing
+    const futureDate = new Date();
+    futureDate.setDate(futureDate.getDate() + 30);
+    const dateString = futureDate.toISOString().split('T')[0];
+    
     // Fill in search form
     cy.get('#origin').type('GRU');
     cy.get('#destination').type('GIG');
-    cy.get('#departureDate').type('2024-12-15');
+    cy.get('#departureDate').type(dateString);
     cy.get('#passengers').clear().type('2');
     
     // Submit search
@@ -38,10 +43,16 @@ describe('Travel Intelligence Module', () => {
     // Click on Hotels tab
     cy.contains('Hotels').click();
     
+    // Use future dates for testing
+    const checkInDate = new Date();
+    checkInDate.setDate(checkInDate.getDate() + 30);
+    const checkOutDate = new Date();
+    checkOutDate.setDate(checkOutDate.getDate() + 35);
+    
     // Fill in hotel search
     cy.get('#hotelDestination').type('Rio de Janeiro');
-    cy.get('#checkIn').type('2024-12-15');
-    cy.get('#checkOut').type('2024-12-20');
+    cy.get('#checkIn').type(checkInDate.toISOString().split('T')[0]);
+    cy.get('#checkOut').type(checkOutDate.toISOString().split('T')[0]);
     
     // Submit search
     cy.contains('button', 'Search Hotels').click();
@@ -81,9 +92,14 @@ describe('Travel Intelligence Module', () => {
 
   it('should add flight to favorites', () => {
     cy.contains('Flights').click();
+    
+    const futureDate = new Date();
+    futureDate.setDate(futureDate.getDate() + 30);
+    const dateString = futureDate.toISOString().split('T')[0];
+    
     cy.get('#origin').type('GRU');
     cy.get('#destination').type('GIG');
-    cy.get('#departureDate').type('2024-12-15');
+    cy.get('#departureDate').type(dateString);
     cy.contains('button', 'Search Flights').click();
     
     // Wait for results and add to favorites
@@ -96,9 +112,14 @@ describe('Travel Intelligence Module', () => {
 
   it('should open airline deep link', () => {
     cy.contains('Flights').click();
+    
+    const futureDate = new Date();
+    futureDate.setDate(futureDate.getDate() + 30);
+    const dateString = futureDate.toISOString().split('T')[0];
+    
     cy.get('#origin').type('GRU');
     cy.get('#destination').type('GIG');
-    cy.get('#departureDate').type('2024-12-15');
+    cy.get('#departureDate').type(dateString);
     cy.contains('button', 'Search Flights').click();
     
     cy.contains('Search Results', { timeout: 3000 }).should('exist');

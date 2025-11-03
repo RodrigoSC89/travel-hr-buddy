@@ -105,6 +105,8 @@ export default function FlightSearch() {
   };
 
   const addToFavorites = (flight: any) => {
+    // TODO: Implement actual save to Supabase favorites table
+    // For now, just show toast
     toast({
       title: "Added to Favorites",
       description: `${flight.airline} flight saved`,

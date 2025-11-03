@@ -97,6 +97,8 @@ export default function HotelSearch() {
   };
 
   const addToFavorites = (hotel: any) => {
+    // TODO: Implement actual save to Supabase favorites table
+    // For now, just show toast
     toast({
       title: "Added to Favorites",
       description: `${hotel.name} saved`,

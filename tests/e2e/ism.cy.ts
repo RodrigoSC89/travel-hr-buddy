@@ -16,9 +16,12 @@ describe('ISM Audit Module', () => {
   it('should upload and process an ISM audit PDF', () => {
     cy.contains('Upload Audit').click();
     
+    // Use current date
+    const currentDate = new Date().toISOString().split('T')[0];
+    
     // Fill in audit details
     cy.get('#vesselName').type('MV Oceanic');
-    cy.get('#auditDate').type('2024-11-01');
+    cy.get('#auditDate').type(currentDate);
     
     // Select audit type
     cy.get('#auditType').parent().click();
@@ -49,8 +52,10 @@ describe('ISM Audit Module', () => {
   it('should show audit checklist after processing', () => {
     cy.contains('Upload Audit').click();
     
+    const currentDate = new Date().toISOString().split('T')[0];
+    
     cy.get('#vesselName').type('MV Test Vessel');
-    cy.get('#auditDate').type('2024-11-01');
+    cy.get('#auditDate').type(currentDate);
     cy.get('#auditType').parent().click();
     cy.contains('External Audit').click();
     

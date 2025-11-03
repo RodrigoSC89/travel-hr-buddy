@@ -62,6 +62,9 @@ export default function ISMAuditUpload() {
       setExtractedText(text);
       
       setProgress(70);
+      
+      // Clean up object URL to prevent memory leak
+      URL.revokeObjectURL(imageUrl);
       await worker.terminate();
 
       // Step 2: AI Analysis (mock)
