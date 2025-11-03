@@ -67,6 +67,7 @@ const ForecastPage = safeLazyImport(() => import("@/pages/Forecast"));
 const ForecastGlobal = safeLazyImport(() => import("@/pages/ForecastGlobal"));
 const MaintenanceDashboard = safeLazyImport(() => import("@/pages/Maintenance"));
 const ComplianceHub = safeLazyImport(() => import("@/pages/compliance/ComplianceHub"));
+const PrePSCDashboard = safeLazyImport(() => import("@/pages/compliance/PrePSCDashboard"));
 const DPIntelligenceCenter = safeLazyImport(() => import("@/modules/intelligence/dp-intelligence"));
 const Innovation = safeLazyImport(() => import("@/pages/Innovation"));
 const Optimization = safeLazyImport(() => import("@/pages/Optimization"));
@@ -659,6 +660,7 @@ function App() {
                       <Route path="/forecast-global" element={<ForecastGlobal />} />
                       <Route path="/maintenance" element={<MaintenanceDashboard />} />
                       <Route path="/compliance" element={<ComplianceHub />} />
+                      <Route path="/compliance/pre-psc" element={<PrePSCDashboard />} />
                       <Route path="/control-hub" element={<ControlHub />} />
                       <Route path="/vault-ai" element={<VaultAI />} />
                       <Route path="/admin/vault-ai-search" element={<VaultAIComplete />} />
