@@ -90,7 +90,7 @@ export function InspectionsList({ onSelectInspection, onStatsUpdate }: Inspectio
           <CardHeader>
             <div className="flex items-center justify-between">
               <CardTitle className="text-lg">
-                {inspection.inspection_type.replace(/_/g, ' ').toUpperCase()}
+                {inspection.inspection_type.replace(/_/g, " ").toUpperCase()}
               </CardTitle>
               <Badge className={getStatusColor(inspection.status)}>
                 {inspection.status}

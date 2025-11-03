@@ -21,10 +21,10 @@ declare global {
     credentialType?: RTCIceCredentialType;
   }
 
-  type RTCIceTransportPolicy = 'all' | 'relay';
-  type RTCBundlePolicy = 'balanced' | 'max-compat' | 'max-bundle';
-  type RTCRtcpMuxPolicy = 'require';
-  type RTCIceCredentialType = 'password' | 'oauth';
+  type RTCIceTransportPolicy = "all" | "relay";
+  type RTCBundlePolicy = "balanced" | "max-compat" | "max-bundle";
+  type RTCRtcpMuxPolicy = "require";
+  type RTCIceCredentialType = "password" | "oauth";
 
   interface RTCPeerConnectionIceEvent extends Event {
     candidate: RTCIceCandidate | null;
@@ -74,10 +74,10 @@ declare global {
     usernameFragment?: string;
   }
 
-  type RTCIceComponent = 'rtp' | 'rtcp';
-  type RTCIceProtocol = 'udp' | 'tcp';
-  type RTCIceCandidateType = 'host' | 'srflx' | 'prflx' | 'relay';
-  type RTCIceTcpCandidateType = 'active' | 'passive' | 'so';
+  type RTCIceComponent = "rtp" | "rtcp";
+  type RTCIceProtocol = "udp" | "tcp";
+  type RTCIceCandidateType = "host" | "srflx" | "prflx" | "relay";
+  type RTCIceTcpCandidateType = "active" | "passive" | "so";
 
   interface RTCSessionDescription {
     type: RTCSdpType;
@@ -90,7 +90,7 @@ declare global {
     sdp?: string;
   }
 
-  type RTCSdpType = 'offer' | 'pranswer' | 'answer' | 'rollback';
+  type RTCSdpType = "offer" | "pranswer" | "answer" | "rollback";
 
   interface RTCOfferOptions {
     voiceActivityDetection?: boolean;
@@ -130,8 +130,8 @@ declare global {
     send(data: ArrayBufferView): void;
   }
 
-  type RTCDataChannelState = 'connecting' | 'open' | 'closing' | 'closed';
-  type BinaryType = 'blob' | 'arraybuffer';
+  type RTCDataChannelState = "connecting" | "open" | "closing" | "closed";
+  type BinaryType = "blob" | "arraybuffer";
 
   interface RTCDataChannelInit {
     ordered?: boolean;
@@ -152,7 +152,7 @@ declare global {
     setCodecPreferences(codecs: RTCRtpCodecCapability[]): void;
   }
 
-  type RTCRtpTransceiverDirection = 'sendrecv' | 'sendonly' | 'recvonly' | 'inactive';
+  type RTCRtpTransceiverDirection = "sendrecv" | "sendonly" | "recvonly" | "inactive";
 
   interface RTCRtpSender {
     track: MediaStreamTrack | null;
@@ -199,8 +199,8 @@ declare global {
     scaleResolutionDownBy?: number;
   }
 
-  type RTCDtxStatus = 'disabled' | 'enabled';
-  type RTCPriorityType = 'very-low' | 'low' | 'medium' | 'high';
+  type RTCDtxStatus = "disabled" | "enabled";
+  type RTCPriorityType = "very-low" | "low" | "medium" | "high";
 
   interface RTCRtpHeaderExtensionParameters {
     uri: string;
@@ -246,7 +246,7 @@ declare global {
     onerror: ((this: RTCDtlsTransport, ev: Event) => unknown) | null;
   }
 
-  type RTCDtlsTransportState = 'new' | 'connecting' | 'connected' | 'closed' | 'failed';
+  type RTCDtlsTransportState = "new" | "connecting" | "connected" | "closed" | "failed";
 
   interface RTCIceTransport extends EventTarget {
     role: RTCIceRole;
@@ -263,9 +263,9 @@ declare global {
     onselectedcandidatepairchange: ((this: RTCIceTransport, ev: Event) => unknown) | null;
   }
 
-  type RTCIceRole = 'controlling' | 'controlled';
-  type RTCIceTransportState = 'new' | 'checking' | 'connected' | 'completed' | 'disconnected' | 'failed' | 'closed';
-  type RTCIceGathererState = 'new' | 'gathering' | 'complete';
+  type RTCIceRole = "controlling" | "controlled";
+  type RTCIceTransportState = "new" | "checking" | "connected" | "completed" | "disconnected" | "failed" | "closed";
+  type RTCIceGathererState = "new" | "gathering" | "complete";
 
   interface RTCIceCandidatePair {
     local: RTCIceCandidate;

@@ -5,28 +5,28 @@
  */
 
 export type ForecastType = 
-  | 'demand'
-  | 'maintenance'
-  | 'cost'
-  | 'performance'
-  | 'risk'
-  | 'efficiency'
-  | 'custom';
+  | "demand"
+  | "maintenance"
+  | "cost"
+  | "performance"
+  | "risk"
+  | "efficiency"
+  | "custom";
 
 export type EntityType = 
-  | 'vessel'
-  | 'crew'
-  | 'component'
-  | 'system'
-  | 'route'
-  | 'job'
-  | 'custom';
+  | "vessel"
+  | "crew"
+  | "component"
+  | "system"
+  | "route"
+  | "job"
+  | "custom";
 
 export type ForecastStatus = 
-  | 'pending'
-  | 'confirmed'
-  | 'invalidated'
-  | 'archived';
+  | "pending"
+  | "confirmed"
+  | "invalidated"
+  | "archived";
 
 export interface ForecastResult {
   id: string;
@@ -49,7 +49,7 @@ export interface ForecastResult {
   updated_at?: string;
 }
 
-export interface ForecastResultInsert extends Omit<ForecastResult, 'id' | 'created_at' | 'updated_at'> {
+export interface ForecastResultInsert extends Omit<ForecastResult, "id" | "created_at" | "updated_at"> {
   id?: string;
   created_at?: string;
   updated_at?: string;
@@ -58,39 +58,39 @@ export interface ForecastResultInsert extends Omit<ForecastResult, 'id' | 'creat
 export interface ForecastResultUpdate extends Partial<ForecastResultInsert> {}
 
 export type ModelType = 
-  | 'regression'
-  | 'classification'
-  | 'clustering'
-  | 'time_series'
-  | 'deep_learning'
-  | 'ensemble';
+  | "regression"
+  | "classification"
+  | "clustering"
+  | "time_series"
+  | "deep_learning"
+  | "ensemble";
 
 export type Algorithm = 
-  | 'random_forest'
-  | 'lstm'
-  | 'xgboost'
-  | 'neural_network'
-  | 'svm'
-  | 'linear_regression'
-  | 'decision_tree'
-  | 'arima'
-  | 'prophet'
-  | 'custom';
+  | "random_forest"
+  | "lstm"
+  | "xgboost"
+  | "neural_network"
+  | "svm"
+  | "linear_regression"
+  | "decision_tree"
+  | "arima"
+  | "prophet"
+  | "custom";
 
 export type UseCase = 
-  | 'maintenance_prediction'
-  | 'demand_forecasting'
-  | 'risk_assessment'
-  | 'anomaly_detection'
-  | 'cost_optimization'
-  | 'performance_prediction'
-  | 'custom';
+  | "maintenance_prediction"
+  | "demand_forecasting"
+  | "risk_assessment"
+  | "anomaly_detection"
+  | "cost_optimization"
+  | "performance_prediction"
+  | "custom";
 
 export type DeploymentStatus = 
-  | 'draft'
-  | 'staging'
-  | 'production'
-  | 'deprecated';
+  | "draft"
+  | "staging"
+  | "production"
+  | "deprecated";
 
 export interface MLConfiguration {
   id: string;
@@ -115,7 +115,7 @@ export interface MLConfiguration {
   updated_at?: string;
 }
 
-export interface MLConfigurationInsert extends Omit<MLConfiguration, 'id' | 'created_at' | 'updated_at'> {
+export interface MLConfigurationInsert extends Omit<MLConfiguration, "id" | "created_at" | "updated_at"> {
   id?: string;
   created_at?: string;
   updated_at?: string;

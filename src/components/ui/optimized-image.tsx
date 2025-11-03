@@ -50,7 +50,7 @@ export const OptimizedImage: React.FC<OptimizedImageProps> = ({
         });
       },
       {
-        rootMargin: '50px',
+        rootMargin: "50px",
         threshold: 0.01,
       }
     );
@@ -69,13 +69,13 @@ export const OptimizedImage: React.FC<OptimizedImageProps> = ({
   };
 
   // Generate srcset for responsive images
-  const srcSet = width && typeof width === 'number'
+  const srcSet = width && typeof width === "number"
     ? imageOptimizer.generateSrcSet(src, [
-        Math.round(width * 0.5),
-        width,
-        Math.round(width * 1.5),
-        Math.round(width * 2),
-      ])
+      Math.round(width * 0.5),
+      width,
+      Math.round(width * 1.5),
+      Math.round(width * 2),
+    ])
     : undefined;
 
   return (

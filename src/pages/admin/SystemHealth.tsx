@@ -35,7 +35,7 @@ export default function SystemHealth() {
       toast({
         title: "Validation Complete",
         description: `System status: ${result.overallStatus.toUpperCase()}`,
-        variant: result.overallStatus === 'fail' ? 'destructive' : 'default'
+        variant: result.overallStatus === "fail" ? "destructive" : "default"
       });
     } catch (error) {
       toast({
@@ -50,29 +50,29 @@ export default function SystemHealth() {
 
   const getStatusColor = (status: string) => {
     switch (status) {
-      case 'pass': return 'text-green-600';
-      case 'warning': return 'text-yellow-600';
-      case 'fail': return 'text-red-600';
-      default: return 'text-muted-foreground';
+    case "pass": return "text-green-600";
+    case "warning": return "text-yellow-600";
+    case "fail": return "text-red-600";
+    default: return "text-muted-foreground";
     }
   };
 
   const getStatusIcon = (status: string) => {
     switch (status) {
-      case 'pass': return <CheckCircle className="h-5 w-5 text-green-600" />;
-      case 'warning': return <AlertTriangle className="h-5 w-5 text-yellow-600" />;
-      case 'fail': return <AlertTriangle className="h-5 w-5 text-red-600" />;
-      default: return <Activity className="h-5 w-5" />;
+    case "pass": return <CheckCircle className="h-5 w-5 text-green-600" />;
+    case "warning": return <AlertTriangle className="h-5 w-5 text-yellow-600" />;
+    case "fail": return <AlertTriangle className="h-5 w-5 text-red-600" />;
+    default: return <Activity className="h-5 w-5" />;
     }
   };
 
   const getCategoryIcon = (category: string) => {
     switch (category) {
-      case 'performance': return <Zap className="h-5 w-5" />;
-      case 'memory': return <Activity className="h-5 w-5" />;
-      case 'security': return <Shield className="h-5 w-5" />;
-      case 'qa': return <Brain className="h-5 w-5" />;
-      default: return <Activity className="h-5 w-5" />;
+    case "performance": return <Zap className="h-5 w-5" />;
+    case "memory": return <Activity className="h-5 w-5" />;
+    case "security": return <Shield className="h-5 w-5" />;
+    case "qa": return <Brain className="h-5 w-5" />;
+    default: return <Activity className="h-5 w-5" />;
     }
   };
 
@@ -121,7 +121,7 @@ export default function SystemHealth() {
                   </div>
                 </div>
                 <Badge 
-                  variant={report.overallStatus === 'pass' ? 'default' : 'destructive'}
+                  variant={report.overallStatus === "pass" ? "default" : "destructive"}
                   className="text-lg px-4 py-2"
                 >
                   {report.overallStatus.toUpperCase()}
@@ -171,9 +171,9 @@ export default function SystemHealth() {
                       <CardTitle className="capitalize">{category.details}</CardTitle>
                     </div>
                     <Badge variant={
-                      category.status === 'pass' ? 'default' : 
-                      category.status === 'warning' ? 'secondary' : 
-                      'destructive'
+                      category.status === "pass" ? "default" : 
+                        category.status === "warning" ? "secondary" : 
+                          "destructive"
                     }>
                       {category.status}
                     </Badge>
@@ -190,10 +190,10 @@ export default function SystemHealth() {
                         className="flex items-start gap-2 text-sm border-l-2 pl-3 py-1"
                         style={{
                           borderColor: check.passed 
-                            ? 'hsl(var(--success))' 
-                            : check.severity === 'critical' 
-                            ? 'hsl(var(--destructive))' 
-                            : 'hsl(var(--warning))'
+                            ? "hsl(var(--success))" 
+                            : check.severity === "critical" 
+                              ? "hsl(var(--destructive))" 
+                              : "hsl(var(--warning))"
                         }}
                       >
                         <div className="flex-1">

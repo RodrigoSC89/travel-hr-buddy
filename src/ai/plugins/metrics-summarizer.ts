@@ -3,16 +3,16 @@
  * Summarizes system metrics and generates insights
  */
 
-import { BaseAIPlugin, AIPluginInput, AIPluginOutput, AIPluginMetadata } from './types';
+import { BaseAIPlugin, AIPluginInput, AIPluginOutput, AIPluginMetadata } from "./types";
 
 export class MetricsSummarizerPlugin extends BaseAIPlugin {
   metadata: AIPluginMetadata = {
-    name: 'metrics-summarizer',
-    version: '1.0.0',
-    description: 'Analyzes and summarizes system metrics to generate actionable insights',
-    author: 'Nautilus One AI',
+    name: "metrics-summarizer",
+    version: "1.0.0",
+    description: "Analyzes and summarizes system metrics to generate actionable insights",
+    author: "Nautilus One AI",
     enabled: true,
-    requiredFeatureFlag: 'ai_plugins',
+    requiredFeatureFlag: "ai_plugins",
   };
 
   async run(input: AIPluginInput): Promise<AIPluginOutput> {
@@ -22,7 +22,7 @@ export class MetricsSummarizerPlugin extends BaseAIPlugin {
       if (!Array.isArray(metrics) || metrics.length === 0) {
         return {
           success: false,
-          error: 'No metrics data provided',
+          error: "No metrics data provided",
         };
       }
 
@@ -47,13 +47,13 @@ export class MetricsSummarizerPlugin extends BaseAIPlugin {
     } catch (error) {
       return {
         success: false,
-        error: error instanceof Error ? error.message : 'Unknown error',
+        error: error instanceof Error ? error.message : "Unknown error",
       };
     }
   }
 
-  private calculateTrend(metrics: any[]): 'increasing' | 'decreasing' | 'stable' {
-    if (metrics.length < 2) return 'stable';
+  private calculateTrend(metrics: any[]): "increasing" | "decreasing" | "stable" {
+    if (metrics.length < 2) return "stable";
     
     const firstHalf = metrics.slice(0, Math.floor(metrics.length / 2));
     const secondHalf = metrics.slice(Math.floor(metrics.length / 2));
@@ -63,21 +63,21 @@ export class MetricsSummarizerPlugin extends BaseAIPlugin {
     
     const difference = ((secondAvg - firstAvg) / firstAvg) * 100;
     
-    if (difference > 10) return 'increasing';
-    if (difference < -10) return 'decreasing';
-    return 'stable';
+    if (difference > 10) return "increasing";
+    if (difference < -10) return "decreasing";
+    return "stable";
   }
 
   private generateInsights(metrics: any[]): string[] {
     const insights: string[] = [];
     const trend = this.calculateTrend(metrics);
     
-    if (trend === 'increasing') {
-      insights.push('Metrics show an upward trend - monitor for potential capacity issues');
-    } else if (trend === 'decreasing') {
-      insights.push('Metrics show a downward trend - investigate potential performance degradation');
+    if (trend === "increasing") {
+      insights.push("Metrics show an upward trend - monitor for potential capacity issues");
+    } else if (trend === "decreasing") {
+      insights.push("Metrics show a downward trend - investigate potential performance degradation");
     } else {
-      insights.push('Metrics are stable within normal parameters');
+      insights.push("Metrics are stable within normal parameters");
     }
     
     return insights;
@@ -85,5 +85,5 @@ export class MetricsSummarizerPlugin extends BaseAIPlugin {
 }
 
 // Register the plugin
-import { pluginRegistry } from './types';
+import { pluginRegistry } from "./types";
 pluginRegistry.register(new MetricsSummarizerPlugin());

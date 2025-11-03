@@ -31,8 +31,8 @@ export default function Org360Dashboard() {
     queryKey: ["user-engagement-360"],
     queryFn: async () => {
       const { data, error } = await supabase
-        .from('profiles')
-        .select('id, last_active_at');
+        .from("profiles")
+        .select("id, last_active_at");
       
       if (error) throw error;
 
@@ -60,9 +60,9 @@ export default function Org360Dashboard() {
         avgResponseTime: 245,
         successRate: 97.3,
         bySector: [
-          { name: 'Operations', requests: 624 },
-          { name: 'Compliance', requests: 412 },
-          { name: 'Maintenance', requests: 511 },
+          { name: "Operations", requests: 624 },
+          { name: "Compliance", requests: 412 },
+          { name: "Maintenance", requests: 511 },
         ],
       };
     },
@@ -72,10 +72,10 @@ export default function Org360Dashboard() {
     queryKey: ["risks-360"],
     queryFn: async () => {
       const { data, error } = await supabase
-        .from('system_logs')
-        .select('*')
-        .eq('severity', 'error')
-        .gte('created_at', new Date(Date.now() - 24 * 60 * 60 * 1000).toISOString());
+        .from("system_logs")
+        .select("*")
+        .eq("severity", "error")
+        .gte("created_at", new Date(Date.now() - 24 * 60 * 60 * 1000).toISOString());
 
       return {
         critical: 2,

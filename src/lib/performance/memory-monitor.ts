@@ -13,7 +13,7 @@ export interface MemorySnapshot {
 
 export interface MemoryLeakReport {
   hasLeak: boolean;
-  severity: 'none' | 'low' | 'medium' | 'high' | 'critical';
+  severity: "none" | "low" | "medium" | "high" | "critical";
   growthRate: number; // MB per minute
   snapshots: MemorySnapshot[];
   recommendation: string;
@@ -28,7 +28,7 @@ class MemoryMonitor {
    */
   startMonitoring(intervalMs: number = 5000): void {
     if (this.monitoringInterval) {
-      console.warn('Memory monitoring already started');
+      console.warn("Memory monitoring already started");
       return;
     }
 
@@ -39,7 +39,7 @@ class MemoryMonitor {
       this.takeSnapshot();
     }, intervalMs);
 
-    console.log('Memory monitoring started');
+    console.log("Memory monitoring started");
   }
 
   /**
@@ -59,7 +59,7 @@ class MemoryMonitor {
    */
   private takeSnapshot(): void {
     if (!(performance as any).memory) {
-      console.warn('Performance.memory API not available');
+      console.warn("Performance.memory API not available");
       return;
     }
 
@@ -87,10 +87,10 @@ class MemoryMonitor {
     if (this.snapshots.length < 2) {
       return {
         hasLeak: false,
-        severity: 'none',
+        severity: "none",
         growthRate: 0,
         snapshots: this.snapshots,
-        recommendation: 'Insufficient data to detect memory leaks'
+        recommendation: "Insufficient data to detect memory leaks"
       };
     }
 
@@ -124,13 +124,13 @@ class MemoryMonitor {
   private calculateSeverity(
     growthRate: number,
     percentUsed: number
-  ): 'none' | 'low' | 'medium' | 'high' | 'critical' {
-    if (percentUsed > 90) return 'critical';
-    if (growthRate > 10) return 'critical';
-    if (growthRate > 5) return 'high';
-    if (growthRate > 2) return 'medium';
-    if (growthRate > 1) return 'low';
-    return 'none';
+  ): "none" | "low" | "medium" | "high" | "critical" {
+    if (percentUsed > 90) return "critical";
+    if (growthRate > 10) return "critical";
+    if (growthRate > 5) return "high";
+    if (growthRate > 2) return "medium";
+    if (growthRate > 1) return "low";
+    return "none";
   }
 
   /**
@@ -138,16 +138,16 @@ class MemoryMonitor {
    */
   private getRecommendation(severity: string, growthRate: number): string {
     switch (severity) {
-      case 'critical':
-        return 'CRITICAL: Immediate action required. Memory usage is extremely high or growing rapidly. Check for uncleaned intervals, event listeners, or large data accumulation.';
-      case 'high':
-        return 'HIGH: Memory leak detected. Growing at ' + growthRate.toFixed(2) + ' MB/min. Review component cleanup and data management.';
-      case 'medium':
-        return 'MEDIUM: Moderate memory growth detected. Monitor closely and optimize data handling.';
-      case 'low':
-        return 'LOW: Slight memory increase detected. Normal for complex applications but worth monitoring.';
-      default:
-        return 'No significant memory issues detected. Memory usage is stable.';
+    case "critical":
+      return "CRITICAL: Immediate action required. Memory usage is extremely high or growing rapidly. Check for uncleaned intervals, event listeners, or large data accumulation.";
+    case "high":
+      return "HIGH: Memory leak detected. Growing at " + growthRate.toFixed(2) + " MB/min. Review component cleanup and data management.";
+    case "medium":
+      return "MEDIUM: Moderate memory growth detected. Monitor closely and optimize data handling.";
+    case "low":
+      return "LOW: Slight memory increase detected. Normal for complex applications but worth monitoring.";
+    default:
+      return "No significant memory issues detected. Memory usage is stable.";
     }
   }
 

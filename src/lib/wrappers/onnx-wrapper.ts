@@ -10,8 +10,8 @@ import type {
   ONNXOutputs,
   ONNXInferenceSession,
   ONNXTensor
-} from '@/types/ai-core';
-import { logger } from '@/lib/logger';
+} from "@/types/ai-core";
+import { logger } from "@/lib/logger";
 
 class ONNXSessionWrapper implements ONNXInferenceSession {
   private session: unknown = null;
@@ -22,14 +22,14 @@ class ONNXSessionWrapper implements ONNXInferenceSession {
   async loadModel(modelPath: string): Promise<ONNXModel> {
     try {
       // Dynamic import to handle ONNX Runtime
-      const ort = await import('onnxruntime-web');
+      const ort = await import("onnxruntime-web");
       
       this.session = await ort.InferenceSession.create(modelPath, {
         executionProviders: this.config.executionProviders,
-        graphOptimizationLevel: this.config.graphOptimizationLevel ?? 'all',
+        graphOptimizationLevel: this.config.graphOptimizationLevel ?? "all",
         enableCpuMemArena: this.config.enableCpuMemArena ?? true,
         enableMemPattern: this.config.enableMemPattern ?? true,
-        executionMode: this.config.executionMode ?? 'sequential',
+        executionMode: this.config.executionMode ?? "sequential",
         logSeverityLevel: this.config.logSeverityLevel ?? 2,
       });
 
@@ -41,14 +41,14 @@ class ONNXSessionWrapper implements ONNXInferenceSession {
       logger.info(`[ONNX] Model loaded successfully from ${modelPath}`);
       return this.model;
     } catch (error) {
-      logger.error('[ONNX] Failed to load model:', error);
+      logger.error("[ONNX] Failed to load model:", error);
       throw error;
     }
   }
 
   async run(inputs: ONNXInputs): Promise<ONNXOutputs> {
     if (!this.model) {
-      throw new Error('Model not loaded');
+      throw new Error("Model not loaded");
     }
     return this.model.run(inputs);
   }
@@ -62,7 +62,7 @@ class ONNXSessionWrapper implements ONNXInferenceSession {
       (this.session as any).release?.();
       this.session = null;
     }
-    logger.info('[ONNX] Session released');
+    logger.info("[ONNX] Session released");
   }
 }
 
@@ -94,20 +94,20 @@ class ONNXModelWrapper implements ONNXModel {
         outputs[name] = {
           data: (tensor as any).data as Float32Array,
           dims: (tensor as any).dims as number[],
-          type: (tensor as any).type as ONNXTensor['type'],
+          type: (tensor as any).type as ONNXTensor["type"],
         };
       }
 
       return outputs;
     } catch (error) {
-      logger.error('[ONNX] Inference error:', error);
+      logger.error("[ONNX] Inference error:", error);
       throw error;
     }
   }
 
   release(): void {
     // Session release is handled by the parent
-    logger.debug('[ONNX] Model wrapper released');
+    logger.debug("[ONNX] Model wrapper released");
   }
 }
 
@@ -124,7 +124,7 @@ export function createONNXSession(config: ONNXConfig): ONNXInferenceSession {
 export function createTensor(
   data: Float32Array | Int32Array | Uint8Array,
   dims: number[],
-  type: ONNXTensor['type'] = 'float32'
+  type: ONNXTensor["type"] = "float32"
 ): ONNXTensor {
   return { data, dims, type };
 }

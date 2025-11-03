@@ -6,7 +6,7 @@ import { ScrollArea } from "@/components/ui/scroll-area";
 import { MessageCircle, Send, Bot } from "lucide-react";
 
 interface Message {
-  role: 'user' | 'assistant';
+  role: "user" | "assistant";
   content: string;
 }
 
@@ -23,8 +23,8 @@ const MLC_KNOWLEDGE_BASE: Record<string, string> = {
 export function InspectorChatbot() {
   const [messages, setMessages] = useState<Message[]>([
     {
-      role: 'assistant',
-      content: 'Hello! I\'m your MLC Compliance Assistant. Ask me anything about Maritime Labour Convention 2006 regulations, inspection procedures, or compliance requirements.'
+      role: "assistant",
+      content: "Hello! I'm your MLC Compliance Assistant. Ask me anything about Maritime Labour Convention 2006 regulations, inspection procedures, or compliance requirements."
     }
   ]);
   const [input, setInput] = useState("");
@@ -33,7 +33,7 @@ export function InspectorChatbot() {
   const handleSend = async () => {
     if (!input.trim()) return;
 
-    const userMessage: Message = { role: 'user', content: input };
+    const userMessage: Message = { role: "user", content: input };
     setMessages(prev => [...prev, userMessage]);
     setInput("");
     setLoading(true);
@@ -42,7 +42,7 @@ export function InspectorChatbot() {
     setTimeout(() => {
       const response = findRelevantResponse(input);
       const assistantMessage: Message = {
-        role: 'assistant',
+        role: "assistant",
         content: response
       };
       setMessages(prev => [...prev, assistantMessage]);
@@ -64,7 +64,7 @@ export function InspectorChatbot() {
   };
 
   const handleKeyPress = (e: React.KeyboardEvent) => {
-    if (e.key === 'Enter' && !e.shiftKey) {
+    if (e.key === "Enter" && !e.shiftKey) {
       e.preventDefault();
       handleSend();
     }
@@ -89,21 +89,21 @@ export function InspectorChatbot() {
             {messages.map((message, index) => (
               <div
                 key={index}
-                className={`flex ${message.role === 'user' ? 'justify-end' : 'justify-start'}`}
+                className={`flex ${message.role === "user" ? "justify-end" : "justify-start"}`}
               >
                 <div
                   className={`max-w-[80%] rounded-lg p-3 ${
-                    message.role === 'user'
-                      ? 'bg-primary text-primary-foreground'
-                      : 'bg-muted'
+                    message.role === "user"
+                      ? "bg-primary text-primary-foreground"
+                      : "bg-muted"
                   }`}
                 >
                   <div className="flex items-start gap-2">
-                    {message.role === 'assistant' && (
+                    {message.role === "assistant" && (
                       <Bot className="h-4 w-4 mt-1 flex-shrink-0" />
                     )}
                     <p className="text-sm whitespace-pre-wrap">{message.content}</p>
-                    {message.role === 'user' && (
+                    {message.role === "user" && (
                       <MessageCircle className="h-4 w-4 mt-1 flex-shrink-0" />
                     )}
                   </div>

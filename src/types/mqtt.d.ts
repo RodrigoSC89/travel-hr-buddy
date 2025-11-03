@@ -3,11 +3,11 @@
  * Type definitions for MQTT protocol used in inter-vessel communication
  */
 
-declare module 'mqtt' {
+declare module "mqtt" {
   export interface IClientOptions {
     keepalive?: number;
     clientId?: string;
-    protocolId?: 'MQTT' | 'MQIsdp';
+    protocolId?: "MQTT" | "MQIsdp";
     protocolVersion?: 3 | 4 | 5;
     clean?: boolean;
     reconnectPeriod?: number;
@@ -91,25 +91,25 @@ declare module 'mqtt' {
     reconnecting: boolean;
     options: IClientOptions;
 
-    on(event: 'connect', cb: OnConnectCallback): this;
-    on(event: 'message', cb: OnMessageCallback): this;
-    on(event: 'packetsend', cb: OnPacketCallback): this;
-    on(event: 'packetreceive', cb: OnPacketCallback): this;
-    on(event: 'error', cb: OnErrorCallback): this;
-    on(event: 'close', cb: OnCloseCallback): this;
-    on(event: 'offline', cb: () => void): this;
-    on(event: 'reconnect', cb: () => void): this;
-    on(event: 'end', cb: () => void): this;
+    on(event: "connect", cb: OnConnectCallback): this;
+    on(event: "message", cb: OnMessageCallback): this;
+    on(event: "packetsend", cb: OnPacketCallback): this;
+    on(event: "packetreceive", cb: OnPacketCallback): this;
+    on(event: "error", cb: OnErrorCallback): this;
+    on(event: "close", cb: OnCloseCallback): this;
+    on(event: "offline", cb: () => void): this;
+    on(event: "reconnect", cb: () => void): this;
+    on(event: "end", cb: () => void): this;
 
-    once(event: 'connect', cb: OnConnectCallback): this;
-    once(event: 'message', cb: OnMessageCallback): this;
-    once(event: 'packetsend', cb: OnPacketCallback): this;
-    once(event: 'packetreceive', cb: OnPacketCallback): this;
-    once(event: 'error', cb: OnErrorCallback): this;
-    once(event: 'close', cb: OnCloseCallback): this;
-    once(event: 'offline', cb: () => void): this;
-    once(event: 'reconnect', cb: () => void): this;
-    once(event: 'end', cb: () => void): this;
+    once(event: "connect", cb: OnConnectCallback): this;
+    once(event: "message", cb: OnMessageCallback): this;
+    once(event: "packetsend", cb: OnPacketCallback): this;
+    once(event: "packetreceive", cb: OnPacketCallback): this;
+    once(event: "error", cb: OnErrorCallback): this;
+    once(event: "close", cb: OnCloseCallback): this;
+    once(event: "offline", cb: () => void): this;
+    once(event: "reconnect", cb: () => void): this;
+    once(event: "end", cb: () => void): this;
 
     removeListener(event: string, callback: Function): this;
     removeAllListeners(event?: string): this;

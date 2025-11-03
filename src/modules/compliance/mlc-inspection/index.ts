@@ -1,2 +1,2 @@
-export { default as MLCInspectionDashboard } from './MLCInspectionDashboard';
-export { default } from './MLCInspectionDashboard';
+export { default as MLCInspectionDashboard } from "./MLCInspectionDashboard";
+export { default } from "./MLCInspectionDashboard";

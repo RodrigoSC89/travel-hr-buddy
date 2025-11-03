@@ -12,7 +12,7 @@ import { Textarea } from "@/components/ui/textarea";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { useToast } from "@/hooks/use-toast";
 import { prePSCService, PrePSCInspection, PrePSCChecklistItem } from "@/services/pre-psc.service";
-import { getDefaultChecklistTemplate, calculateInspectionScore } from "@/lib/psc-score-calculator";
+import { getDefaultChecklistTemplate } from "@/lib/psc-score-calculator";
 import { Loader2, Save, Send, CheckCircle, XCircle, AlertCircle } from "lucide-react";
 import { Badge } from "@/components/ui/badge";
 import { Progress } from "@/components/ui/progress";
@@ -25,11 +25,10 @@ interface PrePSCFormProps {
 export default function PrePSCForm({ inspectionId, onComplete }: PrePSCFormProps) {
   const [loading, setLoading] = useState(false);
   const [saving, setSaving] = useState(false);
-  const [vesselName, setVesselName] = useState("");
   const [inspectorName, setInspectorName] = useState("");
   const [portCountry, setPortCountry] = useState("");
   const [inspectionDate, setInspectionDate] = useState(
-    new Date().toISOString().split('T')[0]
+    new Date().toISOString().split("T")[0]
   );
   const [checklistItems, setChecklistItems] = useState<PrePSCChecklistItem[]>([]);
   const [currentInspectionId, setCurrentInspectionId] = useState<string | undefined>(inspectionId);
@@ -58,7 +57,7 @@ export default function PrePSCForm({ inspectionId, onComplete }: PrePSCFormProps
       
       setInspectorName(inspection.inspector_name);
       setPortCountry(inspection.port_country || "");
-      setInspectionDate(inspection.inspection_date?.split('T')[0] || "");
+      setInspectionDate(inspection.inspection_date?.split("T")[0] || "");
       setChecklistItems(items);
     } catch (error) {
       console.error("Error loading inspection:", error);
@@ -77,8 +76,8 @@ export default function PrePSCForm({ inspectionId, onComplete }: PrePSCFormProps
     updated[index] = { ...updated[index], [field]: value };
     
     // Auto-update conformity based on status
-    if (field === 'status') {
-      updated[index].conformity = value === 'compliant';
+    if (field === "status") {
+      updated[index].conformity = value === "compliant";
     }
     
     setChecklistItems(updated);
@@ -105,7 +104,7 @@ export default function PrePSCForm({ inspectionId, onComplete }: PrePSCFormProps
           inspector_name: inspectorName,
           port_country: portCountry,
           inspection_date: inspectionDate,
-          status: submit ? 'submitted' : 'draft',
+          status: submit ? "submitted" : "draft",
         };
 
         const created = await prePSCService.createInspection(inspection);
@@ -117,7 +116,7 @@ export default function PrePSCForm({ inspectionId, onComplete }: PrePSCFormProps
           inspector_name: inspectorName,
           port_country: portCountry,
           inspection_date: inspectionDate,
-          status: submit ? 'submitted' : 'in_progress',
+          status: submit ? "submitted" : "in_progress",
         });
       }
 
@@ -168,36 +167,36 @@ export default function PrePSCForm({ inspectionId, onComplete }: PrePSCFormProps
 
   const getCompletionProgress = () => {
     const answered = checklistItems.filter(
-      item => item.status && item.status !== 'pending'
+      item => item.status && item.status !== "pending"
     ).length;
     return Math.round((answered / checklistItems.length) * 100);
   };
 
   const getStatusColor = (status: string) => {
     switch (status) {
-      case 'compliant':
-        return 'bg-green-100 text-green-800 hover:bg-green-100';
-      case 'non_compliant':
-        return 'bg-red-100 text-red-800 hover:bg-red-100';
-      case 'requires_action':
-        return 'bg-yellow-100 text-yellow-800 hover:bg-yellow-100';
-      case 'not_applicable':
-        return 'bg-gray-100 text-gray-800 hover:bg-gray-100';
-      default:
-        return 'bg-blue-100 text-blue-800 hover:bg-blue-100';
+    case "compliant":
+      return "bg-green-100 text-green-800 hover:bg-green-100";
+    case "non_compliant":
+      return "bg-red-100 text-red-800 hover:bg-red-100";
+    case "requires_action":
+      return "bg-yellow-100 text-yellow-800 hover:bg-yellow-100";
+    case "not_applicable":
+      return "bg-gray-100 text-gray-800 hover:bg-gray-100";
+    default:
+      return "bg-blue-100 text-blue-800 hover:bg-blue-100";
     }
   };
 
   const getStatusIcon = (status: string) => {
     switch (status) {
-      case 'compliant':
-        return <CheckCircle className="h-4 w-4" />;
-      case 'non_compliant':
-        return <XCircle className="h-4 w-4" />;
-      case 'requires_action':
-        return <AlertCircle className="h-4 w-4" />;
-      default:
-        return null;
+    case "compliant":
+      return <CheckCircle className="h-4 w-4" />;
+    case "non_compliant":
+      return <XCircle className="h-4 w-4" />;
+    case "requires_action":
+      return <AlertCircle className="h-4 w-4" />;
+    default:
+      return null;
     }
   };
 
@@ -279,7 +278,7 @@ export default function PrePSCForm({ inspectionId, onComplete }: PrePSCFormProps
           <CardHeader>
             <CardTitle className="text-lg">{category}</CardTitle>
             <CardDescription>
-              {items.length} item(s) - {items.filter(({ item }) => item.status === 'compliant').length} compliant
+              {items.length} item(s) - {items.filter(({ item }) => item.status === "compliant").length} compliant
             </CardDescription>
           </CardHeader>
           <CardContent className="space-y-4">
@@ -294,10 +293,10 @@ export default function PrePSCForm({ inspectionId, onComplete }: PrePSCFormProps
                       </p>
                     )}
                   </div>
-                  <Badge className={getStatusColor(item.status || 'pending')}>
+                  <Badge className={getStatusColor(item.status || "pending")}>
                     <span className="flex items-center gap-1">
-                      {getStatusIcon(item.status || 'pending')}
-                      {item.status || 'Pending'}
+                      {getStatusIcon(item.status || "pending")}
+                      {item.status || "Pending"}
                     </span>
                   </Badge>
                 </div>
@@ -306,8 +305,8 @@ export default function PrePSCForm({ inspectionId, onComplete }: PrePSCFormProps
                   <div className="space-y-2">
                     <Label>Status</Label>
                     <Select
-                      value={item.status || 'pending'}
-                      onValueChange={(value) => handleItemChange(index, 'status', value)}
+                      value={item.status || "pending"}
+                      onValueChange={(value) => handleItemChange(index, "status", value)}
                     >
                       <SelectTrigger>
                         <SelectValue />
@@ -322,12 +321,12 @@ export default function PrePSCForm({ inspectionId, onComplete }: PrePSCFormProps
                     </Select>
                   </div>
 
-                  {item.status === 'non_compliant' || item.status === 'requires_action' ? (
+                  {item.status === "non_compliant" || item.status === "requires_action" ? (
                     <div className="space-y-2">
                       <Label>Priority</Label>
                       <Select
-                        value={item.action_priority || 'medium'}
-                        onValueChange={(value) => handleItemChange(index, 'action_priority', value)}
+                        value={item.action_priority || "medium"}
+                        onValueChange={(value) => handleItemChange(index, "action_priority", value)}
                       >
                         <SelectTrigger>
                           <SelectValue />
@@ -347,7 +346,7 @@ export default function PrePSCForm({ inspectionId, onComplete }: PrePSCFormProps
                   <Label>Inspector Comments</Label>
                   <Textarea
                     value={item.inspector_comments || ""}
-                    onChange={(e) => handleItemChange(index, 'inspector_comments', e.target.value)}
+                    onChange={(e) => handleItemChange(index, "inspector_comments", e.target.value)}
                     placeholder="Add notes, observations, or corrective actions..."
                     rows={2}
                   />

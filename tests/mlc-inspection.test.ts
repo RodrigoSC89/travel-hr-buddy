@@ -135,7 +135,7 @@ describe("MLC Inspection Service", () => {
   describe("AI Report Generation", () => {
     it("should generate AI report with compliance score", async () => {
       // Mock the service methods
-      vi.spyOn(mlcInspectionService, 'getInspectionById').mockResolvedValue({
+      vi.spyOn(mlcInspectionService, "getInspectionById").mockResolvedValue({
         id: "inspection-1",
         vessel_id: "vessel-1",
         inspector_id: "inspector-1",
@@ -147,7 +147,7 @@ describe("MLC Inspection Service", () => {
         updated_at: new Date().toISOString(),
       });
 
-      vi.spyOn(mlcInspectionService, 'getFindings').mockResolvedValue([
+      vi.spyOn(mlcInspectionService, "getFindings").mockResolvedValue([
         {
           id: "finding-1",
           inspection_id: "inspection-1",
@@ -187,7 +187,7 @@ describe("MLC Inspection Service", () => {
     });
 
     it("should process compliance calculations correctly", async () => {
-      vi.spyOn(mlcInspectionService, 'getInspectionById').mockResolvedValue({
+      vi.spyOn(mlcInspectionService, "getInspectionById").mockResolvedValue({
         id: "inspection-1",
         vessel_id: "vessel-1",
         inspector_id: "inspector-1",
@@ -226,7 +226,7 @@ describe("MLC Inspection Service", () => {
         },
       ];
 
-      vi.spyOn(mlcInspectionService, 'getFindings').mockResolvedValue(mockFindings);
+      vi.spyOn(mlcInspectionService, "getFindings").mockResolvedValue(mockFindings);
 
       // Verify compliance calculation logic
       const compliantCount = mockFindings.filter(f => f.compliance).length;

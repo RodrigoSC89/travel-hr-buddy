@@ -4,19 +4,19 @@
  */
 
 export type AgentRole = 
-  | 'coordinator'
-  | 'analyzer'
-  | 'executor'
-  | 'monitor'
-  | 'learner';
+  | "coordinator"
+  | "analyzer"
+  | "executor"
+  | "monitor"
+  | "learner";
 
 export type AgentStatus = 
-  | 'idle'
-  | 'active'
-  | 'processing'
-  | 'waiting'
-  | 'error'
-  | 'offline';
+  | "idle"
+  | "active"
+  | "processing"
+  | "waiting"
+  | "error"
+  | "offline";
 
 export interface AIAgent {
   id: string;
@@ -42,10 +42,10 @@ export interface AgentPerformance {
 export interface AgentMessage {
   from: string;
   to: string;
-  type: 'request' | 'response' | 'notification' | 'error';
+  type: "request" | "response" | "notification" | "error";
   payload: unknown;
   timestamp: string;
-  priority: 'low' | 'normal' | 'high' | 'urgent';
+  priority: "low" | "normal" | "high" | "urgent";
 }
 
 export interface AgentTask {
@@ -53,8 +53,8 @@ export interface AgentTask {
   agentId: string;
   type: string;
   description: string;
-  priority: 'low' | 'normal' | 'high' | 'urgent';
-  status: 'pending' | 'in_progress' | 'completed' | 'failed';
+  priority: "low" | "normal" | "high" | "urgent";
+  status: "pending" | "in_progress" | "completed" | "failed";
   result?: unknown;
   error?: string;
   startedAt?: string;

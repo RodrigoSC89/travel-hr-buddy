@@ -24,40 +24,40 @@ import { logger } from "@/lib/logger";
 
 const getStatusIcon = (status: "healthy" | "degraded" | "unhealthy") => {
   switch (status) {
-    case "healthy":
-      return <CheckCircle className="h-5 w-5 text-green-500" />;
-    case "degraded":
-      return <AlertTriangle className="h-5 w-5 text-yellow-500" />;
-    case "unhealthy":
-      return <XCircle className="h-5 w-5 text-red-500" />;
+  case "healthy":
+    return <CheckCircle className="h-5 w-5 text-green-500" />;
+  case "degraded":
+    return <AlertTriangle className="h-5 w-5 text-yellow-500" />;
+  case "unhealthy":
+    return <XCircle className="h-5 w-5 text-red-500" />;
   }
 };
 
 const getStatusColor = (status: "healthy" | "degraded" | "unhealthy") => {
   switch (status) {
-    case "healthy":
-      return "bg-green-500/10 text-green-700 border-green-500/20";
-    case "degraded":
-      return "bg-yellow-500/10 text-yellow-700 border-yellow-500/20";
-    case "unhealthy":
-      return "bg-red-500/10 text-red-700 border-red-500/20";
+  case "healthy":
+    return "bg-green-500/10 text-green-700 border-green-500/20";
+  case "degraded":
+    return "bg-yellow-500/10 text-yellow-700 border-yellow-500/20";
+  case "unhealthy":
+    return "bg-red-500/10 text-red-700 border-red-500/20";
   }
 };
 
 const getServiceIcon = (service: string) => {
   switch (service) {
-    case "supabase":
-      return <Database className="h-4 w-4" />;
-    case "api":
-      return <Globe className="h-4 w-4" />;
-    case "auth":
-      return <Lock className="h-4 w-4" />;
-    case "storage":
-      return <HardDrive className="h-4 w-4" />;
-    case "network":
-      return <Wifi className="h-4 w-4" />;
-    default:
-      return <Activity className="h-4 w-4" />;
+  case "supabase":
+    return <Database className="h-4 w-4" />;
+  case "api":
+    return <Globe className="h-4 w-4" />;
+  case "auth":
+    return <Lock className="h-4 w-4" />;
+  case "storage":
+    return <HardDrive className="h-4 w-4" />;
+  case "network":
+    return <Wifi className="h-4 w-4" />;
+  default:
+    return <Activity className="h-4 w-4" />;
   }
 };
 

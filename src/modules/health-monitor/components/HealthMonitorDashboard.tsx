@@ -1,11 +1,11 @@
 // PATCH 623: Health Monitor Dashboard
-import { useHealthCheck } from '../hooks/useHealthCheck';
-import { ServiceStatusCard } from './ServiceStatusCard';
-import { Card, CardContent, CardHeader, CardTitle, CardDescription } from '@/components/ui/card';
-import { Button } from '@/components/ui/button';
-import { Badge } from '@/components/ui/badge';
-import { RefreshCw, Activity, CheckCircle, AlertCircle, XCircle } from 'lucide-react';
-import { format } from 'date-fns';
+import { useHealthCheck } from "../hooks/useHealthCheck";
+import { ServiceStatusCard } from "./ServiceStatusCard";
+import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "@/components/ui/card";
+import { Button } from "@/components/ui/button";
+import { Badge } from "@/components/ui/badge";
+import { RefreshCw, Activity, CheckCircle, AlertCircle, XCircle } from "lucide-react";
+import { format } from "date-fns";
 
 export function HealthMonitorDashboard() {
   const { 
@@ -22,21 +22,21 @@ export function HealthMonitorDashboard() {
   const overallStatusConfig = {
     healthy: {
       icon: CheckCircle,
-      color: 'text-green-500',
-      bgColor: 'bg-green-50 dark:bg-green-950',
-      label: 'All Systems Operational'
+      color: "text-green-500",
+      bgColor: "bg-green-50 dark:bg-green-950",
+      label: "All Systems Operational"
     },
     degraded: {
       icon: AlertCircle,
-      color: 'text-yellow-500',
-      bgColor: 'bg-yellow-50 dark:bg-yellow-950',
-      label: 'Performance Degraded'
+      color: "text-yellow-500",
+      bgColor: "bg-yellow-50 dark:bg-yellow-950",
+      label: "Performance Degraded"
     },
     down: {
       icon: XCircle,
-      color: 'text-red-500',
-      bgColor: 'bg-red-50 dark:bg-red-950',
-      label: 'System Issues Detected'
+      color: "text-red-500",
+      bgColor: "bg-red-50 dark:bg-red-950",
+      label: "System Issues Detected"
     }
   };
 
@@ -61,7 +61,7 @@ export function HealthMonitorDashboard() {
           disabled={isChecking}
           variant="outline"
         >
-          <RefreshCw className={`h-4 w-4 mr-2 ${isChecking ? 'animate-spin' : ''}`} />
+          <RefreshCw className={`h-4 w-4 mr-2 ${isChecking ? "animate-spin" : ""}`} />
           Refresh
         </Button>
       </div>
@@ -77,17 +77,17 @@ export function HealthMonitorDashboard() {
                 <CardDescription>
                   {systemHealth && (
                     <>
-                      Last checked: {format(systemHealth.lastCheck, 'PPpp')}
+                      Last checked: {format(systemHealth.lastCheck, "PPpp")}
                     </>
                   )}
                 </CardDescription>
               </div>
             </div>
             <Badge 
-              variant={systemHealth?.overall === 'healthy' ? 'default' : 'secondary'}
+              variant={systemHealth?.overall === "healthy" ? "default" : "secondary"}
               className="text-lg px-4 py-2"
             >
-              {systemHealth?.overall.toUpperCase() || 'CHECKING...'}
+              {systemHealth?.overall.toUpperCase() || "CHECKING..."}
             </Badge>
           </div>
         </CardHeader>

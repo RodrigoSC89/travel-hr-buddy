@@ -1,6 +1,6 @@
 // PATCH 623: Health Monitoring Service
-import { supabase } from '@/integrations/supabase/client';
-import type { HealthCheckResult, ServiceStatus } from '../types';
+import { supabase } from "@/integrations/supabase/client";
+import type { HealthCheckResult, ServiceStatus } from "../types";
 
 /**
  * Check Database Health
@@ -11,16 +11,16 @@ export async function checkDatabaseHealth(): Promise<HealthCheckResult> {
   try {
     // Simple query to test database connectivity
     const { error } = await supabase
-      .from('profiles')
-      .select('id')
+      .from("profiles")
+      .select("id")
       .limit(1);
     
     const responseTime = Date.now() - startTime;
     
     if (error) {
       return {
-        service: 'database',
-        status: 'down',
+        service: "database",
+        status: "down",
         responseTime,
         timestamp: new Date(),
         error: error.message
@@ -29,23 +29,23 @@ export async function checkDatabaseHealth(): Promise<HealthCheckResult> {
     
     // Determine status based on response time
     const status: ServiceStatus = 
-      responseTime < 100 ? 'healthy' : 
-      responseTime < 500 ? 'degraded' : 
-      'down';
+      responseTime < 100 ? "healthy" : 
+        responseTime < 500 ? "degraded" : 
+          "down";
     
     return {
-      service: 'database',
+      service: "database",
       status,
       responseTime,
       timestamp: new Date()
     };
   } catch (error) {
     return {
-      service: 'database',
-      status: 'down',
+      service: "database",
+      status: "down",
       responseTime: Date.now() - startTime,
       timestamp: new Date(),
-      error: error instanceof Error ? error.message : 'Unknown error'
+      error: error instanceof Error ? error.message : "Unknown error"
     };
   }
 }
@@ -64,8 +64,8 @@ export async function checkStorageHealth(): Promise<HealthCheckResult> {
     
     if (error) {
       return {
-        service: 'storage',
-        status: 'down',
+        service: "storage",
+        status: "down",
         responseTime,
         timestamp: new Date(),
         error: error.message
@@ -73,12 +73,12 @@ export async function checkStorageHealth(): Promise<HealthCheckResult> {
     }
     
     const status: ServiceStatus = 
-      responseTime < 200 ? 'healthy' : 
-      responseTime < 1000 ? 'degraded' : 
-      'down';
+      responseTime < 200 ? "healthy" : 
+        responseTime < 1000 ? "degraded" : 
+          "down";
     
     return {
-      service: 'storage',
+      service: "storage",
       status,
       responseTime,
       timestamp: new Date(),
@@ -88,11 +88,11 @@ export async function checkStorageHealth(): Promise<HealthCheckResult> {
     };
   } catch (error) {
     return {
-      service: 'storage',
-      status: 'down',
+      service: "storage",
+      status: "down",
       responseTime: Date.now() - startTime,
       timestamp: new Date(),
-      error: error instanceof Error ? error.message : 'Unknown error'
+      error: error instanceof Error ? error.message : "Unknown error"
     };
   }
 }
@@ -119,12 +119,12 @@ export async function checkSystemResources(): Promise<HealthCheckResult> {
       : 0;
     
     const status: ServiceStatus = 
-      memoryUsage < 70 ? 'healthy' : 
-      memoryUsage < 90 ? 'degraded' : 
-      'down';
+      memoryUsage < 70 ? "healthy" : 
+        memoryUsage < 90 ? "degraded" : 
+          "down";
     
     return {
-      service: 'system',
+      service: "system",
       status,
       responseTime: Date.now() - startTime,
       timestamp: new Date(),
@@ -136,12 +136,12 @@ export async function checkSystemResources(): Promise<HealthCheckResult> {
     };
   } catch (error) {
     return {
-      service: 'system',
-      status: 'healthy', // Default to healthy if we can't check
+      service: "system",
+      status: "healthy", // Default to healthy if we can't check
       responseTime: Date.now() - startTime,
       timestamp: new Date(),
       metadata: {
-        note: 'Memory API not available in this browser'
+        note: "Memory API not available in this browser"
       }
     };
   }
@@ -161,8 +161,8 @@ export async function checkAPIConnectivity(): Promise<HealthCheckResult> {
     
     if (error) {
       return {
-        service: 'api',
-        status: 'degraded',
+        service: "api",
+        status: "degraded",
         responseTime,
         timestamp: new Date(),
         error: error.message
@@ -170,12 +170,12 @@ export async function checkAPIConnectivity(): Promise<HealthCheckResult> {
     }
     
     const status: ServiceStatus = 
-      responseTime < 100 ? 'healthy' : 
-      responseTime < 500 ? 'degraded' : 
-      'down';
+      responseTime < 100 ? "healthy" : 
+        responseTime < 500 ? "degraded" : 
+          "down";
     
     return {
-      service: 'api',
+      service: "api",
       status,
       responseTime,
       timestamp: new Date(),
@@ -185,11 +185,11 @@ export async function checkAPIConnectivity(): Promise<HealthCheckResult> {
     };
   } catch (error) {
     return {
-      service: 'api',
-      status: 'down',
+      service: "api",
+      status: "down",
       responseTime: Date.now() - startTime,
       timestamp: new Date(),
-      error: error instanceof Error ? error.message : 'Unknown error'
+      error: error instanceof Error ? error.message : "Unknown error"
     };
   }
 }
@@ -212,12 +212,12 @@ export async function runAllHealthChecks(): Promise<HealthCheckResult[]> {
  * Get overall system status
  */
 export function getOverallStatus(results: HealthCheckResult[]): ServiceStatus {
-  const hasDown = results.some(r => r.status === 'down');
-  const hasDegraded = results.some(r => r.status === 'degraded');
+  const hasDown = results.some(r => r.status === "down");
+  const hasDegraded = results.some(r => r.status === "degraded");
   
-  if (hasDown) return 'down';
-  if (hasDegraded) return 'degraded';
-  return 'healthy';
+  if (hasDown) return "down";
+  if (hasDegraded) return "degraded";
+  return "healthy";
 }
 
 /**
@@ -232,9 +232,9 @@ export async function logHealthCheck(result: HealthCheckResult, tenantId?: strin
       const { data: { user } } = await supabase.auth.getUser();
       if (user) {
         const { data: profile } = await supabase
-          .from('profiles')
-          .select('tenant_id')
-          .eq('id', user.id)
+          .from("profiles")
+          .select("tenant_id")
+          .eq("id", user.id)
           .single();
         
         tenant_id = profile?.tenant_id;
@@ -242,7 +242,7 @@ export async function logHealthCheck(result: HealthCheckResult, tenantId?: strin
     }
     
     await supabase
-      .from('system_health_logs')
+      .from("system_health_logs")
       .insert({
         service_name: result.service,
         status: result.status,
@@ -253,7 +253,7 @@ export async function logHealthCheck(result: HealthCheckResult, tenantId?: strin
         tenant_id: tenant_id || null
       });
   } catch (error) {
-    console.error('Failed to log health check:', error);
+    console.error("Failed to log health check:", error);
     // Don't throw - logging failures shouldn't break health checks
   }
 }

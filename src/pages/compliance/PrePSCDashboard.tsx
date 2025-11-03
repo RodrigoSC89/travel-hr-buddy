@@ -7,7 +7,7 @@ import React, { useState, useEffect } from "react";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
-import { Plus, FileText, Shield, AlertTriangle, CheckCircle, Download, TrendingUp } from "lucide-react";
+import { Plus, FileText, Shield, AlertTriangle, Download, TrendingUp } from "lucide-react";
 import { useToast } from "@/hooks/use-toast";
 import { prePSCService } from "@/services/pre-psc.service";
 import PrePSCForm from "@/modules/compliance/pre-psc/PrePSCForm";
@@ -25,7 +25,6 @@ export default function PrePSCDashboard() {
     criticalItems: 0,
     nonCompliantItems: 0,
   });
-  const [loading, setLoading] = useState(true);
   const { toast } = useToast();
 
   useEffect(() => {
@@ -34,7 +33,6 @@ export default function PrePSCDashboard() {
 
   const loadStats = async () => {
     try {
-      setLoading(false);
       const statsData = await prePSCService.getInspectionStats();
       setStats(statsData);
     } catch (error) {
@@ -44,8 +42,6 @@ export default function PrePSCDashboard() {
         description: "Failed to load inspection statistics",
         variant: "destructive",
       });
-    } finally {
-      setLoading(false);
     }
   };
 
@@ -55,7 +51,7 @@ export default function PrePSCDashboard() {
     setActiveTab("form");
   };
 
-  const handleInspectionComplete = (inspectionId: string) => {
+  const handleInspectionComplete = () => {
     setShowNewInspection(false);
     setActiveTab("overview");
     loadStats();
