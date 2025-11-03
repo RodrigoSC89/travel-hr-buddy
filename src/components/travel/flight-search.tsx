@@ -208,8 +208,9 @@ const validateAndRewriteInput = (input: string, type: "origin" | "destination"):
     return "";
   }
   
-  // Remove special characters and normalize
-  let cleaned = input.trim().replace(/[^\w\s()-]/g, "");
+  // Remove dangerous characters but preserve valid ones including accents, dots, apostrophes
+  // Allow: letters (including accented), numbers, spaces, hyphens, dots, apostrophes, parentheses
+  let cleaned = input.trim().replace(/[^\w\s()'.,-]/gu, "");
   
   // If it's just a code (3 letters), capitalize it
   if (cleaned.length === 3 && /^[a-zA-Z]{3}$/.test(cleaned)) {

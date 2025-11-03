@@ -41,8 +41,8 @@ test.describe('Travel Intelligence API Fallback', () => {
     // Wait for results or error
     await page.waitForTimeout(2000);
     
-    // Check that error message is displayed
-    const errorBox = page.locator('.error-box, [role="alert"]').first();
+    // Check that error message is displayed using more semantic selectors
+    const errorBox = page.locator('[role="alert"]').first();
     await expect(errorBox).toBeVisible({ timeout: 10000 });
     
     // Verify error message contains fallback text
@@ -83,8 +83,8 @@ test.describe('Travel Intelligence API Fallback', () => {
   test('should handle timeout gracefully', async ({ page }) => {
     // Delay API response to simulate timeout
     await page.route('**/functions/v1/amadeus-search', async route => {
-      // Delay for 12 seconds (longer than 10s timeout)
-      await new Promise(resolve => setTimeout(resolve, 12000));
+      // Delay for 11 seconds (just over 10s timeout threshold)
+      await new Promise(resolve => setTimeout(resolve, 11000));
       route.fulfill({
         status: 200,
         body: JSON.stringify({ success: false, error: 'Timeout' })

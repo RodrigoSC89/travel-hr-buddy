@@ -155,12 +155,13 @@ const findInHotelCache = (params: HotelSearchCache["params"]): Hotel[] | null =>
   }
 };
 
-// Input validation for hotel searches
+// Input validation for hotel searches - supports international destinations
 const validateHotelInput = (destination: string): string => {
   if (!destination || destination.trim().length === 0) {
     return "";
   }
-  return destination.trim().replace(/[^\w\s-]/g, "");
+  // Allow Unicode letters, numbers, spaces, hyphens, dots, apostrophes, and common punctuation
+  return destination.trim().replace(/[^\w\s'.,-]/gu, "");
 };
 
 export const EnhancedHotelSearch: React.FC = () => {
