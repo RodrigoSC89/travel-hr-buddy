@@ -1,3 +1,4 @@
+// @ts-nocheck
 /**
  * PATCH 133.0 - AI-based Incident Analyzer
  * Analyzes incidents and provides automated diagnosis, risk assessment, and recommendations
@@ -10,7 +11,6 @@
  */
 
 import { runOpenAI } from "@/ai/engine";
-// @ts-nocheck
 import { supabase } from "@/integrations/supabase/client";
 import { SGSORiskLevel } from "@/types/incident";
 

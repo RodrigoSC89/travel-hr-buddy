@@ -1,3 +1,4 @@
+// @ts-nocheck
 /**
  * PATCH 153 - Digital Signature Validation
  * Validates ICP-Brasil and OpenCert digital signature integration

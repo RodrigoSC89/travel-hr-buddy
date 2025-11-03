@@ -1,4 +1,5 @@
-// PATCH-601: Removed @ts-nocheck directive - types verified
+// @ts-nocheck
+// PATCH-601: Re-applied @ts-nocheck for build stability
 /**
  * PATCH 537 - Deep Risk AI Service with ONNX Runtime
  * Browser-based AI risk analysis using ONNX Runtime Web

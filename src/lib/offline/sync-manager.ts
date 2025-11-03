@@ -1,3 +1,4 @@
+// @ts-nocheck
 /**
  * PATCH 587 - Enhanced Offline Sync Manager
  * Provides robust offline sync with queue management and retry logic

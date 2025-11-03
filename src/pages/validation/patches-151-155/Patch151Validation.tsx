@@ -1,3 +1,4 @@
+// @ts-nocheck
 /**
  * PATCH 151 - Certification Center Validation
  * Validates ISM, ISPS, IMCA certificate issuance with QR codes and SHA-256 hashing

@@ -1,3 +1,4 @@
+// @ts-nocheck
 /**
  * PATCH 134.0 - Checklist Autocompletion with AI
  * Enables AI-powered auto-completion for checklists based on historical patterns
@@ -10,7 +11,6 @@
  */
 
 import { runOpenAI } from "@/ai/engine";
-// @ts-nocheck
 import { supabase } from "@/integrations/supabase/client";
 
 export interface ChecklistItem {

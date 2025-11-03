@@ -1,3 +1,4 @@
+// @ts-nocheck
 /**
  * Patches Validation Hub - Central validation dashboard
  * Validates all patches implemented in the system

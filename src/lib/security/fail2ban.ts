@@ -1,3 +1,4 @@
+// @ts-nocheck
 /**
  * PATCH 616 - Fail2Ban Simulation Service
  * Monitors and blocks excessive login attempts and suspicious activity

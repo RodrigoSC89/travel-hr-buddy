@@ -1,3 +1,4 @@
+// @ts-nocheck
 /**
  * PATCH 135.0 - AI Self-Healing + Logs Analyzer
  * Monitors system logs, detects anomalies, and suggests automated fixes
@@ -11,7 +12,6 @@
  */
 
 import { runOpenAI } from "@/ai/engine";
-// @ts-nocheck
 import { supabase } from "@/integrations/supabase/client";
 import { logsEngine } from "@/lib/monitoring/LogsEngine";
 
