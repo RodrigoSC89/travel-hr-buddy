@@ -1,8 +1,12 @@
 import React from "react";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
-import { Shield, CheckCircle, AlertTriangle, TrendingUp } from "lucide-react";
+import { Button } from "@/components/ui/button";
+import { Shield, CheckCircle, AlertTriangle, TrendingUp, Ship, FileText, Anchor } from "lucide-react";
+import { useNavigate } from "react-router-dom";
 
 const ComplianceHub = () => {
+  const navigate = useNavigate();
+
   return (
     <div className="container mx-auto p-6 space-y-6">
       <div className="flex items-center gap-3 mb-6">
@@ -55,6 +59,67 @@ const ComplianceHub = () => {
           </CardContent>
         </Card>
       </div>
+
+      {/* Compliance Modules */}
+      <Card>
+        <CardHeader>
+          <CardTitle>Compliance Modules</CardTitle>
+        </CardHeader>
+        <CardContent>
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+            <Card className="cursor-pointer hover:shadow-lg transition-shadow" onClick={() => navigate('/pre-psc')}>
+              <CardHeader>
+                <div className="flex items-center gap-3">
+                  <Ship className="h-6 w-6 text-primary" />
+                  <CardTitle className="text-base">Pre-PSC Inspection</CardTitle>
+                </div>
+              </CardHeader>
+              <CardContent>
+                <p className="text-sm text-muted-foreground">
+                  Conduct internal Port State Control audits with AI assistance and digital signatures
+                </p>
+                <Button variant="link" className="p-0 h-auto mt-2">
+                  Launch Module →
+                </Button>
+              </CardContent>
+            </Card>
+
+            <Card className="cursor-pointer hover:shadow-lg transition-shadow">
+              <CardHeader>
+                <div className="flex items-center gap-3">
+                  <FileText className="h-6 w-6 text-primary" />
+                  <CardTitle className="text-base">MLC Inspection</CardTitle>
+                </div>
+              </CardHeader>
+              <CardContent>
+                <p className="text-sm text-muted-foreground">
+                  Maritime Labour Convention inspection and compliance tracking
+                </p>
+                <Button variant="link" className="p-0 h-auto mt-2">
+                  View Module →
+                </Button>
+              </CardContent>
+            </Card>
+
+            <Card className="cursor-pointer hover:shadow-lg transition-shadow">
+              <CardHeader>
+                <div className="flex items-center gap-3">
+                  <Anchor className="h-6 w-6 text-primary" />
+                  <CardTitle className="text-base">SGSO Management</CardTitle>
+                </div>
+              </CardHeader>
+              <CardContent>
+                <p className="text-sm text-muted-foreground">
+                  Safety Management System plans and action tracking
+                </p>
+                <Button variant="link" className="p-0 h-auto mt-2">
+                  View Module →
+                </Button>
+              </CardContent>
+            </Card>
+          </div>
+        </CardContent>
+      </Card>
       
       <Card>
         <CardHeader>
@@ -63,7 +128,8 @@ const ComplianceHub = () => {
         <CardContent>
           <p className="text-muted-foreground">
             Centralized compliance management with regulatory tracking, automated monitoring, 
-            risk assessment, and compliance reporting across all operations.
+            risk assessment, and compliance reporting across all operations. Now includes Pre-Port 
+            State Control inspections with AI-powered guidance and digital signatures.
           </p>
         </CardContent>
       </Card>
