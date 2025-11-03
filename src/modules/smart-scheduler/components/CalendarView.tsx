@@ -1,18 +1,20 @@
 /**
- * PATCH 597 - Calendar View Component
- * Visual calendar display for scheduled tasks
+ * PATCH 603 - Calendar View Component (Enhanced)
+ * Visual calendar display for scheduled tasks with intelligent slot suggestions
  */
 
 import React, { useMemo } from "react";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
+import { Sparkles } from "lucide-react";
 import type { ScheduledTask, CalendarEvent } from "../types";
 
 interface CalendarViewProps {
   tasks: ScheduledTask[];
+  showIntelligentSlots?: boolean;
 }
 
-export function CalendarView({ tasks }: CalendarViewProps) {
+export function CalendarView({ tasks, showIntelligentSlots = true }: CalendarViewProps) {
   // Convert tasks to calendar events
   const events = useMemo<CalendarEvent[]>(() => {
     return tasks.map(task => ({
@@ -25,6 +27,27 @@ export function CalendarView({ tasks }: CalendarViewProps) {
       task
     }));
   }, [tasks]);
+
+  // Calculate intelligent time slots based on workload distribution
+  const intelligentSlots = useMemo(() => {
+    if (!showIntelligentSlots) return new Map<string, number>();
+    
+    const workloadByDate = new Map<string, number>();
+    
+    events.forEach(event => {
+      const dateKey = event.start.toISOString().split("T")[0];
+      const currentLoad = workloadByDate.get(dateKey) || 0;
+      
+      // Weight by priority
+      const weight = event.priority === "critical" ? 4 : 
+                     event.priority === "high" ? 3 :
+                     event.priority === "medium" ? 2 : 1;
+      
+      workloadByDate.set(dateKey, currentLoad + weight);
+    });
+    
+    return workloadByDate;
+  }, [events, showIntelligentSlots]);
 
   // Group events by date
   const eventsByDate = useMemo(() => {
@@ -70,10 +93,33 @@ export function CalendarView({ tasks }: CalendarViewProps) {
     }
   };
 
+  // Helper to get slot recommendation
+  const getSlotRecommendation = (dateKey: string, workload: number): { color: string; label: string } | null => {
+    if (!showIntelligentSlots) return null;
+    
+    if (workload === 0) {
+      return { color: "text-green-600", label: "Optimal slot" };
+    } else if (workload <= 3) {
+      return { color: "text-blue-600", label: "Good slot" };
+    } else if (workload <= 6) {
+      return { color: "text-yellow-600", label: "Busy" };
+    } else {
+      return { color: "text-red-600", label: "Overloaded" };
+    }
+  };
+
   return (
     <Card>
       <CardHeader>
-        <CardTitle>Task Calendar - Next 30 Days</CardTitle>
+        <div className="flex items-center justify-between">
+          <CardTitle>Task Calendar - Next 30 Days</CardTitle>
+          {showIntelligentSlots && (
+            <Badge variant="secondary" className="gap-1">
+              <Sparkles className="w-3 h-3" />
+              AI-Powered Slots
+            </Badge>
+          )}
+        </div>
       </CardHeader>
       <CardContent>
         <div className="space-y-4">
@@ -81,6 +127,8 @@ export function CalendarView({ tasks }: CalendarViewProps) {
             const dateKey = date.toISOString().split("T")[0];
             const dayEvents = eventsByDate.get(dateKey) || [];
             const isToday = dateKey === new Date().toISOString().split("T")[0];
+            const workload = intelligentSlots.get(dateKey) || 0;
+            const slotRecommendation = getSlotRecommendation(dateKey, workload);
 
             return (
               <div
@@ -100,6 +148,12 @@ export function CalendarView({ tasks }: CalendarViewProps) {
                       <Badge variant="default" className="text-xs">
                         Today
                       </Badge>
+                    )}
+                    {slotRecommendation && (
+                      <span className={`text-xs ${slotRecommendation.color} flex items-center gap-1`}>
+                        <Sparkles className="w-3 h-3" />
+                        {slotRecommendation.label}
+                      </span>
                     )}
                   </div>
                   {dayEvents.length > 0 && (
