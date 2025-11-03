@@ -13,7 +13,7 @@ import { Textarea } from "@/components/ui/textarea";
 import { toast } from "sonner";
 import { Save, Sparkles, FileText } from "lucide-react";
 import { ISMChecklistCard } from "./components/ISMChecklistCard";
-import type { ISMAudit, ISMAuditItem, AuditType } from "@/types/ism-audit";
+import type { ISMAudit, ISMAuditItem } from "@/types/ism-audit";
 import { ISM_CHECKLIST_TEMPLATES, calculateComplianceScore } from "@/types/ism-audit";
 import { analyzeISMItem, generateAuditSummary } from "@/lib/llm/ismAssistant";
 
@@ -34,7 +34,7 @@ export function ISMAuditForm({ audit, onSave, onCancel }: ISMAuditFormProps) {
     items: audit?.items || [],
   });
 
-  const [analyzingItem, setAnalyzingItem] = useState<string | null>(null);
+  const [, setAnalyzingItem] = useState<string | null>(null);
   const [generatingSummary, setGeneratingSummary] = useState(false);
 
   const handleFieldChange = (field: string, value: string) => {

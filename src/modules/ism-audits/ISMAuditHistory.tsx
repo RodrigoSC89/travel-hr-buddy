@@ -34,7 +34,7 @@ export function ISMAuditHistory({ audits, onViewDetails, onBack }: ISMAuditHisto
 
   // Filter and sort audits
   const filteredAudits = useMemo(() => {
-    let result = audits.filter(audit => {
+    const result = audits.filter(audit => {
       const matchesSearch = 
         audit.vesselName.toLowerCase().includes(searchTerm.toLowerCase()) ||
         audit.auditor.toLowerCase().includes(searchTerm.toLowerCase()) ||
@@ -49,18 +49,18 @@ export function ISMAuditHistory({ audits, onViewDetails, onBack }: ISMAuditHisto
     // Sort
     result.sort((a, b) => {
       switch (sortBy) {
-        case "date-desc":
-          return new Date(b.auditDate).getTime() - new Date(a.auditDate).getTime();
-        case "date-asc":
-          return new Date(a.auditDate).getTime() - new Date(b.auditDate).getTime();
-        case "score-desc":
-          return (b.complianceScore || 0) - (a.complianceScore || 0);
-        case "score-asc":
-          return (a.complianceScore || 0) - (b.complianceScore || 0);
-        case "vessel":
-          return a.vesselName.localeCompare(b.vesselName);
-        default:
-          return 0;
+      case "date-desc":
+        return new Date(b.auditDate).getTime() - new Date(a.auditDate).getTime();
+      case "date-asc":
+        return new Date(a.auditDate).getTime() - new Date(b.auditDate).getTime();
+      case "score-desc":
+        return (b.complianceScore || 0) - (a.complianceScore || 0);
+      case "score-asc":
+        return (a.complianceScore || 0) - (b.complianceScore || 0);
+      case "vessel":
+        return a.vesselName.localeCompare(b.vesselName);
+      default:
+        return 0;
       }
     });
 

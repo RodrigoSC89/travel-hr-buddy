@@ -15,7 +15,6 @@ import {
   Ship, 
   User,
   MapPin,
-  FileText,
   CheckCircle2,
   XCircle,
   AlertCircle,
@@ -23,7 +22,7 @@ import {
 } from "lucide-react";
 import type { ISMAudit } from "@/types/ism-audit";
 import { calculateComplianceScore } from "@/types/ism-audit";
-import { NonConformityTag } from "./components/NonConformityTag";
+
 import { exportToPDF, formatPDFContent } from "@/lib/pdf";
 
 interface ISMAuditDetailsProps {
@@ -102,18 +101,16 @@ export function ISMAuditDetails({ audit, onBack, onEdit }: ISMAuditDetailsProps)
                 <h4 style="background-color: #f3f4f6; padding: 10px;">${category}</h4>
                 <table style="width: 100%; border-collapse: collapse;">
                   ${items.map(item => `
-                    <tr>
-                      <td style="padding: 8px; border: 1px solid #ddd; width: 60%;">${item.question}</td>
-                      <td style="padding: 8px; border: 1px solid #ddd; width: 20%;">
-                        ${item.compliant === "compliant" ? "✓ Conforme" : 
-                          item.compliant === "non-compliant" ? "✗ Não Conforme" :
-                          item.compliant === "not-applicable" ? "N/A" : "Pendente"}
-                      </td>
-                      <td style="padding: 8px; border: 1px solid #ddd; width: 20%;">
-                        ${item.notes || "-"}
-                      </td>
-                    </tr>
-                  `).join("")}
+                <tr>
+                  <td style="padding: 8px; border: 1px solid #ddd; width: 60%;">${item.question}</td>
+                  <td style="padding: 8px; border: 1px solid #ddd; width: 20%;">
+                    ${item.compliant === "compliant" ? "✓ Conforme" : item.compliant === "non-compliant" ? "✗ Não Conforme" : item.compliant === "not-applicable" ? "N/A" : "Pendente"}
+                  </td>
+                  <td style="padding: 8px; border: 1px solid #ddd; width: 20%;">
+                    ${item.notes || "-"}
+                  </td>
+                </tr>
+              `).join("")}
                 </table>
               </div>
             `).join("")}

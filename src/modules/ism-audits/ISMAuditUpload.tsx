@@ -203,7 +203,7 @@ export function ISMAuditUpload({ onItemsExtracted, onCancel }: ISMAuditUploadPro
               <div className="border rounded-lg p-4 max-h-64 overflow-y-auto">
                 <h3 className="font-semibold mb-3">Preview dos Itens Extraídos:</h3>
                 <div className="space-y-2">
-                  {extractedItems.slice(0, 5).map((item, index) => (
+                  {extractedItems.slice(0, 5).map((item) => (
                     <div key={item.id} className="text-sm border-b pb-2">
                       <span className="font-medium text-gray-700">{item.category}</span>
                       <p className="text-gray-600">{item.question}</p>
