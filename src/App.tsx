@@ -185,6 +185,7 @@ const ForecastHistoryPage = safeLazyImport(() => import("@/pages/admin/mmi/forec
 const BIForecastsPage = safeLazyImport(() => import("@/pages/admin/bi/forecasts"));
 const PEODPAuditPage = safeLazyImport(() => import("@/pages/admin/peodp-audit"));
 const PEODPWizardComplete = safeLazyImport(() => import("@/pages/admin/peodp-wizard-complete"));
+const PreOvidInspection = safeLazyImport(() => import("@/pages/admin/pre-ovid-inspection"));
 const VaultAI = safeLazyImport(() => import("@/modules/vault_ai/pages/VaultAIPage"));
 const VaultAIComplete = safeLazyImport(() => import("@/pages/admin/vault-ai-complete"));
 const Patch66Dashboard = safeLazyImport(() => import("@/pages/Patch66Dashboard"));
@@ -839,6 +840,7 @@ function App() {
                       <Route path="/admin/auditorias-lista" element={<AuditoriasLista />} />
                       <Route path="/admin/peodp-audit" element={<PEODPAuditPage />} />
                       <Route path="/admin/peodp-wizard" element={<PEODPWizardComplete />} />
+                      <Route path="/admin/pre-ovid-inspection" element={<PreOvidInspection />} />
                       <Route path="/admin/simulations" element={<Simulations />} />
                       <Route path="/admin/cron-monitor" element={<CronMonitor />} />
                       <Route path="/admin/training" element={<TrainingManagement />} />
