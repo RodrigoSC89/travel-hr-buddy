@@ -73,6 +73,7 @@ export interface AgentSwitch {
 
 export class MultiAgentPerformanceScanner {
   private scanInterval: number = 60000; // 1 minute
+  private scanIntervalId: NodeJS.Timeout | null = null; // PATCH 607: Store interval ID
   private isScanning: boolean = false;
   private thresholds = {
     minSuccessRate: 0.85,
@@ -90,15 +91,21 @@ export class MultiAgentPerformanceScanner {
 
     this.isScanning = true;
     this.scan();
-    setInterval(() => this.scan(), this.scanInterval);
+    // PATCH 607: Store interval ID for proper cleanup
+    this.scanIntervalId = setInterval(() => this.scan(), this.scanInterval);
     logger.info("Multi-Agent Performance Scanner started");
   }
 
   /**
    * Stop scanning
+   * PATCH 607: Added proper cleanup
    */
   stopScanning(): void {
     this.isScanning = false;
+    if (this.scanIntervalId) {
+      clearInterval(this.scanIntervalId);
+      this.scanIntervalId = null;
+    }
     logger.info("Multi-Agent Performance Scanner stopped");
   }
 
