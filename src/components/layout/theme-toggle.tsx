@@ -1,4 +1,4 @@
-import { Moon, Sun } from "lucide-react";
+import { Moon, Sun, Palette } from "lucide-react";
 
 import { Button } from "@/components/ui/button";
 import {
@@ -9,6 +9,7 @@ import {
 } from "@/components/ui/dropdown-menu";
 import { useTheme } from "@/components/layout/theme-provider";
 
+// PATCH 620: Extended theme toggle with nautilus and high-contrast themes
 export function ThemeToggle() {
   const { setTheme } = useTheme();
 
@@ -27,6 +28,13 @@ export function ThemeToggle() {
         </DropdownMenuItem>
         <DropdownMenuItem onClick={() => setTheme("dark")}>
           Escuro
+        </DropdownMenuItem>
+        <DropdownMenuItem onClick={() => setTheme("nautilus")}>
+          <Palette className="mr-2 h-4 w-4" />
+          Nautilus
+        </DropdownMenuItem>
+        <DropdownMenuItem onClick={() => setTheme("high-contrast")}>
+          Alto Contraste
         </DropdownMenuItem>
         <DropdownMenuItem onClick={() => setTheme("system")}>
           Sistema
