@@ -336,6 +336,19 @@
       "hasMockData": false,
       "deprecatedIn": "191.0",
       "replacedBy": "fleet"
+    },
+    {
+      "id": "lsa-ffa-inspections",
+      "name": "LSA & FFA Inspections",
+      "path": "/modules/lsa-ffa-inspections",
+      "route": "/lsa-ffa-inspections",
+      "status": "active",
+      "category": "compliance",
+      "description": "Life-Saving Appliances & Fire-Fighting Appliances inspections with AI recommendations, SOLAS compliance scoring, and PDF reports",
+      "hasDatabase": true,
+      "hasMockData": false,
+      "version": "1.0.0",
+      "lastModified": "2025-11-03"
     }
   ],
   "routes": [
@@ -478,13 +491,19 @@
       "status": "redirect",
       "type": "redirect",
       "redirectTo": "/fleet"
+    },
+    {
+      "path": "/lsa-ffa-inspections",
+      "module": "lsa-ffa-inspections",
+      "status": "active",
+      "type": "module"
     }
   ],
   "statistics": {
-    "totalModules": 27,
-    "activeModules": 20,
+    "totalModules": 28,
+    "activeModules": 21,
     "deprecatedModules": 7,
-    "modulesWithRealData": 19,
+    "modulesWithRealData": 20,
     "modulesWithMockData": 0,
     "lastPatches": ["551", "552", "553", "554", "555"]
   }
