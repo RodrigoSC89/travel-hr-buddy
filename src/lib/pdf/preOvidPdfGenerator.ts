@@ -3,8 +3,8 @@
  * PATCH 650 - Pre-OVID Inspection Module
  */
 
-import jsPDF from 'jspdf';
-import 'jspdf-autotable';
+import jsPDF from "jspdf";
+import "jspdf-autotable";
 
 // Maximum number of checklist items to include in PDF to avoid huge files
 const MAX_CHECKLIST_ITEMS_IN_PDF = 30;
@@ -48,23 +48,23 @@ export async function generatePreOvidPDF(inspection: InspectionData) {
 
   // Title
   doc.setFontSize(18);
-  doc.setFont('helvetica', 'bold');
-  doc.text('Pré-OVID Inspection Report', pageWidth / 2, yPosition, {
-    align: 'center',
+  doc.setFont("helvetica", "bold");
+  doc.text("Pré-OVID Inspection Report", pageWidth / 2, yPosition, {
+    align: "center",
   });
   yPosition += 15;
 
   // Header information
   doc.setFontSize(12);
-  doc.setFont('helvetica', 'normal');
+  doc.setFont("helvetica", "normal");
 
   const headerInfo = [
-    `Vessel: ${inspection.vessel_name || 'N/A'}`,
-    `Inspector: ${inspection.inspector_name || 'N/A'}`,
-    `Date: ${new Date(inspection.inspection_date).toLocaleDateString('pt-BR')}`,
-    `Location: ${inspection.location || 'N/A'}`,
-    `Checklist: ${inspection.checklist_version || 'N/A'}`,
-    `Status: ${inspection.status || 'N/A'}`,
+    `Vessel: ${inspection.vessel_name || "N/A"}`,
+    `Inspector: ${inspection.inspector_name || "N/A"}`,
+    `Date: ${new Date(inspection.inspection_date).toLocaleDateString("pt-BR")}`,
+    `Location: ${inspection.location || "N/A"}`,
+    `Checklist: ${inspection.checklist_version || "N/A"}`,
+    `Status: ${inspection.status || "N/A"}`,
   ];
 
   headerInfo.forEach((info) => {
@@ -77,12 +77,12 @@ export async function generatePreOvidPDF(inspection: InspectionData) {
   // AI Summary Section
   if (inspection.ai_report?.summary) {
     doc.setFontSize(14);
-    doc.setFont('helvetica', 'bold');
-    doc.text('AI Summary', 20, yPosition);
+    doc.setFont("helvetica", "bold");
+    doc.text("AI Summary", 20, yPosition);
     yPosition += 8;
 
     doc.setFontSize(11);
-    doc.setFont('helvetica', 'normal');
+    doc.setFont("helvetica", "normal");
     const summaryLines = doc.splitTextToSize(
       inspection.ai_report.summary,
       pageWidth - 40
@@ -104,11 +104,11 @@ export async function generatePreOvidPDF(inspection: InspectionData) {
     inspection.ai_report?.compliance_score !== undefined
   ) {
     doc.setFontSize(12);
-    doc.setFont('helvetica', 'bold');
-    doc.text('Scores:', 20, yPosition);
+    doc.setFont("helvetica", "bold");
+    doc.text("Scores:", 20, yPosition);
     yPosition += 7;
 
-    doc.setFont('helvetica', 'normal');
+    doc.setFont("helvetica", "normal");
     if (inspection.ai_report.risk_score !== undefined) {
       doc.text(
         `Risk Score: ${inspection.ai_report.risk_score}%`,
@@ -136,12 +136,12 @@ export async function generatePreOvidPDF(inspection: InspectionData) {
     }
 
     doc.setFontSize(14);
-    doc.setFont('helvetica', 'bold');
-    doc.text('🔍 Critical Findings', 20, yPosition);
+    doc.setFont("helvetica", "bold");
+    doc.text("🔍 Critical Findings", 20, yPosition);
     yPosition += 8;
 
     doc.setFontSize(11);
-    doc.setFont('helvetica', 'normal');
+    doc.setFont("helvetica", "normal");
     const findingsLines = doc.splitTextToSize(
       inspection.ai_report.critical_findings,
       pageWidth - 40
@@ -165,8 +165,8 @@ export async function generatePreOvidPDF(inspection: InspectionData) {
     }
 
     doc.setFontSize(14);
-    doc.setFont('helvetica', 'bold');
-    doc.text('Checklist Results', 20, yPosition);
+    doc.setFont("helvetica", "bold");
+    doc.text("Checklist Results", 20, yPosition);
     yPosition += 10;
 
     // Limit items to avoid excessively large PDFs
@@ -179,7 +179,7 @@ export async function generatePreOvidPDF(inspection: InspectionData) {
       }
 
       doc.setFontSize(11);
-      doc.setFont('helvetica', 'bold');
+      doc.setFont("helvetica", "bold");
       doc.text(
         `Q${response.question_number}: ${response.section}`,
         20,
@@ -187,7 +187,7 @@ export async function generatePreOvidPDF(inspection: InspectionData) {
       );
       yPosition += 6;
 
-      doc.setFont('helvetica', 'normal');
+      doc.setFont("helvetica", "normal");
       const questionLines = doc.splitTextToSize(
         response.question_text,
         pageWidth - 40
@@ -207,7 +207,7 @@ export async function generatePreOvidPDF(inspection: InspectionData) {
 
       if (response.non_conformity) {
         doc.setTextColor(255, 0, 0);
-        doc.text('⚠️ Non-conformity', 25, yPosition);
+        doc.text("⚠️ Non-conformity", 25, yPosition);
         doc.setTextColor(0, 0, 0);
         yPosition += 5;
       }
@@ -243,12 +243,12 @@ export async function generatePreOvidPDF(inspection: InspectionData) {
     yPosition = 20;
 
     doc.setFontSize(14);
-    doc.setFont('helvetica', 'bold');
-    doc.text('📋 Suggested Action Plan', 20, yPosition);
+    doc.setFont("helvetica", "bold");
+    doc.text("📋 Suggested Action Plan", 20, yPosition);
     yPosition += 10;
 
     doc.setFontSize(11);
-    doc.setFont('helvetica', 'normal');
+    doc.setFont("helvetica", "normal");
     const planLines = doc.splitTextToSize(
       inspection.ai_report.suggested_plan,
       pageWidth - 40
@@ -268,12 +268,12 @@ export async function generatePreOvidPDF(inspection: InspectionData) {
   for (let i = 1; i <= totalPages; i++) {
     doc.setPage(i);
     doc.setFontSize(9);
-    doc.setFont('helvetica', 'italic');
+    doc.setFont("helvetica", "italic");
     doc.text(
-      `Page ${i} of ${totalPages} - Generated on ${new Date().toLocaleString('pt-BR')}`,
+      `Page ${i} of ${totalPages} - Generated on ${new Date().toLocaleString("pt-BR")}`,
       pageWidth / 2,
       pageHeight - 10,
-      { align: 'center' }
+      { align: "center" }
     );
   }
 
@@ -289,14 +289,14 @@ export function exportInspectionToCSV(inspection: InspectionData) {
 
   // Header row
   rows.push([
-    'Section',
-    'Question Number',
-    'Question',
-    'Response',
-    'Comments',
-    'Non-Conformity',
-    'AI Suggestion',
-    'AI Risk Analysis',
+    "Section",
+    "Question Number",
+    "Question",
+    "Response",
+    "Comments",
+    "Non-Conformity",
+    "AI Suggestion",
+    "AI Risk Analysis",
   ]);
 
   // Data rows
@@ -307,26 +307,26 @@ export function exportInspectionToCSV(inspection: InspectionData) {
         response.question_number,
         response.question_text,
         response.response,
-        response.comments || '',
-        response.non_conformity ? 'Yes' : 'No',
-        response.ai_suggestion || '',
-        response.ai_risk_analysis || '',
+        response.comments || "",
+        response.non_conformity ? "Yes" : "No",
+        response.ai_suggestion || "",
+        response.ai_risk_analysis || "",
       ]);
     });
   }
 
   // Convert to CSV string
   const csvContent = rows
-    .map((row) => row.map((cell) => `"${cell}"`).join(','))
-    .join('\n');
+    .map((row) => row.map((cell) => `"${cell}"`).join(","))
+    .join("\n");
 
   // Create blob and download
-  const blob = new Blob([csvContent], { type: 'text/csv;charset=utf-8;' });
-  const link = document.createElement('a');
+  const blob = new Blob([csvContent], { type: "text/csv;charset=utf-8;" });
+  const link = document.createElement("a");
   const url = URL.createObjectURL(blob);
-  link.setAttribute('href', url);
-  link.setAttribute('download', `pre-ovid-inspection-${inspection.id}.csv`);
-  link.style.visibility = 'hidden';
+  link.setAttribute("href", url);
+  link.setAttribute("download", `pre-ovid-inspection-${inspection.id}.csv`);
+  link.style.visibility = "hidden";
   document.body.appendChild(link);
   link.click();
   document.body.removeChild(link);

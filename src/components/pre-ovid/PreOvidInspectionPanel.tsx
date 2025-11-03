@@ -3,43 +3,43 @@
  * PATCH 650 - Pre-OVID Inspection Module
  */
 
-import { useState } from 'react';
-import { Tabs, TabsList, TabsTrigger, TabsContent } from '@/components/ui/tabs';
-import { Card, CardHeader, CardContent, CardTitle } from '@/components/ui/card';
-import { Label } from '@/components/ui/label';
-import { Input } from '@/components/ui/input';
-import { Textarea } from '@/components/ui/textarea';
-import { Button } from '@/components/ui/button';
+import { useState } from "react";
+import { Tabs, TabsList, TabsTrigger, TabsContent } from "@/components/ui/tabs";
+import { Card, CardHeader, CardContent, CardTitle } from "@/components/ui/card";
+import { Label } from "@/components/ui/label";
+import { Input } from "@/components/ui/input";
+import { Textarea } from "@/components/ui/textarea";
+import { Button } from "@/components/ui/button";
 import {
   Select,
   SelectTrigger,
   SelectValue,
   SelectContent,
   SelectItem,
-} from '@/components/ui/select';
-import { useToast } from '@/hooks/use-toast';
-import { Loader2, FileText, Upload, Brain } from 'lucide-react';
+} from "@/components/ui/select";
+import { useToast } from "@/hooks/use-toast";
+import { Loader2, FileText, Upload, Brain } from "lucide-react";
 import {
   createInspection,
   generateAIReport,
   type PreOvidInspection,
   type PreOvidResponse,
   type PreOvidEvidence,
-} from '@/pages/api/pre-ovid/inspections';
+} from "@/pages/api/pre-ovid/inspections";
 
 export default function PreOvidInspectionPanel() {
   const { toast } = useToast();
   const [loading, setLoading] = useState(false);
   const [generatingReport, setGeneratingReport] = useState(false);
-  const [activeTab, setActiveTab] = useState('inspection');
+  const [activeTab, setActiveTab] = useState("inspection");
 
   // Form state
-  const [vesselName, setVesselName] = useState('');
-  const [inspectorName, setInspectorName] = useState('');
-  const [location, setLocation] = useState('');
-  const [checklistVersion, setChecklistVersion] = useState('ovid-v3');
-  const [observations, setObservations] = useState('');
-  const [aiReport, setAiReport] = useState('[Relatório será gerado aqui]');
+  const [vesselName, setVesselName] = useState("");
+  const [inspectorName, setInspectorName] = useState("");
+  const [location, setLocation] = useState("");
+  const [checklistVersion, setChecklistVersion] = useState("ovid-v3");
+  const [observations, setObservations] = useState("");
+  const [aiReport, setAiReport] = useState("[Relatório será gerado aqui]");
   const [currentInspectionId, setCurrentInspectionId] = useState<
     string | null
   >(null);
@@ -47,9 +47,9 @@ export default function PreOvidInspectionPanel() {
   const handleSaveInspection = async () => {
     if (!inspectorName.trim()) {
       toast({
-        title: 'Erro',
-        description: 'Por favor, informe o nome do inspetor',
-        variant: 'destructive',
+        title: "Erro",
+        description: "Por favor, informe o nome do inspetor",
+        variant: "destructive",
       });
       return;
     }
@@ -59,32 +59,32 @@ export default function PreOvidInspectionPanel() {
     try {
       // TODO: Replace with actual authentication context
       // Get inspector ID from useAuth() or similar context
-      const mockInspectorId = 'mock-inspector-id';
+      const mockInspectorId = "mock-inspector-id";
 
       const inspection: PreOvidInspection = {
         inspector_id: mockInspectorId,
         location,
         checklist_version: checklistVersion,
         notes: observations,
-        status: 'draft',
+        status: "draft",
       };
 
       // Mock responses for demonstration
       const responses: PreOvidResponse[] = [
         {
-          section: 'Segurança',
-          question_number: '1',
-          question_text: 'Equipamentos de segurança estão disponíveis?',
-          response: 'Sim',
-          comments: 'Todos os equipamentos estão em boas condições',
+          section: "Segurança",
+          question_number: "1",
+          question_text: "Equipamentos de segurança estão disponíveis?",
+          response: "Sim",
+          comments: "Todos os equipamentos estão em boas condições",
           non_conformity: false,
         },
         {
-          section: 'Tripulação',
-          question_number: '2',
-          question_text: 'A tripulação possui certificações válidas?',
-          response: 'Sim',
-          comments: 'Certificações válidas até 2026',
+          section: "Tripulação",
+          question_number: "2",
+          question_text: "A tripulação possui certificações válidas?",
+          response: "Sim",
+          comments: "Certificações válidas até 2026",
           non_conformity: false,
         },
       ];
@@ -100,15 +100,15 @@ export default function PreOvidInspectionPanel() {
       }
 
       toast({
-        title: 'Sucesso',
-        description: 'Inspeção salva com sucesso!',
+        title: "Sucesso",
+        description: "Inspeção salva com sucesso!",
       });
     } catch (error) {
-      console.error('Error saving inspection:', error);
+      console.error("Error saving inspection:", error);
       toast({
-        title: 'Erro',
-        description: 'Erro ao salvar inspeção. Tente novamente.',
-        variant: 'destructive',
+        title: "Erro",
+        description: "Erro ao salvar inspeção. Tente novamente.",
+        variant: "destructive",
       });
     } finally {
       setLoading(false);
@@ -118,9 +118,9 @@ export default function PreOvidInspectionPanel() {
   const handleGenerateAIReport = async () => {
     if (!currentInspectionId) {
       toast({
-        title: 'Erro',
-        description: 'Salve a inspeção antes de gerar o relatório',
-        variant: 'destructive',
+        title: "Erro",
+        description: "Salve a inspeção antes de gerar o relatório",
+        variant: "destructive",
       });
       return;
     }
@@ -129,7 +129,7 @@ export default function PreOvidInspectionPanel() {
 
     try {
       // TODO: Replace with actual authentication context
-      const mockInspectorId = 'mock-inspector-id';
+      const mockInspectorId = "mock-inspector-id";
       const result = await generateAIReport(
         currentInspectionId,
         mockInspectorId
@@ -146,15 +146,15 @@ export default function PreOvidInspectionPanel() {
       }
 
       toast({
-        title: 'Sucesso',
-        description: 'Relatório IA gerado com sucesso!',
+        title: "Sucesso",
+        description: "Relatório IA gerado com sucesso!",
       });
     } catch (error) {
-      console.error('Error generating AI report:', error);
+      console.error("Error generating AI report:", error);
       toast({
-        title: 'Erro',
-        description: 'Erro ao gerar relatório IA. Tente novamente.',
-        variant: 'destructive',
+        title: "Erro",
+        description: "Erro ao gerar relatório IA. Tente novamente.",
+        variant: "destructive",
       });
     } finally {
       setGeneratingReport(false);
@@ -326,7 +326,7 @@ export default function PreOvidInspectionPanel() {
                 {generatingReport && (
                   <Loader2 className="mr-2 h-4 w-4 animate-spin" />
                 )}
-                {generatingReport ? 'Gerando Relatório...' : 'Gerar Relatório IA'}
+                {generatingReport ? "Gerando Relatório..." : "Gerar Relatório IA"}
               </Button>
 
               <div className="flex gap-2">
