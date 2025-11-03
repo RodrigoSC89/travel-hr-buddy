@@ -187,7 +187,7 @@ function generateRecommendations(
   // Category-specific recommendations
   const categoryIssues = new Map<string, number>();
   findings
-    .filter(f => f.status === 'non-compliant' && f.status !== 'not-applicable')
+    .filter(f => f.status === 'non-compliant')
     .forEach(finding => {
       const count = categoryIssues.get(finding.category) || 0;
       categoryIssues.set(finding.category, count + 1);
