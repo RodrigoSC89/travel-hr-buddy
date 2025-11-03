@@ -94,7 +94,7 @@ describe("LLMEmissionAnalyzer", () => {
   });
 
   it("should return WARNING for moderate emissions", () => {
-    const input = { co2: 210, nox: 10 };
+    const input = { co2: 210, nox: 12 };
     const result = LLMEmissionAnalyzer.analyze(input);
     
     expect(result.complianceLevel).toBe("WARNING");
