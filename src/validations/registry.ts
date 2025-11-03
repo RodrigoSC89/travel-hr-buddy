@@ -83,7 +83,7 @@ class ValidationRegistry {
       return {
         passed: false,
         tests: {},
-        errors: [error instanceof Error ? error.message : 'Unknown error'],
+        errors: [error instanceof Error ? error.message : "Unknown error"],
         timestamp: new Date().toISOString(),
       };
     }
@@ -132,7 +132,7 @@ export function createValidator(
       name,
       description,
       category,
-      version: '1.0.0',
+      version: "1.0.0",
     },
     run: runFn,
   };

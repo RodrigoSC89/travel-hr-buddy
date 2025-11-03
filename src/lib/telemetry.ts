@@ -51,16 +51,16 @@ class TelemetryTracker {
       }
     };
     
-    document.addEventListener('click', throttledClick, true);
+    document.addEventListener("click", throttledClick, true);
 
     // Track errors
-    window.addEventListener('error', this.handleError.bind(this));
+    window.addEventListener("error", this.handleError.bind(this));
 
     // Track unhandled promise rejections
-    window.addEventListener('unhandledrejection', this.handleUnhandledRejection.bind(this));
+    window.addEventListener("unhandledrejection", this.handleUnhandledRejection.bind(this));
 
     // Flush before page unload
-    window.addEventListener('beforeunload', () => {
+    window.addEventListener("beforeunload", () => {
       this.flush();
     });
   }
@@ -70,15 +70,15 @@ class TelemetryTracker {
     // Use data-track-id if available, fallback to id, then first class, then 'unknown'
     const elementId = target.dataset.trackId || 
                      target.id || 
-                     target.className.split(' ')[0] || 
-                     'unknown';
+                     target.className.split(" ")[0] || 
+                     "unknown";
     const elementName = target.tagName.toLowerCase();
 
     this.track({
-      eventType: 'click',
+      eventType: "click",
       elementId,
       elementName,
-      action: 'click',
+      action: "click",
       context: {
         x: event.clientX,
         y: event.clientY,
@@ -89,8 +89,8 @@ class TelemetryTracker {
 
   private handleError(event: ErrorEvent): void {
     this.track({
-      eventType: 'error',
-      action: 'error_occurred',
+      eventType: "error",
+      action: "error_occurred",
       isError: true,
       errorMessage: event.message,
       context: {
@@ -103,10 +103,10 @@ class TelemetryTracker {
 
   private handleUnhandledRejection(event: PromiseRejectionEvent): void {
     this.track({
-      eventType: 'unhandled_rejection',
-      action: 'promise_rejection',
+      eventType: "unhandled_rejection",
+      action: "promise_rejection",
       isError: true,
-      errorMessage: event.reason?.toString() || 'Unknown promise rejection',
+      errorMessage: event.reason?.toString() || "Unknown promise rejection",
     });
   }
 
@@ -126,7 +126,7 @@ class TelemetryTracker {
     this.queue = [];
 
     try {
-      const { error } = await supabase.from('telemetry_events').insert(
+      const { error } = await supabase.from("telemetry_events").insert(
         events.map(event => ({
           event_type: event.eventType,
           element_id: event.elementId,
@@ -142,12 +142,12 @@ class TelemetryTracker {
       );
 
       if (error) {
-        console.error('Failed to send telemetry:', error);
+        console.error("Failed to send telemetry:", error);
         // Put events back in queue to retry
         this.queue.unshift(...events);
       }
     } catch (error) {
-      console.error('Telemetry flush error:', error);
+      console.error("Telemetry flush error:", error);
       // Put events back in queue to retry
       this.queue.unshift(...events);
     }
@@ -155,8 +155,8 @@ class TelemetryTracker {
 
   trackPageView(pageName: string): void {
     this.track({
-      eventType: 'pageview',
-      action: 'page_viewed',
+      eventType: "pageview",
+      action: "page_viewed",
       context: {
         pageName,
         referrer: document.referrer,
@@ -166,8 +166,8 @@ class TelemetryTracker {
 
   trackFeatureUse(featureName: string, details?: Record<string, any>): void {
     this.track({
-      eventType: 'feature_use',
-      action: 'feature_used',
+      eventType: "feature_use",
+      action: "feature_used",
       elementName: featureName,
       context: details,
     });
@@ -175,7 +175,7 @@ class TelemetryTracker {
 
   trackInteraction(elementId: string, interactionType: string, details?: Record<string, any>): void {
     this.track({
-      eventType: 'interaction',
+      eventType: "interaction",
       elementId,
       action: interactionType,
       context: details,

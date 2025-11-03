@@ -3,8 +3,8 @@
  * Type definitions for AI performance monitoring and logging
  */
 
-export type LogLevel = 'debug' | 'info' | 'warn' | 'error' | 'critical';
-export type LogCategory = 'performance' | 'error' | 'decision' | 'learning' | 'system';
+export type LogLevel = "debug" | "info" | "warn" | "error" | "critical";
+export type LogCategory = "performance" | "error" | "decision" | "learning" | "system";
 
 export interface PerformanceLog {
   id: string;
@@ -48,7 +48,7 @@ export interface LogContext {
   requestId?: string;
   agentId?: string;
   pipelineId?: string;
-  environment: 'development' | 'staging' | 'production';
+  environment: "development" | "staging" | "production";
 }
 
 export interface PerformanceSummary {
@@ -79,7 +79,7 @@ export interface Bottleneck {
   operation: string;
   occurrences: number;
   avgDuration: number;
-  impact: 'low' | 'medium' | 'high' | 'critical';
+  impact: "low" | "medium" | "high" | "critical";
   suggestion: string;
 }
 

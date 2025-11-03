@@ -523,7 +523,7 @@ function App() {
     }, INIT_TIMEOUT_MS);
     
     try {
-      performance.mark('init-start');
+      performance.mark("init-start");
       
       initializeMonitoring();
       logger.info("Monitoring initialized");
@@ -563,9 +563,9 @@ function App() {
         }, 2000);
       }
       
-      performance.mark('init-end');
-      performance.measure('app-initialization', 'init-start', 'init-end');
-      const initMeasure = performance.getEntriesByName('app-initialization')[0];
+      performance.mark("init-end");
+      performance.measure("app-initialization", "init-start", "init-end");
+      const initMeasure = performance.getEntriesByName("app-initialization")[0];
       
       logger.info("App initialized successfully", { 
         duration: `${initMeasure?.duration.toFixed(2)}ms` 
@@ -581,9 +581,9 @@ function App() {
     return () => {
       systemWatchdog.stop();
       isInitialized = false; // Reset para hot-reload em dev
-      performance.clearMarks('init-start');
-      performance.clearMarks('init-end');
-      performance.clearMeasures('app-initialization');
+      performance.clearMarks("init-start");
+      performance.clearMarks("init-end");
+      performance.clearMeasures("app-initialization");
     };
   }, []);
 

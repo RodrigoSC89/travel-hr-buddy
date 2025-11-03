@@ -3,29 +3,27 @@
  * Main form for creating and editing inspections
  */
 
-import React, { useState, useEffect } from 'react';
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
-import { Button } from '@/components/ui/button';
-import { Input } from '@/components/ui/input';
-import { Label } from '@/components/ui/label';
-import { Textarea } from '@/components/ui/textarea';
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
-import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
-import { Badge } from '@/components/ui/badge';
-import { Alert, AlertDescription } from '@/components/ui/alert';
-import { Checkbox } from '@/components/ui/checkbox';
-import { RadioGroup, RadioGroupItem } from '@/components/ui/radio-group';
+import React, { useState, useEffect } from "react";
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
+import { Button } from "@/components/ui/button";
+import { Input } from "@/components/ui/input";
+import { Label } from "@/components/ui/label";
+import { Textarea } from "@/components/ui/textarea";
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
+import { Badge } from "@/components/ui/badge";
+import { Alert, AlertDescription } from "@/components/ui/alert";
+import { Checkbox } from "@/components/ui/checkbox";
+import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
 import {
   Save,
-  FileText,
   AlertTriangle,
   CheckCircle,
   Plus,
   Trash2,
   Download,
-  PenTool,
-} from 'lucide-react';
-import SignatureCanvas from 'react-signature-canvas';
+} from "lucide-react";
+import SignatureCanvas from "react-signature-canvas";
 import type {
   LSAFFAInspection,
   InspectionType,
@@ -35,43 +33,43 @@ import type {
   IssueSeverity,
   LSA_CATEGORIES,
   FFA_CATEGORIES,
-} from '@/types/lsa-ffa';
-import { calculateInspectionScore } from '@/lib/scoreCalculator';
-import { LSAFFAInsightAI } from './LSAFFAInsightAI';
-import { downloadInspectionReport } from './ReportGenerator';
+} from "@/types/lsa-ffa";
+import { calculateInspectionScore } from "@/lib/scoreCalculator";
+import { LSAFFAInsightAI } from "./LSAFFAInsightAI";
+import { downloadInspectionReport } from "./ReportGenerator";
 
 const LSA_CATEGORIES_CONST = [
-  'Lifeboats',
-  'Life Rafts',
-  'Rescue Boats',
-  'Life Jackets',
-  'Immersion Suits',
-  'Thermal Protective Aids',
-  'Visual Signals',
-  'Sound Signals',
-  'Line-Throwing Appliances',
-  'EPIRB',
-  'SART',
-  'Lifeboat Equipment',
-  'Davits and Launching',
+  "Lifeboats",
+  "Life Rafts",
+  "Rescue Boats",
+  "Life Jackets",
+  "Immersion Suits",
+  "Thermal Protective Aids",
+  "Visual Signals",
+  "Sound Signals",
+  "Line-Throwing Appliances",
+  "EPIRB",
+  "SART",
+  "Lifeboat Equipment",
+  "Davits and Launching",
 ] as const;
 
 const FFA_CATEGORIES_CONST = [
-  'Portable Fire Extinguishers',
-  'Fixed Fire Extinguishers',
-  'Fire Hoses and Nozzles',
-  'Fire Pumps',
-  'Fire Main System',
-  'Sprinkler Systems',
-  'Fire Detection Systems',
-  'Fire Alarm Systems',
-  'Emergency Fire Pumps',
-  'Fixed Gas Systems',
-  'Fixed Foam Systems',
-  'Fire Doors and Dampers',
-  'Firemen\'s Outfits',
-  'Breathing Apparatus',
-  'EEBD',
+  "Portable Fire Extinguishers",
+  "Fixed Fire Extinguishers",
+  "Fire Hoses and Nozzles",
+  "Fire Pumps",
+  "Fire Main System",
+  "Sprinkler Systems",
+  "Fire Detection Systems",
+  "Fire Alarm Systems",
+  "Emergency Fire Pumps",
+  "Fixed Gas Systems",
+  "Fixed Foam Systems",
+  "Fire Doors and Dampers",
+  "Firemen's Outfits",
+  "Breathing Apparatus",
+  "EEBD",
 ] as const;
 
 interface LSAFFAFormProps {
@@ -83,19 +81,19 @@ interface LSAFFAFormProps {
 }
 
 export function LSAFFAForm({ inspection, vesselId, vesselName, onSave, onCancel }: LSAFFAFormProps) {
-  const [inspectionType, setInspectionType] = useState<InspectionType>(inspection?.type || 'LSA');
-  const [inspector, setInspector] = useState(inspection?.inspector || '');
-  const [date, setDate] = useState(inspection?.date || new Date().toISOString().split('T')[0]);
+  const [inspectionType, setInspectionType] = useState<InspectionType>(inspection?.type || "LSA");
+  const [inspector, setInspector] = useState(inspection?.inspector || "");
+  const [date, setDate] = useState(inspection?.date || new Date().toISOString().split("T")[0]);
   const [checklist, setChecklist] = useState<Record<string, ChecklistItem>>(
     inspection?.checklist || {}
   );
   const [issues, setIssues] = useState<InspectionIssue[]>(inspection?.issues_found || []);
-  const [aiNotes, setAiNotes] = useState(inspection?.ai_notes || '');
+  const [aiNotes, setAiNotes] = useState(inspection?.ai_notes || "");
   const [saving, setSaving] = useState(false);
   const [signatureRef, setSignatureRef] = useState<SignatureCanvas | null>(null);
-  const [activeTab, setActiveTab] = useState('checklist');
+  const [activeTab, setActiveTab] = useState("checklist");
 
-  const categories = inspectionType === 'LSA' ? LSA_CATEGORIES_CONST : FFA_CATEGORIES_CONST;
+  const categories = inspectionType === "LSA" ? LSA_CATEGORIES_CONST : FFA_CATEGORIES_CONST;
 
   // Initialize checklist if empty
   useEffect(() => {
@@ -107,8 +105,8 @@ export function LSAFFAForm({ inspection, vesselId, vesselName, onSave, onCancel 
           id,
           category,
           item: `Inspect ${category}`,
-          status: 'pending',
-          notes: '',
+          status: "pending",
+          notes: "",
           evidence: [],
         };
       });
@@ -130,8 +128,8 @@ export function LSAFFAForm({ inspection, vesselId, vesselName, onSave, onCancel 
     const newIssue: InspectionIssue = {
       id: `issue-${Date.now()}`,
       category: categories[0],
-      description: '',
-      severity: 'minor',
+      description: "",
+      severity: "minor",
       resolved: false,
     };
     setIssues((prev) => [...prev, newIssue]);
@@ -149,7 +147,7 @@ export function LSAFFAForm({ inspection, vesselId, vesselName, onSave, onCancel 
 
   const handleSave = async () => {
     if (!inspector.trim()) {
-      alert('Please enter inspector name');
+      alert("Please enter inspector name");
       return;
     }
 
@@ -175,8 +173,8 @@ export function LSAFFAForm({ inspection, vesselId, vesselName, onSave, onCancel 
 
       await onSave(inspectionData);
     } catch (error) {
-      console.error('Failed to save inspection:', error);
-      alert('Failed to save inspection');
+      console.error("Failed to save inspection:", error);
+      alert("Failed to save inspection");
     } finally {
       setSaving(false);
     }
@@ -184,15 +182,15 @@ export function LSAFFAForm({ inspection, vesselId, vesselName, onSave, onCancel 
 
   const handleExportPDF = async () => {
     if (!inspection) {
-      alert('Please save the inspection first');
+      alert("Please save the inspection first");
       return;
     }
 
     try {
       await downloadInspectionReport(inspection, vesselName);
     } catch (error) {
-      console.error('Failed to export PDF:', error);
-      alert('Failed to export PDF');
+      console.error("Failed to export PDF:", error);
+      alert("Failed to export PDF");
     }
   };
 
@@ -204,7 +202,7 @@ export function LSAFFAForm({ inspection, vesselId, vesselName, onSave, onCancel 
       <Card>
         <CardHeader>
           <CardTitle>
-            {inspection ? 'Edit' : 'New'} {inspectionType} Inspection
+            {inspection ? "Edit" : "New"} {inspectionType} Inspection
           </CardTitle>
           <CardDescription>Vessel: {vesselName}</CardDescription>
         </CardHeader>
@@ -249,7 +247,7 @@ export function LSAFFAForm({ inspection, vesselId, vesselName, onSave, onCancel 
           </div>
 
           {/* Score Display */}
-          <Alert className={scoreData.overallScore >= 75 ? 'border-green-500' : 'border-orange-500'}>
+          <Alert className={scoreData.overallScore >= 75 ? "border-green-500" : "border-orange-500"}>
             <div className="flex items-center justify-between">
               <div className="flex items-center gap-2">
                 {scoreData.overallScore >= 75 ? (
@@ -261,7 +259,7 @@ export function LSAFFAForm({ inspection, vesselId, vesselName, onSave, onCancel 
                   Compliance Score: {scoreData.overallScore}%
                 </span>
               </div>
-              <Badge variant={scoreData.overallScore >= 75 ? 'default' : 'destructive'}>
+              <Badge variant={scoreData.overallScore >= 75 ? "default" : "destructive"}>
                 {scoreData.complianceLevel.toUpperCase()}
               </Badge>
             </div>
@@ -296,7 +294,7 @@ export function LSAFFAForm({ inspection, vesselId, vesselName, onSave, onCancel 
                   <div key={item.id} className="p-4 border rounded-lg space-y-3">
                     <div className="flex items-center justify-between">
                       <h4 className="font-semibold">{item.category}</h4>
-                      <Badge variant={item.status === 'pass' ? 'default' : 'secondary'}>
+                      <Badge variant={item.status === "pass" ? "default" : "secondary"}>
                         {item.status.toUpperCase()}
                       </Badge>
                     </div>
@@ -336,7 +334,7 @@ export function LSAFFAForm({ inspection, vesselId, vesselName, onSave, onCancel 
                     </RadioGroup>
 
                     <Textarea
-                      value={item.notes || ''}
+                      value={item.notes || ""}
                       onChange={(e) =>
                         updateChecklistItem(item.id, { notes: e.target.value })
                       }
@@ -436,7 +434,7 @@ export function LSAFFAForm({ inspection, vesselId, vesselName, onSave, onCancel 
                       />
 
                       <Textarea
-                        value={issue.correctiveAction || ''}
+                        value={issue.correctiveAction || ""}
                         onChange={(e) =>
                           updateIssue(issue.id, { correctiveAction: e.target.value })
                         }
@@ -469,7 +467,7 @@ export function LSAFFAForm({ inspection, vesselId, vesselName, onSave, onCancel 
               inspection={inspection}
               onInsightGenerated={(insight) => {
                 setAiNotes(
-                  `${insight.summary}\n\nRecommendations:\n${insight.recommendations.join('\n')}\n\nRisk Assessment:\n${insight.riskAssessment}`
+                  `${insight.summary}\n\nRecommendations:\n${insight.recommendations.join("\n")}\n\nRisk Assessment:\n${insight.riskAssessment}`
                 );
               }}
             />
@@ -497,7 +495,7 @@ export function LSAFFAForm({ inspection, vesselId, vesselName, onSave, onCancel 
                 <SignatureCanvas
                   ref={(ref) => setSignatureRef(ref)}
                   canvasProps={{
-                    className: 'w-full h-48 border rounded',
+                    className: "w-full h-48 border rounded",
                   }}
                 />
               </div>

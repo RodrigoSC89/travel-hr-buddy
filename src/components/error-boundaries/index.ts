@@ -3,4 +3,4 @@
  * Central export point for all error boundary components
  */
 
-export { ModuleErrorBoundary, useModuleErrorHandler } from './ModuleErrorBoundary';
+export { ModuleErrorBoundary, useModuleErrorHandler } from "./ModuleErrorBoundary";

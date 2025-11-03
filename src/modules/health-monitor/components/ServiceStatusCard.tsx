@@ -1,9 +1,9 @@
 // PATCH 623: Service Status Card Component
-import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
-import { Badge } from '@/components/ui/badge';
-import { Activity, AlertCircle, CheckCircle, Clock } from 'lucide-react';
-import type { HealthCheckResult, ServiceStatus } from '../types';
-import { formatDistanceToNow } from 'date-fns';
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import { Badge } from "@/components/ui/badge";
+import { Activity, AlertCircle, CheckCircle, Clock } from "lucide-react";
+import type { HealthCheckResult, ServiceStatus } from "../types";
+import { formatDistanceToNow } from "date-fns";
 
 interface ServiceStatusCardProps {
   result: HealthCheckResult;
@@ -13,24 +13,24 @@ export function ServiceStatusCard({ result }: ServiceStatusCardProps) {
   const statusConfig = {
     healthy: {
       icon: CheckCircle,
-      color: 'text-green-500',
-      bgColor: 'bg-green-50 dark:bg-green-950',
-      borderColor: 'border-green-200 dark:border-green-800',
-      badge: 'default' as const
+      color: "text-green-500",
+      bgColor: "bg-green-50 dark:bg-green-950",
+      borderColor: "border-green-200 dark:border-green-800",
+      badge: "default" as const
     },
     degraded: {
       icon: AlertCircle,
-      color: 'text-yellow-500',
-      bgColor: 'bg-yellow-50 dark:bg-yellow-950',
-      borderColor: 'border-yellow-200 dark:border-yellow-800',
-      badge: 'secondary' as const
+      color: "text-yellow-500",
+      bgColor: "bg-yellow-50 dark:bg-yellow-950",
+      borderColor: "border-yellow-200 dark:border-yellow-800",
+      badge: "secondary" as const
     },
     down: {
       icon: AlertCircle,
-      color: 'text-red-500',
-      bgColor: 'bg-red-50 dark:bg-red-950',
-      borderColor: 'border-red-200 dark:border-red-800',
-      badge: 'destructive' as const
+      color: "text-red-500",
+      bgColor: "bg-red-50 dark:bg-red-950",
+      borderColor: "border-red-200 dark:border-red-800",
+      badge: "destructive" as const
     }
   };
 
@@ -85,7 +85,7 @@ export function ServiceStatusCard({ result }: ServiceStatusCardProps) {
               <div className="text-xs text-muted-foreground space-y-1">
                 {Object.entries(result.metadata).map(([key, value]) => (
                   <div key={key} className="flex justify-between">
-                    <span className="capitalize">{key.replace(/_/g, ' ')}:</span>
+                    <span className="capitalize">{key.replace(/_/g, " ")}:</span>
                     <span className="font-mono">{String(value)}</span>
                   </div>
                 ))}

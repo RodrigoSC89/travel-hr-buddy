@@ -3,12 +3,12 @@
  * PATCH 545 - Technical Debt Visualization
  */
 
-import { useState } from 'react';
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
-import { Badge } from '@/components/ui/badge';
-import { Button } from '@/components/ui/button';
-import { Input } from '@/components/ui/input';
-import { ScrollArea } from '@/components/ui/scroll-area';
+import { useState } from "react";
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
+import { Badge } from "@/components/ui/badge";
+import { Button } from "@/components/ui/button";
+import { Input } from "@/components/ui/input";
+import { ScrollArea } from "@/components/ui/scroll-area";
 import { 
   AlertCircle,
   CheckCircle2,
@@ -17,121 +17,121 @@ import {
   Filter,
   Search,
   Wrench
-} from 'lucide-react';
+} from "lucide-react";
 
 interface TodoItem {
   file: string;
   line: number;
-  type: 'TODO' | 'FIXME' | 'HACK' | 'XXX';
-  category: 'feature' | 'integration' | 'validation' | 'style' | 'refactor';
+  type: "TODO" | "FIXME" | "HACK" | "XXX";
+  category: "feature" | "integration" | "validation" | "style" | "refactor";
   message: string;
   module: string;
-  priority: 'low' | 'medium' | 'high' | 'critical';
+  priority: "low" | "medium" | "high" | "critical";
 }
 
 export default function TodoTracker() {
-  const [searchTerm, setSearchTerm] = useState('');
-  const [selectedCategory, setSelectedCategory] = useState<string>('all');
+  const [searchTerm, setSearchTerm] = useState("");
+  const [selectedCategory, setSelectedCategory] = useState<string>("all");
 
   // Mapped from code analysis (537 TODOs found)
   const todosByModule = [
     {
-      module: 'AI Services',
+      module: "AI Services",
       count: 97,
       files: 12,
-      priority: 'high',
+      priority: "high",
       items: [
         {
-          file: 'src/ai/services/checklistAutoFill.ts',
+          file: "src/ai/services/checklistAutoFill.ts",
           line: 90,
-          type: 'TODO' as const,
-          category: 'integration' as const,
-          message: 'Implementar quando tabela checklist_completions existir',
-          module: 'AI Services',
-          priority: 'high' as const
+          type: "TODO" as const,
+          category: "integration" as const,
+          message: "Implementar quando tabela checklist_completions existir",
+          module: "AI Services",
+          priority: "high" as const
         },
         {
-          file: 'src/ai/services/incidentAnalyzer.ts',
+          file: "src/ai/services/incidentAnalyzer.ts",
           line: 189,
-          type: 'TODO' as const,
-          category: 'integration' as const,
-          message: 'Implementar quando tabela dp_incidents existir',
-          module: 'AI Services',
-          priority: 'high' as const
+          type: "TODO" as const,
+          category: "integration" as const,
+          message: "Implementar quando tabela dp_incidents existir",
+          module: "AI Services",
+          priority: "high" as const
         },
         {
-          file: 'src/ai/services/logsAnalyzer.ts',
+          file: "src/ai/services/logsAnalyzer.ts",
           line: 66,
-          type: 'TODO' as const,
-          category: 'integration' as const,
-          message: 'Fetch logs from database when system_logs table exists',
-          module: 'AI Services',
-          priority: 'high' as const
+          type: "TODO" as const,
+          category: "integration" as const,
+          message: "Fetch logs from database when system_logs table exists",
+          module: "AI Services",
+          priority: "high" as const
         }
       ]
     },
     {
-      module: 'Admin Components',
+      module: "Admin Components",
       count: 156,
       files: 28,
-      priority: 'medium',
+      priority: "medium",
       items: [
         {
-          file: 'src/components/admin/organization-stats-cards.tsx',
+          file: "src/components/admin/organization-stats-cards.tsx",
           line: 16,
-          type: 'TODO' as const,
-          category: 'integration' as const,
-          message: 'buscar dados reais',
-          module: 'Admin Components',
-          priority: 'medium' as const
+          type: "TODO" as const,
+          category: "integration" as const,
+          message: "buscar dados reais",
+          module: "Admin Components",
+          priority: "medium" as const
         }
       ]
     },
     {
-      module: 'AI Features',
+      module: "AI Features",
       count: 89,
       files: 15,
-      priority: 'medium',
+      priority: "medium",
       items: [
         {
-          file: 'src/components/ai/advanced-ai-insights.tsx',
+          file: "src/components/ai/advanced-ai-insights.tsx",
           line: 175,
-          type: 'TODO' as const,
-          category: 'feature' as const,
-          message: 'Open implementation workflow dialog',
-          module: 'AI Features',
-          priority: 'medium' as const
+          type: "TODO" as const,
+          category: "feature" as const,
+          message: "Open implementation workflow dialog",
+          module: "AI Features",
+          priority: "medium" as const
         },
         {
-          file: 'src/components/ai/integrated-ai-assistant.tsx',
+          file: "src/components/ai/integrated-ai-assistant.tsx",
           line: 437,
-          type: 'TODO' as const,
-          category: 'feature' as const,
-          message: 'Implement settings dialog with model selection, temperature, etc.',
-          module: 'AI Features',
-          priority: 'medium' as const
+          type: "TODO" as const,
+          category: "feature" as const,
+          message: "Implement settings dialog with model selection, temperature, etc.",
+          module: "AI Features",
+          priority: "medium" as const
         }
       ]
     },
     {
-      module: 'Validation Components',
+      module: "Validation Components",
       count: 195,
       files: 42,
-      priority: 'low',
+      priority: "low",
       items: []
     }
   ];
 
   const totalTodos = todosByModule.reduce((sum, m) => sum + m.count, 0);
-  const highPriority = todosByModule.filter(m => m.priority === 'high').reduce((sum, m) => sum + m.count, 0);
-  const mediumPriority = todosByModule.filter(m => m.priority === 'medium').reduce((sum, m) => sum + m.count, 0);
+  const highPriority = todosByModule.filter(m => m.priority === "high").reduce((sum, m) => sum + m.count, 0);
+  const mediumPriority = todosByModule.filter(m => m.priority === "medium").reduce((sum, m) => sum + m.count, 0);
 
   const categories = [
-    { id: 'all', name: 'Todos', count: totalTodos },
-    { id: 'feature', name: 'Features', count: 156 },
-    { id: 'integration', name: 'Integrations', count: 186 },
-    { id: 'validation', name: 'Validation', count: 195 },
-    { id: 'refactor', name: 'Refactor', count: 0 }
+    { id: "all", name: "Todos", count: totalTodos },
+    { id: "feature", name: "Features", count: 156 },
+    { id: "integration", name: "Integrations", count: 186 },
+    { id: "validation", name: "Validation", count: 195 },
+    { id: "refactor", name: "Refactor", count: 0 }
   ];
 
   const filteredModules = todosByModule.filter(m => 
@@ -216,7 +216,7 @@ export default function TodoTracker() {
             {categories.map((cat) => (
               <Button
                 key={cat.id}
-                variant={selectedCategory === cat.id ? 'default' : 'outline'}
+                variant={selectedCategory === cat.id ? "default" : "outline"}
                 size="sm"
                 onClick={() => setSelectedCategory(cat.id)}
               >
@@ -250,8 +250,8 @@ export default function TodoTracker() {
                       <div className="flex items-center gap-2">
                         <Badge 
                           variant={
-                            module.priority === 'high' ? 'destructive' :
-                            module.priority === 'medium' ? 'secondary' : 'outline'
+                            module.priority === "high" ? "destructive" :
+                              module.priority === "medium" ? "secondary" : "outline"
                           }
                         >
                           {module.priority}
@@ -278,7 +278,7 @@ export default function TodoTracker() {
                               </Badge>
                             </div>
                             <div className="flex items-center gap-2 mt-2">
-                              <Badge variant={item.type !== 'TODO' ? 'destructive' : 'secondary'}>
+                              <Badge variant={item.type !== "TODO" ? "destructive" : "secondary"}>
                                 {item.type}
                               </Badge>
                               <Badge variant="outline">{item.category}</Badge>

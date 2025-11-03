@@ -3,7 +3,7 @@
  * Validates digital signatures and ensures data integrity
  */
 
-import { supabase } from '@/integrations/supabase/client';
+import { supabase } from "@/integrations/supabase/client";
 
 export interface SignatureValidation {
   isValid: boolean;
@@ -24,7 +24,7 @@ export function validateSignatureFormat(signatureData: string): boolean {
   }
   
   // Check minimum size (should have actual signature data)
-  const base64Data = signatureData.split(',')[1];
+  const base64Data = signatureData.split(",")[1];
   if (!base64Data || base64Data.length < 100) {
     return false;
   }
@@ -66,22 +66,22 @@ export async function validateInspectionSignature(
       return {
         isValid: false,
         timestamp: new Date().toISOString(),
-        inspector: 'unknown',
+        inspector: "unknown",
       };
     }
     
     // Get inspection data
     const { data: inspection, error } = await supabase
-      .from('lsa_ffa_inspections')
-      .select('*')
-      .eq('id', inspectionId)
+      .from("lsa_ffa_inspections")
+      .select("*")
+      .eq("id", inspectionId)
       .single();
     
     if (error || !inspection) {
       return {
         isValid: false,
         timestamp: new Date().toISOString(),
-        inspector: 'unknown',
+        inspector: "unknown",
       };
     }
     
@@ -92,7 +92,7 @@ export async function validateInspectionSignature(
         timestamp: inspection.signature_validated_at || new Date().toISOString(),
         inspector: inspection.inspector,
         metadata: {
-          reason: 'Inspection already signed',
+          reason: "Inspection already signed",
         },
       };
     }
@@ -107,7 +107,7 @@ export async function validateInspectionSignature(
         timestamp: signatureDate.toISOString(),
         inspector: inspection.inspector,
         metadata: {
-          reason: 'Signature date cannot be before inspection date',
+          reason: "Signature date cannot be before inspection date",
         },
       };
     }
@@ -123,13 +123,13 @@ export async function validateInspectionSignature(
       },
     };
   } catch (error) {
-    console.error('Signature validation error:', error);
+    console.error("Signature validation error:", error);
     return {
       isValid: false,
       timestamp: new Date().toISOString(),
-      inspector: 'unknown',
+      inspector: "unknown",
       metadata: {
-        error: error instanceof Error ? error.message : 'Unknown error',
+        error: error instanceof Error ? error.message : "Unknown error",
       },
     };
   }
@@ -148,36 +148,36 @@ export async function applySignature(
     if (!validation.isValid) {
       return {
         success: false,
-        message: validation.metadata?.reason as string || 'Invalid signature',
+        message: validation.metadata?.reason as string || "Invalid signature",
       };
     }
     
     // Update inspection with signature
     const { error } = await supabase
-      .from('lsa_ffa_inspections')
+      .from("lsa_ffa_inspections")
       .update({
         signature_data: signatureData,
         signature_validated: true,
         signature_validated_at: validation.timestamp,
       })
-      .eq('id', inspectionId);
+      .eq("id", inspectionId);
     
     if (error) {
       return {
         success: false,
-        message: 'Failed to apply signature',
+        message: "Failed to apply signature",
       };
     }
     
     return {
       success: true,
-      message: 'Signature applied successfully',
+      message: "Signature applied successfully",
     };
   } catch (error) {
-    console.error('Apply signature error:', error);
+    console.error("Apply signature error:", error);
     return {
       success: false,
-      message: error instanceof Error ? error.message : 'Unknown error',
+      message: error instanceof Error ? error.message : "Unknown error",
     };
   }
 }
@@ -192,7 +192,7 @@ export function verifySignatureIntegrity(
   const actualHash = createSignatureHash(
     signatureData,
     new Date().toISOString(),
-    'verify'
+    "verify"
   );
   
   return actualHash === expectedHash;
@@ -206,9 +206,9 @@ export function getSignatureMetadata(signatureData: string): {
   size: number;
   createdAt: string;
 } {
-  const parts = signatureData.split(',');
-  const format = parts[0]?.match(/image\/([^;]+)/)?.[1] || 'unknown';
-  const base64Data = parts[1] || '';
+  const parts = signatureData.split(",");
+  const format = parts[0]?.match(/image\/([^;]+)/)?.[1] || "unknown";
+  const base64Data = parts[1] || "";
   const size = Math.round((base64Data.length * 3) / 4); // Approximate byte size
   
   return {

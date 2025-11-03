@@ -3,14 +3,14 @@
  * Calculates compliance scores based on checklist items and issues
  */
 
-import type { ChecklistItem, InspectionIssue } from '@/types/lsa-ffa';
+import type { ChecklistItem, InspectionIssue } from "@/types/lsa-ffa";
 
 export interface ScoreBreakdown {
   overallScore: number;
   checklistScore: number;
   issuesPenalty: number;
   categoryScores: Record<string, number>;
-  complianceLevel: 'critical' | 'low' | 'medium' | 'high' | 'excellent';
+  complianceLevel: "critical" | "low" | "medium" | "high" | "excellent";
   recommendation: string;
 }
 
@@ -95,7 +95,7 @@ function calculateCategoryScores(
   categories.forEach(category => {
     const categoryItems = items.filter(item => item.category === category);
     const passed = categoryItems.filter(
-      item => item.status === 'pass' || item.status === 'na'
+      item => item.status === "pass" || item.status === "na"
     ).length;
     
     categoryScores[category] = categoryItems.length > 0
@@ -109,56 +109,56 @@ function calculateCategoryScores(
 /**
  * Get compliance level based on score
  */
-function getComplianceLevel(score: number): ScoreBreakdown['complianceLevel'] {
-  if (score >= 90) return 'excellent';
-  if (score >= 75) return 'high';
-  if (score >= 60) return 'medium';
-  if (score >= 40) return 'low';
-  return 'critical';
+function getComplianceLevel(score: number): ScoreBreakdown["complianceLevel"] {
+  if (score >= 90) return "excellent";
+  if (score >= 75) return "high";
+  if (score >= 60) return "medium";
+  if (score >= 40) return "low";
+  return "critical";
 }
 
 /**
  * Get recommendation based on score and issues
  */
 function getRecommendation(score: number, issues: InspectionIssue[]): string {
-  const criticalIssues = issues.filter(i => i.severity === 'critical' && !i.resolved);
-  const majorIssues = issues.filter(i => i.severity === 'major' && !i.resolved);
+  const criticalIssues = issues.filter(i => i.severity === "critical" && !i.resolved);
+  const majorIssues = issues.filter(i => i.severity === "major" && !i.resolved);
   
   if (criticalIssues.length > 0) {
     return `⚠️ URGENT: ${criticalIssues.length} critical issue(s) require immediate attention before vessel operation.`;
   }
   
   if (score < 60) {
-    return '❌ Non-compliant: Significant deficiencies found. Corrective actions required before next inspection.';
+    return "❌ Non-compliant: Significant deficiencies found. Corrective actions required before next inspection.";
   }
   
   if (majorIssues.length > 0 || score < 75) {
-    return '⚠️ Conditionally compliant: Address identified issues to improve safety standards.';
+    return "⚠️ Conditionally compliant: Address identified issues to improve safety standards.";
   }
   
   if (score < 90) {
-    return '✓ Compliant: Good condition. Minor improvements recommended for optimal performance.';
+    return "✓ Compliant: Good condition. Minor improvements recommended for optimal performance.";
   }
   
-  return '✅ Excellent: All equipment meets or exceeds SOLAS requirements. Continue current maintenance practices.';
+  return "✅ Excellent: All equipment meets or exceeds SOLAS requirements. Continue current maintenance practices.";
 }
 
 /**
  * Calculate trend based on historical scores
  */
 export function calculateScoreTrend(scores: number[]): {
-  trend: 'improving' | 'declining' | 'stable';
+  trend: "improving" | "declining" | "stable";
   change: number;
 } {
   if (scores.length < 2) {
-    return { trend: 'stable', change: 0 };
+    return { trend: "stable", change: 0 };
   }
   
   const recent = scores.slice(-3);
   const older = scores.slice(-6, -3);
   
   if (older.length === 0) {
-    return { trend: 'stable', change: 0 };
+    return { trend: "stable", change: 0 };
   }
   
   const recentAvg = recent.reduce((a, b) => a + b, 0) / recent.length;
@@ -166,18 +166,18 @@ export function calculateScoreTrend(scores: number[]): {
   
   const change = Math.round(recentAvg - olderAvg);
   
-  if (change > 5) return { trend: 'improving', change };
-  if (change < -5) return { trend: 'declining', change };
-  return { trend: 'stable', change };
+  if (change > 5) return { trend: "improving", change };
+  if (change < -5) return { trend: "declining", change };
+  return { trend: "stable", change };
 }
 
 /**
  * Get compliance color for UI
  */
 export function getComplianceColor(score: number): string {
-  if (score >= 90) return 'text-green-600';
-  if (score >= 75) return 'text-blue-600';
-  if (score >= 60) return 'text-yellow-600';
-  if (score >= 40) return 'text-orange-600';
-  return 'text-red-600';
+  if (score >= 90) return "text-green-600";
+  if (score >= 75) return "text-blue-600";
+  if (score >= 60) return "text-yellow-600";
+  if (score >= 40) return "text-orange-600";
+  return "text-red-600";
 }

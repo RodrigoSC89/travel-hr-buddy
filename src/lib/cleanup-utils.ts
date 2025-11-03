@@ -4,8 +4,8 @@
  * Prevents memory leaks and ensures proper resource management
  */
 
-import { useEffect, useRef, useCallback } from 'react';
-import { logger } from '@/lib/logger';
+import { useEffect, useRef, useCallback } from "react";
+import { logger } from "@/lib/logger";
 
 /**
  * Cleanup manager for tracking and cleaning up resources
@@ -16,7 +16,7 @@ export class CleanupManager {
   private intervals: Set<NodeJS.Timeout> = new Set();
   private name: string;
 
-  constructor(name: string = 'CleanupManager') {
+  constructor(name: string = "CleanupManager") {
     this.name = name;
   }
 
@@ -121,7 +121,7 @@ export class CleanupManager {
  * }, []);
  * ```
  */
-export function useCleanup(componentName: string = 'Component'): CleanupManager {
+export function useCleanup(componentName: string = "Component"): CleanupManager {
   const managerRef = useRef<CleanupManager | null>(null);
 
   if (!managerRef.current) {
@@ -248,7 +248,7 @@ export function useSubscription<T>(
     });
 
     return () => {
-      if (typeof unsubscribe === 'function') {
+      if (typeof unsubscribe === "function") {
         unsubscribe();
       }
     };
@@ -305,11 +305,11 @@ export function useAbortableEffect(
       try {
         await effect(controller.signal);
       } catch (error) {
-        if (error instanceof Error && error.name === 'AbortError') {
+        if (error instanceof Error && error.name === "AbortError") {
           // Ignore abort errors
           return;
         }
-        logger.error('[useAbortableEffect] Error in effect:', error);
+        logger.error("[useAbortableEffect] Error in effect:", error);
       }
     };
 

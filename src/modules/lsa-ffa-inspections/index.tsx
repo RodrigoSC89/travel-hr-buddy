@@ -2,12 +2,12 @@
  * LSA & FFA Inspections Module - Main Dashboard
  */
 
-import React, { useState } from 'react';
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
-import { Button } from '@/components/ui/button';
-import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
-import { Badge } from '@/components/ui/badge';
-import { Alert, AlertDescription } from '@/components/ui/alert';
+import React, { useState } from "react";
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
+import { Button } from "@/components/ui/button";
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
+import { Badge } from "@/components/ui/badge";
+import { Alert, AlertDescription } from "@/components/ui/alert";
 import {
   Plus,
   FileText,
@@ -15,18 +15,15 @@ import {
   AlertTriangle,
   CheckCircle,
   Download,
-  TrendingUp,
-  TrendingDown,
-  Minus,
   LifeBuoy,
   Flame,
-} from 'lucide-react';
-import { useToast } from '@/hooks/use-toast';
-import { useLsaFfa } from './useLsaFfa';
-import { LSAFFAForm } from './LSAFFAForm';
-import type { LSAFFAInspection } from '@/types/lsa-ffa';
-import { getComplianceColor } from '@/lib/scoreCalculator';
-import { downloadInspectionReport } from './ReportGenerator';
+} from "lucide-react";
+import { useToast } from "@/hooks/use-toast";
+import { useLsaFfa } from "./useLsaFfa";
+import { LSAFFAForm } from "./LSAFFAForm";
+import type { LSAFFAInspection } from "@/types/lsa-ffa";
+import { getComplianceColor } from "@/lib/scoreCalculator";
+import { downloadInspectionReport } from "./ReportGenerator";
 
 interface LSAFFAInspectionsDashboardProps {
   vesselId?: string;
@@ -35,7 +32,7 @@ interface LSAFFAInspectionsDashboardProps {
 
 export default function LSAFFAInspectionsDashboard({
   vesselId,
-  vesselName = 'Unknown Vessel',
+  vesselName = "Unknown Vessel",
 }: LSAFFAInspectionsDashboardProps) {
   const {
     inspections,
@@ -50,19 +47,19 @@ export default function LSAFFAInspectionsDashboard({
 
   const [showForm, setShowForm] = useState(false);
   const [selectedInspection, setSelectedInspection] = useState<LSAFFAInspection | undefined>();
-  const [activeTab, setActiveTab] = useState('overview');
+  const [activeTab, setActiveTab] = useState("overview");
   const { toast } = useToast();
 
-  const handleCreateNew = (type: 'LSA' | 'FFA') => {
+  const handleCreateNew = (type: "LSA" | "FFA") => {
     setSelectedInspection(undefined);
     setShowForm(true);
-    setActiveTab('form');
+    setActiveTab("form");
   };
 
   const handleEdit = (inspection: LSAFFAInspection) => {
     setSelectedInspection(inspection);
     setShowForm(true);
-    setActiveTab('form');
+    setActiveTab("form");
   };
 
   const handleSave = async (inspectionData: Partial<LSAFFAInspection>) => {
@@ -70,20 +67,20 @@ export default function LSAFFAInspectionsDashboard({
       if (selectedInspection) {
         await updateInspection(selectedInspection.id, inspectionData);
         toast({
-          title: 'Success',
-          description: 'Inspection updated successfully',
+          title: "Success",
+          description: "Inspection updated successfully",
         });
       } else {
-        await createInspection(inspectionData as Omit<LSAFFAInspection, 'id' | 'created_at' | 'updated_at'>);
+        await createInspection(inspectionData as Omit<LSAFFAInspection, "id" | "created_at" | "updated_at">);
         toast({
-          title: 'Success',
-          description: 'Inspection created successfully',
+          title: "Success",
+          description: "Inspection created successfully",
         });
       }
       setShowForm(false);
-      setActiveTab('overview');
+      setActiveTab("overview");
     } catch (error) {
-      console.error('Failed to save inspection:', error);
+      console.error("Failed to save inspection:", error);
     }
   };
 
@@ -91,21 +88,21 @@ export default function LSAFFAInspectionsDashboard({
     try {
       await downloadInspectionReport(inspection, vesselName);
       toast({
-        title: 'Success',
-        description: 'Report downloaded successfully',
+        title: "Success",
+        description: "Report downloaded successfully",
       });
     } catch (error) {
-      console.error('Failed to export report:', error);
+      console.error("Failed to export report:", error);
       toast({
-        title: 'Error',
-        description: 'Failed to export report',
-        variant: 'destructive',
+        title: "Error",
+        description: "Failed to export report",
+        variant: "destructive",
       });
     }
   };
 
-  const lsaInspections = getInspectionsByType('LSA');
-  const ffaInspections = getInspectionsByType('FFA');
+  const lsaInspections = getInspectionsByType("LSA");
+  const ffaInspections = getInspectionsByType("FFA");
   const criticalInspections = getCriticalInspections();
 
   return (
@@ -119,11 +116,11 @@ export default function LSAFFAInspectionsDashboard({
           </p>
         </div>
         <div className="flex gap-2">
-          <Button onClick={() => handleCreateNew('LSA')}>
+          <Button onClick={() => handleCreateNew("LSA")}>
             <LifeBuoy className="mr-2 h-4 w-4" />
             New LSA Inspection
           </Button>
-          <Button onClick={() => handleCreateNew('FFA')} variant="secondary">
+          <Button onClick={() => handleCreateNew("FFA")} variant="secondary">
             <Flame className="mr-2 h-4 w-4" />
             New FFA Inspection
           </Button>
@@ -136,7 +133,7 @@ export default function LSAFFAInspectionsDashboard({
           <TabsTrigger value="lsa">LSA ({lsaInspections.length})</TabsTrigger>
           <TabsTrigger value="ffa">FFA ({ffaInspections.length})</TabsTrigger>
           <TabsTrigger value="form">
-            {showForm ? (selectedInspection ? 'Edit' : 'New') : 'Inspection Form'}
+            {showForm ? (selectedInspection ? "Edit" : "New") : "Inspection Form"}
           </TabsTrigger>
         </TabsList>
 
@@ -234,7 +231,7 @@ export default function LSAFFAInspectionsDashboard({
                       onClick={() => handleEdit(inspection)}
                     >
                       <div className="flex items-center gap-4">
-                        {inspection.type === 'LSA' ? (
+                        {inspection.type === "LSA" ? (
                           <LifeBuoy className="h-8 w-8 text-blue-600" />
                         ) : (
                           <Flame className="h-8 w-8 text-red-600" />
@@ -285,7 +282,7 @@ export default function LSAFFAInspectionsDashboard({
                   <CardTitle>LSA Inspections</CardTitle>
                   <CardDescription>Life-Saving Appliances</CardDescription>
                 </div>
-                <Button onClick={() => handleCreateNew('LSA')} size="sm">
+                <Button onClick={() => handleCreateNew("LSA")} size="sm">
                   <Plus className="mr-2 h-4 w-4" />
                   New LSA Inspection
                 </Button>
@@ -321,7 +318,7 @@ export default function LSAFFAInspectionsDashboard({
                   <CardTitle>FFA Inspections</CardTitle>
                   <CardDescription>Fire-Fighting Appliances</CardDescription>
                 </div>
-                <Button onClick={() => handleCreateNew('FFA')} size="sm">
+                <Button onClick={() => handleCreateNew("FFA")} size="sm">
                   <Plus className="mr-2 h-4 w-4" />
                   New FFA Inspection
                 </Button>
@@ -353,13 +350,13 @@ export default function LSAFFAInspectionsDashboard({
           {showForm || selectedInspection ? (
             <LSAFFAForm
               inspection={selectedInspection}
-              vesselId={vesselId || ''}
+              vesselId={vesselId || ""}
               vesselName={vesselName}
               onSave={handleSave}
               onCancel={() => {
                 setShowForm(false);
                 setSelectedInspection(undefined);
-                setActiveTab('overview');
+                setActiveTab("overview");
               }}
             />
           ) : (
@@ -371,11 +368,11 @@ export default function LSAFFAInspectionsDashboard({
                   Create a new inspection or edit an existing one to view the form
                 </p>
                 <div className="flex gap-2">
-                  <Button onClick={() => handleCreateNew('LSA')}>
+                  <Button onClick={() => handleCreateNew("LSA")}>
                     <LifeBuoy className="mr-2 h-4 w-4" />
                     New LSA Inspection
                   </Button>
-                  <Button onClick={() => handleCreateNew('FFA')} variant="secondary">
+                  <Button onClick={() => handleCreateNew("FFA")} variant="secondary">
                     <Flame className="mr-2 h-4 w-4" />
                     New FFA Inspection
                   </Button>
@@ -405,7 +402,7 @@ function InspectionCard({
       onClick={() => onEdit(inspection)}
     >
       <div className="flex items-center gap-4">
-        {inspection.type === 'LSA' ? (
+        {inspection.type === "LSA" ? (
           <LifeBuoy className="h-8 w-8 text-blue-600" />
         ) : (
           <Flame className="h-8 w-8 text-red-600" />

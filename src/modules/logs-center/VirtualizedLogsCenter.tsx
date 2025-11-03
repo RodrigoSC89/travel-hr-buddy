@@ -136,13 +136,13 @@ export default function VirtualizedLogsCenter() {
 
   const getLevelIcon = (level: LogLevel) => {
     switch (level) {
-      case "error":
-        return <AlertCircle className="h-4 w-4 text-red-500" />;
-      case "warn":
-        return <AlertTriangle className="h-4 w-4 text-amber-500" />;
-      case "info":
-      default:
-        return <Info className="h-4 w-4 text-blue-500" />;
+    case "error":
+      return <AlertCircle className="h-4 w-4 text-red-500" />;
+    case "warn":
+      return <AlertTriangle className="h-4 w-4 text-amber-500" />;
+    case "info":
+    default:
+      return <Info className="h-4 w-4 text-blue-500" />;
     }
   };
 
@@ -150,13 +150,13 @@ export default function VirtualizedLogsCenter() {
     level: LogLevel
   ): "default" | "destructive" | "secondary" => {
     switch (level) {
-      case "error":
-        return "destructive";
-      case "warn":
-        return "secondary";
-      case "info":
-      default:
-        return "default";
+    case "error":
+      return "destructive";
+    case "warn":
+      return "secondary";
+    case "info":
+    default:
+      return "default";
     }
   };
 

@@ -52,33 +52,33 @@ export default function CodeHealth() {
 
   const getGradeColor = (grade: string) => {
     switch (grade) {
-      case 'A': return 'text-green-600';
-      case 'B': return 'text-blue-600';
-      case 'C': return 'text-yellow-600';
-      case 'D': return 'text-orange-600';
-      case 'F': return 'text-red-600';
-      default: return 'text-muted-foreground';
+    case "A": return "text-green-600";
+    case "B": return "text-blue-600";
+    case "C": return "text-yellow-600";
+    case "D": return "text-orange-600";
+    case "F": return "text-red-600";
+    default: return "text-muted-foreground";
     }
   };
 
   const getCategoryIcon = (category: string) => {
     switch (category) {
-      case 'architecture': return <Layers className="h-5 w-5" />;
-      case 'performance': return <Zap className="h-5 w-5" />;
-      case 'maintainability': return <Code className="h-5 w-5" />;
-      case 'testCoverage': return <TestTube className="h-5 w-5" />;
-      case 'documentation': return <FileText className="h-5 w-5" />;
-      default: return <Activity className="h-5 w-5" />;
+    case "architecture": return <Layers className="h-5 w-5" />;
+    case "performance": return <Zap className="h-5 w-5" />;
+    case "maintainability": return <Code className="h-5 w-5" />;
+    case "testCoverage": return <TestTube className="h-5 w-5" />;
+    case "documentation": return <FileText className="h-5 w-5" />;
+    default: return <Activity className="h-5 w-5" />;
     }
   };
 
   const getSeverityColor = (severity: string) => {
     switch (severity) {
-      case 'critical': return 'destructive';
-      case 'high': return 'destructive';
-      case 'medium': return 'secondary';
-      case 'low': return 'outline';
-      default: return 'outline';
+    case "critical": return "destructive";
+    case "high": return "destructive";
+    case "medium": return "secondary";
+    case "low": return "outline";
+    default: return "outline";
     }
   };
 
@@ -191,7 +191,7 @@ export default function CodeHealth() {
                     <div className="flex items-center gap-2">
                       {getCategoryIcon(key)}
                       <CardTitle className="text-lg capitalize">
-                        {key.replace(/([A-Z])/g, ' $1').trim()}
+                        {key.replace(/([A-Z])/g, " $1").trim()}
                       </CardTitle>
                     </div>
                     <Badge className={getGradeColor(category.grade)}>

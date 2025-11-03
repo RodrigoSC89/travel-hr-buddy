@@ -2,17 +2,17 @@
  * Custom hook for LSA & FFA Inspections
  */
 
-import { useState, useEffect, useCallback } from 'react';
-import { useToast } from '@/hooks/use-toast';
-import { lsaFfaInspectionService } from '@/services/lsa-ffa-inspection.service';
-import { calculateInspectionScore } from '@/lib/scoreCalculator';
+import { useState, useEffect, useCallback } from "react";
+import { useToast } from "@/hooks/use-toast";
+import { lsaFfaInspectionService } from "@/services/lsa-ffa-inspection.service";
+import { calculateInspectionScore } from "@/lib/scoreCalculator";
 import type {
   LSAFFAInspection,
   InspectionStats,
   InspectionType,
   ChecklistItem,
   InspectionIssue,
-} from '@/types/lsa-ffa';
+} from "@/types/lsa-ffa";
 
 interface UseLsaFfaOptions {
   vesselId?: string;
@@ -36,12 +36,12 @@ export function useLsaFfa(options: UseLsaFfaOptions = {}) {
       const data = await lsaFfaInspectionService.getInspections(vesselId);
       setInspections(data);
     } catch (err) {
-      const error = err instanceof Error ? err : new Error('Failed to load inspections');
+      const error = err instanceof Error ? err : new Error("Failed to load inspections");
       setError(error);
       toast({
-        title: 'Error',
+        title: "Error",
         description: error.message,
-        variant: 'destructive',
+        variant: "destructive",
       });
     } finally {
       setLoading(false);
@@ -54,31 +54,31 @@ export function useLsaFfa(options: UseLsaFfaOptions = {}) {
       const data = await lsaFfaInspectionService.getInspectionStats(vesselId);
       setStats(data);
     } catch (err) {
-      console.error('Failed to load stats:', err);
+      console.error("Failed to load stats:", err);
     }
   }, [vesselId]);
 
   // Create inspection
   const createInspection = useCallback(
     async (
-      inspection: Omit<LSAFFAInspection, 'id' | 'created_at' | 'updated_at'>
+      inspection: Omit<LSAFFAInspection, "id" | "created_at" | "updated_at">
     ) => {
       try {
         setLoading(true);
         const newInspection = await lsaFfaInspectionService.createInspection(inspection);
         setInspections((prev) => [newInspection, ...prev]);
         toast({
-          title: 'Success',
-          description: 'Inspection created successfully',
+          title: "Success",
+          description: "Inspection created successfully",
         });
         await loadStats();
         return newInspection;
       } catch (err) {
-        const error = err instanceof Error ? err : new Error('Failed to create inspection');
+        const error = err instanceof Error ? err : new Error("Failed to create inspection");
         toast({
-          title: 'Error',
+          title: "Error",
           description: error.message,
-          variant: 'destructive',
+          variant: "destructive",
         });
         throw error;
       } finally {
@@ -98,17 +98,17 @@ export function useLsaFfa(options: UseLsaFfaOptions = {}) {
           prev.map((i) => (i.id === id ? updated : i))
         );
         toast({
-          title: 'Success',
-          description: 'Inspection updated successfully',
+          title: "Success",
+          description: "Inspection updated successfully",
         });
         await loadStats();
         return updated;
       } catch (err) {
-        const error = err instanceof Error ? err : new Error('Failed to update inspection');
+        const error = err instanceof Error ? err : new Error("Failed to update inspection");
         toast({
-          title: 'Error',
+          title: "Error",
           description: error.message,
-          variant: 'destructive',
+          variant: "destructive",
         });
         throw error;
       } finally {
@@ -126,16 +126,16 @@ export function useLsaFfa(options: UseLsaFfaOptions = {}) {
         await lsaFfaInspectionService.deleteInspection(id);
         setInspections((prev) => prev.filter((i) => i.id !== id));
         toast({
-          title: 'Success',
-          description: 'Inspection deleted successfully',
+          title: "Success",
+          description: "Inspection deleted successfully",
         });
         await loadStats();
       } catch (err) {
-        const error = err instanceof Error ? err : new Error('Failed to delete inspection');
+        const error = err instanceof Error ? err : new Error("Failed to delete inspection");
         toast({
-          title: 'Error',
+          title: "Error",
           description: error.message,
-          variant: 'destructive',
+          variant: "destructive",
         });
         throw error;
       } finally {
@@ -166,7 +166,7 @@ export function useLsaFfa(options: UseLsaFfaOptions = {}) {
     return inspections.filter(
       (i) =>
         i.score < 70 ||
-        i.issues_found.some((issue) => issue.severity === 'critical')
+        i.issues_found.some((issue) => issue.severity === "critical")
     );
   }, [inspections]);
 
@@ -182,17 +182,17 @@ export function useLsaFfa(options: UseLsaFfaOptions = {}) {
           prev.map((i) => (i.id === inspectionId ? updated : i))
         );
         toast({
-          title: 'Success',
-          description: 'Issue marked as resolved',
+          title: "Success",
+          description: "Issue marked as resolved",
         });
         await loadStats();
         return updated;
       } catch (err) {
-        const error = err instanceof Error ? err : new Error('Failed to resolve issue');
+        const error = err instanceof Error ? err : new Error("Failed to resolve issue");
         toast({
-          title: 'Error',
+          title: "Error",
           description: error.message,
-          variant: 'destructive',
+          variant: "destructive",
         });
         throw error;
       }
@@ -211,17 +211,17 @@ export function useLsaFfa(options: UseLsaFfaOptions = {}) {
         if (result) {
           await loadInspections();
           toast({
-            title: 'Success',
-            description: 'Signature applied successfully',
+            title: "Success",
+            description: "Signature applied successfully",
           });
         }
         return result;
       } catch (err) {
-        const error = err instanceof Error ? err : new Error('Failed to apply signature');
+        const error = err instanceof Error ? err : new Error("Failed to apply signature");
         toast({
-          title: 'Error',
+          title: "Error",
           description: error.message,
-          variant: 'destructive',
+          variant: "destructive",
         });
         throw error;
       }

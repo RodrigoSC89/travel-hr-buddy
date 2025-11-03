@@ -3,15 +3,15 @@
  * Generates PDF reports with inspection results and AI recommendations
  */
 
-import jsPDF from 'jspdf';
-import autoTable from 'jspdf-autotable';
+import jsPDF from "jspdf";
+import autoTable from "jspdf-autotable";
 import type {
   LSAFFAInspection,
   ChecklistItem,
   InspectionIssue,
   ReportExportOptions,
-} from '@/types/lsa-ffa';
-import { calculateInspectionScore } from '@/lib/scoreCalculator';
+} from "@/types/lsa-ffa";
+import { calculateInspectionScore } from "@/lib/scoreCalculator";
 
 export class ReportGenerator {
   private doc: jsPDF;
@@ -27,11 +27,11 @@ export class ReportGenerator {
     inspection: LSAFFAInspection,
     vesselName: string,
     options: ReportExportOptions = {
-      format: 'pdf',
+      format: "pdf",
       includeEvidence: false,
       includeAINotes: true,
       includeSignature: true,
-      language: 'en',
+      language: "en",
     }
   ): Promise<Blob> {
     this.doc = new jsPDF();
@@ -70,7 +70,7 @@ export class ReportGenerator {
     // Add footer
     this.addFooter();
 
-    return this.doc.output('blob');
+    return this.doc.output("blob");
   }
 
   /**
@@ -81,19 +81,19 @@ export class ReportGenerator {
 
     // Title
     this.doc.setFontSize(20);
-    this.doc.setFont('helvetica', 'bold');
+    this.doc.setFont("helvetica", "bold");
     this.doc.text(
       `${inspection.type} Inspection Report`,
       pageWidth / 2,
       20,
-      { align: 'center' }
+      { align: "center" }
     );
 
     // Vessel name
     this.doc.setFontSize(14);
-    this.doc.setFont('helvetica', 'normal');
+    this.doc.setFont("helvetica", "normal");
     this.doc.text(`Vessel: ${vesselName}`, pageWidth / 2, 30, {
-      align: 'center',
+      align: "center",
     });
 
     // Line separator
@@ -108,16 +108,16 @@ export class ReportGenerator {
     const startY = 45;
 
     this.doc.setFontSize(12);
-    this.doc.setFont('helvetica', 'bold');
-    this.doc.text('Inspection Details', 15, startY);
+    this.doc.setFont("helvetica", "bold");
+    this.doc.text("Inspection Details", 15, startY);
 
-    this.doc.setFont('helvetica', 'normal');
+    this.doc.setFont("helvetica", "normal");
     this.doc.setFontSize(10);
 
     const details = [
       `Inspector: ${inspection.inspector}`,
       `Date: ${new Date(inspection.date).toLocaleDateString()}`,
-      `Type: ${inspection.type === 'LSA' ? 'Life-Saving Appliances' : 'Fire-Fighting Appliances'}`,
+      `Type: ${inspection.type === "LSA" ? "Life-Saving Appliances" : "Fire-Fighting Appliances"}`,
       `Report ID: ${inspection.id}`,
     ];
 
@@ -137,8 +137,8 @@ export class ReportGenerator {
     );
 
     this.doc.setFontSize(12);
-    this.doc.setFont('helvetica', 'bold');
-    this.doc.text('Compliance Score', 15, startY);
+    this.doc.setFont("helvetica", "bold");
+    this.doc.text("Compliance Score", 15, startY);
 
     // Score box
     const boxX = 15;
@@ -157,17 +157,17 @@ export class ReportGenerator {
       this.doc.setFillColor(239, 68, 68); // red
     }
 
-    this.doc.rect(boxX, boxY, boxWidth, boxHeight, 'F');
+    this.doc.rect(boxX, boxY, boxWidth, boxHeight, "F");
 
     // Score text
     this.doc.setTextColor(255, 255, 255);
     this.doc.setFontSize(24);
-    this.doc.setFont('helvetica', 'bold');
+    this.doc.setFont("helvetica", "bold");
     this.doc.text(
       `${scoreData.overallScore}%`,
       boxX + boxWidth / 2,
       boxY + boxHeight / 2 + 3,
-      { align: 'center' }
+      { align: "center" }
     );
 
     // Reset text color
@@ -175,7 +175,7 @@ export class ReportGenerator {
 
     // Compliance level
     this.doc.setFontSize(10);
-    this.doc.setFont('helvetica', 'normal');
+    this.doc.setFont("helvetica", "normal");
     this.doc.text(
       `Status: ${scoreData.complianceLevel.toUpperCase()}`,
       boxX + boxWidth + 10,
@@ -202,21 +202,21 @@ export class ReportGenerator {
 
     this.doc.addPage();
     this.doc.setFontSize(12);
-    this.doc.setFont('helvetica', 'bold');
-    this.doc.text('Inspection Checklist', 15, 20);
+    this.doc.setFont("helvetica", "bold");
+    this.doc.text("Inspection Checklist", 15, 20);
 
     const tableData = items.map((item) => [
       item.category,
       item.item,
       item.status.toUpperCase(),
-      item.notes || '-',
+      item.notes || "-",
     ]);
 
     autoTable(this.doc, {
       startY: 25,
-      head: [['Category', 'Item', 'Status', 'Notes']],
+      head: [["Category", "Item", "Status", "Notes"]],
       body: tableData,
-      theme: 'striped',
+      theme: "striped",
       headStyles: { fillColor: [59, 130, 246] },
       columnStyles: {
         0: { cellWidth: 40 },
@@ -233,21 +233,21 @@ export class ReportGenerator {
   private addIssues(issues: InspectionIssue[]): void {
     this.doc.addPage();
     this.doc.setFontSize(12);
-    this.doc.setFont('helvetica', 'bold');
-    this.doc.text('Issues Found', 15, 20);
+    this.doc.setFont("helvetica", "bold");
+    this.doc.text("Issues Found", 15, 20);
 
     const tableData = issues.map((issue) => [
       issue.category,
       issue.description,
       issue.severity.toUpperCase(),
-      issue.resolved ? 'Yes' : 'No',
+      issue.resolved ? "Yes" : "No",
     ]);
 
     autoTable(this.doc, {
       startY: 25,
-      head: [['Category', 'Description', 'Severity', 'Resolved']],
+      head: [["Category", "Description", "Severity", "Resolved"]],
       body: tableData,
-      theme: 'striped',
+      theme: "striped",
       headStyles: { fillColor: [239, 68, 68] },
       columnStyles: {
         0: { cellWidth: 35 },
@@ -264,11 +264,11 @@ export class ReportGenerator {
   private addAINotes(aiNotes: string): void {
     this.doc.addPage();
     this.doc.setFontSize(12);
-    this.doc.setFont('helvetica', 'bold');
-    this.doc.text('AI Recommendations', 15, 20);
+    this.doc.setFont("helvetica", "bold");
+    this.doc.text("AI Recommendations", 15, 20);
 
     this.doc.setFontSize(10);
-    this.doc.setFont('helvetica', 'normal');
+    this.doc.setFont("helvetica", "normal");
 
     const pageWidth = this.doc.internal.pageSize.getWidth();
     const lines = this.doc.splitTextToSize(aiNotes, pageWidth - 30);
@@ -283,25 +283,25 @@ export class ReportGenerator {
     const signatureY = pageHeight - 60;
 
     this.doc.setFontSize(10);
-    this.doc.setFont('helvetica', 'bold');
-    this.doc.text('Inspector Signature:', 15, signatureY);
+    this.doc.setFont("helvetica", "bold");
+    this.doc.text("Inspector Signature:", 15, signatureY);
 
     if (inspection.signature_data) {
       try {
         this.doc.addImage(
           inspection.signature_data,
-          'PNG',
+          "PNG",
           15,
           signatureY + 5,
           50,
           20
         );
       } catch (error) {
-        console.error('Failed to add signature image:', error);
+        console.error("Failed to add signature image:", error);
       }
     }
 
-    this.doc.setFont('helvetica', 'normal');
+    this.doc.setFont("helvetica", "normal");
     this.doc.setFontSize(9);
     this.doc.text(`Signed by: ${inspection.inspector}`, 15, signatureY + 30);
     this.doc.text(
@@ -324,7 +324,7 @@ export class ReportGenerator {
       const pageWidth = this.doc.internal.pageSize.getWidth();
 
       this.doc.setFontSize(8);
-      this.doc.setFont('helvetica', 'normal');
+      this.doc.setFont("helvetica", "normal");
       this.doc.setTextColor(128, 128, 128);
 
       // Page number
@@ -332,7 +332,7 @@ export class ReportGenerator {
         `Page ${i} of ${pageCount}`,
         pageWidth / 2,
         pageHeight - 10,
-        { align: 'center' }
+        { align: "center" }
       );
 
       // Generated timestamp
@@ -343,8 +343,8 @@ export class ReportGenerator {
       );
 
       // SOLAS compliance note
-      this.doc.text('SOLAS Compliant Report', pageWidth - 15, pageHeight - 10, {
-        align: 'right',
+      this.doc.text("SOLAS Compliant Report", pageWidth - 15, pageHeight - 10, {
+        align: "right",
       });
     }
   }
@@ -360,7 +360,7 @@ export class ReportGenerator {
    * Get report as base64 string
    */
   getBase64(): string {
-    return this.doc.output('datauristring');
+    return this.doc.output("datauristring");
   }
 }
 
@@ -376,9 +376,9 @@ export async function downloadInspectionReport(
   const blob = await generator.generateReport(inspection, vesselName, options);
 
   const url = URL.createObjectURL(blob);
-  const link = document.createElement('a');
+  const link = document.createElement("a");
   link.href = url;
-  link.download = `${inspection.type}-Inspection-${vesselName}-${new Date(inspection.date).toISOString().split('T')[0]}.pdf`;
+  link.download = `${inspection.type}-Inspection-${vesselName}-${new Date(inspection.date).toISOString().split("T")[0]}.pdf`;
   link.click();
   URL.revokeObjectURL(url);
 }

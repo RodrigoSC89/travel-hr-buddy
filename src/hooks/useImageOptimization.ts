@@ -3,12 +3,12 @@
  * PATCH 542 - Client-side image optimization utilities
  */
 
-import { useState, useEffect } from 'react';
-import { imageOptimizer, OptimizedImageResult } from '@/lib/images/image-optimizer';
+import { useState, useEffect } from "react";
+import { imageOptimizer, OptimizedImageResult } from "@/lib/images/image-optimizer";
 
 export interface UseImageOptimizationOptions {
   quality?: number;
-  format?: 'webp' | 'avif' | 'original';
+  format?: "webp" | "avif" | "original";
   generateBlurPlaceholder?: boolean;
 }
 
@@ -57,7 +57,7 @@ export function useImageFormatSupport() {
   const [formats, setFormats] = useState({
     webp: false,
     avif: false,
-    optimal: 'jpeg' as 'avif' | 'webp' | 'jpeg',
+    optimal: "jpeg" as "avif" | "webp" | "jpeg",
   });
 
   useEffect(() => {

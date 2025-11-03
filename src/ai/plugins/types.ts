@@ -108,14 +108,14 @@ class AIPluginRegistry {
             error: `Plugin ${pluginName} input validation failed. Please check input parameters.`,
             metadata: { 
               providedInput: input,
-              expectedFormat: 'Refer to plugin documentation',
+              expectedFormat: "Refer to plugin documentation",
             },
           };
         }
       } catch (validationError) {
         return {
           success: false,
-          error: `Plugin ${pluginName} validation error: ${validationError instanceof Error ? validationError.message : 'Unknown validation error'}`,
+          error: `Plugin ${pluginName} validation error: ${validationError instanceof Error ? validationError.message : "Unknown validation error"}`,
         };
       }
     }
@@ -125,7 +125,7 @@ class AIPluginRegistry {
     } catch (error) {
       return {
         success: false,
-        error: error instanceof Error ? error.message : 'Unknown error',
+        error: error instanceof Error ? error.message : "Unknown error",
       };
     }
   }

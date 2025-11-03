@@ -21,26 +21,26 @@ export default function SystemBenchmark() {
       const result = await cpuBenchmark.runBenchmark();
       setReport(result);
     } catch (error) {
-      console.error('Benchmark failed:', error);
+      console.error("Benchmark failed:", error);
     } finally {
       setIsRunning(false);
     }
   };
 
   const getScoreColor = (score: number) => {
-    if (score >= 80) return 'text-green-600';
-    if (score >= 60) return 'text-yellow-600';
-    return 'text-red-600';
+    if (score >= 80) return "text-green-600";
+    if (score >= 60) return "text-yellow-600";
+    return "text-red-600";
   };
 
   const getStatusBadge = (status: string) => {
     const variants = {
-      excellent: 'default',
-      good: 'secondary',
-      acceptable: 'outline',
-      poor: 'destructive'
+      excellent: "default",
+      good: "secondary",
+      acceptable: "outline",
+      poor: "destructive"
     } as const;
-    return variants[status as keyof typeof variants] || 'outline';
+    return variants[status as keyof typeof variants] || "outline";
   };
 
   return (
@@ -152,7 +152,7 @@ export default function SystemBenchmark() {
                   <dd className="font-medium">
                     {report.systemInfo.memory > 0 
                       ? `${report.systemInfo.memory} MB` 
-                      : 'N/A'}
+                      : "N/A"}
                   </dd>
                 </div>
                 <div className="col-span-2">

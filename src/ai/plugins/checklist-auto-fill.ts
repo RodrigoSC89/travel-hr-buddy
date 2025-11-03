@@ -3,16 +3,16 @@
  * Intelligently fills checklist items based on historical data and context
  */
 
-import { BaseAIPlugin, AIPluginInput, AIPluginOutput, AIPluginMetadata } from './types';
+import { BaseAIPlugin, AIPluginInput, AIPluginOutput, AIPluginMetadata } from "./types";
 
 export class ChecklistAutoFillPlugin extends BaseAIPlugin {
   metadata: AIPluginMetadata = {
-    name: 'checklist-auto-fill',
-    version: '1.0.0',
-    description: 'Automatically fills checklist items based on historical patterns and context',
-    author: 'Nautilus One AI',
+    name: "checklist-auto-fill",
+    version: "1.0.0",
+    description: "Automatically fills checklist items based on historical patterns and context",
+    author: "Nautilus One AI",
     enabled: true,
-    requiredFeatureFlag: 'ai_plugins',
+    requiredFeatureFlag: "ai_plugins",
   };
 
   async run(input: AIPluginInput): Promise<AIPluginOutput> {
@@ -22,7 +22,7 @@ export class ChecklistAutoFillPlugin extends BaseAIPlugin {
       if (!checklistTemplate) {
         return {
           success: false,
-          error: 'Checklist template is required',
+          error: "Checklist template is required",
         };
       }
 
@@ -48,7 +48,7 @@ export class ChecklistAutoFillPlugin extends BaseAIPlugin {
     } catch (error) {
       return {
         success: false,
-        error: error instanceof Error ? error.message : 'Unknown error',
+        error: error instanceof Error ? error.message : "Unknown error",
       };
     }
   }
@@ -72,7 +72,7 @@ export class ChecklistAutoFillPlugin extends BaseAIPlugin {
           name: item.name,
           value,
           autoFilled: true,
-          source: contextValue ? 'context' : historicalValue ? 'historical' : 'default',
+          source: contextValue ? "context" : historicalValue ? "historical" : "default",
         });
       }
     }
@@ -120,12 +120,12 @@ export class ChecklistAutoFillPlugin extends BaseAIPlugin {
   private generateSuggestions(filledItems: any[]): string[] {
     const suggestions: string[] = [];
     
-    const defaultCount = filledItems.filter(i => i.source === 'default').length;
+    const defaultCount = filledItems.filter(i => i.source === "default").length;
     if (defaultCount > 0) {
       suggestions.push(`${defaultCount} items filled with default values - review for accuracy`);
     }
     
-    const historicalCount = filledItems.filter(i => i.source === 'historical').length;
+    const historicalCount = filledItems.filter(i => i.source === "historical").length;
     if (historicalCount > 0) {
       suggestions.push(`${historicalCount} items filled from historical data - verify current relevance`);
     }
@@ -135,5 +135,5 @@ export class ChecklistAutoFillPlugin extends BaseAIPlugin {
 }
 
 // Register the plugin
-import { pluginRegistry } from './types';
+import { pluginRegistry } from "./types";
 pluginRegistry.register(new ChecklistAutoFillPlugin());

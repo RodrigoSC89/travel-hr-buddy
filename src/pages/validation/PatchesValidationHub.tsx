@@ -149,12 +149,12 @@ export default function PatchesValidationHub() {
 
   const getStatusColor = (status: string) => {
     switch (status) {
-      case "complete": return "default";
-      case "partial": return "secondary";
-      case "pending": return "outline";
-      case "active": return "default";
-      case "incomplete": return "destructive";
-      default: return "outline";
+    case "complete": return "default";
+    case "partial": return "secondary";
+    case "pending": return "outline";
+    case "active": return "default";
+    case "incomplete": return "destructive";
+    default: return "outline";
     }
   };
 

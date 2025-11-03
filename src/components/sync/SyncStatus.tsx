@@ -36,15 +36,15 @@ export function SyncStatus() {
       });
     };
 
-    window.addEventListener('online', handleOnline);
-    window.addEventListener('offline', handleOffline);
+    window.addEventListener("online", handleOnline);
+    window.addEventListener("offline", handleOffline);
 
     // Load pending count
     loadPendingCount();
 
     return () => {
-      window.removeEventListener('online', handleOnline);
-      window.removeEventListener('offline', handleOffline);
+      window.removeEventListener("online", handleOnline);
+      window.removeEventListener("offline", handleOffline);
     };
   }, []);
 
@@ -57,7 +57,7 @@ export function SyncStatus() {
       ]);
       setPendingCount(docs.length + logs.length + actions.length);
     } catch (error) {
-      console.error('Failed to load pending count:', error);
+      console.error("Failed to load pending count:", error);
     }
   };
 
@@ -79,7 +79,7 @@ export function SyncStatus() {
           // TODO: Implement actual sync to Supabase
           await offlineCache.markDocumentSynced(doc.id);
         } catch (error) {
-          console.error('Failed to sync document:', error);
+          console.error("Failed to sync document:", error);
         }
       }
 
@@ -89,7 +89,7 @@ export function SyncStatus() {
           // TODO: Implement actual sync to Supabase
           await offlineCache.markLogSynced(log.id);
         } catch (error) {
-          console.error('Failed to sync log:', error);
+          console.error("Failed to sync log:", error);
         }
       }
 
@@ -99,7 +99,7 @@ export function SyncStatus() {
           // TODO: Implement actual action processing
           await offlineCache.removePendingAction(action.id);
         } catch (error) {
-          console.error('Failed to process action:', error);
+          console.error("Failed to process action:", error);
         }
       }
 

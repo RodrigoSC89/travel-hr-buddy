@@ -21,7 +21,7 @@ export interface TimelineEvent {
   id: string;
   event_type: string;
   event_category: string;
-  severity: 'info' | 'success' | 'warning' | 'error';
+  severity: "info" | "success" | "warning" | "error";
   title: string;
   description?: string;
   user_id?: string;
@@ -45,24 +45,24 @@ const eventIcons = {
 
 const severityConfig = {
   info: {
-    color: 'text-blue-500',
-    bgColor: 'bg-blue-50',
-    badge: 'default' as const,
+    color: "text-blue-500",
+    bgColor: "bg-blue-50",
+    badge: "default" as const,
   },
   success: {
-    color: 'text-green-500',
-    bgColor: 'bg-green-50',
-    badge: 'default' as const,
+    color: "text-green-500",
+    bgColor: "bg-green-50",
+    badge: "default" as const,
   },
   warning: {
-    color: 'text-yellow-500',
-    bgColor: 'bg-yellow-50',
-    badge: 'outline' as const,
+    color: "text-yellow-500",
+    bgColor: "bg-yellow-50",
+    badge: "outline" as const,
   },
   error: {
-    color: 'text-red-500',
-    bgColor: 'bg-red-50',
-    badge: 'destructive' as const,
+    color: "text-red-500",
+    bgColor: "bg-red-50",
+    badge: "destructive" as const,
   },
 };
 
@@ -116,7 +116,7 @@ export function EventTimeline({ events }: EventTimelineProps) {
                       </p>
                     )}
                     <div className="flex items-center gap-4 text-xs text-muted-foreground">
-                      <span>{format(new Date(event.created_at), 'PPp')}</span>
+                      <span>{format(new Date(event.created_at), "PPp")}</span>
                       {event.metadata && Object.keys(event.metadata).length > 0 && (
                         <span className="text-xs">
                           {Object.entries(event.metadata).slice(0, 2).map(([key, value]) => (

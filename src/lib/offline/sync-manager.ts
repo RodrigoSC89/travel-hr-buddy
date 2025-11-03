@@ -140,21 +140,21 @@ class OfflineSyncManager {
       let result;
 
       switch (item.operation) {
-        case "insert":
-          result = await supabase.from(item.table).insert(item.data);
-          break;
-        case "update":
-          result = await supabase
-            .from(item.table)
-            .update(item.data)
-            .eq("id", item.data.id);
-          break;
-        case "delete":
-          result = await supabase
-            .from(item.table)
-            .delete()
-            .eq("id", item.data.id);
-          break;
+      case "insert":
+        result = await supabase.from(item.table).insert(item.data);
+        break;
+      case "update":
+        result = await supabase
+          .from(item.table)
+          .update(item.data)
+          .eq("id", item.data.id);
+        break;
+      case "delete":
+        result = await supabase
+          .from(item.table)
+          .delete()
+          .eq("id", item.data.id);
+        break;
       }
 
       if (result.error) {

@@ -3,13 +3,13 @@
  * PATCH 624 - Componente visual para validação de preview
  */
 
-import { useState } from 'react';
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
-import { Button } from '@/components/ui/button';
-import { Badge } from '@/components/ui/badge';
-import { CheckCircle2, XCircle, AlertTriangle, Loader2, Play, RefreshCw } from 'lucide-react';
-import { LovableValidator, ValidationResult } from '@/lib/qa/LovableValidator';
-import { ScrollArea } from '@/components/ui/scroll-area';
+import { useState } from "react";
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
+import { Button } from "@/components/ui/button";
+import { Badge } from "@/components/ui/badge";
+import { CheckCircle2, XCircle, AlertTriangle, Loader2, Play, RefreshCw } from "lucide-react";
+import { LovableValidator, ValidationResult } from "@/lib/qa/LovableValidator";
+import { ScrollArea } from "@/components/ui/scroll-area";
 
 interface PreviewValidatorProps {
   componentName: string;
@@ -33,7 +33,7 @@ export function PreviewValidator({
       const validationResult = await LovableValidator.run(componentName);
       setResult(validationResult);
     } catch (error) {
-      console.error('Erro ao executar validação:', error);
+      console.error("Erro ao executar validação:", error);
     } finally {
       setLoading(false);
     }
@@ -41,23 +41,23 @@ export function PreviewValidator({
 
   const getSeverityColor = (severity: string) => {
     switch (severity) {
-      case 'critical': return 'text-red-500';
-      case 'high': return 'text-orange-500';
-      case 'medium': return 'text-yellow-500';
-      case 'low': return 'text-blue-500';
-      default: return 'text-muted-foreground';
+    case "critical": return "text-red-500";
+    case "high": return "text-orange-500";
+    case "medium": return "text-yellow-500";
+    case "low": return "text-blue-500";
+    default: return "text-muted-foreground";
     }
   };
 
   const getSeverityIcon = (severity: string) => {
     switch (severity) {
-      case 'critical':
-      case 'high':
-        return <XCircle className="h-4 w-4" />;
-      case 'medium':
-        return <AlertTriangle className="h-4 w-4" />;
-      default:
-        return <CheckCircle2 className="h-4 w-4" />;
+    case "critical":
+    case "high":
+      return <XCircle className="h-4 w-4" />;
+    case "medium":
+      return <AlertTriangle className="h-4 w-4" />;
+    default:
+      return <CheckCircle2 className="h-4 w-4" />;
     }
   };
 
@@ -69,8 +69,8 @@ export function PreviewValidator({
             <CardTitle className="flex items-center gap-2">
               Lovable Preview Validator
               {result && (
-                <Badge variant={result.passed ? 'default' : 'destructive'}>
-                  {result.passed ? '✓ PASS' : '✗ FAIL'}
+                <Badge variant={result.passed ? "default" : "destructive"}>
+                  {result.passed ? "✓ PASS" : "✗ FAIL"}
                 </Badge>
               )}
             </CardTitle>
@@ -90,7 +90,7 @@ export function PreviewValidator({
             ) : (
               <Play className="mr-2 h-4 w-4" />
             )}
-            {result ? 'Re-validar' : 'Executar'}
+            {result ? "Re-validar" : "Executar"}
           </Button>
         </div>
       </CardHeader>
@@ -103,24 +103,24 @@ export function PreviewValidator({
               <MetricCard
                 label="Render Time"
                 value={`${result.performance.renderTime.toFixed(2)}ms`}
-                status={result.performance.renderTime < 3000 ? 'good' : 'bad'}
+                status={result.performance.renderTime < 3000 ? "good" : "bad"}
               />
               <MetricCard
                 label="Data Size"
                 value={`${(result.performance.dataSize / 1024).toFixed(2)}KB`}
-                status={result.performance.dataSize < 3072 ? 'good' : 'bad'}
+                status={result.performance.dataSize < 3072 ? "good" : "bad"}
               />
               <MetricCard
                 label="Re-renders"
                 value={result.performance.reRenderCount.toString()}
-                status={result.performance.reRenderCount < 10 ? 'good' : 'bad'}
+                status={result.performance.reRenderCount < 10 ? "good" : "bad"}
               />
               <MetricCard
                 label="Memory"
                 value={
                   result.performance.memoryUsage 
                     ? `${(result.performance.memoryUsage / 1024 / 1024).toFixed(2)}MB`
-                    : 'N/A'
+                    : "N/A"
                 }
                 status="neutral"
               />
@@ -213,12 +213,12 @@ function MetricCard({
 }: { 
   label: string; 
   value: string; 
-  status: 'good' | 'bad' | 'neutral';
+  status: "good" | "bad" | "neutral";
 }) {
   const statusColors = {
-    good: 'text-green-500',
-    bad: 'text-red-500',
-    neutral: 'text-muted-foreground'
+    good: "text-green-500",
+    bad: "text-red-500",
+    neutral: "text-muted-foreground"
   };
 
   return (

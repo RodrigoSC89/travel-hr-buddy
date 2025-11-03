@@ -87,7 +87,7 @@ test.describe("PATCH 563: UX Recovery & Navigation", () => {
     
     // Inject a script that could cause an error
     const hasErrorBoundary = await page.evaluate(() => {
-      return document.querySelector('[role="alert"]') !== null || true;
+      return document.querySelector("[role=\"alert\"]") !== null || true;
     });
     
     // Just verify the page loaded successfully
@@ -224,10 +224,10 @@ test.describe("PATCH 566: E2E Regression Tests", () => {
     
     // Get performance metrics
     const performanceTiming = await page.evaluate(() => {
-      const perfData = performance.getEntriesByType('navigation')[0] as PerformanceNavigationTiming;
+      const perfData = performance.getEntriesByType("navigation")[0] as PerformanceNavigationTiming;
       return {
-        fcp: performance.getEntriesByType('paint')
-          .find(entry => entry.name === 'first-contentful-paint')?.startTime || 0,
+        fcp: performance.getEntriesByType("paint")
+          .find(entry => entry.name === "first-contentful-paint")?.startTime || 0,
         loadTime: perfData.loadEventEnd - perfData.fetchStart
       };
     });
@@ -240,7 +240,7 @@ test.describe("PATCH 566: E2E Regression Tests", () => {
   test("should not have JavaScript errors on load", async ({ page }) => {
     const errors: string[] = [];
     
-    page.on('pageerror', error => {
+    page.on("pageerror", error => {
       errors.push(error.message);
     });
     
@@ -249,9 +249,9 @@ test.describe("PATCH 566: E2E Regression Tests", () => {
     
     // We allow some warnings but no critical errors
     const criticalErrors = errors.filter(e => 
-      e.includes('TypeError') || 
-      e.includes('ReferenceError') ||
-      e.includes('Cannot read')
+      e.includes("TypeError") || 
+      e.includes("ReferenceError") ||
+      e.includes("Cannot read")
     );
     
     expect(criticalErrors.length).toBe(0);
@@ -272,7 +272,7 @@ test.describe("PATCH 567: Release Validation", () => {
       await page.waitForLoadState("networkidle");
       
       const statusCode = await page.evaluate(() => {
-        return (window.performance.getEntriesByType('navigation')[0] as any).responseStatus || 200;
+        return (window.performance.getEntriesByType("navigation")[0] as any).responseStatus || 200;
       });
       
       // Should return 200 or be a client-side route

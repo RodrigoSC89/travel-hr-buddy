@@ -3,15 +3,15 @@
  * Provides AI-powered recommendations and analysis
  */
 
-import React, { useState } from 'react';
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
-import { Button } from '@/components/ui/button';
-import { Textarea } from '@/components/ui/textarea';
-import { Badge } from '@/components/ui/badge';
-import { Alert, AlertDescription } from '@/components/ui/alert';
-import { Loader2, Sparkles, AlertTriangle, CheckCircle, Info } from 'lucide-react';
-import { openai } from '@/lib/ai/openai-client';
-import type { LSAFFAInspection, AIInsight, ChecklistItem } from '@/types/lsa-ffa';
+import React, { useState } from "react";
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
+import { Button } from "@/components/ui/button";
+import { Textarea } from "@/components/ui/textarea";
+import { Badge } from "@/components/ui/badge";
+import { Alert, AlertDescription } from "@/components/ui/alert";
+import { Loader2, Sparkles, AlertTriangle, CheckCircle, Info } from "lucide-react";
+import { openai } from "@/lib/ai/openai-client";
+import type { LSAFFAInspection, AIInsight } from "@/types/lsa-ffa";
 
 interface LSAFFAInsightAIProps {
   inspection: LSAFFAInspection;
@@ -22,7 +22,7 @@ export function LSAFFAInsightAI({ inspection, onInsightGenerated }: LSAFFAInsigh
   const [loading, setLoading] = useState(false);
   const [insight, setInsight] = useState<AIInsight | null>(null);
   const [error, setError] = useState<string | null>(null);
-  const [customPrompt, setCustomPrompt] = useState('');
+  const [customPrompt, setCustomPrompt] = useState("");
 
   const generateInsight = async (additionalContext?: string) => {
     setLoading(true);
@@ -30,14 +30,14 @@ export function LSAFFAInsightAI({ inspection, onInsightGenerated }: LSAFFAInsigh
 
     try {
       const checklistItems = Object.values(inspection.checklist);
-      const failedItems = checklistItems.filter((item) => item.status === 'fail');
+      const failedItems = checklistItems.filter((item) => item.status === "fail");
       const criticalIssues = inspection.issues_found.filter(
-        (issue) => issue.severity === 'critical' && !issue.resolved
+        (issue) => issue.severity === "critical" && !issue.resolved
       );
 
       // Build prompt for AI
       const prompt = `You are a maritime safety expert specializing in SOLAS regulations for ${
-        inspection.type === 'LSA' ? 'Life-Saving Appliances' : 'Fire-Fighting Appliances'
+        inspection.type === "LSA" ? "Life-Saving Appliances" : "Fire-Fighting Appliances"
       }.
 
 Inspection Details:
@@ -48,17 +48,17 @@ Inspection Details:
 
 Checklist Summary:
 - Total Items: ${checklistItems.length}
-- Passed: ${checklistItems.filter((i) => i.status === 'pass').length}
+- Passed: ${checklistItems.filter((i) => i.status === "pass").length}
 - Failed: ${failedItems.length}
-- Pending: ${checklistItems.filter((i) => i.status === 'pending').length}
+- Pending: ${checklistItems.filter((i) => i.status === "pending").length}
 
 ${
   failedItems.length > 0
     ? `
 Failed Items:
-${failedItems.map((item) => `- ${item.category}: ${item.item}`).join('\n')}
+${failedItems.map((item) => `- ${item.category}: ${item.item}`).join("\n")}
 `
-    : ''
+    : ""
 }
 
 ${
@@ -66,16 +66,16 @@ ${
     ? `
 Issues Found:
 ${inspection.issues_found
-  .map(
-    (issue) =>
-      `- [${issue.severity.toUpperCase()}] ${issue.category}: ${issue.description}`
-  )
-  .join('\n')}
+    .map(
+      (issue) =>
+        `- [${issue.severity.toUpperCase()}] ${issue.category}: ${issue.description}`
+    )
+    .join("\n")}
 `
-    : ''
+    : ""
 }
 
-${additionalContext ? `\nAdditional Context: ${additionalContext}` : ''}
+${additionalContext ? `\nAdditional Context: ${additionalContext}` : ""}
 
 Please provide:
 1. A concise summary of the inspection results
@@ -93,26 +93,26 @@ Format your response as JSON with this structure:
 }`;
 
       const response = await openai.chat.completions.create({
-        model: 'gpt-4-turbo-preview',
+        model: "gpt-4-turbo-preview",
         messages: [
           {
-            role: 'system',
+            role: "system",
             content:
-              'You are an expert maritime safety inspector specializing in SOLAS compliance. Provide clear, actionable recommendations.',
+              "You are an expert maritime safety inspector specializing in SOLAS compliance. Provide clear, actionable recommendations.",
           },
           {
-            role: 'user',
+            role: "user",
             content: prompt,
           },
         ],
         temperature: 0.7,
         max_tokens: 1500,
-        response_format: { type: 'json_object' },
+        response_format: { type: "json_object" },
       });
 
       const content = response.choices[0]?.message?.content;
       if (!content) {
-        throw new Error('No response from AI');
+        throw new Error("No response from AI");
       }
 
       const parsedInsight: AIInsight = JSON.parse(content);
@@ -123,9 +123,9 @@ Format your response as JSON with this structure:
       setInsight(parsedInsight);
       onInsightGenerated?.(parsedInsight);
     } catch (err) {
-      console.error('Failed to generate insight:', err);
+      console.error("Failed to generate insight:", err);
       setError(
-        err instanceof Error ? err.message : 'Failed to generate AI recommendations'
+        err instanceof Error ? err.message : "Failed to generate AI recommendations"
       );
     } finally {
       setLoading(false);

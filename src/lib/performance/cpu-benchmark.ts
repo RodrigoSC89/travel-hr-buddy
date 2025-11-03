@@ -8,7 +8,7 @@ export interface BenchmarkResult {
   executionTime: number;
   operationsPerSecond: number;
   score: number;
-  status: 'excellent' | 'good' | 'acceptable' | 'poor';
+  status: "excellent" | "good" | "acceptable" | "poor";
 }
 
 export interface BenchmarkReport {
@@ -70,7 +70,7 @@ class CPUBenchmark {
     const opsPerSecond = Math.round((iterations / executionTime) * 1000);
     
     return {
-      testName: 'Array Operations',
+      testName: "Array Operations",
       executionTime: Math.round(executionTime),
       operationsPerSecond: opsPerSecond,
       score: this.calculateScore(executionTime, 500),
@@ -98,7 +98,7 @@ class CPUBenchmark {
     const opsPerSecond = Math.round((iterations / executionTime) * 1000);
 
     return {
-      testName: 'Object Operations',
+      testName: "Object Operations",
       executionTime: Math.round(executionTime),
       operationsPerSecond: opsPerSecond,
       score: this.calculateScore(executionTime, 300),
@@ -114,15 +114,15 @@ class CPUBenchmark {
     const startTime = performance.now();
 
     for (let i = 0; i < iterations; i++) {
-      const str = 'Hello World Testing Performance Benchmark';
-      str.split(' ').map(s => s.toUpperCase()).join('-').toLowerCase().repeat(2);
+      const str = "Hello World Testing Performance Benchmark";
+      str.split(" ").map(s => s.toUpperCase()).join("-").toLowerCase().repeat(2);
     }
 
     const executionTime = performance.now() - startTime;
     const opsPerSecond = Math.round((iterations / executionTime) * 1000);
 
     return {
-      testName: 'String Operations',
+      testName: "String Operations",
       executionTime: Math.round(executionTime),
       operationsPerSecond: opsPerSecond,
       score: this.calculateScore(executionTime, 200),
@@ -145,7 +145,7 @@ class CPUBenchmark {
     const opsPerSecond = Math.round((iterations / executionTime) * 1000);
 
     return {
-      testName: 'Math Operations',
+      testName: "Math Operations",
       executionTime: Math.round(executionTime),
       operationsPerSecond: opsPerSecond,
       score: this.calculateScore(executionTime, 100),
@@ -160,16 +160,16 @@ class CPUBenchmark {
     const iterations = 10000;
     const startTime = performance.now();
 
-    const container = document.createElement('div');
+    const container = document.createElement("div");
     document.body.appendChild(container);
 
     for (let i = 0; i < iterations; i++) {
-      const element = document.createElement('div');
+      const element = document.createElement("div");
       element.textContent = `Test ${i}`;
-      element.className = 'test-class';
+      element.className = "test-class";
       container.appendChild(element);
       if (i % 100 === 0) {
-        container.innerHTML = ''; // Clear periodically
+        container.innerHTML = ""; // Clear periodically
       }
     }
 
@@ -179,7 +179,7 @@ class CPUBenchmark {
     const opsPerSecond = Math.round((iterations / executionTime) * 1000);
 
     return {
-      testName: 'DOM Operations',
+      testName: "DOM Operations",
       executionTime: Math.round(executionTime),
       operationsPerSecond: opsPerSecond,
       score: this.calculateScore(executionTime, 800),
@@ -201,13 +201,13 @@ class CPUBenchmark {
   private getStatus(
     executionTime: number,
     baseline: number
-  ): 'excellent' | 'good' | 'acceptable' | 'poor' {
+  ): "excellent" | "good" | "acceptable" | "poor" {
     const ratio = executionTime / baseline;
     
-    if (ratio <= 0.7) return 'excellent';
-    if (ratio <= 1.0) return 'good';
-    if (ratio <= 1.5) return 'acceptable';
-    return 'poor';
+    if (ratio <= 0.7) return "excellent";
+    if (ratio <= 1.0) return "good";
+    if (ratio <= 1.5) return "acceptable";
+    return "poor";
   }
 
   /**

@@ -3,13 +3,13 @@
  * Migrated from src/ai/visual/validation/Patch606Validation.tsx
  */
 
-import { createValidator, ValidationResult } from '@/validations/registry';
+import { createValidator, ValidationResult } from "@/validations/registry";
 
 export const patch606Validator = createValidator(
   606,
-  'Visual Situational Awareness Engine',
-  'Validates pattern detection in dashboards/maps, visual alerts, and performance metrics',
-  'ai-visual',
+  "Visual Situational Awareness Engine",
+  "Validates pattern detection in dashboards/maps, visual alerts, and performance metrics",
+  "ai-visual",
   async (): Promise<ValidationResult> => {
     const tests: Record<string, boolean> = {};
     const metadata: Record<string, any> = {};
@@ -76,7 +76,7 @@ export const patch606Validator = createValidator(
       return {
         passed: false,
         tests,
-        errors: [error instanceof Error ? error.message : 'Unknown error'],
+        errors: [error instanceof Error ? error.message : "Unknown error"],
         timestamp: new Date().toISOString(),
       };
     }

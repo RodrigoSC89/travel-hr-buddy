@@ -32,10 +32,10 @@ export const CertificatesList: React.FC = () => {
 
   const getCertTypeColor = (type: string) => {
     switch (type) {
-      case "ICP-Brasil": return "default";
-      case "OpenCert": return "secondary";
-      case "Custom": return "outline";
-      default: return "outline";
+    case "ICP-Brasil": return "default";
+    case "OpenCert": return "secondary";
+    case "Custom": return "outline";
+    default: return "outline";
     }
   };
 

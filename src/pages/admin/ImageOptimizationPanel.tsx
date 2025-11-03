@@ -3,32 +3,32 @@
  * PATCH 542 - Monitor and configure image optimization settings
  */
 
-import { useState } from 'react';
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
-import { Badge } from '@/components/ui/badge';
-import { Button } from '@/components/ui/button';
-import { OptimizedImage } from '@/components/ui/optimized-image';
-import { useImageFormatSupport } from '@/hooks/useImageOptimization';
-import { cdnManager } from '@/lib/images/cdn-config';
-import { imageOptimizer } from '@/lib/images/image-optimizer';
-import { Image, CheckCircle, XCircle, Sparkles, Globe, Zap } from 'lucide-react';
+import { useState } from "react";
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
+import { Badge } from "@/components/ui/badge";
+import { Button } from "@/components/ui/button";
+import { OptimizedImage } from "@/components/ui/optimized-image";
+import { useImageFormatSupport } from "@/hooks/useImageOptimization";
+import { cdnManager } from "@/lib/images/cdn-config";
+import { imageOptimizer } from "@/lib/images/image-optimizer";
+import { Image, CheckCircle, XCircle, Sparkles, Globe, Zap } from "lucide-react";
 
 export default function ImageOptimizationPanel() {
   const formats = useImageFormatSupport();
   const cdnConfig = cdnManager.getConfig();
-  const [testImage] = useState('/placeholder.svg');
+  const [testImage] = useState("/placeholder.svg");
 
   const formatSupport = [
-    { name: 'WebP', supported: formats.webp, savings: '~25%' },
-    { name: 'AVIF', supported: formats.avif, savings: '~50%' },
+    { name: "WebP", supported: formats.webp, savings: "~25%" },
+    { name: "AVIF", supported: formats.avif, savings: "~50%" },
   ];
 
   const optimizationFeatures = [
-    { name: 'Lazy Loading', enabled: true, description: 'Images load when visible' },
-    { name: 'Blur Placeholders', enabled: true, description: 'Smooth loading experience' },
-    { name: 'Responsive Images', enabled: true, description: 'Multiple sizes via srcset' },
-    { name: 'Format Detection', enabled: true, description: 'Auto WebP/AVIF support' },
-    { name: 'CDN Integration', enabled: cdnConfig.enabled, description: cdnConfig.provider.toUpperCase() },
+    { name: "Lazy Loading", enabled: true, description: "Images load when visible" },
+    { name: "Blur Placeholders", enabled: true, description: "Smooth loading experience" },
+    { name: "Responsive Images", enabled: true, description: "Multiple sizes via srcset" },
+    { name: "Format Detection", enabled: true, description: "Auto WebP/AVIF support" },
+    { name: "CDN Integration", enabled: cdnConfig.enabled, description: cdnConfig.provider.toUpperCase() },
   ];
 
   return (
@@ -76,12 +76,12 @@ export default function ImageOptimizationPanel() {
                   <div>
                     <p className="font-semibold">{format.name}</p>
                     <p className="text-sm text-muted-foreground">
-                      {format.supported ? `${format.savings} smaller` : 'Not supported'}
+                      {format.supported ? `${format.savings} smaller` : "Not supported"}
                     </p>
                   </div>
                 </div>
-                <Badge variant={format.supported ? 'default' : 'secondary'}>
-                  {format.supported ? 'Enabled' : 'Disabled'}
+                <Badge variant={format.supported ? "default" : "secondary"}>
+                  {format.supported ? "Enabled" : "Disabled"}
                 </Badge>
               </div>
             ))}
@@ -112,8 +112,8 @@ export default function ImageOptimizationPanel() {
             </div>
             <div className="space-y-2">
               <p className="text-sm text-muted-foreground">Status</p>
-              <Badge variant={cdnConfig.enabled ? 'default' : 'secondary'} className="text-base">
-                {cdnConfig.enabled ? 'Active' : 'Local Only'}
+              <Badge variant={cdnConfig.enabled ? "default" : "secondary"} className="text-base">
+                {cdnConfig.enabled ? "Active" : "Local Only"}
               </Badge>
             </div>
           </div>
@@ -158,8 +158,8 @@ export default function ImageOptimizationPanel() {
                     <p className="text-sm text-muted-foreground">{feature.description}</p>
                   </div>
                 </div>
-                <Badge variant={feature.enabled ? 'default' : 'outline'}>
-                  {feature.enabled ? 'Active' : 'Inactive'}
+                <Badge variant={feature.enabled ? "default" : "outline"}>
+                  {feature.enabled ? "Active" : "Inactive"}
                 </Badge>
               </div>
             ))}

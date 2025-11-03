@@ -50,7 +50,7 @@ export default function ControlCenter() {
     } catch (error) {
       setHealthStatus({
         healthy: false,
-        message: 'Health check failed'
+        message: "Health check failed"
       });
     } finally {
       setIsChecking(false);
