@@ -1,6 +1,6 @@
 /**
- * Skyscanner Service Integration
- * Test flight search functionality
+ * PATCH 608: Skyscanner Service Integration
+ * Flight search functionality with RapidAPI integration
  */
 
 export interface SkyscannerTestResult {
@@ -8,6 +8,35 @@ export interface SkyscannerTestResult {
   message: string;
   responseTime?: number;
   data?: Record<string, unknown>;
+  error?: string;
+}
+
+export interface FlightSearchParams {
+  origin: string;
+  destination: string;
+  departureDate: string;
+  returnDate?: string;
+  adults?: number;
+  children?: number;
+  cabinClass?: string;
+}
+
+export interface FlightOffer {
+  id: string;
+  airline: string;
+  price: number;
+  currency: string;
+  duration: string;
+  stops: number;
+  departureTime: string;
+  arrivalTime: string;
+  deepLink?: string;
+}
+
+export interface FlightSearchResult {
+  success: boolean;
+  offers: FlightOffer[];
+  cached?: boolean;
   error?: string;
 }
 
@@ -73,6 +102,143 @@ export async function testSkyscannerConnection(): Promise<SkyscannerTestResult> 
       message: "Failed to connect to Skyscanner API",
       responseTime: Date.now() - startTime,
       error: error instanceof Error ? error.message : "Unknown error",
+    };
+  }
+}
+
+/**
+ * Search for flights using Skyscanner API
+ * Implements caching to avoid rate limits
+ */
+export async function searchFlights(params: FlightSearchParams): Promise<FlightSearchResult> {
+  const apiKey = import.meta.env.VITE_RAPIDAPI_KEY || import.meta.env.VITE_SKYSCANNER_API_KEY;
+
+  if (!apiKey) {
+    return {
+      success: false,
+      offers: [],
+      error: "API key not configured. Set VITE_RAPIDAPI_KEY or VITE_SKYSCANNER_API_KEY.",
+    };
+  }
+
+  // Check cache first
+  const cacheKey = `skyscanner_${JSON.stringify(params)}`;
+  const cached = sessionStorage.getItem(cacheKey);
+  
+  if (cached) {
+    try {
+      const cachedData = JSON.parse(cached);
+      // Cache valid for 5 minutes
+      if (Date.now() - cachedData.timestamp < 5 * 60 * 1000) {
+        return {
+          success: true,
+          offers: cachedData.offers,
+          cached: true,
+        };
+      }
+    } catch {
+      // Invalid cache, continue with API call
+    }
+  }
+
+  try {
+    const {
+      origin,
+      destination,
+      departureDate,
+      returnDate,
+      adults = 1,
+      children = 0,
+      cabinClass = 'economy',
+    } = params;
+
+    // Using Skyscanner API v3 search endpoint
+    const searchUrl = 'https://skyscanner-api.p.rapidapi.com/v3/flights/live/search/create';
+    
+    const requestBody = {
+      query: {
+        market: 'BR',
+        locale: 'pt-BR',
+        currency: 'BRL',
+        queryLegs: [
+          {
+            originPlaceId: { iata: origin },
+            destinationPlaceId: { iata: destination },
+            date: { year: parseInt(departureDate.split('-')[0]), month: parseInt(departureDate.split('-')[1]), day: parseInt(departureDate.split('-')[2]) },
+          },
+        ],
+        cabinClass: cabinClass.toUpperCase(),
+        adults,
+        children,
+      },
+    };
+
+    if (returnDate) {
+      requestBody.query.queryLegs.push({
+        originPlaceId: { iata: destination },
+        destinationPlaceId: { iata: origin },
+        date: { year: parseInt(returnDate.split('-')[0]), month: parseInt(returnDate.split('-')[1]), day: parseInt(returnDate.split('-')[2]) },
+      });
+    }
+
+    const response = await fetch(searchUrl, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+        'X-RapidAPI-Key': apiKey,
+        'X-RapidAPI-Host': 'skyscanner-api.p.rapidapi.com',
+      },
+      body: JSON.stringify(requestBody),
+    });
+
+    if (!response.ok) {
+      return {
+        success: false,
+        offers: [],
+        error: `API error: ${response.status} ${response.statusText}`,
+      };
+    }
+
+    const data = await response.json();
+    
+    // Parse Skyscanner response (structure may vary)
+    const offers: FlightOffer[] = [];
+    
+    if (data.content?.results?.itineraries) {
+      Object.values(data.content.results.itineraries).forEach((itinerary: any) => {
+        if (itinerary.pricingOptions && itinerary.pricingOptions.length > 0) {
+          const pricing = itinerary.pricingOptions[0];
+          offers.push({
+            id: itinerary.id,
+            airline: itinerary.legs?.[0]?.carriers?.marketing?.[0]?.name || 'Unknown',
+            price: pricing.price.amount,
+            currency: pricing.price.unit,
+            duration: itinerary.legs?.[0]?.durationInMinutes ? `${Math.floor(itinerary.legs[0].durationInMinutes / 60)}h ${itinerary.legs[0].durationInMinutes % 60}m` : 'N/A',
+            stops: itinerary.legs?.[0]?.stopCount || 0,
+            departureTime: itinerary.legs?.[0]?.departure || '',
+            arrivalTime: itinerary.legs?.[0]?.arrival || '',
+            deepLink: pricing.items?.[0]?.deepLink,
+          });
+        }
+      });
+    }
+
+    // Cache the result
+    sessionStorage.setItem(cacheKey, JSON.stringify({
+      timestamp: Date.now(),
+      offers,
+    }));
+
+    return {
+      success: true,
+      offers,
+      cached: false,
+    };
+  } catch (error) {
+    return {
+      success: false,
+      offers: [],
+      error: error instanceof Error ? error.message : 'Unknown error',
     };
   }
 }
