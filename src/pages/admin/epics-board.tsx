@@ -5,8 +5,14 @@
 
 import React from "react";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
-import { Badge } from "@/components/ui/badge";
 import { CheckCircle2, Circle, AlertCircle } from "lucide-react";
+
+// Simple badge component inline
+const SimpleBadge = ({ children, className = "" }: { children: React.ReactNode; className?: string }) => (
+  <span className={`inline-flex items-center rounded-full px-2.5 py-0.5 text-xs font-semibold ${className}`}>
+    {children}
+  </span>
+);
 
 // Patch progress data
 const epicsData = [
@@ -53,14 +59,14 @@ const getStatusIcon = (status: string) => {
 };
 
 const getStatusBadge = (status: string) => {
-  const statusMap: Record<string, { label: string; variant: "default" | "secondary" | "destructive" | "outline" }> = {
-    done: { label: "🟢 Em produção", variant: "default" },
-    "in-progress": { label: "🟡 Em desenvolvimento", variant: "secondary" },
-    pending: { label: "⚪ Pendente", variant: "outline" },
+  const statusMap: Record<string, { label: string; className: string }> = {
+    done: { label: "🟢 Em produção", className: "bg-green-100 text-green-800" },
+    "in-progress": { label: "🟡 Em desenvolvimento", className: "bg-yellow-100 text-yellow-800" },
+    pending: { label: "⚪ Pendente", className: "bg-gray-100 text-gray-800" },
   };
 
   const statusInfo = statusMap[status] || statusMap.pending;
-  return <Badge variant={statusInfo.variant}>{statusInfo.label}</Badge>;
+  return <SimpleBadge className={statusInfo.className}>{statusInfo.label}</SimpleBadge>;
 };
 
 const getTestBadges = (tests: string[]) => {
@@ -73,9 +79,9 @@ const getTestBadges = (tests: string[]) => {
 
     const testInfo = testMap[test] || { icon: "❌", label: test };
     return (
-      <Badge key={test} variant="outline" className="ml-1">
+      <SimpleBadge key={test} className="ml-1 bg-blue-100 text-blue-800">
         {testInfo.icon} {testInfo.label}
-      </Badge>
+      </SimpleBadge>
     );
   });
 };
@@ -171,7 +177,7 @@ export default function EpicsBoard() {
                       <code className="text-sm bg-muted px-2 py-1 rounded">{epic.area}</code>
                     </td>
                     <td className="p-3">
-                      <Badge variant="secondary">{epic.type}</Badge>
+                      <SimpleBadge className="bg-purple-100 text-purple-800">{epic.type}</SimpleBadge>
                     </td>
                     <td className="p-3">
                       <div className="flex flex-wrap gap-1">{getTestBadges(epic.tests)}</div>
