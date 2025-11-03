@@ -14,6 +14,7 @@ export const NAVIGATION = [
   { name: "FMEA Expert", path: "/fmea-expert", component: safeLazyImport(() => import("@/modules/planning/fmea/FMEAExpert"), "FMEA Expert") },
   { name: "SGSO", path: "/sgso", component: safeLazyImport(() => import("@/modules/compliance/sgso/SGSOSystem"), "SGSO") },
   { name: "MLC Inspection", path: "/mlc-inspection", component: safeLazyImport(() => import("@/modules/compliance/mlc-inspection"), "MLC Inspection") },
+  { name: "LSA/FFA Inspections", path: "/lsa-ffa-inspections", component: safeLazyImport(() => import("@/modules/lsa-ffa-inspections"), "LSA/FFA Inspections") },
   { name: "PEO-DP", path: "/peo-dp", component: safeLazyImport(() => import("@/modules/hr/peo-dp/PEODPPanel"), "PEO-DP") },
 ];
 
