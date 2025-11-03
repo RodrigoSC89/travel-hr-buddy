@@ -1,13 +1,13 @@
 # 📝 CHANGELOG - Nautilus One
 
-> 📦 Para informações sobre PATCHES 608-612, consulte o arquivo [patches/nautilus-one-production-series.yaml](../patches/nautilus-one-production-series.yaml)
+> 📦 Para informações sobre PATCHES 608-612, consulte o arquivo [patches/nautilus-one-production-series.yaml](patches/nautilus-one-production-series.yaml)
 
 ## PATCHES 608-612 - Maritime Operations & Safety Modules
 **Data:** November 3, 2025
 **Tipo:** Feature Release - Production Track
 
 ### 📋 Overview
-Nova série de patches focada em módulos de operações marítimas e inspeções de segurança. Consulte o arquivo [nautilus-one-production-series.yaml](../patches/nautilus-one-production-series.yaml) para detalhes completos sobre cada patch.
+Nova série de patches focada em módulos de operações marítimas e inspeções de segurança. Consulte o arquivo [nautilus-one-production-series.yaml](patches/nautilus-one-production-series.yaml) para detalhes completos sobre cada patch.
 
 ### Módulos Incluídos
 - **PATCH-608**: Travel Intelligence Module (stable)
