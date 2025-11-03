@@ -2,6 +2,13 @@ import jsPDF from 'jspdf';
 import autoTable from 'jspdf-autotable';
 import type { LSAFFAInspection, Vessel, LSAFFAEquipment } from './types';
 
+// Extend jsPDF type to include autoTable plugin
+interface jsPDFWithAutoTable extends jsPDF {
+  lastAutoTable: {
+    finalY: number;
+  };
+}
+
 export class ReportGenerator {
   /**
    * Generate a PDF report for an LSA/FFA inspection
@@ -56,7 +63,7 @@ export class ReportGenerator {
       margin: { left: margin },
     });
     
-    yPos = (doc as any).lastAutoTable.finalY + 10;
+    yPos = (doc as jsPDFWithAutoTable).lastAutoTable.finalY + 10;
 
     // Inspection Details
     doc.setFontSize(14);
@@ -89,7 +96,7 @@ export class ReportGenerator {
       margin: { left: margin },
     });
     
-    yPos = (doc as any).lastAutoTable.finalY + 10;
+    yPos = (doc as jsPDFWithAutoTable).lastAutoTable.finalY + 10;
 
     // Checklist Results
     if (inspection.checklist && inspection.checklist.length > 0) {
@@ -126,7 +133,7 @@ export class ReportGenerator {
         margin: { left: margin, right: margin },
       });
       
-      yPos = (doc as any).lastAutoTable.finalY + 10;
+      yPos = (doc as jsPDFWithAutoTable).lastAutoTable.finalY + 10;
     }
 
     // Issues Found
@@ -168,7 +175,7 @@ export class ReportGenerator {
         margin: { left: margin, right: margin },
       });
       
-      yPos = (doc as any).lastAutoTable.finalY + 10;
+      yPos = (doc as jsPDFWithAutoTable).lastAutoTable.finalY + 10;
     }
 
     // Equipment Details (if provided)
@@ -210,7 +217,7 @@ export class ReportGenerator {
         margin: { left: margin, right: margin },
       });
       
-      yPos = (doc as any).lastAutoTable.finalY + 10;
+      yPos = (doc as jsPDFWithAutoTable).lastAutoTable.finalY + 10;
     }
 
     // AI Notes (if available)
@@ -331,7 +338,7 @@ export class ReportGenerator {
       margin: { left: margin },
     });
     
-    yPos = (doc as any).lastAutoTable.finalY + 15;
+    yPos = (doc as jsPDFWithAutoTable).lastAutoTable.finalY + 15;
 
     // Individual Inspection Details
     doc.setFontSize(14);

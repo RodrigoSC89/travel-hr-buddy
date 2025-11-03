@@ -16,7 +16,7 @@ CREATE TABLE IF NOT EXISTS public.lsa_ffa_inspections (
     frequency TEXT CHECK (frequency IN ('weekly', 'monthly', 'annual', 'ad_hoc')),
     
     -- Checklist and Findings (stored as JSONB for flexibility)
-    checklist JSONB NOT NULL DEFAULT '{}',
+    checklist JSONB NOT NULL DEFAULT '[]',
     issues_found JSONB DEFAULT '[]',
     
     -- Compliance Score (calculated 0-100)

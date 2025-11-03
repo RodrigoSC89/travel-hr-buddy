@@ -61,8 +61,9 @@ export const LSAFFAInsightAI: React.FC<LSAFFAInsightAIProps> = ({
     setError(null);
 
     try {
-      // Simulate AI analysis - in production, this would call an AI service
-      // For now, we'll generate insights based on the inspection data
+      // TODO: Replace with real AI/LLM integration in production
+      // Current implementation provides rule-based analysis
+      // Future: Call external AI service (OpenAI, Claude, etc.) for enhanced insights
       const totalItems = inspection.checklist.length;
       const failedItems = inspection.checklist.filter(item => !item.checked).length;
       const issuesCount = inspection.issues_found.length;

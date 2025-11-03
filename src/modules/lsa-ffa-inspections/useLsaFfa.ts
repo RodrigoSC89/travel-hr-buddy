@@ -137,6 +137,9 @@ export const useLsaFfa = (vesselId?: string) => {
       const checkedItems = data.checklist.filter(item => item.checked).length;
       const score = totalItems > 0 ? Math.round((checkedItems / totalItems) * 100) : 0;
 
+      // Get current user ID
+      const { data: { user } } = await supabase.auth.getUser();
+
       const { data: inspection, error } = await supabase
         .from('lsa_ffa_inspections')
         .insert({
@@ -148,6 +151,7 @@ export const useLsaFfa = (vesselId?: string) => {
           issues_found: data.issues_found,
           score,
           status: 'draft',
+          created_by: user?.id,
         })
         .select()
         .single();

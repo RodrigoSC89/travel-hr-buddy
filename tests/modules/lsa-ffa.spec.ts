@@ -1,8 +1,8 @@
 import { describe, it, expect, beforeEach, vi } from 'vitest';
 import { renderHook, waitFor } from '@testing-library/react';
-import { useLsaFfa } from '../src/modules/lsa-ffa-inspections/useLsaFfa';
-import { ReportGenerator } from '../src/modules/lsa-ffa-inspections/ReportGenerator';
-import type { LSAFFAInspection, Vessel, InspectionFormData } from '../src/modules/lsa-ffa-inspections/types';
+import { useLsaFfa } from '@/modules/lsa-ffa-inspections/useLsaFfa';
+import { ReportGenerator } from '@/modules/lsa-ffa-inspections/ReportGenerator';
+import type { LSAFFAInspection, Vessel, InspectionFormData } from '@/modules/lsa-ffa-inspections/types';
 
 // Mock Supabase client
 vi.mock('@/integrations/supabase/client', () => ({
