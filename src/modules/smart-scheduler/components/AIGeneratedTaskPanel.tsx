@@ -47,16 +47,16 @@ export function AIGeneratedTaskPanel() {
 
   const getPriorityColor = (priority: string) => {
     switch (priority) {
-      case "critical":
-        return "destructive";
-      case "high":
-        return "destructive";
-      case "medium":
-        return "default";
-      case "low":
-        return "secondary";
-      default:
-        return "outline";
+    case "critical":
+      return "destructive";
+    case "high":
+      return "destructive";
+    case "medium":
+      return "default";
+    case "low":
+      return "secondary";
+    default:
+      return "outline";
     }
   };
 

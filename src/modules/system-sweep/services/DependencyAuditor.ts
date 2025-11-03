@@ -61,7 +61,7 @@ export class DependencyAuditor {
     // Check if there are excessive event listeners
     // This is a simplified implementation
     const listenerTypes = ["error", "unhandledrejection", "resize", "scroll"];
-    let excessiveCount = 0;
+    const excessiveCount = 0;
 
     for (const type of listenerTypes) {
       // In a real implementation, you'd track these via a custom event tracking system

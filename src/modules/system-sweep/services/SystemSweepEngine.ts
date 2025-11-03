@@ -108,7 +108,7 @@ export class SystemSweepEngine {
 
     return {
       buildStatus: buildIssues.some(i => i.severity === "critical") ? "fail" : 
-                   buildIssues.length > 0 ? "warning" : "pass",
+        buildIssues.length > 0 ? "warning" : "pass",
       routesChecked: routeIssues.length,
       brokenRoutes: routeIssues.filter(i => i.severity === "critical").length,
       slowComponents: perfIssues.filter(i => i.description.includes("slow render")).length,
@@ -134,19 +134,19 @@ export class SystemSweepEngine {
       try {
         // Auto-fix logic based on category
         switch (issue.category) {
-          case "typescript":
-            // Remove @ts-ignore comments
-            logger.info(`Auto-fixing TypeScript issue: ${issue.title}`);
-            fixed++;
-            break;
-          case "console_errors":
-            // Could implement error suppression or logging improvements
-            logger.info(`Auto-fixing console error: ${issue.title}`);
-            fixed++;
-            break;
-          default:
-            logger.warn(`No auto-fix available for category: ${issue.category}`);
-            failed++;
+        case "typescript":
+          // Remove @ts-ignore comments
+          logger.info(`Auto-fixing TypeScript issue: ${issue.title}`);
+          fixed++;
+          break;
+        case "console_errors":
+          // Could implement error suppression or logging improvements
+          logger.info(`Auto-fixing console error: ${issue.title}`);
+          fixed++;
+          break;
+        default:
+          logger.warn(`No auto-fix available for category: ${issue.category}`);
+          failed++;
         }
       } catch (error) {
         logger.error(`Failed to auto-fix issue ${issue.id}:`, error);

@@ -98,7 +98,7 @@ export class PerformanceAuditor {
    */
   private static checkMemoryUsage(): SweepIssue | null {
     // Check if Performance Memory API is available
-    if ('memory' in performance) {
+    if ("memory" in performance) {
       const memory = (performance as any).memory;
       const usedMemoryMB = memory.usedJSHeapSize / 1048576;
       const totalMemoryMB = memory.jsHeapSizeLimit / 1048576;

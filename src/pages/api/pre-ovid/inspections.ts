@@ -3,14 +3,14 @@
  * PATCH 650 - Pre-OVID Inspection Module
  */
 
-import { supabase } from '@/integrations/supabase/client';
+import { supabase } from "@/integrations/supabase/client";
 
 export interface PreOvidInspection {
   id?: string;
   vessel_id?: string;
   inspector_id: string;
   inspection_date?: string;
-  status?: 'draft' | 'submitted' | 'reviewed';
+  status?: "draft" | "submitted" | "reviewed";
   risk_rating?: string;
   notes?: string;
   location?: string;
@@ -50,22 +50,22 @@ export async function createInspection(
       vessel_id: inspection.vessel_id || null,
       inspector_id: inspection.inspector_id,
       inspection_date: inspection.inspection_date || new Date().toISOString(),
-      status: inspection.status || 'draft',
+      status: inspection.status || "draft",
       risk_rating: inspection.risk_rating || null,
       notes: inspection.notes || null,
       location: inspection.location || null,
-      checklist_version: inspection.checklist_version || 'ovid-v3',
+      checklist_version: inspection.checklist_version || "ovid-v3",
     };
 
     // Insert main inspection
     const { data: inspectionResult, error: inspectionError } = await supabase
-      .from('pre_ovid_inspections')
+      .from("pre_ovid_inspections")
       .insert([inspectionData])
-      .select('id')
+      .select("id")
       .single();
 
     if (inspectionError) {
-      console.error('Error creating inspection:', inspectionError);
+      console.error("Error creating inspection:", inspectionError);
       return { error: inspectionError.message };
     }
 
@@ -79,18 +79,18 @@ export async function createInspection(
         question_number: r.question_number,
         question_text: r.question_text,
         response: r.response,
-        comments: r.comments || '',
+        comments: r.comments || "",
         non_conformity: r.non_conformity || false,
         ai_suggestion: r.ai_suggestion || null,
         ai_risk_analysis: r.ai_risk_analysis || null,
       }));
 
       const { error: responsesError } = await supabase
-        .from('pre_ovid_responses')
+        .from("pre_ovid_responses")
         .insert(responsesData);
 
       if (responsesError) {
-        console.error('Error inserting responses:', responsesError);
+        console.error("Error inserting responses:", responsesError);
       }
     }
 
@@ -107,18 +107,18 @@ export async function createInspection(
       }));
 
       const { error: evidencesError } = await supabase
-        .from('pre_ovid_evidences')
+        .from("pre_ovid_evidences")
         .insert(evidencesData);
 
       if (evidencesError) {
-        console.error('Error inserting evidences:', evidencesError);
+        console.error("Error inserting evidences:", evidencesError);
       }
     }
 
     return { inspectionId, data: inspectionResult };
   } catch (error) {
-    console.error('Error in createInspection:', error);
-    return { error: 'Failed to create inspection' };
+    console.error("Error in createInspection:", error);
+    return { error: "Failed to create inspection" };
   }
 }
 
@@ -128,7 +128,7 @@ export async function createInspection(
 export async function getInspectionById(id: string) {
   try {
     const { data, error } = await supabase
-      .from('pre_ovid_inspections')
+      .from("pre_ovid_inspections")
       .select(
         `
         *,
@@ -137,18 +137,18 @@ export async function getInspectionById(id: string) {
         ai_reports:pre_ovid_ai_reports(*)
       `
       )
-      .eq('id', id)
+      .eq("id", id)
       .single();
 
     if (error) {
-      console.error('Error fetching inspection:', error);
+      console.error("Error fetching inspection:", error);
       return { error: error.message };
     }
 
     return { data };
   } catch (error) {
-    console.error('Error in getInspectionById:', error);
-    return { error: 'Failed to fetch inspection' };
+    console.error("Error in getInspectionById:", error);
+    return { error: "Failed to fetch inspection" };
   }
 }
 
@@ -162,7 +162,7 @@ export async function getInspections(filters?: {
 }) {
   try {
     let query = supabase
-      .from('pre_ovid_inspections')
+      .from("pre_ovid_inspections")
       .select(
         `
         *,
@@ -170,14 +170,14 @@ export async function getInspections(filters?: {
         inspector:profiles(full_name)
       `
       )
-      .order('created_at', { ascending: false });
+      .order("created_at", { ascending: false });
 
     if (filters?.vessel_id) {
-      query = query.eq('vessel_id', filters.vessel_id);
+      query = query.eq("vessel_id", filters.vessel_id);
     }
 
     if (filters?.status) {
-      query = query.eq('status', filters.status);
+      query = query.eq("status", filters.status);
     }
 
     if (filters?.limit) {
@@ -187,14 +187,14 @@ export async function getInspections(filters?: {
     const { data, error } = await query;
 
     if (error) {
-      console.error('Error fetching inspections:', error);
+      console.error("Error fetching inspections:", error);
       return { error: error.message };
     }
 
     return { data };
   } catch (error) {
-    console.error('Error in getInspections:', error);
-    return { error: 'Failed to fetch inspections' };
+    console.error("Error in getInspections:", error);
+    return { error: "Failed to fetch inspections" };
   }
 }
 
@@ -203,25 +203,25 @@ export async function getInspections(filters?: {
  */
 export async function updateInspectionStatus(
   id: string,
-  status: 'draft' | 'submitted' | 'reviewed'
+  status: "draft" | "submitted" | "reviewed"
 ) {
   try {
     const { data, error } = await supabase
-      .from('pre_ovid_inspections')
+      .from("pre_ovid_inspections")
       .update({ status })
-      .eq('id', id)
+      .eq("id", id)
       .select()
       .single();
 
     if (error) {
-      console.error('Error updating inspection status:', error);
+      console.error("Error updating inspection status:", error);
       return { error: error.message };
     }
 
     return { data };
   } catch (error) {
-    console.error('Error in updateInspectionStatus:', error);
-    return { error: 'Failed to update inspection status' };
+    console.error("Error in updateInspectionStatus:", error);
+    return { error: "Failed to update inspection status" };
   }
 }
 
@@ -237,7 +237,7 @@ export async function generateAIReport(
     const inspectionResult = await getInspectionById(inspectionId);
 
     if (inspectionResult.error || !inspectionResult.data) {
-      return { error: 'Failed to fetch inspection data' };
+      return { error: "Failed to fetch inspection data" };
     }
 
     const inspection = inspectionResult.data;
@@ -251,7 +251,7 @@ export async function generateAIReport(
 
     // Save AI report
     const { data, error } = await supabase
-      .from('pre_ovid_ai_reports')
+      .from("pre_ovid_ai_reports")
       .insert([
         {
           inspection_id: inspectionId,
@@ -267,14 +267,14 @@ export async function generateAIReport(
       .single();
 
     if (error) {
-      console.error('Error creating AI report:', error);
+      console.error("Error creating AI report:", error);
       return { error: error.message };
     }
 
     return { data };
   } catch (error) {
-    console.error('Error in generateAIReport:', error);
-    return { error: 'Failed to generate AI report' };
+    console.error("Error in generateAIReport:", error);
+    return { error: "Failed to generate AI report" };
   }
 }
 
@@ -286,7 +286,7 @@ function generateSummary(inspection: any): string {
 
   return `Inspeção realizada em ${new Date(
     inspection.inspection_date
-  ).toLocaleDateString('pt-BR')} com ${responseCount} itens verificados. ${nonConformities} não conformidades identificadas. Status: ${inspection.status}.`;
+  ).toLocaleDateString("pt-BR")} com ${responseCount} itens verificados. ${nonConformities} não conformidades identificadas. Status: ${inspection.status}.`;
 }
 
 function identifyCriticalFindings(inspection: any): string {
@@ -294,7 +294,7 @@ function identifyCriticalFindings(inspection: any): string {
     inspection.responses?.filter((r: any) => r.non_conformity) || [];
 
   if (criticalItems.length === 0) {
-    return 'Nenhuma não conformidade crítica identificada.';
+    return "Nenhuma não conformidade crítica identificada.";
   }
 
   return criticalItems
@@ -303,7 +303,7 @@ function identifyCriticalFindings(inspection: any): string {
         item.question_text
       }`;
     })
-    .join('\n');
+    .join("\n");
 }
 
 function generateActionPlan(inspection: any): string {
@@ -311,7 +311,7 @@ function generateActionPlan(inspection: any): string {
     inspection.responses?.filter((r: any) => r.non_conformity) || [];
 
   if (nonConformities.length === 0) {
-    return 'Nenhuma ação corretiva necessária. Manter padrão de conformidade.';
+    return "Nenhuma ação corretiva necessária. Manter padrão de conformidade.";
   }
 
   return `Plano de ação recomendado:\n\n${nonConformities
@@ -320,7 +320,7 @@ function generateActionPlan(inspection: any): string {
         item.question_text
       }\nPrazo sugerido: 30 dias\nResponsável: A definir`;
     })
-    .join('\n\n')}`;
+    .join("\n\n")}`;
 }
 
 function calculateRiskScore(inspection: any): number {

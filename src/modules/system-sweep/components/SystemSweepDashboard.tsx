@@ -16,37 +16,37 @@ export function SystemSweepDashboard() {
 
   const getSeverityColor = (severity: string) => {
     switch (severity) {
-      case "critical":
-        return "destructive";
-      case "high":
-        return "destructive";
-      case "medium":
-        return "default";
-      case "low":
-        return "secondary";
-      default:
-        return "outline";
+    case "critical":
+      return "destructive";
+    case "high":
+      return "destructive";
+    case "medium":
+      return "default";
+    case "low":
+      return "secondary";
+    default:
+      return "outline";
     }
   };
 
   const getCategoryIcon = (category: string) => {
     switch (category) {
-      case "build":
-        return "🔨";
-      case "routing":
-        return "🛣️";
-      case "performance":
-        return "⚡";
-      case "memory":
-        return "💾";
-      case "typescript":
-        return "📘";
-      case "supabase":
-        return "🗄️";
-      case "console_errors":
-        return "⚠️";
-      default:
-        return "📋";
+    case "build":
+      return "🔨";
+    case "routing":
+      return "🛣️";
+    case "performance":
+      return "⚡";
+    case "memory":
+      return "💾";
+    case "typescript":
+      return "📘";
+    case "supabase":
+      return "🗄️";
+    case "console_errors":
+      return "⚠️";
+    default:
+      return "📋";
     }
   };
 
