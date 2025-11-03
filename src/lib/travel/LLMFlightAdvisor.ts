@@ -16,7 +16,7 @@ export interface FlightRecommendation {
 /**
  * Analyze flight offers and provide AI-powered recommendations
  */
-export async function analyzeFlight Offers(
+export async function analyzeFlightOffers(
   offers: FlightOffer[],
   userPreferences?: {
     priorityPrice?: boolean;

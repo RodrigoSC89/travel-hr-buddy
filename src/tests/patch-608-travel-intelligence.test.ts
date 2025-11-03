@@ -98,87 +98,212 @@ describe('PATCH 608 - Deep Link Builder', () => {
 });
 
 describe('PATCH 608 - LLM Flight Advisor', () => {
-  const { analyzeFlightOffers } = await import('@/lib/travel/LLMFlightAdvisor');
-  const { FlightOffer } = await import('@/services/skyscanner');
+  it('should identify best price offer', async () => {
+    const { analyzeFlightOffers } = await import('@/lib/travel/LLMFlightAdvisor');
+    const { FlightOffer } = await import('@/services/skyscanner');
 
-  const mockOffers: FlightOffer[] = [
-    {
-      id: '1',
-      airline: 'LATAM',
-      price: 1500,
-      currency: 'BRL',
-      duration: '2h 30m',
-      stops: 0,
-      departureTime: '10:00',
-      arrivalTime: '12:30',
-    },
-    {
-      id: '2',
-      airline: 'GOL',
-      price: 1200,
-      currency: 'BRL',
-      duration: '3h 15m',
-      stops: 1,
-      departureTime: '08:00',
-      arrivalTime: '11:15',
-    },
-    {
-      id: '3',
-      airline: 'AZUL',
-      price: 1350,
-      currency: 'BRL',
-      duration: '2h 45m',
-      stops: 0,
-      departureTime: '14:00',
-      arrivalTime: '16:45',
-    },
-  ];
+    const mockOffers: any[] = [
+      {
+        id: '1',
+        airline: 'LATAM',
+        price: 1500,
+        currency: 'BRL',
+        duration: '2h 30m',
+        stops: 0,
+        departureTime: '10:00',
+        arrivalTime: '12:30',
+      },
+      {
+        id: '2',
+        airline: 'GOL',
+        price: 1200,
+        currency: 'BRL',
+        duration: '3h 15m',
+        stops: 1,
+        departureTime: '08:00',
+        arrivalTime: '11:15',
+      },
+      {
+        id: '3',
+        airline: 'AZUL',
+        price: 1350,
+        currency: 'BRL',
+        duration: '2h 45m',
+        stops: 0,
+        departureTime: '14:00',
+        arrivalTime: '16:45',
+      },
+    ];
 
-  describe('analyzeFlightOffers', () => {
-    it('should identify best price offer', async () => {
-      const result = await analyzeFlightOffers(mockOffers);
-      expect(result.bestPrice).toBeDefined();
-      expect(result.bestPrice?.price).toBe(1200);
-      expect(result.bestPrice?.airline).toBe('GOL');
-    });
+    const result = await analyzeFlightOffers(mockOffers);
+    expect(result.bestPrice).toBeDefined();
+    expect(result.bestPrice?.price).toBe(1200);
+    expect(result.bestPrice?.airline).toBe('GOL');
+  });
 
-    it('should identify best duration offer', async () => {
-      const result = await analyzeFlightOffers(mockOffers);
-      expect(result.bestDuration).toBeDefined();
-      expect(result.bestDuration?.duration).toBe('2h 30m');
-    });
+  it('should identify best duration offer', async () => {
+    const { analyzeFlightOffers } = await import('@/lib/travel/LLMFlightAdvisor');
 
-    it('should provide recommendation', async () => {
-      const result = await analyzeFlightOffers(mockOffers);
-      expect(result.recommended).toBeDefined();
-      expect(result.reasoning).toBeTruthy();
-      expect(typeof result.reasoning).toBe('string');
-    });
+    const mockOffers: any[] = [
+      {
+        id: '1',
+        airline: 'LATAM',
+        price: 1500,
+        currency: 'BRL',
+        duration: '2h 30m',
+        stops: 0,
+        departureTime: '10:00',
+        arrivalTime: '12:30',
+      },
+      {
+        id: '2',
+        airline: 'GOL',
+        price: 1200,
+        currency: 'BRL',
+        duration: '3h 15m',
+        stops: 1,
+        departureTime: '08:00',
+        arrivalTime: '11:15',
+      },
+      {
+        id: '3',
+        airline: 'AZUL',
+        price: 1350,
+        currency: 'BRL',
+        duration: '2h 45m',
+        stops: 0,
+        departureTime: '14:00',
+        arrivalTime: '16:45',
+      },
+    ];
 
-    it('should generate insights', async () => {
-      const result = await analyzeFlightOffers(mockOffers);
-      expect(result.insights).toBeDefined();
-      expect(Array.isArray(result.insights)).toBe(true);
-      expect(result.insights.length).toBeGreaterThan(0);
-    });
+    const result = await analyzeFlightOffers(mockOffers);
+    expect(result.bestDuration).toBeDefined();
+    expect(result.bestDuration?.duration).toBe('2h 30m');
+  });
 
-    it('should handle empty offers', async () => {
-      const result = await analyzeFlightOffers([]);
-      expect(result.bestPrice).toBeNull();
-      expect(result.bestDuration).toBeNull();
-      expect(result.recommended).toBeNull();
-      expect(result.reasoning).toContain('No flight offers');
-    });
+  it('should provide recommendation', async () => {
+    const { analyzeFlightOffers } = await import('@/lib/travel/LLMFlightAdvisor');
 
-    it('should respect user preferences for price', async () => {
-      const result = await analyzeFlightOffers(mockOffers, { priorityPrice: true });
-      expect(result.recommended?.id).toBe(result.bestPrice?.id);
-    });
+    const mockOffers: any[] = [
+      {
+        id: '1',
+        airline: 'LATAM',
+        price: 1500,
+        currency: 'BRL',
+        duration: '2h 30m',
+        stops: 0,
+        departureTime: '10:00',
+        arrivalTime: '12:30',
+      },
+      {
+        id: '2',
+        airline: 'GOL',
+        price: 1200,
+        currency: 'BRL',
+        duration: '3h 15m',
+        stops: 1,
+        departureTime: '08:00',
+        arrivalTime: '11:15',
+      },
+    ];
 
-    it('should respect user preferences for speed', async () => {
-      const result = await analyzeFlightOffers(mockOffers, { prioritySpeed: true });
-      expect(result.recommended?.id).toBe(result.bestDuration?.id);
-    });
+    const result = await analyzeFlightOffers(mockOffers);
+    expect(result.recommended).toBeDefined();
+    expect(result.reasoning).toBeTruthy();
+    expect(typeof result.reasoning).toBe('string');
+  });
+
+  it('should generate insights', async () => {
+    const { analyzeFlightOffers } = await import('@/lib/travel/LLMFlightAdvisor');
+
+    const mockOffers: any[] = [
+      {
+        id: '1',
+        airline: 'LATAM',
+        price: 1500,
+        currency: 'BRL',
+        duration: '2h 30m',
+        stops: 0,
+        departureTime: '10:00',
+        arrivalTime: '12:30',
+      },
+    ];
+
+    const result = await analyzeFlightOffers(mockOffers);
+    expect(result.insights).toBeDefined();
+    expect(Array.isArray(result.insights)).toBe(true);
+    expect(result.insights.length).toBeGreaterThan(0);
+  });
+
+  it('should handle empty offers', async () => {
+    const { analyzeFlightOffers } = await import('@/lib/travel/LLMFlightAdvisor');
+
+    const result = await analyzeFlightOffers([]);
+    expect(result.bestPrice).toBeNull();
+    expect(result.bestDuration).toBeNull();
+    expect(result.recommended).toBeNull();
+    expect(result.reasoning).toContain('No flight offers');
+  });
+
+  it('should respect user preferences for price', async () => {
+    const { analyzeFlightOffers } = await import('@/lib/travel/LLMFlightAdvisor');
+
+    const mockOffers: any[] = [
+      {
+        id: '1',
+        airline: 'LATAM',
+        price: 1500,
+        currency: 'BRL',
+        duration: '2h 30m',
+        stops: 0,
+        departureTime: '10:00',
+        arrivalTime: '12:30',
+      },
+      {
+        id: '2',
+        airline: 'GOL',
+        price: 1200,
+        currency: 'BRL',
+        duration: '3h 15m',
+        stops: 1,
+        departureTime: '08:00',
+        arrivalTime: '11:15',
+      },
+    ];
+
+    const result = await analyzeFlightOffers(mockOffers, { priorityPrice: true });
+    expect(result.recommended?.id).toBe(result.bestPrice?.id);
+  });
+
+  it('should respect user preferences for speed', async () => {
+    const { analyzeFlightOffers } = await import('@/lib/travel/LLMFlightAdvisor');
+
+    const mockOffers: any[] = [
+      {
+        id: '1',
+        airline: 'LATAM',
+        price: 1500,
+        currency: 'BRL',
+        duration: '2h 30m',
+        stops: 0,
+        departureTime: '10:00',
+        arrivalTime: '12:30',
+      },
+      {
+        id: '2',
+        airline: 'GOL',
+        price: 1200,
+        currency: 'BRL',
+        duration: '3h 15m',
+        stops: 1,
+        departureTime: '08:00',
+        arrivalTime: '11:15',
+      },
+    ];
+
+    const result = await analyzeFlightOffers(mockOffers, { prioritySpeed: true });
+    expect(result.recommended?.id).toBe(result.bestDuration?.id);
   });
 });
 
