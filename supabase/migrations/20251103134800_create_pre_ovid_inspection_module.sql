@@ -137,8 +137,14 @@ CREATE POLICY "Users can view AI reports of their inspections" ON pre_ovid_ai_re
     )
   );
 
-CREATE POLICY "System can create AI reports" ON pre_ovid_ai_reports
-  FOR INSERT WITH CHECK (true);
+-- Only system/admin can create AI reports to prevent unauthorized report generation
+CREATE POLICY "Admin can create AI reports" ON pre_ovid_ai_reports
+  FOR INSERT WITH CHECK (
+    EXISTS (
+      SELECT 1 FROM profiles 
+      WHERE id = auth.uid() AND role IN ('admin', 'super_admin')
+    )
+  );
 
 -- Função para atualizar updated_at automaticamente
 CREATE OR REPLACE FUNCTION update_pre_ovid_inspections_updated_at()

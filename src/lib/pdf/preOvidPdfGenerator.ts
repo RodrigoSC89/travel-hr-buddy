@@ -6,6 +6,9 @@
 import jsPDF from 'jspdf';
 import 'jspdf-autotable';
 
+// Maximum number of checklist items to include in PDF to avoid huge files
+const MAX_CHECKLIST_ITEMS_IN_PDF = 30;
+
 export interface InspectionData {
   id: string;
   vessel_name?: string;
@@ -166,8 +169,8 @@ export async function generatePreOvidPDF(inspection: InspectionData) {
     doc.text('Checklist Results', 20, yPosition);
     yPosition += 10;
 
-    // Limit to first 30 items to avoid huge PDFs
-    const itemsToShow = inspection.responses.slice(0, 30);
+    // Limit items to avoid excessively large PDFs
+    const itemsToShow = inspection.responses.slice(0, MAX_CHECKLIST_ITEMS_IN_PDF);
 
     itemsToShow.forEach((response, index) => {
       if (yPosition > pageHeight - 40) {
@@ -225,9 +228,9 @@ export async function generatePreOvidPDF(inspection: InspectionData) {
       yPosition += 3;
     });
 
-    if (inspection.responses.length > 30) {
+    if (inspection.responses.length > MAX_CHECKLIST_ITEMS_IN_PDF) {
       doc.text(
-        `... and ${inspection.responses.length - 30} more items`,
+        `... and ${inspection.responses.length - MAX_CHECKLIST_ITEMS_IN_PDF} more items`,
         20,
         yPosition
       );

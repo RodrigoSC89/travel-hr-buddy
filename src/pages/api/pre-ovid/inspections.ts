@@ -3,7 +3,7 @@
  * PATCH 650 - Pre-OVID Inspection Module
  */
 
-import { supabase } from '@/lib/supabase';
+import { supabase } from '@/integrations/supabase/client';
 
 export interface PreOvidInspection {
   id?: string;
@@ -45,21 +45,22 @@ export async function createInspection(
   evidences: PreOvidEvidence[] = []
 ) {
   try {
+    // Prepare inspection data with defaults
+    const inspectionData = {
+      vessel_id: inspection.vessel_id || null,
+      inspector_id: inspection.inspector_id,
+      inspection_date: inspection.inspection_date || new Date().toISOString(),
+      status: inspection.status || 'draft',
+      risk_rating: inspection.risk_rating || null,
+      notes: inspection.notes || null,
+      location: inspection.location || null,
+      checklist_version: inspection.checklist_version || 'ovid-v3',
+    };
+
     // Insert main inspection
-    const { data: inspectionData, error: inspectionError } = await supabase
+    const { data: inspectionResult, error: inspectionError } = await supabase
       .from('pre_ovid_inspections')
-      .insert([
-        {
-          vessel_id: inspection.vessel_id,
-          inspector_id: inspection.inspector_id,
-          inspection_date: inspection.inspection_date || new Date().toISOString(),
-          status: inspection.status || 'draft',
-          risk_rating: inspection.risk_rating,
-          notes: inspection.notes,
-          location: inspection.location,
-          checklist_version: inspection.checklist_version || 'ovid-v3',
-        },
-      ])
+      .insert([inspectionData])
       .select('id')
       .single();
 
@@ -68,7 +69,7 @@ export async function createInspection(
       return { error: inspectionError.message };
     }
 
-    const inspectionId = inspectionData.id;
+    const inspectionId = inspectionResult.id;
 
     // Insert responses if provided
     if (responses.length > 0) {
@@ -114,7 +115,7 @@ export async function createInspection(
       }
     }
 
-    return { inspectionId, data: inspectionData };
+    return { inspectionId, data: inspectionResult };
   } catch (error) {
     console.error('Error in createInspection:', error);
     return { error: 'Failed to create inspection' };

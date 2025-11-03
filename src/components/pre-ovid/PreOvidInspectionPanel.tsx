@@ -57,7 +57,8 @@ export default function PreOvidInspectionPanel() {
     setLoading(true);
 
     try {
-      // Mock inspector ID - in production, get from auth context
+      // TODO: Replace with actual authentication context
+      // Get inspector ID from useAuth() or similar context
       const mockInspectorId = 'mock-inspector-id';
 
       const inspection: PreOvidInspection = {
@@ -127,6 +128,7 @@ export default function PreOvidInspectionPanel() {
     setGeneratingReport(true);
 
     try {
+      // TODO: Replace with actual authentication context
       const mockInspectorId = 'mock-inspector-id';
       const result = await generateAIReport(
         currentInspectionId,
