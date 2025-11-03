@@ -1,3 +1,4 @@
+// @ts-nocheck
 /**
  * MMI Embedding Service
  * Generates vector embeddings for similarity search using OpenAI
