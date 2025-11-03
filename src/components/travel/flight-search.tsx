@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { Card, CardContent } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -25,6 +25,24 @@ import {
   TrendingDown,
   AlertTriangle
 } from "lucide-react";
+
+// Cache interface for storing last 5 queries
+interface SearchCache {
+  params: {
+    from: string;
+    to: string;
+    departure: string;
+    return: string;
+    passengers: number;
+    class: string;
+  };
+  results: FlightOption[];
+  timestamp: number;
+}
+
+const CACHE_KEY = "travel_search_cache";
+const MAX_CACHE_ITEMS = 5;
+const CACHE_EXPIRY_MS = 30 * 60 * 1000; // 30 minutes
 
 interface FlightOption {
   id: string;
@@ -134,6 +152,81 @@ const mockFlights: FlightOption[] = [
   }
 ];
 
+// Cache management functions
+const loadCache = (): SearchCache[] => {
+  try {
+    const cached = localStorage.getItem(CACHE_KEY);
+    if (cached) {
+      const items = JSON.parse(cached) as SearchCache[];
+      // Filter out expired items
+      return items.filter(item => Date.now() - item.timestamp < CACHE_EXPIRY_MS);
+    }
+  } catch (error) {
+    console.error("Error loading cache:", error);
+  }
+  return [];
+};
+
+const saveToCache = (params: SearchCache["params"], results: FlightOption[]) => {
+  try {
+    const cache = loadCache();
+    // Add new item to the beginning
+    cache.unshift({
+      params,
+      results,
+      timestamp: Date.now()
+    });
+    // Keep only last 5 items
+    const trimmedCache = cache.slice(0, MAX_CACHE_ITEMS);
+    localStorage.setItem(CACHE_KEY, JSON.stringify(trimmedCache));
+  } catch (error) {
+    console.error("Error saving to cache:", error);
+  }
+};
+
+const findInCache = (params: SearchCache["params"]): FlightOption[] | null => {
+  try {
+    const cache = loadCache();
+    const match = cache.find(item => 
+      item.params.from === params.from &&
+      item.params.to === params.to &&
+      item.params.departure === params.departure &&
+      item.params.return === params.return &&
+      item.params.passengers === params.passengers &&
+      item.params.class === params.class
+    );
+    return match?.results || null;
+  } catch (error) {
+    console.error("Error finding in cache:", error);
+    return null;
+  }
+};
+
+// Input validation and intelligent rewriting
+const validateAndRewriteInput = (input: string, type: "origin" | "destination"): string => {
+  if (!input || input.trim().length === 0) {
+    return "";
+  }
+  
+  // Remove special characters and normalize
+  let cleaned = input.trim().replace(/[^\w\s()-]/g, "");
+  
+  // If it's just a code (3 letters), capitalize it
+  if (cleaned.length === 3 && /^[a-zA-Z]{3}$/.test(cleaned)) {
+    return cleaned.toUpperCase();
+  }
+  
+  // If it contains a code in parentheses, ensure it's properly formatted
+  const codeMatch = cleaned.match(/\(([a-zA-Z]{3})\)/);
+  if (codeMatch) {
+    const cityPart = cleaned.split("(")[0].trim();
+    const code = codeMatch[1].toUpperCase();
+    return `${cityPart} (${code})`;
+  }
+  
+  return cleaned;
+};
+
 export const FlightSearch = () => {
   const { toast } = useToast();
   const { 
@@ -149,6 +242,7 @@ export const FlightSearch = () => {
   const [isSearching, setIsSearching] = useState(false);
   const [selectedFlight, setSelectedFlight] = useState<string | null>(null);
   const [showPredictions, setShowPredictions] = useState(false);
+  const [apiError, setApiError] = useState<string | null>(null);
   const [searchParams, setSearchParams] = useState({
     from: "São Paulo (GRU)",
     to: "Rio de Janeiro (SDU)",
@@ -158,38 +252,80 @@ export const FlightSearch = () => {
     class: "economy"
   });
 
-  // Função para buscar voos
+  // Load cache on mount
+  useEffect(() => {
+    const cached = findInCache(searchParams);
+    if (cached && cached.length > 0) {
+      setFlights(cached);
+      setFilteredFlights(cached);
+    }
+  }, []);
+
+  // Função para buscar voos com validação melhorada
   const handleSearch = async () => {
-    if (!searchParams.from || !searchParams.to || !searchParams.departure) {
+    // Input validation and rewriting
+    const validatedFrom = validateAndRewriteInput(searchParams.from, "origin");
+    const validatedTo = validateAndRewriteInput(searchParams.to, "destination");
+    const validatedDate = searchParams.departure;
+
+    if (!validatedFrom || !validatedTo || !validatedDate) {
       toast({
         title: "Campos obrigatórios",
-        description: "Por favor, preencha origem, destino e data de partida",
+        description: "Por favor, informe origem, destino e data válidos.",
         variant: "destructive"
       });
       return;
     }
 
+    // Update params with validated values
+    const validatedParams = {
+      ...searchParams,
+      from: validatedFrom,
+      to: validatedTo
+    };
+
+    // Check cache first
+    const cachedResults = findInCache(validatedParams);
+    if (cachedResults) {
+      setFlights(cachedResults);
+      setFilteredFlights(cachedResults);
+      setApiError(null);
+      toast({
+        title: "Resultados do cache",
+        description: `${cachedResults.length} voos carregados do cache`,
+      });
+      return;
+    }
+
     setIsSearching(true);
+    setApiError(null);
     
     try {
       // Extrair códigos de aeroporto dos campos de origem e destino
-      const originCode = searchParams.from.includes("(") 
-        ? searchParams.from.match(/\(([^)]+)\)/)?.[1] || searchParams.from.slice(0, 3).toUpperCase()
-        : searchParams.from.slice(0, 3).toUpperCase();
+      const originCode = validatedFrom.includes("(") 
+        ? validatedFrom.match(/\(([^)]+)\)/)?.[1] || validatedFrom.slice(0, 3).toUpperCase()
+        : validatedFrom.slice(0, 3).toUpperCase();
       
-      const destinationCode = searchParams.to.includes("(") 
-        ? searchParams.to.match(/\(([^)]+)\)/)?.[1] || searchParams.to.slice(0, 3).toUpperCase()
-        : searchParams.to.slice(0, 3).toUpperCase();
+      const destinationCode = validatedTo.includes("(") 
+        ? validatedTo.match(/\(([^)]+)\)/)?.[1] || validatedTo.slice(0, 3).toUpperCase()
+        : validatedTo.slice(0, 3).toUpperCase();
 
-      const { data, error } = await supabase.functions.invoke("amadeus-search", {
+      // Set timeout for API call
+      const timeoutPromise = new Promise((_, reject) => 
+        setTimeout(() => reject(new Error("Timeout: API não respondeu em tempo hábil")), 10000)
+      );
+
+      const apiPromise = supabase.functions.invoke("amadeus-search", {
         body: {
           searchType: "flights",
           origin: originCode,
           destination: destinationCode,
-          departureDate: searchParams.departure,
-          adults: searchParams.passengers,
+          departureDate: validatedDate,
+          adults: validatedParams.passengers,
         }
       });
+
+      const { data, error } = await Promise.race([apiPromise, timeoutPromise]) as any;
 
       if (error) {
         throw error;
@@ -199,7 +335,7 @@ export const FlightSearch = () => {
         // Transform Amadeus data to our format
         const transformedFlights = data.data.data.map((offer: any, index: number) => {
           // Gerar URL específica de booking com parâmetros do voo
-          const bookingUrl = generateFlightBookingUrl(offer, searchParams);
+          const bookingUrl = generateFlightBookingUrl(offer, validatedParams);
           
           return {
             id: offer.id || `flight-${index}`,
@@ -208,14 +344,14 @@ export const FlightSearch = () => {
             departure: {
               airport: offer.itineraries[0]?.segments[0]?.departure?.iataCode || originCode,
               time: offer.itineraries[0]?.segments[0]?.departure?.at?.split("T")[1]?.substring(0, 5) || "00:00",
-              city: searchParams.from.split("(")[0].trim(),
-              date: offer.itineraries[0]?.segments[0]?.departure?.at?.split("T")[0] || searchParams.departure,
+              city: validatedFrom.split("(")[0].trim(),
+              date: offer.itineraries[0]?.segments[0]?.departure?.at?.split("T")[0] || validatedDate,
             },
             arrival: {
               airport: offer.itineraries[0]?.segments[0]?.arrival?.iataCode || destinationCode,
               time: offer.itineraries[0]?.segments[0]?.arrival?.at?.split("T")[1]?.substring(0, 5) || "00:00",
-              city: searchParams.to.split("(")[0].trim(),
-              date: offer.itineraries[0]?.segments[0]?.arrival?.at?.split("T")[0] || searchParams.departure,
+              city: validatedTo.split("(")[0].trim(),
+              date: offer.itineraries[0]?.segments[0]?.arrival?.at?.split("T")[0] || validatedDate,
             },
             duration: offer.itineraries[0]?.duration?.replace("PT", "").replace("H", "h ").replace("M", "m") || "2h 30m",
             price: Math.round(parseFloat(offer.price?.total || "299")),
@@ -232,6 +368,8 @@ export const FlightSearch = () => {
         if (transformedFlights.length > 0) {
           setFlights(transformedFlights);
           setFilteredFlights(transformedFlights);
+          saveToCache(validatedParams, transformedFlights);
+          setApiError(null);
           toast({
             title: "Busca concluída",
             description: `${transformedFlights.length} voos reais encontrados!`
@@ -242,8 +380,21 @@ export const FlightSearch = () => {
       } else {
         throw new Error("Resposta inválida da API");
       }
-    } catch (error) {
-      // Fallback para dados mock com URLs específicas
+    } catch (error: any) {
+      // Enhanced fallback with better error messages
+      console.error("Flight search error:", error);
+      
+      let errorMessage = "Falha ao buscar dados. Exibindo resultados de demonstração.";
+      if (error?.message?.includes("Timeout")) {
+        errorMessage = "A API não respondeu a tempo. Exibindo resultados de demonstração.";
+      } else if (error?.message?.includes("quota") || error?.message?.includes("rate limit")) {
+        errorMessage = "Limite de requisições atingido. Exibindo resultados de demonstração.";
+      } else if (error?.message?.includes("network") || error?.message?.includes("fetch")) {
+        errorMessage = "Erro de conexão. Verifique sua internet. Exibindo resultados de demonstração.";
+      }
+
+      setApiError(errorMessage);
+      
       const newFlights = mockFlights.map(flight => ({
         ...flight,
         price: flight.price + Math.floor(Math.random() * 100) - 50,
@@ -260,9 +411,11 @@ export const FlightSearch = () => {
       
       setFlights(newFlights);
       setFilteredFlights(newFlights);
+      saveToCache(validatedParams, newFlights);
+      
       toast({
-        title: "Dados de demonstração",
-        description: `Erro na API. Exibindo ${newFlights.length} voos de exemplo`,
+        title: "Modo de demonstração",
+        description: errorMessage,
         variant: "destructive"
       });
     } finally {
@@ -544,6 +697,16 @@ export const FlightSearch = () => {
           </div>
         </div>
       </Card>
+
+      {/* API Error Alert */}
+      {apiError && (
+        <Alert variant="destructive" className="border-orange-200 bg-orange-50 dark:bg-orange-900/20">
+          <AlertTriangle className="h-4 w-4" />
+          <AlertDescription className="ml-2">
+            <strong>Aviso:</strong> {apiError}
+          </AlertDescription>
+        </Alert>
+      )}
 
       {/* Stats */}
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">

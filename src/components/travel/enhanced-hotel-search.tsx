@@ -45,6 +45,23 @@ import {
   Zap
 } from "lucide-react";
 
+// Cache interface for storing last 5 hotel queries
+interface HotelSearchCache {
+  params: {
+    destination: string;
+    checkIn: string;
+    checkOut: string;
+    guests: number;
+    rooms: number;
+  };
+  results: Hotel[];
+  timestamp: number;
+}
+
+const HOTEL_CACHE_KEY = "hotel_search_cache";
+const MAX_CACHE_ITEMS = 5;
+const CACHE_EXPIRY_MS = 30 * 60 * 1000; // 30 minutes
+
 interface Hotel {
   id: string;
   name: string;
@@ -92,6 +109,60 @@ interface TravelItinerary {
   status: "planned" | "active" | "completed";
 }
 
+// Hotel cache management functions
+const loadHotelCache = (): HotelSearchCache[] => {
+  try {
+    const cached = localStorage.getItem(HOTEL_CACHE_KEY);
+    if (cached) {
+      const items = JSON.parse(cached) as HotelSearchCache[];
+      return items.filter(item => Date.now() - item.timestamp < CACHE_EXPIRY_MS);
+    }
+  } catch (error) {
+    console.error("Error loading hotel cache:", error);
+  }
+  return [];
+};
+
+const saveToHotelCache = (params: HotelSearchCache["params"], results: Hotel[]) => {
+  try {
+    const cache = loadHotelCache();
+    cache.unshift({
+      params,
+      results,
+      timestamp: Date.now()
+    });
+    const trimmedCache = cache.slice(0, MAX_CACHE_ITEMS);
+    localStorage.setItem(HOTEL_CACHE_KEY, JSON.stringify(trimmedCache));
+  } catch (error) {
+    console.error("Error saving to hotel cache:", error);
+  }
+};
+
+const findInHotelCache = (params: HotelSearchCache["params"]): Hotel[] | null => {
+  try {
+    const cache = loadHotelCache();
+    const match = cache.find(item => 
+      item.params.destination === params.destination &&
+      item.params.checkIn === params.checkIn &&
+      item.params.checkOut === params.checkOut &&
+      item.params.guests === params.guests &&
+      item.params.rooms === params.rooms
+    );
+    return match?.results || null;
+  } catch (error) {
+    console.error("Error finding in hotel cache:", error);
+    return null;
+  }
+};
+
+// Input validation for hotel searches
+const validateHotelInput = (destination: string): string => {
+  if (!destination || destination.trim().length === 0) {
+    return "";
+  }
+  return destination.trim().replace(/[^\w\s-]/g, "");
+};
+
 export const EnhancedHotelSearch: React.FC = () => {
   const { toast } = useToast();
   const [activeTab, setActiveTab] = useState("search");
@@ -103,6 +174,7 @@ export const EnhancedHotelSearch: React.FC = () => {
   const [guests, setGuests] = useState(2);
   const [rooms, setRooms] = useState(1);
   const [isSearching, setIsSearching] = useState(false);
+  const [apiError, setApiError] = useState<string | null>(null);
   const [priceRange, setPriceRange] = useState({ min: 0, max: 1000 });
   const [selectedAmenities, setSelectedAmenities] = useState<string[]>([]);
   
@@ -284,10 +356,13 @@ export const EnhancedHotelSearch: React.FC = () => {
   };
 
   const handleSearch = async () => {
-    if (!destination || !checkInDate || !checkOutDate) {
+    // Input validation
+    const validatedDestination = validateHotelInput(destination);
+    
+    if (!validatedDestination || !checkInDate || !checkOutDate) {
       toast({
         title: "Campos obrigatórios",
-        description: "Preencha destino, check-in e check-out",
+        description: "Por favor, informe destino, check-in e check-out válidos.",
         variant: "destructive"
       });
       return;
@@ -302,20 +377,47 @@ export const EnhancedHotelSearch: React.FC = () => {
       return;
     }
 
+    // Check cache first
+    const cacheParams = {
+      destination: validatedDestination,
+      checkIn: format(checkInDate, "yyyy-MM-dd"),
+      checkOut: format(checkOutDate, "yyyy-MM-dd"),
+      guests,
+      rooms
+    };
+
+    const cachedResults = findInHotelCache(cacheParams);
+    if (cachedResults) {
+      setHotels(cachedResults);
+      setApiError(null);
+      toast({
+        title: "Resultados do cache",
+        description: `${cachedResults.length} hotéis carregados do cache`,
+      });
+      return;
+    }
+
     setIsSearching(true);
+    setApiError(null);
     
     try {
-      // Chamar API Amadeus para busca real
-      const { data, error } = await supabase.functions.invoke("amadeus-search", {
+      // Set timeout for API call
+      const timeoutPromise = new Promise((_, reject) => 
+        setTimeout(() => reject(new Error("Timeout: API não respondeu em tempo hábil")), 10000)
+      );
+
+      const apiPromise = supabase.functions.invoke("amadeus-search", {
         body: {
           searchType: "hotels",
-          cityName: destination,
-          checkIn: format(checkInDate, "yyyy-MM-dd"),
-          checkOut: format(checkOutDate, "yyyy-MM-dd"),
+          cityName: validatedDestination,
+          checkIn: cacheParams.checkIn,
+          checkOut: cacheParams.checkOut,
           adults: guests,
           rooms: rooms
         }
       });
+
+      const { data, error } = await Promise.race([apiPromise, timeoutPromise]) as any;
 
       if (error) throw error;
 
@@ -323,7 +425,7 @@ export const EnhancedHotelSearch: React.FC = () => {
         const transformedHotels = data.data.data.map((offer: any, index: number) => ({
           id: offer.hotel?.hotelId || `hotel-${index}`,
           name: offer.hotel?.name || "Hotel Disponível",
-          location: offer.hotel?.address?.cityName || destination,
+          location: offer.hotel?.address?.cityName || validatedDestination,
           address: offer.hotel?.address?.lines?.join(", ") || "",
           rating: 4.0 + Math.random() * 1.0,
           price: Math.round(parseFloat(offer.offers?.[0]?.price?.total || "200")),
@@ -331,13 +433,15 @@ export const EnhancedHotelSearch: React.FC = () => {
           image: `https://images.unsplash.com/photo-${1566073771259 + index}?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80`,
           amenities: ["WiFi Gratuito", "Café da manhã"],
           distance: "Centro da cidade",
-          bookingUrl: generateBookingUrl(offer, { destination, checkInDate, checkOutDate, guests, rooms }),
-          description: `Hotel disponível em ${destination}`,
+          bookingUrl: generateBookingUrl(offer, { destination: validatedDestination, checkInDate, checkOutDate, guests, rooms }),
+          description: `Hotel disponível em ${validatedDestination}`,
           checkInTime: "14:00",
           checkOutTime: "11:00"
         }));
 
         setHotels(transformedHotels);
+        saveToHotelCache(cacheParams, transformedHotels);
+        setApiError(null);
         toast({
           title: "Busca concluída",
           description: `${transformedHotels.length} hotéis encontrados!`
@@ -345,16 +449,31 @@ export const EnhancedHotelSearch: React.FC = () => {
       } else {
         throw new Error("Nenhum hotel encontrado");
       }
-    } catch (error) {
-      // Usar dados mock como fallback
+    } catch (error: any) {
+      // Enhanced fallback with better error messages
+      console.error("Hotel search error:", error);
+      
+      let errorMessage = "Falha ao buscar dados. Exibindo resultados de demonstração.";
+      if (error?.message?.includes("Timeout")) {
+        errorMessage = "A API não respondeu a tempo. Exibindo resultados de demonstração.";
+      } else if (error?.message?.includes("quota") || error?.message?.includes("rate limit")) {
+        errorMessage = "Limite de requisições atingido. Exibindo resultados de demonstração.";
+      } else if (error?.message?.includes("network") || error?.message?.includes("fetch")) {
+        errorMessage = "Erro de conexão. Verifique sua internet. Exibindo resultados de demonstração.";
+      }
+
+      setApiError(errorMessage);
+      
       const filteredHotels = mockHotels.filter(hotel => 
         hotel.location.toLowerCase().includes(destination.toLowerCase())
       );
-      setHotels(filteredHotels.length > 0 ? filteredHotels : mockHotels);
+      const fallbackHotels = filteredHotels.length > 0 ? filteredHotels : mockHotels;
+      setHotels(fallbackHotels);
+      saveToHotelCache(cacheParams, fallbackHotels);
       
       toast({
-        title: "Dados de demonstração",
-        description: "Exibindo hotéis de exemplo",
+        title: "Modo de demonstração",
+        description: errorMessage,
         variant: "destructive"
       });
     } finally {
@@ -749,6 +868,16 @@ export const EnhancedHotelSearch: React.FC = () => {
               </Button>
             </CardContent>
           </Card>
+
+          {/* API Error Alert */}
+          {apiError && (
+            <Alert variant="destructive" className="border-orange-200 bg-orange-50 dark:bg-orange-900/20">
+              <AlertTriangle className="h-4 w-4" />
+              <AlertDescription className="ml-2">
+                <strong>Aviso:</strong> {apiError}
+              </AlertDescription>
+            </Alert>
+          )}
 
           {/* Resultados da Busca */}
           {sortedHotels.length > 0 && (
