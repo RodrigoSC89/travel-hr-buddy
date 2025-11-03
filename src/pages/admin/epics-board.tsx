@@ -44,6 +44,7 @@ interface Patch {
   modules: string[];
   dependencies: string[];
   validation_status: "pending" | "passed" | "failed";
+  tests?: string[]; // Optional array of test types: "e2e", "unit", "integration"
 }
 
 export default function EpicsBoard() {
@@ -143,21 +144,22 @@ export default function EpicsBoard() {
       id: "epic-003",
       name: "Advanced AI & Automation",
       description: "Enhanced AI capabilities and automation features",
-      status: "todo",
+      status: "completed",
       start_date: "2025-12-01",
-      target_date: "2026-01-31",
+      target_date: "2025-12-15",
       owner: "AI Team",
       patches: [
         {
           id: "patch-603",
           number: "PATCH 603",
-          name: "Smart Calendar AI",
-          description: "Dynamic scheduling with predictive AI",
-          status: "todo",
-          progress: 0,
-          modules: ["smart-scheduler-ai", "fleet-availability", "failure-detection"],
+          name: "Agendamento com IA",
+          description: "AI-powered scheduling with risk-based recommendations",
+          status: "completed",
+          progress: 100,
+          modules: ["smart-scheduler", "llm-task-engine", "calendar"],
           dependencies: ["patch-597", "supabase"],
-          validation_status: "pending",
+          validation_status: "passed",
+          tests: ["e2e", "unit"],
         },
       ],
     },
@@ -165,7 +167,7 @@ export default function EpicsBoard() {
       id: "epic-004",
       name: "Compliance & Auditing",
       description: "ISM audits, ESG monitoring, and remote audit capabilities",
-      status: "todo",
+      status: "in_progress",
       start_date: "2025-12-15",
       target_date: "2026-02-28",
       owner: "Compliance Team",
@@ -184,24 +186,26 @@ export default function EpicsBoard() {
         {
           id: "patch-605",
           number: "PATCH 605",
-          name: "ESG & EEXI Monitoring",
-          description: "Environmental compliance tracking and reporting",
-          status: "todo",
-          progress: 0,
+          name: "ESG & EEXI Tracker",
+          description: "ESG metrics, emissions tracking, and EEXI/CII compliance",
+          status: "completed",
+          progress: 100,
           modules: ["esg-dashboard", "emissions-tracking", "forecast-ai"],
           dependencies: ["supabase", "analytics"],
-          validation_status: "pending",
+          validation_status: "passed",
+          tests: ["e2e", "unit"],
         },
         {
           id: "patch-606",
           number: "PATCH 606",
-          name: "Remote Audit with AI",
-          description: "Remote auditing with evidence validation",
-          status: "todo",
-          progress: 0,
+          name: "Auditoria Remota com IA",
+          description: "Remote audit system with LLM evidence validation and OCR",
+          status: "completed",
+          progress: 100,
           modules: ["remote-audits", "evidence-uploader", "ocr-ai"],
           dependencies: ["supabase", "document-hub"],
-          validation_status: "pending",
+          validation_status: "passed",
+          tests: ["e2e", "unit"],
         },
       ],
     },
@@ -457,6 +461,23 @@ export default function EpicsBoard() {
                               {patch.dependencies.map((dep) => (
                                 <Badge key={dep} variant="outline" className="text-xs">
                                   {dep}
+                                </Badge>
+                              ))}
+                            </div>
+                          </div>
+                        )}
+
+                        {/* Test Coverage */}
+                        {patch.tests && patch.tests.length > 0 && (
+                          <div className="mt-2">
+                            <div className="flex items-center gap-2 flex-wrap">
+                              <CheckCircle2 className="h-4 w-4 text-green-600" />
+                              <span className="text-xs text-muted-foreground">
+                                Tests:
+                              </span>
+                              {patch.tests.map((testType) => (
+                                <Badge key={testType} variant="default" className="text-xs bg-green-600 hover:bg-green-700">
+                                  ✅ {testType.toUpperCase()}
                                 </Badge>
                               ))}
                             </div>
