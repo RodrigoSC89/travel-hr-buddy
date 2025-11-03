@@ -72,7 +72,7 @@ export function parseTextToISMItems(text: string, defaultCategory: string = "Gen
       
       if (cleanQuestion.length > 10) {
         items.push({
-          id: `item-${Date.now()}-${Math.random().toString(36).substr(2, 9)}`,
+          id: `item-${Date.now()}-${crypto.randomUUID ? crypto.randomUUID().slice(0, 8) : Math.random().toString(36).substr(2, 9)}`,
           question: cleanQuestion,
           category: currentCategory,
           compliant: hasCheckMark ? "compliant" : hasCrossMark ? "non-compliant" : "pending",

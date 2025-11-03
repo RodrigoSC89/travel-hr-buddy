@@ -61,7 +61,7 @@ test.describe("ISM Audit Module", () => {
     await page.getByRole("button", { name: /Carregar Template/i }).click();
     
     // Update first item
-    const firstItem = page.locator(".checklist-card").first();
+    const firstItem = page.locator("[data-testid='checklist-card']").first();
     await firstItem.getByRole("button", { name: /Conforme/i }).click();
     
     // Save audit
@@ -102,7 +102,7 @@ test.describe("ISM Audit Module", () => {
     await page.getByRole("button", { name: /Carregar Template/i }).click();
     
     // Mark some items as compliant
-    const items = page.locator(".checklist-card");
+    const items = page.locator("[data-testid='checklist-card']");
     const count = await items.count();
     
     for (let i = 0; i < Math.min(count, 3); i++) {
@@ -168,7 +168,7 @@ test.describe("ISM Audit AI Analysis", () => {
     await page.getByRole("button", { name: /Carregar Template/i }).click();
     
     // Add notes to first item
-    const firstItem = page.locator(".checklist-card").first();
+    const firstItem = page.locator("[data-testid='checklist-card']").first();
     await firstItem.getByPlaceholder(/notas/i).fill("Test evidence and notes");
     
     // Click analyze button

@@ -34,7 +34,7 @@ export function ISMAuditForm({ audit, onSave, onCancel }: ISMAuditFormProps) {
     items: audit?.items || [],
   });
 
-  const [, setAnalyzingItem] = useState<string | null>(null);
+  const [isAnalyzing, setIsAnalyzing] = useState<string | null>(null);
   const [generatingSummary, setGeneratingSummary] = useState(false);
 
   const handleFieldChange = (field: string, value: string) => {
@@ -72,7 +72,7 @@ export function ISMAuditForm({ audit, onSave, onCancel }: ISMAuditFormProps) {
       return;
     }
 
-    setAnalyzingItem(item.id);
+    setIsAnalyzing(item.id);
     try {
       const analysis = await analyzeISMItem({
         question: item.question,
@@ -93,7 +93,7 @@ export function ISMAuditForm({ audit, onSave, onCancel }: ISMAuditFormProps) {
       console.error("Error analyzing item:", error);
       toast.error("Erro ao analisar item");
     } finally {
-      setAnalyzingItem(null);
+      setIsAnalyzing(null);
     }
   };
 
@@ -294,6 +294,7 @@ export function ISMAuditForm({ audit, onSave, onCancel }: ISMAuditFormProps) {
                 onUpdate={handleItemUpdate}
                 onAnalyze={handleAnalyzeItem}
                 showAIAnalysis={true}
+                disabled={isAnalyzing === item.id}
               />
             ))
           ) : (

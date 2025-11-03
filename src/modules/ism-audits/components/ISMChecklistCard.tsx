@@ -21,6 +21,7 @@ interface ISMChecklistCardProps {
   onUpdate: (item: ISMAuditItem) => void;
   onAnalyze?: (item: ISMAuditItem) => void;
   showAIAnalysis?: boolean;
+  disabled?: boolean;
 }
 
 const statusIcons = {
@@ -48,7 +49,8 @@ export function ISMChecklistCard({
   item, 
   onUpdate, 
   onAnalyze,
-  showAIAnalysis = true 
+  showAIAnalysis = true,
+  disabled = false
 }: ISMChecklistCardProps) {
   const handleStatusChange = (status: ComplianceStatus) => {
     onUpdate({ ...item, compliant: status });
@@ -59,7 +61,7 @@ export function ISMChecklistCard({
   };
 
   return (
-    <Card className="p-4 space-y-3">
+    <Card className="p-4 space-y-3" data-testid="checklist-card">
       <div className="flex items-start justify-between gap-4">
         <div className="flex-1">
           <Badge variant="outline" className="mb-2">
@@ -108,9 +110,10 @@ export function ISMChecklistCard({
               size="sm"
               variant="outline"
               className="w-full"
+              disabled={disabled}
             >
               <Sparkles className="h-4 w-4 mr-2" />
-              Analisar com IA
+              {disabled ? "Analisando..." : "Analisar com IA"}
             </Button>
           )}
           
