@@ -143,54 +143,43 @@ describe('LSA/FFA Inspections Module', () => {
       };
       
       const totalItems = emptyChecklist.checklist.length;
-      const score = totalItems > 0 ? 0 : 0; // Default to 0 when no items
+      const checkedItems = emptyChecklist.checklist.filter(item => item.checked).length;
+      const score = totalItems === 0 ? 0 : Math.round((checkedItems / totalItems) * 100);
       
       expect(score).toBe(0);
     });
   });
 
+  // Helper function to calculate risk rating based on score
+  const calculateRiskRating = (score: number): string => {
+    if (score < 50) return 'critical';
+    if (score < 70) return 'high';
+    if (score < 85) return 'medium';
+    return 'low';
+  };
+
   describe('Risk Assessment', () => {
     it('should assess critical risk when score is below 50%', () => {
       const lowScoreInspection = { ...mockInspection, score: 45 };
-      
-      let riskRating = 'low';
-      if (lowScoreInspection.score < 50) {
-        riskRating = 'critical';
-      }
-      
+      const riskRating = calculateRiskRating(lowScoreInspection.score);
       expect(riskRating).toBe('critical');
     });
 
     it('should assess high risk when score is between 50-70%', () => {
       const mediumScoreInspection = { ...mockInspection, score: 65 };
-      
-      let riskRating = 'low';
-      if (mediumScoreInspection.score >= 50 && mediumScoreInspection.score < 70) {
-        riskRating = 'high';
-      }
-      
+      const riskRating = calculateRiskRating(mediumScoreInspection.score);
       expect(riskRating).toBe('high');
     });
 
     it('should assess medium risk when score is between 70-85%', () => {
       const goodScoreInspection = { ...mockInspection, score: 75 };
-      
-      let riskRating = 'low';
-      if (goodScoreInspection.score >= 70 && goodScoreInspection.score < 85) {
-        riskRating = 'medium';
-      }
-      
+      const riskRating = calculateRiskRating(goodScoreInspection.score);
       expect(riskRating).toBe('medium');
     });
 
     it('should assess low risk when score is above 85%', () => {
       const highScoreInspection = { ...mockInspection, score: 90 };
-      
-      let riskRating = 'low';
-      if (highScoreInspection.score >= 85) {
-        riskRating = 'low';
-      }
-      
+      const riskRating = calculateRiskRating(highScoreInspection.score);
       expect(riskRating).toBe('low');
     });
   });
@@ -241,7 +230,7 @@ describe('LSA/FFA Inspections Module', () => {
           {
             equipment: 'Fire Extinguisher #3',
             description: 'Expired certification',
-            severity: 'critical' as const,
+            severity: 'critical',
           },
         ],
       };
