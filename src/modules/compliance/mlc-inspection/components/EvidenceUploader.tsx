@@ -64,15 +64,15 @@ export function EvidenceUploader({ inspectionId, onUpdate }: EvidenceUploaderPro
   return (
     <Card className="w-full max-w-md mx-auto">
       <CardHeader>
-        <CardTitle className="text-xl font-semibold">Upload de Evidências</CardTitle>
+        <CardTitle className="text-xl font-semibold">Evidence Upload</CardTitle>
         <CardDescription>
-          Anexe documentos, imagens ou vídeos relevantes à inspeção MLC.
+          Attach documents, images, or videos relevant to the MLC inspection.
         </CardDescription>
       </CardHeader>
       <CardContent>
         <div className="space-y-4">
           <div className="space-y-2">
-            <Label htmlFor="file">Selecione o arquivo</Label>
+            <Label htmlFor="file">Select file</Label>
             <Input 
               id="file" 
               type="file" 
@@ -100,7 +100,7 @@ export function EvidenceUploader({ inspectionId, onUpdate }: EvidenceUploaderPro
               disabled={!selectedFile || uploading}
             >
               <UploadCloud className="w-4 h-4" /> 
-              {uploading ? "Enviando..." : "Enviar"}
+              {uploading ? "Uploading..." : "Upload"}
             </Button>
             {selectedFile && (
               <Button 
@@ -110,16 +110,16 @@ export function EvidenceUploader({ inspectionId, onUpdate }: EvidenceUploaderPro
                 disabled={uploading}
               >
                 <Trash2 className="w-4 h-4" /> 
-                Remover
+                Remove
               </Button>
             )}
           </div>
 
           <div className="text-xs text-muted-foreground mt-4">
-            <p>Tipos de arquivo suportados:</p>
-            <p>• Imagens (JPG, PNG, etc.)</p>
-            <p>• Documentos PDF</p>
-            <p>• Documentos Word (DOC, DOCX)</p>
+            <p>Supported file types:</p>
+            <p>• Images (JPG, PNG, etc.)</p>
+            <p>• PDF documents</p>
+            <p>• Word documents (DOC, DOCX)</p>
           </div>
         </div>
       </CardContent>

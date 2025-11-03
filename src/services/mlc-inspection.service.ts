@@ -60,6 +60,10 @@ export interface MLCAIReport {
   created_by?: string;
 }
 
+// Constants
+const AI_MODEL_NAME = 'MLC Compliance Analyzer v1.0';
+const DEFAULT_CONFIDENCE_SCORE = 85;
+
 class MLCInspectionService {
   // Inspections
   async getInspections(): Promise<MLCInspection[]> {
@@ -222,9 +226,7 @@ class MLCInspectionService {
     const majorFindings = findings.filter(f => f.severity === 'major').length;
 
     // Generate summary
-    const summary = `MLC Inspection conducted on ${new Date(inspection.inspection_date).toLocaleDateString()}. 
-    Total findings: ${totalFindings}, Compliant: ${compliantFindings}, Non-compliant: ${nonCompliantFindings}.
-    Critical issues: ${criticalFindings}, Major issues: ${majorFindings}.`;
+    const summary = `MLC Inspection conducted on ${new Date(inspection.inspection_date).toLocaleDateString()}. Total findings: ${totalFindings}, Compliant: ${compliantFindings}, Non-compliant: ${nonCompliantFindings}. Critical issues: ${criticalFindings}, Major issues: ${majorFindings}.`;
 
     // Generate key findings
     const keyFindings = findings
@@ -233,8 +235,7 @@ class MLCInspectionService {
 
     // Generate suggestions
     const suggestions = nonCompliantFindings > 0
-      ? `Immediate attention required for ${criticalFindings} critical and ${majorFindings} major non-compliances. 
-      Review corrective actions and implement preventive measures.`
+      ? `Immediate attention required for ${criticalFindings} critical and ${majorFindings} major non-compliances. Review corrective actions and implement preventive measures.`
       : 'All items are compliant. Continue monitoring and maintain current standards.';
 
     // Generate risk assessment
@@ -256,8 +257,8 @@ class MLCInspectionService {
         key_findings: keyFindings,
         suggestions,
         risk_assessment: riskAssessment,
-        model_used: 'MLC Compliance Analyzer v1.0',
-        confidence_score: 85,
+        model_used: AI_MODEL_NAME,
+        confidence_score: DEFAULT_CONFIDENCE_SCORE,
       })
       .select()
       .single();
