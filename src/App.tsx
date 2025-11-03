@@ -79,6 +79,12 @@ const IoT = safeLazyImport(() => import("@/pages/IoT"));
 const Blockchain = safeLazyImport(() => import("@/pages/Blockchain"));
 const Gamification = safeLazyImport(() => import("@/pages/Gamification"));
 const PredictiveAnalytics = safeLazyImport(() => import("@/pages/PredictiveAnalytics"));
+
+// PATCH 608-612: New Maritime Modules
+const TravelIntelligence = safeLazyImport(() => import("@/modules/travel-intelligence"));
+const ISMAudits = safeLazyImport(() => import("@/modules/ism-audits"));
+const PreOvidInspection = safeLazyImport(() => import("@/pages/admin/pre-ovid-inspection"));
+
 // PATCH 540 Fase 4: Admin pages bundled (17 → 1 import)
 const APITester = AdminBundle.APITester;
 const APIStatus = AdminBundle.APIStatus;
@@ -186,7 +192,6 @@ const ForecastHistoryPage = safeLazyImport(() => import("@/pages/admin/mmi/forec
 const BIForecastsPage = safeLazyImport(() => import("@/pages/admin/bi/forecasts"));
 const PEODPAuditPage = safeLazyImport(() => import("@/pages/admin/peodp-audit"));
 const PEODPWizardComplete = safeLazyImport(() => import("@/pages/admin/peodp-wizard-complete"));
-const PreOvidInspection = safeLazyImport(() => import("@/pages/admin/pre-ovid-inspection"));
 const VaultAI = safeLazyImport(() => import("@/modules/vault_ai/pages/VaultAIPage"));
 const VaultAIComplete = safeLazyImport(() => import("@/pages/admin/vault-ai-complete"));
 const Patch66Dashboard = safeLazyImport(() => import("@/pages/Patch66Dashboard"));
@@ -645,6 +650,12 @@ function App() {
                       <Route path="/dashboard/document-hub" element={<DocumentHub />} />
                       <Route path="/ai-assistant" element={<AIAssistant />} />
                       <Route path="/travel" element={<Travel />} />
+                      {/* PATCH 608: Travel Intelligence */}
+                      <Route path="/travel-intelligence" element={<TravelIntelligence />} />
+                      {/* PATCH 609: ISM Audits */}
+                      <Route path="/ism-audits" element={<ISMAudits />} />
+                      {/* PATCH 610: Pre-OVID Inspection */}
+                      <Route path="/pre-ovid" element={<PreOvidInspection />} />
                       <Route path="/analytics" element={<Analytics />} />
                       <Route path="/hr" element={<HumanResources />} />
                       {/* PATCH 551: Communication Center Consolidation - Unified communication route */}
