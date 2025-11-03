@@ -145,7 +145,19 @@ export const cleanupOldContexts = (): void => {
   });
 };
 
-// Cleanup old contexts every 30 minutes
+// PATCH 607: Cleanup old contexts every 30 minutes with proper cleanup
+let cleanupIntervalId: NodeJS.Timeout | null = null;
+
 if (typeof window !== "undefined") {
-  setInterval(cleanupOldContexts, 30 * 60 * 1000);
+  cleanupIntervalId = setInterval(cleanupOldContexts, 30 * 60 * 1000);
 }
+
+/**
+ * PATCH 607: Stop cleanup interval (useful for testing or cleanup)
+ */
+export const stopContextCleanup = (): void => {
+  if (cleanupIntervalId) {
+    clearInterval(cleanupIntervalId);
+    cleanupIntervalId = null;
+  }
+};
