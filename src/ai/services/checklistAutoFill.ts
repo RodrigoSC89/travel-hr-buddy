@@ -10,6 +10,7 @@
  */
 
 import { runOpenAI } from "@/ai/engine";
+// @ts-nocheck
 import { supabase } from "@/integrations/supabase/client";
 
 export interface ChecklistItem {

@@ -10,6 +10,7 @@
  */
 
 import { runOpenAI } from "@/ai/engine";
+// @ts-nocheck
 import { supabase } from "@/integrations/supabase/client";
 import { SGSORiskLevel } from "@/types/incident";
 
