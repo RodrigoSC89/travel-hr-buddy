@@ -213,6 +213,9 @@ const DeploymentStatus = safeLazyImport(() => import("@/pages/admin/DeploymentSt
 const TodoTracker = safeLazyImport(() => import("@/pages/admin/TodoTracker"));
 const LabsStatus = safeLazyImport(() => import("@/pages/admin/LabsStatus"));
 
+// PATCH 602 - Epics Board
+const EpicsBoard = safeLazyImport(() => import("@/pages/admin/epics-board"));
+
 // PATCH 574 - i18n Dashboard
 const I18nDashboard = safeLazyImport(() => import("@/pages/dashboard/i18n"));
 const I18nDemo = safeLazyImport(() => import("@/pages/i18n-demo"));
@@ -821,6 +824,9 @@ function App() {
                       {/* PATCH 545 - Technical Debt Tracking */}
                       <Route path="/admin/todo-tracker" element={<TodoTracker />} />
                       <Route path="/admin/labs-status" element={<LabsStatus />} />
+                      
+                      {/* PATCH 602 - Epics & Patches Board */}
+                      <Route path="/admin/epics-board" element={<EpicsBoard />} />
 
                       <Route path="/admin/documents/edit/:id" element={<CollaborativeEditor />} />
                       <Route path="/admin/documents/view/:id" element={<DocumentView />} />
