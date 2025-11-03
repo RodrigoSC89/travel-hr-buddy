@@ -11,8 +11,10 @@
  * - services: AI-powered services (PATCH 133.0, 134.0, 135.0)
  * - collective: Collective Intelligence System (PATCH 216-220)
  * 
+ * PATCH 594: Added lazy loading functions to avoid static/dynamic import conflicts
+ * 
  * @module ai
- * @updated 2025-01-24
+ * @updated 2025-11-02
  */
 
 export { nautilusInference, type InferenceResult, type AnalysisResult } from "./nautilus-inference";
@@ -252,3 +254,82 @@ export {
   type EmotionAwareResponse,
   type EmotionStats
 } from "./emotion/feedback-responder";
+
+// ============================================================================
+// PATCH 594 - Lazy Loading Functions for Strategic Decision System
+// ============================================================================
+// These functions avoid "dynamically imported but also statically imported" warnings
+// by providing lazy-loading wrappers for heavy AI modules
+
+/**
+ * Lazy load the Predictive Strategy Engine
+ * Avoids static import conflicts while maintaining type safety
+ */
+export async function getPredictiveStrategyEngine() {
+  const { predictiveStrategyEngine, PredictiveStrategyEngine } = await import("./strategy/predictive-engine");
+  return { predictiveStrategyEngine, PredictiveStrategyEngine };
+}
+
+/**
+ * Lazy load the Decision Simulator Core
+ */
+export async function getDecisionSimulatorCore() {
+  const { decisionSimulatorCore, DecisionSimulatorCore } = await import("./decision-simulator");
+  return { decisionSimulatorCore, DecisionSimulatorCore };
+}
+
+/**
+ * Lazy load the Neural Governance Module
+ */
+export async function getNeuralGovernance() {
+  const { neuralGovernance, NeuralGovernance } = await import("./governance/neural-governance");
+  return { neuralGovernance, NeuralGovernance };
+}
+
+/**
+ * Lazy load the Strategic Consensus Builder
+ */
+export async function getStrategicConsensusBuilder() {
+  const { strategicConsensusBuilder, StrategicConsensusBuilder } = await import("./agents/consensus-builder");
+  return { strategicConsensusBuilder, StrategicConsensusBuilder };
+}
+
+/**
+ * Lazy load the Executive Summary Generator
+ */
+export async function getExecutiveSummaryGenerator() {
+  const { ExecutiveSummaryGenerator } = await import("./reporting/executive-summary");
+  return { ExecutiveSummaryGenerator };
+}
+
+/**
+ * Lazy load the complete Strategic Decision System
+ * Convenience function to load all modules at once
+ */
+export async function getStrategicDecisionSystem() {
+  const [
+    predictive,
+    simulator,
+    governance,
+    consensus,
+    executive
+  ] = await Promise.all([
+    getPredictiveStrategyEngine(),
+    getDecisionSimulatorCore(),
+    getNeuralGovernance(),
+    getStrategicConsensusBuilder(),
+    getExecutiveSummaryGenerator()
+  ]);
+
+  return {
+    ...predictive,
+    ...simulator,
+    ...governance,
+    ...consensus,
+    ...executive
+  };
+}
+
+// Re-export strategic-decision-system module for backwards compatibility
+// But recommend using lazy loading functions above
+export * from "./strategic-decision-system";
