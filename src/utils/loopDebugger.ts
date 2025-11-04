@@ -21,7 +21,7 @@ interface LoopStats {
 
 class LoopDebugger {
   private executionRecords: Map<string, ExecutionRecord[]> = new Map();
-  private enabled: boolean = process.env.NODE_ENV === 'development';
+  private enabled: boolean = typeof process !== 'undefined' && process.env?.NODE_ENV === 'development';
   private maxRecordsPerFunction: number = 100;
 
   /**
@@ -67,6 +67,16 @@ class LoopDebugger {
    * Sanitize arguments to prevent circular references
    */
   private sanitizeArgs(args: any[]): any[] {
+    // Quick check for all primitives to skip expensive serialization
+    const allPrimitives = args.every((arg) => {
+      const type = typeof arg;
+      return type === 'string' || type === 'number' || type === 'boolean' || arg === null || arg === undefined;
+    });
+    
+    if (allPrimitives) {
+      return args;
+    }
+
     try {
       return JSON.parse(JSON.stringify(args));
     } catch {

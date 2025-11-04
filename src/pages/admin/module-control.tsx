@@ -125,7 +125,7 @@ export const ModuleControl: React.FC = () => {
   };
 
   return (
-    <div className="container mx-auto p-6 space-y-6">
+    <main className="container mx-auto p-6 space-y-6" role="main" aria-label="Module Control Center">
       {/* Header */}
       <div>
         <h1 className="text-3xl font-bold mb-2">Module Control Center</h1>
@@ -259,7 +259,7 @@ export const ModuleControl: React.FC = () => {
           )}
         </TabsContent>
       </Tabs>
-    </div>
+    </main>
   );
 };
 

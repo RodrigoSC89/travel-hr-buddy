@@ -137,7 +137,8 @@ export const ModuleLLMHelper: React.FC = () => {
   };
 
   return (
-    <div className="container mx-auto p-6 space-y-6">
+    <main className="container mx-auto p-6 space-y-6" role="main" aria-label="Module LLM Prompt Helper"
+>
       {/* Header */}
       <div>
         <h1 className="text-3xl font-bold mb-2 flex items-center gap-2">
@@ -348,7 +349,7 @@ export const ModuleLLMHelper: React.FC = () => {
           )}
         </div>
       </div>
-    </div>
+    </main>
   );
 };
 
