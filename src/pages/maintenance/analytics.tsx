@@ -58,7 +58,7 @@ export default function MaintenanceAnalytics() {
           <Card>
             <CardHeader>
               <CardTitle className="text-sm">Custo Médio</CardTitle>
-              <CardDescription">Por Manutenção</CardDescription>
+              <CardDescription>Por Manutenção</CardDescription>
             </CardHeader>
             <CardContent>
               <div className="text-2xl font-bold text-orange-600">R$ 1,850</div>

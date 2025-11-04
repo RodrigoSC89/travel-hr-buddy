@@ -86,7 +86,7 @@ const TravelIntelligence = safeLazyImport(() => import("@/modules/travel-intelli
 const PreOvidInspection = safeLazyImport(() => import("@/pages/admin/pre-ovid-inspection"));
 
 // PATCH 650-653: Maintenance and Safety Modules
-const MaintenancePlanner = safeLazyImport(() => import("@/pages/maintenance/planner"));
+const MaintenancePlannerPage = safeLazyImport(() => import("@/pages/maintenance/planner"));
 const MaintenanceHistory = safeLazyImport(() => import("@/pages/maintenance/history"));
 const MaintenanceAnalytics = safeLazyImport(() => import("@/pages/maintenance/analytics"));
 const PEODPSimulation = safeLazyImport(() => import("@/pages/safety/peo-dp-simulation"));
@@ -686,7 +686,7 @@ function App() {
                       <Route path="/forecast-global" element={<ForecastGlobal />} />
                       <Route path="/maintenance" element={<MaintenanceDashboard />} />
                       {/* PATCH 650: Maintenance Planner Module */}
-                      <Route path="/maintenance/planner" element={<MaintenancePlanner />} />
+                      <Route path="/maintenance/planner" element={<MaintenancePlannerPage />} />
                       <Route path="/maintenance/history" element={<MaintenanceHistory />} />
                       <Route path="/maintenance/analytics" element={<MaintenanceAnalytics />} />
                       {/* PATCH 651: PEO-DP Module */}

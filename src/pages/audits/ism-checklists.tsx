@@ -39,7 +39,7 @@ export default function ISMAuditChecklists() {
         description="Checklists de auditoria conforme ISM Code"
         gradient="green"
         badges={[
-          { icon={ClipboardList}, label: "Checklists" },
+          { icon: ClipboardList, label: "Checklists" },
           { icon: CheckCircle, label: "Validação" }
         ]}
       />
