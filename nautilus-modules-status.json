@@ -1,0 +1,874 @@
+{
+  "metadata": {
+    "verificationDate": "2025-11-04",
+    "system": "Nautilus One",
+    "version": "1.2.0",
+    "totalDocumented": 276,
+    "totalImplemented": 45,
+    "totalPartial": 8,
+    "totalPlanned": 223,
+    "implementationRate": 16.3
+  },
+  "categories": {
+    "core": {
+      "name": "Core & Dashboard",
+      "implemented": 1,
+      "partial": 0,
+      "planned": 0,
+      "total": 1
+    },
+    "maritime": {
+      "name": "Sistema Marítimo",
+      "implemented": 11,
+      "partial": 4,
+      "planned": 4,
+      "total": 19
+    },
+    "maintenance": {
+      "name": "Manutenção Técnica",
+      "implemented": 1,
+      "partial": 0,
+      "planned": 3,
+      "total": 4
+    },
+    "compliance": {
+      "name": "Compliance & Auditoria",
+      "implemented": 3,
+      "partial": 2,
+      "planned": 6,
+      "total": 11
+    },
+    "communication": {
+      "name": "Comunicação",
+      "implemented": 4,
+      "partial": 2,
+      "planned": 0,
+      "total": 6
+    },
+    "ai": {
+      "name": "Inteligência Artificial",
+      "implemented": 11,
+      "partial": 0,
+      "planned": 3,
+      "total": 14
+    },
+    "documents": {
+      "name": "Documentos",
+      "implemented": 1,
+      "partial": 0,
+      "planned": 3,
+      "total": 4
+    },
+    "travel": {
+      "name": "Viagens & Reservas",
+      "implemented": 1,
+      "partial": 0,
+      "planned": 3,
+      "total": 4
+    },
+    "analytics": {
+      "name": "Analytics",
+      "implemented": 4,
+      "partial": 0,
+      "planned": 0,
+      "total": 4
+    },
+    "hr": {
+      "name": "RH & Treinamento",
+      "implemented": 3,
+      "partial": 0,
+      "planned": 0,
+      "total": 3
+    },
+    "logistics": {
+      "name": "Logística",
+      "implemented": 3,
+      "partial": 0,
+      "planned": 0,
+      "total": 3
+    },
+    "system": {
+      "name": "Sistema",
+      "implemented": 3,
+      "partial": 0,
+      "planned": 0,
+      "total": 3
+    },
+    "experimental": {
+      "name": "Experimentais",
+      "implemented": 0,
+      "partial": 0,
+      "planned": 4,
+      "total": 4
+    }
+  },
+  "implementedModules": [
+    {
+      "id": "dashboard",
+      "name": "Dashboard Principal",
+      "category": "core",
+      "status": "implemented",
+      "path": "/dashboard",
+      "aiEnabled": true,
+      "integrations": ["Supabase", "OpenAI"],
+      "verifiedIn": "src/lib/registry/modules-definition.ts"
+    },
+    {
+      "id": "bridge-link",
+      "name": "BridgeLink",
+      "category": "maritime",
+      "status": "implemented",
+      "path": "/bridgelink",
+      "aiEnabled": true,
+      "integrations": ["Supabase", "MQTT"],
+      "verifiedIn": "src/lib/registry/modules-definition.ts"
+    },
+    {
+      "id": "control-hub",
+      "name": "Control Hub",
+      "category": "maritime",
+      "status": "implemented",
+      "path": "/control-hub",
+      "aiEnabled": true,
+      "integrations": ["Supabase", "MQTT"],
+      "verifiedIn": "src/lib/registry/modules-definition.ts"
+    },
+    {
+      "id": "mission-control",
+      "name": "Mission Control",
+      "category": "maritime",
+      "status": "implemented",
+      "path": "/mission-control",
+      "aiEnabled": true,
+      "integrations": ["Supabase", "MQTT"],
+      "submodules": ["autonomy", "ai-command", "logs"],
+      "verifiedIn": "modules-registry.json"
+    },
+    {
+      "id": "fleet-management",
+      "name": "Fleet Management",
+      "category": "maritime",
+      "status": "implemented",
+      "path": "/fleet",
+      "aiEnabled": true,
+      "integrations": ["Supabase", "OpenAI"],
+      "verifiedIn": "modules-registry.json"
+    },
+    {
+      "id": "crew-management",
+      "name": "Crew Management",
+      "category": "maritime",
+      "status": "implemented",
+      "path": "/crew",
+      "aiEnabled": true,
+      "integrations": ["Supabase", "OpenAI"],
+      "verifiedIn": "modules-registry.json"
+    },
+    {
+      "id": "dp-intelligence",
+      "name": "DP Intelligence",
+      "category": "maritime",
+      "status": "implemented",
+      "path": "/dp-intelligence",
+      "aiEnabled": true,
+      "integrations": ["Supabase", "OpenAI"],
+      "verifiedIn": "src/lib/registry/modules-definition.ts"
+    },
+    {
+      "id": "forecast-global",
+      "name": "Forecast Global",
+      "category": "maritime",
+      "status": "implemented",
+      "path": "/forecast-global",
+      "aiEnabled": true,
+      "integrations": ["Supabase", "OpenAI"],
+      "verifiedIn": "src/lib/registry/modules-definition.ts"
+    },
+    {
+      "id": "peo-dp",
+      "name": "PEO-DP",
+      "category": "maritime",
+      "status": "implemented",
+      "path": "/peo-dp",
+      "aiEnabled": true,
+      "integrations": ["Supabase"],
+      "verifiedIn": "src/lib/registry/modules-definition.ts"
+    },
+    {
+      "id": "sgso",
+      "name": "SGSO",
+      "category": "maritime",
+      "status": "implemented",
+      "path": "/sgso",
+      "aiEnabled": true,
+      "integrations": ["Supabase", "OpenAI"],
+      "verifiedIn": "src/lib/registry/modules-definition.ts"
+    },
+    {
+      "id": "fmea-expert",
+      "name": "FMEA Expert",
+      "category": "maritime",
+      "status": "implemented",
+      "path": "/admin/risk-audit",
+      "aiEnabled": true,
+      "integrations": ["Supabase", "OpenAI"],
+      "verifiedIn": "src/lib/registry/modules-definition.ts"
+    },
+    {
+      "id": "crew-wellbeing",
+      "name": "Crew Wellbeing",
+      "category": "maritime",
+      "status": "implemented",
+      "path": "/crew-wellbeing",
+      "aiEnabled": true,
+      "integrations": ["Supabase", "Lovable AI"],
+      "verifiedIn": "src/lib/registry/modules-definition.ts"
+    },
+    {
+      "id": "maintenance-planner",
+      "name": "MMI (Maintenance Intelligence)",
+      "category": "maintenance",
+      "status": "implemented",
+      "path": "/mmi/jobs",
+      "aiEnabled": true,
+      "integrations": ["Supabase", "OpenAI"],
+      "verifiedIn": "src/lib/registry/modules-definition.ts"
+    },
+    {
+      "id": "compliance-hub",
+      "name": "Compliance Hub",
+      "category": "compliance",
+      "status": "implemented",
+      "path": "/compliance-hub",
+      "aiEnabled": true,
+      "integrations": ["Supabase", "OpenAI"],
+      "verifiedIn": "src/lib/registry/modules-definition.ts"
+    },
+    {
+      "id": "audit-center",
+      "name": "Audit Center",
+      "category": "compliance",
+      "status": "implemented",
+      "path": "/audit-center",
+      "aiEnabled": true,
+      "integrations": ["Supabase", "OpenAI"],
+      "verifiedIn": "src/lib/registry/modules-definition.ts"
+    },
+    {
+      "id": "checklists-inteligentes",
+      "name": "Checklists Inteligentes",
+      "category": "compliance",
+      "status": "implemented",
+      "path": "/checklists-inteligentes",
+      "aiEnabled": true,
+      "integrations": ["Supabase", "OpenAI"],
+      "verifiedIn": "src/lib/registry/modules-definition.ts"
+    },
+    {
+      "id": "communication-center",
+      "name": "Communication Center",
+      "category": "communication",
+      "status": "implemented",
+      "path": "/comunicacao",
+      "aiEnabled": true,
+      "integrations": ["Supabase", "MQTT"],
+      "verifiedIn": "modules-registry.json"
+    },
+    {
+      "id": "channel-manager",
+      "name": "Channel Manager",
+      "category": "communication",
+      "status": "implemented",
+      "path": "/channel-manager",
+      "aiEnabled": false,
+      "integrations": ["Supabase", "MQTT"],
+      "verifiedIn": "src/lib/registry/modules-definition.ts"
+    },
+    {
+      "id": "notification-center",
+      "name": "Notification Center",
+      "category": "communication",
+      "status": "implemented",
+      "path": "/notifications-center",
+      "aiEnabled": true,
+      "integrations": ["Supabase"],
+      "verifiedIn": "src/lib/registry/modules-definition.ts"
+    },
+    {
+      "id": "real-time-workspace",
+      "name": "Real-time Workspace",
+      "category": "communication",
+      "status": "implemented",
+      "path": "/real-time-workspace",
+      "aiEnabled": true,
+      "integrations": ["Supabase", "Realtime"],
+      "verifiedIn": "src/lib/registry/modules-definition.ts"
+    },
+    {
+      "id": "ai-assistant",
+      "name": "Nautilus LLM Core",
+      "category": "ai",
+      "status": "implemented",
+      "path": "/mission-control/llm",
+      "aiEnabled": true,
+      "integrations": ["Supabase", "OpenAI"],
+      "verifiedIn": "src/lib/registry/modules-definition.ts"
+    },
+    {
+      "id": "ai-insights",
+      "name": "AI Insights",
+      "category": "ai",
+      "status": "implemented",
+      "path": "/ai-insights",
+      "aiEnabled": true,
+      "integrations": ["Supabase", "OpenAI"],
+      "verifiedIn": "src/lib/registry/modules-definition.ts"
+    },
+    {
+      "id": "voice-assistant-ai",
+      "name": "Voice Assistant",
+      "category": "ai",
+      "status": "implemented",
+      "path": "/voice-assistant-new",
+      "aiEnabled": true,
+      "integrations": ["Web Speech API"],
+      "verifiedIn": "src/lib/registry/modules-definition.ts"
+    },
+    {
+      "id": "automation",
+      "name": "Automation Engine",
+      "category": "ai",
+      "status": "implemented",
+      "path": "/automation",
+      "aiEnabled": true,
+      "integrations": ["Supabase", "OpenAI"],
+      "verifiedIn": "src/lib/registry/modules-definition.ts"
+    },
+    {
+      "id": "feedback",
+      "name": "Feedback System",
+      "category": "ai",
+      "status": "implemented",
+      "path": "/feedback",
+      "aiEnabled": true,
+      "integrations": ["Supabase", "OpenAI"],
+      "verifiedIn": "src/lib/registry/modules-definition.ts"
+    },
+    {
+      "id": "ai-command-center",
+      "name": "AI Command Center",
+      "category": "ai",
+      "status": "implemented",
+      "path": "/mission-control/ai-command",
+      "aiEnabled": true,
+      "integrations": ["Supabase", "Lovable AI"],
+      "verifiedIn": "src/lib/registry/modules-definition.ts"
+    },
+    {
+      "id": "workflow-engine",
+      "name": "Workflow Engine",
+      "category": "ai",
+      "status": "implemented",
+      "path": "/mission-control/workflows",
+      "aiEnabled": true,
+      "integrations": ["Supabase", "Lovable AI"],
+      "verifiedIn": "src/lib/registry/modules-definition.ts"
+    },
+    {
+      "id": "thought-chain",
+      "name": "Chain of Thought",
+      "category": "ai",
+      "status": "implemented",
+      "path": "/mission-control/thought-chain",
+      "aiEnabled": true,
+      "integrations": ["Supabase", "OpenAI"],
+      "verifiedIn": "src/lib/registry/modules-definition.ts"
+    },
+    {
+      "id": "autonomy-console",
+      "name": "Autonomy Console",
+      "category": "ai",
+      "status": "implemented",
+      "path": "/mission-control/autonomy",
+      "aiEnabled": true,
+      "integrations": ["Supabase"],
+      "verifiedIn": "src/lib/registry/modules-definition.ts"
+    },
+    {
+      "id": "insight-dashboard",
+      "name": "Insight Dashboard",
+      "category": "ai",
+      "status": "implemented",
+      "path": "/mission-control/insight-dashboard",
+      "aiEnabled": true,
+      "integrations": ["Supabase", "OpenAI"],
+      "verifiedIn": "src/lib/registry/modules-definition.ts"
+    },
+    {
+      "id": "sonar-ai",
+      "name": "Sonar AI",
+      "category": "ai",
+      "status": "implemented",
+      "path": "/sonar-ai",
+      "aiEnabled": true,
+      "integrations": ["Supabase"],
+      "verifiedIn": "modules-registry.json"
+    },
+    {
+      "id": "document-hub",
+      "name": "Document Hub",
+      "category": "documents",
+      "status": "implemented",
+      "path": "/documentos",
+      "aiEnabled": true,
+      "integrations": ["Supabase", "OpenAI"],
+      "verifiedIn": "modules-registry.json"
+    },
+    {
+      "id": "price-alerts",
+      "name": "Price Alerts",
+      "category": "travel",
+      "status": "implemented",
+      "path": "/price-alerts",
+      "aiEnabled": false,
+      "integrations": ["Supabase"],
+      "verifiedIn": "modules-registry.json"
+    },
+    {
+      "id": "analytics",
+      "name": "Analytics Central",
+      "category": "analytics",
+      "status": "implemented",
+      "path": "/analytics",
+      "aiEnabled": true,
+      "integrations": ["Supabase", "OpenAI"],
+      "verifiedIn": "src/lib/registry/modules-definition.ts"
+    },
+    {
+      "id": "analytics-core",
+      "name": "Analytics Core",
+      "category": "analytics",
+      "status": "implemented",
+      "path": "/analytics-core",
+      "aiEnabled": true,
+      "integrations": ["Supabase", "OpenAI"],
+      "verifiedIn": "src/lib/registry/modules-definition.ts"
+    },
+    {
+      "id": "reports",
+      "name": "Reports Central",
+      "category": "analytics",
+      "status": "implemented",
+      "path": "/reports-module",
+      "aiEnabled": true,
+      "integrations": ["Supabase", "OpenAI"],
+      "verifiedIn": "src/lib/registry/modules-definition.ts"
+    },
+    {
+      "id": "performance",
+      "name": "Performance Monitor",
+      "category": "analytics",
+      "status": "implemented",
+      "path": "/performance",
+      "aiEnabled": true,
+      "integrations": ["Supabase"],
+      "verifiedIn": "modules-registry.json"
+    },
+    {
+      "id": "portal-funcionario",
+      "name": "Employee Portal",
+      "category": "hr",
+      "status": "implemented",
+      "path": "/portal-funcionario",
+      "aiEnabled": true,
+      "integrations": ["Supabase", "OpenAI"],
+      "verifiedIn": "src/lib/registry/modules-definition.ts"
+    },
+    {
+      "id": "training-academy",
+      "name": "Training Academy",
+      "category": "hr",
+      "status": "implemented",
+      "path": "/training-academy",
+      "aiEnabled": true,
+      "integrations": ["Supabase", "OpenAI"],
+      "verifiedIn": "src/lib/registry/modules-definition.ts"
+    },
+    {
+      "id": "user-management",
+      "name": "User Management",
+      "category": "hr",
+      "status": "implemented",
+      "path": "/user-management",
+      "aiEnabled": false,
+      "integrations": ["Supabase"],
+      "verifiedIn": "src/lib/registry/modules-definition.ts"
+    },
+    {
+      "id": "voyage-planner",
+      "name": "Voyage Planner",
+      "category": "logistics",
+      "status": "implemented",
+      "path": "/voyage-planner",
+      "aiEnabled": true,
+      "integrations": ["Supabase", "OpenAI", "MapBox"],
+      "verifiedIn": "src/lib/registry/modules-definition.ts"
+    },
+    {
+      "id": "logistics-hub",
+      "name": "Logistics Hub",
+      "category": "logistics",
+      "status": "implemented",
+      "path": "/logistics-hub",
+      "aiEnabled": true,
+      "integrations": ["Supabase", "OpenAI"],
+      "verifiedIn": "src/lib/registry/modules-definition.ts"
+    },
+    {
+      "id": "fuel-optimizer",
+      "name": "Fuel Optimizer",
+      "category": "logistics",
+      "status": "implemented",
+      "path": "/fuel-optimizer",
+      "aiEnabled": true,
+      "integrations": ["Supabase", "OpenAI"],
+      "verifiedIn": "src/lib/registry/modules-definition.ts"
+    },
+    {
+      "id": "api-gateway",
+      "name": "API Gateway",
+      "category": "system",
+      "status": "implemented",
+      "path": "/api-gateway",
+      "aiEnabled": false,
+      "integrations": ["Supabase"],
+      "verifiedIn": "src/lib/registry/modules-definition.ts"
+    },
+    {
+      "id": "emergency-response",
+      "name": "Emergency Response",
+      "category": "system",
+      "status": "implemented",
+      "path": "/emergency-response",
+      "aiEnabled": true,
+      "integrations": ["Supabase", "MQTT", "OpenAI"],
+      "verifiedIn": "src/lib/registry/modules-definition.ts"
+    },
+    {
+      "id": "satellite-tracker",
+      "name": "Satellite Tracker",
+      "category": "system",
+      "status": "implemented",
+      "path": "/satellite-tracker",
+      "aiEnabled": false,
+      "integrations": ["Supabase"],
+      "verifiedIn": "src/lib/registry/modules-definition.ts"
+    }
+  ],
+  "partialModules": [
+    {
+      "id": "navigation-copilot-v2",
+      "name": "Navigation Copilot v2",
+      "category": "maritime",
+      "status": "partial",
+      "note": "v2 implemented, v1 deprecated",
+      "verifiedIn": "modules-registry.json"
+    },
+    {
+      "id": "route-planner-v2",
+      "name": "Route Planner v2",
+      "category": "maritime",
+      "status": "partial",
+      "note": "v2 implemented, v1 deprecated",
+      "verifiedIn": "modules-registry.json"
+    },
+    {
+      "id": "underwater-drone-v2",
+      "name": "Underwater Drone v2",
+      "category": "maritime",
+      "status": "partial",
+      "note": "v2 implemented, v1 deprecated",
+      "verifiedIn": "modules-registry.json"
+    },
+    {
+      "id": "drone-commander-v2",
+      "name": "Drone Commander v2",
+      "category": "maritime",
+      "status": "partial",
+      "note": "v2 implemented, v1 deprecated",
+      "verifiedIn": "modules-registry.json"
+    },
+    {
+      "id": "mlc-checklist",
+      "name": "MLC Checklist",
+      "category": "compliance",
+      "status": "partial",
+      "note": "Integrated into checklists-inteligentes"
+    },
+    {
+      "id": "ism-audit",
+      "name": "ISM Audit",
+      "category": "compliance",
+      "status": "partial",
+      "note": "Implemented as ism-audits",
+      "verifiedIn": "modules-registry.json"
+    },
+    {
+      "id": "incident-reports",
+      "name": "Incident Reports",
+      "category": "communication",
+      "status": "partial",
+      "note": "Consolidated and unified",
+      "verifiedIn": "modules-registry.json"
+    },
+    {
+      "id": "document-templates",
+      "name": "Document Templates",
+      "category": "documents",
+      "status": "partial",
+      "note": "Exists partially in document-hub",
+      "verifiedIn": "modules-registry.json"
+    }
+  ],
+  "plannedModules": [
+    {
+      "id": "lsa-ffa-inspection",
+      "name": "LSA/FFA Inspection",
+      "category": "compliance",
+      "status": "planned",
+      "priority": "high"
+    },
+    {
+      "id": "pre-psc-audit",
+      "name": "Pre-PSC Audit",
+      "category": "compliance",
+      "status": "planned",
+      "priority": "high"
+    },
+    {
+      "id": "dp-certifications",
+      "name": "DP Certifications",
+      "category": "compliance",
+      "status": "planned",
+      "priority": "medium"
+    },
+    {
+      "id": "pre-ovid-checklist",
+      "name": "Pre-OVID Checklist",
+      "category": "compliance",
+      "status": "planned",
+      "priority": "medium"
+    },
+    {
+      "id": "psc-detector",
+      "name": "PSC Detector",
+      "category": "compliance",
+      "status": "planned",
+      "priority": "high"
+    },
+    {
+      "id": "waste-management-marpol",
+      "name": "Waste Management MARPOL",
+      "category": "compliance",
+      "status": "planned",
+      "priority": "high"
+    },
+    {
+      "id": "weather-dashboard",
+      "name": "Weather Dashboard",
+      "category": "maritime",
+      "status": "planned",
+      "priority": "medium",
+      "note": "Partially covered by forecast-global"
+    },
+    {
+      "id": "satcom",
+      "name": "Satcom",
+      "category": "maritime",
+      "status": "planned",
+      "priority": "high"
+    },
+    {
+      "id": "ocean-sonar",
+      "name": "Ocean Sonar",
+      "category": "maritime",
+      "status": "planned",
+      "priority": "medium",
+      "note": "Partially covered by sonar-ai"
+    },
+    {
+      "id": "maritime-supremo",
+      "name": "Maritime Supremo",
+      "category": "maritime",
+      "status": "planned",
+      "priority": "low",
+      "note": "Consolidated into fleet module"
+    },
+    {
+      "id": "mmi-jobs-panel",
+      "name": "MMI Jobs Panel",
+      "category": "maintenance",
+      "status": "planned",
+      "priority": "low",
+      "note": "Integrated into mmi module"
+    },
+    {
+      "id": "mmi-history",
+      "name": "MMI History",
+      "category": "maintenance",
+      "status": "planned",
+      "priority": "low",
+      "note": "Integrated into mmi module"
+    },
+    {
+      "id": "mmi-bi",
+      "name": "MMI BI",
+      "category": "maintenance",
+      "status": "planned",
+      "priority": "low",
+      "note": "Integrated into mmi module"
+    },
+    {
+      "id": "deep-risk-ai",
+      "name": "Deep Risk AI",
+      "category": "ai",
+      "status": "planned",
+      "priority": "high"
+    },
+    {
+      "id": "coordination-ai",
+      "name": "Coordination AI",
+      "category": "ai",
+      "status": "planned",
+      "priority": "medium"
+    },
+    {
+      "id": "document-ai-extractor",
+      "name": "Document AI Extractor",
+      "category": "ai",
+      "status": "planned",
+      "priority": "medium",
+      "note": "Partially in document-hub"
+    },
+    {
+      "id": "template-editor",
+      "name": "Template Editor",
+      "category": "documents",
+      "status": "planned",
+      "priority": "medium"
+    },
+    {
+      "id": "document-expiry-manager",
+      "name": "Document Expiry Manager",
+      "category": "documents",
+      "status": "planned",
+      "priority": "medium"
+    },
+    {
+      "id": "travel-intelligence",
+      "name": "Travel Intelligence",
+      "category": "travel",
+      "status": "planned",
+      "priority": "medium"
+    },
+    {
+      "id": "hotel-booking",
+      "name": "Hotel Booking",
+      "category": "travel",
+      "status": "planned",
+      "priority": "medium"
+    },
+    {
+      "id": "crew-reservations",
+      "name": "Crew Reservations",
+      "category": "travel",
+      "status": "planned",
+      "priority": "medium"
+    },
+    {
+      "id": "blockchain-engine",
+      "name": "Blockchain Engine",
+      "category": "experimental",
+      "status": "planned",
+      "priority": "low"
+    },
+    {
+      "id": "gamification-dashboard",
+      "name": "Gamification Dashboard",
+      "category": "experimental",
+      "status": "planned",
+      "priority": "low"
+    },
+    {
+      "id": "ar-overlay-engine",
+      "name": "AR Overlay Engine",
+      "category": "experimental",
+      "status": "planned",
+      "priority": "low"
+    },
+    {
+      "id": "edge-ai-core",
+      "name": "Edge AI Core",
+      "category": "experimental",
+      "status": "planned",
+      "priority": "low"
+    },
+    {
+      "id": "incident-learning-center",
+      "name": "Incident Learning Center",
+      "category": "ai",
+      "status": "planned",
+      "priority": "high"
+    },
+    {
+      "id": "seemp-efficiency",
+      "name": "SEEMP Efficiency",
+      "category": "maritime",
+      "status": "planned",
+      "priority": "medium"
+    }
+  ],
+  "integrationStats": {
+    "supabase": 43,
+    "openai": 32,
+    "mqtt": 5,
+    "realtime": 2,
+    "webSpeechAPI": 1,
+    "mapbox": 1,
+    "lovableAI": 3
+  },
+  "aiStats": {
+    "modulesWithAI": 38,
+    "modulesWithoutAI": 7,
+    "aiEnabledRate": 84.4,
+    "aiFirstModules": 11
+  },
+  "recommendations": {
+    "highPriority": [
+      "Implement pre-psc-audit for international operations",
+      "Deploy lsa-ffa-inspection for SOLAS compliance",
+      "Add waste-management-marpol for environmental compliance",
+      "Complete satcom for satellite communication",
+      "Implement deep-risk-ai for advanced risk assessment"
+    ],
+    "mediumPriority": [
+      "Expand travel-intelligence module",
+      "Add hotel-booking integration",
+      "Implement crew-reservations",
+      "Deploy document-expiry-manager",
+      "Add template-editor autonomy"
+    ],
+    "lowPriority": [
+      "Consider gamification-dashboard for team engagement",
+      "Evaluate blockchain-engine for distributed audit",
+      "Explore ar-overlay-engine for UX innovation"
+    ]
+  },
+  "verificationSources": [
+    "modules-registry.json",
+    "src/lib/registry/modules-definition.ts",
+    "MAPA_MODULOS_NAUTILUS_ONE.md",
+    "src/pages/ directory structure",
+    "modules/ directory"
+  ]
+}
