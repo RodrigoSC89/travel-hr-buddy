@@ -256,6 +256,9 @@ const ControlCenter = safeLazyImport(() => import("@/pages/admin/ControlCenter")
 // PATCH 646 - Modules Status Dashboard
 const ModulesStatusDashboard = safeLazyImport(() => import("@/pages/admin/modules-status"));
 
+// PATCH 648 - AI Suggestions Dashboard
+const AISuggestionsDashboard = safeLazyImport(() => import("@/pages/admin/ai-suggestions"));
+
 // PATCH 540: Bundled modules para reduzir lazy loading (12 → 1 import)
 const FeedbackModule = ModulesBundle.FeedbackModule;
 const FleetModule = ModulesBundle.FleetModule;
@@ -823,6 +826,9 @@ function App() {
                       {/* PATCH 646 - Modules Status Dashboard */}
                       <Route path="/admin/modules-status" element={<ModulesStatusDashboard />} />
                       <Route path="/admin/modules-control" element={<ModulesStatusDashboard />} />
+                      
+                      {/* PATCH 648 - AI Suggestions Dashboard */}
+                      <Route path="/admin/ai-suggestions" element={<AISuggestionsDashboard />} />
                       
                       {/* PATCH 541 Phase 3 - Performance Tools */}
                       <Route path="/admin/control-center" element={<ControlCenter />} />
