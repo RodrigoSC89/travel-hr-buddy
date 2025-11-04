@@ -46,9 +46,12 @@ async function generateHash(data: string): Promise<string> {
 
 /**
  * Generate digital signature for evidence entry
+ * NOTE: This is a simplified implementation for demonstration.
+ * In production, use proper cryptographic signing with ECDSA or RSA-PSS.
  */
 async function generateSignature(data: string, privateKey: string): Promise<string> {
-  // Simplified signature for demo - in production use proper cryptographic signing
+  // TODO: Replace with proper digital signature algorithm (ECDSA/RSA-PSS) for production
+  // This simplified version is for demonstration purposes only
   const combined = data + privateKey;
   return await generateHash(combined);
 }

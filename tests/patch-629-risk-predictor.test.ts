@@ -210,12 +210,16 @@ describe("PATCH 629 - Predictive Risk Engine", () => {
       const risks = await predictComplianceRisks();
       const overdueRisks = risks.filter(r => r.daysWithoutInspection > 180);
 
-      overdueRisks.forEach(risk => {
-        expect(risk.score).toBeGreaterThan(50);
-        expect(risk.recommendedActions.some(a => 
+      // All overdue modules should have elevated risk scores and inspection recommendations
+      const allHaveHighScore = overdueRisks.every(risk => risk.score > 50);
+      const allHaveInspectionAction = overdueRisks.every(risk =>
+        risk.recommendedActions.some(a =>
           a.toLowerCase().includes("inspection") || a.toLowerCase().includes("audit")
-        )).toBe(true);
-      });
+        )
+      );
+
+      expect(allHaveHighScore).toBe(true);
+      expect(allHaveInspectionAction).toBe(true);
     });
 
     it("should assign appropriate predictions based on risk level", async () => {

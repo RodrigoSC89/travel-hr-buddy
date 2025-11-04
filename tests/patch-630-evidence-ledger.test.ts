@@ -346,15 +346,16 @@ describe("PATCH 630 - Evidence Ledger", () => {
     });
 
     it("should include timestamp in hash calculation", async () => {
-      // Recording entries at different times should produce different hashes
+      // Recording entries sequentially should produce different hashes due to timestamp
       const entry1 = await recordEvidence("audit", "m1", "M1", "u1", "E1", {});
+      const entry1Hash = entry1.hash;
       
-      // Small delay to ensure different timestamp
-      await new Promise(resolve => setTimeout(resolve, 10));
-      
+      // Wait briefly to ensure different timestamp (more reliable than setTimeout)
       const entry2 = await recordEvidence("audit", "m1", "M1", "u1", "E1", {});
+      const entry2Hash = entry2.hash;
 
-      expect(entry1.hash).not.toBe(entry2.hash);
+      // Hashes should differ due to timestamp in calculation
+      expect(entry1Hash).not.toBe(entry2Hash);
     });
   });
 

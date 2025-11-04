@@ -121,6 +121,9 @@ export default function CopilotV2() {
         className="fixed bottom-6 right-6 h-14 w-14 rounded-full shadow-lg"
         onClick={() => setOpen(true)}
         size="icon"
+        aria-label="Open Nautilus Copilot AI Assistant"
+        aria-expanded={open}
+        role="button"
       >
         <Sparkles className="h-6 w-6" />
       </Button>
