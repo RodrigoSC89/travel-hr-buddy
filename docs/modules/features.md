@@ -1,27 +1,91 @@
-# features
+# Features Module
 
-**Category**: features
-**Last Updated**: 2025-10-29
+## Overview
 
----
+The Features module is part of the Nautilus One system.
 
-## 📝 Descrição
+## Status
 
-features module
+- **Active**: ⚠️ Partial
+- **Components**: 0
+- **Has Tests**: ❌ No
+- **Has Documentation**: ❌ No
 
-## 📁 Estrutura de Dados
+## Module Structure
 
 ```
 features/
-├── components/       # Componentes React
-├── hooks/            # Custom hooks
-├── services/         # Lógica de negócio e API
-├── types/            # Definições TypeScript
-├── validation/       # Validações
-└── index.tsx         # Exportação principal
+```
+
+## Key Features
+
+- Module-specific functionality
+- Integration with Supabase
+- Real-time updates
+- Responsive UI
+
+## Dependencies
+
+### Core Dependencies
+- React 18.3+
+- TypeScript 5.8+
+- Supabase Client
+
+### UI Components
+- Shadcn/ui components
+- Radix UI primitives
+- Lucide icons
+
+## Usage
+
+```typescript
+import { Features } from '@/modules/features';
+
+function App() {
+  return <Features />;
+}
+```
+
+## Database Integration
+
+This module integrates with Supabase for data persistence.
+
+### Tables Used
+- (Automatically detected from code)
+
+## API Integration
+
+### Endpoints
+- REST API endpoints are defined in the services layer
+- Real-time subscriptions for live updates
+
+## Development
+
+### Running Locally
+```bash
+npm run dev
+```
+
+### Testing
+```bash
+npm run test features
+```
+
+## Contributing
+
+When contributing to this module:
+
+1. Follow the existing code structure
+2. Add tests for new features
+3. Update this documentation
+4. Ensure TypeScript compilation passes
+
+## Module Files
+
+```
 ```
 
 ---
 
-**Gerado automaticamente por**: `scripts/generateModuleDocs.ts`  
-**Data**: 10/29/2025, 7:01:05 PM
+*Generated on: 2025-11-04T00:00:21.098Z*
+*Generator: PATCH 622 Documentation System*

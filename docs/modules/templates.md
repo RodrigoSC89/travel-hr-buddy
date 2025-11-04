@@ -1,219 +1,94 @@
 # Templates Module
 
-## Visão Geral
+## Overview
 
-O Templates é um módulo de gerenciamento de templates de documentos com recursos de IA para geração, personalização e aplicação automatizada de templates para diversos tipos de documentos operacionais.
+The Templates module is part of the Nautilus One system.
 
-**Categoria**: Operations / Documents  
-**Rota**: `/templates`  
-**Status**: Ativo  
-**Versão**: 2.0
+## Status
 
-## Componentes Principais
+- **Active**: ✅ Yes
+- **Components**: 2
+- **Has Tests**: ❌ No
+- **Has Documentation**: ❌ No
 
-### TemplateLibrary
-- Biblioteca de templates disponíveis
-- Categorização por tipo
-- Search e filtering
-- Preview de templates
-- Template versioning
+## Module Structure
 
-### TemplateEditor
-- Editor visual de templates
-- Drag-and-drop builder
-- Variable insertion
-- Conditional logic
-- Rich text formatting
-
-### TemplateGenerator
-- AI-powered template generation
-- Template from scratch
-- Template from example
-- Auto-complete suggestions
-- Smart formatting
-
-### TemplateApplicator
-- Apply template to data
-- Batch processing
-- Variable substitution
-- Output generation (PDF, DOCX, HTML)
-
-## Banco de Dados Utilizado
-
-### Tabelas Principais
-```sql
-CREATE TABLE templates (
-  id UUID PRIMARY KEY DEFAULT uuid_generate_v4(),
-  name VARCHAR(255) NOT NULL,
-  description TEXT,
-  template_type VARCHAR(100) NOT NULL,
-  category VARCHAR(100),
-  content JSONB NOT NULL,
-  variables JSONB DEFAULT '{}',
-  version INTEGER DEFAULT 1,
-  status VARCHAR(20) DEFAULT 'draft',
-  is_public BOOLEAN DEFAULT FALSE,
-  created_by UUID REFERENCES auth.users(id),
-  created_at TIMESTAMP DEFAULT NOW(),
-  updated_at TIMESTAMP DEFAULT NOW()
-);
-
-CREATE TABLE template_versions (
-  id UUID PRIMARY KEY DEFAULT uuid_generate_v4(),
-  template_id UUID REFERENCES templates(id),
-  version_number INTEGER NOT NULL,
-  content JSONB NOT NULL,
-  changes_description TEXT,
-  created_by UUID REFERENCES auth.users(id),
-  created_at TIMESTAMP DEFAULT NOW()
-);
-
-CREATE TABLE template_applications (
-  id UUID PRIMARY KEY DEFAULT uuid_generate_v4(),
-  template_id UUID REFERENCES templates(id),
-  applied_by UUID REFERENCES auth.users(id),
-  input_data JSONB,
-  output_format VARCHAR(20),
-  generated_document_url TEXT,
-  status VARCHAR(20) DEFAULT 'completed',
-  applied_at TIMESTAMP DEFAULT NOW()
-);
+```
+templates/
+├── index.tsx          # Main module entry
 ```
 
-## Requisições API Envolvidas
+## Key Features
 
-### Template Management
-- **GET /api/templates** - Lista templates
-- **POST /api/templates** - Cria template
-- **GET /api/templates/:id** - Detalhes do template
-- **PUT /api/templates/:id** - Atualiza template
-- **DELETE /api/templates/:id** - Remove template
-- **POST /api/templates/:id/duplicate** - Duplica template
-- **GET /api/templates/categories** - Lista categorias
+- Module-specific functionality
+- Integration with Supabase
+- Real-time updates
+- Responsive UI
 
-### Template AI Features
-- **POST /api/templates/generate** - Gera template com AI
-- **POST /api/templates/rewrite** - Reescreve seção com AI
-- **POST /api/templates/suggest** - Sugestões de conteúdo
-- **POST /api/templates/analyze** - Análise de template
+## Dependencies
 
-### Template Application
-- **POST /api/templates/:id/apply** - Aplica template
-- **POST /api/templates/:id/preview** - Preview de aplicação
-- **POST /api/templates/batch-apply** - Aplicação em lote
-- **GET /api/templates/applications** - Histórico de aplicações
+### Core Dependencies
+- React 18.3+
+- TypeScript 5.8+
+- Supabase Client
 
-### Export
-- **POST /api/templates/:id/export/pdf** - Export para PDF
-- **POST /api/templates/:id/export/docx** - Export para DOCX
-- **POST /api/templates/:id/export/html** - Export para HTML
+### UI Components
+- Shadcn/ui components
+- Radix UI primitives
+- Lucide icons
 
-## Features de IA
+## Usage
 
-### Template Generation
-- AI-powered template creation
-- Learning from existing templates
-- Best practices application
-- Industry-specific templates
+```typescript
+import { Templates } from '@/modules/templates';
 
-### Content Rewriting
-- AI-assisted text improvement
-- Tone adjustment
-- Clarity enhancement
-- Grammar and style fixes
+function App() {
+  return <Templates />;
+}
+```
 
-### Smart Variables
-- Auto-detection of variables
-- Variable type inference
-- Default value suggestions
-- Validation rules
+## Database Integration
 
-### Intelligent Formatting
-- Auto-formatting based on content type
-- Consistent styling
-- Layout optimization
-- Responsive design
+This module integrates with Supabase for data persistence.
 
-## Tipos de Templates
+### Tables Used
+- (Automatically detected from code)
 
-### Operational Templates
-- Work orders
-- Inspection reports
-- Maintenance logs
-- Safety checklists
+## API Integration
 
-### Administrative Templates
-- Contracts
-- Purchase orders
-- Invoices
-- Correspondence
+### Endpoints
+- REST API endpoints are defined in the services layer
+- Real-time subscriptions for live updates
 
-### Compliance Templates
-- Audit reports
-- Incident reports
-- Compliance certificates
-- Training records
+## Development
 
-### Technical Templates
-- Technical specifications
-- Procedures
-- Manuals
-- Diagrams
+### Running Locally
+```bash
+npm run dev
+```
 
-## Integrações
+### Testing
+```bash
+npm run test templates
+```
 
-### Document Hub
-- Template-based document creation
-- Document versioning
-- Document storage
-- Collaboration features
+## Contributing
 
-### Mission Control
-- Mission planning documents
-- Briefing documents
-- Report templates
-- Debrief documents
+When contributing to this module:
 
-### Crew Management
-- Certification templates
-- Performance review forms
-- Training records
-- Contracts
+1. Follow the existing code structure
+2. Add tests for new features
+3. Update this documentation
+4. Ensure TypeScript compilation passes
 
-### Compliance Hub
-- Audit templates
-- Compliance forms
-- Report templates
-- Checklist templates
+## Module Files
 
-## Template Variables
+```
+index.tsx
+template-library.ts
+```
 
-### System Variables
-- `{date}` - Current date
-- `{time}` - Current time
-- `{user.name}` - Current user name
-- `{company.name}` - Company name
+---
 
-### Custom Variables
-- User-defined variables
-- Variable validation
-- Default values
-- Conditional logic
-
-### Dynamic Variables
-- Calculated values
-- Database lookups
-- API integrations
-- Real-time data
-
-## Testes
-
-Localização: 
-- `tests/templates.test.tsx`
-- `e2e/templates.spec.ts`
-
-## Última Atualização
-
-**Data**: 2025-10-29  
-**Versão**: 2.0  
-**Features**: AI generation, Smart variables, Multiple export formats
+*Generated on: 2025-11-04T00:00:21.112Z*
+*Generator: PATCH 622 Documentation System*

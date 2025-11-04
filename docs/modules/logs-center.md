@@ -1,135 +1,98 @@
 # Logs Center Module
 
-## Visão Geral
+## Overview
 
-O Logs Center é o módulo centralizado para visualização, busca e análise de logs de todas as operações do sistema, com capacidades avançadas de filtragem e alertas em tempo real.
+The Logs Center module is part of the Nautilus One system.
 
-**Categoria**: Core  
-**Rota**: `/logs-center`  
-**Status**: Ativo  
-**Versão**: 2.0
+## Status
 
-## Componentes Principais
+- **Active**: ✅ Yes
+- **Components**: 4
+- **Has Tests**: ✅ Yes
+- **Has Documentation**: ✅ Yes
 
-### LogViewer
-- Visualização em tempo real de logs
-- Filtros por tipo, severidade e módulo de origem
-- Busca full-text nos logs
-- Export para CSV/JSON
+## Module Structure
 
-### LogFilters
-- Filtros por data/hora
-- Filtros por severity (info, warning, error, critical)
-- Filtros por tipo de log (system, mission, audit, security)
-- Filtros por módulo de origem
-
-### LogDetails
-- Visualização detalhada de um log específico
-- Metadata e context information
-- Stack traces para erros
-- Related logs (correlação automática)
-
-### AlertsPanel
-- Alertas críticos não resolvidos
-- Configuração de regras de alerta
-- Notificações em tempo real
-- Escalação automática
-
-## Banco de Dados Utilizado
-
-### Tabelas Principais
-- `system_logs` - Logs gerais do sistema
-- `mission_logs` - Logs relacionados a missões
-- `audit_logs` - Logs de auditoria e compliance
-- `security_logs` - Logs de segurança e acesso
-- `log_alerts` - Alertas baseados em logs
-
-### Schema Exemplo
-```sql
-CREATE TABLE system_logs (
-  id UUID PRIMARY KEY DEFAULT uuid_generate_v4(),
-  log_type VARCHAR(50) NOT NULL,
-  severity VARCHAR(20) NOT NULL,
-  title VARCHAR(255) NOT NULL,
-  message TEXT NOT NULL,
-  category VARCHAR(100),
-  source_module VARCHAR(100) NOT NULL,
-  user_id UUID REFERENCES auth.users(id),
-  metadata JSONB DEFAULT '{}',
-  event_timestamp TIMESTAMP NOT NULL,
-  created_at TIMESTAMP DEFAULT NOW()
-);
-
-CREATE INDEX idx_logs_timestamp ON system_logs(event_timestamp DESC);
-CREATE INDEX idx_logs_severity ON system_logs(severity);
-CREATE INDEX idx_logs_source ON system_logs(source_module);
+```
+logs-center/
+├── index.tsx          # Main module entry
+└── __tests__/         # Unit tests
 ```
 
-## Requisições API Envolvidas
+## Key Features
 
-### GET /api/logs
-Lista logs com paginação e filtros
-- **Query Params**: 
-  - type, severity, source_module
-  - start_date, end_date
-  - limit (default: 50), offset
-  - search (full-text search)
-- **Response**: Array de Log objects + pagination metadata
-- **Cache**: Sem cache (dados em tempo real)
+- Module-specific functionality
+- Integration with Supabase
+- Real-time updates
+- Responsive UI
 
-### GET /api/logs/:id
-Retorna detalhes de um log específico
-- **Response**: Log object completo com metadata
+## Dependencies
 
-### POST /api/logs
-Cria novo log (usado por outros módulos)
-- **Body**: LogCreateInput
-- **Response**: Log object criado
+### Core Dependencies
+- React 18.3+
+- TypeScript 5.8+
+- Supabase Client
 
-### GET /api/logs/alerts
-Lista alertas ativos
-- **Query Params**: resolved (boolean), severity
-- **Response**: Array de Alert objects
+### UI Components
+- Shadcn/ui components
+- Radix UI primitives
+- Lucide icons
 
-### WebSocket: /ws/logs
-Stream de logs em tempo real
-- **Events**: 
-  - new_log: Novo log criado
-  - log_updated: Log atualizado
-  - new_alert: Novo alerta criado
+## Usage
 
-## Integrações
+```typescript
+import { LogsCenter } from '@/modules/logs-center';
 
-- **Mission Engine**: Logs de missões
-- **Security Module**: Logs de segurança
-- **Audit Center**: Logs de auditoria
-- **Performance Monitor**: Logs de performance
-- **All Modules**: Todos os módulos enviam logs
+function App() {
+  return <LogsCenter />;
+}
+```
 
-## Recursos Avançados
+## Database Integration
 
-### Log Correlation
-- Agrupa logs relacionados automaticamente
-- Identifica padrões e anomalias
-- Rastreamento distribuído (distributed tracing)
+This module integrates with Supabase for data persistence.
 
-### Alerting Rules
-- Regras configuráveis de alerta
-- Threshold-based alerts
-- Pattern matching
-- Rate-based alerting
+### Tables Used
+- (Automatically detected from code)
 
-### Log Retention
-- Retention policy configurável (padrão: 90 dias)
-- Archive para cold storage
-- Compliance com regulamentações
+## API Integration
 
-## Testes
+### Endpoints
+- REST API endpoints are defined in the services layer
+- Real-time subscriptions for live updates
 
-Localização: `tests/patch-408-logs-center.test.tsx`
+## Development
 
-## Última Atualização
+### Running Locally
+```bash
+npm run dev
+```
 
-**Data**: 2025-10-29  
-**Versão**: 2.0  
-**Patch**: PATCH 408
+### Testing
+```bash
+npm run test logs-center
+```
+
+## Contributing
+
+When contributing to this module:
+
+1. Follow the existing code structure
+2. Add tests for new features
+3. Update this documentation
+4. Ensure TypeScript compilation passes
+
+## Module Files
+
+```
+LogsCenter.tsx
+README.md
+VirtualizedLogsCenter.tsx
+index.ts
+types.ts
+```
+
+---
+
+*Generated on: 2025-11-04T00:00:21.102Z*
+*Generator: PATCH 622 Documentation System*

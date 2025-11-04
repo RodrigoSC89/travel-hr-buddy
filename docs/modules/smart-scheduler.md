@@ -1,87 +1,96 @@
-# Smart Scheduler
+# Smart Scheduler Module
 
-## Objetivo
-Agendar automaticamente inspeções e tarefas com base em risco, histórico e pontuação de conformidade.
+## Overview
 
-## Estrutura de Arquivos
-- `SmartSchedulerDashboard.tsx` - Painel principal de visualização
-- `CalendarView.tsx` - Visualização de calendário
-- `llmTaskEngine.ts` - Motor de tarefas com IA
-
-## Componentes Principais
-
-### SmartSchedulerDashboard
-Painel principal que exibe todas as tarefas agendadas, permite criar novas tarefas e visualizar o calendário de eventos.
-
-### CalendarView
-Componente de calendário interativo que mostra as tarefas agendadas em uma visualização temporal.
-
-### llmTaskEngine
-Motor de IA que analisa dados históricos, conformidade e risco para sugerir agendamentos inteligentes.
-
-## Integrações
-
-### Supabase
-- Tabela `scheduled_tasks` - Armazena todas as tarefas agendadas
-- Queries com RLS (Row Level Security)
-- Sincronização em tempo real
-
-### Módulos Conectados
-- **PSC (Port State Control)** - Integração com inspeções portuárias
-- **MLC (Maritime Labour Convention)** - Conformidade trabalhista
-- **OVID** - Verificação de documentos
-- **LSA/FFA (Life Saving Appliances/Fire Fighting Appliances)** - Equipamentos de segurança
-
-### Sistema de Notificações
-- Alertas automáticos para tarefas próximas
-- Notificações push e email
-- Lembretes configuráveis
-
-### Watchdog
-- Monitoramento contínuo de tarefas
-- Detecção de atrasos
-- Alertas de não conformidade
-
-## Funcionalidades
-
-### Agendamento Automático
-- Análise de histórico de conformidade
-- Priorização por nível de risco
-- Sugestões inteligentes baseadas em IA
-
-### Gestão de Tarefas
-- Criação manual e automática de tarefas
-- Atribuição a embarcações e tripulantes
-- Rastreamento de status
-
-### Análise Preditiva
-- Identificação de padrões de falha
-- Previsão de necessidades de inspeção
-- Otimização de recursos
+The Smart Scheduler module is part of the Nautilus One system.
 
 ## Status
-✅ Produção (desde PATCH 597)
 
-## Roadmap Futuro
+- **Active**: ✅ Yes
+- **Components**: 2
+- **Has Tests**: ❌ No
+- **Has Documentation**: ❌ No
 
-### Fase 1 (Q1 2025)
-- IA preditiva avançada com aprendizado de máquina
-- Análise multi-embarcação para otimização de frota
+## Module Structure
 
-### Fase 2 (Q2 2025)
-- Integração com sistemas externos de manutenção
-- API pública para integrações de terceiros
+```
+smart-scheduler/
+├── index.tsx          # Main module entry
+├── components/        # UI components
+├── services/          # Business logic
+```
 
-### Fase 3 (Q3 2025)
-- Agendamento baseado em condições climáticas
-- Otimização de rotas considerando disponibilidade de portos
+## Key Features
 
-## Métricas de Sucesso
-- Redução de 40% em atrasos de inspeção
-- Aumento de 35% na conformidade preventiva
-- 90% de precisão nas sugestões de agendamento
+- Module-specific functionality
+- Integration with Supabase
+- Real-time updates
+- Responsive UI
 
-## Documentação Técnica
-- Ver `/src/modules/smart-scheduler/` para código-fonte
-- Ver `/tests/e2e/patch597_scheduler.cy.ts` para testes E2E
-- Ver `/tests/unit/llmTaskEngine.test.ts` para testes unitários
+## Dependencies
+
+### Core Dependencies
+- React 18.3+
+- TypeScript 5.8+
+- Supabase Client
+
+### UI Components
+- Shadcn/ui components
+- Radix UI primitives
+- Lucide icons
+
+## Usage
+
+```typescript
+import { SmartScheduler } from '@/modules/smart-scheduler';
+
+function App() {
+  return <SmartScheduler />;
+}
+```
+
+## Database Integration
+
+This module integrates with Supabase for data persistence.
+
+### Tables Used
+- (Automatically detected from code)
+
+## API Integration
+
+### Endpoints
+- REST API endpoints are defined in the services layer
+- Real-time subscriptions for live updates
+
+## Development
+
+### Running Locally
+```bash
+npm run dev
+```
+
+### Testing
+```bash
+npm run test smart-scheduler
+```
+
+## Contributing
+
+When contributing to this module:
+
+1. Follow the existing code structure
+2. Add tests for new features
+3. Update this documentation
+4. Ensure TypeScript compilation passes
+
+## Module Files
+
+```
+index.ts
+types.ts
+```
+
+---
+
+*Generated on: 2025-11-04T00:00:21.110Z*
+*Generator: PATCH 622 Documentation System*

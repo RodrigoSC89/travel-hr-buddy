@@ -9,7 +9,7 @@
 import { useEffect, useState } from "react";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { supabase } from "@/integrations/supabase/client";
-import { ExportarComentariosPDF } from "./ExportarComentariosPDF";
+import { ExportarComentariosPDF } from "@/components/sgso/ExportarComentariosPDF";
 import { MessageSquare, User, Calendar } from "lucide-react";
 import { format } from "date-fns";
 import { toast } from "sonner";

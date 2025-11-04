@@ -1,61 +1,94 @@
 # Weather Dashboard Module
 
-## Visão Geral
+## Overview
 
-O Weather Dashboard fornece dados meteorológicos em tempo real, previsões e alertas para operações marítimas, com integração de múltiplas fontes de dados meteorológicos.
+The Weather Dashboard module is part of the Nautilus One system.
 
-**Categoria**: Specialized / Environment  
-**Rota**: `/weather-dashboard`  
-**Status**: Ativo  
-**Versão**: 2.0
+## Status
 
-## Componentes Principais
+- **Active**: ✅ Yes
+- **Components**: 1
+- **Has Tests**: ❌ No
+- **Has Documentation**: ❌ No
 
-### WeatherMap
-- Interactive weather map
-- Multiple layers (wind, precipitation, temperature, pressure)
-- Storm tracking
-- Historical data visualization
+## Module Structure
 
-### ForecastPanel
-- Short-term forecast (24-72h)
-- Extended forecast (7-14 days)
-- Sea state forecast
-- Wind and wave predictions
+```
+weather-dashboard/
+├── index.tsx          # Main module entry
+├── components/        # UI components
+```
 
-### AlertsPanel
-- Storm warnings
-- Severe weather alerts
-- Small craft advisories
-- Marine warnings
+## Key Features
 
-### HistoricalData
-- Historical weather patterns
-- Trend analysis
-- Climate data
-- Seasonal variations
+- Module-specific functionality
+- Integration with Supabase
+- Real-time updates
+- Responsive UI
 
-## Requisições API Envolvidas
+## Dependencies
 
-### Current Weather
-- **GET /api/weather/current** - Current conditions
-- **GET /api/weather/location** - Weather for specific location
-- **GET /api/weather/route** - Weather along route
+### Core Dependencies
+- React 18.3+
+- TypeScript 5.8+
+- Supabase Client
 
-### Forecast
-- **GET /api/weather/forecast** - Weather forecast
-- **GET /api/weather/forecast/marine** - Marine forecast
-- **GET /api/weather/alerts** - Weather alerts
+### UI Components
+- Shadcn/ui components
+- Radix UI primitives
+- Lucide icons
 
-## Integrações
+## Usage
 
-- **Navigation Copilot**: Weather-aware navigation
-- **Route Planner**: Weather-optimized routing
-- **Mission Control**: Weather impact on missions
-- **Fleet Management**: Operational planning
+```typescript
+import { WeatherDashboard } from '@/modules/weather-dashboard';
 
-## Última Atualização
+function App() {
+  return <WeatherDashboard />;
+}
+```
 
-**Data**: 2025-10-29  
-**Versão**: 2.0  
-**Features**: Real-time data, Forecasts, Alerts
+## Database Integration
+
+This module integrates with Supabase for data persistence.
+
+### Tables Used
+- (Automatically detected from code)
+
+## API Integration
+
+### Endpoints
+- REST API endpoints are defined in the services layer
+- Real-time subscriptions for live updates
+
+## Development
+
+### Running Locally
+```bash
+npm run dev
+```
+
+### Testing
+```bash
+npm run test weather-dashboard
+```
+
+## Contributing
+
+When contributing to this module:
+
+1. Follow the existing code structure
+2. Add tests for new features
+3. Update this documentation
+4. Ensure TypeScript compilation passes
+
+## Module Files
+
+```
+index.tsx
+```
+
+---
+
+*Generated on: 2025-11-04T00:00:21.115Z*
+*Generator: PATCH 622 Documentation System*

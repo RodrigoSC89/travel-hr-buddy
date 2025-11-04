@@ -20,7 +20,7 @@ import {
   incidentReplayService,
   type IncidentData,
 } from "../services/incidentReplayService";
-import { IncidentReplay } from "../components/IncidentReplay";
+import { IncidentReplay } from "./components/IncidentReplay";
 import { toast } from "sonner";
 
 export const IncidentReplayAI: React.FC = () => {

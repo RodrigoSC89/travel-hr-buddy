@@ -1,52 +1,99 @@
-# Underwater Drone Control Module
+# Underwater Drone Module
 
-## Visão Geral
+## Overview
 
-O Underwater Drone Control é o módulo especializado para controle e monitoramento de ROVs (Remotely Operated Vehicles) e AUVs (Autonomous Underwater Vehicles), incluindo planejamento de missões, telemetria e análise de dados.
+The Underwater Drone module is part of the Nautilus One system.
 
-**Categoria**: Specialized / Operations  
-**Rota**: `/underwater-drone`  
-**Status**: Ativo  
-**Versão**: 450.0
+## Status
 
-## Componentes Principais
+- **Active**: ✅ Yes
+- **Components**: 4
+- **Has Tests**: ❌ No
+- **Has Documentation**: ✅ Yes
 
-### DroneControlPanel
-- Real-time drone control interface
-- Video feed visualization
-- Sensor data display
-- Command interface
-- Emergency controls
+## Module Structure
 
-### MissionPlanner
-- Underwater mission planning
-- Waypoint management
-- Depth profiling
-- Survey area definition
-- Mission simulation
+```
+underwater-drone/
+├── index.tsx          # Main module entry
+├── components/        # UI components
+├── services/          # Business logic
+```
 
-### TelemetryMonitor
-- Position tracking (GPS/USBL)
-- Depth and altitude
-- Speed and heading
-- Battery status
-- System health
+## Key Features
 
-### DataAnalyzer
-- Video analysis
-- Sonar data processing
-- Environmental data
-- Object detection
-- Mission reports
+- Module-specific functionality
+- Integration with Supabase
+- Real-time updates
+- Responsive UI
 
-## Integrações
+## Dependencies
 
-- **Mission Control**: Mission planning and execution
-- **Sonar AI**: Underwater object detection
-- **Fleet Management**: ROV asset management
+### Core Dependencies
+- React 18.3+
+- TypeScript 5.8+
+- Supabase Client
 
-## Última Atualização
+### UI Components
+- Shadcn/ui components
+- Radix UI primitives
+- Lucide icons
 
-**Data**: 2025-10-29  
-**Versão**: 450.0  
-**Features**: ROV/AUV control, Mission planning, Telemetry
+## Usage
+
+```typescript
+import { UnderwaterDrone } from '@/modules/underwater-drone';
+
+function App() {
+  return <UnderwaterDrone />;
+}
+```
+
+## Database Integration
+
+This module integrates with Supabase for data persistence.
+
+### Tables Used
+- (Automatically detected from code)
+
+## API Integration
+
+### Endpoints
+- REST API endpoints are defined in the services layer
+- Real-time subscriptions for live updates
+
+## Development
+
+### Running Locally
+```bash
+npm run dev
+```
+
+### Testing
+```bash
+npm run test underwater-drone
+```
+
+## Contributing
+
+When contributing to this module:
+
+1. Follow the existing code structure
+2. Add tests for new features
+3. Update this documentation
+4. Ensure TypeScript compilation passes
+
+## Module Files
+
+```
+README.md
+droneSubCore.ts
+index.tsx
+missionUploadSub.ts
+telemetrySub.ts
+```
+
+---
+
+*Generated on: 2025-11-04T00:00:21.114Z*
+*Generator: PATCH 622 Documentation System*

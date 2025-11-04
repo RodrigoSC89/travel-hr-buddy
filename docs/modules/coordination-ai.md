@@ -1,33 +1,101 @@
-# 🤖 Módulo: coordination-ai
+# Coordination Ai Module
 
-## 📌 Objetivo
-Orquestra ações simultâneas entre múltiplos agentes autônomos, como drones, sensores e satélites, com base em regras de missão e feedback da IA.
+## Overview
 
-## 📁 Estrutura de Arquivos
-- `lib/coordination/logic.ts`
-- `hooks/useCoordination.ts`
-- `components/CoordinationPanel.tsx`
+The Coordination Ai module is part of the Nautilus One system.
 
-## 🔗 Integrações
-- Supabase: `missions`, `agents`
-- MQTT: `agents/+/status`, `coordination/commands`
-- IA: ONNX Runtime (local), fallback via LLM API
+## Status
 
-## 🔄 Fluxo Operacional
-```mermaid
-graph TD
-Start --> ReceiveStatus --> EvaluateRules --> SendCommands --> Monitor
+- **Active**: ✅ Yes
+- **Components**: 6
+- **Has Tests**: ❌ No
+- **Has Documentation**: ✅ Yes
+
+## Module Structure
+
+```
+coordination-ai/
+├── index.tsx          # Main module entry
+├── components/        # UI components
+├── services/          # Business logic
 ```
 
-## 🧪 Testes
+## Key Features
 
-- ✅ Unitários
-- ✅ Mock reativo
-- ✅ Integração MQTT
+- Module-specific functionality
+- Integration with Supabase
+- Real-time updates
+- Responsive UI
 
-## 📋 Status Atual
+## Dependencies
 
-- ✅ Estrutura lógica criada
-- ✅ UI básica implementada
-- ✅ Integração com MQTT
-- ✅ Coordenação reativa
+### Core Dependencies
+- React 18.3+
+- TypeScript 5.8+
+- Supabase Client
+
+### UI Components
+- Shadcn/ui components
+- Radix UI primitives
+- Lucide icons
+
+## Usage
+
+```typescript
+import { CoordinationAi } from '@/modules/coordination-ai';
+
+function App() {
+  return <CoordinationAi />;
+}
+```
+
+## Database Integration
+
+This module integrates with Supabase for data persistence.
+
+### Tables Used
+- (Automatically detected from code)
+
+## API Integration
+
+### Endpoints
+- REST API endpoints are defined in the services layer
+- Real-time subscriptions for live updates
+
+## Development
+
+### Running Locally
+```bash
+npm run dev
+```
+
+### Testing
+```bash
+npm run test coordination-ai
+```
+
+## Contributing
+
+When contributing to this module:
+
+1. Follow the existing code structure
+2. Add tests for new features
+3. Update this documentation
+4. Ensure TypeScript compilation passes
+
+## Module Files
+
+```
+CoordinationAIPanel.tsx
+README.md
+aiFleetStatus.tsx
+coordinationAI.ts
+fallbackLayer.ts
+index.ts
+page.tsx
+```
+
+---
+
+*Generated on: 2025-11-04T00:00:21.094Z*
+*Generator: PATCH 622 Documentation System*

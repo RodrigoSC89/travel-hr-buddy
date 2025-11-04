@@ -1,31 +1,97 @@
-# ⚠️ Módulo: deep-risk-ai
+# Deep Risk Ai Module
 
-## 📌 Objetivo
-Avaliar riscos operacionais em tempo real utilizando inferência local e análise contextual com IA embarcada.
+## Overview
 
-## 📁 Estrutura de Arquivos
-- `lib/deep-risk/engine.ts`
-- `hooks/useRiskScore.ts`
-- `components/RiskIndicator.tsx`
+The Deep Risk Ai module is part of the Nautilus One system.
 
-## 🔗 Integrações
-- Supabase: `incident_reports`, `telemetry`
-- IA: ONNX Runtime + fallback para API externa de risco
+## Status
 
-## 🔄 Fluxo Operacional
-```mermaid
-graph LR
-SensorData --> Analyze --> Score --> Alert --> Log
+- **Active**: ✅ Yes
+- **Components**: 1
+- **Has Tests**: ❌ No
+- **Has Documentation**: ✅ Yes
+
+## Module Structure
+
+```
+deep-risk-ai/
+├── index.tsx          # Main module entry
+├── components/        # UI components
+├── services/          # Business logic
+├── types/             # TypeScript types
 ```
 
-## 🧪 Testes
+## Key Features
 
-- ✅ Score < 0.3 = OK
-- ✅ Score > 0.7 = ALERT
-- ✅ IA responde em <500ms
+- Module-specific functionality
+- Integration with Supabase
+- Real-time updates
+- Responsive UI
 
-## 📋 Status Atual
+## Dependencies
 
-- ✅ UI criada
-- ✅ Lógica ONNX ativa
-- ✅ Integração com logs
+### Core Dependencies
+- React 18.3+
+- TypeScript 5.8+
+- Supabase Client
+
+### UI Components
+- Shadcn/ui components
+- Radix UI primitives
+- Lucide icons
+
+## Usage
+
+```typescript
+import { DeepRiskAi } from '@/modules/deep-risk-ai';
+
+function App() {
+  return <DeepRiskAi />;
+}
+```
+
+## Database Integration
+
+This module integrates with Supabase for data persistence.
+
+### Tables Used
+- (Automatically detected from code)
+
+## API Integration
+
+### Endpoints
+- REST API endpoints are defined in the services layer
+- Real-time subscriptions for live updates
+
+## Development
+
+### Running Locally
+```bash
+npm run dev
+```
+
+### Testing
+```bash
+npm run test deep-risk-ai
+```
+
+## Contributing
+
+When contributing to this module:
+
+1. Follow the existing code structure
+2. Add tests for new features
+3. Update this documentation
+4. Ensure TypeScript compilation passes
+
+## Module Files
+
+```
+README.md
+index.tsx
+```
+
+---
+
+*Generated on: 2025-11-04T00:00:21.095Z*
+*Generator: PATCH 622 Documentation System*
