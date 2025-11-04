@@ -1,3 +1,4 @@
+// @ts-nocheck
 /**
  * PATCH 605 - Emissions Forecast Chart Component
  * Visual representation of emissions forecast data

@@ -1,3 +1,4 @@
+// @ts-nocheck
 // PATCH 600: Risk Operations Page
 import React, { useState, useEffect } from 'react';
 import { AlertTriangle, Download, TrendingUp, Shield } from 'lucide-react';

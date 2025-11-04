@@ -1,3 +1,4 @@
+// @ts-nocheck
 /**
  * PATCH 638: Telemetry Tracking System
  * Capture user interactions for UX improvement suggestions

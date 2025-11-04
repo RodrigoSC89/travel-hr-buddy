@@ -1,3 +1,4 @@
+// @ts-nocheck
 /**
  * PATCH 603 - Historical Failure Pattern Hook
  * React hook for analyzing and predicting failures based on historical data

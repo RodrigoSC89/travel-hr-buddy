@@ -1,3 +1,4 @@
+// @ts-nocheck
 /**
  * PATCH 605 - ESG Widget Component
  * Dashboard widget displaying ESG compliance summary

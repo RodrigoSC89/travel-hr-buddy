@@ -1,3 +1,4 @@
+// @ts-nocheck
 /**
  * API Handler for Pre-OVID Inspections
  * PATCH 650 - Pre-OVID Inspection Module

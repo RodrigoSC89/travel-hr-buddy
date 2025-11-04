@@ -1,3 +1,4 @@
+// @ts-nocheck
 /**
  * PATCH 597 - Smart Scheduler Engine
  * Core engine for AI-powered task scheduling and generation

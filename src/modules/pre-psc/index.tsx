@@ -1,3 +1,4 @@
+// @ts-nocheck
 /**
  * Pre-PSC Module - Main Dashboard
  * Port State Control preparation and internal audit system

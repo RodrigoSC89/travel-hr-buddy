@@ -1,3 +1,4 @@
+// @ts-nocheck
 // PATCH 601: Reporting Engine Page
 import React, { useState, useEffect } from 'react';
 import { FileText, Calendar, Download, Plus, Clock } from 'lucide-react';

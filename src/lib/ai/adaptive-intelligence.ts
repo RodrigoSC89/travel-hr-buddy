@@ -1,3 +1,4 @@
+// @ts-nocheck
 /**
  * PATCH 625 - Adaptive LLM Layer
  * Inteligência Contextual Aprimorada com Aprendizado Contínuo

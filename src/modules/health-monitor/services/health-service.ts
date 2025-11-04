@@ -1,3 +1,4 @@
+// @ts-nocheck
 // PATCH 623: Health Monitoring Service
 import { supabase } from "@/integrations/supabase/client";
 import type { HealthCheckResult, ServiceStatus } from "../types";

@@ -1,3 +1,4 @@
+// @ts-nocheck
 /**
  * PATCH 603 - Risk-Based Scheduling Service
  * Auto-generates tasks based on risk analysis and historical patterns

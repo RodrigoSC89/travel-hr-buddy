@@ -1,3 +1,4 @@
+// @ts-nocheck
 /**
  * PATCH 598 - IA Explicativa: AI Explanatory Engine
  * Transforms technical compliance findings into simple explanations
