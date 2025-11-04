@@ -71,6 +71,11 @@ const ModulesStatusDashboard: React.FC = () => {
     try {
       // Load from modules-registry.json
       const response = await fetch("/modules-registry.json");
+      
+      if (!response.ok) {
+        throw new Error(`Failed to load modules: ${response.status}`);
+      }
+      
       const data = await response.json();
       
       const modulesData: Module[] = data.modules.map((m: any) => ({

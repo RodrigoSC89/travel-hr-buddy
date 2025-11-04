@@ -193,7 +193,9 @@ export class PDFReportGenerator {
     });
 
     // Update yPosition after table
-    const finalY = (this.doc as any).lastAutoTable.finalY;
+    // Note: jspdf-autotable adds lastAutoTable property dynamically
+    const docWithTable = this.doc as jsPDF & { lastAutoTable?: { finalY: number } };
+    const finalY = docWithTable.lastAutoTable?.finalY ?? this.yPosition;
     this.yPosition = finalY + 10;
   }
 

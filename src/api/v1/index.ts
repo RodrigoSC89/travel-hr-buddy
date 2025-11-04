@@ -25,7 +25,6 @@ export interface ModuleAPIData {
  * API v1 Endpoints
  */
 export class NautilusAPI {
-  private baseUrl = "/api/v1";
   private rateLimit = {
     requests: 0,
     windowStart: Date.now(),
@@ -67,6 +66,17 @@ export class NautilusAPI {
   }
 
   /**
+   * Fetch and parse modules registry
+   */
+  private async fetchModulesRegistry(): Promise<any> {
+    const response = await fetch("/modules-registry.json");
+    if (!response.ok) {
+      throw new Error(`Failed to load modules registry: ${response.status}`);
+    }
+    return await response.json();
+  }
+
+  /**
    * GET /api/v1/modules
    * Get all modules
    */
@@ -76,8 +86,7 @@ export class NautilusAPI {
     }
 
     try {
-      const response = await fetch("/modules-registry.json");
-      const data = await response.json();
+      const data = await this.fetchModulesRegistry();
       
       const modules: ModuleAPIData[] = data.modules.map((m: any) => ({
         id: m.id,
@@ -104,8 +113,7 @@ export class NautilusAPI {
     }
 
     try {
-      const response = await fetch("/modules-registry.json");
-      const data = await response.json();
+      const data = await this.fetchModulesRegistry();
       
       const module = data.modules.find((m: any) => m.id === id);
       
