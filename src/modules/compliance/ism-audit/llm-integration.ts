@@ -51,7 +51,7 @@ export async function getLLMExplanation(
       };
     }
 
-    const explanation = parseL LMResponse(response, item);
+    const explanation = parseLLMResponse(response, item);
 
     Logger.ai("LLM explanation generated successfully", {
       item_id: item.id
