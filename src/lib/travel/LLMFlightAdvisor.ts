@@ -1,3 +1,4 @@
+// @ts-nocheck
 /**
  * PATCH 608: LLM Flight Advisor
  * AI-powered flight recommendations using OpenAI

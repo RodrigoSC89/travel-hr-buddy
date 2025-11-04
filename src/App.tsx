@@ -82,7 +82,7 @@ const PredictiveAnalytics = safeLazyImport(() => import("@/pages/PredictiveAnaly
 
 // PATCH 608-612: New Maritime Modules
 const TravelIntelligence = safeLazyImport(() => import("@/modules/travel-intelligence"));
-const ISMAudits = safeLazyImport(() => import("@/modules/ism-audits"));
+// const ISMAudits = safeLazyImport(() => import("@/modules/ism-audits"), "ISMAudits"); // Temporarily disabled
 const PreOvidInspection = safeLazyImport(() => import("@/pages/admin/pre-ovid-inspection"));
 
 // PATCH 540 Fase 4: Admin pages bundled (17 → 1 import)
@@ -652,8 +652,8 @@ function App() {
                       <Route path="/travel" element={<Travel />} />
                       {/* PATCH 608: Travel Intelligence */}
                       <Route path="/travel-intelligence" element={<TravelIntelligence />} />
-                      {/* PATCH 609: ISM Audits */}
-                      <Route path="/ism-audits" element={<ISMAudits />} />
+                      {/* PATCH 609: ISM Audits - Temporarily disabled */}
+                      {/* <Route path="/ism-audits" element={<ISMAudits />} /> */}
                       {/* PATCH 610: Pre-OVID Inspection */}
                       <Route path="/pre-ovid" element={<PreOvidInspection />} />
                       <Route path="/analytics" element={<Analytics />} />

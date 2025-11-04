@@ -20,17 +20,17 @@ export function PreviewWrapper({
 }: PreviewWrapperProps) {
   const fallback = <Skeleton className={fallbackClassName} />;
   
-  const handleError = (error: Error, info: { componentStack: string }) => {
+  const handleError = (error: Error, info: React.ErrorInfo) => {
     // Log error for monitoring
     logger.error("[PreviewWrapper] Component error caught", {
       error: error.message,
       stack: error.stack,
-      componentStack: info.componentStack
+      componentStack: info.componentStack || ""
     });
     
     // Call custom error handler if provided
     if (onError) {
-      onError(error, info);
+      onError(error, { componentStack: info.componentStack || "" });
     }
   };
   

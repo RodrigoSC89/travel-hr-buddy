@@ -194,6 +194,15 @@ class TelemetryTracker {
 export const telemetry = new TelemetryTracker();
 
 /**
+ * Initialize telemetry system
+ */
+export function initTelemetry() {
+  // Telemetry is already initialized via the global instance
+  // This function exists for compatibility
+  console.log("[Telemetry] System initialized");
+}
+
+/**
  * React hook for tracking telemetry in components
  */
 export function useTelemetry() {

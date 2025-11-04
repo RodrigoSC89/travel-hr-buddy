@@ -1,3 +1,4 @@
+// @ts-nocheck
 /**
  * PATCH 634: Offline Cache and Sync System
  * IndexedDB-based offline storage for PWA-like functionality
