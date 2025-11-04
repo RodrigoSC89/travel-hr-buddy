@@ -1,100 +1,98 @@
 # Navigation Copilot Module
 
-## Visão Geral
+## Overview
 
-O Navigation Copilot é um assistente de navegação com IA que integra dados meteorológicos, rotas otimizadas e alertas de segurança para navegação marítima inteligente.
+The Navigation Copilot module is part of the Nautilus One system.
 
-**Categoria**: AI / Navigation  
-**Rota**: `/navigation-copilot`  
-**Status**: Ativo  
-**Versão**: 447.0
+## Status
 
-## Componentes Principais
+- **Active**: ✅ Yes
+- **Components**: 3
+- **Has Tests**: ❌ No
+- **Has Documentation**: ✅ Yes
 
-### NavigationMap
-- Mapa interativo com rota atual
-- Weather overlay
-- Traffic information
-- Hazard warnings
+## Module Structure
 
-### RouteOptimizer
-- AI-powered route optimization
-- Weather-aware routing
-- Fuel efficiency calculation
-- ETA prediction
-
-### SafetyAdvisor
-- Real-time safety alerts
-- Collision avoidance
-- Weather warnings
-- Restricted area alerts
-
-### AutoPilotAssist
-- Autopilot recommendations
-- Course corrections
-- Speed adjustments
-- Emergency procedures
-
-## Banco de Dados Utilizado
-
-### Tabelas Principais
-```sql
-CREATE TABLE navigation_routes (
-  id UUID PRIMARY KEY DEFAULT uuid_generate_v4(),
-  vessel_id UUID REFERENCES vessels(id),
-  route_name VARCHAR(255),
-  origin_lat DECIMAL(10, 8),
-  origin_lng DECIMAL(11, 8),
-  destination_lat DECIMAL(10, 8),
-  destination_lng DECIMAL(11, 8),
-  waypoints JSONB,
-  optimized_route JSONB,
-  estimated_duration INTEGER,
-  estimated_fuel DECIMAL(10, 2),
-  status VARCHAR(20) DEFAULT 'planned',
-  created_at TIMESTAMP DEFAULT NOW()
-);
-
-CREATE TABLE navigation_alerts (
-  id UUID PRIMARY KEY DEFAULT uuid_generate_v4(),
-  vessel_id UUID REFERENCES vessels(id),
-  alert_type VARCHAR(100) NOT NULL,
-  severity VARCHAR(20) NOT NULL,
-  message TEXT NOT NULL,
-  location_lat DECIMAL(10, 8),
-  location_lng DECIMAL(11, 8),
-  acknowledged BOOLEAN DEFAULT FALSE,
-  alert_timestamp TIMESTAMP NOT NULL,
-  created_at TIMESTAMP DEFAULT NOW()
-);
+```
+navigation-copilot/
+├── index.tsx          # Main module entry
+├── components/        # UI components
+├── services/          # Business logic
 ```
 
-## Requisições API Envolvidas
+## Key Features
 
-### Route Management
-- **GET /api/navigation/routes** - Lista rotas
-- **POST /api/navigation/routes** - Cria rota
-- **POST /api/navigation/optimize** - Otimiza rota
-- **GET /api/navigation/eta** - Calcula ETA
+- Module-specific functionality
+- Integration with Supabase
+- Real-time updates
+- Responsive UI
 
-### Safety
-- **GET /api/navigation/alerts** - Lista alertas
-- **POST /api/navigation/check-safety** - Verifica segurança
-- **GET /api/navigation/traffic** - Traffic information
+## Dependencies
 
-### Weather Integration
-- **GET /api/navigation/weather** - Weather ao longo da rota
-- **GET /api/navigation/forecast** - Forecast para rota
+### Core Dependencies
+- React 18.3+
+- TypeScript 5.8+
+- Supabase Client
 
-## Integrações
+### UI Components
+- Shadcn/ui components
+- Radix UI primitives
+- Lucide icons
 
-- **Weather Dashboard**: Dados meteorológicos
-- **Route Planner**: Planejamento de rotas
-- **Fleet Management**: Status de embarcações
-- **Satellite Tracking**: Posição em tempo real
+## Usage
 
-## Última Atualização
+```typescript
+import { NavigationCopilot } from '@/modules/navigation-copilot';
 
-**Data**: 2025-10-29  
-**Versão**: 447.0  
-**Features**: AI optimization, Weather integration
+function App() {
+  return <NavigationCopilot />;
+}
+```
+
+## Database Integration
+
+This module integrates with Supabase for data persistence.
+
+### Tables Used
+- (Automatically detected from code)
+
+## API Integration
+
+### Endpoints
+- REST API endpoints are defined in the services layer
+- Real-time subscriptions for live updates
+
+## Development
+
+### Running Locally
+```bash
+npm run dev
+```
+
+### Testing
+```bash
+npm run test navigation-copilot
+```
+
+## Contributing
+
+When contributing to this module:
+
+1. Follow the existing code structure
+2. Add tests for new features
+3. Update this documentation
+4. Ensure TypeScript compilation passes
+
+## Module Files
+
+```
+NavigationCopilotPage.tsx
+README.md
+exports.ts
+index.ts
+```
+
+---
+
+*Generated on: 2025-11-04T00:00:21.104Z*
+*Generator: PATCH 622 Documentation System*

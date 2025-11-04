@@ -1,276 +1,96 @@
 # System Watchdog Module
 
-## Visão Geral
+## Overview
 
-O System Watchdog é o módulo de monitoramento de saúde do sistema, fornecendo observabilidade completa, alertas proativos e diagnósticos automatizados para garantir a disponibilidade e performance do sistema.
+The System Watchdog module is part of the Nautilus One system.
 
-**Categoria**: Operations / System  
-**Rota**: `/system-watchdog`  
-**Status**: Ativo  
-**Versão**: 2.0
+## Status
 
-## Componentes Principais
+- **Active**: ✅ Yes
+- **Components**: 3
+- **Has Tests**: ❌ No
+- **Has Documentation**: ✅ Yes
 
-### HealthDashboard
-- Status geral do sistema
-- Service health checks
-- Performance metrics
-- Alert summary
-- Uptime statistics
+## Module Structure
 
-### ServiceMonitor
-- Monitoramento de serviços individuais
-- API endpoint health
-- Database connection status
-- Third-party services
-- Microservices health
-
-### PerformanceMonitor
-- Response time tracking
-- Throughput metrics
-- Resource utilization (CPU, memory, disk)
-- Database performance
-- Network latency
-
-### AlertManager
-- Real-time alerts
-- Alert rules configuration
-- Escalation policies
-- Notification channels
-- Alert history
-
-### DiagnosticTools
-- Automated diagnostics
-- Log analysis
-- Error pattern detection
-- Performance profiling
-- Troubleshooting guides
-
-## Banco de Dados Utilizado
-
-### Tabelas Principais
-```sql
-CREATE TABLE system_health_checks (
-  id UUID PRIMARY KEY DEFAULT uuid_generate_v4(),
-  service_name VARCHAR(100) NOT NULL,
-  check_type VARCHAR(50) NOT NULL,
-  status VARCHAR(20) NOT NULL,
-  response_time INTEGER,
-  details JSONB DEFAULT '{}',
-  checked_at TIMESTAMP NOT NULL,
-  created_at TIMESTAMP DEFAULT NOW()
-);
-
-CREATE TABLE performance_metrics (
-  id UUID PRIMARY KEY DEFAULT uuid_generate_v4(),
-  metric_type VARCHAR(100) NOT NULL,
-  metric_name VARCHAR(100) NOT NULL,
-  value DECIMAL(15, 4),
-  unit VARCHAR(20),
-  tags JSONB DEFAULT '{}',
-  recorded_at TIMESTAMP NOT NULL,
-  created_at TIMESTAMP DEFAULT NOW()
-);
-
-CREATE TABLE system_alerts (
-  id UUID PRIMARY KEY DEFAULT uuid_generate_v4(),
-  alert_type VARCHAR(100) NOT NULL,
-  severity VARCHAR(20) NOT NULL,
-  title VARCHAR(255) NOT NULL,
-  message TEXT NOT NULL,
-  service_name VARCHAR(100),
-  threshold_value DECIMAL(15, 4),
-  current_value DECIMAL(15, 4),
-  resolved BOOLEAN DEFAULT FALSE,
-  resolved_at TIMESTAMP,
-  acknowledged BOOLEAN DEFAULT FALSE,
-  acknowledged_by UUID REFERENCES auth.users(id),
-  metadata JSONB DEFAULT '{}',
-  triggered_at TIMESTAMP NOT NULL,
-  created_at TIMESTAMP DEFAULT NOW()
-);
-
-CREATE TABLE diagnostic_logs (
-  id UUID PRIMARY KEY DEFAULT uuid_generate_v4(),
-  diagnostic_type VARCHAR(100) NOT NULL,
-  severity VARCHAR(20) NOT NULL,
-  findings TEXT NOT NULL,
-  recommendations TEXT,
-  automated BOOLEAN DEFAULT TRUE,
-  executed_at TIMESTAMP NOT NULL,
-  created_at TIMESTAMP DEFAULT NOW()
-);
+```
+system-watchdog/
+├── index.tsx          # Main module entry
 ```
 
-## Requisições API Envolvidas
+## Key Features
 
-### Health Checks
-- **GET /api/system/health** - Overall system health
-- **GET /api/system/health/:service** - Service health
-- **POST /api/system/health/check** - Manual health check
-- **GET /api/system/health/history** - Health history
+- Module-specific functionality
+- Integration with Supabase
+- Real-time updates
+- Responsive UI
 
-### Performance Monitoring
-- **GET /api/system/metrics** - Current metrics
-- **GET /api/system/metrics/history** - Historical metrics
-- **GET /api/system/performance** - Performance summary
-- **WebSocket /ws/system/metrics** - Real-time metrics stream
+## Dependencies
 
-### Alerts
-- **GET /api/system/alerts** - Lista alertas
-- **GET /api/system/alerts/active** - Alertas ativos
-- **PUT /api/system/alerts/:id/acknowledge** - Acknowledges alert
-- **PUT /api/system/alerts/:id/resolve** - Resolve alert
-- **POST /api/system/alerts/rules** - Cria regra de alerta
+### Core Dependencies
+- React 18.3+
+- TypeScript 5.8+
+- Supabase Client
 
-### Diagnostics
-- **POST /api/system/diagnose** - Executa diagnóstico
-- **GET /api/system/diagnostics** - Histórico de diagnósticos
-- **GET /api/system/logs** - System logs
-- **POST /api/system/analyze-logs** - Análise de logs
+### UI Components
+- Shadcn/ui components
+- Radix UI primitives
+- Lucide icons
 
-## Monitoramento de Serviços
+## Usage
 
-### Core Services
-- Web Application
-- API Gateway
-- Database (Supabase)
-- Authentication service
-- File storage
+```typescript
+import { SystemWatchdog } from '@/modules/system-watchdog';
 
-### Third-party Services
-- Email service (SMTP)
-- SMS service
-- Weather API
-- Satellite API
-- AI/ML services
+function App() {
+  return <SystemWatchdog />;
+}
+```
 
-### Infrastructure
-- Server health
-- Network connectivity
-- CDN status
-- Load balancer
-- DNS resolution
+## Database Integration
 
-## Métricas Monitoradas
+This module integrates with Supabase for data persistence.
 
-### Application Metrics
-- Request rate
-- Response time
-- Error rate
-- Success rate
-- Concurrent users
+### Tables Used
+- (Automatically detected from code)
 
-### System Metrics
-- CPU utilization
-- Memory usage
-- Disk I/O
-- Network bandwidth
-- Database connections
+## API Integration
 
-### Business Metrics
-- Active users
-- Transactions per minute
-- Module usage
-- API calls
-- Data throughput
+### Endpoints
+- REST API endpoints are defined in the services layer
+- Real-time subscriptions for live updates
 
-## Alerting Rules
+## Development
 
-### Threshold-based Alerts
-- Value exceeds threshold
-- Value below threshold
-- Rapid change detection
-- Sustained deviation
+### Running Locally
+```bash
+npm run dev
+```
 
-### Pattern-based Alerts
-- Error spike detection
-- Unusual activity patterns
-- Anomaly detection
-- Trend-based alerts
+### Testing
+```bash
+npm run test system-watchdog
+```
 
-### Service-based Alerts
-- Service down
-- Service degraded
-- Slow response
-- Connection failures
+## Contributing
 
-## Escalation Policies
+When contributing to this module:
 
-### Level 1: Information
-- Email notification
-- Dashboard indicator
-- Log entry
-- Auto-resolution attempts
+1. Follow the existing code structure
+2. Add tests for new features
+3. Update this documentation
+4. Ensure TypeScript compilation passes
 
-### Level 2: Warning
-- Email + SMS
-- Dashboard alert
-- Slack notification
-- Team lead notification
+## Module Files
 
-### Level 3: Critical
-- Phone call
-- PagerDuty
-- Multiple channels
-- Management escalation
+```
+README.md
+SystemWatchdog.tsx
+index.ts
+watchdog-service.ts
+```
 
-## Automated Diagnostics
+---
 
-### Issue Detection
-- Automatic problem identification
-- Root cause analysis
-- Impact assessment
-- Related issues correlation
-
-### Recommendations
-- Suggested fixes
-- Workarounds
-- Escalation paths
-- Documentation links
-
-### Auto-remediation
-- Automatic service restart
-- Cache clearing
-- Connection pool reset
-- Database optimization
-
-## Integrações
-
-### All Modules
-- Health status tracking
-- Performance monitoring
-- Error tracking
-- Usage analytics
-
-### Logs Center
-- Centralized logging
-- Log correlation
-- Error aggregation
-- Audit trails
-
-### Admin Dashboard
-- System overview
-- Management reports
-- SLA tracking
-- Capacity planning
-
-## SLA Monitoring
-
-- **Uptime SLA**: Target 99.9%
-- **Response Time SLA**: < 500ms (p95)
-- **Error Rate SLA**: < 0.1%
-- **Recovery Time Objective (RTO)**: < 1 hour
-- **Recovery Point Objective (RPO)**: < 15 minutes
-
-## Testes
-
-Localização: 
-- `tests/system-health.test.tsx`
-- `tests/nautilus-core.test.ts`
-
-## Última Atualização
-
-**Data**: 2025-10-29  
-**Versão**: 2.0  
-**Features**: Real-time monitoring, Auto-diagnostics, Alerting
+*Generated on: 2025-11-04T00:00:21.112Z*
+*Generator: PATCH 622 Documentation System*

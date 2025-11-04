@@ -1,86 +1,96 @@
 # Route Planner Module
 
-## Visão Geral
+## Overview
 
-O Route Planner v2 é o módulo avançado de planejamento de rotas marítimas com cálculo dinâmico de ETA, integração meteorológica e otimização de combustível.
+The Route Planner module is part of the Nautilus One system.
 
-**Categoria**: Specialized / Navigation  
-**Rota**: `/route-planner`  
-**Status**: Ativo  
-**Versão**: 449.0
+## Status
 
-## Componentes Principais
+- **Active**: ✅ Yes
+- **Components**: 1
+- **Has Tests**: ❌ No
+- **Has Documentation**: ✅ Yes
 
-### RouteMap
-- Interactive map with route visualization
-- Multiple route options display
-- Real-time vessel position
-- Weather overlay
-- Traffic information
+## Module Structure
 
-### RouteOptimizer
-- Fuel-efficient routing
-- Time-optimized routing
-- Weather-aware routing
-- Multi-waypoint optimization
-- Cost comparison
-
-### ETACalculator
-- Dynamic ETA calculation
-- Real-time updates
-- Weather impact consideration
-- Speed profile optimization
-- Arrival window prediction
-
-### WeatherIntegration
-- Weather forecast along route
-- Storm avoidance
-- Sea state prediction
-- Wind and current analysis
-- Safe passage windows
-
-## Banco de Dados Utilizado
-
-### Tabelas Principais
-```sql
-CREATE TABLE planned_routes (
-  id UUID PRIMARY KEY,
-  vessel_id UUID REFERENCES vessels(id),
-  route_name VARCHAR(255),
-  origin GEOGRAPHY(POINT),
-  destination GEOGRAPHY(POINT),
-  waypoints JSONB,
-  distance_nm DECIMAL(10, 2),
-  estimated_duration INTEGER,
-  estimated_fuel DECIMAL(10, 2),
-  optimization_type VARCHAR(50),
-  weather_data JSONB,
-  created_at TIMESTAMP DEFAULT NOW()
-);
+```
+route-planner/
+├── index.tsx          # Main module entry
+├── components/        # UI components
+├── services/          # Business logic
 ```
 
-## Requisições API Envolvidas
+## Key Features
 
-### Route Planning
-- **POST /api/routes/plan** - Plan new route
-- **POST /api/routes/optimize** - Optimize existing route
-- **GET /api/routes/:id/eta** - Calculate ETA
-- **POST /api/routes/compare** - Compare multiple routes
+- Module-specific functionality
+- Integration with Supabase
+- Real-time updates
+- Responsive UI
 
-### Weather Integration
-- **GET /api/routes/:id/weather** - Weather forecast for route
-- **GET /api/routes/safe-passage** - Safe passage windows
-- **POST /api/routes/weather-reroute** - Weather-based rerouting
+## Dependencies
 
-## Integrações
+### Core Dependencies
+- React 18.3+
+- TypeScript 5.8+
+- Supabase Client
 
-- **Navigation Copilot**: AI-assisted navigation
-- **Weather Dashboard**: Weather data
-- **Fleet Management**: Vessel data
-- **Satellite Tracking**: Real-time position
+### UI Components
+- Shadcn/ui components
+- Radix UI primitives
+- Lucide icons
 
-## Última Atualização
+## Usage
 
-**Data**: 2025-10-29  
-**Versão**: 449.0  
-**Features**: Dynamic ETA, Weather integration, Route optimization
+```typescript
+import { RoutePlanner } from '@/modules/route-planner';
+
+function App() {
+  return <RoutePlanner />;
+}
+```
+
+## Database Integration
+
+This module integrates with Supabase for data persistence.
+
+### Tables Used
+- (Automatically detected from code)
+
+## API Integration
+
+### Endpoints
+- REST API endpoints are defined in the services layer
+- Real-time subscriptions for live updates
+
+## Development
+
+### Running Locally
+```bash
+npm run dev
+```
+
+### Testing
+```bash
+npm run test route-planner
+```
+
+## Contributing
+
+When contributing to this module:
+
+1. Follow the existing code structure
+2. Add tests for new features
+3. Update this documentation
+4. Ensure TypeScript compilation passes
+
+## Module Files
+
+```
+README.md
+index.tsx
+```
+
+---
+
+*Generated on: 2025-11-04T00:00:21.108Z*
+*Generator: PATCH 622 Documentation System*

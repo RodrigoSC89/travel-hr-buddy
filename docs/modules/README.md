@@ -1,183 +1,196 @@
-# Travel HR Buddy - Módulos do Sistema
+# Nautilus One - Module Documentation Index
 
-## Índice de Módulos Documentados
+This directory contains auto-generated documentation for all active modules in the Nautilus One system.
 
-Este diretório contém a documentação técnica detalhada dos 20 principais módulos operacionais do sistema Travel HR Buddy.
+**Generated on:** 2025-11-04T00:00:21.115Z
 
-## Módulos Core (5)
+## Available Modules
 
-### [Dashboard](./dashboard.md)
-Módulo central com visão consolidada de todas as operações, métricas e status do sistema em tempo real.
-- **Rota**: `/` ou `/dashboard`
-- **Status**: Ativo
-- **Features**: Real-time metrics, Quick actions, Activity feed
+### AI & Intelligence
 
-### [Logs Center](./logs-center.md)
-Módulo centralizado para visualização, busca e análise de logs de todas as operações do sistema.
-- **Rota**: `/logs-center`
-- **Status**: Ativo
-- **Features**: Real-time logs, Advanced filtering, Alerts
+- [Ai](./ai.md)
+- [Ai Coordination](./ai-coordination.md)
+- [Ai Evolution](./ai-evolution.md)
+- [Ai Logging](./ai-logging.md)
+- [Ai Training](./ai-training.md)
+- [Ai Translator](./ai-translator.md)
+- [Blockchain Integration](./blockchain-integration.md)
+- [Coordination Ai](./coordination-ai.md)
+- [Deep Risk Ai](./deep-risk-ai.md)
+- [Intelligence](./intelligence.md)
+- [Maintenance Planner](./maintenance-planner.md)
+- [Mission Intelligence](./mission-intelligence.md)
+- [Ocean Sonar Ai](./ocean-sonar-ai.md)
+- [Predictive Strategy](./predictive-strategy.md)
+- [Sonar Ai](./sonar-ai.md)
+- [Training](./training.md)
+- [Travel Intelligence](./travel-intelligence.md)
+- [Vault_ai](./vault_ai.md)
 
-### [Compliance Hub](./compliance-hub.md)
-Centraliza funcionalidades de conformidade regulatória, auditorias IMCA, SGSO e métricas de risco.
-- **Rota**: `/compliance`
-- **Status**: Ativo
-- **Features**: IMCA audits, SGSO, Risk metrics
+### Analytics
 
-### [Mission Control](./mission-control.md)
-Módulo unificado para planejamento, execução e monitoramento de missões operacionais com IA.
-- **Rota**: `/mission-control` ou `/mission-engine`
-- **Status**: Ativo
-- **Features**: Mission planning, AI coordination, Tactical execution
+- [Analytics](./analytics.md)
+- [Reporting Engine](./reporting-engine.md)
 
-### [Fleet Management](./fleet.md)
-Gerenciamento completo de embarcações, incluindo tracking, manutenção, performance e operações.
-- **Rota**: `/fleet`
-- **Status**: Ativo
-- **Features**: Real-time tracking, Maintenance, AIS integration
+### Communication
 
----
+- [Communication](./communication.md)
+- [Communication Center](./communication-center.md)
 
-## Módulos de IA (5)
+### Compliance
 
-### [AI Coordination](./ai-coordination.md)
-Orquestração de inteligência artificial que coordena múltiplos agentes AI e otimiza recursos.
-- **Rota**: `/coordination-ai`
-- **Status**: Ativo
-- **Features**: Multi-agent orchestration, Task distribution, ML models
+- [Audit](./audit.md)
+- [Compliance](./compliance.md)
+- [Ism Audits](./ism-audits.md)
+- [Lsa Ffa Inspections](./lsa-ffa-inspections.md)
+- [Remote Audits](./remote-audits.md)
+- [Risk Audit](./risk-audit.md)
 
-### [Deep Risk AI](./deep-risk-ai.md)
-Análise preditiva de riscos usando machine learning e deep learning para operações marítimas.
-- **Rota**: `/deep-risk-ai`
-- **Status**: Ativo
-- **Features**: Anomaly detection, Predictive analytics, Risk mitigation
+### Core
 
-### [Sonar AI](./sonar-ai.md)
-Análise inteligente de dados de sonar submarino com detecção e classificação de objetos.
-- **Rota**: `/sonar-ai`
-- **Status**: Ativo (v448)
-- **Features**: Object detection, Pattern recognition, AI classification
+- [Adaptive Ui](./adaptive-ui.md)
+- [Ai Vision Core](./ai-vision-core.md)
+- [Core](./core.md)
+- [Reflective Core](./reflective-core.md)
+- [Shared](./shared.md)
+- [Ui](./ui.md)
 
-### [Navigation Copilot](./navigation-copilot.md)
-Assistente de navegação com IA integrando dados meteorológicos e rotas otimizadas.
-- **Rota**: `/navigation-copilot`
-- **Status**: Ativo (v447)
-- **Features**: AI optimization, Weather integration, Safety advisor
+### Operations
 
-### [Vault AI](./vault-ai.md)
-Armazenamento seguro e inteligente de documentos com análise AI e controle de acesso.
-- **Rota**: `/vault_ai`
-- **Status**: Ativo
-- **Features**: AI classification, Secure storage, Smart search
+- [Drone Fleet](./drone-fleet.md)
+- [Fleet](./fleet.md)
+- [Mission Control](./mission-control.md)
+- [Mission Engine](./mission-engine.md)
+- [Mission Mobile](./mission-mobile.md)
+- [Mission Replay](./mission-replay.md)
+- [Missions](./missions.md)
+- [Operations](./operations.md)
+- [Risk Operations](./risk-operations.md)
 
----
+### Other
 
-## Módulos Operacionais (5)
+- [Admin](./admin.md)
+- [Api Gateway](./api-gateway.md)
+- [Assistants](./assistants.md)
+- [Auto Reconfig](./auto-reconfig.md)
+- [Auto Sub](./auto-sub.md)
+- [Auto Tuning](./auto-tuning.md)
+- [Autodocs](./autodocs.md)
+- [Autoexec](./autoexec.md)
+- [Awareness Dashboard](./awareness-dashboard.md)
+- [Beta Users](./beta-users.md)
+- [Certification Center](./certification-center.md)
+- [Configuration](./configuration.md)
+- [Connectivity](./connectivity.md)
+- [Consolidation](./consolidation.md)
+- [Control](./control.md)
+- [Coordination](./coordination.md)
+- [Copilot Presenter](./copilot-presenter.md)
+- [Crew](./crew.md)
+- [Decision Simulator](./decision-simulator.md)
+- [Digital Signature](./digital-signature.md)
+- [Document Hub](./document-hub.md)
+- [Drone Commander](./drone-commander.md)
+- [Emergency](./emergency.md)
+- [Emotion Feedback](./emotion-feedback.md)
+- [Empathy](./empathy.md)
+- [Esg Dashboard](./esg-dashboard.md)
+- [Evolution Tracker](./evolution-tracker.md)
+- [Executive Summary](./executive-summary.md)
+- [Features](./features.md)
+- [Finance](./finance.md)
+- [Finance Hub](./finance-hub.md)
+- [Forecast](./forecast.md)
+- [Forecast Engine](./forecast-engine.md)
+- [Governance](./governance.md)
+- [Health Monitor](./health-monitor.md)
+- [Hr](./hr.md)
+- [I18n Dashboard](./i18n-dashboard.md)
+- [I18n Hooks](./i18n-hooks.md)
+- [Incident Center](./incident-center.md)
+- [Incident Replay](./incident-replay.md)
+- [Incident Replayer](./incident-replayer.md)
+- [Incident Reports](./incident-reports.md)
+- [Incident Timeline](./incident-timeline.md)
+- [Incidents](./incidents.md)
+- [Integrations](./integrations.md)
+- [Joint Decision](./joint-decision.md)
+- [Llm Multilingual](./llm-multilingual.md)
+- [Logistics](./logistics.md)
+- [Logs Center](./logs-center.md)
+- [Multilingual Logs](./multilingual-logs.md)
+- [Navigation Copilot](./navigation-copilot.md)
+- [Neural Governance](./neural-governance.md)
+- [Neuro Adapter](./neuro-adapter.md)
+- [Ocean Sonar](./ocean-sonar.md)
+- [Pattern Recognition](./pattern-recognition.md)
+- [Performance](./performance.md)
+- [Planning](./planning.md)
+- [Pre Psc](./pre-psc.md)
+- [Price Alerts](./price-alerts.md)
+- [Price Predictor](./price-predictor.md)
+- [Project Timeline](./project-timeline.md)
+- [Quality Dashboard](./quality-dashboard.md)
+- [Reaction Mapper](./reaction-mapper.md)
+- [Regression](./regression.md)
+- [Release Notes](./release-notes.md)
+- [Resilience Tracker](./resilience-tracker.md)
+- [Risk Analysis](./risk-analysis.md)
+- [Route Planner](./route-planner.md)
+- [Satcom](./satcom.md)
+- [Satellite](./satellite.md)
+- [Satellite Tracker](./satellite-tracker.md)
+- [Security Validation](./security-validation.md)
+- [Self Diagnosis](./self-diagnosis.md)
+- [Sensors](./sensors.md)
+- [Sensors Hub](./sensors-hub.md)
+- [Signal Collector](./signal-collector.md)
+- [Situational Awareness](./situational-awareness.md)
+- [Smart Drills](./smart-drills.md)
+- [Smart Scheduler](./smart-scheduler.md)
+- [Sociocognitive](./sociocognitive.md)
+- [Strategic Consensus](./strategic-consensus.md)
+- [Stress Test](./stress-test.md)
+- [Surface Bot](./surface-bot.md)
+- [System Status](./system-status.md)
+- [System Sweep](./system-sweep.md)
+- [System Watchdog](./system-watchdog.md)
+- [Tactical Response](./tactical-response.md)
+- [Task Automation](./task-automation.md)
+- [Templates](./templates.md)
+- [Testing](./testing.md)
+- [Theme Manager](./theme-manager.md)
+- [Trust Analysis](./trust-analysis.md)
+- [Underwater Drone](./underwater-drone.md)
+- [User Management](./user-management.md)
+- [Validation](./validation.md)
+- [Voice Assistant](./voice-assistant.md)
+- [Watchdog](./watchdog.md)
+- [Weather Dashboard](./weather-dashboard.md)
+- [Workspace](./workspace.md)
 
-### [Crew Management](./crew-management.md)
-Gestão completa de tripulação, certificações, rotações, performance e compliance.
-- **Rota**: `/crew-management`
-- **Status**: Ativo (v446 - consolidado)
-- **Features**: Certification tracking, Rotations, Performance
+### Travel
 
-### [Finance Hub](./finance-hub.md)
-Gestão financeira completa com controle de custos, budgets, faturamento e análise.
-- **Rota**: `/finance-hub`
-- **Status**: Ativo (v192)
-- **Features**: Real-time data, Multi-currency, Forecasting
+- [Travel](./travel.md)
+- [Travel Search](./travel-search.md)
+- [Travel System](./travel-system.md)
 
-### [Templates](./templates.md)
-Gerenciamento de templates de documentos com recursos de IA para geração e personalização.
-- **Rota**: `/templates`
-- **Status**: Ativo
-- **Features**: AI generation, Smart variables, Multiple formats
+## Quick Statistics
 
-### [Incident Reports](./incident-reports.md)
-Registro e gestão de incidentes operacionais com investigação e análise de tendências.
-- **Rota**: `/incident-reports`
-- **Status**: Ativo
-- **Features**: Investigation workflow, Analytics, Compliance
+- **Total Modules**: 145
+- **Documentation Files**: 145
+- **Last Updated**: 2025-11-04T00:00:21.116Z
 
-### [System Watchdog](./system-watchdog.md)
-Monitoramento de saúde do sistema com observabilidade, alertas e diagnósticos automatizados.
-- **Rota**: `/system-watchdog`
-- **Status**: Ativo
-- **Features**: Health monitoring, Auto-diagnostics, SLA tracking
+## How to Use
 
----
+Click on any module name above to view its detailed documentation.
 
-## Módulos Especializados (5)
+Each module documentation includes:
+- Overview and description
+- Module structure
+- Key features
+- Dependencies
+- Usage examples
+- Database integration
+- Development guidelines
 
-### [Underwater Drone](./underwater-drone.md)
-Controle de ROVs e AUVs com planejamento de missões e telemetria.
-- **Rota**: `/underwater-drone`
-- **Status**: Ativo (v450)
-- **Features**: ROV/AUV control, Mission planning, Telemetry
-
-### [Drone Commander](./drone-commander.md)
-Controle e coordenação de frotas de drones aéreos para inspeção e vigilância.
-- **Rota**: `/drone-commander`
-- **Status**: Ativo
-- **Features**: Fleet control, Flight planning, Video streaming
-
-### [Route Planner](./route-planner.md)
-Planejamento avançado de rotas marítimas com ETA dinâmico e integração meteorológica.
-- **Rota**: `/route-planner`
-- **Status**: Ativo (v449)
-- **Features**: Dynamic ETA, Weather integration, Optimization
-
-### [Weather Dashboard](./weather-dashboard.md)
-Dados meteorológicos em tempo real, previsões e alertas para operações marítimas.
-- **Rota**: `/weather-dashboard`
-- **Status**: Ativo
-- **Features**: Real-time data, Marine forecast, Alerts
-
-### [Price Alerts](./price-alerts.md)
-Monitoramento de preços de commodities e combustível com análise de tendências.
-- **Rota**: `/price-alerts`
-- **Status**: Ativo
-- **Features**: Price tracking, Smart alerts, Trend analysis
-
----
-
-## Estrutura da Documentação
-
-Cada módulo documentado contém:
-
-- **Visão Geral**: Descrição, categoria, rota e status
-- **Componentes Principais**: Componentes UI e funcionalidades
-- **Banco de Dados Utilizado**: Schemas e estruturas de dados
-- **Requisições API Envolvidas**: Endpoints e suas especificações
-- **Integrações**: Módulos e serviços integrados
-- **Recursos Avançados**: Features específicas e diferenciais
-- **Testes**: Localização dos testes automatizados
-- **Última Atualização**: Data e versão
-
-## Como Usar Esta Documentação
-
-1. **Desenvolvimento**: Use como referência para entender a arquitetura de cada módulo
-2. **Integração**: Consulte as APIs e integrações disponíveis
-3. **Manutenção**: Identifique componentes e dependências
-4. **Testes**: Localize testes existentes e padrões
-5. **Onboarding**: Material para novos desenvolvedores
-
-## Convenções
-
-- **Rota**: URL path do módulo na aplicação
-- **Status**: `Ativo`, `Deprecated`, `Em Desenvolvimento`
-- **Versão**: Número da versão ou PATCH relacionado
-- **Features**: Principais funcionalidades do módulo
-
-## Documentação Relacionada
-
-- [Module Map](../MODULE_MAP.md) - Mapa completo de módulos
-- [API Reference](../API-REFERENCE.md) - Documentação de APIs
-- [Integration Guide](../INTEGRATION-GUIDE.md) - Guia de integrações
-- [Best Practices](../BEST-PRACTICES.md) - Melhores práticas
-
----
-
-**Última Atualização**: 2025-10-29  
-**Total de Módulos Documentados**: 20  
-**Categorias**: Core (5), AI (5), Operations (5), Specialized (5)  
-**PATCH**: 497 - Documentação Técnica Base

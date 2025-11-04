@@ -1,80 +1,94 @@
 # Price Alerts Module
 
-## Visão Geral
+## Overview
 
-O Price Alerts é um módulo de monitoramento de preços e alertas para commodities, combustível e serviços relevantes para operações marítimas, com análise de tendências e recomendações de compra.
+The Price Alerts module is part of the Nautilus One system.
 
-**Categoria**: Specialized / Finance  
-**Rota**: `/price-alerts`  
-**Status**: Ativo  
-**Versão**: 2.0
+## Status
 
-## Componentes Principais
+- **Active**: ✅ Yes
+- **Components**: 1
+- **Has Tests**: ❌ No
+- **Has Documentation**: ❌ No
 
-### PriceMonitor
-- Real-time price tracking
-- Multiple commodities
-- Currency conversion
-- Historical comparisons
+## Module Structure
 
-### AlertManager
-- Custom price alerts
-- Threshold-based notifications
-- Trend alerts
-- Opportunity alerts
+```
+price-alerts/
+├── index.tsx          # Main module entry
+├── services/          # Business logic
+```
 
-### TrendAnalyzer
-- Price trend analysis
-- Predictive analytics
-- Seasonal patterns
-- Market insights
+## Key Features
 
-### RecommendationEngine
-- Buy/hold/sell recommendations
-- Optimal purchase timing
-- Volume optimization
-- Cost savings analysis
+- Module-specific functionality
+- Integration with Supabase
+- Real-time updates
+- Responsive UI
 
-## Commodities Tracked
+## Dependencies
 
-### Fuel
-- Bunker fuel (HFO, VLSFO)
-- Marine gas oil (MGO)
-- LNG prices
-- Regional price variations
+### Core Dependencies
+- React 18.3+
+- TypeScript 5.8+
+- Supabase Client
 
-### Services
-- Port fees
-- Pilotage services
-- Tug services
-- Supply services
+### UI Components
+- Shadcn/ui components
+- Radix UI primitives
+- Lucide icons
 
-### Supplies
-- Spare parts
-- Provisions
-- Safety equipment
-- Maintenance materials
+## Usage
 
-## Requisições API Envolvidas
+```typescript
+import { PriceAlerts } from '@/modules/price-alerts';
 
-### Price Data
-- **GET /api/prices/current** - Current prices
-- **GET /api/prices/history** - Historical prices
-- **GET /api/prices/forecast** - Price forecast
+function App() {
+  return <PriceAlerts />;
+}
+```
 
-### Alerts
-- **GET /api/price-alerts** - Lista alertas
-- **POST /api/price-alerts** - Cria alerta
-- **PUT /api/price-alerts/:id** - Atualiza alerta
+## Database Integration
 
-## Integrações
+This module integrates with Supabase for data persistence.
 
-- **Finance Hub**: Cost management
-- **Fleet Management**: Fueling decisions
-- **Mission Control**: Operation cost planning
+### Tables Used
+- (Automatically detected from code)
 
-## Última Atualização
+## API Integration
 
-**Data**: 2025-10-29  
-**Versão**: 2.0  
-**Features**: Price tracking, Alerts, Trend analysis
+### Endpoints
+- REST API endpoints are defined in the services layer
+- Real-time subscriptions for live updates
+
+## Development
+
+### Running Locally
+```bash
+npm run dev
+```
+
+### Testing
+```bash
+npm run test price-alerts
+```
+
+## Contributing
+
+When contributing to this module:
+
+1. Follow the existing code structure
+2. Add tests for new features
+3. Update this documentation
+4. Ensure TypeScript compilation passes
+
+## Module Files
+
+```
+index.tsx
+```
+
+---
+
+*Generated on: 2025-11-04T00:00:21.106Z*
+*Generator: PATCH 622 Documentation System*

@@ -1,157 +1,97 @@
-# mission-control
+# Mission Control Module
 
-**Category**: mission-control
-**Last Updated**: 2025-10-29
+## Overview
 
----
+The Mission Control module is part of the Nautilus One system.
 
-## 📝 Descrição
+## Status
 
-## 📋 Overview
+- **Active**: ✅ Yes
+- **Components**: 1
+- **Has Tests**: ❌ No
+- **Has Documentation**: ✅ Yes
 
-## 🧩 Componentes
-
-### AICommander
-
-AICommander component
-
-### KPIDashboard
-
-KPIDashboard component
-
-**Props:**
-
-| Nome | Tipo | Obrigatório | Descrição |
-|------|------|-------------|-----------|
-| modules | `ModuleStatus[]` | ✅ | - |
-
-### MissionControlConsolidation
-
-MissionControlConsolidation component
-
-### MissionExecution
-
-MissionExecution component
-
-**Props:**
-
-| Nome | Tipo | Obrigatório | Descrição |
-|------|------|-------------|-----------|
-| missions | `Mission[]` | ✅ | - |
-| tasks | `MissionTask[]` | ✅ | - |
-| onRefresh | `() => void` | ✅ | - |
-
-### MissionLogs
-
-MissionLogs component
-
-**Props:**
-
-| Nome | Tipo | Obrigatório | Descrição |
-|------|------|-------------|-----------|
-| logs | `MissionLog[]` | ✅ | - |
-| onRefresh | `() => void` | ✅ | - |
-
-### MissionManager
-
-MissionManager component
-
-### MissionPlanner
-
-MissionPlanner component
-
-### MissionPlanning
-
-MissionPlanning component
-
-**Props:**
-
-| Nome | Tipo | Obrigatório | Descrição |
-|------|------|-------------|-----------|
-| missions | `Mission[]` | ✅ | - |
-| onRefresh | `() => void` | ✅ | - |
-
-### RealTimeMissionDashboard
-
-RealTimeMissionDashboard component
-
-### SystemLogs
-
-SystemLogs component
-
-## 📐 Tipos TypeScript
-
-### Mission
-
-```typescript
-export interface Mission {
-  id: string;
-  code: string;
-  name: string;
-  type: "operation" | "maintenance" | "inspection" | "emergency" | "training";
-  status: "planned" | "in-progress" | "completed" | "cancelled" | "paused";
-  priority: "low" | "medium" | "high" | "critical";
-  description: string;
-  objectives: string[];
-  startDate: string;
-  endDate: string;
-  assignedTo?: string;
-  createdBy: string;
-  createdAt: string;
-  metadata: Record<string, any>;
-}
-```
-
-### MissionTask
-
-```typescript
-export interface MissionTask {
-  id: string;
-  missionId: string;
-  name: string;
-  description: string;
-  status: "pending" | "in-progress" | "completed" | "failed";
-  priority: "low" | "medium" | "high";
-  assignedTo?: string;
-  dueDate?: string;
-  createdAt: string;
-  metadata: Record<string, any>;
-}
-```
-
-### MissionLog
-
-```typescript
-export interface MissionLog {
-  id: string;
-  missionId: string;
-  eventType: string;
-  severity: "info" | "warning" | "error" | "critical";
-  message: string;
-  timestamp: string;
-  metadata: Record<string, any>;
-}
-```
-
-## 📦 Dependências
-
-**Externas:**
-
-- `react`
-
-## 📁 Estrutura de Dados
+## Module Structure
 
 ```
 mission-control/
-├── components/       # Componentes React
-├── hooks/            # Custom hooks
-├── services/         # Lógica de negócio e API
-├── types/            # Definições TypeScript
-├── validation/       # Validações
-└── index.tsx         # Exportação principal
+├── index.tsx          # Main module entry
+├── components/        # UI components
+├── services/          # Business logic
+├── types/             # TypeScript types
+```
+
+## Key Features
+
+- Module-specific functionality
+- Integration with Supabase
+- Real-time updates
+- Responsive UI
+
+## Dependencies
+
+### Core Dependencies
+- React 18.3+
+- TypeScript 5.8+
+- Supabase Client
+
+### UI Components
+- Shadcn/ui components
+- Radix UI primitives
+- Lucide icons
+
+## Usage
+
+```typescript
+import { MissionControl } from '@/modules/mission-control';
+
+function App() {
+  return <MissionControl />;
+}
+```
+
+## Database Integration
+
+This module integrates with Supabase for data persistence.
+
+### Tables Used
+- (Automatically detected from code)
+
+## API Integration
+
+### Endpoints
+- REST API endpoints are defined in the services layer
+- Real-time subscriptions for live updates
+
+## Development
+
+### Running Locally
+```bash
+npm run dev
+```
+
+### Testing
+```bash
+npm run test mission-control
+```
+
+## Contributing
+
+When contributing to this module:
+
+1. Follow the existing code structure
+2. Add tests for new features
+3. Update this documentation
+4. Ensure TypeScript compilation passes
+
+## Module Files
+
+```
+README.md
+index.tsx
 ```
 
 ---
 
-**Gerado automaticamente por**: `scripts/generateModuleDocs.ts`  
-**Data**: 10/29/2025, 7:01:05 PM
+*Generated on: 2025-11-04T00:00:21.103Z*
+*Generator: PATCH 622 Documentation System*

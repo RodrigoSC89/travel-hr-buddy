@@ -1,95 +1,99 @@
-# Sonar AI Module
+# Sonar Ai Module
 
-## Visão Geral
+## Overview
 
-O Sonar AI é um módulo de análise inteligente de dados de sonar submarino, utilizando AI para detecção de objetos, classificação de alvos e mapeamento do fundo oceânico.
+The Sonar Ai module is part of the Nautilus One system.
 
-**Categoria**: AI / Ocean Technology  
-**Rota**: `/sonar-ai`  
-**Status**: Ativo  
-**Versão**: 448.0
+## Status
 
-## Componentes Principais
+- **Active**: ✅ Yes
+- **Components**: 4
+- **Has Tests**: ❌ No
+- **Has Documentation**: ✅ Yes
 
-### SonarViewer
-- Visualização de dados de sonar em tempo real
-- Waterfall display
-- Sector scan visualization
-- 3D ocean floor mapping
+## Module Structure
 
-### ObjectDetector
-- AI-powered object detection
-- Target classification
-- Size estimation
-- Movement tracking
-
-### PatternAnalyzer
-- Pattern recognition no fundo oceânico
-- Geological feature identification
-- Anomaly detection
-- Historical comparison
-
-### DataProcessor
-- Real-time sonar data processing
-- Noise filtering
-- Signal enhancement
-- Data compression
-
-## Banco de Dados Utilizado
-
-### Tabelas Principais
-```sql
-CREATE TABLE sonar_scans (
-  id UUID PRIMARY KEY DEFAULT uuid_generate_v4(),
-  vessel_id UUID REFERENCES vessels(id),
-  scan_type VARCHAR(50) NOT NULL,
-  location_lat DECIMAL(10, 8),
-  location_lng DECIMAL(11, 8),
-  depth DECIMAL(8, 2),
-  scan_data JSONB,
-  processed_data JSONB,
-  detected_objects INTEGER DEFAULT 0,
-  scan_timestamp TIMESTAMP NOT NULL,
-  created_at TIMESTAMP DEFAULT NOW()
-);
-
-CREATE TABLE detected_objects (
-  id UUID PRIMARY KEY DEFAULT uuid_generate_v4(),
-  scan_id UUID REFERENCES sonar_scans(id),
-  object_type VARCHAR(100),
-  classification VARCHAR(100),
-  confidence DECIMAL(5, 4),
-  position_x DECIMAL(10, 2),
-  position_y DECIMAL(10, 2),
-  position_z DECIMAL(10, 2),
-  size_estimate JSONB,
-  metadata JSONB DEFAULT '{}',
-  created_at TIMESTAMP DEFAULT NOW()
-);
+```
+sonar-ai/
+├── index.tsx          # Main module entry
+├── components/        # UI components
+├── services/          # Business logic
 ```
 
-## Requisições API Envolvidas
+## Key Features
 
-### Sonar Data
-- **GET /api/sonar/scans** - Lista scans
-- **POST /api/sonar/scans** - Upload scan data
-- **GET /api/sonar/scans/:id** - Detalhes do scan
-- **POST /api/sonar/analyze** - Análise AI
-- **WebSocket /ws/sonar** - Stream de dados
+- Module-specific functionality
+- Integration with Supabase
+- Real-time updates
+- Responsive UI
 
-### Object Detection
-- **GET /api/sonar/objects** - Lista objetos detectados
-- **GET /api/sonar/objects/:id** - Detalhes do objeto
-- **POST /api/sonar/classify** - Classificação de objeto
+## Dependencies
 
-## Integrações
+### Core Dependencies
+- React 18.3+
+- TypeScript 5.8+
+- Supabase Client
 
-- **Underwater Drone**: Dados de ROV/AUV
-- **Mission Control**: Missões de inspeção
-- **Ocean Sonar**: Dados de sonar legacy
+### UI Components
+- Shadcn/ui components
+- Radix UI primitives
+- Lucide icons
 
-## Última Atualização
+## Usage
 
-**Data**: 2025-10-29  
-**Versão**: 448.0  
-**Features**: Object detection, AI classification
+```typescript
+import { SonarAi } from '@/modules/sonar-ai';
+
+function App() {
+  return <SonarAi />;
+}
+```
+
+## Database Integration
+
+This module integrates with Supabase for data persistence.
+
+### Tables Used
+- (Automatically detected from code)
+
+## API Integration
+
+### Endpoints
+- REST API endpoints are defined in the services layer
+- Real-time subscriptions for live updates
+
+## Development
+
+### Running Locally
+```bash
+npm run dev
+```
+
+### Testing
+```bash
+npm run test sonar-ai
+```
+
+## Contributing
+
+When contributing to this module:
+
+1. Follow the existing code structure
+2. Add tests for new features
+3. Update this documentation
+4. Ensure TypeScript compilation passes
+
+## Module Files
+
+```
+README.md
+dataAnalyzer.ts
+index.tsx
+riskInterpreter.ts
+sonar-service.ts
+```
+
+---
+
+*Generated on: 2025-11-04T00:00:21.111Z*
+*Generator: PATCH 622 Documentation System*

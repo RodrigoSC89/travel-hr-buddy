@@ -1,184 +1,94 @@
-# Fleet Management Module
+# Fleet Module
 
-## Visão Geral
+## Overview
 
-O Fleet Management é o módulo central para gerenciamento de embarcações, incluindo tracking em tempo real, manutenção, performance e operações marítimas unificadas.
+The Fleet module is part of the Nautilus One system.
 
-**Categoria**: Core / Operations  
-**Rota**: `/fleet` ou `/maritime`  
-**Status**: Ativo  
-**Versão**: 191.0 (consolidado)
+## Status
 
-## Componentes Principais
+- **Active**: ✅ Yes
+- **Components**: 1
+- **Has Tests**: ❌ No
+- **Has Documentation**: ✅ Yes
 
-### FleetOverview
-- Lista de todas as embarcações
-- Status em tempo real (active, maintenance, docked)
-- Localização no mapa
-- Quick stats (fuel, crew, next maintenance)
+## Module Structure
 
-### VesselDetails
-- Informações detalhadas da embarcação
-- Especificações técnicas
-- Histórico de manutenção
-- Crew assignment
-- Mission history
-
-### VesselTracking
-- Rastreamento GPS em tempo real
-- AIS integration
-- Route history
-- Geofencing alerts
-
-### MaintenancePlanner
-- Scheduled maintenance
-- Preventive maintenance tracking
-- Maintenance history
-- Spare parts inventory
-
-### PerformanceMetrics
-- Fuel consumption
-- Speed and efficiency
-- Operational hours
-- Performance trends
-
-## Banco de Dados Utilizado
-
-### Tabelas Principais
-```sql
-CREATE TABLE vessels (
-  id UUID PRIMARY KEY DEFAULT uuid_generate_v4(),
-  name VARCHAR(255) NOT NULL,
-  imo_number VARCHAR(20) UNIQUE,
-  flag VARCHAR(10),
-  vessel_type VARCHAR(50),
-  status VARCHAR(20) DEFAULT 'active',
-  current_location_lat DECIMAL(10, 8),
-  current_location_lng DECIMAL(11, 8),
-  current_speed DECIMAL(5, 2),
-  heading DECIMAL(5, 2),
-  last_update TIMESTAMP,
-  specifications JSONB DEFAULT '{}',
-  created_at TIMESTAMP DEFAULT NOW(),
-  updated_at TIMESTAMP DEFAULT NOW()
-);
-
-CREATE TABLE vessel_maintenance (
-  id UUID PRIMARY KEY DEFAULT uuid_generate_v4(),
-  vessel_id UUID REFERENCES vessels(id),
-  maintenance_type VARCHAR(100) NOT NULL,
-  scheduled_date DATE NOT NULL,
-  completed_date DATE,
-  status VARCHAR(20) DEFAULT 'scheduled',
-  description TEXT,
-  cost DECIMAL(10, 2),
-  performed_by VARCHAR(255),
-  created_at TIMESTAMP DEFAULT NOW()
-);
-
-CREATE TABLE vessel_tracking (
-  id UUID PRIMARY KEY DEFAULT uuid_generate_v4(),
-  vessel_id UUID REFERENCES vessels(id),
-  latitude DECIMAL(10, 8) NOT NULL,
-  longitude DECIMAL(11, 8) NOT NULL,
-  speed DECIMAL(5, 2),
-  heading DECIMAL(5, 2),
-  recorded_at TIMESTAMP NOT NULL,
-  source VARCHAR(50),
-  metadata JSONB DEFAULT '{}'
-);
+```
+fleet/
+├── index.tsx          # Main module entry
 ```
 
-## Requisições API Envolvidas
+## Key Features
 
-### Vessel Management
-- **GET /api/vessels** - Lista embarcações
-- **POST /api/vessels** - Adiciona embarcação
-- **GET /api/vessels/:id** - Detalhes da embarcação
-- **PUT /api/vessels/:id** - Atualiza embarcação
-- **DELETE /api/vessels/:id** - Remove embarcação
+- Module-specific functionality
+- Integration with Supabase
+- Real-time updates
+- Responsive UI
 
-### Tracking
-- **GET /api/vessels/:id/tracking** - Histórico de posições
-- **POST /api/vessels/:id/position** - Atualiza posição
-- **GET /api/vessels/:id/current-position** - Posição atual
-- **WebSocket /ws/vessels/tracking** - Stream de posições
+## Dependencies
 
-### Maintenance
-- **GET /api/vessels/:id/maintenance** - Manutenções da embarcação
-- **POST /api/vessels/:id/maintenance** - Agenda manutenção
-- **PUT /api/maintenance/:id** - Atualiza manutenção
-- **PUT /api/maintenance/:id/complete** - Completa manutenção
+### Core Dependencies
+- React 18.3+
+- TypeScript 5.8+
+- Supabase Client
 
-### Performance
-- **GET /api/vessels/:id/performance** - Métricas de performance
-- **GET /api/vessels/:id/fuel-consumption** - Consumo de combustível
-- **GET /api/vessels/:id/operational-hours** - Horas operacionais
+### UI Components
+- Shadcn/ui components
+- Radix UI primitives
+- Lucide icons
 
-## Integrações
+## Usage
 
-### AIS Integration
-- Automatic Identification System
-- Real-time vessel tracking
-- Collision avoidance
-- Traffic monitoring
+```typescript
+import { Fleet } from '@/modules/fleet';
 
-### Satellite Tracking
-- Backup tracking via satellite
-- Coverage em áreas remotas
-- Integração com `/satellite-tracker`
+function App() {
+  return <Fleet />;
+}
+```
 
-### Mission Control
-- Vessel assignment para missões
-- Mission-based routing
-- Resource allocation
+## Database Integration
 
-### Crew Management
-- Crew assignment para vessels
-- Certification tracking
-- Onboard crew status
+This module integrates with Supabase for data persistence.
 
-### Weather Dashboard
-- Weather overlay em tracking
-- Weather-aware routing
-- Safety alerts
+### Tables Used
+- (Automatically detected from code)
 
-## Recursos Avançados
+## API Integration
 
-### Geofencing
-- Define geographic boundaries
-- Entry/exit alerts
-- Compliance monitoring
-- Automatic notifications
+### Endpoints
+- REST API endpoints are defined in the services layer
+- Real-time subscriptions for live updates
 
-### Route Optimization
-- Fuel-efficient routing
-- Weather-aware routing
-- ETA calculation
-- Multi-waypoint planning
+## Development
 
-### Predictive Maintenance
-- AI-powered maintenance prediction
-- Failure pattern recognition
-- Cost optimization
-- Downtime reduction
+### Running Locally
+```bash
+npm run dev
+```
 
-## Testes
+### Testing
+```bash
+npm run test fleet
+```
 
-Localização: 
-- `tests/fleet-manager.spec.ts`
-- `tests/fleet-ai.test.ts`
+## Contributing
 
-## Consolidação
+When contributing to this module:
 
-**PATCH 191**: Consolidou módulos `maritime` e `maritime-supremo` em `fleet`
+1. Follow the existing code structure
+2. Add tests for new features
+3. Update this documentation
+4. Ensure TypeScript compilation passes
 
-Redirects configurados:
-- `/maritime` → `/fleet`
-- `/maritime-supremo` → `/fleet`
+## Module Files
 
-## Última Atualização
+```
+README.md
+index.tsx
+```
 
-**Data**: 2025-10-29  
-**Versão**: 191.0  
-**Status**: Consolidado e Ativo
+---
+
+*Generated on: 2025-11-04T00:00:21.099Z*
+*Generator: PATCH 622 Documentation System*
