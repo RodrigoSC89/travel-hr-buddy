@@ -85,6 +85,17 @@ const TravelIntelligence = safeLazyImport(() => import("@/modules/travel-intelli
 // const ISMAudits = safeLazyImport(() => import("@/modules/ism-audits"), "ISMAudits"); // Temporarily disabled
 const PreOvidInspection = safeLazyImport(() => import("@/pages/admin/pre-ovid-inspection"));
 
+// PATCH 650-653: Maintenance and Safety Modules
+const MaintenancePlannerPage = safeLazyImport(() => import("@/pages/maintenance/planner"));
+const MaintenanceHistory = safeLazyImport(() => import("@/pages/maintenance/history"));
+const MaintenanceAnalytics = safeLazyImport(() => import("@/pages/maintenance/analytics"));
+const PEODPSimulation = safeLazyImport(() => import("@/pages/safety/peo-dp-simulation"));
+const PEODPLogs = safeLazyImport(() => import("@/pages/safety/peo-dp-logs"));
+const SGSOFindings = safeLazyImport(() => import("@/pages/compliance/sgso-findings"));
+const ISMAuditDashboard = safeLazyImport(() => import("@/pages/audits/ism-dashboard"));
+const ISMAuditFindings = safeLazyImport(() => import("@/pages/audits/ism-findings"));
+const ISMAuditChecklists = safeLazyImport(() => import("@/pages/audits/ism-checklists"));
+
 // PATCH 540 Fase 4: Admin pages bundled (17 → 1 import)
 const APITester = AdminBundle.APITester;
 const APIStatus = AdminBundle.APIStatus;
@@ -674,6 +685,22 @@ function App() {
                       <Route path="/forecast/global" element={<ForecastGlobal />} />
                       <Route path="/forecast-global" element={<ForecastGlobal />} />
                       <Route path="/maintenance" element={<MaintenanceDashboard />} />
+                      {/* PATCH 650: Maintenance Planner Module */}
+                      <Route path="/maintenance/planner" element={<MaintenancePlannerPage />} />
+                      <Route path="/maintenance/history" element={<MaintenanceHistory />} />
+                      <Route path="/maintenance/analytics" element={<MaintenanceAnalytics />} />
+                      {/* PATCH 651: PEO-DP Module */}
+                      <Route path="/safety/peo-dp" element={<PEODP />} />
+                      <Route path="/safety/peo-dp/simulation" element={<PEODPSimulation />} />
+                      <Route path="/safety/peo-dp/logs" element={<PEODPLogs />} />
+                      {/* PATCH 652: SGSO Module */}
+                      <Route path="/compliance/sgso" element={<SGSO />} />
+                      <Route path="/compliance/sgso/audit" element={<SGSOAuditPage />} />
+                      <Route path="/compliance/sgso/findings" element={<SGSOFindings />} />
+                      {/* PATCH 653: ISM Audit Module */}
+                      <Route path="/audits/ism" element={<ISMAuditDashboard />} />
+                      <Route path="/audits/ism/findings" element={<ISMAuditFindings />} />
+                      <Route path="/audits/ism/checklists" element={<ISMAuditChecklists />} />
                       <Route path="/compliance" element={<ComplianceHub />} />
                       <Route path="/compliance/pre-psc" element={<PrePSCDashboard />} />
                       <Route path="/control-hub" element={<ControlHub />} />

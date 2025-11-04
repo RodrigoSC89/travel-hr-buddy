@@ -1,77 +1,103 @@
-# Maintenance Planner Module
+# Module: maintenance-planner
 
-## Overview
-
-The Maintenance Planner module is part of the Nautilus One system.
+## 📌 Objetivo
+Gerenciar de forma inteligente as manutenções **preventivas**, **corretivas** e **preditivas** de sistemas, equipamentos e sensores embarcados no Nautilus One.
 
 ## Status
 
 - **Active**: ✅ Yes
-- **Components**: 1
-- **Has Tests**: ❌ No
-- **Has Documentation**: ❌ No
+- **Components**: 3 Pages + Dashboard
+- **Has Tests**: ✅ Yes (Playwright)
+- **Has Documentation**: ✅ Yes
+- **AI Integration**: ✅ Yes
+- **LLM Prompts**: ✅ Registered
 
-## Module Structure
+## 🧩 Funcionalidades
+- Agendamento automático por tempo, uso ou sensor
+- Geração de ordens de serviço (OS)
+- Painel de criticidade e KPIs
+- Histórico de manutenção por ativo
+- Integração com sensores (MQTT) e alertas
+- Diagnóstico por IA (via ONNX ou API externa)
+- Exportação em PDF dos relatórios de manutenção
 
+## 🗃️ Tabelas Supabase
+- `maintenance_jobs` - Ordens de serviço
+- `equipment` - Equipamentos e ativos
+- `sensor_logs` - Dados de sensores
+- `maintenance_reports` - Relatórios de manutenção
+- `alerts` - Alertas automáticos
+
+## 🔗 Integrações
+- **MQTT**: Recebimento de alertas e dados de falhas
+- **Supabase**: Realtime + Edge Functions
+- **System Watchdog**: Para eventos críticos
+- **LLM**: Classificação automática de falhas
+
+## 🖥️ UI Pages
+- `/maintenance/planner` - Planejamento de manutenções
+- `/maintenance/history` - Histórico de manutenções
+- `/maintenance/analytics` - Analytics e KPIs
+
+## 🤖 LLM Prompts
+
+### Activation Prompt
 ```
-maintenance-planner/
-├── index.tsx          # Main module entry
-├── components/        # UI components
+"Ative o módulo de planejamento de manutenção. Desejo registrar manutenções preventivas e corretivas, receber sugestões baseadas em sensores e acessar histórico completo de falhas."
 ```
 
-## Key Features
-
-- Module-specific functionality
-- Integration with Supabase
-- Real-time updates
-- Responsive UI
-
-## Dependencies
-
-### Core Dependencies
-- React 18.3+
-- TypeScript 5.8+
-- Supabase Client
-
-### UI Components
-- Shadcn/ui components
-- Radix UI primitives
-- Lucide icons
+### Query Prompts
+- "Quais manutenções estão vencidas?"
+- "Mostre o histórico de manutenção do equipamento X"
+- "Qual equipamento precisa de atenção urgente?"
+- "Gere relatório de manutenções do último mês"
+- "Sugira ações preventivas baseadas nos sensores"
 
 ## Usage
 
 ```typescript
-import { MaintenancePlanner } from '@/modules/maintenance-planner';
-
-function App() {
-  return <MaintenancePlanner />;
-}
+// Navigate to maintenance planner
+import { useNavigate } from 'react-router-dom';
+const navigate = useNavigate();
+navigate('/maintenance/planner');
 ```
 
 ## Database Integration
 
-This module integrates with Supabase for data persistence.
-
-### Tables Used
-- (Automatically detected from code)
-
-## API Integration
-
-### Endpoints
-- REST API endpoints are defined in the services layer
-- Real-time subscriptions for live updates
-
-## Development
-
-### Running Locally
-```bash
-npm run dev
+### maintenance_jobs Table
+```typescript
+{
+  id: UUID
+  equipment_id: UUID
+  maintenance_type: string       // 'preventive', 'corrective', 'predictive'
+  priority: string               // 'critical', 'high', 'medium', 'low'
+  status: string                 // 'scheduled', 'in_progress', 'completed', 'overdue'
+  scheduled_date: timestamp
+  description: text
+  assigned_to: UUID
+  estimated_duration: integer
+  cost_estimate: decimal
+  created_at: timestamp
+  updated_at: timestamp
+}
 ```
 
-### Testing
+## Testing
+
+Test file: `tests/maintenance.spec.ts`
+
 ```bash
-npm run test maintenance-planner
+npm run test:e2e -- tests/maintenance.spec.ts
 ```
+
+## 📈 KPIs Tracked
+
+1. **MTBF** (Mean Time Between Failures)
+2. **MTTR** (Mean Time To Repair)
+3. **Maintenance Completion Rate**
+4. **Planned vs Unplanned Maintenance Ratio**
+5. **Cost per Equipment**
+6. **Equipment Availability**
 
 ## Contributing
 
@@ -82,13 +108,8 @@ When contributing to this module:
 3. Update this documentation
 4. Ensure TypeScript compilation passes
 
-## Module Files
-
-```
-index.tsx
-```
-
 ---
 
-*Generated on: 2025-11-04T00:00:21.103Z*
-*Generator: PATCH 622 Documentation System*
+*Generated on: 2025-11-04T22:18:00.000Z*
+*Generator: PATCH 650 - Maintenance Planner Implementation*
+*Version: 1.0*
