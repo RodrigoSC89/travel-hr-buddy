@@ -14,6 +14,10 @@
 import { readFileSync, readdirSync, statSync, existsSync } from 'fs';
 import { join, relative } from 'path';
 
+// Configuration constants
+const EXCESSIVE_ANY_THRESHOLD = 10;
+const LARGE_FILE_THRESHOLD = 800;
+
 interface Issue {
   severity: 'critical' | 'warning' | 'info';
   category: string;
@@ -162,7 +166,7 @@ function checkAnyUsage(filePath: string, content: string) {
   const lines = content.split('\n');
   const anyCount = (content.match(/:\s*any\b/g) || []).length;
   
-  if (anyCount > 10) {
+  if (anyCount > EXCESSIVE_ANY_THRESHOLD) {
     issues.push({
       severity: 'warning',
       category: 'Type Safety',
@@ -197,7 +201,7 @@ function checkConsoleStatements(filePath: string, content: string) {
 function checkComponentSize(filePath: string, content: string) {
   const lines = content.split('\n');
   
-  if (lines.length > 800) {
+  if (lines.length > LARGE_FILE_THRESHOLD) {
     issues.push({
       severity: 'warning',
       category: 'Component Size',

@@ -5,6 +5,11 @@
 
 import { test, expect } from '@playwright/test';
 
+/**
+ * Default timeout for E2E tests
+ */
+const DEFAULT_TIMEOUT = 10000;
+
 test.describe('Travel Search Module', () => {
   test.beforeEach(async ({ page }) => {
     // Navigate to travel search
@@ -17,19 +22,19 @@ test.describe('Travel Search Module', () => {
     
     // Verify search components are present
     const searchInputs = page.locator('input[type="search"], input[placeholder*="search" i]');
-    await expect(searchInputs.first()).toBeVisible({ timeout: 10000 });
+    await expect(searchInputs.first()).toBeVisible({ timeout: DEFAULT_TIMEOUT });
   });
 
   test('should have flight search functionality', async ({ page }) => {
     // Look for flight-related elements
     const flightElements = page.locator('text=/flight|airplane|plane/i').first();
-    await expect(flightElements).toBeVisible({ timeout: 10000 });
+    await expect(flightElements).toBeVisible({ timeout: DEFAULT_TIMEOUT });
   });
 
   test('should have hotel search functionality', async ({ page }) => {
     // Look for hotel-related elements
     const hotelElements = page.locator('text=/hotel|accommodation/i').first();
-    await expect(hotelElements).toBeVisible({ timeout: 10000 });
+    await expect(hotelElements).toBeVisible({ timeout: DEFAULT_TIMEOUT });
   });
 
   test('should allow date selection', async ({ page }) => {
@@ -43,7 +48,7 @@ test.describe('Travel Search Module', () => {
   test('should have search button', async ({ page }) => {
     // Find search button
     const searchButton = page.locator('button:has-text("Search"), button:has-text("Buscar"), button[type="submit"]').first();
-    await expect(searchButton).toBeVisible({ timeout: 10000 });
+    await expect(searchButton).toBeVisible({ timeout: DEFAULT_TIMEOUT });
   });
 
   test('should display loading state during search', async ({ page }) => {

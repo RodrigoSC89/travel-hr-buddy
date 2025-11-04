@@ -298,10 +298,16 @@ describe('Cross-Module Integration - Unit Tests', () => {
     });
 
     it('should handle null/undefined values gracefully', () => {
-      const safeGet = <T>(obj: any, path: string, defaultValue: T): T => {
+      const safeGet = <T>(obj: Record<string, unknown> | null | undefined, path: string, defaultValue: T): T => {
         try {
-          const value = path.split('.').reduce((acc, part) => acc?.[part], obj);
-          return value !== undefined && value !== null ? value : defaultValue;
+          if (!obj) return defaultValue;
+          const value = path.split('.').reduce<unknown>((acc, part) => {
+            if (acc && typeof acc === 'object') {
+              return (acc as Record<string, unknown>)[part];
+            }
+            return undefined;
+          }, obj);
+          return value !== undefined && value !== null ? (value as T) : defaultValue;
         } catch {
           return defaultValue;
         }

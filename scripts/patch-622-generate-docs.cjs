@@ -16,6 +16,16 @@ if (!fs.existsSync(DOCS_DIR)) {
 }
 
 /**
+ * Helper function to format module names
+ */
+function formatModuleName(moduleName: string): string {
+  return moduleName
+    .split('-')
+    .map(word => word.charAt(0).toUpperCase() + word.slice(1))
+    .join(' ');
+}
+
+/**
  * Extract information from module directory
  */
 function analyzeModule(modulePath, moduleName) {
@@ -60,10 +70,7 @@ function analyzeModule(modulePath, moduleName) {
  * Generate markdown documentation for a module
  */
 function generateModuleDoc(analysis) {
-  const moduleName = analysis.name
-    .split('-')
-    .map(word => word.charAt(0).toUpperCase() + word.slice(1))
-    .join(' ');
+  const moduleName = formatModuleName(analysis.name);
 
   let doc = `# ${moduleName} Module\n\n`;
   
@@ -261,7 +268,7 @@ function generateModuleIndex(modules) {
   Object.keys(categorized).sort().forEach(category => {
     index += `### ${category}\n\n`;
     categorized[category].sort().forEach(module => {
-      const title = module.split('-').map(w => w.charAt(0).toUpperCase() + w.slice(1)).join(' ');
+      const title = formatModuleName(module);
       index += `- [${title}](./${module}.md)\n`;
     });
     index += `\n`;
