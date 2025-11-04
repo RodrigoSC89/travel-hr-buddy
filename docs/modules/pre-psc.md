@@ -1,98 +1,216 @@
-# Pre Psc Module
+# Módulo: Pre-PSC (Port State Control)
 
-## Overview
+## ✅ Objetivo
 
-The Pre Psc module is part of the Nautilus One system.
+Sistema de preparação para inspeções de Port State Control (PSC) com checklist baseado em Paris MoU, análise de risco, IA preditiva para identificação de deficiências potenciais e relatórios de preparação.
 
-## Status
-
-- **Active**: ✅ Yes
-- **Components**: 5
-- **Has Tests**: ❌ No
-- **Has Documentation**: ✅ Yes
-
-## Module Structure
+## 📁 Estrutura de Arquivos
 
 ```
-pre-psc/
-├── index.tsx          # Main module entry
+src/modules/pre-psc/
+├── index.tsx                            # Entry point
+├── PrePSCForm.tsx                       # Formulário principal
+├── PSCAIAssistant.tsx                   # Assistente IA
+├── PSCAlertTrigger.ts                   # Sistema de alertas
+├── PSCScoreCalculator.ts                # Calculador de score
+
+src/modules/compliance/pre-psc/
+└── PrePSCForm.tsx                       # Formulário de conformidade
+
+tests/
+├── pre-psc.test.tsx                     # Unit tests
+└── e2e/
+    ├── pre-psc.spec.ts                  # E2E tests (existente)
+    └── playwright/
+        └── pre-psc.spec.ts              # Playwright tests (PATCH 638)
 ```
 
-## Key Features
+## 🛢️ Tabelas Supabase
 
-- Module-specific functionality
-- Integration with Supabase
-- Real-time updates
-- Responsive UI
+### `pre_psc_inspections`
+Registros de preparação para inspeção PSC.
 
-## Dependencies
+**Campos principais:**
+- `id`: UUID único
+- `vessel_id`: Referência à embarcação
+- `inspector_name`: Nome do inspetor interno
+- `port_country`: Porto/país da próxima inspeção
+- `inspection_date`: Data prevista
+- `checklist_version`: Versão do checklist (Paris, Tokyo, Caribbean MoU)
+- `completion_progress`: Progresso de conclusão (0-100)
+- `risk_score`: Score de risco (0-100)
+- `status`: draft, in_progress, completed, submitted
+- `created_at`: Timestamp
+- `updated_at`: Timestamp
 
-### Core Dependencies
-- React 18.3+
-- TypeScript 5.8+
-- Supabase Client
+### `pre_psc_checklist_items`
+Itens do checklist PSC por categoria.
 
-### UI Components
-- Shadcn/ui components
-- Radix UI primitives
-- Lucide icons
+**Campos principais:**
+- `id`: UUID único
+- `inspection_id`: Referência à inspeção
+- `category`: Certificates, Fire Safety, LSA, Navigation, etc.
+- `item_number`: Número do item
+- `item_description`: Descrição do item
+- `status`: not_started, compliant, deficiency, not_applicable
+- `comments`: Comentários/observações
+- `corrective_action`: Ação corretiva tomada
+- `created_at`: Timestamp
 
-## Usage
+### `psc_risk_factors`
+Fatores de risco identificados pela IA.
 
-```typescript
-import { PrePsc } from '@/modules/pre-psc';
+**Campos principais:**
+- `id`: UUID único
+- `inspection_id`: Referência à inspeção
+- `risk_type`: documentation, equipment, crew, operational
+- `risk_level`: low, medium, high, critical
+- `description`: Descrição do risco
+- `ai_suggestion`: Sugestão da IA
+- `mitigation_status`: planned, in_progress, completed
+- `created_at`: Timestamp
 
-function App() {
-  return <PrePsc />;
-}
+### `psc_deficiency_history`
+Histórico de deficiências PSC anteriores.
+
+**Campos principais:**
+- `id`: UUID único
+- `vessel_id`: Referência à embarcação
+- `inspection_date`: Data da inspeção PSC real
+- `port`: Porto onde ocorreu
+- `deficiency_code`: Código da deficiência
+- `description`: Descrição
+- `rectification_date`: Data de correção
+- `detained`: Boolean de detenção
+- `created_at`: Timestamp
+
+## 🔌 Integrações
+
+### Supabase Auth & Database
+- Autenticação de usuários
+- Armazenamento de checklists
+- Histórico de inspeções
+
+### AI Assistant
+- Análise de risco preditiva
+- Identificação de deficiências potenciais
+- Sugestões de ações corretivas
+- API: OpenAI GPT-4
+
+### Paris MoU / Tokyo MoU Data
+- Checklists oficiais
+- Códigos de deficiência
+- Estatísticas de inspeção (planejado)
+
+### Export Services
+- PDF de relatório de preparação
+- Checklist imprimível
+- Evidências de conformidade
+
+## 🧩 UI - Componentes
+
+### PrePSCForm
+- Formulário de inspeção estruturado
+- Categorias colapsáveis
+- Campos de status por item
+- Progress bar de conclusão
+- Botões de ação (Save Draft, Submit)
+
+### PSCAIAssistant
+- Chat IA para assistência
+- Análise de riscos em tempo real
+- Sugestões contextuais
+- Histórico de interações
+
+### PSCAlertTrigger
+- Alertas de deficiências potenciais
+- Notificações de itens críticos
+- Lembretes de prazos
+
+### PSCScoreCalculator
+- Cálculo automático de score
+- Visualização de risco
+- Comparação com histórico
+- Indicadores de preparação
+
+## 🔒 RLS Policies
+
+```sql
+-- Tripulação pode ver inspeções de seus navios
+CREATE POLICY "Crew can view vessel inspections"
+  ON pre_psc_inspections
+  FOR SELECT
+  USING (
+    vessel_id IN (
+      SELECT vessel_id FROM crew_assignments
+      WHERE user_id = auth.uid()
+    )
+  );
+
+-- Oficiais podem criar e editar inspeções
+CREATE POLICY "Officers can manage inspections"
+  ON pre_psc_inspections
+  FOR ALL
+  USING (
+    vessel_id IN (
+      SELECT vessel_id FROM crew_assignments
+      WHERE user_id = auth.uid() AND role IN ('captain', 'chief_officer')
+    )
+  );
 ```
 
-## Database Integration
+## 📊 Status Atual
 
-This module integrates with Supabase for data persistence.
+### ✅ Implementado
+- Formulário de preparação PSC
+- Checklist por categorias
+- Cálculo de score de risco
+- Assistente IA
+- Sistema de alertas
+- Histórico de deficiências
 
-### Tables Used
-- (Automatically detected from code)
+### ✅ Ativo no Sidebar
+- Rota: `/compliance/pre-psc`
 
-## API Integration
+### ✅ Testes Automatizados
+- Unit tests: `tests/pre-psc.test.tsx`
+- E2E tests: `tests/e2e/pre-psc.spec.ts`
+- Playwright tests: `tests/e2e/playwright/pre-psc.spec.ts` (PATCH 638)
 
-### Endpoints
-- REST API endpoints are defined in the services layer
-- Real-time subscriptions for live updates
+### 🟢 Pronto para Produção
 
-## Development
+## 📈 Melhorias Futuras
 
-### Running Locally
-```bash
-npm run dev
-```
+### Fase 2
+- **PSC Database Integration**: Integração com bancos de dados oficiais PSC
+- **Predictive Deficiencies**: Predição de deficiências baseada em histórico
+- **Mobile Checklist**: App móvel para checklist offline
 
-### Testing
-```bash
-npm run test pre-psc
-```
+### Fase 3
+- **Real PSC Data Sync**: Sincronização com dados reais de inspeções
+- **Fleet Benchmarking**: Comparação de preparação entre frota
+- **Automated Reporting**: Relatórios automáticos para autoridades
 
-## Contributing
+### Fase 4
+- **VR Training**: Treinamento em realidade virtual para PSC
+- **IoT Integration**: Integração com sensores para verificação automática
+- **Blockchain Certificates**: Certificados verificáveis em blockchain
 
-When contributing to this module:
+## 🔗 Referências
 
-1. Follow the existing code structure
-2. Add tests for new features
-3. Update this documentation
-4. Ensure TypeScript compilation passes
+### Paris MoU
+- Checklist oficial de inspeção
+- Códigos de deficiência
+- Estatísticas de detenções
 
-## Module Files
-
-```
-PSCAIAssistant.tsx
-PSCAlertTrigger.ts
-PSCScoreCalculator.ts
-PrePSCForm.tsx
-README.md
-index.tsx
-```
+### SOLAS, MARPOL, MLC
+- Convenções internacionais
+- Requisitos regulatórios
+- Certificações obrigatórias
 
 ---
 
-*Generated on: 2025-11-04T00:00:21.105Z*
-*Generator: PATCH 622 Documentation System*
+**Versão:** 1.0.0 (Múltiplos patches: 633-637)  
+**Data:** Novembro 2025  
+**Status:** ✅ Implementação Completa  
+**Testes:** ✅ PATCH 638 - Cobertura E2E e Unit
