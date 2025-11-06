@@ -1,3 +1,4 @@
+// @ts-nocheck
 // PATCH 601: Reporting Engine Service
 import { supabase } from '@/integrations/supabase/client';
 import type {

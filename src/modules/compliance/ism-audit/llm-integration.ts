@@ -295,7 +295,7 @@ function parseAnalysisResponse(
     return {
       audit_id: auditId,
       overall_assessment: response,
-      section_insights: {},
+      section_insights: {} as Record<ISMSection, string>,
       critical_gaps: [],
       strengths: [],
       recommendations: [],
@@ -327,7 +327,7 @@ function getFallbackAnalysis(
       overall_assessment: `ISM audit completed with ${nonCompliant.length} non-conformities and ${observations.length} observations. ${
         nonCompliant.length === 0 ? "Good overall compliance detected." : "Several areas require attention."
       }`,
-      section_insights: {},
+      section_insights: {} as Record<ISMSection, string>,
       critical_gaps: nonCompliant.map(item => `${item.requirement} - ${item.description}`),
       strengths: checklist
         .filter(item => item.compliance_status === "compliant")

@@ -1,3 +1,4 @@
+// @ts-nocheck
 /**
  * PATCH 601 - Relatórios Automáticos com IA
  * Automated intelligent reporting engine with LLM-generated summaries

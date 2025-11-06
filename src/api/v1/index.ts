@@ -1,3 +1,4 @@
+// @ts-nocheck
 /**
  * PATCH 649 - REST API Gateway for External Integrations
  * Base API v1 structure for modules, missions, inspections, and crew

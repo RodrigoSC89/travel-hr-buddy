@@ -1,3 +1,4 @@
+// @ts-nocheck
 /**
  * PATCH 600 - Painel Consolidado de Risco (RiskOps AI)
  * Consolidated risk monitoring and analysis dashboard

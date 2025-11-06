@@ -55,7 +55,7 @@ export default function SGSOFindings() {
   };
 
   return (
-    <ModulePageWrapper gradient="red">
+    <ModulePageWrapper gradient="orange">
       <ModuleHeader
         icon={AlertTriangle}
         title="Constatações SGSO"

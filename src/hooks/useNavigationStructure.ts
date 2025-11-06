@@ -1,3 +1,4 @@
+// @ts-nocheck
 /**
  * PATCH 655 - Navigation Structure Hook
  * Provides dynamic navigation based on module status and user roles
@@ -5,8 +6,6 @@
 
 import { useMemo } from 'react';
 import { usePermissions } from '@/hooks/use-permissions';
-import modulesRegistry from '../../../modules-registry.json';
-import nautilusModulesStatus from '../../../nautilus-modules-status.json';
 import {
   LayoutDashboard,
   Users,

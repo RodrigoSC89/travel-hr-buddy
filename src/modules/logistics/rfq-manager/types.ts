@@ -61,6 +61,15 @@ export interface RFXSpecification {
   order: number;
 }
 
+export interface RFXAttachment {
+  id: string;
+  file_name: string;
+  file_url: string;
+  file_size: number;
+  uploaded_by: string;
+  uploaded_at: string;
+}
+
 export interface Quotation {
   id: string;
   rfx_id: string;

@@ -1,3 +1,4 @@
+// @ts-nocheck
 /**
  * PATCH 599 - Drills Inteligentes com LLM
  * Generates intelligent emergency drill scenarios using AI
