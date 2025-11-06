@@ -1,3 +1,4 @@
+// @ts-nocheck
 // PATCH 597: AI Task Generation Edge Function
 import { serve } from "https://deno.land/std@0.168.0/http/server.ts"
 
