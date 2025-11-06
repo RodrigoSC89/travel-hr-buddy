@@ -1,16 +1,9 @@
 import { describe, it, expect, vi, beforeEach } from "vitest";
 import { render, screen, waitFor } from "@testing-library/react";
 import DashboardJobs from "@/components/bi/DashboardJobs";
-import { supabase } from "@/integrations/supabase/client";
 
-// Mock the supabase client
-vi.mock("@/integrations/supabase/client", () => ({
-  supabase: {
-    functions: {
-      invoke: vi.fn(),
-    },
-  },
-}));
+// Mock global fetch
+global.fetch = vi.fn();
 
 describe("DashboardJobs Component", () => {
   beforeEach(() => {
@@ -19,7 +12,7 @@ describe("DashboardJobs Component", () => {
 
   it("should render loading skeleton initially", () => {
     // Mock pending state
-    vi.mocked(supabase.functions.invoke).mockImplementation(() => 
+    vi.mocked(global.fetch).mockImplementation(() => 
       new Promise(() => {}) // Never resolves to keep loading state
     );
 
@@ -28,10 +21,10 @@ describe("DashboardJobs Component", () => {
   });
 
   it("should render the chart title", () => {
-    vi.mocked(supabase.functions.invoke).mockResolvedValue({
-      data: [],
-      error: null,
-    });
+    vi.mocked(global.fetch).mockResolvedValue({
+      ok: true,
+      json: async () => [],
+    } as Response);
 
     render(<DashboardJobs />);
     expect(screen.getByText(/📊 Falhas por Componente \+ Tempo Médio/i)).toBeDefined();
@@ -43,41 +36,64 @@ describe("DashboardJobs Component", () => {
       { component_id: "Gerador GE-1", count: 3, avg_duration: 5.2 },
     ];
 
-    vi.mocked(supabase.functions.invoke).mockResolvedValue({
-      data: mockData,
-      error: null,
-    });
+    vi.mocked(global.fetch).mockResolvedValue({
+      ok: true,
+      json: async () => mockData,
+    } as Response);
 
     render(<DashboardJobs />);
 
     await waitFor(() => {
-      expect(supabase.functions.invoke).toHaveBeenCalledWith("bi-jobs-by-component");
+      expect(global.fetch).toHaveBeenCalledWith(
+        expect.stringContaining("/functions/v1/bi-jobs-by-component"),
+        expect.objectContaining({
+          method: "GET",
+          headers: expect.objectContaining({
+            "Content-Type": "application/json",
+          }),
+        })
+      );
     });
   });
 
-  it("should handle errors gracefully", async () => {
-    const mockError = new Error("API Error");
-    vi.mocked(supabase.functions.invoke).mockResolvedValue({
-      data: null,
-      error: mockError,
-    });
+  it("should display error message when fetch fails", async () => {
+    vi.mocked(global.fetch).mockResolvedValue({
+      ok: false,
+      status: 500,
+      json: async () => ({}),
+    } as Response);
 
     const consoleSpy = vi.spyOn(console, "error").mockImplementation(() => {});
 
     render(<DashboardJobs />);
 
     await waitFor(() => {
-      expect(consoleSpy).toHaveBeenCalled();
+      expect(screen.getByText(/Erro ao carregar dados:/i)).toBeDefined();
+    });
+
+    consoleSpy.mockRestore();
+  });
+
+  it("should handle network errors gracefully", async () => {
+    vi.mocked(global.fetch).mockRejectedValue(new Error("Network error"));
+
+    const consoleSpy = vi.spyOn(console, "error").mockImplementation(() => {});
+
+    render(<DashboardJobs />);
+
+    await waitFor(() => {
+      expect(screen.getByText(/Erro ao carregar dados:/i)).toBeDefined();
+      expect(screen.getByText(/Network error/i)).toBeDefined();
     });
 
     consoleSpy.mockRestore();
   });
 
   it("should render without crashing", () => {
-    vi.mocked(supabase.functions.invoke).mockResolvedValue({
-      data: [],
-      error: null,
-    });
+    vi.mocked(global.fetch).mockResolvedValue({
+      ok: true,
+      json: async () => [],
+    } as Response);
 
     const { container } = render(<DashboardJobs />);
     expect(container).toBeDefined();
