@@ -1,5 +1,3 @@
-// @ts-nocheck
-// PATCH-601: Re-applied @ts-nocheck for build stability
 // PATCH 526 - Message Service Abstraction Layer
 // Centralized service for communication management with WebSocket support
 

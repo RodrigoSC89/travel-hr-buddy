@@ -1,5 +1,4 @@
 // PATCH 600: Risk Operations Service
-// @ts-nocheck
 import { supabase } from '@/integrations/supabase/client';
 import type {
   RiskOperation,

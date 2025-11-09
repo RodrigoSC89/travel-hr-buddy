@@ -1,4 +1,3 @@
-// @ts-nocheck
 /**
  * MMI Forecast Service
  * Real GPT-4 integration for maintenance forecasting

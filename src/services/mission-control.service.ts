@@ -1,5 +1,3 @@
-// @ts-nocheck
-// PATCH-601: Re-applied @ts-nocheck for build stability
 /**
  * PATCH 383: Mission Control - Tactical Planning Service
  * Service for mission planning, resource allocation, and real-time synchronization

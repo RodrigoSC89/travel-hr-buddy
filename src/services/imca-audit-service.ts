@@ -1,5 +1,3 @@
-// @ts-nocheck
-// PATCH-601: Re-applied @ts-nocheck for build stability
 import { supabase } from "@/integrations/supabase/client";
 import type { IMCAAuditReport, IMCAAuditInput } from "@/types/imca-audit";
 
