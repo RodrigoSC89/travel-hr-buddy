@@ -156,3 +156,371 @@ comment = "AI-generated explanations for training content and procedures"
 [functions.generate-training-quiz]
 verify_jwt = true
 comment = "Generate quiz questions for training modules with answer validation"
+
+# ============================================
+# AI & ASSISTANT FUNCTIONS (15 functions)
+# ============================================
+
+[functions.ai-chat]
+verify_jwt = true
+comment = "AI chat interface for Nautilus assistant"
+
+[functions.assistant-query]
+verify_jwt = true
+comment = "Process assistant queries with context and history"
+
+[functions.assistant-logs]
+verify_jwt = true
+comment = "Log assistant interactions for analytics"
+
+[functions.assistant-report-logs]
+verify_jwt = true
+comment = "Generate reports from assistant logs"
+
+[functions.generate-ai-report]
+verify_jwt = true
+comment = "Generate AI-powered analytical reports"
+
+[functions.generate-predictions]
+verify_jwt = true
+comment = "Generate predictive analytics and forecasts"
+
+[functions.smart-insights-generator]
+verify_jwt = true
+comment = "Generate smart insights from data patterns"
+
+[functions.crew-ai-insights]
+verify_jwt = true
+comment = "Generate AI insights for crew performance"
+
+[functions.intelligent-notifications]
+verify_jwt = true
+comment = "Send intelligent context-aware notifications"
+
+[functions.generate-recommendations]
+verify_jwt = true
+comment = "Generate AI recommendations for operations"
+
+[functions.process-document]
+verify_jwt = true
+comment = "Process and analyze documents with AI"
+
+[functions.rewrite-document]
+verify_jwt = true
+comment = "AI-powered document rewriting"
+
+[functions.rewrite-selection]
+verify_jwt = true
+comment = "Rewrite selected text with AI"
+
+[functions.rewrite-template]
+verify_jwt = true
+comment = "Rewrite templates with AI assistance"
+
+[functions.summarize-document]
+verify_jwt = true
+comment = "Generate document summaries with AI"
+
+# ============================================
+# TRAINING & LEARNING FUNCTIONS (5 functions)
+# ============================================
+
+[functions.generate-training-module]
+verify_jwt = true
+comment = "Generate complete training modules"
+
+[functions.generate-quiz]
+verify_jwt = true
+comment = "Generate quiz questions for assessments"
+
+[functions.generate-template]
+verify_jwt = true
+comment = "Generate document templates"
+
+[functions.crew-goal-tracker]
+verify_jwt = true
+comment = "Track crew goals and progress"
+
+[functions.crew-gamification]
+verify_jwt = true
+comment = "Gamification system for crew engagement"
+
+# ============================================
+# OPERATIONS & MONITORING FUNCTIONS (20 functions)
+# ============================================
+
+[functions.fleet-tracking]
+verify_jwt = true
+comment = "Real-time fleet tracking and monitoring"
+
+[functions.mmi-copilot]
+verify_jwt = true
+comment = "MMI AI copilot for maintenance assistance"
+
+[functions.mmi-os-create]
+verify_jwt = true
+comment = "Create MMI service orders"
+
+[functions.mmi-os-update]
+verify_jwt = true
+comment = "Update MMI service orders"
+
+[functions.mmi-job-postpone]
+verify_jwt = true
+comment = "Postpone MMI maintenance jobs"
+
+[functions.peotram-ai-analysis]
+verify_jwt = true
+comment = "AI analysis for PEOTRAM system"
+
+[functions.dp-intel-analyze]
+verify_jwt = true
+comment = "Dynamic Positioning intelligence analysis"
+
+[functions.dp-intel-feed]
+verify_jwt = true
+comment = "DP intelligence data feed"
+
+[functions.performance-monitor]
+verify_jwt = true
+comment = "Monitor system and vessel performance"
+
+[functions.dashboard-analytics]
+verify_jwt = true
+comment = "Generate dashboard analytics"
+
+[functions.bi-jobs-by-component]
+verify_jwt = true
+comment = "BI: Jobs analysis by component"
+
+[functions.bi-jobs-forecast]
+verify_jwt = true
+comment = "BI: Jobs forecast analytics"
+
+[functions.jobs-by-component]
+verify_jwt = true
+comment = "Analyze jobs by component"
+
+[functions.jobs-forecast]
+verify_jwt = true
+comment = "Forecast maintenance jobs"
+
+[functions.jobs-forecast-by-component]
+verify_jwt = true
+comment = "Forecast jobs by component"
+
+[functions.restore-analytics]
+verify_jwt = true
+comment = "Analytics for restore operations"
+
+[functions.travel-predictive-analysis]
+verify_jwt = true
+comment = "Predictive analysis for travel operations"
+
+[functions.iot-sensor-processing]
+verify_jwt = true
+comment = "Process IoT sensor data"
+
+[functions.system-validation]
+verify_jwt = true
+comment = "System validation and health checks"
+
+[functions.cron-status]
+verify_jwt = true
+comment = "Monitor cron job status"
+
+# ============================================
+# AUDIT & COMPLIANCE FUNCTIONS (10 functions)
+# ============================================
+
+[functions.auditorias-explain]
+verify_jwt = true
+comment = "Explain audit findings and requirements"
+
+[functions.auditorias-lista]
+verify_jwt = true
+comment = "List and filter audits"
+
+[functions.auditorias-plano]
+verify_jwt = true
+comment = "Generate audit action plans"
+
+[functions.audit-simulate]
+verify_jwt = true
+comment = "Simulate audit scenarios"
+
+[functions.evaluate-audit]
+verify_jwt = true
+comment = "Evaluate audit results with AI"
+
+[functions.export-audit-bundle]
+verify_jwt = true
+comment = "Export complete audit bundles"
+
+[functions.exportar-metricas]
+verify_jwt = true
+comment = "Export metrics and KPIs"
+
+[functions.imca-audit-generator]
+verify_jwt = true
+comment = "Generate IMCA compliance audits"
+
+[functions.resumo-auditorias-api]
+verify_jwt = true
+comment = "API for audit summaries"
+
+[functions.send-auditoria-report]
+verify_jwt = true
+comment = "Send audit reports via email"
+
+# ============================================
+# CHECKLIST & DOCUMENT FUNCTIONS (5 functions)
+# ============================================
+
+[functions.checklist-ai-analysis]
+verify_jwt = true
+comment = "AI analysis of checklists"
+
+[functions.generate-checklist]
+verify_jwt = true
+comment = "Generate checklists from templates"
+
+[functions.summarize-checklist]
+verify_jwt = true
+comment = "Summarize checklist results"
+
+[functions.generate-document]
+verify_jwt = true
+comment = "Generate documents from templates"
+
+[functions.achievement-system]
+verify_jwt = true
+comment = "Track achievements and badges"
+
+# ============================================
+# INTEGRATIONS & EXTERNAL SERVICES (12 functions)
+# ============================================
+
+[functions.amadeus-search]
+verify_jwt = true
+comment = "Search Amadeus travel services"
+
+[functions.sync-starfix]
+verify_jwt = false
+comment = "Sync data with Starfix system"
+
+[functions.weather-integration]
+verify_jwt = true
+comment = "Weather data integration"
+
+[functions.maritime-weather]
+verify_jwt = true
+comment = "Maritime-specific weather data"
+
+[functions.space-weather-status]
+verify_jwt = true
+comment = "Space weather status for GNSS"
+
+[functions.ionosphere-processor]
+verify_jwt = true
+comment = "Process ionosphere data for positioning"
+
+[functions.maritime-communication]
+verify_jwt = true
+comment = "Maritime communication systems"
+
+[functions.eleven-labs-voice]
+verify_jwt = true
+comment = "ElevenLabs voice synthesis"
+
+[functions.text-to-speech]
+verify_jwt = true
+comment = "Text to speech conversion"
+
+[functions.voice-to-text]
+verify_jwt = true
+comment = "Voice to text transcription"
+
+[functions.realtime-voice]
+verify_jwt = true
+comment = "Real-time voice communication"
+
+[functions.realtime-voice-session]
+verify_jwt = true
+comment = "Manage real-time voice sessions"
+
+# ============================================
+# WORKFLOW & AUTOMATION FUNCTIONS (5 functions)
+# ============================================
+
+[functions.create-workflow]
+verify_jwt = true
+comment = "Create automation workflows"
+
+[functions.workflow-steps]
+verify_jwt = true
+comment = "Manage workflow steps"
+
+[functions.workflows-copilot-suggest]
+verify_jwt = true
+comment = "AI suggestions for workflow optimization"
+
+[functions.alerting]
+verify_jwt = true
+comment = "Alert management system"
+
+[functions.daily-restore-report]
+verify_jwt = false
+comment = "Daily restore report generation"
+
+# ============================================
+# MONITORING & PRICING FUNCTIONS (3 functions)
+# ============================================
+
+[functions.monitor-prices]
+verify_jwt = true
+comment = "Monitor price changes"
+
+[functions.check-price]
+verify_jwt = true
+comment = "Check current prices"
+
+[functions.mapbox-token]
+verify_jwt = true
+comment = "Manage Mapbox tokens"
+
+# ============================================
+# CRON JOB FUNCTIONS (Already configured above)
+# ============================================
+
+[functions.check-certificate-expiry]
+verify_jwt = false
+comment = "Check certificate expiration dates"
+
+[functions.forecast-risks-cron]
+verify_jwt = false
+comment = "Forecast risks via cron"
+
+[functions.send-chart-report]
+verify_jwt = false
+comment = "Send chart reports"
+
+[functions.send-monthly-sgso]
+verify_jwt = false
+comment = "Send monthly SGSO reports"
+
+[functions.send-dashboard-report]
+verify_jwt = false
+comment = "Send dashboard reports"
+
+[functions.send-restore-dashboard]
+verify_jwt = false
+comment = "Send restore dashboard"
+
+# ============================================
+# PUBLIC & UTILITY FUNCTIONS (2 functions)
+# ============================================
+
+[functions.public-api]
+verify_jwt = false
+comment = "Public API endpoints"
