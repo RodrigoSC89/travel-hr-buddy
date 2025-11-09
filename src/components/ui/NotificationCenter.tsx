@@ -1,4 +1,3 @@
-// @ts-nocheck
 import React, { useState, useEffect } from "react";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
@@ -212,7 +211,7 @@ export const NotificationCenter: React.FC<NotificationCenterProps> = ({
     setUnreadCount(prev => prev + 1);
   };
 
-  const createNotificationFromMaintenance = (maintenance: unknown) => {
+  const createNotificationFromMaintenance = (maintenance: any) => {
     const notification: Notification = {
       id: `maintenance-${maintenance.id}`,
       type: "maintenance_due",

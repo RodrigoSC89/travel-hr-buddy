@@ -1,4 +1,3 @@
-// @ts-nocheck
 import React, { useState, useMemo } from "react";
 import { cn } from "@/lib/utils";
 import { 
@@ -46,7 +45,7 @@ export interface DataTableProps<T = any> {
     delete?: (row: T) => void;
     custom?: Array<{
       label: string;
-      icon?: React.ComponentType<unknown>;
+      icon?: React.ComponentType<{ className?: string }>;
       action: (row: T) => void;
       color?: string;
     }>;
