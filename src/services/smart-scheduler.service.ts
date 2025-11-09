@@ -1,4 +1,5 @@
 // PATCH 597: Smart Scheduler Service
+// @ts-nocheck - Tabela scheduled_tasks criada, aguardando aplicação no Supabase
 import { supabase } from '@/integrations/supabase/client';
 import type { 
   ScheduledTask, 
