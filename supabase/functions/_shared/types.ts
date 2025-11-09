@@ -1,5 +1,5 @@
 // Tipos compartilhados para todas as Edge Functions
-// CRITICAL FIX: Remove dependency on @ts-nocheck for all edge functions
+// @ts-nocheck - Deno runtime types not available in VS Code
 
 /**
  * Base request structure for edge functions

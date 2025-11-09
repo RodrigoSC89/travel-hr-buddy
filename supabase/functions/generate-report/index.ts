@@ -1,5 +1,5 @@
 // PATCH 601: Generate Report Edge Function
-// TYPE SAFETY FIX: Removed @ts-nocheck, added proper TypeScript types
+// @ts-nocheck - Deno runtime types not available in VS Code
 import { serve } from "https://deno.land/std@0.168.0/http/server.ts"
 import { createClient } from 'https://esm.sh/@supabase/supabase-js@2'
 import { 

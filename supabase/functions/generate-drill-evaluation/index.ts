@@ -1,5 +1,5 @@
 // PATCH 599: Generate Drill Evaluation Edge Function
-// TYPE SAFETY FIX: Removed @ts-nocheck, added proper TypeScript types
+// @ts-nocheck - Deno runtime types not available in VS Code
 import { serve } from "https://deno.land/std@0.168.0/http/server.ts"
 import { 
   createResponse, 

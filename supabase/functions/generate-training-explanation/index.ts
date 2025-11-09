@@ -1,4 +1,5 @@
 // PATCH 598: Generate Training Explanation Edge Function
+// @ts-nocheck - Deno runtime types not available in VS Code
 import { serve } from "https://deno.land/std@0.168.0/http/server.ts"
 import {
   createResponse,
