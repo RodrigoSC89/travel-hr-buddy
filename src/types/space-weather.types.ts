@@ -312,6 +312,23 @@ export interface ROTIData {
 export type SpaceWeatherRiskLevel = 'GREEN' | 'AMBER' | 'RED';
 
 /**
+ * Space Weather Thresholds
+ */
+export interface SpaceWeatherThresholds {
+  kp_amber: number;
+  kp_red: number;
+  solar_wind_speed_amber: number;
+  solar_wind_speed_red: number;
+  bz_amber: number;
+  bz_red: number;
+  pdop_amber: number;
+  pdop_red: number;
+  min_satellites_amber: number;
+  min_satellites_red: number;
+  tec_anomaly_factor: number;
+}
+
+/**
  * Space Weather Status (agregado de todas as fontes)
  */
 export interface SpaceWeatherStatus {

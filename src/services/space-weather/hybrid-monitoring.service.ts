@@ -225,7 +225,12 @@ export class HybridSpaceWeatherService {
       kp_forecast_24h: statusResponse.kp,
       active_alerts: [],
       solar_wind_speed: 0, // DP ASOG não expõe (usa só Kp)
+      solar_wind_density: 0, // DP ASOG não expõe
       bz_gsm: 0,
+      
+      // Ionosphere
+      tec_current: 0, // DP ASOG não expõe TEC diretamente
+      tec_anomaly: false,
       
       // GNSS data
       pdop_current: statusResponse.worst_pdop,

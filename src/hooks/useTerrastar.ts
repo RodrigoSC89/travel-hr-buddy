@@ -25,7 +25,12 @@ export function useTerrastar(vesselId?: string) {
   const [ionosphereData, setIonosphereData] = useState<TerrastarIonosphereData | null>(null);
   const [activeAlerts, setActiveAlerts] = useState<TerrastarAlert[]>([]);
   const [correction, setCorrection] = useState<TerrastarCorrection | null>(null);
-  const [serviceStatus, setServiceStatus] = useState({
+  const [serviceStatus, setServiceStatus] = useState<{
+    available: boolean;
+    service_level: string;
+    latency_ms: number;
+    message?: string;
+  }>({
     available: false,
     service_level: 'UNKNOWN',
     latency_ms: 0,

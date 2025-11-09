@@ -45,7 +45,7 @@ export interface SpaceWeatherThresholds {
   tec_anomaly_factor: number; // default: 1.5 (150% of expected)
 }
 
-const DEFAULT_THRESHOLDS: SpaceWeatherThresholds = {
+export const DEFAULT_THRESHOLDS: SpaceWeatherThresholds = {
   kp_amber: 5,
   kp_red: 7,
   solar_wind_speed_amber: 500,

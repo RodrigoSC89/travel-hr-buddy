@@ -135,6 +135,8 @@ export interface ErrorContext {
   component?: string;
   action?: string;
   userId?: string;
+  status?: number;
+  code?: string;
   metadata?: Record<string, any>;
 }
 
