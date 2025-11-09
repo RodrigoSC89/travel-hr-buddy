@@ -9,6 +9,29 @@
 -- que estavam vulneráveis segundo relatório de segurança do Lovable
 
 -- ============================================
+-- REMOVER FUNÇÕES ANTIGAS (se existirem)
+-- ============================================
+DROP FUNCTION IF EXISTS public.cleanup_old_logs() CASCADE;
+DROP FUNCTION IF EXISTS public.create_default_branding() CASCADE;
+DROP FUNCTION IF EXISTS public.create_session_token(uuid) CASCADE;
+DROP FUNCTION IF EXISTS public.detect_reservation_conflicts() CASCADE;
+DROP FUNCTION IF EXISTS public.generate_crew_ai_recommendations(uuid) CASCADE;
+DROP FUNCTION IF EXISTS public.get_active_sessions() CASCADE;
+DROP FUNCTION IF EXISTS public.get_reservation_stats(date, date) CASCADE;
+DROP FUNCTION IF EXISTS public.handle_new_user() CASCADE;
+DROP FUNCTION IF EXISTS public.jobs_trend_by_month(integer) CASCADE;
+DROP FUNCTION IF EXISTS public.match_mmi_jobs(jsonb) CASCADE;
+DROP FUNCTION IF EXISTS public.revoke_session_token(text) CASCADE;
+DROP FUNCTION IF EXISTS public.update_audit_non_conformities_count() CASCADE;
+DROP FUNCTION IF EXISTS public.update_channel_stats() CASCADE;
+DROP FUNCTION IF EXISTS public.update_context_snapshot_timestamp() CASCADE;
+DROP FUNCTION IF EXISTS public.update_conversation_last_message() CASCADE;
+DROP FUNCTION IF EXISTS public.update_crew_updated_at() CASCADE;
+DROP FUNCTION IF EXISTS public.update_maritime_certificate_status() CASCADE;
+DROP FUNCTION IF EXISTS public.update_updated_at_column() CASCADE;
+DROP FUNCTION IF EXISTS public.validate_email_format() CASCADE;
+
+-- ============================================
 -- FUNÇÃO 1: cleanup_old_logs
 -- ============================================
 CREATE OR REPLACE FUNCTION public.cleanup_old_logs()
