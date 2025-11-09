@@ -1,5 +1,4 @@
 // PATCH 599: Smart Drills Service
-// @ts-nocheck - Tabelas criadas, aguardando aplicação no Supabase
 import { supabase } from '@/integrations/supabase/client';
 import type {
   SmartDrill,

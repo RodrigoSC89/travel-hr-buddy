@@ -4,7 +4,6 @@
  * and generates contextual training for crew members
  */
 
-// @ts-nocheck - Waiting for Supabase types to be regenerated with new tables
 import { supabase } from '@/integrations/supabase/client';
 
 export interface NoncomplianceFinding {
