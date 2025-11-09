@@ -1,4 +1,3 @@
-// @ts-nocheck
 /**
  * PATCH 601 - Relatórios Automáticos com IA
  * Automated intelligent reporting engine with LLM-generated summaries
@@ -268,7 +267,7 @@ async function generateAISummary(
   recommendations: string[];
 }> {
   try {
-    const apiKey = import.meta.env.VITE_OPENAI_API_KEY;
+    const apiKey = (import.meta as any).env.VITE_OPENAI_API_KEY as string;
     
     if (!apiKey) {
       throw new Error("OpenAI API key not configured");

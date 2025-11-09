@@ -1,19 +1,64 @@
-// @ts-nocheck
 // PATCH 601: Generate Report Edge Function
+// TYPE SAFETY FIX: Removed @ts-nocheck, added proper TypeScript types
 import { serve } from "https://deno.land/std@0.168.0/http/server.ts"
 import { createClient } from 'https://esm.sh/@supabase/supabase-js@2'
+import { 
+  createResponse, 
+  EdgeFunctionError, 
+  validateRequestBody, 
+  handleCORS,
+  getEnvVar,
+  safeJSONParse,
+  log
+} from '../_shared/types.ts'
 
-const corsHeaders = {
-  'Access-Control-Allow-Origin': '*',
-  'Access-Control-Allow-Headers': 'authorization, x-client-info, apikey, content-type',
+interface GenerateReportRequest {
+  template_id?: string
+  report_type: 'inspection' | 'risk' | 'tasks' | 'compliance'
+  title: string
+  period_start?: string
+  period_end?: string
+  vessel_id?: string
+  module?: string
+  format?: 'pdf' | 'docx' | 'html'
+  parameters?: Record<string, unknown>
 }
 
-serve(async (req) => {
+interface ReportStatistics {
+  total_items: number
+  critical_items: number
+  completed_items: number
+}
+
+interface ReportResponse {
+  executive_summary: string
+  key_findings: string[]
+  detailed_analysis: string
+  recommendations: string[]
+  conclusion: string
+  statistics: ReportStatistics
+}
+
+interface OpenAIResponse {
+  choices: Array<{
+    message: {
+      content: string
+    }
+  }>
+}
+
+serve(async (req: Request): Promise<Response> => {
   if (req.method === 'OPTIONS') {
-    return new Response('ok', { headers: corsHeaders })
+    return handleCORS()
   }
 
+  const requestId = crypto.randomUUID()
+  log('info', 'Generate report request received', { requestId })
+
   try {
+    const body = await req.json() as GenerateReportRequest
+    validateRequestBody(body as unknown as Record<string, unknown>, ['report_type', 'title'])
+    
     const { 
       template_id, 
       report_type, 
@@ -24,22 +69,17 @@ serve(async (req) => {
       module, 
       format = 'pdf',
       parameters 
-    } = await req.json()
+    } = body
 
-    const openaiApiKey = Deno.env.get('OPENAI_API_KEY')
-    if (!openaiApiKey) {
-      throw new Error('OpenAI API key not configured')
-    }
-
-    const supabaseUrl = Deno.env.get('SUPABASE_URL')!
-    const supabaseKey = Deno.env.get('SUPABASE_SERVICE_ROLE_KEY')!
+    const openaiApiKey = getEnvVar('OPENAI_API_KEY')
+    const supabaseUrl = getEnvVar('SUPABASE_URL')
+    const supabaseKey = getEnvVar('SUPABASE_SERVICE_ROLE_KEY')
     const supabase = createClient(supabaseUrl, supabaseKey)
 
     // Gather data based on report type
-    let contextData = {}
+    let contextData: Record<string, unknown> = {}
     
     if (report_type === 'inspection') {
-      // Get inspection data
       const { data: inspections } = await supabase
         .from('inspections')
         .select('*')
@@ -47,14 +87,12 @@ serve(async (req) => {
         .lte('created_at', period_end || new Date().toISOString())
       contextData = { inspections }
     } else if (report_type === 'risk') {
-      // Get risk data
       const { data: risks } = await supabase
         .from('risk_operations')
         .select('*')
         .order('risk_score', { ascending: false })
       contextData = { risks }
     } else if (report_type === 'tasks') {
-      // Get task data
       const { data: tasks } = await supabase
         .from('scheduled_tasks')
         .select('*')
@@ -95,6 +133,8 @@ Return your response in JSON format:
   }
 }`
 
+    log('info', 'Calling OpenAI API for report generation', { report_type, requestId })
+
     const response = await fetch('https://api.openai.com/v1/chat/completions', {
       method: 'POST',
       headers: {
@@ -120,13 +160,28 @@ Return your response in JSON format:
     })
 
     if (!response.ok) {
-      const error = await response.text()
-      console.error('OpenAI API error:', error)
-      throw new Error(`OpenAI API error: ${response.statusText}`)
+      const errorText = await response.text()
+      log('error', 'OpenAI API error', { status: response.status, error: errorText, requestId })
+      throw new EdgeFunctionError(
+        'OPENAI_API_ERROR',
+        `OpenAI API returned ${response.status}: ${response.statusText}`,
+        502,
+        { originalError: errorText }
+      )
     }
 
-    const data = await response.json()
-    const content = JSON.parse(data.choices[0].message.content)
+    const data = safeJSONParse<OpenAIResponse>(await response.text())
+    const contentText = data.choices[0]?.message?.content
+
+    if (!contentText) {
+      throw new EdgeFunctionError(
+        'INVALID_RESPONSE',
+        'OpenAI API returned empty response',
+        502
+      )
+    }
+
+    const content = safeJSONParse<ReportResponse>(contentText)
 
     // Store the generated report
     const { data: report, error: insertError } = await supabase
@@ -148,27 +203,45 @@ Return your response in JSON format:
       .single()
 
     if (insertError) {
-      throw new Error(`Failed to store report: ${insertError.message}`)
+      throw new EdgeFunctionError(
+        'DATABASE_ERROR',
+        `Failed to store report: ${insertError.message}`,
+        500,
+        { originalError: insertError }
+      )
     }
 
-    return new Response(
-      JSON.stringify({
-        report_id: report.id,
-        content,
-      }),
-      { 
-        headers: { ...corsHeaders, 'Content-Type': 'application/json' },
-        status: 200 
-      }
-    )
+    log('info', 'Report generated and stored successfully', { 
+      report_id: report.id,
+      report_type,
+      requestId 
+    })
+
+    return createResponse({
+      report_id: report.id,
+      content,
+    }, undefined, requestId)
+
   } catch (error) {
-    console.error('Error in generate-report:', error)
-    return new Response(
-      JSON.stringify({ error: error.message }),
-      { 
-        headers: { ...corsHeaders, 'Content-Type': 'application/json' },
-        status: 500
-      }
+    log('error', 'Error in report generation', { 
+      error: error instanceof Error ? error.message : String(error),
+      requestId
+    })
+
+    if (error instanceof EdgeFunctionError) {
+      return createResponse(undefined, error, requestId)
+    }
+
+    return createResponse(
+      undefined,
+      new EdgeFunctionError(
+        'INTERNAL_ERROR',
+        error instanceof Error ? error.message : 'An unexpected error occurred',
+        500,
+        { originalError: String(error) }
+      ),
+      requestId
     )
   }
 })
+

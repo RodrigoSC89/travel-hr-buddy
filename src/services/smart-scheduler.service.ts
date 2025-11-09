@@ -1,4 +1,3 @@
-// @ts-nocheck
 // PATCH 597: Smart Scheduler Service
 import { supabase } from '@/integrations/supabase/client';
 import type { 

@@ -1,24 +1,57 @@
-// @ts-nocheck
 // PATCH 599: Generate Drill Scenario Edge Function
+// TYPE SAFETY FIX: Removed @ts-nocheck, added proper TypeScript types
 import { serve } from "https://deno.land/std@0.168.0/http/server.ts"
+import { 
+  createResponse, 
+  EdgeFunctionError, 
+  validateRequestBody, 
+  handleCORS,
+  getEnvVar,
+  safeJSONParse,
+  log
+} from '../_shared/types.ts'
 
-const corsHeaders = {
-  'Access-Control-Allow-Origin': '*',
-  'Access-Control-Allow-Headers': 'authorization, x-client-info, apikey, content-type',
+interface DrillScenarioRequest {
+  drill_type: string
+  vessel_id?: string
+  context?: string
+  difficulty?: 'basic' | 'intermediate' | 'advanced' | 'expert'
 }
 
-serve(async (req) => {
+interface DrillScenarioResponse {
+  title: string
+  description: string
+  scenario: string
+  objectives: string[]
+  duration_minutes: number
+  roles_involved: string[]
+  equipment_needed: string[]
+  success_criteria: string[]
+}
+
+interface OpenAIResponse {
+  choices: Array<{
+    message: {
+      content: string
+    }
+  }>
+}
+
+serve(async (req: Request): Promise<Response> => {
   if (req.method === 'OPTIONS') {
-    return new Response('ok', { headers: corsHeaders })
+    return handleCORS()
   }
 
-  try {
-    const { drill_type, vessel_id, context, difficulty = 'intermediate' } = await req.json()
+  const requestId = crypto.randomUUID()
+  log('info', 'Drill scenario request received', { requestId })
 
-    const openaiApiKey = Deno.env.get('OPENAI_API_KEY')
-    if (!openaiApiKey) {
-      throw new Error('OpenAI API key not configured')
-    }
+  try {
+    const body = await req.json() as DrillScenarioRequest
+    validateRequestBody(body as unknown as Record<string, unknown>, ['drill_type'])
+    
+    const { drill_type, vessel_id, context, difficulty = 'intermediate' } = body
+
+    const openaiApiKey = getEnvVar('OPENAI_API_KEY')
 
     const prompt = `You are an expert maritime safety training coordinator. Generate a realistic emergency drill scenario.
 
@@ -49,6 +82,8 @@ Return your response in JSON format:
   "success_criteria": ["Criterion 1", "Criterion 2", ...]
 }`
 
+    log('info', 'Calling OpenAI API for drill scenario', { drill_type, requestId })
+
     const response = await fetch('https://api.openai.com/v1/chat/completions', {
       method: 'POST',
       headers: {
@@ -74,37 +109,57 @@ Return your response in JSON format:
     })
 
     if (!response.ok) {
-      const error = await response.text()
-      console.error('OpenAI API error:', error)
-      throw new Error(`OpenAI API error: ${response.statusText}`)
+      const errorText = await response.text()
+      log('error', 'OpenAI API error', { status: response.status, error: errorText, requestId })
+      throw new EdgeFunctionError(
+        'OPENAI_API_ERROR',
+        `OpenAI API returned ${response.status}: ${response.statusText}`,
+        502,
+        { originalError: errorText }
+      )
     }
 
-    const data = await response.json()
-    const content = data.choices[0].message.content
+    const data = safeJSONParse<OpenAIResponse>(await response.text())
+    const content = data.choices[0]?.message?.content
 
-    let result
-    try {
-      result = JSON.parse(content)
-    } catch (e) {
-      console.error('Failed to parse OpenAI response:', content)
-      throw new Error('Invalid response format from AI')
+    if (!content) {
+      throw new EdgeFunctionError(
+        'INVALID_RESPONSE',
+        'OpenAI API returned empty response',
+        502
+      )
     }
 
-    return new Response(
-      JSON.stringify(result),
-      { 
-        headers: { ...corsHeaders, 'Content-Type': 'application/json' },
-        status: 200 
-      }
-    )
+    const result = safeJSONParse<DrillScenarioResponse>(content)
+    
+    log('info', 'Drill scenario generated successfully', { 
+      drill_type, 
+      title: result.title,
+      requestId 
+    })
+
+    return createResponse<DrillScenarioResponse>(result, undefined, requestId)
+
   } catch (error) {
-    console.error('Error in generate-drill-scenario:', error)
-    return new Response(
-      JSON.stringify({ error: error.message }),
-      { 
-        headers: { ...corsHeaders, 'Content-Type': 'application/json' },
-        status: 500
-      }
+    log('error', 'Error in drill scenario generation', { 
+      error: error instanceof Error ? error.message : String(error),
+      requestId
+    })
+
+    if (error instanceof EdgeFunctionError) {
+      return createResponse(undefined, error, requestId)
+    }
+
+    return createResponse(
+      undefined,
+      new EdgeFunctionError(
+        'INTERNAL_ERROR',
+        error instanceof Error ? error.message : 'An unexpected error occurred',
+        500,
+        { originalError: String(error) }
+      ),
+      requestId
     )
   }
 })
+

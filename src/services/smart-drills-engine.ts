@@ -1,4 +1,3 @@
-// @ts-nocheck
 /**
  * PATCH 599 - Drills Inteligentes com LLM
  * Generates intelligent emergency drill scenarios using AI
@@ -64,7 +63,7 @@ export async function generateDrillScenario(
   historicalFailures: string[] = []
 ): Promise<DrillScenario> {
   try {
-    const apiKey = import.meta.env.VITE_OPENAI_API_KEY;
+    const apiKey = (import.meta as any).env.VITE_OPENAI_API_KEY as string;
     
     if (!apiKey) {
       throw new Error("OpenAI API key not configured");
@@ -264,7 +263,7 @@ export async function evaluateDrillPerformance(
   responses: DrillResponse[]
 ): Promise<void> {
   try {
-    const apiKey = import.meta.env.VITE_OPENAI_API_KEY;
+    const apiKey = (import.meta as any).env.VITE_OPENAI_API_KEY as string;
     
     if (!apiKey) {
       throw new Error("OpenAI API key not configured");
@@ -373,7 +372,7 @@ export async function generateCorrectiveActionPlan(
   executionId: string
 ): Promise<void> {
   try {
-    const apiKey = import.meta.env.VITE_OPENAI_API_KEY;
+    const apiKey = (import.meta as any).env.VITE_OPENAI_API_KEY as string;
     
     if (!apiKey) {
       throw new Error("OpenAI API key not configured");
@@ -390,7 +389,7 @@ export async function generateCorrectiveActionPlan(
     }
 
     // Analyze all mistakes
-    const allMistakes = responses.flatMap(r => r.mistakes || []);
+    const allMistakes = responses.flatMap((r: any) => r.mistakes || []);
     const uniqueMistakes = [...new Set(allMistakes)];
 
     const prompt = `

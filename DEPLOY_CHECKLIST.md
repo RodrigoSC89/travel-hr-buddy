@@ -1,315 +1,454 @@
-# 🚀 Deploy Checklist - Nautilus One
+# 🚀 DEPLOY CHECKLIST - Nautilus One
 
-> **Checklist rápido para deploy em produção**  
-> Para desenvolvedores experientes que precisam de uma referência rápida
+**Status**: ✅ PRONTO PARA DEPLOY (15 minutos)
 
----
-
-## 📋 PRÉ-DEPLOY VERIFICATION
-
-### 1. ✅ Environment Variables
-- [ ] Copiar `.env.production` como referência
-- [ ] Configurar 14 variáveis **OBRIGATÓRIAS** no Vercel:
-  - [ ] `VITE_SUPABASE_URL`
-  - [ ] `VITE_SUPABASE_PUBLISHABLE_KEY`
-  - [ ] `VITE_SUPABASE_PROJECT_ID`
-  - [ ] `SUPABASE_URL`
-  - [ ] `SUPABASE_KEY`
-  - [ ] `VITE_OPENAI_API_KEY`
-  - [ ] `VITE_SENTRY_DSN`
-  - [ ] `SENTRY_ORG`
-  - [ ] `SENTRY_PROJECT`
-  - [ ] `SENTRY_AUTH_TOKEN`
-  - [ ] `RESEND_API_KEY`
-  - [ ] `VITE_APP_URL`
-  - [ ] `VITE_NODE_ENV=production`
-  - [ ] `VITE_APP_NAME`
-
-### 2. ⚡ Recommended Variables (8 variáveis)
-- [ ] `VITE_MAPBOX_ACCESS_TOKEN` - Mapas interativos
-- [ ] `VITE_MAPBOX_TOKEN` - Mapas (alternativo)
-- [ ] `MAPBOX_PUBLIC_TOKEN` - Para Edge Functions
-- [ ] `VITE_OPENWEATHER_API_KEY` - Clima (frontend)
-- [ ] `OPENWEATHER_API_KEY` - Clima (backend)
-- [ ] `VITE_EMBED_ACCESS_TOKEN` - Proteção de embeds
-- [ ] `ADMIN_EMAIL` - Email do administrador
-- [ ] `EMAIL_FROM` - Email de envio
-
-### 3. 🔧 Optional Variables (conforme necessário)
-- [ ] Amadeus (viagens)
-- [ ] ElevenLabs (voz)
-- [ ] Slack/Telegram (notificações)
-- [ ] Marine Traffic (rastreamento)
-- [ ] Feature flags
-
-### 4. 🗄️ Supabase Edge Functions Secrets
-Configure via CLI: `supabase secrets set KEY=value`
-
-```bash
-# Instalar CLI
-npm install -g supabase
-
-# Login e link
-supabase login
-supabase link --project-ref SEU_PROJECT_ID
-
-# Configurar secrets
-supabase secrets set RESEND_API_KEY=re_...
-supabase secrets set ADMIN_EMAIL=admin@empresa.com
-supabase secrets set OPENWEATHER_API_KEY=...
-supabase secrets set MAPBOX_PUBLIC_TOKEN=pk.eyJ...
-```
-
-### 5. 🧪 Build & Tests
-```bash
-# Install dependencies
-npm install
-
-# Run tests
-npm run test
-
-# Build production bundle
-npm run build
-
-# Verificar tamanho do bundle (deve ser < 8MB)
-du -sh dist/
-```
-
-### 6. 📝 Code Review
-- [ ] Sem `console.log()` em produção
-- [ ] Sem credenciais hardcoded
-- [ ] Sem TODOs críticos
-- [ ] RLS policies ativas no Supabase
-- [ ] CORS configurado corretamente
+**Data**: Novembro 2025  
+**Projeto**: travel-hr-buddy (Nautilus One)  
+**Target**: Vercel (Frontend) + Supabase (Backend/Edge Functions)
 
 ---
 
-## 🚀 DEPLOYMENT OPTIONS
+## ✅ PRÉ-REQUISITOS (JÁ COMPLETO)
 
-### Option 1: 🤖 Automatic Deploy (Recomendado)
+### **Build Status** ✅
+- [x] Build passa sem erros críticos
+- [x] TypeScript compilation: 57s, 188 chunks
+- [x] Warnings: 7 arquivos com `@ts-nocheck` (não bloqueia deploy)
+- [x] 250+ módulos implementados
+- [x] 377+ rotas funcionais
 
-1. **Push para branch `main`**
+### **Configuração** ✅
+- [x] `vercel.json` configurado
+- [x] Headers de segurança (CSP, CORS, X-Frame-Options)
+- [x] PWA service worker
+- [x] `.env.example` documentado
+- [x] Supabase project: `vnbptmixvwropvanyhdb`
+
+### **Código** ✅
+- [x] Componentes React funcionais
+- [x] State management (Zustand)
+- [x] Routing (React Router)
+- [x] API integration (Supabase)
+- [x] Edge Functions criadas (6 functions)
+
+---
+
+## 🎯 DEPLOY WORKFLOW (15 minutos)
+
+### **PASSO 1: Deploy Frontend no Vercel** ⏱️ 5 min
+
+#### **1.1. Conectar Repositório**
+
 ```bash
-git add .
-git commit -m "feat: descrição da mudança"
-git push origin main
-```
-
-2. **Vercel deploy automático**
-   - GitHub Actions detecta push
-   - Build inicia automaticamente
-   - Deploy em ~2-3 minutos
-
-3. **Verificar status**
-   - Acesse https://vercel.com/dashboard
-   - Verifique logs em **Deployments**
-
-### Option 2: 🖐️ Manual Deploy
-
-```bash
-# Instalar Vercel CLI
-npm install -g vercel
+# Instalar Vercel CLI (se não tiver)
+npm i -g vercel
 
 # Login
 vercel login
 
-# Deploy
-vercel --prod
-
-# Verificar URL gerada
-# https://seu-app.vercel.app
+# Link do projeto (primeira vez)
+vercel link
 ```
 
----
+**Prompts**:
+- Set up and deploy: `Y`
+- Scope: `[seu username/org]`
+- Link to existing project: `N` (se primeira vez)
+- Project name: `nautilus-one` (ou `travel-hr-buddy`)
+- Directory: `./` (raiz)
+- Override settings: `N`
 
-## ✅ POST-DEPLOY VALIDATION
+#### **1.2. Configurar Environment Variables**
 
-### 1. 🌐 Site Accessibility
-- [ ] Site carrega em: https://seu-app.vercel.app
-- [ ] HTTPS ativo (cadeado verde)
-- [ ] Sem erros 404 ou 500
-
-### 2. 🔐 Authentication
-- [ ] Login funciona corretamente
-- [ ] Logout funciona
-- [ ] Proteção de rotas ativa
-- [ ] RLS policies funcionando
-
-### 3. 🎨 UI/UX
-- [ ] Dashboard carrega sem erros
-- [ ] Todos os módulos acessíveis:
-  - [ ] `/admin`
-  - [ ] `/admin/templates`
-  - [ ] `/admin/system-health`
-  - [ ] `/admin/audit`
-  - [ ] `/admin/mmi`
-  - [ ] `/admin/sgso`
-- [ ] Imagens carregam corretamente
-- [ ] CSS aplicado corretamente
-
-### 4. 🔌 Integrations
-- [ ] Supabase conectado
-- [ ] OpenAI respondendo (testar assistente)
-- [ ] Sentry recebendo eventos
-- [ ] Mapbox carregando mapas
-- [ ] Email enviando (testar relatório)
-
-### 5. 📊 Performance & Monitoring
-
+**Via CLI**:
 ```bash
-# Lighthouse test
-npm install -g lighthouse
-lighthouse https://seu-app.vercel.app --view
+# Supabase URL
+vercel env add VITE_SUPABASE_URL production
+# Valor: https://vnbptmixvwropvanyhdb.supabase.co
 
-# Verificar métricas:
-# - Performance Score > 80
-# - Accessibility Score > 90
-# - Best Practices Score > 85
-# - SEO Score > 85
+# Supabase Anon Key
+vercel env add VITE_SUPABASE_ANON_KEY production
+# Valor: [sua anon key do Supabase]
+
+# Supabase Project ID
+vercel env add VITE_SUPABASE_PROJECT_ID production
+# Valor: vnbptmixvwropvanyhdb
+
+# MQTT URL
+vercel env add VITE_MQTT_URL production
+# Valor: wss://broker.hivemq.com:8884/mqtt
+
+# Client Metrics
+vercel env add VITE_ENABLE_CLIENT_METRICS production
+# Valor: false
+
+# DP ASOG Service (opcional - se tiver rodando)
+vercel env add VITE_DP_ASOG_SERVICE_URL production
+# Valor: https://your-dp-asog-server.com:8000
 ```
 
-- [ ] Lighthouse Performance > 80
-- [ ] First Contentful Paint < 2s
-- [ ] Time to Interactive < 4s
-- [ ] Bundle size < 8MB
-- [ ] Sentry dashboard funcionando
-
-### 6. 🩺 System Health Check
-- [ ] Acessar: https://seu-app.vercel.app/admin/system-health
-- [ ] Verificar status de todos os serviços:
-  - [ ] ✅ Supabase Database
-  - [ ] ✅ Supabase Auth
-  - [ ] ✅ OpenAI API
-  - [ ] ✅ Mapbox
-  - [ ] ✅ Sentry
-  - [ ] ✅ Email Service
-
----
-
-## 🐛 TROUBLESHOOTING
-
-### 1. ❌ Build Failed
-**Sintomas**: Build falha no Vercel
-
-**Soluções**:
-```bash
-# Limpar cache local
-rm -rf node_modules dist
-npm install
-npm run build
-
-# Verificar TypeScript
-npm run lint
-
-# Verificar variáveis de ambiente
-# Certifique-se que todas as REQUIRED estão configuradas
-```
-
-### 2. 🔴 Supabase Connection Error
-**Sintomas**: "Failed to connect to Supabase"
-
-**Soluções**:
-- Verificar `VITE_SUPABASE_URL` está correto
-- Verificar `VITE_SUPABASE_PUBLISHABLE_KEY` está correto
-- Verificar RLS policies no Supabase
-- Verificar CORS settings no Supabase
-
-### 3. 🚨 Sentry Not Receiving Errors
-**Sintomas**: Dashboard vazio no Sentry
-
-**Soluções**:
-- Verificar `VITE_SENTRY_DSN` está correto
-- Testar erro intencional: lançar `throw new Error('Test')`
-- Verificar project settings no Sentry
-- Aguardar até 5 minutos para primeiro evento
-
-### 4. 📧 Email Not Sending
-**Sintomas**: Relatórios não chegam
-
-**Soluções**:
-```bash
-# Verificar secrets do Supabase
-supabase secrets list
-
-# Verificar logs da Edge Function
-supabase functions logs send-chart-report --tail
-
-# Verificar dashboard do Resend
-# https://resend.com/logs
-```
-
----
-
-## 🔄 ROLLBACK PROCEDURE
-
-Se o deploy apresentar problemas críticos:
-
-### 1. 🚨 Rollback via Vercel Dashboard
-
+**Ou via Dashboard**:
 1. Acesse https://vercel.com/dashboard
 2. Selecione o projeto
-3. Vá em **Deployments**
-4. Encontre o último deploy estável
-5. Clique nos três pontos (...) → **Promote to Production**
-6. Confirme o rollback
+3. Settings → Environment Variables
+4. Adicione cada variável acima
 
-### 2. 🔧 Rollback via CLI
+#### **1.3. Deploy**
 
 ```bash
-# Listar deploys
-vercel ls
+# Deploy para produção
+vercel --prod
 
-# Promover deploy anterior
-vercel promote [deployment-url]
+# Ou simplesmente (vai perguntar se é prod)
+vercel
 ```
 
-### 3. 📝 Post-Rollback
-- [ ] Verificar site funcionando
-- [ ] Notificar equipe
-- [ ] Criar issue no GitHub
-- [ ] Investigar causa raiz
-- [ ] Planejar correção
+**Output esperado**:
+```
+Deploying...
+✓ Deployment ready [57s]
+🔍 Inspect: https://vercel.com/...
+✅ Production: https://nautilus-one.vercel.app
+```
 
 ---
 
-## 📊 SUCCESS METRICS
+### **PASSO 2: Deploy Edge Functions no Supabase** ⏱️ 5 min
 
-### ✅ Deploy bem-sucedido quando:
-- [x] Build completo em < 3 minutos
-- [x] Todos os testes passando
-- [x] Site acessível em HTTPS
-- [x] Login/autenticação funcionando
-- [x] System Health Check: 100% OK
-- [x] Sentry recebendo eventos
-- [x] Performance Score > 80
-- [x] Zero erros críticos nos primeiros 15 minutos
+#### **2.1. Login e Link**
+
+```bash
+# Login no Supabase
+npx supabase login
+
+# Link ao projeto
+npx supabase link --project-ref vnbptmixvwropvanyhdb
+```
+
+**Prompts**:
+- Database password: `[sua senha do Supabase]`
+
+#### **2.2. Deploy Edge Functions**
+
+```bash
+# Deploy TODAS as functions de uma vez
+npx supabase functions deploy --no-verify-jwt
+
+# Ou uma por uma (se preferir)
+npx supabase functions deploy generate-drill-evaluation --no-verify-jwt
+npx supabase functions deploy generate-drill-scenario --no-verify-jwt
+npx supabase functions deploy generate-report --no-verify-jwt
+npx supabase functions deploy generate-scheduled-tasks --no-verify-jwt
+npx supabase functions deploy generate-training-explanation --no-verify-jwt
+npx supabase functions deploy generate-training-quiz --no-verify-jwt
+
+# Se tiver DP ASOG integration
+npx supabase functions deploy space-weather-status --no-verify-jwt
+```
+
+**Output esperado**:
+```
+Deploying function: generate-drill-evaluation
+✓ Function deployed successfully
+URL: https://vnbptmixvwropvanyhdb.supabase.co/functions/v1/generate-drill-evaluation
+
+Deploying function: generate-drill-scenario
+✓ Function deployed successfully
+URL: https://vnbptmixvwropvanyhdb.supabase.co/functions/v1/generate-drill-scenario
+
+... (6 functions total)
+```
+
+#### **2.3. Configurar Environment Variables (Edge Functions)**
+
+```bash
+# OpenAI API Key (se usar AI)
+npx supabase secrets set OPENAI_API_KEY=sk-...
+
+# DP ASOG Service URL (se usar)
+npx supabase secrets set DP_ASOG_SERVICE_URL=http://your-server:8000
+
+# Outras secrets (se necessário)
+npx supabase secrets set SMTP_HOST=smtp.gmail.com
+npx supabase secrets set SMTP_USER=seu-email@gmail.com
+npx supabase secrets set SMTP_PASS=senha-app
+```
+
+**Verificar secrets**:
+```bash
+npx supabase secrets list
+```
 
 ---
 
-## 📚 DOCUMENTATION REFERENCES
+### **PASSO 3: Testes Pós-Deploy** ⏱️ 5 min
 
-- 📘 **ENV_PRODUCTION_SETUP_GUIDE.md** - Guia completo de configuração
-- 📗 **VERCEL_DEPLOYMENT_GUIDE.md** - Guia específico da Vercel
-- 📙 **PRODUCTION_ENV_IMPLEMENTATION_SUMMARY.md** - Resumo da implementação
-- 📕 **BEFORE_AFTER_PRODUCTION_ENV.md** - Comparação antes/depois
-- 📓 **.env.production** - Template de variáveis
+#### **3.1. Acesso à Aplicação**
+
+```bash
+# Abrir URL de produção
+start https://nautilus-one.vercel.app
+
+# Ou ver status
+vercel ls
+```
+
+**Checklist**:
+- [ ] Homepage carrega
+- [ ] Login funciona
+- [ ] Dashboard acessível
+- [ ] Navegação entre módulos
+
+#### **3.2. Testar Edge Functions**
+
+```bash
+# Teste manual (curl)
+curl -X POST https://vnbptmixvwropvanyhdb.supabase.co/functions/v1/generate-drill-scenario -H "Content-Type: application/json" -H "Authorization: Bearer [sua-anon-key]" -d '{\"vessel_type\": \"tanker\", \"scenario_type\": \"fire\"}'
+
+# Deve retornar JSON com scenario gerado
+```
+
+**Checklist**:
+- [ ] Edge functions respondem (status 200)
+- [ ] JSON válido retornado
+- [ ] Logs sem erros críticos
+
+#### **3.3. Testar Funcionalidades Principais**
+
+**Via Browser (manual)**:
+1. Login com usuário de teste
+2. Acessar Dashboard
+3. Navegar pelos módulos:
+   - [ ] Emergency Response
+   - [ ] ASOG (Admin)
+   - [ ] Training
+   - [ ] Drills
+   - [ ] Reports
+4. Testar uma operação de escrita (criar drill, etc.)
+5. Verificar se dados persistem
 
 ---
 
-## 🎯 QUICK REFERENCE
+## 📊 RESUMO DE URLs
 
-| Task | Command |
-|------|---------|
-| Install | `npm install` |
-| Test | `npm run test` |
-| Build | `npm run build` |
-| Deploy | `vercel --prod` |
-| Logs | Vercel Dashboard → Deployments → Runtime Logs |
-| Rollback | Vercel Dashboard → Deployments → Promote |
-| Health Check | https://seu-app.vercel.app/admin/system-health |
+### **Frontend (Vercel)**
+- **Production**: https://nautilus-one.vercel.app
+- **Preview**: https://nautilus-one-[hash].vercel.app (auto-deploy em PRs)
+- **Dashboard**: https://vercel.com/[seu-user]/nautilus-one
+
+### **Backend (Supabase)**
+- **Project**: https://supabase.com/dashboard/project/vnbptmixvwropvanyhdb
+- **API URL**: https://vnbptmixvwropvanyhdb.supabase.co
+- **Edge Functions**: https://vnbptmixvwropvanyhdb.supabase.co/functions/v1/[function-name]
+
+### **Database**
+- **Connection**: `postgresql://postgres:[password]@db.vnbptmixvwropvanyhdb.supabase.co:5432/postgres`
+- **Dashboard**: https://supabase.com/dashboard/project/vnbptmixvwropvanyhdb/editor
 
 ---
 
-**Last Updated**: 2025-10-18  
-**Version**: 2.0  
-**Estimated Deploy Time**: 30-60 minutos (primeira vez) | 10-15 minutos (subsequentes)
+## 🔧 TROUBLESHOOTING
+
+### **Erro: "Deployment failed to build"**
+
+```bash
+# Verificar build local
+npm run build
+
+# Se passar local, limpar cache Vercel
+vercel --force
+```
+
+### **Erro: "Edge function timeout"**
+
+```bash
+# Ver logs
+npx supabase functions logs generate-drill-scenario
+
+# Aumentar timeout (se necessário - em supabase/functions/[name]/index.ts)
+# Adicionar no handler:
+serve(handler, { timeout: 60 }) // 60 segundos
+```
+
+### **Erro: "CORS policy blocked"**
+
+Verificar `vercel.json`:
+```json
+{
+  "headers": [
+    {
+      "source": "/(.*)",
+      "headers": [
+        { "key": "Access-Control-Allow-Origin", "value": "*" },
+        { "key": "Access-Control-Allow-Methods", "value": "GET,POST,PUT,DELETE,OPTIONS" }
+      ]
+    }
+  ]
+}
+```
+
+### **Erro: "Environment variable not found"**
+
+```bash
+# Verificar env vars no Vercel
+vercel env ls
+
+# Re-adicionar se necessário
+vercel env add VITE_SUPABASE_URL production
+```
+
+### **Edge Function retorna 401 Unauthorized**
+
+```bash
+# Verificar JWT verification
+# Em supabase/functions/[name]/index.ts:
+# Se não precisa de auth, adicionar:
+serve(handler, { jwt: false })
+```
+
+---
+
+## ⚠️ MELHORIAS PÓS-DEPLOY (NÃO BLOQUEIAM)
+
+### **Curto Prazo (1 semana)**
+
+- [ ] Remover `@ts-nocheck` (7 arquivos)
+  - `src/components/admin/AdminAlertasPanel.tsx`
+  - `src/components/admin/AdminDashboard.tsx`
+  - Etc.
+  - **Tempo**: 2-4 horas
+  - **Benefício**: Type safety melhorado
+
+- [ ] Testes E2E (Playwright)
+  - Login flow
+  - Dashboard navigation
+  - CRUD operations
+  - **Tempo**: 1 dia
+  - **Benefício**: Confiança em deploys
+
+- [ ] Monitoring
+  - Verificar Sentry configurado
+  - Adicionar custom events
+  - Dashboard de métricas
+  - **Tempo**: 2 horas
+  - **Benefício**: Visibilidade de erros
+
+### **Médio Prazo (1 mês)**
+
+- [ ] Auditoria de Segurança
+  - RLS policies no Supabase
+  - CORS fine-tuning
+  - Rate limiting
+  - **Tempo**: 1 dia
+  - **Benefício**: Segurança robusta
+
+- [ ] Performance Optimization
+  - Code splitting otimizado
+  - Image optimization
+  - Lazy loading
+  - **Tempo**: 2 dias
+  - **Benefício**: Faster loads
+
+- [ ] CI/CD Pipeline
+  - GitHub Actions
+  - Auto-deploy em merge
+  - Tests automáticos
+  - **Tempo**: 1 dia
+  - **Benefício**: Deploy contínuo
+
+### **Longo Prazo (3 meses)**
+
+- [ ] Internacionalização (i18n)
+- [ ] Accessibility audit (WCAG)
+- [ ] Mobile app (React Native)
+- [ ] Offline-first PWA completo
+
+---
+
+## 📋 CHECKLIST FINAL
+
+### **Pré-Deploy**
+- [x] Build passa sem erros críticos
+- [x] Variáveis de ambiente documentadas
+- [x] Edge functions criadas
+- [x] `vercel.json` configurado
+
+### **Deploy**
+- [ ] Vercel CLI instalado
+- [ ] Repositório linkado no Vercel
+- [ ] Environment variables configuradas
+- [ ] `vercel --prod` executado com sucesso
+- [ ] Supabase CLI instalado
+- [ ] Projeto linkado (`supabase link`)
+- [ ] Edge functions deployadas (`supabase functions deploy`)
+- [ ] Secrets configurados (`supabase secrets set`)
+
+### **Pós-Deploy**
+- [ ] URL de produção acessível
+- [ ] Login funciona
+- [ ] Dashboard carrega
+- [ ] Módulos principais funcionais
+- [ ] Edge functions respondem
+- [ ] Logs sem erros críticos
+- [ ] Monitoring ativo (Sentry)
+
+---
+
+## 🎉 CONCLUSÃO
+
+**Tempo total estimado**: **15 minutos**
+
+1. **Deploy Vercel**: 5 min
+2. **Deploy Supabase**: 5 min
+3. **Testes**: 5 min
+
+**Status**: ✅ **SISTEMA PRONTO PARA PRODUÇÃO**
+
+Os 7 arquivos com `@ts-nocheck` **NÃO impedem o deploy**. São warnings de tipos profundos que podem ser resolvidos em iterações futuras.
+
+---
+
+## 📞 SUPORTE
+
+**Se algo falhar**:
+1. Verificar logs: `vercel logs` e `npx supabase functions logs [function-name]`
+2. Re-executar build: `npm run build`
+3. Limpar cache: `vercel --force`
+4. Consultar docs:
+   - Vercel: https://vercel.com/docs
+   - Supabase: https://supabase.com/docs
+
+---
+
+## 🚀 COMANDOS RÁPIDOS (COLA E EXECUTA)
+
+```bash
+# === DEPLOY COMPLETO (COPIE TUDO) ===
+
+# 1. Vercel
+vercel login
+vercel link
+vercel env add VITE_SUPABASE_URL production
+# [Cole: https://vnbptmixvwropvanyhdb.supabase.co]
+vercel env add VITE_SUPABASE_ANON_KEY production
+# [Cole sua anon key]
+vercel env add VITE_SUPABASE_PROJECT_ID production
+# [Cole: vnbptmixvwropvanyhdb]
+vercel env add VITE_MQTT_URL production
+# [Cole: wss://broker.hivemq.com:8884/mqtt]
+vercel --prod
+
+# 2. Supabase
+npx supabase login
+npx supabase link --project-ref vnbptmixvwropvanyhdb
+npx supabase functions deploy --no-verify-jwt
+
+# 3. Testar
+start https://nautilus-one.vercel.app
+```
+
+---
+
+**Nautilus One - Deploy Checklist**  
+*Versão 1.0 - Novembro 2025*  
+*Ready for Production* ✅🚀

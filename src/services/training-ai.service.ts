@@ -1,4 +1,3 @@
-// @ts-nocheck
 // PATCH 598: Training AI Service
 import { supabase } from '@/integrations/supabase/client';
 import type {

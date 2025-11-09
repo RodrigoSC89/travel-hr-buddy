@@ -1,4 +1,3 @@
-// @ts-nocheck
 /**
  * PATCH 598 - IA Explicativa: AI Explanatory Engine
  * Transforms technical compliance findings into simple explanations
@@ -49,7 +48,7 @@ export async function explainNoncomplianceLLM(
 ): Promise<ExplanationResult> {
   try {
     // Call OpenAI API to generate explanations
-    const apiKey = import.meta.env.VITE_OPENAI_API_KEY;
+    const apiKey = (import.meta as any).env.VITE_OPENAI_API_KEY as string;
     
     if (!apiKey) {
       throw new Error("OpenAI API key not configured");
@@ -192,7 +191,7 @@ export async function generateQuizFromErrors(
   difficulty: 'basic' | 'intermediate' | 'advanced' = 'intermediate'
 ): Promise<string> {
   try {
-    const apiKey = import.meta.env.VITE_OPENAI_API_KEY;
+    const apiKey = (import.meta as any).env.VITE_OPENAI_API_KEY as string;
     
     if (!apiKey) {
       throw new Error("OpenAI API key not configured");

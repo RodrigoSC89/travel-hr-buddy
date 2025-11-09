@@ -1,4 +1,3 @@
-// @ts-nocheck
 /**
  * PATCH 600 - Painel Consolidado de Risco (RiskOps AI)
  * Consolidated risk monitoring and analysis dashboard
@@ -76,7 +75,7 @@ export async function classifyRiskWithAI(
   }
 ): Promise<AIClassification> {
   try {
-    const apiKey = import.meta.env.VITE_OPENAI_API_KEY;
+    const apiKey = (import.meta as any).env.VITE_OPENAI_API_KEY as string;
     
     if (!apiKey) {
       throw new Error("OpenAI API key not configured");
@@ -227,7 +226,7 @@ export async function getConsolidatedRiskScore(vesselId: string): Promise<number
     }
 
     // Calculate weighted average
-    const totalScore = data.reduce((sum, r) => sum + r.risk_score, 0);
+    const totalScore = data.reduce((sum: number, r: any) => sum + r.risk_score, 0);
     return Math.round(totalScore / data.length);
   } catch (error) {
     console.error("Error calculating risk score:", error);
@@ -277,7 +276,7 @@ export async function generateRiskHeatmap(
     // Group by vessel and module
     const heatmapData: Map<string, RiskHeatmapPoint> = new Map();
 
-    data?.forEach((risk) => {
+    data?.forEach((risk: any) => {
       const key = `${risk.vessel_id}-${risk.module_type}`;
       const existing = heatmapData.get(key);
 
@@ -359,20 +358,20 @@ export async function calculateRiskTrends(
       };
     }
 
-    const totalScore = data.reduce((sum, r) => sum + r.risk_score, 0);
+    const totalScore = data.reduce((sum: number, r: any) => sum + r.risk_score, 0);
     const averageRiskScore = totalScore / data.length;
 
-    const criticalRisksCount = data.filter(r => r.risk_level === 'critical').length;
-    const highRisksCount = data.filter(r => r.risk_level === 'high').length;
-    const mediumRisksCount = data.filter(r => r.risk_level === 'medium').length;
-    const lowRisksCount = data.filter(r => r.risk_level === 'low').length;
+    const criticalRisksCount = data.filter((r: any) => r.risk_level === 'critical').length;
+    const highRisksCount = data.filter((r: any) => r.risk_level === 'high').length;
+    const mediumRisksCount = data.filter((r: any) => r.risk_level === 'medium').length;
+    const lowRisksCount = data.filter((r: any) => r.risk_level === 'low').length;
 
     // Calculate trend direction (simplified)
     const firstHalf = data.slice(0, Math.floor(data.length / 2));
     const secondHalf = data.slice(Math.floor(data.length / 2));
     
-    const firstHalfAvg = firstHalf.reduce((sum, r) => sum + r.risk_score, 0) / firstHalf.length;
-    const secondHalfAvg = secondHalf.reduce((sum, r) => sum + r.risk_score, 0) / secondHalf.length;
+    const firstHalfAvg = firstHalf.reduce((sum: number, r: any) => sum + r.risk_score, 0) / firstHalf.length;
+    const secondHalfAvg = secondHalf.reduce((sum: number, r: any) => sum + r.risk_score, 0) / secondHalf.length;
     
     let trendDirection: 'improving' | 'stable' | 'worsening' = 'stable';
     if (secondHalfAvg < firstHalfAvg - 5) trendDirection = 'improving';
@@ -380,8 +379,8 @@ export async function calculateRiskTrends(
 
     // Extract key issues
     const keyIssues = data
-      .filter(r => r.risk_level === 'critical' || r.risk_level === 'high')
-      .map(r => r.risk_title)
+      .filter((r: any) => r.risk_level === 'critical' || r.risk_level === 'high')
+      .map((r: any) => r.risk_title)
       .slice(0, 5);
 
     const trend: RiskTrend = {

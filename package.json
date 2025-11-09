@@ -36,7 +36,7 @@
     "verify:production": "node scripts/production-verification.cjs",
     "deploy:vercel": "vercel --prod",
     "deploy:netlify": "netlify deploy --prod --dir=dist",
-    "postinstall": "rm -rf .next node_modules/.vite src/_legacy || true",
+    "postinstall": "echo Postinstall completed",
     "test:axe": "playwright test --grep @a11y",
     "test:accessibility": "playwright test e2e/accessibility.spec.ts",
     "verify:contrast": "node scripts/verify-contrast.js",

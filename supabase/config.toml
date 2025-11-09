@@ -127,3 +127,32 @@ name = "nautilus-observability-heartbeat"
 function_name = "log-incident"
 schedule = "*/30 * * * *"
 description = "Heartbeat/sample to ensure the observability pipeline is alive"
+
+# ============================================
+# EMERGENCY SECURITY FIX - 6 Missing Edge Functions
+# Added: 2025-01-07
+# ============================================
+
+[functions.generate-drill-evaluation]
+verify_jwt = true
+comment = "AI-powered drill evaluation generation with scoring and feedback"
+
+[functions.generate-drill-scenario]
+verify_jwt = true
+comment = "Generate realistic drill scenarios based on STCW requirements"
+
+[functions.generate-report]
+verify_jwt = true
+comment = "Generate PDF/Excel reports for audits, drills, and compliance"
+
+[functions.generate-scheduled-tasks]
+verify_jwt = true
+comment = "Create automated scheduled tasks based on regulations and intervals"
+
+[functions.generate-training-explanation]
+verify_jwt = true
+comment = "AI-generated explanations for training content and procedures"
+
+[functions.generate-training-quiz]
+verify_jwt = true
+comment = "Generate quiz questions for training modules with answer validation"

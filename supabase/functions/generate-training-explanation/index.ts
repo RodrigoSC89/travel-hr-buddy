@@ -1,24 +1,51 @@
-// @ts-nocheck
 // PATCH 598: Generate Training Explanation Edge Function
 import { serve } from "https://deno.land/std@0.168.0/http/server.ts"
+import {
+  createResponse,
+  EdgeFunctionError,
+  validateRequestBody,
+  getEnvVar,
+  log,
+  handleCORS,
+  safeJSONParse,
+} from '../_shared/types.ts'
 
-const corsHeaders = {
-  'Access-Control-Allow-Origin': '*',
-  'Access-Control-Allow-Headers': 'authorization, x-client-info, apikey, content-type',
+// Request/Response Types
+interface TrainingExplanationRequest {
+  non_conformity: string
+  module: string
+  context?: string
 }
 
-serve(async (req) => {
+interface TrainingExplanationResponse {
+  explanation: string
+  key_points: string[]
+  corrective_actions: string[]
+  related_topics: string[]
+}
+
+interface OpenAIResponse {
+  choices: Array<{
+    message: {
+      content: string
+    }
+  }>
+}
+
+serve(async (req: Request): Promise<Response> => {
+  const requestId = crypto.randomUUID()
+  
   if (req.method === 'OPTIONS') {
-    return new Response('ok', { headers: corsHeaders })
+    return handleCORS()
   }
 
   try {
-    const { non_conformity, module, context } = await req.json()
+    const body = safeJSONParse<TrainingExplanationRequest>(await req.text())
+    validateRequestBody(body as unknown as Record<string, unknown>, ['non_conformity', 'module'])
 
-    const openaiApiKey = Deno.env.get('OPENAI_API_KEY')
-    if (!openaiApiKey) {
-      throw new Error('OpenAI API key not configured')
-    }
+    const { non_conformity, module, context } = body
+
+    const openaiApiKey = getEnvVar('OPENAI_API_KEY')
 
     const prompt = `You are an expert maritime training instructor. Explain the following non-conformity in a clear, educational manner.
 
@@ -39,6 +66,8 @@ Return your response in JSON format:
   "corrective_actions": ["Action 1", "Action 2", ...],
   "related_topics": ["Topic 1", "Topic 2", ...]
 }`
+
+    log('info', 'Calling OpenAI API for training explanation', { module, requestId })
 
     const response = await fetch('https://api.openai.com/v1/chat/completions', {
       method: 'POST',
@@ -65,37 +94,53 @@ Return your response in JSON format:
     })
 
     if (!response.ok) {
-      const error = await response.text()
-      console.error('OpenAI API error:', error)
-      throw new Error(`OpenAI API error: ${response.statusText}`)
+      const errorText = await response.text()
+      log('error', 'OpenAI API error', { status: response.status, error: errorText, requestId })
+      throw new EdgeFunctionError(
+        'OPENAI_API_ERROR',
+        `OpenAI API returned ${response.status}: ${response.statusText}`,
+        502,
+        { originalError: errorText }
+      )
     }
 
-    const data = await response.json()
-    const content = data.choices[0].message.content
+    const data = safeJSONParse<OpenAIResponse>(await response.text())
+    const contentText = data.choices[0]?.message?.content
 
-    let result
-    try {
-      result = JSON.parse(content)
-    } catch (e) {
-      console.error('Failed to parse OpenAI response:', content)
-      throw new Error('Invalid response format from AI')
+    if (!contentText) {
+      throw new EdgeFunctionError(
+        'INVALID_RESPONSE',
+        'OpenAI API returned empty response',
+        502
+      )
     }
 
-    return new Response(
-      JSON.stringify(result),
-      { 
-        headers: { ...corsHeaders, 'Content-Type': 'application/json' },
-        status: 200 
-      }
-    )
+    const result = safeJSONParse<TrainingExplanationResponse>(contentText)
+
+    log('info', 'Training explanation generated successfully', { module, requestId })
+
+    return createResponse(result, undefined, requestId)
+
   } catch (error) {
-    console.error('Error in generate-training-explanation:', error)
-    return new Response(
-      JSON.stringify({ error: error.message }),
-      { 
-        headers: { ...corsHeaders, 'Content-Type': 'application/json' },
-        status: 500
-      }
+    log('error', 'Error in training explanation', { 
+      error: error instanceof Error ? error.message : String(error),
+      requestId
+    })
+
+    if (error instanceof EdgeFunctionError) {
+      return createResponse(undefined, error, requestId)
+    }
+
+    return createResponse(
+      undefined,
+      new EdgeFunctionError(
+        'INTERNAL_ERROR',
+        error instanceof Error ? error.message : 'An unexpected error occurred',
+        500,
+        { originalError: String(error) }
+      ),
+      requestId
     )
   }
 })
+

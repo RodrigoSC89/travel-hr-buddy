@@ -1,24 +1,66 @@
-// @ts-nocheck
 // PATCH 598: Generate Training Quiz Edge Function
 import { serve } from "https://deno.land/std@0.168.0/http/server.ts"
+import {
+  createResponse,
+  EdgeFunctionError,
+  validateRequestBody,
+  getEnvVar,
+  log,
+  handleCORS,
+  safeJSONParse,
+} from '../_shared/types.ts'
 
-const corsHeaders = {
-  'Access-Control-Allow-Origin': '*',
-  'Access-Control-Allow-Headers': 'authorization, x-client-info, apikey, content-type',
+// Request/Response Types
+interface QuizQuestion {
+  id: string
+  question: string
+  options: string[]
+  correct_answer: string
+  explanation: string
+  difficulty: 'easy' | 'medium' | 'hard'
 }
 
-serve(async (req) => {
+interface TrainingQuizRequest {
+  topic: string
+  module: string
+  difficulty?: 'easy' | 'medium' | 'hard'
+  num_questions?: number
+  context?: string
+}
+
+interface TrainingQuizResponse {
+  questions: QuizQuestion[]
+  estimated_duration_minutes: number
+}
+
+interface OpenAIResponse {
+  choices: Array<{
+    message: {
+      content: string
+    }
+  }>
+}
+
+serve(async (req: Request): Promise<Response> => {
+  const requestId = crypto.randomUUID()
+  
   if (req.method === 'OPTIONS') {
-    return new Response('ok', { headers: corsHeaders })
+    return handleCORS()
   }
 
   try {
-    const { topic, module, difficulty = 'medium', num_questions = 5, context } = await req.json()
+    const body = safeJSONParse<TrainingQuizRequest>(await req.text())
+    validateRequestBody(body as unknown as Record<string, unknown>, ['topic', 'module'])
 
-    const openaiApiKey = Deno.env.get('OPENAI_API_KEY')
-    if (!openaiApiKey) {
-      throw new Error('OpenAI API key not configured')
-    }
+    const { 
+      topic, 
+      module, 
+      difficulty = 'medium', 
+      num_questions = 5, 
+      context 
+    } = body
+
+    const openaiApiKey = getEnvVar('OPENAI_API_KEY')
 
     const prompt = `You are an expert maritime training instructor. Generate a quiz for crew training.
 
@@ -52,6 +94,13 @@ Return your response in JSON format:
   "estimated_duration_minutes": 15
 }`
 
+    log('info', 'Calling OpenAI API for quiz generation', { 
+      topic, 
+      module, 
+      num_questions, 
+      requestId 
+    })
+
     const response = await fetch('https://api.openai.com/v1/chat/completions', {
       method: 'POST',
       headers: {
@@ -77,42 +126,64 @@ Return your response in JSON format:
     })
 
     if (!response.ok) {
-      const error = await response.text()
-      console.error('OpenAI API error:', error)
-      throw new Error(`OpenAI API error: ${response.statusText}`)
+      const errorText = await response.text()
+      log('error', 'OpenAI API error', { status: response.status, error: errorText, requestId })
+      throw new EdgeFunctionError(
+        'OPENAI_API_ERROR',
+        `OpenAI API returned ${response.status}: ${response.statusText}`,
+        502,
+        { originalError: errorText }
+      )
     }
 
-    const data = await response.json()
-    const content = data.choices[0].message.content
+    const data = safeJSONParse<OpenAIResponse>(await response.text())
+    const contentText = data.choices[0]?.message?.content
 
-    let result
-    try {
-      result = JSON.parse(content)
-      // Add unique IDs if not present
-      result.questions = result.questions.map((q: any, i: number) => ({
-        ...q,
-        id: q.id || `q-${Date.now()}-${i}`
-      }))
-    } catch (e) {
-      console.error('Failed to parse OpenAI response:', content)
-      throw new Error('Invalid response format from AI')
+    if (!contentText) {
+      throw new EdgeFunctionError(
+        'INVALID_RESPONSE',
+        'OpenAI API returned empty response',
+        502
+      )
     }
 
-    return new Response(
-      JSON.stringify(result),
-      { 
-        headers: { ...corsHeaders, 'Content-Type': 'application/json' },
-        status: 200 
-      }
-    )
+    const result = safeJSONParse<TrainingQuizResponse>(contentText)
+
+    // Add unique IDs if not present
+    result.questions = result.questions.map((q, i) => ({
+      ...q,
+      id: q.id || `q-${Date.now()}-${i}`
+    }))
+
+    log('info', 'Quiz generated successfully', { 
+      question_count: result.questions.length,
+      topic,
+      module,
+      requestId 
+    })
+
+    return createResponse(result, undefined, requestId)
+
   } catch (error) {
-    console.error('Error in generate-training-quiz:', error)
-    return new Response(
-      JSON.stringify({ error: error.message }),
-      { 
-        headers: { ...corsHeaders, 'Content-Type': 'application/json' },
-        status: 500
-      }
+    log('error', 'Error in quiz generation', { 
+      error: error instanceof Error ? error.message : String(error),
+      requestId
+    })
+
+    if (error instanceof EdgeFunctionError) {
+      return createResponse(undefined, error, requestId)
+    }
+
+    return createResponse(
+      undefined,
+      new EdgeFunctionError(
+        'INTERNAL_ERROR',
+        error instanceof Error ? error.message : 'An unexpected error occurred',
+        500,
+        { originalError: String(error) }
+      ),
+      requestId
     )
   }
 })
+
