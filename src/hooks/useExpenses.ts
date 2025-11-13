@@ -36,10 +36,16 @@ export const useExpenses = () => {
       setLoading(true);
       setError(null);
 
+      if (!user?.id) {
+        setExpenses([]);
+        setLoading(false);
+        return;
+      }
+
       const { data, error: fetchError } = await supabase
         .from("expenses")
         .select("*")
-        .eq("user_id", user?.id)
+        .eq("user_id", user.id)
         .order("date", { ascending: false });
 
       if (fetchError) throw fetchError;

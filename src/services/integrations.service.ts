@@ -472,7 +472,8 @@ export class IntegrationsService {
   ): boolean {
     // Simple validation - in production use a library like Ajv
     for (const key in schema) {
-      if (schema[key].required && !config[key]) {
+      const schemaField = schema[key] as { required?: boolean };
+      if (schemaField.required && !config[key]) {
         throw new Error(`Required field missing: ${key}`);
       }
     }

@@ -20,7 +20,7 @@ import {
   TestTube,
   CheckCircle,
   AlertTriangle,
-  Flask,
+  Beaker,
   LucideIcon,
 } from 'lucide-react';
 
@@ -63,7 +63,7 @@ const CATEGORY_ICONS: Record<string, LucideIcon> = {
   hr: Users,
   logistics: Workflow,
   system: Settings,
-  experimental: Flask,
+  experimental: Beaker,
   safety: CheckCircle,
   travel: Activity,
   maintenance: Settings,

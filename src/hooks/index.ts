@@ -42,7 +42,7 @@ export { useRestoreLogsMetrics } from "./use-restore-logs-metrics";
 export { useProfile } from "./use-profile";
 export { useAuthProfile } from "./use-auth-profile";
 export { useExpenses } from "./useExpenses";
-export default { useModules } from "./useModules";
+export { default as useModules } from "./useModules";
 export { useMaritimeActions } from "./useMaritimeActions";
 export { useButtonHandlers } from "./useButtonHandlers";
 export { useFormActions } from "./use-form-actions";
