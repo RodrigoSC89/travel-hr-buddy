@@ -90,13 +90,14 @@ export async function explainNoncomplianceLLM(
     const { error: dbError } = await supabase
       .from("noncompliance_explanations")
       .insert({
-        finding_id: finding.id,
-        finding_type: finding.type,
-        original_finding: finding.description,
-        technical_explanation: explanation.technicalExplanation,
-        simple_explanation: explanation.simpleExplanation,
-        corrective_actions: explanation.correctiveActions,
-        related_regulations: explanation.relatedRegulations,
+        noncompliance_id: finding.id,
+        explanation: `${explanation.technicalExplanation}\n\n${explanation.simpleExplanation}`,
+        ai_analysis: {
+          technicalExplanation: explanation.technicalExplanation,
+          simpleExplanation: explanation.simpleExplanation,
+          correctiveActions: explanation.correctiveActions,
+          relatedRegulations: explanation.relatedRegulations
+        },
         severity: finding.severity,
         user_id: userId,
         vessel_id: finding.vesselId,
@@ -233,13 +234,14 @@ export async function generateQuizFromErrors(
     const { data: quiz, error } = await supabase
       .from("crew_training_quizzes")
       .insert({
-        crew_member_id: crewMemberId,
-        quiz_title: quizData.title,
-        quiz_type: quizType,
+        title: quizData.title,
+        description: `Quiz gerado automaticamente para ${quizType}`,
+        category: quizType,
         questions: quizData.questions,
-        generated_from_errors: errorHistory.map(e => e.id),
         difficulty,
-        estimated_duration_minutes: quizData.estimatedDuration || 15,
+        time_limit_minutes: quizData.estimatedDuration || 15,
+        ai_generated: true,
+        organization_id: (await supabase.auth.getUser()).data.user?.user_metadata?.organization_id || '',
       })
       .select()
       .single();
@@ -330,12 +332,13 @@ export async function recordTrainingResult(
       crew_member_id: crewMemberId,
       score,
       answers,
-      time_taken_seconds: timeTakenSeconds,
+      time_taken_minutes: Math.ceil(timeTakenSeconds / 60),
       passed,
+      organization_id: (await supabase.auth.getUser()).data.user?.user_metadata?.organization_id || '',
     });
 
     // Update learning progress
-    await updateLearningProgress(crewMemberId, quiz.quiz_type, score, passed);
+    await updateLearningProgress(crewMemberId, quiz.category || 'general', score, passed);
   } catch (error) {
     console.error("Error recording training result:", error);
     throw error;
