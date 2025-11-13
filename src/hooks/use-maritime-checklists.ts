@@ -69,7 +69,7 @@ export const useMaritimeChecklists = (userId: string) => {
         completedAt: item.status === 'completed' ? item.updated_at : undefined, // Set undefined instead of null
         priority: "medium" as any, // Default priority
         estimatedDuration: 180, // Default duration
-        complianceScore: item.compliance_score,
+        complianceScore: item.compliance_score ?? undefined,
         workflow: [],
         tags: [],
         template: false,

@@ -99,8 +99,7 @@ export async function explainNoncomplianceLLM(
           relatedRegulations: explanation.relatedRegulations
         },
         severity: finding.severity,
-        user_id: userId,
-        vessel_id: finding.vesselId,
+        organization_id: (await supabase.auth.getUser()).data.user?.user_metadata?.organization_id || '',
       });
 
     if (dbError) {
