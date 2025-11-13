@@ -1,4 +1,3 @@
-// @ts-nocheck
 /**
  * PATCH 609 - Organization Stats Hook with SWR Cache
  * Provides cached organization statistics with automatic revalidation

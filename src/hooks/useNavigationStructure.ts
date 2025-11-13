@@ -1,4 +1,3 @@
-// @ts-nocheck
 /**
  * PATCH 655 - Navigation Structure Hook
  * Provides dynamic navigation based on module status and user roles
