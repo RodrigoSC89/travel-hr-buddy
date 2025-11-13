@@ -31,8 +31,8 @@ export function useFeatureFlag(key: string): boolean {
           .select("enabled")
           .eq("key", key)
           .or(`user_id.eq."${user?.id}",tenant_id.eq."${user?.id}",user_id.is.null,tenant_id.is.null`)
-          .order("user_id", { nullsLast: false })
-          .order("tenant_id", { nullsLast: false })
+          .order("user_id", { ascending: true, nullsFirst: false })
+          .order("tenant_id", { ascending: true, nullsFirst: false })
           .limit(1)
           .single();
 

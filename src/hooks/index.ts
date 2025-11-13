@@ -27,15 +27,14 @@ export type { UserRole, Permission } from "./use-permissions";
 
 // UI & UX
 export { useToast } from "./use-toast";
-export { useMobile } from "./use-mobile";
+export { useIsMobile } from "./use-mobile";
 export { useKeyboardShortcuts } from "./use-keyboard-shortcuts";
 export { useFocusTrap } from "./use-focus-trap";
 export { useArrowNavigation } from "./use-arrow-navigation";
 
 // System & Operations
-export { useOnlineStatus } from "./use-online-status";
 export { useOfflineStorage } from "./use-offline-storage";
-export { useApiHealth } from "./use-api-health";
+export { useAPIHealth } from "./use-api-health";
 export { useRestoreLogsSummary } from "./use-restore-logs-summary";
 export { useRestoreLogsMetrics } from "./use-restore-logs-metrics";
 
@@ -43,7 +42,7 @@ export { useRestoreLogsMetrics } from "./use-restore-logs-metrics";
 export { useProfile } from "./use-profile";
 export { useAuthProfile } from "./use-auth-profile";
 export { useExpenses } from "./useExpenses";
-export { useModules } from "./useModules";
+export default { useModules } from "./useModules";
 export { useMaritimeActions } from "./useMaritimeActions";
 export { useButtonHandlers } from "./useButtonHandlers";
 export { useFormActions } from "./use-form-actions";
@@ -55,6 +54,5 @@ export { useBreadcrumbs } from "./use-breadcrumbs";
 // Specialized Features
 export { useTrainingModules } from "./use-training-modules";
 export { useTravelPredictions } from "./use-travel-predictions";
-export { useVoiceConversation } from "./use-voice-conversation";
 export { useVoiceNavigation } from "./use-voice-navigation";
 export { useServiceIntegrations } from "./use-service-integrations";
