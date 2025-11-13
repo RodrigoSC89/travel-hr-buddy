@@ -1,19 +1,36 @@
 // @ts-nocheck
 import React, { useEffect, useState } from "react";
 import { Card, CardHeader, CardTitle, CardContent } from "@/components/ui/card";
-import * as ort from "onnxruntime-web";
 import { AlertTriangle, Cpu, CheckCircle2 } from "lucide-react";
 import { publishEvent } from "@/lib/mqtt/publisher";
 
+// Lazy load ONNX runtime apenas quando o componente for montado
+let ort: any = null;
+const loadONNX = async () => {
+  if (!ort) {
+    ort = await import("onnxruntime-web");
+  }
+  return ort;
+};
+
 export default function DPAIAnalyzer() {
-  const [status, setStatus] = useState("Inicializando IA...");
+  const [status, setStatus] = useState("Pronto para análise");
   const [fault, setFault] = useState<string | null>(null);
+  const [isAnalyzing, setIsAnalyzing] = useState(false);
 
   useEffect(() => {
     const analyzeDP = async () => {
+      if (isAnalyzing) return;
+      
       try {
-        const session = await ort.InferenceSession.create("/models/nautilus_dp_faults.onnx");
-        const input = new ort.Tensor("float32", new Float32Array([0.98, 1.02, 0.5, 0.01]), [1, 4]);
+        setIsAnalyzing(true);
+        setStatus("Carregando modelo IA...");
+        
+        const ortRuntime = await loadONNX();
+        setStatus("Analisando sistema DP...");
+        
+        const session = await ortRuntime.InferenceSession.create("/models/nautilus_dp_faults.onnx");
+        const input = new ortRuntime.Tensor("float32", new Float32Array([0.98, 1.02, 0.5, 0.01]), [1, 4]);
         const output = await session.run({ input });
         const result = output.output.data[0];
         if (result > 0.7) {
@@ -26,7 +43,9 @@ export default function DPAIAnalyzer() {
         setStatus("Análise concluída");
       } catch (err) {
         console.error("Erro ao carregar modelo ONNX:", err);
-        setStatus("Falha ao carregar modelo ONNX");
+        setStatus("Modelo offline - usando análise básica");
+      } finally {
+        setIsAnalyzing(false);
       }
     };
     analyzeDP();

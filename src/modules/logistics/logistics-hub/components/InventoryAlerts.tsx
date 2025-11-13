@@ -7,8 +7,16 @@ import { Button } from "@/components/ui/button";
 import { AlertTriangle, Package, TrendingDown, AlertCircle, ShoppingCart } from "lucide-react";
 import { supabase } from "@/integrations/supabase/client";
 import { useToast } from "@/hooks/use-toast";
-import * as XLSX from "xlsx";
 import { format } from "date-fns";
+
+// Lazy load XLSX apenas quando necessário (exportação)
+let XLSX: any = null;
+const loadXLSX = async () => {
+  if (!XLSX) {
+    XLSX = await import("xlsx");
+  }
+  return XLSX;
+};
 
 interface InventoryItem {
   id: string;
@@ -196,11 +204,13 @@ export const InventoryAlerts = () => {
         "Category": item.category || "N/A"
       }));
 
-      const worksheet = XLSX.utils.json_to_sheet(exportData);
-      const workbook = XLSX.utils.book_new();
-      XLSX.utils.book_append_sheet(workbook, worksheet, "Inventory Alerts");
+      // Carregar XLSX apenas quando exportar
+      const xlsxLib = await loadXLSX();
+      const worksheet = xlsxLib.utils.json_to_sheet(exportData);
+      const workbook = xlsxLib.utils.book_new();
+      xlsxLib.utils.book_append_sheet(workbook, worksheet, "Inventory Alerts");
       
-      XLSX.writeFile(workbook, `inventory-alerts-${format(new Date(), "yyyy-MM-dd")}.xlsx`);
+      xlsxLib.writeFile(workbook, `inventory-alerts-${format(new Date(), "yyyy-MM-dd")}.xlsx`);
       
       toast({
         title: "Export successful",

@@ -1,0 +1,91 @@
+/**
+ * Configuração de Lazy Loading Otimizado
+ * Módulos pesados que causam travamento são carregados sob demanda
+ */
+
+import { lazy, ComponentType } from 'react';
+
+// Wrapper para lazy loading com timeout e retry
+export const lazyWithRetry = (
+  importFn: () => Promise<{ default: ComponentType<any> }>,
+  fallback: ComponentType<any> | null = null
+) => {
+  return lazy(() =>
+    importFn().catch((error) => {
+      console.error('Erro ao carregar módulo:', error);
+      if (fallback) {
+        return { default: fallback };
+      }
+      // Retry após 2 segundos
+      return new Promise((resolve) => {
+        setTimeout(() => {
+          resolve(importFn());
+        }, 2000);
+      });
+    })
+  );
+};
+
+// Módulos pesados que devem ser carregados apenas sob demanda
+export const HEAVY_MODULES = {
+  // AI/ML Modules (ONNX, TensorFlow)
+  DPAIAnalyzer: lazyWithRetry(() => 
+    import('@/modules/intelligence/dp-intelligence/components/DPAIAnalyzer')
+  ),
+  AIVisionCore: lazyWithRetry(() => 
+    import('@/modules/ai-vision-core')
+  ),
+  
+  // Large Report Modules (XLSX, PDF generation)
+  ComplianceReports: lazyWithRetry(() => 
+    import('@/modules/compliance/compliance-reports')
+  ),
+  InventoryAlerts: lazyWithRetry(() => 
+    import('@/modules/logistics/logistics-hub/components/InventoryAlerts')
+  ),
+  
+  // 3D/Graphics Modules
+  MarineAROverlay: lazyWithRetry(() => 
+    import('@/modules/operations/marine-ar-overlay')
+  ),
+  
+  // Large Data Modules
+  SensorsHub: lazyWithRetry(() => 
+    import('@/pages/sensors-hub')
+  ),
+  NavigationCopilot: lazyWithRetry(() => 
+    import('@/pages/navigation-copilot')
+  ),
+  SatelliteLive: lazyWithRetry(() => 
+    import('@/pages/satellite-live')
+  ),
+};
+
+// Pré-carregar módulos críticos após a aplicação estar rodando
+export const preloadCriticalModules = () => {
+  // Esperar 3 segundos após o load inicial
+  setTimeout(() => {
+    // Pré-carregar apenas módulos mais usados
+    const criticalModules = [
+      import('@/modules/intelligence/smart-alerts'),
+      import('@/modules/intelligence/smart-workflow'),
+    ];
+    
+    Promise.all(criticalModules).catch(console.error);
+  }, 3000);
+};
+
+// Desabilitar módulos pesados em modo de desenvolvimento/baixa performance
+export const shouldLoadHeavyModule = (moduleName: string): boolean => {
+  // Verificar performance do dispositivo
+  const memory = (performance as any).memory;
+  if (memory && memory.jsHeapSizeLimit < 2000000000) {
+    // Menos de 2GB de heap: não carregar módulos pesados
+    console.warn(`Módulo ${moduleName} desabilitado: memória insuficiente`);
+    return false;
+  }
+  
+  return true;
+};
+
+export default HEAVY_MODULES;
