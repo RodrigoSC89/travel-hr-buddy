@@ -6,7 +6,7 @@
 import React from "react";
 import { Package, ClipboardList, AlertTriangle, Truck, ShoppingCart, Building2, Route } from "lucide-react";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
-import { InventoryAlerts } from "./components/InventoryAlerts";
+import InventoryAlerts from "./components/InventoryAlerts";
 import { ShipmentTracker } from "./components/ShipmentTracker";
 import { SupplyRequests } from "./components/SupplyRequests";
 import { LogisticsAlertsPanel } from "./components/LogisticsAlertsPanel";
