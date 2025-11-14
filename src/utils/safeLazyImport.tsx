@@ -27,7 +27,9 @@ export const safeLazyImport = (
   importer: () => Promise<{ default: React.ComponentType<any> }>,
   name = "Módulo",
   retries = 3,
-  initialInterval = 1000
+  initialInterval = 1000,
+  // timeout in ms for each import attempt to avoid hanging Promises
+  timeoutMs = 10000
 ) => {
   /**
    * Retry function with exponential backoff
@@ -57,7 +59,13 @@ export const safeLazyImport = (
 
   const Component = React.lazy(async () => {
     try {
-      return await retryImport(importer);
+      // Wrap importer with a timeout so a stalled import doesn't leave Suspense forever
+      const importerWithTimeout = () => Promise.race([
+        importer(),
+        new Promise((_res, rej) => setTimeout(() => rej(new Error("Import timeout")), timeoutMs)),
+      ] as unknown as Promise<{ default: React.ComponentType<any> }>);
+
+      return await retryImport(importerWithTimeout as () => Promise<{ default: React.ComponentType<any> }>);
     } catch (err) {
       console.error(`❌ Erro ao carregar módulo ${name} após ${retries} tentativas:`, err);
       
