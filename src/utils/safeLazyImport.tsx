@@ -69,6 +69,23 @@ export const safeLazyImport = (
     } catch (err) {
       console.error(`❌ Erro ao carregar módulo ${name} após ${retries} tentativas:`, err);
       
+      // Save detailed error info for debugging
+      const errorInfo = {
+        module: name,
+        timestamp: new Date().toISOString(),
+        error: err instanceof Error ? err.message : String(err),
+        stack: err instanceof Error ? err.stack : undefined,
+        retries: retries,
+        timeout: timeoutMs
+      };
+      
+      try {
+        localStorage.setItem('safeLazyImport:lastError', JSON.stringify(errorInfo));
+        console.warn('🔍 Debug info salvo em localStorage["safeLazyImport:lastError"]', errorInfo);
+      } catch (storageErr) {
+        console.warn('Não foi possível salvar debug info no localStorage', storageErr);
+      }
+      
       // Return a fallback component that displays an error message
       return {
         default: () => (

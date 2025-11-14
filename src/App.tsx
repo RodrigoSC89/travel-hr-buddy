@@ -16,6 +16,7 @@ import { webVitalsService } from "@/services/web-vitals-service";
 import { OffshoreLoader, PageSkeleton } from "@/components/LoadingStates";
 import { lazyWithPreload, preloadStrategy } from "@/lib/performance/lazy-with-preload";
 import { safeLazyImport } from "@/utils/safeLazyImport";
+import { ErrorDebugBanner } from "@/components/debug/ErrorDebugBanner";
 
 // PATCH 540: Import bundles para reduzir lazy loading
 import * as ModulesBundle from "@/bundles/ModulesBundle";
@@ -627,6 +628,7 @@ function App() {
               <RouterComponent {...routerProps}>
                 <CommandPalette />
                 <OfflineBanner />
+                <ErrorDebugBanner />
                 <RedirectHandler />
                 <React.Suspense fallback={<LoadingSpinner />}>
                   <Routes>

@@ -178,32 +178,33 @@ export const TenantProvider: React.FC<{ children: React.ReactNode }> = ({ childr
   }, [user]);
 
   const loadDemoTenant = async () => {
-    const defaultTenant = {
-      id: "550e8400-e29b-41d4-a716-446655440000",
-      slug: "nautilus-demo",
-      name: "Nautilus Demo Corporation",
-      description: "Empresa demonstrativa do sistema Nautilus One",
-      status: "active",
-      plan_type: "enterprise",
-      max_users: 100,
-      max_vessels: 50,
-      max_storage_gb: 100,
-      max_api_calls_per_month: 50000,
-      billing_cycle: "monthly",
-      subdomain: "demo",
-      metadata: {},
-      features: {
-        peotram: true,
-        fleet_management: true,
-        advanced_analytics: true,
-        ai_analysis: true,
-        white_label: true
-      },
-      created_at: new Date().toISOString(),
-      updated_at: new Date().toISOString()
-    };
+    try {
+      const defaultTenant = {
+        id: "550e8400-e29b-41d4-a716-446655440000",
+        slug: "nautilus-demo",
+        name: "Nautilus Demo Corporation",
+        description: "Empresa demonstrativa do sistema Nautilus One",
+        status: "active",
+        plan_type: "enterprise",
+        max_users: 100,
+        max_vessels: 50,
+        max_storage_gb: 100,
+        max_api_calls_per_month: 50000,
+        billing_cycle: "monthly",
+        subdomain: "demo",
+        metadata: {},
+        features: {
+          peotram: true,
+          fleet_management: true,
+          advanced_analytics: true,
+          ai_analysis: true,
+          white_label: true
+        },
+        created_at: new Date().toISOString(),
+        updated_at: new Date().toISOString()
+      };
 
-    setCurrentTenant(defaultTenant as SaasTenant);
+      setCurrentTenant(defaultTenant as SaasTenant);
     
     // Carregar branding demo
     const defaultBranding: TenantBranding = {
@@ -281,6 +282,10 @@ export const TenantProvider: React.FC<{ children: React.ReactNode }> = ({ childr
     
     setTenantUsage(defaultUsage);
     setIsLoading(false);
+    } catch (err) {
+      logger.error("Error loading demo tenant:", err);
+      setIsLoading(false);
+    }
   };
 
   const loadTenantData = async () => {
