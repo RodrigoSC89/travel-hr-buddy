@@ -188,7 +188,7 @@ export const InventoryAlerts = () => {
   };
 
   // PATCH 391: Export to Excel/CSV functionality
-  const exportToExcel = () => {
+  const exportToExcel = async () => {
     try {
       const exportData = lowStockItems.map(item => ({
         "Item Name": item.item_name,
