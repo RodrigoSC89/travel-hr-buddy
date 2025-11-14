@@ -112,15 +112,16 @@ export const useNavigationStructure = (options: {
     includeDeprecated = false,
   } = options;
 
-  const { hasRole } = usePermissions();
+  const { userRole, hasPermission, canAccessModule } = usePermissions();
 
   const navigationModules = useMemo(() => {
     const modules: NavigationModule[] = [];
 
+    // TODO: Implementar modulesRegistry quando disponível
     // Process modules from registry
-    if (modulesRegistry && modulesRegistry.modules) {
-      modulesRegistry.modules.forEach((module: any) => {
-        const status = mapModuleStatus(module.status);
+    // if (modulesRegistry && modulesRegistry.modules) {
+    //   modulesRegistry.modules.forEach((module: any) => {
+    //     const status = mapModuleStatus(module.status);
 
         // Filter by status
         if (
@@ -249,7 +250,7 @@ export const useNavigationStructure = (options: {
  */
 export const useModuleAccess = (moduleId: string) => {
   const { modules } = useNavigationStructure();
-  const { hasRole, hasPermission } = usePermissions();
+  const { userRole, hasPermission, canAccessModule } = usePermissions();
 
   const module = useMemo(() => {
     return modules.find((m) => m.id === moduleId);

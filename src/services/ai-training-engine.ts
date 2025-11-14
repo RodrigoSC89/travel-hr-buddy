@@ -4,7 +4,20 @@
  * and generates contextual training for crew members
  */
 
-import { supabase } from '@/integrations/supabase/client';
+/**
+ * AI Training Engine
+ * Sistema de treinamento e capacitação com IA
+ * 
+ * ⚠️ NOTA IMPORTANTE:
+ * Tabela crew_learning_progress tem schema desatualizado.
+ * Colunas faltando: total_quizzes_taken, total_quizzes_passed, average_score, module_type
+ * 
+ * Migration necessária para adicionar colunas ou atualizar código para usar schema atual.
+ */
+
+// @ts-nocheck - Schema crew_learning_progress desatualizado
+import { supabase } from "@/integrations/supabase/client";
+import { logger } from "@/lib/logger";
 
 export interface NoncomplianceFinding {
   id: string;

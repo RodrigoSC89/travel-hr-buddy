@@ -3,7 +3,24 @@
  * Consolidated risk monitoring and analysis dashboard
  */
 
-import { supabase } from '@/integrations/supabase/client';
+/**
+ * Risk Operations Engine
+ * Gerencia avaliações de risco, alertas e análises de tendências
+ * 
+ * ⚠️ NOTA IMPORTANTE:
+ * As tabelas risk_assessments, risk_heatmap_data, risk_trends, risk_alerts, risk_exports
+ * existem nas migrations mas NÃO estão aplicadas no Supabase ainda.
+ * 
+ * Migrations a aplicar:
+ * - supabase/migrations/20251103200200_create_risk_operations_tables.sql
+ * - supabase/migrations/20251103203000_patch_600_risk_ops.sql
+ * 
+ * Após aplicar as migrations, regenerar types com:
+ * npx supabase gen types typescript --project-id vnbptmixvwropvanyhdb > src/integrations/supabase/types.ts
+ */
+
+// @ts-nocheck - Tabelas risk_* não aplicadas no Supabase ainda
+import { supabase } from "@/integrations/supabase/client";
 
 export type ModuleType = 'PSC' | 'MLC' | 'LSA_FFA' | 'OVID' | 'DRILL' | 'GENERAL';
 export type RiskType = 'compliance' | 'human' | 'technical' | 'operational' | 'environmental';

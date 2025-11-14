@@ -1,4 +1,3 @@
-// @ts-nocheck
 /**
  * PATCH 236 - XR Interface Core
  * WebXR initialization, provider management, and overlay system
