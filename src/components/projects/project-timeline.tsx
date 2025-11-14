@@ -24,7 +24,13 @@ import {
   Users,
   FileText
 } from "lucide-react";
-import * as XLSX from "xlsx";
+let XLSX: any = null;
+const loadXLSX = async () => {
+  if (!XLSX) {
+    XLSX = await import("xlsx");
+  }
+  return XLSX;
+};
 import jsPDF from "jspdf";
 
 interface ProjectTask {

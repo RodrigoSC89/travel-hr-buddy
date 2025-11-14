@@ -9,7 +9,13 @@
  * @version 1.0.0 (Patch 21)
  */
 
-import * as ort from "onnxruntime-web";
+let ort: any = null;
+const loadORT = async () => {
+  if (!ort) {
+    ort = await import("onnxruntime-web");
+  }
+  return ort;
+};
 import { publishEvent } from "@/lib/mqtt/publisher";
 import { createClient } from "@/lib/supabase/client";
 

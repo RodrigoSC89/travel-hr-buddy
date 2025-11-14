@@ -1,7 +1,13 @@
 import React, { useRef, useState, useEffect } from "react";
 import { useFrame } from "@react-three/fiber";
 import { Box, Sphere, Cylinder, Cone } from "@react-three/drei";
-import * as THREE from "three";
+let THREE: any = null;
+const loadTHREE = async () => {
+  if (!THREE) {
+    THREE = await import("three");
+  }
+  return THREE;
+};
 import { supabase } from "@/integrations/supabase/client";
 
 interface AIAction {

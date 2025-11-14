@@ -4,7 +4,13 @@ import { Card, CardHeader, CardTitle, CardContent } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { RefreshCcw, Brain } from "lucide-react";
 import { publishEvent, subscribeForecast } from "@/lib/mqtt/publisher";
-import * as ort from "onnxruntime-web";
+let ort: any = null;
+const loadORT = async () => {
+  if (!ort) {
+    ort = await import("onnxruntime-web");
+  }
+  return ort;
+};
 
 export default function DPSyncDashboard() {
   const [sync, setSync] = useState("Sincronizando...");

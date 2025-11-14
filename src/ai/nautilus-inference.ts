@@ -9,7 +9,13 @@
  * @version 1.0.0 (Beta 3.1)
  */
 
-import * as ort from "onnxruntime-web";
+let ort: any = null;
+const loadORT = async () => {
+  if (!ort) {
+    ort = await import("onnxruntime-web");
+  }
+  return ort;
+};
 import { logger } from "@/lib/logger";
 
 export interface InferenceResult {

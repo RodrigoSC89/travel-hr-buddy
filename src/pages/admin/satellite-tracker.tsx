@@ -8,7 +8,13 @@ import { ScrollArea } from "@/components/ui/scroll-area";
 import { useToast } from "@/components/ui/use-toast";
 import { Satellite, AlertTriangle, Play, Square, Globe, Orbit } from "lucide-react";
 import { supabase } from "@/integrations/supabase/client";
-import * as THREE from "three";
+let THREE: any = null;
+const loadTHREE = async () => {
+  if (!THREE) {
+    THREE = await import("three");
+  }
+  return THREE;
+};
 import { OrbitControls } from "three/examples/jsm/controls/OrbitControls";
 
 interface SatelliteData {

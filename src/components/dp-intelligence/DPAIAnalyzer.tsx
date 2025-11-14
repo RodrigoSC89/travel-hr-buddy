@@ -1,7 +1,13 @@
 // @ts-nocheck
 import React, { useEffect, useState } from "react";
 import { Card, CardHeader, CardTitle, CardContent } from "@/components/ui/card";
-import * as ort from "onnxruntime-web";
+let ort: any = null;
+const loadORT = async () => {
+  if (!ort) {
+    ort = await import("onnxruntime-web");
+  }
+  return ort;
+};
 import { AlertTriangle, Cpu, CheckCircle2 } from "lucide-react";
 import { publishEvent } from "@/lib/mqtt/publisher";
 

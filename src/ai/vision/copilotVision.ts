@@ -1,5 +1,17 @@
-import * as cocoSsd from "@tensorflow-models/coco-ssd";
-import * as tf from "@tensorflow/tfjs";
+let cocoSsd: any = null;
+const loadCocoSsd = async () => {
+  if (!cocoSsd) {
+    cocoSsd = await import("@tensorflow-models/coco-ssd");
+  }
+  return cocoSsd;
+};
+let tf: any = null;
+const loadTF = async () => {
+  if (!tf) {
+    tf = await import("@tensorflow/tfjs");
+  }
+  return tf;
+};
 import Tesseract from "tesseract.js";
 import { supabase } from "@/integrations/supabase/client";
 

@@ -3,7 +3,13 @@
  * Handles TensorFlow.js COCO-SSD object detection
  */
 
-import * as cocoSsd from "@tensorflow-models/coco-ssd";
+let cocoSsd: any = null;
+const loadCocoSsd = async () => {
+  if (!cocoSsd) {
+    cocoSsd = await import("@tensorflow-models/coco-ssd");
+  }
+  return cocoSsd;
+};
 import "@tensorflow/tfjs";
 import { DetectedObject, VisionEvent } from "../types";
 

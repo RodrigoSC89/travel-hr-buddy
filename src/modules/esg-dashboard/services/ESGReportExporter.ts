@@ -4,7 +4,13 @@
  */
 
 import { logger } from "@/lib/logger";
-import * as XLSX from "xlsx";
+let XLSX: any = null;
+const loadXLSX = async () => {
+  if (!XLSX) {
+    XLSX = await import("xlsx");
+  }
+  return XLSX;
+};
 import type { ESGReport, ESGMetric, EmissionLog } from "../types";
 
 // Dynamically import html2pdf

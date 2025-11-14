@@ -5,7 +5,13 @@
  * Browser-based AI risk analysis using ONNX Runtime Web
  */
 
-import * as ort from "onnxruntime-web";
+let ort: any = null;
+const loadORT = async () => {
+  if (!ort) {
+    ort = await import("onnxruntime-web");
+  }
+  return ort;
+};
 import { supabase } from "@/integrations/supabase/client";
 import type { RiskForecast, ONNXModel, RiskLevel } from "@/types/patches-536-540";
 
