@@ -18,7 +18,8 @@ import {
   FileText,
   Users,
   Settings,
-  Truck
+  Truck,
+  type LucideIcon
 } from "lucide-react";
 
 interface Integration {
@@ -29,7 +30,7 @@ interface Integration {
   rating: number;
   downloads: number;
   price: "free" | "paid" | "freemium";
-  icon: React.ComponentType<unknown>;
+  icon: LucideIcon;
   features: string[];
   developer: string;
   version: string;
@@ -205,7 +206,7 @@ export const IntegrationMarketplace: React.FC = () => {
                     <div className="flex items-start justify-between">
                       <div className="flex items-center gap-3">
                         <div className="p-2 bg-primary/10 rounded-lg">
-                          <IconComponent className="w-6 h-6 text-primary" />
+                          <IconComponent className="w-6 h-6" />
                         </div>
                         <div>
                           <CardTitle className="text-lg">{integration.name}</CardTitle>

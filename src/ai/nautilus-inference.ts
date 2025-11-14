@@ -9,7 +9,9 @@
  * @version 1.0.0 (Beta 3.1)
  */
 
-let ort: any = null;
+import type * as ORT from "onnxruntime-web";
+
+let ort: typeof ORT | null = null;
 const loadORT = async () => {
   if (!ort) {
     ort = await import("onnxruntime-web");
@@ -48,7 +50,7 @@ export interface AnalysisResult {
 }
 
 class NautilusInferenceEngine {
-  private session: ort.InferenceSession | null = null;
+  private session: ORT.InferenceSession | null = null;
   private isLoaded = false;
   private modelUrl: string | null = null;
 
@@ -60,7 +62,8 @@ class NautilusInferenceEngine {
     try {
       logger.info("🧠 [Nautilus] Carregando modelo IA embarcada:", modelUrl);
       
-      this.session = await ort.InferenceSession.create(modelUrl, {
+      const ortLib = await loadORT();
+      this.session = await ortLib.InferenceSession.create(modelUrl, {
         executionProviders: ["wasm"],
         graphOptimizationLevel: "all",
       });
@@ -91,9 +94,10 @@ class NautilusInferenceEngine {
     try {
       // Prepara tensor de entrada (simplificado para demonstração)
       // Em produção, seria necessário tokenização e embeddings apropriados
+      const ortLib = await loadORT();
       const textLength = text.length;
       const inputData = new Float32Array([textLength, text.split(" ").length]);
-      const inputTensor = new ort.Tensor("float32", inputData, [1, 2]);
+      const inputTensor = new ortLib.Tensor("float32", inputData, [1, 2]);
 
       // Executa inferência
       const results = await this.session.run({

@@ -1,11 +1,14 @@
-let cocoSsd: any = null;
+import type * as CocoSsdType from "@tensorflow-models/coco-ssd";
+import type * as TFType from "@tensorflow/tfjs";
+
+let cocoSsd: typeof CocoSsdType | null = null;
 const loadCocoSsd = async () => {
   if (!cocoSsd) {
     cocoSsd = await import("@tensorflow-models/coco-ssd");
   }
   return cocoSsd;
 };
-let tf: any = null;
+let tf: typeof TFType | null = null;
 const loadTF = async () => {
   if (!tf) {
     tf = await import("@tensorflow/tfjs");
@@ -42,7 +45,7 @@ export interface OCRResult {
  * Uses Tesseract.js for OCR and TensorFlow.js COCO-SSD for object detection
  */
 export class CopilotVision {
-  private cocoModel: cocoSsd.ObjectDetection | null = null;
+  private cocoModel: CocoSsdType.ObjectDetection | null = null;
   private isInitialized = false;
 
   constructor() {
@@ -53,12 +56,15 @@ export class CopilotVision {
     try {
       console.log("Initializing Copilot Vision...");
       
+      const tfLib = await loadTF();
+      const cocoLib = await loadCocoSsd();
+      
       // Initialize TensorFlow.js backend
-      await tf.ready();
-      console.log("TensorFlow.js backend ready:", tf.getBackend());
+      await tfLib.ready();
+      console.log("TensorFlow.js backend ready:", tfLib.getBackend());
       
       // Load COCO-SSD model
-      this.cocoModel = await cocoSsd.load({
+      this.cocoModel = await cocoLib.load({
         base: "mobilenet_v2",
       });
       
@@ -135,7 +141,7 @@ export class CopilotVision {
 
       const predictions = await this.cocoModel.detect(imageSource as any);
       
-      return predictions.map(pred => ({
+      return predictions.map((pred: { class: string; score: number; bbox: [number, number, number, number] }) => ({
         class: pred.class,
         score: pred.score,
         bbox: pred.bbox as [number, number, number, number],
