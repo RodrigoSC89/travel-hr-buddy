@@ -31,8 +31,8 @@ import * as IntelligenceBundle from "@/bundles/IntelligenceBundle";
 
 // Páginas mais usadas - carregamento prioritário
 import Index from "@/pages/Index";
-const Dashboard = lazyWithPreload(() => import("@/pages/Dashboard"));
-const Travel = lazyWithPreload(() => import("@/pages/Travel"));
+const Dashboard = safeLazyImport(() => import("@/pages/Dashboard"), "Dashboard");
+const Travel = safeLazyImport(() => import("@/pages/Travel"), "Travel");
 
 // Páginas secundárias - carregamento normal
 const PriceAlerts = safeLazyImport(() => import("@/modules/features/price-alerts"));
