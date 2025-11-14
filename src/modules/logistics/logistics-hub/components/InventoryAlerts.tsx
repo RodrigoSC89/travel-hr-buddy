@@ -31,7 +31,7 @@ interface InventoryItem {
 
 type AlertLevel = "critical" | "low" | "normal";
 
-export const InventoryAlerts = () => {
+const InventoryAlerts = () => {
   const [lowStockItems, setLowStockItems] = useState<InventoryItem[]>([]);
   const [loading, setLoading] = useState(true);
   const { toast } = useToast();
@@ -387,3 +387,5 @@ export const InventoryAlerts = () => {
     </Card>
   );
 };
+
+export default InventoryAlerts;
