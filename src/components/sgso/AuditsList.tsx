@@ -85,16 +85,6 @@ export function AuditsList({ onRefresh }: AuditsListProps) {
 
       if (error) throw error;
 
-      // Log the status change
-      const { data: { user } } = await supabase.auth.getUser();
-      await supabase.from("audit_logs").insert({
-        action: "audit_status_changed",
-        entity_type: "sgso_audit",
-        entity_id: auditId,
-        details: { new_status: newStatus },
-        user_id: user?.id
-      });
-
       toast({
         title: "Status Updated",
         description: `Audit status changed to ${newStatus}`,

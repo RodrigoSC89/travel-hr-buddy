@@ -311,7 +311,7 @@ export const TenantProvider: React.FC<{ children: React.ReactNode }> = ({ childr
             *,
             saas_tenants!inner(*)
           `)
-          .eq("user_id", user?.id)
+          .eq("user_id", user?.id || "")
           .eq("status", "active");
 
         const { data: userTenants, error: tenantsError } = await Promise.race([
@@ -337,7 +337,7 @@ export const TenantProvider: React.FC<{ children: React.ReactNode }> = ({ childr
           }
         }
       } catch (err) {
-        logger.warn("Could not load tenant data from database, using demo data", err);
+        logger.warn("Could not load tenant data from database, using demo data", { error: err });
       }
     } catch (err) {
       logger.error("Error loading tenant data:", err);
@@ -374,7 +374,7 @@ export const TenantProvider: React.FC<{ children: React.ReactNode }> = ({ childr
       }
       // Se não houver branding no banco, o demo já está configurado
     } catch (err) {
-      logger.warn("Could not load tenant branding:", err);
+      logger.warn("Could not load tenant branding:", { error: err });
     }
   };
 
@@ -388,7 +388,7 @@ export const TenantProvider: React.FC<{ children: React.ReactNode }> = ({ childr
         .from("tenant_users")
         .select("*")
         .eq("tenant_id", tenantId)
-        .eq("user_id", user?.id)
+        .eq("user_id", user?.id || "")
         .eq("status", "active")
         .maybeSingle();
 
@@ -422,7 +422,7 @@ export const TenantProvider: React.FC<{ children: React.ReactNode }> = ({ childr
         setCurrentUser(defaultUser);
       }
     } catch (err) {
-      logger.warn("Could not load tenant user:", err);
+      logger.warn("Could not load tenant user:", { error: err });
     }
   };
 
@@ -459,7 +459,7 @@ export const TenantProvider: React.FC<{ children: React.ReactNode }> = ({ childr
       }
       // Se não houver usage no banco, o demo já está configurado
     } catch (err) {
-      logger.warn("Could not load tenant usage:", err);
+      logger.warn("Could not load tenant usage:", { error: err });
     }
   };
 
@@ -488,7 +488,7 @@ export const TenantProvider: React.FC<{ children: React.ReactNode }> = ({ childr
         setTenantPlans(plans);
       }
     } catch (err) {
-      logger.warn("Could not load plans:", err);
+      logger.warn("Could not load plans:", { error: err });
     }
   };
 
@@ -560,6 +560,7 @@ export const TenantProvider: React.FC<{ children: React.ReactNode }> = ({ childr
     if (data) {
       const typedData: TenantBranding = {
         ...data,
+        logo_url: data.logo_url || undefined,
         header_style: typeof data.header_style === "object" && !Array.isArray(data.header_style) ? data.header_style as Record<string, unknown> : {},
         sidebar_style: typeof data.sidebar_style === "object" && !Array.isArray(data.sidebar_style) ? data.sidebar_style as Record<string, unknown> : {},
         button_style: typeof data.button_style === "object" && !Array.isArray(data.button_style) ? data.button_style as Record<string, unknown> : {},

@@ -33,13 +33,11 @@ interface DeviceInfo {
 }
 
 interface SessionInfo {
-  id: string;
-  device_info: DeviceInfo | null;
+  session_id: string;
+  user_id: string;
   created_at: string;
-  last_activity_at: string;
   expires_at: string;
-  token: string;
-  revoked: boolean | null;
+  device_info?: DeviceInfo | null;
 }
 
 export const SessionManagement: React.FC = () => {
@@ -68,12 +66,7 @@ export const SessionManagement: React.FC = () => {
         return;
       }
 
-      // Type assertion for device_info
-      const typedSessions = (data || []).map(session => ({
-        ...session,
-        device_info: session.device_info as DeviceInfo | null,
-      }));
-      setSessions(typedSessions);
+      setSessions(data || []);
     } catch (error) {
       console.error("Error loading sessions:", error);
     } finally {
@@ -129,8 +122,8 @@ export const SessionManagement: React.FC = () => {
   const getSessionStatus = (session: SessionInfo) => {
     const now = new Date();
     const expiresAt = new Date(session.expires_at);
-    const lastActivity = new Date(session.last_activity_at);
-    const hoursSinceActivity = (now.getTime() - lastActivity.getTime()) / (1000 * 60 * 60);
+    const createdAt = new Date(session.created_at);
+    const hoursSinceActivity = (now.getTime() - createdAt.getTime()) / (1000 * 60 * 60);
 
     if (expiresAt < now) {
       return { label: "Expirada", variant: "destructive" as const, icon: XCircle };
@@ -176,7 +169,7 @@ export const SessionManagement: React.FC = () => {
                 const StatusIcon = status.icon;
 
                 return (
-                  <Card key={session.id} className="border-2">
+                  <Card key={session.session_id} className="border-2">
                     <CardContent className="p-4">
                       <div className="flex items-start justify-between">
                         <div className="flex items-start space-x-4 flex-1">
@@ -203,8 +196,8 @@ export const SessionManagement: React.FC = () => {
                               )}
                               <p className="flex items-center gap-1">
                                 <Clock className="w-3 h-3" />
-                                Última atividade:{" "}
-                                {formatDistanceToNow(new Date(session.last_activity_at), {
+                                Criada em:{" "}
+                                {formatDistanceToNow(new Date(session.created_at), {
                                   addSuffix: true,
                                   locale: ptBR,
                                 })}
@@ -222,8 +215,8 @@ export const SessionManagement: React.FC = () => {
                         <Button
                           variant="destructive"
                           size="sm"
-                          onClick={() => revokeSession(session.id)}
-                          disabled={revoking === session.id}
+                          onClick={() => revokeSession(session.session_id)}
+                          disabled={revoking === session.session_id}
                         >
                           {revoking === session.id ? (
                             <span className="flex items-center gap-2">
