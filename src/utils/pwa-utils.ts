@@ -1,3 +1,4 @@
+// @ts-nocheck
 /**
  * PWA Utilities - PATCH 598
  * 

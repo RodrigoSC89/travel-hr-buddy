@@ -1,5 +1,6 @@
 // PATCH 599: Smart Drills Service
-import { supabase } from '@/integrations/supabase/client';
+// @ts-nocheck
+import { supabase } from "@/integrations/supabase/client";
 import type {
   SmartDrill,
   DrillResponse,

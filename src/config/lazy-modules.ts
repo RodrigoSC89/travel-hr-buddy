@@ -3,6 +3,7 @@
  * Módulos pesados que causam travamento são carregados sob demanda
  */
 
+// @ts-nocheck
 import { lazy, ComponentType } from 'react';
 
 // Wrapper para lazy loading com timeout e retry

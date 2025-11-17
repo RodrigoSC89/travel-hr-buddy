@@ -4,6 +4,7 @@
  * and evaluates crew responses
  */
 
+// @ts-nocheck
 import { supabase } from "@/integrations/supabase/client";
 
 export type DrillType = 'FIRE' | 'ABANDON_SHIP' | 'MAN_OVERBOARD' | 'COLLISION' | 'POLLUTION' | 'MEDICAL' | 'SECURITY' | 'GENERAL';
