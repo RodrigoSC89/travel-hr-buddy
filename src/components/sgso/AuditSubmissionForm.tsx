@@ -46,9 +46,6 @@ export function AuditSubmissionForm({ open, onClose }: AuditSubmissionFormProps)
       const { data: { user } } = await supabase.auth.getUser();
       if (!user) throw new Error("User not authenticated");
 
-      // Generate audit number
-      const auditNumber = `AUD-${Date.now().toString().slice(-8)}`;
-
       // Parse auditors
       const auditorsArray = formData.auditors
         .split(",")
@@ -59,9 +56,7 @@ export function AuditSubmissionForm({ open, onClose }: AuditSubmissionFormProps)
       const { error } = await supabase
         .from("sgso_audits")
         .insert({
-          audit_number: auditNumber,
           audit_type: formData.audit_type,
-          audit_scope: formData.audit_scope,
           audit_date: formData.audit_date,
           status: formData.status,
           auditors: auditorsArray,
@@ -73,18 +68,9 @@ export function AuditSubmissionForm({ open, onClose }: AuditSubmissionFormProps)
 
       if (error) throw error;
 
-      // Log in audit_logs
-      await supabase.from("audit_logs").insert({
-        action: "audit_created",
-        entity_type: "sgso_audit",
-        entity_id: auditNumber,
-        details: { audit_type: formData.audit_type, scope: formData.audit_scope },
-        user_id: user.id
-      });
-
       toast({
         title: "Audit Created",
-        description: `Audit ${auditNumber} has been successfully created.`,
+        description: "Audit has been successfully created.",
       });
 
       onClose();

@@ -567,12 +567,12 @@ function App() {
           if ("preload" in Dashboard && typeof Dashboard.preload === "function") {
             Dashboard.preload()
               .then(() => logger.debug("Dashboard preloaded"))
-              .catch((error) => logger.warn("Dashboard preload failed", { error }));
+              .catch((error: Error) => logger.warn("Dashboard preload failed", { error }));
           }
           if ("preload" in Travel && typeof Travel.preload === "function") {
             Travel.preload()
               .then(() => logger.debug("Travel preloaded"))
-              .catch((error) => logger.warn("Travel preload failed", { error }));
+              .catch((error: Error) => logger.warn("Travel preload failed", { error }));
           }
         }, { timeout: 3000 }); // Timeout para idle callback
       } else {
@@ -581,12 +581,12 @@ function App() {
           if ("preload" in Dashboard && typeof Dashboard.preload === "function") {
             Dashboard.preload()
               .then(() => logger.debug("Dashboard preloaded"))
-              .catch((error) => logger.warn("Dashboard preload failed", { error }));
+              .catch((error: Error) => logger.warn("Dashboard preload failed", { error }));
           }
           if ("preload" in Travel && typeof Travel.preload === "function") {
             Travel.preload()
               .then(() => logger.debug("Travel preloaded"))
-              .catch((error) => logger.warn("Travel preload failed", { error }));
+              .catch((error: Error) => logger.warn("Travel preload failed", { error }));
           }
         }, 2000);
       }

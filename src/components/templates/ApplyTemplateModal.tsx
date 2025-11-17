@@ -17,7 +17,7 @@ interface Template {
   id: string;
   title: string;
   content: string;
-  created_at: string;
+  created_at: string | null;
 }
 
 interface ApplyTemplateModalProps {

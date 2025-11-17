@@ -3,13 +3,12 @@
  * Módulos pesados que causam travamento são carregados sob demanda
  */
 
-// @ts-nocheck
 import { lazy, ComponentType } from 'react';
 
 // Wrapper para lazy loading com timeout e retry
-export const lazyWithRetry = (
-  importFn: () => Promise<{ default: ComponentType<any> }>,
-  fallback: ComponentType<any> | null = null
+export const lazyWithRetry = <T extends ComponentType<any>>(
+  importFn: () => Promise<{ default: T }>,
+  fallback: T | null = null
 ) => {
   return lazy(() =>
     importFn().catch((error) => {
