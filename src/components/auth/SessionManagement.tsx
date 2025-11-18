@@ -218,7 +218,7 @@ export const SessionManagement: React.FC = () => {
                           onClick={() => revokeSession(session.session_id)}
                           disabled={revoking === session.session_id}
                         >
-                          {revoking === session.id ? (
+                          {revoking === session.session_id ? (
                             <span className="flex items-center gap-2">
                               <div className="animate-spin rounded-full h-3 w-3 border-b-2 border-white"></div>
                               Revogando...

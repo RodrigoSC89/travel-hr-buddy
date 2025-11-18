@@ -562,6 +562,7 @@ export const TenantProvider: React.FC<{ children: React.ReactNode }> = ({ childr
       const typedData: TenantBranding = {
         ...data,
         logo_url: data.logo_url || undefined,
+        favicon_url: data.favicon_url || undefined,
         header_style: typeof data.header_style === "object" && !Array.isArray(data.header_style) ? data.header_style as Record<string, unknown> : {},
         sidebar_style: typeof data.sidebar_style === "object" && !Array.isArray(data.sidebar_style) ? data.sidebar_style as Record<string, unknown> : {},
         button_style: typeof data.button_style === "object" && !Array.isArray(data.button_style) ? data.button_style as Record<string, unknown> : {},
