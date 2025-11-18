@@ -1,4 +1,3 @@
-// @ts-nocheck
 /**
  * PATCH 636: AI Navigation Hook
  * Provides intelligent navigation suggestions based on user behavior
@@ -8,6 +7,7 @@ import { useQuery } from "@tanstack/react-query";
 import { supabase } from "@/integrations/supabase/client";
 import { useAuth } from "@/contexts/AuthContext";
 import { useEffect } from "react";
+import type { Database } from "@/integrations/supabase/types";
 
 interface NavigationEntry {
   from: string;
@@ -20,6 +20,10 @@ interface NavigationSuggestion {
   confidence: number;
   reason: string;
 }
+
+type NavigationHistoryRow = Database["public"]["Tables"]["navigation_history"]["Row"];
+type NavigationHistoryInsert = Database["public"]["Tables"]["navigation_history"]["Insert"];
+type ModuleAccessInsert = Database["public"]["Tables"]["module_access_log"]["Insert"];
 
 export function useAINavigation() {
   const { user } = useAuth();
@@ -34,12 +38,14 @@ export function useAINavigation() {
 
       if (previousPath && previousPath !== currentPath) {
         try {
-          await supabase.from("navigation_history").insert({
+          const payload: NavigationHistoryInsert = {
             user_id: user.id,
             from_path: previousPath,
             to_path: currentPath,
             timestamp: new Date().toISOString(),
-          });
+          };
+
+          await supabase.from("navigation_history").insert(payload);
         } catch (error) {
           console.error("Failed to track navigation:", error);
         }
@@ -68,7 +74,7 @@ export function useAINavigation() {
 
         if (error) throw error;
 
-        return analyzePatternsAndSuggest(history || []);
+        return analyzePatternsAndSuggest((history ?? []) as NavigationHistoryRow[]);
       } catch (error) {
         console.error("Failed to get navigation suggestions:", error);
         return [];
@@ -81,7 +87,7 @@ export function useAINavigation() {
   return { suggestions };
 }
 
-function analyzePatternsAndSuggest(history: any[]): NavigationSuggestion[] {
+function analyzePatternsAndSuggest(history: NavigationHistoryRow[]): NavigationSuggestion[] {
   if (history.length === 0) return [];
 
   const suggestions: NavigationSuggestion[] = [];
@@ -127,11 +133,13 @@ export function useRecordModuleAccess(moduleName: string) {
 
     const recordAccess = async () => {
       try {
-        await supabase.from("module_access_log").insert({
+        const payload: ModuleAccessInsert = {
           user_id: user.id,
           module_name: moduleName,
           accessed_at: new Date().toISOString(),
-        });
+        };
+
+        await supabase.from("module_access_log").insert(payload);
       } catch (error) {
         console.error("Failed to record module access:", error);
       }

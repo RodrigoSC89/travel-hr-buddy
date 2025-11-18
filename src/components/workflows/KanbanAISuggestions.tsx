@@ -2,11 +2,13 @@
 
 import { Card, CardContent } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
-// @ts-nocheck
-import React, { useState, useEffect } from "react";
+import React, { useState } from "react";
 import { supabase } from "@/integrations/supabase/client";
 import { useToast } from "@/hooks/use-toast";
 import { Suggestion } from "./index";
+import type { Database } from "@/integrations/supabase/types";
+
+type WorkflowAISuggestionInsert = Database["public"]["Tables"]["workflow_ai_suggestions"]["Insert"];
 
 export function KanbanAISuggestions({ suggestions }: { suggestions: Suggestion[] }) {
   const [accepted, setAccepted] = useState<string[]>([]);
@@ -15,15 +17,17 @@ export function KanbanAISuggestions({ suggestions }: { suggestions: Suggestion[]
   const handleAccept = async (etapa: string, s: Suggestion) => {
     try {
       setAccepted((prev) => [...prev, etapa]);
-      
-      const { error } = await supabase.from("workflow_ai_suggestions").insert({
+
+      const payload: WorkflowAISuggestionInsert = {
         etapa: s.etapa,
         tipo_sugestao: s.tipo_sugestao,
         conteudo: s.conteudo,
         criticidade: s.criticidade,
         responsavel_sugerido: s.responsavel_sugerido,
         origem: "Copilot",
-      });
+      };
+
+      const { error } = await supabase.from("workflow_ai_suggestions").insert(payload);
 
       if (error) {
         console.error("Error inserting AI suggestion:", error);

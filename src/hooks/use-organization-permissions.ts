@@ -1,4 +1,3 @@
-// @ts-nocheck
 import { useOrganization } from "@/contexts/OrganizationContext";
 
 export const useOrganizationPermissions = () => {
@@ -12,29 +11,32 @@ export const useOrganizationPermissions = () => {
   const canManageData = () => checkPermission("manage_data");
 
   const hasFeature = (feature: string) => {
-    // Para demo, sempre permitir recursos se a organização existe
     if (!currentOrganization) return false;
-    
-    // Verificar nas features da organização
-    if (currentOrganization.features && typeof currentOrganization.features === "object") {
-      return currentOrganization.features[feature] === true;
+
+    const featureFlags = (currentOrganization.features || null) as Record<string, unknown> | null;
+    if (featureFlags && typeof featureFlags === "object") {
+      const value = featureFlags[feature];
+      if (typeof value === "boolean") {
+        return value;
+      }
     }
-    
-    // Fallback para recursos padrão da demo
+
     const defaultFeatures = ["peotram", "fleet_management", "analytics", "ai_analysis"];
     return defaultFeatures.includes(feature);
   };
 
   const isWithinLimits = (type: "users" | "vessels" | "storage") => {
     if (!currentOrganization) return false;
-    
+
+    const toNumber = (value: unknown) => (typeof value === "number" ? value : 0);
+
     switch (type) {
     case "users":
-      return currentOrganization.max_users > 0;
+      return toNumber(currentOrganization.max_users) > 0;
     case "vessels":
-      return currentOrganization.max_vessels > 0;
+      return toNumber(currentOrganization.max_vessels) > 0;
     case "storage":
-      return currentOrganization.max_storage_gb > 0;
+      return toNumber(currentOrganization.max_storage_gb) > 0;
     default:
       return false;
     }

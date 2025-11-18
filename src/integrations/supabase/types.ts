@@ -216,6 +216,176 @@ export type Database = {
         }
         Relationships: []
       }
+      feature_flags: {
+        Row: {
+          created_at: string
+          description: string | null
+          enabled: boolean
+          id: string
+          key: string
+          metadata: Json | null
+          tenant_id: string | null
+          updated_at: string
+          user_id: string | null
+        }
+        Insert: {
+          created_at?: string
+          description?: string | null
+          enabled?: boolean
+          id?: string
+          key: string
+          metadata?: Json | null
+          tenant_id?: string | null
+          updated_at?: string
+          user_id?: string | null
+        }
+        Update: {
+          created_at?: string
+          description?: string | null
+          enabled?: boolean
+          id?: string
+          key?: string
+          metadata?: Json | null
+          tenant_id?: string | null
+          updated_at?: string
+          user_id?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "feature_flags_tenant_id_fkey"
+            columns: ["tenant_id"]
+            isOneToOne: false
+            referencedRelation: "organizations"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      module_access_log: {
+        Row: {
+          accessed_at: string
+          id: string
+          metadata: Json | null
+          module_name: string
+          user_id: string | null
+        }
+        Insert: {
+          accessed_at?: string
+          id?: string
+          metadata?: Json | null
+          module_name: string
+          user_id?: string | null
+        }
+        Update: {
+          accessed_at?: string
+          id?: string
+          metadata?: Json | null
+          module_name?: string
+          user_id?: string | null
+        }
+        Relationships: []
+      }
+      navigation_history: {
+        Row: {
+          from_path: string
+          id: string
+          metadata: Json | null
+          timestamp: string
+          to_path: string
+          user_id: string | null
+        }
+        Insert: {
+          from_path: string
+          id?: string
+          metadata?: Json | null
+          timestamp?: string
+          to_path: string
+          user_id?: string | null
+        }
+        Update: {
+          from_path?: string
+          id?: string
+          metadata?: Json | null
+          timestamp?: string
+          to_path?: string
+          user_id?: string | null
+        }
+        Relationships: []
+      }
+      smart_workflow_steps: {
+        Row: {
+          assigned_to: string | null
+          created_at: string
+          description: string | null
+          id: string
+          metadata: Json | null
+          priority: string | null
+          status: string | null
+          title: string
+          workflow_id: string
+        }
+        Insert: {
+          assigned_to?: string | null
+          created_at?: string
+          description?: string | null
+          id?: string
+          metadata?: Json | null
+          priority?: string | null
+          status?: string | null
+          title: string
+          workflow_id: string
+        }
+        Update: {
+          assigned_to?: string | null
+          created_at?: string
+          description?: string | null
+          id?: string
+          metadata?: Json | null
+          priority?: string | null
+          status?: string | null
+          title?: string
+          workflow_id?: string
+        }
+        Relationships: []
+      }
+      workflow_ai_suggestions: {
+        Row: {
+          conteudo: string | null
+          created_at: string
+          created_by: string | null
+          criticidade: string | null
+          etapa: string
+          id: string
+          origem: string | null
+          responsavel_sugerido: string | null
+          tipo_sugestao: string | null
+          workflow_id: string | null
+        }
+        Insert: {
+          conteudo?: string | null
+          created_at?: string
+          created_by?: string | null
+          criticidade?: string | null
+          etapa: string
+          id?: string
+          origem?: string | null
+          responsavel_sugerido?: string | null
+          tipo_sugestao?: string | null
+          workflow_id?: string | null
+        }
+        Update: {
+          conteudo?: string | null
+          created_at?: string
+          created_by?: string | null
+          criticidade?: string | null
+          etapa?: string
+          id?: string
+          origem?: string | null
+          responsavel_sugerido?: string | null
+          tipo_sugestao?: string | null
+          workflow_id?: string | null
+        }
+        Relationships: []
+      }
       adaptive_parameters: {
         Row: {
           auto_adjust: boolean | null

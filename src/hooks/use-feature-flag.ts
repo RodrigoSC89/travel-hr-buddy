@@ -1,7 +1,7 @@
-// @ts-nocheck
 import { useQuery } from "@tanstack/react-query";
 import { supabase } from "@/integrations/supabase/client";
 import { useAuth } from "@/contexts/AuthContext";
+import type { Database } from "@/integrations/supabase/types";
 
 /**
  * PATCH 629: Feature Flag Hook
@@ -25,24 +25,27 @@ export function useFeatureFlag(key: string): boolean {
     queryKey: ["feature-flag", key, user?.id],
     queryFn: async () => {
       try {
-        // Check in order: user-specific, tenant-specific, global
-        // Use parameterized filter to avoid SQL injection
+        type FeatureFlagRow = Database["public"]["Tables"]["feature_flags"]["Row"];
+
         const { data, error } = await supabase
           .from("feature_flags")
-          .select("enabled")
+          .select("enabled, user_id, tenant_id")
           .eq("key", key)
-          .or(`user_id.eq."${user?.id}",tenant_id.eq."${user?.id}",user_id.is.null,tenant_id.is.null`)
-          .order("user_id", { ascending: true, nullsFirst: false })
-          .order("tenant_id", { ascending: true, nullsFirst: false })
-          .limit(1)
-          .single();
+          .order("user_id", { ascending: false, nullsFirst: true })
+          .order("tenant_id", { ascending: false, nullsFirst: true })
+          .limit(5);
 
         if (error) {
           console.warn(`Feature flag lookup error for "${key}":`, error);
           return false;
         }
 
-        return data?.enabled ?? false;
+        const rows = (data ?? []) as FeatureFlagRow[];
+        const prioritized = rows.find(r => r.user_id && r.user_id === user?.id)
+          ?? rows.find(r => r.tenant_id)
+          ?? rows.find(r => !r.user_id && !r.tenant_id);
+
+        return prioritized?.enabled ?? false;
       } catch (error) {
         console.error(`Feature flag error for "${key}":`, error);
         return false;
@@ -83,7 +86,7 @@ export function useToggleFeatureFlag() {
   return async (key: string, enabled: boolean) => {
     const { error } = await supabase
       .from("feature_flags")
-      .update({ enabled })
+      .update({ enabled, updated_at: new Date().toISOString() })
       .eq("key", key);
 
     if (error) {

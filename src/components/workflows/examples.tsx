@@ -1,4 +1,3 @@
-// @ts-nocheck
 /**
  * Example: Using KanbanAISuggestions in a Workflow Detail Page
  * 
@@ -10,17 +9,28 @@ import { useState, useEffect } from "react";
 import { KanbanAISuggestions } from "@/components/workflows";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { supabase } from "@/integrations/supabase/client";
+import type { Database } from "@/integrations/supabase/types";
+
+type WorkflowSuggestion = {
+  etapa: string;
+  tipo_sugestao: string;
+  conteudo: string;
+  criticidade: string;
+  responsavel_sugerido: string;
+};
+
+type SmartWorkflowStep = Database["public"]["Tables"]["smart_workflow_steps"]["Row"];
 
 // Example: Integration in a workflow detail page
 export function WorkflowDetailWithAISuggestions({ workflowId }: { workflowId: string }) {
-  const [aiSuggestions, setAiSuggestions] = useState<unknown>([]);
+  const [aiSuggestions, setAiSuggestions] = useState<WorkflowSuggestion[]>([]);
 
   useEffect(() => {
     // Example: Fetch AI suggestions from an AI service or generate them
     const generateAISuggestions = async () => {
       // In a real implementation, this would call an AI service
       // For now, we'll use example data
-      const suggestions = [
+  const suggestions: WorkflowSuggestion[] = [
         {
           etapa: "Planejamento",
           tipo_sugestao: "Otimização de Processo",
@@ -80,7 +90,7 @@ export function WorkflowDetailWithAISuggestions({ workflowId }: { workflowId: st
 }
 
 // Example: Generate suggestions dynamically based on workflow analysis
-export async function generateAISuggestionsForWorkflow(workflowId: string) {
+export async function generateAISuggestionsForWorkflow(workflowId: string): Promise<WorkflowSuggestion[]> {
   // Fetch workflow steps
   const { data: steps } = await supabase
     .from("smart_workflow_steps")
@@ -92,10 +102,11 @@ export async function generateAISuggestionsForWorkflow(workflowId: string) {
   }
 
   // Analyze workflow and generate suggestions
-  const suggestions = [];
+  const typedSteps = steps as SmartWorkflowStep[];
+  const suggestions: WorkflowSuggestion[] = [];
 
   // Example: Detect missing documentation
-  const stepsWithoutDescription = steps.filter(s => !s.description);
+  const stepsWithoutDescription = typedSteps.filter(s => !s.description);
   if (stepsWithoutDescription.length > 0) {
     suggestions.push({
       etapa: stepsWithoutDescription[0].title,
@@ -107,7 +118,7 @@ export async function generateAISuggestionsForWorkflow(workflowId: string) {
   }
 
   // Detect high priority tasks without assignment
-  const unassignedHighPriority = steps.filter(
+  const unassignedHighPriority = typedSteps.filter(
     s => s.priority === "high" && !s.assigned_to
   );
   if (unassignedHighPriority.length > 0) {
@@ -121,7 +132,7 @@ export async function generateAISuggestionsForWorkflow(workflowId: string) {
   }
 
   // Detect bottlenecks (many tasks in same status)
-  const inProgressTasks = steps.filter(s => s.status === "em_progresso");
+  const inProgressTasks = typedSteps.filter(s => s.status === "em_progresso");
   if (inProgressTasks.length > 5) {
     suggestions.push({
       etapa: "Em Progresso",
@@ -133,7 +144,7 @@ export async function generateAISuggestionsForWorkflow(workflowId: string) {
   }
 
   // Suggest automation for repetitive tasks
-  const pendingTasks = steps.filter(s => s.status === "pendente");
+  const pendingTasks = typedSteps.filter(s => s.status === "pendente");
   if (pendingTasks.length > 10) {
     suggestions.push({
       etapa: "Planejamento",
@@ -149,12 +160,12 @@ export async function generateAISuggestionsForWorkflow(workflowId: string) {
 
 // Example: Usage in a page component
 export default function ExampleWorkflowPage() {
-  const [suggestions, setSuggestions] = useState<unknown>([]);
+  const [suggestions, setSuggestions] = useState<WorkflowSuggestion[]>([]);
 
   useEffect(() => {
     const loadSuggestions = async () => {
       // Method 1: Use pre-generated suggestions
-      const staticSuggestions = [
+  const staticSuggestions: WorkflowSuggestion[] = [
         {
           etapa: "Code Review",
           tipo_sugestao: "Best Practice",
@@ -168,7 +179,7 @@ export default function ExampleWorkflowPage() {
       const dynamicSuggestions = await generateAISuggestionsForWorkflow("workflow-123");
 
       // Combine and set suggestions
-      setSuggestions([...staticSuggestions, ...dynamicSuggestions]);
+  setSuggestions([...staticSuggestions, ...dynamicSuggestions]);
     };
 
     loadSuggestions();
