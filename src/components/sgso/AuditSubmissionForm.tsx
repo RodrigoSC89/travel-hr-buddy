@@ -1,4 +1,3 @@
-// @ts-nocheck
 import React, { useState } from "react";
 import {
   Dialog,
@@ -21,11 +20,14 @@ import {
 import { useToast } from "@/hooks/use-toast";
 import { supabase } from "@/integrations/supabase/client";
 import { Loader2 } from "lucide-react";
+import type { Database } from "@/integrations/supabase/types";
 
 interface AuditSubmissionFormProps {
   open: boolean;
   onClose: () => void;
 }
+
+type SgsoAuditInsert = Database["public"]["Tables"]["sgso_audits"]["Insert"];
 
 export function AuditSubmissionForm({ open, onClose }: AuditSubmissionFormProps) {
   const { toast } = useToast();
@@ -54,18 +56,25 @@ export function AuditSubmissionForm({ open, onClose }: AuditSubmissionFormProps)
         .filter(a => a.length > 0)
         .map(name => ({ name, role: "auditor" }));
 
+      const payload: SgsoAuditInsert = {
+        audit_type: formData.audit_type,
+        audit_date: formData.audit_date,
+        status: formData.status,
+        metadata: {
+          scope: formData.audit_scope,
+          auditors: auditorsArray,
+          notes: formData.notes,
+          created_by: user.id,
+        },
+        findings: null,
+        recommendations: null,
+        non_conformities_count: 0,
+        compliance_score: null,
+      };
+
       const { error } = await supabase
         .from("sgso_audits")
-        .insert({
-          audit_type: formData.audit_type,
-          audit_date: formData.audit_date,
-          status: formData.status,
-          auditors: auditorsArray,
-          findings: [],
-          non_conformities: [],
-          observations: [],
-          recommendations: []
-        });
+        .insert(payload);
 
       if (error) throw error;
 
@@ -75,10 +84,11 @@ export function AuditSubmissionForm({ open, onClose }: AuditSubmissionFormProps)
       });
 
       onClose();
-    } catch (error: any) {
+    } catch (error: unknown) {
+      const message = error instanceof Error ? error.message : "Unexpected error";
       toast({
         title: "Error",
-        description: error.message,
+        description: message,
         variant: "destructive",
       });
     } finally {
