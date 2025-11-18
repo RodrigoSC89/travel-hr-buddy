@@ -70,7 +70,7 @@ export const useEnhancedNotifications = () => {
       const { data: priceAlerts } = await supabase
         .from("price_alerts")
         .select("*")
-        .eq("user_id", user.id)
+        .eq("user_id", user?.id || "")
         .eq("is_active", true);
 
       const typedPriceAlerts = priceAlerts as PriceAlert[] | null;
