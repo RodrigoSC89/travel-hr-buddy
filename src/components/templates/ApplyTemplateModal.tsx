@@ -1,4 +1,3 @@
-// @ts-nocheck
 import { useEffect, useState } from "react";
 import {
   Dialog,
@@ -13,6 +12,7 @@ import { Input } from "@/components/ui/input";
 import { supabase } from "@/integrations/supabase/client";
 import { FileText } from "lucide-react";
 import { toast } from "@/hooks/use-toast";
+import type { Database } from "@/integrations/supabase/types";
 
 interface Template {
   id: string;
@@ -25,6 +25,10 @@ interface ApplyTemplateModalProps {
   onApply: (content: string) => void;
   tableName?: "templates" | "ai_document_templates";
 }
+
+type TemplatesRow = Database["public"]["Tables"]["templates"]["Row"];
+type AiDocumentTemplateRow = Database["public"]["Tables"]["ai_document_templates"]["Row"];
+type TemplateRow = TemplatesRow | AiDocumentTemplateRow;
 
 export default function ApplyTemplateModal({ onApply, tableName = "templates" }: ApplyTemplateModalProps) {
   const [open, setOpen] = useState(false);
@@ -46,7 +50,8 @@ export default function ApplyTemplateModal({ onApply, tableName = "templates" }:
 
       if (error) throw error;
 
-      setTemplates(data || []);
+      const normalized = (data as TemplateRow[] | null)?.map((row) => normalizeTemplate(row, tableName)) ?? [];
+      setTemplates(normalized);
     } catch (error) {
       console.error("Error fetching templates:", error);
       toast({
@@ -55,6 +60,28 @@ export default function ApplyTemplateModal({ onApply, tableName = "templates" }:
         variant: "destructive",
       });
     }
+  }
+
+  function normalizeTemplate(row: TemplateRow, source: ApplyTemplateModalProps["tableName"]): Template {
+    const base = {
+      id: row.id,
+      title: row.title,
+      created_at: row.created_at ?? null,
+    };
+
+    if (source === "templates") {
+      const templateRow = row as TemplatesRow;
+      const contentValue = typeof templateRow.content === "string"
+        ? templateRow.content
+        : templateRow.content
+          ? JSON.stringify(templateRow.content, null, 2)
+          : "";
+
+      return { ...base, content: contentValue };
+    }
+
+    const aiRow = row as AiDocumentTemplateRow;
+    return { ...base, content: aiRow.content ?? "" };
   }
 
   function applyTemplate(content: string) {
@@ -128,9 +155,11 @@ export default function ApplyTemplateModal({ onApply, tableName = "templates" }:
                 >
                   <div className="flex flex-col items-start w-full">
                     <span className="font-medium">{template.title}</span>
-                    <span className="text-xs text-muted-foreground">
-                      {new Date(template.created_at).toLocaleDateString("pt-BR")}
-                    </span>
+                    {template.created_at && (
+                      <span className="text-xs text-muted-foreground">
+                        {new Date(template.created_at).toLocaleDateString("pt-BR")}
+                      </span>
+                    )}
                   </div>
                 </Button>
               ))
