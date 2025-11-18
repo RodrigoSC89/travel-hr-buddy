@@ -38,6 +38,7 @@ const Travel = safeLazyImport(() => import("@/pages/Travel"), "Travel");
 const PriceAlerts = safeLazyImport(() => import("@/modules/features/price-alerts"));
 const SensorsHub = safeLazyImport(() => import("@/modules/sensors-hub"));
 const CrewValidation = safeLazyImport(() => import("@/pages/admin/crew/validation"));
+const ModuleHarness = safeLazyImport(() => import("@/pages/ModuleHarness"), "ModuleHarness");
 const IntegrationsValidation = safeLazyImport(() => import("@/pages/admin/integrations/validation"));
 const AnalyticsValidation = safeLazyImport(() => import("@/pages/admin/analytics/validation"));
 const ValidationPatches622_626 = safeLazyImport(() => import("@/pages/ValidationPatches622_626"));
@@ -675,6 +676,9 @@ function App() {
                       {/* <Route path="/ism-audits" element={<ISMAudits />} /> */}
                       {/* PATCH 610: Pre-OVID Inspection */}
                       <Route path="/pre-ovid" element={<PreOvidInspection />} />
+                      {import.meta.env.DEV && (
+                        <Route path="/__module_harness" element={<ModuleHarness />} />
+                      )}
                       <Route path="/analytics" element={<Analytics />} />
                       <Route path="/hr" element={<HumanResources />} />
                       {/* PATCH 551: Communication Center Consolidation - Unified communication route */}

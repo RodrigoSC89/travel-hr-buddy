@@ -9,7 +9,8 @@ import { Badge } from "@/components/ui/badge";
 import { useToast } from "@/hooks/use-toast";
 import { supabase } from "@/integrations/supabase/client";
 import { MMIOS } from "@/types/mmi";
-import { utils, writeFile } from "xlsx";
+// Lazy import XLSX para não incluir ~2MB no bundle inicial
+const loadXLSX = () => import("xlsx").then(m => m);
 import html2pdf from "html2pdf.js";
 
 export default function MMIOrdersPage() {
@@ -86,11 +87,12 @@ export default function MMIOrdersPage() {
     }
   };
 
-  const exportToCSV = () => {
-    const worksheet = utils.json_to_sheet(workOrders);
-    const workbook = utils.book_new();
-    utils.book_append_sheet(workbook, worksheet, "Ordens de Serviço");
-    writeFile(workbook, "ordens-de-servico.xlsx");
+  const exportToCSV = async () => {
+    const xlsx = await loadXLSX();
+    const worksheet = xlsx.utils.json_to_sheet(workOrders);
+    const workbook = xlsx.utils.book_new();
+    xlsx.utils.book_append_sheet(workbook, worksheet, "Ordens de Serviço");
+    xlsx.writeFile(workbook, "ordens-de-servico.xlsx");
   };
 
   const exportToPDF = () => {
