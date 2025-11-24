@@ -1,4 +1,3 @@
-// @ts-nocheck
 import { useEffect, useState } from "react";
 import modulesRegistry from "@/../modules-registry-complete.json";
 
@@ -12,7 +11,18 @@ export interface Module {
   updated_at: string;
 }
 
-type RegistryModule = (typeof modulesRegistry)["modules"][number];
+// Type annotation to avoid deep recursion
+type RegistryModule = {
+  id: string;
+  name: string;
+  path?: string;
+  route?: string;
+  status?: string;
+  description?: string;
+  created_at?: string;
+  updated_at?: string;
+  lastModified?: string;
+};
 
 const STATUS_MAP: Record<string, Module["status"]> = {
   active: "functional",

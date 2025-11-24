@@ -1,4 +1,3 @@
-// @ts-nocheck
 /**
  * PATCH 598 - Training Progress Dashboard
  * Displays crew training progress and metrics
