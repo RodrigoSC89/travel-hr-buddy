@@ -1,4 +1,3 @@
-// @ts-nocheck
 // PATCH-601: Re-applied @ts-nocheck for build stability
 /**
  * PATCH 297: AI Document Service

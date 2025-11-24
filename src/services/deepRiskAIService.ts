@@ -1,4 +1,3 @@
-// @ts-nocheck
 // PATCH-601: Re-applied @ts-nocheck for build stability
 /**
  * PATCH 537 - Deep Risk AI Service with ONNX Runtime

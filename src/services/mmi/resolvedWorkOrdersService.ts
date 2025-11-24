@@ -1,4 +1,3 @@
-// @ts-nocheck
 // PATCH-601: Removed @ts-nocheck directive - types verified
 /**
  * Service for managing resolved work orders (OS) for AI learning

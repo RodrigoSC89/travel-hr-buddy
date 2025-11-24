@@ -1,4 +1,3 @@
-// @ts-nocheck
 /**
  * Weather Service
  * Integrates with OpenWeatherMap API for maritime weather data

@@ -1,4 +1,3 @@
-// @ts-nocheck
 // PATCH-601: Removed @ts-nocheck directive - types verified
 /**
  * MMI Jobs Similarity Search Service
@@ -60,22 +59,19 @@ export interface SemanticSearchOptions {
  * @returns Promise with job comparison results
  */
 export async function findSimilarJobsById(jobId: string): Promise<JobComparisonResponse> {
-  // Manually construct URL with query params since Supabase client doesn't support it well for GET
-  const url = `${supabase.supabaseUrl}/functions/v1/mmi-jobs-similar?jobId=${jobId}`;
-  const response = await fetch(url, {
-    method: "GET",
+  // Use edge function invoke instead of protected properties
+  const { data, error } = await supabase.functions.invoke('mmi-jobs-similar', {
+    method: 'GET',
     headers: {
-      Authorization: `Bearer ${(await supabase.auth.getSession()).data.session?.access_token || ""}`,
-      apikey: supabase.supabaseKey,
+      'Content-Type': 'application/json',
     },
   });
 
-  if (!response.ok) {
-    const errorData = await response.json();
-    throw new Error(errorData.error || "Failed to find similar jobs");
+  if (error) {
+    throw new Error(error.message || "Failed to find similar jobs");
   }
 
-  return await response.json();
+  return data;
 }
 
 /**

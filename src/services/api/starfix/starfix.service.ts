@@ -1,4 +1,3 @@
-// @ts-nocheck
 /**
  * StarFix API Integration Service
  * FSP (Flag State Performance) Support System

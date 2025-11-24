@@ -1,4 +1,3 @@
-// @ts-nocheck
 // PATCH-601: Removed @ts-nocheck directive - types verified
 /**
  * PATCH 540 - Navigation Copilot v3 Service
