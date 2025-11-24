@@ -320,7 +320,7 @@ describe("PATCH 535 - RLS Security Validation", () => {
       const admin = { id: "admin-001", role: "admin" };
       const transaction = { id: "tx-001", created_by: "user-002" };
 
-      const canAccess = admin.role === "admin";
+      const canAccess = admin.role === "admin" || admin.id === transaction.created_by;
       expect(canAccess).toBe(true);
     });
 

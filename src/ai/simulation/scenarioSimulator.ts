@@ -1,4 +1,3 @@
-// @ts-nocheck
 /**
  * PATCH 239 - Immersive Scenario Simulator
  * 3D scenario rendering and AI-driven simulation
@@ -9,8 +8,15 @@
 
 import { logger } from "@/lib/logger";
 import { supabase } from "@/integrations/supabase/client";
+import type { PerspectiveCamera, Scene, WebGLRenderer } from "three";
+
 // Lazy import THREE.js para não incluir ~600KB no bundle inicial
-import * as THREE from "three";
+type ThreeModule = typeof import("three");
+
+async function loadThree(): Promise<ThreeModule> {
+  const mod = await import(/* @vite-ignore */ "three");
+  return mod;
+}
 
 export type ScenarioType = "emergency" | "training" | "planning" | "inspection";
 export type SimulationState = "idle" | "loading" | "running" | "paused" | "completed";
@@ -41,15 +47,32 @@ export interface DecisionLog {
 }
 
 class ScenarioSimulator {
-  private scene: THREE.Scene | null = null;
-  private camera: THREE.PerspectiveCamera | null = null;
-  private renderer: THREE.WebGLRenderer | null = null;
+  private three: ThreeModule | null = null;
+  private scene: Scene | null = null;
+  private camera: PerspectiveCamera | null = null;
+  private renderer: WebGLRenderer | null = null;
   private animationFrameId: number | null = null;
+  private aiEventInterval: ReturnType<typeof setInterval> | null = null;
+  private resizeHandler: (() => void) | null = null;
   private state: SimulationState = "idle";
   private currentScenario: ScenarioConfig | null = null;
   private events: SimulationEvent[] = [];
   private decisions: DecisionLog[] = [];
   private startTime: number = 0;
+
+  private async ensureThree(): Promise<ThreeModule> {
+    if (!this.three) {
+      this.three = await loadThree();
+    }
+    return this.three;
+  }
+
+  private getThree(): ThreeModule {
+    if (!this.three) {
+      throw new Error("Three.js not loaded. Call initialize first.");
+    }
+    return this.three;
+  }
 
   /**
    * Initialize 3D environment
@@ -61,6 +84,7 @@ class ScenarioSimulator {
     }
 
     try {
+      const THREE = await this.ensureThree();
       // Create scene
       this.scene = new THREE.Scene();
       this.scene.background = new THREE.Color(0x87ceeb);
@@ -87,7 +111,8 @@ class ScenarioSimulator {
       this.setupLighting();
 
       // Handle window resize
-      window.addEventListener("resize", () => this.handleResize(container));
+      this.resizeHandler = () => this.handleResize(container);
+      window.addEventListener("resize", this.resizeHandler);
 
       logger.info("[Simulator] ✓ 3D environment initialized");
     } catch (error) {
@@ -100,6 +125,7 @@ class ScenarioSimulator {
    * Setup scene lighting
    */
   private setupLighting(): void {
+    const THREE = this.getThree();
     if (!this.scene) return;
 
     // Ambient light
@@ -155,6 +181,7 @@ class ScenarioSimulator {
    * Clear scene objects
    */
   private clearScene(): void {
+    const THREE = this.getThree();
     if (!this.scene) return;
 
     while (this.scene.children.length > 0) {
@@ -173,6 +200,7 @@ class ScenarioSimulator {
    * Build 3D environment
    */
   private async buildEnvironment(environment: string): Promise<void> {
+    const THREE = this.getThree();
     if (!this.scene) return;
 
     // Ground plane
@@ -207,6 +235,7 @@ class ScenarioSimulator {
    * Build maritime environment
    */
   private buildMaritimeEnvironment(): void {
+    const THREE = this.getThree();
     if (!this.scene) return;
 
     // Water plane
@@ -236,6 +265,7 @@ class ScenarioSimulator {
    * Build industrial environment
    */
   private buildIndustrialEnvironment(): void {
+    const THREE = this.getThree();
     if (!this.scene) return;
 
     // Warehouse building
@@ -267,6 +297,7 @@ class ScenarioSimulator {
    * Build emergency environment
    */
   private buildEmergencyEnvironment(): void {
+    const THREE = this.getThree();
     if (!this.scene) return;
 
     // Emergency lights (red)
@@ -289,6 +320,7 @@ class ScenarioSimulator {
    * Build default environment
    */
   private buildDefaultEnvironment(): void {
+    const THREE = this.getThree();
     if (!this.scene) return;
 
     // Simple cube
@@ -352,10 +384,10 @@ class ScenarioSimulator {
    * Start AI-driven simulation
    */
   private async startAISimulation(): Promise<void> {
-    // Generate events periodically
-    const eventInterval = setInterval(() => {
+    this.clearAiInterval();
+    this.aiEventInterval = window.setInterval(() => {
       if (this.state !== "running") {
-        clearInterval(eventInterval);
+        this.clearAiInterval();
         return;
       }
 
@@ -456,6 +488,9 @@ class ScenarioSimulator {
     if (this.state === "paused") {
       this.state = "running";
       this.animate();
+      if (this.currentScenario?.aiEnabled) {
+        this.startAISimulation();
+      }
       logger.info("[Simulator] Simulation resumed");
     }
   }
@@ -468,6 +503,7 @@ class ScenarioSimulator {
     if (this.animationFrameId) {
       cancelAnimationFrame(this.animationFrameId);
     }
+    this.clearAiInterval();
     logger.info("[Simulator] Simulation stopped");
   }
 
@@ -500,6 +536,11 @@ class ScenarioSimulator {
    */
   cleanup(): void {
     this.stop();
+
+    if (this.resizeHandler) {
+      window.removeEventListener("resize", this.resizeHandler);
+      this.resizeHandler = null;
+    }
     
     if (this.renderer) {
       this.renderer.dispose();
@@ -511,8 +552,16 @@ class ScenarioSimulator {
     this.renderer = null;
     this.events = [];
     this.decisions = [];
+    this.three = null;
     
     logger.info("[Simulator] Cleanup complete");
+  }
+
+  private clearAiInterval(): void {
+    if (this.aiEventInterval) {
+      clearInterval(this.aiEventInterval);
+      this.aiEventInterval = null;
+    }
   }
 }
 

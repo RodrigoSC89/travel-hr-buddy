@@ -6,20 +6,64 @@
 import { describe, it, expect, vi, beforeEach } from "vitest";
 import { render, screen } from "@testing-library/react";
 
+type InspectionField = {
+  name: string;
+  type: string;
+  required?: boolean;
+  placeholder?: string;
+  options?: string[];
+  condition?: { field: string; value: string };
+  dependsOn?: string;
+  validation?: {
+    pattern?: RegExp;
+    minLength?: number;
+  };
+};
+
+type FieldGroup = {
+  title: string;
+  fields?: InspectionField[];
+};
+
+type InspectionSchema = {
+  fields?: InspectionField[];
+  fieldGroups?: FieldGroup[];
+};
+
+type FormSubmission = Record<string, unknown>;
+
 // Mock component since it may not exist yet
 const MockInspectionFormRenderer = ({ 
   schema, 
   onSubmit 
 }: { 
-  schema: any; 
-  onSubmit: (data: any) => void;
+  schema: InspectionSchema; 
+  onSubmit: (data: FormSubmission) => void;
 }) => {
+  const inspectorField = schema?.fields?.find((field) => field.name === "inspector");
+  const vesselField = schema?.fields?.find((field) => field.name === "vessel");
+  const totalFields =
+    (schema?.fields?.length ?? 0) +
+    (schema?.fieldGroups?.reduce(
+      (sum: number, group: FieldGroup) => sum + (group.fields?.length ?? 0),
+      0
+    ) ?? 0);
+
   return (
     <div data-testid="inspection-form">
       <h2>Inspection Form</h2>
+      <span data-testid="fields-count">{totalFields}</span>
       <form onSubmit={(e) => { e.preventDefault(); onSubmit({}); }}>
-        <input type="text" name="inspector" placeholder="Inspector Name" />
-        <input type="text" name="vessel" placeholder="Vessel Name" />
+        <input
+          type="text"
+          name="inspector"
+          placeholder={inspectorField?.placeholder ?? "Inspector Name"}
+        />
+        <input
+          type="text"
+          name="vessel"
+          placeholder={vesselField?.placeholder ?? "Vessel Name"}
+        />
         <button type="submit">Submit</button>
       </form>
     </div>

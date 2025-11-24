@@ -10,6 +10,16 @@
 
 import { logger } from "@/lib/logger";
 
+interface PerformanceMemoryInfo {
+  usedJSHeapSize: number;
+  totalJSHeapSize: number;
+  jsHeapSizeLimit: number;
+}
+
+interface PerformanceWithMemory extends Performance {
+  memory?: PerformanceMemoryInfo;
+}
+
 export interface PerformanceMetrics {
   fps: number;
   memory?: {
@@ -26,6 +36,13 @@ export interface WebVitals {
   FID?: number; // First Input Delay
   CLS?: number; // Cumulative Layout Shift
   TTFB?: number; // Time to First Byte
+}
+
+export interface PageLoadMetrics {
+  domContentLoaded: number;
+  loadComplete: number;
+  firstPaint?: number;
+  firstContentfulPaint?: number;
 }
 
 /**
@@ -89,8 +106,9 @@ export function getPerformanceMetrics(): PerformanceMetrics {
   };
 
   // Memory info (Chrome only)
-  if ((performance as any).memory) {
-    const memory = (performance as any).memory;
+  const performanceWithMemory = performance as PerformanceWithMemory;
+  if (performanceWithMemory.memory) {
+    const memory = performanceWithMemory.memory;
     metrics.memory = {
       usedJSHeapSize: memory.usedJSHeapSize,
       totalJSHeapSize: memory.totalJSHeapSize,
@@ -143,7 +161,7 @@ export function measureWebVitals(callback: (vitals: WebVitals) => void): () => v
   if (PerformanceObserver.supportedEntryTypes?.includes("first-input")) {
     const fidObserver = new PerformanceObserver((list) => {
       for (const entry of list.getEntries()) {
-        const fidEntry = entry as any;
+        const fidEntry = entry as PerformanceEventTiming;
         vitals.FID = fidEntry.processingStart - fidEntry.startTime;
         callback(vitals);
       }
@@ -157,7 +175,7 @@ export function measureWebVitals(callback: (vitals: WebVitals) => void): () => v
     let clsValue = 0;
     const clsObserver = new PerformanceObserver((list) => {
       for (const entry of list.getEntries()) {
-        const layoutEntry = entry as any;
+        const layoutEntry = entry as LayoutShift;
         if (!layoutEntry.hadRecentInput) {
           clsValue += layoutEntry.value;
           vitals.CLS = clsValue;
@@ -189,13 +207,14 @@ export function monitorMemory(
   callback: (memory: PerformanceMetrics["memory"]) => void,
   interval: number = 5000
 ): () => void {
-  if (!(performance as any).memory) {
+  const performanceWithMemory = performance as PerformanceWithMemory;
+  if (!performanceWithMemory.memory) {
     logger.warn("Memory monitoring not supported in this browser");
     return () => {};
   }
 
   const checkMemory = () => {
-    const memory = (performance as any).memory;
+    const memory = performanceWithMemory.memory;
     const memoryData = {
       usedJSHeapSize: memory.usedJSHeapSize,
       totalJSHeapSize: memory.totalJSHeapSize,
@@ -220,54 +239,51 @@ export function monitorMemory(
 /**
  * Debounce function - delays execution until after wait time
  */
-export function debounce<T extends (...args: any[]) => any>(
+export function debounce<T extends (...args: unknown[]) => unknown>(
   func: T,
   wait: number
 ): (...args: Parameters<T>) => void {
-  let timeout: number | null = null;
+  let timeout: ReturnType<typeof setTimeout> | undefined;
 
-  return function (this: any, ...args: Parameters<T>) {
-    const context = this;
-
+  return function (this: ThisParameterType<T>, ...args: Parameters<T>) {
     if (timeout) {
       clearTimeout(timeout);
     }
 
     timeout = setTimeout(() => {
-      func.apply(context, args);
-      timeout = null;
-    }, wait) as unknown as number;
+      func.apply(this, args);
+      timeout = undefined;
+    }, wait);
   };
 }
 
 /**
  * Throttle function - limits execution to once per wait time
  */
-export function throttle<T extends (...args: any[]) => any>(
+export function throttle<T extends (...args: unknown[]) => unknown>(
   func: T,
   wait: number
 ): (...args: Parameters<T>) => void {
-  let timeout: number | null = null;
+  let timeout: ReturnType<typeof setTimeout> | undefined;
   let previous = 0;
 
-  return function (this: any, ...args: Parameters<T>) {
-    const context = this;
+  return function (this: ThisParameterType<T>, ...args: Parameters<T>) {
     const now = Date.now();
     const remaining = wait - (now - previous);
 
     if (remaining <= 0 || remaining > wait) {
       if (timeout) {
         clearTimeout(timeout);
-        timeout = null;
+        timeout = undefined;
       }
       previous = now;
-      func.apply(context, args);
+      func.apply(this, args);
     } else if (!timeout) {
       timeout = setTimeout(() => {
         previous = Date.now();
-        timeout = null;
-        func.apply(context, args);
-      }, remaining) as unknown as number;
+        timeout = undefined;
+        func.apply(this, args);
+      }, remaining);
     }
   };
 }
@@ -275,28 +291,28 @@ export function throttle<T extends (...args: any[]) => any>(
 /**
  * Measure function execution time (handles both sync and async functions)
  */
-export function measureExecutionTime<T extends (...args: any[]) => any>(
+export function measureExecutionTime<T extends (...args: unknown[]) => unknown>(
   func: T,
   label?: string
 ): T {
-  return ((...args: Parameters<T>) => {
+  const logDuration = (start: number): number => {
+    const duration = performance.now() - start;
+    logger.info(`${label || func.name} execution time:`, `${duration.toFixed(2)}ms`);
+    return duration;
+  };
+
+  return ((...args: Parameters<T>): ReturnType<T> => {
     const startTime = performance.now();
     const result = func(...args);
-    
-    // Handle async functions
-    if (result && typeof result === "object" && typeof result.then === "function") {
-      return result.then((value: any) => {
-        const endTime = performance.now();
-        const duration = endTime - startTime;
-        logger.info(`${label || func.name} execution time:`, `${duration.toFixed(2)}ms`);
+
+    if (result instanceof Promise) {
+      return result.then((value) => {
+        logDuration(startTime);
         return value;
-      });
+      }) as ReturnType<T>;
     }
-    
-    // Handle sync functions
-    const endTime = performance.now();
-    const duration = endTime - startTime;
-    logger.info(`${label || func.name} execution time:`, `${duration.toFixed(2)}ms`);
+
+    logDuration(startTime);
     return result;
   }) as T;
 }
@@ -371,12 +387,7 @@ export function monitorLongTasks(threshold: number = 50): () => void {
 /**
  * Get page load metrics
  */
-export function getPageLoadMetrics(): {
-  domContentLoaded: number;
-  loadComplete: number;
-  firstPaint?: number;
-  firstContentfulPaint?: number;
-} | null {
+export function getPageLoadMetrics(): PageLoadMetrics | null {
   if (!performance.timing) {
     return null;
   }
@@ -384,7 +395,7 @@ export function getPageLoadMetrics(): {
   const timing = performance.timing;
   const navigationStart = timing.navigationStart;
 
-  const metrics = {
+  const metrics: PageLoadMetrics = {
     domContentLoaded: timing.domContentLoadedEventEnd - navigationStart,
     loadComplete: timing.loadEventEnd - navigationStart
   };
@@ -393,9 +404,9 @@ export function getPageLoadMetrics(): {
   const paintEntries = performance.getEntriesByType("paint");
   for (const entry of paintEntries) {
     if (entry.name === "first-paint") {
-      (metrics as any).firstPaint = entry.startTime;
+      metrics.firstPaint = entry.startTime;
     } else if (entry.name === "first-contentful-paint") {
-      (metrics as any).firstContentfulPaint = entry.startTime;
+      metrics.firstContentfulPaint = entry.startTime;
     }
   }
 

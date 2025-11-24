@@ -5,15 +5,34 @@ import { describe, it, expect, vi, beforeEach } from "vitest";
  * Testing centralized control operations
  */
 
+type ControlQueryResponse<T> = Promise<{ data: T; error: Error | null }>;
+
+type ControlQueryBuilder<T = unknown> = {
+  select: ReturnType<typeof vi.fn<[], ControlQueryResponse<T>>>;
+  insert: ReturnType<typeof vi.fn<[T?], ControlQueryResponse<T>>>;
+  update: ReturnType<typeof vi.fn<[Partial<T>], ControlQueryResponse<T>>>;
+  eq: ReturnType<typeof vi.fn<[], ControlQueryBuilder<T>>>;
+  order: ReturnType<typeof vi.fn<[], ControlQueryBuilder<T>>>;
+  limit: ReturnType<typeof vi.fn<[], ControlQueryBuilder<T>>>;
+};
+
+const createControlQueryBuilder = <T = unknown>(
+  overrides?: Partial<ControlQueryBuilder<T>>
+): ControlQueryBuilder<T> => {
+  const builder: ControlQueryBuilder<T> = {
+    select: vi.fn(() => Promise.resolve({ data: [] as T, error: null })),
+    insert: vi.fn(() => Promise.resolve({ data: null as T, error: null })),
+    update: vi.fn(() => Promise.resolve({ data: null as T, error: null })),
+    eq: vi.fn(() => builder),
+    order: vi.fn(() => builder),
+    limit: vi.fn(() => builder),
+  };
+
+  return { ...builder, ...overrides };
+};
+
 const mockSupabaseClient = {
-  from: vi.fn(() => ({
-    select: vi.fn(() => Promise.resolve({ data: [], error: null })),
-    insert: vi.fn(() => Promise.resolve({ data: null, error: null })),
-    update: vi.fn(() => Promise.resolve({ data: null, error: null })),
-    eq: vi.fn(function(this: any) { return this; }),
-    order: vi.fn(function(this: any) { return this; }),
-    limit: vi.fn(function(this: any) { return this; }),
-  })),
+  from: vi.fn(() => createControlQueryBuilder()),
   rpc: vi.fn(() => Promise.resolve({ data: null, error: null })),
 };
 
@@ -38,11 +57,11 @@ describe("Control Hub Module", () => {
         uptime: 99.9,
       };
 
-      mockSupabaseClient.from.mockReturnValueOnce({
+      const builder = createControlQueryBuilder({
         select: vi.fn(() => Promise.resolve({ data: [mockStatus], error: null })),
-        order: vi.fn(function(this: any) { return this; }),
-        limit: vi.fn(function(this: any) { return this; }),
       });
+
+      mockSupabaseClient.from.mockReturnValueOnce(builder);
 
       const result = await mockSupabaseClient.from("system_status").select("*");
 
@@ -100,10 +119,11 @@ describe("Control Hub Module", () => {
         timestamp: new Date().toISOString(),
       };
 
-      mockSupabaseClient.from.mockReturnValueOnce({
+      const builder = createControlQueryBuilder({
         insert: vi.fn(() => Promise.resolve({ data: event, error: null })),
-        select: vi.fn(function(this: any) { return this; }),
       });
+
+      mockSupabaseClient.from.mockReturnValueOnce(builder);
 
       const result = await mockSupabaseClient.from("system_events").insert(event);
 
@@ -146,11 +166,11 @@ describe("Control Hub Module", () => {
         updated_by: "admin",
       };
 
-      mockSupabaseClient.from.mockReturnValueOnce({
+      const builder = createControlQueryBuilder({
         update: vi.fn(() => Promise.resolve({ data: config, error: null })),
-        eq: vi.fn(function(this: any) { return this; }),
-        select: vi.fn(function(this: any) { return this; }),
       });
+
+      mockSupabaseClient.from.mockReturnValueOnce(builder);
 
       const result = await mockSupabaseClient.from("system_config").update(config);
 

@@ -4,8 +4,9 @@
  * and evaluates crew responses
  */
 
-// @ts-nocheck
+import type { SupabaseClient } from "@supabase/supabase-js";
 import { supabase } from "@/integrations/supabase/client";
+import type { Database, Json } from "@/integrations/supabase/types";
 
 export type DrillType = 'FIRE' | 'ABANDON_SHIP' | 'MAN_OVERBOARD' | 'COLLISION' | 'POLLUTION' | 'MEDICAL' | 'SECURITY' | 'GENERAL';
 export type DrillDifficulty = 'basic' | 'intermediate' | 'advanced' | 'expert';
@@ -54,6 +55,355 @@ export interface DrillResponse {
   strengths: string[];
 }
 
+export type DrillScheduleFrequency =
+  | "weekly"
+  | "biweekly"
+  | "monthly"
+  | "quarterly"
+  | "annually";
+
+type ChatMessageRole = "system" | "user";
+
+type DrillScenarioTable = {
+  Row: {
+    id: string;
+    scenario_title: string;
+    scenario_type: DrillType;
+    difficulty: DrillDifficulty | null;
+    description: string;
+    scenario_details: Json | null;
+    expected_responses: Json | null;
+    evaluation_criteria: Json | null;
+    duration_minutes: number | null;
+    vessel_id: string | null;
+    generated_from_failures: Json | null;
+    ai_generated: boolean | null;
+    created_by: string | null;
+    created_at: string | null;
+    updated_at: string | null;
+  };
+  Insert: {
+    id?: string;
+    scenario_title: string;
+    scenario_type: DrillType;
+    difficulty?: DrillDifficulty;
+    description: string;
+    scenario_details: Json;
+    expected_responses?: Json | null;
+    evaluation_criteria?: Json | null;
+    duration_minutes?: number | null;
+    vessel_id?: string | null;
+    generated_from_failures?: Json | null;
+    ai_generated?: boolean;
+    created_by?: string | null;
+  };
+  Update: Partial<DrillScenarioTable["Row"]>;
+  Relationships: [];
+};
+
+type DrillExecutionTable = {
+  Row: {
+    id: string;
+    scenario_id: string | null;
+    vessel_id: string;
+    execution_date: string;
+    participants: Json | null;
+    status: "scheduled" | "in_progress" | "completed" | "cancelled" | null;
+    actual_duration_minutes: number | null;
+    weather_conditions: string | null;
+    notes: string | null;
+    conducted_by: string | null;
+    created_at: string | null;
+    updated_at: string | null;
+  };
+  Insert: {
+    id?: string;
+    scenario_id?: string | null;
+    vessel_id: string;
+    execution_date?: string;
+    participants?: Json | null;
+    status?: "scheduled" | "in_progress" | "completed" | "cancelled";
+    actual_duration_minutes?: number | null;
+    weather_conditions?: string | null;
+    notes?: string | null;
+    conducted_by?: string | null;
+    created_at?: string | null;
+    updated_at?: string | null;
+  };
+  Update: Partial<DrillExecutionTable["Row"]>;
+  Relationships: [];
+};
+
+type DrillResponseTable = {
+  Row: {
+    id: string;
+    execution_id: string;
+    crew_member_id: string;
+    responses: Json;
+    reaction_time_seconds: number | null;
+    actions_taken: Json | null;
+    mistakes: Json | null;
+    strengths: Json | null;
+    overall_score: number | null;
+    ai_evaluation: string | null;
+    evaluator_notes: string | null;
+    evaluated_by: string | null;
+    created_at: string | null;
+    updated_at: string | null;
+  };
+  Insert: {
+    id?: string;
+    execution_id: string;
+    crew_member_id: string;
+    responses: Json;
+    reaction_time_seconds?: number | null;
+    actions_taken?: Json | null;
+    mistakes?: Json | null;
+    strengths?: Json | null;
+    overall_score?: number | null;
+    ai_evaluation?: string | null;
+    evaluator_notes?: string | null;
+    evaluated_by?: string | null;
+    created_at?: string | null;
+    updated_at?: string | null;
+  };
+  Update: Partial<DrillResponseTable["Row"]>;
+  Relationships: [];
+};
+
+type DrillCorrectiveActionTable = {
+  Row: {
+    id: string;
+    execution_id: string;
+    crew_member_id: string | null;
+    issue_identified: string;
+    recommended_action: string;
+    priority: "critical" | "high" | "medium" | "low" | null;
+    training_required: boolean | null;
+    training_type: string | null;
+    deadline: string | null;
+    status: "pending" | "in_progress" | "completed" | "cancelled" | null;
+    assigned_to: string | null;
+    completed_at: string | null;
+    created_at: string | null;
+    updated_at: string | null;
+  };
+  Insert: {
+    id?: string;
+    execution_id: string;
+    crew_member_id?: string | null;
+    issue_identified: string;
+    recommended_action: string;
+    priority?: "critical" | "high" | "medium" | "low" | null;
+    training_required?: boolean | null;
+    training_type?: string | null;
+    deadline?: string | null;
+    status?: "pending" | "in_progress" | "completed" | "cancelled" | null;
+    assigned_to?: string | null;
+    completed_at?: string | null;
+    created_at?: string | null;
+    updated_at?: string | null;
+  };
+  Update: Partial<DrillCorrectiveActionTable["Row"]>;
+  Relationships: [];
+};
+
+type DrillScheduleTable = {
+  Row: {
+    id: string;
+    scenario_id: string | null;
+    vessel_id: string;
+    frequency: DrillScheduleFrequency;
+    next_scheduled_date: string;
+    last_execution_date: string | null;
+    auto_schedule: boolean | null;
+    active: boolean | null;
+    notification_days_before: number | null;
+    created_by: string | null;
+    created_at: string | null;
+    updated_at: string | null;
+  };
+  Insert: {
+    id?: string;
+    scenario_id?: string | null;
+    vessel_id: string;
+    frequency: DrillScheduleFrequency;
+    next_scheduled_date: string;
+    last_execution_date?: string | null;
+    auto_schedule?: boolean | null;
+    active?: boolean | null;
+    notification_days_before?: number | null;
+    created_by?: string | null;
+    created_at?: string | null;
+    updated_at?: string | null;
+  };
+  Update: Partial<DrillScheduleTable["Row"]>;
+  Relationships: [];
+};
+
+type SmartDrillTables = {
+  drill_scenarios: DrillScenarioTable;
+  drill_executions: DrillExecutionTable;
+  drill_responses: DrillResponseTable;
+  drill_corrective_actions: DrillCorrectiveActionTable;
+  drill_schedule: DrillScheduleTable;
+};
+
+type SmartDrillDatabase = Database & {
+  public: Database["public"] & {
+    Tables: Database["public"]["Tables"] & SmartDrillTables;
+  };
+};
+
+type DrillScenarioRow = DrillScenarioTable["Row"];
+type DrillScenarioInsertPayload = DrillScenarioTable["Insert"];
+type DrillExecutionInsertPayload = DrillExecutionTable["Insert"];
+type DrillExecutionRow = DrillExecutionTable["Row"];
+type DrillResponseInsertPayload = DrillResponseTable["Insert"];
+type DrillCorrectiveActionInsertPayload = DrillCorrectiveActionTable["Insert"];
+type DrillScheduleInsertPayload = DrillScheduleTable["Insert"];
+type DrillScheduleRow = DrillScheduleTable["Row"];
+
+type DrillExecutionWithScenario = DrillExecutionRow & {
+  drill_scenarios: DrillScenarioRow | null;
+};
+
+type DrillScheduleWithScenario = DrillScheduleRow & {
+  drill_scenarios: DrillScenarioRow | null;
+};
+
+type ChatMessage = {
+  role: ChatMessageRole;
+  content: string;
+};
+
+type DrillEvaluationResult = {
+  score: number;
+  evaluation: string;
+  mistakes: string[];
+  strengths: string[];
+};
+
+type CorrectiveActionRecommendation = {
+  issue: string;
+  action: string;
+  priority: "critical" | "high" | "medium" | "low";
+  trainingRequired: boolean;
+  trainingType: string | null;
+};
+
+type OpenAiResponse = {
+  choices?: Array<{
+    message?: {
+      content?: string;
+    };
+  }>;
+};
+
+const smartDrillsClient = supabase as SupabaseClient<SmartDrillDatabase>;
+const DEFAULT_SCENARIO_DETAILS: DrillScenario["scenarioDetails"] = {
+  location: "",
+  timeOfDay: "",
+  weatherConditions: "",
+  initialConditions: "",
+  challenges: [],
+  expectedDuration: 30,
+};
+const OPENAI_ENDPOINT = "https://api.openai.com/v1/chat/completions";
+
+const getOpenAiApiKey = (): string => {
+  const apiKey = (import.meta as { env?: Record<string, string | undefined> }).env?.VITE_OPENAI_API_KEY;
+
+  if (!apiKey) {
+    throw new Error("OpenAI API key not configured");
+  }
+
+  return apiKey;
+};
+
+const requestOpenAiJson = async <T>(
+  messages: ChatMessage[],
+  {
+    temperature,
+    maxTokens,
+  }: {
+    temperature: number;
+    maxTokens: number;
+  }
+): Promise<T> => {
+  const response = await fetch(OPENAI_ENDPOINT, {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json",
+      Authorization: `Bearer ${getOpenAiApiKey()}`,
+    },
+    body: JSON.stringify({
+      model: "gpt-4",
+      messages,
+      temperature,
+      max_tokens: maxTokens,
+    }),
+  });
+
+  if (!response.ok) {
+    throw new Error(`OpenAI API error: ${response.status}`);
+  }
+
+  const data = (await response.json()) as OpenAiResponse;
+  const content = data.choices?.[0]?.message?.content;
+
+  if (!content) {
+    throw new Error("OpenAI API returned empty content");
+  }
+
+  try {
+    return JSON.parse(content) as T;
+  } catch (error) {
+    throw new Error("Failed to parse OpenAI response as JSON");
+  }
+};
+
+const toJson = (value: unknown): Json => value as Json;
+
+const ensureStringArray = (value: unknown): string[] => {
+  if (Array.isArray(value)) {
+    return value.filter((item): item is string => typeof item === "string");
+  }
+
+  return [];
+};
+
+const mapScenarioRowToDomain = (row: DrillScenarioRow): DrillScenario => {
+  const parsedDetails = (row.scenario_details as Partial<DrillScenario["scenarioDetails"]> | null) ?? null;
+  const mergedDetails: DrillScenario["scenarioDetails"] = {
+    ...DEFAULT_SCENARIO_DETAILS,
+    ...(parsedDetails ?? {}),
+  };
+
+  if (!mergedDetails.expectedDuration) {
+    mergedDetails.expectedDuration = row.duration_minutes ?? DEFAULT_SCENARIO_DETAILS.expectedDuration;
+  }
+
+  const expectedResponses = Array.isArray(row.expected_responses)
+    ? (row.expected_responses as ExpectedResponse[])
+    : [];
+
+  const evaluationCriteria = Array.isArray(row.evaluation_criteria)
+    ? (row.evaluation_criteria as EvaluationCriterion[])
+    : [];
+
+  return {
+    id: row.id,
+    title: row.scenario_title,
+    type: row.scenario_type,
+    difficulty: row.difficulty ?? "basic",
+    description: row.description,
+    scenarioDetails: mergedDetails,
+    expectedResponses,
+    evaluationCriteria,
+  };
+};
+
 /**
  * Generates an AI-powered drill scenario based on historical failures
  */
@@ -64,60 +414,39 @@ export async function generateDrillScenario(
   historicalFailures: string[] = []
 ): Promise<DrillScenario> {
   try {
-    const apiKey = (import.meta as any).env.VITE_OPENAI_API_KEY as string;
-    
-    if (!apiKey) {
-      throw new Error("OpenAI API key not configured");
-    }
-
     const prompt = buildDrillScenarioPrompt(type, difficulty, historicalFailures);
-    
-    const response = await fetch("https://api.openai.com/v1/chat/completions", {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-        "Authorization": `Bearer ${apiKey}`,
-      },
-      body: JSON.stringify({
-        model: "gpt-4",
-        messages: [
-          {
-            role: "system",
-            content: "You are a maritime safety expert who creates realistic emergency drill scenarios for vessel crew training. Your scenarios are designed to test crew preparedness and identify training gaps."
-          },
-          {
-            role: "user",
-            content: prompt
-          }
-        ],
-        temperature: 0.9,
-        max_tokens: 2500,
-      }),
-    });
+    const scenario = await requestOpenAiJson<DrillScenario>(
+      [
+        {
+          role: "system",
+          content:
+            "You are a maritime safety expert who creates realistic emergency drill scenarios for vessel crew training. Your scenarios are designed to test crew preparedness and identify training gaps.",
+        },
+        {
+          role: "user",
+          content: prompt,
+        },
+      ],
+      { temperature: 0.9, maxTokens: 2500 }
+    );
 
-    if (!response.ok) {
-      throw new Error(`OpenAI API error: ${response.status}`);
-    }
+    const payload: DrillScenarioInsertPayload = {
+      scenario_title: scenario.title,
+      scenario_type: type,
+      difficulty,
+      description: scenario.description,
+      scenario_details: toJson(scenario.scenarioDetails),
+      expected_responses: toJson(scenario.expectedResponses),
+      evaluation_criteria: toJson(scenario.evaluationCriteria),
+      duration_minutes: scenario.scenarioDetails.expectedDuration,
+      vessel_id: vesselId,
+      generated_from_failures: toJson(historicalFailures),
+      ai_generated: true,
+    };
 
-    const data = await response.json();
-    const scenario = JSON.parse(data.choices[0].message.content);
-
-    // Store scenario in database
-    const { data: savedScenario, error } = await supabase
+    const { data: savedScenario, error } = await smartDrillsClient
       .from("drill_scenarios")
-      .insert({
-        scenario_title: scenario.title,
-        scenario_type: type,
-        difficulty,
-        description: scenario.description,
-        scenario_details: scenario.scenarioDetails,
-        expected_responses: scenario.expectedResponses,
-        evaluation_criteria: scenario.evaluationCriteria,
-        duration_minutes: scenario.scenarioDetails.expectedDuration,
-        vessel_id: vesselId,
-        generated_from_failures: historicalFailures,
-        ai_generated: true,
-      })
+      .insert(payload)
       .select()
       .single();
 
@@ -125,10 +454,7 @@ export async function generateDrillScenario(
       throw new Error(`Database error: ${error.message}`);
     }
 
-    return {
-      id: savedScenario.id,
-      ...scenario
-    };
+    return mapScenarioRowToDomain(savedScenario);
   } catch (error) {
     console.error("Error generating drill scenario:", error);
     throw error;
@@ -209,17 +535,19 @@ export async function scheduleDrill(
   conductedBy: string
 ): Promise<string> {
   try {
-    const { data, error } = await supabase
+    const payload: DrillExecutionInsertPayload = {
+      scenario_id: scenarioId,
+      vessel_id: vesselId,
+      execution_date: executionDate.toISOString(),
+      participants: toJson(participants),
+      status: "scheduled",
+      conducted_by: conductedBy,
+    };
+
+    const { data, error } = await smartDrillsClient
       .from("drill_executions")
-      .insert({
-        scenario_id: scenarioId,
-        vessel_id: vesselId,
-        execution_date: executionDate.toISOString(),
-        participants,
-        status: 'scheduled',
-        conducted_by: conductedBy,
-      })
-      .select()
+      .insert(payload)
+      .select("id")
       .single();
 
     if (error) {
@@ -241,15 +569,21 @@ export async function recordDrillResponse(
   response: DrillResponse
 ): Promise<void> {
   try {
-    await supabase.from("drill_responses").insert({
+    const payload: DrillResponseInsertPayload = {
       execution_id: executionId,
       crew_member_id: response.crewMemberId,
-      responses: response.responses,
+      responses: toJson(response.responses),
       reaction_time_seconds: response.reactionTimeSeconds,
-      actions_taken: response.actionsTaken,
-      mistakes: response.mistakes,
-      strengths: response.strengths,
-    });
+      actions_taken: toJson(response.actionsTaken),
+      mistakes: toJson(response.mistakes),
+      strengths: toJson(response.strengths),
+    };
+
+    const { error } = await smartDrillsClient.from("drill_responses").insert(payload);
+
+    if (error) {
+      throw new Error(`Error recording drill response: ${error.message}`);
+    }
   } catch (error) {
     console.error("Error recording drill response:", error);
     throw error;
@@ -264,69 +598,62 @@ export async function evaluateDrillPerformance(
   responses: DrillResponse[]
 ): Promise<void> {
   try {
-    const apiKey = (import.meta as any).env.VITE_OPENAI_API_KEY as string;
-    
-    if (!apiKey) {
-      throw new Error("OpenAI API key not configured");
-    }
-
-    // Get drill scenario
-    const { data: execution } = await supabase
+    const { data: execution, error } = await smartDrillsClient
       .from("drill_executions")
       .select("*, drill_scenarios(*)")
       .eq("id", executionId)
       .single();
 
-    if (!execution) {
-      throw new Error("Drill execution not found");
+    if (error) {
+      throw new Error(`Failed to load drill execution: ${error.message}`);
     }
 
-    // Evaluate each response
+    if (!execution || !execution.drill_scenarios) {
+      throw new Error("Drill execution or associated scenario not found");
+    }
+
     for (const response of responses) {
       const prompt = buildEvaluationPrompt(execution.drill_scenarios, response);
-      
-      const aiResponse = await fetch("https://api.openai.com/v1/chat/completions", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-          "Authorization": `Bearer ${apiKey}`,
-        },
-        body: JSON.stringify({
-          model: "gpt-4",
-          messages: [
+
+      let evaluation: DrillEvaluationResult;
+      try {
+        evaluation = await requestOpenAiJson<DrillEvaluationResult>(
+          [
             {
               role: "system",
-              content: "You are a maritime safety evaluator who assesses crew emergency drill performance objectively and provides constructive feedback."
+              content:
+                "You are a maritime safety evaluator who assesses crew emergency drill performance objectively and provides constructive feedback.",
             },
             {
               role: "user",
-              content: prompt
-            }
+              content: prompt,
+            },
           ],
-          temperature: 0.7,
-          max_tokens: 1500,
-        }),
-      });
-
-      if (!aiResponse.ok) {
-        console.error("AI evaluation failed for crew member:", response.crewMemberId);
+          { temperature: 0.7, maxTokens: 1500 }
+        );
+      } catch (aiError) {
+        console.error("AI evaluation failed for crew member:", response.crewMemberId, aiError);
         continue;
       }
 
-      const evaluationData = await aiResponse.json();
-      const evaluation = JSON.parse(evaluationData.choices[0].message.content);
-
-      // Update response with AI evaluation
-      await supabase
+      const { error: updateError } = await smartDrillsClient
         .from("drill_responses")
         .update({
           overall_score: evaluation.score,
           ai_evaluation: evaluation.evaluation,
-          mistakes: evaluation.mistakes,
-          strengths: evaluation.strengths,
+          mistakes: toJson(evaluation.mistakes),
+          strengths: toJson(evaluation.strengths),
         })
         .eq("execution_id", executionId)
         .eq("crew_member_id", response.crewMemberId);
+
+      if (updateError) {
+        console.error(
+          "Failed to persist AI evaluation for crew member",
+          response.crewMemberId,
+          updateError
+        );
+      }
     }
   } catch (error) {
     console.error("Error evaluating drill performance:", error);
@@ -337,13 +664,18 @@ export async function evaluateDrillPerformance(
 /**
  * Builds evaluation prompt
  */
-function buildEvaluationPrompt(scenario: any, response: DrillResponse): string {
+function buildEvaluationPrompt(
+  scenario: DrillScenarioRow,
+  response: DrillResponse
+): string {
+  const mappedScenario = mapScenarioRowToDomain(scenario);
+
   return `
 Evaluate this crew member's performance in an emergency drill:
 
-SCENARIO: ${scenario.scenario_title}
-Expected Responses: ${JSON.stringify(scenario.expected_responses)}
-Evaluation Criteria: ${JSON.stringify(scenario.evaluation_criteria)}
+SCENARIO: ${mappedScenario.title}
+Expected Responses: ${JSON.stringify(mappedScenario.expectedResponses)}
+Evaluation Criteria: ${JSON.stringify(mappedScenario.evaluationCriteria)}
 
 CREW MEMBER PERFORMANCE:
 Reaction Time: ${response.reactionTimeSeconds} seconds
@@ -373,31 +705,31 @@ export async function generateCorrectiveActionPlan(
   executionId: string
 ): Promise<void> {
   try {
-    const apiKey = (import.meta as any).env.VITE_OPENAI_API_KEY as string;
-    
-    if (!apiKey) {
-      throw new Error("OpenAI API key not configured");
-    }
-
-    // Get all responses for the drill
-    const { data: responses } = await supabase
+    const { data: responses, error } = await smartDrillsClient
       .from("drill_responses")
-      .select("*")
+      .select("mistakes")
       .eq("execution_id", executionId);
+
+    if (error) {
+      throw new Error(`Failed to load drill responses: ${error.message}`);
+    }
 
     if (!responses || responses.length === 0) {
       return;
     }
 
-    // Analyze all mistakes
-    const allMistakes = responses.flatMap((r: any) => r.mistakes || []);
+    const allMistakes = responses.flatMap((r) => ensureStringArray(r.mistakes));
     const uniqueMistakes = [...new Set(allMistakes)];
+
+    if (uniqueMistakes.length === 0) {
+      return;
+    }
 
     const prompt = `
 Analyze these mistakes from an emergency drill and create a corrective action plan:
 
 Mistakes identified:
-${uniqueMistakes.map(m => `- ${m}`).join('\n')}
+${uniqueMistakes.map((m) => `- ${m}`).join("\n")}
 
 For each critical issue, provide:
 1. Issue description
@@ -418,46 +750,39 @@ Format as JSON array:
 ]
 `;
 
-    const response = await fetch("https://api.openai.com/v1/chat/completions", {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-        "Authorization": `Bearer ${apiKey}`,
-      },
-      body: JSON.stringify({
-        model: "gpt-4",
-        messages: [
-          {
-            role: "system",
-            content: "You are a maritime training coordinator who creates actionable corrective plans."
-          },
-          {
-            role: "user",
-            content: prompt
-          }
-        ],
-        temperature: 0.7,
-        max_tokens: 1500,
-      }),
-    });
+    const actions = await requestOpenAiJson<CorrectiveActionRecommendation[]>(
+      [
+        {
+          role: "system",
+          content: "You are a maritime training coordinator who creates actionable corrective plans.",
+        },
+        {
+          role: "user",
+          content: prompt,
+        },
+      ],
+      { temperature: 0.7, maxTokens: 1500 }
+    );
 
-    if (!response.ok) {
-      throw new Error(`OpenAI API error: ${response.status}`);
+    if (!Array.isArray(actions) || actions.length === 0) {
+      return;
     }
 
-    const data = await response.json();
-    const actions = JSON.parse(data.choices[0].message.content);
+    const inserts: DrillCorrectiveActionInsertPayload[] = actions.map((action) => ({
+      execution_id: executionId,
+      issue_identified: action.issue,
+      recommended_action: action.action,
+      priority: action.priority,
+      training_required: action.trainingRequired,
+      training_type: action.trainingType,
+    }));
 
-    // Store corrective actions
-    for (const action of actions) {
-      await supabase.from("drill_corrective_actions").insert({
-        execution_id: executionId,
-        issue_identified: action.issue,
-        recommended_action: action.action,
-        priority: action.priority,
-        training_required: action.trainingRequired,
-        training_type: action.trainingType,
-      });
+    const { error: insertError } = await smartDrillsClient
+      .from("drill_corrective_actions")
+      .insert(inserts);
+
+    if (insertError) {
+      throw new Error(`Failed to store corrective actions: ${insertError.message}`);
     }
   } catch (error) {
     console.error("Error generating corrective action plan:", error);
@@ -471,24 +796,26 @@ Format as JSON array:
 export async function setupDrillSchedule(
   scenarioId: string,
   vesselId: string,
-  frequency: 'weekly' | 'biweekly' | 'monthly' | 'quarterly' | 'annually',
+  frequency: DrillScheduleFrequency,
   createdBy: string
 ): Promise<string> {
   try {
     const nextDate = calculateNextDrillDate(frequency);
 
-    const { data, error } = await supabase
+    const payload: DrillScheduleInsertPayload = {
+      scenario_id: scenarioId,
+      vessel_id: vesselId,
+      frequency,
+      next_scheduled_date: nextDate.toISOString(),
+      auto_schedule: true,
+      active: true,
+      created_by: createdBy,
+    };
+
+    const { data, error } = await smartDrillsClient
       .from("drill_schedule")
-      .insert({
-        scenario_id: scenarioId,
-        vessel_id: vesselId,
-        frequency,
-        next_scheduled_date: nextDate.toISOString(),
-        auto_schedule: true,
-        active: true,
-        created_by: createdBy,
-      })
-      .select()
+      .insert(payload)
+      .select("id")
       .single();
 
     if (error) {
@@ -505,19 +832,19 @@ export async function setupDrillSchedule(
 /**
  * Calculates next drill date based on frequency
  */
-function calculateNextDrillDate(frequency: string): Date {
+function calculateNextDrillDate(frequency: DrillScheduleFrequency): Date {
   const now = new Date();
   
   switch (frequency) {
-    case 'weekly':
+    case "weekly":
       return new Date(now.getTime() + 7 * 24 * 60 * 60 * 1000);
-    case 'biweekly':
+    case "biweekly":
       return new Date(now.getTime() + 14 * 24 * 60 * 60 * 1000);
-    case 'monthly':
+    case "monthly":
       return new Date(now.getFullYear(), now.getMonth() + 1, now.getDate());
-    case 'quarterly':
+    case "quarterly":
       return new Date(now.getFullYear(), now.getMonth() + 3, now.getDate());
-    case 'annually':
+    case "annually":
       return new Date(now.getFullYear() + 1, now.getMonth(), now.getDate());
     default:
       return new Date(now.getTime() + 30 * 24 * 60 * 60 * 1000);
@@ -527,8 +854,11 @@ function calculateNextDrillDate(frequency: string): Date {
 /**
  * Gets upcoming drills for a vessel
  */
-export async function getUpcomingDrills(vesselId: string, limit = 10) {
-  const { data, error } = await supabase
+export async function getUpcomingDrills(
+  vesselId: string,
+  limit = 10
+): Promise<DrillScheduleWithScenario[]> {
+  const { data, error } = await smartDrillsClient
     .from("drill_schedule")
     .select("*, drill_scenarios(*)")
     .eq("vessel_id", vesselId)
@@ -541,14 +871,17 @@ export async function getUpcomingDrills(vesselId: string, limit = 10) {
     throw error;
   }
 
-  return data;
+  return (data ?? []) as DrillScheduleWithScenario[];
 }
 
 /**
  * Gets drill execution history for a vessel
  */
-export async function getDrillHistory(vesselId: string, limit = 20) {
-  const { data, error } = await supabase
+export async function getDrillHistory(
+  vesselId: string,
+  limit = 20
+): Promise<DrillExecutionWithScenario[]> {
+  const { data, error } = await smartDrillsClient
     .from("drill_executions")
     .select("*, drill_scenarios(*)")
     .eq("vessel_id", vesselId)
@@ -559,5 +892,5 @@ export async function getDrillHistory(vesselId: string, limit = 20) {
     throw error;
   }
 
-  return data;
+  return (data ?? []) as DrillExecutionWithScenario[];
 }

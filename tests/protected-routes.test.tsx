@@ -42,8 +42,8 @@ describe("Protected Routes - E2E Simple Tests", () => {
   });
 
   it("valida estrutura de verificação de autenticação", () => {
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    const authCheck = (user: any) => {
+    type MaybeUser = { id: string } | null | undefined;
+    const authCheck = (user: MaybeUser) => {
       return user !== null && user !== undefined;
     };
 

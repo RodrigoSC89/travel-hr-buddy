@@ -3,12 +3,8 @@
  * PATCH 92.0 - Test unified compliance module
  */
 
-import { describe, it, expect, beforeEach, vi } from "vitest";
-import { 
-  analyzeDocumentWithAI, 
-  evaluateChecklistWithAI,
-  fallbackComplianceEvaluation 
-} from "../../modules/compliance-hub/services/ai-service";
+import { describe, it, expect } from "vitest";
+import { fallbackComplianceEvaluation } from "../../modules/compliance-hub/services/ai-service";
 import { validateFile, calculateRiskSeverity, getComplianceLevel } from "../../modules/compliance-hub/utils/config";
 
 describe("Compliance Hub - Configuration", () => {

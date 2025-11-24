@@ -5,16 +5,38 @@ import { describe, it, expect, vi, beforeEach } from "vitest";
  * Tests control panel functionality, system management, and real-time monitoring
  */
 
+type ControlQueryResponse<T> = Promise<{ data: T; error: Error | null }>;
+
+type ControlQueryBuilder<T = unknown> = {
+  select: (...args: unknown[]) => ControlQueryResponse<T>;
+  insert: (...args: unknown[]) => ControlQueryResponse<T>;
+  update: (...args: unknown[]) => ControlQueryResponse<T>;
+  eq: (...args: unknown[]) => ControlQueryBuilder<T>;
+  order: (...args: unknown[]) => ControlQueryBuilder<T>;
+  limit: (...args: unknown[]) => ControlQueryBuilder<T>;
+};
+
+const createControlQueryBuilder = <T = unknown>(
+  overrides?: Partial<ControlQueryBuilder<T>>
+): ControlQueryBuilder<T> => {
+  const builder = {} as ControlQueryBuilder<T>;
+
+  builder.select = vi.fn(() => Promise.resolve({ data: [] as T, error: null }));
+  builder.insert = vi.fn(() => Promise.resolve({ data: null as T, error: null }));
+  builder.update = vi.fn(() => Promise.resolve({ data: null as T, error: null }));
+  builder.eq = vi.fn(() => builder);
+  builder.order = vi.fn(() => builder);
+  builder.limit = vi.fn(() => builder);
+
+  return Object.assign(builder, overrides);
+};
+
 // Mock Supabase client
 const mockSupabaseClient = {
-  from: vi.fn(() => ({
-    select: vi.fn(() => Promise.resolve({ data: [], error: null })),
-    insert: vi.fn(() => Promise.resolve({ data: null, error: null })),
-    update: vi.fn(() => Promise.resolve({ data: null, error: null })),
-    eq: vi.fn(function(this: any) { return this; }),
-    order: vi.fn(function(this: any) { return this; }),
-    limit: vi.fn(function(this: any) { return this; }),
-  })),
+  from: vi.fn((table?: string) => {
+    void table;
+    return createControlQueryBuilder();
+  }),
   rpc: vi.fn(() => Promise.resolve({ data: null, error: null })),
 };
 
@@ -36,16 +58,16 @@ describe("Control Hub Module", () => {
         uptime: 99.9,
       };
 
-      mockSupabaseClient.from.mockReturnValueOnce({
+      const builder = createControlQueryBuilder({
         select: vi.fn(() => Promise.resolve({ data: mockHealthData, error: null })),
-        eq: vi.fn(function(this: any) { return this; }),
-        order: vi.fn(function(this: any) { return this; }),
-        limit: vi.fn(function(this: any) { return this; }),
       });
 
-      const result = await mockSupabaseClient.from("system_health").select("*");
+      mockSupabaseClient.from.mockReturnValueOnce(builder);
 
-      expect(result.data).toEqual(mockHealthData);
+      const result = await mockSupabaseClient.from("system_health").select("*");
+      const healthData = result.data as typeof mockHealthData;
+
+      expect(healthData).toEqual(mockHealthData);
       expect(result.error).toBeNull();
     });
 
@@ -87,17 +109,17 @@ describe("Control Hub Module", () => {
         { id: 3, name: "MQTT Broker", status: "inactive", uptime: 0 },
       ];
 
-      mockSupabaseClient.from.mockReturnValueOnce({
+      const builder = createControlQueryBuilder({
         select: vi.fn(() => Promise.resolve({ data: mockServices, error: null })),
-        eq: vi.fn(function(this: any) { return this; }),
-        order: vi.fn(function(this: any) { return this; }),
-        limit: vi.fn(function(this: any) { return this; }),
       });
 
-      const result = await mockSupabaseClient.from("services").select("*");
+      mockSupabaseClient.from.mockReturnValueOnce(builder);
 
-      expect(result.data).toEqual(mockServices);
-      expect(result.data?.length).toBe(3);
+      const result = await mockSupabaseClient.from("services").select("*");
+      const services = result.data as typeof mockServices;
+
+      expect(services).toEqual(mockServices);
+      expect(services.length).toBe(3);
     });
 
     it("should filter active services only", () => {
@@ -160,18 +182,17 @@ describe("Control Hub Module", () => {
         timestamp: new Date().toISOString(),
       };
 
-      mockSupabaseClient.from.mockReturnValueOnce({
+      const builder = createControlQueryBuilder({
         insert: vi.fn(() => Promise.resolve({ data: alert, error: null })),
-        select: vi.fn(function(this: any) { return this; }),
-        eq: vi.fn(function(this: any) { return this; }),
-        order: vi.fn(function(this: any) { return this; }),
-        limit: vi.fn(function(this: any) { return this; }),
       });
 
+      mockSupabaseClient.from.mockReturnValueOnce(builder);
+
       const result = await mockSupabaseClient.from("system_alerts").insert(alert);
+      const insertedAlert = result.data as typeof alert;
 
       expect(result.error).toBeNull();
-      expect(result.data.severity).toBe("critical");
+      expect(insertedAlert.severity).toBe("critical");
     });
 
     it("should filter alerts by severity", () => {
@@ -278,18 +299,17 @@ describe("Control Hub Module", () => {
         result: "success",
       };
 
-      mockSupabaseClient.from.mockReturnValueOnce({
+      const builder = createControlQueryBuilder({
         insert: vi.fn(() => Promise.resolve({ data: log, error: null })),
-        select: vi.fn(function(this: any) { return this; }),
-        eq: vi.fn(function(this: any) { return this; }),
-        order: vi.fn(function(this: any) { return this; }),
-        limit: vi.fn(function(this: any) { return this; }),
       });
 
+      mockSupabaseClient.from.mockReturnValueOnce(builder);
+
       const result = await mockSupabaseClient.from("control_logs").insert(log);
+      const insertedLog = result.data as typeof log;
 
       expect(result.error).toBeNull();
-      expect(result.data.result).toBe("success");
+      expect(insertedLog.result).toBe("success");
     });
   });
 
@@ -301,16 +321,16 @@ describe("Control Hub Module", () => {
         max_connections: 1000,
       };
 
-      mockSupabaseClient.from.mockReturnValueOnce({
+      const builder = createControlQueryBuilder({
         select: vi.fn(() => Promise.resolve({ data: config, error: null })),
-        eq: vi.fn(function(this: any) { return this; }),
-        order: vi.fn(function(this: any) { return this; }),
-        limit: vi.fn(function(this: any) { return this; }),
       });
 
-      const result = await mockSupabaseClient.from("system_config").select("*");
+      mockSupabaseClient.from.mockReturnValueOnce(builder);
 
-      expect(result.data).toEqual(config);
+      const result = await mockSupabaseClient.from("system_config").select("*");
+      const systemConfig = result.data as typeof config;
+
+      expect(systemConfig).toEqual(config);
     });
 
     it("should validate configuration changes", () => {

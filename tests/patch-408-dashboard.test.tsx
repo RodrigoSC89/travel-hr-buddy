@@ -4,13 +4,16 @@
  */
 
 import { describe, it, expect, vi, beforeEach, afterEach } from "vitest";
-import { render, screen, waitFor, fireEvent } from "@testing-library/react";
+import { render, screen, waitFor } from "@testing-library/react";
 import { MemoryRouter } from "react-router-dom";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
-import Dashboard from "@/pages/Dashboard";
+import type { ReactNode } from "react";
+import Dashboard from "../src/pages/Dashboard";
+
+type ProviderProps = { children: ReactNode };
 
 // Mock Supabase client
-vi.mock("@/integrations/supabase/client", () => ({
+vi.mock("../src/integrations/supabase/client", () => ({
   supabase: {
     from: vi.fn(() => ({
       select: vi.fn(() => ({
@@ -34,40 +37,40 @@ vi.mock("@/integrations/supabase/client", () => ({
 }));
 
 // Mock AuthContext
-vi.mock("@/contexts/AuthContext", () => ({
+vi.mock("../src/contexts/AuthContext", () => ({
   useAuth: () => ({
     user: { id: "test-user", email: "test@example.com" },
     isAuthenticated: true,
   }),
-  AuthProvider: ({ children }: any) => children,
+  AuthProvider: ({ children }: ProviderProps) => children,
 }));
 
 // Mock TenantContext
-vi.mock("@/contexts/TenantContext", () => ({
+vi.mock("../src/contexts/TenantContext", () => ({
   useTenant: () => ({
     tenantId: "test-tenant",
     tenantName: "Test Tenant",
   }),
-  TenantProvider: ({ children }: any) => children,
+  TenantProvider: ({ children }: ProviderProps) => children,
 }));
 
 // Mock OrganizationContext
-vi.mock("@/contexts/OrganizationContext", () => ({
+vi.mock("../src/contexts/OrganizationContext", () => ({
   useOrganization: () => ({
     currentOrganization: { id: "org-1", name: "Test Organization" },
   }),
-  OrganizationProvider: ({ children }: any) => children,
+  OrganizationProvider: ({ children }: ProviderProps) => children,
 }));
 
 // Mock toast
-vi.mock("@/hooks/use-toast", () => ({
+vi.mock("../src/hooks/use-toast", () => ({
   useToast: () => ({
     toast: vi.fn(),
   }),
 }));
 
 // Mock AI Assistant hook
-vi.mock("@/hooks/use-ai-assistant", () => ({
+vi.mock("../src/hooks/use-ai-assistant", () => ({
   useAIAssistant: () => ({
     messages: [],
     isProcessing: false,
@@ -164,20 +167,31 @@ describe("Dashboard Component", () => {
 
     it("should handle errors gracefully", async () => {
       // Override mock to return error
-      vi.mocked(await import("@/integrations/supabase/client")).supabase.from = vi.fn(() => ({
+      const { supabase } = await import("../src/integrations/supabase/client");
+      const supabaseMock = vi.mocked(supabase);
+
+      supabaseMock.from.mockImplementationOnce(() => ({
         select: vi.fn(() => ({
           eq: vi.fn(() => ({
-            single: vi.fn(() => Promise.resolve({ 
-              data: null, 
-              error: { message: "Test error" } 
-            })),
+            single: vi.fn(() =>
+              Promise.resolve({
+                data: null,
+                error: { message: "Test error" },
+              })
+            ),
           })),
-          order: vi.fn(() => Promise.resolve({ 
-            data: null, 
-            error: { message: "Test error" } 
-          })),
+          order: vi.fn(() =>
+            Promise.resolve({
+              data: null,
+              error: { message: "Test error" },
+            })
+          ),
         })),
-      })) as any;
+        insert: vi.fn(() => Promise.resolve({ data: null, error: null })),
+        update: vi.fn(() => ({
+          eq: vi.fn(() => Promise.resolve({ data: null, error: null })),
+        })),
+      }));
 
       renderDashboard();
       

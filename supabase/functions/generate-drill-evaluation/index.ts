@@ -1,5 +1,5 @@
 // PATCH 599: Generate Drill Evaluation Edge Function
-// @ts-nocheck - Deno runtime types not available in VS Code
+// TYPE SAFETY FIX: Removed @ts-nocheck, added proper TypeScript types
 import { serve } from "https://deno.land/std@0.168.0/http/server.ts"
 import { 
   createResponse, 
@@ -55,6 +55,13 @@ interface OpenAIResponse {
   }>
 }
 
+const withCorsHeaders = (response: Response): Response => {
+  Object.entries(corsHeaders).forEach(([key, value]) => {
+    response.headers.set(key, value)
+  })
+  return response
+}
+
 serve(async (req: Request): Promise<Response> => {
   // Handle CORS preflight
   if (req.method === 'OPTIONS') {
@@ -66,8 +73,8 @@ serve(async (req: Request): Promise<Response> => {
 
   try {
     // Parse and validate request body
-    const body = await req.json() as DrillEvaluationRequest
-    validateRequestBody(body as unknown as Record<string, unknown>, ['drill_id', 'responses'])
+  const body = await req.json() as DrillEvaluationRequest
+  validateRequestBody(body as Record<string, unknown>, ['drill_id', 'responses'])
     
     const { drill_id, responses, observations } = body
 
@@ -160,7 +167,7 @@ Return your response in JSON format:
       requestId 
     })
 
-    return createResponse<DrillEvaluationResponse>(result, undefined, requestId)
+  return withCorsHeaders(createResponse<DrillEvaluationResponse>(result, undefined, requestId))
 
   } catch (error) {
     log('error', 'Error in drill evaluation', { 
@@ -169,18 +176,20 @@ Return your response in JSON format:
     })
 
     if (error instanceof EdgeFunctionError) {
-      return createResponse(undefined, error, requestId)
+      return withCorsHeaders(createResponse(undefined, error, requestId))
     }
 
-    return createResponse(
-      undefined,
-      new EdgeFunctionError(
-        'INTERNAL_ERROR',
-        error instanceof Error ? error.message : 'An unexpected error occurred',
-        500,
-        { originalError: String(error) }
-      ),
-      requestId
+    return withCorsHeaders(
+      createResponse(
+        undefined,
+        new EdgeFunctionError(
+          'INTERNAL_ERROR',
+          error instanceof Error ? error.message : 'An unexpected error occurred',
+          500,
+          { originalError: String(error) }
+        ),
+        requestId
+      )
     )
   }
 })

@@ -20,90 +20,71 @@ import {
   XCircle,
   Clock
 } from "lucide-react";
-import { supabase } from "@/integrations/supabase/client";
 import { useToast } from "@/hooks/use-toast";
 import { formatDistanceToNow } from "date-fns";
 import { ptBR } from "date-fns/locale";
-
-interface DeviceInfo {
-  platform?: string;
-  browser?: string;
-  os?: string;
-  device_type?: string;
-}
-
-interface SessionInfo {
-  session_id: string;
-  user_id: string;
-  created_at: string;
-  expires_at: string;
-  device_info?: DeviceInfo | null;
-}
+import { useSessionManager, type SessionToken } from "@/hooks/use-session-manager";
 
 export const SessionManagement: React.FC = () => {
-  const [sessions, setSessions] = useState<SessionInfo[]>([]);
-  const [loading, setLoading] = useState(true);
+  const {
+    sessions,
+    loading,
+    revokeSession,
+    revokeAllOtherSessions,
+    currentSessionId,
+    error,
+  } = useSessionManager();
   const [revoking, setRevoking] = useState<string | null>(null);
+  const [revokingOthers, setRevokingOthers] = useState(false);
   const { toast } = useToast();
 
-  // Load active sessions
   useEffect(() => {
-    loadSessions();
-  }, []);
+    if (error) {
+      toast({
+        title: "Erro",
+        description: error,
+        variant: "destructive",
+      });
+    }
+  }, [error, toast]);
 
-  const loadSessions = async () => {
+  const handleRevokeSession = async (sessionId: string) => {
     try {
-      setLoading(true);
-      const { data, error } = await supabase.rpc("get_active_sessions");
-
-      if (error) {
-        console.error("Error loading sessions:", error);
-        toast({
-          title: "Erro",
-          description: "Não foi possível carregar as sessões ativas.",
-          variant: "destructive",
-        });
-        return;
-      }
-
-      setSessions(data || []);
+      setRevoking(sessionId);
+      await revokeSession(sessionId, "User requested revocation");
+      toast({
+        title: "Sessão Revogada",
+        description: "A sessão foi revogada com sucesso.",
+      });
     } catch (error) {
-      console.error("Error loading sessions:", error);
+      console.error("Error revoking session:", error);
+      toast({
+        title: "Erro",
+        description: "Não foi possível revogar a sessão.",
+        variant: "destructive",
+      });
     } finally {
-      setLoading(false);
+      setRevoking(null);
     }
   };
 
-  const revokeSession = async (sessionId: string) => {
+  const handleRevokeOtherSessions = async () => {
     try {
-      setRevoking(sessionId);
-      
-      const { data, error } = await supabase.rpc("revoke_session_token", {
-        p_token_id: sessionId,
-        p_reason: "User requested revocation"
+      setRevokingOthers(true);
+      await revokeAllOtherSessions();
+      toast({
+        title: "Sessões Revogadas",
+        description: "Todas as outras sessões foram encerradas com sucesso.",
       });
-
-      if (error) {
-        console.error("Error revoking session:", error);
-        toast({
-          title: "Erro",
-          description: "Não foi possível revogar a sessão.",
-          variant: "destructive",
-        });
-        return;
-      }
-
-      if (data) {
-        toast({
-          title: "Sessão Revogada",
-          description: "A sessão foi revogada com sucesso.",
-        });
-        loadSessions(); // Reload sessions
-      }
     } catch (error) {
-      console.error("Error revoking session:", error);
+      console.error("Error revoking other sessions:", error);
+      toast({
+        title: "Erro",
+        description: "Não foi possível revogar as outras sessões.",
+        variant: "destructive",
+      });
     } finally {
-      setRevoking(null);
+      setRevokingOthers(false);
     }
   };
 
@@ -119,12 +100,15 @@ export const SessionManagement: React.FC = () => {
     }
   };
 
-  const getSessionStatus = (session: SessionInfo) => {
+  const getSessionStatus = (session: SessionToken) => {
     const now = new Date();
     const expiresAt = new Date(session.expires_at);
-    const createdAt = new Date(session.created_at);
-    const hoursSinceActivity = (now.getTime() - createdAt.getTime()) / (1000 * 60 * 60);
+    const lastActivity = new Date(session.last_activity_at);
+    const hoursSinceActivity = (now.getTime() - lastActivity.getTime()) / (1000 * 60 * 60);
 
+    if (session.revoked) {
+      return { label: "Revogada", variant: "destructive" as const, icon: XCircle };
+    }
     if (expiresAt < now) {
       return { label: "Expirada", variant: "destructive" as const, icon: XCircle };
     } else if (hoursSinceActivity < 1) {
@@ -143,6 +127,8 @@ export const SessionManagement: React.FC = () => {
       </Card>
     );
   }
+
+  const hasOtherSessions = sessions.some(session => session.id !== currentSessionId);
 
   return (
     <div className="space-y-4">
@@ -167,9 +153,15 @@ export const SessionManagement: React.FC = () => {
               {sessions.map((session) => {
                 const status = getSessionStatus(session);
                 const StatusIcon = status.icon;
+                const isCurrentSession = session.id === currentSessionId;
 
                 return (
-                  <Card key={session.session_id} className="border-2">
+                  <Card
+                    key={session.id}
+                    className={`border-2 transition-shadow ${
+                      isCurrentSession ? "border-primary/70 shadow-md shadow-primary/20" : ""
+                    }`}
+                  >
                     <CardContent className="p-4">
                       <div className="flex items-start justify-between">
                         <div className="flex items-start space-x-4 flex-1">
@@ -181,6 +173,11 @@ export const SessionManagement: React.FC = () => {
                               <h4 className="font-semibold">
                                 {session.device_info?.platform || "Dispositivo Desconhecido"}
                               </h4>
+                              {isCurrentSession && (
+                                <Badge variant="outline" className="text-primary border-primary/60">
+                                  Este dispositivo
+                                </Badge>
+                              )}
                               <Badge variant={status.variant} className="flex items-center gap-1">
                                 <StatusIcon className="w-3 h-3" />
                                 {status.label}
@@ -213,18 +210,18 @@ export const SessionManagement: React.FC = () => {
                         </div>
                         
                         <Button
-                          variant="destructive"
+                          variant={isCurrentSession ? "outline" : "destructive"}
                           size="sm"
-                          onClick={() => revokeSession(session.session_id)}
-                          disabled={revoking === session.session_id}
+                          onClick={() => handleRevokeSession(session.id)}
+                          disabled={revoking === session.id}
                         >
-                          {revoking === session.session_id ? (
+                          {revoking === session.id ? (
                             <span className="flex items-center gap-2">
                               <div className="animate-spin rounded-full h-3 w-3 border-b-2 border-white"></div>
                               Revogando...
                             </span>
                           ) : (
-                            "Revogar"
+                            isCurrentSession ? "Encerrar aqui" : "Revogar"
                           )}
                         </Button>
                       </div>
@@ -232,6 +229,37 @@ export const SessionManagement: React.FC = () => {
                   </Card>
                 );
               })}
+            </div>
+          )}
+          {sessions.length > 0 && (
+            <div className="mt-6 flex flex-col gap-2 border-t pt-4">
+              <div className="flex items-center justify-between">
+                <div>
+                  <p className="font-medium">Revogar outras sessões</p>
+                  <p className="text-sm text-muted-foreground">
+                    Use esta ação para encerrar o acesso de dispositivos que você não reconhece.
+                  </p>
+                </div>
+                <Button
+                  variant="secondary"
+                  disabled={!hasOtherSessions || revokingOthers}
+                  onClick={handleRevokeOtherSessions}
+                >
+                  {revokingOthers ? (
+                    <span className="flex items-center gap-2">
+                      <div className="animate-spin rounded-full h-3 w-3 border-b-2 border-primary"></div>
+                      Revogando...
+                    </span>
+                  ) : (
+                    "Revogar todas exceto esta"
+                  )}
+                </Button>
+              </div>
+              {!hasOtherSessions && (
+                <p className="text-xs text-muted-foreground">
+                  Nenhuma outra sessão ativa encontrada.
+                </p>
+              )}
             </div>
           )}
         </CardContent>
@@ -252,28 +280,19 @@ export const SessionManagement: React.FC = () => {
  * Compact version for use in settings or profile pages
  */
 export const SessionManagementCompact: React.FC = () => {
-  const [sessionCount, setSessionCount] = useState<number>(0);
-  const [loading, setLoading] = useState(true);
-
-  useEffect(() => {
-    const loadSessionCount = async () => {
-      try {
-        const { data, error } = await supabase.rpc("get_active_sessions");
-        if (!error && data) {
-          setSessionCount(data.length);
-        }
-      } catch (error) {
-        console.error("Error loading session count:", error);
-      } finally {
-        setLoading(false);
-      }
-    };
-
-    loadSessionCount();
-  }, []);
+  const { sessions, loading, error } = useSessionManager();
+  const sessionCount = sessions.length;
 
   if (loading) {
     return <div className="text-sm text-muted-foreground">Carregando...</div>;
+  }
+
+  if (error) {
+    return (
+      <div className="text-sm text-destructive">
+        Não foi possível carregar as sessões.
+      </div>
+    );
   }
 
   return (

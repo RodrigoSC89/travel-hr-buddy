@@ -1,4 +1,3 @@
-// @ts-nocheck
 /**
  * PWA Utilities - PATCH 598
  * 
@@ -10,6 +9,14 @@
  */
 
 import { logger } from "@/lib/logger";
+
+interface BeforeInstallPromptEvent extends Event {
+  prompt: () => Promise<void>;
+  userChoice: Promise<{
+    outcome: "accepted" | "dismissed";
+    platform: string;
+  }>;
+}
 
 export interface ServiceWorkerRegistrationResult {
   success: boolean;
@@ -56,7 +63,7 @@ export async function registerServiceWorker(
           if (newWorker.state === "installed" && navigator.serviceWorker.controller) {
             logger.info("🔄 New service worker available - update ready");
             // Emit custom event for UI to handle
-            window.dispatchEvent(new CustomEvent("sw-update-available", { detail: registration }));
+            window.dispatchEvent(new CustomEvent<ServiceWorkerRegistration>("sw-update-available", { detail: registration }));
           }
         });
       }
@@ -120,7 +127,7 @@ export async function subscribeToPushNotifications(
 function urlBase64ToUint8Array(base64String: string): Uint8Array {
   const padding = "=".repeat((4 - base64String.length % 4) % 4);
   const base64 = (base64String + padding)
-    .replace(/\-/g, "+")
+    .replace(/-/g, "+")
     .replace(/_/g, "/");
 
   const rawData = window.atob(base64);
@@ -167,9 +174,14 @@ interface NetworkInformation {
   effectiveType?: string;
   downlink?: number;
   rtt?: number;
-  addEventListener?: (type: string, listener: () => void) => void;
-  removeEventListener?: (type: string, listener: () => void) => void;
+  addEventListener?: (type: string, listener: EventListener) => void;
+  removeEventListener?: (type: string, listener: EventListener) => void;
 }
+
+type NavigatorWithExtensions = Navigator & {
+  connection?: NetworkInformation;
+  standalone?: boolean;
+};
 
 /**
  * Monitor network connectivity status
@@ -181,11 +193,11 @@ export function monitorNetworkStatus(callback: (status: NetworkStatus) => void):
     };
 
     // Add connection info if available
-    if ("connection" in navigator) {
-      const conn = (navigator as any).connection as NetworkInformation;
-      status.effectiveType = conn?.effectiveType;
-      status.downlink = conn?.downlink;
-      status.rtt = conn?.rtt;
+    const connection = (navigator as NavigatorWithExtensions).connection;
+    if (connection) {
+      status.effectiveType = connection.effectiveType;
+      status.downlink = connection.downlink;
+      status.rtt = connection.rtt;
     }
 
     callback(status);
@@ -198,19 +210,13 @@ export function monitorNetworkStatus(callback: (status: NetworkStatus) => void):
   window.addEventListener("online", updateStatus);
   window.addEventListener("offline", updateStatus);
 
-  if ("connection" in navigator) {
-    const conn = (navigator as any).connection as NetworkInformation;
-    conn?.addEventListener?.("change", updateStatus);
-  }
+  (navigator as NavigatorWithExtensions).connection?.addEventListener?.("change", updateStatus);
 
   // Return cleanup function
   return () => {
     window.removeEventListener("online", updateStatus);
     window.removeEventListener("offline", updateStatus);
-    if ("connection" in navigator) {
-      const conn = (navigator as any).connection as NetworkInformation;
-      conn?.removeEventListener?.("change", updateStatus);
-    }
+    (navigator as NavigatorWithExtensions).connection?.removeEventListener?.("change", updateStatus);
   };
 }
 
@@ -218,27 +224,23 @@ export function monitorNetworkStatus(callback: (status: NetworkStatus) => void):
  * Check if app is installed as PWA
  */
 export function isPWAInstalled(): boolean {
-  return window.matchMedia("(display-mode: standalone)").matches ||
-    (window.navigator as any).standalone === true;
+  const navigatorWithStandalone = window.navigator as NavigatorWithExtensions;
+  return window.matchMedia("(display-mode: standalone)").matches || navigatorWithStandalone.standalone === true;
 }
 
 /**
  * Prompt user to install PWA
  */
 export function setupInstallPrompt(
-  onInstallable: (prompt: any) => void,
+  onInstallable: (prompt: BeforeInstallPromptEvent) => void,
   onInstalled: () => void
 ): () => void {
-  let deferredPrompt: any;
-
-  const handleBeforeInstallPrompt = (e: Event) => {
-    e.preventDefault();
-    deferredPrompt = e;
-    onInstallable(deferredPrompt);
+  const handleBeforeInstallPrompt = (event: BeforeInstallPromptEvent) => {
+    event.preventDefault();
+    onInstallable(event);
   };
 
   const handleAppInstalled = () => {
-    deferredPrompt = null;
     onInstalled();
     logger.info("✅ PWA installed successfully");
   };

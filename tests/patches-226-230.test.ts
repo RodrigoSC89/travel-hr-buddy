@@ -40,8 +40,12 @@ vi.mock("@/lib/logger", () => ({
   },
 }));
 
+type ProtocolAdapterModule = Awaited<typeof import("@/core/interop/protocolAdapter")>;
+type AgentSwarmBridgeModule = Awaited<typeof import("@/ai/agentSwarmBridge")>;
+type TrustComplianceCheckerModule = Awaited<typeof import("@/security/trustComplianceChecker")>;
+
 describe("PATCH 226 - Protocol Adapter", () => {
-  let protocolAdapter: any;
+  let protocolAdapter: ProtocolAdapterModule;
 
   beforeEach(async () => {
     vi.clearAllMocks();
@@ -214,7 +218,7 @@ describe("PATCH 226 - Protocol Adapter", () => {
 });
 
 describe("PATCH 227 - Agent Swarm Bridge", () => {
-  let agentSwarm: any;
+  let agentSwarm: AgentSwarmBridgeModule;
 
   beforeEach(async () => {
     vi.clearAllMocks();
@@ -323,9 +327,10 @@ describe("PATCH 227 - Agent Swarm Bridge", () => {
       ];
 
       const results = await agentSwarm.executeParallel(tasks);
+      const executionResults = results as Array<{ id?: string }>;
       
-      expect(results).toHaveLength(2);
-      expect(results.every((r: any) => r.id)).toBe(true);
+      expect(executionResults).toHaveLength(2);
+      expect(executionResults.every((r) => Boolean(r.id))).toBe(true);
     });
   });
 
@@ -367,7 +372,7 @@ describe("PATCH 227 - Agent Swarm Bridge", () => {
 });
 
 describe("PATCH 229 - Trust & Compliance Checker", () => {
-  let trustChecker: any;
+  let trustChecker: TrustComplianceCheckerModule;
 
   beforeEach(async () => {
     vi.clearAllMocks();
@@ -445,7 +450,8 @@ describe("PATCH 229 - Trust & Compliance Checker", () => {
       );
       
       if (result.trustScore < 30) {
-        expect(result.alerts.some((a: any) => a.level === "critical")).toBe(true);
+        const alerts = result.alerts as Array<{ level: string }>;
+        expect(alerts.some((alert) => alert.level === "critical")).toBe(true);
       }
     });
   });

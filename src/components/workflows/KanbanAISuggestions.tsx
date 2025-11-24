@@ -5,12 +5,12 @@ import { Button } from "@/components/ui/button";
 import React, { useState } from "react";
 import { supabase } from "@/integrations/supabase/client";
 import { useToast } from "@/hooks/use-toast";
-import { Suggestion } from "./index";
+import type { KanbanAISuggestionsProps, Suggestion } from "./types";
 import type { Database } from "@/integrations/supabase/types";
 
 type WorkflowAISuggestionInsert = Database["public"]["Tables"]["workflow_ai_suggestions"]["Insert"];
 
-export function KanbanAISuggestions({ suggestions }: { suggestions: Suggestion[] }) {
+export function KanbanAISuggestions({ suggestions = [] }: KanbanAISuggestionsProps) {
   const [accepted, setAccepted] = useState<string[]>([]);
   const { toast } = useToast();
 

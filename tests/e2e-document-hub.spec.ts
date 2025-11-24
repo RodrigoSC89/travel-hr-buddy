@@ -74,9 +74,10 @@ test.describe("Document Hub Page", () => {
     const emptyState = page.locator("[class*=\"empty\"], :text(\"no documents\"), :text(\"no files\")").first();
     
     const hasContent = await page.locator("table tr, [class*=\"document\"], [class*=\"file\"]").count();
+    const emptyStateVisible = await emptyState.isVisible().catch(() => false);
     
     // Either has documents or empty state
-    expect(hasContent >= 0).toBeTruthy();
+    expect(hasContent > 0 || emptyStateVisible).toBeTruthy();
   });
 
   test("should load within reasonable time", async ({ page }) => {

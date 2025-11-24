@@ -7,18 +7,42 @@ import { describe, it, expect, vi, beforeEach } from "vitest";
 import { render, screen, fireEvent, waitFor } from "@testing-library/react";
 
 // Mock ExportReportButton component
+type ExportFinding = {
+  id: number;
+  description: string;
+  compliant: boolean;
+};
+
+type ExportOptions = {
+  includeImages: boolean;
+  includeComments: boolean;
+  includeSignatures: boolean;
+};
+
+type ExportData = {
+  inspection_id: string;
+  inspector: string;
+  findings: ExportFinding[];
+  filename?: string;
+  exportOptions?: ExportOptions;
+} | null;
+
 const MockExportReportButton = ({ 
   data, 
   format = "pdf",
   onExport 
 }: { 
-  data: any; 
+  data: ExportData; 
   format?: "pdf" | "json" | "csv";
   onExport?: () => void;
 }) => {
   const [exporting, setExporting] = React.useState(false);
+  const canExport = Boolean(data);
   
   const handleExport = async () => {
+    if (!canExport) {
+      return;
+    }
     setExporting(true);
     await new Promise(resolve => setTimeout(resolve, 500));
     if (onExport) onExport();
@@ -28,10 +52,10 @@ const MockExportReportButton = ({
   return (
     <button 
       onClick={handleExport}
-      disabled={exporting}
+      disabled={exporting || !canExport}
       data-testid="export-button"
     >
-      {exporting ? "Exporting..." : `Export ${format.toUpperCase()}`}
+      {exporting ? "Exporting..." : canExport ? `Export ${format.toUpperCase()}` : "No data"}
     </button>
   );
 };

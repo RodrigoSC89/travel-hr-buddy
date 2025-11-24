@@ -68,12 +68,116 @@ interface OperationalMetrics {
   color: string;
 }
 
+type IconType = React.ComponentType<{ className?: string }>;
+
 interface Activity {
   time: string;
   action: string;
   type: string;
-  icon: React.ComponentType<{ className?: string }>;
+  icon: IconType;
 }
+
+interface SectionHeaderProps {
+  icon: IconType;
+  title: string;
+  description: string;
+}
+
+const heroHighlights = [
+  {
+    label: "Eficiência Operacional",
+    value: "96,4%",
+    detail: "+1,2% vs último período",
+    icon: TrendingUp
+  },
+  {
+    label: "SLA Global",
+    value: "99,1%",
+    detail: "Processos auditados (IMCA / ANP)",
+    icon: Shield
+  },
+  {
+    label: "Frota Ativa",
+    value: "24 embarcações",
+    detail: "18 DP / 6 apoio logístico",
+    icon: Ship
+  },
+  {
+    label: "Capital Humano",
+    value: "312 profissionais",
+    detail: "Tripulações certificadas STCW",
+    icon: Users
+  }
+];
+
+const quickStats = [
+  {
+    label: "Compliance Geral",
+    value: "89,7%",
+    detail: "Última auditoria concluída há 24h"
+  },
+  {
+    label: "Ações Pendentes",
+    value: "4",
+    detail: "Planos críticos aguardando aprovação"
+  },
+  {
+    label: "Próxima Auditoria",
+    value: "15 dias",
+    detail: "IMCA Class 2 – Equipe preparada"
+  }
+];
+
+const kpiVisuals: Array<{ icon: IconType; ringClass: string }> = [
+  { icon: Users, ringClass: "border-emerald-500/30 bg-emerald-500/10 text-emerald-500" },
+  { icon: Ship, ringClass: "border-blue-500/30 bg-blue-500/10 text-blue-500" },
+  { icon: Target, ringClass: "border-amber-500/30 bg-amber-500/10 text-amber-500" },
+  { icon: Shield, ringClass: "border-indigo-500/30 bg-indigo-500/10 text-indigo-500" }
+];
+
+const criticalAlerts = [
+  {
+    title: "Manutenção atrasada",
+    detail: "MV Pacífico – 3 dias",
+    severity: "Alto",
+    icon: AlertTriangle,
+    accent: "text-red-500",
+    border: "border-red-500/30"
+  },
+  {
+    title: "Combustível crítico",
+    detail: "MV Índico – 15%",
+    severity: "Médio",
+    icon: Fuel,
+    accent: "text-yellow-500",
+    border: "border-yellow-500/30"
+  },
+  {
+    title: "Certificação vencendo",
+    detail: "STCW – 30 dias",
+    severity: "Planejar",
+    icon: Calendar,
+    accent: "text-blue-500",
+    border: "border-blue-500/30"
+  }
+];
+
+const quickActions = [
+  { label: "Gerar Relatório Mensal", icon: FileText },
+  { label: "Revisar Escalas", icon: Users },
+  { label: "Status da Frota", icon: Ship },
+  { label: "Metas & KPIs", icon: Target }
+];
+
+const SectionHeader = ({ icon: Icon, title, description }: SectionHeaderProps) => (
+  <div className="flex flex-col gap-2">
+    <div className="flex items-center gap-2 text-sm font-semibold uppercase tracking-wide text-primary">
+      <Icon className="h-4 w-4" />
+      <span>{title}</span>
+    </div>
+    <p className="text-sm text-muted-foreground">{description}</p>
+  </div>
+);
 
 export default function ExecutiveDashboard() {
   const { currentOrganization } = useOrganization();
@@ -276,7 +380,7 @@ export default function ExecutiveDashboard() {
   };
 
   const getIconForModule = (moduleName: string | null) => {
-    const iconMap: Record<string, React.ComponentType<{ className?: string }>> = {
+    const iconMap: Record<string, IconType> = {
       vessels: Ship,
       hr: Users,
       reports: FileText,
@@ -301,73 +405,105 @@ export default function ExecutiveDashboard() {
   return (
     <ModulePageWrapper gradient="blue">
       <OrganizationLayout title="Dashboard Executivo">
-        <div className="space-y-6">
-          {/* Header with period selector */}
-          <div className="flex justify-between items-center">
-            <div>
-              <h2 className="text-2xl font-bold">Visão Executiva</h2>
-              <p className="text-muted-foreground">
-              Métricas estratégicas e performance organizacional
-              </p>
+        <div className="space-y-8">
+          <section className="rounded-3xl border border-slate-200 bg-gradient-to-br from-white via-white to-slate-50 p-8 shadow-xl dark:border-white/10 dark:from-slate-950 dark:via-slate-900 dark:to-blue-950 dark:text-white">
+            <div className="flex flex-col gap-8 lg:flex-row lg:items-center lg:justify-between">
+              <div className="space-y-5 max-w-2xl">
+                <Badge variant="outline" className="w-fit border-emerald-500/40 bg-emerald-50 text-emerald-700 dark:border-emerald-400/30 dark:bg-emerald-400/10 dark:text-emerald-200">
+                  Atualizado há 12 minutos
+                </Badge>
+                <div>
+                  <p className="text-sm font-semibold uppercase tracking-wider text-slate-500 dark:text-white/70">Visão executiva</p>
+                  <h2 className="text-3xl font-bold text-slate-900 dark:text-white mt-1">Governança operacional sem ruído visual</h2>
+                  <p className="mt-2 text-base text-slate-600 dark:text-white/70">
+                    Consolidado estratégico com KPIs de frota, capital humano e conformidade para decisões em tempo real.
+                  </p>
+                </div>
+                <div className="flex flex-wrap gap-2">
+                  {["weekly", "monthly", "quarterly", "yearly"].map((period) => (
+                    <Button
+                      key={period}
+                      size="sm"
+                      variant={selectedPeriod === period ? "default" : "ghost"}
+                      className={`${selectedPeriod === period
+                        ? "bg-primary text-white"
+                        : "bg-white/70 text-slate-600 shadow-sm border border-slate-200 dark:bg-white/10 dark:text-white/70 dark:border-white/10"}`}
+                      onClick={() => setSelectedPeriod(period)}
+                    >
+                      {period === "weekly" ? "Semanal" :
+                        period === "monthly" ? "Mensal" :
+                          period === "quarterly" ? "Trimestral" : "Anual"}
+                    </Button>
+                  ))}
+                </div>
+              </div>
+              <div className="grid w-full gap-4 sm:grid-cols-2 lg:w-auto">
+                {heroHighlights.map((highlight) => {
+                  const IconComponent = highlight.icon;
+                  return (
+                    <div
+                      key={highlight.label}
+                      className="rounded-2xl border border-slate-200 bg-white/90 p-4 shadow-md dark:border-white/10 dark:bg-white/10"
+                    >
+                      <div className="flex items-center justify-between text-sm font-medium text-slate-600 dark:text-white/70">
+                        {highlight.label}
+                        <IconComponent className="h-4 w-4" />
+                      </div>
+                      <p className="mt-2 text-3xl font-semibold text-slate-900 dark:text-white">{highlight.value}</p>
+                      <p className="text-xs text-slate-500 dark:text-white/60">{highlight.detail}</p>
+                    </div>
+                  );
+                })}
+              </div>
             </div>
-            <div className="flex gap-2">
-              {["weekly", "monthly", "quarterly", "yearly"].map((period) => (
-                <Button
-                  key={period}
-                  variant={selectedPeriod === period ? "default" : "outline"}
-                  size="sm"
-                  onClick={() => setSelectedPeriod(period)}
-                >
-                  {period === "weekly" ? "Semanal" :
-                    period === "monthly" ? "Mensal" :
-                      period === "quarterly" ? "Trimestral" : "Anual"}
-                </Button>
-              ))}
-            </div>
-          </div>
+          </section>
 
           {/* KPI Cards */}
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
-            {kpiData.map((kpi, index) => (
-              <Card key={index} className="relative overflow-hidden">
-                <CardContent className="p-6">
+            {kpiData.map((kpi, index) => {
+              const visual = kpiVisuals[index % kpiVisuals.length];
+              const IconComponent = visual.icon;
+              return (
+              <Card
+                key={index}
+                className="relative overflow-hidden rounded-3xl border border-slate-200 bg-white/95 shadow-lg dark:border-white/10 dark:bg-slate-950/60"
+              >
+                <CardContent className="p-6 space-y-4">
                   <div className="flex items-center justify-between">
                     <div>
-                      <p className="text-sm font-medium text-muted-foreground">
+                      <p className="text-sm font-semibold text-slate-500 dark:text-white/70">
                         {kpi.metric}
                       </p>
-                      <p className="text-3xl font-bold">{kpi.value}</p>
-                      <div className="flex items-center mt-2">
-                        <Badge 
-                          variant={kpi.trend === "up" ? "default" : "secondary"}
-                          className={kpi.trend === "up" ? "bg-green-100 text-green-800" : "bg-red-100 text-red-800"}
-                        >
-                          {kpi.change}
-                        </Badge>
-                      </div>
+                      <p className="text-3xl font-semibold text-slate-900 dark:text-white">{kpi.value}</p>
                     </div>
-                    <div className="p-3 bg-primary/10 rounded-full">
-                      {index === 0 && <Users className="h-6 w-6 text-primary" />}
-                      {index === 1 && <Ship className="h-6 w-6 text-primary" />}
-                      {index === 2 && <Target className="h-6 w-6 text-primary" />}
-                      {index === 3 && <Shield className="h-6 w-6 text-primary" />}
+                    <div className={`rounded-2xl border ${visual.ringClass} p-3`}>
+                      <IconComponent className="h-6 w-6" />
                     </div>
                   </div>
+                  <Badge
+                    variant="outline"
+                    className={`border-0 px-3 py-1 text-xs font-medium ${
+                      kpi.trend === "up"
+                        ? "bg-emerald-100 text-emerald-700 dark:bg-emerald-500/20 dark:text-emerald-200"
+                        : "bg-red-100 text-red-700 dark:bg-red-500/20 dark:text-red-200"
+                    }`}
+                  >
+                    {kpi.change} vs período anterior
+                  </Badge>
                 </CardContent>
               </Card>
-            ))}
+            );
+            })}
           </div>
 
           {/* Maritime Safety Modules - PEO-DP, SGSO, PEOTRAM */}
-          <Card className="border-2 border-primary/20">
+          <Card className="border border-slate-200 bg-white/95 shadow-lg dark:border-white/10 dark:bg-slate-950/60">
             <CardHeader>
-              <CardTitle className="text-2xl flex items-center gap-2">
-                <Shield className="h-6 w-6 text-primary" />
-              Sistemas de Segurança Marítima
-              </CardTitle>
-              <p className="text-muted-foreground">
-              Status dos módulos críticos de compliance e segurança operacional
-              </p>
+              <SectionHeader 
+                icon={Shield}
+                title="Sistemas de Segurança Marítima"
+                description="Status dos módulos críticos de compliance e segurança operacional"
+              />
             </CardHeader>
             <CardContent>
               <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
@@ -505,27 +641,24 @@ export default function ExecutiveDashboard() {
               </div>
 
               {/* Quick Stats Row */}
-              <div className="grid grid-cols-3 gap-4 mt-6 p-4 bg-gray-50 dark:bg-gray-900 rounded-lg border border-gray-200 dark:border-gray-700">
-                <div className="text-center">
-                  <p className="text-2xl font-bold text-gray-900 dark:text-gray-100">89.7%</p>
-                  <p className="text-sm text-muted-foreground">Compliance Geral</p>
-                </div>
-                <div className="text-center border-x border-gray-200 dark:border-gray-700">
-                  <p className="text-2xl font-bold text-gray-900 dark:text-gray-100">4</p>
-                  <p className="text-sm text-muted-foreground">Ações Pendentes</p>
-                </div>
-                <div className="text-center">
-                  <p className="text-2xl font-bold text-gray-900 dark:text-gray-100">15 dias</p>
-                  <p className="text-sm text-muted-foreground">Próxima Auditoria</p>
-                </div>
-              </div>
+              <Card className="mt-6 border border-slate-200 bg-white/90 shadow-lg dark:border-white/10 dark:bg-slate-950/60">
+                <CardContent className="grid gap-4 p-6 md:grid-cols-3">
+                  {quickStats.map((stat) => (
+                    <div key={stat.label} className="rounded-2xl border border-slate-100/80 p-4 text-center dark:border-white/10">
+                      <p className="text-3xl font-semibold text-slate-900 dark:text-white">{stat.value}</p>
+                      <p className="text-sm font-medium text-slate-500 dark:text-white/70">{stat.label}</p>
+                      <p className="text-xs text-slate-400 dark:text-white/60">{stat.detail}</p>
+                    </div>
+                  ))}
+                </CardContent>
+              </Card>
             </CardContent>
           </Card>
 
           {/* Main Charts */}
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
             {/* Revenue & Profit Chart */}
-            <Card>
+            <Card className="border border-slate-200 bg-white/95 shadow-lg dark:border-white/10 dark:bg-slate-950/60">
               <CardHeader>
                 <CardTitle className="flex items-center gap-2">
                   <DollarSign className="h-5 w-5" />
@@ -563,7 +696,7 @@ export default function ExecutiveDashboard() {
             </Card>
 
             {/* Fleet Performance */}
-            <Card>
+            <Card className="border border-slate-200 bg-white/95 shadow-lg dark:border-white/10 dark:bg-slate-950/60">
               <CardHeader>
                 <CardTitle className="flex items-center gap-2">
                   <Ship className="h-5 w-5" />
@@ -592,7 +725,7 @@ export default function ExecutiveDashboard() {
           {/* Operational Overview */}
           <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
             {/* Operational Time Distribution */}
-            <Card>
+            <Card className="border border-slate-200 bg-white/95 shadow-lg dark:border-white/10 dark:bg-slate-950/60">
               <CardHeader>
                 <CardTitle className="flex items-center gap-2">
                   <Clock className="h-5 w-5" />
@@ -623,89 +756,100 @@ export default function ExecutiveDashboard() {
             </Card>
 
             {/* Critical Alerts */}
-            <Card>
+            <Card className="border border-slate-200 bg-white/90 dark:border-white/10 dark:bg-slate-950/60">
               <CardHeader>
                 <CardTitle className="flex items-center gap-2">
                   <AlertTriangle className="h-5 w-5" />
                 Alertas Críticos
                 </CardTitle>
+                <p className="text-sm text-muted-foreground">
+                  Priorização automática com severidade e contexto operacional
+                </p>
               </CardHeader>
               <CardContent>
                 <div className="space-y-4">
-                  <div className="flex items-center gap-3 p-3 bg-red-50 rounded-lg">
-                    <AlertTriangle className="h-5 w-5 text-red-600" />
-                    <div className="flex-1">
-                      <p className="text-sm font-medium">Manutenção Atrasada</p>
-                      <p className="text-xs text-muted-foreground">MV Pacífico - 3 dias</p>
-                    </div>
-                  </div>
-                  <div className="flex items-center gap-3 p-3 bg-yellow-50 rounded-lg">
-                    <Fuel className="h-5 w-5 text-yellow-600" />
-                    <div className="flex-1">
-                      <p className="text-sm font-medium">Combustível Baixo</p>
-                      <p className="text-xs text-muted-foreground">MV Índico - 15%</p>
-                    </div>
-                  </div>
-                  <div className="flex items-center gap-3 p-3 bg-blue-50 rounded-lg">
-                    <Calendar className="h-5 w-5 text-blue-600" />
-                    <div className="flex-1">
-                      <p className="text-sm font-medium">Certificado Vencendo</p>
-                      <p className="text-xs text-muted-foreground">STCW - 30 dias</p>
-                    </div>
-                  </div>
+                  {criticalAlerts.map((alert) => {
+                    const IconComponent = alert.icon;
+                    return (
+                      <div
+                        key={alert.title}
+                        className={`flex items-center gap-3 rounded-2xl border ${alert.border} bg-white/80 p-3 dark:bg-white/5`}
+                      >
+                        <div className={`rounded-2xl border border-white/40 p-2 ${alert.accent}`}>
+                          <IconComponent className="h-5 w-5" />
+                        </div>
+                        <div className="flex-1">
+                          <p className="text-sm font-semibold text-slate-800 dark:text-white">{alert.title}</p>
+                          <p className="text-xs text-slate-500 dark:text-white/70">{alert.detail}</p>
+                        </div>
+                        <Badge variant="outline" className="border-white/20 text-xs text-slate-600 dark:text-white/70">
+                          {alert.severity}
+                        </Badge>
+                      </div>
+                    );
+                  })}
                 </div>
               </CardContent>
             </Card>
 
             {/* Quick Actions */}
-            <Card>
+            <Card className="border border-slate-200 bg-white/90 dark:border-white/10 dark:bg-slate-950/60">
               <CardHeader>
                 <CardTitle className="flex items-center gap-2">
                   <Activity className="h-5 w-5" />
                 Ações Rápidas
                 </CardTitle>
+                <p className="text-sm text-muted-foreground">
+                  Dispare automações de governança diretamente deste painel
+                </p>
               </CardHeader>
               <CardContent>
                 <div className="space-y-3">
-                  <Button variant="outline" className="w-full justify-start">
-                    <FileText className="h-4 w-4 mr-2" />
-                  Gerar Relatório Mensal
-                  </Button>
-                  <Button variant="outline" className="w-full justify-start">
-                    <Users className="h-4 w-4 mr-2" />
-                  Revisar Escalas
-                  </Button>
-                  <Button variant="outline" className="w-full justify-start">
-                    <Ship className="h-4 w-4 mr-2" />
-                  Status da Frota
-                  </Button>
-                  <Button variant="outline" className="w-full justify-start">
-                    <Target className="h-4 w-4 mr-2" />
-                  Metas & KPIs
-                  </Button>
+                  {quickActions.map((action) => {
+                    const IconComponent = action.icon;
+                    return (
+                      <Button
+                        key={action.label}
+                        variant="outline"
+                        className="w-full justify-start rounded-2xl border-slate-200 bg-white/80 text-slate-700 hover:border-primary hover:text-primary dark:border-white/10 dark:bg-white/5 dark:text-white/80"
+                      >
+                        <IconComponent className="mr-2 h-4 w-4" />
+                        {action.label}
+                      </Button>
+                    );
+                  })}
                 </div>
               </CardContent>
             </Card>
           </div>
 
           {/* Recent Activities */}
-          <Card>
+          <Card className="border border-slate-200 bg-white/95 shadow-lg dark:border-white/10 dark:bg-slate-950/60">
             <CardHeader>
               <CardTitle>Atividades Recentes</CardTitle>
+              <p className="text-sm text-muted-foreground">
+                Feed auditável com contexto de módulo e horário de execução
+              </p>
             </CardHeader>
             <CardContent>
               <div className="space-y-4">
                 {recentActivities.map((activity, index) => {
                   const IconComponent = activity.icon;
                   return (
-                    <div key={index} className="flex items-center gap-4 p-3 hover:bg-muted/50 rounded-lg">
-                      <div className="p-2 bg-primary/10 rounded-full">
-                        <IconComponent className="h-4 w-4 text-primary" />
+                    <div
+                      key={index}
+                      className="flex items-center gap-4 rounded-2xl border border-slate-100 bg-white/80 p-4 transition hover:border-primary/40 dark:border-white/10 dark:bg-white/5"
+                    >
+                      <div className="rounded-2xl border border-primary/30 bg-primary/10 p-2 text-primary">
+                        <IconComponent className="h-4 w-4" />
                       </div>
                       <div className="flex-1">
-                        <p className="text-sm font-medium">{activity.action}</p>
-                        <p className="text-xs text-muted-foreground">{activity.time}</p>
+                        <p className="text-sm font-semibold text-slate-900 dark:text-white">{activity.action}</p>
+                        <p className="text-xs uppercase tracking-wide text-slate-400 dark:text-white/60">{activity.time}</p>
                       </div>
+                      <Badge variant="outline" className="border-white/20 text-xs capitalize text-slate-500 dark:text-white/70">
+                        {activity.type}
+                      </Badge>
                     </div>
                   );
                 })}

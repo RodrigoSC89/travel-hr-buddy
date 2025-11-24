@@ -3,7 +3,7 @@
  * Tests crew member operations, assignments, and validations
  */
 
-import { describe, it, expect, vi, beforeEach } from "vitest";
+import { describe, it, expect } from "vitest";
 
 interface CrewMember {
   id: string;
@@ -249,9 +249,10 @@ describe("Crew Module", () => {
         assigned_vessel: "vessel-001",
       };
 
-      const { assigned_vessel, ...unassignedMember } = assignedMember;
+      const { assigned_vessel: previousAssignment, ...unassignedMember } = assignedMember;
 
-      expect(unassignedMember.assigned_vessel).toBeUndefined();
+      expect(previousAssignment).toBe("vessel-001");
+      expect("assigned_vessel" in unassignedMember).toBe(false);
     });
 
     it("should validate crew member is active before assignment", () => {

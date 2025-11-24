@@ -113,6 +113,8 @@ test.describe("Document Upload Flow", () => {
       // Filter menu should open
       const filterMenu = page.locator("[role=\"menu\"], [role=\"listbox\"]").first();
       expect(await filterMenu.count()).toBeGreaterThan(0);
+    } else if (await typeFilter.count() > 0) {
+      await expect(typeFilter).toBeVisible();
     }
   });
 

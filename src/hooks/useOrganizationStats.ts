@@ -1,4 +1,3 @@
-// @ts-nocheck
 /**
  * PATCH 609 - Organization Stats Hook with SWR Cache
  * Provides cached organization statistics with automatic revalidation
@@ -21,53 +20,65 @@ export interface OrganizationStats {
 const fetcher = async (organizationId: string): Promise<OrganizationStats> => {
   try {
     // Fetch vessels count
-    const { count: totalVessels } = await supabase
+    const vesselsTotal = await supabase
       .from("vessels")
       .select("*", { count: "exact", head: true })
       .eq("organization_id", organizationId);
 
-    const { count: activeVessels } = await supabase
+    const totalVessels = vesselsTotal.count || 0;
+
+    const vesselsActive = await supabase
       .from("vessels")
       .select("*", { count: "exact", head: true })
       .eq("organization_id", organizationId)
       .eq("status", "active");
+
+    const activeVessels = vesselsActive.count || 0;
 
     // Fetch crew count
-    const { count: totalCrew } = await supabase
-      .from("crew_profiles")
+    const crewTotal = await supabase
+      .from("crew_members")
       .select("*", { count: "exact", head: true })
       .eq("organization_id", organizationId);
 
-    const { count: activeCrew } = await supabase
-      .from("crew_profiles")
+    const totalCrew = crewTotal.count || 0;
+
+    const crewActive = await supabase
+      .from("crew_members")
       .select("*", { count: "exact", head: true })
       .eq("organization_id", organizationId)
       .eq("status", "active");
 
+    const activeCrew = crewActive.count || 0;
+
     // Fetch incidents count
-    const { count: totalIncidents } = await supabase
+    const incidentsTotal = await supabase
       .from("dp_incidents")
       .select("*", { count: "exact", head: true })
       .eq("organization_id", organizationId);
 
-    const { count: openIncidents } = await supabase
+    const totalIncidents = incidentsTotal.count || 0;
+
+    const incidentsOpen = await supabase
       .from("dp_incidents")
       .select("*", { count: "exact", head: true })
       .eq("organization_id", organizationId)
       .eq("status", "open");
 
+    const openIncidents = incidentsOpen.count || 0;
+
     // Calculate compliance score (simplified)
-    const complianceScore = openIncidents && totalIncidents
+    const complianceScore = totalIncidents > 0
       ? Math.max(0, 100 - (openIncidents / totalIncidents) * 50)
       : 100;
 
     return {
-      totalVessels: totalVessels || 0,
-      activeVessels: activeVessels || 0,
-      totalCrew: totalCrew || 0,
-      activeCrew: activeCrew || 0,
-      totalIncidents: totalIncidents || 0,
-      openIncidents: openIncidents || 0,
+      totalVessels,
+      activeVessels,
+      totalCrew,
+      activeCrew,
+      totalIncidents,
+      openIncidents,
       complianceScore: Math.round(complianceScore),
       lastUpdated: new Date().toISOString(),
     };

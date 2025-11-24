@@ -7,7 +7,10 @@ import { describe, it, expect, vi, beforeEach, afterEach } from "vitest";
 import { render, screen, waitFor, fireEvent } from "@testing-library/react";
 import { MemoryRouter } from "react-router-dom";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
+import type { ReactNode } from "react";
 import Voice from "@/modules/assistants/voice-assistant";
+
+type ProviderProps = { children: ReactNode };
 
 // Mock Supabase
 vi.mock("@/integrations/supabase/client", () => ({
@@ -27,21 +30,21 @@ vi.mock("@/contexts/AuthContext", () => ({
     user: { id: "test-user", email: "test@example.com" },
     isAuthenticated: true,
   }),
-  AuthProvider: ({ children }: any) => children,
+  AuthProvider: ({ children }: ProviderProps) => children,
 }));
 
 vi.mock("@/contexts/TenantContext", () => ({
   useTenant: () => ({
     tenantId: "test-tenant",
   }),
-  TenantProvider: ({ children }: any) => children,
+  TenantProvider: ({ children }: ProviderProps) => children,
 }));
 
 vi.mock("@/contexts/OrganizationContext", () => ({
   useOrganization: () => ({
     currentOrganization: { id: "org-1", name: "Test Org" },
   }),
-  OrganizationProvider: ({ children }: any) => children,
+  OrganizationProvider: ({ children }: ProviderProps) => children,
 }));
 
 // Mock toast
@@ -60,8 +63,19 @@ const mockSpeechRecognition = {
   removeEventListener: vi.fn(),
 };
 
-global.SpeechRecognition = vi.fn(() => mockSpeechRecognition) as any;
-global.webkitSpeechRecognition = vi.fn(() => mockSpeechRecognition) as any;
+type SpeechRecognitionConstructor = new () => typeof mockSpeechRecognition;
+
+declare global {
+  // eslint-disable-next-line no-var
+  var SpeechRecognition: SpeechRecognitionConstructor | undefined;
+  // eslint-disable-next-line no-var
+  var webkitSpeechRecognition: SpeechRecognitionConstructor | undefined;
+}
+
+const speechRecognitionFactory = vi.fn(() => mockSpeechRecognition);
+
+global.SpeechRecognition = speechRecognitionFactory as unknown as SpeechRecognitionConstructor;
+global.webkitSpeechRecognition = speechRecognitionFactory as unknown as SpeechRecognitionConstructor;
 
 describe("Voice Assistant Component", () => {
   let queryClient: QueryClient;

@@ -3,14 +3,14 @@
  * Tests emergency response coordination and mission tracking
  */
 
-import { describe, it, expect } from 'vitest';
+import { describe, it, expect } from "vitest";
 
 interface Mission {
   id: string;
   code: string;
-  type: 'emergency' | 'scheduled' | 'inspection' | 'rescue';
-  status: 'active' | 'pending' | 'completed' | 'cancelled';
-  priority: 'low' | 'medium' | 'high' | 'critical';
+  type: "emergency" | "scheduled" | "inspection" | "rescue";
+  status: "active" | "pending" | "completed" | "cancelled";
+  priority: "low" | "medium" | "high" | "critical";
   assignedVessel?: string;
   assignedCrew?: string[];
   location: {
@@ -23,93 +23,93 @@ interface Mission {
 
 interface Alert {
   id: string;
-  severity: 'info' | 'warning' | 'error' | 'critical';
+  severity: "info" | "warning" | "error" | "critical";
   message: string;
   timestamp: string;
   acknowledged: boolean;
 }
 
-describe('Mission Control Module', () => {
-  describe('Mission Management', () => {
-    it('should create new mission', () => {
+describe("Mission Control Module", () => {
+  describe("Mission Management", () => {
+    it("should create new mission", () => {
       const mission: Mission = {
-        id: '1',
-        code: 'MSN-001',
-        type: 'emergency',
-        status: 'active',
-        priority: 'critical',
+        id: "1",
+        code: "MSN-001",
+        type: "emergency",
+        status: "active",
+        priority: "critical",
         location: { lat: 40.7128, lng: -74.0060 },
-        startTime: '2025-10-28T10:00:00Z',
+        startTime: "2025-10-28T10:00:00Z",
       };
 
-      expect(mission.code).toBe('MSN-001');
-      expect(mission.status).toBe('active');
-      expect(mission.priority).toBe('critical');
+      expect(mission.code).toBe("MSN-001");
+      expect(mission.status).toBe("active");
+      expect(mission.priority).toBe("critical");
     });
 
-    it('should filter missions by status', () => {
+    it("should filter missions by status", () => {
       const missions: Mission[] = [
         {
-          id: '1',
-          code: 'MSN-001',
-          type: 'emergency',
-          status: 'active',
-          priority: 'critical',
+          id: "1",
+          code: "MSN-001",
+          type: "emergency",
+          status: "active",
+          priority: "critical",
           location: { lat: 0, lng: 0 },
-          startTime: '2025-10-28',
+          startTime: "2025-10-28",
         },
         {
-          id: '2',
-          code: 'MSN-002',
-          type: 'scheduled',
-          status: 'completed',
-          priority: 'medium',
+          id: "2",
+          code: "MSN-002",
+          type: "scheduled",
+          status: "completed",
+          priority: "medium",
           location: { lat: 0, lng: 0 },
-          startTime: '2025-10-27',
+          startTime: "2025-10-27",
         },
         {
-          id: '3',
-          code: 'MSN-003',
-          type: 'inspection',
-          status: 'active',
-          priority: 'high',
+          id: "3",
+          code: "MSN-003",
+          type: "inspection",
+          status: "active",
+          priority: "high",
           location: { lat: 0, lng: 0 },
-          startTime: '2025-10-28',
+          startTime: "2025-10-28",
         },
       ];
 
-      const activeMissions = missions.filter(m => m.status === 'active');
+      const activeMissions = missions.filter(m => m.status === "active");
       expect(activeMissions).toHaveLength(2);
     });
 
-    it('should sort missions by priority', () => {
+    it("should sort missions by priority", () => {
       const missions: Mission[] = [
         {
-          id: '1',
-          code: 'MSN-001',
-          type: 'emergency',
-          status: 'active',
-          priority: 'medium',
+          id: "1",
+          code: "MSN-001",
+          type: "emergency",
+          status: "active",
+          priority: "medium",
           location: { lat: 0, lng: 0 },
-          startTime: '2025-10-28',
+          startTime: "2025-10-28",
         },
         {
-          id: '2',
-          code: 'MSN-002',
-          type: 'rescue',
-          status: 'active',
-          priority: 'critical',
+          id: "2",
+          code: "MSN-002",
+          type: "rescue",
+          status: "active",
+          priority: "critical",
           location: { lat: 0, lng: 0 },
-          startTime: '2025-10-28',
+          startTime: "2025-10-28",
         },
         {
-          id: '3',
-          code: 'MSN-003',
-          type: 'inspection',
-          status: 'active',
-          priority: 'low',
+          id: "3",
+          code: "MSN-003",
+          type: "inspection",
+          status: "active",
+          priority: "low",
           location: { lat: 0, lng: 0 },
-          startTime: '2025-10-28',
+          startTime: "2025-10-28",
         },
       ];
 
@@ -118,32 +118,32 @@ describe('Mission Control Module', () => {
         (a, b) => priorityOrder[a.priority] - priorityOrder[b.priority]
       );
 
-      expect(sorted[0].priority).toBe('critical');
-      expect(sorted[sorted.length - 1].priority).toBe('low');
+      expect(sorted[0].priority).toBe("critical");
+      expect(sorted[sorted.length - 1].priority).toBe("low");
     });
 
-    it('should assign crew to mission', () => {
+    it("should assign crew to mission", () => {
       const mission: Mission = {
-        id: '1',
-        code: 'MSN-001',
-        type: 'emergency',
-        status: 'active',
-        priority: 'critical',
+        id: "1",
+        code: "MSN-001",
+        type: "emergency",
+        status: "active",
+        priority: "critical",
         location: { lat: 0, lng: 0 },
-        startTime: '2025-10-28',
+        startTime: "2025-10-28",
       };
 
       const updatedMission = {
         ...mission,
-        assignedCrew: ['CREW-001', 'CREW-002', 'CREW-003'],
+        assignedCrew: ["CREW-001", "CREW-002", "CREW-003"],
       };
 
       expect(updatedMission.assignedCrew).toHaveLength(3);
     });
 
-    it('should calculate mission duration', () => {
-      const startTime = new Date('2025-10-28T10:00:00Z');
-      const endTime = new Date('2025-10-28T14:30:00Z');
+    it("should calculate mission duration", () => {
+      const startTime = new Date("2025-10-28T10:00:00Z");
+      const endTime = new Date("2025-10-28T14:30:00Z");
       
       const durationMs = endTime.getTime() - startTime.getTime();
       const durationHours = durationMs / (1000 * 60 * 60);
@@ -152,41 +152,41 @@ describe('Mission Control Module', () => {
     });
   });
 
-  describe('Alert Management', () => {
-    it('should create alert', () => {
+  describe("Alert Management", () => {
+    it("should create alert", () => {
       const alert: Alert = {
-        id: '1',
-        severity: 'critical',
-        message: 'Emergency situation detected',
-        timestamp: '2025-10-28T10:00:00Z',
+        id: "1",
+        severity: "critical",
+        message: "Emergency situation detected",
+        timestamp: "2025-10-28T10:00:00Z",
         acknowledged: false,
       };
 
-      expect(alert.severity).toBe('critical');
+      expect(alert.severity).toBe("critical");
       expect(alert.acknowledged).toBe(false);
     });
 
-    it('should filter unacknowledged alerts', () => {
+    it("should filter unacknowledged alerts", () => {
       const alerts: Alert[] = [
         {
-          id: '1',
-          severity: 'critical',
-          message: 'Alert 1',
-          timestamp: '2025-10-28',
+          id: "1",
+          severity: "critical",
+          message: "Alert 1",
+          timestamp: "2025-10-28",
           acknowledged: false,
         },
         {
-          id: '2',
-          severity: 'warning',
-          message: 'Alert 2',
-          timestamp: '2025-10-28',
+          id: "2",
+          severity: "warning",
+          message: "Alert 2",
+          timestamp: "2025-10-28",
           acknowledged: true,
         },
         {
-          id: '3',
-          severity: 'error',
-          message: 'Alert 3',
-          timestamp: '2025-10-28',
+          id: "3",
+          severity: "error",
+          message: "Alert 3",
+          timestamp: "2025-10-28",
           acknowledged: false,
         },
       ];
@@ -195,38 +195,38 @@ describe('Mission Control Module', () => {
       expect(unacknowledged).toHaveLength(2);
     });
 
-    it('should count alerts by severity', () => {
+    it("should count alerts by severity", () => {
       const alerts: Alert[] = [
         {
-          id: '1',
-          severity: 'critical',
-          message: 'Alert 1',
-          timestamp: '2025-10-28',
+          id: "1",
+          severity: "critical",
+          message: "Alert 1",
+          timestamp: "2025-10-28",
           acknowledged: false,
         },
         {
-          id: '2',
-          severity: 'critical',
-          message: 'Alert 2',
-          timestamp: '2025-10-28',
+          id: "2",
+          severity: "critical",
+          message: "Alert 2",
+          timestamp: "2025-10-28",
           acknowledged: false,
         },
         {
-          id: '3',
-          severity: 'warning',
-          message: 'Alert 3',
-          timestamp: '2025-10-28',
+          id: "3",
+          severity: "warning",
+          message: "Alert 3",
+          timestamp: "2025-10-28",
           acknowledged: false,
         },
       ];
 
-      const criticalCount = alerts.filter(a => a.severity === 'critical').length;
+      const criticalCount = alerts.filter(a => a.severity === "critical").length;
       expect(criticalCount).toBe(2);
     });
   });
 
-  describe('Resource Allocation', () => {
-    it('should calculate available vessels', () => {
+  describe("Resource Allocation", () => {
+    it("should calculate available vessels", () => {
       const totalVessels = 20;
       const assignedVessels = 12;
       const availableVessels = totalVessels - assignedVessels;
@@ -234,7 +234,7 @@ describe('Mission Control Module', () => {
       expect(availableVessels).toBe(8);
     });
 
-    it('should calculate crew availability', () => {
+    it("should calculate crew availability", () => {
       const totalCrew = 100;
       const assignedCrew = 75;
       const availabilityRate = ((totalCrew - assignedCrew) / totalCrew) * 100;
@@ -242,7 +242,7 @@ describe('Mission Control Module', () => {
       expect(availabilityRate).toBe(25);
     });
 
-    it('should validate resource requirements', () => {
+    it("should validate resource requirements", () => {
       const requiredCrew = 5;
       const availableCrew = 10;
       
@@ -251,8 +251,8 @@ describe('Mission Control Module', () => {
     });
   });
 
-  describe('Location Tracking', () => {
-    it('should calculate distance between coordinates', () => {
+  describe("Location Tracking", () => {
+    it("should calculate distance between coordinates", () => {
       // Simplified distance calculation
       const point1 = { lat: 40.7128, lng: -74.0060 };
       const point2 = { lat: 34.0522, lng: -118.2437 };
@@ -266,7 +266,7 @@ describe('Mission Control Module', () => {
       expect(distance).toBeGreaterThan(0);
     });
 
-    it('should validate coordinates', () => {
+    it("should validate coordinates", () => {
       const location = { lat: 40.7128, lng: -74.0060 };
       
       const isValid = 
@@ -279,15 +279,15 @@ describe('Mission Control Module', () => {
     });
   });
 
-  describe('Response Time Metrics', () => {
-    it('should calculate average response time', () => {
+  describe("Response Time Metrics", () => {
+    it("should calculate average response time", () => {
       const responseTimes = [5, 10, 8, 12, 7]; // minutes
       const average = responseTimes.reduce((sum, t) => sum + t, 0) / responseTimes.length;
       
       expect(average).toBe(8.4);
     });
 
-    it('should track mission completion rate', () => {
+    it("should track mission completion rate", () => {
       const totalMissions = 100;
       const completedMissions = 85;
       const completionRate = (completedMissions / totalMissions) * 100;
@@ -295,9 +295,9 @@ describe('Mission Control Module', () => {
       expect(completionRate).toBe(85);
     });
 
-    it('should calculate emergency response rate', () => {
+    it("should calculate emergency response rate", () => {
       const emergencyMissions = 20;
-      const respondedOn Time = 18;
+      const respondedOnTime = 18;
       const responseRate = (respondedOnTime / emergencyMissions) * 100;
       
       expect(responseRate).toBe(90);

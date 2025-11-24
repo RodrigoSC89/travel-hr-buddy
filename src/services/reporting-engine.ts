@@ -1,512 +1,764 @@
-// @ts-nocheck
 /**
  * PATCH 601 - Relatórios Automáticos com IA
  * Automated intelligent reporting engine with LLM-generated summaries
  */
 
+import type { SupabaseClient } from "@supabase/supabase-js";
 import { supabase } from "@/integrations/supabase/client";
+import type { Database, Json } from "@/integrations/supabase/types";
+import { logger } from "@/lib/logger";
 
-export type ReportType = 'INSPECTION' | 'TASK' | 'RISK' | 'CREW_PERFORMANCE' | 'MONTHLY_CONSOLIDATED' | 'CUSTOM';
-export type ExportFormat = 'PDF' | 'JSON' | 'XLSX' | 'CSV' | 'HTML';
-export type ScheduleType = 'daily' | 'weekly' | 'biweekly' | 'monthly' | 'quarterly' | 'annually' | 'on_demand';
-
-export interface ReportTemplate {
-  id?: string;
-  templateName: string;
-  templateType: ReportType;
-  description: string;
-  templateStructure: Record<string, any>;
-  sections: ReportSection[];
-  dataSources: string[];
-  visualizationConfig: Record<string, any>;
-  aiSummaryEnabled: boolean;
-}
+export type ReportType =
+	| "INSPECTION"
+	| "TASK"
+	| "RISK"
+	| "CREW_PERFORMANCE"
+	| "MONTHLY_CONSOLIDATED"
+	| "CUSTOM";
+export type ExportFormat = "PDF" | "JSON" | "XLSX" | "CSV" | "HTML";
+export type ScheduleType =
+	| "daily"
+	| "weekly"
+	| "biweekly"
+	| "monthly"
+	| "quarterly"
+	| "annually"
+	| "on_demand";
+type ScheduleDeliveryMethod = "email" | "dashboard" | "both";
 
 export interface ReportSection {
-  id: string;
-  title: string;
-  type: 'text' | 'table' | 'chart' | 'summary' | 'metrics';
-  content?: any;
-  dataQuery?: string;
+	id: string;
+	title: string;
+	type: "text" | "table" | "chart" | "summary" | "metrics";
+	content?: Record<string, unknown>;
+	dataQuery?: string;
+}
+
+export interface ReportTemplate {
+	id: string;
+	templateName: string;
+	templateType: ReportType;
+	description: string | null;
+	templateStructure: Record<string, unknown>;
+	sections: ReportSection[];
+	dataSources: string[];
+	visualizationConfig: Record<string, unknown>;
+	aiSummaryEnabled: boolean;
+	active: boolean;
+	createdBy: string | null;
+	createdAt: string | null;
+	updatedAt: string | null;
 }
 
 export interface GeneratedReport {
-  id?: string;
-  templateId: string;
-  reportTitle: string;
-  reportType: ReportType;
-  vesselId?: string;
-  periodStart?: Date;
-  periodEnd?: Date;
-  reportData: Record<string, any>;
-  aiSummary?: string;
-  aiInsights?: string[];
-  executiveSummary?: string;
-  conclusions?: string[];
-  recommendations?: string[];
-  status: 'generating' | 'completed' | 'failed' | 'archived';
+	id?: string;
+	templateId: string;
+	reportTitle: string;
+	reportType: ReportType;
+	vesselId?: string | null;
+	periodStart?: string | null;
+	periodEnd?: string | null;
+	reportData: Record<string, unknown>;
+	aiSummary?: string | null;
+	aiInsights?: string[];
+	executiveSummary?: string | null;
+	conclusions?: string[];
+	recommendations?: string[];
+	status: "generating" | "completed" | "failed" | "archived";
+}
+
+type ReportData = Record<string, unknown>;
+
+type ReportingTables = {
+	report_templates: {
+		Row: {
+			id: string;
+			template_name: string;
+			template_type: ReportType;
+			description: string | null;
+			template_structure: Json;
+			sections: Json | null;
+			data_sources: Json | null;
+			visualization_config: Json | null;
+			ai_summary_enabled: boolean | null;
+			active: boolean | null;
+			created_by: string | null;
+			created_at: string | null;
+			updated_at: string | null;
+		};
+		Insert: never;
+		Update: never;
+	};
+	generated_reports: {
+		Row: {
+			id: string;
+			template_id: string | null;
+			report_title: string;
+			report_type: ReportType;
+			vessel_id: string | null;
+			period_start: string | null;
+			period_end: string | null;
+			report_data: Json;
+			ai_summary: string | null;
+			ai_insights: Json | null;
+			executive_summary: string | null;
+			conclusions: Json | null;
+			recommendations: Json | null;
+			status: string | null;
+			generation_time_ms: number | null;
+			generated_by: string | null;
+			generated_at: string | null;
+			created_at: string | null;
+			updated_at: string | null;
+		};
+		Insert: {
+			id?: string;
+			template_id: string | null;
+			report_title: string;
+			report_type: ReportType;
+			vessel_id?: string | null;
+			period_start?: string | null;
+			period_end?: string | null;
+			report_data: Json;
+			ai_summary?: string | null;
+			ai_insights?: Json | null;
+			executive_summary?: string | null;
+			conclusions?: Json | null;
+			recommendations?: Json | null;
+			status?: string | null;
+			generation_time_ms?: number | null;
+			generated_by?: string | null;
+			generated_at?: string | null;
+			created_at?: string | null;
+			updated_at?: string | null;
+		};
+		Update: never;
+	};
+	report_generation_log: {
+		Row: {
+			id: string;
+			report_id: string | null;
+			schedule_id: string | null;
+			status: "started" | "processing" | "completed" | "failed";
+			execution_time_ms: number | null;
+			error_message: string | null;
+			error_details: Json | null;
+			data_sources_queried: Json | null;
+			ai_tokens_used: number | null;
+			created_at: string | null;
+		};
+		Insert: {
+			id?: string;
+			report_id?: string | null;
+			schedule_id?: string | null;
+			status: "started" | "processing" | "completed" | "failed";
+			execution_time_ms?: number | null;
+			error_message?: string | null;
+			error_details?: Json | null;
+			data_sources_queried?: Json | null;
+			ai_tokens_used?: number | null;
+			created_at?: string | null;
+		};
+		Update: never;
+	};
+	report_schedules: {
+		Row: {
+			id: string;
+			template_id: string | null;
+			schedule_name: string;
+			schedule_type: ScheduleType;
+			cron_expression: string | null;
+			next_execution: string;
+			last_execution: string | null;
+			vessel_id: string | null;
+			recipients: Json | null;
+			delivery_method: ScheduleDeliveryMethod | null;
+			export_formats: Json | null;
+			active: boolean | null;
+			auto_archive_days: number | null;
+			created_by: string | null;
+			created_at: string | null;
+			updated_at: string | null;
+		};
+		Insert: {
+			id?: string;
+			template_id?: string | null;
+			schedule_name: string;
+			schedule_type: ScheduleType;
+			cron_expression?: string | null;
+			next_execution: string;
+			last_execution?: string | null;
+			vessel_id?: string | null;
+			recipients?: Json | null;
+			delivery_method?: ScheduleDeliveryMethod | null;
+			export_formats?: Json | null;
+			active?: boolean | null;
+			auto_archive_days?: number | null;
+			created_by?: string | null;
+			created_at?: string | null;
+			updated_at?: string | null;
+		};
+		Update: Partial<ReportingTables["report_schedules"]["Row"]>;
+	};
+	report_exports: {
+		Row: {
+			id: string;
+			report_id: string | null;
+			export_format: ExportFormat;
+			file_path: string | null;
+			file_size_bytes: number | null;
+			file_hash: string | null;
+			export_options: Json | null;
+			exported_by: string | null;
+			exported_at: string | null;
+			downloaded_count: number | null;
+			last_downloaded_at: string | null;
+			expires_at: string | null;
+			created_at: string | null;
+		};
+		Insert: {
+			id?: string;
+			report_id?: string | null;
+			export_format: ExportFormat;
+			file_path?: string | null;
+			file_size_bytes?: number | null;
+			file_hash?: string | null;
+			export_options?: Json | null;
+			exported_by?: string | null;
+			exported_at?: string | null;
+			downloaded_count?: number | null;
+			last_downloaded_at?: string | null;
+			expires_at?: string | null;
+			created_at?: string | null;
+		};
+		Update: never;
+	};
+};
+
+type ReportingDatabase = Database & {
+	public: Database["public"] & {
+		Tables: Database["public"]["Tables"] & ReportingTables;
+	};
+};
+
+type ReportTemplateRow = ReportingTables["report_templates"]["Row"];
+type GeneratedReportRow = ReportingTables["generated_reports"]["Row"];
+type GeneratedReportInsert = ReportingTables["generated_reports"]["Insert"];
+type ReportScheduleRow = ReportingTables["report_schedules"]["Row"];
+type ReportGenerationLogInsert = ReportingTables["report_generation_log"]["Insert"];
+type ReportExportInsert = ReportingTables["report_exports"]["Insert"];
+
+type ScheduleWithTemplate = ReportScheduleRow & {
+	report_templates?: ReportTemplateRow | null;
+};
+
+const reportingClient = supabase as SupabaseClient<ReportingDatabase>;
+const OPENAI_MODEL = "gpt-4o-mini";
+const OPENAI_MAX_TOKENS = 2500;
+
+interface AISummaryContent {
+	summary: string;
+	insights: string[];
+	executiveSummary: string;
+	conclusions: string[];
+	recommendations: string[];
+}
+
+interface OpenAIChatCompletion {
+	choices?: Array<{
+		message?: {
+			content?: string | null;
+		} | null;
+	}>;
 }
 
 /**
  * Generates an intelligent report using AI
  */
 export async function generateIntelligentReport(
-  templateId: string,
-  vesselId: string | null,
-  periodStart: Date,
-  periodEnd: Date,
-  userId: string
+	templateId: string,
+	vesselId: string | null,
+	periodStart: Date,
+	periodEnd: Date,
+	userId: string
 ): Promise<string> {
-  const startTime = Date.now();
-  
-  try {
-    // Get template
-    const { data: template, error: templateError } = await supabase
-      .from("report_templates")
-      .select("*")
-      .eq("id", templateId)
-      .single();
+	const startTime = Date.now();
 
-    if (templateError || !template) {
-      throw new Error("Template not found");
-    }
+	try {
+		const { data: template, error: templateError } = await reportingClient
+			.from("report_templates")
+			.select("*")
+			.eq("id", templateId)
+			.single();
 
-    // Collect data from various sources
-    const reportData = await collectReportData(
-      template.data_sources,
-      vesselId,
-      periodStart,
-      periodEnd
-    );
+		if (templateError || !template) {
+			throw new Error(templateError?.message ?? "Template not found");
+		}
 
-    // Generate AI summary if enabled
-    let aiSummary = "";
-    let aiInsights: string[] = [];
-    let executiveSummary = "";
-    let conclusions: string[] = [];
-    let recommendations: string[] = [];
+		const dataSources = extractDataSources(template);
+		const reportData = await collectReportData(
+			dataSources,
+			vesselId,
+			periodStart,
+			periodEnd
+		);
 
-    if (template.ai_summary_enabled) {
-      const aiContent = await generateAISummary(
-        template.template_type,
-        reportData
-      );
-      
-      aiSummary = aiContent.summary;
-      aiInsights = aiContent.insights;
-      executiveSummary = aiContent.executiveSummary;
-      conclusions = aiContent.conclusions;
-      recommendations = aiContent.recommendations;
-    }
+		let aiSummary = "";
+		let aiInsights: string[] = [];
+		let executiveSummary = "";
+		let conclusions: string[] = [];
+		let recommendations: string[] = [];
 
-    // Create report record
-    const { data: report, error: reportError } = await supabase
-      .from("generated_reports")
-      .insert({
-        template_id: templateId,
-        report_title: `${template.template_name} - ${periodStart.toLocaleDateString()}`,
-        report_type: template.template_type,
-        vessel_id: vesselId,
-        period_start: periodStart.toISOString(),
-        period_end: periodEnd.toISOString(),
-        report_data: reportData,
-        ai_summary: aiSummary,
-        ai_insights: aiInsights,
-        executive_summary: executiveSummary,
-        conclusions,
-        recommendations,
-        status: 'completed',
-        generation_time_ms: Date.now() - startTime,
-        generated_by: userId,
-      })
-      .select()
-      .single();
+		if (template.ai_summary_enabled !== false) {
+			const aiContent = await generateAISummary(template.template_type, reportData);
+			aiSummary = aiContent.summary;
+			aiInsights = aiContent.insights;
+			executiveSummary = aiContent.executiveSummary;
+			conclusions = aiContent.conclusions;
+			recommendations = aiContent.recommendations;
+		}
 
-    if (reportError) {
-      throw new Error(`Error creating report: ${reportError.message}`);
-    }
+		const payload: GeneratedReportInsert = {
+			template_id: templateId,
+			report_title: formatReportTitle(template.template_name, periodStart, periodEnd),
+			report_type: template.template_type,
+			vessel_id: vesselId,
+			period_start: periodStart.toISOString(),
+			period_end: periodEnd.toISOString(),
+			report_data: asJson(reportData),
+			ai_summary: aiSummary,
+			ai_insights: asJson(aiInsights),
+			executive_summary: executiveSummary,
+			conclusions: asJson(conclusions),
+			recommendations: asJson(recommendations),
+			status: "completed",
+			generation_time_ms: Date.now() - startTime,
+			generated_by: userId,
+		};
 
-    // Log generation
-    await supabase.from("report_generation_log").insert({
-      report_id: report.id,
-      status: 'completed',
-      execution_time_ms: Date.now() - startTime,
-      data_sources_queried: template.data_sources,
-    });
+		const { data: report, error: reportError } = await reportingClient
+			.from("generated_reports")
+			.insert(payload)
+			.select("*")
+			.single();
 
-    return report.id;
-  } catch (error) {
-    console.error("Error generating report:", error);
-    
-    // Log failure
-    await supabase.from("report_generation_log").insert({
-      status: 'failed',
-      execution_time_ms: Date.now() - startTime,
-      error_message: error instanceof Error ? error.message : "Unknown error",
-    });
-    
-    throw error;
-  }
+		if (reportError || !report) {
+			throw new Error(reportError?.message ?? "Error creating report");
+		}
+
+		await logReportGeneration({
+			report_id: report.id,
+			status: "completed",
+			execution_time_ms: Date.now() - startTime,
+			data_sources_queried: asJson(dataSources),
+		});
+
+		logger.info("Report generated successfully", {
+			reportId: report.id,
+			templateId,
+			vesselId,
+		});
+
+		return report.id;
+	} catch (error) {
+		logger.error("Error generating report", error, {
+			templateId,
+			vesselId,
+		});
+
+		await logReportGeneration({
+			status: "failed",
+			execution_time_ms: Date.now() - startTime,
+			error_message: error instanceof Error ? error.message : "Unknown error",
+			error_details: buildErrorDetails(error),
+		});
+
+		throw error;
+	}
 }
+
 
 /**
  * Collects data from various sources for the report
  */
 async function collectReportData(
-  dataSources: string[],
-  vesselId: string | null,
-  periodStart: Date,
-  periodEnd: Date
-): Promise<Record<string, any>> {
-  const data: Record<string, any> = {};
+	dataSources: string[],
+	vesselId: string | null,
+	periodStart: Date,
+	periodEnd: Date
+): Promise<ReportData> {
+	const data: ReportData = {};
 
-  for (const source of dataSources) {
-    try {
-      switch (source) {
-        case 'risk_assessments':
-          data.risks = await fetchRiskData(vesselId, periodStart, periodEnd);
-          break;
-        case 'drill_executions':
-          data.drills = await fetchDrillData(vesselId, periodStart, periodEnd);
-          break;
-        case 'crew_training':
-          data.training = await fetchTrainingData(vesselId, periodStart, periodEnd);
-          break;
-        case 'noncompliance':
-          data.noncompliance = await fetchNoncomplianceData(vesselId, periodStart, periodEnd);
-          break;
-        default:
-          console.warn(`Unknown data source: ${source}`);
-      }
-    } catch (error) {
-      console.error(`Error fetching data from ${source}:`, error);
-      data[source] = { error: "Failed to fetch data" };
-    }
-  }
+	for (const source of dataSources) {
+		try {
+			switch (source) {
+				case "risk_assessments":
+					data.risks = await fetchRiskData(vesselId, periodStart, periodEnd);
+					break;
+				case "drill_executions":
+					data.drills = await fetchDrillData(vesselId, periodStart, periodEnd);
+					break;
+				case "crew_training":
+					data.training = await fetchTrainingData(periodStart, periodEnd);
+					break;
+				case "noncompliance":
+					data.noncompliance = await fetchNoncomplianceData(
+						vesselId,
+						periodStart,
+						periodEnd
+					);
+					break;
+				default:
+					logger.warn("Unknown data source for reporting engine", { source });
+			}
+		} catch (error) {
+			logger.error(`Error fetching data from ${source}`, error);
+			data[source] = {
+				error: "Failed to fetch data",
+				details: error instanceof Error ? error.message : "Unknown error",
+			};
+		}
+	}
 
-  return data;
+	return data;
 }
 
-/**
- * Fetches risk assessment data
- */
-async function fetchRiskData(vesselId: string | null, start: Date, end: Date) {
-  let query = supabase
-    .from("risk_assessments")
-    .select("*")
-    .gte("assessed_at", start.toISOString())
-    .lte("assessed_at", end.toISOString());
+async function fetchRiskData(
+	vesselId: string | null,
+	start: Date,
+	end: Date
+): Promise<unknown[]> {
+	let query = reportingClient
+		.from("risk_assessments")
+		.select("*")
+		.gte("assessed_at", start.toISOString())
+		.lte("assessed_at", end.toISOString());
 
-  if (vesselId) {
-    query = query.eq("vessel_id", vesselId);
-  }
+	if (vesselId) {
+		query = query.eq("vessel_id", vesselId);
+	}
 
-  const { data, error } = await query;
-  return error ? [] : data;
+	const { data, error } = await query;
+	if (error) {
+		throw error;
+	}
+
+	return data ?? [];
 }
 
-/**
- * Fetches drill execution data
- */
-async function fetchDrillData(vesselId: string | null, start: Date, end: Date) {
-  let query = supabase
-    .from("drill_executions")
-    .select("*, drill_scenarios(*)")
-    .gte("execution_date", start.toISOString())
-    .lte("execution_date", end.toISOString());
+async function fetchDrillData(
+	vesselId: string | null,
+	start: Date,
+	end: Date
+): Promise<unknown[]> {
+	let query = reportingClient
+		.from("drill_executions")
+		.select("*, drill_scenarios(*)")
+		.gte("execution_date", start.toISOString())
+		.lte("execution_date", end.toISOString());
 
-  if (vesselId) {
-    query = query.eq("vessel_id", vesselId);
-  }
+	if (vesselId) {
+		query = query.eq("vessel_id", vesselId);
+	}
 
-  const { data, error } = await query;
-  return error ? [] : data;
+	const { data, error } = await query;
+	if (error) {
+		throw error;
+	}
+
+	return data ?? [];
 }
 
-/**
- * Fetches training data
- */
-async function fetchTrainingData(vesselId: string | null, start: Date, end: Date) {
-  const { data, error } = await supabase
-    .from("crew_training_results")
-    .select("*, crew_training_quizzes(*)")
-    .gte("completed_at", start.toISOString())
-    .lte("completed_at", end.toISOString());
+async function fetchTrainingData(start: Date, end: Date): Promise<unknown[]> {
+	const { data, error } = await reportingClient
+		.from("crew_training_results")
+		.select("*, crew_training_quizzes(*)")
+		.gte("completed_at", start.toISOString())
+		.lte("completed_at", end.toISOString());
 
-  return error ? [] : data;
+	if (error) {
+		throw error;
+	}
+
+	return data ?? [];
 }
 
-/**
- * Fetches noncompliance data
- */
-async function fetchNoncomplianceData(vesselId: string | null, start: Date, end: Date) {
-  let query = supabase
-    .from("noncompliance_explanations")
-    .select("*")
-    .gte("generated_at", start.toISOString())
-    .lte("generated_at", end.toISOString());
+async function fetchNoncomplianceData(
+	vesselId: string | null,
+	start: Date,
+	end: Date
+): Promise<unknown[]> {
+	let query = reportingClient
+		.from("noncompliance_explanations")
+		.select("*")
+		.gte("generated_at", start.toISOString())
+		.lte("generated_at", end.toISOString());
 
-  if (vesselId) {
-    query = query.eq("vessel_id", vesselId);
-  }
+	if (vesselId) {
+		query = query.eq("vessel_id", vesselId);
+	}
 
-  const { data, error } = await query;
-  return error ? [] : data;
+	const { data, error } = await query;
+	if (error) {
+		throw error;
+	}
+
+	return data ?? [];
 }
 
 /**
  * Generates AI summary and insights for the report
  */
 async function generateAISummary(
-  reportType: string,
-  reportData: Record<string, any>
-): Promise<{
-  summary: string;
-  insights: string[];
-  executiveSummary: string;
-  conclusions: string[];
-  recommendations: string[];
-}> {
-  try {
-    const apiKey = (import.meta as any).env.VITE_OPENAI_API_KEY as string;
-    
-    if (!apiKey) {
-      throw new Error("OpenAI API key not configured");
-    }
+	reportType: ReportType,
+	reportData: ReportData
+): Promise<AISummaryContent> {
+	try {
+		const apiKey = (import.meta as any).env.VITE_OPENAI_API_KEY as string | undefined;
 
-    const prompt = buildReportSummaryPrompt(reportType, reportData);
-    
-    const response = await fetch("https://api.openai.com/v1/chat/completions", {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-        "Authorization": `Bearer ${apiKey}`,
-      },
-      body: JSON.stringify({
-        model: "gpt-4",
-        messages: [
-          {
-            role: "system",
-            content: "You are a maritime operations analyst who creates comprehensive, insightful reports. You analyze data and provide executive-level summaries with actionable recommendations."
-          },
-          {
-            role: "user",
-            content: prompt
-          }
-        ],
-        temperature: 0.7,
-        max_tokens: 2500,
-      }),
-    });
+		if (!apiKey) {
+			throw new Error("OpenAI API key not configured");
+		}
 
-    if (!response.ok) {
-      throw new Error(`OpenAI API error: ${response.status}`);
-    }
+		const response = await fetch("https://api.openai.com/v1/chat/completions", {
+			method: "POST",
+			headers: {
+				"Content-Type": "application/json",
+				Authorization: `Bearer ${apiKey}`,
+			},
+			body: JSON.stringify({
+				model: OPENAI_MODEL,
+				messages: [
+					{
+						role: "system",
+						content:
+							"You are a maritime operations analyst. Analyze the supplied data and produce structured, executive-ready insights.",
+					},
+					{
+						role: "user",
+						content: buildReportSummaryPrompt(reportType, reportData),
+					},
+				],
+				temperature: 0.7,
+				max_tokens: OPENAI_MAX_TOKENS,
+			}),
+		});
 
-    const data = await response.json();
-    const content = JSON.parse(data.choices[0].message.content);
+		if (!response.ok) {
+			throw new Error(`OpenAI API error: ${response.status}`);
+		}
 
-    return {
-      summary: content.summary,
-      insights: content.insights,
-      executiveSummary: content.executiveSummary,
-      conclusions: content.conclusions,
-      recommendations: content.recommendations,
-    };
-  } catch (error) {
-    console.error("Error generating AI summary:", error);
-    return {
-      summary: "AI summary generation failed",
-      insights: [],
-      executiveSummary: "Error generating executive summary",
-      conclusions: [],
-      recommendations: [],
-    };
-  }
+		const data = (await response.json()) as OpenAIChatCompletion;
+		const rawContent = data.choices?.[0]?.message?.content;
+
+		if (!rawContent) {
+			throw new Error("OpenAI response did not include content");
+		}
+
+		return parseAiContent(rawContent);
+	} catch (error) {
+		logger.error("Error generating AI summary", error);
+		return {
+			summary: "AI summary generation failed",
+			insights: [],
+			executiveSummary: "Error generating executive summary",
+			conclusions: [],
+			recommendations: [],
+		};
+	}
 }
 
-/**
- * Builds the prompt for AI summary generation
- */
-function buildReportSummaryPrompt(reportType: string, data: Record<string, any>): string {
-  return `
-Analyze this maritime operations data and create a comprehensive report summary:
-
-Report Type: ${reportType}
-
-Data Summary:
-${JSON.stringify(data, null, 2)}
-
-Provide:
-1. SUMMARY: Overall summary of the data (2-3 paragraphs)
-2. INSIGHTS: 5-7 key insights from the data
-3. EXECUTIVE_SUMMARY: High-level executive summary (1 paragraph)
-4. CONCLUSIONS: 3-5 main conclusions
-5. RECOMMENDATIONS: 5-8 actionable recommendations
-
-Format as JSON:
-{
-  "summary": "...",
-  "insights": ["...", "..."],
-  "executiveSummary": "...",
-  "conclusions": ["...", "..."],
-  "recommendations": ["...", "..."]
-}
-`;
+function parseAiContent(rawContent: string): AISummaryContent {
+	try {
+		const parsed = JSON.parse(rawContent);
+		return {
+			summary: parsed.summary ?? "",
+			insights: parsed.insights ?? [],
+			executiveSummary: parsed.executiveSummary ?? "",
+			conclusions: parsed.conclusions ?? [],
+			recommendations: parsed.recommendations ?? [],
+		};
+	} catch (error) {
+		logger.error("Failed to parse AI response", error, { rawContent });
+		return {
+			summary: "AI summary generation failed",
+			insights: [],
+			executiveSummary: "Error generating executive summary",
+			conclusions: [],
+			recommendations: [],
+		};
+	}
 }
 
-/**
- * Exports a report in the specified format
- */
-export async function exportReport(
-  reportId: string,
-  format: ExportFormat,
-  userId: string
-): Promise<string> {
-  try {
-    const { data: report, error } = await supabase
-      .from("generated_reports")
-      .select("*")
-      .eq("id", reportId)
-      .single();
-
-    if (error || !report) {
-      throw new Error("Report not found");
-    }
-
-    // Record export
-    const { data: exportRecord, error: exportError } = await supabase
-      .from("report_exports")
-      .insert({
-        report_id: reportId,
-        export_format: format,
-        file_size_bytes: JSON.stringify(report).length,
-        exported_by: userId,
-      })
-      .select()
-      .single();
-
-    if (exportError) {
-      throw exportError;
-    }
-
-    return exportRecord.id;
-  } catch (error) {
-    console.error("Error exporting report:", error);
-    throw error;
-  }
+function buildReportSummaryPrompt(reportType: string, data: Record<string, unknown>): string {
+	return `Analyze this maritime operations data and create a comprehensive report summary:\n\nReport Type: ${reportType}\n\nData Summary:\n${JSON.stringify(
+		data,
+		null,
+		2
+	)}\n\nProvide:\n1. SUMMARY: Overall summary of the data (2-3 paragraphs)\n2. INSIGHTS: 5-7 key insights from the data\n3. EXECUTIVE_SUMMARY: High-level executive summary (1 paragraph)\n4. CONCLUSIONS: 3-5 main conclusions\n5. RECOMMENDATIONS: 5-8 actionable recommendations\n\nFormat as JSON with the shape {"summary": string, "insights": string[], "executiveSummary": string, "conclusions": string[], "recommendations": string[]}.`;
 }
 
-/**
- * Creates a report schedule
- */
+export interface CreateReportScheduleInput {
+	templateId: string;
+	scheduleName: string;
+	scheduleType: ScheduleType;
+	nextExecution: Date;
+	cronExpression?: string | null;
+	vesselId?: string | null;
+	recipients?: string[];
+	deliveryMethod?: ScheduleDeliveryMethod;
+	exportFormats?: ExportFormat[];
+	autoArchiveDays?: number;
+	active?: boolean;
+}
+
 export async function createReportSchedule(
-  templateId: string,
-  scheduleName: string,
-  scheduleType: ScheduleType,
-  vesselId: string | null,
-  recipients: string[],
-  deliveryMethod: 'email' | 'dashboard' | 'both',
-  exportFormats: ExportFormat[],
-  userId: string
-): Promise<string> {
-  try {
-    const nextExecution = calculateNextExecution(scheduleType);
+	input: CreateReportScheduleInput,
+	userId: string
+): Promise<ScheduleWithTemplate> {
+	const payload: ReportingTables["report_schedules"]["Insert"] = {
+		template_id: input.templateId,
+		schedule_name: input.scheduleName,
+		schedule_type: input.scheduleType,
+		next_execution: input.nextExecution.toISOString(),
+		cron_expression: input.cronExpression ?? null,
+		vessel_id: input.vesselId ?? null,
+		recipients: asJson(input.recipients ?? []),
+		delivery_method: input.deliveryMethod ?? "dashboard",
+		export_formats: asJson(input.exportFormats ?? ["PDF"]),
+		auto_archive_days: input.autoArchiveDays ?? 90,
+		active: input.active ?? true,
+		created_by: userId,
+	};
 
-    const { data, error } = await supabase
-      .from("report_schedules")
-      .insert({
-        template_id: templateId,
-        schedule_name: scheduleName,
-        schedule_type: scheduleType,
-        next_execution: nextExecution.toISOString(),
-        vessel_id: vesselId,
-        recipients,
-        delivery_method: deliveryMethod,
-        export_formats: exportFormats,
-        active: true,
-        created_by: userId,
-      })
-      .select()
-      .single();
+	const { data, error } = await reportingClient
+		.from("report_schedules")
+		.insert(payload)
+		.select("*, report_templates(*)")
+		.single();
 
-    if (error) {
-      throw error;
-    }
+	if (error || !data) {
+		logger.error("Failed to create report schedule", error, { payload });
+		throw new Error(error?.message ?? "Failed to create report schedule");
+	}
 
-    return data.id;
-  } catch (error) {
-    console.error("Error creating report schedule:", error);
-    throw error;
-  }
+	return data as ScheduleWithTemplate;
 }
 
-/**
- * Calculates next execution date based on schedule type
- */
-function calculateNextExecution(scheduleType: ScheduleType): Date {
-  const now = new Date();
-  
-  switch (scheduleType) {
-    case 'daily':
-      return new Date(now.getTime() + 24 * 60 * 60 * 1000);
-    case 'weekly':
-      return new Date(now.getTime() + 7 * 24 * 60 * 60 * 1000);
-    case 'biweekly':
-      return new Date(now.getTime() + 14 * 24 * 60 * 60 * 1000);
-    case 'monthly':
-      return new Date(now.getFullYear(), now.getMonth() + 1, now.getDate());
-    case 'quarterly':
-      return new Date(now.getFullYear(), now.getMonth() + 3, now.getDate());
-    case 'annually':
-      return new Date(now.getFullYear() + 1, now.getMonth(), now.getDate());
-    default:
-      return now;
-  }
+export async function listReportSchedules(
+	includeTemplates = true
+): Promise<ScheduleWithTemplate[]> {
+	const columns = includeTemplates ? "*, report_templates(*)" : "*";
+	const { data, error } = await reportingClient
+		.from("report_schedules")
+		.select(columns)
+		.order("next_execution", { ascending: true });
+
+	if (error) {
+		logger.error("Failed to fetch report schedules", error);
+		throw new Error(error.message);
+	}
+
+	return (data as ScheduleWithTemplate[]) ?? [];
 }
 
-/**
- * Gets recent reports
- */
-export async function getRecentReports(vesselId: string | null, limit = 20) {
-  let query = supabase
-    .from("generated_reports")
-    .select("*")
-    .order("generated_at", { ascending: false })
-    .limit(limit);
-
-  if (vesselId) {
-    query = query.eq("vessel_id", vesselId);
-  }
-
-  const { data, error } = await query;
-
-  if (error) {
-    throw error;
-  }
-
-  return data;
+export interface RecordReportExportInput {
+	reportId: string;
+	exportFormat: ExportFormat;
+	exportedBy: string;
+	filePath?: string | null;
+	fileSizeBytes?: number | null;
+	fileHash?: string | null;
+	exportOptions?: Record<string, unknown>;
+	expiresAt?: Date | null;
 }
 
-/**
- * Gets active report schedules
- */
-export async function getActiveSchedules(vesselId: string | null) {
-  let query = supabase
-    .from("report_schedules")
-    .select("*, report_templates(*)")
-    .eq("active", true)
-    .order("next_execution", { ascending: true });
+export async function recordReportExport(
+	input: RecordReportExportInput
+): Promise<void> {
+	const payload: ReportExportInsert = {
+		report_id: input.reportId,
+		export_format: input.exportFormat,
+		file_path: input.filePath ?? null,
+		file_size_bytes: input.fileSizeBytes ?? null,
+		file_hash: input.fileHash ?? null,
+		export_options: asJson(input.exportOptions ?? {}),
+		exported_by: input.exportedBy,
+		exported_at: new Date().toISOString(),
+		expires_at: input.expiresAt?.toISOString() ?? null,
+	};
 
-  if (vesselId) {
-    query = query.eq("vessel_id", vesselId);
-  }
+	const { error } = await reportingClient.from("report_exports").insert(payload);
+	if (error) {
+		logger.error("Failed to record report export", error, { input });
+		throw new Error(error.message);
+	}
+}
 
-  const { data, error } = await query;
+export async function listGeneratedReports(
+	limit = 20
+): Promise<GeneratedReportRow[]> {
+	const { data, error } = await reportingClient
+		.from("generated_reports")
+		.select("*")
+		.order("generated_at", { ascending: false })
+		.limit(limit);
 
-  if (error) {
-    throw error;
-  }
+	if (error) {
+		logger.error("Failed to fetch generated reports", error);
+		throw new Error(error.message);
+	}
 
-  return data;
+	return data ?? [];
+}
+
+async function logReportGeneration(payload: ReportGenerationLogInsert): Promise<void> {
+	const { error } = await reportingClient.from("report_generation_log").insert(payload);
+	if (error) {
+		logger.error("Failed to insert report generation log", error, { payload });
+	}
+}
+
+function extractDataSources(template: ReportTemplateRow): string[] {
+	const raw = template.data_sources;
+	if (!raw) {
+		return [];
+	}
+
+	if (Array.isArray(raw)) {
+		return raw.filter((item): item is string => typeof item === "string");
+	}
+
+	if (typeof raw === "string") {
+		try {
+			const parsed = JSON.parse(raw);
+			if (Array.isArray(parsed)) {
+				return parsed.filter((item): item is string => typeof item === "string");
+			}
+		} catch (error) {
+			logger.warn("Failed to parse data_sources string", error, { raw });
+		}
+	}
+
+	return [];
+}
+
+function formatReportTitle(templateName: string, start: Date, end: Date): string {
+	const formatter = new Intl.DateTimeFormat("pt-BR", { dateStyle: "medium" });
+	return `${templateName} — ${formatter.format(start)} a ${formatter.format(end)}`;
+}
+
+function buildErrorDetails(error: unknown): Json {
+	if (error instanceof Error) {
+		return asJson({
+			message: error.message,
+			stack: error.stack,
+		});
+	}
+
+	return asJson({ error: String(error) });
+}
+
+function asJson<T>(value: T): Json {
+	return value as unknown as Json;
 }

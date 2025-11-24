@@ -11,6 +11,24 @@ import {
   generateInteractiveCard
 } from "@/lib/ai/copilot-v2";
 
+type TrainingModule = {
+  id: string;
+  title: string;
+  role: string;
+  duration: string;
+  topics: string[];
+  status: "not_started" | "in_progress" | "completed";
+  progress: number;
+};
+
+type CorrectiveAction = {
+  type: string;
+  priority: "low" | "medium" | "high";
+  action: string;
+  description: string;
+  context?: Record<string, unknown>;
+};
+
 describe("PATCH 632 - Nautilus Copilot V2", () => {
   describe("Command Management", () => {
     it("should return all available commands", () => {
@@ -312,17 +330,23 @@ describe("PATCH 632 - Nautilus Copilot V2", () => {
 
     it("should have valid module status", async () => {
       const modules = await executeCopilotCommand("training-mode");
+      const trainingModules = modules as TrainingModule[];
 
-      const validStatuses = ["not_started", "in_progress", "completed"];
-      modules.forEach((module: any) => {
+      const validStatuses: TrainingModule["status"][] = [
+        "not_started",
+        "in_progress",
+        "completed",
+      ];
+      trainingModules.forEach((module) => {
         expect(validStatuses).toContain(module.status);
       });
     });
 
     it("should have valid progress values", async () => {
       const modules = await executeCopilotCommand("training-mode");
+      const trainingModules = modules as TrainingModule[];
 
-      modules.forEach((module: any) => {
+      trainingModules.forEach((module) => {
         expect(module.progress).toBeGreaterThanOrEqual(0);
         expect(module.progress).toBeLessThanOrEqual(100);
       });
@@ -330,8 +354,9 @@ describe("PATCH 632 - Nautilus Copilot V2", () => {
 
     it("should include topics array", async () => {
       const modules = await executeCopilotCommand("training-mode");
+      const trainingModules = modules as TrainingModule[];
 
-      modules.forEach((module: any) => {
+      trainingModules.forEach((module) => {
         expect(Array.isArray(module.topics)).toBe(true);
         expect(module.topics.length).toBeGreaterThan(0);
       });
@@ -347,23 +372,26 @@ describe("PATCH 632 - Nautilus Copilot V2", () => {
 
     it("should prioritize actions by severity", async () => {
       const actions = await executeCopilotCommand("suggest-actions");
-      const priorities = actions.map((a: any) => a.priority);
+      const correctiveActions = actions as CorrectiveAction[];
+      const priorities = correctiveActions.map(action => action.priority);
 
       expect(priorities).toContain("high");
     });
 
     it("should include action context", async () => {
       const actions = await executeCopilotCommand("suggest-actions");
+      const correctiveActions = actions as CorrectiveAction[];
 
-      actions.forEach((action: any) => {
+      correctiveActions.forEach((action) => {
         expect(action).toHaveProperty("context");
       });
     });
 
     it("should provide actionable suggestions", async () => {
       const actions = await executeCopilotCommand("suggest-actions");
+      const correctiveActions = actions as CorrectiveAction[];
 
-      actions.forEach((action: any) => {
+      correctiveActions.forEach((action) => {
         expect(action.action).toBeDefined();
         expect(action.description.length).toBeGreaterThan(10);
       });

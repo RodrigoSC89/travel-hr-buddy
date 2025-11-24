@@ -3,20 +3,20 @@
  * Tests for PSC compliance checks
  */
 
-describe('PSC Pre-Inspection Module', () => {
+describe("PSC Pre-Inspection Module", () => {
   beforeEach(() => {
-    cy.visit('/compliance/pre-psc');
+    cy.visit("/compliance/pre-psc");
   });
 
-  it('should display the Pre-PSC page', () => {
-    cy.contains('PSC').should('exist');
+  it("should display the Pre-PSC page", () => {
+    cy.contains("PSC").should("exist");
   });
 
-  it('should show DNV/IMO compliance guides', () => {
-    cy.get('body').should('exist');
+  it("should show DNV/IMO compliance guides", () => {
+    cy.get("body").should("exist");
   });
 
-  it('should calculate automatic score', () => {
-    cy.get('body').should('exist');
+  it("should calculate automatic score", () => {
+    cy.get("body").should("exist");
   });
 });

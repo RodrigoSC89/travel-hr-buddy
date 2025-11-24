@@ -1,6 +1,6 @@
 // PATCH 599: Smart Drills Service
-// @ts-nocheck
 import { supabase } from "@/integrations/supabase/client";
+import type { Database } from "@/integrations/supabase/types";
 import type {
   SmartDrill,
   DrillResponse,
@@ -12,6 +12,15 @@ import type {
   DrillEvaluationResponse,
   DrillStatistics,
 } from '@/types/smart-drills';
+
+type SmartDrillInsertPayload = Database["public"]["Tables"]["smart_drills"]["Insert"];
+type SmartDrillUpdatePayload = Database["public"]["Tables"]["smart_drills"]["Update"] & {
+  completed_at?: string | null;
+};
+type DrillResponseInsertPayload = Database["public"]["Tables"]["drill_responses"]["Insert"];
+type DrillCorrectiveActionInsertPayload = Database["public"]["Tables"]["drill_corrective_actions"]["Insert"];
+type DrillCorrectiveActionUpdatePayload = Database["public"]["Tables"]["drill_corrective_actions"]["Update"];
+type DrillEvaluationInsertPayload = Database["public"]["Tables"]["drill_evaluations"]["Insert"];
 
 export class SmartDrillsService {
   /**
@@ -27,7 +36,7 @@ export class SmartDrillsService {
       query = query.eq('vessel_id', vesselId);
     }
 
-    const { data, error } = await query;
+    const { data, error } = await query.returns<SmartDrill[]>();
 
     if (error) {
       console.error('Error fetching drills:', error);
@@ -45,7 +54,7 @@ export class SmartDrillsService {
       .from('smart_drills')
       .select('*')
       .eq('id', id)
-      .single();
+      .single<SmartDrill>();
 
     if (error) {
       console.error('Error fetching drill:', error);
@@ -59,11 +68,12 @@ export class SmartDrillsService {
    * Create a new drill
    */
   static async createDrill(drill: Partial<SmartDrill>): Promise<SmartDrill> {
+    const payload = drill as SmartDrillInsertPayload;
     const { data, error } = await supabase
       .from('smart_drills')
-      .insert(drill)
+      .insert(payload)
       .select()
-      .single();
+      .single<SmartDrill>();
 
     if (error) {
       console.error('Error creating drill:', error);
@@ -77,12 +87,13 @@ export class SmartDrillsService {
    * Update a drill
    */
   static async updateDrill(id: string, updates: Partial<SmartDrill>): Promise<SmartDrill> {
+    const payload = updates as SmartDrillUpdatePayload;
     const { data, error } = await supabase
       .from('smart_drills')
-      .update(updates)
+      .update(payload)
       .eq('id', id)
       .select()
-      .single();
+      .single<SmartDrill>();
 
     if (error) {
       console.error('Error updating drill:', error);
@@ -125,7 +136,8 @@ export class SmartDrillsService {
       .from('drill_responses')
       .select('*')
       .eq('drill_id', drillId)
-      .order('created_at', { ascending: true });
+      .order('created_at', { ascending: true })
+      .returns<DrillResponse[]>();
 
     if (error) {
       console.error('Error fetching drill responses:', error);
@@ -141,11 +153,12 @@ export class SmartDrillsService {
   static async submitDrillResponse(
     response: Partial<DrillResponse>
   ): Promise<DrillResponse> {
+    const payload = response as DrillResponseInsertPayload;
     const { data, error } = await supabase
       .from('drill_responses')
-      .insert(response)
+      .insert(payload)
       .select()
-      .single();
+      .single<DrillResponse>();
 
     if (error) {
       console.error('Error submitting drill response:', error);
@@ -163,7 +176,7 @@ export class SmartDrillsService {
       .from('drill_evaluations')
       .select('*')
       .eq('drill_id', drillId)
-      .single();
+      .single<DrillEvaluation>();
 
     if (error && error.code !== 'PGRST116') {
       console.error('Error fetching drill evaluation:', error);
@@ -179,11 +192,12 @@ export class SmartDrillsService {
   static async createDrillEvaluation(
     evaluation: Partial<DrillEvaluation>
   ): Promise<DrillEvaluation> {
+    const payload = evaluation as DrillEvaluationInsertPayload;
     const { data, error } = await supabase
       .from('drill_evaluations')
-      .insert(evaluation)
+      .insert(payload)
       .select()
-      .single();
+      .single<DrillEvaluation>();
 
     if (error) {
       console.error('Error creating drill evaluation:', error);
@@ -201,7 +215,8 @@ export class SmartDrillsService {
       .from('drill_corrective_actions')
       .select('*')
       .eq('drill_id', drillId)
-      .order('priority', { ascending: false });
+      .order('priority', { ascending: false })
+      .returns<DrillCorrectiveAction[]>();
 
     if (error) {
       console.error('Error fetching corrective actions:', error);
@@ -217,11 +232,12 @@ export class SmartDrillsService {
   static async createCorrectiveAction(
     action: Partial<DrillCorrectiveAction>
   ): Promise<DrillCorrectiveAction> {
+    const payload = action as DrillCorrectiveActionInsertPayload;
     const { data, error } = await supabase
       .from('drill_corrective_actions')
-      .insert(action)
+      .insert(payload)
       .select()
-      .single();
+      .single<DrillCorrectiveAction>();
 
     if (error) {
       console.error('Error creating corrective action:', error);
@@ -238,12 +254,13 @@ export class SmartDrillsService {
     id: string,
     updates: Partial<DrillCorrectiveAction>
   ): Promise<DrillCorrectiveAction> {
+    const payload = updates as DrillCorrectiveActionUpdatePayload;
     const { data, error } = await supabase
       .from('drill_corrective_actions')
-      .update(updates)
+      .update(payload)
       .eq('id', id)
       .select()
-      .single();
+      .single<DrillCorrectiveAction>();
 
     if (error) {
       console.error('Error updating corrective action:', error);
@@ -259,7 +276,7 @@ export class SmartDrillsService {
   static async generateDrillScenario(
     request: DrillScenarioRequest
   ): Promise<DrillScenarioResponse> {
-    const { data, error } = await supabase.functions.invoke('generate-drill-scenario', {
+    const { data, error } = await supabase.functions.invoke<DrillScenarioResponse>('generate-drill-scenario', {
       body: request,
     });
 
@@ -277,7 +294,7 @@ export class SmartDrillsService {
   static async generateDrillEvaluation(
     request: DrillEvaluationRequest
   ): Promise<DrillEvaluationResponse> {
-    const { data, error } = await supabase.functions.invoke('generate-drill-evaluation', {
+    const { data, error } = await supabase.functions.invoke<DrillEvaluationResponse>('generate-drill-evaluation', {
       body: request,
     });
 
@@ -293,13 +310,17 @@ export class SmartDrillsService {
    * Get drill statistics
    */
   static async getDrillStatistics(vesselId?: string): Promise<DrillStatistics> {
-    const { data, error } = await supabase.rpc('get_drill_statistics', {
+    const { data, error } = await supabase.rpc<DrillStatistics>('get_drill_statistics', {
       p_vessel_id: vesselId || null,
     });
 
     if (error) {
       console.error('Error fetching drill statistics:', error);
       throw error;
+    }
+
+    if (!data) {
+      throw new Error('No drill statistics returned');
     }
 
     return data;

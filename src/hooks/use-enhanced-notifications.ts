@@ -1,10 +1,13 @@
-import { useState, useEffect, useCallback } from "react";
+import { useState, useEffect, useCallback, useMemo, useRef } from "react";
 import { supabase } from "@/integrations/supabase/client";
 import { useAuth } from "@/contexts/AuthContext";
 import type { Database } from "@/integrations/supabase/types";
 
 type EmployeeCertificate = Database["public"]["Tables"]["employee_certificates"]["Row"];
 type PriceAlert = Database["public"]["Tables"]["price_alerts"]["Row"];
+type EmployeeNotificationRow = Database["public"]["Tables"]["employee_notifications"]["Row"];
+
+type NotificationOrigin = "database" | "certificate" | "price_alert" | "welcome";
 
 export interface Notification {
   id: string;
@@ -12,116 +15,116 @@ export interface Notification {
   message: string;
   type: "info" | "success" | "warning" | "error";
   read: boolean;
+  origin: NotificationOrigin;
   action?: {
     label: string;
     href: string;
   };
   created_at: string;
   expires_at?: string;
+  persistentId?: string;
+  metadata?: Record<string, string | number | boolean | null>;
 }
 
 export const useEnhancedNotifications = () => {
   const [notifications, setNotifications] = useState<Notification[]>([]);
-  const [unreadCount, setUnreadCount] = useState(0);
-  const [isLoading, setIsLoading] = useState(false);
+  const [isLoading, setIsLoading] = useState(true);
+  const [error, setError] = useState<string | null>(null);
   const { user } = useAuth();
+  const isMountedRef = useRef(true);
+
+  const unreadCount = useMemo(
+    () => notifications.filter(notification => !notification.read).length,
+    [notifications]
+  );
 
   // Buscar notificações do usuário
   const fetchNotifications = useCallback(async () => {
-    if (!user) return;
+    if (!user) {
+      setNotifications([]);
+      setIsLoading(false);
+      setError(null);
+      return;
+    }
 
     try {
       setIsLoading(true);
-      
-      // Simular notificações baseadas em dados reais
-      const mockNotifications: Notification[] = [];
+      setError(null);
 
-      // Verificar certificados expirando
-      const { data: certificates } = await supabase
-        .from("employee_certificates")
-        .select("*")
-        .eq("employee_id", user.email)
-        .gte("expiry_date", new Date().toISOString())
-        .lte("expiry_date", new Date(Date.now() + 30 * 24 * 60 * 60 * 1000).toISOString());
+      const now = new Date();
+      const thirtyDaysFromNow = new Date(now.getTime() + 30 * 24 * 60 * 60 * 1000);
+      const certificateIdentifiers = [user.id, user.email].filter(Boolean) as string[];
 
-      (certificates as EmployeeCertificate[] | null)?.forEach(cert => {
-        const expiryDate = cert.expiry_date ? new Date(cert.expiry_date) : null;
-        if (!expiryDate) return;
-        
-        const daysUntilExpiry = Math.ceil(
-          (expiryDate.getTime() - new Date().getTime()) / (1000 * 60 * 60 * 24)
-        );
-        
-        mockNotifications.push({
-          id: `cert-${cert.id}`,
-          title: "Certificado Expirando",
-          message: `Seu certificado "${cert.certificate_name}" expira em ${daysUntilExpiry} dias`,
-          type: daysUntilExpiry <= 7 ? "error" : "warning",
-          read: false,
-          action: {
-            label: "Ver Certificado",
-            href: "/hr"
-          },
-          created_at: new Date().toISOString()
-        });
-      });
+      const certificatesPromise = certificateIdentifiers.length > 0
+        ? supabase
+          .from("employee_certificates")
+          .select("id, certificate_name, expiry_date, employee_id")
+          .in("employee_id", certificateIdentifiers)
+          .gte("expiry_date", now.toISOString())
+          .lte("expiry_date", thirtyDaysFromNow.toISOString())
+        : Promise.resolve({ data: [] as EmployeeCertificate[], error: null });
 
-      // Verificar alertas de preços
-      const { data: priceAlerts } = await supabase
+      const priceAlertsPromise = supabase
         .from("price_alerts")
-        .select("*")
-        .eq("user_id", user?.id || "")
+        .select("id, product_name, target_price, current_price, user_id, is_active, created_at")
+        .eq("user_id", user.id)
         .eq("is_active", true);
 
-      const typedPriceAlerts = priceAlerts as PriceAlert[] | null;
-      if (typedPriceAlerts && typedPriceAlerts.length > 0) {
-        mockNotifications.push({
-          id: "price-alerts-active",
-          title: "Alertas de Preços Ativos",
-          message: `Você tem ${typedPriceAlerts.length} alertas de preços monitorando produtos`,
-          type: "info",
-          read: false,
-          action: {
-            label: "Ver Alertas",
-            href: "/price-alerts"
-          },
-          created_at: new Date().toISOString()
-        });
+      const persistedNotificationsPromise = supabase
+        .from("employee_notifications")
+        .select("id, title, message, type, is_read, action_url, created_at")
+        .eq("user_id", user.id)
+        .order("created_at", { ascending: false })
+        .limit(50);
+
+      const [certificatesResult, priceAlertsResult, persistedResult] = await Promise.all([
+        certificatesPromise,
+        priceAlertsPromise,
+        persistedNotificationsPromise,
+      ]);
+
+      if (certificatesResult.error || priceAlertsResult.error || persistedResult.error) {
+        throw certificatesResult.error || priceAlertsResult.error || persistedResult.error;
       }
 
-      // Adicionar notificações de boas-vindas para novos usuários
-      const userCreatedAt = user.created_at ? new Date(user.created_at) : new Date();
-      const daysSinceCreated = Math.ceil(
-        (new Date().getTime() - userCreatedAt.getTime()) / (1000 * 60 * 60 * 24)
+      if (!isMountedRef.current) return;
+
+      const certificateNotifications = buildCertificateNotifications(
+        (certificatesResult.data || []) as EmployeeCertificate[],
+        now
       );
+      const priceAlertNotifications = buildPriceAlertNotifications(
+        (priceAlertsResult.data || []) as PriceAlert[]
+      );
+      const persistedNotifications = buildPersistedNotifications(
+        (persistedResult.data || []) as EmployeeNotificationRow[]
+      );
+      const welcomeNotification = buildWelcomeNotification(user.created_at);
 
-      if (daysSinceCreated <= 7) {
-        mockNotifications.push({
-          id: "welcome",
-          title: "Bem-vindo ao Sistema!",
-          message: "Explore todas as funcionalidades disponíveis. Precisa de ajuda? Consulte nossa documentação.",
-          type: "success",
-          read: false,
-          action: {
-            label: "Explorar",
-            href: "/"
-          },
-          created_at: new Date().toISOString()
-        });
-      }
-
-      setNotifications(mockNotifications);
-      setUnreadCount(mockNotifications.filter(n => !n.read).length);
+      const combinedNotifications = deduplicateNotifications([
+        ...persistedNotifications,
+        ...certificateNotifications,
+        ...priceAlertNotifications,
+        ...welcomeNotification,
+      ]);
+      
+      setNotifications(combinedNotifications);
     } catch (err: unknown) {
       const errorMessage = err instanceof Error ? err.message : "Unknown error";
       console.error("Error fetching notifications:", errorMessage);
+      setError("Erro ao carregar notificações");
     } finally {
-      setIsLoading(false);
+      if (isMountedRef.current) {
+        setIsLoading(false);
+      }
     }
   }, [user]);
 
   // Marcar notificação como lida
-  const markAsRead = (notificationId: string) => {
+  const markAsRead = useCallback(async (notificationId: string) => {
+    const target = notifications.find(notification => notification.id === notificationId);
+    if (!target) return;
+
     setNotifications(prev =>
       prev.map(notification =>
         notification.id === notificationId
@@ -129,28 +132,44 @@ export const useEnhancedNotifications = () => {
           : notification
       )
     );
-    setUnreadCount(prev => Math.max(0, prev - 1));
-  };
+
+    if (target.persistentId) {
+      await supabase
+        .from("employee_notifications")
+        .update({ is_read: true })
+        .eq("id", target.persistentId);
+    }
+  }, [notifications]);
 
   // Marcar todas como lidas
-  const markAllAsRead = () => {
-    setNotifications(prev =>
-      prev.map(notification => ({ ...notification, read: true }))
-    );
-    setUnreadCount(0);
-  };
+  const markAllAsRead = useCallback(async () => {
+    const persistentIds = notifications
+      .filter(notification => !notification.read && notification.persistentId)
+      .map(notification => notification.persistentId as string);
+
+    setNotifications(prev => prev.map(notification => ({ ...notification, read: true })));
+
+    if (persistentIds.length > 0) {
+      await supabase
+        .from("employee_notifications")
+        .update({ is_read: true })
+        .in("id", persistentIds);
+    }
+  }, [notifications]);
 
   // Remover notificação
-  const removeNotification = (notificationId: string) => {
-    setNotifications(prev => {
-      const filtered = prev.filter(n => n.id !== notificationId);
-      const removedNotification = prev.find(n => n.id === notificationId);
-      if (removedNotification && !removedNotification.read) {
-        setUnreadCount(count => Math.max(0, count - 1));
-      }
-      return filtered;
-    });
-  };
+  const removeNotification = useCallback(async (notificationId: string) => {
+    const target = notifications.find(notification => notification.id === notificationId);
+
+    setNotifications(prev => prev.filter(notification => notification.id !== notificationId));
+
+    if (target?.persistentId) {
+      await supabase
+        .from("employee_notifications")
+        .delete()
+        .eq("id", target.persistentId);
+    }
+  }, [notifications]);
 
   // Carregar notificações quando o usuário mudar
   useEffect(() => {
@@ -159,17 +178,162 @@ export const useEnhancedNotifications = () => {
 
   // Atualizar notificações periodicamente
   useEffect(() => {
+    if (!user) return;
+
     const interval = setInterval(fetchNotifications, 5 * 60 * 1000); // 5 minutos
     return () => clearInterval(interval);
-  }, [fetchNotifications]);
+  }, [fetchNotifications, user]);
+
+  useEffect(() => {
+    return () => {
+      isMountedRef.current = false;
+    };
+  }, []);
 
   return {
     notifications,
     unreadCount,
     isLoading,
+    error,
     fetchNotifications,
     markAsRead,
     markAllAsRead,
     removeNotification
   };
+};
+
+const buildCertificateNotifications = (
+  certificates: EmployeeCertificate[],
+  now: Date
+): Notification[] => {
+  return certificates
+    .map((cert) => {
+      if (!cert.expiry_date) return null;
+      const expiryDate = new Date(cert.expiry_date);
+      if (Number.isNaN(expiryDate.getTime())) return null;
+
+      const daysUntilExpiry = Math.ceil(
+        (expiryDate.getTime() - now.getTime()) / (1000 * 60 * 60 * 24)
+      );
+
+      return {
+        id: `cert-${cert.id}`,
+        title: "Certificado Expirando",
+        message: `Seu certificado "${cert.certificate_name}" expira em ${daysUntilExpiry} dias`,
+        type: daysUntilExpiry <= 7 ? "error" : "warning",
+        read: false,
+        origin: "certificate" as const,
+        action: {
+          label: "Ver Certificado",
+          href: "/hr",
+        },
+        created_at: now.toISOString(),
+        expires_at: cert.expiry_date,
+        metadata: {
+          certificateId: cert.id,
+          daysUntilExpiry,
+        },
+      } satisfies Notification;
+    })
+    .filter((notification): notification is Notification => Boolean(notification));
+};
+
+const buildPriceAlertNotifications = (alerts: PriceAlert[]): Notification[] => {
+  if (!alerts.length) {
+    return [];
+  }
+
+  const mostRecent = alerts.reduce((latest, alert) => {
+    if (!latest) return alert;
+    return new Date(alert.created_at).getTime() > new Date(latest.created_at).getTime()
+      ? alert
+      : latest;
+  });
+
+  return [
+    {
+      id: "price-alerts-active",
+      title: "Alertas de Preços Ativos",
+      message: `Você tem ${alerts.length} alertas monitorando oportunidades de compra. Último produto configurado: ${mostRecent.product_name}.`,
+      type: "info",
+      read: false,
+      origin: "price_alert",
+      action: {
+        label: "Ver Alertas",
+        href: "/price-alerts",
+      },
+      created_at: mostRecent.created_at ?? new Date().toISOString(),
+      metadata: {
+        lastProduct: mostRecent.product_name,
+        lastTargetPrice: mostRecent.target_price,
+      },
+    },
+  ];
+};
+
+const buildPersistedNotifications = (rows: EmployeeNotificationRow[]): Notification[] =>
+  rows.map((row) => ({
+    id: row.id,
+    persistentId: row.id,
+    title: row.title,
+    message: row.message,
+    type: normalizeNotificationType(row.type),
+    read: row.is_read ?? false,
+    origin: "database",
+    action: row.action_url
+      ? {
+        label: "Ver Detalhes",
+        href: row.action_url,
+      }
+      : undefined,
+    created_at: row.created_at ?? new Date().toISOString(),
+  }));
+
+const buildWelcomeNotification = (userCreatedAt?: string) => {
+  if (!userCreatedAt) return [];
+
+  const createdAtDate = new Date(userCreatedAt);
+  if (Number.isNaN(createdAtDate.getTime())) return [];
+
+  const daysSinceCreated = Math.ceil(
+    (Date.now() - createdAtDate.getTime()) / (1000 * 60 * 60 * 24)
+  );
+
+  if (daysSinceCreated > 7) return [];
+
+  return [
+    {
+      id: "welcome",
+      title: "Bem-vindo ao Sistema!",
+      message: "Explore todas as funcionalidades disponíveis. Precisa de ajuda? Consulte nossa documentação.",
+      type: "success",
+      read: false,
+      origin: "welcome",
+      action: {
+        label: "Explorar",
+        href: "/",
+      },
+      created_at: createdAtDate.toISOString(),
+    },
+  ];
+};
+
+const deduplicateNotifications = (items: Notification[]): Notification[] => {
+  const notificationMap = new Map<string, Notification>();
+
+  items.forEach((item) => {
+    notificationMap.set(item.id, item);
+  });
+
+  return Array.from(notificationMap.values()).sort((a, b) => {
+    return new Date(b.created_at).getTime() - new Date(a.created_at).getTime();
+  });
+};
+
+const normalizeNotificationType = (type?: string | null): Notification["type"] => {
+  if (type === "success" || type === "warning" || type === "error" || type === "info") {
+    return type;
+  }
+
+  return "info";
 };

@@ -3,9 +3,9 @@
  * Tests for document upload, preview, AI integration, and history
  */
 
-import { describe, it, expect, vi, beforeEach } from "vitest";
-import { parsePdf } from "@/lib/pdf";
-import { runAIContext } from "@/ai";
+import { describe, it, expect } from "vitest";
+import { parsePdf } from "../../src/lib/pdf";
+import { runAIContext } from "../../src/ai";
 
 describe("Document Hub Module - PATCH 91.1", () => {
   describe("PDF Parser", () => {

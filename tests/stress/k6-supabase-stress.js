@@ -1,3 +1,5 @@
+/* global __ENV */
+
 /**
  * K6 Load Testing Script for Supabase
  * PATCH 156.0 - Stress Testing & Load Simulation
@@ -82,9 +84,9 @@ function testReadOperations() {
   requestCount.add(1);
   
   const success = check(response, {
-    "status is 200": (r) => r.status === 200,
-    "response time < 2000ms": (r) => duration < 2000,
-    "has data": (r) => r.json() !== null,
+    "status is 200": ({ status }) => status === 200,
+    "response time < 2000ms": () => duration < 2000,
+    "has data": (res) => res.json() !== null,
   });
   
   failureRate.add(!success);
@@ -107,8 +109,8 @@ function testDashboardQueries() {
   requestCount.add(1);
   
   const success = check(response, {
-    "status is 200": (r) => r.status === 200,
-    "response time < 3000ms": (r) => duration < 3000,
+    "status is 200": ({ status }) => status === 200,
+    "response time < 3000ms": () => duration < 3000,
   });
   
   failureRate.add(!success);
@@ -127,8 +129,8 @@ function testListOperations() {
   requestCount.add(1);
   
   const success = check(response, {
-    "status is 200": (r) => r.status === 200,
-    "response time < 2500ms": (r) => duration < 2500,
+    "status is 200": ({ status }) => status === 200,
+    "response time < 2500ms": () => duration < 2500,
   });
   
   failureRate.add(!success);
@@ -154,8 +156,8 @@ function testWriteOperations() {
   requestCount.add(1);
   
   const success = check(response, {
-    "status is 201 or 409": (r) => r.status === 201 || r.status === 409,
-    "response time < 3000ms": (r) => duration < 3000,
+    "status is 201 or 409": ({ status }) => status === 201 || status === 409,
+    "response time < 3000ms": () => duration < 3000,
   });
   
   failureRate.add(!success);
@@ -170,7 +172,6 @@ export function handleSummary(data) {
 
 function textSummary(data, options) {
   const indent = options.indent || "";
-  const enableColors = options.enableColors || false;
   
   let summary = "\n" + indent + "================== STRESS TEST SUMMARY ==================\n";
   summary += indent + `Total Requests: ${data.metrics.total_requests.values.count}\n`;

@@ -4,6 +4,52 @@ import { MemoryRouter, Route, Routes } from "react-router-dom";
 import DocumentHistoryPage from "@/pages/admin/documents/DocumentHistory";
 import { supabase } from "@/integrations/supabase/client";
 
+type DocumentProfile = {
+  email: string;
+};
+
+type DocumentVersionRecord = {
+  id: string;
+  document_id: string;
+  content: string;
+  created_at: string;
+  updated_by: string;
+  profiles?: DocumentProfile;
+};
+
+type VersionsOrderResponse = Promise<{
+  data: DocumentVersionRecord[];
+  error: Error | null;
+}>;
+
+type VersionsOrderBuilder = {
+  order: () => VersionsOrderResponse;
+};
+
+type VersionsSelectBuilder = {
+  eq: () => VersionsOrderBuilder;
+};
+
+type VersionsQueryBuilder = {
+  select: () => VersionsSelectBuilder;
+};
+
+const createVersionQueryBuilder = (
+  versions: DocumentVersionRecord[] = []
+): VersionsQueryBuilder => {
+  const orderBuilder: VersionsOrderBuilder = {
+    order: vi.fn(() => Promise.resolve({ data: versions, error: null })),
+  };
+
+  const selectBuilder: VersionsSelectBuilder = {
+    eq: vi.fn(() => orderBuilder),
+  };
+
+  return {
+    select: vi.fn(() => selectBuilder),
+  };
+};
+
 // Mock supabase client
 vi.mock("@/integrations/supabase/client", () => ({
   supabase: {
@@ -41,17 +87,7 @@ describe("DocumentHistoryPage Component", () => {
   beforeEach(() => {
     vi.clearAllMocks();
     // Default mock for empty versions
-    vi.mocked(supabase.from).mockReturnValue({
-      select: vi.fn().mockReturnValue({
-        eq: vi.fn().mockReturnValue({
-          order: vi.fn().mockResolvedValue({
-            data: [],
-            error: null,
-          }),
-        }),
-      }),
-      // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    } as unknown);
+    vi.mocked(supabase.from).mockReturnValue(createVersionQueryBuilder());
   });
 
   it("should render the page with loading state initially", async () => {
@@ -140,17 +176,7 @@ describe("DocumentHistoryPage Component", () => {
       }
     ];
 
-    vi.mocked(supabase.from).mockReturnValue({
-      select: vi.fn().mockReturnValue({
-        eq: vi.fn().mockReturnValue({
-          order: vi.fn().mockResolvedValue({
-            data: mockVersions,
-            error: null,
-          }),
-        }),
-      }),
-      // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    } as unknown);
+    vi.mocked(supabase.from).mockReturnValue(createVersionQueryBuilder(mockVersions));
 
     render(
       <MemoryRouter initialEntries={["/admin/documents/history/123"]}>
@@ -193,17 +219,7 @@ describe("DocumentHistoryPage Component", () => {
       }
     ];
 
-    vi.mocked(supabase.from).mockReturnValue({
-      select: vi.fn().mockReturnValue({
-        eq: vi.fn().mockReturnValue({
-          order: vi.fn().mockResolvedValue({
-            data: mockVersions,
-            error: null,
-          }),
-        }),
-      }),
-      // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    } as unknown);
+    vi.mocked(supabase.from).mockReturnValue(createVersionQueryBuilder(mockVersions));
 
     render(
       <MemoryRouter initialEntries={["/admin/documents/history/123"]}>
@@ -330,17 +346,7 @@ describe("DocumentHistoryPage Component", () => {
       }
     ];
 
-    vi.mocked(supabase.from).mockReturnValue({
-      select: vi.fn().mockReturnValue({
-        eq: vi.fn().mockReturnValue({
-          order: vi.fn().mockResolvedValue({
-            data: mockVersions,
-            error: null,
-          }),
-        }),
-      }),
-      // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    } as unknown);
+    vi.mocked(supabase.from).mockReturnValue(createVersionQueryBuilder(mockVersions));
 
     render(
       <MemoryRouter initialEntries={["/admin/documents/history/123"]}>

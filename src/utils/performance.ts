@@ -11,16 +11,16 @@ import React, { useEffect, useRef, useCallback } from "react";
  * @param wait - Wait time in milliseconds
  * @returns Debounced function
  */
-export function debounce<T extends (...args: any[]) => any>(
+export function debounce<T extends (...args: unknown[]) => unknown>(
   func: T,
   wait: number
 ): (...args: Parameters<T>) => void {
-  let timeout: NodeJS.Timeout | null = null;
+  let timeout: ReturnType<typeof setTimeout> | undefined;
 
-  return function executedFunction(...args: Parameters<T>) {
+  return function executedFunction(this: ThisParameterType<T>, ...args: Parameters<T>) {
     const later = () => {
-      timeout = null;
-      func(...args);
+      timeout = undefined;
+      func.apply(this, args);
     };
 
     if (timeout) {
@@ -36,15 +36,15 @@ export function debounce<T extends (...args: any[]) => any>(
  * @param limit - Time limit in milliseconds
  * @returns Throttled function
  */
-export function throttle<T extends (...args: any[]) => any>(
+export function throttle<T extends (...args: unknown[]) => unknown>(
   func: T,
   limit: number
 ): (...args: Parameters<T>) => void {
-  let inThrottle: boolean = false;
+  let inThrottle = false;
 
-  return function executedFunction(...args: Parameters<T>) {
+  return function executedFunction(this: ThisParameterType<T>, ...args: Parameters<T>) {
     if (!inThrottle) {
-      func(...args);
+      func.apply(this, args);
       inThrottle = true;
       setTimeout(() => {
         inThrottle = false;
@@ -82,12 +82,12 @@ export function useDebounce<T>(value: T, delay: number): T {
  * @param deps - Dependencies array
  * @returns Debounced callback
  */
-export function useDebouncedCallback<T extends (...args: any[]) => any>(
+export function useDebouncedCallback<T extends (...args: unknown[]) => unknown>(
   callback: T,
   delay: number,
   deps: React.DependencyList = []
 ): (...args: Parameters<T>) => void {
-  const timeoutRef = useRef<NodeJS.Timeout | null>(null);
+  const timeoutRef = useRef<ReturnType<typeof setTimeout> | undefined>(undefined);
 
   useEffect(() => {
     // Cleanup on unmount or deps change
@@ -119,7 +119,7 @@ export function useDebouncedCallback<T extends (...args: any[]) => any>(
  * @param deps - Dependencies array
  * @returns Throttled callback
  */
-export function useThrottledCallback<T extends (...args: any[]) => any>(
+export function useThrottledCallback<T extends (...args: unknown[]) => unknown>(
   callback: T,
   delay: number,
   deps: React.DependencyList = []

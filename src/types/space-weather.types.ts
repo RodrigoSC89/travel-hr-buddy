@@ -20,7 +20,7 @@
 export interface NOAAKpIndex {
   time_tag: string; // ISO timestamp
   kp: number; // 0-9 scale
-  observed: 'observed' | 'estimated';
+  observed: "observed" | "estimated";
   noaa_scale: string; // "G0", "G1", etc.
 }
 
@@ -90,12 +90,12 @@ export interface CelesTrakGPElement {
  * Grupos de satélites disponíveis no CelesTrak
  */
 export type CelesTrakGroup = 
-  | 'GPS-OPS' 
-  | 'GALILEO'
-  | 'GLONASS-OPS'
-  | 'BEIDOU'
-  | 'SBAS'
-  | 'GNSS';
+  | "GPS-OPS" 
+  | "GALILEO"
+  | "GLONASS-OPS"
+  | "BEIDOU"
+  | "SBAS"
+  | "GNSS";
 
 // ============================================
 // Madrigal Types
@@ -176,9 +176,9 @@ export interface WAMIPEForecast {
 export interface WAMIPEProduct {
   cycle: string; // "00", "06", "12", "18"
   forecast_date: string; // "20241201"
-  product_type: 'tec' | 'nmf2' | 'hmf2' | 'muf' | 'foF2';
+  product_type: "tec" | "nmf2" | "hmf2" | "muf" | "foF2";
   grid_resolution: string; // "2.5deg"
-  format: 'netcdf';
+  format: "netcdf";
   file_url: string;
 }
 
@@ -194,7 +194,7 @@ export interface BOMSpaceWeatherRequest {
   api_key: string;
   start_time: string; // ISO
   end_time: string; // ISO
-  data_type: 'ionosonde' | 'scintillation' | 't-index' | 'kp';
+  data_type: "ionosonde" | "scintillation" | "t-index" | "kp";
   station?: string; // e.g., "Learmonth", "Townsville"
 }
 
@@ -229,7 +229,7 @@ export interface BOMTIndex {
 export interface SatelliteVisibility {
   satellite_id: string; // NORAD_CAT_ID or PRN
   satellite_name: string;
-  constellation: 'GPS' | 'GALILEO' | 'GLONASS' | 'BEIDOU';
+  constellation: "GPS" | "GALILEO" | "GLONASS" | "BEIDOU";
   elevation: number; // degrees
   azimuth: number; // degrees
   range: number; // km
@@ -264,7 +264,7 @@ export interface DOPMetrics {
  */
 export interface SkyplotPoint {
   satellite_id: string;
-  constellation: 'GPS' | 'GALILEO' | 'GLONASS' | 'BEIDOU';
+  constellation: "GPS" | "GALILEO" | "GLONASS" | "BEIDOU";
   azimuth: number; // 0-360 degrees
   elevation: number; // 0-90 degrees
   snr?: number; // Signal-to-Noise Ratio (dB-Hz)
@@ -287,7 +287,7 @@ export interface ScintillationIndex {
   sigma_phi: number; // radians (phase scintillation)
   satellite_prn: string;
   elevation: number;
-  frequency: 'L1' | 'L2' | 'L5';
+  frequency: "L1" | "L2" | "L5";
 }
 
 /**
@@ -309,7 +309,7 @@ export interface ROTIData {
 /**
  * Space Weather Risk Level (para ASOG/DP gates)
  */
-export type SpaceWeatherRiskLevel = 'GREEN' | 'AMBER' | 'RED';
+export type SpaceWeatherRiskLevel = "GREEN" | "AMBER" | "RED";
 
 /**
  * Space Weather Thresholds
@@ -349,7 +349,7 @@ export interface SpaceWeatherStatus {
   // Ionosphere
   tec_current: number; // TECU (average over region)
   tec_anomaly: boolean; // TEC > expected threshold
-  scintillation_risk: 'LOW' | 'MODERATE' | 'HIGH';
+  scintillation_risk: "LOW" | "MODERATE" | "HIGH";
   
   // GNSS Performance
   pdop_current: number;
@@ -362,7 +362,7 @@ export interface SpaceWeatherStatus {
   
   // Recommendations
   recommendations: string[];
-  dp_gate_status: 'PROCEED' | 'CAUTION' | 'HOLD';
+  dp_gate_status: "PROCEED" | "CAUTION" | "HOLD";
 }
 
 // ============================================
@@ -373,7 +373,7 @@ export interface SpaceWeatherStatus {
  * NOAA SWPC API Config (sem auth - público)
  */
 export interface NOAASWPCConfig {
-  base_url: 'https://services.swpc.noaa.gov';
+  base_url: "https://services.swpc.noaa.gov";
   enabled: boolean;
   cache_ttl_minutes: number; // cache duration
 }
@@ -382,7 +382,7 @@ export interface NOAASWPCConfig {
  * CelesTrak API Config (sem auth - público)
  */
 export interface CelesTrakConfig {
-  base_url: 'https://celestrak.org';
+  base_url: "https://celestrak.org";
   enabled: boolean;
   update_interval_hours: number; // TLE update frequency
   groups: CelesTrakGroup[];
@@ -392,7 +392,7 @@ export interface CelesTrakConfig {
  * Madrigal API Config
  */
 export interface MadrigalConfig {
-  base_url: 'http://cedar.openmadrigal.org' | 'http://millstonehill.haystack.mit.edu';
+  base_url: "http://cedar.openmadrigal.org" | "http://millstonehill.haystack.mit.edu";
   enabled: boolean;
   user_fullname: string;
   user_email: string;
@@ -403,7 +403,7 @@ export interface MadrigalConfig {
  * BOM Space Weather Config (requer API key)
  */
 export interface BOMConfig {
-  base_url: 'https://sws-data.sws.bom.gov.au';
+  base_url: "https://sws-data.sws.bom.gov.au";
   api_key?: string;
   enabled: boolean;
 }
@@ -452,7 +452,7 @@ export interface SpaceWeatherAPIResponse<T> {
   data?: T;
   error?: string;
   timestamp: string;
-  source: 'noaa' | 'celestrak' | 'madrigal' | 'bom' | 'wam-ipe';
+  source: "noaa" | "celestrak" | "madrigal" | "bom" | "wam-ipe";
   cached: boolean;
   cache_expires_at?: string;
 }
@@ -484,7 +484,7 @@ export interface GNSSPlanningRequest {
   longitude: number;
   altitude_m?: number;
   mask_angle_deg?: number; // default 5°
-  constellations?: ('GPS' | 'GALILEO' | 'GLONASS' | 'BEIDOU')[];
+  constellations?: ("GPS" | "GALILEO" | "GLONASS" | "BEIDOU")[];
 }
 
 /**

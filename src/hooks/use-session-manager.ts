@@ -5,9 +5,10 @@
  * Hook for managing user sessions and tokens
  */
 
-import { useState, useEffect, useCallback } from "react";
+import { useState, useEffect, useCallback, Dispatch, SetStateAction } from "react";
 import { supabase } from "@/integrations/supabase/client";
 import { useAuth } from "@/contexts/AuthContext";
+import type { Database } from "@/integrations/supabase/types";
 
 interface DeviceInfo {
   platform?: string;
@@ -16,7 +17,7 @@ interface DeviceInfo {
   device_type?: string;
 }
 
-interface SessionToken {
+export interface SessionToken {
   id: string;
   token: string;
   device_info: DeviceInfo | null;
@@ -24,7 +25,14 @@ interface SessionToken {
   expires_at: string;
   last_activity_at: string;
   revoked: boolean | null;
+  ip_address?: string | null;
 }
+
+type SupabaseActiveSession = Omit<SessionToken, "device_info"> & {
+  device_info?: DeviceInfo | null;
+};
+
+type ActiveSessionRow = Database["public"]["Functions"]["get_active_sessions"]["Returns"][number];
 
 interface CreateSessionParams {
   deviceInfo?: {
@@ -42,8 +50,9 @@ interface CreateSessionParams {
 export const useSessionManager = () => {
   const { user } = useAuth();
   const [sessions, setSessions] = useState<SessionToken[]>([]);
-  const [loading, setLoading] = useState(false);
-  const [currentSessionId, setCurrentSessionId] = useState<string | null>(null);
+  const [loading, setLoading] = useState(true);
+  const [currentSessionId, setCurrentSessionId] = useState<string | null>(() => getStoredSessionId());
+  const [errorMessage, setErrorMessage] = useState<string | null>(null);
 
   /**
    * Load active sessions for the current user
@@ -53,21 +62,35 @@ export const useSessionManager = () => {
 
     try {
       setLoading(true);
+      setErrorMessage(null);
       const { data, error } = await supabase.rpc("get_active_sessions");
 
       if (error) {
         console.error("Error loading sessions:", error);
+        setErrorMessage("Não foi possível carregar as sessões ativas.");
         return;
       }
 
-      // Type assertion for device_info
-      const typedSessions = (data || []).map(session => ({
-        ...session,
-        device_info: session.device_info as DeviceInfo | null,
-      }));
+      // Ensure device_info and metadata are normalized
+      const typedSessions: SessionToken[] = (data || []).map(normalizeSupabaseSession);
       setSessions(typedSessions);
+
+      const storedSessionId = getStoredSessionId();
+      const hasStoredSession = storedSessionId && typedSessions.some(session => session.id === storedSessionId);
+
+      if (!storedSessionId && typedSessions.length > 0) {
+        setAndPersistCurrentSession(typedSessions[0].id, setCurrentSessionId);
+      } else if (storedSessionId && !hasStoredSession) {
+        if (typedSessions.length > 0) {
+          setAndPersistCurrentSession(typedSessions[0].id, setCurrentSessionId);
+        } else {
+          clearStoredSessionId();
+          setCurrentSessionId(null);
+        }
+      }
     } catch (error) {
       console.error("Error loading sessions:", error);
+      setErrorMessage("Não foi possível carregar as sessões ativas.");
     } finally {
       setLoading(false);
     }
@@ -86,12 +109,7 @@ export const useSessionManager = () => {
 
     try {
       // Detect device info if not provided
-      const finalDeviceInfo = deviceInfo || {
-        platform: navigator.platform,
-        browser: navigator.userAgent.split(" ").pop() || "Unknown",
-        os: navigator.platform,
-        device_type: /Mobile|Tablet/.test(navigator.userAgent) ? "mobile" : "desktop",
-      };
+      const finalDeviceInfo = deviceInfo || detectDeviceInfo();
 
       const { data, error } = await supabase.rpc("create_session_token", {
         p_device_info: finalDeviceInfo,
@@ -105,7 +123,7 @@ export const useSessionManager = () => {
 
       if (data && data.length > 0) {
         const session = data[0];
-        setCurrentSessionId(session.token_id);
+        setAndPersistCurrentSession(session.token_id, setCurrentSessionId);
         await loadSessions(); // Refresh sessions list
         return session;
       }
@@ -113,6 +131,7 @@ export const useSessionManager = () => {
       return null;
     } catch (error) {
       console.error("Error creating session:", error);
+      setErrorMessage("Não foi possível criar a sessão.");
       throw error;
     }
   }, [user, loadSessions]);
@@ -133,16 +152,23 @@ export const useSessionManager = () => {
 
       if (error) {
         console.error("Error revoking session:", error);
+        setErrorMessage("Não foi possível revogar a sessão.");
         throw error;
+      }
+
+      if (sessionId === currentSessionId) {
+        clearStoredSessionId();
+        setCurrentSessionId(null);
       }
 
       await loadSessions(); // Refresh sessions list
       return data;
     } catch (error) {
       console.error("Error revoking session:", error);
+      setErrorMessage("Não foi possível revogar a sessão.");
       throw error;
     }
-  }, [user, loadSessions]);
+  }, [user, currentSessionId, loadSessions]);
 
   /**
    * Revoke all sessions except the current one
@@ -164,6 +190,7 @@ export const useSessionManager = () => {
       await loadSessions(); // Refresh sessions list
     } catch (error) {
       console.error("Error revoking all other sessions:", error);
+      setErrorMessage("Não foi possível revogar as outras sessões.");
       throw error;
     }
   }, [user, currentSessionId, sessions, revokeSession, loadSessions]);
@@ -211,15 +238,22 @@ export const useSessionManager = () => {
 
   // Load sessions on mount
   useEffect(() => {
-    if (user) {
-      loadSessions();
+    if (!user) {
+      setSessions([]);
+      setLoading(false);
+      clearStoredSessionId();
+      setCurrentSessionId(null);
+      return;
     }
+
+    loadSessions();
   }, [user, loadSessions]);
 
   return {
     sessions,
     loading,
     currentSessionId,
+    error: errorMessage,
     loadSessions,
     createSession,
     revokeSession,
@@ -233,6 +267,15 @@ export const useSessionManager = () => {
  * Detect device information from user agent
  */
 export const detectDeviceInfo = () => {
+  if (typeof navigator === "undefined") {
+    return {
+      platform: "server",
+      browser: "unknown",
+      os: "unknown",
+      device_type: "server",
+    };
+  }
+
   const userAgent = navigator.userAgent;
   
   // Detect browser
@@ -263,3 +306,91 @@ export const detectDeviceInfo = () => {
     device_type: deviceType,
   };
 };
+
+const normalizeSupabaseSession = (rawSession: ActiveSessionRow): SessionToken => {
+  const session = rawSession as ActiveSessionRow & SupabaseActiveSession & { session_id?: string | null };
+
+  const parsedDeviceInfo = parseDeviceInfo(session.device_info);
+  const fallbackId =
+    session.session_id ||
+    session.id ||
+    session.token ||
+    `session-${Date.now()}-${Math.random().toString(36).slice(2, 8)}`;
+
+  return {
+    id: fallbackId,
+    token: session.token ?? "",
+    device_info: parsedDeviceInfo,
+    created_at: session.created_at,
+    expires_at: session.expires_at,
+    last_activity_at: session.last_activity_at ?? session.created_at,
+    revoked: session.revoked ?? false,
+    ip_address: session.ip_address ?? null,
+  };
+};
+
+const parseDeviceInfo = (deviceInfo: unknown): DeviceInfo | null => {
+  if (!deviceInfo || typeof deviceInfo !== "object") {
+    return null;
+  }
+
+  const safeInfo = deviceInfo as Record<string, unknown>;
+
+  const normalized: DeviceInfo = {
+    platform: typeof safeInfo.platform === "string" ? safeInfo.platform : undefined,
+    browser: typeof safeInfo.browser === "string" ? safeInfo.browser : undefined,
+    os: typeof safeInfo.os === "string" ? safeInfo.os : undefined,
+    device_type: typeof safeInfo.device_type === "string" ? safeInfo.device_type : undefined,
+  };
+
+  if (!normalized.platform && !normalized.browser && !normalized.os && !normalized.device_type) {
+    return null;
+  }
+
+  return normalized;
+};
+
+function getStoredSessionId(): string | null {
+  if (typeof window === "undefined" || !window.sessionStorage) {
+    return null;
+  }
+
+  try {
+    return window.sessionStorage.getItem("session_id");
+  } catch (error) {
+    console.warn("Unable to access sessionStorage for session_id", error);
+    return null;
+  }
+}
+
+function setStoredSessionId(sessionId: string) {
+  if (typeof window === "undefined" || !window.sessionStorage) {
+    return;
+  }
+
+  try {
+    window.sessionStorage.setItem("session_id", sessionId);
+  } catch (error) {
+    console.warn("Unable to persist session_id", error);
+  }
+}
+
+function clearStoredSessionId() {
+  if (typeof window === "undefined" || !window.sessionStorage) {
+    return;
+  }
+
+  try {
+    window.sessionStorage.removeItem("session_id");
+  } catch (error) {
+    console.warn("Unable to clear session_id", error);
+  }
+}
+
+function setAndPersistCurrentSession(
+  sessionId: string,
+  setter: Dispatch<SetStateAction<string | null>>,
+) {
+  setStoredSessionId(sessionId);
+  setter(sessionId);
+}

@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { supabase } from "@/integrations/supabase/client";
+import modulesRegistry from "@/../modules-registry-complete.json";
 
 export interface Module {
   id: string;
@@ -11,6 +11,47 @@ export interface Module {
   updated_at: string;
 }
 
+type RegistryModule = (typeof modulesRegistry)["modules"][number];
+
+const STATUS_MAP: Record<string, Module["status"]> = {
+  active: "functional",
+  implemented: "functional",
+  functional: "functional",
+  available: "functional",
+  planned: "pending",
+  partial: "pending",
+  experimental: "pending",
+  beta: "pending",
+  preview: "pending",
+  deprecated: "disabled",
+  disabled: "disabled",
+  removed: "disabled",
+  archived: "disabled",
+};
+
+const normalizeStatus = (status?: string): Module["status"] => {
+  if (!status) {
+    return "pending";
+  }
+
+  const normalized = status.toLowerCase();
+  return STATUS_MAP[normalized] ?? "disabled";
+};
+
+const normalizeModule = (module: RegistryModule): Module => {
+  const fallbackDate = module.lastModified ?? new Date().toISOString();
+
+  return {
+    id: module.id,
+    name: module.name,
+    path: module.path || module.route || "/",
+    status: normalizeStatus(module.status),
+    description: module.description || "Descrição indisponível",
+    created_at: fallbackDate,
+    updated_at: fallbackDate,
+  };
+};
+
 export default function useModules() {
   const [modules, setModules] = useState<Module[]>([]);
   const [loading, setLoading] = useState(true);
@@ -20,17 +61,14 @@ export default function useModules() {
     
     async function fetchModules() {
       try {
-        const { data, error } = await supabase.from("modules").select("*");
-        
+        const registryModules = Array.isArray(modulesRegistry.modules)
+          ? modulesRegistry.modules
+          : [];
+
         if (cancelled) return;
-        
-        if (!error && data) {
-          const typedModules: Module[] = data.map(item => ({
-            ...item,
-            status: item.status as "functional" | "pending" | "disabled"
-          }));
-          setModules(typedModules);
-        }
+
+        const formattedModules = registryModules.map(normalizeModule);
+        setModules(formattedModules);
       } catch (error) {
         console.error("Failed to fetch modules:", error);
       } finally {

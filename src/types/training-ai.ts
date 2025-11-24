@@ -7,14 +7,14 @@ export interface AITrainingSession {
   module: string;
   topic: string;
   explanation: string | null;
-  llm_feedback: Record<string, any>;
+  llm_feedback: Record<string, unknown>;
   quiz_data: QuizQuestion[];
   score: number | null;
   passed: boolean;
   duration_minutes: number | null;
   created_at: string;
   completed_at: string | null;
-  metadata: Record<string, any>;
+  metadata: Record<string, unknown>;
 }
 
 export interface QuizQuestion {
@@ -23,7 +23,7 @@ export interface QuizQuestion {
   options: string[];
   correct_answer: string;
   explanation: string;
-  difficulty: 'easy' | 'medium' | 'hard';
+  difficulty: "easy" | "medium" | "hard";
 }
 
 export interface AITrainingHistory {
@@ -45,7 +45,7 @@ export interface TrainingLearningPath {
   description: string | null;
   modules: string[];
   progress: number;
-  status: 'active' | 'completed' | 'paused';
+  status: "active" | "completed" | "paused";
   ai_recommended: boolean;
   created_at: string;
   updated_at: string;
@@ -76,7 +76,7 @@ export interface LLMExplanationResponse {
 export interface QuizGenerationRequest {
   topic: string;
   module: string;
-  difficulty?: 'easy' | 'medium' | 'hard';
+  difficulty?: "easy" | "medium" | "hard";
   num_questions?: number;
   context?: string;
 }

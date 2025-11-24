@@ -5,17 +5,41 @@ import { describe, it, expect, vi, beforeEach } from "vitest";
  * Testing global forecasting and prediction
  */
 
+type ForecastQueryResponse<T> = Promise<{ data: T; error: Error | null }>;
+
+type ForecastQueryBuilder<T = unknown> = {
+  select: (...args: unknown[]) => ForecastQueryResponse<T>;
+  insert: (...args: unknown[]) => ForecastQueryResponse<T>;
+  update: (...args: unknown[]) => ForecastQueryResponse<T>;
+  eq: (...args: unknown[]) => ForecastQueryBuilder<T>;
+  gte: (...args: unknown[]) => ForecastQueryBuilder<T>;
+  lte: (...args: unknown[]) => ForecastQueryBuilder<T>;
+  order: (...args: unknown[]) => ForecastQueryBuilder<T>;
+  limit: (...args: unknown[]) => ForecastQueryBuilder<T>;
+};
+
+const createForecastQueryBuilder = <T = unknown>(
+  overrides?: Partial<ForecastQueryBuilder<T>>
+): ForecastQueryBuilder<T> => {
+  const builder = {} as ForecastQueryBuilder<T>;
+
+  builder.select = vi.fn(() => Promise.resolve({ data: [] as T, error: null }));
+  builder.insert = vi.fn(() => Promise.resolve({ data: null as T, error: null }));
+  builder.update = vi.fn(() => Promise.resolve({ data: null as T, error: null }));
+  builder.eq = vi.fn(() => builder);
+  builder.gte = vi.fn(() => builder);
+  builder.lte = vi.fn(() => builder);
+  builder.order = vi.fn(() => builder);
+  builder.limit = vi.fn(() => builder);
+
+  return Object.assign(builder, overrides);
+};
+
 const mockSupabaseClient = {
-  from: vi.fn(() => ({
-    select: vi.fn(() => Promise.resolve({ data: [], error: null })),
-    insert: vi.fn(() => Promise.resolve({ data: null, error: null })),
-    update: vi.fn(() => Promise.resolve({ data: null, error: null })),
-    eq: vi.fn(function(this: any) { return this; }),
-    gte: vi.fn(function(this: any) { return this; }),
-    lte: vi.fn(function(this: any) { return this; }),
-    order: vi.fn(function(this: any) { return this; }),
-    limit: vi.fn(function(this: any) { return this; }),
-  })),
+  from: vi.fn((table?: string) => {
+    void table;
+    return createForecastQueryBuilder();
+  }),
   rpc: vi.fn(() => Promise.resolve({ data: null, error: null })),
 };
 
@@ -41,15 +65,17 @@ describe("Forecast Global Module", () => {
         confidence: 0.85,
       };
 
-      mockSupabaseClient.from.mockReturnValueOnce({
+      const builder = createForecastQueryBuilder({
         insert: vi.fn(() => Promise.resolve({ data: mockForecast, error: null })),
-        select: vi.fn(function(this: any) { return this; }),
       });
 
-      const result = await mockSupabaseClient.from("forecasts").insert(mockForecast);
+      mockSupabaseClient.from.mockReturnValueOnce(builder);
 
-      expect(result.data).toEqual(mockForecast);
-      expect(result.data.confidence).toBeGreaterThan(0.8);
+      const result = await mockSupabaseClient.from("forecasts").insert(mockForecast);
+      const forecast = result.data as typeof mockForecast;
+
+      expect(forecast).toEqual(mockForecast);
+      expect(forecast.confidence).toBeGreaterThan(0.8);
     });
 
     it("should fetch historical forecasts", async () => {
@@ -58,16 +84,17 @@ describe("Forecast Global Module", () => {
         { id: 2, period: "2025-10", accuracy: 88 },
       ];
 
-      mockSupabaseClient.from.mockReturnValueOnce({
+      const builder = createForecastQueryBuilder({
         select: vi.fn(() => Promise.resolve({ data: mockForecasts, error: null })),
-        gte: vi.fn(function(this: any) { return this; }),
-        order: vi.fn(function(this: any) { return this; }),
       });
 
-      const result = await mockSupabaseClient.from("forecasts").select("*");
+      mockSupabaseClient.from.mockReturnValueOnce(builder);
 
-      expect(result.data).toHaveLength(2);
-      expect(result.data).toEqual(mockForecasts);
+      const result = await mockSupabaseClient.from("forecasts").select("*");
+      const forecasts = result.data as typeof mockForecasts;
+
+      expect(forecasts).toHaveLength(2);
+      expect(forecasts).toEqual(mockForecasts);
     });
   });
 

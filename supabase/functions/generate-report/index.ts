@@ -1,11 +1,12 @@
 // PATCH 601: Generate Report Edge Function
-// @ts-nocheck - Deno runtime types not available in VS Code
+// TYPE SAFETY FIX: Removed @ts-nocheck, added proper TypeScript types
 import { serve } from "https://deno.land/std@0.168.0/http/server.ts"
 import { createClient } from 'https://esm.sh/@supabase/supabase-js@2'
 import { 
   createResponse, 
   EdgeFunctionError, 
   validateRequestBody, 
+  corsHeaders,
   handleCORS,
   getEnvVar,
   safeJSONParse,
@@ -47,6 +48,13 @@ interface OpenAIResponse {
   }>
 }
 
+const withCorsHeaders = (response: Response): Response => {
+  Object.entries(corsHeaders).forEach(([key, value]) => {
+    response.headers.set(key, value)
+  })
+  return response
+}
+
 serve(async (req: Request): Promise<Response> => {
   if (req.method === 'OPTIONS') {
     return handleCORS()
@@ -56,8 +64,8 @@ serve(async (req: Request): Promise<Response> => {
   log('info', 'Generate report request received', { requestId })
 
   try {
-    const body = await req.json() as GenerateReportRequest
-    validateRequestBody(body as unknown as Record<string, unknown>, ['report_type', 'title'])
+  const body = await req.json() as GenerateReportRequest
+  validateRequestBody(body as Record<string, unknown>, ['report_type', 'title'])
     
     const { 
       template_id, 
@@ -217,10 +225,10 @@ Return your response in JSON format:
       requestId 
     })
 
-    return createResponse({
+    return withCorsHeaders(createResponse({
       report_id: report.id,
       content,
-    }, undefined, requestId)
+    }, undefined, requestId))
 
   } catch (error) {
     log('error', 'Error in report generation', { 
@@ -229,18 +237,20 @@ Return your response in JSON format:
     })
 
     if (error instanceof EdgeFunctionError) {
-      return createResponse(undefined, error, requestId)
+      return withCorsHeaders(createResponse(undefined, error, requestId))
     }
 
-    return createResponse(
-      undefined,
-      new EdgeFunctionError(
-        'INTERNAL_ERROR',
-        error instanceof Error ? error.message : 'An unexpected error occurred',
-        500,
-        { originalError: String(error) }
-      ),
-      requestId
+    return withCorsHeaders(
+      createResponse(
+        undefined,
+        new EdgeFunctionError(
+          'INTERNAL_ERROR',
+          error instanceof Error ? error.message : 'An unexpected error occurred',
+          500,
+          { originalError: String(error) }
+        ),
+        requestId
+      )
     )
   }
 })

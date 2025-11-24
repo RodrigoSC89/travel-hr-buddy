@@ -6,7 +6,7 @@
 interface ExecutionRecord {
   functionName: string;
   timestamp: number;
-  args?: any[];
+  args?: unknown[];
   stackTrace: string;
 }
 
@@ -21,7 +21,7 @@ interface LoopStats {
 
 class LoopDebugger {
   private executionRecords: Map<string, ExecutionRecord[]> = new Map();
-  private enabled: boolean = typeof process !== 'undefined' && process.env?.NODE_ENV === 'development';
+  private enabled: boolean = typeof process !== "undefined" && process.env?.NODE_ENV === "development";
   private maxRecordsPerFunction: number = 100;
 
   /**
@@ -37,14 +37,14 @@ class LoopDebugger {
   /**
    * Track a function execution
    */
-  track(functionName: string, args?: any[]): void {
+  track(functionName: string, args?: unknown[]): void {
     if (!this.enabled) return;
 
     const record: ExecutionRecord = {
       functionName,
       timestamp: Date.now(),
       args: args ? this.sanitizeArgs(args) : undefined,
-      stackTrace: new Error().stack || 'No stack trace',
+      stackTrace: new Error().stack || "No stack trace",
     };
 
     if (!this.executionRecords.has(functionName)) {
@@ -66,11 +66,11 @@ class LoopDebugger {
   /**
    * Sanitize arguments to prevent circular references
    */
-  private sanitizeArgs(args: any[]): any[] {
+  private sanitizeArgs(args: unknown[]): unknown[] {
     // Quick check for all primitives to skip expensive serialization
     const allPrimitives = args.every((arg) => {
       const type = typeof arg;
-      return type === 'string' || type === 'number' || type === 'boolean' || arg === null || arg === undefined;
+      return type === "string" || type === "number" || type === "boolean" || arg === null || arg === undefined;
     });
     
     if (allPrimitives) {
@@ -78,14 +78,14 @@ class LoopDebugger {
     }
 
     try {
-      return JSON.parse(JSON.stringify(args));
+      return JSON.parse(JSON.stringify(args)) as unknown[];
     } catch {
       return args.map((arg) => {
-        if (typeof arg === 'object' && arg !== null) {
-          return '[Object]';
+        if (typeof arg === "object" && arg !== null) {
+          return "[Object]";
         }
-        if (typeof arg === 'function') {
-          return '[Function]';
+        if (typeof arg === "function") {
+          return "[Function]";
         }
         return arg;
       });
@@ -169,10 +169,10 @@ class LoopDebugger {
     const potentialLoops = stats.filter((s) => s.executionsPerSecond > 2);
 
     if (potentialLoops.length === 0) {
-      return '✅ No loops detected';
+      return "✅ No loops detected";
     }
 
-    let report = '🔁 LOOP DETECTION REPORT\n\n';
+    let report = "🔁 LOOP DETECTION REPORT\n\n";
     report += `Found ${potentialLoops.length} potential loops:\n\n`;
 
     potentialLoops.forEach((stat, index) => {
@@ -207,27 +207,37 @@ class LoopDebugger {
 // Singleton instance
 export const loopDebugger = new LoopDebugger();
 
+declare global {
+  interface Window {
+    __loopDebugger?: LoopDebugger;
+  }
+}
+
 // Global access for debugging
-if (typeof window !== 'undefined') {
-  (window as any).__loopDebugger = loopDebugger;
+if (typeof window !== "undefined") {
+  window.__loopDebugger = loopDebugger;
 }
 
 /**
  * Decorator to automatically track function executions
  */
 export function trackLoop(functionName?: string) {
-  return function (
-    target: any,
+  return function <T extends (...args: unknown[]) => unknown>(
+    target: { constructor: { name: string } },
     propertyKey: string,
-    descriptor: PropertyDescriptor
-  ) {
+    descriptor: TypedPropertyDescriptor<T>
+  ): TypedPropertyDescriptor<T> | void {
     const originalMethod = descriptor.value;
-    const trackingName = functionName || `${target.constructor.name}.${propertyKey}`;
+    if (!originalMethod) {
+      return descriptor;
+    }
 
-    descriptor.value = function (...args: any[]) {
+    const trackingName = functionName ?? `${target.constructor.name}.${propertyKey}`;
+
+    descriptor.value = function (this: ThisParameterType<T>, ...args: Parameters<T>): ReturnType<T> {
       loopDebugger.track(trackingName, args);
       return originalMethod.apply(this, args);
-    };
+    } as T;
 
     return descriptor;
   };

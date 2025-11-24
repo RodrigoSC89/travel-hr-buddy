@@ -6,31 +6,23 @@
  */
 
 import { useState, useEffect } from "react";
-import { KanbanAISuggestions } from "@/components/workflows";
+import { KanbanAISuggestions, type Suggestion } from "@/components/workflows";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { supabase } from "@/integrations/supabase/client";
 import type { Database } from "@/integrations/supabase/types";
-
-type WorkflowSuggestion = {
-  etapa: string;
-  tipo_sugestao: string;
-  conteudo: string;
-  criticidade: string;
-  responsavel_sugerido: string;
-};
 
 type SmartWorkflowStep = Database["public"]["Tables"]["smart_workflow_steps"]["Row"];
 
 // Example: Integration in a workflow detail page
 export function WorkflowDetailWithAISuggestions({ workflowId }: { workflowId: string }) {
-  const [aiSuggestions, setAiSuggestions] = useState<WorkflowSuggestion[]>([]);
+  const [aiSuggestions, setAiSuggestions] = useState<Suggestion[]>([]);
 
   useEffect(() => {
     // Example: Fetch AI suggestions from an AI service or generate them
     const generateAISuggestions = async () => {
       // In a real implementation, this would call an AI service
       // For now, we'll use example data
-  const suggestions: WorkflowSuggestion[] = [
+      const suggestions: Suggestion[] = [
         {
           etapa: "Planejamento",
           tipo_sugestao: "Otimização de Processo",
@@ -90,7 +82,7 @@ export function WorkflowDetailWithAISuggestions({ workflowId }: { workflowId: st
 }
 
 // Example: Generate suggestions dynamically based on workflow analysis
-export async function generateAISuggestionsForWorkflow(workflowId: string): Promise<WorkflowSuggestion[]> {
+export async function generateAISuggestionsForWorkflow(workflowId: string): Promise<Suggestion[]> {
   // Fetch workflow steps
   const { data: steps } = await supabase
     .from("smart_workflow_steps")
@@ -103,7 +95,7 @@ export async function generateAISuggestionsForWorkflow(workflowId: string): Prom
 
   // Analyze workflow and generate suggestions
   const typedSteps = steps as SmartWorkflowStep[];
-  const suggestions: WorkflowSuggestion[] = [];
+  const suggestions: Suggestion[] = [];
 
   // Example: Detect missing documentation
   const stepsWithoutDescription = typedSteps.filter(s => !s.description);
@@ -160,12 +152,12 @@ export async function generateAISuggestionsForWorkflow(workflowId: string): Prom
 
 // Example: Usage in a page component
 export default function ExampleWorkflowPage() {
-  const [suggestions, setSuggestions] = useState<WorkflowSuggestion[]>([]);
+  const [suggestions, setSuggestions] = useState<Suggestion[]>([]);
 
   useEffect(() => {
     const loadSuggestions = async () => {
       // Method 1: Use pre-generated suggestions
-  const staticSuggestions: WorkflowSuggestion[] = [
+      const staticSuggestions: Suggestion[] = [
         {
           etapa: "Code Review",
           tipo_sugestao: "Best Practice",
@@ -179,7 +171,7 @@ export default function ExampleWorkflowPage() {
       const dynamicSuggestions = await generateAISuggestionsForWorkflow("workflow-123");
 
       // Combine and set suggestions
-  setSuggestions([...staticSuggestions, ...dynamicSuggestions]);
+      setSuggestions([...staticSuggestions, ...dynamicSuggestions]);
     };
 
     loadSuggestions();

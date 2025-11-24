@@ -1,10 +1,10 @@
-// @ts-nocheck
 /**
  * PATCH 611 - Cross-Module Validator
  * Validates data integrity between different system modules
  */
 
 import { supabase } from "@/integrations/supabase/client";
+import type { Database } from "@/integrations/supabase/types";
 
 export interface ValidationResult {
   module: string;
@@ -27,6 +27,29 @@ export interface CrossModuleValidation {
   overall_integrity: number; // 0-100
 }
 
+type Tables = Database["public"]["Tables"];
+type TableRow<TableName extends keyof Tables> = Tables[TableName]["Row"];
+
+type VesselRow = TableRow<"vessels">;
+type CrewMemberRow = TableRow<"crew_members">;
+
+const calculateScoreAndStatus = (checks: ValidationCheck[]): { score: number; status: ValidationResult["status"] } => {
+  if (checks.length === 0) {
+    return { score: 0, status: "error" };
+  }
+
+  const passedChecks = checks.filter((check) => check.passed).length;
+  const score = Math.round((passedChecks / checks.length) * 100);
+
+  if (score >= 90) return { score, status: "valid" };
+  if (score >= 70) return { score, status: "warning" };
+  return { score, status: "error" };
+};
+
+const formatCount = (value: number | null | undefined): number => {
+  return typeof value === "number" && !Number.isNaN(value) ? value : 0;
+};
+
 /**
  * Validate AI to Analytics data consistency
  */
@@ -43,8 +66,9 @@ export async function validateAIToAnalytics(): Promise<ValidationResult> {
       .from("analytics_events")
       .select("*", { count: "exact", head: true });
     
-    if (aiLogCount && analyticsCount) {
-      const ratio = Math.abs(aiLogCount - analyticsCount) / Math.max(aiLogCount, analyticsCount);
+    if (aiLogCount !== null && analyticsCount !== null) {
+      const maxCount = Math.max(aiLogCount, analyticsCount);
+      const ratio = maxCount === 0 ? 0 : Math.abs(aiLogCount - analyticsCount) / maxCount;
       checks.push({
         name: "Record Count Consistency",
         passed: ratio < 0.1, // Allow 10% difference
@@ -61,7 +85,7 @@ export async function validateAIToAnalytics(): Promise<ValidationResult> {
       .limit(100);
     
     if (recentAILogs && recentAILogs.length > 0) {
-      const orphanedLogs = recentAILogs.filter(log => !log.module_name);
+      const orphanedLogs = recentAILogs.filter((log) => !log.module_name);
       checks.push({
         name: "Module Name Integrity",
         passed: orphanedLogs.length === 0,
@@ -92,9 +116,7 @@ export async function validateAIToAnalytics(): Promise<ValidationResult> {
     });
   }
   
-  const passedChecks = checks.filter(c => c.passed).length;
-  const score = Math.round((passedChecks / checks.length) * 100);
-  const status = score >= 90 ? "valid" : score >= 70 ? "warning" : "error";
+  const { score, status } = calculateScoreAndStatus(checks);
   
   return {
     module: "AI → Analytics",
@@ -118,9 +140,9 @@ export async function validateHealthToPerformance(): Promise<ValidationResult> {
     
     checks.push({
       name: "Health Records Available",
-      passed: (healthCount || 0) > 0,
-      message: `${healthCount || 0} health records found`,
-      severity: (healthCount || 0) > 0 ? "info" : "error",
+      passed: formatCount(healthCount) > 0,
+      message: `${formatCount(healthCount)} health records found`,
+      severity: formatCount(healthCount) > 0 ? "info" : "error",
     });
     
     // Check 2: Verify performance metrics are logged
@@ -130,9 +152,9 @@ export async function validateHealthToPerformance(): Promise<ValidationResult> {
     
     checks.push({
       name: "Performance Metrics Available",
-      passed: (perfCount || 0) > 0,
-      message: `${perfCount || 0} performance metrics found`,
-      severity: (perfCount || 0) > 0 ? "info" : "warning",
+      passed: formatCount(perfCount) > 0,
+      message: `${formatCount(perfCount)} performance metrics found`,
+      severity: formatCount(perfCount) > 0 ? "info" : "warning",
     });
     
     // Check 3: Check for recent health updates (within last hour)
@@ -144,9 +166,9 @@ export async function validateHealthToPerformance(): Promise<ValidationResult> {
     
     checks.push({
       name: "Recent Health Updates",
-      passed: (recentHealthCount || 0) > 0,
-      message: `${recentHealthCount || 0} updates in last hour`,
-      severity: (recentHealthCount || 0) > 0 ? "info" : "warning",
+      passed: formatCount(recentHealthCount) > 0,
+      message: `${formatCount(recentHealthCount)} updates in last hour`,
+      severity: formatCount(recentHealthCount) > 0 ? "info" : "warning",
     });
     
   } catch (error) {
@@ -158,9 +180,7 @@ export async function validateHealthToPerformance(): Promise<ValidationResult> {
     });
   }
   
-  const passedChecks = checks.filter(c => c.passed).length;
-  const score = Math.round((passedChecks / checks.length) * 100);
-  const status = score >= 90 ? "valid" : score >= 70 ? "warning" : "error";
+  const { score, status } = calculateScoreAndStatus(checks);
   
   return {
     module: "Health → Performance",
@@ -179,25 +199,32 @@ export async function validateCrewToOperations(): Promise<ValidationResult> {
   try {
     // Check 1: Verify crew profiles have valid vessel references
     const { data: crewWithVessels } = await supabase
-      .from("crew_profiles")
+      .from<CrewMemberRow>("crew_members")
       .select("id, vessel_id")
       .not("vessel_id", "is", null);
     
     if (crewWithVessels && crewWithVessels.length > 0) {
       // Verify each vessel_id exists
-      const vesselIds = crewWithVessels.map(c => c.vessel_id);
-      const { count: validVessels } = await supabase
-        .from("vessels")
-        .select("id", { count: "exact", head: true })
-        .in("id", vesselIds);
+      const vesselIds = crewWithVessels
+        .map((crew) => crew.vessel_id)
+        .filter((id): id is NonNullable<VesselRow["id"]> => Boolean(id));
       
-      const validRatio = (validVessels || 0) / crewWithVessels.length;
-      checks.push({
-        name: "Valid Vessel References",
-        passed: validRatio > 0.95,
-        message: `${Math.round(validRatio * 100)}% of crew have valid vessel assignments`,
-        severity: validRatio > 0.95 ? "info" : "error",
-      });
+      if (vesselIds.length > 0) {
+        const { count: validVessels } = await supabase
+          .from("vessels")
+          .select("id", { count: "exact", head: true })
+          .in("id", vesselIds);
+        
+        const validRatio = crewWithVessels.length === 0
+          ? 1
+          : formatCount(validVessels) / crewWithVessels.length;
+        checks.push({
+          name: "Valid Vessel References",
+          passed: validRatio > 0.95,
+          message: `${Math.round(validRatio * 100)}% of crew have valid vessel assignments`,
+          severity: validRatio > 0.95 ? "info" : "error",
+        });
+      }
     }
     
     // Check 2: Verify operations reference valid crew
@@ -217,7 +244,7 @@ export async function validateCrewToOperations(): Promise<ValidationResult> {
     
     // Check 3: Check for orphaned records
     const { data: orphanedCrew } = await supabase
-      .from("crew_profiles")
+      .from<CrewMemberRow>("crew_members")
       .select("id")
       .is("organization_id", null);
     
@@ -237,9 +264,7 @@ export async function validateCrewToOperations(): Promise<ValidationResult> {
     });
   }
   
-  const passedChecks = checks.filter(c => c.passed).length;
-  const score = Math.round((passedChecks / checks.length) * 100);
-  const status = score >= 90 ? "valid" : score >= 70 ? "warning" : "error";
+  const { score, status } = calculateScoreAndStatus(checks);
   
   return {
     module: "Crew → Operations",
@@ -282,7 +307,7 @@ export async function logIntegrityIssues(validation: CrossModuleValidation) {
   ];
 
   for (const { result, moduleName } of modulesToCheck) {
-    const failedChecks = result.checks.filter(c => !c.passed);
+    const failedChecks = result.checks.filter((check) => !check.passed);
     
     for (const issue of failedChecks) {
       try {

@@ -28,14 +28,41 @@ const mockTemplates = [
   },
 ];
 
+type TemplateRecord = {
+  id: string;
+  title: string;
+  content: string;
+  created_at: string;
+};
+
+type TemplateQueryResponse = Promise<{
+  data: TemplateRecord[] | null;
+  error: Error | null;
+}>;
+
+type TemplateQueryBuilder = {
+  select: () => {
+    order: () => TemplateQueryResponse;
+  };
+};
+
+const createTemplateQueryBuilder = (
+  response?: Partial<{ data: TemplateRecord[] | null; error: Error | null }>
+): TemplateQueryBuilder => {
+  const { data = mockTemplates, error = null } = response ?? {};
+  const orderFn = vi.fn(() => Promise.resolve({ data, error }));
+
+  return {
+    select: vi.fn(() => ({
+      order: orderFn,
+    })),
+  };
+};
+
 // Mock Supabase client
 vi.mock("@/integrations/supabase/client", () => ({
   supabase: {
-    from: vi.fn(() => ({
-      select: vi.fn(() => ({
-        order: vi.fn().mockResolvedValue({ data: mockTemplates, error: null }),
-      })),
-    })),
+    from: vi.fn(() => createTemplateQueryBuilder()),
   },
 }));
 
@@ -230,12 +257,9 @@ describe("ApplyTemplateModal Component", () => {
 
   it("should handle fetch error gracefully", async () => {
     // Override the mock for this test
-    vi.mocked(supabase.from).mockReturnValueOnce({
-      select: vi.fn(() => ({
-        order: vi.fn().mockResolvedValue({ data: null, error: new Error("Fetch failed") }),
-      })),
-      // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    } as unknown);
+    vi.mocked(supabase.from).mockReturnValueOnce(
+      createTemplateQueryBuilder({ data: null, error: new Error("Fetch failed") })
+    );
     
     const onApply = vi.fn();
     render(<ApplyTemplateModal onApply={onApply} />);

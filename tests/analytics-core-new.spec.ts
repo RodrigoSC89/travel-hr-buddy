@@ -5,15 +5,34 @@ import { describe, it, expect, vi, beforeEach } from "vitest";
  * Testing analytics data collection and processing
  */
 
+type QueryResponse<T> = Promise<{ data: T; error: Error | null }>;
+
+type MockQueryBuilder<TInsert = unknown, TSelect = unknown> = {
+  select: ReturnType<typeof vi.fn<[], QueryResponse<TSelect>>>;
+  insert: ReturnType<typeof vi.fn<[TInsert?], QueryResponse<TInsert>>>;
+  eq: ReturnType<typeof vi.fn<[], MockQueryBuilder<TInsert, TSelect>>>;
+  gte: ReturnType<typeof vi.fn<[], MockQueryBuilder<TInsert, TSelect>>>;
+  lte: ReturnType<typeof vi.fn<[], MockQueryBuilder<TInsert, TSelect>>>;
+  order: ReturnType<typeof vi.fn<[], MockQueryBuilder<TInsert, TSelect>>>;
+};
+
+const createQueryBuilder = <TInsert = unknown, TSelect = unknown>(
+  overrides?: Partial<MockQueryBuilder<TInsert, TSelect>>
+): MockQueryBuilder<TInsert, TSelect> => {
+  const builder: MockQueryBuilder<TInsert, TSelect> = {
+    select: vi.fn(() => Promise.resolve({ data: [] as TSelect, error: null })),
+    insert: vi.fn(() => Promise.resolve({ data: null as TInsert, error: null })),
+    eq: vi.fn(() => builder),
+    gte: vi.fn(() => builder),
+    lte: vi.fn(() => builder),
+    order: vi.fn(() => builder),
+  };
+
+  return { ...builder, ...overrides };
+};
+
 const mockSupabaseClient = {
-  from: vi.fn(() => ({
-    select: vi.fn(() => Promise.resolve({ data: [], error: null })),
-    insert: vi.fn(() => Promise.resolve({ data: null, error: null })),
-    eq: vi.fn(function(this: any) { return this; }),
-    gte: vi.fn(function(this: any) { return this; }),
-    lte: vi.fn(function(this: any) { return this; }),
-    order: vi.fn(function(this: any) { return this; }),
-  })),
+  from: vi.fn(() => createQueryBuilder()),
   rpc: vi.fn(() => Promise.resolve({ data: null, error: null })),
 };
 
@@ -35,10 +54,11 @@ describe("Analytics Core Module", () => {
         timestamp: new Date().toISOString(),
       };
 
-      mockSupabaseClient.from.mockReturnValueOnce({
+      const customBuilder = createQueryBuilder({
         insert: vi.fn(() => Promise.resolve({ data: event, error: null })),
-        select: vi.fn(function(this: any) { return this; }),
       });
+
+      mockSupabaseClient.from.mockReturnValueOnce(customBuilder);
 
       const result = await mockSupabaseClient.from("analytics_events").insert(event);
 

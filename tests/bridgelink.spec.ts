@@ -5,14 +5,32 @@ import { describe, it, expect, vi, beforeEach } from "vitest";
  * Testing communication bridge functionality
  */
 
+type BridgeQueryResponse<T> = Promise<{ data: T; error: Error | null }>;
+
+type BridgeQueryBuilder<T = unknown> = {
+  select: ReturnType<typeof vi.fn<[], BridgeQueryResponse<T>>>;
+  insert: ReturnType<typeof vi.fn<[T?], BridgeQueryResponse<T>>>;
+  update: ReturnType<typeof vi.fn<[Partial<T>], BridgeQueryResponse<T>>>;
+  eq: ReturnType<typeof vi.fn<[], BridgeQueryBuilder<T>>>;
+  order: ReturnType<typeof vi.fn<[], BridgeQueryBuilder<T>>>;
+};
+
+const createBridgeQueryBuilder = <T = unknown>(
+  overrides?: Partial<BridgeQueryBuilder<T>>
+): BridgeQueryBuilder<T> => {
+  const builder: BridgeQueryBuilder<T> = {
+    select: vi.fn(() => Promise.resolve({ data: [] as T, error: null })),
+    insert: vi.fn(() => Promise.resolve({ data: null as T, error: null })),
+    update: vi.fn(() => Promise.resolve({ data: null as T, error: null })),
+    eq: vi.fn(() => builder),
+    order: vi.fn(() => builder),
+  };
+
+  return { ...builder, ...overrides };
+};
+
 const mockSupabaseClient = {
-  from: vi.fn(() => ({
-    select: vi.fn(() => Promise.resolve({ data: [], error: null })),
-    insert: vi.fn(() => Promise.resolve({ data: null, error: null })),
-    update: vi.fn(() => Promise.resolve({ data: null, error: null })),
-    eq: vi.fn(function(this: any) { return this; }),
-    order: vi.fn(function(this: any) { return this; }),
-  })),
+  from: vi.fn(() => createBridgeQueryBuilder()),
 };
 
 vi.mock("@/integrations/supabase/client", () => ({
@@ -33,11 +51,11 @@ describe("Bridge Link Module", () => {
         participants: ["user1", "user2"],
       };
 
-      mockSupabaseClient.from.mockReturnValueOnce({
+      const builder = createBridgeQueryBuilder({
         insert: vi.fn(() => Promise.resolve({ data: mockChannel, error: null })),
-        select: vi.fn(function(this: any) { return this; }),
-        eq: vi.fn(function(this: any) { return this; }),
       });
+
+      mockSupabaseClient.from.mockReturnValueOnce(builder);
 
       const result = await mockSupabaseClient.from("communication_channels").insert(mockChannel);
 
@@ -51,11 +69,11 @@ describe("Bridge Link Module", () => {
         { id: 2, name: "emergency", status: "active" },
       ];
 
-      mockSupabaseClient.from.mockReturnValueOnce({
+      const builder = createBridgeQueryBuilder({
         select: vi.fn(() => Promise.resolve({ data: mockChannels, error: null })),
-        eq: vi.fn(function(this: any) { return this; }),
-        order: vi.fn(function(this: any) { return this; }),
       });
+
+      mockSupabaseClient.from.mockReturnValueOnce(builder);
 
       const result = await mockSupabaseClient.from("communication_channels").select("*");
 

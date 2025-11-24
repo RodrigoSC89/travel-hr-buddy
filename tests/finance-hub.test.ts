@@ -97,9 +97,17 @@ describe("Finance Hub - useFinanceData Hook", () => {
       },
     ];
 
-    // Test would use mocked data to verify calculations
-    // For now, this is a placeholder showing the test structure
-    expect(1000 - 500).toBe(500); // Net profit calculation
+    const income = mockTransactions
+      .filter(t => t.transaction_type === "income")
+      .reduce((sum, t) => sum + t.amount, 0);
+    const expenses = mockTransactions
+      .filter(t => t.transaction_type === "expense")
+      .reduce((sum, t) => sum + t.amount, 0);
+    const netProfit = income - expenses;
+
+    expect(income).toBe(1000);
+    expect(expenses).toBe(500);
+    expect(netProfit).toBe(500);
   });
 
   it("should handle transaction creation", async () => {
@@ -112,8 +120,9 @@ describe("Finance Hub - useFinanceData Hook", () => {
       description: "Test transaction",
     };
 
-    // Test would call createTransaction method
-    // expect(result.current.createTransaction).toBeDefined();
+    expect(result.current.createTransaction).toBeDefined();
+    expect(typeof result.current.createTransaction).toBe("function");
+    expect(newTransaction).toMatchObject({ amount: 1500, currency: "USD" });
   });
 
   it("should handle invoice creation", async () => {
@@ -127,8 +136,9 @@ describe("Finance Hub - useFinanceData Hook", () => {
       currency: "USD",
     };
 
-    // Test would call createInvoice method
-    // expect(result.current.createInvoice).toBeDefined();
+    expect(result.current.createInvoice).toBeDefined();
+    expect(typeof result.current.createInvoice).toBe("function");
+    expect(newInvoice).toMatchObject({ invoice_number: "INV-001", status: "pending" });
   });
 
   it("should format currency correctly", () => {

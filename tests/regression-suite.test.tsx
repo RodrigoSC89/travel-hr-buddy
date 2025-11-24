@@ -9,8 +9,8 @@
  */
 
 import React from "react";
-import { describe, it, expect, beforeAll, afterAll } from "vitest";
-import { render, screen, waitFor } from "@testing-library/react";
+import { describe, it, expect, afterAll } from "vitest";
+import { render, waitFor } from "@testing-library/react";
 import { BrowserRouter } from "react-router-dom";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import * as fs from "fs";
@@ -181,6 +181,7 @@ describe("PATCH 564 - Regression Tests: API Endpoints", () => {
   apiEndpoints.forEach(({ path: apiPath, method, name }) => {
     it(`should respond to ${method} ${apiPath}`, async () => {
       const startTime = Date.now();
+      expect(name).toBeTruthy();
       
       try {
         // Mock API call

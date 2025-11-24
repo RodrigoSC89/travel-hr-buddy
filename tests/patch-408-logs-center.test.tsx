@@ -3,7 +3,7 @@
  * Test suite for logs center and activity tracking
  */
 
-import React, { useState } from "react";
+import React, { type ReactNode } from "react";
 import { describe, it, expect, vi, beforeEach, afterEach } from "vitest";
 import { render, screen, waitFor, fireEvent } from "@testing-library/react";
 import { MemoryRouter } from "react-router-dom";
@@ -35,7 +35,7 @@ const mockLogs = [
 ];
 
 // Mock Supabase
-vi.mock("@/integrations/supabase/client", () => ({
+vi.mock("../src/integrations/supabase/client", () => ({
   supabase: {
     from: vi.fn(() => ({
       select: vi.fn(() => ({
@@ -52,27 +52,29 @@ vi.mock("@/integrations/supabase/client", () => ({
 }));
 
 // Mock contexts
-vi.mock("@/contexts/AuthContext", () => ({
+type ProviderProps = { children: ReactNode };
+
+vi.mock("../src/contexts/AuthContext", () => ({
   useAuth: () => ({
     user: { id: "test-user", email: "test@example.com" },
   }),
-  AuthProvider: ({ children }: any) => children,
+  AuthProvider: ({ children }: ProviderProps) => children,
 }));
 
-vi.mock("@/contexts/TenantContext", () => ({
+vi.mock("../src/contexts/TenantContext", () => ({
   useTenant: () => ({ tenantId: "test-tenant" }),
-  TenantProvider: ({ children }: any) => children,
+  TenantProvider: ({ children }: ProviderProps) => children,
 }));
 
-vi.mock("@/contexts/OrganizationContext", () => ({
+vi.mock("../src/contexts/OrganizationContext", () => ({
   useOrganization: () => ({
     currentOrganization: { id: "org-1", name: "Test Org" },
   }),
-  OrganizationProvider: ({ children }: any) => children,
+  OrganizationProvider: ({ children }: ProviderProps) => children,
 }));
 
 // Mock toast
-vi.mock("@/hooks/use-toast", () => ({
+vi.mock("../src/hooks/use-toast", () => ({
   useToast: () => ({
     toast: vi.fn(),
   }),
@@ -82,6 +84,10 @@ vi.mock("@/hooks/use-toast", () => ({
 const LogsCenter = () => {
   const [logs, setLogs] = React.useState(mockLogs);
   const [filter, setFilter] = React.useState("all");
+
+  React.useEffect(() => {
+    setLogs(mockLogs);
+  }, []);
   
   const filteredLogs = React.useMemo(() => {
     if (filter === "all") return logs;

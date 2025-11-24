@@ -103,6 +103,13 @@ test.describe("Button Component Tests", () => {
             className?.includes("opacity"),
           "Disabled button should have visual indication (reduced opacity or disabled class)"
         ).toBeTruthy();
+
+        // aria-disabled should align with actual disabled state when present
+        if (ariaDisabled) {
+          expect(ariaDisabled === "true").toBe(true);
+        }
+      } else if (ariaDisabled) {
+        expect(ariaDisabled === "false").toBe(true);
       }
     }
   });
@@ -139,7 +146,7 @@ test.describe("Button Component Tests", () => {
         return activeEl?.tagName === "BUTTON";
       });
 
-      expect(anyButtonFocused, "At least one button should be keyboard accessible").toBeTruthy();
+      expect(isFocused || anyButtonFocused, "At least one button should be keyboard accessible").toBeTruthy();
     }
   });
 

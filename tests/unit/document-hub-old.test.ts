@@ -3,7 +3,7 @@
  * Tests document management, templates, and AI features
  */
 
-import { describe, it, expect, vi } from "vitest";
+import { describe, it, expect } from "vitest";
 
 interface Document {
   id: string;

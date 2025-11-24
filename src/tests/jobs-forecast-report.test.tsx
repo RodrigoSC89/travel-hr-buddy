@@ -1,18 +1,32 @@
 import { describe, it, expect, vi, beforeEach } from "vitest";
 import { render, screen, waitFor, fireEvent } from "@testing-library/react";
 import JobsForecastReport from "@/components/bi/JobsForecastReport";
-import { supabase } from "@/integrations/supabase/client";
+
+type TrendPoint = {
+  date: string;
+  jobs: number;
+};
+
+type ForecastResponse = {
+  data: { forecast: string } | null;
+  error: Error | null;
+};
+
+type ForecastInvokeFn = (
+  functionName: string,
+  options: { body: { trend: TrendPoint[] } }
+) => Promise<ForecastResponse>;
+
+const invokeMock = vi.fn<ForecastInvokeFn>();
 
 // Mock the supabase client
 vi.mock("@/integrations/supabase/client", () => ({
   supabase: {
     functions: {
-      invoke: vi.fn(),
+      invoke: invokeMock,
     },
   },
 }));
-
-/* eslint-disable @typescript-eslint/no-explicit-any */
 describe("JobsForecastReport Component", () => {
   beforeEach(() => {
     vi.clearAllMocks();
@@ -32,7 +46,7 @@ describe("JobsForecastReport Component", () => {
     const mockInvoke = vi.fn(() => 
       new Promise((resolve) => setTimeout(() => resolve({ data: { forecast: "Test forecast" }, error: null }), 100))
     );
-    (supabase.functions.invoke as any).mockImplementation(mockInvoke);
+    invokeMock.mockImplementation(mockInvoke);
 
     render(<JobsForecastReport trend={[{ date: "2025-01", jobs: 10 }]} />);
     
@@ -45,7 +59,7 @@ describe("JobsForecastReport Component", () => {
 
   it("should display forecast when data is loaded", async () => {
     const mockForecast = "Previsão: Esperamos um aumento de 15% nos próximos 2 meses";
-    (supabase.functions.invoke as any).mockResolvedValue({
+    invokeMock.mockResolvedValue({
       data: { forecast: mockForecast },
       error: null,
     });
@@ -58,7 +72,7 @@ describe("JobsForecastReport Component", () => {
   });
 
   it("should handle error when forecast fetch fails", async () => {
-    (supabase.functions.invoke as any).mockResolvedValue({
+    invokeMock.mockResolvedValue({
       data: null,
       error: new Error("API Error"),
     });
@@ -72,7 +86,7 @@ describe("JobsForecastReport Component", () => {
 
   it("should call generate forecast when button is clicked", async () => {
     const mockForecast = "Previsão gerada manualmente";
-    (supabase.functions.invoke as any).mockResolvedValue({
+    invokeMock.mockResolvedValue({
       data: { forecast: mockForecast },
       error: null,
     });
@@ -92,7 +106,7 @@ describe("JobsForecastReport Component", () => {
       data: { forecast: "Auto-generated forecast" },
       error: null,
     });
-    (supabase.functions.invoke as any).mockImplementation(mockInvoke);
+    invokeMock.mockImplementation(mockInvoke);
 
     const trendData = [
       { date: "2025-01", jobs: 10 },
@@ -110,7 +124,7 @@ describe("JobsForecastReport Component", () => {
 
   it("should not fetch when trend array is empty", () => {
     const mockInvoke = vi.fn();
-    (supabase.functions.invoke as any).mockImplementation(mockInvoke);
+    invokeMock.mockImplementation(mockInvoke);
 
     render(<JobsForecastReport trend={[]} />);
 
@@ -126,7 +140,7 @@ describe("JobsForecastReport Component", () => {
   it("should call onForecastUpdate callback when forecast is loaded", async () => {
     const mockForecast = "Previsão de teste";
     const mockCallback = vi.fn();
-    (supabase.functions.invoke as any).mockResolvedValue({
+    invokeMock.mockResolvedValue({
       data: { forecast: mockForecast },
       error: null,
     });
@@ -140,7 +154,7 @@ describe("JobsForecastReport Component", () => {
 
   it("should call onForecastUpdate callback with error message on error", async () => {
     const mockCallback = vi.fn();
-    (supabase.functions.invoke as any).mockResolvedValue({
+    invokeMock.mockResolvedValue({
       data: null,
       error: new Error("API Error"),
     });
@@ -152,4 +166,3 @@ describe("JobsForecastReport Component", () => {
     });
   });
 });
-/* eslint-enable @typescript-eslint/no-explicit-any */

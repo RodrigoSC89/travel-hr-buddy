@@ -1,14 +1,14 @@
 // PATCH 600: Risk Ops AI Types
 
-export type RiskType = 'operational' | 'compliance' | 'safety' | 'environmental' | 'financial';
-export type RiskSeverity = 'low' | 'medium' | 'high' | 'critical';
-export type RiskLikelihood = 'unlikely' | 'possible' | 'likely' | 'almost_certain';
-export type RiskStatus = 'open' | 'mitigated' | 'closed';
-export type TrendDirection = 'improving' | 'stable' | 'degrading';
+export type RiskType = "operational" | "compliance" | "safety" | "environmental" | "financial";
+export type RiskSeverity = "low" | "medium" | "high" | "critical";
+export type RiskLikelihood = "unlikely" | "possible" | "likely" | "almost_certain";
+export type RiskStatus = "open" | "mitigated" | "closed";
+export type TrendDirection = "improving" | "stable" | "degrading";
 
 // Constants for UI rendering
-export const RISK_SEVERITIES: RiskSeverity[] = ['critical', 'high', 'medium', 'low'];
-export const RISK_LIKELIHOODS: RiskLikelihood[] = ['unlikely', 'possible', 'likely', 'almost_certain'];
+export const RISK_SEVERITIES: RiskSeverity[] = ["critical", "high", "medium", "low"];
+export const RISK_LIKELIHOODS: RiskLikelihood[] = ["unlikely", "possible", "likely", "almost_certain"];
 
 export interface RiskOperation {
   id: string;
@@ -27,7 +27,7 @@ export interface RiskOperation {
   created_at: string;
   updated_at: string;
   resolved_at: string | null;
-  metadata: Record<string, any>;
+  metadata: Record<string, unknown>;
 }
 
 export interface RiskAssessment {
@@ -39,7 +39,7 @@ export interface RiskAssessment {
   likelihood: RiskLikelihood;
   risk_score: number;
   comments: string | null;
-  ai_analysis: Record<string, any>;
+  ai_analysis: Record<string, unknown>;
   created_at: string;
 }
 

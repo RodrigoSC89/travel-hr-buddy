@@ -5,16 +5,38 @@ import { describe, it, expect, vi, beforeEach } from "vitest";
  * Testing document management and AI features
  */
 
+type DocRecord = Record<string, unknown>;
+type DocQueryResponse<T extends DocRecord | DocRecord[]> = Promise<{ data: T; error: Error | null }>;
+
+type DocQueryBuilder = {
+  select: () => DocQueryResponse<DocRecord[]>;
+  insert: (payload?: DocRecord) => DocQueryResponse<DocRecord>;
+  update: (payload: Partial<DocRecord>) => DocQueryResponse<DocRecord>;
+  delete: () => DocQueryResponse<DocRecord>;
+  eq: () => DocQueryBuilder;
+  order: () => DocQueryBuilder;
+  limit: () => DocQueryBuilder;
+};
+
+const createDocQueryBuilder = (overrides?: Partial<DocQueryBuilder>): DocQueryBuilder => {
+  const builder = {} as DocQueryBuilder;
+
+  builder.select = vi.fn(() => Promise.resolve({ data: [], error: null }));
+  builder.insert = vi.fn(() => Promise.resolve({ data: {}, error: null }));
+  builder.update = vi.fn(() => Promise.resolve({ data: {}, error: null }));
+  builder.delete = vi.fn(() => Promise.resolve({ data: {}, error: null }));
+  builder.eq = vi.fn(() => builder);
+  builder.order = vi.fn(() => builder);
+  builder.limit = vi.fn(() => builder);
+
+  return { ...builder, ...overrides };
+};
+
 const mockSupabaseClient = {
-  from: vi.fn(() => ({
-    select: vi.fn(() => Promise.resolve({ data: [], error: null })),
-    insert: vi.fn(() => Promise.resolve({ data: null, error: null })),
-    update: vi.fn(() => Promise.resolve({ data: null, error: null })),
-    delete: vi.fn(() => Promise.resolve({ data: null, error: null })),
-    eq: vi.fn(function(this: any) { return this; }),
-    order: vi.fn(function(this: any) { return this; }),
-    limit: vi.fn(function(this: any) { return this; }),
-  })),
+  from: vi.fn((table?: string) => {
+    void table;
+    return createDocQueryBuilder();
+  }),
 };
 
 vi.mock("@/integrations/supabase/client", () => ({
@@ -35,15 +57,17 @@ describe("Document Hub Module", () => {
         created_by: "user123",
       };
 
-      mockSupabaseClient.from.mockReturnValueOnce({
+      const builder = createDocQueryBuilder({
         insert: vi.fn(() => Promise.resolve({ data: { id: 1, ...document }, error: null })),
-        select: vi.fn(function(this: any) { return this; }),
       });
 
-      const result = await mockSupabaseClient.from("documents").insert(document);
+      mockSupabaseClient.from.mockReturnValueOnce(builder);
 
-      expect(result.data).toHaveProperty("id");
-      expect(result.data.title).toBe(document.title);
+      const result = await mockSupabaseClient.from("documents").insert(document);
+      const createdDocument = result.data as typeof document & { id: number };
+
+      expect(createdDocument).toHaveProperty("id");
+      expect(createdDocument.title).toBe(document.title);
     });
 
     it("should update document content", async () => {
@@ -52,15 +76,16 @@ describe("Document Hub Module", () => {
         updated_at: new Date().toISOString(),
       };
 
-      mockSupabaseClient.from.mockReturnValueOnce({
+      const builder = createDocQueryBuilder({
         update: vi.fn(() => Promise.resolve({ data: { id: 1, ...updates }, error: null })),
-        eq: vi.fn(function(this: any) { return this; }),
-        select: vi.fn(function(this: any) { return this; }),
       });
 
-      const result = await mockSupabaseClient.from("documents").update(updates);
+      mockSupabaseClient.from.mockReturnValueOnce(builder);
 
-      expect(result.data.content).toBe(updates.content);
+      const result = await mockSupabaseClient.from("documents").update(updates);
+      const updatedDocument = result.data as typeof updates & { id: number };
+
+      expect(updatedDocument.content).toBe(updates.content);
     });
   });
 

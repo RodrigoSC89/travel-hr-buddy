@@ -11,16 +11,46 @@ global.ResizeObserver = class ResizeObserver {
 };
 
 // Mock IntersectionObserver for components that use it
-global.IntersectionObserver = class IntersectionObserver {
-  constructor() {}
-  observe() {}
-  unobserve() {}
-  disconnect() {}
-  takeRecords() {
+global.IntersectionObserver = class IntersectionObserver implements IntersectionObserver {
+  readonly root: Element | null;
+  readonly rootMargin: string;
+  readonly thresholds: ReadonlyArray<number>;
+
+  constructor(
+    private readonly callback: IntersectionObserverCallback,
+    options?: IntersectionObserverInit
+  ) {
+    this.root = options?.root ?? null;
+    this.rootMargin = options?.rootMargin ?? "0px";
+    const threshold = options?.threshold;
+    this.thresholds = Array.isArray(threshold)
+      ? threshold
+      : typeof threshold === "number"
+        ? [threshold]
+        : [];
+  }
+
+  disconnect(): void {
+    // no-op
+  }
+
+  observe(target: Element): void {
+    void target;
+  }
+
+  unobserve(): void {
+    // no-op
+  }
+
+  takeRecords(): IntersectionObserverEntry[] {
     return [];
   }
-// eslint-disable-next-line @typescript-eslint/no-explicit-any
-} as any;
+
+  // Custom helper for tests to simulate intersection changes if needed
+  trigger(entries: IntersectionObserverEntry[]): void {
+    this.callback(entries, this);
+  }
+};
 
 // Mock ApplyTemplateModal for test stability
 vi.mock("@/components/templates/ApplyTemplateModal", () => ({

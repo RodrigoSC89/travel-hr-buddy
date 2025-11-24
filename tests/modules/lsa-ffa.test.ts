@@ -1,11 +1,9 @@
-import { describe, it, expect, beforeEach, vi } from 'vitest';
-import { renderHook, waitFor } from '@testing-library/react';
-import { useLsaFfa } from '@/modules/lsa-ffa-inspections/useLsaFfa';
-import { ReportGenerator } from '@/modules/lsa-ffa-inspections/ReportGenerator';
-import type { LSAFFAInspection, Vessel, InspectionFormData } from '@/modules/lsa-ffa-inspections/types';
+import { describe, it, expect, vi } from "vitest";
+import { ReportGenerator } from "@/modules/lsa-ffa-inspections/ReportGenerator";
+import type { LSAFFAInspection, Vessel, InspectionFormData } from "@/modules/lsa-ffa-inspections/types";
 
 // Mock Supabase client
-vi.mock('@/integrations/supabase/client', () => ({
+vi.mock("@/integrations/supabase/client", () => ({
   supabase: {
     from: vi.fn(() => ({
       select: vi.fn(() => ({
@@ -45,51 +43,51 @@ vi.mock('@/integrations/supabase/client', () => ({
 }));
 
 // Mock toast
-vi.mock('@/hooks/use-toast', () => ({
+vi.mock("@/hooks/use-toast", () => ({
   useToast: () => ({
     toast: vi.fn(),
   }),
 }));
 
 const mockVessel: Vessel = {
-  id: 'vessel-1',
-  name: 'MV Test Vessel',
-  imo_number: '1234567',
-  vessel_type: 'Cargo',
-  flag_state: 'Panama',
+  id: "vessel-1",
+  name: "MV Test Vessel",
+  imo_number: "1234567",
+  vessel_type: "Cargo",
+  flag_state: "Panama",
 };
 
 const mockInspection: LSAFFAInspection = {
-  id: 'inspection-1',
-  vessel_id: 'vessel-1',
-  inspector: 'John Doe',
+  id: "inspection-1",
+  vessel_id: "vessel-1",
+  inspector: "John Doe",
   date: new Date().toISOString(),
-  type: 'LSA',
-  frequency: 'weekly',
+  type: "LSA",
+  frequency: "weekly",
   checklist: [
-    { id: 'lsa_w1', item: 'Visual inspection of lifeboats', required: true, checked: true },
-    { id: 'lsa_w2', item: 'Check lifeboat emergency equipment', required: true, checked: true },
-    { id: 'lsa_w3', item: 'Test lifeboat engine', required: true, checked: false },
+    { id: "lsa_w1", item: "Visual inspection of lifeboats", required: true, checked: true },
+    { id: "lsa_w2", item: "Check lifeboat emergency equipment", required: true, checked: true },
+    { id: "lsa_w3", item: "Test lifeboat engine", required: true, checked: false },
   ],
   issues_found: [
     {
-      equipment: 'Lifeboat #1',
-      description: 'Engine failed to start',
-      severity: 'major',
-      correctiveAction: 'Schedule engine service',
+      equipment: "Lifeboat #1",
+      description: "Engine failed to start",
+      severity: "major",
+      correctiveAction: "Schedule engine service",
     },
   ],
   score: 67,
-  ai_notes: 'Lifeboat engine requires immediate attention',
-  ai_risk_rating: 'medium',
-  status: 'draft',
+  ai_notes: "Lifeboat engine requires immediate attention",
+  ai_risk_rating: "medium",
+  status: "draft",
   created_at: new Date().toISOString(),
   updated_at: new Date().toISOString(),
 };
 
-describe('LSA/FFA Inspections Module', () => {
-  describe('Inspection Data Management', () => {
-    it('should calculate score correctly based on checklist', () => {
+describe("LSA/FFA Inspections Module", () => {
+  describe("Inspection Data Management", () => {
+    it("should calculate score correctly based on checklist", () => {
       const totalItems = mockInspection.checklist.length;
       const checkedItems = mockInspection.checklist.filter(item => item.checked).length;
       const expectedScore = Math.round((checkedItems / totalItems) * 100);
@@ -97,20 +95,20 @@ describe('LSA/FFA Inspections Module', () => {
       expect(mockInspection.score).toBe(expectedScore);
     });
 
-    it('should identify failed checklist items', () => {
+    it("should identify failed checklist items", () => {
       const failedItems = mockInspection.checklist.filter(item => !item.checked);
       expect(failedItems).toHaveLength(1);
-      expect(failedItems[0].id).toBe('lsa_w3');
+      expect(failedItems[0].id).toBe("lsa_w3");
     });
 
-    it('should have proper issue severity levels', () => {
+    it("should have proper issue severity levels", () => {
       const issue = mockInspection.issues_found[0];
-      expect(['minor', 'major', 'critical']).toContain(issue.severity);
+      expect(["minor", "major", "critical"]).toContain(issue.severity);
     });
   });
 
-  describe('Inspection Score Calculation', () => {
-    it('should return 100% for fully compliant inspection', () => {
+  describe("Inspection Score Calculation", () => {
+    it("should return 100% for fully compliant inspection", () => {
       const compliantInspection = {
         ...mockInspection,
         checklist: mockInspection.checklist.map(item => ({ ...item, checked: true })),
@@ -123,7 +121,7 @@ describe('LSA/FFA Inspections Module', () => {
       expect(score).toBe(100);
     });
 
-    it('should return 0% for inspection with no items checked', () => {
+    it("should return 0% for inspection with no items checked", () => {
       const nonCompliantInspection = {
         ...mockInspection,
         checklist: mockInspection.checklist.map(item => ({ ...item, checked: false })),
@@ -136,7 +134,7 @@ describe('LSA/FFA Inspections Module', () => {
       expect(score).toBe(0);
     });
 
-    it('should handle empty checklist gracefully', () => {
+    it("should handle empty checklist gracefully", () => {
       const emptyChecklist = {
         ...mockInspection,
         checklist: [],
@@ -152,85 +150,85 @@ describe('LSA/FFA Inspections Module', () => {
 
   // Helper function to calculate risk rating based on score
   const calculateRiskRating = (score: number): string => {
-    if (score < 50) return 'critical';
-    if (score < 70) return 'high';
-    if (score < 85) return 'medium';
-    return 'low';
+    if (score < 50) return "critical";
+    if (score < 70) return "high";
+    if (score < 85) return "medium";
+    return "low";
   };
 
-  describe('Risk Assessment', () => {
-    it('should assess critical risk when score is below 50%', () => {
+  describe("Risk Assessment", () => {
+    it("should assess critical risk when score is below 50%", () => {
       const lowScoreInspection = { ...mockInspection, score: 45 };
       const riskRating = calculateRiskRating(lowScoreInspection.score);
-      expect(riskRating).toBe('critical');
+      expect(riskRating).toBe("critical");
     });
 
-    it('should assess high risk when score is between 50-70%', () => {
+    it("should assess high risk when score is between 50-70%", () => {
       const mediumScoreInspection = { ...mockInspection, score: 65 };
       const riskRating = calculateRiskRating(mediumScoreInspection.score);
-      expect(riskRating).toBe('high');
+      expect(riskRating).toBe("high");
     });
 
-    it('should assess medium risk when score is between 70-85%', () => {
+    it("should assess medium risk when score is between 70-85%", () => {
       const goodScoreInspection = { ...mockInspection, score: 75 };
       const riskRating = calculateRiskRating(goodScoreInspection.score);
-      expect(riskRating).toBe('medium');
+      expect(riskRating).toBe("medium");
     });
 
-    it('should assess low risk when score is above 85%', () => {
+    it("should assess low risk when score is above 85%", () => {
       const highScoreInspection = { ...mockInspection, score: 90 };
       const riskRating = calculateRiskRating(highScoreInspection.score);
-      expect(riskRating).toBe('low');
+      expect(riskRating).toBe("low");
     });
   });
 
-  describe('SOLAS Compliance', () => {
-    it('should validate LSA inspection types', () => {
-      expect(['LSA', 'FFA']).toContain(mockInspection.type);
+  describe("SOLAS Compliance", () => {
+    it("should validate LSA inspection types", () => {
+      expect(["LSA", "FFA"]).toContain(mockInspection.type);
     });
 
-    it('should validate inspection frequency options', () => {
-      const validFrequencies = ['weekly', 'monthly', 'annual', 'ad_hoc'];
+    it("should validate inspection frequency options", () => {
+      const validFrequencies = ["weekly", "monthly", "annual", "ad_hoc"];
       expect(validFrequencies).toContain(mockInspection.frequency);
     });
 
-    it('should require inspector name', () => {
+    it("should require inspector name", () => {
       expect(mockInspection.inspector).toBeTruthy();
       expect(mockInspection.inspector.length).toBeGreaterThan(0);
     });
 
-    it('should have checklist based on SOLAS requirements', () => {
+    it("should have checklist based on SOLAS requirements", () => {
       expect(mockInspection.checklist).toBeDefined();
       expect(mockInspection.checklist.length).toBeGreaterThan(0);
     });
   });
 
-  describe('Report Generation', () => {
-    it('should generate PDF report', async () => {
+  describe("Report Generation", () => {
+    it("should generate PDF report", async () => {
       const blob = await ReportGenerator.generatePDF(mockInspection, mockVessel);
       
       expect(blob).toBeInstanceOf(Blob);
-      expect(blob.type).toBe('application/pdf');
+      expect(blob.type).toBe("application/pdf");
     });
 
-    it('should include vessel information in report', async () => {
+    it("should include vessel information in report", async () => {
       const blob = await ReportGenerator.generatePDF(mockInspection, mockVessel);
       expect(blob.size).toBeGreaterThan(0);
     });
 
-    it('should include inspection checklist in report', async () => {
+    it("should include inspection checklist in report", async () => {
       const blob = await ReportGenerator.generatePDF(mockInspection, mockVessel);
       expect(blob.size).toBeGreaterThan(0);
     });
 
-    it('should include issues in report when present', async () => {
+    it("should include issues in report when present", async () => {
       const inspectionWithIssues = {
         ...mockInspection,
         issues_found: [
           {
-            equipment: 'Fire Extinguisher #3',
-            description: 'Expired certification',
-            severity: 'critical',
+            equipment: "Fire Extinguisher #3",
+            description: "Expired certification",
+            severity: "critical",
           },
         ],
       };
@@ -240,68 +238,68 @@ describe('LSA/FFA Inspections Module', () => {
     });
   });
 
-  describe('Data Validation', () => {
-    it('should validate required fields for inspection creation', () => {
-      const requiredFields = ['vessel_id', 'inspector', 'type', 'checklist'];
+  describe("Data Validation", () => {
+    it("should validate required fields for inspection creation", () => {
+      const requiredFields = ["vessel_id", "inspector", "type", "checklist"];
       
       requiredFields.forEach(field => {
         expect(mockInspection).toHaveProperty(field);
       });
     });
 
-    it('should validate issue severity levels', () => {
-      const validSeverities = ['minor', 'major', 'critical'];
+    it("should validate issue severity levels", () => {
+      const validSeverities = ["minor", "major", "critical"];
       
       mockInspection.issues_found.forEach(issue => {
         expect(validSeverities).toContain(issue.severity);
       });
     });
 
-    it('should validate inspection status values', () => {
-      const validStatuses = ['draft', 'in_progress', 'completed', 'reviewed'];
+    it("should validate inspection status values", () => {
+      const validStatuses = ["draft", "in_progress", "completed", "reviewed"];
       expect(validStatuses).toContain(mockInspection.status);
     });
   });
 
-  describe('AI Analysis Simulation', () => {
-    it('should generate AI suggestions based on score', () => {
+  describe("AI Analysis Simulation", () => {
+    it("should generate AI suggestions based on score", () => {
       const suggestions: string[] = [];
       
       if (mockInspection.score < 100) {
-        suggestions.push('Schedule additional training for crew members');
+        suggestions.push("Schedule additional training for crew members");
       }
       
       if (mockInspection.issues_found.length > 0) {
-        suggestions.push('Address identified issues before next inspection');
+        suggestions.push("Address identified issues before next inspection");
       }
       
       expect(suggestions.length).toBeGreaterThan(0);
     });
 
-    it('should identify critical issues', () => {
+    it("should identify critical issues", () => {
       const criticalIssues = mockInspection.issues_found.filter(
-        issue => issue.severity === 'critical'
+        issue => issue.severity === "critical"
       );
       
       expect(Array.isArray(criticalIssues)).toBe(true);
     });
 
-    it('should recommend follow-up inspection when score is low', () => {
+    it("should recommend follow-up inspection when score is low", () => {
       const shouldRecommendFollowUp = mockInspection.score < 85;
       expect(shouldRecommendFollowUp).toBe(true);
     });
   });
 
-  describe('Integration Tests', () => {
-    it('should create complete inspection workflow', () => {
+  describe("Integration Tests", () => {
+    it("should create complete inspection workflow", () => {
       // 1. Create inspection
       const newInspection: Partial<InspectionFormData> = {
         vessel_id: mockVessel.id,
-        inspector: 'Test Inspector',
-        type: 'FFA',
-        frequency: 'monthly',
+        inspector: "Test Inspector",
+        type: "FFA",
+        frequency: "monthly",
         checklist: [
-          { id: 'ffa_m1', item: 'Test fire main pressure', required: true, checked: true },
+          { id: "ffa_m1", item: "Test fire main pressure", required: true, checked: true },
         ],
         issues_found: [],
       };
@@ -317,8 +315,8 @@ describe('LSA/FFA Inspections Module', () => {
       expect(score).toBe(100);
       
       // 3. Determine status
-      const status = 'draft';
-      expect(status).toBe('draft');
+      const status = "draft";
+      expect(status).toBe("draft");
     });
   });
 });

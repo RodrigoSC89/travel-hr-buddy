@@ -45,7 +45,7 @@ describe("EvidenceUploader Component", () => {
     render(<EvidenceUploader inspectionId={mockInspectionId} onUpdate={mockOnUpdate} />);
     
     const file = new File(["test"], "evidence.jpg", { type: "image/jpeg" });
-    const fileInput = document.querySelector('input[type="file"]');
+    const fileInput = document.querySelector("input[type=\"file\"]");
     
     if (fileInput) {
       fireEvent.change(fileInput, { target: { files: [file] } });
@@ -65,7 +65,7 @@ describe("EvidenceUploader Component", () => {
     render(<EvidenceUploader inspectionId={mockInspectionId} onUpdate={mockOnUpdate} />);
     
     const file = new File(["content"], "document.pdf", { type: "application/pdf" });
-    const fileInput = document.querySelector('input[type="file"]');
+    const fileInput = document.querySelector("input[type=\"file\"]");
     
     if (fileInput) {
       fireEvent.change(fileInput, { target: { files: [file] } });
@@ -82,7 +82,7 @@ describe("EvidenceUploader Component", () => {
     render(<EvidenceUploader inspectionId={mockInspectionId} onUpdate={mockOnUpdate} />);
     
     const file = new File(["data"], "report.pdf", { type: "application/pdf" });
-    const fileInput = document.querySelector('input[type="file"]');
+    const fileInput = document.querySelector("input[type=\"file\"]");
     
     if (fileInput) {
       fireEvent.change(fileInput, { target: { files: [file] } });
@@ -102,7 +102,7 @@ describe("EvidenceUploader Component", () => {
     render(<EvidenceUploader inspectionId={mockInspectionId} onUpdate={mockOnUpdate} />);
     
     const file = new File(["content"], "file.txt", { type: "text/plain" });
-    const fileInput = document.querySelector('input[type="file"]');
+    const fileInput = document.querySelector("input[type=\"file\"]");
     
     if (fileInput) {
       fireEvent.change(fileInput, { target: { files: [file] } });

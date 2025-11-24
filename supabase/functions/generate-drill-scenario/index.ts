@@ -1,10 +1,11 @@
 // PATCH 599: Generate Drill Scenario Edge Function
-// @ts-nocheck - Deno runtime types not available in VS Code
+// TYPE SAFETY FIX: Removed @ts-nocheck, added proper TypeScript types
 import { serve } from "https://deno.land/std@0.168.0/http/server.ts"
 import { 
   createResponse, 
   EdgeFunctionError, 
   validateRequestBody, 
+  corsHeaders,
   handleCORS,
   getEnvVar,
   safeJSONParse,
@@ -37,6 +38,13 @@ interface OpenAIResponse {
   }>
 }
 
+const withCorsHeaders = (response: Response): Response => {
+  Object.entries(corsHeaders).forEach(([key, value]) => {
+    response.headers.set(key, value)
+  })
+  return response
+}
+
 serve(async (req: Request): Promise<Response> => {
   if (req.method === 'OPTIONS') {
     return handleCORS()
@@ -46,8 +54,8 @@ serve(async (req: Request): Promise<Response> => {
   log('info', 'Drill scenario request received', { requestId })
 
   try {
-    const body = await req.json() as DrillScenarioRequest
-    validateRequestBody(body as unknown as Record<string, unknown>, ['drill_type'])
+  const body = await req.json() as DrillScenarioRequest
+  validateRequestBody(body as Record<string, unknown>, ['drill_type'])
     
     const { drill_type, vessel_id, context, difficulty = 'intermediate' } = body
 
@@ -138,7 +146,7 @@ Return your response in JSON format:
       requestId 
     })
 
-    return createResponse<DrillScenarioResponse>(result, undefined, requestId)
+    return withCorsHeaders(createResponse<DrillScenarioResponse>(result, undefined, requestId))
 
   } catch (error) {
     log('error', 'Error in drill scenario generation', { 
@@ -147,18 +155,20 @@ Return your response in JSON format:
     })
 
     if (error instanceof EdgeFunctionError) {
-      return createResponse(undefined, error, requestId)
+      return withCorsHeaders(createResponse(undefined, error, requestId))
     }
 
-    return createResponse(
-      undefined,
-      new EdgeFunctionError(
-        'INTERNAL_ERROR',
-        error instanceof Error ? error.message : 'An unexpected error occurred',
-        500,
-        { originalError: String(error) }
-      ),
-      requestId
+    return withCorsHeaders(
+      createResponse(
+        undefined,
+        new EdgeFunctionError(
+          'INTERNAL_ERROR',
+          error instanceof Error ? error.message : 'An unexpected error occurred',
+          500,
+          { originalError: String(error) }
+        ),
+        requestId
+      )
     )
   }
 })

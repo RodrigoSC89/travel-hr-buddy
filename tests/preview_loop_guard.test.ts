@@ -4,9 +4,9 @@
  * Tests to validate proper cleanup of intervals and timeouts
  */
 
-import { describe, it, expect, vi, beforeEach, afterEach } from 'vitest';
+import { describe, it, expect, vi, beforeEach, afterEach } from "vitest";
 
-describe('Preview Loop Guard Tests', () => {
+describe("Preview Loop Guard Tests", () => {
   beforeEach(() => {
     vi.useFakeTimers();
   });
@@ -16,9 +16,9 @@ describe('Preview Loop Guard Tests', () => {
     vi.clearAllTimers();
   });
 
-  it('should cleanup setInterval on unmount', () => {
+  it("should cleanup setInterval on unmount", () => {
     const callback = vi.fn();
-    let intervalId: NodeJS.Timeout | null = null;
+    let intervalId: ReturnType<typeof setInterval> | null = null;
 
     // Simulate useEffect with interval
     const setupInterval = () => {
@@ -43,9 +43,9 @@ describe('Preview Loop Guard Tests', () => {
     expect(callback).toHaveBeenCalledTimes(3); // Still 3, not 6
   });
 
-  it('should cleanup setTimeout on unmount', () => {
+  it("should cleanup setTimeout on unmount", () => {
     const callback = vi.fn();
-    let timeoutId: NodeJS.Timeout | null = null;
+    let timeoutId: ReturnType<typeof setTimeout> | null = null;
 
     // Simulate useEffect with timeout
     const setupTimeout = () => {
@@ -68,10 +68,10 @@ describe('Preview Loop Guard Tests', () => {
     expect(callback).not.toHaveBeenCalled();
   });
 
-  it('should handle multiple intervals with proper cleanup', () => {
+  it("should handle multiple intervals with proper cleanup", () => {
     const callback1 = vi.fn();
     const callback2 = vi.fn();
-    const intervals: NodeJS.Timeout[] = [];
+    const intervals: Array<ReturnType<typeof setInterval>> = [];
 
     // Setup multiple intervals
     const setupMultipleIntervals = () => {
@@ -100,7 +100,7 @@ describe('Preview Loop Guard Tests', () => {
     expect(callback2).toHaveBeenCalledTimes(4);
   });
 
-  it('should prevent infinite loops by limiting execution count', () => {
+  it("should prevent infinite loops by limiting execution count", () => {
     let executionCount = 0;
     const maxExecutions = 100;
 
@@ -127,9 +127,9 @@ describe('Preview Loop Guard Tests', () => {
     cleanup();
   });
 
-  it('should handle cleanup being called multiple times safely', () => {
+  it("should handle cleanup being called multiple times safely", () => {
     const callback = vi.fn();
-    let intervalId: NodeJS.Timeout | null = null;
+    let intervalId: ReturnType<typeof setInterval> | null = null;
 
     const setupInterval = () => {
       intervalId = setInterval(callback, 1000);
@@ -152,10 +152,10 @@ describe('Preview Loop Guard Tests', () => {
     expect(intervalId).toBeNull();
   });
 
-  it('should verify performanceScanner cleanup', () => {
+  it("should verify performanceScanner cleanup", () => {
     // Mock scanner similar to src/ai/monitoring/performanceScanner.ts
     class MockScanner {
-      private scanIntervalId: NodeJS.Timeout | null = null;
+      private scanIntervalId: ReturnType<typeof setInterval> | null = null;
       private isScanning = false;
 
       startScanning(interval: number = 1000) {
@@ -190,9 +190,9 @@ describe('Preview Loop Guard Tests', () => {
     expect(scanner.getIntervalId()).toBeNull();
   });
 
-  it('should verify moduleContext cleanup', () => {
+  it("should verify moduleContext cleanup", () => {
     // Mock context manager similar to src/ai/contexts/moduleContext.ts
-    let cleanupIntervalId: NodeJS.Timeout | null = null;
+    let cleanupIntervalId: ReturnType<typeof setInterval> | null = null;
     
     const startContextCleanup = (interval: number = 1000) => {
       cleanupIntervalId = setInterval(() => {
@@ -217,8 +217,8 @@ describe('Preview Loop Guard Tests', () => {
   });
 });
 
-describe('useEffect Cleanup Pattern Tests', () => {
-  it('should demonstrate correct useEffect cleanup pattern', () => {
+describe("useEffect Cleanup Pattern Tests", () => {
+  it("should demonstrate correct useEffect cleanup pattern", () => {
     const callback = vi.fn();
 
     // Correct pattern
@@ -244,7 +244,7 @@ describe('useEffect Cleanup Pattern Tests', () => {
     expect(callback).toHaveBeenCalledTimes(3); // No additional calls
   });
 
-  it('should catch missing cleanup as anti-pattern', () => {
+  it("should catch missing cleanup as anti-pattern", () => {
     const callback = vi.fn();
 
     // Anti-pattern: No cleanup

@@ -28,33 +28,39 @@ import {
 } from "@/ai/self-healing/self-diagnosis-loop";
 
 describe("PATCHES 586-590: AI Meta-Architecture", () => {
+  type SupabaseFromBuilder = ReturnType<typeof supabase.from>;
+
+  const createSupabaseBuilder = (): SupabaseFromBuilder => ({
+    insert: vi.fn().mockResolvedValue({ data: null, error: null }),
+    select: vi.fn().mockReturnValue({
+      eq: vi.fn().mockResolvedValue({ data: [], error: null }),
+    }),
+  });
+
   beforeEach(() => {
     vi.clearAllMocks();
     
     // Mock Supabase client
-    vi.spyOn(supabase, "from").mockReturnValue({
-      insert: vi.fn().mockResolvedValue({ data: null, error: null }),
-      select: vi.fn().mockReturnValue({
-        eq: vi.fn().mockResolvedValue({ data: [], error: null }),
-      }),
-    } as any);
+    vi.spyOn(supabase, "from").mockImplementation(() => createSupabaseBuilder());
   });
 
   describe("PATCH 586 - Multi-Level Coordination Engine", () => {
     it("should create strategic decision", async () => {
       const engine = new MultiLevelCoordinationEngine();
       
+      const objectives: Objective[] = [
+        {
+          id: "obj-1",
+          description: "Complete mission alpha",
+          priority: 9,
+          deadline: "2025-12-31",
+          status: "pending",
+        },
+      ];
+
       const context: LevelContext = {
         level: "strategic",
-        objectives: [
-          {
-            id: "obj-1",
-            description: "Complete mission alpha",
-            priority: 9,
-            deadline: "2025-12-31",
-            status: "pending",
-          },
-        ],
+        objectives,
         availableResources: ["strategic_planner", "long-term_analyst"],
         constraints: { budget: 100000, maxTimeline: 180 },
         timeHorizon: 720, // 30 days
@@ -74,17 +80,31 @@ describe("PATCHES 586-590: AI Meta-Architecture", () => {
     it("should detect conflicts between levels", async () => {
       const engine = new MultiLevelCoordinationEngine();
       
+      const strategicObjectives: Objective[] = [{
+        id: "1",
+        description: "Strategic goal",
+        priority: 9,
+        deadline: "2025-12-31",
+        status: "pending",
+      }];
       const strategicContext: LevelContext = {
         level: "strategic",
-        objectives: [{ id: "1", description: "Strategic goal", priority: 9, deadline: "2025-12-31", status: "pending" }],
+        objectives: strategicObjectives,
         availableResources: ["resource-A"],
         constraints: {},
         timeHorizon: 720,
       };
 
+      const tacticalObjectives: Objective[] = [{
+        id: "2",
+        description: "Immediate action",
+        priority: 10,
+        deadline: "2025-11-01",
+        status: "pending",
+      }];
       const tacticalContext: LevelContext = {
         level: "tactical",
-        objectives: [{ id: "2", description: "Immediate action", priority: 10, deadline: "2025-11-01", status: "pending" }],
+        objectives: tacticalObjectives,
         availableResources: ["resource-A"], // Same resource
         constraints: {},
         timeHorizon: 2,
@@ -147,7 +167,7 @@ describe("PATCHES 586-590: AI Meta-Architecture", () => {
     it("should record decisions for reflection", async () => {
       const core = new ReflectiveCore();
       
-      const decisionId = await core.recordDecision({
+      const decisionRecord: Omit<DecisionRecord, "id" | "timestamp"> = {
         missionId: "mission-1",
         decisionType: "navigation",
         context: { weather: "clear" },
@@ -157,7 +177,9 @@ describe("PATCHES 586-590: AI Meta-Architecture", () => {
         impactScore: 85,
         confidenceAtTime: 0.8,
         actualPerformance: 90,
-      });
+      };
+
+      const decisionId = await core.recordDecision(decisionRecord);
 
       expect(decisionId).toBeDefined();
       expect(decisionId).toContain("decision-");
@@ -167,7 +189,7 @@ describe("PATCHES 586-590: AI Meta-Architecture", () => {
       const core = new ReflectiveCore();
       
       // Record multiple decisions
-      await core.recordDecision({
+      const failureDecision: Omit<DecisionRecord, "id" | "timestamp"> = {
         missionId: "mission-1",
         decisionType: "route_planning",
         context: {},
@@ -177,9 +199,10 @@ describe("PATCHES 586-590: AI Meta-Architecture", () => {
         impactScore: 30,
         confidenceAtTime: 0.7,
         actualPerformance: 25,
-      });
+      };
+      await core.recordDecision(failureDecision);
 
-      await core.recordDecision({
+      const successDecision: Omit<DecisionRecord, "id" | "timestamp"> = {
         missionId: "mission-1",
         decisionType: "route_planning",
         context: {},
@@ -189,7 +212,8 @@ describe("PATCHES 586-590: AI Meta-Architecture", () => {
         impactScore: 90,
         confidenceAtTime: 0.9,
         actualPerformance: 95,
-      });
+      };
+      await core.recordDecision(successDecision);
 
       const report = await core.reflectOnMission("mission-1");
 
@@ -223,7 +247,7 @@ describe("PATCHES 586-590: AI Meta-Architecture", () => {
     it("should identify missed opportunities", async () => {
       const core = new ReflectiveCore();
       
-      await core.recordDecision({
+      const partialDecision: Omit<DecisionRecord, "id" | "timestamp"> = {
         missionId: "mission-3",
         decisionType: "resource_allocation",
         context: {},
@@ -233,12 +257,15 @@ describe("PATCHES 586-590: AI Meta-Architecture", () => {
         impactScore: 55,
         confidenceAtTime: 0.6,
         actualPerformance: 50,
-      });
+      };
+
+      await core.recordDecision(partialDecision);
 
       const report = await core.reflectOnMission("mission-3");
 
       const missedOpportunities = report.insights.filter(
-        i => i.insightType === "missed_opportunity"
+        (insight: (typeof report.insights)[number]) =>
+          insight.insightType === "missed_opportunity"
       );
       expect(missedOpportunities.length).toBeGreaterThan(0);
     });
@@ -272,7 +299,7 @@ describe("PATCHES 586-590: AI Meta-Architecture", () => {
         parentVersionId: null,
       });
 
-      await tracker.recordMetrics(version.versionId, {
+      const metrics: Omit<PerformanceMetrics, "versionId" | "timestamp"> = {
         accuracy: 85,
         precision: 82,
         recall: 88,
@@ -283,7 +310,9 @@ describe("PATCHES 586-590: AI Meta-Architecture", () => {
         confidenceCalibration: 75,
         resourceEfficiency: 70,
         sampleSize: 1000,
-      });
+      };
+
+      await tracker.recordMetrics(version.versionId, metrics);
 
       const timeline = tracker.getEvolutionTimeline();
       expect(timeline.metricsHistory.length).toBeGreaterThan(0);
@@ -307,7 +336,7 @@ describe("PATCHES 586-590: AI Meta-Architecture", () => {
         parentVersionId: v1.versionId,
       });
 
-      await tracker.recordMetrics(v1.versionId, {
+      const baselineMetrics: Omit<PerformanceMetrics, "versionId" | "timestamp"> = {
         accuracy: 80,
         precision: 78,
         recall: 82,
@@ -318,9 +347,11 @@ describe("PATCHES 586-590: AI Meta-Architecture", () => {
         confidenceCalibration: 70,
         resourceEfficiency: 65,
         sampleSize: 1000,
-      });
+      };
 
-      await tracker.recordMetrics(v2.versionId, {
+      await tracker.recordMetrics(v1.versionId, baselineMetrics);
+
+      const improvedMetrics: Omit<PerformanceMetrics, "versionId" | "timestamp"> = {
         accuracy: 90,
         precision: 88,
         recall: 92,
@@ -331,7 +362,9 @@ describe("PATCHES 586-590: AI Meta-Architecture", () => {
         confidenceCalibration: 82,
         resourceEfficiency: 78,
         sampleSize: 1000,
-      });
+      };
+
+      await tracker.recordMetrics(v2.versionId, improvedMetrics);
 
       const comparison = await tracker.compareVersions(v1.versionId, v2.versionId);
 

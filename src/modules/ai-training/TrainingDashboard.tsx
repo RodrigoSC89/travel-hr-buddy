@@ -9,10 +9,70 @@ import { Progress } from "@/components/ui/progress";
 import { Badge } from "@/components/ui/badge";
 import { getTrainingProgress } from "@/services/ai-training-engine";
 import type { LearningProgress } from "./types";
+import type { Database } from "@/integrations/supabase/types";
 
 interface TrainingDashboardProps {
   crewMemberId: string;
 }
+
+type CrewLearningProgressRow = Database["public"]["Tables"]["crew_learning_progress"]["Row"];
+
+type ProgressMetadata = Partial<{
+  totalQuizzesTaken: number;
+  totalQuizzesPassed: number;
+  averageScore: number;
+  lastUpdatedAt: string;
+  improvementRate: number;
+  weakAreas: string[];
+  strongAreas: string[];
+}>;
+
+const isRecord = (value: unknown): value is Record<string, unknown> => {
+  return typeof value === "object" && value !== null && !Array.isArray(value);
+};
+
+const toNumber = (value: unknown): number | undefined => {
+  return typeof value === "number" && Number.isFinite(value) ? value : undefined;
+};
+
+const toStringArray = (value: unknown): string[] => {
+  if (!Array.isArray(value)) return [];
+  return value.filter((item): item is string => typeof item === "string");
+};
+
+const extractProgressMetadata = (payload: CrewLearningProgressRow["completed_modules"]): ProgressMetadata => {
+  if (!isRecord(payload)) {
+    return {};
+  }
+
+  return payload as ProgressMetadata;
+};
+
+const mapRowToLearningProgress = (row: CrewLearningProgressRow): LearningProgress => {
+  const metadata = extractProgressMetadata(row.completed_modules);
+
+  const totalQuizzesTaken = toNumber(metadata.totalQuizzesTaken) ?? 0;
+  const totalQuizzesPassed = toNumber(metadata.totalQuizzesPassed) ?? 0;
+  const averageScore = toNumber(metadata.averageScore) ?? row.progress_percentage ?? 0;
+  const improvementRate = toNumber(metadata.improvementRate) ?? 0;
+  const weakAreas = toStringArray(metadata.weakAreas);
+  const strongAreas = toStringArray(metadata.strongAreas);
+  const lastTrainingDate =
+    typeof metadata.lastUpdatedAt === "string" && metadata.lastUpdatedAt
+      ? metadata.lastUpdatedAt
+      : row.last_activity_at ?? row.updated_at ?? row.created_at ?? new Date().toISOString();
+
+  return {
+    moduleType: row.topic,
+    totalQuizzesTaken,
+    totalQuizzesPassed,
+    averageScore,
+    lastTrainingDate,
+    improvementRate,
+    weakAreas,
+    strongAreas,
+  };
+};
 
 export default function TrainingDashboard({ crewMemberId }: TrainingDashboardProps) {
   const [progress, setProgress] = useState<LearningProgress[]>([]);
@@ -25,7 +85,8 @@ export default function TrainingDashboard({ crewMemberId }: TrainingDashboardPro
   const loadProgress = async () => {
     try {
       const data = await getTrainingProgress(crewMemberId);
-      setProgress(data as LearningProgress[]);
+      const normalized = data.map(mapRowToLearningProgress);
+      setProgress(normalized);
     } catch (error) {
       console.error("Error loading progress:", error);
     } finally {

@@ -3,7 +3,7 @@
  * Tests crew member operations and assignment logic
  */
 
-import { describe, it, expect, vi } from "vitest";
+import { describe, it, expect } from "vitest";
 
 // Mock crew member type
 interface CrewMember {
@@ -139,8 +139,17 @@ describe("Crew Management Module", () => {
         { crewId: "1", startDate: "2025-10-10", endDate: "2025-10-20" },
       ];
 
-      // Check if dates overlap
-      const hasConflict = true; // Simplified check
+      const hasConflict = schedules.some((current, index) =>
+        schedules.slice(index + 1).some(other => {
+          const currentStart = new Date(current.startDate).getTime();
+          const currentEnd = new Date(current.endDate).getTime();
+          const otherStart = new Date(other.startDate).getTime();
+          const otherEnd = new Date(other.endDate).getTime();
+
+          const overlaps = currentStart <= otherEnd && otherStart <= currentEnd;
+          return current.crewId === other.crewId && overlaps;
+        })
+      );
       expect(hasConflict).toBe(true);
     });
 

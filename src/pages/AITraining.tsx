@@ -37,10 +37,10 @@ const AITraining: React.FC = () => {
   const loadTrainingData = async (crewMemberId: string) => {
     try {
       setLoading(true);
-      const [sessionsData, statsData] = await Promise.all([
-        TrainingAIService.getTrainingSessions(crewMemberId),
-        TrainingAIService.getTrainingStats(crewMemberId),
-      ]);
+      const sessionsData = await TrainingAIService.getTrainingSessions(crewMemberId);
+      const statsData = await TrainingAIService.getTrainingStats(crewMemberId, {
+        sessions: sessionsData,
+      });
       setSessions(sessionsData);
       setStats(statsData);
     } catch (error) {

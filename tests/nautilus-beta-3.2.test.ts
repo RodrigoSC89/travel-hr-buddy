@@ -56,6 +56,15 @@ describe("Nautilus One Beta 3.2 - Core Modules", () => {
       });
 
       expect(typeof unsubscribe).toBe("function");
+
+      const sampleData = {
+        timestamp: new Date().toISOString(),
+        forecast: { "DP System": "Stable" },
+      } as const;
+
+      (engine as any).notify(sampleData);
+      expect(callbackCalled).toBe(true);
+      unsubscribe();
     });
 
     it("should update and retrieve config", () => {

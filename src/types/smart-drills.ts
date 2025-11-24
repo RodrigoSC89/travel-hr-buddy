@@ -1,19 +1,19 @@
 // PATCH 599: Smart Drills Types
 
 export type DrillType = 
-  | 'fire'
-  | 'man_overboard'
-  | 'abandon_ship'
-  | 'collision'
-  | 'flooding'
-  | 'medical_emergency'
-  | 'pollution'
-  | 'security_breach'
-  | 'other';
+  | "fire"
+  | "man_overboard"
+  | "abandon_ship"
+  | "collision"
+  | "flooding"
+  | "medical_emergency"
+  | "pollution"
+  | "security_breach"
+  | "other";
 
-export type DrillStatus = 'scheduled' | 'in_progress' | 'completed' | 'cancelled';
-export type ActionStatus = 'pending' | 'in_progress' | 'completed';
-export type ActionPriority = 'low' | 'medium' | 'high' | 'critical';
+export type DrillStatus = "scheduled" | "in_progress" | "completed" | "cancelled";
+export type ActionStatus = "pending" | "in_progress" | "completed";
+export type ActionPriority = "low" | "medium" | "high" | "critical";
 
 export interface SmartDrill {
   id: string;
@@ -31,7 +31,7 @@ export interface SmartDrill {
   updated_at: string;
   completed_at: string | null;
   ai_generated: boolean;
-  metadata: Record<string, any>;
+  metadata: Record<string, unknown>;
   recurrence_pattern: string | null;
 }
 
@@ -55,7 +55,7 @@ export interface DrillEvaluation {
   weaknesses: string[];
   recommendations: string[];
   corrective_plan: string | null;
-  ai_analysis: Record<string, any>;
+  ai_analysis: Record<string, unknown>;
   evaluator_id: string | null;
   created_at: string;
   updated_at: string;
@@ -79,7 +79,7 @@ export interface DrillScenarioRequest {
   drill_type: DrillType;
   vessel_id?: string;
   context?: string;
-  difficulty?: 'basic' | 'intermediate' | 'advanced';
+  difficulty?: "basic" | "intermediate" | "advanced";
 }
 
 export interface DrillScenarioResponse {
@@ -105,7 +105,7 @@ export interface DrillEvaluationResponse {
   weaknesses: string[];
   recommendations: string[];
   corrective_plan: string;
-  detailed_analysis: Record<string, any>;
+  detailed_analysis: Record<string, unknown>;
 }
 
 export interface DrillStatistics {

@@ -1,22 +1,22 @@
 // PATCH 601: LLM Reporting Engine Types
 
-export type ReportTemplateType = 'inspection' | 'risk' | 'tasks' | 'compliance' | 'custom';
-export type ReportFormat = 'pdf' | 'json' | 'xlsx';
-export type ReportFrequency = 'daily' | 'weekly' | 'monthly' | 'quarterly';
+export type ReportTemplateType = "inspection" | "risk" | "tasks" | "compliance" | "custom";
+export type ReportFormat = "pdf" | "json" | "xlsx";
+export type ReportFrequency = "daily" | "weekly" | "monthly" | "quarterly";
 
 export interface ReportTemplate {
   id: string;
   name: string;
   description: string | null;
   template_type: ReportTemplateType;
-  template_content: Record<string, any>;
+  template_content: Record<string, unknown>;
   sections: ReportSection[];
   variables: string[];
   is_active: boolean;
   created_by: string | null;
   created_at: string;
   updated_at: string;
-  metadata: Record<string, any>;
+  metadata: Record<string, unknown>;
 }
 
 export interface ReportSection {
@@ -31,10 +31,10 @@ export interface GeneratedReport {
   template_id: string | null;
   title: string;
   report_type: string;
-  content: Record<string, any>;
+  content: Record<string, unknown>;
   format: ReportFormat;
   file_url: string | null;
-  parameters: Record<string, any>;
+  parameters: Record<string, unknown>;
   generated_by: string | null;
   generated_at: string;
   period_start: string | null;
@@ -42,7 +42,7 @@ export interface GeneratedReport {
   vessel_id: string | null;
   module: string | null;
   ai_generated: boolean;
-  metadata: Record<string, any>;
+  metadata: Record<string, unknown>;
 }
 
 export interface ReportSchedule {
@@ -56,7 +56,7 @@ export interface ReportSchedule {
   time_of_day: string | null;
   recipients: string[];
   format: ReportFormat;
-  parameters: Record<string, any>;
+  parameters: Record<string, unknown>;
   is_active: boolean;
   last_run_at: string | null;
   next_run_at: string | null;
@@ -74,12 +74,12 @@ export interface ReportGenerationRequest {
   vessel_id?: string;
   module?: string;
   format?: ReportFormat;
-  parameters?: Record<string, any>;
+  parameters?: Record<string, unknown>;
 }
 
 export interface ReportGenerationResponse {
   report_id: string;
-  content: Record<string, any>;
+  content: Record<string, unknown>;
   file_url?: string;
 }
 

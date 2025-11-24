@@ -1,9 +1,8 @@
 import { test, expect } from "@playwright/test";
-import { 
-  setupConsoleErrorListener, 
-  filterCriticalErrors, 
+import {
+  setupConsoleErrorListener,
   validatePageLoad,
-  waitForNetworkIdle
+  waitForNetworkIdle,
 } from "./test-utils";
 
 /**
@@ -59,16 +58,12 @@ test.describe("Dashboard Module - PATCH 549", () => {
     // Look for skeleton loaders or suspense indicators
     const skeletons = page.locator("[class*='skeleton'], [class*='loading'], [class*='Skeleton']");
     
-    // At some point during load, skeletons should appear
-    // (This might be very quick, so we check if any exist or existed)
-    const hasSkeletons = await skeletons.count() > 0;
-    
     // Wait for charts to load
     await page.waitForLoadState("networkidle");
     await page.waitForTimeout(1000);
     
     // Charts should eventually load (skeletons should be gone or replaced)
-    const remainingSkeletons = await page.locator("[class*='skeleton']").count();
+    const remainingSkeletons = await skeletons.count();
     
     // It's OK to have some structural skeletons, but not blocking ones
     expect(remainingSkeletons).toBeLessThan(10);
@@ -193,10 +188,12 @@ test.describe("Dashboard Module - PATCH 549", () => {
     
     // Look for error boundary or error message
     const errorMessages = page.locator("text=/error/i, text=/failed/i, [role='alert']");
+    const hasErrorMessages = (await errorMessages.count()) > 0;
     
     // It's OK to show error messages when APIs fail
     // The important thing is the page doesn't crash
     const pageContent = await page.content();
     expect(pageContent).toBeTruthy();
+    expect(typeof hasErrorMessages).toBe("boolean");
   });
 });

@@ -6,14 +6,25 @@
 import { describe, it, expect, vi, beforeEach } from "vitest";
 import { render, screen, fireEvent } from "@testing-library/react";
 
+type ChecklistItem = {
+  id: string;
+  title: string;
+  description?: string;
+  completed: boolean;
+  children?: ChecklistItem[];
+  priority?: "low" | "medium" | "high";
+};
+
+type ChecklistAccordionProps = {
+  items: ChecklistItem[];
+  onItemChange: (id: string, checked: boolean) => void;
+};
+
 // Mock ChecklistAccordion component
 const MockChecklistAccordion = ({ 
   items, 
   onItemChange 
-}: { 
-  items: any[]; 
-  onItemChange: (id: string, checked: boolean) => void;
-}) => {
+}: ChecklistAccordionProps) => {
   return (
     <div data-testid="checklist-accordion">
       <h3>Checklist Items</h3>
@@ -35,7 +46,7 @@ const MockChecklistAccordion = ({
 };
 
 describe("ChecklistAccordion Component", () => {
-  const mockItems = [
+  const mockItems: ChecklistItem[] = [
     { id: "1", title: "Item 1", description: "Description 1", completed: false },
     { id: "2", title: "Item 2", description: "Description 2", completed: true },
     { id: "3", title: "Item 3", description: "Description 3", completed: false },
@@ -89,7 +100,7 @@ describe("ChecklistAccordion Component", () => {
   });
 
   it("should support nested checklist items", () => {
-    const nestedItems = [
+    const nestedItems: ChecklistItem[] = [
       { 
         id: "1", 
         title: "Parent Item", 
@@ -114,7 +125,7 @@ describe("ChecklistAccordion Component", () => {
   });
 
   it("should support search/filter functionality", () => {
-    const searchableItems = [
+    const searchableItems: ChecklistItem[] = [
       { id: "1", title: "Fire Safety Check", completed: false },
       { id: "2", title: "Life Saving Appliances", completed: false },
       { id: "3", title: "Navigation Equipment", completed: false },
@@ -131,7 +142,7 @@ describe("ChecklistAccordion Component", () => {
   });
 
   it("should support item priority/severity levels", () => {
-    const priorityItems = [
+    const priorityItems: ChecklistItem[] = [
       { id: "1", title: "Critical Item", priority: "high", completed: false },
       { id: "2", title: "Normal Item", priority: "medium", completed: false },
     ];

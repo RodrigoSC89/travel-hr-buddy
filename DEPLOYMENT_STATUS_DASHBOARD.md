@@ -13,6 +13,26 @@ Track and visualize the status of deployments across different environments and 
 - Automated merge status
 - Release notes
 
+## ✅ Latest Validation Snapshot — 2025-11-18
+
+| Check | Result | Notes |
+|-------|--------|-------|
+| `npm run type-check` | ✅ PASS | `tsc --noEmit` completed without errors. |
+| `npm run build` | ✅ PASS (warnings) | Vite build succeeded; see chunking observations below. |
+| `npm run lint` | ❌ FAIL (legacy debt) | Existing test suites still violate quote/no-unused-vars rules. |
+
+### Build Observations
+
+- Vite reported multiple mixed static/dynamic import patterns across AI modules (e.g., `sociocognitive-layer`, `empathy-core`, `predictive-engine`). These modules remain bundled into main chunks; evaluate whether dual imports are intentional or should be isolated for better code-splitting.
+- Several output chunks (e.g., `pages-main`, `vendors`, `ai-ml`) exceed the default 1000 kB warning threshold. Consider manual chunking, lighter shared dependencies, or more aggressive dynamic imports before production ship.
+- PWA generation succeeded (`generateSW` mode) with 108 precache entries totaling ~14.5 MB.
+
+### Outstanding Actions Before Promotion
+
+1. **Lint Remediation:** Large suite of historical tests (`tests/modules/lsa-ffa.test.ts`, `tests/pre-psc.test.tsx`, etc.) must be updated to double quotes and have unused symbols removed or disabled for CI to pass.
+2. **Module Split Review:** Confirm whether the AI subsystem’s hybrid import strategy is still required post ModuleHarness work. Align on either static or dynamic patterns to unlock real chunk savings.
+3. **Bundle Size Watchlist:** Track heavy assets (`pages-main`, `vendors`, `.wasm` bundles) during final QA; raise chunk limit via `build.chunkSizeWarningLimit` only if performance budgets are otherwise met.
+
 ## 🏗️ Architecture
 
 ### Components

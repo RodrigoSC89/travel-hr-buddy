@@ -180,8 +180,6 @@ test.describe("Login and Navigation Flow", () => {
 
   test("should handle keyboard navigation", async ({ page }) => {
     // Tab through focusable elements
-    const initialFocus = await page.evaluate(() => document.activeElement?.tagName);
-    
     await page.keyboard.press("Tab");
     await page.waitForTimeout(100);
     

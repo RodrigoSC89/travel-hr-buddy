@@ -5,16 +5,39 @@ import { describe, it, expect, vi, beforeEach } from "vitest";
  * Testing fleet operations and management
  */
 
+type FleetQueryResponse<T> = Promise<{ data: T; error: Error | null }>;
+
+type FleetQueryBuilder<T = unknown> = {
+  select: (...args: unknown[]) => FleetQueryResponse<T>;
+  insert: (...args: unknown[]) => FleetQueryResponse<T>;
+  update: (...args: unknown[]) => FleetQueryResponse<T>;
+  delete: (...args: unknown[]) => FleetQueryResponse<T>;
+  eq: (...args: unknown[]) => FleetQueryBuilder<T>;
+  order: (...args: unknown[]) => FleetQueryBuilder<T>;
+  limit: (...args: unknown[]) => FleetQueryBuilder<T>;
+};
+
+const createFleetQueryBuilder = <T = unknown>(
+  overrides?: Partial<FleetQueryBuilder<T>>
+): FleetQueryBuilder<T> => {
+  const builder = {} as FleetQueryBuilder<T>;
+
+  builder.select = vi.fn(() => Promise.resolve({ data: [] as T, error: null }));
+  builder.insert = vi.fn(() => Promise.resolve({ data: null as T, error: null }));
+  builder.update = vi.fn(() => Promise.resolve({ data: null as T, error: null }));
+  builder.delete = vi.fn(() => Promise.resolve({ data: null as T, error: null }));
+  builder.eq = vi.fn(() => builder);
+  builder.order = vi.fn(() => builder);
+  builder.limit = vi.fn(() => builder);
+
+  return Object.assign(builder, overrides);
+};
+
 const mockSupabaseClient = {
-  from: vi.fn(() => ({
-    select: vi.fn(() => Promise.resolve({ data: [], error: null })),
-    insert: vi.fn(() => Promise.resolve({ data: null, error: null })),
-    update: vi.fn(() => Promise.resolve({ data: null, error: null })),
-    delete: vi.fn(() => Promise.resolve({ data: null, error: null })),
-    eq: vi.fn(function(this: any) { return this; }),
-    order: vi.fn(function(this: any) { return this; }),
-    limit: vi.fn(function(this: any) { return this; }),
-  })),
+  from: vi.fn((table?: string) => {
+    void table;
+    return createFleetQueryBuilder();
+  }),
 };
 
 vi.mock("@/integrations/supabase/client", () => ({
@@ -33,16 +56,17 @@ describe("Fleet Manager Module", () => {
         { id: 2, name: "Vessel Beta", status: "maintenance", type: "tanker" },
       ];
 
-      mockSupabaseClient.from.mockReturnValueOnce({
+      const builder = createFleetQueryBuilder({
         select: vi.fn(() => Promise.resolve({ data: mockVessels, error: null })),
-        eq: vi.fn(function(this: any) { return this; }),
-        order: vi.fn(function(this: any) { return this; }),
       });
 
-      const result = await mockSupabaseClient.from("vessels").select("*");
+      mockSupabaseClient.from.mockReturnValueOnce(builder);
 
-      expect(result.data).toHaveLength(2);
-      expect(result.data).toEqual(mockVessels);
+      const result = await mockSupabaseClient.from("vessels").select("*");
+      const vessels = result.data as typeof mockVessels;
+
+      expect(vessels).toHaveLength(2);
+      expect(vessels).toEqual(mockVessels);
     });
 
     it("should add new vessel to fleet", async () => {
@@ -53,14 +77,16 @@ describe("Fleet Manager Module", () => {
         capacity: 5000,
       };
 
-      mockSupabaseClient.from.mockReturnValueOnce({
+      const builder = createFleetQueryBuilder({
         insert: vi.fn(() => Promise.resolve({ data: { id: 3, ...newVessel }, error: null })),
-        select: vi.fn(function(this: any) { return this; }),
       });
 
-      const result = await mockSupabaseClient.from("vessels").insert(newVessel);
+      mockSupabaseClient.from.mockReturnValueOnce(builder);
 
-      expect(result.data).toHaveProperty("id");
+      const result = await mockSupabaseClient.from("vessels").insert(newVessel);
+      const createdVessel = result.data as typeof newVessel & { id: number };
+
+      expect(createdVessel).toHaveProperty("id");
       expect(result.error).toBeNull();
     });
 
@@ -68,15 +94,16 @@ describe("Fleet Manager Module", () => {
       const vesselId = 1;
       const updates = { status: "maintenance" };
 
-      mockSupabaseClient.from.mockReturnValueOnce({
+      const builder = createFleetQueryBuilder({
         update: vi.fn(() => Promise.resolve({ data: { id: vesselId, ...updates }, error: null })),
-        eq: vi.fn(function(this: any) { return this; }),
-        select: vi.fn(function(this: any) { return this; }),
       });
 
-      const result = await mockSupabaseClient.from("vessels").update(updates);
+      mockSupabaseClient.from.mockReturnValueOnce(builder);
 
-      expect(result.data).toEqual({ id: vesselId, ...updates });
+      const result = await mockSupabaseClient.from("vessels").update(updates);
+      const updatedVessel = result.data as typeof updates & { id: number };
+
+      expect(updatedVessel).toEqual({ id: vesselId, ...updates });
       expect(result.error).toBeNull();
     });
   });
