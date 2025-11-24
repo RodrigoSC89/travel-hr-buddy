@@ -1,3 +1,4 @@
+/// <reference lib="deno.ns" />
 // Terrastar Ionosphere Processor Edge Function
 // Process and store ionospheric correction data
 import { serve } from "https://deno.land/std@0.168.0/http/server.ts"

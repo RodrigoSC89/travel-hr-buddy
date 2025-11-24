@@ -54,8 +54,8 @@ serve(async (req: Request): Promise<Response> => {
   log('info', 'Drill scenario request received', { requestId })
 
   try {
-  const body = await req.json() as DrillScenarioRequest
-  validateRequestBody(body as Record<string, unknown>, ['drill_type'])
+    const body = await req.json() as DrillScenarioRequest
+    validateRequestBody(body as unknown as Record<string, unknown>, ['drill_type'])
     
     const { drill_type, vessel_id, context, difficulty = 'intermediate' } = body
 

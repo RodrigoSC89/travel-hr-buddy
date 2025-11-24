@@ -65,7 +65,7 @@ serve(async (req: Request): Promise<Response> => {
 
   try {
   const body = await req.json() as GenerateReportRequest
-  validateRequestBody(body as Record<string, unknown>, ['report_type', 'title'])
+    validateRequestBody(body as unknown as Record<string, unknown>, ['report_type', 'title'])
     
     const { 
       template_id, 

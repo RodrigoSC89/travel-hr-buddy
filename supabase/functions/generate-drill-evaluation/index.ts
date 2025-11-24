@@ -73,8 +73,8 @@ serve(async (req: Request): Promise<Response> => {
 
   try {
     // Parse and validate request body
-  const body = await req.json() as DrillEvaluationRequest
-  validateRequestBody(body as Record<string, unknown>, ['drill_id', 'responses'])
+    const body = await req.json() as DrillEvaluationRequest
+    validateRequestBody(body as unknown as Record<string, unknown>, ['drill_id', 'responses'])
     
     const { drill_id, responses, observations } = body
 

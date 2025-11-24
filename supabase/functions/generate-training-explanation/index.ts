@@ -50,7 +50,7 @@ serve(async (req: Request): Promise<Response> => {
 
   try {
   const body = safeJSONParse<TrainingExplanationRequest>(await req.text())
-  validateRequestBody(body as Record<string, unknown>, ['non_conformity', 'module'])
+    validateRequestBody(body as unknown as Record<string, unknown>, ['non_conformity', 'module'])
 
     const { non_conformity, module, context } = body
 
