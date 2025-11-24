@@ -1,4 +1,3 @@
-// @ts-nocheck
 /**
  * PATCH 134.0 - Checklist Autocompletion with AI
  * Enables AI-powered auto-completion for checklists based on historical patterns

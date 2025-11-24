@@ -1,4 +1,3 @@
-// @ts-nocheck
 /**
  * PATCH 135.0 - AI Self-Healing + Logs Analyzer
  * Monitors system logs, detects anomalies, and suggests automated fixes

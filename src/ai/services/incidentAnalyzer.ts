@@ -1,4 +1,4 @@
-// @ts-nocheck
+// @ts-nocheck - dp_incidents missing ai_analysis and risk_level columns
 /**
  * PATCH 133.0 - AI-based Incident Analyzer
  * Analyzes incidents and provides automated diagnosis, risk assessment, and recommendations
