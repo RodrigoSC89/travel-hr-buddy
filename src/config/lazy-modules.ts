@@ -1,4 +1,3 @@
-// @ts-nocheck
 /**
  * Configuração de Lazy Loading Otimizado
  * Módulos pesados que causam travamento são carregados sob demanda
@@ -18,9 +17,12 @@ export const lazyWithRetry = <T extends ComponentType<any>>(
         return { default: fallback };
       }
       // Retry após 2 segundos
-      return new Promise((resolve) => {
+      return new Promise<{ default: T }>((resolve) => {
         setTimeout(() => {
-          resolve(importFn());
+          importFn().then(resolve).catch(() => {
+            // Se falhar novamente, retorna um componente vazio
+            resolve({ default: (() => null) as T });
+          });
         }, 2000);
       });
     })
