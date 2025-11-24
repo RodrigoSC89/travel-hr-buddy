@@ -1,27 +1,67 @@
 /**
  * useAuditLog Hook
  * PATCH 123.0 - Audit Trail por Role
- * 
+ *
  * Hook for automatically logging user actions with role context
  */
 
-import React, { useCallback } from "react";
+import { useCallback, useEffect, useMemo, useRef } from "react";
+import type { ComponentType } from "react";
 import { supabase } from "@/integrations/supabase/client";
 import { useAuth } from "@/contexts/AuthContext";
+import type { Database, Json } from "@/integrations/supabase/types";
+
+type LogUserActionArgs = Database["public"]["Functions"]["log_user_action"]["Args"];
+type LogUserActionReturn = Database["public"]["Functions"]["log_user_action"]["Returns"];
+type AuditLogStatus = "success" | "failure" | "error";
+type JsonObject = Record<string, Json | undefined>;
 
 interface LogActionParams {
-  action: string;
-  resourceType: string;
-  resourceId?: string | null;
-  status?: "success" | "failure" | "error";
-  details?: Record<string, any>;
+  action: LogUserActionArgs["p_action"];
+  resourceType: LogUserActionArgs["p_resource_type"];
+  resourceId?: LogUserActionArgs["p_resource_id"] | null;
+  status?: AuditLogStatus;
+  details?: Json;
 }
+
+const isJsonObject = (value: Json | undefined): value is JsonObject => {
+  return typeof value === "object" && value !== null && !Array.isArray(value);
+};
+
+const normalizeDetails = (details?: Json): JsonObject => {
+  if (!details) {
+    return {};
+  }
+
+  if (isJsonObject(details)) {
+    return Object.fromEntries(
+      Object.entries(details).filter(([, val]) => val !== undefined)
+    ) as JsonObject;
+  }
+
+  return { value: details };
+};
 
 /**
  * Hook to log user actions with audit trail
  */
 export const useAuditLog = () => {
   const { user } = useAuth();
+
+  const userContextDetails = useMemo<JsonObject>(() => {
+    if (!user) {
+      return {};
+    }
+
+    const userMetadata = (user.app_metadata as Record<string, Json | undefined>) || {};
+    const preferredRole = userMetadata?.role || user.user_metadata?.role;
+
+    return {
+      user_id: user.id,
+      user_email: user.email ?? undefined,
+      user_role: typeof preferredRole === "string" ? preferredRole : undefined,
+    } satisfies JsonObject;
+  }, [user]);
 
   /**
    * Log a user action to the audit trail
@@ -31,20 +71,30 @@ export const useAuditLog = () => {
     resourceType,
     resourceId,
     status = "success",
-    details = {},
+    details,
   }: LogActionParams) => {
     if (!user) {
       console.warn("Cannot log action: User not authenticated");
       return null;
     }
 
+    if (!action || !resourceType) {
+      console.warn("Cannot log action: Missing required fields", { action, resourceType });
+      return null;
+    }
+
+    const mergedDetails = {
+      ...normalizeDetails(details),
+      ...userContextDetails,
+    } satisfies JsonObject;
+
     try {
-      const { data, error } = await supabase.rpc("log_user_action", {
+      const { data, error } = await supabase.rpc<LogUserActionReturn>("log_user_action", {
         p_action: action,
         p_resource_type: resourceType,
         p_resource_id: resourceId ?? undefined,
         p_status: status,
-        p_details: details,
+        p_details: mergedDetails,
       });
 
       if (error) {
@@ -57,7 +107,7 @@ export const useAuditLog = () => {
       console.error("Error logging action:", error);
       return null;
     }
-  }, [user]);
+  }, [user, userContextDetails]);
 
   /**
    * Log a successful action
@@ -66,7 +116,7 @@ export const useAuditLog = () => {
     action: string,
     resourceType: string,
     resourceId?: string | null,
-    details?: Record<string, any>
+    details?: Record<string, unknown>
   ) => {
     return logAction({ action, resourceType, resourceId, status: "success", details });
   }, [logAction]);
@@ -78,7 +128,7 @@ export const useAuditLog = () => {
     action: string,
     resourceType: string,
     resourceId?: string | null,
-    details?: Record<string, any>
+    details?: Record<string, unknown>
   ) => {
     return logAction({ action, resourceType, resourceId, status: "failure", details });
   }, [logAction]);
@@ -91,10 +141,10 @@ export const useAuditLog = () => {
     resourceType: string,
     error: Error | string,
     resourceId?: string | null,
-    details?: Record<string, any>
+    details?: Json
   ) => {
-    const errorDetails = {
-      ...details,
+    const errorDetails: JsonObject = {
+      ...normalizeDetails(details),
       error: typeof error === "string" ? error : error.message,
       stack: typeof error === "string" ? undefined : error.stack,
     };
@@ -114,32 +164,53 @@ export const useAuditLog = () => {
  * Note: For TypeScript compatibility, consider using the useAuditLog hook directly
  * instead of this HOC in your components.
  */
-export const withAuditLog = (
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  Component: React.ComponentType<any>,
+export function withAuditLog<Props extends Record<string, unknown>>(
+  Component: ComponentType<Props>,
   config: {
     action: string;
     resourceType: string;
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    getResourceId?: (props: any) => string | undefined;
+    getResourceId?: (props: Props) => string | undefined;
   }
-) => {
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  const AuditLogWrapper = (props: any) => {
-    const { logAction } = useAuditLog();
+) {
+  const { action, resourceType, getResourceId } = config;
 
-    React.useEffect(() => {
-      const resourceId = config.getResourceId ? config.getResourceId(props) : undefined;
-      logAction({
-        action: config.action,
-        resourceType: config.resourceType,
+  const AuditLogWrapper = (props: Props) => {
+    const { logAction } = useAuditLog();
+    const lastPayloadRef = useRef<{ action: string; resourceType: string; resourceId?: string }>();
+    const resourceId = useMemo(
+      () => (getResourceId ? getResourceId(props) : undefined),
+      [getResourceId, props]
+    );
+
+    useEffect(() => {
+      const payload = {
+        action,
+        resourceType,
         resourceId,
-        status: "success",
-      });
-    }, [logAction, props]);
+        status: "success" as AuditLogStatus,
+      };
+
+      const lastPayload = lastPayloadRef.current;
+      if (
+        lastPayload &&
+        lastPayload.action === payload.action &&
+        lastPayload.resourceType === payload.resourceType &&
+        lastPayload.resourceId === payload.resourceId
+      ) {
+        return;
+      }
+
+      lastPayloadRef.current = {
+        action: payload.action,
+        resourceType: payload.resourceType,
+        resourceId: payload.resourceId,
+      };
+
+      logAction(payload);
+    }, [action, resourceType, logAction, resourceId]);
 
     return <Component {...props} />;
   };
 
   return AuditLogWrapper;
-};
+}
