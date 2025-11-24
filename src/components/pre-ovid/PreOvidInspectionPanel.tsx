@@ -1,4 +1,3 @@
-// @ts-nocheck
 /**
  * Pre-OVID Inspection Panel Component
  * PATCH 650 - Pre-OVID Inspection Module

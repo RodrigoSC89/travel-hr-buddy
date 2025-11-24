@@ -1,4 +1,3 @@
-// @ts-nocheck
 /**
  * PATCH 369 - Voice Assistant - Real Processing with Wake Word
  * Voice assistant with wake word detection, transcription, and TTS response
