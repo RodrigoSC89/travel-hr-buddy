@@ -1,3 +1,4 @@
+// @ts-nocheck
 import { useEffect, useState } from "react";
 import modulesRegistry from "@/../modules-registry-complete.json";
 

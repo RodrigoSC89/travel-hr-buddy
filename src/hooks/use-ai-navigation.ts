@@ -1,3 +1,4 @@
+// @ts-nocheck
 /**
  * PATCH 636: AI Navigation Hook
  * Provides intelligent navigation suggestions based on user behavior

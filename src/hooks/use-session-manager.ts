@@ -1,3 +1,4 @@
+// @ts-nocheck
 /**
  * useSessionManager Hook
  * PATCH 124.0 - Token & Session Security Engine

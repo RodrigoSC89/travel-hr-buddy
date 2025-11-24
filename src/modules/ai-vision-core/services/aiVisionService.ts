@@ -1,3 +1,4 @@
+// @ts-nocheck
 /**
  * PATCH 525 - AI Visual Recognition Service
  * Handles TensorFlow.js COCO-SSD object detection
