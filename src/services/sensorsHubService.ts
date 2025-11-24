@@ -1,4 +1,3 @@
-// @ts-nocheck
 // PATCH-601: Removed @ts-nocheck directive
 /**
  * PATCH 538 - Sensors Hub Service

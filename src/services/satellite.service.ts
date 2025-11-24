@@ -1,4 +1,3 @@
-// @ts-nocheck
 // PATCH-601: Removed @ts-nocheck directive
 /**
  * PATCH 350: Satellite Tracker v2 - Service Layer

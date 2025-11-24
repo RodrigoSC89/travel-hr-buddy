@@ -1,4 +1,3 @@
-// @ts-nocheck
 /**
  * PATCH 578 - Multilayer Reaction Mapper Component
  * Interactive visualization of multi-layer reaction system

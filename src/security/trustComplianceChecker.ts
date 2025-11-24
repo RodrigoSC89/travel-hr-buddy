@@ -1,4 +1,3 @@
-// @ts-nocheck
 /**
  * PATCH 229 - Trust & Compliance Checker
  * Verification system for trust and compliance before accepting external inputs
