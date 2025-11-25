@@ -1,4 +1,3 @@
-// @ts-nocheck
 /**
  * PATCH 367 - Fleet Management - Telemetry & Maintenance Alerts
  * Real-time fleet telemetry monitoring with predictive maintenance

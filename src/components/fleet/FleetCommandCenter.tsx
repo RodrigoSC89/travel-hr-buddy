@@ -1,4 +1,3 @@
-// @ts-nocheck
 /**
  * PATCH 168.0: Nautilus Fleet Command Center (FCC)
  * Central dashboard for fleet-wide vessel monitoring and mission control
