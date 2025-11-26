@@ -13,7 +13,7 @@ export class RiskOpsService {
    * Get all risks with optional filtering
    */
   static async getRisks(vesselId?: string, module?: string): Promise<RiskOperation[]> {
-    let query = supabase
+    let query = (supabase as any)
       .from('risk_operations')
       .select('*')
       .order('risk_score', { ascending: false });
@@ -39,7 +39,7 @@ export class RiskOpsService {
    * Create a new risk
    */
   static async createRisk(risk: Partial<RiskOperation>): Promise<RiskOperation> {
-    const { data, error } = await supabase
+    const { data, error } = await (supabase as any)
       .from('risk_operations')
       .insert(risk)
       .select()
@@ -57,7 +57,7 @@ export class RiskOpsService {
    * Update a risk
    */
   static async updateRisk(id: string, updates: Partial<RiskOperation>): Promise<RiskOperation> {
-    const { data, error } = await supabase
+    const { data, error } = await (supabase as any)
       .from('risk_operations')
       .update(updates)
       .eq('id', id)
@@ -76,7 +76,7 @@ export class RiskOpsService {
    * Delete a risk
    */
   static async deleteRisk(id: string): Promise<void> {
-    const { error } = await supabase
+    const { error } = await (supabase as any)
       .from('risk_operations')
       .delete()
       .eq('id', id);
@@ -91,7 +91,7 @@ export class RiskOpsService {
    * Get risk assessments
    */
   static async getRiskAssessments(riskId: string): Promise<RiskAssessment[]> {
-    const { data, error } = await supabase
+    const { data, error } = await (supabase as any)
       .from('risk_assessments')
       .select('*')
       .eq('risk_id', riskId)
@@ -111,7 +111,7 @@ export class RiskOpsService {
   static async createRiskAssessment(
     assessment: Partial<RiskAssessment>
   ): Promise<RiskAssessment> {
-    const { data, error } = await supabase
+    const { data, error } = await (supabase as any)
       .from('risk_assessments')
       .insert(assessment)
       .select()
@@ -132,33 +132,33 @@ export class RiskOpsService {
     vesselId?: string,
     module?: string
   ): Promise<RiskStatistics> {
-    const { data, error } = await supabase.rpc('get_risk_statistics', {
+    const { data, error } = await (supabase.rpc('get_risk_statistics', {
       p_vessel_id: vesselId || null,
       p_module: module || null,
-    });
+    }) as any);
 
     if (error) {
       console.error('Error fetching risk statistics:', error);
       throw error;
     }
 
-    return data;
+    return data as RiskStatistics;
   }
 
   /**
    * Get risk heatmap data
    */
   static async getRiskHeatmap(vesselId?: string): Promise<RiskHeatmapCell[]> {
-    const { data, error } = await supabase.rpc('get_risk_heatmap', {
+    const { data, error } = await (supabase.rpc('get_risk_heatmap', {
       p_vessel_id: vesselId || null,
-    });
+    }) as any);
 
     if (error) {
       console.error('Error fetching risk heatmap:', error);
       throw error;
     }
 
-    return data || [];
+    return (data || []) as RiskHeatmapCell[];
   }
 
   /**

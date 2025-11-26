@@ -1,4 +1,3 @@
-/// <reference lib="deno.ns" />
 /**
  * Supabase Edge Function: Space Weather Status
  * 

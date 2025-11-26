@@ -579,7 +579,7 @@ export async function recordDrillResponse(
       strengths: toJson(response.strengths),
     };
 
-    const { error } = await smartDrillsClient.from("drill_responses").insert(payload);
+    const { error } = await smartDrillsClient.from("drill_responses").insert(payload as any);
 
     if (error) {
       throw new Error(`Error recording drill response: ${error.message}`);
@@ -782,7 +782,7 @@ Format as JSON array:
 
     const { error: insertError } = await smartDrillsClient
       .from("drill_corrective_actions")
-      .insert(inserts);
+      .insert(inserts as any);
 
     if (insertError) {
       throw new Error(`Failed to store corrective actions: ${insertError.message}`);

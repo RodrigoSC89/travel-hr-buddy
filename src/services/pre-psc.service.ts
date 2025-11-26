@@ -85,7 +85,7 @@ class PrePSCService {
         inspection_type: inspection.inspection_type || "self-assessment",
       };
 
-      const { data, error } = await supabase
+      const { data, error } = await (supabase as any)
         .from("pre_psc_inspections")
         .insert(inspectionData)
         .select()
@@ -105,7 +105,7 @@ class PrePSCService {
    */
   async getInspection(inspectionId: string): Promise<PrePSCInspection> {
     try {
-      const { data, error } = await supabase
+      const { data, error } = await (supabase as any)
         .from("pre_psc_inspections")
         .select("*")
         .eq("id", inspectionId)
@@ -129,7 +129,7 @@ class PrePSCService {
     offset?: number;
   }): Promise<PrePSCInspection[]> {
     try {
-      let query = supabase
+      let query = (supabase as any)
         .from("pre_psc_inspections")
         .select("*")
         .order("inspection_date", { ascending: false });
@@ -165,7 +165,7 @@ class PrePSCService {
    */
   async updateInspection(inspectionId: string, updates: Partial<PrePSCInspection>): Promise<PrePSCInspection> {
     try {
-      const { data, error } = await supabase
+      const { data, error } = await (supabase as any)
         .from("pre_psc_inspections")
         .update(updates)
         .eq("id", inspectionId)
@@ -186,7 +186,7 @@ class PrePSCService {
    */
   async deleteInspection(inspectionId: string): Promise<void> {
     try {
-      const { error } = await supabase
+      const { error } = await (supabase as any)
         .from("pre_psc_inspections")
         .delete()
         .eq("id", inspectionId);
@@ -204,7 +204,7 @@ class PrePSCService {
    */
   async createChecklistItem(item: PrePSCChecklistItem): Promise<PrePSCChecklistItem> {
     try {
-      const { data, error } = await supabase
+      const { data, error } = await (supabase as any)
         .from("pre_psc_checklist_items")
         .insert(item)
         .select()
@@ -223,7 +223,7 @@ class PrePSCService {
    */
   async createChecklistItems(items: PrePSCChecklistItem[]): Promise<PrePSCChecklistItem[]> {
     try {
-      const { data, error } = await supabase
+      const { data, error } = await (supabase as any)
         .from("pre_psc_checklist_items")
         .insert(items)
         .select();
@@ -241,7 +241,7 @@ class PrePSCService {
    */
   async getChecklistItems(inspectionId: string): Promise<PrePSCChecklistItem[]> {
     try {
-      const { data, error } = await supabase
+      const { data, error } = await (supabase as any)
         .from("pre_psc_checklist_items")
         .select("*")
         .eq("inspection_id", inspectionId)
@@ -260,7 +260,7 @@ class PrePSCService {
    */
   async updateChecklistItem(itemId: string, updates: Partial<PrePSCChecklistItem>): Promise<PrePSCChecklistItem> {
     try {
-      const { data, error } = await supabase
+      const { data, error } = await (supabase as any)
         .from("pre_psc_checklist_items")
         .update(updates)
         .eq("id", itemId)
@@ -281,14 +281,14 @@ class PrePSCService {
   async getInspectionStats(): Promise<InspectionStats> {
     try {
       // Get all inspections
-      const { data: inspections, error: inspectionsError } = await supabase
+      const { data: inspections, error: inspectionsError } = await (supabase as any)
         .from("pre_psc_inspections")
         .select("id, status, total_score");
 
       if (inspectionsError) throw inspectionsError;
 
       // Get critical items
-      const { data: criticalItems, error: criticalError } = await supabase
+      const { data: criticalItems, error: criticalError } = await (supabase as any)
         .from("pre_psc_checklist_items")
         .select("id")
         .eq("action_priority", "critical");
@@ -296,7 +296,7 @@ class PrePSCService {
       if (criticalError) throw criticalError;
 
       // Get non-compliant items
-      const { data: nonCompliantItems, error: nonCompliantError } = await supabase
+      const { data: nonCompliantItems, error: nonCompliantError } = await (supabase as any)
         .from("pre_psc_checklist_items")
         .select("id")
         .eq("status", "non_compliant");

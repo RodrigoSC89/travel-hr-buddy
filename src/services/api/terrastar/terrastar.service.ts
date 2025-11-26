@@ -170,7 +170,7 @@ export async function requestPositionCorrection(
     // Store correction in database
     await supabase
       .from('terrastar_corrections')
-      .insert(correction);
+      .insert(correction as any);
 
     return correction;
   } catch (error) {
@@ -214,7 +214,7 @@ export async function subscribeToIonosphericAlerts(
     const data = await response.json();
 
     // Store subscription
-    await supabase
+    await (supabase as any)
       .from('terrastar_alert_subscriptions')
       .insert({
         vessel_id: vesselId,
@@ -235,7 +235,7 @@ export async function subscribeToIonosphericAlerts(
  */
 export async function getActiveAlerts(vesselId: string): Promise<TerrastarAlert[]> {
   try {
-    const { data: alerts, error } = await supabase
+    const { data: alerts, error } = await (supabase as any)
       .from('terrastar_alerts')
       .select('*')
       .eq('vessel_id', vesselId)
@@ -257,7 +257,7 @@ export async function getActiveAlerts(vesselId: string): Promise<TerrastarAlert[
  */
 export async function acknowledgeAlert(alertId: string): Promise<boolean> {
   try {
-    const { error } = await supabase
+    const { error } = await (supabase as any)
       .from('terrastar_alerts')
       .update({ acknowledged: true })
       .eq('id', alertId);

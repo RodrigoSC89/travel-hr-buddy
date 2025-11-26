@@ -14,7 +14,7 @@ export class ReportingEngineService {
    * Get all report templates
    */
   static async getTemplates(): Promise<ReportTemplate[]> {
-    const { data, error } = await supabase
+    const { data, error } = await (supabase as any)
       .from('report_templates')
       .select('*')
       .eq('is_active', true)
@@ -32,7 +32,7 @@ export class ReportingEngineService {
    * Create a report template
    */
   static async createTemplate(template: Partial<ReportTemplate>): Promise<ReportTemplate> {
-    const { data, error } = await supabase
+    const { data, error } = await (supabase as any)
       .from('report_templates')
       .insert(template)
       .select()
@@ -53,7 +53,7 @@ export class ReportingEngineService {
     id: string,
     updates: Partial<ReportTemplate>
   ): Promise<ReportTemplate> {
-    const { data, error } = await supabase
+    const { data, error } = await (supabase as any)
       .from('report_templates')
       .update(updates)
       .eq('id', id)
@@ -72,7 +72,7 @@ export class ReportingEngineService {
    * Get generated reports
    */
   static async getReports(): Promise<GeneratedReport[]> {
-    const { data, error } = await supabase
+    const { data, error } = await (supabase as any)
       .from('generated_reports')
       .select('*')
       .order('generated_at', { ascending: false })
@@ -90,7 +90,7 @@ export class ReportingEngineService {
    * Get a specific report
    */
   static async getReport(id: string): Promise<GeneratedReport> {
-    const { data, error } = await supabase
+    const { data, error } = await (supabase as any)
       .from('generated_reports')
       .select('*')
       .eq('id', id)
@@ -126,7 +126,7 @@ export class ReportingEngineService {
    * Get report schedules
    */
   static async getSchedules(): Promise<ReportSchedule[]> {
-    const { data, error } = await supabase
+    const { data, error } = await (supabase as any)
       .from('report_schedules')
       .select('*')
       .order('name', { ascending: true });
@@ -143,7 +143,7 @@ export class ReportingEngineService {
    * Create a report schedule
    */
   static async createSchedule(schedule: Partial<ReportSchedule>): Promise<ReportSchedule> {
-    const { data, error } = await supabase
+    const { data, error } = await (supabase as any)
       .from('report_schedules')
       .insert(schedule)
       .select()
@@ -164,7 +164,7 @@ export class ReportingEngineService {
     id: string,
     updates: Partial<ReportSchedule>
   ): Promise<ReportSchedule> {
-    const { data, error } = await supabase
+    const { data, error } = await (supabase as any)
       .from('report_schedules')
       .update(updates)
       .eq('id', id)
@@ -183,7 +183,7 @@ export class ReportingEngineService {
    * Delete a schedule
    */
   static async deleteSchedule(id: string): Promise<void> {
-    const { error } = await supabase
+    const { error } = await (supabase as any)
       .from('report_schedules')
       .delete()
       .eq('id', id);
@@ -198,14 +198,14 @@ export class ReportingEngineService {
    * Get report statistics
    */
   static async getStatistics(): Promise<ReportStatistics> {
-    const { data, error } = await supabase.rpc('get_report_statistics');
+    const { data, error } = await (supabase.rpc('get_report_statistics') as any);
 
     if (error) {
       console.error('Error fetching statistics:', error);
       throw error;
     }
 
-    return data;
+    return data as ReportStatistics;
   }
 
   /**
