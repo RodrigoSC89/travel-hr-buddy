@@ -67,7 +67,7 @@ const DEFAULT_CONFIDENCE_SCORE = 85;
 class MLCInspectionService {
   // Inspections
   async getInspections(): Promise<MLCInspection[]> {
-    const { data, error } = await supabase
+    const { data, error } = await (supabase as any)
       .from("mlc_inspections")
       .select("*")
       .order("inspection_date", { ascending: false });
@@ -77,7 +77,7 @@ class MLCInspectionService {
   }
 
   async getInspectionById(id: string): Promise<MLCInspection | null> {
-    const { data, error } = await supabase
+    const { data, error } = await (supabase as any)
       .from("mlc_inspections")
       .select("*")
       .eq("id", id)
@@ -88,7 +88,7 @@ class MLCInspectionService {
   }
 
   async createInspection(inspection: Partial<MLCInspection>): Promise<MLCInspection> {
-    const { data, error } = await supabase
+    const { data, error } = await (supabase as any)
       .from("mlc_inspections")
       .insert(inspection)
       .select()
@@ -99,7 +99,7 @@ class MLCInspectionService {
   }
 
   async updateInspection(id: string, updates: Partial<MLCInspection>): Promise<MLCInspection> {
-    const { data, error } = await supabase
+    const { data, error } = await (supabase as any)
       .from("mlc_inspections")
       .update({ ...updates, updated_at: new Date().toISOString() })
       .eq("id", id)
@@ -111,7 +111,7 @@ class MLCInspectionService {
   }
 
   async deleteInspection(id: string): Promise<void> {
-    const { error } = await supabase
+    const { error } = await (supabase as any)
       .from("mlc_inspections")
       .delete()
       .eq("id", id);
@@ -121,7 +121,7 @@ class MLCInspectionService {
 
   // Findings
   async getFindings(inspectionId: string): Promise<MLCFinding[]> {
-    const { data, error } = await supabase
+    const { data, error } = await (supabase as any)
       .from("mlc_findings")
       .select("*")
       .eq("inspection_id", inspectionId)
@@ -132,7 +132,7 @@ class MLCInspectionService {
   }
 
   async createFinding(finding: Partial<MLCFinding>): Promise<MLCFinding> {
-    const { data, error } = await supabase
+    const { data, error } = await (supabase as any)
       .from("mlc_findings")
       .insert(finding)
       .select()
@@ -143,7 +143,7 @@ class MLCInspectionService {
   }
 
   async updateFinding(id: string, updates: Partial<MLCFinding>): Promise<MLCFinding> {
-    const { data, error } = await supabase
+    const { data, error } = await (supabase as any)
       .from("mlc_findings")
       .update({ ...updates, updated_at: new Date().toISOString() })
       .eq("id", id)
@@ -155,7 +155,7 @@ class MLCInspectionService {
   }
 
   async deleteFinding(id: string): Promise<void> {
-    const { error } = await supabase
+    const { error } = await (supabase as any)
       .from("mlc_findings")
       .delete()
       .eq("id", id);
@@ -165,7 +165,7 @@ class MLCInspectionService {
 
   // Evidences
   async getEvidences(inspectionId: string): Promise<MLCEvidence[]> {
-    const { data, error } = await supabase
+    const { data, error } = await (supabase as any)
       .from("mlc_evidences")
       .select("*")
       .eq("inspection_id", inspectionId)
@@ -176,7 +176,7 @@ class MLCInspectionService {
   }
 
   async uploadEvidence(evidence: Partial<MLCEvidence>): Promise<MLCEvidence> {
-    const { data, error } = await supabase
+    const { data, error } = await (supabase as any)
       .from("mlc_evidences")
       .insert(evidence)
       .select()
@@ -187,7 +187,7 @@ class MLCInspectionService {
   }
 
   async deleteEvidence(id: string): Promise<void> {
-    const { error } = await supabase
+    const { error } = await (supabase as any)
       .from("mlc_evidences")
       .delete()
       .eq("id", id);
@@ -197,7 +197,7 @@ class MLCInspectionService {
 
   // AI Reports
   async getAIReport(inspectionId: string): Promise<MLCAIReport | null> {
-    const { data, error } = await supabase
+    const { data, error } = await (supabase as any)
       .from("mlc_ai_reports")
       .select("*")
       .eq("inspection_id", inspectionId)
@@ -249,7 +249,7 @@ class MLCInspectionService {
     }
 
     // Create AI report
-    const { data, error } = await supabase
+    const { data, error } = await (supabase as any)
       .from("mlc_ai_reports")
       .insert({
         inspection_id: inspectionId,
@@ -277,13 +277,13 @@ class MLCInspectionService {
 
   // Statistics
   async getInspectionStats() {
-    const { data: inspections, error: inspectionsError } = await supabase
+    const { data: inspections, error: inspectionsError } = await (supabase as any)
       .from("mlc_inspections")
       .select("id, status, compliance_score");
     
     if (inspectionsError) throw inspectionsError;
 
-    const { data: findings, error: findingsError } = await supabase
+    const { data: findings, error: findingsError } = await (supabase as any)
       .from("mlc_findings")
       .select("id, compliance, severity");
     
@@ -291,14 +291,14 @@ class MLCInspectionService {
 
     return {
       totalInspections: inspections?.length || 0,
-      draftInspections: inspections?.filter(i => i.status === "draft").length || 0,
-      submittedInspections: inspections?.filter(i => i.status === "submitted").length || 0,
+      draftInspections: inspections?.filter((i: any) => i.status === "draft").length || 0,
+      submittedInspections: inspections?.filter((i: any) => i.status === "submitted").length || 0,
       averageCompliance: inspections?.length 
-        ? Math.round(inspections.reduce((acc, i) => acc + (i.compliance_score || 0), 0) / inspections.length)
+        ? Math.round(inspections.reduce((acc: any, i: any) => acc + (i.compliance_score || 0), 0) / inspections.length)
         : 0,
       totalFindings: findings?.length || 0,
-      criticalFindings: findings?.filter(f => f.severity === "critical").length || 0,
-      nonCompliantFindings: findings?.filter(f => !f.compliance).length || 0,
+      criticalFindings: findings?.filter((f: any) => f.severity === "critical").length || 0,
+      nonCompliantFindings: findings?.filter((f: any) => !f.compliance).length || 0,
     };
   }
 }

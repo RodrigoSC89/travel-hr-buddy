@@ -304,13 +304,13 @@ class PrePSCService {
       if (nonCompliantError) throw nonCompliantError;
 
       const totalInspections = inspections?.length || 0;
-      const draftInspections = inspections?.filter(i => i.status === "draft").length || 0;
-      const completedInspections = inspections?.filter(i => i.status === "completed").length || 0;
-      const submittedInspections = inspections?.filter(i => i.status === "submitted").length || 0;
+      const draftInspections = inspections?.filter((i: any) => i.status === "draft").length || 0;
+      const completedInspections = inspections?.filter((i: any) => i.status === "completed").length || 0;
+      const submittedInspections = inspections?.filter((i: any) => i.status === "submitted").length || 0;
       
-      const scores = inspections?.map(i => i.total_score || 0).filter(s => s > 0) || [];
+      const scores = inspections?.map((i: any) => i.total_score || 0).filter((s: any) => s > 0) || [];
       const averageScore = scores.length > 0 
-        ? scores.reduce((a, b) => a + b, 0) / scores.length 
+        ? scores.reduce((a: any, b: any) => a + b, 0) / scores.length 
         : 0;
 
       return {

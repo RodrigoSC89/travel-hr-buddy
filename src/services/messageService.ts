@@ -64,11 +64,12 @@ class MessageService {
         .order("created_at", { ascending: false });
 
       if (error) throw error;
-      return (data || []).map(ch => ({
+      return (data || []).map((ch: any) => ({
         ...ch,
         channel_type: ch.channel_type || "public",
         is_private: ch.is_private || false,
-      }));
+        organization_id: ch.organization_id || undefined,
+      })) as Channel[];
     } catch (error) {
       console.error("Error fetching channels:", error);
       return this.getDemoChannels();
@@ -225,11 +226,12 @@ class MessageService {
         .single();
 
       if (error) throw error;
-      return data ? {
+      return data ? ({
         ...data,
-        channel_type: data.channel_type || "public",
-        is_private: data.is_private || false,
-      } : null;
+        channel_type: (data as any).channel_type || "public",
+        is_private: (data as any).is_private || false,
+        organization_id: (data as any).organization_id ?? undefined,
+      } as Channel) : null;
     } catch (error) {
       console.error("Error creating channel:", error);
       throw error;
@@ -252,11 +254,12 @@ class MessageService {
         .single();
 
       if (error) throw error;
-      return data ? {
+      return data ? ({
         ...data,
-        channel_type: data.channel_type || "public",
-        is_private: data.is_private || false,
-      } : null;
+        channel_type: (data as any).channel_type || "public",
+        is_private: (data as any).is_private || false,
+        organization_id: (data as any).organization_id ?? undefined,
+      } as Channel) : null;
     } catch (error) {
       console.error("Error updating channel:", error);
       throw error;

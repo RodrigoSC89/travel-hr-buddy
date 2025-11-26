@@ -132,10 +132,10 @@ export class RiskOpsService {
     vesselId?: string,
     module?: string
   ): Promise<RiskStatistics> {
-    const { data, error } = await (supabase.rpc('get_risk_statistics', {
+    const { data, error } = await (supabase as any).rpc('get_risk_statistics', {
       p_vessel_id: vesselId || null,
       p_module: module || null,
-    }) as any);
+    });
 
     if (error) {
       console.error('Error fetching risk statistics:', error);
@@ -149,9 +149,9 @@ export class RiskOpsService {
    * Get risk heatmap data
    */
   static async getRiskHeatmap(vesselId?: string): Promise<RiskHeatmapCell[]> {
-    const { data, error } = await (supabase.rpc('get_risk_heatmap', {
+    const { data, error } = await ((supabase as any).rpc as any)('get_risk_heatmap', {
       p_vessel_id: vesselId || null,
-    }) as any);
+    });
 
     if (error) {
       console.error('Error fetching risk heatmap:', error);
