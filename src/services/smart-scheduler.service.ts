@@ -49,7 +49,7 @@ export class SmartSchedulerService {
       throw error;
     }
 
-    return data || [];
+    return (data || []) as unknown as ScheduledTask[];
   }
 
   /**
@@ -58,7 +58,7 @@ export class SmartSchedulerService {
   static async createTask(task: Partial<ScheduledTask>): Promise<ScheduledTask> {
     const { data, error } = await supabase
       .from('scheduled_tasks')
-      .insert(task)
+      .insert(task as any)
       .select()
       .single();
 
@@ -67,7 +67,7 @@ export class SmartSchedulerService {
       throw error;
     }
 
-    return data;
+    return data as unknown as ScheduledTask;
   }
 
   /**
@@ -76,7 +76,7 @@ export class SmartSchedulerService {
   static async updateTask(id: string, updates: Partial<ScheduledTask>): Promise<ScheduledTask> {
     const { data, error } = await supabase
       .from('scheduled_tasks')
-      .update(updates)
+      .update(updates as any)
       .eq('id', id)
       .select()
       .single();
@@ -86,7 +86,7 @@ export class SmartSchedulerService {
       throw error;
     }
 
-    return data;
+    return data as unknown as ScheduledTask;
   }
 
   /**
@@ -134,7 +134,7 @@ export class SmartSchedulerService {
    * Mark overdue tasks
    */
   static async markOverdueTasks(): Promise<void> {
-    const { error } = await supabase.rpc('mark_overdue_tasks');
+    const { error } = await supabase.rpc('auto_mark_overdue_tasks');
 
     if (error) {
       console.error('Error marking overdue tasks:', error);
@@ -146,7 +146,7 @@ export class SmartSchedulerService {
    * Generate recurring tasks
    */
   static async generateRecurringTasks(): Promise<void> {
-    const { error } = await supabase.rpc('generate_recurring_tasks');
+    const { error } = await supabase.rpc('generate_recurring_tasks' as any);
 
     if (error) {
       console.error('Error generating recurring tasks:', error);

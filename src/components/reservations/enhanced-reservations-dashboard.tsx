@@ -111,7 +111,7 @@ export const EnhancedReservationsDashboard: React.FC = () => {
         ...item,
         reservation_type: item.reservation_type as "hotel" | "transport" | "embarkation" | "flight" | "other",
         status: item.status as "pending" | "confirmed" | "cancelled" | "completed",
-        crew_member_name: profileMap.get(item.user_id) ?? "N/A",
+        crew_member_name: item.user_id ? (profileMap.get(item.user_id) ?? "N/A") : "N/A",
         conflict_detected: false,
         ai_suggestions: []
       })) as EnhancedReservation[];
@@ -288,7 +288,7 @@ export const EnhancedReservationsDashboard: React.FC = () => {
           {/* Filters */}
           <ReservationFilters 
             filters={filters} 
-            onFiltersChange={setFilters}
+            onFiltersChange={(newFilters) => setFilters(newFilters as any)}
             reservations={reservations}
           />
 

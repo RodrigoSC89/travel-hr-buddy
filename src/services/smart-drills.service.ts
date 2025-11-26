@@ -285,6 +285,10 @@ export class SmartDrillsService {
       throw error;
     }
 
+    if (!data) {
+      throw new Error('No drill scenario returned');
+    }
+
     return data;
   }
 
@@ -303,6 +307,10 @@ export class SmartDrillsService {
       throw error;
     }
 
+    if (!data) {
+      throw new Error('No drill evaluation returned');
+    }
+
     return data;
   }
 
@@ -310,9 +318,7 @@ export class SmartDrillsService {
    * Get drill statistics
    */
   static async getDrillStatistics(vesselId?: string): Promise<DrillStatistics> {
-    const { data, error } = await supabase.rpc<DrillStatistics>('get_drill_statistics', {
-      p_vessel_id: vesselId || null,
-    });
+    const { data, error } = await supabase.rpc('get_drill_statistics') as { data: DrillStatistics | null; error: any };
 
     if (error) {
       console.error('Error fetching drill statistics:', error);

@@ -174,7 +174,7 @@ export async function fetchStarFixInspections(imoNumber: string): Promise<StarFi
     if (inspections.length > 0) {
       const { error } = await supabase
         .from('starfix_inspections')
-        .upsert(inspections);
+        .upsert(inspections as any);
 
       if (error) {
         console.error('Error storing StarFix inspections:', error);
@@ -327,7 +327,7 @@ export async function syncPendingInspections(): Promise<{ synced: number; failed
     let failed = 0;
 
     for (const inspection of pendingInspections) {
-      const result = await submitInspectionToStarFix(inspection as StarFixInspection);
+      const result = await submitInspectionToStarFix(inspection as unknown as any);
       if (result.success) {
         synced++;
       } else {

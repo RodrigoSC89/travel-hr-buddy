@@ -417,15 +417,15 @@ export class TrainingAIService {
       crew_member_id: crewMemberId,
       topic,
       session_type: options.sessionType ?? session.module ?? "general",
-      content: this.serializeSessionContent(session),
+      content: this.serializeSessionContent(session) as unknown as Json,
       status: session.completed_at ? (session.passed ? "completed" : "failed") : "in_progress",
       final_score: session.score ?? null,
       duration_minutes: session.duration_minutes ?? null,
       completed_at: session.completed_at ?? null,
       started_at: session.created_at ?? new Date().toISOString(),
-      ai_feedback: session.llm_feedback ?? {},
-      performance_metrics: session.metadata ?? {},
-      personalization_data: session.metadata ?? {},
+      ai_feedback: (session.llm_feedback ?? {}) as unknown as Json,
+      performance_metrics: (session.metadata ?? {}) as unknown as Json,
+      personalization_data: (session.metadata ?? {}) as unknown as Json,
       progress_percentage: (session.metadata?.progress_percentage as number | undefined) ?? null,
       difficulty_level: (session.metadata?.difficulty_level as string | undefined) ?? null,
     };
@@ -447,16 +447,16 @@ export class TrainingAIService {
       payload.status = updates.passed ? "completed" : "failed";
     }
     if (updates.llm_feedback !== undefined) {
-      payload.ai_feedback = updates.llm_feedback;
+      payload.ai_feedback = updates.llm_feedback as unknown as Json;
     }
     if (updates.metadata !== undefined) {
-      payload.performance_metrics = updates.metadata;
-      payload.personalization_data = updates.metadata;
+      payload.performance_metrics = updates.metadata as unknown as Json;
+      payload.personalization_data = updates.metadata as unknown as Json;
     }
 
     const serializedContent = this.serializeSessionContent(updates);
     if (Object.keys(serializedContent).length) {
-      payload.content = serializedContent;
+      payload.content = serializedContent as unknown as Json;
     }
 
     return payload;

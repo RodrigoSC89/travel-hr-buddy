@@ -295,7 +295,9 @@ export async function generateIntelligentReport(
 			throw new Error(templateError?.message ?? "Template not found");
 		}
 
-		const dataSources = extractDataSources(template);
+		const typedTemplate = template as ReportTemplateRow;
+
+		const dataSources = extractDataSources(typedTemplate);
 		const reportData = await collectReportData(
 			dataSources,
 			vesselId,
@@ -309,8 +311,8 @@ export async function generateIntelligentReport(
 		let conclusions: string[] = [];
 		let recommendations: string[] = [];
 
-		if (template.ai_summary_enabled !== false) {
-			const aiContent = await generateAISummary(template.template_type, reportData);
+		if (typedTemplate.ai_summary_enabled !== false) {
+			const aiContent = await generateAISummary(typedTemplate.template_type, reportData);
 			aiSummary = aiContent.summary;
 			aiInsights = aiContent.insights;
 			executiveSummary = aiContent.executiveSummary;
@@ -320,8 +322,8 @@ export async function generateIntelligentReport(
 
 		const payload: GeneratedReportInsert = {
 			template_id: templateId,
-			report_title: formatReportTitle(template.template_name, periodStart, periodEnd),
-			report_type: template.template_type,
+			report_title: formatReportTitle(typedTemplate.template_name, periodStart, periodEnd),
+			report_type: typedTemplate.template_type,
 			vessel_id: vesselId,
 			period_start: periodStart.toISOString(),
 			period_end: periodEnd.toISOString(),
@@ -358,7 +360,7 @@ export async function generateIntelligentReport(
 		logger.info("Report generated successfully", {
 			reportId: typedReport.id,
 			templateId,
-			vestselId,
+			vesselId,
 		});
 
 		return typedReport.id;
