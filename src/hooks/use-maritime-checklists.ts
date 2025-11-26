@@ -300,7 +300,7 @@ export const useMaritimeChecklists = (userId: string) => {
 
       // Transform data to match our Checklist interface
       const typedData = (data ?? []) as ChecklistQueryResult[];
-      const transformedChecklists: Checklist[] = typedData.map(item => ({
+      const transformedChecklists: Checklist[] = typedData.map((item: any) => ({
         id: item.id,
         title: item.title,
         type: (item.type as Checklist["type"]) ?? "dp",
@@ -325,7 +325,7 @@ export const useMaritimeChecklists = (userId: string) => {
           certifications: ["Maritime Inspector"]
         },
         status: (item.status as Checklist["status"]) ?? "draft",
-        items: (item.checklist_items ?? []).map(checklistItem => ({
+        items: (item.checklist_items ?? []).map((checklistItem: any) => ({
           id: checklistItem.id,
           title: checklistItem.title,
           description: checklistItem.description,
@@ -391,7 +391,7 @@ export const useMaritimeChecklists = (userId: string) => {
       }
 
       const transformed = records
-        .map(transformTemplateRecord)
+        .map((record: any) => transformTemplateRecord(record))
         .filter((template): template is ChecklistTemplate => Boolean(template));
 
       if (!transformed.length) {

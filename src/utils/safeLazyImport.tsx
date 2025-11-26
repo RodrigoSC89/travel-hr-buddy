@@ -1,4 +1,4 @@
-import React from "react";
+import React, { ComponentType } from "react";
 
 /**
  * Safe Lazy Import – Prevents failures when loading dynamic modules
@@ -63,7 +63,7 @@ export const safeLazyImport = (
       const importerWithTimeout = () => Promise.race([
         importer(),
         new Promise((_res, rej) => setTimeout(() => rej(new Error("Import timeout")), timeoutMs)),
-      ] as unknown as Promise<{ default: React.ComponentType<any> }>);
+      ] as [Promise<{ default: ComponentType<any> }>, Promise<never>]);
 
       return await retryImport(importerWithTimeout as () => Promise<{ default: React.ComponentType<any> }>);
     } catch (err) {

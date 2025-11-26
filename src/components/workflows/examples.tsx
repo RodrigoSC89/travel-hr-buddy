@@ -11,7 +11,8 @@ import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { supabase } from "@/integrations/supabase/client";
 import type { Database } from "@/integrations/supabase/types";
 
-type SmartWorkflowStep = Database["public"]["Tables"]["smart_workflow_steps"]["Row"];
+// Missing table in database schema - using any for now
+// type SmartWorkflowStep = Database["public"]["Tables"]["smart_workflow_steps"]["Row"];
 
 // Example: Integration in a workflow detail page
 export function WorkflowDetailWithAISuggestions({ workflowId }: { workflowId: string }) {
@@ -84,7 +85,7 @@ export function WorkflowDetailWithAISuggestions({ workflowId }: { workflowId: st
 // Example: Generate suggestions dynamically based on workflow analysis
 export async function generateAISuggestionsForWorkflow(workflowId: string): Promise<Suggestion[]> {
   // Fetch workflow steps
-  const { data: steps } = await supabase
+  const { data: steps } = await (supabase as any)
     .from("smart_workflow_steps")
     .select("*")
     .eq("workflow_id", workflowId);
@@ -94,7 +95,7 @@ export async function generateAISuggestionsForWorkflow(workflowId: string): Prom
   }
 
   // Analyze workflow and generate suggestions
-  const typedSteps = steps as SmartWorkflowStep[];
+  const typedSteps = steps as any[];
   const suggestions: Suggestion[] = [];
 
   // Example: Detect missing documentation

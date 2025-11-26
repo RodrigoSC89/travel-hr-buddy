@@ -21,9 +21,10 @@ interface NavigationSuggestion {
   reason: string;
 }
 
-type NavigationHistoryRow = Database["public"]["Tables"]["navigation_history"]["Row"];
-type NavigationHistoryInsert = Database["public"]["Tables"]["navigation_history"]["Insert"];
-type ModuleAccessInsert = Database["public"]["Tables"]["module_access_log"]["Insert"];
+// Missing tables in database schema - using any for now
+// type NavigationHistoryRow = Database["public"]["Tables"]["navigation_history"]["Row"];
+// type NavigationHistoryInsert = Database["public"]["Tables"]["navigation_history"]["Insert"];
+// type ModuleAccessInsert = Database["public"]["Tables"]["module_access_log"]["Insert"];
 
 export function useAINavigation() {
   const { user } = useAuth();
@@ -38,14 +39,14 @@ export function useAINavigation() {
 
       if (previousPath && previousPath !== currentPath) {
         try {
-          const payload: NavigationHistoryInsert = {
+          const payload: any = {
             user_id: user.id,
             from_path: previousPath,
             to_path: currentPath,
             timestamp: new Date().toISOString(),
           };
 
-          await supabase.from("navigation_history").insert(payload);
+          await (supabase as any).from("navigation_history").insert(payload);
         } catch (error) {
           console.error("Failed to track navigation:", error);
         }
@@ -65,7 +66,7 @@ export function useAINavigation() {
 
       try {
         // Get user's navigation history
-        const { data: history, error } = await supabase
+        const { data: history, error } = await (supabase as any)
           .from("navigation_history")
           .select("*")
           .eq("user_id", user.id)
@@ -74,7 +75,7 @@ export function useAINavigation() {
 
         if (error) throw error;
 
-        return analyzePatternsAndSuggest((history ?? []) as NavigationHistoryRow[]);
+        return analyzePatternsAndSuggest((history ?? []) as any[]);
       } catch (error) {
         console.error("Failed to get navigation suggestions:", error);
         return [];
@@ -87,7 +88,7 @@ export function useAINavigation() {
   return { suggestions };
 }
 
-function analyzePatternsAndSuggest(history: NavigationHistoryRow[]): NavigationSuggestion[] {
+function analyzePatternsAndSuggest(history: any[]): NavigationSuggestion[] {
   if (history.length === 0) return [];
 
   const suggestions: NavigationSuggestion[] = [];
@@ -133,13 +134,13 @@ export function useRecordModuleAccess(moduleName: string) {
 
     const recordAccess = async () => {
       try {
-        const payload: ModuleAccessInsert = {
+        const payload: any = {
           user_id: user.id,
           module_name: moduleName,
           accessed_at: new Date().toISOString(),
         };
 
-        await supabase.from("module_access_log").insert(payload);
+        await (supabase as any).from("module_access_log").insert(payload);
       } catch (error) {
         console.error("Failed to record module access:", error);
       }

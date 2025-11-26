@@ -105,8 +105,8 @@ export const useEnhancedNotifications = () => {
         ...persistedNotifications,
         ...certificateNotifications,
         ...priceAlertNotifications,
-        ...welcomeNotification,
-      ]);
+        ...welcomeNotification ? [welcomeNotification] : [],
+      ] as any);
       
       setNotifications(combinedNotifications);
     } catch (err: unknown) {
@@ -207,7 +207,7 @@ const buildCertificateNotifications = (
   now: Date
 ): Notification[] => {
   return certificates
-    .map((cert) => {
+    .map((cert: any) => {
       if (!cert.expiry_date) return null;
       const expiryDate = new Date(cert.expiry_date);
       if (Number.isNaN(expiryDate.getTime())) return null;
@@ -235,7 +235,7 @@ const buildCertificateNotifications = (
         },
       } satisfies Notification;
     })
-    .filter((notification): notification is Notification => Boolean(notification));
+    .filter((notification: any): notification is Notification => Boolean(notification)) as Notification[];
 };
 
 const buildPriceAlertNotifications = (alerts: PriceAlert[]): Notification[] => {

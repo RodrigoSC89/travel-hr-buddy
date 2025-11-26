@@ -560,6 +560,10 @@ export const TenantProvider: React.FC<{ children: React.ReactNode }> = ({ childr
     if (data) {
       const typedData: TenantBranding = {
         ...data,
+        background_color: data.background_color ?? undefined,
+        text_color: data.text_color ?? undefined,
+        created_at: data.created_at || "",
+        updated_at: data.updated_at || "",
         logo_url: data.logo_url || undefined,
         favicon_url: data.favicon_url || undefined,
         header_style: typeof data.header_style === "object" && !Array.isArray(data.header_style) ? data.header_style as Record<string, unknown> : {},

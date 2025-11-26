@@ -52,7 +52,7 @@ class ScenarioSimulator {
   private camera: PerspectiveCamera | null = null;
   private renderer: WebGLRenderer | null = null;
   private animationFrameId: number | null = null;
-  private aiEventInterval: ReturnType<typeof setInterval> | null = null;
+  private aiEventInterval: number | null = null;
   private resizeHandler: (() => void) | null = null;
   private state: SimulationState = "idle";
   private currentScenario: ScenarioConfig | null = null;

@@ -110,7 +110,7 @@ export async function subscribeToPushNotifications(
 
     const subscription = await swRegistration.pushManager.subscribe({
       userVisibleOnly: true,
-      applicationServerKey: urlBase64ToUint8Array(vapidPublicKey)
+      applicationServerKey: urlBase64ToUint8Array(vapidPublicKey) as BufferSource
     });
 
     logger.info("✅ Push notification subscription created");
@@ -245,11 +245,11 @@ export function setupInstallPrompt(
     logger.info("✅ PWA installed successfully");
   };
 
-  window.addEventListener("beforeinstallprompt", handleBeforeInstallPrompt);
+  window.addEventListener("beforeinstallprompt", handleBeforeInstallPrompt as any);
   window.addEventListener("appinstalled", handleAppInstalled);
 
   return () => {
-    window.removeEventListener("beforeinstallprompt", handleBeforeInstallPrompt);
+    window.removeEventListener("beforeinstallprompt", handleBeforeInstallPrompt as any);
     window.removeEventListener("appinstalled", handleAppInstalled);
   };
 }

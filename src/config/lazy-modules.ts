@@ -21,7 +21,7 @@ export const lazyWithRetry = <T extends ComponentType<any>>(
         setTimeout(() => {
           importFn().then(resolve).catch(() => {
             // Se falhar novamente, retorna um componente vazio
-            resolve({ default: (() => null) as T });
+            resolve({ default: (() => null) as unknown as T });
           });
         }, 2000);
       });

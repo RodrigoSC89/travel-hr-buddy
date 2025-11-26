@@ -25,9 +25,7 @@ export function useFeatureFlag(key: string): boolean {
     queryKey: ["feature-flag", key, user?.id],
     queryFn: async () => {
       try {
-        type FeatureFlagRow = Database["public"]["Tables"]["feature_flags"]["Row"];
-
-        const { data, error } = await supabase
+        const { data, error } = await (supabase as any)
           .from("feature_flags")
           .select("enabled, user_id, tenant_id")
           .eq("key", key)
@@ -40,7 +38,7 @@ export function useFeatureFlag(key: string): boolean {
           return false;
         }
 
-        const rows = (data ?? []) as FeatureFlagRow[];
+        const rows = (data ?? []) as any[];
         const prioritized = rows.find(r => r.user_id && r.user_id === user?.id)
           ?? rows.find(r => r.tenant_id)
           ?? rows.find(r => !r.user_id && !r.tenant_id);
@@ -66,7 +64,7 @@ export function useFeatureFlags() {
   return useQuery({
     queryKey: ["feature-flags"],
     queryFn: async () => {
-      const { data, error } = await supabase
+      const { data, error } = await (supabase as any)
         .from("feature_flags")
         .select("*")
         .order("key");
@@ -84,7 +82,7 @@ export function useFeatureFlags() {
  */
 export function useToggleFeatureFlag() {
   return async (key: string, enabled: boolean) => {
-    const { error } = await supabase
+    const { error } = await (supabase as any)
       .from("feature_flags")
       .update({ enabled, updated_at: new Date().toISOString() })
       .eq("key", key);
