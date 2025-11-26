@@ -385,11 +385,11 @@ const mapScenarioRowToDomain = (row: DrillScenarioRow): DrillScenario => {
   }
 
   const expectedResponses = Array.isArray(row.expected_responses)
-    ? (row.expected_responses as ExpectedResponse[])
+    ? (row.expected_responses as unknown as ExpectedResponse[])
     : [];
 
   const evaluationCriteria = Array.isArray(row.evaluation_criteria)
-    ? (row.evaluation_criteria as EvaluationCriterion[])
+    ? (row.evaluation_criteria as unknown as EvaluationCriterion[])
     : [];
 
   return {
@@ -613,7 +613,10 @@ export async function evaluateDrillPerformance(
     }
 
     for (const response of responses) {
-      const prompt = buildEvaluationPrompt(execution.drill_scenarios, response);
+      const prompt = buildEvaluationPrompt(
+        execution.drill_scenarios as any,
+        response
+      );
 
       let evaluation: DrillEvaluationResult;
       try {
@@ -871,7 +874,7 @@ export async function getUpcomingDrills(
     throw error;
   }
 
-  return (data ?? []) as DrillScheduleWithScenario[];
+  return (data ?? []) as unknown as DrillScheduleWithScenario[];
 }
 
 /**
@@ -892,5 +895,5 @@ export async function getDrillHistory(
     throw error;
   }
 
-  return (data ?? []) as DrillExecutionWithScenario[];
+  return (data ?? []) as unknown as DrillExecutionWithScenario[];
 }

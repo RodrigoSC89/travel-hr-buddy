@@ -35,7 +35,18 @@ import {
   Globe
 } from "lucide-react";
 
-const InteractiveStatsCard = ({ icon: Icon, title, value, change, trend, description, color = "blue", delay = 0 }) => {
+interface InteractiveStatsCardProps {
+  icon: React.ElementType;
+  title: string;
+  value: string | number;
+  change: string;
+  trend: "up" | "down";
+  description: string;
+  color?: "blue" | "green" | "purple" | "orange" | "rose";
+  delay?: number;
+}
+
+const InteractiveStatsCard = ({ icon: Icon, title, value, change, trend, description, color = "blue", delay = 0 }: InteractiveStatsCardProps) => {
   const [isVisible, setIsVisible] = useState(false);
   const [isHovered, setIsHovered] = useState(false);
 
@@ -44,7 +55,15 @@ const InteractiveStatsCard = ({ icon: Icon, title, value, change, trend, descrip
     return () => clearTimeout(timer);
   }, [delay]);
 
-  const colorClasses = {
+  type ColorType = "blue" | "green" | "purple" | "orange" | "rose";
+  
+  const colorClasses: Record<ColorType, {
+    gradient: string;
+    border: string;
+    icon: string;
+    bg: string;
+    glow: string;
+  }> = {
     blue: {
       gradient: "from-info/20 via-info/10 to-info/20",
       border: "border-info/30",
@@ -82,7 +101,7 @@ const InteractiveStatsCard = ({ icon: Icon, title, value, change, trend, descrip
     }
   };
 
-  const colors = colorClasses[color];
+  const colors = colorClasses[color as ColorType];
 
   return (
     <Card 
@@ -155,7 +174,15 @@ const InteractiveStatsCard = ({ icon: Icon, title, value, change, trend, descrip
   );
 };
 
-const FloatingActionButton = ({ icon: Icon, label, onClick, color = "primary", delay = 0 }) => {
+interface FloatingActionButtonProps {
+  icon: React.ElementType;
+  label: string;
+  onClick: () => void;
+  color?: "primary" | "secondary";
+  delay?: number;
+}
+
+const FloatingActionButton = ({ icon: Icon, label, onClick, color = "primary", delay = 0 }: FloatingActionButtonProps) => {
   const [isVisible, setIsVisible] = useState(false);
   
   useEffect(() => {
@@ -188,15 +215,25 @@ const FloatingActionButton = ({ icon: Icon, label, onClick, color = "primary", d
   );
 };
 
-const PulsingNotificationCard = ({ title, description, time, priority = "medium", icon: Icon }) => {
-  const priorityColors = {
+interface PulsingNotificationCardProps {
+  title: string;
+  description: string;
+  time: string;
+  priority?: "high" | "medium" | "low";
+  icon: React.ElementType;
+}
+
+const PulsingNotificationCard = ({ title, description, time, priority = "medium", icon: Icon }: PulsingNotificationCardProps) => {
+  type PriorityType = "high" | "medium" | "low";
+  
+  const priorityColors: Record<PriorityType, string> = {
     high: "border-l-destructive bg-destructive/10 text-destructive-foreground",
     medium: "border-l-info bg-info/10 text-info-foreground", 
     low: "border-l-success bg-success/10 text-success-foreground"
   };
 
   return (
-    <div className={`group p-4 border-l-4 rounded-xl ${priorityColors[priority]} 
+    <div className={`group p-4 border-l-4 rounded-xl ${priorityColors[priority as PriorityType]} 
       hover:scale-[1.02] transition-all duration-300 cursor-pointer hover:shadow-lg backdrop-blur-sm`}>
       <div className="flex items-start gap-3">
         <div className="p-2.5 rounded-xl bg-card/80 border border-border backdrop-blur-sm 

@@ -338,7 +338,7 @@ export async function generateIntelligentReport(
 
 		const { data: report, error: reportError } = await reportingClient
 			.from("generated_reports")
-			.insert(payload)
+			.insert(payload as any)
 			.select("*")
 			.single();
 
@@ -346,20 +346,22 @@ export async function generateIntelligentReport(
 			throw new Error(reportError?.message ?? "Error creating report");
 		}
 
+		const typedReport = report as GeneratedReportRow;
+
 		await logReportGeneration({
-			report_id: report.id,
+			report_id: typedReport.id,
 			status: "completed",
 			execution_time_ms: Date.now() - startTime,
 			data_sources_queried: asJson(dataSources),
 		});
 
 		logger.info("Report generated successfully", {
-			reportId: report.id,
+			reportId: typedReport.id,
 			templateId,
-			vesselId,
+			vestselId,
 		});
 
-		return report.id;
+		return typedReport.id;
 	} catch (error) {
 		logger.error("Error generating report", error, {
 			templateId,
@@ -633,7 +635,7 @@ export async function createReportSchedule(
 
 	const { data, error } = await reportingClient
 		.from("report_schedules")
-		.insert(payload)
+		.insert(payload as any)
 		.select("*, report_templates(*)")
 		.single();
 
@@ -688,7 +690,7 @@ export async function recordReportExport(
 		expires_at: input.expiresAt?.toISOString() ?? null,
 	};
 
-	const { error } = await reportingClient.from("report_exports").insert(payload);
+	const { error } = await reportingClient.from("report_exports").insert(payload as any);
 	if (error) {
 		logger.error("Failed to record report export", error, { input });
 		throw new Error(error.message);
@@ -713,7 +715,7 @@ export async function listGeneratedReports(
 }
 
 async function logReportGeneration(payload: ReportGenerationLogInsert): Promise<void> {
-	const { error } = await reportingClient.from("report_generation_log").insert(payload);
+	const { error } = await reportingClient.from("report_generation_log").insert(payload as any);
 	if (error) {
 		logger.error("Failed to insert report generation log", error, { payload });
 	}
@@ -736,7 +738,7 @@ function extractDataSources(template: ReportTemplateRow): string[] {
 				return parsed.filter((item): item is string => typeof item === "string");
 			}
 		} catch (error) {
-			logger.warn("Failed to parse data_sources string", error, { raw });
+			logger.warn("Failed to parse data_sources string: " + raw);
 		}
 	}
 

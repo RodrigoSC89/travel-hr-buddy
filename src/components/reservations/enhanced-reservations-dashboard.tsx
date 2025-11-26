@@ -99,7 +99,7 @@ export const EnhancedReservationsDashboard: React.FC = () => {
       if (error) throw error;
       
       // Fetch user profiles separately to get crew member names
-      const userIds = [...new Set((data || []).map(item => item.user_id))];
+      const userIds = [...new Set((data || []).map(item => item.user_id))].filter((id): id is string => id !== null);
       const { data: profiles } = await supabase
         .from("profiles")
         .select("id, full_name")
