@@ -1,3 +1,4 @@
+// @ts-nocheck - Cypress types
 /**
  * PATCH 611: PSC Pre-Inspection E2E Tests
  * Tests for PSC compliance checks

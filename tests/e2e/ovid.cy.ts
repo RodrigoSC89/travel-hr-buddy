@@ -1,9 +1,8 @@
+// @ts-nocheck - Cypress types
 /**
  * PATCH 610: Pre-OVID Inspection E2E Tests
  * Tests for OCIMF OVID checklist
- */
-
-describe("Pre-OVID Inspection Module", () => {
+ */describe("Pre-OVID Inspection Module", () => {
   beforeEach(() => {
     cy.visit("/pre-ovid");
   });

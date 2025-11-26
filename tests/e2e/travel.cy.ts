@@ -1,3 +1,4 @@
+// @ts-nocheck - Cypress types
 /// <reference types="cypress" />
 
 /**

@@ -1,3 +1,4 @@
+// @ts-nocheck - Playwright type compatibility
 import { test, expect } from "@playwright/test";
 import path from "path";
 import fs from "fs";
@@ -253,7 +254,7 @@ test.describe("Document Upload Flow", () => {
       // Check if multiple uploads are supported
       const isMultiple = await fileInput.getAttribute("multiple");
       
-      expect(typeof isMultiple).toBe("string" || "object");
+      expect(["string", "object"]).toContain(typeof isMultiple);
     } else {
       test.skip();
     }

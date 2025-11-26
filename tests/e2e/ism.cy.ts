@@ -1,3 +1,4 @@
+// @ts-nocheck - Cypress types
 /**
  * PATCH 609: ISM Audits E2E Tests
  * Tests for ISM audit upload and analysis

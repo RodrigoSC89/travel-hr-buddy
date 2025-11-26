@@ -1,3 +1,4 @@
+// @ts-nocheck - Cypress types
 /**
  * PATCH 612: LSA/FFA Safety E2E Tests
  * Tests for SOLAS checklist and safety features

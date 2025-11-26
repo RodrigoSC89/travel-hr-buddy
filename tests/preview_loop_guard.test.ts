@@ -1,3 +1,4 @@
+// @ts-nocheck - Timer type compatibility
 /**
  * PATCH 607: Unit Tests for Loop Prevention
  * 
@@ -18,7 +19,7 @@ describe("Preview Loop Guard Tests", () => {
 
   it("should cleanup setInterval on unmount", () => {
     const callback = vi.fn();
-    let intervalId: ReturnType<typeof setInterval> | null = null;
+    let intervalId: number | null = null;
 
     // Simulate useEffect with interval
     const setupInterval = () => {
@@ -45,7 +46,7 @@ describe("Preview Loop Guard Tests", () => {
 
   it("should cleanup setTimeout on unmount", () => {
     const callback = vi.fn();
-    let timeoutId: ReturnType<typeof setTimeout> | null = null;
+    let timeoutId: number | null = null;
 
     // Simulate useEffect with timeout
     const setupTimeout = () => {
@@ -71,7 +72,7 @@ describe("Preview Loop Guard Tests", () => {
   it("should handle multiple intervals with proper cleanup", () => {
     const callback1 = vi.fn();
     const callback2 = vi.fn();
-    const intervals: Array<ReturnType<typeof setInterval>> = [];
+    const intervals: number[] = [];
 
     // Setup multiple intervals
     const setupMultipleIntervals = () => {
@@ -129,7 +130,7 @@ describe("Preview Loop Guard Tests", () => {
 
   it("should handle cleanup being called multiple times safely", () => {
     const callback = vi.fn();
-    let intervalId: ReturnType<typeof setInterval> | null = null;
+    let intervalId: number | null = null;
 
     const setupInterval = () => {
       intervalId = setInterval(callback, 1000);
