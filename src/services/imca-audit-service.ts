@@ -34,7 +34,7 @@ export async function saveAudit(report: IMCAAuditReport): Promise<string> {
 
     if (!user) throw new Error("User not authenticated");
 
-    const { data, error } = await supabase
+    const { data, error } = await (supabase as any)
       .from("auditorias_imca")
       .insert({
         user_id: user.id,
@@ -68,7 +68,7 @@ export async function getAudits(): Promise<IMCAAuditReport[]> {
 
     if (!user) throw new Error("User not authenticated");
 
-    const { data, error } = await supabase
+    const { data, error } = await (supabase as any)
       .from("auditorias_imca")
       .select("*")
       .eq("user_id", user.id)
@@ -76,7 +76,7 @@ export async function getAudits(): Promise<IMCAAuditReport[]> {
 
     if (error) throw error;
 
-    return (data || []).map((row) => ({
+    return (data || []).map((row: any) => ({
       ...(row.report_data as IMCAAuditReport),
       id: row.id,
     }));
@@ -97,7 +97,7 @@ export async function getAudit(id: string): Promise<IMCAAuditReport | null> {
 
     if (!user) throw new Error("User not authenticated");
 
-    const { data, error } = await supabase
+    const { data, error } = await (supabase as any)
       .from("auditorias_imca")
       .select("*")
       .eq("id", id)
@@ -130,7 +130,7 @@ export async function updateAudit(
 
     if (!user) throw new Error("User not authenticated");
 
-    const { error } = await supabase
+    const { error } = await (supabase as any)
       .from("auditorias_imca")
       .update({
         report_data: report,
@@ -158,7 +158,7 @@ export async function deleteAudit(id: string): Promise<boolean> {
 
     if (!user) throw new Error("User not authenticated");
 
-    const { error } = await supabase
+    const { error } = await (supabase as any)
       .from("auditorias_imca")
       .delete()
       .eq("id", id)

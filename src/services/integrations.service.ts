@@ -23,7 +23,7 @@ export class IntegrationsService {
       .order("created_at", { ascending: false });
 
     if (error) throw error;
-    return data || [];
+    return (data || []) as any;
   }
 
   static async getIntegration(id: string): Promise<WebhookIntegration | null> {
@@ -34,7 +34,7 @@ export class IntegrationsService {
       .single();
 
     if (error) throw error;
-    return data;
+    return data as any;
   }
 
   static async createIntegration(
@@ -42,12 +42,12 @@ export class IntegrationsService {
   ): Promise<WebhookIntegration> {
     const { data, error } = await supabase
       .from("webhook_integrations")
-      .insert(integration)
+      .insert(integration as any)
       .select()
       .single();
 
     if (error) throw error;
-    return data;
+    return data as any;
   }
 
   static async updateIntegration(
@@ -62,7 +62,7 @@ export class IntegrationsService {
       .single();
 
     if (error) throw error;
-    return data;
+    return data as any;
   }
 
   static async deleteIntegration(id: string): Promise<void> {
@@ -94,7 +94,7 @@ export class IntegrationsService {
 
     const { data, error } = await query;
     if (error) throw error;
-    return data || [];
+    return (data || []) as any;
   }
 
   static async dispatchWebhookEvent(
@@ -102,14 +102,14 @@ export class IntegrationsService {
     eventType: string,
     payload: Record<string, unknown>
   ): Promise<string> {
-    const { data, error } = await supabase.rpc("dispatch_webhook_event", {
+    const { data, error } = await (supabase as any).rpc("dispatch_webhook_event", {
       p_integration_id: integrationId,
       p_event_type: eventType,
       p_payload: payload,
     });
 
     if (error) throw error;
-    return data;
+    return data as any;
   }
 
   // OAuth Connections
@@ -120,7 +120,7 @@ export class IntegrationsService {
       .order("created_at", { ascending: false });
 
     if (error) throw error;
-    return data || [];
+    return (data || []) as any;
   }
 
   static async getOAuthConnection(
@@ -133,7 +133,7 @@ export class IntegrationsService {
       .maybeSingle();
 
     if (error) throw error;
-    return data;
+    return data as any;
   }
 
   static async saveOAuthConnection(
@@ -141,12 +141,12 @@ export class IntegrationsService {
   ): Promise<OAuthConnection> {
     const { data, error } = await supabase
       .from("oauth_connections")
-      .upsert(connection)
+      .upsert(connection as any)
       .select()
       .single();
 
     if (error) throw error;
-    return data;
+    return data as any;
   }
 
   static async disconnectOAuth(provider: IntegrationProvider): Promise<void> {
@@ -179,7 +179,7 @@ export class IntegrationsService {
       .order("display_name");
 
     if (error) throw error;
-    return data || [];
+    return (data || []) as any;
   }
 
   static async getEnabledPlugins(): Promise<IntegrationPlugin[]> {
@@ -190,7 +190,7 @@ export class IntegrationsService {
       .order("display_name");
 
     if (error) throw error;
-    return data || [];
+    return (data || []) as any;
   }
 
   static async togglePlugin(id: string, enabled: boolean): Promise<void> {
@@ -211,11 +211,11 @@ export class IntegrationsService {
       .limit(limit);
 
     if (error) throw error;
-    return data || [];
+    return (data || []) as any;
   }
 
   static async createLog(log: Partial<IntegrationLog>): Promise<void> {
-    const { error } = await supabase.from("integration_logs").insert(log);
+    const { error } = await supabase.from("integration_logs").insert(log as any);
     if (error) throw error;
   }
 
@@ -394,7 +394,7 @@ export class IntegrationsService {
         ...plugin,
         is_enabled: true,
         version: plugin.version || "1.0.0",
-      })
+      } as any)
       .select()
       .single();
 
@@ -406,7 +406,7 @@ export class IntegrationsService {
       context: { plugin_id: data.id },
     });
 
-    return data;
+    return data as any;
   }
 
   static async uninstallPlugin(pluginId: string): Promise<void> {
@@ -463,7 +463,7 @@ export class IntegrationsService {
       .single();
 
     if (error) throw error;
-    return data;
+    return data as any;
   }
 
   static validatePluginConfig(
@@ -558,6 +558,7 @@ export class IntegrationsService {
     const eventsByDay = new Map<string, { success: number; failed: number }>();
     
     for (const event of events || []) {
+      if (!event.triggered_at) continue;
       const day = event.triggered_at.split("T")[0];
       const current = eventsByDay.get(day) || { success: 0, failed: 0 };
       
@@ -572,14 +573,15 @@ export class IntegrationsService {
 
     const eventsByIntegration = new Map<string, number>();
     for (const event of events || []) {
+      if (!event.integration_id) continue;
       const count = eventsByIntegration.get(event.integration_id) || 0;
       eventsByIntegration.set(event.integration_id, count + 1);
     }
 
     return {
       total_events: events?.length || 0,
-      success_count: events?.filter(e => e.status === "success").length || 0,
-      failure_count: events?.filter(e => e.status === "failed").length || 0,
+      success_count: events?.filter((e: any) => e.status === "success").length || 0,
+      failure_count: events?.filter((e: any) => e.status === "failed").length || 0,
       by_day: Array.from(eventsByDay.entries()).map(([day, stats]) => ({
         date: day,
         ...stats,

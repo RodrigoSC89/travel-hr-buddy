@@ -198,7 +198,7 @@ export class ReportingEngineService {
    * Get report statistics
    */
   static async getStatistics(): Promise<ReportStatistics> {
-    const { data, error } = await (supabase.rpc('get_report_statistics') as any);
+    const { data, error } = await (supabase as any).rpc('get_report_statistics');
 
     if (error) {
       console.error('Error fetching statistics:', error);
