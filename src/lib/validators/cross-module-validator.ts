@@ -206,8 +206,9 @@ export async function validateCrewToOperations(): Promise<ValidationResult> {
     if (crewWithVessels && crewWithVessels.length > 0) {
       // Verify each vessel_id exists
       const vesselIds = crewWithVessels
-        .map((crew) => crew.vessel_id)
-        .filter((id): id is NonNullable<VesselRow["id"]> => Boolean(id));
+        .filter((crew: any) => crew.vessel_id)
+        .map((crew: any) => crew.vessel_id)
+        .filter((id: any, index: number, self: any[]) => self.indexOf(id) === index);
       
       if (vesselIds.length > 0) {
         const { count: validVessels } = await supabase
@@ -228,7 +229,7 @@ export async function validateCrewToOperations(): Promise<ValidationResult> {
     }
     
     // Check 2: Verify operations reference valid crew
-    const { data: operations } = await supabase
+    const { data: operations } = await (supabase as any)
       .from("vessel_operations")
       .select("id, crew_required")
       .limit(100);
@@ -243,8 +244,8 @@ export async function validateCrewToOperations(): Promise<ValidationResult> {
     }
     
     // Check 3: Check for orphaned records
-    const { data: orphanedCrew } = await supabase
-      .from<CrewMemberRow>("crew_members")
+    const { data: orphanedCrew } = await (supabase as any)
+      .from("crew_members")
       .select("id")
       .is("organization_id", null);
     
@@ -311,7 +312,7 @@ export async function logIntegrityIssues(validation: CrossModuleValidation) {
     
     for (const issue of failedChecks) {
       try {
-        await supabase
+        await (supabase as any)
           .from("integrity_logs")
           .insert({
             timestamp: new Date().toISOString(),
@@ -319,7 +320,7 @@ export async function logIntegrityIssues(validation: CrossModuleValidation) {
             error_type: issue.severity,
             relation: issue.name,
             message: issue.message,
-          });
+          } as any);
       } catch (error) {
         console.error("Error logging integrity issue:", error);
       }

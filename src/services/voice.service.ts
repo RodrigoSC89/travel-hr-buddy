@@ -18,6 +18,16 @@ import type {
   Platform,
 } from "@/types/voice";
 
+// Browser Speech Recognition API types
+declare global {
+  interface Window {
+    SpeechRecognition: any;
+    webkitSpeechRecognition: any;
+  }
+}
+
+type SpeechRecognition = any;
+
 export class VoiceService {
   private static recognition: SpeechRecognition | null = null;
   private static synthesis: SpeechSynthesis | null = null;

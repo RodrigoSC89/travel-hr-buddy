@@ -20,7 +20,7 @@ global.IntersectionObserver = class IntersectionObserver implements Intersection
     private readonly callback: IntersectionObserverCallback,
     options?: IntersectionObserverInit
   ) {
-    this.root = options?.root ?? null;
+    this.root = (options?.root ?? null) as Element | null;
     this.rootMargin = options?.rootMargin ?? "0px";
     const threshold = options?.threshold;
     this.thresholds = Array.isArray(threshold)

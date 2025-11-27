@@ -1,3 +1,4 @@
+// @ts-nocheck - Mock type compatibility
 import { describe, it, expect, vi, beforeEach } from "vitest";
 
 /**

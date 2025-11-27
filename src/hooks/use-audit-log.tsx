@@ -118,7 +118,7 @@ export const useAuditLog = () => {
     resourceId?: string | null,
     details?: Record<string, unknown>
   ) => {
-    return logAction({ action, resourceType, resourceId, status: "success", details });
+    return logAction({ action, resourceType, resourceId, status: "success", details: details as any });
   }, [logAction]);
 
   /**
@@ -130,7 +130,7 @@ export const useAuditLog = () => {
     resourceId?: string | null,
     details?: Record<string, unknown>
   ) => {
-    return logAction({ action, resourceType, resourceId, status: "failure", details });
+    return logAction({ action, resourceType, resourceId, status: "failure", details: details as any });
   }, [logAction]);
 
   /**

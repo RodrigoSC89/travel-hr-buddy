@@ -236,7 +236,7 @@ export function trackLoop(functionName?: string) {
 
     descriptor.value = function (this: ThisParameterType<T>, ...args: Parameters<T>): ReturnType<T> {
       loopDebugger.track(trackingName, args);
-      return originalMethod.apply(this, args);
+      return originalMethod.apply(this, args) as ReturnType<T>;
     } as T;
 
     return descriptor;

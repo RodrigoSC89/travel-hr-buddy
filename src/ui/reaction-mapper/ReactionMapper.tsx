@@ -161,7 +161,7 @@ export const ReactionMapper: React.FC<ReactionMapperProps> = ({
 
     // Trigger simulation event
     if (integrateWithControlHub) {
-      BridgeLink.emit("reaction-mapper:simulation-started", "ReactionMapper", {
+      BridgeLink.emit("reaction-mapper:simulation-started" as any, "ReactionMapper", {
         scenarioId: state.currentScenario.id,
         timestamp: Date.now(),
       });
@@ -266,7 +266,7 @@ export const ReactionMapper: React.FC<ReactionMapperProps> = ({
     }));
 
     if (integrateWithControlHub) {
-      BridgeLink.emit("reaction-mapper:simulation-stopped", "ReactionMapper", {
+      BridgeLink.emit("reaction-mapper:simulation-stopped" as any, "ReactionMapper", {
         timestamp: Date.now(),
       });
     }

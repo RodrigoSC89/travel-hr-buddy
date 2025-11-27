@@ -105,13 +105,13 @@ const fetchChecklistHistory = async (
       return [];
     }
     
-    return (data || []).map(record => ({
+    return (data || []).map((record: any) => ({
       id: record.id,
-      checklistType: record.checklist_type,
+      checklistType: record.checklist_type || record.checklist_name,
       items: Array.isArray(record.items) ? record.items : [],
-      completedAt: record.completed_at,
+      completedAt: record.completed_at || "",
       vessel: record.vessel_id,
-      user: record.user_id
+      user: record.user_id || record.completed_by
     }));
   } catch (error) {
     console.error("Error fetching checklist history:", error);

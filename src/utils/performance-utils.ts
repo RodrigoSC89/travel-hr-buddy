@@ -313,7 +313,7 @@ export function measureExecutionTime<T extends (...args: unknown[]) => unknown>(
     }
 
     logDuration(startTime);
-    return result;
+    return result as ReturnType<T>;
   }) as T;
 }
 
