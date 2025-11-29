@@ -16,6 +16,7 @@ import { webVitalsService } from "@/services/web-vitals-service";
 import { OffshoreLoader, PageSkeleton } from "@/components/LoadingStates";
 import { lazyWithPreload, preloadStrategy } from "@/lib/performance/lazy-with-preload";
 import { safeLazyImport } from "@/utils/safeLazyImport";
+import Integrations from "@/pages/Integrations";
 
 // PATCH 540: Import bundles para reduzir lazy loading
 import * as ModulesBundle from "@/bundles/ModulesBundle";
@@ -505,7 +506,7 @@ const RedirectHandler = () => {
     try {
       // Check if there's a stored redirect path from 404.html
       const redirectPath = sessionStorage.getItem("redirectPath");
-      
+
       // Only redirect if:
       // 1. There is a stored path
       // 2. The stored path is not the home page
@@ -513,7 +514,7 @@ const RedirectHandler = () => {
       if (redirectPath && redirectPath !== "/" && location.pathname === "/") {
         // Clear the stored path to prevent future redirects
         sessionStorage.removeItem("redirectPath");
-        
+
         // Navigate to the stored path with replace to avoid adding to history
         navigate(redirectPath, { replace: true });
       }
@@ -540,25 +541,25 @@ function App() {
       logger.info("App already initialized, skipping duplicate initialization");
       return;
     }
-    
+
     isInitialized = true;
     logger.info("Nautilus One - Starting system initialization");
-    
+
     // PATCH 536: Timeout de segurança para inicialização
     const initTimeout = setTimeout(() => {
       logger.error("Initialization timeout exceeded", { timeout: INIT_TIMEOUT_MS });
     }, INIT_TIMEOUT_MS);
-    
+
     try {
       performance.mark("init-start");
-      
+
       initializeMonitoring();
       logger.info("Monitoring initialized");
-      
+
       // PATCH 85.0 - Iniciar System Watchdog automaticamente
       systemWatchdog.start();
       logger.info("System Watchdog started");
-      
+
       // Preload módulos críticos durante idle time com proteção
       if ("requestIdleCallback" in window) {
         requestIdleCallback(() => {
@@ -589,22 +590,22 @@ function App() {
           }
         }, 2000);
       }
-      
+
       performance.mark("init-end");
       performance.measure("app-initialization", "init-start", "init-end");
       const initMeasure = performance.getEntriesByName("app-initialization")[0];
-      
-      logger.info("App initialized successfully", { 
-        duration: `${initMeasure?.duration.toFixed(2)}ms` 
+
+      logger.info("App initialized successfully", {
+        duration: `${initMeasure?.duration.toFixed(2)}ms`
       });
-      
+
       clearTimeout(initTimeout);
-      
+
     } catch (error) {
       logger.error("Critical error during initialization", { error });
       clearTimeout(initTimeout);
     }
-    
+
     return () => {
       systemWatchdog.stop();
       isInitialized = false; // Reset para hot-reload em dev
@@ -636,7 +637,7 @@ function App() {
                     <Route path="/cert/:token" element={<CertViewer />} />
                     <Route path="/unauthorized" element={<Unauthorized />} />
                     <Route path="/validation/patches-622-626" element={<ValidationPatches622_626 />} />
-                    
+
                     {/* All routes wrapped in SmartLayout */}
                     <Route element={<SmartLayout />}>
                       <Route path="/" element={<Index />} />
@@ -774,6 +775,8 @@ function App() {
                       <Route path="/admin/documents" element={<DocumentList />} />
                       <Route path="/admin/documents/ai" element={<DocumentAIEditor />} />
                       <Route path="/admin/documents/editor" element={<DocumentEditorPage />} />
+                      <Route path="/templates" element={<Suspense fallback={SuspenseFallback}><Templates /></Suspense>} />
+
                       <Route path="/admin/templates" element={<Templates />} />
                       {/* PATCH 488: Template Library */}
                       <Route path="/admin/templates/library" element={<TemplateLibrary />} />
@@ -784,6 +787,7 @@ function App() {
                       <Route path="/admin/crew/consolidation-validation" element={<CrewConsolidationValidationPage />} />
                       <Route path="/admin/crew/validation" element={<CrewValidation />} />
                       <Route path="/admin/integrations/validation" element={<IntegrationsValidation />} />
+                      <Route path="/integrations" element={<Suspense fallback={SuspenseFallback}><Integrations /></Suspense>} />
                       <Route path="/admin/analytics/validation" element={<AnalyticsValidation />} />
                       <Route path="/admin/document-hub/validation" element={<DocumentHubValidationPage />} />
                       <Route path="/admin/mission-control/validation" element={<MissionControlValidationPage />} />
@@ -807,38 +811,38 @@ function App() {
                       <Route path="/admin/deep-risk-ai/validation" element={<DeepRiskAIValidation />} />
                       <Route path="/admin/templates-system/validation" element={<TemplatesSystemValidation />} />
                       <Route path="/admin/sonar-ai-v2/validation" element={<SonarAIValidationV2 />} />
-                      
+
                       {/* Validation Routes - Patches 436-440 */}
                       <Route path="/admin/underwater-drone/validation" element={<UnderwaterDroneValidation />} />
                       <Route path="/admin/price-alerts/validation" element={<PriceAlertsValidationPatch438 />} />
                       <Route path="/admin/incident-reports-v2/validation" element={<IncidentReportsV2Validation />} />
                       <Route path="/admin/ai-coordination/validation" element={<AICoordinationValidation />} />
-                      
+
                       {/* Validation Routes - Patches 441-445 */}
                       <Route path="/admin/sensor-hub-v2/validation" element={<SensorHubV2Validation />} />
                       <Route path="/admin/satcom-v2/validation" element={<SATCOMv2Validation />} />
                       <Route path="/admin/ocean-sonar-v3/validation" element={<OceanSonarV3Validation />} />
-                      
+
                       {/* Validation Routes - Patches 471-480 */}
                       <Route path="/admin/incident-replay-ai/validation" element={<IncidentReplayAIValidation />} />
                       <Route path="/admin/incidents-consolidation-v2/validation" element={<IncidentsConsolidationV2Validation />} />
                       <Route path="/admin/route-planner-v1/validation" element={<RoutePlannerV1Validation />} />
                       <Route path="/admin/satcom-v1/validation" element={<SatcomV1Validation />} />
                       <Route path="/admin/sonar-ai-detailed/validation" element={<SonarAIDetailedValidation />} />
-                      
+
                       {/* Patches Validation Routes */}
                       <Route path="/validation/patches-151-155" element={<Patches151to155 />} />
                       <Route path="/validation/hub" element={<PatchesValidationHub />} />
                       <Route path="/validation/patches-601-605" element={<Patches601to605 />} />
                       <Route path="/validation/patches-606-610" element={<Patches606to610 />} />
                       <Route path="/validation/patches-611-615" element={<Patches611to615 />} />
-                      
+
                       {/* Validation Route - Patches 481-485 */}
                       <Route path="/admin/patches-481-485/validation" element={<Patches481485Validation />} />
-                      
+
                       {/* Validation Route - Patches 491-495 */}
                       <Route path="/admin/patches-491-495/validation" element={<Patches491495Validation />} />
-                      
+
                       {/* PATCH 541 - PATCHES 506-510 UI Routes */}
                       <Route path="/admin/patches-506-510/validation" element={<Patches506510Validation />} />
                       <Route path="/admin/patches-506-510/ai-memory" element={<AIMemoryDashboard />} />
@@ -846,36 +850,36 @@ function App() {
                       <Route path="/admin/patches-506-510/rls-audit" element={<RLSAuditDashboard />} />
                       <Route path="/admin/patches-506-510/ai-feedback" element={<AIFeedbackDashboard />} />
                       <Route path="/admin/patches-506-510/sessions" element={<SessionManagement />} />
-                      
+
                       {/* PATCH 541 - Virtualized Logs */}
                       <Route path="/logs-center-virtual" element={<VirtualizedLogsCenter />} />
-                      
+
                       {/* PATCH 646 - Modules Status Dashboard */}
                       <Route path="/admin/modules-status" element={<ModulesStatusDashboard />} />
                       <Route path="/admin/modules-control" element={<ModulesStatusDashboard />} />
-                      
+
                       {/* PATCH 648 - AI Suggestions Dashboard */}
                       <Route path="/admin/ai-suggestions" element={<AISuggestionsDashboard />} />
-                      
+
                       {/* PATCH 541 Phase 3 - Performance Tools */}
                       <Route path="/admin/control-center" element={<ControlCenter />} />
                       <Route path="/admin/benchmark" element={<SystemBenchmark />} />
                       <Route path="/admin/health-validation" element={<SystemHealthDashboard />} />
                       <Route path="/admin/code-health" element={<CodeHealthDashboard />} />
-                      
+
                       {/* PATCH 542 - Image Optimization */}
                       <Route path="/admin/image-optimization" element={<ImageOptimizationPanel />} />
-                      
+
                       {/* PATCH 543 - Lighthouse CI */}
                       <Route path="/admin/lighthouse-dashboard" element={<LighthouseDashboard />} />
-                      
+
                       {/* Final - Deployment Status */}
                       <Route path="/admin/deployment-status" element={<DeploymentStatus />} />
-                      
+
                       {/* PATCH 545 - Technical Debt Tracking */}
                       <Route path="/admin/todo-tracker" element={<TodoTracker />} />
                       <Route path="/admin/labs-status" element={<LabsStatus />} />
-                      
+
                       {/* PATCH 602 - Epics & Patches Board */}
                       <Route path="/admin/epics-board" element={<EpicsBoard />} />
 
@@ -928,7 +932,7 @@ function App() {
                       <Route path="/smart-layout-demo" element={<SmartLayoutDemo />} />
                       <Route path="/template-editor-demo" element={<TemplateEditorDemo />} />
                       <Route path="/_offline" element={<Offline />} />
-                      
+
                       {/* New Module Routes */}
                       <Route path="/feedback" element={<FeedbackModule />} />
                       {/* PATCH 191.0: Consolidated Fleet Module */}
@@ -1009,16 +1013,16 @@ function App() {
                       <Route path="/voice-assistant" element={<VoiceAssistantModule />} />
                       <Route path="/notifications-center" element={<NotificationsCenterModule />} />
                       <Route path="/notifications" element={<NotificationsCenterModule />} />
-                      
+
                       {/* PATCH 407: Sonar AI Module */}
                       <Route path="/sonar-ai" element={<SonarAI />} />
-                      
+
                       {/* PATCH 524: Incident Replay AI Module */}
                       <Route path="/incident-replay" element={<IncidentReplayAI />} />
-                      
+
                       {/* PATCH 525: AI Visual Recognition Core Module */}
                       <Route path="/ai-vision-core" element={<AIVisionCore />} />
-                      
+
                       {/* Validation Routes - Patches 401-410 */}
                       <Route path="/admin/template-editor/validation" element={<TemplateEditorValidation />} />
                       <Route path="/admin/price-alerts/validation" element={<PriceAlertsValidation />} />
@@ -1027,18 +1031,18 @@ function App() {
                       <Route path="/admin/sonar-ai/validation" element={<SonarAIValidation />} />
                       <Route path="/admin/test-automation/validation" element={<TestAutomationValidation />} />
                       <Route path="/admin/templates-application/validation" element={<TemplatesApplicationValidation />} />
-                      
+
                       {/* Validation Routes - Patches 411-415 */}
                       <Route path="/admin/price-alerts-finalizado/validation" element={<PriceAlertsFinalizadoValidation />} />
                       <Route path="/admin/unified-logs-panel/validation" element={<UnifiedLogsPanelValidation />} />
                       <Route path="/admin/coordination-ai/validation" element={<CoordinationAIValidation />} />
                       <Route path="/admin/experimental-modules/validation" element={<ExperimentalModulesValidation />} />
-                      
+
                       {/* Validation Routes - Patches 416-420 */}
                       <Route path="/admin/templates-editor/validation" element={<TemplatesEditorValidation />} />
                       <Route path="/admin/price-alerts-notification/validation" element={<PriceAlertsNotificationValidation />} />
                       <Route path="/admin/satcom-simulation/validation" element={<SatcomSimulationValidation />} />
-                      
+
                       {/* Portuguese Module Routes with English Aliases */}
                       <Route path="/comunicacao" element={<Communication />} />
                       <Route path="/portal-funcionario" element={<Portal />} />
@@ -1046,21 +1050,21 @@ function App() {
                       <Route path="/checklists-inteligentes" element={<ChecklistsInteligentes />} />
                       <Route path="/real-time-workspace" element={<RealTimeWorkspace />} />
                       <Route path="/voice-assistant-new" element={<VoiceAssistantModule />} />
-                      
+
                       {/* PATCH 516-520: Advanced Sensor and Navigation Systems */}
                       <Route path="/sensors-hub" element={<SensorsHubAdvanced />} />
                       <Route path="/navigation-copilot" element={<NavigationCopilotAI />} />
                       <Route path="/satellite-live" element={<SatelliteLive />} />
                       <Route path="/joint-missions" element={<JointMissions />} />
                       <Route path="/interop-grid" element={<InteropGridAI />} />
-                      
+
                       {/* PATCH 511-515: Validation Routes */}
                       <Route path="/admin/patch-511-satellite-tracker" element={<Patch511SatelliteTracker />} />
                       <Route path="/admin/patch-512-satcom" element={<Patch512Satcom />} />
                       <Route path="/admin/patch-513-ocean-sonar" element={<Patch513OceanSonar />} />
                       <Route path="/admin/patch-514-navigation-copilot" element={<Patch514NavigationCopilot />} />
                       <Route path="/admin/patch-515-sensors-integration" element={<Patch515SensorsIntegration />} />
-                      
+
                       {/* PATCH 526-531: Validation Routes */}
                       <Route path="/admin/patch-526/communication" element={<Patch526Communication />} />
                       <Route path="/admin/patch-527/incident-reports" element={<Patch527IncidentReports />} />
@@ -1068,19 +1072,19 @@ function App() {
                       <Route path="/admin/patch-529/price-alerts" element={<Patch529PriceAlerts />} />
                       <Route path="/admin/patch-530/mission-control-v2" element={<Patch530MissionControlV2 />} />
                       <Route path="/admin/patch-531/test-validation" element={<Patch531TestValidation />} />
-                      
+
                       {/* PATCH 531-535: New Validation Routes */}
                       <Route path="/admin/patch-531/navigation-copilot-v2" element={<Patch531NavigationCopilotV2 />} />
                       <Route path="/admin/patch-532/route-planner-ai" element={<Patch532RoutePlannerAI />} />
                       <Route path="/admin/patch-533/underwater-drone-v2" element={<Patch533UnderwaterDroneV2 />} />
                       <Route path="/admin/patch-534/drone-commander-ai" element={<Patch534DroneCommanderAI />} />
                       <Route path="/admin/patch-535/mission-consolidation" element={<Patch535MissionConsolidation />} />
-                      
+
                       {/* PATCH 566-570: Copilot Presenter, AI Evolution, Changelog v3.5 */}
                       <Route path="/demo/copilot-presenter" element={<CopilotPresenterPage />} />
                       <Route path="/dashboard/ai-evolution" element={<AIEvolutionPage />} />
                       <Route path="/release-notes/v3.5" element={<ReleaseNotesV35 />} />
-                      
+
                       {/* Master Validation Dashboard */}
                       <Route path="/validation/master-validation" element={<Suspense fallback={<PageSkeleton />}>{React.createElement(safeLazyImport(() => import("@/pages/validation/master-validation")))}</Suspense>} />
                       <Route path="/validation/patches-546-550" element={<Patches546to550ValidationPage />} />
@@ -1096,12 +1100,12 @@ function App() {
                       <Route path="/validation/patches-601-605" element={<Patches601to605 />} />
                       <Route path="/validation/patches-606-610" element={<Patches606to610 />} />
                       <Route path="/validation/patches-611-615" element={<Patches611to615 />} />
-                       
+
                       {/* Additional navigation routes from config */}
                       {NAVIGATION.map(({ path, component: Component }) => (
                         <Route key={path} path={path} element={<Suspense fallback={SuspenseFallback}><Component /></Suspense>} />
                       ))}
-                      
+
                       <Route path="*" element={<NotFound />} />
                     </Route>
                   </Routes>

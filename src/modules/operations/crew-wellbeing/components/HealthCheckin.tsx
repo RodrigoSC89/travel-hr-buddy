@@ -1,247 +1,183 @@
 import React, { useState } from "react";
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
-import { Label } from "@/components/ui/label";
 import { Slider } from "@/components/ui/slider";
+import { Label } from "@/components/ui/label";
 import { Textarea } from "@/components/ui/textarea";
-import { Input } from "@/components/ui/input";
-import { 
-  Heart, 
-  Moon, 
-  Apple, 
-  Smile, 
-  Activity, 
-  AlertCircle,
-  Save,
-  TrendingUp,
-  TrendingDown
-} from "lucide-react";
 import { useToast } from "@/hooks/use-toast";
+import { supabase } from "@/integrations/supabase/client";
+import { Activity, Heart, Moon, Zap } from "lucide-react";
 
-interface HealthMetrics {
-  sleep_hours: number;
-  sleep_quality: number;
-  nutrition_rating: number;
-  mood_rating: number;
-  stress_level: number;
-  energy_level: number;
-  exercise_minutes: number;
-  water_intake_liters: number;
-  notes: string;
-}
-
-export const HealthCheckin: React.FC = () => {
+export const HealthCheckIn = () => {
   const { toast } = useToast();
-  const [metrics, setMetrics] = useState<HealthMetrics>({
-    sleep_hours: 7,
-    sleep_quality: 3,
-    nutrition_rating: 3,
-    mood_rating: 3,
-    stress_level: 3,
-    energy_level: 3,
-    exercise_minutes: 30,
-    water_intake_liters: 2,
-    notes: ""
+  const [isSubmitting, setIsSubmitting] = useState(false);
+  const [formData, setFormData] = useState({
+    stress_level: 50,
+    energy_level: 50,
+    sleep_quality: 50,
+    mood: 50,
+    notes: "",
   });
 
   const handleSubmit = async () => {
-    // TODO: Implement actual save to Supabase
-    toast({
-      title: "Health Check-in Saved",
-      description: "Your health metrics have been recorded successfully"
-    });
-  };
+    setIsSubmitting(true);
+    try {
+      const { data: { user } } = await supabase.auth.getUser();
+      
+      if (!user) {
+        toast({
+          title: "Erro",
+          description: "Você precisa estar autenticado",
+          variant: "destructive",
+        });
+        return;
+      }
 
-  const getRatingColor = (rating: number, inverse: boolean = false) => {
-    if (inverse) {
-      if (rating >= 4) return "text-red-500";
-      if (rating === 3) return "text-yellow-500";
-      return "text-green-500";
+      const { error } = await supabase.from("crew_health_logs" as any).insert({
+        crew_member_id: user.id,
+        stress_level: formData.stress_level,
+        energy_level: formData.energy_level,
+        sleep_quality: formData.sleep_quality,
+        mood: formData.mood,
+        notes: formData.notes,
+        timestamp: new Date().toISOString(),
+      });
+
+      if (error) throw error;
+
+      // Save to mood history for dashboard
+      const moodHistory = JSON.parse(localStorage.getItem("crew_mood_history") || "[]");
+      moodHistory.push({
+        date: new Date(),
+        stress: formData.stress_level,
+        energy: formData.energy_level,
+        sleep: formData.sleep_quality,
+        mood: formData.mood,
+      });
+      // Keep only last 30 days
+      const last30Days = moodHistory.slice(-30);
+      localStorage.setItem("crew_mood_history", JSON.stringify(last30Days));
+
+      toast({
+        title: "Check-in registrado",
+        description: "Seus dados de bem-estar foram salvos com sucesso",
+      });
+
+      // Reset form
+      setFormData({
+        stress_level: 50,
+        energy_level: 50,
+        sleep_quality: 50,
+        mood: 50,
+        notes: "",
+      });
+    } catch (error) {
+      console.error("Error submitting check-in:", error);
+      toast({
+        title: "Erro",
+        description: "Não foi possível salvar o check-in",
+        variant: "destructive",
+      });
+    } finally {
+      setIsSubmitting(false);
     }
-    if (rating >= 4) return "text-green-500";
-    if (rating === 3) return "text-yellow-500";
-    return "text-red-500";
-  };
-
-  const getRatingIcon = (value: number) => {
-    if (value >= 4) return <TrendingUp className="h-4 w-4" />;
-    return <TrendingDown className="h-4 w-4" />;
   };
 
   return (
-    <div className="space-y-6">
-      <Card>
-        <CardHeader>
-          <CardTitle className="flex items-center gap-2">
-            <Heart className="h-5 w-5 text-red-500" />
-            Daily Health Check-in
-          </CardTitle>
-          <CardDescription>Track your wellbeing metrics</CardDescription>
-        </CardHeader>
-        <CardContent className="space-y-6">
-          {/* Sleep */}
-          <div className="space-y-4">
-            <div className="flex items-center justify-between">
-              <div className="flex items-center gap-2">
-                <Moon className="h-5 w-5 text-blue-500" />
-                <Label>Sleep</Label>
-              </div>
-              <span className="text-sm font-medium">{metrics.sleep_hours} hours</span>
-            </div>
-            <Input
-              type="number"
-              min="0"
-              max="24"
-              step="0.5"
-              value={metrics.sleep_hours}
-              onChange={(e) => setMetrics({ ...metrics, sleep_hours: parseFloat(e.target.value) })}
-              className="w-full"
-            />
-            
-            <div>
-              <div className="flex items-center justify-between mb-2">
-                <Label>Sleep Quality</Label>
-                <span className={`text-sm font-medium ${getRatingColor(metrics.sleep_quality)}`}>
-                  {metrics.sleep_quality}/5
-                </span>
-              </div>
-              <Slider
-                value={[metrics.sleep_quality]}
-                onValueChange={(value) => setMetrics({ ...metrics, sleep_quality: value[0] })}
-                min={1}
-                max={5}
-                step={1}
-                className="w-full"
-              />
-            </div>
+    <Card>
+      <CardHeader>
+        <CardTitle className="flex items-center gap-2">
+          <Heart className="h-5 w-5 text-primary" />
+          Check-in de Bem-Estar
+        </CardTitle>
+      </CardHeader>
+      <CardContent className="space-y-6">
+        <div className="space-y-3">
+          <div className="flex items-center justify-between">
+            <Label className="flex items-center gap-2">
+              <Zap className="h-4 w-4" />
+              Nível de Estresse
+            </Label>
+            <span className="text-sm font-medium">{formData.stress_level}%</span>
           </div>
+          <Slider
+            value={[formData.stress_level]}
+            onValueChange={([value]) => setFormData({ ...formData, stress_level: value })}
+            max={100}
+            step={1}
+          />
+        </div>
 
-          {/* Nutrition */}
-          <div className="space-y-2">
-            <div className="flex items-center justify-between mb-2">
-              <div className="flex items-center gap-2">
-                <Apple className="h-5 w-5 text-green-500" />
-                <Label>Nutrition</Label>
-              </div>
-              <span className={`text-sm font-medium ${getRatingColor(metrics.nutrition_rating)}`}>
-                {metrics.nutrition_rating}/5
-              </span>
-            </div>
-            <Slider
-              value={[metrics.nutrition_rating]}
-              onValueChange={(value) => setMetrics({ ...metrics, nutrition_rating: value[0] })}
-              min={1}
-              max={5}
-              step={1}
-              className="w-full"
-            />
+        <div className="space-y-3">
+          <div className="flex items-center justify-between">
+            <Label className="flex items-center gap-2">
+              <Activity className="h-4 w-4" />
+              Nível de Energia
+            </Label>
+            <span className="text-sm font-medium">{formData.energy_level}%</span>
           </div>
+          <Slider
+            value={[formData.energy_level]}
+            onValueChange={([value]) => setFormData({ ...formData, energy_level: value })}
+            max={100}
+            step={1}
+          />
+        </div>
 
-          {/* Mood */}
-          <div className="space-y-2">
-            <div className="flex items-center justify-between mb-2">
-              <div className="flex items-center gap-2">
-                <Smile className="h-5 w-5 text-yellow-500" />
-                <Label>Mood</Label>
-              </div>
-              <span className={`text-sm font-medium ${getRatingColor(metrics.mood_rating)}`}>
-                {metrics.mood_rating}/5
-              </span>
-            </div>
-            <Slider
-              value={[metrics.mood_rating]}
-              onValueChange={(value) => setMetrics({ ...metrics, mood_rating: value[0] })}
-              min={1}
-              max={5}
-              step={1}
-              className="w-full"
-            />
+        <div className="space-y-3">
+          <div className="flex items-center justify-between">
+            <Label className="flex items-center gap-2">
+              <Moon className="h-4 w-4" />
+              Qualidade do Sono
+            </Label>
+            <span className="text-sm font-medium">{formData.sleep_quality}%</span>
           </div>
+          <Slider
+            value={[formData.sleep_quality]}
+            onValueChange={([value]) => setFormData({ ...formData, sleep_quality: value })}
+            max={100}
+            step={1}
+          />
+        </div>
 
-          {/* Stress Level */}
-          <div className="space-y-2">
-            <div className="flex items-center justify-between mb-2">
-              <div className="flex items-center gap-2">
-                <AlertCircle className="h-5 w-5 text-orange-500" />
-                <Label>Stress Level</Label>
-              </div>
-              <span className={`text-sm font-medium ${getRatingColor(metrics.stress_level, true)}`}>
-                {metrics.stress_level}/5
-              </span>
-            </div>
-            <Slider
-              value={[metrics.stress_level]}
-              onValueChange={(value) => setMetrics({ ...metrics, stress_level: value[0] })}
-              min={1}
-              max={5}
-              step={1}
-              className="w-full"
-            />
+        <div className="space-y-3">
+          <div className="flex items-center justify-between">
+            <Label className="flex items-center gap-2">
+              <Heart className="h-4 w-4" />
+              Humor Geral
+            </Label>
+            <span className="text-sm font-medium">{formData.mood}%</span>
           </div>
+          <Slider
+            value={[formData.mood]}
+            onValueChange={([value]) => setFormData({ ...formData, mood: value })}
+            max={100}
+            step={1}
+          />
+        </div>
 
-          {/* Energy Level */}
-          <div className="space-y-2">
-            <div className="flex items-center justify-between mb-2">
-              <div className="flex items-center gap-2">
-                <Activity className="h-5 w-5 text-purple-500" />
-                <Label>Energy Level</Label>
-              </div>
-              <span className={`text-sm font-medium ${getRatingColor(metrics.energy_level)}`}>
-                {metrics.energy_level}/5
-              </span>
-            </div>
-            <Slider
-              value={[metrics.energy_level]}
-              onValueChange={(value) => setMetrics({ ...metrics, energy_level: value[0] })}
-              min={1}
-              max={5}
-              step={1}
-              className="w-full"
-            />
-          </div>
+        <div className="space-y-2">
+          <Label>Observações (opcional)</Label>
+          <Textarea
+            placeholder="Como você está se sentindo? Alguma preocupação específica?"
+            value={formData.notes}
+            onChange={(e) => setFormData({ ...formData, notes: e.target.value })}
+            rows={3}
+          />
+        </div>
 
-          {/* Exercise */}
-          <div className="space-y-2">
-            <Label>Exercise (minutes)</Label>
-            <Input
-              type="number"
-              min="0"
-              max="300"
-              value={metrics.exercise_minutes}
-              onChange={(e) => setMetrics({ ...metrics, exercise_minutes: parseInt(e.target.value) })}
-            />
-          </div>
+        <Button 
+          onClick={handleSubmit} 
+          disabled={isSubmitting}
+          className="w-full"
+        >
+          {isSubmitting ? "Salvando..." : "Registrar Check-in"}
+        </Button>
 
-          {/* Water Intake */}
-          <div className="space-y-2">
-            <Label>Water Intake (liters)</Label>
-            <Input
-              type="number"
-              min="0"
-              max="10"
-              step="0.1"
-              value={metrics.water_intake_liters}
-              onChange={(e) => setMetrics({ ...metrics, water_intake_liters: parseFloat(e.target.value) })}
-            />
-          </div>
-
-          {/* Notes */}
-          <div className="space-y-2">
-            <Label>Notes (optional)</Label>
-            <Textarea
-              placeholder="Any concerns or notes about your wellbeing..."
-              value={metrics.notes}
-              onChange={(e) => setMetrics({ ...metrics, notes: e.target.value })}
-              className="min-h-[100px]"
-            />
-          </div>
-
-          <Button onClick={handleSubmit} className="w-full">
-            <Save className="mr-2 h-4 w-4" />
-            Save Check-in
-          </Button>
-        </CardContent>
-      </Card>
-    </div>
+        <p className="text-xs text-muted-foreground text-center">
+          🔒 Seus dados são confidenciais e protegidos
+        </p>
+      </CardContent>
+    </Card>
   );
 };
