@@ -7,7 +7,7 @@
  */
 
 import { openai } from "@/lib/ai/openai-client";
-import { supabase } from \"@/integrations/supabase/client\";
+import { supabase } from "@/integrations/supabase/client";
 import { logger } from "@/lib/logger";
 import { getModuleContext, ModuleContext } from "./contexts/moduleContext";
 
