@@ -37,8 +37,8 @@ const MissionControlPage: React.FC = () => {
   useEffect(() => {
     loadData();
     
-    // Auto-refresh every 10 seconds
-    const interval = setInterval(loadData, 10000);
+    // Auto-refresh every 15 seconds (increased from 10s)
+    const interval = setInterval(loadData, 15000);
     return () => clearInterval(interval);
   }, []);
 

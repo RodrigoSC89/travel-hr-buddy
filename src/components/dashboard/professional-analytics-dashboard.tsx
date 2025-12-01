@@ -100,7 +100,7 @@ const MetricCard = ({ title, value, change, icon: Icon, trend }: any) => {
           <div className="space-y-1">
             <p className="text-3xl font-bold font-playfair">{value}</p>
             <p className="text-xs text-muted-foreground flex items-center gap-1">
-              <span className={isPositive ? "text-green-600" : "text-red-600"}>
+              <span className={isPositive ? "text-success" : "text-destructive"}>
                 {isPositive ? "↑" : "↓"} {Math.abs(change)}%
               </span>
               {trend}
@@ -216,14 +216,14 @@ export function ProfessionalAnalyticsDashboard() {
                     type="monotone" 
                     dataKey="profit" 
                     fill="url(#colorProfit)" 
-                    stroke="#10b981"
+                    stroke="hsl(var(--success))"
                     name="Lucro"
                   />
                   <Line 
                     yAxisId="right"
                     type="monotone" 
                     dataKey="transactions" 
-                    stroke="#f59e0b" 
+                    stroke="hsl(var(--warning))" 
                     strokeWidth={3}
                     name="Transações"
                     dot={{ r: 4 }}
@@ -267,7 +267,7 @@ export function ProfessionalAnalyticsDashboard() {
                             animate={{ width: `${Math.min(percentage, 100)}%` }}
                             transition={{ duration: 1, ease: "easeOut" }}
                             className={`absolute top-0 left-0 h-full rounded-full ${
-                              isAbove ? "bg-gradient-to-r from-green-500 to-emerald-500" : "bg-gradient-to-r from-yellow-500 to-orange-500"
+                              isAbove ? "bg-gradient-to-r from-success/80 to-success" : "bg-gradient-to-r from-warning/80 to-warning"
                             }`}
                           />
                         </div>
@@ -326,7 +326,7 @@ export function ProfessionalAnalyticsDashboard() {
                   <Legend />
                   <Bar dataKey="revenue" stackId="a" fill="#3b82f6" name="Receita" />
                   <Bar dataKey="costs" stackId="a" fill="#ef4444" name="Custos" />
-                  <Line type="monotone" dataKey="profit" stroke="#10b981" strokeWidth={3} name="Lucro Líquido" />
+                  <Line type="monotone" dataKey="profit" stroke="hsl(var(--success))" strokeWidth={3} name="Lucro Líquido" />
                 </ComposedChart>
               </ResponsiveContainer>
             </CardContent>
@@ -365,8 +365,8 @@ export function ProfessionalAnalyticsDashboard() {
                     stroke="#3b82f6"
                     name="Usuários Ativos"
                   />
-                  <Bar dataKey="new" fill="#10b981" name="Novos" radius={[8, 8, 0, 0]} />
-                  <Bar dataKey="churned" fill="#ef4444" name="Churn" radius={[8, 8, 0, 0]} />
+                  <Bar dataKey="new" fill="hsl(var(--success))" name="Novos" radius={[8, 8, 0, 0]} />
+                  <Bar dataKey="churned" fill="hsl(var(--destructive))" name="Churn" radius={[8, 8, 0, 0]} />
                 </ComposedChart>
               </ResponsiveContainer>
             </CardContent>
@@ -383,8 +383,8 @@ export function ProfessionalAnalyticsDashboard() {
                 </CardTitle>
               </CardHeader>
               <CardContent className="space-y-4">
-                <div className="flex items-start gap-3 p-3 bg-green-50 dark:bg-green-950/20 rounded-lg border border-green-200 dark:border-green-800">
-                  <Activity className="h-5 w-5 text-green-600 mt-0.5" />
+                <div className="flex items-start gap-3 p-3 bg-success/10 rounded-lg border border-success/20">
+                  <Activity className="h-5 w-5 text-success mt-0.5" />
                   <div>
                     <p className="font-semibold text-sm">Tendência Positiva Detectada</p>
                     <p className="text-xs text-muted-foreground">
@@ -393,8 +393,8 @@ export function ProfessionalAnalyticsDashboard() {
                   </div>
                 </div>
 
-                <div className="flex items-start gap-3 p-3 bg-blue-50 dark:bg-blue-950/20 rounded-lg border border-blue-200 dark:border-blue-800">
-                  <TrendingUp className="h-5 w-5 text-blue-600 mt-0.5" />
+                <div className="flex items-start gap-3 p-3 bg-primary/10 rounded-lg border border-primary/20">
+                  <TrendingUp className="h-5 w-5 text-primary mt-0.5" />
                   <div>
                     <p className="font-semibold text-sm">Projeção de Crescimento</p>
                     <p className="text-xs text-muted-foreground">
@@ -403,8 +403,8 @@ export function ProfessionalAnalyticsDashboard() {
                   </div>
                 </div>
 
-                <div className="flex items-start gap-3 p-3 bg-purple-50 dark:bg-purple-950/20 rounded-lg border border-purple-200 dark:border-purple-800">
-                  <Target className="h-5 w-5 text-purple-600 mt-0.5" />
+                <div className="flex items-start gap-3 p-3 bg-accent/50 rounded-lg border border-border">
+                  <Target className="h-5 w-5 text-foreground mt-0.5" />
                   <div>
                     <p className="font-semibold text-sm">Oportunidade de Otimização</p>
                     <p className="text-xs text-muted-foreground">

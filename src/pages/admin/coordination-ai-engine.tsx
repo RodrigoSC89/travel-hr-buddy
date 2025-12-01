@@ -58,8 +58,8 @@ const CoordinationAIEnginePage: React.FC = () => {
   useEffect(() => {
     loadData();
     
-    // Refresh every 5 seconds
-    const interval = setInterval(loadData, 5000);
+    // Refresh every 10 seconds (increased from 5s)
+    const interval = setInterval(loadData, 10000);
     return () => clearInterval(interval);
   }, []);
 

@@ -56,8 +56,9 @@ export default function CrewManagement() {
       // Carregar navios
       const { data: vesselsData } = await supabase
         .from("vessels")
-        .select("*")
-        .eq("organization_id", "550e8400-e29b-41d4-a716-446655440000");
+        .select("id, name, status")
+        .eq("organization_id", "550e8400-e29b-41d4-a716-446655440000")
+        .limit(50);
 
       if (vesselsData) {
         setVessels(vesselsData);
@@ -150,11 +151,11 @@ export default function CrewManagement() {
 
   const getStatusColor = (status: string) => {
     switch (status) {
-    case "active": return "bg-green-500";
-    case "shore_leave": return "bg-yellow-500";
-    case "medical_leave": return "bg-orange-500";
-    case "inactive": return "bg-gray-500";
-    default: return "bg-gray-500";
+    case "active": return "bg-success";
+    case "shore_leave": return "bg-warning";
+    case "medical_leave": return "bg-orange-500/80";
+    case "inactive": return "bg-muted";
+    default: return "bg-muted";
     }
   };
 
@@ -217,11 +218,11 @@ export default function CrewManagement() {
             <div className="flex items-center justify-between">
               <div>
                 <p className="text-sm font-medium text-muted-foreground">Ativos</p>
-                <p className="text-2xl font-bold text-green-600">
+                <p className="text-2xl font-bold text-success">
                   {crewMembers.filter(m => m.status === "active").length}
                 </p>
               </div>
-              <CheckCircle className="h-8 w-8 text-green-600" />
+              <CheckCircle className="h-8 w-8 text-success" />
             </div>
           </CardContent>
         </Card>
@@ -231,11 +232,11 @@ export default function CrewManagement() {
             <div className="flex items-center justify-between">
               <div>
                 <p className="text-sm font-medium text-muted-foreground">Em Licença</p>
-                <p className="text-2xl font-bold text-yellow-600">
+                <p className="text-2xl font-bold text-warning">
                   {crewMembers.filter(m => m.status === "shore_leave").length}
                 </p>
               </div>
-              <Calendar className="h-8 w-8 text-yellow-600" />
+              <Calendar className="h-8 w-8 text-warning" />
             </div>
           </CardContent>
         </Card>
@@ -245,9 +246,9 @@ export default function CrewManagement() {
             <div className="flex items-center justify-between">
               <div>
                 <p className="text-sm font-medium text-muted-foreground">Cert. Vencendo</p>
-                <p className="text-2xl font-bold text-red-600">3</p>
+                <p className="text-2xl font-bold text-destructive">3</p>
               </div>
-              <AlertTriangle className="h-8 w-8 text-red-600" />
+              <AlertTriangle className="h-8 w-8 text-destructive" />
             </div>
           </CardContent>
         </Card>
