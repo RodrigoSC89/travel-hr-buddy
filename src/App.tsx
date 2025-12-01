@@ -17,6 +17,7 @@ import { ErrorDebugBanner } from "@/components/debug/ErrorDebugBanner";
 
 // PATCH 68.2 - Module Loader System
 import { getModuleRoutes } from "@/utils/module-routes";
+import { createOptimizedQueryClient } from "@/lib/performance/query-config";
 
 // Core pages - Eager loading
 import Index from "@/pages/Index";
@@ -29,16 +30,8 @@ const HealthCheck = React.lazy(() => import("@/pages/HealthCheck"));
 const NotFound = React.lazy(() => import("@/pages/NotFound"));
 const Unauthorized = React.lazy(() => import("@/pages/Unauthorized"));
 
-// Initialize monitoring & services
-const queryClient = new QueryClient({
-  defaultOptions: {
-    queries: {
-      staleTime: 1000 * 60 * 5,
-      retry: 1,
-      refetchOnWindowFocus: false,
-    },
-  },
-});
+// Initialize monitoring & services with optimized query client
+const queryClient = createOptimizedQueryClient();
 
 // RouterType based on environment
 const RouterType = import.meta.env.VITE_USE_HASH_ROUTER === "true" ? HashRouter : Router;
