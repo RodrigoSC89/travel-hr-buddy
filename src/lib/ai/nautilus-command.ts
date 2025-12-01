@@ -4,6 +4,7 @@
  */
 
 import { supabase } from "@/integrations/supabase/client";
+import { logger } from "@/lib/logger";
 
 const COMMAND_URL = `${import.meta.env.VITE_SUPABASE_URL}/functions/v1/nautilus-command`;
 
@@ -110,7 +111,10 @@ export async function streamCommandChat({
 
     onDone();
   } catch (error) {
-    console.error("Error in command chat:", error);
+    logger.error("Error in command chat", error as Error, { 
+      messagesCount: messages.length,
+      hasContext: !!context 
+    });
     if (onError) {
       onError(error instanceof Error ? error : new Error("Unknown error"));
     }

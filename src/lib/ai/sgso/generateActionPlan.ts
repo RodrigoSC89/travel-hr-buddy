@@ -84,7 +84,10 @@ Nível de risco: ${incident.sgso_risk_level}`;
       return null;
     }
   } catch (error) {
-    console.error("Error generating SGSO action plan:", error);
+    logger.error("Error generating SGSO action plan", error as Error, { 
+      category: incident.sgso_category,
+      riskLevel: incident.sgso_risk_level 
+    });
     return null;
   }
 }

@@ -26,9 +26,9 @@ export const reportInsight = async (category: string, payload: unknown): Promise
     // Envia em background sem bloquear a UI
     queueMicrotask(async () => {
       await supabase.from("ai_insights").insert(entry);
-      logger.info(`🧠 Insight enviado: ${category}`);
+      logger.info(`Insight enviado: ${category}`);
     });
   } catch (err) {
-    console.warn("⚠️ Falha ao enviar insight:", err);
+    logger.warn("Falha ao enviar insight", { error: err, category });
   }
 };
