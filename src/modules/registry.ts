@@ -406,9 +406,22 @@ export const MODULE_REGISTRY: Record<string, ModuleDefinition> = {
     category: "maintenance",
     path: "modules/maintenance-planner",
     description: "Plan and track maintenance",
-    status: "active", // PATCH 96.0 – Has route in AppRouter at /maintenance
+    status: "active",
     completeness: "100%",
     route: "/maintenance/planner",
+    icon: "Wrench",
+    lazy: true,
+  },
+
+  "maintenance.mmi": {
+    id: "maintenance.mmi",
+    name: "MMI - Manutenção Industrial",
+    category: "maintenance",
+    path: "pages/MMI",
+    description: "Sistema completo de gestão de manutenção com IA para forecasts e ordens de serviço",
+    status: "active",
+    completeness: "100%",
+    route: "/mmi",
     icon: "Wrench",
     lazy: true,
   },
