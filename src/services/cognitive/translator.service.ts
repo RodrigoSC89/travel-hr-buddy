@@ -3,6 +3,8 @@
  * Refactored multilingual translation service
  */
 
+import { logger } from "@/lib/logger";
+
 export type SupportedLanguage = "pt" | "en" | "es" | "fr" | "de";
 
 export interface TranslationCache {
@@ -81,7 +83,7 @@ export class TranslatorService {
         confidence: 0.0,
       };
     } catch (error) {
-      console.error("[Translator] Translation failed", error);
+      logger.error("[Translator] Translation failed", error as Error, { key, targetLang });
       return {
         translation: key,
         source: "fallback",
@@ -143,7 +145,7 @@ export class TranslatorService {
       }
     }
 
-    console.info("[Translator] Cleared expired cache");
+    logger.info("[Translator] Cleared expired cache", { cacheSize: this.cache.size });
   }
 
   // Private helper methods
@@ -171,7 +173,7 @@ export class TranslatorService {
       if (!response.ok) throw new Error(`Failed to load ${lang}.json`);
       return await response.json();
     } catch (error) {
-      console.error(`[Translator] Failed to load JSON for ${lang}`, error);
+      logger.error("[Translator] Failed to load translation JSON", error as Error, { lang });
       return {};
     }
   }

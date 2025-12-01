@@ -3,6 +3,7 @@
 
 import { supabase } from "@/integrations/supabase/client";
 import { RealtimeChannel } from "@supabase/supabase-js";
+import { logger } from "@/lib/logger";
 
 export interface Channel {
   id: string;
@@ -71,7 +72,7 @@ class MessageService {
         organization_id: ch.organization_id || undefined,
       })) as Channel[];
     } catch (error) {
-      console.error("Error fetching channels:", error);
+      logger.error("Error fetching channels", error as Error);
       return this.getDemoChannels();
     }
   }
@@ -118,7 +119,7 @@ class MessageService {
       // Normalize data to handle different column names
       return (data || []).map(msg => this.normalizeMessage(msg));
     } catch (error) {
-      console.error("Error fetching messages:", error);
+      logger.error("Error fetching messages", error as Error, { channelId: filter.channelId });
       return [];
     }
   }
@@ -191,7 +192,7 @@ class MessageService {
       if (error) throw error;
       return data ? this.normalizeMessage(data) : null;
     } catch (error) {
-      console.error("Error sending message:", error);
+      logger.error("Error sending message", error as Error, { channelId, contentLength: content.length });
       throw error;
     }
   }
@@ -233,7 +234,7 @@ class MessageService {
         organization_id: (data as any).organization_id ?? undefined,
       } as Channel) : null;
     } catch (error) {
-      console.error("Error creating channel:", error);
+      logger.error("Error creating channel", error as Error, { name, channelType });
       throw error;
     }
   }
@@ -261,7 +262,7 @@ class MessageService {
         organization_id: (data as any).organization_id ?? undefined,
       } as Channel) : null;
     } catch (error) {
-      console.error("Error updating channel:", error);
+      logger.error("Error updating channel", error as Error, { channelId, updates: Object.keys(updates) });
       throw error;
     }
   }
@@ -279,7 +280,7 @@ class MessageService {
       if (error) throw error;
       return true;
     } catch (error) {
-      console.error("Error deleting channel:", error);
+      logger.error("Error deleting channel", error as Error, { channelId });
       return false;
     }
   }
@@ -316,7 +317,7 @@ class MessageService {
         totalCount: countResult.count || 0,
       };
     } catch (error) {
-      console.error("Error fetching message history:", error);
+      logger.error("Error fetching message history", error as Error, { channelId, page });
       return { messages: [], totalCount: 0 };
     }
   }
@@ -340,7 +341,7 @@ class MessageService {
         table: "communication_channels",
       },
       (payload) => {
-        console.log("Channel change detected", payload);
+        logger.debug("Channel change detected via realtime", { event: payload.eventType });
         if (payload.new) {
           this.channelCallbacks.forEach((callback) => callback(payload.new as Channel));
         }
@@ -359,7 +360,7 @@ class MessageService {
     }
 
     this.realtimeChannel.on("postgres_changes", messageFilter, (payload) => {
-      console.log("New message detected", payload);
+      logger.debug("New message detected via realtime", { channelId });
       if (payload.new) {
         this.messageCallbacks.forEach((callback) => callback(payload.new as Message));
       }
@@ -418,7 +419,7 @@ class MessageService {
       if (error) throw error;
       return (data || []).map(msg => this.normalizeMessage(msg));
     } catch (error) {
-      console.error("Error searching messages:", error);
+      logger.error("Error searching messages", error as Error, { query, channelCount: channelIds?.length });
       return [];
     }
   }
