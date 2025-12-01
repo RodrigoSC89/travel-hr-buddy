@@ -9,6 +9,7 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { ReportingEngineService } from '@/services/reporting-engine.service';
 import type { GeneratedReport, ReportTemplate, ReportSchedule, ReportStatistics } from '@/types/reporting-engine';
 import { toast } from 'sonner';
+import { logger } from '@/lib/logger';
 
 const ReportingEngine: React.FC = () => {
   const [reports, setReports] = useState<GeneratedReport[]>([]);
@@ -35,7 +36,7 @@ const ReportingEngine: React.FC = () => {
       setSchedules(schedulesData);
       setStats(statsData);
     } catch (error) {
-      console.error('Error loading data:', error);
+      logger.error('Error loading data', { error });
       toast.error('Failed to load reporting data');
     } finally {
       setLoading(false);
@@ -56,7 +57,7 @@ const ReportingEngine: React.FC = () => {
       toast.success('Report generated successfully');
       loadData();
     } catch (error) {
-      console.error('Error generating report:', error);
+      logger.error('Error generating report', { error, reportType: 'inspection' });
       toast.error('Failed to generate report');
     }
   };
@@ -75,7 +76,7 @@ const ReportingEngine: React.FC = () => {
       window.URL.revokeObjectURL(url);
       toast.success('Report exported');
     } catch (error) {
-      console.error('Error exporting report:', error);
+      logger.error('Error exporting report', { error, reportId });
       toast.error('Failed to export report');
     }
   };

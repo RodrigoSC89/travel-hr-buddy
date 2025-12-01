@@ -4,6 +4,7 @@ import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { ScrollArea } from "@/components/ui/scroll-area";
 import { BookOpen, Home, FileText } from "lucide-react";
+import { logger } from "@/lib/logger";
 
 /**
  * Documentation Viewer Component
@@ -56,7 +57,7 @@ export default function DocsViewer() {
       ];
       setModuleList(modules);
     } catch (err) {
-      console.error("Error loading module list:", err);
+      logger.error("Error loading module list", { error: err });
     }
   };
 
