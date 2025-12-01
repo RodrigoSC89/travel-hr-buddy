@@ -6,6 +6,7 @@ import "./index.css";
 import "../sentry.client.config";
 import { logger } from "@/lib/logger";
 import { initializeTheme } from "@/lib/theme/theme-utils";
+import { initHealthCheck } from "@/lib/module-health";
 // PATCH 598: Enhanced PWA utilities
 import { 
   registerServiceWorker, 
@@ -17,6 +18,9 @@ import {
 
 // PATCH 129.0: Initialize theme before rendering
 initializeTheme();
+
+// PATCH 651.0: Run health check on startup
+initHealthCheck();
 
 // Iniciar monitor de failover na inicialização
 // initFailoverSystem(); // Desabilitado temporariamente - sem heartbeats configurados

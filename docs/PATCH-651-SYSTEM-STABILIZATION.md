@@ -88,6 +88,34 @@ import { ModuleErrorBoundary } from "@/components/error-boundaries/ModuleErrorBo
 
 ---
 
+## ✅ FASE 2.5: HEALTH CHECK SYSTEM (CONCLUÍDA)
+
+### Sistema de Health Check Implementado
+
+**Localização**: `src/lib/module-health.ts`
+
+**Funcionalidades**:
+- ✅ Validação automática de integridade dos módulos
+- ✅ Detecção de rotas duplicadas ou faltantes
+- ✅ Verificação de dependências entre módulos
+- ✅ Dashboard visual em `/health`
+- ✅ Logging estruturado no startup
+- ✅ Exposição de status via `window.__NAUTILUS_MODULE_HEALTH__`
+
+### Correções Críticas Aplicadas
+
+**1. Remoção de Arquivo Duplicado**
+- ❌ Removido: `src/utils/module-routes.tsx` (PATCH 68.2 - antigo)
+- ✅ Mantido: `src/utils/module-routes.ts` (PATCH 68.4 - correto)
+- **Motivo**: Conflito entre dois sistemas de rotas causava inconsistências
+
+**2. Nova Rota de Monitoramento**
+- ✅ Adicionada: `/health` - Dashboard de health check
+- ✅ Integração no App.tsx com lazy loading
+- ✅ Execução automática no startup via `main.tsx`
+
+---
+
 ## 🔍 VERIFICAÇÕES REALIZADAS
 
 ### Análise de Loops Infinitos
@@ -176,7 +204,12 @@ type ModuleCategory =
 ### Arquivos Modificados
 1. `src/modules/registry.ts` - Adicionados 6 novos módulos
 2. `src/components/error-boundaries/ModuleErrorBoundary.tsx` - Criado
-3. Páginas verificadas como existentes e funcionais
+3. `src/lib/module-health.ts` - Sistema de health check criado
+4. `src/pages/HealthCheck.tsx` - Dashboard de monitoramento criado
+5. `src/main.tsx` - Integração do health check no startup
+6. `src/App.tsx` - Adicionada rota `/health`
+7. `src/utils/module-routes.tsx` - **REMOVIDO** (duplicado)
+8. Páginas criadas: Travel, Communication, Analytics, Reports, Integrations
 
 ### Breaking Changes
 ❌ Nenhuma mudança breaking
