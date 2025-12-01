@@ -219,10 +219,12 @@ export const TravelDocumentManager = () => {
     setIsUploading(true);
     setUploadProgress(0);
 
-    // Simulate upload progress
+    // Simulate upload progress with cleanup tracking
+    let intervalCleared = false;
     const interval = setInterval(() => {
       setUploadProgress(prev => {
-        if (prev >= 100) {
+        if (prev >= 100 && !intervalCleared) {
+          intervalCleared = true;
           clearInterval(interval);
           setIsUploading(false);
           

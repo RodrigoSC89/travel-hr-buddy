@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useCallback } from "react";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
@@ -206,8 +206,8 @@ export const NotificationCenter = () => {
     }
   };
 
-  const setupRealTimeSubscription = () => {
-    // Mock real-time subscription for new notifications
+  const setupRealTimeSubscription = useCallback(() => {
+    // Mock real-time subscription for new notifications with cleanup tracking
     const interval = setInterval(() => {
       // Simulate new notification occasionally
       if (Math.random() < 0.1) { // 10% chance every 30 seconds
@@ -235,7 +235,7 @@ export const NotificationCenter = () => {
     }, 30000);
 
     return () => clearInterval(interval);
-  };
+  }, [toast]);
 
   const filterNotifications = () => {
     let filtered = [...notifications];

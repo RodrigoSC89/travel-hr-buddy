@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useRef } from "react";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
@@ -43,16 +43,22 @@ export const IoTSensorDashboard = () => {
   const [selectedVessel, setSelectedVessel] = useState<string | null>(null);
   const [alerts, setAlerts] = useState<any[]>([]);
   const [loading, setLoading] = useState(true);
+  const intervalRef = useRef<NodeJS.Timeout | null>(null);
 
   useEffect(() => {
     loadSensorData();
     
-    // Set up real-time sensor updates
-    const interval = setInterval(() => {
+    // Set up real-time sensor updates with cleanup tracking
+    intervalRef.current = setInterval(() => {
       simulateSensorUpdates();
-    }, 5000); // Update every 5 seconds
+    }, 5000);
 
-    return () => clearInterval(interval);
+    return () => {
+      if (intervalRef.current) {
+        clearInterval(intervalRef.current);
+        intervalRef.current = null;
+      }
+    };
   }, []);
 
   const loadSensorData = () => {

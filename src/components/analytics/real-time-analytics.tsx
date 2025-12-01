@@ -114,7 +114,7 @@ const RealTimeAnalytics = () => {
     { name: "Rede", value: 32, color: "#ff7300" }
   ]);
 
-  // Simulate real-time updates
+  // Simulate real-time updates with proper cleanup
   useEffect(() => {
     if (!isLive) return;
 
@@ -128,6 +128,8 @@ const RealTimeAnalytics = () => {
         change: generateRandomChange()
       })));
     }, 3000);
+
+    return () => clearInterval(interval);
 
     return () => clearInterval(interval);
   }, [isLive]);
