@@ -9,6 +9,7 @@ import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { Brain, ThumbsUp, ThumbsDown, TrendingUp, Download } from "lucide-react";
 import { useToast } from "@/hooks/use-toast";
+import { logger } from "@/lib/logger";
 
 interface LearningEvent {
   iteration: number;
@@ -53,7 +54,12 @@ export function Patch605Validation() {
       learningEvents.push(event);
       setEvents([...learningEvents]);
       
-      console.log(`PATCH 605 ✅ Learning iteration ${i}:`, event);
+      logger.info("PATCH 605: Learning iteration completed", { 
+        iteration: i, 
+        event,
+        weightAdjustment: event.adjustedWeight - event.initialWeight,
+        feedbackType: event.feedback
+      });
     }
     
     setIsLearning(false);
@@ -84,7 +90,11 @@ export function Patch605Validation() {
       learningEvents: events
     };
     
-    console.log("PATCH 605 📊 Learning report:", report);
+    logger.info("PATCH 605: Learning report exported", { 
+      report,
+      totalIterations: events.length,
+      averageAccuracy: report.averageAccuracy
+    });
     
     toast({
       title: "Report Exported",

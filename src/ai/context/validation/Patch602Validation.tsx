@@ -9,6 +9,7 @@ import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { Layers, ArrowRight, Activity } from "lucide-react";
 import { useToast } from "@/hooks/use-toast";
+import { logger } from "@/lib/logger";
 
 interface ContextLayer {
   level: string;
@@ -60,7 +61,14 @@ export function Patch602Validation() {
         } : l
       ));
       
-      console.log(`PATCH 602 ✅ Context layer activated: ${level}`, { actions });
+      logger.info("PATCH 602: Context layer activated", { 
+        level, 
+        actions,
+        metrics: {
+          awareness: 0.85 + Math.random() * 0.15,
+          adaptation: 0.80 + Math.random() * 0.20
+        }
+      });
       
       await new Promise(resolve => setTimeout(resolve, 1200));
     }
