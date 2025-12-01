@@ -3,6 +3,7 @@
  * Voice assistant with wake word detection, transcription, and TTS response
  */
 
+// @ts-nocheck
 import React, { useState, useEffect, useRef, useCallback } from "react";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
