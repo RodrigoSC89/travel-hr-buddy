@@ -1,4 +1,5 @@
 import { supabase } from "@/integrations/supabase/client";
+import { logger } from "@/lib/logger";
 
 export interface IntentInput {
   voiceCommand?: string;
@@ -46,9 +47,9 @@ export class MultimodalIntentEngine {
       }
       
       this.isInitialized = true;
-      console.log("Multimodal Intent Engine initialized");
+      logger.info("Multimodal Intent Engine initialized");
     } catch (error) {
-      console.error("Failed to initialize Intent Engine:", error);
+      logger.error("Failed to initialize Intent Engine", { error });
     }
   }
 
@@ -87,7 +88,7 @@ export class MultimodalIntentEngine {
         timestamp: new Date().toISOString(),
       };
     } catch (error) {
-      console.error("Error processing intent:", error);
+      logger.error("Error processing intent", { error });
       throw error;
     }
   }
@@ -203,7 +204,7 @@ export class MultimodalIntentEngine {
         parameters: intent.parameters,
       };
     } catch (error) {
-      console.error("Error classifying intent:", error);
+      logger.error("Error classifying intent", { error });
       
       // Return default intent on error
       return {
@@ -297,7 +298,7 @@ export class MultimodalIntentEngine {
     try {
       await (supabase as any).from("ia_performance_log").insert(data);
     } catch (error) {
-      console.error("Failed to log performance:", error);
+      logger.error("Failed to log performance", { error });
     }
   }
 }
