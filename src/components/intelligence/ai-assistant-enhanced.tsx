@@ -54,6 +54,7 @@ const AIAssistantEnhanced: React.FC = () => {
   const [selectedCapability, setSelectedCapability] = useState<string>("general");
   const [isLoaded, setIsLoaded] = useState(false);
   const messagesEndRef = useRef<HTMLDivElement>(null);
+  const timeoutsRef = useRef<NodeJS.Timeout[]>([]);
 
   useEffect(() => {
     setIsLoaded(true);
@@ -72,6 +73,13 @@ const AIAssistantEnhanced: React.FC = () => {
   useEffect(() => {
     messagesEndRef.current?.scrollIntoView({ behavior: "smooth" });
   }, [messages]);
+
+  // Cleanup all timeouts on unmount
+  useEffect(() => {
+    return () => {
+      timeoutsRef.current.forEach(timeout => clearTimeout(timeout));
+    };
+  }, []);
 
   const aiCapabilities: AICapability[] = [
     {
@@ -132,8 +140,8 @@ const AIAssistantEnhanced: React.FC = () => {
     setInputMessage("");
     setIsProcessing(true);
 
-    // Simular processamento da IA
-    setTimeout(() => {
+    // Simular processamento da IA com cleanup tracking
+    const timeout = setTimeout(() => {
       const aiResponse = generateAIResponse(inputMessage, selectedCapability);
       const aiMessage: Message = {
         id: `ai-${Date.now()}`,
@@ -146,6 +154,7 @@ const AIAssistantEnhanced: React.FC = () => {
       setMessages(prev => [...prev, aiMessage]);
       setIsProcessing(false);
     }, 1500);
+    timeoutsRef.current.push(timeout);
   };
 
   const generateAIResponse = (input: string, capability: string): string => {
@@ -179,11 +188,12 @@ const AIAssistantEnhanced: React.FC = () => {
   const handleVoiceToggle = () => {
     setIsVoiceActive(!isVoiceActive);
     if (!isVoiceActive) {
-      // Simular reconhecimento de voz
-      setTimeout(() => {
+      // Simular reconhecimento de voz com cleanup tracking
+      const timeout = setTimeout(() => {
         setInputMessage("Como está o desempenho das operações hoje?");
         setIsVoiceActive(false);
       }, 3000);
+      timeoutsRef.current.push(timeout);
     }
   };
 

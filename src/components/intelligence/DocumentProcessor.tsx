@@ -36,6 +36,7 @@ export const DocumentProcessor: React.FC = () => {
   const [processedDocs, setProcessedDocs] = useState<ProcessedDocument[]>([]);
   const [selectedDoc, setSelectedDoc] = useState<ProcessedDocument | null>(null);
   const fileInputRef = useRef<HTMLInputElement>(null);
+  const progressIntervalRef = useRef<NodeJS.Timeout | null>(null);
   const { toast } = useToast();
 
   const handleFileUpload = async (files: FileList | null) => {
@@ -74,11 +75,14 @@ export const DocumentProcessor: React.FC = () => {
     setUploadProgress(0);
 
     try {
-      // Simulate upload progress
-      const progressInterval = setInterval(() => {
+      // Simulate upload progress with proper cleanup tracking
+      progressIntervalRef.current = setInterval(() => {
         setUploadProgress(prev => {
           if (prev >= 90) {
-            clearInterval(progressInterval);
+            if (progressIntervalRef.current) {
+              clearInterval(progressIntervalRef.current);
+              progressIntervalRef.current = null;
+            }
             return 90;
           }
           return prev + 10;
@@ -98,7 +102,10 @@ export const DocumentProcessor: React.FC = () => {
         }
       });
 
-      clearInterval(progressInterval);
+      if (progressIntervalRef.current) {
+        clearInterval(progressIntervalRef.current);
+        progressIntervalRef.current = null;
+      }
       setUploadProgress(100);
 
       if (error) throw error;
@@ -128,6 +135,10 @@ export const DocumentProcessor: React.FC = () => {
       }
 
     } catch (error) {
+      if (progressIntervalRef.current) {
+        clearInterval(progressIntervalRef.current);
+        progressIntervalRef.current = null;
+      }
       toast({
         title: "Erro no Processamento",
         description: error instanceof Error ? error.message : "Falha ao processar documento",
