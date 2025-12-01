@@ -6,6 +6,7 @@
  */
 
 import { supabase } from "@/integrations/supabase/client";
+import { logger } from "@/lib/logger";
 import type {
   CoordinationAgent,
   CoordinationTask,
@@ -35,7 +36,7 @@ class CoordinationAIService {
       .single();
 
     if (error) {
-      console.error("Error registering agent:", error);
+      logger.error("Error registering agent", error, { agent: agent.agent_name });
       return null;
     }
 
@@ -59,7 +60,7 @@ class CoordinationAIService {
     const { data, error } = await query.order("priority_level", { ascending: false });
 
     if (error) {
-      console.error("Error fetching agents:", error);
+      logger.error("Error fetching agents", error, { filters });
       return [];
     }
 
@@ -80,7 +81,7 @@ class CoordinationAIService {
       .eq("id", agentId);
 
     if (error) {
-      console.error("Error updating agent status:", error);
+      logger.error("Error updating agent status", error, { agentId, status });
       return false;
     }
 
@@ -108,7 +109,7 @@ class CoordinationAIService {
       .single();
 
     if (error) {
-      console.error("Error creating task:", error);
+      logger.error("Error creating task", error, { taskName: task.task_name, taskType: task.task_type });
       return null;
     }
 
@@ -135,7 +136,7 @@ class CoordinationAIService {
     const { data, error } = await query.order("priority", { ascending: false }).order("created_at", { ascending: true });
 
     if (error) {
-      console.error("Error fetching tasks:", error);
+      logger.error("Error fetching tasks", error, { filters });
       return [];
     }
 
@@ -154,7 +155,7 @@ class CoordinationAIService {
       .single();
 
     if (taskError || !task) {
-      console.error("Error fetching task:", taskError);
+      logger.error("Error fetching task", taskError as Error, { taskId });
       return false;
     }
 
@@ -166,7 +167,7 @@ class CoordinationAIService {
       .order("priority_level", { ascending: false });
 
     if (!agents || agents.length === 0) {
-      console.log("No available agents");
+      logger.info("No available agents", { taskId });
       return false;
     }
 
@@ -178,7 +179,7 @@ class CoordinationAIService {
     });
 
     if (capableAgents.length === 0) {
-      console.log("No agents with required capabilities");
+      logger.info("No agents with required capabilities", { taskId, requiredCapabilities: task.required_capabilities });
       return false;
     }
 
@@ -202,7 +203,7 @@ class CoordinationAIService {
       .eq("id", taskId);
 
     if (assignError) {
-      console.error("Error assigning task:", assignError);
+      logger.error("Error assigning task", assignError, { taskId, agentId: bestAgent.id });
       return false;
     }
 
@@ -267,7 +268,7 @@ class CoordinationAIService {
       .single();
 
     if (updateError) {
-      console.error("Error updating task:", updateError);
+      logger.error("Error updating task", updateError, { taskId, status });
       return false;
     }
 
@@ -311,7 +312,7 @@ class CoordinationAIService {
       }]);
 
     if (error) {
-      console.error("Error logging decision:", error);
+      logger.error("Error logging decision", error, { taskId: decision.task_id, agentId: decision.agent_id });
       return false;
     }
 
@@ -329,7 +330,7 @@ class CoordinationAIService {
       .order("timestamp", { ascending: false });
 
     if (error) {
-      console.error("Error fetching decisions:", error);
+      logger.error("Error fetching decisions", error, { taskId });
       return [];
     }
 
@@ -347,7 +348,7 @@ class CoordinationAIService {
       .range(offset, offset + limit - 1);
 
     if (error) {
-      console.error("Error fetching all decisions:", error);
+      logger.error("Error fetching all decisions", error, { limit, offset });
       return [];
     }
 
@@ -393,7 +394,7 @@ class CoordinationAIService {
       }]);
 
     if (error) {
-      console.error("Error linking to mission:", error);
+      logger.error("Error linking to mission", error, { taskId, missionId });
       return false;
     }
 
