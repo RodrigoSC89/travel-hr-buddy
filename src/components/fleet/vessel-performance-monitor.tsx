@@ -47,12 +47,6 @@ const VesselPerformanceMonitor = () => {
   const [vessels, setVessels] = useState<VesselPerformanceData[]>([]);
   const [selectedVessel, setSelectedVessel] = useState<string>("");
 
-  useEffect(() => {
-    loadPerformanceData();
-    const interval = setInterval(loadPerformanceData, 60000); // Update every minute
-    return () => clearInterval(interval);
-  }, []);
-
   const loadPerformanceData = () => {
     // Simulate real-time performance data
     const mockData: VesselPerformanceData[] = [
@@ -110,6 +104,13 @@ const VesselPerformanceMonitor = () => {
       setSelectedVessel(mockData[0].id);
     }
   };
+
+  // PATCH 549: useEffect after function declaration
+  useEffect(() => {
+    loadPerformanceData();
+    const interval = setInterval(loadPerformanceData, 60000); // Update every minute
+    return () => clearInterval(interval);
+  }, []);
 
   const generateMockHistory = (): PerformancePoint[] => {
     const points: PerformancePoint[] = [];

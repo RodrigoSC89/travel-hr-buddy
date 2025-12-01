@@ -63,11 +63,6 @@ const ComplianceChecklist = () => {
   const [aiInsight, setAiInsight] = useState<string>("");
   const { toast } = useToast();
 
-  useEffect(() => {
-    loadComplianceRecords();
-    loadAIInsights();
-  }, []);
-
   const loadComplianceRecords = async () => {
     try {
       setLoading(true);
@@ -95,6 +90,9 @@ const ComplianceChecklist = () => {
       );
 
       setRecords(recordsWithDetails as any);
+      
+      // PATCH 549: Call loadAIInsights after records are loaded
+      await loadAIInsightsInternal(recordsWithDetails as any);
     } catch (error) {
       console.error("Error loading compliance records:", error);
       toast({
@@ -107,11 +105,24 @@ const ComplianceChecklist = () => {
     }
   };
 
+  // PATCH 549: Moved loadAIInsights inside loadComplianceRecords to avoid stale state dependency
+  // and useEffect after both functions
+  useEffect(() => {
+    const loadData = async () => {
+      await loadComplianceRecords();
+    };
+    loadData();
+  }, []);
+
   const loadAIInsights = async () => {
+    await loadAIInsightsInternal(records);
+  };
+
+  const loadAIInsightsInternal = async (currentRecords: any[]) => {
     try {
-      const nonCompliantCount = records.filter(r => r.risk_level === "non_compliant").length;
-      const riskCount = records.filter(r => r.risk_level === "major_risk" || r.risk_level === "minor_risk").length;
-      const compliantCount = records.filter(r => r.risk_level === "compliant").length;
+      const nonCompliantCount = currentRecords.filter(r => r.risk_level === "non_compliant").length;
+      const riskCount = currentRecords.filter(r => r.risk_level === "major_risk" || r.risk_level === "minor_risk").length;
+      const compliantCount = currentRecords.filter(r => r.risk_level === "compliant").length;
       
       const response = await runAIContext({
         module: "compliance-auditor",
@@ -120,7 +131,7 @@ const ComplianceChecklist = () => {
           nonCompliantCount,
           riskCount,
           compliantCount,
-          totalChecklists: records.filter(r => r.completion_status === "completed").length
+          totalChecklists: currentRecords.filter(r => r.completion_status === "completed").length
         }
       });
       
