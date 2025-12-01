@@ -1,4 +1,3 @@
-// @ts-nocheck
 /**
  * PATCH 536 - Core AI Engine
  * Central AI Engine with OpenAI Integration
@@ -100,10 +99,15 @@ const storeInteraction = async (request: AIEngineRequest, response: string): Pro
       }
     };
     
-    // Store in Supabase for persistent learning and analytics
+    // Store in Supabase ai_memory_events table for persistent learning and analytics
     const { error } = await supabase
-      .from("ai_interactions")
-      .insert(contextData);
+      .from("ai_memory_events")
+      .insert({
+        event_type: "ai_interaction",
+        event_data: contextData,
+        user_id: request.context.userId,
+        metadata: contextData.metadata
+      });
     
     if (error) {
       logger.warn("Failed to persist AI interaction to Supabase", { error });
