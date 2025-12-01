@@ -8,6 +8,7 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { SmartDrillsService } from '@/services/smart-drills.service';
 import type { SmartDrill, DrillStatistics } from '@/types/smart-drills';
 import { toast } from 'sonner';
+import { logger } from '@/lib/logger';
 
 const SmartDrills: React.FC = () => {
   const [drills, setDrills] = useState<SmartDrill[]>([]);
@@ -25,7 +26,7 @@ const SmartDrills: React.FC = () => {
       const data = await SmartDrillsService.getDrills();
       setDrills(data);
     } catch (error) {
-      console.error('Error loading drills:', error);
+      logger.error('Error loading drills', { error });
       toast.error('Failed to load drills');
     } finally {
       setLoading(false);
@@ -37,7 +38,7 @@ const SmartDrills: React.FC = () => {
       const data = await SmartDrillsService.getDrillStatistics();
       setStats(data);
     } catch (error) {
-      console.error('Error loading stats:', error);
+      logger.error('Error loading stats', { error });
     }
   };
 
@@ -65,7 +66,7 @@ const SmartDrills: React.FC = () => {
       loadDrills();
       loadStats();
     } catch (error) {
-      console.error('Error generating drill:', error);
+      logger.error('Error generating drill', { error });
       toast.error('Failed to generate drill');
     }
   };

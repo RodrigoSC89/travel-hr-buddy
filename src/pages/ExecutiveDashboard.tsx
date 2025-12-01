@@ -1,9 +1,11 @@
 import React, { useState, useEffect } from "react";
+import { useNavigate } from "react-router-dom";
 import { OrganizationLayout } from "@/components/layout/organization-layout";
 import { ModulePageWrapper } from "@/components/ui/module-page-wrapper";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
+import { logger } from "@/lib/logger";
 import { 
   BarChart, 
   Bar, 
@@ -181,6 +183,7 @@ const SectionHeader = ({ icon: Icon, title, description }: SectionHeaderProps) =
 
 export default function ExecutiveDashboard() {
   const { currentOrganization } = useOrganization();
+  const navigate = useNavigate();
   const [selectedPeriod, setSelectedPeriod] = useState("monthly");
   const [isLoading, setIsLoading] = useState(true);
   const [kpiData, setKpiData] = useState<KPIData[]>([]);
@@ -208,7 +211,7 @@ export default function ExecutiveDashboard() {
         loadRecentActivities()
       ]);
     } catch (error) {
-      console.error("Error loading dashboard data:", error);
+      logger.error("Error loading dashboard data", { error, organizationId: currentOrganization?.id });
       toast.error("Erro ao carregar dados do dashboard");
     } finally {
       setIsLoading(false);
@@ -270,7 +273,7 @@ export default function ExecutiveDashboard() {
         }
       ]);
     } catch (error) {
-      console.error("Error loading KPI data:", error);
+      logger.error("Error loading KPI data", { error, organizationId: currentOrganization?.id });
     }
   };
 
@@ -306,7 +309,7 @@ export default function ExecutiveDashboard() {
 
       setFleetPerformanceData(performanceData);
     } catch (error) {
-      console.error("Error loading fleet performance:", error);
+      logger.error("Error loading fleet performance", { error, organizationId: currentOrganization?.id });
     }
   };
 
@@ -348,7 +351,7 @@ export default function ExecutiveDashboard() {
 
       setRecentActivities(activities);
     } catch (error) {
-      console.error("Error loading recent activities:", error);
+      logger.error("Error loading recent activities", { error, organizationId: currentOrganization?.id });
       // Fallback to default activities
       setRecentActivities([
         {
@@ -544,7 +547,7 @@ export default function ExecutiveDashboard() {
                     </div>
                     <Button 
                       className="w-full mt-4 bg-blue-600 hover:bg-blue-700 text-white font-semibold"
-                      onClick={() => window.location.href = "/peo-dp"}
+                      onClick={() => navigate("/peo-dp")}
                     >
                     Acessar PEO-DP
                     </Button>
@@ -588,7 +591,7 @@ export default function ExecutiveDashboard() {
                     </div>
                     <Button 
                       className="w-full mt-4 bg-red-600 hover:bg-red-700 text-white font-semibold"
-                      onClick={() => window.location.href = "/sgso"}
+                      onClick={() => navigate("/sgso")}
                     >
                     Acessar SGSO
                     </Button>
@@ -632,7 +635,7 @@ export default function ExecutiveDashboard() {
                     </div>
                     <Button 
                       className="w-full mt-4 bg-green-600 hover:bg-green-700 text-white font-semibold"
-                      onClick={() => window.location.href = "/peotram"}
+                      onClick={() => navigate("/peotram")}
                     >
                     Acessar PEOTRAM
                     </Button>
