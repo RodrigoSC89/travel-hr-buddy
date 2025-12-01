@@ -1,4 +1,5 @@
 import React, { useState, useEffect, useCallback } from "react";
+import { useNavigate } from "react-router-dom";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
@@ -45,6 +46,7 @@ const MaritimeFleetManagement = () => {
   const [activeTab, setActiveTab] = useState("overview");
   const [isLoading, setIsLoading] = useState(false);
   const { toast } = useToast();
+  const navigate = useNavigate();
 
   // Quick stats state
   const [fleetStats, setFleetStats] = useState({
@@ -331,7 +333,7 @@ const MaritimeFleetManagement = () => {
                 <CardDescription>Programação e histórico</CardDescription>
               </CardHeader>
               <CardContent>
-                <Button variant="outline" onClick={() => window.location.href = "/maintenance/planner"}>
+                <Button variant="outline" onClick={() => navigate("/maintenance/planner")}>
                   Ir para Planejador de Manutenção
                 </Button>
               </CardContent>
@@ -345,7 +347,7 @@ const MaritimeFleetManagement = () => {
                 <CardDescription>Centro de documentos da frota</CardDescription>
               </CardHeader>
               <CardContent>
-                <Button variant="outline" onClick={() => window.location.href = "/dashboard/document-hub"}>
+                <Button variant="outline" onClick={() => navigate("/dashboard/document-hub")}>
                   Ir para Document Hub
                 </Button>
               </CardContent>
@@ -387,7 +389,7 @@ const MaritimeFleetManagement = () => {
                 <CardDescription>Notificações e avisos críticos</CardDescription>
               </CardHeader>
               <CardContent>
-                <Button variant="outline" onClick={() => window.location.href = "/notifications-center"}>
+                <Button variant="outline" onClick={() => navigate("/notifications-center")}>
                   Ir para Central de Notificações
                 </Button>
               </CardContent>
@@ -401,7 +403,7 @@ const MaritimeFleetManagement = () => {
                 <CardDescription>Compliance regulatório</CardDescription>
               </CardHeader>
               <CardContent>
-                <Button variant="outline" onClick={() => window.location.href = "/compliance-hub"}>
+                <Button variant="outline" onClick={() => navigate("/compliance-hub")}>
                   Ir para Compliance Hub
                 </Button>
               </CardContent>
@@ -415,7 +417,7 @@ const MaritimeFleetManagement = () => {
                 <CardDescription>Central de comunicação</CardDescription>
               </CardHeader>
               <CardContent>
-                <Button variant="outline" onClick={() => window.location.href = "/notifications-center"}>
+                <Button variant="outline" onClick={() => navigate("/notifications-center")}>
                   Ir para Central de Notificações
                 </Button>
               </CardContent>
