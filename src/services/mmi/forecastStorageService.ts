@@ -7,6 +7,7 @@
 
 import { createClient } from "@/lib/supabase/client";
 import type { AIForecast } from "@/types/mmi";
+import { logger } from "@/lib/logger";
 
 export interface SaveForecastInput {
   vessel_id?: string;
@@ -40,13 +41,13 @@ export async function saveForecast(input: SaveForecastInput) {
       .single();
 
     if (error) {
-      console.error("Error saving forecast:", error);
+      logger.error("Error saving forecast", error as Error, { vesselName: input.vessel_name, systemName: input.system_name });
       throw error;
     }
 
     return data;
   } catch (error) {
-    console.error("Failed to save forecast:", error);
+    logger.error("Failed to save forecast", error as Error, { vesselName: input.vessel_name, systemName: input.system_name });
     throw error;
   }
 }

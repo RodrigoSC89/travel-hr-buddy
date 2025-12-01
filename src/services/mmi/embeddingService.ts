@@ -4,6 +4,7 @@
  */
 
 import OpenAI from "openai";
+import { logger } from "@/lib/logger";
 
 const EMBEDDING_MODEL = "text-embedding-3-small";
 const EMBEDDING_DIMENSIONS = 1536;
@@ -21,7 +22,7 @@ export const generateEmbedding = async (text: string): Promise<number[]> => {
   const apiKey = import.meta.env.VITE_OPENAI_API_KEY;
   
   if (!apiKey || apiKey === "your_openai_api_key_here") {
-    console.warn("OpenAI API key not configured, using mock embedding");
+    logger.warn("OpenAI API key not configured, using mock embedding");
     return generateMockEmbedding();
   }
 
@@ -39,8 +40,8 @@ export const generateEmbedding = async (text: string): Promise<number[]> => {
 
     return response.data[0].embedding;
   } catch (error) {
-    console.error("Error generating embedding:", error);
-    console.warn("Falling back to mock embedding");
+    logger.error("Error generating embedding", error as Error, { textLength: text.length });
+    logger.warn("Falling back to mock embedding");
     return generateMockEmbedding();
   }
 };
