@@ -1,5 +1,6 @@
 // PATCH 599: Smart Drills Service
 import { supabase } from "@/integrations/supabase/client";
+import { logger } from "@/lib/logger";
 import type { Database } from "@/integrations/supabase/types";
 import type {
   SmartDrill,
@@ -39,7 +40,7 @@ export class SmartDrillsService {
     const { data, error } = await query.returns<SmartDrill[]>();
 
     if (error) {
-      console.error('Error fetching drills:', error);
+      logger.error('Error fetching drills', error as Error, { vesselId });
       throw error;
     }
 
@@ -57,7 +58,7 @@ export class SmartDrillsService {
       .single<SmartDrill>();
 
     if (error) {
-      console.error('Error fetching drill:', error);
+      logger.error('Error fetching drill', error as Error, { drillId: id });
       throw error;
     }
 
@@ -76,7 +77,7 @@ export class SmartDrillsService {
       .single<SmartDrill>();
 
     if (error) {
-      console.error('Error creating drill:', error);
+      logger.error('Error creating drill', error as Error, { drillType: drill.drill_type });
       throw error;
     }
 
@@ -96,7 +97,7 @@ export class SmartDrillsService {
       .single<SmartDrill>();
 
     if (error) {
-      console.error('Error updating drill:', error);
+      logger.error('Error updating drill', error as Error, { drillId: id });
       throw error;
     }
 
@@ -113,7 +114,7 @@ export class SmartDrillsService {
       .eq('id', id);
 
     if (error) {
-      console.error('Error deleting drill:', error);
+      logger.error('Error deleting drill', error as Error, { drillId: id });
       throw error;
     }
   }
@@ -140,7 +141,7 @@ export class SmartDrillsService {
       .returns<DrillResponse[]>();
 
     if (error) {
-      console.error('Error fetching drill responses:', error);
+      logger.error('Error fetching drill responses', error as Error, { drillId });
       throw error;
     }
 
@@ -161,7 +162,7 @@ export class SmartDrillsService {
       .single<DrillResponse>();
 
     if (error) {
-      console.error('Error submitting drill response:', error);
+      logger.error('Error submitting drill response', error as Error, { drillId: response.drill_id });
       throw error;
     }
 
@@ -179,7 +180,7 @@ export class SmartDrillsService {
       .single<DrillEvaluation>();
 
     if (error && error.code !== 'PGRST116') {
-      console.error('Error fetching drill evaluation:', error);
+      logger.error('Error fetching drill evaluation', error as Error, { drillId });
       throw error;
     }
 
@@ -200,7 +201,7 @@ export class SmartDrillsService {
       .single<DrillEvaluation>();
 
     if (error) {
-      console.error('Error creating drill evaluation:', error);
+      logger.error('Error creating drill evaluation', error as Error, { drillId: evaluation.drill_id });
       throw error;
     }
 
@@ -219,7 +220,7 @@ export class SmartDrillsService {
       .returns<DrillCorrectiveAction[]>();
 
     if (error) {
-      console.error('Error fetching corrective actions:', error);
+      logger.error('Error fetching corrective actions', error as Error, { drillId });
       throw error;
     }
 
@@ -240,7 +241,7 @@ export class SmartDrillsService {
       .single<DrillCorrectiveAction>();
 
     if (error) {
-      console.error('Error creating corrective action:', error);
+      logger.error('Error creating corrective action', error as Error, { drillId: action.drill_id });
       throw error;
     }
 
@@ -263,7 +264,7 @@ export class SmartDrillsService {
       .single<DrillCorrectiveAction>();
 
     if (error) {
-      console.error('Error updating corrective action:', error);
+      logger.error('Error updating corrective action', error as Error, { actionId: id });
       throw error;
     }
 
@@ -281,7 +282,7 @@ export class SmartDrillsService {
     });
 
     if (error) {
-      console.error('Error generating drill scenario:', error);
+      logger.error('Error generating drill scenario', error as Error, { drillType: request.drill_type });
       throw error;
     }
 
@@ -303,7 +304,7 @@ export class SmartDrillsService {
     });
 
     if (error) {
-      console.error('Error generating drill evaluation:', error);
+      logger.error('Error generating drill evaluation', error as Error, { drillId: request.drill_id });
       throw error;
     }
 
@@ -321,7 +322,7 @@ export class SmartDrillsService {
     const { data, error } = await supabase.rpc('get_drill_statistics') as { data: DrillStatistics | null; error: any };
 
     if (error) {
-      console.error('Error fetching drill statistics:', error);
+      logger.error('Error fetching drill statistics', error as Error, { vesselId });
       throw error;
     }
 

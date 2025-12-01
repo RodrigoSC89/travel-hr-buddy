@@ -173,7 +173,7 @@ class SensorsHubService {
     const { data, error } = await query;
 
     if (error) {
-      console.error("Error fetching sensor logs:", error);
+      logger.error("Error fetching sensor logs", error as Error, { vesselId, sensorType, limit });
       return [];
     }
 
@@ -191,7 +191,7 @@ class SensorsHubService {
       .order("created_at", { ascending: false });
 
     if (error) {
-      console.error("Error fetching alerts:", error);
+      logger.error("Error fetching alerts", error as Error);
       return [];
     }
 
@@ -254,7 +254,7 @@ class SensorsHubService {
       .limit(100);
 
     if (error) {
-      console.error("Error fetching latest readings:", error);
+      logger.error("Error fetching latest readings", error as Error);
       return [];
     }
 

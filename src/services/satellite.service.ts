@@ -495,7 +495,7 @@ export class SatelliteService {
       
       return null;
     } catch (error) {
-      console.error("Error fetching TLE from Celestrak:", error);
+      logger.error("Error fetching TLE from Celestrak", error as Error, { satelliteName });
       return null;
     }
   }
@@ -523,7 +523,7 @@ export class SatelliteService {
 
       return await response.json();
     } catch (error) {
-      console.error("Error fetching satellite position from N2YO:", error);
+      logger.error("Error fetching satellite position from N2YO", error as Error, { noradId, observerLat, observerLng });
       throw error;
     }
   }
@@ -570,7 +570,7 @@ export class SatelliteService {
           });
         }
       } catch (error) {
-        console.error(`Failed to update satellite ${satellite.satellite_name}:`, error);
+        logger.error("Failed to update satellite", error as Error, { satelliteName: satellite.satellite_name });
       }
     }
   }
@@ -590,7 +590,7 @@ export class SatelliteService {
         created_at: new Date().toISOString(),
       });
     } catch (error) {
-      console.error("Failed to log orbital event:", error);
+      logger.error("Failed to log orbital event", error as Error, { satelliteId, eventType });
     }
   }
 

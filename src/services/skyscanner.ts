@@ -3,6 +3,8 @@
  * Flight search functionality with RapidAPI integration
  */
 
+import { logger } from "@/lib/logger";
+
 export interface SkyscannerTestResult {
   success: boolean;
   message: string;
@@ -79,7 +81,7 @@ interface SkyscannerSearchResponse {
 function parseDateToComponents(dateString: string): { year: number; month: number; day: number } | null {
   const parts = dateString.split('-');
   if (parts.length !== 3) {
-    console.error('Invalid date format. Expected YYYY-MM-DD');
+    logger.error('Invalid date format. Expected YYYY-MM-DD', new Error('Invalid date format'), { dateString });
     return null;
   }
   
@@ -88,7 +90,7 @@ function parseDateToComponents(dateString: string): { year: number; month: numbe
   const day = parseInt(parts[2]);
   
   if (isNaN(year) || isNaN(month) || isNaN(day)) {
-    console.error('Invalid date components');
+    logger.error('Invalid date components', new Error('Invalid date components'), { year, month, day });
     return null;
   }
   
