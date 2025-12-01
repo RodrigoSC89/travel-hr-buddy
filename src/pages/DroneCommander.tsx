@@ -37,8 +37,8 @@ const DroneCommanderPage: React.FC = () => {
 
   useEffect(() => {
     loadData();
-    // Refresh data every 5 seconds for real-time updates
-    const interval = setInterval(loadData, 5000);
+    // Refresh data every 10 seconds for real-time updates (increased from 5s)
+    const interval = setInterval(loadData, 10000);
     return () => clearInterval(interval);
   }, []);
 

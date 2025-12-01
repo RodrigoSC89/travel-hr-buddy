@@ -48,8 +48,8 @@ const SensorsHubPage: React.FC = () => {
 
   useEffect(() => {
     loadData();
-    // Refresh data every 3 seconds for real-time updates
-    const interval = setInterval(loadData, 3000);
+    // Refresh data every 10 seconds for real-time updates (increased from 3s)
+    const interval = setInterval(loadData, 10000);
     return () => clearInterval(interval);
   }, []);
 

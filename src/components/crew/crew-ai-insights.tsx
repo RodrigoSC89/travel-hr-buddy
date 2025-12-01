@@ -49,13 +49,13 @@ export const CrewAIInsights = ({ crew }: CrewAIInsightsProps) => {
     if (crew.length > 0) {
       handleGenerateInsights();
     }
-  }, [crew.length]);
+  }, [crew.length, handleGenerateInsights]);
 
   const priorityColors = {
-    low: "bg-blue-500",
-    medium: "bg-yellow-500",
-    high: "bg-orange-500",
-    critical: "bg-red-500",
+    low: "bg-primary",
+    medium: "bg-warning",
+    high: "bg-orange-500/80",
+    critical: "bg-destructive",
   };
 
   const typeIcons = {
@@ -157,7 +157,7 @@ export const CrewAIInsights = ({ crew }: CrewAIInsightsProps) => {
                   </h4>
                   <div className="space-y-2">
                     {insights.strengths?.map((strength: string, index: number) => (
-                      <div key={index} className="flex items-start gap-3 p-3 bg-green-500/10 rounded-lg">
+                      <div key={index} className="flex items-start gap-3 p-3 bg-success/10 rounded-lg">
                         <span className="text-sm">{strength}</span>
                       </div>
                     ))}
@@ -167,12 +167,12 @@ export const CrewAIInsights = ({ crew }: CrewAIInsightsProps) => {
                 {insights.concerns?.length > 0 && (
                   <div>
                     <h4 className="font-medium flex items-center gap-2 mb-3">
-                      <AlertTriangle className="h-4 w-4 text-orange-500" />
+                      <AlertTriangle className="h-4 w-4 text-warning" />
                       Pontos de Atenção
                     </h4>
                     <div className="space-y-2">
                       {insights.concerns.map((concern: string, index: number) => (
-                        <div key={index} className="flex items-start gap-3 p-3 bg-orange-500/10 rounded-lg">
+                        <div key={index} className="flex items-start gap-3 p-3 bg-warning/10 rounded-lg">
                           <span className="text-sm">{concern}</span>
                         </div>
                       ))}
@@ -273,9 +273,9 @@ export const CrewAIInsights = ({ crew }: CrewAIInsightsProps) => {
                       <p className="font-medium">{rot.currentVessel}</p>
                     </div>
                     <div>
-                      <span className="text-muted-foreground">Embarcação Sugerida:</span>
-                      <p className="font-medium text-green-600">{rot.suggestedVessel}</p>
-                    </div>
+                        <span className="text-muted-foreground">Embarcação Sugerida:</span>
+                        <p className="font-medium text-success">{rot.suggestedVessel}</p>
+                      </div>
                     <div>
                       <span className="text-muted-foreground">Data de Rotação:</span>
                       <p className="font-medium">{new Date(rot.rotationDate).toLocaleDateString()}</p>
@@ -351,9 +351,9 @@ export const CrewAIInsights = ({ crew }: CrewAIInsightsProps) => {
                   </div>
 
                   {gap.criticalGaps.length > 0 && (
-                    <div className="p-3 bg-red-500/10 rounded-lg">
+                    <div className="p-3 bg-destructive/10 rounded-lg">
                       <span className="text-sm font-medium flex items-center gap-2">
-                        <AlertTriangle className="h-4 w-4 text-red-500" />
+                        <AlertTriangle className="h-4 w-4 text-destructive" />
                         Lacunas Críticas
                       </span>
                       <ul className="list-disc list-inside text-sm mt-2 space-y-1">

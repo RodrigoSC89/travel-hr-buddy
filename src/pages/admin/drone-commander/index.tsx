@@ -41,8 +41,8 @@ const DroneCommanderPage: React.FC = () => {
     // Setup WebSocket connection for real-time updates
     setupWebSocket();
     
-    // Refresh drone status every 5 seconds
-    const interval = setInterval(loadDrones, 5000);
+    // Refresh drone status every 10 seconds (increased from 5s)
+    const interval = setInterval(loadDrones, 10000);
     
     return () => {
       clearInterval(interval);
