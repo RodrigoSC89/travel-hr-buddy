@@ -130,8 +130,6 @@ const RealTimeAnalytics = () => {
     }, 3000);
 
     return () => clearInterval(interval);
-
-    return () => clearInterval(interval);
   }, [isLive]);
 
   const generateRandomValue = (title: string): string => {
