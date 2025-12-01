@@ -6,6 +6,7 @@
  */
 
 import { supabase } from "@/integrations/supabase/client";
+import { logger } from "@/lib/logger";
 import type {
   SonarData,
   SonarAIAnalysis,
@@ -46,7 +47,7 @@ class OceanSonarAIService {
       .single();
 
     if (error) {
-      console.error("Error ingesting sonar data:", error);
+      logger.error("Error ingesting sonar data", error as Error, { scanType, scanId });
       return null;
     }
 
@@ -256,7 +257,7 @@ class OceanSonarAIService {
       .limit(limit);
 
     if (error) {
-      console.error("Error fetching sonar scans:", error);
+      logger.error("Error fetching sonar scans", error as Error, { limit });
       return [];
     }
 
@@ -274,7 +275,7 @@ class OceanSonarAIService {
       .single();
 
     if (error) {
-      console.error("Error fetching analysis:", error);
+      logger.error("Error fetching analysis", error as Error, { scanId });
       return null;
     }
 
@@ -292,7 +293,7 @@ class OceanSonarAIService {
       .limit(limit);
 
     if (error) {
-      console.error("Error fetching detection logs:", error);
+      logger.error("Error fetching detection logs", error as Error, { limit });
       return [];
     }
 

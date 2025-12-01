@@ -3,6 +3,8 @@
  * Refactored service for managing mirror instances
  */
 
+import { logger } from "@/lib/logger";
+
 export type InstanceStatus = "active" | "inactive" | "syncing" | "error" | "offline";
 export type SyncDirection = "pull" | "push" | "bidirectional";
 export type DataCategory = "config" | "ai_memory" | "logs" | "user_data" | "all";
@@ -63,7 +65,7 @@ export class InstanceControllerService {
     capabilities: string[],
     location?: { latitude: number; longitude: number; name: string }
   ): MirrorInstance {
-    console.info(`[InstanceController] Registering instance: ${name}`);
+    logger.info("Registering instance", { name, endpoint, capabilities: capabilities.length });
 
     const instance: MirrorInstance = {
       id: this.generateId(),
@@ -89,7 +91,7 @@ export class InstanceControllerService {
     };
 
     this.instances.set(instance.id, instance);
-    console.info(`[InstanceController] Instance registered: ${instance.id}`);
+    logger.info("Instance registered", { instanceId: instance.id, name: instance.name });
     return instance;
   }
 
@@ -124,7 +126,7 @@ export class InstanceControllerService {
 
     instance.status = status;
     instance.lastSeen = new Date();
-    console.info(`[InstanceController] Instance ${instanceId} status: ${status}`);
+    logger.info("Instance status updated", { instanceId, status });
   }
 
   /**

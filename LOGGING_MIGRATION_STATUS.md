@@ -393,16 +393,43 @@ Todos os arquivos restantes de MMI services foram migrados com sucesso.
 
 ## 📋 Próximas Fases
 
-### Fase 8: Outros Serviços - 🔄 PRÓXIMA
+### Fase 8: Outros Serviços - ✅ CONCLUÍDA
+
+**Lote 1 - Services Core (✅ Concluído):**
+
+50. **src/services/cognitive/instance-controller.service.ts** ✅ COMPLETO
+   - 3 console.info → logger.info
+   - Melhorias: Contexto com instanceId, name, status, endpoint
+   - Build: ✅ Passou
+
+51. **src/services/navigationCopilotV3Service.ts** ✅ COMPLETO
+   - 4 console.error → logger.error
+   - Melhorias: Contexto com routeId, routeName
+   - Build: ✅ Passou
+
+52. **src/services/oauth-service.ts** ✅ COMPLETO
+   - 2 console.error → logger.error
+   - Melhorias: Contexto com provider, event, limit
+   - Build: ✅ Passou
+
+53. **src/services/oceanSonarAIService.ts** ✅ COMPLETO
+   - 4 console.error → logger.error
+   - Melhorias: Contexto com scanType, scanId, limit
+   - Build: ✅ Passou
+
+54. **src/services/offlineCache.ts** ✅ COMPLETO
+   - 11 console.log/error → logger.debug/error/info
+   - Melhorias: Contexto com key, ttl, age, cache operations
+   - Build: ✅ Passou
 
 ### Antes da Migração
 - **Total console.log/error:** ~2164+
 - **Arquivos com console:** ~791
 - **Logging estruturado:** 0%
 
-### Depois da Fase 7 (Lote 1)
-- **console.log removidos:** ~300+
-- **Arquivos migrados:** 53/787 (6.7%)
+### Depois da Fase 8 (Lote 1)
+- **console.log removidos:** ~324+
+- **Arquivos migrados:** 58/787 (7.4%)
 - **Logging estruturado:** 100% nos arquivos migrados
 - **Build status:** ✅ Todos passando
 - **Diretórios completos:** src/lib/ai/ (100%), src/services/ai/ (100%), src/lib/email/ (100%), src/services/cognitive/ (100%), src/services/mmi/ (100%)
