@@ -9,6 +9,7 @@ import { supabase } from "@/integrations/supabase/client";
 import { generateEmbedding } from "./embeddingService";
 import { AIRecommendation, SimilarCase } from "@/types/mmi";
 import OpenAI from "openai";
+import { logger } from "@/lib/logger";
 
 export interface CopilotSuggestion {
   text: string;
@@ -27,7 +28,7 @@ const getSimilarCases = async (embedding: number[], matchThreshold = 0.7, matchC
     });
 
     if (error) {
-      console.warn("Error fetching similar cases from database:", error);
+      logger.warn("Error fetching similar cases from database", { error, matchThreshold, matchCount });
       return [];
     }
 
@@ -45,7 +46,7 @@ const getSimilarCases = async (embedding: number[], matchThreshold = 0.7, matchC
       date: item.created_at,
     }));
   } catch (error) {
-    console.warn("Database not available, using mock similar cases");
+    logger.warn("Database not available, using mock similar cases", { error: error instanceof Error ? error.message : String(error) });
     return [
       { job_id: "JOB-001", similarity: 0.85, action: "Substituição preventiva", outcome: "Sucesso" },
       { job_id: "JOB-012", similarity: 0.78, action: "Inspeção detalhada", outcome: "Sucesso" },
@@ -66,7 +67,7 @@ export const getAIRecommendation = async (jobDescription: string): Promise<AIRec
 
   // If OpenAI API is not available, return mock recommendation
   if (!apiKey || apiKey === "your_openai_api_key_here") {
-    console.warn("OpenAI API key not configured, using mock recommendation");
+    logger.warn("OpenAI API key not configured, using mock recommendation");
     return {
       technical_action: `Realizar inspeção completa e preventiva do componente descrito: ${jobDescription.substring(0, 100)}`,
       component: "Sistema identificado no job",
@@ -121,7 +122,7 @@ Responda APENAS com JSON válido, sem texto adicional.`;
       similar_cases: similarCases,
     };
   } catch (error) {
-    console.error("Error generating AI recommendation:", error);
+    logger.error("Error generating AI recommendation", error as Error, { jobDescriptionLength: jobDescription.length });
     // Return fallback recommendation
     return {
       technical_action: `Realizar inspeção e manutenção preventiva: ${jobDescription.substring(0, 100)}`,
@@ -158,7 +159,7 @@ export const getCopilotSuggestions = async (
       onChunk(data.reply || data.text || JSON.stringify(data));
     }
   } catch (error) {
-    console.error("Error fetching copilot suggestions:", error);
+    logger.error("Error fetching copilot suggestions", error as Error, { promptLength: prompt.length });
     throw error;
   }
 };
@@ -221,7 +222,7 @@ export const streamCopilotSuggestions = async (
       onChunk(chunk);
     }
   } catch (error) {
-    console.error("Error streaming copilot suggestions:", error);
+    logger.error("Error streaming copilot suggestions", error as Error, { promptLength: prompt.length });
     throw error;
   }
 };

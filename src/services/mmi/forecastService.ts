@@ -5,6 +5,7 @@
 
 import OpenAI from "openai";
 import type { AIForecast, MMIComponent, MMIHistory } from "@/types/mmi";
+import { logger } from "@/lib/logger";
 
 const openai = new OpenAI({
   apiKey: import.meta.env.VITE_OPENAI_API_KEY,
@@ -115,7 +116,7 @@ Formate sua resposta como JSON com esta estrutura:
       }
     } catch (parseError) {
       // Fallback: create structured response from unstructured text
-      console.warn("Failed to parse JSON response, using fallback structure:", parseError);
+      logger.warn("Failed to parse JSON response, using fallback structure", { error: parseError instanceof Error ? parseError.message : String(parseError) });
       
       forecast = {
         next_intervention: extractSection(content, "próxima intervenção", "por que") || "Manutenção preventiva necessária",
@@ -133,7 +134,7 @@ Formate sua resposta como JSON com esta estrutura:
 
     return forecast;
   } catch (error) {
-    console.error("Error generating forecast:", error);
+    logger.error("Error generating forecast", error as Error, { componentName: input.component.component_name, systemName: input.system_name });
     
     // Return a fallback forecast in case of API failure
     return {
