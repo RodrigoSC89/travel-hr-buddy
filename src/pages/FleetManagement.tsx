@@ -64,10 +64,11 @@ const MaritimeFleetManagement = () => {
     try {
       setIsLoading(true);
       
-      // Try to load from database, fallback to mock data
+      // PATCH 549: Limit query to prevent loading too much data
       const { data: vesselsData, error } = await supabase
         .from("vessels")
-        .select("*");
+        .select("id, name, status")
+        .limit(100);
       
       if (error) {
         // Mock data fallback
@@ -104,7 +105,7 @@ const MaritimeFleetManagement = () => {
   // PATCH 549: Fixed dependencies to prevent infinite loops
   useEffect(() => {
     loadFleetStats();
-  }, []);
+  }, [loadFleetStats]);
 
   const exportFleetData = async () => {
     try {
