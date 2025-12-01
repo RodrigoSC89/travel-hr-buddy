@@ -5,6 +5,7 @@ import { Button } from "@/components/ui/button";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { supabase } from "@/integrations/supabase/client";
 import { useToast } from "@/hooks/use-toast";
+import { logger } from "@/lib/logger";
 import { 
   Ship, 
   Users, 
@@ -87,7 +88,7 @@ const FleetModule = () => {
         .order("name");
 
       if (vesselsError) {
-        console.error("Error loading vessels:", vesselsError);
+        logger.error("Error loading vessels", { error: vesselsError });
       } else {
         setVessels((vesselsData as any[]) || []);
       }
@@ -99,7 +100,7 @@ const FleetModule = () => {
         .order("scheduled_date", { ascending: false });
 
       if (maintenanceError) {
-        console.error("Error loading maintenance:", maintenanceError);
+        logger.error("Error loading maintenance", { error: maintenanceError });
       } else {
         setMaintenance((maintenanceData as any[]) || []);
       }
@@ -111,13 +112,13 @@ const FleetModule = () => {
         .order("start_date", { ascending: false });
 
       if (crewError) {
-        console.error("Error loading crew assignments:", crewError);
+        logger.error("Error loading crew assignments", { error: crewError });
       } else {
         setCrewAssignments((crewData as any[]) || []);
       }
 
     } catch (error) {
-      console.error("Error loading fleet data:", error);
+      logger.error("Error loading fleet data", { error });
       toast({
         title: "Error",
         description: "Failed to load fleet data. Please try again.",

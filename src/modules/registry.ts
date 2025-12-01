@@ -876,6 +876,19 @@ export const MODULE_REGISTRY: Record<string, ModuleDefinition> = {
     icon: "Navigation",
     lazy: true,
     version: "489.0",
+  },
+
+  "compliance.peotram": {
+    id: "compliance.peotram",
+    name: "PEOTRAM",
+    category: "compliance",
+    path: "pages/PEOTRAM",
+    description: "Sistema de auditoria anual Petrobras com IA preditiva e análise de conformidade",
+    status: "active",
+    completeness: "100%",
+    route: "/peotram",
+    icon: "FileCheck",
+    lazy: true,
   }
 };
 
