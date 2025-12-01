@@ -13,6 +13,7 @@ const loadORT = async () => {
   return ort;
 };
 import { supabase } from "@/integrations/supabase/client";
+import { logger } from "@/lib/logger";
 import type { RiskForecast, ONNXModel, RiskLevel } from "@/types/patches-536-540";
 
 class DeepRiskAIService {
@@ -27,13 +28,13 @@ class DeepRiskAIService {
     try {
       // In a real implementation, you would load the actual ONNX model
       // For now, we'll simulate a successful load
-      console.log("Loading ONNX model...");
+      logger.info("Loading ONNX model", { modelName: this.modelName });
       
       // Simulate model loading delay
       await new Promise(resolve => setTimeout(resolve, 1000));
       
       this.modelLoaded = true;
-      console.log("ONNX model loaded successfully");
+      logger.info("ONNX model loaded successfully", { modelName: this.modelName });
 
       // Register model in database
       await this.registerModel({
@@ -50,7 +51,7 @@ class DeepRiskAIService {
 
       return true;
     } catch (error) {
-      console.error("Error loading ONNX model:", error);
+      logger.error("Error loading ONNX model", error as Error, { modelName: this.modelName });
       this.modelLoaded = false;
       return false;
     }
@@ -275,13 +276,13 @@ class DeepRiskAIService {
         .single();
 
       if (error) {
-        console.error("Error saving risk forecast:", error);
+        logger.error("Error saving risk forecast", error, { name, riskScore: result.score });
         return null;
       }
 
       return data;
     } catch (error) {
-      console.error("Error creating risk forecast:", error);
+      logger.error("Error creating risk forecast", error as Error, { name });
       return null;
     }
   }
@@ -297,7 +298,7 @@ class DeepRiskAIService {
       .limit(limit);
 
     if (error) {
-      console.error("Error fetching risk forecasts:", error);
+      logger.error("Error fetching risk forecasts", error, { limit });
       return [];
     }
 

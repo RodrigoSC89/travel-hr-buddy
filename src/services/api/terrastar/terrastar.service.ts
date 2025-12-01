@@ -5,6 +5,7 @@
  */
 
 import { supabase } from "@/integrations/supabase/client";
+import { logger } from "@/lib/logger";
 
 export interface TerrastarIonosphereData {
   timestamp: string;
@@ -116,7 +117,7 @@ export async function getIonosphericData(
 
     return ionosphereData;
   } catch (error) {
-    console.error('Error fetching ionospheric data:', error);
+    logger.error('Error fetching ionospheric data', error as Error, { latitude, longitude, altitude });
     throw error;
   }
 }
@@ -174,7 +175,7 @@ export async function requestPositionCorrection(
 
     return correction;
   } catch (error) {
-    console.error('Error requesting position correction:', error);
+    logger.error('Error requesting position correction', error as Error, { vesselId, latitude, longitude });
     throw error;
   }
 }
@@ -225,7 +226,7 @@ export async function subscribeToIonosphericAlerts(
 
     return { subscription_id: data.subscription_id };
   } catch (error) {
-    console.error('Error subscribing to alerts:', error);
+    logger.error('Error subscribing to alerts', error as Error, { vesselId, boundingBox });
     throw error;
   }
 }
@@ -247,7 +248,7 @@ export async function getActiveAlerts(vesselId: string): Promise<TerrastarAlert[
 
     return (alerts || []) as TerrastarAlert[];
   } catch (error) {
-    console.error('Error fetching active alerts:', error);
+    logger.error('Error fetching active alerts', error as Error, { vesselId });
     return [];
   }
 }
@@ -266,7 +267,7 @@ export async function acknowledgeAlert(alertId: string): Promise<boolean> {
 
     return true;
   } catch (error) {
-    console.error('Error acknowledging alert:', error);
+    logger.error('Error acknowledging alert', error as Error, { alertId });
     return false;
   }
 }
@@ -309,7 +310,7 @@ export async function getIonosphericForecast(
     const data = await response.json();
     return data;
   } catch (error) {
-    console.error('Error fetching ionospheric forecast:', error);
+    logger.error('Error fetching ionospheric forecast', error as Error, { latitude, longitude, hours });
     throw error;
   }
 }
@@ -362,7 +363,7 @@ export async function getCorrectionStatistics(
       signal_quality_avg: signalQualities.reduce((a: number, b: number) => a + b, 0) / signalQualities.length,
     };
   } catch (error) {
-    console.error('Error getting correction statistics:', error);
+    logger.error('Error getting correction statistics', error as Error, { vesselId, days });
     throw error;
   }
 }
