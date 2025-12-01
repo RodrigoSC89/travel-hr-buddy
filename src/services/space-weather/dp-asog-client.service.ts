@@ -14,6 +14,8 @@
  * @module services/space-weather/dp-asog-client
  */
 
+import { logger } from "@/lib/logger";
+
 // ============================================================================
 // Types
 // ============================================================================
@@ -179,7 +181,7 @@ export class DPASOGClient {
       
       return await response.json();
     } catch (error) {
-      console.error('[DPASOGClient] Failed to fetch Kp:', error);
+      logger.error('[DPASOGClient] Failed to fetch Kp', error as Error);
       throw new Error(`Failed to fetch Kp from DP ASOG Service: ${error instanceof Error ? error.message : 'Unknown error'}`);
     }
   }
@@ -233,7 +235,7 @@ export class DPASOGClient {
       
       return await response.json();
     } catch (error) {
-      console.error('[DPASOGClient] Failed to fetch PDOP:', error);
+      logger.error('[DPASOGClient] Failed to fetch PDOP', error as Error, { lat: request.lat, lon: request.lon, hours: request.hours });
       throw new Error(`Failed to fetch PDOP from DP ASOG Service: ${error instanceof Error ? error.message : 'Unknown error'}`);
     }
   }
@@ -291,7 +293,7 @@ export class DPASOGClient {
       
       return await response.json();
     } catch (error) {
-      console.error('[DPASOGClient] Failed to fetch status:', error);
+      logger.error('[DPASOGClient] Failed to fetch status', error as Error, { lat: request.lat, lon: request.lon, hours: request.hours });
       throw new Error(`Failed to fetch status from DP ASOG Service: ${error instanceof Error ? error.message : 'Unknown error'}`);
     }
   }

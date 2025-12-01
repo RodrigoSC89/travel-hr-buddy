@@ -1,6 +1,7 @@
 // PATCH 597: Smart Scheduler Service
 import { supabase } from "@/integrations/supabase/client";
-import type { 
+import { logger } from "@/lib/logger";
+import type {
   ScheduledTask, 
   TaskFilter, 
   TaskGenerationRequest,
@@ -45,7 +46,7 @@ export class SmartSchedulerService {
     const { data, error } = await query;
 
     if (error) {
-      console.error('Error fetching tasks:', error);
+      logger.error('Error fetching tasks', error as Error, { filter });
       throw error;
     }
 
@@ -63,7 +64,7 @@ export class SmartSchedulerService {
       .single();
 
     if (error) {
-      console.error('Error creating task:', error);
+      logger.error('Error creating task', error as Error, { taskTitle: task.title });
       throw error;
     }
 
@@ -82,7 +83,7 @@ export class SmartSchedulerService {
       .single();
 
     if (error) {
-      console.error('Error updating task:', error);
+      logger.error('Error updating task', error as Error, { taskId: id });
       throw error;
     }
 
@@ -99,7 +100,7 @@ export class SmartSchedulerService {
       .eq('id', id);
 
     if (error) {
-      console.error('Error deleting task:', error);
+      logger.error('Error deleting task', error as Error, { taskId: id });
       throw error;
     }
   }
@@ -123,7 +124,7 @@ export class SmartSchedulerService {
     });
 
     if (error) {
-      console.error('Error generating tasks:', error);
+      logger.error('Error generating tasks', error as Error, { vesselId: request.vessel_id });
       throw error;
     }
 
@@ -137,7 +138,7 @@ export class SmartSchedulerService {
     const { error } = await supabase.rpc('auto_mark_overdue_tasks');
 
     if (error) {
-      console.error('Error marking overdue tasks:', error);
+      logger.error('Error marking overdue tasks', error as Error);
       throw error;
     }
   }
@@ -149,7 +150,7 @@ export class SmartSchedulerService {
     const { error } = await supabase.rpc('generate_recurring_tasks' as any);
 
     if (error) {
-      console.error('Error generating recurring tasks:', error);
+      logger.error('Error generating recurring tasks', error as Error);
       throw error;
     }
   }
