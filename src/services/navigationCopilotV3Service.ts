@@ -6,6 +6,7 @@
  */
 
 import { supabase } from "@/integrations/supabase/client";
+import { logger } from "@/lib/logger";
 import type {
   AutonomousRoute,
   NavigationAlert,
@@ -48,7 +49,7 @@ class NavigationCopilotV3Service {
       .single();
 
     if (error) {
-      console.error("Error creating route:", error);
+      logger.error("Error creating route", error as Error, { routeName: route.route_name });
       return null;
     }
 
@@ -356,7 +357,7 @@ class NavigationCopilotV3Service {
       .order("created_at", { ascending: false });
 
     if (error) {
-      console.error("Error fetching routes:", error);
+      logger.error("Error fetching routes", error as Error);
       return [];
     }
 
@@ -374,7 +375,7 @@ class NavigationCopilotV3Service {
       .order("created_at", { ascending: false });
 
     if (error) {
-      console.error("Error fetching alerts:", error);
+      logger.error("Error fetching alerts", error as Error, { routeId });
       return [];
     }
 
@@ -392,7 +393,7 @@ class NavigationCopilotV3Service {
       .order("created_at", { ascending: false });
 
     if (error) {
-      console.error("Error fetching replan history:", error);
+      logger.error("Error fetching replan history", error as Error, { routeId });
       return [];
     }
 

@@ -6,6 +6,7 @@
  */
 
 import { supabase } from "@/integrations/supabase/client";
+import { logger } from "@/lib/logger";
 
 interface OAuthConfig {
   clientId: string;
@@ -401,7 +402,7 @@ export class OAuthService {
           request_data: metadata
         } as any);
     } catch (error) {
-      console.error("Failed to log integration event:", error);
+      logger.error("Failed to log integration event", error as Error, { provider, event });
     }
   }
 
@@ -431,7 +432,7 @@ export class OAuthService {
     const { data, error } = await query;
 
     if (error) {
-      console.error("Failed to fetch integration logs:", error);
+      logger.error("Failed to fetch integration logs", error as Error, { provider, limit });
       return [];
     }
 
