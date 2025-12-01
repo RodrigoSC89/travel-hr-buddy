@@ -77,7 +77,7 @@ export const useDashboardStats = () => {
     } finally {
       setLoading(false);
     }
-  }, [toast]);
+  }, []);
 
   return {
     stats,

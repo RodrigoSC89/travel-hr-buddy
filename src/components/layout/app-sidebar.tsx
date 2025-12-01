@@ -685,7 +685,7 @@ const URL_ALIASES: Record<string, string> = {
   "/patch-66": "/patch66",
   "/users": "/user-management",
   // New aliases to consolidate duplicates after reorg
-  "/maritime": "/sistema-maritimo",
+  "/sistema-maritimo": "/maritime",
   "/alertas-precos": "/price-alerts",
   "/reservas": "/reservations",
   "/viagens": "/travel",
