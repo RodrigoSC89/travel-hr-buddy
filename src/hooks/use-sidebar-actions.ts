@@ -54,7 +54,8 @@ export const useSidebarActions = () => {
       peotram: "/peotram",
       sgso: "/sgso",
       "imca-audit": "/imca-audit",
-      "pre-ovid": "/admin/pre-ovid"
+      "pre-ovid": "/admin/pre-ovid",
+      "mlc-inspection": "/mlc-inspection"
     };
 
     const route = moduleRoutes[moduleKey] || `/${moduleKey}`;
