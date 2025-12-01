@@ -7,6 +7,7 @@ import { Badge } from "@/components/ui/badge";
 import { RefreshCw, TrendingUp, Clock, Zap, Activity } from "lucide-react";
 import { aiLogger } from "@/lib/ai/ai-logger";
 import { toast } from "sonner";
+import { logger } from "@/lib/logger";
 
 export default function AIAuditDashboard() {
   const [logs, setLogs] = useState<any[]>([]);
@@ -34,7 +35,7 @@ export default function AIAuditDashboard() {
       const metricsData = await aiLogger.getMetrics(selectedService || undefined);
       setMetrics(metricsData);
     } catch (error: any) {
-      console.error("Error fetching AI audit data:", error);
+      logger.error("Error fetching AI audit data", { error, selectedService, selectedStatus });
       toast.error("Failed to fetch AI audit data");
     } finally {
       setLoading(false);

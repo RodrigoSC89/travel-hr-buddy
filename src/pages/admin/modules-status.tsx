@@ -31,6 +31,7 @@ import {
   Zap
 } from "lucide-react";
 import { Link } from "react-router-dom";
+import { logger } from "@/lib/logger";
 
 interface Module {
   id: string;
@@ -96,7 +97,7 @@ const ModulesStatusDashboard: React.FC = () => {
       setModules(modulesData);
       setFilteredModules(modulesData);
     } catch (error) {
-      console.error("Error loading modules:", error);
+      logger.error("Error loading modules status", { error });
     } finally {
       setLoading(false);
     }

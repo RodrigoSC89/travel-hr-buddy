@@ -10,6 +10,7 @@ import { Badge } from "@/components/ui/badge";
 import { Progress } from "@/components/ui/progress";
 import { Activity, Clock, Cpu, TrendingUp, Zap } from "lucide-react";
 import { cpuBenchmark, BenchmarkReport } from "@/lib/performance/cpu-benchmark";
+import { logger } from "@/lib/logger";
 
 export default function SystemBenchmark() {
   const [isRunning, setIsRunning] = useState(false);
@@ -21,7 +22,7 @@ export default function SystemBenchmark() {
       const result = await cpuBenchmark.runBenchmark();
       setReport(result);
     } catch (error) {
-      console.error("Benchmark failed:", error);
+      logger.error("System benchmark failed", { error });
     } finally {
       setIsRunning(false);
     }

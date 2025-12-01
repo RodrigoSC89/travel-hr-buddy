@@ -20,6 +20,7 @@ import {
 } from "lucide-react";
 import { templateLibrary, TemplateDefinition } from "@/modules/templates/template-library";
 import { useToast } from "@/hooks/use-toast";
+import { logger } from "@/lib/logger";
 
 export default function TemplateLibraryPage() {
   const [selectedTemplate, setSelectedTemplate] = useState<TemplateDefinition | null>(null);
@@ -58,7 +59,7 @@ export default function TemplateLibraryPage() {
       description: `${template.name} ready for editing`,
     });
     // Simulate save to database
-    console.log("Saving template to ai_document_templates:", template.id);
+    logger.info("Saving template to ai_document_templates", { templateId: template.id, templateName: template.name });
   };
 
   const types = ["all", "document", "incident", "fmea", "contract", "report", "checklist"];

@@ -14,6 +14,7 @@ import { Activity, Cpu, MemoryStick, Gauge, AlertTriangle, RefreshCw, TrendingUp
 import { LineChart, Line, AreaChart, Area, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer } from "recharts";
 import { supabase } from "@/integrations/supabase/client";
 import { toast } from "sonner";
+import { logger } from "@/lib/logger";
 
 interface PerformanceMetric {
   timestamp: number;
@@ -179,18 +180,18 @@ export default function PerformanceProfiler() {
             } else {
               acc.push(item);
             }
-            return acc;
-          }, [] as SlowComponent[]);
-          
-          // Keep only recent ones (last 5 minutes)
-          const fiveMinutesAgo = Date.now() - 5 * 60 * 1000;
-          return merged.filter((x) => x.lastSeen > fiveMinutesAgo);
-        });
-      }
-    } catch (error) {
-      console.error("Error detecting slow components:", error);
+          return acc;
+        }, [] as SlowComponent[]);
+        
+        // Keep only recent ones (last 5 minutes)
+        const fiveMinutesAgo = Date.now() - 5 * 60 * 1000;
+        return merged.filter((x) => x.lastSeen > fiveMinutesAgo);
+      });
     }
-  };
+  } catch (error) {
+    logger.error("Error detecting slow components in performance profiler", { error });
+  }
+};
 
   const identifyBottlenecks = (metric: PerformanceMetric) => {
     const issues: string[] = [];
@@ -228,7 +229,7 @@ export default function PerformanceProfiler() {
 
       await supabase.from("performance_metrics").insert(snapshot);
     } catch (error) {
-      console.error("Error storing metrics:", error);
+      logger.error("Error storing performance metrics", { error, cpuUsage: metric.cpu, memoryUsage: metric.memory });
     }
   };
 
