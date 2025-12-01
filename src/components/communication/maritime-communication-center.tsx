@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useCallback } from "react";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
@@ -207,14 +207,14 @@ export const MaritimeCommunicationCenter = () => {
     }
   };
 
-  const setupRealTimeUpdates = () => {
-    // Set up real-time communication updates
+  const setupRealTimeUpdates = useCallback(() => {
+    // Set up real-time communication updates with cleanup tracking
     const interval = setInterval(() => {
       // Checking for new communications
     }, 30000);
 
     return () => clearInterval(interval);
-  };
+  }, []);
 
   const sendMessage = async () => {
     try {

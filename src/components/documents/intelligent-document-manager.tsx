@@ -191,13 +191,15 @@ const IntelligentDocumentManager = () => {
 
     setShowUploadDialog(true);
     
-    // Simulate upload progress
+    // Simulate upload progress with cleanup tracking
     let progress = 0;
+    let intervalCleared = false;
     const interval = setInterval(() => {
       progress += 10;
       setUploadProgress(progress);
       
-      if (progress >= 100) {
+      if (progress >= 100 && !intervalCleared) {
+        intervalCleared = true;
         clearInterval(interval);
         setTimeout(() => {
           setShowUploadDialog(false);

@@ -144,9 +144,11 @@ export const NeuralRouteOptimizer: React.FC = () => {
     setIsOptimizing(true);
     setOptimizationProgress(0);
 
+    let intervalCleared = false;
     const interval = setInterval(() => {
       setOptimizationProgress(prev => {
-        if (prev >= 100) {
+        if (prev >= 100 && !intervalCleared) {
+          intervalCleared = true;
           clearInterval(interval);
           setIsOptimizing(false);
           setSelectedRoute(routes[0]);
