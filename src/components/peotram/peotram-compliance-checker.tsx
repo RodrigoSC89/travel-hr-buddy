@@ -73,10 +73,6 @@ export const PeotramComplianceChecker: React.FC = () => {
   const [complianceReport, setComplianceReport] = useState<ComplianceReport | null>(null);
   const [isLoading, setIsLoading] = useState(true);
 
-  useEffect(() => {
-    loadComplianceData();
-  }, [selectedPeriod, selectedCategory]);
-
   const loadComplianceData = async () => {
     setIsLoading(true);
     try {
@@ -90,6 +86,11 @@ export const PeotramComplianceChecker: React.FC = () => {
       setIsLoading(false);
     }
   };
+
+  // PATCH 549: useEffect after function declaration to prevent loop
+  useEffect(() => {
+    loadComplianceData();
+  }, [selectedPeriod, selectedCategory]);
 
   const getMockComplianceItems = (): ComplianceItem[] => [
     {

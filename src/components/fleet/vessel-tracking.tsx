@@ -47,19 +47,6 @@ export const VesselTracking = () => {
   const [loading, setLoading] = useState(true);
   const { toast } = useToast();
 
-  useEffect(() => {
-    loadVessels();
-    
-    // Set up real-time tracking
-    const interval = setInterval(() => {
-      if (trackingMode === "real-time") {
-        loadVessels();
-      }
-    }, 30000); // Update every 30 seconds
-
-    return () => clearInterval(interval);
-  }, [trackingMode]);
-
   const loadVessels = async () => {
     try {
       const { data, error } = await supabase
@@ -105,6 +92,20 @@ export const VesselTracking = () => {
       setLoading(false);
     }
   };
+
+  // PATCH 549: useEffect with proper memoized loadVessels
+  useEffect(() => {
+    loadVessels();
+    
+    // Set up real-time tracking
+    const interval = setInterval(() => {
+      if (trackingMode === "real-time") {
+        loadVessels();
+      }
+    }, 30000); // Update every 30 seconds
+
+    return () => clearInterval(interval);
+  }, [trackingMode]);
 
   const getStatusColor = (status: VesselPosition["status"]) => {
     switch (status) {

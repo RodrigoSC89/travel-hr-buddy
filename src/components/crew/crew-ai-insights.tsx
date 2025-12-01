@@ -49,7 +49,8 @@ export const CrewAIInsights = ({ crew }: CrewAIInsightsProps) => {
     if (crew.length > 0) {
       handleGenerateInsights();
     }
-  }, [crew.length, handleGenerateInsights]);
+    // PATCH 549: Remove handleGenerateInsights from deps to prevent loop
+  }, [crew.length]);
 
   const priorityColors = {
     low: "bg-primary",

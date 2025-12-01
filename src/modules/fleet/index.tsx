@@ -73,10 +73,6 @@ const FleetModule = () => {
   const [crewAssignments, setCrewAssignments] = useState<CrewAssignment[]>([]);
   const [loading, setLoading] = useState(true);
 
-  useEffect(() => {
-    loadFleetData();
-  }, []);
-
   const loadFleetData = async () => {
     try {
       setLoading(true);
@@ -131,6 +127,11 @@ const FleetModule = () => {
       setLoading(false);
     }
   };
+
+  // PATCH 549: useEffect after function declaration
+  useEffect(() => {
+    loadFleetData();
+  }, []);
 
   const activeVessels = vessels.filter(v => v.status === "active").length;
   const pendingMaintenance = maintenance.filter(m => m.status === "pending").length;
