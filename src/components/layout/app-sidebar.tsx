@@ -430,6 +430,26 @@ const navigationItems = [
         icon: Shield,
       },
       {
+        title: "PEOTRAM",
+        url: "/peotram",
+        icon: FileText,
+      },
+      {
+        title: "SGSO",
+        url: "/sgso",
+        icon: Shield,
+      },
+      {
+        title: "IMCA Audit",
+        url: "/imca-audit",
+        icon: CheckCircle,
+      },
+      {
+        title: "Pre-OVID",
+        url: "/admin/pre-ovid",
+        icon: Scan,
+      },
+      {
         title: "AI Insights",
         url: "/ai-insights",
         icon: Brain,
