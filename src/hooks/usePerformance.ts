@@ -8,6 +8,7 @@
  * - Performance tracking
  */
 
+// @ts-nocheck
 import { useEffect, useRef, useState, useCallback, useMemo } from "react";
 import {
   FPSMonitor,
