@@ -3,6 +3,8 @@
  * Refactored service for distributed context sharing
  */
 
+import { logger } from "@/lib/logger";
+
 export type ContextType = "mission" | "risk" | "ai" | "prediction" | "telemetry";
 export type SyncStatus = "pending" | "synced" | "failed";
 
@@ -45,7 +47,10 @@ export class ContextMeshService {
 
     this.notifySubscribers(fullMessage);
     this.addToHistory(fullMessage);
-    console.debug(`[ContextMesh] Published ${message.contextType} from ${message.moduleName}`);
+    logger.debug("[ContextMesh] Published context message", { 
+      contextType: message.contextType, 
+      moduleName: message.moduleName 
+    });
   }
 
   /**
@@ -64,7 +69,10 @@ export class ContextMeshService {
       this.eventBus.get(type)!.add(subscription.handler);
     });
 
-    console.debug(`[ContextMesh] ${subscription.moduleName} subscribed to ${subscription.contextTypes.join(", ")}`);
+    logger.debug("[ContextMesh] Subscription created", { 
+      moduleName: subscription.moduleName, 
+      contextTypes: subscription.contextTypes 
+    });
     return id;
   }
 
@@ -117,7 +125,10 @@ export class ContextMeshService {
         try {
           handler(message);
         } catch (error) {
-          console.error(`[ContextMesh] Error in handler for ${message.contextType}`, error);
+          logger.error("[ContextMesh] Error in message handler", error as Error, { 
+            contextType: message.contextType,
+            moduleName: message.moduleName
+          });
         }
       });
     }

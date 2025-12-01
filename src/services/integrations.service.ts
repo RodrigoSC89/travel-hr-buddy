@@ -4,6 +4,7 @@
  */
 
 import { supabase } from "@/integrations/supabase/client";
+import { logger } from "@/lib/logger";
 import type {
   WebhookIntegration,
   WebhookEvent,
@@ -381,7 +382,7 @@ export class IntegrationsService {
       
       return true;
     } catch (error) {
-      console.error("Webhook test failed:", error);
+      logger.error("Webhook test failed", error as Error, { integrationId });
       return false;
     }
   }
