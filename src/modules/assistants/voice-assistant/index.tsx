@@ -1,7 +1,8 @@
-import React, { useState, useEffect, useRef } from "react";
+import React, { useState, useCallback, useEffect, useRef } from "react";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { ScrollArea } from "@/components/ui/scroll-area";
 import { 
   Mic, 
@@ -15,7 +16,9 @@ import {
   Command
 } from "lucide-react";
 import { useToast } from "@/hooks/use-toast";
+import { toast as sonnerToast } from "sonner";
 import { logger } from "@/lib/logger";
+import { useNavigate } from "react-router-dom";
 
 interface VoiceCommand {
   timestamp: string;
@@ -25,6 +28,7 @@ interface VoiceCommand {
 }
 
 const VoiceAssistant: React.FC = () => {
+  const navigate = useNavigate();
   const { toast } = useToast();
   const [isListening, setIsListening] = useState(false);
   const [isSpeaking, setIsSpeaking] = useState(false);
@@ -146,17 +150,17 @@ const VoiceAssistant: React.FC = () => {
     if (lowerCommand.includes("dashboard") || lowerCommand.includes("painel")) {
       action = "navigate_dashboard";
       response = "Abrindo dashboard principal...";
-      setTimeout(() => window.location.href = "/dashboard", 1000);
+      setTimeout(() => navigate("/dashboard"), 500);
     } 
     else if (lowerCommand.includes("relatório") || lowerCommand.includes("relatorio")) {
       action = "navigate_reports";
       response = "Abrindo central de relatórios...";
-      setTimeout(() => window.location.href = "/reports", 1000);
+      setTimeout(() => navigate("/reports"), 500);
     }
     else if (lowerCommand.includes("frota") || lowerCommand.includes("embarcações")) {
       action = "navigate_fleet";
       response = "Abrindo gestão de frota...";
-      setTimeout(() => window.location.href = "/fleet", 1000);
+      setTimeout(() => navigate("/fleet"), 500);
     }
     else if (lowerCommand.includes("status") || lowerCommand.includes("situação")) {
       action = "query_status";
@@ -169,7 +173,7 @@ const VoiceAssistant: React.FC = () => {
     else if (lowerCommand.includes("tripulação") || lowerCommand.includes("crew")) {
       action = "navigate_crew";
       response = "Abrindo gestão de tripulação...";
-      setTimeout(() => window.location.href = "/crew", 1000);
+      setTimeout(() => navigate("/crew"), 500);
     }
     else {
       response = `Recebi o comando: ${command}. Ainda estou aprendendo a executar essa ação.`;
