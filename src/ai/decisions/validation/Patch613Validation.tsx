@@ -3,6 +3,7 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/com
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { CheckCircle2, XCircle, Loader2 } from "lucide-react";
+import { logger } from "@/lib/logger";
 
 interface Scenario {
   id: string;
@@ -179,7 +180,10 @@ export function Patch613Validation() {
       });
 
     } catch (error) {
-      console.error("Validation error:", error);
+      logger.error("PATCH 613: Validation error", error as Error, {
+        testResults,
+        errorType: "decision_simulator_validation"
+      });
       Object.keys(testResults).forEach(key => {
         if (testResults[key] === undefined) testResults[key] = false;
       });

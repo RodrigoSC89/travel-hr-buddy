@@ -10,6 +10,7 @@ import { Badge } from "@/components/ui/badge";
 import { Input } from "@/components/ui/input";
 import { Mic, MessageSquare, MousePointer, TrendingUp } from "lucide-react";
 import { useToast } from "@/hooks/use-toast";
+import { logger } from "@/lib/logger";
 
 interface FeedbackEvent {
   id: string;
@@ -40,7 +41,12 @@ export function Patch603Validation() {
     const newScore = Math.min(1, behaviorScore + event.impact);
     setBehaviorScore(newScore);
     
-    console.log(`PATCH 603 ✅ Feedback processed [${channel}]:`, event);
+    logger.info("PATCH 603: Feedback processed", { 
+      channel, 
+      event,
+      newScore,
+      behaviorAdjustment: event.impact 
+    });
     
     toast({
       title: `${channel.charAt(0).toUpperCase() + channel.slice(1)} Feedback Recorded`,
