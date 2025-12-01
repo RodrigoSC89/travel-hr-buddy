@@ -4,6 +4,7 @@
  */
 
 import { openai } from "@/lib/openai";
+import { logger } from "@/lib/logger";
 
 export interface IncidentClassification {
   sgso_category: string;
@@ -68,7 +69,9 @@ Responda em JSON:
       return null;
     }
   } catch (error) {
-    console.error("Error classifying incident with AI:", error);
+    logger.error("Error classifying incident with AI", error as Error, { 
+      descriptionLength: description.length 
+    });
     return null;
   }
 }

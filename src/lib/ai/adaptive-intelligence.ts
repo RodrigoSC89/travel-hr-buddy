@@ -8,6 +8,7 @@
  */
 
 import { supabase } from '@/integrations/supabase/client';
+import { logger } from '@/lib/logger';
 
 export type InspectionType = 'PSC' | 'ISM' | 'MLC' | 'OVID' | 'LSA';
 
@@ -63,7 +64,10 @@ export class FeedbackStorage {
       .single();
 
     if (error) {
-      console.error('Error storing feedback:', error);
+      logger.error('Error storing feedback', error as Error, { 
+        inspectionType: feedback.inspection_type,
+        isNonConformity: feedback.is_non_conformity 
+      });
       throw new Error(`Failed to store feedback: ${error.message}`);
     }
 
@@ -85,7 +89,10 @@ export class FeedbackStorage {
       .limit(limit);
 
     if (error) {
-      console.error('Error fetching feedbacks:', error);
+      logger.error('Error fetching feedbacks', error as Error, { 
+        inspectionType,
+        limit 
+      });
       return [];
     }
 
@@ -318,7 +325,7 @@ export class InspectorProfileManager {
       .single();
 
     if (error) {
-      console.error('Error fetching inspector profile:', error);
+      logger.error('Error fetching inspector profile', error as Error, { inspectorId });
       return null;
     }
 
