@@ -39,12 +39,12 @@ export const useDashboardStats = () => {
     try {
       setLoading(true);
       
-      // Load only essential data (max 3 vessels)
+      // PATCH 549: Load only essential data with strict limit (max 5 vessels)
       const { data: vesselsData, error: vesselsError } = await supabase
         .from("vessels")
         .select("id, name, imo_number, vessel_type")
         .eq("organization_id", "550e8400-e29b-41d4-a716-446655440000")
-        .limit(3);
+        .limit(5);
 
       if (!vesselsError && vesselsData) {
         setVessels(vesselsData);
@@ -77,7 +77,7 @@ export const useDashboardStats = () => {
     } finally {
       setLoading(false);
     }
-  }, []);
+  }, [toast]);
 
   return {
     stats,

@@ -60,10 +60,10 @@ export default function Maritime() {
   const navigate = useNavigate();
   const { stats, vessels, loading, loadDashboardData } = useDashboardStats();
 
-  // PATCH 549: Removed activeFeature state and unnecessary transitions
+  // PATCH 549: Fixed dependencies to prevent infinite loops
   useEffect(() => {
     loadDashboardData();
-  }, []);
+  }, [loadDashboardData]);
 
   const StatCard = memo(({ title, value, icon: Icon, variant = "default", trend, onClick }: any) => (
     <Card className={onClick ? "cursor-pointer hover:shadow-md transition-shadow" : ""} onClick={onClick}>

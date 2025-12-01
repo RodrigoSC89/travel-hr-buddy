@@ -1,30 +1,33 @@
-import React, { useState, useEffect } from "react";
-import { EnhancedPeotramDashboard } from "./enhanced-peotram-dashboard";
-import { PeotramAuditWizard } from "./peotram-audit-wizard";
-import { PeotramReportsGenerator } from "./peotram-reports-generator";
-import { PeotramNonConformities } from "./peotram-non-conformities";
-import { PeotramTemplateManager } from "./peotram-template-manager";
-import { PeotramAnalyticsPanel } from "./peotram-analytics-panel";
-import { PeotramComplianceChecker } from "./peotram-compliance-checker";
-import { PeotramPerformanceIndicators } from "./peotram-performance-indicators";
-import { PeotramRiskAssessment } from "./peotram-risk-assessment";
-import { PeotramTrainingManagement } from "./peotram-training-management";
-import { PeotramRealtimeMonitoring } from "./peotram-realtime-monitoring";
-import { PeotramWorkflowManager } from "./peotram-workflow-manager";
-import { PeotramIntegrationHub } from "./peotram-integration-hub";
-import { PeotramAdvancedReporting } from "./peotram-advanced-reporting";
-import { PeotramEmergencyResponse } from "./peotram-emergency-response";
-import { PeotramEquipmentManager } from "./peotram-equipment-manager";
-import { PeotramIncidentManager } from "./peotram-incident-manager";
-import { PeotramCommunicationCenter } from "./peotram-communication-center";
-import { PeotramDocumentManager } from "./peotram-document-manager";
-import { PeotramComplianceTracker } from "./peotram-compliance-tracker";
-import { PeotramPerformanceKPI } from "./peotram-performance-kpi";
-import { PeotramEnvironmentalMonitor } from "./peotram-environmental-monitor";
-import { PeotramOCRProcessor } from "./peotram-ocr-processor";
-import { PeotramChecklistVersionManager } from "./peotram-checklist-version-manager";
-import { PeotramAdvancedAnalytics } from "./peotram-advanced-analytics";
-import { PeotramPredictiveAnalytics } from "./peotram-predictive-analytics";
+import React, { useState, useEffect, lazy, Suspense } from "react";
+
+// PATCH 549: Lazy load components to prevent bundle bloat and freezing
+const EnhancedPeotramDashboard = lazy(() => import("./enhanced-peotram-dashboard").then(m => ({ default: m.EnhancedPeotramDashboard })));
+const PeotramAuditWizard = lazy(() => import("./peotram-audit-wizard").then(m => ({ default: m.PeotramAuditWizard })));
+const PeotramReportsGenerator = lazy(() => import("./peotram-reports-generator").then(m => ({ default: m.PeotramReportsGenerator })));
+const PeotramNonConformities = lazy(() => import("./peotram-non-conformities").then(m => ({ default: m.PeotramNonConformities })));
+const PeotramTemplateManager = lazy(() => import("./peotram-template-manager").then(m => ({ default: m.PeotramTemplateManager })));
+const PeotramAnalyticsPanel = lazy(() => import("./peotram-analytics-panel").then(m => ({ default: m.PeotramAnalyticsPanel })));
+const PeotramComplianceChecker = lazy(() => import("./peotram-compliance-checker").then(m => ({ default: m.PeotramComplianceChecker })));
+const PeotramPerformanceIndicators = lazy(() => import("./peotram-performance-indicators").then(m => ({ default: m.PeotramPerformanceIndicators })));
+const PeotramRiskAssessment = lazy(() => import("./peotram-risk-assessment").then(m => ({ default: m.PeotramRiskAssessment })));
+const PeotramTrainingManagement = lazy(() => import("./peotram-training-management").then(m => ({ default: m.PeotramTrainingManagement })));
+const PeotramRealtimeMonitoring = lazy(() => import("./peotram-realtime-monitoring").then(m => ({ default: m.PeotramRealtimeMonitoring })));
+const PeotramWorkflowManager = lazy(() => import("./peotram-workflow-manager").then(m => ({ default: m.PeotramWorkflowManager })));
+const PeotramIntegrationHub = lazy(() => import("./peotram-integration-hub").then(m => ({ default: m.PeotramIntegrationHub })));
+const PeotramAdvancedReporting = lazy(() => import("./peotram-advanced-reporting").then(m => ({ default: m.PeotramAdvancedReporting })));
+const PeotramEmergencyResponse = lazy(() => import("./peotram-emergency-response").then(m => ({ default: m.PeotramEmergencyResponse })));
+const PeotramEquipmentManager = lazy(() => import("./peotram-equipment-manager").then(m => ({ default: m.PeotramEquipmentManager })));
+const PeotramIncidentManager = lazy(() => import("./peotram-incident-manager").then(m => ({ default: m.PeotramIncidentManager })));
+const PeotramCommunicationCenter = lazy(() => import("./peotram-communication-center").then(m => ({ default: m.PeotramCommunicationCenter })));
+const PeotramDocumentManager = lazy(() => import("./peotram-document-manager").then(m => ({ default: m.PeotramDocumentManager })));
+const PeotramComplianceTracker = lazy(() => import("./peotram-compliance-tracker").then(m => ({ default: m.PeotramComplianceTracker })));
+const PeotramPerformanceKPI = lazy(() => import("./peotram-performance-kpi").then(m => ({ default: m.PeotramPerformanceKPI })));
+const PeotramEnvironmentalMonitor = lazy(() => import("./peotram-environmental-monitor").then(m => ({ default: m.PeotramEnvironmentalMonitor })));
+const PeotramOCRProcessor = lazy(() => import("./peotram-ocr-processor").then(m => ({ default: m.PeotramOCRProcessor })));
+const PeotramChecklistVersionManager = lazy(() => import("./peotram-checklist-version-manager").then(m => ({ default: m.PeotramChecklistVersionManager })));
+const PeotramAdvancedAnalytics = lazy(() => import("./peotram-advanced-analytics").then(m => ({ default: m.PeotramAdvancedAnalytics })));
+const PeotramPredictiveAnalytics = lazy(() => import("./peotram-predictive-analytics").then(m => ({ default: m.PeotramPredictiveAnalytics })));
+
 import { Button } from "@/components/ui/button";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from "@/components/ui/dialog";
@@ -264,12 +267,14 @@ export const EnhancedPeotramManager: React.FC = () => {
   // Se há uma auditoria selecionada, mostrar o wizard
   if (selectedAudit) {
     return (
-      <PeotramAuditWizard
-        auditId={selectedAudit.id}
-        onSave={handleSaveAudit}
-        onComplete={handleCompleteAudit}
-        onCancel={() => setSelectedAudit(null)}
-      />
+      <Suspense fallback={<div className="flex items-center justify-center p-8">Carregando wizard...</div>}>
+        <PeotramAuditWizard
+          auditId={selectedAudit.id}
+          onSave={handleSaveAudit}
+          onComplete={handleCompleteAudit}
+          onCancel={() => setSelectedAudit(null)}
+        />
+      </Suspense>
     );
   }
 
@@ -296,11 +301,13 @@ export const EnhancedPeotramManager: React.FC = () => {
               <DialogHeader>
                 <DialogTitle>Nova Auditoria PEOTRAM</DialogTitle>
               </DialogHeader>
-              <PeotramAuditWizard
-                onSave={handleSaveAudit}
-                onComplete={handleCompleteAudit}
-                onCancel={() => setIsNewAuditOpen(false)}
-              />
+              <Suspense fallback={<div className="flex items-center justify-center p-8">Carregando...</div>}>
+                <PeotramAuditWizard
+                  onSave={handleSaveAudit}
+                  onComplete={handleCompleteAudit}
+                  onCancel={() => setIsNewAuditOpen(false)}
+                />
+              </Suspense>
             </DialogContent>
           </Dialog>
           
@@ -491,7 +498,9 @@ export const EnhancedPeotramManager: React.FC = () => {
         )}
 
         <TabsContent value="dashboard" className="space-y-0">
-          <EnhancedPeotramDashboard />
+          <Suspense fallback={<div className="flex items-center justify-center p-8">Carregando dashboard...</div>}>
+            <EnhancedPeotramDashboard />
+          </Suspense>
         </TabsContent>
 
         <TabsContent value="audits" className="space-y-6">
@@ -612,60 +621,78 @@ export const EnhancedPeotramManager: React.FC = () => {
         </TabsContent>
 
         <TabsContent value="non-conformities">
-          <PeotramNonConformities 
-            nonConformities={nonConformities}
-            onUpdate={(id: string, updates: any) => handleUpdateNonConformity(id, updates)}
-          />
-        </TabsContent>
-
-        <TabsContent value="reports">
-          <PeotramReportsGenerator />
-        </TabsContent>
-
-        <TabsContent value="templates">
-          <PeotramTemplateManager 
-            templates={templates}
-            onTemplateUpdate={(template: unknown) => handleUpdateTemplate(template)}
-          />
-        </TabsContent>
-
-        <TabsContent value="analytics">
-          <PeotramAnalyticsPanel />
-        </TabsContent>
-
-        <TabsContent value="compliance">
-          <PeotramComplianceChecker />
-        </TabsContent>
-
-        <TabsContent value="monitoring">
-          <PeotramRealtimeMonitoring />
-        </TabsContent>
-
-        <TabsContent value="management">
-          {managementSubView === "non-conformities" && (
+          <Suspense fallback={<div className="flex items-center justify-center p-8">Carregando...</div>}>
             <PeotramNonConformities 
               nonConformities={nonConformities}
               onUpdate={(id: string, updates: any) => handleUpdateNonConformity(id, updates)}
             />
-          )}
-          {managementSubView === "reports" && <PeotramReportsGenerator />}
-          {managementSubView === "templates" && (
+          </Suspense>
+        </TabsContent>
+
+        <TabsContent value="reports">
+          <Suspense fallback={<div className="flex items-center justify-center p-8">Carregando...</div>}>
+            <PeotramReportsGenerator />
+          </Suspense>
+        </TabsContent>
+
+        <TabsContent value="templates">
+          <Suspense fallback={<div className="flex items-center justify-center p-8">Carregando...</div>}>
             <PeotramTemplateManager 
               templates={templates}
               onTemplateUpdate={(template: unknown) => handleUpdateTemplate(template)}
             />
-          )}
-          {managementSubView === "analytics" && (
-            <div className="space-y-6">
-              <PeotramAdvancedAnalytics />
-              <PeotramPredictiveAnalytics />
-            </div>
-          )}
-          {managementSubView === "compliance" && <PeotramComplianceChecker />}
-          {managementSubView === "risk-assessment" && <PeotramRiskAssessment />}
-          {managementSubView === "training" && <PeotramTrainingManagement />}
-          {managementSubView === "workflows" && <PeotramWorkflowManager />}
-          {managementSubView === "integrations" && <PeotramIntegrationHub />}
+          </Suspense>
+        </TabsContent>
+
+        <TabsContent value="analytics">
+          <Suspense fallback={<div className="flex items-center justify-center p-8">Carregando...</div>}>
+            <PeotramAnalyticsPanel />
+          </Suspense>
+        </TabsContent>
+
+        <TabsContent value="compliance">
+          <Suspense fallback={<div className="flex items-center justify-center p-8">Carregando...</div>}>
+            <PeotramComplianceChecker />
+          </Suspense>
+        </TabsContent>
+
+        <TabsContent value="monitoring">
+          <Suspense fallback={<div className="flex items-center justify-center p-8">Carregando...</div>}>
+            <PeotramRealtimeMonitoring />
+          </Suspense>
+        </TabsContent>
+
+        <TabsContent value="management">
+          <Suspense fallback={<div className="flex items-center justify-center p-8">Carregando...</div>}>
+            {managementSubView === "non-conformities" && (
+              <PeotramNonConformities 
+                nonConformities={nonConformities}
+                onUpdate={(id: string, updates: any) => handleUpdateNonConformity(id, updates)}
+              />
+            )}
+            {managementSubView === "reports" && <PeotramReportsGenerator />}
+            {managementSubView === "templates" && (
+              <PeotramTemplateManager 
+                templates={templates}
+                onTemplateUpdate={(template: unknown) => handleUpdateTemplate(template)}
+              />
+            )}
+            {managementSubView === "analytics" && (
+              <div className="space-y-6">
+                <PeotramAdvancedAnalytics />
+                <PeotramPredictiveAnalytics />
+              </div>
+            )}
+            {managementSubView === "compliance" && <PeotramComplianceChecker />}
+            {managementSubView === "risk-assessment" && <PeotramRiskAssessment />}
+            {managementSubView === "training" && <PeotramTrainingManagement />}
+            {managementSubView === "workflows" && <PeotramWorkflowManager />}
+            {managementSubView === "integrations" && <PeotramIntegrationHub />}
+            {managementSubView === "emergency" && <PeotramEmergencyResponse />}
+            {managementSubView === "equipment" && <PeotramEquipmentManager />}
+            {managementSubView === "incidents" && <PeotramIncidentManager />}
+            {managementSubView === "communication" && <PeotramCommunicationCenter />}
+          </Suspense>
         </TabsContent>
 
         {/* Manter as antigas abas para compatibilidade */}

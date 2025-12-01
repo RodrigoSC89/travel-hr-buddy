@@ -1,5 +1,5 @@
 // @ts-nocheck
-import { useState, useEffect } from "react";
+import React, { useState, useEffect, useCallback } from "react";
 import { supabase } from "@/integrations/supabase/client";
 import { VesselStatus, MaintenanceAlert, FuelUsage } from "@/types/modules";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
@@ -15,6 +15,43 @@ export function FleetManagementDashboard() {
   const [maintenanceAlerts, setMaintenanceAlerts] = useState<MaintenanceAlert[]>([]);
   const [fuelUsage, setFuelUsage] = useState<FuelUsage[]>([]);
   const [loading, setLoading] = useState(true);
+
+  const loadFleetData = useCallback(async () => {
+    try {
+      const [statusRes, alertsRes, fuelRes] = await Promise.all([
+        supabase
+          .from("vessel_status")
+          .select("*")
+          .order("timestamp", { ascending: false })
+          .limit(10),
+        supabase
+          .from("maintenance_alerts")
+          .select("*")
+          .eq("status", "active")
+          .order("severity", { ascending: false })
+          .order("created_at", { ascending: false })
+          .limit(50),
+        supabase
+          .from("fuel_usage")
+          .select("*")
+          .order("recorded_at", { ascending: false })
+          .limit(20)
+      ]);
+
+      if (statusRes.error) throw statusRes.error;
+      if (alertsRes.error) throw alertsRes.error;
+      if (fuelRes.error) throw fuelRes.error;
+
+      setVesselStatuses(statusRes.data || []);
+      setMaintenanceAlerts(alertsRes.data || []);
+      setFuelUsage(fuelRes.data || []);
+    } catch (error) {
+      logger.error("Error loading fleet data", { error });
+      toast.error("Failed to load fleet data");
+    } finally {
+      setLoading(false);
+    }
+  }, []);
 
   useEffect(() => {
     loadFleetData();
@@ -38,43 +75,7 @@ export function FleetManagementDashboard() {
     return () => {
       supabase.removeChannel(channel);
     };
-  }, []);
-
-  const loadFleetData = async () => {
-    try {
-      const [statusRes, alertsRes, fuelRes] = await Promise.all([
-        supabase
-          .from("vessel_status")
-          .select("*")
-          .order("timestamp", { ascending: false })
-          .limit(10),
-        supabase
-          .from("maintenance_alerts")
-          .select("*")
-          .eq("status", "active")
-          .order("severity", { ascending: false })
-          .order("created_at", { ascending: false }),
-        supabase
-          .from("fuel_usage")
-          .select("*")
-          .order("recorded_at", { ascending: false })
-          .limit(20)
-      ]);
-
-      if (statusRes.error) throw statusRes.error;
-      if (alertsRes.error) throw alertsRes.error;
-      if (fuelRes.error) throw fuelRes.error;
-
-      setVesselStatuses(statusRes.data || []);
-      setMaintenanceAlerts(alertsRes.data || []);
-      setFuelUsage(fuelRes.data || []);
-    } catch (error) {
-      logger.error("Error loading fleet data", { error });
-      toast.error("Failed to load fleet data");
-    } finally {
-      setLoading(false);
-    }
-  };
+  }, [loadFleetData]);
 
   const getStatusBadge = (status: string) => {
     const variants: Record<string, "default" | "secondary" | "destructive" | "outline"> = {
