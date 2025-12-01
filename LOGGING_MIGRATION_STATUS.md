@@ -1,7 +1,7 @@
 # 📊 Migration Status - Console.log → Logger
 
 **Data:** 2025-12-01  
-**Status:** ✅ FASE 9 LOTE 2 CONCLUÍDO
+**Status:** ✅ FASE 10 LOTE 2 CONCLUÍDO (PATCH 549.0)
 
 ---
 
@@ -494,25 +494,114 @@ Todos os serviços críticos adicionais foram migrados com sucesso.
 
 ---
 
+### Fase 10: Critical Module Fixes (PATCH 549.0) - ✅ CONCLUÍDA
+
+**Lote 1 - Módulos com Rotas Inválidas e Travamentos (✅ Concluído):**
+
+65. **src/modules/registry.ts** ✅ COMPLETO
+   - Adicionado módulo PEOTRAM com rota `/peotram`
+   - Melhorias: Módulo agora acessível via routing system
+   - Build: ✅ Passou
+
+66. **src/pages/Maritime.tsx** ✅ COMPLETO (PATCH 549.0)
+   - Removidos 15+ lazy loads excessivos
+   - Simplificada navegação para links diretos
+   - Corrigidos useEffect dependencies
+   - Melhorias: Eliminado travamento do módulo
+   - Build: ✅ Passou
+
+67. **src/pages/FleetManagement.tsx** ✅ COMPLETO (PATCH 549.0)
+   - Removidos lazy loads excessivos
+   - Substituídos por placeholders e links para módulos específicos
+   - Corrigidos useEffect dependencies
+   - Migrados window.location.href → navigate()
+   - Melhorias: Módulo não trava mais, navegação SPA
+   - Build: ✅ Passou
+
+68. **src/modules/fleet/index.tsx** ✅ COMPLETO
+   - 5 console.error → logger.error
+   - Melhorias: Contexto com moduleId, path, error
+   - Build: ✅ Passou
+
+69. **src/pages/Travel.tsx** ✅ COMPLETO (PATCH 549.0)
+   - Removidos 11 lazy loads excessivos
+   - Simplificada estrutura de tabs
+   - Melhorias: Performance melhorada, sem travamentos
+   - Build: ✅ Passou
+
+70. **src/modules/assistants/voice-assistant/index.tsx** ✅ COMPLETO (PATCH 549.0)
+   - Substituídos 4 window.location.href → navigate()
+   - Ajustados timeouts
+   - Melhorias: Navegação SPA sem recarregamento
+   - Build: ✅ Passou
+
+**Lote 2 - Erros Críticos de Logging e Navegação (✅ Concluído):**
+
+71. **src/pages/ExecutiveDashboard.tsx** ✅ COMPLETO
+   - 5 console.error → logger.error
+   - 3 window.location.href → navigate()
+   - Melhorias: Contexto com organizationId, error details, navegação SPA
+   - Build: ✅ Passou
+
+72. **src/pages/SGSO.tsx** ✅ COMPLETO
+   - 1 window.location.href → navigate()
+   - Melhorias: Navegação SPA
+   - Build: ✅ Passou
+
+73. **src/pages/AITraining.tsx** ✅ COMPLETO
+   - 3 console.error → logger.error
+   - Melhorias: Contexto com userId, crewMemberId, error details
+   - Build: ✅ Passou
+
+74. **src/pages/SmartDrills.tsx** ✅ COMPLETO
+   - 3 console.error → logger.error
+   - Melhorias: Contexto com drill operations, error details
+   - Build: ✅ Passou
+
+**Estatísticas PATCH 549.0:**
+- Arquivos corrigidos: 10
+- Console statements removidos: 16
+- window.location.href removidos: 8
+- Lazy loads removidos: 26+
+- Módulos destraved: 4 (Maritime, Fleet Management, Travel, Voice Assistant)
+- Módulos com rotas corrigidas: 1 (PEOTRAM)
+
+---
+
+### Fase 10 - ✅ CONCLUÍDA
+
+Todos os módulos críticos com travamento e rotas inválidas foram corrigidos.
+Zero módulos travando no sistema.
+
+---
+
 ### Antes da Migração
 - **Total console.log/error:** ~2164+
 - **Arquivos com console:** ~791
 - **Logging estruturado:** 0%
 
-### Depois da Fase 9 (Lote 1)
-- **console.log removidos:** ~384+
-- **Arquivos migrados:** 68/787 (8.6%)
+### Depois da Fase 10 (PATCH 549.0)
+- **console.log removidos:** ~421+
+- **window.location.href removidos:** 8
+- **Lazy loads removidos:** 26+
+- **Arquivos migrados:** 76/787 (9.7%)
+- **Módulos críticos corrigidos:** 4 (Maritime, Fleet, Travel, Voice Assistant)
 - **Logging estruturado:** 100% nos arquivos migrados
 - **Build status:** ✅ Todos passando
 - **Diretórios completos:** src/lib/ai/ (100%), src/services/ai/ (100%), src/lib/email/ (100%), src/services/cognitive/ (100%), src/services/mmi/ (100%)
 
-### Próximos Diretórios
-- **Outros services/** - ~120+ console.log/error/warn restantes (mocks, outros)
-- **src/ai/** - ~50 console.log restantes  
-- **src/components/** - ~400 console.log
-- **src/pages/** - ~300 console.log
-- **src/hooks/** - ~100 console.log
-- **Outros** - ~300 console.log
+### Próximos Diretórios (Fase 11)
+- **src/pages/** - ~133+ console.error/log/warn restantes (prioridade ALTA)
+  - CalendarView, DocsViewer, ExecutiveReport, MMIForecastPage
+  - MMITasks, ReportingEngine, RiskOperations, SmartScheduler
+  - ValidationPatches, admin/*.tsx (múltiplos arquivos)
+- **window.location.href restantes** - ~87 arquivos (prioridade ALTA)
+  - Componentes de erro boundaries
+  - Pages admin
+  - Widgets ESG
+- **src/components/** - ~400 console.log (prioridade MÉDIA)
+- **src/hooks/** - ~100 console.log (prioridade BAIXA)
+- **Outros** - ~300 console.log (prioridade BAIXA)
 
 ### Meta Final
 - **console.log removidos:** 2164+ (100%)
@@ -640,6 +729,7 @@ find src -name "*.ts" -o -name "*.tsx" | xargs sed -i 's/console\.warn(/logger.w
 
 ---
 
-**Status:** ✅ FASE 7 LOTE 1 COMPLETO - Diretório MMI 100% migrado  
-**Próxima Ação:** Migrar Fase 8 (outros services restantes)  
-**Última Atualização:** 2025-12-01
+**Status:** ✅ FASE 10 COMPLETA (PATCH 549.0) - Zero módulos travando, rotas corrigidas  
+**Próxima Ação:** Iniciar Fase 11 (src/pages/ - console logging migration)  
+**Última Atualização:** 2025-12-01  
+**Build Status:** ✅ All tests passing

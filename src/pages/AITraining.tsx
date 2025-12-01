@@ -10,6 +10,7 @@ import { TrainingAIService } from '@/services/training-ai.service';
 import type { AITrainingSession, TrainingStats } from '@/types/training-ai';
 import { toast } from 'sonner';
 import { supabase } from '@/integrations/supabase/client';
+import { logger } from '@/lib/logger';
 
 const AITraining: React.FC = () => {
   const [sessions, setSessions] = useState<AITrainingSession[]>([]);
@@ -29,7 +30,7 @@ const AITraining: React.FC = () => {
         await loadTrainingData(user.id);
       }
     } catch (error) {
-      console.error('Error loading user:', error);
+      logger.error('Error loading user', { error });
       toast.error('Failed to load user data');
     }
   };
@@ -44,7 +45,7 @@ const AITraining: React.FC = () => {
       setSessions(sessionsData);
       setStats(statsData);
     } catch (error) {
-      console.error('Error loading training data:', error);
+      logger.error('Error loading training data', { error, crewMemberId });
       toast.error('Failed to load training data');
     } finally {
       setLoading(false);
@@ -67,7 +68,7 @@ const AITraining: React.FC = () => {
       window.URL.revokeObjectURL(url);
       toast.success('Training history exported');
     } catch (error) {
-      console.error('Error exporting history:', error);
+      logger.error('Error exporting history', { error, userId });
       toast.error('Failed to export history');
     }
   };

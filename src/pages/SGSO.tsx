@@ -1,4 +1,5 @@
 import React from "react";
+import { useNavigate } from "react-router-dom";
 import { Card, CardContent } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import ModuleActionButton from "@/components/ui/module-action-button";
@@ -23,6 +24,7 @@ import {
 
 const SGSO = () => {
   const { handleCreate, handleGenerateReport, handleExport, handleRefresh, showInfo } = useMaritimeActions();
+  const navigate = useNavigate();
   return (
     <ModulePageWrapper gradient="orange">
       <ModuleHeader
@@ -85,7 +87,7 @@ const SGSO = () => {
             id: "pdf-report",
             label: "Relatório PDF",
             icon: <FileCheck className="h-3 w-3" />,
-            action: () => window.location.href = "/sgso/report"
+            action: () => navigate("/sgso/report")
           }
         ]}
         quickActions={[
