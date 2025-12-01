@@ -89,6 +89,8 @@ export const OperationsDashboardRealTime: React.FC = () => {
   const mqttClientRef = useRef<any>(null);
   const wsRef = useRef<WebSocket | null>(null);
   const realtimeChannelRef = useRef<any>(null);
+  const mqttSimulationRef = useRef<NodeJS.Timeout | null>(null);
+  const wsSimulationRef = useRef<NodeJS.Timeout | null>(null);
 
   useEffect(() => {
     initializeConnections();
@@ -187,8 +189,13 @@ export const OperationsDashboardRealTime: React.FC = () => {
   };
 
   const simulateMQTTMessages = () => {
-    // Simulate MQTT telemetry data
-    setInterval(() => {
+    // Clear existing interval if any
+    if (mqttSimulationRef.current) {
+      clearInterval(mqttSimulationRef.current);
+    }
+    
+    // Simulate MQTT telemetry data with cleanup tracking
+    mqttSimulationRef.current = setInterval(() => {
       const mqttData = {
         topic: "vessel/telemetry",
         payload: {
@@ -205,8 +212,13 @@ export const OperationsDashboardRealTime: React.FC = () => {
   };
 
   const simulateWebSocketMessages = () => {
-    // Simulate WebSocket alerts
-    setInterval(() => {
+    // Clear existing interval if any
+    if (wsSimulationRef.current) {
+      clearInterval(wsSimulationRef.current);
+    }
+    
+    // Simulate WebSocket alerts with cleanup tracking
+    wsSimulationRef.current = setInterval(() => {
       const wsData = {
         type: "alert",
         severity: ["low", "medium", "high"][Math.floor(Math.random() * 3)],
@@ -376,6 +388,15 @@ export const OperationsDashboardRealTime: React.FC = () => {
     }
     if (wsRef.current) {
       wsRef.current.close();
+    }
+    // PATCH 549: Clean up simulation intervals
+    if (mqttSimulationRef.current) {
+      clearInterval(mqttSimulationRef.current);
+      mqttSimulationRef.current = null;
+    }
+    if (wsSimulationRef.current) {
+      clearInterval(wsSimulationRef.current);
+      wsSimulationRef.current = null;
     }
   };
 
