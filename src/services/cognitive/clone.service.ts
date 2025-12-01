@@ -4,6 +4,7 @@
  */
 
 import { supabase } from "@/integrations/supabase/client";
+import { logger } from "@/lib/logger";
 
 export interface CloneConfiguration {
   id: string;
@@ -47,7 +48,7 @@ export class CognitiveCloneService {
    * Create a configuration snapshot
    */
   static async createSnapshot(name?: string): Promise<CloneSnapshot> {
-    console.info("[CognitiveClone] Creating snapshot");
+    logger.info("[CognitiveClone] Creating snapshot", { name });
 
     try {
       const snapshot: CloneSnapshot = {
@@ -75,7 +76,7 @@ export class CognitiveCloneService {
       await this.saveSnapshot(snapshot);
       return snapshot;
     } catch (error) {
-      console.error("[CognitiveClone] Failed to create snapshot:", error);
+      logger.error("[CognitiveClone] Failed to create snapshot", error as Error, { name });
       throw error;
     }
   }
@@ -92,7 +93,7 @@ export class CognitiveCloneService {
       restrictions?: string[];
     }
   ): Promise<CloneConfiguration> {
-    console.info(`[CognitiveClone] Creating clone: ${options.name}`);
+    logger.info("[CognitiveClone] Creating clone", { cloneName: options.name, sourceSnapshotId: sourceSnapshot.configurationId });
 
     try {
       const cloneConfig: CloneConfiguration = {
@@ -121,10 +122,10 @@ export class CognitiveCloneService {
       await this.persistCloneData(cloneConfig);
       this.activeClones.set(cloneConfig.id, cloneConfig);
 
-      console.info(`[CognitiveClone] Clone created: ${cloneConfig.id}`);
+      logger.info("[CognitiveClone] Clone created successfully", { cloneId: cloneConfig.id, cloneName: cloneConfig.name });
       return cloneConfig;
     } catch (error) {
-      console.error("[CognitiveClone] Failed to create clone:", error);
+      logger.error("[CognitiveClone] Failed to create clone", error as Error, { cloneName: options.name });
       throw error;
     }
   }

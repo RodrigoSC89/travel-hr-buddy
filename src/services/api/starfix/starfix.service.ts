@@ -5,6 +5,7 @@
  */
 
 import { supabase } from "@/integrations/supabase/client";
+import { logger } from "@/lib/logger";
 
 export interface StarFixVessel {
   imo_number: string;
@@ -124,7 +125,7 @@ export async function registerVesselInStarFix(vessel: StarFixVessel): Promise<{ 
 
     return { success: true, starfix_id: data.starfix_id };
   } catch (error) {
-    console.error('Error registering vessel in StarFix:', error);
+    logger.error('Error registering vessel in StarFix', error as Error, { vessel: vessel.imo_number });
     return { 
       success: false, 
       error: error instanceof Error ? error.message : 'Unknown error' 
@@ -177,13 +178,13 @@ export async function fetchStarFixInspections(imoNumber: string): Promise<StarFi
         .upsert(inspections as any);
 
       if (error) {
-        console.error('Error storing StarFix inspections:', error);
+        logger.error('Error storing StarFix inspections', error, { imoNumber, count: inspections.length });
       }
     }
 
     return inspections;
   } catch (error) {
-    console.error('Error fetching StarFix inspections:', error);
+    logger.error('Error fetching StarFix inspections', error as Error, { imoNumber });
     throw error;
   }
 }
@@ -235,7 +236,7 @@ export async function getStarFixPerformanceMetrics(
 
     return metrics;
   } catch (error) {
-    console.error('Error fetching StarFix performance metrics:', error);
+    logger.error('Error fetching StarFix performance metrics', error as Error, { imoNumber, periodMonths });
     throw error;
   }
 }
@@ -292,7 +293,7 @@ export async function submitInspectionToStarFix(inspection: StarFixInspection): 
 
     return { success: true };
   } catch (error) {
-    console.error('Error submitting inspection to StarFix:', error);
+    logger.error('Error submitting inspection to StarFix', error as Error, { inspectionId: inspection.id, imoNumber: inspection.imo_number });
     
     // Update sync status to failed comment: Removed starfix_sync_status field (not in schema)
     // if (inspection.id) {
@@ -337,7 +338,7 @@ export async function syncPendingInspections(): Promise<{ synced: number; failed
 
     return { synced, failed };
   } catch (error) {
-    console.error('Error syncing pending inspections:', error);
+    logger.error('Error syncing pending inspections', error as Error);
     return { synced: 0, failed: 0 };
   }
 }
@@ -370,7 +371,7 @@ export async function getStarFixSyncStatus(vesselId: string): Promise<{
       failed_inspections: 0,
     };
   } catch (error) {
-    console.error('Error getting StarFix sync status:', error);
+    logger.error('Error getting StarFix sync status', error as Error, { vesselId });
     return {
       last_sync: null,
       pending_inspections: 0,
