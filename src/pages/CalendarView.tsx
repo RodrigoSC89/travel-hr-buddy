@@ -7,6 +7,7 @@ import { Badge } from '@/components/ui/badge';
 import { SmartSchedulerService } from '@/services/smart-scheduler.service';
 import type { ScheduledTask } from '@/types/smart-scheduler';
 import { toast } from 'sonner';
+import { logger } from '@/lib/logger';
 
 const CalendarView: React.FC = () => {
   const [tasks, setTasks] = useState<ScheduledTask[]>([]);
@@ -29,7 +30,7 @@ const CalendarView: React.FC = () => {
       });
       setTasks(data);
     } catch (error) {
-      console.error('Error loading tasks:', error);
+      logger.error('Error loading tasks', { error, currentMonth: currentDate.getMonth(), currentYear: currentDate.getFullYear() });
       toast.error('Failed to load tasks');
     } finally {
       setLoading(false);

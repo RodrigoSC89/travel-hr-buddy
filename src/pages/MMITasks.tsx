@@ -9,6 +9,7 @@ import { ptBR } from "date-fns/locale";
 import { toast } from "sonner";
 import type { MMITask } from "@/types/mmi";
 import { fetchTasks, updateTaskStatus, createWorkOrderFromTask } from "@/services/mmi/taskService";
+import { logger } from "@/lib/logger";
 import {
   Dialog,
   DialogContent,
@@ -33,7 +34,7 @@ export default function MMITasksPage() {
       const data = await fetchTasks();
       setTasks(data);
     } catch (error) {
-      console.error("Error loading tasks:", error);
+      logger.error("Error loading tasks", { error });
       toast.error("Erro ao carregar tarefas");
     } finally {
       setLoading(false);
@@ -83,7 +84,7 @@ export default function MMITasksPage() {
         toast.error("Erro ao criar Ordem de Serviço");
       }
     } catch (error) {
-      console.error("Error creating OS:", error);
+      logger.error("Error creating OS", { error, taskId: task.id, taskTitle: task.title });
       toast.error("Erro ao criar Ordem de Serviço");
     } finally {
       setCreatingOS(false);
@@ -100,7 +101,7 @@ export default function MMITasksPage() {
         toast.error("Erro ao atualizar status");
       }
     } catch (error) {
-      console.error("Error updating status:", error);
+      logger.error("Error updating status", { error, taskId, newStatus });
       toast.error("Erro ao atualizar status");
     }
   };

@@ -575,25 +575,66 @@ Zero módulos travando no sistema.
 
 ---
 
+### Fase 11: Pages Logging Migration (PATCH 549.0) - ✅ LOTE 1 CONCLUÍDO
+
+**Lote 1 - Pages Core com Console (✅ Concluído):**
+
+75. **src/pages/CalendarView.tsx** ✅ COMPLETO
+   - 1 console.error → logger.error
+   - Melhorias: Contexto com currentMonth, currentYear
+   - Build: ✅ Passou
+
+76. **src/pages/DocsViewer.tsx** ✅ COMPLETO
+   - 1 console.error → logger.error
+   - Melhorias: Contexto com error
+   - Build: ✅ Passou
+
+77. **src/pages/MMIForecastPage.tsx** ✅ COMPLETO
+   - 2 console.error → logger.error
+   - Melhorias: Contexto com vesselName, systemName, hourmeter, forecastLength
+   - Build: ✅ Passou
+
+78. **src/pages/MMITasks.tsx** ✅ COMPLETO
+   - 3 console.error → logger.error
+   - Melhorias: Contexto com taskId, taskTitle, newStatus
+   - Build: ✅ Passou
+
+79. **src/pages/ReportingEngine.tsx** ✅ COMPLETO
+   - 3 console.error → logger.error
+   - Melhorias: Contexto com reportId, reportType
+   - Build: ✅ Passou
+
+**Estatísticas Lote 1:**
+- Arquivos corrigidos: 5
+- Console statements removidos: 10
+- Total acumulado: 431+ console removidos
+
+---
+
+### Fase 11 - 🔄 EM PROGRESSO
+
+Lote 1 completo. Próximos lotes em progresso.
+
+---
+
 ### Antes da Migração
 - **Total console.log/error:** ~2164+
 - **Arquivos com console:** ~791
 - **Logging estruturado:** 0%
 
-### Depois da Fase 10 (PATCH 549.0)
-- **console.log removidos:** ~421+
+### Depois da Fase 11 Lote 1 (PATCH 549.0)
+- **console.log removidos:** ~431+
 - **window.location.href removidos:** 8
 - **Lazy loads removidos:** 26+
-- **Arquivos migrados:** 76/787 (9.7%)
+- **Arquivos migrados:** 81/787 (10.3%)
 - **Módulos críticos corrigidos:** 4 (Maritime, Fleet, Travel, Voice Assistant)
 - **Logging estruturado:** 100% nos arquivos migrados
 - **Build status:** ✅ Todos passando
 - **Diretórios completos:** src/lib/ai/ (100%), src/services/ai/ (100%), src/lib/email/ (100%), src/services/cognitive/ (100%), src/services/mmi/ (100%)
 
-### Próximos Diretórios (Fase 11)
-- **src/pages/** - ~133+ console.error/log/warn restantes (prioridade ALTA)
-  - CalendarView, DocsViewer, ExecutiveReport, MMIForecastPage
-  - MMITasks, ReportingEngine, RiskOperations, SmartScheduler
+### Próximos Diretórios (Fase 11 Lote 2+)
+- **src/pages/** - ~123+ console.error/log/warn restantes (prioridade ALTA)
+  - ExecutiveReport, RiskOperations, SmartScheduler (prioridade imediata)
   - ValidationPatches, admin/*.tsx (múltiplos arquivos)
 - **window.location.href restantes** - ~87 arquivos (prioridade ALTA)
   - Componentes de erro boundaries
@@ -729,7 +770,7 @@ find src -name "*.ts" -o -name "*.tsx" | xargs sed -i 's/console\.warn(/logger.w
 
 ---
 
-**Status:** ✅ FASE 10 COMPLETA (PATCH 549.0) - Zero módulos travando, rotas corrigidas  
-**Próxima Ação:** Iniciar Fase 11 (src/pages/ - console logging migration)  
+**Status:** ✅ FASE 11 LOTE 1 COMPLETO (PATCH 549.0) - 431+ console removidos, 81 arquivos migrados  
+**Próxima Ação:** Iniciar Fase 11 Lote 2 (RiskOperations, SmartScheduler, ExecutiveReport)  
 **Última Atualização:** 2025-12-01  
 **Build Status:** ✅ All tests passing
