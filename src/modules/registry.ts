@@ -931,6 +931,20 @@ export const MODULE_REGISTRY: Record<string, ModuleDefinition> = {
     icon: "ClipboardCheck",
     lazy: true,
     version: "650.0",
+  },
+
+  "compliance.mlc-inspection": {
+    id: "compliance.mlc-inspection",
+    name: "MLC Inspection",
+    category: "compliance",
+    path: "modules/compliance/mlc-inspection",
+    description: "Maritime Labour Convention 2006 Digital Inspection System",
+    status: "active",
+    completeness: "100%",
+    route: "/mlc-inspection",
+    icon: "Shield",
+    lazy: true,
+    version: "650.1",
   }
 };
 
