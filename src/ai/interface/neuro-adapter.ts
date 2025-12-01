@@ -7,6 +7,8 @@
  * @created 2025-01-24
  */
 
+import { logger } from "@/lib/logger";
+
 export type InputType = "text" | "voice" | "gesture" | "thought";
 export type InteractionState = "active" | "paused" | "hesitating" | "confirming" | "idle";
 export type AdaptiveReaction = "suggest" | "confirm" | "wait" | "clarify" | "execute";
@@ -75,7 +77,7 @@ class NeuroHumanAdapter {
     // Log da adaptação
     this.logAdaptation(input, reaction);
 
-    console.log("[NeuroAdapter] Input processed:", {
+    logger.debug("[NeuroAdapter] Input processed", {
       type: input.type,
       state: this.humanContext.currentState,
       reaction: reaction.reaction,
@@ -295,7 +297,7 @@ class NeuroHumanAdapter {
       this.adaptationLog.shift();
     }
 
-    console.log("[NeuroAdapter] Adaptation with human context:", {
+    logger.debug("[NeuroAdapter] Adaptation with human context", {
       inputType: input.type,
       reactionType: reaction.reaction,
       state: this.humanContext.currentState,

@@ -12,6 +12,7 @@ import { analyzeLogs, generateSummary, type AnalysisResult } from "./analyzer";
 import { suggestFix } from "./suggestFix";
 import { createAutoPR, commentOnPR } from "./createPR";
 import { MemoryEngine } from "./memory/memoryEngine";
+import { logger } from "@/lib/logger";
 
 interface NautilusCoreConfig {
   workflowName: string;
@@ -25,58 +26,58 @@ interface NautilusCoreConfig {
  * Main execution function
  */
 async function main() {
-  console.log("🌊 Nautilus Intelligence Core - Starting Analysis\n");
+  logger.info("🌊 Nautilus Intelligence Core - Starting Analysis");
 
   try {
     // Get configuration from environment or defaults
     const config = getConfiguration();
 
-    console.log("📋 Configuration:");
-    console.log(`   Workflow: ${config.workflowName}`);
-    console.log(`   Run ID: ${config.runId}`);
-    console.log(`   Log Sources: ${config.logSources.length} file(s)`);
-    console.log(`   Create PR: ${config.createPR}`);
-    console.log("");
+    logger.info("📋 Configuration:", {
+      workflow: config.workflowName,
+      runId: config.runId,
+      logSourcesCount: config.logSources.length,
+      createPR: config.createPR
+    });
 
     // Step 1: Collect and analyze logs
-    console.log("📖 Step 1: Analyzing logs...");
+    logger.info("📖 Step 1: Analyzing logs...");
     const logs = await collectLogs(config.logSources);
     const analysis = analyzeLogs(logs, config.workflowName, config.runId);
 
-    console.log(`   Found ${analysis.findings.length} issue(s)\n`);
+    logger.info(`Found ${analysis.findings.length} issue(s)`);
 
     // Step 2: Save analysis results
-    console.log("💾 Step 2: Saving analysis results...");
+    logger.info("💾 Step 2: Saving analysis results...");
     await saveAnalysis(analysis, config.outputPath);
-    console.log(`   Saved to: ${config.outputPath}\n`);
+    logger.info(`Saved to: ${config.outputPath}`);
 
     // Step 3: Generate summary
     const summary = generateSummary(analysis);
-    console.log("📊 Analysis Summary:");
-    console.log(summary);
-    console.log("");
+    logger.info("📊 Analysis Summary:", { summary });
 
     // Step 4: If issues found, generate fix suggestions
     if (analysis.hasIssues && config.createPR) {
-      console.log("🔧 Step 3: Generating fix suggestions...");
+      logger.info("🔧 Step 3: Generating fix suggestions...");
       const suggestion = await suggestFix(analysis);
 
       if (suggestion) {
-        console.log(`   Title: ${suggestion.title}`);
-        console.log(`   Priority: ${suggestion.priority}`);
-        console.log("");
+        logger.info("Fix suggestion generated", {
+          title: suggestion.title,
+          priority: suggestion.priority
+        });
 
         // Step 5: Create automated PR
-        console.log("🚀 Step 4: Creating automated PR...");
+        logger.info("🚀 Step 4: Creating automated PR...");
         const result = await createAutoPR(suggestion, analysis);
 
         if (result.success) {
-          console.log("✅ PR created successfully!");
-          console.log(`   URL: ${result.prUrl}`);
-          console.log(`   Number: #${result.prNumber}\n`);
+          logger.info("✅ PR created successfully!", {
+            prUrl: result.prUrl,
+            prNumber: result.prNumber
+          });
 
           // 🧠 Store learning in Nautilus Memory Engine
-          console.log("🧠 Storing learning in Memory Engine...");
+          logger.info("🧠 Storing learning in Memory Engine...");
           const memory = new MemoryEngine();
           const findingsArray = analysis.findings.map(f => f.message || String(f));
           memory.store(findingsArray, suggestion.title);
@@ -84,32 +85,29 @@ async function main() {
           // Check for recurrent patterns
           const patterns = memory.getRecurrentPatterns();
           if (patterns.length > 0) {
-            console.log("📊 Recurrent patterns detected:");
-            for (const p of patterns) {
-              console.log(`   🔁 ${p.pattern} → ${p.occurrences} occurrences`);
-            }
+            logger.info("📊 Recurrent patterns detected:", {
+              patterns: patterns.map(p => ({ pattern: p.pattern, occurrences: p.occurrences }))
+            });
           } else {
-            console.log("🧩 No recurrent patterns found yet.");
+            logger.info("🧩 No recurrent patterns found yet.");
           }
-          console.log("");
         } else {
-          console.error(`❌ Failed to create PR: ${result.error}\n`);
+          logger.error("❌ Failed to create PR", { error: result.error });
           process.exit(1);
         }
       } else {
-        console.log("ℹ️  No fix suggestions generated\n");
+        logger.info("ℹ️  No fix suggestions generated");
       }
     } else if (!analysis.hasIssues) {
-      console.log("✅ No issues detected - no action needed\n");
+      logger.info("✅ No issues detected - no action needed");
     } else {
-      console.log("ℹ️  PR creation disabled - analysis complete\n");
+      logger.info("ℹ️  PR creation disabled - analysis complete");
     }
 
-    console.log("🎉 Nautilus Intelligence Core - Analysis Complete");
+    logger.info("🎉 Nautilus Intelligence Core - Analysis Complete");
     process.exit(0);
   } catch (error: any) {
-    console.error("❌ Fatal error:", error.message);
-    console.error(error.stack);
+    logger.error("❌ Fatal error", { message: error.message, stack: error.stack });
     process.exit(1);
   }
 }
@@ -160,18 +158,18 @@ async function collectLogs(sources: string[]): Promise<string> {
         combinedLogs += `\n=== Log Source: ${source} ===\n`;
         combinedLogs += content;
         combinedLogs += "\n";
-        console.log(`   ✓ Loaded: ${source}`);
+        logger.debug(`✓ Loaded: ${source}`);
       } else {
-        console.log(`   ⚠ Skipped: ${source} (not found)`);
+        logger.debug(`⚠ Skipped: ${source} (not found)`);
       }
     } catch (error: any) {
-      console.warn(`   ⚠ Error reading ${source}:`, error.message);
+      logger.warn(`Error reading ${source}`, { error: error.message });
     }
   }
 
   // If no logs were found, check if we're in a CI environment
   if (!combinedLogs) {
-    console.log("   ℹ️  No log files found, checking GitHub Actions context...");
+    logger.info("No log files found, checking GitHub Actions context...");
     combinedLogs = getCIContextLogs();
   }
 
@@ -226,7 +224,7 @@ async function saveAnalysis(analysis: AnalysisResult, outputPath: string): Promi
  * Run in demo mode with sample logs for testing
  */
 async function runDemo() {
-  console.log("🎭 Running Nautilus Intelligence Core in DEMO mode\n");
+  logger.info("🎭 Running Nautilus Intelligence Core in DEMO mode");
 
   const sampleLogs = `
 === Build Log ===
@@ -262,24 +260,24 @@ coverage < 85% threshold
   const analysis = analyzeLogs(sampleLogs, "Demo Workflow", 12345);
   const summary = generateSummary(analysis);
   
-  console.log(summary);
-  console.log("\n📊 Analysis JSON:");
-  console.log(JSON.stringify(analysis, null, 2));
+  logger.info("Demo analysis summary", { summary });
+  logger.info("📊 Analysis JSON:", { analysis });
 
   // Save to file
   await saveAnalysis(analysis, "demo-analysis.json");
-  console.log("\n💾 Saved to demo-analysis.json");
+  logger.info("💾 Saved to demo-analysis.json");
 
   // Generate suggestion (will use fallback without API key)
-  console.log("\n🔧 Generating fix suggestions...");
+  logger.info("🔧 Generating fix suggestions...");
   const suggestion = await suggestFix(analysis);
   
   if (suggestion) {
-    console.log("\n📝 Fix Suggestion:");
-    console.log(`Title: ${suggestion.title}`);
-    console.log(`Priority: ${suggestion.priority}`);
-    console.log(`\nDescription:\n${suggestion.description}`);
-    console.log(`\nSuggested Changes:\n${suggestion.suggestedChanges}`);
+    logger.info("📝 Fix Suggestion:", {
+      title: suggestion.title,
+      priority: suggestion.priority,
+      description: suggestion.description,
+      suggestedChanges: suggestion.suggestedChanges
+    });
   }
 
   // Clean up
@@ -288,7 +286,7 @@ coverage < 85% threshold
 
 // Check if running in demo mode
 if (process.argv.includes("--demo")) {
-  runDemo().catch(console.error);
+  runDemo().catch((error) => logger.error("Demo failed", { error }));
 } else {
-  main().catch(console.error);
+  main().catch((error) => logger.error("Main execution failed", { error }));
 }
