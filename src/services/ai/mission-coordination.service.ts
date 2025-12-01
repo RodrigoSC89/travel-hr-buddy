@@ -9,6 +9,7 @@ import type {
   MissionLog,
   VesselRole 
 } from "@/types/ai-core";
+import { logger } from "@/lib/logger";
 
 interface SimpleMission {
   id: string;
@@ -48,10 +49,10 @@ export class MissionCoordinationService {
       };
 
       this.missions.set(mission.id, mission);
-      console.info("[MissionCoordination] Mission created:", mission.id);
+      logger.info("[MissionCoordination] Mission created", { missionId: mission.id, name: mission.name, priority: mission.priority });
       return mission;
     } catch (error) {
-      console.error("[MissionCoordination] Error in createMission:", error);
+      logger.error("[MissionCoordination] Error in createMission", error as Error, { missionData });
       return null;
     }
   }
@@ -63,12 +64,12 @@ export class MissionCoordinationService {
     try {
       const mission = this.missions.get(missionId);
       if (!mission) {
-        console.warn("[MissionCoordination] Mission not found:", missionId);
+        logger.warn("[MissionCoordination] Mission not found", { missionId });
         return null;
       }
       return mission;
     } catch (error) {
-      console.error("[MissionCoordination] Error in getMission:", error);
+      logger.error("[MissionCoordination] Error in getMission", error as Error, { missionId });
       return null;
     }
   }
@@ -98,10 +99,10 @@ export class MissionCoordinationService {
       const existingVessels = this.vessels.get(missionId) || [];
       this.vessels.set(missionId, [...existingVessels, assignment]);
 
-      console.info("[MissionCoordination] Vessel assigned:", assignment.id);
+      logger.info("[MissionCoordination] Vessel assigned", { assignmentId: assignment.id, missionId, vesselId, role });
       return assignment;
     } catch (error) {
-      console.error("[MissionCoordination] Error in assignVessel:", error);
+      logger.error("[MissionCoordination] Error in assignVessel", error as Error, { missionId, vesselId, role });
       return null;
     }
   }
@@ -116,7 +117,7 @@ export class MissionCoordinationService {
     try {
       const mission = this.missions.get(missionId);
       if (!mission) {
-        console.warn("[MissionCoordination] Mission not found:", missionId);
+        logger.warn("[MissionCoordination] Mission not found", { missionId });
         return null;
       }
 
@@ -124,10 +125,10 @@ export class MissionCoordinationService {
       mission.updated_at = new Date().toISOString();
       this.missions.set(missionId, mission);
 
-      console.info("[MissionCoordination] Mission status updated:", missionId, status);
+      logger.info("[MissionCoordination] Mission status updated", { missionId, oldStatus: mission.status, newStatus: status });
       return mission;
     } catch (error) {
-      console.error("[MissionCoordination] Error in updateMissionStatus:", error);
+      logger.error("[MissionCoordination] Error in updateMissionStatus", error as Error, { missionId, status });
       return null;
     }
   }
@@ -156,10 +157,10 @@ export class MissionCoordinationService {
       const existingLogs = this.logs.get(missionId) || [];
       this.logs.set(missionId, [...existingLogs, log]);
 
-      console.info("[MissionCoordination] Log added:", log.id);
+      logger.info("[MissionCoordination] Log added", { logId: log.id, missionId, logType, vesselId });
       return log;
     } catch (error) {
-      console.error("[MissionCoordination] Error in addMissionLog:", error);
+      logger.error("[MissionCoordination] Error in addMissionLog", error as Error, { missionId, logType, vesselId });
       return null;
     }
   }
@@ -171,7 +172,7 @@ export class MissionCoordinationService {
     try {
       return this.vessels.get(missionId) || [];
     } catch (error) {
-      console.error("[MissionCoordination] Error in getMissionVessels:", error);
+      logger.error("[MissionCoordination] Error in getMissionVessels", error as Error, { missionId });
       return [];
     }
   }
@@ -183,7 +184,7 @@ export class MissionCoordinationService {
     try {
       return this.logs.get(missionId) || [];
     } catch (error) {
-      console.error("[MissionCoordination] Error in getMissionLogs:", error);
+      logger.error("[MissionCoordination] Error in getMissionLogs", error as Error, { missionId });
       return [];
     }
   }
@@ -195,7 +196,7 @@ export class MissionCoordinationService {
     try {
       return Array.from(this.missions.values());
     } catch (error) {
-      console.error("[MissionCoordination] Error in getAllMissions:", error);
+      logger.error("[MissionCoordination] Error in getAllMissions", error as Error);
       return [];
     }
   }

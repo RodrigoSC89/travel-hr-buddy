@@ -45,7 +45,7 @@ export async function runForecastAnalysis(): Promise<ForecastResult> {
       .limit(100);
 
     if (error) {
-      console.error("❌ Supabase query error:", error);
+      logger.error("Supabase query error", error, { table: "dp_telemetry" });
       return { 
         status: "error", 
         message: `Database error: ${error.message}` 
@@ -83,7 +83,7 @@ export async function runForecastAnalysis(): Promise<ForecastResult> {
       ...risk
     };
   } catch (error) {
-    console.error("❌ Forecast analysis error:", error);
+    logger.error("Forecast analysis error", error as Error);
     return {
       status: "error",
       message: error instanceof Error ? error.message : "Unknown error"
@@ -136,19 +136,19 @@ function publishForecastAlert(risk: RiskClassification): void {
       
       client.publish("nautilus/forecast/alert", JSON.stringify(alertData), { qos: 1 }, (err) => {
         if (err) {
-          console.error("❌ Failed to publish forecast alert:", err);
+          logger.error("Failed to publish forecast alert", err as Error, { alertData });
         } else {
-          logger.info("✅ Published forecast alert:", alertData);
+          logger.info("Published forecast alert", { alertData });
         }
         client.end();
       });
     });
 
     client.on("error", (err) => {
-      console.error("❌ MQTT connection error:", err);
+      logger.error("MQTT connection error", err as Error);
       client.end();
     });
   } catch (error) {
-    console.error("❌ Error publishing forecast alert:", error);
+    logger.error("Error publishing forecast alert", error as Error);
   }
 }

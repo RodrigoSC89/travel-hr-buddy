@@ -4,6 +4,7 @@
  */
 
 import type { VesselAIContext } from "@/types/ai-core";
+import { logger } from "@/lib/logger";
 
 export class DistributedAIService {
   private static readonly SYNC_INTERVAL_HOURS = 12;
@@ -23,7 +24,7 @@ export class DistributedAIService {
       // For now, create a local context (database integration to be added)
       return await this.createVesselContext(vesselId);
     } catch (error) {
-      console.error("[DistributedAI] Error in getVesselContext:", error);
+      logger.error("[DistributedAI] Error in getVesselContext", error as Error, { vesselId });
       return null;
     }
   }
@@ -46,10 +47,10 @@ export class DistributedAIService {
       };
 
       this.CONTEXT_CACHE.set(vesselId, context);
-      console.info("[DistributedAI] Context created for vessel:", vesselId);
+      logger.info("[DistributedAI] Context created for vessel", { vesselId, contextId: context.context_id });
       return context;
     } catch (error) {
-      console.error("[DistributedAI] Error in createVesselContext:", error);
+      logger.error("[DistributedAI] Error in createVesselContext", error as Error, { vesselId });
       return null;
     }
   }
@@ -64,7 +65,7 @@ export class DistributedAIService {
     try {
       const existing = this.CONTEXT_CACHE.get(vesselId);
       if (!existing) {
-        console.warn("[DistributedAI] Context not found for update:", vesselId);
+        logger.warn("[DistributedAI] Context not found for update", { vesselId });
         return null;
       }
 
@@ -75,10 +76,10 @@ export class DistributedAIService {
       };
 
       this.CONTEXT_CACHE.set(vesselId, updated);
-      console.info("[DistributedAI] Context updated for vessel:", vesselId);
+      logger.info("[DistributedAI] Context updated for vessel", { vesselId, updates: Object.keys(updates) });
       return updated;
     } catch (error) {
-      console.error("[DistributedAI] Error in updateVesselContext:", error);
+      logger.error("[DistributedAI] Error in updateVesselContext", error as Error, { vesselId });
       return null;
     }
   }
@@ -88,7 +89,7 @@ export class DistributedAIService {
    */
   static clearCache(): void {
     this.CONTEXT_CACHE.clear();
-    console.info("[DistributedAI] Context cache cleared");
+    logger.info("[DistributedAI] Context cache cleared", { cacheSize: this.CONTEXT_CACHE.size });
   }
 
   /**
@@ -108,15 +109,15 @@ export class DistributedAIService {
    */
   static async performGlobalSync(): Promise<boolean> {
     try {
-      console.info("[DistributedAI] Starting global sync");
+      logger.info("[DistributedAI] Starting global sync", { contextsInCache: this.CONTEXT_CACHE.size });
       
       // Implementation for global sync would go here
       this.lastGlobalSync = new Date();
       
-      console.info("[DistributedAI] Global sync completed");
+      logger.info("[DistributedAI] Global sync completed", { syncTime: this.lastGlobalSync.toISOString() });
       return true;
     } catch (error) {
-      console.error("[DistributedAI] Error in global sync:", error);
+      logger.error("[DistributedAI] Error in global sync", error as Error);
       return false;
     }
   }
