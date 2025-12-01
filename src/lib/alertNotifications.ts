@@ -5,6 +5,7 @@
  */
 
 import { supabase } from "@/integrations/supabase/client";
+import { logger } from "@/lib/logger";
 
 export type AlertPriority = "low" | "medium" | "high" | "critical";
 
@@ -48,7 +49,10 @@ export async function sendSMSAlert(options: SMSAlertOptions): Promise<AlertRespo
 
     return data as AlertResponse;
   } catch (error) {
-    console.error("Error sending SMS alert:", error);
+    logger.error("Error sending SMS alert", error as Error, { 
+      to: options.to,
+      priority: options.priority 
+    });
     return {
       success: false,
       error: error instanceof Error ? error.message : "Unknown error",
@@ -71,7 +75,11 @@ export async function sendEmailAlert(options: EmailAlertOptions): Promise<AlertR
 
     return data as AlertResponse;
   } catch (error) {
-    console.error("Error sending email alert:", error);
+    logger.error("Error sending email alert", error as Error, { 
+      to: options.to,
+      subject: options.subject,
+      priority: options.priority 
+    });
     return {
       success: false,
       error: error instanceof Error ? error.message : "Unknown error",

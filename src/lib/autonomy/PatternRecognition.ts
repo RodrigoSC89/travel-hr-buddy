@@ -192,7 +192,7 @@ class PatternRecognition {
         logger.info(`🧠 Carregados ${this.patterns.size} padrões conhecidos`);
       }
     } catch (error) {
-      console.error("Erro ao carregar padrões:", error);
+      logger.error("Erro ao carregar padrões", error as Error);
     }
   }
 
@@ -208,7 +208,7 @@ class PatternRecognition {
       };
       localStorage.setItem("nautilus_patterns", JSON.stringify(data));
     } catch (error) {
-      console.error("Erro ao salvar padrões:", error);
+      logger.error("Erro ao salvar padrões", error as Error);
     }
   }
 
