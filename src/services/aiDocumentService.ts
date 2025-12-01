@@ -7,6 +7,7 @@
 
 import { createWorker, Worker } from "tesseract.js";
 import { supabase } from "@/integrations/supabase/client";
+import { logger } from "@/lib/logger";
 
 interface EntityExtraction {
   type: "email" | "phone" | "amount" | "date" | "name" | "other";
@@ -317,7 +318,7 @@ class AIDocumentService {
       });
 
       if (error) {
-        console.error("Error saving document insights:", error);
+        logger.error("Error saving document insights", error as Error, { documentId });
       }
 
       // Update processing queue

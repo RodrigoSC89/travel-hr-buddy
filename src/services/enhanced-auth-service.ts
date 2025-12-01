@@ -5,6 +5,7 @@
 
 import { supabase } from "@/integrations/supabase/client";
 import { Session, User } from "@supabase/supabase-js";
+import { logger } from "@/lib/logger";
 
 interface AuthState {
   session: Session | null;
@@ -40,7 +41,7 @@ export class TokenRefreshManager {
         this.scheduleRefresh(session);
       }
     } catch (error) {
-      console.error("Error initializing refresh cycle:", error);
+      logger.error("Error initializing refresh cycle", error as Error);
     }
 
     // Listen for auth state changes
@@ -75,7 +76,7 @@ export class TokenRefreshManager {
         this.refreshToken();
       }, refreshTime);
 
-      console.log(`Token refresh scheduled in ${Math.round(refreshTime / 1000 / 60)} minutes`);
+      logger.debug(`Token refresh scheduled in ${Math.round(refreshTime / 1000 / 60)} minutes`);
     } else {
       // Token is about to expire or already expired, refresh immediately
       this.refreshToken();
@@ -90,20 +91,20 @@ export class TokenRefreshManager {
       const { data, error } = await supabase.auth.refreshSession();
 
       if (error) {
-        console.error("Token refresh error:", error);
+        logger.error("Token refresh error", error as Error);
         return { success: false, error: error.message };
       }
 
       if (data.session) {
-        console.log("Token refreshed successfully");
+        logger.info("Token refreshed successfully");
         this.scheduleRefresh(data.session);
         return { success: true, session: data.session };
       }
 
       return { success: false, error: "No session returned" };
     } catch (error) {
-      console.error("Exception during token refresh:", error);
-      return { 
+      logger.error("Exception during token refresh", error as Error);
+      return {
         success: false, 
         error: error instanceof Error ? error.message : "Unknown error" 
       };
@@ -149,14 +150,14 @@ export async function secureLogout(): Promise<{ success: boolean; error?: string
       localStorage.removeItem("supabase.auth.token");
       sessionStorage.clear();
 
-      console.log("Secure logout completed");
+      logger.info("Secure logout completed");
       return { success: true };
     }
 
     return { success: true };
   } catch (error) {
-    console.error("Logout error:", error);
-    return { 
+    logger.error("Logout error", error as Error);
+    return {
       success: false, 
       error: error instanceof Error ? error.message : "Unknown error" 
     };
@@ -185,7 +186,7 @@ export async function getActiveSession(): Promise<{
 
     return { session, expiresIn, isExpiringSoon };
   } catch (error) {
-    console.error("Error getting session:", error);
+    logger.error("Error getting session", error as Error);
     return { session: null, expiresIn: 0, isExpiringSoon: false };
   }
 }
@@ -198,7 +199,7 @@ export async function isAuthenticated(): Promise<boolean> {
     const { data: { session } } = await supabase.auth.getSession();
     return !!session;
   } catch (error) {
-    console.error("Authentication check error:", error);
+    logger.error("Authentication check error", error as Error);
     return false;
   }
 }
@@ -244,7 +245,7 @@ export async function getSessionMetadata(): Promise<SessionMetadata | null> {
       isExpiring: isExpiringSoon,
     };
   } catch (error) {
-    console.error("Error getting session metadata:", error);
+    logger.error("Error getting session metadata", error as Error);
     return null;
   }
 }
