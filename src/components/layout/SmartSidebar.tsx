@@ -116,6 +116,11 @@ const groupedModules = [
       { label: "Compliance Hub", path: "/compliance-hub" },
       { label: "Centro de Auditoria", path: "/audit-center" },
       { label: "Relatórios de Incidentes", path: "/incident-reports" },
+      // Novos módulos de compliance avançado
+      { label: "SGSO", path: "/sgso" },
+      { label: "IMCA Audit", path: "/imca-audit" },
+      { label: "Pre-OVID Inspection", path: "/admin/pre-ovid" },
+      { label: "MLC Inspection", path: "/mlc-inspection" },
     ],
   },
   {
