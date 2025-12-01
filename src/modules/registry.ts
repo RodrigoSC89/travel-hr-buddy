@@ -945,6 +945,81 @@ export const MODULE_REGISTRY: Record<string, ModuleDefinition> = {
     icon: "Shield",
     lazy: true,
     version: "650.1",
+  },
+
+  // Travel & Logistics
+  "travel": {
+    id: "travel",
+    name: "Travel Management",
+    category: "operations",
+    path: "pages/Travel",
+    description: "Sistema integrado de gestão de viagens corporativas",
+    status: "active",
+    completeness: "100%",
+    route: "/travel",
+    icon: "Plane",
+    lazy: true,
+    version: "651.0",
+  },
+
+  // Communications
+  "communication": {
+    id: "communication",
+    name: "Communication Hub",
+    category: "operations",
+    path: "pages/Communication",
+    description: "Central de comunicação e mensagens",
+    status: "active",
+    completeness: "100%",
+    route: "/communication",
+    icon: "MessageSquare",
+    lazy: true,
+    version: "651.0",
+  },
+
+  // Analytics
+  "analytics": {
+    id: "analytics",
+    name: "Analytics Dashboard",
+    category: "features",
+    path: "pages/Analytics",
+    description: "Dashboard de análise de dados e métricas",
+    status: "active",
+    completeness: "100%",
+    route: "/analytics",
+    icon: "BarChart3",
+    lazy: true,
+    version: "651.0",
+  },
+
+  // Reports
+  "reports": {
+    id: "reports",
+    name: "Reports Center",
+    category: "operations",
+    path: "pages/Reports",
+    description: "Central de geração e gestão de relatórios",
+    status: "active",
+    completeness: "100%",
+    route: "/reports",
+    icon: "FileText",
+    lazy: true,
+    version: "651.0",
+  },
+
+  // Integrations
+  "integrations": {
+    id: "integrations",
+    name: "Integrations Hub",
+    category: "configuration",
+    path: "pages/Integrations",
+    description: "Hub de integrações e APIs externas",
+    status: "active",
+    completeness: "100%",
+    route: "/integrations",
+    icon: "Globe",
+    lazy: true,
+    version: "651.0",
   }
 };
 
