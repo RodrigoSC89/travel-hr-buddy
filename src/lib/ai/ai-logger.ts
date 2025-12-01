@@ -5,6 +5,7 @@
  */
 
 import { supabase } from "@/integrations/supabase/client";
+import { logger } from "@/lib/logger";
 
 export interface AILogEntry {
   user_id?: string;
@@ -48,10 +49,10 @@ class AILogger {
         .insert(logData);
 
       if (error) {
-        console.error("Failed to log AI interaction:", error);
+        logger.error("Failed to log AI interaction", error as Error, { service: entry.service, status: entry.status });
       }
     } catch (error) {
-      console.error("Error in AILogger.log:", error);
+      logger.error("Error in AILogger.log", error as Error, { service: entry.service });
     }
   }
 
@@ -151,7 +152,7 @@ class AILogger {
 
       return data || [];
     } catch (error) {
-      console.error("Error fetching AI logs:", error);
+      logger.error("Error fetching AI logs", error as Error, { filters });
       return [];
     }
   }
@@ -194,7 +195,7 @@ class AILogger {
         avgTokens: Math.round(avgTokens),
       };
     } catch (error) {
-      console.error("Error fetching AI metrics:", error);
+      logger.error("Error fetching AI metrics", error as Error, { service });
       return {
         avgResponseTime: 0,
         successRate: 0,
