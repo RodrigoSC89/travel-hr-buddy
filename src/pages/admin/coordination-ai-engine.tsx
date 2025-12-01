@@ -24,6 +24,7 @@ import {
 } from "lucide-react";
 import { toast } from "sonner";
 import { coordinationAIService } from "@/services/coordinationAIService";
+import { logger } from "@/lib/logger";
 import type {
   CoordinationAgent,
   CoordinationTask,
@@ -76,7 +77,7 @@ const CoordinationAIEnginePage: React.FC = () => {
       setDecisions(decisionsData);
       setStatistics(statsData);
     } catch (error) {
-      console.error("Error loading data:", error);
+      logger.error("Error loading coordination AI data", { error });
     }
   };
 
@@ -106,7 +107,7 @@ const CoordinationAIEnginePage: React.FC = () => {
         toast.error("Failed to register agent");
       }
     } catch (error) {
-      console.error("Error registering agent:", error);
+      logger.error("Error registering coordination agent", { error, agentName: newAgentName, agentType: newAgentType });
       toast.error("Error registering agent");
     } finally {
       setLoading(false);
@@ -139,7 +140,7 @@ const CoordinationAIEnginePage: React.FC = () => {
         toast.error("Failed to create task");
       }
     } catch (error) {
-      console.error("Error creating task:", error);
+      logger.error("Error creating coordination task", { error, taskName: newTaskName, taskType: newTaskType });
       toast.error("Error creating task");
     } finally {
       setLoading(false);

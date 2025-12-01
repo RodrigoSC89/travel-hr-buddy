@@ -29,6 +29,7 @@ import { supabase } from "@/integrations/supabase/client";
 import { useToast } from "@/hooks/use-toast";
 import jsPDF from "jspdf";
 import "jspdf-autotable";
+import { logger } from "@/lib/logger";
 
 interface WizardStep {
   id: string;
@@ -150,7 +151,7 @@ export default function PeoDpWizardComplete() {
       // Run initial inference
       runInference(formData);
     } catch (error) {
-      console.error("Error loading historical data:", error);
+      logger.error("Error loading PEO-DP historical data", { error });
     }
   };
 
@@ -167,7 +168,7 @@ export default function PeoDpWizardComplete() {
       setInferenceResults(results);
       performCrossValidation(data, results);
     } catch (error) {
-      console.error("Error running inference:", error);
+      logger.error("Error running PEO-DP inference", { error });
     }
   };
 
@@ -494,7 +495,7 @@ export default function PeoDpWizardComplete() {
       // Auto-export PDF
       await exportToPDF();
     } catch (error) {
-      console.error("Error submitting audit:", error);
+      logger.error("Error submitting PEO-DP audit", { error, vesselName: formData.vessel_name });
       toast({
         title: "Erro",
         description: "Falha ao salvar auditoria",

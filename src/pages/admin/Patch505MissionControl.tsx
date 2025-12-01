@@ -3,6 +3,7 @@ import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Rocket, CheckCircle2, XCircle, Layers, FileText, Play, Download } from "lucide-react";
 import { useState } from "react";
+import { logger } from "@/lib/logger";
 
 export default function Patch505MissionControl() {
   const [validationStatus, setValidationStatus] = useState<"idle" | "running" | "complete">("idle");
@@ -57,7 +58,7 @@ export default function Patch505MissionControl() {
   };
 
   const exportReport = () => {
-    console.log("Exporting mission report...");
+    logger.info("Exporting mission report for Mission Control");
   };
 
   const passCount = validationChecks.filter((c) => c.status === "pass").length;

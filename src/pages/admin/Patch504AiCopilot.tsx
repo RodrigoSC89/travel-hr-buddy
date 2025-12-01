@@ -4,6 +4,7 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Bot, CheckCircle2, XCircle, MessageSquare, Volume2, Image, Brain } from "lucide-react";
 import { useState } from "react";
+import { logger } from "@/lib/logger";
 
 export default function Patch504AiCopilot() {
   const [validationStatus, setValidationStatus] = useState<"idle" | "running" | "complete">("idle");
@@ -66,7 +67,7 @@ export default function Patch504AiCopilot() {
     e.preventDefault();
     if (userInput.trim()) {
       // Simulate AI response
-      console.log("AI processing:", userInput);
+      logger.info("AI processing user input", { inputLength: userInput.length });
       setUserInput("");
     }
   };

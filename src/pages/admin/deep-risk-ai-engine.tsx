@@ -23,6 +23,7 @@ import {
 import { toast } from "sonner";
 import { deepRiskAIService } from "@/services/deepRiskAIService";
 import type { RiskForecast, RiskLevel } from "@/types/patches-536-540";
+import { logger } from "@/lib/logger";
 
 const DeepRiskAIPage: React.FC = () => {
   const [activeTab, setActiveTab] = useState("analyzer");
@@ -73,7 +74,7 @@ const DeepRiskAIPage: React.FC = () => {
         toast.error("Failed to load ONNX model");
       }
     } catch (error) {
-      console.error("Error initializing model:", error);
+      logger.error("Error initializing deep risk AI model", { error });
       toast.error("Error initializing model");
     }
   };
@@ -87,7 +88,7 @@ const DeepRiskAIPage: React.FC = () => {
       setForecasts(forecastsData);
       setStatistics(statsData);
     } catch (error) {
-      console.error("Error loading data:", error);
+      logger.error("Error loading deep risk AI data", { error });
     }
   };
 
@@ -113,7 +114,7 @@ const DeepRiskAIPage: React.FC = () => {
       setCurrentAnalysis(result);
       toast.success(`Risk analysis complete: ${result.level.toUpperCase()} (${result.score.toFixed(1)})`);
     } catch (error) {
-      console.error("Error analyzing risk:", error);
+      logger.error("Error analyzing risk with deep risk AI", { error, weatherRisk, mechanicalRisk });
       toast.error("Error analyzing risk");
     } finally {
       setLoading(false);
@@ -152,7 +153,7 @@ const DeepRiskAIPage: React.FC = () => {
         toast.error("Failed to save forecast");
       }
     } catch (error) {
-      console.error("Error saving forecast:", error);
+      logger.error("Error saving risk forecast", { error, forecastName });
       toast.error("Error saving forecast");
     } finally {
       setLoading(false);

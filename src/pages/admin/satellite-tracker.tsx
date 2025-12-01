@@ -8,6 +8,7 @@ import { ScrollArea } from "@/components/ui/scroll-area";
 import { useToast } from "@/components/ui/use-toast";
 import { Satellite, AlertTriangle, Play, Square, Globe, Orbit } from "lucide-react";
 import { supabase } from "@/integrations/supabase/client";
+import { logger } from "@/lib/logger";
 let THREE: any = null;
 const loadTHREE = async () => {
   if (!THREE) {
@@ -69,7 +70,7 @@ export default function SatelliteTracker() {
           table: "satellite_alerts"
         },
         (payload) => {
-          console.log("New satellite alert:", payload);
+          logger.info("New satellite alert received", { alertId: payload.new.id, severity: payload.new.severity });
           toast({
             title: "Satellite Alert",
             description: payload.new.title,
@@ -112,7 +113,7 @@ export default function SatelliteTracker() {
 
       setSatellites(satellitesWithPosition);
     } catch (error) {
-      console.error("Error fetching satellites:", error);
+      logger.error("Error fetching satellites", { error });
       toast({
         title: "Error",
         description: "Failed to load satellites",
@@ -135,7 +136,7 @@ export default function SatelliteTracker() {
       if (error) throw error;
       setAlerts(data || []);
     } catch (error) {
-      console.error("Error fetching alerts:", error);
+      logger.error("Error fetching satellite alerts", { error });
     }
   };
 
@@ -233,7 +234,7 @@ export default function SatelliteTracker() {
         description: "Satellite tracking session initiated",
       });
     } catch (error) {
-      console.error("Error starting tracking:", error);
+      logger.error("Error starting satellite tracking", { error, satelliteId });
       toast({
         title: "Error",
         description: "Failed to start tracking session",
@@ -260,7 +261,7 @@ export default function SatelliteTracker() {
         description: "Satellite tracking session ended",
       });
     } catch (error) {
-      console.error("Error stopping tracking:", error);
+      logger.error("Error stopping satellite tracking", { error, trackingSessionId });
     }
   };
 
@@ -279,7 +280,7 @@ export default function SatelliteTracker() {
 
       fetchAlerts();
     } catch (error) {
-      console.error("Error resolving alert:", error);
+      logger.error("Error resolving satellite alert", { error, alertId });
     }
   };
 

@@ -20,6 +20,7 @@ import {
   SelectTrigger,
   SelectValue,
 } from '@/components/ui/select';
+import { logger } from '@/lib/logger';
 
 export const ModuleControl: React.FC = () => {
   const navigate = useNavigate();
@@ -80,7 +81,7 @@ export const ModuleControl: React.FC = () => {
     });
 
     // Log activation change
-    console.log(`Module ${id} ${newState ? 'activated' : 'deactivated'}`);
+    logger.info(`Module activation state changed`, { moduleId: id, newState });
   };
 
   const handleNavigate = (path: string) => {
@@ -88,7 +89,7 @@ export const ModuleControl: React.FC = () => {
   };
 
   const handleViewHistory = (id: string) => {
-    console.log(`Viewing history for module ${id}`);
+    logger.info(`Viewing module history`, { moduleId: id });
     // TODO: Implement history view
   };
 

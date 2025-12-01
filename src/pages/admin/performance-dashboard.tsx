@@ -13,6 +13,7 @@ import { formatDistanceToNow } from "date-fns";
 import { ptBR } from "date-fns/locale";
 import { Line } from "react-chartjs-2";
 import { Chart as ChartJS, CategoryScale, LinearScale, PointElement, LineElement, Title, Tooltip, Legend } from "chart.js";
+import { logger } from "@/lib/logger";
 
 ChartJS.register(CategoryScale, LinearScale, PointElement, LineElement, Title, Tooltip, Legend);
 
@@ -108,7 +109,7 @@ export default function PerformanceDashboard() {
       setMetrics(metricsResult.data || []);
       setAlerts(alertsResult.data || []);
     } catch (error) {
-      console.error("Error loading dashboard data:", error);
+      logger.error("Error loading performance dashboard data", { error, timeRange });
       toast({
         title: "Erro",
         description: "Falha ao carregar dados de performance",
