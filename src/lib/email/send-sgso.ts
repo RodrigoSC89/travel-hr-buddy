@@ -30,7 +30,7 @@ export async function sendSGSOReport(
   const apiKey = process.env.RESEND_API_KEY;
 
   if (!apiKey) {
-    console.error("❌ RESEND_API_KEY is not configured in environment variables");
+    logger.error("RESEND_API_KEY is not configured in environment variables");
     return {
       success: false,
       error: "RESEND_API_KEY is not configured in environment variables",
@@ -169,7 +169,7 @@ export async function sendSGSOReport(
     });
 
     if (error) {
-      console.error("❌ Resend API error:", error);
+      logger.error("Resend API error", error as Error, { vessel, to });
       return { success: false, error };
     }
 
@@ -180,7 +180,7 @@ export async function sendSGSOReport(
 
     return { success: false, error: "No data returned from Resend API" };
   } catch (err) {
-    console.error("❌ Unexpected error sending SGSO report email:", err);
+    logger.error("Unexpected error sending SGSO report email", err as Error, { vessel, to });
     return {
       success: false,
       error: err instanceof Error ? err.message : "Unknown error occurred",
