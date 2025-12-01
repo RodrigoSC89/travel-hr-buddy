@@ -1,7 +1,7 @@
 # 📊 Migration Status - Console.log → Logger
 
 **Data:** 2025-12-01  
-**Status:** ✅ FASE 7 LOTE 1 CONCLUÍDO
+**Status:** ✅ FASE 8 LOTE 2 CONCLUÍDO
 
 ---
 
@@ -422,20 +422,55 @@ Todos os arquivos restantes de MMI services foram migrados com sucesso.
    - Melhorias: Contexto com key, ttl, age, cache operations
    - Build: ✅ Passou
 
+**Lote 2 - Services Críticos (✅ Concluído):**
+
+55. **src/services/mmi/taskService.ts** ✅ COMPLETO
+   - 7 console.error → logger.error
+   - Melhorias: Contexto com taskId, userId, title, systemName, filters
+   - Build: ✅ Passou
+
+56. **src/services/openai.ts** ✅ COMPLETO
+   - 3 console.error → logger.error
+   - Melhorias: Contexto com API status, textLength, errorData
+   - Build: ✅ Passou
+
+57. **src/services/peodp-inference-service.ts** ✅ COMPLETO
+   - 3 console.error → logger.error
+   - Melhorias: Contexto com vesselId, limit
+   - Build: ✅ Passou
+
+58. **src/services/reporting-engine.service.ts** ✅ COMPLETO
+   - 11 console.error → logger.error
+   - Melhorias: Contexto com templateId, reportId, scheduleId, requestType
+   - Build: ✅ Passou
+
+59. **src/services/risk-operations-engine.ts** ✅ COMPLETO
+   - 7 console.error → logger.error
+   - Melhorias: Contexto com vesselId, moduleType, findingType, severity, filters
+   - Build: ✅ Passou
+
+---
+
+### Fase 8 - ✅ CONCLUÍDA
+
+Todos os serviços críticos foram migrados com sucesso.
+
+---
+
 ### Antes da Migração
 - **Total console.log/error:** ~2164+
 - **Arquivos com console:** ~791
 - **Logging estruturado:** 0%
 
-### Depois da Fase 8 (Lote 1)
-- **console.log removidos:** ~324+
-- **Arquivos migrados:** 58/787 (7.4%)
+### Depois da Fase 8 (Lote 2)
+- **console.log removidos:** ~355+
+- **Arquivos migrados:** 63/787 (8.0%)
 - **Logging estruturado:** 100% nos arquivos migrados
 - **Build status:** ✅ Todos passando
 - **Diretórios completos:** src/lib/ai/ (100%), src/services/ai/ (100%), src/lib/email/ (100%), src/services/cognitive/ (100%), src/services/mmi/ (100%)
 
 ### Próximos Diretórios
-- **Outros services/** - ~150+ console.log/error/warn restantes
+- **Outros services/** - ~120+ console.log/error/warn restantes (mocks, outros)
 - **src/ai/** - ~50 console.log restantes  
 - **src/components/** - ~400 console.log
 - **src/pages/** - ~300 console.log
