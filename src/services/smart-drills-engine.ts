@@ -6,6 +6,7 @@
 
 import type { SupabaseClient } from "@supabase/supabase-js";
 import { supabase } from "@/integrations/supabase/client";
+import { logger } from "@/lib/logger";
 import type { Database, Json } from "@/integrations/supabase/types";
 
 export type DrillType = 'FIRE' | 'ABANDON_SHIP' | 'MAN_OVERBOARD' | 'COLLISION' | 'POLLUTION' | 'MEDICAL' | 'SECURITY' | 'GENERAL';
@@ -456,7 +457,7 @@ export async function generateDrillScenario(
 
     return mapScenarioRowToDomain(savedScenario);
   } catch (error) {
-    console.error("Error generating drill scenario:", error);
+    logger.error("Error generating drill scenario", error as Error, { drillType: type, difficulty });
     throw error;
   }
 }
@@ -556,7 +557,7 @@ export async function scheduleDrill(
 
     return data.id;
   } catch (error) {
-    console.error("Error scheduling drill:", error);
+    logger.error("Error scheduling drill", error as Error, { scenarioId, vesselId });
     throw error;
   }
 }
@@ -585,7 +586,7 @@ export async function recordDrillResponse(
       throw new Error(`Error recording drill response: ${error.message}`);
     }
   } catch (error) {
-    console.error("Error recording drill response:", error);
+    logger.error("Error recording drill response", error as Error, { executionId });
     throw error;
   }
 }
@@ -635,7 +636,7 @@ export async function evaluateDrillPerformance(
           { temperature: 0.7, maxTokens: 1500 }
         );
       } catch (aiError) {
-        console.error("AI evaluation failed for crew member:", response.crewMemberId, aiError);
+        logger.error("AI evaluation failed for crew member", aiError as Error, { crewMemberId: response.crewMemberId });
         continue;
       }
 
@@ -651,15 +652,11 @@ export async function evaluateDrillPerformance(
         .eq("crew_member_id", response.crewMemberId);
 
       if (updateError) {
-        console.error(
-          "Failed to persist AI evaluation for crew member",
-          response.crewMemberId,
-          updateError
-        );
+        logger.error("Failed to persist AI evaluation for crew member", updateError as Error, { crewMemberId: response.crewMemberId, executionId });
       }
     }
   } catch (error) {
-    console.error("Error evaluating drill performance:", error);
+    logger.error("Error evaluating drill performance", error as Error, { executionId });
     throw error;
   }
 }
@@ -788,7 +785,7 @@ Format as JSON array:
       throw new Error(`Failed to store corrective actions: ${insertError.message}`);
     }
   } catch (error) {
-    console.error("Error generating corrective action plan:", error);
+    logger.error("Error generating corrective action plan", error as Error, { executionId });
     throw error;
   }
 }
@@ -827,7 +824,7 @@ export async function setupDrillSchedule(
 
     return data.id;
   } catch (error) {
-    console.error("Error setting up drill schedule:", error);
+    logger.error("Error setting up drill schedule", error as Error, { scenarioId, vesselId, frequency });
     throw error;
   }
 }
