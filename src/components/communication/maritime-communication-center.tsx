@@ -74,7 +74,10 @@ export const MaritimeCommunicationCenter = () => {
   useEffect(() => {
     loadCommunications();
     loadChannels();
-    setupRealTimeUpdates();
+    const cleanup = setupRealTimeUpdates();
+    return () => {
+      cleanup();
+    };
   }, []);
 
   const loadCommunications = async () => {

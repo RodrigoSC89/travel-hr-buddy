@@ -82,7 +82,10 @@ export const IntelligentAlertSystem = () => {
 
   useEffect(() => {
     loadIntelligentData();
-    setupRealTimeUpdates();
+    const cleanup = setupRealTimeUpdates();
+    return () => {
+      cleanup();
+    };
   }, []);
 
   const loadIntelligentData = async () => {
