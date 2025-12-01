@@ -25,6 +25,7 @@ import Index from "@/pages/Index";
 const Dashboard = React.lazy(() => import("@/pages/Dashboard"));
 const Admin = React.lazy(() => import("@/pages/Admin"));
 const Settings = React.lazy(() => import("@/pages/Settings"));
+const HealthCheck = React.lazy(() => import("@/pages/HealthCheck"));
 const NotFound = React.lazy(() => import("@/pages/NotFound"));
 const Unauthorized = React.lazy(() => import("@/pages/Unauthorized"));
 
@@ -104,6 +105,13 @@ function App() {
                     <Route path="settings" element={
                       <Suspense fallback={<OffshoreLoader />}>
                         <Settings />
+                      </Suspense>
+                    } />
+                    
+                    {/* Health Check */}
+                    <Route path="health" element={
+                      <Suspense fallback={<OffshoreLoader />}>
+                        <HealthCheck />
                       </Suspense>
                     } />
                     
