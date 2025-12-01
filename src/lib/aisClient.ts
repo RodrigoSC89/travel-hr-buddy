@@ -4,6 +4,8 @@
  * Patch 141.0
  */
 
+import { logger } from "@/lib/logger";
+
 export interface VesselPosition {
   mmsi: string;
   name: string;
@@ -76,7 +78,7 @@ export class AISClient {
       const data = await response.json();
       return this.parseVesselData(data);
     } catch (error) {
-      console.error("Error fetching AIS data:", error);
+      logger.error("Error fetching AIS data", error as Error, { bounds });
       // Fallback to mock data on error
       return this.getMockVessels(bounds);
     }
@@ -120,7 +122,7 @@ export class AISClient {
       const vessels = this.parseVesselData(data);
       return vessels[0] || null;
     } catch (error) {
-      console.error("Error fetching vessel by MMSI:", error);
+      logger.error("Error fetching vessel by MMSI", error as Error, { mmsi });
       return null;
     }
   }

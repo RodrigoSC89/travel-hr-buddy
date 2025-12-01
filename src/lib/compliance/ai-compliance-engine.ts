@@ -30,7 +30,7 @@ export async function initComplianceEngine() {
     session = await ort.InferenceSession.create(modelPath);
     logger.info("✅ AI Compliance Engine iniciado");
   } catch (err) {
-    console.error("Erro ao carregar modelo ONNX:", err);
+    logger.error("Erro ao carregar modelo ONNX", err as Error, { modelPath });
   }
 }
 
@@ -65,7 +65,10 @@ export async function runComplianceAudit(data: any) {
       client.publish("nautilus/compliance/alerts", JSON.stringify({ level: complianceLevel, score: weightedScore }));
     }
   } catch (error) {
-    console.warn("MQTT publishing skipped:", error);
+    logger.warn("MQTT publishing skipped", { 
+      error: error instanceof Error ? error.message : String(error),
+      level: complianceLevel 
+    });
   }
 
   return { score: weightedScore, complianceLevel };
