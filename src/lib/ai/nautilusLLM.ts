@@ -10,6 +10,7 @@
  */
 
 import { supabase } from "@/integrations/supabase/client";
+import { logger } from "@/lib/logger";
 
 export type NautilusMode = "deterministic" | "creative" | "safe";
 
@@ -60,7 +61,13 @@ export async function nautilusRespond(options: NautilusLLMOptions): Promise<Naut
     return data as NautilusLLMResponse;
 
   } catch (error) {
-    console.error("Nautilus LLM error:", error);
+    logger.error("Nautilus LLM error", error as Error, {
+      prompt: prompt.substring(0, 100),
+      contextId,
+      moduleId,
+      sessionId,
+      mode
+    });
     
     // Fallback local
     return {
@@ -117,11 +124,11 @@ export async function updateSystemContext(contextId: string = "global") {
       });
 
     if (error) {
-      console.error("Error updating context:", error);
+      logger.error("Error updating context", error as Error, { contextId });
     }
 
   } catch (error) {
-    console.error("Error in updateSystemContext:", error);
+    logger.error("Error in updateSystemContext", error as Error, { contextId });
   }
 }
 
@@ -136,7 +143,7 @@ export async function getConversationHistory(sessionId: string) {
     .order("created_at", { ascending: true });
 
   if (error) {
-    console.error("Error fetching conversation history:", error);
+    logger.error("Error fetching conversation history", error as Error, { sessionId });
     return [];
   }
 
@@ -153,7 +160,7 @@ export async function getIAStats() {
     .gte("created_at", new Date(Date.now() - 24 * 60 * 60 * 1000).toISOString());
 
   if (error) {
-    console.error("Error fetching IA stats:", error);
+    logger.error("Error fetching IA stats", error as Error);
     return {
       totalRequests: 0,
       averageConfidence: 0,
