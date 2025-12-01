@@ -1,5 +1,6 @@
 import { supabase } from "@/integrations/supabase/client";
 import type { IMCAAuditReport, IMCAAuditInput } from "@/types/imca-audit";
+import { logger } from "@/lib/logger";
 
 /**
  * Generate a new IMCA audit report using AI
@@ -18,7 +19,7 @@ export async function generateIMCAAudit(
     if (error) throw error;
     return data;
   } catch (error) {
-    console.error("Error generating IMCA audit:", error);
+    logger.error("Error generating IMCA audit", error as Error, { input });
     throw error;
   }
 }
@@ -52,7 +53,7 @@ export async function saveAudit(report: IMCAAuditReport): Promise<string> {
     if (error) throw error;
     return data.id;
   } catch (error) {
-    console.error("Error saving audit:", error);
+    logger.error("Error saving audit", error as Error, { vesselName: report.vesselName });
     throw error;
   }
 }
@@ -81,7 +82,7 @@ export async function getAudits(): Promise<IMCAAuditReport[]> {
       id: row.id,
     }));
   } catch (error) {
-    console.error("Error fetching audits:", error);
+    logger.error("Error fetching audits", error as Error);
     throw error;
   }
 }
@@ -111,7 +112,7 @@ export async function getAudit(id: string): Promise<IMCAAuditReport | null> {
       id: data.id,
     };
   } catch (error) {
-    console.error("Error fetching audit:", error);
+    logger.error("Error fetching audit", error as Error, { auditId: id });
     return null;
   }
 }
@@ -142,7 +143,7 @@ export async function updateAudit(
     if (error) throw error;
     return true;
   } catch (error) {
-    console.error("Error updating audit:", error);
+    logger.error("Error updating audit", error as Error, { auditId: id });
     return false;
   }
 }
@@ -167,7 +168,7 @@ export async function deleteAudit(id: string): Promise<boolean> {
     if (error) throw error;
     return true;
   } catch (error) {
-    console.error("Error deleting audit:", error);
+    logger.error("Error deleting audit", error as Error, { auditId: id });
     return false;
   }
 }

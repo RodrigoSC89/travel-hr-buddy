@@ -4,6 +4,7 @@
  */
 
 import { supabase } from "@/integrations/supabase/client";
+import { logger } from "@/lib/logger";
 
 export interface Mission {
   id: string;
@@ -416,7 +417,7 @@ export class MissionControlService {
         created_at: new Date().toISOString(),
       } as any);
     } catch (error) {
-      console.error("Failed to log mission event:", error);
+      logger.error("Failed to log mission event", error as Error, { missionId, logType });
     }
   }
 

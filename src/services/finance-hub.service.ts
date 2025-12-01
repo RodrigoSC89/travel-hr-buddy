@@ -6,6 +6,7 @@
  */
 
 import { supabase } from "@/integrations/supabase/client";
+import { logger } from "@/lib/logger";
 
 export interface Transaction {
   id: string;
@@ -607,9 +608,9 @@ export class FinanceHubService {
       const permission = `finance:${resource}:${action}`;
       return data.permissions?.includes(permission) || 
              data.permissions?.includes("finance:*:*") ||
-             data.permissions?.includes(`finance:${resource}:*`);
+              data.permissions?.includes(`finance:${resource}:*`);
     } catch (error) {
-      console.error("Permission check failed:", error);
+      logger.error("Permission check failed", error as Error, { resource, action });
       return false;
     }
   }

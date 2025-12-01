@@ -1,7 +1,7 @@
 # 📊 Migration Status - Console.log → Logger
 
 **Data:** 2025-12-01  
-**Status:** ✅ FASE 4 COMPLETA (Todos os lotes concluídos)
+**Status:** ✅ FASE 5 LOTE 1 CONCLUÍDO
 
 ---
 
@@ -259,11 +259,39 @@ Todos os arquivos críticos de lib foram migrados com sucesso.
 
 ## 📋 Próximas Fases
 
-### Fase 5: Arquivos Services - 🔄 PRÓXIMA
+### Fase 5: Arquivos Services - 🔄 EM ANDAMENTO
 
-**Lote 1 - Services Principais:**
-- src/services/ (diversos arquivos com console.log)
-- Priorizar services mais usados e críticos
+**Lote 1 - Services Principais (✅ Concluído):**
+
+32. **src/services/enhanced-auth-service.ts** ✅ COMPLETO
+   - 10 console.log/error → logger.info/error/debug
+   - Melhorias: Contexto com token refresh, session
+   - Build: ✅ Passou
+
+33. **src/services/imca-audit-service.ts** ✅ COMPLETO
+   - 6 console.error → logger.error
+   - Melhorias: Contexto com auditId, vesselName
+   - Build: ✅ Passou
+
+34. **src/services/aiDocumentService.ts** ✅ COMPLETO
+   - 1 console.error → logger.error
+   - Melhorias: Contexto com documentId
+   - Build: ✅ Passou
+
+35. **src/services/mission-control.service.ts** ✅ COMPLETO
+   - 1 console.error → logger.error
+   - Melhorias: Contexto com missionId, logType
+   - Build: ✅ Passou
+
+36. **src/services/finance-hub.service.ts** ✅ COMPLETO
+   - 1 console.error → logger.error
+   - Melhorias: Contexto com resource, action
+   - Build: ✅ Passou
+
+**Lote 2 - Services Message e Cognitive:**
+- src/services/messageService.ts (~10 console.log/error)
+- src/services/cognitive/*.ts (~múltiplos arquivos)
+- src/services/integrations.service.ts (~1 console.error)
 
 Diretórios restantes:
 - **src/ai/** - ~50 console.log restantes
@@ -281,9 +309,9 @@ Diretórios restantes:
 - **Arquivos com console:** ~791
 - **Logging estruturado:** 0%
 
-### Depois da Fase 4 (Lotes 1-2) - ✅ FASE 4 COMPLETA
-- **console.log removidos:** ~215+
-- **Arquivos migrados:** 40/791 (5.1%)
+### Depois da Fase 5 (Lote 1)
+- **console.log removidos:** ~234+
+- **Arquivos migrados:** 45/791 (5.7%)
 - **Logging estruturado:** 100% nos arquivos migrados
 - **Build status:** ✅ Todos passando
 - **Diretórios completos:** src/lib/ai/ (100%), src/services/ai/ (100%), src/lib/email/ (100%)
@@ -414,6 +442,6 @@ find src -name "*.ts" -o -name "*.tsx" | xargs sed -i 's/console\.warn(/logger.w
 
 ---
 
-**Status:** ✅ FASE 4 COMPLETA - Iniciando Fase 5  
-**Próxima Ação:** Migrar Fase 5 (services principais)  
+**Status:** ✅ FASE 5 LOTE 1 COMPLETO - Continuando para Lote 2  
+**Próxima Ação:** Migrar Fase 5 Lote 2 (services message/cognitive)  
 **Última Atualização:** 2025-12-01
