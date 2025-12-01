@@ -1,5 +1,6 @@
 // PATCH 600: Risk Operations Service
 import { supabase } from '@/integrations/supabase/client';
+import { logger } from '@/lib/logger';
 import type {
   RiskOperation,
   RiskAssessment,
@@ -28,7 +29,7 @@ export class RiskOpsService {
     const { data, error } = await query;
 
     if (error) {
-      console.error('Error fetching risks:', error);
+      logger.error('Error fetching risks', error as Error, { vesselId, module });
       throw error;
     }
 
@@ -46,7 +47,7 @@ export class RiskOpsService {
       .single();
 
     if (error) {
-      console.error('Error creating risk:', error);
+      logger.error('Error creating risk', error as Error, { riskTitle: risk.title });
       throw error;
     }
 
@@ -65,7 +66,7 @@ export class RiskOpsService {
       .single();
 
     if (error) {
-      console.error('Error updating risk:', error);
+      logger.error('Error updating risk', error as Error, { riskId: id });
       throw error;
     }
 
@@ -82,7 +83,7 @@ export class RiskOpsService {
       .eq('id', id);
 
     if (error) {
-      console.error('Error deleting risk:', error);
+      logger.error('Error deleting risk', error as Error, { riskId: id });
       throw error;
     }
   }
@@ -98,7 +99,7 @@ export class RiskOpsService {
       .order('assessment_date', { ascending: false });
 
     if (error) {
-      console.error('Error fetching assessments:', error);
+      logger.error('Error fetching assessments', error as Error, { riskId });
       throw error;
     }
 
@@ -118,7 +119,7 @@ export class RiskOpsService {
       .single();
 
     if (error) {
-      console.error('Error creating assessment:', error);
+      logger.error('Error creating assessment', error as Error, { riskId: assessment.risk_id });
       throw error;
     }
 
@@ -138,7 +139,7 @@ export class RiskOpsService {
     });
 
     if (error) {
-      console.error('Error fetching risk statistics:', error);
+      logger.error('Error fetching risk statistics', error as Error, { vesselId, module });
       throw error;
     }
 
@@ -154,7 +155,7 @@ export class RiskOpsService {
     });
 
     if (error) {
-      console.error('Error fetching risk heatmap:', error);
+      logger.error('Error fetching risk heatmap', error as Error, { vesselId });
       throw error;
     }
 
