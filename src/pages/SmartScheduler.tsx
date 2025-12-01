@@ -9,6 +9,7 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { SmartSchedulerService } from '@/services/smart-scheduler.service';
 import type { ScheduledTask, TaskModule, TaskStatus } from '@/types/smart-scheduler';
 import { toast } from 'sonner';
+import { logger } from '@/lib/logger';
 
 const SmartScheduler: React.FC = () => {
   const [tasks, setTasks] = useState<ScheduledTask[]>([]);
@@ -28,7 +29,7 @@ const SmartScheduler: React.FC = () => {
       const data = await SmartSchedulerService.getTasks(filter);
       setTasks(data);
     } catch (error) {
-      console.error('Error loading tasks:', error);
+      logger.error('Error loading tasks', { error, module: selectedModule });
       toast.error('Failed to load tasks');
     } finally {
       setLoading(false);
@@ -40,7 +41,7 @@ const SmartScheduler: React.FC = () => {
       const data = await SmartSchedulerService.getTaskStatsByModule();
       setStats(data);
     } catch (error) {
-      console.error('Error loading stats:', error);
+      logger.error('Error loading stats', { error });
     }
   };
 
@@ -64,7 +65,7 @@ const SmartScheduler: React.FC = () => {
         toast.info('No tasks to generate at this time');
       }
     } catch (error) {
-      console.error('Error generating tasks:', error);
+      logger.error('Error generating tasks', { error, module: selectedModule });
       toast.error('Failed to generate tasks');
     }
   };
@@ -76,7 +77,7 @@ const SmartScheduler: React.FC = () => {
       loadTasks();
       loadStats();
     } catch (error) {
-      console.error('Error completing task:', error);
+      logger.error('Error completing task', { error, taskId });
       toast.error('Failed to complete task');
     }
   };

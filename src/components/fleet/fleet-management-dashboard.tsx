@@ -8,6 +8,7 @@ import { Button } from "@/components/ui/button";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Ship, MapPin, Fuel, AlertTriangle, Activity, TrendingUp } from "lucide-react";
 import { toast } from "sonner";
+import { logger } from "@/lib/logger";
 
 export function FleetManagementDashboard() {
   const [vesselStatuses, setVesselStatuses] = useState<VesselStatus[]>([]);
@@ -68,7 +69,7 @@ export function FleetManagementDashboard() {
       setMaintenanceAlerts(alertsRes.data || []);
       setFuelUsage(fuelRes.data || []);
     } catch (error) {
-      console.error("Error loading fleet data:", error);
+      logger.error("Error loading fleet data", { error });
       toast.error("Failed to load fleet data");
     } finally {
       setLoading(false);
