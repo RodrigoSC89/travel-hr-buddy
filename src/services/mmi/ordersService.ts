@@ -7,6 +7,7 @@
 
 import { supabase } from "@/integrations/supabase/client";
 import { MMIOS } from "@/types/mmi";
+import { logger } from "@/lib/logger";
 
 /**
  * Fetch all work orders with job details
@@ -29,13 +30,13 @@ export async function fetchOrders(): Promise<MMIOS[]> {
       .order("created_at", { ascending: false });
 
     if (error) {
-      console.error("Error fetching orders:", error);
+      logger.error("Error fetching orders", error as Error);
       throw error;
     }
 
     return data || [];
   } catch (error) {
-    console.error("Failed to fetch orders:", error);
+    logger.error("Failed to fetch orders", error as Error);
     return [];
   }
 }
@@ -62,13 +63,13 @@ export async function fetchOrderById(orderId: string): Promise<MMIOS | null> {
       .single();
 
     if (error) {
-      console.error("Error fetching order:", error);
+      logger.error("Error fetching order", error as Error, { orderId });
       throw error;
     }
 
     return data;
   } catch (error) {
-    console.error("Failed to fetch order:", error);
+    logger.error("Failed to fetch order", error as Error, { orderId });
     return null;
   }
 }
@@ -92,7 +93,7 @@ export async function updateOrderStatus(
     if (error) throw error;
     return true;
   } catch (error) {
-    console.error("Error updating order status:", error);
+    logger.error("Error updating order status", error as Error, { orderId, status });
     return false;
   }
 }
@@ -116,7 +117,7 @@ export async function addTechnicianComment(
     if (error) throw error;
     return true;
   } catch (error) {
-    console.error("Error adding comment:", error);
+    logger.error("Error adding comment", error as Error, { orderId, commentLength: comment.length });
     return false;
   }
 }
@@ -139,7 +140,7 @@ export async function createOSFromForecast(
     const { data: { user }, error: authError } = await supabase.auth.getUser();
     
     if (authError) {
-      console.error("Auth error:", authError);
+      logger.error("Auth error", authError as Error);
       throw new Error("Unauthorized");
     }
 
@@ -154,13 +155,13 @@ export async function createOSFromForecast(
     });
 
     if (error) {
-      console.error("Error creating OS:", error);
+      logger.error("Error creating OS", error as Error, { forecastId, jobId });
       throw new Error(error.message);
     }
 
     return true;
   } catch (error) {
-    console.error("Failed to create OS from forecast:", error);
+    logger.error("Failed to create OS from forecast", error as Error, { forecastId, jobId });
     return false;
   }
 }
