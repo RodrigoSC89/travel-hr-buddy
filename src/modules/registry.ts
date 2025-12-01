@@ -889,6 +889,48 @@ export const MODULE_REGISTRY: Record<string, ModuleDefinition> = {
     route: "/peotram",
     icon: "FileCheck",
     lazy: true,
+  },
+
+  "compliance.sgso": {
+    id: "compliance.sgso",
+    name: "SGSO",
+    category: "compliance",
+    path: "pages/SGSO",
+    description: "PATCH 650 - Sistema de Gestão de Segurança Operacional - Compliance ANP Resolução 43/2007 com 17 práticas obrigatórias",
+    status: "active",
+    completeness: "100%",
+    route: "/sgso",
+    icon: "Shield",
+    lazy: true,
+    version: "650.0",
+  },
+
+  "compliance.imca-audit": {
+    id: "compliance.imca-audit",
+    name: "IMCA Audit",
+    category: "compliance",
+    path: "pages/IMCAAudit",
+    description: "PATCH 650 - Sistema de auditoria IMCA com geração de relatórios e análise de conformidade",
+    status: "active",
+    completeness: "100%",
+    route: "/imca-audit",
+    icon: "FileCheck",
+    lazy: true,
+    version: "650.0",
+  },
+
+  "compliance.pre-ovid": {
+    id: "compliance.pre-ovid",
+    name: "Pre-OVID Inspection",
+    category: "compliance",
+    path: "pages/admin/pre-ovid-inspection",
+    description: "PATCH 650 - Sistema de inspeção Pre-OVID com checklist inteligente, evidências e relatórios IA",
+    status: "active",
+    completeness: "100%",
+    route: "/admin/pre-ovid",
+    icon: "ClipboardCheck",
+    lazy: true,
+    version: "650.0",
   }
 };
 

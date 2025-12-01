@@ -51,7 +51,10 @@ export const useSidebarActions = () => {
       "advanced-reports": "/advanced-reports",
       "checklists-inteligentes": "/checklists-inteligentes",
       "crew-dossier": "/crew-dossier",
-      peotram: "/peotram"
+      peotram: "/peotram",
+      sgso: "/sgso",
+      "imca-audit": "/imca-audit",
+      "pre-ovid": "/admin/pre-ovid"
     };
 
     const route = moduleRoutes[moduleKey] || `/${moduleKey}`;
