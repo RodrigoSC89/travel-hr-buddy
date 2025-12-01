@@ -1,4 +1,4 @@
-import React, { useState, useEffect, lazy, Suspense, startTransition, useMemo, useCallback, memo } from "react";
+import React, { useState, useEffect, useMemo, useCallback, memo } from "react";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
@@ -7,7 +7,6 @@ import { Progress } from "@/components/ui/progress";
 import { ModulePageWrapper } from "@/components/ui/module-page-wrapper";
 import { ModuleHeader } from "@/components/ui/module-header";
 import { DashboardSkeleton } from "@/components/ui/loading-skeleton";
-import { Skeleton } from "@/components/ui/skeleton";
 import { supabase } from "@/integrations/supabase/client";
 import { 
   Ship, 
@@ -32,19 +31,8 @@ import { toast } from "@/hooks/use-toast";
 import { useNavigate } from "react-router-dom";
 import { useDashboardStats } from "@/hooks/useDashboardStats";
 
-// PATCH 548 - Lazy loading de componentes pesados
-const ChecklistScheduler = lazy(() => import("../components/maritime/checklist-scheduler").then(m => ({ default: m.ChecklistScheduler })));
-const ChecklistReports = lazy(() => import("../components/maritime/checklist-reports").then(m => ({ default: m.ChecklistReports })));
-const QREquipmentManager = lazy(() => import("../components/maritime/qr-equipment-manager").then(m => ({ default: m.QREquipmentManager })));
-const ChecklistDashboard = lazy(() => import("../components/maritime/checklist-dashboard").then(m => ({ default: m.ChecklistDashboard })));
-const NotificationCenter = lazy(() => import("../components/maritime/notification-center").then(m => ({ default: m.NotificationCenter })));
-const RealTimeFleetMonitor = lazy(() => import("../components/maritime/real-time-fleet-monitor").then(m => ({ default: m.RealTimeFleetMonitor })));
-const VesselPerformanceDashboard = lazy(() => import("../components/maritime/vessel-performance-dashboard").then(m => ({ default: m.VesselPerformanceDashboard })));
-const IoTSensorDashboard = lazy(() => import("../components/maritime/iot-sensor-dashboard").then(m => ({ default: m.IoTSensorDashboard })));
-const PredictiveMaintenanceSystem = lazy(() => import("../components/maritime/predictive-maintenance-system").then(m => ({ default: m.PredictiveMaintenanceSystem })));
-
 /**
- * PATCH 191.0 - Maritime Operations Module
+ * PATCH 191.0 + 549.0 - Maritime Operations Module (Optimized)
  * 
  * Specialized maritime operations focused on:
  * - Compliance checklists and certifications
@@ -55,6 +43,8 @@ const PredictiveMaintenanceSystem = lazy(() => import("../components/maritime/pr
  * 
  * Built on top of unified Fleet Management (see: /fleet or src/modules/fleet)
  * Shares database tables: vessels, maintenance, routes, crew_assignments
+ * 
+ * PATCH 549: Removed lazy loading for sub-components to prevent freezing
  */
 
 interface DashboardStats {
@@ -69,13 +59,11 @@ interface DashboardStats {
 export default function Maritime() {
   const navigate = useNavigate();
   const { stats, vessels, loading, loadDashboardData } = useDashboardStats();
-  const [activeFeature, setActiveFeature] = useState<string | null>(null);
-  const openFeature = useCallback((feature: string) => startTransition(() => setActiveFeature(feature)), []);
-  const closeFeature = useCallback(() => startTransition(() => setActiveFeature(null)), []);
 
+  // PATCH 549: Removed activeFeature state and unnecessary transitions
   useEffect(() => {
     loadDashboardData();
-  }, [loadDashboardData]);
+  }, []);
 
   const StatCard = memo(({ title, value, icon: Icon, variant = "default", trend, onClick }: any) => (
     <Card className={onClick ? "cursor-pointer hover:shadow-md transition-shadow" : ""} onClick={onClick}>
@@ -264,39 +252,11 @@ export default function Maritime() {
                   <Shield className="h-4 w-4 mr-2" />
                   Verificar Certificações
                 </Button>
-                <Button className="w-full justify-start" variant="outline" onClick={() => openFeature("dashboard")}>
+                <Button className="w-full justify-start" variant="outline" onClick={() => navigate("/checklists")}>
                   <BarChart3 className="h-4 w-4 mr-2" />
                   Dashboard de Checklists
                 </Button>
-                <Button className="w-full justify-start" variant="outline" onClick={() => openFeature("scheduler")}>
-                  <Calendar className="h-4 w-4 mr-2" />
-                  Agendamento de Checklists
-                </Button>
-                <Button className="w-full justify-start" variant="outline" onClick={() => openFeature("reports")}>
-                  <FileText className="h-4 w-4 mr-2" />
-                  Relatórios de Checklists
-                </Button>
-                <Button className="w-full justify-start" variant="outline" onClick={() => openFeature("qr-equipment")}>
-                  <QrCode className="h-4 w-4 mr-2" />
-                  QR Equipamentos
-                </Button>
-                <Button className="w-full justify-start" variant="outline" onClick={() => openFeature("notifications")}>
-                  <Bell className="h-4 w-4 mr-2" />
-                  Central de Notificações
-                </Button>
-                <Button className="w-full justify-start" variant="outline" onClick={() => openFeature("fleet-monitor")}>
-                  <Activity className="h-4 w-4 mr-2" />
-                  Monitor Tempo Real
-                </Button>
-                <Button className="w-full justify-start" variant="outline" onClick={() => openFeature("performance")}>
-                  <TrendingUp className="h-4 w-4 mr-2" />
-                  Performance de Navios
-                </Button>
-                <Button className="w-full justify-start" variant="outline" onClick={() => openFeature("iot-sensors")}>
-                  <Activity className="h-4 w-4 mr-2" />
-                  Sensores IoT
-                </Button>
-                <Button className="w-full justify-start" variant="outline" onClick={() => openFeature("predictive-maintenance")}>
+                <Button className="w-full justify-start" variant="outline" onClick={() => navigate("/maintenance/planner")}>
                   <Wrench className="h-4 w-4 mr-2" />
                   Manutenção Preditiva
                 </Button>
@@ -429,98 +389,6 @@ export default function Maritime() {
           </Card>
         </TabsContent>
       </Tabs>
-
-      {/* Feature Components - PATCH 548 Optimized with Suspense */}
-      {activeFeature === "dashboard" && (
-        <div className="mt-6 animate-fade-in">
-          <Button variant="outline" onClick={closeFeature} className="mb-4">
-            ← Voltar ao Dashboard
-          </Button>
-          <Suspense fallback={<Skeleton className="h-96 w-full" />}>
-            <ChecklistDashboard userId="user-123" />
-          </Suspense>
-        </div>
-      )}
-      {activeFeature === "scheduler" && (
-        <div className="mt-6 animate-fade-in">
-          <Button variant="outline" onClick={closeFeature} className="mb-4">
-            ← Voltar ao Dashboard
-          </Button>
-          <Suspense fallback={<Skeleton className="h-96 w-full" />}>
-            <ChecklistScheduler />
-          </Suspense>
-        </div>
-      )}
-      {activeFeature === "reports" && (
-        <div className="mt-6 animate-fade-in">
-          <Button variant="outline" onClick={closeFeature} className="mb-4">
-            ← Voltar ao Dashboard
-          </Button>
-          <Suspense fallback={<Skeleton className="h-96 w-full" />}>
-            <ChecklistReports />
-          </Suspense>
-        </div>
-      )}
-      {activeFeature === "qr-equipment" && (
-        <div className="mt-6 animate-fade-in">
-          <Button variant="outline" onClick={closeFeature} className="mb-4">
-            ← Voltar ao Dashboard
-          </Button>
-          <Suspense fallback={<Skeleton className="h-96 w-full" />}>
-            <QREquipmentManager />
-          </Suspense>
-        </div>
-      )}
-      {activeFeature === "notifications" && (
-        <div className="mt-6 animate-fade-in">
-          <Button variant="outline" onClick={closeFeature} className="mb-4">
-            ← Voltar ao Dashboard
-          </Button>
-          <Suspense fallback={<Skeleton className="h-96 w-full" />}>
-            <NotificationCenter userId="user-123" />
-          </Suspense>
-        </div>
-      )}
-      {activeFeature === "fleet-monitor" && (
-        <div className="mt-6 animate-fade-in">
-          <Button variant="outline" onClick={closeFeature} className="mb-4">
-            ← Voltar ao Dashboard
-          </Button>
-          <Suspense fallback={<Skeleton className="h-96 w-full" />}>
-            <RealTimeFleetMonitor />
-          </Suspense>
-        </div>
-      )}
-      {activeFeature === "performance" && (
-        <div className="mt-6 animate-fade-in">
-          <Button variant="outline" onClick={closeFeature} className="mb-4">
-            ← Voltar ao Dashboard
-          </Button>
-          <Suspense fallback={<Skeleton className="h-96 w-full" />}>
-            <VesselPerformanceDashboard />
-          </Suspense>
-        </div>
-      )}
-      {activeFeature === "iot-sensors" && (
-        <div className="mt-6 animate-fade-in">
-          <Button variant="outline" onClick={closeFeature} className="mb-4">
-            ← Voltar ao Dashboard
-          </Button>
-          <Suspense fallback={<Skeleton className="h-96 w-full" />}>
-            <IoTSensorDashboard />
-          </Suspense>
-        </div>
-      )}
-      {activeFeature === "predictive-maintenance" && (
-        <div className="mt-6 animate-fade-in">
-          <Button variant="outline" onClick={closeFeature} className="mb-4">
-            ← Voltar ao Dashboard
-          </Button>
-          <Suspense fallback={<Skeleton className="h-96 w-full" />}>
-            <PredictiveMaintenanceSystem />
-          </Suspense>
-        </div>
-      )}
     </ModulePageWrapper>
   );
 }
