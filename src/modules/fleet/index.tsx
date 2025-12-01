@@ -81,11 +81,12 @@ const FleetModule = () => {
     try {
       setLoading(true);
 
-      // Load vessels
+      // Load vessels (limited set of columns and rows for performance)
       const { data: vesselsData, error: vesselsError } = await supabase
         .from("vessels")
-        .select("*")
-        .order("name");
+        .select("id, name, status, location, updated_at")
+        .order("name")
+        .limit(50);
 
       if (vesselsError) {
         logger.error("Error loading vessels", { error: vesselsError });
@@ -93,11 +94,12 @@ const FleetModule = () => {
         setVessels((vesselsData as any[]) || []);
       }
 
-      // Load maintenance records
+      // Load maintenance records (capped for performance)
       const { data: maintenanceData, error: maintenanceError } = await supabase
         .from("maintenance" as any)
-        .select("*")
-        .order("scheduled_date", { ascending: false });
+        .select("id, vessel_id, type, scheduled_date, status")
+        .order("scheduled_date", { ascending: false })
+        .limit(100);
 
       if (maintenanceError) {
         logger.error("Error loading maintenance", { error: maintenanceError });
@@ -105,11 +107,12 @@ const FleetModule = () => {
         setMaintenance((maintenanceData as any[]) || []);
       }
 
-      // Load crew assignments
+      // Load crew assignments (capped for performance)
       const { data: crewData, error: crewError } = await supabase
         .from("crew_assignments" as any)
-        .select("*")
-        .order("start_date", { ascending: false });
+        .select("id, vessel_id, crew_member_id, role, assigned_date")
+        .order("start_date", { ascending: false })
+        .limit(100);
 
       if (crewError) {
         logger.error("Error loading crew assignments", { error: crewError });
