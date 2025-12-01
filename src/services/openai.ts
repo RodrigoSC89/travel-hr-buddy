@@ -3,6 +3,8 @@
  * Test chat completion functionality and embeddings generation
  */
 
+import { logger } from "@/lib/logger";
+
 export interface OpenAITestResult {
   success: boolean;
   message: string;
@@ -19,7 +21,7 @@ export async function generateEmbedding(text: string): Promise<number[] | null> 
   const apiKey = import.meta.env.VITE_OPENAI_API_KEY;
 
   if (!apiKey) {
-    console.error("OpenAI API key not configured");
+    logger.error("OpenAI API key not configured");
     return null;
   }
 
@@ -38,7 +40,7 @@ export async function generateEmbedding(text: string): Promise<number[] | null> 
 
     if (!response.ok) {
       const errorData = await response.json().catch(() => ({}));
-      console.error("OpenAI embedding error:", errorData);
+      logger.error("OpenAI embedding error", new Error(`HTTP ${response.status}`), { errorData, status: response.status });
       return null;
     }
 
@@ -50,7 +52,7 @@ export async function generateEmbedding(text: string): Promise<number[] | null> 
 
     return null;
   } catch (error) {
-    console.error("Exception generating embedding:", error);
+    logger.error("Exception generating embedding", error as Error, { textLength: text?.length });
     return null;
   }
 }

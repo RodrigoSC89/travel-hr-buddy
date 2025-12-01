@@ -5,6 +5,7 @@
  */
 
 import { supabase } from "@/integrations/supabase/client";
+import { logger } from "@/lib/logger";
 
 interface VesselPerformanceData {
   vessel_id: string;
@@ -108,7 +109,7 @@ export class PEODPInferenceService {
       
       return sortedRecommendations;
     } catch (error) {
-      console.error("Error generating recommendations:", error);
+      logger.error("Error generating recommendations", error as Error, { vesselId });
       throw new Error("Failed to generate PEO-DP recommendations");
     }
   }
@@ -449,7 +450,7 @@ export class PEODPInferenceService {
           model_version: "1.0.0"
         } as any);
     } catch (error) {
-      console.error("Failed to log inference:", error);
+      logger.error("Failed to log inference", error as Error, { vesselId });
     }
   }
 
@@ -468,7 +469,7 @@ export class PEODPInferenceService {
       .limit(limit);
 
     if (error) {
-      console.error("Failed to fetch inference history:", error);
+      logger.error("Failed to fetch inference history", error as Error, { vesselId, limit });
       return [];
     }
 

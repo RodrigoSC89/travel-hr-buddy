@@ -1,5 +1,6 @@
 // PATCH 601: Reporting Engine Service
 import { supabase } from '@/integrations/supabase/client';
+import { logger } from '@/lib/logger';
 import type {
   ReportTemplate,
   GeneratedReport,
@@ -21,7 +22,7 @@ export class ReportingEngineService {
       .order('name', { ascending: true });
 
     if (error) {
-      console.error('Error fetching templates:', error);
+      logger.error('Error fetching templates', error as Error);
       throw error;
     }
 
@@ -39,7 +40,7 @@ export class ReportingEngineService {
       .single();
 
     if (error) {
-      console.error('Error creating template:', error);
+      logger.error('Error creating template', error as Error, { templateName: template.name });
       throw error;
     }
 
@@ -61,7 +62,7 @@ export class ReportingEngineService {
       .single();
 
     if (error) {
-      console.error('Error updating template:', error);
+      logger.error('Error updating template', error as Error, { templateId: id });
       throw error;
     }
 
@@ -79,7 +80,7 @@ export class ReportingEngineService {
       .limit(50);
 
     if (error) {
-      console.error('Error fetching reports:', error);
+      logger.error('Error fetching reports', error as Error);
       throw error;
     }
 
@@ -97,7 +98,7 @@ export class ReportingEngineService {
       .single();
 
     if (error) {
-      console.error('Error fetching report:', error);
+      logger.error('Error fetching report', error as Error, { reportId: id });
       throw error;
     }
 
@@ -115,7 +116,7 @@ export class ReportingEngineService {
     });
 
     if (error) {
-      console.error('Error generating report:', error);
+      logger.error('Error generating report', error as Error, { requestType: request.report_type });
       throw error;
     }
 
@@ -132,7 +133,7 @@ export class ReportingEngineService {
       .order('name', { ascending: true });
 
     if (error) {
-      console.error('Error fetching schedules:', error);
+      logger.error('Error fetching schedules', error as Error);
       throw error;
     }
 
@@ -150,7 +151,7 @@ export class ReportingEngineService {
       .single();
 
     if (error) {
-      console.error('Error creating schedule:', error);
+      logger.error('Error creating schedule', error as Error, { scheduleName: schedule.name });
       throw error;
     }
 
@@ -172,7 +173,7 @@ export class ReportingEngineService {
       .single();
 
     if (error) {
-      console.error('Error updating schedule:', error);
+      logger.error('Error updating schedule', error as Error, { scheduleId: id });
       throw error;
     }
 
@@ -189,7 +190,7 @@ export class ReportingEngineService {
       .eq('id', id);
 
     if (error) {
-      console.error('Error deleting schedule:', error);
+      logger.error('Error deleting schedule', error as Error, { scheduleId: id });
       throw error;
     }
   }
@@ -201,7 +202,7 @@ export class ReportingEngineService {
     const { data, error } = await (supabase as any).rpc('get_report_statistics');
 
     if (error) {
-      console.error('Error fetching statistics:', error);
+      logger.error('Error fetching statistics', error as Error);
       throw error;
     }
 

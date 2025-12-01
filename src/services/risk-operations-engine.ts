@@ -21,6 +21,7 @@
 
 // @ts-nocheck - Tabelas risk_* não aplicadas no Supabase ainda
 import { supabase } from "@/integrations/supabase/client";
+import { logger } from "@/lib/logger";
 
 export type ModuleType = 'PSC' | 'MLC' | 'LSA_FFA' | 'OVID' | 'DRILL' | 'GENERAL';
 export type RiskType = 'compliance' | 'human' | 'technical' | 'operational' | 'environmental';
@@ -164,7 +165,7 @@ Format as JSON:
       recommendations: classification.recommendations,
     };
   } catch (error) {
-    console.error("Error classifying risk:", error);
+    logger.error("Error classifying risk", error as Error, { findingType: finding.type, severity: finding.severity });
     // Return default classification on error
     return {
       confidence: 50,
@@ -218,7 +219,7 @@ export async function createRiskAssessment(
 
     return data.id;
   } catch (error) {
-    console.error("Error creating risk assessment:", error);
+    logger.error("Error creating risk assessment", error as Error, { vesselId: assessment.vesselId, moduleType: assessment.moduleType });
     throw error;
   }
 }
@@ -246,7 +247,7 @@ export async function getConsolidatedRiskScore(vesselId: string): Promise<number
     const totalScore = data.reduce((sum: number, r: any) => sum + r.risk_score, 0);
     return Math.round(totalScore / data.length);
   } catch (error) {
-    console.error("Error calculating risk score:", error);
+    logger.error("Error calculating risk score", error as Error, { vesselId });
     return 0;
   }
 }
@@ -325,7 +326,7 @@ export async function generateRiskHeatmap(
 
     return Array.from(heatmapData.values());
   } catch (error) {
-    console.error("Error generating heatmap:", error);
+    logger.error("Error generating heatmap", error as Error, { filters });
     throw error;
   }
 }
@@ -431,7 +432,7 @@ export async function calculateRiskTrends(
 
     return trend;
   } catch (error) {
-    console.error("Error calculating risk trends:", error);
+    logger.error("Error calculating risk trends", error as Error, { vesselId, moduleType, periodDays });
     throw error;
   }
 }
@@ -468,7 +469,7 @@ export async function createRiskAlert(
 
     return data.id;
   } catch (error) {
-    console.error("Error creating risk alert:", error);
+    logger.error("Error creating risk alert", error as Error, { vesselId, alertType, severity });
     throw error;
   }
 }
@@ -523,7 +524,7 @@ export async function exportRiskData(
 
     return exportRecord.id;
   } catch (error) {
-    console.error("Error exporting risk data:", error);
+    logger.error("Error exporting risk data", error as Error, { format, scope, userId });
     throw error;
   }
 }

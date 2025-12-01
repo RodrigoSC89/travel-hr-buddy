@@ -70,14 +70,14 @@ ${forecast.maintenance_history.map((h) => `• ${h.date}: ${h.action}`).join("\n
       .single();
 
     if (error) {
-      console.error("Error creating task:", error);
+      logger.error("Error creating task", error as Error, { title, systemName: system_name });
       throw error;
     }
 
-    logger.info("Task created successfully:", task);
+    logger.info("Task created successfully", { taskId: task.id, title });
     return task;
   } catch (error) {
-    console.error("Error in createTaskFromForecast:", error);
+    logger.error("Error in createTaskFromForecast", error as Error, { systemName: system_name, componentName: component_name });
     return null;
   }
 }
@@ -117,7 +117,7 @@ export async function fetchTasks(filters?: {
 
     return data || [];
   } catch (error) {
-    console.error("Error fetching tasks:", error);
+    logger.error("Error fetching tasks", error as Error, { filters });
     return [];
   }
 }
@@ -139,7 +139,7 @@ export async function updateTaskStatus(
 
     return true;
   } catch (error) {
-    console.error("Error updating task status:", error);
+    logger.error("Error updating task status", error as Error, { taskId, status });
     return false;
   }
 }
@@ -158,7 +158,7 @@ export async function assignTask(taskId: string, userId: string): Promise<boolea
 
     return true;
   } catch (error) {
-    console.error("Error assigning task:", error);
+    logger.error("Error assigning task", error as Error, { taskId, userId });
     return false;
   }
 }
@@ -250,7 +250,7 @@ export async function createWorkOrderFromTask(taskId: string): Promise<{ os_numb
       id: workOrder.id,
     };
   } catch (error) {
-    console.error("Error creating work order from task:", error);
+    logger.error("Error creating work order from task", error as Error, { taskId });
     return null;
   }
 }
@@ -269,7 +269,7 @@ export async function deleteTask(taskId: string): Promise<boolean> {
 
     return true;
   } catch (error) {
-    console.error("Error deleting task:", error);
+    logger.error("Error deleting task", error as Error, { taskId });
     return false;
   }
 }
