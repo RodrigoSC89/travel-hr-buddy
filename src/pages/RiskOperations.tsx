@@ -9,6 +9,7 @@ import { RiskOpsService } from '@/services/risk-ops.service';
 import type { RiskOperation, RiskStatistics, RiskHeatmapCell } from '@/types/risk-ops';
 import { RISK_SEVERITIES, RISK_LIKELIHOODS } from '@/types/risk-ops';
 import { toast } from 'sonner';
+import { logger } from '@/lib/logger';
 
 const RiskOperations: React.FC = () => {
   const [risks, setRisks] = useState<RiskOperation[]>([]);
@@ -32,7 +33,7 @@ const RiskOperations: React.FC = () => {
       setStats(statsData);
       setHeatmap(heatmapData);
     } catch (error) {
-      console.error('Error loading risk data:', error);
+      logger.error('Error loading risk data', { error });
       toast.error('Failed to load risk data');
     } finally {
       setLoading(false);
@@ -53,7 +54,7 @@ const RiskOperations: React.FC = () => {
       window.URL.revokeObjectURL(url);
       toast.success('Exported to JSON');
     } catch (error) {
-      console.error('Error exporting:', error);
+      logger.error('Error exporting to JSON', { error });
       toast.error('Failed to export');
     }
   };
@@ -72,7 +73,7 @@ const RiskOperations: React.FC = () => {
       window.URL.revokeObjectURL(url);
       toast.success('Exported to CSV');
     } catch (error) {
-      console.error('Error exporting:', error);
+      logger.error('Error exporting to CSV', { error });
       toast.error('Failed to export');
     }
   };

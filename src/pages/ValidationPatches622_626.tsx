@@ -9,6 +9,7 @@ import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { CheckCircle2, XCircle, Loader2, PlayCircle } from "lucide-react";
 import { useNavigate } from "react-router-dom";
+import { logger } from "@/lib/logger";
 
 export default function ValidationPatches622_626() {
   const [results, setResults] = useState<Record<string, boolean>>({});
@@ -22,32 +23,32 @@ export default function ValidationPatches622_626() {
 
     try {
       // Test 1: Dashboard carrega sem travar
-      console.log("[Validation] Testing dashboard load...");
+      logger.info("[Validation] Testing dashboard load");
       const dashboardTest = await testDashboardLoad();
       testResults["dashboard_loads"] = dashboardTest.success;
 
       // Test 2: Cada KPI possui fallback visual
-      console.log("[Validation] Testing KPI fallbacks...");
+      logger.info("[Validation] Testing KPI fallbacks");
       const fallbackTest = testKPIFallbacks();
       testResults["kpi_fallbacks"] = fallbackTest.success;
 
       // Test 3: Logs de performance aparecem no console
-      console.log("[Validation] Testing performance logs...");
+      logger.info("[Validation] Testing performance logs");
       const performanceTest = testPerformanceLogs();
       testResults["performance_logs"] = performanceTest.success;
 
       // Test 4: Dashboard funciona sem Supabase (via cache)
-      console.log("[Validation] Testing offline functionality...");
+      logger.info("[Validation] Testing offline functionality");
       const offlineTest = await testOfflineMode();
       testResults["offline_mode"] = offlineTest.success;
 
       // Test 5: Layout adaptável e sem quebra visual
-      console.log("[Validation] Testing responsive layout...");
+      logger.info("[Validation] Testing responsive layout");
       const layoutTest = testResponsiveLayout();
       testResults["responsive_layout"] = layoutTest.success;
 
       // Test 6: Watchdog detecta falhas e oferece recovery
-      console.log("[Validation] Testing watchdog...");
+      logger.info("[Validation] Testing watchdog");
       const watchdogTest = testWatchdog();
       testResults["watchdog_active"] = watchdogTest.success;
 
@@ -61,7 +62,7 @@ export default function ValidationPatches622_626() {
       });
 
     } catch (error) {
-      console.error("Validation error:", error);
+      logger.error("Validation error", { error });
       Object.keys(testResults).forEach(key => {
         if (testResults[key] === undefined) testResults[key] = false;
       });
@@ -224,7 +225,7 @@ function testPerformanceLogs() {
   // Check if usePerformanceLog hook exists
   const hasPerformanceHook = true;
   
-  console.log("[Performance Test] usePerformanceLog hook verificado");
+  logger.info("[Performance Test] usePerformanceLog hook verificado");
   
   return {
     success: hasPerformanceHook,
