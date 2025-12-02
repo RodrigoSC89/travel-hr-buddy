@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from "react";
+import { useOptimizedPolling } from "@/hooks/use-optimized-polling";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
@@ -304,12 +305,12 @@ const EnhancedUnifiedDashboard = () => {
     );
   };
 
-  React.useEffect(() => {
-    if (isAutoUpdate) {
-      const interval = setInterval(refreshData, 60000);
-      return () => clearInterval(interval);
-    }
-  }, [isAutoUpdate]);
+  useOptimizedPolling({
+    id: "enhanced-unified-dashboard-refresh",
+    callback: refreshData,
+    interval: 60000,
+    enabled: isAutoUpdate,
+  });
 
   const getStatusIcon = (type: string) => {
     switch (type) {

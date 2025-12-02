@@ -4,6 +4,7 @@
  */
 
 import React, { useState, useEffect } from "react";
+import { useOptimizedPolling } from "@/hooks/use-optimized-polling";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Badge } from "@/components/ui/badge";
@@ -61,8 +62,6 @@ export const CollectiveDashboard: React.FC = () => {
   useEffect(() => {
     initializeSystems();
     loadDashboardData();
-    const interval = setInterval(loadDashboardData, 10000); // Refresh every 10s
-    return () => clearInterval(interval);
   }, []);
 
   const initializeSystems = async () => {
@@ -154,6 +153,13 @@ export const CollectiveDashboard: React.FC = () => {
       };
     });
   };
+
+  // Optimized polling for dashboard refresh
+  useOptimizedPolling({
+    id: "collective-dashboard-refresh",
+    callback: loadDashboardData,
+    interval: 10000,
+  });
 
   const exportPDF = async () => {
     logger.info("[CollectiveDashboard] Exporting PDF report...");

@@ -1,4 +1,5 @@
 import React, { useState, useEffect, useCallback } from "react";
+import { useOptimizedPolling } from "@/hooks/use-optimized-polling";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
@@ -207,10 +208,16 @@ export const NotificationCenter = () => {
   };
 
   const setupRealTimeSubscription = useCallback(() => {
-    // Mock real-time subscription for new notifications with cleanup tracking
-    const interval = setInterval(() => {
+    // Mock real-time subscription for new notifications
+    // This is now handled by useOptimizedPolling below
+  }, [toast]);
+
+  // Optimized polling for new notifications
+  useOptimizedPolling({
+    id: "notification-center-realtime",
+    callback: () => {
       // Simulate new notification occasionally
-      if (Math.random() < 0.1) { // 10% chance every 30 seconds
+      if (Math.random() < 0.1) { // 10% chance
         const newNotification: Notification = {
           id: Date.now().toString(),
           title: "Nova notificação",
@@ -232,10 +239,9 @@ export const NotificationCenter = () => {
           description: newNotification.message
         });
       }
-    }, 30000);
-
-    return () => clearInterval(interval);
-  }, [toast]);
+    },
+    interval: 30000,
+  });
 
   const filterNotifications = () => {
     let filtered = [...notifications];
