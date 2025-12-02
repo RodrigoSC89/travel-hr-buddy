@@ -4,6 +4,7 @@
  */
 
 import { useEffect, useState, useCallback } from "react";
+import { useOptimizedPolling } from "@/hooks/use-optimized-polling";
 import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert";
 import { Button } from "@/components/ui/button";
 import { AlertTriangle, RefreshCw, CheckCircle } from "lucide-react";
@@ -166,12 +167,14 @@ export function DashboardWatchdog({ onHeal }: DashboardWatchdogProps) {
     attemptAutoHeal();
   }, [attemptAutoHeal]);
 
-  // Set up periodic checks
-  useEffect(() => {
-    const interval = setInterval(() => {
-      runWatchdogChecks();
-    }, 5000); // Check every 5 seconds
+  // Set up periodic checks with optimized polling
+  useOptimizedPolling({
+    id: "dashboard-watchdog-checks",
+    callback: () => { runWatchdogChecks(); }, // Wrap to return void
+    interval: 5000, // Check every 5 seconds
+  });
 
+  useEffect(() => {
     // Track user interactions
     const updateInteractionTime = () => {
       (window as any).__lastInteractionTime = Date.now();
@@ -182,7 +185,6 @@ export function DashboardWatchdog({ onHeal }: DashboardWatchdogProps) {
     window.addEventListener("scroll", updateInteractionTime);
 
     return () => {
-      clearInterval(interval);
       
       // Clear any pending timeouts
       if ((window as any).__watchdogTimeout) {

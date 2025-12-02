@@ -1,4 +1,5 @@
 import React, { useEffect, useRef, useState } from "react";
+import { useOptimizedPolling } from "@/hooks/use-optimized-polling";
 import mapboxgl from "mapbox-gl";
 import "mapbox-gl/dist/mapbox-gl.css";
 import { supabase } from "@/integrations/supabase/client";
@@ -73,11 +74,7 @@ const VesselTrackingMap = () => {
     // Load vessel data
     loadVesselData();
 
-    // Set up real-time updates
-    const intervalId = setInterval(loadVesselData, 30000); // Update every 30 seconds
-
     return () => {
-      clearInterval(intervalId);
       map.current?.remove();
     };
   }, [mapboxToken]);
@@ -198,6 +195,13 @@ const VesselTrackingMap = () => {
         .addTo(map.current!);
     });
   };
+
+  // Real-time updates with optimized polling
+  useOptimizedPolling({
+    id: "vessel-tracking-map-updates",
+    callback: loadVesselData,
+    interval: 30000,
+  });
 
   const getVesselMarkerStyle = (status: string) => {
     switch (status) {

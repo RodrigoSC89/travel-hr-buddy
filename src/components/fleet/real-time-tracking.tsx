@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from "react";
+import { useOptimizedPolling } from "@/hooks/use-optimized-polling";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
@@ -61,13 +62,6 @@ const RealTimeTracking: React.FC = () => {
 
   useEffect(() => {
     loadVesselLocations();
-    
-    // Simulate real-time updates every 30 seconds
-    const interval = setInterval(() => {
-      updateVesselPositions();
-    }, 30000);
-
-    return () => clearInterval(interval);
   }, []);
 
   const loadVesselLocations = () => {
@@ -199,6 +193,13 @@ const RealTimeTracking: React.FC = () => {
       lastUpdate: new Date().toISOString()
     })));
   };
+
+  // Real-time updates with optimized polling
+  useOptimizedPolling({
+    id: "fleet-real-time-tracking",
+    callback: updateVesselPositions,
+    interval: 30000,
+  });
 
   const getStatusColor = (status: string) => {
     switch (status) {
