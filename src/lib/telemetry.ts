@@ -5,6 +5,7 @@
  */
 
 import { supabase } from "@/integrations/supabase/client";
+import { logger } from "@/lib/logger";
 
 interface TelemetryEvent {
   eventType: string;
@@ -143,12 +144,12 @@ class TelemetryTracker {
       );
 
       if (error) {
-        console.error("Failed to send telemetry:", error);
+        logger.error("Failed to send telemetry", { error });
         // Put events back in queue to retry
         this.queue.unshift(...events);
       }
     } catch (error) {
-      console.error("Telemetry flush error:", error);
+      logger.error("Telemetry flush error", { error });
       // Put events back in queue to retry
       this.queue.unshift(...events);
     }
@@ -200,7 +201,7 @@ export const telemetry = new TelemetryTracker();
 export function initTelemetry() {
   // Telemetry is already initialized via the global instance
   // This function exists for compatibility
-  console.log("[Telemetry] System initialized");
+  logger.info("[Telemetry] System initialized");
 }
 
 /**

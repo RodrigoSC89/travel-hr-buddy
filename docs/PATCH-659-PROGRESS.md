@@ -1,6 +1,6 @@
 # PATCH 659 - TypeScript Critical Fixes Progress
 
-**Status:** 🟢 BATCH 5 COMPLETE  
+**Status:** 🟡 BATCH 6 PARTIAL  
 **Started:** 2025-12-02  
 **Target:** Reduce @ts-nocheck from 385 to 193 files (-50%)
 
@@ -10,8 +10,8 @@
 
 | Metric | Before | Current | Target | Progress |
 |--------|--------|---------|--------|----------|
-| **@ts-nocheck files** | 385 | 372 | 193 | 3.4% |
-| **console.* statements** | 1337 | 1289 | 200 | 3.6% |
+| **@ts-nocheck files** | 385 | 385 | 193 | 0% |
+| **console.* statements** | 1337 | 1285 | 200 | 3.9% |
 | **Build Status** | ✅ | ✅ | ✅ | 100% |
 
 ---
@@ -38,23 +38,33 @@
 11. ✅ `src/integrations/interop/jointTasking.ts` - Logger added, all operations logged
 12. ✅ `src/integrations/interop/trustCompliance.ts` - Logger added, trust events logged
 
+### Batch 6: Lib AI + Utils (0/4 files) - ⏸️ DEFERRED
+13. ⏸️ `src/lib/ai/adaptive-intelligence.ts` - Logger improved, needs `ai_inspection_feedback`, `inspector_profiles` tables
+14. ⏸️ `src/lib/ai/ai-logger.ts` - Already has logger, needs proper `ai_logs` table schema
+15. ⏸️ `src/lib/health-check.ts` - Already has logger, needs `system_health` table  
+16. ⏸️ `src/lib/telemetry.ts` - Logger added, needs `telemetry_events` table
+
 ---
 
 ## ⏸️ Deferred Files (Database Schema Missing)
 
 The following files require database tables that don't exist in the current schema:
 
-### Core Services (8 files deferred)
-9. ⏸️ `src/api/v1/index.ts` - Requires schema validation for missions/inspections
-10. ⏸️ `src/assistants/neuralCopilot.ts` - Requires `copilot_sessions` table
-11. ⏸️ `src/core/clones/cognitiveClone.ts` - Requires `clone_registry`, `clone_snapshots`, `clone_context_storage` tables
-12. ⏸️ `src/core/context/contextMesh.ts` - Requires `context_history` table
-13. ⏸️ `src/core/i18n/translator.ts` - Requires `translation_cache` table
-14. ⏸️ `src/core/interop/protocolAdapter.ts` - Requires `interop_log` table
-15. ⏸️ `src/core/mirrors/instanceController.ts` - Requires `mirror_instances`, `clone_sync_log` tables
-16. ⏸️ `src/core/prioritization/autoBalancer.ts` - Requires `priority_shifts` table
+### Core Services (12 files deferred)
+17. ⏸️ `src/api/v1/index.ts` - Requires schema validation for missions/inspections
+18. ⏸️ `src/assistants/neuralCopilot.ts` - Requires `copilot_sessions` table
+19. ⏸️ `src/core/clones/cognitiveClone.ts` - Requires `clone_registry`, `clone_snapshots`, `clone_context_storage` tables
+20. ⏸️ `src/core/context/contextMesh.ts` - Requires `context_history` table
+21. ⏸️ `src/core/i18n/translator.ts` - Requires `translation_cache` table
+22. ⏸️ `src/core/interop/protocolAdapter.ts` - Requires `interop_log` table
+23. ⏸️ `src/core/mirrors/instanceController.ts` - Requires `mirror_instances`, `clone_sync_log` tables
+24. ⏸️ `src/core/prioritization/autoBalancer.ts` - Requires `priority_shifts` table
+25. ⏸️ `src/lib/ai/adaptive-intelligence.ts` - Requires `ai_inspection_feedback`, `inspector_profiles` tables
+26. ⏸️ `src/lib/ai/ai-logger.ts` - `ai_logs` table exists but schema mismatch
+27. ⏸️ `src/lib/health-check.ts` - Requires `system_health` table, `get_system_status` RPC
+28. ⏸️ `src/lib/telemetry.ts` - Requires `telemetry_events` table
 
-**Action Required:** These files need database migrations before TypeScript fixes can be applied. 36 `console.*` replaced with `logger.*` across all deferred files.
+**Action Required:** These files need database migrations before TypeScript fixes can be applied. Logger improvements applied where possible.
 
 ---
 
@@ -99,7 +109,7 @@ To complete PATCH 659, the following tables need to be created:
 **Type Safety Improvements:**
 - 9 critical files now fully typed (1 core + 4 AI + 4 interop)
 - 13 @ts-nocheck directives removed from main codebase
-- 48 console statements replaced with proper logging
+- 52 console statements replaced with proper logging
 - Navigator/Browser APIs properly typed
 - AI core logging centralized
 - Interop layer fully logged with error context
@@ -110,7 +120,7 @@ To complete PATCH 659, the following tables need to be created:
 - ✅ All tests passing
 
 **Known Issues:**
-- 8 files deferred due to missing database schema
+- 12 files deferred due to missing database schema
 - These require database migrations before TypeScript fixes can be applied
 - Logging improvements applied to all files regardless of TypeScript status
 
@@ -122,12 +132,12 @@ To complete PATCH 659, the following tables need to be created:
 1. Create database migrations for missing tables
 2. Continue with remaining files that don't require DB changes
 
-### Batch 6 Target (Next 4 files):
-17. `src/lib/ai/embedding/embeddingUtils.ts`
-18. `src/lib/ai/prompts/mission-prompt.ts`
-19. `src/lib/analytics/dataCollector.ts`
-20. `src/lib/analytics/insightEngine.ts`
+### Batch 7 Target (Next 4 files):
+17. `src/lib/compliance/ai-compliance-engine.ts`
+18. `src/lib/incidents/ai-incident-response.ts`
+19. `src/lib/offline-cache.ts`
+20. `src/lib/offline/sync-manager.ts`
 
 ---
 
-**Status:** Build passando ✅ | 13 arquivos limpos | 8 aguardando migrations DB
+**Status:** Build passando ✅ | 13 arquivos limpos | 12 aguardando migrations DB | Logging melhorado em 4 arquivos adicionais
