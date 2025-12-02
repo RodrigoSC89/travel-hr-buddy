@@ -25,21 +25,24 @@ export const ProtectedRoute: React.FC<ProtectedRouteProps> = ({
   const { userRole, isLoading: roleLoading } = usePermissions();
   const location = useLocation();
 
-  const isLoading = authLoading || roleLoading;
-
-  // Show loading while checking authentication
-  if (isLoading) {
+  // Only wait for auth loading first
+  if (authLoading) {
     return <OffshoreLoader />;
   }
 
-  // Redirect to auth if not authenticated
+  // Redirect to auth if not authenticated (don't wait for role loading)
   if (!user) {
     return <Navigate to="/auth" state={{ from: location }} replace />;
   }
 
+  // Only check role loading if we need roles
+  if (requiredRoles.length > 0 && roleLoading) {
+    return <OffshoreLoader />;
+  }
+
   // Check role-based access if roles are specified
-  if (requiredRoles.length > 0 && userRole) {
-    const hasRequiredRole = requiredRoles.includes(userRole);
+  if (requiredRoles.length > 0) {
+    const hasRequiredRole = userRole && requiredRoles.includes(userRole);
     
     if (!hasRequiredRole) {
       return <Navigate to={unauthorizedRedirect} state={{ from: location }} replace />;
