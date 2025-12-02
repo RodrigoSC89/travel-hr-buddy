@@ -9,6 +9,7 @@ import { Button } from "@/components/ui/button";
 import { syncEngine } from "@/lib/syncEngine";
 import { toast } from "sonner";
 import { useState } from "react";
+import { logger } from "@/lib/logger";
 
 export const OfflineBanner = () => {
   const { isOnline, wasOffline, pendingChanges } = useNetworkStatus();
@@ -29,7 +30,7 @@ export const OfflineBanner = () => {
     try {
       await syncEngine.pushLocalChanges();
     } catch (error) {
-      console.error("Manual sync failed:", error);
+      logger.error("Manual sync failed:", error);
       toast.error("Sync failed. Please try again.");
     } finally {
       setIsSyncing(false);

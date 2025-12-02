@@ -5,6 +5,7 @@
  */
 
 import React, { Component, ErrorInfo, ReactNode } from 'react';
+import { logger } from '@/lib/logger';
 
 interface Props {
   children: ReactNode;
@@ -37,7 +38,7 @@ export class ErrorBoundary extends Component<Props, State> {
 
   componentDidCatch(error: Error, errorInfo: ErrorInfo): void {
     // Log error
-    console.error('Error caught by boundary:', error, errorInfo);
+    logger.error('Error caught by boundary:', { error, errorInfo });
     
     this.setState({
       error,
@@ -144,8 +145,7 @@ export interface ErrorContext {
  * Log error with context
  */
 export function logError(error: Error, context?: ErrorContext): void {
-  console.error('Error:', error);
-  console.error('Context:', context);
+  logger.error('Error:', { error, context });
   
   // TODO: Send to error tracking service
   // if (window.Sentry) {
@@ -242,7 +242,7 @@ export async function retryOperation<T>(
       // Calculate delay with exponential backoff
       const delay = backoff ? delayMs * Math.pow(2, attempt) : delayMs;
       
-      console.warn(`Operation failed (attempt ${attempt + 1}/${maxRetries}). Retrying in ${delay}ms...`);
+      logger.warn(`Operation failed (attempt ${attempt + 1}/${maxRetries}). Retrying in ${delay}ms...`);
       
       // Wait before retry
       await new Promise(resolve => setTimeout(resolve, delay));

@@ -4,6 +4,7 @@ import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Users, Ship, Database, TrendingUp } from "lucide-react";
 import { supabase } from "@/integrations/supabase/client";
 import { useToast } from "@/hooks/use-toast";
+import { logger } from "@/lib/logger";
 
 interface OrganizationStats {
   activeUsers: number;
@@ -60,7 +61,7 @@ export const OrganizationStatsCards: React.FC = () => {
       });
 
     } catch (error) {
-      console.error("Error fetching organization stats:", error);
+      logger.error("Error fetching organization stats:", error);
       toast({
         title: "Erro ao carregar estatísticas",
         description: "Não foi possível carregar os dados da organização",
