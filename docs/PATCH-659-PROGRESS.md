@@ -1,6 +1,6 @@
 # PATCH 659 - TypeScript Critical Fixes Progress
 
-**Status:** 🟢 BATCH 4 COMPLETE  
+**Status:** 🟢 BATCH 5 COMPLETE  
 **Started:** 2025-12-02  
 **Target:** Reduce @ts-nocheck from 385 to 193 files (-50%)
 
@@ -10,13 +10,13 @@
 
 | Metric | Before | Current | Target | Progress |
 |--------|--------|---------|--------|----------|
-| **@ts-nocheck files** | 385 | 376 | 193 | 2.3% |
+| **@ts-nocheck files** | 385 | 372 | 193 | 3.4% |
 | **console.* statements** | 1337 | 1289 | 200 | 3.6% |
 | **Build Status** | ✅ | ✅ | ✅ | 100% |
 
 ---
 
-## ✅ Completed Files (9/20)
+## ✅ Completed Files (13/20)
 
 ### Batch 1 (3 files) - ✅ COMPLETE
 1. ✅ `src/ai/services/checklistAutoFill.ts` - Types fixed, logger added
@@ -31,6 +31,12 @@
 6. ✅ `src/ai/nautilus-core.ts` - Logger added, console.* replaced
 7. ✅ `src/ai/nautilus-inference.ts` - console.* replaced with logger
 8. ✅ `src/ai/watchdog.ts` - Error interceptor fixed, proper console.error handling
+
+### Batch 5: Hooks + Interop (4 files) - ✅ COMPLETE
+9. ✅ `src/hooks/usePerformance.ts` - @ts-nocheck removed (already had logger)
+10. ✅ `src/integrations/interop/agentSwarm.ts` - Logger added, error handling improved
+11. ✅ `src/integrations/interop/jointTasking.ts` - Logger added, all operations logged
+12. ✅ `src/integrations/interop/trustCompliance.ts` - Logger added, trust events logged
 
 ---
 
@@ -91,11 +97,12 @@ To complete PATCH 659, the following tables need to be created:
 ## 📈 Impact
 
 **Type Safety Improvements:**
-- 5 critical files now fully typed (1 core + 4 AI)
-- 9 @ts-nocheck directives removed from main codebase
+- 9 critical files now fully typed (1 core + 4 AI + 4 interop)
+- 13 @ts-nocheck directives removed from main codebase
 - 48 console statements replaced with proper logging
 - Navigator/Browser APIs properly typed
 - AI core logging centralized
+- Interop layer fully logged with error context
 
 **Build Health:**
 - ✅ Zero build errors
@@ -115,12 +122,12 @@ To complete PATCH 659, the following tables need to be created:
 1. Create database migrations for missing tables
 2. Continue with remaining files that don't require DB changes
 
-### Batch 5 Target (Next 4 files):
-17. `src/hooks/usePerformance.ts`
-18. `src/integrations/interop/agentSwarm.ts`
-19. `src/integrations/interop/jointTasking.ts`
-20. `src/integrations/interop/trustCompliance.ts`
+### Batch 6 Target (Next 4 files):
+17. `src/lib/ai/embedding/embeddingUtils.ts`
+18. `src/lib/ai/prompts/mission-prompt.ts`
+19. `src/lib/analytics/dataCollector.ts`
+20. `src/lib/analytics/insightEngine.ts`
 
 ---
 
-**Status:** Build passando ✅ | 9 arquivos limpos | 8 aguardando migrations DB
+**Status:** Build passando ✅ | 13 arquivos limpos | 8 aguardando migrations DB

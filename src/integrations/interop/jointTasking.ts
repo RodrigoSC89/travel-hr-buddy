@@ -1,6 +1,6 @@
-// @ts-nocheck
 // PATCH 228 - Joint Tasking
 import { supabase } from "@/integrations/supabase/client";
+import { logger } from "@/lib/logger";
 
 export interface ExternalEntity {
   entity_id: string;
@@ -34,7 +34,12 @@ export async function registerExternalEntity(entity: ExternalEntity) {
     .select()
     .single();
 
-  if (error) throw error;
+  if (error) {
+    logger.error("Failed to register external entity", { error, entity_id: entity.entity_id });
+    throw error;
+  }
+  
+  logger.info(`External entity registered: ${entity.entity_id}`, { name: entity.name, type: entity.entity_type });
   return data;
 }
 
@@ -48,10 +53,12 @@ export async function assignMissionTask(task: JointMissionTask) {
     .single();
 
   if (entityError || !entity) {
+    logger.error("External entity not found", { error: entityError, entity_id: task.assigned_entity });
     throw new Error(`External entity ${task.assigned_entity} not found`);
   }
 
   if (entity.status !== "active") {
+    logger.warn("Cannot assign task to inactive entity", { entity_id: task.assigned_entity, status: entity.status });
     throw new Error(`External entity ${task.assigned_entity} is not active`);
   }
 
@@ -68,7 +75,12 @@ export async function assignMissionTask(task: JointMissionTask) {
     .select()
     .single();
 
-  if (taskError) throw taskError;
+  if (taskError) {
+    logger.error("Failed to create mission task", { error: taskError, mission_id: task.mission_id });
+    throw taskError;
+  }
+  
+  logger.info(`Mission task assigned`, { task_id: taskData.id, entity_id: task.assigned_entity, mission_id: task.mission_id });
 
   // Log mission event
   await logMissionEvent(task.mission_id, "task_assigned", {
@@ -106,7 +118,12 @@ export async function updateTaskStatus(
     .select()
     .single();
 
-  if (error) throw error;
+  if (error) {
+    logger.error("Failed to update task status", { error, task_id: taskId, status });
+    throw error;
+  }
+  
+  logger.info(`Task status updated`, { task_id: taskId, new_status: status });
 
   // Log status change
   await logMissionEvent(data.mission_id, "task_status_change", {
@@ -136,7 +153,10 @@ export async function getMissionTasks(missionId: string) {
     .eq("mission_id", missionId)
     .order("created_at", { ascending: false });
 
-  if (error) throw error;
+  if (error) {
+    logger.error("Failed to get mission tasks", { error, mission_id: missionId });
+    throw error;
+  }
   return data;
 }
 
@@ -152,7 +172,10 @@ export async function getExternalEntities(status?: string) {
   }
 
   const { data, error } = await query;
-  if (error) throw error;
+  if (error) {
+    logger.error("Failed to get external entities", { error, status });
+    throw error;
+  }
   return data;
 }
 
@@ -180,6 +203,9 @@ export async function getMissionLogs(missionId: string, limit: number = 100) {
     .order("created_at", { ascending: false })
     .limit(limit);
 
-  if (error) throw error;
+  if (error) {
+    logger.error("Failed to get mission logs", { error, mission_id: missionId });
+    throw error;
+  }
   return data;
 }

@@ -8,7 +8,6 @@
  * - Performance tracking
  */
 
-// @ts-nocheck
 import { useEffect, useRef, useState, useCallback, useMemo } from "react";
 import {
   FPSMonitor,
@@ -235,12 +234,14 @@ export function useOptimizedEventListener<K extends keyof WindowEventMap>(
   useEffect(() => {
     if (!enabled) return;
 
-    let optimizedHandler = (event: WindowEventMap[K]) => savedHandler.current(event);
+    let optimizedHandler: (event: WindowEventMap[K]) => void = (event: WindowEventMap[K]) => savedHandler.current(event);
 
     if (throttleMs) {
-      optimizedHandler = throttle(optimizedHandler, throttleMs);
+      const throttledFn = throttle(optimizedHandler as any, throttleMs);
+      optimizedHandler = throttledFn as any;
     } else if (debounceMs) {
-      optimizedHandler = debounce(optimizedHandler, debounceMs);
+      const debouncedFn = debounce(optimizedHandler as any, debounceMs);
+      optimizedHandler = debouncedFn as any;
     }
 
     window.addEventListener(eventName, optimizedHandler as any);

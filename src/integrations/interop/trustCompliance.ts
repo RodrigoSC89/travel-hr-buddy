@@ -1,6 +1,6 @@
-// @ts-nocheck
 // PATCH 229 - Trust Compliance
 import { supabase } from "@/integrations/supabase/client";
+import { logger } from "@/lib/logger";
 
 export interface TrustEvent {
   entity_id: string;
@@ -83,13 +83,14 @@ export async function validateEntityTrust(
 // Record trust event
 export async function recordTrustEvent(event: TrustEvent): Promise<void> {
   // Get current entity trust score
-  const { data: entity } = await supabase
+  const { data: entity, error: fetchError } = await supabase
     .from("external_entities")
     .select("trust_score")
     .eq("entity_id", event.entity_id)
     .single();
 
-  if (!entity) {
+  if (!entity || fetchError) {
+    logger.error("Entity not found for trust event", { error: fetchError, entity_id: event.entity_id });
     throw new Error(`Entity ${event.entity_id} not found`);
   }
 
@@ -97,19 +98,36 @@ export async function recordTrustEvent(event: TrustEvent): Promise<void> {
   const newScore = calculateTrustScore(oldScore, event);
 
   // Update entity trust score
-  await supabase
+  const { error: updateError } = await supabase
     .from("external_entities")
     .update({ trust_score: newScore })
     .eq("entity_id", event.entity_id);
 
+  if (updateError) {
+    logger.error("Failed to update trust score", { error: updateError, entity_id: event.entity_id });
+    throw updateError;
+  }
+
   // Log the trust event
-  await supabase.from("trust_events").insert({
+  const { error: insertError } = await supabase.from("trust_events").insert({
     entity_id: event.entity_id,
     event_type: event.event_type,
     trust_score_before: oldScore,
     trust_score_after: newScore,
     details: event.details,
     severity: event.severity || "info"
+  });
+
+  if (insertError) {
+    logger.error("Failed to log trust event", { error: insertError, entity_id: event.entity_id });
+    throw insertError;
+  }
+  
+  logger.info(`Trust event recorded`, { 
+    entity_id: event.entity_id, 
+    event_type: event.event_type, 
+    old_score: oldScore, 
+    new_score: newScore 
   });
 }
 
@@ -125,7 +143,10 @@ export async function getTrustEvents(
     .order("created_at", { ascending: false })
     .limit(limit);
 
-  if (error) throw error;
+  if (error) {
+    logger.error("Failed to get trust events", { error, entity_id: entityId });
+    throw error;
+  }
   return data;
 }
 
