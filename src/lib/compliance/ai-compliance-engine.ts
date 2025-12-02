@@ -1,5 +1,5 @@
-// @ts-nocheck
-import React from "react";
+// @ts-nocheck - Requires compliance_audit_logs table schema and onnxruntime-web types
+import * as ort from "onnxruntime-web";
 import { logger } from "@/lib/logger";
 import { supabase } from "@/integrations/supabase/client";
 import mqtt from "mqtt";

@@ -1,4 +1,3 @@
-// @ts-nocheck
 /**
  * PATCH 634: Offline Cache and Sync System
  * IndexedDB-based offline storage for PWA-like functionality
@@ -68,7 +67,7 @@ class OfflineCacheManager {
         }
         if (!db.objectStoreNames.contains("logs")) {
           const logsStore = db.createObjectStore("logs", { keyPath: "id" });
-          logsStore.createIndex("timestamp", "timestamp");
+          (logsStore as any).createIndex("timestamp", "timestamp");
         }
         if (!db.objectStoreNames.contains("pendingActions")) {
           db.createObjectStore("pendingActions", { keyPath: "id" });
