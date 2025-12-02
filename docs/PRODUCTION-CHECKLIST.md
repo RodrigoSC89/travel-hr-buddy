@@ -5,6 +5,43 @@
 
 ## 📋 Checklist de Produção
 
+### 🚨 AUDITORIA CRÍTICA - PROBLEMAS IDENTIFICADOS
+
+⚠️ **ATENÇÃO**: Varredura profunda do repositório identificou dívida técnica crítica.
+
+#### ❌ TypeScript Suppressions (CRÍTICO)
+- **385 arquivos** com @ts-nocheck/@ts-ignore/@ts-expect-error
+- **Impacto**: Type safety comprometida, possíveis crashes em produção
+- **Ação**: PATCH 659 - TypeScript Critical Fixes (URGENTE)
+- **Prazo**: 1-2 dias
+
+#### ❌ Console Logging (ALTO)
+- **1337 ocorrências** de console.log/error/warn
+- **Impacto**: Performance, segurança (vazamento de dados)
+- **Ação**: PATCH 660 - Logging Cleanup (ALTA)
+- **Prazo**: 2-3 dias
+
+#### ⚠️ Code Quality (MÉDIO)
+- **894 TODOs/FIXMEs** não resolvidos
+- **862 useEffect** hooks sem dependencies
+- **Impacto**: Manutenibilidade, possíveis memory leaks
+- **Ação**: PATCH 661 - Code Quality (MÉDIA)
+- **Prazo**: 3-5 dias
+
+**📊 Referência Completa**: Ver `docs/CRITICAL-AUDIT-REPORT.md`
+
+**🔧 Scripts de Validação Criados**:
+```bash
+bash scripts/run-all-validations.sh          # Executar todas as validações
+bash scripts/validate-typescript.sh          # Check @ts-nocheck
+bash scripts/validate-logging.sh             # Check console.*
+bash scripts/validate-hooks.sh               # Check useEffect
+bash scripts/validate-routes.sh              # Check rotas
+bash scripts/performance-budget-check.sh     # Check performance
+```
+
+---
+
 ### 🎯 Prioridade CRÍTICA
 
 #### Performance ✅ COMPLETO
@@ -189,17 +226,53 @@ Implementar rate limiting em APIs críticas:
 
 ## 🔥 Próximas Ações (Em Ordem)
 
-1. **Security Audit** - Verificar secrets e vulnerabilidades
-2. **Bundle Optimization** - Analisar e otimizar bundle size
-3. **Rate Limiting** - Implementar proteção contra abuse
-4. **Testing** - Adicionar testes críticos
-5. **Deploy Strategy** - Preparar pipeline de deploy
+### ⛔ NÃO FAZER DEPLOY ATÉ:
+
+1. ✅ **PATCH 659 - TypeScript Critical Fixes** (URGENTE - 1-2 dias)
+   - Resolver pelo menos 50% dos @ts-nocheck (385 → 192 arquivos)
+   - Fixar arquivos core (AI services, API)
+   - Adicionar interfaces faltantes do Supabase
+   - Remover suppressions gradualmente
+
+2. ✅ **PATCH 660 - Logging Cleanup** (ALTA - 2-3 dias)
+   - Substituir console.* por logger em módulos críticos (1337 → 200)
+   - Remover logs sensíveis (dados de usuário, tokens)
+   - Configurar níveis de log por ambiente
+   - Implementar structured logging
+
+3. ✅ **PATCH 661 - Code Quality** (MÉDIA - 3-5 dias)
+   - Resolver TODOs críticos (database schema, API keys)
+   - Fixar useEffect hooks problemáticos
+   - Adicionar cleanup functions para subscriptions
+   - Adicionar testes para código refatorado
+
+### Após PATCHES 659-661:
+
+4. **Validação Completa** (1h)
+   - Executar `bash scripts/run-all-validations.sh`
+   - Todos os checks devem passar
+   - Code review dos arquivos críticos
+
+5. **Configurar GitHub** (30min)
+   - Adicionar secrets (Vercel, Supabase, etc.)
+   - Configurar environments (staging, production)
+   - Testar workflows
+
+6. **Deploy para Staging** (1h)
+   - Merge para develop
+   - Monitorar deploy
+   - Validar funcionamento
+
+7. **Deploy para Produção** (1h)
+   - Merge para main
+   - Monitoramento ativo
+   - Validar métricas
 
 ---
 
-## ✅ Status Geral
+## ⚠️ Status Geral
 
-**Pronto para Produção**: ✅ SIM
+**Pronto para Produção**: ⚠️ PRONTO COM RESSALVAS (APÓS PATCHES 659-661)
 
 **Status por Categoria:**
 - Performance: ✅ Excelente (16 componentes otimizados)
