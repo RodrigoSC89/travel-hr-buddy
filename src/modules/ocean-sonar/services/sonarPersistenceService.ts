@@ -4,7 +4,7 @@
  * Service for persisting sonar readings and AI predictions to database
  */
 
-import { supabase } from "@/lib/supabase";
+import { supabase } from "@/integrations/supabase/client";
 import { logger } from "@/lib/logger";
 import type { BathymetricData, SonarReading } from "./sonarEngine";
 

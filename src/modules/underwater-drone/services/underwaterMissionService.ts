@@ -4,7 +4,7 @@
  * Service for persisting underwater drone missions, telemetry, and events to database
  */
 
-import { supabase } from "@/lib/supabase";
+import { supabase } from "@/integrations/supabase/client";
 import { logger } from "@/lib/logger";
 import type { Mission } from "../missionUploadSub";
 
