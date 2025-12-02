@@ -1,6 +1,7 @@
 // @ts-nocheck
 // PATCH 623: Health Monitoring Service
 import { supabase } from "@/integrations/supabase/client";
+import { logger } from "@/lib/logger";
 import type { HealthCheckResult, ServiceStatus } from "../types";
 
 /**
@@ -254,7 +255,7 @@ export async function logHealthCheck(result: HealthCheckResult, tenantId?: strin
         tenant_id: tenant_id || null
       });
   } catch (error) {
-    console.error("Failed to log health check:", error);
+    logger.error("Failed to log health check:", error);
     // Don't throw - logging failures shouldn't break health checks
   }
 }

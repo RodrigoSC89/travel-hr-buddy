@@ -9,6 +9,7 @@ import {
 } from "../services/health-service";
 import type { HealthCheckResult, SystemHealth, ServiceStatus } from "../types";
 import { toast } from "sonner";
+import { logger } from "@/lib/logger";
 
 export function useHealthCheck(options?: { 
   autoRefresh?: boolean;
@@ -40,7 +41,7 @@ export function useHealthCheck(options?: {
   const logMutation = useMutation({
     mutationFn: logHealthCheck,
     onError: (error) => {
-      console.error("Failed to log health check:", error);
+      logger.error("Failed to log health check:", error);
       // Don't show toast for logging failures to avoid spamming user
     }
   });

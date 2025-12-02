@@ -5,6 +5,7 @@
  */
 
 import { supabase } from "@/integrations/supabase/client";
+import { logger } from "@/lib/logger";
 
 export interface CoordinationEvent {
   eventType: "critical_incident" | "satellite_alert" | "price_alert" | "system_health" | "custom";
@@ -64,7 +65,7 @@ export class CoordinationAIService {
 
       return decision;
     } catch (error) {
-      console.error("Error coordinating event:", error);
+      logger.error("Error coordinating event:", error);
       throw error;
     }
   }
@@ -119,7 +120,7 @@ export class CoordinationAIService {
         this.ruleConditionsMatch(rule.conditions, event)
       );
     } catch (error) {
-      console.error("Error fetching coordination rules:", error);
+      logger.error("Error fetching coordination rules:", error);
       return [];
     }
   }
@@ -312,7 +313,7 @@ export class CoordinationAIService {
           execution_time_ms: Date.now() - startTime
         });
     } catch (error) {
-      console.error("Error storing coordination decision:", error);
+      logger.error("Error storing coordination decision:", error);
       throw error;
     }
   }
@@ -326,14 +327,14 @@ export class CoordinationAIService {
     for (const action of decision.actions) {
       try {
         // Simulate action execution - in production, call actual module APIs
-        console.log(`Executing action on ${action.module}:`, action.action, action.parameters);
+        logger.info(`Executing action on ${action.module}:`, { action: action.action, parameters: action.parameters });
         results.push({
           module: action.module,
           action: action.action,
           success: true
         });
       } catch (error) {
-        console.error(`Error executing action on ${action.module}:`, error);
+        logger.error(`Error executing action on ${action.module}:`, error);
         results.push({
           module: action.module,
           action: action.action,
@@ -377,7 +378,7 @@ export class CoordinationAIService {
           triggered_by: "coordination_ai"
         });
     } catch (error) {
-      console.error("Error logging coordination event:", error);
+      logger.error("Error logging coordination event:", error);
     }
   }
 
@@ -393,7 +394,7 @@ export class CoordinationAIService {
         });
       }
     } catch (error) {
-      console.error("Error updating module heartbeats:", error);
+      logger.error("Error updating module heartbeats:", error);
     }
   }
 
@@ -433,7 +434,7 @@ export class CoordinationAIService {
       if (error) throw error;
       return data || [];
     } catch (error) {
-      console.error("Error fetching coordination decisions:", error);
+      logger.error("Error fetching coordination decisions:", error);
       throw error;
     }
   }
@@ -451,7 +452,7 @@ export class CoordinationAIService {
       if (error) throw error;
       return data || [];
     } catch (error) {
-      console.error("Error fetching module statuses:", error);
+      logger.error("Error fetching module statuses:", error);
       throw error;
     }
   }
