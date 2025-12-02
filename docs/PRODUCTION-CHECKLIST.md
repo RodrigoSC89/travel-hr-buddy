@@ -218,9 +218,17 @@ Implementar rate limiting em APIs críticas:
 
 **Sistemas Implementados em PATCH 653:**
 1. ✅ Unit Tests (Performance, Security, Error Tracking)
-2. ✅ Testing Infrastructure (Vitest + Playwright)
-3. ✅ Testing Guide completo
-4. ⏳ Integration Tests (em progresso)
-5. ⏳ E2E Tests (em progresso)
+2. ✅ Integration Tests (Auth, Performance, Error Tracking)
+3. ✅ E2E Tests (Auth Flow, Dashboards, Error Handling)
+4. ✅ Testing Infrastructure (Vitest + Playwright)
+5. ✅ Testing Guide completo
 
-**Recomendação**: ✅ Sistema pronto para deploy em produção com monitoramento completo.
+**Itens Críticos para MVP (3-5 dias):**
+1. 🔴 **Security Audit** - Verificar secrets e vulnerabilidades (1-2h)
+2. 🟡 **Asset Optimization** - Comprimir imagens críticas (2-3h)
+3. ⚡ **CI/CD Setup** - Workflow básico de deploy (2-3h)
+4. 🟢 **Performance Validation** - Budget check final (1h)
+
+**Recomendação**: ✅ Sistema 85% pronto. Completar 4 tasks críticas e deployar MVP em 3-5 dias.
+
+Ver roadmap completo em: `docs/MVP-ROADMAP.md`
