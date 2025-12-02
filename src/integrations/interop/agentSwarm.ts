@@ -1,6 +1,6 @@
-// @ts-nocheck
 // PATCH 227 - Agent Swarm Bridge
 import { supabase } from "@/integrations/supabase/client";
+import { logger } from "@/lib/logger";
 
 export interface Agent {
   agent_id: string;
@@ -41,7 +41,12 @@ export async function registerAgent(agent: Omit<Agent, "id" | "created_at" | "up
     .select("agent_id")
     .single();
 
-  if (error) throw error;
+  if (error) {
+    logger.error("Failed to register agent", { error, agent_id: agent.agent_id });
+    throw error;
+  }
+  
+  logger.info(`Agent registered: ${agent.agent_id}`, { name: agent.name });
   return data.agent_id;
 }
 
@@ -57,7 +62,10 @@ export async function listAgents(status?: string) {
   }
 
   const { data, error } = await query;
-  if (error) throw error;
+  if (error) {
+    logger.error("Failed to list agents", { error, status });
+    throw error;
+  }
   return data;
 }
 
@@ -99,6 +107,7 @@ export async function distributeTask(task: SwarmTask): Promise<TaskResult[]> {
         success: true
       };
     } catch (error: any) {
+      logger.error(`Agent task failed`, { agent_id: agentId, task_id: task.task_id, error });
       await updateAgentMetrics(agentId, false, Date.now() - taskStartTime);
       
       await supabase
@@ -167,7 +176,10 @@ export async function getAgentMetrics(agentId?: string) {
   }
 
   const { data, error } = await query;
-  if (error) throw error;
+  if (error) {
+    logger.error("Failed to get agent metrics", { error, agent_id: agentId });
+    throw error;
+  }
   return data;
 }
 
