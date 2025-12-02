@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from "react";
+import { useOptimizedPolling } from "@/hooks/use-optimized-polling";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
@@ -96,16 +97,15 @@ export const VesselTracking = () => {
   // PATCH 549: useEffect with proper memoized loadVessels
   useEffect(() => {
     loadVessels();
+  }, []);
     
-    // Set up real-time tracking
-    const interval = setInterval(() => {
-      if (trackingMode === "real-time") {
-        loadVessels();
-      }
-    }, 30000); // Update every 30 seconds
-
-    return () => clearInterval(interval);
-  }, [trackingMode]);
+  // Real-time tracking with optimized polling
+  useOptimizedPolling({
+    id: "vessel-tracking-realtime",
+    callback: loadVessels,
+    interval: 30000,
+    enabled: trackingMode === "real-time",
+  });
 
   const getStatusColor = (status: VesselPosition["status"]) => {
     switch (status) {
