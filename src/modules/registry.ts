@@ -61,15 +61,7 @@ export const MODULE_REGISTRY: Record<string, ModuleDefinition> = {
     lazy: true,
   },
 
-  "core.shared": {
-    id: "core.shared",
-    name: "Shared Components",
-    category: "core",
-    path: "modules/shared",
-    description: "Shared components and utilities",
-    status: "deprecated",
-    lazy: false,
-  },
+  // REMOVED: core.shared - Deprecated (PATCH 176.2)
 
   "core.system-watchdog": {
     id: "core.system-watchdog",
@@ -126,31 +118,8 @@ export const MODULE_REGISTRY: Record<string, ModuleDefinition> = {
     version: "191.0",
   },
 
-  "operations.performance": {
-    id: "operations.performance",
-    name: "Performance Monitoring",
-    category: "operations",
-    path: "modules/operations/performance",
-    description: "Monitor operational performance - DEPRECATED: Use operations.dashboard instead",
-    status: "deprecated",
-    completeness: "partial",
-    route: "/performance",
-    icon: "TrendingUp",
-    lazy: true,
-  },
-
-  "operations.crew-wellbeing": {
-    id: "operations.crew-wellbeing",
-    name: "Crew Wellbeing",
-    category: "operations",
-    path: "modules/operations/crew-wellbeing",
-    description: "Monitor crew health and wellbeing - DEPRECATED: Integrate into operations.crew",
-    status: "deprecated",
-    completeness: "partial",
-    route: "/crew-wellbeing",
-    icon: "Heart",
-    lazy: true,
-  },
+  // REMOVED: operations.performance - Use operations.dashboard (PATCH 176.2)
+  // REMOVED: operations.crew-wellbeing - Integrated into operations.crew (PATCH 176.2)
 
   "operations.maritime-system": {
     id: "operations.maritime-system",
@@ -180,30 +149,8 @@ export const MODULE_REGISTRY: Record<string, ModuleDefinition> = {
     lazy: true,
   },
 
-  "compliance.reports": {
-    id: "compliance.reports",
-    name: "Compliance Reports",
-    category: "compliance",
-    path: "modules/compliance/reports",
-    description: "Generate compliance reports - DEPRECATED: Merged into compliance.hub",
-    status: "deprecated",
-    completeness: "partial",
-    route: "/compliance/reports",
-    icon: "FileText",
-    lazy: true,
-  },
-
-  "compliance.audit-center": {
-    id: "compliance.audit-center",
-    name: "Audit Center (Legacy)",
-    category: "compliance",
-    path: "modules/compliance/audit-center",
-    description: "Manage audits and inspections - DEPRECATED: Use compliance-hub instead",
-    status: "deprecated",
-    route: "/compliance/audit",
-    icon: "ClipboardCheck",
-    lazy: true,
-  },
+  // REMOVED: compliance.reports - Merged into compliance.hub (PATCH 176.2)
+  // REMOVED: compliance.audit-center - Use compliance-hub (PATCH 176.2)
 
   "compliance.hub": {
     id: "compliance.hub",
@@ -231,18 +178,7 @@ export const MODULE_REGISTRY: Record<string, ModuleDefinition> = {
     lazy: true,
   },
 
-  "intelligence.analytics": {
-    id: "intelligence.analytics",
-    name: "Analytics Core",
-    category: "intelligence",
-    path: "modules/intelligence/analytics-core",
-    description: "Core analytics engine - DEPRECATED: Use operations.dashboard for analytics",
-    status: "deprecated",
-    completeness: "partial",
-    route: "/intelligence/analytics",
-    icon: "BarChart3",
-    lazy: true,
-  },
+  // REMOVED: intelligence.analytics - Use operations.dashboard (PATCH 176.2)
 
   "intelligence.automation": {
     id: "intelligence.automation",
@@ -257,108 +193,14 @@ export const MODULE_REGISTRY: Record<string, ModuleDefinition> = {
     lazy: true,
   },
 
-  "emergency.response": {
-    id: "emergency.response",
-    name: "Emergency Response",
-    category: "emergency",
-    path: "modules/emergency/emergency-response",
-    description: "Emergency response management - DEPRECATED: Merge into compliance.hub",
-    status: "deprecated",
-    completeness: "partial",
-    route: "/emergency/response",
-    icon: "AlertTriangle",
-    lazy: true,
-  },
-
-  "emergency.mission-control": {
-    id: "emergency.mission-control",
-    name: "Mission Control",
-    category: "emergency",
-    path: "modules/emergency/mission-control",
-    description: "Mission control center - DEPRECATED: Merge into operations.dashboard",
-    status: "deprecated",
-    completeness: "partial",
-    route: "/emergency/mission-control",
-    icon: "Radio",
-    lazy: true,
-  },
-
-  "emergency.mission-logs": {
-    id: "emergency.mission-logs",
-    name: "Mission Logs",
-    category: "emergency",
-    path: "modules/emergency/mission-logs",
-    description: "Mission logging and tracking - DEPRECATED: Use core.logs-center",
-    status: "deprecated",
-    completeness: "partial",
-    route: "/emergency/logs",
-    icon: "BookOpen",
-    lazy: true,
-  },
-
-  "emergency.risk-management": {
-    id: "emergency.risk-management",
-    name: "Risk Management (Legacy)",
-    category: "emergency",
-    path: "modules/emergency/risk-management",
-    description: "Risk assessment and management - DEPRECATED: Use compliance-hub instead",
-    status: "deprecated",
-    route: "/emergency/risk",
-    icon: "AlertCircle",
-    lazy: true,
-  },
-
-  "logistics.hub": {
-    id: "logistics.hub",
-    name: "Logistics Hub",
-    category: "logistics",
-    path: "modules/logistics/logistics-hub",
-    description: "Central logistics management - DEPRECATED: Merge into operations.fleet",
-    status: "deprecated",
-    completeness: "partial",
-    route: "/logistics/hub",
-    icon: "Package",
-    lazy: true,
-  },
-
-  "logistics.fuel-optimizer": {
-    id: "logistics.fuel-optimizer",
-    name: "Fuel Optimizer",
-    category: "logistics",
-    path: "modules/logistics/fuel-optimizer",
-    description: "Optimize fuel consumption - DEPRECATED: Integrate into operations.fleet",
-    status: "deprecated",
-    completeness: "partial",
-    route: "/logistics/fuel",
-    icon: "Droplet",
-    lazy: true,
-  },
-
-  "logistics.satellite-tracker": {
-    id: "logistics.satellite-tracker",
-    name: "Satellite Tracker",
-    category: "logistics",
-    path: "modules/logistics/satellite-tracker",
-    description: "Track vessels via satellite - DEPRECATED: Use operations.fleet tracking",
-    status: "deprecated",
-    completeness: "partial",
-    route: "/logistics/tracker",
-    icon: "Satellite",
-    lazy: true,
-  },
-
-  "planning.voyage": {
-    id: "planning.voyage",
-    name: "Voyage Planner",
-    category: "planning",
-    path: "modules/planning/voyage-planner",
-    description: "Plan and optimize voyages - DEPRECATED: Merge into operations.fleet",
-    status: "deprecated",
-    completeness: "partial",
-    route: "/planning/voyage",
-    icon: "Map",
-    lazy: true,
-  },
+  // REMOVED: emergency.response - Merged into compliance.hub (PATCH 176.2)
+  // REMOVED: emergency.mission-control - Use operations.mission-control (PATCH 176.2)
+  // REMOVED: emergency.mission-logs - Use core.logs-center (PATCH 176.2)
+  // REMOVED: emergency.risk-management - Use compliance-hub (PATCH 176.2)
+  // REMOVED: logistics.hub - Merged into operations.fleet (PATCH 176.2)
+  // REMOVED: logistics.fuel-optimizer - Integrated into operations.fleet (PATCH 176.2)
+  // REMOVED: logistics.satellite-tracker - Use operations.fleet tracking (PATCH 176.2)
+  // REMOVED: planning.voyage - Merged into operations.fleet (PATCH 176.2)
 
   "hr.training": {
     id: "hr.training",
@@ -386,18 +228,7 @@ export const MODULE_REGISTRY: Record<string, ModuleDefinition> = {
     lazy: true,
   },
 
-  "hr.employee-portal": {
-    id: "hr.employee-portal",
-    name: "Employee Portal",
-    category: "hr",
-    path: "modules/hr/employee-portal",
-    description: "Employee self-service portal - DEPRECATED: Integrate into operations.crew",
-    status: "deprecated",
-    completeness: "partial",
-    route: "/portal",
-    icon: "User",
-    lazy: true,
-  },
+  // REMOVED: hr.employee-portal - Integrated into operations.crew (PATCH 176.2)
 
   "maintenance.planner": {
     id: "maintenance.planner",
@@ -584,17 +415,7 @@ export const MODULE_REGISTRY: Record<string, ModuleDefinition> = {
     version: "91.1",
   },
 
-  "config.settings": {
-    id: "config.settings",
-    name: "Settings",
-    category: "configuration",
-    path: "modules/configuration/settings",
-    description: "Application settings (placeholder - no implementation)",
-    status: "deprecated",
-    route: "/settings",
-    icon: "Settings",
-    lazy: true,
-  },
+  // REMOVED: config.settings - No implementation (PATCH 176.2)
 
   "config.user-management": {
     id: "config.user-management",
@@ -623,17 +444,7 @@ export const MODULE_REGISTRY: Record<string, ModuleDefinition> = {
     lazy: true,
   },
 
-  "features.checklists": {
-    id: "features.checklists",
-    name: "Smart Checklists (Legacy)",
-    category: "features",
-    path: "modules/features/checklists",
-    description: "Intelligent checklist system - DEPRECATED: Use compliance-hub instead",
-    status: "deprecated",
-    route: "/checklists",
-    icon: "CheckSquare",
-    lazy: true,
-  },
+  // REMOVED: features.checklists - Use compliance-hub (PATCH 176.2)
 
   "features.reservations": {
     id: "features.reservations",
