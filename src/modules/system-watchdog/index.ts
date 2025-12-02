@@ -3,6 +3,8 @@
  * Entry point for the autonomous monitoring module
  */
 
-export { default as SystemWatchdog } from "./SystemWatchdog";
+import SystemWatchdog from "./SystemWatchdog";
+export { SystemWatchdog };
 export { watchdogService } from "./watchdog-service";
 export type { HealthCheckResult, WatchdogEvent } from "./watchdog-service";
+export default SystemWatchdog;
