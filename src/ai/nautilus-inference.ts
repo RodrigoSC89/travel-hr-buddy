@@ -75,7 +75,7 @@ class NautilusInferenceEngine {
       logger.info("🧠 [Nautilus] Inputs:", this.session.inputNames);
       logger.info("🧠 [Nautilus] Outputs:", this.session.outputNames);
     } catch (error) {
-      console.error("🧠 [Nautilus] Erro ao carregar modelo:", error);
+      logger.error("🧠 [Nautilus] Erro ao carregar modelo", { error });
       throw error;
     }
   }
@@ -87,7 +87,7 @@ class NautilusInferenceEngine {
    */
   async analyze(text: string): Promise<InferenceResult> {
     if (!this.isLoaded || !this.session) {
-      console.warn("🧠 [Nautilus] Modelo não carregado. Usando análise baseada em regras.");
+      logger.warn("🧠 [Nautilus] Modelo não carregado. Usando análise baseada em regras.");
       return this.fallbackAnalyze(text);
     }
 
@@ -114,7 +114,7 @@ class NautilusInferenceEngine {
         timestamp: Date.now()
       };
     } catch (error) {
-      console.error("🧠 [Nautilus] Erro durante inferência:", error);
+      logger.error("🧠 [Nautilus] Erro durante inferência", { error });
       return this.fallbackAnalyze(text);
     }
   }
