@@ -31,8 +31,8 @@ const NotFound = React.lazy(() => import("@/pages/NotFound"));
 const Unauthorized = React.lazy(() => import("@/pages/Unauthorized"));
 const Auth = React.lazy(() => import("@/pages/Auth"));
 
-// Protected Route wrapper
-import { ProtectedRoute } from "@/components/auth/protected-route";
+// Protected Route wrappers - PATCH 68.5
+import { ProtectedRoute, AdminRoute } from "@/components/auth/protected-route";
 
 // Initialize monitoring & services with optimized query client
 const queryClient = createOptimizedQueryClient();
@@ -69,10 +69,15 @@ function App() {
                 <ErrorDebugBanner />
                 
                 <Routes>
-                  {/* Auth Route - Public */}
+                  {/* Public Routes */}
                   <Route path="/auth" element={
                     <Suspense fallback={<OffshoreLoader />}>
                       <Auth />
+                    </Suspense>
+                  } />
+                  <Route path="/unauthorized" element={
+                    <Suspense fallback={<OffshoreLoader />}>
+                      <Unauthorized />
                     </Suspense>
                   } />
                   
@@ -102,11 +107,13 @@ function App() {
                       />
                     ))}
                     
-                    {/* Admin Routes */}
+                    {/* Admin Routes - PATCH 68.5: Role-protected */}
                     <Route path="admin/*" element={
-                      <Suspense fallback={<OffshoreLoader />}>
-                        <Admin />
-                      </Suspense>
+                      <AdminRoute>
+                        <Suspense fallback={<OffshoreLoader />}>
+                          <Admin />
+                        </Suspense>
+                      </AdminRoute>
                     } />
                     
                     {/* Settings */}
@@ -123,12 +130,7 @@ function App() {
                       </Suspense>
                     } />
                     
-                    {/* Error Routes */}
-                    <Route path="unauthorized" element={
-                      <Suspense fallback={<OffshoreLoader />}>
-                        <Unauthorized />
-                      </Suspense>
-                    } />
+                    {/* 404 Route */}
                     <Route path="*" element={
                       <Suspense fallback={<OffshoreLoader />}>
                         <NotFound />
