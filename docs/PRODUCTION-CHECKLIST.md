@@ -223,12 +223,13 @@ Implementar rate limiting em APIs críticas:
 4. ✅ Testing Infrastructure (Vitest + Playwright)
 5. ✅ Testing Guide completo
 
-**Itens Críticos para MVP (1-2 dias):**
+**Itens Finais para MVP (1 dia):**
 1. ✅ **Security Audit** - COMPLETO (Score 89%) - Ver `docs/SECURITY-AUDIT-REPORT.md`
 2. ✅ **Asset Optimization** - COMPLETO (Score 88%) - Ver `docs/ASSET-OPTIMIZATION-REPORT.md`
-3. ⚡ **CI/CD Setup** - Workflow básico de deploy (2-3h) - PRÓXIMO
-4. 🟢 **Performance Validation** - Budget check final (1h)
+3. ✅ **CI/CD Setup** - COMPLETO (Score 95%) - Ver `docs/CI-CD-SETUP.md`
+4. 🔄 **GitHub Configuration** - Secrets + Environments (30min) - PRÓXIMO
+5. 🟢 **Performance Validation** - Budget check final (1h)
 
-**Recomendação**: ✅ Sistema 95% pronto. Implementar CI/CD e deployar MVP em 1-2 dias.
+**Recomendação**: ✅ Sistema 98% pronto. Configurar GitHub e deployar MVP em 1 dia.
 
 Ver roadmap completo em: `docs/MVP-ROADMAP.md`

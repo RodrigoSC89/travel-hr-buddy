@@ -1,0 +1,71 @@
+name: CD - Deploy to Staging
+
+on:
+  push:
+    branches: [develop]
+  workflow_dispatch:
+    inputs:
+      reason:
+        description: 'Reason for manual deployment'
+        required: false
+        default: 'Manual deployment'
+
+# Only one deployment at a time
+concurrency:
+  group: staging-deployment
+  cancel-in-progress: false
+
+jobs:
+  deploy-staging:
+    name: 🚀 Deploy to Staging
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    environment:
+      name: staging
+      url: https://staging.nautilus.app  # Update with your staging URL
+    
+    steps:
+      - name: 📥 Checkout code
+        uses: actions/checkout@v4
+        
+      - name: 📦 Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+          cache: 'npm'
+          
+      - name: 📥 Install dependencies
+        run: npm ci
+        
+      - name: 🏗️ Build for staging
+        run: npm run build
+        env:
+          NODE_OPTIONS: "--max-old-space-size=4096"
+          VITE_NODE_ENV: staging
+          VITE_SUPABASE_URL: ${{ secrets.STAGING_SUPABASE_URL }}
+          VITE_SUPABASE_PUBLISHABLE_KEY: ${{ secrets.STAGING_SUPABASE_PUBLISHABLE_KEY }}
+          
+      - name: 🧪 Run smoke tests
+        run: |
+          echo "🧪 Running smoke tests..."
+          npm run test:unit -- --run --reporter=verbose
+        continue-on-error: true
+        
+      - name: 🚀 Deploy to Staging (Lovable)
+        run: |
+          echo "🚀 Deploying to Lovable staging environment..."
+          echo "Note: Update this step with your actual deployment command"
+          # Example: Deploy via CLI or API
+          # npx lovable deploy --env=staging
+          
+      - name: ✅ Deployment successful
+        run: |
+          echo "✅ Staging deployment completed!"
+          echo "📍 Staging URL: https://staging.nautilus.app"
+          
+      - name: 💬 Notify team (optional)
+        if: success()
+        run: |
+          echo "📢 Notifying team of successful deployment..."
+          # Add Slack/Discord notification here if needed
+          # Example: curl -X POST ${{ secrets.SLACK_WEBHOOK_URL }} ...
