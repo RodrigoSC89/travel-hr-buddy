@@ -1,7 +1,7 @@
 // @ts-nocheck
 /**
  * PATCH 649 - REST API Gateway for External Integrations
- * TODO PATCH 659: TypeScript fixes pending (complex type issues)
+ * TODO PATCH 659: TypeScript fixes deferred (missions/inspections schema needs validation)
  * Base API v1 structure for modules, missions, inspections, and crew
  */
 
@@ -109,18 +109,18 @@ export class NautilusAPI {
    * GET /api/v1/module/:id
    * Get specific module
    */
-  async getModule(id: string): Promise<APIResponse<ModuleAPIData>> {
+  async getModule(id: string): Promise<APIResponse<ModuleAPIData | null>> {
     if (!this.checkRateLimit()) {
-      return this.createResponse(false, undefined, "Rate limit exceeded");
+      return this.createResponse<ModuleAPIData | null>(false, null, "Rate limit exceeded");
     }
 
     try {
       const data = await this.fetchModulesRegistry();
       
-      const module = data.modules.find((m: any) => m.id === id);
+      const module = data.modules.find((m: Record<string, string>) => m.id === id);
       
       if (!module) {
-        return this.createResponse(false, undefined, "Module not found");
+        return this.createResponse<ModuleAPIData | null>(false, null, "Module not found");
       }
 
       const moduleData: ModuleAPIData = {
@@ -134,7 +134,7 @@ export class NautilusAPI {
 
       return this.createResponse(true, moduleData);
     } catch (error) {
-      return this.createResponse(false, undefined, "Failed to fetch module");
+      return this.createResponse<ModuleAPIData | null>(false, null, "Failed to fetch module");
     }
   }
 
@@ -144,7 +144,7 @@ export class NautilusAPI {
    */
   async getMissions(): Promise<APIResponse<MissionRow[]>> {
     if (!this.checkRateLimit()) {
-      return this.createResponse(false, undefined, "Rate limit exceeded");
+      return this.createResponse<MissionRow[]>(false, [] as MissionRow[], "Rate limit exceeded");
     }
 
     try {
@@ -158,7 +158,7 @@ export class NautilusAPI {
 
       return this.createResponse(true, data || []);
     } catch (error) {
-      return this.createResponse(false, undefined, "Failed to fetch missions");
+      return this.createResponse<MissionRow[]>(false, [] as MissionRow[], "Failed to fetch missions");
     }
   }
 
@@ -166,9 +166,9 @@ export class NautilusAPI {
    * POST /api/v1/missions
    * Create new mission
    */
-  async createMission(missionData: Partial<MissionRow>): Promise<APIResponse<MissionRow>> {
+  async createMission(missionData: Record<string, unknown>): Promise<APIResponse<MissionRow | null>> {
     if (!this.checkRateLimit()) {
-      return this.createResponse(false, undefined, "Rate limit exceeded");
+      return this.createResponse<MissionRow | null>(false, null, "Rate limit exceeded");
     }
 
     try {
@@ -182,7 +182,7 @@ export class NautilusAPI {
 
       return this.createResponse(true, data);
     } catch (error) {
-      return this.createResponse(false, undefined, "Failed to create mission");
+      return this.createResponse<MissionRow | null>(false, null, "Failed to create mission");
     }
   }
 
@@ -192,7 +192,7 @@ export class NautilusAPI {
    */
   async getCrew(): Promise<APIResponse<CrewMemberRow[]>> {
     if (!this.checkRateLimit()) {
-      return this.createResponse(false, undefined, "Rate limit exceeded");
+      return this.createResponse<CrewMemberRow[]>(false, [] as CrewMemberRow[], "Rate limit exceeded");
     }
 
     try {
@@ -205,7 +205,7 @@ export class NautilusAPI {
 
       return this.createResponse(true, data || []);
     } catch (error) {
-      return this.createResponse(false, undefined, "Failed to fetch crew");
+      return this.createResponse<CrewMemberRow[]>(false, [] as CrewMemberRow[], "Failed to fetch crew");
     }
   }
 
@@ -213,23 +213,24 @@ export class NautilusAPI {
    * POST /api/v1/inspections
    * Create new inspection
    */
-  async createInspection(inspectionData: any): Promise<APIResponse<any>> {
+  async createInspection(inspectionData: Record<string, unknown>): Promise<APIResponse<Record<string, unknown> | null>> {
     if (!this.checkRateLimit()) {
-      return this.createResponse(false, undefined, "Rate limit exceeded");
+      return this.createResponse<Record<string, unknown> | null>(false, null, "Rate limit exceeded");
     }
 
     try {
+      // Note: inspections table may not exist in schema
       const { data, error } = await supabase
-        .from("inspections")
+        .from("inspections" as any)
         .insert([inspectionData])
         .select()
         .single();
 
       if (error) throw error;
 
-      return this.createResponse(true, data);
+      return this.createResponse(true, data as Record<string, unknown>);
     } catch (error) {
-      return this.createResponse(false, undefined, "Failed to create inspection");
+      return this.createResponse<Record<string, unknown> | null>(false, null, "Failed to create inspection");
     }
   }
 

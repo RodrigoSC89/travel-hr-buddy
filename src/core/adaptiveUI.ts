@@ -1,11 +1,30 @@
-// @ts-nocheck
 /**
  * PATCH 222.0 - Adaptive UI Reconfiguration Engine
+ * PATCH 659: TypeScript fixes applied
  * Adapts UI based on device type, network, operation, and priority
  * Automatically reconfigures UI based on operational context and limitations
  */
 
 import { logger } from "@/lib/logger";
+
+// Extended Navigator interfaces
+interface ExtendedNavigator extends Navigator {
+  deviceMemory?: number;
+  connection?: NetworkInformation;
+  mozConnection?: NetworkInformation;
+  webkitConnection?: NetworkInformation;
+  getBattery?: () => Promise<BatteryManager>;
+}
+
+interface NetworkInformation {
+  effectiveType?: "slow-2g" | "2g" | "3g" | "4g" | "5g";
+  downlink?: number;
+}
+
+interface BatteryManager {
+  level: number;
+  charging: boolean;
+}
 
 export type DeviceType = "mobile" | "tablet" | "desktop" | "console";
 export type NetworkQuality = "excellent" | "good" | "fair" | "poor" | "offline";
@@ -169,15 +188,16 @@ class AdaptiveUI {
     }
 
     // Try to get device memory if available
-    const memory = (navigator as any).deviceMemory;
+    const extNavigator = navigator as ExtendedNavigator;
+    const memory = extNavigator.deviceMemory;
     const cpuCores = navigator.hardwareConcurrency;
 
     // Try to get battery info if available
     let batteryLevel: number | undefined;
     let isLowPowerMode: boolean | undefined;
 
-    if ("getBattery" in navigator) {
-      (navigator as any).getBattery().then((battery: any) => {
+    if (extNavigator.getBattery) {
+      extNavigator.getBattery().then((battery: BatteryManager) => {
         batteryLevel = battery.level * 100;
         isLowPowerMode = batteryLevel < 20;
       });
@@ -198,7 +218,8 @@ class AdaptiveUI {
    * Measure network quality
    */
   private measureNetwork(): NetworkMetrics {
-    const connection = (navigator as any).connection || (navigator as any).mozConnection || (navigator as any).webkitConnection;
+    const extNavigator = navigator as ExtendedNavigator;
+    const connection = extNavigator.connection || extNavigator.mozConnection || extNavigator.webkitConnection;
 
     let latency = 50; // Default
     let bandwidth = 10; // Default Mbps
@@ -255,7 +276,7 @@ class AdaptiveUI {
     // This would be connected to contextMesh in real implementation
     // For now, derive from localStorage or defaults
     const missionType = (localStorage.getItem("current_mission_type") as MissionType) || "administrative";
-    const priority = (localStorage.getItem("current_priority") as any) || "medium";
+    const priority = (localStorage.getItem("current_priority") as "low" | "medium" | "high" | "critical") || "medium";
     const isOffline = !navigator.onLine;
 
     return {
@@ -304,7 +325,7 @@ class AdaptiveUI {
     };
 
     // Configure layout
-    const layout = {
+    const layout: UIConfiguration["layout"] = {
       sidebar: mode === "emergency" || device.type === "mobile" ? "hidden" : 
         mode === "minimal" || device.type === "tablet" ? "mini" : "full",
       header: mode === "emergency" ? "minimal" : 
@@ -314,7 +335,7 @@ class AdaptiveUI {
     };
 
     // Configure data strategy
-    const dataStrategy = {
+    const dataStrategy: UIConfiguration["dataStrategy"] = {
       caching: network.quality === "poor" || context.isOffline ? "aggressive" : 
         network.quality === "excellent" ? "minimal" : "normal",
       preloading: network.quality === "excellent" && !device.isLowPowerMode,

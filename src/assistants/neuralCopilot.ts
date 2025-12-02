@@ -1,7 +1,7 @@
 // @ts-nocheck
 /**
  * PATCH 213.0 - Neural Copilot Engine (Co-Piloto Neural IA)
- * TODO PATCH 659: TypeScript fixes pending (SpeechRecognition types + Supabase schema)
+ * TODO PATCH 659: TypeScript fixes deferred (copilot_sessions table schema missing from database)
  * 
  * Virtual copilot based on embedded AI with continuous context and multimodal support (voice/text).
  */
@@ -110,11 +110,11 @@ class NeuralCopilotEngine {
       const { data, error } = await supabase
         .from("copilot_sessions")
         .insert({
-          tenant_id: userId,
+          user_id: userId,
           session_name: sessionName,
-          context: context,
-          messages: [systemMessage],
-          recommendations: [],
+          context: context as unknown as Record<string, unknown>,
+          messages: [systemMessage] as unknown as Record<string, unknown>,
+          recommendations: [] as unknown as Record<string, unknown>,
           status: "active",
         })
         .select()
@@ -361,14 +361,16 @@ class NeuralCopilotEngine {
 
     logger.info("[NeuralCopilot] Starting voice input", { sessionId });
 
-    this.speechRecognition.onresult = (event: any) => {
-      const transcript = event.results[event.results.length - 1][0].transcript;
+    this.speechRecognition.onresult = (event: unknown) => {
+      const speechEvent = event as { results: Array<Array<{ transcript: string }>> };
+      const transcript = speechEvent.results[speechEvent.results.length - 1][0].transcript;
       logger.info("[NeuralCopilot] Voice input received", { transcript });
       onResult(transcript);
     };
 
-    this.speechRecognition.onerror = (event: any) => {
-      logger.error("[NeuralCopilot] Speech recognition error", { error: event.error });
+    this.speechRecognition.onerror = (event: unknown) => {
+      const errorEvent = event as { error: string };
+      logger.error("[NeuralCopilot] Speech recognition error", { error: errorEvent.error });
     };
 
     this.speechRecognition.start();
@@ -425,14 +427,14 @@ class NeuralCopilotEngine {
 
       const session: CopilotSession = {
         id: data.id,
-        user_id: data.user_id,
-        session_name: data.session_name,
-        context: data.context,
-        messages: data.messages,
-        recommendations: data.recommendations,
-        status: data.status,
-        created_at: new Date(data.created_at),
-        updated_at: new Date(data.updated_at),
+        user_id: data.user_id as string,
+        session_name: data.session_name as string,
+        context: data.context as unknown as CopilotContext,
+        messages: data.messages as unknown as CopilotMessage[],
+        recommendations: data.recommendations as unknown as TacticalRecommendation[],
+        status: (data.status as string || "active") as "active" | "paused" | "completed",
+        created_at: new Date(data.created_at as string),
+        updated_at: new Date(data.updated_at as string),
       };
 
       this.activeSessions.set(sessionId, session);
@@ -451,9 +453,9 @@ class NeuralCopilotEngine {
       const { error } = await supabase
         .from("copilot_sessions")
         .update({
-          messages: session.messages as any,
-          recommendations: session.recommendations as any,
-          context: session.context,
+          messages: session.messages as unknown as Record<string, unknown>,
+          recommendations: session.recommendations as unknown as Record<string, unknown>,
+          context: session.context as unknown as Record<string, unknown>,
           status: session.status,
         })
         .eq("id", session.id);
@@ -481,15 +483,15 @@ class NeuralCopilotEngine {
       if (error) throw error;
 
       return (data || []).map(d => ({
-        id: d.id,
-        user_id: d.user_id,
-        session_name: d.session_name,
-        context: d.context,
-        messages: d.messages,
-        recommendations: d.recommendations,
-        status: d.status,
-        created_at: new Date(d.created_at),
-        updated_at: new Date(d.updated_at),
+        id: d.id as string,
+        user_id: d.user_id as string,
+        session_name: d.session_name as string,
+        context: d.context as unknown as CopilotContext,
+        messages: d.messages as unknown as CopilotMessage[],
+        recommendations: d.recommendations as unknown as TacticalRecommendation[],
+        status: (d.status as string || "active") as "active" | "paused" | "completed",
+        created_at: new Date(d.created_at as string),
+        updated_at: new Date(d.updated_at as string),
       }));
     } catch (error) {
       logger.error("[NeuralCopilot] Failed to list sessions", { error });
