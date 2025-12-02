@@ -1,6 +1,6 @@
-// @ts-nocheck
 /**
  * PATCH 134.0 - Checklist Autocompletion with AI
+ * PATCH 659 - TypeScript fixes applied
  * Enables AI-powered auto-completion for checklists based on historical patterns
  * 
  * Features:
@@ -12,6 +12,8 @@
 
 import { runOpenAI } from "@/ai/engine";
 import { supabase } from "@/integrations/supabase/client";
+import { logger } from "@/lib/logger";
+import type { Database } from "@/integrations/supabase/types";
 
 export interface ChecklistItem {
   id: string;
@@ -29,6 +31,9 @@ export interface ChecklistHistory {
   vessel?: string;
   user?: string;
 }
+
+type ChecklistCompletionRow = Database['public']['Tables']['checklist_completions']['Row'];
+type ChecklistCompletionInsert = Database['public']['Tables']['checklist_completions']['Insert'];
 
 export interface AutoFillResult {
   items: ChecklistItem[];
@@ -73,7 +78,7 @@ export const autoFillChecklist = async (
 
     return aiResult;
   } catch (error) {
-    console.error("Error in autoFillChecklist:", error);
+    logger.error("Error in autoFillChecklist", error);
     
     // Fallback to pattern-based completion
     return generatePatternBasedCompletions(currentItems, []);
@@ -91,7 +96,7 @@ const fetchChecklistHistory = async (
     let query = supabase
       .from("checklist_completions")
       .select("*")
-      .eq("checklist_type", checklistType)
+      .eq("checklist_name", checklistType)
       .order("completed_at", { ascending: false })
       .limit(10);
     
@@ -102,20 +107,22 @@ const fetchChecklistHistory = async (
     const { data, error } = await query;
     
     if (error) {
-      console.error("Error fetching checklist history:", error);
+      logger.error("Error fetching checklist history", error);
       return [];
     }
     
-    return (data || []).map((record: any) => ({
+    return (data || []).map((record: ChecklistCompletionRow) => ({
       id: record.id,
-      checklistType: record.checklist_type || record.checklist_name,
-      items: Array.isArray(record.items) ? record.items : [],
-      completedAt: record.completed_at || "",
-      vessel: record.vessel_id,
-      user: record.user_id || record.completed_by
+      checklistType: record.checklist_name,
+      items: Array.isArray((record.completion_data as any)?.items) 
+        ? (record.completion_data as any).items 
+        : [],
+      completedAt: record.completed_at || record.started_at,
+      vessel: record.vessel_id || undefined,
+      user: record.completed_by || undefined
     }));
   } catch (error) {
-    console.error("Error fetching checklist history:", error);
+    logger.error("Error fetching checklist history", error);
     return [];
   }
 };
@@ -127,7 +134,11 @@ const generateAICompletions = async (
   checklistType: string,
   currentItems: ChecklistItem[],
   history: ChecklistHistory[],
-  context?: any
+  context?: {
+    vessel?: string;
+    user?: string;
+    date?: string;
+  }
 ): Promise<AutoFillResult> => {
   try {
     const historyContext = history.slice(0, 5).map((h, idx) => `
@@ -190,7 +201,7 @@ Regras:
     const result = parseAICompletionResponse(response.content, currentItems);
     return result;
   } catch (error) {
-    console.error("Error generating AI completions:", error);
+    logger.error("Error generating AI completions", error);
     throw error;
   }
 };
@@ -212,7 +223,7 @@ const parseAICompletionResponse = (
     
     // Merge with original items to preserve IDs
     const mergedItems = originalItems.map(originalItem => {
-      const aiItem = parsed.items?.find((i: any) => 
+      const aiItem = parsed.items?.find((i: ChecklistItem) =>
         i.label === originalItem.label || i.id === originalItem.id
       );
       
@@ -239,7 +250,7 @@ const parseAICompletionResponse = (
         : []
     };
   } catch (error) {
-    console.error("Error parsing AI completion response:", error);
+    logger.error("Error parsing AI completion response", error);
     throw error;
   }
 };
@@ -333,24 +344,28 @@ export const saveChecklistCompletion = async (
   }
 ): Promise<boolean> => {
   try {
+    const insertData: ChecklistCompletionInsert = {
+      checklist_name: checklistType,
+      completion_data: { items } as any, // JSON type with items array
+      vessel_id: context?.vessel || null,
+      completed_by: context?.userId || null,
+      completed_at: new Date().toISOString(),
+      started_at: new Date().toISOString(),
+      status: 'completed'
+    };
+
     const { error } = await supabase
       .from("checklist_completions")
-      .insert({
-        checklist_type: checklistType,
-        items: items,
-        vessel_id: context?.vessel,
-        user_id: context?.userId,
-        completed_at: new Date().toISOString()
-      });
+      .insert(insertData);
     
     if (error) {
-      console.error("Error saving checklist completion:", error);
+      logger.error("Error saving checklist completion", error);
       return false;
     }
     
     return true;
   } catch (error) {
-    console.error("Error saving checklist completion:", error);
+    logger.error("Error saving checklist completion", error);
     return false;
   }
 };
