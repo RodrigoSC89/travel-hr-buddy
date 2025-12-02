@@ -11,7 +11,7 @@
 | Metric | Before | Current | Target | Progress |
 |--------|--------|---------|--------|----------|
 | **@ts-nocheck files** | 385 | 385 | 193 | 0% |
-| **console.* statements** | 1337 | 1285 | 200 | 3.9% |
+| **console.* statements** | 1337 | 1284 | 200 | 4.0% |
 | **Build Status** | ✅ | ✅ | ✅ | 100% |
 
 ---
@@ -56,13 +56,19 @@
 23. ⏸️ `src/lib/compliance/ai-compliance-engine.ts` - Logger improved, needs `compliance_audit_logs` table + ONNX types
 24. ⏸️ `src/lib/incidents/ai-incident-response.ts` - Logger added (1 console.warn replaced), needs `incident_reports` table
 
+### Batch 9: Mission Systems (0/4 files) - ⏸️ DEFERRED
+25. ⏸️ `src/lib/mission-engine.ts` - Needs interface updates to match DB schema (Mission type mismatch)
+26. ⏸️ `src/lib/multi-mission-engine.ts` - Needs `mission_coordination_plans` table
+27. ⏸️ `src/lib/sgso-report.ts` - Logger improved (1 console.error replaced), needs SGSO tables (`safety_incidents`, `non_conformities`, `risk_assessments`, `sgso_practices`)
+28. ⏸️ `src/lib/sgso/submit.ts` - Needs `sgso_audits`, `sgso_audit_items` tables
+
 ---
 
 ## ⏸️ Deferred Files (Database Schema Missing)
 
 The following files require database tables that don't exist in the current schema:
 
-### Core Services (18 files deferred)
+### Core Services (22 files deferred)
 21. ⏸️ `src/api/v1/index.ts` - Requires schema validation for missions/inspections
 22. ⏸️ `src/assistants/neuralCopilot.ts` - Requires `copilot_sessions` table
 23. ⏸️ `src/core/clones/cognitiveClone.ts` - Requires `clone_registry`, `clone_snapshots`, `clone_context_storage` tables
@@ -78,6 +84,10 @@ The following files require database tables that don't exist in the current sche
 33. ⏸️ `src/lib/validators/cross-module-validator.ts` - Logger improved, needs integrity tables
 34. ⏸️ `src/lib/compliance/ai-compliance-engine.ts` - Logger improved, needs `compliance_audit_logs` table + ONNX types
 35. ⏸️ `src/lib/incidents/ai-incident-response.ts` - Logger added, needs `incident_reports` table
+36. ⏸️ `src/lib/mission-engine.ts` - Needs interface updates to match DB schema (Mission type mismatch)
+37. ⏸️ `src/lib/multi-mission-engine.ts` - Needs `mission_coordination_plans` table
+38. ⏸️ `src/lib/sgso-report.ts` - Logger improved, needs SGSO tables
+39. ⏸️ `src/lib/sgso/submit.ts` - Needs `sgso_audits`, `sgso_audit_items` tables
 
 **Action Required:** These files need database migrations before TypeScript fixes can be applied. Logger improvements applied where possible.
 
@@ -124,7 +134,7 @@ To complete PATCH 659, the following tables need to be created:
 **Type Safety Improvements:**
 - 11 critical files now fully typed (1 core + 4 AI + 4 interop + 2 offline)
 - 15 @ts-nocheck directives removed from main codebase
-- 58 console statements replaced with proper logging (1 added in Batch 8)
+- 59 console statements replaced with proper logging
 - Navigator/Browser APIs properly typed
 - AI core logging centralized
 - Interop layer fully logged with error context
@@ -135,9 +145,9 @@ To complete PATCH 659, the following tables need to be created:
 - ✅ All tests passing
 
 **Known Issues:**
-- 18 files deferred due to missing database schema
-- These require database migrations before TypeScript fixes can be applied
-- Logging improvements applied to files where console.* usage found
+- 22 files deferred due to missing database schema or interface mismatches
+- These require database migrations or schema updates before TypeScript fixes can be applied
+- Logging improvements applied to all deferred files where console.* usage found
 
 ---
 
@@ -147,12 +157,12 @@ To complete PATCH 659, the following tables need to be created:
 1. Create database migrations for missing tables
 2. Continue with remaining files that don't require DB changes
 
-### Batch 9 Target (Next 4 files):
-25. `src/lib/mission-engine.ts`
-26. `src/lib/multi-mission-engine.ts`
-27. `src/lib/sgso-report.ts`
-28. `src/lib/sgso/submit.ts`
+### Batch 10 Target (Next 4 files):
+29. `src/lib/distributed-ai-engine.ts`
+30. `src/lib/intervessel-sync.ts`
+31. `src/lib/crew/training-adapter.ts`
+32. `src/lib/crew/adaptive-drills.ts`
 
 ---
 
-**Status:** Build passing ✅ | 15 files cleaned | 18 awaiting DB migrations | Logging improved in 2 additional files (Batch 8)
+**Status:** Build passing ✅ | 15 files cleaned | 22 awaiting DB migrations | Batch 9 complete (all deferred)
