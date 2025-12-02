@@ -1,12 +1,14 @@
 // @ts-nocheck
 /**
  * PATCH 232: Auto Priority Balancer
+ * TODO PATCH 659: TypeScript fixes deferred (priority_shifts table schema missing)
  * 
  * Dynamically adjusts priorities between modules and tasks based on global context.
  * Reads system state, applies intelligent rebalancing algorithms, and logs all changes.
  */
 
 import { supabase } from "@/integrations/supabase/client";
+import { logger } from "@/lib/logger";
 
 export interface Priority {
   moduleId: string;
