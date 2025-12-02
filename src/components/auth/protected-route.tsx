@@ -1,7 +1,7 @@
 import React from "react";
-import { Navigate } from "react-router-dom";
+import { Navigate, useLocation } from "react-router-dom";
 import { useAuth } from "@/contexts/AuthContext";
-import { LoadingSpinner } from "@/components/ui/loading-spinner";
+import { OffshoreLoader } from "@/components/LoadingStates";
 
 interface ProtectedRouteProps {
   children: React.ReactNode;
@@ -11,26 +11,17 @@ export const ProtectedRoute: React.FC<ProtectedRouteProps> = ({
   children
 }) => {
   const { user, isLoading } = useAuth();
+  const location = useLocation();
 
   // Show loading while checking authentication
   if (isLoading) {
-    return (
-      <div className="min-h-screen flex items-center justify-center">
-        <div className="text-center space-y-4">
-          <LoadingSpinner size="lg" />
-          <p className="text-muted-foreground">Verificando autenticação...</p>
-        </div>
-      </div>
-    );
+    return <OffshoreLoader />;
   }
 
   // Redirect to auth if not authenticated
   if (!user) {
-    return <Navigate to="/auth" replace />;
+    return <Navigate to="/auth" state={{ from: location }} replace />;
   }
-
-  // TODO: Add permission checking logic here if needed
-  // For now, just check if user is authenticated
 
   return <>{children}</>;
 };
