@@ -3,6 +3,8 @@
  * Main export for UAV control and coordination
  */
 
+import DroneCommanderPage from "./page";
+
 export { droneCommander } from "./droneCommander";
 export { missionUploader } from "./missionUploader";
 export { DroneTelemetryStream } from "./droneTelemetryStream";
@@ -23,3 +25,6 @@ export type {
   MissionUploadResult,
   MissionValidationResult
 } from "./missionUploader";
+
+export { DroneCommanderPage };
+export default DroneCommanderPage;
