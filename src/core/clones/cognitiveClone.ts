@@ -1,6 +1,7 @@
 // @ts-nocheck
 /**
  * PATCH 221.0 - Cognitive Clone Core
+ * TODO PATCH 659: TypeScript fixes deferred (clone_registry table schema missing from database)
  * System for creating functional copies of Nautilus with replicated AI + limited context
  * Enables creating cloneable cognitive instances (with memory and local replicated AI)
  */

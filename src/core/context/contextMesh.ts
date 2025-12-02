@@ -1,6 +1,7 @@
 // @ts-nocheck
 /**
  * PATCH 216 - Context Mesh Core
+ * TODO PATCH 659: TypeScript fixes deferred (context_history table schema missing from database)
  * Distributed context mesh for sharing state, decisions, and learning between modules
  */
 
