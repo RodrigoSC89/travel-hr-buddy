@@ -1,6 +1,7 @@
 // @ts-nocheck
 /**
  * PATCH 649 - REST API Gateway for External Integrations
+ * TODO PATCH 659: TypeScript fixes pending (complex type issues)
  * Base API v1 structure for modules, missions, inspections, and crew
  */
 
@@ -69,7 +70,7 @@ export class NautilusAPI {
   /**
    * Fetch and parse modules registry
    */
-  private async fetchModulesRegistry(): Promise<any> {
+  private async fetchModulesRegistry(): Promise<{modules: any[]}> {
     const response = await fetch("/modules-registry.json");
     if (!response.ok) {
       throw new Error(`Failed to load modules registry: ${response.status}`);
@@ -141,7 +142,7 @@ export class NautilusAPI {
    * GET /api/v1/missions
    * Get all missions
    */
-  async getMissions(): Promise<APIResponse<any[]>> {
+  async getMissions(): Promise<APIResponse<MissionRow[]>> {
     if (!this.checkRateLimit()) {
       return this.createResponse(false, undefined, "Rate limit exceeded");
     }
@@ -165,7 +166,7 @@ export class NautilusAPI {
    * POST /api/v1/missions
    * Create new mission
    */
-  async createMission(missionData: any): Promise<APIResponse<any>> {
+  async createMission(missionData: Partial<MissionRow>): Promise<APIResponse<MissionRow>> {
     if (!this.checkRateLimit()) {
       return this.createResponse(false, undefined, "Rate limit exceeded");
     }
@@ -189,7 +190,7 @@ export class NautilusAPI {
    * GET /api/v1/crew
    * Get crew members
    */
-  async getCrew(): Promise<APIResponse<any[]>> {
+  async getCrew(): Promise<APIResponse<CrewMemberRow[]>> {
     if (!this.checkRateLimit()) {
       return this.createResponse(false, undefined, "Rate limit exceeded");
     }

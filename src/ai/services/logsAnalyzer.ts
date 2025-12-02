@@ -1,6 +1,6 @@
-// @ts-nocheck
 /**
  * PATCH 135.0 - AI Self-Healing + Logs Analyzer
+ * PATCH 659 - TypeScript fixes applied
  * Monitors system logs, detects anomalies, and suggests automated fixes
  * 
  * Features:
@@ -14,6 +14,10 @@
 import { runOpenAI } from "@/ai/engine";
 import { supabase } from "@/integrations/supabase/client";
 import { logsEngine } from "@/lib/monitoring/LogsEngine";
+import { logger } from "@/lib/logger";
+import type { Database } from "@/integrations/supabase/types";
+
+type SystemLogRow = Database['public']['Tables']['system_logs']['Row'];
 
 export interface LogAnalysisResult {
   anomalies: Anomaly[];
@@ -72,7 +76,7 @@ export const analyzeSystemLogs = async (
       .limit(1000);
     
     if (error) {
-      console.error("Error fetching system logs from database:", error);
+      logger.error("Error fetching system logs from database", error);
       // Fallback to in-memory logs
       const logs = logsEngine.getRecentLogs(500);
       return analyzeLogsData(logs);
@@ -84,15 +88,15 @@ export const analyzeSystemLogs = async (
     
     return await analyzeLogsData(allLogs);
   } catch (error) {
-    console.error("Error analyzing system logs:", error);
+    logger.error("Error analyzing system logs", error);
     throw error;
   }
 };
 
 /**
- * PATCH 586: Extract log analysis logic for reusability
+ * Extract log analysis logic for reusability
  */
-const analyzeLogsData = async (allLogs: any[]): Promise<LogAnalysisResult> => {
+const analyzeLogsData = async (allLogs: (SystemLogRow | any)[]): Promise<LogAnalysisResult> => {
   if (allLogs.length === 0) {
     return {
       anomalies: [],
@@ -122,7 +126,7 @@ const analyzeLogsData = async (allLogs: any[]): Promise<LogAnalysisResult> => {
 /**
  * Detect anomalies in logs
  */
-const detectAnomalies = (logs: any[]): Anomaly[] => {
+const detectAnomalies = (logs: (SystemLogRow | any)[]): Anomaly[] => {
   const anomalies: Anomaly[] = [];
   
   // Group logs by type and message pattern
@@ -188,7 +192,7 @@ const detectAnomalies = (logs: any[]): Anomaly[] => {
  */
 const generateRecommendations = async (
   anomalies: Anomaly[],
-  logs: any[]
+  logs: (SystemLogRow | any)[]
 ): Promise<Recommendation[]> => {
   if (anomalies.length === 0) {
     return [];
@@ -253,7 +257,7 @@ Regras:
 
     return parseRecommendationsResponse(response.content, anomalies);
   } catch (error) {
-    console.error("Error generating recommendations:", error);
+    logger.error("Error generating recommendations", error);
     // Return fallback recommendations
     return generateFallbackRecommendations(anomalies);
   }
@@ -288,7 +292,7 @@ const parseRecommendationsResponse = (
         : "medium"
     }));
   } catch (error) {
-    console.error("Error parsing recommendations:", error);
+    logger.error("Error parsing recommendations", error);
     return [];
   }
 };
@@ -335,7 +339,7 @@ Confiança: ${(recommendation.confidence * 100).toFixed(0)}%`;
 };
 
 /**
- * PATCH 586: Store auto-fix in history (autofix_history table exists)
+ * Store auto-fix in history (adapted to use existing table structure)
  */
 export const storeAutoFixHistory = async (
   result: AutoFixResult
@@ -344,28 +348,33 @@ export const storeAutoFixHistory = async (
     const { error } = await supabase
       .from("autofix_history")
       .insert({
-        anomaly_id: result.anomalyId,
-        applied_fix: result.appliedFix,
-        result: result.result,
-        success: result.success,
-        executed_at: result.timestamp
+        file_path: "system", // Generic since we don't have specific file
+        issue_type: "anomaly",
+        fix_applied: result.appliedFix,
+        status: result.success ? "success" : "failed",
+        details: {
+          anomaly_id: result.anomalyId,
+          result: result.result,
+          timestamp: result.timestamp
+        },
+        applied_at: result.timestamp
       });
     
     if (error) {
-      console.error("Error storing autofix history:", error);
+      logger.error("Error storing autofix history", error);
       return false;
     }
     
     return true;
   } catch (error) {
-    console.error("Error storing autofix history:", error);
+    logger.error("Error storing autofix history", error);
     return false;
   }
 };
 
 // Helper functions
 
-const groupByPattern = (logs: any[]): Map<string, any[]> => {
+const groupByPattern = (logs: (SystemLogRow | any)[]): Map<string, any[]> => {
   const patterns = new Map<string, any[]>();
   
   logs.forEach(log => {
@@ -382,7 +391,7 @@ const groupByPattern = (logs: any[]): Map<string, any[]> => {
   return patterns;
 };
 
-const groupByModule = (logs: any[]): Map<string, any[]> => {
+const groupByModule = (logs: (SystemLogRow | any)[]): Map<string, any[]> => {
   const modules = new Map<string, any[]>();
   
   logs.forEach(log => {
