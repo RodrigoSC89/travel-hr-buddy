@@ -16,6 +16,7 @@ import {
   RefreshCw,
   Download
 } from "lucide-react";
+import { useOptimizedPolling } from "@/hooks/use-optimized-polling";
 
 interface MetricData {
   name: string;
@@ -109,18 +110,18 @@ export const IntegrationMonitoring: React.FC = () => {
   });
 
   // Simular dados em tempo real
-  useEffect(() => {
-    const interval = setInterval(() => {
+  useOptimizedPolling({
+    id: "integration-monitoring-realtime",
+    callback: () => {
       setRealTimeData(prev => ({
         activeConnections: Math.max(15, prev.activeConnections + Math.floor(Math.random() * 6 - 3)),
         requestsPerMinute: Math.max(100, prev.requestsPerMinute + Math.floor(Math.random() * 20 - 10)),
         averageLatency: Math.max(150, prev.averageLatency + Math.floor(Math.random() * 50 - 25)),
         errorCount: Math.max(0, prev.errorCount + Math.floor(Math.random() * 3 - 1))
       }));
-    }, 3000);
-
-    return () => clearInterval(interval);
-  }, []);
+    },
+    interval: 3000,
+  });
 
   const getStatusColor = (status: MetricData["status"]) => {
     switch (status) {
