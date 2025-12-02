@@ -18,6 +18,7 @@ import {
 } from "lucide-react";
 import { useAPIHealth } from "@/hooks/use-api-health";
 import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert";
+import { useOptimizedPolling } from "@/hooks/use-optimized-polling";
 
 interface SystemMetrics {
   uptime: string;
@@ -36,10 +37,12 @@ export const HealthStatusDashboard: React.FC = () => {
   });
   const [lastUpdate, setLastUpdate] = useState<Date>(new Date());
 
-  useEffect(() => {
-    // Calculate uptime since page load
-    const startTime = Date.now();
-    const interval = setInterval(() => {
+  // Calculate uptime since page load
+  const startTime = Date.now();
+
+  useOptimizedPolling({
+    id: "health-status-uptime",
+    callback: () => {
       const uptime = Date.now() - startTime;
       const days = Math.floor(uptime / (1000 * 60 * 60 * 24));
       const hours = Math.floor((uptime % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
@@ -49,10 +52,9 @@ export const HealthStatusDashboard: React.FC = () => {
         ...prev,
         uptime: `${days}d ${hours}h ${minutes}m`
       }));
-    }, 60000); // Update every minute
-
-    return () => clearInterval(interval);
-  }, []);
+    },
+    interval: 60000, // Update every minute
+  });
 
   useEffect(() => {
     // Calculate metrics from health status

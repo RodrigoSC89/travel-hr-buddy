@@ -49,6 +49,7 @@ import {
   MessageSquare
 } from "lucide-react";
 import { toast } from "@/hooks/use-toast";
+import { useOptimizedPolling } from "@/hooks/use-optimized-polling";
 
 interface WorkflowStepConfig {
   [key: string]: string | number | boolean | string[] | number[] | boolean[] | undefined;
@@ -210,8 +211,9 @@ const SmartWorkflowAutomation = () => {
   ];
 
   // Real-time updates simulation
-  useEffect(() => {
-    const interval = setInterval(() => {
+  useOptimizedPolling({
+    id: "workflow-execution-updates",
+    callback: () => {
       // Update running executions
       setExecutions(prev => prev.map(exec => {
         if (exec.status === "running") {
@@ -227,10 +229,9 @@ const SmartWorkflowAutomation = () => {
         }
         return exec;
       }));
-    }, 10000);
-
-    return () => clearInterval(interval);
-  }, []);
+    },
+    interval: 10000,
+  });
 
   const getStatusIcon = (status: string) => {
     switch (status) {
