@@ -4,6 +4,7 @@
  */
 
 import { supabase } from "@/integrations/supabase/client";
+import { logger } from "@/lib/logger";
 import type { DroneStatus, DroneFlight, DroneTask, DroneCommand } from "../types";
 
 export class DroneCommanderService {
@@ -20,7 +21,7 @@ export class DroneCommanderService {
       if (error) throw error;
       return (data || []).map(this.mapToDrone);
     } catch (error) {
-      console.error("Error fetching drones:", error);
+      logger.error("Error fetching drones:", error);
       return [];
     }
   }
@@ -36,7 +37,7 @@ export class DroneCommanderService {
       if (error) throw error;
       return data ? this.mapToDrone(data) : null;
     } catch (error) {
-      console.error("Error fetching drone:", error);
+      logger.error("Error fetching drone:", error);
       return null;
     }
   }
@@ -63,7 +64,7 @@ export class DroneCommanderService {
 
       if (error) throw error;
     } catch (error) {
-      console.error("Error updating drone status:", error);
+      logger.error("Error updating drone status:", error);
       throw error;
     }
   }
@@ -95,7 +96,7 @@ export class DroneCommanderService {
       if (error) throw error;
       return this.mapToFlight(data);
     } catch (error) {
-      console.error("Error creating flight:", error);
+      logger.error("Error creating flight:", error);
       throw error;
     }
   }
@@ -115,7 +116,7 @@ export class DroneCommanderService {
 
       return (data || []).map(this.mapToFlight);
     } catch (error) {
-      console.error("Error fetching flights:", error);
+      logger.error("Error fetching flights:", error);
       return [];
     }
   }
@@ -135,7 +136,7 @@ export class DroneCommanderService {
 
       if (error) throw error;
     } catch (error) {
-      console.error("Error updating flight:", error);
+      logger.error("Error updating flight:", error);
       throw error;
     }
   }
@@ -163,7 +164,7 @@ export class DroneCommanderService {
       if (error) throw error;
       return this.mapToTask(data);
     } catch (error) {
-      console.error("Error creating task:", error);
+      logger.error("Error creating task:", error);
       throw error;
     }
   }
@@ -183,7 +184,7 @@ export class DroneCommanderService {
 
       return (data || []).map(this.mapToTask);
     } catch (error) {
-      console.error("Error fetching tasks:", error);
+      logger.error("Error fetching tasks:", error);
       return [];
     }
   }
@@ -214,7 +215,7 @@ export class DroneCommanderService {
           .eq("id", data.id);
       }, 2000);
     } catch (error) {
-      console.error("Error sending command:", error);
+      logger.error("Error sending command:", error);
       throw error;
     }
   }
@@ -299,7 +300,7 @@ export class DroneCommanderService {
 
       if (error) throw error;
     } catch (error) {
-      console.error("Error logging fleet event:", error);
+      logger.error("Error logging fleet event:", error);
       throw error;
     }
   }
@@ -324,7 +325,7 @@ export class DroneCommanderService {
 
       return data || [];
     } catch (error) {
-      console.error("Error fetching fleet logs:", error);
+      logger.error("Error fetching fleet logs:", error);
       return [];
     }
   }

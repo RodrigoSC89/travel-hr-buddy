@@ -11,7 +11,7 @@
 | Metric | Before | Current | Target | Progress |
 |--------|--------|---------|--------|----------|
 | **@ts-nocheck files** | 385 | 385 | 193 | 0% |
-| **console.* statements** | 1337 | 1284 | 200 | 4.0% |
+| **console.* statements** | 1337 | 1269 | 200 | 5.1% |
 | **Build Status** | ✅ | ✅ | ✅ | 100% |
 
 ---
@@ -62,13 +62,31 @@
 27. ⏸️ `src/lib/sgso-report.ts` - Logger improved (1 console.error replaced), needs SGSO tables (`safety_incidents`, `non_conformities`, `risk_assessments`, `sgso_practices`)
 28. ⏸️ `src/lib/sgso/submit.ts` - Needs `sgso_audits`, `sgso_audit_items` tables
 
+### Batch 10: Distributed AI & Intervessel (0/4 files) - ⏸️ DEFERRED
+29. ⏸️ `src/lib/distributed-ai-engine.ts` - Needs `vessel_ai_contexts`, `ai_decisions` tables
+30. ⏸️ `src/lib/intervessel-sync.ts` - Needs `vessel_alerts`, `vessel_alert_notifications`, `vessel_trust_relationships`, `replicated_logs` tables
+31. ⏸️ `src/lib/crew/training-adapter.ts` - File does not exist
+32. ⏸️ `src/lib/crew/adaptive-drills.ts` - File does not exist
+
+### Batch 11: Health & Telemetry Systems (0/4 files) - ⏸️ DEFERRED
+33. ⏸️ `src/lib/health-check.ts` - Needs `system_health` table
+34. ⏸️ `src/lib/telemetry.ts` - Needs `telemetry_events` table
+35. ⏸️ `src/lib/satelliteSyncEngine.ts` - Needs `weather_feed`, `satellite_data` tables
+36. ⏸️ `src/core/mirrors/instanceController.ts` - Needs `mirror_instances`, `clone_sync_log` tables (already noted in file)
+
+### Batch 12: Module Services (0/4 files) - ⏸️ DEFERRED
+37. ⏸️ `src/modules/coordination-ai/services/coordination-ai-service.ts` - Logger improved (9 console statements replaced), needs `coordination_rules`, `ai_coordination_decisions`, `ai_coordination_logs`, `module_status` tables
+38. ⏸️ `src/modules/health-monitor/hooks/useHealthCheck.ts` - Logger improved (1 console.error replaced)
+39. ⏸️ `src/modules/health-monitor/services/health-service.ts` - Logger improved (1 console.error replaced), needs `system_health_logs` table
+40. ⏸️ `src/modules/drone-commander/services/drone-service.ts` - Logger improved (8 console.error replaced), needs `drones`, `drone_flights`, `drone_tasks`, `drone_commands`, `drone_fleet_logs` tables
+
 ---
 
 ## ⏸️ Deferred Files (Database Schema Missing)
 
 The following files require database tables that don't exist in the current schema:
 
-### Core Services (22 files deferred)
+### Core Services (34 files deferred)
 21. ⏸️ `src/api/v1/index.ts` - Requires schema validation for missions/inspections
 22. ⏸️ `src/assistants/neuralCopilot.ts` - Requires `copilot_sessions` table
 23. ⏸️ `src/core/clones/cognitiveClone.ts` - Requires `clone_registry`, `clone_snapshots`, `clone_context_storage` tables
@@ -88,6 +106,18 @@ The following files require database tables that don't exist in the current sche
 37. ⏸️ `src/lib/multi-mission-engine.ts` - Needs `mission_coordination_plans` table
 38. ⏸️ `src/lib/sgso-report.ts` - Logger improved, needs SGSO tables
 39. ⏸️ `src/lib/sgso/submit.ts` - Needs `sgso_audits`, `sgso_audit_items` tables
+40. ⏸️ `src/lib/distributed-ai-engine.ts` - Needs `vessel_ai_contexts`, `ai_decisions` tables
+41. ⏸️ `src/lib/intervessel-sync.ts` - Needs `vessel_alerts`, `vessel_alert_notifications`, `vessel_trust_relationships`, `replicated_logs` tables
+42. ⏸️ `src/lib/crew/training-adapter.ts` - File does not exist
+43. ⏸️ `src/lib/crew/adaptive-drills.ts` - File does not exist
+44. ⏸️ `src/lib/health-check.ts` - Needs `system_health` table
+45. ⏸️ `src/lib/telemetry.ts` - Needs `telemetry_events` table
+46. ⏸️ `src/lib/satelliteSyncEngine.ts` - Needs `weather_feed`, `satellite_data` tables
+47. ⏸️ `src/core/mirrors/instanceController.ts` - Needs `mirror_instances`, `clone_sync_log` tables
+48. ⏸️ `src/modules/coordination-ai/services/coordination-ai-service.ts` - Logger improved (9 console replaced), needs coordination tables
+49. ⏸️ `src/modules/health-monitor/hooks/useHealthCheck.ts` - Logger improved (1 console.error replaced)
+50. ⏸️ `src/modules/health-monitor/services/health-service.ts` - Logger improved (1 console.error replaced), needs `system_health_logs` table
+51. ⏸️ `src/modules/drone-commander/services/drone-service.ts` - Logger improved (8 console.error replaced), needs drone tables
 
 **Action Required:** These files need database migrations before TypeScript fixes can be applied. Logger improvements applied where possible.
 
@@ -134,10 +164,11 @@ To complete PATCH 659, the following tables need to be created:
 **Type Safety Improvements:**
 - 11 critical files now fully typed (1 core + 4 AI + 4 interop + 2 offline)
 - 15 @ts-nocheck directives removed from main codebase
-- 59 console statements replaced with proper logging
+- 74 console statements replaced with proper logging (15 added in Batch 12)
 - Navigator/Browser APIs properly typed
 - AI core logging centralized
 - Interop layer fully logged with error context
+- Module services logging improved across coordination-ai, health-monitor, and drone-commander
 
 **Build Health:**
 - ✅ Zero build errors
@@ -145,7 +176,7 @@ To complete PATCH 659, the following tables need to be created:
 - ✅ All tests passing
 
 **Known Issues:**
-- 22 files deferred due to missing database schema or interface mismatches
+- 34 files deferred due to missing database schema, interface mismatches, or non-existent files
 - These require database migrations or schema updates before TypeScript fixes can be applied
 - Logging improvements applied to all deferred files where console.* usage found
 
@@ -157,12 +188,9 @@ To complete PATCH 659, the following tables need to be created:
 1. Create database migrations for missing tables
 2. Continue with remaining files that don't require DB changes
 
-### Batch 10 Target (Next 4 files):
-29. `src/lib/distributed-ai-engine.ts`
-30. `src/lib/intervessel-sync.ts`
-31. `src/lib/crew/training-adapter.ts`
-32. `src/lib/crew/adaptive-drills.ts`
+### Batch 13 Target (Next - finding files without DB dependencies):
+Looking for additional files that can be fixed without database schema dependencies...
 
 ---
 
-**Status:** Build passing ✅ | 15 files cleaned | 22 awaiting DB migrations | Batch 9 complete (all deferred)
+**Status:** Build passing ✅ | 15 files cleaned | 34 awaiting DB migrations | Batch 12 complete (all deferred, 15 console replaced)
