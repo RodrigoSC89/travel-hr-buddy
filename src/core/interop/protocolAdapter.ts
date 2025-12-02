@@ -1,6 +1,7 @@
 // @ts-nocheck
 /**
  * PATCH 226 - Protocol Adapter
+ * TODO PATCH 659: TypeScript fixes deferred (interop_log table schema missing)
  * Interoperability adapter for input/output with external systems via multiple protocols
  * Supports: JSON-RPC 2.0, GraphQL, AIS/GMDSS (simulated), NATO STANAG (simulated)
  */

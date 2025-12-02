@@ -1,5 +1,6 @@
 /**
  * PATCH 571 - AI Translator Core
+ * TODO PATCH 659: TypeScript fixes deferred (translation_cache table schema missing)
  * Sistema de tradução multilíngue em tempo real com fallback para IA
  * Suporte: pt, en, es, fr, de
  */
