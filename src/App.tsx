@@ -29,6 +29,10 @@ const Settings = React.lazy(() => import("@/pages/Settings"));
 const HealthCheck = React.lazy(() => import("@/pages/HealthCheck"));
 const NotFound = React.lazy(() => import("@/pages/NotFound"));
 const Unauthorized = React.lazy(() => import("@/pages/Unauthorized"));
+const Auth = React.lazy(() => import("@/pages/Auth"));
+
+// Protected Route wrapper
+import { ProtectedRoute } from "@/components/auth/protected-route";
 
 // Initialize monitoring & services with optimized query client
 const queryClient = createOptimizedQueryClient();
@@ -65,8 +69,19 @@ function App() {
                 <ErrorDebugBanner />
                 
                 <Routes>
-                  {/* Core Routes */}
-                  <Route path="/" element={<SmartLayout />}>
+                  {/* Auth Route - Public */}
+                  <Route path="/auth" element={
+                    <Suspense fallback={<OffshoreLoader />}>
+                      <Auth />
+                    </Suspense>
+                  } />
+                  
+                  {/* Protected Routes */}
+                  <Route path="/" element={
+                    <ProtectedRoute>
+                      <SmartLayout />
+                    </ProtectedRoute>
+                  }>
                     <Route index element={<Index />} />
                     <Route path="dashboard" element={
                       <Suspense fallback={<OffshoreLoader />}>
