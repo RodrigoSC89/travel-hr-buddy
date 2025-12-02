@@ -24,6 +24,7 @@ import { useToast } from "@/hooks/use-toast";
 import { formatDistanceToNow } from "date-fns";
 import { ptBR } from "date-fns/locale";
 import { useSessionManager, type SessionToken } from "@/hooks/use-session-manager";
+import { logger } from "@/lib/logger";
 
 export const SessionManagement: React.FC = () => {
   const {
@@ -57,7 +58,7 @@ export const SessionManagement: React.FC = () => {
         description: "A sessão foi revogada com sucesso.",
       });
     } catch (error) {
-      console.error("Error revoking session:", error);
+      logger.error("[SessionManagement] Error revoking session:", error as Error);
       toast({
         title: "Erro",
         description: "Não foi possível revogar a sessão.",
@@ -77,7 +78,7 @@ export const SessionManagement: React.FC = () => {
         description: "Todas as outras sessões foram encerradas com sucesso.",
       });
     } catch (error) {
-      console.error("Error revoking other sessions:", error);
+      logger.error("[SessionManagement] Error revoking other sessions:", error as Error);
       toast({
         title: "Erro",
         description: "Não foi possível revogar as outras sessões.",

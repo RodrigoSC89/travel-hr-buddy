@@ -3,6 +3,7 @@
 import { useEffect, useState } from "react";
 import { Card, CardContent } from "@/components/ui/card";
 import { BarChart, Bar, XAxis, YAxis, Tooltip, ResponsiveContainer, Legend } from "recharts";
+import { logger } from "@/lib/logger";
 
 interface ComplianceByVesselData {
   vessel: string;
@@ -31,7 +32,7 @@ export function ComplianceByVesselChart() {
         const responseData = await response.json();
         setData(responseData);
       } catch (err) {
-        console.error("Error fetching compliance by vessel data:", err);
+        logger.error("[ComplianceByVesselChart] Error fetching data:", err as Error);
         setError("Erro ao carregar dados de conformidade por navio");
         // Set sample data on error
         setData([
