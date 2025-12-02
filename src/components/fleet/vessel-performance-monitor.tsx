@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from "react";
+import { useOptimizedPolling } from "@/hooks/use-optimized-polling";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
@@ -108,9 +109,14 @@ const VesselPerformanceMonitor = () => {
   // PATCH 549: useEffect after function declaration
   useEffect(() => {
     loadPerformanceData();
-    const interval = setInterval(loadPerformanceData, 60000); // Update every minute
-    return () => clearInterval(interval);
   }, []);
+
+  // Periodic performance updates with optimized polling
+  useOptimizedPolling({
+    id: "vessel-performance-monitor-updates",
+    callback: loadPerformanceData,
+    interval: 60000,
+  });
 
   const generateMockHistory = (): PerformancePoint[] => {
     const points: PerformancePoint[] = [];
