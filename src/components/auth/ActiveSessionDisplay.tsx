@@ -25,6 +25,7 @@ import {
 } from "@/services/enhanced-auth-service";
 import { useToast } from "@/hooks/use-toast";
 import { useNavigate } from "react-router-dom";
+import { logger } from "@/lib/logger";
 
 interface SessionMetadata {
   userId: string;
@@ -63,7 +64,7 @@ export function ActiveSessionDisplay() {
       const metadata = await getSessionMetadata();
       setSession(metadata);
     } catch (error) {
-      console.error("Error loading session:", error);
+      logger.error("Error loading session:", error);
       toast({
         title: "Error",
         description: "Failed to load session information",
@@ -90,7 +91,7 @@ export function ActiveSessionDisplay() {
 
       navigate("/auth/login");
     } catch (error) {
-      console.error("Logout error:", error);
+      logger.error("Logout error:", error);
       toast({
         title: "Error",
         description: error instanceof Error ? error.message : "Failed to logout",
