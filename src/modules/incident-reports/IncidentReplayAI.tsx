@@ -19,7 +19,7 @@ import {
 import {
   incidentReplayService,
   type IncidentData,
-} from "../services/incidentReplayService";
+} from "./services/incidentReplayService";
 import { IncidentReplay } from "./components/IncidentReplay";
 import { toast } from "sonner";
 
