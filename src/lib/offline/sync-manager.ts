@@ -1,4 +1,3 @@
-// @ts-nocheck
 /**
  * PATCH 587 - Enhanced Offline Sync Manager
  * Provides robust offline sync with queue management and retry logic
@@ -141,16 +140,16 @@ class OfflineSyncManager {
 
       switch (item.operation) {
       case "insert":
-        result = await supabase.from(item.table).insert(item.data);
+        result = await (supabase as any).from(item.table).insert(item.data);
         break;
       case "update":
-        result = await supabase
+        result = await (supabase as any)
           .from(item.table)
           .update(item.data)
           .eq("id", item.data.id);
         break;
       case "delete":
-        result = await supabase
+        result = await (supabase as any)
           .from(item.table)
           .delete()
           .eq("id", item.data.id);
