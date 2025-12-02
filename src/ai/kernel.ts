@@ -11,6 +11,7 @@
  */
 
 import { supabase } from "@/integrations/supabase/client";
+import { logger } from "@/lib/logger";
 
 export interface AIContextRequest {
   module: string;
@@ -807,8 +808,8 @@ async function logAIContext(request: AIContextRequest, response: AIContextRespon
     // Keep only last 100 logs
     if (logs.length > 100) logs.shift();
     localStorage.setItem("ai_context_logs", JSON.stringify(logs));
-  } catch (error) {
-    console.warn("Failed to log AI context:", error);
+    } catch (error) {
+    logger.warn("Failed to log AI context", { error });
   }
 }
 
@@ -832,7 +833,7 @@ export async function runAIContext(request: AIContextRequest): Promise<AIContext
     
     return response;
   } catch (error) {
-    console.error("AI Context error:", error);
+    logger.error("AI Context error", { error });
     
     // Return fallback response
     return {

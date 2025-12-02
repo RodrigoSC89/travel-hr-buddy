@@ -91,9 +91,9 @@ class SystemWatchdog {
       });
     });
 
-    // Interceptar console.error
+    // Interceptar logger.error para captura (mantém console.error para watchdog)
     const originalError = console.error;
-    console.error = (...args) => {
+    console.error = (...args: any[]) => {
       this.handleError({
         type: "runtime",
         message: args.join(" "),
