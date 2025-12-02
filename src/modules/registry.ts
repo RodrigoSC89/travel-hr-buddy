@@ -52,11 +52,11 @@ export const MODULE_REGISTRY: Record<string, ModuleDefinition> = {
     id: "core.dashboard",
     name: "Dashboard",
     category: "core",
-    path: "modules/ui/dashboard/Dashboard",
-    description: "Main application dashboard",
-    status: "active", // PATCH 96.0 – Verified: Has route in AppRouter
+    path: "pages/Dashboard",
+    description: "Main application dashboard - Route handled directly by App.tsx",
+    status: "active",
     completeness: "100%",
-    route: "/dashboard",
+    // route removed - defined directly in App.tsx to avoid conflict
     icon: "LayoutDashboard",
     lazy: true,
   },
