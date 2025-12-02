@@ -152,7 +152,7 @@ export class AutoPriorityBalancer {
 
       await supabase.from("priority_shifts").insert(records);
     } catch (error) {
-      console.error("Failed to log priority shifts:", error);
+      logger.error("Failed to log priority shifts:", error);
     }
   }
 
@@ -320,7 +320,7 @@ export class AutoPriorityBalancer {
         hasEmergency: data?.some(i => i.severity === "critical") || false,
       };
     } catch (error) {
-      console.error("Failed to fetch incidents:", error);
+      logger.error("Failed to fetch incidents:", error);
       return { count: 0, hasEmergency: false };
     }
   }
@@ -363,7 +363,7 @@ export class AutoPriorityBalancer {
 
       return data?.length || 0;
     } catch (error) {
-      console.error("Failed to count deadlines:", error);
+      logger.error("Failed to count deadlines:", error);
       return 0;
     }
   }
@@ -395,7 +395,7 @@ export class AutoPriorityBalancer {
         timestamp: d.timestamp,
       })) || [];
     } catch (error) {
-      console.error("Failed to fetch priority history:", error);
+      logger.error("Failed to fetch priority history:", error);
       return [];
     }
   }
