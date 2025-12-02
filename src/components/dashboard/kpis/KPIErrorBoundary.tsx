@@ -7,6 +7,7 @@ import React, { Component, ErrorInfo, ReactNode } from "react";
 import { Card, CardContent } from "@/components/ui/card";
 import { AlertTriangle } from "lucide-react";
 import { Button } from "@/components/ui/button";
+import { logger } from "@/lib/logger";
 
 interface Props {
   children: ReactNode;
@@ -29,7 +30,7 @@ export class KPIErrorBoundary extends Component<Props, State> {
   }
 
   componentDidCatch(error: Error, errorInfo: ErrorInfo) {
-    console.error(`Error in ${this.props.kpiName}:`, error, errorInfo);
+    logger.error(`[KPIErrorBoundary] Error in ${this.props.kpiName}:`, error, { componentStack: errorInfo.componentStack });
     
     // Optional: Log to analytics/monitoring service
     // logErrorToService(error, errorInfo);

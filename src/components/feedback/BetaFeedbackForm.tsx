@@ -15,6 +15,7 @@ import { Input } from "@/components/ui/input";
 import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
 import { useToast } from "@/hooks/use-toast";
 import { supabase } from "@/integrations/supabase/client";
+import { logger } from "@/lib/logger";
 
 interface FeedbackData {
   userId: string;
@@ -100,7 +101,7 @@ export function BetaFeedbackForm() {
         bugs: "",
       });
     } catch (error) {
-      console.error("Error submitting feedback:", error);
+      logger.error("[BetaFeedbackForm] Error submitting feedback:", error as Error);
       toast({
         title: "Erro",
         description: "Não foi possível enviar o feedback. Tente novamente.",

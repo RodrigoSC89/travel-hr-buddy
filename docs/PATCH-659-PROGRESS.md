@@ -1,6 +1,6 @@
 # PATCH 659 - TypeScript Critical Fixes Progress
 
-**Status:** 🟡 BATCH 14 COMPLETE  
+**Status:** 🟡 BATCH 15 COMPLETE  
 **Started:** 2025-12-02  
 **Target:** Reduce @ts-nocheck from 385 to 193 files (-50%)
 
@@ -11,12 +11,12 @@
 | Metric | Before | Current | Target | Progress |
 |--------|--------|---------|--------|----------|
 | **@ts-nocheck files** | 385 | 385 | 193 | 0% |
-| **console.* statements** | 1337 | 1249 | 200 | 6.6% |
+| **console.* statements** | 1337 | 1243 | 200 | 7.0% |
 | **Build Status** | ✅ | ✅ | ✅ | 100% |
 
 ---
 
-## ✅ Completed Files (23/20)
+## ✅ Completed Files (27/20)
 
 ### Batch 1 (3 files) - ✅ COMPLETE
 1. ✅ `src/ai/services/checklistAutoFill.ts` - Types fixed, logger added
@@ -91,6 +91,12 @@
 46. ✅ `src/components/ai/PerformanceMonitor.tsx` - Logger added (1 console replacement)
 47. ✅ `src/components/ai/evolution/BehavioralEvolutionDashboard.tsx` - Logger added (1 console replacement)
 48. ✅ `src/components/bi/ExportPDF.tsx` - Logger added (2 console replacements)
+
+### Batch 15: More Components (4/4 files) - ✅ COMPLETE
+49. ✅ `src/components/feedback/BetaFeedbackForm.tsx` - Logger added (1 console replacement), @ts-nocheck kept (DB schema mismatch)
+50. ✅ `src/components/bi/ComplianceByVesselChart.tsx` - Logger added (1 console replacement)
+51. ✅ `src/components/dashboard/kpis/KPIErrorBoundary.tsx` - Logger added (1 console replacement)
+52. ✅ `src/components/auth/SessionManagement.tsx` - Logger added (2 console replacements)
 
 ---
 
