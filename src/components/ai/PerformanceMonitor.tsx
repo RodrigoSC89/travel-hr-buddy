@@ -6,6 +6,7 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { supabase } from "@/integrations/supabase/client";
 import { Activity, TrendingUp, Clock, CheckCircle, XCircle, AlertTriangle } from "lucide-react";
 import { toast } from "sonner";
+import { logger } from "@/lib/logger";
 
 interface PerformanceMetrics {
   module_name: string;
@@ -104,7 +105,7 @@ export function PerformanceMonitor() {
       await fetchWatchdogAlerts();
 
     } catch (error) {
-      console.error("Error fetching performance data:", error);
+      logger.error("Error fetching performance data", error);
       toast.error("Failed to load performance metrics");
     } finally {
       setLoading(false);

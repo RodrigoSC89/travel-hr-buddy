@@ -15,6 +15,7 @@ import {
 } from "lucide-react";
 import { toast } from "sonner";
 import { PerformanceMonitor } from "../PerformanceMonitor";
+import { logger } from "@/lib/logger";
 
 interface BehaviorEvolution {
   timestamp: string;
@@ -98,7 +99,7 @@ export function BehavioralEvolutionDashboard() {
       setRecentEvolutions(evolutions);
 
     } catch (error) {
-      console.error("Error fetching system status:", error);
+      logger.error("Error fetching system status", error);
       toast.error("Failed to load behavioral evolution data");
     } finally {
       setLoading(false);

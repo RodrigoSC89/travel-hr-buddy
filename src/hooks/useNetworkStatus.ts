@@ -5,6 +5,7 @@
 
 import { useState, useEffect } from "react";
 import { syncEngine } from "@/lib/syncEngine";
+import { logger } from "@/lib/logger";
 
 export interface NetworkStatus {
   isOnline: boolean;
@@ -30,7 +31,7 @@ export const useNetworkStatus = () => {
 
     // Handle online event
     const handleOnline = async () => {
-      console.log("Network: Online");
+      logger.info("Network: Online");
       setStatus(prev => ({
         isOnline: true,
         wasOffline: prev.wasOffline || !prev.isOnline,
@@ -43,7 +44,7 @@ export const useNetworkStatus = () => {
 
     // Handle offline event
     const handleOffline = () => {
-      console.log("Network: Offline");
+      logger.info("Network: Offline");
       setStatus(prev => ({
         ...prev,
         isOnline: false,
