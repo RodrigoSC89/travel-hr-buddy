@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from "react";
+import { useOptimizedPolling } from "@/hooks/use-optimized-polling";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
@@ -114,11 +115,10 @@ const RealTimeAnalytics = () => {
     { name: "Rede", value: 32, color: "#ff7300" }
   ]);
 
-  // Simulate real-time updates with proper cleanup
-  useEffect(() => {
-    if (!isLive) return;
-
-    const interval = setInterval(() => {
+  // Simulate real-time updates with optimized polling
+  useOptimizedPolling({
+    id: "real-time-analytics-updates",
+    callback: () => {
       setLastUpdate(new Date());
       
       // Update metrics with random variations
@@ -127,10 +127,10 @@ const RealTimeAnalytics = () => {
         value: generateRandomValue(metric.title),
         change: generateRandomChange()
       })));
-    }, 3000);
-
-    return () => clearInterval(interval);
-  }, [isLive]);
+    },
+    interval: 3000,
+    enabled: isLive,
+  });
 
   const generateRandomValue = (title: string): string => {
     switch (title) {
