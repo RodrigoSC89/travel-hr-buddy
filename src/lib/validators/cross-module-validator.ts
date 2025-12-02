@@ -323,7 +323,7 @@ export async function logIntegrityIssues(validation: CrossModuleValidation) {
             message: issue.message,
           } as any);
       } catch (error) {
-        console.error("Error logging integrity issue:", error);
+        logger.error("Error logging integrity issue:", error);
       }
     }
   }
