@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from "react";
+import { useOptimizedPolling } from "@/hooks/use-optimized-polling";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
@@ -55,14 +56,8 @@ export const RealTimeFleetMonitor = () => {
       }, handleFleetUpdate)
       .subscribe();
 
-    // Set up periodic updates
-    const interval = setInterval(() => {
-      updateVesselPositions();
-    }, 30000); // Update every 30 seconds
-
     return () => {
       supabase.removeChannel(channel);
-      clearInterval(interval);
     };
   }, []);
 
@@ -129,6 +124,13 @@ export const RealTimeFleetMonitor = () => {
       }
     })));
   };
+
+  // Periodic vessel position updates with optimized polling
+  useOptimizedPolling({
+    id: "fleet-monitor-vessel-positions",
+    callback: updateVesselPositions,
+    interval: 30000,
+  });
 
   const updateWeatherForVessel = async (vesselId: string, location: { lat: number; lon: number }) => {
     try {

@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from "react";
+import { useOptimizedPolling } from "@/hooks/use-optimized-polling";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
@@ -70,13 +71,6 @@ const IntelligentAlerts: React.FC = () => {
 
   useEffect(() => {
     loadIntelligentAlerts();
-    
-    // Simulate real-time alert generation
-    const interval = setInterval(() => {
-      generateNewAlert();
-    }, 45000); // Generate new alert every 45 seconds
-
-    return () => clearInterval(interval);
   }, []);
 
   const loadIntelligentAlerts = () => {
@@ -239,6 +233,13 @@ const IntelligentAlerts: React.FC = () => {
       });
     }
   };
+
+  // Real-time alert generation with optimized polling
+  useOptimizedPolling({
+    id: "intelligent-alerts-generation",
+    callback: generateNewAlert,
+    interval: 45000,
+  });
 
   const acknowledgeAlert = (alertId: string) => {
     setAlerts(prev => prev.map(alert => 

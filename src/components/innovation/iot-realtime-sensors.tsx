@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from "react";
+import { useOptimizedPolling } from "@/hooks/use-optimized-polling";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { Progress } from "@/components/ui/progress";
@@ -110,9 +111,10 @@ const IoTRealtimeSensors: React.FC = () => {
     }
   ]);
 
-  // Simular atualizações em tempo real
-  useEffect(() => {
-    const interval = setInterval(() => {
+  // Real-time sensor updates with optimized polling
+  useOptimizedPolling({
+    id: "iot-realtime-sensors-updates",
+    callback: () => {
       setSensors(prevSensors => 
         prevSensors.map(sensor => ({
           ...sensor,
@@ -123,10 +125,9 @@ const IoTRealtimeSensors: React.FC = () => {
             sensor.value > sensor.maxRange ? "critical" : "normal"
         }))
       );
-    }, 3000);
-
-    return () => clearInterval(interval);
-  }, []);
+    },
+    interval: 3000,
+  });
 
   const getStatusColor = (status: string) => {
     switch (status) {
