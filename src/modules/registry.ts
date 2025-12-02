@@ -464,18 +464,7 @@ export const MODULE_REGISTRY: Record<string, ModuleDefinition> = {
     lazy: true,
   },
 
-  "connectivity.communication": {
-    id: "connectivity.communication",
-    name: "Communication",
-    category: "connectivity",
-    path: "modules/connectivity/communication",
-    description: "Communication hub - DEPRECATED: Use connectivity.channel-manager",
-    status: "deprecated",
-    completeness: "partial",
-    route: "/communication",
-    icon: "MessageSquare",
-    lazy: true,
-  },
+  // REMOVED: connectivity.communication - Duplicate of "communication" module (pages/Communication) - PATCH 176.1
 
   "connectivity.integrations-hub": {
     id: "connectivity.integrations-hub",
@@ -659,18 +648,7 @@ export const MODULE_REGISTRY: Record<string, ModuleDefinition> = {
     lazy: true,
   },
 
-  "features.travel": {
-    id: "features.travel",
-    name: "Travel",
-    category: "features",
-    path: "modules/features/travel",
-    description: "Travel management",
-    status: "incomplete", // PATCH 96.0 – File not found at specified path
-    completeness: "broken",
-    route: "/travel",
-    icon: "Plane",
-    lazy: true,
-  },
+  // REMOVED: features.travel - Duplicate of "travel" module (pages/Travel) - PATCH 176.1
 
   "features.vault-ai": {
     id: "features.vault-ai",
