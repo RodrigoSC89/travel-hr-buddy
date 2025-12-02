@@ -1,4 +1,4 @@
-import React, { useEffect, Suspense } from "react";
+import React, { useEffect, Suspense, useMemo } from "react";
 import { BrowserRouter as Router, HashRouter, Routes, Route } from "react-router-dom";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { ErrorBoundary } from "./components/layout/error-boundary";
@@ -52,10 +52,12 @@ function App() {
     });
   }, []);
 
-  // PATCH 68.2 - Get module routes automatically from MODULE_REGISTRY
-  const moduleRoutes = getModuleRoutes();
-  
-  logger.info(`Loaded ${moduleRoutes.length} module routes from registry`);
+  // PATCH 68.2/68.7 - Get module routes automatically from MODULE_REGISTRY (memoized)
+  const moduleRoutes = useMemo(() => {
+    const routes = getModuleRoutes();
+    logger.info(`Loaded ${routes.length} module routes from registry`);
+    return routes;
+  }, []);
 
   return (
     <ErrorBoundary>
