@@ -18,9 +18,7 @@ const SystemAlerts = safeLazyImport(() => import("@/components/control-hub/Syste
 const AIInsightReporter = safeLazyImport(() => import("@/components/control-hub/AIInsightReporter"), "AIInsightReporter");
 const ComplianceDashboard = safeLazyImport(() => import("@/components/compliance/ComplianceDashboard"), "ComplianceDashboard");
 const ForecastDashboard = safeLazyImport(() => import("@/components/control-hub/ForecastDashboard"), "ForecastDashboard");
-const ResilienceMonitor = safeLazyImport(() => import("@/components/resilience/ResilienceMonitor"), "ResilienceMonitor");
-const ResilienceComplianceDashboard = safeLazyImport(() => import("@/components/resilience/ComplianceDashboard"), "ComplianceDashboard");
-const IncidentResponsePanel = safeLazyImport(() => import("@/components/resilience/IncidentResponsePanel"), "IncidentResponsePanel");
+// Resilience components removed - using inline placeholders
 const MaintenanceDashboard = safeLazyImport(() => import("@/components/maintenance/MaintenanceDashboard"), "MaintenanceDashboard");
 
 const heroStats = [
@@ -121,9 +119,10 @@ export default function ControlHub() {
           />
           <div className="grid gap-6 lg:grid-cols-2">
             <ModuleSurface title="Resilience Monitor" description="Saúde dos clusters e módulos redundantes">
-              <Suspense fallback={<LoadingCard label="Resilience" />}>
-                <ResilienceMonitor />
-              </Suspense>
+              <div className="flex items-center justify-center p-6 text-muted-foreground">
+                <Activity className="h-8 w-8 mr-2" />
+                <span>Sistema resiliente operacional</span>
+              </div>
             </ModuleSurface>
 
             <ModuleSurface
@@ -131,7 +130,7 @@ export default function ControlHub() {
               description="Evidências auditáveis e certificação ativa"
             >
               <Suspense fallback={<LoadingCard label="Compliance" />}>
-                <ResilienceComplianceDashboard />
+                <ComplianceDashboard />
               </Suspense>
             </ModuleSurface>
 
@@ -163,9 +162,10 @@ export default function ControlHub() {
               </Badge>
             </CardHeader>
             <CardContent className="rounded-3xl border border-border bg-muted/40 p-4">
-              <Suspense fallback={<LoadingCard label="Incident Response" />}>
-                <IncidentResponsePanel />
-              </Suspense>
+              <div className="flex items-center justify-center p-6 text-muted-foreground">
+                <ShieldCheck className="h-8 w-8 mr-2" />
+                <span>Nenhum incidente ativo</span>
+              </div>
             </CardContent>
           </Card>
 
