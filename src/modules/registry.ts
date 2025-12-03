@@ -1120,6 +1120,21 @@ export const MODULE_REGISTRY: Record<string, ModuleDefinition> = {
     lazy: true,
     version: "1.0.0",
   },
+
+  // Safety Guardian Module
+  "operations.safety-guardian": {
+    id: "operations.safety-guardian",
+    name: "Safety Guardian",
+    category: "operations",
+    path: "modules/safety-guardian/index",
+    description: "Sistema de segurança com monitoramento de incidentes, near misses e IA preditiva",
+    status: "active",
+    completeness: "100%",
+    route: "/safety-guardian",
+    icon: "Shield",
+    lazy: true,
+    version: "1.0.0",
+  },
 };
 
 export function getModule(id: string): ModuleDefinition | undefined {
