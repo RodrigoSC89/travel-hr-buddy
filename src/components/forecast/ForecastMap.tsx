@@ -7,10 +7,10 @@ export default function ForecastMap() {
   const [ready, setReady] = useState(false);
 
   return (
-    <Card className="bg-gray-900 border-gray-800">
+    <Card className="bg-card border-border">
       <CardHeader>
-        <CardTitle className="text-white flex items-center space-x-2">
-          <MapPin className="text-blue-400" aria-hidden="true" />
+        <CardTitle className="text-card-foreground flex items-center space-x-2">
+          <MapPin className="text-primary" aria-hidden="true" />
           <span>Mapa Global de Previsão</span>
         </CardTitle>
       </CardHeader>
@@ -23,7 +23,7 @@ export default function ForecastMap() {
         >
           <iframe
             title="Maritime forecast map"
-            className="w-full h-96 rounded-lg border border-gray-700"
+            className="w-full h-96 rounded-lg border border-border"
             src="https://earth.nullschool.net/#current/wind/surface/level/orthographic=0,0,0"
             loading="lazy"
             onLoad={() => setReady(true)}

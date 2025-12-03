@@ -30,10 +30,10 @@ export default function ForecastAIInsights() {
   }, []);
 
   return (
-    <Card className="bg-gray-900 border-gray-800">
+    <Card className="bg-card border-border">
       <CardHeader>
-        <CardTitle className="text-white flex items-center space-x-2">
-          <Brain className="text-purple-400" />
+        <CardTitle className="text-card-foreground flex items-center space-x-2">
+          <Brain className="text-primary" />
           <span>Previsão IA</span>
         </CardTitle>
       </CardHeader>
@@ -41,17 +41,17 @@ export default function ForecastAIInsights() {
         {prediction !== null ? (
           typeof prediction === "number" ? (
             <div className="flex items-center space-x-3">
-              <AlertTriangle className="text-yellow-400" />
+              <AlertTriangle className="text-warning" />
               <div>
-                <p className="text-sm text-gray-400">Probabilidade de instabilidade</p>
-                <p className="text-2xl font-bold text-white">{(prediction * 100).toFixed(1)}%</p>
+                <p className="text-sm text-muted-foreground">Probabilidade de instabilidade</p>
+                <p className="text-2xl font-bold text-foreground">{(prediction * 100).toFixed(1)}%</p>
               </div>
             </div>
           ) : (
-            <p className="text-red-400">{prediction}</p>
+            <p className="text-destructive">{prediction}</p>
           )
         ) : (
-          <p className="text-gray-400">Carregando modelo...</p>
+          <p className="text-muted-foreground">Carregando modelo...</p>
         )}
       </CardContent>
     </Card>

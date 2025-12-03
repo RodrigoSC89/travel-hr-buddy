@@ -78,9 +78,9 @@ export default function ForecastAI() {
   }, []);
 
   const getConfidenceColor = (confidence: number) => {
-    if (confidence >= 0.8) return "text-green-500";
-    if (confidence >= 0.5) return "text-yellow-500";
-    return "text-red-500";
+    if (confidence >= 0.8) return "text-success";
+    if (confidence >= 0.5) return "text-warning";
+    return "text-destructive";
   };
 
   const getConfidenceLabel = (confidence: number) => {
@@ -92,13 +92,13 @@ export default function ForecastAI() {
   const getStatusIcon = () => {
     switch (status) {
     case "success":
-      return <CheckCircle className="text-green-500" aria-hidden="true" />;
+      return <CheckCircle className="text-success" aria-hidden="true" />;
     case "error":
-      return <XCircle className="text-red-500" aria-hidden="true" />;
+      return <XCircle className="text-destructive" aria-hidden="true" />;
     case "offline":
-      return <AlertTriangle className="text-yellow-500" aria-hidden="true" />;
+      return <AlertTriangle className="text-warning" aria-hidden="true" />;
     default:
-      return <Brain className="text-purple-400 animate-pulse" aria-hidden="true" />;
+      return <Brain className="text-primary animate-pulse" aria-hidden="true" />;
     }
   };
 
@@ -116,22 +116,22 @@ export default function ForecastAI() {
   };
 
   return (
-    <Card className="bg-gray-900 border-gray-800">
+    <Card className="bg-card border-border">
       <CardHeader>
-        <CardTitle className="text-white flex items-center space-x-2">
-          <Brain className="text-purple-400" aria-hidden="true" />
+        <CardTitle className="text-card-foreground flex items-center space-x-2">
+          <Brain className="text-primary" aria-hidden="true" />
           <span>Previsão IA com ONNX Runtime</span>
         </CardTitle>
       </CardHeader>
       <CardContent>
         {/* Status Indicator with WCAG aria-live */}
         <div
-          className="flex items-center space-x-2 mb-4 p-2 bg-gray-800 rounded"
+          className="flex items-center space-x-2 mb-4 p-2 bg-muted rounded"
           aria-live="polite"
           aria-atomic="true"
         >
           {getStatusIcon()}
-          <span className="text-sm text-gray-300">{getStatusMessage()}</span>
+          <span className="text-sm text-muted-foreground">{getStatusMessage()}</span>
         </div>
 
         {/* Prediction Display */}
@@ -139,13 +139,13 @@ export default function ForecastAI() {
           <div className="space-y-4">
             {/* Forecast Value */}
             <div className="flex items-center space-x-3">
-              <AlertTriangle className="text-yellow-400" aria-hidden="true" />
+              <AlertTriangle className="text-warning" aria-hidden="true" />
               <div>
-                <p className="text-sm text-gray-400" id="forecast-label">
+                <p className="text-sm text-muted-foreground" id="forecast-label">
                   Probabilidade de instabilidade
                 </p>
                 <p
-                  className="text-3xl font-bold text-white"
+                  className="text-3xl font-bold text-foreground"
                   aria-labelledby="forecast-label"
                 >
                   {(prediction.forecast * 100).toFixed(1)}%
@@ -156,7 +156,7 @@ export default function ForecastAI() {
             {/* Confidence Indicator with WCAG-compliant progress bar */}
             <div>
               <div className="flex justify-between items-center mb-1">
-                <label htmlFor="confidence-bar" className="text-sm text-gray-400">
+                <label htmlFor="confidence-bar" className="text-sm text-muted-foreground">
                   Confiança do modelo
                 </label>
                 <span
@@ -167,7 +167,7 @@ export default function ForecastAI() {
                 </span>
               </div>
               <div
-                className="w-full bg-gray-700 rounded-full h-2.5"
+                className="w-full bg-secondary rounded-full h-2.5"
                 role="progressbar"
                 aria-valuenow={Math.round(prediction.confidence * 100)}
                 aria-valuemin={0}
@@ -178,10 +178,10 @@ export default function ForecastAI() {
                 <div
                   className={`h-2.5 rounded-full transition-all duration-500 ${
                     prediction.confidence >= 0.8
-                      ? "bg-green-500"
+                      ? "bg-success"
                       : prediction.confidence >= 0.5
-                        ? "bg-yellow-500"
-                        : "bg-red-500"
+                        ? "bg-warning"
+                        : "bg-destructive"
                   }`}
                   style={{ width: `${prediction.confidence * 100}%` }}
                 />
@@ -189,12 +189,12 @@ export default function ForecastAI() {
             </div>
 
             {/* Timestamp */}
-            <p className="text-xs text-gray-500">
+            <p className="text-xs text-muted-foreground">
               Última atualização: {new Date(prediction.timestamp).toLocaleString("pt-BR")}
             </p>
           </div>
         ) : (
-          <p className="text-gray-400" aria-live="polite">
+          <p className="text-muted-foreground" aria-live="polite">
             Inicializando inferência...
           </p>
         )}

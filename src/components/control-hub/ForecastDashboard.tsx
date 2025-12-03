@@ -78,17 +78,17 @@ export default function ForecastDashboard() {
   const getLevelColor = () => {
     switch (forecast.level) {
     case "OK":
-      return "text-green-400";
+      return "text-success";
     case "Risco":
-      return "text-yellow-400";
+      return "text-warning";
     case "Crítico":
-      return "text-red-500";
+      return "text-destructive";
     case "Sem Dados":
-      return "text-gray-400";
+      return "text-muted-foreground";
     case "Erro":
-      return "text-orange-400";
+      return "text-warning";
     default:
-      return "text-blue-400";
+      return "text-primary";
     }
   };
 
@@ -110,9 +110,9 @@ export default function ForecastDashboard() {
   };
 
   return (
-    <Card className="bg-gray-900 border-gray-800">
+    <Card className="bg-card border-border">
       <CardHeader>
-        <CardTitle className="text-white flex items-center gap-2">
+        <CardTitle className="text-card-foreground flex items-center gap-2">
           <Gauge className="h-5 w-5" />
           Forecast Global — AI Predictive Optimization
         </CardTitle>
@@ -120,17 +120,17 @@ export default function ForecastDashboard() {
       <CardContent>
         {loading ? (
           <div className="flex items-center justify-center p-8">
-            <Loader className="h-8 w-8 animate-spin text-blue-400" />
-            <span className="ml-3 text-gray-400">Carregando previsões...</span>
+            <Loader className="h-8 w-8 animate-spin text-primary" />
+            <span className="ml-3 text-muted-foreground">Carregando previsões...</span>
           </div>
         ) : (
           <div className="space-y-4">
             {/* Risk Level Display */}
-            <div className="flex items-center justify-between p-4 bg-gray-800 rounded-lg">
+            <div className="flex items-center justify-between p-4 bg-muted rounded-lg">
               <div className="flex items-center gap-3">
                 <span className="text-3xl">{getLevelIcon()}</span>
                 <div>
-                  <p className="text-sm text-gray-400">Status Atual</p>
+                  <p className="text-sm text-muted-foreground">Status Atual</p>
                   <p className={`text-xl font-bold ${getLevelColor()}`}>
                     {forecast.level}
                   </p>
@@ -139,7 +139,7 @@ export default function ForecastDashboard() {
               
               {forecast.status === "success" && (
                 <div className="text-right">
-                  <p className="text-sm text-gray-400">Probabilidade</p>
+                  <p className="text-sm text-muted-foreground">Probabilidade</p>
                   <p className={`text-2xl font-bold ${getLevelColor()}`}>
                     {(forecast.value * 100).toFixed(1)}%
                   </p>
@@ -148,18 +148,18 @@ export default function ForecastDashboard() {
             </div>
 
             {/* Status Message */}
-            <div className="p-4 bg-gray-800/50 rounded-lg border border-gray-700">
+            <div className="p-4 bg-muted/50 rounded-lg border border-border">
               <p className={`text-sm ${getLevelColor()}`}>
                 {forecast.message || "Análise em andamento..."}
               </p>
             </div>
 
             {/* Info Banner */}
-            <div className="flex items-start gap-2 p-3 bg-blue-900/20 border border-blue-800/30 rounded-lg">
-              <TrendingUp className="h-4 w-4 text-blue-400 mt-0.5" />
-              <div className="text-xs text-blue-300">
+            <div className="flex items-start gap-2 p-3 bg-info/10 border border-info/30 rounded-lg">
+              <TrendingUp className="h-4 w-4 text-info mt-0.5" />
+              <div className="text-xs text-info">
                 <p className="font-semibold mb-1">Previsão Preditiva de Falhas</p>
-                <p className="text-blue-400/80">
+                <p className="text-info/80">
                   Sistema baseado em ONNX ML • Atualização a cada 60s • Dados de telemetria DP
                 </p>
               </div>
@@ -167,11 +167,11 @@ export default function ForecastDashboard() {
 
             {/* Alert for Critical Status */}
             {forecast.level === "Crítico" && (
-              <div className="flex items-start gap-2 p-3 bg-red-900/20 border border-red-800/30 rounded-lg animate-pulse">
-                <AlertTriangle className="h-5 w-5 text-red-400" />
-                <div className="text-sm text-red-300">
+              <div className="flex items-start gap-2 p-3 bg-destructive/10 border border-destructive/30 rounded-lg animate-pulse">
+                <AlertTriangle className="h-5 w-5 text-destructive" />
+                <div className="text-sm text-destructive">
                   <p className="font-semibold">Alerta Crítico Ativo</p>
-                  <p className="text-red-400/80">
+                  <p className="text-destructive/80">
                     Protocolo DP ativado. Verifique sistemas de posicionamento dinâmico.
                   </p>
                 </div>
