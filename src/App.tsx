@@ -141,6 +141,21 @@ function App() {
                     <Route path="task-automation" element={<Navigate to="/automation" replace />} />
                     <Route path="comunicacao" element={<Navigate to="/communication" replace />} />
                     <Route path="notification-center" element={<Navigate to="/notifications-center" replace />} />
+                    <Route path="documentos" element={<Navigate to="/documents" replace />} />
+                    <Route path="checklists" element={<Navigate to="/admin/checklists" replace />} />
+                    <Route path="checklists-inteligentes" element={<Navigate to="/admin/checklists" replace />} />
+                    <Route path="finance-hub" element={<Navigate to="/finance" replace />} />
+                    <Route path="reports-module" element={<Navigate to="/reports" replace />} />
+                    <Route path="smart-workflow" element={<Navigate to="/workflow" replace />} />
+                    <Route path="user-management" element={<Navigate to="/users" replace />} />
+                    <Route path="project-timeline" element={<Navigate to="/projects/timeline" replace />} />
+                    <Route path="analytics-core" element={<Navigate to="/analytics" replace />} />
+                    <Route path="portal" element={<Navigate to="/training-academy" replace />} />
+                    <Route path="portal-funcionario" element={<Navigate to="/training-academy" replace />} />
+                    <Route path="mobile-optimization" element={<Navigate to="/optimization" replace />} />
+                    <Route path="alertas-precos" element={<Navigate to="/price-alerts" replace />} />
+                    <Route path="help" element={<Navigate to="/notifications-center" replace />} />
+                    <Route path="audit-center" element={<Navigate to="/compliance-hub" replace />} />
                     
                     {/* 404 Route */}
                     <Route path="*" element={
