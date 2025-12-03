@@ -15,7 +15,6 @@ import {
 } from "@/components/ui/dialog";
 import { Badge } from "@/components/ui/badge";
 import { ScrollArea } from "@/components/ui/scroll-area";
-import { ChannelStatusLog } from "@/modules/connectivity/channel-manager/components/ChannelStatusLog";
 
 export default function ChannelManagerHub() {
   const { toast } = useToast();
@@ -276,7 +275,7 @@ export default function ChannelManagerHub() {
             )}
           </Card>
 
-          {selectedChannel && <ChannelStatusLog channelId={selectedChannel} />}
+          {/* Channel Status Log - removed pending module migration */}
         </div>
       </div>
     </div>
