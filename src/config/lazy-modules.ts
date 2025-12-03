@@ -37,9 +37,6 @@ export const HEAVY_MODULES = {
   ),
   
   // Large Data Modules
-  SensorsHub: lazyWithRetry(() => 
-    import('@/pages/sensors-hub')
-  ),
   SatelliteLive: lazyWithRetry(() => 
     import('@/pages/satellite-live')
   ),

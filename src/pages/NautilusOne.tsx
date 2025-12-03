@@ -24,7 +24,6 @@ import CompetencyHeatmap from "@/components/crew/competency-heatmap";
 import CrewManagement2 from "@/components/crew/crew-management-2";
 import APIHubNautilus from "@/components/integration/api-hub-nautilus";
 import AIThreatDetection from "@/components/security/ai-threat-detection";
-import { VaultCore } from "@/modules/vault_ai";
 
 const NautilusOne: React.FC = () => {
   const [activeModule, setActiveModule] = useState("overview");
@@ -354,7 +353,12 @@ const NautilusOne: React.FC = () => {
               </TabsContent>
 
               <TabsContent value="vault">
-                <VaultCore />
+                <Card>
+                  <CardContent className="p-6 text-center">
+                    <Database className="h-12 w-12 mx-auto text-muted-foreground mb-4" />
+                    <p className="text-muted-foreground">Vault AI - Módulo em desenvolvimento</p>
+                  </CardContent>
+                </Card>
               </TabsContent>
             </Tabs>
           </CardContent>
