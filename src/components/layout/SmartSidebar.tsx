@@ -64,13 +64,10 @@ const groupedModules = [
     icon: <Bell className="w-4 h-4 mr-2" />,
     items: [
       { label: "Comunicação", path: "/communication" },
-      { label: "Comunicação", path: "/comunicacao" },
       { label: "Workspace em Tempo Real", path: "/real-time-workspace" },
       { label: "Gerenciador de Canais", path: "/channel-manager" },
       { label: "Centro de Notificações", path: "/notification-center" },
-      { label: "Notifications Center", path: "/notifications-center" },
       { label: "Alertas de Preços", path: "/price-alerts" },
-      { label: "Alertas de Preços", path: "/alertas-precos" },
       { label: "Centro de Ajuda", path: "/help" },
     ],
   },
