@@ -591,6 +591,19 @@ export const MODULE_REGISTRY: Record<string, ModuleDefinition> = {
     lazy: true,
   },
 
+  "innovation.hub": {
+    id: "innovation.hub",
+    name: "IA & Inovação",
+    category: "intelligence",
+    path: "pages/Innovation",
+    description: "Centro de Inteligência Artificial e Inovação Tecnológica",
+    status: "active",
+    completeness: "100%",
+    route: "/innovation",
+    icon: "Bot",
+    lazy: true,
+  },
+
   "features.task-automation": {
     id: "features.task-automation",
     name: "Task Automation",
