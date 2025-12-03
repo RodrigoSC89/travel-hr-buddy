@@ -139,6 +139,7 @@ function App() {
                     <Route path="voice" element={<Navigate to="/assistant/voice" replace />} />
                     <Route path="voice-assistant" element={<Navigate to="/assistant/voice" replace />} />
                     <Route path="task-automation" element={<Navigate to="/automation" replace />} />
+                    <Route path="comunicacao" element={<Navigate to="/communication" replace />} />
                     
                     {/* 404 Route */}
                     <Route path="*" element={
