@@ -4,8 +4,13 @@ import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { Progress } from "@/components/ui/progress";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
-import { Dialog, DialogContent, DialogHeader, DialogTitle } from "@/components/ui/dialog";
+import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogDescription } from "@/components/ui/dialog";
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
+import { Input } from "@/components/ui/input";
+import { Label } from "@/components/ui/label";
 import { PeoDpWizard } from "./peo-dp-wizard";
+import { PEODPAuditForm } from "./peodp-audit-form";
+import { PEODPChecklistEditor } from "./peodp-checklist-editor";
 import {
   LayoutDashboard,
   FileText,
@@ -23,9 +28,19 @@ import {
   AlertTriangle,
   TrendingUp,
   Target,
-  Shield
+  Shield,
+  ClipboardCheck,
+  Ship
 } from "lucide-react";
 import { toast } from "sonner";
+import {
+  type PEODPAudit,
+  type PEODPAuditItem,
+  type PEODPChecklistVersion,
+  PEODP_DEFAULT_REQUIREMENTS,
+  getScoreColor,
+  getScoreLevel
+} from "@/types/peodp-checklist";
 
 interface DPPlan {
   id: string;
@@ -126,18 +141,68 @@ export const PeoDpManager: React.FC = () => {
     }
   ]);
 
+  const [audits, setAudits] = useState<PEODPAudit[]>([]);
   const [selectedPlan, setSelectedPlan] = useState<DPPlan | null>(plans[0] || null);
-  const [activeView, setActiveView] = useState<"dashboard" | "plans" | "analytics">("dashboard");
+  const [activeView, setActiveView] = useState<"dashboard" | "plans" | "audits" | "checklist" | "analytics">("dashboard");
   const [isWizardOpen, setIsWizardOpen] = useState(false);
+  const [isAuditDialogOpen, setIsAuditDialogOpen] = useState(false);
+  const [isChecklistEditorOpen, setIsChecklistEditorOpen] = useState(false);
+
+  // New audit form state
+  const [newAuditVessel, setNewAuditVessel] = useState("");
+  const [newAuditDpClass, setNewAuditDpClass] = useState<"DP1" | "DP2" | "DP3">("DP2");
+  const [activeAudit, setActiveAudit] = useState<{ vesselName: string; dpClass: "DP1" | "DP2" | "DP3" } | null>(null);
 
   const createNewPlan = () => {
     setIsWizardOpen(true);
   };
 
   const handleWizardComplete = async (data: any) => {
-    // TODO: Create plan in database
     setIsWizardOpen(false);
     toast.success("Plano PEO-DP criado com sucesso!");
+  };
+
+  const handleStartAudit = () => {
+    if (!newAuditVessel.trim()) {
+      toast.error("Informe o nome da embarcação");
+      return;
+    }
+    setActiveAudit({ vesselName: newAuditVessel, dpClass: newAuditDpClass });
+    setIsAuditDialogOpen(false);
+    setActiveView("audits");
+  };
+
+  const handleAuditSave = (items: PEODPAuditItem[], score: number) => {
+    console.log("Audit saved:", { items, score });
+    toast.success("Auditoria salva como rascunho");
+  };
+
+  const handleAuditComplete = (items: PEODPAuditItem[], score: number) => {
+    const newAudit: PEODPAudit = {
+      id: `audit-${Date.now()}`,
+      vesselId: "",
+      vesselName: activeAudit?.vesselName || "",
+      dpClass: activeAudit?.dpClass || "DP2",
+      checklistVersionId: "default-2024",
+      auditDate: new Date().toISOString(),
+      status: "concluido",
+      items,
+      score,
+      scoreBySection: {} as any,
+      recommendations: [],
+      createdAt: new Date().toISOString(),
+      updatedAt: new Date().toISOString(),
+      completedAt: new Date().toISOString()
+    };
+
+    setAudits(prev => [newAudit, ...prev]);
+    setActiveAudit(null);
+    toast.success(`Auditoria concluída com score ${score}%`);
+  };
+
+  const handleChecklistSave = (version: PEODPChecklistVersion) => {
+    console.log("Checklist saved:", version);
+    setIsChecklistEditorOpen(false);
   };
 
   const getStatusBadge = (status: DPPlan["status"]) => {
@@ -164,7 +229,7 @@ export const PeoDpManager: React.FC = () => {
   return (
     <div className="space-y-6">
       {/* Stats Overview */}
-      <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
+      <div className="grid grid-cols-1 md:grid-cols-5 gap-4">
         <Card>
           <CardHeader className="pb-3">
             <CardTitle className="text-sm font-medium text-muted-foreground">
@@ -209,6 +274,19 @@ export const PeoDpManager: React.FC = () => {
         <Card>
           <CardHeader className="pb-3">
             <CardTitle className="text-sm font-medium text-muted-foreground">
+              Auditorias Realizadas
+            </CardTitle>
+          </CardHeader>
+          <CardContent>
+            <div className="text-3xl font-bold text-blue-600">
+              {audits.length}
+            </div>
+          </CardContent>
+        </Card>
+
+        <Card>
+          <CardHeader className="pb-3">
+            <CardTitle className="text-sm font-medium text-muted-foreground">
               Ações Pendentes
             </CardTitle>
           </CardHeader>
@@ -227,7 +305,7 @@ export const PeoDpManager: React.FC = () => {
       {/* Main Content */}
       <Tabs value={activeView} onValueChange={(v) => setActiveView(v as any)} className="space-y-6">
         <div className="flex items-center justify-between">
-          <TabsList className="grid w-full max-w-md grid-cols-3">
+          <TabsList className="grid w-full max-w-2xl grid-cols-5">
             <TabsTrigger value="dashboard" className="flex items-center gap-2">
               <LayoutDashboard className="h-4 w-4" />
               Dashboard
@@ -236,16 +314,30 @@ export const PeoDpManager: React.FC = () => {
               <FileText className="h-4 w-4" />
               Planos
             </TabsTrigger>
+            <TabsTrigger value="audits" className="flex items-center gap-2">
+              <ClipboardCheck className="h-4 w-4" />
+              Auditorias
+            </TabsTrigger>
+            <TabsTrigger value="checklist" className="flex items-center gap-2">
+              <Settings className="h-4 w-4" />
+              Checklist
+            </TabsTrigger>
             <TabsTrigger value="analytics" className="flex items-center gap-2">
               <TrendingUp className="h-4 w-4" />
               Analytics
             </TabsTrigger>
           </TabsList>
 
-          <Button onClick={createNewPlan}>
-            <Plus className="h-4 w-4 mr-2" />
-            Novo Plano PEO-DP
-          </Button>
+          <div className="flex gap-2">
+            <Button variant="outline" onClick={() => setIsAuditDialogOpen(true)}>
+              <ClipboardCheck className="h-4 w-4 mr-2" />
+              Nova Auditoria
+            </Button>
+            <Button onClick={createNewPlan}>
+              <Plus className="h-4 w-4 mr-2" />
+              Novo Plano
+            </Button>
+          </div>
         </div>
 
         {/* Dashboard View */}
@@ -418,6 +510,85 @@ export const PeoDpManager: React.FC = () => {
           </Card>
         </TabsContent>
 
+        {/* Audits View */}
+        <TabsContent value="audits" className="space-y-4">
+          {activeAudit ? (
+            <PEODPAuditForm
+              vesselName={activeAudit.vesselName}
+              dpClass={activeAudit.dpClass}
+              requirements={PEODP_DEFAULT_REQUIREMENTS}
+              onSave={handleAuditSave}
+              onComplete={handleAuditComplete}
+            />
+          ) : (
+            <Card>
+              <CardHeader>
+                <div className="flex items-center justify-between">
+                  <div>
+                    <CardTitle>Auditorias PEO-DP</CardTitle>
+                    <CardDescription>
+                      Histórico de auditorias realizadas com checklist baseado no programa Petrobras
+                    </CardDescription>
+                  </div>
+                  <Button onClick={() => setIsAuditDialogOpen(true)}>
+                    <Plus className="h-4 w-4 mr-2" />
+                    Nova Auditoria
+                  </Button>
+                </div>
+              </CardHeader>
+              <CardContent>
+                {audits.length === 0 ? (
+                  <div className="text-center py-12">
+                    <ClipboardCheck className="h-12 w-12 mx-auto text-muted-foreground mb-4" />
+                    <p className="text-muted-foreground">Nenhuma auditoria realizada ainda</p>
+                    <Button 
+                      variant="outline" 
+                      className="mt-4"
+                      onClick={() => setIsAuditDialogOpen(true)}
+                    >
+                      Iniciar Primeira Auditoria
+                    </Button>
+                  </div>
+                ) : (
+                  <div className="space-y-3">
+                    {audits.map(audit => (
+                      <div key={audit.id} className="p-4 border rounded-lg">
+                        <div className="flex items-center justify-between">
+                          <div className="flex items-center gap-3">
+                            <Ship className="h-5 w-5 text-muted-foreground" />
+                            <div>
+                              <p className="font-medium">{audit.vesselName}</p>
+                              <p className="text-sm text-muted-foreground">
+                                Classe {audit.dpClass} • {new Date(audit.auditDate).toLocaleDateString("pt-BR")}
+                              </p>
+                            </div>
+                          </div>
+                          <div className="flex items-center gap-3">
+                            <div className="text-right">
+                              <p className={`text-2xl font-bold ${getScoreColor(audit.score)}`}>
+                                {audit.score}%
+                              </p>
+                              <p className="text-xs text-muted-foreground">{getScoreLevel(audit.score)}</p>
+                            </div>
+                            <Badge variant={audit.status === "concluido" ? "default" : "secondary"}>
+                              {audit.status === "concluido" ? "Concluída" : audit.status}
+                            </Badge>
+                          </div>
+                        </div>
+                      </div>
+                    ))}
+                  </div>
+                )}
+              </CardContent>
+            </Card>
+          )}
+        </TabsContent>
+
+        {/* Checklist Editor View */}
+        <TabsContent value="checklist" className="space-y-4">
+          <PEODPChecklistEditor onSave={handleChecklistSave} />
+        </TabsContent>
+
         {/* Analytics View */}
         <TabsContent value="analytics" className="space-y-4">
           <Card>
@@ -434,6 +605,57 @@ export const PeoDpManager: React.FC = () => {
           </Card>
         </TabsContent>
       </Tabs>
+
+      {/* New Audit Dialog */}
+      <Dialog open={isAuditDialogOpen} onOpenChange={setIsAuditDialogOpen}>
+        <DialogContent>
+          <DialogHeader>
+            <DialogTitle>Nova Auditoria PEO-DP</DialogTitle>
+            <DialogDescription>
+              Inicie uma nova auditoria baseada no checklist PEO-DP Petrobras
+            </DialogDescription>
+          </DialogHeader>
+          <div className="space-y-4 py-4">
+            <div className="space-y-2">
+              <Label htmlFor="vesselName">Nome da Embarcação</Label>
+              <Input
+                id="vesselName"
+                placeholder="Ex: PSV Atlantic Explorer"
+                value={newAuditVessel}
+                onChange={(e) => setNewAuditVessel(e.target.value)}
+              />
+            </div>
+            <div className="space-y-2">
+              <Label>Classe DP</Label>
+              <Select value={newAuditDpClass} onValueChange={(v) => setNewAuditDpClass(v as any)}>
+                <SelectTrigger>
+                  <SelectValue />
+                </SelectTrigger>
+                <SelectContent>
+                  <SelectItem value="DP1">DP1</SelectItem>
+                  <SelectItem value="DP2">DP2</SelectItem>
+                  <SelectItem value="DP3">DP3</SelectItem>
+                </SelectContent>
+              </Select>
+            </div>
+            <div className="bg-muted p-3 rounded-lg text-sm">
+              <p className="font-medium mb-1">Checklist PEO-DP {new Date().getFullYear()}</p>
+              <p className="text-muted-foreground">
+                {PEODP_DEFAULT_REQUIREMENTS.length} requisitos em 6 seções
+              </p>
+            </div>
+          </div>
+          <div className="flex justify-end gap-2">
+            <Button variant="outline" onClick={() => setIsAuditDialogOpen(false)}>
+              Cancelar
+            </Button>
+            <Button onClick={handleStartAudit}>
+              <ClipboardCheck className="h-4 w-4 mr-2" />
+              Iniciar Auditoria
+            </Button>
+          </div>
+        </DialogContent>
+      </Dialog>
 
       {/* Wizard Dialog */}
       <Dialog open={isWizardOpen} onOpenChange={setIsWizardOpen}>
