@@ -1,5 +1,5 @@
 import React, { useEffect, Suspense, useMemo } from "react";
-import { BrowserRouter as Router, HashRouter, Routes, Route } from "react-router-dom";
+import { BrowserRouter as Router, HashRouter, Routes, Route, Navigate } from "react-router-dom";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { ErrorBoundary } from "./components/layout/error-boundary";
 import { AuthProvider } from "./contexts/AuthContext";
@@ -131,6 +131,10 @@ function App() {
                         <HealthCheck />
                       </Suspense>
                     } />
+                    
+                    {/* Route Redirects - Duplicate/Legacy Routes */}
+                    <Route path="intelligent-documents" element={<Navigate to="/documents" replace />} />
+                    <Route path="document-ai" element={<Navigate to="/documents" replace />} />
                     
                     {/* 404 Route */}
                     <Route path="*" element={
