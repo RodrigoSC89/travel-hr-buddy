@@ -28,7 +28,12 @@ import {
   type AIAnalysis,
 } from "../services/incidentReplayService";
 import { toast } from "sonner";
-import jsPDF from "jspdf";
+
+// Lazy load jsPDF
+const loadJsPDF = async () => {
+  const { default: jsPDF } = await import("jspdf");
+  return jsPDF;
+};
 
 interface IncidentReplayProps {
   incidentId: string;
@@ -103,6 +108,7 @@ export const IncidentReplay: React.FC<IncidentReplayProps> = ({ incidentId, onCl
     if (!incident || !analysis) return;
 
     try {
+      const jsPDF = await loadJsPDF();
       const doc = new jsPDF();
       let yPos = 20;
 

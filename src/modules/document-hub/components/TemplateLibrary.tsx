@@ -17,7 +17,12 @@ import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@
 import { useToast } from "@/hooks/use-toast";
 import { supabase } from "@/integrations/supabase/client";
 import { FileText, Plus, Download, Edit, Trash2, History, Copy } from "lucide-react";
-import jsPDF from "jspdf";
+
+// Lazy load jsPDF
+const loadJsPDF = async () => {
+  const { default: jsPDF } = await import("jspdf");
+  return jsPDF;
+};
 
 interface Template {
   id: string;

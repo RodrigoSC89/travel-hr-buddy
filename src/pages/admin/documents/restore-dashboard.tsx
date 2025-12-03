@@ -25,9 +25,16 @@ import {
   Tooltip,
   Legend,
 } from "chart.js";
-import jsPDF from "jspdf";
-import autoTable from "jspdf-autotable";
 import { QRCodeSVG } from "qrcode.react";
+
+// Lazy load jsPDF
+const loadJsPDF = async () => {
+  const [{ default: jsPDF }, autoTableModule] = await Promise.all([
+    import("jspdf"),
+    import("jspdf-autotable")
+  ]);
+  return { jsPDF, autoTable: autoTableModule.default };
+};
 
 // Register Chart.js components
 ChartJS.register(

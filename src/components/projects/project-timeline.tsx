@@ -31,7 +31,12 @@ const loadXLSX = async () => {
   }
   return XLSX;
 };
-import jsPDF from "jspdf";
+
+// Lazy load jsPDF
+const loadJsPDF = async () => {
+  const { default: jsPDF } = await import("jspdf");
+  return jsPDF;
+};
 
 interface ProjectTask {
   id: string;

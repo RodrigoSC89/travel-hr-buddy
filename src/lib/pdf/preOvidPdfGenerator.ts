@@ -3,8 +3,14 @@
  * PATCH 650 - Pre-OVID Inspection Module
  */
 
-import jsPDF from "jspdf";
-import "jspdf-autotable";
+// Lazy load jsPDF
+const loadJsPDF = async () => {
+  const [{ default: jsPDF }, autoTableModule] = await Promise.all([
+    import("jspdf"),
+    import("jspdf-autotable")
+  ]);
+  return { jsPDF, autoTable: autoTableModule.default };
+};
 
 // Maximum number of checklist items to include in PDF to avoid huge files
 const MAX_CHECKLIST_ITEMS_IN_PDF = 30;
@@ -41,6 +47,7 @@ export interface InspectionData {
  * Generate a PDF report for a Pre-OVID inspection
  */
 export async function generatePreOvidPDF(inspection: InspectionData) {
+  const { jsPDF } = await loadJsPDF();
   const doc = new jsPDF();
   const pageWidth = doc.internal.pageSize.width;
   const pageHeight = doc.internal.pageSize.height;

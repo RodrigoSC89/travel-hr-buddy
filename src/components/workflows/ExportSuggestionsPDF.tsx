@@ -1,12 +1,18 @@
 import { format } from "date-fns";
-import jsPDF from "jspdf";
 import { Suggestion } from "./index";
+
+// Lazy load jsPDF
+const loadJsPDF = async () => {
+  const { default: jsPDF } = await import("jspdf");
+  return jsPDF;
+};
 
 /**
  * Export workflow AI suggestions to PDF format
  * @param suggestions - Array of AI suggestions to export
  */
-export function exportSuggestionsToPDF(suggestions: Suggestion[]): void {
+export async function exportSuggestionsToPDF(suggestions: Suggestion[]): Promise<void> {
+  const jsPDF = await loadJsPDF();
   const doc = new jsPDF();
   const margin = 20;
   const pageWidth = doc.internal.pageSize.getWidth();

@@ -22,8 +22,15 @@ import {
 import { Progress } from "@/components/ui/progress";
 import { Bar } from "react-chartjs-2";
 import { Chart as ChartJS, CategoryScale, LinearScale, BarElement, Title, Tooltip, Legend } from "chart.js";
-import jsPDF from "jspdf";
-import "jspdf-autotable";
+
+// Lazy load jsPDF
+const loadJsPDF = async () => {
+  const [{ default: jsPDF }, autoTableModule] = await Promise.all([
+    import("jspdf"),
+    import("jspdf-autotable")
+  ]);
+  return { jsPDF, autoTable: autoTableModule.default };
+};
 import { FuelOptimizationService } from "@/services/fuel-optimization-service";
 
 ChartJS.register(CategoryScale, LinearScale, BarElement, Title, Tooltip, Legend);

@@ -9,8 +9,16 @@ import { Checkbox } from "@/components/ui/checkbox";
 import { FileText, Download, Calendar, Clock, Filter, Send, FileJson, FileSpreadsheet } from "lucide-react";
 import { useToast } from "@/hooks/use-toast";
 import { supabase } from "@/integrations/supabase/client";
-import jsPDF from "jspdf";
-import autoTable from "jspdf-autotable";
+
+// Lazy load jsPDF
+const loadJsPDF = async () => {
+  const [{ default: jsPDF }, autoTableModule] = await Promise.all([
+    import("jspdf"),
+    import("jspdf-autotable")
+  ]);
+  return { jsPDF, autoTable: autoTableModule.default };
+};
+
 let XLSX: any = null;
 const loadXLSX = async () => {
   if (!XLSX) {
@@ -135,8 +143,9 @@ const ComplianceReports = () => {
   };
 
   // PDF Export using jsPDF
-  const exportToPDF = (data: any[]) => {
+  const exportToPDF = async (data: any[]) => {
     try {
+      const { jsPDF, autoTable } = await loadJsPDF();
       const doc = new jsPDF();
       
       // Add title

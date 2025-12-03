@@ -10,9 +10,14 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Eye, FileDown, FileText } from "lucide-react";
-import jsPDF from "jspdf";
 import { useToast } from "@/hooks/use-toast";
 import { escapeRegexSpecialChars } from "../services/template-utils";
+
+// Lazy load jsPDF
+const loadJsPDF = async () => {
+  const { default: jsPDF } = await import("jspdf");
+  return jsPDF;
+};
 
 interface TemplatePreviewProps {
   templateContent: string;
@@ -42,8 +47,9 @@ export const TemplatePreview: React.FC<TemplatePreviewProps> = ({
     setPreviewContent(content);
   };
 
-  const generatePDF = () => {
+  const generatePDF = async () => {
     try {
+      const jsPDF = await loadJsPDF();
       const doc = new jsPDF();
       
       // Use DOMParser to safely parse HTML

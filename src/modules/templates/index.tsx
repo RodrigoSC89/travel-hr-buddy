@@ -50,9 +50,14 @@ import {
   Edit,
   Trash2,
 } from "lucide-react";
-import jsPDF from "jspdf";
 import { Document, Packer, Paragraph, TextRun } from "docx"; // PATCH 493: Add Word export
 import { saveAs } from "file-saver"; // PATCH 493: For downloading files
+
+// Lazy load jsPDF
+const loadJsPDF = async () => {
+  const { default: jsPDF } = await import("jspdf");
+  return jsPDF;
+};
 
 interface Template {
   id: string;
