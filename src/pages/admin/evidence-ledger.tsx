@@ -288,12 +288,12 @@ export default function EvidenceLedgerPage() {
           <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
             <div>
               <Label>Event Type</Label>
-              <Select value={filterEventType} onValueChange={setFilterEventType}>
+              <Select value={filterEventType || "all"} onValueChange={(value) => setFilterEventType(value === "all" ? "" : value)}>
                 <SelectTrigger>
                   <SelectValue placeholder="All types" />
                 </SelectTrigger>
                 <SelectContent>
-                  <SelectItem value="">All types</SelectItem>
+                  <SelectItem value="all">All types</SelectItem>
                   <SelectItem value="inspection">Inspection</SelectItem>
                   <SelectItem value="audit">Audit</SelectItem>
                   <SelectItem value="correction">Correction</SelectItem>

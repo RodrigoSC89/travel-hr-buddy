@@ -215,24 +215,24 @@ export default function AuditDashboard() {
               value={filters.module_accessed}
               onChange={(e) => handleFilterChange("module_accessed", e.target.value)}
             />
-            <Select value={filters.result} onValueChange={(value) => handleFilterChange("result", value)}>
+            <Select value={filters.result || "all"} onValueChange={(value) => handleFilterChange("result", value === "all" ? "" : value)}>
               <SelectTrigger>
                 <SelectValue placeholder="Result" />
               </SelectTrigger>
               <SelectContent>
-                <SelectItem value="">All Results</SelectItem>
+                <SelectItem value="all">All Results</SelectItem>
                 <SelectItem value="success">Success</SelectItem>
                 <SelectItem value="failure">Failure</SelectItem>
                 <SelectItem value="denied">Denied</SelectItem>
                 <SelectItem value="error">Error</SelectItem>
               </SelectContent>
             </Select>
-            <Select value={filters.severity} onValueChange={(value) => handleFilterChange("severity", value)}>
+            <Select value={filters.severity || "all"} onValueChange={(value) => handleFilterChange("severity", value === "all" ? "" : value)}>
               <SelectTrigger>
                 <SelectValue placeholder="Severity" />
               </SelectTrigger>
               <SelectContent>
-                <SelectItem value="">All Severities</SelectItem>
+                <SelectItem value="all">All Severities</SelectItem>
                 <SelectItem value="info">Info</SelectItem>
                 <SelectItem value="warning">Warning</SelectItem>
                 <SelectItem value="critical">Critical</SelectItem>

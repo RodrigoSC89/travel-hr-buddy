@@ -365,12 +365,12 @@ export const EnhancedFeedbackSystem: React.FC = () => {
 
                 <div>
                   <Label>Tipo</Label>
-                  <Select value={filter.type || ""} onValueChange={(value) => setFilter({...filter, type: value || undefined})}>
+                <Select value={filter.type || "all"} onValueChange={(value) => setFilter({...filter, type: value === "all" ? undefined : value})}>
                     <SelectTrigger>
                       <SelectValue placeholder="Todos os tipos" />
                     </SelectTrigger>
                     <SelectContent>
-                      <SelectItem value="">Todos os tipos</SelectItem>
+                      <SelectItem value="all">Todos os tipos</SelectItem>
                       {feedbackTypes.map(type => (
                         <SelectItem key={type.value} value={type.value}>
                           {type.label}
@@ -382,12 +382,12 @@ export const EnhancedFeedbackSystem: React.FC = () => {
 
                 <div>
                   <Label>Status</Label>
-                  <Select value={filter.status || ""} onValueChange={(value) => setFilter({...filter, status: value || undefined})}>
+                <Select value={filter.status || "all"} onValueChange={(value) => setFilter({...filter, status: value === "all" ? undefined : value})}>
                     <SelectTrigger>
                       <SelectValue placeholder="Todos os status" />
                     </SelectTrigger>
                     <SelectContent>
-                      <SelectItem value="">Todos os status</SelectItem>
+                      <SelectItem value="all">Todos os status</SelectItem>
                       {statusOptions.map(status => (
                         <SelectItem key={status.value} value={status.value}>
                           {status.label}
@@ -399,12 +399,12 @@ export const EnhancedFeedbackSystem: React.FC = () => {
 
                 <div>
                   <Label>Módulo</Label>
-                  <Select value={filter.module || ""} onValueChange={(value) => setFilter({...filter, module: value || undefined})}>
+                <Select value={filter.module || "all"} onValueChange={(value) => setFilter({...filter, module: value === "all" ? undefined : value})}>
                     <SelectTrigger>
                       <SelectValue placeholder="Todos os módulos" />
                     </SelectTrigger>
                     <SelectContent>
-                      <SelectItem value="">Todos os módulos</SelectItem>
+                      <SelectItem value="all">Todos os módulos</SelectItem>
                       {modules.map(module => (
                         <SelectItem key={module} value={module}>
                           {module.charAt(0).toUpperCase() + module.slice(1)}
