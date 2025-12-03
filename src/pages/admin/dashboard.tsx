@@ -23,7 +23,7 @@ import { BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContaine
 import { useAuth } from "@/contexts/AuthContext";
 import { usePermissions } from "@/hooks/use-permissions";
 import { supabase } from "@/integrations/supabase/client";
-import jsPDF from "jspdf";
+import { usePDFExport } from "@/hooks/use-pdf-export";
 import { useToast } from "@/hooks/use-toast";
 
 interface TrendDataPoint {
@@ -49,6 +49,7 @@ export default function AdminDashboard() {
   const [loadingMonthlySummary, setLoadingMonthlySummary] = useState(false);
   const [exportingPDF, setExportingPDF] = useState(false);
   const { toast } = useToast();
+  const { getJsPDF } = usePDFExport();
 
   // Check if in public view mode
   const isPublic = searchParams.get("public") === "1";
@@ -200,6 +201,7 @@ export default function AdminDashboard() {
   const exportPDF = async () => {
     setExportingPDF(true);
     try {
+      const jsPDF = await getJsPDF();
       const pdf = new jsPDF();
       const pageWidth = pdf.internal.pageSize.getWidth();
       const pageHeight = pdf.internal.pageSize.getHeight();

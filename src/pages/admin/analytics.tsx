@@ -24,7 +24,7 @@ import {
   Line,
 } from "recharts";
 import html2canvas from "html2canvas";
-import jsPDF from "jspdf";
+import { usePDFExport } from "@/hooks/use-pdf-export";
 
 // Mock data for builds by branch
 const mockBuildsByBranch = [
@@ -84,6 +84,7 @@ export default function AnalyticsPage() {
   const [startDate, setStartDate] = useState("");
   const [endDate, setEndDate] = useState("");
   const [isSendingEmail, setIsSendingEmail] = useState(false);
+  const { getJsPDF } = usePDFExport();
 
   // Filter data based on date range (simplified for demonstration)
   const branchChart = useMemo(() => {
@@ -126,6 +127,7 @@ export default function AnalyticsPage() {
     try {
       const canvas = await html2canvas(node);
       const imgData = canvas.toDataURL("image/png");
+      const jsPDF = await getJsPDF();
       const pdf = new jsPDF();
       const width = pdf.internal.pageSize.getWidth();
       const height = (canvas.height * width) / canvas.width;

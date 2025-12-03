@@ -1,4 +1,8 @@
-import Tesseract from "tesseract.js";
+/**
+ * OCR Service with lazy-loaded Tesseract.js
+ * Reduces initial bundle by ~500KB
+ */
+
 import { logger } from "@/lib/logger";
 
 export interface OCRResult {
@@ -25,16 +29,26 @@ export interface OCRProgress {
   progress: number;
 }
 
+// Lazy load Tesseract
+let Tesseract: typeof import("tesseract.js") | null = null;
+const loadTesseract = async () => {
+  if (!Tesseract) {
+    Tesseract = await import("tesseract.js");
+  }
+  return Tesseract;
+};
+
 export class OCRService {
-  private worker: Tesseract.Worker | null = null;
+  private worker: any = null;
 
   async initialize(language: string = "por+eng"): Promise<void> {
     if (this.worker) {
       await this.terminate();
     }
 
-    this.worker = await Tesseract.createWorker(language, 1, {
-      logger: (m) => logger.info("OCR:", m),
+    const TesseractModule = await loadTesseract();
+    this.worker = await TesseractModule.createWorker(language, 1, {
+      logger: (m: any) => logger.info("OCR:", m),
     });
   }
 
@@ -53,7 +67,7 @@ export class OCRService {
     const processingTime = Date.now() - startTime;
 
     // Extract blocks with bounding boxes
-    const blocks: OCRBlock[] = data.blocks?.map(block => ({
+    const blocks: OCRBlock[] = data.blocks?.map((block: any) => ({
       text: block.text,
       confidence: block.confidence,
       bbox: block.bbox,

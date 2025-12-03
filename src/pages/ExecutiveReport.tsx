@@ -10,11 +10,12 @@ import { Badge } from "@/components/ui/badge";
 import { Download, TrendingUp, AlertTriangle, CheckCircle } from "lucide-react";
 import { toast } from "sonner";
 import html2canvas from "html2canvas";
-import jsPDF from "jspdf";
+import { usePDFExport } from "@/hooks/use-pdf-export";
 import { logger } from "@/lib/logger";
 
 const ExecutiveReport = () => {
   const reportRef = useRef<HTMLDivElement>(null);
+  const { getJsPDF } = usePDFExport();
 
   const systemStatus = {
     version: "2.1.0",
@@ -54,6 +55,7 @@ const ExecutiveReport = () => {
       });
 
       const imgData = canvas.toDataURL("image/png");
+      const jsPDF = await getJsPDF();
       const pdf = new jsPDF({
         orientation: "portrait",
         unit: "mm",

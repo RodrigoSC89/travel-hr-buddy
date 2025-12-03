@@ -17,7 +17,22 @@
 
 **Total Potential Savings: ~3.5MB in initial bundle**
 
-### 2. How to Use Lazy Loading
+### 2. Files Already Migrated
+
+#### Maps (lazy mapbox-gl):
+- ✅ `src/components/fleet/vessel-tracking-map.tsx`
+- ✅ `src/components/logistics/DeliveryMap.tsx`
+- ✅ `src/modules/satellite-tracker/components/SatelliteMap.tsx`
+
+#### PDF Export (lazy jsPDF):
+- ✅ `src/components/auditorias/ListaAuditoriasIMCA.tsx`
+- ✅ `src/pages/admin/analytics.tsx`
+- ✅ `src/pages/admin/dashboard.tsx`
+- ✅ `src/pages/ExecutiveReport.tsx`
+- ✅ `src/components/unified-logs-panel.tsx`
+
+#### OCR (lazy tesseract):
+- ✅ `src/services/ocr-service.ts`
 
 #### PDF Export (replaces direct jsPDF imports)
 ```tsx
