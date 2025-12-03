@@ -1150,6 +1150,36 @@ export const MODULE_REGISTRY: Record<string, ModuleDefinition> = {
     lazy: true,
     version: "1.0.0",
   },
+
+  // Smart Mobility Module
+  "logistics.smart-mobility": {
+    id: "logistics.smart-mobility",
+    name: "Smart Mobility",
+    category: "logistics",
+    path: "modules/smart-mobility/index",
+    description: "Gestão inteligente de viagens, hospedagens e logística de tripulação com IA",
+    status: "active",
+    completeness: "100%",
+    route: "/smart-mobility",
+    icon: "Plane",
+    lazy: true,
+    version: "1.0.0",
+  },
+
+  // Autonomous Procurement Module
+  "logistics.autonomous-procurement": {
+    id: "logistics.autonomous-procurement",
+    name: "Autonomous Procurement",
+    category: "logistics",
+    path: "modules/autonomous-procurement/index",
+    description: "Compras autônomas com IA, análise de fornecedores e rastreabilidade blockchain",
+    status: "active",
+    completeness: "100%",
+    route: "/autonomous-procurement",
+    icon: "ShoppingCart",
+    lazy: true,
+    version: "1.0.0",
+  },
 };
 
 export function getModule(id: string): ModuleDefinition | undefined {

@@ -4,7 +4,7 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
-import { Shield, Wrench, Users, Box, Brain, Zap, Ship, Sparkles, Leaf, AlertTriangle, GraduationCap } from "lucide-react";
+import { Shield, Wrench, Users, Box, Brain, Zap, Ship, Sparkles, Leaf, AlertTriangle, GraduationCap, Plane, ShoppingCart } from "lucide-react";
 import { Link, useNavigate } from "react-router-dom";
 import { usePreviewSafeMode } from "@/hooks/qa/usePreviewSafeMode";
 
@@ -91,6 +91,22 @@ const AIModulesPanel = () => {
       icon: GraduationCap,
       badge: "AI Training",
       color: "from-indigo-500 to-purple-600"
+    },
+    { 
+      name: "Smart Mobility", 
+      description: "Viagens e logística",
+      route: "/smart-mobility",
+      icon: Plane,
+      badge: "Viagens",
+      color: "from-sky-500 to-blue-600"
+    },
+    { 
+      name: "Compras IA", 
+      description: "Procurement autônomo",
+      route: "/autonomous-procurement",
+      icon: ShoppingCart,
+      badge: "Auto-Req",
+      color: "from-amber-500 to-orange-600"
     }
   ];
 
@@ -103,7 +119,7 @@ const AIModulesPanel = () => {
         </CardTitle>
       </CardHeader>
       <CardContent>
-        <div className="grid grid-cols-2 md:grid-cols-4 lg:grid-cols-7 gap-3">
+        <div className="grid grid-cols-3 md:grid-cols-5 lg:grid-cols-9 gap-3">
           {modules.map((mod) => (
             <button
               key={mod.route}
