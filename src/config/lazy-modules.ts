@@ -35,29 +35,10 @@ export const HEAVY_MODULES = {
   DPAIAnalyzer: lazyWithRetry(() => 
     import('@/modules/intelligence/dp-intelligence/components/DPAIAnalyzer')
   ),
-  AIVisionCore: lazyWithRetry(() => 
-    import('@/modules/ai-vision-core')
-  ),
-  
-  // Large Report Modules (XLSX, PDF generation)
-  ComplianceReports: lazyWithRetry(() => 
-    import('@/modules/compliance/compliance-reports')
-  ),
-  InventoryAlerts: lazyWithRetry(() => 
-    import('@/modules/logistics/logistics-hub/components/InventoryAlerts')
-  ),
-  
-  // 3D/Graphics Modules
-  MarineAROverlay: lazyWithRetry(() => 
-    import('@/modules/operations/marine-ar-overlay')
-  ),
   
   // Large Data Modules
   SensorsHub: lazyWithRetry(() => 
     import('@/pages/sensors-hub')
-  ),
-  NavigationCopilot: lazyWithRetry(() => 
-    import('@/pages/navigation-copilot')
   ),
   SatelliteLive: lazyWithRetry(() => 
     import('@/pages/satellite-live')
