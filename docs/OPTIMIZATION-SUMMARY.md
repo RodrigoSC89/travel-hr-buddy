@@ -12,7 +12,7 @@
 | **Páginas de teste/demo** | 9 | 0 | **100%** |
 | **Páginas duplicadas** | 14+ | 0 | **100%** |
 | **Dependências removidas** | 0 | 3 | - |
-| **Componentes órfãos** | 14+ | 0 | **100%** |
+| **Componentes órfãos** | 23+ | 0 | **100%** |
 
 ---
 
@@ -45,7 +45,7 @@ Removido sidebar duplicado de:
 - SystemAuditor.tsx
 - UserOnboarding.tsx
 
-### 5. Componentes Órfãos Removidos (18 diretórios)
+### 5. Componentes Órfãos Removidos (23 diretórios/arquivos)
 - `src/components/stress-test/` - não utilizado
 - `src/components/watchdog/` - não utilizado
 - `src/components/voice/` - não utilizado
@@ -63,6 +63,12 @@ Removido sidebar duplicado de:
 - `src/components/vessel/` - não utilizado (1 arquivo)
 - `src/components/weather/` - não utilizado (1 arquivo)
 - `src/components/control-hub/` - refatorado inline (4 arquivos)
+- `src/components/search/` - não utilizado (1 arquivo)
+- `src/components/user/` - não utilizado (1 arquivo)
+- `src/components/error-boundaries/` - não utilizado (2 arquivos)
+- `src/components/common/` - não utilizado (1 arquivo)
+- `src/components/system/` - não utilizado (3 arquivos)
+- `src/components/business/` - não utilizado (2 arquivos)
 
 ### 6. Páginas Duplicadas Removidas
 - `src/pages/control/ControlHub.tsx` - duplicado de pages/ControlHub.tsx
