@@ -2,8 +2,10 @@ import React, { useMemo, useState, useCallback } from "react";
 import { ProfessionalHeader } from "@/components/dashboard/professional-header";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Button } from "@/components/ui/button";
-import { Shield } from "lucide-react";
-import { Link } from "react-router-dom";
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import { Badge } from "@/components/ui/badge";
+import { Shield, Wrench, Users, Box, Brain, Zap, Ship, Sparkles } from "lucide-react";
+import { Link, useNavigate } from "react-router-dom";
 import { usePreviewSafeMode } from "@/hooks/qa/usePreviewSafeMode";
 
 // PATCH 584: Split Index into optimized subcomponents
@@ -28,6 +30,75 @@ const FLEET_DATA = [
   { name: "Manutenção", value: 3, color: "#f59e0b" },
   { name: "Standby", value: 1, color: "#3b82f6" },
 ] as const;
+
+// PATCH 549: Quick Access to AI Modules
+const AIModulesPanel = () => {
+  const navigate = useNavigate();
+  
+  const modules = [
+    { 
+      name: "MMI Inteligente", 
+      description: "Manutenção com IA, Digital Twin, Copilot",
+      route: "/maintenance-planner",
+      icon: Wrench,
+      badge: "Digital Twin",
+      color: "from-blue-500 to-cyan-500"
+    },
+    { 
+      name: "Crew 2.0", 
+      description: "Análise de fadiga, competências, performance",
+      route: "/crew-management",
+      icon: Users,
+      badge: "IA Avançada",
+      color: "from-green-500 to-emerald-500"
+    },
+    { 
+      name: "PEOTRAM", 
+      description: "Compliance e auditorias marítimas",
+      route: "/peotram",
+      icon: Shield,
+      badge: "Compliance",
+      color: "from-purple-500 to-indigo-500"
+    },
+    { 
+      name: "DP Operations", 
+      description: "Monitoramento de posicionamento dinâmico",
+      route: "/dp-operations",
+      icon: Ship,
+      badge: "Real-time",
+      color: "from-orange-500 to-red-500"
+    }
+  ];
+
+  return (
+    <Card className="border-primary/20 bg-gradient-to-br from-primary/5 to-secondary/5">
+      <CardHeader className="pb-3">
+        <CardTitle className="flex items-center gap-2 text-lg">
+          <Sparkles className="h-5 w-5 text-primary" />
+          Módulos IA Avançados - PATCH 549
+        </CardTitle>
+      </CardHeader>
+      <CardContent>
+        <div className="grid grid-cols-2 md:grid-cols-4 gap-3">
+          {modules.map((mod) => (
+            <button
+              key={mod.route}
+              onClick={() => navigate(mod.route)}
+              className={`p-4 rounded-lg bg-gradient-to-br ${mod.color} text-white hover:scale-105 transition-all duration-200 text-left`}
+            >
+              <mod.icon className="h-6 w-6 mb-2" />
+              <h4 className="font-semibold text-sm">{mod.name}</h4>
+              <p className="text-xs opacity-90 mt-1">{mod.description}</p>
+              <Badge variant="secondary" className="mt-2 text-xs bg-white/20 hover:bg-white/30">
+                {mod.badge}
+              </Badge>
+            </button>
+          ))}
+        </div>
+      </CardContent>
+    </Card>
+  );
+};
 
 const Index = () => {
   const [activeTab, setActiveTab] = useState("overview");
@@ -61,6 +132,9 @@ const Index = () => {
           </Button>
         </Link>
       </div>
+
+      {/* PATCH 549: AI Modules Quick Access */}
+      <AIModulesPanel />
 
       {/* PATCH 584: KPIs Grid extracted to memoized component */}
       <KPIGrid />
