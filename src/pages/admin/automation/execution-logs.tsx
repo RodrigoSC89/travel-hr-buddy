@@ -8,9 +8,14 @@ import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { Badge } from "@/components/ui/badge";
-import jsPDF from "jspdf";
 import { toast } from "@/hooks/use-toast";
 import { logger } from "@/lib/logger";
+
+// Lazy load jsPDF
+const loadJsPDF = async () => {
+  const { default: jsPDF } = await import("jspdf");
+  return jsPDF;
+};
 import {
   BarChart, 
   Bar, 
@@ -312,7 +317,7 @@ export default function ExecutionLogsPage() {
   }
 
   // PDF Export
-  function exportPDF() {
+  async function exportPDF() {
     if (filteredExecutions.length === 0) {
       toast({
         title: "Nenhum dado para exportar",
@@ -334,6 +339,7 @@ export default function ExecutionLogsPage() {
     try {
       setExportingPdf(true);
       
+      const jsPDF = await loadJsPDF();
       const doc = new jsPDF();
       const margin = 20;
       let y = margin;

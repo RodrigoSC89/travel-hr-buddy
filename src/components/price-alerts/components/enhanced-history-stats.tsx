@@ -8,8 +8,15 @@ import { useAuth } from "@/contexts/AuthContext";
 import { Line, Bar } from "react-chartjs-2";
 import { Download, TrendingUp, BarChart3, FileText } from "lucide-react";
 import { useToast } from "@/hooks/use-toast";
-import jsPDF from "jspdf";
-import autoTable from "jspdf-autotable";
+
+// Lazy load jsPDF
+const loadJsPDF = async () => {
+  const [{ default: jsPDF }, autoTableModule] = await Promise.all([
+    import("jspdf"),
+    import("jspdf-autotable")
+  ]);
+  return { jsPDF, autoTable: autoTableModule.default };
+};
 import {
   Chart as ChartJS,
   CategoryScale,
@@ -268,7 +275,8 @@ export function EnhancedHistoryStats() {
     });
   };
 
-  const exportToPDF = () => {
+  const exportToPDF = async () => {
+    const { jsPDF, autoTable } = await loadJsPDF();
     const doc = new jsPDF();
 
     doc.setFontSize(18);

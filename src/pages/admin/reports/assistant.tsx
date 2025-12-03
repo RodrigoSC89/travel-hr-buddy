@@ -8,11 +8,18 @@ import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import { ScrollArea } from "@/components/ui/scroll-area";
 import { ArrowLeft, Download, FileText, BarChart3 } from "lucide-react";
-import jsPDF from "jspdf";
-import autoTable from "jspdf-autotable";
 import { toast } from "@/hooks/use-toast";
 import { Bar } from "react-chartjs-2";
 import { logger } from "@/lib/logger";
+
+// Lazy load jsPDF
+const loadJsPDF = async () => {
+  const [{ default: jsPDF }, autoTableModule] = await Promise.all([
+    import("jspdf"),
+    import("jspdf-autotable")
+  ]);
+  return { jsPDF, autoTable: autoTableModule.default };
+};
 import {
   Chart as ChartJS,
   CategoryScale,
@@ -197,7 +204,7 @@ export default function AssistantReportLogsPage() {
     }
   }
 
-  function exportPDF() {
+  async function exportPDF() {
     if (logs.length === 0) {
       toast({
         title: "Nenhum dado para exportar",
@@ -207,6 +214,7 @@ export default function AssistantReportLogsPage() {
       return;
     }
 
+    const { jsPDF, autoTable } = await loadJsPDF();
     const doc = new jsPDF();
     doc.text("📬 Logs de Envio de Relatórios do Assistente IA", 14, 16);
     autoTable(doc, {

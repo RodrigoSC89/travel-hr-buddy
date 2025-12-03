@@ -14,9 +14,16 @@ import { supabase } from "@/integrations/supabase/client";
 import { useToast } from "@/hooks/use-toast";
 import { formatDistanceToNow } from "date-fns";
 import { ptBR } from "date-fns/locale";
-import jsPDF from "jspdf";
-import "jspdf-autotable";
 import { logger } from "@/lib/logger";
+
+// Lazy load jsPDF
+const loadJsPDF = async () => {
+  const [{ default: jsPDF }, autoTableModule] = await Promise.all([
+    import("jspdf"),
+    import("jspdf-autotable")
+  ]);
+  return { jsPDF, autoTable: autoTableModule.default };
+};
 
 interface IncidentReport {
   id: string;
@@ -261,6 +268,7 @@ export default function IncidentReportsComplete() {
   };
 
   const exportToPDF = async (incident: IncidentReport) => {
+    const { jsPDF } = await loadJsPDF();
     const doc = new jsPDF();
     
     // Title

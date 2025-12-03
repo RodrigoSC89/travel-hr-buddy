@@ -19,7 +19,12 @@ import {
   CartesianGrid,
 } from "recharts";
 import html2canvas from "html2canvas";
-import jsPDF from "jspdf";
+
+// Lazy load jsPDF
+const loadJsPDF = async () => {
+  const { default: jsPDF } = await import("jspdf");
+  return jsPDF;
+};
 
 interface DadosNavio {
   nome_navio: string;
@@ -93,6 +98,7 @@ export default function DashboardAuditorias() {
       });
 
       const imgData = canvas.toDataURL("image/png");
+      const jsPDF = await loadJsPDF();
       const pdf = new jsPDF({
         orientation: "landscape",
         unit: "mm",

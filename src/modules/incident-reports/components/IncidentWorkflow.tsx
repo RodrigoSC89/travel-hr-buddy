@@ -12,7 +12,12 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@
 import { AlertOctagon, FileText, Search, CheckCircle, X, Upload } from "lucide-react";
 import { supabase } from "@/integrations/supabase/client";
 import { useToast } from "@/hooks/use-toast";
-import jsPDF from "jspdf";
+
+// Lazy load jsPDF
+const loadJsPDF = async () => {
+  const { default: jsPDF } = await import("jspdf");
+  return jsPDF;
+};
 
 interface IncidentWorkflowProps {
   incident: any;
@@ -117,8 +122,9 @@ export const IncidentWorkflow: React.FC<IncidentWorkflowProps> = ({ incident, on
     }
   };
 
-  const exportToPDF = () => {
+  const exportToPDF = async () => {
     try {
+      const jsPDF = await loadJsPDF();
       const doc = new jsPDF();
       
       doc.setFontSize(20);

@@ -17,8 +17,13 @@ import {
 } from "lucide-react";
 import { supabase } from "@/integrations/supabase/client";
 import { toast } from "@/hooks/use-toast";
-import jsPDF from "jspdf";
 import { logger } from "@/lib/logger";
+
+// Lazy load jsPDF
+const loadJsPDF = async () => {
+  const { default: jsPDF } = await import("jspdf");
+  return jsPDF;
+};
 
 import ApplyTemplateModal from "@/components/templates/ApplyTemplateModal";
 
@@ -150,6 +155,7 @@ export default function DocumentAIEditorPage() {
 
     setExporting(true);
     try {
+      const jsPDF = await loadJsPDF();
       const pdf = new jsPDF();
       const pageWidth = pdf.internal.pageSize.getWidth();
       const pageHeight = pdf.internal.pageSize.getHeight();
