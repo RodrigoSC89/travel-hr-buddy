@@ -2,6 +2,7 @@
  * PEO-DP Panel
  * Interface completa para Sistema Inteligente de Auditoria DP
  * Baseado em NORMAM-101 e IMCA M 117
+ * PATCH 549 - Advanced Maritime Intelligence
  */
 
 import React, { useState, useEffect } from "react";
@@ -27,11 +28,16 @@ import {
   Download,
   RefreshCw,
   Compass,
-  Anchor
+  Anchor,
+  Bot,
+  BarChart3,
+  Brain
 } from "lucide-react";
 import { peodpCore } from "./peodp_core";
 import type { PEODPAuditoria } from "@/types/peodp-audit";
 import type { PEODPSessionReport, PEODPExecutiveSummary } from "./types";
+import DPCopilot from "./components/DPCopilot";
+import DPAnalyticsDashboard from "./components/DPAnalyticsDashboard";
 
 export default function PEODPPanel() {
   const [isLoading, setIsLoading] = useState(false);
@@ -164,8 +170,16 @@ export default function PEODPPanel() {
         )}
       </div>
 
-      <Tabs defaultValue="auditoria" className="space-y-4">
-        <TabsList className="grid w-full grid-cols-3">
+      <Tabs defaultValue="copilot" className="space-y-4">
+        <TabsList className="grid w-full grid-cols-5">
+          <TabsTrigger value="copilot" className="flex items-center gap-2">
+            <Bot className="h-4 w-4" />
+            Copilot IA
+          </TabsTrigger>
+          <TabsTrigger value="analytics" className="flex items-center gap-2">
+            <Brain className="h-4 w-4" />
+            Analytics
+          </TabsTrigger>
           <TabsTrigger value="auditoria" className="flex items-center gap-2">
             <Shield className="h-4 w-4" />
             Auditoria
@@ -179,6 +193,16 @@ export default function PEODPPanel() {
             Relatórios
           </TabsTrigger>
         </TabsList>
+
+        {/* Copilot IA Tab - PATCH 549 */}
+        <TabsContent value="copilot" className="space-y-4">
+          <DPCopilot />
+        </TabsContent>
+
+        {/* Analytics Tab - PATCH 549 */}
+        <TabsContent value="analytics" className="space-y-4">
+          <DPAnalyticsDashboard />
+        </TabsContent>
 
         {/* Auditoria Tab */}
         <TabsContent value="auditoria" className="space-y-4">
