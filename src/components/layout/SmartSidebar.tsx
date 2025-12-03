@@ -66,7 +66,7 @@ const groupedModules = [
       { label: "Comunicação", path: "/communication" },
       { label: "Workspace em Tempo Real", path: "/real-time-workspace" },
       { label: "Gerenciador de Canais", path: "/channel-manager" },
-      { label: "Centro de Notificações", path: "/notification-center" },
+      { label: "Centro de Notificações", path: "/notifications-center" },
       { label: "Alertas de Preços", path: "/price-alerts" },
       { label: "Centro de Ajuda", path: "/help" },
     ],
