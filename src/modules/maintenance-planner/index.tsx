@@ -5,9 +5,8 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Badge } from "@/components/ui/badge";
 import { 
   Wrench, Calendar, CheckCircle, AlertTriangle, Plus, Download, 
-  Bell, Bot, Ship, Activity, LayoutGrid
+  Bell, Bot, Ship, Activity, LayoutGrid, Clock, FileText
 } from "lucide-react";
-import { supabase } from "@/integrations/supabase/client";
 import { useToast } from "@/hooks/use-toast";
 import { MaintenanceCalendarView } from "./components/MaintenanceCalendarView";
 import { MaintenanceTimelineView } from "./components/MaintenanceTimelineView";
@@ -17,6 +16,8 @@ import { MaintenanceAlertsPanel } from "./components/MaintenanceAlertsPanel";
 import { MMICopilot } from "./components/MMICopilot";
 import { FleetHealthPanel } from "./components/FleetHealthPanel";
 import { JobsCenter } from "./components/JobsCenter";
+import HourometerManager from "./components/HourometerManager";
+import WorkOrderManager from "./components/WorkOrderManager";
 
 interface MaintenanceStats {
   scheduled: number;
@@ -181,18 +182,26 @@ const MaintenancePlanner = () => {
       
       {/* Main Tabs */}
       <Tabs value={activeTab} onValueChange={setActiveTab}>
-        <TabsList className="grid w-full grid-cols-6">
+        <TabsList className="flex flex-wrap gap-1 h-auto p-1">
           <TabsTrigger value="saude" className="flex items-center gap-2">
             <Ship className="h-4 w-4" />
-            Saúde da Frota
+            Saúde
           </TabsTrigger>
           <TabsTrigger value="copilot" className="flex items-center gap-2">
             <Bot className="h-4 w-4" />
-            Copilot IA
+            Copilot
           </TabsTrigger>
           <TabsTrigger value="jobs" className="flex items-center gap-2">
             <LayoutGrid className="h-4 w-4" />
-            Central de Jobs
+            Jobs
+          </TabsTrigger>
+          <TabsTrigger value="horimetros" className="flex items-center gap-2">
+            <Clock className="h-4 w-4" />
+            Horímetros
+          </TabsTrigger>
+          <TabsTrigger value="os" className="flex items-center gap-2">
+            <FileText className="h-4 w-4" />
+            OS
           </TabsTrigger>
           <TabsTrigger value="calendar">Calendário</TabsTrigger>
           <TabsTrigger value="timeline">Timeline</TabsTrigger>
@@ -250,6 +259,14 @@ const MaintenancePlanner = () => {
 
         <TabsContent value="jobs" className="mt-6">
           <JobsCenter onCreateJob={() => setShowCreateDialog(true)} />
+        </TabsContent>
+
+        <TabsContent value="horimetros" className="mt-6">
+          <HourometerManager />
+        </TabsContent>
+
+        <TabsContent value="os" className="mt-6">
+          <WorkOrderManager />
         </TabsContent>
 
         <TabsContent value="calendar" className="mt-6">
