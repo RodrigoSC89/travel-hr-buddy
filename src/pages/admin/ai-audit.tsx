@@ -119,12 +119,12 @@ export default function AIAuditDashboard() {
         </CardHeader>
         <CardContent>
           <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-            <Select value={selectedService} onValueChange={setSelectedService}>
+            <Select value={selectedService || "all"} onValueChange={(value) => setSelectedService(value === "all" ? "" : value)}>
               <SelectTrigger>
                 <SelectValue placeholder="All Services" />
               </SelectTrigger>
               <SelectContent>
-                <SelectItem value="">All Services</SelectItem>
+                <SelectItem value="all">All Services</SelectItem>
                 <SelectItem value="copilot">Copilot</SelectItem>
                 <SelectItem value="vault_ai">Vault AI</SelectItem>
                 <SelectItem value="dp_intelligence">DP Intelligence</SelectItem>
@@ -133,12 +133,12 @@ export default function AIAuditDashboard() {
               </SelectContent>
             </Select>
 
-            <Select value={selectedStatus} onValueChange={setSelectedStatus}>
+            <Select value={selectedStatus || "all"} onValueChange={(value) => setSelectedStatus(value === "all" ? "" : value)}>
               <SelectTrigger>
                 <SelectValue placeholder="All Status" />
               </SelectTrigger>
               <SelectContent>
-                <SelectItem value="">All Status</SelectItem>
+                <SelectItem value="all">All Status</SelectItem>
                 <SelectItem value="success">Success</SelectItem>
                 <SelectItem value="error">Error</SelectItem>
                 <SelectItem value="timeout">Timeout</SelectItem>

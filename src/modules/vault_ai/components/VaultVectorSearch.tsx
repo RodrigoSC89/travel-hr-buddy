@@ -135,16 +135,16 @@ export function VaultVectorSearch() {
               <div>
                 <Label htmlFor="documentType">Document Type</Label>
                 <Select
-                  value={filters.documentType}
+                  value={filters.documentType || "all"}
                   onValueChange={(value) =>
-                    setFilters({ ...filters, documentType: value })
+                    setFilters({ ...filters, documentType: value === "all" ? "" : value })
                   }
                 >
                   <SelectTrigger>
                     <SelectValue placeholder="All types" />
                   </SelectTrigger>
                   <SelectContent>
-                    <SelectItem value="">All types</SelectItem>
+                    <SelectItem value="all">All types</SelectItem>
                     <SelectItem value="policy">Policy</SelectItem>
                     <SelectItem value="procedure">Procedure</SelectItem>
                     <SelectItem value="manual">Manual</SelectItem>
@@ -156,16 +156,16 @@ export function VaultVectorSearch() {
               <div>
                 <Label htmlFor="category">Category</Label>
                 <Select
-                  value={filters.category}
+                  value={filters.category || "all"}
                   onValueChange={(value) =>
-                    setFilters({ ...filters, category: value })
+                    setFilters({ ...filters, category: value === "all" ? "" : value })
                   }
                 >
                   <SelectTrigger>
                     <SelectValue placeholder="All categories" />
                   </SelectTrigger>
                   <SelectContent>
-                    <SelectItem value="">All categories</SelectItem>
+                    <SelectItem value="all">All categories</SelectItem>
                     <SelectItem value="safety">Safety</SelectItem>
                     <SelectItem value="operations">Operations</SelectItem>
                     <SelectItem value="maintenance">Maintenance</SelectItem>

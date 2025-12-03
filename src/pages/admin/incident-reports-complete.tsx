@@ -708,12 +708,12 @@ export default function IncidentReportsComplete() {
                       </div>
                       <div>
                         <Label>Alterar Status (opcional)</Label>
-                        <Select value={newFollowup.new_status} onValueChange={(value) => setNewFollowup({...newFollowup, new_status: value})}>
+                        <Select value={newFollowup.new_status || "none"} onValueChange={(value) => setNewFollowup({...newFollowup, new_status: value === "none" ? "" : value})}>
                           <SelectTrigger>
                             <SelectValue placeholder="Manter status atual" />
                           </SelectTrigger>
                           <SelectContent>
-                            <SelectItem value="">Sem alteração</SelectItem>
+                            <SelectItem value="none">Sem alteração</SelectItem>
                             <SelectItem value="under_analysis">Em Análise</SelectItem>
                             <SelectItem value="resolved">Resolvido</SelectItem>
                             <SelectItem value="closed">Fechado</SelectItem>
