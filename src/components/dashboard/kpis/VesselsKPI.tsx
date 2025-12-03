@@ -50,9 +50,9 @@ export function VesselsKPI() {
           <div className="flex items-center justify-between animate-pulse">
             <div>
               <p className="text-sm text-muted-foreground">Embarcações Ativas</p>
-              <div className="h-9 w-16 bg-gray-200 rounded mt-1"></div>
+              <div className="h-9 w-16 bg-muted rounded mt-1"></div>
             </div>
-            <Ship className="h-8 w-8 text-gray-300" />
+            <Ship className="h-8 w-8 text-muted-foreground" />
           </div>
         </CardContent>
       </Card>

@@ -50,9 +50,9 @@ export function RevenueKPI() {
           <div className="flex items-center justify-between animate-pulse">
             <div>
               <p className="text-sm text-muted-foreground">Receita Total</p>
-              <div className="h-9 w-32 bg-gray-200 rounded mt-1"></div>
+              <div className="h-9 w-32 bg-muted rounded mt-1"></div>
             </div>
-            <TrendingUp className="h-8 w-8 text-gray-300" />
+            <TrendingUp className="h-8 w-8 text-muted-foreground" />
           </div>
         </CardContent>
       </Card>

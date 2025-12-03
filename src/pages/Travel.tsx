@@ -76,19 +76,19 @@ const Travel = () => {
           <div className="relative flex items-start justify-between">
             <div className="flex-1">
               <div className="flex items-center gap-4 mb-4">
-                <div className="p-4 rounded-2xl bg-white/10 backdrop-blur-md border border-white/20 shadow-2xl">
-                  <Plane className="w-10 h-10 text-white" />
+                <div className="p-4 rounded-2xl bg-primary/10 backdrop-blur-md border border-primary/20 shadow-2xl">
+                  <Plane className="w-10 h-10 text-primary" />
                 </div>
                 <div>
-                  <Badge className="mb-2 bg-white/20 hover:bg-white/30 text-white border-white/30 backdrop-blur-sm">
+                  <Badge className="mb-2 bg-primary/20 hover:bg-primary/30 text-primary-foreground border-primary/30 backdrop-blur-sm">
                     Sistema de Viagens
                   </Badge>
-                  <h1 className="text-4xl font-black text-white tracking-tight">
+                  <h1 className="text-4xl font-black text-foreground tracking-tight">
                     Gestão de Viagens
                   </h1>
                 </div>
               </div>
-              <p className="text-xl text-info-foreground/90 max-w-2xl mb-6 leading-relaxed">
+              <p className="text-xl text-muted-foreground max-w-2xl mb-6 leading-relaxed">
                 Sistema completo para reservas, aprovações e gestão de viagens corporativas
               </p>
             </div>
