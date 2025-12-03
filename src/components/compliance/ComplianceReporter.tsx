@@ -92,53 +92,53 @@ export default function ComplianceReporter() {
   }
 
   return (
-    <Card className="bg-gray-950 border-cyan-800">
+    <Card className="bg-card border-primary/30">
       <CardHeader>
-        <CardTitle className="text-cyan-400 flex items-center gap-2">
+        <CardTitle className="text-primary flex items-center gap-2">
           <AlertCircle className="h-5 w-5" />
           Incident Reports - Real-time Tracking
         </CardTitle>
-        <CardDescription className="text-gray-400">
+        <CardDescription>
           Automated incident detection and compliance mapping
         </CardDescription>
       </CardHeader>
       <CardContent>
-        <div className="rounded-md border border-cyan-800">
+        <div className="rounded-md border border-primary/30">
           <Table>
             <TableHeader>
-              <TableRow className="border-cyan-800 hover:bg-gray-900">
-                <TableHead className="text-cyan-400">Timestamp</TableHead>
-                <TableHead className="text-cyan-400">Module</TableHead>
-                <TableHead className="text-cyan-400">Type</TableHead>
-                <TableHead className="text-cyan-400">Severity</TableHead>
-                <TableHead className="text-cyan-400">Risk Score</TableHead>
-                <TableHead className="text-cyan-400">Compliance</TableHead>
+              <TableRow className="border-primary/30 hover:bg-muted">
+                <TableHead className="text-primary">Timestamp</TableHead>
+                <TableHead className="text-primary">Module</TableHead>
+                <TableHead className="text-primary">Type</TableHead>
+                <TableHead className="text-primary">Severity</TableHead>
+                <TableHead className="text-primary">Risk Score</TableHead>
+                <TableHead className="text-primary">Compliance</TableHead>
               </TableRow>
             </TableHeader>
             <TableBody>
               {incidents.length === 0 ? (
                 <TableRow>
-                  <TableCell colSpan={6} className="text-center text-gray-400 py-8">
+                  <TableCell colSpan={6} className="text-center text-muted-foreground py-8">
                     No incidents reported
                   </TableCell>
                 </TableRow>
               ) : (
                 incidents.map((incident) => (
-                  <TableRow key={incident.id} className="border-cyan-800/50 hover:bg-gray-900">
-                    <TableCell className="text-gray-300">
+                  <TableRow key={incident.id} className="border-primary/20 hover:bg-muted">
+                    <TableCell className="text-foreground">
                       {new Date(incident.timestamp).toLocaleString()}
                     </TableCell>
-                    <TableCell className="text-gray-300">{incident.module}</TableCell>
-                    <TableCell className="text-gray-300">{incident.type}</TableCell>
+                    <TableCell className="text-foreground">{incident.module}</TableCell>
+                    <TableCell className="text-foreground">{incident.type}</TableCell>
                     <TableCell>
                       <Badge variant={getSeverityColor(incident.severity)}>
                         {incident.severity}
                       </Badge>
                     </TableCell>
-                    <TableCell className="text-gray-300 font-mono">
+                    <TableCell className="text-foreground font-mono">
                       {incident.riskScore.toFixed(2)}
                     </TableCell>
-                    <TableCell className="text-gray-300">
+                    <TableCell className="text-foreground">
                       <div className="flex flex-wrap gap-1">
                         {incident.compliance?.slice(0, 3).map((std, idx) => (
                           <Badge key={idx} variant="outline" className="text-xs">

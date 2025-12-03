@@ -62,21 +62,21 @@ const systemSignals = [
     value: "39",
     detail: "36 em execução estável",
     icon: Layers,
-    color: "text-slate-100",
+    color: "text-foreground",
   },
   {
     title: "Uptime médio",
     value: "98.9%",
     detail: "SLA Platinum",
     icon: Activity,
-    color: "text-emerald-300",
+    color: "text-success",
   },
   {
     title: "Alertas críticos",
     value: "00",
     detail: "últimas 72h",
     icon: AlertTriangle,
-    color: "text-amber-300",
+    color: "text-warning",
   },
 ];
 
@@ -160,8 +160,8 @@ export default function Dashboard() {
                     <card.icon className="h-5 w-5 text-white" />
                   </div>
                 </div>
-                <div className="flex items-center justify-between text-sm text-slate-300">
-                  <span className="font-semibold text-emerald-300">{card.change}</span>
+              <div className="flex items-center justify-between text-sm text-muted-foreground">
+                  <span className="font-semibold text-success">{card.change}</span>
                   <span>{card.sublabel}</span>
                 </div>
               </CardContent>
@@ -174,20 +174,20 @@ export default function Dashboard() {
           {systemSignals.map((signal) => (
             <Card
               key={signal.title}
-              className="border-white/5 bg-white/5 text-white backdrop-blur"
+              className="border-border bg-card text-card-foreground backdrop-blur"
             >
               <CardContent className="space-y-4 p-6">
                 <div className="flex items-center justify-between">
                   <div>
-                    <p className="text-xs uppercase tracking-wide text-slate-300">
+                    <p className="text-xs uppercase tracking-wide text-muted-foreground">
                       {signal.title}
                     </p>
                     <p className={`mt-3 text-3xl font-semibold ${signal.color}`}>{signal.value}</p>
-                    <p className="text-sm text-slate-300">{signal.detail}</p>
+                    <p className="text-sm text-muted-foreground">{signal.detail}</p>
                   </div>
-                  <signal.icon className="h-10 w-10 text-white" />
+                  <signal.icon className="h-10 w-10 text-primary" />
                 </div>
-                <Progress value={signal.title === "Módulos Monitorados" ? 92 : 100} className="h-2 bg-white/10" />
+                <Progress value={signal.title === "Módulos Monitorados" ? 92 : 100} className="h-2 bg-muted" />
               </CardContent>
             </Card>
           ))}
@@ -195,10 +195,10 @@ export default function Dashboard() {
 
         {/* Operational integrity */}
         <section className="grid gap-5 lg:grid-cols-2">
-          <Card className="border-white/5 bg-white/5 text-white backdrop-blur">
+          <Card className="border-border bg-card text-card-foreground backdrop-blur">
             <CardHeader>
               <CardTitle>Integridade Operacional</CardTitle>
-              <CardDescription className="text-slate-300">
+              <CardDescription>
                 Indicadores críticos monitorados em tempo real pela IA distribuída
               </CardDescription>
             </CardHeader>
@@ -208,47 +208,47 @@ export default function Dashboard() {
                   label: "Checklist Dinâmico",
                   value: "100%",
                   detail: "37 fluxos validados",
-                  color: "text-emerald-300",
+                  color: "text-success",
                   progress: 100,
                 },
                 {
                   label: "Planos de contingência",
                   value: "12 ativos",
                   detail: "Testados nas últimas 48h",
-                  color: "text-sky-300",
+                  color: "text-primary",
                   progress: 86,
                 },
                 {
                   label: "Inspeções críticas",
                   value: "8 pendências",
                   detail: "Prazo médio 4h",
-                  color: "text-amber-300",
+                  color: "text-warning",
                   progress: 64,
                 },
               ].map((item) => (
                 <div key={item.label} className="space-y-2">
                   <div className="flex items-center justify-between">
                     <div>
-                      <p className="text-sm text-slate-300">{item.label}</p>
+                      <p className="text-sm text-muted-foreground">{item.label}</p>
                       <p className={`${item.color} text-lg font-semibold`}>{item.value}</p>
                     </div>
-                    <span className="text-xs text-slate-400">{item.detail}</span>
+                    <span className="text-xs text-muted-foreground">{item.detail}</span>
                   </div>
-                  <Progress value={item.progress} className="h-2 bg-white/10" />
+                  <Progress value={item.progress} className="h-2 bg-muted" />
                 </div>
               ))}
             </CardContent>
           </Card>
 
-          <Card className="border-white/5 bg-white/5 text-white backdrop-blur">
+          <Card className="border-border bg-card text-card-foreground backdrop-blur">
             <CardHeader className="flex flex-row items-center justify-between">
               <div>
                 <CardTitle>Status do Sistema</CardTitle>
-                <CardDescription className="text-slate-300">
+                <CardDescription>
                   Todos os serviços essenciais passam em auditoria de contraste WCAG 2.1 AA
                 </CardDescription>
               </div>
-              <Badge variant="outline" className="border-emerald-400/40 bg-emerald-500/10 text-emerald-200">
+              <Badge variant="outline" className="border-success/40 bg-success/10 text-success-foreground">
                 Estável
               </Badge>
             </CardHeader>
@@ -259,12 +259,12 @@ export default function Dashboard() {
                 "Verificações de segurança, autenticação e telemetria ativas",
                 "Fluxos de IA e automação com monitoramento contínuo",
               ].map((item) => (
-                <div key={item} className="flex items-start gap-3 text-sm text-slate-200">
-                  <CheckCircle className="mt-0.5 h-4 w-4 text-emerald-300" />
+                <div key={item} className="flex items-start gap-3 text-sm text-foreground">
+                  <CheckCircle className="mt-0.5 h-4 w-4 text-success" />
                   <span>{item}</span>
                 </div>
               ))}
-              <div className="rounded-2xl border border-white/10 bg-gradient-to-r from-emerald-500/10 to-emerald-400/5 p-4 text-xs text-slate-200">
+              <div className="rounded-2xl border border-border bg-gradient-to-r from-success/10 to-success/5 p-4 text-xs text-muted-foreground">
                 Painel certificado para operação em ambientes de ponte e centros de comando, mantendo legibilidade mínima de 4.5:1 em todos os textos principais.
               </div>
             </CardContent>

@@ -59,19 +59,19 @@ export default function ControlHub() {
                 <h1 className="mt-3 text-4xl font-semibold tracking-tight text-white lg:text-5xl">
                   Control Hub · Observability & AI Insights
                 </h1>
-                <p className="mt-3 max-w-2xl text-base leading-relaxed text-slate-300">
+                <p className="mt-3 max-w-2xl text-base leading-relaxed text-muted-foreground">
                   Painel executivo com telemetria em tempo real, alertas unificados e modelos de IA distribuídos para decisões rápidas e auditáveis.
                 </p>
               </div>
             </div>
             <div className="grid w-full gap-4 sm:grid-cols-3">
               {heroStats.map((stat) => (
-                <Card key={stat.label} className="border-white/10 bg-white/5 text-white">
+                <Card key={stat.label} className="border-border bg-card text-card-foreground">
                   <CardContent className="space-y-2 p-4">
-                    <stat.icon className="h-5 w-5 text-emerald-300" />
-                    <p className="text-xs uppercase tracking-wide text-slate-400">{stat.label}</p>
-                    <p className="text-2xl font-semibold text-white">{stat.value}</p>
-                    <p className="text-xs text-slate-400">{stat.detail}</p>
+                    <stat.icon className="h-5 w-5 text-success" />
+                    <p className="text-xs uppercase tracking-wide text-muted-foreground">{stat.label}</p>
+                    <p className="text-2xl font-semibold text-foreground">{stat.value}</p>
+                    <p className="text-xs text-muted-foreground">{stat.detail}</p>
                   </CardContent>
                 </Card>
               ))}
@@ -150,29 +150,29 @@ export default function ControlHub() {
         </section>
 
         <section className="grid gap-6 lg:grid-cols-2">
-          <Card className="border-white/5 bg-white/5 text-white">
+          <Card className="border-border bg-card text-card-foreground">
             <CardHeader className="flex flex-row items-start justify-between">
               <div>
                 <CardTitle>Resposta a incidentes</CardTitle>
-                <p className="text-sm text-slate-300">
+                <p className="text-sm text-muted-foreground">
                   Playbooks com IA, comunicação automatizada e trilhas de auditoria completas
                 </p>
               </div>
-              <Badge variant="outline" className="border-amber-300/50 bg-amber-400/10 text-amber-200">
+              <Badge variant="outline" className="border-warning/50 bg-warning/10 text-warning-foreground">
                 Em standby
               </Badge>
             </CardHeader>
-            <CardContent className="rounded-3xl border border-white/10 bg-slate-950/40 p-4">
+            <CardContent className="rounded-3xl border border-border bg-muted/40 p-4">
               <Suspense fallback={<LoadingCard label="Incident Response" />}>
                 <IncidentResponsePanel />
               </Suspense>
             </CardContent>
           </Card>
 
-          <Card className="border-white/5 bg-white/5 text-white">
+          <Card className="border-border bg-card text-card-foreground">
             <CardHeader>
               <CardTitle>AI Insight Reporter</CardTitle>
-              <p className="text-sm text-slate-300">
+              <p className="text-sm text-muted-foreground">
                 Insights priorizados por criticidade, explicados e prontos para ação executiva
               </p>
             </CardHeader>
@@ -202,12 +202,12 @@ function SectionHeader({ title, description }: { title: string; description: str
 
 function ModuleSurface({ title, description, children }: PropsWithChildren<{ title: string; description: string }>) {
   return (
-    <div className="rounded-3xl border border-white/10 bg-white/5 p-4 text-white shadow-lg backdrop-blur">
+    <div className="rounded-3xl border border-border bg-card p-4 text-card-foreground shadow-lg backdrop-blur">
       <div className="space-y-1 px-1 pb-4">
-        <p className="text-xs uppercase tracking-wide text-slate-400">{title}</p>
-        <p className="text-sm text-slate-300">{description}</p>
+        <p className="text-xs uppercase tracking-wide text-muted-foreground">{title}</p>
+        <p className="text-sm text-muted-foreground">{description}</p>
       </div>
-      <div className="rounded-2xl border border-white/5 bg-slate-950/30 p-3">
+      <div className="rounded-2xl border border-border bg-muted/30 p-3">
         {children}
       </div>
     </div>
@@ -216,9 +216,9 @@ function ModuleSurface({ title, description, children }: PropsWithChildren<{ tit
 
 function LoadingCard({ label }: { label?: string }) {
   return (
-    <div className="flex flex-col items-center justify-center gap-3 rounded-2xl border border-white/10 bg-slate-950/60 p-6 text-slate-300">
-      <Loader className="h-6 w-6 animate-spin text-emerald-300" />
-      {label && <span className="text-xs uppercase tracking-[0.2em] text-slate-500">{label}</span>}
+    <div className="flex flex-col items-center justify-center gap-3 rounded-2xl border border-border bg-muted/60 p-6 text-muted-foreground">
+      <Loader className="h-6 w-6 animate-spin text-success" />
+      {label && <span className="text-xs uppercase tracking-[0.2em] text-muted-foreground">{label}</span>}
     </div>
   );
 }

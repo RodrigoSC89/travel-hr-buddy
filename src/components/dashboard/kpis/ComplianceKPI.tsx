@@ -50,9 +50,9 @@ export function ComplianceKPI() {
           <div className="flex items-center justify-between animate-pulse">
             <div>
               <p className="text-sm text-muted-foreground">Compliance Score</p>
-              <div className="h-9 w-24 bg-gray-200 rounded mt-1"></div>
+              <div className="h-9 w-24 bg-muted rounded mt-1"></div>
             </div>
-            <Shield className="h-8 w-8 text-gray-300" />
+            <Shield className="h-8 w-8 text-muted-foreground" />
           </div>
         </CardContent>
       </Card>

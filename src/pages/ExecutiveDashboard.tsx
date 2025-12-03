@@ -429,8 +429,8 @@ export default function ExecutiveDashboard() {
                       size="sm"
                       variant={selectedPeriod === period ? "default" : "ghost"}
                       className={`${selectedPeriod === period
-                        ? "bg-primary text-white"
-                        : "bg-white/70 text-slate-600 shadow-sm border border-slate-200 dark:bg-white/10 dark:text-white/70 dark:border-white/10"}`}
+                        ? "bg-primary text-primary-foreground"
+                        : "bg-secondary text-secondary-foreground shadow-sm border border-border"}`}
                       onClick={() => setSelectedPeriod(period)}
                     >
                       {period === "weekly" ? "Semanal" :
@@ -814,7 +814,7 @@ export default function ExecutiveDashboard() {
                       <Button
                         key={action.label}
                         variant="outline"
-                        className="w-full justify-start rounded-2xl border-slate-200 bg-white/80 text-slate-700 hover:border-primary hover:text-primary dark:border-white/10 dark:bg-white/5 dark:text-white/80"
+                        className="w-full justify-start rounded-2xl border-border bg-secondary text-secondary-foreground hover:border-primary hover:text-primary"
                       >
                         <IconComponent className="mr-2 h-4 w-4" />
                         {action.label}
