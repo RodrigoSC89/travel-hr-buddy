@@ -4,7 +4,7 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
-import { Shield, Wrench, Users, Box, Brain, Zap, Ship, Sparkles, Leaf } from "lucide-react";
+import { Shield, Wrench, Users, Box, Brain, Zap, Ship, Sparkles, Leaf, AlertTriangle } from "lucide-react";
 import { Link, useNavigate } from "react-router-dom";
 import { usePreviewSafeMode } from "@/hooks/qa/usePreviewSafeMode";
 
@@ -31,14 +31,14 @@ const FLEET_DATA = [
   { name: "Standby", value: 1, color: "#3b82f6" },
 ] as const;
 
-// PATCH 549: Quick Access to AI Modules
+// Quick Access to AI Modules
 const AIModulesPanel = () => {
   const navigate = useNavigate();
   
   const modules = [
     { 
       name: "MMI Inteligente", 
-      description: "Manutenção com IA, Digital Twin, Copilot",
+      description: "Manutenção com IA, Digital Twin",
       route: "/maintenance-planner",
       icon: Wrench,
       badge: "Digital Twin",
@@ -46,7 +46,7 @@ const AIModulesPanel = () => {
     },
     { 
       name: "Crew 2.0", 
-      description: "Análise de fadiga, competências, performance",
+      description: "Análise de fadiga e competências",
       route: "/crew-management",
       icon: Users,
       badge: "IA Avançada",
@@ -54,7 +54,7 @@ const AIModulesPanel = () => {
     },
     { 
       name: "PEO-DP", 
-      description: "Posicionamento dinâmico e auditoria DP",
+      description: "Posicionamento dinâmico",
       route: "/peo-dp",
       icon: Ship,
       badge: "IMCA M117",
@@ -62,19 +62,27 @@ const AIModulesPanel = () => {
     },
     { 
       name: "ESG & Emissões", 
-      description: "Carbon footprint, CII, compliance IMO",
+      description: "Carbon footprint, CII",
       route: "/esg-emissions",
       icon: Leaf,
       badge: "IMO 2020",
-      color: "from-green-600 to-teal-500"
+      color: "from-teal-500 to-green-600"
+    },
+    { 
+      name: "Safety Guardian", 
+      description: "Incidentes e IA preditiva",
+      route: "/safety-guardian",
+      icon: AlertTriangle,
+      badge: "TRIR/LTI",
+      color: "from-red-500 to-orange-500"
     },
     { 
       name: "PEOTRAM", 
-      description: "Compliance e auditorias marítimas",
+      description: "Compliance marítimo",
       route: "/peotram",
       icon: Shield,
       badge: "Compliance",
-      color: "from-orange-500 to-red-500"
+      color: "from-orange-500 to-amber-500"
     }
   ];
 
@@ -87,17 +95,17 @@ const AIModulesPanel = () => {
         </CardTitle>
       </CardHeader>
       <CardContent>
-        <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-3">
+        <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-6 gap-3">
           {modules.map((mod) => (
             <button
               key={mod.route}
               onClick={() => navigate(mod.route)}
-              className={`p-4 rounded-lg bg-gradient-to-br ${mod.color} text-white hover:scale-105 transition-all duration-200 text-left`}
+              className={`p-3 rounded-lg bg-gradient-to-br ${mod.color} text-white hover:scale-105 transition-all duration-200 text-left`}
             >
-              <mod.icon className="h-6 w-6 mb-2" />
-              <h4 className="font-semibold text-sm">{mod.name}</h4>
-              <p className="text-xs opacity-90 mt-1 line-clamp-2">{mod.description}</p>
-              <Badge variant="secondary" className="mt-2 text-xs bg-white/20 hover:bg-white/30">
+              <mod.icon className="h-5 w-5 mb-2" />
+              <h4 className="font-semibold text-xs">{mod.name}</h4>
+              <p className="text-[10px] opacity-90 mt-1 line-clamp-2">{mod.description}</p>
+              <Badge variant="secondary" className="mt-2 text-[10px] bg-white/20 hover:bg-white/30">
                 {mod.badge}
               </Badge>
             </button>
