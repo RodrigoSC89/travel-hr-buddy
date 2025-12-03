@@ -1105,6 +1105,21 @@ export const MODULE_REGISTRY: Record<string, ModuleDefinition> = {
     version: "658.0",
     permissions: ["admin"],
   },
+
+  // ESG & Emissions Module
+  "operations.esg-emissions": {
+    id: "operations.esg-emissions",
+    name: "ESG & Emissões",
+    category: "operations",
+    path: "modules/esg-emissions/index",
+    description: "Monitoramento ambiental, carbon footprint, CII rating e compliance IMO/MARPOL",
+    status: "active",
+    completeness: "100%",
+    route: "/esg-emissions",
+    icon: "Leaf",
+    lazy: true,
+    version: "1.0.0",
+  },
 };
 
 export function getModule(id: string): ModuleDefinition | undefined {
