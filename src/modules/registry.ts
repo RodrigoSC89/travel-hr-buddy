@@ -539,6 +539,58 @@ export const MODULE_REGISTRY: Record<string, ModuleDefinition> = {
     lazy: true,
   },
 
+  "emergency.emergency-response": {
+    id: "emergency.emergency-response",
+    name: "Emergency Response",
+    category: "emergency",
+    path: "pages/EmergencyResponse",
+    description: "Emergency response management and coordination",
+    status: "active",
+    completeness: "100%",
+    route: "/emergency-response",
+    icon: "AlertTriangle",
+    lazy: true,
+  },
+
+  "features.optimization": {
+    id: "features.optimization",
+    name: "Optimization",
+    category: "features",
+    path: "pages/Optimization",
+    description: "System optimization and performance tuning",
+    status: "active",
+    completeness: "100%",
+    route: "/optimization",
+    icon: "Gauge",
+    lazy: true,
+  },
+
+  "features.mobile-optimization": {
+    id: "features.mobile-optimization",
+    name: "Mobile Optimization",
+    category: "features",
+    path: "pages/MobileOptimization",
+    description: "Mobile performance optimization center",
+    status: "active",
+    completeness: "100%",
+    route: "/mobile-optimization",
+    icon: "Smartphone",
+    lazy: true,
+  },
+
+  "core.system-monitor": {
+    id: "core.system-monitor",
+    name: "System Monitor",
+    category: "core",
+    path: "pages/SystemMonitor",
+    description: "Real-time system performance monitoring",
+    status: "active",
+    completeness: "100%",
+    route: "/system-monitor",
+    icon: "Monitor",
+    lazy: true,
+  },
+
   "features.task-automation": {
     id: "features.task-automation",
     name: "Task Automation",
