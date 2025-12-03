@@ -6,14 +6,18 @@ Sistema completo de gerenciamento marítimo com IA, integração de APIs e segur
 
 | Documento | Descrição |
 |-----------|-----------|
+| [docs/INDEX.md](./docs/INDEX.md) | **Índice da documentação** |
 | [docs/getting-started.md](./docs/getting-started.md) | Guia de início rápido |
+| [docs/STRUCTURE.md](./docs/STRUCTURE.md) | **Estrutura do repositório** |
 | [docs/architecture.md](./docs/architecture.md) | Arquitetura do sistema |
 | [docs/api/](./docs/api/) | APIs e Edge Functions |
 | [docs/features/](./docs/features/) | Funcionalidades |
 | [docs/deployment/](./docs/deployment/) | Guia de deploy |
 | [docs/development/](./docs/development/) | Guia para devs |
+| [docs/SECURITY.md](./docs/SECURITY.md) | Práticas de segurança |
 
-> 📦 Documentação legada em: `archive/legacy-docs/`
+> 📦 **Novo desenvolvedor?** Comece por [docs/getting-started.md](./docs/getting-started.md)  
+> 📁 Documentação legada: `archive/legacy-docs/`
 
 ---
 
