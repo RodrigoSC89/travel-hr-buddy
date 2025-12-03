@@ -271,7 +271,7 @@ export const CrewIntelligenceSystem: React.FC = () => {
                     AI VISUAL
                   </Badge>
                 </CardTitle>
-                <CardDescription className="text-white/90">
+                <CardDescription className="text-primary-foreground/90">
                   Detecção de fadiga por IA, otimização de escalas e análise de performance
                 </CardDescription>
               </div>

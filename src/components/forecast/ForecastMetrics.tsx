@@ -6,7 +6,7 @@ interface MetricData {
   label: string;
   value: number;
   description: string;
-  color: string;
+  colorClass: string;
 }
 
 const metrics: MetricData[] = [
@@ -14,19 +14,19 @@ const metrics: MetricData[] = [
     label: "Confiabilidade do Modelo",
     value: 93,
     description: "Taxa de acertos do modelo ONNX em previsões históricas",
-    color: "bg-blue-500",
+    colorClass: "bg-primary",
   },
   {
     label: "Precisão em Tempo Real",
     value: 88,
     description: "Acurácia das previsões comparadas com dados reais",
-    color: "bg-green-500",
+    colorClass: "bg-success",
   },
   {
     label: "Cobertura Global",
     value: 97,
     description: "Percentual de regiões marítimas monitoradas",
-    color: "bg-purple-500",
+    colorClass: "bg-info",
   },
 ];
 
@@ -35,17 +35,17 @@ function MetricBar({ metric }: { metric: MetricData }) {
     <div className="space-y-2">
       {/* Label and Value */}
       <div className="flex justify-between items-center">
-        <label htmlFor={`metric-${metric.label}`} className="text-sm font-medium text-gray-300">
+        <label htmlFor={`metric-${metric.label}`} className="text-sm font-medium text-foreground">
           {metric.label}
         </label>
-        <span className="text-sm font-semibold text-white" aria-label={`${metric.label}: ${metric.value}%`}>
+        <span className="text-sm font-semibold text-foreground" aria-label={`${metric.label}: ${metric.value}%`}>
           {metric.value}%
         </span>
       </div>
 
       {/* WCAG 2.1 Level AA Compliant Progress Bar */}
       <div
-        className="w-full bg-gray-700 rounded-full h-3"
+        className="w-full bg-secondary rounded-full h-3"
         role="progressbar"
         aria-valuenow={metric.value}
         aria-valuemin={0}
@@ -55,14 +55,14 @@ function MetricBar({ metric }: { metric: MetricData }) {
         id={`metric-${metric.label}`}
       >
         <div
-          className={`h-3 rounded-full transition-all duration-700 ${metric.color}`}
+          className={`h-3 rounded-full transition-all duration-700 ${metric.colorClass}`}
           style={{ width: `${metric.value}%` }}
         />
       </div>
 
       {/* Description */}
       <p
-        className="text-xs text-gray-500"
+        className="text-xs text-muted-foreground"
         id={`metric-desc-${metric.label}`}
       >
         {metric.description}
@@ -73,10 +73,10 @@ function MetricBar({ metric }: { metric: MetricData }) {
 
 export default function ForecastMetrics() {
   return (
-    <Card className="bg-gray-900 border-gray-800">
+    <Card className="bg-card border-border">
       <CardHeader>
-        <CardTitle className="text-white flex items-center space-x-2">
-          <BarChart3 className="text-blue-400" aria-hidden="true" />
+        <CardTitle className="text-card-foreground flex items-center space-x-2">
+          <BarChart3 className="text-primary" aria-hidden="true" />
           <span>Métricas de Performance</span>
         </CardTitle>
       </CardHeader>

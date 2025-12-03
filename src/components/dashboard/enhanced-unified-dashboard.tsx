@@ -474,7 +474,7 @@ const EnhancedUnifiedDashboard = () => {
             <CardHeader className="relative border-b border-emerald-100/50 bg-gradient-to-r from-emerald-50/50 to-transparent backdrop-blur-sm">
               <CardTitle className="flex items-center gap-3">
                 <div className="p-2 rounded-xl bg-gradient-to-br from-emerald-500 to-emerald-600 shadow-soft">
-                  <DollarSign className="w-5 h-5 text-white" />
+                  <DollarSign className="w-5 h-5 text-primary-foreground" />
                 </div>
                 <span className="text-xl font-bold bg-gradient-to-r from-emerald-700 to-emerald-600 bg-clip-text text-transparent">
                   Performance Financeira
@@ -604,7 +604,7 @@ const EnhancedUnifiedDashboard = () => {
                 <div className="space-y-2">
                   <CardTitle className="text-3xl flex items-center gap-3">
                     <div className="p-3 rounded-2xl bg-gradient-ocean shadow-glow">
-                      <Globe className="w-7 h-7 text-white" />
+                      <Globe className="w-7 h-7 text-primary-foreground" />
                     </div>
                     <span className="bg-gradient-to-r from-azure-700 to-azure-600 bg-clip-text text-transparent">
                       Módulos Operacionais

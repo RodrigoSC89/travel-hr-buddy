@@ -135,7 +135,7 @@ export const ModernExecutiveDashboard: React.FC<ExecutiveDashboardProps> = ({ cl
       value: "96.8%",
       subtitle: "Última auditoria: 15/09/2025",
       trend: "+2.3% vs mês anterior",
-      icon: <Shield className="w-6 h-6 text-white" />,
+      icon: <Shield className="w-6 h-6 text-primary-foreground" />,
       color: "green" as const,
       onClick: () => navigate("/peotram"),
       actionLabel: "Ver PEOTRAM"
@@ -145,7 +145,7 @@ export const ModernExecutiveDashboard: React.FC<ExecutiveDashboardProps> = ({ cl
       value: "247",
       subtitle: "12 embarcações em operação",
       trend: "98% certificados válidos",
-      icon: <Users className="w-6 h-6 text-white" />,
+      icon: <Users className="w-6 h-6 text-primary-foreground" />,
       color: "blue" as const,
       onClick: () => navigate("/maritime"),
       actionLabel: "Ver Frota"
@@ -155,7 +155,7 @@ export const ModernExecutiveDashboard: React.FC<ExecutiveDashboardProps> = ({ cl
       value: "28",
       subtitle: "Vencendo em 30 dias",
       trend: "Ação necessária",
-      icon: <AlertTriangle className="w-6 h-6 text-white" />,
+      icon: <AlertTriangle className="w-6 h-6 text-primary-foreground" />,
       color: "yellow" as const,
       onClick: () => navigate("/maritime-certifications"),
       actionLabel: "Verificar"
@@ -165,7 +165,7 @@ export const ModernExecutiveDashboard: React.FC<ExecutiveDashboardProps> = ({ cl
       value: "94.2%",
       subtitle: "Média dos últimos 30 dias",
       trend: "+1.8% vs período anterior",
-      icon: <TrendingUp className="w-6 h-6 text-white" />,
+      icon: <TrendingUp className="w-6 h-6 text-primary-foreground" />,
       color: "purple" as const,
       onClick: () => navigate("/analytics"),
       actionLabel: "Analytics"
@@ -175,7 +175,7 @@ export const ModernExecutiveDashboard: React.FC<ExecutiveDashboardProps> = ({ cl
       value: "4.2h",
       subtitle: "Resolução de incidentes",
       trend: "-15 min vs média",
-      icon: <Clock className="w-6 h-6 text-white" />,
+      icon: <Clock className="w-6 h-6 text-primary-foreground" />,
       color: "green" as const,
       onClick: () => navigate("/system-monitor"),
       actionLabel: "Monitor"
@@ -185,7 +185,7 @@ export const ModernExecutiveDashboard: React.FC<ExecutiveDashboardProps> = ({ cl
       value: "92%",
       subtitle: "11 de 12 embarcações ativas",
       trend: "Dentro da meta (>90%)",
-      icon: <Anchor className="w-6 h-6 text-white" />,
+      icon: <Anchor className="w-6 h-6 text-primary-foreground" />,
       color: "blue" as const,
       onClick: () => navigate("/fleet-dashboard"),
       actionLabel: "Frota"

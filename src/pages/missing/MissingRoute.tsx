@@ -15,23 +15,23 @@ export default function MissingRoute() {
   const location = useLocation();
 
   return (
-    <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-gray-50 to-gray-100 dark:from-gray-900 dark:to-gray-800 px-4">
-      <div className="max-w-md w-full bg-white dark:bg-gray-800 rounded-lg shadow-xl p-8 text-center">
+    <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-background to-muted px-4">
+      <div className="max-w-md w-full bg-card rounded-lg shadow-xl p-8 text-center border border-border">
         <div className="flex justify-center mb-6">
-          <div className="w-16 h-16 bg-red-100 dark:bg-red-900/30 rounded-full flex items-center justify-center">
-            <AlertTriangle className="w-8 h-8 text-red-600 dark:text-red-400" />
+          <div className="w-16 h-16 bg-destructive/10 rounded-full flex items-center justify-center">
+            <AlertTriangle className="w-8 h-8 text-destructive" />
           </div>
         </div>
 
-        <h1 className="text-2xl font-bold text-gray-900 dark:text-gray-100 mb-3">
+        <h1 className="text-2xl font-bold text-foreground mb-3">
           Rota não encontrada
         </h1>
 
-        <p className="text-gray-600 dark:text-gray-400 mb-2">
+        <p className="text-muted-foreground mb-2">
           O módulo ou página que você está tentando acessar pode ter sido:
         </p>
 
-        <ul className="text-left text-gray-600 dark:text-gray-400 mb-6 space-y-2">
+        <ul className="text-left text-muted-foreground mb-6 space-y-2">
           <li className="flex items-start">
             <span className="mr-2">•</span>
             <span>Movido para outro endereço</span>
@@ -46,7 +46,7 @@ export default function MissingRoute() {
           </li>
         </ul>
 
-        <div className="text-sm text-gray-500 dark:text-gray-500 mb-6 p-3 bg-gray-100 dark:bg-gray-700/50 rounded">
+        <div className="text-sm text-muted-foreground mb-6 p-3 bg-muted rounded">
           <strong>Caminho solicitado:</strong>
           <br />
           <code className="text-xs">{location.pathname}</code>
@@ -70,7 +70,7 @@ export default function MissingRoute() {
           </Button>
         </div>
 
-        <p className="text-xs text-gray-500 dark:text-gray-600 mt-6">
+        <p className="text-xs text-muted-foreground mt-6">
           Se você acredita que isso é um erro, entre em contato com o suporte técnico.
         </p>
       </div>
