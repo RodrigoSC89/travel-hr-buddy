@@ -1135,6 +1135,21 @@ export const MODULE_REGISTRY: Record<string, ModuleDefinition> = {
     lazy: true,
     version: "1.0.0",
   },
+
+  // Nautilus Academy Module
+  "hr.nautilus-academy": {
+    id: "hr.nautilus-academy",
+    name: "Nautilus Academy",
+    category: "hr",
+    path: "modules/nautilus-academy/index",
+    description: "Gestão inteligente de treinamentos e certificações marítimas com IA",
+    status: "active",
+    completeness: "100%",
+    route: "/nautilus-academy",
+    icon: "GraduationCap",
+    lazy: true,
+    version: "1.0.0",
+  },
 };
 
 export function getModule(id: string): ModuleDefinition | undefined {
