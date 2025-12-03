@@ -416,7 +416,7 @@ const navigationItems = [
       },
       {
         title: "Automação Tarefas",
-        url: "/task-automation",
+        url: "/automation",
         icon: Zap,
       },
       {
@@ -526,7 +526,7 @@ const navigationItems = [
       },
       {
         title: "Assistente Voz",
-        url: "/voice-assistant",
+        url: "/assistant/voice",
         icon: Mic,
       },
       {

@@ -55,11 +55,8 @@ const groupedModules = [
       { label: "DP Intelligence", path: "/dp-intelligence" },
       { label: "Insights de IA", path: "/ai-insights" },
       { label: "Documentos IA", path: "/documents" },
-      { label: "Assistente IA", path: "/ai-assistant" },
-      { label: "Assistente de Voz", path: "/voice" },
-      { label: "Voice Assistant", path: "/voice-assistant" },
+      { label: "Assistente de Voz", path: "/assistant/voice" },
       { label: "Automação IA", path: "/automation" },
-      { label: "Automação de Tarefas", path: "/task-automation" },
     ],
   },
   {

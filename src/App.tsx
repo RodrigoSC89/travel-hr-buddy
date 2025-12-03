@@ -135,6 +135,10 @@ function App() {
                     {/* Route Redirects - Duplicate/Legacy Routes */}
                     <Route path="intelligent-documents" element={<Navigate to="/documents" replace />} />
                     <Route path="document-ai" element={<Navigate to="/documents" replace />} />
+                    <Route path="ai-assistant" element={<Navigate to="/assistant/voice" replace />} />
+                    <Route path="voice" element={<Navigate to="/assistant/voice" replace />} />
+                    <Route path="voice-assistant" element={<Navigate to="/assistant/voice" replace />} />
+                    <Route path="task-automation" element={<Navigate to="/automation" replace />} />
                     
                     {/* 404 Route */}
                     <Route path="*" element={
