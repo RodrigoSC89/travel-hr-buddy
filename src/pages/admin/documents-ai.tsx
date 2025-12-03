@@ -9,8 +9,13 @@ import { Card, CardContent } from "@/components/ui/card";
 import { Sparkles, Loader2, FileText, Save, Download, Brain, RefreshCw, List } from "lucide-react";
 import { supabase } from "@/integrations/supabase/client";
 import { toast } from "@/hooks/use-toast";
-import jsPDF from "jspdf";
 import { logger } from "@/lib/logger";
+
+// Lazy load jsPDF
+const loadJsPDF = async () => {
+  const { default: jsPDF } = await import("jspdf");
+  return jsPDF;
+};
 
 export default function DocumentsAIPage() {
   const navigate = useNavigate();
@@ -138,6 +143,7 @@ export default function DocumentsAIPage() {
 
     setExporting(true);
     try {
+      const jsPDF = await loadJsPDF();
       const pdf = new jsPDF();
       const pageWidth = pdf.internal.pageSize.getWidth();
       const pageHeight = pdf.internal.pageSize.getHeight();

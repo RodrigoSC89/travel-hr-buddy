@@ -39,6 +39,15 @@
 - ✅ `src/modules/hr/training-academy/services/generateCertificatePDF.ts`
 - ✅ `src/components/performance/performance-monitor.tsx`
 - ✅ `src/components/sgso/sgso-audit-editor.tsx`
+- ✅ `src/modules/document-hub/templates/services/templateSystemService.ts`
+- ✅ `src/modules/hr/peo-dp/peodp_report.ts`
+- ✅ `src/modules/incident-reports/components/IncidentDetailDialog.tsx`
+- ✅ `src/modules/project-timeline/components/ExportActions.tsx`
+- ✅ `src/modules/mission-control/components/MissionControlConsolidation.tsx`
+- ✅ `src/modules/travel/TravelManagement.tsx`
+- ✅ `src/pages/admin/assistant-logs.tsx`
+- ✅ `src/pages/admin/checklists.tsx`
+- ✅ `src/pages/admin/documents-ai.tsx`
 
 #### OCR (lazy tesseract):
 - ✅ `src/services/ocr-service.ts`

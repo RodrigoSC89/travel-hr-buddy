@@ -1,15 +1,21 @@
 /**
  * Project Timeline Export Component
  * PATCH 389 - PDF and ICS export functionality
+ * PATCH 653 - Lazy loading for jsPDF
  */
 
 import React from "react";
 import { Button } from "@/components/ui/button";
 import { Download, FileDown, Calendar as CalendarIcon } from "lucide-react";
 import { useToast } from "@/hooks/use-toast";
-import jsPDF from "jspdf";
-import autoTable from "jspdf-autotable";
 import { format } from "date-fns";
+
+// Lazy load jsPDF
+const loadPDFLibs = async () => {
+  const { default: jsPDF } = await import("jspdf");
+  const { default: autoTable } = await import("jspdf-autotable");
+  return { jsPDF, autoTable };
+};
 
 interface Task {
   id: string;
@@ -30,7 +36,7 @@ interface ExportActionsProps {
 export const ExportActions: React.FC<ExportActionsProps> = ({ tasks }) => {
   const { toast } = useToast();
 
-  const exportToPDF = () => {
+  const exportToPDF = async () => {
     if (tasks.length === 0) {
       toast({
         title: "No tasks to export",
@@ -40,6 +46,7 @@ export const ExportActions: React.FC<ExportActionsProps> = ({ tasks }) => {
       return;
     }
 
+    const { jsPDF, autoTable } = await loadPDFLibs();
     const doc = new jsPDF("landscape");
     
     // Add title

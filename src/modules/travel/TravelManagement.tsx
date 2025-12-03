@@ -2,6 +2,7 @@
 /**
  * PATCH 298: Travel Management Component
  * Multi-leg itinerary display with conflict detection and PDF export
+ * PATCH 653 - Lazy loading for jsPDF
  */
 
 import React, { useState, useEffect } from "react";
@@ -30,8 +31,13 @@ import {
 import { supabase } from "@/integrations/supabase/client";
 import { useToast } from "@/hooks/use-toast";
 import { format } from "date-fns";
-import jsPDF from "jspdf";
-import "jspdf-autotable";
+
+// Lazy load jsPDF
+const loadJsPDF = async () => {
+  const { default: jsPDF } = await import("jspdf");
+  await import("jspdf-autotable");
+  return jsPDF;
+};
 
 interface TravelItinerary {
   id: string;

@@ -2,6 +2,7 @@
 /**
  * PATCH 505: Mission Control Consolidation Dashboard
  * Unified dashboard integrating all mission control sub-modules
+ * PATCH 653 - Lazy loading for jsPDF
  */
 
 import React, { useState, useEffect, lazy, Suspense } from "react";
@@ -22,8 +23,13 @@ const MissionLogs = lazy(() => import("../components/MissionLogs").then(m => ({ 
 const AICommander = lazy(() => import("../components/AICommander").then(m => ({ default: m.AICommander })));
 const KPIDashboard = lazy(() => import("../components/KPIDashboard").then(m => ({ default: m.KPIDashboard })));
 import { toast } from "sonner";
-import jsPDF from "jspdf";
-import "jspdf-autotable";
+
+// Lazy load jsPDF
+const loadJsPDF = async () => {
+  const { default: jsPDF } = await import("jspdf");
+  await import("jspdf-autotable");
+  return jsPDF;
+};
 
 interface MissionStats {
   total: number;

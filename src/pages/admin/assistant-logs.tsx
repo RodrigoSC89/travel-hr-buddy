@@ -19,10 +19,15 @@ import {
   FileText,
   Mail
 } from "lucide-react";
-import jsPDF from "jspdf";
-import autoTable from "jspdf-autotable";
 import { supabase } from "@/integrations/supabase/client";
 import { format } from "date-fns";
+
+// Lazy load jsPDF
+const loadPDFLibs = async () => {
+  const { default: jsPDF } = await import("jspdf");
+  const { default: autoTable } = await import("jspdf-autotable");
+  return { jsPDF, autoTable };
+};
 
 interface AssistantLog {
   id: string;
@@ -152,12 +157,13 @@ export default function AssistantLogsPage() {
     URL.revokeObjectURL(url);
   }
 
-  function exportToPDF() {
+  async function exportToPDF() {
     if (filteredLogs.length === 0) {
       alert("Não há dados para exportar");
       return;
     }
 
+    const { jsPDF, autoTable } = await loadPDFLibs();
     const doc = new jsPDF();
     
     // Add title
