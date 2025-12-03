@@ -617,19 +617,6 @@ export const MODULE_REGISTRY: Record<string, ModuleDefinition> = {
     lazy: true,
   },
 
-  "documents.intelligent-documents": {
-    id: "documents.intelligent-documents",
-    name: "Documentos Inteligentes",
-    category: "documents",
-    path: "pages/IntelligentDocuments",
-    description: "Gestão de documentos com IA",
-    status: "active",
-    completeness: "100%",
-    route: "/intelligent-documents",
-    icon: "FileText",
-    lazy: true,
-  },
-
   "features.task-automation": {
     id: "features.task-automation",
     name: "Task Automation",

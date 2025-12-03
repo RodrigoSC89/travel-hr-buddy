@@ -699,6 +699,7 @@ const URL_ALIASES: Record<string, string> = {
   "/documentos": "/documents",
   "/documentos-ia": "/documents",
   "/intelligent-documents": "/documents",
+  "/document-ai": "/documents",
   "/emergency": "/emergency-response",
   "/voice-assistant-new": "/voice-assistant",
   "/peo-tram": "/peotram",
