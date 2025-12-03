@@ -604,6 +604,32 @@ export const MODULE_REGISTRY: Record<string, ModuleDefinition> = {
     lazy: true,
   },
 
+  "intelligence.dp-intelligence": {
+    id: "intelligence.dp-intelligence",
+    name: "DP Intelligence",
+    category: "intelligence",
+    path: "pages/DPIntelligence",
+    description: "Centro de Inteligência para Posicionamento Dinâmico",
+    status: "active",
+    completeness: "100%",
+    route: "/dp-intelligence",
+    icon: "Brain",
+    lazy: true,
+  },
+
+  "documents.intelligent-documents": {
+    id: "documents.intelligent-documents",
+    name: "Documentos Inteligentes",
+    category: "documents",
+    path: "pages/IntelligentDocuments",
+    description: "Gestão de documentos com IA",
+    status: "active",
+    completeness: "100%",
+    route: "/intelligent-documents",
+    icon: "FileText",
+    lazy: true,
+  },
+
   "features.task-automation": {
     id: "features.task-automation",
     name: "Task Automation",
