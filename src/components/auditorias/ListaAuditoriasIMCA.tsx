@@ -6,7 +6,7 @@ import { Badge } from "@/components/ui/badge";
 import { toast } from "sonner";
 import { format } from "date-fns";
 import html2canvas from "html2canvas";
-import jsPDF from "jspdf";
+import { usePDFExport } from "@/hooks/use-pdf-export";
 
 interface Auditoria {
   id: string;
@@ -34,6 +34,7 @@ export default function ListaAuditoriasIMCA() {
   const [explicacao, setExplicacao] = useState<Record<string, string>>({});
   const [plano, setPlano] = useState<Record<string, string>>({});
   const pdfRef = useRef<HTMLDivElement>(null);
+  const { getJsPDF, isLoading: isPDFLoading } = usePDFExport();
 
   const supabaseUrl = import.meta.env.VITE_SUPABASE_URL;
   const supabaseAnonKey = import.meta.env.VITE_SUPABASE_ANON_KEY || import.meta.env.VITE_SUPABASE_PUBLISHABLE_KEY;
@@ -110,6 +111,7 @@ export default function ListaAuditoriasIMCA() {
       });
 
       const imgData = canvas.toDataURL("image/png");
+      const jsPDF = await getJsPDF();
       const pdf = new jsPDF({
         orientation: "portrait",
         unit: "mm",
