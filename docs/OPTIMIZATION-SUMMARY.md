@@ -12,6 +12,7 @@
 | **Páginas de teste/demo** | 9 | 0 | **100%** |
 | **Páginas duplicadas** | 14+ | 0 | **100%** |
 | **Dependências removidas** | 0 | 3 | - |
+| **Componentes órfãos** | 7+ | 0 | **100%** |
 
 ---
 
@@ -43,6 +44,15 @@ Removido sidebar duplicado de:
 - Security.tsx
 - SystemAuditor.tsx
 - UserOnboarding.tsx
+
+### 5. Componentes Órfãos Removidos (7 diretórios)
+- `src/components/stress-test/` - não utilizado
+- `src/components/watchdog/` - não utilizado
+- `src/components/voice/` - não utilizado
+- `src/components/crew-wellbeing/` - não utilizado
+- `src/components/user-management/` - não utilizado
+- `src/components/resilience/` - não utilizado
+- `src/components/interop/` - não utilizado
 
 ### 5. Redirects Configurados (24 rotas)
 Todas as rotas legadas redirecionam corretamente.
