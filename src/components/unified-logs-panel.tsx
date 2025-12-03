@@ -12,8 +12,7 @@ import { Calendar } from "@/components/ui/calendar";
 import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover";
 import { CalendarIcon } from "lucide-react";
 import { format } from "date-fns";
-import jsPDF from "jspdf";
-import autoTable from "jspdf-autotable";
+import { usePDFExport } from "@/hooks/use-pdf-export";
 
 interface LogEntry {
   id: string;
@@ -27,6 +26,7 @@ interface LogEntry {
 export function UnifiedLogsPanel() {
   const { user } = useAuth();
   const { toast } = useToast();
+  const { getJsPDF, getAutoTable } = usePDFExport();
   const [logs, setLogs] = useState<LogEntry[]>([]);
   const [isLoading, setIsLoading] = useState(true);
   const [sourceFilter, setSourceFilter] = useState("all");
@@ -225,7 +225,9 @@ export function UnifiedLogsPanel() {
     });
   };
 
-  const exportToPDF = () => {
+  const exportToPDF = async () => {
+    const jsPDF = await getJsPDF();
+    const autoTable = await getAutoTable();
     const doc = new jsPDF();
 
     doc.setFontSize(18);
