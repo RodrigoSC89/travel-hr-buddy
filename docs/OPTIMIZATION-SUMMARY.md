@@ -45,7 +45,7 @@ Removido sidebar duplicado de:
 - SystemAuditor.tsx
 - UserOnboarding.tsx
 
-### 5. Componentes Órfãos Removidos (14 diretórios)
+### 5. Componentes Órfãos Removidos (18 diretórios)
 - `src/components/stress-test/` - não utilizado
 - `src/components/watchdog/` - não utilizado
 - `src/components/voice/` - não utilizado
@@ -59,8 +59,15 @@ Removido sidebar duplicado de:
 - `src/components/dp-intelligence/` - não utilizado
 - `src/components/maritime-mode/` - não utilizado
 - `src/components/SharedDashboard/` - não utilizado
+- `src/components/enterprise/` - não utilizado (1 arquivo)
+- `src/components/vessel/` - não utilizado (1 arquivo)
+- `src/components/weather/` - não utilizado (1 arquivo)
+- `src/components/control-hub/` - refatorado inline (4 arquivos)
 
-### 6. Redirects Configurados (24 rotas)
+### 6. Páginas Duplicadas Removidas
+- `src/pages/control/ControlHub.tsx` - duplicado de pages/ControlHub.tsx
+
+### 7. Redirects Configurados (24 rotas)
 Todas as rotas legadas redirecionam corretamente.
 
 ### 6. Arquivos de Configuração Limpos
