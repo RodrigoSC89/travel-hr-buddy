@@ -1,7 +1,41 @@
 /**
  * PEO-DP Checklist Types
  * Baseado no Programa de Excelência em Operações DP - Petrobras
+ * Documento: PEO-DP_03-11-2021 - DC&L/LOEP/LOFF/EO - 15/09/2021
  */
+
+// Glossário PEO-DP
+export const PEODP_GLOSSARY: Record<string, string> = {
+  "ASOG": "Activity Specific Operating Guidelines",
+  "CAM": "Critical Activity Mode",
+  "CCM": "Centro de Controle de Máquinas",
+  "DP": "Dynamic Positioning",
+  "EAM": "Embarcação de Apoio Marítimo",
+  "FMEA": "Failure Mode and Effect Analysis",
+  "IMCA": "International Marine Contractors Association",
+  "IMO": "International Maritime Organization",
+  "IPCLV": "Índice de Preenchimento Correto das Listas de Verificação",
+  "MTS": "Marine Technology Society",
+  "NORMAM": "Norma da Autoridade Marítima",
+  "OCIMF": "Oil Companies International Marine Forum",
+  "PMS": "Power Management System",
+  "UPS": "Uninterrupted Power Supply",
+  "Drift Off": "Empuxo insuficiente após uma falha",
+  "Drive Off": "Excede os requisitos de empuxo ou empuxo na direção errada após uma falha",
+  "Large Excursion": "Embarcação retorna ao ponto com desvio inaceitavelmente grande",
+  "Loss of Position": "Perda de posição e/ou aproamento fora dos limites definidos"
+};
+
+// Referências normativas PEO-DP 2021
+export const PEODP_REFERENCES: string[] = [
+  "IMCA M 103, M 109, M 115, M 117, M 166, M 182, M 190, M 196, M 206, M 220",
+  "IMO MSC/Circ.645, 738, 1580",
+  "ISO 9001, ISO 31000",
+  "MTS DP Operations Guidance",
+  "OCIMF DP Assurance Framework",
+  "NORMAM-01, NORMAM-13, NR-30",
+  "PE-2LEP-00001, PP-2LEP-00002"
+];
 
 export type ComplianceStatus = "conforme" | "parcial" | "nao_conforme" | "nao_aplicavel" | "pendente";
 
