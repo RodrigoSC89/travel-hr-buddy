@@ -238,8 +238,21 @@ export const MODULE_REGISTRY: Record<string, ModuleDefinition> = {
     description: "Plan and track maintenance",
     status: "active",
     completeness: "100%",
-    route: "/maintenance/planner",
+    route: "/maintenance-planner",
     icon: "Wrench",
+    lazy: true,
+  },
+
+  "operations.mission-logs": {
+    id: "operations.mission-logs",
+    name: "Mission Logs",
+    category: "operations",
+    path: "pages/MissionLogsPage",
+    description: "Track and manage mission operations logs",
+    status: "active",
+    completeness: "100%",
+    route: "/mission-logs",
+    icon: "FileText",
     lazy: true,
   },
 
