@@ -4,7 +4,7 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
-import { Shield, Wrench, Users, Box, Brain, Zap, Ship, Sparkles } from "lucide-react";
+import { Shield, Wrench, Users, Box, Brain, Zap, Ship, Sparkles, Leaf } from "lucide-react";
 import { Link, useNavigate } from "react-router-dom";
 import { usePreviewSafeMode } from "@/hooks/qa/usePreviewSafeMode";
 
@@ -53,19 +53,27 @@ const AIModulesPanel = () => {
       color: "from-green-500 to-emerald-500"
     },
     { 
+      name: "PEO-DP", 
+      description: "Posicionamento dinâmico e auditoria DP",
+      route: "/peo-dp",
+      icon: Ship,
+      badge: "IMCA M117",
+      color: "from-purple-500 to-indigo-500"
+    },
+    { 
+      name: "ESG & Emissões", 
+      description: "Carbon footprint, CII, compliance IMO",
+      route: "/esg-emissions",
+      icon: Leaf,
+      badge: "IMO 2020",
+      color: "from-green-600 to-teal-500"
+    },
+    { 
       name: "PEOTRAM", 
       description: "Compliance e auditorias marítimas",
       route: "/peotram",
       icon: Shield,
       badge: "Compliance",
-      color: "from-purple-500 to-indigo-500"
-    },
-    { 
-      name: "DP Operations", 
-      description: "Monitoramento de posicionamento dinâmico",
-      route: "/dp-operations",
-      icon: Ship,
-      badge: "Real-time",
       color: "from-orange-500 to-red-500"
     }
   ];
@@ -75,11 +83,11 @@ const AIModulesPanel = () => {
       <CardHeader className="pb-3">
         <CardTitle className="flex items-center gap-2 text-lg">
           <Sparkles className="h-5 w-5 text-primary" />
-          Módulos IA Avançados - PATCH 549
+          Módulos IA Avançados
         </CardTitle>
       </CardHeader>
       <CardContent>
-        <div className="grid grid-cols-2 md:grid-cols-4 gap-3">
+        <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-3">
           {modules.map((mod) => (
             <button
               key={mod.route}
@@ -88,7 +96,7 @@ const AIModulesPanel = () => {
             >
               <mod.icon className="h-6 w-6 mb-2" />
               <h4 className="font-semibold text-sm">{mod.name}</h4>
-              <p className="text-xs opacity-90 mt-1">{mod.description}</p>
+              <p className="text-xs opacity-90 mt-1 line-clamp-2">{mod.description}</p>
               <Badge variant="secondary" className="mt-2 text-xs bg-white/20 hover:bg-white/30">
                 {mod.badge}
               </Badge>
