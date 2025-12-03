@@ -1180,6 +1180,51 @@ export const MODULE_REGISTRY: Record<string, ModuleDefinition> = {
     lazy: true,
     version: "1.0.0",
   },
+
+  // Medical Infirmary Module
+  "hr.medical-infirmary": {
+    id: "hr.medical-infirmary",
+    name: "Enfermaria Digital",
+    category: "hr",
+    path: "modules/medical-infirmary/index",
+    description: "Gestão de saúde, medicamentos e atendimentos conforme MLC e NORMAM",
+    status: "active",
+    completeness: "100%",
+    route: "/medical-infirmary",
+    icon: "Stethoscope",
+    lazy: true,
+    version: "1.0.0",
+  },
+
+  // Waste Management Module
+  "compliance.waste-management": {
+    id: "compliance.waste-management",
+    name: "Gestão de Resíduos",
+    category: "compliance",
+    path: "modules/waste-management/index",
+    description: "Conformidade MARPOL, Oil Record Book e Garbage Record Book",
+    status: "active",
+    completeness: "100%",
+    route: "/waste-management",
+    icon: "Recycle",
+    lazy: true,
+    version: "1.0.0",
+  },
+
+  // SOLAS Training Module
+  "compliance.solas-training": {
+    id: "compliance.solas-training",
+    name: "SOLAS & ISM Training",
+    category: "compliance",
+    path: "modules/solas-training/index",
+    description: "Exercícios de segurança, drills obrigatórios e certificações STCW",
+    status: "active",
+    completeness: "100%",
+    route: "/solas-training",
+    icon: "ShieldAlert",
+    lazy: true,
+    version: "1.0.0",
+  },
 };
 
 export function getModule(id: string): ModuleDefinition | undefined {
