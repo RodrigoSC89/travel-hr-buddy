@@ -2,7 +2,18 @@
 
 Sistema completo de gerenciamento marítimo com IA, integração de APIs e segurança enterprise.
 
-> **📌 README Original preservado em**: [README_ORIGINAL.md](./README_ORIGINAL.md)
+## 📚 Documentação
+
+| Documento | Descrição |
+|-----------|-----------|
+| [docs/getting-started.md](./docs/getting-started.md) | Guia de início rápido |
+| [docs/architecture.md](./docs/architecture.md) | Arquitetura do sistema |
+| [docs/api/](./docs/api/) | APIs e Edge Functions |
+| [docs/features/](./docs/features/) | Funcionalidades |
+| [docs/deployment/](./docs/deployment/) | Guia de deploy |
+| [docs/development/](./docs/development/) | Guia para devs |
+
+> 📦 Documentação legada em: `archive/legacy-docs/`
 
 ---
 
