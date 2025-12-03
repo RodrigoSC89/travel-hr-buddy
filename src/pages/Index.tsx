@@ -4,7 +4,7 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
-import { Shield, Wrench, Users, Box, Brain, Zap, Ship, Sparkles, Leaf, AlertTriangle } from "lucide-react";
+import { Shield, Wrench, Users, Box, Brain, Zap, Ship, Sparkles, Leaf, AlertTriangle, GraduationCap } from "lucide-react";
 import { Link, useNavigate } from "react-router-dom";
 import { usePreviewSafeMode } from "@/hooks/qa/usePreviewSafeMode";
 
@@ -83,6 +83,14 @@ const AIModulesPanel = () => {
       icon: Shield,
       badge: "Compliance",
       color: "from-orange-500 to-amber-500"
+    },
+    { 
+      name: "Nautilus Academy", 
+      description: "Treinamentos com IA",
+      route: "/nautilus-academy",
+      icon: GraduationCap,
+      badge: "AI Training",
+      color: "from-indigo-500 to-purple-600"
     }
   ];
 
@@ -95,7 +103,7 @@ const AIModulesPanel = () => {
         </CardTitle>
       </CardHeader>
       <CardContent>
-        <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-6 gap-3">
+        <div className="grid grid-cols-2 md:grid-cols-4 lg:grid-cols-7 gap-3">
           {modules.map((mod) => (
             <button
               key={mod.route}
