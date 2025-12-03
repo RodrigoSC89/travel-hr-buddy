@@ -7,9 +7,14 @@ import { Progress } from "@/components/ui/progress";
 import { PlusCircle, BarChart3, Sparkles } from "lucide-react";
 import { supabase } from "@/integrations/supabase/client";
 import html2canvas from "html2canvas";
-import jsPDF from "jspdf";
 import { toast } from "@/hooks/use-toast";
 import { logger } from "@/lib/logger";
+
+// Lazy load jsPDF
+const loadJsPDF = async () => {
+  const { default: jsPDF } = await import("jspdf");
+  return jsPDF;
+};
 
 interface ChecklistItem {
   id: string;
@@ -246,6 +251,7 @@ export default function ChecklistsPage() {
     if (!el) return;
     const canvas = await html2canvas(el);
     const imgData = canvas.toDataURL("image/png");
+    const jsPDF = await loadJsPDF();
     const pdf = new jsPDF();
     const width = pdf.internal.pageSize.getWidth();
     const height = (canvas.height * width) / canvas.width;
