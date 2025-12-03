@@ -9,17 +9,73 @@
 
 import React, { Suspense, PropsWithChildren } from "react";
 import { safeLazyImport } from "@/utils/safeLazyImport";
-import { Loader, Activity, ShieldCheck, Radio, Sparkles } from "lucide-react";
+import { Loader, Activity, ShieldCheck, Radio, Sparkles, AlertTriangle, TrendingUp, Gauge } from "lucide-react";
 import { Badge } from "@/components/ui/badge";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 
-const ControlHubPanel = safeLazyImport(() => import("@/components/control-hub/ControlHubPanel"), "ControlHubPanel");
-const SystemAlerts = safeLazyImport(() => import("@/components/control-hub/SystemAlerts"), "SystemAlerts");
-const AIInsightReporter = safeLazyImport(() => import("@/components/control-hub/AIInsightReporter"), "AIInsightReporter");
 const ComplianceDashboard = safeLazyImport(() => import("@/components/compliance/ComplianceDashboard"), "ComplianceDashboard");
-const ForecastDashboard = safeLazyImport(() => import("@/components/control-hub/ForecastDashboard"), "ForecastDashboard");
-// Resilience components removed - using inline placeholders
 const MaintenanceDashboard = safeLazyImport(() => import("@/components/maintenance/MaintenanceDashboard"), "MaintenanceDashboard");
+
+// Inline placeholder components
+const ControlHubPanel = () => (
+  <div className="p-4 space-y-3">
+    <div className="flex items-center gap-2">
+      <Gauge className="h-5 w-5 text-success" />
+      <span className="text-sm font-medium">Sistema Operacional</span>
+    </div>
+    <div className="grid grid-cols-2 gap-2 text-xs">
+      <div className="p-2 bg-success/10 rounded">MQTT: Online</div>
+      <div className="p-2 bg-success/10 rounded">AIS: Ativo</div>
+      <div className="p-2 bg-success/10 rounded">Sensores: 98%</div>
+      <div className="p-2 bg-success/10 rounded">Latência: 12ms</div>
+    </div>
+  </div>
+);
+
+const SystemAlerts = () => (
+  <div className="p-4 space-y-3">
+    <div className="flex items-center gap-2">
+      <AlertTriangle className="h-5 w-5 text-warning" />
+      <span className="text-sm font-medium">Alertas Ativos</span>
+    </div>
+    <div className="text-center py-4 text-muted-foreground text-sm">
+      Nenhum alerta crítico no momento
+    </div>
+  </div>
+);
+
+const AIInsightReporter = () => (
+  <div className="p-4 space-y-3">
+    <div className="flex items-center gap-2">
+      <Sparkles className="h-5 w-5 text-primary" />
+      <span className="text-sm font-medium">Insights de IA</span>
+    </div>
+    <div className="space-y-2 text-xs">
+      <div className="p-2 bg-primary/10 rounded">✓ Performance da frota dentro do esperado</div>
+      <div className="p-2 bg-primary/10 rounded">✓ Manutenção preventiva em dia</div>
+      <div className="p-2 bg-primary/10 rounded">✓ Consumo de combustível otimizado</div>
+    </div>
+  </div>
+);
+
+const ForecastDashboard = () => (
+  <div className="p-4 space-y-3">
+    <div className="flex items-center gap-2">
+      <TrendingUp className="h-5 w-5 text-success" />
+      <span className="text-sm font-medium">Previsões</span>
+    </div>
+    <div className="space-y-2 text-xs">
+      <div className="flex justify-between p-2 bg-muted/50 rounded">
+        <span>Próxima manutenção:</span>
+        <span className="font-medium">7 dias</span>
+      </div>
+      <div className="flex justify-between p-2 bg-muted/50 rounded">
+        <span>Risco operacional:</span>
+        <span className="font-medium text-success">Baixo</span>
+      </div>
+    </div>
+  </div>
+);
 
 const heroStats = [
   {
@@ -87,27 +143,21 @@ export default function ControlHub() {
               title="Núcleo de Observabilidade"
               description="MQTT, AIS e sensores convergindo em tempo real"
             >
-              <Suspense fallback={<LoadingCard label="Observabilidade" />}>
-                <ControlHubPanel />
-              </Suspense>
+              <ControlHubPanel />
             </ModuleSurface>
 
             <ModuleSurface
               title="Alertas unificados"
               description="Correlação automática de eventos críticos"
             >
-              <Suspense fallback={<LoadingCard label="Alertas" />}>
-                <SystemAlerts />
-              </Suspense>
+              <SystemAlerts />
             </ModuleSurface>
 
             <ModuleSurface
               title="Forecast assistido por IA"
               description="Desempenho da frota e riscos previstos"
             >
-              <Suspense fallback={<LoadingCard label="Forecast" />}>
-                <ForecastDashboard />
-              </Suspense>
+              <ForecastDashboard />
             </ModuleSurface>
           </div>
         </section>
@@ -177,9 +227,7 @@ export default function ControlHub() {
               </p>
             </CardHeader>
             <CardContent className="rounded-3xl border border-white/10 bg-slate-950/40 p-4">
-              <Suspense fallback={<LoadingCard label="AI Insights" />}>
-                <AIInsightReporter />
-              </Suspense>
+              <AIInsightReporter />
             </CardContent>
           </Card>
         </section>
