@@ -1,18 +1,25 @@
 /**
  * PEO-DP Report Generator
  * Gera relatório técnico PEO-DP em PDF (compatível com Petrobras)
+ * PATCH 653 - Lazy loading for jsPDF
  */
 
-import jsPDF from "jspdf";
-import autoTable from "jspdf-autotable";
 import type { PEODPAuditoria } from "@/types/peodp-audit";
 import { getScoreLevel } from "@/types/peodp-audit";
+
+// Lazy load jsPDF
+const loadPDFLibs = async () => {
+  const { default: jsPDF } = await import("jspdf");
+  const { default: autoTable } = await import("jspdf-autotable");
+  return { jsPDF, autoTable };
+};
 
 export class PEOReport {
   /**
    * Gera relatório PDF da auditoria PEO-DP
    */
-  gerarRelatorio(auditoria: PEODPAuditoria, recomendacoes?: string[]): jsPDF {
+  async gerarRelatorio(auditoria: PEODPAuditoria, recomendacoes?: string[]): Promise<InstanceType<typeof import("jspdf").default>> {
+    const { jsPDF, autoTable } = await loadPDFLibs();
     const doc = new jsPDF();
     const pageWidth = doc.internal.pageSize.getWidth();
     let yPosition = 20;
@@ -100,7 +107,7 @@ export class PEOReport {
         1: { cellWidth: 120 },
         2: { cellWidth: 30 },
       },
-      didParseCell: (data) => {
+      didParseCell: (data: any) => {
         if (data.column.index === 2 && data.section === "body") {
           const status = data.cell.raw as string;
           if (status === "OK") {
@@ -175,8 +182,8 @@ export class PEOReport {
   /**
    * Download do relatório em PDF
    */
-  downloadRelatorio(auditoria: PEODPAuditoria, recomendacoes?: string[], filename?: string): void {
-    const doc = this.gerarRelatorio(auditoria, recomendacoes);
+  async downloadRelatorio(auditoria: PEODPAuditoria, recomendacoes?: string[], filename?: string): Promise<void> {
+    const doc = await this.gerarRelatorio(auditoria, recomendacoes);
     const defaultFilename = `PEO_DP_Auditoria_${auditoria.vesselName || "Report"}_${
       new Date().toISOString().split("T")[0]
     }.pdf`;
@@ -186,8 +193,8 @@ export class PEOReport {
   /**
    * Gera preview base64 do PDF
    */
-  gerarPreview(auditoria: PEODPAuditoria, recomendacoes?: string[]): string {
-    const doc = this.gerarRelatorio(auditoria, recomendacoes);
+  async gerarPreview(auditoria: PEODPAuditoria, recomendacoes?: string[]): Promise<string> {
+    const doc = await this.gerarRelatorio(auditoria, recomendacoes);
     return doc.output("dataurlstring");
   }
 

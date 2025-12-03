@@ -30,6 +30,15 @@
 - ✅ `src/pages/admin/dashboard.tsx`
 - ✅ `src/pages/ExecutiveReport.tsx`
 - ✅ `src/components/unified-logs-panel.tsx`
+- ✅ `src/lib/reports/pdf-generator.ts`
+- ✅ `src/lib/logger/exportToPDF.ts`
+- ✅ `src/modules/analytics/services/export-service.ts`
+- ✅ `src/lib/sgso-report.ts`
+- ✅ `src/modules/compliance/ism-audit/export-service.ts`
+- ✅ `src/modules/compliance/sgso/services/generateSgsoReportPDF.ts`
+- ✅ `src/modules/hr/training-academy/services/generateCertificatePDF.ts`
+- ✅ `src/components/performance/performance-monitor.tsx`
+- ✅ `src/components/sgso/sgso-audit-editor.tsx`
 
 #### OCR (lazy tesseract):
 - ✅ `src/services/ocr-service.ts`

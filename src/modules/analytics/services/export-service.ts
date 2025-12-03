@@ -1,10 +1,16 @@
 /**
  * PATCH 101.0 - Export Service for PDF and CSV
+ * PATCH 653 - Lazy loading for jsPDF
  */
 
 import { ChartData } from "../types";
-import jsPDF from "jspdf";
-import "jspdf-autotable";
+
+// Lazy load jsPDF
+const loadJsPDF = async () => {
+  const { default: jsPDF } = await import("jspdf");
+  await import("jspdf-autotable");
+  return jsPDF;
+};
 
 class ExportService {
   async exportToPDF(
@@ -12,6 +18,7 @@ class ExportService {
     charts: { name: string; data: ChartData }[],
     metrics: any[]
   ): Promise<void> {
+    const jsPDF = await loadJsPDF();
     const doc = new jsPDF();
     let yPosition = 20;
 

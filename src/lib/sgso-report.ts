@@ -2,11 +2,17 @@
 /**
  * SGSO Report Generation Library
  * Helper functions for generating SGSO reports and PDF buffers
+ * PATCH 653 - Lazy loading for jsPDF
  */
 
-import jsPDF from "jspdf";
-import "jspdf-autotable";
 import { createClient } from "@supabase/supabase-js";
+
+// Lazy load jsPDF
+const loadJsPDF = async () => {
+  const { default: jsPDF } = await import("jspdf");
+  await import("jspdf-autotable");
+  return jsPDF;
+};
 
 // Extend jsPDF type to include autoTable
 declare module "jspdf" {
@@ -145,6 +151,7 @@ export async function generatePDFBufferForVessel(vesselId: string): Promise<Buff
     throw new Error(`No metrics found for vessel ID: ${vesselId}`);
   }
 
+  const jsPDF = await loadJsPDF();
   const doc = new jsPDF();
   const currentDate = new Date().toLocaleDateString("pt-BR");
   const currentMonth = new Date().toLocaleDateString("pt-BR", {

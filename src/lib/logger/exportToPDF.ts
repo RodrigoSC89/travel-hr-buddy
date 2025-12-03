@@ -1,11 +1,27 @@
 /**
  * PATCH 94.0 - Logs Center PDF Export
  * Export logs with header, grouped data, and QR code verification
+ * PATCH 653 - Lazy loading for jsPDF
  */
 
-import jsPDF from "jspdf";
-import autoTable from "jspdf-autotable";
 import QRCode from "qrcode";
+
+// Lazy load jsPDF
+let jsPDFModule: typeof import("jspdf").default | null = null;
+let autoTableModule: typeof import("jspdf-autotable").default | null = null;
+
+const loadPDFLibs = async () => {
+  if (!jsPDFModule) {
+    const { default: jsPDF } = await import("jspdf");
+    jsPDFModule = jsPDF;
+  }
+  if (!autoTableModule) {
+    const { default: autoTable } = await import("jspdf-autotable");
+    autoTableModule = autoTable;
+  }
+  return { jsPDF: jsPDFModule!, autoTable: autoTableModule! };
+};
+
 import type { LogEntry } from "../../modules/logs-center/types";
 
 interface ExportOptions {
@@ -61,6 +77,9 @@ export async function exportLogsAsPDF(
   options: ExportOptions = {}
 ): Promise<void> {
   const { title = "Relatório de Logs Técnicos", includeQR = true } = options;
+
+  // Load PDF libraries
+  const { jsPDF, autoTable } = await loadPDFLibs();
 
   // Create PDF document
   const doc = new jsPDF({
@@ -131,7 +150,7 @@ export async function exportLogsAsPDF(
       2: { cellWidth: 50 },
       3: { cellWidth: "auto" },
     },
-    didDrawCell: (data) => {
+    didDrawCell: (data: any) => {
       // Color-code level column
       if (data.column.index === 1 && data.section === "body") {
         const level = logs[data.row.index]?.level;

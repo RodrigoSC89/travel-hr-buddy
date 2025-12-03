@@ -18,8 +18,13 @@ import {
   XCircle,
   FileText
 } from "lucide-react";
-import jsPDF from "jspdf";
-import autoTable from "jspdf-autotable";
+
+// Lazy load jsPDF
+const loadPDFLibs = async () => {
+  const { default: jsPDF } = await import("jspdf");
+  const { default: autoTable } = await import("jspdf-autotable");
+  return { jsPDF, autoTable };
+};
 
 interface AuditArea {
   id: string;

@@ -1,10 +1,24 @@
 /**
  * PATCH 651 - PDF Report Generator
  * Automated report generation for modules
+ * PATCH 653 - Lazy loading for jsPDF
  */
 
-import jsPDF from "jspdf";
-import autoTable from "jspdf-autotable";
+// Lazy load jsPDF and autoTable
+let jsPDFModule: typeof import("jspdf").default | null = null;
+let autoTableModule: typeof import("jspdf-autotable").default | null = null;
+
+const loadPDFLibs = async () => {
+  if (!jsPDFModule) {
+    const { default: jsPDF } = await import("jspdf");
+    jsPDFModule = jsPDF;
+  }
+  if (!autoTableModule) {
+    const { default: autoTable } = await import("jspdf-autotable");
+    autoTableModule = autoTable;
+  }
+  return { jsPDF: jsPDFModule, autoTable: autoTableModule };
+};
 
 export interface ReportConfig {
   title: string;
@@ -26,16 +40,26 @@ export interface TableData {
 }
 
 export class PDFReportGenerator {
-  private doc: jsPDF;
+  private doc: InstanceType<typeof import("jspdf").default>;
+  private autoTable: typeof import("jspdf-autotable").default;
   private yPosition: number;
   private pageHeight: number;
   private margin: number;
 
-  constructor() {
+  private constructor(
+    jsPDF: typeof import("jspdf").default,
+    autoTable: typeof import("jspdf-autotable").default
+  ) {
     this.doc = new jsPDF();
+    this.autoTable = autoTable;
     this.yPosition = 20;
     this.pageHeight = this.doc.internal.pageSize.height;
     this.margin = 20;
+  }
+
+  static async create(): Promise<PDFReportGenerator> {
+    const { jsPDF, autoTable } = await loadPDFLibs();
+    return new PDFReportGenerator(jsPDF, autoTable);
   }
 
   /**
@@ -173,7 +197,7 @@ export class PDFReportGenerator {
    * Add table content
    */
   private addTable(tableData: TableData) {
-    autoTable(this.doc, {
+    this.autoTable(this.doc, {
       startY: this.yPosition,
       head: [tableData.headers],
       body: tableData.rows,
@@ -194,7 +218,7 @@ export class PDFReportGenerator {
 
     // Update yPosition after table
     // Note: jspdf-autotable adds lastAutoTable property dynamically
-    const docWithTable = this.doc as jsPDF & { lastAutoTable?: { finalY: number } };
+    const docWithTable = this.doc as InstanceType<typeof import("jspdf").default> & { lastAutoTable?: { finalY: number } };
     const finalY = docWithTable.lastAutoTable?.finalY ?? this.yPosition;
     this.yPosition = finalY + 10;
   }
@@ -248,7 +272,7 @@ export async function generateStandardModuleReport(
     recommendations: string[];
   }
 ): Promise<Blob> {
-  const generator = new PDFReportGenerator();
+  const generator = await PDFReportGenerator.create();
 
   const config: ReportConfig = {
     title: `${moduleName} - Status Report`,

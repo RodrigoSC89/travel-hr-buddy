@@ -1,5 +1,6 @@
 // @ts-nocheck
 // PATCH 393 - Enhanced with signatures, corrective actions, and PDF export
+// PATCH 653 - Lazy loading for jsPDF
 import React, { useState, useEffect } from "react";
 import {
   Dialog,
@@ -18,9 +19,14 @@ import { SignatureDialog, SignatureData } from "./SignatureDialog";
 import { supabase } from "@/integrations/supabase/client";
 import { useToast } from "@/hooks/use-toast";
 import { FileDown, PenTool, Plus, CheckCircle } from "lucide-react";
-import jsPDF from "jspdf";
-import autoTable from "jspdf-autotable";
 import { format } from "date-fns";
+
+// Lazy load jsPDF
+const loadPDFLibs = async () => {
+  const { default: jsPDF } = await import("jspdf");
+  const { default: autoTable } = await import("jspdf-autotable");
+  return { jsPDF, autoTable };
+};
 
 interface Incident {
   id: string;
