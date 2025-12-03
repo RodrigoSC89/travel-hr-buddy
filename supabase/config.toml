@@ -524,3 +524,11 @@ comment = "Send restore dashboard"
 [functions.public-api]
 verify_jwt = false
 comment = "Public API endpoints"
+
+# ============================================
+# DGNSS SATELLITE TRACKING
+# ============================================
+
+[functions.dgnss-tracking]
+verify_jwt = false
+comment = "DGNSS satellite tracking API - GPS, GLONASS, Galileo, SBAS"
