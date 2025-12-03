@@ -532,3 +532,7 @@ comment = "Public API endpoints"
 [functions.dgnss-tracking]
 verify_jwt = false
 comment = "DGNSS satellite tracking API - GPS, GLONASS, Galileo, SBAS"
+
+[functions.mmi-advanced-copilot]
+verify_jwt = false
+comment = "MMI Advanced Copilot - Multimodal AI assistant with voice, memory, and proactive suggestions"
