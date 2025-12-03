@@ -10,8 +10,13 @@ import { Line } from "react-chartjs-2";
 import { Chart as ChartJS, CategoryScale, LinearScale, PointElement, LineElement, Title, Tooltip, Legend } from "chart.js";
 import { supabase } from "@/integrations/supabase/client";
 import { useToast } from "@/hooks/use-toast";
-import jsPDF from "jspdf";
-import "jspdf-autotable";
+
+// Lazy load jsPDF
+const loadJsPDF = async () => {
+  const { default: jsPDF } = await import("jspdf");
+  await import("jspdf-autotable");
+  return jsPDF;
+};
 
 ChartJS.register(CategoryScale, LinearScale, PointElement, LineElement, Title, Tooltip, Legend);
 

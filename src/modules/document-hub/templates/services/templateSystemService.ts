@@ -1,12 +1,18 @@
 /**
  * Template System Service - PATCH 434
  * Unified template management with PDF generation and Document Hub integration
+ * PATCH 653 - Lazy loading for jsPDF
  */
 
 import { supabase } from "@/integrations/supabase/client";
 import { logger } from "@/lib/logger";
-import jsPDF from "jspdf";
-import "jspdf-autotable";
+
+// Lazy load jsPDF
+const loadJsPDF = async () => {
+  const { default: jsPDF } = await import("jspdf");
+  await import("jspdf-autotable");
+  return jsPDF;
+};
 
 export interface TemplateField {
   id: string;
@@ -246,6 +252,7 @@ class TemplateSystemService {
    */
   private async generatePDF(htmlContent: string, css: string): Promise<Blob> {
     try {
+      const jsPDF = await loadJsPDF();
       const doc = new jsPDF({
         orientation: "portrait",
         unit: "mm",

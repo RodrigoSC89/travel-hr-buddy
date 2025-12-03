@@ -1,5 +1,13 @@
-import jsPDF from "jspdf";
-import autoTable from "jspdf-autotable";
+/**
+ * PATCH 653 - Lazy loading for jsPDF
+ */
+
+// Lazy load jsPDF
+const loadPDFLibs = async () => {
+  const { default: jsPDF } = await import("jspdf");
+  const { default: autoTable } = await import("jspdf-autotable");
+  return { jsPDF, autoTable };
+};
 
 export interface SGSOPlan {
   id: string;
@@ -34,6 +42,7 @@ export const generateSgsoReportPDF = async (
   vesselName?: string,
   responsibleUsers?: Record<string, string>
 ): Promise<Blob> => {
+  const { jsPDF, autoTable } = await loadPDFLibs();
   const doc = new jsPDF();
   const pageWidth = doc.internal.pageSize.width;
   let yPosition = 20;

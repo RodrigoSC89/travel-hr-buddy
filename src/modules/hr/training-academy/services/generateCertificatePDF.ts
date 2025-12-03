@@ -1,4 +1,12 @@
-import jsPDF from "jspdf";
+/**
+ * PATCH 653 - Lazy loading for jsPDF
+ */
+
+// Lazy load jsPDF
+const loadJsPDF = async () => {
+  const { default: jsPDF } = await import("jspdf");
+  return jsPDF;
+};
 
 export interface Certificate {
   id: string;
@@ -10,6 +18,8 @@ export interface Certificate {
 }
 
 export const generateCertificatePDF = async (certificate: Certificate): Promise<Blob> => {
+  const jsPDF = await loadJsPDF();
+  
   const doc = new jsPDF({
     orientation: "landscape",
     unit: "mm",

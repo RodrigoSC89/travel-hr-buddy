@@ -1,13 +1,19 @@
 /**
  * ISM Audit Intelligence Module - Report Export Service
  * PATCH 633
+ * PATCH 653 - Lazy loading for jsPDF
  * Handles PDF and JSON export of ISM audit reports
  */
 
-import jsPDF from "jspdf";
-import "jspdf-autotable";
 import { ISMAuditItem, ISMChecklistItem, ISMFinding, ISMReportExport, ISM_SECTIONS } from "./types";
 import { Logger } from "@/lib/utils/logger";
+
+// Lazy load jsPDF
+const loadJsPDF = async () => {
+  const { default: jsPDF } = await import("jspdf");
+  await import("jspdf-autotable");
+  return jsPDF;
+};
 
 /**
  * Export ISM audit report as PDF
@@ -20,6 +26,7 @@ export async function exportISMAuditPDF(
   try {
     Logger.info("Exporting ISM audit to PDF", { auditId: audit.id });
 
+    const jsPDF = await loadJsPDF();
     const doc = new jsPDF();
     let yPosition = 20;
 
