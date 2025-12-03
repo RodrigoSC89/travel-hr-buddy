@@ -4,7 +4,6 @@
  */
 
 import { useMemo } from "react";
-import modulesRegistry from "@/../modules-registry-complete.json";
 import { usePermissions } from "@/hooks/use-permissions";
 import {
   LayoutDashboard,
@@ -21,6 +20,23 @@ import {
   Beaker,
   LucideIcon,
 } from "lucide-react";
+
+// Inline module registry
+const MODULES_REGISTRY = {
+  modules: [
+    { id: "dashboard", name: "Dashboard", path: "/dashboard", status: "active", category: "core", description: "Main dashboard" },
+    { id: "dp-intelligence", name: "DP Intelligence", path: "/dp-intelligence", status: "active", category: "maritime", description: "Dynamic positioning AI" },
+    { id: "forecast-global", name: "Forecast Global", path: "/forecast-global", status: "active", category: "analytics", description: "Global forecasting" },
+    { id: "control-hub", name: "Control Hub", path: "/control-hub", status: "active", category: "operations", description: "Central control" },
+    { id: "fmea-expert", name: "FMEA Expert", path: "/fmea-expert", status: "active", category: "safety", description: "Failure mode analysis" },
+    { id: "compliance-hub", name: "Compliance Hub", path: "/compliance-hub", status: "active", category: "compliance", description: "Compliance management" },
+    { id: "crew-management", name: "Crew Management", path: "/crew-management", status: "active", category: "hr", description: "Crew operations" },
+    { id: "fleet-management", name: "Fleet Management", path: "/fleet-management", status: "active", category: "maritime", description: "Fleet operations" },
+    { id: "maintenance", name: "Maintenance", path: "/maintenance", status: "active", category: "maintenance", description: "Maintenance system" },
+    { id: "reports", name: "Reports", path: "/reports", status: "active", category: "documents", description: "Reporting system" },
+    { id: "ai-assistant", name: "AI Assistant", path: "/ai-assistant", status: "active", category: "ai", description: "AI-powered assistant" },
+  ]
+};
 
 export type ModuleStatus = "production" | "development" | "experimental" | "deprecated";
 
@@ -43,13 +59,6 @@ export interface NavigationGroup {
   modules: NavigationModule[];
 }
 
-const STATUS_ICONS: Record<ModuleStatus, string> = {
-  production: "✅",
-  development: "⚠️",
-  experimental: "🧪",
-  deprecated: "❌",
-};
-
 const CATEGORY_ICONS: Record<string, LucideIcon> = {
   core: LayoutDashboard,
   maritime: Ship,
@@ -71,50 +80,18 @@ const CATEGORY_ICONS: Record<string, LucideIcon> = {
   planning: Workflow,
 };
 
-const CATEGORY_PERMISSION_MAP: Record<string, "admin" | "hr" | "reports" | "analytics" | "settings"> = {
-  hr: "hr",
-  analytics: "analytics",
-  compliance: "reports",
-  system: "settings",
-  core: "admin",
-};
-
-type BaseRegistryModule = (typeof modulesRegistry.modules)[number];
-type RegistryModuleExtras = {
-  requiresRole?: string[];
-  aiEnabled?: boolean;
-  integrations?: string[];
-  badge?: string;
-};
-type RegistryModule = BaseRegistryModule & RegistryModuleExtras;
-
-/**
- * Maps module registry status to simplified status
- */
 const mapModuleStatus = (registryStatus: string | undefined): ModuleStatus => {
   const normalized = (registryStatus || "").toLowerCase();
-  if (["active", "implemented", "production"].includes(normalized)) {
-    return "production";
-  }
-  if (["partial", "beta", "preview", "planned"].includes(normalized)) {
-    return "development";
-  }
-  if (["deprecated", "legacy", "disabled", "archived"].includes(normalized)) {
-    return "deprecated";
-  }
+  if (["active", "implemented", "production"].includes(normalized)) return "production";
+  if (["partial", "beta", "preview", "planned"].includes(normalized)) return "development";
+  if (["deprecated", "legacy", "disabled", "archived"].includes(normalized)) return "deprecated";
   return "experimental";
 };
 
-/**
- * Get icon for module category
- */
 const getModuleIcon = (category: string): LucideIcon => {
   return CATEGORY_ICONS[category] || Activity;
 };
 
-/**
- * Hook to get navigation structure filtered by status and user role
- */
 export const useNavigationStructure = (options: {
   includeProduction?: boolean;
   includeDevelopment?: boolean;
@@ -131,9 +108,7 @@ export const useNavigationStructure = (options: {
   const { userRole, canAccessModule } = usePermissions();
 
   const navigationModules = useMemo(() => {
-    const rawModules: RegistryModule[] = Array.isArray(modulesRegistry.modules)
-      ? (modulesRegistry.modules as RegistryModule[])
-      : [];
+    const rawModules = MODULES_REGISTRY.modules;
 
     const statusAllowed = (status: ModuleStatus) => {
       if (status === "production") return includeProduction;
@@ -142,117 +117,53 @@ export const useNavigationStructure = (options: {
       return includeDeprecated;
     };
 
-    const normalizeModule = (module: RegistryModule): NavigationModule | null => {
-      const category = module.category || "core";
-      const status = mapModuleStatus(module.status);
-
-      if (!statusAllowed(status)) {
-        return null;
-      }
-
-      const requiredRoles = Array.isArray(module.requiresRole)
-        ? module.requiresRole
-        : undefined;
-
-      if (requiredRoles) {
-        if (!userRole || !requiredRoles.includes(userRole)) {
-          return null;
-        }
-      }
-
-      const permissionKey = CATEGORY_PERMISSION_MAP[category];
-      if (permissionKey && !canAccessModule(permissionKey)) {
-        return null;
-      }
-
-      const description = module.description || "Módulo sem descrição disponível";
-      const icon = getModuleIcon(category);
-      const path = module.path || module.route || "/";
-      const aiEnabled = Boolean(module.aiEnabled ?? module.integrations?.includes("OpenAI"));
-
-      return {
-        id: module.id,
-        name: module.name,
-        path,
-        category,
-        status,
-        icon,
-        requiresRole: requiredRoles,
-        aiEnabled,
-        description,
-        badge: module.status === "deprecated" ? "Legacy" : undefined,
-      };
-    };
-
     return rawModules
-      .map(normalizeModule)
-      .filter((module): module is NavigationModule => module !== null);
-  }, [
-    includeProduction,
-    includeDevelopment,
-    includeExperimental,
-    includeDeprecated,
-    userRole,
-    canAccessModule,
-  ]);
+      .map((module): NavigationModule | null => {
+        const category = module.category || "core";
+        const status = mapModuleStatus(module.status);
 
-  /**
-   * Get modules grouped by category
-   */
+        if (!statusAllowed(status)) return null;
+
+        return {
+          id: module.id,
+          name: module.name,
+          path: module.path,
+          category,
+          status,
+          icon: getModuleIcon(category),
+          description: module.description || "Módulo sem descrição",
+        };
+      })
+      .filter((m): m is NavigationModule => m !== null);
+  }, [includeProduction, includeDevelopment, includeExperimental, includeDeprecated, userRole, canAccessModule]);
+
   const getModulesByCategory = useMemo(() => {
     const grouped = new Map<string, NavigationModule[]>();
-
     navigationModules.forEach((module) => {
-      if (!grouped.has(module.category)) {
-        grouped.set(module.category, []);
-      }
+      if (!grouped.has(module.category)) grouped.set(module.category, []);
       grouped.get(module.category)!.push(module);
     });
-
     return grouped;
   }, [navigationModules]);
 
-  /**
-   * Get modules filtered by status
-   */
   const getModulesByStatus = (status: ModuleStatus): NavigationModule[] => {
-    return navigationModules.filter((module) => module.status === status);
+    return navigationModules.filter((m) => m.status === status);
   };
 
-  /**
-   * Get modules filtered by role
-   */
-  const getModulesByRole = (role: string): NavigationModule[] => {
-    return navigationModules.filter((module) => {
-      if (!module.requiresRole) return true;
-      return module.requiresRole.includes(role);
-    });
-  };
-
-  /**
-   * Get navigation groups for sidebar
-   */
   const getNavigationGroups = useMemo((): NavigationGroup[] => {
-    const groups: NavigationGroup[] = [];
-
-    // Group by category
     const categoryGroups = new Map<string, NavigationModule[]>();
-    
     navigationModules.forEach((module) => {
-      if (!categoryGroups.has(module.category)) {
-        categoryGroups.set(module.category, []);
-      }
+      if (!categoryGroups.has(module.category)) categoryGroups.set(module.category, []);
       categoryGroups.get(module.category)!.push(module);
     });
 
-    // Convert to navigation groups
+    const groups: NavigationGroup[] = [];
     categoryGroups.forEach((modules, category) => {
       groups.push({
         title: category.charAt(0).toUpperCase() + category.slice(1),
         modules: modules.sort((a, b) => {
-          // Sort by status priority: production > development > experimental > deprecated
-          const statusOrder = { production: 0, development: 1, experimental: 2, deprecated: 3 };
-          return (statusOrder[a.status] || 99) - (statusOrder[b.status] || 99);
+          const order = { production: 0, development: 1, experimental: 2, deprecated: 3 };
+          return (order[a.status] || 99) - (order[b.status] || 99);
         }),
       });
     });
@@ -260,53 +171,28 @@ export const useNavigationStructure = (options: {
     return groups.sort((a, b) => a.title.localeCompare(b.title));
   }, [navigationModules]);
 
-  /**
-   * Get status badge for module
-   */
-  const getStatusBadge = (status: ModuleStatus): string => {
-    return STATUS_ICONS[status] || "";
-  };
-
-  /**
-   * Get module statistics
-   */
-  const getStatistics = useMemo(() => {
-    return {
-      total: navigationModules.length,
-      production: getModulesByStatus("production").length,
-      development: getModulesByStatus("development").length,
-      experimental: getModulesByStatus("experimental").length,
-      deprecated: getModulesByStatus("deprecated").length,
-      withAI: navigationModules.filter((m) => m.aiEnabled).length,
-    };
-  }, [navigationModules]);
+  const getStatistics = useMemo(() => ({
+    total: navigationModules.length,
+    production: getModulesByStatus("production").length,
+    development: getModulesByStatus("development").length,
+    experimental: getModulesByStatus("experimental").length,
+    deprecated: getModulesByStatus("deprecated").length,
+    withAI: navigationModules.filter((m) => m.aiEnabled).length,
+  }), [navigationModules]);
 
   return {
     modules: navigationModules,
     getModulesByCategory,
     getModulesByStatus,
-    getModulesByRole,
     getNavigationGroups,
-    getStatusBadge,
     statistics: getStatistics,
   };
 };
 
-/**
- * Hook to check if module is accessible by current user
- */
 export const useModuleAccess = (moduleId: string) => {
   const { modules } = useNavigationStructure();
-
-  const module = useMemo(() => {
-    return modules.find((m) => m.id === moduleId);
-  }, [modules, moduleId]);
-
-  const hasAccess = useMemo(() => {
-    if (!module) return false;
-    if (module.status === "deprecated") return false;
-    return true;
-  }, [module]);
+  const module = useMemo(() => modules.find((m) => m.id === moduleId), [modules, moduleId]);
+  const hasAccess = useMemo(() => module ? module.status !== "deprecated" : false, [module]);
 
   return {
     module,
