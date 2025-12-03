@@ -13,11 +13,11 @@ import { MaintenanceTimelineView } from "./components/MaintenanceTimelineView";
 import { MaintenanceTasksTable } from "./components/MaintenanceTasksTable";
 import { CreateMaintenancePlanDialog } from "./components/CreateMaintenancePlanDialog";
 import { MaintenanceAlertsPanel } from "./components/MaintenanceAlertsPanel";
-import { MMICopilot } from "./components/MMICopilot";
 import { FleetHealthPanel } from "./components/FleetHealthPanel";
 import { JobsCenter } from "./components/JobsCenter";
 import HourometerManager from "./components/HourometerManager";
 import WorkOrderManager from "./components/WorkOrderManager";
+import AdvancedCopilot from "./components/AdvancedCopilot";
 
 interface MaintenanceStats {
   scheduled: number;
@@ -213,48 +213,7 @@ const MaintenancePlanner = () => {
         </TabsContent>
 
         <TabsContent value="copilot" className="mt-6">
-          <div className="grid md:grid-cols-2 gap-6">
-            <MMICopilot onJobCreated={handleJobCreated} />
-            <Card>
-              <CardHeader>
-                <CardTitle className="flex items-center gap-2">
-                  <Bot className="h-5 w-5" />
-                  Sobre o Copilot de Manutenção
-                </CardTitle>
-              </CardHeader>
-              <CardContent className="space-y-4">
-                <p className="text-muted-foreground">
-                  O Copilot de Manutenção utiliza IA avançada para auxiliar nas operações de manutenção naval.
-                </p>
-                <div className="space-y-3">
-                  <div className="border rounded-lg p-3">
-                    <h4 className="font-semibold text-sm mb-1">✨ Criação por Linguagem Natural</h4>
-                    <p className="text-xs text-muted-foreground">
-                      Descreva o problema e a IA cria o job estruturado automaticamente.
-                    </p>
-                  </div>
-                  <div className="border rounded-lg p-3">
-                    <h4 className="font-semibold text-sm mb-1">🔮 Análise Preditiva</h4>
-                    <p className="text-xs text-muted-foreground">
-                      Avalia riscos de postergação e sugere prioridades baseado em histórico.
-                    </p>
-                  </div>
-                  <div className="border rounded-lg p-3">
-                    <h4 className="font-semibold text-sm mb-1">📦 Gestão de Estoque</h4>
-                    <p className="text-xs text-muted-foreground">
-                      Sugere peças necessárias e alerta sobre disponibilidade.
-                    </p>
-                  </div>
-                  <div className="border rounded-lg p-3">
-                    <h4 className="font-semibold text-sm mb-1">📊 Métricas Inteligentes</h4>
-                    <p className="text-xs text-muted-foreground">
-                      MTBF, confiança e análise de risco em tempo real.
-                    </p>
-                  </div>
-                </div>
-              </CardContent>
-            </Card>
-          </div>
+          <AdvancedCopilot />
         </TabsContent>
 
         <TabsContent value="jobs" className="mt-6">
