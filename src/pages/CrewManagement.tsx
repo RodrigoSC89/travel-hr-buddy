@@ -22,6 +22,7 @@ import {
 import { toast } from "@/hooks/use-toast";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { CrewAIInsights } from "@/components/crew/crew-ai-insights";
+import CrewAIAnalysis from "@/modules/crew-management/components/CrewAIAnalysis";
 
 interface CrewMember {
   id: string;
@@ -256,14 +257,19 @@ export default function CrewManagement() {
 
       {/* Tabs for Content */}
       <Tabs defaultValue="list" className="w-full">
-        <TabsList className="grid w-full grid-cols-2 md:grid-cols-3">
+        <TabsList className="grid w-full grid-cols-2 md:grid-cols-4">
           <TabsTrigger value="list">Lista de Tripulação</TabsTrigger>
-          <TabsTrigger value="ai-insights" className="gap-2 bg-gradient-to-r from-primary/10 to-secondary/10">
+          <TabsTrigger value="ai-analysis" className="gap-2 bg-gradient-to-r from-primary/10 to-secondary/10">
             <Brain className="h-4 w-4" />
-            Insights IA
+            Análise IA 2.0
           </TabsTrigger>
+          <TabsTrigger value="ai-insights">Insights</TabsTrigger>
           <TabsTrigger value="certifications">Certificações</TabsTrigger>
         </TabsList>
+
+        <TabsContent value="ai-analysis" className="mt-6">
+          <CrewAIAnalysis />
+        </TabsContent>
 
         <TabsContent value="list" className="space-y-6 mt-6">
           {/* Filters and Actions */}

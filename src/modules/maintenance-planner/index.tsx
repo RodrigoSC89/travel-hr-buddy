@@ -5,7 +5,7 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Badge } from "@/components/ui/badge";
 import { 
   Wrench, Calendar, CheckCircle, AlertTriangle, Plus, Download, 
-  Bell, Bot, Ship, Activity, LayoutGrid, Clock, FileText
+  Bell, Bot, Ship, Activity, LayoutGrid, Clock, FileText, Box
 } from "lucide-react";
 import { useToast } from "@/hooks/use-toast";
 import { MaintenanceCalendarView } from "./components/MaintenanceCalendarView";
@@ -18,6 +18,7 @@ import { JobsCenter } from "./components/JobsCenter";
 import HourometerManager from "./components/HourometerManager";
 import WorkOrderManager from "./components/WorkOrderManager";
 import AdvancedCopilot from "./components/AdvancedCopilot";
+import DigitalTwin from "./components/DigitalTwin";
 
 interface MaintenanceStats {
   scheduled: number;
@@ -203,6 +204,10 @@ const MaintenancePlanner = () => {
             <FileText className="h-4 w-4" />
             OS
           </TabsTrigger>
+          <TabsTrigger value="twin" className="flex items-center gap-2">
+            <Box className="h-4 w-4" />
+            Digital Twin
+          </TabsTrigger>
           <TabsTrigger value="calendar">Calendário</TabsTrigger>
           <TabsTrigger value="timeline">Timeline</TabsTrigger>
           <TabsTrigger value="tasks">Tarefas</TabsTrigger>
@@ -226,6 +231,10 @@ const MaintenancePlanner = () => {
 
         <TabsContent value="os" className="mt-6">
           <WorkOrderManager />
+        </TabsContent>
+
+        <TabsContent value="twin" className="mt-6">
+          <DigitalTwin />
         </TabsContent>
 
         <TabsContent value="calendar" className="mt-6">
