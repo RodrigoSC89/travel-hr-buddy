@@ -490,8 +490,8 @@ const navigationItems = [
         icon: Target,
       },
       {
-        title: "Drone Commander",
-        url: "/drone-commander",
+        title: "Underwater Drone",
+        url: "/underwater-drone",
         icon: Plane,
       },
       {
