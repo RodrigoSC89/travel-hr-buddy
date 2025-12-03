@@ -1,13 +1,13 @@
 import React, { useEffect, useRef, useState } from "react";
 import { useOptimizedPolling } from "@/hooks/use-optimized-polling";
-import mapboxgl from "mapbox-gl";
-import "mapbox-gl/dist/mapbox-gl.css";
+import { loadMapboxGL } from "@/lib/performance/heavy-libs-loader";
 import { supabase } from "@/integrations/supabase/client";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Ship, MapPin, Navigation, Activity, AlertTriangle } from "lucide-react";
 import { useToast } from "@/hooks/use-toast";
+import { Skeleton } from "@/components/ui/skeleton";
 
 interface VesselLocation {
   id: string;
@@ -25,10 +25,12 @@ interface VesselLocation {
 
 const VesselTrackingMap = () => {
   const mapContainer = useRef<HTMLDivElement>(null);
-  const map = useRef<mapboxgl.Map | null>(null);
+  const map = useRef<any>(null);
+  const mapboxRef = useRef<any>(null);
   const [vessels, setVessels] = useState<VesselLocation[]>([]);
   const [selectedVessel, setSelectedVessel] = useState<VesselLocation | null>(null);
   const [mapboxToken, setMapboxToken] = useState<string>("");
+  const [isMapLoading, setIsMapLoading] = useState(true);
   const { toast } = useToast();
 
   useEffect(() => {
@@ -53,28 +55,46 @@ const VesselTrackingMap = () => {
   useEffect(() => {
     if (!mapboxToken || !mapContainer.current) return;
 
-    // Initialize map
-    mapboxgl.accessToken = mapboxToken;
-    
-    map.current = new mapboxgl.Map({
-      container: mapContainer.current,
-      style: "mapbox://styles/mapbox/satellite-streets-v12",
-      projection: "globe",
-      zoom: 2,
-      center: [-40, -15], // Centro do Brasil
-      pitch: 45,
-    });
+    let mounted = true;
 
-    // Add navigation controls
-    map.current.addControl(new mapboxgl.NavigationControl(), "top-right");
+    const initMap = async () => {
+      try {
+        const mapboxgl = await loadMapboxGL();
+        if (!mounted || !mapContainer.current) return;
+        
+        mapboxRef.current = mapboxgl;
+        mapboxgl.accessToken = mapboxToken;
+        
+        const mapInstance = new mapboxgl.Map({
+          container: mapContainer.current,
+          style: "mapbox://styles/mapbox/satellite-streets-v12",
+          projection: "globe",
+          zoom: 2,
+          center: [-40, -15],
+          pitch: 45,
+        });
 
-    // Add scale control
-    map.current.addControl(new mapboxgl.ScaleControl(), "bottom-left");
+        map.current = mapInstance;
 
-    // Load vessel data
-    loadVesselData();
+        mapInstance.addControl(new mapboxgl.NavigationControl(), "top-right");
+        mapInstance.addControl(new mapboxgl.ScaleControl(), "bottom-left");
+
+        mapInstance.on("load", () => {
+          if (mounted) {
+            setIsMapLoading(false);
+            loadVesselData();
+          }
+        });
+      } catch (error) {
+        console.error("Failed to load map:", error);
+        if (mounted) setIsMapLoading(false);
+      }
+    };
+
+    initMap();
 
     return () => {
+      mounted = false;
       map.current?.remove();
     };
   }, [mapboxToken]);
@@ -152,7 +172,8 @@ const VesselTrackingMap = () => {
   };
 
   const updateVesselMarkers = (vesselData: VesselLocation[]) => {
-    if (!map.current) return;
+    if (!map.current || !mapboxRef.current) return;
+    const mapboxgl = mapboxRef.current;
 
     // Remove existing markers
     const existingMarkers = document.querySelectorAll(".vessel-marker");
@@ -348,6 +369,17 @@ const VesselTrackingMap = () => {
 
       {/* Map */}
       <div className="lg:col-span-3 relative">
+        {isMapLoading && (
+          <div className="absolute inset-0 z-10">
+            <Skeleton className="w-full h-full rounded-lg" />
+            <div className="absolute inset-0 flex items-center justify-center">
+              <div className="text-center text-muted-foreground">
+                <MapPin className="h-8 w-8 mx-auto mb-2 animate-pulse" />
+                <p className="text-sm">Carregando mapa...</p>
+              </div>
+            </div>
+          </div>
+        )}
         <div ref={mapContainer} className="w-full h-full rounded-lg" />
         
         {/* Map Controls */}

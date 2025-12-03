@@ -1,9 +1,9 @@
 import React, { useEffect, useRef, useState } from "react";
-import mapboxgl from "mapbox-gl";
-import "mapbox-gl/dist/mapbox-gl.css";
+import { loadMapboxGL } from "@/lib/performance/heavy-libs-loader";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { MapPin, Truck, Package } from "lucide-react";
+import { Skeleton } from "@/components/ui/skeleton";
 
 // Set your Mapbox access token (should be in environment variables)
 const MAPBOX_TOKEN = import.meta.env.VITE_MAPBOX_ACCESS_TOKEN || "";
@@ -32,38 +32,55 @@ interface DeliveryMapProps {
 
 export function DeliveryMap({ deliveries }: DeliveryMapProps) {
   const mapContainer = useRef<HTMLDivElement>(null);
-  const map = useRef<mapboxgl.Map | null>(null);
+  const map = useRef<any>(null);
+  const mapboxRef = useRef<any>(null);
+  const [isLoading, setIsLoading] = useState(true);
 
   useEffect(() => {
     if (!mapContainer.current || map.current) return;
 
     if (!MAPBOX_TOKEN) {
       console.error("Mapbox token is required for map functionality");
+      setIsLoading(false);
       return;
     }
 
-    try {
-      mapboxgl.accessToken = MAPBOX_TOKEN;
+    let mounted = true;
 
-      map.current = new mapboxgl.Map({
-        container: mapContainer.current,
-        style: "mapbox://styles/mapbox/streets-v12",
-        center: [-50, -10], // Center on Brazil
-        zoom: 3,
-      });
+    const initMap = async () => {
+      try {
+        const mapboxgl = await loadMapboxGL();
+        if (!mounted || !mapContainer.current) return;
+        
+        mapboxRef.current = mapboxgl;
+        mapboxgl.accessToken = MAPBOX_TOKEN;
 
-      // Add navigation controls
-      map.current.addControl(new mapboxgl.NavigationControl(), "top-right");
+        const mapInstance = new mapboxgl.Map({
+          container: mapContainer.current,
+          style: "mapbox://styles/mapbox/streets-v12",
+          center: [-50, -10],
+          zoom: 3,
+        });
 
-      // Wait for map to load
-      map.current.on("load", () => {
-        addDeliveryMarkers();
-      });
-    } catch (error) {
-      console.error("Error initializing map:", error);
-    }
+        map.current = mapInstance;
+        mapInstance.addControl(new mapboxgl.NavigationControl(), "top-right");
+
+        mapInstance.on("load", () => {
+          if (mounted) {
+            setIsLoading(false);
+            addDeliveryMarkers();
+          }
+        });
+      } catch (error) {
+        console.error("Error initializing map:", error);
+        if (mounted) setIsLoading(false);
+      }
+    };
+
+    initMap();
 
     return () => {
+      mounted = false;
       if (map.current) {
         map.current.remove();
         map.current = null;
@@ -78,7 +95,8 @@ export function DeliveryMap({ deliveries }: DeliveryMapProps) {
   }, [deliveries]);
 
   const addDeliveryMarkers = () => {
-    if (!map.current) return;
+    if (!map.current || !mapboxRef.current) return;
+    const mapboxgl = mapboxRef.current;
 
     // Clear existing markers
     const markers = document.querySelectorAll(".mapboxgl-marker");
@@ -224,6 +242,17 @@ export function DeliveryMap({ deliveries }: DeliveryMapProps) {
       </CardHeader>
       <CardContent className="p-0">
         <div className="relative">
+          {isLoading && (
+            <div className="absolute inset-0 z-20">
+              <Skeleton className="w-full h-[600px]" />
+              <div className="absolute inset-0 flex items-center justify-center">
+                <div className="text-center text-muted-foreground">
+                  <MapPin className="h-8 w-8 mx-auto mb-2 animate-pulse" />
+                  <p className="text-sm">Loading map...</p>
+                </div>
+              </div>
+            </div>
+          )}
           <div ref={mapContainer} className="h-[600px] w-full" />
           
           {/* Legend */}
