@@ -520,6 +520,11 @@ const navigationItems = [
         icon: BarChart3,
       },
       {
+        title: "Documentos IA",
+        url: "/documents",
+        icon: Brain,
+      },
+      {
         title: "Assistente Voz",
         url: "/voice-assistant",
         icon: Mic,
