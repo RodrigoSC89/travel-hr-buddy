@@ -108,3 +108,21 @@ export {
   minimalFields,
   getAdaptivePageSize,
 } from './query-optimizer';
+
+// PATCH 810: API compression
+export {
+  compressPayload,
+  selectFields as selectFieldsApi,
+  batchRequests,
+  getDelta,
+  getAdaptivePageSize as getAdaptivePageSizeNetwork,
+  deduplicatedRequest,
+  streamResponse,
+} from './api-compression';
+
+// PATCH 810: Smart prefetch
+export {
+  smartPrefetch,
+  useSmartPrefetch,
+  usePrefetchLink,
+} from './smart-prefetch';
