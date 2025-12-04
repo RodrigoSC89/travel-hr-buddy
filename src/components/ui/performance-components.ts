@@ -19,8 +19,7 @@ export { ErrorFallback, InlineError, EmptyState } from './ErrorFallback';
 
 // Images
 export { OptimizedImage } from './OptimizedImage';
-// Note: OptimizedImagePro temporarily removed to fix React hook initialization issue
-// export { OptimizedImagePro } from './OptimizedImagePro';
+export { OptimizedImagePro } from './OptimizedImagePro';
 
 // Actions
 export { ActionButton } from './ActionButton';

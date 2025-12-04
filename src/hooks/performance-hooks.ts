@@ -41,7 +41,5 @@ export { useAnalytics, trackEvent, trackPerformance } from './use-analytics';
 export type { AnalyticsEvent, AnalyticsEventType } from './use-analytics';
 
 // Connection Speed Detection - PATCH 753
-// Note: Temporarily disabled to fix React hook initialization issue
-// These hooks can be imported directly from '@/hooks/useConnectionSpeed' when needed
-// export { useConnectionSpeed, useAdaptiveLoading } from './useConnectionSpeed';
-// export type { ConnectionQuality } from './useConnectionSpeed';
+export { useConnectionSpeed, useAdaptiveLoading } from './useConnectionSpeed';
+export type { ConnectionQuality } from './useConnectionSpeed';

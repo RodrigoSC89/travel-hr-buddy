@@ -52,14 +52,14 @@ const getQuality = (effectiveType: string, rtt: number): ConnectionQuality => {
 };
 
 export function useConnectionSpeed(): ConnectionInfo {
-  const [connectionInfo, setConnectionInfo] = useState<ConnectionInfo>({
-    quality: "moderate",
+  const [connectionInfo, setConnectionInfo] = useState<ConnectionInfo>(() => ({
+    quality: "moderate" as ConnectionQuality,
     effectiveType: "4g",
     downlink: 10,
     rtt: 50,
     saveData: false,
-    isOnline: typeof navigator !== "undefined" ? navigator.onLine : true,
-  });
+    isOnline: true,
+  }));
 
   const updateConnectionInfo = useCallback(() => {
     const connection = getConnection();
