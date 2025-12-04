@@ -126,3 +126,14 @@ export {
   useSmartPrefetch,
   usePrefetchLink,
 } from './smart-prefetch';
+
+// PATCH 815: Bundle & Memory optimization
+export { 
+  HEAVY_DEPENDENCIES, 
+  getBundleOptimizationRecommendations, 
+  calculatePotentialSavings,
+  getCriticalDependencies,
+  logBundleAnalysis 
+} from './bundle-analyzer';
+export { memoryManager, shouldReduceMemory, getMemoryAwareSettings } from './memory-manager';
+export { initializePerformance, requestIdleCallbackPolyfill, cancelIdleCallbackPolyfill } from './init';
