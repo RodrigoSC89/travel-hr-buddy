@@ -1,34 +1,61 @@
 /**
- * Nautilus One Mobile App - Main Export
- * Patches 161.0 - 165.0, 187.0
+ * PATCH 190.0 - Nautilus One Mobile App - Main Export
+ * Complete mobile optimization suite
  */
 
-// PATCH 161.0 - Mobile MVP
+// Core Services
 export { sqliteStorage } from "./services/sqlite-storage";
-export { OfflineChecklist } from "./components/OfflineChecklist";
-export { MissionDashboardComponent } from "./components/MissionDashboard";
+export { syncQueue } from "./services/syncQueue";
+export { networkDetector } from "./services/networkDetector";
+export { EnhancedSyncEngine, enhancedSyncEngine } from "./services/enhanced-sync-engine";
+
+// Optimization Hooks
+export { useVirtualizedList, useInfiniteVirtualList } from "./hooks/useVirtualizedList";
+export { useWorker, useWorkerSort, useWorkerFilter, useWorkerSearch } from "./hooks/useWorker";
+export { 
+  useRuntimeOptimization, 
+  useMemoryPressure, 
+  useMemoryCleanup,
+  useDeferredRender,
+  useVisibleRender,
+  useBatchedUpdates,
+  useLayoutContainment,
+  useDebounce,
+  useThrottle,
+  useOptimizedScroll,
+} from "./hooks/useRuntimeOptimization";
+export { useAdaptivePolling } from "./hooks/useAdaptivePolling";
+export { useMobileOptimization } from "./hooks/useMobileOptimization";
+export { useOfflineSync, useTableSync } from "./hooks/useOfflineSync";
+export { usePerformanceMonitor, PerformanceOverlay } from "./hooks/usePerformanceMonitor";
+
+// Optimized Components
+export { VirtualizedList, VirtualizedGrid } from "./components/VirtualizedList";
+export { NetworkAwareImage } from "./components/NetworkAwareImage";
+export { OfflineIndicator } from "./components/OfflineIndicator";
+
+// Providers
+export { OfflineDataProvider, useOfflineData, useOfflineTable } from "./providers/OfflineDataProvider";
+
+// Types
 export type { 
   MobileChecklist, 
-  ChecklistItem, 
+  ChecklistItem,
   MissionDashboard,
   SyncQueueItem,
   OfflineConfig,
-  MobileAppState 
+  MobileAppState,
+  NetworkStatus,
 } from "./types";
 
-// PATCH 162.0 - SmartSync Engine
-export { syncQueue } from "./services/syncQueue";
-export { networkDetector } from "./services/networkDetector";
+// Legacy exports for backwards compatibility
+export { OfflineChecklist } from "./components/OfflineChecklist";
+export { MissionDashboardComponent } from "./components/MissionDashboard";
 export { useSyncManager } from "./hooks/useSyncManager";
-
-// PATCH 165.0 - Mobile AI Core
 export { mobileAICore } from "./ai";
 export { localMemory } from "./ai/localMemory";
 export { intentParser } from "./ai/intentParser";
 export { VoiceInterface } from "./components/VoiceInterface";
 export type { Intent } from "./ai/intentParser";
-
-// PATCH 187.0 - Enhanced Mobile Features
-export { EnhancedSyncEngine, enhancedSyncEngine } from "./services/enhanced-sync-engine";
 export { BiometricAuthService, biometricAuthService } from "./services/biometric-auth";
 export { MobileHome, MobileMissions, MobileLogs } from "./screens";

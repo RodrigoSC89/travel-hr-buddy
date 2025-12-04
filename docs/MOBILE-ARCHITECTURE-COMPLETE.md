@@ -12,26 +12,29 @@
 ┌─────────────────────────────────────────────────────┐
 │                    UI LAYER                         │
 │  ┌─────────────────────────────────────────────┐    │
-│  │  Virtualized Lists  │  Lazy Components       │    │
-│  │  Skeleton Loading   │  Network-Aware Images  │    │
+│  │  VirtualizedList    │  Lazy Components       │    │
+│  │  Skeleton Loading   │  NetworkAwareImage     │    │
+│  │  OfflineIndicator   │  PerformanceOverlay    │    │
 │  └─────────────────────────────────────────────┘    │
 ├─────────────────────────────────────────────────────┤
 │                  LOGIC LAYER                        │
 │  ┌─────────────────────────────────────────────┐    │
 │  │  Web Workers        │  Memoization           │    │
 │  │  Runtime Monitor    │  Memory Management     │    │
+│  │  Deferred Render    │  Layout Containment    │    │
 │  └─────────────────────────────────────────────┘    │
 ├─────────────────────────────────────────────────────┤
 │                 NETWORK LAYER                       │
 │  ┌─────────────────────────────────────────────┐    │
 │  │  Delta Sync         │  Request Queue         │    │
-│  │  Adaptive Polling   │  Compression           │    │
+│  │  Adaptive Polling   │  Network Detector      │    │
+│  │  Enhanced Sync Eng  │  Conflict Resolution   │    │
 │  └─────────────────────────────────────────────┘    │
 ├─────────────────────────────────────────────────────┤
 │                STORAGE LAYER                        │
 │  ┌─────────────────────────────────────────────┐    │
 │  │  IndexedDB/SQLite   │  TTL Cache             │    │
-│  │  Sync Queue         │  Conflict Resolution   │    │
+│  │  Sync Queue         │  Offline Data Provider │    │
 │  └─────────────────────────────────────────────┘    │
 └─────────────────────────────────────────────────────┘
 ```
