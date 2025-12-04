@@ -1,14 +1,14 @@
-// Service Worker Avançado - TravelHR Buddy
-const CACHE_NAME = 'travelhr-v2';
-const STATIC_CACHE = 'travelhr-static-v2';
-const DYNAMIC_CACHE = 'travelhr-dynamic-v2';
-const API_CACHE = 'travelhr-api-v2';
+// Service Worker Avançado - TravelHR Buddy v3
+// Otimizado para internet lenta e offline
+const CACHE_NAME = 'travelhr-v3';
+const STATIC_CACHE = 'travelhr-static-v3';
+const DYNAMIC_CACHE = 'travelhr-dynamic-v3';
+const API_CACHE = 'travelhr-api-v3';
+const IMAGE_CACHE = 'travelhr-images-v3';
 
-// Recursos estáticos para cache imediato
-const STATIC_ASSETS = [
-  '/',
-  '/index.html',
-  '/manifest.json',
+// Limites de cache
+const MAX_DYNAMIC_CACHE_SIZE = 50;
+const MAX_IMAGE_CACHE_SIZE = 100;
   '/favicon.ico'
 ];
 
@@ -33,13 +33,13 @@ self.addEventListener('install', (event) => {
 
 // Ativação e limpeza de caches antigos
 self.addEventListener('activate', (event) => {
-  console.log('[SW] Activating...');
+  console.log('[SW] Activating v3...');
   event.waitUntil(
     caches.keys()
       .then((keys) => {
         return Promise.all(
           keys
-            .filter((key) => !key.includes('v2'))
+            .filter((key) => !key.includes('v3'))
             .map((key) => {
               console.log('[SW] Removing old cache:', key);
               return caches.delete(key);
