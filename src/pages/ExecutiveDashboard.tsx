@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useCallback, useMemo, useRef } from "react";
+import React, { useState, useEffect, useRef } from "react";
 import { useNavigate } from "react-router-dom";
 import { OrganizationLayout } from "@/components/layout/organization-layout";
 import { ModulePageWrapper } from "@/components/ui/module-page-wrapper";
@@ -196,9 +196,9 @@ export default function ExecutiveDashboard() {
   
   // Ref para evitar chamadas duplicadas
   const loadingRef = useRef(false);
-  const orgIdRef = useRef<string | null>(null);
+  const initialLoadDone = useRef(false);
 
-  const getIconForModule = useCallback((moduleName: string | null): IconType => {
+  const getIconForModule = (moduleName: string | null): IconType => {
     const iconMap: Record<string, IconType> = {
       vessels: Ship,
       hr: Users,
@@ -207,132 +207,96 @@ export default function ExecutiveDashboard() {
       settings: CheckCircle
     };
     return iconMap[moduleName || ""] || Activity;
-  }, []);
+  };
 
-  const loadKPIData = useCallback(async (orgId: string) => {
-    try {
-      const [vesselResult, userResult, activeVesselsResult] = await Promise.all([
-        supabase.from("vessels").select("*", { count: "exact", head: true }).eq("organization_id", orgId),
-        supabase.from("organization_users").select("*", { count: "exact", head: true }).eq("organization_id", orgId).eq("status", "active"),
-        supabase.from("vessels").select("id").eq("organization_id", orgId).eq("status", "active")
-      ]);
-
-      const vesselCount = vesselResult.count || 0;
-      const userCount = userResult.count || 0;
-      const activeVessels = activeVesselsResult.data?.length || 0;
-      const utilization = vesselCount > 0 ? Math.round((activeVessels / vesselCount) * 100) : 0;
-
-      return [
-        { metric: "Usuários Ativos", value: String(userCount), change: "+5%", trend: "up" as const },
-        { metric: "Embarcações", value: String(vesselCount), change: "+2%", trend: "up" as const },
-        { metric: "Utilização da Frota", value: `${utilization}%`, change: "+3%", trend: "up" as const },
-        { metric: "Compliance Score", value: "89%", change: "+1%", trend: "up" as const }
-      ];
-    } catch (error) {
-      logger.error("Error loading KPI data", { error, organizationId: orgId });
-      return [];
-    }
-  }, []);
-
-  const loadRevenueData = useCallback((): RevenueData[] => {
-    const months = ["Jan", "Fev", "Mar", "Abr", "Mai", "Jun"];
-    return months.map((month) => ({
-      month,
-      revenue: 2000 + Math.random() * 600,
-      costs: 1400 + Math.random() * 300,
-      profit: 500 + Math.random() * 400
-    }));
-  }, []);
-
-  const loadFleetPerformance = useCallback(async (orgId: string): Promise<FleetPerformanceData[]> => {
-    try {
-      const { data: vessels, error } = await supabase
-        .from("vessels")
-        .select("id, name, status")
-        .eq("organization_id", orgId)
-        .limit(5);
-
-      if (error) throw error;
-
-      return vessels?.map(vessel => ({
-        vessel: vessel.name,
-        efficiency: vessel.status === "active" ? 85 + Math.random() * 15 : 70 + Math.random() * 15,
-        revenue: 350000 + Math.random() * 150000
-      })) || [];
-    } catch (error) {
-      logger.error("Error loading fleet performance", { error, organizationId: orgId });
-      return [];
-    }
-  }, []);
-
-  const loadOperationalMetrics = useCallback((): OperationalMetrics[] => {
-    return [
-      { name: "Tempo de Operação", value: 92, color: "#10b981" },
-      { name: "Tempo de Manutenção", value: 5, color: "#f59e0b" },
-      { name: "Tempo Ocioso", value: 3, color: "#ef4444" }
-    ];
-  }, []);
-
-  const loadRecentActivities = useCallback(async (orgId: string): Promise<Activity[]> => {
-    try {
-      const startIndex = currentPage * pageSize;
-      const endIndex = startIndex + pageSize - 1;
-      
-      const { data: logs, error } = await supabase
-        .from("access_logs")
-        .select("id, action, module_accessed, created_at")
-        .eq("severity", "info")
-        .order("created_at", { ascending: false })
-        .range(startIndex, endIndex);
-
-      if (error) throw error;
-
-      return logs?.map(log => ({
-        time: new Date(log.created_at).toLocaleTimeString("pt-BR", { hour: "2-digit", minute: "2-digit" }),
-        action: log.action || "Atividade do sistema",
-        type: log.module_accessed || "system",
-        icon: getIconForModule(log.module_accessed)
-      })) || [];
-    } catch (error) {
-      logger.error("Error loading recent activities", { error, organizationId: orgId });
-      return [
-        { time: "2h atrás", action: "Dashboard acessado", type: "system", icon: BarChart3 },
-        { time: "4h atrás", action: "Relatório gerado", type: "report", icon: FileText },
-        { time: "6h atrás", action: "Novo usuário adicionado", type: "user", icon: Users },
-        { time: "8h atrás", action: "Configuração atualizada", type: "settings", icon: CheckCircle }
-      ];
-    }
-  }, [currentPage, getIconForModule]);
-
-  // Efeito principal de carregamento - otimizado para evitar loops
+  // Efeito principal de carregamento - simplificado
   useEffect(() => {
     const orgId = currentOrganization?.id;
     
     // Evitar chamadas duplicadas
-    if (!orgId || loadingRef.current || orgIdRef.current === orgId) {
+    if (!orgId || loadingRef.current) {
       if (!orgId) setIsLoading(false);
       return;
     }
     
+    // Se já carregou dados para esta org, não recarregar
+    if (initialLoadDone.current) {
+      setIsLoading(false);
+      return;
+    }
+    
     loadingRef.current = true;
-    orgIdRef.current = orgId;
 
     const loadData = async () => {
       setIsLoading(true);
       try {
-        const [kpi, revenue, fleet, metrics, activities] = await Promise.all([
-          loadKPIData(orgId),
-          Promise.resolve(loadRevenueData()),
-          loadFleetPerformance(orgId),
-          Promise.resolve(loadOperationalMetrics()),
-          loadRecentActivities(orgId)
+        // KPI Data
+        const [vesselResult, userResult, activeVesselsResult] = await Promise.all([
+          supabase.from("vessels").select("*", { count: "exact", head: true }).eq("organization_id", orgId),
+          supabase.from("organization_users").select("*", { count: "exact", head: true }).eq("organization_id", orgId).eq("status", "active"),
+          supabase.from("vessels").select("id").eq("organization_id", orgId).eq("status", "active")
         ]);
 
-        setKpiData(kpi);
-        setRevenueData(revenue);
-        setFleetPerformanceData(fleet);
-        setOperationalMetrics(metrics);
-        setRecentActivities(activities);
+        const vesselCount = vesselResult.count || 0;
+        const userCount = userResult.count || 0;
+        const activeVessels = activeVesselsResult.data?.length || 0;
+        const utilization = vesselCount > 0 ? Math.round((activeVessels / vesselCount) * 100) : 0;
+
+        setKpiData([
+          { metric: "Usuários Ativos", value: String(userCount), change: "+5%", trend: "up" },
+          { metric: "Embarcações", value: String(vesselCount), change: "+2%", trend: "up" },
+          { metric: "Utilização da Frota", value: `${utilization}%`, change: "+3%", trend: "up" },
+          { metric: "Compliance Score", value: "89%", change: "+1%", trend: "up" }
+        ]);
+
+        // Revenue Data - estático
+        const months = ["Jan", "Fev", "Mar", "Abr", "Mai", "Jun"];
+        setRevenueData(months.map((month) => ({
+          month,
+          revenue: 2000 + Math.random() * 600,
+          costs: 1400 + Math.random() * 300,
+          profit: 500 + Math.random() * 400
+        })));
+
+        // Fleet Performance
+        const { data: vessels } = await supabase
+          .from("vessels")
+          .select("id, name, status")
+          .eq("organization_id", orgId)
+          .limit(5);
+
+        setFleetPerformanceData(vessels?.map(vessel => ({
+          vessel: vessel.name,
+          efficiency: vessel.status === "active" ? 85 + Math.random() * 15 : 70 + Math.random() * 15,
+          revenue: 350000 + Math.random() * 150000
+        })) || []);
+
+        // Operational Metrics - estático
+        setOperationalMetrics([
+          { name: "Tempo de Operação", value: 92, color: "#10b981" },
+          { name: "Tempo de Manutenção", value: 5, color: "#f59e0b" },
+          { name: "Tempo Ocioso", value: 3, color: "#ef4444" }
+        ]);
+
+        // Recent Activities - com fallback
+        const { data: logs } = await supabase
+          .from("access_logs")
+          .select("id, action, module_accessed, created_at")
+          .eq("severity", "info")
+          .order("created_at", { ascending: false })
+          .range(0, 4);
+
+        setRecentActivities(logs?.map(log => ({
+          time: new Date(log.created_at).toLocaleTimeString("pt-BR", { hour: "2-digit", minute: "2-digit" }),
+          action: log.action || "Atividade do sistema",
+          type: log.module_accessed || "system",
+          icon: getIconForModule(log.module_accessed)
+        })) || [
+          { time: "2h atrás", action: "Dashboard acessado", type: "system", icon: BarChart3 },
+          { time: "4h atrás", action: "Relatório gerado", type: "report", icon: FileText }
+        ]);
+
+        initialLoadDone.current = true;
       } catch (error) {
         logger.error("Error loading dashboard data", { error, organizationId: orgId });
         toast.error("Erro ao carregar dados do dashboard");
@@ -343,15 +307,20 @@ export default function ExecutiveDashboard() {
     };
 
     loadData();
-  }, [currentOrganization?.id, loadKPIData, loadRevenueData, loadFleetPerformance, loadOperationalMetrics, loadRecentActivities]);
+  }, [currentOrganization?.id]);
 
-  // Atualizar quando período muda (sem recarregar todos os dados)
+  // Atualizar apenas revenue quando período muda
   useEffect(() => {
-    if (!currentOrganization?.id || isLoading) return;
+    if (isLoading || !initialLoadDone.current) return;
     
-    // Apenas atualiza dados que dependem do período
-    setRevenueData(loadRevenueData());
-  }, [selectedPeriod, loadRevenueData, currentOrganization?.id, isLoading]);
+    const months = ["Jan", "Fev", "Mar", "Abr", "Mai", "Jun"];
+    setRevenueData(months.map((month) => ({
+      month,
+      revenue: 2000 + Math.random() * 600,
+      costs: 1400 + Math.random() * 300,
+      profit: 500 + Math.random() * 400
+    })));
+  }, [selectedPeriod]);
 
   if (isLoading) {
     return (
