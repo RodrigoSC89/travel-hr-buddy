@@ -17,6 +17,8 @@ import {
 // PATCH 700: Performance optimizations
 import { webVitalsMonitor } from "@/lib/web-vitals-monitor";
 import { imageOptimizer } from "@/lib/image-optimizer";
+// PATCH 800: Offline sync manager
+import { initializeSyncManager } from "@/lib/offline/sync-manager";
 
 // PATCH 129.0: Initialize theme before rendering
 initializeTheme();
@@ -39,6 +41,9 @@ imageOptimizer.initialize().then(() => {
   const support = imageOptimizer.getSupport();
   logger.info(`[ImageOptimizer] WebP: ${support?.webp}, AVIF: ${support?.avif}`);
 });
+
+// PATCH 800: Initialize offline sync manager
+initializeSyncManager();
 
 // PATCH 598: Enhanced PWA initialization with utilities
 if ("serviceWorker" in navigator) {

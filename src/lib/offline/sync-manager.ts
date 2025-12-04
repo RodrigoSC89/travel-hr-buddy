@@ -271,3 +271,13 @@ class OfflineSyncManager {
 
 // Export singleton instance
 export const offlineSyncManager = new OfflineSyncManager();
+
+/**
+ * Initialize the sync manager (for main.tsx)
+ */
+export function initializeSyncManager(): () => void {
+  // The singleton is already initialized, just return cleanup
+  return () => {
+    offlineSyncManager.destroy();
+  };
+}
