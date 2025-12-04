@@ -17,7 +17,11 @@ export default defineConfig(({ mode }) => {
       host: true,
       port: 8080,
       strictPort: true,
-      hmr: { overlay: false }
+      hmr: { 
+        overlay: false,
+        // Prevent full page reloads on HMR errors
+        timeout: 5000
+      }
     },
     plugins: [
       react(), 
@@ -214,7 +218,13 @@ export default defineConfig(({ mode }) => {
         "@": path.resolve(__dirname, "./src"),
       },
       // CRITICAL: Ensure single React instance to prevent useState null error
-      dedupe: ["react", "react-dom", "react-router-dom"],
+      dedupe: [
+        "react", 
+        "react-dom", 
+        "react-router-dom",
+        "@tanstack/react-query",
+        "react-helmet-async"
+      ],
     },
     build: {
       outDir: "dist",
@@ -432,10 +442,11 @@ export default defineConfig(({ mode }) => {
         "react-router-dom",
         "@supabase/supabase-js",
         "@tanstack/react-query",
+        "react-helmet-async",
         "mqtt"
       ],
-      // Force re-optimization to avoid stale cache
-      force: true,
+      // Remove force: true to prevent HMR issues
+      exclude: [],
     },
     cacheDir: ".vite-cache",
     esbuild: {
