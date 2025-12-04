@@ -19,6 +19,9 @@ import { DPCompetenceHub } from "./dp-competence-hub";
 import { OperationalWindowMonitor } from "./operational-window-monitor";
 import { DPAIAdvisor } from "./dp-ai-advisor";
 import { ClientAssurancePortal } from "./client-assurance-portal";
+import { DPReplaySystem } from "./dp-replay-system";
+import { SIMOPSManager } from "./simops-manager";
+import { AutoEvidenceBuilder } from "./auto-evidence-builder";
 import {
   LayoutDashboard,
   FileText,
@@ -347,6 +350,15 @@ export const PeoDpManager: React.FC = () => {
             <TabsTrigger value="validation" className="flex items-center gap-1 text-xs px-2 py-1">
               <Target className="h-3 w-3" />ML
             </TabsTrigger>
+            <TabsTrigger value="replay" className="flex items-center gap-1 text-xs px-2 py-1">
+              <Radio className="h-3 w-3" />Replay
+            </TabsTrigger>
+            <TabsTrigger value="simops" className="flex items-center gap-1 text-xs px-2 py-1">
+              <Ship className="h-3 w-3" />SIMOPS
+            </TabsTrigger>
+            <TabsTrigger value="evidence" className="flex items-center gap-1 text-xs px-2 py-1">
+              <FileText className="h-3 w-3" />Evidências
+            </TabsTrigger>
             <TabsTrigger value="checklist" className="flex items-center gap-1 text-xs px-2 py-1">
               <Settings className="h-3 w-3" />Checklist
             </TabsTrigger>
@@ -651,6 +663,21 @@ export const PeoDpManager: React.FC = () => {
         {/* Client Assurance Portal */}
         <TabsContent value="client" className="space-y-4">
           <ClientAssurancePortal />
+        </TabsContent>
+
+        {/* DP Replay System */}
+        <TabsContent value="replay" className="space-y-4">
+          <DPReplaySystem />
+        </TabsContent>
+
+        {/* SIMOPS Manager */}
+        <TabsContent value="simops" className="space-y-4">
+          <SIMOPSManager />
+        </TabsContent>
+
+        {/* Auto-Evidence Builder */}
+        <TabsContent value="evidence" className="space-y-4">
+          <AutoEvidenceBuilder />
         </TabsContent>
       </Tabs>
 
