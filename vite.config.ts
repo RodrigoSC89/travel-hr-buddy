@@ -213,6 +213,8 @@ export default defineConfig(({ mode }) => {
       alias: {
         "@": path.resolve(__dirname, "./src"),
       },
+      // CRITICAL: Ensure single React instance to prevent useState null error
+      dedupe: ["react", "react-dom", "react-router-dom"],
     },
     build: {
       outDir: "dist",
@@ -421,7 +423,7 @@ export default defineConfig(({ mode }) => {
       },
     },
     optimizeDeps: {
-      include: ["mqtt", "@supabase/supabase-js", "react-router-dom"],
+      include: ["react", "react-dom", "mqtt", "@supabase/supabase-js", "react-router-dom"],
     },
     cacheDir: ".vite-cache",
     esbuild: {
