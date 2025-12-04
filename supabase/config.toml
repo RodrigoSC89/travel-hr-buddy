@@ -373,6 +373,10 @@ comment = "API for audit summaries"
 verify_jwt = true
 comment = "Send audit reports via email"
 
+[functions.sgso-assistant]
+verify_jwt = false
+comment = "SGSO AI assistant with ANP Resolution 43/2007 knowledge"
+
 # ============================================
 # CHECKLIST & DOCUMENT FUNCTIONS (5 functions)
 # ============================================

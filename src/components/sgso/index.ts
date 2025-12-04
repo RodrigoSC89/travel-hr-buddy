@@ -15,3 +15,6 @@ export { MetricasPanel } from "./MetricasPanel";
 export { SGSOTrendChart } from "./SGSOTrendChart";
 export { SGSOActionPlanGenerator } from "./SGSOActionPlanGenerator";
 export { SGSOHistoryTable } from "./SGSOHistoryTable";
+export { CAPAManager } from "./CAPAManager";
+export { SGSOAssistant } from "./SGSOAssistant";
+export { ANPDossierExport } from "./ANPDossierExport";
