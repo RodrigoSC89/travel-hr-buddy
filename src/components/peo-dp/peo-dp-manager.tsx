@@ -27,6 +27,7 @@ import { POPsLibrary } from "./pops-library";
 import { RegulatorPortal } from "./regulator-portal";
 import { AdaptiveAIAdvisor } from "./adaptive-ai-advisor";
 import { AISSimopsIntegration } from "./ais-simops-integration";
+import { DPIntelCenter } from "./dp-intel-center";
 import {
   LayoutDashboard,
   FileText,
@@ -383,6 +384,9 @@ export const PeoDpManager: React.FC = () => {
             <TabsTrigger value="ais" className="flex items-center gap-1 text-xs px-2 py-1">
               <Radar className="h-3 w-3" />AIS
             </TabsTrigger>
+            <TabsTrigger value="intel" className="flex items-center gap-1 text-xs px-2 py-1">
+              <AlertTriangle className="h-3 w-3" />Intel DP
+            </TabsTrigger>
             <TabsTrigger value="checklist" className="flex items-center gap-1 text-xs px-2 py-1">
               <Settings className="h-3 w-3" />Checklist
             </TabsTrigger>
@@ -727,6 +731,11 @@ export const PeoDpManager: React.FC = () => {
         {/* AIS + SIMOPS Integration */}
         <TabsContent value="ais" className="space-y-4">
           <AISSimopsIntegration />
+        </TabsContent>
+
+        {/* DP Intelligence Center */}
+        <TabsContent value="intel" className="space-y-4">
+          <DPIntelCenter />
         </TabsContent>
       </Tabs>
 
