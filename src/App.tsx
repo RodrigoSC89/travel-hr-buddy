@@ -11,6 +11,7 @@ import { SmartLayout } from "./components/layout/SmartLayout";
 import { initializeMonitoring } from "@/lib/monitoring/init";
 import { logger } from "@/lib/logger";
 import { CommandPalette } from "@/components/CommandPalette";
+import { KeyboardShortcutsHelp } from "@/components/help/KeyboardShortcuts";
 import { OfflineBanner } from "@/components/OfflineBanner";
 import { systemWatchdog } from "@/ai/watchdog";
 import { OffshoreLoader } from "@/components/LoadingStates";
@@ -31,7 +32,7 @@ const Dashboard = React.lazy(() => import("@/pages/Dashboard"));
 const Admin = React.lazy(() => import("@/pages/Admin"));
 const Settings = React.lazy(() => import("@/pages/Settings"));
 const HealthCheck = React.lazy(() => import("@/pages/HealthCheck"));
-const NotFound = React.lazy(() => import("@/pages/NotFound"));
+const NotFound = React.lazy(() => import("@/pages/NotFoundProfessional"));
 const Unauthorized = React.lazy(() => import("@/pages/Unauthorized"));
 const Auth = React.lazy(() => import("@/pages/Auth"));
 
@@ -72,9 +73,10 @@ function App() {
               <TenantProvider>
                 <OrganizationProvider>
                   <RouterType>
-                <CommandPalette />
-                <OfflineBanner />
-                <ErrorDebugBanner />
+                    <CommandPalette />
+                    <KeyboardShortcutsHelp />
+                    <OfflineBanner />
+                    <ErrorDebugBanner />
                 
                 <Routes>
                   {/* Public Routes */}
