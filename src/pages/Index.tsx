@@ -1,4 +1,5 @@
 import React, { useMemo, useState, useCallback } from "react";
+import { Helmet } from "react-helmet-async";
 import { ProfessionalHeader } from "@/components/dashboard/professional-header";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Button } from "@/components/ui/button";
@@ -157,7 +158,16 @@ const Index = () => {
   }, []);
 
   return (
-    <div className="space-y-6 p-6 bg-gradient-to-br from-background via-background to-primary/5 min-h-screen">
+    <>
+      <Helmet>
+        <title>Dashboard Executivo | Nautilus One - Sistema Marítimo Corporativo</title>
+        <meta name="description" content="Visão estratégica e métricas em tempo real do Sistema Nautilus One. Gerencie operações marítimas, manutenção, compliance e analytics com IA avançada." />
+        <meta name="keywords" content="maritime, offshore, gestão marítima, manutenção, compliance, ESG, IA, analytics" />
+        <meta property="og:title" content="Dashboard Executivo | Nautilus One" />
+        <meta property="og:description" content="Sistema corporativo para gestão marítima com IA avançada" />
+        <link rel="canonical" href="/" />
+      </Helmet>
+      <div className="space-y-6 p-6 bg-gradient-to-br from-background via-background to-primary/5 min-h-screen">
       <div className="flex items-center justify-between">
         <ProfessionalHeader
           title="Dashboard Executivo"
@@ -211,7 +221,8 @@ const Index = () => {
           <OperationsTab />
         </TabsContent>
       </Tabs>
-    </div>
+      </div>
+    </>
   );
 };
 
