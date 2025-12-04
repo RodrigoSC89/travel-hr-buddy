@@ -423,7 +423,19 @@ export default defineConfig(({ mode }) => {
       },
     },
     optimizeDeps: {
-      include: ["react", "react-dom", "mqtt", "@supabase/supabase-js", "react-router-dom"],
+      include: [
+        "react", 
+        "react-dom", 
+        "react-dom/client",
+        "react/jsx-runtime",
+        "react/jsx-dev-runtime",
+        "react-router-dom",
+        "@supabase/supabase-js",
+        "@tanstack/react-query",
+        "mqtt"
+      ],
+      // Force re-optimization to avoid stale cache
+      force: true,
     },
     cacheDir: ".vite-cache",
     esbuild: {
