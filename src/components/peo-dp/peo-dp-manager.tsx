@@ -11,6 +11,8 @@ import { Label } from "@/components/ui/label";
 import { PeoDpWizard } from "./peo-dp-wizard";
 import { PEODPAuditForm } from "./peodp-audit-form";
 import { PEODPChecklistEditor } from "./peodp-checklist-editor";
+import { FMEADPTrialsIntegration } from "./fmea-dp-trials-integration";
+import { MLValidationIMCA } from "./ml-validation-imca";
 import {
   LayoutDashboard,
   FileText,
@@ -143,7 +145,7 @@ export const PeoDpManager: React.FC = () => {
 
   const [audits, setAudits] = useState<PEODPAudit[]>([]);
   const [selectedPlan, setSelectedPlan] = useState<DPPlan | null>(plans[0] || null);
-  const [activeView, setActiveView] = useState<"dashboard" | "plans" | "audits" | "checklist" | "analytics">("dashboard");
+  const [activeView, setActiveView] = useState<"dashboard" | "plans" | "audits" | "checklist" | "analytics" | "fmea" | "validation">("dashboard");
   const [isWizardOpen, setIsWizardOpen] = useState(false);
   const [isAuditDialogOpen, setIsAuditDialogOpen] = useState(false);
   const [isChecklistEditorOpen, setIsChecklistEditorOpen] = useState(false);
@@ -305,7 +307,7 @@ export const PeoDpManager: React.FC = () => {
       {/* Main Content */}
       <Tabs value={activeView} onValueChange={(v) => setActiveView(v as any)} className="space-y-6">
         <div className="flex items-center justify-between">
-          <TabsList className="grid w-full max-w-2xl grid-cols-5">
+          <TabsList className="grid w-full max-w-3xl grid-cols-7">
             <TabsTrigger value="dashboard" className="flex items-center gap-2">
               <LayoutDashboard className="h-4 w-4" />
               Dashboard
@@ -317,6 +319,14 @@ export const PeoDpManager: React.FC = () => {
             <TabsTrigger value="audits" className="flex items-center gap-2">
               <ClipboardCheck className="h-4 w-4" />
               Auditorias
+            </TabsTrigger>
+            <TabsTrigger value="fmea" className="flex items-center gap-2">
+              <Shield className="h-4 w-4" />
+              FMEA/Trials
+            </TabsTrigger>
+            <TabsTrigger value="validation" className="flex items-center gap-2">
+              <Target className="h-4 w-4" />
+              Validação ML
             </TabsTrigger>
             <TabsTrigger value="checklist" className="flex items-center gap-2">
               <Settings className="h-4 w-4" />
@@ -587,6 +597,16 @@ export const PeoDpManager: React.FC = () => {
         {/* Checklist Editor View */}
         <TabsContent value="checklist" className="space-y-4">
           <PEODPChecklistEditor onSave={handleChecklistSave} />
+        </TabsContent>
+
+        {/* FMEA/DP Trials View */}
+        <TabsContent value="fmea" className="space-y-4">
+          <FMEADPTrialsIntegration />
+        </TabsContent>
+
+        {/* ML Validation View */}
+        <TabsContent value="validation" className="space-y-4">
+          <MLValidationIMCA />
         </TabsContent>
 
         {/* Analytics View */}
