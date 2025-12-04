@@ -1,6 +1,6 @@
 /**
- * Performance Hooks Index
- * Central export for all performance-related hooks
+ * Hooks Index
+ * Central export for all custom hooks
  */
 
 // Connection awareness
@@ -29,3 +29,9 @@ export { useSystemHealth } from './use-system-health';
 
 // Keyboard shortcuts
 export { useKeyboardShortcuts } from './use-keyboard-shortcuts';
+
+// Form management
+export { useForm, createChangeHandler } from './use-form';
+
+// Confirmation dialogs
+export { useConfirmation, ConfirmationDialog } from './use-confirmation';
