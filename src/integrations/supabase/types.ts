@@ -5822,6 +5822,78 @@ export type Database = {
         }
         Relationships: []
       }
+      forecast_history: {
+        Row: {
+          accuracy_score: number | null
+          actual_value: number | null
+          confidence_level: number | null
+          context_data: Json | null
+          created_at: string | null
+          forecast_type: string
+          id: string
+          model_used: string | null
+          module_name: string
+          organization_id: string | null
+          parameters: Json | null
+          predicted_value: number
+          prediction_date: string
+          target_date: string
+          validated_at: string | null
+          vessel_id: string | null
+        }
+        Insert: {
+          accuracy_score?: number | null
+          actual_value?: number | null
+          confidence_level?: number | null
+          context_data?: Json | null
+          created_at?: string | null
+          forecast_type: string
+          id?: string
+          model_used?: string | null
+          module_name: string
+          organization_id?: string | null
+          parameters?: Json | null
+          predicted_value: number
+          prediction_date: string
+          target_date: string
+          validated_at?: string | null
+          vessel_id?: string | null
+        }
+        Update: {
+          accuracy_score?: number | null
+          actual_value?: number | null
+          confidence_level?: number | null
+          context_data?: Json | null
+          created_at?: string | null
+          forecast_type?: string
+          id?: string
+          model_used?: string | null
+          module_name?: string
+          organization_id?: string | null
+          parameters?: Json | null
+          predicted_value?: number
+          prediction_date?: string
+          target_date?: string
+          validated_at?: string | null
+          vessel_id?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "forecast_history_organization_id_fkey"
+            columns: ["organization_id"]
+            isOneToOne: false
+            referencedRelation: "organizations"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "forecast_history_vessel_id_fkey"
+            columns: ["vessel_id"]
+            isOneToOne: false
+            referencedRelation: "vessels"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       fuel_logs: {
         Row: {
           consumption_rate_lph: number | null
@@ -6095,6 +6167,62 @@ export type Database = {
           total_price?: number
         }
         Relationships: []
+      }
+      ia_adoption_metrics: {
+        Row: {
+          accepted_suggestions: number | null
+          avg_response_time_ms: number | null
+          created_at: string | null
+          feature_usage: Json | null
+          id: string
+          module_name: string
+          organization_id: string | null
+          period_end: string
+          period_start: string
+          rejected_suggestions: number | null
+          total_interactions: number | null
+          updated_at: string | null
+          user_satisfaction_score: number | null
+        }
+        Insert: {
+          accepted_suggestions?: number | null
+          avg_response_time_ms?: number | null
+          created_at?: string | null
+          feature_usage?: Json | null
+          id?: string
+          module_name: string
+          organization_id?: string | null
+          period_end: string
+          period_start: string
+          rejected_suggestions?: number | null
+          total_interactions?: number | null
+          updated_at?: string | null
+          user_satisfaction_score?: number | null
+        }
+        Update: {
+          accepted_suggestions?: number | null
+          avg_response_time_ms?: number | null
+          created_at?: string | null
+          feature_usage?: Json | null
+          id?: string
+          module_name?: string
+          organization_id?: string | null
+          period_end?: string
+          period_start?: string
+          rejected_suggestions?: number | null
+          total_interactions?: number | null
+          updated_at?: string | null
+          user_satisfaction_score?: number | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "ia_adoption_metrics_organization_id_fkey"
+            columns: ["organization_id"]
+            isOneToOne: false
+            referencedRelation: "organizations"
+            referencedColumns: ["id"]
+          },
+        ]
       }
       ia_context_log: {
         Row: {
@@ -8182,6 +8310,170 @@ export type Database = {
             columns: ["vessel_id"]
             isOneToOne: false
             referencedRelation: "vessels"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      mmi_maintenance_jobs: {
+        Row: {
+          actual_hours: number | null
+          assigned_to: string | null
+          completed_date: string | null
+          component_id: string | null
+          component_name: string | null
+          created_at: string | null
+          created_by: string | null
+          description: string | null
+          embedding: string | null
+          estimated_hours: number | null
+          id: string
+          job_type: string | null
+          metadata: Json | null
+          organization_id: string | null
+          priority: string | null
+          scheduled_date: string | null
+          status: string | null
+          tags: string[] | null
+          title: string
+          updated_at: string | null
+          vessel_id: string | null
+        }
+        Insert: {
+          actual_hours?: number | null
+          assigned_to?: string | null
+          completed_date?: string | null
+          component_id?: string | null
+          component_name?: string | null
+          created_at?: string | null
+          created_by?: string | null
+          description?: string | null
+          embedding?: string | null
+          estimated_hours?: number | null
+          id?: string
+          job_type?: string | null
+          metadata?: Json | null
+          organization_id?: string | null
+          priority?: string | null
+          scheduled_date?: string | null
+          status?: string | null
+          tags?: string[] | null
+          title: string
+          updated_at?: string | null
+          vessel_id?: string | null
+        }
+        Update: {
+          actual_hours?: number | null
+          assigned_to?: string | null
+          completed_date?: string | null
+          component_id?: string | null
+          component_name?: string | null
+          created_at?: string | null
+          created_by?: string | null
+          description?: string | null
+          embedding?: string | null
+          estimated_hours?: number | null
+          id?: string
+          job_type?: string | null
+          metadata?: Json | null
+          organization_id?: string | null
+          priority?: string | null
+          scheduled_date?: string | null
+          status?: string | null
+          tags?: string[] | null
+          title?: string
+          updated_at?: string | null
+          vessel_id?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "mmi_maintenance_jobs_organization_id_fkey"
+            columns: ["organization_id"]
+            isOneToOne: false
+            referencedRelation: "organizations"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "mmi_maintenance_jobs_vessel_id_fkey"
+            columns: ["vessel_id"]
+            isOneToOne: false
+            referencedRelation: "vessels"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      mmi_os_resolvidas: {
+        Row: {
+          acao_tomada: string
+          componente_id: string | null
+          componente_nome: string | null
+          created_at: string | null
+          criticidade: string | null
+          custo_estimado: number | null
+          descricao: string | null
+          embedding: string | null
+          id: string
+          job_id: string | null
+          metadata: Json | null
+          origem: string | null
+          resolvido_em: string | null
+          resolvido_por: string | null
+          resultado: string | null
+          tags: string[] | null
+          tecnico_responsavel: string | null
+          tempo_resolucao_horas: number | null
+          titulo: string
+          updated_at: string | null
+        }
+        Insert: {
+          acao_tomada: string
+          componente_id?: string | null
+          componente_nome?: string | null
+          created_at?: string | null
+          criticidade?: string | null
+          custo_estimado?: number | null
+          descricao?: string | null
+          embedding?: string | null
+          id?: string
+          job_id?: string | null
+          metadata?: Json | null
+          origem?: string | null
+          resolvido_em?: string | null
+          resolvido_por?: string | null
+          resultado?: string | null
+          tags?: string[] | null
+          tecnico_responsavel?: string | null
+          tempo_resolucao_horas?: number | null
+          titulo: string
+          updated_at?: string | null
+        }
+        Update: {
+          acao_tomada?: string
+          componente_id?: string | null
+          componente_nome?: string | null
+          created_at?: string | null
+          criticidade?: string | null
+          custo_estimado?: number | null
+          descricao?: string | null
+          embedding?: string | null
+          id?: string
+          job_id?: string | null
+          metadata?: Json | null
+          origem?: string | null
+          resolvido_em?: string | null
+          resolvido_por?: string | null
+          resultado?: string | null
+          tags?: string[] | null
+          tecnico_responsavel?: string | null
+          tempo_resolucao_horas?: number | null
+          titulo?: string
+          updated_at?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "mmi_os_resolvidas_job_id_fkey"
+            columns: ["job_id"]
+            isOneToOne: false
+            referencedRelation: "mmi_maintenance_jobs"
             referencedColumns: ["id"]
           },
         ]
@@ -15046,6 +15338,10 @@ export type Database = {
         Args: { crew_uuid: string }
         Returns: number
       }
+      calculate_ia_adoption_score: {
+        Args: { org_uuid: string }
+        Returns: number
+      }
       calculate_next_execution: { Args: { task_id: string }; Returns: string }
       calculate_peotram_compliance_score: {
         Args: { audit_uuid: string }
@@ -15250,6 +15546,22 @@ export type Database = {
           id: string
           similarity: number
           title: string
+        }[]
+      }
+      match_os_resolvidas: {
+        Args: {
+          match_count?: number
+          match_threshold?: number
+          query_embedding: string
+        }
+        Returns: {
+          acao_tomada: string
+          componente_nome: string
+          descricao: string
+          id: string
+          resultado: string
+          similarity: number
+          titulo: string
         }[]
       }
       revoke_session_token:

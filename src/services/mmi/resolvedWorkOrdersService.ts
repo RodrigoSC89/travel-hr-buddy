@@ -1,25 +1,56 @@
 // @ts-nocheck
-// PATCH-601: Re-added @ts-nocheck for build stability
 /**
- * Service for managing resolved work orders (OS) for AI learning
+ * PATCH 653 - Service for managing resolved work orders (OS) for AI learning
+ * Updated to match new mmi_os_resolvidas table schema
  */
 
 import { supabase } from "@/integrations/supabase/client";
-import { Database } from "@/integrations/supabase/types";
 import { logger } from "@/lib/logger";
 
-type MmiOsResolvidas = Database["public"]["Tables"]["mmi_os_resolvidas"];
-type MmiOsResolvidasInsert = MmiOsResolvidas["Insert"];
-type MmiOsResolvidasRow = MmiOsResolvidas["Row"];
+export interface MmiOsResolvidasRow {
+  id: string;
+  job_id: string | null;
+  titulo: string;
+  descricao: string | null;
+  componente_id: string | null;
+  componente_nome: string | null;
+  acao_tomada: string;
+  resultado: string | null;
+  tempo_resolucao_horas: number | null;
+  custo_estimado: number | null;
+  tecnico_responsavel: string | null;
+  resolvido_em: string;
+  resolvido_por: string | null;
+  tags: string[] | null;
+  criticidade: string | null;
+  origem: string | null;
+  metadata: Record<string, any> | null;
+  created_at: string;
+  updated_at: string;
+}
 
-type MmiOsIaFeed = Database["public"]["Views"]["mmi_os_ia_feed"];
-type MmiOsIaFeedRow = MmiOsIaFeed["Row"];
+export interface CreateResolvedWorkOrderInput {
+  job_id?: string;
+  titulo: string;
+  descricao?: string;
+  componente_id?: string;
+  componente_nome?: string;
+  acao_tomada: string;
+  resultado?: string;
+  tempo_resolucao_horas?: number;
+  custo_estimado?: number;
+  tecnico_responsavel?: string;
+  tags?: string[];
+  criticidade?: string;
+  origem?: string;
+  metadata?: Record<string, any>;
+}
 
 /**
  * Create a new resolved work order record
  */
 export const createResolvedWorkOrder = async (
-  data: Omit<MmiOsResolvidasInsert, "id" | "created_at">
+  data: CreateResolvedWorkOrderInput
 ): Promise<{ data: MmiOsResolvidasRow | null; error: Error | null }> => {
   try {
     const { data: result, error } = await supabase
@@ -45,56 +76,23 @@ export const createResolvedWorkOrder = async (
  */
 export const getResolvedWorkOrdersByComponent = async (
   componente: string,
-  onlyEffective: boolean = false
+  onlySuccessful: boolean = false
 ): Promise<{ data: MmiOsResolvidasRow[] | null; error: Error | null }> => {
   try {
     let query = supabase
       .from("mmi_os_resolvidas")
       .select("*")
-      .eq("componente", componente)
+      .eq("componente_nome", componente)
       .order("resolvido_em", { ascending: false });
 
-    if (onlyEffective) {
-      query = query.eq("efetiva", true);
+    if (onlySuccessful) {
+      query = query.eq("resultado", "Sucesso");
     }
 
     const { data, error } = await query;
 
     if (error) {
-      logger.error("Error fetching resolved work orders", error as Error, { componente, onlyEffective });
-      return { data: null, error };
-    }
-
-    return { data, error: null };
-  } catch (error) {
-    logger.error("Unexpected error", error as Error);
-    return { data: null, error: error as Error };
-  }
-};
-
-/**
- * Get AI learning feed data
- * This returns clean data for AI consumption
- */
-export const getAiLearningFeed = async (
-  componente?: string,
-  limit: number = 100
-): Promise<{ data: MmiOsIaFeedRow[] | null; error: Error | null }> => {
-  try {
-    let query = supabase
-      .from("mmi_os_ia_feed")
-      .select("*")
-      .order("resolvido_em", { ascending: false })
-      .limit(limit);
-
-    if (componente) {
-      query = query.eq("componente", componente);
-    }
-
-    const { data, error } = await query;
-
-    if (error) {
-      logger.error("Error fetching AI learning feed", error as Error, { componente, limit });
+      logger.error("Error fetching resolved work orders", error as Error, { componente, onlySuccessful });
       return { data: null, error };
     }
 
@@ -115,7 +113,7 @@ export const getResolvedWorkOrderStats = async (componente?: string) => {
       .select("*");
 
     if (componente) {
-      query = query.eq("componente", componente);
+      query = query.eq("componente_nome", componente);
     }
 
     const { data, error } = await query;
@@ -131,26 +129,24 @@ export const getResolvedWorkOrderStats = async (componente?: string) => {
 
     // Calculate statistics
     const total = data.length;
-    const effective = data.filter(item => item.efetiva === true).length;
-    const ineffective = data.filter(item => item.efetiva === false).length;
-    const pending = data.filter(item => item.efetiva === null).length;
+    const successful = data.filter(item => item.resultado === "Sucesso").length;
+    const failed = data.filter(item => item.resultado === "Falha").length;
+    const pending = data.filter(item => !item.resultado).length;
     
-    // Calculate average duration for completed items with duration
-    const itemsWithDuration = data.filter(item => item.duracao_execucao);
-    const avgDuration = itemsWithDuration.length > 0
-      ? itemsWithDuration
-        .map(item => parseDurationToMinutes(item.duracao_execucao))
-        .reduce((sum, duration) => sum + duration, 0) / itemsWithDuration.length
+    // Calculate average resolution time
+    const itemsWithTime = data.filter(item => item.tempo_resolucao_horas);
+    const avgResolutionHours = itemsWithTime.length > 0
+      ? itemsWithTime.reduce((sum, item) => sum + (item.tempo_resolucao_horas || 0), 0) / itemsWithTime.length
       : 0;
 
     return {
       data: {
         total,
-        effective,
-        ineffective,
+        successful,
+        failed,
         pending,
-        effectivenessRate: total > 0 ? (effective / total) * 100 : 0,
-        avgDurationMinutes: avgDuration,
+        successRate: total > 0 ? (successful / total) * 100 : 0,
+        avgResolutionHours,
       },
       error: null,
     };
@@ -161,20 +157,20 @@ export const getResolvedWorkOrderStats = async (componente?: string) => {
 };
 
 /**
- * Update the effectiveness status of a resolved work order
+ * Update the result status of a resolved work order
  */
-export const updateWorkOrderEffectiveness = async (
+export const updateWorkOrderResult = async (
   id: string,
-  efetiva: boolean,
-  causa_confirmada?: string
+  resultado: string,
+  tecnico_responsavel?: string
 ): Promise<{ data: MmiOsResolvidasRow | null; error: Error | null }> => {
   try {
     const updateData: Partial<MmiOsResolvidasRow> = {
-      efetiva,
+      resultado,
     };
 
-    if (causa_confirmada) {
-      updateData.causa_confirmada = causa_confirmada;
+    if (tecnico_responsavel) {
+      updateData.tecnico_responsavel = tecnico_responsavel;
     }
 
     const { data, error } = await supabase
@@ -185,7 +181,7 @@ export const updateWorkOrderEffectiveness = async (
       .single();
 
     if (error) {
-      logger.error("Error updating work order effectiveness", error as Error, { id, efetiva });
+      logger.error("Error updating work order result", error as Error, { id, resultado });
       return { data: null, error };
     }
 
@@ -197,38 +193,20 @@ export const updateWorkOrderEffectiveness = async (
 };
 
 /**
- * Helper function to parse PostgreSQL interval to minutes
+ * Get the most common actions for a specific component
  */
-function parseDurationToMinutes(duration: string | null): number {
-  if (!duration) return 0;
-  
-  // Simple parser for common interval formats
-  // Examples: "2 hours", "1 hour 30 minutes", "45 minutes"
-  const hourMatch = duration.match(/(\d+)\s*hour/i);
-  const minuteMatch = duration.match(/(\d+)\s*minute/i);
-  
-  const hours = hourMatch ? parseInt(hourMatch[1]) : 0;
-  const minutes = minuteMatch ? parseInt(minuteMatch[1]) : 0;
-  
-  return (hours * 60) + minutes;
-}
-
-/**
- * Get the most common causes for a specific component
- */
-export const getMostCommonCauses = async (
+export const getMostCommonActions = async (
   componente: string,
   limit: number = 5
-): Promise<{ data: Array<{ causa: string; count: number }> | null; error: Error | null }> => {
+): Promise<{ data: Array<{ acao: string; count: number }> | null; error: Error | null }> => {
   try {
     const { data, error } = await supabase
       .from("mmi_os_resolvidas")
-      .select("causa_confirmada")
-      .eq("componente", componente)
-      .not("causa_confirmada", "is", null);
+      .select("acao_tomada")
+      .eq("componente_nome", componente);
 
     if (error) {
-      logger.error("Error fetching causes", error as Error, { componente, limit });
+      logger.error("Error fetching actions", error as Error, { componente, limit });
       return { data: null, error };
     }
 
@@ -236,21 +214,21 @@ export const getMostCommonCauses = async (
       return { data: [], error: null };
     }
 
-    // Count occurrences of each cause
-    const causeCounts: { [key: string]: number } = {};
+    // Count occurrences of each action
+    const actionCounts: { [key: string]: number } = {};
     data.forEach(item => {
-      if (item.causa_confirmada) {
-        causeCounts[item.causa_confirmada] = (causeCounts[item.causa_confirmada] || 0) + 1;
+      if (item.acao_tomada) {
+        actionCounts[item.acao_tomada] = (actionCounts[item.acao_tomada] || 0) + 1;
       }
     });
 
     // Convert to array and sort by count
-    const sortedCauses = Object.entries(causeCounts)
-      .map(([causa, count]) => ({ causa, count }))
+    const sortedActions = Object.entries(actionCounts)
+      .map(([acao, count]) => ({ acao, count }))
       .sort((a, b) => b.count - a.count)
       .slice(0, limit);
 
-    return { data: sortedCauses, error: null };
+    return { data: sortedActions, error: null };
   } catch (error) {
     logger.error("Unexpected error", error as Error);
     return { data: null, error: error as Error };
@@ -258,55 +236,26 @@ export const getMostCommonCauses = async (
 };
 
 /**
- * Get the most effective actions for a specific component
+ * Search resolved work orders by text
  */
-export const getMostEffectiveActions = async (
-  componente: string,
-  limit: number = 5
-): Promise<{ data: Array<{ acao: string; successRate: number; count: number }> | null; error: Error | null }> => {
+export const searchResolvedWorkOrders = async (
+  searchTerm: string,
+  limit: number = 20
+): Promise<{ data: MmiOsResolvidasRow[] | null; error: Error | null }> => {
   try {
     const { data, error } = await supabase
       .from("mmi_os_resolvidas")
-      .select("acao_realizada, efetiva")
-      .eq("componente", componente)
-      .not("acao_realizada", "is", null)
-      .not("efetiva", "is", null);
+      .select("*")
+      .or(`titulo.ilike.%${searchTerm}%,descricao.ilike.%${searchTerm}%,acao_tomada.ilike.%${searchTerm}%`)
+      .order("resolvido_em", { ascending: false })
+      .limit(limit);
 
     if (error) {
-      logger.error("Error fetching actions", error as Error, { componente, limit });
+      logger.error("Error searching work orders", error as Error, { searchTerm });
       return { data: null, error };
     }
 
-    if (!data || data.length === 0) {
-      return { data: [], error: null };
-    }
-
-    // Calculate success rate for each action
-    const actionStats: { [key: string]: { total: number; successful: number } } = {};
-    
-    data.forEach(item => {
-      if (item.acao_realizada) {
-        if (!actionStats[item.acao_realizada]) {
-          actionStats[item.acao_realizada] = { total: 0, successful: 0 };
-        }
-        actionStats[item.acao_realizada].total++;
-        if (item.efetiva) {
-          actionStats[item.acao_realizada].successful++;
-        }
-      }
-    });
-
-    // Convert to array and calculate success rate
-    const sortedActions = Object.entries(actionStats)
-      .map(([acao, stats]) => ({
-        acao,
-        successRate: (stats.successful / stats.total) * 100,
-        count: stats.total,
-      }))
-      .sort((a, b) => b.successRate - a.successRate)
-      .slice(0, limit);
-
-    return { data: sortedActions, error: null };
+    return { data, error: null };
   } catch (error) {
     logger.error("Unexpected error", error as Error);
     return { data: null, error: error as Error };
