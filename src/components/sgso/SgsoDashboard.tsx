@@ -15,7 +15,10 @@ import {
   Activity,
   Bell,
   Calendar,
-  Brain
+  Brain,
+  GitBranch,
+  Download,
+  MessageSquare
 } from "lucide-react";
 import { AnpPracticesManager } from "./AnpPracticesManager";
 import { RiskAssessmentMatrix } from "./RiskAssessmentMatrix";
@@ -28,6 +31,9 @@ import { EmergencyResponse } from "./EmergencyResponse";
 import { PainelSGSO } from "./PainelSGSO";
 import { PainelMetricasRisco } from "./PainelMetricasRisco";
 import { SGSOActionPlanGenerator } from "./SGSOActionPlanGenerator";
+import { CAPAManager } from "./CAPAManager";
+import { SGSOAssistant } from "./SGSOAssistant";
+import { ANPDossierExport } from "./ANPDossierExport";
 
 export const SgsoDashboard: React.FC = () => {
   const [activeTab, setActiveTab] = useState("overview");
@@ -237,6 +243,27 @@ export const SgsoDashboard: React.FC = () => {
                 Plano IA
               </TabsTrigger>
               <TabsTrigger 
+                value="capa"
+                className="data-[state=active]:bg-white data-[state=active]:text-orange-600 data-[state=active]:font-bold min-h-[44px]"
+              >
+                <GitBranch className="h-4 w-4 mr-2" />
+                CAPA
+              </TabsTrigger>
+              <TabsTrigger 
+                value="assistente"
+                className="data-[state=active]:bg-white data-[state=active]:text-blue-600 data-[state=active]:font-bold min-h-[44px]"
+              >
+                <MessageSquare className="h-4 w-4 mr-2" />
+                Assistente
+              </TabsTrigger>
+              <TabsTrigger 
+                value="dossie"
+                className="data-[state=active]:bg-white data-[state=active]:text-green-600 data-[state=active]:font-bold min-h-[44px]"
+              >
+                <Download className="h-4 w-4 mr-2" />
+                Dossiê ANP
+              </TabsTrigger>
+              <TabsTrigger 
                 value="metrics"
                 className="data-[state=active]:bg-white data-[state=active]:text-purple-600 data-[state=active]:font-bold min-h-[44px]"
               >
@@ -248,7 +275,7 @@ export const SgsoDashboard: React.FC = () => {
                 className="data-[state=active]:bg-white data-[state=active]:text-red-600 data-[state=active]:font-bold min-h-[44px]"
               >
                 <Activity className="h-4 w-4 mr-2" />
-                Painel SGSO
+                Painel
               </TabsTrigger>
             </TabsList>
 
@@ -378,6 +405,18 @@ export const SgsoDashboard: React.FC = () => {
 
             <TabsContent value="plano-ia">
               <SGSOActionPlanGenerator />
+            </TabsContent>
+
+            <TabsContent value="capa">
+              <CAPAManager />
+            </TabsContent>
+
+            <TabsContent value="assistente">
+              <SGSOAssistant />
+            </TabsContent>
+
+            <TabsContent value="dossie">
+              <ANPDossierExport />
             </TabsContent>
 
             <TabsContent value="metrics">
