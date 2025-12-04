@@ -36,20 +36,21 @@ export const Header: React.FC = () => {
             <OrganizationSelector />
             <RealTimeNotificationCenter />
             
-            <TooltipProvider>
+            <TooltipProvider delayDuration={0}>
               <Tooltip>
                 <TooltipTrigger asChild>
                   <Button
+                    type="button"
                     variant="ghost"
                     size="sm"
-                    className="h-9 w-9 p-0 hover:bg-accent transition-colors"
+                    className="h-9 w-9 p-0 cursor-pointer hover:bg-accent transition-colors"
                     onClick={() => navigate("/settings")}
                     aria-label="Configurações"
                   >
                     <Settings className="h-4 w-4 text-foreground" />
                   </Button>
                 </TooltipTrigger>
-                <TooltipContent>
+                <TooltipContent side="bottom" sideOffset={8}>
                   <p>Configurações</p>
                 </TooltipContent>
               </Tooltip>
@@ -57,20 +58,21 @@ export const Header: React.FC = () => {
 
             <UserMenu />
             
-            <TooltipProvider>
+            <TooltipProvider delayDuration={0}>
               <Tooltip>
                 <TooltipTrigger asChild>
                   <Button
+                    type="button"
                     variant={isHighContrast ? "default" : "ghost"}
                     size="sm"
                     onClick={toggleHighContrast}
                     aria-label={isHighContrast ? "Desativar alto contraste" : "Ativar alto contraste"}
-                    className="h-9 px-3 text-xs"
+                    className="h-9 px-3 text-xs cursor-pointer"
                   >
                     Contraste
                   </Button>
                 </TooltipTrigger>
-                <TooltipContent>
+                <TooltipContent side="bottom" sideOffset={8}>
                   <p>{isHighContrast ? "Desativar alto contraste" : "Ativar alto contraste"}</p>
                 </TooltipContent>
               </Tooltip>
