@@ -10,11 +10,25 @@ import {
   ChevronDown,
   ChevronRight,
   Menu,
-  X
+  X,
+  Users,
+  Shield,
+  Plane,
+  Settings,
+  Anchor,
+  Waves,
+  Bot,
+  TrendingUp,
+  Leaf,
+  ShoppingCart,
+  Stethoscope,
+  Recycle,
+  GraduationCap,
+  Lightbulb
 } from "lucide-react";
 import { cn } from "@/lib/utils";
 
-// Grouped modules by category
+// Grouped modules by category - UPDATED WITH ALL NEW MODULES
 const groupedModules = [
   {
     title: "Dashboard & Visão Geral",
@@ -22,6 +36,8 @@ const groupedModules = [
     items: [
       { label: "Dashboard Principal", path: "/" },
       { label: "Visão Geral", path: "/dashboard" },
+      { label: "Dashboard Executivo", path: "/executive-dashboard" },
+      { label: "Monitor de Sistema", path: "/system-monitor" },
     ],
   },
   {
@@ -32,6 +48,7 @@ const groupedModules = [
       { label: "Gestão de Frota", path: "/fleet" },
       { label: "Tripulação", path: "/crew" },
       { label: "Planejador de Manutenção", path: "/maintenance-planner" },
+      { label: "MMI - Manutenção Industrial", path: "/mmi" },
       { label: "Registros de Missão", path: "/mission-logs" },
       { label: "Planejador de Viagem", path: "/voyage-planner" },
       { label: "Otimizador de Combustível", path: "/fuel-optimizer" },
@@ -40,15 +57,26 @@ const groupedModules = [
       { label: "Controle de Missão", path: "/mission-control" },
       { label: "Resposta a Emergências", path: "/emergency-response" },
       { label: "Otimização", path: "/optimization" },
-      { label: "PEOTRAM", path: "/peotram" },
-      { label: "PEO-DP", path: "/peo-dp" },
-      { label: "Monitor de Sistema", path: "/system-monitor" },
     ],
   },
   {
-    title: "Colaboração & IA",
+    title: "Operações Submarinas",
+    icon: <Anchor className="w-4 h-4 mr-2" />,
+    items: [
+      { label: "Ocean Sonar AI", path: "/ocean-sonar" },
+      { label: "Underwater Drone", path: "/underwater-drone" },
+      { label: "AutoSub Mission", path: "/auto-sub" },
+      { label: "Sonar AI Enhancement", path: "/sonar-ai" },
+      { label: "Deep Risk AI", path: "/deep-risk-ai" },
+    ],
+  },
+  {
+    title: "IA & Inovação",
     icon: <Brain className="w-4 h-4 mr-2" />,
     items: [
+      { label: "Dashboard IA", path: "/ai-dashboard" },
+      { label: "Sugestões Workflow", path: "/workflow-suggestions" },
+      { label: "Métricas de Adoção", path: "/ai-adoption" },
       { label: "IA & Inovação", path: "/innovation" },
       { label: "DP Intelligence", path: "/dp-intelligence" },
       { label: "Insights de IA", path: "/ai-insights" },
@@ -62,6 +90,7 @@ const groupedModules = [
     icon: <Bell className="w-4 h-4 mr-2" />,
     items: [
       { label: "Comunicação", path: "/communication" },
+      { label: "Centro de Comunicação", path: "/communication-center" },
       { label: "Workspace em Tempo Real", path: "/real-time-workspace" },
       { label: "Gerenciador de Canais", path: "/channel-manager" },
       { label: "Centro de Notificações", path: "/notifications-center" },
@@ -74,6 +103,7 @@ const groupedModules = [
     items: [
       { label: "Relatórios", path: "/reports" },
       { label: "Analytics Core", path: "/analytics" },
+      { label: "Dashboard Operacional", path: "/operations-dashboard" },
       { label: "Finanças", path: "/finance" },
       { label: "Workflow", path: "/workflow" },
       { label: "Gestão de Usuários", path: "/users" },
@@ -81,46 +111,63 @@ const groupedModules = [
   },
   {
     title: "RH & Pessoas",
-    icon: <Folder className="w-4 h-4 mr-2" />,
+    icon: <Users className="w-4 h-4 mr-2" />,
     items: [
       { label: "Academia de Treinamento", path: "/training-academy" },
+      { label: "Nautilus Academy", path: "/nautilus-academy" },
+      { label: "PEOTRAM", path: "/peotram" },
+      { label: "PEO-DP", path: "/peo-dp" },
+      { label: "Enfermaria Digital", path: "/medical-infirmary" },
     ],
   },
   {
-    title: "Documentos & Compliance",
-    icon: <Folder className="w-4 h-4 mr-2" />,
+    title: "Compliance & Segurança",
+    icon: <Shield className="w-4 h-4 mr-2" />,
     items: [
-      { label: "Documentos", path: "/documents" },
-      { label: "Checklists Inteligentes", path: "/admin/checklists" },
       { label: "Compliance Hub", path: "/compliance-hub" },
-      { label: "Centro de Auditoria", path: "/audit-center" },
-      { label: "Relatórios de Incidentes", path: "/incident-reports" },
       { label: "SGSO", path: "/sgso" },
       { label: "IMCA Audit", path: "/imca-audit" },
       { label: "Pre-OVID Inspection", path: "/admin/pre-ovid" },
       { label: "MLC Inspection", path: "/mlc-inspection" },
+      { label: "Safety Guardian", path: "/safety-guardian" },
+      { label: "SOLAS & ISM Training", path: "/solas-training" },
+      { label: "Gestão de Resíduos", path: "/waste-management" },
+      { label: "Checklists Inteligentes", path: "/admin/checklists" },
+      { label: "Relatórios de Incidentes", path: "/incident-reports" },
+    ],
+  },
+  {
+    title: "ESG & Sustentabilidade",
+    icon: <Leaf className="w-4 h-4 mr-2" />,
+    items: [
+      { label: "ESG & Emissões", path: "/esg-emissions" },
+      { label: "Gestão de Resíduos", path: "/waste-management" },
     ],
   },
   {
     title: "Viagens & Logística",
-    icon: <Folder className="w-4 h-4 mr-2" />,
+    icon: <Plane className="w-4 h-4 mr-2" />,
     items: [
       { label: "Viagens", path: "/travel" },
+      { label: "Smart Mobility", path: "/smart-mobility" },
       { label: "Reservas", path: "/reservations" },
+      { label: "Autonomous Procurement", path: "/autonomous-procurement" },
     ],
   },
   {
     title: "Integrações & Sistema",
-    icon: <Folder className="w-4 h-4 mr-2" />,
+    icon: <Settings className="w-4 h-4 mr-2" />,
     items: [
       { label: "Hub de Integrações", path: "/integrations" },
       { label: "API Gateway", path: "/api-gateway" },
       { label: "Colaboração", path: "/collaboration" },
       { label: "Templates", path: "/templates" },
       { label: "Configurações", path: "/settings" },
+      { label: "QA Preview", path: "/qa/preview" },
     ],
   },
 ];
+
 interface SmartSidebarProps {
   className?: string;
 }
@@ -141,6 +188,16 @@ export function SmartSidebar({ className }: SmartSidebarProps) {
   const closeMobileMenu = () => {
     setIsMobileOpen(false);
   };
+
+  // Auto-open section containing current route
+  React.useEffect(() => {
+    const currentGroup = groupedModules.find(group => 
+      group.items.some(item => item.path === location.pathname)
+    );
+    if (currentGroup && openSection !== currentGroup.title) {
+      setOpenSection(currentGroup.title);
+    }
+  }, [location.pathname]);
 
   return (
     <>
@@ -221,7 +278,7 @@ export function SmartSidebar({ className }: SmartSidebarProps) {
         </nav>
 
         <div className="p-4 border-t border-zinc-800 mt-4 text-xs text-zinc-400 text-center">
-          <p>Versão 2.1.0</p>
+          <p>Versão 2.2.0</p>
           <p className="mt-1">© 2024 Nautilus</p>
         </div>
       </aside>
