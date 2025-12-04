@@ -1,0 +1,168 @@
+/**
+ * WCAG Contrast Fixes
+ * Correções de contraste para acessibilidade AA/AAA
+ */
+
+/* === TEXTO COM CONTRASTE GARANTIDO === */
+
+/* Texto sobre fundos claros - mínimo 4.5:1 */
+.text-high-contrast {
+  color: hsl(220 87% 8%) !important; /* #0A0E1A */
+}
+
+.text-medium-contrast {
+  color: hsl(220 15% 30%) !important; /* Cinza escuro */
+}
+
+/* Texto sobre fundos escuros - mínimo 4.5:1 */
+.dark .text-high-contrast,
+.bg-dark .text-high-contrast {
+  color: hsl(0 0% 98%) !important; /* #FAFAFA */
+}
+
+/* === BOTÕES COM CONTRASTE GARANTIDO === */
+
+/* Botão primário - azul com texto branco */
+.btn-contrast-primary {
+  background-color: hsl(214 84% 40%) !important; /* Azul mais escuro para contraste */
+  color: hsl(0 0% 100%) !important;
+}
+
+.btn-contrast-primary:hover {
+  background-color: hsl(214 84% 35%) !important;
+}
+
+/* Botão secundário - fundo claro com texto escuro */
+.btn-contrast-secondary {
+  background-color: hsl(220 13% 95%) !important;
+  color: hsl(220 87% 8%) !important;
+  border: 1px solid hsl(220 13% 85%) !important;
+}
+
+/* === CARDS COM CONTRASTE GARANTIDO === */
+
+/* Card claro */
+.card-contrast-light {
+  background-color: hsl(0 0% 100%);
+  color: hsl(220 87% 8%);
+  border: 1px solid hsl(220 13% 90%);
+}
+
+/* Card escuro */
+.card-contrast-dark {
+  background-color: hsl(220 25% 12%);
+  color: hsl(0 0% 95%);
+  border: 1px solid hsl(220 20% 20%);
+}
+
+/* === INPUTS COM CONTRASTE GARANTIDO === */
+
+.input-contrast {
+  background-color: hsl(0 0% 100%);
+  color: hsl(220 87% 8%);
+  border: 2px solid hsl(220 13% 80%);
+}
+
+.input-contrast::placeholder {
+  color: hsl(220 10% 50%);
+}
+
+.input-contrast:focus {
+  border-color: hsl(214 84% 46%);
+  outline: 2px solid hsl(214 84% 46% / 0.2);
+}
+
+/* === BADGES COM CONTRASTE GARANTIDO === */
+
+.badge-success-contrast {
+  background-color: hsl(142 76% 25%);
+  color: hsl(0 0% 100%);
+}
+
+.badge-warning-contrast {
+  background-color: hsl(38 92% 40%);
+  color: hsl(0 0% 0%);
+}
+
+.badge-error-contrast {
+  background-color: hsl(0 84% 40%);
+  color: hsl(0 0% 100%);
+}
+
+.badge-info-contrast {
+  background-color: hsl(214 84% 35%);
+  color: hsl(0 0% 100%);
+}
+
+/* === TABELAS COM CONTRASTE === */
+
+.table-contrast thead {
+  background-color: hsl(220 13% 95%);
+}
+
+.table-contrast th {
+  color: hsl(220 87% 8%);
+  font-weight: 600;
+}
+
+.table-contrast td {
+  color: hsl(220 15% 20%);
+}
+
+.table-contrast tr:hover {
+  background-color: hsl(214 84% 96%);
+}
+
+/* === LINKS COM CONTRASTE === */
+
+.link-contrast {
+  color: hsl(214 91% 35%);
+  text-decoration: underline;
+  text-underline-offset: 2px;
+}
+
+.link-contrast:hover {
+  color: hsl(214 100% 28%);
+}
+
+/* === FOCUS VISIBLE === */
+
+.focus-contrast:focus-visible {
+  outline: 3px solid hsl(214 84% 46%);
+  outline-offset: 2px;
+}
+
+/* === DARK MODE OVERRIDES === */
+
+.dark {
+  /* Garantir que texto seja legível no dark mode */
+  --foreground: 0 0% 95%;
+  --card-foreground: 0 0% 93%;
+  --muted-foreground: 220 10% 65%;
+}
+
+/* === PERFORMANCE: Reduzir animações em conexões lentas === */
+
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+  }
+}
+
+/* === MOBILE TOUCH TARGETS === */
+
+@media (max-width: 768px) {
+  /* Garantir touch targets de 44px mínimo */
+  button,
+  [role="button"],
+  input[type="checkbox"],
+  input[type="radio"],
+  a {
+    min-height: 44px;
+    min-width: 44px;
+  }
+}
