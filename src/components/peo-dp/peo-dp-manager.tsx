@@ -13,6 +13,9 @@ import { PEODPAuditForm } from "./peodp-audit-form";
 import { PEODPChecklistEditor } from "./peodp-checklist-editor";
 import { FMEADPTrialsIntegration } from "./fmea-dp-trials-integration";
 import { MLValidationIMCA } from "./ml-validation-imca";
+import { SmartDPLogbook } from "./smart-dp-logbook";
+import { LessonsLearnedCenter } from "./lessons-learned-center";
+import { DPCompetenceHub } from "./dp-competence-hub";
 import {
   LayoutDashboard,
   FileText,
@@ -307,33 +310,45 @@ export const PeoDpManager: React.FC = () => {
       {/* Main Content */}
       <Tabs value={activeView} onValueChange={(v) => setActiveView(v as any)} className="space-y-6">
         <div className="flex items-center justify-between">
-          <TabsList className="grid w-full max-w-3xl grid-cols-7">
-            <TabsTrigger value="dashboard" className="flex items-center gap-2">
-              <LayoutDashboard className="h-4 w-4" />
+          <TabsList className="grid w-full max-w-4xl grid-cols-10">
+            <TabsTrigger value="dashboard" className="flex items-center gap-1 text-xs">
+              <LayoutDashboard className="h-3 w-3" />
               Dashboard
             </TabsTrigger>
-            <TabsTrigger value="plans" className="flex items-center gap-2">
-              <FileText className="h-4 w-4" />
+            <TabsTrigger value="plans" className="flex items-center gap-1 text-xs">
+              <FileText className="h-3 w-3" />
               Planos
             </TabsTrigger>
-            <TabsTrigger value="audits" className="flex items-center gap-2">
-              <ClipboardCheck className="h-4 w-4" />
+            <TabsTrigger value="audits" className="flex items-center gap-1 text-xs">
+              <ClipboardCheck className="h-3 w-3" />
               Auditorias
             </TabsTrigger>
-            <TabsTrigger value="fmea" className="flex items-center gap-2">
-              <Shield className="h-4 w-4" />
-              FMEA/Trials
+            <TabsTrigger value="logbook" className="flex items-center gap-1 text-xs">
+              <FileText className="h-3 w-3" />
+              Logbook
             </TabsTrigger>
-            <TabsTrigger value="validation" className="flex items-center gap-2">
-              <Target className="h-4 w-4" />
-              Validação ML
+            <TabsTrigger value="lessons" className="flex items-center gap-1 text-xs">
+              <Target className="h-3 w-3" />
+              Lições
             </TabsTrigger>
-            <TabsTrigger value="checklist" className="flex items-center gap-2">
-              <Settings className="h-4 w-4" />
+            <TabsTrigger value="competence" className="flex items-center gap-1 text-xs">
+              <GraduationCap className="h-3 w-3" />
+              CPD
+            </TabsTrigger>
+            <TabsTrigger value="fmea" className="flex items-center gap-1 text-xs">
+              <Shield className="h-3 w-3" />
+              FMEA
+            </TabsTrigger>
+            <TabsTrigger value="validation" className="flex items-center gap-1 text-xs">
+              <Target className="h-3 w-3" />
+              ML
+            </TabsTrigger>
+            <TabsTrigger value="checklist" className="flex items-center gap-1 text-xs">
+              <Settings className="h-3 w-3" />
               Checklist
             </TabsTrigger>
-            <TabsTrigger value="analytics" className="flex items-center gap-2">
-              <TrendingUp className="h-4 w-4" />
+            <TabsTrigger value="analytics" className="flex items-center gap-1 text-xs">
+              <TrendingUp className="h-3 w-3" />
               Analytics
             </TabsTrigger>
           </TabsList>
@@ -597,6 +612,21 @@ export const PeoDpManager: React.FC = () => {
         {/* Checklist Editor View */}
         <TabsContent value="checklist" className="space-y-4">
           <PEODPChecklistEditor onSave={handleChecklistSave} />
+        </TabsContent>
+
+        {/* Smart DP Logbook */}
+        <TabsContent value="logbook" className="space-y-4">
+          <SmartDPLogbook />
+        </TabsContent>
+
+        {/* Lessons Learned Center */}
+        <TabsContent value="lessons" className="space-y-4">
+          <LessonsLearnedCenter />
+        </TabsContent>
+
+        {/* DP Competence Hub */}
+        <TabsContent value="competence" className="space-y-4">
+          <DPCompetenceHub />
         </TabsContent>
 
         {/* FMEA/DP Trials View */}
