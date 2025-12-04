@@ -142,7 +142,13 @@ const TrainingAcademy = () => {
               <CardContent className="pt-6 text-center text-muted-foreground">
                 <BookOpen className="h-12 w-12 mx-auto mb-3 opacity-50" />
                 <p>Você ainda não está inscrito em nenhum curso</p>
-                <Button className="mt-4" onClick={() => {}}>
+                <Button 
+                  className="mt-4" 
+                  onClick={() => {
+                    const catalogTab = document.querySelector('[data-value="catalog"]') as HTMLElement;
+                    if (catalogTab) catalogTab.click();
+                  }}
+                >
                   Explorar Catálogo
                 </Button>
               </CardContent>

@@ -2,15 +2,24 @@ import React from "react";
 import { Button } from "@/components/ui/button";
 import { ThemeToggle } from "./theme-toggle";
 import { SidebarTrigger } from "@/components/ui/sidebar";
-import { NotificationCenter } from "@/components/notifications/notification-center";
 import { RealTimeNotificationCenter } from "@/components/notifications/real-time-notification-center";
 import { UserMenu } from "@/components/auth/user-menu";
 import { SimpleGlobalSearch } from "@/components/ui/simple-global-search";
 import { OrganizationSelector } from "@/components/admin/organization-selector";
 import { useHighContrastTheme } from "@/hooks/useHighContrastTheme";
+import { useNavigate } from "react-router-dom";
+import { Settings } from "lucide-react";
+import {
+  Tooltip,
+  TooltipContent,
+  TooltipProvider,
+  TooltipTrigger,
+} from "@/components/ui/tooltip";
 
 export const Header: React.FC = () => {
   const { isHighContrast, toggleHighContrast } = useHighContrastTheme();
+  const navigate = useNavigate();
+
   return (
     <header className="sticky top-0 z-50 w-full border-b bg-background/98 backdrop-blur-sm supports-[backdrop-filter]:bg-background/90">
       <div className="container flex h-14 items-center">
@@ -23,17 +32,50 @@ export const Header: React.FC = () => {
             <SimpleGlobalSearch />
           </div>
           
-          <nav className="flex items-center space-x-2">
+          <nav className="flex items-center space-x-1">
             <OrganizationSelector />
             <RealTimeNotificationCenter />
+            
+            <TooltipProvider>
+              <Tooltip>
+                <TooltipTrigger asChild>
+                  <Button
+                    variant="ghost"
+                    size="sm"
+                    className="h-9 w-9 p-0 hover:bg-accent transition-colors"
+                    onClick={() => navigate("/settings")}
+                    aria-label="Configurações"
+                  >
+                    <Settings className="h-4 w-4 text-foreground" />
+                  </Button>
+                </TooltipTrigger>
+                <TooltipContent>
+                  <p>Configurações</p>
+                </TooltipContent>
+              </Tooltip>
+            </TooltipProvider>
+
             <UserMenu />
-            <Button
-              variant={isHighContrast ? "default" : "outline"}
-              onClick={toggleHighContrast}
-              aria-label={isHighContrast ? "Desativar alto contraste" : "Ativar alto contraste"}
-            >
-              Contraste
-            </Button>
+            
+            <TooltipProvider>
+              <Tooltip>
+                <TooltipTrigger asChild>
+                  <Button
+                    variant={isHighContrast ? "default" : "ghost"}
+                    size="sm"
+                    onClick={toggleHighContrast}
+                    aria-label={isHighContrast ? "Desativar alto contraste" : "Ativar alto contraste"}
+                    className="h-9 px-3 text-xs"
+                  >
+                    Contraste
+                  </Button>
+                </TooltipTrigger>
+                <TooltipContent>
+                  <p>{isHighContrast ? "Desativar alto contraste" : "Ativar alto contraste"}</p>
+                </TooltipContent>
+              </Tooltip>
+            </TooltipProvider>
+            
             <ThemeToggle />
           </nav>
         </div>

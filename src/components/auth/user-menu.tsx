@@ -1,6 +1,7 @@
 import React from "react";
 import { Button } from "@/components/ui/button";
 import { useAuth } from "@/contexts/AuthContext";
+import { useNavigate } from "react-router-dom";
 import { 
   DropdownMenu,
   DropdownMenuContent,
@@ -10,10 +11,11 @@ import {
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
-import { User, Settings, LogOut } from "lucide-react";
+import { User, Settings, LogOut, HelpCircle, Bell } from "lucide-react";
 
 export const UserMenu: React.FC = () => {
   const { user, signOut } = useAuth();
+  const navigate = useNavigate();
 
   if (!user) return null;
 
@@ -23,6 +25,10 @@ export const UserMenu: React.FC = () => {
 
   const handleSignOut = async () => {
     await signOut();
+  };
+
+  const handleNavigate = (path: string) => {
+    navigate(path);
   };
 
   return (
@@ -49,13 +55,33 @@ export const UserMenu: React.FC = () => {
           </div>
         </DropdownMenuLabel>
         <DropdownMenuSeparator />
-        <DropdownMenuItem className="cursor-pointer">
+        <DropdownMenuItem 
+          className="cursor-pointer"
+          onClick={() => handleNavigate("/profile")}
+        >
           <User className="mr-2 h-4 w-4 text-foreground/70" />
           <span className="text-foreground">Perfil</span>
         </DropdownMenuItem>
-        <DropdownMenuItem className="cursor-pointer">
+        <DropdownMenuItem 
+          className="cursor-pointer"
+          onClick={() => handleNavigate("/settings")}
+        >
           <Settings className="mr-2 h-4 w-4 text-foreground/70" />
           <span className="text-foreground">Configurações</span>
+        </DropdownMenuItem>
+        <DropdownMenuItem 
+          className="cursor-pointer"
+          onClick={() => handleNavigate("/notifications-center")}
+        >
+          <Bell className="mr-2 h-4 w-4 text-foreground/70" />
+          <span className="text-foreground">Notificações</span>
+        </DropdownMenuItem>
+        <DropdownMenuItem 
+          className="cursor-pointer"
+          onClick={() => handleNavigate("/help")}
+        >
+          <HelpCircle className="mr-2 h-4 w-4 text-foreground/70" />
+          <span className="text-foreground">Ajuda</span>
         </DropdownMenuItem>
         <DropdownMenuSeparator />
         <DropdownMenuItem onClick={handleSignOut} className="cursor-pointer text-destructive focus:text-destructive">

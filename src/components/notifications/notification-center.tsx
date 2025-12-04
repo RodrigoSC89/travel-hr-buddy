@@ -173,14 +173,14 @@ export const NotificationCenter: React.FC = () => {
 
         {notifications.length > 0 && (
           <div className="border-t border-border p-2">
-            <Button 
-              variant="ghost" 
-              className="w-full text-xs h-8 text-popover-foreground hover:bg-muted"
-              onClick={() => {
-              }}
-            >
-              Ver todas as notificações
-            </Button>
+            <Link to="/notifications-center" className="block">
+              <Button 
+                variant="ghost" 
+                className="w-full text-xs h-8 text-popover-foreground hover:bg-muted"
+              >
+                Ver todas as notificações
+              </Button>
+            </Link>
           </div>
         )}
       </PopoverContent>
