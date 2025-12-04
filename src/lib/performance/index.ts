@@ -98,3 +98,13 @@ export {
   chunkArray,
   createRequestDeduplicator,
 } from './data-compression';
+
+// PATCH 800: Query optimization
+export {
+  optimizedQuery,
+  batchQueries,
+  invalidateCache,
+  prefetchQuery,
+  minimalFields,
+  getAdaptivePageSize,
+} from './query-optimizer';
