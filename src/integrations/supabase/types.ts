@@ -4680,46 +4680,52 @@ export type Database = {
       }
       dp_incidents: {
         Row: {
-          description: string
+          created_at: string | null
+          dp_class: string | null
           id: string
-          incident_type: string
-          location: Json | null
-          metadata: Json | null
-          reported_at: string
-          reported_by: string | null
-          resolution_notes: string | null
-          resolved_at: string | null
+          incident_date: string
+          link: string | null
+          location: string | null
+          root_cause: string | null
           severity: string | null
-          status: string | null
-          vessel_id: string | null
+          source: string | null
+          summary: string | null
+          tags: string[] | null
+          title: string
+          updated_at: string | null
+          vessel: string | null
         }
         Insert: {
-          description: string
-          id?: string
-          incident_type: string
-          location?: Json | null
-          metadata?: Json | null
-          reported_at?: string
-          reported_by?: string | null
-          resolution_notes?: string | null
-          resolved_at?: string | null
+          created_at?: string | null
+          dp_class?: string | null
+          id: string
+          incident_date: string
+          link?: string | null
+          location?: string | null
+          root_cause?: string | null
           severity?: string | null
-          status?: string | null
-          vessel_id?: string | null
+          source?: string | null
+          summary?: string | null
+          tags?: string[] | null
+          title: string
+          updated_at?: string | null
+          vessel?: string | null
         }
         Update: {
-          description?: string
+          created_at?: string | null
+          dp_class?: string | null
           id?: string
-          incident_type?: string
-          location?: Json | null
-          metadata?: Json | null
-          reported_at?: string
-          reported_by?: string | null
-          resolution_notes?: string | null
-          resolved_at?: string | null
+          incident_date?: string
+          link?: string | null
+          location?: string | null
+          root_cause?: string | null
           severity?: string | null
-          status?: string | null
-          vessel_id?: string | null
+          source?: string | null
+          summary?: string | null
+          tags?: string[] | null
+          title?: string
+          updated_at?: string | null
+          vessel?: string | null
         }
         Relationships: []
       }
