@@ -79,3 +79,22 @@ export {
 export { pollingManager } from './polling-manager';
 export { lazyWithPreload, preloadStrategy, moduleCache } from './lazy-with-preload';
 export { createOptimizedQueryClient } from './query-config';
+
+// PATCH 800: Enhanced lazy loading
+export { 
+  createLazyComponent, 
+  LazyWrapper, 
+  preloadComponent,
+  useInViewport 
+} from './lazy-loader';
+
+// PATCH 800: Data compression utilities
+export {
+  compressObject as compressObjectSimple,
+  selectFields,
+  paginateData,
+  estimateSize,
+  logDataTransfer,
+  chunkArray,
+  createRequestDeduplicator,
+} from './data-compression';

@@ -56,3 +56,9 @@ export { useTrainingModules } from "./use-training-modules";
 export { useTravelPredictions } from "./use-travel-predictions";
 export { useVoiceNavigation } from "./use-voice-navigation";
 export { useServiceIntegrations } from "./use-service-integrations";
+
+// PATCH 800: Performance & Offline Hooks
+export { useDebouncedValue, useDebouncedCallback, useThrottledCallback } from "./use-debounced-value";
+export { useNetworkStatus, useAdaptiveSettings } from "./use-network-status";
+export { useVirtualList, useInfiniteScroll } from "./use-virtual-list";
+export { useOfflineMutation } from "./use-offline-mutation";
