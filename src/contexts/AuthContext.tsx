@@ -5,12 +5,15 @@ import { useToast } from "@/hooks/use-toast";
 import { logger } from "@/lib/logger";
 import { Logger } from "@/lib/utils/logger";
 
+type OAuthProvider = "google" | "github" | "azure";
+
 interface AuthContextType {
   user: User | null;
   session: Session | null;
   isLoading: boolean;
   signUp: (email: string, password: string, fullName: string) => Promise<{ error: Error | null }>;
   signIn: (email: string, password: string) => Promise<{ error: Error | null }>;
+  signInWithOAuth: (provider: OAuthProvider) => Promise<{ error: Error | null }>;
   signOut: () => Promise<void>;
   resetPassword: (email: string) => Promise<{ error: Error | null }>;
 }
@@ -158,6 +161,30 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
     return { error };
   };
 
+  const signInWithOAuth = async (provider: OAuthProvider) => {
+    setIsLoading(true);
+    
+    const redirectUrl = `${window.location.origin}/`;
+    
+    const { error } = await supabase.auth.signInWithOAuth({
+      provider,
+      options: {
+        redirectTo: redirectUrl,
+      }
+    });
+
+    if (error) {
+      toast({
+        title: "Erro no login",
+        description: error.message,
+        variant: "destructive",
+      });
+    }
+
+    setIsLoading(false);
+    return { error };
+  };
+
   const signOut = async () => {
     setIsLoading(true);
     await supabase.auth.signOut();
@@ -193,6 +220,7 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
     isLoading,
     signUp,
     signIn,
+    signInWithOAuth,
     signOut,
     resetPassword,
   };
