@@ -625,6 +625,12 @@ export const EnhancedPeotramManager: React.FC = () => {
           </div>
         </TabsContent>
 
+        <TabsContent value="cnpj-history" className="space-y-6">
+          <Suspense fallback={<div className="flex items-center justify-center p-8">Carregando histórico...</div>}>
+            <PeotramCNPJHistory />
+          </Suspense>
+        </TabsContent>
+
         <TabsContent value="non-conformities">
           <Suspense fallback={<div className="flex items-center justify-center p-8">Carregando...</div>}>
             <PeotramNonConformities 
