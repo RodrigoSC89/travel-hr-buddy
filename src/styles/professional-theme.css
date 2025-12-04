@@ -1,0 +1,487 @@
+/**
+ * NAUTILUS ONE - PROFESSIONAL ENTERPRISE THEME
+ * Estilo Náutico Profissional com Alto Contraste
+ * WCAG AAA Compliant - Enterprise Grade
+ */
+
+/* ============================================
+   PROFESSIONAL COLOR PALETTE - NAUTICAL CORPORATE
+   ============================================ */
+
+:root {
+  /* === PROFESSIONAL BLUES - Azuis Sóbrios e Corporativos === */
+  --pro-navy-50: 214 32% 96%;      /* #F4F7FA - Cinza azulado muito claro */
+  --pro-navy-100: 214 35% 91%;     /* #E5EBF1 - Cinza azulado claro */
+  --pro-navy-200: 214 30% 82%;     /* #C9D4E1 - Cinza azulado */
+  --pro-navy-300: 214 25% 68%;     /* #9FB1C5 - Azul cinza médio */
+  --pro-navy-400: 214 28% 52%;     /* #5E7A9A - Azul profissional */
+  --pro-navy-500: 214 35% 40%;     /* #425E7A - Azul corporativo */
+  --pro-navy-600: 214 45% 30%;     /* #29435E - Azul marinho médio */
+  --pro-navy-700: 214 55% 22%;     /* #1A3148 - Azul marinho escuro */
+  --pro-navy-800: 214 60% 16%;     /* #122536 - Azul noturno */
+  --pro-navy-900: 214 65% 11%;     /* #0B1A28 - Azul profundo */
+
+  /* === CORPORATE ACCENT - Destaques Profissionais === */
+  --pro-accent-primary: 199 89% 48%;    /* #0891B2 - Azul ciano corporate */
+  --pro-accent-secondary: 199 89% 40%;  /* #0E7490 - Ciano escuro */
+  --pro-accent-success: 152 69% 31%;    /* #16A34A - Verde corporate */
+  --pro-accent-warning: 38 92% 50%;     /* #F59E0B - Âmbar corporate */
+  --pro-accent-danger: 0 72% 51%;       /* #DC2626 - Vermelho corporate */
+  
+  /* === PROFESSIONAL GRAYS - Tons Neutros === */
+  --pro-gray-50: 220 14% 98%;      /* #FAFBFC */
+  --pro-gray-100: 220 14% 96%;     /* #F5F6F8 */
+  --pro-gray-200: 220 13% 91%;     /* #E4E7EB */
+  --pro-gray-300: 216 12% 84%;     /* #D1D5DB */
+  --pro-gray-400: 218 11% 65%;     /* #9CA3AF */
+  --pro-gray-500: 220 9% 46%;      /* #6B7280 */
+  --pro-gray-600: 215 14% 34%;     /* #4B5563 */
+  --pro-gray-700: 217 19% 27%;     /* #374151 */
+  --pro-gray-800: 215 28% 17%;     /* #1F2937 */
+  --pro-gray-900: 221 39% 11%;     /* #111827 */
+
+  /* === PROFESSIONAL SHADOWS === */
+  --shadow-xs: 0 1px 2px 0 rgba(0, 0, 0, 0.05);
+  --shadow-sm: 0 1px 3px 0 rgba(0, 0, 0, 0.1), 0 1px 2px -1px rgba(0, 0, 0, 0.1);
+  --shadow-md: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -2px rgba(0, 0, 0, 0.1);
+  --shadow-lg: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -4px rgba(0, 0, 0, 0.1);
+  --shadow-xl: 0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 8px 10px -6px rgba(0, 0, 0, 0.1);
+  --shadow-pro: 0 2px 4px rgba(0, 0, 0, 0.04), 0 4px 8px rgba(0, 0, 0, 0.04);
+  --shadow-card: 0 1px 3px rgba(0, 0, 0, 0.08), 0 1px 2px rgba(0, 0, 0, 0.06);
+  --shadow-elevated: 0 4px 12px rgba(0, 0, 0, 0.08), 0 2px 4px rgba(0, 0, 0, 0.04);
+  --shadow-floating: 0 8px 24px rgba(0, 0, 0, 0.12), 0 4px 8px rgba(0, 0, 0, 0.06);
+
+  /* === PROFESSIONAL BORDERS === */
+  --border-subtle: 1px solid hsl(var(--pro-gray-200));
+  --border-default: 1px solid hsl(var(--pro-gray-300));
+  --border-strong: 1px solid hsl(var(--pro-gray-400));
+  --border-accent: 1px solid hsl(var(--pro-accent-primary));
+  
+  /* === PROFESSIONAL SPACING === */
+  --space-card-sm: 1rem;
+  --space-card-md: 1.25rem;
+  --space-card-lg: 1.5rem;
+  --space-section: 2rem;
+  --space-page: 2.5rem;
+
+  /* === PROFESSIONAL TYPOGRAPHY === */
+  --font-display: 'Inter', system-ui, -apple-system, sans-serif;
+  --font-body: 'Inter', system-ui, -apple-system, sans-serif;
+  --font-mono: 'JetBrains Mono', 'Fira Code', monospace;
+  
+  --text-xs: 0.75rem;     /* 12px */
+  --text-sm: 0.8125rem;   /* 13px */
+  --text-base: 0.875rem;  /* 14px - Professional base */
+  --text-md: 0.9375rem;   /* 15px */
+  --text-lg: 1rem;        /* 16px */
+  --text-xl: 1.125rem;    /* 18px */
+  --text-2xl: 1.25rem;    /* 20px */
+  --text-3xl: 1.5rem;     /* 24px */
+  --text-4xl: 1.875rem;   /* 30px */
+  
+  --leading-tight: 1.25;
+  --leading-normal: 1.5;
+  --leading-relaxed: 1.625;
+  
+  --tracking-tight: -0.025em;
+  --tracking-normal: 0;
+  --tracking-wide: 0.025em;
+
+  /* === PROFESSIONAL CARD COLORS - MUTED & CORPORATE === */
+  --card-metric-green: 152 44% 96%;        /* Fundo verde muito sutil */
+  --card-metric-green-border: 152 44% 85%;
+  --card-metric-green-text: 152 69% 25%;   /* Texto verde escuro */
+  --card-metric-green-value: 152 69% 31%;  /* Valor verde */
+  
+  --card-metric-blue: 199 44% 96%;         /* Fundo azul muito sutil */
+  --card-metric-blue-border: 199 44% 85%;
+  --card-metric-blue-text: 199 69% 25%;    /* Texto azul escuro */
+  --card-metric-blue-value: 199 89% 40%;   /* Valor azul */
+  
+  --card-metric-purple: 270 44% 96%;       /* Fundo roxo muito sutil */
+  --card-metric-purple-border: 270 35% 85%;
+  --card-metric-purple-text: 270 50% 30%;  /* Texto roxo escuro */
+  --card-metric-purple-value: 270 50% 45%; /* Valor roxo */
+  
+  --card-metric-orange: 38 44% 96%;        /* Fundo âmbar muito sutil */
+  --card-metric-orange-border: 38 44% 85%;
+  --card-metric-orange-text: 38 92% 25%;   /* Texto âmbar escuro */
+  --card-metric-orange-value: 38 92% 45%;  /* Valor âmbar */
+}
+
+/* Dark mode professional overrides */
+.dark {
+  --shadow-card: 0 1px 3px rgba(0, 0, 0, 0.24), 0 1px 2px rgba(0, 0, 0, 0.18);
+  --shadow-elevated: 0 4px 12px rgba(0, 0, 0, 0.24), 0 2px 4px rgba(0, 0, 0, 0.12);
+  --shadow-floating: 0 8px 24px rgba(0, 0, 0, 0.32), 0 4px 8px rgba(0, 0, 0, 0.16);
+  
+  --border-subtle: 1px solid hsl(var(--pro-navy-700));
+  --border-default: 1px solid hsl(var(--pro-navy-600));
+  
+  /* Dark mode metric cards */
+  --card-metric-green: 152 44% 12%;
+  --card-metric-green-border: 152 44% 20%;
+  --card-metric-green-text: 152 44% 75%;
+  --card-metric-green-value: 152 69% 55%;
+  
+  --card-metric-blue: 199 44% 12%;
+  --card-metric-blue-border: 199 44% 20%;
+  --card-metric-blue-text: 199 44% 75%;
+  --card-metric-blue-value: 199 89% 55%;
+  
+  --card-metric-purple: 270 30% 14%;
+  --card-metric-purple-border: 270 30% 22%;
+  --card-metric-purple-text: 270 35% 75%;
+  --card-metric-purple-value: 270 50% 65%;
+  
+  --card-metric-orange: 38 44% 12%;
+  --card-metric-orange-border: 38 44% 20%;
+  --card-metric-orange-text: 38 44% 75%;
+  --card-metric-orange-value: 38 92% 60%;
+}
+
+/* ============================================
+   PROFESSIONAL COMPONENT STYLES
+   ============================================ */
+
+/* Professional Card Base */
+.card-professional {
+  background: hsl(var(--card));
+  border: var(--border-subtle);
+  border-radius: var(--radius);
+  box-shadow: var(--shadow-card);
+  transition: box-shadow 0.2s ease, border-color 0.2s ease;
+}
+
+.card-professional:hover {
+  box-shadow: var(--shadow-elevated);
+}
+
+/* Professional Metric Cards */
+.card-metric {
+  position: relative;
+  padding: var(--space-card-md);
+  border-radius: var(--radius);
+  border: 1px solid;
+  transition: all 0.2s ease;
+}
+
+.card-metric::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 4px;
+  height: 100%;
+  border-radius: var(--radius) 0 0 var(--radius);
+}
+
+.card-metric--green {
+  background: hsl(var(--card-metric-green));
+  border-color: hsl(var(--card-metric-green-border));
+}
+.card-metric--green::before { background: hsl(var(--card-metric-green-value)); }
+.card-metric--green .card-metric__label { color: hsl(var(--card-metric-green-text)); }
+.card-metric--green .card-metric__value { color: hsl(var(--card-metric-green-value)); }
+
+.card-metric--blue {
+  background: hsl(var(--card-metric-blue));
+  border-color: hsl(var(--card-metric-blue-border));
+}
+.card-metric--blue::before { background: hsl(var(--card-metric-blue-value)); }
+.card-metric--blue .card-metric__label { color: hsl(var(--card-metric-blue-text)); }
+.card-metric--blue .card-metric__value { color: hsl(var(--card-metric-blue-value)); }
+
+.card-metric--purple {
+  background: hsl(var(--card-metric-purple));
+  border-color: hsl(var(--card-metric-purple-border));
+}
+.card-metric--purple::before { background: hsl(var(--card-metric-purple-value)); }
+.card-metric--purple .card-metric__label { color: hsl(var(--card-metric-purple-text)); }
+.card-metric--purple .card-metric__value { color: hsl(var(--card-metric-purple-value)); }
+
+.card-metric--orange {
+  background: hsl(var(--card-metric-orange));
+  border-color: hsl(var(--card-metric-orange-border));
+}
+.card-metric--orange::before { background: hsl(var(--card-metric-orange-value)); }
+.card-metric--orange .card-metric__label { color: hsl(var(--card-metric-orange-text)); }
+.card-metric--orange .card-metric__value { color: hsl(var(--card-metric-orange-value)); }
+
+/* Professional Typography */
+.text-heading {
+  font-weight: 600;
+  letter-spacing: var(--tracking-tight);
+  line-height: var(--leading-tight);
+}
+
+.text-body {
+  font-weight: 400;
+  letter-spacing: var(--tracking-normal);
+  line-height: var(--leading-normal);
+}
+
+.text-label {
+  font-size: var(--text-sm);
+  font-weight: 500;
+  letter-spacing: var(--tracking-wide);
+  text-transform: uppercase;
+  color: hsl(var(--muted-foreground));
+}
+
+.text-metric {
+  font-size: var(--text-3xl);
+  font-weight: 700;
+  letter-spacing: var(--tracking-tight);
+  line-height: 1;
+  font-variant-numeric: tabular-nums;
+}
+
+/* Professional Buttons */
+.btn-professional {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+  padding: 0.625rem 1rem;
+  font-size: var(--text-sm);
+  font-weight: 500;
+  border-radius: calc(var(--radius) - 2px);
+  transition: all 0.15s ease;
+  cursor: pointer;
+}
+
+.btn-professional--primary {
+  background: hsl(var(--pro-accent-primary));
+  color: white;
+  border: none;
+  box-shadow: var(--shadow-sm);
+}
+
+.btn-professional--primary:hover {
+  background: hsl(var(--pro-accent-secondary));
+  box-shadow: var(--shadow-md);
+}
+
+.btn-professional--secondary {
+  background: transparent;
+  color: hsl(var(--foreground));
+  border: var(--border-default);
+}
+
+.btn-professional--secondary:hover {
+  background: hsl(var(--muted));
+  border-color: hsl(var(--pro-gray-400));
+}
+
+/* Professional Tables */
+.table-professional {
+  width: 100%;
+  border-collapse: separate;
+  border-spacing: 0;
+}
+
+.table-professional th {
+  font-size: var(--text-xs);
+  font-weight: 600;
+  letter-spacing: var(--tracking-wide);
+  text-transform: uppercase;
+  color: hsl(var(--muted-foreground));
+  padding: 0.75rem 1rem;
+  text-align: left;
+  border-bottom: var(--border-default);
+  background: hsl(var(--muted) / 0.5);
+}
+
+.table-professional td {
+  padding: 0.875rem 1rem;
+  border-bottom: var(--border-subtle);
+  font-size: var(--text-sm);
+}
+
+.table-professional tr:hover td {
+  background: hsl(var(--muted) / 0.3);
+}
+
+/* Professional Sidebar */
+.sidebar-professional {
+  background: hsl(var(--pro-navy-900));
+  color: hsl(var(--pro-navy-200));
+}
+
+.sidebar-professional .sidebar-item {
+  padding: 0.625rem 1rem;
+  border-radius: calc(var(--radius) - 4px);
+  font-size: var(--text-sm);
+  font-weight: 500;
+  color: hsl(var(--pro-navy-300));
+  transition: all 0.15s ease;
+}
+
+.sidebar-professional .sidebar-item:hover {
+  background: hsl(var(--pro-navy-800));
+  color: hsl(var(--pro-navy-100));
+}
+
+.sidebar-professional .sidebar-item--active {
+  background: hsl(var(--pro-accent-primary) / 0.15);
+  color: hsl(var(--pro-accent-primary));
+  font-weight: 600;
+}
+
+/* Professional Header */
+.header-professional {
+  background: hsl(var(--background));
+  border-bottom: var(--border-subtle);
+  backdrop-filter: blur(8px);
+}
+
+.dark .header-professional {
+  background: hsl(var(--background) / 0.95);
+}
+
+/* Professional Status Indicators */
+.status-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.375rem;
+  padding: 0.25rem 0.625rem;
+  font-size: var(--text-xs);
+  font-weight: 500;
+  border-radius: 9999px;
+}
+
+.status-badge--success {
+  background: hsl(var(--pro-accent-success) / 0.1);
+  color: hsl(var(--pro-accent-success));
+}
+
+.status-badge--warning {
+  background: hsl(var(--pro-accent-warning) / 0.1);
+  color: hsl(var(--pro-accent-warning));
+}
+
+.status-badge--danger {
+  background: hsl(var(--pro-accent-danger) / 0.1);
+  color: hsl(var(--pro-accent-danger));
+}
+
+.status-badge--info {
+  background: hsl(var(--pro-accent-primary) / 0.1);
+  color: hsl(var(--pro-accent-primary));
+}
+
+/* Professional Charts Container */
+.chart-container {
+  background: hsl(var(--card));
+  border: var(--border-subtle);
+  border-radius: var(--radius);
+  padding: var(--space-card-lg);
+}
+
+.chart-container__header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 1.5rem;
+}
+
+.chart-container__title {
+  font-size: var(--text-md);
+  font-weight: 600;
+  color: hsl(var(--foreground));
+}
+
+.chart-container__subtitle {
+  font-size: var(--text-sm);
+  color: hsl(var(--muted-foreground));
+  margin-top: 0.25rem;
+}
+
+/* Professional Module Header */
+.module-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding-bottom: 1.5rem;
+  margin-bottom: 1.5rem;
+  border-bottom: var(--border-subtle);
+}
+
+.module-header__title {
+  font-size: var(--text-2xl);
+  font-weight: 600;
+  color: hsl(var(--foreground));
+  letter-spacing: var(--tracking-tight);
+}
+
+.module-header__description {
+  font-size: var(--text-sm);
+  color: hsl(var(--muted-foreground));
+  margin-top: 0.25rem;
+}
+
+/* Professional Empty State */
+.empty-state {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 3rem 2rem;
+  text-align: center;
+}
+
+.empty-state__icon {
+  width: 3rem;
+  height: 3rem;
+  color: hsl(var(--muted-foreground));
+  margin-bottom: 1rem;
+}
+
+.empty-state__title {
+  font-size: var(--text-lg);
+  font-weight: 600;
+  color: hsl(var(--foreground));
+  margin-bottom: 0.5rem;
+}
+
+.empty-state__description {
+  font-size: var(--text-sm);
+  color: hsl(var(--muted-foreground));
+  max-width: 24rem;
+}
+
+/* Focus States - Professional */
+.focus-professional:focus-visible {
+  outline: 2px solid hsl(var(--pro-accent-primary));
+  outline-offset: 2px;
+}
+
+/* Professional Dividers */
+.divider {
+  height: 1px;
+  background: hsl(var(--border));
+  margin: 1.5rem 0;
+}
+
+.divider--subtle {
+  background: hsl(var(--border) / 0.5);
+}
+
+/* Professional Loading States */
+.skeleton-professional {
+  background: linear-gradient(
+    90deg,
+    hsl(var(--muted)) 0%,
+    hsl(var(--muted) / 0.5) 50%,
+    hsl(var(--muted)) 100%
+  );
+  background-size: 200% 100%;
+  animation: skeleton-shimmer 1.5s ease-in-out infinite;
+  border-radius: calc(var(--radius) - 4px);
+}
+
+@keyframes skeleton-shimmer {
+  0% { background-position: 200% 0; }
+  100% { background-position: -200% 0; }
+}
