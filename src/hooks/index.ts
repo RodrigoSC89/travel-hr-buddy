@@ -59,6 +59,9 @@ export { useServiceIntegrations } from "./use-service-integrations";
 
 // PATCH 800: Performance & Offline Hooks
 export { useDebouncedValue, useDebouncedCallback, useThrottledCallback } from "./use-debounced-value";
-export { useNetworkStatus, useAdaptiveSettings } from "./use-network-status";
+export { useNetworkStatus, useAdaptiveSettings, type ConnectionQuality } from "./use-network-status";
 export { useVirtualList, useInfiniteScroll } from "./use-virtual-list";
 export { useOfflineMutation } from "./use-offline-mutation";
+
+// PATCH 810: Optimized Data Fetching
+export { useOptimizedQuery, useOptimizedMutation, useInfiniteOptimizedQuery } from "./use-optimized-query";
