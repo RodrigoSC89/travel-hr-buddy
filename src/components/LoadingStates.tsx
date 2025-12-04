@@ -1,12 +1,13 @@
 /**
  * Loading States - Design Profissional para Conexões Lentas
- * Mantém identidade visual durante carregamento
+ * PATCH 753 - Otimizado para conexões lentas com detecção de velocidade
  */
 
-import React from "react";
+import React, { memo, useState, useEffect } from "react";
 import { Card, CardContent, CardHeader } from "@/components/ui/card";
 import { Skeleton } from "@/components/ui/skeleton";
-import { Loader2, Ship, Waves } from "lucide-react";
+import { Loader2, Ship, Waves, Compass, Anchor } from "lucide-react";
+import { cn } from "@/lib/utils";
 
 export const PageSkeleton = () => (
   <div className="space-y-6 p-6 animate-in fade-in duration-500">
@@ -113,13 +114,113 @@ export const OffshoreLoader: React.FC<{
   </div>
 );
 
-export const MinimalLoader = () => (
-  <div className="flex items-center justify-center p-12">
-    <div className="flex items-center gap-3">
-      <Loader2 className="h-8 w-8 animate-spin text-primary" />
-      <span className="text-sm text-muted-foreground">Carregando...</span>
+export const MinimalLoader = memo(function MinimalLoader() {
+  return (
+    <div className="flex items-center justify-center p-12">
+      <div className="flex items-center gap-3">
+        <Loader2 className="h-8 w-8 animate-spin text-primary" />
+        <span className="text-sm text-muted-foreground">Carregando...</span>
+      </div>
     </div>
-  </div>
-);
+  );
+});
+
+// Nautical Spinner - Compacto
+export const NauticalSpinner = memo(function NauticalSpinner({
+  size = "default",
+  className
+}: {
+  size?: "small" | "default" | "large";
+  className?: string;
+}) {
+  const sizeClasses = {
+    small: "h-4 w-4",
+    default: "h-6 w-6",
+    large: "h-10 w-10",
+  };
+  
+  return (
+    <div className={cn("relative", sizeClasses[size], className)}>
+      <Compass className="w-full h-full text-primary animate-spin" />
+    </div>
+  );
+});
+
+// Anchor Loader - Alternativo
+export const AnchorLoader = memo(function AnchorLoader({
+  message = "Ancorando dados..."
+}: {
+  message?: string;
+}) {
+  return (
+    <div className="flex flex-col items-center justify-center gap-3 p-6">
+      <div className="relative">
+        <Anchor className="h-10 w-10 text-primary animate-bounce" />
+      </div>
+      <p className="text-sm text-muted-foreground">{message}</p>
+    </div>
+  );
+});
+
+// Page Loader - Full Page
+export const PageLoader = memo(function PageLoader({
+  message = "Carregando página..."
+}: {
+  message?: string;
+}) {
+  return (
+    <div className="min-h-[60vh] flex items-center justify-center">
+      <OffshoreLoader module={message} />
+    </div>
+  );
+});
+
+// Button Loader
+export const ButtonLoader = memo(function ButtonLoader() {
+  return (
+    <div className="h-4 w-4 rounded-full border-2 border-current border-t-transparent animate-spin" />
+  );
+});
+
+// Data Loader
+export const DataLoader = memo(function DataLoader({
+  message = "Carregando dados...",
+  progress
+}: {
+  message?: string;
+  progress?: number;
+}) {
+  return (
+    <div className="flex flex-col items-center justify-center gap-4 p-8">
+      <NauticalSpinner size="large" />
+      
+      <div className="text-center space-y-2">
+        <p className="text-sm font-medium text-foreground">{message}</p>
+        
+        {progress !== undefined && (
+          <div className="w-48 h-2 bg-muted rounded-full overflow-hidden">
+            <div 
+              className="h-full bg-primary transition-all duration-300 ease-out"
+              style={{ width: `${Math.min(100, progress)}%` }}
+            />
+          </div>
+        )}
+      </div>
+    </div>
+  );
+});
+
+// Module Loader
+export const ModuleLoader = memo(function ModuleLoader({
+  moduleName = "módulo"
+}: {
+  moduleName?: string;
+}) {
+  return (
+    <div className="min-h-[400px] flex items-center justify-center">
+      <OffshoreLoader module={moduleName} />
+    </div>
+  );
+});
 
 export const LoadingSpinner = OffshoreLoader;

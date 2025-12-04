@@ -8,17 +8,21 @@
 import { logger } from "@/lib/logger";
 
 // Extended Navigator interfaces
-interface ExtendedNavigator extends Navigator {
-  deviceMemory?: number;
-  connection?: NetworkInformation;
-  mozConnection?: NetworkInformation;
-  webkitConnection?: NetworkInformation;
-  getBattery?: () => Promise<BatteryManager>;
-}
-
-interface NetworkInformation {
+interface AdaptiveNetworkInfo {
   effectiveType?: "slow-2g" | "2g" | "3g" | "4g" | "5g";
   downlink?: number;
+  rtt?: number;
+  saveData?: boolean;
+}
+
+interface AdaptiveNavigator {
+  deviceMemory?: number;
+  hardwareConcurrency?: number;
+  onLine?: boolean;
+  connection?: AdaptiveNetworkInfo;
+  mozConnection?: AdaptiveNetworkInfo;
+  webkitConnection?: AdaptiveNetworkInfo;
+  getBattery?: () => Promise<BatteryManager>;
 }
 
 interface BatteryManager {
@@ -188,9 +192,9 @@ class AdaptiveUI {
     }
 
     // Try to get device memory if available
-    const extNavigator = navigator as ExtendedNavigator;
+    const extNavigator = navigator as unknown as AdaptiveNavigator;
     const memory = extNavigator.deviceMemory;
-    const cpuCores = navigator.hardwareConcurrency;
+    const cpuCores = extNavigator.hardwareConcurrency;
 
     // Try to get battery info if available
     let batteryLevel: number | undefined;
@@ -218,7 +222,7 @@ class AdaptiveUI {
    * Measure network quality
    */
   private measureNetwork(): NetworkMetrics {
-    const extNavigator = navigator as ExtendedNavigator;
+    const extNavigator = navigator as unknown as AdaptiveNavigator;
     const connection = extNavigator.connection || extNavigator.mozConnection || extNavigator.webkitConnection;
 
     let latency = 50; // Default

@@ -1,6 +1,7 @@
 /**
  * UI Components Performance Exports
  * Central export for all UI components
+ * PATCH 753 - Enhanced with skeleton loaders and optimized images
  */
 
 // Connection-aware components
@@ -18,6 +19,7 @@ export { ErrorFallback, InlineError, EmptyState } from './ErrorFallback';
 
 // Images
 export { OptimizedImage } from './OptimizedImage';
+export { OptimizedImagePro } from './OptimizedImagePro';
 
 // Actions
 export { ActionButton } from './ActionButton';
@@ -57,3 +59,17 @@ export {
   Divider,
   ChartContainer
 } from './ProfessionalCard';
+
+// Skeleton Loaders
+export {
+  SkeletonBase,
+  SkeletonMetricCard,
+  SkeletonTable,
+  SkeletonChart,
+  SkeletonList,
+  SkeletonDashboard,
+  SkeletonModule,
+  SkeletonSidebar,
+  SkeletonForm,
+  ConnectionAwareLoader as SkeletonConnectionLoader
+} from './SkeletonPro';
