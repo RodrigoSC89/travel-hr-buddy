@@ -24,6 +24,8 @@ export interface UseConnectionAwareResult {
   animationLevel: 'none' | 'reduced' | 'full';
   getPollingInterval: (base: number) => number;
   timeout: number;
+  quality: 'excellent' | 'good' | 'fair' | 'poor' | 'offline';
+  shouldReduceData: boolean;
 }
 
 /**
@@ -56,15 +58,23 @@ export function useConnectionAware(): UseConnectionAwareResult {
     return getOptimalPollingInterval(base);
   }, [connectionInfo]);
 
+  const slow = isSlowConnection();
+  const quality = offline ? 'offline' as const : 
+    connectionInfo.effectiveType === '4g' ? 'excellent' as const :
+    connectionInfo.effectiveType === '3g' ? 'good' as const :
+    connectionInfo.effectiveType === '2g' ? 'fair' as const : 'poor' as const;
+
   return useMemo(() => ({
     connectionInfo,
-    isSlowConnection: isSlowConnection(),
+    isSlowConnection: slow,
     isOffline: offline,
     imageQuality: getOptimalImageQuality(),
     animationLevel: getOptimalAnimationLevel(),
     getPollingInterval,
-    timeout: getOptimalTimeout()
-  }), [connectionInfo, offline, getPollingInterval]);
+    timeout: getOptimalTimeout(),
+    quality,
+    shouldReduceData: slow || quality === 'fair' || quality === 'poor'
+  }), [connectionInfo, offline, getPollingInterval, slow, quality]);
 }
 
 /**
