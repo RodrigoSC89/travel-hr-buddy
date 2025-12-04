@@ -65,3 +65,12 @@ export { useOfflineMutation } from "./use-offline-mutation";
 
 // PATCH 810: Optimized Data Fetching
 export { useOptimizedQuery, useOptimizedMutation, useInfiniteOptimizedQuery } from "./use-optimized-query";
+
+// PATCH 815: Adaptive Performance
+export { 
+  useAdaptivePerformance, 
+  useThrottledRealtime, 
+  useAdaptivePolling,
+  useFeatureFlags,
+  type PerformanceConfig 
+} from "./use-adaptive-performance";
