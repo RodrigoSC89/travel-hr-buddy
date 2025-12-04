@@ -1,37 +1,185 @@
-const CACHE_NAME = 'nautilus-one-v1';
-const urlsToCache = [
+// Service Worker Avançado - TravelHR Buddy
+const CACHE_NAME = 'travelhr-v2';
+const STATIC_CACHE = 'travelhr-static-v2';
+const DYNAMIC_CACHE = 'travelhr-dynamic-v2';
+const API_CACHE = 'travelhr-api-v2';
+
+// Recursos estáticos para cache imediato
+const STATIC_ASSETS = [
   '/',
+  '/index.html',
   '/manifest.json',
-  '/favicon.ico',
-  // Add other static assets as needed
+  '/favicon.ico'
 ];
 
+// URLs da API que devem ser cacheadas
+const API_PATTERNS = [
+  /\/rest\/v1\//,
+  /\/functions\/v1\//
+];
+
+// Instalação do Service Worker
 self.addEventListener('install', (event) => {
+  console.log('[SW] Installing...');
   event.waitUntil(
-    caches.open(CACHE_NAME)
-      .then((cache) => cache.addAll(urlsToCache))
+    caches.open(STATIC_CACHE)
+      .then((cache) => {
+        console.log('[SW] Caching static assets');
+        return cache.addAll(STATIC_ASSETS);
+      })
+      .then(() => self.skipWaiting())
   );
 });
 
+// Ativação e limpeza de caches antigos
+self.addEventListener('activate', (event) => {
+  console.log('[SW] Activating...');
+  event.waitUntil(
+    caches.keys()
+      .then((keys) => {
+        return Promise.all(
+          keys
+            .filter((key) => !key.includes('v2'))
+            .map((key) => {
+              console.log('[SW] Removing old cache:', key);
+              return caches.delete(key);
+            })
+        );
+      })
+      .then(() => self.clients.claim())
+  );
+});
+
+// Estratégia de cache inteligente
 self.addEventListener('fetch', (event) => {
-  event.respondWith(
-    caches.match(event.request)
-      .then((response) => {
-        // Return cached version or fetch from network
-        return response || fetch(event.request);
-      }
-    )
-  );
+  const { request } = event;
+  const url = new URL(request.url);
+
+  // Ignorar requisições não-GET
+  if (request.method !== 'GET') return;
+
+  // Ignorar chrome-extension e outros protocolos
+  if (!url.protocol.startsWith('http')) return;
+
+  // API requests: Network First com fallback para cache
+  if (API_PATTERNS.some((pattern) => pattern.test(url.pathname))) {
+    event.respondWith(networkFirstStrategy(request, API_CACHE));
+    return;
+  }
+
+  // Assets estáticos: Cache First
+  if (isStaticAsset(url.pathname)) {
+    event.respondWith(cacheFirstStrategy(request, STATIC_CACHE));
+    return;
+  }
+
+  // Páginas HTML: Stale While Revalidate
+  if (request.headers.get('accept')?.includes('text/html')) {
+    event.respondWith(staleWhileRevalidate(request, DYNAMIC_CACHE));
+    return;
+  }
+
+  // Outros recursos: Cache First com Network Fallback
+  event.respondWith(cacheFirstStrategy(request, DYNAMIC_CACHE));
 });
 
-// Background sync for offline actions
+// Estratégias de cache
+async function networkFirstStrategy(request, cacheName) {
+  try {
+    const networkResponse = await fetch(request);
+    if (networkResponse.ok) {
+      const cache = await caches.open(cacheName);
+      cache.put(request, networkResponse.clone());
+    }
+    return networkResponse;
+  } catch (error) {
+    const cachedResponse = await caches.match(request);
+    if (cachedResponse) {
+      return cachedResponse;
+    }
+    return new Response(JSON.stringify({ error: 'Offline', cached: false }), {
+      status: 503,
+      headers: { 'Content-Type': 'application/json' }
+    });
+  }
+}
+
+async function cacheFirstStrategy(request, cacheName) {
+  const cachedResponse = await caches.match(request);
+  if (cachedResponse) {
+    return cachedResponse;
+  }
+  
+  try {
+    const networkResponse = await fetch(request);
+    if (networkResponse.ok) {
+      const cache = await caches.open(cacheName);
+      cache.put(request, networkResponse.clone());
+    }
+    return networkResponse;
+  } catch (error) {
+    return new Response('Offline', { status: 503 });
+  }
+}
+
+async function staleWhileRevalidate(request, cacheName) {
+  const cache = await caches.open(cacheName);
+  const cachedResponse = await cache.match(request);
+  
+  const fetchPromise = fetch(request)
+    .then((networkResponse) => {
+      if (networkResponse.ok) {
+        cache.put(request, networkResponse.clone());
+      }
+      return networkResponse;
+    })
+    .catch(() => cachedResponse);
+  
+  return cachedResponse || fetchPromise;
+}
+
+// Helpers
+function isStaticAsset(pathname) {
+  return /\.(js|css|png|jpg|jpeg|gif|svg|ico|woff|woff2|ttf|eot)$/.test(pathname);
+}
+
+// Background Sync para operações offline
 self.addEventListener('sync', (event) => {
-  if (event.tag === 'background-sync') {
-    event.waitUntil(doBackgroundSync());
+  console.log('[SW] Background sync:', event.tag);
+  if (event.tag === 'sync-data' || event.tag === 'background-sync') {
+    event.waitUntil(syncOfflineData());
   }
 });
 
-function doBackgroundSync() {
-  // Handle offline actions when connection is restored
-  return Promise.resolve();
+async function syncOfflineData() {
+  const clients = await self.clients.matchAll();
+  clients.forEach((client) => {
+    client.postMessage({ type: 'SYNC_COMPLETE' });
+  });
 }
+
+// Push Notifications
+self.addEventListener('push', (event) => {
+  const data = event.data?.json() || {};
+  const options = {
+    body: data.body || 'Nova notificação',
+    icon: '/favicon.ico',
+    badge: '/favicon.ico',
+    vibrate: [100, 50, 100],
+    data: { url: data.url || '/' },
+    actions: data.actions || []
+  };
+  
+  event.waitUntil(
+    self.registration.showNotification(data.title || 'TravelHR', options)
+  );
+});
+
+self.addEventListener('notificationclick', (event) => {
+  event.notification.close();
+  event.waitUntil(
+    self.clients.openWindow(event.notification.data.url)
+  );
+});
+
+console.log('[SW] Service Worker v2 loaded');
