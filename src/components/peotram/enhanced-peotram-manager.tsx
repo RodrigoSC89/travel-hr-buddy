@@ -27,6 +27,7 @@ const PeotramOCRProcessor = lazy(() => import("./peotram-ocr-processor").then(m 
 const PeotramChecklistVersionManager = lazy(() => import("./peotram-checklist-version-manager").then(m => ({ default: m.PeotramChecklistVersionManager })));
 const PeotramAdvancedAnalytics = lazy(() => import("./peotram-advanced-analytics").then(m => ({ default: m.PeotramAdvancedAnalytics })));
 const PeotramPredictiveAnalytics = lazy(() => import("./peotram-predictive-analytics").then(m => ({ default: m.PeotramPredictiveAnalytics })));
+const PeotramCNPJHistory = lazy(() => import("./peotram-cnpj-history").then(m => ({ default: m.PeotramCNPJHistory })));
 
 import { Button } from "@/components/ui/button";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
@@ -325,7 +326,7 @@ export const EnhancedPeotramManager: React.FC = () => {
 
       {/* Main Content */}
       <Tabs value={activeView} onValueChange={setActiveView} className="space-y-6">
-        <TabsList className="grid w-full grid-cols-6 bg-muted/50">
+        <TabsList className="grid w-full grid-cols-7 bg-muted/50">
           <TabsTrigger value="dashboard" className="flex items-center gap-2">
             <BarChart3 className="w-4 h-4" />
             Dashboard
@@ -333,6 +334,10 @@ export const EnhancedPeotramManager: React.FC = () => {
           <TabsTrigger value="audits" className="flex items-center gap-2">
             <FileCheck className="w-4 h-4" />
             Auditorias
+          </TabsTrigger>
+          <TabsTrigger value="cnpj-history" className="flex items-center gap-2">
+            <Building className="w-4 h-4" />
+            Histórico CNPJ
           </TabsTrigger>
           <TabsTrigger value="ocr" className="flex items-center gap-2">
             <Upload className="w-4 h-4" />
