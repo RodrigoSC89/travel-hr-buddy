@@ -8,6 +8,7 @@ import { Badge } from "@/components/ui/badge";
 import { Shield, Wrench, Users, Box, Brain, Zap, Ship, Sparkles, Leaf, AlertTriangle, GraduationCap, Plane, ShoppingCart } from "lucide-react";
 import { Link, useNavigate } from "react-router-dom";
 import { usePreviewSafeMode } from "@/hooks/qa/usePreviewSafeMode";
+import { WelcomeOnboarding } from "@/components/onboarding/WelcomeOnboarding";
 
 // PATCH 584: Split Index into optimized subcomponents
 import { KPIGrid } from "@/components/dashboard/index/KPIGrid";
@@ -159,6 +160,9 @@ const Index = () => {
 
   return (
     <>
+      {/* Onboarding para novos usuários */}
+      <WelcomeOnboarding />
+      
       <Helmet>
         <title>Dashboard Executivo | Nautilus One - Sistema Marítimo Corporativo</title>
         <meta name="description" content="Visão estratégica e métricas em tempo real do Sistema Nautilus One. Gerencie operações marítimas, manutenção, compliance e analytics com IA avançada." />
