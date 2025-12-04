@@ -16,29 +16,29 @@ interface ConnectionInfo {
   isOnline: boolean;
 }
 
-interface NetworkInformation extends EventTarget {
-  effectiveType: "slow-2g" | "2g" | "3g" | "4g";
-  downlink: number;
-  rtt: number;
-  saveData: boolean;
-  addEventListener(type: "change", listener: () => void): void;
-  removeEventListener(type: "change", listener: () => void): void;
+// Network Information API types (without global declaration to avoid conflicts)
+interface NetworkInformationType {
+  effectiveType?: "slow-2g" | "2g" | "3g" | "4g";
+  downlink?: number;
+  rtt?: number;
+  saveData?: boolean;
+  addEventListener?: (type: string, listener: () => void) => void;
+  removeEventListener?: (type: string, listener: () => void) => void;
 }
 
-declare global {
-  interface Navigator {
-    connection?: NetworkInformation;
-    mozConnection?: NetworkInformation;
-    webkitConnection?: NetworkInformation;
-  }
+interface NavigatorWithConnection extends Navigator {
+  connection?: NetworkInformationType;
+  mozConnection?: NetworkInformationType;
+  webkitConnection?: NetworkInformationType;
 }
 
-const getConnection = (): NetworkInformation | undefined => {
-  return navigator.connection || navigator.mozConnection || navigator.webkitConnection;
+const getConnection = (): NetworkInformationType | undefined => {
+  const nav = navigator as NavigatorWithConnection;
+  return nav.connection || nav.mozConnection || nav.webkitConnection;
 };
 
 const getQuality = (effectiveType: string, rtt: number): ConnectionQuality => {
-  if (!navigator.onLine) return "offline";
+  if (typeof navigator !== "undefined" && !navigator.onLine) return "offline";
   
   // Based on Network Information API
   if (effectiveType === "4g" && rtt < 100) return "fast";
@@ -52,19 +52,13 @@ const getQuality = (effectiveType: string, rtt: number): ConnectionQuality => {
 };
 
 export function useConnectionSpeed(): ConnectionInfo {
-  const [connectionInfo, setConnectionInfo] = useState<ConnectionInfo>(() => {
-    const connection = getConnection();
-    const effectiveType = connection?.effectiveType || "4g";
-    const rtt = connection?.rtt || 50;
-    
-    return {
-      quality: getQuality(effectiveType, rtt),
-      effectiveType,
-      downlink: connection?.downlink || 10,
-      rtt,
-      saveData: connection?.saveData || false,
-      isOnline: navigator.onLine,
-    };
+  const [connectionInfo, setConnectionInfo] = useState<ConnectionInfo>({
+    quality: "moderate",
+    effectiveType: "4g",
+    downlink: 10,
+    rtt: 50,
+    saveData: false,
+    isOnline: typeof navigator !== "undefined" ? navigator.onLine : true,
   });
 
   const updateConnectionInfo = useCallback(() => {
@@ -78,28 +72,35 @@ export function useConnectionSpeed(): ConnectionInfo {
       downlink: connection?.downlink || 10,
       rtt,
       saveData: connection?.saveData || false,
-      isOnline: navigator.onLine,
+      isOnline: typeof navigator !== "undefined" ? navigator.onLine : true,
     });
   }, []);
 
   useEffect(() => {
+    // Initialize on mount
+    updateConnectionInfo();
+    
     const connection = getConnection();
     
     // Listen for connection changes
-    if (connection) {
+    if (connection?.addEventListener) {
       connection.addEventListener("change", updateConnectionInfo);
     }
     
     // Listen for online/offline events
-    window.addEventListener("online", updateConnectionInfo);
-    window.addEventListener("offline", updateConnectionInfo);
+    if (typeof window !== "undefined") {
+      window.addEventListener("online", updateConnectionInfo);
+      window.addEventListener("offline", updateConnectionInfo);
+    }
     
     return () => {
-      if (connection) {
+      if (connection?.removeEventListener) {
         connection.removeEventListener("change", updateConnectionInfo);
       }
-      window.removeEventListener("online", updateConnectionInfo);
-      window.removeEventListener("offline", updateConnectionInfo);
+      if (typeof window !== "undefined") {
+        window.removeEventListener("online", updateConnectionInfo);
+        window.removeEventListener("offline", updateConnectionInfo);
+      }
     };
   }, [updateConnectionInfo]);
 
