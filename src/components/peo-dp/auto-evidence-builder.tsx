@@ -30,8 +30,12 @@ import {
   Archive,
   Layers,
   Target,
-  BookOpen
+  BookOpen,
+  Brain,
+  Sparkles,
+  Loader2
 } from "lucide-react";
+import { useAIAdvisor } from "@/hooks/useAIAdvisor";
 
 interface EvidenceItem {
   id: string;
@@ -132,6 +136,13 @@ export const AutoEvidenceBuilder: React.FC = () => {
   const [searchTerm, setSearchTerm] = useState("");
   const [selectedItems, setSelectedItems] = useState<string[]>([]);
   const [activeTab, setActiveTab] = useState("packages");
+  const [aiSummaries, setAiSummaries] = useState<Record<string, string>>({});
+  const [generatingSummary, setGeneratingSummary] = useState<string | null>(null);
+
+  const { generateEvidence, loading: aiLoading } = useAIAdvisor({
+    profile: "inspector",
+    language: "pt-BR",
+  });
 
   const filteredItems = evidenceItems.filter(item =>
     item.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
@@ -153,6 +164,28 @@ export const AutoEvidenceBuilder: React.FC = () => {
 
   const handleAutoCollect = () => {
     toast.success("Coletando evidências automaticamente dos módulos...");
+  };
+
+  const handleGenerateAISummary = async (pkg: EvidencePackage) => {
+    setGeneratingSummary(pkg.id);
+    try {
+      const eventData = {
+        type: pkg.type,
+        name: pkg.name,
+        date: pkg.createdAt,
+        vessel: "MV Atlantic Explorer",
+        description: `Pacote de evidências contendo ${pkg.items.length} documentos para ${pkg.targetAudience}. Status: ${pkg.status}. Completude: ${pkg.completeness}%.`,
+        items: pkg.items.map(i => ({ name: i.name, type: i.type, status: i.status })),
+      };
+      
+      const summary = await generateEvidence(eventData);
+      setAiSummaries(prev => ({ ...prev, [pkg.id]: summary }));
+      toast.success("Resumo técnico gerado com sucesso!");
+    } catch (error) {
+      toast.error("Erro ao gerar resumo");
+    } finally {
+      setGeneratingSummary(null);
+    }
   };
 
   const getStatusBadge = (status: string) => {
@@ -324,6 +357,19 @@ export const AutoEvidenceBuilder: React.FC = () => {
                     </div>
 
                     <div className="flex flex-col gap-2 ml-4">
+                      <Button 
+                        size="sm" 
+                        variant="outline" 
+                        onClick={() => handleGenerateAISummary(pkg)}
+                        disabled={generatingSummary === pkg.id}
+                      >
+                        {generatingSummary === pkg.id ? (
+                          <Loader2 className="w-3 h-3 mr-1 animate-spin" />
+                        ) : (
+                          <Brain className="w-3 h-3 mr-1" />
+                        )}
+                        Resumo IA
+                      </Button>
                       <Button size="sm" variant="outline" onClick={() => handleGeneratePDF(pkg)}>
                         <Download className="w-3 h-3 mr-1" />PDF
                       </Button>
@@ -337,6 +383,21 @@ export const AutoEvidenceBuilder: React.FC = () => {
                       )}
                     </div>
                   </div>
+                  
+                  {/* AI Summary Section */}
+                  {aiSummaries[pkg.id] && (
+                    <div className="mt-4 p-4 bg-primary/5 rounded-lg border border-primary/20">
+                      <div className="flex items-center gap-2 mb-2">
+                        <Sparkles className="h-4 w-4 text-primary" />
+                        <span className="font-medium text-sm">Resumo Técnico (IA)</span>
+                      </div>
+                      <div className="prose prose-sm dark:prose-invert max-w-none">
+                        <pre className="whitespace-pre-wrap text-xs bg-background/50 p-3 rounded">
+                          {aiSummaries[pkg.id]}
+                        </pre>
+                      </div>
+                    </div>
+                  )}
                 </CardContent>
               </Card>
             ))}

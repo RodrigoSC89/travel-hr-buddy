@@ -540,3 +540,11 @@ comment = "DGNSS satellite tracking API - GPS, GLONASS, Galileo, SBAS"
 [functions.mmi-advanced-copilot]
 verify_jwt = false
 comment = "MMI Advanced Copilot - Multimodal AI assistant with voice, memory, and proactive suggestions"
+
+# ============================================
+# PEO-DP AI ADVISOR
+# ============================================
+
+[functions.ai-advisor]
+verify_jwt = false
+comment = "PEO-DP AI Advisor - Adaptive copilot with profile-based responses for DPO, Inspector, Manager"
