@@ -1,6 +1,6 @@
 /**
- * UI Components Index - Performance & Accessibility
- * Central export for optimized UI components
+ * UI Components Performance Exports
+ * Central export for all UI components
  */
 
 // Connection-aware components
@@ -24,3 +24,24 @@ export { ActionButton } from './ActionButton';
 
 // Status
 export { SystemStatusIndicator } from './SystemStatusIndicator';
+
+// Micro-interactions
+export { 
+  SuccessAnimation, 
+  Ripple, 
+  PulseDot, 
+  StatusIndicator, 
+  NotificationBadge,
+  LoadingDots,
+  TypingIndicator,
+  ProgressRing
+} from './MicroInteractions';
+
+// Feedback
+export {
+  InlineFeedback,
+  SaveIndicator,
+  CharacterCounter,
+  FieldFeedback,
+  ActionResult
+} from './FeedbackComponents';
