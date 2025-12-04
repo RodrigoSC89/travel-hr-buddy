@@ -34,7 +34,12 @@ export const UserMenu: React.FC = () => {
   return (
     <DropdownMenu>
       <DropdownMenuTrigger asChild>
-        <Button variant="ghost" className="relative h-8 w-8 rounded-full hover:bg-accent transition-colors">
+        <Button 
+          type="button"
+          variant="ghost" 
+          className="relative h-9 w-9 rounded-full cursor-pointer hover:bg-accent transition-colors"
+          aria-label="Menu do usuário"
+        >
           <Avatar className="h-8 w-8 border-2 border-border">
             <AvatarImage src={user.user_metadata?.avatar_url} alt="Avatar" />
             <AvatarFallback className="bg-primary text-primary-foreground text-xs font-medium">

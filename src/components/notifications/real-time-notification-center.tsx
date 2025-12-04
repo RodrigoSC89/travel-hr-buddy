@@ -303,16 +303,21 @@ export const RealTimeNotificationCenter: React.FC = () => {
     <Popover open={isOpen} onOpenChange={setIsOpen}>
       <PopoverTrigger asChild>
         <Button 
+          type="button"
           variant="ghost" 
           size="sm"
-          className="relative p-2 hover:bg-accent transition-colors"
-          aria-label="Notificações"
+          className="relative p-2 h-9 w-9 cursor-pointer hover:bg-accent transition-colors"
+          aria-label="Abrir notificações"
+          onClick={(e) => {
+            e.preventDefault();
+            setIsOpen(!isOpen);
+          }}
         >
           <Bell className="h-5 w-5 text-foreground" />
           {totalUnread > 0 && (
             <Badge 
               variant="destructive" 
-              className="absolute -top-1 -right-1 h-5 w-5 rounded-full p-0 flex items-center justify-center text-xs shadow-sm"
+              className="absolute -top-1 -right-1 h-5 w-5 rounded-full p-0 flex items-center justify-center text-xs shadow-sm pointer-events-none"
             >
               {totalUnread > 9 ? "9+" : totalUnread}
             </Badge>
@@ -321,7 +326,7 @@ export const RealTimeNotificationCenter: React.FC = () => {
       </PopoverTrigger>
       
       <PopoverContent 
-        className="w-96 p-0" 
+        className="w-96 p-0 z-[110] bg-popover border-border shadow-xl" 
         align="end"
         side="bottom"
         sideOffset={8}
