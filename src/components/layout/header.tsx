@@ -7,6 +7,7 @@ import { UserMenu } from "@/components/auth/user-menu";
 import { SimpleGlobalSearch } from "@/components/ui/simple-global-search";
 import { OrganizationSelector } from "@/components/admin/organization-selector";
 import { SystemStatusIndicator } from "@/components/ui/SystemStatusIndicator";
+import { OfflineSyncIndicator } from "@/components/ui/OfflineSyncIndicator";
 import { useHighContrastTheme } from "@/hooks/useHighContrastTheme";
 import { useNavigate } from "react-router-dom";
 import { Settings } from "lucide-react";
@@ -34,6 +35,7 @@ export const Header: React.FC = () => {
           </div>
           
           <nav className="flex items-center space-x-2">
+            <OfflineSyncIndicator />
             <SystemStatusIndicator />
             <OrganizationSelector />
             <RealTimeNotificationCenter />

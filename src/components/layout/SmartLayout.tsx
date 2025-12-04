@@ -5,6 +5,7 @@ import { SmartHeader } from "@/components/layout/SmartHeader";
 import { ThemeProvider } from "@/components/layout/theme-provider";
 import { Toaster } from "@/components/ui/sonner";
 import { mobileClasses } from "@/styles/mobile-ui-kit";
+import { SkipToContent } from "@/components/ui/AccessibleButton";
 
 // Simple loading fallback component
 const LoadingFallback = () => (
@@ -19,6 +20,9 @@ const LoadingFallback = () => (
 export function SmartLayout() {
   return (
     <ThemeProvider defaultTheme="dark" storageKey="nautilus-ui-theme">
+      {/* Skip to content link for accessibility */}
+      <SkipToContent targetId="main-content" />
+      
       <div className={`flex h-screen w-full overflow-hidden bg-background ${mobileClasses.safeAreaTop} ${mobileClasses.safeAreaBottom}`}>
         {/* Smart Sidebar - hidden on mobile by default */}
         <div className={mobileClasses.hideOnMobile}>
@@ -31,7 +35,11 @@ export function SmartLayout() {
           <SmartHeader />
 
           {/* Page Content - responsive padding */}
-          <main className={`flex-1 overflow-y-auto bg-zinc-50 dark:bg-zinc-900 ${mobileClasses.responsivePadding}`}>
+          <main 
+            id="main-content"
+            tabIndex={-1}
+            className={`flex-1 overflow-y-auto bg-zinc-50 dark:bg-zinc-900 ${mobileClasses.responsivePadding} focus:outline-none`}
+          >
             <Suspense fallback={<LoadingFallback />}>
               <Outlet />
             </Suspense>
