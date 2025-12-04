@@ -1,6 +1,11 @@
+/**
+ * MetricCard Component - PATCH 754
+ * Enhanced with better contrast and accessibility
+ */
+
 import React from "react";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
-import { LucideIcon } from "lucide-react";
+import { LucideIcon, TrendingUp, TrendingDown } from "lucide-react";
 import { cn } from "@/lib/utils";
 
 export interface MetricCardProps {
@@ -17,38 +22,41 @@ export interface MetricCardProps {
   variant?: "default" | "ocean" | "success" | "warning" | "danger";
   className?: string;
   iconClassName?: string;
+  loading?: boolean;
 }
 
+// PATCH 754: Enhanced contrast styles
 const variantStyles = {
-  default: "bg-card border border-border hover:shadow-md",
-  ocean: "gradient-ocean text-azure-50 border-0 hover:shadow-nautical",
-  success: "bg-success/10 border border-success/20 hover:shadow-lg",
-  warning: "bg-warning/10 border border-warning/20 hover:shadow-lg",
-  danger: "bg-danger/10 border border-danger/20 hover:shadow-lg",
+  default: "bg-card border border-border/80 hover:shadow-md hover:border-border",
+  ocean: "bg-gradient-ocean text-white border-0 hover:shadow-azure",
+  success: "bg-success/15 border border-success/30 hover:shadow-lg hover:bg-success/20",
+  warning: "bg-warning/15 border border-warning/30 hover:shadow-lg hover:bg-warning/20",
+  danger: "bg-danger/15 border border-danger/30 hover:shadow-lg hover:bg-danger/20",
 };
 
 const iconVariantStyles = {
-  default: "bg-primary/10 text-primary",
-  ocean: "bg-azure-100/20 text-azure-50",
-  success: "bg-success/20 text-success",
-  warning: "bg-warning/20 text-warning",
-  danger: "bg-danger/20 text-danger",
+  default: "bg-primary/15 text-primary",
+  ocean: "bg-white/20 text-white",
+  success: "bg-success/25 text-success",
+  warning: "bg-warning/25 text-warning",
+  danger: "bg-danger/25 text-danger",
 };
 
+// PATCH 754: Improved text contrast
 const valueVariantStyles = {
-  default: "text-foreground",
-  ocean: "text-azure-50",
-  success: "text-success-foreground",
-  warning: "text-warning-foreground",
-  danger: "text-danger-foreground",
+  default: "text-foreground font-bold",
+  ocean: "text-white font-bold",
+  success: "text-foreground font-bold",
+  warning: "text-foreground font-bold",
+  danger: "text-foreground font-bold",
 };
 
 const descriptionVariantStyles = {
-  default: "text-muted-foreground",
-  ocean: "text-azure-50/80",
-  success: "text-success-foreground/80",
-  warning: "text-warning-foreground/80",
-  danger: "text-danger-foreground/80",
+  default: "text-foreground/70",
+  ocean: "text-white/90",
+  success: "text-foreground/70",
+  warning: "text-foreground/70",
+  danger: "text-foreground/70",
 };
 
 /**

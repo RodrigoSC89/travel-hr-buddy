@@ -1,13 +1,15 @@
 /**
- * Professional Header Component
- * Header profissional reutilizável com logomarca Nautilus
+ * Professional Header Component - PATCH 754
+ * Header profissional com indicador de conexão
  */
 
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
-import { Clock, Download, RefreshCw } from "lucide-react";
+import { Download, RefreshCw } from "lucide-react";
 import { motion } from "framer-motion";
 import nautilusLogo from "@/assets/nautilus-logo.png";
+import { ConnectionIndicator } from "@/components/ui/ConnectionIndicator";
+import { useLightMode } from "@/hooks/useConnectionAdaptive";
 
 interface ProfessionalHeaderProps {
   title: string;
@@ -24,12 +26,14 @@ export function ProfessionalHeader({
   showRealTime = true,
   actions 
 }: ProfessionalHeaderProps) {
+  const isLightMode = useLightMode();
+  
   return (
     <motion.div
-      initial={{ opacity: 0, y: -20 }}
-      animate={{ opacity: 1, y: 0 }}
-      transition={{ duration: 0.4 }}
-      className="relative overflow-hidden rounded-2xl bg-gradient-to-br from-primary/10 via-background to-background border border-primary/20 p-8 mb-6"
+      initial={isLightMode ? undefined : { opacity: 0, y: -20 }}
+      animate={isLightMode ? undefined : { opacity: 1, y: 0 }}
+      transition={isLightMode ? undefined : { duration: 0.4 }}
+      className="relative overflow-hidden rounded-2xl bg-gradient-to-br from-primary/10 via-background to-background border border-primary/20 p-6 md:p-8 mb-6"
     >
       {/* Decorative elements */}
       <div className="absolute top-0 right-0 w-96 h-96 bg-gradient-to-br from-primary/5 to-transparent rounded-full blur-3xl -mr-48 -mt-48" />
@@ -65,22 +69,25 @@ export function ProfessionalHeader({
         </div>
 
         <div className="flex items-center gap-3">
+          {/* Connection indicator */}
+          <ConnectionIndicator size="sm" />
+          
           {showRealTime && (
-            <Badge variant="outline" className="gap-2 px-4 py-2 text-sm">
-              <div className="h-2 w-2 rounded-full bg-green-500 animate-pulse" />
+            <Badge variant="outline" className="gap-2 px-3 py-1.5 text-sm hidden sm:flex">
+              <div className="h-2 w-2 rounded-full bg-success animate-pulse" />
               Tempo Real
             </Badge>
           )}
           
           {actions || (
             <div className="flex gap-2">
-              <Button variant="outline" size="sm" className="gap-2">
+              <Button variant="outline" size="sm" className="gap-2 hidden md:flex">
                 <RefreshCw className="h-4 w-4" />
-                Atualizar
+                <span className="hidden lg:inline">Atualizar</span>
               </Button>
-              <Button variant="outline" size="sm" className="gap-2">
+              <Button variant="outline" size="sm" className="gap-2 hidden md:flex">
                 <Download className="h-4 w-4" />
-                Exportar
+                <span className="hidden lg:inline">Exportar</span>
               </Button>
             </div>
           )}
