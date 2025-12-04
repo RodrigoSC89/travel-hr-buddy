@@ -3,7 +3,7 @@
  * Automatic WebP/AVIF conversion and lazy loading for 2Mbps networks
  */
 
-import { useNetworkAware } from '@/mobile/hooks/useNetworkAware';
+// Note: No React hook imports here - this runs before React initialization
 
 export interface ImageOptimizationConfig {
   quality: number;
