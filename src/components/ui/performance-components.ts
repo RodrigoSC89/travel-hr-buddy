@@ -45,3 +45,15 @@ export {
   FieldFeedback,
   ActionResult
 } from './FeedbackComponents';
+
+// Professional components
+export {
+  MetricCard,
+  ProfessionalCard,
+  StatusBadge,
+  ModuleHeader,
+  EmptyState as ProfessionalEmptyState,
+  StatGrid,
+  Divider,
+  ChartContainer
+} from './ProfessionalCard';
