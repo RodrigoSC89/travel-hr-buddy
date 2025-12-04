@@ -5,6 +5,8 @@ import { ErrorBoundary } from "./components/layout/error-boundary";
 import { AuthProvider } from "./contexts/AuthContext";
 import { TenantProvider } from "./contexts/TenantContext";
 import { OrganizationProvider } from "./contexts/OrganizationContext";
+import { PerformanceProvider } from "./contexts/PerformanceContext";
+import { AccessibilityProvider } from "./components/AccessibilityProvider";
 import { SmartLayout } from "./components/layout/SmartLayout";
 import { initializeMonitoring } from "@/lib/monitoring/init";
 import { logger } from "@/lib/logger";
@@ -64,10 +66,12 @@ function App() {
   return (
     <ErrorBoundary>
       <QueryClientProvider client={queryClient}>
-        <AuthProvider>
-          <TenantProvider>
-            <OrganizationProvider>
-              <RouterType>
+        <PerformanceProvider>
+          <AccessibilityProvider>
+            <AuthProvider>
+              <TenantProvider>
+                <OrganizationProvider>
+                  <RouterType>
                 <CommandPalette />
                 <OfflineBanner />
                 <ErrorDebugBanner />
@@ -177,10 +181,12 @@ function App() {
                     <WebVitalsOverlay position="bottom-right" />
                   </Suspense>
                 )}
-              </RouterType>
-            </OrganizationProvider>
-          </TenantProvider>
-        </AuthProvider>
+                  </RouterType>
+                </OrganizationProvider>
+              </TenantProvider>
+            </AuthProvider>
+          </AccessibilityProvider>
+        </PerformanceProvider>
       </QueryClientProvider>
     </ErrorBoundary>
   );
