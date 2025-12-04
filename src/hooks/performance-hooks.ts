@@ -35,3 +35,7 @@ export { useForm, createChangeHandler } from './use-form';
 
 // Confirmation dialogs
 export { useConfirmation, ConfirmationDialog } from './use-confirmation';
+
+// Analytics
+export { useAnalytics, trackEvent, trackPerformance } from './use-analytics';
+export type { AnalyticsEvent, AnalyticsEventType } from './use-analytics';
