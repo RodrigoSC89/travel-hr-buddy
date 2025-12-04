@@ -1,10 +1,17 @@
 /**
- * Performance Utilities Index - PATCH 750
+ * Performance Utilities Index - PATCH 751
  * Central export for all performance utilities
  */
 
 // Connection awareness
 export * from './connection-aware';
+
+// Request deduplication and optimization
+export { 
+  requestDeduplicator, 
+  RequestBatcher, 
+  fetchWithRetry 
+} from './request-deduplication';
 
 // Existing utilities
 export { offlineManager, cachedFetch } from './offline-manager';
