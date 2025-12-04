@@ -16,6 +16,9 @@ import { MLValidationIMCA } from "./ml-validation-imca";
 import { SmartDPLogbook } from "./smart-dp-logbook";
 import { LessonsLearnedCenter } from "./lessons-learned-center";
 import { DPCompetenceHub } from "./dp-competence-hub";
+import { OperationalWindowMonitor } from "./operational-window-monitor";
+import { DPAIAdvisor } from "./dp-ai-advisor";
+import { ClientAssurancePortal } from "./client-assurance-portal";
 import {
   LayoutDashboard,
   FileText,
@@ -310,46 +313,42 @@ export const PeoDpManager: React.FC = () => {
       {/* Main Content */}
       <Tabs value={activeView} onValueChange={(v) => setActiveView(v as any)} className="space-y-6">
         <div className="flex items-center justify-between">
-          <TabsList className="grid w-full max-w-4xl grid-cols-10">
-            <TabsTrigger value="dashboard" className="flex items-center gap-1 text-xs">
-              <LayoutDashboard className="h-3 w-3" />
-              Dashboard
+          <TabsList className="flex flex-wrap gap-1 h-auto p-1">
+            <TabsTrigger value="dashboard" className="flex items-center gap-1 text-xs px-2 py-1">
+              <LayoutDashboard className="h-3 w-3" />Dashboard
             </TabsTrigger>
-            <TabsTrigger value="plans" className="flex items-center gap-1 text-xs">
-              <FileText className="h-3 w-3" />
-              Planos
+            <TabsTrigger value="plans" className="flex items-center gap-1 text-xs px-2 py-1">
+              <FileText className="h-3 w-3" />Planos
             </TabsTrigger>
-            <TabsTrigger value="audits" className="flex items-center gap-1 text-xs">
-              <ClipboardCheck className="h-3 w-3" />
-              Auditorias
+            <TabsTrigger value="audits" className="flex items-center gap-1 text-xs px-2 py-1">
+              <ClipboardCheck className="h-3 w-3" />Auditorias
             </TabsTrigger>
-            <TabsTrigger value="logbook" className="flex items-center gap-1 text-xs">
-              <FileText className="h-3 w-3" />
-              Logbook
+            <TabsTrigger value="logbook" className="flex items-center gap-1 text-xs px-2 py-1">
+              <FileText className="h-3 w-3" />Logbook
             </TabsTrigger>
-            <TabsTrigger value="lessons" className="flex items-center gap-1 text-xs">
-              <Target className="h-3 w-3" />
-              Lições
+            <TabsTrigger value="lessons" className="flex items-center gap-1 text-xs px-2 py-1">
+              <Target className="h-3 w-3" />Lições
             </TabsTrigger>
-            <TabsTrigger value="competence" className="flex items-center gap-1 text-xs">
-              <GraduationCap className="h-3 w-3" />
-              CPD
+            <TabsTrigger value="competence" className="flex items-center gap-1 text-xs px-2 py-1">
+              <GraduationCap className="h-3 w-3" />CPD
             </TabsTrigger>
-            <TabsTrigger value="fmea" className="flex items-center gap-1 text-xs">
-              <Shield className="h-3 w-3" />
-              FMEA
+            <TabsTrigger value="window" className="flex items-center gap-1 text-xs px-2 py-1">
+              <Radio className="h-3 w-3" />Janela Op.
             </TabsTrigger>
-            <TabsTrigger value="validation" className="flex items-center gap-1 text-xs">
-              <Target className="h-3 w-3" />
-              ML
+            <TabsTrigger value="advisor" className="flex items-center gap-1 text-xs px-2 py-1">
+              <Target className="h-3 w-3" />AI Advisor
             </TabsTrigger>
-            <TabsTrigger value="checklist" className="flex items-center gap-1 text-xs">
-              <Settings className="h-3 w-3" />
-              Checklist
+            <TabsTrigger value="client" className="flex items-center gap-1 text-xs px-2 py-1">
+              <Users className="h-3 w-3" />Cliente
             </TabsTrigger>
-            <TabsTrigger value="analytics" className="flex items-center gap-1 text-xs">
-              <TrendingUp className="h-3 w-3" />
-              Analytics
+            <TabsTrigger value="fmea" className="flex items-center gap-1 text-xs px-2 py-1">
+              <Shield className="h-3 w-3" />FMEA
+            </TabsTrigger>
+            <TabsTrigger value="validation" className="flex items-center gap-1 text-xs px-2 py-1">
+              <Target className="h-3 w-3" />ML
+            </TabsTrigger>
+            <TabsTrigger value="checklist" className="flex items-center gap-1 text-xs px-2 py-1">
+              <Settings className="h-3 w-3" />Checklist
             </TabsTrigger>
           </TabsList>
 
@@ -639,20 +638,19 @@ export const PeoDpManager: React.FC = () => {
           <MLValidationIMCA />
         </TabsContent>
 
-        {/* Analytics View */}
-        <TabsContent value="analytics" className="space-y-4">
-          <Card>
-            <CardHeader>
-              <CardTitle>Analytics e Insights</CardTitle>
-              <CardDescription>
-                Análise avançada de compliance e performance
-              </CardDescription>
-            </CardHeader>
-            <CardContent className="py-12 text-center text-muted-foreground">
-              <TrendingUp className="h-12 w-12 mx-auto mb-3 opacity-50" />
-              <p>Dashboard de analytics será implementado em breve</p>
-            </CardContent>
-          </Card>
+        {/* Operational Window Monitor */}
+        <TabsContent value="window" className="space-y-4">
+          <OperationalWindowMonitor />
+        </TabsContent>
+
+        {/* AI Advisor */}
+        <TabsContent value="advisor" className="space-y-4">
+          <DPAIAdvisor />
+        </TabsContent>
+
+        {/* Client Assurance Portal */}
+        <TabsContent value="client" className="space-y-4">
+          <ClientAssurancePortal />
         </TabsContent>
       </Tabs>
 
