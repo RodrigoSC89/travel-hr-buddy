@@ -22,6 +22,11 @@ import { ClientAssurancePortal } from "./client-assurance-portal";
 import { DPReplaySystem } from "./dp-replay-system";
 import { SIMOPSManager } from "./simops-manager";
 import { AutoEvidenceBuilder } from "./auto-evidence-builder";
+import { ComputerVisionInspector } from "./computer-vision-inspector";
+import { POPsLibrary } from "./pops-library";
+import { RegulatorPortal } from "./regulator-portal";
+import { AdaptiveAIAdvisor } from "./adaptive-ai-advisor";
+import { AISSimopsIntegration } from "./ais-simops-integration";
 import {
   LayoutDashboard,
   FileText,
@@ -41,7 +46,11 @@ import {
   Target,
   Shield,
   ClipboardCheck,
-  Ship
+  Ship,
+  Camera,
+  BookOpen,
+  Brain,
+  Radar
 } from "lucide-react";
 import { toast } from "sonner";
 import {
@@ -358,6 +367,21 @@ export const PeoDpManager: React.FC = () => {
             </TabsTrigger>
             <TabsTrigger value="evidence" className="flex items-center gap-1 text-xs px-2 py-1">
               <FileText className="h-3 w-3" />Evidências
+            </TabsTrigger>
+            <TabsTrigger value="vision" className="flex items-center gap-1 text-xs px-2 py-1">
+              <Camera className="h-3 w-3" />Visão
+            </TabsTrigger>
+            <TabsTrigger value="pops" className="flex items-center gap-1 text-xs px-2 py-1">
+              <BookOpen className="h-3 w-3" />POPs
+            </TabsTrigger>
+            <TabsTrigger value="regulator" className="flex items-center gap-1 text-xs px-2 py-1">
+              <Shield className="h-3 w-3" />Reguladores
+            </TabsTrigger>
+            <TabsTrigger value="ai-adaptive" className="flex items-center gap-1 text-xs px-2 py-1">
+              <Brain className="h-3 w-3" />AI Adapt.
+            </TabsTrigger>
+            <TabsTrigger value="ais" className="flex items-center gap-1 text-xs px-2 py-1">
+              <Radar className="h-3 w-3" />AIS
             </TabsTrigger>
             <TabsTrigger value="checklist" className="flex items-center gap-1 text-xs px-2 py-1">
               <Settings className="h-3 w-3" />Checklist
