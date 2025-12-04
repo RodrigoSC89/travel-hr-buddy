@@ -104,7 +104,7 @@ class DataCompressionService {
   private async decompressWithStream(data: Uint8Array): Promise<Uint8Array> {
     const stream = new DecompressionStream("gzip");
     const writer = stream.writable.getWriter();
-    writer.write(data);
+    writer.write(data as unknown as BufferSource);
     writer.close();
 
     const reader = stream.readable.getReader();
