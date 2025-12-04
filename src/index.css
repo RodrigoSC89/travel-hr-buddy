@@ -1,8 +1,10 @@
-@import url("https://fonts.googleapis.com/css2?family=Inter:ital,opsz,wght@0,14..32,200;0,14..32,300;0,14..32,400;0,14..32,500;0,14..32,600;0,14..32,700;0,14..32,800;0,14..32,900;1,14..32,200;1,14..32,300;1,14..32,400;1,14..32,500;1,14..32,600;1,14..32,700;1,14..32,800;1,14..32,900&display=swap");
-@import url("https://fonts.googleapis.com/css2?family=Orbitron:wght@400;500;600;700;800;900&display=swap");
-@import url("https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,500;0,600;0,700;0,800;1,400;1,500;1,600;1,700&display=swap");
+/* PERFORMANCE PATCH: Otimização de fontes para 4G instável */
+/* Carrega apenas pesos essenciais com font-display: swap */
+@import url("https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap");
+
 @import "./styles/theme.css";
 @import "./styles/professional-theme.css";
+@import "./styles/contrast-fixes.css";
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
