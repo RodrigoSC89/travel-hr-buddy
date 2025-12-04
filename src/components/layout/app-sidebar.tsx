@@ -177,38 +177,48 @@ const navigationItems = [
   },
   {
     title: "IA & Inovação",
-    url: "innovation",
+    url: "/innovation",
     icon: Bot,
     items: [
       {
+        title: "Dashboard IA",
+        url: "/ai-dashboard",
+        icon: Brain,
+      },
+      {
+        title: "Sugestões Workflow",
+        url: "/workflow-suggestions",
+        icon: Workflow,
+      },
+      {
+        title: "Métricas de Adoção",
+        url: "/ai-adoption",
+        icon: TrendingUp,
+      },
+      {
         title: "Assistente IA",
-        url: "innovation",
+        url: "/innovation",
         icon: Bot,
       },
       {
+        title: "AI Insights",
+        url: "/ai-insights",
+        icon: Brain,
+      },
+      {
         title: "Análise Preditiva",
-        url: "predictive-analytics",
+        url: "/predictive-analytics",
         icon: Brain,
       },
       {
         title: "Gamificação",
-        url: "gamification",
+        url: "/gamification",
         icon: Trophy,
       },
       {
-        title: "Realidade Aumentada",
-        url: "ar",
-        icon: Eye,
-      },
-      {
         title: "IoT Dashboard",
-        url: "iot",
+        url: "/iot",
         icon: Smartphone,
-      },
-      {
-        title: "Blockchain",
-        url: "blockchain",
-        icon: Shield,
       },
     ],
   },

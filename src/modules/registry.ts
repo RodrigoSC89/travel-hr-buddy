@@ -1225,6 +1225,51 @@ export const MODULE_REGISTRY: Record<string, ModuleDefinition> = {
     lazy: true,
     version: "1.0.0",
   },
+
+  // AI Dashboard Module - PATCH 653
+  "intelligence.ai-dashboard": {
+    id: "intelligence.ai-dashboard",
+    name: "Dashboard IA",
+    category: "intelligence",
+    path: "pages/ai/AIDashboard",
+    description: "Central de monitoramento de IA com métricas de adoção, sugestões de workflow e alertas do sistema",
+    status: "active",
+    completeness: "100%",
+    route: "/ai-dashboard",
+    icon: "Brain",
+    lazy: true,
+    version: "653.0",
+  },
+
+  // AI Workflow Suggestions Module - PATCH 653
+  "intelligence.workflow-suggestions": {
+    id: "intelligence.workflow-suggestions",
+    name: "Sugestões IA Workflow",
+    category: "intelligence",
+    path: "pages/ai/WorkflowSuggestions",
+    description: "Sugestões inteligentes geradas por IA para otimização de workflows",
+    status: "active",
+    completeness: "100%",
+    route: "/workflow-suggestions",
+    icon: "Lightbulb",
+    lazy: true,
+    version: "653.0",
+  },
+
+  // AI Adoption Metrics Module - PATCH 653
+  "intelligence.ai-adoption": {
+    id: "intelligence.ai-adoption",
+    name: "Métricas de Adoção IA",
+    category: "intelligence",
+    path: "pages/ai/AIAdoption",
+    description: "Scorecard e métricas de adoção do sistema de IA por módulo",
+    status: "active",
+    completeness: "100%",
+    route: "/ai-adoption",
+    icon: "TrendingUp",
+    lazy: true,
+    version: "653.0",
+  },
 };
 
 export function getModule(id: string): ModuleDefinition | undefined {
