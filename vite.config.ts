@@ -87,8 +87,8 @@ export default defineConfig(({ mode }) => {
           ]
         },
         workbox: {
-          maximumFileSizeToCacheInBytes: 10485760, // 10MB limit for PWA caching
-          globPatterns: ["**/*.{js,css,html,ico,png,svg,woff,woff2}"],
+          maximumFileSizeToCacheInBytes: 5242880, // 5MB limit for PWA caching (reduced for 2Mb connections)
+          globPatterns: ["**/*.{js,css,html,ico,svg,woff2}"], // Removed png, prefer webp
           // PATCH 587: Enhanced runtime caching strategies for better offline support
           runtimeCaching: [
             {
@@ -119,17 +119,17 @@ export default defineConfig(({ mode }) => {
                 }
               }
             },
-            // PATCH 587: API cache with network-first strategy
+            // PATCH 587: API cache with network-first strategy (optimized for 2Mb)
             {
               urlPattern: /\/api\/.*/i,
               handler: "NetworkFirst",
               options: {
                 cacheName: "api-cache",
                 expiration: {
-                  maxEntries: 100, // Increased from 50
-                  maxAgeSeconds: 60 * 10 // 10 minutes
+                  maxEntries: 50,
+                  maxAgeSeconds: 60 * 5 // 5 minutes - shorter TTL for bandwidth
                 },
-                networkTimeoutSeconds: 10,
+                networkTimeoutSeconds: 8, // Faster timeout for slow connections
                 plugins: [
                   {
                     cacheWillUpdate: async ({ response }) => {
@@ -143,17 +143,17 @@ export default defineConfig(({ mode }) => {
                 ]
               }
             },
-            // PATCH 587: Supabase API caching for offline resilience
+            // PATCH 587: Supabase API caching for offline resilience (optimized)
             {
               urlPattern: /^https:\/\/.*\.supabase\.co\/rest\/.*/i,
               handler: "NetworkFirst",
               options: {
                 cacheName: "supabase-api-cache",
                 expiration: {
-                  maxEntries: 200,
-                  maxAgeSeconds: 60 * 15 // 15 minutes
+                  maxEntries: 100, // Reduced for memory
+                  maxAgeSeconds: 60 * 10 // 10 minutes
                 },
-                networkTimeoutSeconds: 8,
+                networkTimeoutSeconds: 6, // Faster fallback to cache
                 plugins: [
                   {
                     cacheWillUpdate: async ({ response }) => {

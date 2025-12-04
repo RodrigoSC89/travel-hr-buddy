@@ -8,15 +8,14 @@
       "url": [
         "http://localhost:4173",
         "http://localhost:4173/dashboard",
-        "http://localhost:4173/admin/control-center",
-        "http://localhost:4173/admin/image-optimization"
+        "http://localhost:4173/hr/crew-management"
       ],
       "settings": {
         "preset": "desktop",
         "throttling": {
-          "rttMs": 40,
-          "throughputKbps": 10240,
-          "cpuSlowdownMultiplier": 1
+          "rttMs": 100,
+          "throughputKbps": 4096,
+          "cpuSlowdownMultiplier": 1.5
         },
         "screenEmulation": {
           "mobile": false,
