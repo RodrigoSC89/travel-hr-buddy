@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useCallback, useRef } from "react";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
@@ -59,8 +59,13 @@ export const BusinessKPIDashboard: React.FC = () => {
   const [isLoading, setIsLoading] = useState(false);
   const [lastUpdated, setLastUpdated] = useState<Date | null>(null);
   const { toast } = useToast();
+  
+  // Ref para evitar chamadas duplicadas
+  const loadingRef = useRef(false);
 
-  const loadKPIData = async () => {
+  const loadKPIData = useCallback(async () => {
+    if (loadingRef.current) return;
+    loadingRef.current = true;
     setIsLoading(true);
     try {
       // Simulate API call
@@ -168,12 +173,13 @@ export const BusinessKPIDashboard: React.FC = () => {
       });
     } finally {
       setIsLoading(false);
+      loadingRef.current = false;
     }
-  };
+  }, [toast]);
 
   useEffect(() => {
     loadKPIData();
-  }, []);
+  }, [loadKPIData]);
 
   const getChangeIcon = (type: "increase" | "decrease") => {
     return type === "increase" ? (

@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useCallback, useRef } from "react";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
@@ -216,8 +216,11 @@ const AIInsightsPanel: React.FC<{ profile: string }> = ({ profile }) => {
   const [insights, setInsights] = useState<AIInsight[]>([]);
   const [isGenerating, setIsGenerating] = useState(false);
   const { toast } = useToast();
+  const hasGeneratedRef = useRef(false);
+  const currentProfileRef = useRef(profile);
 
-  const generateInsights = async () => {
+  const generateInsights = useCallback(async () => {
+    if (isGenerating) return;
     setIsGenerating(true);
     
     // Simulate AI insights generation
@@ -273,11 +276,16 @@ const AIInsightsPanel: React.FC<{ profile: string }> = ({ profile }) => {
         description: `${sampleInsights.length} insights foram gerados com base nos dados atuais.`,
       });
     }, 2000);
-  };
+  }, [isGenerating, toast]);
 
   useEffect(() => {
-    generateInsights();
-  }, [profile]);
+    // Só gera se o profile mudou ou é a primeira vez
+    if (!hasGeneratedRef.current || currentProfileRef.current !== profile) {
+      hasGeneratedRef.current = true;
+      currentProfileRef.current = profile;
+      generateInsights();
+    }
+  }, [profile, generateInsights]);
 
   const getInsightIcon = (type: AIInsight["type"]) => {
     switch (type) {

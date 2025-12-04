@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useCallback, useRef } from "react";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
@@ -122,8 +122,14 @@ const StrategicDashboard: React.FC = () => {
     return metricsData[profile as keyof typeof metricsData] || metricsData.admin;
   };
 
-  // Load dashboard data
-  const loadDashboardData = async () => {
+  // Ref para evitar chamadas duplicadas
+  const loadingRef = useRef(false);
+
+  // Load dashboard data - memoizado para evitar loops
+  const loadDashboardData = useCallback(async () => {
+    if (loadingRef.current) return;
+    loadingRef.current = true;
+    
     try {
       setIsLoading(true);
       
@@ -215,8 +221,9 @@ const StrategicDashboard: React.FC = () => {
       });
     } finally {
       setIsLoading(false);
+      loadingRef.current = false;
     }
-  };
+  }, [selectedProfile, toast]);
 
   // Refresh dashboard
   const refreshDashboard = () => {
@@ -306,13 +313,15 @@ const StrategicDashboard: React.FC = () => {
   useEffect(() => {
     loadDashboardData();
     
-    // Set up real-time updates
+    // Set up real-time updates (apenas se não estiver carregando)
     const interval = setInterval(() => {
-      loadDashboardData();
+      if (!loadingRef.current) {
+        loadDashboardData();
+      }
     }, 30000); // 30 seconds
 
     return () => clearInterval(interval);
-  }, [selectedProfile]);
+  }, [loadDashboardData]);
 
   // Filter alerts and activities based on search
   const filteredAlerts = alerts.filter(alert => 
