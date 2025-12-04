@@ -1,6 +1,6 @@
 import React, { useEffect, Suspense, useMemo } from "react";
 import { BrowserRouter as Router, HashRouter, Routes, Route, Navigate } from "react-router-dom";
-import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
+import { QueryClientProvider } from "@tanstack/react-query";
 import { ErrorBoundary } from "./components/layout/error-boundary";
 import { AuthProvider } from "./contexts/AuthContext";
 import { TenantProvider } from "./contexts/TenantContext";
@@ -11,9 +11,11 @@ import { logger } from "@/lib/logger";
 import { CommandPalette } from "@/components/CommandPalette";
 import { OfflineBanner } from "@/components/OfflineBanner";
 import { systemWatchdog } from "@/ai/watchdog";
-import { webVitalsService } from "@/services/web-vitals-service";
 import { OffshoreLoader } from "@/components/LoadingStates";
 import { ErrorDebugBanner } from "@/components/debug/ErrorDebugBanner";
+import { Toaster } from "@/components/ui/toaster";
+// PATCH 700: Web Vitals Overlay for development
+const WebVitalsOverlay = React.lazy(() => import("@/components/WebVitalsOverlay"));
 
 // PATCH 68.2 - Module Loader System
 import { getModuleRoutes } from "@/utils/module-routes";
@@ -165,6 +167,16 @@ function App() {
                     } />
                   </Route>
                 </Routes>
+                
+                {/* PATCH 700: Toast notifications */}
+                <Toaster />
+                
+                {/* PATCH 700: Web Vitals Overlay (dev only) */}
+                {import.meta.env.DEV && (
+                  <Suspense fallback={null}>
+                    <WebVitalsOverlay position="bottom-right" />
+                  </Suspense>
+                )}
               </RouterType>
             </OrganizationProvider>
           </TenantProvider>
