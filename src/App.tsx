@@ -15,6 +15,7 @@ import { systemWatchdog } from "@/ai/watchdog";
 import { OffshoreLoader } from "@/components/LoadingStates";
 import { ErrorDebugBanner } from "@/components/debug/ErrorDebugBanner";
 import { Toaster } from "@/components/ui/toaster";
+import { SmartPrefetchProvider } from "@/components/performance/SmartPrefetchProvider";
 // PATCH 700: Web Vitals Overlay for development
 const WebVitalsOverlay = React.lazy(() => import("@/components/WebVitalsOverlay"));
 
@@ -70,6 +71,7 @@ function App() {
           <TenantProvider>
             <OrganizationProvider>
               <RouterType>
+                <SmartPrefetchProvider>
                 <CommandPalette />
                 <KeyboardShortcutsHelp />
                 <OfflineBanner />
@@ -187,6 +189,7 @@ function App() {
                     <WebVitalsOverlay position="bottom-right" />
                   </Suspense>
                 )}
+                </SmartPrefetchProvider>
               </RouterType>
             </OrganizationProvider>
           </TenantProvider>
