@@ -703,6 +703,31 @@ export const PeoDpManager: React.FC = () => {
         <TabsContent value="evidence" className="space-y-4">
           <AutoEvidenceBuilder />
         </TabsContent>
+
+        {/* Computer Vision Inspector */}
+        <TabsContent value="vision" className="space-y-4">
+          <ComputerVisionInspector />
+        </TabsContent>
+
+        {/* POPs Library */}
+        <TabsContent value="pops" className="space-y-4">
+          <POPsLibrary />
+        </TabsContent>
+
+        {/* Regulator Portal */}
+        <TabsContent value="regulator" className="space-y-4">
+          <RegulatorPortal />
+        </TabsContent>
+
+        {/* Adaptive AI Advisor */}
+        <TabsContent value="ai-adaptive" className="space-y-4">
+          <AdaptiveAIAdvisor />
+        </TabsContent>
+
+        {/* AIS + SIMOPS Integration */}
+        <TabsContent value="ais" className="space-y-4">
+          <AISSimopsIntegration />
+        </TabsContent>
       </Tabs>
 
       {/* New Audit Dialog */}
