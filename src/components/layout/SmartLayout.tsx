@@ -6,6 +6,7 @@ import { ThemeProvider } from "@/components/layout/theme-provider";
 import { Toaster } from "@/components/ui/sonner";
 import { mobileClasses } from "@/styles/mobile-ui-kit";
 import { SkipToContent } from "@/components/ui/AccessibleButton";
+import { useScrollRestoration } from "@/hooks/useScrollRestoration";
 
 // Simple loading fallback component
 const LoadingFallback = () => (
@@ -18,6 +19,9 @@ const LoadingFallback = () => (
 );
 
 export function SmartLayout() {
+  // Restaurar posição do scroll entre navegações
+  useScrollRestoration();
+  
   return (
     <ThemeProvider defaultTheme="dark" storageKey="nautilus-ui-theme">
       {/* Skip to content link for accessibility */}

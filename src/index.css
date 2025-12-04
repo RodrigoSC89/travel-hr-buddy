@@ -5,6 +5,7 @@
 @import "./styles/theme.css";
 @import "./styles/professional-theme.css";
 @import "./styles/contrast-fixes.css";
+@import "./styles/ux-optimizations.css";
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
