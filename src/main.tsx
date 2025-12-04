@@ -14,7 +14,9 @@ import {
   setupInstallPrompt,
   isPWAInstalled
 } from "@/utils/pwa-utils";
-// import { initFailoverSystem } from "@/lib/failover/failover-core";
+// PATCH 700: Performance optimizations
+import { webVitalsMonitor } from "@/lib/web-vitals-monitor";
+import { imageOptimizer } from "@/lib/image-optimizer";
 
 // PATCH 129.0: Initialize theme before rendering
 initializeTheme();
@@ -22,8 +24,21 @@ initializeTheme();
 // PATCH 651.0: Run health check on startup
 initHealthCheck();
 
-// Iniciar monitor de failover na inicialização
-// initFailoverSystem(); // Desabilitado temporariamente - sem heartbeats configurados
+// PATCH 700: Initialize performance monitoring
+webVitalsMonitor.initialize({
+  onMetric: (metric) => {
+    logger.debug(`[WebVitals] ${metric.name}: ${metric.value.toFixed(2)} (${metric.rating})`);
+  },
+  onAlert: (metric, message) => {
+    logger.warn(`[WebVitals Alert] ${message}`);
+  }
+});
+
+// Initialize image optimizer
+imageOptimizer.initialize().then(() => {
+  const support = imageOptimizer.getSupport();
+  logger.info(`[ImageOptimizer] WebP: ${support?.webp}, AVIF: ${support?.avif}`);
+});
 
 // PATCH 598: Enhanced PWA initialization with utilities
 if ("serviceWorker" in navigator) {

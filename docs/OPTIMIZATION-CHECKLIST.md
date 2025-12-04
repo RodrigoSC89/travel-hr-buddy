@@ -1,8 +1,8 @@
 # Checklist de Otimização - Sistema Completo
 
-## ✅ Implementado
+## ✅ Implementado (PATCH 700)
 
-### Performance
+### Performance Core
 - [x] **Image Optimizer** - `src/lib/image-optimizer.ts`
   - Compressão automática WebP/AVIF
   - Lazy loading com IntersectionObserver
@@ -22,8 +22,37 @@
   - Priority loading option
 
 - [x] **WebVitalsOverlay** - `src/components/WebVitalsOverlay.tsx`
-  - Dashboard visual de métricas
-  - Dev tool para debugging
+  - Dashboard visual de métricas (dev only)
+
+### Performance Infrastructure
+- [x] **PerformanceContext** - `src/contexts/PerformanceContext.tsx`
+  - Context centralizado para otimizações
+  - Network-aware state global
+  - Image format detection
+  
+- [x] **Enhanced Skeletons** - `src/components/ui/enhanced-skeletons.tsx`
+  - Card, Table, Form, List, Dashboard skeletons
+  - Shimmer animation
+  
+- [x] **Route Prefetch** - `src/hooks/useRoutePrefetch.ts`
+  - Prefetch inteligente baseado em navegação
+  - Network-aware prefetching
+
+- [x] **Resource Hints** - `src/components/ResourceHints.tsx`
+  - Preconnect, prefetch, preload
+  - Critical CSS inline
+
+- [x] **Lazy Load Utils** - `src/lib/lazy-load.ts`
+  - Retry logic para módulos
+  - Fallback padronizado
+
+- [x] **Idle Callback Utils** - `src/lib/idle-callback.ts`
+  - Polyfill requestIdleCallback
+  - Batch idle tasks
+
+### Backend
+- [x] **Web Vitals Edge Function** - `supabase/functions/report-web-vitals/`
+  - Coleta e armazena métricas de performance
 
 ### Mobile/Offline
 - [x] IndexedDB storage
