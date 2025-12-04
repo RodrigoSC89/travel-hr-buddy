@@ -10,8 +10,18 @@ type NetworkChangeCallback = (status: NetworkStatus) => void;
 class NetworkDetector {
   private listeners: NetworkChangeCallback[] = [];
   private currentStatus: NetworkStatus;
+  private initialized = false;
 
   constructor() {
+    // Lazy initialization - don't run in constructor
+    this.currentStatus = { isOnline: true };
+  }
+
+  private ensureInitialized(): void {
+    if (this.initialized) return;
+    if (typeof window === "undefined" || typeof navigator === "undefined") return;
+    
+    this.initialized = true;
     this.currentStatus = this.getCurrentStatus();
     this.initializeListeners();
   }
@@ -76,6 +86,7 @@ class NetworkDetector {
    * Add listener for network changes
    */
   public onChange(callback: NetworkChangeCallback): () => void {
+    this.ensureInitialized();
     this.listeners.push(callback);
     
     // Return unsubscribe function
@@ -122,6 +133,7 @@ class NetworkDetector {
    * Get current status
    */
   public getStatus(): NetworkStatus {
+    this.ensureInitialized();
     return this.currentStatus;
   }
 
