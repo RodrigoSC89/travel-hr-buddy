@@ -1,6 +1,7 @@
 /**
  * Offline Module Index
  * Central export for offline utilities
+ * PATCH 900: Enhanced resilience features
  */
 
 export { requestQueue } from './request-queue';
@@ -22,3 +23,39 @@ export {
   type ConnectionState, 
   type RetryConfig 
 } from './connection-resilience';
+
+// PATCH 900: Advanced resilience features
+export {
+  resolveConflict,
+  conflictStore,
+  type ConflictStrategy,
+  type ConflictResult,
+} from './conflict-resolution';
+
+export {
+  compressPayload,
+  decompressPayload,
+  getCompressionStats,
+  shouldCompress,
+  type CompressedPayload,
+} from './payload-compression';
+
+export {
+  circuits,
+  circuitBreakerRegistry,
+  protectedFetch,
+  CircuitOpenError,
+  type CircuitState,
+  type CircuitStats,
+} from './circuit-breaker';
+
+export {
+  getStorageQuota,
+  getStorageBreakdown,
+  isStorageLow,
+  clearOldCaches,
+  requestPersistence,
+  storageMonitor,
+  formatBytes,
+  type StorageQuota,
+} from './storage-quota';

@@ -53,3 +53,6 @@ export {
 // Network status
 export { NetworkStatusIndicator } from './NetworkStatusIndicator';
 
+// Resilience indicator (PATCH 900)
+export { ResilienceIndicator, ResilienceBadge } from './ResilienceIndicator';
+
