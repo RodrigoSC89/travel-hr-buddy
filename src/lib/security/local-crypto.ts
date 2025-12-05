@@ -138,9 +138,9 @@ class LocalCrypto {
       const key = await this.deriveKey(password, salt);
 
       const decrypted = await crypto.subtle.decrypt(
-        { name: ALGORITHM, iv },
+        { name: ALGORITHM, iv: iv.buffer as ArrayBuffer },
         key,
-        data
+        data.buffer as ArrayBuffer
       );
 
       const decoder = new TextDecoder();
