@@ -82,9 +82,9 @@ function PerformanceMonitorComponent() {
   };
 
   const getLatencyColor = (latency: number) => {
-    if (latency < 100) return "text-green-500";
-    if (latency < 300) return "text-yellow-500";
-    return "text-red-500";
+    if (latency < 100) return "text-emerald-400";
+    if (latency < 300) return "text-amber-400";
+    return "text-red-400";
   };
 
   return (
@@ -110,23 +110,23 @@ function PerformanceMonitorComponent() {
         {/* Memory */}
         <div className="space-y-1">
           <div className="flex items-center justify-between text-sm">
-            <span className="flex items-center gap-1.5 text-foreground font-medium">
-              <Cpu className="h-3.5 w-3.5 text-primary" />
+            <span className="flex items-center gap-1.5 text-foreground font-bold">
+              <Cpu className="h-4 w-4 text-blue-400" />
               Memória
             </span>
-            <span className="font-semibold text-foreground">{metrics.memory.toFixed(1)} MB</span>
+            <span className="font-bold text-white">{metrics.memory.toFixed(1)} MB</span>
           </div>
-          <Progress value={Math.min((metrics.memory / 100) * 100, 100)} className="h-1.5" />
+          <Progress value={Math.min((metrics.memory / 100) * 100, 100)} className="h-2" />
         </div>
 
         {/* Latency */}
         <div className="space-y-1">
           <div className="flex items-center justify-between text-sm">
-            <span className="flex items-center gap-1.5 text-foreground font-medium">
-              <Wifi className="h-3.5 w-3.5 text-primary" />
+            <span className="flex items-center gap-1.5 text-foreground font-bold">
+              <Wifi className="h-4 w-4 text-blue-400" />
               Latência
             </span>
-            <span className={cn("font-semibold", getLatencyColor(metrics.latency))}>
+            <span className={cn("font-bold text-base", getLatencyColor(metrics.latency))}>
               {metrics.latency}ms
             </span>
           </div>
@@ -134,13 +134,13 @@ function PerformanceMonitorComponent() {
 
         {/* Compact Stats */}
         <div className="grid grid-cols-2 gap-2 pt-2 border-t border-border/50">
-          <div className="text-center p-2 rounded bg-muted/50">
-            <div className="text-sm font-semibold text-foreground">{metrics.ttfb.toFixed(0)}ms</div>
-            <div className="text-xs font-medium text-foreground/70">TTFB</div>
+          <div className="text-center p-3 rounded-lg bg-slate-800/80">
+            <div className="text-base font-bold text-white">{metrics.ttfb.toFixed(0)}ms</div>
+            <div className="text-sm font-bold text-slate-300">TTFB</div>
           </div>
-          <div className="text-center p-2 rounded bg-muted/50">
-            <div className="text-sm font-semibold text-foreground">{formatBytes(metrics.transferSize)}</div>
-            <div className="text-xs font-medium text-foreground/70">Transfer</div>
+          <div className="text-center p-3 rounded-lg bg-slate-800/80">
+            <div className="text-base font-bold text-white">{formatBytes(metrics.transferSize)}</div>
+            <div className="text-sm font-bold text-slate-300">Transfer</div>
           </div>
         </div>
       </CardContent>
