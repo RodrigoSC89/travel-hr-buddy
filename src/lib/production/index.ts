@@ -16,3 +16,10 @@ export {
   type DiagnosticResult,
   type DiagnosticsReport
 } from './system-diagnostics';
+
+export {
+  offlineTester,
+  useOfflineTester,
+  type OfflineTestResult,
+  type OfflineTestReport
+} from './offline-test';
