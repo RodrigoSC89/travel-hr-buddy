@@ -1,5 +1,5 @@
 /**
- * LLM Module Index
+ * LLM Module Index - PATCH 850
  * Central export for LLM utilities
  */
 
@@ -11,3 +11,9 @@ export {
   type AnalyzeISMItemParams,
   type ISMAnalysisResult
 } from './ismAssistant';
+
+// Hybrid LLM Engine (offline-first)
+export {
+  hybridLLMEngine,
+  useHybridLLM
+} from './hybrid-engine';

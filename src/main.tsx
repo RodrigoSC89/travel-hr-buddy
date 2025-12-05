@@ -25,6 +25,15 @@ const initializeApp = async () => {
     const { initializeSyncManager } = await import("@/lib/offline/sync-manager");
     initializeSyncManager();
     
+    // PATCH 850: Initialize automation manager
+    const { automationManager } = await import("@/lib/automation/automation-manager");
+    automationManager.start();
+    logger.info("✅ Automation Manager started");
+    
+    // PATCH 850: Initialize error tracker
+    const { errorTracker } = await import("@/lib/error-tracking/error-tracker");
+    errorTracker.init();
+    
     // PATCH 700: Initialize performance monitoring (only in production)
     if (import.meta.env.PROD) {
       const { webVitalsMonitor } = await import("@/lib/web-vitals-monitor");
