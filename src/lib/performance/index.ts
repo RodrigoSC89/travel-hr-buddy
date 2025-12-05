@@ -247,3 +247,8 @@ export {
 // PATCH 850: Memory & Resource Management
 export { memoryOptimizer } from './memory-optimizer';
 export { resourceManager, type ResourceStatus } from './resource-manager';
+
+// PATCH 970: Advanced Performance Optimization
+export { systemBenchmark, type BenchmarkResult } from './system-benchmark';
+export { dataRetentionManager, type RetentionPolicy, type CleanupResult } from './data-retention';
+export { smartSyncManager, type SyncItem, type SyncStats } from './smart-sync';
