@@ -141,3 +141,25 @@ export { initializePerformance, requestIdleCallbackPolyfill, cancelIdleCallbackP
 // PATCH 820: Critical resources & request queue
 export { criticalResourceLoader, useResourcePreload } from './critical-resource-loader';
 export { requestQueue, prioritizedFetch } from './request-queue';
+
+// PATCH 825: Delta sync & cursor pagination
+export { deltaSyncManager, useDeltaSync } from './delta-sync';
+export { 
+  encodeCursor, 
+  decodeCursor, 
+  buildCursorQuery, 
+  processCursorResults,
+  useCursorPagination,
+  type CursorPaginationParams,
+  type CursorPaginationResult 
+} from './cursor-pagination';
+
+// PATCH 825: Code splitting
+export { 
+  lazyWithRetry, 
+  preloadModule, 
+  HeavyModules, 
+  preloadRouteModules,
+  dynamicImport,
+  lazyOnVisible 
+} from './code-splitting';
