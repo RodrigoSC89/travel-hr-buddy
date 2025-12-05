@@ -472,6 +472,19 @@ export const MODULE_REGISTRY: Record<string, ModuleDefinition> = {
     lazy: true,
   },
 
+  "planning.calendar": {
+    id: "planning.calendar",
+    name: "Calendário & Agenda",
+    category: "planning",
+    path: "pages/CalendarView",
+    description: "Visualização de agenda, escalas e tarefas programadas",
+    status: "active",
+    completeness: "100%",
+    route: "/calendar",
+    icon: "Calendar",
+    lazy: true,
+  },
+
   // REMOVED: features.travel - Duplicate of "travel" module (pages/Travel) - PATCH 176.1
 
   "features.vault-ai": {

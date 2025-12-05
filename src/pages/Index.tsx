@@ -62,7 +62,7 @@ const AIModulesPanel = memo(() => {
     { 
       name: "Crew 2.0", 
       description: "Análise de fadiga e competências",
-      route: "/crew-management",
+      route: "/crew",
       icon: Users,
       badge: "IA Avançada",
       color: "from-green-500 to-emerald-500"

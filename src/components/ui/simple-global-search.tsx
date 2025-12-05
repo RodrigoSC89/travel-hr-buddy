@@ -70,7 +70,7 @@ const staticResults: SearchResult[] = [
     description: "Gestão da frota e operações marítimas",
     category: "Operações",
     icon: Ship,
-    path: "/vessels",
+    path: "/fleet",
     keywords: ["embarcações", "frota", "vessels", "navios", "operações"]
   },
   {

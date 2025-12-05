@@ -181,6 +181,12 @@ function App() {
                     <Route path="help" element={<Navigate to="/notifications-center" replace />} />
                     <Route path="audit-center" element={<Navigate to="/compliance-hub" replace />} />
                     
+                    {/* PATCH 951: Fix missing navigation routes */}
+                    <Route path="crew-management" element={<Navigate to="/crew" replace />} />
+                    <Route path="vessels" element={<Navigate to="/fleet" replace />} />
+                    <Route path="schedule" element={<Navigate to="/calendar" replace />} />
+                    <Route path="schedules" element={<Navigate to="/calendar" replace />} />
+                    
                     {/* 404 Route */}
                     <Route path="*" element={
                       <Suspense fallback={<OffshoreLoader />}>

@@ -150,7 +150,7 @@ const navigationItems = [
       },
       {
         title: "Tripulação",
-        url: "/crew-management",
+        url: "/crew",
         icon: Users,
       },
       {

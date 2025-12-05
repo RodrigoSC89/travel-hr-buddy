@@ -75,9 +75,9 @@ const ONBOARDING_STEPS: Step[] = [
     description: 'Gerencie embarcações, tripulação e operações',
     icon: Ship,
     tasks: [
-      { id: 'vessel', label: 'Cadastrar primeira embarcação', path: '/vessels' },
+      { id: 'vessel', label: 'Cadastrar primeira embarcação', path: '/fleet' },
       { id: 'crew', label: 'Adicionar tripulantes', path: '/crew' },
-      { id: 'schedule', label: 'Criar escala de bordo', path: '/schedules' },
+      { id: 'schedule', label: 'Criar escala de bordo', path: '/calendar' },
     ],
     tips: [
       'Certificados com vencimento próximo aparecem em vermelho',
