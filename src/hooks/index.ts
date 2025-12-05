@@ -119,3 +119,8 @@ export { useErrorTracking } from "@/lib/error-tracking/error-tracker";
 export { useBandwidthOptimizer } from "@/lib/performance/low-bandwidth-optimizer";
 export { useOptimizedFetch } from "@/lib/performance/request-optimizer";
 export { useSlowConnectionWarning } from "@/components/performance/ConnectionIndicator";
+
+// PATCH 835: Advanced performance utilities
+export { useNetworkStatus as useNetworkMonitor, useNetworkAware } from "@/lib/performance/network-monitor";
+export { useVirtualScroll, useInfiniteScroll as useInfiniteScrollAdvanced, useWindowedData } from "@/lib/performance/virtual-scroll";
+export { useCompressedFetch } from "@/lib/performance/data-compressor";
