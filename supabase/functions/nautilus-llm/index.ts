@@ -22,9 +22,12 @@ serve(async (req) => {
   }
 
   try {
+    // Usar Lovable AI Gateway (preferencial) ou OpenAI como fallback
+    const LOVABLE_API_KEY = Deno.env.get('LOVABLE_API_KEY');
     const OPENAI_API_KEY = Deno.env.get('OPENAI_API_KEY');
-    if (!OPENAI_API_KEY) {
-      throw new Error('OPENAI_API_KEY not configured');
+    
+    if (!LOVABLE_API_KEY && !OPENAI_API_KEY) {
+      throw new Error('No AI API key configured');
     }
 
     const supabaseUrl = Deno.env.get('SUPABASE_URL')!;
@@ -86,15 +89,22 @@ CAPACIDADES:
     let usedCache = false;
 
     try {
-      // Tentar OpenAI
-      const openaiResponse = await fetch('https://api.openai.com/v1/chat/completions', {
+      // Usar Lovable AI Gateway (preferencial)
+      const apiUrl = LOVABLE_API_KEY 
+        ? 'https://ai.gateway.lovable.dev/v1/chat/completions'
+        : 'https://api.openai.com/v1/chat/completions';
+      
+      const apiKey = LOVABLE_API_KEY || OPENAI_API_KEY;
+      const model = LOVABLE_API_KEY ? 'google/gemini-2.5-flash' : 'gpt-4o-mini';
+      
+      const aiResponse = await fetch(apiUrl, {
         method: 'POST',
         headers: {
-          'Authorization': `Bearer ${OPENAI_API_KEY}`,
+          'Authorization': `Bearer ${apiKey}`,
           'Content-Type': 'application/json',
         },
         body: JSON.stringify({
-          model: 'gpt-4o-mini',
+          model,
           messages: [
             { role: 'system', content: systemPrompt },
             { role: 'user', content: prompt }
@@ -104,11 +114,26 @@ CAPACIDADES:
         }),
       });
 
-      if (!openaiResponse.ok) {
-        throw new Error('OpenAI API error');
+      // Tratar rate limits e erros de pagamento
+      if (aiResponse.status === 429) {
+        return new Response(
+          JSON.stringify({ error: 'Rate limit excedido. Tente novamente em alguns segundos.' }),
+          { status: 429, headers: { ...corsHeaders, 'Content-Type': 'application/json' } }
+        );
+      }
+      
+      if (aiResponse.status === 402) {
+        return new Response(
+          JSON.stringify({ error: 'Créditos de IA esgotados. Recarregue seu plano.' }),
+          { status: 402, headers: { ...corsHeaders, 'Content-Type': 'application/json' } }
+        );
       }
 
-      const data = await openaiResponse.json();
+      if (!aiResponse.ok) {
+        throw new Error('AI API error');
+      }
+
+      const data = await aiResponse.json();
       response = data.choices[0].message.content;
 
       // Atualizar cache
@@ -117,13 +142,13 @@ CAPACIDADES:
         .upsert({
           prompt_hash: promptHash,
           cached_response: response,
-          model_used: 'gpt-4o-mini',
+          model_used: model,
           usage_count: (cachedResponse?.usage_count || 0) + 1,
           last_used_at: new Date().toISOString()
         });
 
     } catch (error) {
-      console.error('OpenAI error, using fallback:', error);
+      console.error('AI API error, using fallback:', error);
       
       if (cachedResponse) {
         response = cachedResponse.cached_response;
