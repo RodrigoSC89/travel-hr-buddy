@@ -195,11 +195,11 @@ export function QuickStartGuide() {
             <Button
               onClick={() => setIsOpen(true)}
               size="lg"
-              className="rounded-full h-14 px-6 shadow-lg bg-gradient-to-r from-primary to-primary/80 hover:from-primary/90 hover:to-primary/70"
+              className="rounded-full h-14 px-6 shadow-xl bg-slate-900 dark:bg-slate-100 text-white dark:text-slate-900 hover:bg-slate-800 dark:hover:bg-slate-200 font-bold"
             >
               <Rocket className="w-5 h-5 mr-2" />
               Início Rápido
-              <Badge variant="secondary" className="ml-2">
+              <Badge className="ml-2 bg-white dark:bg-slate-900 text-slate-900 dark:text-white font-bold border-0">
                 {progress}%
               </Badge>
             </Button>
