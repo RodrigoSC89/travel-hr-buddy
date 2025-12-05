@@ -1,4 +1,4 @@
-import React, { useMemo, useState, useCallback, Suspense, lazy } from "react";
+import React, { useMemo, useState, useCallback, Suspense, lazy, memo } from "react";
 import { Helmet } from "react-helmet-async";
 import { ProfessionalHeader } from "@/components/dashboard/professional-header";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
@@ -7,7 +7,8 @@ import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { Shield, Wrench, Users, Brain, Ship, Sparkles, Leaf, AlertTriangle, GraduationCap, Plane, ShoppingCart } from "lucide-react";
 import { Link, useNavigate } from "react-router-dom";
-import { WelcomeOnboarding } from "@/components/onboarding/WelcomeOnboarding";
+// Lazy load onboarding
+const WelcomeOnboarding = lazy(() => import("@/components/onboarding/WelcomeOnboarding").then(m => ({ default: m.WelcomeOnboarding })));
 
 // PATCH 584: Split Index into optimized subcomponents - Lazy loaded
 const KPIGrid = lazy(() => import("@/components/dashboard/index/KPIGrid").then(m => ({ default: m.KPIGrid })));
@@ -45,11 +46,11 @@ const FLEET_DATA = [
   { name: "Standby", value: 1, color: "#3b82f6" },
 ] as const;
 
-// Quick Access to AI Modules
-const AIModulesPanel = () => {
+// Quick Access to AI Modules - Memoized
+const AIModulesPanel = memo(() => {
   const navigate = useNavigate();
   
-  const modules = [
+  const modules = useMemo(() => [
     { 
       name: "MMI Inteligente", 
       description: "Manutenção com IA, Digital Twin",
@@ -122,7 +123,7 @@ const AIModulesPanel = () => {
       badge: "Auto-Req",
       color: "from-amber-500 to-orange-600"
     }
-  ];
+  ], []);
 
   return (
     <Card className="border-primary/20 bg-gradient-to-br from-primary/5 to-secondary/5">
@@ -152,7 +153,9 @@ const AIModulesPanel = () => {
       </CardContent>
     </Card>
   );
-};
+});
+
+AIModulesPanel.displayName = 'AIModulesPanel';
 
 const Index = () => {
   const [activeTab, setActiveTab] = useState("overview");
@@ -170,7 +173,9 @@ const Index = () => {
       </Suspense>
       
       {/* Onboarding para novos usuários */}
-      <WelcomeOnboarding />
+      <Suspense fallback={null}>
+        <WelcomeOnboarding />
+      </Suspense>
       
       {/* PATCH 850: PWA Install Prompt */}
       <Suspense fallback={null}>
