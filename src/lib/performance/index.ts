@@ -193,3 +193,7 @@ export {
 
 // PATCH 833: Web Vitals monitoring
 export { webVitalsMonitor, useWebVitals } from './web-vitals-monitor';
+
+// PATCH 834: Low bandwidth optimizations
+export { bandwidthOptimizer, useBandwidthOptimizer } from './low-bandwidth-optimizer';
+export { requestOptimizer, optimizedFetch, useOptimizedFetch } from './request-optimizer';

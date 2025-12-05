@@ -1,0 +1,36 @@
+/**
+ * Performance Components Index
+ * PATCH 834: Central export for all performance components
+ */
+
+// Data loading
+export { DataLoader, SuspenseLoader, InlineLoader } from './DataLoader';
+
+// Connection awareness
+export { ConnectionIndicator, ConnectionBadge, useSlowConnectionWarning } from './ConnectionIndicator';
+
+// Performance monitoring
+export { PerformanceMonitor, DevPerformanceOverlay } from './PerformanceMonitor';
+
+// Main wrapper
+export { 
+  PerformanceWrapper, 
+  withPerformance, 
+  PerformanceProvider, 
+  usePerformanceContext 
+} from './PerformanceWrapper';
+
+// Virtualized list
+export { VirtualizedList, useVirtualizedData } from './VirtualizedList';
+
+// Error boundary
+export { useErrorBoundary } from './ErrorBoundaryAdvanced';
+
+// Connection aware
+export { 
+  ConnectionProvider, 
+  useConnection, 
+  ConnectionConditional,
+  withConnectionAware,
+  useAdaptiveFetch 
+} from './ConnectionAware';
