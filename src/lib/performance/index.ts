@@ -197,3 +197,26 @@ export { webVitalsMonitor, useWebVitals } from './web-vitals-monitor';
 // PATCH 834: Low bandwidth optimizations
 export { bandwidthOptimizer, useBandwidthOptimizer } from './low-bandwidth-optimizer';
 export { requestOptimizer, optimizedFetch, useOptimizedFetch } from './request-optimizer';
+
+// PATCH 835: Advanced data handling
+export { 
+  compressLZ, 
+  decompressLZ, 
+  compressJSON as compressJSONAdvanced, 
+  decompressJSON as decompressJSONAdvanced, 
+  reducePayload,
+  calculateSavings,
+  estimateTransferTime,
+  useCompressedFetch 
+} from './data-compressor';
+export { 
+  useVirtualScroll, 
+  useInfiniteScroll, 
+  useWindowedData 
+} from './virtual-scroll';
+export { 
+  networkMonitor, 
+  useNetworkStatus, 
+  useNetworkAware,
+  type NetworkStatus 
+} from './network-monitor';

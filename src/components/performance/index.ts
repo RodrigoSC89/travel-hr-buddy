@@ -1,6 +1,6 @@
 /**
  * Performance Components Index
- * PATCH 834: Central export for all performance components
+ * PATCH 835: Central export for all performance components
  */
 
 // Data loading
@@ -24,7 +24,7 @@ export {
 export { VirtualizedList, useVirtualizedData } from './VirtualizedList';
 
 // Error boundary
-export { useErrorBoundary } from './ErrorBoundaryAdvanced';
+export { ErrorBoundaryAdvanced, useErrorBoundary } from './ErrorBoundaryAdvanced';
 
 // Connection aware
 export { 
@@ -34,3 +34,6 @@ export {
   withConnectionAware,
   useAdaptiveFetch 
 } from './ConnectionAware';
+
+// Optimized image (re-export from lib)
+export { OptimizedImage, OptimizedAvatar } from './OptimizedImage';
