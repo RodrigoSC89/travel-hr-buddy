@@ -14,3 +14,13 @@ export {
   logger, 
   createModuleLogger 
 } from './structured-logging';
+
+export {
+  apm,
+  withAPM,
+  useAPMTransaction,
+  type APMMetric,
+  type APMTransaction,
+  type APMSpan,
+  type APMError,
+} from './apm';
