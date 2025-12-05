@@ -114,3 +114,8 @@ export { useSystemConfig } from "@/lib/system/system-config";
 export { useRealtimeSubscription, useRealtimeConnectionStatus } from "@/lib/realtime/realtime-manager";
 export { useAnalytics } from "@/lib/analytics/analytics-client";
 export { useErrorTracking } from "@/lib/error-tracking/error-tracker";
+
+// PATCH 834: Low bandwidth optimizations
+export { useBandwidthOptimizer } from "@/lib/performance/low-bandwidth-optimizer";
+export { useOptimizedFetch } from "@/lib/performance/request-optimizer";
+export { useSlowConnectionWarning } from "@/components/performance/ConnectionIndicator";

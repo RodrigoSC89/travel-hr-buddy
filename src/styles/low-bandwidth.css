@@ -1,0 +1,179 @@
+/**
+ * Low Bandwidth Optimizations
+ * PATCH 834: CSS optimizations for slow connections
+ */
+
+/* Reduce motion for low bandwidth */
+.reduce-motion *,
+.reduce-motion *::before,
+.reduce-motion *::after {
+  animation-duration: 0.01ms !important;
+  animation-iteration-count: 1 !important;
+  transition-duration: 0.01ms !important;
+}
+
+/* Disable heavy effects on low bandwidth */
+.low-bandwidth {
+  /* Remove shadows */
+  --shadow-sm: none;
+  --shadow-md: none;
+  --shadow-lg: none;
+  --shadow-xl: none;
+  
+  /* Remove blur effects */
+  --backdrop-blur: none;
+  
+  /* Simplify gradients */
+  --gradient-primary: var(--primary);
+  --gradient-secondary: var(--secondary);
+}
+
+.low-bandwidth .backdrop-blur-sm,
+.low-bandwidth .backdrop-blur-md,
+.low-bandwidth .backdrop-blur-lg,
+.low-bandwidth .backdrop-blur-xl {
+  backdrop-filter: none !important;
+  -webkit-backdrop-filter: none !important;
+}
+
+.low-bandwidth .shadow-sm,
+.low-bandwidth .shadow-md,
+.low-bandwidth .shadow-lg,
+.low-bandwidth .shadow-xl {
+  box-shadow: 0 1px 2px rgba(0, 0, 0, 0.1) !important;
+}
+
+/* Simplify borders */
+.low-bandwidth .border-gradient {
+  border-image: none !important;
+  border-color: var(--border) !important;
+}
+
+/* Hide decorative elements */
+.low-bandwidth .decorative,
+.low-bandwidth [data-decorative="true"] {
+  display: none !important;
+}
+
+/* Simplify backgrounds */
+.low-bandwidth .bg-gradient-to-r,
+.low-bandwidth .bg-gradient-to-l,
+.low-bandwidth .bg-gradient-to-t,
+.low-bandwidth .bg-gradient-to-b {
+  background-image: none !important;
+  background-color: var(--background) !important;
+}
+
+/* Optimize images */
+.low-bandwidth img {
+  image-rendering: optimizeSpeed;
+}
+
+/* Hide non-essential images */
+.low-bandwidth .bg-image-decorative {
+  background-image: none !important;
+}
+
+/* Reduce font rendering overhead */
+.low-bandwidth {
+  text-rendering: optimizeSpeed;
+  -webkit-font-smoothing: auto;
+}
+
+/* Simplify hover effects */
+.low-bandwidth *:hover {
+  transform: none !important;
+  filter: none !important;
+}
+
+/* Optimize scrolling */
+.low-bandwidth {
+  scroll-behavior: auto !important;
+}
+
+.low-bandwidth .scroll-smooth {
+  scroll-behavior: auto !important;
+}
+
+/* Hide video backgrounds */
+.low-bandwidth video[autoplay] {
+  display: none !important;
+}
+
+/* Skeleton optimization */
+.low-bandwidth .animate-pulse {
+  animation: none !important;
+  opacity: 0.5 !important;
+}
+
+/* Optimize table rendering */
+.low-bandwidth table {
+  table-layout: fixed;
+}
+
+/* Critical content visibility */
+.low-bandwidth .content-visibility-auto {
+  content-visibility: auto;
+  contain-intrinsic-size: 0 500px;
+}
+
+/* Print-style for extremely slow connections */
+@media (prefers-reduced-data: reduce) {
+  img, video, iframe {
+    display: none !important;
+  }
+  
+  * {
+    background-image: none !important;
+  }
+}
+
+/* Connection indicator styles */
+.connection-indicator {
+  position: fixed;
+  bottom: 1rem;
+  left: 1rem;
+  z-index: 9999;
+  padding: 0.5rem 1rem;
+  border-radius: 9999px;
+  font-size: 0.75rem;
+  font-weight: 500;
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  backdrop-filter: blur(8px);
+}
+
+.connection-indicator.fast {
+  background-color: rgba(34, 197, 94, 0.1);
+  color: rgb(34, 197, 94);
+}
+
+.connection-indicator.slow {
+  background-color: rgba(234, 179, 8, 0.1);
+  color: rgb(234, 179, 8);
+}
+
+.connection-indicator.offline {
+  background-color: rgba(239, 68, 68, 0.1);
+  color: rgb(239, 68, 68);
+}
+
+/* Loading states optimization */
+.loading-optimized {
+  will-change: opacity;
+  contain: layout style paint;
+}
+
+/* Content chunks for progressive loading */
+.content-chunk {
+  content-visibility: auto;
+  contain-intrinsic-block-size: 200px;
+}
+
+/* Optimize fixed elements */
+.low-bandwidth .fixed,
+.low-bandwidth .sticky {
+  will-change: auto;
+  transform: translateZ(0);
+}
