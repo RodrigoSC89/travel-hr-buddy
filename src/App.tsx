@@ -11,7 +11,6 @@ import { logger } from "@/lib/logger";
 import { CommandPalette } from "@/components/CommandPalette";
 import { KeyboardShortcutsHelp } from "@/components/help/KeyboardShortcuts";
 import { OfflineBanner } from "@/components/OfflineBanner";
-import { systemWatchdog } from "@/ai/watchdog";
 import { OffshoreLoader } from "@/components/LoadingStates";
 import { ErrorDebugBanner } from "@/components/debug/ErrorDebugBanner";
 import { Toaster } from "@/components/ui/toaster";
@@ -48,7 +47,6 @@ const RouterType = import.meta.env.VITE_USE_HASH_ROUTER === "true" ? HashRouter 
 function App() {
   useEffect(() => {
     initializeMonitoring();
-    systemWatchdog.start();
     
     logger.info("Nautilus One initialized", {
       version: "68.2",
