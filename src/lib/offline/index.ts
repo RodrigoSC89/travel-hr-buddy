@@ -15,3 +15,10 @@ export {
   clearExpiredCache,
   getQueueStats 
 } from './sync-queue';
+
+// PATCH 850: Connection resilience
+export { 
+  connectionResilience, 
+  type ConnectionState, 
+  type RetryConfig 
+} from './connection-resilience';

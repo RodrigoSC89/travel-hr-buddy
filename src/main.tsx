@@ -34,6 +34,17 @@ const initializeApp = async () => {
     const { errorTracker } = await import("@/lib/error-tracking/error-tracker");
     errorTracker.init();
     
+    // PATCH 850: Initialize resource manager
+    const { resourceManager } = await import("@/lib/performance/resource-manager");
+    await resourceManager.initialize();
+    resourceManager.startMonitoring();
+    logger.info("✅ Resource Manager initialized");
+    
+    // PATCH 850: Initialize memory optimizer
+    const { memoryOptimizer } = await import("@/lib/performance/memory-optimizer");
+    memoryOptimizer.startMonitoring();
+    logger.info("✅ Memory Optimizer started");
+    
     // PATCH 700: Initialize performance monitoring (only in production)
     if (import.meta.env.PROD) {
       const { webVitalsMonitor } = await import("@/lib/web-vitals-monitor");
