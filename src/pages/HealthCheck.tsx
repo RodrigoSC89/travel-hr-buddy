@@ -11,7 +11,7 @@ import { Button } from "@/components/ui/button";
 import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { RefreshCw, CheckCircle2, AlertTriangle, XCircle, Activity, Shield } from "lucide-react";
-import { ProductionHealthDashboard } from "@/components/production/ProductionHealthDashboard";
+import { ProductionHealthDashboard, SystemDiagnosticsPanel } from "@/components/production";
 
 export default function HealthCheckPage() {
   const [health, setHealth] = useState<HealthStatus | null>(null);
@@ -83,8 +83,9 @@ export default function HealthCheckPage() {
           </TabsTrigger>
         </TabsList>
 
-        <TabsContent value="production" className="mt-6">
+        <TabsContent value="production" className="mt-6 space-y-6">
           <ProductionHealthDashboard autoRun={true} />
+          <SystemDiagnosticsPanel />
         </TabsContent>
 
         <TabsContent value="modules" className="mt-6">
