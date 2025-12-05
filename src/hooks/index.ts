@@ -74,3 +74,10 @@ export {
   useFeatureFlags,
   type PerformanceConfig 
 } from "./use-adaptive-performance";
+
+// PATCH 820: Intersection-based Preloading
+export { 
+  useIntersectionPreload, 
+  useHoverPreload, 
+  useProgressiveImage 
+} from "./use-intersection-preload";
