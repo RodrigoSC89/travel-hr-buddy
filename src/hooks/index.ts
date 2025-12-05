@@ -111,3 +111,6 @@ export { usePWA } from "@/lib/pwa/service-worker-registration";
 export { useWebVitals } from "@/lib/performance/web-vitals-monitor";
 export { useAPI, useSupabaseQuery } from "@/lib/api/unified-api-client";
 export { useSystemConfig } from "@/lib/system/system-config";
+export { useRealtimeSubscription, useRealtimeConnectionStatus } from "@/lib/realtime/realtime-manager";
+export { useAnalytics } from "@/lib/analytics/analytics-client";
+export { useErrorTracking } from "@/lib/error-tracking/error-tracker";
