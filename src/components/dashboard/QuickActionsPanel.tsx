@@ -139,16 +139,16 @@ const QuickActionsPanelComponent: React.FC = () => {
               <Button
                 key={action.id}
                 variant="ghost"
-                className={`h-auto flex-col gap-1 p-3 ${action.color} text-white relative`}
+                className={`h-auto flex-col gap-2 p-3 ${action.color} text-white relative shadow-md`}
                 onClick={() => handleNavigate(action.route)}
                 onMouseEnter={() => handlePrefetch(action.route)}
               >
-                <action.icon className="h-5 w-5" />
-                <span className="text-xs font-medium">{action.label}</span>
+                <action.icon className="h-6 w-6 drop-shadow-sm" />
+                <span className="text-sm font-bold drop-shadow-sm">{action.label}</span>
                 {action.badge && (
                   <Badge 
                     variant="secondary" 
-                    className="absolute -top-1 -right-1 text-[10px] px-1 py-0 bg-white text-foreground"
+                    className="absolute -top-1 -right-1 text-[10px] px-1.5 py-0.5 bg-slate-900 text-white font-semibold border-0"
                   >
                     {action.badge}
                   </Badge>
@@ -179,13 +179,13 @@ const QuickActionsPanelComponent: React.FC = () => {
                 key={activity.id}
                 className="flex items-center gap-3 p-2 rounded-lg hover:bg-muted/50 transition-colors cursor-pointer"
               >
-                <div className="p-1.5 rounded-full bg-primary/20">
-                  <activity.icon className="h-3.5 w-3.5 text-primary" />
+                <div className="p-2 rounded-full bg-primary/30">
+                  <activity.icon className="h-4 w-4 text-primary" />
                 </div>
                 <div className="flex-1 min-w-0">
-                  <p className="text-sm truncate text-foreground font-medium">{activity.text}</p>
+                  <p className="text-sm truncate text-foreground font-semibold">{activity.text}</p>
                 </div>
-                <span className="text-sm text-primary/90 whitespace-nowrap font-medium">
+                <span className="text-sm text-foreground whitespace-nowrap font-bold">
                   {activity.time}
                 </span>
               </div>
