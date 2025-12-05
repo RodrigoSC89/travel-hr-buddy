@@ -1,57 +1,128 @@
 /**
- * Performance Initialization
- * Sets up all performance optimizations on app start
+ * Performance Initialization - Enhanced
+ * Sets up all performance optimizations for 2Mbps networks
  */
 
 import { memoryManager } from './memory-manager';
 import { resourceHints } from './resource-hints';
+import { bandwidthOptimizer } from './low-bandwidth-optimizer';
+import { Logger } from "@/lib/utils/logger";
+
+let isInitialized = false;
+let startTime = 0;
+const milestones: Map<string, number> = new Map();
 
 /**
  * Initialize performance optimizations
  */
 export function initializePerformance() {
   if (typeof window === 'undefined') return;
+  if (isInitialized) return;
+  
+  isInitialized = true;
+  startTime = performance.now();
+  recordMilestone('init-start');
 
-  console.log('[Performance] Initializing optimizations...');
+  Logger.info("Initializing performance optimizations", undefined, "PerfInit");
 
-  // 1. Start memory monitoring
-  memoryManager.startMonitoring(30000); // Check every 30s
+  // 1. Bandwidth optimizer first (critical for slow networks)
+  bandwidthOptimizer.init();
+  recordMilestone('bandwidth-init');
 
-  // 2. Setup resource hints
+  // 2. Apply critical CSS optimizations
+  applyCriticalOptimizations();
+  recordMilestone('critical-css');
+
+  // 3. Memory monitoring (light)
+  memoryManager.startMonitoring(60000); // 60s for lower overhead
+
+  // 4. Resource hints
   try {
     resourceHints.initializeCommonHints();
-    
-    // Preconnect to Supabase
     const supabaseUrl = import.meta.env.VITE_SUPABASE_URL;
     if (supabaseUrl) {
       resourceHints.preconnect(supabaseUrl);
     }
   } catch (e) {
-    console.warn('[Performance] Resource hints setup failed:', e);
+    Logger.warn("Resource hints setup failed", { error: e }, "PerfInit");
   }
 
-  // 3. Register Service Worker
+  // 5. Register Service Worker (async)
   registerServiceWorker();
 
-  // 4. Setup performance observer
+  // 6. Setup performance observer
   setupPerformanceObserver();
 
-  // 5. Cleanup on page unload
+  // 7. Cleanup on page unload
   window.addEventListener('beforeunload', () => {
     memoryManager.stopMonitoring();
   });
 
-  console.log('[Performance] Initialization complete');
+  recordMilestone('init-complete');
+  Logger.info(`Performance init complete in ${(performance.now() - startTime).toFixed(2)}ms`, undefined, "PerfInit");
+}
+
+/**
+ * Apply critical CSS optimizations
+ */
+function applyCriticalOptimizations() {
+  document.documentElement.classList.add('perf-optimized');
+
+  // Check for existing style
+  if (document.getElementById('critical-perf-styles')) return;
+
+  const style = document.createElement('style');
+  style.id = 'critical-perf-styles';
+  style.textContent = `
+    .perf-optimized {
+      text-rendering: optimizeSpeed;
+      -webkit-font-smoothing: antialiased;
+    }
+    
+    .low-bandwidth .shadow-lg,
+    .low-bandwidth .shadow-xl {
+      box-shadow: 0 1px 3px rgba(0,0,0,0.1) !important;
+    }
+    
+    .low-bandwidth [class*="gradient"] {
+      background-image: none !important;
+    }
+    
+    .skeleton-loading {
+      background: linear-gradient(90deg, hsl(var(--muted)) 25%, hsl(var(--muted-foreground)/0.1) 50%, hsl(var(--muted)) 75%);
+      background-size: 200% 100%;
+      animation: skeleton-shimmer 1.5s ease-in-out infinite;
+    }
+    
+    @keyframes skeleton-shimmer {
+      0% { background-position: 200% 0; }
+      100% { background-position: -200% 0; }
+    }
+    
+    @media (prefers-reduced-motion: reduce) {
+      *, *::before, *::after {
+        animation-duration: 0.01ms !important;
+        transition-duration: 0.01ms !important;
+      }
+    }
+    
+    .content-hidden {
+      content-visibility: auto;
+      contain-intrinsic-size: 0 300px;
+    }
+  `;
+  document.head.appendChild(style);
+}
+
+function recordMilestone(name: string) {
+  milestones.set(name, performance.now() - startTime);
 }
 
 /**
  * Register Service Worker for offline support
  */
 async function registerServiceWorker() {
-  if (!('serviceWorker' in navigator)) {
-    console.log('[Performance] Service Worker not supported');
-    return;
-  }
+  if (!('serviceWorker' in navigator)) return;
 
   try {
     const registration = await navigator.serviceWorker.register('/sw.js', {
@@ -59,32 +130,25 @@ async function registerServiceWorker() {
       updateViaCache: 'none',
     });
 
-    console.log('[Performance] Service Worker registered:', registration.scope);
-
-    // Check for updates
     registration.addEventListener('updatefound', () => {
       const newWorker = registration.installing;
       if (newWorker) {
         newWorker.addEventListener('statechange', () => {
           if (newWorker.state === 'installed' && navigator.serviceWorker.controller) {
-            console.log('[Performance] New Service Worker available');
-            // Notify user about update
             dispatchEvent(new CustomEvent('sw-update-available'));
           }
         });
       }
     });
 
-    // Handle messages from Service Worker
     navigator.serviceWorker.addEventListener('message', (event) => {
       if (event.data.type === 'SYNC_COMPLETE') {
-        console.log('[Performance] Background sync complete');
         dispatchEvent(new CustomEvent('sync-complete', { detail: event.data }));
       }
     });
 
   } catch (error) {
-    console.warn('[Performance] Service Worker registration failed:', error);
+    Logger.warn("Service Worker registration failed", { error }, "PerfInit");
   }
 }
 
@@ -95,24 +159,15 @@ function setupPerformanceObserver() {
   if (!('PerformanceObserver' in window)) return;
 
   try {
-    // Observe LCP
+    // LCP Observer
     const lcpObserver = new PerformanceObserver((list) => {
       const entries = list.getEntries();
       const lastEntry = entries[entries.length - 1];
-      console.log('[Performance] LCP:', lastEntry.startTime.toFixed(0), 'ms');
+      recordMilestone(`lcp-${lastEntry.startTime.toFixed(0)}`);
     });
     lcpObserver.observe({ type: 'largest-contentful-paint', buffered: true });
 
-    // Observe FID
-    const fidObserver = new PerformanceObserver((list) => {
-      const entries = list.getEntries();
-      entries.forEach((entry: any) => {
-        console.log('[Performance] FID:', entry.processingStart - entry.startTime, 'ms');
-      });
-    });
-    fidObserver.observe({ type: 'first-input', buffered: true });
-
-    // Observe CLS
+    // CLS Observer
     let clsScore = 0;
     const clsObserver = new PerformanceObserver((list) => {
       for (const entry of list.getEntries() as any[]) {
@@ -123,16 +178,31 @@ function setupPerformanceObserver() {
     });
     clsObserver.observe({ type: 'layout-shift', buffered: true });
 
-    // Report CLS on page hide
-    document.addEventListener('visibilitychange', () => {
-      if (document.visibilityState === 'hidden') {
-        console.log('[Performance] CLS:', clsScore.toFixed(4));
-      }
-    });
-
   } catch (e) {
-    console.warn('[Performance] Performance observer setup failed:', e);
+    // Ignore observer errors
   }
+}
+
+/**
+ * Stop performance monitoring
+ */
+export function stopPerformance() {
+  memoryManager.stopMonitoring();
+  isInitialized = false;
+  Logger.info("Performance monitoring stopped", undefined, "PerfInit");
+}
+
+/**
+ * Get performance report
+ */
+export function getPerformanceReport() {
+  return {
+    milestones: Object.fromEntries(milestones),
+    loadTime: performance.now() - startTime,
+    bandwidth: bandwidthOptimizer.getConfig(),
+    connectionType: bandwidthOptimizer.getConnectionType(),
+    memory: (performance as any).memory?.usedJSHeapSize || 0,
+  };
 }
 
 /**
