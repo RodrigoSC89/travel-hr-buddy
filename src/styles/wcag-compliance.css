@@ -1,0 +1,426 @@
+/**
+ * WCAG 2.1 AA/AAA Compliance Styles - PATCH 902
+ * Comprehensive accessibility fixes for contrast and readability
+ * 
+ * WCAG Requirements:
+ * - Normal text (< 18px): 4.5:1 minimum (AA), 7:1 for AAA
+ * - Large text (≥ 18px bold or ≥ 24px): 3:1 minimum (AA), 4.5:1 for AAA
+ * - UI components: 3:1 minimum
+ */
+
+/* ============================================
+   FOUNDATION: Typography Scale
+   ============================================ */
+
+:root {
+  /* Minimum font sizes for readability */
+  --font-size-min: 14px;
+  --font-size-base: 16px;
+  --font-size-lg: 18px;
+  --font-size-xl: 20px;
+  --font-size-2xl: 24px;
+  --font-size-3xl: 30px;
+  --font-size-4xl: 36px;
+  
+  /* Line heights for readability */
+  --line-height-tight: 1.25;
+  --line-height-normal: 1.5;
+  --line-height-relaxed: 1.75;
+  
+  /* Font weights for visibility */
+  --font-weight-body: 450;
+  --font-weight-medium: 500;
+  --font-weight-semibold: 600;
+  --font-weight-bold: 700;
+  
+  /* High contrast color tokens */
+  --hc-text-primary: 220 87% 8%;       /* #0A0E1A - 16:1 on white */
+  --hc-text-secondary: 220 20% 25%;    /* #333B4D - 10:1 on white */
+  --hc-text-muted: 220 15% 35%;        /* #4A5568 - 7:1 on white */
+  --hc-text-on-dark: 0 0% 98%;         /* #FAFAFA - 17:1 on dark */
+  --hc-text-on-primary: 0 0% 100%;     /* #FFFFFF */
+  
+  /* Status colors with guaranteed contrast */
+  --hc-success: 142 71% 28%;           /* #166534 - 7:1 on white */
+  --hc-warning: 32 95% 35%;            /* #B45309 - 5.5:1 on white */
+  --hc-error: 0 72% 40%;               /* #B91C1C - 7:1 on white */
+  --hc-info: 214 84% 35%;              /* #1E5C94 - 7:1 on white */
+}
+
+.dark {
+  --hc-text-primary: 0 0% 98%;
+  --hc-text-secondary: 220 20% 80%;
+  --hc-text-muted: 220 15% 65%;
+  --hc-text-on-dark: 0 0% 98%;
+  
+  --hc-success: 142 71% 55%;
+  --hc-warning: 38 92% 55%;
+  --hc-error: 0 72% 60%;
+  --hc-info: 214 84% 55%;
+}
+
+/* ============================================
+   WCAG COMPLIANT TEXT UTILITIES
+   ============================================ */
+
+/* Primary text - maximum contrast */
+.wcag-text-primary {
+  color: hsl(var(--hc-text-primary)) !important;
+  font-weight: var(--font-weight-body);
+}
+
+/* Secondary text - high contrast */
+.wcag-text-secondary {
+  color: hsl(var(--hc-text-secondary)) !important;
+  font-weight: var(--font-weight-body);
+}
+
+/* Muted text - still AA compliant */
+.wcag-text-muted {
+  color: hsl(var(--hc-text-muted)) !important;
+  font-weight: var(--font-weight-medium); /* Increased weight compensates */
+}
+
+/* ============================================
+   HEADING CONTRAST FIXES
+   ============================================ */
+
+/* Dashboard title - remove gradient, use solid high-contrast color */
+.dashboard-title,
+h1.bg-clip-text {
+  background: none !important;
+  -webkit-background-clip: unset !important;
+  background-clip: unset !important;
+  -webkit-text-fill-color: unset !important;
+  color: hsl(var(--hc-text-primary)) !important;
+  font-weight: 700 !important;
+  text-shadow: none;
+}
+
+/* Alternative: Accessible gradient that maintains contrast */
+.accessible-gradient-text {
+  background: linear-gradient(
+    135deg, 
+    hsl(214 84% 25%), 
+    hsl(214 84% 35%)
+  );
+  -webkit-background-clip: text;
+  background-clip: text;
+  -webkit-text-fill-color: transparent;
+  font-weight: 700;
+}
+
+.dark .accessible-gradient-text {
+  background: linear-gradient(
+    135deg, 
+    hsl(214 84% 65%), 
+    hsl(214 84% 75%)
+  );
+  -webkit-background-clip: text;
+  background-clip: text;
+}
+
+/* ============================================
+   CARD MODULE CONTRAST FIXES
+   ============================================ */
+
+/* AI Module cards - ensure text visibility */
+.ai-module-card {
+  position: relative;
+}
+
+.ai-module-card::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(
+    180deg,
+    transparent 0%,
+    rgba(0, 0, 0, 0.4) 60%,
+    rgba(0, 0, 0, 0.6) 100%
+  );
+  border-radius: inherit;
+  pointer-events: none;
+}
+
+.ai-module-card h4,
+.ai-module-card p {
+  position: relative;
+  z-index: 1;
+  text-shadow: 0 1px 2px rgba(0, 0, 0, 0.3);
+}
+
+/* Minimum font sizes for module cards */
+.ai-module-card h4 {
+  font-size: var(--font-size-min) !important;
+  font-weight: var(--font-weight-semibold) !important;
+  line-height: var(--line-height-tight);
+}
+
+.ai-module-card p {
+  font-size: 12px !important; /* Increased from 10px */
+  font-weight: var(--font-weight-medium) !important;
+  line-height: var(--line-height-normal);
+}
+
+/* ============================================
+   BADGE CONTRAST FIXES
+   ============================================ */
+
+/* Real-time badge with better contrast */
+.badge-realtime {
+  background-color: hsl(142 71% 28% / 0.15) !important;
+  color: hsl(var(--hc-success)) !important;
+  border: 1.5px solid hsl(var(--hc-success)) !important;
+  font-weight: var(--font-weight-medium);
+}
+
+.dark .badge-realtime {
+  background-color: hsl(142 71% 55% / 0.15) !important;
+  color: hsl(142 71% 55%) !important;
+  border-color: hsl(142 71% 55%) !important;
+}
+
+/* Status badges with guaranteed contrast */
+.badge-status-success {
+  background-color: hsl(var(--hc-success)) !important;
+  color: white !important;
+  font-weight: var(--font-weight-medium);
+}
+
+.badge-status-warning {
+  background-color: hsl(var(--hc-warning)) !important;
+  color: white !important;
+  font-weight: var(--font-weight-medium);
+}
+
+.badge-status-error {
+  background-color: hsl(var(--hc-error)) !important;
+  color: white !important;
+  font-weight: var(--font-weight-medium);
+}
+
+.badge-status-info {
+  background-color: hsl(var(--hc-info)) !important;
+  color: white !important;
+  font-weight: var(--font-weight-medium);
+}
+
+/* ============================================
+   BUTTON CONTRAST FIXES
+   ============================================ */
+
+/* Outline buttons need darker borders */
+.btn-outline-contrast,
+button[data-variant="outline"] {
+  border-width: 1.5px !important;
+  border-color: hsl(220 15% 65%) !important;
+  color: hsl(var(--hc-text-primary)) !important;
+  font-weight: var(--font-weight-medium);
+}
+
+.btn-outline-contrast:hover,
+button[data-variant="outline"]:hover {
+  background-color: hsl(220 15% 95%) !important;
+  border-color: hsl(220 15% 50%) !important;
+}
+
+.dark .btn-outline-contrast,
+.dark button[data-variant="outline"] {
+  border-color: hsl(220 15% 45%) !important;
+  color: hsl(var(--hc-text-on-dark)) !important;
+}
+
+/* Primary buttons */
+.btn-primary-contrast {
+  background-color: hsl(214 84% 35%) !important;
+  color: white !important;
+  font-weight: var(--font-weight-medium);
+}
+
+.btn-primary-contrast:hover {
+  background-color: hsl(214 84% 28%) !important;
+}
+
+/* ============================================
+   TABLE CONTRAST FIXES
+   ============================================ */
+
+.table-accessible th {
+  background-color: hsl(220 13% 93%) !important;
+  color: hsl(var(--hc-text-primary)) !important;
+  font-weight: var(--font-weight-semibold);
+  font-size: var(--font-size-min);
+}
+
+.table-accessible td {
+  color: hsl(var(--hc-text-secondary)) !important;
+  font-size: var(--font-size-min);
+}
+
+.dark .table-accessible th {
+  background-color: hsl(220 20% 18%) !important;
+}
+
+/* ============================================
+   FORM INPUT CONTRAST FIXES
+   ============================================ */
+
+.input-accessible {
+  border: 2px solid hsl(220 15% 70%) !important;
+  color: hsl(var(--hc-text-primary)) !important;
+  font-size: var(--font-size-base) !important;
+  background-color: hsl(0 0% 100%) !important;
+}
+
+.input-accessible::placeholder {
+  color: hsl(220 10% 50%) !important;
+  font-weight: var(--font-weight-body);
+}
+
+.input-accessible:focus {
+  border-color: hsl(214 84% 40%) !important;
+  box-shadow: 0 0 0 3px hsl(214 84% 40% / 0.2) !important;
+}
+
+.dark .input-accessible {
+  background-color: hsl(220 20% 13%) !important;
+  border-color: hsl(220 15% 35%) !important;
+}
+
+/* ============================================
+   LINK CONTRAST FIXES
+   ============================================ */
+
+.link-accessible {
+  color: hsl(214 84% 30%) !important;
+  text-decoration: underline;
+  text-underline-offset: 3px;
+  text-decoration-thickness: 1.5px;
+  font-weight: var(--font-weight-medium);
+}
+
+.link-accessible:hover {
+  color: hsl(214 84% 20%) !important;
+  text-decoration-thickness: 2px;
+}
+
+.link-accessible:focus-visible {
+  outline: 3px solid hsl(214 84% 40%);
+  outline-offset: 2px;
+  border-radius: 2px;
+}
+
+.dark .link-accessible {
+  color: hsl(214 84% 65%) !important;
+}
+
+.dark .link-accessible:hover {
+  color: hsl(214 84% 75%) !important;
+}
+
+/* ============================================
+   ICON ACCESSIBILITY
+   ============================================ */
+
+/* Icons should not be sole conveyors of information */
+.icon-with-label {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+/* Ensure icon contrast */
+.icon-accessible {
+  color: hsl(var(--hc-text-secondary));
+}
+
+.icon-accessible.icon-success {
+  color: hsl(var(--hc-success));
+}
+
+.icon-accessible.icon-warning {
+  color: hsl(var(--hc-warning));
+}
+
+.icon-accessible.icon-error {
+  color: hsl(var(--hc-error));
+}
+
+/* ============================================
+   FOCUS INDICATORS
+   ============================================ */
+
+/* High visibility focus ring */
+*:focus-visible {
+  outline: 3px solid hsl(214 84% 40%) !important;
+  outline-offset: 2px !important;
+}
+
+/* Skip focus on non-interactive elements */
+[tabindex="-1"]:focus-visible {
+  outline: none !important;
+}
+
+/* ============================================
+   RESPONSIVE TEXT SIZING
+   ============================================ */
+
+/* Ensure minimum readable sizes on all devices */
+@media screen and (max-width: 768px) {
+  body {
+    font-size: var(--font-size-base);
+  }
+  
+  h1 { font-size: var(--font-size-2xl) !important; }
+  h2 { font-size: var(--font-size-xl) !important; }
+  h3 { font-size: var(--font-size-lg) !important; }
+  
+  /* Increase touch targets */
+  button, a, input, select {
+    min-height: 44px;
+    min-width: 44px;
+  }
+  
+  /* Larger text on mobile for outdoor use */
+  .ai-module-card p {
+    font-size: var(--font-size-min) !important;
+  }
+}
+
+/* ============================================
+   MOTION PREFERENCES
+   ============================================ */
+
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
+}
+
+/* ============================================
+   PRINT ACCESSIBILITY
+   ============================================ */
+
+@media print {
+  * {
+    background: white !important;
+    color: black !important;
+    box-shadow: none !important;
+    text-shadow: none !important;
+  }
+  
+  a[href]::after {
+    content: " (" attr(href) ")";
+    font-size: 0.8em;
+  }
+  
+  .no-print {
+    display: none !important;
+  }
+}

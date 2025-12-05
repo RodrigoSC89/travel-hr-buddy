@@ -57,11 +57,12 @@ export function ProfessionalHeader({
           )}
           
           <div className="space-y-2">
-            <h1 className="text-4xl font-bold font-playfair bg-gradient-to-r from-primary via-primary/80 to-accent bg-clip-text text-transparent">
+            {/* WCAG 2.1 AA: Solid color for guaranteed 7:1+ contrast */}
+            <h1 className="text-3xl md:text-4xl font-bold font-playfair text-foreground">
               {title}
             </h1>
             {subtitle && (
-              <p className="text-muted-foreground text-lg">
+              <p className="text-base md:text-lg text-foreground/80 font-medium">
                 {subtitle}
               </p>
             )}
@@ -73,8 +74,11 @@ export function ProfessionalHeader({
           <ConnectionIndicator size="sm" />
           
           {showRealTime && (
-            <Badge variant="outline" className="gap-2 px-3 py-1.5 text-sm hidden sm:flex">
-              <div className="h-2 w-2 rounded-full bg-success animate-pulse" />
+            <Badge 
+              variant="outline" 
+              className="gap-2 px-3 py-1.5 text-sm hidden sm:flex border-emerald-600 text-emerald-700 dark:border-emerald-400 dark:text-emerald-300 font-medium bg-emerald-50 dark:bg-emerald-950/30"
+            >
+              <div className="h-2 w-2 rounded-full bg-emerald-600 dark:bg-emerald-400 animate-pulse" />
               Tempo Real
             </Badge>
           )}
