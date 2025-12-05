@@ -1,52 +1,40 @@
 /**
- * Monitoring System Initializer - PATCH 65.0
- * Starts all monitoring and autonomy systems
+ * Monitoring System Initializer - PATCH 65.0 (Optimized)
+ * Lightweight initialization to prevent memory leaks
  */
 
-import { systemWatchdog } from "./SystemWatchdog";
-import { metricsDaemon } from "./MetricsDaemon";
-import { logsEngine } from "./LogsEngine";
-import { autonomyEngine } from "@/lib/autonomy/AutonomyEngine";
 import { Logger } from "@/lib/utils/logger";
 
 let isInitialized = false;
 
 /**
- * Initialize all monitoring systems
+ * Initialize monitoring (lightweight version)
+ * Heavy monitoring systems are disabled by default to prevent crashes
  */
 export function initializeMonitoring() {
   if (isInitialized) {
-    Logger.info("Monitoring: Already initialized", undefined, "MonitoringInit");
     return;
   }
 
-  Logger.info("Initializing Nautilus Monitoring Stack...", undefined, "MonitoringInit");
-
-  try {
-    // Start logs engine
-    logsEngine.info("system", "Logs Engine inicializado");
-
-    // Start system watchdog
-    systemWatchdog.start();
+  // Only enable heavy monitoring if explicitly requested
+  const enableHeavyMonitoring = import.meta.env.VITE_ENABLE_HEAVY_MONITORING === "true";
+  
+  if (enableHeavyMonitoring) {
+    Logger.info("Starting heavy monitoring (enabled via env)", undefined, "MonitoringInit");
     
-    // Start metrics daemon
-    metricsDaemon.start();
-    
-    // Start autonomy engine
-    autonomyEngine.start();
-
-    isInitialized = true;
-
-    Logger.info("Sistema de monitoramento totalmente operacional", {
-      components: ["LogsEngine", "SystemWatchdog", "MetricsDaemon", "AutonomyEngine"]
-    }, "MonitoringInit");
-
-  } catch (error) {
-    Logger.error("Failed to initialize monitoring", error, "MonitoringInit");
-    logsEngine.error("system", "Falha ao inicializar monitoramento", {
-      error: error instanceof Error ? error.message : "Unknown error"
-    });
+    try {
+      // Dynamically import heavy modules only if needed
+      import("./SystemWatchdog").then(({ systemWatchdog }) => {
+        systemWatchdog.start();
+      });
+    } catch (error) {
+      Logger.error("Failed to start monitoring", error, "MonitoringInit");
+    }
+  } else {
+    Logger.info("Lightweight monitoring mode (heavy systems disabled)", undefined, "MonitoringInit");
   }
+
+  isInitialized = true;
 }
 
 /**
@@ -54,21 +42,13 @@ export function initializeMonitoring() {
  */
 export function stopMonitoring() {
   if (!isInitialized) return;
-
-  Logger.info("Stopping Nautilus Monitoring Stack...", undefined, "MonitoringInit");
-
-  try {
-    autonomyEngine.stop();
-    metricsDaemon.stop();
+  
+  // Stop systems if they were started
+  import("./SystemWatchdog").then(({ systemWatchdog }) => {
     systemWatchdog.stop();
-    logsEngine.stop();
-
-    isInitialized = false;
-
-    Logger.info("Nautilus Monitoring Stack: OFFLINE", undefined, "MonitoringInit");
-  } catch (error) {
-    Logger.error("Failed to stop monitoring", error, "MonitoringInit");
-  }
+  }).catch(() => {});
+  
+  isInitialized = false;
 }
 
 /**
