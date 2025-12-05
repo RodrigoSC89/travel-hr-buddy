@@ -1,5 +1,5 @@
 /**
- * Health Check Dashboard - PATCH 651.0
+ * Health Check Dashboard - PATCH 850
  * Visual dashboard for system health monitoring
  */
 
@@ -9,7 +9,9 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/com
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert";
-import { RefreshCw, CheckCircle2, AlertTriangle, XCircle } from "lucide-react";
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
+import { RefreshCw, CheckCircle2, AlertTriangle, XCircle, Activity, Shield } from "lucide-react";
+import { ProductionHealthDashboard } from "@/components/production/ProductionHealthDashboard";
 
 export default function HealthCheckPage() {
   const [health, setHealth] = useState<HealthStatus | null>(null);
@@ -69,6 +71,23 @@ export default function HealthCheckPage() {
 
   return (
     <div className="container mx-auto p-6 space-y-6">
+      <Tabs defaultValue="modules" className="w-full">
+        <TabsList className="grid w-full grid-cols-2">
+          <TabsTrigger value="modules" className="flex items-center gap-2">
+            <Activity className="h-4 w-4" />
+            Módulos
+          </TabsTrigger>
+          <TabsTrigger value="production" className="flex items-center gap-2">
+            <Shield className="h-4 w-4" />
+            Produção
+          </TabsTrigger>
+        </TabsList>
+
+        <TabsContent value="production" className="mt-6">
+          <ProductionHealthDashboard autoRun={true} />
+        </TabsContent>
+
+        <TabsContent value="modules" className="mt-6">
       {/* Header */}
       <div className="flex items-center justify-between">
         <div>
@@ -118,7 +137,7 @@ export default function HealthCheckPage() {
       )}
 
       {/* Health Checks */}
-      <div className="grid gap-6 md:grid-cols-3">
+      <div className="grid gap-6 md:grid-cols-3 space-y-6">
         {/* Modules Check */}
         <Card>
           <CardHeader>
@@ -226,6 +245,8 @@ export default function HealthCheckPage() {
           </CardContent>
         </Card>
       </div>
+      </TabsContent>
+      </Tabs>
     </div>
   );
 }
