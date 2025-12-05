@@ -8,6 +8,7 @@
 @import "./styles/ux-optimizations.css";
 @import "./styles/low-bandwidth.css";
 @import "./styles/revolutionary-ux.css";
+@import "./styles/accessibility.css";
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
