@@ -7,6 +7,7 @@ import { TenantProvider } from "./contexts/TenantContext";
 import { OrganizationProvider } from "./contexts/OrganizationContext";
 import { SmartLayout } from "./components/layout/SmartLayout";
 import { initializeMonitoring } from "@/lib/monitoring/init";
+import { initializePerformance } from "@/lib/performance/init";
 import { logger } from "@/lib/logger";
 import { CommandPalette } from "@/components/CommandPalette";
 import { KeyboardShortcutsHelp } from "@/components/help/KeyboardShortcuts";
@@ -15,6 +16,7 @@ import { OffshoreLoader } from "@/components/LoadingStates";
 import { ErrorDebugBanner } from "@/components/debug/ErrorDebugBanner";
 import { Toaster } from "@/components/ui/toaster";
 import { SmartPrefetchProvider } from "@/components/performance/SmartPrefetchProvider";
+import { BandwidthIndicator } from "@/components/performance/BandwidthIndicator";
 // PATCH 700: Web Vitals Overlay for development
 const WebVitalsOverlay = React.lazy(() => import("@/components/WebVitalsOverlay"));
 
@@ -46,11 +48,16 @@ const RouterType = import.meta.env.VITE_USE_HASH_ROUTER === "true" ? HashRouter 
 
 function App() {
   useEffect(() => {
+    // Initialize performance first (critical for slow networks)
+    initializePerformance();
+    
+    // Then monitoring (light mode by default)
     initializeMonitoring();
     
     logger.info("Nautilus One initialized", {
-      version: "68.2",
+      version: "68.3",
       moduleLoader: "active",
+      performanceOptimized: true,
       timestamp: new Date().toISOString(),
     });
   }, []);
@@ -184,6 +191,9 @@ function App() {
                 
                 {/* PATCH 700: Toast notifications */}
                 <Toaster />
+                
+                {/* PATCH 835: Bandwidth indicator for slow connections */}
+                <BandwidthIndicator />
                 
                 {/* PATCH 700: Web Vitals Overlay (dev only) */}
                 {import.meta.env.DEV && (

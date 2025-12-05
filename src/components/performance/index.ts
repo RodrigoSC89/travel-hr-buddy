@@ -37,3 +37,19 @@ export {
 
 // Optimized image (re-export from lib)
 export { OptimizedImage, OptimizedAvatar } from './OptimizedImage';
+
+// Bandwidth indicator
+export { BandwidthIndicator, BandwidthBadge } from './BandwidthIndicator';
+
+// Skeleton loaders
+export { 
+  Skeleton, 
+  SkeletonCard, 
+  SkeletonTable, 
+  SkeletonDashboard, 
+  SkeletonList 
+} from './SkeletonLoader';
+
+// Network status
+export { NetworkStatusIndicator } from './NetworkStatusIndicator';
+
