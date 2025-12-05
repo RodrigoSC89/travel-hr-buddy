@@ -50,6 +50,7 @@ export interface AuditReport {
 const STORAGE_KEY = 'nautilus_audit_log';
 const MAX_ENTRIES = 10000;
 const RETENTION_DAYS = 90;
+const AUDIT_PASSWORD = 'nautilus_audit_secure_key_2024';
 
 class AuditProtocol {
   private entries: AuditEntry[] = [];
@@ -71,7 +72,8 @@ class AuditProtocol {
       if (stored) {
         if (this.encryptionEnabled) {
           try {
-            const decrypted = await localCrypto.decrypt(stored);
+            const encrypted = JSON.parse(stored);
+            const decrypted = await localCrypto.decrypt(encrypted, AUDIT_PASSWORD);
             this.entries = JSON.parse(decrypted).map((e: any) => ({
               ...e,
               timestamp: new Date(e.timestamp),
@@ -106,8 +108,8 @@ class AuditProtocol {
     try {
       const data = JSON.stringify(this.entries);
       if (this.encryptionEnabled) {
-        const encrypted = await localCrypto.encrypt(data);
-        localStorage.setItem(STORAGE_KEY, encrypted);
+        const encrypted = await localCrypto.encrypt(data, AUDIT_PASSWORD);
+        localStorage.setItem(STORAGE_KEY, JSON.stringify(encrypted));
       } else {
         localStorage.setItem(STORAGE_KEY, data);
       }
