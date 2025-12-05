@@ -65,6 +65,14 @@ export default function Maritime() {
     loadDashboardData();
   }, [loadDashboardData]);
 
+  // PATCH 960: Memoized compliance data to prevent re-renders
+  const complianceData = useMemo(() => [
+    { name: 'PEOTRAM', value: 87, color: 'text-green-600' },
+    { name: 'ISM Code', value: 92, color: 'text-green-600' },
+    { name: 'ISPS Code', value: 78, color: 'text-yellow-600' },
+    { name: 'MARPOL', value: 95, color: 'text-green-600' },
+  ], []);
+
   const StatCard = memo(({ title, value, icon: Icon, variant = "default", trend, onClick }: any) => (
     <Card className={onClick ? "cursor-pointer hover:shadow-md transition-shadow" : ""} onClick={onClick}>
       <CardContent className="pt-6">
@@ -276,38 +284,17 @@ export default function Maritime() {
               </CardDescription>
             </CardHeader>
             <CardContent>
-              {useMemo(() => (
-                <div className="space-y-4">
-                  <div className="flex items-center justify-between">
-                    <span className="text-sm font-medium">PEOTRAM</span>
+              <div className="space-y-4">
+                {complianceData.map((item) => (
+                  <div key={item.name} className="flex items-center justify-between">
+                    <span className="text-sm font-medium">{item.name}</span>
                     <div className="flex items-center space-x-2">
-                      <Progress value={87} className="w-24" />
-                      <span className="text-sm text-green-600">87%</span>
+                      <Progress value={item.value} className="w-24" />
+                      <span className={`text-sm ${item.color}`}>{item.value}%</span>
                     </div>
                   </div>
-                  <div className="flex items-center justify-between">
-                    <span className="text-sm font-medium">ISM Code</span>
-                    <div className="flex items-center space-x-2">
-                      <Progress value={92} className="w-24" />
-                      <span className="text-sm text-green-600">92%</span>
-                    </div>
-                  </div>
-                  <div className="flex items-center justify-between">
-                    <span className="text-sm font-medium">ISPS Code</span>
-                    <div className="flex items-center space-x-2">
-                      <Progress value={78} className="w-24" />
-                      <span className="text-sm text-yellow-600">78%</span>
-                    </div>
-                  </div>
-                  <div className="flex items-center justify-between">
-                    <span className="text-sm font-medium">MARPOL</span>
-                    <div className="flex items-center space-x-2">
-                      <Progress value={95} className="w-24" />
-                      <span className="text-sm text-green-600">95%</span>
-                    </div>
-                  </div>
-                </div>
-              ), [])}
+                ))}
+              </div>
             </CardContent>
           </Card>
         </TabsContent>

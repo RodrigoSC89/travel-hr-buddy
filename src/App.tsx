@@ -187,6 +187,10 @@ function App() {
                     <Route path="schedule" element={<Navigate to="/calendar" replace />} />
                     <Route path="schedules" element={<Navigate to="/calendar" replace />} />
                     
+                    {/* PATCH 960: Fix missing missions route */}
+                    <Route path="missions/new" element={<Navigate to="/mission-logs" replace />} />
+                    <Route path="missions" element={<Navigate to="/mission-logs" replace />} />
+                    
                     {/* 404 Route */}
                     <Route path="*" element={
                       <Suspense fallback={<OffshoreLoader />}>
