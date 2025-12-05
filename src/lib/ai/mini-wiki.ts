@@ -364,11 +364,10 @@ class MiniWikiEngine {
       }
       // Use LLM to summarize article content based on question
       try {
-        const response = await hybridLLMEngine.chat(
-          `Com base no seguinte contexto, responda de forma clara e direta: "${question}"\n\nContexto: ${context}`,
-          { mode: 'fast', maxTokens: 300 }
+        const result = await hybridLLMEngine.query(
+          `Com base no seguinte contexto, responda de forma clara e direta: "${question}"\n\nContexto: ${context}`
         );
-        return response;
+        return result.response;
       } catch {
         // Fallback to article content
         if ('content' in bestMatch) {
@@ -379,11 +378,10 @@ class MiniWikiEngine {
 
     // No good match - use general LLM response
     try {
-      const response = await hybridLLMEngine.chat(
-        `Você é um assistente técnico para um sistema marítimo. Responda de forma clara e objetiva: ${question}`,
-        { mode: 'fast', maxTokens: 300 }
+      const result = await hybridLLMEngine.query(
+        `Você é um assistente técnico para um sistema marítimo. Responda de forma clara e objetiva: ${question}`
       );
-      return response;
+      return result.response;
     } catch {
       return 'Desculpe, não encontrei informações sobre essa pergunta. Tente reformular ou consulte o suporte técnico.';
     }

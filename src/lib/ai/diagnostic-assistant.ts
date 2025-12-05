@@ -427,7 +427,7 @@ class DiagnosticAssistant {
 
     // Use AI for free-form diagnosis
     try {
-      const response = await hybridLLMEngine.chat(
+      const result = await hybridLLMEngine.query(
         `Você é um assistente técnico especializado em diagnóstico de problemas. 
          O usuário relatou o seguinte problema: "${problem}"
          
@@ -436,10 +436,9 @@ class DiagnosticAssistant {
          2. Passos de verificação
          3. Soluções sugeridas
          
-         Seja claro e objetivo.`,
-        { mode: 'fast', maxTokens: 400 }
+         Seja claro e objetivo.`
       );
-      return response;
+      return result.response;
     } catch {
       return `Não consegui processar o diagnóstico automaticamente.
 
