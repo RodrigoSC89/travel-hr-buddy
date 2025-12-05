@@ -289,9 +289,10 @@ export function useSmartAssistant() {
   const [messages, setMessages] = useState<AssistantMessage[]>(smartAssistant.getMessages());
   const [isLoading, setIsLoading] = useState(false);
   
-  useState(() => {
-    return smartAssistant.subscribe(setMessages);
-  });
+  useEffect(() => {
+    const unsubscribe = smartAssistant.subscribe(setMessages);
+    return unsubscribe;
+  }, []);
   
   const sendMessage = useCallback(async (content: string) => {
     setIsLoading(true);
