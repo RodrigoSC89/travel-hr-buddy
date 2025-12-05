@@ -42,10 +42,13 @@ class ProductionReadinessChecker {
     await this.checkPerformanceMetrics();
     await this.checkErrorTracking();
     await this.checkCacheConfiguration();
+    await this.checkResourceManager();
+    await this.checkMemoryOptimizer();
 
     // Optional checks
     await this.checkPWAManifest();
     await this.checkNetworkResilience();
+    await this.checkConnectionResilience();
 
     const totalDuration = performance.now() - startTime;
 
@@ -304,6 +307,82 @@ class ProductionReadinessChecker {
         category: 'optional',
         status: 'skipped',
         message: 'Network Information API not available',
+        duration: performance.now() - start,
+      });
+    }
+  }
+
+  private async checkResourceManager(): Promise<void> {
+    const start = performance.now();
+    
+    try {
+      const { resourceManager } = await import('@/lib/performance/resource-manager');
+      const status = resourceManager.getStatus();
+      
+      this.addCheck({
+        name: 'Resource Manager',
+        category: 'important',
+        status: status.overall === 'constrained' ? 'warning' : 'pass',
+        message: `Status: ${status.overall}, Network: ${status.network}, Memory: ${status.memory}`,
+        duration: performance.now() - start,
+      });
+    } catch (error) {
+      this.addCheck({
+        name: 'Resource Manager',
+        category: 'important',
+        status: 'fail',
+        message: `Failed to load: ${error instanceof Error ? error.message : 'Unknown'}`,
+        duration: performance.now() - start,
+      });
+    }
+  }
+
+  private async checkMemoryOptimizer(): Promise<void> {
+    const start = performance.now();
+    
+    try {
+      const { memoryOptimizer } = await import('@/lib/performance/memory-optimizer');
+      const stats = memoryOptimizer.getStats();
+      
+      this.addCheck({
+        name: 'Memory Optimizer',
+        category: 'important',
+        status: stats.status === 'critical' ? 'fail' : stats.status === 'high' ? 'warning' : 'pass',
+        message: `Status: ${stats.status}, Usage: ${(stats.usage * 100).toFixed(1)}%`,
+        duration: performance.now() - start,
+      });
+    } catch (error) {
+      this.addCheck({
+        name: 'Memory Optimizer',
+        category: 'important',
+        status: 'fail',
+        message: `Failed to load: ${error instanceof Error ? error.message : 'Unknown'}`,
+        duration: performance.now() - start,
+      });
+    }
+  }
+
+  private async checkConnectionResilience(): Promise<void> {
+    const start = performance.now();
+    
+    try {
+      const { connectionResilience } = await import('@/lib/offline/connection-resilience');
+      const state = connectionResilience.getState();
+      const settings = connectionResilience.getAdaptiveSettings();
+      
+      this.addCheck({
+        name: 'Connection Resilience',
+        category: 'optional',
+        status: state.isOnline ? 'pass' : 'warning',
+        message: `Online: ${state.isOnline}, Type: ${state.effectiveType}, Quality: ${settings.imageQuality}%`,
+        duration: performance.now() - start,
+      });
+    } catch (error) {
+      this.addCheck({
+        name: 'Connection Resilience',
+        category: 'optional',
+        status: 'fail',
+        message: `Failed to load: ${error instanceof Error ? error.message : 'Unknown'}`,
         duration: performance.now() - start,
       });
     }
