@@ -3,7 +3,7 @@
  * Painel completo com todas as funcionalidades do sistema
  */
 
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useCallback, memo } from "react";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
@@ -37,44 +37,52 @@ import {
 } from "lucide-react";
 import { cn } from "@/lib/utils";
 
-// Sistema de Performance
+// Sistema de Performance - Otimizado para evitar re-renders constantes
 const useSystemMetrics = () => {
   const [metrics, setMetrics] = useState({
-    cpu: 0,
-    memory: 0,
+    cpu: 15,
+    memory: 45,
     network: 'online' as 'online' | 'offline',
-    latency: 0,
+    latency: 35,
     fps: 60,
-    cacheHit: 0,
+    cacheHit: 92,
     loadTime: 0
   });
 
-  useEffect(() => {
-    const updateMetrics = () => {
-      // Simular métricas reais
-      const memory = (performance as any).memory;
-      setMetrics({
-        cpu: Math.random() * 30 + 10,
-        memory: memory ? (memory.usedJSHeapSize / memory.totalJSHeapSize) * 100 : 45,
-        network: navigator.onLine ? 'online' : 'offline',
-        latency: Math.random() * 50 + 20,
-        fps: Math.floor(Math.random() * 5 + 58),
-        cacheHit: Math.random() * 20 + 80,
-        loadTime: performance.now() / 1000
-      });
-    };
-
-    updateMetrics();
-    const interval = setInterval(updateMetrics, 2000);
-    return () => clearInterval(interval);
+  const updateMetrics = useCallback(() => {
+    const memory = (performance as any).memory;
+    setMetrics({
+      cpu: Math.random() * 30 + 10,
+      memory: memory ? (memory.usedJSHeapSize / memory.totalJSHeapSize) * 100 : 45,
+      network: navigator.onLine ? 'online' : 'offline',
+      latency: Math.round((navigator as any).connection?.rtt || 50),
+      fps: 60,
+      cacheHit: 92,
+      loadTime: performance.now() / 1000
+    });
   }, []);
 
-  return metrics;
+  useEffect(() => {
+    // Coletar métricas apenas uma vez no mount
+    const timer = setTimeout(updateMetrics, 500);
+    
+    // Atualizar apenas quando status de rede muda
+    window.addEventListener('online', updateMetrics);
+    window.addEventListener('offline', updateMetrics);
+    
+    return () => {
+      clearTimeout(timer);
+      window.removeEventListener('online', updateMetrics);
+      window.removeEventListener('offline', updateMetrics);
+    };
+  }, [updateMetrics]);
+
+  return { metrics, updateMetrics };
 };
 
 // Componente de Métricas de Performance
-const PerformanceMetrics = () => {
-  const metrics = useSystemMetrics();
+const PerformanceMetrics = memo(() => {
+  const { metrics } = useSystemMetrics();
 
   return (
     <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
@@ -108,7 +116,7 @@ const PerformanceMetrics = () => {
       />
     </div>
   );
-};
+});
 
 const MetricCard = ({ icon: Icon, label, value, color, progress }: {
   icon: any;
