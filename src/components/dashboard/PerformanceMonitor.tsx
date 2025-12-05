@@ -1,8 +1,9 @@
 /**
- * Performance Monitor - Monitoramento visual de performance
+ * Performance Monitor - Versão otimizada
+ * PATCH 900: Removido requestAnimationFrame constante para evitar travamentos
  */
 
-import { useState, useEffect } from "react";
+import { useState, useEffect, memo, useCallback } from "react";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Progress } from "@/components/ui/progress";
 import { Badge } from "@/components/ui/badge";
@@ -14,9 +15,10 @@ import {
   Zap,
   TrendingUp,
   Clock,
-  Database
+  Database,
+  RefreshCw
 } from "lucide-react";
-import { criticalPathOptimizer } from "@/lib/performance/critical-path-optimizer";
+import { Button } from "@/components/ui/button";
 
 interface PerformanceData {
   fps: number;
@@ -28,7 +30,7 @@ interface PerformanceData {
   transferSize: number;
 }
 
-export function PerformanceMonitor() {
+function PerformanceMonitorComponent() {
   const [metrics, setMetrics] = useState<PerformanceData>({
     fps: 60,
     memory: 0,
@@ -39,60 +41,43 @@ export function PerformanceMonitor() {
     transferSize: 0,
   });
   const [connectionType, setConnectionType] = useState('unknown');
+  const [isExpanded, setIsExpanded] = useState(false);
+
+  // Coletar métricas apenas uma vez no mount e sob demanda
+  const collectMetrics = useCallback(() => {
+    const perfEntries = performance.getEntriesByType('navigation')[0] as PerformanceNavigationTiming;
+    const resources = performance.getEntriesByType('resource');
+    
+    const totalTransfer = resources.reduce((acc, r: any) => acc + (r.transferSize || 0), 0);
+    
+    setMetrics({
+      fps: 60,
+      memory: (performance as any).memory?.usedJSHeapSize / 1048576 || 0,
+      latency: Math.round((navigator as any).connection?.rtt || 50),
+      ttfb: perfEntries?.responseStart - perfEntries?.requestStart || 0,
+      domLoad: perfEntries?.domContentLoadedEventEnd - perfEntries?.startTime || 0,
+      resourceCount: resources.length,
+      transferSize: totalTransfer,
+    });
+  }, []);
 
   useEffect(() => {
-    let frameCount = 0;
-    let lastTime = performance.now();
-    let animationId: number;
-
-    const measureFPS = () => {
-      frameCount++;
-      const currentTime = performance.now();
-      
-      if (currentTime - lastTime >= 1000) {
-        const perfMetrics = criticalPathOptimizer.getPerformanceMetrics();
-        
-        setMetrics({
-          fps: frameCount,
-          memory: (performance as any).memory?.usedJSHeapSize / 1048576 || 0,
-          latency: Math.round(Math.random() * 50 + 20), // Simulado
-          ttfb: perfMetrics.ttfb,
-          domLoad: perfMetrics.domContentLoaded,
-          resourceCount: perfMetrics.resourceCount,
-          transferSize: perfMetrics.transferSize,
-        });
-        
-        frameCount = 0;
-        lastTime = currentTime;
-      }
-      
-      animationId = requestAnimationFrame(measureFPS);
-    };
-
-    measureFPS();
+    // Coletar métricas iniciais após o DOM estar pronto
+    const timer = setTimeout(collectMetrics, 1000);
 
     // Detectar tipo de conexão
     if ('connection' in navigator) {
       const conn = (navigator as any).connection;
       setConnectionType(conn?.effectiveType || 'unknown');
-      conn?.addEventListener('change', () => {
-        setConnectionType(conn?.effectiveType || 'unknown');
-      });
     }
 
-    return () => cancelAnimationFrame(animationId);
-  }, []);
+    return () => clearTimeout(timer);
+  }, [collectMetrics]);
 
   const formatBytes = (bytes: number) => {
     if (bytes < 1024) return `${bytes} B`;
     if (bytes < 1048576) return `${(bytes / 1024).toFixed(1)} KB`;
     return `${(bytes / 1048576).toFixed(1)} MB`;
-  };
-
-  const getStatusColor = (value: number, thresholds: { good: number; warning: number }) => {
-    if (value >= thresholds.good) return "bg-green-500";
-    if (value >= thresholds.warning) return "bg-yellow-500";
-    return "bg-red-500";
   };
 
   const getLatencyColor = (latency: number) => {
@@ -106,27 +91,21 @@ export function PerformanceMonitor() {
       <CardHeader className="pb-2">
         <CardTitle className="flex items-center gap-2 text-sm font-medium">
           <Activity className="h-4 w-4 text-primary" />
-          Monitor de Performance
+          Performance
           <Badge variant="outline" className="ml-auto text-xs">
             {connectionType.toUpperCase()}
           </Badge>
+          <Button 
+            variant="ghost" 
+            size="icon" 
+            className="h-6 w-6"
+            onClick={collectMetrics}
+          >
+            <RefreshCw className="h-3 w-3" />
+          </Button>
         </CardTitle>
       </CardHeader>
-      <CardContent className="space-y-4">
-        {/* FPS */}
-        <div className="space-y-1">
-          <div className="flex items-center justify-between text-xs">
-            <span className="flex items-center gap-1">
-              <Zap className="h-3 w-3" />
-              FPS
-            </span>
-            <span className={metrics.fps >= 55 ? "text-green-500" : metrics.fps >= 30 ? "text-yellow-500" : "text-red-500"}>
-              {metrics.fps}
-            </span>
-          </div>
-          <Progress value={(metrics.fps / 60) * 100} className="h-1" />
-        </div>
-
+      <CardContent className="space-y-3">
         {/* Memory */}
         <div className="space-y-1">
           <div className="flex items-center justify-between text-xs">
@@ -150,28 +129,15 @@ export function PerformanceMonitor() {
               {metrics.latency}ms
             </span>
           </div>
-          <Progress value={Math.max(0, 100 - metrics.latency)} className="h-1" />
         </div>
 
-        {/* Stats Grid */}
+        {/* Compact Stats */}
         <div className="grid grid-cols-2 gap-2 pt-2 border-t border-border/50">
-          <div className="text-center p-2 rounded bg-muted/30">
-            <Clock className="h-3 w-3 mx-auto mb-1 text-muted-foreground" />
+          <div className="text-center p-1.5 rounded bg-muted/30">
             <div className="text-xs font-medium">{metrics.ttfb.toFixed(0)}ms</div>
             <div className="text-[10px] text-muted-foreground">TTFB</div>
           </div>
-          <div className="text-center p-2 rounded bg-muted/30">
-            <TrendingUp className="h-3 w-3 mx-auto mb-1 text-muted-foreground" />
-            <div className="text-xs font-medium">{metrics.domLoad.toFixed(0)}ms</div>
-            <div className="text-[10px] text-muted-foreground">DOM Load</div>
-          </div>
-          <div className="text-center p-2 rounded bg-muted/30">
-            <Database className="h-3 w-3 mx-auto mb-1 text-muted-foreground" />
-            <div className="text-xs font-medium">{metrics.resourceCount}</div>
-            <div className="text-[10px] text-muted-foreground">Recursos</div>
-          </div>
-          <div className="text-center p-2 rounded bg-muted/30">
-            <HardDrive className="h-3 w-3 mx-auto mb-1 text-muted-foreground" />
+          <div className="text-center p-1.5 rounded bg-muted/30">
             <div className="text-xs font-medium">{formatBytes(metrics.transferSize)}</div>
             <div className="text-[10px] text-muted-foreground">Transfer</div>
           </div>
@@ -180,3 +146,5 @@ export function PerformanceMonitor() {
     </Card>
   );
 }
+
+export const PerformanceMonitor = memo(PerformanceMonitorComponent);
