@@ -16,6 +16,7 @@ import { OverviewCharts } from "@/components/dashboard/index/OverviewCharts";
 import { QuickStats } from "@/components/dashboard/index/QuickStats";
 import { FinancialTab } from "@/components/dashboard/index/FinancialTab";
 import { OperationsTab } from "@/components/dashboard/index/OperationsTab";
+import { SystemControlPanel } from "@/components/system/SystemControlPanel";
 
 // PATCH 584: Memoized data constants for better performance
 const REVENUE_DATA = [
@@ -189,6 +190,9 @@ const Index = () => {
 
       {/* PATCH 549: AI Modules Quick Access */}
       <AIModulesPanel />
+
+      {/* PATCH 800: Sistema de Controle Unificado */}
+      <SystemControlPanel />
 
       {/* PATCH 584: KPIs Grid extracted to memoized component */}
       <KPIGrid />
