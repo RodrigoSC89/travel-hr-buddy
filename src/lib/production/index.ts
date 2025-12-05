@@ -9,3 +9,10 @@ export {
   type ReadinessCheck,
   type ReadinessReport 
 } from './readiness-checker';
+
+export {
+  systemDiagnostics,
+  useSystemDiagnostics,
+  type DiagnosticResult,
+  type DiagnosticsReport
+} from './system-diagnostics';

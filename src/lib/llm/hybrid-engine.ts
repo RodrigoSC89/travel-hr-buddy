@@ -44,16 +44,40 @@ const OFFLINE_RESPONSES: Record<string, { response: string; confidence: number }
     confidence: 1.0
   },
   'help': {
-    response: 'Posso ajudar com: navegação, documentos, compliance, manutenção e operações marítimas.',
+    response: 'Posso ajudar com: navegação, documentos, compliance, manutenção, operações marítimas, gestão de tripulação e relatórios.',
     confidence: 1.0
   },
   'compliance': {
-    response: 'Para questões de compliance, verifique os checklists de auditoria ISM no módulo de Compliance.',
+    response: 'Para questões de compliance, verifique os checklists de auditoria ISM no módulo de Compliance. Acesse via menu principal > Compliance.',
     confidence: 0.85
   },
   'maintenance': {
-    response: 'O sistema de manutenção preventiva está disponível no módulo de Manutenção.',
+    response: 'O sistema de manutenção preventiva está disponível no módulo de Manutenção. Você pode criar ordens de serviço e acompanhar o histórico.',
     confidence: 0.85
+  },
+  'crew': {
+    response: 'O módulo de Tripulação permite gerenciar documentos, certificações e escalas. Acesse via menu principal > RH > Tripulação.',
+    confidence: 0.85
+  },
+  'navigation': {
+    response: 'Para informações de navegação, acesse o módulo de Operações > Navegação. Lá você encontra rotas, cartas náuticas e condições meteorológicas.',
+    confidence: 0.85
+  },
+  'documents': {
+    response: 'Todos os documentos estão no módulo de Documentação. Você pode pesquisar, filtrar por categoria e fazer upload de novos arquivos.',
+    confidence: 0.85
+  },
+  'reports': {
+    response: 'Relatórios estão disponíveis em cada módulo específico ou no painel central de Analytics. Exporte em PDF, Excel ou envie por email.',
+    confidence: 0.85
+  },
+  'status': {
+    response: 'Para verificar o status do sistema, acesse o Dashboard principal ou a página de Health Check em /health.',
+    confidence: 0.9
+  },
+  'offline': {
+    response: 'Você está offline. Os dados foram salvos localmente e serão sincronizados quando a conexão for restaurada.',
+    confidence: 1.0
   },
   'error': {
     response: 'Desculpe, não consegui processar sua solicitação no momento. Tente novamente quando estiver online.',
@@ -185,17 +209,35 @@ class HybridLLMEngine {
   private matchOfflinePattern(prompt: string): { response: string; confidence: number } | null {
     const lowerPrompt = prompt.toLowerCase();
 
-    if (lowerPrompt.includes('olá') || lowerPrompt.includes('oi') || lowerPrompt.includes('bom dia')) {
+    if (lowerPrompt.includes('olá') || lowerPrompt.includes('oi') || lowerPrompt.includes('bom dia') || lowerPrompt.includes('boa tarde')) {
       return OFFLINE_RESPONSES['greeting'];
     }
-    if (lowerPrompt.includes('ajuda') || lowerPrompt.includes('help')) {
+    if (lowerPrompt.includes('ajuda') || lowerPrompt.includes('help') || lowerPrompt.includes('como')) {
       return OFFLINE_RESPONSES['help'];
     }
     if (lowerPrompt.includes('compliance') || lowerPrompt.includes('auditoria') || lowerPrompt.includes('ism')) {
       return OFFLINE_RESPONSES['compliance'];
     }
-    if (lowerPrompt.includes('manutenção') || lowerPrompt.includes('maintenance')) {
+    if (lowerPrompt.includes('manutenção') || lowerPrompt.includes('maintenance') || lowerPrompt.includes('ordem de serviço')) {
       return OFFLINE_RESPONSES['maintenance'];
+    }
+    if (lowerPrompt.includes('tripulação') || lowerPrompt.includes('crew') || lowerPrompt.includes('marinheiro')) {
+      return OFFLINE_RESPONSES['crew'];
+    }
+    if (lowerPrompt.includes('navegação') || lowerPrompt.includes('rota') || lowerPrompt.includes('carta')) {
+      return OFFLINE_RESPONSES['navigation'];
+    }
+    if (lowerPrompt.includes('documento') || lowerPrompt.includes('arquivo') || lowerPrompt.includes('upload')) {
+      return OFFLINE_RESPONSES['documents'];
+    }
+    if (lowerPrompt.includes('relatório') || lowerPrompt.includes('report') || lowerPrompt.includes('exportar')) {
+      return OFFLINE_RESPONSES['reports'];
+    }
+    if (lowerPrompt.includes('status') || lowerPrompt.includes('saúde') || lowerPrompt.includes('health')) {
+      return OFFLINE_RESPONSES['status'];
+    }
+    if (!navigator.onLine) {
+      return OFFLINE_RESPONSES['offline'];
     }
 
     return null;
