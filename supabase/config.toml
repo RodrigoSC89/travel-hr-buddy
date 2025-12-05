@@ -548,3 +548,15 @@ comment = "MMI Advanced Copilot - Multimodal AI assistant with voice, memory, an
 [functions.ai-advisor]
 verify_jwt = false
 comment = "PEO-DP AI Advisor - Adaptive copilot with profile-based responses for DPO, Inspector, Manager"
+
+# ============================================
+# PATCH 833: System Health & Analytics
+# ============================================
+
+[functions.system-health]
+verify_jwt = false
+comment = "System health check endpoint - monitors database, storage, auth, and realtime status"
+
+[functions.track-analytics]
+verify_jwt = false
+comment = "Server-side analytics tracking with batching support"
