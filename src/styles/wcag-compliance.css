@@ -424,3 +424,91 @@ button[data-variant="outline"]:hover {
     display: none !important;
   }
 }
+
+/* ============================================
+   DARK MODE GLOBAL CONTRAST FIXES
+   ============================================ */
+
+.dark {
+  /* Force high contrast text in dark mode */
+  --text-on-dark: 0 0% 95%;
+  --text-muted-on-dark: 220 20% 75%;
+}
+
+/* Global text contrast improvements for dark mode */
+.dark .text-muted-foreground {
+  color: hsl(220 20% 75%) !important;
+}
+
+.dark .text-foreground {
+  color: hsl(0 0% 98%) !important;
+}
+
+/* Card text visibility in dark mode */
+.dark [class*="CardTitle"],
+.dark .card h1,
+.dark .card h2,
+.dark .card h3,
+.dark .card h4 {
+  color: hsl(0 0% 98%) !important;
+}
+
+/* Sidebar menu items - high contrast */
+.dark [data-sidebar="menu-button"] {
+  color: hsl(0 0% 90%) !important;
+}
+
+.dark [data-sidebar="menu-button"]:hover {
+  color: hsl(0 0% 100%) !important;
+}
+
+.dark [data-sidebar="menu-sub-button"] {
+  color: hsl(0 0% 85%) !important;
+}
+
+/* Stats bar text improvements */
+.dark .text-slate-300 {
+  color: hsl(220 20% 80%) !important;
+}
+
+/* Badge text visibility */
+.dark [class*="Badge"]:not([class*="destructive"]) {
+  font-weight: 600;
+}
+
+/* Form labels in dark mode */
+.dark label {
+  color: hsl(0 0% 90%);
+  font-weight: 500;
+}
+
+/* Table cells in dark mode */
+.dark td,
+.dark th {
+  color: hsl(0 0% 90%);
+}
+
+.dark th {
+  font-weight: 600;
+}
+
+/* Description text */
+.dark .text-sm:not([class*="font-"]),
+.dark .text-xs:not([class*="font-"]) {
+  font-weight: 450;
+}
+
+/* Status indicators - ensure visibility */
+.dark .text-emerald-400,
+.dark .text-green-400 {
+  color: hsl(142 71% 60%) !important;
+}
+
+.dark .text-amber-400,
+.dark .text-yellow-400 {
+  color: hsl(38 92% 60%) !important;
+}
+
+.dark .text-red-400 {
+  color: hsl(0 72% 65%) !important;
+}

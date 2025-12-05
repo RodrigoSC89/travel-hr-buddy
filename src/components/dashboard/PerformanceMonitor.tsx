@@ -19,6 +19,7 @@ import {
   RefreshCw
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
+import { cn } from "@/lib/utils";
 
 interface PerformanceData {
   fps: number;
@@ -87,45 +88,45 @@ function PerformanceMonitorComponent() {
   };
 
   return (
-    <Card className="bg-card/50 backdrop-blur border-border/50">
+    <Card className="bg-card/80 backdrop-blur border-border/50">
       <CardHeader className="pb-2">
-        <CardTitle className="flex items-center gap-2 text-sm font-medium">
+        <CardTitle className="flex items-center gap-2 text-sm font-semibold text-foreground">
           <Activity className="h-4 w-4 text-primary" />
           Performance
-          <Badge variant="outline" className="ml-auto text-xs">
+          <Badge variant="outline" className="ml-auto text-xs font-semibold border-primary/50 text-primary">
             {connectionType.toUpperCase()}
           </Badge>
           <Button 
             variant="ghost" 
             size="icon" 
-            className="h-6 w-6"
+            className="h-7 w-7"
             onClick={collectMetrics}
           >
-            <RefreshCw className="h-3 w-3" />
+            <RefreshCw className="h-3.5 w-3.5" />
           </Button>
         </CardTitle>
       </CardHeader>
       <CardContent className="space-y-3">
         {/* Memory */}
         <div className="space-y-1">
-          <div className="flex items-center justify-between text-xs">
-            <span className="flex items-center gap-1">
-              <Cpu className="h-3 w-3" />
+          <div className="flex items-center justify-between text-sm">
+            <span className="flex items-center gap-1.5 text-foreground font-medium">
+              <Cpu className="h-3.5 w-3.5 text-primary" />
               Memória
             </span>
-            <span>{metrics.memory.toFixed(1)} MB</span>
+            <span className="font-semibold text-foreground">{metrics.memory.toFixed(1)} MB</span>
           </div>
-          <Progress value={Math.min((metrics.memory / 100) * 100, 100)} className="h-1" />
+          <Progress value={Math.min((metrics.memory / 100) * 100, 100)} className="h-1.5" />
         </div>
 
         {/* Latency */}
         <div className="space-y-1">
-          <div className="flex items-center justify-between text-xs">
-            <span className="flex items-center gap-1">
-              <Wifi className="h-3 w-3" />
+          <div className="flex items-center justify-between text-sm">
+            <span className="flex items-center gap-1.5 text-foreground font-medium">
+              <Wifi className="h-3.5 w-3.5 text-primary" />
               Latência
             </span>
-            <span className={getLatencyColor(metrics.latency)}>
+            <span className={cn("font-semibold", getLatencyColor(metrics.latency))}>
               {metrics.latency}ms
             </span>
           </div>
@@ -133,13 +134,13 @@ function PerformanceMonitorComponent() {
 
         {/* Compact Stats */}
         <div className="grid grid-cols-2 gap-2 pt-2 border-t border-border/50">
-          <div className="text-center p-1.5 rounded bg-muted/30">
-            <div className="text-xs font-medium">{metrics.ttfb.toFixed(0)}ms</div>
-            <div className="text-[10px] text-muted-foreground">TTFB</div>
+          <div className="text-center p-2 rounded bg-muted/50">
+            <div className="text-sm font-semibold text-foreground">{metrics.ttfb.toFixed(0)}ms</div>
+            <div className="text-xs font-medium text-foreground/70">TTFB</div>
           </div>
-          <div className="text-center p-1.5 rounded bg-muted/30">
-            <div className="text-xs font-medium">{formatBytes(metrics.transferSize)}</div>
-            <div className="text-[10px] text-muted-foreground">Transfer</div>
+          <div className="text-center p-2 rounded bg-muted/50">
+            <div className="text-sm font-semibold text-foreground">{formatBytes(metrics.transferSize)}</div>
+            <div className="text-xs font-medium text-foreground/70">Transfer</div>
           </div>
         </div>
       </CardContent>

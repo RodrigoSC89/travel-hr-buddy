@@ -128,7 +128,7 @@ const QuickActionsPanelComponent: React.FC = () => {
       {/* Quick Actions */}
       <Card className="border-primary/20 bg-gradient-to-br from-card to-primary/5">
         <CardHeader className="pb-3">
-          <CardTitle className="flex items-center gap-2 text-base">
+          <CardTitle className="flex items-center gap-2 text-base text-foreground font-semibold">
             <Zap className="h-4 w-4 text-primary" />
             Ações Rápidas
           </CardTitle>
@@ -160,14 +160,14 @@ const QuickActionsPanelComponent: React.FC = () => {
       </Card>
 
       {/* Recent Activity */}
-      <Card className="border-border/50 bg-card/50">
+      <Card className="border-border/50 bg-card/80">
         <CardHeader className="pb-3">
-          <CardTitle className="flex items-center justify-between text-base">
+          <CardTitle className="flex items-center justify-between text-base text-foreground font-semibold">
             <span className="flex items-center gap-2">
-              <Bell className="h-4 w-4 text-muted-foreground" />
+              <Bell className="h-4 w-4 text-primary" />
               Atividade Recente
             </span>
-            <Button variant="ghost" size="sm" className="text-xs h-7">
+            <Button variant="ghost" size="sm" className="text-sm h-7 text-primary hover:text-primary font-medium">
               Ver todas
             </Button>
           </CardTitle>
@@ -179,13 +179,13 @@ const QuickActionsPanelComponent: React.FC = () => {
                 key={activity.id}
                 className="flex items-center gap-3 p-2 rounded-lg hover:bg-muted/50 transition-colors cursor-pointer"
               >
-                <div className="p-1.5 rounded-full bg-primary/10">
-                  <activity.icon className="h-3 w-3 text-primary" />
+                <div className="p-1.5 rounded-full bg-primary/20">
+                  <activity.icon className="h-3.5 w-3.5 text-primary" />
                 </div>
                 <div className="flex-1 min-w-0">
-                  <p className="text-sm truncate">{activity.text}</p>
+                  <p className="text-sm truncate text-foreground font-medium">{activity.text}</p>
                 </div>
-                <span className="text-xs text-muted-foreground whitespace-nowrap">
+                <span className="text-sm text-primary/90 whitespace-nowrap font-medium">
                   {activity.time}
                 </span>
               </div>

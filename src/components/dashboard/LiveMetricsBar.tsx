@@ -72,30 +72,30 @@ function LiveMetricsBarComponent() {
 
   const getStatusColor = (status?: string) => {
     switch (status) {
-      case 'success': return 'text-green-500';
-      case 'warning': return 'text-yellow-500';
-      case 'error': return 'text-red-500';
-      default: return 'text-muted-foreground';
+      case 'success': return 'text-emerald-400';
+      case 'warning': return 'text-amber-400';
+      case 'error': return 'text-red-400';
+      default: return 'text-slate-300';
     }
   };
 
   return (
-    <div className="bg-card/80 backdrop-blur border-b border-border/50 px-4 py-2">
+    <div className="bg-card/95 backdrop-blur border-b border-border/50 px-4 py-2.5">
       <div className="flex items-center justify-between gap-4 overflow-x-auto">
         {metrics.map((metric) => (
           <div 
             key={metric.id}
-            className="flex items-center gap-2 text-xs whitespace-nowrap"
+            className="flex items-center gap-2 text-sm whitespace-nowrap"
           >
             <div className={getStatusColor(metric.status)}>
               {metric.icon}
             </div>
-            <span className="text-muted-foreground hidden sm:inline">{metric.label}:</span>
-            <span className="font-semibold">{metric.value}</span>
+            <span className="text-slate-300 dark:text-slate-300 hidden sm:inline font-medium">{metric.label}:</span>
+            <span className="font-bold text-foreground">{metric.value}</span>
           </div>
         ))}
-        <Badge variant="outline" className="text-[10px] bg-primary/10 text-primary border-primary/30 shrink-0">
-          <Radio className="h-2 w-2 mr-1" />
+        <Badge variant="outline" className="text-xs bg-emerald-500/20 text-emerald-300 border-emerald-500/50 shrink-0 font-semibold">
+          <Radio className="h-2.5 w-2.5 mr-1" />
           LIVE
         </Badge>
       </div>
