@@ -56,3 +56,6 @@ export { NetworkStatusIndicator } from './NetworkStatusIndicator';
 // Resilience indicator (PATCH 900)
 export { ResilienceIndicator, ResilienceBadge } from './ResilienceIndicator';
 
+// System Health Dashboard (PATCH 970)
+export { SystemHealthDashboard } from './SystemHealthDashboard';
+
