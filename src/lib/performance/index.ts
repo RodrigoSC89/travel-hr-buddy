@@ -226,3 +226,20 @@ export {
   useNetworkAware,
   type NetworkStatus 
 } from './network-monitor';
+
+// PATCH 840: Preload strategy
+export { preloadStrategy as routePreloadStrategy } from './preload-strategy';
+
+// PATCH 840: Final optimizations
+export { 
+  createLazyObserver,
+  createResizeObserver,
+  createScrollHandler,
+  loadImageWithRetry,
+  chunkArray as chunkArrayFinal,
+  processBatch,
+  measureTime,
+  measureTimeAsync,
+  LRUCache,
+  finalOptimizations
+} from './final-optimizations';
