@@ -105,3 +105,9 @@ export { useVirtualizedData } from "@/components/performance/VirtualizedList";
 export { useRequestQueue } from "@/lib/performance/request-queue-manager";
 export { useCachedFetch } from "@/lib/performance/api-cache-layer";
 export { useErrorBoundary } from "@/components/performance/ErrorBoundaryAdvanced";
+
+// PATCH 833: PWA & System utilities
+export { usePWA } from "@/lib/pwa/service-worker-registration";
+export { useWebVitals } from "@/lib/performance/web-vitals-monitor";
+export { useAPI, useSupabaseQuery } from "@/lib/api/unified-api-client";
+export { useSystemConfig } from "@/lib/system/system-config";

@@ -190,3 +190,6 @@ export {
   dynamicImport,
   lazyOnVisible 
 } from './code-splitting';
+
+// PATCH 833: Web Vitals monitoring
+export { webVitalsMonitor, useWebVitals } from './web-vitals-monitor';
