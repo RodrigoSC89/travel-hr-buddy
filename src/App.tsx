@@ -11,6 +11,7 @@ import { initializePerformance } from "@/lib/performance/init";
 import { logger } from "@/lib/logger";
 import { CommandPalette } from "@/components/CommandPalette";
 import { KeyboardShortcutsHelp } from "@/components/help/KeyboardShortcuts";
+import { QuickStartGuide } from "@/components/help/QuickStartGuide";
 import { OfflineBanner } from "@/components/OfflineBanner";
 import { OffshoreLoader } from "@/components/LoadingStates";
 import { ErrorDebugBanner } from "@/components/debug/ErrorDebugBanner";
@@ -194,6 +195,9 @@ function App() {
                 
                 {/* PATCH 835: Bandwidth indicator for slow connections */}
                 <BandwidthIndicator />
+                
+                {/* PATCH 838: Quick Start Guide for new users */}
+                <QuickStartGuide />
                 
                 {/* PATCH 700: Web Vitals Overlay (dev only) */}
                 {import.meta.env.DEV && (
