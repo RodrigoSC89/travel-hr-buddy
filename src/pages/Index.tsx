@@ -1,31 +1,33 @@
-import React, { useMemo, useState, useCallback } from "react";
+import React, { useMemo, useState, useCallback, Suspense, lazy } from "react";
 import { Helmet } from "react-helmet-async";
 import { ProfessionalHeader } from "@/components/dashboard/professional-header";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
-import { Shield, Wrench, Users, Box, Brain, Zap, Ship, Sparkles, Leaf, AlertTriangle, GraduationCap, Plane, ShoppingCart, Radio } from "lucide-react";
+import { Shield, Wrench, Users, Brain, Ship, Sparkles, Leaf, AlertTriangle, GraduationCap, Plane, ShoppingCart } from "lucide-react";
 import { Link, useNavigate } from "react-router-dom";
-import { usePreviewSafeMode } from "@/hooks/qa/usePreviewSafeMode";
 import { WelcomeOnboarding } from "@/components/onboarding/WelcomeOnboarding";
 
-// PATCH 584: Split Index into optimized subcomponents
-import { KPIGrid } from "@/components/dashboard/index/KPIGrid";
-import { OverviewCharts } from "@/components/dashboard/index/OverviewCharts";
-import { QuickStats } from "@/components/dashboard/index/QuickStats";
-import { FinancialTab } from "@/components/dashboard/index/FinancialTab";
-import { OperationsTab } from "@/components/dashboard/index/OperationsTab";
-import { SystemControlPanel } from "@/components/system/SystemControlPanel";
-import { QuickActionsPanel } from "@/components/dashboard/QuickActionsPanel";
-import { NetworkStatusWidget } from "@/components/dashboard/NetworkStatusWidget";
-import { PerformanceMonitor } from "@/components/dashboard/PerformanceMonitor";
-import { AIModulesGrid } from "@/components/dashboard/AIModulesGrid";
-import { LiveMetricsBar } from "@/components/dashboard/LiveMetricsBar";
+// PATCH 584: Split Index into optimized subcomponents - Lazy loaded
+const KPIGrid = lazy(() => import("@/components/dashboard/index/KPIGrid").then(m => ({ default: m.KPIGrid })));
+const OverviewCharts = lazy(() => import("@/components/dashboard/index/OverviewCharts").then(m => ({ default: m.OverviewCharts })));
+const QuickStats = lazy(() => import("@/components/dashboard/index/QuickStats").then(m => ({ default: m.QuickStats })));
+const FinancialTab = lazy(() => import("@/components/dashboard/index/FinancialTab").then(m => ({ default: m.FinancialTab })));
+const OperationsTab = lazy(() => import("@/components/dashboard/index/OperationsTab").then(m => ({ default: m.OperationsTab })));
+const SystemControlPanel = lazy(() => import("@/components/system/SystemControlPanel").then(m => ({ default: m.SystemControlPanel })));
+const QuickActionsPanel = lazy(() => import("@/components/dashboard/QuickActionsPanel").then(m => ({ default: m.QuickActionsPanel })));
+const NetworkStatusWidget = lazy(() => import("@/components/dashboard/NetworkStatusWidget").then(m => ({ default: m.NetworkStatusWidget })));
+const PerformanceMonitor = lazy(() => import("@/components/dashboard/PerformanceMonitor").then(m => ({ default: m.PerformanceMonitor })));
+const AIModulesGrid = lazy(() => import("@/components/dashboard/AIModulesGrid").then(m => ({ default: m.AIModulesGrid })));
+const LiveMetricsBar = lazy(() => import("@/components/dashboard/LiveMetricsBar").then(m => ({ default: m.LiveMetricsBar })));
 
-// PATCH 850: PWA & Offline Components
-import { OfflineStatusBar } from "@/components/pwa/OfflineStatusBar";
-import { InstallPrompt } from "@/components/pwa/InstallPrompt";
+// PATCH 850: PWA & Offline Components - Lazy loaded
+const OfflineStatusBar = lazy(() => import("@/components/pwa/OfflineStatusBar").then(m => ({ default: m.OfflineStatusBar })));
+const InstallPrompt = lazy(() => import("@/components/pwa/InstallPrompt").then(m => ({ default: m.InstallPrompt })));
+
+// Loading placeholder
+const LoadingPlaceholder = () => <div className="h-32 bg-muted/20 rounded-lg animate-pulse" />;
 
 // PATCH 584: Memoized data constants for better performance
 const REVENUE_DATA = [
@@ -154,14 +156,6 @@ const AIModulesPanel = () => {
 
 const Index = () => {
   const [activeTab, setActiveTab] = useState("overview");
-  
-  // PATCH 624 - Preview Safe Mode
-  const { isValidated, validationPassed, shouldShowData } = usePreviewSafeMode({
-    componentName: "Index",
-    enableValidation: true,
-    maxRenderTime: 2000,
-    silenceErrors: true
-  });
 
   // PATCH 584: Memoize callback to prevent unnecessary re-renders
   const handleTabChange = useCallback((value: string) => {
@@ -171,13 +165,17 @@ const Index = () => {
   return (
     <>
       {/* PATCH 850: PWA Offline Status */}
-      <OfflineStatusBar />
+      <Suspense fallback={null}>
+        <OfflineStatusBar />
+      </Suspense>
       
       {/* Onboarding para novos usuários */}
       <WelcomeOnboarding />
       
       {/* PATCH 850: PWA Install Prompt */}
-      <InstallPrompt />
+      <Suspense fallback={null}>
+        <InstallPrompt />
+      </Suspense>
       
       <Helmet>
         <title>Dashboard Executivo | Nautilus One - Sistema Marítimo Corporativo</title>
@@ -189,7 +187,9 @@ const Index = () => {
       </Helmet>
       
       {/* Live Metrics Bar - Always visible */}
-      <LiveMetricsBar />
+      <Suspense fallback={null}>
+        <LiveMetricsBar />
+      </Suspense>
       
       <div className="space-y-6 p-6 bg-gradient-to-br from-background via-background to-primary/5 min-h-screen">
       <div className="flex items-center justify-between">
@@ -213,10 +213,16 @@ const Index = () => {
       {/* PATCH 801: Quick Actions, Network Status & Performance */}
       <div className="grid lg:grid-cols-4 gap-4">
         <div className="lg:col-span-2">
-          <QuickActionsPanel />
+          <Suspense fallback={<LoadingPlaceholder />}>
+            <QuickActionsPanel />
+          </Suspense>
         </div>
-        <NetworkStatusWidget />
-        <PerformanceMonitor />
+        <Suspense fallback={<LoadingPlaceholder />}>
+          <NetworkStatusWidget />
+        </Suspense>
+        <Suspense fallback={<LoadingPlaceholder />}>
+          <PerformanceMonitor />
+        </Suspense>
       </div>
 
       {/* PATCH 802: AI Modules Grid */}
@@ -228,15 +234,21 @@ const Index = () => {
           </CardTitle>
         </CardHeader>
         <CardContent>
-          <AIModulesGrid />
+          <Suspense fallback={<LoadingPlaceholder />}>
+            <AIModulesGrid />
+          </Suspense>
         </CardContent>
       </Card>
 
       {/* PATCH 800: Sistema de Controle Unificado */}
-      <SystemControlPanel />
+      <Suspense fallback={<LoadingPlaceholder />}>
+        <SystemControlPanel />
+      </Suspense>
 
       {/* PATCH 584: KPIs Grid extracted to memoized component */}
-      <KPIGrid />
+      <Suspense fallback={<LoadingPlaceholder />}>
+        <KPIGrid />
+      </Suspense>
 
       {/* Main Tabs */}
       <Tabs value={activeTab} onValueChange={handleTabChange} className="space-y-6">
@@ -254,20 +266,28 @@ const Index = () => {
 
         <TabsContent value="overview" className="space-y-6">
           {/* PATCH 584: Charts extracted to memoized component */}
-          <OverviewCharts revenueData={REVENUE_DATA} fleetData={FLEET_DATA} />
+          <Suspense fallback={<LoadingPlaceholder />}>
+            <OverviewCharts revenueData={REVENUE_DATA} fleetData={FLEET_DATA} />
+          </Suspense>
           
           {/* PATCH 584: Quick Stats extracted to memoized component */}
-          <QuickStats />
+          <Suspense fallback={<LoadingPlaceholder />}>
+            <QuickStats />
+          </Suspense>
         </TabsContent>
 
         <TabsContent value="financial">
           {/* PATCH 584: Financial tab extracted to memoized component */}
-          <FinancialTab data={REVENUE_DATA} />
+          <Suspense fallback={<LoadingPlaceholder />}>
+            <FinancialTab data={REVENUE_DATA} />
+          </Suspense>
         </TabsContent>
 
         <TabsContent value="operations">
           {/* PATCH 584: Operations tab extracted to memoized component */}
-          <OperationsTab />
+          <Suspense fallback={<LoadingPlaceholder />}>
+            <OperationsTab />
+          </Suspense>
         </TabsContent>
       </Tabs>
       </div>
