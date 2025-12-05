@@ -1,9 +1,11 @@
 /**
- * Smart AI Assistant - PATCH 837
+ * Smart AI Assistant - PATCH 900
  * Contextual AI assistant with maritime domain knowledge
+ * Now integrated with Hybrid LLM Engine for offline-first AI
  */
 
-import { useState, useCallback } from 'react';
+import { useState, useCallback, useEffect } from 'react';
+import { hybridLLMEngine } from '@/lib/llm/hybrid-engine';
 
 interface AssistantMessage {
   id: string;
@@ -147,7 +149,7 @@ Quando possível, sugira ações que o usuário pode realizar no sistema.`;
   }
   
   /**
-   * Generate response (can be replaced with actual AI call)
+   * Generate response using Hybrid LLM Engine (cloud + offline fallback)
    */
   private async generateResponse(input: string): Promise<{
     content: string;
@@ -155,7 +157,7 @@ Quando possível, sugira ações que o usuário pode realizar no sistema.`;
   }> {
     const lowerInput = input.toLowerCase();
     
-    // Navigation intents
+    // Navigation intents - handle locally for instant response
     if (lowerInput.includes('ir para') || lowerInput.includes('abrir') || lowerInput.includes('navegar')) {
       const destinations: Record<string, { path: string; name: string }> = {
         'dashboard': { path: '/dashboard', name: 'Dashboard' },
@@ -165,7 +167,12 @@ Quando possível, sugira ações que o usuário pode realizar no sistema.`;
         'recursos humanos': { path: '/hr', name: 'Recursos Humanos' },
         'frota': { path: '/fleet', name: 'Frota' },
         'documentos': { path: '/documents', name: 'Documentos' },
+        'manutenção': { path: '/mmi', name: 'Manutenção (MMI)' },
+        'mmi': { path: '/mmi', name: 'Manutenção (MMI)' },
+        'compliance': { path: '/compliance-hub', name: 'Compliance Hub' },
         'configurações': { path: '/settings', name: 'Configurações' },
+        'tripulação': { path: '/crew', name: 'Tripulação' },
+        'crew': { path: '/crew', name: 'Tripulação' },
       };
       
       for (const [key, dest] of Object.entries(destinations)) {
@@ -181,8 +188,34 @@ Quando possível, sugira ações que o usuário pode realizar no sistema.`;
         }
       }
     }
-    
-    // Help intents
+
+    // Try Hybrid LLM Engine for complex queries
+    try {
+      const llmResponse = await hybridLLMEngine.query(input, {
+        context: `Módulo atual: ${this.context.activeModule}. Página: ${this.context.currentPage}. Papel: ${this.context.userRole}.`
+      });
+
+      // Build suggestions based on response source
+      const suggestions = llmResponse.source === 'cloud' 
+        ? ['Ver mais detalhes', 'Outra pergunta']
+        : ['Tentar novamente online', 'Ver ajuda'];
+
+      return {
+        content: llmResponse.response,
+        metadata: {
+          suggestions,
+          data: {
+            source: llmResponse.source,
+            confidence: llmResponse.confidence,
+            latency: llmResponse.latency
+          }
+        },
+      };
+    } catch (error) {
+      console.warn('[SmartAssistant] LLM query failed, using fallback:', error);
+    }
+
+    // Fallback responses for common intents
     if (lowerInput.includes('ajuda') || lowerInput.includes('o que você pode')) {
       return {
         content: `Posso ajudar você com:
@@ -191,62 +224,24 @@ Quando possível, sugira ações que o usuário pode realizar no sistema.`;
 📋 **Tarefas** - "Criar nova viagem", "Ver pendentes"
 🔍 **Busca** - "Buscar tripulante João"
 📊 **Relatórios** - "Gerar relatório mensal"
-❓ **Dúvidas** - Pergunte sobre qualquer funcionalidade
+🛠️ **Manutenção** - "Ver ordens de serviço", "Status MMI"
+⚓ **Compliance** - "Auditorias pendentes", "Checklists"
 
 Use os botões de ação rápida abaixo ou digite sua pergunta.`,
         metadata: {
-          suggestions: ['Criar viagem', 'Ver pendentes', 'Relatórios'],
+          suggestions: ['Ir para MMI', 'Ver pendentes', 'Compliance'],
         },
       };
     }
     
-    // Create/new intents
-    if (lowerInput.includes('criar') || lowerInput.includes('nova') || lowerInput.includes('novo')) {
-      if (lowerInput.includes('viagem')) {
-        return {
-          content: `Para criar uma nova solicitação de viagem:
-
-1. Acesse o módulo de Viagens
-2. Clique em "Nova Solicitação"
-3. Preencha os dados do tripulante
-4. Selecione origem, destino e datas
-5. Envie para aprovação
-
-Quer que eu te leve para o módulo de viagens?`,
-          metadata: {
-            action: 'navigate',
-            data: { path: '/travel', name: 'Viagens' },
-            suggestions: ['Ir para Viagens', 'Ver tutorial'],
-          },
-        };
-      }
-    }
-    
-    // Status intents
-    if (lowerInput.includes('status') || lowerInput.includes('pendente')) {
-      return {
-        content: `Aqui está um resumo do status atual:
-
-✅ **5** solicitações aprovadas hoje
-⏳ **3** pendentes de aprovação
-⚠️ **2** documentos expirando esta semana
-🚢 **8** embarcações em operação
-
-Quer ver detalhes de algum item específico?`,
-        metadata: {
-          suggestions: ['Ver pendentes', 'Docs expirando', 'Status frota'],
-        },
-      };
-    }
-    
-    // Default response
+    // Default fallback
     return {
       content: `Entendi sua pergunta sobre "${input}". 
 
-Para uma resposta mais precisa, posso:
-- Te direcionar ao módulo correto
-- Mostrar um tutorial
-- Executar uma ação específica
+No momento estou processando localmente. Para respostas mais detalhadas:
+- Verifique sua conexão de internet
+- Tente uma pergunta mais específica
+- Use os módulos do sistema diretamente
 
 Como posso ajudar?`,
       metadata: {
