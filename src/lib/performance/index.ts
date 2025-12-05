@@ -243,3 +243,7 @@ export {
   LRUCache,
   finalOptimizations
 } from './final-optimizations';
+
+// PATCH 850: Memory & Resource Management
+export { memoryOptimizer } from './memory-optimizer';
+export { resourceManager, type ResourceStatus } from './resource-manager';
