@@ -1,9 +1,9 @@
 /**
- * PATCH 801 - Quick Actions Panel
- * Acesso rápido às principais funcionalidades
+ * PATCH 801/835 - Quick Actions Panel
+ * Acesso rápido às principais funcionalidades - Otimizado
  */
 
-import React from "react";
+import React, { memo, useCallback } from "react";
 import { useNavigate } from "react-router-dom";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
@@ -17,16 +17,11 @@ import {
   Calendar,
   ClipboardCheck,
   BarChart3,
-  Settings,
-  Search,
-  Bell,
-  MessageSquare,
   Zap,
-  Target,
-  TrendingUp,
-  Shield,
   Wrench,
+  Bell,
 } from "lucide-react";
+import { smartPrefetch } from "@/lib/performance/smart-prefetch";
 
 interface QuickAction {
   id: string;
@@ -117,8 +112,16 @@ const recentActivities = [
   { id: 4, text: "Tripulante João Silva certificado", time: "2h", icon: Users },
 ];
 
-export const QuickActionsPanel: React.FC = () => {
+const QuickActionsPanelComponent: React.FC = () => {
   const navigate = useNavigate();
+
+  const handleNavigate = useCallback((route: string) => {
+    navigate(route);
+  }, [navigate]);
+
+  const handlePrefetch = useCallback((route: string) => {
+    smartPrefetch.prefetchRoute(route);
+  }, []);
 
   return (
     <div className="grid md:grid-cols-2 gap-4">
@@ -137,7 +140,8 @@ export const QuickActionsPanel: React.FC = () => {
                 key={action.id}
                 variant="ghost"
                 className={`h-auto flex-col gap-1 p-3 ${action.color} text-white relative`}
-                onClick={() => navigate(action.route)}
+                onClick={() => handleNavigate(action.route)}
+                onMouseEnter={() => handlePrefetch(action.route)}
               >
                 <action.icon className="h-5 w-5" />
                 <span className="text-xs font-medium">{action.label}</span>
@@ -193,4 +197,5 @@ export const QuickActionsPanel: React.FC = () => {
   );
 };
 
+export const QuickActionsPanel = memo(QuickActionsPanelComponent);
 export default QuickActionsPanel;
