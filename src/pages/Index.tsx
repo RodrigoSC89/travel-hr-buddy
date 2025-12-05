@@ -128,7 +128,7 @@ const AIModulesPanel = memo(() => {
   return (
     <Card className="border-primary/20 bg-gradient-to-br from-primary/5 to-secondary/5">
       <CardHeader className="pb-3">
-        <CardTitle className="flex items-center gap-2 text-lg">
+        <CardTitle className="flex items-center gap-2 text-lg text-foreground font-semibold">
           <Sparkles className="h-5 w-5 text-primary" />
           Módulos IA Avançados
         </CardTitle>
@@ -139,14 +139,23 @@ const AIModulesPanel = memo(() => {
             <button
               key={mod.route}
               onClick={() => navigate(mod.route)}
-              className={`p-3 rounded-lg bg-gradient-to-br ${mod.color} text-white hover:scale-105 transition-all duration-200 text-left`}
+              className={`relative p-3 rounded-lg bg-gradient-to-br ${mod.color} text-white hover:scale-105 transition-all duration-200 text-left overflow-hidden group`}
+              aria-label={`${mod.name}: ${mod.description}`}
             >
-              <mod.icon className="h-5 w-5 mb-2" />
-              <h4 className="font-semibold text-xs">{mod.name}</h4>
-              <p className="text-[10px] opacity-90 mt-1 line-clamp-2">{mod.description}</p>
-              <Badge variant="secondary" className="mt-2 text-[10px] bg-white/20 hover:bg-white/30">
-                {mod.badge}
-              </Badge>
+              {/* Dark overlay for text contrast */}
+              <div className="absolute inset-0 bg-gradient-to-t from-black/50 via-black/20 to-transparent pointer-events-none" />
+              
+              <div className="relative z-10">
+                <mod.icon className="h-5 w-5 mb-2 drop-shadow-sm" aria-hidden="true" />
+                <h4 className="font-semibold text-sm drop-shadow-sm">{mod.name}</h4>
+                <p className="text-xs opacity-95 mt-1 line-clamp-2 drop-shadow-sm font-medium">{mod.description}</p>
+                <Badge 
+                  variant="secondary" 
+                  className="mt-2 text-xs bg-white/25 hover:bg-white/35 text-white border-0 font-medium"
+                >
+                  {mod.badge}
+                </Badge>
+              </div>
             </button>
           ))}
         </div>

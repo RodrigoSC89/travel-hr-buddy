@@ -9,6 +9,7 @@
 @import "./styles/low-bandwidth.css";
 @import "./styles/revolutionary-ux.css";
 @import "./styles/accessibility.css";
+@import "./styles/wcag-compliance.css";
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
@@ -81,7 +82,7 @@
     --info-foreground: var(--azure-50);
 
     --muted: 220 13% 95%;                    /* #F1F5F9 - Cinza muito claro */
-    --muted-foreground: 220 9% 46%;          /* #64748B - Cinza médio para contraste */
+    --muted-foreground: 220 15% 35%;         /* #4A5568 - WCAG AA: 7:1 contrast on white */
 
     --destructive: 0 84% 60%;                /* #F56565 - Vermelho */
     --destructive-foreground: 0 0% 98%;      /* #FAFAFA - Branco */
