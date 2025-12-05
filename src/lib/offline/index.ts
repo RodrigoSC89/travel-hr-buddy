@@ -59,3 +59,22 @@ export {
   formatBytes,
   type StorageQuota,
 } from './storage-quota';
+
+// PATCH 901: Advanced features
+export {
+  requestBatcher,
+  batchedFetch,
+} from './request-batcher';
+
+export {
+  smartSync,
+  initializeSmartSync,
+  type SmartSyncConfig,
+} from './smart-sync';
+
+export {
+  dataIntegrity,
+  validateDataStructure,
+  sanitizeForSync,
+  type IntegrityCheck,
+} from './data-integrity';
