@@ -5,7 +5,7 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
-import { Shield, Wrench, Users, Box, Brain, Zap, Ship, Sparkles, Leaf, AlertTriangle, GraduationCap, Plane, ShoppingCart } from "lucide-react";
+import { Shield, Wrench, Users, Box, Brain, Zap, Ship, Sparkles, Leaf, AlertTriangle, GraduationCap, Plane, ShoppingCart, Radio } from "lucide-react";
 import { Link, useNavigate } from "react-router-dom";
 import { usePreviewSafeMode } from "@/hooks/qa/usePreviewSafeMode";
 import { WelcomeOnboarding } from "@/components/onboarding/WelcomeOnboarding";
@@ -19,6 +19,9 @@ import { OperationsTab } from "@/components/dashboard/index/OperationsTab";
 import { SystemControlPanel } from "@/components/system/SystemControlPanel";
 import { QuickActionsPanel } from "@/components/dashboard/QuickActionsPanel";
 import { NetworkStatusWidget } from "@/components/dashboard/NetworkStatusWidget";
+import { PerformanceMonitor } from "@/components/dashboard/PerformanceMonitor";
+import { AIModulesGrid } from "@/components/dashboard/AIModulesGrid";
+import { LiveMetricsBar } from "@/components/dashboard/LiveMetricsBar";
 
 // PATCH 584: Memoized data constants for better performance
 const REVENUE_DATA = [
@@ -174,6 +177,10 @@ const Index = () => {
         <meta property="og:description" content="Sistema corporativo para gestão marítima com IA avançada" />
         <link rel="canonical" href="/" />
       </Helmet>
+      
+      {/* Live Metrics Bar - Always visible */}
+      <LiveMetricsBar />
+      
       <div className="space-y-6 p-6 bg-gradient-to-br from-background via-background to-primary/5 min-h-screen">
       <div className="flex items-center justify-between">
         <ProfessionalHeader
@@ -193,13 +200,27 @@ const Index = () => {
       {/* PATCH 549: AI Modules Quick Access */}
       <AIModulesPanel />
 
-      {/* PATCH 801: Quick Actions & Network Status */}
-      <div className="grid lg:grid-cols-3 gap-4">
+      {/* PATCH 801: Quick Actions, Network Status & Performance */}
+      <div className="grid lg:grid-cols-4 gap-4">
         <div className="lg:col-span-2">
           <QuickActionsPanel />
         </div>
         <NetworkStatusWidget />
+        <PerformanceMonitor />
       </div>
+
+      {/* PATCH 802: AI Modules Grid */}
+      <Card className="border-primary/20">
+        <CardHeader className="pb-3">
+          <CardTitle className="flex items-center gap-2 text-lg">
+            <Brain className="h-5 w-5 text-primary" />
+            Central de Inteligência Artificial
+          </CardTitle>
+        </CardHeader>
+        <CardContent>
+          <AIModulesGrid />
+        </CardContent>
+      </Card>
 
       {/* PATCH 800: Sistema de Controle Unificado */}
       <SystemControlPanel />
