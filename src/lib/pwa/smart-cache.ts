@@ -281,6 +281,8 @@ class SmartCacheManager {
 export const smartCache = new SmartCacheManager();
 
 // React hook
+import { useState, useEffect } from 'react';
+
 export function useSmartCache<T>(key: string, fetcher: () => Promise<T>, deps: any[] = []) {
   const [data, setData] = useState<T | null>(null);
   const [loading, setLoading] = useState(true);
@@ -331,5 +333,3 @@ export function useSmartCache<T>(key: string, fetcher: () => Promise<T>, deps: a
 
   return { data, loading, error, refresh };
 }
-
-import { useState, useEffect } from 'react';

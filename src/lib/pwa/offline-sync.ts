@@ -3,6 +3,7 @@
  * Revolutionary offline capabilities for maritime environments
  */
 
+import { useState, useEffect } from 'react';
 import { openDB, IDBPDatabase } from 'idb';
 
 interface SyncQueueItem {
@@ -284,5 +285,3 @@ export function useOfflineSync() {
     processQueue: offlineSync.processQueue.bind(offlineSync),
   };
 }
-
-import { useState, useEffect } from 'react';
