@@ -86,40 +86,40 @@ const NetworkStatusWidgetComponent: React.FC = () => {
   const SignalIcon = getSignalIcon();
 
   return (
-    <Card className="border-border/50 bg-card/50">
+    <Card className="border-border/50 bg-card/80">
       <CardContent className="p-4">
         <div className="flex items-center justify-between mb-3">
           <div className="flex items-center gap-2">
-            <div className={cn("p-2 rounded-full", stats.isOnline ? "bg-green-500/10" : "bg-red-500/10")}>
+            <div className={cn("p-2 rounded-full", stats.isOnline ? "bg-emerald-500/20" : "bg-red-500/20")}>
               <SignalIcon className={cn("h-4 w-4", getSignalColor())} />
             </div>
             <div>
-              <p className="text-sm font-medium">Conexão</p>
-              <p className={cn("text-xs", getSignalColor())}>{getSpeedLabel()}</p>
+              <p className="text-sm font-semibold text-foreground">Conexão</p>
+              <p className={cn("text-sm font-medium", getSignalColor())}>{getSpeedLabel()}</p>
             </div>
           </div>
           <div className="flex items-center gap-2">
-            <Badge variant={stats.isOnline ? "default" : "destructive"} className="text-xs">
+            <Badge variant={stats.isOnline ? "default" : "destructive"} className="text-xs font-semibold">
               {stats.isOnline ? 'Online' : 'Offline'}
             </Badge>
-            <Button variant="ghost" size="icon" className="h-6 w-6" onClick={updateStats}>
-              <RefreshCw className="h-3 w-3" />
+            <Button variant="ghost" size="icon" className="h-7 w-7" onClick={updateStats}>
+              <RefreshCw className="h-3.5 w-3.5" />
             </Button>
           </div>
         </div>
 
         <div className="grid grid-cols-3 gap-2">
-          <div className="text-center p-2 rounded-lg bg-muted/30">
-            <Download className="h-3 w-3 mx-auto mb-1 text-primary" />
-            <p className="text-xs font-medium">{stats.downlink.toFixed(1)} Mbps</p>
+          <div className="text-center p-2.5 rounded-lg bg-muted/50">
+            <Download className="h-3.5 w-3.5 mx-auto mb-1 text-primary" />
+            <p className="text-sm font-semibold text-foreground">{stats.downlink.toFixed(1)} Mbps</p>
           </div>
-          <div className="text-center p-2 rounded-lg bg-muted/30">
-            <RefreshCw className="h-3 w-3 mx-auto mb-1 text-primary" />
-            <p className="text-xs font-medium">{stats.rtt} ms</p>
+          <div className="text-center p-2.5 rounded-lg bg-muted/50">
+            <RefreshCw className="h-3.5 w-3.5 mx-auto mb-1 text-primary" />
+            <p className="text-sm font-semibold text-foreground">{stats.rtt} ms</p>
           </div>
-          <div className="text-center p-2 rounded-lg bg-muted/30">
-            <Signal className="h-3 w-3 mx-auto mb-1 text-primary" />
-            <p className="text-xs font-medium uppercase">{stats.effectiveType}</p>
+          <div className="text-center p-2.5 rounded-lg bg-muted/50">
+            <Signal className="h-3.5 w-3.5 mx-auto mb-1 text-primary" />
+            <p className="text-sm font-semibold text-foreground uppercase">{stats.effectiveType}</p>
           </div>
         </div>
       </CardContent>
