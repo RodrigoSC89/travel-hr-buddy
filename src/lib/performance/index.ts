@@ -137,3 +137,7 @@ export {
 } from './bundle-analyzer';
 export { memoryManager, shouldReduceMemory, getMemoryAwareSettings } from './memory-manager';
 export { initializePerformance, requestIdleCallbackPolyfill, cancelIdleCallbackPolyfill } from './init';
+
+// PATCH 820: Critical resources & request queue
+export { criticalResourceLoader, useResourcePreload } from './critical-resource-loader';
+export { requestQueue, prioritizedFetch } from './request-queue';
