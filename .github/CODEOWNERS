@@ -1,0 +1,32 @@
+# Code Owners for Nautilus One
+# These owners will be requested for review on PRs
+
+# Global owners (fallback)
+* @nautilus-core-team
+
+# Frontend
+/src/components/ @nautilus-frontend-team
+/src/pages/ @nautilus-frontend-team
+/src/hooks/ @nautilus-frontend-team
+
+# Backend / Edge Functions
+/supabase/functions/ @nautilus-backend-team
+/supabase/migrations/ @nautilus-backend-team
+
+# Security sensitive files
+/src/lib/security/ @nautilus-security-team
+/src/middleware/ @nautilus-security-team
+/.env* @nautilus-security-team
+
+# CI/CD Configuration
+/.github/workflows/ @nautilus-devops-team
+/vercel.json @nautilus-devops-team
+
+# Documentation
+/docs/ @nautilus-docs-team
+/README.md @nautilus-docs-team
+
+# Configuration files
+/vite.config.ts @nautilus-core-team
+/tailwind.config.ts @nautilus-frontend-team
+/tsconfig*.json @nautilus-core-team
