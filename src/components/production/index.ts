@@ -4,3 +4,4 @@
 
 export { ProductionHealthDashboard } from './ProductionHealthDashboard';
 export { SystemDiagnosticsPanel } from './SystemDiagnosticsPanel';
+export { PerformanceMonitor } from './PerformanceMonitor';
