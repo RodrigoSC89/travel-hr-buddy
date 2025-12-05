@@ -124,3 +124,15 @@ export { useSlowConnectionWarning } from "@/components/performance/ConnectionInd
 export { useNetworkStatus as useNetworkMonitor, useNetworkAware } from "@/lib/performance/network-monitor";
 export { useVirtualScroll, useInfiniteScroll as useInfiniteScrollAdvanced, useWindowedData } from "@/lib/performance/virtual-scroll";
 export { useCompressedFetch } from "@/lib/performance/data-compressor";
+
+// PATCH 836: Revolutionary UX
+export { usePredictiveUI, useSmartPrefetching } from "@/lib/ux/predictive-ui";
+export { useHapticFeedback } from "@/lib/ux/haptic-feedback";
+export { useGestureNavigation, useSwipeNavigation } from "@/lib/ux/gesture-navigation";
+export { useRippleEffect, useButtonPress, useStaggeredList, usePulseOnChange, useShakeOnError } from "@/lib/ux/micro-interactions";
+export { useSmartSuggestions, useContextualHelp } from "@/lib/ux/smart-suggestions";
+export { useOnboarding } from "@/lib/ux/onboarding-system";
+
+// PATCH 837: Collaboration & Voice
+export { usePresence, useCursorTracking, useUsersOnPage } from "@/lib/collaboration/realtime-presence";
+export { useVoiceCommands } from "@/lib/voice/advanced-voice-commands";
