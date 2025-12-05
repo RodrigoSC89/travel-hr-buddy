@@ -81,3 +81,22 @@ export {
   useHoverPreload, 
   useProgressiveImage 
 } from "./use-intersection-preload";
+
+// PATCH 831: Performance utilities
+export { useOfflineSync } from "@/lib/performance/offline-sync";
+export { 
+  useOptimisticUpdate, 
+  useOptimisticList, 
+  useDebouncedOptimisticUpdate 
+} from "@/lib/performance/optimistic-updates";
+export { 
+  useDebouncedInput, 
+  useValidatedField, 
+  useOptimizedForm, 
+  useAutoSave 
+} from "@/lib/performance/form-optimization";
+export { 
+  useConnection, 
+  useAdaptiveFetch 
+} from "@/components/performance/ConnectionAware";
+export { useVirtualizedData } from "@/components/performance/VirtualizedList";

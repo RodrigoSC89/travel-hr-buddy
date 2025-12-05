@@ -1,7 +1,27 @@
 /**
- * Performance Utilities Index - PATCH 830
+ * Performance Utilities Index - PATCH 831
  * Central export for all performance utilities
  */
+
+// PATCH 831: Offline sync
+export { offlineSync, useOfflineSync } from './offline-sync';
+
+// PATCH 831: Optimistic updates
+export {
+  useOptimisticUpdate,
+  useOptimisticList,
+  createOptimisticMutation,
+  useDebouncedOptimisticUpdate,
+} from './optimistic-updates';
+
+// PATCH 831: Form optimization
+export {
+  useDebouncedInput,
+  useThrottledCallback,
+  useValidatedField,
+  useOptimizedForm,
+  useAutoSave,
+} from './form-optimization';
 
 /**
  * Configurações padrão de performance
