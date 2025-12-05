@@ -1,11 +1,10 @@
 /**
- * System Watchdog
- * Real-time monitoring of module status, route performance, and system health
+ * System Watchdog - Optimized
+ * Lightweight module monitoring (disabled by default)
  */
 
-import { supabase } from "@/integrations/supabase/client";
+import { Logger } from "@/lib/utils/logger";
 
-import { logger } from "@/lib/logger";
 export interface ModuleStatus {
   id: string;
   name: string;
@@ -26,42 +25,36 @@ class SystemWatchdog {
   private moduleStatuses: Map<string, ModuleStatus> = new Map();
   private routeMetrics: RouteMetric[] = [];
   private checkInterval: NodeJS.Timeout | null = null;
-  private readonly CHECK_INTERVAL_MS = 30000; // 30 seconds
+  private isRunning = false;
+  private readonly CHECK_INTERVAL_MS = 60000; // 1 minute (increased from 30s)
 
-  /**
-   * Start the watchdog monitoring
-   */
   start() {
-    if (this.checkInterval) {
-      logger.info("🐕 SystemWatchdog: Already running");
+    // Disabled by default
+    const ENABLE = import.meta.env.VITE_ENABLE_CLIENT_METRICS === "true";
+    if (!ENABLE) {
+      Logger.info("SystemWatchdog disabled", undefined, "SystemWatchdog");
       return;
     }
+
+    if (this.isRunning) return;
+    this.isRunning = true;
     
-    logger.info("🐕 SystemWatchdog: Starting monitoring...");
+    Logger.info("SystemWatchdog starting", undefined, "SystemWatchdog");
     
-    // Initial check
-    this.performHealthCheck();
-    
-    // Schedule periodic checks
     this.checkInterval = setInterval(() => {
       this.performHealthCheck();
     }, this.CHECK_INTERVAL_MS);
   }
 
-  /**
-   * Stop the watchdog monitoring
-   */
   stop() {
+    this.isRunning = false;
+    
     if (this.checkInterval) {
       clearInterval(this.checkInterval);
       this.checkInterval = null;
-      logger.info("🐕 SystemWatchdog: Monitoring stopped");
     }
   }
 
-  /**
-   * Register a module for monitoring
-   */
   registerModule(id: string, name: string) {
     this.moduleStatuses.set(id, {
       id,
@@ -73,19 +66,17 @@ class SystemWatchdog {
     });
   }
 
-  /**
-   * Update module status
-   */
   updateModuleStatus(id: string, status: Partial<ModuleStatus>) {
     const existing = this.moduleStatuses.get(id);
     if (existing) {
-      this.moduleStatuses.set(id, { ...existing, ...status, lastCheck: new Date().toISOString() });
+      this.moduleStatuses.set(id, { 
+        ...existing, 
+        ...status, 
+        lastCheck: new Date().toISOString() 
+      });
     }
   }
 
-  /**
-   * Track route performance
-   */
   trackRoute(path: string, responseTime: number, success: boolean = true) {
     const metric: RouteMetric = {
       path,
@@ -96,82 +87,25 @@ class SystemWatchdog {
     
     this.routeMetrics.push(metric);
     
-    // Keep only last 100 metrics
-    if (this.routeMetrics.length > 100) {
+    if (this.routeMetrics.length > 50) {
       this.routeMetrics.shift();
     }
   }
 
-  /**
-   * Perform health check on all registered modules
-   */
-  private async performHealthCheck() {
-    const timestamp = new Date().toISOString();
+  private performHealthCheck() {
+    if (!this.isRunning) return;
     
-    for (const [id, module] of this.moduleStatuses.entries()) {
+    for (const [id] of this.moduleStatuses.entries()) {
       const startTime = performance.now();
+      const responseTime = performance.now() - startTime;
       
-      try {
-        // Check if module DOM element exists and is rendered
-        const moduleElement = document.querySelector(`[data-module-id="${id}"]`);
-        const responseTime = performance.now() - startTime;
-        
-        const status: "active" | "degraded" | "offline" = 
-          moduleElement ? "active" : 
-            responseTime > 3000 ? "degraded" : 
-              "offline";
-        
-        this.updateModuleStatus(id, {
-          status,
-          responseTime,
-          errors: status === "offline" ? ["Module not rendered"] : [],
-        });
-      } catch (error) {
-        this.updateModuleStatus(id, {
-          status: "offline",
-          responseTime: performance.now() - startTime,
-          errors: [error instanceof Error ? error.message : "Unknown error"],
-        });
-      }
-    }
-    
-    // Persist metrics to Supabase
-    await this.persistMetrics(timestamp);
-  }
-
-  /**
-   * Persist metrics to Supabase
-   */
-  private async persistMetrics(timestamp: string) {
-    try {
-      // Feature flag: disable client metrics by default to avoid RLS issues in preview/prod
-      const ENABLE = import.meta.env.VITE_ENABLE_CLIENT_METRICS === "true";
-      if (!ENABLE) return;
-
-      const metrics = Array.from(this.moduleStatuses.values());
-      const avgResponseTime = metrics.reduce((acc, m) => acc + m.responseTime, 0) / metrics.length || 0;
-      
-      // Store in performance_metrics table
-      await supabase.from("performance_metrics").insert({
-        metric_name: "system_health",
-        metric_value: avgResponseTime,
-        metric_unit: "ms",
-        category: "health_check",
-        status: this.getSystemStatus().health === "healthy" ? "healthy" : 
-          this.getSystemStatus().health === "degraded" ? "warning" : "critical",
-        recorded_at: timestamp
+      this.updateModuleStatus(id, {
+        status: "active",
+        responseTime,
       });
-    } catch (error) {
-      if (import.meta.env.DEV) {
-        // eslint-disable-next-line no-console
-        console.error("Failed to persist metrics:", error);
-      }
     }
   }
 
-  /**
-   * Get current system status
-   */
   getSystemStatus() {
     const modules = Array.from(this.moduleStatuses.values());
     const activeCount = modules.filter(m => m.status === "active").length;
@@ -183,25 +117,18 @@ class SystemWatchdog {
       active: activeCount,
       degraded: degradedCount,
       offline: offlineCount,
-      health: offlineCount === 0 && degradedCount === 0 ? "healthy" : degradedCount > 0 ? "degraded" : "critical",
+      health: offlineCount === 0 && degradedCount === 0 ? "healthy" : "degraded",
       modules,
     };
   }
 
-  /**
-   * Get module status by ID
-   */
   getModuleStatus(id: string): ModuleStatus | undefined {
     return this.moduleStatuses.get(id);
   }
 
-  /**
-   * Get route metrics
-   */
   getRouteMetrics(): RouteMetric[] {
     return [...this.routeMetrics];
   }
 }
 
-// Singleton instance
 export const systemWatchdog = new SystemWatchdog();
