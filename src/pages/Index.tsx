@@ -17,6 +17,8 @@ import { QuickStats } from "@/components/dashboard/index/QuickStats";
 import { FinancialTab } from "@/components/dashboard/index/FinancialTab";
 import { OperationsTab } from "@/components/dashboard/index/OperationsTab";
 import { SystemControlPanel } from "@/components/system/SystemControlPanel";
+import { QuickActionsPanel } from "@/components/dashboard/QuickActionsPanel";
+import { NetworkStatusWidget } from "@/components/dashboard/NetworkStatusWidget";
 
 // PATCH 584: Memoized data constants for better performance
 const REVENUE_DATA = [
@@ -190,6 +192,14 @@ const Index = () => {
 
       {/* PATCH 549: AI Modules Quick Access */}
       <AIModulesPanel />
+
+      {/* PATCH 801: Quick Actions & Network Status */}
+      <div className="grid lg:grid-cols-3 gap-4">
+        <div className="lg:col-span-2">
+          <QuickActionsPanel />
+        </div>
+        <NetworkStatusWidget />
+      </div>
 
       {/* PATCH 800: Sistema de Controle Unificado */}
       <SystemControlPanel />
