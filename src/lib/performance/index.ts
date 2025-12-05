@@ -1,5 +1,5 @@
 /**
- * Performance Utilities Index - PATCH 752.1
+ * Performance Utilities Index - PATCH 830
  * Central export for all performance utilities
  */
 
@@ -118,6 +118,7 @@ export {
   getAdaptivePageSize as getAdaptivePageSizeNetwork,
   deduplicatedRequest,
   streamResponse,
+  useAdaptiveApiSettings,
 } from './api-compression';
 
 // PATCH 810: Smart prefetch

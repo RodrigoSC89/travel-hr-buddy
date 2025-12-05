@@ -207,3 +207,32 @@ export async function* streamResponse<T>(
     }
   }
 }
+
+/**
+ * Hook for adaptive API settings based on connection quality
+ */
+export function useAdaptiveApiSettings() {
+  // Simple implementation without hook dependency for flexibility
+  const getQuality = (): 'excellent' | 'good' | 'fair' | 'poor' | 'offline' => {
+    if (!navigator.onLine) return 'offline';
+    const connection = (navigator as Navigator & { connection?: { effectiveType?: string; rtt?: number } }).connection;
+    if (!connection) return 'good';
+    
+    const type = connection.effectiveType;
+    if (type === '4g') return 'excellent';
+    if (type === '3g') return 'fair';
+    if (type === '2g' || type === 'slow-2g') return 'poor';
+    return 'good';
+  };
+  
+  const quality = getQuality();
+  
+  return {
+    pageSize: getAdaptivePageSize(quality),
+    enablePrefetch: quality === 'excellent' || quality === 'good',
+    enableRealtime: quality !== 'poor' && quality !== 'offline',
+    retryCount: quality === 'poor' ? 1 : 3,
+    timeout: quality === 'poor' ? 30000 : 10000,
+    quality,
+  };
+}
