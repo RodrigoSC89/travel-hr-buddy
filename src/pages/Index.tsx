@@ -23,6 +23,10 @@ import { PerformanceMonitor } from "@/components/dashboard/PerformanceMonitor";
 import { AIModulesGrid } from "@/components/dashboard/AIModulesGrid";
 import { LiveMetricsBar } from "@/components/dashboard/LiveMetricsBar";
 
+// PATCH 850: PWA & Offline Components
+import { OfflineStatusBar } from "@/components/pwa/OfflineStatusBar";
+import { InstallPrompt } from "@/components/pwa/InstallPrompt";
+
 // PATCH 584: Memoized data constants for better performance
 const REVENUE_DATA = [
   { month: "Jan", revenue: 42000, target: 40000 },
@@ -166,8 +170,14 @@ const Index = () => {
 
   return (
     <>
+      {/* PATCH 850: PWA Offline Status */}
+      <OfflineStatusBar />
+      
       {/* Onboarding para novos usuários */}
       <WelcomeOnboarding />
+      
+      {/* PATCH 850: PWA Install Prompt */}
+      <InstallPrompt />
       
       <Helmet>
         <title>Dashboard Executivo | Nautilus One - Sistema Marítimo Corporativo</title>

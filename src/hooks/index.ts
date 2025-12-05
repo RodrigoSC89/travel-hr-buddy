@@ -149,3 +149,12 @@ export { useA11y, useReducedMotion, useHighContrast } from "@/lib/accessibility/
 // PATCH 839: i18n & Analytics
 export { useTranslation, useI18nContext } from "@/lib/i18n/translation-manager";
 export { useAnalytics as useAdvancedAnalytics, usePageTracking, useAnalyticsData } from "@/lib/analytics/advanced-analytics";
+
+// PATCH 850: PWA Offline Hooks
+export {
+  useOnlineStatus,
+  usePendingSync,
+  useOfflineMutations,
+  useCachedData,
+  usePWAInstall,
+} from "./use-pwa";
