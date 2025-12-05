@@ -1,8 +1,7 @@
 import React, { createContext, useContext, useState, useEffect } from "react";
 import { User, Session } from "@supabase/supabase-js";
 import { supabase } from "@/integrations/supabase/client";
-import { useToast } from "@/hooks/use-toast";
-import { logger } from "@/lib/logger";
+import { toast } from "sonner";
 import { Logger } from "@/lib/utils/logger";
 
 type OAuthProvider = "google" | "github" | "azure";
@@ -36,35 +35,28 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
   const [user, setUser] = useState<User | null>(null);
   const [session, setSession] = useState<Session | null>(null);
   const [isLoading, setIsLoading] = useState(true);
-  const { toast } = useToast();
 
   useEffect(() => {
     // Set up auth state listener FIRST
     const { data: { subscription } } = supabase.auth.onAuthStateChange(
-      (event, session) => {
-        setSession(session);
-        setUser(session?.user ?? null);
+      (event, currentSession) => {
+        setSession(currentSession);
+        setUser(currentSession?.user ?? null);
         setIsLoading(false);
         
-        try {
-          if (event === "SIGNED_IN") {
-            toast({
-              title: "Bem-vindo!",
+        // Use setTimeout to defer toast calls (avoid deadlock)
+        if (event === "SIGNED_IN") {
+          setTimeout(() => {
+            toast.success("Bem-vindo!", {
               description: "Login realizado com sucesso.",
             });
-          } else if (event === "SIGNED_OUT") {
-            toast({
-              title: "Desconectado",
+          }, 0);
+        } else if (event === "SIGNED_OUT") {
+          setTimeout(() => {
+            toast.info("Desconectado", {
               description: "Você foi desconectado com sucesso.",
             });
-          } else if (event === "TOKEN_REFRESHED") {
-            // Token refreshed successfully
-          } else if (event === "USER_UPDATED") {
-            // User data updated
-          }
-        } catch (err) {
-          // Ignorar erros de toast
-          Logger.warn("Toast error", err, "AuthContext");
+          }, 0);
         }
       }
     );
@@ -78,24 +70,20 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
         
         const sessionPromise = supabase.auth.getSession();
 
-        const { data: { session }, error } = await Promise.race([
+        const { data: { session: existingSession }, error } = await Promise.race([
           sessionPromise,
           timeoutPromise
         ]).catch(() => ({ data: { session: null }, error: null })) as { data: { session: Session | null }, error: unknown };
 
         if (error) {
-          try {
-            toast({
-              title: "Erro de Sessão",
+          setTimeout(() => {
+            toast.error("Erro de Sessão", {
               description: "Não foi possível recuperar a sessão. Por favor, faça login novamente.",
-              variant: "destructive",
             });
-          } catch (err) {
-            Logger.warn("Toast error on session loading", err, "AuthContext");
-          }
+          }, 0);
         }
-        setSession(session);
-        setUser(session?.user ?? null);
+        setSession(existingSession);
+        setUser(existingSession?.user ?? null);
       } catch (error) {
         Logger.warn("Error loading session", error, "AuthContext");
       } finally {
@@ -106,7 +94,7 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
     loadSession();
 
     return () => subscription.unsubscribe();
-  }, [toast]);
+  }, []);
 
   const signUp = async (email: string, password: string, fullName: string) => {
     setIsLoading(true);
@@ -125,14 +113,11 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
     });
 
     if (error) {
-      toast({
-        title: "Erro no cadastro",
+      toast.error("Erro no cadastro", {
         description: error.message,
-        variant: "destructive",
       });
     } else {
-      toast({
-        title: "Cadastro realizado!",
+      toast.success("Cadastro realizado!", {
         description: "Verifique seu email para confirmar a conta.",
       });
     }
@@ -150,10 +135,8 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
     });
 
     if (error) {
-      toast({
-        title: "Erro no login",
+      toast.error("Erro no login", {
         description: error.message,
-        variant: "destructive",
       });
     }
 
@@ -174,10 +157,8 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
     });
 
     if (error) {
-      toast({
-        title: "Erro no login",
+      toast.error("Erro no login", {
         description: error.message,
-        variant: "destructive",
       });
     }
 
@@ -199,14 +180,11 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
     });
 
     if (error) {
-      toast({
-        title: "Erro",
+      toast.error("Erro", {
         description: error.message,
-        variant: "destructive",
       });
     } else {
-      toast({
-        title: "Email enviado!",
+      toast.success("Email enviado!", {
         description: "Verifique seu email para redefinir a senha.",
       });
     }
