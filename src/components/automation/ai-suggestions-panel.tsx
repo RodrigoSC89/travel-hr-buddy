@@ -128,7 +128,7 @@ export const AISuggestionsPanel: React.FC = () => {
       break;
     case "review_schedule":
       // Redirecionar para a página de escalas
-      navigate("/crew-management");
+      navigate("/crew");
       break;
     case "assign_auditor":
       // Abrir modal de atribuição de auditor

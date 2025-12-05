@@ -132,7 +132,7 @@ export default function Maritime() {
           icon={Users}
           variant="success"
           trend="100% operacional"
-          onClick={() => navigate("/crew-management")}
+          onClick={() => navigate("/crew")}
         />
         <StatCard
           title="Certificações Pendentes"
@@ -244,7 +244,7 @@ export default function Maritime() {
                   <FileText className="h-4 w-4 mr-2" />
                   Nova Auditoria PEOTRAM
                 </Button>
-                <Button className="w-full justify-start" variant="outline" onClick={() => navigate("/crew-management")}>
+                <Button className="w-full justify-start" variant="outline" onClick={() => navigate("/crew")}>
                   <Users className="h-4 w-4 mr-2" />
                   Gerenciar Tripulação
                 </Button>

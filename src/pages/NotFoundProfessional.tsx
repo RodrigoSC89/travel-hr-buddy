@@ -18,7 +18,7 @@ import {
 const suggestedRoutes = [
   { path: "/", label: "Dashboard Principal", icon: Home },
   { path: "/maintenance-planner", label: "MMI - Manutenção", icon: Anchor },
-  { path: "/crew-management", label: "Gestão de Tripulação", icon: LifeBuoy },
+  { path: "/crew", label: "Gestão de Tripulação", icon: LifeBuoy },
   { path: "/analytics", label: "Analytics", icon: Map },
 ];
 
