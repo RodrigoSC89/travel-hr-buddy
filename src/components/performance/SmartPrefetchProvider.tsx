@@ -1,26 +1,44 @@
 /**
  * Smart Prefetch Provider
- * Automatically tracks navigation and prefetches predicted routes
+ * PATCH 900: Corrigido para evitar erro de useContext null
  */
 
-import { useEffect } from 'react';
-import { useSmartPrefetch } from '@/lib/performance/smart-prefetch';
+import React, { useEffect, useState, memo } from 'react';
 import { resourceHints } from '@/lib/performance/resource-hints';
 
-export function SmartPrefetchProvider({ children }: { children: React.ReactNode }) {
-  // Initialize smart prefetch tracking
-  useSmartPrefetch();
+// Componente interno que usa os hooks de forma segura
+const PrefetchInitializer = memo(() => {
+  const [initialized, setInitialized] = useState(false);
 
-  // Setup common resource hints on mount
   useEffect(() => {
-    resourceHints.initializeCommonHints();
+    if (initialized) return;
     
-    // Preconnect to Supabase
-    const supabaseUrl = import.meta.env.VITE_SUPABASE_URL;
-    if (supabaseUrl) {
-      resourceHints.preconnect(supabaseUrl);
+    try {
+      resourceHints.initializeCommonHints();
+      
+      const supabaseUrl = import.meta.env.VITE_SUPABASE_URL;
+      if (supabaseUrl) {
+        resourceHints.preconnect(supabaseUrl);
+      }
+      
+      setInitialized(true);
+    } catch (error) {
+      console.warn('Prefetch initialization failed:', error);
     }
-  }, []);
+  }, [initialized]);
 
-  return <>{children}</>;
+  return null;
+});
+
+PrefetchInitializer.displayName = 'PrefetchInitializer';
+
+function SmartPrefetchProviderComponent({ children }: { children: React.ReactNode }) {
+  return (
+    <>
+      <PrefetchInitializer />
+      {children}
+    </>
+  );
 }
+
+export const SmartPrefetchProvider = memo(SmartPrefetchProviderComponent);
