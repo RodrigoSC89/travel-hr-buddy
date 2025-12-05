@@ -23,8 +23,8 @@ const WebVitalsOverlay = React.lazy(() => import("@/components/WebVitalsOverlay"
 import { getModuleRoutes } from "@/utils/module-routes";
 import { createOptimizedQueryClient } from "@/lib/performance/query-config";
 
-// Core pages - Eager loading
-import Index from "@/pages/Index";
+// Core pages - Lazy loading for better performance
+const Index = React.lazy(() => import("@/pages/Index"));
 
 // Essential pages - Lazy loading
 const Dashboard = React.lazy(() => import("@/pages/Dashboard"));
@@ -96,7 +96,11 @@ function App() {
                       <SmartLayout />
                     </ProtectedRoute>
                   }>
-                    <Route index element={<Index />} />
+                    <Route index element={
+                      <Suspense fallback={<OffshoreLoader />}>
+                        <Index />
+                      </Suspense>
+                    } />
                     <Route path="dashboard" element={
                       <Suspense fallback={<OffshoreLoader />}>
                         <Dashboard />
