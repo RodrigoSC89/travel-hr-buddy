@@ -136,3 +136,16 @@ export { useOnboarding } from "@/lib/ux/onboarding-system";
 // PATCH 837: Collaboration & Voice
 export { usePresence, useCursorTracking, useUsersOnPage } from "@/lib/collaboration/realtime-presence";
 export { useVoiceCommands } from "@/lib/voice/advanced-voice-commands";
+
+// PATCH 837: PWA Enhanced
+export { useOfflineSync as usePWAOfflineSync } from "@/lib/pwa/offline-sync";
+export { useSmartCache } from "@/lib/pwa/smart-cache";
+export { useServiceWorker } from "@/lib/pwa/service-worker-manager";
+
+// PATCH 838: Notifications & Accessibility
+export { useNotifications, useNotificationPermission, useNotificationPreferences } from "@/lib/notifications/smart-notifications";
+export { useA11y, useReducedMotion, useHighContrast } from "@/lib/accessibility/a11y-manager";
+
+// PATCH 839: i18n & Analytics
+export { useTranslation, useI18nContext } from "@/lib/i18n/translation-manager";
+export { useAnalytics as useAdvancedAnalytics, usePageTracking, useAnalyticsData } from "@/lib/analytics/advanced-analytics";
