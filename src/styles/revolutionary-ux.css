@@ -1,0 +1,255 @@
+/**
+ * Revolutionary UX Styles - PATCH 836
+ * Disruptive animations and interactions
+ */
+
+/* Ripple Effect */
+@keyframes ripple {
+  0% {
+    transform: scale(0);
+    opacity: 0.5;
+  }
+  100% {
+    transform: scale(4);
+    opacity: 0;
+  }
+}
+
+.animate-ripple {
+  animation: ripple 0.4s ease-out forwards;
+}
+
+/* Shake Animation */
+@keyframes shake {
+  0%, 100% { transform: translateX(0); }
+  10%, 30%, 50%, 70%, 90% { transform: translateX(-4px); }
+  20%, 40%, 60%, 80% { transform: translateX(4px); }
+}
+
+.animate-shake {
+  animation: shake 0.3s ease-out;
+}
+
+/* Bounce Animation */
+@keyframes bounce-in {
+  0% { transform: scale(0.3); opacity: 0; }
+  50% { transform: scale(1.05); }
+  70% { transform: scale(0.9); }
+  100% { transform: scale(1); opacity: 1; }
+}
+
+.animate-bounce-in {
+  animation: bounce-in 0.4s cubic-bezier(0.68, -0.55, 0.265, 1.55);
+}
+
+/* Slide animations */
+@keyframes slide-in-bottom {
+  0% { transform: translateY(20px); opacity: 0; }
+  100% { transform: translateY(0); opacity: 1; }
+}
+
+@keyframes slide-in-right {
+  0% { transform: translateX(20px); opacity: 0; }
+  100% { transform: translateX(0); opacity: 1; }
+}
+
+@keyframes slide-in-left {
+  0% { transform: translateX(-20px); opacity: 0; }
+  100% { transform: translateX(0); opacity: 1; }
+}
+
+.animate-slide-in-bottom {
+  animation: slide-in-bottom 0.3s ease-out;
+}
+
+.animate-slide-in-right {
+  animation: slide-in-right 0.3s ease-out;
+}
+
+.animate-slide-in-left {
+  animation: slide-in-left 0.3s ease-out;
+}
+
+/* Glow Effect */
+@keyframes glow {
+  0%, 100% {
+    box-shadow: 0 0 5px hsl(var(--primary) / 0.5),
+                0 0 10px hsl(var(--primary) / 0.3),
+                0 0 20px hsl(var(--primary) / 0.1);
+  }
+  50% {
+    box-shadow: 0 0 10px hsl(var(--primary) / 0.7),
+                0 0 20px hsl(var(--primary) / 0.5),
+                0 0 30px hsl(var(--primary) / 0.3);
+  }
+}
+
+.animate-glow {
+  animation: glow 2s ease-in-out infinite;
+}
+
+/* Floating Animation */
+@keyframes float {
+  0%, 100% { transform: translateY(0); }
+  50% { transform: translateY(-10px); }
+}
+
+.animate-float {
+  animation: float 3s ease-in-out infinite;
+}
+
+/* Progress Ring */
+@keyframes progress-ring {
+  0% { stroke-dashoffset: 100; }
+  100% { stroke-dashoffset: 0; }
+}
+
+.animate-progress-ring {
+  animation: progress-ring 1s ease-out forwards;
+}
+
+/* Gradient Text Animation */
+@keyframes gradient-shift {
+  0% { background-position: 0% 50%; }
+  50% { background-position: 100% 50%; }
+  100% { background-position: 0% 50%; }
+}
+
+.animate-gradient-text {
+  background: linear-gradient(
+    90deg,
+    hsl(var(--primary)),
+    hsl(var(--primary) / 0.7),
+    hsl(var(--primary))
+  );
+  background-size: 200% auto;
+  background-clip: text;
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  animation: gradient-shift 3s ease infinite;
+}
+
+/* Card Hover Effects */
+.card-hover-lift {
+  transition: transform 0.2s ease-out, box-shadow 0.2s ease-out;
+}
+
+.card-hover-lift:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 12px 20px -8px hsl(var(--foreground) / 0.1);
+}
+
+/* Interactive Button Styles */
+.btn-interactive {
+  position: relative;
+  overflow: hidden;
+  transition: all 0.2s ease-out;
+}
+
+.btn-interactive::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(
+    135deg,
+    transparent 0%,
+    hsl(var(--primary-foreground) / 0.1) 50%,
+    transparent 100%
+  );
+  transform: translateX(-100%);
+  transition: transform 0.3s ease-out;
+}
+
+.btn-interactive:hover::before {
+  transform: translateX(100%);
+}
+
+/* Focus Styles */
+.focus-ring {
+  transition: box-shadow 0.2s ease-out;
+}
+
+.focus-ring:focus-visible {
+  outline: none;
+  box-shadow: 0 0 0 2px hsl(var(--background)),
+              0 0 0 4px hsl(var(--primary));
+}
+
+/* Skeleton Loading with Gradient */
+@keyframes skeleton-loading {
+  0% { background-position: -200% 0; }
+  100% { background-position: 200% 0; }
+}
+
+.skeleton-gradient {
+  background: linear-gradient(
+    90deg,
+    hsl(var(--muted)) 0%,
+    hsl(var(--muted) / 0.5) 50%,
+    hsl(var(--muted)) 100%
+  );
+  background-size: 200% 100%;
+  animation: skeleton-loading 1.5s ease-in-out infinite;
+}
+
+/* Notification Badge Animation */
+@keyframes notification-pulse {
+  0% { transform: scale(1); }
+  50% { transform: scale(1.2); }
+  100% { transform: scale(1); }
+}
+
+.notification-badge {
+  animation: notification-pulse 0.5s ease-out;
+}
+
+/* Success Checkmark Animation */
+@keyframes check-draw {
+  0% { stroke-dashoffset: 100; }
+  100% { stroke-dashoffset: 0; }
+}
+
+.animate-check {
+  stroke-dasharray: 100;
+  stroke-dashoffset: 100;
+  animation: check-draw 0.4s ease-out forwards;
+}
+
+/* Reduced Motion Support */
+@media (prefers-reduced-motion: reduce) {
+  .animate-ripple,
+  .animate-shake,
+  .animate-bounce-in,
+  .animate-slide-in-bottom,
+  .animate-slide-in-right,
+  .animate-slide-in-left,
+  .animate-glow,
+  .animate-float,
+  .animate-gradient-text,
+  .skeleton-gradient,
+  .notification-badge,
+  .animate-check {
+    animation: none !important;
+  }
+  
+  .card-hover-lift:hover {
+    transform: none;
+  }
+  
+  .btn-interactive::before {
+    display: none;
+  }
+}
+
+/* Low Bandwidth Mode - Disable heavy animations */
+.low-bandwidth .animate-glow,
+.low-bandwidth .animate-float,
+.low-bandwidth .animate-gradient-text,
+.low-bandwidth .skeleton-gradient {
+  animation: none !important;
+}
+
+.low-bandwidth .card-hover-lift:hover {
+  transform: none;
+  box-shadow: none;
+}
