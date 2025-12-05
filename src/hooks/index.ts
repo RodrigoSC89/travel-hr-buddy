@@ -100,3 +100,8 @@ export {
   useAdaptiveFetch 
 } from "@/components/performance/ConnectionAware";
 export { useVirtualizedData } from "@/components/performance/VirtualizedList";
+
+// PATCH 832: Advanced utilities
+export { useRequestQueue } from "@/lib/performance/request-queue-manager";
+export { useCachedFetch } from "@/lib/performance/api-cache-layer";
+export { useErrorBoundary } from "@/components/performance/ErrorBoundaryAdvanced";

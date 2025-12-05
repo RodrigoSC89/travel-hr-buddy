@@ -1,5 +1,5 @@
 /**
- * Performance Utilities Index - PATCH 831
+ * Performance Utilities Index - PATCH 832
  * Central export for all performance utilities
  */
 
@@ -22,6 +22,12 @@ export {
   useOptimizedForm,
   useAutoSave,
 } from './form-optimization';
+
+// PATCH 832: Request queue manager (advanced)
+export { requestQueue as advancedRequestQueue, useRequestQueue } from './request-queue-manager';
+
+// PATCH 832: API cache layer
+export { apiCache, createCachedFetch, useCachedFetch } from './api-cache-layer';
 
 /**
  * Configurações padrão de performance
