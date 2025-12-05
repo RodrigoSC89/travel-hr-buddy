@@ -327,16 +327,30 @@ class HybridLLMEngine {
   }
 
   private async fetchFromCloud(prompt: string, context?: string): Promise<string> {
-    const { data, error } = await supabase.functions.invoke('nautilus-llm', {
-      body: {
-        prompt,
-        context,
-        mode: 'safe',
-      },
-    });
+    try {
+      const { data, error } = await supabase.functions.invoke('nautilus-llm', {
+        body: {
+          prompt,
+          context,
+          mode: 'safe',
+        },
+      });
 
-    if (error) throw error;
-    return data?.response || 'Não foi possível obter resposta.';
+      if (error) {
+        logger.warn('[HybridLLM] Cloud error:', { error });
+        throw error;
+      }
+      
+      // Handle rate limiting gracefully
+      if (data?.source === 'rate_limited' || data?.source === 'fallback') {
+        logger.info('[HybridLLM] Using fallback response from cloud');
+      }
+      
+      return data?.response || 'Não foi possível obter resposta.';
+    } catch (error) {
+      logger.error('[HybridLLM] fetchFromCloud failed:', { error });
+      throw error;
+    }
   }
 
   /**
