@@ -268,7 +268,8 @@ const Innovation = () => {
 
         <TabsContent value="emerging" className="space-y-6">
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-            <Card className="hover:shadow-lg transition-all duration-300 group">
+            <Card className="hover:shadow-lg transition-all duration-300 group cursor-pointer"
+              onClick={() => handleModuleAccess("/ar")}>
               <CardHeader>
                 <CardTitle className="flex items-center gap-2">
                   <Eye className="h-5 w-5 text-indigo-500" />
@@ -284,11 +285,12 @@ const Innovation = () => {
                   <Badge className="bg-indigo-100 text-indigo-700">Beta</Badge>
                   <span className="text-xs text-muted-foreground">3 aplicações</span>
                 </div>
-                <Button className="w-full" variant="outline">Explorar AR</Button>
+                <Button className="w-full">Explorar AR</Button>
               </CardContent>
             </Card>
 
-            <Card className="hover:shadow-lg transition-all duration-300 group">
+            <Card className="hover:shadow-lg transition-all duration-300 group cursor-pointer"
+              onClick={() => handleModuleAccess("/blockchain")}>
               <CardHeader>
                 <CardTitle className="flex items-center gap-2">
                   <Shield className="h-5 w-5 text-emerald-500" />
@@ -304,7 +306,7 @@ const Innovation = () => {
                   <Badge className="bg-emerald-100 text-emerald-700">Seguro</Badge>
                   <span className="text-xs text-muted-foreground">1,247 transações</span>
                 </div>
-                <Button className="w-full" variant="outline">Acessar Blockchain</Button>
+                <Button className="w-full">Acessar Blockchain</Button>
               </CardContent>
             </Card>
 
@@ -325,16 +327,12 @@ const Innovation = () => {
                   <Badge className="bg-blue-100 text-blue-700">342 dispositivos</Badge>
                   <span className="text-xs text-muted-foreground">99.2% online</span>
                 </div>
-                <Button className="w-full" onClick={(e) => {
-                  e.stopPropagation();
-                  handleModuleAccess("/iot");
-                }}>
-                  Ver Dashboard
-                </Button>
+                <Button className="w-full">Ver Dashboard</Button>
               </CardContent>
             </Card>
 
-            <Card className="hover:shadow-lg transition-all duration-300 group">
+            <Card className="hover:shadow-lg transition-all duration-300 group cursor-pointer"
+              onClick={() => handleModuleAccess("/edge-computing")}>
               <CardHeader>
                 <CardTitle className="flex items-center gap-2">
                   <Network className="h-5 w-5 text-purple-500" />
@@ -350,11 +348,12 @@ const Innovation = () => {
                   <Badge className="bg-purple-100 text-purple-700">15 nós</Badge>
                   <span className="text-xs text-muted-foreground">4ms latência</span>
                 </div>
-                <Button className="w-full" variant="outline">Gerenciar Nós</Button>
+                <Button className="w-full">Gerenciar Nós</Button>
               </CardContent>
             </Card>
 
-            <Card className="hover:shadow-lg transition-all duration-300 group">
+            <Card className="hover:shadow-lg transition-all duration-300 group cursor-pointer"
+              onClick={() => handleModuleAccess("/quantum-computing")}>
               <CardHeader>
                 <CardTitle className="flex items-center gap-2">
                   <Activity className="h-5 w-5 text-pink-500" />
@@ -370,11 +369,12 @@ const Innovation = () => {
                   <Badge className="bg-pink-100 text-pink-700">Experimental</Badge>
                   <span className="text-xs text-muted-foreground">Em pesquisa</span>
                 </div>
-                <Button className="w-full" variant="outline">Ver Projetos</Button>
+                <Button className="w-full">Ver Projetos</Button>
               </CardContent>
             </Card>
 
-            <Card className="hover:shadow-lg transition-all duration-300 group">
+            <Card className="hover:shadow-lg transition-all duration-300 group cursor-pointer"
+              onClick={() => handleModuleAccess("/generative-ai")}>
               <CardHeader>
                 <CardTitle className="flex items-center gap-2">
                   <Sparkles className="h-5 w-5 text-yellow-500" />
@@ -390,7 +390,7 @@ const Innovation = () => {
                   <Badge className="bg-yellow-100 text-yellow-700">GPT-4</Badge>
                   <span className="text-xs text-muted-foreground">156 docs gerados</span>
                 </div>
-                <Button className="w-full" variant="outline">Criar Conteúdo</Button>
+                <Button className="w-full">Criar Conteúdo</Button>
               </CardContent>
             </Card>
           </div>
