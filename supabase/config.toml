@@ -385,6 +385,10 @@ comment = "AI copilot for fuel optimization analysis"
 verify_jwt = false
 comment = "AI copilot for voyage planning"
 
+[functions.weather-ai-copilot]
+verify_jwt = false
+comment = "AI copilot for maritime weather analysis"
+
 # ============================================
 # CHECKLIST & DOCUMENT FUNCTIONS (5 functions)
 # ============================================
