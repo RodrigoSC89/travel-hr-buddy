@@ -3,11 +3,12 @@
  * Acesso rápido às principais funcionalidades - Otimizado
  */
 
-import React, { memo, useCallback } from "react";
+import React, { memo, useCallback, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
+import { AlertsDialog } from "@/components/layout/AlertsDialog";
 import {
   Plus,
   FileText,
@@ -114,6 +115,7 @@ const recentActivities = [
 
 const QuickActionsPanelComponent: React.FC = () => {
   const navigate = useNavigate();
+  const [alertsOpen, setAlertsOpen] = useState(false);
 
   const handleNavigate = useCallback((route: string) => {
     navigate(route);
@@ -121,6 +123,10 @@ const QuickActionsPanelComponent: React.FC = () => {
 
   const handlePrefetch = useCallback((route: string) => {
     smartPrefetch.prefetchRoute(route);
+  }, []);
+
+  const handleViewAllActivities = useCallback(() => {
+    setAlertsOpen(true);
   }, []);
 
   return (
@@ -167,7 +173,12 @@ const QuickActionsPanelComponent: React.FC = () => {
               <Bell className="h-4 w-4 text-primary" />
               Atividade Recente
             </span>
-            <Button variant="ghost" size="sm" className="text-sm h-7 text-primary hover:text-primary font-medium">
+            <Button 
+              variant="ghost" 
+              size="sm" 
+              className="text-sm h-7 text-primary hover:text-primary font-medium"
+              onClick={handleViewAllActivities}
+            >
               Ver todas
             </Button>
           </CardTitle>
@@ -193,6 +204,9 @@ const QuickActionsPanelComponent: React.FC = () => {
           </div>
         </CardContent>
       </Card>
+
+      {/* Alerts Dialog */}
+      <AlertsDialog open={alertsOpen} onOpenChange={setAlertsOpen} />
     </div>
   );
 };
