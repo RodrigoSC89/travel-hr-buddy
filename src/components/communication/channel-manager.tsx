@@ -90,7 +90,6 @@ export const ChannelManager: React.FC<ChannelManagerProps> = ({
   onStatsUpdate
 }) => {
   const [channels, setChannels] = useState<Channel[]>([]);
-  const [filteredChannels, setFilteredChannels] = useState<Channel[]>([]);
   const [selectedChannel, setSelectedChannel] = useState<Channel | null>(null);
   const [channelMembers, setChannelMembers] = useState<ChannelMember[]>([]);
   const [loading, setLoading] = useState(true);
@@ -112,7 +111,7 @@ export const ChannelManager: React.FC<ChannelManagerProps> = ({
     is_public: true
   });
 
-  const loadChannels = useCallback(async () => {
+  const loadChannels = async () => {
     try {
       setLoading(true);
       
@@ -208,9 +207,9 @@ export const ChannelManager: React.FC<ChannelManagerProps> = ({
     } finally {
       setLoading(false);
     }
-  }, [toast]);
+  };
 
-  const setupRealTimeSubscription = useCallback(() => {
+  const setupRealTimeSubscription = () => {
     const channel = supabase
       .channel("channels-changes")
       .on(
@@ -229,9 +228,10 @@ export const ChannelManager: React.FC<ChannelManagerProps> = ({
     return () => {
       supabase.removeChannel(channel);
     };
-  }, [loadChannels]);
+  };
 
-  const filterChannels = useCallback(() => {
+  // Memoized filter - computed directly to avoid effect loops
+  const displayedChannels = React.useMemo(() => {
     let filtered = [...channels];
 
     if (searchTerm) {
@@ -245,19 +245,16 @@ export const ChannelManager: React.FC<ChannelManagerProps> = ({
       filtered = filtered.filter(c => c.type === selectedType);
     }
 
-    setFilteredChannels(filtered);
+    return filtered;
   }, [channels, searchTerm, selectedType]);
 
+  // Initialize only once on mount
   useEffect(() => {
     loadChannels();
     const cleanup = setupRealTimeSubscription();
-    
     return cleanup;
-  }, [loadChannels, setupRealTimeSubscription]);
-
-  useEffect(() => {
-    filterChannels();
-  }, [filterChannels]);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
 
   const createChannel = async () => {
     try {
@@ -479,7 +476,7 @@ export const ChannelManager: React.FC<ChannelManagerProps> = ({
 
       {/* Channels Grid */}
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
-        {filteredChannels.map((channel) => {
+        {displayedChannels.map((channel) => {
           const ChannelIcon = getChannelIcon(channel.type);
           
           return (
@@ -632,7 +629,7 @@ export const ChannelManager: React.FC<ChannelManagerProps> = ({
         })}
       </div>
 
-      {filteredChannels.length === 0 && (
+      {displayedChannels.length === 0 && (
         <Card>
           <CardContent className="p-8 text-center">
             <Hash className="h-12 w-12 mx-auto mb-4 text-muted-foreground" />

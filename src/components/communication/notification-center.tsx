@@ -73,7 +73,6 @@ interface NotificationSettings {
 
 export const NotificationCenter = () => {
   const [notifications, setNotifications] = useState<Notification[]>([]);
-  const [filteredNotifications, setFilteredNotifications] = useState<Notification[]>([]);
   const [settings, setSettings] = useState<NotificationSettings>({
     email_enabled: true,
     push_enabled: true,
@@ -118,12 +117,8 @@ export const NotificationCenter = () => {
     return () => {
       mounted = false;
     };
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
-
-  // Filter notifications when dependencies change - memoized to prevent loops
-  useEffect(() => {
-    filterNotifications();
-  }, [notifications, activeTab, selectedType, selectedPriority]);
 
   const loadNotifications = async () => {
     try {
@@ -227,7 +222,8 @@ export const NotificationCenter = () => {
   // Removed useOptimizedPolling - it was causing infinite re-renders
   // by adding random notifications and triggering toasts
 
-  const filterNotifications = () => {
+  // Memoized filter - computed directly without effect to prevent loops
+  const getFilteredNotifications = useCallback(() => {
     let filtered = [...notifications];
 
     // Filter by tab
@@ -257,8 +253,11 @@ export const NotificationCenter = () => {
       filtered = filtered.filter(n => n.priority === selectedPriority);
     }
 
-    setFilteredNotifications(filtered);
-  };
+    return filtered;
+  }, [notifications, activeTab, selectedType, selectedPriority]);
+
+  // Use memoized filtered results
+  const displayedNotifications = getFilteredNotifications();
 
   const markAsRead = async (notificationId: string) => {
     try {
@@ -472,7 +471,7 @@ export const NotificationCenter = () => {
         {["all", "unread", "important", "action"].map(tab => (
           <TabsContent key={tab} value={tab} className="mt-6">
             <div className="space-y-2">
-              {filteredNotifications.length === 0 ? (
+              {displayedNotifications.length === 0 ? (
                 <Card>
                   <CardContent className="p-8 text-center">
                     <Bell className="h-12 w-12 mx-auto mb-4 text-muted-foreground" />
@@ -486,7 +485,7 @@ export const NotificationCenter = () => {
                   </CardContent>
                 </Card>
               ) : (
-                filteredNotifications.map(notification => {
+                displayedNotifications.map(notification => {
                   const NotificationIcon = getNotificationIcon(notification.type);
                   const SourceIcon = getSourceIcon(notification.source);
                   
