@@ -191,6 +191,9 @@ function App() {
                     <Route path="missions/new" element={<Navigate to="/mission-logs" replace />} />
                     <Route path="missions" element={<Navigate to="/mission-logs" replace />} />
                     
+                    {/* PATCH 981: Fix maintenance/planner route */}
+                    <Route path="maintenance/planner" element={<Navigate to="/maintenance-planner" replace />} />
+                    
                     {/* 404 Route */}
                     <Route path="*" element={
                       <Suspense fallback={<OffshoreLoader />}>

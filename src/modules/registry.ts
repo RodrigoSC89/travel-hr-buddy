@@ -1339,6 +1339,77 @@ export const MODULE_REGISTRY: Record<string, ModuleDefinition> = {
     lazy: true,
     version: "980.0",
   },
+
+  // PATCH 981: Maritime System Missing Routes
+  "operations.fleet-dashboard": {
+    id: "operations.fleet-dashboard",
+    name: "Fleet Dashboard",
+    category: "operations",
+    path: "pages/FleetDashboard",
+    description: "Professional fleet dashboard with vessel monitoring and operational metrics",
+    status: "active",
+    completeness: "100%",
+    route: "/fleet-dashboard",
+    icon: "Ship",
+    lazy: true,
+    version: "981.0",
+  },
+
+  "operations.fleet-tracking": {
+    id: "operations.fleet-tracking",
+    name: "Fleet Tracking",
+    category: "operations",
+    path: "pages/FleetTracking",
+    description: "Real-time vessel tracking and monitoring",
+    status: "active",
+    completeness: "100%",
+    route: "/fleet-tracking",
+    icon: "MapPin",
+    lazy: true,
+    version: "981.0",
+  },
+
+  "operations.maritime-certifications": {
+    id: "operations.maritime-certifications",
+    name: "Maritime Certifications",
+    category: "operations",
+    path: "pages/MaritimeCertifications",
+    description: "Maritime certification management and compliance tracking",
+    status: "active",
+    completeness: "100%",
+    route: "/maritime-certifications",
+    icon: "Shield",
+    lazy: true,
+    version: "981.0",
+  },
+
+  "intelligence.intelligent-alerts": {
+    id: "intelligence.intelligent-alerts",
+    name: "Intelligent Alerts",
+    category: "intelligence",
+    path: "pages/IntelligentAlerts",
+    description: "AI-powered intelligent alert system with real-time monitoring",
+    status: "active",
+    completeness: "100%",
+    route: "/intelligent-alerts",
+    icon: "Zap",
+    lazy: true,
+    version: "981.0",
+  },
+
+  "operations.task-management": {
+    id: "operations.task-management",
+    name: "Task Management",
+    category: "operations",
+    path: "pages/TaskManagement",
+    description: "Complete task management with scheduling and tracking",
+    status: "active",
+    completeness: "100%",
+    route: "/task-management",
+    icon: "Target",
+    lazy: true,
+    version: "981.0",
+  },
 };
 
 export function getModule(id: string): ModuleDefinition | undefined {
