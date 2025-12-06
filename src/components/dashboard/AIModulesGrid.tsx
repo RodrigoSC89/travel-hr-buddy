@@ -98,10 +98,10 @@ const modules: AIModule[] = [
     name: 'Assistente de Navegação',
     description: 'Rotas otimizadas',
     icon: <Navigation className="h-5 w-5" />,
-    status: 'standby',
+    status: 'active',
     accuracy: 88,
     category: 'operations',
-    route: '/fleet/navigation'
+    route: '/ai/navigation'
   },
   {
     id: 'compliance',
@@ -111,7 +111,7 @@ const modules: AIModule[] = [
     status: 'active',
     accuracy: 95,
     category: 'safety',
-    route: '/compliance'
+    route: '/ai/compliance'
   },
 ];
 
