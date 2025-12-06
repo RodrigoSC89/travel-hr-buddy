@@ -5,6 +5,10 @@ import { Badge } from "@/components/ui/badge";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Progress } from "@/components/ui/progress";
 import { Alert, AlertDescription } from "@/components/ui/alert";
+import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogDescription, DialogFooter } from "@/components/ui/dialog";
+import { Input } from "@/components/ui/input";
+import { Label } from "@/components/ui/label";
+import { Switch } from "@/components/ui/switch";
 import { useToast } from "@/hooks/use-toast";
 import { 
   Activity, 
@@ -23,7 +27,9 @@ import {
   Globe,
   Shield,
   RefreshCw,
-  Download
+  Download,
+  Bell,
+  Save
 } from "lucide-react";
 import { LineChart, Line, AreaChart, Area, XAxis, YAxis, CartesianGrid, Tooltip, Legend, ResponsiveContainer } from "recharts";
 
@@ -49,6 +55,18 @@ const SystemPerformanceMonitor = () => {
   const [isRefreshing, setIsRefreshing] = useState(false);
   const [selectedTimeRange, setSelectedTimeRange] = useState("1h");
   const [isExporting, setIsExporting] = useState(false);
+  const [alertConfigOpen, setAlertConfigOpen] = useState(false);
+  
+  // Alert configuration state
+  const [alertConfig, setAlertConfig] = useState({
+    cpuThreshold: 70,
+    memoryThreshold: 80,
+    diskThreshold: 90,
+    networkThreshold: 50,
+    emailNotifications: true,
+    pushNotifications: false,
+    slackNotifications: false,
+  });
 
   // Dados simulados de métricas do sistema
   const [systemMetrics, setSystemMetrics] = useState<SystemMetric[]>([
@@ -483,7 +501,7 @@ const SystemPerformanceMonitor = () => {
                 <p className="text-sm text-muted-foreground">
                   Configure thresholds para receber alertas automáticos quando métricas críticas forem atingidas.
                 </p>
-                <Button>
+                <Button onClick={() => setAlertConfigOpen(true)}>
                   <Shield className="w-4 h-4 mr-2" />
                   Configurar Alertas
                 </Button>
@@ -492,6 +510,127 @@ const SystemPerformanceMonitor = () => {
           </Card>
         </TabsContent>
       </Tabs>
+
+      {/* Alert Configuration Dialog */}
+      <Dialog open={alertConfigOpen} onOpenChange={setAlertConfigOpen}>
+        <DialogContent className="sm:max-w-[500px]">
+          <DialogHeader>
+            <DialogTitle className="flex items-center gap-2">
+              <Bell className="h-5 w-5 text-primary" />
+              Configuração de Alertas
+            </DialogTitle>
+            <DialogDescription>
+              Configure os thresholds e canais de notificação para alertas do sistema.
+            </DialogDescription>
+          </DialogHeader>
+          
+          <div className="space-y-6 py-4">
+            {/* Thresholds */}
+            <div className="space-y-4">
+              <h4 className="font-medium text-sm">Thresholds de Alerta (%)</h4>
+              <div className="grid grid-cols-2 gap-4">
+                <div className="space-y-2">
+                  <Label htmlFor="cpu-threshold">CPU</Label>
+                  <Input
+                    id="cpu-threshold"
+                    type="number"
+                    min="0"
+                    max="100"
+                    value={alertConfig.cpuThreshold}
+                    onChange={(e) => setAlertConfig(prev => ({ ...prev, cpuThreshold: Number(e.target.value) }))}
+                  />
+                </div>
+                <div className="space-y-2">
+                  <Label htmlFor="memory-threshold">Memória</Label>
+                  <Input
+                    id="memory-threshold"
+                    type="number"
+                    min="0"
+                    max="100"
+                    value={alertConfig.memoryThreshold}
+                    onChange={(e) => setAlertConfig(prev => ({ ...prev, memoryThreshold: Number(e.target.value) }))}
+                  />
+                </div>
+                <div className="space-y-2">
+                  <Label htmlFor="disk-threshold">Disco</Label>
+                  <Input
+                    id="disk-threshold"
+                    type="number"
+                    min="0"
+                    max="100"
+                    value={alertConfig.diskThreshold}
+                    onChange={(e) => setAlertConfig(prev => ({ ...prev, diskThreshold: Number(e.target.value) }))}
+                  />
+                </div>
+                <div className="space-y-2">
+                  <Label htmlFor="network-threshold">Rede</Label>
+                  <Input
+                    id="network-threshold"
+                    type="number"
+                    min="0"
+                    max="100"
+                    value={alertConfig.networkThreshold}
+                    onChange={(e) => setAlertConfig(prev => ({ ...prev, networkThreshold: Number(e.target.value) }))}
+                  />
+                </div>
+              </div>
+            </div>
+
+            {/* Notification Channels */}
+            <div className="space-y-4">
+              <h4 className="font-medium text-sm">Canais de Notificação</h4>
+              <div className="space-y-3">
+                <div className="flex items-center justify-between">
+                  <Label htmlFor="email-notifications" className="flex items-center gap-2">
+                    Email
+                  </Label>
+                  <Switch
+                    id="email-notifications"
+                    checked={alertConfig.emailNotifications}
+                    onCheckedChange={(checked) => setAlertConfig(prev => ({ ...prev, emailNotifications: checked }))}
+                  />
+                </div>
+                <div className="flex items-center justify-between">
+                  <Label htmlFor="push-notifications" className="flex items-center gap-2">
+                    Push Notifications
+                  </Label>
+                  <Switch
+                    id="push-notifications"
+                    checked={alertConfig.pushNotifications}
+                    onCheckedChange={(checked) => setAlertConfig(prev => ({ ...prev, pushNotifications: checked }))}
+                  />
+                </div>
+                <div className="flex items-center justify-between">
+                  <Label htmlFor="slack-notifications" className="flex items-center gap-2">
+                    Slack
+                  </Label>
+                  <Switch
+                    id="slack-notifications"
+                    checked={alertConfig.slackNotifications}
+                    onCheckedChange={(checked) => setAlertConfig(prev => ({ ...prev, slackNotifications: checked }))}
+                  />
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <DialogFooter>
+            <Button variant="outline" onClick={() => setAlertConfigOpen(false)}>
+              Cancelar
+            </Button>
+            <Button onClick={() => {
+              toast({
+                title: "Configurações salvas",
+                description: "As configurações de alertas foram atualizadas com sucesso.",
+              });
+              setAlertConfigOpen(false);
+            }}>
+              <Save className="w-4 h-4 mr-2" />
+              Salvar Configurações
+            </Button>
+          </DialogFooter>
+        </DialogContent>
+      </Dialog>
     </div>
   );
 };
