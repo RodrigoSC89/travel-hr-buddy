@@ -530,17 +530,21 @@ export const ChannelManager: React.FC<ChannelManagerProps> = ({
                           <MoreHorizontal className="h-4 w-4" />
                         </Button>
                       </DropdownMenuTrigger>
-                      <DropdownMenuContent align="end" className="bg-popover border">
-                        <DropdownMenuItem onClick={(e) => {
-                          e.stopPropagation();
+                      <DropdownMenuContent 
+                        align="end" 
+                        className="bg-popover border z-50"
+                        onClick={(e) => e.stopPropagation()}
+                      >
+                        <DropdownMenuItem onSelect={(e) => {
+                          e.preventDefault();
                           setSelectedChannel(channel);
                           setIsChannelDetailOpen(true);
                         }}>
                           <Edit className="h-4 w-4 mr-2" />
                           Editar canal
                         </DropdownMenuItem>
-                        <DropdownMenuItem onClick={(e) => {
-                          e.stopPropagation();
+                        <DropdownMenuItem onSelect={(e) => {
+                          e.preventDefault();
                           toast({
                             title: "Configurações",
                             description: `Abrindo configurações do canal ${channel.name}`
@@ -549,8 +553,8 @@ export const ChannelManager: React.FC<ChannelManagerProps> = ({
                           <Settings className="h-4 w-4 mr-2" />
                           Configurações
                         </DropdownMenuItem>
-                        <DropdownMenuItem onClick={(e) => {
-                          e.stopPropagation();
+                        <DropdownMenuItem onSelect={(e) => {
+                          e.preventDefault();
                           toast({
                             title: "Gerenciar Membros",
                             description: `Gerenciando ${channel.member_count} membros do canal ${channel.name}`
@@ -562,8 +566,8 @@ export const ChannelManager: React.FC<ChannelManagerProps> = ({
                         <DropdownMenuSeparator />
                         <DropdownMenuItem 
                           className="text-destructive focus:text-destructive"
-                          onClick={(e) => {
-                            e.stopPropagation();
+                          onSelect={(e) => {
+                            e.preventDefault();
                             setChannels(prev => prev.filter(c => c.id !== channel.id));
                             toast({
                               title: "Canal excluído",
