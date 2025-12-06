@@ -78,7 +78,9 @@ export const InboxManager: React.FC<InboxManagerProps> = ({
 
   useEffect(() => {
     loadMessages();
-    setupRealTimeSubscription();
+    const cleanup = setupRealTimeSubscription();
+    
+    return cleanup;
   }, []);
 
   useEffect(() => {
