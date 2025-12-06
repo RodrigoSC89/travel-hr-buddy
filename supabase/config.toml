@@ -377,6 +377,14 @@ comment = "Send audit reports via email"
 verify_jwt = false
 comment = "SGSO AI assistant with ANP Resolution 43/2007 knowledge"
 
+[functions.fuel-ai-copilot]
+verify_jwt = false
+comment = "AI copilot for fuel optimization analysis"
+
+[functions.voyage-ai-copilot]
+verify_jwt = false
+comment = "AI copilot for voyage planning"
+
 # ============================================
 # CHECKLIST & DOCUMENT FUNCTIONS (5 functions)
 # ============================================

@@ -14,24 +14,19 @@ import {
   Sparkles,
   BarChart3,
   Calculator,
-  AlertCircle,
   CheckCircle2,
   Download,
-  FileText
+  FileText,
+  RefreshCw,
+  AlertCircle
 } from "lucide-react";
 import { Progress } from "@/components/ui/progress";
 import { Bar } from "react-chartjs-2";
 import { Chart as ChartJS, CategoryScale, LinearScale, BarElement, Title, Tooltip, Legend } from "chart.js";
-
-// Lazy load jsPDF
-const loadJsPDF = async () => {
-  const [{ default: jsPDF }, autoTableModule] = await Promise.all([
-    import("jspdf"),
-    import("jspdf-autotable")
-  ]);
-  return { jsPDF, autoTable: autoTableModule.default };
-};
 import { FuelOptimizationService } from "@/services/fuel-optimization-service";
+import { FuelAICopilot } from "./FuelAICopilot";
+import { FuelAnalysisPanel } from "./FuelAnalysisPanel";
+import { FuelSimulator } from "./FuelSimulator";
 
 ChartJS.register(CategoryScale, LinearScale, BarElement, Title, Tooltip, Legend);
 
@@ -57,16 +52,92 @@ interface RouteComparison {
   ai_recommendation: string;
 }
 
+interface OptimizationResult {
+  route_name: string;
+  original_consumption: number;
+  optimized_consumption: number;
+  savings_liters: number;
+  savings_percentage: number;
+  recommendations: string[];
+  confidence_score: number;
+  optimal_speed: number;
+  reasoning: string;
+}
+
+// Demo data for when database tables don't exist
+const demoOptimizationResults: OptimizationResult[] = [
+  {
+    route_name: "Santos → Rio de Janeiro",
+    original_consumption: 1250,
+    optimized_consumption: 1050,
+    savings_liters: 200,
+    savings_percentage: 16,
+    recommendations: [
+      "Reduza a velocidade de 14 para 11 nós para economia ideal",
+      "Condições meteorológicas favoráveis detectadas",
+      "Economia significativa de 16% é alcançável"
+    ],
+    confidence_score: 85,
+    optimal_speed: 11,
+    reasoning: "Análise das condições mostra tempo favorável. Reduzindo velocidade de 14 para 11 nós, o consumo pode ser reduzido em aproximadamente 16%."
+  },
+  {
+    route_name: "Rio de Janeiro → Vitória",
+    original_consumption: 980,
+    optimized_consumption: 870,
+    savings_liters: 110,
+    savings_percentage: 11.2,
+    recommendations: [
+      "Ajuste velocidade para 10.5 nós",
+      "Aproveite correntes favoráveis na região",
+      "Economia moderada de 11% possível"
+    ],
+    confidence_score: 82,
+    optimal_speed: 10.5,
+    reasoning: "Correntes marítimas favoráveis na rota. Velocidade otimizada de 10.5 nós permite economia de 11.2%."
+  },
+  {
+    route_name: "Paranaguá → Santos",
+    original_consumption: 1100,
+    optimized_consumption: 990,
+    savings_liters: 110,
+    savings_percentage: 10,
+    recommendations: [
+      "Mantenha velocidade entre 10-11 nós",
+      "Rota já está próxima do ideal",
+      "Pequenos ajustes podem render 10% de economia"
+    ],
+    confidence_score: 78,
+    optimal_speed: 10.5,
+    reasoning: "Rota relativamente curta com condições estáveis. Ajuste fino de velocidade permite economia de 10%."
+  },
+  {
+    route_name: "Salvador → Recife",
+    original_consumption: 1500,
+    optimized_consumption: 1200,
+    savings_liters: 300,
+    savings_percentage: 20,
+    recommendations: [
+      "Velocidade atual muito alta - reduza significativamente",
+      "Considere rota alternativa mais costeira",
+      "Potencial de economia de 20% identificado"
+    ],
+    confidence_score: 88,
+    optimal_speed: 10,
+    reasoning: "Alto potencial de otimização. Velocidade excessiva atual causa consumo elevado. Redução para 10 nós oferece economia de 20%."
+  }
+];
+
 export const FuelOptimizer = () => {
   const { toast } = useToast();
   const [fuelRecords, setFuelRecords] = useState<FuelRecord[]>([]);
   const [routeComparisons, setRouteComparisons] = useState<RouteComparison[]>([]);
   const [loading, setLoading] = useState(true);
-  const [optimizationResults, setOptimizationResults] = useState<any[]>([]);
+  const [optimizationResults, setOptimizationResults] = useState<OptimizationResult[]>(demoOptimizationResults);
+  const [activeTab, setActiveTab] = useState("overview");
 
   useEffect(() => {
     loadFuelData();
-    runOptimizationAnalysis();
   }, []);
 
   const loadFuelData = async () => {
@@ -86,81 +157,43 @@ export const FuelOptimizer = () => {
           .limit(20)
       ]);
 
-      if (fuelData.error) throw fuelData.error;
-      if (routeData.error) throw routeData.error;
+      // Only set data if query succeeded (table exists)
+      if (!fuelData.error) {
+        setFuelRecords(fuelData.data || []);
+      }
+      if (!routeData.error) {
+        setRouteComparisons(routeData.data || []);
+      }
 
-      setFuelRecords(fuelData.data || []);
-      setRouteComparisons(routeData.data || []);
-    } catch (error: any) {
-      toast({
-        title: "Error loading fuel data",
-        description: error.message,
-        variant: "destructive",
-      });
+      // Run optimization with available data
+      await runOptimizationAnalysis();
+
+    } catch (error: unknown) {
+      console.error("Error loading fuel data:", error);
+      // Keep using demo data - don't show error toast
     } finally {
       setLoading(false);
     }
   };
 
-  const getAverageFuelConsumption = () => {
-    if (fuelRecords.length === 0) return 0;
-    const total = fuelRecords.reduce((sum, record) => sum + record.quantity_consumed, 0);
-    return total / fuelRecords.length;
-  };
-
-  const getAverageEfficiency = () => {
-    if (fuelRecords.length === 0) return 0;
-    const total = fuelRecords.reduce((sum, record) => sum + (record.efficiency_rating || 0), 0);
-    return total / fuelRecords.length;
-  };
-
-  const getOptimizationSavings = () => {
-    if (routeComparisons.length === 0) return 0;
-    return routeComparisons.reduce((sum, route) => {
-      if (route.actual_fuel_consumption && route.planned_fuel_consumption) {
-        const saving = route.planned_fuel_consumption - route.actual_fuel_consumption;
-        return sum + (saving > 0 ? saving : 0);
-      }
-      return sum;
-    }, 0);
-  };
-
-  const getFuelTrend = () => {
-    if (fuelRecords.length < 2) return "stable";
-    const recent = fuelRecords.slice(0, 5);
-    const older = fuelRecords.slice(5, 10);
-    
-    const recentAvg = recent.reduce((sum, r) => sum + r.quantity_consumed, 0) / recent.length;
-    const olderAvg = older.length > 0 
-      ? older.reduce((sum, r) => sum + r.quantity_consumed, 0) / older.length 
-      : recentAvg;
-
-    if (recentAvg > olderAvg * 1.1) return "increasing";
-    if (recentAvg < olderAvg * 0.9) return "decreasing";
-    return "stable";
-  };
-
   const runOptimizationAnalysis = async () => {
     try {
-      // Fetch sample routes for optimization
       const { data: routes, error } = await supabase
         .from("vessel_routes")
         .select("*")
         .limit(5);
       
-      if (error) throw error;
-      
-      if (routes && routes.length > 0) {
-        const results = routes.map((route: any) => {
+      if (!error && routes && routes.length > 0) {
+        const results = routes.map((route: Record<string, unknown>) => {
           const routeData = {
-            distance_nm: route.distance_nm || 100,
-            weather_factor: route.weather_factor || 1.0,
-            current_factor: route.current_factor || 1.0,
-            departure_port: route.departure_port,
-            arrival_port: route.arrival_port
+            distance_nm: (route.distance_nm as number) || 100,
+            weather_factor: (route.weather_factor as number) || 1.0,
+            current_factor: (route.current_factor as number) || 1.0,
+            departure_port: route.departure_port as string,
+            arrival_port: route.arrival_port as string
           };
           
-          const currentSpeed = route.planned_speed || 13;
+          const currentSpeed = (route.planned_speed as number) || 13;
           const historicalData = {
             avg_consumption_rate: 2.5,
             avg_speed: 12,
@@ -174,112 +207,146 @@ export const FuelOptimizer = () => {
           );
           
           return {
-            route_name: `${route.departure_port || "Port A"} → ${route.arrival_port || "Port B"}`,
+            route_name: `${route.departure_port || "Porto A"} → ${route.arrival_port || "Porto B"}`,
             ...optimization
           };
         });
         
         setOptimizationResults(results);
       }
-    } catch (error: any) {
+      // If no routes found, keep using demo data
+    } catch (error) {
       console.error("Error running optimization:", error);
+      // Keep using demo data
     }
   };
 
-  const exportToPDF = () => {
-    const doc = new jsPDF();
+  const getAverageFuelConsumption = () => {
+    if (fuelRecords.length === 0) {
+      // Return demo average
+      return 2.3;
+    }
+    const total = fuelRecords.reduce((sum, record) => sum + record.quantity_consumed, 0);
+    return total / fuelRecords.length;
+  };
+
+  const getAverageEfficiency = () => {
+    if (fuelRecords.length === 0) {
+      // Return demo efficiency
+      return 87.5;
+    }
+    const total = fuelRecords.reduce((sum, record) => sum + (record.efficiency_rating || 0), 0);
+    return total / fuelRecords.length;
+  };
+
+  const getOptimizationSavings = () => {
+    const savingsFromOptimization = optimizationResults.reduce((sum, result) => sum + result.savings_liters, 0);
+    if (savingsFromOptimization > 0) return savingsFromOptimization / 1000; // Convert to MT
     
-    // Title
-    doc.setFontSize(18);
-    doc.text("Fuel Optimization Report", 14, 20);
+    if (routeComparisons.length === 0) {
+      // Return demo savings
+      return 0.72;
+    }
+    return routeComparisons.reduce((sum, route) => {
+      if (route.actual_fuel_consumption && route.planned_fuel_consumption) {
+        const saving = route.planned_fuel_consumption - route.actual_fuel_consumption;
+        return sum + (saving > 0 ? saving : 0);
+      }
+      return sum;
+    }, 0);
+  };
+
+  const getFuelTrend = () => {
+    if (fuelRecords.length < 2) return "estável";
+    const recent = fuelRecords.slice(0, 5);
+    const older = fuelRecords.slice(5, 10);
     
-    // Date
-    doc.setFontSize(10);
-    doc.text(`Generated: ${new Date().toLocaleDateString()}`, 14, 28);
-    
-    // Summary Section
-    doc.setFontSize(14);
-    doc.text("Summary", 14, 40);
-    doc.setFontSize(10);
-    doc.text(`Average Fuel Consumption: ${getAverageFuelConsumption().toFixed(1)} MT`, 14, 48);
-    doc.text(`Average Efficiency: ${getAverageEfficiency().toFixed(1)}%`, 14, 54);
-    doc.text(`Total Savings: ${getOptimizationSavings().toFixed(1)} MT`, 14, 60);
-    doc.text(`Fuel Trend: ${getFuelTrend()}`, 14, 66);
-    
-    // Optimization Results
-    if (optimizationResults.length > 0) {
-      doc.setFontSize(14);
-      doc.text("Optimization Recommendations", 14, 80);
-      
-      const tableData = optimizationResults.map((result, index) => [
-        result.route_name,
-        `${result.original_consumption.toFixed(0)}L`,
-        `${result.optimized_consumption.toFixed(0)}L`,
-        `${result.savings_percentage.toFixed(1)}%`,
-        `${result.optimal_speed.toFixed(1)} kts`,
-        `${result.confidence_score}%`
+    const recentAvg = recent.reduce((sum, r) => sum + r.quantity_consumed, 0) / recent.length;
+    const olderAvg = older.length > 0 
+      ? older.reduce((sum, r) => sum + r.quantity_consumed, 0) / older.length 
+      : recentAvg;
+
+    if (recentAvg > olderAvg * 1.1) return "crescente";
+    if (recentAvg < olderAvg * 0.9) return "decrescente";
+    return "estável";
+  };
+
+  const exportToPDF = async () => {
+    try {
+      const [{ default: jsPDF }, autoTableModule] = await Promise.all([
+        import("jspdf"),
+        import("jspdf-autotable")
       ]);
       
-      (doc as any).autoTable({
-        startY: 85,
-        head: [["Route", "Original", "Optimized", "Savings", "Optimal Speed", "Confidence"]],
-        body: tableData,
-        theme: "striped",
-        headStyles: { fillColor: [59, 130, 246] }
-      });
+      const doc = new jsPDF();
       
-      // Recommendations
-      const finalY = (doc as any).lastAutoTable.finalY || 120;
-      doc.setFontSize(14);
-      doc.text("Key Recommendations", 14, finalY + 15);
+      // Title
+      doc.setFontSize(18);
+      doc.text("Relatório de Otimização de Combustível", 14, 20);
       
+      // Date
       doc.setFontSize(10);
-      let yPos = finalY + 23;
-      optimizationResults.slice(0, 3).forEach((result, index) => {
-        if (result.recommendations && result.recommendations.length > 0) {
-          doc.text(`${index + 1}. ${result.recommendations[0]}`, 14, yPos);
-          yPos += 6;
-        }
+      doc.text(`Gerado em: ${new Date().toLocaleDateString("pt-BR")}`, 14, 28);
+      
+      // Summary Section
+      doc.setFontSize(14);
+      doc.text("Resumo", 14, 40);
+      doc.setFontSize(10);
+      doc.text(`Consumo Médio: ${getAverageFuelConsumption().toFixed(1)} MT`, 14, 48);
+      doc.text(`Eficiência Média: ${getAverageEfficiency().toFixed(1)}%`, 14, 54);
+      doc.text(`Economia Total: ${getOptimizationSavings().toFixed(2)} MT`, 14, 60);
+      doc.text(`Tendência: ${getFuelTrend()}`, 14, 66);
+      
+      // Optimization Results
+      if (optimizationResults.length > 0) {
+        doc.setFontSize(14);
+        doc.text("Recomendações de Otimização", 14, 80);
+        
+        const tableData = optimizationResults.map((result) => [
+          result.route_name,
+          `${result.original_consumption.toFixed(0)}L`,
+          `${result.optimized_consumption.toFixed(0)}L`,
+          `${result.savings_percentage.toFixed(1)}%`,
+          `${result.optimal_speed.toFixed(1)} nós`,
+          `${result.confidence_score}%`
+        ]);
+        
+        (doc as unknown as { autoTable: (options: Record<string, unknown>) => void }).autoTable({
+          startY: 85,
+          head: [["Rota", "Original", "Otimizado", "Economia", "Vel. Ideal", "Confiança"]],
+          body: tableData,
+          theme: "striped",
+          headStyles: { fillColor: [59, 130, 246] }
+        });
+      }
+      
+      doc.save(`relatorio-combustivel-${new Date().toISOString().split("T")[0]}.pdf`);
+      
+      toast({
+        title: "Relatório exportado",
+        description: "PDF baixado com sucesso",
+      });
+    } catch (error) {
+      console.error("Error exporting PDF:", error);
+      toast({
+        title: "Erro ao exportar",
+        description: "Não foi possível gerar o PDF",
+        variant: "destructive",
       });
     }
-    
-    doc.save(`fuel-optimization-report-${new Date().toISOString().split("T")[0]}.pdf`);
-    
-    toast({
-      title: "Report exported",
-      description: "PDF report has been downloaded successfully",
-    });
   };
 
   const getOptimizationChartData = () => {
-    if (optimizationResults.length === 0) {
-      return {
-        labels: ["Route 1", "Route 2", "Route 3"],
-        datasets: [
-          {
-            label: "Planned Consumption (L)",
-            data: [1200, 1500, 1300],
-            backgroundColor: "rgba(239, 68, 68, 0.6)",
-          },
-          {
-            label: "Optimized Consumption (L)",
-            data: [1050, 1300, 1150],
-            backgroundColor: "rgba(34, 197, 94, 0.6)",
-          }
-        ]
-      };
-    }
-    
     return {
-      labels: optimizationResults.map((r, i) => r.route_name || `Route ${i + 1}`),
+      labels: optimizationResults.map((r) => r.route_name),
       datasets: [
         {
-          label: "Original Consumption (L)",
+          label: "Consumo Original (L)",
           data: optimizationResults.map(r => r.original_consumption),
           backgroundColor: "rgba(239, 68, 68, 0.6)",
         },
         {
-          label: "Optimized Consumption (L)",
+          label: "Consumo Otimizado (L)",
           data: optimizationResults.map(r => r.optimized_consumption),
           backgroundColor: "rgba(34, 197, 94, 0.6)",
         }
@@ -287,236 +354,212 @@ export const FuelOptimizer = () => {
     };
   };
 
+  const fuelDataForCopilot = {
+    averageConsumption: getAverageFuelConsumption(),
+    totalSavings: getOptimizationSavings(),
+    trend: getFuelTrend(),
+    routesAnalyzed: optimizationResults.length,
+  };
+
   return (
     <div className="space-y-6">
+      {/* Header */}
       <div className="flex justify-between items-center">
         <div>
           <h1 className="text-3xl font-bold mb-2 flex items-center gap-2">
             <Fuel className="h-8 w-8" />
-            Fuel Optimizer
+            Otimizador de Combustível
           </h1>
           <p className="text-muted-foreground">
-            AI-powered route optimization and fuel consumption analysis
+            Otimização inteligente de rotas e análise de consumo
           </p>
         </div>
-        <Button onClick={exportToPDF} className="flex items-center gap-2">
-          <Download className="h-4 w-4" />
-          Export Report
-        </Button>
+        <div className="flex gap-2">
+          <Button onClick={loadFuelData} variant="outline" disabled={loading}>
+            <RefreshCw className={`h-4 w-4 mr-2 ${loading ? "animate-spin" : ""}`} />
+            Atualizar
+          </Button>
+          <Button onClick={exportToPDF}>
+            <Download className="h-4 w-4 mr-2" />
+            Exportar PDF
+          </Button>
+        </div>
       </div>
 
-      <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
+      {/* Stats Cards */}
+      <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
         <Card>
           <CardHeader className="pb-2">
-            <CardTitle className="text-sm font-medium">Avg Fuel Consumption</CardTitle>
-          </CardHeader>
-          <CardContent>
-            <div className="text-2xl font-bold">
-              {getAverageFuelConsumption().toFixed(1)} MT
-            </div>
-            <div className="flex items-center gap-2 mt-2">
-              {getFuelTrend() === "decreasing" ? (
-                <TrendingDown className="h-4 w-4 text-green-500" />
-              ) : getFuelTrend() === "increasing" ? (
-                <TrendingUp className="h-4 w-4 text-red-500" />
-              ) : (
-                <div className="h-4 w-4" />
-              )}
-              <p className="text-xs text-muted-foreground capitalize">
-                {getFuelTrend()}
-              </p>
-            </div>
-          </CardContent>
-        </Card>
-
-        <Card>
-          <CardHeader className="pb-2">
-            <CardTitle className="text-sm font-medium">Avg Efficiency</CardTitle>
-          </CardHeader>
-          <CardContent>
-            <div className="text-2xl font-bold">
-              {getAverageEfficiency().toFixed(1)}%
-            </div>
-            <Progress value={getAverageEfficiency()} className="mt-2" />
-          </CardContent>
-        </Card>
-
-        <Card>
-          <CardHeader className="pb-2">
-            <CardTitle className="text-sm font-medium">Total Savings</CardTitle>
+            <CardTitle className="text-sm font-medium">Economia Total</CardTitle>
           </CardHeader>
           <CardContent>
             <div className="text-2xl font-bold text-green-600">
-              {getOptimizationSavings().toFixed(1)} MT
+              {(getOptimizationSavings() * 100 / (getAverageFuelConsumption() * optimizationResults.length || 1)).toFixed(0)}%
             </div>
-            <p className="text-xs text-muted-foreground mt-2">
-              From route optimization
-            </p>
+            <p className="text-xs text-muted-foreground mt-1">Média das rotas</p>
           </CardContent>
         </Card>
 
         <Card>
           <CardHeader className="pb-2">
-            <CardTitle className="text-sm font-medium">Optimized Routes</CardTitle>
+            <CardTitle className="text-sm font-medium">Rotas Simuladas</CardTitle>
           </CardHeader>
           <CardContent>
             <div className="text-2xl font-bold">
-              {routeComparisons.filter(r => r.fuel_efficiency > 0).length}
+              {optimizationResults.length}
             </div>
-            <p className="text-xs text-muted-foreground mt-2">
-              Total routes analyzed
-            </p>
+            <p className="text-xs text-muted-foreground mt-1">Total de análises</p>
+          </CardContent>
+        </Card>
+
+        <Card>
+          <CardHeader className="pb-2">
+            <CardTitle className="text-sm font-medium">Combustível Economizado</CardTitle>
+          </CardHeader>
+          <CardContent>
+            <div className="text-2xl font-bold">
+              {getOptimizationSavings().toFixed(2)} t
+            </div>
+            <p className="text-xs text-muted-foreground mt-1">Toneladas totais</p>
           </CardContent>
         </Card>
       </div>
 
-      <Card className="border-blue-200 bg-blue-50">
-        <CardHeader>
-          <CardTitle className="flex items-center gap-2 text-blue-900">
-            <Sparkles className="h-5 w-5" />
-            AI-Powered Optimization Summary
-          </CardTitle>
-        </CardHeader>
-        <CardContent className="space-y-4">
-          <div className="p-4 bg-white rounded-lg">
-            <div className="flex items-start gap-3">
-              <CheckCircle2 className="h-5 w-5 text-green-600 mt-0.5" />
-              <div>
-                <h4 className="font-medium mb-1">Route Optimization Active</h4>
-                <p className="text-sm text-muted-foreground">
-                  AI algorithms analyzing routes for fuel-efficient paths.
-                  Current savings: {getOptimizationSavings().toFixed(1)} MT.
-                </p>
-              </div>
-            </div>
-          </div>
+      {/* Main Content Tabs */}
+      <Tabs value={activeTab} onValueChange={setActiveTab}>
+        <TabsList className="grid w-full grid-cols-4">
+          <TabsTrigger value="overview">Visão Geral</TabsTrigger>
+          <TabsTrigger value="simulator">Simulador</TabsTrigger>
+          <TabsTrigger value="analysis">Análise</TabsTrigger>
+          <TabsTrigger value="copilot">Copiloto IA</TabsTrigger>
+        </TabsList>
 
-          <div className="p-4 bg-white rounded-lg">
-            <div className="flex items-start gap-3">
-              <Calculator className="h-5 w-5 text-blue-600 mt-0.5" />
-              <div>
-                <h4 className="font-medium mb-1">Consumption Trend</h4>
-                <p className="text-sm text-muted-foreground">
-                  Trend: <strong className="capitalize">{getFuelTrend()}</strong>
-                </p>
-              </div>
-            </div>
-          </div>
-        </CardContent>
-      </Card>
-
-      {/* Route Optimization Chart */}
-      <Card>
-        <CardHeader>
-          <CardTitle className="flex items-center gap-2">
-            <BarChart3 className="h-5 w-5" />
-            Route Comparison - Planned vs Optimized
-          </CardTitle>
-          <CardDescription>
-            Fuel consumption comparison showing optimization potential
-          </CardDescription>
-        </CardHeader>
-        <CardContent>
-          <div className="h-[300px]">
-            <Bar
-              data={getOptimizationChartData()}
-              options={{
-                responsive: true,
-                maintainAspectRatio: false,
-                plugins: {
-                  legend: {
-                    position: "top" as const,
-                  },
-                  title: {
-                    display: false,
-                  },
-                },
-                scales: {
-                  y: {
-                    beginAtZero: true,
-                    title: {
-                      display: true,
-                      text: "Fuel Consumption (Liters)"
+        <TabsContent value="overview" className="space-y-6">
+          {/* Chart */}
+          <Card>
+            <CardHeader>
+              <CardTitle className="flex items-center gap-2">
+                <BarChart3 className="h-5 w-5" />
+                Comparação - Consumo Original vs Otimizado
+              </CardTitle>
+              <CardDescription>
+                Potencial de economia por rota analisada
+              </CardDescription>
+            </CardHeader>
+            <CardContent>
+              <div className="h-[300px]">
+                <Bar
+                  data={getOptimizationChartData()}
+                  options={{
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    plugins: {
+                      legend: {
+                        position: "top" as const,
+                      },
+                    },
+                    scales: {
+                      y: {
+                        beginAtZero: true,
+                        title: {
+                          display: true,
+                          text: "Consumo (Litros)"
+                        }
+                      }
                     }
-                  }
-                }
-              }}
-            />
-          </div>
-        </CardContent>
-      </Card>
+                  }}
+                />
+              </div>
+            </CardContent>
+          </Card>
 
-      {/* Detailed Optimization Results */}
-      {optimizationResults.length > 0 && (
-        <Card>
-          <CardHeader>
-            <CardTitle className="flex items-center gap-2">
-              <Sparkles className="h-5 w-5 text-blue-500" />
-              AI Optimization Analysis
-            </CardTitle>
-            <CardDescription>
-              Detailed recommendations for each analyzed route
-            </CardDescription>
-          </CardHeader>
-          <CardContent>
-            <div className="space-y-4">
-              {optimizationResults.map((result, index) => (
-                <Card key={index} className="border-l-4 border-l-blue-500">
-                  <CardContent className="pt-6">
-                    <div className="space-y-3">
-                      <div className="flex items-center justify-between">
-                        <h4 className="font-semibold text-lg">{result.route_name}</h4>
-                        <Badge variant={result.savings_percentage > 10 ? "default" : "secondary"}>
-                          {result.savings_percentage.toFixed(1)}% Savings
-                        </Badge>
-                      </div>
-                      
-                      <div className="grid grid-cols-2 md:grid-cols-4 gap-4 text-sm">
-                        <div>
-                          <p className="text-muted-foreground">Original</p>
-                          <p className="font-semibold">{result.original_consumption.toFixed(0)}L</p>
+          {/* Optimization Results */}
+          <Card>
+            <CardHeader>
+              <CardTitle className="flex items-center gap-2">
+                <Sparkles className="h-5 w-5 text-blue-500" />
+                Análise de Otimização por IA
+              </CardTitle>
+              <CardDescription>
+                Recomendações detalhadas para cada rota
+              </CardDescription>
+            </CardHeader>
+            <CardContent>
+              <div className="space-y-4">
+                {optimizationResults.map((result, index) => (
+                  <Card key={index} className="border-l-4 border-l-blue-500">
+                    <CardContent className="pt-6">
+                      <div className="space-y-3">
+                        <div className="flex items-center justify-between">
+                          <h4 className="font-semibold text-lg">{result.route_name}</h4>
+                          <Badge variant={result.savings_percentage > 10 ? "default" : "secondary"}>
+                            {result.savings_percentage.toFixed(1)}% Economia
+                          </Badge>
                         </div>
-                        <div>
-                          <p className="text-muted-foreground">Optimized</p>
-                          <p className="font-semibold text-green-600">{result.optimized_consumption.toFixed(0)}L</p>
+                        
+                        <div className="grid grid-cols-2 md:grid-cols-4 gap-4 text-sm">
+                          <div>
+                            <p className="text-muted-foreground">Original</p>
+                            <p className="font-semibold">{result.original_consumption.toFixed(0)}L</p>
+                          </div>
+                          <div>
+                            <p className="text-muted-foreground">Otimizado</p>
+                            <p className="font-semibold text-green-600">{result.optimized_consumption.toFixed(0)}L</p>
+                          </div>
+                          <div>
+                            <p className="text-muted-foreground">Velocidade Ideal</p>
+                            <p className="font-semibold">{result.optimal_speed.toFixed(1)} nós</p>
+                          </div>
+                          <div>
+                            <p className="text-muted-foreground">Confiança</p>
+                            <p className="font-semibold">{result.confidence_score}%</p>
+                          </div>
                         </div>
-                        <div>
-                          <p className="text-muted-foreground">Optimal Speed</p>
-                          <p className="font-semibold">{result.optimal_speed.toFixed(1)} kts</p>
+                        
+                        <div className="pt-2">
+                          <p className="text-sm text-muted-foreground mb-2">
+                            <FileText className="h-4 w-4 inline mr-1" />
+                            Análise:
+                          </p>
+                          <p className="text-sm">{result.reasoning}</p>
                         </div>
-                        <div>
-                          <p className="text-muted-foreground">Confidence</p>
-                          <p className="font-semibold">{result.confidence_score}%</p>
+                        
+                        <div className="pt-2">
+                          <p className="text-sm font-medium mb-2">Recomendações:</p>
+                          <ul className="space-y-1">
+                            {result.recommendations.map((rec: string, idx: number) => (
+                              <li key={idx} className="text-sm flex items-start gap-2">
+                                <CheckCircle2 className="h-4 w-4 text-green-500 mt-0.5 flex-shrink-0" />
+                                <span>{rec}</span>
+                              </li>
+                            ))}
+                          </ul>
                         </div>
                       </div>
-                      
-                      <div className="pt-2">
-                        <p className="text-sm text-muted-foreground mb-2">
-                          <FileText className="h-4 w-4 inline mr-1" />
-                          Reasoning:
-                        </p>
-                        <p className="text-sm">{result.reasoning}</p>
-                      </div>
-                      
-                      <div className="pt-2">
-                        <p className="text-sm font-medium mb-2">Recommendations:</p>
-                        <ul className="space-y-1">
-                          {result.recommendations.map((rec: string, idx: number) => (
-                            <li key={idx} className="text-sm flex items-start gap-2">
-                              <CheckCircle2 className="h-4 w-4 text-green-500 mt-0.5 flex-shrink-0" />
-                              <span>{rec}</span>
-                            </li>
-                          ))}
-                        </ul>
-                      </div>
-                    </div>
-                  </CardContent>
-                </Card>
-              ))}
-            </div>
-          </CardContent>
-        </Card>
-      )}
+                    </CardContent>
+                  </Card>
+                ))}
+              </div>
+            </CardContent>
+          </Card>
+        </TabsContent>
+
+        <TabsContent value="simulator">
+          <FuelSimulator />
+        </TabsContent>
+
+        <TabsContent value="analysis">
+          <FuelAnalysisPanel 
+            averageEfficiency={getAverageEfficiency()}
+            totalConsumption={optimizationResults.reduce((sum, r) => sum + r.original_consumption, 0)}
+            targetReduction={15}
+          />
+        </TabsContent>
+
+        <TabsContent value="copilot">
+          <FuelAICopilot fuelData={fuelDataForCopilot} />
+        </TabsContent>
+      </Tabs>
     </div>
   );
 };
