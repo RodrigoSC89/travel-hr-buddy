@@ -1,5 +1,8 @@
 project_id = "vnbptmixvwropvanyhdb"
 
+[functions.voice-assistant-chat]
+verify_jwt = false
+
 [functions.dp-intelligence-ai]
 verify_jwt = false
 

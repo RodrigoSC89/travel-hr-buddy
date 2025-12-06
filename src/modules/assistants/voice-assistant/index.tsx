@@ -2,8 +2,9 @@ import React, { useState, useCallback, useEffect, useRef } from "react";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
-import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
+import { Input } from "@/components/ui/input";
 import { ScrollArea } from "@/components/ui/scroll-area";
+import { motion, AnimatePresence } from "framer-motion";
 import { 
   Mic, 
   MicOff, 
@@ -13,18 +14,35 @@ import {
   MessageSquare,
   Activity,
   Loader2,
-  Command
+  Command,
+  Send,
+  Bot,
+  User,
+  Sparkles,
+  Navigation,
+  CheckCircle,
+  AlertCircle,
+  Settings,
+  Waves
 } from "lucide-react";
 import { useToast } from "@/hooks/use-toast";
-import { toast as sonnerToast } from "sonner";
 import { logger } from "@/lib/logger";
 import { useNavigate } from "react-router-dom";
+import { supabase } from "@/integrations/supabase/client";
 
 interface VoiceCommand {
+  id: string;
   timestamp: string;
-  transcript: string;
-  response: string;
+  type: "user" | "assistant";
+  content: string;
+  navigation?: string;
   action?: string;
+  status: "pending" | "success" | "error";
+}
+
+interface ConversationMessage {
+  role: "user" | "assistant";
+  content: string;
 }
 
 const VoiceAssistant: React.FC = () => {
@@ -32,29 +50,28 @@ const VoiceAssistant: React.FC = () => {
   const { toast } = useToast();
   const [isListening, setIsListening] = useState(false);
   const [isSpeaking, setIsSpeaking] = useState(false);
+  const [isProcessing, setIsProcessing] = useState(false);
   const [transcript, setTranscript] = useState("");
-  const [commands, setCommands] = useState<VoiceCommand[]>([]);
+  const [textInput, setTextInput] = useState("");
+  const [messages, setMessages] = useState<VoiceCommand[]>([]);
+  const [conversationHistory, setConversationHistory] = useState<ConversationMessage[]>([]);
   const [isSupported, setIsSupported] = useState(true);
   const [volume, setVolume] = useState(1);
+  const [useElevenLabs, setUseElevenLabs] = useState(true);
 
   const recognitionRef = useRef<any>(null);
   const synthRef = useRef<SpeechSynthesis | null>(null);
+  const audioRef = useRef<HTMLAudioElement | null>(null);
+  const scrollRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
-    // Verificar suporte do navegador
     const SpeechRecognition = (window as any).SpeechRecognition || (window as any).webkitSpeechRecognition;
     
     if (!SpeechRecognition || !window.speechSynthesis) {
       setIsSupported(false);
-      toast({
-        title: "Navegador não suportado",
-        description: "Seu navegador não suporta reconhecimento de voz. Use Chrome, Edge ou Safari.",
-        variant: "destructive",
-      });
       return;
     }
 
-    // Inicializar Speech Recognition
     recognitionRef.current = new SpeechRecognition();
     recognitionRef.current.continuous = true;
     recognitionRef.current.interimResults = true;
@@ -63,10 +80,8 @@ const VoiceAssistant: React.FC = () => {
     recognitionRef.current.onresult = (event: any) => {
       const current = event.resultIndex;
       const transcriptText = event.results[current][0].transcript;
-      
       setTranscript(transcriptText);
 
-      // Se for resultado final, processar comando
       if (event.results[current].isFinal) {
         processCommand(transcriptText);
         setTranscript("");
@@ -75,21 +90,18 @@ const VoiceAssistant: React.FC = () => {
 
     recognitionRef.current.onerror = (event: any) => {
       logger.error("Speech recognition error", { error: event.error });
-      
-      if (event.error === "no-speech") {
+      if (event.error !== "no-speech") {
         toast({
-          title: "Nenhuma fala detectada",
-          description: "Tente falar mais alto ou verificar seu microfone.",
+          title: "Erro de reconhecimento",
+          description: "Houve um problema com o microfone.",
           variant: "destructive",
         });
       }
-      
       setIsListening(false);
     };
 
     recognitionRef.current.onend = () => {
       if (isListening) {
-        // Reiniciar se ainda estiver no modo de escuta
         try {
           recognitionRef.current?.start();
         } catch (error) {
@@ -99,16 +111,20 @@ const VoiceAssistant: React.FC = () => {
     };
 
     synthRef.current = window.speechSynthesis;
+    audioRef.current = new Audio();
 
     return () => {
-      if (recognitionRef.current) {
-        recognitionRef.current.stop();
-      }
-      if (synthRef.current) {
-        synthRef.current.cancel();
-      }
+      recognitionRef.current?.stop();
+      synthRef.current?.cancel();
+      audioRef.current?.pause();
     };
   }, [isListening]);
+
+  useEffect(() => {
+    if (scrollRef.current) {
+      scrollRef.current.scrollTop = scrollRef.current.scrollHeight;
+    }
+  }, [messages]);
 
   const toggleListening = () => {
     if (!isSupported) return;
@@ -116,23 +132,19 @@ const VoiceAssistant: React.FC = () => {
     if (isListening) {
       recognitionRef.current?.stop();
       setIsListening(false);
-      toast({
-        title: "Assistente pausado",
-        description: "O assistente de voz foi pausado.",
-      });
     } else {
       try {
         recognitionRef.current?.start();
         setIsListening(true);
         toast({
-          title: "Assistente ativo",
-          description: "Estou ouvindo. Fale seu comando.",
+          title: "🎤 ARIA ativada",
+          description: "Estou ouvindo. Como posso ajudar?",
         });
       } catch (error) {
         logger.error("Error starting recognition", { error });
         toast({
           title: "Erro ao iniciar",
-          description: "Não foi possível iniciar o reconhecimento de voz.",
+          description: "Não foi possível acessar o microfone.",
           variant: "destructive",
         });
       }
@@ -140,252 +152,472 @@ const VoiceAssistant: React.FC = () => {
   };
 
   const processCommand = async (command: string) => {
-    logger.info("Processing voice command", { command });
+    if (!command.trim()) return;
 
-    const lowerCommand = command.toLowerCase();
-    let response = "";
-    let action = "";
+    const userMessageId = `user-${Date.now()}`;
+    const assistantMessageId = `assistant-${Date.now()}`;
 
-    // Processar comandos comuns
-    if (lowerCommand.includes("dashboard") || lowerCommand.includes("painel")) {
-      action = "navigate_dashboard";
-      response = "Abrindo dashboard principal...";
-      setTimeout(() => navigate("/dashboard"), 500);
-    } 
-    else if (lowerCommand.includes("relatório") || lowerCommand.includes("relatorio")) {
-      action = "navigate_reports";
-      response = "Abrindo central de relatórios...";
-      setTimeout(() => navigate("/reports"), 500);
-    }
-    else if (lowerCommand.includes("frota") || lowerCommand.includes("embarcações")) {
-      action = "navigate_fleet";
-      response = "Abrindo gestão de frota...";
-      setTimeout(() => navigate("/fleet"), 500);
-    }
-    else if (lowerCommand.includes("status") || lowerCommand.includes("situação")) {
-      action = "query_status";
-      response = "Sistema operando normalmente. Todos os módulos estão ativos.";
-    }
-    else if (lowerCommand.includes("ajuda") || lowerCommand.includes("help")) {
-      action = "show_help";
-      response = "Posso ajudá-lo a navegar pelo sistema, abrir módulos, verificar status e muito mais. Experimente dizer: ir para dashboard, abrir relatórios, ou mostrar frota.";
-    }
-    else if (lowerCommand.includes("tripulação") || lowerCommand.includes("crew")) {
-      action = "navigate_crew";
-      response = "Abrindo gestão de tripulação...";
-      setTimeout(() => navigate("/crew"), 500);
-    }
-    else {
-      response = `Recebi o comando: ${command}. Ainda estou aprendendo a executar essa ação.`;
-    }
-
-    // Adicionar ao histórico
-    const newCommand: VoiceCommand = {
+    // Add user message
+    const userMessage: VoiceCommand = {
+      id: userMessageId,
       timestamp: new Date().toISOString(),
-      transcript: command,
-      response,
-      action
+      type: "user",
+      content: command,
+      status: "success",
     };
+    setMessages(prev => [...prev, userMessage]);
 
-    setCommands(prev => [newCommand, ...prev]);
+    // Add pending assistant message
+    const pendingMessage: VoiceCommand = {
+      id: assistantMessageId,
+      timestamp: new Date().toISOString(),
+      type: "assistant",
+      content: "",
+      status: "pending",
+    };
+    setMessages(prev => [...prev, pendingMessage]);
+    setIsProcessing(true);
 
-    // Falar resposta
-    speak(response);
+    try {
+      // Call AI endpoint
+      const { data, error } = await supabase.functions.invoke("voice-assistant-chat", {
+        body: {
+          message: command,
+          conversationHistory,
+        },
+      });
 
-    logger.info("Command processed", { command: newCommand });
+      if (error) throw error;
+
+      const response = data.response || "Desculpe, não consegui processar.";
+      const navigation = data.navigation;
+      const action = data.action;
+
+      // Update conversation history
+      setConversationHistory(prev => [
+        ...prev,
+        { role: "user", content: command },
+        { role: "assistant", content: response },
+      ]);
+
+      // Update assistant message
+      setMessages(prev =>
+        prev.map(msg =>
+          msg.id === assistantMessageId
+            ? {
+                ...msg,
+                content: response,
+                navigation,
+                action,
+                status: "success",
+              }
+            : msg
+        )
+      );
+
+      // Speak response
+      await speak(response);
+
+      // Handle navigation
+      if (navigation) {
+        setTimeout(() => {
+          navigate(navigation);
+          toast({
+            title: "Navegando",
+            description: `Indo para ${navigation}`,
+          });
+        }, 1500);
+      }
+
+    } catch (error) {
+      logger.error("Error processing command", { error });
+      setMessages(prev =>
+        prev.map(msg =>
+          msg.id === assistantMessageId
+            ? {
+                ...msg,
+                content: "Desculpe, ocorreu um erro. Tente novamente.",
+                status: "error",
+              }
+            : msg
+        )
+      );
+    } finally {
+      setIsProcessing(false);
+    }
   };
 
-  const speak = (text: string) => {
-    if (!synthRef.current) return;
+  const speak = async (text: string) => {
+    if (volume === 0) return;
 
-    synthRef.current.cancel(); // Cancelar falas anteriores
+    setIsSpeaking(true);
 
+    try {
+      if (useElevenLabs) {
+        // Try ElevenLabs first
+        const { data, error } = await supabase.functions.invoke("eleven-labs-voice", {
+          body: {
+            text,
+            voice_id: "EXAVITQu4vr4xnSDxMaL", // Sarah - friendly female voice
+            model_id: "eleven_multilingual_v2",
+          },
+        });
+
+        if (!error && data?.audioContent) {
+          const audioSrc = `data:audio/mpeg;base64,${data.audioContent}`;
+          if (audioRef.current) {
+            audioRef.current.src = audioSrc;
+            audioRef.current.volume = volume;
+            audioRef.current.onended = () => setIsSpeaking(false);
+            audioRef.current.onerror = () => {
+              setIsSpeaking(false);
+              fallbackSpeak(text);
+            };
+            await audioRef.current.play();
+            return;
+          }
+        }
+      }
+      
+      // Fallback to browser TTS
+      fallbackSpeak(text);
+    } catch (error) {
+      logger.error("TTS error", { error });
+      fallbackSpeak(text);
+    }
+  };
+
+  const fallbackSpeak = (text: string) => {
+    if (!synthRef.current) {
+      setIsSpeaking(false);
+      return;
+    }
+
+    synthRef.current.cancel();
     const utterance = new SpeechSynthesisUtterance(text);
     utterance.lang = "pt-BR";
     utterance.volume = volume;
     utterance.rate = 1.0;
     utterance.pitch = 1.0;
-
-    utterance.onstart = () => setIsSpeaking(true);
     utterance.onend = () => setIsSpeaking(false);
     utterance.onerror = () => setIsSpeaking(false);
-
     synthRef.current.speak(utterance);
+  };
+
+  const handleTextSubmit = (e: React.FormEvent) => {
+    e.preventDefault();
+    if (textInput.trim()) {
+      processCommand(textInput);
+      setTextInput("");
+    }
   };
 
   const toggleMute = () => {
     const newVolume = volume > 0 ? 0 : 1;
     setVolume(newVolume);
     toast({
-      title: newVolume > 0 ? "Som ativado" : "Som desativado",
-      description: newVolume > 0 ? "O assistente voltará a falar." : "O assistente está mudo.",
+      title: newVolume > 0 ? "🔊 Som ativado" : "🔇 Som desativado",
     });
   };
 
+  const clearHistory = () => {
+    setMessages([]);
+    setConversationHistory([]);
+    toast({ title: "Histórico limpo" });
+  };
+
+  const quickCommands = [
+    { label: "Dashboard", command: "Ir para o dashboard" },
+    { label: "Frota", command: "Mostrar a frota" },
+    { label: "Tripulação", command: "Ver tripulação" },
+    { label: "Relatórios", command: "Abrir relatórios" },
+    { label: "Status", command: "Qual o status do sistema?" },
+    { label: "Ajuda", command: "O que você pode fazer?" },
+  ];
+
   return (
-    <div className="container mx-auto p-6">
-      <div className="mb-6">
-        <h1 className="text-3xl font-bold mb-2">Assistente de Voz</h1>
-        <p className="text-muted-foreground">
-          Controle o Nautilus One usando comandos de voz
-        </p>
+    <div className="container mx-auto p-6 max-w-6xl">
+      {/* Header */}
+      <div className="mb-8">
+        <div className="flex items-center gap-3 mb-2">
+          <div className="relative">
+            <div className="h-12 w-12 rounded-full bg-gradient-to-br from-primary to-purple-600 flex items-center justify-center">
+              <Bot className="h-6 w-6 text-white" />
+            </div>
+            {(isListening || isSpeaking) && (
+              <span className="absolute -bottom-1 -right-1 h-4 w-4 bg-green-500 rounded-full border-2 border-background animate-pulse" />
+            )}
+          </div>
+          <div>
+            <h1 className="text-3xl font-bold bg-gradient-to-r from-primary to-purple-600 bg-clip-text text-transparent">
+              ARIA - Assistente de Voz
+            </h1>
+            <p className="text-muted-foreground">
+              Assistente de Resposta Inteligente e Automação do Nautilus One
+            </p>
+          </div>
+        </div>
       </div>
 
-      <div className="grid gap-6 md:grid-cols-2">
-        {/* Controles Principais */}
-        <Card>
-          <CardHeader>
-            <CardTitle>Controles de Voz</CardTitle>
-            <CardDescription>
-              Ative o assistente e fale seus comandos
-            </CardDescription>
-          </CardHeader>
-          <CardContent className="space-y-6">
-            {!isSupported ? (
-              <div className="text-center p-8 text-muted-foreground">
-                <p>Seu navegador não suporta reconhecimento de voz.</p>
-                <p className="text-sm mt-2">Use Chrome, Edge ou Safari para melhor experiência.</p>
+      <div className="grid gap-6 lg:grid-cols-3">
+        {/* Main Chat Area */}
+        <Card className="lg:col-span-2 flex flex-col h-[600px]">
+          <CardHeader className="pb-3">
+            <div className="flex items-center justify-between">
+              <CardTitle className="flex items-center gap-2">
+                <MessageSquare className="h-5 w-5" />
+                Conversa
+              </CardTitle>
+              <div className="flex items-center gap-2">
+                <Badge variant={isListening ? "default" : "secondary"} className="gap-1">
+                  {isListening ? <Radio className="h-3 w-3 animate-pulse" /> : <MicOff className="h-3 w-3" />}
+                  {isListening ? "Ouvindo" : "Pausado"}
+                </Badge>
+                <Badge variant={isSpeaking ? "default" : "secondary"} className="gap-1">
+                  {isSpeaking ? <Volume2 className="h-3 w-3 animate-pulse" /> : <VolumeX className="h-3 w-3" />}
+                  {isSpeaking ? "Falando" : "Mudo"}
+                </Badge>
               </div>
-            ) : (
-              <>
-                <div className="flex justify-center">
-                  <Button
-                    size="lg"
-                    variant={isListening ? "destructive" : "default"}
-                    className="h-32 w-32 rounded-full"
-                    onClick={toggleListening}
-                  >
-                    {isListening ? (
-                      <div className="flex flex-col items-center">
-                        <Radio className="h-12 w-12 mb-2 animate-pulse" />
-                        <span className="text-xs">Ouvindo...</span>
-                      </div>
-                    ) : (
-                      <div className="flex flex-col items-center">
-                        <Mic className="h-12 w-12 mb-2" />
-                        <span className="text-xs">Ativar</span>
-                      </div>
-                    )}
-                  </Button>
-                </div>
+            </div>
+          </CardHeader>
 
-                <div className="flex justify-center gap-4">
-                  <Badge variant={isListening ? "default" : "secondary"}>
-                    {isListening ? <Mic className="mr-1 h-3 w-3" /> : <MicOff className="mr-1 h-3 w-3" />}
-                    {isListening ? "Escutando" : "Pausado"}
-                  </Badge>
-                  
-                  <Badge variant={isSpeaking ? "default" : "secondary"}>
-                    {isSpeaking ? <Volume2 className="mr-1 h-3 w-3" /> : <VolumeX className="mr-1 h-3 w-3" />}
-                    {isSpeaking ? "Falando" : "Silencioso"}
-                  </Badge>
-                </div>
-
-                {transcript && (
-                  <Card className="bg-muted">
-                    <CardContent className="pt-4">
-                      <p className="text-sm text-muted-foreground mb-1">Ouvindo:</p>
-                      <p className="font-medium">{transcript}</p>
-                    </CardContent>
-                  </Card>
+          <CardContent className="flex-1 flex flex-col overflow-hidden">
+            {/* Messages */}
+            <ScrollArea className="flex-1 pr-4" ref={scrollRef}>
+              <div className="space-y-4">
+                {messages.length === 0 && (
+                  <div className="text-center py-12">
+                    <Sparkles className="h-12 w-12 mx-auto text-muted-foreground/50 mb-4" />
+                    <p className="text-muted-foreground">
+                      Olá! Sou a ARIA, sua assistente de voz.
+                    </p>
+                    <p className="text-sm text-muted-foreground/70 mt-2">
+                      Clique no microfone ou digite uma mensagem para começar.
+                    </p>
+                  </div>
                 )}
 
-                <Button variant="outline" className="w-full" onClick={toggleMute}>
-                  {volume > 0 ? <Volume2 className="mr-2 h-4 w-4" /> : <VolumeX className="mr-2 h-4 w-4" />}
-                  {volume > 0 ? "Desativar Som" : "Ativar Som"}
-                </Button>
-              </>
-            )}
-          </CardContent>
-        </Card>
+                <AnimatePresence>
+                  {messages.map((msg) => (
+                    <motion.div
+                      key={msg.id}
+                      initial={{ opacity: 0, y: 10 }}
+                      animate={{ opacity: 1, y: 0 }}
+                      exit={{ opacity: 0, y: -10 }}
+                      className={`flex gap-3 ${msg.type === "user" ? "justify-end" : "justify-start"}`}
+                    >
+                      {msg.type === "assistant" && (
+                        <div className="h-8 w-8 rounded-full bg-gradient-to-br from-primary to-purple-600 flex items-center justify-center flex-shrink-0">
+                          <Bot className="h-4 w-4 text-white" />
+                        </div>
+                      )}
+                      
+                      <div
+                        className={`max-w-[80%] rounded-2xl px-4 py-3 ${
+                          msg.type === "user"
+                            ? "bg-primary text-primary-foreground"
+                            : "bg-muted"
+                        }`}
+                      >
+                        {msg.status === "pending" ? (
+                          <div className="flex items-center gap-2">
+                            <Loader2 className="h-4 w-4 animate-spin" />
+                            <span className="text-sm">Pensando...</span>
+                          </div>
+                        ) : (
+                          <>
+                            <p className="text-sm">{msg.content}</p>
+                            {msg.navigation && (
+                              <Badge variant="outline" className="mt-2 gap-1">
+                                <Navigation className="h-3 w-3" />
+                                {msg.navigation}
+                              </Badge>
+                            )}
+                          </>
+                        )}
+                      </div>
 
-        {/* Comandos Disponíveis */}
-        <Card>
-          <CardHeader>
-            <CardTitle className="flex items-center gap-2">
-              <Command className="h-5 w-5" />
-              Comandos Disponíveis
-            </CardTitle>
-            <CardDescription>
-              Experimente estes comandos de voz
-            </CardDescription>
-          </CardHeader>
-          <CardContent>
-            <ScrollArea className="h-[400px]">
-              <div className="space-y-3">
-                <div className="p-3 border rounded-lg">
-                  <p className="font-semibold text-sm mb-1">Navegação</p>
-                  <ul className="text-sm text-muted-foreground space-y-1">
-                    <li>• "Ir para dashboard"</li>
-                    <li>• "Abrir relatórios"</li>
-                    <li>• "Mostrar frota"</li>
-                    <li>• "Ver tripulação"</li>
-                  </ul>
-                </div>
+                      {msg.type === "user" && (
+                        <div className="h-8 w-8 rounded-full bg-muted flex items-center justify-center flex-shrink-0">
+                          <User className="h-4 w-4" />
+                        </div>
+                      )}
+                    </motion.div>
+                  ))}
+                </AnimatePresence>
 
-                <div className="p-3 border rounded-lg">
-                  <p className="font-semibold text-sm mb-1">Consultas</p>
-                  <ul className="text-sm text-muted-foreground space-y-1">
-                    <li>• "Qual o status do sistema"</li>
-                    <li>• "Mostrar ajuda"</li>
-                  </ul>
-                </div>
-
-                <div className="p-3 border rounded-lg bg-muted">
-                  <p className="font-semibold text-sm mb-1">Em Breve</p>
-                  <ul className="text-sm text-muted-foreground space-y-1">
-                    <li>• "Gerar relatório"</li>
-                    <li>• "Enviar email"</li>
-                    <li>• "Criar checklist"</li>
-                  </ul>
-                </div>
+                {/* Transcript preview */}
+                {transcript && (
+                  <motion.div
+                    initial={{ opacity: 0 }}
+                    animate={{ opacity: 1 }}
+                    className="flex justify-end gap-3"
+                  >
+                    <div className="max-w-[80%] rounded-2xl px-4 py-3 bg-primary/20 border border-primary/30">
+                      <p className="text-sm italic">{transcript}...</p>
+                    </div>
+                    <div className="h-8 w-8 rounded-full bg-muted flex items-center justify-center flex-shrink-0">
+                      <Mic className="h-4 w-4 animate-pulse text-primary" />
+                    </div>
+                  </motion.div>
+                )}
               </div>
             </ScrollArea>
+
+            {/* Input Area */}
+            <div className="mt-4 space-y-3">
+              {/* Voice Button */}
+              <div className="flex justify-center">
+                <motion.button
+                  whileHover={{ scale: 1.05 }}
+                  whileTap={{ scale: 0.95 }}
+                  onClick={toggleListening}
+                  disabled={!isSupported || isProcessing}
+                  className={`
+                    h-16 w-16 rounded-full flex items-center justify-center transition-all
+                    ${isListening 
+                      ? "bg-red-500 hover:bg-red-600 shadow-lg shadow-red-500/50" 
+                      : "bg-gradient-to-br from-primary to-purple-600 hover:opacity-90 shadow-lg shadow-primary/50"
+                    }
+                    ${(!isSupported || isProcessing) && "opacity-50 cursor-not-allowed"}
+                  `}
+                >
+                  {isProcessing ? (
+                    <Loader2 className="h-7 w-7 text-white animate-spin" />
+                  ) : isListening ? (
+                    <Waves className="h-7 w-7 text-white animate-pulse" />
+                  ) : (
+                    <Mic className="h-7 w-7 text-white" />
+                  )}
+                </motion.button>
+              </div>
+
+              {/* Text Input */}
+              <form onSubmit={handleTextSubmit} className="flex gap-2">
+                <Input
+                  placeholder="Ou digite sua mensagem..."
+                  value={textInput}
+                  onChange={(e) => setTextInput(e.target.value)}
+                  disabled={isProcessing}
+                  className="flex-1"
+                />
+                <Button type="submit" disabled={!textInput.trim() || isProcessing}>
+                  <Send className="h-4 w-4" />
+                </Button>
+              </form>
+            </div>
           </CardContent>
         </Card>
-      </div>
 
-      {/* Histórico de Comandos */}
-      <Card className="mt-6">
-        <CardHeader>
-          <CardTitle className="flex items-center gap-2">
-            <Activity className="h-5 w-5" />
-            Histórico de Comandos
-          </CardTitle>
-          <CardDescription>
-            Últimos comandos processados pelo assistente
-          </CardDescription>
-        </CardHeader>
-        <CardContent>
-          {commands.length === 0 ? (
-            <p className="text-center text-muted-foreground py-8">
-              Nenhum comando executado ainda. Ative o assistente e comece a falar!
-            </p>
-          ) : (
-            <ScrollArea className="h-[300px]">
-              <div className="space-y-4">
-                {commands.map((cmd, index) => (
-                  <div key={index} className="border-l-2 border-primary pl-4 py-2">
-                    <div className="flex items-center gap-2 mb-2">
-                      <MessageSquare className="h-4 w-4 text-primary" />
-                      <span className="text-xs text-muted-foreground">
-                        {new Date(cmd.timestamp).toLocaleTimeString()}
-                      </span>
-                      {cmd.action && (
-                        <Badge variant="outline" className="text-xs">
-                          {cmd.action}
-                        </Badge>
-                      )}
-                    </div>
-                    <p className="text-sm font-medium mb-1">Você: {cmd.transcript}</p>
-                    <p className="text-sm text-muted-foreground">Assistente: {cmd.response}</p>
-                  </div>
+        {/* Right Sidebar */}
+        <div className="space-y-4">
+          {/* Quick Commands */}
+          <Card>
+            <CardHeader className="pb-3">
+              <CardTitle className="text-base flex items-center gap-2">
+                <Command className="h-4 w-4" />
+                Comandos Rápidos
+              </CardTitle>
+            </CardHeader>
+            <CardContent>
+              <div className="grid grid-cols-2 gap-2">
+                {quickCommands.map((cmd) => (
+                  <Button
+                    key={cmd.label}
+                    variant="outline"
+                    size="sm"
+                    className="justify-start"
+                    onClick={() => processCommand(cmd.command)}
+                    disabled={isProcessing}
+                  >
+                    {cmd.label}
+                  </Button>
                 ))}
               </div>
-            </ScrollArea>
-          )}
-        </CardContent>
-      </Card>
+            </CardContent>
+          </Card>
+
+          {/* Settings */}
+          <Card>
+            <CardHeader className="pb-3">
+              <CardTitle className="text-base flex items-center gap-2">
+                <Settings className="h-4 w-4" />
+                Configurações
+              </CardTitle>
+            </CardHeader>
+            <CardContent className="space-y-3">
+              <Button 
+                variant="outline" 
+                className="w-full justify-between"
+                onClick={toggleMute}
+              >
+                <span>Síntese de Voz</span>
+                {volume > 0 ? <Volume2 className="h-4 w-4 text-green-500" /> : <VolumeX className="h-4 w-4 text-red-500" />}
+              </Button>
+              
+              <Button
+                variant="outline"
+                className="w-full justify-between"
+                onClick={() => setUseElevenLabs(!useElevenLabs)}
+              >
+                <span>Voz Premium</span>
+                {useElevenLabs ? <CheckCircle className="h-4 w-4 text-green-500" /> : <AlertCircle className="h-4 w-4 text-muted-foreground" />}
+              </Button>
+
+              <Button
+                variant="ghost"
+                className="w-full"
+                onClick={clearHistory}
+              >
+                Limpar Histórico
+              </Button>
+            </CardContent>
+          </Card>
+
+          {/* Status */}
+          <Card>
+            <CardHeader className="pb-3">
+              <CardTitle className="text-base flex items-center gap-2">
+                <Activity className="h-4 w-4" />
+                Status
+              </CardTitle>
+            </CardHeader>
+            <CardContent>
+              <div className="space-y-2 text-sm">
+                <div className="flex justify-between">
+                  <span className="text-muted-foreground">Reconhecimento</span>
+                  <Badge variant={isSupported ? "default" : "destructive"}>
+                    {isSupported ? "Disponível" : "Indisponível"}
+                  </Badge>
+                </div>
+                <div className="flex justify-between">
+                  <span className="text-muted-foreground">IA</span>
+                  <Badge variant="default">Ativa</Badge>
+                </div>
+                <div className="flex justify-between">
+                  <span className="text-muted-foreground">Mensagens</span>
+                  <span className="font-mono">{messages.length}</span>
+                </div>
+              </div>
+            </CardContent>
+          </Card>
+
+          {/* Help */}
+          <Card className="bg-gradient-to-br from-primary/10 to-purple-600/10 border-primary/20">
+            <CardContent className="pt-4">
+              <p className="text-sm mb-3">
+                <strong>Dica:</strong> Experimente perguntar:
+              </p>
+              <ul className="text-xs text-muted-foreground space-y-1">
+                <li>• "Qual o status do sistema?"</li>
+                <li>• "Me leve para a frota"</li>
+                <li>• "Quais módulos estão disponíveis?"</li>
+                <li>• "Preciso criar um relatório"</li>
+              </ul>
+            </CardContent>
+          </Card>
+        </div>
+      </div>
     </div>
   );
 };
