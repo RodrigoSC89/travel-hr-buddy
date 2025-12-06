@@ -1761,6 +1761,45 @@ export const MODULE_REGISTRY: Record<string, ModuleDefinition> = {
     icon: "TrendingUp",
     lazy: true,
   },
+
+  "automation.workflows": {
+    id: "automation.workflows",
+    name: "Workflows Automatizados",
+    category: "operations",
+    path: "pages/automation/WorkflowsPage",
+    description: "Automação completa de processos operacionais",
+    status: "active",
+    completeness: "100%",
+    route: "/automation/workflows",
+    icon: "Workflow",
+    lazy: true,
+  },
+
+  "automation.rpa": {
+    id: "automation.rpa",
+    name: "RPA - Automação Robótica",
+    category: "operations",
+    path: "pages/automation/RPAPage",
+    description: "Bots inteligentes para tarefas repetitivas",
+    status: "active",
+    completeness: "100%",
+    route: "/automation/rpa",
+    icon: "Bot",
+    lazy: true,
+  },
+
+  "automation.triggers": {
+    id: "automation.triggers",
+    name: "Triggers Inteligentes",
+    category: "operations",
+    path: "pages/automation/IntelligentTriggersPage",
+    description: "Ações automáticas baseadas em eventos e condições",
+    status: "active",
+    completeness: "100%",
+    route: "/automation/triggers",
+    icon: "Zap",
+    lazy: true,
+  },
 };
 
 export function getModule(id: string): ModuleDefinition | undefined {
