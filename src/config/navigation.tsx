@@ -20,6 +20,10 @@ export const NAVIGATION = [
   { name: "Workflow", path: "/workflow", component: safeLazyImport(() => import("@/pages/Workflow"), "Workflow") },
   // LSA/FFA Inspections - module archived
   { name: "PEO-DP", path: "/peo-dp", component: safeLazyImport(() => import("@/modules/hr/peo-dp/PEODPPanel"), "PEO-DP") },
+  // PATCH 980: System Diagnostic Tools
+  { name: "System Diagnostic", path: "/system-diagnostic", component: safeLazyImport(() => import("@/pages/SystemDiagnostic"), "System Diagnostic") },
+  { name: "Execution Roadmap", path: "/execution-roadmap", component: safeLazyImport(() => import("@/pages/ExecutionRoadmap"), "Execution Roadmap") },
+  { name: "Usage Simulation", path: "/usage-simulation", component: safeLazyImport(() => import("@/pages/UsageSimulation"), "Usage Simulation") },
 ];
 
 export const SuspenseFallback = <div className="p-8 text-center text-gray-400">🔄 Carregando módulo...</div>;

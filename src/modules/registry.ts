@@ -1296,6 +1296,49 @@ export const MODULE_REGISTRY: Record<string, ModuleDefinition> = {
     lazy: true,
     version: "653.0",
   },
+
+  // PATCH 980: System Diagnostic and Delivery Tools
+  "core.system-diagnostic": {
+    id: "core.system-diagnostic",
+    name: "System Diagnostic",
+    category: "core",
+    path: "pages/SystemDiagnostic",
+    description: "Complete system health diagnostic with readiness checklist and technical package generation",
+    status: "active",
+    completeness: "100%",
+    route: "/system-diagnostic",
+    icon: "Activity",
+    lazy: true,
+    version: "980.0",
+  },
+
+  "core.execution-roadmap": {
+    id: "core.execution-roadmap",
+    name: "Execution Roadmap",
+    category: "core",
+    path: "pages/ExecutionRoadmap",
+    description: "Technical execution roadmap for 7, 15, and 30 days with task tracking",
+    status: "active",
+    completeness: "100%",
+    route: "/execution-roadmap",
+    icon: "Calendar",
+    lazy: true,
+    version: "980.0",
+  },
+
+  "core.usage-simulation": {
+    id: "core.usage-simulation",
+    name: "Usage Simulation",
+    category: "core",
+    path: "pages/UsageSimulation",
+    description: "Simulate real-world usage scenarios for system validation",
+    status: "active",
+    completeness: "100%",
+    route: "/usage-simulation",
+    icon: "Play",
+    lazy: true,
+    version: "980.0",
+  },
 };
 
 export function getModule(id: string): ModuleDefinition | undefined {
