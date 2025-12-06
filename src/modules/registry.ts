@@ -1735,6 +1735,32 @@ export const MODULE_REGISTRY: Record<string, ModuleDefinition> = {
     icon: "Trophy",
     lazy: true,
   },
+
+  "intelligence.advanced-analytics": {
+    id: "intelligence.advanced-analytics",
+    name: "Analytics Avançado",
+    category: "intelligence",
+    path: "pages/AdvancedAnalytics",
+    description: "Dashboards interativos e análises avançadas",
+    status: "active",
+    completeness: "100%",
+    route: "/advanced-analytics",
+    icon: "BarChart3",
+    lazy: true,
+  },
+
+  "intelligence.business-insights": {
+    id: "intelligence.business-insights",
+    name: "Insights de Negócio",
+    category: "intelligence",
+    path: "pages/BusinessInsights",
+    description: "Inteligência de negócio e análise de tendências",
+    status: "active",
+    completeness: "100%",
+    route: "/business-insights",
+    icon: "TrendingUp",
+    lazy: true,
+  },
 };
 
 export function getModule(id: string): ModuleDefinition | undefined {
