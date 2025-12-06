@@ -3,13 +3,14 @@
  * Header profissional com indicador de conexão
  */
 
+import { useState, useCallback } from "react";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
-import { Download, RefreshCw } from "lucide-react";
+import { Download, RefreshCw, Loader2 } from "lucide-react";
 import { motion } from "framer-motion";
 import nautilusLogo from "@/assets/nautilus-logo.png";
 import { ConnectionIndicator } from "@/components/ui/ConnectionIndicator";
-import { useLightMode } from "@/hooks/useConnectionAdaptive";
+import { toast } from "sonner";
 
 interface ProfessionalHeaderProps {
   title: string;
@@ -17,6 +18,8 @@ interface ProfessionalHeaderProps {
   showLogo?: boolean;
   showRealTime?: boolean;
   actions?: React.ReactNode;
+  onRefresh?: () => void | Promise<void>;
+  onExport?: () => void | Promise<void>;
 }
 
 export function ProfessionalHeader({ 
@@ -24,15 +27,65 @@ export function ProfessionalHeader({
   subtitle, 
   showLogo = true,
   showRealTime = true,
-  actions 
+  actions,
+  onRefresh,
+  onExport
 }: ProfessionalHeaderProps) {
-  const isLightMode = useLightMode();
+  const [isRefreshing, setIsRefreshing] = useState(false);
+  const [isExporting, setIsExporting] = useState(false);
+
+  const handleRefresh = useCallback(async () => {
+    setIsRefreshing(true);
+    try {
+      if (onRefresh) {
+        await onRefresh();
+      } else {
+        // Default behavior: reload page data
+        window.location.reload();
+      }
+      toast.success("Dados atualizados com sucesso");
+    } catch (error) {
+      toast.error("Erro ao atualizar dados");
+    } finally {
+      setIsRefreshing(false);
+    }
+  }, [onRefresh]);
+
+  const handleExport = useCallback(async () => {
+    setIsExporting(true);
+    try {
+      if (onExport) {
+        await onExport();
+      } else {
+        // Default behavior: export to JSON
+        const data = {
+          exportedAt: new Date().toISOString(),
+          title,
+          type: "dashboard_export"
+        };
+        const blob = new Blob([JSON.stringify(data, null, 2)], { type: "application/json" });
+        const url = URL.createObjectURL(blob);
+        const a = document.createElement("a");
+        a.href = url;
+        a.download = `${title.toLowerCase().replace(/\s+/g, '-')}-${new Date().toISOString().split('T')[0]}.json`;
+        document.body.appendChild(a);
+        a.click();
+        document.body.removeChild(a);
+        URL.revokeObjectURL(url);
+      }
+      toast.success("Exportação concluída com sucesso");
+    } catch (error) {
+      toast.error("Erro ao exportar dados");
+    } finally {
+      setIsExporting(false);
+    }
+  }, [onExport, title]);
   
   return (
     <motion.div
-      initial={isLightMode ? undefined : { opacity: 0, y: -20 }}
-      animate={isLightMode ? undefined : { opacity: 1, y: 0 }}
-      transition={isLightMode ? undefined : { duration: 0.4 }}
+      initial={{ opacity: 0, y: -20 }}
+      animate={{ opacity: 1, y: 0 }}
+      transition={{ duration: 0.4 }}
       className="relative overflow-hidden rounded-2xl bg-gradient-to-br from-primary/10 via-background to-background border border-primary/20 p-6 md:p-8 mb-6"
     >
       {/* Decorative elements */}
@@ -85,12 +138,32 @@ export function ProfessionalHeader({
           
           {actions || (
             <div className="flex gap-2">
-              <Button variant="outline" size="sm" className="gap-2 hidden md:flex">
-                <RefreshCw className="h-4 w-4" />
+              <Button 
+                variant="outline" 
+                size="sm" 
+                className="gap-2 hidden md:flex"
+                onClick={handleRefresh}
+                disabled={isRefreshing}
+              >
+                {isRefreshing ? (
+                  <Loader2 className="h-4 w-4 animate-spin" />
+                ) : (
+                  <RefreshCw className="h-4 w-4" />
+                )}
                 <span className="hidden lg:inline">Atualizar</span>
               </Button>
-              <Button variant="outline" size="sm" className="gap-2 hidden md:flex">
-                <Download className="h-4 w-4" />
+              <Button 
+                variant="outline" 
+                size="sm" 
+                className="gap-2 hidden md:flex"
+                onClick={handleExport}
+                disabled={isExporting}
+              >
+                {isExporting ? (
+                  <Loader2 className="h-4 w-4 animate-spin" />
+                ) : (
+                  <Download className="h-4 w-4" />
+                )}
                 <span className="hidden lg:inline">Exportar</span>
               </Button>
             </div>
