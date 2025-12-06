@@ -18,6 +18,8 @@ import { NewEmergencyPlanDialog } from "./dialogs/NewEmergencyPlanDialog";
 import { ScheduleDrillDialog } from "./dialogs/ScheduleDrillDialog";
 import { EmergencyReportDialog } from "./dialogs/EmergencyReportDialog";
 import { EmergencyLocationsDialog } from "./dialogs/EmergencyLocationsDialog";
+import { ViewPlanDialog } from "./dialogs/ViewPlanDialog";
+import { DrillSimulationDialog } from "./dialogs/DrillSimulationDialog";
 
 interface EmergencyPlan {
   id: string;
@@ -158,6 +160,9 @@ export const EmergencyResponse: React.FC = () => {
   const [scheduleDrillOpen, setScheduleDrillOpen] = useState(false);
   const [reportOpen, setReportOpen] = useState(false);
   const [locationsOpen, setLocationsOpen] = useState(false);
+  const [viewPlanOpen, setViewPlanOpen] = useState(false);
+  const [drillSimOpen, setDrillSimOpen] = useState(false);
+  const [selectedPlan, setSelectedPlan] = useState<EmergencyPlan | null>(null);
 
   const activeCount = EMERGENCY_PLANS.filter(p => p.status === "active").length;
   const reviewCount = EMERGENCY_PLANS.filter(p => p.status === "under_review").length;
@@ -172,12 +177,14 @@ export const EmergencyResponse: React.FC = () => {
     ? EMERGENCY_PLANS
     : EMERGENCY_PLANS.filter(p => p.type === selectedType);
 
-  const handleViewPlan = (planId: string, planTitle: string) => {
-    handleViewDetails(`plano ${planTitle}`, planId);
+  const handleViewPlan = (plan: EmergencyPlan) => {
+    setSelectedPlan(plan);
+    setViewPlanOpen(true);
   };
 
-  const handleStartDrill = (planId: string, planTitle: string) => {
-    showInfo("Iniciando simulado", `Preparando simulado de ${planTitle}`);
+  const handleStartDrill = (plan: EmergencyPlan) => {
+    setSelectedPlan(plan);
+    setDrillSimOpen(true);
   };
 
   return (
@@ -356,8 +363,7 @@ export const EmergencyResponse: React.FC = () => {
                           variant="outline"
                           size="sm"
                           className="min-h-[44px] px-6"
-                          onClick={() => handleViewPlan(plan.id, plan.title)}
-                          disabled={isLoading}
+                          onClick={() => handleViewPlan(plan)}
                         >
                           <FileText className="h-4 w-4 mr-2" />
                           Ver Plano
@@ -365,8 +371,7 @@ export const EmergencyResponse: React.FC = () => {
                         <Button
                           size="sm"
                           className="min-h-[44px] px-6 bg-orange-600 hover:bg-orange-700 text-white"
-                          onClick={() => handleStartDrill(plan.id, plan.title)}
-                          disabled={isLoading}
+                          onClick={() => handleStartDrill(plan)}
                         >
                           <Activity className="h-4 w-4 mr-2" />
                           Simulado
@@ -495,6 +500,16 @@ export const EmergencyResponse: React.FC = () => {
       <EmergencyLocationsDialog 
         open={locationsOpen} 
         onOpenChange={setLocationsOpen} 
+      />
+      <ViewPlanDialog
+        open={viewPlanOpen}
+        onOpenChange={setViewPlanOpen}
+        plan={selectedPlan}
+      />
+      <DrillSimulationDialog
+        open={drillSimOpen}
+        onOpenChange={setDrillSimOpen}
+        plan={selectedPlan}
       />
     </div>
   );
