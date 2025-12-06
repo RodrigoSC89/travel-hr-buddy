@@ -164,6 +164,7 @@ function App() {
                     <Route path="voice-assistant" element={<Navigate to="/assistant/voice" replace />} />
                     <Route path="task-automation" element={<Navigate to="/automation" replace />} />
                     <Route path="comunicacao" element={<Navigate to="/communication" replace />} />
+                    <Route path="communication-center" element={<Navigate to="/communication" replace />} />
                     <Route path="notification-center" element={<Navigate to="/notifications-center" replace />} />
                     <Route path="documentos" element={<Navigate to="/documents" replace />} />
                     <Route path="checklists" element={<Navigate to="/admin/checklists" replace />} />
