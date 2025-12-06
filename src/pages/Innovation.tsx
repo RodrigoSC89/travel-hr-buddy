@@ -490,7 +490,8 @@ const Innovation = () => {
 
         <TabsContent value="automation" className="space-y-6">
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-            <Card className="hover:shadow-lg transition-all duration-300 group">
+            <Card className="hover:shadow-lg transition-all duration-300 group cursor-pointer"
+              onClick={() => handleModuleAccess("/automation/workflows")}>
               <CardHeader>
                 <CardTitle className="flex items-center gap-2">
                   <Workflow className="h-5 w-5 text-purple-500" />
@@ -510,7 +511,8 @@ const Innovation = () => {
               </CardContent>
             </Card>
 
-            <Card className="hover:shadow-lg transition-all duration-300 group">
+            <Card className="hover:shadow-lg transition-all duration-300 group cursor-pointer"
+              onClick={() => handleModuleAccess("/automation/rpa")}>
               <CardHeader>
                 <CardTitle className="flex items-center gap-2">
                   <Target className="h-5 w-5 text-red-500" />
@@ -530,7 +532,8 @@ const Innovation = () => {
               </CardContent>
             </Card>
 
-            <Card className="hover:shadow-lg transition-all duration-300 group">
+            <Card className="hover:shadow-lg transition-all duration-300 group cursor-pointer"
+              onClick={() => handleModuleAccess("/automation/triggers")}>
               <CardHeader>
                 <CardTitle className="flex items-center gap-2">
                   <Zap className="h-5 w-5 text-yellow-500" />
