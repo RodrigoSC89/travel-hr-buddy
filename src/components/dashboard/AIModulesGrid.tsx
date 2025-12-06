@@ -4,9 +4,11 @@
  */
 
 import { useState, memo, useMemo, useCallback } from "react";
+import { useNavigate } from "react-router-dom";
 import { Card, CardContent } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
+import { useToast } from "@/hooks/use-toast";
 import { 
   MessageSquare, 
   FileText, 
@@ -27,6 +29,7 @@ interface AIModule {
   status: 'active' | 'standby' | 'learning';
   accuracy: number;
   category: 'core' | 'operations' | 'safety' | 'analytics';
+  route: string;
 }
 
 const modules: AIModule[] = [
@@ -37,7 +40,8 @@ const modules: AIModule[] = [
     icon: <MessageSquare className="h-5 w-5" />,
     status: 'active',
     accuracy: 94,
-    category: 'core'
+    category: 'core',
+    route: '/ai/copilot'
   },
   {
     id: 'document',
@@ -46,7 +50,8 @@ const modules: AIModule[] = [
     icon: <FileText className="h-5 w-5" />,
     status: 'active',
     accuracy: 91,
-    category: 'core'
+    category: 'core',
+    route: '/ai/document-analysis'
   },
   {
     id: 'predictive',
@@ -55,7 +60,8 @@ const modules: AIModule[] = [
     icon: <BarChart3 className="h-5 w-5" />,
     status: 'active',
     accuracy: 87,
-    category: 'analytics'
+    category: 'analytics',
+    route: '/ai/insights'
   },
   {
     id: 'safety',
@@ -64,7 +70,8 @@ const modules: AIModule[] = [
     icon: <Shield className="h-5 w-5" />,
     status: 'active',
     accuracy: 96,
-    category: 'safety'
+    category: 'safety',
+    route: '/security'
   },
   {
     id: 'crew',
@@ -73,7 +80,8 @@ const modules: AIModule[] = [
     icon: <Users className="h-5 w-5" />,
     status: 'active',
     accuracy: 89,
-    category: 'operations'
+    category: 'operations',
+    route: '/crew'
   },
   {
     id: 'vessel',
@@ -82,7 +90,8 @@ const modules: AIModule[] = [
     icon: <Ship className="h-5 w-5" />,
     status: 'active',
     accuracy: 92,
-    category: 'operations'
+    category: 'operations',
+    route: '/fleet'
   },
   {
     id: 'navigation',
@@ -91,7 +100,8 @@ const modules: AIModule[] = [
     icon: <Navigation className="h-5 w-5" />,
     status: 'standby',
     accuracy: 88,
-    category: 'operations'
+    category: 'operations',
+    route: '/fleet/navigation'
   },
   {
     id: 'compliance',
@@ -100,7 +110,8 @@ const modules: AIModule[] = [
     icon: <CheckCircle className="h-5 w-5" />,
     status: 'active',
     accuracy: 95,
-    category: 'safety'
+    category: 'safety',
+    route: '/compliance'
   },
 ];
 
@@ -112,7 +123,7 @@ const categories = [
   { id: 'analytics', name: 'Analytics' },
 ];
 
-const ModuleCard = memo(({ module }: { module: AIModule }) => {
+const ModuleCard = memo(({ module, onClick }: { module: AIModule; onClick: () => void }) => {
   const getStatusColor = (status: string) => {
     switch (status) {
       case 'active': return 'bg-green-500/20 text-green-500 border-green-500/30';
@@ -122,7 +133,10 @@ const ModuleCard = memo(({ module }: { module: AIModule }) => {
   };
 
   return (
-    <Card className="group hover:shadow-md hover:border-primary/50 transition-shadow cursor-pointer bg-card/50">
+    <Card 
+      className="group hover:shadow-md hover:border-primary/50 transition-shadow cursor-pointer bg-card/50"
+      onClick={onClick}
+    >
       <CardContent className="p-4">
         <div className="flex items-start justify-between mb-3">
           <div className="p-2 rounded-lg bg-primary/10 text-primary">
@@ -153,7 +167,7 @@ const ModuleCard = memo(({ module }: { module: AIModule }) => {
               {module.accuracy}%
             </span>
           </div>
-          <ArrowRight className="h-3 w-3 text-muted-foreground" />
+          <ArrowRight className="h-3 w-3 text-muted-foreground group-hover:text-primary transition-colors" />
         </div>
       </CardContent>
     </Card>
@@ -164,6 +178,8 @@ ModuleCard.displayName = 'ModuleCard';
 
 function AIModulesGridComponent() {
   const [selectedCategory, setSelectedCategory] = useState<string>('all');
+  const navigate = useNavigate();
+  const { toast } = useToast();
 
   const filteredModules = useMemo(() => 
     selectedCategory === 'all' 
@@ -175,6 +191,15 @@ function AIModulesGridComponent() {
   const handleCategoryChange = useCallback((id: string) => {
     setSelectedCategory(id);
   }, []);
+
+  const handleModuleClick = useCallback((module: AIModule) => {
+    toast({
+      title: module.name,
+      description: `Acessando ${module.description.toLowerCase()}...`,
+      duration: 2000,
+    });
+    navigate(module.route);
+  }, [navigate, toast]);
 
   return (
     <div className="space-y-4">
@@ -196,7 +221,11 @@ function AIModulesGridComponent() {
       {/* Modules Grid - Sem animações */}
       <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-3">
         {filteredModules.map((module) => (
-          <ModuleCard key={module.id} module={module} />
+          <ModuleCard 
+            key={module.id} 
+            module={module} 
+            onClick={() => handleModuleClick(module)}
+          />
         ))}
       </div>
     </div>
