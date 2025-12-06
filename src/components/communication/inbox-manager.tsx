@@ -523,45 +523,68 @@ export const InboxManager: React.FC<InboxManagerProps> = ({
                                 <MoreHorizontal className="h-4 w-4" />
                               </Button>
                             </DropdownMenuTrigger>
-                            <DropdownMenuContent align="end" className="bg-popover border">
-                              <DropdownMenuItem onClick={(e) => {
-                                e.stopPropagation();
-                                toast({
-                                  title: "Responder",
-                                  description: `Respondendo mensagem de ${message.sender_name}`
-                                });
-                              }}>
+                            <DropdownMenuContent 
+                              align="end" 
+                              className="bg-popover border z-50"
+                              onClick={(e) => e.stopPropagation()}
+                            >
+                              <DropdownMenuItem 
+                                onSelect={(e) => {
+                                  e.preventDefault();
+                                  setSelectedMessage(message);
+                                  toast({
+                                    title: "Responder Mensagem",
+                                    description: `Abrindo resposta para ${message.sender_name}`,
+                                  });
+                                }}
+                              >
                                 <Reply className="h-4 w-4 mr-2" />
                                 Responder
                               </DropdownMenuItem>
-                              <DropdownMenuItem onClick={(e) => {
-                                e.stopPropagation();
-                                toast({
-                                  title: "Encaminhar",
-                                  description: "Selecione os destinatários para encaminhar"
-                                });
-                              }}>
+                              <DropdownMenuItem 
+                                onSelect={(e) => {
+                                  e.preventDefault();
+                                  navigator.clipboard.writeText(message.content);
+                                  toast({
+                                    title: "Encaminhar Mensagem",
+                                    description: "Conteúdo copiado. Selecione o destinatário para encaminhar.",
+                                  });
+                                }}
+                              >
                                 <Forward className="h-4 w-4 mr-2" />
                                 Encaminhar
                               </DropdownMenuItem>
-                              <DropdownMenuItem onClick={(e) => {
-                                e.stopPropagation();
-                                toast({
-                                  title: "Download iniciado",
-                                  description: "A mensagem será baixada em formato PDF"
-                                });
-                              }}>
+                              <DropdownMenuItem 
+                                onSelect={(e) => {
+                                  e.preventDefault();
+                                  // Create and download message as text file
+                                  const content = `De: ${message.sender_name} (${message.sender_role})\nData: ${new Date(message.created_at).toLocaleString('pt-BR')}\nPrioridade: ${message.priority}\n\n${message.content}`;
+                                  const blob = new Blob([content], { type: 'text/plain' });
+                                  const url = URL.createObjectURL(blob);
+                                  const a = document.createElement('a');
+                                  a.href = url;
+                                  a.download = `mensagem-${message.id}.txt`;
+                                  document.body.appendChild(a);
+                                  a.click();
+                                  document.body.removeChild(a);
+                                  URL.revokeObjectURL(url);
+                                  toast({
+                                    title: "Download Concluído",
+                                    description: "Mensagem baixada com sucesso",
+                                  });
+                                }}
+                              >
                                 <Download className="h-4 w-4 mr-2" />
                                 Baixar
                               </DropdownMenuItem>
                               <DropdownMenuSeparator />
                               <DropdownMenuItem 
-                                onClick={(e) => {
-                                  e.stopPropagation();
+                                onSelect={(e) => {
+                                  e.preventDefault();
                                   setMessages(prev => prev.filter(m => m.id !== message.id));
                                   toast({
-                                    title: "Sucesso",
-                                    description: "Mensagem excluída"
+                                    title: "Mensagem Excluída",
+                                    description: "A mensagem foi removida com sucesso",
                                   });
                                 }}
                                 className="text-destructive focus:text-destructive"
