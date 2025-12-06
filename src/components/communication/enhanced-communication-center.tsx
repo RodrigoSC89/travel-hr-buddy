@@ -57,31 +57,39 @@ export const EnhancedCommunicationCenter = () => {
   const { toast } = useToast();
 
   useEffect(() => {
-    loadCommunicationStats();
+    let mounted = true;
+    
+    const init = async () => {
+      if (mounted) {
+        try {
+          // Load stats only once
+          setStats({
+            totalMessages: 1247,
+            unreadMessages: 23,
+            activeChannels: 8,
+            urgentMessages: 3,
+            todayMessages: 47,
+            responseRate: 95
+          });
+        } catch (error) {
+          toast({
+            title: "Erro",
+            description: "Erro ao carregar estatísticas de comunicação",
+            variant: "destructive"
+          });
+        } finally {
+          setLoading(false);
+        }
+      }
+    };
+    
+    init();
+    
+    return () => {
+      mounted = false;
+    };
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
-
-  const loadCommunicationStats = async () => {
-    try {
-      setLoading(true);
-      // Mock data - replace with real API calls
-      setStats({
-        totalMessages: 1247,
-        unreadMessages: 23,
-        activeChannels: 8,
-        urgentMessages: 3,
-        todayMessages: 47,
-        responseRate: 95
-      });
-    } catch (error) {
-      toast({
-        title: "Erro",
-        description: "Erro ao carregar estatísticas de comunicação",
-        variant: "destructive"
-      });
-    } finally {
-      setLoading(false);
-    }
-  };
 
   const getTabIcon = (tab: string) => {
     switch (tab) {
@@ -300,7 +308,12 @@ export const EnhancedCommunicationCenter = () => {
                 title: "Sucesso",
                 description: "Mensagem enviada com sucesso"
               });
-              loadCommunicationStats();
+              // Stats will be refreshed on next page load
+              setStats(prev => ({
+                ...prev,
+                totalMessages: prev.totalMessages + 1,
+                todayMessages: prev.todayMessages + 1
+              }));
             }}
           />
         </TabsContent>

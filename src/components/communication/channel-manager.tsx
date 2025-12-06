@@ -209,27 +209,6 @@ export const ChannelManager: React.FC<ChannelManagerProps> = ({
     }
   };
 
-  const setupRealTimeSubscription = () => {
-    const channel = supabase
-      .channel("channels-changes")
-      .on(
-        "postgres_changes",
-        {
-          event: "*",
-          schema: "public",
-          table: "communication_channels"
-        },
-        () => {
-          loadChannels();
-        }
-      )
-      .subscribe();
-
-    return () => {
-      supabase.removeChannel(channel);
-    };
-  };
-
   // Memoized filter - computed directly to avoid effect loops
   const displayedChannels = React.useMemo(() => {
     let filtered = [...channels];
@@ -248,11 +227,21 @@ export const ChannelManager: React.FC<ChannelManagerProps> = ({
     return filtered;
   }, [channels, searchTerm, selectedType]);
 
-  // Initialize only once on mount
+  // Initialize only once on mount - no realtime subscription to prevent loops
   useEffect(() => {
-    loadChannels();
-    const cleanup = setupRealTimeSubscription();
-    return cleanup;
+    let mounted = true;
+    
+    const init = async () => {
+      if (mounted) {
+        await loadChannels();
+      }
+    };
+    
+    init();
+    
+    return () => {
+      mounted = false;
+    };
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 

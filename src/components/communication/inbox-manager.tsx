@@ -75,11 +75,21 @@ export const InboxManager: React.FC<InboxManagerProps> = ({
   const [activeInboxTab, setActiveInboxTab] = useState("all");
   const { toast } = useToast();
 
+  // Initialize only once on mount - no realtime subscription to prevent loops
   useEffect(() => {
-    loadMessages();
-    const cleanup = setupRealTimeSubscription();
+    let mounted = true;
     
-    return cleanup;
+    const init = async () => {
+      if (mounted) {
+        await loadMessages();
+      }
+    };
+    
+    init();
+    
+    return () => {
+      mounted = false;
+    };
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
@@ -173,26 +183,8 @@ export const InboxManager: React.FC<InboxManagerProps> = ({
     }
   };
 
-  const setupRealTimeSubscription = () => {
-    const channel = supabase
-      .channel("messages-changes")
-      .on(
-        "postgres_changes",
-        {
-          event: "*",
-          schema: "public",
-          table: "messages"
-        },
-        () => {
-          loadMessages();
-        }
-      )
-      .subscribe();
-
-    return () => {
-      supabase.removeChannel(channel);
-    };
-  };
+  // Realtime subscription removed to prevent infinite re-render loops
+  // Enable only when connected to real database with proper debouncing
 
   // Memoized filter - computed directly to avoid effect loops
   const displayedMessages = useMemo(() => {
