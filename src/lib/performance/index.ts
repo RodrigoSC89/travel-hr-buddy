@@ -252,3 +252,15 @@ export { resourceManager, type ResourceStatus } from './resource-manager';
 export { systemBenchmark, type BenchmarkResult } from './system-benchmark';
 export { dataRetentionManager, type RetentionPolicy, type CleanupResult } from './data-retention';
 export { smartSyncManager, type SyncItem, type SyncStats } from './smart-sync';
+
+// PATCH 975: Memory, Indexing, AI Cache, Dashboard & Module Optimization
+export { memoryLeakDetector, throttle, debounce, createCleanupEffect } from './memory-leak-detector';
+export { indexedDBOptimizer } from './indexed-db-optimizer';
+export { aiResponseCache, useAICache } from './ai-response-cache';
+export { 
+  dashboardOptimizer, 
+  useOptimizedWidget, 
+  useVirtualDashboard,
+  calculateInWorker 
+} from './dashboard-optimizer';
+export { moduleLoader, useModuleLoader } from './module-loader';
