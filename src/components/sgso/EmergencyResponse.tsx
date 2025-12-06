@@ -14,6 +14,10 @@ import {
   CheckCircle,
   Shield
 } from "lucide-react";
+import { NewEmergencyPlanDialog } from "./dialogs/NewEmergencyPlanDialog";
+import { ScheduleDrillDialog } from "./dialogs/ScheduleDrillDialog";
+import { EmergencyReportDialog } from "./dialogs/EmergencyReportDialog";
+import { EmergencyLocationsDialog } from "./dialogs/EmergencyLocationsDialog";
 
 interface EmergencyPlan {
   id: string;
@@ -148,6 +152,12 @@ const getStatusConfig = (status: string) => {
 export const EmergencyResponse: React.FC = () => {
   const [selectedType, setSelectedType] = useState<string>("all");
   const { handleViewDetails, showInfo, isLoading } = useMaritimeActions();
+  
+  // Dialog states
+  const [newPlanOpen, setNewPlanOpen] = useState(false);
+  const [scheduleDrillOpen, setScheduleDrillOpen] = useState(false);
+  const [reportOpen, setReportOpen] = useState(false);
+  const [locationsOpen, setLocationsOpen] = useState(false);
 
   const activeCount = EMERGENCY_PLANS.filter(p => p.status === "active").length;
   const reviewCount = EMERGENCY_PLANS.filter(p => p.status === "under_review").length;
@@ -433,32 +443,28 @@ export const EmergencyResponse: React.FC = () => {
           <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
             <Button
               className="bg-red-600 hover:bg-red-700 text-white min-h-[56px] flex-col gap-2"
-              onClick={() => showInfo("Novo Plano", "Abrindo formulário para criar novo plano de emergência")}
-              disabled={isLoading}
+              onClick={() => setNewPlanOpen(true)}
             >
               <AlertTriangle className="h-6 w-6" />
               <span className="font-semibold">Novo Plano</span>
             </Button>
             <Button
               className="bg-blue-600 hover:bg-blue-700 text-white min-h-[56px] flex-col gap-2"
-              onClick={() => showInfo("Agendar Simulado", "Abrindo agenda de simulados")}
-              disabled={isLoading}
+              onClick={() => setScheduleDrillOpen(true)}
             >
               <Clock className="h-6 w-6" />
               <span className="font-semibold">Agendar</span>
             </Button>
             <Button
               className="bg-green-600 hover:bg-green-700 text-white min-h-[56px] flex-col gap-2"
-              onClick={() => showInfo("Relatório", "Gerando relatório de simulados")}
-              disabled={isLoading}
+              onClick={() => setReportOpen(true)}
             >
               <FileText className="h-6 w-6" />
               <span className="font-semibold">Relatório</span>
             </Button>
             <Button
               className="bg-orange-600 hover:bg-orange-700 text-white min-h-[56px] flex-col gap-2"
-              onClick={() => showInfo("Localização", "Abrindo mapa de pontos de encontro")}
-              disabled={isLoading}
+              onClick={() => setLocationsOpen(true)}
             >
               <MapPin className="h-6 w-6" />
               <span className="font-semibold">Localização</span>
@@ -466,6 +472,30 @@ export const EmergencyResponse: React.FC = () => {
           </div>
         </CardContent>
       </Card>
+
+      {/* Dialogs */}
+      <NewEmergencyPlanDialog 
+        open={newPlanOpen} 
+        onOpenChange={setNewPlanOpen}
+        onPlanCreated={(plan) => {
+          console.log("New plan created:", plan);
+        }}
+      />
+      <ScheduleDrillDialog 
+        open={scheduleDrillOpen} 
+        onOpenChange={setScheduleDrillOpen}
+        onDrillScheduled={(drill) => {
+          console.log("Drill scheduled:", drill);
+        }}
+      />
+      <EmergencyReportDialog 
+        open={reportOpen} 
+        onOpenChange={setReportOpen} 
+      />
+      <EmergencyLocationsDialog 
+        open={locationsOpen} 
+        onOpenChange={setLocationsOpen} 
+      />
     </div>
   );
 };
