@@ -11,6 +11,7 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@
 import { Badge } from "@/components/ui/badge";
 import { Map, Wind, Thermometer, Droplets, Waves, Cloud, Loader2, RefreshCw, AlertCircle } from "lucide-react";
 import { useToast } from "@/hooks/use-toast";
+import { supabase } from "@/integrations/supabase/client";
 
 interface WindyMapProps {
   lat?: number;
@@ -28,9 +29,6 @@ const layers: { id: LayerType; label: string; icon: React.ElementType; owmLayer:
   { id: "pressure", label: "Pressão", icon: Waves, owmLayer: "pressure_new" },
 ];
 
-// OpenWeatherMap API key from environment or fallback
-const OWM_API_KEY = "b8e9d9a9c7e5f4a3b2c1d0e9f8a7b6c5";
-
 export const WindyMap: React.FC<WindyMapProps> = ({ 
   lat = -23.9608, 
   lon = -46.3335,
@@ -41,21 +39,73 @@ export const WindyMap: React.FC<WindyMapProps> = ({
   const [isLoading, setIsLoading] = useState(true);
   const [mapError, setMapError] = useState(false);
   const [useAlternative, setUseAlternative] = useState(false);
+  const [apiKey, setApiKey] = useState<string | null>(null);
+  const [weatherData, setWeatherData] = useState<any>(null);
   const iframeRef = useRef<HTMLIFrameElement>(null);
   const { toast } = useToast();
+
+  // Fetch API key from edge function
+  useEffect(() => {
+    const fetchApiKey = async () => {
+      try {
+        const { data, error } = await supabase.functions.invoke('weather-map-proxy', {
+          body: { action: 'get_keys' }
+        });
+
+        if (error) {
+          console.error("Error fetching API keys:", error);
+          setMapError(true);
+          setUseAlternative(true);
+          return;
+        }
+
+        if (data?.openweather) {
+          setApiKey(data.openweather);
+        } else {
+          setMapError(true);
+          setUseAlternative(true);
+        }
+      } catch (err) {
+        console.error("Failed to fetch API keys:", err);
+        setMapError(true);
+        setUseAlternative(true);
+      }
+    };
+
+    fetchApiKey();
+  }, []);
+
+  // Fetch weather data
+  useEffect(() => {
+    const fetchWeatherData = async () => {
+      try {
+        const { data, error } = await supabase.functions.invoke('weather-map-proxy', {
+          body: { action: 'weather_data', lat, lon }
+        });
+
+        if (!error && data?.data) {
+          setWeatherData(data.data);
+        }
+      } catch (err) {
+        console.error("Failed to fetch weather data:", err);
+      }
+    };
+
+    fetchWeatherData();
+  }, [lat, lon]);
 
   // Check if iframe loaded successfully
   useEffect(() => {
     const timer = setTimeout(() => {
-      if (isLoading) {
+      if (isLoading && !apiKey) {
         setMapError(true);
         setIsLoading(false);
         setUseAlternative(true);
       }
-    }, 5000);
+    }, 8000);
 
     return () => clearTimeout(timer);
-  }, [isLoading]);
+  }, [isLoading, apiKey]);
 
   const handleIframeLoad = () => {
     setIsLoading(false);
@@ -81,14 +131,11 @@ export const WindyMap: React.FC<WindyMapProps> = ({
     });
   };
 
-  // OpenWeatherMap tile URL
-  const getOWMTileUrl = () => {
+  // Get tile URL with API key
+  const getOWMTileUrl = (z: number, x: number, y: number) => {
+    if (!apiKey) return '';
     const layer = layers.find(l => l.id === selectedLayer);
-    const z = Math.min(zoom, 10);
-    const x = Math.floor((lon + 180) / 360 * Math.pow(2, z));
-    const y = Math.floor((1 - Math.log(Math.tan(lat * Math.PI / 180) + 1 / Math.cos(lat * Math.PI / 180)) / Math.PI) / 2 * Math.pow(2, z));
-    
-    return `https://tile.openweathermap.org/map/${layer?.owmLayer}/${z}/${x}/${y}.png?appid=${OWM_API_KEY}`;
+    return `https://tile.openweathermap.org/map/${layer?.owmLayer}/${z}/${x}/${y}.png?appid=${apiKey}`;
   };
 
   // Alternative embedded weather visualization
