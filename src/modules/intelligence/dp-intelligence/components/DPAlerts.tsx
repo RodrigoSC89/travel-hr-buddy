@@ -1,9 +1,18 @@
-import React, { useState } from "react";
+import React, { useState, useMemo } from "react";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Switch } from "@/components/ui/switch";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
+import {
+  Dialog,
+  DialogContent,
+  DialogHeader,
+  DialogTitle,
+  DialogTrigger,
+} from "@/components/ui/dialog";
+import { Label } from "@/components/ui/label";
+import { Checkbox } from "@/components/ui/checkbox";
 import {
   AlertTriangle,
   Bell,
@@ -14,7 +23,9 @@ import {
   Volume2,
   XCircle,
   Filter,
+  X,
 } from "lucide-react";
+import { toast } from "sonner";
 
 interface Alert {
   id: string;
@@ -24,6 +35,12 @@ interface Alert {
   timestamp: string;
   acknowledged: boolean;
   source: string;
+}
+
+interface FilterState {
+  severity: string[];
+  source: string[];
+  acknowledged: boolean | null;
 }
 
 const alerts: Alert[] = [
@@ -83,9 +100,73 @@ const alertConfig = [
   { name: "Power Management", enabled: true, sound: true },
 ];
 
+const severityOptions = [
+  { value: "critical", label: "Crítico" },
+  { value: "warning", label: "Alerta" },
+  { value: "info", label: "Info" },
+];
+
 export default function DPAlerts() {
   const [activeAlerts, setActiveAlerts] = useState(alerts);
   const [config, setConfig] = useState(alertConfig);
+  const [filterOpen, setFilterOpen] = useState(false);
+  const [filters, setFilters] = useState<FilterState>({
+    severity: [],
+    source: [],
+    acknowledged: null,
+  });
+
+  const sources = useMemo(() => 
+    [...new Set(alerts.map(a => a.source))],
+    []
+  );
+
+  const hasActiveFilters = filters.severity.length > 0 || filters.source.length > 0 || filters.acknowledged !== null;
+
+  const filteredAlerts = useMemo(() => {
+    return activeAlerts.filter(alert => {
+      if (filters.severity.length > 0 && !filters.severity.includes(alert.severity)) {
+        return false;
+      }
+      if (filters.source.length > 0 && !filters.source.includes(alert.source)) {
+        return false;
+      }
+      if (filters.acknowledged !== null && alert.acknowledged !== filters.acknowledged) {
+        return false;
+      }
+      return true;
+    });
+  }, [activeAlerts, filters]);
+
+  const pendingFilteredAlerts = filteredAlerts.filter(a => !a.acknowledged);
+
+  const toggleSeverityFilter = (severity: string) => {
+    setFilters(prev => ({
+      ...prev,
+      severity: prev.severity.includes(severity)
+        ? prev.severity.filter(s => s !== severity)
+        : [...prev.severity, severity],
+    }));
+  };
+
+  const toggleSourceFilter = (source: string) => {
+    setFilters(prev => ({
+      ...prev,
+      source: prev.source.includes(source)
+        ? prev.source.filter(s => s !== source)
+        : [...prev.source, source],
+    }));
+  };
+
+  const applyFilters = () => {
+    setFilterOpen(false);
+    toast.success("Filtros aplicados");
+  };
+
+  const clearFilters = () => {
+    setFilters({ severity: [], source: [], acknowledged: null });
+    toast.info("Filtros limpos");
+  };
 
   const getSeverityIcon = (severity: string) => {
     switch (severity) {
@@ -193,56 +274,126 @@ export default function DPAlerts() {
 
         <TabsContent value="active" className="space-y-4">
           <div className="flex justify-between items-center">
-            <h3 className="text-lg font-semibold">Alertas Pendentes</h3>
-            <Button variant="outline" size="sm">
-              <Filter className="h-4 w-4 mr-2" />
-              Filtrar
-            </Button>
+            <div className="flex items-center gap-2">
+              <h3 className="text-lg font-semibold">Alertas Pendentes</h3>
+              {hasActiveFilters && (
+                <Badge variant="secondary" className="gap-1">
+                  Filtros ativos
+                  <Button
+                    variant="ghost"
+                    size="sm"
+                    className="h-4 w-4 p-0 ml-1"
+                    onClick={clearFilters}
+                  >
+                    <X className="h-3 w-3" />
+                  </Button>
+                </Badge>
+              )}
+            </div>
+            <Dialog open={filterOpen} onOpenChange={setFilterOpen}>
+              <DialogTrigger asChild>
+                <Button variant="outline" size="sm">
+                  <Filter className="h-4 w-4 mr-2" />
+                  Filtrar
+                </Button>
+              </DialogTrigger>
+              <DialogContent className="sm:max-w-md">
+                <DialogHeader>
+                  <DialogTitle>Filtrar Alertas</DialogTitle>
+                </DialogHeader>
+                <div className="space-y-6 py-4">
+                  <div className="space-y-3">
+                    <Label className="text-sm font-medium">Severidade</Label>
+                    <div className="flex flex-wrap gap-2">
+                      {severityOptions.map(option => (
+                        <div key={option.value} className="flex items-center space-x-2">
+                          <Checkbox
+                            id={`severity-${option.value}`}
+                            checked={filters.severity.includes(option.value)}
+                            onCheckedChange={() => toggleSeverityFilter(option.value)}
+                          />
+                          <Label htmlFor={`severity-${option.value}`} className="text-sm cursor-pointer">
+                            {option.label}
+                          </Label>
+                        </div>
+                      ))}
+                    </div>
+                  </div>
+
+                  <div className="space-y-3">
+                    <Label className="text-sm font-medium">Fonte</Label>
+                    <div className="flex flex-wrap gap-2">
+                      {sources.map(source => (
+                        <div key={source} className="flex items-center space-x-2">
+                          <Checkbox
+                            id={`source-${source}`}
+                            checked={filters.source.includes(source)}
+                            onCheckedChange={() => toggleSourceFilter(source)}
+                          />
+                          <Label htmlFor={`source-${source}`} className="text-sm cursor-pointer">
+                            {source}
+                          </Label>
+                        </div>
+                      ))}
+                    </div>
+                  </div>
+
+                  <div className="flex gap-2 pt-4">
+                    <Button onClick={applyFilters} className="flex-1">
+                      Aplicar Filtros
+                    </Button>
+                    <Button variant="outline" onClick={clearFilters}>
+                      Limpar
+                    </Button>
+                  </div>
+                </div>
+              </DialogContent>
+            </Dialog>
           </div>
 
           <div className="space-y-4">
-            {activeAlerts
-              .filter(a => !a.acknowledged)
-              .map(alert => (
-                <Card key={alert.id} className={`border-l-4 ${
-                  alert.severity === "critical" ? "border-l-red-500" :
-                  alert.severity === "warning" ? "border-l-amber-500" :
-                  "border-l-blue-500"
-                }`}>
-                  <CardContent className="pt-4">
-                    <div className="flex items-start justify-between">
-                      <div className="flex items-start gap-3">
-                        {getSeverityIcon(alert.severity)}
-                        <div>
-                          <div className="flex items-center gap-2 mb-1">
-                            <h4 className="font-semibold">{alert.title}</h4>
-                            {getSeverityBadge(alert.severity)}
-                          </div>
-                          <p className="text-sm text-muted-foreground">{alert.description}</p>
-                          <div className="flex items-center gap-4 mt-2 text-xs text-muted-foreground">
-                            <span>{alert.source}</span>
-                            <span>{alert.timestamp}</span>
-                          </div>
+            {pendingFilteredAlerts.map(alert => (
+              <Card key={alert.id} className={`border-l-4 ${
+                alert.severity === "critical" ? "border-l-red-500" :
+                alert.severity === "warning" ? "border-l-amber-500" :
+                "border-l-blue-500"
+              }`}>
+                <CardContent className="pt-4">
+                  <div className="flex items-start justify-between">
+                    <div className="flex items-start gap-3">
+                      {getSeverityIcon(alert.severity)}
+                      <div>
+                        <div className="flex items-center gap-2 mb-1">
+                          <h4 className="font-semibold">{alert.title}</h4>
+                          {getSeverityBadge(alert.severity)}
+                        </div>
+                        <p className="text-sm text-muted-foreground">{alert.description}</p>
+                        <div className="flex items-center gap-4 mt-2 text-xs text-muted-foreground">
+                          <span>{alert.source}</span>
+                          <span>{alert.timestamp}</span>
                         </div>
                       </div>
-                      <Button
-                        size="sm"
-                        variant="outline"
-                        onClick={() => acknowledgeAlert(alert.id)}
-                      >
-                        <CheckCircle2 className="h-4 w-4 mr-1" />
-                        Reconhecer
-                      </Button>
                     </div>
-                  </CardContent>
-                </Card>
-              ))}
+                    <Button
+                      size="sm"
+                      variant="outline"
+                      onClick={() => acknowledgeAlert(alert.id)}
+                    >
+                      <CheckCircle2 className="h-4 w-4 mr-1" />
+                      Reconhecer
+                    </Button>
+                  </div>
+                </CardContent>
+              </Card>
+            ))}
 
-            {activeAlerts.filter(a => !a.acknowledged).length === 0 && (
+            {pendingFilteredAlerts.length === 0 && (
               <Card>
                 <CardContent className="pt-6 text-center">
                   <CheckCircle2 className="h-12 w-12 text-emerald-500 mx-auto mb-2" />
-                  <p className="text-muted-foreground">Nenhum alerta pendente</p>
+                  <p className="text-muted-foreground">
+                    {hasActiveFilters ? "Nenhum alerta encontrado com os filtros aplicados" : "Nenhum alerta pendente"}
+                  </p>
                 </CardContent>
               </Card>
             )}
@@ -251,7 +402,7 @@ export default function DPAlerts() {
 
         <TabsContent value="history" className="space-y-4">
           <div className="space-y-4">
-            {activeAlerts.map(alert => (
+            {filteredAlerts.map(alert => (
               <Card key={alert.id} className="opacity-75">
                 <CardContent className="pt-4">
                   <div className="flex items-start gap-3">
