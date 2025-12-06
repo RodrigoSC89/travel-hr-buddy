@@ -3,7 +3,7 @@
  * Exibe notificações e alertas do sistema
  */
 
-import { useState } from "react";
+import React, { useState } from "react";
 import {
   Dialog,
   DialogContent,
@@ -48,7 +48,7 @@ const mockAlerts: Alert[] = [
     title: "Manutenção Programada",
     message: "Embarcação 'Ocean Pioneer' com manutenção preventiva agendada para amanhã.",
     type: "warning",
-    timestamp: new Date(Date.now() - 1000 * 60 * 30), // 30 min ago
+    timestamp: new Date(Date.now() - 1000 * 60 * 30),
     isRead: false,
     module: "MMI"
   },
@@ -57,7 +57,7 @@ const mockAlerts: Alert[] = [
     title: "Certificado Expirando",
     message: "3 certificados de tripulantes expiram nos próximos 30 dias.",
     type: "warning",
-    timestamp: new Date(Date.now() - 1000 * 60 * 60 * 2), // 2 hours ago
+    timestamp: new Date(Date.now() - 1000 * 60 * 60 * 2),
     isRead: false,
     module: "Crew"
   },
@@ -66,7 +66,7 @@ const mockAlerts: Alert[] = [
     title: "Meta ESG Atingida",
     message: "Emissões de CO2 reduziram 15% em relação ao mês anterior.",
     type: "success",
-    timestamp: new Date(Date.now() - 1000 * 60 * 60 * 5), // 5 hours ago
+    timestamp: new Date(Date.now() - 1000 * 60 * 60 * 5),
     isRead: true,
     module: "ESG"
   },
@@ -75,7 +75,7 @@ const mockAlerts: Alert[] = [
     title: "Novo Relatório Disponível",
     message: "Relatório mensal de operações está pronto para download.",
     type: "info",
-    timestamp: new Date(Date.now() - 1000 * 60 * 60 * 24), // 1 day ago
+    timestamp: new Date(Date.now() - 1000 * 60 * 60 * 24),
     isRead: true,
     module: "Analytics"
   },
@@ -84,13 +84,13 @@ const mockAlerts: Alert[] = [
     title: "Alerta de Segurança",
     message: "Incidente reportado na área de operações - verificação necessária.",
     type: "error",
-    timestamp: new Date(Date.now() - 1000 * 60 * 15), // 15 min ago
+    timestamp: new Date(Date.now() - 1000 * 60 * 15),
     isRead: false,
     module: "Safety"
   }
 ];
 
-export function AlertsDialog({ open, onOpenChange }: AlertsDialogProps) {
+const AlertsDialog: React.FC<AlertsDialogProps> = ({ open, onOpenChange }) => {
   const [alerts, setAlerts] = useState<Alert[]>(mockAlerts);
   const [activeTab, setActiveTab] = useState("all");
 
@@ -249,4 +249,6 @@ export function AlertsDialog({ open, onOpenChange }: AlertsDialogProps) {
       </DialogContent>
     </Dialog>
   );
-}
+};
+
+export { AlertsDialog };
