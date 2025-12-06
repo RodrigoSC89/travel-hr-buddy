@@ -23,6 +23,7 @@ import { toast } from "@/hooks/use-toast";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { CrewAIInsights } from "@/components/crew/crew-ai-insights";
 import CrewAIAnalysis from "@/modules/crew-management/components/CrewAIAnalysis";
+import { CrewCertificationsManager } from "@/components/crew/crew-certifications-manager";
 
 interface CrewMember {
   id: string;
@@ -461,17 +462,7 @@ export default function CrewManagement() {
         </TabsContent>
 
         <TabsContent value="certifications" className="space-y-6 mt-6">
-          <Card>
-            <CardHeader>
-              <CardTitle>Certificações</CardTitle>
-              <CardDescription>
-                Gestão de certificações e documentos da tripulação
-              </CardDescription>
-            </CardHeader>
-            <CardContent>
-              <p className="text-muted-foreground">Em desenvolvimento...</p>
-            </CardContent>
-          </Card>
+          <CrewCertificationsManager crewMembers={crewMembers} />
         </TabsContent>
       </Tabs>
     </div>
