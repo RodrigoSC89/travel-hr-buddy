@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useMemo } from "react";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -67,7 +67,6 @@ export const InboxManager: React.FC<InboxManagerProps> = ({
   onStatsUpdate
 }) => {
   const [messages, setMessages] = useState<Message[]>([]);
-  const [filteredMessages, setFilteredMessages] = useState<Message[]>([]);
   const [loading, setLoading] = useState(true);
   const [searchTerm, setSearchTerm] = useState("");
   const [selectedCategory, setSelectedCategory] = useState<string>("all");
@@ -81,11 +80,8 @@ export const InboxManager: React.FC<InboxManagerProps> = ({
     const cleanup = setupRealTimeSubscription();
     
     return cleanup;
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
-
-  useEffect(() => {
-    filterMessages();
-  }, [messages, searchTerm, selectedCategory, selectedPriority, activeInboxTab]);
 
   const loadMessages = async () => {
     try {
@@ -198,7 +194,8 @@ export const InboxManager: React.FC<InboxManagerProps> = ({
     };
   };
 
-  const filterMessages = () => {
+  // Memoized filter - computed directly to avoid effect loops
+  const displayedMessages = useMemo(() => {
     let filtered = [...messages];
 
     // Filter by tab
@@ -236,8 +233,8 @@ export const InboxManager: React.FC<InboxManagerProps> = ({
       filtered = filtered.filter(m => m.priority === selectedPriority);
     }
 
-    setFilteredMessages(filtered);
-  };
+    return filtered;
+  }, [messages, activeInboxTab, searchTerm, selectedCategory, selectedPriority]);
 
   const markAsRead = async (messageId: string) => {
     try {
@@ -338,7 +335,7 @@ export const InboxManager: React.FC<InboxManagerProps> = ({
               Caixa de Entrada
             </CardTitle>
             <div className="flex items-center gap-2">
-              <Badge variant="secondary">{filteredMessages.length} mensagens</Badge>
+              <Badge variant="secondary">{displayedMessages.length} mensagens</Badge>
             </div>
           </div>
         </CardHeader>
@@ -410,7 +407,7 @@ export const InboxManager: React.FC<InboxManagerProps> = ({
 
       {/* Messages List */}
       <div className="space-y-2">
-        {filteredMessages.length === 0 ? (
+        {displayedMessages.length === 0 ? (
           <Card>
             <CardContent className="p-8 text-center">
               <MessageSquare className="h-12 w-12 mx-auto mb-4 text-muted-foreground" />
@@ -421,7 +418,7 @@ export const InboxManager: React.FC<InboxManagerProps> = ({
             </CardContent>
           </Card>
         ) : (
-          filteredMessages.map((message) => {
+          displayedMessages.map((message: Message) => {
             const CategoryIcon = getCategoryIcon(message.category);
             const isUnread = message.status !== "read";
             
