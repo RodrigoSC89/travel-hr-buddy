@@ -140,11 +140,12 @@ const FleetModule = () => {
       const { error } = await supabase
         .from("vessels")
         .insert([{
-          vessel_name: newVessel.name,
+          name: newVessel.name,
           imo_number: newVessel.imo_number || null,
           vessel_type: newVessel.vessel_type,
           status: newVessel.status,
-          current_location: newVessel.location || null
+          current_location: newVessel.location || null,
+          flag_state: "BR"
         }]);
 
       if (error) throw error;
@@ -153,19 +154,6 @@ const FleetModule = () => {
         title: "Sucesso",
         description: "Embarcação adicionada com sucesso!"
       });
-
-      setShowAddVesselDialog(false);
-      setNewVessel({ name: "", imo_number: "", vessel_type: "cargo", status: "active", location: "" });
-      loadFleetData();
-    } catch (error) {
-      logger.error("Error adding vessel", { error });
-      toast({
-        title: "Erro",
-        description: "Falha ao adicionar embarcação",
-        variant: "destructive"
-      });
-    }
-  };
 
       setShowAddVesselDialog(false);
       setNewVessel({ name: "", imo_number: "", vessel_type: "cargo", status: "active", location: "" });
