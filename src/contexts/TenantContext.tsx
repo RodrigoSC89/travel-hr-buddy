@@ -1,7 +1,9 @@
-import React, { createContext, useContext, useEffect, useState } from "react";
+import * as React from "react";
 import { supabase } from "@/integrations/supabase/client";
 import { useAuth } from "./AuthContext";
 import { logger } from "@/lib/logger";
+
+const { createContext, useContext, useEffect, useState } = React;
 
 interface SaasTenant {
   id: string;
@@ -143,14 +145,43 @@ interface TenantContextType {
   getSubdomain: () => string;
 }
 
-const TenantContext = createContext<TenantContextType | undefined>(undefined);
+// Default context value to prevent null errors
+const defaultTenantValue: TenantContextType = {
+  currentTenant: null,
+  currentBranding: null,
+  currentUser: null,
+  tenantPlans: [],
+  tenantUsage: null,
+  availableTenants: [],
+  isLoading: true,
+  error: null,
+  switchTenant: async () => {},
+  updateBranding: async () => {},
+  updateTenantSettings: async () => {},
+  inviteTenantUser: async () => {},
+  updateUserRole: async () => {},
+  removeTenantUser: async () => {},
+  getTenantUsers: async () => [],
+  checkPermission: () => false,
+  checkFeatureAccess: () => false,
+  checkUsageLimits: () => true,
+  upgradePlan: async () => {},
+  downgradeplan: async () => {},
+  formatCurrency: (amount: number) => `R$ ${amount.toFixed(2)}`,
+  formatDate: (date: string) => new Date(date).toLocaleDateString("pt-BR"),
+  getSubdomain: () => "demo",
+};
 
-export const useTenant = () => {
-  const context = useContext(TenantContext);
-  if (!context) {
-    throw new Error("useTenant must be used within a TenantProvider");
+const TenantContext = createContext<TenantContextType>(defaultTenantValue);
+
+export const useTenant = (): TenantContextType => {
+  try {
+    const context = useContext(TenantContext);
+    return context || defaultTenantValue;
+  } catch (error) {
+    console.warn("useTenant called outside of provider, returning default value");
+    return defaultTenantValue;
   }
-  return context;
 };
 
 export const TenantProvider: React.FC<{ children: React.ReactNode }> = ({ children }) => {

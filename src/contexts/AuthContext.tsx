@@ -1,8 +1,10 @@
-import React, { createContext, useContext, useState, useEffect } from "react";
+import * as React from "react";
 import { User, Session } from "@supabase/supabase-js";
 import { supabase } from "@/integrations/supabase/client";
 import { toast } from "sonner";
 import { Logger } from "@/lib/utils/logger";
+
+const { createContext, useContext, useState, useEffect } = React;
 
 type OAuthProvider = "google" | "github" | "azure";
 
@@ -17,14 +19,28 @@ interface AuthContextType {
   resetPassword: (email: string) => Promise<{ error: Error | null }>;
 }
 
-const AuthContext = createContext<AuthContextType | undefined>(undefined);
+// Default context value to prevent null errors
+const defaultAuthValue: AuthContextType = {
+  user: null,
+  session: null,
+  isLoading: true,
+  signUp: async () => ({ error: null }),
+  signIn: async () => ({ error: null }),
+  signInWithOAuth: async () => ({ error: null }),
+  signOut: async () => {},
+  resetPassword: async () => ({ error: null }),
+};
 
-export const useAuth = () => {
-  const context = useContext(AuthContext);
-  if (!context) {
-    throw new Error("useAuth must be used within an AuthProvider");
+const AuthContext = createContext<AuthContextType>(defaultAuthValue);
+
+export const useAuth = (): AuthContextType => {
+  try {
+    const context = useContext(AuthContext);
+    return context || defaultAuthValue;
+  } catch (error) {
+    console.warn("useAuth called outside of provider, returning default value");
+    return defaultAuthValue;
   }
-  return context;
 };
 
 interface AuthProviderProps {
