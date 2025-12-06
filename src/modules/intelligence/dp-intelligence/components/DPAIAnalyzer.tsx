@@ -2,10 +2,8 @@ import React, { useState } from "react";
 import { Card, CardHeader, CardTitle, CardContent } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
-import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Progress } from "@/components/ui/progress";
 import { ScrollArea } from "@/components/ui/scroll-area";
-import { supabase } from "@/integrations/supabase/client";
 import { toast } from "sonner";
 import {
   Cpu,
@@ -64,17 +62,44 @@ export default function DPAIAnalyzer() {
     setAnalysis(null);
 
     try {
-      const { data, error } = await supabase.functions.invoke("dp-intelligence-ai", {
-        body: { telemetry, analysisType: type },
-      });
+      console.log("Starting DP analysis:", type, telemetry);
+      
+      const response = await fetch(
+        `https://vnbptmixvwropvanyhdb.supabase.co/functions/v1/dp-intelligence-ai`,
+        {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify({ telemetry, analysisType: type }),
+        }
+      );
 
-      if (error) {
-        console.error("Analysis error:", error);
+      if (!response.ok) {
+        const errorData = await response.json().catch(() => ({}));
+        console.error("Analysis error:", response.status, errorData);
+        
+        if (response.status === 429) {
+          toast.error("Limite de requisições", {
+            description: "Muitas requisições. Aguarde alguns segundos e tente novamente.",
+          });
+          return;
+        }
+        
+        if (response.status === 402) {
+          toast.error("Créditos insuficientes", {
+            description: "Adicione créditos ao workspace para continuar usando a IA.",
+          });
+          return;
+        }
+        
         toast.error("Erro na análise", {
-          description: error.message || "Não foi possível completar a análise.",
+          description: errorData.message || "Não foi possível completar a análise.",
         });
         return;
       }
+
+      const data = await response.json();
 
       if (data.error) {
         toast.error(data.error, { description: data.message });
@@ -84,15 +109,25 @@ export default function DPAIAnalyzer() {
       setAnalysis(data.analysis);
       setLastAnalysis(new Date());
       toast.success("Análise concluída", {
-        description: `Análise ${type} completada com sucesso.`,
+        description: `Análise ${getAnalysisLabel(type)} completada com sucesso.`,
       });
     } catch (err) {
       console.error("Error:", err);
       toast.error("Erro de conexão", {
-        description: "Não foi possível conectar ao serviço de IA.",
+        description: "Não foi possível conectar ao serviço de IA. Verifique sua conexão.",
       });
     } finally {
       setIsAnalyzing(false);
+    }
+  };
+
+  const getAnalysisLabel = (type: string) => {
+    switch (type) {
+      case "full": return "Completa";
+      case "predictive": return "Preditiva";
+      case "optimization": return "Otimização";
+      case "emergency": return "Emergência";
+      default: return type;
     }
   };
 
