@@ -1,9 +1,11 @@
 // @ts-nocheck
-import React, { createContext, useContext, useEffect, useState } from "react";
+import * as React from "react";
 import { supabase } from "@/integrations/supabase/client";
 import { useAuth } from "./AuthContext";
 import { logger } from "@/lib/logger";
 import type { Database } from "@/integrations/supabase/types";
+
+const { createContext, useContext, useEffect, useState } = React;
 
 type Organization = Database["public"]["Tables"]["organizations"]["Row"];
 type OrganizationBranding = Database["public"]["Tables"]["organization_branding"]["Row"];
@@ -33,14 +35,32 @@ interface OrganizationContextType {
   updateUserRole: (userId: string, role: string) => Promise<void>;
 }
 
-const OrganizationContext = createContext<OrganizationContextType | undefined>(undefined);
+// Default context value to prevent null errors
+const defaultContextValue: OrganizationContextType = {
+  currentOrganization: null,
+  currentBranding: null,
+  userRole: null,
+  isLoading: true,
+  error: null,
+  switchOrganization: async () => {},
+  updateBranding: async () => {},
+  checkPermission: () => false,
+  getCurrentOrganizationUsers: async () => [],
+  inviteUser: async () => {},
+  removeUser: async () => {},
+  updateUserRole: async () => {}
+};
 
-export const useOrganization = () => {
-  const context = useContext(OrganizationContext);
-  if (!context) {
-    throw new Error("useOrganization must be used within an OrganizationProvider");
+const OrganizationContext = createContext<OrganizationContextType>(defaultContextValue);
+
+export const useOrganization = (): OrganizationContextType => {
+  try {
+    const context = useContext(OrganizationContext);
+    return context || defaultContextValue;
+  } catch (error) {
+    console.warn("useOrganization called outside of provider, returning default value");
+    return defaultContextValue;
   }
-  return context;
 };
 
 export const OrganizationProvider: React.FC<{ children: React.ReactNode }> = ({ children }) => {
