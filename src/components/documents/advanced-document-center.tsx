@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useRef } from "react";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
@@ -8,6 +8,7 @@ import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
 import { Label } from "@/components/ui/label";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
+import { Dialog, DialogContent, DialogDescription, DialogFooter, DialogHeader, DialogTitle } from "@/components/ui/dialog";
 import { 
   FileText, 
   Upload, 
@@ -35,11 +36,14 @@ import {
   BarChart3,
   TrendingUp,
   RefreshCw,
-  Plus
+  Plus,
+  X,
+  File
 } from "lucide-react";
 import { useAuth } from "@/contexts/AuthContext";
 import { useToast } from "@/hooks/use-toast";
 import { Alert, AlertDescription } from "@/components/ui/alert";
+import { ScrollArea } from "@/components/ui/scroll-area";
 
 interface Document {
   id: string;
@@ -58,6 +62,7 @@ interface Document {
   downloadCount: number;
   viewCount: number;
   collaborators: string[];
+  content?: string;
   approvals: Array<{
     user: string;
     status: "pending" | "approved" | "rejected";
@@ -83,6 +88,7 @@ interface DocumentTemplate {
 export const AdvancedDocumentCenter: React.FC = () => {
   const { user } = useAuth();
   const { toast } = useToast();
+  const fileInputRef = useRef<HTMLInputElement>(null);
   
   const [documents, setDocuments] = useState<Document[]>([]);
   const [templates, setTemplates] = useState<DocumentTemplate[]>([]);
@@ -92,6 +98,20 @@ export const AdvancedDocumentCenter: React.FC = () => {
   const [statusFilter, setStatusFilter] = useState("all");
   const [selectedDocument, setSelectedDocument] = useState<Document | null>(null);
   const [viewMode, setViewMode] = useState<"grid" | "list">("grid");
+  
+  // Dialog states
+  const [isUploadDialogOpen, setIsUploadDialogOpen] = useState(false);
+  const [isNewDocDialogOpen, setIsNewDocDialogOpen] = useState(false);
+  const [isViewDialogOpen, setIsViewDialogOpen] = useState(false);
+  const [uploadedFiles, setUploadedFiles] = useState<File[]>([]);
+  const [newDocForm, setNewDocForm] = useState({
+    title: "",
+    description: "",
+    category: "manuais",
+    tags: "",
+    isPublic: false
+  });
+  const [isUploading, setIsUploading] = useState(false);
 
   // Dados simulados para demonstração
   const generateMockData = () => {
@@ -288,22 +308,156 @@ export const AdvancedDocumentCenter: React.FC = () => {
   });
 
   const handleUpload = () => {
+    setIsUploadDialogOpen(true);
+  };
+
+  const handleFileSelect = (event: React.ChangeEvent<HTMLInputElement>) => {
+    const files = event.target.files;
+    if (files) {
+      setUploadedFiles(Array.from(files));
+    }
+  };
+
+  const handleUploadSubmit = async () => {
+    if (uploadedFiles.length === 0) {
+      toast({
+        title: "Nenhum arquivo selecionado",
+        description: "Por favor, selecione pelo menos um arquivo para upload.",
+        variant: "destructive"
+      });
+      return;
+    }
+
+    setIsUploading(true);
+    
+    // Simulate upload delay
+    await new Promise(resolve => setTimeout(resolve, 1500));
+    
+    const newDocuments: Document[] = uploadedFiles.map((file, index) => {
+      const fileType = file.name.split('.').pop()?.toLowerCase() || 'other';
+      return {
+        id: `new-${Date.now()}-${index}`,
+        title: file.name.replace(/\.[^/.]+$/, ""),
+        description: `Documento enviado via upload`,
+        type: (["pdf", "docx", "xlsx", "pptx"].includes(fileType) ? fileType : "other") as Document["type"],
+        category: "manuais",
+        size: file.size,
+        status: "draft" as const,
+        version: "1.0",
+        createdAt: new Date(),
+        updatedAt: new Date(),
+        createdBy: user?.email || "Usuário",
+        tags: [],
+        isPublic: false,
+        downloadCount: 0,
+        viewCount: 0,
+        collaborators: [user?.email || "Usuário"],
+        approvals: []
+      };
+    });
+
+    setDocuments(prev => [...newDocuments, ...prev]);
+    setUploadedFiles([]);
+    setIsUploadDialogOpen(false);
+    setIsUploading(false);
+    
+    if (fileInputRef.current) {
+      fileInputRef.current.value = "";
+    }
+    
     toast({
-      title: "Upload simulado",
-      description: "Funcionalidade de upload será implementada.",
+      title: "Upload concluído",
+      description: `${uploadedFiles.length} arquivo(s) enviado(s) com sucesso.`,
     });
   };
 
-  const handleDownload = (documentId: string) => {
-    setDocuments(prev => prev.map(doc => 
-      doc.id === documentId 
-        ? { ...doc, downloadCount: doc.downloadCount + 1 }
-        : doc
+  const handleNewDocument = () => {
+    setIsNewDocDialogOpen(true);
+  };
+
+  const handleNewDocSubmit = async () => {
+    if (!newDocForm.title.trim()) {
+      toast({
+        title: "Título obrigatório",
+        description: "Por favor, informe o título do documento.",
+        variant: "destructive"
+      });
+      return;
+    }
+
+    const newDoc: Document = {
+      id: `new-${Date.now()}`,
+      title: newDocForm.title,
+      description: newDocForm.description,
+      type: "docx",
+      category: newDocForm.category,
+      size: 0,
+      status: "draft",
+      version: "1.0",
+      createdAt: new Date(),
+      updatedAt: new Date(),
+      createdBy: user?.email || "Usuário",
+      tags: newDocForm.tags.split(",").map(t => t.trim()).filter(Boolean),
+      isPublic: newDocForm.isPublic,
+      downloadCount: 0,
+      viewCount: 0,
+      collaborators: [user?.email || "Usuário"],
+      content: "",
+      approvals: []
+    };
+
+    setDocuments(prev => [newDoc, ...prev]);
+    setNewDocForm({
+      title: "",
+      description: "",
+      category: "manuais",
+      tags: "",
+      isPublic: false
+    });
+    setIsNewDocDialogOpen(false);
+    
+    toast({
+      title: "Documento criado",
+      description: "O novo documento foi criado com sucesso.",
+    });
+  };
+
+  const handleDownload = (doc: Document) => {
+    setDocuments(prev => prev.map(d => 
+      d.id === doc.id 
+        ? { ...d, downloadCount: d.downloadCount + 1 }
+        : d
     ));
+    
+    // Create a simulated download
+    const content = `
+Documento: ${doc.title}
+Descrição: ${doc.description}
+Versão: ${doc.version}
+Categoria: ${doc.category}
+Criado por: ${doc.createdBy}
+Data de criação: ${doc.createdAt.toLocaleDateString()}
+Última atualização: ${doc.updatedAt.toLocaleDateString()}
+Tags: ${doc.tags.join(", ")}
+Status: ${doc.status}
+
+---
+Este é um documento de demonstração do Centro de Documentos.
+    `.trim();
+
+    const blob = new Blob([content], { type: 'text/plain' });
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement('a');
+    a.href = url;
+    a.download = `${doc.title}.txt`;
+    document.body.appendChild(a);
+    a.click();
+    document.body.removeChild(a);
+    URL.revokeObjectURL(url);
     
     toast({
       title: "Download iniciado",
-      description: "O documento está sendo baixado.",
+      description: `Baixando "${doc.title}"...`,
     });
   };
 
@@ -315,6 +469,7 @@ export const AdvancedDocumentCenter: React.FC = () => {
     ));
     
     setSelectedDocument(document);
+    setIsViewDialogOpen(true);
   };
 
   const handleStatusChange = (documentId: string, newStatus: Document["status"]) => {
@@ -353,12 +508,22 @@ export const AdvancedDocumentCenter: React.FC = () => {
             <Upload className="h-4 w-4 mr-2" />
             Upload
           </Button>
-          <Button>
+          <Button onClick={handleNewDocument}>
             <Plus className="h-4 w-4 mr-2" />
             Novo Documento
           </Button>
         </div>
       </div>
+
+      {/* Hidden file input */}
+      <input
+        ref={fileInputRef}
+        type="file"
+        multiple
+        className="hidden"
+        onChange={handleFileSelect}
+        accept=".pdf,.doc,.docx,.xls,.xlsx,.ppt,.pptx,.txt,.jpg,.jpeg,.png"
+      />
 
       {/* Overview Cards */}
       <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-4">
@@ -556,7 +721,7 @@ export const AdvancedDocumentCenter: React.FC = () => {
                         <Button 
                           size="sm" 
                           className="flex-1"
-                          onClick={() => handleDownload(doc.id)}
+                          onClick={() => handleDownload(doc)}
                         >
                           <Download className="h-3 w-3 mr-1" />
                           Baixar
@@ -593,7 +758,7 @@ export const AdvancedDocumentCenter: React.FC = () => {
                         <Button size="sm" variant="outline" onClick={() => handleView(doc)}>
                           <Eye className="h-3 w-3" />
                         </Button>
-                        <Button size="sm" onClick={() => handleDownload(doc.id)}>
+                        <Button size="sm" onClick={() => handleDownload(doc)}>
                           <Download className="h-3 w-3" />
                         </Button>
                       </div>
@@ -752,6 +917,260 @@ export const AdvancedDocumentCenter: React.FC = () => {
           </div>
         </TabsContent>
       </Tabs>
+
+      {/* Upload Dialog */}
+      <Dialog open={isUploadDialogOpen} onOpenChange={setIsUploadDialogOpen}>
+        <DialogContent className="sm:max-w-lg">
+          <DialogHeader>
+            <DialogTitle>Upload de Documentos</DialogTitle>
+            <DialogDescription>
+              Selecione os arquivos que deseja enviar para o Centro de Documentos.
+            </DialogDescription>
+          </DialogHeader>
+          
+          <div className="space-y-4">
+            <div 
+              className="border-2 border-dashed border-border rounded-lg p-8 text-center cursor-pointer hover:border-primary/50 transition-colors"
+              onClick={() => fileInputRef.current?.click()}
+            >
+              <Upload className="h-10 w-10 mx-auto text-muted-foreground mb-4" />
+              <p className="text-sm font-medium">Clique para selecionar arquivos</p>
+              <p className="text-xs text-muted-foreground mt-1">
+                PDF, DOC, DOCX, XLS, XLSX, PPT, PPTX, TXT, JPG, PNG
+              </p>
+            </div>
+            
+            {uploadedFiles.length > 0 && (
+              <div className="space-y-2">
+                <Label>Arquivos selecionados ({uploadedFiles.length})</Label>
+                <ScrollArea className="h-32 border border-border rounded-md p-2">
+                  {uploadedFiles.map((file, index) => (
+                    <div key={index} className="flex items-center justify-between py-1">
+                      <div className="flex items-center gap-2">
+                        <File className="h-4 w-4 text-muted-foreground" />
+                        <span className="text-sm truncate max-w-[200px]">{file.name}</span>
+                        <span className="text-xs text-muted-foreground">
+                          ({(file.size / 1024).toFixed(1)} KB)
+                        </span>
+                      </div>
+                      <Button 
+                        size="sm" 
+                        variant="ghost" 
+                        onClick={() => setUploadedFiles(prev => prev.filter((_, i) => i !== index))}
+                      >
+                        <X className="h-4 w-4" />
+                      </Button>
+                    </div>
+                  ))}
+                </ScrollArea>
+              </div>
+            )}
+          </div>
+          
+          <DialogFooter>
+            <Button variant="outline" onClick={() => setIsUploadDialogOpen(false)}>
+              Cancelar
+            </Button>
+            <Button onClick={handleUploadSubmit} disabled={isUploading || uploadedFiles.length === 0}>
+              {isUploading ? (
+                <>
+                  <RefreshCw className="h-4 w-4 mr-2 animate-spin" />
+                  Enviando...
+                </>
+              ) : (
+                <>
+                  <Upload className="h-4 w-4 mr-2" />
+                  Enviar {uploadedFiles.length > 0 && `(${uploadedFiles.length})`}
+                </>
+              )}
+            </Button>
+          </DialogFooter>
+        </DialogContent>
+      </Dialog>
+
+      {/* New Document Dialog */}
+      <Dialog open={isNewDocDialogOpen} onOpenChange={setIsNewDocDialogOpen}>
+        <DialogContent className="sm:max-w-lg">
+          <DialogHeader>
+            <DialogTitle>Novo Documento</DialogTitle>
+            <DialogDescription>
+              Crie um novo documento no Centro de Documentos.
+            </DialogDescription>
+          </DialogHeader>
+          
+          <div className="space-y-4">
+            <div className="space-y-2">
+              <Label htmlFor="doc-title">Título *</Label>
+              <Input
+                id="doc-title"
+                placeholder="Título do documento"
+                value={newDocForm.title}
+                onChange={(e) => setNewDocForm(prev => ({ ...prev, title: e.target.value }))}
+              />
+            </div>
+            
+            <div className="space-y-2">
+              <Label htmlFor="doc-description">Descrição</Label>
+              <Textarea
+                id="doc-description"
+                placeholder="Descrição do documento"
+                value={newDocForm.description}
+                onChange={(e) => setNewDocForm(prev => ({ ...prev, description: e.target.value }))}
+              />
+            </div>
+            
+            <div className="space-y-2">
+              <Label htmlFor="doc-category">Categoria</Label>
+              <Select 
+                value={newDocForm.category} 
+                onValueChange={(value) => setNewDocForm(prev => ({ ...prev, category: value }))}
+              >
+                <SelectTrigger>
+                  <SelectValue />
+                </SelectTrigger>
+                <SelectContent>
+                  <SelectItem value="manuais">Manuais</SelectItem>
+                  <SelectItem value="relatórios">Relatórios</SelectItem>
+                  <SelectItem value="políticas">Políticas</SelectItem>
+                  <SelectItem value="certificados">Certificados</SelectItem>
+                </SelectContent>
+              </Select>
+            </div>
+            
+            <div className="space-y-2">
+              <Label htmlFor="doc-tags">Tags (separadas por vírgula)</Label>
+              <Input
+                id="doc-tags"
+                placeholder="tag1, tag2, tag3"
+                value={newDocForm.tags}
+                onChange={(e) => setNewDocForm(prev => ({ ...prev, tags: e.target.value }))}
+              />
+            </div>
+          </div>
+          
+          <DialogFooter>
+            <Button variant="outline" onClick={() => setIsNewDocDialogOpen(false)}>
+              Cancelar
+            </Button>
+            <Button onClick={handleNewDocSubmit}>
+              <Plus className="h-4 w-4 mr-2" />
+              Criar Documento
+            </Button>
+          </DialogFooter>
+        </DialogContent>
+      </Dialog>
+
+      {/* View Document Dialog */}
+      <Dialog open={isViewDialogOpen} onOpenChange={setIsViewDialogOpen}>
+        <DialogContent className="sm:max-w-2xl">
+          <DialogHeader>
+            <DialogTitle className="flex items-center gap-2">
+              <span className="text-2xl">{selectedDocument && getFileTypeIcon(selectedDocument.type)}</span>
+              {selectedDocument?.title}
+            </DialogTitle>
+            <DialogDescription>
+              {selectedDocument?.description}
+            </DialogDescription>
+          </DialogHeader>
+          
+          {selectedDocument && (
+            <ScrollArea className="max-h-[60vh]">
+              <div className="space-y-6">
+                <div className="flex items-center gap-2 flex-wrap">
+                  <Badge className={getStatusColor(selectedDocument.status)}>
+                    {getStatusIcon(selectedDocument.status)}
+                    <span className="ml-1 capitalize">{selectedDocument.status}</span>
+                  </Badge>
+                  <Badge variant="outline">v{selectedDocument.version}</Badge>
+                  <Badge variant="secondary">{selectedDocument.category}</Badge>
+                  {selectedDocument.isPublic ? (
+                    <Badge variant="outline" className="text-green-600">
+                      <Globe className="h-3 w-3 mr-1" />
+                      Público
+                    </Badge>
+                  ) : (
+                    <Badge variant="outline" className="text-yellow-600">
+                      <Lock className="h-3 w-3 mr-1" />
+                      Privado
+                    </Badge>
+                  )}
+                </div>
+                
+                <div className="grid grid-cols-2 gap-4 text-sm">
+                  <div>
+                    <span className="text-muted-foreground">Criado por:</span>
+                    <p className="font-medium">{selectedDocument.createdBy}</p>
+                  </div>
+                  <div>
+                    <span className="text-muted-foreground">Tamanho:</span>
+                    <p className="font-medium">{formatFileSize(selectedDocument.size)}</p>
+                  </div>
+                  <div>
+                    <span className="text-muted-foreground">Criado em:</span>
+                    <p className="font-medium">{selectedDocument.createdAt.toLocaleDateString()}</p>
+                  </div>
+                  <div>
+                    <span className="text-muted-foreground">Atualizado em:</span>
+                    <p className="font-medium">{selectedDocument.updatedAt.toLocaleDateString()}</p>
+                  </div>
+                </div>
+                
+                <div>
+                  <span className="text-muted-foreground text-sm">Tags:</span>
+                  <div className="flex flex-wrap gap-1 mt-1">
+                    {selectedDocument.tags.map((tag, index) => (
+                      <Badge key={index} variant="secondary" className="text-xs">
+                        {tag}
+                      </Badge>
+                    ))}
+                    {selectedDocument.tags.length === 0 && (
+                      <span className="text-xs text-muted-foreground">Nenhuma tag</span>
+                    )}
+                  </div>
+                </div>
+                
+                <div>
+                  <span className="text-muted-foreground text-sm">Colaboradores:</span>
+                  <div className="flex flex-wrap gap-2 mt-1">
+                    {selectedDocument.collaborators.map((collaborator, index) => (
+                      <Badge key={index} variant="outline" className="text-xs">
+                        <User className="h-3 w-3 mr-1" />
+                        {collaborator}
+                      </Badge>
+                    ))}
+                  </div>
+                </div>
+                
+                <div className="flex items-center gap-4 text-sm text-muted-foreground border-t border-border pt-4">
+                  <span className="flex items-center">
+                    <Eye className="h-4 w-4 mr-1" />
+                    {selectedDocument.viewCount} visualizações
+                  </span>
+                  <span className="flex items-center">
+                    <Download className="h-4 w-4 mr-1" />
+                    {selectedDocument.downloadCount} downloads
+                  </span>
+                </div>
+              </div>
+            </ScrollArea>
+          )}
+          
+          <DialogFooter>
+            <Button variant="outline" onClick={() => setIsViewDialogOpen(false)}>
+              Fechar
+            </Button>
+            {selectedDocument && (
+              <Button onClick={() => {
+                handleDownload(selectedDocument);
+                setIsViewDialogOpen(false);
+              }}>
+                <Download className="h-4 w-4 mr-2" />
+                Baixar
+              </Button>
+            )}
+          </DialogFooter>
+        </DialogContent>
+      </Dialog>
     </div>
   );
 };
