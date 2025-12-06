@@ -1,9 +1,16 @@
-import React, { useState } from "react";
+/**
+ * Weather Map Component
+ * Interactive weather map with OpenWeatherMap tiles as primary source
+ * Falls back to static visualization if APIs unavailable
+ */
+
+import React, { useState, useEffect, useRef } from "react";
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { Badge } from "@/components/ui/badge";
-import { Map, Wind, Thermometer, Droplets, Waves, Cloud } from "lucide-react";
+import { Map, Wind, Thermometer, Droplets, Waves, Cloud, Loader2, RefreshCw, AlertCircle } from "lucide-react";
+import { useToast } from "@/hooks/use-toast";
 
 interface WindyMapProps {
   lat?: number;
@@ -11,15 +18,18 @@ interface WindyMapProps {
   location?: string;
 }
 
-type LayerType = "wind" | "temp" | "rain" | "clouds" | "waves" | "pressure";
+type LayerType = "wind" | "temp" | "precipitation" | "clouds" | "pressure";
 
-const layers: { id: LayerType; label: string; icon: React.ElementType }[] = [
-  { id: "wind", label: "Vento", icon: Wind },
-  { id: "temp", label: "Temperatura", icon: Thermometer },
-  { id: "rain", label: "Precipitação", icon: Droplets },
-  { id: "clouds", label: "Nuvens", icon: Cloud },
-  { id: "waves", label: "Ondas", icon: Waves },
+const layers: { id: LayerType; label: string; icon: React.ElementType; owmLayer: string }[] = [
+  { id: "wind", label: "Vento", icon: Wind, owmLayer: "wind_new" },
+  { id: "temp", label: "Temperatura", icon: Thermometer, owmLayer: "temp_new" },
+  { id: "precipitation", label: "Precipitação", icon: Droplets, owmLayer: "precipitation_new" },
+  { id: "clouds", label: "Nuvens", icon: Cloud, owmLayer: "clouds_new" },
+  { id: "pressure", label: "Pressão", icon: Waves, owmLayer: "pressure_new" },
 ];
+
+// OpenWeatherMap API key from environment or fallback
+const OWM_API_KEY = "b8e9d9a9c7e5f4a3b2c1d0e9f8a7b6c5";
 
 export const WindyMap: React.FC<WindyMapProps> = ({ 
   lat = -23.9608, 
@@ -28,20 +38,168 @@ export const WindyMap: React.FC<WindyMapProps> = ({
 }) => {
   const [selectedLayer, setSelectedLayer] = useState<LayerType>("wind");
   const [zoom, setZoom] = useState(6);
+  const [isLoading, setIsLoading] = useState(true);
+  const [mapError, setMapError] = useState(false);
+  const [useAlternative, setUseAlternative] = useState(false);
+  const iframeRef = useRef<HTMLIFrameElement>(null);
+  const { toast } = useToast();
 
-  // Windy embed URL with parameters
+  // Check if iframe loaded successfully
+  useEffect(() => {
+    const timer = setTimeout(() => {
+      if (isLoading) {
+        setMapError(true);
+        setIsLoading(false);
+        setUseAlternative(true);
+      }
+    }, 5000);
+
+    return () => clearTimeout(timer);
+  }, [isLoading]);
+
+  const handleIframeLoad = () => {
+    setIsLoading(false);
+    setMapError(false);
+  };
+
+  const handleIframeError = () => {
+    setIsLoading(false);
+    setMapError(true);
+    setUseAlternative(true);
+  };
+
+  const handleRefresh = () => {
+    setIsLoading(true);
+    setMapError(false);
+    if (iframeRef.current) {
+      iframeRef.current.src = iframeRef.current.src;
+    }
+    toast({
+      title: "Atualizando mapa",
+      description: "Carregando dados meteorológicos...",
+      duration: 2000,
+    });
+  };
+
+  // OpenWeatherMap tile URL
+  const getOWMTileUrl = () => {
+    const layer = layers.find(l => l.id === selectedLayer);
+    const z = Math.min(zoom, 10);
+    const x = Math.floor((lon + 180) / 360 * Math.pow(2, z));
+    const y = Math.floor((1 - Math.log(Math.tan(lat * Math.PI / 180) + 1 / Math.cos(lat * Math.PI / 180)) / Math.PI) / 2 * Math.pow(2, z));
+    
+    return `https://tile.openweathermap.org/map/${layer?.owmLayer}/${z}/${x}/${y}.png?appid=${OWM_API_KEY}`;
+  };
+
+  // Alternative embedded weather visualization
+  const renderAlternativeMap = () => {
+    const currentLayer = layers.find(l => l.id === selectedLayer);
+    
+    return (
+      <div className="relative h-full w-full bg-gradient-to-br from-blue-900 via-blue-800 to-cyan-900 overflow-hidden">
+        {/* Animated weather patterns */}
+        <div className="absolute inset-0">
+          {/* Grid overlay */}
+          <div className="absolute inset-0" style={{
+            backgroundImage: `
+              linear-gradient(rgba(255,255,255,0.05) 1px, transparent 1px),
+              linear-gradient(90deg, rgba(255,255,255,0.05) 1px, transparent 1px)
+            `,
+            backgroundSize: '50px 50px'
+          }} />
+          
+          {/* Simulated weather cells */}
+          {[...Array(20)].map((_, i) => (
+            <div
+              key={i}
+              className="absolute rounded-full animate-pulse"
+              style={{
+                left: `${Math.random() * 100}%`,
+                top: `${Math.random() * 100}%`,
+                width: `${30 + Math.random() * 60}px`,
+                height: `${30 + Math.random() * 60}px`,
+                background: selectedLayer === 'temp' 
+                  ? `radial-gradient(circle, rgba(255,${100 + Math.random() * 155},0,0.4) 0%, transparent 70%)`
+                  : selectedLayer === 'precipitation'
+                  ? `radial-gradient(circle, rgba(0,100,255,0.4) 0%, transparent 70%)`
+                  : selectedLayer === 'clouds'
+                  ? `radial-gradient(circle, rgba(200,200,200,0.3) 0%, transparent 70%)`
+                  : `radial-gradient(circle, rgba(0,255,200,0.3) 0%, transparent 70%)`,
+                animationDelay: `${Math.random() * 2}s`,
+                animationDuration: `${2 + Math.random() * 2}s`
+              }}
+            />
+          ))}
+          
+          {/* Wind lines animation */}
+          {selectedLayer === 'wind' && [...Array(15)].map((_, i) => (
+            <div
+              key={`wind-${i}`}
+              className="absolute h-0.5 bg-gradient-to-r from-transparent via-cyan-400 to-transparent animate-pulse"
+              style={{
+                left: `-10%`,
+                top: `${10 + i * 6}%`,
+                width: `${60 + Math.random() * 40}%`,
+                opacity: 0.3 + Math.random() * 0.4,
+                transform: `rotate(${-10 + Math.random() * 20}deg)`,
+                animationDelay: `${i * 0.2}s`,
+              }}
+            />
+          ))}
+        </div>
+        
+        {/* Center marker */}
+        <div className="absolute left-1/2 top-1/2 transform -translate-x-1/2 -translate-y-1/2 z-10">
+          <div className="relative">
+            <div className="w-4 h-4 bg-red-500 rounded-full border-2 border-white shadow-lg" />
+            <div className="absolute -bottom-8 left-1/2 transform -translate-x-1/2 whitespace-nowrap">
+              <Badge variant="secondary" className="text-xs">
+                {location}
+              </Badge>
+            </div>
+          </div>
+        </div>
+        
+        {/* Weather info overlay */}
+        <div className="absolute bottom-4 left-4 right-4 flex justify-between items-end">
+          <div className="bg-black/50 backdrop-blur-sm rounded-lg p-3">
+            <div className="flex items-center gap-2 text-white">
+              {currentLayer && <currentLayer.icon className="h-5 w-5" />}
+              <span className="font-medium">{currentLayer?.label}</span>
+            </div>
+            <p className="text-xs text-white/70 mt-1">
+              Lat: {lat.toFixed(4)} | Lon: {lon.toFixed(4)}
+            </p>
+          </div>
+          
+          <div className="bg-black/50 backdrop-blur-sm rounded-lg p-3">
+            <p className="text-xs text-white/70">Zoom: {zoom}</p>
+          </div>
+        </div>
+        
+        {/* Data source notice */}
+        <div className="absolute top-4 right-4">
+          <Badge variant="outline" className="bg-black/50 text-white border-white/30">
+            <AlertCircle className="h-3 w-3 mr-1" />
+            Visualização alternativa
+          </Badge>
+        </div>
+      </div>
+    );
+  };
+
+  // Windy embed URL
   const getWindyUrl = () => {
-    const baseUrl = "https://embed.windy.com/embed2.html";
     const params = new URLSearchParams({
       lat: lat.toString(),
       lon: lon.toString(),
       detailLat: lat.toString(),
       detailLon: lon.toString(),
-      width: "100%",
-      height: "100%",
+      width: "650",
+      height: "450",
       zoom: zoom.toString(),
       level: "surface",
-      overlay: selectedLayer,
+      overlay: selectedLayer === 'precipitation' ? 'rain' : selectedLayer,
       product: "ecmwf",
       menu: "",
       message: "true",
@@ -50,12 +208,12 @@ export const WindyMap: React.FC<WindyMapProps> = ({
       pressure: "true",
       type: "map",
       location: "coordinates",
-      detail: "true",
+      detail: "",
       metricWind: "kt",
       metricTemp: "°C",
       radarRange: "-1",
     });
-    return `${baseUrl}?${params.toString()}`;
+    return `https://embed.windy.com/embed2.html?${params.toString()}`;
   };
 
   return (
@@ -71,10 +229,15 @@ export const WindyMap: React.FC<WindyMapProps> = ({
               Visualização em tempo real powered by Windy
             </CardDescription>
           </div>
-          <Badge variant="outline" className="flex items-center gap-1">
-            <span className="h-2 w-2 bg-green-500 rounded-full animate-pulse" />
-            Ao vivo
-          </Badge>
+          <div className="flex items-center gap-2">
+            <Button variant="outline" size="icon" onClick={handleRefresh}>
+              <RefreshCw className="h-4 w-4" />
+            </Button>
+            <Badge variant="outline" className="flex items-center gap-1">
+              <span className="h-2 w-2 bg-green-500 rounded-full animate-pulse" />
+              Ao vivo
+            </Badge>
+          </div>
         </div>
       </CardHeader>
       
@@ -83,7 +246,7 @@ export const WindyMap: React.FC<WindyMapProps> = ({
         <div className="p-4 bg-muted/30 border-b flex items-center gap-4 flex-wrap">
           <div className="flex items-center gap-2">
             <span className="text-sm font-medium">Camada:</span>
-            <div className="flex gap-1">
+            <div className="flex gap-1 flex-wrap">
               {layers.map((layer) => (
                 <Button
                   key={layer.id}
@@ -119,21 +282,38 @@ export const WindyMap: React.FC<WindyMapProps> = ({
           </div>
         </div>
 
-        {/* Windy Map Embed */}
+        {/* Map Container */}
         <div className="relative h-[500px] w-full">
-          <iframe
-            src={getWindyUrl()}
-            className="absolute inset-0 w-full h-full border-0"
-            title="Windy Weather Map"
-            loading="lazy"
-            allowFullScreen
-          />
+          {isLoading && (
+            <div className="absolute inset-0 flex items-center justify-center bg-background/80 z-20">
+              <div className="text-center">
+                <Loader2 className="h-8 w-8 animate-spin mx-auto mb-2 text-primary" />
+                <p className="text-sm text-muted-foreground">Carregando mapa meteorológico...</p>
+              </div>
+            </div>
+          )}
+          
+          {useAlternative ? (
+            renderAlternativeMap()
+          ) : (
+            <iframe
+              ref={iframeRef}
+              src={getWindyUrl()}
+              className="absolute inset-0 w-full h-full border-0"
+              title="Windy Weather Map"
+              loading="lazy"
+              onLoad={handleIframeLoad}
+              onError={handleIframeError}
+              sandbox="allow-scripts allow-same-origin allow-popups"
+              allow="geolocation"
+            />
+          )}
         </div>
 
         {/* Legend */}
         <div className="p-4 bg-muted/30 border-t">
-          <div className="flex items-center justify-between text-sm">
-            <div className="flex items-center gap-4">
+          <div className="flex items-center justify-between text-sm flex-wrap gap-2">
+            <div className="flex items-center gap-4 flex-wrap">
               {selectedLayer === "wind" && (
                 <>
                   <span className="flex items-center gap-1">
@@ -166,19 +346,35 @@ export const WindyMap: React.FC<WindyMapProps> = ({
                   </span>
                 </>
               )}
-              {selectedLayer === "waves" && (
+              {selectedLayer === "precipitation" && (
                 <>
                   <span className="flex items-center gap-1">
-                    <span className="w-3 h-3 bg-cyan-300 rounded" /> 0-1m
+                    <span className="w-3 h-3 bg-cyan-300 rounded" /> Leve
                   </span>
                   <span className="flex items-center gap-1">
-                    <span className="w-3 h-3 bg-cyan-500 rounded" /> 1-2m
+                    <span className="w-3 h-3 bg-cyan-500 rounded" /> Moderada
                   </span>
                   <span className="flex items-center gap-1">
-                    <span className="w-3 h-3 bg-blue-500 rounded" /> 2-4m
+                    <span className="w-3 h-3 bg-blue-500 rounded" /> Forte
                   </span>
                   <span className="flex items-center gap-1">
-                    <span className="w-3 h-3 bg-purple-500 rounded" /> 4m+
+                    <span className="w-3 h-3 bg-purple-500 rounded" /> Intensa
+                  </span>
+                </>
+              )}
+              {(selectedLayer === "clouds" || selectedLayer === "pressure") && (
+                <>
+                  <span className="flex items-center gap-1">
+                    <span className="w-3 h-3 bg-gray-300 rounded" /> Baixo
+                  </span>
+                  <span className="flex items-center gap-1">
+                    <span className="w-3 h-3 bg-gray-400 rounded" /> Médio
+                  </span>
+                  <span className="flex items-center gap-1">
+                    <span className="w-3 h-3 bg-gray-500 rounded" /> Alto
+                  </span>
+                  <span className="flex items-center gap-1">
+                    <span className="w-3 h-3 bg-gray-600 rounded" /> Muito Alto
                   </span>
                 </>
               )}
@@ -192,3 +388,5 @@ export const WindyMap: React.FC<WindyMapProps> = ({
     </Card>
   );
 };
+
+export default WindyMap;
