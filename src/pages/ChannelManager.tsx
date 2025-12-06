@@ -1,10 +1,10 @@
 import { ModulePageWrapper } from "@/components/ui/module-page-wrapper";
-import ChannelManagerHub from "@/components/channel-manager/ChannelManagerHub";
+import ChannelManagerProfessional from "@/components/channel-manager/ChannelManagerProfessional";
 
 const ChannelManager = () => {
   return (
     <ModulePageWrapper gradient="purple">
-      <ChannelManagerHub />
+      <ChannelManagerProfessional />
     </ModulePageWrapper>
   );
 };
