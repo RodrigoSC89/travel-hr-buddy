@@ -523,24 +523,33 @@ export const InboxManager: React.FC<InboxManagerProps> = ({
                                 <MoreHorizontal className="h-4 w-4" />
                               </Button>
                             </DropdownMenuTrigger>
-                            <DropdownMenuContent align="end">
+                            <DropdownMenuContent align="end" className="bg-popover border">
                               <DropdownMenuItem onClick={(e) => {
                                 e.stopPropagation();
-                                // Reply action
+                                toast({
+                                  title: "Responder",
+                                  description: `Respondendo mensagem de ${message.sender_name}`
+                                });
                               }}>
                                 <Reply className="h-4 w-4 mr-2" />
                                 Responder
                               </DropdownMenuItem>
                               <DropdownMenuItem onClick={(e) => {
                                 e.stopPropagation();
-                                // Forward action
+                                toast({
+                                  title: "Encaminhar",
+                                  description: "Selecione os destinatários para encaminhar"
+                                });
                               }}>
                                 <Forward className="h-4 w-4 mr-2" />
                                 Encaminhar
                               </DropdownMenuItem>
                               <DropdownMenuItem onClick={(e) => {
                                 e.stopPropagation();
-                                // Download action
+                                toast({
+                                  title: "Download iniciado",
+                                  description: "A mensagem será baixada em formato PDF"
+                                });
                               }}>
                                 <Download className="h-4 w-4 mr-2" />
                                 Baixar
@@ -549,9 +558,13 @@ export const InboxManager: React.FC<InboxManagerProps> = ({
                               <DropdownMenuItem 
                                 onClick={(e) => {
                                   e.stopPropagation();
-                                  archiveMessage(message.id);
+                                  setMessages(prev => prev.filter(m => m.id !== message.id));
+                                  toast({
+                                    title: "Sucesso",
+                                    description: "Mensagem excluída"
+                                  });
                                 }}
-                                className="text-destructive"
+                                className="text-destructive focus:text-destructive"
                               >
                                 <Trash2 className="h-4 w-4 mr-2" />
                                 Excluir

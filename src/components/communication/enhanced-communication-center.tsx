@@ -116,7 +116,12 @@ export const EnhancedCommunicationCenter = () => {
           </div>
           
           <div className="flex items-center gap-2">
-            <Button variant="outline" size="sm" className="gap-2">
+            <Button 
+              variant="outline" 
+              size="sm" 
+              className="gap-2"
+              onClick={() => setActiveTab("notifications")}
+            >
               <Bell className="h-4 w-4" />
               Notificações
               {stats.unreadMessages > 0 && (
@@ -125,7 +130,11 @@ export const EnhancedCommunicationCenter = () => {
                 </Badge>
               )}
             </Button>
-            <Button size="sm" className="gap-2">
+            <Button 
+              size="sm" 
+              className="gap-2"
+              onClick={() => setActiveTab("compose")}
+            >
               <PlusCircle className="h-4 w-4" />
               Nova Mensagem
             </Button>
@@ -221,7 +230,11 @@ export const EnhancedCommunicationCenter = () => {
                     Clique na caixa de entrada para visualizar
                   </p>
                 </div>
-                <Button variant="destructive" size="sm">
+                <Button 
+                  variant="destructive" 
+                  size="sm"
+                  onClick={() => setActiveTab("inbox")}
+                >
                   Ver Agora
                 </Button>
               </div>

@@ -588,14 +588,15 @@ export const MessageComposer: React.FC<MessageComposerProps> = ({
                 className="hidden"
                 id="file-upload"
               />
-              <label htmlFor="file-upload">
-                <Button variant="outline" size="sm" asChild>
-                  <span className="cursor-pointer">
-                    <Paperclip className="h-4 w-4 mr-2" />
-                    Adicionar Arquivo
-                  </span>
-                </Button>
-              </label>
+              <Button 
+                variant="outline" 
+                size="sm" 
+                onClick={() => document.getElementById("file-upload")?.click()}
+                type="button"
+              >
+                <Paperclip className="h-4 w-4 mr-2" />
+                Adicionar Arquivo
+              </Button>
               <Button variant="outline" size="sm" onClick={handleImageUpload} aria-label="Adicionar imagem">
                 <Image className="h-4 w-4 mr-2" />
                 Imagem
