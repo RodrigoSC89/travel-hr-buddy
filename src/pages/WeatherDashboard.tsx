@@ -162,10 +162,10 @@ export default function WeatherDashboard() {
       setWeatherData(mockWeatherData);
       
       // Save to database silently
-      await supabase.from("weather_forecast").insert({
+      supabase.from("weather_forecast").insert({
         location: { lat, lng: lon, name: locationName },
         forecast: mockWeatherData.current
-      }).catch(() => {});
+      }).then(() => {}).catch(() => {});
       
       toast({
         title: "Dados atualizados",
