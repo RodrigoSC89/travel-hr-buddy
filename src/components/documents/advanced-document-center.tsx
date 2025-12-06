@@ -112,6 +112,9 @@ export const AdvancedDocumentCenter: React.FC = () => {
     isPublic: false
   });
   const [isUploading, setIsUploading] = useState(false);
+  const [isTemplateDialogOpen, setIsTemplateDialogOpen] = useState(false);
+  const [selectedTemplate, setSelectedTemplate] = useState<DocumentTemplate | null>(null);
+  const [templateFormData, setTemplateFormData] = useState<Record<string, string>>({});
 
   // Dados simulados para demonstração
   const generateMockData = () => {
@@ -485,6 +488,78 @@ Este é um documento de demonstração do Centro de Documentos.
     });
   };
 
+  const handleUseTemplate = (template: DocumentTemplate) => {
+    setSelectedTemplate(template);
+    const initialData: Record<string, string> = {};
+    template.fields.forEach(field => {
+      initialData[field.name] = "";
+    });
+    setTemplateFormData(initialData);
+    setIsTemplateDialogOpen(true);
+  };
+
+  const handleTemplateSubmit = () => {
+    if (!selectedTemplate) return;
+
+    // Validate required fields
+    const missingFields = selectedTemplate.fields
+      .filter(field => field.required && !templateFormData[field.name]?.trim())
+      .map(field => field.name);
+
+    if (missingFields.length > 0) {
+      toast({
+        title: "Campos obrigatórios",
+        description: `Por favor, preencha: ${missingFields.join(", ")}`,
+        variant: "destructive"
+      });
+      return;
+    }
+
+    // Create document content from template fields
+    const content = selectedTemplate.fields
+      .map(field => `${field.name}: ${templateFormData[field.name] || "N/A"}`)
+      .join("\n");
+
+    const newDoc: Document = {
+      id: `template-${Date.now()}`,
+      title: `${selectedTemplate.name} - ${new Date().toLocaleDateString()}`,
+      description: `Documento gerado a partir do template: ${selectedTemplate.name}`,
+      type: "docx",
+      category: selectedTemplate.category,
+      size: content.length * 2,
+      status: "draft",
+      version: "1.0",
+      createdAt: new Date(),
+      updatedAt: new Date(),
+      createdBy: user?.email || "Usuário",
+      tags: [selectedTemplate.category, "template"],
+      isPublic: false,
+      downloadCount: 0,
+      viewCount: 0,
+      collaborators: [user?.email || "Usuário"],
+      content: content,
+      approvals: []
+    };
+
+    setDocuments(prev => [newDoc, ...prev]);
+    
+    // Update template usage count
+    setTemplates(prev => prev.map(t => 
+      t.id === selectedTemplate.id 
+        ? { ...t, usageCount: t.usageCount + 1 }
+        : t
+    ));
+
+    setTemplateFormData({});
+    setSelectedTemplate(null);
+    setIsTemplateDialogOpen(false);
+
+    toast({
+      title: "Documento criado",
+      description: `Documento criado a partir do template "${selectedTemplate.name}".`,
+    });
+  };
+
   if (isLoading) {
     return (
       <div className="flex items-center justify-center h-96">
@@ -799,7 +874,7 @@ Este é um documento de demonstração do Centro de Documentos.
                           Usado {template.usageCount} vezes
                         </div>
                         
-                        <Button className="w-full" size="sm">
+                        <Button className="w-full" size="sm" onClick={() => handleUseTemplate(template)}>
                           Usar Template
                         </Button>
                       </div>
@@ -1168,6 +1243,112 @@ Este é um documento de demonstração do Centro de Documentos.
                 Baixar
               </Button>
             )}
+          </DialogFooter>
+        </DialogContent>
+      </Dialog>
+
+      {/* Use Template Dialog */}
+      <Dialog open={isTemplateDialogOpen} onOpenChange={setIsTemplateDialogOpen}>
+        <DialogContent className="sm:max-w-lg">
+          <DialogHeader>
+            <DialogTitle>{selectedTemplate?.name}</DialogTitle>
+            <DialogDescription>
+              {selectedTemplate?.description}
+            </DialogDescription>
+          </DialogHeader>
+          
+          {selectedTemplate && (
+            <ScrollArea className="max-h-[60vh]">
+              <div className="space-y-4 pr-4">
+                {selectedTemplate.fields.map((field, index) => (
+                  <div key={index} className="space-y-2">
+                    <Label htmlFor={`field-${index}`}>
+                      {field.name} {field.required && <span className="text-destructive">*</span>}
+                    </Label>
+                    
+                    {field.type === "text" && (
+                      <Input
+                        id={`field-${index}`}
+                        placeholder={`Digite ${field.name.toLowerCase()}`}
+                        value={templateFormData[field.name] || ""}
+                        onChange={(e) => setTemplateFormData(prev => ({
+                          ...prev,
+                          [field.name]: e.target.value
+                        }))}
+                      />
+                    )}
+                    
+                    {field.type === "number" && (
+                      <Input
+                        id={`field-${index}`}
+                        type="number"
+                        placeholder={`Digite ${field.name.toLowerCase()}`}
+                        value={templateFormData[field.name] || ""}
+                        onChange={(e) => setTemplateFormData(prev => ({
+                          ...prev,
+                          [field.name]: e.target.value
+                        }))}
+                      />
+                    )}
+                    
+                    {field.type === "date" && (
+                      <Input
+                        id={`field-${index}`}
+                        type="date"
+                        value={templateFormData[field.name] || ""}
+                        onChange={(e) => setTemplateFormData(prev => ({
+                          ...prev,
+                          [field.name]: e.target.value
+                        }))}
+                      />
+                    )}
+                    
+                    {field.type === "textarea" && (
+                      <Textarea
+                        id={`field-${index}`}
+                        placeholder={`Digite ${field.name.toLowerCase()}`}
+                        value={templateFormData[field.name] || ""}
+                        onChange={(e) => setTemplateFormData(prev => ({
+                          ...prev,
+                          [field.name]: e.target.value
+                        }))}
+                      />
+                    )}
+                    
+                    {field.type === "select" && field.options && (
+                      <Select 
+                        value={templateFormData[field.name] || ""} 
+                        onValueChange={(value) => setTemplateFormData(prev => ({
+                          ...prev,
+                          [field.name]: value
+                        }))}
+                      >
+                        <SelectTrigger>
+                          <SelectValue placeholder={`Selecione ${field.name.toLowerCase()}`} />
+                        </SelectTrigger>
+                        <SelectContent>
+                          {field.options.map((option, optIndex) => (
+                            <SelectItem key={optIndex} value={option}>
+                              {option}
+                            </SelectItem>
+                          ))}
+                        </SelectContent>
+                      </Select>
+                    )}
+                  </div>
+                ))}
+              </div>
+            </ScrollArea>
+          )}
+          
+          <DialogFooter>
+            <Button variant="outline" onClick={() => setIsTemplateDialogOpen(false)}>
+              Cancelar
+            </Button>
+            <Button onClick={handleTemplateSubmit}>
+              <FileText className="h-4 w-4 mr-2" />
+              Criar Documento
+            </Button>
           </DialogFooter>
         </DialogContent>
       </Dialog>
