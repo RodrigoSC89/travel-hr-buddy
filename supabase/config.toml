@@ -52,6 +52,15 @@ verify_jwt = true
 [functions.api-gateway]
 verify_jwt = false
 
+[functions.satellite-ai-copilot]
+verify_jwt = false
+
+[functions.fuel-ai-copilot]
+verify_jwt = false
+
+[functions.weather-ai-copilot]
+verify_jwt = false
+
 # Cron Jobs - Scheduled Functions
 # Documentation: https://supabase.com/docs/guides/functions/schedule-functions
 # Format: cron expression (minute hour day month day_of_week)
