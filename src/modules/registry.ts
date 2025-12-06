@@ -1709,6 +1709,32 @@ export const MODULE_REGISTRY: Record<string, ModuleDefinition> = {
     icon: "Sparkles",
     lazy: true,
   },
+
+  "optimization.performance-optimizer": {
+    id: "optimization.performance-optimizer",
+    name: "Otimização de Performance",
+    category: "features",
+    path: "pages/PerformanceOptimizer",
+    description: "Análise e otimização automática de sistemas",
+    status: "active",
+    completeness: "100%",
+    route: "/performance-optimizer",
+    icon: "Zap",
+    lazy: true,
+  },
+
+  "features.gamification": {
+    id: "features.gamification",
+    name: "Gamificação",
+    category: "features",
+    path: "pages/Gamification",
+    description: "Sistema de engajamento através de mecânicas de jogos",
+    status: "active",
+    completeness: "100%",
+    route: "/gamification",
+    icon: "Trophy",
+    lazy: true,
+  },
 };
 
 export function getModule(id: string): ModuleDefinition | undefined {

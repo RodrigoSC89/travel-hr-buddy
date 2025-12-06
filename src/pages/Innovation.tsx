@@ -398,7 +398,8 @@ const Innovation = () => {
 
         <TabsContent value="optimization" className="space-y-6">
           <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-            <Card className="hover:shadow-lg transition-all duration-300 group">
+            <Card className="hover:shadow-lg transition-all duration-300 group cursor-pointer"
+              onClick={() => handleModuleAccess("/performance-optimizer")}>
               <CardHeader>
                 <CardTitle className="flex items-center gap-2">
                   <Zap className="h-5 w-5 text-yellow-500" />
@@ -418,7 +419,8 @@ const Innovation = () => {
               </CardContent>
             </Card>
 
-            <Card className="hover:shadow-lg transition-all duration-300 group">
+            <Card className="hover:shadow-lg transition-all duration-300 group cursor-pointer"
+              onClick={() => handleModuleAccess("/gamification")}>
               <CardHeader>
                 <CardTitle className="flex items-center gap-2">
                   <Trophy className="h-5 w-5 text-orange-500" />
