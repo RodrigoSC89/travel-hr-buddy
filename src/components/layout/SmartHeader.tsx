@@ -4,8 +4,14 @@ import { Button } from "@/components/ui/button";
 import { useTheme } from "@/components/layout/theme-provider";
 import { SimpleGlobalSearch } from "@/components/ui/simple-global-search";
 import { UserMenu } from "@/components/auth/user-menu";
-import { AlertsDialog } from "@/components/layout/AlertsDialog";
-import { QuickCopilotDialog } from "@/components/layout/QuickCopilotDialog";
+
+// Lazy load dialogs para evitar problemas de hooks
+const AlertsDialog = React.lazy(() => 
+  import("@/components/layout/AlertsDialog").then(m => ({ default: m.AlertsDialog }))
+);
+const QuickCopilotDialog = React.lazy(() => 
+  import("@/components/layout/QuickCopilotDialog").then(m => ({ default: m.QuickCopilotDialog }))
+);
 
 export function SmartHeader() {
   const { theme, setTheme } = useTheme();
@@ -55,7 +61,7 @@ export function SmartHeader() {
           >
             <Bell className="w-5 h-5" />
             {notificationCount > 0 && (
-              <span className="absolute -top-1 -right-1 bg-red-500 text-white text-xs rounded-full w-5 h-5 flex items-center justify-center font-bold" aria-label={`${notificationCount} notificações não lidas`}>
+              <span className="absolute -top-1 -right-1 bg-red-500 text-white text-xs rounded-full w-5 h-5 flex items-center justify-center font-bold">
                 {notificationCount}
               </span>
             )}
@@ -78,9 +84,15 @@ export function SmartHeader() {
         </div>
       </header>
 
-      {/* Dialogs */}
-      <AlertsDialog open={alertsOpen} onOpenChange={setAlertsOpen} />
-      <QuickCopilotDialog open={copilotOpen} onOpenChange={setCopilotOpen} />
+      {/* Dialogs - Lazy loaded */}
+      <React.Suspense fallback={null}>
+        {alertsOpen && (
+          <AlertsDialog open={alertsOpen} onOpenChange={setAlertsOpen} />
+        )}
+        {copilotOpen && (
+          <QuickCopilotDialog open={copilotOpen} onOpenChange={setCopilotOpen} />
+        )}
+      </React.Suspense>
     </>
   );
 }
