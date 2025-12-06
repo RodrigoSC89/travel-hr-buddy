@@ -63,9 +63,7 @@ export const AdminPanel: React.FC = () => {
                 </CardDescription>
               </div>
               <Button asChild>
-                <Link to="/admin/control-center">
-                  Acessar Control Center
-                </Link>
+                <Link to="/admin/control-center">Acessar Control Center</Link>
               </Button>
             </div>
           </CardHeader>
