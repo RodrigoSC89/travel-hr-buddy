@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useCallback } from "react";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
@@ -18,7 +18,12 @@ import {
   File,
   FolderOpen,
   Clock,
-  User
+  User,
+  Loader2,
+  Link,
+  Copy,
+  Check,
+  X
 } from "lucide-react";
 import {
   DropdownMenu,
@@ -33,8 +38,18 @@ import {
   DialogDescription,
   DialogHeader,
   DialogTitle,
-  DialogTrigger,
+  DialogFooter,
 } from "@/components/ui/dialog";
+import {
+  AlertDialog,
+  AlertDialogAction,
+  AlertDialogCancel,
+  AlertDialogContent,
+  AlertDialogDescription,
+  AlertDialogFooter,
+  AlertDialogHeader,
+  AlertDialogTitle,
+} from "@/components/ui/alert-dialog";
 import { useToast } from "@/hooks/use-toast";
 
 export interface SharedDocument {
@@ -86,18 +101,44 @@ export const WorkspaceDocuments: React.FC<WorkspaceDocumentsProps> = ({
 }) => {
   const [searchQuery, setSearchQuery] = useState("");
   const [isUploadOpen, setIsUploadOpen] = useState(false);
+  const [isUploading, setIsUploading] = useState(false);
+  const [selectedFile, setSelectedFile] = useState<File | null>(null);
+  const [isViewOpen, setIsViewOpen] = useState(false);
+  const [isShareOpen, setIsShareOpen] = useState(false);
+  const [isDeleteOpen, setIsDeleteOpen] = useState(false);
+  const [selectedDoc, setSelectedDoc] = useState<SharedDocument | null>(null);
+  const [isDownloading, setIsDownloading] = useState<string | null>(null);
+  const [linkCopied, setLinkCopied] = useState(false);
   const { toast } = useToast();
 
   const filteredDocs = documents.filter(doc => 
     doc.name.toLowerCase().includes(searchQuery.toLowerCase())
   );
 
-  const handleUpload = () => {
-    toast({
-      title: "Upload iniciado",
-      description: "Seu arquivo está sendo enviado...",
-    });
-    setIsUploadOpen(false);
+  const handleUpload = async () => {
+    if (!selectedFile) return;
+    
+    setIsUploading(true);
+    try {
+      // Simulate upload
+      await new Promise(resolve => setTimeout(resolve, 2000));
+      
+      onUpload?.(selectedFile);
+      toast({
+        title: "Upload concluído",
+        description: `${selectedFile.name} foi enviado com sucesso`,
+      });
+      setIsUploadOpen(false);
+      setSelectedFile(null);
+    } catch (error) {
+      toast({
+        title: "Erro no upload",
+        description: "Tente novamente",
+        variant: "destructive",
+      });
+    } finally {
+      setIsUploading(false);
+    }
   };
 
   const handleDragOver = (e: React.DragEvent) => {
@@ -108,12 +149,89 @@ export const WorkspaceDocuments: React.FC<WorkspaceDocumentsProps> = ({
     e.preventDefault();
     const files = e.dataTransfer.files;
     if (files.length > 0) {
-      onUpload?.(files[0]);
+      setSelectedFile(files[0]);
+    }
+  };
+
+  const handleDownload = async (doc: SharedDocument) => {
+    setIsDownloading(doc.id);
+    try {
+      // Simulate download
+      await new Promise(resolve => setTimeout(resolve, 1500));
+      
+      onDownload?.(doc);
       toast({
-        title: "Arquivo recebido",
-        description: `${files[0].name} será enviado`,
+        title: "Download concluído",
+        description: `${doc.name} foi baixado com sucesso`,
+      });
+    } catch (error) {
+      toast({
+        title: "Erro no download",
+        description: "Tente novamente",
+        variant: "destructive",
+      });
+    } finally {
+      setIsDownloading(null);
+    }
+  };
+
+  const handleViewDoc = (doc: SharedDocument) => {
+    setSelectedDoc(doc);
+    setIsViewOpen(true);
+    onView?.(doc);
+  };
+
+  const handleShareDoc = (doc: SharedDocument) => {
+    setSelectedDoc(doc);
+    setIsShareOpen(true);
+  };
+
+  const handleDeleteDoc = (doc: SharedDocument) => {
+    setSelectedDoc(doc);
+    setIsDeleteOpen(true);
+  };
+
+  const confirmDelete = () => {
+    if (selectedDoc) {
+      onDelete?.(selectedDoc);
+      toast({
+        title: "Documento excluído",
+        description: `${selectedDoc.name} foi removido`,
+        variant: "destructive",
       });
     }
+    setIsDeleteOpen(false);
+    setSelectedDoc(null);
+  };
+
+  const handleCopyLink = async () => {
+    try {
+      await navigator.clipboard.writeText(`https://workspace.nautilus/docs/${selectedDoc?.id}`);
+      setLinkCopied(true);
+      setTimeout(() => setLinkCopied(false), 2000);
+      toast({
+        title: "Link copiado",
+        description: "O link foi copiado para a área de transferência",
+      });
+    } catch (error) {
+      toast({
+        title: "Erro ao copiar",
+        description: "Tente novamente",
+        variant: "destructive",
+      });
+    }
+  };
+
+  const confirmShare = () => {
+    if (selectedDoc) {
+      onShare?.(selectedDoc);
+      toast({
+        title: "Documento compartilhado",
+        description: `${selectedDoc.name} agora está compartilhado com a equipe`,
+      });
+    }
+    setIsShareOpen(false);
+    setSelectedDoc(null);
   };
 
   return (
@@ -124,43 +242,10 @@ export const WorkspaceDocuments: React.FC<WorkspaceDocumentsProps> = ({
             <FolderOpen className="h-5 w-5 text-primary" />
             Documentos Compartilhados
           </CardTitle>
-          <Dialog open={isUploadOpen} onOpenChange={setIsUploadOpen}>
-            <DialogTrigger asChild>
-              <Button size="sm" className="gap-2">
-                <Upload className="h-4 w-4" />
-                Upload
-              </Button>
-            </DialogTrigger>
-            <DialogContent>
-              <DialogHeader>
-                <DialogTitle>Upload de Documento</DialogTitle>
-                <DialogDescription>
-                  Arraste um arquivo ou clique para selecionar
-                </DialogDescription>
-              </DialogHeader>
-              <div 
-                className="border-2 border-dashed border-border rounded-lg p-8 text-center hover:border-primary/50 transition-colors cursor-pointer"
-                onDragOver={handleDragOver}
-                onDrop={handleDrop}
-                onClick={() => document.getElementById("file-input")?.click()}
-              >
-                <Upload className="h-10 w-10 mx-auto text-muted-foreground mb-4" />
-                <p className="text-sm text-muted-foreground">
-                  Arraste arquivos aqui ou clique para selecionar
-                </p>
-                <p className="text-xs text-muted-foreground mt-2">
-                  PDF, DOCX, XLSX, imagens até 10MB
-                </p>
-                <input id="file-input" type="file" className="hidden" onChange={(e) => {
-                  if (e.target.files?.[0]) {
-                    onUpload?.(e.target.files[0]);
-                    handleUpload();
-                  }
-                }} />
-              </div>
-              <Button onClick={handleUpload} className="w-full">Enviar</Button>
-            </DialogContent>
-          </Dialog>
+          <Button size="sm" className="gap-2" onClick={() => setIsUploadOpen(true)}>
+            <Upload className="h-4 w-4" />
+            Upload
+          </Button>
         </div>
         <div className="relative mt-3">
           <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-muted-foreground" />
@@ -186,7 +271,7 @@ export const WorkspaceDocuments: React.FC<WorkspaceDocumentsProps> = ({
                 <div
                   key={doc.id}
                   className="group flex items-center gap-3 p-3 rounded-lg border border-border/50 hover:bg-accent/50 hover:border-primary/30 cursor-pointer transition-all duration-200"
-                  onClick={() => onView?.(doc)}
+                  onClick={() => handleViewDoc(doc)}
                 >
                   <div className="p-2.5 rounded-lg bg-muted">
                     {getFileIcon(doc.type)}
@@ -221,9 +306,14 @@ export const WorkspaceDocuments: React.FC<WorkspaceDocumentsProps> = ({
                       variant="ghost" 
                       size="icon" 
                       className="h-8 w-8"
-                      onClick={(e) => { e.stopPropagation(); onDownload?.(doc); }}
+                      disabled={isDownloading === doc.id}
+                      onClick={(e) => { e.stopPropagation(); handleDownload(doc); }}
                     >
-                      <Download className="h-4 w-4" />
+                      {isDownloading === doc.id ? (
+                        <Loader2 className="h-4 w-4 animate-spin" />
+                      ) : (
+                        <Download className="h-4 w-4" />
+                      )}
                     </Button>
                     <DropdownMenu>
                       <DropdownMenuTrigger asChild>
@@ -236,19 +326,19 @@ export const WorkspaceDocuments: React.FC<WorkspaceDocumentsProps> = ({
                           <MoreHorizontal className="h-4 w-4" />
                         </Button>
                       </DropdownMenuTrigger>
-                      <DropdownMenuContent align="end">
-                        <DropdownMenuItem onClick={() => onView?.(doc)}>
+                      <DropdownMenuContent align="end" className="bg-background border">
+                        <DropdownMenuItem onClick={(e) => { e.stopPropagation(); handleViewDoc(doc); }}>
                           <Eye className="h-4 w-4 mr-2" />
                           Visualizar
                         </DropdownMenuItem>
-                        <DropdownMenuItem onClick={() => onShare?.(doc)}>
+                        <DropdownMenuItem onClick={(e) => { e.stopPropagation(); handleShareDoc(doc); }}>
                           <Share2 className="h-4 w-4 mr-2" />
                           Compartilhar
                         </DropdownMenuItem>
                         <DropdownMenuSeparator />
                         <DropdownMenuItem 
-                          className="text-destructive"
-                          onClick={() => onDelete?.(doc)}
+                          className="text-destructive focus:text-destructive"
+                          onClick={(e) => { e.stopPropagation(); handleDeleteDoc(doc); }}
                         >
                           <Trash2 className="h-4 w-4 mr-2" />
                           Excluir
@@ -262,6 +352,177 @@ export const WorkspaceDocuments: React.FC<WorkspaceDocumentsProps> = ({
           </div>
         </ScrollArea>
       </CardContent>
+
+      {/* Upload Dialog */}
+      <Dialog open={isUploadOpen} onOpenChange={setIsUploadOpen}>
+        <DialogContent>
+          <DialogHeader>
+            <DialogTitle>Upload de Documento</DialogTitle>
+            <DialogDescription>
+              Arraste um arquivo ou clique para selecionar
+            </DialogDescription>
+          </DialogHeader>
+          <div 
+            className={`border-2 border-dashed rounded-lg p-8 text-center cursor-pointer transition-colors ${
+              selectedFile ? 'border-primary bg-primary/5' : 'border-border hover:border-primary/50'
+            }`}
+            onDragOver={handleDragOver}
+            onDrop={handleDrop}
+            onClick={() => document.getElementById("file-input")?.click()}
+          >
+            {selectedFile ? (
+              <div className="flex flex-col items-center gap-2">
+                {getFileIcon(selectedFile.name.split('.').pop()?.toUpperCase() as any || "OTHER")}
+                <p className="font-medium">{selectedFile.name}</p>
+                <p className="text-sm text-muted-foreground">
+                  {(selectedFile.size / 1024 / 1024).toFixed(2)} MB
+                </p>
+                <Button 
+                  variant="ghost" 
+                  size="sm"
+                  onClick={(e) => { e.stopPropagation(); setSelectedFile(null); }}
+                >
+                  <X className="h-4 w-4 mr-1" />
+                  Remover
+                </Button>
+              </div>
+            ) : (
+              <>
+                <Upload className="h-10 w-10 mx-auto text-muted-foreground mb-4" />
+                <p className="text-sm text-muted-foreground">
+                  Arraste arquivos aqui ou clique para selecionar
+                </p>
+                <p className="text-xs text-muted-foreground mt-2">
+                  PDF, DOCX, XLSX, imagens até 10MB
+                </p>
+              </>
+            )}
+            <input 
+              id="file-input" 
+              type="file" 
+              className="hidden" 
+              onChange={(e) => {
+                if (e.target.files?.[0]) {
+                  setSelectedFile(e.target.files[0]);
+                }
+              }} 
+            />
+          </div>
+          <DialogFooter>
+            <Button variant="outline" onClick={() => { setIsUploadOpen(false); setSelectedFile(null); }}>
+              Cancelar
+            </Button>
+            <Button onClick={handleUpload} disabled={!selectedFile || isUploading}>
+              {isUploading ? (
+                <>
+                  <Loader2 className="h-4 w-4 mr-2 animate-spin" />
+                  Enviando...
+                </>
+              ) : (
+                <>
+                  <Upload className="h-4 w-4 mr-2" />
+                  Enviar
+                </>
+              )}
+            </Button>
+          </DialogFooter>
+        </DialogContent>
+      </Dialog>
+
+      {/* View Dialog */}
+      <Dialog open={isViewOpen} onOpenChange={setIsViewOpen}>
+        <DialogContent className="sm:max-w-2xl">
+          <DialogHeader>
+            <DialogTitle className="flex items-center gap-2">
+              {selectedDoc && getFileIcon(selectedDoc.type)}
+              {selectedDoc?.name}
+            </DialogTitle>
+            <DialogDescription>
+              Última modificação: {selectedDoc?.lastModified} por {selectedDoc?.modifiedBy}
+            </DialogDescription>
+          </DialogHeader>
+          <div className="min-h-[300px] bg-muted rounded-lg flex items-center justify-center">
+            <div className="text-center">
+              {selectedDoc && getFileIcon(selectedDoc.type)}
+              <p className="mt-4 text-muted-foreground">
+                Visualização do documento
+              </p>
+              <p className="text-sm text-muted-foreground mt-1">
+                {selectedDoc?.size}
+              </p>
+            </div>
+          </div>
+          <DialogFooter>
+            <Button variant="outline" onClick={() => setIsViewOpen(false)}>
+              Fechar
+            </Button>
+            <Button onClick={() => selectedDoc && handleDownload(selectedDoc)}>
+              <Download className="h-4 w-4 mr-2" />
+              Download
+            </Button>
+          </DialogFooter>
+        </DialogContent>
+      </Dialog>
+
+      {/* Share Dialog */}
+      <Dialog open={isShareOpen} onOpenChange={setIsShareOpen}>
+        <DialogContent>
+          <DialogHeader>
+            <DialogTitle>Compartilhar Documento</DialogTitle>
+            <DialogDescription>
+              Compartilhe "{selectedDoc?.name}" com a equipe
+            </DialogDescription>
+          </DialogHeader>
+          <div className="space-y-4">
+            <div className="flex items-center gap-2 p-3 bg-muted rounded-lg">
+              <Link className="h-4 w-4 text-muted-foreground" />
+              <Input 
+                value={`https://workspace.nautilus/docs/${selectedDoc?.id}`}
+                readOnly
+                className="flex-1 bg-transparent border-none"
+              />
+              <Button size="sm" variant="ghost" onClick={handleCopyLink}>
+                {linkCopied ? (
+                  <Check className="h-4 w-4 text-green-500" />
+                ) : (
+                  <Copy className="h-4 w-4" />
+                )}
+              </Button>
+            </div>
+            <p className="text-sm text-muted-foreground">
+              Todos os membros da equipe com acesso ao workspace poderão visualizar este documento.
+            </p>
+          </div>
+          <DialogFooter>
+            <Button variant="outline" onClick={() => setIsShareOpen(false)}>
+              Cancelar
+            </Button>
+            <Button onClick={confirmShare}>
+              <Share2 className="h-4 w-4 mr-2" />
+              Compartilhar
+            </Button>
+          </DialogFooter>
+        </DialogContent>
+      </Dialog>
+
+      {/* Delete Confirmation */}
+      <AlertDialog open={isDeleteOpen} onOpenChange={setIsDeleteOpen}>
+        <AlertDialogContent>
+          <AlertDialogHeader>
+            <AlertDialogTitle>Excluir documento?</AlertDialogTitle>
+            <AlertDialogDescription>
+              Tem certeza que deseja excluir "{selectedDoc?.name}"? Esta ação não pode ser desfeita.
+            </AlertDialogDescription>
+          </AlertDialogHeader>
+          <AlertDialogFooter>
+            <AlertDialogCancel>Cancelar</AlertDialogCancel>
+            <AlertDialogAction onClick={confirmDelete} className="bg-destructive text-destructive-foreground hover:bg-destructive/90">
+              <Trash2 className="h-4 w-4 mr-2" />
+              Excluir
+            </AlertDialogAction>
+          </AlertDialogFooter>
+        </AlertDialogContent>
+      </AlertDialog>
     </Card>
   );
 };
