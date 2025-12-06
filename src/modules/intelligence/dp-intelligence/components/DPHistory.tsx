@@ -1,10 +1,38 @@
-import React from "react";
+import React, { useState } from "react";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
-import { Clock, Download, Filter, TrendingUp, Activity, FileText } from "lucide-react";
+import { Input } from "@/components/ui/input";
+import { Label } from "@/components/ui/label";
+import {
+  Dialog,
+  DialogContent,
+  DialogHeader,
+  DialogTitle,
+  DialogTrigger,
+  DialogFooter,
+} from "@/components/ui/dialog";
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select";
+import { Checkbox } from "@/components/ui/checkbox";
+import { Clock, Download, Filter, TrendingUp, Activity, FileText, X } from "lucide-react";
+import { toast } from "sonner";
 
-const historyData = [
+interface HistoryItem {
+  id: number;
+  date: string;
+  event: string;
+  type: string;
+  status: string;
+  details: string;
+}
+
+const historyData: HistoryItem[] = [
   {
     id: 1,
     date: "2024-12-06 14:30",
@@ -103,20 +131,315 @@ const getTypeIcon = (type: string) => {
   }
 };
 
+const getTypeLabel = (type: string) => {
+  const labels: Record<string, string> = {
+    analysis: "Análise",
+    operation: "Operação",
+    alert: "Alerta",
+    optimization: "Otimização",
+    maintenance: "Manutenção",
+  };
+  return labels[type] || type;
+};
+
+const getStatusLabel = (status: string) => {
+  const labels: Record<string, string> = {
+    success: "Sucesso",
+    warning: "Alerta",
+    error: "Erro",
+    info: "Info",
+  };
+  return labels[status] || status;
+};
+
 export default function DPHistory() {
+  const [isFilterOpen, setIsFilterOpen] = useState(false);
+  const [isExportOpen, setIsExportOpen] = useState(false);
+  const [filters, setFilters] = useState({
+    types: [] as string[],
+    statuses: [] as string[],
+    dateFrom: "",
+    dateTo: "",
+    searchText: "",
+  });
+  const [activeFilters, setActiveFilters] = useState(filters);
+
+  const allTypes = ["analysis", "operation", "alert", "optimization", "maintenance"];
+  const allStatuses = ["success", "warning", "error", "info"];
+
+  const filteredData = historyData.filter((item) => {
+    // Type filter
+    if (activeFilters.types.length > 0 && !activeFilters.types.includes(item.type)) {
+      return false;
+    }
+    // Status filter
+    if (activeFilters.statuses.length > 0 && !activeFilters.statuses.includes(item.status)) {
+      return false;
+    }
+    // Text search
+    if (activeFilters.searchText) {
+      const searchLower = activeFilters.searchText.toLowerCase();
+      if (
+        !item.event.toLowerCase().includes(searchLower) &&
+        !item.details.toLowerCase().includes(searchLower)
+      ) {
+        return false;
+      }
+    }
+    // Date filters
+    if (activeFilters.dateFrom) {
+      const itemDate = new Date(item.date.replace(" ", "T"));
+      const fromDate = new Date(activeFilters.dateFrom);
+      if (itemDate < fromDate) return false;
+    }
+    if (activeFilters.dateTo) {
+      const itemDate = new Date(item.date.replace(" ", "T"));
+      const toDate = new Date(activeFilters.dateTo);
+      toDate.setHours(23, 59, 59);
+      if (itemDate > toDate) return false;
+    }
+    return true;
+  });
+
+  const handleApplyFilters = () => {
+    setActiveFilters({ ...filters });
+    setIsFilterOpen(false);
+    toast.success("Filtros aplicados", {
+      description: `${filteredData.length} eventos encontrados.`,
+    });
+  };
+
+  const handleClearFilters = () => {
+    const cleared = {
+      types: [],
+      statuses: [],
+      dateFrom: "",
+      dateTo: "",
+      searchText: "",
+    };
+    setFilters(cleared);
+    setActiveFilters(cleared);
+    toast.success("Filtros limpos");
+  };
+
+  const handleToggleType = (type: string) => {
+    setFilters((prev) => ({
+      ...prev,
+      types: prev.types.includes(type)
+        ? prev.types.filter((t) => t !== type)
+        : [...prev.types, type],
+    }));
+  };
+
+  const handleToggleStatus = (status: string) => {
+    setFilters((prev) => ({
+      ...prev,
+      statuses: prev.statuses.includes(status)
+        ? prev.statuses.filter((s) => s !== status)
+        : [...prev.statuses, status],
+    }));
+  };
+
+  const handleExport = (format: "csv" | "json" | "pdf") => {
+    const dataToExport = filteredData;
+
+    if (format === "csv") {
+      const headers = ["Data", "Evento", "Tipo", "Status", "Detalhes"];
+      const rows = dataToExport.map((item) => [
+        item.date,
+        item.event,
+        getTypeLabel(item.type),
+        getStatusLabel(item.status),
+        item.details,
+      ]);
+      const csvContent = [headers.join(","), ...rows.map((row) => row.map((cell) => `"${cell}"`).join(","))].join("\n");
+      
+      const blob = new Blob([csvContent], { type: "text/csv;charset=utf-8;" });
+      const link = document.createElement("a");
+      link.href = URL.createObjectURL(blob);
+      link.download = `dp-historico-${new Date().toISOString().split("T")[0]}.csv`;
+      link.click();
+      toast.success("Exportação concluída", { description: "Arquivo CSV baixado com sucesso." });
+    } else if (format === "json") {
+      const jsonContent = JSON.stringify(dataToExport, null, 2);
+      const blob = new Blob([jsonContent], { type: "application/json" });
+      const link = document.createElement("a");
+      link.href = URL.createObjectURL(blob);
+      link.download = `dp-historico-${new Date().toISOString().split("T")[0]}.json`;
+      link.click();
+      toast.success("Exportação concluída", { description: "Arquivo JSON baixado com sucesso." });
+    } else if (format === "pdf") {
+      // Simple text-based PDF simulation - in production would use jsPDF
+      const textContent = dataToExport
+        .map((item) => `${item.date} - ${item.event}\nTipo: ${getTypeLabel(item.type)} | Status: ${getStatusLabel(item.status)}\n${item.details}\n\n`)
+        .join("");
+      const blob = new Blob([`DP INTELLIGENCE - HISTÓRICO DE EVENTOS\n\n${textContent}`], { type: "text/plain" });
+      const link = document.createElement("a");
+      link.href = URL.createObjectURL(blob);
+      link.download = `dp-historico-${new Date().toISOString().split("T")[0]}.txt`;
+      link.click();
+      toast.success("Exportação concluída", { description: "Relatório baixado com sucesso." });
+    }
+
+    setIsExportOpen(false);
+  };
+
+  const hasActiveFilters =
+    activeFilters.types.length > 0 ||
+    activeFilters.statuses.length > 0 ||
+    activeFilters.dateFrom ||
+    activeFilters.dateTo ||
+    activeFilters.searchText;
+
   return (
     <div className="space-y-6">
       <div className="flex items-center justify-between">
-        <h2 className="text-xl font-semibold">Histórico de Eventos</h2>
+        <div className="flex items-center gap-2">
+          <h2 className="text-xl font-semibold">Histórico de Eventos</h2>
+          {hasActiveFilters && (
+            <Badge variant="secondary" className="gap-1">
+              {filteredData.length} resultados
+              <Button
+                variant="ghost"
+                size="sm"
+                className="h-4 w-4 p-0 ml-1"
+                onClick={handleClearFilters}
+              >
+                <X className="h-3 w-3" />
+              </Button>
+            </Badge>
+          )}
+        </div>
         <div className="flex gap-2">
-          <Button variant="outline" size="sm">
-            <Filter className="h-4 w-4 mr-2" />
-            Filtrar
-          </Button>
-          <Button variant="outline" size="sm">
-            <Download className="h-4 w-4 mr-2" />
-            Exportar
-          </Button>
+          {/* Filter Dialog */}
+          <Dialog open={isFilterOpen} onOpenChange={setIsFilterOpen}>
+            <DialogTrigger asChild>
+              <Button variant="outline" size="sm" className={hasActiveFilters ? "border-primary" : ""}>
+                <Filter className="h-4 w-4 mr-2" />
+                Filtrar
+              </Button>
+            </DialogTrigger>
+            <DialogContent className="sm:max-w-md">
+              <DialogHeader>
+                <DialogTitle>Filtrar Eventos</DialogTitle>
+              </DialogHeader>
+              <div className="space-y-4 py-4">
+                {/* Search */}
+                <div className="space-y-2">
+                  <Label>Buscar</Label>
+                  <Input
+                    placeholder="Buscar por evento ou detalhes..."
+                    value={filters.searchText}
+                    onChange={(e) => setFilters({ ...filters, searchText: e.target.value })}
+                  />
+                </div>
+
+                {/* Type Filter */}
+                <div className="space-y-2">
+                  <Label>Tipo de Evento</Label>
+                  <div className="flex flex-wrap gap-2">
+                    {allTypes.map((type) => (
+                      <label key={type} className="flex items-center gap-2 cursor-pointer">
+                        <Checkbox
+                          checked={filters.types.includes(type)}
+                          onCheckedChange={() => handleToggleType(type)}
+                        />
+                        <span className="text-sm">{getTypeLabel(type)}</span>
+                      </label>
+                    ))}
+                  </div>
+                </div>
+
+                {/* Status Filter */}
+                <div className="space-y-2">
+                  <Label>Status</Label>
+                  <div className="flex flex-wrap gap-2">
+                    {allStatuses.map((status) => (
+                      <label key={status} className="flex items-center gap-2 cursor-pointer">
+                        <Checkbox
+                          checked={filters.statuses.includes(status)}
+                          onCheckedChange={() => handleToggleStatus(status)}
+                        />
+                        <span className="text-sm">{getStatusLabel(status)}</span>
+                      </label>
+                    ))}
+                  </div>
+                </div>
+
+                {/* Date Range */}
+                <div className="grid grid-cols-2 gap-4">
+                  <div className="space-y-2">
+                    <Label>Data Inicial</Label>
+                    <Input
+                      type="date"
+                      value={filters.dateFrom}
+                      onChange={(e) => setFilters({ ...filters, dateFrom: e.target.value })}
+                    />
+                  </div>
+                  <div className="space-y-2">
+                    <Label>Data Final</Label>
+                    <Input
+                      type="date"
+                      value={filters.dateTo}
+                      onChange={(e) => setFilters({ ...filters, dateTo: e.target.value })}
+                    />
+                  </div>
+                </div>
+              </div>
+              <DialogFooter className="flex gap-2">
+                <Button variant="outline" onClick={handleClearFilters}>
+                  Limpar
+                </Button>
+                <Button onClick={handleApplyFilters}>Aplicar Filtros</Button>
+              </DialogFooter>
+            </DialogContent>
+          </Dialog>
+
+          {/* Export Dialog */}
+          <Dialog open={isExportOpen} onOpenChange={setIsExportOpen}>
+            <DialogTrigger asChild>
+              <Button variant="outline" size="sm">
+                <Download className="h-4 w-4 mr-2" />
+                Exportar
+              </Button>
+            </DialogTrigger>
+            <DialogContent className="sm:max-w-sm">
+              <DialogHeader>
+                <DialogTitle>Exportar Histórico</DialogTitle>
+              </DialogHeader>
+              <div className="space-y-3 py-4">
+                <p className="text-sm text-muted-foreground">
+                  Exportar {filteredData.length} eventos selecionados
+                </p>
+                <div className="space-y-2">
+                  <Button
+                    variant="outline"
+                    className="w-full justify-start"
+                    onClick={() => handleExport("csv")}
+                  >
+                    <FileText className="h-4 w-4 mr-2" />
+                    Exportar como CSV
+                  </Button>
+                  <Button
+                    variant="outline"
+                    className="w-full justify-start"
+                    onClick={() => handleExport("json")}
+                  >
+                    <FileText className="h-4 w-4 mr-2" />
+                    Exportar como JSON
+                  </Button>
+                  <Button
+                    variant="outline"
+                    className="w-full justify-start"
+                    onClick={() => handleExport("pdf")}
+                  >
+                    <FileText className="h-4 w-4 mr-2" />
+                    Exportar como Relatório
+                  </Button>
+                </div>
+              </div>
+            </DialogContent>
+          </Dialog>
         </div>
       </div>
 
@@ -127,32 +450,38 @@ export default function DPHistory() {
           </CardTitle>
         </CardHeader>
         <CardContent>
-          <div className="relative">
-            <div className="absolute left-4 top-0 bottom-0 w-0.5 bg-muted" />
-            <div className="space-y-6">
-              {historyData.map((item, index) => (
-                <div key={item.id} className="relative pl-10">
-                  <div className="absolute left-2 top-1 w-4 h-4 rounded-full bg-primary flex items-center justify-center">
-                    {getTypeIcon(item.type)}
-                  </div>
-                  <div className="p-4 rounded-lg border hover:bg-muted/50 transition-colors">
-                    <div className="flex items-start justify-between">
-                      <div>
-                        <div className="flex items-center gap-2 mb-1">
-                          <span className="font-semibold">{item.event}</span>
-                          {getStatusBadge(item.status)}
+          {filteredData.length === 0 ? (
+            <div className="text-center py-8 text-muted-foreground">
+              Nenhum evento encontrado com os filtros selecionados.
+            </div>
+          ) : (
+            <div className="relative">
+              <div className="absolute left-4 top-0 bottom-0 w-0.5 bg-muted" />
+              <div className="space-y-6">
+                {filteredData.map((item) => (
+                  <div key={item.id} className="relative pl-10">
+                    <div className="absolute left-2 top-1 w-4 h-4 rounded-full bg-primary flex items-center justify-center">
+                      {getTypeIcon(item.type)}
+                    </div>
+                    <div className="p-4 rounded-lg border hover:bg-muted/50 transition-colors">
+                      <div className="flex items-start justify-between">
+                        <div>
+                          <div className="flex items-center gap-2 mb-1">
+                            <span className="font-semibold">{item.event}</span>
+                            {getStatusBadge(item.status)}
+                          </div>
+                          <p className="text-sm text-muted-foreground">{item.details}</p>
                         </div>
-                        <p className="text-sm text-muted-foreground">{item.details}</p>
+                        <span className="text-xs text-muted-foreground whitespace-nowrap">
+                          {item.date}
+                        </span>
                       </div>
-                      <span className="text-xs text-muted-foreground whitespace-nowrap">
-                        {item.date}
-                      </span>
                     </div>
                   </div>
-                </div>
-              ))}
+                ))}
+              </div>
             </div>
-          </div>
+          )}
         </CardContent>
       </Card>
 
