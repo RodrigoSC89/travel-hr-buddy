@@ -155,12 +155,7 @@ const Innovation = () => {
                   <Badge className="bg-green-100 text-green-700">Online</Badge>
                   <span className="text-xs text-muted-foreground">98.7% precisão</span>
                 </div>
-                <Button className="w-full" onClick={(e) => {
-                  e.stopPropagation();
-                  handleModuleAccess("/ai-assistant");
-                }}>
-                  Acessar Assistente
-                </Button>
+                <Button className="w-full">Acessar Assistente</Button>
               </CardContent>
             </Card>
 
@@ -181,16 +176,12 @@ const Innovation = () => {
                   <Badge className="bg-blue-100 text-blue-700">Ativo</Badge>
                   <span className="text-xs text-muted-foreground">247 predições</span>
                 </div>
-                <Button className="w-full" onClick={(e) => {
-                  e.stopPropagation();
-                  handleModuleAccess("/predictive-analytics");
-                }}>
-                  Ver Predições
-                </Button>
+                <Button className="w-full">Ver Predições</Button>
               </CardContent>
             </Card>
 
-            <Card className="hover:shadow-lg transition-all duration-300 group">
+            <Card className="hover:shadow-lg transition-all duration-300 group cursor-pointer"
+              onClick={() => handleModuleAccess("/smart-automation")}>
               <CardHeader>
                 <CardTitle className="flex items-center gap-2">
                   <Workflow className="h-5 w-5 text-green-500" />
@@ -206,11 +197,12 @@ const Innovation = () => {
                   <Badge className="bg-green-100 text-green-700">24 workflows</Badge>
                   <span className="text-xs text-muted-foreground">89% eficiência</span>
                 </div>
-                <Button className="w-full" variant="outline">Em Breve</Button>
+                <Button className="w-full">Gerenciar Automações</Button>
               </CardContent>
             </Card>
 
-            <Card className="hover:shadow-lg transition-all duration-300 group">
+            <Card className="hover:shadow-lg transition-all duration-300 group cursor-pointer"
+              onClick={() => handleModuleAccess("/models-lab")}>
               <CardHeader>
                 <CardTitle className="flex items-center gap-2">
                   <TestTube className="h-5 w-5 text-orange-500" />
@@ -226,11 +218,12 @@ const Innovation = () => {
                   <Badge className="bg-orange-100 text-orange-700">12 modelos</Badge>
                   <span className="text-xs text-muted-foreground">6 em treinamento</span>
                 </div>
-                <Button className="w-full" variant="outline">Acessar Lab</Button>
+                <Button className="w-full">Acessar Lab</Button>
               </CardContent>
             </Card>
 
-            <Card className="hover:shadow-lg transition-all duration-300 group">
+            <Card className="hover:shadow-lg transition-all duration-300 group cursor-pointer"
+              onClick={() => handleModuleAccess("/ai-processing")}>
               <CardHeader>
                 <CardTitle className="flex items-center gap-2">
                   <Cpu className="h-5 w-5 text-red-500" />
@@ -246,11 +239,12 @@ const Innovation = () => {
                   <Badge className="bg-red-100 text-red-700">GPU Acelerado</Badge>
                   <span className="text-xs text-muted-foreground">1.2TB processados</span>
                 </div>
-                <Button className="w-full" variant="outline">Ver Status</Button>
+                <Button className="w-full">Ver Status</Button>
               </CardContent>
             </Card>
 
-            <Card className="hover:shadow-lg transition-all duration-300 group">
+            <Card className="hover:shadow-lg transition-all duration-300 group cursor-pointer"
+              onClick={() => handleModuleAccess("/data-lake")}>
               <CardHeader>
                 <CardTitle className="flex items-center gap-2">
                   <Database className="h-5 w-5 text-cyan-500" />
@@ -266,7 +260,7 @@ const Innovation = () => {
                   <Badge className="bg-cyan-100 text-cyan-700">45.7TB</Badge>
                   <span className="text-xs text-muted-foreground">Estruturado</span>
                 </div>
-                <Button className="w-full" variant="outline">Explorar Dados</Button>
+                <Button className="w-full">Explorar Dados</Button>
               </CardContent>
             </Card>
           </div>
