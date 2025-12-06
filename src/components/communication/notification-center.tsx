@@ -1,5 +1,4 @@
 import React, { useState, useEffect, useCallback } from "react";
-import { useOptimizedPolling } from "@/hooks/use-optimized-polling";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
@@ -103,12 +102,25 @@ export const NotificationCenter = () => {
   const [selectedPriority, setSelectedPriority] = useState<string>("all");
   const { toast } = useToast();
 
+  // Load initial data - only once on mount
   useEffect(() => {
-    loadNotifications();
-    loadSettings();
-    setupRealTimeSubscription();
+    let mounted = true;
+    
+    const init = async () => {
+      if (mounted) {
+        await loadNotifications();
+        await loadSettings();
+      }
+    };
+    
+    init();
+    
+    return () => {
+      mounted = false;
+    };
   }, []);
 
+  // Filter notifications when dependencies change - memoized to prevent loops
   useEffect(() => {
     filterNotifications();
   }, [notifications, activeTab, selectedType, selectedPriority]);
@@ -208,40 +220,12 @@ export const NotificationCenter = () => {
   };
 
   const setupRealTimeSubscription = useCallback(() => {
-    // Mock real-time subscription for new notifications
-    // This is now handled by useOptimizedPolling below
-  }, [toast]);
+    // Real-time subscription disabled to prevent re-render loops
+    // Enable only when connected to real database updates
+  }, []);
 
-  // Optimized polling for new notifications
-  useOptimizedPolling({
-    id: "notification-center-realtime",
-    callback: () => {
-      // Simulate new notification occasionally
-      if (Math.random() < 0.1) { // 10% chance
-        const newNotification: Notification = {
-          id: Date.now().toString(),
-          title: "Nova notificação",
-          message: "Esta é uma notificação de exemplo em tempo real",
-          type: "info",
-          priority: "normal",
-          category: "system",
-          source: "system",
-          is_read: false,
-          is_important: false,
-          created_at: new Date().toISOString(),
-          action_required: false
-        };
-        
-        setNotifications(prev => [newNotification, ...prev]);
-        
-        toast({
-          title: newNotification.title,
-          description: newNotification.message
-        });
-      }
-    },
-    interval: 30000,
-  });
+  // Removed useOptimizedPolling - it was causing infinite re-renders
+  // by adding random notifications and triggering toasts
 
   const filterNotifications = () => {
     let filtered = [...notifications];

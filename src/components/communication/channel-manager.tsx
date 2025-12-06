@@ -250,7 +250,9 @@ export const ChannelManager: React.FC<ChannelManagerProps> = ({
 
   useEffect(() => {
     loadChannels();
-    setupRealTimeSubscription();
+    const cleanup = setupRealTimeSubscription();
+    
+    return cleanup;
   }, [loadChannels, setupRealTimeSubscription]);
 
   useEffect(() => {
