@@ -36,10 +36,7 @@ export const HEAVY_MODULES = {
     import('@/modules/intelligence/dp-intelligence/components/DPAIAnalyzer')
   ),
   
-  // Large Data Modules
-  SatelliteLive: lazyWithRetry(() => 
-    import('@/pages/satellite-live')
-  ),
+  // Large Data Modules (removed - consolidated)
 };
 
 // Pré-carregar módulos críticos após a aplicação estar rodando
