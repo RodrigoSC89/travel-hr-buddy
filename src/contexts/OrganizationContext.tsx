@@ -1,11 +1,9 @@
 // @ts-nocheck
-import * as React from "react";
+import React, { createContext, useContext, useEffect, useState, useCallback, useMemo } from "react";
 import { supabase } from "@/integrations/supabase/client";
 import { useAuth } from "./AuthContext";
 import { logger } from "@/lib/logger";
 import type { Database } from "@/integrations/supabase/types";
-
-const { createContext, useContext, useEffect, useState } = React;
 
 type Organization = Database["public"]["Tables"]["organizations"]["Row"];
 type OrganizationBranding = Database["public"]["Tables"]["organization_branding"]["Row"];

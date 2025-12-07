@@ -1,9 +1,7 @@
-import * as React from "react";
+import React, { createContext, useContext, useEffect, useState, useCallback, useMemo } from "react";
 import { supabase } from "@/integrations/supabase/client";
 import { useAuth } from "./AuthContext";
 import { logger } from "@/lib/logger";
-
-const { createContext, useContext, useEffect, useState } = React;
 
 interface SaasTenant {
   id: string;
