@@ -73,8 +73,6 @@ export const useWorkflows = () => {
 
   // Fetch workflows from database
   const fetchWorkflows = useCallback(async () => {
-    if (!user) return;
-    
     try {
       setIsLoading(true);
       setError(null);
@@ -122,8 +120,6 @@ export const useWorkflows = () => {
 
   // Fetch automation rules
   const fetchAutomationRules = useCallback(async () => {
-    if (!user) return;
-
     try {
       const { data, error: ruleError } = await supabase
         .from("automation_rules")
@@ -148,9 +144,13 @@ export const useWorkflows = () => {
   }, [user]);
 
   useEffect(() => {
-    fetchWorkflows();
-    fetchAutomationRules();
-  }, [fetchWorkflows, fetchAutomationRules]);
+    const loadData = async () => {
+      await fetchWorkflows();
+      await fetchAutomationRules();
+    };
+    loadData();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
 
   // Create a new workflow
   const createWorkflow = useCallback(async (workflow: Partial<Workflow>) => {
