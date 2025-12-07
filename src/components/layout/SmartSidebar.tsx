@@ -75,6 +75,7 @@ const groupedModules = [
     icon: <Brain className="w-4 h-4 mr-2" />,
     items: [
       { label: "Dashboard IA", path: "/ai-dashboard" },
+      { label: "Mentor DP", path: "/mentor-dp" },
       { label: "Sugestões Workflow", path: "/workflow-suggestions" },
       { label: "Métricas de Adoção", path: "/ai-adoption" },
       { label: "IA & Inovação", path: "/innovation" },
