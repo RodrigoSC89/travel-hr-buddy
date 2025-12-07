@@ -1,7 +1,10 @@
 /**
  * Low Bandwidth Optimizer
  * PATCH 834: Aggressive optimizations for 2 Mbps networks
+ * PATCH 1000: Fixed React import order to prevent useState null error
  */
+
+import { useState, useEffect, useMemo } from 'react';
 
 interface BandwidthConfig {
   maxImageSize: number;
@@ -233,9 +236,7 @@ class LowBandwidthOptimizer {
 
 export const bandwidthOptimizer = new LowBandwidthOptimizer();
 
-// React hook
-import { useState, useEffect, useMemo } from 'react';
-
+// React hook - imports moved to top of file (PATCH 1000)
 export function useBandwidthOptimizer() {
   const [config, setConfig] = useState<BandwidthConfig>(bandwidthOptimizer.getConfig());
   const [connectionType, setConnectionType] = useState(bandwidthOptimizer.getConnectionType());
