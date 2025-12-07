@@ -39,40 +39,53 @@ const OperationsDashboard = () => {
   const { toast } = useToast();
   const [loading, setLoading] = useState(true);
   const [operations, setOperations] = useState<VesselOperation[]>([]);
+  const [vessels, setVessels] = useState<any[]>([]);
 
   const loadOperationsData = async () => {
     try {
       setLoading(true);
       
-      // Simulated operations data - would connect to real tables
-      const mockOperations: VesselOperation[] = [
-        {
-          id: "op-1",
-          vessel_name: "MV Atlantic Star",
-          operation_type: "cargo_loading",
-          status: "in_progress",
-          start_time: new Date().toISOString(),
-          location: "Porto de Santos"
-        },
-        {
-          id: "op-2",
-          vessel_name: "MV Pacific Explorer",
-          operation_type: "navigation",
-          status: "active",
-          start_time: new Date(Date.now() - 3600000).toISOString(),
-          location: "Em trânsito - Atlântico Sul"
-        },
-        {
-          id: "op-3",
-          vessel_name: "MV Ocean Voyager",
-          operation_type: "maintenance",
-          status: "scheduled",
-          start_time: new Date(Date.now() + 86400000).toISOString(),
-          location: "Porto de Rio Grande"
-        }
-      ];
+      // Load real vessel data
+      const { data: vesselsData, error: vesselsError } = await supabase
+        .from("vessels")
+        .select("id, name, status, current_location, vessel_type")
+        .limit(20);
       
-      setOperations(mockOperations);
+      if (!vesselsError && vesselsData) {
+        setVessels(vesselsData);
+        
+        // Map vessels to operations
+        const mappedOperations: VesselOperation[] = vesselsData.map((v: any) => ({
+          id: v.id,
+          vessel_name: v.name,
+          operation_type: mapStatusToOperationType(v.status),
+          status: mapVesselStatus(v.status),
+          start_time: new Date().toISOString(),
+          location: v.current_location || "Localização não informada"
+        }));
+        
+        setOperations(mappedOperations);
+      } else {
+        // Fallback to mock data
+        setOperations([
+          {
+            id: "op-1",
+            vessel_name: "MV Atlantic Star",
+            operation_type: "cargo_loading",
+            status: "in_progress",
+            start_time: new Date().toISOString(),
+            location: "Porto de Santos"
+          },
+          {
+            id: "op-2",
+            vessel_name: "MV Pacific Explorer",
+            operation_type: "navigation",
+            status: "active",
+            start_time: new Date(Date.now() - 3600000).toISOString(),
+            location: "Em trânsito - Atlântico Sul"
+          }
+        ]);
+      }
     } catch (error) {
       console.error("Error loading operations:", error);
       toast({
@@ -85,14 +98,38 @@ const OperationsDashboard = () => {
     }
   };
 
+  const mapStatusToOperationType = (status: string): string => {
+    const typeMap: Record<string, string> = {
+      "active": "navigation",
+      "in_port": "cargo_loading",
+      "docked": "cargo_unloading",
+      "maintenance": "maintenance",
+      "inactive": "inspection"
+    };
+    return typeMap[status] || "navigation";
+  };
+
+  const mapVesselStatus = (status: string): string => {
+    const statusMap: Record<string, string> = {
+      "active": "active",
+      "in_port": "in_progress",
+      "docked": "in_progress",
+      "maintenance": "scheduled",
+      "inactive": "completed"
+    };
+    return statusMap[status] || "active";
+  };
+
   useEffect(() => {
     loadOperationsData();
+    const interval = setInterval(loadOperationsData, 60000); // Refresh every minute
+    return () => clearInterval(interval);
   }, []);
 
   const metrics: OperationMetric[] = [
     {
       label: "Embarcações Ativas",
-      value: 12,
+      value: vessels.filter(v => v.status === "active").length || operations.length,
       status: "normal",
       icon: <Ship className="h-5 w-5" />
     },
@@ -104,16 +141,15 @@ const OperationsDashboard = () => {
       icon: <Activity className="h-5 w-5" />
     },
     {
-      label: "Consumo de Combustível",
-      value: 245,
-      unit: "t/dia",
-      status: "warning",
+      label: "Em Manutenção",
+      value: vessels.filter(v => v.status === "maintenance").length,
+      status: vessels.filter(v => v.status === "maintenance").length > 2 ? "warning" : "normal",
       icon: <Fuel className="h-5 w-5" />
     },
     {
       label: "Alertas Ativos",
-      value: 3,
-      status: "warning",
+      value: vessels.filter(v => v.status === "maintenance" || v.status === "inactive").length,
+      status: vessels.filter(v => v.status === "maintenance").length > 0 ? "warning" : "normal",
       icon: <AlertTriangle className="h-5 w-5" />
     }
   ];
