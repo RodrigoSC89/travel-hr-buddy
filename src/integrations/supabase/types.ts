@@ -4678,6 +4678,71 @@ export type Database = {
           },
         ]
       }
+      dp_academy_progress: {
+        Row: {
+          average_score: number | null
+          category: string
+          completed_at: string | null
+          completed_lessons: number | null
+          created_at: string | null
+          id: string
+          last_lesson_at: string | null
+          module_id: string
+          module_name: string
+          organization_id: string | null
+          progress_percent: number | null
+          quiz_scores: Json | null
+          time_spent_minutes: number | null
+          total_lessons: number | null
+          updated_at: string | null
+          user_id: string | null
+        }
+        Insert: {
+          average_score?: number | null
+          category: string
+          completed_at?: string | null
+          completed_lessons?: number | null
+          created_at?: string | null
+          id?: string
+          last_lesson_at?: string | null
+          module_id: string
+          module_name: string
+          organization_id?: string | null
+          progress_percent?: number | null
+          quiz_scores?: Json | null
+          time_spent_minutes?: number | null
+          total_lessons?: number | null
+          updated_at?: string | null
+          user_id?: string | null
+        }
+        Update: {
+          average_score?: number | null
+          category?: string
+          completed_at?: string | null
+          completed_lessons?: number | null
+          created_at?: string | null
+          id?: string
+          last_lesson_at?: string | null
+          module_id?: string
+          module_name?: string
+          organization_id?: string | null
+          progress_percent?: number | null
+          quiz_scores?: Json | null
+          time_spent_minutes?: number | null
+          total_lessons?: number | null
+          updated_at?: string | null
+          user_id?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "dp_academy_progress_organization_id_fkey"
+            columns: ["organization_id"]
+            isOneToOne: false
+            referencedRelation: "organizations"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       dp_incidents: {
         Row: {
           created_at: string | null
@@ -4779,6 +4844,369 @@ export type Database = {
             columns: ["vessel_id"]
             isOneToOne: false
             referencedRelation: "vessels"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      dp_logbook_entries: {
+        Row: {
+          ai_response: string | null
+          bookmarked: boolean | null
+          content: string | null
+          created_at: string | null
+          entry_type: string
+          id: string
+          importance: string | null
+          metadata: Json | null
+          organization_id: string | null
+          related_topics: string[] | null
+          tags: string[] | null
+          title: string
+          updated_at: string | null
+          user_id: string | null
+        }
+        Insert: {
+          ai_response?: string | null
+          bookmarked?: boolean | null
+          content?: string | null
+          created_at?: string | null
+          entry_type: string
+          id?: string
+          importance?: string | null
+          metadata?: Json | null
+          organization_id?: string | null
+          related_topics?: string[] | null
+          tags?: string[] | null
+          title: string
+          updated_at?: string | null
+          user_id?: string | null
+        }
+        Update: {
+          ai_response?: string | null
+          bookmarked?: boolean | null
+          content?: string | null
+          created_at?: string | null
+          entry_type?: string
+          id?: string
+          importance?: string | null
+          metadata?: Json | null
+          organization_id?: string | null
+          related_topics?: string[] | null
+          tags?: string[] | null
+          title?: string
+          updated_at?: string | null
+          user_id?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "dp_logbook_entries_organization_id_fkey"
+            columns: ["organization_id"]
+            isOneToOne: false
+            referencedRelation: "organizations"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      dp_mentor_sessions: {
+        Row: {
+          completed_at: string | null
+          context: Json | null
+          created_at: string | null
+          difficulty_level: string | null
+          id: string
+          messages: Json | null
+          organization_id: string | null
+          performance_score: number | null
+          session_type: string
+          topic: string | null
+          updated_at: string | null
+          user_id: string | null
+        }
+        Insert: {
+          completed_at?: string | null
+          context?: Json | null
+          created_at?: string | null
+          difficulty_level?: string | null
+          id?: string
+          messages?: Json | null
+          organization_id?: string | null
+          performance_score?: number | null
+          session_type?: string
+          topic?: string | null
+          updated_at?: string | null
+          user_id?: string | null
+        }
+        Update: {
+          completed_at?: string | null
+          context?: Json | null
+          created_at?: string | null
+          difficulty_level?: string | null
+          id?: string
+          messages?: Json | null
+          organization_id?: string | null
+          performance_score?: number | null
+          session_type?: string
+          topic?: string | null
+          updated_at?: string | null
+          user_id?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "dp_mentor_sessions_organization_id_fkey"
+            columns: ["organization_id"]
+            isOneToOne: false
+            referencedRelation: "organizations"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      dp_proficiency_assessments: {
+        Row: {
+          ai_evaluation: Json | null
+          areas_for_improvement: string[] | null
+          assessment_type: string
+          assessor_notes: string | null
+          category_scores: Json
+          created_at: string | null
+          id: string
+          next_assessment_date: string | null
+          organization_id: string | null
+          overall_level: string
+          recommended_training: Json | null
+          strengths: string[] | null
+          user_id: string | null
+        }
+        Insert: {
+          ai_evaluation?: Json | null
+          areas_for_improvement?: string[] | null
+          assessment_type: string
+          assessor_notes?: string | null
+          category_scores?: Json
+          created_at?: string | null
+          id?: string
+          next_assessment_date?: string | null
+          organization_id?: string | null
+          overall_level: string
+          recommended_training?: Json | null
+          strengths?: string[] | null
+          user_id?: string | null
+        }
+        Update: {
+          ai_evaluation?: Json | null
+          areas_for_improvement?: string[] | null
+          assessment_type?: string
+          assessor_notes?: string | null
+          category_scores?: Json
+          created_at?: string | null
+          id?: string
+          next_assessment_date?: string | null
+          organization_id?: string | null
+          overall_level?: string
+          recommended_training?: Json | null
+          strengths?: string[] | null
+          user_id?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "dp_proficiency_assessments_organization_id_fkey"
+            columns: ["organization_id"]
+            isOneToOne: false
+            referencedRelation: "organizations"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      dp_qa_repository: {
+        Row: {
+          answer: string
+          category: string
+          created_at: string | null
+          created_by: string | null
+          difficulty_level: string | null
+          helpful_votes: number | null
+          id: string
+          is_featured: boolean | null
+          organization_id: string | null
+          question: string
+          regulatory_references: string[] | null
+          related_documents: string[] | null
+          subcategory: string | null
+          tags: string[] | null
+          updated_at: string | null
+          view_count: number | null
+        }
+        Insert: {
+          answer: string
+          category: string
+          created_at?: string | null
+          created_by?: string | null
+          difficulty_level?: string | null
+          helpful_votes?: number | null
+          id?: string
+          is_featured?: boolean | null
+          organization_id?: string | null
+          question: string
+          regulatory_references?: string[] | null
+          related_documents?: string[] | null
+          subcategory?: string | null
+          tags?: string[] | null
+          updated_at?: string | null
+          view_count?: number | null
+        }
+        Update: {
+          answer?: string
+          category?: string
+          created_at?: string | null
+          created_by?: string | null
+          difficulty_level?: string | null
+          helpful_votes?: number | null
+          id?: string
+          is_featured?: boolean | null
+          organization_id?: string | null
+          question?: string
+          regulatory_references?: string[] | null
+          related_documents?: string[] | null
+          subcategory?: string | null
+          tags?: string[] | null
+          updated_at?: string | null
+          view_count?: number | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "dp_qa_repository_organization_id_fkey"
+            columns: ["organization_id"]
+            isOneToOne: false
+            referencedRelation: "organizations"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      dp_quizzes: {
+        Row: {
+          answers: Json | null
+          completed_at: string | null
+          correct_count: number | null
+          created_at: string | null
+          feedback: Json | null
+          id: string
+          organization_id: string | null
+          passed: boolean | null
+          questions: Json
+          quiz_type: string
+          score: number | null
+          time_limit_minutes: number | null
+          time_spent_minutes: number | null
+          topic: string
+          total_questions: number
+          user_id: string | null
+        }
+        Insert: {
+          answers?: Json | null
+          completed_at?: string | null
+          correct_count?: number | null
+          created_at?: string | null
+          feedback?: Json | null
+          id?: string
+          organization_id?: string | null
+          passed?: boolean | null
+          questions?: Json
+          quiz_type: string
+          score?: number | null
+          time_limit_minutes?: number | null
+          time_spent_minutes?: number | null
+          topic: string
+          total_questions: number
+          user_id?: string | null
+        }
+        Update: {
+          answers?: Json | null
+          completed_at?: string | null
+          correct_count?: number | null
+          created_at?: string | null
+          feedback?: Json | null
+          id?: string
+          organization_id?: string | null
+          passed?: boolean | null
+          questions?: Json
+          quiz_type?: string
+          score?: number | null
+          time_limit_minutes?: number | null
+          time_spent_minutes?: number | null
+          topic?: string
+          total_questions?: number
+          user_id?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "dp_quizzes_organization_id_fkey"
+            columns: ["organization_id"]
+            isOneToOne: false
+            referencedRelation: "organizations"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      dp_simulations: {
+        Row: {
+          ai_evaluation: Json | null
+          completed_at: string | null
+          created_at: string | null
+          difficulty: string | null
+          failure_events: Json | null
+          feedback: string | null
+          id: string
+          initial_conditions: Json
+          organization_id: string | null
+          passed: boolean | null
+          performance_score: number | null
+          scenario_name: string
+          scenario_type: string
+          time_to_resolve_seconds: number | null
+          user_decisions: Json | null
+          user_id: string | null
+        }
+        Insert: {
+          ai_evaluation?: Json | null
+          completed_at?: string | null
+          created_at?: string | null
+          difficulty?: string | null
+          failure_events?: Json | null
+          feedback?: string | null
+          id?: string
+          initial_conditions?: Json
+          organization_id?: string | null
+          passed?: boolean | null
+          performance_score?: number | null
+          scenario_name: string
+          scenario_type: string
+          time_to_resolve_seconds?: number | null
+          user_decisions?: Json | null
+          user_id?: string | null
+        }
+        Update: {
+          ai_evaluation?: Json | null
+          completed_at?: string | null
+          created_at?: string | null
+          difficulty?: string | null
+          failure_events?: Json | null
+          feedback?: string | null
+          id?: string
+          initial_conditions?: Json
+          organization_id?: string | null
+          passed?: boolean | null
+          performance_score?: number | null
+          scenario_name?: string
+          scenario_type?: string
+          time_to_resolve_seconds?: number | null
+          user_decisions?: Json | null
+          user_id?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "dp_simulations_organization_id_fkey"
+            columns: ["organization_id"]
+            isOneToOne: false
+            referencedRelation: "organizations"
             referencedColumns: ["id"]
           },
         ]
