@@ -75,11 +75,9 @@ const groupedModules = [
     icon: <Brain className="w-4 h-4 mr-2" />,
     items: [
       { label: "Dashboard IA", path: "/ai-dashboard" },
-      { label: "Mentor DP", path: "/mentor-dp" },
       { label: "Sugestões Workflow", path: "/workflow-suggestions" },
       { label: "Métricas de Adoção", path: "/ai-adoption" },
       { label: "IA & Inovação", path: "/innovation" },
-      { label: "DP Intelligence", path: "/dp-intelligence" },
       { label: "Insights de IA", path: "/ai-insights" },
       { label: "Documentos IA", path: "/documents" },
       { label: "Assistente de Voz", path: "/assistant/voice" },
@@ -110,17 +108,26 @@ const groupedModules = [
     ],
   },
   {
+    title: "Treinamentos",
+    icon: <GraduationCap className="w-4 h-4 mr-2" />,
+    items: [
+      { label: "Nautilus Academy", path: "/nautilus-academy" },
+      { label: "SOLAS & ISM Training", path: "/solas-training" },
+      { label: "Mentor DP", path: "/mentor-dp" },
+      { label: "DP Intelligence", path: "/dp-intelligence" },
+    ],
+  },
+  {
     title: "RH & Pessoas",
     icon: <Users className="w-4 h-4 mr-2" />,
     items: [
       { label: "Nautilus People Hub", path: "/nautilus-people" },
-      { label: "Nautilus Academy", path: "/nautilus-academy" },
       { label: "Enfermaria Digital", path: "/medical-infirmary" },
     ],
   },
   {
     title: "Auditorias",
-    icon: <GraduationCap className="w-4 h-4 mr-2" />,
+    icon: <Shield className="w-4 h-4 mr-2" />,
     items: [
       { label: "PEO-DP", path: "/peo-dp" },
       { label: "PEOTRAM", path: "/peotram" },
@@ -136,7 +143,6 @@ const groupedModules = [
     items: [
       { label: "Compliance Hub", path: "/compliance-hub" },
       { label: "Safety Guardian", path: "/safety-guardian" },
-      { label: "SOLAS & ISM Training", path: "/solas-training" },
       { label: "Gestão de Resíduos", path: "/waste-management" },
       { label: "Checklists Inteligentes", path: "/admin/checklists" },
       { label: "Relatórios de Incidentes", path: "/incident-reports" },
