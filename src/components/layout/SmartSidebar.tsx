@@ -150,7 +150,6 @@ const groupedModules = [
     items: [
       { label: "Compliance Hub", path: "/compliance-hub" },
       { label: "Safety Guardian", path: "/safety-guardian" },
-      { label: "Gestão de Resíduos", path: "/waste-management" },
     ],
   },
   {
