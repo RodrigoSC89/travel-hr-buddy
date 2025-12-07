@@ -49,6 +49,10 @@ verify_jwt = true
 [functions.nautilus-command]
 verify_jwt = false
 
+[functions.nautilus-brain]
+verify_jwt = false
+comment = "Nautilus Brain AI - Central intelligence with streaming LLM"
+
 [functions.workflow-execute]
 verify_jwt = true
 
