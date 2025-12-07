@@ -602,3 +602,15 @@ comment = "Travel price monitoring with Amadeus API integration for flights and 
 [functions.dp-mentor-ai]
 verify_jwt = false
 comment = "DP Mentor AI - Dynamic Positioning training and mentoring system"
+
+# ============================================
+# NAUTILUS COMMAND CENTER AI
+# ============================================
+
+[functions.nautilus-brain]
+verify_jwt = false
+comment = "Nautilus Brain - Central AI for maritime operations with multi-model orchestration"
+
+[functions.nautilus-predict]
+verify_jwt = false
+comment = "Nautilus Predict - Predictive maintenance and operational analytics"

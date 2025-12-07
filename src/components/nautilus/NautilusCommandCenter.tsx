@@ -128,7 +128,10 @@ export function NautilusCommandCenter() {
           </TabsContent>
 
           <TabsContent value="iot" className="mt-6">
-            <IoTDashboard vesselId="demo-vessel" />
+            <div className="grid gap-4 md:grid-cols-2">
+              <IoTDashboard vesselId="vessel-atlantico-sul" vesselName="Atlântico Sul" />
+              <IoTDashboard vesselId="vessel-pacifico-norte" vesselName="Pacífico Norte" />
+            </div>
           </TabsContent>
         </Tabs>
       </div>

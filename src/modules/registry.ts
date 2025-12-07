@@ -1825,6 +1825,20 @@ export const MODULE_REGISTRY: Record<string, ModuleDefinition> = {
     lazy: true,
     version: "1.0.0",
   },
+
+  "intelligence.nautilus-command": {
+    id: "intelligence.nautilus-command",
+    name: "Nautilus Command",
+    category: "intelligence",
+    path: "pages/NautilusCommand",
+    description: "Centro de comando integrado com IA para gestão marítima avançada - Fleet Intelligence, Crew Management, Smart Inventory e Maintenance Hub",
+    status: "active",
+    completeness: "100%",
+    route: "/nautilus-command",
+    icon: "Brain",
+    lazy: true,
+    version: "1.0.0",
+  },
 };
 
 export function getModule(id: string): ModuleDefinition | undefined {
