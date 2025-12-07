@@ -186,6 +186,11 @@ const navigationItems = [
         icon: Brain,
       },
       {
+        title: "Mentor DP",
+        url: "/mentor-dp",
+        icon: Anchor,
+      },
+      {
         title: "Sugestões Workflow",
         url: "/workflow-suggestions",
         icon: Workflow,
