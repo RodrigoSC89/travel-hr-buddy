@@ -72,6 +72,7 @@ const groupedModules = [
     title: "IA & Inovação",
     icon: <Brain className="w-4 h-4 mr-2" />,
     items: [
+      { label: "🚀 IA Revolucionária", path: "/revolutionary-ai" },
       { label: "Dashboard IA", path: "/ai-dashboard" },
       { label: "Sugestões Workflow", path: "/workflow-suggestions" },
       { label: "Métricas de Adoção", path: "/ai-adoption" },
