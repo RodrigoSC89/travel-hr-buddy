@@ -53,5 +53,11 @@ export { default as SmartMobility } from "./smart-mobility";
 // Assistants
 export { default as VoiceAssistant } from "./assistants/voice-assistant";
 
+// Procurement & Inventory
+export { default as ProcurementInventory } from "./procurement-inventory";
+
+// SOLAS, ISPS & ISM Training
+export { default as SolasIspsTraining } from "./solas-isps-training";
+
 // Re-export registry
 export { MODULE_REGISTRY, type ModuleDefinition } from "./registry";

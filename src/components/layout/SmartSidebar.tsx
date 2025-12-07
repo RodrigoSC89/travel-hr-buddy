@@ -111,7 +111,7 @@ const groupedModules = [
     icon: <GraduationCap className="w-4 h-4 mr-2" />,
     items: [
       { label: "Nautilus Academy", path: "/nautilus-academy" },
-      { label: "SOLAS & ISM Training", path: "/solas-training" },
+      { label: "SOLAS, ISPS & ISM Training", path: "/solas-isps-training" },
       { label: "Mentor DP", path: "/mentor-dp" },
       { label: "DP Intelligence", path: "/dp-intelligence" },
     ],
@@ -162,7 +162,7 @@ const groupedModules = [
       { label: "Viagens", path: "/travel" },
       { label: "Smart Mobility", path: "/smart-mobility" },
       { label: "Reservas", path: "/reservations" },
-      { label: "Autonomous Procurement", path: "/autonomous-procurement" },
+      { label: "Procurement & Inventory AI", path: "/procurement-inventory" },
     ],
   },
   {
