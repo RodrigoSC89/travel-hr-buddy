@@ -395,14 +395,24 @@ export const NAUTILUS_MODULES: ModuleDefinition[] = [
     description: "Autonomous decision-making console"
   },
   {
-    id: "emergency-response",
-    name: "Resposta a Emergências",
-    path: "/emergency-response",
-    category: "system",
+    id: "solas-isps-training",
+    name: "SOLAS, ISPS & ISM Training",
+    path: "/solas-isps-training",
+    category: "training",
     aiEnabled: true,
-    connectedTo: ["Supabase", "MQTT", "OpenAI"],
+    connectedTo: ["Supabase", "OpenAI"],
     fallbackAvailable: true,
-    description: "Emergency response coordination"
+    description: "Unified SOLAS, ISPS & ISM training with emergency response"
+  },
+  {
+    id: "procurement-inventory",
+    name: "Procurement & Inventory AI",
+    path: "/procurement-inventory",
+    category: "logistics",
+    aiEnabled: true,
+    connectedTo: ["Supabase", "OpenAI"],
+    fallbackAvailable: true,
+    description: "AI-powered procurement and inventory management"
   },
   {
     id: "satellite-tracker",

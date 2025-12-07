@@ -54,7 +54,6 @@ const groupedModules = [
       { label: "Dashboard Meteorológico", path: "/weather-dashboard" },
       { label: "Rastreador de Satélite", path: "/satellite-tracker" },
       { label: "Controle de Missão", path: "/mission-control" },
-      { label: "Resposta a Emergências", path: "/emergency-response" },
       { label: "Otimização", path: "/optimization" },
     ],
   },

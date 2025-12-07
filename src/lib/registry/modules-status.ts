@@ -56,7 +56,8 @@ export const FOLDER_TO_MODULE_MAP: Record<string, string> = {
   "feedback": "feedback",
   "api-gateway": "api-gateway",
   "mission-control": "mission-control",
-  "emergency-response": "emergency-response",
+  "solas-isps-training": "solas-isps-training",
+  "procurement-inventory": "procurement-inventory",
   "satellite-tracker": "satellite-tracker",
   "crew-wellbeing": "crew-wellbeing",
   "sgso": "sgso",
@@ -86,7 +87,10 @@ export const DEPRECATED_FOLDERS = [
   "configuracoes", // system settings, not a module
   "centro-ajuda", // help center, not a module
   "hub-integracoes", // merged into api-gateway
-  "incident-reports", // merged into emergency-response
+  "incident-reports", // merged into solas-isps-training
+  "emergency-response", // merged into solas-isps-training
+  "solas-training", // merged into solas-isps-training
+  "autonomous-procurement", // replaced by procurement-inventory
   "maintenance-planner", // merged into mmi
   "mission-logs", // merged into mission-control
   "otimizacao", // merged into fuel-optimizer

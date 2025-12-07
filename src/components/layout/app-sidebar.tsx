@@ -233,8 +233,8 @@ const navigationItems = [
         icon: Trophy,
       },
       {
-        title: "SOLAS & ISM Training",
-        url: "/solas-training",
+        title: "SOLAS, ISPS & ISM Training",
+        url: "/solas-isps-training",
         icon: Shield,
       },
       {
@@ -502,9 +502,9 @@ const navigationItems = [
         icon: UserCog,
       },
       {
-        title: "Resposta Emergências",
-        url: "/emergency-response",
-        icon: Bell,
+        title: "Procurement & Inventory AI",
+        url: "/procurement-inventory",
+        icon: Database,
       },
       {
         title: "Controle Missão",
