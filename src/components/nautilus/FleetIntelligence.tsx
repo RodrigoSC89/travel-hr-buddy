@@ -40,35 +40,108 @@ export function FleetIntelligence() {
 
   const loadFleetData = async () => {
     try {
-      const { data } = await supabase
+      const { data, error } = await supabase
         .from("vessels")
         .select("*")
         .limit(10);
 
-      if (data) {
+      if (error) {
+        console.error("Error loading vessels:", error);
+        // Use demo data if no access
+        setVessels(getDemoVessels());
+        return;
+      }
+
+      if (data && data.length > 0) {
         const mappedVessels: VesselStatus[] = data.map((v) => ({
           id: v.id,
-          name: v.name,
-          status: (v.status as VesselStatus["status"]) || "anchored",
-          fuelLevel: v.current_fuel_level || Math.random() * 100,
-          speed: Math.random() * 20,
+          name: v.name || "Embarcação",
+          status: mapVesselStatus(v.status),
+          fuelLevel: v.current_fuel_level ? Math.min(100, (v.current_fuel_level / 15)) : 50 + Math.random() * 40,
+          speed: v.status === "active" ? 8 + Math.random() * 12 : 0,
           position: {
-            lat: -23.5505 + Math.random() * 10, 
-            lng: -46.6333 + Math.random() * 10 
+            lat: -23.5505 + Math.random() * 5, 
+            lng: -46.6333 + Math.random() * 5 
           },
-          nextPort: v.current_location || "Santos",
+          nextPort: v.current_location || "Santos, BR",
           eta: new Date(Date.now() + Math.random() * 86400000 * 3).toISOString(),
-          alerts: Math.floor(Math.random() * 5),
-          efficiency: 75 + Math.random() * 25,
+          alerts: Math.floor(Math.random() * 3),
+          efficiency: 75 + Math.random() * 20,
         }));
         setVessels(mappedVessels);
+      } else {
+        setVessels(getDemoVessels());
       }
     } catch (error) {
       console.error("Error loading fleet:", error);
+      setVessels(getDemoVessels());
     } finally {
       setIsLoading(false);
     }
   };
+
+  const mapVesselStatus = (dbStatus: string | null): VesselStatus["status"] => {
+    const statusMap: Record<string, VesselStatus["status"]> = {
+      "active": "navigating",
+      "in_port": "anchored",
+      "docked": "anchored",
+      "maintenance": "maintenance",
+      "emergency": "emergency",
+      "inactive": "anchored"
+    };
+    return statusMap[dbStatus || ""] || "anchored";
+  };
+
+  const getDemoVessels = (): VesselStatus[] => [
+    {
+      id: "demo-1",
+      name: "MV Atlântico Sul",
+      status: "navigating",
+      fuelLevel: 78,
+      speed: 14.5,
+      position: { lat: -23.9618, lng: -46.3322 },
+      nextPort: "Santos, BR",
+      eta: new Date(Date.now() + 86400000).toISOString(),
+      alerts: 0,
+      efficiency: 92
+    },
+    {
+      id: "demo-2",
+      name: "MV Pacífico Norte",
+      status: "anchored",
+      fuelLevel: 65,
+      speed: 0,
+      position: { lat: -22.9068, lng: -43.1729 },
+      nextPort: "Rio de Janeiro, BR",
+      eta: new Date(Date.now() + 172800000).toISOString(),
+      alerts: 1,
+      efficiency: 88
+    },
+    {
+      id: "demo-3",
+      name: "MV Índico Explorer",
+      status: "maintenance",
+      fuelLevel: 45,
+      speed: 0,
+      position: { lat: -25.4284, lng: -49.2733 },
+      nextPort: "Paranaguá, BR",
+      eta: new Date(Date.now() + 259200000).toISOString(),
+      alerts: 2,
+      efficiency: 76
+    },
+    {
+      id: "demo-4",
+      name: "MV Ártico Star",
+      status: "navigating",
+      fuelLevel: 82,
+      speed: 16.2,
+      position: { lat: -8.0476, lng: -34.8770 },
+      nextPort: "Recife, BR",
+      eta: new Date(Date.now() + 43200000).toISOString(),
+      alerts: 0,
+      efficiency: 95
+    }
+  ];
 
   const getStatusColor = (status: VesselStatus["status"]) => {
     const colors = {
