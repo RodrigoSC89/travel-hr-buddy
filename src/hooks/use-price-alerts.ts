@@ -1,5 +1,6 @@
 import { useState, useEffect } from "react";
 import { useToast } from "@/hooks/use-toast";
+import { supabase } from "@/integrations/supabase/client";
 import { 
   priceAlertsService, 
   PriceAlert, 
@@ -19,16 +20,32 @@ export const usePriceAlerts = () => {
     try {
       setLoading(true);
       setError(null);
+      
+      // Check if user is authenticated before fetching
+      const { data: { user } } = await supabase.auth.getUser();
+      if (!user) {
+        // User not authenticated - just return empty array silently
+        setAlerts([]);
+        setLoading(false);
+        return;
+      }
+      
       const data = await priceAlertsService.getAlerts();
       setAlerts(data);
     } catch (err) {
+      // Don't show error toast for auth-related issues
       const errorMessage = err instanceof Error ? err.message : "Failed to load alerts";
-      setError(errorMessage);
-      toast({
-        title: "Error",
-        description: errorMessage,
-        variant: "destructive",
-      });
+      if (!errorMessage.includes("JWT") && !errorMessage.includes("auth") && !errorMessage.includes("row-level security")) {
+        setError(errorMessage);
+        toast({
+          title: "Error",
+          description: errorMessage,
+          variant: "destructive",
+        });
+      } else {
+        // Silently set empty array for auth issues
+        setAlerts([]);
+      }
     } finally {
       setLoading(false);
     }
@@ -171,11 +188,25 @@ export const usePriceNotifications = () => {
     try {
       setLoading(true);
       setError(null);
+      
+      // Check if user is authenticated before fetching
+      const { data: { user } } = await supabase.auth.getUser();
+      if (!user) {
+        setNotifications([]);
+        setLoading(false);
+        return;
+      }
+      
       const data = await priceAlertsService.getNotifications(unreadOnly);
       setNotifications(data);
     } catch (err) {
       const errorMessage = err instanceof Error ? err.message : "Failed to load notifications";
-      setError(errorMessage);
+      // Don't set error for auth-related issues
+      if (!errorMessage.includes("JWT") && !errorMessage.includes("auth") && !errorMessage.includes("row-level security")) {
+        setError(errorMessage);
+      } else {
+        setNotifications([]);
+      }
     } finally {
       setLoading(false);
     }
