@@ -186,11 +186,6 @@ const navigationItems = [
         icon: Brain,
       },
       {
-        title: "Mentor DP",
-        url: "/mentor-dp",
-        icon: Anchor,
-      },
-      {
         title: "Sugestões Workflow",
         url: "/workflow-suggestions",
         icon: Workflow,
@@ -224,6 +219,33 @@ const navigationItems = [
         title: "IoT Dashboard",
         url: "/iot",
         icon: Smartphone,
+      },
+    ],
+  },
+  {
+    title: "Treinamentos",
+    url: "/nautilus-academy",
+    icon: Trophy,
+    items: [
+      {
+        title: "Nautilus Academy",
+        url: "/nautilus-academy",
+        icon: Trophy,
+      },
+      {
+        title: "SOLAS & ISM Training",
+        url: "/solas-training",
+        icon: Shield,
+      },
+      {
+        title: "Mentor DP",
+        url: "/mentor-dp",
+        icon: Anchor,
+      },
+      {
+        title: "DP Intelligence",
+        url: "/dp-intelligence",
+        icon: Brain,
       },
     ],
   },
@@ -335,9 +357,9 @@ const navigationItems = [
         icon: FileText,
       },
       {
-        title: "DP Intelligence",
-        url: "/dp-intelligence",
-        icon: Brain,
+        title: "Feedback",
+        url: "/feedback",
+        icon: MessageSquare,
       },
       {
         title: "Feedback",
@@ -390,9 +412,9 @@ const navigationItems = [
         icon: CheckCircle,
       },
       {
-        title: "Nautilus Academy",
-        url: "/nautilus-academy",
-        icon: Trophy,
+        title: "Gestão de Riscos",
+        url: "/risk-management",
+        icon: Shield,
       },
       {
         title: "Gestão de Riscos",
