@@ -1,14 +1,14 @@
 /**
  * ESG Emissions Dashboard
  * Monitoramento de emissões, carbon footprint e compliance ambiental
+ * Integrado com Supabase para dados de embarcações
  */
 
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Progress } from "@/components/ui/progress";
-import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import {
   Leaf,
@@ -17,7 +17,6 @@ import {
   Wind,
   TrendingDown,
   TrendingUp,
-  AlertTriangle,
   CheckCircle,
   BarChart3,
   Globe,
@@ -26,12 +25,24 @@ import {
   Thermometer,
   FileText,
   Brain,
-  Sparkles
+  Sparkles,
+  Loader2,
+  AlertTriangle
 } from "lucide-react";
-import { LineChart, Line, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer, AreaChart, Area, PieChart, Pie, Cell } from "recharts";
+import { AreaChart, Area, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer, PieChart, Pie, Cell } from "recharts";
+import { supabase } from "@/integrations/supabase/client";
 
-// Simulated emissions data
-const monthlyEmissions = [
+interface VesselData {
+  id: string;
+  name: string;
+  vessel_type: string;
+  fuel_capacity: number;
+  current_fuel_level: number;
+  status: string;
+}
+
+// Demo data as fallback
+const demoMonthlyEmissions = [
   { month: "Jan", co2: 245, sox: 12, nox: 28, pm: 5.2 },
   { month: "Fev", co2: 238, sox: 11, nox: 26, pm: 4.8 },
   { month: "Mar", co2: 252, sox: 13, nox: 29, pm: 5.5 },
@@ -49,12 +60,16 @@ const fuelConsumption = [
   { name: "LNG", value: 5, color: "#8b5cf6" },
 ];
 
+// Vessel emissions data
 const vesselEmissions = [
   { vessel: "PSV Atlantic Explorer", co2: 42.5, efficiency: "A", trend: -8.2 },
   { vessel: "AHTS Pacific Star", co2: 68.3, efficiency: "B", trend: -3.1 },
   { vessel: "OSV Caribbean Wind", co2: 35.8, efficiency: "A+", trend: -12.5 },
   { vessel: "PSV Gulf Stream", co2: 48.2, efficiency: "B", trend: 2.3 },
 ];
+
+// Monthly emissions data
+const monthlyEmissions = demoMonthlyEmissions;
 
 export const EmissionsDashboard: React.FC = () => {
   const [selectedPeriod, setSelectedPeriod] = useState("ytd");

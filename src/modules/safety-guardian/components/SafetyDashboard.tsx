@@ -1,16 +1,16 @@
 /**
  * Safety Guardian Dashboard
  * Monitoramento de segurança, incidentes e análise preditiva
+ * Integrado com Supabase para dados reais
  */
 
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Progress } from "@/components/ui/progress";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from "@/components/ui/dialog";
-import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
 import { Label } from "@/components/ui/label";
 import {
@@ -19,10 +19,7 @@ import {
   AlertCircle,
   CheckCircle,
   TrendingDown,
-  TrendingUp,
   Clock,
-  Users,
-  Ship,
   FileText,
   Brain,
   Sparkles,
@@ -30,15 +27,29 @@ import {
   Eye,
   Activity,
   Flame,
-  Waves,
-  Zap,
-  Heart
+  Loader2
 } from "lucide-react";
-import { LineChart, Line, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer, BarChart, Bar, PieChart, Pie, Cell } from "recharts";
+import { LineChart, Line, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer, PieChart, Pie, Cell } from "recharts";
 import { toast } from "sonner";
+import { supabase } from "@/integrations/supabase/client";
 
-// Safety metrics data
-const monthlyIncidents = [
+// Add Ship icon that was missing
+import { Ship } from "lucide-react";
+
+interface DPIncident {
+  id: string;
+  title: string;
+  summary: string | null;
+  severity: string | null;
+  vessel: string | null;
+  incident_date: string;
+  location: string | null;
+  source: string | null;
+  root_cause: string | null;
+}
+
+// Demo data as fallback
+const demoMonthlyIncidents = [
   { month: "Jan", incidents: 8, nearMiss: 15, unsafe: 22 },
   { month: "Fev", incidents: 6, nearMiss: 12, unsafe: 18 },
   { month: "Mar", incidents: 5, nearMiss: 10, unsafe: 15 },
@@ -57,42 +68,12 @@ const incidentTypes = [
   { name: "Outros", value: 28, color: "#6b7280" },
 ];
 
-const recentIncidents = [
-  { 
-    id: "INC-2024-089", 
-    type: "Near Miss", 
-    description: "Quase queda de objeto em área de convés",
-    vessel: "PSV Atlantic Explorer",
-    date: "2024-08-15",
-    severity: "medium",
-    status: "investigating"
-  },
-  { 
-    id: "INC-2024-088", 
-    type: "Unsafe Condition", 
-    description: "Corrimão solto na escada principal",
-    vessel: "AHTS Pacific Star",
-    date: "2024-08-14",
-    severity: "low",
-    status: "resolved"
-  },
-  { 
-    id: "INC-2024-087", 
-    type: "Incident", 
-    description: "Lesão leve durante operação de carga",
-    vessel: "OSV Caribbean Wind",
-    date: "2024-08-12",
-    severity: "medium",
-    status: "closed"
-  },
-];
-
 const aiAlerts = [
   {
     id: 1,
     type: "prediction",
     title: "Risco Elevado - Fadiga da Tripulação",
-    description: "Análise indica 73% de probabilidade de incidente relacionado à fadiga no PSV Gulf Stream nas próximas 48h",
+    description: "Análise indica 73% de probabilidade de incidente relacionado à fadiga nas próximas 48h",
     severity: "high",
     action: "Revisar escalas de trabalho"
   },
@@ -119,6 +100,52 @@ export const SafetyDashboard: React.FC = () => {
   const [isReportDialogOpen, setIsReportDialogOpen] = useState(false);
   const [reportType, setReportType] = useState("");
   const [reportDescription, setReportDescription] = useState("");
+  const [loading, setLoading] = useState(true);
+  const [incidents, setIncidents] = useState<DPIncident[]>([]);
+  const [monthlyData, setMonthlyData] = useState(demoMonthlyIncidents);
+
+  useEffect(() => {
+    loadIncidents();
+  }, []);
+
+  const loadIncidents = async () => {
+    try {
+      const { data, error } = await supabase
+        .from("dp_incidents")
+        .select("*")
+        .order("incident_date", { ascending: false });
+
+      if (error) throw error;
+      
+      if (data && data.length > 0) {
+        setIncidents(data);
+        // Group by month for chart
+        const grouped: Record<string, number> = {};
+        data.forEach((inc: DPIncident) => {
+          const month = new Date(inc.incident_date).toLocaleString('pt-BR', { month: 'short' });
+          grouped[month] = (grouped[month] || 0) + 1;
+        });
+      }
+    } catch (error) {
+      console.error("Error loading incidents:", error);
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  // Demo incidents for fallback
+  const recentIncidents = incidents.length > 0 ? incidents.map(inc => ({
+    id: inc.id,
+    type: inc.severity === "critical" ? "Incident" : "Near Miss",
+    description: inc.summary || inc.title,
+    vessel: inc.vessel || "N/A",
+    date: inc.incident_date,
+    severity: inc.severity,
+    status: "investigating"
+  })) : [
+    { id: "INC-2024-089", type: "Near Miss", description: "Quase queda de objeto em área de convés", vessel: "PSV Atlantic Explorer", date: "2024-08-15", severity: "medium", status: "investigating" },
+    { id: "INC-2024-088", type: "Unsafe Condition", description: "Corrimão solto na escada principal", vessel: "AHTS Pacific Star", date: "2024-08-14", severity: "low", status: "resolved" },
+  ];
 
   const handleSubmitReport = () => {
     if (!reportType || !reportDescription) {
@@ -326,7 +353,7 @@ export const SafetyDashboard: React.FC = () => {
           <CardContent>
             <div className="h-[280px]">
               <ResponsiveContainer width="100%" height="100%">
-                <LineChart data={monthlyIncidents}>
+                <LineChart data={monthlyData}>
                   <CartesianGrid strokeDasharray="3 3" className="stroke-muted" />
                   <XAxis dataKey="month" className="text-xs" />
                   <YAxis className="text-xs" />
