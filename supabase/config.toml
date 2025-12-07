@@ -183,6 +183,10 @@ comment = "AI-generated explanations for training content and procedures"
 verify_jwt = true
 comment = "Generate quiz questions for training modules with answer validation"
 
+[functions.solas-training-ai]
+verify_jwt = false
+comment = "SOLAS Training AI with chat, reports, predictions and scheduling via Lovable AI"
+
 # ============================================
 # AI & ASSISTANT FUNCTIONS (15 functions)
 # ============================================
