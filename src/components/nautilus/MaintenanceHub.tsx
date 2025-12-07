@@ -52,30 +52,15 @@ export function MaintenanceHub() {
 
   const loadMaintenanceData = async () => {
     try {
-      const { data: maintenanceData } = await supabase
-        .from("work_orders")
-        .select("*")
-        .limit(20);
+      // Mock data - work_orders table doesn't exist in schema
+      const mockTasks: MaintenanceTask[] = [
+        { id: "1", title: "Troca de Óleo Motor Principal", description: "Manutenção preventiva programada", vessel: "Atlântico Sul", component: "Motor Principal", priority: "high", status: "pending", dueDate: "2024-12-15", predictedFailure: 12, aiRecommendation: "Baseado em padrões de uso, recomendamos antecipar esta manutenção em 5 dias." },
+        { id: "2", title: "Inspeção Sistema Hidráulico", description: "Verificação de vazamentos", vessel: "Pacífico Norte", component: "Sistema Hidráulico", priority: "critical", status: "overdue", dueDate: "2024-12-01" },
+        { id: "3", title: "Calibração Instrumentos", description: "Calibração anual de instrumentos de navegação", vessel: "Atlântico Sul", component: "Navegação", priority: "medium", status: "in_progress", dueDate: "2024-12-20" },
+        { id: "4", title: "Manutenção Gerador", description: "Substituição de filtros e verificação", vessel: "Pacífico Norte", component: "Gerador 1", priority: "low", status: "completed", dueDate: "2024-12-10" },
+      ];
+      setTasks(mockTasks);
 
-      if (maintenanceData) {
-        const mappedTasks: MaintenanceTask[] = maintenanceData.map((t: any) => ({
-          id: t.id,
-          title: t.title || "Manutenção",
-          description: t.description || "",
-          vessel: "Embarcação",
-          component: "Motor Principal",
-          priority: (t.priority as MaintenanceTask["priority"]) || "medium",
-          status: (t.status as MaintenanceTask["status"]) || "pending",
-          dueDate: t.due_date || new Date().toISOString(),
-          predictedFailure: Math.random() * 30,
-          aiRecommendation: Math.random() > 0.5 
-            ? "Baseado em padrões de uso, recomendamos antecipar esta manutenção em 5 dias para evitar falha."
-            : undefined,
-        }));
-        setTasks(mappedTasks);
-      }
-
-      // Generate mock component health data
       const mockComponents: ComponentHealth[] = [
         { id: "1", name: "Motor Principal", vessel: "Atlântico Sul", health: 85, temperature: 72, vibration: 12, predictedLifespan: 2500, lastMaintenance: "2024-01-15" },
         { id: "2", name: "Gerador 1", vessel: "Atlântico Sul", health: 92, temperature: 65, vibration: 8, predictedLifespan: 4200, lastMaintenance: "2024-02-20" },

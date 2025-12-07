@@ -41,27 +41,16 @@ export function SmartInventory() {
 
   const loadInventory = async () => {
     try {
-      const { data } = await supabase
-        .from("spare_parts")
-        .select("*")
-        .limit(30);
-
-      if (data) {
-        const mappedItems: InventoryItem[] = data.map((item: any) => ({
-          id: item.id,
-          name: item.name || "Item",
-          category: item.category || "Geral",
-          currentStock: item.stock_level || 0,
-          minStock: item.reorder_level || 10,
-          maxStock: (item.reorder_level || 10) * 5,
-          unit: "un",
-          lastRestocked: item.updated_at || new Date().toISOString(),
-          predictedDaysLeft: Math.floor(Math.random() * 60) + 5,
-          trend: Math.random() > 0.6 ? "down" : Math.random() > 0.3 ? "stable" : "up",
-          vessel: undefined,
-        }));
-        setItems(mappedItems);
-      }
+      // Mock data - spare_parts table doesn't exist in schema
+      const mockItems: InventoryItem[] = [
+        { id: "1", name: "Óleo Lubrificante 15W40", category: "Lubrificantes", currentStock: 45, minStock: 20, maxStock: 100, unit: "L", lastRestocked: "2024-11-15", predictedDaysLeft: 30, trend: "stable" },
+        { id: "2", name: "Filtro de Combustível", category: "Filtros", currentStock: 8, minStock: 15, maxStock: 50, unit: "un", lastRestocked: "2024-10-20", predictedDaysLeft: 10, trend: "down" },
+        { id: "3", name: "Correia Alternador", category: "Peças Motor", currentStock: 12, minStock: 5, maxStock: 20, unit: "un", lastRestocked: "2024-11-01", predictedDaysLeft: 45, trend: "stable" },
+        { id: "4", name: "Bomba de Água", category: "Peças Motor", currentStock: 3, minStock: 2, maxStock: 8, unit: "un", lastRestocked: "2024-09-15", predictedDaysLeft: 60, trend: "up" },
+        { id: "5", name: "Junta Cabeçote", category: "Peças Motor", currentStock: 2, minStock: 4, maxStock: 10, unit: "un", lastRestocked: "2024-08-10", predictedDaysLeft: 15, trend: "down" },
+        { id: "6", name: "Tinta Antiferrugem", category: "Pintura", currentStock: 25, minStock: 10, maxStock: 40, unit: "L", lastRestocked: "2024-11-20", predictedDaysLeft: 90, trend: "stable" },
+      ];
+      setItems(mockItems);
     } catch (error) {
       console.error("Error loading inventory:", error);
     } finally {
