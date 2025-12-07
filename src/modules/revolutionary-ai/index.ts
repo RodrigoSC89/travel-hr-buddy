@@ -13,6 +13,13 @@ export { ScenarioSimulator } from './ScenarioSimulator';
 export { AuditAssistant } from './AuditAssistant';
 export { SupplierComparator } from './SupplierComparator';
 
+// Additional Revolutionary Features
+export { OfflineSync } from './OfflineSync';
+export { OperationalTimeline } from './OperationalTimeline';
+export { ESGDashboard } from './ESGDashboard';
+export { AdaptiveInterface } from './AdaptiveInterface';
+export { VoiceCommandsAdvanced } from './VoiceCommandsAdvanced';
+
 // Feature Descriptions for Navigation
 export const REVOLUTIONARY_FEATURES = [
   {
@@ -78,5 +85,45 @@ export const REVOLUTIONARY_FEATURES = [
     icon: 'Building2',
     component: 'SupplierComparator',
     category: 'Procurement'
+  },
+  {
+    id: 'offline-sync',
+    name: 'Sincronização Offline',
+    description: 'Opere sem internet e sincronize automaticamente',
+    icon: 'CloudOff',
+    component: 'OfflineSync',
+    category: 'Infraestrutura'
+  },
+  {
+    id: 'operational-timeline',
+    name: 'Timeline Operacional',
+    description: 'Histórico vivo de eventos por embarcação',
+    icon: 'Clock',
+    component: 'OperationalTimeline',
+    category: 'Operações'
+  },
+  {
+    id: 'esg-dashboard',
+    name: 'Dashboard ESG',
+    description: 'Compliance ambiental, social e governança',
+    icon: 'Leaf',
+    component: 'ESGDashboard',
+    category: 'Sustentabilidade'
+  },
+  {
+    id: 'adaptive-interface',
+    name: 'Interface Adaptativa',
+    description: 'UI personalizada por perfil de usuário',
+    icon: 'Layout',
+    component: 'AdaptiveInterface',
+    category: 'UX'
+  },
+  {
+    id: 'voice-commands',
+    name: 'Comandos de Voz',
+    description: 'Reconhecimento de voz contextual avançado',
+    icon: 'Mic',
+    component: 'VoiceCommandsAdvanced',
+    category: 'IA Conversacional'
   }
 ];
