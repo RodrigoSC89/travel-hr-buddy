@@ -73,6 +73,9 @@ const groupedModules = [
     icon: <Brain className="w-4 h-4 mr-2" />,
     items: [
       { label: "🚀 IA Revolucionária", path: "/revolutionary-ai" },
+      { label: "🔄 Workflow Visual IA", path: "/workflow-visual" },
+      { label: "📅 Calendário Operacional", path: "/operational-calendar" },
+      { label: "🚨 Modo Emergência", path: "/emergency-mode" },
       { label: "Dashboard IA", path: "/ai-dashboard" },
       { label: "Sugestões Workflow", path: "/workflow-suggestions" },
       { label: "Métricas de Adoção", path: "/ai-adoption" },
