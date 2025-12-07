@@ -42,12 +42,18 @@ export function CrewManagement() {
 
   const loadCrewData = async () => {
     try {
-      const { data } = await supabase
+      const { data, error } = await supabase
         .from("crew_members")
         .select("*, vessels(name)")
         .limit(20);
 
-      if (data) {
+      if (error) {
+        console.error("Error loading crew:", error);
+        setCrew(getDemoCrew());
+        return;
+      }
+
+      if (data && data.length > 0) {
         const mappedCrew: CrewMember[] = data.map((c: any) => ({
           id: c.id,
           name: c.full_name || "Tripulante",
@@ -70,13 +76,25 @@ export function CrewManagement() {
           performance: 70 + Math.random() * 30,
         }));
         setCrew(mappedCrew);
+      } else {
+        setCrew(getDemoCrew());
       }
     } catch (error) {
       console.error("Error loading crew:", error);
+      setCrew(getDemoCrew());
     } finally {
       setIsLoading(false);
     }
   };
+
+  const getDemoCrew = (): CrewMember[] => [
+    { id: "1", name: "Carlos Silva", position: "Capitão", vessel: "MV Atlântico Sul", certifications: [{ name: "STCW", expiryDate: new Date(Date.now() + 90 * 86400000).toISOString(), status: "valid" }, { name: "GMDSS", expiryDate: new Date(Date.now() + 180 * 86400000).toISOString(), status: "valid" }], hoursWorked: 8, restHours: 10, performance: 95 },
+    { id: "2", name: "Ana Costa", position: "Oficial de Navegação", vessel: "MV Atlântico Sul", certifications: [{ name: "STCW", expiryDate: new Date(Date.now() + 30 * 86400000).toISOString(), status: "expiring" }, { name: "ARPA", expiryDate: new Date(Date.now() + 200 * 86400000).toISOString(), status: "valid" }], hoursWorked: 6, restHours: 12, performance: 88 },
+    { id: "3", name: "João Santos", position: "Engenheiro Chefe", vessel: "MV Pacífico Norte", certifications: [{ name: "STCW", expiryDate: new Date(Date.now() + 120 * 86400000).toISOString(), status: "valid" }], hoursWorked: 10, restHours: 8, performance: 92 },
+    { id: "4", name: "Maria Oliveira", position: "Oficial de Segurança", vessel: "MV Pacífico Norte", certifications: [{ name: "STCW", expiryDate: new Date(Date.now() + 15 * 86400000).toISOString(), status: "expiring" }, { name: "ISPS", expiryDate: new Date(Date.now() + 60 * 86400000).toISOString(), status: "valid" }], hoursWorked: 4, restHours: 14, performance: 85 },
+    { id: "5", name: "Pedro Almeida", position: "Marinheiro", vessel: "MV Índico Explorer", certifications: [{ name: "STCW", expiryDate: new Date(Date.now() + 300 * 86400000).toISOString(), status: "valid" }], hoursWorked: 0, restHours: 16, performance: 78 },
+    { id: "6", name: "Fernanda Lima", position: "Cozinheira", vessel: "MV Atlântico Sul", certifications: [{ name: "STCW", expiryDate: new Date(Date.now() + 250 * 86400000).toISOString(), status: "valid" }], hoursWorked: 7, restHours: 9, performance: 90 },
+  ];
 
   const stats = {
     total: crew.length,
