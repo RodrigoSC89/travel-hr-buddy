@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import { useState, useEffect } from "react";
 import { Link, useLocation } from "react-router-dom";
 import { 
   LayoutDashboard, 
@@ -213,7 +213,7 @@ export function SmartSidebar({ className }: SmartSidebarProps) {
   };
 
   // Auto-open section containing current route
-  React.useEffect(() => {
+  useEffect(() => {
     const currentGroup = groupedModules.find(group => 
       group.items.some(item => item.path === location.pathname)
     );
@@ -308,3 +308,5 @@ export function SmartSidebar({ className }: SmartSidebarProps) {
     </>
   );
 }
+
+export default SmartSidebar;
