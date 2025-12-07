@@ -293,18 +293,7 @@ export const MODULE_REGISTRY: Record<string, ModuleDefinition> = {
   // REMOVED: logistics.satellite-tracker - Use operations.fleet tracking (PATCH 176.2)
   // REMOVED: planning.voyage - Merged into operations.fleet (PATCH 176.2)
 
-  "hr.training": {
-    id: "hr.training",
-    name: "Training Academy",
-    category: "hr",
-    path: "pages/TrainingAcademy",
-    description: "Training and certification management with AI-powered learning paths",
-    status: "active",
-    completeness: "100%",
-    route: "/training-academy",
-    icon: "GraduationCap",
-    lazy: true,
-  },
+  // REMOVED: hr.training - Merged into nautilus-academy (PATCH UNIFY-ACADEMY)
 
   "hr.peo-dp": {
     id: "hr.peo-dp",
