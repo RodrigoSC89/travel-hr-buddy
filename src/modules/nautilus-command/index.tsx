@@ -13,6 +13,7 @@
  */
 
 import React, { useState, useEffect } from "react";
+import { useNavigate } from "react-router-dom";
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
@@ -281,6 +282,72 @@ const NautilusCommandCenter = () => {
           </div>
         </motion.div>
 
+        {/* Integrated Module Navigation Cards */}
+        <motion.div
+          initial={{ opacity: 0, y: 20 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ delay: 0.05 }}
+        >
+          <Card className="border-none shadow-lg bg-gradient-to-r from-card to-muted/30">
+            <CardHeader className="pb-3">
+              <div className="flex items-center justify-between">
+                <div className="flex items-center gap-2">
+                  <Brain className="h-5 w-5 text-primary" />
+                  <CardTitle className="text-lg">Nautilus Command Center</CardTitle>
+                  <Badge variant="secondary" className="text-xs">Novo</Badge>
+                </div>
+                <p className="text-sm text-muted-foreground">
+                  Centro de Comando Integrado com IA • Frota, Tripulação, Estoque, Manutenção & IoT
+                </p>
+              </div>
+            </CardHeader>
+            <CardContent>
+              <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-3">
+                <IntegratedModuleCard
+                  icon={<Ship className="h-5 w-5" />}
+                  title="Frota"
+                  subtitle={`${systemStatus.fleet.active} ativas`}
+                  path="/fleet"
+                  color="blue"
+                  alerts={systemStatus.fleet.alerts}
+                />
+                <IntegratedModuleCard
+                  icon={<Users className="h-5 w-5" />}
+                  title="Tripulação"
+                  subtitle={`${systemStatus.crew.onboard} a bordo`}
+                  path="/crew"
+                  color="green"
+                  alerts={systemStatus.crew.expiringCerts}
+                />
+                <IntegratedModuleCard
+                  icon={<Package className="h-5 w-5" />}
+                  title="Estoque"
+                  subtitle={`${systemStatus.inventory.pendingOrders} pedidos`}
+                  path="/procurement-inventory"
+                  color="purple"
+                  alerts={systemStatus.inventory.lowStock}
+                />
+                <IntegratedModuleCard
+                  icon={<Wrench className="h-5 w-5" />}
+                  title="Manutenção"
+                  subtitle={`${systemStatus.maintenance.efficiency}% efic.`}
+                  path="/intelligent-maintenance"
+                  color="orange"
+                  alerts={systemStatus.maintenance.overdue}
+                />
+                <IntegratedModuleCard
+                  icon={<Cpu className="h-5 w-5" />}
+                  title="IoT"
+                  subtitle="Sensores ativos"
+                  path="/iot-dashboard"
+                  color="cyan"
+                  alerts={0}
+                />
+              </div>
+            </CardContent>
+          </Card>
+        </motion.div>
+
         {/* Quick Status Bar */}
         <motion.div
           initial={{ opacity: 0, y: 20 }}
@@ -451,6 +518,46 @@ const StatusCard: React.FC<StatusCardProps> = ({ icon, title, value, subtitle, c
         </div>
       </CardContent>
     </Card>
+  );
+};
+
+// Integrated Module Card Component
+interface IntegratedModuleCardProps {
+  icon: React.ReactNode;
+  title: string;
+  subtitle: string;
+  path: string;
+  color: 'blue' | 'green' | 'orange' | 'purple' | 'cyan';
+  alerts?: number;
+}
+
+const IntegratedModuleCard: React.FC<IntegratedModuleCardProps> = ({ icon, title, subtitle, path, color, alerts = 0 }) => {
+  const navigate = useNavigate();
+  
+  const colorClasses = {
+    blue: 'text-blue-500 bg-blue-100 dark:bg-blue-900/30 hover:bg-blue-200 dark:hover:bg-blue-900/50',
+    green: 'text-green-500 bg-green-100 dark:bg-green-900/30 hover:bg-green-200 dark:hover:bg-green-900/50',
+    orange: 'text-orange-500 bg-orange-100 dark:bg-orange-900/30 hover:bg-orange-200 dark:hover:bg-orange-900/50',
+    purple: 'text-purple-500 bg-purple-100 dark:bg-purple-900/30 hover:bg-purple-200 dark:hover:bg-purple-900/50',
+    cyan: 'text-cyan-500 bg-cyan-100 dark:bg-cyan-900/30 hover:bg-cyan-200 dark:hover:bg-cyan-900/50'
+  };
+
+  return (
+    <button
+      onClick={() => navigate(path)}
+      className={`relative flex flex-col items-center justify-center p-4 rounded-xl transition-all ${colorClasses[color]} cursor-pointer group`}
+    >
+      {alerts > 0 && (
+        <Badge variant="destructive" className="absolute -top-1 -right-1 text-xs h-5 w-5 p-0 flex items-center justify-center">
+          {alerts}
+        </Badge>
+      )}
+      <div className="p-2 rounded-full bg-background/50 group-hover:scale-110 transition-transform">
+        {React.cloneElement(icon as React.ReactElement, { className: `h-5 w-5 ${colorClasses[color].split(' ')[0]}` })}
+      </div>
+      <span className="mt-2 font-medium text-sm">{title}</span>
+      <span className="text-xs opacity-70">{subtitle}</span>
+    </button>
   );
 };
 
