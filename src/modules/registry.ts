@@ -1800,6 +1800,20 @@ export const MODULE_REGISTRY: Record<string, ModuleDefinition> = {
     icon: "Zap",
     lazy: true,
   },
+
+  "intelligence.mentor-dp": {
+    id: "intelligence.mentor-dp",
+    name: "Mentor DP",
+    category: "intelligence",
+    path: "pages/MentorDP",
+    description: "Módulo de mentoria técnica em Posicionamento Dinâmico com IA generativa e preditiva",
+    status: "active",
+    completeness: "100%",
+    route: "/mentor-dp",
+    icon: "Compass",
+    lazy: true,
+    version: "1.0.0",
+  },
 };
 
 export function getModule(id: string): ModuleDefinition | undefined {
