@@ -113,7 +113,6 @@ const groupedModules = [
     title: "RH & Pessoas",
     icon: <Users className="w-4 h-4 mr-2" />,
     items: [
-      { label: "Academia de Treinamento", path: "/training-academy" },
       { label: "Nautilus Academy", path: "/nautilus-academy" },
       { label: "PEOTRAM", path: "/peotram" },
       { label: "PEO-DP", path: "/peo-dp" },

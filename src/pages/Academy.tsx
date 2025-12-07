@@ -1,8 +1,9 @@
 import React from "react";
-import TrainingAcademy from "@/modules/hr/training-academy";
+import { Navigate } from "react-router-dom";
 
+// PATCH: UNIFY-ACADEMY - Redirect to Nautilus Academy
 const Academy = () => {
-  return <TrainingAcademy />;
+  return <Navigate to="/nautilus-academy" replace />;
 };
 
 export default Academy;

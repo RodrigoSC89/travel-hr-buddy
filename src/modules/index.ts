@@ -27,8 +27,8 @@ export * from "./compliance";
 // Analytics
 export { default as AnalyticsCore } from "./analytics";
 
-// HR & Training
-export { default as TrainingAcademy } from "./training";
+// HR & Training - Unified in Nautilus Academy
+export { default as NautilusAcademy } from "./nautilus-academy";
 
 // Mission Control
 export { default as MissionControl } from "./mission-control";

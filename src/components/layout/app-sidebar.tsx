@@ -390,8 +390,8 @@ const navigationItems = [
         icon: CheckCircle,
       },
       {
-        title: "Academia Treinamento",
-        url: "/training-academy",
+        title: "Nautilus Academy",
+        url: "/nautilus-academy",
         icon: Trophy,
       },
       {

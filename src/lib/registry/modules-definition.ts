@@ -215,16 +215,7 @@ export const NAUTILUS_MODULES: ModuleDefinition[] = [
     fallbackAvailable: true,
     description: "Employee portal and HR services"
   },
-  {
-    id: "training-academy",
-    name: "Academia de Treinamento",
-    path: "/training-academy",
-    category: "hr",
-    aiEnabled: true,
-    connectedTo: ["Supabase", "OpenAI"],
-    fallbackAvailable: true,
-    description: "Training and certification management"
-  },
+  // REMOVED: training-academy - Merged into nautilus-academy (unified training module)
   {
     id: "user-management",
     name: "Gestão de Usuários",
