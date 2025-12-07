@@ -200,8 +200,8 @@ verify_jwt = true
 comment = "Generate reports from assistant logs"
 
 [functions.generate-ai-report]
-verify_jwt = true
-comment = "Generate AI-powered analytical reports"
+verify_jwt = false
+comment = "Generate AI-powered analytical reports with Lovable AI"
 
 [functions.generate-predictions]
 verify_jwt = true
