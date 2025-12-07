@@ -89,6 +89,12 @@ const navigationItems = [
     alwaysVisible: true
   },
   {
+    title: "IA Revolucionária",
+    url: "/revolutionary-ai",
+    icon: Zap,
+    alwaysVisible: true
+  },
+  {
     title: "Dashboard",
     url: "/",
     icon: LayoutDashboard,
