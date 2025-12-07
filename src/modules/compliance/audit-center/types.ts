@@ -3,7 +3,7 @@
  * PATCH 62.0
  */
 
-export type AuditType = "IMCA" | "ISM" | "ISPS";
+export type AuditType = "IMCA" | "ISM" | "ISPS" | "PEOTRAM" | "SGSO";
 export type AuditStatus = "scheduled" | "in_progress" | "completed" | "overdue";
 export type ChecklistStatus = "ok" | "warning" | "fail" | "not_checked";
 
