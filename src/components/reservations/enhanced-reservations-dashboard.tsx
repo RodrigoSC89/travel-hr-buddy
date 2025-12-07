@@ -83,29 +83,49 @@ export const EnhancedReservationsDashboard: React.FC = () => {
   const { user } = useAuth();
 
   useEffect(() => {
-    if (user) {
-      fetchReservations();
-    }
-  }, [user]);
+    fetchReservations();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
 
   const fetchReservations = async () => {
     try {
       setLoading(true);
+      
+      // Check if user is authenticated
+      const { data: { user: authUser } } = await supabase.auth.getUser();
+      if (!authUser) {
+        // User not authenticated - show empty state
+        setReservations([]);
+        setLoading(false);
+        return;
+      }
+      
       const { data, error } = await supabase
         .from("reservations")
         .select("*")
         .order("start_date", { ascending: true });
 
-      if (error) throw error;
+      if (error) {
+        // Handle RLS/auth errors silently
+        if (error.message.includes("row-level security") || error.message.includes("JWT")) {
+          setReservations([]);
+          setLoading(false);
+          return;
+        }
+        throw error;
+      }
       
       // Fetch user profiles separately to get crew member names
       const userIds = [...new Set((data || []).map(item => item.user_id))].filter((id): id is string => id !== null);
-      const { data: profiles } = await supabase
-        .from("profiles")
-        .select("id, full_name")
-        .in("id", userIds);
-
-      const profileMap = new Map(profiles?.map(p => [p.id, p.full_name]) || []);
+      
+      let profileMap = new Map<string, string | null>();
+      if (userIds.length > 0) {
+        const { data: profiles } = await supabase
+          .from("profiles")
+          .select("id, full_name")
+          .in("id", userIds);
+        profileMap = new Map(profiles?.map(p => [p.id, p.full_name]) || []);
+      }
       
       const enhancedData = (data || []).map(item => ({
         ...item,
@@ -120,11 +140,13 @@ export const EnhancedReservationsDashboard: React.FC = () => {
       const conflictChecked = detectConflicts(enhancedData);
       setReservations(conflictChecked);
     } catch (error) {
+      console.error("Error fetching reservations:", error);
       toast({
         title: "Erro",
         description: "Erro ao carregar reservas",
         variant: "destructive"
       });
+      setReservations([]);
     } finally {
       setLoading(false);
     }
