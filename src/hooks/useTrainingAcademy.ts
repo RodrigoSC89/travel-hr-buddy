@@ -352,6 +352,22 @@ export const useTrainingAcademy = () => {
     return myProgress.find((p) => p.course_id === courseId);
   }, [myProgress]);
 
+  // Create crew member - simulated for now
+  const createCrewMember = useCallback(async (crewData: Partial<CrewMember>) => {
+    // Add to local state (in production, this would save to DB)
+    const newCrew: CrewMember = {
+      id: `crew-${Date.now()}`,
+      name: crewData.name || "Novo Tripulante",
+      position: crewData.position || "Marinheiro",
+      department: crewData.department || "Operações",
+      trainingProgress: 0,
+      certifications: 0,
+    };
+    setCrewMembers(prev => [...prev, newCrew]);
+    toast({ title: "Tripulante cadastrado", description: "Tripulante cadastrado com sucesso!" });
+    return newCrew;
+  }, [toast]);
+
   return {
     courses,
     myProgress,
@@ -365,7 +381,9 @@ export const useTrainingAcademy = () => {
     deleteCourse,
     exportData,
     getCourseProgress,
+    createCrewMember,
     refetch: async () => {
+      fetchedRef.current = false;
       await Promise.all([fetchCourses(), fetchProgress(), fetchCrewMembers()]);
     },
   };
