@@ -83,6 +83,12 @@ interface NavigationItem {
 // Navigation items with improved structure
 const navigationItems = [
   {
+    title: "Nautilus Command",
+    url: "/nautilus-command",
+    icon: Brain,
+    alwaysVisible: true
+  },
+  {
     title: "Dashboard",
     url: "/",
     icon: LayoutDashboard,
