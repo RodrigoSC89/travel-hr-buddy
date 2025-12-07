@@ -89,6 +89,7 @@ const groupedModules = [
       { label: "Relatórios", path: "/reports" },
       { label: "Relatórios de Incidentes", path: "/incident-reports" },
       { label: "Templates", path: "/templates" },
+      { label: "Checklists Inteligentes", path: "/admin/checklists" },
     ],
   },
   {
@@ -150,7 +151,6 @@ const groupedModules = [
       { label: "Compliance Hub", path: "/compliance-hub" },
       { label: "Safety Guardian", path: "/safety-guardian" },
       { label: "Gestão de Resíduos", path: "/waste-management" },
-      { label: "Checklists Inteligentes", path: "/admin/checklists" },
     ],
   },
   {
