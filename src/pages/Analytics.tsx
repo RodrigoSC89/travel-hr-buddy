@@ -1,8 +1,8 @@
 import React from "react";
-import { ProfessionalAnalyticsDashboard } from "@/components/dashboard/professional-analytics-dashboard";
+import AnalyticsCoreProfessional from "@/modules/analytics/AnalyticsCoreProfessional";
 
 const Analytics = () => {
-  return <ProfessionalAnalyticsDashboard />;
+  return <AnalyticsCoreProfessional />;
 };
 
 export default Analytics;
