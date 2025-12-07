@@ -6,6 +6,7 @@ import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { logger } from "@/lib/logger";
+import { useBrain } from "@/components/global/GlobalBrainProvider";
 import { 
   BarChart, 
   Bar, 
@@ -38,7 +39,11 @@ import {
   Shield,
   Anchor,
   Leaf,
-  BarChart3
+  BarChart3,
+  Brain,
+  Sparkles,
+  Radio,
+  RefreshCw
 } from "lucide-react";
 import { supabase } from "@/integrations/supabase/client";
 import { useOrganization } from "@/contexts/OrganizationContext";
@@ -184,8 +189,11 @@ const SectionHeader = ({ icon: Icon, title, description }: SectionHeaderProps) =
 export default function ExecutiveDashboard() {
   const { currentOrganization } = useOrganization();
   const navigate = useNavigate();
+  const { openBrain } = useBrain();
   const [selectedPeriod, setSelectedPeriod] = useState("monthly");
   const [isLoading, setIsLoading] = useState(true);
+  const [isOnline, setIsOnline] = useState(navigator.onLine);
+  const [lastSync, setLastSync] = useState(new Date());
   const [kpiData, setKpiData] = useState<KPIData[]>([]);
   const [revenueData, setRevenueData] = useState<RevenueData[]>([]);
   const [fleetPerformanceData, setFleetPerformanceData] = useState<FleetPerformanceData[]>([]);
@@ -193,6 +201,18 @@ export default function ExecutiveDashboard() {
   const [recentActivities, setRecentActivities] = useState<Activity[]>([]);
   const [currentPage] = useState(0);
   const pageSize = 50;
+  
+  // Online/offline detection
+  useEffect(() => {
+    const handleOnline = () => setIsOnline(true);
+    const handleOffline = () => setIsOnline(false);
+    window.addEventListener('online', handleOnline);
+    window.addEventListener('offline', handleOffline);
+    return () => {
+      window.removeEventListener('online', handleOnline);
+      window.removeEventListener('offline', handleOffline);
+    };
+  }, []);
   
   // Ref para evitar chamadas duplicadas
   const loadingRef = useRef(false);
@@ -338,15 +358,68 @@ export default function ExecutiveDashboard() {
     <ModulePageWrapper gradient="blue">
       <OrganizationLayout title="Dashboard Executivo">
         <div className="space-y-8">
+          {/* Command Center Header */}
+          <div className="flex flex-col md:flex-row md:items-center justify-between gap-4 mb-2">
+            <div className="flex items-center gap-3">
+              <div className="relative">
+                <div className="p-3 rounded-2xl bg-gradient-to-br from-blue-600 via-cyan-500 to-teal-500 shadow-lg">
+                  <Ship className="h-8 w-8 text-white" />
+                </div>
+                {isOnline ? (
+                  <div className="absolute -top-1 -right-1 w-3 h-3 bg-green-500 rounded-full border-2 border-background animate-pulse" />
+                ) : (
+                  <div className="absolute -top-1 -right-1 w-3 h-3 bg-yellow-500 rounded-full border-2 border-background" />
+                )}
+              </div>
+              <div>
+                <h1 className="text-2xl font-bold bg-gradient-to-r from-blue-600 via-cyan-500 to-teal-500 bg-clip-text text-transparent">
+                  Centro de Comando Nautilus
+                </h1>
+                <p className="text-sm text-muted-foreground">
+                  Dashboard executivo unificado com IA embarcada
+                </p>
+              </div>
+            </div>
+            
+            <div className="flex items-center gap-2 flex-wrap">
+              <Badge variant={isOnline ? "default" : "secondary"} className="gap-1">
+                <Radio className={`h-3 w-3 ${isOnline ? "animate-pulse" : ""}`} />
+                {isOnline ? "Online" : "Offline"}
+              </Badge>
+              <Badge variant="outline" className="gap-1">
+                <Clock className="h-3 w-3" />
+                Sync: {lastSync.toLocaleTimeString("pt-BR", { hour: "2-digit", minute: "2-digit" })}
+              </Badge>
+              
+              <Button 
+                variant="outline" 
+                size="sm" 
+                onClick={() => { setLastSync(new Date()); window.location.reload(); }}
+              >
+                <RefreshCw className="h-4 w-4 mr-2" />
+                Atualizar
+              </Button>
+              
+              <Button 
+                onClick={() => openBrain("Dashboard Executivo")}
+                className="bg-gradient-to-r from-purple-600 to-pink-500 hover:from-purple-700 hover:to-pink-600"
+              >
+                <Brain className="h-4 w-4 mr-2" />
+                Nautilus Brain
+              </Button>
+            </div>
+          </div>
+
           <section className="rounded-3xl border border-slate-200 bg-gradient-to-br from-white via-white to-slate-50 p-8 shadow-xl dark:border-white/10 dark:from-slate-950 dark:via-slate-900 dark:to-blue-950 dark:text-white">
             <div className="flex flex-col gap-8 lg:flex-row lg:items-center lg:justify-between">
               <div className="space-y-5 max-w-2xl">
                 <Badge variant="outline" className="w-fit border-emerald-500/40 bg-emerald-50 text-emerald-700 dark:border-emerald-400/30 dark:bg-emerald-400/10 dark:text-emerald-200">
+                  <Sparkles className="h-3 w-3 mr-1" />
                   Atualizado há 12 minutos
                 </Badge>
                 <div>
                   <p className="text-sm font-semibold uppercase tracking-wider text-slate-500 dark:text-white/70">Visão executiva</p>
-                  <h2 className="text-3xl font-bold text-slate-900 dark:text-white mt-1">Governança operacional sem ruído visual</h2>
+                  <h2 className="text-3xl font-bold text-slate-900 dark:text-white mt-1">Governança operacional com IA</h2>
                   <p className="mt-2 text-base text-slate-600 dark:text-white/70">
                     Consolidado estratégico com KPIs de frota, capital humano e conformidade para decisões em tempo real.
                   </p>
