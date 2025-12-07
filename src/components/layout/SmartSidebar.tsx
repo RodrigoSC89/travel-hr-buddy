@@ -113,6 +113,7 @@ const groupedModules = [
     title: "RH & Pessoas",
     icon: <Users className="w-4 h-4 mr-2" />,
     items: [
+      { label: "Nautilus People Hub", path: "/nautilus-people" },
       { label: "Nautilus Academy", path: "/nautilus-academy" },
       { label: "Enfermaria Digital", path: "/medical-infirmary" },
     ],
