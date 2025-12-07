@@ -49,9 +49,14 @@ export const FleetCockpit: React.FC<FleetCockpitProps> = ({ vessels: propVessels
     try {
       const { data } = await supabase.from('vessels').select('*').limit(20);
       
-      // Enrich with mock operational data
-      const enrichedVessels = (data || []).map(v => ({
-        ...v,
+      // Map and enrich with mock operational data
+      const enrichedVessels: Vessel[] = (data || []).map(v => ({
+        id: v.id,
+        name: v.name,
+        imo_number: v.imo_number,
+        vessel_type: v.vessel_type,
+        status: v.status || 'active',
+        current_location: v.current_location,
         fuel_level: Math.floor(Math.random() * 40) + 60,
         speed: Math.floor(Math.random() * 15) + 5,
         heading: Math.floor(Math.random() * 360),
