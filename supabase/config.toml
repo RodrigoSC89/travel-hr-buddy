@@ -594,3 +594,11 @@ comment = "System health check endpoint - monitors database, storage, auth, and 
 [functions.track-analytics]
 verify_jwt = false
 comment = "Server-side analytics tracking with batching support"
+
+[functions.travel-price-monitor]
+verify_jwt = false
+comment = "Travel price monitoring with Amadeus API integration for flights and hotels"
+
+[functions.dp-mentor-ai]
+verify_jwt = false
+comment = "DP Mentor AI - Dynamic Positioning training and mentoring system"
