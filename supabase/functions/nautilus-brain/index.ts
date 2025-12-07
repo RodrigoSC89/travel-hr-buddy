@@ -9,13 +9,15 @@ const SYSTEM_PROMPT = `Você é o Nautilus Brain, a inteligência artificial cen
 
 Suas capacidades incluem:
 - Gestão inteligente de frota marítima
-- Manutenção preditiva de embarcações
+- Manutenção preditiva de embarcações com ML
 - Otimização de rotas e consumo de combustível
 - Gestão de tripulação e certificações
-- Controle de estoque e procurement
+- Automação de procurement e estoque
 - Compliance regulatório (SOLAS, ISM, ISPS, MLC)
 - Análise de dados e insights operacionais
 - Predição de falhas e alertas proativos
+- Geração de relatórios inteligentes
+- Recomendações estratégicas baseadas em dados
 
 Você deve:
 1. Responder em português do Brasil
@@ -24,14 +26,16 @@ Você deve:
 4. Sugerir ações proativas
 5. Alertar sobre riscos e prazos críticos
 6. Usar terminologia náutica apropriada
+7. Quando possível, incluir análises preditivas
 
 Quando o usuário perguntar sobre:
 - Embarcações: forneça status, localização, manutenções pendentes
 - Tripulação: certificações, escalas, conformidade
-- Manutenção: próximas manutenções, peças críticas, predições
-- Estoque: níveis, reposição automática, fornecedores
+- Manutenção: próximas manutenções, peças críticas, predições de falha
+- Estoque: níveis, reposição automática, fornecedores recomendados
 - Compliance: certificados vencendo, auditorias, não-conformidades
-- Custos: análise de custos por embarcação, otimizações`;
+- Custos: análise por embarcação, otimizações sugeridas
+- Relatórios: gere análises executivas com insights`;
 
 serve(async (req: Request) => {
   if (req.method === "OPTIONS") {
@@ -39,7 +43,7 @@ serve(async (req: Request) => {
   }
 
   try {
-    const { messages, context } = await req.json();
+    const { messages, context, action } = await req.json();
     const LOVABLE_API_KEY = Deno.env.get("LOVABLE_API_KEY");
     
     if (!LOVABLE_API_KEY) {
@@ -50,21 +54,44 @@ serve(async (req: Request) => {
     let contextualPrompt = SYSTEM_PROMPT;
     
     if (context) {
-      contextualPrompt += `\n\nContexto atual do sistema:\n`;
+      contextualPrompt += `\n\n📊 CONTEXTO ATUAL DO SISTEMA:\n`;
       if (context.vessels) {
-        contextualPrompt += `- Total de embarcações: ${context.vessels.total}\n`;
-        contextualPrompt += `- Em operação: ${context.vessels.active}\n`;
-        contextualPrompt += `- Em manutenção: ${context.vessels.maintenance}\n`;
+        contextualPrompt += `🚢 Frota: ${context.vessels.active}/${context.vessels.total} embarcações ativas\n`;
+        if (context.vessels.maintenance > 0) {
+          contextualPrompt += `⚠️ ${context.vessels.maintenance} em manutenção\n`;
+        }
       }
       if (context.alerts) {
-        contextualPrompt += `- Alertas ativos: ${context.alerts.count}\n`;
-        contextualPrompt += `- Alertas críticos: ${context.alerts.critical}\n`;
+        contextualPrompt += `🔔 Alertas: ${context.alerts.count} ativos (${context.alerts.critical} críticos)\n`;
       }
       if (context.maintenance) {
-        contextualPrompt += `- Manutenções pendentes: ${context.maintenance.pending}\n`;
-        contextualPrompt += `- Próximas 7 dias: ${context.maintenance.upcoming}\n`;
+        contextualPrompt += `🔧 Manutenção: ${context.maintenance.pending} pendentes, ${context.maintenance.upcoming} nos próximos 7 dias\n`;
+      }
+      if (context.crew) {
+        contextualPrompt += `👥 Tripulação: ${context.crew.onboard}/${context.crew.total} a bordo\n`;
+      }
+      if (context.stock) {
+        contextualPrompt += `📦 Estoque: ${context.stock.critical} itens críticos, ${context.stock.low} baixos\n`;
       }
     }
+
+    // Handle special actions
+    if (action === 'predictive_maintenance') {
+      contextualPrompt += `\n\n🔮 MODO: Análise de Manutenção Preditiva
+Analise padrões de falha, histórico de manutenção e condições operacionais para prever problemas.`;
+    } else if (action === 'procurement') {
+      contextualPrompt += `\n\n🛒 MODO: Automação de Procurement
+Analise níveis de estoque, consumo médio e sugira compras otimizadas com fornecedores recomendados.`;
+    } else if (action === 'report') {
+      contextualPrompt += `\n\n📊 MODO: Geração de Relatório
+Gere análises executivas com métricas, tendências e recomendações acionáveis.`;
+    }
+
+    console.log("Nautilus Brain - Processing request with context:", { 
+      hasContext: !!context, 
+      action,
+      messagesCount: messages?.length 
+    });
 
     const response = await fetch("https://ai.gateway.lovable.dev/v1/chat/completions", {
       method: "POST",
@@ -76,39 +103,47 @@ serve(async (req: Request) => {
         model: "google/gemini-2.5-flash",
         messages: [
           { role: "system", content: contextualPrompt },
-          ...messages,
+          ...(messages || []),
         ],
         stream: true,
       }),
     });
 
     if (!response.ok) {
+      const errorText = await response.text();
+      console.error("AI gateway error:", response.status, errorText);
+      
       if (response.status === 429) {
-        return new Response(JSON.stringify({ error: "Limite de requisições excedido. Tente novamente em alguns segundos." }), {
+        return new Response(JSON.stringify({ 
+          error: "Limite de requisições excedido. Aguarde alguns segundos e tente novamente." 
+        }), {
           status: 429,
           headers: { ...corsHeaders, "Content-Type": "application/json" },
         });
       }
       if (response.status === 402) {
-        return new Response(JSON.stringify({ error: "Créditos de IA insuficientes. Adicione créditos no workspace." }), {
+        return new Response(JSON.stringify({ 
+          error: "Créditos de IA insuficientes. Adicione créditos no workspace Lovable." 
+        }), {
           status: 402,
           headers: { ...corsHeaders, "Content-Type": "application/json" },
         });
       }
-      const errorText = await response.text();
-      console.error("AI gateway error:", response.status, errorText);
       return new Response(JSON.stringify({ error: "Erro no gateway de IA" }), {
         status: 500,
         headers: { ...corsHeaders, "Content-Type": "application/json" },
       });
     }
 
+    // Return streaming response
     return new Response(response.body, {
       headers: { ...corsHeaders, "Content-Type": "text/event-stream" },
     });
   } catch (error) {
     console.error("Nautilus Brain error:", error);
-    return new Response(JSON.stringify({ error: error instanceof Error ? error.message : "Erro desconhecido" }), {
+    return new Response(JSON.stringify({ 
+      error: error instanceof Error ? error.message : "Erro desconhecido" 
+    }), {
       status: 500,
       headers: { ...corsHeaders, "Content-Type": "application/json" },
     });
