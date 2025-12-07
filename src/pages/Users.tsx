@@ -1,11 +1,10 @@
 import React from "react";
-import { UserManagementMultiTenant } from "@/components/admin/user-management-multi-tenant";
-import { OrganizationLayout } from "@/components/layout/organization-layout";
+import { UserManagementHub } from "@/components/admin/UserManagementHub";
 
 export default function Users() {
   return (
-    <OrganizationLayout title="Gestão de Usuários">
-      <UserManagementMultiTenant />
-    </OrganizationLayout>
+    <div className="min-h-screen bg-background p-6">
+      <UserManagementHub />
+    </div>
   );
 }
