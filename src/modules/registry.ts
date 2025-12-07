@@ -295,6 +295,20 @@ export const MODULE_REGISTRY: Record<string, ModuleDefinition> = {
 
   // REMOVED: hr.training - Merged into nautilus-academy (PATCH UNIFY-ACADEMY)
 
+  "hr.nautilus-people": {
+    id: "hr.nautilus-people",
+    name: "Nautilus People Hub",
+    category: "hr",
+    path: "modules/nautilus-people",
+    description: "Revolutionary HR management module with integrated LLM - Employee registry, recruitment pipeline, performance center, climate engagement, people analytics, onboarding, time & attendance, career development, and AI-powered HR chatbot",
+    status: "active",
+    completeness: "100%",
+    route: "/nautilus-people",
+    icon: "Users",
+    lazy: true,
+    version: "1.0.0",
+  },
+
   "hr.peo-dp": {
     id: "hr.peo-dp",
     name: "PEO-DP",
