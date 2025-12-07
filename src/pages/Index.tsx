@@ -22,6 +22,8 @@ const NetworkStatusWidget = lazy(() => import("@/components/dashboard/NetworkSta
 const PerformanceMonitor = lazy(() => import("@/components/dashboard/PerformanceMonitor").then(m => ({ default: m.PerformanceMonitor })));
 const AIModulesGrid = lazy(() => import("@/components/dashboard/AIModulesGrid").then(m => ({ default: m.AIModulesGrid })));
 const LiveMetricsBar = lazy(() => import("@/components/dashboard/LiveMetricsBar").then(m => ({ default: m.LiveMetricsBar })));
+const LiveDashboardStats = lazy(() => import("@/components/dashboard/LiveDashboardStats").then(m => ({ default: m.LiveDashboardStats })));
+const DashboardActions = lazy(() => import("@/components/dashboard/DashboardActions").then(m => ({ default: m.DashboardActions })));
 
 // PATCH 850: PWA & Offline Components - Lazy loaded
 const OfflineStatusBar = lazy(() => import("@/components/pwa/OfflineStatusBar").then(m => ({ default: m.OfflineStatusBar })));
@@ -223,6 +225,16 @@ const Index = () => {
 
       {/* PATCH 549: AI Modules Quick Access */}
       <AIModulesPanel />
+
+      {/* Live Dashboard Stats with real data */}
+      <Suspense fallback={<LoadingPlaceholder />}>
+        <LiveDashboardStats />
+      </Suspense>
+
+      {/* Dashboard Actions */}
+      <Suspense fallback={<LoadingPlaceholder />}>
+        <DashboardActions />
+      </Suspense>
 
       {/* PATCH 801: Quick Actions, Network Status & Performance */}
       <div className="grid lg:grid-cols-4 gap-4">
