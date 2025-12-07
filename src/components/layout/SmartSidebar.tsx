@@ -114,9 +114,19 @@ const groupedModules = [
     icon: <Users className="w-4 h-4 mr-2" />,
     items: [
       { label: "Nautilus Academy", path: "/nautilus-academy" },
-      { label: "PEOTRAM", path: "/peotram" },
-      { label: "PEO-DP", path: "/peo-dp" },
       { label: "Enfermaria Digital", path: "/medical-infirmary" },
+    ],
+  },
+  {
+    title: "Auditorias",
+    icon: <GraduationCap className="w-4 h-4 mr-2" />,
+    items: [
+      { label: "PEO-DP", path: "/peo-dp" },
+      { label: "PEOTRAM", path: "/peotram" },
+      { label: "SGSO", path: "/sgso" },
+      { label: "IMCA Audit", path: "/imca-audit" },
+      { label: "Pre-OVID Inspection", path: "/admin/pre-ovid" },
+      { label: "MLC Inspection", path: "/mlc-inspection" },
     ],
   },
   {
@@ -124,10 +134,6 @@ const groupedModules = [
     icon: <Shield className="w-4 h-4 mr-2" />,
     items: [
       { label: "Compliance Hub", path: "/compliance-hub" },
-      { label: "SGSO", path: "/sgso" },
-      { label: "IMCA Audit", path: "/imca-audit" },
-      { label: "Pre-OVID Inspection", path: "/admin/pre-ovid" },
-      { label: "MLC Inspection", path: "/mlc-inspection" },
       { label: "Safety Guardian", path: "/safety-guardian" },
       { label: "SOLAS & ISM Training", path: "/solas-training" },
       { label: "Gestão de Resíduos", path: "/waste-management" },

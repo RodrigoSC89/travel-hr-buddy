@@ -445,24 +445,9 @@ const navigationItems = [
         icon: Shield,
       },
       {
-        title: "PEOTRAM",
-        url: "/peotram",
-        icon: FileText,
-      },
-      {
-        title: "SGSO",
-        url: "/sgso",
-        icon: Shield,
-      },
-      {
-        title: "IMCA Audit",
-        url: "/imca-audit",
-        icon: CheckCircle,
-      },
-      {
-        title: "Pre-OVID",
-        url: "/admin/pre-ovid",
-        icon: Scan,
+        title: "AI Insights",
+        url: "/ai-insights",
+        icon: Brain,
       },
       {
         title: "AI Insights",
@@ -633,24 +618,16 @@ const navigationItems = [
     icon: CheckCircle
   },
   {
-    title: "PEOTRAM",
-    url: "/peotram",
-    icon: Shield
-  },
-  {
-    title: "PEO-DP",
-    url: "/peo-dp",
-    icon: Anchor
-  },
-  {
-    title: "Centro de Inteligência DP",
-    url: "/dp-intelligence",
-    icon: Brain
-  },
-  {
-    title: "SGSO",
-    url: "/sgso",
-    icon: Shield
+    title: "Auditorias",
+    icon: Shield,
+    items: [
+      { title: "PEO-DP", url: "/peo-dp", icon: Anchor },
+      { title: "PEOTRAM", url: "/peotram", icon: FileText },
+      { title: "SGSO", url: "/sgso", icon: Shield },
+      { title: "IMCA Audit", url: "/imca-audit", icon: CheckCircle },
+      { title: "Pre-OVID Inspection", url: "/admin/pre-ovid", icon: Scan },
+      { title: "MLC Inspection", url: "/mlc-inspection", icon: Shield },
+    ],
   },
   {
     title: "Templates",
