@@ -1,19 +1,19 @@
 /**
  * Audit Center - AI Evaluation Integration
- * PATCH 62.0
+ * PATCH 62.0 - Extended with PEOTRAM and SGSO
  */
 
 import { supabase } from "@/integrations/supabase/client";
 import { Logger } from "@/lib/utils/logger";
 import { AUDIT_CONFIG } from "./config";
-import { AIAuditResponse, ChecklistStatus } from "./types";
+import { AIAuditResponse, ChecklistStatus, AuditType } from "./types";
 
 /**
  * Evaluate audit checklist using AI
  */
 export async function evaluateAuditWithAI(
   checklistData: Record<string, ChecklistStatus>,
-  auditType: "IMCA" | "ISM" | "ISPS",
+  auditType: AuditType,
   auditId: string
 ): Promise<{ success: boolean; data?: AIAuditResponse; error?: string }> {
   try {
@@ -72,7 +72,7 @@ export async function evaluateAuditWithAI(
  */
 export function fallbackEvaluation(
   checklistData: Record<string, ChecklistStatus>,
-  auditType: "IMCA" | "ISM" | "ISPS"
+  auditType: AuditType
 ): AIAuditResponse {
   Logger.warn("Using fallback AI evaluation", { auditType });
 

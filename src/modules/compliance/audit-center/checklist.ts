@@ -1,9 +1,9 @@
 /**
  * Audit Center - Checklist Definitions
- * PATCH 62.0
+ * PATCH 62.0 - Extended with PEOTRAM and SGSO
  */
 
-import { ChecklistItem } from "./types";
+import { ChecklistItem, AuditType } from "./types";
 
 export const checklistItems: ChecklistItem[] = [
   // ISM Code Items
@@ -81,6 +81,52 @@ export const checklistItems: ChecklistItem[] = [
     description: "Verificar atualização da avaliação de ameaças à segurança",
     regulation_reference: "ISPS Code Part A Section 8"
   },
+
+  // PEOTRAM Items
+  {
+    id: "peotram-safety-procedures",
+    label: "Procedimentos de segurança PEOTRAM",
+    category: "PEOTRAM",
+    description: "Verificar procedimentos operacionais de segurança em terminais",
+    regulation_reference: "PEOTRAM Section 1"
+  },
+  {
+    id: "peotram-crew-training",
+    label: "Treinamento de tripulação PEOTRAM",
+    category: "PEOTRAM",
+    description: "Validar certificações e treinamentos PEOTRAM",
+    regulation_reference: "PEOTRAM Section 3"
+  },
+  {
+    id: "peotram-environmental",
+    label: "Conformidade ambiental PEOTRAM",
+    category: "PEOTRAM",
+    description: "Verificar gestão de resíduos e emissões",
+    regulation_reference: "PEOTRAM Section 5"
+  },
+
+  // SGSO Items
+  {
+    id: "sgso-risk-management",
+    label: "Gestão de riscos SGSO",
+    category: "SGSO",
+    description: "Verificar identificação e controle de riscos operacionais",
+    regulation_reference: "SGSO Cap. 3"
+  },
+  {
+    id: "sgso-incident-reporting",
+    label: "Relato de incidentes SGSO",
+    category: "SGSO",
+    description: "Validar sistema de relato e investigação de incidentes",
+    regulation_reference: "SGSO Cap. 7"
+  },
+  {
+    id: "sgso-audits-internal",
+    label: "Auditorias internas SGSO",
+    category: "SGSO",
+    description: "Verificar realização de auditorias internas periódicas",
+    regulation_reference: "SGSO Cap. 9"
+  },
   
   // General Maintenance
   {
@@ -102,7 +148,7 @@ export const checklistItems: ChecklistItem[] = [
 /**
  * Get checklist items by audit type
  */
-export function getChecklistByType(type: "IMCA" | "ISM" | "ISPS"): ChecklistItem[] {
+export function getChecklistByType(type: AuditType): ChecklistItem[] {
   return checklistItems.filter(item => item.category === type);
 }
 
