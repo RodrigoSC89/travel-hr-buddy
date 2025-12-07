@@ -1,10 +1,10 @@
 /**
  * Low Bandwidth Optimizer
  * PATCH 834: Aggressive optimizations for 2 Mbps networks
- * PATCH 1000: Fixed React import order to prevent useState null error
+ * PATCH 1001: Fixed React hooks initialization order to prevent useState null error
  */
 
-import { useState, useEffect, useMemo } from 'react';
+import * as React from 'react';
 
 interface BandwidthConfig {
   maxImageSize: number;
@@ -236,35 +236,55 @@ class LowBandwidthOptimizer {
 
 export const bandwidthOptimizer = new LowBandwidthOptimizer();
 
-// React hook - imports moved to top of file (PATCH 1000)
+// Default config for SSR/initial render
+const DEFAULT_CONFIG: BandwidthConfig = BANDWIDTH_CONFIGS['4g'];
+
+// React hook - using React namespace import to prevent null errors (PATCH 1001)
 export function useBandwidthOptimizer() {
-  const [config, setConfig] = useState<BandwidthConfig>(bandwidthOptimizer.getConfig());
-  const [connectionType, setConnectionType] = useState(bandwidthOptimizer.getConnectionType());
+  const [config, setConfig] = React.useState<BandwidthConfig>(() => {
+    try {
+      return bandwidthOptimizer.getConfig();
+    } catch {
+      return DEFAULT_CONFIG;
+    }
+  });
+  
+  const [connectionType, setConnectionType] = React.useState(() => {
+    try {
+      return bandwidthOptimizer.getConnectionType();
+    } catch {
+      return '4g';
+    }
+  });
 
-  useEffect(() => {
-    bandwidthOptimizer.init();
-    
-    const unsubscribe = bandwidthOptimizer.subscribe((newConfig) => {
-      setConfig(newConfig);
-      setConnectionType(bandwidthOptimizer.getConnectionType());
-    });
+  React.useEffect(() => {
+    try {
+      bandwidthOptimizer.init();
+      
+      const unsubscribe = bandwidthOptimizer.subscribe((newConfig) => {
+        setConfig(newConfig);
+        setConnectionType(bandwidthOptimizer.getConnectionType());
+      });
 
-    return unsubscribe;
+      return unsubscribe;
+    } catch (error) {
+      console.warn('BandwidthOptimizer init failed:', error);
+    }
   }, []);
 
-  const optimizations = useMemo(() => ({
-    isLowBandwidth: bandwidthOptimizer.isLowBandwidth(),
-    shouldLoadImages: config.maxImageSize > 0,
-    shouldAnimate: config.enableAnimations,
-    shouldPrefetch: config.enablePrefetch,
-    imageQuality: config.imageQuality,
-    batchSize: config.batchSize,
-    timeout: config.requestTimeout,
-  }), [config]);
+  const optimizations = React.useMemo(() => ({
+    isLowBandwidth: config ? ['2g', 'slow-2g', 'offline'].includes(connectionType) : false,
+    shouldLoadImages: config ? config.maxImageSize > 0 : true,
+    shouldAnimate: config ? config.enableAnimations : true,
+    shouldPrefetch: config ? config.enablePrefetch : true,
+    imageQuality: config ? config.imageQuality : 85,
+    batchSize: config ? config.batchSize : 20,
+    timeout: config ? config.requestTimeout : 30000,
+  }), [config, connectionType]);
 
   return {
-    config,
-    connectionType,
+    config: config || DEFAULT_CONFIG,
+    connectionType: connectionType || '4g',
     ...optimizations,
     getOptimizedImageUrl: bandwidthOptimizer.getOptimizedImageUrl.bind(bandwidthOptimizer),
     getOptimizedFetchOptions: bandwidthOptimizer.getOptimizedFetchOptions.bind(bandwidthOptimizer),
