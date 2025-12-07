@@ -205,25 +205,45 @@ export default function MentorDPProfessional() {
     setLogEntries(prev => [entry, ...prev]);
   }, []);
 
-  // Call AI Edge Function
+  // Call AI Edge Function with enhanced error handling
   const callMentorAI = async (action: string, params: any = {}): Promise<any> => {
+    console.log("[MentorDP] Calling edge function:", action, params);
+    
     try {
-      const { data, error } = await supabase.functions.invoke("dp-mentor-ai", {
-        body: { action, ...params },
+      const response = await fetch(`https://vnbptmixvwropvanyhdb.supabase.co/functions/v1/dp-mentor-ai`, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          "apikey": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InZuYnB0bWl4dndyb3B2YW55aGRiIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NTg1NzczNTEsImV4cCI6MjA3NDE1MzM1MX0.-LivvlGPJwz_Caj5nVk_dhVeheaXPCROmXc4G8UsJcE",
+        },
+        body: JSON.stringify({ action, ...params }),
       });
 
-      if (error) {
-        console.error("Edge function error:", error);
-        throw new Error(error.message || "Erro ao comunicar com o Mentor DP");
+      console.log("[MentorDP] Response status:", response.status);
+
+      if (!response.ok) {
+        const errorText = await response.text();
+        console.error("[MentorDP] Response error:", errorText);
+        
+        if (response.status === 429) {
+          throw new Error("Limite de requisições excedido. Aguarde alguns minutos e tente novamente.");
+        }
+        if (response.status === 402) {
+          throw new Error("Créditos de IA insuficientes. Adicione créditos ao workspace.");
+        }
+        throw new Error(`Erro ${response.status}: ${errorText || "Falha na comunicação com o Mentor DP"}`);
       }
 
-      if (!data?.success && data?.error) {
+      const data = await response.json();
+      console.log("[MentorDP] Response data:", { success: data.success, hasContent: !!data.content });
+
+      if (!data.success && data.error) {
         throw new Error(data.error);
       }
 
       return data;
     } catch (error: any) {
-      console.error("callMentorAI error:", error);
+      console.error("[MentorDP] callMentorAI error:", error);
       throw error;
     }
   };
