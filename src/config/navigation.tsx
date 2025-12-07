@@ -2,7 +2,7 @@ import { safeLazyImport } from "@/utils/safeLazyImport";
 
 // Navegação principal do Nautilus One
 export const NAVIGATION = [
-  { name: "Nautilus Command", path: "/nautilus-command", component: safeLazyImport(() => import("@/modules/nautilus-command"), "Nautilus Command Center") },
+  { name: "Nautilus Command", path: "/nautilus-command", component: safeLazyImport(() => import("@/pages/ExecutiveDashboard"), "Nautilus Command Center") },
   { name: "Dashboard", path: "/dashboard", component: safeLazyImport(() => import("@/modules/ui/dashboard/Dashboard"), "Dashboard") },
   { name: "Executive Dashboard", path: "/executive-dashboard", component: safeLazyImport(() => import("@/pages/ExecutiveDashboard"), "Executive Dashboard") },
   // PATCH 191.0: Consolidated Fleet Module
