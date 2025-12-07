@@ -77,9 +77,18 @@ const groupedModules = [
       { label: "Métricas de Adoção", path: "/ai-adoption" },
       { label: "IA & Inovação", path: "/innovation" },
       { label: "Insights de IA", path: "/ai-insights" },
-      { label: "Documentos IA", path: "/documents" },
       { label: "Assistente de Voz", path: "/assistant/voice" },
       { label: "Automação IA", path: "/automation" },
+    ],
+  },
+  {
+    title: "Relatórios e Documentos",
+    icon: <Folder className="w-4 h-4 mr-2" />,
+    items: [
+      { label: "Documentos IA", path: "/documents" },
+      { label: "Relatórios", path: "/reports" },
+      { label: "Relatórios de Incidentes", path: "/incident-reports" },
+      { label: "Templates", path: "/templates" },
     ],
   },
   {
@@ -97,7 +106,6 @@ const groupedModules = [
     title: "Gestão e Analytics",
     icon: <BarChart2 className="w-4 h-4 mr-2" />,
     items: [
-      { label: "Relatórios", path: "/reports" },
       { label: "Analytics Core", path: "/analytics" },
       { label: "Dashboard Operacional", path: "/operations-dashboard" },
       { label: "Finanças", path: "/finance" },
@@ -143,7 +151,6 @@ const groupedModules = [
       { label: "Safety Guardian", path: "/safety-guardian" },
       { label: "Gestão de Resíduos", path: "/waste-management" },
       { label: "Checklists Inteligentes", path: "/admin/checklists" },
-      { label: "Relatórios de Incidentes", path: "/incident-reports" },
     ],
   },
   {
@@ -171,7 +178,6 @@ const groupedModules = [
       { label: "Hub de Integrações", path: "/integrations" },
       { label: "API Gateway", path: "/api-gateway" },
       { label: "Colaboração", path: "/collaboration" },
-      { label: "Templates", path: "/templates" },
       { label: "Configurações", path: "/settings" },
       { label: "QA Preview", path: "/qa/preview" },
     ],
