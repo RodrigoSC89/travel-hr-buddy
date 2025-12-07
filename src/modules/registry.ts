@@ -324,6 +324,20 @@ export const MODULE_REGISTRY: Record<string, ModuleDefinition> = {
 
   // REMOVED: hr.employee-portal - Integrated into operations.crew (PATCH 176.2)
 
+  "maintenance.intelligent": {
+    id: "maintenance.intelligent",
+    name: "Manutenção Inteligente",
+    category: "maintenance",
+    path: "modules/intelligent-maintenance",
+    description: "Sistema Premium de Gestão de Manutenção Naval com IA - Inclui Saúde da Frota, Copilot IA, Forecast GPT-4, Central de Jobs, Ordens de Serviço, Digital Twin 3D e Dashboard BI",
+    status: "active",
+    completeness: "100%",
+    route: "/intelligent-maintenance",
+    icon: "Wrench",
+    lazy: true,
+    version: "501.0",
+  },
+
   "maintenance.planner": {
     id: "maintenance.planner",
     name: "Maintenance Planner",
