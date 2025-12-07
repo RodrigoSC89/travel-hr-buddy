@@ -711,17 +711,22 @@ export const MODULE_REGISTRY: Record<string, ModuleDefinition> = {
     lazy: true,
   },
 
-  "emergency.emergency-response": {
-    id: "emergency.emergency-response",
-    name: "Emergency Response",
-    category: "emergency",
-    path: "pages/EmergencyResponse",
-    description: "Emergency response management and coordination",
+  // DEPRECATED: emergency.emergency-response - Merged into solas-isps-training
+  // "emergency.emergency-response": { ... }
+
+  // SOLAS, ISPS & ISM Training - Unified Module
+  "training.solas-isps-training": {
+    id: "training.solas-isps-training",
+    name: "SOLAS, ISPS & ISM Training",
+    category: "hr",
+    path: "modules/solas-isps-training/index",
+    description: "Módulo unificado de treinamentos SOLAS, ISPS Code e ISM com IA preditiva e generativa, drills, certificações STCW e resposta a emergências",
     status: "active",
     completeness: "100%",
-    route: "/emergency-response",
-    icon: "AlertTriangle",
+    route: "/solas-isps-training",
+    icon: "ShieldAlert",
     lazy: true,
+    version: "2.0.0",
   },
 
   "features.optimization": {
@@ -1383,17 +1388,20 @@ export const MODULE_REGISTRY: Record<string, ModuleDefinition> = {
     version: "1.0.0",
   },
 
-  // SOLAS Training Module
-  "compliance.solas-training": {
-    id: "compliance.solas-training",
-    name: "SOLAS & ISM Training",
-    category: "compliance",
-    path: "modules/solas-training/index",
-    description: "Exercícios de segurança, drills obrigatórios e certificações STCW",
+  // DEPRECATED: compliance.solas-training - Replaced by training.solas-isps-training
+  // See training.solas-isps-training for the unified module
+
+  // Procurement & Inventory AI-Driven Module
+  "logistics.procurement-inventory": {
+    id: "logistics.procurement-inventory",
+    name: "Procurement & Inventory AI",
+    category: "logistics",
+    path: "modules/procurement-inventory/index",
+    description: "Módulo completo de compras e controle de estoque com IA integrada: requisições, POs, fornecedores, previsão de demanda e chatbot inteligente",
     status: "active",
     completeness: "100%",
-    route: "/solas-training",
-    icon: "ShieldAlert",
+    route: "/procurement-inventory",
+    icon: "ShoppingCart",
     lazy: true,
     version: "1.0.0",
   },
