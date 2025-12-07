@@ -48,6 +48,61 @@ const FLEET_DATA = [
   { name: "Standby", value: 1, color: "#3b82f6" },
 ] as const;
 
+// Nautilus Command Center Hero - Primary CTA
+const NautilusCommandHero = memo(() => {
+  const navigate = useNavigate();
+  
+  return (
+    <Card 
+      className="relative overflow-hidden border-2 border-primary/30 bg-gradient-to-br from-primary/10 via-background to-cyan-500/10 cursor-pointer hover:border-primary/50 transition-all duration-300 group"
+      onClick={() => navigate('/nautilus-command')}
+    >
+      <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_top_right,_var(--tw-gradient-stops))] from-primary/20 via-transparent to-transparent opacity-50" />
+      <CardContent className="relative p-6">
+        <div className="flex items-center justify-between">
+          <div className="flex items-center gap-4">
+            <div className="p-3 rounded-xl bg-primary/20 group-hover:bg-primary/30 transition-colors">
+              <Brain className="h-8 w-8 text-primary" />
+            </div>
+            <div>
+              <h2 className="text-xl font-bold text-foreground flex items-center gap-2">
+                Nautilus Command Center
+                <Badge className="bg-cyan-500/20 text-cyan-600 dark:text-cyan-400 border-cyan-500/30">
+                  Novo
+                </Badge>
+              </h2>
+              <p className="text-muted-foreground">
+                Centro de Comando Integrado com IA • Frota, Tripulação, Estoque, Manutenção & IoT
+              </p>
+            </div>
+          </div>
+          <Button className="gap-2 bg-primary hover:bg-primary/90">
+            <Ship className="h-4 w-4" />
+            Acessar
+          </Button>
+        </div>
+        
+        <div className="grid grid-cols-5 gap-3 mt-4">
+          {[
+            { label: 'Frota', icon: Ship, color: 'text-blue-500' },
+            { label: 'Tripulação', icon: Users, color: 'text-emerald-500' },
+            { label: 'Estoque', icon: ShoppingCart, color: 'text-amber-500' },
+            { label: 'Manutenção', icon: Wrench, color: 'text-purple-500' },
+            { label: 'IoT', icon: Sparkles, color: 'text-cyan-500' },
+          ].map((item) => (
+            <div key={item.label} className="flex flex-col items-center gap-1 p-2 rounded-lg bg-muted/50">
+              <item.icon className={`h-5 w-5 ${item.color}`} />
+              <span className="text-xs text-muted-foreground">{item.label}</span>
+            </div>
+          ))}
+        </div>
+      </CardContent>
+    </Card>
+  );
+});
+
+NautilusCommandHero.displayName = 'NautilusCommandHero';
+
 // Quick Access to AI Modules - Memoized
 const AIModulesPanel = memo(() => {
   const navigate = useNavigate();
@@ -116,14 +171,6 @@ const AIModulesPanel = memo(() => {
       icon: Plane,
       badge: "Viagens",
       color: "from-sky-500 to-blue-600"
-    },
-    { 
-      name: "Compras IA", 
-      description: "Procurement autônomo",
-      route: "/autonomous-procurement",
-      icon: ShoppingCart,
-      badge: "Auto-Req",
-      color: "from-amber-500 to-orange-600"
     }
   ], []);
 
@@ -222,6 +269,9 @@ const Index = () => {
           </Button>
         </Link>
       </div>
+
+      {/* PATCH 1000: Nautilus Command Center Hero */}
+      <NautilusCommandHero />
 
       {/* PATCH 549: AI Modules Quick Access */}
       <AIModulesPanel />
