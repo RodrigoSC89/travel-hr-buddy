@@ -70,12 +70,15 @@ class OfflineSyncManager {
   }
 
   private async registerBackgroundSync(): Promise<void> {
-    if ('serviceWorker' in navigator && 'sync' in window.registration!) {
-      try {
-        await window.registration?.sync.register('sync-mutations');
-      } catch (error) {
-        console.warn('[OfflineSync] Background sync not supported:', error);
+    try {
+      if ('serviceWorker' in navigator) {
+        const registration = await navigator.serviceWorker.ready;
+        if (registration && 'sync' in registration) {
+          await (registration as any).sync.register('sync-mutations');
+        }
       }
+    } catch (error) {
+      console.warn('[OfflineSync] Background sync not supported:', error);
     }
   }
 
