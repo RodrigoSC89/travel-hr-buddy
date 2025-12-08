@@ -277,7 +277,7 @@ serve(async (req: Request) => {
     const err = error as Error;
     console.error("MLC compliance check error:", err);
     return new Response(
-      JSON.stringify({ error: error.message }),
+      JSON.stringify({ error: err.message }),
       { status: 500, headers: { ...corsHeaders, "Content-Type": "application/json" } }
     );
   }
