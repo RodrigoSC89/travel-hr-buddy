@@ -83,6 +83,9 @@ const TenantProvider = React.lazy(() =>
 const OrganizationProvider = React.lazy(() => 
   import("./contexts/OrganizationContext").then(m => ({ default: m.OrganizationProvider }))
 );
+const GlobalBrainProvider = React.lazy(() => 
+  import("./components/global/GlobalBrainProvider").then(m => ({ default: m.GlobalBrainProvider }))
+);
 
 // Initialize monitoring & services with optimized query client
 const queryClient = createOptimizedQueryClient();
@@ -108,6 +111,7 @@ function App() {
           <Suspense fallback={<OffshoreLoader />}>
             <TenantProvider>
               <OrganizationProvider>
+                <GlobalBrainProvider showTrigger={true}>
                 <RouterType>
                   <Routes>
                     {/* Public Routes */}
@@ -243,6 +247,7 @@ function App() {
                   
                   <Toaster />
                 </RouterType>
+                </GlobalBrainProvider>
               </OrganizationProvider>
             </TenantProvider>
           </Suspense>

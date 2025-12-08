@@ -138,42 +138,114 @@ Como posso ajudar você hoje?`,
     setInput("");
     setIsLoading(true);
 
+    // Add assistant placeholder for streaming
+    const assistantId = (Date.now() + 1).toString();
+    setMessages(prev => [...prev, {
+      id: assistantId,
+      role: 'assistant',
+      content: '',
+      timestamp: new Date()
+    }]);
+
     try {
-      const { data, error } = await supabase.functions.invoke('nautilus-llm', {
-        body: {
-          prompt: input,
-          contextId: 'global-assistant',
-          moduleId: 'nautilus-brain',
-          sessionId: `brain-${Date.now()}`,
-          mode: 'safe',
-          systemData
-        }
+      // Build messages history for context
+      const messageHistory = messages.map(m => ({
+        role: m.role,
+        content: m.content
+      }));
+      messageHistory.push({ role: 'user', content: input });
+
+      const response = await fetch(`${import.meta.env.VITE_SUPABASE_URL}/functions/v1/nautilus-brain`, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          'Authorization': `Bearer ${import.meta.env.VITE_SUPABASE_PUBLISHABLE_KEY}`,
+        },
+        body: JSON.stringify({
+          messages: messageHistory,
+          context: {
+            vessels: { total: systemData?.fleet?.total || 0, active: systemData?.fleet?.active || 0 },
+            crew: { total: systemData?.crew?.total || 0, onboard: systemData?.crew?.onboard || 0 },
+            maintenance: { pending: systemData?.maintenance?.pending || 0 }
+          }
+        })
       });
 
-      if (error) throw error;
+      if (!response.ok) {
+        const errorData = await response.json();
+        throw new Error(errorData.error || 'Erro na comunicação com IA');
+      }
 
-      const assistantMessage: Message = {
-        id: (Date.now() + 1).toString(),
-        role: 'assistant',
-        content: data.response || generateFallbackResponse(input),
-        timestamp: new Date(),
-        context: data.model,
-        suggestions: generateSuggestions(input)
-      };
+      // Handle streaming response
+      const reader = response.body?.getReader();
+      const decoder = new TextDecoder();
+      let assistantContent = '';
+      let buffer = '';
 
-      setMessages(prev => [...prev, assistantMessage]);
+      if (reader) {
+        while (true) {
+          const { done, value } = await reader.read();
+          if (done) break;
+          
+          buffer += decoder.decode(value, { stream: true });
+          
+          // Process SSE lines
+          let newlineIndex: number;
+          while ((newlineIndex = buffer.indexOf('\n')) !== -1) {
+            let line = buffer.slice(0, newlineIndex);
+            buffer = buffer.slice(newlineIndex + 1);
+            
+            if (line.endsWith('\r')) line = line.slice(0, -1);
+            if (line.startsWith(':') || line.trim() === '') continue;
+            if (!line.startsWith('data: ')) continue;
+            
+            const jsonStr = line.slice(6).trim();
+            if (jsonStr === '[DONE]') break;
+            
+            try {
+              const parsed = JSON.parse(jsonStr);
+              const content = parsed.choices?.[0]?.delta?.content;
+              if (content) {
+                assistantContent += content;
+                setMessages(prev => prev.map(m => 
+                  m.id === assistantId 
+                    ? { ...m, content: assistantContent }
+                    : m
+                ));
+              }
+            } catch {
+              // Incomplete JSON, will be handled in next iteration
+            }
+          }
+        }
+      }
+
+      // Add suggestions after complete
+      setMessages(prev => prev.map(m => 
+        m.id === assistantId 
+          ? { ...m, suggestions: generateSuggestions(input) }
+          : m
+      ));
+
     } catch (error) {
       console.error('Brain error:', error);
       
-      const fallbackMessage: Message = {
-        id: (Date.now() + 1).toString(),
-        role: 'assistant',
-        content: generateFallbackResponse(input),
-        timestamp: new Date(),
-        suggestions: generateSuggestions(input)
-      };
-
-      setMessages(prev => [...prev, fallbackMessage]);
+      // Update assistant message with fallback
+      setMessages(prev => prev.map(m => 
+        m.id === assistantId 
+          ? { 
+              ...m, 
+              content: generateFallbackResponse(input),
+              suggestions: generateSuggestions(input)
+            }
+          : m
+      ));
+      
+      toast({
+        title: "Aviso",
+        description: error instanceof Error ? error.message : "Usando resposta offline",
+        variant: "default"
+      });
     } finally {
       setIsLoading(false);
     }
