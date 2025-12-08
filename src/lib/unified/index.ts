@@ -111,3 +111,34 @@ export {
   type CrewMemberFormData,
   type CertificateFormData,
 } from "./validation.unified";
+
+// ==================== SLOW CONNECTION OPTIMIZER ====================
+export {
+  // Connection Quality
+  detectConnectionQuality,
+  type ConnectionQuality,
+  type ConnectionMetrics,
+  // Adaptive Fetch
+  adaptiveFetch,
+  type AdaptiveFetchOptions,
+  // Payload Optimization
+  compressPayload,
+  paginateForSlowConnection,
+  // Image Optimization
+  getOptimizedImageUrl,
+  preloadCriticalImages,
+  type ImageOptimizationOptions,
+  // Cache Strategies
+  getCached,
+  setCached,
+  clearOldCache,
+  type CacheEntry,
+  // Loading State
+  estimateLoadTime,
+  getLoadingMessage,
+  type LoadingState,
+  // Hooks
+  useSlowConnectionFetch,
+  useConnectionQuality,
+  useAdaptivePolling,
+} from "./slow-connection.unified";
