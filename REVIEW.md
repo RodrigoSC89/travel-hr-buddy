@@ -8,7 +8,7 @@
 
 ## 🔄 Fusão de Módulos com Função Igual e Nomes Diferentes
 
-### Módulos Unificados Criados (Total: 15 fusões, ~43 arquivos → 15 módulos)
+### Módulos Unificados Criados (Total: 16 fusões, ~52 arquivos → 16 módulos)
 
 | Módulos Originais | Novo Módulo Unificado | Observações |
 |-------------------|----------------------|-------------|
@@ -25,7 +25,7 @@
 | `reporting-engine.service.ts`, `reporting-engine.ts` | `src/services/unified/reporting-engine.unified.ts` | Engine de relatórios |
 | `smart-drills.service.ts`, `smart-drills-engine.ts` | `src/services/unified/smart-drills.unified.ts` | Simulacros inteligentes |
 | **NotificationCenter.tsx** (8 variantes), **enhanced-notification-center.tsx**, **real-time-notification-center.tsx**, **ui/NotificationCenter.tsx**, etc. | `src/components/unified/NotificationCenter.unified.tsx` | **8 arquivos → 1** (Panel, Popover, Page variants) |
-
+| `use-debounced-value.ts`, `useOptimizedState.ts` (debounce), `usePerformance.ts` (debounce/throttle), `form-optimization.ts`, `memory-leak-detector.ts`, `cleanup-utils.ts`, `useRuntimeOptimization.ts`, `utils/performance.ts` | `src/hooks/unified/useDebounceThrottle.unified.ts` | **9 arquivos → 1** (debounce, throttle, hooks) |
 ### Índices Centralizados Criados
 
 | Arquivo | Propósito |
@@ -57,12 +57,43 @@ import {
 import { useUnifiedNotifications } from "@/components/unified";
 ```
 
+### Debounce/Throttle Unificado - Exports Disponíveis
+
+```typescript
+import {
+  // Utility functions
+  debounce,
+  throttle,
+  // Debounce hooks
+  useDebouncedValue,
+  useDebouncedState,
+  useDebouncedCallback,
+  useDebouncedInput,
+  useDebounce,
+  // Throttle hooks
+  useThrottledCallback,
+  useThrottle,
+  useThrottledValue,
+  // Advanced hooks
+  useAdaptiveDebounce,
+} from "@/hooks/unified";
+```
+
 ### Próximos Passos Recomendados
 
-1. ✅ **15 fusões concluídas** - Todos os grupos identificados foram unificados
+1. ✅ **16 fusões concluídas** - Todos os grupos identificados foram unificados
 2. ⏳ **Atualizar imports** - Migrar todos os imports para módulos unificados
 3. ⏳ **Remover arquivos antigos** - Após validação dos módulos unificados
 4. ⏳ **Testar variantes** - Validar cada variant do NotificationCenter
+
+### Componentes Já Unificados (Pré-existentes)
+
+Os seguintes componentes já estavam unificados antes desta auditoria:
+- `EmptyState` → `src/components/ui/EmptyState.tsx`
+- `StatusBadge` / `StatusIndicator` → `src/components/ui/StatusBadge.tsx`
+- `MetricCard` / `KPICard` / `StatsCard` → `src/components/ui/MetricCard.tsx`
+- `Loading` / `LoadingSpinner` → `src/components/ui/Loading.tsx`
+- `ModuleHeader` → `src/components/ui/module-header.tsx`
 
 ---
 
