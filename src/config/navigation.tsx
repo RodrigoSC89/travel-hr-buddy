@@ -16,6 +16,10 @@ export const NAVIGATION = [
   { name: "Manutenção Inteligente", path: "/intelligent-maintenance", component: safeLazyImport(() => import("@/modules/intelligent-maintenance"), "Manutenção Inteligente") },
   { name: "MMI - Manutenção", path: "/mmi", component: safeLazyImport(() => import("@/pages/MMI"), "MMI") },
   { name: "Procurement & Inventory", path: "/procurement-inventory", component: safeLazyImport(() => import("@/modules/procurement-inventory"), "Procurement & Inventory") },
+  // PATCH UNIFY-8.0: Unified Mission Command Center (fusão de 2 módulos de missão)
+  { name: "Mission Command Center", path: "/mission-command", component: safeLazyImport(() => import("@/pages/MissionCommandCenter"), "Mission Command Center") },
+  { name: "Mission Logs", path: "/mission-logs", component: safeLazyImport(() => import("@/pages/MissionLogsPage"), "Mission Logs") },
+  { name: "Mission Control", path: "/mission-control", component: safeLazyImport(() => import("@/modules/mission-control"), "Mission Control") },
   { name: "SOLAS, ISPS & ISM Training", path: "/solas-isps-training", component: safeLazyImport(() => import("@/modules/solas-isps-training"), "SOLAS, ISPS & ISM Training") },
   { name: "FMEA Expert", path: "/fmea-expert", component: safeLazyImport(() => import("@/modules/planning/fmea/FMEAExpert"), "FMEA Expert") },
   { name: "SGSO", path: "/sgso", component: safeLazyImport(() => import("@/modules/compliance/sgso/SGSOSystem"), "SGSO") },
