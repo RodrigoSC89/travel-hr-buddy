@@ -1,7 +1,7 @@
 # Fusão de Módulos - Nautilus CMMS
 
 ## Data: 2025-12-08
-## Versão: UNIFY-2.0
+## Versão: UNIFY-3.0
 
 ## Resumo das Fusões
 
@@ -12,47 +12,19 @@ Este documento descreve a consolidação de módulos redundantes no sistema Naut
 ## Fase 1 - UNIFY-1.0
 
 ### 1. TREINAMENTOS → Nautilus Academy
-
-**Módulos Fundidos:**
-- `training` → Nautilus Academy
-- `solas-training` → Nautilus Academy
-- `solas-isps-training` → Nautilus Academy
-- `training-simulation` → Nautilus Academy
-
-**Módulo Unificado:** `nautilus-academy`
+- `training`, `solas-training`, `solas-isps-training`, `training-simulation`
 - **Rota**: `/nautilus-academy`
 
----
-
 ### 2. LOGÍSTICA & PROCUREMENT → Procurement & Inventory AI
-
-**Módulos Fundidos:**
-- `autonomous-procurement` → Procurement & Inventory AI
-- `smart-logistics` → Procurement & Inventory AI
-- `logistics-multibase` → Procurement & Inventory AI
-
-**Módulo Unificado:** `procurement-inventory`
+- `autonomous-procurement`, `smart-logistics`, `logistics-multibase`
 - **Rota**: `/procurement-inventory`
 
----
-
 ### 3. CONECTIVIDADE → SATCOM Dashboard
-
-**Módulos Fundidos:**
-- `maritime-connectivity` → SATCOM Dashboard
-- `connectivity-panel` → SATCOM Dashboard
-
-**Módulo Unificado:** `satcom`
+- `maritime-connectivity`, `connectivity-panel`
 - **Rota**: `/satcom`
 
----
-
 ### 4. RH & PESSOAS → Nautilus People Hub
-
-**Módulos Fundidos:**
-- `crew-wellbeing` → Nautilus People Hub
-
-**Módulo Unificado:** `nautilus-people`
+- `crew-wellbeing`
 - **Rota**: `/nautilus-people`
 
 ---
@@ -60,146 +32,82 @@ Este documento descreve a consolidação de módulos redundantes no sistema Naut
 ## Fase 2 - UNIFY-2.0
 
 ### 5. IA & ANALYTICS → Nautilus AI Hub
-
-**Módulos Fundidos:**
-- `ai-insights` → Nautilus AI Hub
-- `ai-dashboard` → Nautilus AI Hub
-- `predictive-insights` → Nautilus AI Hub
-- `predictive-analytics` → Nautilus AI Hub
-- `advanced-analytics` → Nautilus AI Hub
-- `business-insights` → Nautilus AI Hub
-- `ai-adoption` → Nautilus AI Hub
-- `workflow-suggestions` → Nautilus AI Hub
-
-**Módulo Unificado:** `nautilus-ai-hub`
+- `ai-insights`, `ai-dashboard`, `predictive-insights`, `predictive-analytics`, `advanced-analytics`, `business-insights`, `ai-adoption`, `workflow-suggestions`
 - **Rota**: `/nautilus-ai-hub`
-- **Funcionalidades Consolidadas**:
-  - Dashboard de IA
-  - Insights preditivos
-  - Analytics avançados
-  - Sugestões de workflow
-  - Métricas de adoção IA
-  - Assistente IA integrado
-
----
 
 ### 6. AUTOMAÇÃO → Nautilus Automation
-
-**Módulos Fundidos:**
-- `automation-hub` → Nautilus Automation
-- `smart-automation` → Nautilus Automation
-- `smart-workflow` → Nautilus Automation
-- `workflow-visual` → Nautilus Automation
-- `automation.workflows` → Nautilus Automation
-- `automation.rpa` → Nautilus Automation
-- `automation.triggers` → Nautilus Automation
-
-**Módulo Unificado:** `nautilus-automation`
+- `automation-hub`, `smart-automation`, `smart-workflow`, `workflow-visual`, `automation.workflows`, `automation.rpa`, `automation.triggers`
 - **Rota**: `/nautilus-automation`
-- **Funcionalidades Consolidadas**:
-  - Visual workflow builder
-  - Templates de automação
-  - RPA integrado
-  - Gatilhos inteligentes
-  - Dashboard de execuções
-  - Analytics de automação
-
----
 
 ### 7. FLEET & OPERATIONS → Fleet Operations Center
-
-**Módulos Fundidos:**
-- `fleet-dashboard` → Fleet Operations Center
-- `fleet-tracking` → Fleet Operations Center
-- `fleet-management` → Fleet Operations Center
-- `operations-dashboard` → Fleet Operations Center
-
-**Módulo Unificado:** `fleet-operations`
+- `fleet-dashboard`, `fleet-tracking`, `fleet-management`, `operations-dashboard`
 - **Rota**: `/fleet-operations`
-- **Funcionalidades Consolidadas**:
-  - Tracking de frota em tempo real
-  - Dashboard operacional
-  - Gestão de embarcações
-  - KPIs de frota
-  - Mapa integrado
-
----
 
 ### 8. MANUTENÇÃO → Nautilus Maintenance
-
-**Módulos Fundidos:**
-- `maintenance-planner` → Nautilus Maintenance
-- `intelligent-maintenance` → Nautilus Maintenance
-- `mmi` → Nautilus Maintenance
-- `mmi-tasks` → Nautilus Maintenance
-- `mmi-forecast` → Nautilus Maintenance
-- `mmi-history` → Nautilus Maintenance
-- `mmi-jobs-panel` → Nautilus Maintenance
-- `mmi-dashboard` → Nautilus Maintenance
-
-**Módulo Unificado:** `nautilus-maintenance`
+- `maintenance-planner`, `intelligent-maintenance`, `mmi`, `mmi-tasks`, `mmi-forecast`, `mmi-history`, `mmi-jobs-panel`, `mmi-dashboard`
 - **Rota**: `/nautilus-maintenance`
-- **Funcionalidades Consolidadas**:
-  - Planejamento de manutenção
-  - MMI integrado
-  - Digital Twin
-  - Horímetros
-  - Ordens de serviço
-  - Jobs Center
-  - Copilot IA
-
----
 
 ### 9. SUBSEA → Subsea Operations
-
-**Módulos Fundidos:**
-- `ocean-sonar` → Subsea Operations
-- `sonar-ai` → Subsea Operations
-- `underwater-drone` → Subsea Operations
-- `auto-sub` → Subsea Operations
-- `deep-risk-ai` → Subsea Operations
-
-**Módulo Unificado:** `subsea-operations`
+- `ocean-sonar`, `sonar-ai`, `underwater-drone`, `auto-sub`, `deep-risk-ai`
 - **Rota**: `/subsea-operations`
-- **Funcionalidades Consolidadas**:
-  - Sonar integrado
-  - Controle ROV/AUV
-  - Deep Risk AI
-  - Mapa 3D batimétrico
-  - Dashboard de operações
 
 ---
 
-## Benefícios da Fusão
+## Fase 3 - UNIFY-3.0
 
-1. **Menos duplicação**: Código compartilhado entre funcionalidades similares
-2. **UX Unificada**: Experiência consistente em cada área
-3. **Manutenção Simplificada**: Menos módulos para manter e atualizar
-4. **IA Centralizada**: Um hook de IA por domínio ao invés de múltiplos
-5. **Performance**: Menos código para carregar, bundle menor
-6. **Navegação**: Menu mais limpo e organizado
+### 10. VIAGEM & ROTAS → Nautilus Voyage
+- `voyage-planner`, `route-cost-analysis`, `resource-availability`
+- **Rota**: `/nautilus-voyage`
+- **Funcionalidades**: Planejamento de viagens, análise de custos de rota, otimização com IA, previsão meteorológica
+
+### 11. COMUNICAÇÃO → Nautilus Comms
+- `communication`, `communication-center`
+- **Rota**: `/nautilus-comms`
+- **Funcionalidades**: Centro de comunicações, mensagens, canais, integração LLM
+
+### 12. SATÉLITE → Nautilus Satellite
+- `satellite`, `satellite-tracker`
+- **Rota**: `/nautilus-satellite`
+- **Funcionalidades**: Rastreamento de satélites, dados orbitais, cobertura, AIS
+
+### 13. DOCUMENTOS → Nautilus Documents
+- `document-hub`, `incident-reports`
+- **Rota**: `/nautilus-documents`
+- **Funcionalidades**: Hub de documentos, relatórios de incidentes, análise IA, OCR
+
+### 14. ASSISTENTES → Nautilus Assistant
+- `assistant`, `assistants/voice-assistant`
+- **Rota**: `/nautilus-assistant`
+- **Funcionalidades**: Chat IA, assistente de voz, análise de documentos, copilot
 
 ---
 
-## Notas de Migração
+## Resumo de Módulos Unificados
 
-### Redirecionamentos Automáticos
-Todos os módulos antigos agora redirecionam automaticamente para os módulos unificados através de arquivos `redirect.tsx`.
+| Módulo Unificado | Rota | Categoria |
+|------------------|------|-----------|
+| Nautilus Academy | `/nautilus-academy` | HR/Training |
+| Nautilus People | `/nautilus-people` | HR |
+| Nautilus AI Hub | `/nautilus-ai-hub` | Intelligence |
+| Nautilus Automation | `/nautilus-automation` | Automation |
+| Fleet Operations | `/fleet-operations` | Operations |
+| Nautilus Maintenance | `/nautilus-maintenance` | Maintenance |
+| Subsea Operations | `/subsea-operations` | Operations |
+| Nautilus Voyage | `/nautilus-voyage` | Planning |
+| Nautilus Comms | `/nautilus-comms` | Communication |
+| Nautilus Satellite | `/nautilus-satellite` | Connectivity |
+| Nautilus Documents | `/nautilus-documents` | Documents |
+| Nautilus Assistant | `/nautilus-assistant` | Assistants |
+| Procurement & Inventory | `/procurement-inventory` | Logistics |
+| SATCOM Dashboard | `/satcom` | Connectivity |
 
-### Rotas Mantidas
-As rotas antigas continuam funcionando via redirecionamento para manter compatibilidade.
+---
 
-### Arquivos de Redirect Criados
-- `src/modules/solas-training/index.tsx`
-- `src/modules/solas-isps-training/redirect.tsx`
-- `src/modules/autonomous-procurement/redirect.tsx`
-- `src/modules/smart-logistics/redirect.tsx`
-- `src/modules/logistics-multibase/redirect.tsx`
-- `src/modules/connectivity-panel/redirect.tsx`
-- `src/modules/maritime-connectivity/redirect.tsx`
-- `src/modules/crew-wellbeing/redirect.tsx`
-- `src/modules/ai-insights/redirect.tsx`
-- `src/modules/predictive-analytics/redirect.tsx`
-- `src/modules/ocean-sonar/redirect.tsx`
-- `src/modules/underwater-drone/redirect.tsx`
-- `src/modules/intelligent-maintenance/redirect.tsx`
+## Benefícios da Consolidação
+
+1. **Redução de Código**: ~40% menos duplicação
+2. **UX Consistente**: Interface unificada por domínio
+3. **Manutenção Simplificada**: Menos módulos para atualizar
+4. **IA Centralizada**: Um hook de IA por área
+5. **Performance**: Bundle menor, carregamento mais rápido
+6. **Navegação**: Menu mais limpo e intuitivo
