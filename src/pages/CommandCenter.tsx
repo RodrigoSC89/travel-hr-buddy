@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useRef } from "react";
+import React, { useState, useEffect, useRef, useContext } from "react";
 import { useNavigate } from "react-router-dom";
 import { OrganizationLayout } from "@/components/layout/organization-layout";
 import { ModulePageWrapper } from "@/components/ui/module-page-wrapper";
@@ -7,7 +7,6 @@ import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { logger } from "@/lib/logger";
-import { useBrain } from "@/components/global/GlobalBrainProvider";
 import { 
   BarChart, 
   Bar, 
@@ -190,7 +189,6 @@ const SectionHeader = ({ icon: Icon, title, description }: SectionHeaderProps) =
 export default function CommandCenter() {
   const { currentOrganization } = useOrganization();
   const navigate = useNavigate();
-  const { openBrain } = useBrain();
   const [selectedPeriod, setSelectedPeriod] = useState("monthly");
   const [activeTab, setActiveTab] = useState("executive");
   const [isLoading, setIsLoading] = useState(true);
@@ -390,7 +388,7 @@ export default function CommandCenter() {
               </Button>
               
               <Button 
-                onClick={() => openBrain("Command Center")}
+                onClick={() => toast.info("Nautilus Brain em desenvolvimento")}
                 className="bg-gradient-to-r from-purple-600 to-pink-500 hover:from-purple-700 hover:to-pink-600"
               >
                 <Brain className="h-4 w-4 mr-2" />
