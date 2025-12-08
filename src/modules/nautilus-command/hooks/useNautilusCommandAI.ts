@@ -3,7 +3,7 @@
  * Streaming chat otimizado para o centro de comando
  */
 
-import { useState, useCallback } from "react";
+import { useState, useCallback, useRef } from "react";
 import { supabase } from "@/integrations/supabase/client";
 import { toast } from "sonner";
 
@@ -13,6 +13,7 @@ export interface CommandMessage {
   content: string;
   timestamp: Date;
   status?: "pending" | "complete" | "error";
+  feedback?: "positive" | "negative";
 }
 
 export interface SystemContext {
@@ -24,6 +25,8 @@ export interface SystemContext {
 }
 
 const COMMAND_URL = `${import.meta.env.VITE_SUPABASE_URL}/functions/v1/nautilus-command`;
+const MAX_RETRIES = 2;
+const RETRY_DELAY = 1000;
 
 export function useNautilusCommandAI() {
   const [isLoading, setIsLoading] = useState(false);
@@ -235,6 +238,41 @@ Dados: ${JSON.stringify(context)}`;
     setMessages([]);
   }, []);
 
+  const setFeedback = useCallback(async (messageId: string, feedback: "positive" | "negative") => {
+    setMessages(prev => prev.map(m => 
+      m.id === messageId ? { ...m, feedback } : m
+    ));
+    
+    // Log feedback for analytics
+    try {
+      await supabase.from("ai_feedback_scores").insert({
+        command_type: "nautilus-command",
+        command_data: { messageId },
+        self_score: feedback === "positive" ? 1 : 0,
+        feedback_data: { type: feedback }
+      });
+    } catch {
+      // Silent fail for analytics
+    }
+    
+    toast.success(feedback === "positive" ? "Obrigado pelo feedback!" : "Feedback registrado");
+  }, []);
+
+  const exportConversation = useCallback(() => {
+    const content = messages
+      .map(m => `[${m.role.toUpperCase()} - ${m.timestamp.toLocaleString()}]\n${m.content}`)
+      .join("\n\n---\n\n");
+    
+    const blob = new Blob([content], { type: "text/markdown" });
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement("a");
+    a.href = url;
+    a.download = `nautilus-command-${new Date().toISOString().slice(0,10)}.md`;
+    a.click();
+    URL.revokeObjectURL(url);
+    toast.success("Conversa exportada!");
+  }, [messages]);
+
   return {
     messages,
     isLoading,
@@ -244,6 +282,8 @@ Dados: ${JSON.stringify(context)}`;
     suggestActions,
     get360View,
     clearMessages,
-    setMessages
+    setMessages,
+    setFeedback,
+    exportConversation
   };
 }
