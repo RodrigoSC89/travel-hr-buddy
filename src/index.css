@@ -5,6 +5,7 @@
 @import "./styles/theme.css";
 @import "./styles/professional-theme.css";
 @import "./styles/contrast-fixes.css";
+@import "./styles/global-contrast-fix.css";
 @import "./styles/ux-optimizations.css";
 @import "./styles/low-bandwidth.css";
 @import "./styles/revolutionary-ux.css";
@@ -48,69 +49,64 @@
     --popover: 0 0% 100%;                    /* #FFFFFF - Popovers brancos */
     --popover-foreground: 220 87% 8%;        /* #0A0E1A - Texto escuro */
 
-    /* Paleta Principal Azul */
+    /* Paleta Principal Azul - VALORES HSL DIRETOS */
     --primary: 214 84% 46%;                  /* #0EA5E9 - Azul oceânico */
-    --primary-foreground: 0 0% 98%;          /* #FAFAFA - Branco sobre azul */
-    --primary-light: var(--azure-500);       /* #0EA5E9 - Azul médio */
-    --primary-dark: var(--azure-700);        /* #0369A1 - Azul escuro */
-    --primary-glow: var(--azure-400);        /* #38BDF8 - Azul brilhante */
+    --primary-foreground: 0 0% 100%;         /* #FFFFFF - Branco sobre azul */
+    --primary-light: 214 84% 46%;            /* Azul médio */
+    --primary-dark: 214 100% 32%;            /* Azul escuro */
+    --primary-glow: 214 71% 59%;             /* Azul brilhante */
 
     --secondary: 220 13% 91%;                /* #E2E8F0 - Cinza claro */
     --secondary-foreground: 220 87% 8%;      /* #0A0E1A - Texto escuro */
-    --secondary-light: var(--azure-700);
+    --secondary-light: 214 100% 32%;         /* Azul escuro */
 
     --accent: 214 84% 46%;                   /* #0EA5E9 - Azul destaque */
-    --accent-foreground: 0 0% 98%;           /* #FAFAFA - Branco */
-    --accent-light: var(--azure-400);
+    --accent-foreground: 0 0% 100%;          /* #FFFFFF - Branco */
+    --accent-light: 214 71% 59%;             /* Azul claro */
 
-    /* Links com Azuis Harmoniosos */
-    --link: var(--azure-600);                /* #0284C7 - Azul para links */
-    --link-hover: var(--azure-800);          /* #075985 - Azul escuro no hover */
+    /* Links com Azuis Harmoniosos - VALORES HSL DIRETOS */
+    --link: 214 91% 40%;                     /* Azul para links */
+    --link-hover: 214 100% 25%;              /* Azul escuro no hover */
 
-    /* Cores Náuticas em Azul */
-    --nautical: var(--azure-700);            /* #0369A1 - Azul náutico */
-    --nautical-foreground: var(--azure-50);
+    /* Cores Náuticas em Azul - VALORES HSL DIRETOS */
+    --nautical: 214 100% 32%;                /* Azul náutico */
+    --nautical-foreground: 214 100% 97%;     /* Texto claro */
     
-    /* Status Colors em Tons de Azul */
-    --success: 200 100% 35%;                 /* #00A86B - Verde azulado */
-    --success-foreground: var(--azure-50);
-    --warning: 45 100% 51%;                  /* #FFA500 - Laranja (complementar) */
-    --warning-foreground: 214 100% 11%;     /* Texto escuro */
-    --danger: 4 90% 45%;                     /* #E63946 - Vermelho azulado */
-    --danger-foreground: var(--azure-50);
-    --info: var(--azure-500);                /* #0EA5E9 - Azul informativo */
-    --info-foreground: var(--azure-50);
+    /* Status Colors - VALORES HSL DIRETOS COM FOREGROUND CORRETO */
+    --success: 142 76% 36%;                  /* Verde */
+    --success-foreground: 0 0% 100%;         /* Branco para contraste */
+    --warning: 45 100% 51%;                  /* Laranja */
+    --warning-foreground: 0 0% 0%;           /* Preto para contraste */
+    --danger: 4 90% 45%;                     /* Vermelho */
+    --danger-foreground: 0 0% 100%;          /* Branco para contraste */
+    --info: 214 84% 46%;                     /* Azul informativo */
+    --info-foreground: 0 0% 100%;            /* Branco para contraste */
 
     --muted: 220 13% 95%;                    /* #F1F5F9 - Cinza muito claro */
     --muted-foreground: 220 15% 35%;         /* #4A5568 - WCAG AA: 7:1 contrast on white */
 
     --destructive: 0 84% 60%;                /* #F56565 - Vermelho */
-    --destructive-foreground: 0 0% 98%;      /* #FAFAFA - Branco */
+    --destructive-foreground: 0 0% 100%;     /* Branco */
     
-    /* Cores de Status com Azuis */
-    --status-active: 200 100% 35%;
-    --status-active-foreground: var(--azure-50);
-    --status-inactive: var(--azure-400);
-    --status-inactive-foreground: var(--azure-900);
-    --status-warning: 45 100% 51%;
-    --status-warning-foreground: 214 100% 11%;
-    --status-error: 4 90% 45%;
-    --status-error-foreground: var(--azure-50);
+    /* Cores de Status - VALORES HSL DIRETOS */
+    --status-active: 142 76% 36%;            /* Verde */
+    --status-active-foreground: 0 0% 100%;   /* Branco */
+    --status-inactive: 214 71% 59%;          /* Azul claro */
+    --status-inactive-foreground: 0 0% 0%;   /* Preto */
+    --status-warning: 45 100% 51%;           /* Laranja */
+    --status-warning-foreground: 0 0% 0%;    /* Preto */
+    --status-error: 4 90% 45%;               /* Vermelho */
+    --status-error-foreground: 0 0% 100%;    /* Branco */
 
-    --border: 220 13% 91%;                   /* #E2E8F0 - Bordas cinza claro */
+    --border: 220 13% 85%;                   /* #D1D5DB - Bordas mais escuras para contraste */
     --input: 220 13% 91%;                    /* #E2E8F0 - Inputs cinza claro */
     --ring: 214 84% 46%;                     /* #0EA5E9 - Focus ring azul */
 
     --radius: 0.75rem;
     
-    /* Popover Colors */
-    --popover: var(--azure-100);
-    --popover-foreground: 214 100% 15%;
-    
-    /* Interactive Elements */
-    --border: var(--azure-300);
-    --input: var(--azure-200);
-    --ring: var(--azure-500);
+    /* Popover Colors - VALORES HSL DIRETOS (não usar var()) */
+    --popover: 0 0% 100%;                    /* #FFFFFF - Branco puro */
+    --popover-foreground: 220 87% 8%;        /* #0A0E1A - Texto escuro */
     
     /* === MARITIME OFFSHORE HIGH CONTRAST (WCAG AAA) === */
     /* Cores específicas para uso marítimo offshore com alto contraste solar */
@@ -291,55 +287,55 @@
     --bg-overlay-dark: 0 0% 0% / 0.8;        /* Overlay escuro 80% para máximo contraste */
     
     --nautical: var(--azure-600);
-    --nautical-foreground: var(--azure-100);
+    --nautical-foreground: 214 100% 93%;     /* Azul claro */
     
     --muted: 220 84% 12%;                    /* #1E293B - Fundos sutis */
     --muted-foreground: 220 20% 75%;         /* #B4BDD0 - WCAG AA: 8:1 contrast */
     
-    /* Status Colors Modo Escuro */
-    --success: 200 100% 45%;
-    --success-foreground: var(--azure-900);
-    --warning: 45 100% 61%;
-    --warning-foreground: var(--azure-900);
-    --danger: 4 90% 55%;
-    --danger-foreground: var(--azure-100);
-    --info: var(--azure-400);
-    --info-foreground: var(--azure-900);
+    /* Status Colors Modo Escuro - VALORES HSL DIRETOS */
+    --success: 142 71% 55%;                  /* Verde vibrante */
+    --success-foreground: 0 0% 0%;           /* Preto para contraste */
+    --warning: 45 100% 61%;                  /* Amarelo vibrante */
+    --warning-foreground: 0 0% 0%;           /* Preto para contraste */
+    --danger: 4 90% 55%;                     /* Vermelho vibrante */
+    --danger-foreground: 0 0% 100%;          /* Branco para contraste */
+    --info: 214 71% 59%;                     /* Azul claro vibrante */
+    --info-foreground: 0 0% 0%;              /* Preto para contraste */
     
     --destructive: 4 90% 55%;
-    --destructive-foreground: var(--azure-100);
+    --destructive-foreground: 0 0% 100%;     /* Branco para contraste */
     
-    --status-active: 200 100% 45%;
-    --status-active-foreground: var(--azure-900);
-    --status-inactive: var(--azure-600);
-    --status-inactive-foreground: var(--azure-200);
+    --status-active: 142 71% 55%;
+    --status-active-foreground: 0 0% 0%;
+    --status-inactive: 214 91% 40%;
+    --status-inactive-foreground: 0 0% 100%;
     --status-warning: 45 100% 61%;
-    --status-warning-foreground: var(--azure-900);
+    --status-warning-foreground: 0 0% 0%;
     --status-error: 4 90% 55%;
-    --status-error-foreground: var(--azure-100);
+    --status-error-foreground: 0 0% 100%;
     
-    /* Popover Colors */
-    --popover: var(--azure-800);
-    --popover-foreground: var(--azure-100);
+    /* Popover Colors - VALORES HSL DIRETOS */
+    --popover: 220 39% 15%;                  /* Fundo escuro sólido */
+    --popover-foreground: 0 0% 95%;          /* Texto claro */
     
-    --border: 220 84% 12%;                   /* #1E293B - Bordas escuras */
-    --input: 220 84% 12%;                    /* #1E293B - Inputs escuros */
-    --ring: var(--azure-400);
+    --border: 220 84% 20%;                   /* Bordas mais visíveis */
+    --input: 220 84% 15%;                    /* Inputs escuros */
+    --ring: 214 71% 59%;                     /* Ring azul claro */
     
     /* Gradients Modo Escuro */
-    --gradient-ocean: linear-gradient(135deg, hsl(var(--azure-500)), hsl(var(--azure-400)));
-    --gradient-depth: linear-gradient(180deg, hsl(var(--azure-600)), hsl(var(--azure-800)));
-    --gradient-wave: linear-gradient(90deg, hsl(var(--azure-400)), hsl(var(--azure-500)), hsl(var(--azure-600)));
+    --gradient-ocean: linear-gradient(135deg, hsl(214 84% 46%), hsl(214 71% 59%));
+    --gradient-depth: linear-gradient(180deg, hsl(214 91% 40%), hsl(214 100% 25%));
+    --gradient-wave: linear-gradient(90deg, hsl(214 71% 59%), hsl(214 84% 46%), hsl(214 91% 40%));
     
-    /* Sidebar Modo Escuro - WCAG AA Contrast */
-    --sidebar-background: var(--azure-900);
-    --sidebar-foreground: 0 0% 95%;          /* #F2F2F2 - Alto contraste */
-    --sidebar-primary: var(--azure-400);
-    --sidebar-primary-foreground: var(--azure-900);
-    --sidebar-accent: var(--azure-800);
-    --sidebar-accent-foreground: 0 0% 95%;   /* #F2F2F2 - Alto contraste */
-    --sidebar-border: var(--azure-700);
-    --sidebar-ring: var(--azure-400);
+    /* Sidebar Modo Escuro - VALORES HSL DIRETOS */
+    --sidebar-background: 214 100% 18%;      /* Azul noturno */
+    --sidebar-foreground: 0 0% 95%;          /* Texto claro */
+    --sidebar-primary: 214 71% 59%;          /* Azul claro */
+    --sidebar-primary-foreground: 0 0% 0%;   /* Texto escuro */
+    --sidebar-accent: 214 100% 25%;          /* Azul escuro */
+    --sidebar-accent-foreground: 0 0% 95%;   /* Texto claro */
+    --sidebar-border: 214 100% 32%;          /* Borda azul */
+    --sidebar-ring: 214 71% 59%;             /* Ring azul */
   }
 }
 
