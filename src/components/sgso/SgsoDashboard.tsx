@@ -32,7 +32,7 @@ import { PainelSGSO } from "./PainelSGSO";
 import { PainelMetricasRisco } from "./PainelMetricasRisco";
 import { SGSOActionPlanGenerator } from "./SGSOActionPlanGenerator";
 import { CAPAManager } from "./CAPAManager";
-import { SGSOAssistant } from "./SGSOAssistant";
+import { SGSOEnhancedAssistant } from "./SGSOEnhancedAssistant";
 import { ANPDossierExport } from "./ANPDossierExport";
 
 export const SgsoDashboard: React.FC = () => {
@@ -412,7 +412,7 @@ export const SgsoDashboard: React.FC = () => {
             </TabsContent>
 
             <TabsContent value="assistente">
-              <SGSOAssistant />
+              <SGSOEnhancedAssistant />
             </TabsContent>
 
             <TabsContent value="dossie">
