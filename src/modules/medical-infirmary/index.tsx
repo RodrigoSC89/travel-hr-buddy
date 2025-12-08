@@ -1,8 +1,12 @@
 import React from "react";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Badge } from "@/components/ui/badge";
-import { Stethoscope, LayoutDashboard, Users, Pill, FileText, Brain } from "lucide-react";
+import { Stethoscope, LayoutDashboard, Users, Pill, FileText, Brain, ClipboardList } from "lucide-react";
 import InfirmaryDashboard from "./components/InfirmaryDashboard";
+import CrewHealthTab from "./components/CrewHealthTab";
+import SuppliesTab from "./components/SuppliesTab";
+import RecordsTab from "./components/RecordsTab";
+import ReportsTab from "./components/ReportsTab";
 
 export default function MedicalInfirmary() {
   return (
@@ -18,7 +22,7 @@ export default function MedicalInfirmary() {
                 Enfermaria Digital
                 <Badge variant="secondary" className="ml-2">
                   <Brain className="h-3 w-3 mr-1" />
-                  AI-Assisted
+                  AI-Powered
                 </Badge>
               </h1>
               <p className="text-muted-foreground">
@@ -31,7 +35,7 @@ export default function MedicalInfirmary() {
 
       <div className="container mx-auto px-4 py-6">
         <Tabs defaultValue="dashboard" className="space-y-6">
-          <TabsList className="grid w-full max-w-2xl grid-cols-5">
+          <TabsList className="grid w-full max-w-3xl grid-cols-5">
             <TabsTrigger value="dashboard" className="flex items-center gap-2">
               <LayoutDashboard className="h-4 w-4" />
               <span className="hidden sm:inline">Dashboard</span>
@@ -45,7 +49,7 @@ export default function MedicalInfirmary() {
               <span className="hidden sm:inline">Estoque</span>
             </TabsTrigger>
             <TabsTrigger value="records" className="flex items-center gap-2">
-              <FileText className="h-4 w-4" />
+              <ClipboardList className="h-4 w-4" />
               <span className="hidden sm:inline">Prontuários</span>
             </TabsTrigger>
             <TabsTrigger value="reports" className="flex items-center gap-2">
@@ -59,27 +63,19 @@ export default function MedicalInfirmary() {
           </TabsContent>
 
           <TabsContent value="crew">
-            <div className="text-center py-12 text-muted-foreground">
-              Fichas médicas da tripulação - Em desenvolvimento
-            </div>
+            <CrewHealthTab />
           </TabsContent>
 
           <TabsContent value="supplies">
-            <div className="text-center py-12 text-muted-foreground">
-              Gestão completa de estoque médico - Em desenvolvimento
-            </div>
+            <SuppliesTab />
           </TabsContent>
 
           <TabsContent value="records">
-            <div className="text-center py-12 text-muted-foreground">
-              Prontuários e histórico de atendimentos - Em desenvolvimento
-            </div>
+            <RecordsTab />
           </TabsContent>
 
           <TabsContent value="reports">
-            <div className="text-center py-12 text-muted-foreground">
-              Relatórios MLC e Port State - Em desenvolvimento
-            </div>
+            <ReportsTab />
           </TabsContent>
         </Tabs>
       </div>
