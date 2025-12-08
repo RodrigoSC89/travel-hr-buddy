@@ -222,7 +222,9 @@ function App() {
                 <BandwidthIndicator />
                 
                 {/* PATCH 838: Quick Start Guide for new users */}
-                <QuickStartGuide />
+                <Suspense fallback={null}>
+                  <QuickStartGuide />
+                </Suspense>
                 
                 {/* PATCH 700: Web Vitals Overlay (dev only) */}
                 {import.meta.env.DEV && (
