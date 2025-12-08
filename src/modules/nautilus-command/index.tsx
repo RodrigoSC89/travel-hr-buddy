@@ -331,7 +331,7 @@ const NautilusCommandCenter = () => {
                   icon={<Wrench className="h-5 w-5" />}
                   title="Manutenção"
                   subtitle={`${systemStatus.maintenance.efficiency}% efic.`}
-                  path="/intelligent-maintenance"
+                  path="/maintenance-command"
                   color="orange"
                   alerts={systemStatus.maintenance.overdue}
                 />
