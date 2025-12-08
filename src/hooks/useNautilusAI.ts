@@ -84,17 +84,13 @@ export function useNautilusAI() {
     setError(null);
 
     try {
-      const systemPrompt = MODULE_PROMPTS[module];
       const actionContext = getActionContext(action);
 
-      const { data, error: fnError } = await supabase.functions.invoke("nautilus-llm", {
+      const { data, error: fnError } = await supabase.functions.invoke("nautilus-ai", {
         body: {
+          module,
+          action,
           prompt: `${actionContext}\n\n${prompt}`,
-          systemPrompt,
-          contextId: `${module}-${action}`,
-          moduleId: module,
-          sessionId: `${module}-${Date.now()}`,
-          mode: "safe",
           context
         }
       });
