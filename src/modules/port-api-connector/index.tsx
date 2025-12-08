@@ -27,9 +27,12 @@ import {
   Activity,
   Database,
   Link2,
-  AlertTriangle
+  AlertTriangle,
+  Brain,
+  Loader2
 } from "lucide-react";
 import { toast } from "sonner";
+import { useNautilusEnhancementAI } from "@/hooks/useNautilusEnhancementAI";
 
 interface PortConnection {
   id: string;
@@ -114,9 +117,11 @@ const mockLogs: APILog[] = [
 ];
 
 export default function PortAPIConnector() {
+  const { integratePort, isLoading: aiLoading } = useNautilusEnhancementAI();
   const [connections, setConnections] = useState<PortConnection[]>(mockConnections);
   const [logs, setLogs] = useState<APILog[]>(mockLogs);
   const [isSyncing, setIsSyncing] = useState(false);
+  const [aiStatus, setAiStatus] = useState<Record<string, any>>({});
 
   const syncAll = () => {
     setIsSyncing(true);
@@ -144,20 +149,21 @@ export default function PortAPIConnector() {
     }));
   };
 
-  const testConnection = (id: string) => {
+  const testConnection = async (id: string) => {
     const conn = connections.find(c => c.id === id);
     if (!conn) return;
     
     toast.info(`Testando conexão com ${conn.portName}...`);
     
-    setTimeout(() => {
-      const success = Math.random() > 0.3;
-      if (success) {
-        toast.success(`Conexão com ${conn.portName} OK!`);
-      } else {
-        toast.error(`Falha na conexão com ${conn.portName}`);
-      }
-    }, 1500);
+    // Use AI to analyze port integration status
+    const result = await integratePort(conn.portName, id);
+    
+    if (result?.response) {
+      setAiStatus(prev => ({ ...prev, [id]: result.response }));
+      toast.success(`Conexão com ${conn.portName} analisada pela IA!`);
+    } else {
+      toast.error(`Falha na análise de ${conn.portName}`);
+    }
   };
 
   const getStatusColor = (status: string) => {

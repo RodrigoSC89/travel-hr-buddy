@@ -24,9 +24,12 @@ import {
   Target,
   Award,
   Clock,
-  Brain
+  Brain,
+  Sparkles,
+  Loader2
 } from "lucide-react";
 import { toast } from "sonner";
+import { useNautilusEnhancementAI } from "@/hooks/useNautilusEnhancementAI";
 
 interface Simulation {
   id: string;
@@ -125,6 +128,7 @@ const simulationSteps: SimulationStep[] = [
 ];
 
 export default function TrainingSimulation() {
+  const { simulateTraining, isLoading: aiLoading } = useNautilusEnhancementAI();
   const [activeSimulation, setActiveSimulation] = useState<Simulation | null>(null);
   const [isRunning, setIsRunning] = useState(false);
   const [currentStep, setCurrentStep] = useState(0);
@@ -132,6 +136,7 @@ export default function TrainingSimulation() {
   const [selectedAnswer, setSelectedAnswer] = useState<number | null>(null);
   const [showFeedback, setShowFeedback] = useState(false);
   const [completedSimulations, setCompletedSimulations] = useState<string[]>([]);
+  const [aiEvaluation, setAiEvaluation] = useState<any>(null);
 
   const startSimulation = (sim: Simulation) => {
     setActiveSimulation(sim);
@@ -158,16 +163,30 @@ export default function TrainingSimulation() {
     }
   };
 
-  const nextStep = () => {
+  const nextStep = async () => {
     if (currentStep < simulationSteps.length - 1) {
       setCurrentStep(prev => prev + 1);
       setSelectedAnswer(null);
       setShowFeedback(false);
     } else {
-      // Simulation complete
+      // Simulation complete - get AI evaluation
       setIsRunning(false);
       setCompletedSimulations(prev => [...prev, activeSimulation!.id]);
-      toast.success(`Simulação concluída! Pontuação: ${score + (selectedAnswer !== null && simulationSteps[currentStep].options[selectedAnswer].correct ? 100 : 0)}/${simulationSteps.length * 100}`);
+      const finalScore = score + (selectedAnswer !== null && simulationSteps[currentStep].options[selectedAnswer].correct ? 100 : 0);
+      toast.success(`Simulação concluída! Pontuação: ${finalScore}/${simulationSteps.length * 100}`);
+      
+      // Request AI evaluation
+      const result = await simulateTraining(activeSimulation!.id, [{
+        scenarioType: activeSimulation!.type,
+        score: finalScore,
+        totalSteps: simulationSteps.length,
+        difficulty: activeSimulation!.difficulty
+      }]);
+      
+      if (result?.response) {
+        setAiEvaluation(result.response);
+        toast.info("Avaliação de IA disponível!");
+      }
     }
   };
 

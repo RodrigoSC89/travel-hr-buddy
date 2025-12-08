@@ -26,9 +26,12 @@ import {
   Eye,
   FileText,
   Settings,
-  Database
+  Database,
+  Loader2,
+  Sparkles
 } from "lucide-react";
 import { toast } from "sonner";
+import { useNautilusEnhancementAI } from "@/hooks/useNautilusEnhancementAI";
 
 interface AuditEntry {
   id: string;
@@ -151,10 +154,10 @@ const mockAIInsights: AIInsight[] = [
 ];
 
 export default function AuditTrail() {
+  const { analyzeAudit, isLoading } = useNautilusEnhancementAI();
   const [auditEntries, setAuditEntries] = useState<AuditEntry[]>(mockAuditEntries);
   const [aiInsights, setAIInsights] = useState<AIInsight[]>(mockAIInsights);
   const [searchQuery, setSearchQuery] = useState("");
-  const [isAnalyzing, setIsAnalyzing] = useState(false);
   const [selectedSeverity, setSelectedSeverity] = useState<string | null>(null);
 
   const filteredEntries = auditEntries.filter(entry => {
@@ -169,25 +172,39 @@ export default function AuditTrail() {
     return matchesSearch && matchesSeverity;
   });
 
-  const runAIAnalysis = () => {
-    setIsAnalyzing(true);
+  const runAIAnalysis = async () => {
     toast.info("Analisando padrões com IA...");
     
-    setTimeout(() => {
+    const result = await analyzeAudit(auditEntries);
+    
+    if (result?.response) {
+      const aiResponse = result.response;
       const newInsight: AIInsight = {
         id: Date.now().toString(),
-        type: "anomaly",
-        title: "Nova análise concluída",
-        description: `Análise de ${auditEntries.length} registros identificou ${Math.floor(Math.random() * 5) + 1} padrões relevantes.`,
-        confidence: Math.floor(Math.random() * 20) + 80,
-        affectedEntries: Math.floor(Math.random() * 20) + 5,
+        type: aiResponse.riskLevel === 'high' ? "risk" : aiResponse.riskLevel === 'medium' ? "anomaly" : "pattern",
+        title: aiResponse.summary || "Análise de IA concluída",
+        description: aiResponse.findings?.join(' ') || `Análise de ${auditEntries.length} registros concluída.`,
+        confidence: aiResponse.confidence || 85,
+        affectedEntries: aiResponse.affectedCount || auditEntries.length,
         timestamp: new Date()
       };
       
-      setAIInsights(prev => [newInsight, ...prev]);
-      setIsAnalyzing(false);
+      // Add anomaly insights if present
+      const anomalyInsights: AIInsight[] = (aiResponse.anomalies || []).map((a: any, idx: number) => ({
+        id: `anomaly-${Date.now()}-${idx}`,
+        type: "anomaly" as const,
+        title: a.title || "Anomalia detectada",
+        description: a.description || a,
+        confidence: a.confidence || 75,
+        affectedEntries: a.count || 1,
+        timestamp: new Date()
+      }));
+      
+      setAIInsights(prev => [newInsight, ...anomalyInsights, ...prev]);
       toast.success("Análise de IA concluída!");
-    }, 2000);
+    } else {
+      toast.error("Erro na análise de IA");
+    }
   };
 
   const exportReport = () => {
@@ -240,9 +257,9 @@ export default function AuditTrail() {
             <Download className="h-4 w-4 mr-2" />
             Exportar
           </Button>
-          <Button onClick={runAIAnalysis} disabled={isAnalyzing}>
-            <Brain className="h-4 w-4 mr-2" />
-            {isAnalyzing ? "Analisando..." : "Análise IA"}
+          <Button onClick={runAIAnalysis} disabled={isLoading}>
+            {isLoading ? <Loader2 className="h-4 w-4 mr-2 animate-spin" /> : <Sparkles className="h-4 w-4 mr-2" />}
+            {isLoading ? "Analisando..." : "Análise IA"}
           </Button>
         </div>
       </div>
