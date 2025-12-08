@@ -11,7 +11,10 @@ export const NAVIGATION = [
   { name: "BridgeLink", path: "/bridgelink", component: safeLazyImport(() => import("@/modules/control/bridgelink/BridgeLinkDashboard"), "BridgeLink") },
   { name: "Forecast Global", path: "/forecast-global", component: safeLazyImport(() => import("@/modules/control/forecast-global/ForecastConsole"), "Forecast Global") },
   { name: "Control Hub", path: "/control-hub", component: safeLazyImport(() => import("@/modules/control/control-hub/ControlHubPanel"), "Control Hub") },
+  // PATCH UNIFY-3.0: Unified Maintenance Command Center (fusão de 8 módulos de manutenção)
+  { name: "Maintenance Command Center", path: "/maintenance-command", component: safeLazyImport(() => import("@/pages/MaintenanceCommandCenter"), "Maintenance Command Center") },
   { name: "Manutenção Inteligente", path: "/intelligent-maintenance", component: safeLazyImport(() => import("@/modules/intelligent-maintenance"), "Manutenção Inteligente") },
+  { name: "MMI - Manutenção", path: "/mmi", component: safeLazyImport(() => import("@/pages/MMI"), "MMI") },
   { name: "Procurement & Inventory", path: "/procurement-inventory", component: safeLazyImport(() => import("@/modules/procurement-inventory"), "Procurement & Inventory") },
   { name: "SOLAS, ISPS & ISM Training", path: "/solas-isps-training", component: safeLazyImport(() => import("@/modules/solas-isps-training"), "SOLAS, ISPS & ISM Training") },
   { name: "FMEA Expert", path: "/fmea-expert", component: safeLazyImport(() => import("@/modules/planning/fmea/FMEAExpert"), "FMEA Expert") },
