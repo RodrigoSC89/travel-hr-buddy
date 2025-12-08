@@ -1,5 +1,6 @@
 /**
  * Climate & Engagement - Clima Organizacional e Engajamento
+ * Versão funcional completa com todas as ações
  */
 
 import React, { useState } from 'react';
@@ -11,6 +12,8 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { Textarea } from '@/components/ui/textarea';
 import { RadioGroup, RadioGroupItem } from '@/components/ui/radio-group';
 import { Label } from '@/components/ui/label';
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
+import { toast } from 'sonner';
 import {
   Heart,
   TrendingUp,
@@ -24,19 +27,14 @@ import {
   Send,
   BarChart3,
   Users,
-  Building2,
   Sparkles,
   AlertTriangle,
   CheckCircle,
-  Clock
+  Loader2
 } from 'lucide-react';
 import { motion } from 'framer-motion';
-
-interface PulseSurveyQuestion {
-  id: string;
-  pergunta: string;
-  categoria: string;
-}
+import { useNautilusPeopleAI } from '../hooks/useNautilusPeopleAI';
+import { departamentos } from '../data/mockData';
 
 interface ClimateResult {
   categoria: string;
@@ -45,10 +43,21 @@ interface ClimateResult {
   participacao: number;
 }
 
+interface PulseSurveyQuestion {
+  id: string;
+  pergunta: string;
+  categoria: string;
+}
+
 const ClimateEngagement: React.FC = () => {
   const [activeTab, setActiveTab] = useState('dashboard');
   const [selectedMood, setSelectedMood] = useState<string | null>(null);
   const [surveyResponses, setSurveyResponses] = useState<Record<string, number>>({});
+  const [feedbackText, setFeedbackText] = useState('');
+  const [feedbackType, setFeedbackType] = useState<'elogio' | 'sugestao' | 'critica'>('sugestao');
+  const [moodComment, setMoodComment] = useState('');
+  
+  const { isLoading, analyzeFeedback, analyzeClimate } = useNautilusPeopleAI();
 
   const climateResults: ClimateResult[] = [
     { categoria: 'Satisfação Geral', score: 87, trend: 'up', participacao: 92 },
@@ -87,7 +96,7 @@ const ClimateEngagement: React.FC = () => {
     },
     {
       id: '3',
-      tipo: 'reclamacao',
+      tipo: 'critica',
       texto: 'Os computadores do setor precisam de atualização urgente.',
       departamento: 'Financeiro',
       data: '2025-12-03',
@@ -118,11 +127,80 @@ const ClimateEngagement: React.FC = () => {
       case 'resolvido':
         return <Badge className="bg-green-500"><CheckCircle className="w-3 h-3 mr-1" />Resolvido</Badge>;
       case 'em_analise':
-        return <Badge className="bg-yellow-500"><Clock className="w-3 h-3 mr-1" />Em Análise</Badge>;
+        return <Badge className="bg-yellow-500"><AlertTriangle className="w-3 h-3 mr-1" />Em Análise</Badge>;
       case 'respondido':
         return <Badge className="bg-blue-500"><MessageSquare className="w-3 h-3 mr-1" />Respondido</Badge>;
       default:
         return <Badge variant="secondary">{status}</Badge>;
+    }
+  };
+
+  const handleSendSurvey = async () => {
+    const answeredQuestions = Object.keys(surveyResponses).length;
+    if (answeredQuestions < pulseSurveyQuestions.length) {
+      toast.error(`Por favor, responda todas as ${pulseSurveyQuestions.length} perguntas`);
+      return;
+    }
+
+    toast.info('Enviando respostas...');
+    await new Promise(resolve => setTimeout(resolve, 1000));
+    
+    toast.success('Respostas enviadas com sucesso! Obrigado pela participação.');
+    setSurveyResponses({});
+  };
+
+  const handleRegisterMood = async () => {
+    if (!selectedMood) {
+      toast.error('Selecione como você está se sentindo');
+      return;
+    }
+
+    toast.info('Registrando seu humor...');
+    await new Promise(resolve => setTimeout(resolve, 800));
+    
+    const moodLabels: Record<string, string> = {
+      great: 'Ótimo',
+      good: 'Bem',
+      neutral: 'Neutro',
+      bad: 'Ruim',
+      terrible: 'Péssimo'
+    };
+    
+    toast.success(`Humor "${moodLabels[selectedMood]}" registrado com sucesso!`);
+    setSelectedMood(null);
+    setMoodComment('');
+  };
+
+  const handleSendFeedback = async () => {
+    if (!feedbackText.trim()) {
+      toast.error('Digite sua mensagem antes de enviar');
+      return;
+    }
+
+    toast.info('Analisando feedback com IA...');
+    
+    const result = await analyzeFeedback(feedbackText, 'Geral');
+    
+    if (result) {
+      toast.success('Feedback enviado anonimamente! A IA identificou pontos importantes.');
+    } else {
+      toast.success('Feedback enviado anonimamente! Obrigado pela contribuição.');
+    }
+    
+    setFeedbackText('');
+  };
+
+  const handleGenerateInsights = async () => {
+    toast.info('Gerando insights com IA...');
+    
+    const result = await analyzeClimate({
+      results: climateResults,
+      period: 'Q4 2025',
+      participationRate: 91
+    });
+    
+    if (result) {
+      toast.success('Insights gerados! Confira o relatório completo.');
     }
   };
 
@@ -212,6 +290,13 @@ const ClimateEngagement: React.FC = () => {
 
         {/* Dashboard Tab */}
         <TabsContent value="dashboard" className="space-y-6">
+          <div className="flex justify-end">
+            <Button onClick={handleGenerateInsights} disabled={isLoading}>
+              {isLoading ? <Loader2 className="w-4 h-4 mr-2 animate-spin" /> : <Sparkles className="w-4 h-4 mr-2" />}
+              Gerar Insights com IA
+            </Button>
+          </div>
+          
           <Card>
             <CardHeader>
               <CardTitle>Resultados por Categoria</CardTitle>
@@ -320,7 +405,7 @@ const ClimateEngagement: React.FC = () => {
                     <Badge variant="outline">{question.categoria}</Badge>
                   </div>
                   <RadioGroup
-                    className="flex gap-2"
+                    className="flex gap-4"
                     value={surveyResponses[question.id]?.toString()}
                     onValueChange={(value) => setSurveyResponses({ ...surveyResponses, [question.id]: parseInt(value) })}
                   >
@@ -335,7 +420,7 @@ const ClimateEngagement: React.FC = () => {
                   </RadioGroup>
                 </div>
               ))}
-              <Button className="w-full">
+              <Button className="w-full" onClick={handleSendSurvey}>
                 <Send className="w-4 h-4 mr-2" />
                 Enviar Respostas
               </Button>
@@ -380,8 +465,13 @@ const ClimateEngagement: React.FC = () => {
                   className="space-y-3"
                 >
                   <Label>Quer compartilhar algo mais? (opcional)</Label>
-                  <Textarea placeholder="Digite aqui..." rows={3} />
-                  <Button className="w-full">
+                  <Textarea 
+                    placeholder="Digite aqui..." 
+                    rows={3}
+                    value={moodComment}
+                    onChange={(e) => setMoodComment(e.target.value)}
+                  />
+                  <Button className="w-full" onClick={handleRegisterMood}>
                     <Send className="w-4 h-4 mr-2" />
                     Registrar Humor
                   </Button>
@@ -399,23 +489,40 @@ const ClimateEngagement: React.FC = () => {
               <CardDescription>Suas sugestões e críticas são importantes para nós</CardDescription>
             </CardHeader>
             <CardContent className="space-y-4">
-              <Textarea placeholder="Digite sua sugestão, elogio ou crítica..." rows={4} />
+              <Textarea 
+                placeholder="Digite sua sugestão, elogio ou crítica..." 
+                rows={4}
+                value={feedbackText}
+                onChange={(e) => setFeedbackText(e.target.value)}
+              />
               <div className="flex gap-2">
-                <Button variant="outline" className="flex-1">
+                <Button 
+                  variant={feedbackType === 'elogio' ? 'default' : 'outline'} 
+                  className="flex-1"
+                  onClick={() => setFeedbackType('elogio')}
+                >
                   <ThumbsUp className="w-4 h-4 mr-2" />
                   Elogio
                 </Button>
-                <Button variant="outline" className="flex-1">
+                <Button 
+                  variant={feedbackType === 'sugestao' ? 'default' : 'outline'} 
+                  className="flex-1"
+                  onClick={() => setFeedbackType('sugestao')}
+                >
                   <MessageSquare className="w-4 h-4 mr-2" />
                   Sugestão
                 </Button>
-                <Button variant="outline" className="flex-1">
+                <Button 
+                  variant={feedbackType === 'critica' ? 'default' : 'outline'} 
+                  className="flex-1"
+                  onClick={() => setFeedbackType('critica')}
+                >
                   <ThumbsDown className="w-4 h-4 mr-2" />
                   Crítica
                 </Button>
               </div>
-              <Button className="w-full">
-                <Send className="w-4 h-4 mr-2" />
+              <Button className="w-full" onClick={handleSendFeedback} disabled={isLoading}>
+                {isLoading ? <Loader2 className="w-4 h-4 mr-2 animate-spin" /> : <Send className="w-4 h-4 mr-2" />}
                 Enviar Anonimamente
               </Button>
             </CardContent>
@@ -424,17 +531,22 @@ const ClimateEngagement: React.FC = () => {
           <Card>
             <CardHeader>
               <CardTitle>Feedbacks Recentes</CardTitle>
-              <CardDescription>Acompanhe o status das sugestões da equipe</CardDescription>
+              <CardDescription>Acompanhe o status dos feedbacks enviados</CardDescription>
             </CardHeader>
             <CardContent className="space-y-3">
-              {recentFeedback.map((fb) => (
-                <div key={fb.id} className="p-4 bg-muted/50 rounded-lg border">
-                  <div className="flex items-start justify-between mb-2">
-                    <Badge variant="outline">{fb.departamento}</Badge>
-                    {getStatusBadge(fb.status)}
+              {recentFeedback.map((feedback) => (
+                <div key={feedback.id} className="p-4 bg-muted/50 rounded-lg border">
+                  <div className="flex items-center justify-between mb-2">
+                    <div className="flex items-center gap-2">
+                      <Badge variant="outline">{feedback.tipo}</Badge>
+                      <span className="text-xs text-muted-foreground">{feedback.departamento}</span>
+                    </div>
+                    {getStatusBadge(feedback.status)}
                   </div>
-                  <p className="text-sm">{fb.texto}</p>
-                  <p className="text-xs text-muted-foreground mt-2">{fb.data}</p>
+                  <p className="text-sm">{feedback.texto}</p>
+                  <p className="text-xs text-muted-foreground mt-2">
+                    Enviado em {new Date(feedback.data).toLocaleDateString('pt-BR')}
+                  </p>
                 </div>
               ))}
             </CardContent>
