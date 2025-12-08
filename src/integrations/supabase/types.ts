@@ -2251,6 +2251,168 @@ export type Database = {
         }
         Relationships: []
       }
+      cbt_courses: {
+        Row: {
+          applicable_ranks: string[] | null
+          category: string | null
+          content_type: string | null
+          content_url: string | null
+          created_at: string
+          created_by: string | null
+          description: string | null
+          duration_minutes: number | null
+          id: string
+          is_active: boolean | null
+          is_mandatory: boolean | null
+          language: string | null
+          organization_id: string | null
+          passing_score: number | null
+          prerequisites: string[] | null
+          stcw_reference: string | null
+          thumbnail_url: string | null
+          title: string
+          updated_at: string
+          validity_months: number | null
+          version: string | null
+        }
+        Insert: {
+          applicable_ranks?: string[] | null
+          category?: string | null
+          content_type?: string | null
+          content_url?: string | null
+          created_at?: string
+          created_by?: string | null
+          description?: string | null
+          duration_minutes?: number | null
+          id?: string
+          is_active?: boolean | null
+          is_mandatory?: boolean | null
+          language?: string | null
+          organization_id?: string | null
+          passing_score?: number | null
+          prerequisites?: string[] | null
+          stcw_reference?: string | null
+          thumbnail_url?: string | null
+          title: string
+          updated_at?: string
+          validity_months?: number | null
+          version?: string | null
+        }
+        Update: {
+          applicable_ranks?: string[] | null
+          category?: string | null
+          content_type?: string | null
+          content_url?: string | null
+          created_at?: string
+          created_by?: string | null
+          description?: string | null
+          duration_minutes?: number | null
+          id?: string
+          is_active?: boolean | null
+          is_mandatory?: boolean | null
+          language?: string | null
+          organization_id?: string | null
+          passing_score?: number | null
+          prerequisites?: string[] | null
+          stcw_reference?: string | null
+          thumbnail_url?: string | null
+          title?: string
+          updated_at?: string
+          validity_months?: number | null
+          version?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "cbt_courses_organization_id_fkey"
+            columns: ["organization_id"]
+            isOneToOne: false
+            referencedRelation: "organizations"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      cbt_progress: {
+        Row: {
+          attempts: number | null
+          certificate_issued: boolean | null
+          certificate_number: string | null
+          completed_at: string | null
+          course_id: string | null
+          created_at: string
+          crew_member_id: string | null
+          expiry_date: string | null
+          id: string
+          last_accessed_at: string | null
+          organization_id: string | null
+          progress_percent: number | null
+          score: number | null
+          started_at: string | null
+          status: string | null
+          time_spent_minutes: number | null
+          updated_at: string
+        }
+        Insert: {
+          attempts?: number | null
+          certificate_issued?: boolean | null
+          certificate_number?: string | null
+          completed_at?: string | null
+          course_id?: string | null
+          created_at?: string
+          crew_member_id?: string | null
+          expiry_date?: string | null
+          id?: string
+          last_accessed_at?: string | null
+          organization_id?: string | null
+          progress_percent?: number | null
+          score?: number | null
+          started_at?: string | null
+          status?: string | null
+          time_spent_minutes?: number | null
+          updated_at?: string
+        }
+        Update: {
+          attempts?: number | null
+          certificate_issued?: boolean | null
+          certificate_number?: string | null
+          completed_at?: string | null
+          course_id?: string | null
+          created_at?: string
+          crew_member_id?: string | null
+          expiry_date?: string | null
+          id?: string
+          last_accessed_at?: string | null
+          organization_id?: string | null
+          progress_percent?: number | null
+          score?: number | null
+          started_at?: string | null
+          status?: string | null
+          time_spent_minutes?: number | null
+          updated_at?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "cbt_progress_course_id_fkey"
+            columns: ["course_id"]
+            isOneToOne: false
+            referencedRelation: "cbt_courses"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "cbt_progress_crew_member_id_fkey"
+            columns: ["crew_member_id"]
+            isOneToOne: false
+            referencedRelation: "crew_members"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "cbt_progress_organization_id_fkey"
+            columns: ["organization_id"]
+            isOneToOne: false
+            referencedRelation: "organizations"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       certificate_alerts: {
         Row: {
           alert_date: string
@@ -2694,6 +2856,136 @@ export type Database = {
             referencedColumns: ["id"]
           },
         ]
+      }
+      class_surveys: {
+        Row: {
+          certificates_issued: string[] | null
+          classification_society_id: string | null
+          completed_date: string | null
+          conditions_of_class: Json | null
+          cost: number | null
+          created_at: string
+          documents: string[] | null
+          due_date: string
+          findings: Json | null
+          id: string
+          notes: string | null
+          organization_id: string | null
+          recommendations: Json | null
+          status: string | null
+          survey_location: string | null
+          survey_name: string
+          survey_type: string
+          surveyor_name: string | null
+          updated_at: string
+          vessel_id: string | null
+          window_end: string | null
+          window_start: string | null
+        }
+        Insert: {
+          certificates_issued?: string[] | null
+          classification_society_id?: string | null
+          completed_date?: string | null
+          conditions_of_class?: Json | null
+          cost?: number | null
+          created_at?: string
+          documents?: string[] | null
+          due_date: string
+          findings?: Json | null
+          id?: string
+          notes?: string | null
+          organization_id?: string | null
+          recommendations?: Json | null
+          status?: string | null
+          survey_location?: string | null
+          survey_name: string
+          survey_type: string
+          surveyor_name?: string | null
+          updated_at?: string
+          vessel_id?: string | null
+          window_end?: string | null
+          window_start?: string | null
+        }
+        Update: {
+          certificates_issued?: string[] | null
+          classification_society_id?: string | null
+          completed_date?: string | null
+          conditions_of_class?: Json | null
+          cost?: number | null
+          created_at?: string
+          documents?: string[] | null
+          due_date?: string
+          findings?: Json | null
+          id?: string
+          notes?: string | null
+          organization_id?: string | null
+          recommendations?: Json | null
+          status?: string | null
+          survey_location?: string | null
+          survey_name?: string
+          survey_type?: string
+          surveyor_name?: string | null
+          updated_at?: string
+          vessel_id?: string | null
+          window_end?: string | null
+          window_start?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "class_surveys_classification_society_id_fkey"
+            columns: ["classification_society_id"]
+            isOneToOne: false
+            referencedRelation: "classification_societies"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "class_surveys_organization_id_fkey"
+            columns: ["organization_id"]
+            isOneToOne: false
+            referencedRelation: "organizations"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "class_surveys_vessel_id_fkey"
+            columns: ["vessel_id"]
+            isOneToOne: false
+            referencedRelation: "vessels"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      classification_societies: {
+        Row: {
+          code: string
+          country: string | null
+          created_at: string
+          id: string
+          is_iacs_member: boolean | null
+          logo_url: string | null
+          name: string
+          website: string | null
+        }
+        Insert: {
+          code: string
+          country?: string | null
+          created_at?: string
+          id?: string
+          is_iacs_member?: boolean | null
+          logo_url?: string | null
+          name: string
+          website?: string | null
+        }
+        Update: {
+          code?: string
+          country?: string | null
+          created_at?: string
+          id?: string
+          is_iacs_member?: boolean | null
+          logo_url?: string | null
+          name?: string
+          website?: string | null
+        }
+        Relationships: []
       }
       cognitive_feedback: {
         Row: {
@@ -3425,6 +3717,82 @@ export type Database = {
           },
         ]
       }
+      crew_competency_assessments: {
+        Row: {
+          assessment_date: string
+          assessor_id: string | null
+          assessor_name: string | null
+          competency_id: string | null
+          created_at: string
+          crew_member_id: string | null
+          evidence_reference: string | null
+          evidence_type: string | null
+          expiry_date: string | null
+          id: string
+          notes: string | null
+          organization_id: string | null
+          score: number | null
+          status: string | null
+          updated_at: string
+        }
+        Insert: {
+          assessment_date: string
+          assessor_id?: string | null
+          assessor_name?: string | null
+          competency_id?: string | null
+          created_at?: string
+          crew_member_id?: string | null
+          evidence_reference?: string | null
+          evidence_type?: string | null
+          expiry_date?: string | null
+          id?: string
+          notes?: string | null
+          organization_id?: string | null
+          score?: number | null
+          status?: string | null
+          updated_at?: string
+        }
+        Update: {
+          assessment_date?: string
+          assessor_id?: string | null
+          assessor_name?: string | null
+          competency_id?: string | null
+          created_at?: string
+          crew_member_id?: string | null
+          evidence_reference?: string | null
+          evidence_type?: string | null
+          expiry_date?: string | null
+          id?: string
+          notes?: string | null
+          organization_id?: string | null
+          score?: number | null
+          status?: string | null
+          updated_at?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "crew_competency_assessments_competency_id_fkey"
+            columns: ["competency_id"]
+            isOneToOne: false
+            referencedRelation: "stcw_competencies"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "crew_competency_assessments_crew_member_id_fkey"
+            columns: ["crew_member_id"]
+            isOneToOne: false
+            referencedRelation: "crew_members"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "crew_competency_assessments_organization_id_fkey"
+            columns: ["organization_id"]
+            isOneToOne: false
+            referencedRelation: "organizations"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       crew_development_goals: {
         Row: {
           category: string
@@ -4099,6 +4467,127 @@ export type Database = {
           },
           {
             foreignKeyName: "crew_members_vessel_id_fkey"
+            columns: ["vessel_id"]
+            isOneToOne: false
+            referencedRelation: "vessels"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      crew_payroll: {
+        Row: {
+          allotments: Json | null
+          allowances: Json | null
+          approved_at: string | null
+          approved_by: string | null
+          bank_reference: string | null
+          base_salary: number
+          bonuses: Json | null
+          created_at: string
+          crew_member_id: string | null
+          currency: string | null
+          days_onboard: number | null
+          deductions: Json | null
+          gross_pay: number | null
+          id: string
+          net_pay: number | null
+          notes: string | null
+          organization_id: string | null
+          overtime_amount: number | null
+          overtime_hours: number | null
+          overtime_rate: number | null
+          payment_date: string | null
+          payment_method: string | null
+          payment_status: string | null
+          payroll_period_end: string
+          payroll_period_start: string
+          pension_contribution: number | null
+          tax_amount: number | null
+          union_dues: number | null
+          updated_at: string
+          vessel_id: string | null
+        }
+        Insert: {
+          allotments?: Json | null
+          allowances?: Json | null
+          approved_at?: string | null
+          approved_by?: string | null
+          bank_reference?: string | null
+          base_salary: number
+          bonuses?: Json | null
+          created_at?: string
+          crew_member_id?: string | null
+          currency?: string | null
+          days_onboard?: number | null
+          deductions?: Json | null
+          gross_pay?: number | null
+          id?: string
+          net_pay?: number | null
+          notes?: string | null
+          organization_id?: string | null
+          overtime_amount?: number | null
+          overtime_hours?: number | null
+          overtime_rate?: number | null
+          payment_date?: string | null
+          payment_method?: string | null
+          payment_status?: string | null
+          payroll_period_end: string
+          payroll_period_start: string
+          pension_contribution?: number | null
+          tax_amount?: number | null
+          union_dues?: number | null
+          updated_at?: string
+          vessel_id?: string | null
+        }
+        Update: {
+          allotments?: Json | null
+          allowances?: Json | null
+          approved_at?: string | null
+          approved_by?: string | null
+          bank_reference?: string | null
+          base_salary?: number
+          bonuses?: Json | null
+          created_at?: string
+          crew_member_id?: string | null
+          currency?: string | null
+          days_onboard?: number | null
+          deductions?: Json | null
+          gross_pay?: number | null
+          id?: string
+          net_pay?: number | null
+          notes?: string | null
+          organization_id?: string | null
+          overtime_amount?: number | null
+          overtime_hours?: number | null
+          overtime_rate?: number | null
+          payment_date?: string | null
+          payment_method?: string | null
+          payment_status?: string | null
+          payroll_period_end?: string
+          payroll_period_start?: string
+          pension_contribution?: number | null
+          tax_amount?: number | null
+          union_dues?: number | null
+          updated_at?: string
+          vessel_id?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "crew_payroll_crew_member_id_fkey"
+            columns: ["crew_member_id"]
+            isOneToOne: false
+            referencedRelation: "crew_members"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "crew_payroll_organization_id_fkey"
+            columns: ["organization_id"]
+            isOneToOne: false
+            referencedRelation: "organizations"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "crew_payroll_vessel_id_fkey"
             columns: ["vessel_id"]
             isOneToOne: false
             referencedRelation: "vessels"
@@ -5596,6 +6085,168 @@ export type Database = {
           },
         ]
       }
+      drydock_events: {
+        Row: {
+          actual_cost: number | null
+          actual_end_date: string | null
+          actual_start_date: string | null
+          class_requirements: Json | null
+          created_at: string
+          created_by: string | null
+          currency: string | null
+          documents: string[] | null
+          estimated_cost: number | null
+          event_type: string
+          id: string
+          notes: string | null
+          organization_id: string | null
+          planned_end_date: string
+          planned_start_date: string
+          shipyard_location: string | null
+          shipyard_name: string
+          status: string | null
+          updated_at: string
+          vessel_id: string | null
+          work_scope: Json | null
+        }
+        Insert: {
+          actual_cost?: number | null
+          actual_end_date?: string | null
+          actual_start_date?: string | null
+          class_requirements?: Json | null
+          created_at?: string
+          created_by?: string | null
+          currency?: string | null
+          documents?: string[] | null
+          estimated_cost?: number | null
+          event_type: string
+          id?: string
+          notes?: string | null
+          organization_id?: string | null
+          planned_end_date: string
+          planned_start_date: string
+          shipyard_location?: string | null
+          shipyard_name: string
+          status?: string | null
+          updated_at?: string
+          vessel_id?: string | null
+          work_scope?: Json | null
+        }
+        Update: {
+          actual_cost?: number | null
+          actual_end_date?: string | null
+          actual_start_date?: string | null
+          class_requirements?: Json | null
+          created_at?: string
+          created_by?: string | null
+          currency?: string | null
+          documents?: string[] | null
+          estimated_cost?: number | null
+          event_type?: string
+          id?: string
+          notes?: string | null
+          organization_id?: string | null
+          planned_end_date?: string
+          planned_start_date?: string
+          shipyard_location?: string | null
+          shipyard_name?: string
+          status?: string | null
+          updated_at?: string
+          vessel_id?: string | null
+          work_scope?: Json | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "drydock_events_organization_id_fkey"
+            columns: ["organization_id"]
+            isOneToOne: false
+            referencedRelation: "organizations"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "drydock_events_vessel_id_fkey"
+            columns: ["vessel_id"]
+            isOneToOne: false
+            referencedRelation: "vessels"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      ecdis_data: {
+        Row: {
+          backup_arrangements: string | null
+          chart_folios: string[] | null
+          created_at: string
+          ecdis_manufacturer: string | null
+          ecdis_model: string | null
+          enc_cells_installed: number | null
+          enc_permit_status: string | null
+          id: string
+          last_sync_at: string | null
+          last_update_date: string | null
+          next_update_due: string | null
+          organization_id: string | null
+          routes: Json | null
+          software_version: string | null
+          type_approval_number: string | null
+          updated_at: string
+          vessel_id: string | null
+        }
+        Insert: {
+          backup_arrangements?: string | null
+          chart_folios?: string[] | null
+          created_at?: string
+          ecdis_manufacturer?: string | null
+          ecdis_model?: string | null
+          enc_cells_installed?: number | null
+          enc_permit_status?: string | null
+          id?: string
+          last_sync_at?: string | null
+          last_update_date?: string | null
+          next_update_due?: string | null
+          organization_id?: string | null
+          routes?: Json | null
+          software_version?: string | null
+          type_approval_number?: string | null
+          updated_at?: string
+          vessel_id?: string | null
+        }
+        Update: {
+          backup_arrangements?: string | null
+          chart_folios?: string[] | null
+          created_at?: string
+          ecdis_manufacturer?: string | null
+          ecdis_model?: string | null
+          enc_cells_installed?: number | null
+          enc_permit_status?: string | null
+          id?: string
+          last_sync_at?: string | null
+          last_update_date?: string | null
+          next_update_due?: string | null
+          organization_id?: string | null
+          routes?: Json | null
+          software_version?: string | null
+          type_approval_number?: string | null
+          updated_at?: string
+          vessel_id?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "ecdis_data_organization_id_fkey"
+            columns: ["organization_id"]
+            isOneToOne: false
+            referencedRelation: "organizations"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "ecdis_data_vessel_id_fkey"
+            columns: ["vessel_id"]
+            isOneToOne: false
+            referencedRelation: "vessels"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       emergency_alerts: {
         Row: {
           acknowledged_at: string | null
@@ -6595,6 +7246,84 @@ export type Database = {
           total_price?: number
         }
         Relationships: []
+      }
+      hull_inspections: {
+        Row: {
+          anodes_condition: string | null
+          coating_condition: string | null
+          created_at: string
+          findings: Json | null
+          fouling_level: string | null
+          hull_condition_score: number | null
+          id: string
+          inspection_date: string
+          inspection_type: string
+          inspector_company: string | null
+          inspector_name: string | null
+          next_inspection_due: string | null
+          organization_id: string | null
+          photos: string[] | null
+          recommendations: Json | null
+          report_file: string | null
+          updated_at: string
+          vessel_id: string | null
+        }
+        Insert: {
+          anodes_condition?: string | null
+          coating_condition?: string | null
+          created_at?: string
+          findings?: Json | null
+          fouling_level?: string | null
+          hull_condition_score?: number | null
+          id?: string
+          inspection_date: string
+          inspection_type: string
+          inspector_company?: string | null
+          inspector_name?: string | null
+          next_inspection_due?: string | null
+          organization_id?: string | null
+          photos?: string[] | null
+          recommendations?: Json | null
+          report_file?: string | null
+          updated_at?: string
+          vessel_id?: string | null
+        }
+        Update: {
+          anodes_condition?: string | null
+          coating_condition?: string | null
+          created_at?: string
+          findings?: Json | null
+          fouling_level?: string | null
+          hull_condition_score?: number | null
+          id?: string
+          inspection_date?: string
+          inspection_type?: string
+          inspector_company?: string | null
+          inspector_name?: string | null
+          next_inspection_due?: string | null
+          organization_id?: string | null
+          photos?: string[] | null
+          recommendations?: Json | null
+          report_file?: string | null
+          updated_at?: string
+          vessel_id?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "hull_inspections_organization_id_fkey"
+            columns: ["organization_id"]
+            isOneToOne: false
+            referencedRelation: "organizations"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "hull_inspections_vessel_id_fkey"
+            columns: ["vessel_id"]
+            isOneToOne: false
+            referencedRelation: "vessels"
+            referencedColumns: ["id"]
+          },
+        ]
       }
       ia_adoption_metrics: {
         Row: {
@@ -8735,6 +9464,82 @@ export type Database = {
           },
           {
             foreignKeyName: "missions_vessel_id_fkey"
+            columns: ["vessel_id"]
+            isOneToOne: false
+            referencedRelation: "vessels"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      mlc_rest_hours: {
+        Row: {
+          approved_at: string | null
+          approved_by: string | null
+          compliant: boolean | null
+          created_at: string
+          crew_member_id: string | null
+          id: string
+          notes: string | null
+          organization_id: string | null
+          record_date: string
+          rest_periods: Json
+          total_rest_hours: number | null
+          total_work_hours: number | null
+          vessel_id: string | null
+          violation_details: string | null
+          violation_type: string | null
+        }
+        Insert: {
+          approved_at?: string | null
+          approved_by?: string | null
+          compliant?: boolean | null
+          created_at?: string
+          crew_member_id?: string | null
+          id?: string
+          notes?: string | null
+          organization_id?: string | null
+          record_date: string
+          rest_periods?: Json
+          total_rest_hours?: number | null
+          total_work_hours?: number | null
+          vessel_id?: string | null
+          violation_details?: string | null
+          violation_type?: string | null
+        }
+        Update: {
+          approved_at?: string | null
+          approved_by?: string | null
+          compliant?: boolean | null
+          created_at?: string
+          crew_member_id?: string | null
+          id?: string
+          notes?: string | null
+          organization_id?: string | null
+          record_date?: string
+          rest_periods?: Json
+          total_rest_hours?: number | null
+          total_work_hours?: number | null
+          vessel_id?: string | null
+          violation_details?: string | null
+          violation_type?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "mlc_rest_hours_crew_member_id_fkey"
+            columns: ["crew_member_id"]
+            isOneToOne: false
+            referencedRelation: "crew_members"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "mlc_rest_hours_organization_id_fkey"
+            columns: ["organization_id"]
+            isOneToOne: false
+            referencedRelation: "organizations"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "mlc_rest_hours_vessel_id_fkey"
             columns: ["vessel_id"]
             isOneToOne: false
             referencedRelation: "vessels"
@@ -11185,6 +11990,172 @@ export type Database = {
         }
         Relationships: []
       }
+      rfq_quotations: {
+        Row: {
+          attachments: string[] | null
+          created_at: string
+          currency: string | null
+          delivery_date: string | null
+          id: string
+          notes: string | null
+          payment_terms: string | null
+          quoted_items: Json
+          reviewed_at: string | null
+          reviewed_by: string | null
+          rfq_id: string | null
+          status: string | null
+          submitted_at: string | null
+          supplier_id: string | null
+          total_amount: number | null
+          validity_date: string | null
+        }
+        Insert: {
+          attachments?: string[] | null
+          created_at?: string
+          currency?: string | null
+          delivery_date?: string | null
+          id?: string
+          notes?: string | null
+          payment_terms?: string | null
+          quoted_items?: Json
+          reviewed_at?: string | null
+          reviewed_by?: string | null
+          rfq_id?: string | null
+          status?: string | null
+          submitted_at?: string | null
+          supplier_id?: string | null
+          total_amount?: number | null
+          validity_date?: string | null
+        }
+        Update: {
+          attachments?: string[] | null
+          created_at?: string
+          currency?: string | null
+          delivery_date?: string | null
+          id?: string
+          notes?: string | null
+          payment_terms?: string | null
+          quoted_items?: Json
+          reviewed_at?: string | null
+          reviewed_by?: string | null
+          rfq_id?: string | null
+          status?: string | null
+          submitted_at?: string | null
+          supplier_id?: string | null
+          total_amount?: number | null
+          validity_date?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "rfq_quotations_rfq_id_fkey"
+            columns: ["rfq_id"]
+            isOneToOne: false
+            referencedRelation: "rfq_requests"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "rfq_quotations_supplier_id_fkey"
+            columns: ["supplier_id"]
+            isOneToOne: false
+            referencedRelation: "suppliers"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      rfq_requests: {
+        Row: {
+          awarded_amount: number | null
+          awarded_at: string | null
+          awarded_supplier_id: string | null
+          budget_estimate: number | null
+          category: string | null
+          created_at: string
+          created_by: string | null
+          currency: string | null
+          deadline: string | null
+          delivery_date: string | null
+          delivery_port: string | null
+          description: string | null
+          id: string
+          invited_suppliers: string[] | null
+          items: Json
+          organization_id: string | null
+          rfq_number: string
+          status: string | null
+          title: string
+          updated_at: string
+          vessel_id: string | null
+        }
+        Insert: {
+          awarded_amount?: number | null
+          awarded_at?: string | null
+          awarded_supplier_id?: string | null
+          budget_estimate?: number | null
+          category?: string | null
+          created_at?: string
+          created_by?: string | null
+          currency?: string | null
+          deadline?: string | null
+          delivery_date?: string | null
+          delivery_port?: string | null
+          description?: string | null
+          id?: string
+          invited_suppliers?: string[] | null
+          items?: Json
+          organization_id?: string | null
+          rfq_number: string
+          status?: string | null
+          title: string
+          updated_at?: string
+          vessel_id?: string | null
+        }
+        Update: {
+          awarded_amount?: number | null
+          awarded_at?: string | null
+          awarded_supplier_id?: string | null
+          budget_estimate?: number | null
+          category?: string | null
+          created_at?: string
+          created_by?: string | null
+          currency?: string | null
+          deadline?: string | null
+          delivery_date?: string | null
+          delivery_port?: string | null
+          description?: string | null
+          id?: string
+          invited_suppliers?: string[] | null
+          items?: Json
+          organization_id?: string | null
+          rfq_number?: string
+          status?: string | null
+          title?: string
+          updated_at?: string
+          vessel_id?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "rfq_requests_awarded_supplier_id_fkey"
+            columns: ["awarded_supplier_id"]
+            isOneToOne: false
+            referencedRelation: "suppliers"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "rfq_requests_organization_id_fkey"
+            columns: ["organization_id"]
+            isOneToOne: false
+            referencedRelation: "organizations"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "rfq_requests_vessel_id_fkey"
+            columns: ["vessel_id"]
+            isOneToOne: false
+            referencedRelation: "vessels"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       rls_access_logs: {
         Row: {
           access_granted: boolean
@@ -12648,6 +13619,155 @@ export type Database = {
             columns: ["vessel_id"]
             isOneToOne: false
             referencedRelation: "vessels"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      stcw_competencies: {
+        Row: {
+          applicable_ranks: string[] | null
+          assessment_criteria: Json | null
+          code: string
+          created_at: string
+          description: string | null
+          function_area: string | null
+          id: string
+          level: string | null
+          name: string
+          sea_service_months: number | null
+          stcw_chapter: string | null
+          stcw_table: string
+          training_required: boolean | null
+        }
+        Insert: {
+          applicable_ranks?: string[] | null
+          assessment_criteria?: Json | null
+          code: string
+          created_at?: string
+          description?: string | null
+          function_area?: string | null
+          id?: string
+          level?: string | null
+          name: string
+          sea_service_months?: number | null
+          stcw_chapter?: string | null
+          stcw_table: string
+          training_required?: boolean | null
+        }
+        Update: {
+          applicable_ranks?: string[] | null
+          assessment_criteria?: Json | null
+          code?: string
+          created_at?: string
+          description?: string | null
+          function_area?: string | null
+          id?: string
+          level?: string | null
+          name?: string
+          sea_service_months?: number | null
+          stcw_chapter?: string | null
+          stcw_table?: string
+          training_required?: boolean | null
+        }
+        Relationships: []
+      }
+      suppliers: {
+        Row: {
+          address: string | null
+          approved_at: string | null
+          approved_by: string | null
+          category: string[] | null
+          certifications: string[] | null
+          city: string | null
+          company_name: string
+          contact_email: string | null
+          contact_name: string | null
+          contact_phone: string | null
+          countries: string[] | null
+          country: string | null
+          created_at: string
+          id: string
+          is_active: boolean | null
+          is_approved: boolean | null
+          lead_time_days: number | null
+          notes: string | null
+          organization_id: string | null
+          payment_terms: string | null
+          ports_served: string[] | null
+          rating: number | null
+          services: string[] | null
+          total_orders: number | null
+          total_value: number | null
+          trading_name: string | null
+          updated_at: string
+          website: string | null
+        }
+        Insert: {
+          address?: string | null
+          approved_at?: string | null
+          approved_by?: string | null
+          category?: string[] | null
+          certifications?: string[] | null
+          city?: string | null
+          company_name: string
+          contact_email?: string | null
+          contact_name?: string | null
+          contact_phone?: string | null
+          countries?: string[] | null
+          country?: string | null
+          created_at?: string
+          id?: string
+          is_active?: boolean | null
+          is_approved?: boolean | null
+          lead_time_days?: number | null
+          notes?: string | null
+          organization_id?: string | null
+          payment_terms?: string | null
+          ports_served?: string[] | null
+          rating?: number | null
+          services?: string[] | null
+          total_orders?: number | null
+          total_value?: number | null
+          trading_name?: string | null
+          updated_at?: string
+          website?: string | null
+        }
+        Update: {
+          address?: string | null
+          approved_at?: string | null
+          approved_by?: string | null
+          category?: string[] | null
+          certifications?: string[] | null
+          city?: string | null
+          company_name?: string
+          contact_email?: string | null
+          contact_name?: string | null
+          contact_phone?: string | null
+          countries?: string[] | null
+          country?: string | null
+          created_at?: string
+          id?: string
+          is_active?: boolean | null
+          is_approved?: boolean | null
+          lead_time_days?: number | null
+          notes?: string | null
+          organization_id?: string | null
+          payment_terms?: string | null
+          ports_served?: string[] | null
+          rating?: number | null
+          services?: string[] | null
+          total_orders?: number | null
+          total_value?: number | null
+          trading_name?: string | null
+          updated_at?: string
+          website?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "suppliers_organization_id_fkey"
+            columns: ["organization_id"]
+            isOneToOne: false
+            referencedRelation: "organizations"
             referencedColumns: ["id"]
           },
         ]
