@@ -634,3 +634,15 @@ comment = "Nautilus Brain - Central AI for maritime operations with multi-model 
 [functions.nautilus-predict]
 verify_jwt = false
 comment = "Nautilus Predict - Predictive maintenance and operational analytics"
+
+# ============================================
+# AI SPECIALIZED FUNCTIONS (Phase 4)
+# ============================================
+
+[functions.ai-predictive-maintenance]
+verify_jwt = false
+comment = "AI Predictive Maintenance - Failure prediction, anomaly detection, health assessment"
+
+[functions.ai-crew-optimizer]
+verify_jwt = false
+comment = "AI Crew Optimizer - Schedule, allocation, fatigue, certification, cost optimization"
