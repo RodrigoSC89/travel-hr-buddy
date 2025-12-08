@@ -18,6 +18,7 @@ import { ErrorDebugBanner } from "@/components/debug/ErrorDebugBanner";
 import { Toaster } from "@/components/ui/toaster";
 import { SmartPrefetchProvider } from "@/components/performance/SmartPrefetchProvider";
 import { BandwidthIndicator } from "@/components/performance/BandwidthIndicator";
+import { SlowNetworkProvider, NetworkStatusBadge } from "@/components/performance/SlowNetworkOptimizer";
 import { GlobalBrainProvider } from "@/components/global/GlobalBrainProvider";
 // PATCH 700: Web Vitals Overlay for development
 const WebVitalsOverlay = React.lazy(() => import("@/components/WebVitalsOverlay"));
@@ -80,6 +81,7 @@ function App() {
           <TenantProvider>
             <OrganizationProvider>
               <RouterType>
+                <SlowNetworkProvider>
                 <SmartPrefetchProvider>
                 <GlobalBrainProvider showTrigger={true}>
                 <CommandPalette />
@@ -226,6 +228,9 @@ function App() {
                 {/* PATCH 700: Toast notifications */}
                 <Toaster />
                 
+                {/* PATCH 180: Network status for slow connections */}
+                <NetworkStatusBadge />
+                
                 {/* PATCH 835: Bandwidth indicator for slow connections */}
                 <BandwidthIndicator />
                 
@@ -242,6 +247,7 @@ function App() {
                 )}
                 </GlobalBrainProvider>
                 </SmartPrefetchProvider>
+                </SlowNetworkProvider>
               </RouterType>
             </OrganizationProvider>
           </TenantProvider>
