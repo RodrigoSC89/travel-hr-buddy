@@ -27,21 +27,49 @@ export const CACHE_TIMES = {
 } as const;
 
 /**
- * Optimized QueryClient configuration
+ * Get connection quality for adaptive caching
+ */
+function getConnectionQuality(): "fast" | "slow" | "critical" {
+  const nav = navigator as Navigator & {
+    connection?: { effectiveType?: string; downlink?: number };
+  };
+  
+  if (!nav.connection) return "fast";
+  
+  const downlink = nav.connection.downlink || 10;
+  const effectiveType = nav.connection.effectiveType || "4g";
+  
+  if (downlink < 0.5 || effectiveType === "slow-2g") return "critical";
+  if (downlink < 2 || ["2g", "3g"].includes(effectiveType)) return "slow";
+  return "fast";
+}
+
+/**
+ * Optimized QueryClient configuration with slow network support
  */
 export function createOptimizedQueryClient(): QueryClient {
+  const connectionQuality = getConnectionQuality();
+  
+  // Adjust settings based on connection
+  const staleTimeMultiplier = connectionQuality === "critical" ? 5 : connectionQuality === "slow" ? 3 : 1;
+  const gcTimeMultiplier = connectionQuality === "critical" ? 3 : connectionQuality === "slow" ? 2 : 1;
+  const retryCount = connectionQuality === "critical" ? 3 : connectionQuality === "slow" ? 2 : 1;
+  
   return new QueryClient({
     defaultOptions: {
       queries: {
-        // Default to semi-static cache
-        staleTime: CACHE_TIMES.semiStatic,
+        // Adaptive stale time based on connection
+        staleTime: CACHE_TIMES.semiStatic * staleTimeMultiplier,
         
-        // Cache data for 15 minutes by default
-        gcTime: 1000 * 60 * 15,
+        // Cache data longer on slow connections
+        gcTime: 1000 * 60 * 15 * gcTimeMultiplier,
         
-        // Retry failed queries once
-        retry: 1,
-        retryDelay: (attemptIndex) => Math.min(1000 * 2 ** attemptIndex, 30000),
+        // More retries on slow connections
+        retry: retryCount,
+        retryDelay: (attemptIndex) => {
+          const baseDelay = connectionQuality === "critical" ? 2000 : 1000;
+          return Math.min(baseDelay * Math.pow(2, attemptIndex), 60000);
+        },
         
         // Don't refetch on window focus by default
         refetchOnWindowFocus: false,
@@ -52,16 +80,19 @@ export function createOptimizedQueryClient(): QueryClient {
         // Refetch on reconnect
         refetchOnReconnect: true,
         
-        // Network mode - don't fetch if offline
-        networkMode: "online",
+        // Network mode - allow offline access to cached data
+        networkMode: "offlineFirst",
+        
+        // Placeholder data while loading
+        placeholderData: (previousData: unknown) => previousData,
       },
       mutations: {
-        // Retry mutations once on failure
-        retry: 1,
-        retryDelay: 1000,
+        // More retries for slow networks
+        retry: retryCount,
+        retryDelay: connectionQuality === "critical" ? 3000 : 1000,
         
-        // Network mode for mutations
-        networkMode: "online",
+        // Network mode for mutations - queue when offline
+        networkMode: "offlineFirst",
         
         // Log mutation errors
         onError: (error) => {
