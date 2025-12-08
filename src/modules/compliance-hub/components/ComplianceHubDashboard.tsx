@@ -3,19 +3,63 @@
  * Dashboard principal do módulo de conformidade com IA integrada
  */
 
-import React, { useEffect } from 'react';
+import React, { useState, useEffect } from 'react';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
-import { Shield, FileCheck, Award, Brain, Settings, Bell } from 'lucide-react';
+import { Shield, FileCheck, Award, Brain, Settings, GraduationCap } from 'lucide-react';
 import { ComplianceKPICards } from './ComplianceKPICards';
 import { ComplianceAlertsPanel } from './ComplianceAlertsPanel';
 import { ComplianceAIAnalysisPanel } from './ComplianceAIAnalysisPanel';
+import { AuditsPanel } from './AuditsPanel';
+import { CertificatesPanel } from './CertificatesPanel';
+import { TrainingMatrixPanel } from './TrainingMatrixPanel';
+import { CreateAuditDialog } from './CreateAuditDialog';
+import { SettingsDialog, type ComplianceSettings } from './SettingsDialog';
+import { FilterPanel, type ComplianceFilters } from './FilterPanel';
 import { useComplianceData } from '../hooks/useComplianceData';
 import { useComplianceAI } from '../hooks/useComplianceAI';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
 import { Progress } from '@/components/ui/progress';
-import { ScrollArea } from '@/components/ui/scroll-area';
+import { toast } from 'sonner';
+
+const defaultFilters: ComplianceFilters = {
+  search: '',
+  status: [],
+  auditType: [],
+  vessel: '',
+  dateRange: { from: undefined, to: undefined },
+  severity: [],
+  regulation: '',
+};
+
+const defaultSettings: ComplianceSettings = {
+  notifications: {
+    emailAlerts: true,
+    pushNotifications: true,
+    certificateExpiryDays: 30,
+    auditReminderDays: 14,
+    findingOverdueDays: 7,
+  },
+  ai: {
+    autoAnalysis: true,
+    predictiveAlerts: true,
+    aiSuggestions: true,
+    analysisFrequency: 'weekly',
+  },
+  audit: {
+    autoGenerateChecklist: true,
+    requireEvidence: true,
+    autoCloseFindings: false,
+    findingAutoEscalation: true,
+  },
+  reports: {
+    autoGenerateReports: true,
+    reportFrequency: 'monthly',
+    includeAIAnalysis: true,
+    emailReports: true,
+  },
+};
 
 export function ComplianceHubDashboard() {
   const {
@@ -36,7 +80,14 @@ export function ComplianceHubDashboard() {
     runComplianceAnalysis,
     askComplianceAI,
     chatLoading,
+    generateAuditChecklist,
   } = useComplianceAI();
+
+  const [filters, setFilters] = useState<ComplianceFilters>(defaultFilters);
+  const [settings, setSettings] = useState<ComplianceSettings>(defaultSettings);
+  const [showFilters, setShowFilters] = useState(false);
+  const [showCreateAudit, setShowCreateAudit] = useState(false);
+  const [showSettings, setShowSettings] = useState(false);
 
   useEffect(() => {
     if (complianceItems.length > 0 && !analysisState.analysis) {
@@ -45,6 +96,34 @@ export function ComplianceHubDashboard() {
   }, [complianceItems, audits, certificates]);
 
   const trainingMatrix = getTrainingMatrix();
+
+  const vessels = [
+    { id: 'v1', name: 'MV Atlantic Star' },
+    { id: 'v2', name: 'MV Pacific Pioneer' },
+    { id: 'v3', name: 'MV Nordeste Explorer' },
+  ];
+
+  const regulations = [
+    { id: 'ism', name: 'ISM Code' },
+    { id: 'isps', name: 'ISPS Code' },
+    { id: 'mlc', name: 'MLC 2006' },
+    { id: 'solas', name: 'SOLAS' },
+    { id: 'marpol', name: 'MARPOL' },
+  ];
+
+  const handleCreateAudit = async (auditData: any) => {
+    toast.success('Auditoria criada com sucesso');
+    setShowCreateAudit(false);
+  };
+
+  const handleSaveSettings = async (newSettings: ComplianceSettings) => {
+    setSettings(newSettings);
+    toast.success('Configurações salvas');
+  };
+
+  const handleGenerateRecommendations = async (crewMemberId: string) => {
+    return await askComplianceAI(`Gere recomendações de treinamento para o tripulante ${crewMemberId}`);
+  };
 
   return (
     <div className="container mx-auto p-6 space-y-6">
@@ -60,11 +139,11 @@ export function ComplianceHubDashboard() {
           </div>
         </div>
         <div className="flex items-center gap-2">
-          <Button variant="outline" size="sm">
+          <Button variant="outline" size="sm" onClick={() => setShowSettings(true)}>
             <Settings className="h-4 w-4 mr-2" />
             Configurações
           </Button>
-          <Button size="sm">
+          <Button size="sm" onClick={() => setShowCreateAudit(true)}>
             <FileCheck className="h-4 w-4 mr-2" />
             Nova Auditoria
           </Button>
@@ -80,7 +159,7 @@ export function ComplianceHubDashboard() {
           <TabsTrigger value="overview"><Shield className="h-4 w-4 mr-2" />Visão Geral</TabsTrigger>
           <TabsTrigger value="audits"><FileCheck className="h-4 w-4 mr-2" />Auditorias</TabsTrigger>
           <TabsTrigger value="certificates"><Award className="h-4 w-4 mr-2" />Certificados</TabsTrigger>
-          <TabsTrigger value="training"><Brain className="h-4 w-4 mr-2" />Treinamentos</TabsTrigger>
+          <TabsTrigger value="training"><GraduationCap className="h-4 w-4 mr-2" />Treinamentos</TabsTrigger>
           <TabsTrigger value="ai"><Brain className="h-4 w-4 mr-2" />IA Preditiva</TabsTrigger>
         </TabsList>
 
@@ -103,7 +182,6 @@ export function ComplianceHubDashboard() {
             />
           </div>
 
-          {/* Compliance Items Overview */}
           <Card>
             <CardHeader>
               <CardTitle>Status de Conformidade por Regulamento</CardTitle>
@@ -128,98 +206,38 @@ export function ComplianceHubDashboard() {
         </TabsContent>
 
         <TabsContent value="audits">
-          <Card>
-            <CardHeader>
-              <CardTitle>Auditorias</CardTitle>
-            </CardHeader>
-            <CardContent>
-              <ScrollArea className="h-[400px]">
-                <div className="space-y-4">
-                  {audits.map((audit) => (
-                    <div key={audit.id} className="p-4 rounded-lg border">
-                      <div className="flex items-center justify-between mb-2">
-                        <span className="font-medium">{audit.vesselName} - {audit.auditType.toUpperCase()}</span>
-                        <Badge variant={audit.status === 'completed' ? 'default' : 'secondary'}>
-                          {audit.status}
-                        </Badge>
-                      </div>
-                      <p className="text-sm text-muted-foreground">Auditor: {audit.auditorName}</p>
-                      <p className="text-sm text-muted-foreground">Data: {audit.scheduledDate}</p>
-                      {audit.findings.length > 0 && (
-                        <div className="mt-2 pt-2 border-t">
-                          <span className="text-xs text-muted-foreground">{audit.findings.length} finding(s)</span>
-                        </div>
-                      )}
-                    </div>
-                  ))}
-                </div>
-              </ScrollArea>
-            </CardContent>
-          </Card>
+          <AuditsPanel
+            audits={audits}
+            onCreateAudit={() => setShowCreateAudit(true)}
+            onViewAudit={(id) => toast.info(`Visualizando auditoria ${id}`)}
+            onEditAudit={(id) => toast.info(`Editando auditoria ${id}`)}
+            onDeleteAudit={(id) => toast.success('Auditoria excluída')}
+            onGenerateChecklist={async (id) => {
+              await generateAuditChecklist('internal', 'vessel');
+              toast.success('Checklist gerado com IA');
+            }}
+            onExportAudit={(id) => toast.success('Auditoria exportada')}
+          />
         </TabsContent>
 
         <TabsContent value="certificates">
-          <Card>
-            <CardHeader>
-              <CardTitle>Certificados</CardTitle>
-            </CardHeader>
-            <CardContent>
-              <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                {certificates.map((cert) => (
-                  <div key={cert.id} className="p-4 rounded-lg border">
-                    <div className="flex items-center justify-between mb-2">
-                      <span className="font-medium">{cert.name}</span>
-                      <Badge variant={
-                        cert.status === 'valid' ? 'default' :
-                        cert.status === 'expiring-soon' ? 'secondary' : 'destructive'
-                      }>
-                        {cert.status === 'valid' ? 'Válido' :
-                         cert.status === 'expiring-soon' ? 'Expirando' : 'Expirado'}
-                      </Badge>
-                    </div>
-                    <p className="text-sm text-muted-foreground">{cert.vesselName}</p>
-                    <p className="text-xs text-muted-foreground mt-1">Validade: {cert.expiryDate}</p>
-                  </div>
-                ))}
-              </div>
-            </CardContent>
-          </Card>
+          <CertificatesPanel
+            certificates={certificates}
+            onAddCertificate={() => toast.info('Adicionar certificado')}
+            onViewCertificate={(id) => toast.info(`Visualizando certificado ${id}`)}
+            onEditCertificate={(id) => toast.info(`Editando certificado ${id}`)}
+            onDownloadCertificate={(id) => toast.success('Download iniciado')}
+            onSetReminder={(id) => toast.success('Lembrete configurado')}
+          />
         </TabsContent>
 
         <TabsContent value="training">
-          <Card>
-            <CardHeader>
-              <div className="flex items-center justify-between">
-                <CardTitle>Matriz de Treinamentos</CardTitle>
-                <Badge>Conformidade: {trainingMatrix.overallCompliance}%</Badge>
-              </div>
-            </CardHeader>
-            <CardContent>
-              <div className="space-y-4">
-                {trainings.map((training) => (
-                  <div key={training.id} className="p-4 rounded-lg border">
-                    <div className="flex items-center justify-between mb-2">
-                      <div>
-                        <span className="font-medium">{training.crewMemberName}</span>
-                        <span className="text-sm text-muted-foreground ml-2">({training.crewMemberRank})</span>
-                      </div>
-                      <Badge variant={
-                        training.status === 'completed' ? 'default' :
-                        training.status === 'in-progress' ? 'secondary' :
-                        training.status === 'expired' ? 'destructive' : 'outline'
-                      }>
-                        {training.status === 'completed' ? 'Concluído' :
-                         training.status === 'in-progress' ? 'Em Progresso' :
-                         training.status === 'expired' ? 'Expirado' : 'Não Iniciado'}
-                      </Badge>
-                    </div>
-                    <p className="text-sm">{training.courseName}</p>
-                    <Progress value={training.progress} className="h-1.5 mt-2" />
-                  </div>
-                ))}
-              </div>
-            </CardContent>
-          </Card>
+          <TrainingMatrixPanel
+            trainings={trainings}
+            matrix={trainingMatrix}
+            onGenerateRecommendations={handleGenerateRecommendations}
+            onExportMatrix={() => toast.success('Matriz exportada')}
+          />
         </TabsContent>
 
         <TabsContent value="ai">
@@ -235,6 +253,21 @@ export function ComplianceHubDashboard() {
           />
         </TabsContent>
       </Tabs>
+
+      {/* Dialogs */}
+      <CreateAuditDialog
+        open={showCreateAudit}
+        onOpenChange={setShowCreateAudit}
+        onCreateAudit={handleCreateAudit}
+        vessels={vessels}
+      />
+
+      <SettingsDialog
+        open={showSettings}
+        onOpenChange={setShowSettings}
+        settings={settings}
+        onSaveSettings={handleSaveSettings}
+      />
     </div>
   );
 }
