@@ -57,3 +57,17 @@ export {
   type NotificationVariant,
   type NotificationMode,
 } from "./NotificationCenter.unified";
+
+// ==================== CONNECTION-AWARE FEEDBACK ====================
+export {
+  ConnectionBanner,
+  ConnectionBadge,
+  AdaptiveLoader,
+  OfflineFallback,
+  getBannerConfig,
+  getBadgeConfig,
+  type ConnectionBannerProps,
+  type ConnectionBadgeProps,
+  type AdaptiveLoaderProps,
+  type OfflineFallbackProps,
+} from "./ConnectionAwareFeedback.unified";
