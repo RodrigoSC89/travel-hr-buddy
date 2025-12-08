@@ -8,9 +8,10 @@ import { Progress } from "@/components/ui/progress";
 import { 
   DollarSign, TrendingUp, TrendingDown, Ship, Fuel, Users, Wrench,
   Navigation, Calendar, Brain, Sparkles, AlertTriangle, CheckCircle2,
-  BarChart3, PieChart, Download
+  BarChart3, PieChart, Download, Loader2
 } from "lucide-react";
 import { useToast } from "@/hooks/use-toast";
+import { useNautilusEnhancementAI } from "@/hooks/useNautilusEnhancementAI";
 
 interface RouteCost {
   id: string;
@@ -99,22 +100,40 @@ const sampleCosts: RouteCost[] = [
 
 export default function RouteCostAnalysis() {
   const { toast } = useToast();
+  const { analyzeRouteCost, isLoading } = useNautilusEnhancementAI();
   const [costs, setCosts] = useState<RouteCost[]>(sampleCosts);
   const [selectedPeriod, setSelectedPeriod] = useState("2024-02");
   const [selectedVessel, setSelectedVessel] = useState("all");
-  const [isAnalyzing, setIsAnalyzing] = useState(false);
 
   const handleAIAnalysis = async () => {
-    setIsAnalyzing(true);
     toast({ title: "Analisando custos...", description: "IA identificando desvios e oportunidades" });
     
-    await new Promise(r => setTimeout(r, 2000));
+    const routeData = filteredCosts.map(c => ({
+      route: c.route,
+      vessel: c.vessel,
+      totalCost: c.totalCost,
+      breakdown: c.breakdown,
+      efficiency: c.efficiency
+    }));
     
-    toast({ 
-      title: "Análise concluída", 
-      description: "3 oportunidades de economia identificadas" 
-    });
-    setIsAnalyzing(false);
+    const result = await analyzeRouteCost(routeData, { period: selectedPeriod });
+    
+    if (result?.response) {
+      const aiResponse = result.response;
+      
+      // Update costs with new AI insights
+      setCosts(prev => prev.map(cost => ({
+        ...cost,
+        aiInsights: aiResponse.insights?.[cost.id] || cost.aiInsights
+      })));
+      
+      toast({ 
+        title: "Análise concluída", 
+        description: `${aiResponse.opportunitiesCount || 3} oportunidades de economia identificadas` 
+      });
+    } else {
+      toast({ title: "Erro", description: "Falha na análise de IA", variant: "destructive" });
+    }
   };
 
   const filteredCosts = selectedVessel === "all" 
@@ -182,8 +201,8 @@ export default function RouteCostAnalysis() {
               <SelectItem value="AHTS Maré Alta">AHTS Maré Alta</SelectItem>
             </SelectContent>
           </Select>
-          <Button onClick={handleAIAnalysis} disabled={isAnalyzing}>
-            <Sparkles className={`h-4 w-4 mr-2 ${isAnalyzing ? 'animate-spin' : ''}`} />
+          <Button onClick={handleAIAnalysis} disabled={isLoading}>
+            {isLoading ? <Loader2 className="h-4 w-4 mr-2 animate-spin" /> : <Sparkles className="h-4 w-4 mr-2" />}
             Analisar com IA
           </Button>
         </div>
