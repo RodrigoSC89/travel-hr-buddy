@@ -16907,6 +16907,7 @@ export type Database = {
         Args: { tenant_uuid: string; user_uuid?: string }
         Returns: boolean
       }
+      check_log_rate_limit: { Args: never; Returns: boolean }
       check_organization_limits: {
         Args: { limit_type: string; org_id: string }
         Returns: boolean
@@ -17151,6 +17152,10 @@ export type Database = {
           is_valid: boolean
           user_id: string
         }[]
+      }
+      validate_webhook_signature: {
+        Args: { payload: string; secret: string; signature: string }
+        Returns: boolean
       }
     }
     Enums: {
