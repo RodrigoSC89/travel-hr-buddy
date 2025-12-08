@@ -251,7 +251,7 @@ export function SmartSidebar({ className }: SmartSidebarProps) {
     <>
       {/* Mobile menu button */}
       <button
-        className="lg:hidden fixed top-4 left-4 z-50 p-2 rounded-md bg-zinc-900 text-white shadow-lg"
+        className="lg:hidden fixed top-4 left-4 z-50 p-2 rounded-md bg-sidebar-background text-sidebar-foreground shadow-lg border border-sidebar-border"
         onClick={() => setIsMobileOpen(!isMobileOpen)}
       >
         {isMobileOpen ? <X className="w-6 h-6" /> : <Menu className="w-6 h-6" />}
@@ -268,17 +268,17 @@ export function SmartSidebar({ className }: SmartSidebarProps) {
       {/* Sidebar */}
       <aside
         className={cn(
-          "fixed lg:static inset-y-0 left-0 z-40 w-64 bg-zinc-900 dark:bg-zinc-950 text-white h-screen overflow-y-auto shadow-lg transition-transform duration-300",
+          "fixed lg:static inset-y-0 left-0 z-40 w-64 bg-sidebar-background text-sidebar-foreground h-screen overflow-y-auto shadow-lg transition-transform duration-300 border-r border-sidebar-border",
           isMobileOpen ? "translate-x-0" : "-translate-x-full lg:translate-x-0",
           className
         )}
       >
-        <div className="p-4 border-b border-zinc-800">
-          <h1 className="font-bold text-xl flex items-center gap-2">
-            <Ship className="w-6 h-6 text-blue-400" />
+        <div className="p-4 border-b border-sidebar-border">
+          <h1 className="font-bold text-xl flex items-center gap-2 text-sidebar-foreground">
+            <Ship className="w-6 h-6 text-primary" />
             🧭 Nautilus One
           </h1>
-          <p className="text-xs text-zinc-400 mt-1">Sistema Corporativo</p>
+          <p className="text-xs text-sidebar-foreground/70 mt-1">Sistema Corporativo</p>
         </div>
 
         <nav className="space-y-1 p-2">
@@ -286,8 +286,8 @@ export function SmartSidebar({ className }: SmartSidebarProps) {
             <div key={group.title}>
               <button
                 className={cn(
-                  "flex items-center justify-between w-full px-3 py-2.5 text-left text-sm font-medium rounded-md transition-colors hover:bg-zinc-800 dark:hover:bg-zinc-900",
-                  openSection === group.title && "bg-zinc-800 dark:bg-zinc-900"
+                  "flex items-center justify-between w-full px-3 py-2.5 text-left text-sm font-medium rounded-md transition-colors text-sidebar-foreground hover:bg-sidebar-accent hover:text-sidebar-accent-foreground",
+                  openSection === group.title && "bg-sidebar-accent text-sidebar-accent-foreground"
                 )}
                 onClick={() => toggleSection(group.title)}
               >
@@ -303,7 +303,7 @@ export function SmartSidebar({ className }: SmartSidebarProps) {
               </button>
               
               {openSection === group.title && (
-                <div className="ml-4 mt-1 space-y-0.5 border-l border-zinc-700 pl-2">
+                <div className="ml-4 mt-1 space-y-0.5 border-l border-sidebar-border pl-2">
                   {group.items.map((item) => (
                     <Link
                       to={item.path}
@@ -312,8 +312,8 @@ export function SmartSidebar({ className }: SmartSidebarProps) {
                       className={cn(
                         "block px-3 py-2 text-sm rounded-md transition-colors",
                         isActive(item.path)
-                          ? "bg-blue-600 text-white font-medium"
-                          : "text-zinc-300 hover:bg-zinc-800 dark:hover:bg-zinc-900 hover:text-white"
+                          ? "bg-sidebar-primary text-sidebar-primary-foreground font-medium"
+                          : "text-sidebar-foreground/80 hover:bg-sidebar-accent hover:text-sidebar-accent-foreground"
                       )}
                     >
                       {item.label}
@@ -325,7 +325,7 @@ export function SmartSidebar({ className }: SmartSidebarProps) {
           ))}
         </nav>
 
-        <div className="p-4 border-t border-zinc-800 mt-4 text-xs text-zinc-400 text-center">
+        <div className="p-4 border-t border-sidebar-border mt-4 text-xs text-sidebar-foreground/60 text-center">
           <p>Nautilus One v3.0.0</p>
           <p className="mt-1">© 2024-2025 Nautilus</p>
         </div>
