@@ -234,6 +234,22 @@ export function useAdaptiveDebounce(): number {
 }
 
 /**
+ * Hook that returns adaptive settings based on network quality
+ */
+export function useAdaptiveSettings(): AdaptiveSettings {
+  const { adaptiveSettings } = useNetwork();
+  return adaptiveSettings;
+}
+
+/**
+ * Hook that returns connection quality
+ */
+export function useConnectionQuality(): ConnectionQuality {
+  const { quality } = useNetwork();
+  return quality;
+}
+
+/**
  * Hook for adaptive polling with connection awareness
  */
 export function useAdaptivePolling(

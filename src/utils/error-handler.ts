@@ -1,5 +1,25 @@
+/**
+ * DEPRECATED: Use @/lib/unified instead
+ * This file re-exports from the unified module for backward compatibility
+ */
+
+export {
+  APIError,
+  ValidationError,
+  NetworkError,
+  AuthError,
+  errorTracker,
+  handleApiError,
+  getErrorMessage,
+  isRetryableError,
+  normalizeError,
+  logError,
+  logErrorOnce,
+} from "@/lib/unified/error-handling.unified";
+
+// Legacy ErrorHandler class - re-implemented using unified module
+import { errorTracker, handleApiError, getErrorMessage, normalizeError, logError } from "@/lib/unified/error-handling.unified";
 import { toast } from "@/hooks/use-toast";
-import { logger } from "@/lib/logger";
 
 export interface AppError {
   message: string;
@@ -8,124 +28,39 @@ export interface AppError {
   details?: unknown;
 }
 
-/**
- * Sistema centralizado de tratamento de erros
- */
 export class ErrorHandler {
-  private static logError(error: AppError) {
-    if (error.severity === "error" || error.severity === "critical") {
-      logger.error(error.message, error.details);
-    } else if (error.severity === "warning") {
-      logger.warn(error.message, { details: error.details });
-    } else {
-      logger.info(error.message, { details: error.details });
-    }
-  }
-
-  private static showToast(error: AppError) {
-    const variant = error.severity === "error" || error.severity === "critical" 
-      ? "destructive" 
-      : "default";
-
-    toast({
-      title: this.getSeverityTitle(error.severity),
-      description: error.message,
-      variant,
-    });
-  }
-
-  private static getSeverityTitle(severity: AppError["severity"]): string {
-    switch (severity) {
-    case "critical":
-      return "Erro Crítico";
-    case "error":
-      return "Erro";
-    case "warning":
-      return "Atenção";
-    case "info":
-      return "Informação";
-    }
-  }
-
-  /**
-   * Manipula um erro da aplicação
-   */
   static handle(error: AppError | Error | unknown, showToastNotification = true) {
-    let appError: AppError;
-
-    if (error instanceof Error) {
-      appError = {
-        message: error.message,
-        severity: "error",
-        details: error.stack,
-      };
-    } else if (typeof error === "object" && error !== null && "message" in error) {
-      appError = error as AppError;
-    } else {
-      appError = {
-        message: "Ocorreu um erro desconhecido",
-        severity: "error",
-        details: error,
-      };
-    }
-
-    this.logError(appError);
-
+    const normalized = normalizeError(error);
+    logError(normalized);
+    
     if (showToastNotification) {
-      this.showToast(appError);
+      toast({
+        title: normalized.name || "Erro",
+        description: getErrorMessage(normalized),
+        variant: "destructive",
+      });
     }
-
-    return appError;
+    
+    return {
+      message: getErrorMessage(normalized),
+      severity: "error" as const,
+      details: error,
+    };
   }
 
-  /**
-   * Manipula erros do Supabase
-   */
   static handleSupabaseError(error: unknown, context?: string) {
-    const message = context 
-      ? `Erro ao ${context}` 
-      : "Erro na operação do banco de dados";
-
-    return this.handle({
-      message,
-      severity: "error",
-      details: error,
-    });
+    return this.handle(error, true);
   }
 
-  /**
-   * Manipula erros de rede
-   */
   static handleNetworkError(error: unknown, context?: string) {
-    const message = context 
-      ? `Erro de conexão ao ${context}` 
-      : "Erro de conexão. Verifique sua internet.";
-
-    return this.handle({
-      message,
-      severity: "warning",
-      details: error,
-    });
+    return this.handle(error, true);
   }
 
-  /**
-   * Manipula erros de validação
-   */
   static handleValidationError(message: string, details?: unknown) {
-    return this.handle({
-      message,
-      severity: "warning",
-      details,
-    });
+    return this.handle({ message, severity: "warning", details }, true);
   }
 
-  /**
-   * Cria um wrapper para funções assíncronas com tratamento de erro
-   */
-  static async wrap<T>(
-    fn: () => Promise<T>,
-    context?: string
-  ): Promise<T | null> {
+  static async wrap<T>(fn: () => Promise<T>, context?: string): Promise<T | null> {
     try {
       return await fn();
     } catch (error) {
