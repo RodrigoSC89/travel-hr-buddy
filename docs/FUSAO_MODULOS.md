@@ -284,3 +284,23 @@ npm run test:coverage
 
 **Data da fusão**: 2025-12-08
 **Módulos reduzidos**: 8 → 1
+
+---
+
+## Fase 8 - UNIFY-8.0 ✅
+
+### 19. MISSÃO → Mission Command Center ✅
+- `mission-logs` → redirect para `/mission-command`
+- `mission-control` → redirect para `/mission-command`
+- **Rota**: `/mission-command`
+- **Funcionalidades unificadas**:
+  - **Visão Geral**: Cards de status + módulos integrados
+  - **Mission Logs**: CRUD completo de registros de missão
+  - **Real-Time**: Execução de missões em tempo real com polling 5s
+  - **Modules**: Status de Fleet, Emergency, Satellite, Weather
+  - **System Logs**: Logs do sistema
+  - **AI Commander**: Assistente de IA integrado
+  - **KPI Dashboard**: Métricas em tempo real
+
+**Data da fusão**: 2025-12-08
+**Módulos reduzidos**: 2 → 1
