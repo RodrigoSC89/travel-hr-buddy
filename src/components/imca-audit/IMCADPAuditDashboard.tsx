@@ -29,13 +29,20 @@ import {
   TrendingUp,
   Target,
   FileWarning,
-  Sparkles
+  Sparkles,
+  PlayCircle,
+  Plus,
+  Zap
 } from "lucide-react";
 import { DP_CHECKLIST_CATEGORIES, DP_CHECKLIST_ITEMS } from "@/data/imca-dp-checklist";
 import { IMCADPChecklist } from "./IMCADPChecklist";
 import { IMCADPAIAssistant } from "./IMCADPAIAssistant";
 import { IMCADPCompetencyMatrix } from "./IMCADPCompetencyMatrix";
 import { IMCADPNonConformities } from "./IMCADPNonConformities";
+import { IMCAAuditManager, CustomChecklistItem, CustomCategory } from "./IMCAAuditManager";
+import { IMCAAuditSections } from "./IMCAAuditSections";
+import { IMCAAuditTrials } from "./IMCAAuditTrials";
+import { IMCAAuditEvents } from "./IMCAAuditEvents";
 
 interface AuditStatus {
   totalItems: number;
@@ -61,6 +68,37 @@ export function IMCADPAuditDashboard() {
   const [activeTab, setActiveTab] = useState("overview");
   const [selectedDPClass, setSelectedDPClass] = useState<"DP1" | "DP2" | "DP3">("DP2");
   const [auditData, setAuditData] = useState<Record<number, { status: string; notes: string; evidence: string }>>({});
+  const [customItems, setCustomItems] = useState<CustomChecklistItem[]>([]);
+  const [customCategories, setCustomCategories] = useState<CustomCategory[]>([]);
+
+  // Calculate section scores for the 5 audit blocks
+  const getSectionScores = () => {
+    const sections: Record<string, { compliant: number; nonCompliant: number; total: number }> = {
+      TEC: { compliant: 0, nonCompliant: 0, total: 0 },
+      OPR: { compliant: 0, nonCompliant: 0, total: 0 },
+      COMP: { compliant: 0, nonCompliant: 0, total: 0 },
+      DOC: { compliant: 0, nonCompliant: 0, total: 0 },
+      CPD: { compliant: 0, nonCompliant: 0, total: 0 }
+    };
+
+    // Map category codes to section codes
+    const categoryToSection: Record<string, string> = {
+      'ASOG': 'OPR', 'CAMO': 'OPR', 'DOC': 'DOC', 'MNT': 'TEC',
+      'INF': 'TEC', 'COMP': 'COMP', 'MON': 'OPR', 'EMG': 'OPR'
+    };
+
+    DP_CHECKLIST_ITEMS.forEach(item => {
+      if (!item.applicableDPClass.includes(selectedDPClass)) return;
+      const section = categoryToSection[item.categoryCode] || 'TEC';
+      if (sections[section]) {
+        sections[section].total++;
+        if (auditData[item.id]?.status === 'C') sections[section].compliant++;
+        if (auditData[item.id]?.status === 'NC') sections[section].nonCompliant++;
+      }
+    });
+
+    return sections;
+  };
 
   // Calculate audit statistics
   const getAuditStatus = (): AuditStatus => {
@@ -239,18 +277,30 @@ export function IMCADPAuditDashboard() {
 
       {/* Main Content Tabs */}
       <Tabs value={activeTab} onValueChange={setActiveTab} className="space-y-4">
-        <TabsList className="grid w-full grid-cols-2 md:grid-cols-6 h-auto">
+        <TabsList className="flex flex-wrap h-auto gap-1">
           <TabsTrigger value="overview" className="gap-2">
             <BarChart3 className="h-4 w-4" />
             Visão Geral
+          </TabsTrigger>
+          <TabsTrigger value="sections" className="gap-2">
+            <TrendingUp className="h-4 w-4" />
+            5 Blocos
           </TabsTrigger>
           <TabsTrigger value="checklist" className="gap-2">
             <ClipboardList className="h-4 w-4" />
             Checklist
           </TabsTrigger>
+          <TabsTrigger value="trials" className="gap-2">
+            <PlayCircle className="h-4 w-4" />
+            DP Trials
+          </TabsTrigger>
+          <TabsTrigger value="events" className="gap-2">
+            <Zap className="h-4 w-4" />
+            Eventos
+          </TabsTrigger>
           <TabsTrigger value="nc" className="gap-2">
             <AlertCircle className="h-4 w-4" />
-            NCs / Ações
+            NCs
           </TabsTrigger>
           <TabsTrigger value="competency" className="gap-2">
             <Users className="h-4 w-4" />
@@ -258,12 +308,16 @@ export function IMCADPAuditDashboard() {
           </TabsTrigger>
           <TabsTrigger value="ai" className="gap-2 relative">
             <Brain className="h-4 w-4" />
-            Assistente IA
+            IA
             <Sparkles className="h-3 w-3 absolute -top-1 -right-1 text-amber-500" />
+          </TabsTrigger>
+          <TabsTrigger value="manager" className="gap-2">
+            <Plus className="h-4 w-4" />
+            Gerenciar
           </TabsTrigger>
           <TabsTrigger value="settings" className="gap-2">
             <Settings className="h-4 w-4" />
-            Configurações
+            Config
           </TabsTrigger>
         </TabsList>
 
@@ -385,12 +439,43 @@ export function IMCADPAuditDashboard() {
           </div>
         </TabsContent>
 
+        {/* 5 Audit Sections Tab */}
+        <TabsContent value="sections">
+          <IMCAAuditSections 
+            selectedDPClass={selectedDPClass}
+            sectionScores={getSectionScores()}
+          />
+        </TabsContent>
+
         {/* Checklist Tab */}
         <TabsContent value="checklist">
           <IMCADPChecklist 
             selectedDPClass={selectedDPClass}
             auditData={auditData}
             setAuditData={setAuditData}
+          />
+        </TabsContent>
+
+        {/* DP Trials Tab */}
+        <TabsContent value="trials">
+          <IMCAAuditTrials selectedDPClass={selectedDPClass} />
+        </TabsContent>
+
+        {/* Events Tab */}
+        <TabsContent value="events">
+          <IMCAAuditEvents selectedDPClass={selectedDPClass} />
+        </TabsContent>
+
+        {/* Manager Tab - Add new items/categories */}
+        <TabsContent value="manager">
+          <IMCAAuditManager
+            customItems={customItems}
+            customCategories={customCategories}
+            onAddItem={(item) => setCustomItems([...customItems, item])}
+            onEditItem={(item) => setCustomItems(customItems.map(i => i.id === item.id ? item : i))}
+            onDeleteItem={(id) => setCustomItems(customItems.filter(i => i.id !== id))}
+            onAddCategory={(cat) => setCustomCategories([...customCategories, cat])}
+            onDeleteCategory={(code) => setCustomCategories(customCategories.filter(c => c.code !== code))}
           />
         </TabsContent>
 
