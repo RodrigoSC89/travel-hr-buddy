@@ -134,4 +134,103 @@ import { usePerformanceMonitor } from '@/hooks/unified';
 
 ---
 
-*Documentação gerada em 2025-12-08 | PATCH 178.0*
+## Fusões de Services (PATCH 178.1)
+
+### 6. OpenAI Client Service (Unificado)
+**Localização**: `src/services/unified/openai-client.service.ts`
+
+| Módulos Originais | Funcionalidades Preservadas |
+|-------------------|----------------------------|
+| `src/services/openai.ts` | Embeddings, test connection |
+| `src/services/mmi/embeddingService.ts` | Embeddings com fallback |
+| `src/services/mmi/copilotApi.ts` | Chat completions |
+| `src/services/mmi/forecastService.ts` | Previsões com AI |
+| `src/services/reporting-engine.ts` | AI summaries (lógica OpenAI) |
+| `src/services/smart-drills-engine.ts` | Drill scenarios (lógica OpenAI) |
+| `src/services/ai-training-engine.ts` | Explanations (lógica OpenAI) |
+| `src/services/risk-operations-engine.ts` | Risk analysis (lógica OpenAI) |
+
+**Funcionalidades do service unificado:**
+- ✅ API key management centralizado
+- ✅ Chat completions (texto e JSON)
+- ✅ Embeddings com text-embedding-ada-002
+- ✅ Mock embeddings para fallback
+- ✅ Test de conexão
+- ✅ Helpers especializados (reports, drills, compliance)
+- ✅ Configuração flexível (model, temperature, tokens)
+
+---
+
+### 7. AI Engines Service (Unificado)
+**Localização**: `src/services/unified/ai-engines.service.ts`
+
+| Módulos Originais | Funcionalidades Preservadas |
+|-------------------|----------------------------|
+| `src/services/ai/distributed-ai.service.ts` | Vessel context, cache, sync |
+| `src/services/ai/mission-coordination.service.ts` | Missions, vessels, logs |
+| `src/services/coordinationAIService.ts` | Agent coordination (parcial) |
+| `src/services/deepRiskAIService.ts` | Risk prediction (parcial) |
+| `src/services/oceanSonarAIService.ts` | Sonar analysis (parcial) |
+| `src/services/training-ai.service.ts` | Training sessions (parcial) |
+
+**Funcionalidades do service unificado:**
+- ✅ Vessel AI Context management com cache
+- ✅ Global sync mechanism
+- ✅ Mission CRUD operations
+- ✅ Vessel assignment to missions
+- ✅ Mission logging
+- ✅ Metrics tracking
+- ✅ Singleton pattern com exports retrocompatíveis
+
+---
+
+## Como Usar os Services Unificados
+
+```typescript
+// Importar dos services unificados
+import { 
+  // OpenAI
+  chatCompletion,
+  generateEmbedding,
+  isOpenAIConfigured,
+  testOpenAIConnection,
+  
+  // AI Engines
+  aiEngineService,
+} from '@/services/unified';
+
+// Uso de OpenAI
+const response = await chatCompletion([
+  { role: "system", content: "You are a helpful assistant." },
+  { role: "user", content: "Hello!" },
+]);
+
+// Uso de AI Engine
+const context = await aiEngineService.getVesselContext("vessel-123");
+const mission = await aiEngineService.createMission({ name: "Patrol" });
+```
+
+---
+
+## Compatibilidade Retroativa (Services)
+
+```typescript
+// Estes ainda funcionam (deprecated)
+import { DistributedAIService, MissionCoordinationService } from '@/services/ai';
+import { generateEmbedding, testOpenAIConnection } from '@/services/openai';
+```
+
+---
+
+## Métricas de Fusão
+
+| Categoria | Antes | Depois | Redução |
+|-----------|-------|--------|---------|
+| Arquivos OpenAI | 9 | 1 | 89% |
+| Arquivos AI Services | 6 | 1 | 83% |
+| Linhas duplicadas (aprox) | ~800 | ~200 | 75% |
+| Chamadas fetch duplicadas | 15+ | 3 | 80% |
+
+---
+
+*Documentação atualizada em 2025-12-08 | PATCH 178.1*
