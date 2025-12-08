@@ -5,14 +5,11 @@
 @import "./styles/theme.css";
 @import "./styles/professional-theme.css";
 @import "./styles/contrast-fixes.css";
-@import "./styles/global-contrast-fix.css";
 @import "./styles/ux-optimizations.css";
 @import "./styles/low-bandwidth.css";
 @import "./styles/revolutionary-ux.css";
 @import "./styles/accessibility.css";
 @import "./styles/wcag-compliance.css";
-/* ULTIMATE CONTRAST FIX - Importado por último para garantir override */
-@import "./styles/ultimate-contrast-fix.css";
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
@@ -196,14 +193,15 @@
     /* Layout */
     --radius: 12px;
 
-    --sidebar-background: var(--azure-100);
-    --sidebar-foreground: 214 100% 15%;
-    --sidebar-primary: var(--azure-600);
-    --sidebar-primary-foreground: var(--azure-50);
-    --sidebar-accent: var(--azure-200);
-    --sidebar-accent-foreground: 214 100% 15%;
-    --sidebar-border: var(--azure-300);
-    --sidebar-ring: var(--azure-500);
+    /* Sidebar Light Mode - VALORES HSL DIRETOS */
+    --sidebar-background: 214 95% 93%;        /* Azul gelo claro */
+    --sidebar-foreground: 214 100% 15%;       /* Azul escuro para texto */
+    --sidebar-primary: 214 91% 40%;           /* Azul forte */
+    --sidebar-primary-foreground: 0 0% 100%;  /* Branco */
+    --sidebar-accent: 214 87% 85%;            /* Azul claro */
+    --sidebar-accent-foreground: 214 100% 15%;/* Azul escuro */
+    --sidebar-border: 214 78% 73%;            /* Azul médio */
+    --sidebar-ring: 214 84% 46%;              /* Azul principal */
     
     /* Tokens Marítimos em Azul */
     --ocean-blue: var(--azure-600);
