@@ -313,13 +313,14 @@ export const MODULE_REGISTRY: Record<string, ModuleDefinition> = {
     id: "hr.peo-dp",
     name: "PEO-DP",
     category: "hr",
-    path: "modules/hr/peo-dp/PEODPPanel",
-    description: "PEO-DP system integration",
+    path: "pages/PEODP",
+    description: "PEO-DP Complete Management - Includes Class Surveys, STCW Matrix, MLC Compliance, FMEA, Audits, and AI Analysis",
     status: "active",
     completeness: "100%",
     route: "/peo-dp",
-    icon: "Shield",
+    icon: "Anchor",
     lazy: true,
+    version: "2.0.0",
   },
 
   // REMOVED: hr.employee-portal - Integrated into operations.crew (PATCH 176.2)
@@ -1952,6 +1953,39 @@ export const MODULE_REGISTRY: Record<string, ModuleDefinition> = {
     completeness: "100%",
     route: "/crew-wellbeing",
     icon: "Heart",
+    lazy: true,
+    version: "1.0.0",
+  },
+
+  // ==========================================
+  // PATCH COMPETITIVE-ANALYSIS: New Modules
+  // Added based on maritime software competitive analysis
+  // ==========================================
+  
+  "maintenance.drydock": {
+    id: "maintenance.drydock",
+    name: "Drydock & Hull Management",
+    category: "maintenance",
+    path: "pages/DrydockManagement",
+    description: "Complete drydock planning, hull inspections, and cost prediction with AI",
+    status: "active",
+    completeness: "100%",
+    route: "/drydock-management",
+    icon: "Anchor",
+    lazy: true,
+    version: "1.0.0",
+  },
+
+  "logistics.supplier-marketplace": {
+    id: "logistics.supplier-marketplace",
+    name: "Supplier Marketplace",
+    category: "logistics",
+    path: "pages/SupplierMarketplace",
+    description: "Maritime supplier marketplace with RFQ management and price benchmarking",
+    status: "active",
+    completeness: "100%",
+    route: "/supplier-marketplace",
+    icon: "ShoppingCart",
     lazy: true,
     version: "1.0.0",
   },

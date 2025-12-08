@@ -30,6 +30,10 @@ import { AISSimopsIntegration } from "./ais-simops-integration";
 import { DPIntelCenter } from "./dp-intel-center";
 import { ASOGStatusDisplay } from "./asog-status-display";
 import { PEODPAIChat } from "./peodp-ai-chat";
+// New competitive analysis components
+import { ClassSurveyDashboard } from "@/components/compliance/ClassSurveyDashboard";
+import { STCWCompetencyMatrix } from "@/components/crew/STCWCompetencyMatrix";
+import { MLCComplianceDashboard } from "@/components/crew/MLCComplianceDashboard";
 import {
   LayoutDashboard,
   MessageSquare,
@@ -55,7 +59,10 @@ import {
   Camera,
   BookOpen,
   Brain,
-  Radar
+  Radar,
+  Anchor,
+  Award,
+  Clock
 } from "lucide-react";
 import { toast } from "sonner";
 import {
@@ -399,6 +406,16 @@ export const PeoDpManager: React.FC = () => {
             </TabsTrigger>
             <TabsTrigger value="ai-chat" className="flex items-center gap-1 text-xs px-2 py-1">
               <MessageSquare className="h-3 w-3" />AI Chat
+            </TabsTrigger>
+            {/* New Competitive Analysis Tabs */}
+            <TabsTrigger value="class-surveys" className="flex items-center gap-1 text-xs px-2 py-1 bg-primary/10">
+              <Anchor className="h-3 w-3" />Classificadora
+            </TabsTrigger>
+            <TabsTrigger value="stcw-matrix" className="flex items-center gap-1 text-xs px-2 py-1 bg-primary/10">
+              <Award className="h-3 w-3" />STCW Matrix
+            </TabsTrigger>
+            <TabsTrigger value="mlc-compliance" className="flex items-center gap-1 text-xs px-2 py-1 bg-primary/10">
+              <Clock className="h-3 w-3" />MLC 2006
             </TabsTrigger>
           </TabsList>
 
@@ -756,6 +773,21 @@ export const PeoDpManager: React.FC = () => {
         {/* PEO-DP AI Chat */}
         <TabsContent value="ai-chat" className="space-y-4">
           <PEODPAIChat />
+        </TabsContent>
+
+        {/* NEW: Class Survey Management */}
+        <TabsContent value="class-surveys" className="space-y-4">
+          <ClassSurveyDashboard />
+        </TabsContent>
+
+        {/* NEW: STCW Competency Matrix */}
+        <TabsContent value="stcw-matrix" className="space-y-4">
+          <STCWCompetencyMatrix />
+        </TabsContent>
+
+        {/* NEW: MLC 2006 Compliance */}
+        <TabsContent value="mlc-compliance" className="space-y-4">
+          <MLCComplianceDashboard />
         </TabsContent>
       </Tabs>
 
