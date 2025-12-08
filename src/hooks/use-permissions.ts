@@ -124,12 +124,23 @@ export const usePermissions = () => {
     return roleNames[role] || "Funcionário";
   };
 
+  const hasAnyRole = (roles: UserRole[]): boolean => {
+    if (!userRole) return false;
+    return roles.includes(userRole);
+  };
+
+  const isAdmin = (): boolean => {
+    return userRole === "admin";
+  };
+
   return {
     userRole,
     permissions,
     isLoading,
     hasPermission,
     canAccessModule,
-    getRoleDisplayName
+    getRoleDisplayName,
+    hasAnyRole,
+    isAdmin
   };
 };
