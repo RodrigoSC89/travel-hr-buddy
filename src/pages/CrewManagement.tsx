@@ -24,7 +24,8 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { CrewAIInsights } from "@/components/crew/crew-ai-insights";
 import CrewAIAnalysis from "@/modules/crew-management/components/CrewAIAnalysis";
 import { CrewCertificationsManager } from "@/components/crew/crew-certifications-manager";
-
+import { CrewIntelligenceAI } from "@/components/crew/CrewIntelligenceAI";
+import { Sparkles, Target } from "lucide-react";
 interface CrewMember {
   id: string;
   full_name: string;
@@ -258,15 +259,26 @@ export default function CrewManagement() {
 
       {/* Tabs for Content */}
       <Tabs defaultValue="list" className="w-full">
-        <TabsList className="grid w-full grid-cols-2 md:grid-cols-4">
+        <TabsList className="grid w-full grid-cols-2 md:grid-cols-5">
           <TabsTrigger value="list">Lista de Tripulação</TabsTrigger>
-          <TabsTrigger value="ai-analysis" className="gap-2 bg-gradient-to-r from-primary/10 to-secondary/10">
+          <TabsTrigger value="crew-intelligence" className="gap-2 bg-gradient-to-r from-blue-500/10 to-cyan-500/10">
+            <Target className="h-4 w-4" />
+            Crew Intelligence
+            <Badge variant="secondary" className="ml-1 text-xs">
+              <Sparkles className="h-3 w-3" />
+            </Badge>
+          </TabsTrigger>
+          <TabsTrigger value="ai-analysis" className="gap-2">
             <Brain className="h-4 w-4" />
-            Análise IA 2.0
+            Análise IA
           </TabsTrigger>
           <TabsTrigger value="ai-insights">Insights</TabsTrigger>
           <TabsTrigger value="certifications">Certificações</TabsTrigger>
         </TabsList>
+
+        <TabsContent value="crew-intelligence" className="mt-6">
+          <CrewIntelligenceAI />
+        </TabsContent>
 
         <TabsContent value="ai-analysis" className="mt-6">
           <CrewAIAnalysis />

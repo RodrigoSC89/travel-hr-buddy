@@ -11,7 +11,7 @@ import { Button } from "@/components/ui/button";
 import { 
   Ship, Users, Package, Wrench, Brain, 
   Wifi, WifiOff, Activity, Settings, RefreshCw,
-  Bell, AlertTriangle, TrendingUp
+  Bell, AlertTriangle, TrendingUp, Sparkles
 } from "lucide-react";
 import { motion } from "framer-motion";
 import { FleetIntelligence } from "./FleetIntelligence";
@@ -22,6 +22,7 @@ import { IoTDashboard } from "./IoTDashboard";
 import { OfflineIndicator } from "./OfflineIndicator";
 import { useOfflineSync } from "@/hooks/useOfflineSync";
 import { supabase } from "@/integrations/supabase/client";
+import { CommandCenterAI } from "@/components/command/CommandCenterAI";
 
 interface SystemStats {
   vessels: number;
@@ -32,7 +33,7 @@ interface SystemStats {
 }
 
 export function NautilusCommandCenter() {
-  const [activeTab, setActiveTab] = useState("fleet");
+  const [activeTab, setActiveTab] = useState("command-ai");
   const { isOnline, pendingCount, forceSync, isSyncing } = useOfflineSync();
   const [stats, setStats] = useState<SystemStats>({
     vessels: 0,
@@ -79,6 +80,7 @@ export function NautilusCommandCenter() {
   };
 
   const modules = [
+    { id: "command-ai", label: "IA Command", icon: Brain, color: "text-purple-500", isNew: true },
     { id: "fleet", label: "Frota", icon: Ship, color: "text-blue-500", count: stats.vessels },
     { id: "crew", label: "Tripulação", icon: Users, color: "text-emerald-500", count: stats.crew },
     { id: "inventory", label: "Estoque", icon: Package, color: "text-amber-500", count: stats.lowStockItems > 0 ? stats.lowStockItems : undefined },
@@ -178,7 +180,7 @@ export function NautilusCommandCenter() {
       <div className="container mx-auto px-4 py-6">
         <Tabs value={activeTab} onValueChange={setActiveTab} className="space-y-6">
           {/* Tab Navigation */}
-          <TabsList className="grid grid-cols-5 h-auto p-1 bg-muted/50">
+          <TabsList className="grid grid-cols-6 h-auto p-1 bg-muted/50">
             {modules.map((module) => {
               const Icon = module.icon;
               return (
@@ -189,6 +191,11 @@ export function NautilusCommandCenter() {
                 >
                   <Icon className={`h-5 w-5 ${activeTab === module.id ? module.color : "text-muted-foreground"}`} />
                   <span className="text-xs">{module.label}</span>
+                  {(module as any).isNew && (
+                    <Badge className="absolute -top-1 -right-1 h-5 p-1 flex items-center justify-center text-[9px] bg-gradient-to-r from-purple-500 to-pink-500">
+                      <Sparkles className="h-3 w-3" />
+                    </Badge>
+                  )}
                   {module.count !== undefined && module.count > 0 && (
                     <Badge 
                       variant={module.id === "inventory" ? "destructive" : "secondary"} 
@@ -203,6 +210,10 @@ export function NautilusCommandCenter() {
           </TabsList>
 
           {/* Tab Contents */}
+          <TabsContent value="command-ai" className="mt-6">
+            <CommandCenterAI />
+          </TabsContent>
+
           <TabsContent value="fleet" className="mt-6">
             <FleetIntelligence />
           </TabsContent>
