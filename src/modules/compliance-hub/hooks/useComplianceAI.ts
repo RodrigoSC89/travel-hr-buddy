@@ -1,6 +1,6 @@
 /**
  * Compliance Hub AI Hook
- * Hook para integração com IA preditiva e generativa
+ * Hook para integração com Lovable AI - IA preditiva e generativa
  */
 
 import { useState, useCallback } from 'react';
@@ -22,6 +22,11 @@ interface DocumentAnalysis {
   recommendations: string[];
 }
 
+interface ChatMessage {
+  role: 'user' | 'assistant';
+  content: string;
+}
+
 export function useComplianceAI() {
   const [analysisState, setAnalysisState] = useState<AIAnalysisState>({
     loading: false,
@@ -30,6 +35,7 @@ export function useComplianceAI() {
   });
   const [chatLoading, setChatLoading] = useState(false);
   const [documentAnalysisLoading, setDocumentAnalysisLoading] = useState(false);
+  const [chatHistory, setChatHistory] = useState<ChatMessage[]>([]);
 
   const runComplianceAnalysis = useCallback(
     async (
@@ -40,13 +46,14 @@ export function useComplianceAI() {
       setAnalysisState({ loading: true, error: null, analysis: null });
 
       try {
-        // Call AI endpoint
-        const { data, error } = await supabase.functions.invoke('ai-compliance-analysis', {
+        const { data, error } = await supabase.functions.invoke('compliance-ai', {
           body: {
-            complianceItems: items,
-            audits,
-            certificates,
-            action: 'full_analysis',
+            action: 'analyze_compliance',
+            data: {
+              complianceItems: items,
+              audits,
+              certificates,
+            },
           },
         });
 
@@ -57,7 +64,6 @@ export function useComplianceAI() {
         return analysis;
       } catch (error) {
         console.error('Error running compliance analysis:', error);
-        // Return fallback analysis
         const fallback = generateFallbackAnalysis(items, certificates);
         setAnalysisState({ loading: false, error: null, analysis: fallback });
         return fallback;
@@ -70,11 +76,13 @@ export function useComplianceAI() {
     setDocumentAnalysisLoading(true);
 
     try {
-      const { data, error } = await supabase.functions.invoke('ai-document-analysis', {
+      const { data, error } = await supabase.functions.invoke('compliance-ai', {
         body: {
-          content: documentContent,
-          type: documentType,
-          action: 'compliance_check',
+          action: 'analyze_document',
+          data: {
+            content: documentContent,
+            type: documentType,
+          },
         },
       });
 
@@ -104,11 +112,13 @@ export function useComplianceAI() {
 
   const generateAuditChecklist = useCallback(async (auditType: string, vesselType: string): Promise<string[]> => {
     try {
-      const { data, error } = await supabase.functions.invoke('ai-audit-checklist', {
+      const { data, error } = await supabase.functions.invoke('compliance-ai', {
         body: {
-          auditType,
-          vesselType,
           action: 'generate_checklist',
+          data: {
+            auditType,
+            vesselType,
+          },
         },
       });
 
@@ -117,31 +127,52 @@ export function useComplianceAI() {
       return data.checklist || getDefaultChecklist(auditType);
     } catch (error) {
       console.error('Error generating checklist:', error);
+      toast.error('Erro ao gerar checklist. Usando modelo padrão.');
       return getDefaultChecklist(auditType);
     }
   }, []);
 
   const askComplianceAI = useCallback(async (question: string, context?: any): Promise<string> => {
     setChatLoading(true);
+    
+    // Add user message to history
+    const userMessage: ChatMessage = { role: 'user', content: question };
+    setChatHistory(prev => [...prev, userMessage]);
 
     try {
-      const { data, error } = await supabase.functions.invoke('training-ai-assistant', {
+      const { data, error } = await supabase.functions.invoke('compliance-ai', {
         body: {
           action: 'chat',
           data: {
             message: question,
-            context: {
-              module: 'compliance',
-              ...context,
-            },
+            context,
           },
         },
       });
 
-      if (error) throw error;
-      return data.response || 'Não foi possível processar sua pergunta. Tente novamente.';
+      if (error) {
+        // Handle rate limit and payment errors
+        if (error.message?.includes('429')) {
+          toast.error('Limite de requisições atingido. Tente novamente em alguns instantes.');
+          return 'Limite de requisições atingido. Por favor, aguarde alguns instantes antes de tentar novamente.';
+        }
+        if (error.message?.includes('402')) {
+          toast.error('Créditos insuficientes. Adicione créditos ao seu workspace.');
+          return 'Créditos insuficientes. Adicione créditos ao seu workspace Lovable para continuar usando a IA.';
+        }
+        throw error;
+      }
+
+      const response = data.response || 'Não foi possível processar sua pergunta. Tente novamente.';
+      
+      // Add assistant message to history
+      const assistantMessage: ChatMessage = { role: 'assistant', content: response };
+      setChatHistory(prev => [...prev, assistantMessage]);
+      
+      return response;
     } catch (error) {
       console.error('Error in compliance AI chat:', error);
+      toast.error('Erro ao processar pergunta');
       return generateAIResponse(question);
     } finally {
       setChatLoading(false);
@@ -150,10 +181,10 @@ export function useComplianceAI() {
 
   const predictRisks = useCallback(async (complianceData: any): Promise<AIComplianceAnalysis['predictedIssues']> => {
     try {
-      const { data, error } = await supabase.functions.invoke('ai-risk-prediction', {
+      const { data, error } = await supabase.functions.invoke('compliance-ai', {
         body: {
-          complianceData,
           action: 'predict_risks',
+          data: { complianceData },
         },
       });
 
@@ -180,22 +211,42 @@ export function useComplianceAI() {
 
   const suggestCorrectiveAction = useCallback(async (finding: any): Promise<string> => {
     try {
-      const { data, error } = await supabase.functions.invoke('training-ai-assistant', {
+      const { data, error } = await supabase.functions.invoke('compliance-ai', {
         body: {
-          action: 'suggest_action',
+          action: 'suggest_corrective_action',
+          data: { finding },
+        },
+      });
+
+      if (error) throw error;
+      return data.response || 'Implementar plano de ação corretiva conforme procedimentos do SMS.';
+    } catch (error) {
+      console.error('Error suggesting corrective action:', error);
+      return `Ação sugerida para ${finding.category}: Revisar procedimentos aplicáveis, implementar correções necessárias e documentar evidências de implementação.`;
+    }
+  }, []);
+
+  const generateTrainingRecommendation = useCallback(async (crewMemberId: string): Promise<string> => {
+    try {
+      const { data, error } = await supabase.functions.invoke('compliance-ai', {
+        body: {
+          action: 'training_recommendation',
           data: {
-            finding,
-            context: 'compliance_finding',
+            message: `Gere recomendações de treinamento para o tripulante ${crewMemberId} considerando requisitos STCW e desenvolvimento profissional.`,
           },
         },
       });
 
       if (error) throw error;
-      return data.suggestion || 'Implementar plano de ação corretiva conforme procedimentos do SMS.';
+      return data.response || 'Recomenda-se revisar a matriz de competências e identificar gaps de treinamento.';
     } catch (error) {
-      console.error('Error suggesting corrective action:', error);
-      return `Ação sugerida para ${finding.category}: Revisar procedimentos aplicáveis, implementar correções necessárias e documentar evidências de implementação.`;
+      console.error('Error generating training recommendation:', error);
+      return 'Recomenda-se revisar a matriz de competências STCW e identificar treinamentos prioritários para renovação de certificados.';
     }
+  }, []);
+
+  const clearChatHistory = useCallback(() => {
+    setChatHistory([]);
   }, []);
 
   return {
@@ -212,11 +263,16 @@ export function useComplianceAI() {
     
     // Chat
     chatLoading,
+    chatHistory,
     askComplianceAI,
+    clearChatHistory,
     
     // Predictions
     predictRisks,
     suggestCorrectiveAction,
+    
+    // Training
+    generateTrainingRecommendation,
   };
 }
 
@@ -225,7 +281,9 @@ function generateFallbackAnalysis(
   items: ComplianceItem[],
   certificates: Certificate[]
 ): AIComplianceAnalysis {
-  const avgScore = items.reduce((acc, item) => acc + item.score, 0) / items.length;
+  const avgScore = items.length > 0 
+    ? items.reduce((acc, item) => acc + item.score, 0) / items.length 
+    : 85;
   const expiredCerts = certificates.filter(c => c.status === 'expired').length;
   
   return {
@@ -334,7 +392,7 @@ function generateAIResponse(question: string): string {
   }
   
   if (lowerQuestion.includes('psc') || lowerQuestion.includes('port state')) {
-    return 'Para se preparar para uma inspeção PSC (Port State Control), verifique: 1) Todos os certificados estatutários válidos; 2) Registros de manutenção atualizados; 3) Qualificações da tripulação em dia; 4) Equipamentos de segurança inspecionados; 5) Condições de trabalho conforme MLC. Realize uma inspeção interna prévia usando nosso módulo Pre-PSC para identificar e corrigir deficiências.';
+    return 'Para se preparar para uma inspeção PSC (Port State Control), verifique: 1) Todos os certificados estatutários válidos; 2) Registros de manutenção atualizados; 3) Qualificações da tripulação em dia; 4) Equipamentos de segurança inspecionados; 5) Condições de trabalho conforme MLC. Realize uma inspeção interna prévia para identificar e corrigir deficiências.';
   }
   
   if (lowerQuestion.includes('mlc') || lowerQuestion.includes('trabalho marítimo')) {
