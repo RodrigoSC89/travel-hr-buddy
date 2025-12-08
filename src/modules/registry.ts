@@ -771,15 +771,29 @@ export const MODULE_REGISTRY: Record<string, ModuleDefinition> = {
     lazy: true,
   },
 
-  "core.system-monitor": {
-    id: "core.system-monitor",
-    name: "System Monitor",
+  "core.system-hub": {
+    id: "core.system-hub",
+    name: "Centro de Operações",
     category: "core",
-    path: "pages/SystemMonitor",
-    description: "Real-time system performance monitoring",
+    path: "pages/SystemHub",
+    description: "Unified system operations: monitoring, diagnostics, and roadmap",
     status: "active",
     completeness: "100%",
-    route: "/system-monitor",
+    route: "/system-hub",
+    icon: "Server",
+    lazy: true,
+  },
+
+  // DEPRECATED: Merged into system-hub
+  "core.system-monitor": {
+    id: "core.system-monitor",
+    name: "System Monitor (Merged)",
+    category: "core",
+    path: "pages/SystemHub",
+    description: "Merged into Centro de Operações",
+    status: "deprecated",
+    completeness: "100%",
+    route: "/system-hub",
     icon: "Monitor",
     lazy: true,
   },
@@ -2060,15 +2074,16 @@ export const MODULE_REGISTRY: Record<string, ModuleDefinition> = {
     version: "177.0",
   },
 
+  // DEPRECATED: Merged into system-hub
   "core.product-roadmap": {
     id: "core.product-roadmap",
-    name: "Product Roadmap",
+    name: "Product Roadmap (Merged)",
     category: "core",
-    path: "pages/ProductRoadmap",
-    description: "Product development roadmap and feature planning",
-    status: "active",
+    path: "pages/SystemHub",
+    description: "Merged into Centro de Operações",
+    status: "deprecated",
     completeness: "100%",
-    route: "/product-roadmap",
+    route: "/system-hub",
     icon: "Map",
     lazy: true,
     version: "177.0",
