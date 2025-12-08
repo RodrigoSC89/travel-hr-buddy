@@ -37,10 +37,8 @@ const groupedModules = [
       { label: "🚀 Nautilus Command", path: "/nautilus-command" },
       { label: "Dashboard Principal", path: "/" },
       { label: "Dashboard Executivo", path: "/executive-dashboard" },
-      { label: "Diagnóstico do Sistema", path: "/system-diagnostic" },
-      { label: "Monitor de Sistema", path: "/system-monitor" },
+      { label: "Centro de Operações", path: "/system-hub" },
       { label: "Telemetria", path: "/telemetry" },
-      { label: "Product Roadmap", path: "/product-roadmap" },
     ],
   },
   {
