@@ -14,6 +14,8 @@ interface NautilusLLMRequest {
   moduleId?: string;
   sessionId: string;
   mode?: 'deterministic' | 'creative' | 'safe';
+  systemPrompt?: string; // Custom system prompt from client
+  stream?: boolean; // Enable streaming
 }
 
 serve(async (req) => {
@@ -34,7 +36,7 @@ serve(async (req) => {
     const supabaseKey = Deno.env.get('SUPABASE_SERVICE_ROLE_KEY')!;
     const supabase = createClient(supabaseUrl, supabaseKey);
 
-    const { prompt, contextId = 'global', moduleId, sessionId, mode = 'safe' }: NautilusLLMRequest = await req.json();
+    const { prompt, contextId = 'global', moduleId, sessionId, mode = 'safe', systemPrompt: customSystemPrompt, stream = false }: NautilusLLMRequest = await req.json();
     
     const startTime = Date.now();
 
@@ -56,8 +58,8 @@ serve(async (req) => {
 
     const temperature = temperatureMap[mode];
 
-    // System prompt específico do Nautilus
-    const systemPrompt = `Você é a IA embarcada do Nautilus One, um sistema marítimo offshore avançado.
+    // System prompt específico do Nautilus (pode ser sobrescrito pelo cliente)
+    const defaultSystemPrompt = `Você é a IA embarcada do Nautilus One, um sistema marítimo offshore avançado.
 
 CONTEXTO DO SISTEMA: ${contextSummary}
 
@@ -76,6 +78,8 @@ CAPACIDADES:
 - Otimização operacional
 - Geração de relatórios técnicos
 - Interpretação de comandos em linguagem natural`;
+
+    const systemPrompt = customSystemPrompt || defaultSystemPrompt;
 
     // Verificar cache primeiro (fallback)
     const promptHash = btoa(prompt).substring(0, 50);
@@ -110,9 +114,22 @@ CAPACIDADES:
             { role: 'user', content: prompt }
           ],
           temperature,
-          max_tokens: 1000,
+          max_tokens: 1500,
+          stream,
         }),
       });
+
+      // Handle streaming response
+      if (stream && aiResponse.ok && aiResponse.body) {
+        return new Response(aiResponse.body, {
+          headers: { 
+            ...corsHeaders, 
+            'Content-Type': 'text/event-stream',
+            'Cache-Control': 'no-cache',
+            'Connection': 'keep-alive'
+          },
+        });
+      }
 
       // Tratar rate limits e erros de pagamento
       if (aiResponse.status === 429) {

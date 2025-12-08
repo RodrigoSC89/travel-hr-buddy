@@ -11,7 +11,8 @@ import { Button } from "@/components/ui/button";
 import { 
   Ship, Users, Package, Wrench, Brain, 
   Wifi, WifiOff, Activity, Settings, RefreshCw,
-  Bell, AlertTriangle, TrendingUp, Sparkles
+  Bell, AlertTriangle, TrendingUp, Sparkles,
+  Terminal, Bot, FlaskConical
 } from "lucide-react";
 import { motion } from "framer-motion";
 import { FleetIntelligence } from "./FleetIntelligence";
@@ -23,6 +24,9 @@ import { OfflineIndicator } from "./OfflineIndicator";
 import { useOfflineSync } from "@/hooks/useOfflineSync";
 import { supabase } from "@/integrations/supabase/client";
 import { CommandCenterAI } from "@/components/command/CommandCenterAI";
+import { NaturalLanguageInterface } from "@/components/ai/NaturalLanguageInterface";
+import { AutonomousAgentPanel } from "@/components/ai/AutonomousAgentPanel";
+import { ScenarioSimulatorPanel } from "@/components/ai/ScenarioSimulatorPanel";
 
 interface SystemStats {
   vessels: number;
@@ -81,6 +85,9 @@ export function NautilusCommandCenter() {
 
   const modules = [
     { id: "command-ai", label: "IA Command", icon: Brain, color: "text-purple-500", isNew: true },
+    { id: "nlp", label: "Comandos", icon: Terminal, color: "text-cyan-500", isNew: true },
+    { id: "agent", label: "Agente", icon: Bot, color: "text-emerald-500", isNew: true },
+    { id: "simulator", label: "Simulador", icon: FlaskConical, color: "text-orange-500", isNew: true },
     { id: "fleet", label: "Frota", icon: Ship, color: "text-blue-500", count: stats.vessels },
     { id: "crew", label: "Tripulação", icon: Users, color: "text-emerald-500", count: stats.crew },
     { id: "inventory", label: "Estoque", icon: Package, color: "text-amber-500", count: stats.lowStockItems > 0 ? stats.lowStockItems : undefined },
@@ -180,7 +187,7 @@ export function NautilusCommandCenter() {
       <div className="container mx-auto px-4 py-6">
         <Tabs value={activeTab} onValueChange={setActiveTab} className="space-y-6">
           {/* Tab Navigation */}
-          <TabsList className="grid grid-cols-6 h-auto p-1 bg-muted/50">
+          <TabsList className="grid grid-cols-5 md:grid-cols-10 h-auto p-1 bg-muted/50">
             {modules.map((module) => {
               const Icon = module.icon;
               return (
@@ -212,6 +219,18 @@ export function NautilusCommandCenter() {
           {/* Tab Contents */}
           <TabsContent value="command-ai" className="mt-6">
             <CommandCenterAI />
+          </TabsContent>
+
+          <TabsContent value="nlp" className="mt-6">
+            <NaturalLanguageInterface />
+          </TabsContent>
+
+          <TabsContent value="agent" className="mt-6">
+            <AutonomousAgentPanel />
+          </TabsContent>
+
+          <TabsContent value="simulator" className="mt-6">
+            <ScenarioSimulatorPanel />
           </TabsContent>
 
           <TabsContent value="fleet" className="mt-6">
