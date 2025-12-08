@@ -51,7 +51,7 @@ jobs:
 
       - name: Upload test results
         if: always()
-        uses: actions/upload-artifact@v4
+        uses: actions/upload-artifact@v5
         with:
           name: playwright-report-${{ matrix.browser }}
           path: playwright-report/
@@ -59,7 +59,7 @@ jobs:
 
       - name: Upload test screenshots
         if: failure()
-        uses: actions/upload-artifact@v4
+        uses: actions/upload-artifact@v5
         with:
           name: playwright-screenshots-${{ matrix.browser }}
           path: test-results/
@@ -103,7 +103,7 @@ jobs:
           echo "Target: >90% route coverage" >> coverage-report.md
 
       - name: Upload coverage report
-        uses: actions/upload-artifact@v4
+        uses: actions/upload-artifact@v5
         with:
           name: e2e-coverage-report
           path: coverage-report.md

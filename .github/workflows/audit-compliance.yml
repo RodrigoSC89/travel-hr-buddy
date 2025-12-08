@@ -30,7 +30,7 @@ jobs:
           echo "✅ Relatório de conformidade técnica gerado com sucesso."
 
       - name: Upload audit artifact
-        uses: actions/upload-artifact@v4
+        uses: actions/upload-artifact@v5
         with:
           name: audit-report
           path: dist/audit-report.pdf
