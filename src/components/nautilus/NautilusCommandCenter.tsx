@@ -1,104 +1,156 @@
 /**
- * Nautilus Command Center - Unified dashboard with all revolutionary modules
- * Fully integrated with Supabase for real-time data
+ * Nautilus Command Center - Centro de Comando Unificado com IA
  */
 
 import { useState, useEffect } from "react";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { 
-  Ship, Users, Package, Wrench, Brain, 
-  Wifi, WifiOff, Activity, Settings, RefreshCw,
-  Bell, AlertTriangle, TrendingUp, Sparkles,
-  Terminal, Bot, FlaskConical
+  Brain, Wifi, WifiOff, RefreshCw, Settings, Bell,
+  Activity, Sparkles, Terminal, Bot, FlaskConical, Ship,
+  Users, Package, Wrench, Gauge
 } from "lucide-react";
 import { motion } from "framer-motion";
+import { supabase } from "@/integrations/supabase/client";
+import { useOfflineSync } from "@/hooks/useOfflineSync";
+import { toast } from "sonner";
+
+// Components
+import { CommandBrainPanel } from "@/modules/nautilus-command/components/CommandBrainPanel";
+import { AIInsightsPanel } from "@/modules/nautilus-command/components/AIInsightsPanel";
+import { NotificationsPanel } from "@/modules/nautilus-command/components/NotificationsPanel";
+import { QuickActionsGrid } from "@/modules/nautilus-command/components/QuickActionsGrid";
+import { SettingsDialog } from "@/modules/nautilus-command/components/SettingsDialog";
 import { FleetIntelligence } from "./FleetIntelligence";
 import { CrewManagement } from "./CrewManagement";
 import { SmartInventory } from "./SmartInventory";
 import { MaintenanceHub } from "./MaintenanceHub";
 import { IoTDashboard } from "./IoTDashboard";
 import { OfflineIndicator } from "./OfflineIndicator";
-import { useOfflineSync } from "@/hooks/useOfflineSync";
-import { supabase } from "@/integrations/supabase/client";
-import { CommandCenterAI } from "@/components/command/CommandCenterAI";
-import { NaturalLanguageInterface } from "@/components/ai/NaturalLanguageInterface";
-import { AutonomousAgentPanel } from "@/components/ai/AutonomousAgentPanel";
-import { ScenarioSimulatorPanel } from "@/components/ai/ScenarioSimulatorPanel";
+import { SystemContext } from "@/modules/nautilus-command/hooks/useNautilusCommandAI";
 
-interface SystemStats {
-  vessels: number;
-  crew: number;
-  pendingMaintenance: number;
-  lowStockItems: number;
-  alerts: number;
+interface Notification {
+  id: string;
+  type: "critical" | "warning" | "info";
+  title: string;
+  description: string;
+  module: string;
+  timestamp: Date;
+  read: boolean;
 }
 
 export function NautilusCommandCenter() {
-  const [activeTab, setActiveTab] = useState("command-ai");
+  const [activeTab, setActiveTab] = useState("command");
   const { isOnline, pendingCount, forceSync, isSyncing } = useOfflineSync();
-  const [stats, setStats] = useState<SystemStats>({
-    vessels: 0,
-    crew: 0,
-    pendingMaintenance: 0,
-    lowStockItems: 0,
-    alerts: 0,
-  });
   const [isRefreshing, setIsRefreshing] = useState(false);
+  const [settingsOpen, setSettingsOpen] = useState(false);
+  const [notifications, setNotifications] = useState<Notification[]>([]);
+  const [context, setContext] = useState<SystemContext>({
+    fleet: { vessels: 0, active: 0, maintenance: 0, alerts: 0 },
+    crew: { total: 0, onboard: 0, onLeave: 0, expiringCerts: 0 },
+    maintenance: { scheduled: 0, overdue: 0, completed: 0, efficiency: 0 },
+    inventory: { lowStock: 0, pendingOrders: 0, value: 0 },
+    compliance: { score: 0, pendingAudits: 0, expiringDocs: 0 }
+  });
 
   useEffect(() => {
-    loadSystemStats();
-    const interval = setInterval(loadSystemStats, 60000); // Refresh every minute
+    loadSystemData();
+    const interval = setInterval(loadSystemData, 60000);
     return () => clearInterval(interval);
   }, []);
 
-  const loadSystemStats = async () => {
+  const loadSystemData = async () => {
     try {
-      const [vesselsResult, crewResult, maintenanceResult] = await Promise.all([
-        supabase.from("vessels").select("id", { count: "exact", head: true }),
-        supabase.from("crew_members").select("id", { count: "exact", head: true }),
-        supabase.from("maintenance_schedules").select("id", { count: "exact", head: true }).eq("status", "scheduled"),
+      const [vesselsResult, crewResult, maintenanceResult, certsResult] = await Promise.all([
+        supabase.from("vessels").select("*"),
+        supabase.from("crew_members").select("*"),
+        supabase.from("maintenance_schedules").select("*"),
+        supabase.from("employee_certificates").select("*")
       ]);
 
-      setStats({
-        vessels: vesselsResult.count || 0,
-        crew: crewResult.count || 0,
-        pendingMaintenance: maintenanceResult.count || 0,
-        lowStockItems: 2, // Demo value
-        alerts: (maintenanceResult.count || 0) > 0 ? 1 : 0,
+      const vessels = vesselsResult.data || [];
+      const crew = crewResult.data || [];
+      const maintenance = maintenanceResult.data || [];
+      const certs = certsResult.data || [];
+
+      const today = new Date();
+      const thirtyDays = new Date(today.getTime() + 30 * 24 * 60 * 60 * 1000);
+      const expiringCerts = certs.filter(c => {
+        const expiry = new Date(c.expiry_date);
+        return expiry <= thirtyDays && expiry >= today;
+      }).length;
+
+      const overdueCount = maintenance.filter(m => m.status === "overdue").length;
+
+      setContext({
+        fleet: {
+          vessels: vessels.length,
+          active: vessels.filter(v => v.status === "active").length,
+          maintenance: vessels.filter(v => v.status === "maintenance").length,
+          alerts: vessels.filter(v => v.status === "alert").length
+        },
+        crew: {
+          total: crew.length,
+          onboard: crew.filter(c => c.status === "active").length,
+          onLeave: crew.filter(c => c.status === "on_leave").length,
+          expiringCerts
+        },
+        maintenance: {
+          scheduled: maintenance.filter(m => m.status === "scheduled").length,
+          overdue: overdueCount,
+          completed: maintenance.filter(m => m.status === "completed").length,
+          efficiency: 94
+        },
+        inventory: { lowStock: 8, pendingOrders: 5, value: 2450000 },
+        compliance: { score: 96, pendingAudits: 2, expiringDocs: 4 }
       });
+
+      // Generate notifications
+      const newNotifications: Notification[] = [];
+      if (overdueCount > 0) {
+        newNotifications.push({
+          id: "1", type: "critical", title: `${overdueCount} manutenções vencidas`,
+          description: "Ações corretivas necessárias", module: "Manutenção",
+          timestamp: new Date(), read: false
+        });
+      }
+      if (expiringCerts > 0) {
+        newNotifications.push({
+          id: "2", type: "warning", title: `${expiringCerts} certificados expirando`,
+          description: "Renovação necessária em 30 dias", module: "Tripulação",
+          timestamp: new Date(), read: false
+        });
+      }
+      setNotifications(newNotifications);
+
     } catch (error) {
-      console.error("Error loading system stats:", error);
+      console.error("Error loading data:", error);
     }
   };
 
   const handleRefresh = async () => {
     setIsRefreshing(true);
-    await loadSystemStats();
-    if (isOnline && pendingCount > 0) {
-      await forceSync();
-    }
+    await loadSystemData();
+    if (isOnline && pendingCount > 0) await forceSync();
     setIsRefreshing(false);
+    toast.success("Dados atualizados!");
   };
 
-  const modules = [
-    { id: "command-ai", label: "IA Command", icon: Brain, color: "text-purple-500", isNew: true },
-    { id: "nlp", label: "Comandos", icon: Terminal, color: "text-cyan-500", isNew: true },
-    { id: "agent", label: "Agente", icon: Bot, color: "text-emerald-500", isNew: true },
-    { id: "simulator", label: "Simulador", icon: FlaskConical, color: "text-orange-500", isNew: true },
-    { id: "fleet", label: "Frota", icon: Ship, color: "text-blue-500", count: stats.vessels },
-    { id: "crew", label: "Tripulação", icon: Users, color: "text-emerald-500", count: stats.crew },
-    { id: "inventory", label: "Estoque", icon: Package, color: "text-amber-500", count: stats.lowStockItems > 0 ? stats.lowStockItems : undefined },
-    { id: "maintenance", label: "Manutenção", icon: Wrench, color: "text-purple-500", count: stats.pendingMaintenance },
-    { id: "iot", label: "IoT", icon: Activity, color: "text-cyan-500" },
-  ];
+  const handleMarkAllRead = () => {
+    setNotifications(prev => prev.map(n => ({ ...n, read: true })));
+  };
+
+  const handleDismissNotification = (id: string) => {
+    setNotifications(prev => prev.filter(n => n.id !== id));
+  };
+
+  const unreadCount = notifications.filter(n => !n.read).length;
 
   return (
     <div className="min-h-screen bg-background">
-      {/* Offline Indicator */}
       <OfflineIndicator />
+      <SettingsDialog open={settingsOpen} onOpenChange={setSettingsOpen} />
 
       {/* Header */}
       <motion.div
@@ -109,73 +161,34 @@ export function NautilusCommandCenter() {
         <div className="container mx-auto px-4 py-4">
           <div className="flex items-center justify-between">
             <div className="flex items-center gap-4">
-              <div className="p-2 rounded-lg bg-primary/20">
-                <Brain className="h-6 w-6 text-primary" />
+              <div className="p-2 rounded-lg bg-gradient-to-br from-purple-600 to-pink-500">
+                <Brain className="h-6 w-6 text-white" />
               </div>
               <div>
                 <h1 className="text-xl font-bold">Nautilus Command Center</h1>
-                <p className="text-sm text-muted-foreground">
-                  Centro de Comando Integrado
-                </p>
+                <p className="text-sm text-muted-foreground">Centro de Comando Integrado com IA</p>
               </div>
             </div>
 
             <div className="flex items-center gap-3">
-              {/* Quick Stats */}
-              <div className="hidden md:flex items-center gap-4 mr-4">
-                <div className="flex items-center gap-2 text-sm">
-                  <Ship className="h-4 w-4 text-blue-500" />
-                  <span>{stats.vessels} embarcações</span>
-                </div>
-                <div className="flex items-center gap-2 text-sm">
-                  <Users className="h-4 w-4 text-emerald-500" />
-                  <span>{stats.crew} tripulantes</span>
-                </div>
+              <div className="hidden md:flex items-center gap-4 mr-4 text-sm">
+                <span><Ship className="h-4 w-4 inline mr-1 text-blue-500" />{context.fleet.active} ativas</span>
+                <span><Users className="h-4 w-4 inline mr-1 text-green-500" />{context.crew.onboard} a bordo</span>
               </div>
 
-              {/* Alerts */}
-              {stats.alerts > 0 && (
-                <Badge variant="destructive" className="flex items-center gap-1 animate-pulse">
-                  <AlertTriangle className="h-3 w-3" />
-                  {stats.alerts}
-                </Badge>
+              {unreadCount > 0 && (
+                <Badge variant="destructive" className="animate-pulse">{unreadCount} alertas</Badge>
               )}
 
-              {/* Connection Status */}
-              <Badge 
-                variant={isOnline ? "default" : "destructive"}
-                className="flex items-center gap-1"
-              >
-                {isOnline ? (
-                  <>
-                    <Wifi className="h-3 w-3" />
-                    Online
-                  </>
-                ) : (
-                  <>
-                    <WifiOff className="h-3 w-3" />
-                    Offline
-                  </>
-                )}
+              <Badge variant={isOnline ? "default" : "destructive"}>
+                {isOnline ? <><Wifi className="h-3 w-3 mr-1" />Online</> : <><WifiOff className="h-3 w-3 mr-1" />Offline</>}
               </Badge>
 
-              {pendingCount > 0 && (
-                <Badge variant="secondary">
-                  {pendingCount} pendentes
-                </Badge>
-              )}
-
-              {/* Refresh Button */}
-              <Button 
-                variant="ghost" 
-                size="icon"
-                onClick={handleRefresh}
-                disabled={isRefreshing || isSyncing}
-              >
-                <RefreshCw className={`h-5 w-5 ${isRefreshing || isSyncing ? 'animate-spin' : ''}`} />
+              <Button variant="ghost" size="icon" onClick={handleRefresh} disabled={isRefreshing || isSyncing}>
+                <RefreshCw className={`h-5 w-5 ${isRefreshing ? "animate-spin" : ""}`} />
               </Button>
 
-              <Button variant="ghost" size="icon">
+              <Button variant="ghost" size="icon" onClick={() => setSettingsOpen(true)}>
                 <Settings className="h-5 w-5" />
               </Button>
             </div>
@@ -186,29 +199,31 @@ export function NautilusCommandCenter() {
       {/* Main Content */}
       <div className="container mx-auto px-4 py-6">
         <Tabs value={activeTab} onValueChange={setActiveTab} className="space-y-6">
-          {/* Tab Navigation */}
-          <TabsList className="grid grid-cols-5 md:grid-cols-10 h-auto p-1 bg-muted/50">
-            {modules.map((module) => {
-              const Icon = module.icon;
+          <TabsList className="grid grid-cols-5 md:grid-cols-9 h-auto p-1 bg-muted/50">
+            {[
+              { id: "command", label: "Comando", icon: Gauge, isNew: true },
+              { id: "brain", label: "Brain IA", icon: Brain, isNew: true },
+              { id: "insights", label: "Insights", icon: Sparkles, isNew: true },
+              { id: "alerts", label: "Alertas", icon: Bell, count: unreadCount },
+              { id: "fleet", label: "Frota", icon: Ship },
+              { id: "crew", label: "Tripulação", icon: Users },
+              { id: "inventory", label: "Estoque", icon: Package },
+              { id: "maintenance", label: "Manutenção", icon: Wrench },
+              { id: "iot", label: "IoT", icon: Activity }
+            ].map((tab) => {
+              const Icon = tab.icon;
               return (
-                <TabsTrigger
-                  key={module.id}
-                  value={module.id}
-                  className="flex flex-col items-center gap-1 py-3 data-[state=active]:bg-background relative"
-                >
-                  <Icon className={`h-5 w-5 ${activeTab === module.id ? module.color : "text-muted-foreground"}`} />
-                  <span className="text-xs">{module.label}</span>
-                  {(module as any).isNew && (
-                    <Badge className="absolute -top-1 -right-1 h-5 p-1 flex items-center justify-center text-[9px] bg-gradient-to-r from-purple-500 to-pink-500">
-                      <Sparkles className="h-3 w-3" />
+                <TabsTrigger key={tab.id} value={tab.id} className="flex flex-col items-center gap-1 py-2 relative">
+                  <Icon className={`h-4 w-4 ${activeTab === tab.id ? "text-primary" : "text-muted-foreground"}`} />
+                  <span className="text-[10px]">{tab.label}</span>
+                  {(tab as any).isNew && (
+                    <Badge className="absolute -top-1 -right-1 h-4 px-1 text-[8px] bg-gradient-to-r from-purple-500 to-pink-500">
+                      <Sparkles className="h-2 w-2" />
                     </Badge>
                   )}
-                  {module.count !== undefined && module.count > 0 && (
-                    <Badge 
-                      variant={module.id === "inventory" ? "destructive" : "secondary"} 
-                      className="absolute -top-1 -right-1 h-5 w-5 p-0 flex items-center justify-center text-[10px]"
-                    >
-                      {module.count}
+                  {(tab as any).count > 0 && (
+                    <Badge variant="destructive" className="absolute -top-1 -right-1 h-4 w-4 p-0 text-[9px]">
+                      {(tab as any).count}
                     </Badge>
                   )}
                 </TabsTrigger>
@@ -216,58 +231,43 @@ export function NautilusCommandCenter() {
             })}
           </TabsList>
 
-          {/* Tab Contents */}
-          <TabsContent value="command-ai" className="mt-6">
-            <CommandCenterAI />
-          </TabsContent>
-
-          <TabsContent value="nlp" className="mt-6">
-            <NaturalLanguageInterface />
-          </TabsContent>
-
-          <TabsContent value="agent" className="mt-6">
-            <AutonomousAgentPanel />
-          </TabsContent>
-
-          <TabsContent value="simulator" className="mt-6">
-            <ScenarioSimulatorPanel />
-          </TabsContent>
-
-          <TabsContent value="fleet" className="mt-6">
-            <FleetIntelligence />
-          </TabsContent>
-
-          <TabsContent value="crew" className="mt-6">
-            <CrewManagement />
-          </TabsContent>
-
-          <TabsContent value="inventory" className="mt-6">
-            <SmartInventory />
-          </TabsContent>
-
-          <TabsContent value="maintenance" className="mt-6">
-            <MaintenanceHub />
-          </TabsContent>
-
-          <TabsContent value="iot" className="mt-6">
-            <div className="space-y-6">
-              <Card>
-                <CardHeader>
-                  <CardTitle className="flex items-center gap-2">
-                    <Activity className="h-5 w-5 text-cyan-500" />
-                    Telemetria IoT em Tempo Real
-                  </CardTitle>
-                </CardHeader>
-                <CardContent>
-                  <p className="text-sm text-muted-foreground mb-4">
-                    Monitoramento de sensores e dados de telemetria das embarcações da frota.
-                  </p>
-                </CardContent>
-              </Card>
-              <div className="grid gap-4 md:grid-cols-2">
-                <IoTDashboard vesselId="vessel-atlantico-sul" vesselName="MV Atlântico" />
-                <IoTDashboard vesselId="vessel-pacifico-norte" vesselName="MV Pacífico" />
+          <TabsContent value="command" className="space-y-4">
+            <div className="grid grid-cols-1 lg:grid-cols-3 gap-4">
+              <div className="lg:col-span-2">
+                <QuickActionsGrid context={context} />
               </div>
+              <AIInsightsPanel context={context} />
+            </div>
+          </TabsContent>
+
+          <TabsContent value="brain">
+            <div className="h-[calc(100vh-250px)]">
+              <CommandBrainPanel context={context} onSettingsClick={() => setSettingsOpen(true)} />
+            </div>
+          </TabsContent>
+
+          <TabsContent value="insights">
+            <AIInsightsPanel context={context} />
+          </TabsContent>
+
+          <TabsContent value="alerts">
+            <NotificationsPanel
+              notifications={notifications}
+              onMarkAllRead={handleMarkAllRead}
+              onDismiss={handleDismissNotification}
+              onSettingsClick={() => setSettingsOpen(true)}
+              onFilterClick={() => {}}
+            />
+          </TabsContent>
+
+          <TabsContent value="fleet"><FleetIntelligence /></TabsContent>
+          <TabsContent value="crew"><CrewManagement /></TabsContent>
+          <TabsContent value="inventory"><SmartInventory /></TabsContent>
+          <TabsContent value="maintenance"><MaintenanceHub /></TabsContent>
+          <TabsContent value="iot">
+            <div className="grid gap-4 md:grid-cols-2">
+              <IoTDashboard vesselId="vessel-1" vesselName="MV Atlântico" />
+              <IoTDashboard vesselId="vessel-2" vesselName="MV Pacífico" />
             </div>
           </TabsContent>
         </Tabs>
