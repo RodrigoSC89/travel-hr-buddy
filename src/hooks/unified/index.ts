@@ -10,6 +10,8 @@ export {
   useConnectionAware, 
   useConnectionAdaptive,
   useLightMode,
+  useAdaptiveSettings,
+  useConnectionQuality,
   useAdaptiveDebounce as useNetworkAdaptiveDebounce,
   useAdaptivePolling,
   type NetworkStatus,
