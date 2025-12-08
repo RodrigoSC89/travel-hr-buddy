@@ -3,13 +3,56 @@
  * Quick reference guide for maritime compliance requirements
  */
 
-import React from "react";
+import React, { useState } from "react";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
-import { CheckCircle, FileCheck } from "lucide-react";
-import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from "@/components/ui/accordion";
+import { CheckCircle, FileCheck, ChevronDown, ChevronRight } from "lucide-react";
+import { Collapsible, CollapsibleContent, CollapsibleTrigger } from "@/components/ui/collapsible";
+
+interface RequirementItem {
+  code: string;
+  title: string;
+  description: string;
+}
+
+interface CollapsibleSectionProps {
+  title: string;
+  requirements: RequirementItem[];
+  defaultOpen?: boolean;
+}
+
+const CollapsibleSection: React.FC<CollapsibleSectionProps> = ({ title, requirements, defaultOpen = false }) => {
+  const [isOpen, setIsOpen] = useState(defaultOpen);
+
+  return (
+    <Collapsible open={isOpen} onOpenChange={setIsOpen} className="border-b border-border/50 last:border-0">
+      <CollapsibleTrigger className="flex items-center justify-between w-full py-4 text-left hover:text-primary transition-colors">
+        <span className="font-medium text-primary">{title}</span>
+        {isOpen ? (
+          <ChevronDown className="h-4 w-4 text-muted-foreground" />
+        ) : (
+          <ChevronRight className="h-4 w-4 text-muted-foreground" />
+        )}
+      </CollapsibleTrigger>
+      <CollapsibleContent className="pb-4">
+        <div className="space-y-3">
+          {requirements.map((req, idx) => (
+            <div key={idx} className="flex gap-3 p-3 bg-muted/50 rounded-lg">
+              <CheckCircle className="h-5 w-5 text-green-500 flex-shrink-0 mt-0.5" />
+              <div>
+                <div className="font-semibold text-foreground">{req.code}</div>
+                <div className="text-sm text-primary mt-1">{req.title}</div>
+                <div className="text-sm text-muted-foreground mt-1">{req.description}</div>
+              </div>
+            </div>
+          ))}
+        </div>
+      </CollapsibleContent>
+    </Collapsible>
+  );
+};
 
 export default function ISMChecklist() {
-  const ismRequirements = [
+  const ismRequirements: RequirementItem[] = [
     {
       code: "ISM Code 9.1",
       title: "Accident and Non-conformity Reporting",
@@ -27,7 +70,7 @@ export default function ISMChecklist() {
     },
   ];
 
-  const ispsRequirements = [
+  const ispsRequirements: RequirementItem[] = [
     {
       code: "ISPS Code Part B-16",
       title: "Security Incident Procedures",
@@ -35,7 +78,7 @@ export default function ISMChecklist() {
     },
   ];
 
-  const imcaRequirements = [
+  const imcaRequirements: RequirementItem[] = [
     {
       code: "IMCA M109",
       title: "DP Incident Reporting",
@@ -54,78 +97,22 @@ export default function ISMChecklist() {
   ];
 
   return (
-    <Card className="bg-gray-950 border-cyan-800">
+    <Card>
       <CardHeader>
-        <CardTitle className="text-cyan-400 flex items-center gap-2">
-          <FileCheck className="h-5 w-5" />
+        <CardTitle className="flex items-center gap-2">
+          <FileCheck className="h-5 w-5 text-primary" />
           ISM/ISPS Compliance Checklist
         </CardTitle>
-        <CardDescription className="text-gray-400">
+        <CardDescription>
           Key maritime compliance requirements and standards
         </CardDescription>
       </CardHeader>
       <CardContent>
-        <Accordion type="single" collapsible className="w-full">
-          <AccordionItem value="ism" className="border-cyan-800/50">
-            <AccordionTrigger className="text-cyan-400 hover:text-cyan-300">
-              ISM Code Requirements
-            </AccordionTrigger>
-            <AccordionContent>
-              <div className="space-y-3">
-                {ismRequirements.map((req, idx) => (
-                  <div key={idx} className="flex gap-3 p-3 bg-gray-900 rounded-lg">
-                    <CheckCircle className="h-5 w-5 text-green-400 flex-shrink-0 mt-0.5" />
-                    <div>
-                      <div className="font-semibold text-gray-200">{req.code}</div>
-                      <div className="text-sm text-cyan-400 mt-1">{req.title}</div>
-                      <div className="text-sm text-gray-400 mt-1">{req.description}</div>
-                    </div>
-                  </div>
-                ))}
-              </div>
-            </AccordionContent>
-          </AccordionItem>
-
-          <AccordionItem value="isps" className="border-cyan-800/50">
-            <AccordionTrigger className="text-cyan-400 hover:text-cyan-300">
-              ISPS Code Requirements
-            </AccordionTrigger>
-            <AccordionContent>
-              <div className="space-y-3">
-                {ispsRequirements.map((req, idx) => (
-                  <div key={idx} className="flex gap-3 p-3 bg-gray-900 rounded-lg">
-                    <CheckCircle className="h-5 w-5 text-green-400 flex-shrink-0 mt-0.5" />
-                    <div>
-                      <div className="font-semibold text-gray-200">{req.code}</div>
-                      <div className="text-sm text-cyan-400 mt-1">{req.title}</div>
-                      <div className="text-sm text-gray-400 mt-1">{req.description}</div>
-                    </div>
-                  </div>
-                ))}
-              </div>
-            </AccordionContent>
-          </AccordionItem>
-
-          <AccordionItem value="imca" className="border-cyan-800/50">
-            <AccordionTrigger className="text-cyan-400 hover:text-cyan-300">
-              IMCA Guidelines
-            </AccordionTrigger>
-            <AccordionContent>
-              <div className="space-y-3">
-                {imcaRequirements.map((req, idx) => (
-                  <div key={idx} className="flex gap-3 p-3 bg-gray-900 rounded-lg">
-                    <CheckCircle className="h-5 w-5 text-green-400 flex-shrink-0 mt-0.5" />
-                    <div>
-                      <div className="font-semibold text-gray-200">{req.code}</div>
-                      <div className="text-sm text-cyan-400 mt-1">{req.title}</div>
-                      <div className="text-sm text-gray-400 mt-1">{req.description}</div>
-                    </div>
-                  </div>
-                ))}
-              </div>
-            </AccordionContent>
-          </AccordionItem>
-        </Accordion>
+        <div className="space-y-2">
+          <CollapsibleSection title="ISM Code Requirements" requirements={ismRequirements} defaultOpen />
+          <CollapsibleSection title="ISPS Code Requirements" requirements={ispsRequirements} />
+          <CollapsibleSection title="IMCA Guidelines" requirements={imcaRequirements} />
+        </div>
       </CardContent>
     </Card>
   );
