@@ -162,22 +162,54 @@ export function ASOGStatusDisplay({
     return (
       <Card className={cn("border-2", config.borderColor, config.bgColor)}>
         <CardContent className="p-4">
-          <div className="flex items-center justify-between">
+          <div className="flex items-center justify-between flex-wrap gap-4">
             <div className="flex items-center gap-3">
               <StatusIcon className={cn("h-6 w-6", config.textColor)} />
               <div>
                 <div className="flex items-center gap-2">
-                  <span className="font-semibold">ASOG Status:</span>
+                  <span className="font-semibold">ASOG Status: {config.description}</span>
                   <Badge className={cn(config.badgeColor, "text-white font-bold px-3")}>
                     {config.label}
                   </Badge>
                 </div>
-                <p className="text-sm text-muted-foreground">{config.description}</p>
+                <p className="text-sm text-muted-foreground">
+                  {data.vesselName && `${data.vesselName} • `}
+                  Todos os sistemas DP operando dentro dos parâmetros
+                </p>
               </div>
             </div>
-            <div className="flex gap-2">
-              <Button size="sm" variant="outline" onClick={onStatusChange?.bind(null, "green")}>
+            <div className="flex gap-2 flex-wrap">
+              <Button 
+                size="sm" 
+                variant={data.status === "green" ? "default" : "outline"}
+                className={data.status === "green" ? "bg-green-500 hover:bg-green-600 text-white" : ""}
+                onClick={() => onStatusChange?.("green")}
+              >
                 <CheckCircle className="h-4 w-4 mr-1" /> Normal
+              </Button>
+              <Button 
+                size="sm" 
+                variant={data.status === "blue" ? "default" : "outline"}
+                className={data.status === "blue" ? "bg-blue-500 hover:bg-blue-600 text-white" : ""}
+                onClick={() => onStatusChange?.("blue")}
+              >
+                <Info className="h-4 w-4 mr-1" /> Advisory
+              </Button>
+              <Button 
+                size="sm" 
+                variant={data.status === "yellow" ? "default" : "outline"}
+                className={data.status === "yellow" ? "bg-yellow-500 hover:bg-yellow-600 text-white" : ""}
+                onClick={() => onStatusChange?.("yellow")}
+              >
+                <AlertTriangle className="h-4 w-4 mr-1" /> Degradado
+              </Button>
+              <Button 
+                size="sm" 
+                variant={data.status === "red" ? "default" : "outline"}
+                className={data.status === "red" ? "bg-red-500 hover:bg-red-600 text-white" : ""}
+                onClick={() => onStatusChange?.("red")}
+              >
+                <XCircle className="h-4 w-4 mr-1" /> Emergência
               </Button>
               <Button size="sm" variant="outline" onClick={onAcknowledgeAlert}>
                 <Bell className="h-4 w-4 mr-1" /> Alerta
