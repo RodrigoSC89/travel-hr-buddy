@@ -4,7 +4,7 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/com
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Progress } from "@/components/ui/progress";
-import { logger } from "@/lib/logger";
+import { useToast } from "@/hooks/use-toast";
 import {
   Users,
   CheckCircle,
@@ -126,6 +126,7 @@ export const TrainingCompliance: React.FC = () => {
   const [selectedCategory, setSelectedCategory] = useState<string>("all");
   const [isLoading, setIsLoading] = useState(false);
   const { handleViewDetails, showInfo, handleCreate } = useMaritimeActions();
+  const { toast } = useToast();
 
   const validCount = SAMPLE_TRAININGS.filter(t => t.status === "valid").length;
   const expiringCount = SAMPLE_TRAININGS.filter(t => t.status === "expiring_soon").length;
@@ -356,21 +357,36 @@ export const TrainingCompliance: React.FC = () => {
             </Button>
             <Button 
               className="bg-blue-600 hover:bg-blue-700 text-white min-h-[56px] flex-col gap-2"
-              onClick={() => logger.info("Relatório compliance")}
+              onClick={() => {
+                toast({
+                  title: "📊 Gerando Relatório",
+                  description: "Relatório de compliance de treinamentos está sendo gerado..."
+                });
+              }}
             >
               <FileText className="h-6 w-6" />
               <span className="font-semibold">Relatório</span>
             </Button>
             <Button 
               className="bg-orange-600 hover:bg-orange-700 text-white min-h-[56px] flex-col gap-2"
-              onClick={() => logger.info("Certificados expirados")}
+              onClick={() => {
+                toast({
+                  title: "⚠️ Certificados Expirados",
+                  description: "Listando certificados expirados que precisam de renovação..."
+                });
+              }}
             >
               <AlertTriangle className="h-6 w-6" />
               <span className="font-semibold">Expirados</span>
             </Button>
             <Button 
               className="bg-purple-600 hover:bg-purple-700 text-white min-h-[56px] flex-col gap-2"
-              onClick={() => logger.info("Matriz competências")}
+              onClick={() => {
+                toast({
+                  title: "👥 Matriz de Competências",
+                  description: "Abrindo matriz de competências da tripulação..."
+                });
+              }}
             >
               <Users className="h-6 w-6" />
               <span className="font-semibold">Matriz</span>
