@@ -29,6 +29,8 @@ export type AIAction =
   | "match"
   | "optimize";
 
+// Helper type for the hook return
+
 interface AIRequest {
   module: AIModule;
   action: AIAction;
@@ -131,6 +133,12 @@ export function useNautilusAI() {
   const chat = useCallback((module: AIModule, prompt: string, context?: Record<string, unknown>) => 
     query({ module, action: "chat", prompt, context }), [query]);
 
+  const optimize = useCallback((module: AIModule, prompt: string, context?: Record<string, unknown>) => 
+    query({ module, action: "optimize", prompt, context }), [query]);
+
+  const match = useCallback((module: AIModule, prompt: string, context?: Record<string, unknown>) => 
+    query({ module, action: "match", prompt, context }), [query]);
+
   return {
     query,
     predict,
@@ -138,6 +146,8 @@ export function useNautilusAI() {
     suggest,
     generate,
     chat,
+    optimize,
+    match,
     isLoading,
     error
   };

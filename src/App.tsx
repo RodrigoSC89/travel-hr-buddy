@@ -39,6 +39,7 @@ const Unauthorized = React.lazy(() => import("@/pages/Unauthorized"));
 const Auth = React.lazy(() => import("@/pages/Auth"));
 const UserProfilePage = React.lazy(() => import("@/pages/user/profile"));
 const RevolutionaryAI = React.lazy(() => import("@/pages/RevolutionaryAI"));
+const AIEnhancedModules = React.lazy(() => import("@/pages/AIEnhancedModules"));
 
 // Protected Route wrappers - PATCH 68.5
 import { ProtectedRoute, AdminRoute } from "@/components/auth/protected-route";
@@ -163,6 +164,13 @@ function App() {
                     <Route path="revolutionary-ai/*" element={
                       <Suspense fallback={<OffshoreLoader />}>
                         <RevolutionaryAI />
+                      </Suspense>
+                    } />
+                    
+                    {/* AI Enhanced Modules */}
+                    <Route path="ai-modules" element={
+                      <Suspense fallback={<OffshoreLoader />}>
+                        <AIEnhancedModules />
                       </Suspense>
                     } />
                     
