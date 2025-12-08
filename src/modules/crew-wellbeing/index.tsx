@@ -10,6 +10,7 @@ import {
   TrendingUp, TrendingDown, Shield, Sparkles
 } from "lucide-react";
 import { useToast } from "@/hooks/use-toast";
+import { useNautilusEnhancementAI } from "@/hooks/useNautilusEnhancementAI";
 
 interface CrewWellbeing {
   id: string;
