@@ -59,11 +59,35 @@ export interface ASOGStatusData {
 }
 
 interface ASOGStatusDisplayProps {
-  data: ASOGStatusData;
+  data?: ASOGStatusData;
   onStatusChange?: (status: ASOGStatus) => void;
   onAcknowledgeAlert?: () => void;
   compact?: boolean;
 }
+
+const DEFAULT_DATA: ASOGStatusData = {
+  status: "green",
+  statusLabel: "GREEN",
+  statusDescription: "Operações Normais - Todos os sistemas operando dentro dos parâmetros",
+  environmentalLimits: {
+    windSpeed: { current: 12, limit: 25, unit: "kt" },
+    waveHeight: { current: 1.8, limit: 3.5, unit: "m" },
+    current: { current: 0.8, limit: 2.0, unit: "kt" },
+    visibility: { current: 8, limit: 2, unit: "nm" }
+  },
+  systems: [
+    { id: "dp-1", name: "DP System 1", status: "operational", redundancy: 100 },
+    { id: "dp-2", name: "DP System 2", status: "operational", redundancy: 100 },
+    { id: "thrusters", name: "Thrusters", status: "operational", redundancy: 95 },
+    { id: "generators", name: "Power Generation", status: "operational", redundancy: 100 },
+    { id: "references", name: "Position References", status: "operational", redundancy: 85 },
+    { id: "ups", name: "UPS Systems", status: "operational", redundancy: 100 }
+  ],
+  lastUpdate: new Date(),
+  operationType: "Cargo Operations",
+  dpClass: "DP2",
+  vesselName: "PSV Atlantic Explorer"
+};
 
 const STATUS_CONFIG: Record<ASOGStatus, {
   label: string;
@@ -112,7 +136,13 @@ const STATUS_CONFIG: Record<ASOGStatus, {
   }
 };
 
-export function ASOGStatusDisplay({ data, onStatusChange, onAcknowledgeAlert, compact = false }: ASOGStatusDisplayProps) {
+export function ASOGStatusDisplay({ 
+  data: propData, 
+  onStatusChange, 
+  onAcknowledgeAlert, 
+  compact = false 
+}: ASOGStatusDisplayProps) {
+  const data = propData || DEFAULT_DATA;
   const config = STATUS_CONFIG[data.status];
   const StatusIcon = config.icon;
 

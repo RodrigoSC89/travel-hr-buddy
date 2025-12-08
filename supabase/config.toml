@@ -148,6 +148,10 @@ verify_jwt = false
 import_map = "./import_map.json"
 comment = "Record Nautilus One incidents for observability"
 
+[functions.peodp-ai-chat]
+verify_jwt = false
+comment = "PEO-DP AI Chat for audit compliance, legislation queries, and evidence generation"
+
 [[edge_runtime.cron]]
 name = "nautilus-observability-heartbeat"
 function_name = "log-incident"

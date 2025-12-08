@@ -28,8 +28,12 @@ import { RegulatorPortal } from "./regulator-portal";
 import { AdaptiveAIAdvisor } from "./adaptive-ai-advisor";
 import { AISSimopsIntegration } from "./ais-simops-integration";
 import { DPIntelCenter } from "./dp-intel-center";
+import { ASOGStatusDisplay } from "./asog-status-display";
+import { PEODPAIChat } from "./peodp-ai-chat";
 import {
   LayoutDashboard,
+  MessageSquare,
+  Activity,
   FileText,
   Users,
   GraduationCap,
@@ -390,6 +394,12 @@ export const PeoDpManager: React.FC = () => {
             <TabsTrigger value="checklist" className="flex items-center gap-1 text-xs px-2 py-1">
               <Settings className="h-3 w-3" />Checklist
             </TabsTrigger>
+            <TabsTrigger value="asog" className="flex items-center gap-1 text-xs px-2 py-1">
+              <Activity className="h-3 w-3" />ASOG
+            </TabsTrigger>
+            <TabsTrigger value="ai-chat" className="flex items-center gap-1 text-xs px-2 py-1">
+              <MessageSquare className="h-3 w-3" />AI Chat
+            </TabsTrigger>
           </TabsList>
 
           <div className="flex gap-2">
@@ -736,6 +746,16 @@ export const PeoDpManager: React.FC = () => {
         {/* DP Intelligence Center */}
         <TabsContent value="intel" className="space-y-4">
           <DPIntelCenter />
+        </TabsContent>
+
+        {/* ASOG Status Display */}
+        <TabsContent value="asog" className="space-y-4">
+          <ASOGStatusDisplay />
+        </TabsContent>
+
+        {/* PEO-DP AI Chat */}
+        <TabsContent value="ai-chat" className="space-y-4">
+          <PEODPAIChat />
         </TabsContent>
       </Tabs>
 
