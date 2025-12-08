@@ -1,7 +1,7 @@
 /**
  * Modules Index - Centralized Exports
  * Provides easy access to all module components
- * Updated: PATCH UNIFY-2.0 - Module Consolidation Phase 2
+ * Updated: PATCH UNIFY-3.0 - Module Consolidation Phase 3
  * 
  * FUSÃO DE MÓDULOS:
  * - Treinamento → Nautilus Academy (unified)
@@ -13,6 +13,11 @@
  * - Fleet & Operations → Fleet Operations Center (unified)
  * - Manutenção → Nautilus Maintenance (unified)
  * - Subsea → Subsea Operations (unified)
+ * - Viagem/Rotas → Nautilus Voyage (unified)
+ * - Satélite → Nautilus Satellite (unified)
+ * - Documentos → Nautilus Documents (unified)
+ * - Assistentes → Nautilus Assistant (unified)
+ * - Comunicação → Nautilus Comms (unified)
  */
 
 // ============================================
@@ -28,16 +33,12 @@ export { default as FleetModule } from "./fleet";
 export { default as CrewManagement } from "./crew-management";
 export { default as OperationsDashboard } from "./operations";
 export { default as FleetOperations } from "./fleet-operations";
-// Deprecated: Use FleetOperations for unified fleet view
 
 // ============================================
 // MAINTENANCE (UNIFIED → NAUTILUS MAINTENANCE)
 // ============================================
 export { default as MaintenancePlanner } from "./maintenance-planner";
 export { default as NautilusMaintenance } from "./nautilus-maintenance";
-// Deprecated: Use NautilusMaintenance instead
-// export { default as IntelligentMaintenance } from "./nautilus-maintenance";
-// export { default as MMI } from "./nautilus-maintenance";
 
 // ============================================
 // MISSION CONTROL
@@ -45,36 +46,42 @@ export { default as NautilusMaintenance } from "./nautilus-maintenance";
 export { default as MissionControl } from "./mission-control";
 
 // ============================================
-// COMMUNICATION & CONNECTIVITY (UNIFIED → SATCOM)
+// VOYAGE & ROUTES (UNIFIED → NAUTILUS VOYAGE)
+// ============================================
+export { default as NautilusVoyage } from "./nautilus-voyage";
+export { default as VoyagePlanner } from "./voyage-planner";
+// Deprecated: Use NautilusVoyage instead
+// export { default as RouteCostAnalysis } from "./nautilus-voyage";
+
+// ============================================
+// COMMUNICATION & CONNECTIVITY (UNIFIED → SATCOM & NAUTILUS COMMS)
 // ============================================
 export { CommunicationCenter } from "./communication-center";
 export { default as SatcomDashboard } from "./satcom";
+export { default as NautilusComms } from "./nautilus-comms";
+
+// ============================================
+// SATELLITE (UNIFIED → NAUTILUS SATELLITE)
+// ============================================
+export { default as NautilusSatellite } from "./nautilus-satellite";
+// Deprecated: Use NautilusSatellite instead
+// export { default as SatelliteTracker } from "./nautilus-satellite";
 
 // ============================================
 // INTELLIGENCE & AI MODULES (UNIFIED → NAUTILUS AI HUB)
 // ============================================
 export * from "./ai";
 export { default as NautilusAIHub } from "./nautilus-ai-hub";
-// Deprecated: Use NautilusAIHub instead
-// export { default as AIInsights } from "./nautilus-ai-hub";
-// export { default as PredictiveAnalytics } from "./nautilus-ai-hub";
-// export { default as AdvancedAnalytics } from "./nautilus-ai-hub";
 
 // ============================================
 // AUTOMATION (UNIFIED → NAUTILUS AUTOMATION)
 // ============================================
 export { default as NautilusAutomation } from "./nautilus-automation";
-// Deprecated: Use NautilusAutomation instead
-// export { default as AutomationHub } from "./nautilus-automation";
-// export { default as SmartWorkflow } from "./nautilus-automation";
 
 // ============================================
 // SUBSEA OPERATIONS (UNIFIED)
 // ============================================
 export { default as SubseaOperations } from "./subsea-operations";
-// Deprecated: Use SubseaOperations instead
-// export { default as OceanSonar } from "./subsea-operations";
-// export { default as UnderwaterDrone } from "./subsea-operations";
 
 // ============================================
 // COMPLIANCE MODULES
@@ -93,10 +100,17 @@ export { default as NautilusAcademy } from "./nautilus-academy";
 export { default as NautilusPeople } from "./nautilus-people";
 
 // ============================================
-// DOCUMENTS
+// DOCUMENTS (UNIFIED → NAUTILUS DOCUMENTS)
 // ============================================
+export { default as NautilusDocuments } from "./nautilus-documents";
 export { default as IncidentReports } from "./incident-reports";
 export { default as DocumentHub } from "./document-hub";
+
+// ============================================
+// ASSISTANTS (UNIFIED → NAUTILUS ASSISTANT)
+// ============================================
+export { default as NautilusAssistant } from "./nautilus-assistant";
+export { default as VoiceAssistant } from "./assistants/voice-assistant";
 
 // ============================================
 // FINANCE
@@ -114,11 +128,6 @@ export { default as MedicalInfirmary } from "./medical-infirmary";
 export { default as ESGEmissions } from "./esg-emissions";
 export { default as SafetyGuardian } from "./safety-guardian";
 export { default as SmartMobility } from "./smart-mobility";
-
-// ============================================
-// ASSISTANTS
-// ============================================
-export { default as VoiceAssistant } from "./assistants/voice-assistant";
 
 // ============================================
 // PROCUREMENT & INVENTORY (UNIFIED)
