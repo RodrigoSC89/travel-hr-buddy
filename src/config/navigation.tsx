@@ -3,9 +3,10 @@ import { safeLazyImport } from "@/utils/safeLazyImport";
 // Navegação principal do Nautilus One
 export const NAVIGATION = [
   { name: "Command Center", path: "/command-center", component: safeLazyImport(() => import("@/pages/CommandCenter"), "Command Center") },
-  // PATCH 191.0: Consolidated Fleet Module
-  { name: "Sistema Marítimo", path: "/sistema-maritimo", component: safeLazyImport(() => import("@/modules/fleet"), "Fleet Management") },
-  { name: "Fleet Management", path: "/fleet", component: safeLazyImport(() => import("@/modules/fleet"), "Fleet Management") },
+  // PATCH 192.0: Unified Fleet Command Center (fusão de 3 módulos)
+  { name: "Fleet Command Center", path: "/fleet-command", component: safeLazyImport(() => import("@/pages/FleetCommandCenter"), "Fleet Command Center") },
+  { name: "Sistema Marítimo", path: "/sistema-maritimo", component: safeLazyImport(() => import("@/pages/FleetCommandCenter"), "Fleet Command Center") },
+  { name: "Fleet Management", path: "/fleet", component: safeLazyImport(() => import("@/pages/FleetCommandCenter"), "Fleet Command Center") },
   { name: "DP Intelligence", path: "/dp-intelligence", component: safeLazyImport(() => import("@/modules/intelligence/dp-intelligence/DPIntelligenceCenter"), "DP Intelligence") },
   { name: "BridgeLink", path: "/bridgelink", component: safeLazyImport(() => import("@/modules/control/bridgelink/BridgeLinkDashboard"), "BridgeLink") },
   { name: "Forecast Global", path: "/forecast-global", component: safeLazyImport(() => import("@/modules/control/forecast-global/ForecastConsole"), "Forecast Global") },

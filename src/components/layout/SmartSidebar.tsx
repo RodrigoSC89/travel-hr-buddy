@@ -44,9 +44,7 @@ const groupedModules = [
     icon: <Ship className="w-4 h-4 mr-2" />,
     items: [
       { label: "Sistema Marítimo", path: "/maritime" },
-      { label: "Gestão de Frota", path: "/fleet" },
-      { label: "Fleet Dashboard", path: "/fleet-dashboard" },
-      { label: "Fleet Tracking", path: "/fleet-tracking" },
+      { label: "🚢 Fleet Command Center", path: "/fleet-command" },
       { label: "Tripulação", path: "/crew" },
       { label: "Manutenção Inteligente", path: "/intelligent-maintenance" },
       { label: "MMI - Manutenção", path: "/mmi" },
