@@ -1048,14 +1048,14 @@ export const MODULE_REGISTRY: Record<string, ModuleDefinition> = {
     id: "compliance.mlc-inspection",
     name: "MLC Inspection",
     category: "compliance",
-    path: "modules/compliance/mlc-inspection",
-    description: "Maritime Labour Convention 2006 Digital Inspection System",
+    path: "pages/MLCInspection",
+    description: "Maritime Labour Convention 2006 Digital Inspection System com IA integrada",
     status: "active",
     completeness: "100%",
     route: "/mlc-inspection",
     icon: "Shield",
     lazy: true,
-    version: "650.1",
+    version: "650.2",
   },
 
   // Travel & Logistics
