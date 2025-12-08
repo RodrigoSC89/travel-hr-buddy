@@ -28,7 +28,7 @@ import {
 } from "lucide-react";
 import { cn } from "@/lib/utils";
 
-// Grouped modules by category - UPDATED WITH ALL NEW MODULES
+// Grouped modules by category - PATCH 177.0 AUDIT COMPLETE
 const groupedModules = [
   {
     title: "Centro de Comando",
@@ -39,6 +39,8 @@ const groupedModules = [
       { label: "Dashboard Executivo", path: "/executive-dashboard" },
       { label: "Diagnóstico do Sistema", path: "/system-diagnostic" },
       { label: "Monitor de Sistema", path: "/system-monitor" },
+      { label: "Telemetria", path: "/telemetry" },
+      { label: "Product Roadmap", path: "/product-roadmap" },
     ],
   },
   {
@@ -47,15 +49,22 @@ const groupedModules = [
     items: [
       { label: "Sistema Marítimo", path: "/maritime" },
       { label: "Gestão de Frota", path: "/fleet" },
+      { label: "Fleet Dashboard", path: "/fleet-dashboard" },
+      { label: "Fleet Tracking", path: "/fleet-tracking" },
       { label: "Tripulação", path: "/crew" },
       { label: "Manutenção Inteligente", path: "/intelligent-maintenance" },
+      { label: "MMI - Manutenção", path: "/mmi" },
+      { label: "Drydock Management", path: "/drydock-management" },
       { label: "Registros de Missão", path: "/mission-logs" },
       { label: "Planejador de Viagem", path: "/voyage-planner" },
       { label: "Otimizador de Combustível", path: "/fuel-optimizer" },
       { label: "Dashboard Meteorológico", path: "/weather-dashboard" },
       { label: "Rastreador de Satélite", path: "/satellite-tracker" },
       { label: "Controle de Missão", path: "/mission-control" },
-      { label: "Otimização", path: "/optimization" },
+      { label: "Checklists Marítimos", path: "/maritime-checklists" },
+      { label: "Certificações Marítimas", path: "/maritime-certifications" },
+      { label: "Bridge Link", path: "/bridge-link" },
+      { label: "Previsão Global", path: "/forecast-global" },
     ],
   },
   {
@@ -117,10 +126,17 @@ const groupedModules = [
     icon: <BarChart2 className="w-4 h-4 mr-2" />,
     items: [
       { label: "Analytics Core", path: "/analytics" },
+      { label: "Analytics Avançado", path: "/advanced-analytics" },
+      { label: "Business Insights", path: "/business-insights" },
+      { label: "Predictive Analytics", path: "/predictive-analytics" },
       { label: "Dashboard Operacional", path: "/operations-dashboard" },
       { label: "Finanças", path: "/finance" },
+      { label: "Análise de Custos", path: "/route-cost-analysis" },
       { label: "Workflow", path: "/workflow" },
+      { label: "Workflow Visual", path: "/workflow-visual" },
       { label: "Gestão de Usuários", path: "/users" },
+      { label: "Gestão de Tarefas", path: "/task-management" },
+      { label: "Alertas Inteligentes", path: "/intelligent-alerts" },
     ],
   },
   {
@@ -177,6 +193,8 @@ const groupedModules = [
       { label: "Smart Mobility", path: "/smart-mobility" },
       { label: "Reservas", path: "/reservations" },
       { label: "Procurement & Inventory AI", path: "/procurement-inventory" },
+      { label: "Autonomous Procurement", path: "/autonomous-procurement" },
+      { label: "Supplier Marketplace", path: "/supplier-marketplace" },
     ],
   },
   {
@@ -186,8 +204,14 @@ const groupedModules = [
       { label: "Hub de Integrações", path: "/integrations" },
       { label: "API Gateway", path: "/api-gateway" },
       { label: "Colaboração", path: "/collaboration" },
+      { label: "Conectividade Marítima", path: "/maritime-connectivity" },
+      { label: "Calendário Operacional", path: "/operational-calendar" },
+      { label: "Modo Emergência", path: "/emergency-mode" },
+      { label: "IoT Dashboard", path: "/iot" },
+      { label: "Gamificação", path: "/gamification" },
       { label: "Configurações", path: "/settings" },
       { label: "QA Preview", path: "/qa/preview" },
+      { label: "Production Deploy", path: "/production-deploy" },
     ],
   },
 ];
