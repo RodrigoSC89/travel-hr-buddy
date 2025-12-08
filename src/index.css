@@ -11,6 +11,8 @@
 @import "./styles/revolutionary-ux.css";
 @import "./styles/accessibility.css";
 @import "./styles/wcag-compliance.css";
+/* ULTIMATE CONTRAST FIX - Importado por último para garantir override */
+@import "./styles/ultimate-contrast-fix.css";
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
@@ -83,7 +85,7 @@
     --info-foreground: 0 0% 100%;            /* Branco para contraste */
 
     --muted: 220 13% 95%;                    /* #F1F5F9 - Cinza muito claro */
-    --muted-foreground: 220 15% 35%;         /* #4A5568 - WCAG AA: 7:1 contrast on white */
+    --muted-foreground: 220 20% 28%;         /* Cinza escuro - WCAG AAA: 8:1+ contrast */
 
     --destructive: 0 84% 60%;                /* #F56565 - Vermelho */
     --destructive-foreground: 0 0% 100%;     /* Branco */
@@ -290,7 +292,7 @@
     --nautical-foreground: 214 100% 93%;     /* Azul claro */
     
     --muted: 220 84% 12%;                    /* #1E293B - Fundos sutis */
-    --muted-foreground: 220 20% 75%;         /* #B4BDD0 - WCAG AA: 8:1 contrast */
+    --muted-foreground: 220 15% 78%;         /* Cinza claro - WCAG AAA: 9:1+ contrast */
     
     /* Status Colors Modo Escuro - VALORES HSL DIRETOS */
     --success: 142 71% 55%;                  /* Verde vibrante */
