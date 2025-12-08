@@ -1,6 +1,9 @@
 /**
- * Protected Route Guard - PATCH 68.5
+ * Protected Route Guard - PATCH 177.0
  * Authentication and role-based access control for routes
+ * 
+ * INTEGRATION STATUS: Ready for activation
+ * Set ENABLE_AUTH_PROTECTION=true in environment to enable
  */
 import React from "react";
 import { Navigate, useLocation } from "react-router-dom";
@@ -16,14 +19,38 @@ interface ProtectedRouteProps {
   unauthorizedRedirect?: string;
 }
 
+// Feature flag for enabling authentication protection
+const AUTH_PROTECTION_ENABLED = import.meta.env.VITE_ENABLE_AUTH_PROTECTION === "true";
+
 export const ProtectedRoute: React.FC<ProtectedRouteProps> = ({ 
   children,
-  // eslint-disable-next-line @typescript-eslint/no-unused-vars
   requiredRoles = [],
-  // eslint-disable-next-line @typescript-eslint/no-unused-vars
   unauthorizedRedirect = "/unauthorized"
 }) => {
-  // TEMPORARIAMENTE DESABILITADO - TODO: reativar quando auth estiver funcionando
+  const location = useLocation();
+  const { user, isLoading } = useAuth();
+  const { hasAnyRole } = usePermissions();
+
+  // If auth protection is disabled, allow access (development mode)
+  if (!AUTH_PROTECTION_ENABLED) {
+    return <>{children}</>;
+  }
+
+  // Show loader while checking authentication
+  if (isLoading) {
+    return <OffshoreLoader />;
+  }
+
+  // Redirect to login if not authenticated
+  if (!user) {
+    return <Navigate to="/auth" state={{ from: location }} replace />;
+  }
+
+  // Check role-based access if roles are specified
+  if (requiredRoles.length > 0 && !hasAnyRole(requiredRoles)) {
+    return <Navigate to={unauthorizedRedirect} replace />;
+  }
+
   return <>{children}</>;
 };
 
