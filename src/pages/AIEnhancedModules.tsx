@@ -7,7 +7,8 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Badge } from "@/components/ui/badge";
 import {
   Brain, Wrench, Users, ShoppingCart, Navigation,
-  GraduationCap, Shield, DollarSign, LayoutDashboard, Anchor
+  GraduationCap, Shield, DollarSign, LayoutDashboard, Anchor,
+  Terminal, Bot, FlaskConical
 } from "lucide-react";
 
 // AI Enhanced Components
@@ -20,9 +21,15 @@ import { QHSEAutonomousAI } from "@/components/qhse/QHSEAutonomousAI";
 import { PEODPEnhancedAI } from "@/components/peodp/PEODPEnhancedAI";
 import { FinanceAnalyticsAI } from "@/components/finance/FinanceAnalyticsAI";
 import { CommandCenterAI } from "@/components/command/CommandCenterAI";
+import { NaturalLanguageInterface } from "@/components/ai/NaturalLanguageInterface";
+import { AutonomousAgentPanel } from "@/components/ai/AutonomousAgentPanel";
+import { ScenarioSimulatorPanel } from "@/components/ai/ScenarioSimulatorPanel";
 
 const modules = [
   { id: "command", label: "Command Center", icon: LayoutDashboard, component: CommandCenterAI },
+  { id: "nlp", label: "Linguagem Natural", icon: Terminal, component: NaturalLanguageInterface },
+  { id: "agent", label: "Agente Autônomo", icon: Bot, component: AutonomousAgentPanel },
+  { id: "simulator", label: "Simulador", icon: FlaskConical, component: ScenarioSimulatorPanel },
   { id: "maintenance", label: "Manutenção", icon: Wrench, component: PredictiveMaintenanceAI },
   { id: "crew", label: "Tripulação", icon: Users, component: CrewIntelligenceAI },
   { id: "procurement", label: "Compras", icon: ShoppingCart, component: ProcurementIntelligenceAI },
