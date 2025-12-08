@@ -10,7 +10,7 @@ export {
   useConnectionAware, 
   useConnectionAdaptive,
   useLightMode,
-  useAdaptiveDebounce,
+  useAdaptiveDebounce as useNetworkAdaptiveDebounce,
   useAdaptivePolling,
   type NetworkStatus,
   type ConnectionQuality,
@@ -47,3 +47,24 @@ export {
   type OfflineMutationOptions,
   type OfflineDataOptions,
 } from './useOffline';
+
+// Debounce & Throttle (UNIFIED)
+export {
+  // Utility functions
+  debounce,
+  throttle,
+  // Debounce hooks
+  useDebouncedValue,
+  useDebouncedState,
+  useDebouncedCallback,
+  useDebouncedInput,
+  useDebounce,
+  // Throttle hooks
+  useThrottledCallback,
+  useThrottle,
+  useThrottledValue,
+  // Advanced hooks
+  useLeadingDebouncedCallback,
+  useTrailingThrottledCallback,
+  useAdaptiveDebounce,
+} from './useDebounceThrottle.unified';
