@@ -267,11 +267,7 @@ export function AuthProvider({ children }: AuthProviderProps) {
     resetPassword,
   }), [user, session, isLoading, signUp, signIn, signInWithOAuth, signOut, resetPassword]);
 
-  // Show nothing until initialized to prevent flash
-  if (!isInitialized && isLoading) {
-    return null;
-  }
-
+  // Always render provider - children handle loading state
   return (
     <AuthContext.Provider value={value}>
       {children}
