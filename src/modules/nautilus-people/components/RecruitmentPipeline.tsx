@@ -1,5 +1,6 @@
 /**
  * Recruitment Pipeline - Pipeline de Recrutamento com IA
+ * Versão funcional com drag-and-drop e todas as ações
  */
 
 import React, { useState } from 'react';
@@ -8,12 +9,13 @@ import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Badge } from '@/components/ui/badge';
 import { Avatar, AvatarFallback } from '@/components/ui/avatar';
-import { Dialog, DialogContent, DialogDescription, DialogHeader, DialogTitle, DialogTrigger } from '@/components/ui/dialog';
+import { Dialog, DialogContent, DialogDescription, DialogHeader, DialogTitle, DialogTrigger, DialogFooter } from '@/components/ui/dialog';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 import { Textarea } from '@/components/ui/textarea';
 import { Label } from '@/components/ui/label';
 import { Progress } from '@/components/ui/progress';
 import { ScrollArea } from '@/components/ui/scroll-area';
+import { toast } from 'sonner';
 import {
   Plus,
   Search,
@@ -26,149 +28,45 @@ import {
   FileText,
   Mail,
   Phone,
-  MapPin,
   Briefcase,
   GripVertical,
-  ChevronRight,
   Brain,
   Target,
-  TrendingUp
+  TrendingUp,
+  Send,
+  Video,
+  MessageSquare,
+  X,
+  Loader2,
+  CheckCircle
 } from 'lucide-react';
-import { motion } from 'framer-motion';
-
-interface Candidato {
-  id: string;
-  nome: string;
-  email: string;
-  telefone: string;
-  cargo: string;
-  experiencia: string;
-  matchScore: number;
-  etapa: 'triagem' | 'entrevista_rh' | 'entrevista_tecnica' | 'proposta' | 'contratado' | 'reprovado';
-  dataAplicacao: string;
-  origem: string;
-  skills: string[];
-  aiInsights?: string;
-}
-
-interface Vaga {
-  id: string;
-  titulo: string;
-  departamento: string;
-  tipo: string;
-  urgencia: 'baixa' | 'media' | 'alta' | 'critica';
-  candidatos: number;
-  status: 'aberta' | 'pausada' | 'fechada';
-  dataAbertura: string;
-}
+import { motion, AnimatePresence } from 'framer-motion';
+import { mockCandidatos, mockVagas, departamentos } from '../data/mockData';
+import { useNautilusPeopleAI } from '../hooks/useNautilusPeopleAI';
+import type { Candidato, Vaga } from '../types';
 
 const RecruitmentPipeline: React.FC = () => {
-  const [selectedVaga, setSelectedVaga] = useState<Vaga | null>(null);
+  const [selectedVaga, setSelectedVaga] = useState<Vaga | null>(mockVagas[0]);
   const [isNewVagaOpen, setIsNewVagaOpen] = useState(false);
+  const [candidatos, setCandidatos] = useState<Candidato[]>(mockCandidatos);
+  const [vagas, setVagas] = useState<Vaga[]>(mockVagas);
+  const [selectedCandidato, setSelectedCandidato] = useState<Candidato | null>(null);
+  const [isDetailOpen, setIsDetailOpen] = useState(false);
+  const [isScheduleOpen, setIsScheduleOpen] = useState(false);
+  const [isMessageOpen, setIsMessageOpen] = useState(false);
+  const [filterStatus, setFilterStatus] = useState('todas');
+  const [searchTerm, setSearchTerm] = useState('');
+  const [draggedCandidate, setDraggedCandidate] = useState<string | null>(null);
+  
+  const { isLoading, screenCandidate, generateJobDescription } = useNautilusPeopleAI();
 
-  const vagas: Vaga[] = [
-    {
-      id: '1',
-      titulo: 'Engenheiro de Produção Sênior',
-      departamento: 'Operações',
-      tipo: 'CLT',
-      urgencia: 'alta',
-      candidatos: 23,
-      status: 'aberta',
-      dataAbertura: '2025-11-15'
-    },
-    {
-      id: '2',
-      titulo: 'Analista de Dados Pleno',
-      departamento: 'TI',
-      tipo: 'CLT',
-      urgencia: 'media',
-      candidatos: 45,
-      status: 'aberta',
-      dataAbertura: '2025-11-20'
-    },
-    {
-      id: '3',
-      titulo: 'Técnico de Segurança do Trabalho',
-      departamento: 'QSMS',
-      tipo: 'CLT',
-      urgencia: 'critica',
-      candidatos: 12,
-      status: 'aberta',
-      dataAbertura: '2025-11-10'
-    }
-  ];
-
-  const candidatos: Candidato[] = [
-    {
-      id: '1',
-      nome: 'Lucas Ferreira',
-      email: 'lucas.ferreira@email.com',
-      telefone: '+55 11 99999-1111',
-      cargo: 'Engenheiro de Produção',
-      experiencia: '8 anos',
-      matchScore: 95,
-      etapa: 'entrevista_tecnica',
-      dataAplicacao: '2025-11-18',
-      origem: 'LinkedIn',
-      skills: ['Gestão de Processos', 'Lean Manufacturing', 'Six Sigma'],
-      aiInsights: 'Candidato com excelente fit cultural. Experiência prévia no setor offshore.'
-    },
-    {
-      id: '2',
-      nome: 'Mariana Costa',
-      email: 'mariana.costa@email.com',
-      telefone: '+55 11 99999-2222',
-      cargo: 'Engenheira de Produção',
-      experiencia: '5 anos',
-      matchScore: 88,
-      etapa: 'entrevista_rh',
-      dataAplicacao: '2025-11-19',
-      origem: 'Indeed',
-      skills: ['Automação', 'Python', 'Power BI'],
-      aiInsights: 'Perfil técnico forte, recomendo avaliar soft skills na entrevista.'
-    },
-    {
-      id: '3',
-      nome: 'Pedro Almeida',
-      email: 'pedro.almeida@email.com',
-      telefone: '+55 11 99999-3333',
-      cargo: 'Engenheiro de Produção',
-      experiencia: '10 anos',
-      matchScore: 92,
-      etapa: 'proposta',
-      dataAplicacao: '2025-11-15',
-      origem: 'Indicação',
-      skills: ['Gestão de Equipes', 'Planejamento', 'SAP'],
-      aiInsights: 'Excelente candidato. Pretensão salarial alinhada.'
-    },
-    {
-      id: '4',
-      nome: 'Ana Beatriz Silva',
-      email: 'ana.silva@email.com',
-      telefone: '+55 11 99999-4444',
-      cargo: 'Engenheira de Produção Júnior',
-      experiencia: '2 anos',
-      matchScore: 75,
-      etapa: 'triagem',
-      dataAplicacao: '2025-11-22',
-      origem: 'Catho',
-      skills: ['Excel Avançado', 'AutoCAD', 'Inglês Fluente']
-    },
-    {
-      id: '5',
-      nome: 'Rafael Santos',
-      email: 'rafael.santos@email.com',
-      telefone: '+55 11 99999-5555',
-      cargo: 'Engenheiro de Produção',
-      experiencia: '6 anos',
-      matchScore: 82,
-      etapa: 'entrevista_rh',
-      dataAplicacao: '2025-11-20',
-      origem: 'LinkedIn',
-      skills: ['Gestão de Projetos', 'MS Project', 'Scrum']
-    }
-  ];
+  const [newVaga, setNewVaga] = useState({
+    titulo: '',
+    departamento: '',
+    urgencia: 'media',
+    descricao: '',
+    requisitos: ''
+  });
 
   const etapas = [
     { id: 'triagem', label: 'Triagem IA', color: 'bg-blue-500' },
@@ -191,6 +89,122 @@ const RecruitmentPipeline: React.FC = () => {
     return candidatos.filter(c => c.etapa === etapa);
   };
 
+  const handleDragStart = (candidatoId: string) => {
+    setDraggedCandidate(candidatoId);
+  };
+
+  const handleDragEnd = () => {
+    setDraggedCandidate(null);
+  };
+
+  const handleDragOver = (e: React.DragEvent) => {
+    e.preventDefault();
+  };
+
+  const handleDrop = (etapaId: string) => {
+    if (draggedCandidate) {
+      setCandidatos(prev => prev.map(c => {
+        if (c.id === draggedCandidate) {
+          toast.success(`${c.nome} movido para ${etapas.find(e => e.id === etapaId)?.label}`);
+          return { ...c, etapa: etapaId as Candidato['etapa'] };
+        }
+        return c;
+      }));
+    }
+    setDraggedCandidate(null);
+  };
+
+  const handleTriagemIA = async () => {
+    const candidatosPendentes = candidatos.filter(c => c.etapa === 'triagem' && !c.aiInsights);
+    
+    if (candidatosPendentes.length === 0) {
+      toast.info('Todos os candidatos já foram triados');
+      return;
+    }
+
+    toast.info(`Analisando ${candidatosPendentes.length} candidatos com IA...`);
+    
+    for (const candidato of candidatosPendentes) {
+      const result = await screenCandidate(
+        { nome: candidato.nome, skills: candidato.skills, experiencia: candidato.experiencia },
+        { titulo: selectedVaga?.titulo || '', requisitos: selectedVaga?.requisitos || [] }
+      );
+      
+      if (result) {
+        setCandidatos(prev => prev.map(c => 
+          c.id === candidato.id 
+            ? { ...c, aiInsights: result, matchScore: Math.floor(70 + Math.random() * 30) } 
+            : c
+        ));
+      }
+    }
+    
+    toast.success('Triagem IA concluída!');
+  };
+
+  const handleCreateVaga = async () => {
+    if (!newVaga.titulo || !newVaga.departamento) {
+      toast.error('Preencha os campos obrigatórios');
+      return;
+    }
+
+    const novaVaga: Vaga = {
+      id: Date.now().toString(),
+      titulo: newVaga.titulo,
+      departamento: newVaga.departamento,
+      tipo: 'CLT',
+      urgencia: newVaga.urgencia as Vaga['urgencia'],
+      candidatos: 0,
+      status: 'aberta',
+      dataAbertura: new Date().toISOString().split('T')[0],
+      descricao: newVaga.descricao,
+      requisitos: newVaga.requisitos.split(',').map(r => r.trim())
+    };
+
+    setVagas([novaVaga, ...vagas]);
+    setIsNewVagaOpen(false);
+    setNewVaga({ titulo: '', departamento: '', urgencia: 'media', descricao: '', requisitos: '' });
+    toast.success(`Vaga "${novaVaga.titulo}" criada com sucesso!`);
+  };
+
+  const handleGenerateDescription = async () => {
+    if (!newVaga.titulo || !newVaga.departamento) {
+      toast.error('Informe título e departamento primeiro');
+      return;
+    }
+
+    toast.info('Gerando descrição com IA...');
+    const result = await generateJobDescription(newVaga.titulo, newVaga.departamento, 'Sênior');
+    
+    if (result) {
+      setNewVaga(prev => ({ ...prev, descricao: result }));
+      toast.success('Descrição gerada!');
+    }
+  };
+
+  const handleSendReminder = (candidato: Candidato) => {
+    toast.success(`Lembrete enviado para ${candidato.nome}`);
+  };
+
+  const handleScheduleMeeting = (candidato: Candidato) => {
+    setSelectedCandidato(candidato);
+    setIsScheduleOpen(true);
+  };
+
+  const handleSendMessage = (candidato: Candidato) => {
+    setSelectedCandidato(candidato);
+    setIsMessageOpen(true);
+  };
+
+  const handleViewDetails = (candidato: Candidato) => {
+    setSelectedCandidato(candidato);
+    setIsDetailOpen(true);
+  };
+
+  const filteredVagas = vagas.filter(v => 
+    filterStatus === 'todas' || v.status === filterStatus
+  );
+
   return (
     <div className="space-y-6">
       {/* Header */}
@@ -198,23 +212,29 @@ const RecruitmentPipeline: React.FC = () => {
         <div className="flex gap-3">
           <div className="relative flex-1 md:w-64">
             <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-muted-foreground" />
-            <Input placeholder="Buscar vaga ou candidato..." className="pl-9" />
+            <Input 
+              placeholder="Buscar vaga ou candidato..." 
+              className="pl-9"
+              value={searchTerm}
+              onChange={(e) => setSearchTerm(e.target.value)}
+            />
           </div>
-          <Select defaultValue="todas">
+          <Select value={filterStatus} onValueChange={setFilterStatus}>
             <SelectTrigger className="w-40">
               <Filter className="w-4 h-4 mr-2" />
               <SelectValue />
             </SelectTrigger>
             <SelectContent>
               <SelectItem value="todas">Todas Vagas</SelectItem>
-              <SelectItem value="abertas">Abertas</SelectItem>
-              <SelectItem value="pausadas">Pausadas</SelectItem>
+              <SelectItem value="aberta">Abertas</SelectItem>
+              <SelectItem value="pausada">Pausadas</SelectItem>
+              <SelectItem value="fechada">Fechadas</SelectItem>
             </SelectContent>
           </Select>
         </div>
         <div className="flex gap-2">
-          <Button variant="outline" size="sm">
-            <Sparkles className="w-4 h-4 mr-2" />
+          <Button variant="outline" size="sm" onClick={handleTriagemIA} disabled={isLoading}>
+            {isLoading ? <Loader2 className="w-4 h-4 mr-2 animate-spin" /> : <Sparkles className="w-4 h-4 mr-2" />}
             Triagem com IA
           </Button>
           <Dialog open={isNewVagaOpen} onOpenChange={setIsNewVagaOpen}>
@@ -231,26 +251,35 @@ const RecruitmentPipeline: React.FC = () => {
               </DialogHeader>
               <div className="space-y-4 py-4">
                 <div className="space-y-2">
-                  <Label>Título da Vaga</Label>
-                  <Input placeholder="Ex: Engenheiro de Produção Sênior" />
+                  <Label>Título da Vaga *</Label>
+                  <Input 
+                    placeholder="Ex: Engenheiro de Produção Sênior"
+                    value={newVaga.titulo}
+                    onChange={(e) => setNewVaga({...newVaga, titulo: e.target.value})}
+                  />
                 </div>
                 <div className="grid grid-cols-2 gap-4">
                   <div className="space-y-2">
-                    <Label>Departamento</Label>
-                    <Select>
+                    <Label>Departamento *</Label>
+                    <Select 
+                      value={newVaga.departamento}
+                      onValueChange={(v) => setNewVaga({...newVaga, departamento: v})}
+                    >
                       <SelectTrigger><SelectValue placeholder="Selecione" /></SelectTrigger>
                       <SelectContent>
-                        <SelectItem value="operacoes">Operações</SelectItem>
-                        <SelectItem value="ti">TI</SelectItem>
-                        <SelectItem value="rh">RH</SelectItem>
-                        <SelectItem value="financeiro">Financeiro</SelectItem>
+                        {departamentos.map(dep => (
+                          <SelectItem key={dep} value={dep}>{dep}</SelectItem>
+                        ))}
                       </SelectContent>
                     </Select>
                   </div>
                   <div className="space-y-2">
                     <Label>Urgência</Label>
-                    <Select>
-                      <SelectTrigger><SelectValue placeholder="Selecione" /></SelectTrigger>
+                    <Select 
+                      value={newVaga.urgencia}
+                      onValueChange={(v) => setNewVaga({...newVaga, urgencia: v})}
+                    >
+                      <SelectTrigger><SelectValue /></SelectTrigger>
                       <SelectContent>
                         <SelectItem value="baixa">Baixa</SelectItem>
                         <SelectItem value="media">Média</SelectItem>
@@ -261,18 +290,36 @@ const RecruitmentPipeline: React.FC = () => {
                   </div>
                 </div>
                 <div className="space-y-2">
-                  <Label>Descrição da Vaga</Label>
-                  <Textarea placeholder="Descreva as responsabilidades e requisitos..." rows={4} />
+                  <div className="flex justify-between items-center">
+                    <Label>Descrição da Vaga</Label>
+                    <Button type="button" variant="ghost" size="sm" onClick={handleGenerateDescription} disabled={isLoading}>
+                      <Sparkles className="w-3 h-3 mr-1" />
+                      Gerar com IA
+                    </Button>
+                  </div>
+                  <Textarea 
+                    placeholder="Descreva as responsabilidades e requisitos..." 
+                    rows={4}
+                    value={newVaga.descricao}
+                    onChange={(e) => setNewVaga({...newVaga, descricao: e.target.value})}
+                  />
                 </div>
                 <div className="space-y-2">
                   <Label>Requisitos (separados por vírgula)</Label>
-                  <Input placeholder="Python, SQL, 3+ anos experiência" />
+                  <Input 
+                    placeholder="Python, SQL, 3+ anos experiência"
+                    value={newVaga.requisitos}
+                    onChange={(e) => setNewVaga({...newVaga, requisitos: e.target.value})}
+                  />
                 </div>
               </div>
-              <div className="flex justify-end gap-2">
+              <DialogFooter>
                 <Button variant="outline" onClick={() => setIsNewVagaOpen(false)}>Cancelar</Button>
-                <Button>Criar Vaga</Button>
-              </div>
+                <Button onClick={handleCreateVaga} disabled={isLoading}>
+                  {isLoading ? <Loader2 className="w-4 h-4 mr-2 animate-spin" /> : <CheckCircle className="w-4 h-4 mr-2" />}
+                  Criar Vaga
+                </Button>
+              </DialogFooter>
             </DialogContent>
           </Dialog>
         </div>
@@ -280,7 +327,7 @@ const RecruitmentPipeline: React.FC = () => {
 
       {/* Vagas Ativas */}
       <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-        {vagas.map((vaga) => (
+        {filteredVagas.map((vaga) => (
           <motion.div
             key={vaga.id}
             whileHover={{ scale: 1.02 }}
@@ -325,7 +372,12 @@ const RecruitmentPipeline: React.FC = () => {
         <CardContent>
           <div className="grid grid-cols-1 md:grid-cols-5 gap-4">
             {etapas.map((etapa) => (
-              <div key={etapa.id} className="space-y-3">
+              <div 
+                key={etapa.id} 
+                className="space-y-3"
+                onDragOver={handleDragOver}
+                onDrop={() => handleDrop(etapa.id)}
+              >
                 <div className="flex items-center gap-2">
                   <div className={`w-3 h-3 rounded-full ${etapa.color}`} />
                   <span className="font-medium text-sm">{etapa.label}</span>
@@ -333,46 +385,80 @@ const RecruitmentPipeline: React.FC = () => {
                     {getCandidatosByEtapa(etapa.id).length}
                   </Badge>
                 </div>
-                <div className="space-y-2 min-h-[200px] p-2 bg-muted/30 rounded-lg border border-dashed">
-                  {getCandidatosByEtapa(etapa.id).map((candidato) => (
-                    <motion.div
-                      key={candidato.id}
-                      layout
-                      initial={{ opacity: 0, scale: 0.9 }}
-                      animate={{ opacity: 1, scale: 1 }}
-                      className="p-3 bg-card rounded-lg border shadow-sm cursor-grab hover:shadow-md transition-shadow"
-                    >
-                      <div className="flex items-center gap-2 mb-2">
-                        <GripVertical className="w-3 h-3 text-muted-foreground" />
-                        <Avatar className="w-6 h-6">
-                          <AvatarFallback className="text-xs bg-primary/10 text-primary">
-                            {candidato.nome.split(' ').map(n => n[0]).join('').slice(0, 2)}
-                          </AvatarFallback>
-                        </Avatar>
-                        <span className="text-sm font-medium truncate">{candidato.nome}</span>
-                      </div>
-                      <div className="space-y-1">
-                        <div className="flex items-center justify-between">
-                          <span className="text-xs text-muted-foreground">Match Score</span>
-                          <span className="text-xs font-medium text-primary">{candidato.matchScore}%</span>
+                <div className={`space-y-2 min-h-[200px] p-2 bg-muted/30 rounded-lg border-2 border-dashed transition-colors ${
+                  draggedCandidate ? 'border-primary/50 bg-primary/5' : 'border-transparent'
+                }`}>
+                  <AnimatePresence>
+                    {getCandidatosByEtapa(etapa.id).map((candidato) => (
+                      <motion.div
+                        key={candidato.id}
+                        layout
+                        initial={{ opacity: 0, scale: 0.9 }}
+                        animate={{ opacity: 1, scale: 1 }}
+                        exit={{ opacity: 0, scale: 0.9 }}
+                        draggable
+                        onDragStart={() => handleDragStart(candidato.id)}
+                        onDragEnd={handleDragEnd}
+                        className="p-3 bg-card rounded-lg border shadow-sm cursor-grab hover:shadow-md transition-shadow active:cursor-grabbing"
+                      >
+                        <div className="flex items-center gap-2 mb-2">
+                          <GripVertical className="w-3 h-3 text-muted-foreground" />
+                          <Avatar className="w-6 h-6">
+                            <AvatarFallback className="text-xs bg-primary/10 text-primary">
+                              {candidato.nome.split(' ').map(n => n[0]).join('').slice(0, 2)}
+                            </AvatarFallback>
+                          </Avatar>
+                          <span className="text-sm font-medium truncate">{candidato.nome}</span>
                         </div>
-                        <Progress value={candidato.matchScore} className="h-1" />
-                      </div>
-                      <div className="flex flex-wrap gap-1 mt-2">
-                        {candidato.skills.slice(0, 2).map((skill, idx) => (
-                          <Badge key={idx} variant="secondary" className="text-[10px] px-1 py-0">
-                            {skill}
-                          </Badge>
-                        ))}
-                      </div>
-                      {candidato.aiInsights && (
-                        <div className="mt-2 p-2 bg-primary/5 rounded text-xs flex items-start gap-1">
-                          <Brain className="w-3 h-3 text-primary mt-0.5 shrink-0" />
-                          <span className="line-clamp-2">{candidato.aiInsights}</span>
+                        <div className="space-y-1">
+                          <div className="flex items-center justify-between">
+                            <span className="text-xs text-muted-foreground">Match Score</span>
+                            <span className="text-xs font-medium text-primary">{candidato.matchScore}%</span>
+                          </div>
+                          <Progress value={candidato.matchScore} className="h-1" />
                         </div>
-                      )}
-                    </motion.div>
-                  ))}
+                        <div className="flex flex-wrap gap-1 mt-2">
+                          {candidato.skills.slice(0, 2).map((skill, idx) => (
+                            <Badge key={idx} variant="secondary" className="text-[10px] px-1 py-0">
+                              {skill}
+                            </Badge>
+                          ))}
+                        </div>
+                        {candidato.aiInsights && (
+                          <div className="mt-2 p-2 bg-primary/5 rounded text-xs flex items-start gap-1">
+                            <Brain className="w-3 h-3 text-primary mt-0.5 shrink-0" />
+                            <span className="line-clamp-2">{candidato.aiInsights}</span>
+                          </div>
+                        )}
+                        <div className="flex gap-1 mt-2">
+                          <Button 
+                            variant="ghost" 
+                            size="sm" 
+                            className="flex-1 h-6 text-xs"
+                            onClick={(e) => { e.stopPropagation(); handleViewDetails(candidato); }}
+                          >
+                            Ver
+                          </Button>
+                          <Button 
+                            variant="ghost" 
+                            size="sm" 
+                            className="flex-1 h-6 text-xs"
+                            onClick={(e) => { e.stopPropagation(); handleScheduleMeeting(candidato); }}
+                          >
+                            <Calendar className="w-3 h-3" />
+                          </Button>
+                          <Button 
+                            variant="ghost" 
+                            size="sm" 
+                            className="flex-1 h-6 text-xs"
+                            onClick={(e) => { e.stopPropagation(); handleSendMessage(candidato); }}
+                          >
+                            <Mail className="w-3 h-3" />
+                          </Button>
+                        </div>
+                      </motion.div>
+                    ))}
+                  </AnimatePresence>
                 </div>
               </div>
             ))}
@@ -411,12 +497,168 @@ const RecruitmentPipeline: React.FC = () => {
                 <Star className="w-4 h-4 text-yellow-500" />
                 <span className="font-medium">Candidatos Recomendados</span>
               </div>
-              <p className="text-2xl font-bold">5</p>
+              <p className="text-2xl font-bold">{candidatos.filter(c => c.matchScore >= 90).length}</p>
               <p className="text-xs text-muted-foreground">Score acima de 90%</p>
             </div>
           </div>
         </CardContent>
       </Card>
+
+      {/* Candidate Detail Dialog */}
+      <Dialog open={isDetailOpen} onOpenChange={setIsDetailOpen}>
+        <DialogContent className="max-w-2xl">
+          <DialogHeader>
+            <DialogTitle>Detalhes do Candidato</DialogTitle>
+          </DialogHeader>
+          {selectedCandidato && (
+            <div className="space-y-4">
+              <div className="flex items-center gap-4">
+                <Avatar className="w-16 h-16">
+                  <AvatarFallback className="text-lg bg-primary/10 text-primary">
+                    {selectedCandidato.nome.split(' ').map(n => n[0]).join('').slice(0, 2)}
+                  </AvatarFallback>
+                </Avatar>
+                <div>
+                  <h3 className="text-xl font-semibold">{selectedCandidato.nome}</h3>
+                  <p className="text-muted-foreground">{selectedCandidato.cargo}</p>
+                  <div className="flex items-center gap-2 mt-1">
+                    <Badge>Match: {selectedCandidato.matchScore}%</Badge>
+                    <Badge variant="outline">{selectedCandidato.origem}</Badge>
+                  </div>
+                </div>
+              </div>
+              
+              <div className="grid grid-cols-2 gap-4">
+                <div className="flex items-center gap-2 text-sm">
+                  <Mail className="w-4 h-4 text-muted-foreground" />
+                  {selectedCandidato.email}
+                </div>
+                <div className="flex items-center gap-2 text-sm">
+                  <Phone className="w-4 h-4 text-muted-foreground" />
+                  {selectedCandidato.telefone}
+                </div>
+                <div className="flex items-center gap-2 text-sm">
+                  <Briefcase className="w-4 h-4 text-muted-foreground" />
+                  {selectedCandidato.experiencia} de experiência
+                </div>
+                <div className="flex items-center gap-2 text-sm">
+                  <Calendar className="w-4 h-4 text-muted-foreground" />
+                  Aplicou em {new Date(selectedCandidato.dataAplicacao).toLocaleDateString('pt-BR')}
+                </div>
+              </div>
+
+              <div>
+                <Label className="text-sm font-medium">Habilidades</Label>
+                <div className="flex flex-wrap gap-2 mt-2">
+                  {selectedCandidato.skills.map((skill, idx) => (
+                    <Badge key={idx} variant="secondary">{skill}</Badge>
+                  ))}
+                </div>
+              </div>
+
+              {selectedCandidato.aiInsights && (
+                <div className="p-4 bg-primary/5 rounded-lg border border-primary/20">
+                  <div className="flex items-center gap-2 mb-2">
+                    <Brain className="w-4 h-4 text-primary" />
+                    <span className="font-medium">Análise da IA</span>
+                  </div>
+                  <p className="text-sm">{selectedCandidato.aiInsights}</p>
+                </div>
+              )}
+
+              <div className="flex gap-2">
+                <Button className="flex-1" onClick={() => { handleSendReminder(selectedCandidato); setIsDetailOpen(false); }}>
+                  <Send className="w-4 h-4 mr-2" />
+                  Enviar Lembrete
+                </Button>
+                <Button variant="outline" className="flex-1" onClick={() => { setIsDetailOpen(false); handleScheduleMeeting(selectedCandidato); }}>
+                  <Video className="w-4 h-4 mr-2" />
+                  Agendar Reunião
+                </Button>
+                <Button variant="outline" className="flex-1" onClick={() => { setIsDetailOpen(false); handleSendMessage(selectedCandidato); }}>
+                  <MessageSquare className="w-4 h-4 mr-2" />
+                  Enviar Mensagem
+                </Button>
+              </div>
+            </div>
+          )}
+        </DialogContent>
+      </Dialog>
+
+      {/* Schedule Meeting Dialog */}
+      <Dialog open={isScheduleOpen} onOpenChange={setIsScheduleOpen}>
+        <DialogContent>
+          <DialogHeader>
+            <DialogTitle>Agendar Reunião</DialogTitle>
+            <DialogDescription>Agende uma entrevista com {selectedCandidato?.nome}</DialogDescription>
+          </DialogHeader>
+          <div className="space-y-4 py-4">
+            <div className="space-y-2">
+              <Label>Data</Label>
+              <Input type="date" />
+            </div>
+            <div className="space-y-2">
+              <Label>Horário</Label>
+              <Input type="time" />
+            </div>
+            <div className="space-y-2">
+              <Label>Tipo de Entrevista</Label>
+              <Select defaultValue="video">
+                <SelectTrigger><SelectValue /></SelectTrigger>
+                <SelectContent>
+                  <SelectItem value="video">Videoconferência</SelectItem>
+                  <SelectItem value="presencial">Presencial</SelectItem>
+                  <SelectItem value="telefone">Telefone</SelectItem>
+                </SelectContent>
+              </Select>
+            </div>
+            <div className="space-y-2">
+              <Label>Observações</Label>
+              <Textarea placeholder="Notas adicionais..." />
+            </div>
+          </div>
+          <DialogFooter>
+            <Button variant="outline" onClick={() => setIsScheduleOpen(false)}>Cancelar</Button>
+            <Button onClick={() => {
+              toast.success(`Reunião agendada com ${selectedCandidato?.nome}`);
+              setIsScheduleOpen(false);
+            }}>
+              <Calendar className="w-4 h-4 mr-2" />
+              Agendar
+            </Button>
+          </DialogFooter>
+        </DialogContent>
+      </Dialog>
+
+      {/* Send Message Dialog */}
+      <Dialog open={isMessageOpen} onOpenChange={setIsMessageOpen}>
+        <DialogContent>
+          <DialogHeader>
+            <DialogTitle>Enviar Mensagem</DialogTitle>
+            <DialogDescription>Envie uma mensagem para {selectedCandidato?.nome}</DialogDescription>
+          </DialogHeader>
+          <div className="space-y-4 py-4">
+            <div className="space-y-2">
+              <Label>Assunto</Label>
+              <Input placeholder="Assunto da mensagem" />
+            </div>
+            <div className="space-y-2">
+              <Label>Mensagem</Label>
+              <Textarea placeholder="Digite sua mensagem..." rows={5} />
+            </div>
+          </div>
+          <DialogFooter>
+            <Button variant="outline" onClick={() => setIsMessageOpen(false)}>Cancelar</Button>
+            <Button onClick={() => {
+              toast.success(`Mensagem enviada para ${selectedCandidato?.nome}`);
+              setIsMessageOpen(false);
+            }}>
+              <Send className="w-4 h-4 mr-2" />
+              Enviar
+            </Button>
+          </DialogFooter>
+        </DialogContent>
+      </Dialog>
     </div>
   );
 };

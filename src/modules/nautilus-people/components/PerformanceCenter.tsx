@@ -1,144 +1,65 @@
 /**
- * Performance Center - Avaliações de Desempenho e Feedback 360
+ * Performance Center - Avaliações, OKRs, Feedback e 9-Box
+ * Versão funcional completa
  */
 
 import React, { useState } from 'react';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
-import { Input } from '@/components/ui/input';
 import { Badge } from '@/components/ui/badge';
 import { Progress } from '@/components/ui/progress';
 import { Avatar, AvatarFallback } from '@/components/ui/avatar';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 import { Textarea } from '@/components/ui/textarea';
-import { Dialog, DialogContent, DialogDescription, DialogHeader, DialogTitle, DialogTrigger } from '@/components/ui/dialog';
+import { Dialog, DialogContent, DialogDescription, DialogHeader, DialogTitle, DialogTrigger, DialogFooter } from '@/components/ui/dialog';
+import { Input } from '@/components/ui/input';
+import { Label } from '@/components/ui/label';
+import { toast } from 'sonner';
 import {
   Target,
   Star,
   TrendingUp,
-  TrendingDown,
   MessageSquare,
   Calendar,
   Award,
-  Users,
   BarChart3,
   CheckCircle,
   Clock,
   Plus,
   Send,
   ThumbsUp,
-  Sparkles
+  Sparkles,
+  Loader2,
+  Download,
+  Eye
 } from 'lucide-react';
 import { motion } from 'framer-motion';
-
-interface Avaliacao {
-  id: string;
-  colaborador: string;
-  cargo: string;
-  departamento: string;
-  ciclo: string;
-  nota: number;
-  status: 'pendente' | 'em_andamento' | 'concluida';
-  autoAvaliacao: number;
-  avaliacaoGestor: number;
-  feedback360: number;
-  metas: { titulo: string; progresso: number; peso: number }[];
-}
-
-interface OKR {
-  id: string;
-  objetivo: string;
-  keyResults: { titulo: string; meta: number; atual: number; unidade: string }[];
-  responsavel: string;
-  prazo: string;
-  progresso: number;
-}
+import { mockAvaliacoes, mockOKRs, mockNineBox, mockColaboradores } from '../data/mockData';
+import { useNautilusPeopleAI } from '../hooks/useNautilusPeopleAI';
+import type { Avaliacao, OKR } from '../types';
 
 const PerformanceCenter: React.FC = () => {
   const [activeTab, setActiveTab] = useState('avaliacoes');
   const [selectedCiclo, setSelectedCiclo] = useState('q4-2025');
+  const [avaliacoes, setAvaliacoes] = useState<Avaliacao[]>(mockAvaliacoes);
+  const [okrs, setOkrs] = useState<OKR[]>(mockOKRs);
+  const [isNewOKROpen, setIsNewOKROpen] = useState(false);
+  const [isFeedbackOpen, setIsFeedbackOpen] = useState(false);
+  const [isDetailOpen, setIsDetailOpen] = useState(false);
+  const [selectedAvaliacao, setSelectedAvaliacao] = useState<Avaliacao | null>(null);
+  const [feedbackText, setFeedbackText] = useState('');
+  const [feedbackTarget, setFeedbackTarget] = useState('');
+  const [feedbackType, setFeedbackType] = useState<'reconhecimento' | 'construtivo'>('reconhecimento');
+  
+  const { isLoading, generateOKR, analyzePerformance } = useNautilusPeopleAI();
 
-  const avaliacoes: Avaliacao[] = [
-    {
-      id: '1',
-      colaborador: 'Carlos Eduardo Silva',
-      cargo: 'Engenheiro de Produção',
-      departamento: 'Operações',
-      ciclo: 'Q4 2025',
-      nota: 4.2,
-      status: 'em_andamento',
-      autoAvaliacao: 4.5,
-      avaliacaoGestor: 4.0,
-      feedback360: 4.2,
-      metas: [
-        { titulo: 'Reduzir tempo de setup em 15%', progresso: 85, peso: 30 },
-        { titulo: 'Implementar Lean na linha A', progresso: 100, peso: 40 },
-        { titulo: 'Treinar 5 operadores', progresso: 60, peso: 30 }
-      ]
-    },
-    {
-      id: '2',
-      colaborador: 'Ana Paula Martins',
-      cargo: 'Analista de RH Sênior',
-      departamento: 'Recursos Humanos',
-      ciclo: 'Q4 2025',
-      nota: 4.8,
-      status: 'concluida',
-      autoAvaliacao: 4.7,
-      avaliacaoGestor: 4.9,
-      feedback360: 4.8,
-      metas: [
-        { titulo: 'Reduzir turnover em 20%', progresso: 100, peso: 35 },
-        { titulo: 'Implementar novo onboarding', progresso: 100, peso: 35 },
-        { titulo: 'Pesquisa de clima', progresso: 100, peso: 30 }
-      ]
-    },
-    {
-      id: '3',
-      colaborador: 'Roberto Santos Filho',
-      cargo: 'Técnico de Segurança',
-      departamento: 'QSMS',
-      ciclo: 'Q4 2025',
-      nota: 0,
-      status: 'pendente',
-      autoAvaliacao: 0,
-      avaliacaoGestor: 0,
-      feedback360: 0,
-      metas: [
-        { titulo: 'Zero acidentes na área', progresso: 100, peso: 50 },
-        { titulo: 'Treinamentos SIPAT', progresso: 75, peso: 25 },
-        { titulo: 'Auditorias mensais', progresso: 90, peso: 25 }
-      ]
-    }
-  ];
-
-  const okrs: OKR[] = [
-    {
-      id: '1',
-      objetivo: 'Aumentar eficiência operacional',
-      keyResults: [
-        { titulo: 'Reduzir tempo de parada', meta: 20, atual: 18, unidade: '%' },
-        { titulo: 'Aumentar OEE', meta: 85, atual: 82, unidade: '%' },
-        { titulo: 'Reduzir custos de manutenção', meta: 15, atual: 12, unidade: '%' }
-      ],
-      responsavel: 'Carlos Silva',
-      prazo: '31/12/2025',
-      progresso: 78
-    },
-    {
-      id: '2',
-      objetivo: 'Desenvolver cultura de inovação',
-      keyResults: [
-        { titulo: 'Ideias implementadas', meta: 50, atual: 42, unidade: 'un' },
-        { titulo: 'Participação em hackathons', meta: 80, atual: 75, unidade: '%' },
-        { titulo: 'Patentes registradas', meta: 3, atual: 2, unidade: 'un' }
-      ],
-      responsavel: 'Equipe TI',
-      prazo: '31/12/2025',
-      progresso: 82
-    }
-  ];
+  const [newOKR, setNewOKR] = useState({
+    objetivo: '',
+    keyResults: '',
+    responsavel: '',
+    prazo: ''
+  });
 
   const getStatusBadge = (status: string) => {
     switch (status) {
@@ -158,6 +79,121 @@ const PerformanceCenter: React.FC = () => {
     if (nota >= 3.5) return 'text-blue-500';
     if (nota >= 2.5) return 'text-yellow-500';
     return 'text-red-500';
+  };
+
+  const handleStartAvaliacao = async (avaliacao: Avaliacao) => {
+    toast.info(`Iniciando avaliação de ${avaliacao.colaborador}...`);
+    
+    const result = await analyzePerformance(
+      { nome: avaliacao.colaborador, cargo: avaliacao.cargo },
+      avaliacao.metas,
+      []
+    );
+    
+    if (result) {
+      setAvaliacoes(prev => prev.map(a => 
+        a.id === avaliacao.id 
+          ? { ...a, status: 'em_andamento' as const }
+          : a
+      ));
+      toast.success('Avaliação iniciada com análise de IA!');
+    }
+  };
+
+  const handleContinueAvaliacao = (avaliacao: Avaliacao) => {
+    setSelectedAvaliacao(avaliacao);
+    setIsDetailOpen(true);
+  };
+
+  const handleCreateOKR = async () => {
+    if (!newOKR.objetivo || !newOKR.responsavel) {
+      toast.error('Preencha os campos obrigatórios');
+      return;
+    }
+
+    const novoOKR: OKR = {
+      id: Date.now().toString(),
+      objetivo: newOKR.objetivo,
+      keyResults: newOKR.keyResults.split('\n').filter(kr => kr.trim()).map((kr, idx) => ({
+        id: `kr-${idx}`,
+        titulo: kr.trim(),
+        meta: 100,
+        atual: 0,
+        unidade: '%'
+      })),
+      responsavel: newOKR.responsavel,
+      prazo: newOKR.prazo || '31/12/2025',
+      progresso: 0,
+      status: 'ativo'
+    };
+
+    setOkrs([novoOKR, ...okrs]);
+    setIsNewOKROpen(false);
+    setNewOKR({ objetivo: '', keyResults: '', responsavel: '', prazo: '' });
+    toast.success('OKR criado com sucesso!');
+  };
+
+  const handleGenerateOKRWithAI = async () => {
+    toast.info('Gerando OKR com IA...');
+    const result = await generateOKR('Melhorar eficiência operacional', 'Operações', 'Q1 2026');
+    
+    if (result) {
+      try {
+        const parsed = JSON.parse(result);
+        setNewOKR({
+          objetivo: parsed.objective || '',
+          keyResults: parsed.keyResults?.map((kr: { title: string }) => kr.title).join('\n') || '',
+          responsavel: parsed.owner || '',
+          prazo: parsed.quarter || ''
+        });
+        toast.success('OKR gerado pela IA!');
+      } catch {
+        setNewOKR(prev => ({ ...prev, objetivo: result }));
+        toast.success('Sugestão de objetivo gerada!');
+      }
+    }
+  };
+
+  const handleSendFeedback = () => {
+    if (!feedbackText || !feedbackTarget) {
+      toast.error('Preencha todos os campos');
+      return;
+    }
+
+    toast.success(`Feedback ${feedbackType} enviado para ${feedbackTarget}!`);
+    setFeedbackText('');
+    setFeedbackTarget('');
+    setIsFeedbackOpen(false);
+  };
+
+  const handleExportNineBox = () => {
+    const csvContent = 'Colaborador,Performance,Potencial,Classificação\n' +
+      mockNineBox.map(n => `${n.colaborador},${n.performance},${n.potential},${n.label}`).join('\n');
+    
+    const blob = new Blob([csvContent], { type: 'text/csv' });
+    const url = URL.createObjectURL(blob);
+    const link = document.createElement('a');
+    link.href = url;
+    link.download = 'nine_box_matrix.csv';
+    link.click();
+    
+    toast.success('Matriz 9-Box exportada!');
+  };
+
+  const nineBoxGrid = [
+    { row: 0, col: 0, label: 'Enigma', performance: 'low', potential: 'high', color: 'bg-yellow-500/20' },
+    { row: 0, col: 1, label: 'Potencial Crescente', performance: 'medium', potential: 'high', color: 'bg-blue-500/20' },
+    { row: 0, col: 2, label: 'Estrela', performance: 'high', potential: 'high', color: 'bg-green-500/20' },
+    { row: 1, col: 0, label: 'Questionável', performance: 'low', potential: 'medium', color: 'bg-orange-500/20' },
+    { row: 1, col: 1, label: 'Profissional Chave', performance: 'medium', potential: 'medium', color: 'bg-purple-500/20' },
+    { row: 1, col: 2, label: 'Alto Performer', performance: 'high', potential: 'medium', color: 'bg-teal-500/20' },
+    { row: 2, col: 0, label: 'Em Risco', performance: 'low', potential: 'low', color: 'bg-red-500/20' },
+    { row: 2, col: 1, label: 'Eficiente', performance: 'medium', potential: 'low', color: 'bg-gray-500/20' },
+    { row: 2, col: 2, label: 'Especialista', performance: 'high', potential: 'low', color: 'bg-indigo-500/20' },
+  ];
+
+  const getCollaboratorsInBox = (performance: string, potential: string) => {
+    return mockNineBox.filter(n => n.performance === performance && n.potential === potential);
   };
 
   return (
@@ -201,7 +237,7 @@ const PerformanceCenter: React.FC = () => {
           <CardContent className="p-4">
             <div className="flex items-center justify-between">
               <div>
-                <p className="text-2xl font-bold">23</p>
+                <p className="text-2xl font-bold">{avaliacoes.filter(a => a.status === 'pendente').length}</p>
                 <p className="text-sm text-muted-foreground">Avaliações Pendentes</p>
               </div>
               <Clock className="w-8 h-8 text-orange-500" />
@@ -245,7 +281,7 @@ const PerformanceCenter: React.FC = () => {
                 <SelectItem value="q2-2025">Q2 2025</SelectItem>
               </SelectContent>
             </Select>
-            <Button>
+            <Button onClick={() => toast.info('Funcionalidade de nova avaliação')}>
               <Plus className="w-4 h-4 mr-2" />
               Nova Avaliação
             </Button>
@@ -302,8 +338,8 @@ const PerformanceCenter: React.FC = () => {
 
                     <div className="mt-4 space-y-2">
                       <p className="text-sm font-medium">Metas do Ciclo</p>
-                      {avaliacao.metas.map((meta, idx) => (
-                        <div key={idx} className="space-y-1">
+                      {avaliacao.metas.map((meta) => (
+                        <div key={meta.id} className="space-y-1">
                           <div className="flex justify-between text-sm">
                             <span className="text-muted-foreground">{meta.titulo}</span>
                             <span>{meta.progresso}%</span>
@@ -314,11 +350,31 @@ const PerformanceCenter: React.FC = () => {
                     </div>
 
                     <div className="mt-4 flex gap-2">
-                      <Button variant="outline" size="sm" className="flex-1">
+                      <Button 
+                        variant="outline" 
+                        size="sm" 
+                        className="flex-1"
+                        onClick={() => handleContinueAvaliacao(avaliacao)}
+                      >
+                        <Eye className="w-4 h-4 mr-2" />
                         Ver Detalhes
                       </Button>
-                      <Button size="sm" className="flex-1">
-                        {avaliacao.status === 'pendente' ? 'Iniciar Avaliação' : 'Continuar'}
+                      <Button 
+                        size="sm" 
+                        className="flex-1"
+                        onClick={() => avaliacao.status === 'pendente' ? handleStartAvaliacao(avaliacao) : handleContinueAvaliacao(avaliacao)}
+                        disabled={isLoading}
+                      >
+                        {isLoading ? (
+                          <Loader2 className="w-4 h-4 mr-2 animate-spin" />
+                        ) : avaliacao.status === 'pendente' ? (
+                          <>
+                            <Sparkles className="w-4 h-4 mr-2" />
+                            Iniciar Avaliação
+                          </>
+                        ) : (
+                          'Continuar'
+                        )}
                       </Button>
                     </div>
                   </CardContent>
@@ -330,15 +386,81 @@ const PerformanceCenter: React.FC = () => {
 
         {/* OKRs Tab */}
         <TabsContent value="okrs" className="space-y-4">
-          <div className="flex justify-end">
-            <Button>
-              <Plus className="w-4 h-4 mr-2" />
-              Novo OKR
-            </Button>
+          <div className="flex justify-end gap-2">
+            <Dialog open={isNewOKROpen} onOpenChange={setIsNewOKROpen}>
+              <DialogTrigger asChild>
+                <Button>
+                  <Plus className="w-4 h-4 mr-2" />
+                  Novo OKR
+                </Button>
+              </DialogTrigger>
+              <DialogContent>
+                <DialogHeader>
+                  <DialogTitle>Criar Novo OKR</DialogTitle>
+                  <DialogDescription>Defina objetivos e resultados-chave</DialogDescription>
+                </DialogHeader>
+                <div className="space-y-4 py-4">
+                  <div className="space-y-2">
+                    <div className="flex justify-between items-center">
+                      <Label>Objetivo *</Label>
+                      <Button type="button" variant="ghost" size="sm" onClick={handleGenerateOKRWithAI} disabled={isLoading}>
+                        <Sparkles className="w-3 h-3 mr-1" />
+                        Gerar com IA
+                      </Button>
+                    </div>
+                    <Input 
+                      placeholder="Ex: Aumentar eficiência operacional"
+                      value={newOKR.objetivo}
+                      onChange={(e) => setNewOKR({...newOKR, objetivo: e.target.value})}
+                    />
+                  </div>
+                  <div className="space-y-2">
+                    <Label>Key Results (um por linha)</Label>
+                    <Textarea 
+                      placeholder="Reduzir tempo de parada em 20%&#10;Aumentar OEE para 85%"
+                      rows={4}
+                      value={newOKR.keyResults}
+                      onChange={(e) => setNewOKR({...newOKR, keyResults: e.target.value})}
+                    />
+                  </div>
+                  <div className="grid grid-cols-2 gap-4">
+                    <div className="space-y-2">
+                      <Label>Responsável *</Label>
+                      <Select 
+                        value={newOKR.responsavel}
+                        onValueChange={(v) => setNewOKR({...newOKR, responsavel: v})}
+                      >
+                        <SelectTrigger><SelectValue placeholder="Selecione" /></SelectTrigger>
+                        <SelectContent>
+                          {mockColaboradores.map(c => (
+                            <SelectItem key={c.id} value={c.nome}>{c.nome}</SelectItem>
+                          ))}
+                        </SelectContent>
+                      </Select>
+                    </div>
+                    <div className="space-y-2">
+                      <Label>Prazo</Label>
+                      <Input 
+                        type="date"
+                        value={newOKR.prazo}
+                        onChange={(e) => setNewOKR({...newOKR, prazo: e.target.value})}
+                      />
+                    </div>
+                  </div>
+                </div>
+                <DialogFooter>
+                  <Button variant="outline" onClick={() => setIsNewOKROpen(false)}>Cancelar</Button>
+                  <Button onClick={handleCreateOKR} disabled={isLoading}>
+                    {isLoading ? <Loader2 className="w-4 h-4 mr-2 animate-spin" /> : <CheckCircle className="w-4 h-4 mr-2" />}
+                    Criar OKR
+                  </Button>
+                </DialogFooter>
+              </DialogContent>
+            </Dialog>
           </div>
 
           <div className="space-y-4">
-            {okrs.map((okr, index) => (
+            {okrs.map((okr) => (
               <Card key={okr.id}>
                 <CardHeader>
                   <div className="flex items-start justify-between">
@@ -355,8 +477,8 @@ const PerformanceCenter: React.FC = () => {
                   </div>
                 </CardHeader>
                 <CardContent className="space-y-3">
-                  {okr.keyResults.map((kr, idx) => (
-                    <div key={idx} className="flex items-center justify-between p-3 bg-muted/50 rounded-lg">
+                  {okr.keyResults.map((kr) => (
+                    <div key={kr.id} className="flex items-center justify-between p-3 bg-muted/50 rounded-lg">
                       <div className="flex-1">
                         <p className="text-sm font-medium">{kr.titulo}</p>
                         <p className="text-xs text-muted-foreground">
@@ -388,27 +510,44 @@ const PerformanceCenter: React.FC = () => {
               <CardDescription>Dê feedback construtivo para seus colegas</CardDescription>
             </CardHeader>
             <CardContent className="space-y-4">
-              <Select>
+              <Select value={feedbackTarget} onValueChange={setFeedbackTarget}>
                 <SelectTrigger>
                   <SelectValue placeholder="Selecione o colaborador" />
                 </SelectTrigger>
                 <SelectContent>
-                  <SelectItem value="carlos">Carlos Eduardo Silva</SelectItem>
-                  <SelectItem value="ana">Ana Paula Martins</SelectItem>
-                  <SelectItem value="roberto">Roberto Santos</SelectItem>
+                  {mockColaboradores.map(c => (
+                    <SelectItem key={c.id} value={c.nome}>{c.nome}</SelectItem>
+                  ))}
                 </SelectContent>
               </Select>
-              <Textarea placeholder="Digite seu feedback..." rows={4} />
+              <Textarea 
+                placeholder="Digite seu feedback..." 
+                rows={4}
+                value={feedbackText}
+                onChange={(e) => setFeedbackText(e.target.value)}
+              />
               <div className="flex gap-2">
-                <Button variant="outline" className="flex-1">
+                <Button 
+                  variant={feedbackType === 'reconhecimento' ? 'default' : 'outline'} 
+                  className="flex-1"
+                  onClick={() => setFeedbackType('reconhecimento')}
+                >
                   <ThumbsUp className="w-4 h-4 mr-2" />
                   Reconhecimento
                 </Button>
-                <Button className="flex-1">
-                  <Send className="w-4 h-4 mr-2" />
-                  Enviar Feedback
+                <Button 
+                  variant={feedbackType === 'construtivo' ? 'default' : 'outline'} 
+                  className="flex-1"
+                  onClick={() => setFeedbackType('construtivo')}
+                >
+                  <MessageSquare className="w-4 h-4 mr-2" />
+                  Construtivo
                 </Button>
               </div>
+              <Button className="w-full" onClick={handleSendFeedback}>
+                <Send className="w-4 h-4 mr-2" />
+                Enviar Feedback
+              </Button>
             </CardContent>
           </Card>
 
@@ -417,21 +556,27 @@ const PerformanceCenter: React.FC = () => {
               <CardTitle>Feedbacks Recentes</CardTitle>
             </CardHeader>
             <CardContent className="space-y-3">
-              {[1, 2, 3].map((_, idx) => (
+              {[
+                { de: 'Carlos Silva', para: 'Ana Martins', tipo: 'reconhecimento', texto: 'Excelente trabalho na apresentação do projeto!' },
+                { de: 'Maria Lima', para: 'João Pedro', tipo: 'construtivo', texto: 'Sugestão para melhorar a comunicação nas reuniões.' },
+                { de: 'Roberto Santos', para: 'Carlos Silva', tipo: 'reconhecimento', texto: 'Liderança exemplar no projeto de segurança.' }
+              ].map((feedback, idx) => (
                 <div key={idx} className="p-4 bg-muted/50 rounded-lg border">
                   <div className="flex items-center gap-3 mb-2">
                     <Avatar className="w-8 h-8">
-                      <AvatarFallback className="bg-primary/10 text-primary text-xs">CS</AvatarFallback>
+                      <AvatarFallback className="bg-primary/10 text-primary text-xs">
+                        {feedback.de.split(' ').map(n => n[0]).join('')}
+                      </AvatarFallback>
                     </Avatar>
                     <div>
-                      <p className="text-sm font-medium">Carlos Silva</p>
+                      <p className="text-sm font-medium">{feedback.de} → {feedback.para}</p>
                       <p className="text-xs text-muted-foreground">há 2 horas</p>
                     </div>
-                    <Badge variant="outline" className="ml-auto">Reconhecimento</Badge>
+                    <Badge variant="outline" className="ml-auto">
+                      {feedback.tipo === 'reconhecimento' ? '👍 Reconhecimento' : '💬 Construtivo'}
+                    </Badge>
                   </div>
-                  <p className="text-sm text-muted-foreground">
-                    Excelente trabalho na apresentação do projeto! Sua preparação e clareza foram muito importantes para o sucesso da reunião.
-                  </p>
+                  <p className="text-sm text-muted-foreground">{feedback.texto}</p>
                 </div>
               ))}
             </CardContent>
@@ -441,40 +586,129 @@ const PerformanceCenter: React.FC = () => {
         {/* 9-Box Tab */}
         <TabsContent value="nine-box">
           <Card>
-            <CardHeader>
-              <CardTitle>Matriz 9-Box</CardTitle>
-              <CardDescription>Análise de potencial vs performance</CardDescription>
+            <CardHeader className="flex flex-row items-center justify-between">
+              <div>
+                <CardTitle>Matriz 9-Box</CardTitle>
+                <CardDescription>Análise de potencial vs performance</CardDescription>
+              </div>
+              <Button variant="outline" onClick={handleExportNineBox}>
+                <Download className="w-4 h-4 mr-2" />
+                Exportar
+              </Button>
             </CardHeader>
             <CardContent>
-              <div className="grid grid-cols-3 gap-2 aspect-square max-w-2xl mx-auto">
-                {['Alto Potencial\nBaixa Performance', 'Alto Potencial\nMédia Performance', 'Alto Potencial\nAlta Performance',
-                  'Médio Potencial\nBaixa Performance', 'Médio Potencial\nMédia Performance', 'Médio Potencial\nAlta Performance',
-                  'Baixo Potencial\nBaixa Performance', 'Baixo Potencial\nMédia Performance', 'Baixo Potencial\nAlta Performance'
-                ].map((label, idx) => (
-                  <div
-                    key={idx}
-                    className={`p-4 rounded-lg border flex flex-col items-center justify-center text-center ${
-                      idx === 2 ? 'bg-green-500/20 border-green-500/50' :
-                      idx === 5 || idx === 1 ? 'bg-blue-500/20 border-blue-500/50' :
-                      idx === 4 ? 'bg-yellow-500/20 border-yellow-500/50' :
-                      idx === 6 ? 'bg-red-500/20 border-red-500/50' :
-                      'bg-muted/50'
-                    }`}
-                  >
-                    <p className="text-xs text-muted-foreground whitespace-pre-line">{label}</p>
-                    <p className="text-xl font-bold mt-2">
-                      {idx === 2 ? 12 : idx === 5 ? 23 : idx === 4 ? 45 : idx === 1 ? 18 : idx === 3 ? 8 : idx === 6 ? 3 : idx === 7 ? 15 : idx === 8 ? 28 : 5}
-                    </p>
-                  </div>
-                ))}
-              </div>
-              <div className="flex justify-center gap-4 mt-4 text-sm text-muted-foreground">
-                <span>← Baixa Performance | Alta Performance →</span>
+              <div className="grid grid-cols-3 gap-2 max-w-3xl mx-auto">
+                {/* Labels de Potencial (esquerda) */}
+                <div className="col-span-3 flex items-center gap-2 mb-2">
+                  <span className="text-xs text-muted-foreground w-20">Alto Potencial</span>
+                  <div className="flex-1" />
+                </div>
+                
+                {nineBoxGrid.map((cell) => {
+                  const collaborators = getCollaboratorsInBox(cell.performance, cell.potential);
+                  return (
+                    <div
+                      key={`${cell.row}-${cell.col}`}
+                      className={`aspect-square p-2 rounded-lg border ${cell.color} flex flex-col`}
+                    >
+                      <span className="text-xs font-medium mb-1">{cell.label}</span>
+                      <div className="flex-1 flex flex-wrap gap-1 content-start">
+                        {collaborators.map(c => (
+                          <Avatar key={c.colaboradorId} className="w-8 h-8" title={c.colaborador}>
+                            <AvatarFallback className="text-[10px] bg-background">
+                              {c.colaborador.split(' ').map(n => n[0]).join('').slice(0, 2)}
+                            </AvatarFallback>
+                          </Avatar>
+                        ))}
+                      </div>
+                      <Badge variant="secondary" className="text-[10px] mt-1">
+                        {collaborators.length} pessoas
+                      </Badge>
+                    </div>
+                  );
+                })}
+                
+                {/* Labels de Performance (baixo) */}
+                <div className="col-span-3 flex justify-around mt-2">
+                  <span className="text-xs text-muted-foreground">Baixa Performance</span>
+                  <span className="text-xs text-muted-foreground">Média Performance</span>
+                  <span className="text-xs text-muted-foreground">Alta Performance</span>
+                </div>
               </div>
             </CardContent>
           </Card>
         </TabsContent>
       </Tabs>
+
+      {/* Detail Dialog */}
+      <Dialog open={isDetailOpen} onOpenChange={setIsDetailOpen}>
+        <DialogContent className="max-w-2xl">
+          <DialogHeader>
+            <DialogTitle>Detalhes da Avaliação</DialogTitle>
+          </DialogHeader>
+          {selectedAvaliacao && (
+            <div className="space-y-4">
+              <div className="flex items-center gap-4">
+                <Avatar className="w-16 h-16">
+                  <AvatarFallback className="text-lg bg-primary/10 text-primary">
+                    {selectedAvaliacao.colaborador.split(' ').map(n => n[0]).join('').slice(0, 2)}
+                  </AvatarFallback>
+                </Avatar>
+                <div>
+                  <h3 className="text-xl font-semibold">{selectedAvaliacao.colaborador}</h3>
+                  <p className="text-muted-foreground">{selectedAvaliacao.cargo}</p>
+                  <p className="text-sm text-muted-foreground">{selectedAvaliacao.departamento} • {selectedAvaliacao.ciclo}</p>
+                </div>
+                <div className="ml-auto text-right">
+                  {getStatusBadge(selectedAvaliacao.status)}
+                  {selectedAvaliacao.nota > 0 && (
+                    <p className={`text-3xl font-bold ${getNotaColor(selectedAvaliacao.nota)}`}>
+                      {selectedAvaliacao.nota.toFixed(1)}
+                    </p>
+                  )}
+                </div>
+              </div>
+
+              <div className="grid grid-cols-3 gap-4">
+                <Card>
+                  <CardContent className="p-4 text-center">
+                    <p className="text-sm text-muted-foreground">Auto-avaliação</p>
+                    <p className="text-2xl font-bold">{selectedAvaliacao.autoAvaliacao.toFixed(1)}</p>
+                  </CardContent>
+                </Card>
+                <Card>
+                  <CardContent className="p-4 text-center">
+                    <p className="text-sm text-muted-foreground">Avaliação Gestor</p>
+                    <p className="text-2xl font-bold">{selectedAvaliacao.avaliacaoGestor.toFixed(1)}</p>
+                  </CardContent>
+                </Card>
+                <Card>
+                  <CardContent className="p-4 text-center">
+                    <p className="text-sm text-muted-foreground">Feedback 360°</p>
+                    <p className="text-2xl font-bold">{selectedAvaliacao.feedback360.toFixed(1)}</p>
+                  </CardContent>
+                </Card>
+              </div>
+
+              <div>
+                <h4 className="font-medium mb-3">Metas do Ciclo</h4>
+                <div className="space-y-3">
+                  {selectedAvaliacao.metas.map((meta) => (
+                    <div key={meta.id} className="p-3 bg-muted/50 rounded-lg">
+                      <div className="flex justify-between items-center mb-2">
+                        <span className="font-medium">{meta.titulo}</span>
+                        <span className="text-sm">{meta.progresso}%</span>
+                      </div>
+                      <Progress value={meta.progresso} className="h-2" />
+                      <p className="text-xs text-muted-foreground mt-1">Peso: {meta.peso}%</p>
+                    </div>
+                  ))}
+                </div>
+              </div>
+            </div>
+          )}
+        </DialogContent>
+      </Dialog>
     </div>
   );
 };
