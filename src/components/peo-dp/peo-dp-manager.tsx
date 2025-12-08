@@ -34,6 +34,7 @@ import { PEODPAIChat } from "./peodp-ai-chat";
 import { ClassSurveyDashboard } from "@/components/compliance/ClassSurveyDashboard";
 import { STCWCompetencyMatrix } from "@/components/crew/STCWCompetencyMatrix";
 import { MLCComplianceDashboard } from "@/components/crew/MLCComplianceDashboard";
+import { PEODP7PillarsOverview } from "./peodp-7-pillars-overview";
 import {
   LayoutDashboard,
   MessageSquare,
@@ -62,7 +63,8 @@ import {
   Radar,
   Anchor,
   Award,
-  Clock
+  Clock,
+  Layers
 } from "lucide-react";
 import { toast } from "sonner";
 import {
@@ -258,8 +260,53 @@ export const PeoDpManager: React.FC = () => {
     return (section.completed / section.total) * 100;
   };
 
+  // ASOG Status State
+  const [asogStatus, setAsogStatus] = useState<"green" | "blue" | "yellow" | "red">("green");
+  
+  const handleAsogStatusChange = (status: "green" | "blue" | "yellow" | "red") => {
+    setAsogStatus(status);
+    const statusLabels = {
+      green: "Operações Normais",
+      blue: "Advisory", 
+      yellow: "Degradado",
+      red: "Emergência"
+    };
+    toast.success(`ASOG Status alterado para ${statusLabels[status]}`);
+  };
+
+  const handleAcknowledgeAlert = () => {
+    toast.success("Alerta reconhecido e registrado no logbook");
+  };
+
   return (
     <div className="space-y-6">
+      {/* ASOG Status Display - Always visible at top */}
+      <ASOGStatusDisplay 
+        compact 
+        data={{
+          status: asogStatus,
+          statusLabel: asogStatus.toUpperCase(),
+          statusDescription: asogStatus === "green" ? "Operações Normais" : 
+                            asogStatus === "blue" ? "Advisory" : 
+                            asogStatus === "yellow" ? "Degradado" : "Emergência",
+          environmentalLimits: {
+            windSpeed: { current: 12, limit: 25, unit: "kt" },
+            waveHeight: { current: 1.8, limit: 3.5, unit: "m" },
+            current: { current: 0.8, limit: 2.0, unit: "kt" },
+            visibility: { current: 8, limit: 2, unit: "nm" }
+          },
+          systems: [
+            { id: "dp-1", name: "DP System 1", status: "operational", redundancy: 100 },
+            { id: "dp-2", name: "DP System 2", status: "operational", redundancy: 100 }
+          ],
+          lastUpdate: new Date(),
+          vesselName: selectedPlan?.vessel_name || "PSV Atlantic Explorer",
+          dpClass: selectedPlan?.dp_class || "DP2"
+        }}
+        onStatusChange={handleAsogStatusChange}
+        onAcknowledgeAlert={handleAcknowledgeAlert}
+      />
+      
       {/* Stats Overview */}
       <div className="grid grid-cols-1 md:grid-cols-5 gap-4">
         <Card>
@@ -340,6 +387,9 @@ export const PeoDpManager: React.FC = () => {
           <TabsList className="flex flex-wrap gap-1 h-auto p-1">
             <TabsTrigger value="dashboard" className="flex items-center gap-1 text-xs px-2 py-1">
               <LayoutDashboard className="h-3 w-3" />Dashboard
+            </TabsTrigger>
+            <TabsTrigger value="pillars" className="flex items-center gap-1 text-xs px-2 py-1 bg-primary/10">
+              <Layers className="h-3 w-3" />7 Pilares
             </TabsTrigger>
             <TabsTrigger value="plans" className="flex items-center gap-1 text-xs px-2 py-1">
               <FileText className="h-3 w-3" />Planos
@@ -553,6 +603,11 @@ export const PeoDpManager: React.FC = () => {
               </Card>
             </>
           )}
+        </TabsContent>
+
+        {/* 7 Pillars Overview */}
+        <TabsContent value="pillars" className="space-y-4">
+          <PEODP7PillarsOverview />
         </TabsContent>
 
         {/* Plans View */}
