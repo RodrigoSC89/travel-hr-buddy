@@ -148,7 +148,7 @@ const groupedModules = [
       { label: "PEOTRAM", path: "/peotram" },
       { label: "SGSO", path: "/sgso" },
       { label: "IMCA Audit", path: "/imca-audit" },
-      { label: "Pre-OVID Inspection", path: "/admin/pre-ovid" },
+      { label: "Pre-OVID Inspection", path: "/pre-ovid-inspection" },
       { label: "MLC Inspection", path: "/mlc-inspection" },
     ],
   },

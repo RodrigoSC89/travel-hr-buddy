@@ -44,7 +44,7 @@ Regulatory compliance and audit management.
 | compliance.peotram | PEOTRAM | ✅ Active | /peotram |
 | compliance.sgso | SGSO | ✅ Active | /sgso |
 | compliance.imca-audit | IMCA Audit | ✅ Active | /imca-audit |
-| compliance.pre-ovid | Pre-OVID Inspection | ✅ Active | /admin/pre-ovid |
+| compliance.pre-ovid | Pre-OVID Inspection | ✅ Active | /pre-ovid-inspection |
 | compliance.mlc-inspection | MLC Inspection | ✅ Active | /mlc-inspection |
 | admin.sgso-history | SGSO History | ✅ Active | /admin/sgso/history |
 
