@@ -49,17 +49,19 @@ export interface ModuleDefinition {
 }
 
 export const MODULE_REGISTRY: Record<string, ModuleDefinition> = {
-  "core.dashboard": {
-    id: "core.dashboard",
-    name: "Dashboard",
+  // PATCH UNIFY-DASHBOARD: Dashboard + Executive Dashboard fundidos em Command Center
+  "core.command-center": {
+    id: "core.command-center",
+    name: "Command Center",
     category: "core",
-    path: "pages/Dashboard",
-    description: "Main application dashboard - Route handled directly by App.tsx",
+    path: "pages/CommandCenter",
+    description: "Dashboard unificado com visão executiva e operacional - KPIs, métricas de frota, compliance e atividades",
     status: "active",
     completeness: "100%",
-    // route removed - defined directly in App.tsx to avoid conflict
+    route: "/command-center",
     icon: "LayoutDashboard",
     lazy: true,
+    version: "2.0.0",
   },
 
   // REMOVED: core.shared - Deprecated (PATCH 176.2)
@@ -257,18 +259,8 @@ export const MODULE_REGISTRY: Record<string, ModuleDefinition> = {
     lazy: true,
   },
 
-  "core.executive-dashboard": {
-    id: "core.executive-dashboard",
-    name: "Executive Dashboard",
-    category: "core",
-    path: "pages/ExecutiveDashboard",
-    description: "Dashboard executivo com KPIs, métricas de frota e compliance",
-    status: "active",
-    completeness: "100%",
-    route: "/executive-dashboard",
-    icon: "BarChart3",
-    lazy: true,
-  },
+  // DEPRECATED: core.executive-dashboard - Fundido em core.command-center (PATCH UNIFY-DASHBOARD)
+  // Redirect automático para /command-center
 
   // REMOVED: intelligence.analytics - Use operations.dashboard (PATCH 176.2)
 

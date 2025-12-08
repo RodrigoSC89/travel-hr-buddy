@@ -210,3 +210,23 @@ npm run test:coverage
 
 **Data da fusão**: 2025-12-08
 **Módulos reduzidos**: 3 → 1
+
+---
+
+## Fase 5 - UNIFY-5.0 ✅
+
+### 16. DASHBOARDS → Command Center ✅
+- `dashboard` → redirect para `/command-center`
+- `executive-dashboard` → redirect para `/command-center`
+- `nautilus-command` → redirect para `/command-center`
+- **Rota**: `/command-center`
+- **Funcionalidades unificadas**:
+  - Visão executiva com KPIs estratégicos
+  - Visão operacional com gráficos e métricas
+  - Status de módulos de segurança marítima (PEO-DP, SGSO, PEOTRAM)
+  - Alertas críticos e ações rápidas
+  - Atividades recentes e feed auditável
+  - Navegação via abas entre visões executiva/operacional
+
+**Data da fusão**: 2025-12-08
+**Módulos reduzidos**: 3 → 1
