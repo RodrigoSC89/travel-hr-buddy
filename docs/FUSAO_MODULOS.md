@@ -230,3 +230,24 @@ npm run test:coverage
 
 **Data da fusão**: 2025-12-08
 **Módulos reduzidos**: 3 → 1
+
+---
+
+## Fase 6 - UNIFY-6.0 ✅
+
+### 17. FLEET OPERATIONS → Fleet Command Center ✅
+- `fleet` → redirect para `/fleet-command`
+- `fleet-dashboard` → redirect para `/fleet-command`
+- `fleet-tracking` → redirect para `/fleet-command`
+- `sistema-maritimo` → redirect para `/fleet-command`
+- **Rota**: `/fleet-command`
+- **Funcionalidades unificadas**:
+  - **Visão Geral**: Cards de embarcações + AI Copilot
+  - **Rastreamento**: Mapa interativo com lista de embarcações
+  - **Embarcações**: Grid completo + CRUD de embarcações
+  - **Manutenção**: Gestão de manutenções preventivas e corretivas
+  - **Combustível**: Gráficos de consumo e eficiência energética
+  - **Analytics**: Radar de performance + Insights de IA
+
+**Data da fusão**: 2025-12-08
+**Módulos reduzidos**: 3 → 1

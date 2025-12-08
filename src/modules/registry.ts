@@ -107,18 +107,34 @@ export const MODULE_REGISTRY: Record<string, ModuleDefinition> = {
     lazy: true,
   },
 
+  // PATCH 192.0: Unified Fleet Command Center (fusão de 3 módulos: Fleet, Fleet Dashboard, Fleet Tracking)
+  "operations.fleet-command": {
+    id: "operations.fleet-command",
+    name: "Fleet Command Center",
+    category: "operations",
+    path: "pages/FleetCommandCenter",
+    description: "PATCH 192.0 - Centro unificado de operações de frota: gestão de embarcações, rastreamento em tempo real, métricas operacionais, manutenção e analytics. Fusão de: operations.fleet, operations.fleet-dashboard, operations.fleet-tracking",
+    status: "active",
+    completeness: "100%",
+    route: "/fleet-command",
+    icon: "Ship",
+    lazy: true,
+    version: "192.0",
+  },
+
+  // DEPRECATED: Módulos antigos redirecionam para fleet-command
   "operations.fleet": {
     id: "operations.fleet",
     name: "Fleet Management",
     category: "operations",
-    path: "modules/fleet",
-    description: "PATCH 191.0 - Unified fleet management with vessel tracking, maintenance scheduling, crew assignments, and route management. Integrated with Supabase tables: vessels, maintenance, routes, crew_assignments",
-    status: "active", // PATCH 191.0 – Consolidated from operations/fleet and operations/maritime-system
+    path: "pages/FleetCommandCenter",
+    description: "DEPRECATED - Use operations.fleet-command. Redirects to Fleet Command Center.",
+    status: "deprecated",
     completeness: "100%",
     route: "/fleet",
     icon: "Ship",
     lazy: true,
-    version: "191.0",
+    version: "192.0",
   },
 
   // REMOVED: operations.performance - Use operations.dashboard (PATCH 176.2)
@@ -1516,19 +1532,19 @@ export const MODULE_REGISTRY: Record<string, ModuleDefinition> = {
     version: "980.0",
   },
 
-  // PATCH 981: Maritime System Missing Routes
+  // PATCH 192.0: Deprecated - Merged into Fleet Command Center
   "operations.fleet-dashboard": {
     id: "operations.fleet-dashboard",
     name: "Fleet Dashboard",
     category: "operations",
     path: "pages/FleetDashboard",
-    description: "Professional fleet dashboard with vessel monitoring and operational metrics",
-    status: "active",
+    description: "DEPRECATED - Use operations.fleet-command. Redirects to Fleet Command Center.",
+    status: "deprecated",
     completeness: "100%",
     route: "/fleet-dashboard",
     icon: "Ship",
     lazy: true,
-    version: "981.0",
+    version: "192.0",
   },
 
   "operations.fleet-tracking": {
@@ -1536,13 +1552,13 @@ export const MODULE_REGISTRY: Record<string, ModuleDefinition> = {
     name: "Fleet Tracking",
     category: "operations",
     path: "pages/FleetTracking",
-    description: "Real-time vessel tracking and monitoring",
-    status: "active",
+    description: "DEPRECATED - Use operations.fleet-command. Redirects to Fleet Command Center.",
+    status: "deprecated",
     completeness: "100%",
     route: "/fleet-tracking",
     icon: "MapPin",
     lazy: true,
-    version: "981.0",
+    version: "192.0",
   },
 
   "operations.maritime-certifications": {
