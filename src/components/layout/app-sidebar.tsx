@@ -659,7 +659,7 @@ const navigationItems = [
       { title: "PEOTRAM", url: "/peotram", icon: FileText },
       { title: "SGSO", url: "/sgso", icon: Shield },
       { title: "IMCA Audit", url: "/imca-audit", icon: CheckCircle },
-      { title: "Pre-OVID Inspection", url: "/admin/pre-ovid", icon: Scan },
+      { title: "Pre-OVID Inspection", url: "/pre-ovid-inspection", icon: Scan },
       { title: "MLC Inspection", url: "/mlc-inspection", icon: Shield },
     ],
   },

@@ -54,7 +54,7 @@ export const useSidebarActions = () => {
       peotram: "/peotram",
       sgso: "/sgso",
       "imca-audit": "/imca-audit",
-      "pre-ovid": "/admin/pre-ovid",
+      "pre-ovid": "/pre-ovid-inspection",
       "mlc-inspection": "/mlc-inspection"
     };
 

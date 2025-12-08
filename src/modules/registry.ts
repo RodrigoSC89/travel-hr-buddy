@@ -1030,7 +1030,19 @@ export const MODULE_REGISTRY: Record<string, ModuleDefinition> = {
     version: "650.0",
   },
 
-  // REMOVED: compliance.pre-ovid - Module cleaned up in repository optimization
+  "compliance.pre-ovid": {
+    id: "compliance.pre-ovid",
+    name: "Pre-OVID Inspection",
+    category: "compliance",
+    path: "pages/PreOVIDInspection",
+    description: "OCIMF Offshore Vessel Inspection Database - OVIQ4 (7300) com IA integrada",
+    status: "active",
+    completeness: "100%",
+    route: "/pre-ovid-inspection",
+    icon: "Ship",
+    lazy: true,
+    version: "650.0",
+  },
 
   "compliance.mlc-inspection": {
     id: "compliance.mlc-inspection",
