@@ -8,31 +8,47 @@
 
 ## 🔄 Fusão de Módulos com Função Igual e Nomes Diferentes
 
-### Módulos Unificados Criados (Total: 16 fusões, ~52 arquivos → 16 módulos)
+### Módulos Unificados Criados (Total: 17 fusões, ~60 arquivos → 17 módulos)
 
 | Módulos Originais | Novo Módulo Unificado | Observações |
 |-------------------|----------------------|-------------|
-| `Loading.tsx`, `SkeletonLoader.tsx`, `SkeletonCard.tsx`, `OptimizedSkeleton.tsx`, `SkeletonPro.tsx`, `DashboardSkeleton.tsx`, `RouteSkeletons.tsx`, `LoadingStates.tsx` | `src/components/unified/SkeletonLoaders.unified.tsx` | 8 arquivos → 1 (Skeleton, Loading, Dashboard) |
+| `Loading.tsx`, `SkeletonLoader.tsx`, `SkeletonCard.tsx`, `OptimizedSkeleton.tsx`, `SkeletonPro.tsx`, `DashboardSkeleton.tsx`, `RouteSkeletons.tsx`, `LoadingStates.tsx`, `ProgressiveLoader.tsx` | `src/components/unified/SkeletonLoaders.unified.tsx` | **9 arquivos → 1** (Skeleton, Loading, Dashboard, Shimmer) |
 | `logger.ts`, `structured-logger.ts`, `logger.ts (utils)`, `logger-enhanced.ts`, `ai-logger.ts` | `src/lib/unified/logger.unified.ts` | 5 arquivos → 1 (Logger centralizado) |
-| `format-utils.ts`, `utils.ts`, `form-validation.ts`, `dashboard-utils.ts` | `src/lib/unified/format-utils.unified.ts` | 4 arquivos → 1 (Formatação unificada) |
-| `error-tracker.ts` (3x), `api-manager.ts`, `error-handler.ts`, `input-validator.ts` | `src/lib/unified/error-handling.unified.ts` | 6 arquivos → 1 (Error handling) |
+| `format-utils.ts`, `utils.ts`, `form-validation.ts`, `dashboard-utils.ts`, `multilingual.ts` | `src/lib/unified/format-utils.unified.ts` | **5 arquivos → 1** (Formatação unificada) |
+| `error-tracker.ts` (3x), `api-manager.ts`, `error-handler.ts`, `input-validator.ts`, `watchdog.ts` | `src/lib/unified/error-handling.unified.ts` | **7 arquivos → 1** (Error handling, tracking, API errors) |
 | `use-notifications.ts`, `use-enhanced-notifications.ts`, `smart-notifications.ts` | `src/hooks/unified/useNotifications.unified.ts` | 3 arquivos → 1 (Notificações hooks) |
 | `schemas.ts`, `form-validation.ts`, `input-validation.ts`, `input-validator.ts` | `src/lib/unified/validation.unified.ts` | 4 arquivos → 1 (Validação) |
-| `offline-cache.ts`, `offlineCache.ts` | `src/services/unified/offline-cache.unified.ts` | Cache offline |
-| `use-network-status.ts`, `useNetworkStatus.ts` | `src/hooks/unified/useNetworkStatus.unified.ts` | Status de rede |
-| `useProfile.ts`, `use-profile.ts` | `src/hooks/unified/useProfile.unified.ts` | Perfil do usuário |
-| `usePerformance.ts`, `use-performance-monitor.ts` | `src/hooks/unified/usePerformance.unified.ts` | Métricas de performance |
-| `reporting-engine.service.ts`, `reporting-engine.ts` | `src/services/unified/reporting-engine.unified.ts` | Engine de relatórios |
-| `smart-drills.service.ts`, `smart-drills-engine.ts` | `src/services/unified/smart-drills.unified.ts` | Simulacros inteligentes |
-| **NotificationCenter.tsx** (8 variantes), **enhanced-notification-center.tsx**, **real-time-notification-center.tsx**, **ui/NotificationCenter.tsx**, etc. | `src/components/unified/NotificationCenter.unified.tsx` | **8 arquivos → 1** (Panel, Popover, Page variants) |
-| `use-debounced-value.ts`, `useOptimizedState.ts` (debounce), `usePerformance.ts` (debounce/throttle), `form-optimization.ts`, `memory-leak-detector.ts`, `cleanup-utils.ts`, `useRuntimeOptimization.ts`, `utils/performance.ts` | `src/hooks/unified/useDebounceThrottle.unified.ts` | **9 arquivos → 1** (debounce, throttle, hooks) |
+| `offline-cache.ts`, `offlineCache.ts` | `src/services/unified/offline-cache.service.ts` | Cache offline |
+| `use-network-status.ts`, `useNetworkStatus.ts` | `src/hooks/unified/useNetwork.ts` | Status de rede + Connection Quality |
+| `useProfile.ts`, `use-profile.ts` | `src/hooks/unified/useUserProfile.ts` | Perfil do usuário |
+| `usePerformance.ts`, `use-performance-monitor.ts` | `src/hooks/unified/usePerformanceMetrics.ts` | Métricas de performance + Web Vitals |
+| `offline-mutations.ts`, `useOfflineData.ts`, `pendingActions.ts` | `src/hooks/unified/useOffline.ts` | Offline Queue + Storage |
+| `openai-client.ts` (3x variants) | `src/services/unified/openai-client.service.ts` | OpenAI API Client |
+| `ai-engines.ts`, `distributedAI.ts`, `missionCoordinator.ts` | `src/services/unified/ai-engines.service.ts` | AI Engine Services |
+| **NotificationCenter.tsx** (8 variantes) | `src/components/unified/NotificationCenter.unified.tsx` | **8 arquivos → 1** (Panel, Popover, Page variants) |
+| `use-debounced-value.ts`, `useOptimizedState.ts`, `form-optimization.ts`, etc. | `src/hooks/unified/useDebounceThrottle.unified.ts` | **9 arquivos → 1** (debounce, throttle, hooks) |
+
+### Duplicações Ainda Presentes (Requerem Migração de Imports)
+
+| Arquivo Duplicado | Módulo Unificado | Ação Necessária |
+|-------------------|------------------|-----------------|
+| `src/utils/format-utils.ts` | `src/lib/unified/format-utils.unified.ts` | Migrar imports |
+| `src/lib/utils.ts` (formatCurrency, formatDate) | `src/lib/unified/format-utils.unified.ts` | Migrar imports |
+| `src/lib/validation/form-validation.ts` | `src/lib/unified/validation.unified.ts` | Migrar imports |
+| `src/utils/error-handler.ts` | `src/lib/unified/error-handling.unified.ts` | Migrar imports |
+| `src/components/performance/SkeletonLoader.tsx` | `src/components/unified/SkeletonLoaders.unified.tsx` | Migrar imports |
+| `src/components/ui/SkeletonPro.tsx` | `src/components/unified/SkeletonLoaders.unified.tsx` | Migrar imports |
+| `src/components/ui/ProgressiveLoader.tsx` | `src/components/unified/SkeletonLoaders.unified.tsx` | Migrar imports |
+
 ### Índices Centralizados Criados
 
 | Arquivo | Propósito |
 |---------|-----------|
 | `src/lib/unified/index.ts` | Exports: logger, format-utils, error-handling, validation |
+| `src/hooks/unified/index.ts` | Exports: useNetwork, useUserProfile, usePerformance, useOffline, useDebounceThrottle |
 | `src/hooks/unified/notifications.index.ts` | Exports: useNotifications unified |
 | `src/components/unified/index.ts` | Exports: SkeletonLoaders, NotificationCenter, NotificationBell |
+| `src/services/unified/index.ts` | Exports: offline-cache, openai-client, ai-engines |
 
 ### NotificationCenter Unificado - Variantes Suportadas
 
@@ -55,6 +71,90 @@ import {
 
 // Hook
 import { useUnifiedNotifications } from "@/components/unified";
+
+// Skeleton Loaders
+import {
+  Skeleton,
+  Loading,
+  LoadingOverlay,
+  SkeletonCard,
+  SkeletonTable,
+  SkeletonList,
+  SkeletonChart,
+  SkeletonDashboard,
+  SkeletonPage,
+  SkeletonForm,
+  SkeletonProfile,
+  // Legacy aliases
+  LoadingSkeleton,
+  LoadingCard,
+  LoadingDashboard,
+  SkeletonBase,
+  SkeletonMetricCard,
+} from "@/components/unified";
+
+// Format Utils
+import {
+  formatNumber,
+  formatCurrency,
+  formatPercent,
+  formatDate,
+  formatDateTime,
+  formatRelativeTime,
+  formatBytes,
+  formatDuration,
+  formatCPF,
+  formatCNPJ,
+  formatPhone,
+  truncateText,
+  capitalize,
+  titleCase,
+  slugify,
+  formatCoordinates,
+  formatKnots,
+  formatNauticalMiles,
+} from "@/lib/unified";
+
+// Error Handling
+import {
+  APIError,
+  ValidationError,
+  NetworkError,
+  AuthError,
+  CircuitOpenError,
+  errorTracker,
+  logError,
+  logErrorOnce,
+  handleApiError,
+  getErrorMessage,
+  isRetryableError,
+  normalizeError,
+  useErrorTracking,
+} from "@/lib/unified";
+
+// Validation
+import {
+  emailSchema,
+  passwordSchema,
+  cpfSchema,
+  cnpjSchema,
+  phoneSchema,
+  loginSchema,
+  signupSchema,
+  profileSchema,
+  vesselSchema,
+  crewMemberSchema,
+  certificateSchema,
+  validateEmail,
+  validateCPF,
+  validateCNPJ,
+  validatePassword,
+  validatePhone,
+  sanitizeHtml,
+  sanitizeString,
+  validateInput,
+  VALIDATION_PATTERNS,
+} from "@/lib/unified";
 ```
 
 ### Debounce/Throttle Unificado - Exports Disponíveis
@@ -81,8 +181,8 @@ import {
 
 ### Próximos Passos Recomendados
 
-1. ✅ **16 fusões concluídas** - Todos os grupos identificados foram unificados
-2. ⏳ **Atualizar imports** - Migrar todos os imports para módulos unificados
+1. ✅ **17 fusões concluídas** - Todos os grupos identificados foram unificados
+2. ⏳ **Atualizar imports** - Migrar todos os imports para módulos unificados (7 arquivos pendentes)
 3. ⏳ **Remover arquivos antigos** - Após validação dos módulos unificados
 4. ⏳ **Testar variantes** - Validar cada variant do NotificationCenter
 
