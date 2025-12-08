@@ -28,6 +28,7 @@ const PeotramChecklistVersionManager = lazy(() => import("./peotram-checklist-ve
 const PeotramAdvancedAnalytics = lazy(() => import("./peotram-advanced-analytics").then(m => ({ default: m.PeotramAdvancedAnalytics })));
 const PeotramPredictiveAnalytics = lazy(() => import("./peotram-predictive-analytics").then(m => ({ default: m.PeotramPredictiveAnalytics })));
 const PeotramCNPJHistory = lazy(() => import("./peotram-cnpj-history").then(m => ({ default: m.PeotramCNPJHistory })));
+const PeotramAIAssistant = lazy(() => import("./peotram-ai-assistant").then(m => ({ default: m.PeotramAIAssistant })));
 
 import { Button } from "@/components/ui/button";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
@@ -58,7 +59,9 @@ import {
   Shield,
   Zap,
   Activity,
-  Leaf
+  Leaf,
+  Brain,
+  MessageSquare
 } from "lucide-react";
 
 interface PeotramAudit {
@@ -326,7 +329,7 @@ export const EnhancedPeotramManager: React.FC = () => {
 
       {/* Main Content */}
       <Tabs value={activeView} onValueChange={setActiveView} className="space-y-6">
-        <TabsList className="grid w-full grid-cols-7 bg-muted/50">
+        <TabsList className="grid w-full grid-cols-8 bg-muted/50">
           <TabsTrigger value="dashboard" className="flex items-center gap-2">
             <BarChart3 className="w-4 h-4" />
             Dashboard
@@ -334,6 +337,10 @@ export const EnhancedPeotramManager: React.FC = () => {
           <TabsTrigger value="audits" className="flex items-center gap-2">
             <FileCheck className="w-4 h-4" />
             Auditorias
+          </TabsTrigger>
+          <TabsTrigger value="ai-assistant" className="flex items-center gap-2 bg-gradient-to-r from-orange-500/10 to-yellow-500/10">
+            <Brain className="w-4 h-4 text-orange-500" />
+            IA Assistant
           </TabsTrigger>
           <TabsTrigger value="cnpj-history" className="flex items-center gap-2">
             <Building className="w-4 h-4" />
@@ -623,6 +630,13 @@ export const EnhancedPeotramManager: React.FC = () => {
               </CardContent>
             </Card>
           </div>
+        </TabsContent>
+
+        {/* AI Assistant Tab */}
+        <TabsContent value="ai-assistant" className="space-y-6">
+          <Suspense fallback={<div className="flex items-center justify-center p-8">Carregando assistente IA...</div>}>
+            <PeotramAIAssistant />
+          </Suspense>
         </TabsContent>
 
         <TabsContent value="cnpj-history" className="space-y-6">
