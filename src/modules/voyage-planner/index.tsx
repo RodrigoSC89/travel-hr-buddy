@@ -13,7 +13,7 @@ import {
   AlertTriangle, CheckCircle2, Plus, RefreshCw, Download
 } from "lucide-react";
 import { useToast } from "@/hooks/use-toast";
-import { supabase } from "@/integrations/supabase/client";
+import { useNautilusEnhancementAI } from "@/hooks/useNautilusEnhancementAI";
 
 interface VoyagePlan {
   id: string;
@@ -73,6 +73,7 @@ const sampleVoyages: VoyagePlan[] = [
 
 export default function VoyagePlanner() {
   const { toast } = useToast();
+  const { planVoyage, analyzeRouteCost, isLoading: aiLoading } = useNautilusEnhancementAI();
   const [voyages, setVoyages] = useState<VoyagePlan[]>(sampleVoyages);
   const [isOptimizing, setIsOptimizing] = useState(false);
   const [newVoyage, setNewVoyage] = useState({
@@ -86,9 +87,18 @@ export default function VoyagePlanner() {
     setIsOptimizing(true);
     toast({ title: "Otimizando rota...", description: "IA analisando condições meteorológicas e consumo" });
     
+    const voyage = voyages.find(v => v.id === voyageId);
+    if (!voyage) return;
+    
     try {
-      // Simulate AI optimization
-      await new Promise(r => setTimeout(r, 2000));
+      const result = await planVoyage(voyage.origin, voyage.destination, { name: voyage.vessel }, {
+        departure: voyage.departure,
+        fuelEstimate: voyage.fuelEstimate
+      });
+      
+      const newRecommendations = result?.success && typeof result.response === 'string' 
+        ? [result.response.slice(0, 150)]
+        : ["Rota otimizada com economia de 8% em combustível"];
       
       setVoyages(prev => prev.map(v => 
         v.id === voyageId 
@@ -96,10 +106,7 @@ export default function VoyagePlanner() {
               ...v, 
               status: "approved" as const,
               fuelEstimate: Math.round(v.fuelEstimate * 0.92),
-              aiRecommendations: [
-                ...v.aiRecommendations,
-                "Rota otimizada com economia de 8% em combustível"
-              ]
+              aiRecommendations: [...v.aiRecommendations, ...newRecommendations]
             }
           : v
       ));

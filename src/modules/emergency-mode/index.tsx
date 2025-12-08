@@ -27,8 +27,8 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
-import { supabase } from "@/integrations/supabase/client";
 import { useToast } from "@/hooks/use-toast";
+import { useNautilusEnhancementAI } from "@/hooks/useNautilusEnhancementAI";
 import { motion, AnimatePresence } from "framer-motion";
 import {
   AlertOctagon,
@@ -278,6 +278,7 @@ const emergencyProtocols: Record<EmergencyType, EmergencyProtocol> = {
 
 const EmergencyMode = () => {
   const { toast } = useToast();
+  const { getEmergencyGuidance, isLoading: aiLoading } = useNautilusEnhancementAI();
   const [isEmergencyActive, setIsEmergencyActive] = useState(false);
   const [emergencyType, setEmergencyType] = useState<EmergencyType | null>(null);
   const [protocol, setProtocol] = useState<EmergencyProtocol | null>(null);

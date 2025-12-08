@@ -191,6 +191,10 @@ comment = "SOLAS Training AI with chat, reports, predictions and scheduling via 
 verify_jwt = false
 comment = "Nautilus People Hub AI for HR analytics, recruitment, performance and engagement"
 
+[functions.nautilus-enhancement-ai]
+verify_jwt = false
+comment = "Unified AI for all Lovable enhancements: workflow, calendar, journaling, audit, voyage, emergency, training, wellbeing"
+
 # ============================================
 # AI & ASSISTANT FUNCTIONS (15 functions)
 # ============================================
