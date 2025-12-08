@@ -5,6 +5,10 @@ import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Input } from "@/components/ui/input";
+import { Label } from "@/components/ui/label";
+import { Textarea } from "@/components/ui/textarea";
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
+import { Dialog, DialogContent, DialogDescription, DialogHeader, DialogTitle, DialogTrigger } from "@/components/ui/dialog";
 import { 
   DropdownMenu,
   DropdownMenuContent,
@@ -27,7 +31,8 @@ import {
   Filter,
   Plus,
   Eye,
-  Sparkles
+  Sparkles,
+  Save
 } from "lucide-react";
 
 interface Incident {
@@ -148,6 +153,7 @@ export const IncidentReporting: React.FC = () => {
   const [searchQuery, setSearchQuery] = useState("");
   const [showSearchDialog, setShowSearchDialog] = useState(false);
   const [showAIModal, setShowAIModal] = useState(false);
+  const [newIncidentDialogOpen, setNewIncidentDialogOpen] = useState(false);
   const [aiClassification, setAIClassification] = useState<IncidentClassification | null>(null);
   const [filterSeverity, setFilterSeverity] = useState({
     critical: true,
@@ -163,6 +169,15 @@ export const IncidentReporting: React.FC = () => {
     security: true,
     operational: true,
     other: true
+  });
+  const [incidentForm, setIncidentForm] = useState({
+    title: "",
+    type: "",
+    severity: "",
+    description: "",
+    vessel: "",
+    location: "",
+    reportedBy: ""
   });
   const { toast } = useToast();
 
@@ -188,9 +203,24 @@ export const IncidentReporting: React.FC = () => {
       title: "✨ Classificação aplicada",
       description: `Categoria: ${classification.sgso_category}, Risco: ${classification.sgso_risk_level}`,
     });
-    // Here you would typically save this to your incident form state
-    // For now, we'll just log it
     logger.info("AI Classification applied:", classification);
+  };
+
+  const handleSubmitIncident = () => {
+    if (!incidentForm.title || !incidentForm.type || !incidentForm.severity) {
+      toast({
+        title: "Campos obrigatórios",
+        description: "Preencha título, tipo e severidade",
+        variant: "destructive"
+      });
+      return;
+    }
+    toast({
+      title: "✅ Incidente Registrado",
+      description: `Incidente "${incidentForm.title}" foi registrado com sucesso.`
+    });
+    setNewIncidentDialogOpen(false);
+    setIncidentForm({ title: "", type: "", severity: "", description: "", vessel: "", location: "", reportedBy: "" });
   };
 
   const filteredIncidents = SAMPLE_INCIDENTS.filter(incident => {
@@ -279,10 +309,92 @@ export const IncidentReporting: React.FC = () => {
                 <Sparkles className="h-4 w-4 mr-2" />
                 Classificar com IA
               </Button>
-              <Button className="bg-red-600 hover:bg-red-700 text-white font-semibold">
-                <Plus className="h-4 w-4 mr-2" />
-                Novo Incidente
-              </Button>
+              <Dialog open={newIncidentDialogOpen} onOpenChange={setNewIncidentDialogOpen}>
+                <DialogTrigger asChild>
+                  <Button className="bg-red-600 hover:bg-red-700 text-white font-semibold">
+                    <Plus className="h-4 w-4 mr-2" />
+                    Novo Incidente
+                  </Button>
+                </DialogTrigger>
+                <DialogContent className="max-w-lg">
+                  <DialogHeader>
+                    <DialogTitle className="flex items-center gap-2">
+                      <Bell className="h-5 w-5 text-red-600" />
+                      Registrar Novo Incidente
+                    </DialogTitle>
+                    <DialogDescription>
+                      Preencha os dados do incidente para registro no SGSO
+                    </DialogDescription>
+                  </DialogHeader>
+                  <div className="space-y-4 py-4">
+                    <div className="space-y-2">
+                      <Label>Título *</Label>
+                      <Input
+                        placeholder="Descreva brevemente o incidente"
+                        value={incidentForm.title}
+                        onChange={(e) => setIncidentForm(prev => ({ ...prev, title: e.target.value }))}
+                      />
+                    </div>
+                    <div className="grid grid-cols-2 gap-4">
+                      <div className="space-y-2">
+                        <Label>Tipo *</Label>
+                        <Select value={incidentForm.type} onValueChange={(v) => setIncidentForm(prev => ({ ...prev, type: v }))}>
+                          <SelectTrigger><SelectValue placeholder="Selecione" /></SelectTrigger>
+                          <SelectContent>
+                            <SelectItem value="accident">Acidente</SelectItem>
+                            <SelectItem value="near_miss">Quase Acidente</SelectItem>
+                            <SelectItem value="environmental">Ambiental</SelectItem>
+                            <SelectItem value="operational">Operacional</SelectItem>
+                          </SelectContent>
+                        </Select>
+                      </div>
+                      <div className="space-y-2">
+                        <Label>Severidade *</Label>
+                        <Select value={incidentForm.severity} onValueChange={(v) => setIncidentForm(prev => ({ ...prev, severity: v }))}>
+                          <SelectTrigger><SelectValue placeholder="Selecione" /></SelectTrigger>
+                          <SelectContent>
+                            <SelectItem value="critical">Crítico</SelectItem>
+                            <SelectItem value="high">Alto</SelectItem>
+                            <SelectItem value="medium">Médio</SelectItem>
+                            <SelectItem value="low">Baixo</SelectItem>
+                          </SelectContent>
+                        </Select>
+                      </div>
+                    </div>
+                    <div className="grid grid-cols-2 gap-4">
+                      <div className="space-y-2">
+                        <Label>Embarcação</Label>
+                        <Input
+                          placeholder="Nome da embarcação"
+                          value={incidentForm.vessel}
+                          onChange={(e) => setIncidentForm(prev => ({ ...prev, vessel: e.target.value }))}
+                        />
+                      </div>
+                      <div className="space-y-2">
+                        <Label>Reportado por</Label>
+                        <Input
+                          placeholder="Nome do responsável"
+                          value={incidentForm.reportedBy}
+                          onChange={(e) => setIncidentForm(prev => ({ ...prev, reportedBy: e.target.value }))}
+                        />
+                      </div>
+                    </div>
+                    <div className="space-y-2">
+                      <Label>Descrição</Label>
+                      <Textarea
+                        placeholder="Descreva o incidente em detalhes..."
+                        rows={3}
+                        value={incidentForm.description}
+                        onChange={(e) => setIncidentForm(prev => ({ ...prev, description: e.target.value }))}
+                      />
+                    </div>
+                    <Button className="w-full bg-red-600 hover:bg-red-700" onClick={handleSubmitIncident}>
+                      <Save className="h-4 w-4 mr-2" />
+                      Registrar Incidente
+                    </Button>
+                  </div>
+                </DialogContent>
+              </Dialog>
             </div>
           </div>
         </CardHeader>
