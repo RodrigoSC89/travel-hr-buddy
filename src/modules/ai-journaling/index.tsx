@@ -12,7 +12,7 @@ import {
   FileText, TrendingUp, Users, Anchor, Fuel
 } from "lucide-react";
 import { useToast } from "@/hooks/use-toast";
-import { supabase } from "@/integrations/supabase/client";
+import { useNautilusEnhancementAI } from "@/hooks/useNautilusEnhancementAI";
 
 interface JournalEntry {
   id: string;
@@ -94,6 +94,7 @@ const sampleJournals: JournalEntry[] = [
 
 export default function AIJournaling() {
   const { toast } = useToast();
+  const { generateJournal, isLoading } = useNautilusEnhancementAI();
   const [journals, setJournals] = useState<JournalEntry[]>(sampleJournals);
   const [selectedVessel, setSelectedVessel] = useState("all");
   const [isGenerating, setIsGenerating] = useState(false);
@@ -103,22 +104,14 @@ export default function AIJournaling() {
     toast({ title: "Gerando journal...", description: "IA analisando dados operacionais do dia" });
 
     try {
-      const { data, error } = await supabase.functions.invoke("training-ai-assistant", {
-        body: {
-          action: "chat",
-          data: {
-            message: "Gere um resumo executivo do dia operacional para uma embarcação offshore, incluindo destaques, decisões e riscos.",
-            context: { type: "journal" }
-          }
-        }
-      });
+      const result = await generateJournal({ name: "MV Atlântico Sul", type: "PSV" });
 
       const today = new Date();
       const newJournal: JournalEntry = {
         id: Date.now().toString(),
         date: today.toISOString().split("T")[0],
         vessel: "MV Atlântico Sul",
-        summary: data?.response || "Dia operacional transcorreu conforme planejado. Todas as atividades programadas foram concluídas dentro do cronograma estabelecido. Condições meteorológicas estáveis permitiram operação normal.",
+        summary: typeof result?.response === 'string' ? result.response : "Dia operacional transcorreu conforme planejado. Todas as atividades programadas foram concluídas dentro do cronograma estabelecido. Condições meteorológicas estáveis permitiram operação normal.",
         highlights: [
           "Operações concluídas conforme cronograma",
           "Manutenção preventiva realizada",

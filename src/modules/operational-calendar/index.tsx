@@ -32,8 +32,8 @@ import {
 } from "@/components/ui/dialog";
 import { ScrollArea } from "@/components/ui/scroll-area";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
-import { supabase } from "@/integrations/supabase/client";
 import { useToast } from "@/hooks/use-toast";
+import { useNautilusEnhancementAI } from "@/hooks/useNautilusEnhancementAI";
 import {
   CalendarDays,
   Ship,
