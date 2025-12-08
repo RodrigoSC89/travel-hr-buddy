@@ -1,5 +1,5 @@
-import { IMCAAuditGenerator } from "@/components/imca-audit/imca-audit-generator";
+import { IMCADPAuditDashboard } from "@/components/imca-audit/IMCADPAuditDashboard";
 
 export default function IMCAAudit() {
-  return <IMCAAuditGenerator />;
+  return <IMCADPAuditDashboard />;
 }
