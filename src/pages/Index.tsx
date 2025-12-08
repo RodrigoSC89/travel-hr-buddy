@@ -109,9 +109,17 @@ const AIModulesPanel = memo(() => {
   
   const modules = useMemo(() => [
     { 
+      name: "Nautilus Command", 
+      description: "Centro de Comando Integrado com IA",
+      route: "/nautilus-command",
+      icon: Brain,
+      badge: "Novo",
+      color: "from-purple-500 to-indigo-600"
+    },
+    { 
       name: "MMI Inteligente", 
       description: "Manutenção com IA, Digital Twin",
-      route: "/maintenance-planner",
+      route: "/intelligent-maintenance",
       icon: Wrench,
       badge: "Digital Twin",
       color: "from-blue-500 to-cyan-500"
@@ -133,12 +141,28 @@ const AIModulesPanel = memo(() => {
       color: "from-purple-500 to-indigo-500"
     },
     { 
-      name: "ESG & Emissões", 
-      description: "Carbon footprint, CII",
-      route: "/esg-emissions",
-      icon: Leaf,
-      badge: "IMO 2020",
+      name: "IMCA Audit", 
+      description: "Auditoria DP com IA",
+      route: "/imca-audit",
+      icon: Shield,
+      badge: "M103/M166",
+      color: "from-amber-500 to-orange-500"
+    },
+    { 
+      name: "MLC Inspection", 
+      description: "Maritime Labour Convention 2006",
+      route: "/mlc-inspection",
+      icon: Shield,
+      badge: "ILO",
       color: "from-teal-500 to-green-600"
+    },
+    { 
+      name: "Pre-OVID", 
+      description: "OCIMF OVIQ4 Inspection",
+      route: "/pre-ovid-inspection",
+      icon: Ship,
+      badge: "OVIQ4",
+      color: "from-sky-500 to-blue-600"
     },
     { 
       name: "Safety Guardian", 
@@ -147,14 +171,6 @@ const AIModulesPanel = memo(() => {
       icon: AlertTriangle,
       badge: "TRIR/LTI",
       color: "from-red-500 to-orange-500"
-    },
-    { 
-      name: "PEOTRAM", 
-      description: "Compliance marítimo",
-      route: "/peotram",
-      icon: Shield,
-      badge: "Compliance",
-      color: "from-orange-500 to-amber-500"
     },
     { 
       name: "Nautilus Academy", 
@@ -183,7 +199,7 @@ const AIModulesPanel = memo(() => {
         </CardTitle>
       </CardHeader>
       <CardContent>
-        <div className="grid grid-cols-3 md:grid-cols-5 lg:grid-cols-9 gap-3">
+        <div className="grid grid-cols-2 md:grid-cols-5 lg:grid-cols-10 gap-3">
           {modules.map((mod) => (
             <button
               key={mod.route}

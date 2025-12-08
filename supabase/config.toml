@@ -646,3 +646,55 @@ comment = "AI Predictive Maintenance - Failure prediction, anomaly detection, he
 [functions.ai-crew-optimizer]
 verify_jwt = false
 comment = "AI Crew Optimizer - Schedule, allocation, fatigue, certification, cost optimization"
+
+# ============================================
+# COMPLIANCE & INSPECTION AI (MLC, OVID, IMCA)
+# ============================================
+
+[functions.mlc-assistant]
+verify_jwt = false
+comment = "MLC 2006 Maritime Labour Convention AI Assistant with compliance checking"
+
+[functions.ovid-assistant]
+verify_jwt = false
+comment = "OVID/OVIQ4 Inspection AI Assistant for offshore vessel inspection database"
+
+[functions.imca-dp-assistant]
+verify_jwt = false
+comment = "IMCA DP Audit AI Assistant with M103, M166, M190 knowledge base"
+
+[functions.peotram-ai-chat]
+verify_jwt = false
+comment = "PEOTRAM AI Chat for Petrobras annual audit compliance"
+
+[functions.training-ai-assistant]
+verify_jwt = false
+comment = "Training AI Assistant for STCW, SOLAS, and maritime certifications"
+
+[functions.fleet-ai-copilot]
+verify_jwt = false
+comment = "Fleet AI Copilot for vessel management and operational intelligence"
+
+[functions.crew-ai-copilot]
+verify_jwt = false
+comment = "Crew AI Copilot for personnel management and competency analysis"
+
+[functions.automation-ai-copilot]
+verify_jwt = false
+comment = "Automation AI Copilot for workflow suggestions and process optimization"
+
+[functions.competency-gap-analyzer]
+verify_jwt = false
+comment = "Competency Gap Analyzer for crew training needs assessment"
+
+[functions.drydock-cost-predictor]
+verify_jwt = false
+comment = "Drydock Cost Predictor with AI-powered cost estimation"
+
+[functions.ai-incident-analysis]
+verify_jwt = false
+comment = "AI Incident Analysis for safety and risk assessment"
+
+[functions.report-web-vitals]
+verify_jwt = false
+comment = "Web Vitals performance reporting endpoint"

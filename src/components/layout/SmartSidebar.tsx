@@ -31,12 +31,13 @@ import { cn } from "@/lib/utils";
 // Grouped modules by category - UPDATED WITH ALL NEW MODULES
 const groupedModules = [
   {
-    title: "Dashboard & Visão Geral",
-    icon: <LayoutDashboard className="w-4 h-4 mr-2" />,
+    title: "Centro de Comando",
+    icon: <Brain className="w-4 h-4 mr-2" />,
     items: [
+      { label: "🚀 Nautilus Command", path: "/nautilus-command" },
       { label: "Dashboard Principal", path: "/" },
-      { label: "Visão Geral", path: "/dashboard" },
       { label: "Dashboard Executivo", path: "/executive-dashboard" },
+      { label: "Diagnóstico do Sistema", path: "/system-diagnostic" },
       { label: "Monitor de Sistema", path: "/system-monitor" },
     ],
   },
@@ -301,8 +302,8 @@ export function SmartSidebar({ className }: SmartSidebarProps) {
         </nav>
 
         <div className="p-4 border-t border-zinc-800 mt-4 text-xs text-zinc-400 text-center">
-          <p>Versão 2.2.0</p>
-          <p className="mt-1">© 2024 Nautilus</p>
+          <p>Nautilus One v3.0.0</p>
+          <p className="mt-1">© 2024-2025 Nautilus</p>
         </div>
       </aside>
     </>
