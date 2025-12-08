@@ -1,7 +1,6 @@
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
-import { DollarSign, TrendingUp, TrendingDown, Wallet, Calendar, RefreshCw, Plus, Activity } from "lucide-react";
-import { useQuery } from "@tanstack/react-query";
+import { DollarSign, TrendingUp, TrendingDown, Wallet, Calendar, RefreshCw, Plus, Activity, Brain } from "lucide-react";
 import { supabase } from "@/integrations/supabase/client";
 import { Button } from "@/components/ui/button";
 import { useState, useEffect } from "react";
@@ -9,6 +8,8 @@ import { TransactionList } from "./components/TransactionList";
 import { BudgetOverview } from "./components/BudgetOverview";
 import { ExpenseChart } from "./components/ExpenseChart";
 import { InvoiceManager } from "./components/InvoiceManager";
+import { AddTransactionDialog } from "./components/AddTransactionDialog";
+import { FinanceAIPanel } from "./components/FinanceAIPanel";
 import { useToast } from "@/hooks/use-toast";
 import { motion } from "framer-motion";
 
@@ -32,6 +33,7 @@ export default function FinanceHub() {
   const { toast } = useToast();
   const [selectedPeriod, setSelectedPeriod] = useState<"month" | "quarter" | "year">("month");
   const [loading, setLoading] = useState(true);
+  const [showAddTransaction, setShowAddTransaction] = useState(false);
   const [summary, setSummary] = useState<FinancialSummary>({
     income: 0,
     expenses: 0,
@@ -142,6 +144,10 @@ export default function FinanceHub() {
           </div>
         </div>
         <div className="flex gap-2">
+          <Button onClick={() => setShowAddTransaction(true)}>
+            <Plus className="h-4 w-4 mr-2" />
+            Nova Transação
+          </Button>
           <Button variant="outline" onClick={loadFinancialData} disabled={loading}>
             <RefreshCw className={`h-4 w-4 mr-2 ${loading ? "animate-spin" : ""}`} />
             Atualizar
@@ -241,11 +247,15 @@ export default function FinanceHub() {
 
       {/* Tabs */}
       <Tabs defaultValue="overview" className="space-y-4">
-        <TabsList className="grid w-full grid-cols-4">
+        <TabsList className="grid w-full grid-cols-5">
           <TabsTrigger value="overview">Visão Geral</TabsTrigger>
           <TabsTrigger value="transactions">Transações</TabsTrigger>
           <TabsTrigger value="budget">Orçamento</TabsTrigger>
           <TabsTrigger value="invoices">Faturas</TabsTrigger>
+          <TabsTrigger value="ai" className="flex items-center gap-1">
+            <Brain className="h-4 w-4" />
+            IA
+          </TabsTrigger>
         </TabsList>
 
         <TabsContent value="overview" className="space-y-4">
@@ -263,7 +273,21 @@ export default function FinanceHub() {
         <TabsContent value="invoices">
           <InvoiceManager />
         </TabsContent>
+
+        <TabsContent value="ai">
+          <FinanceAIPanel 
+            transactions={summary.transactions} 
+            income={summary.income} 
+            expenses={summary.expenses} 
+          />
+        </TabsContent>
       </Tabs>
+
+      <AddTransactionDialog 
+        open={showAddTransaction} 
+        onOpenChange={setShowAddTransaction} 
+        onSuccess={loadFinancialData}
+      />
     </div>
   );
 }

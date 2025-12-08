@@ -698,3 +698,15 @@ comment = "AI Incident Analysis for safety and risk assessment"
 [functions.report-web-vitals]
 verify_jwt = false
 comment = "Web Vitals performance reporting endpoint"
+
+[functions.nautilus-ai]
+verify_jwt = false
+comment = "Nautilus AI - Unified AI gateway for all modules via Lovable AI"
+
+[functions.compliance-ai]
+verify_jwt = false
+comment = "Compliance AI - Audits, checklists, risk analysis via Lovable AI"
+
+[functions.safety-ai]
+verify_jwt = false
+comment = "Safety AI - Incident analysis, training, DDS generation via Lovable AI"
