@@ -111,7 +111,7 @@ serve(async (req: Request) => {
       .slice(0, 10);
 
     for (const [compId, gapCount] of sortedCompetencyGaps) {
-      const comp = competencies?.find(c => c.id === compId);
+      const comp = competencies?.find((c: any) => c.id === compId);
       if (comp) {
         trainingRecommendations.push({
           competency_code: comp.code,
@@ -184,7 +184,7 @@ serve(async (req: Request) => {
     const err = error as Error;
     console.error("Competency gap analysis error:", err);
     return new Response(
-      JSON.stringify({ error: error.message }),
+      JSON.stringify({ error: err.message }),
       { status: 500, headers: { ...corsHeaders, "Content-Type": "application/json" } }
     );
   }
