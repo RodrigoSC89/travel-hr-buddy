@@ -147,12 +147,12 @@ const NautilusAIHub: React.FC = () => {
     setIsProcessing(true);
 
     try {
-      const response = await invoke("maintenance", userMessage, {
+      const response = await invoke("audit_analyze", userMessage, {
         context: "Nautilus AI Hub - Assistente de Inteligência Artificial Marítima"
       });
 
-      if (response?.data) {
-        setChatMessages(prev => [...prev, { role: "assistant", content: typeof response.data === 'string' ? response.data : JSON.stringify(response.data) }]);
+      if (response?.response) {
+        setChatMessages(prev => [...prev, { role: "assistant", content: typeof response.response === 'string' ? response.response : JSON.stringify(response.response) }]);
       } else {
         setChatMessages(prev => [...prev, { 
           role: "assistant", 
