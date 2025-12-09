@@ -95,16 +95,75 @@ export const MODULE_REGISTRY: Record<string, ModuleDefinition> = {
     version: "94.0",
   },
 
+  // PATCH UNIFY-9.0: Maritime Command Center (fusão de 4 módulos marítimos)
+  "operations.maritime-command": {
+    id: "operations.maritime-command",
+    name: "Maritime Command Center",
+    category: "operations",
+    path: "pages/MaritimeCommandCenter",
+    description: "PATCH UNIFY-9.0 - Centro Unificado de Operações Marítimas: Tripulação, Certificações, Checklists, IoT Sensors, Crew Intelligence AI. Fusão de: operations.crew, operations.maritime-system, operations.maritime-checklists, operations.maritime-certifications",
+    status: "active",
+    completeness: "100%",
+    route: "/maritime-command",
+    icon: "Ship",
+    lazy: true,
+    version: "900.0",
+  },
+
+  // DEPRECATED: Módulos fundidos no Maritime Command Center
   "operations.crew": {
     id: "operations.crew",
     name: "Crew Management",
     category: "operations",
     path: "pages/CrewManagement",
-    description: "Manage crew members and assignments - Active with Supabase integration and demo data",
-    status: "active",
+    description: "DEPRECATED: Redirecionado para Maritime Command Center",
+    status: "deprecated",
     completeness: "100%",
     route: "/crew",
+    redirectTo: "/maritime-command",
     icon: "Users",
+    lazy: true,
+  },
+
+  "operations.maritime-system": {
+    id: "operations.maritime-system",
+    name: "Maritime Operations",
+    category: "operations",
+    path: "pages/MaritimeCommandCenter",
+    description: "DEPRECATED: Redirecionado para Maritime Command Center",
+    status: "deprecated",
+    completeness: "100%",
+    route: "/maritime",
+    redirectTo: "/maritime-command",
+    icon: "Anchor",
+    lazy: true,
+  },
+
+  "operations.maritime-checklists": {
+    id: "operations.maritime-checklists",
+    name: "Maritime Checklists",
+    category: "operations",
+    path: "pages/MaritimeChecklists",
+    description: "DEPRECATED: Redirecionado para Maritime Command Center",
+    status: "deprecated",
+    completeness: "100%",
+    route: "/maritime-checklists",
+    redirectTo: "/maritime-command",
+    icon: "ClipboardList",
+    lazy: true,
+  },
+
+  "operations.maritime-certifications": {
+    id: "operations.maritime-certifications",
+    name: "Maritime Certifications",
+    category: "operations",
+    path: "pages/MaritimeCertifications",
+    description: "DEPRECATED: Redirecionado para Maritime Command Center",
+    status: "deprecated",
+    completeness: "100%",
+    route: "/maritime-certifications",
+    redirectTo: "/maritime-command",
+    icon: "Award",
     lazy: true,
   },
 
@@ -136,24 +195,6 @@ export const MODULE_REGISTRY: Record<string, ModuleDefinition> = {
     icon: "Ship",
     lazy: true,
     version: "192.0",
-  },
-
-  // REMOVED: operations.performance - Use operations.dashboard (PATCH 176.2)
-  // REMOVED: operations.crew-wellbeing - Integrated into operations.crew (PATCH 176.2)
-
-  "operations.maritime-system": {
-    id: "operations.maritime-system",
-    name: "Maritime Operations",
-    category: "operations",
-    path: "pages/Maritime",
-    description: "PATCH 191.0 - Maritime-specific operations: checklists, certifications, IoT sensors, predictive maintenance, and crew rotation. Built on top of unified fleet management (operations.fleet)",
-    status: "active", // PATCH 191.0 – Specialized maritime operations using fleet as base
-    completeness: "100%",
-    route: "/maritime",
-    icon: "Anchor",
-    lazy: true,
-    version: "191.0",
-    dependencies: ["operations.fleet"],
   },
 
   "operations.dashboard": {
