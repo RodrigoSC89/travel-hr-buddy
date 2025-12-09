@@ -71,14 +71,19 @@ class OfflineSyncManager {
 
   private async registerBackgroundSync(): Promise<void> {
     try {
-      if ('serviceWorker' in navigator) {
+      // Only register if we have a valid service worker with sync support
+      if ('serviceWorker' in navigator && navigator.serviceWorker.controller) {
         const registration = await navigator.serviceWorker.ready;
         if (registration && 'sync' in registration) {
-          await (registration as any).sync.register('sync-mutations');
+          // Use a short tag name to avoid "tag too long" error
+          await (registration as any).sync.register('sync');
         }
       }
     } catch (error) {
-      console.warn('[OfflineSync] Background sync not supported:', error);
+      // Silently handle - background sync is an enhancement, not required
+      if (error instanceof Error && !error.message.includes('without a window')) {
+        console.warn('[OfflineSync] Background sync not available');
+      }
     }
   }
 
