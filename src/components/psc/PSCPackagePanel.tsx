@@ -58,13 +58,13 @@ export const PSCPackagePanel: React.FC = () => {
     setLoading(true);
     try {
       // Use empty vessel ID to get all inspections
-      const insp = await getVesselInspections('').catch(() => []);
-      const def = await getDeficiencies('').catch(() => []);
+      const insp = await getVesselInspections('').catch(() => [] as PSCInspection[]);
+      const def = await getDeficiencies('').catch(() => [] as PSCDeficiency[]);
       setInspections(insp);
       setDeficiencies(def);
       
-      // Calculate risk score
-      const score = await calculateRiskScore('', '').catch(() => 25);
+      // Calculate risk score using fetched data
+      const score = calculateRiskScore(insp, def);
       setRiskScore(score);
     } catch (error) {
       console.error('Error loading PSC data:', error);
@@ -77,13 +77,22 @@ export const PSCPackagePanel: React.FC = () => {
   const handleGeneratePackage = async (format: 'pdf' | 'zip' | 'csv') => {
     setGenerating(true);
     try {
-      let result;
-      if (format === 'pdf') {
-        result = await generatePDFPackage(inspections, deficiencies, '');
-      } else if (format === 'zip') {
-        result = await generateZIPPackage(inspections, deficiencies, '', []);
+      let result: Blob | string | null = null;
+      const inspection = selectedInspection || inspections[0];
+      
+      if (!inspection && format !== 'csv') {
+        toast.error('Selecione uma inspeção primeiro');
+        setGenerating(false);
+        return;
+      }
+      
+      if (format === 'pdf' && inspection) {
+        result = await generatePDFPackage(inspection, deficiencies, 'Embarcação');
+      } else if (format === 'zip' && inspection) {
+        result = await generateZIPPackage(inspection, deficiencies, 'Embarcação', []);
       } else {
-        result = await exportInspectionsCSV(inspections);
+        result = exportInspectionsCSV(inspections);
+      }
       
       if (result) {
         toast.success(`Pacote ${format.toUpperCase()} gerado com sucesso`);

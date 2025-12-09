@@ -2390,6 +2390,49 @@ export const MODULE_REGISTRY: Record<string, ModuleDefinition> = {
     lazy: true,
     version: "177.0",
   },
+
+  // PATCH 850 - Document Workflow, PSC Package Generator, AI Audit
+  "compliance.document-workflow": {
+    id: "compliance.document-workflow",
+    name: "Workflow de Documentos",
+    category: "compliance",
+    path: "pages/DocumentWorkflow",
+    description: "Controle de versão, aprovação e distribuição de documentos ISM/MLC",
+    status: "active",
+    completeness: "100%",
+    route: "/document-workflow",
+    icon: "FileText",
+    lazy: true,
+    version: "850.0",
+  },
+
+  "compliance.psc-package": {
+    id: "compliance.psc-package",
+    name: "Gerador de Pacotes PSC",
+    category: "compliance",
+    path: "pages/PSCPackage",
+    description: "Documentação e rastreamento de deficiências para inspeção Port State Control",
+    status: "active",
+    completeness: "100%",
+    route: "/psc-package",
+    icon: "Shield",
+    lazy: true,
+    version: "850.0",
+  },
+
+  "intelligence.ai-audit": {
+    id: "intelligence.ai-audit",
+    name: "Auditoria de IA",
+    category: "intelligence",
+    path: "pages/AIAudit",
+    description: "Logging completo de interações com IA para conformidade regulamentar",
+    status: "active",
+    completeness: "100%",
+    route: "/ai-audit",
+    icon: "Brain",
+    lazy: true,
+    version: "850.0",
+  },
 };
 
 export function getModule(id: string): ModuleDefinition | undefined {

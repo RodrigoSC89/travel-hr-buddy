@@ -77,7 +77,7 @@ export const DocumentWorkflowPanel: React.FC = () => {
   const loadDocuments = async () => {
     setLoading(true);
     try {
-      const docs = await getDocuments({});
+      const docs = await getDocuments('');
       setDocuments(docs);
       setPendingApprovals([]);
     } catch (error) {
@@ -125,7 +125,7 @@ export const DocumentWorkflowPanel: React.FC = () => {
 
   const handleApprove = async (approvalId: string, decision: 'approved' | 'rejected', comments?: string) => {
     try {
-      await processApproval(approvalId, decision, comments, undefined, undefined);
+      await processApproval(approvalId, decision, '', '', '', comments);
       toast.success(decision === 'approved' ? 'Documento aprovado' : 'Documento rejeitado');
       loadDocuments();
     } catch (error) {
