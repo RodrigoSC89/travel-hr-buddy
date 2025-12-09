@@ -1606,19 +1606,19 @@ export const MODULE_REGISTRY: Record<string, ModuleDefinition> = {
     lazy: true,
   },
 
-  // AI Adoption Metrics Module - PATCH 653
+  // DEPRECATED: AI Adoption - Fusão no AI Command Center (PATCH UNIFY-11.1)
   "intelligence.ai-adoption": {
     id: "intelligence.ai-adoption",
     name: "Métricas de Adoção IA",
     category: "intelligence",
     path: "pages/ai/AIAdoption",
-    description: "Scorecard e métricas de adoção do sistema de IA por módulo",
-    status: "active",
+    description: "DEPRECATED: Redirecionado para AI Command Center",
+    status: "deprecated",
     completeness: "100%",
     route: "/ai-adoption",
+    redirectTo: "/ai-command",
     icon: "TrendingUp",
     lazy: true,
-    version: "653.0",
   },
 
   // PATCH 980: System Diagnostic and Delivery Tools
