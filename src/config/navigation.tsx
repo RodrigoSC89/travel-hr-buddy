@@ -40,6 +40,8 @@ export const NAVIGATION = [
   { name: "AI Insights", path: "/ai-insights", component: safeLazyImport(() => import("@/pages/AIInsights"), "AI Insights") },
   { name: "Automation", path: "/automation", component: safeLazyImport(() => import("@/pages/Automation"), "Automation") },
   { name: "Real-Time Workspace", path: "/real-time-workspace", component: safeLazyImport(() => import("@/modules/workspace/real-time-workspace"), "Real-Time Workspace") },
+  // PATCH UNIFY-12.0: Workflow Command Center (fusão de 4 módulos de workflow)
+  { name: "Workflow Command Center", path: "/workflow-command", component: safeLazyImport(() => import("@/pages/WorkflowCommandCenter"), "Workflow Command Center") },
   { name: "Workflow", path: "/workflow", component: safeLazyImport(() => import("@/pages/Workflow"), "Workflow") },
   { name: "Nautilus People Hub", path: "/nautilus-people", component: safeLazyImport(() => import("@/modules/nautilus-people"), "Nautilus People Hub") },
   { name: "PEO-DP", path: "/peo-dp", component: safeLazyImport(() => import("@/modules/hr/peo-dp/PEODPPanel"), "PEO-DP") },
