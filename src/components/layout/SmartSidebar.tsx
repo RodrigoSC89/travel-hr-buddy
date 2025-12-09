@@ -1,30 +1,11 @@
 import { useState, useEffect } from "react";
 import { Link, useLocation } from "react-router-dom";
 import { 
-  LayoutDashboard, 
-  Ship, 
-  Brain, 
-  Bell, 
-  BarChart2, 
-  Folder,
   ChevronDown,
   ChevronRight,
   Menu,
   X,
-  Users,
-  Shield,
-  Plane,
-  Settings,
-  Anchor,
-  Waves,
-  Bot,
-  TrendingUp,
-  Leaf,
-  ShoppingCart,
-  Stethoscope,
-  Recycle,
-  GraduationCap,
-  Lightbulb
+  Ship
 } from "lucide-react";
 import { cn } from "@/lib/utils";
 
@@ -32,7 +13,6 @@ import { cn } from "@/lib/utils";
 const groupedModules = [
   {
     title: "🎯 Centro de Comando",
-    icon: <Brain className="w-4 h-4 mr-2" />,
     items: [
       { label: "🚀 Command Center", path: "/command-center" },
       { label: "🧠 Nautilus Command", path: "/nautilus-command" },
@@ -43,7 +23,6 @@ const groupedModules = [
   },
   {
     title: "⚓ Sistema Marítimo",
-    icon: <Ship className="w-4 h-4 mr-2" />,
     items: [
       { label: "⚓ Maritime Command", path: "/maritime-command" },
       { label: "🚢 Fleet Command Center", path: "/fleet-command" },
@@ -56,7 +35,6 @@ const groupedModules = [
   },
   {
     title: "🌊 Operações Submarinas",
-    icon: <Anchor className="w-4 h-4 mr-2" />,
     items: [
       { label: "🔊 Ocean Sonar AI", path: "/ocean-sonar" },
       { label: "🤖 Underwater Drone", path: "/underwater-drone" },
@@ -67,7 +45,6 @@ const groupedModules = [
   },
   {
     title: "🧠 IA & Inovação",
-    icon: <Brain className="w-4 h-4 mr-2" />,
     items: [
       { label: "🧠 AI Command Center", path: "/ai-command" },
       { label: "🔄 Workflow Command", path: "/workflow-command" },
@@ -82,7 +59,6 @@ const groupedModules = [
   },
   {
     title: "📁 Relatórios e Documentos",
-    icon: <Folder className="w-4 h-4 mr-2" />,
     items: [
       { label: "📊 Reports Command", path: "/reports-command" },
       { label: "📄 Documentos IA", path: "/documents" },
@@ -92,7 +68,6 @@ const groupedModules = [
   },
   {
     title: "📢 Comunicação & Alertas",
-    icon: <Bell className="w-4 h-4 mr-2" />,
     items: [
       { label: "📡 Communication Command", path: "/communication-command" },
       { label: "🚨 Alerts Command", path: "/alerts-command" },
@@ -101,7 +76,6 @@ const groupedModules = [
   },
   {
     title: "📊 Gestão e Analytics",
-    icon: <BarChart2 className="w-4 h-4 mr-2" />,
     items: [
       { label: "📊 Analytics Command", path: "/analytics-command" },
       { label: "⚙️ Operations Command", path: "/operations-command" },
@@ -112,7 +86,6 @@ const groupedModules = [
   },
   {
     title: "🎓 Treinamentos",
-    icon: <GraduationCap className="w-4 h-4 mr-2" />,
     items: [
       { label: "🎓 Nautilus Academy", path: "/nautilus-academy" },
       { label: "📚 SOLAS, ISPS & ISM Training", path: "/solas-isps-training" },
@@ -122,7 +95,6 @@ const groupedModules = [
   },
   {
     title: "👥 RH & Pessoas",
-    icon: <Users className="w-4 h-4 mr-2" />,
     items: [
       { label: "👥 Nautilus People Hub", path: "/nautilus-people" },
       { label: "🏥 Enfermaria Digital", path: "/medical-infirmary" },
@@ -130,7 +102,6 @@ const groupedModules = [
   },
   {
     title: "🔍 Auditorias",
-    icon: <Shield className="w-4 h-4 mr-2" />,
     items: [
       { label: "📋 PEO-DP", path: "/peo-dp" },
       { label: "📋 PEOTRAM", path: "/peotram" },
@@ -142,7 +113,6 @@ const groupedModules = [
   },
   {
     title: "🛡️ Compliance & Segurança",
-    icon: <Shield className="w-4 h-4 mr-2" />,
     items: [
       { label: "🛡️ Compliance Hub", path: "/compliance-hub" },
       { label: "⛑️ Safety Guardian", path: "/safety-guardian" },
@@ -150,7 +120,6 @@ const groupedModules = [
   },
   {
     title: "🌱 ESG & Sustentabilidade",
-    icon: <Leaf className="w-4 h-4 mr-2" />,
     items: [
       { label: "🌱 ESG & Emissões", path: "/esg-emissions" },
       { label: "♻️ Gestão de Resíduos", path: "/waste-management" },
@@ -158,7 +127,6 @@ const groupedModules = [
   },
   {
     title: "✈️ Viagens & Logística",
-    icon: <Plane className="w-4 h-4 mr-2" />,
     items: [
       { label: "✈️ Viagens", path: "/travel" },
       { label: "🚗 Smart Mobility", path: "/smart-mobility" },
@@ -170,7 +138,6 @@ const groupedModules = [
   },
   {
     title: "⚙️ Integrações & Sistema",
-    icon: <Settings className="w-4 h-4 mr-2" />,
     items: [
       { label: "🔗 Hub de Integrações", path: "/integrations" },
       { label: "🌐 API Gateway", path: "/api-gateway" },
@@ -262,10 +229,7 @@ export function SmartSidebar({ className }: SmartSidebarProps) {
                 )}
                 onClick={() => toggleSection(group.title)}
               >
-                <div className="flex items-center">
-                  {group.icon}
-                  <span>{group.title}</span>
-                </div>
+                <span>{group.title}</span>
                 {openSection === group.title ? (
                   <ChevronDown className="w-4 h-4" />
                 ) : (
