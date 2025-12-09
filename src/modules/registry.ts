@@ -197,15 +197,32 @@ export const MODULE_REGISTRY: Record<string, ModuleDefinition> = {
     version: "192.0",
   },
 
+  // PATCH UNIFY-OPS: Operations Command Center (fusão de Business Insights + Operations Dashboard)
+  "operations.command": {
+    id: "operations.command",
+    name: "Operations Command Center",
+    category: "operations",
+    path: "pages/OperationsCommandCenter",
+    description: "PATCH UNIFY-OPS - Centro Unificado de Operações e Business Intelligence: Dashboard operacional, insights de negócio, tendências, previsões e análise IA. Fusão de: operations.dashboard, business-insights",
+    status: "active",
+    completeness: "100%",
+    route: "/operations-command",
+    icon: "Activity",
+    lazy: true,
+    version: "1600.0",
+  },
+
+  // DEPRECATED: Operations Dashboard - Merged into Operations Command Center
   "operations.dashboard": {
     id: "operations.dashboard",
     name: "Operations Dashboard",
     category: "operations",
     path: "modules/operations/operations-dashboard",
-    description: "Consolidated operations dashboard - Fleet, crew, performance, and operational metrics with real-time monitoring",
-    status: "active", // PATCH 96.0 – Verified: Has Supabase integration
+    description: "DEPRECATED: Redirecionado para Operations Command Center",
+    status: "deprecated",
     completeness: "100%",
     route: "/operations-dashboard",
+    redirectTo: "/operations-command",
     icon: "Ship",
     lazy: true,
   },
