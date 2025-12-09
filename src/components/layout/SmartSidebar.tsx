@@ -139,12 +139,25 @@ const groupedModules = [
     items: [
       { label: "🔗 Hub de Integrações", path: "/integrations" },
       { label: "🌐 API Gateway", path: "/api-gateway" },
+      { label: "🔑 Public API", path: "/public-api" },
       { label: "🤝 Colaboração", path: "/collaboration" },
       { label: "📊 IoT Dashboard", path: "/iot" },
       { label: "🎮 Gamificação", path: "/gamification" },
+      { label: "🧩 Plugins", path: "/plugins" },
       { label: "⚙️ Configurações", path: "/settings" },
       { label: "🧪 QA Preview", path: "/qa/preview" },
       { label: "🚀 Production Deploy", path: "/production-deploy" },
+    ],
+  },
+  {
+    title: "🚀 Enterprise Features",
+    items: [
+      { label: "🧠 IA Preditiva", path: "/predictive-maintenance" },
+      { label: "📊 BI Dashboard", path: "/bi-dashboard" },
+      { label: "🔧 Assistente Diagnóstico", path: "/diagnostic-assistant" },
+      { label: "🗺️ Simulador de Viagem", path: "/voyage-simulator" },
+      { label: "📋 Compliance Automation", path: "/compliance-automation" },
+      { label: "📷 Image Recognition", path: "/image-recognition" },
     ],
   },
 ];
