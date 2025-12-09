@@ -2463,6 +2463,96 @@ export const MODULE_REGISTRY: Record<string, ModuleDefinition> = {
     lazy: true,
     version: "852.0",
   },
+
+  // PHASE 3 - BI com Dashboards + IA
+  "intelligence.bi-dashboard": {
+    id: "intelligence.bi-dashboard",
+    name: "BI Dashboard",
+    category: "intelligence",
+    path: "pages/BIDashboard",
+    description: "Business Intelligence com dashboards customizáveis e consultas assistidas por IA",
+    status: "active",
+    completeness: "100%",
+    route: "/bi-dashboard",
+    icon: "BarChart3",
+    lazy: true,
+    version: "853.0",
+  },
+
+  // PHASE 4 - Assistente de Diagnóstico
+  "maintenance.diagnostic-assistant": {
+    id: "maintenance.diagnostic-assistant",
+    name: "Assistente de Diagnóstico",
+    category: "maintenance",
+    path: "pages/DiagnosticAssistantPage",
+    description: "IA para diagnóstico técnico de falhas com acesso a manuais e histórico",
+    status: "active",
+    completeness: "100%",
+    route: "/diagnostic-assistant",
+    icon: "Wrench",
+    lazy: true,
+    version: "854.0",
+  },
+
+  // PHASE 5 - Simulador de Viagem
+  "operations.voyage-simulator": {
+    id: "operations.voyage-simulator",
+    name: "Simulador de Viagem",
+    category: "operations",
+    path: "pages/VoyageSimulatorPage",
+    description: "Simulação de rotas com clima, consumo e otimização por IA",
+    status: "active",
+    completeness: "100%",
+    route: "/voyage-simulator",
+    icon: "Navigation",
+    lazy: true,
+    version: "855.0",
+  },
+
+  // PHASE 6 - Conformidade Automatizada
+  "compliance.automation": {
+    id: "compliance.automation",
+    name: "Conformidade Automatizada",
+    category: "compliance",
+    path: "pages/ComplianceAutomationPage",
+    description: "Gestão automatizada de ISM, MLC, MARPOL e SOLAS",
+    status: "active",
+    completeness: "100%",
+    route: "/compliance-automation",
+    icon: "Shield",
+    lazy: true,
+    version: "856.0",
+  },
+
+  // PHASE 7 - Sistema de Plugins
+  "core.plugin-manager": {
+    id: "core.plugin-manager",
+    name: "Gerenciador de Plugins",
+    category: "core",
+    path: "pages/PluginManagerPage",
+    description: "Sistema modular de plugins e extensões customizáveis",
+    status: "active",
+    completeness: "100%",
+    route: "/plugins",
+    icon: "Puzzle",
+    lazy: true,
+    version: "857.0",
+  },
+
+  // PHASE 8 - Reconhecimento de Imagem
+  "inspection.image-recognition": {
+    id: "inspection.image-recognition",
+    name: "Reconhecimento de Imagem",
+    category: "operations",
+    path: "pages/ImageRecognitionPage",
+    description: "IA para análise de fotos de inspeção - corrosão, danos e EPIs",
+    status: "active",
+    completeness: "100%",
+    route: "/image-recognition",
+    icon: "Camera",
+    lazy: true,
+    version: "858.0",
+  },
 };
 
 export function getModule(id: string): ModuleDefinition | undefined {
