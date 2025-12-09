@@ -33,7 +33,12 @@ export const NAVIGATION = [
   { name: "FMEA Expert", path: "/fmea-expert", component: safeLazyImport(() => import("@/modules/planning/fmea/FMEAExpert"), "FMEA Expert") },
   { name: "SGSO", path: "/sgso", component: safeLazyImport(() => import("@/modules/compliance/sgso/SGSOSystem"), "SGSO") },
   { name: "MLC Inspection", path: "/mlc-inspection", component: safeLazyImport(() => import("@/modules/compliance/mlc-inspection"), "MLC Inspection") },
+  // PATCH UNIFY-11.0: AI Command Center (fusão de 4 módulos de IA)
+  { name: "AI Command Center", path: "/ai-command", component: safeLazyImport(() => import("@/pages/AICommandCenter"), "AI Command Center") },
+  { name: "Revolutionary AI", path: "/revolutionary-ai", component: safeLazyImport(() => import("@/pages/RevolutionaryAI"), "Revolutionary AI") },
+  { name: "AI Dashboard", path: "/ai-dashboard", component: safeLazyImport(() => import("@/pages/ai/AIDashboard"), "AI Dashboard") },
   { name: "AI Insights", path: "/ai-insights", component: safeLazyImport(() => import("@/pages/AIInsights"), "AI Insights") },
+  { name: "Automation", path: "/automation", component: safeLazyImport(() => import("@/pages/Automation"), "Automation") },
   { name: "Real-Time Workspace", path: "/real-time-workspace", component: safeLazyImport(() => import("@/modules/workspace/real-time-workspace"), "Real-Time Workspace") },
   { name: "Workflow", path: "/workflow", component: safeLazyImport(() => import("@/pages/Workflow"), "Workflow") },
   { name: "Nautilus People Hub", path: "/nautilus-people", component: safeLazyImport(() => import("@/modules/nautilus-people"), "Nautilus People Hub") },
