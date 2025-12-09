@@ -104,9 +104,8 @@ const groupedModules = [
     icon: <BarChart2 className="w-4 h-4 mr-2" />,
     items: [
       { label: "📊 Analytics Command", path: "/analytics-command" },
+      { label: "⚙️ Operations Command", path: "/operations-command" },
       { label: "💰 Finance Command", path: "/finance-command" },
-      { label: "Business Insights", path: "/business-insights" },
-      { label: "Dashboard Operacional", path: "/operations-dashboard" },
       { label: "Gestão de Usuários", path: "/users" },
       { label: "Gestão de Tarefas", path: "/task-management" },
     ],
