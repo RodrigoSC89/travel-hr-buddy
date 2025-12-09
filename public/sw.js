@@ -103,7 +103,7 @@ self.addEventListener('fetch', (event) => {
 // Estratégias de cache
 
 async function networkFirstStrategy(request, cacheName) {
-  const timeoutMs = isSlowConnection() ? 10000 : 5000;
+  const timeoutMs = isSlowConnection() ? 15000 : 8000;
   
   try {
     const controller = new AbortController();
@@ -120,19 +120,34 @@ async function networkFirstStrategy(request, cacheName) {
     }
     return networkResponse;
   } catch (error) {
+    // Try to get cached response first
     const cachedResponse = await caches.match(request);
     if (cachedResponse) {
       console.log('[SW] Serving from cache:', request.url);
-      return cachedResponse;
+      // Clone and add header to indicate cached response
+      const headers = new Headers(cachedResponse.headers);
+      headers.set('X-Cached', 'true');
+      return new Response(cachedResponse.body, {
+        status: cachedResponse.status,
+        statusText: cachedResponse.statusText,
+        headers
+      });
     }
-    return new Response(JSON.stringify({ 
-      error: 'Offline', 
-      cached: false,
-      message: 'Você está offline. Reconecte para atualizar os dados.'
-    }), {
-      status: 503,
-      headers: { 'Content-Type': 'application/json' }
-    });
+    
+    // Only return offline error if truly offline and no cache
+    if (!navigator.onLine) {
+      return new Response(JSON.stringify({ 
+        error: 'Offline', 
+        cached: false,
+        message: 'Você está offline. Reconecte para atualizar os dados.'
+      }), {
+        status: 503,
+        headers: { 'Content-Type': 'application/json' }
+      });
+    }
+    
+    // Network error but online - let it pass through
+    throw error;
   }
 }
 
