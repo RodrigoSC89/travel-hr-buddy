@@ -69,7 +69,7 @@ const groupedModules = [
     title: "IA & Inovação",
     icon: <Brain className="w-4 h-4 mr-2" />,
     items: [
-      { label: "🚀 IA Revolucionária", path: "/revolutionary-ai" },
+      { label: "🧠 AI Command Center", path: "/ai-command" },
       { label: "🔄 Workflow Visual IA", path: "/workflow-visual" },
       { label: "📅 Calendário Operacional", path: "/operational-calendar" },
       { label: "🚨 Modo Emergência", path: "/emergency-mode" },
@@ -78,12 +78,9 @@ const groupedModules = [
       { label: "💰 Análise de Custos", path: "/route-cost-analysis" },
       { label: "📡 Conectividade", path: "/maritime-connectivity" },
       { label: "❤️ Bem-estar Tripulação", path: "/crew-wellbeing" },
-      { label: "Dashboard IA", path: "/ai-dashboard" },
       { label: "Sugestões Workflow", path: "/workflow-suggestions" },
       { label: "Métricas de Adoção", path: "/ai-adoption" },
-      { label: "Insights de IA", path: "/ai-insights" },
       { label: "Assistente de Voz", path: "/assistant/voice" },
-      { label: "Automação IA", path: "/automation" },
     ],
   },
   {

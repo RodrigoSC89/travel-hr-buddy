@@ -226,15 +226,31 @@ export const MODULE_REGISTRY: Record<string, ModuleDefinition> = {
     lazy: true,
   },
 
+  // PATCH UNIFY-11.0: AI Command Center (fusão de 4 módulos de IA)
+  "intelligence.ai-command": {
+    id: "intelligence.ai-command",
+    name: "AI Command Center",
+    category: "intelligence",
+    path: "pages/AICommandCenter",
+    description: "PATCH UNIFY-11.0 - Centro Unificado de IA: IA Revolucionária, Dashboard IA, Insights IA, Automação IA. Comando Universal, Agente Autônomo, Simulador, Manutenção Preditiva, Workflows.",
+    status: "active",
+    completeness: "100%",
+    route: "/ai-command",
+    icon: "Brain",
+    lazy: true,
+    version: "1100.0",
+  },
+
   "intelligence.ai-insights": {
     id: "intelligence.ai-insights",
     name: "AI Insights Dashboard",
     category: "intelligence",
     path: "pages/AIInsights",
-    description: "AI-powered insights, analytics, logs, alerts, and failure analysis",
-    status: "active",
+    description: "DEPRECATED: Redirecionado para AI Command Center",
+    status: "deprecated",
     completeness: "100%",
     route: "/ai-insights",
+    redirectTo: "/ai-command",
     icon: "Brain",
     lazy: true,
   },
@@ -326,11 +342,12 @@ export const MODULE_REGISTRY: Record<string, ModuleDefinition> = {
     id: "intelligence.automation",
     name: "Automation Hub",
     category: "intelligence",
-    path: "pages/AutomationHub",
-    description: "Intelligent automation workflows and process optimization",
-    status: "active",
+    path: "pages/Automation",
+    description: "DEPRECATED: Redirecionado para AI Command Center",
+    status: "deprecated",
     completeness: "100%",
     route: "/automation",
+    redirectTo: "/ai-command",
     icon: "Zap",
     lazy: true,
   },
@@ -1543,19 +1560,19 @@ export const MODULE_REGISTRY: Record<string, ModuleDefinition> = {
     version: "1.0.0",
   },
 
-  // AI Dashboard Module - PATCH 653
+  // DEPRECATED: AI Dashboard - Fusão no AI Command Center (PATCH UNIFY-11.0)
   "intelligence.ai-dashboard": {
     id: "intelligence.ai-dashboard",
     name: "Dashboard IA",
     category: "intelligence",
     path: "pages/ai/AIDashboard",
-    description: "Central de monitoramento de IA com métricas de adoção, sugestões de workflow e alertas do sistema",
-    status: "active",
+    description: "DEPRECATED: Redirecionado para AI Command Center",
+    status: "deprecated",
     completeness: "100%",
     route: "/ai-dashboard",
+    redirectTo: "/ai-command",
     icon: "Brain",
     lazy: true,
-    version: "653.0",
   },
 
   // AI Workflow Suggestions Module - PATCH 653
