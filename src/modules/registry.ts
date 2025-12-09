@@ -663,15 +663,32 @@ export const MODULE_REGISTRY: Record<string, ModuleDefinition> = {
     lazy: true,
   },
 
+  // PATCH UNIFY-FINANCE: Finance Command Center (fusão de Finance Hub + Route Cost Analysis)
+  "finance.command": {
+    id: "finance.command",
+    name: "Finance Command Center",
+    category: "finance",
+    path: "pages/FinanceCommandCenter",
+    description: "PATCH UNIFY-FINANCE - Centro Unificado Financeiro: Finanças, Orçamentos, Transações, Aprovações, Análise de Custos por Rota com IA. Fusão de: finance.hub, route-cost-analysis",
+    status: "active",
+    completeness: "100%",
+    route: "/finance-command",
+    icon: "DollarSign",
+    lazy: true,
+    version: "1500.0",
+  },
+
+  // DEPRECATED: Finance Hub - Merged into Finance Command Center
   "finance.hub": {
     id: "finance.hub",
     name: "Finance Hub",
     category: "finance",
     path: "pages/FinanceHub",
-    description: "Financial management hub with budgets, expenses and approvals",
-    status: "active",
+    description: "DEPRECATED: Redirecionado para Finance Command Center",
+    status: "deprecated",
     completeness: "100%",
     route: "/finance",
+    redirectTo: "/finance-command",
     icon: "DollarSign",
     lazy: true,
   },
