@@ -1,3 +1,4 @@
+// App.tsx - PATCH 850.1 - Force cache invalidation
 import React, { useEffect, Suspense, useMemo } from "react";
 import { BrowserRouter as Router, HashRouter, Routes, Route, Navigate } from "react-router-dom";
 import { QueryClientProvider } from "@tanstack/react-query";
