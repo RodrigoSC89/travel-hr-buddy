@@ -374,9 +374,23 @@ export const MODULE_REGISTRY: Record<string, ModuleDefinition> = {
   // REMOVED: emergency.mission-logs - Use core.logs-center (PATCH 176.2)
   // REMOVED: emergency.risk-management - Use compliance-hub (PATCH 176.2)
   // REMOVED: logistics.hub - Merged into operations.fleet (PATCH 176.2)
-  // REMOVED: logistics.fuel-optimizer - Integrated into operations.fleet (PATCH 176.2)
   // REMOVED: logistics.satellite-tracker - Use operations.fleet tracking (PATCH 176.2)
   // REMOVED: planning.voyage - Merged into operations.fleet (PATCH 176.2)
+
+  // PATCH 838: Fuel Manager Module
+  "logistics.fuel-manager": {
+    id: "logistics.fuel-manager",
+    name: "Fuel Manager",
+    category: "logistics",
+    path: "pages/FuelManagerPage",
+    description: "Gestão inteligente de combustível com análise preditiva IA - Registro de consumo, cálculo de média, previsão de reabastecimento",
+    status: "active",
+    completeness: "100%",
+    route: "/fuel-manager",
+    icon: "Fuel",
+    lazy: true,
+    version: "838.0",
+  },
 
   // REMOVED: hr.training - Merged into nautilus-academy (PATCH UNIFY-ACADEMY)
 
