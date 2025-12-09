@@ -220,7 +220,10 @@ function App() {
                       <Route path="smart-workflow" element={<Navigate to="/workflow" replace />} />
                       <Route path="user-management" element={<Navigate to="/users" replace />} />
                       <Route path="project-timeline" element={<Navigate to="/projects/timeline" replace />} />
-                      <Route path="analytics-core" element={<Navigate to="/analytics" replace />} />
+                      <Route path="analytics-core" element={<Navigate to="/analytics-command" replace />} />
+                      <Route path="analytics" element={<Navigate to="/analytics-command" replace />} />
+                      <Route path="advanced-analytics" element={<Navigate to="/analytics-command" replace />} />
+                      <Route path="predictive-analytics" element={<Navigate to="/analytics-command" replace />} />
                       <Route path="portal" element={<Navigate to="/nautilus-academy" replace />} />
                       <Route path="portal-funcionario" element={<Navigate to="/nautilus-academy" replace />} />
                       <Route path="training-academy" element={<Navigate to="/nautilus-academy" replace />} />

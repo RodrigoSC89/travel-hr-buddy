@@ -104,10 +104,8 @@ const groupedModules = [
     title: "Gestão e Analytics",
     icon: <BarChart2 className="w-4 h-4 mr-2" />,
     items: [
-      { label: "Analytics Core", path: "/analytics" },
-      { label: "Analytics Avançado", path: "/advanced-analytics" },
+      { label: "📊 Analytics Command", path: "/analytics-command" },
       { label: "Business Insights", path: "/business-insights" },
-      { label: "Predictive Analytics", path: "/predictive-analytics" },
       { label: "Dashboard Operacional", path: "/operations-dashboard" },
       { label: "Finanças", path: "/finance" },
       { label: "Análise de Custos", path: "/route-cost-analysis" },

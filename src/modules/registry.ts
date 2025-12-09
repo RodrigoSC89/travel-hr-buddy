@@ -1298,16 +1298,32 @@ export const MODULE_REGISTRY: Record<string, ModuleDefinition> = {
     version: "651.0",
   },
 
-  // Analytics
+  // PATCH UNIFY-ANALYTICS: Analytics Command Center (fusão de Analytics Core + Advanced Analytics + Predictive Analytics)
+  "intelligence.analytics-command": {
+    id: "intelligence.analytics-command",
+    name: "Analytics Command Center",
+    category: "intelligence",
+    path: "pages/AnalyticsCommandCenter",
+    description: "PATCH UNIFY-ANALYTICS - Centro Unificado de Analytics: Core Analytics, Advanced Fleet Analytics, Predictive Analytics, AI Insights. Fusão de: analytics, advanced-analytics, predictive-analytics",
+    status: "active",
+    completeness: "100%",
+    route: "/analytics-command",
+    icon: "BarChart3",
+    lazy: true,
+    version: "1100.0",
+  },
+
+  // DEPRECATED: Analytics Core fundido no Analytics Command Center
   "analytics": {
     id: "analytics",
     name: "Analytics Dashboard",
     category: "features",
     path: "pages/Analytics",
-    description: "Dashboard de análise de dados e métricas",
-    status: "active",
+    description: "DEPRECATED: Redirecionado para Analytics Command Center",
+    status: "deprecated",
     completeness: "100%",
     route: "/analytics",
+    redirectTo: "/analytics-command",
     icon: "BarChart3",
     lazy: true,
     version: "651.0",
@@ -1807,15 +1823,17 @@ export const MODULE_REGISTRY: Record<string, ModuleDefinition> = {
     lazy: true,
   },
 
+  // DEPRECATED: Predictive Analytics fundido no Analytics Command Center
   "intelligence.predictive-analytics": {
     id: "intelligence.predictive-analytics",
     name: "Predictive Analytics",
     category: "intelligence",
     path: "pages/PredictiveAnalytics",
-    description: "Análise preditiva avançada com machine learning",
-    status: "active",
+    description: "DEPRECATED: Redirecionado para Analytics Command Center",
+    status: "deprecated",
     completeness: "100%",
     route: "/predictive-analytics",
+    redirectTo: "/analytics-command",
     icon: "Brain",
     lazy: true,
   },
@@ -1976,15 +1994,17 @@ export const MODULE_REGISTRY: Record<string, ModuleDefinition> = {
     lazy: true,
   },
 
+  // DEPRECATED: Advanced Analytics fundido no Analytics Command Center
   "intelligence.advanced-analytics": {
     id: "intelligence.advanced-analytics",
     name: "Analytics Avançado",
     category: "intelligence",
     path: "pages/AdvancedAnalytics",
-    description: "Dashboards interativos e análises avançadas",
-    status: "active",
+    description: "DEPRECATED: Redirecionado para Analytics Command Center",
+    status: "deprecated",
     completeness: "100%",
     route: "/advanced-analytics",
+    redirectTo: "/analytics-command",
     icon: "BarChart3",
     lazy: true,
   },
