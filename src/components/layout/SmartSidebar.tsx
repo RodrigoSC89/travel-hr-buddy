@@ -78,7 +78,6 @@ const groupedModules = [
       { label: "💰 Análise de Custos", path: "/route-cost-analysis" },
       { label: "📡 Conectividade", path: "/maritime-connectivity" },
       { label: "❤️ Bem-estar Tripulação", path: "/crew-wellbeing" },
-      { label: "Métricas de Adoção", path: "/ai-adoption" },
       { label: "Assistente de Voz", path: "/assistant/voice" },
     ],
   },

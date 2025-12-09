@@ -1,6 +1,6 @@
 /**
- * PATCH UNIFY-11.0: AI Command Center
- * Fusão de: IA Revolucionária + Dashboard IA + Insights de IA + Automação IA
+ * PATCH UNIFY-11.1: AI Command Center
+ * Fusão de: IA Revolucionária + Dashboard IA + Insights de IA + Automação IA + Métricas de Adoção
  * 
  * Funcionalidades integradas:
  * - Comando Universal (linguagem natural)
@@ -17,6 +17,9 @@
  * - Automações e workflows
  * - Sugestões inteligentes
  * - Relatórios automatizados
+ * - Métricas de Adoção por Módulo (PATCH UNIFY-11.1)
+ * - Atividade Recente de IA
+ * - Adoção por Departamento
  */
 
 import React, { useState, useEffect } from "react";
@@ -54,7 +57,11 @@ import {
   FileText,
   Play,
   Bot,
-  Cpu
+  Cpu,
+  ArrowUp,
+  ArrowDown,
+  Download,
+  XCircle
 } from "lucide-react";
 import { useToast } from "@/hooks/use-toast";
 import { useSystemHealth } from "@/hooks/ai/useSystemHealth";
@@ -81,7 +88,7 @@ import { AutomatedReportsManager } from "@/components/automation/automated-repor
 import { SmartOnboardingWizard } from "@/components/automation/smart-onboarding-wizard";
 
 // Insights Charts
-import { ResponsiveContainer, LineChart, Line, XAxis, YAxis, CartesianGrid, Tooltip, RadarChart, PolarGrid, PolarAngleAxis, PolarRadiusAxis, Radar, AreaChart, Area } from "recharts";
+import { ResponsiveContainer, LineChart, Line, XAxis, YAxis, CartesianGrid, Tooltip, RadarChart, PolarGrid, PolarAngleAxis, PolarRadiusAxis, Radar, AreaChart, Area, BarChart, Bar, Legend } from "recharts";
 
 const REVOLUTIONARY_FEATURES = [
   { id: "command", name: "Comando Universal", icon: Command, color: "text-blue-400", description: "Linguagem natural" },
@@ -143,6 +150,57 @@ export default function AICommandCenter() {
     { id: 3, title: "Predição de Demanda", confidence: 95, impact: "high", status: "implemented", savings: "30% recursos" },
     { id: 4, title: "Anomalia Detectada", confidence: 78, impact: "low", status: "monitoring", savings: "5% riscos" },
   ]);
+
+  // Adoption metrics data (from AIAdoption module)
+  const [adoptionData] = useState({
+    overview: {
+      acceptanceRate: 78,
+      totalSuggestions: 1247,
+      avgResponseTime: 245,
+      successRate: 94,
+      activeUsers: 89,
+      totalInteractions: 3856,
+      previousAcceptanceRate: 72,
+    },
+    modules: [
+      { name: "Manutenção Preditiva", interactions: 456, accepted: 387, rejected: 69, avgTime: 180, trend: "up" },
+      { name: "Compliance", interactions: 342, accepted: 298, rejected: 44, avgTime: 220, trend: "up" },
+      { name: "Gestão de Tripulação", interactions: 289, accepted: 231, rejected: 58, avgTime: 195, trend: "stable" },
+      { name: "Rotas Marítimas", interactions: 234, accepted: 187, rejected: 47, avgTime: 310, trend: "up" },
+      { name: "Documentação", interactions: 198, accepted: 158, rejected: 40, avgTime: 150, trend: "down" },
+      { name: "Segurança", interactions: 167, accepted: 150, rejected: 17, avgTime: 280, trend: "up" },
+    ],
+    timeline: [
+      { date: "Jan", interactions: 450, accepted: 360, rate: 80 },
+      { date: "Fev", interactions: 520, accepted: 390, rate: 75 },
+      { date: "Mar", interactions: 580, accepted: 464, rate: 80 },
+      { date: "Abr", interactions: 620, accepted: 527, rate: 85 },
+      { date: "Mai", interactions: 680, accepted: 544, rate: 80 },
+      { date: "Jun", interactions: 750, accepted: 638, rate: 85 },
+    ],
+    userAdoption: [
+      { department: "Operações", users: 32, activeUsers: 28, adoptionRate: 87 },
+      { department: "Manutenção", users: 24, activeUsers: 22, adoptionRate: 92 },
+      { department: "Compliance", users: 18, activeUsers: 15, adoptionRate: 83 },
+      { department: "RH", users: 12, activeUsers: 9, adoptionRate: 75 },
+      { department: "Segurança", users: 15, activeUsers: 12, adoptionRate: 80 },
+    ],
+    recentActivity: [
+      { id: "1", type: "accepted", module: "MMI", description: "Sugestão de manutenção preventiva aceita", timestamp: new Date(Date.now() - 1000 * 60 * 5) },
+      { id: "2", type: "rejected", module: "Compliance", description: "Ajuste de prazo rejeitado pelo usuário", timestamp: new Date(Date.now() - 1000 * 60 * 15) },
+      { id: "3", type: "accepted", module: "Tripulação", description: "Reatribuição de tarefas aceita", timestamp: new Date(Date.now() - 1000 * 60 * 30) },
+      { id: "4", type: "accepted", module: "Rotas", description: "Otimização de rota implementada", timestamp: new Date(Date.now() - 1000 * 60 * 45) },
+      { id: "5", type: "accepted", module: "Segurança", description: "Alerta de segurança processado", timestamp: new Date(Date.now() - 1000 * 60 * 60) },
+    ],
+  });
+
+  const getTrendIcon = (trend: string) => {
+    switch (trend) {
+      case "up": return <ArrowUp className="h-4 w-4 text-green-500" />;
+      case "down": return <ArrowDown className="h-4 w-4 text-red-500" />;
+      default: return <span className="h-4 w-4 text-muted-foreground">-</span>;
+    }
+  };
 
   const getHealthStatusColor = (status?: string) => {
     switch (status) {
@@ -347,6 +405,10 @@ export default function AICommandCenter() {
                 <Sparkles className="w-4 h-4 mr-2" />
                 IA Revolucionária
               </TabsTrigger>
+              <TabsTrigger value="adoption">
+                <TrendingUp className="w-4 h-4 mr-2" />
+                Adoção
+              </TabsTrigger>
               <TabsTrigger value="insights">
                 <Lightbulb className="w-4 h-4 mr-2" />
                 Insights
@@ -470,6 +532,232 @@ export default function AICommandCenter() {
               >
                 {renderRevolutionaryContent()}
               </motion.div>
+            </TabsContent>
+
+            {/* Adoption Metrics Tab */}
+            <TabsContent value="adoption" className="space-y-6">
+              {/* Adoption Stats */}
+              <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
+                <Card>
+                  <CardContent className="pt-6">
+                    <div className="flex items-center justify-between">
+                      <div>
+                        <p className="text-sm text-muted-foreground">Taxa de Aceitação</p>
+                        <p className="text-3xl font-bold text-primary">{adoptionData.overview.acceptanceRate}%</p>
+                        <div className="flex items-center gap-1 mt-1">
+                          {adoptionData.overview.acceptanceRate > adoptionData.overview.previousAcceptanceRate ? (
+                            <ArrowUp className="h-3 w-3 text-green-500" />
+                          ) : (
+                            <ArrowDown className="h-3 w-3 text-red-500" />
+                          )}
+                          <span className="text-xs text-muted-foreground">
+                            vs {adoptionData.overview.previousAcceptanceRate}% anterior
+                          </span>
+                        </div>
+                      </div>
+                      <CheckCircle2 className="h-8 w-8 text-green-500" />
+                    </div>
+                  </CardContent>
+                </Card>
+
+                <Card>
+                  <CardContent className="pt-6">
+                    <div className="flex items-center justify-between">
+                      <div>
+                        <p className="text-sm text-muted-foreground">Total de Sugestões</p>
+                        <p className="text-3xl font-bold">{adoptionData.overview.totalSuggestions.toLocaleString()}</p>
+                        <p className="text-xs text-muted-foreground mt-1">
+                          {adoptionData.overview.totalInteractions.toLocaleString()} interações
+                        </p>
+                      </div>
+                      <Brain className="h-8 w-8 text-purple-500" />
+                    </div>
+                  </CardContent>
+                </Card>
+
+                <Card>
+                  <CardContent className="pt-6">
+                    <div className="flex items-center justify-between">
+                      <div>
+                        <p className="text-sm text-muted-foreground">Tempo Médio</p>
+                        <p className="text-3xl font-bold">{adoptionData.overview.avgResponseTime}ms</p>
+                        <p className="text-xs text-muted-foreground mt-1">Resposta do sistema</p>
+                      </div>
+                      <Clock className="h-8 w-8 text-blue-500" />
+                    </div>
+                  </CardContent>
+                </Card>
+
+                <Card>
+                  <CardContent className="pt-6">
+                    <div className="flex items-center justify-between">
+                      <div>
+                        <p className="text-sm text-muted-foreground">Taxa de Sucesso</p>
+                        <p className="text-3xl font-bold text-green-500">{adoptionData.overview.successRate}%</p>
+                        <div className="flex items-center gap-1 mt-1">
+                          <Users className="h-3 w-3 text-muted-foreground" />
+                          <span className="text-xs text-muted-foreground">
+                            {adoptionData.overview.activeUsers} usuários ativos
+                          </span>
+                        </div>
+                      </div>
+                      <BarChart3 className="h-8 w-8 text-green-500" />
+                    </div>
+                  </CardContent>
+                </Card>
+              </div>
+
+              {/* Charts Row */}
+              <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
+                {/* Evolution Chart */}
+                <Card>
+                  <CardHeader>
+                    <CardTitle>Evolução da Adoção</CardTitle>
+                    <CardDescription>Tendência de interações e aceitação</CardDescription>
+                  </CardHeader>
+                  <CardContent>
+                    <ResponsiveContainer width="100%" height={250}>
+                      <AreaChart data={adoptionData.timeline}>
+                        <CartesianGrid strokeDasharray="3 3" className="stroke-muted" />
+                        <XAxis dataKey="date" />
+                        <YAxis />
+                        <Tooltip />
+                        <Legend />
+                        <Area type="monotone" dataKey="interactions" name="Interações" stroke="#3b82f6" fill="#3b82f6" fillOpacity={0.2} />
+                        <Area type="monotone" dataKey="accepted" name="Aceitas" stroke="#22c55e" fill="#22c55e" fillOpacity={0.2} />
+                      </AreaChart>
+                    </ResponsiveContainer>
+                  </CardContent>
+                </Card>
+
+                {/* Department Adoption Chart */}
+                <Card>
+                  <CardHeader>
+                    <CardTitle>Adoção por Departamento</CardTitle>
+                    <CardDescription>Taxa de adoção em cada departamento</CardDescription>
+                  </CardHeader>
+                  <CardContent>
+                    <ResponsiveContainer width="100%" height={250}>
+                      <BarChart data={adoptionData.userAdoption} layout="vertical">
+                        <CartesianGrid strokeDasharray="3 3" className="stroke-muted" />
+                        <XAxis type="number" domain={[0, 100]} />
+                        <YAxis dataKey="department" type="category" width={100} />
+                        <Tooltip />
+                        <Bar dataKey="adoptionRate" name="Taxa de Adoção" fill="hsl(var(--primary))" radius={[0, 4, 4, 0]} />
+                      </BarChart>
+                    </ResponsiveContainer>
+                  </CardContent>
+                </Card>
+              </div>
+
+              {/* Module Usage & Recent Activity */}
+              <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
+                {/* Module Usage */}
+                <Card>
+                  <CardHeader>
+                    <CardTitle>Uso por Módulo</CardTitle>
+                    <CardDescription>Operações de IA por módulo do sistema</CardDescription>
+                  </CardHeader>
+                  <CardContent>
+                    <ScrollArea className="h-[300px]">
+                      <div className="space-y-4">
+                        {adoptionData.modules.map((module) => {
+                          const rate = Math.round((module.accepted / module.interactions) * 100);
+                          return (
+                            <div key={module.name} className="space-y-2">
+                              <div className="flex items-center justify-between text-sm">
+                                <div className="flex items-center gap-2">
+                                  <span className="font-medium">{module.name}</span>
+                                  {getTrendIcon(module.trend)}
+                                </div>
+                                <div className="flex items-center gap-2">
+                                  <span className="text-muted-foreground">{module.interactions} ops</span>
+                                  <Badge variant="outline" className="text-xs">{rate}%</Badge>
+                                </div>
+                              </div>
+                              <Progress value={rate} className="h-2" />
+                            </div>
+                          );
+                        })}
+                      </div>
+                    </ScrollArea>
+                  </CardContent>
+                </Card>
+
+                {/* Recent Activity */}
+                <Card>
+                  <CardHeader>
+                    <CardTitle className="flex items-center gap-2">
+                      <Activity className="h-5 w-5" />
+                      Atividade Recente
+                    </CardTitle>
+                    <CardDescription>Últimas interações com sugestões de IA</CardDescription>
+                  </CardHeader>
+                  <CardContent>
+                    <ScrollArea className="h-[300px]">
+                      <div className="space-y-3">
+                        {adoptionData.recentActivity.map((activity) => (
+                          <div key={activity.id} className="flex items-start gap-3 p-3 rounded-lg bg-muted/30">
+                            {activity.type === "accepted" ? (
+                              <CheckCircle2 className="h-5 w-5 text-green-500 mt-0.5" />
+                            ) : (
+                              <XCircle className="h-5 w-5 text-red-500 mt-0.5" />
+                            )}
+                            <div className="flex-1">
+                              <div className="flex items-center gap-2">
+                                <p className="text-sm font-medium">{activity.description}</p>
+                                <Badge variant="outline" className="text-xs">{activity.module}</Badge>
+                              </div>
+                              <p className="text-xs text-muted-foreground mt-1">
+                                {activity.timestamp.toLocaleTimeString("pt-BR", { hour: "2-digit", minute: "2-digit" })}
+                              </p>
+                            </div>
+                          </div>
+                        ))}
+                      </div>
+                    </ScrollArea>
+                  </CardContent>
+                </Card>
+              </div>
+
+              {/* Summary Stats */}
+              <Card>
+                <CardHeader>
+                  <CardTitle>Resumo de Sugestões</CardTitle>
+                  <CardDescription>Estatísticas das sugestões geradas pela IA</CardDescription>
+                </CardHeader>
+                <CardContent>
+                  <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
+                    <div className="p-4 rounded-lg bg-green-500/10 text-center">
+                      <CheckCircle2 className="h-8 w-8 mx-auto text-green-500 mb-2" />
+                      <p className="text-2xl font-bold text-green-500">
+                        {Math.round(adoptionData.overview.totalSuggestions * adoptionData.overview.acceptanceRate / 100)}
+                      </p>
+                      <p className="text-xs text-muted-foreground">Aceitas</p>
+                    </div>
+
+                    <div className="p-4 rounded-lg bg-red-500/10 text-center">
+                      <XCircle className="h-8 w-8 mx-auto text-red-500 mb-2" />
+                      <p className="text-2xl font-bold text-red-500">
+                        {Math.round(adoptionData.overview.totalSuggestions * (100 - adoptionData.overview.acceptanceRate) / 100)}
+                      </p>
+                      <p className="text-xs text-muted-foreground">Rejeitadas</p>
+                    </div>
+
+                    <div className="p-4 rounded-lg bg-blue-500/10 text-center">
+                      <Brain className="h-8 w-8 mx-auto text-blue-500 mb-2" />
+                      <p className="text-2xl font-bold text-blue-500">{adoptionData.overview.totalInteractions.toLocaleString()}</p>
+                      <p className="text-xs text-muted-foreground">Operações IA</p>
+                    </div>
+
+                    <div className="p-4 rounded-lg bg-purple-500/10 text-center">
+                      <TrendingUp className="h-8 w-8 mx-auto text-purple-500 mb-2" />
+                      <p className="text-2xl font-bold text-purple-500">{adoptionData.overview.acceptanceRate}%</p>
+                      <p className="text-xs text-muted-foreground">Taxa Adoção</p>
+                    </div>
+                  </div>
+                </CardContent>
+              </Card>
             </TabsContent>
 
             {/* Insights Tab */}
