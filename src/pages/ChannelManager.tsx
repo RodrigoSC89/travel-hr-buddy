@@ -1,12 +1,11 @@
-import { ModulePageWrapper } from "@/components/ui/module-page-wrapper";
-import ChannelManagerProfessional from "@/components/channel-manager/ChannelManagerProfessional";
+/**
+ * DEPRECATED: This module has been merged into Communication Command Center
+ * Redirects to /communication-command
+ */
+import { Navigate } from "react-router-dom";
 
 const ChannelManager = () => {
-  return (
-    <ModulePageWrapper gradient="purple">
-      <ChannelManagerProfessional />
-    </ModulePageWrapper>
-  );
+  return <Navigate to="/communication-command" replace />;
 };
 
 export default ChannelManager;
