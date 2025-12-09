@@ -2433,6 +2433,21 @@ export const MODULE_REGISTRY: Record<string, ModuleDefinition> = {
     lazy: true,
     version: "850.0",
   },
+
+  // PHASE 1 - Sistema de Recomendações Preditivas
+  "intelligence.predictive-ai": {
+    id: "intelligence.predictive-ai",
+    name: "IA Preditiva",
+    category: "intelligence",
+    path: "pages/PredictiveAI",
+    description: "Sistema de recomendações preditivas baseado em IA - manutenção, treinamento, compliance e otimização operacional",
+    status: "active",
+    completeness: "100%",
+    route: "/predictive-ai",
+    icon: "Brain",
+    lazy: true,
+    version: "851.0",
+  },
 };
 
 export function getModule(id: string): ModuleDefinition | undefined {
