@@ -2448,6 +2448,21 @@ export const MODULE_REGISTRY: Record<string, ModuleDefinition> = {
     lazy: true,
     version: "851.0",
   },
+
+  // PHASE 2 - API Pública para Integrações
+  "core.public-api": {
+    id: "core.public-api",
+    name: "API Pública",
+    category: "core",
+    path: "pages/PublicAPI",
+    description: "Gerenciamento de API Keys e documentação para integrações externas - OAuth 2.0, rate limiting, Swagger",
+    status: "active",
+    completeness: "100%",
+    route: "/public-api",
+    icon: "Globe",
+    lazy: true,
+    version: "852.0",
+  },
 };
 
 export function getModule(id: string): ModuleDefinition | undefined {
