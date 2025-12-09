@@ -1,12 +1,8 @@
 /**
- * Nautilus Voyage - Módulo Unificado de Viagem e Rotas
- * PATCH UNIFY-3.0 - Fusão dos módulos de Viagem/Rotas
- * 
- * Módulos fundidos:
- * - voyage-planner → Nautilus Voyage
- * - route-cost-analysis → Nautilus Voyage
- * - resource-availability → Nautilus Voyage
+ * REDIRECT: nautilus-voyage → voyage-command
+ * PATCH UNIFY-12.0 - Fusão dos módulos de viagem
  */
-
-// Re-export do VoyagePlanner como módulo unificado
-export { default } from "@/modules/voyage-planner";
+import { Navigate } from "react-router-dom";
+export default function NautilusVoyageRedirect() {
+  return <Navigate to="/voyage-command" replace />;
+}
