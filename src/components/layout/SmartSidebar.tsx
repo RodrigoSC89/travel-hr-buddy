@@ -38,7 +38,7 @@ const groupedModules = [
       { label: "🧠 Nautilus Command", path: "/nautilus-command" },
       { label: "Centro de Operações", path: "/system-hub" },
       { label: "Telemetria", path: "/telemetry" },
-      { label: "🌤️ Dashboard Meteorológico", path: "/weather-dashboard" },
+      { label: "🌤️ Weather Command", path: "/weather-command" },
     ],
   },
   {
@@ -52,7 +52,6 @@ const groupedModules = [
       { label: "🎯 Mission Command", path: "/mission-command" },
       { label: "Planejador de Viagem", path: "/voyage-planner" },
       { label: "Bridge Link", path: "/bridge-link" },
-      { label: "Previsão Global", path: "/forecast-global" },
     ],
   },
   {
