@@ -670,15 +670,17 @@ export const MODULE_REGISTRY: Record<string, ModuleDefinition> = {
     lazy: true,
   },
 
+  // DEPRECATED: Incident Reports - Merged into Reports Command Center
   "documents.incident-reports": {
     id: "documents.incident-reports",
     name: "Incident Reports",
     category: "documents",
     path: "pages/DPIncidents",
-    description: "DP Incident reporting and intelligence system",
-    status: "active",
+    description: "DEPRECATED: Redirecionado para Reports Command Center",
+    status: "deprecated",
     completeness: "100%",
     route: "/incident-reports",
+    redirectTo: "/reports-command",
     icon: "AlertOctagon",
     lazy: true,
   },
@@ -1274,16 +1276,32 @@ export const MODULE_REGISTRY: Record<string, ModuleDefinition> = {
     version: "651.0",
   },
 
-  // Reports
+  // PATCH UNIFY-13.0: Reports Command Center (fusão de Reports + Incident Reports)
+  "documents.reports-command": {
+    id: "documents.reports-command",
+    name: "Reports Command Center",
+    category: "documents",
+    path: "pages/ReportsCommandCenter",
+    description: "PATCH UNIFY-13.0 - Centro Unificado de Relatórios: Gerador IA, Dashboard, Incidentes DP, Analytics. Fusão de: reports, documents.incident-reports",
+    status: "active",
+    completeness: "100%",
+    route: "/reports-command",
+    icon: "FileText",
+    lazy: true,
+    version: "1300.0",
+  },
+
+  // DEPRECATED: Reports - Merged into Reports Command Center
   "reports": {
     id: "reports",
     name: "Reports Center",
     category: "operations",
     path: "pages/Reports",
-    description: "Central de geração e gestão de relatórios",
-    status: "active",
+    description: "DEPRECATED: Redirecionado para Reports Command Center",
+    status: "deprecated",
     completeness: "100%",
     route: "/reports",
+    redirectTo: "/reports-command",
     icon: "FileText",
     lazy: true,
     version: "651.0",

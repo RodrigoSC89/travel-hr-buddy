@@ -85,9 +85,8 @@ const groupedModules = [
     title: "Relatórios e Documentos",
     icon: <Folder className="w-4 h-4 mr-2" />,
     items: [
+      { label: "📊 Reports Command", path: "/reports-command" },
       { label: "Documentos IA", path: "/documents" },
-      { label: "Relatórios", path: "/reports" },
-      { label: "Relatórios de Incidentes", path: "/incident-reports" },
       { label: "Templates", path: "/templates" },
       { label: "Checklists Inteligentes", path: "/admin/checklists" },
     ],

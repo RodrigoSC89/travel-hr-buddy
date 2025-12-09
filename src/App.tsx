@@ -216,7 +216,7 @@ function App() {
                       <Route path="checklists" element={<Navigate to="/admin/checklists" replace />} />
                       <Route path="checklists-inteligentes" element={<Navigate to="/admin/checklists" replace />} />
                       <Route path="finance-hub" element={<Navigate to="/finance" replace />} />
-                      <Route path="reports-module" element={<Navigate to="/reports" replace />} />
+                      <Route path="reports-module" element={<Navigate to="/reports-command" replace />} />
                       <Route path="smart-workflow" element={<Navigate to="/workflow" replace />} />
                       <Route path="user-management" element={<Navigate to="/users" replace />} />
                       <Route path="project-timeline" element={<Navigate to="/projects/timeline" replace />} />
