@@ -16931,7 +16931,6 @@ export type Database = {
       cleanup_old_logs: { Args: never; Returns: undefined }
       create_sample_peotram_audit: { Args: never; Returns: string }
       create_session_token:
-        | { Args: { p_user_id: string }; Returns: string }
         | {
             Args: { p_device_info?: Json; p_expires_in_hours?: number }
             Returns: {
@@ -16940,6 +16939,7 @@ export type Database = {
               token_id: string
             }[]
           }
+        | { Args: { p_user_id: string }; Returns: string }
       detect_reservation_conflicts: {
         Args: {
           p_end_date: string
