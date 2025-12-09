@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import { useState } from "react";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
@@ -56,7 +56,7 @@ const mockRecords: DischargeRecord[] = [
   { id: "3", date: "2024-01-10", type: "Óleo Usado", quantity: 2000, unit: "L", location: "Porto de Macaé", method: "Re-refino", certificate: "CERT-2024-003" },
 ];
 
-export default function WasteDashboard() {
+const WasteDashboard = () => {
   const [chatMessage, setChatMessage] = useState("");
   const [chatHistory, setChatHistory] = useState<{ role: string; content: string }[]>([
     { role: "assistant", content: "Olá! Sou o assistente ambiental do Nautilus. Posso ajudar com MARPOL, descarte de resíduos e relatórios ambientais. Como posso ajudar?" },
@@ -87,6 +87,24 @@ export default function WasteDashboard() {
 
   const criticalTanks = mockTanks.filter(t => t.status === "critical").length;
   const warningTanks = mockTanks.filter(t => t.status === "warning").length;
+
+  const getStatusColor = (status: string) => {
+    switch (status) {
+      case "critical": return "bg-red-500";
+      case "warning": return "bg-amber-500";
+      default: return "bg-green-500";
+    }
+  };
+
+  const getTypeIcon = (type: string) => {
+    switch (type) {
+      case "oily": return <Droplets className="h-5 w-5 text-amber-600" />;
+      case "sewage": return <Trash2 className="h-5 w-5 text-brown-600" />;
+      case "bilge": return <Droplets className="h-5 w-5 text-blue-600" />;
+      case "garbage": return <Recycle className="h-5 w-5 text-green-600" />;
+      default: return <Trash2 className="h-5 w-5" />;
+    }
+  };
 
   return (
     <div className="space-y-6">
@@ -148,9 +166,9 @@ export default function WasteDashboard() {
           <CardContent className="p-4">
             <div className="flex items-center justify-between">
               <div>
-                <p className="text-sm text-muted-foreground">Reciclagem</p>
-                <p className="text-2xl font-bold">78%</p>
-                <p className="text-xs text-green-600">↑ 5% vs mês anterior</p>
+                <p className="text-sm text-muted-foreground">Redução CO₂</p>
+                <p className="text-2xl font-bold">12%</p>
+                <p className="text-xs text-green-600">vs. mês anterior</p>
               </div>
               <TrendingDown className="h-8 w-8 text-green-500 opacity-80" />
             </div>
@@ -158,25 +176,64 @@ export default function WasteDashboard() {
         </Card>
       </div>
 
-      {/* AI Assistant + Tanks */}
       <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
-        {/* AI Environmental Assistant */}
-        <Card className="lg:col-span-1 bg-gradient-to-br from-teal-500/5 to-green-500/5 border-teal-500/20">
-          <CardHeader className="pb-3">
-            <CardTitle className="flex items-center gap-2 text-lg">
-              <Brain className="h-5 w-5 text-teal-500" />
-              Assistente MARPOL
+        {/* Tanks Status */}
+        <Card className="lg:col-span-2">
+          <CardHeader>
+            <CardTitle className="flex items-center gap-2">
+              <Droplets className="h-5 w-5 text-blue-500" />
+              Status dos Tanques
+            </CardTitle>
+          </CardHeader>
+          <CardContent className="space-y-4">
+            {mockTanks.map((tank) => (
+              <div key={tank.id} className="space-y-2">
+                <div className="flex items-center justify-between">
+                  <div className="flex items-center gap-2">
+                    {getTypeIcon(tank.type)}
+                    <span className="font-medium">{tank.name}</span>
+                    <Badge variant={tank.status === "critical" ? "destructive" : tank.status === "warning" ? "secondary" : "outline"}>
+                      {tank.status === "critical" ? "Crítico" : tank.status === "warning" ? "Atenção" : "Normal"}
+                    </Badge>
+                  </div>
+                  <span className="text-sm text-muted-foreground">
+                    {tank.currentLevel}/{tank.capacity} {tank.unit}
+                  </span>
+                </div>
+                <Progress 
+                  value={(tank.currentLevel / tank.capacity) * 100} 
+                  className={`h-2 ${tank.status === "critical" ? "[&>div]:bg-red-500" : tank.status === "warning" ? "[&>div]:bg-amber-500" : "[&>div]:bg-green-500"}`}
+                />
+                <div className="flex items-center justify-between text-xs text-muted-foreground">
+                  <span>Último descarte: {tank.lastDischarge}</span>
+                  <span>{Math.round((tank.currentLevel / tank.capacity) * 100)}% ocupado</span>
+                </div>
+              </div>
+            ))}
+          </CardContent>
+        </Card>
+
+        {/* AI Assistant */}
+        <Card>
+          <CardHeader>
+            <CardTitle className="flex items-center gap-2">
+              <Brain className="h-5 w-5 text-purple-500" />
+              Assistente Ambiental
               <Badge variant="secondary" className="ml-auto">
                 <Sparkles className="h-3 w-3 mr-1" />
-                LLM
+                IA
               </Badge>
             </CardTitle>
           </CardHeader>
-          <CardContent>
-            <div className="h-64 overflow-y-auto space-y-3 mb-4 p-3 bg-background/50 rounded-lg">
+          <CardContent className="space-y-4">
+            <div className="h-[200px] overflow-y-auto space-y-3 border rounded-lg p-3 bg-muted/30">
               {chatHistory.map((msg, i) => (
                 <div key={i} className={`flex ${msg.role === "user" ? "justify-end" : "justify-start"}`}>
-                  <div className={`max-w-[85%] p-3 rounded-lg text-sm ${msg.role === "user" ? "bg-primary text-primary-foreground" : "bg-muted"}`}>
+                  <div className={`max-w-[85%] rounded-lg px-3 py-2 text-sm ${
+                    msg.role === "user" 
+                      ? "bg-primary text-primary-foreground" 
+                      : "bg-muted"
+                  }`}>
                     {msg.content}
                   </div>
                 </div>
@@ -187,120 +244,66 @@ export default function WasteDashboard() {
                 placeholder="Pergunte sobre MARPOL, descarte..."
                 value={chatMessage}
                 onChange={(e) => setChatMessage(e.target.value)}
-                onKeyPress={(e) => e.key === "Enter" && handleSendMessage()}
+                onKeyDown={(e) => e.key === "Enter" && handleSendMessage()}
               />
               <Button size="icon" onClick={handleSendMessage}>
                 <Send className="h-4 w-4" />
               </Button>
             </div>
-            <div className="flex flex-wrap gap-2 mt-3">
-              <Button variant="outline" size="sm" onClick={() => setChatMessage("Regras MARPOL")}>
-                MARPOL
-              </Button>
-              <Button variant="outline" size="sm" onClick={() => setChatMessage("Como fazer descarte?")}>
-                Descarte
-              </Button>
-              <Button variant="outline" size="sm" onClick={() => setChatMessage("Gerar relatório")}>
-                Relatório
-              </Button>
-            </div>
-          </CardContent>
-        </Card>
-
-        {/* Waste Tanks */}
-        <Card className="lg:col-span-2">
-          <CardHeader>
-            <div className="flex items-center justify-between">
-              <CardTitle className="flex items-center gap-2">
-                <Droplets className="h-5 w-5" />
-                Tanques de Resíduos
-              </CardTitle>
-              <Button size="sm">
-                <Trash2 className="h-4 w-4 mr-2" />
-                Solicitar Descarte
-              </Button>
-            </div>
-          </CardHeader>
-          <CardContent>
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-              {mockTanks.map((tank) => (
-                <div key={tank.id} className={`p-4 rounded-lg border ${
-                  tank.status === "critical" ? "bg-red-500/10 border-red-500/30" :
-                  tank.status === "warning" ? "bg-amber-500/10 border-amber-500/30" :
-                  "bg-muted/30 border-border"
-                }`}>
-                  <div className="flex items-center justify-between mb-3">
-                    <div className="flex items-center gap-2">
-                      {tank.type === "oily" && <Droplets className="h-5 w-5 text-amber-600" />}
-                      {tank.type === "sewage" && <Droplets className="h-5 w-5 text-brown-600" />}
-                      {tank.type === "bilge" && <Droplets className="h-5 w-5 text-gray-600" />}
-                      {tank.type === "garbage" && <Trash2 className="h-5 w-5 text-green-600" />}
-                      <span className="font-medium">{tank.name}</span>
-                    </div>
-                    <Badge variant={tank.status === "ok" ? "outline" : tank.status === "critical" ? "destructive" : "secondary"}>
-                      {tank.status === "ok" ? "Normal" : tank.status === "warning" ? "Alerta" : "Crítico"}
-                    </Badge>
-                  </div>
-                  <div className="space-y-2">
-                    <div className="flex justify-between text-sm">
-                      <span>{tank.currentLevel} {tank.unit}</span>
-                      <span className="text-muted-foreground">/ {tank.capacity} {tank.unit}</span>
-                    </div>
-                    <Progress value={(tank.currentLevel / tank.capacity) * 100} className={`h-3 ${
-                      tank.status === "critical" ? "[&>div]:bg-red-500" :
-                      tank.status === "warning" ? "[&>div]:bg-amber-500" : ""
-                    }`} />
-                    <p className="text-xs text-muted-foreground">Último descarte: {tank.lastDischarge}</p>
-                  </div>
-                </div>
-              ))}
-            </div>
           </CardContent>
         </Card>
       </div>
 
-      {/* Discharge Records */}
+      {/* Recent Discharges */}
       <Card>
         <CardHeader>
           <CardTitle className="flex items-center gap-2">
-            <FileText className="h-5 w-5" />
-            Registros de Descarte (Garbage/Oil Record Book)
+            <FileText className="h-5 w-5 text-teal-500" />
+            Últimos Descartes Certificados
           </CardTitle>
         </CardHeader>
         <CardContent>
-          <div className="space-y-3">
-            {mockRecords.map((record) => (
-              <div key={record.id} className="flex items-center justify-between p-4 rounded-lg bg-muted/30">
-                <div className="flex items-center gap-4">
-                  <div className="p-2 rounded-lg bg-teal-500/10">
-                    <Recycle className="h-5 w-5 text-teal-600" />
-                  </div>
-                  <div>
-                    <p className="font-medium">{record.type}</p>
-                    <p className="text-sm text-muted-foreground">
-                      {record.quantity} {record.unit} • {record.method}
-                    </p>
-                  </div>
-                </div>
-                <div className="flex items-center gap-4 text-sm">
-                  <span className="flex items-center gap-1 text-muted-foreground">
-                    <MapPin className="h-4 w-4" />
-                    {record.location}
-                  </span>
-                  <span className="flex items-center gap-1 text-muted-foreground">
-                    <Calendar className="h-4 w-4" />
-                    {record.date}
-                  </span>
-                  <Badge variant="outline" className="flex items-center gap-1">
-                    <CheckCircle2 className="h-3 w-3" />
-                    {record.certificate}
-                  </Badge>
-                </div>
-              </div>
-            ))}
+          <div className="overflow-x-auto">
+            <table className="w-full text-sm">
+              <thead>
+                <tr className="border-b">
+                  <th className="text-left py-3 px-2">Data</th>
+                  <th className="text-left py-3 px-2">Tipo</th>
+                  <th className="text-left py-3 px-2">Quantidade</th>
+                  <th className="text-left py-3 px-2">Local</th>
+                  <th className="text-left py-3 px-2">Método</th>
+                  <th className="text-left py-3 px-2">Certificado</th>
+                </tr>
+              </thead>
+              <tbody>
+                {mockRecords.map((record) => (
+                  <tr key={record.id} className="border-b hover:bg-muted/50">
+                    <td className="py-3 px-2 flex items-center gap-2">
+                      <Calendar className="h-4 w-4 text-muted-foreground" />
+                      {record.date}
+                    </td>
+                    <td className="py-3 px-2">{record.type}</td>
+                    <td className="py-3 px-2">{record.quantity} {record.unit}</td>
+                    <td className="py-3 px-2 flex items-center gap-2">
+                      <MapPin className="h-4 w-4 text-muted-foreground" />
+                      {record.location}
+                    </td>
+                    <td className="py-3 px-2">{record.method}</td>
+                    <td className="py-3 px-2">
+                      <Badge variant="outline" className="gap-1">
+                        <CheckCircle2 className="h-3 w-3 text-green-500" />
+                        {record.certificate}
+                      </Badge>
+                    </td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
           </div>
         </CardContent>
       </Card>
     </div>
   );
-}
+};
+
+export default WasteDashboard;
