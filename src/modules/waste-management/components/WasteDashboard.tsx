@@ -5,7 +5,6 @@ import { Badge } from "@/components/ui/badge";
 import { Progress } from "@/components/ui/progress";
 import { Input } from "@/components/ui/input";
 import {
-  Trash2,
   Droplets,
   Leaf,
   AlertTriangle,
@@ -14,11 +13,11 @@ import {
   Sparkles,
   Send,
   Recycle,
-  Ship,
   MapPin,
   Calendar,
   CheckCircle2,
   TrendingDown,
+  Trash2,
 } from "lucide-react";
 
 interface WasteTank {
@@ -56,7 +55,7 @@ const mockRecords: DischargeRecord[] = [
   { id: "3", date: "2024-01-10", type: "Óleo Usado", quantity: 2000, unit: "L", location: "Porto de Macaé", method: "Re-refino", certificate: "CERT-2024-003" },
 ];
 
-const WasteDashboard = () => {
+function WasteDashboard() {
   const [chatMessage, setChatMessage] = useState("");
   const [chatHistory, setChatHistory] = useState<{ role: string; content: string }[]>([
     { role: "assistant", content: "Olá! Sou o assistente ambiental do Nautilus. Posso ajudar com MARPOL, descarte de resíduos e relatórios ambientais. Como posso ajudar?" },
@@ -88,18 +87,10 @@ const WasteDashboard = () => {
   const criticalTanks = mockTanks.filter(t => t.status === "critical").length;
   const warningTanks = mockTanks.filter(t => t.status === "warning").length;
 
-  const getStatusColor = (status: string) => {
-    switch (status) {
-      case "critical": return "bg-red-500";
-      case "warning": return "bg-amber-500";
-      default: return "bg-green-500";
-    }
-  };
-
   const getTypeIcon = (type: string) => {
     switch (type) {
       case "oily": return <Droplets className="h-5 w-5 text-amber-600" />;
-      case "sewage": return <Trash2 className="h-5 w-5 text-brown-600" />;
+      case "sewage": return <Trash2 className="h-5 w-5 text-stone-600" />;
       case "bilge": return <Droplets className="h-5 w-5 text-blue-600" />;
       case "garbage": return <Recycle className="h-5 w-5 text-green-600" />;
       default: return <Trash2 className="h-5 w-5" />;
@@ -278,15 +269,19 @@ const WasteDashboard = () => {
               <tbody>
                 {mockRecords.map((record) => (
                   <tr key={record.id} className="border-b hover:bg-muted/50">
-                    <td className="py-3 px-2 flex items-center gap-2">
-                      <Calendar className="h-4 w-4 text-muted-foreground" />
-                      {record.date}
+                    <td className="py-3 px-2">
+                      <div className="flex items-center gap-2">
+                        <Calendar className="h-4 w-4 text-muted-foreground" />
+                        {record.date}
+                      </div>
                     </td>
                     <td className="py-3 px-2">{record.type}</td>
                     <td className="py-3 px-2">{record.quantity} {record.unit}</td>
-                    <td className="py-3 px-2 flex items-center gap-2">
-                      <MapPin className="h-4 w-4 text-muted-foreground" />
-                      {record.location}
+                    <td className="py-3 px-2">
+                      <div className="flex items-center gap-2">
+                        <MapPin className="h-4 w-4 text-muted-foreground" />
+                        {record.location}
+                      </div>
                     </td>
                     <td className="py-3 px-2">{record.method}</td>
                     <td className="py-3 px-2">
@@ -304,6 +299,6 @@ const WasteDashboard = () => {
       </Card>
     </div>
   );
-};
+}
 
 export default WasteDashboard;

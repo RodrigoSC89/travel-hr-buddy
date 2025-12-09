@@ -1,10 +1,18 @@
-import React from "react";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Badge } from "@/components/ui/badge";
 import { Recycle, LayoutDashboard, Droplets, Trash2, FileText, Brain } from "lucide-react";
-import WasteDashboard from "./components/WasteDashboard";
+import { Suspense, lazy } from "react";
 
-export default function WasteManagement() {
+// Lazy load dashboard to avoid hook issues
+const WasteDashboard = lazy(() => import("./components/WasteDashboard"));
+
+const LoadingFallback = () => (
+  <div className="flex items-center justify-center py-12">
+    <div className="animate-spin h-8 w-8 border-4 border-primary border-t-transparent rounded-full" />
+  </div>
+);
+
+const WasteManagement = () => {
   return (
     <div className="min-h-screen bg-background">
       <div className="border-b bg-gradient-to-r from-teal-500/10 via-green-500/10 to-emerald-500/10">
@@ -55,7 +63,9 @@ export default function WasteManagement() {
           </TabsList>
 
           <TabsContent value="dashboard">
-            <WasteDashboard />
+            <Suspense fallback={<LoadingFallback />}>
+              <WasteDashboard />
+            </Suspense>
           </TabsContent>
 
           <TabsContent value="tanks">
@@ -85,4 +95,6 @@ export default function WasteManagement() {
       </div>
     </div>
   );
-}
+};
+
+export default WasteManagement;
