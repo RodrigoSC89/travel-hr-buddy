@@ -973,15 +973,31 @@ export const MODULE_REGISTRY: Record<string, ModuleDefinition> = {
     lazy: true,
   },
 
+  // PATCH UNIFY-12.0: Workflow Command Center (fusão de 4 módulos de workflow)
+  "intelligence.workflow-command": {
+    id: "intelligence.workflow-command",
+    name: "Workflow Command Center",
+    category: "intelligence",
+    path: "pages/WorkflowCommandCenter",
+    description: "PATCH UNIFY-12.0 - Centro Unificado de Workflows: Workflow Visual IA, Sugestões Workflow, Workflow, Smart Workflow. Builder visual, automações, sugestões de IA, templates e analytics.",
+    status: "active",
+    completeness: "100%",
+    route: "/workflow-command",
+    icon: "Workflow",
+    lazy: true,
+    version: "1200.0",
+  },
+
   "intelligence.smart-workflow": {
     id: "intelligence.smart-workflow",
     name: "Smart Workflow",
     category: "intelligence",
     path: "pages/Workflow",
-    description: "Intelligent workflow automation",
-    status: "active",
+    description: "DEPRECATED: Redirecionado para Workflow Command Center",
+    status: "deprecated",
     completeness: "100%",
     route: "/workflow",
+    redirectTo: "/workflow-command",
     icon: "GitBranch",
     lazy: true,
   },
@@ -1575,19 +1591,19 @@ export const MODULE_REGISTRY: Record<string, ModuleDefinition> = {
     lazy: true,
   },
 
-  // AI Workflow Suggestions Module - PATCH 653
+  // DEPRECATED: Workflow Suggestions - Fusão no Workflow Command Center (PATCH UNIFY-12.0)
   "intelligence.workflow-suggestions": {
     id: "intelligence.workflow-suggestions",
     name: "Sugestões IA Workflow",
     category: "intelligence",
     path: "pages/ai/WorkflowSuggestions",
-    description: "Sugestões inteligentes geradas por IA para otimização de workflows",
-    status: "active",
+    description: "DEPRECATED: Redirecionado para Workflow Command Center",
+    status: "deprecated",
     completeness: "100%",
     route: "/workflow-suggestions",
+    redirectTo: "/workflow-command",
     icon: "Lightbulb",
     lazy: true,
-    version: "653.0",
   },
 
   // AI Adoption Metrics Module - PATCH 653
@@ -1980,19 +1996,19 @@ export const MODULE_REGISTRY: Record<string, ModuleDefinition> = {
     version: "1.0.0",
   },
 
-  // PATCH: New AI & Innovation Modules
+  // DEPRECATED: Workflow Visual - Fusão no Workflow Command Center (PATCH UNIFY-12.0)
   "intelligence.workflow-visual": {
     id: "intelligence.workflow-visual",
     name: "Workflow Visual IA",
     category: "intelligence",
     path: "modules/workflow-visual",
-    description: "Workflow visual dinâmico com IA integrada - React Flow com sugestões em tempo real, execução de ações automáticas",
-    status: "active",
+    description: "DEPRECATED: Redirecionado para Workflow Command Center",
+    status: "deprecated",
     completeness: "100%",
     route: "/workflow-visual",
+    redirectTo: "/workflow-command",
     icon: "GitBranch",
     lazy: true,
-    version: "1.0.0",
   },
 
   "operations.operational-calendar": {
