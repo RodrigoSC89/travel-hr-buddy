@@ -35,8 +35,10 @@ const groupedModules = [
     icon: <Brain className="w-4 h-4 mr-2" />,
     items: [
       { label: "🚀 Command Center", path: "/command-center" },
+      { label: "🧠 Nautilus Command", path: "/nautilus-command" },
       { label: "Centro de Operações", path: "/system-hub" },
       { label: "Telemetria", path: "/telemetry" },
+      { label: "🌤️ Dashboard Meteorológico", path: "/weather-dashboard" },
     ],
   },
   {
