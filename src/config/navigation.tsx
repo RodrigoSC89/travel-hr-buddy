@@ -7,6 +7,12 @@ export const NAVIGATION = [
   { name: "Fleet Command Center", path: "/fleet-command", component: safeLazyImport(() => import("@/pages/FleetCommandCenter"), "Fleet Command Center") },
   { name: "Sistema Marítimo", path: "/sistema-maritimo", component: safeLazyImport(() => import("@/pages/FleetCommandCenter"), "Fleet Command Center") },
   { name: "Fleet Management", path: "/fleet", component: safeLazyImport(() => import("@/pages/FleetCommandCenter"), "Fleet Command Center") },
+  // PATCH UNIFY-9.0: Maritime Command Center (fusão de 4 módulos marítimos)
+  { name: "Maritime Command Center", path: "/maritime-command", component: safeLazyImport(() => import("@/pages/MaritimeCommandCenter"), "Maritime Command Center") },
+  { name: "Maritime", path: "/maritime", component: safeLazyImport(() => import("@/pages/MaritimeCommandCenter"), "Maritime Command Center") },
+  { name: "Tripulação", path: "/crew", component: safeLazyImport(() => import("@/pages/CrewManagement"), "Crew Management") },
+  { name: "Checklists Marítimos", path: "/maritime-checklists", component: safeLazyImport(() => import("@/pages/MaritimeChecklists"), "Maritime Checklists") },
+  { name: "Certificações Marítimas", path: "/maritime-certifications", component: safeLazyImport(() => import("@/pages/MaritimeCertifications"), "Maritime Certifications") },
   { name: "DP Intelligence", path: "/dp-intelligence", component: safeLazyImport(() => import("@/modules/intelligence/dp-intelligence/DPIntelligenceCenter"), "DP Intelligence") },
   { name: "BridgeLink", path: "/bridgelink", component: safeLazyImport(() => import("@/modules/control/bridgelink/BridgeLinkDashboard"), "BridgeLink") },
   { name: "Forecast Global", path: "/forecast-global", component: safeLazyImport(() => import("@/modules/control/forecast-global/ForecastConsole"), "Forecast Global") },
@@ -27,10 +33,8 @@ export const NAVIGATION = [
   { name: "AI Insights", path: "/ai-insights", component: safeLazyImport(() => import("@/pages/AIInsights"), "AI Insights") },
   { name: "Real-Time Workspace", path: "/real-time-workspace", component: safeLazyImport(() => import("@/modules/workspace/real-time-workspace"), "Real-Time Workspace") },
   { name: "Workflow", path: "/workflow", component: safeLazyImport(() => import("@/pages/Workflow"), "Workflow") },
-  // LSA/FFA Inspections - module archived
   { name: "Nautilus People Hub", path: "/nautilus-people", component: safeLazyImport(() => import("@/modules/nautilus-people"), "Nautilus People Hub") },
   { name: "PEO-DP", path: "/peo-dp", component: safeLazyImport(() => import("@/modules/hr/peo-dp/PEODPPanel"), "PEO-DP") },
-  // PATCH 980: System Diagnostic Tools
   { name: "System Diagnostic", path: "/system-diagnostic", component: safeLazyImport(() => import("@/pages/SystemDiagnostic"), "System Diagnostic") },
   { name: "Execution Roadmap", path: "/execution-roadmap", component: safeLazyImport(() => import("@/pages/ExecutionRoadmap"), "Execution Roadmap") },
   { name: "Usage Simulation", path: "/usage-simulation", component: safeLazyImport(() => import("@/pages/UsageSimulation"), "Usage Simulation") },
