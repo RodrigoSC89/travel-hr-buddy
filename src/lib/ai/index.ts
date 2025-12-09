@@ -64,3 +64,13 @@ export {
   type ComplianceCheckResult,
   type ComplianceReport,
 } from './compliance-checker';
+
+// AI Audit Logger (PATCH 850)
+export {
+  logAIInteraction,
+  searchAuditLogs,
+  getAuditStatistics,
+  exportAuditLogsCSV,
+  type AIAuditEntry,
+  type AuditSearchFilters,
+} from './audit-logger';
