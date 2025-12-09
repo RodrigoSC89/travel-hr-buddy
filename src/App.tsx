@@ -225,7 +225,9 @@ function App() {
                       <Route path="portal-funcionario" element={<Navigate to="/nautilus-academy" replace />} />
                       <Route path="training-academy" element={<Navigate to="/nautilus-academy" replace />} />
                       <Route path="mobile-optimization" element={<Navigate to="/optimization" replace />} />
-                      <Route path="alertas-precos" element={<Navigate to="/price-alerts" replace />} />
+                      <Route path="alertas-precos" element={<Navigate to="/alerts-command" replace />} />
+                      <Route path="price-alerts" element={<Navigate to="/alerts-command" replace />} />
+                      <Route path="intelligent-alerts" element={<Navigate to="/alerts-command" replace />} />
                       <Route path="help" element={<Navigate to="/notifications-center" replace />} />
                       <Route path="audit-center" element={<Navigate to="/compliance-hub" replace />} />
                       <Route path="crew-management" element={<Navigate to="/crew" replace />} />

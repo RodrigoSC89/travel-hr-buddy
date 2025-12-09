@@ -96,8 +96,8 @@ const groupedModules = [
     icon: <Bell className="w-4 h-4 mr-2" />,
     items: [
       { label: "📡 Communication Command", path: "/communication-command" },
+      { label: "🚨 Alerts Command", path: "/alerts-command" },
       { label: "Workspace em Tempo Real", path: "/real-time-workspace" },
-      { label: "Alertas de Preços", path: "/price-alerts" },
     ],
   },
   {
@@ -113,7 +113,6 @@ const groupedModules = [
       { label: "Análise de Custos", path: "/route-cost-analysis" },
       { label: "Gestão de Usuários", path: "/users" },
       { label: "Gestão de Tarefas", path: "/task-management" },
-      { label: "Alertas Inteligentes", path: "/intelligent-alerts" },
     ],
   },
   {
