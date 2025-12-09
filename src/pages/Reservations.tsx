@@ -1,26 +1,18 @@
-import React from "react";
-import { EnhancedReservationsDashboard } from "@/components/reservations/enhanced-reservations-dashboard";
-import { ModulePageWrapper } from "@/components/ui/module-page-wrapper";
-import { ModuleHeader } from "@/components/ui/module-header";
-import { Calendar, Clock, CheckCircle, TrendingUp } from "lucide-react";
+/**
+ * DEPRECATED: Este módulo foi fundido no Travel Command Center
+ * Redireciona para /travel-command
+ */
+import { useEffect } from "react";
+import { useNavigate } from "react-router-dom";
 
-const Reservations: React.FC = () => {
-  return (
-    <ModulePageWrapper gradient="blue">
-      <ModuleHeader
-        icon={Calendar}
-        title="Reservas"
-        description="Gestão completa de reservas com calendário integrado e acompanhamento de status"
-        gradient="blue"
-        badges={[
-          { icon: Clock, label: "Agendamento Inteligente" },
-          { icon: CheckCircle, label: "Confirmações Automáticas" },
-          { icon: TrendingUp, label: "Otimização" }
-        ]}
-      />
-      <EnhancedReservationsDashboard />
-    </ModulePageWrapper>
-  );
+const Reservations = () => {
+  const navigate = useNavigate();
+  
+  useEffect(() => {
+    navigate("/travel-command", { replace: true });
+  }, [navigate]);
+
+  return null;
 };
 
 export default Reservations;
