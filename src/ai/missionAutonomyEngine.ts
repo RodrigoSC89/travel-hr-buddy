@@ -292,17 +292,18 @@ class MissionAutonomyEngine {
 
       if (error) throw error;
 
+      const record = data as any;
       const action: AutonomyAction = {
-        id: data.id,
-        action_type: data.action_type,
-        decision_level: data.decision_level,
-        status: data.status,
-        context: data.context,
-        reasoning: data.reasoning,
-        confidence_score: data.confidence_score,
-        risk_score: data.risk_score,
-        created_at: new Date(data.created_at),
-        updated_at: new Date(data.updated_at),
+        id: record.id,
+        action_type: record.action_type,
+        decision_level: record.decision_level,
+        status: record.status,
+        context: record.context,
+        reasoning: record.reasoning,
+        confidence_score: record.confidence_score,
+        risk_score: record.risk_score,
+        created_at: new Date(record.created_at),
+        updated_at: new Date(record.updated_at),
       };
 
       logger.info("[MissionAutonomy] Action created", { actionId: action.id });
@@ -522,20 +523,21 @@ class MissionAutonomyEngine {
       if (error) throw error;
       if (!data) return null;
 
+      const record = data as any;
       return {
-        id: data.id,
-        action_type: data.action_type,
-        decision_level: data.decision_level,
-        status: data.status,
-        context: data.context,
-        reasoning: data.reasoning,
-        confidence_score: data.confidence_score,
-        risk_score: data.risk_score,
-        approved_by: data.approved_by,
-        executed_at: data.executed_at ? new Date(data.executed_at) : undefined,
-        result: data.result,
-        created_at: new Date(data.created_at),
-        updated_at: new Date(data.updated_at),
+        id: record.id,
+        action_type: record.action_type,
+        decision_level: record.decision_level,
+        status: record.status,
+        context: record.context,
+        reasoning: record.reasoning,
+        confidence_score: record.confidence_score,
+        risk_score: record.risk_score,
+        approved_by: record.approved_by,
+        executed_at: record.executed_at ? new Date(record.executed_at) : undefined,
+        result: record.result,
+        created_at: new Date(record.created_at),
+        updated_at: new Date(record.updated_at),
       };
     } catch (error) {
       logger.warn("[MissionAutonomy] Failed to get action", { error });
