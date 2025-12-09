@@ -95,10 +95,8 @@ const groupedModules = [
     title: "Comunicação & Alertas",
     icon: <Bell className="w-4 h-4 mr-2" />,
     items: [
-      { label: "Centro de Comunicação", path: "/communication" },
+      { label: "📡 Communication Command", path: "/communication-command" },
       { label: "Workspace em Tempo Real", path: "/real-time-workspace" },
-      { label: "Gerenciador de Canais", path: "/channel-manager" },
-      { label: "Centro de Notificações", path: "/notifications-center" },
       { label: "Alertas de Preços", path: "/price-alerts" },
     ],
   },

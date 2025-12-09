@@ -551,15 +551,32 @@ export const MODULE_REGISTRY: Record<string, ModuleDefinition> = {
     lazy: true,
   },
 
+  // PATCH UNIFY-14.0: Communication Command Center (fusão de Communication + Channel Manager + Notifications)
+  "connectivity.communication-command": {
+    id: "connectivity.communication-command",
+    name: "Communication Command Center",
+    category: "connectivity",
+    path: "pages/CommunicationCommandCenter",
+    description: "PATCH UNIFY-14.0 - Centro Unificado de Comunicação: Mensagens, Gerenciador de Canais, Centro de Notificações. Fusão de: communication, channel-manager, notifications",
+    status: "active",
+    completeness: "100%",
+    route: "/communication-command",
+    icon: "Radio",
+    lazy: true,
+    version: "1400.0",
+  },
+
+  // DEPRECATED: Channel Manager - Merged into Communication Command Center
   "connectivity.channel-manager": {
     id: "connectivity.channel-manager",
     name: "Channel Manager",
     category: "connectivity",
     path: "pages/ChannelManager",
-    description: "Manage communication channels and connectivity status",
-    status: "active",
+    description: "DEPRECATED: Redirecionado para Communication Command Center",
+    status: "deprecated",
     completeness: "100%",
     route: "/channel-manager",
+    redirectTo: "/communication-command",
     icon: "Radio",
     lazy: true,
   },
@@ -577,15 +594,17 @@ export const MODULE_REGISTRY: Record<string, ModuleDefinition> = {
     lazy: true,
   },
 
+  // DEPRECATED: Notifications Center - Merged into Communication Command Center
   "connectivity.notifications": {
     id: "connectivity.notifications",
     name: "Notifications Center",
     category: "connectivity",
     path: "pages/NotificationsCenter",
-    description: "Centralized notification management and alerts",
-    status: "active",
+    description: "DEPRECATED: Redirecionado para Communication Command Center",
+    status: "deprecated",
     completeness: "100%",
     route: "/notifications-center",
+    redirectTo: "/communication-command",
     icon: "Bell",
     lazy: true,
   },
@@ -1246,16 +1265,17 @@ export const MODULE_REGISTRY: Record<string, ModuleDefinition> = {
     version: "651.0",
   },
 
-  // Communications
+  // DEPRECATED: Communication Hub - Merged into Communication Command Center
   "communication": {
     id: "communication",
     name: "Communication Hub",
     category: "operations",
     path: "pages/Communication",
-    description: "Central de comunicação e mensagens",
-    status: "active",
+    description: "DEPRECATED: Redirecionado para Communication Command Center",
+    status: "deprecated",
     completeness: "100%",
     route: "/communication",
+    redirectTo: "/communication-command",
     icon: "MessageSquare",
     lazy: true,
     version: "651.0",
