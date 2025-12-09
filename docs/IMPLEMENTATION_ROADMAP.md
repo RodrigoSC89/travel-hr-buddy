@@ -23,6 +23,93 @@ Este documento define o plano de implementação para todas as 10 áreas priorit
 | 9 | 🚨 Modo Emergência | MÉDIA | ✅ Concluído |
 | 10 | 📦 Prontidão Deploy | ALTA | ✅ Concluído |
 
+## 📄 Módulos Adicionais Implementados
+
+| # | Área | Status |
+|---|------|--------|
+| 11 | 📄 Workflow ISM/MLC/PSC | ✅ Concluído |
+| 12 | 🗂 OPFS Storage (Cache Camadas) | ✅ Concluído |
+| 13 | 📊 AI Audit Logger | ✅ Concluído |
+| 14 | 📋 PSC Package Generator | ✅ Concluído |
+| 15 | 🛠 Painel de Prompts Admin | ✅ Concluído |
+
+---
+
+## 11. 📄 Workflow de Documentos ISM/MLC/PSC
+
+### Funcionalidades Implementadas
+- Registro de documentos com controle de versão
+- Workflow de aprovação multi-etapas
+- Assinatura digital com rastreamento
+- Distribuição com confirmação de recebimento
+- Categorias: ISM, MLC, PSC, Auditoria, Certificados
+- Referências de conformidade (ISM Code, SOLAS, MARPOL)
+
+### Arquivos
+- `src/lib/documents/workflow-service.ts`
+- `src/lib/documents/index.ts`
+
+---
+
+## 12. 🗂 OPFS Storage com Cache em Camadas
+
+### Funcionalidades Implementadas
+- Suporte a Origin Private File System (OPFS)
+- Cache em 3 camadas: Hot (50MB), Warm (150MB), Cold (300MB)
+- Promoção/demoção automática baseada em acesso
+- Controle de cotas por tier
+- Evicção inteligente de arquivos antigos
+
+### Arquivos
+- `src/lib/storage/opfs-manager.ts`
+- `src/lib/storage/index.ts`
+
+---
+
+## 13. 📊 AI Audit Logger para Conformidade
+
+### Funcionalidades Implementadas
+- Log completo de interações com IA
+- Rastreamento de modelo, versão, parâmetros
+- Pontuação de confiança e qualidade
+- Registro de aprovações HITL
+- Fontes RAG documentadas
+- Exportação CSV para inspeções ISM/MLC
+
+### Arquivos
+- `src/lib/ai/audit-logger.ts`
+- `src/lib/ai/rag-engine.ts`
+
+---
+
+## 14. 📋 PSC Package Generator
+
+### Funcionalidades Implementadas
+- Criação de registros de inspeção PSC
+- Rastreamento de deficiências com severidade
+- Cálculo de score de risco
+- Geração automática de pacotes PDF
+- Exportação ZIP com documentos
+- Checklist de documentos por tipo de inspeção
+
+### Arquivos
+- `src/lib/psc/package-generator.ts`
+- `src/lib/psc/index.ts`
+
+---
+
+## Tabelas de Banco de Dados Criadas
+
+| Tabela | Descrição |
+|--------|-----------|
+| `document_registry` | Registro central de documentos |
+| `document_versions` | Histórico de versões |
+| `document_approvals` | Workflow de aprovação |
+| `document_distribution` | Controle de distribuição |
+| `psc_inspections` | Inspeções PSC |
+| `psc_deficiencies` | Deficiências encontradas |
+| `ai_audit_logs` | Logs de auditoria de IA |
+
 ---
 
 ## 1. 🔐 Segurança RLS/Edge Functions
