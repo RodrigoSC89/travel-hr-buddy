@@ -1644,20 +1644,6 @@ export const MODULE_REGISTRY: Record<string, ModuleDefinition> = {
     version: "192.0",
   },
 
-  "operations.maritime-certifications": {
-    id: "operations.maritime-certifications",
-    name: "Maritime Certifications",
-    category: "operations",
-    path: "pages/MaritimeCertifications",
-    description: "Maritime certification management and compliance tracking",
-    status: "active",
-    completeness: "100%",
-    route: "/maritime-certifications",
-    icon: "Shield",
-    lazy: true,
-    version: "981.0",
-  },
-
   "intelligence.intelligent-alerts": {
     id: "intelligence.intelligent-alerts",
     name: "Intelligent Alerts",
@@ -2119,20 +2105,6 @@ export const MODULE_REGISTRY: Record<string, ModuleDefinition> = {
     completeness: "100%",
     route: "/telemetry",
     icon: "Activity",
-    lazy: true,
-    version: "177.0",
-  },
-
-  "operations.maritime-checklists": {
-    id: "operations.maritime-checklists",
-    name: "Maritime Checklists",
-    category: "operations",
-    path: "pages/MaritimeChecklists",
-    description: "Comprehensive maritime checklists for vessel operations and safety",
-    status: "active",
-    completeness: "100%",
-    route: "/maritime-checklists",
-    icon: "CheckSquare",
     lazy: true,
     version: "177.0",
   },
