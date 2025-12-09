@@ -747,15 +747,32 @@ export const MODULE_REGISTRY: Record<string, ModuleDefinition> = {
     lazy: true,
   },
 
+  // PATCH UNIFY-ALERTS: Alerts Command Center (fusão de price-alerts + intelligent-alerts)
+  "features.alerts-command": {
+    id: "features.alerts-command",
+    name: "Alerts Command Center",
+    category: "features",
+    path: "pages/AlertsCommandCenter",
+    description: "PATCH UNIFY-ALERTS - Centro Unificado de Alertas: Price Alerts + Intelligent Alerts. Monitoramento de preços, alertas inteligentes com IA e insights preditivos.",
+    status: "active",
+    completeness: "100%",
+    route: "/alerts-command",
+    icon: "Bell",
+    lazy: true,
+    version: "1000.0",
+  },
+
+  // DEPRECATED: Módulos fundidos no Alerts Command Center
   "features.price-alerts": {
     id: "features.price-alerts",
     name: "Price Alerts",
     category: "features",
     path: "pages/PriceAlerts",
-    description: "Price monitoring and alerts with AI predictions",
-    status: "active",
+    description: "DEPRECATED: Redirecionado para Alerts Command Center",
+    status: "deprecated",
     completeness: "100%",
     route: "/price-alerts",
+    redirectTo: "/alerts-command",
     icon: "Bell",
     lazy: true,
   },
@@ -1747,15 +1764,17 @@ export const MODULE_REGISTRY: Record<string, ModuleDefinition> = {
     version: "192.0",
   },
 
+  // DEPRECATED: Intelligent Alerts fundido no Alerts Command Center
   "intelligence.intelligent-alerts": {
     id: "intelligence.intelligent-alerts",
     name: "Intelligent Alerts",
     category: "intelligence",
     path: "pages/IntelligentAlerts",
-    description: "AI-powered intelligent alert system with real-time monitoring",
-    status: "active",
+    description: "DEPRECATED: Redirecionado para Alerts Command Center",
+    status: "deprecated",
     completeness: "100%",
     route: "/intelligent-alerts",
+    redirectTo: "/alerts-command",
     icon: "Zap",
     lazy: true,
     version: "981.0",
