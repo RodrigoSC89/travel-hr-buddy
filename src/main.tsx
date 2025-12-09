@@ -1,4 +1,4 @@
-import React from "react";
+import { StrictMode } from "react";
 import { createRoot } from "react-dom/client";
 import { HelmetProvider } from "react-helmet-async";
 import App from "./App.tsx";
@@ -57,10 +57,10 @@ if (typeof requestIdleCallback !== "undefined") {
 const container = document.getElementById("root");
 if (container) {
   createRoot(container).render(
-    <React.StrictMode>
+    <StrictMode>
       <HelmetProvider>
         <App />
       </HelmetProvider>
-    </React.StrictMode>
+    </StrictMode>
   );
 }
