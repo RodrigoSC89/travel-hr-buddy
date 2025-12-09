@@ -813,15 +813,32 @@ export const MODULE_REGISTRY: Record<string, ModuleDefinition> = {
 
   // REMOVED: features.checklists - Use compliance-hub (PATCH 176.2)
 
+  // Travel Command Center - UNIFIED (PATCH UNIFY-TRAVEL)
+  "logistics.travel-command": {
+    id: "logistics.travel-command",
+    name: "Travel Command Center",
+    category: "logistics",
+    path: "pages/TravelCommandCenter",
+    description: "Central unificada de viagens: mobilidade, reservas, voos, hotéis e transfers com IA",
+    status: "active",
+    completeness: "100%",
+    route: "/travel-command",
+    icon: "Plane",
+    lazy: true,
+    version: "2.0.0",
+  },
+
+  // DEPRECATED: Reservations - Fusão no Travel Command Center
   "features.reservations": {
     id: "features.reservations",
     name: "Reservations",
     category: "features",
     path: "pages/Reservations",
-    description: "Reservation management with calendar and status tracking",
-    status: "active",
+    description: "DEPRECATED: Redirecionado para Travel Command Center",
+    status: "deprecated",
     completeness: "100%",
     route: "/reservations",
+    redirectTo: "/travel-command",
     icon: "Calendar",
     lazy: true,
   },
@@ -1619,19 +1636,19 @@ export const MODULE_REGISTRY: Record<string, ModuleDefinition> = {
     version: "1.0.0",
   },
 
-  // Smart Mobility Module
+  // DEPRECATED: Smart Mobility - Fusão no Travel Command Center
   "logistics.smart-mobility": {
     id: "logistics.smart-mobility",
     name: "Smart Mobility",
     category: "logistics",
     path: "modules/smart-mobility/index",
-    description: "Gestão inteligente de viagens, hospedagens e logística de tripulação com IA",
-    status: "active",
+    description: "DEPRECATED: Redirecionado para Travel Command Center",
+    status: "deprecated",
     completeness: "100%",
     route: "/smart-mobility",
+    redirectTo: "/travel-command",
     icon: "Plane",
     lazy: true,
-    version: "1.0.0",
   },
 
   // Autonomous Procurement Module

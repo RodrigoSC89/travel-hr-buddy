@@ -127,9 +127,7 @@ const groupedModules = [
   {
     title: "✈️ Viagens & Logística",
     items: [
-      { label: "✈️ Viagens", path: "/travel" },
-      { label: "🚗 Smart Mobility", path: "/smart-mobility" },
-      { label: "🏨 Reservas", path: "/reservations" },
+      { label: "✈️ Travel Command", path: "/travel-command" },
       { label: "🛒 Procurement Command", path: "/procurement-command" },
     ],
   },
