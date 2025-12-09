@@ -131,9 +131,7 @@ const groupedModules = [
       { label: "✈️ Viagens", path: "/travel" },
       { label: "🚗 Smart Mobility", path: "/smart-mobility" },
       { label: "🏨 Reservas", path: "/reservations" },
-      { label: "📦 Procurement & Inventory AI", path: "/procurement-inventory" },
-      { label: "🤖 Autonomous Procurement", path: "/autonomous-procurement" },
-      { label: "🏪 Supplier Marketplace", path: "/supplier-marketplace" },
+      { label: "🛒 Procurement Command", path: "/procurement-command" },
     ],
   },
   {

@@ -1682,19 +1682,34 @@ export const MODULE_REGISTRY: Record<string, ModuleDefinition> = {
   // DEPRECATED: compliance.solas-training - Replaced by training.solas-isps-training
   // See training.solas-isps-training for the unified module
 
-  // Procurement & Inventory AI-Driven Module
+  // Procurement Command Center - UNIFIED (PATCH UNIFY-PROCUREMENT)
+  "logistics.procurement-command": {
+    id: "logistics.procurement-command",
+    name: "Procurement Command Center",
+    category: "logistics",
+    path: "pages/ProcurementCommandCenter",
+    description: "Central unificada de procurement: compras com IA, inventário, fornecedores, RFQs e automação",
+    status: "active",
+    completeness: "100%",
+    route: "/procurement-command",
+    icon: "ShoppingCart",
+    lazy: true,
+    version: "2.0.0",
+  },
+
+  // DEPRECATED: Procurement & Inventory AI - Fusão no Procurement Command Center
   "logistics.procurement-inventory": {
     id: "logistics.procurement-inventory",
     name: "Procurement & Inventory AI",
     category: "logistics",
-    path: "modules/procurement-inventory/index",
-    description: "Módulo completo de compras e controle de estoque com IA integrada: requisições, POs, fornecedores, previsão de demanda e chatbot inteligente",
-    status: "active",
+    path: "pages/ProcurementInventory",
+    description: "DEPRECATED: Redirecionado para Procurement Command Center",
+    status: "deprecated",
     completeness: "100%",
     route: "/procurement-inventory",
+    redirectTo: "/procurement-command",
     icon: "ShoppingCart",
     lazy: true,
-    version: "1.0.0",
   },
 
   // DEPRECATED: AI Dashboard - Fusão no AI Command Center (PATCH UNIFY-11.0)
