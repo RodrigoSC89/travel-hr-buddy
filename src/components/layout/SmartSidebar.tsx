@@ -51,7 +51,6 @@ const groupedModules = [
       { label: "📅 Calendário Operacional", path: "/operational-calendar" },
       { label: "🚨 Modo Emergência", path: "/emergency-mode" },
       { label: "📝 Journaling IA", path: "/ai-journaling" },
-      { label: "🗺️ Voyage Command", path: "/voyage-command" },
       { label: "📡 Conectividade", path: "/maritime-connectivity" },
       { label: "❤️ Bem-estar Tripulação", path: "/crew-wellbeing" },
       { label: "🎙️ Assistente de Voz", path: "/assistant/voice" },
