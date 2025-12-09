@@ -15,6 +15,9 @@ export const NAVIGATION = [
   { name: "Certificações Marítimas", path: "/maritime-certifications", component: safeLazyImport(() => import("@/pages/MaritimeCertifications"), "Maritime Certifications") },
   { name: "DP Intelligence", path: "/dp-intelligence", component: safeLazyImport(() => import("@/modules/intelligence/dp-intelligence/DPIntelligenceCenter"), "DP Intelligence") },
   { name: "BridgeLink", path: "/bridgelink", component: safeLazyImport(() => import("@/modules/control/bridgelink/BridgeLinkDashboard"), "BridgeLink") },
+  // PATCH UNIFY-10.0: Weather Command Center (fusão de 2 módulos meteorológicos)
+  { name: "Weather Command Center", path: "/weather-command", component: safeLazyImport(() => import("@/pages/WeatherCommandCenter"), "Weather Command Center") },
+  { name: "Weather Dashboard", path: "/weather-dashboard", component: safeLazyImport(() => import("@/pages/WeatherDashboard"), "Weather Dashboard") },
   { name: "Forecast Global", path: "/forecast-global", component: safeLazyImport(() => import("@/modules/control/forecast-global/ForecastConsole"), "Forecast Global") },
   { name: "Control Hub", path: "/control-hub", component: safeLazyImport(() => import("@/modules/control/control-hub/ControlHubPanel"), "Control Hub") },
   // PATCH UNIFY-3.0: Unified Maintenance Command Center (fusão de 8 módulos de manutenção)
