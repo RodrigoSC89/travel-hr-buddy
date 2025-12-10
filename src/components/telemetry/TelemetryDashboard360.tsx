@@ -1,11 +1,11 @@
 /**
- * PATCH 215.1 - Telemetry Dashboard 360 (Painel Cognitivo Operacional)
+ * PATCH 215.2 - Telemetry Dashboard 360 (Painel Cognitivo Operacional)
  * 
  * Complete, integrated, and professional telemetry dashboard with LLM integration,
  * real-time data sync, PDF export, and interactive map visualization.
  */
 
-import React, { useEffect, useState, useCallback } from "react";
+import React, { useEffect, useState, useCallback, useMemo } from "react";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Badge } from "@/components/ui/badge";
@@ -20,7 +20,6 @@ import {
   Play,
   Pause,
   RefreshCw,
-  Settings,
   Loader2,
   CheckCircle,
   XCircle,
@@ -32,13 +31,29 @@ import { logger } from "@/lib/logger";
 import { toast } from "sonner";
 import { TelemetryAIAssistant } from "./TelemetryAIAssistant";
 import { TelemetryExporter } from "./TelemetryExporter";
-import { TelemetryAlerts, TelemetryAlert } from "./TelemetryAlerts";
+import { TelemetryAlerts, type TelemetryAlert } from "./TelemetryAlerts";
 import { TelemetryMap } from "./TelemetryMap";
+import { TelemetrySettings, type TelemetryConfig } from "./TelemetrySettings";
 import { motion } from "framer-motion";
 
 interface TelemetryDashboard360Props {
   userId?: string;
 }
+
+// Default config
+const defaultTelemetryConfig: TelemetryConfig = {
+  autoSyncInterval: 60,
+  enableNotifications: true,
+  notificationSound: true,
+  dataRetentionDays: 30,
+  mapRefreshRate: 30,
+  alertThreshold: "medium",
+  aiModelPreference: "balanced",
+  showWeatherAlerts: true,
+  showSatelliteAlerts: true,
+  showSystemAlerts: true,
+  darkMapTheme: true,
+};
 
 export const TelemetryDashboard360: React.FC<TelemetryDashboard360Props> = ({ userId }) => {
   const [weatherData, setWeatherData] = useState<any[]>([]);
@@ -50,6 +65,7 @@ export const TelemetryDashboard360: React.FC<TelemetryDashboard360Props> = ({ us
   const [isLoading, setIsLoading] = useState(false);
   const [lastRefresh, setLastRefresh] = useState<Date | null>(null);
   const [alerts, setAlerts] = useState<TelemetryAlert[]>([]);
+  const [telemetryConfig, setTelemetryConfig] = useState<TelemetryConfig>(defaultTelemetryConfig);
 
   const loadDashboardData = useCallback(async () => {
     setIsLoading(true);
@@ -252,9 +268,10 @@ export const TelemetryDashboard360: React.FC<TelemetryDashboard360Props> = ({ us
             syncStatus={syncStatus}
             autonomyActions={autonomyActions}
           />
-          <Button variant="ghost" size="icon">
-            <Settings className="h-4 w-4" />
-          </Button>
+          <TelemetrySettings 
+            config={telemetryConfig}
+            onSave={setTelemetryConfig}
+          />
         </div>
       </motion.div>
 
