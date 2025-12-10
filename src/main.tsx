@@ -1,9 +1,14 @@
-// main.tsx - PATCH 850.1 - Cache invalidation
-import { StrictMode } from "react";
-import { createRoot } from "react-dom/client";
+// main.tsx - PATCH 850.2 - React instance fix
+import React from "react";
+import ReactDOM from "react-dom/client";
 import { HelmetProvider } from "react-helmet-async";
 import App from "./App.tsx";
 import "./index.css";
+
+// Ensure single React instance
+if (typeof window !== "undefined") {
+  (window as any).__REACT_DEVTOOLS_GLOBAL_HOOK__ = (window as any).__REACT_DEVTOOLS_GLOBAL_HOOK__ || {};
+}
 
 // Initialize theme before rendering
 const initializeTheme = () => {
@@ -57,11 +62,12 @@ if (typeof requestIdleCallback !== "undefined") {
 // Render the app
 const container = document.getElementById("root");
 if (container) {
-  createRoot(container).render(
-    <StrictMode>
+  const root = ReactDOM.createRoot(container);
+  root.render(
+    <React.StrictMode>
       <HelmetProvider>
         <App />
       </HelmetProvider>
-    </StrictMode>
+    </React.StrictMode>
   );
 }
