@@ -1,65 +1,30 @@
-// App.tsx - PATCH 850.2 - React hooks fix
-import React, { useEffect, Suspense, useMemo, useState } from "react";
-import { BrowserRouter as Router, HashRouter, Routes, Route, Navigate } from "react-router-dom";
+/**
+ * App.tsx - PATCH 851.0 - Definitive React Hook Fix
+ * 
+ * Architecture:
+ * - App (class component with error boundary) 
+ *   -> QueryClientProvider
+ *     -> AuthProvider
+ *       -> AppRoutes (functional component with hooks)
+ */
+
+// CRITICAL: Use consistent React import
+import * as React from "react";
+import { BrowserRouter, HashRouter, Routes, Route, Navigate } from "react-router-dom";
 import { QueryClientProvider } from "@tanstack/react-query";
+
+// Contexts
 import { AuthProvider } from "./contexts/AuthContext";
+
+// UI Components
 import { Toaster } from "@/components/ui/toaster";
 import { Toaster as SonnerToaster } from "sonner";
 
-// Simple inline error boundary for maximum reliability
-class ErrorBoundary extends React.Component<
-  { children: React.ReactNode },
-  { hasError: boolean; error?: Error }
-> {
-  constructor(props: { children: React.ReactNode }) {
-    super(props);
-    this.state = { hasError: false };
-  }
-
-  static getDerivedStateFromError(error: Error) {
-    return { hasError: true, error };
-  }
-
-  componentDidCatch(error: Error, errorInfo: React.ErrorInfo) {
-    console.error("App Error:", error, errorInfo);
-  }
-
-  render() {
-    if (this.state.hasError) {
-      return (
-        <div className="min-h-screen flex items-center justify-center bg-background p-4">
-          <div className="text-center space-y-4 max-w-md">
-            <h1 className="text-2xl font-bold text-destructive">Erro ao carregar</h1>
-            <p className="text-muted-foreground">{this.state.error?.message}</p>
-            <button 
-              onClick={() => window.location.reload()}
-              className="px-4 py-2 bg-primary text-primary-foreground rounded-md hover:bg-primary/90"
-            >
-              Recarregar página
-            </button>
-          </div>
-        </div>
-      );
-    }
-    return this.props.children;
-  }
-}
-
-// Simple loader component
-const OffshoreLoader = () => (
-  <div className="min-h-screen flex items-center justify-center bg-background">
-    <div className="text-center space-y-4">
-      <div className="animate-spin h-12 w-12 border-4 border-primary border-t-transparent rounded-full mx-auto" />
-      <p className="text-muted-foreground">Carregando...</p>
-    </div>
-  </div>
-);
-
-// PATCH 68.2 - Module Loader System
+// Utils and config
 import { getModuleRoutes } from "@/utils/module-routes";
 import { createOptimizedQueryClient } from "@/lib/performance/query-config";
 
-// Core pages - Lazy loading for better performance
+// Core pages - Lazy loading
 const Index = React.lazy(() => import("@/pages/Index"));
 const Dashboard = React.lazy(() => import("@/pages/Dashboard"));
 const Admin = React.lazy(() => import("@/pages/Admin"));
@@ -72,7 +37,7 @@ const UserProfilePage = React.lazy(() => import("@/pages/user/profile"));
 const RevolutionaryAI = React.lazy(() => import("@/pages/RevolutionaryAI"));
 const AIEnhancedModules = React.lazy(() => import("@/pages/AIEnhancedModules"));
 
-// Protected Route wrappers - PATCH 68.5
+// Protected Route wrappers
 import { ProtectedRoute, AdminRoute } from "@/components/auth/protected-route";
 
 // Lazy load heavy components
@@ -89,15 +54,46 @@ const GlobalBrainProvider = React.lazy(() =>
   import("./components/global/GlobalBrainProvider").then(m => ({ default: m.GlobalBrainProvider }))
 );
 
-// Initialize monitoring & services with optimized query client
+// Query client (singleton)
 const queryClient = createOptimizedQueryClient();
 
-// RouterType based on environment
-const RouterType = import.meta.env.VITE_USE_HASH_ROUTER === "true" ? HashRouter : Router;
+// Router selection
+const RouterComponent = import.meta.env.VITE_USE_HASH_ROUTER === "true" ? HashRouter : BrowserRouter;
 
-function AppContent() {
-  // PATCH 68.2/68.7 - Get module routes automatically from MODULE_REGISTRY (memoized)
-  const moduleRoutes = useMemo(() => {
+// Simple loader
+function Loader(): JSX.Element {
+  return (
+    <div className="min-h-screen flex items-center justify-center bg-background">
+      <div className="text-center space-y-4">
+        <div className="animate-spin h-12 w-12 border-4 border-primary border-t-transparent rounded-full mx-auto" />
+        <p className="text-muted-foreground">Carregando...</p>
+      </div>
+    </div>
+  );
+}
+
+// Error display component
+function ErrorDisplay({ message, onRetry }: { message: string; onRetry: () => void }): JSX.Element {
+  return (
+    <div className="min-h-screen flex items-center justify-center bg-background p-4">
+      <div className="text-center space-y-4 max-w-md">
+        <h1 className="text-2xl font-bold text-destructive">Erro ao carregar</h1>
+        <p className="text-muted-foreground">{message}</p>
+        <button 
+          onClick={onRetry}
+          className="px-4 py-2 bg-primary text-primary-foreground rounded-md hover:bg-primary/90"
+        >
+          Recarregar página
+        </button>
+      </div>
+    </div>
+  );
+}
+
+// Routes component (uses hooks safely)
+function AppRoutes(): JSX.Element {
+  // Get module routes with memoization
+  const moduleRoutes = React.useMemo(() => {
     try {
       return getModuleRoutes();
     } catch (e) {
@@ -107,52 +103,52 @@ function AppContent() {
   }, []);
 
   return (
-    <Suspense fallback={<OffshoreLoader />}>
+    <React.Suspense fallback={<Loader />}>
       <TenantProvider>
         <OrganizationProvider>
-          <RouterType>
+          <RouterComponent>
             <GlobalBrainProvider showTrigger={true}>
               <Routes>
                 {/* Public Routes */}
                 <Route path="/auth" element={
-                  <Suspense fallback={<OffshoreLoader />}>
+                  <React.Suspense fallback={<Loader />}>
                     <Auth />
-                  </Suspense>
+                  </React.Suspense>
                 } />
                 <Route path="/unauthorized" element={
-                  <Suspense fallback={<OffshoreLoader />}>
+                  <React.Suspense fallback={<Loader />}>
                     <Unauthorized />
-                  </Suspense>
+                  </React.Suspense>
                 } />
                 
                 {/* Protected Routes */}
                 <Route path="/" element={
                   <ProtectedRoute>
-                    <Suspense fallback={<OffshoreLoader />}>
+                    <React.Suspense fallback={<Loader />}>
                       <SmartLayout />
-                    </Suspense>
+                    </React.Suspense>
                   </ProtectedRoute>
                 }>
                   <Route index element={
-                    <Suspense fallback={<OffshoreLoader />}>
+                    <React.Suspense fallback={<Loader />}>
                       <Index />
-                    </Suspense>
+                    </React.Suspense>
                   } />
                   <Route path="dashboard" element={
-                    <Suspense fallback={<OffshoreLoader />}>
+                    <React.Suspense fallback={<Loader />}>
                       <Dashboard />
-                    </Suspense>
+                    </React.Suspense>
                   } />
                   
-                  {/* PATCH 68.2 - Module Routes from Registry */}
+                  {/* Module Routes from Registry */}
                   {moduleRoutes.map((route) => (
                     <Route
                       key={route.id}
                       path={route.path}
                       element={
-                        <Suspense fallback={<OffshoreLoader />}>
+                        <React.Suspense fallback={<Loader />}>
                           <route.component />
-                        </Suspense>
+                        </React.Suspense>
                       }
                     />
                   ))}
@@ -160,48 +156,48 @@ function AppContent() {
                   {/* Admin Routes */}
                   <Route path="admin/*" element={
                     <AdminRoute>
-                      <Suspense fallback={<OffshoreLoader />}>
+                      <React.Suspense fallback={<Loader />}>
                         <Admin />
-                      </Suspense>
+                      </React.Suspense>
                     </AdminRoute>
                   } />
                   
                   {/* Settings */}
                   <Route path="settings" element={
-                    <Suspense fallback={<OffshoreLoader />}>
+                    <React.Suspense fallback={<Loader />}>
                       <Settings />
-                    </Suspense>
+                    </React.Suspense>
                   } />
                   
                   {/* Profile */}
                   <Route path="profile" element={
-                    <Suspense fallback={<OffshoreLoader />}>
+                    <React.Suspense fallback={<Loader />}>
                       <UserProfilePage />
-                    </Suspense>
+                    </React.Suspense>
                   } />
                   
                   {/* Health Check */}
                   <Route path="health" element={
-                    <Suspense fallback={<OffshoreLoader />}>
+                    <React.Suspense fallback={<Loader />}>
                       <HealthCheck />
-                    </Suspense>
+                    </React.Suspense>
                   } />
                   
                   {/* Revolutionary AI Hub */}
                   <Route path="revolutionary-ai/*" element={
-                    <Suspense fallback={<OffshoreLoader />}>
+                    <React.Suspense fallback={<Loader />}>
                       <RevolutionaryAI />
-                    </Suspense>
+                    </React.Suspense>
                   } />
                   
                   {/* AI Enhanced Modules */}
                   <Route path="ai-modules" element={
-                    <Suspense fallback={<OffshoreLoader />}>
+                    <React.Suspense fallback={<Loader />}>
                       <AIEnhancedModules />
-                    </Suspense>
+                    </React.Suspense>
                   } />
                   
-                  {/* Route Redirects - Legacy Routes */}
+                  {/* Legacy Route Redirects */}
                   <Route path="intelligent-documents" element={<Navigate to="/documents" replace />} />
                   <Route path="document-ai" element={<Navigate to="/documents" replace />} />
                   <Route path="ai-assistant" element={<Navigate to="/assistant/voice" replace />} />
@@ -242,9 +238,9 @@ function AppContent() {
                   
                   {/* 404 Route */}
                   <Route path="*" element={
-                    <Suspense fallback={<OffshoreLoader />}>
+                    <React.Suspense fallback={<Loader />}>
                       <NotFound />
-                    </Suspense>
+                    </React.Suspense>
                   } />
                 </Route>
               </Routes>
@@ -252,35 +248,56 @@ function AppContent() {
               <Toaster />
               <SonnerToaster position="top-right" richColors />
             </GlobalBrainProvider>
-          </RouterType>
+          </RouterComponent>
         </OrganizationProvider>
       </TenantProvider>
-    </Suspense>
+    </React.Suspense>
   );
 }
 
-function App() {
-  const [isReady, setIsReady] = useState(false);
+// Error boundary state interface
+interface ErrorBoundaryState {
+  hasError: boolean;
+  error: Error | null;
+}
 
-  useEffect(() => {
-    // Small delay to ensure React is fully initialized
-    const timer = setTimeout(() => setIsReady(true), 10);
-    return () => clearTimeout(timer);
-  }, []);
-
-  if (!isReady) {
-    return <OffshoreLoader />;
+// Main App component - Class component for error boundary
+class App extends React.Component<Record<string, never>, ErrorBoundaryState> {
+  constructor(props: Record<string, never>) {
+    super(props);
+    this.state = { hasError: false, error: null };
   }
 
-  return (
-    <ErrorBoundary>
+  static getDerivedStateFromError(error: Error): ErrorBoundaryState {
+    return { hasError: true, error };
+  }
+
+  componentDidCatch(error: Error, errorInfo: React.ErrorInfo): void {
+    console.error("App Error:", error, errorInfo);
+  }
+
+  handleRetry = (): void => {
+    window.location.reload();
+  };
+
+  render(): React.ReactNode {
+    if (this.state.hasError) {
+      return (
+        <ErrorDisplay 
+          message={this.state.error?.message || "Erro desconhecido"} 
+          onRetry={this.handleRetry} 
+        />
+      );
+    }
+
+    return (
       <QueryClientProvider client={queryClient}>
         <AuthProvider>
-          <AppContent />
+          <AppRoutes />
         </AuthProvider>
       </QueryClientProvider>
-    </ErrorBoundary>
-  );
+    );
+  }
 }
 
 export default App;
