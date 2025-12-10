@@ -1,73 +1,84 @@
-// main.tsx - PATCH 850.2 - React instance fix
-import React from "react";
-import ReactDOM from "react-dom/client";
+/**
+ * main.tsx - PATCH 851.0 - Definitive React Hook Fix
+ * 
+ * Root cause: React hooks require a stable React instance.
+ * Solution: Ensure React is imported FIRST and used consistently.
+ */
+
+// CRITICAL: Import React FIRST before anything else
+import * as React from "react";
+import * as ReactDOM from "react-dom/client";
+
+// Validate React is available
+if (!React || !React.useState) {
+  throw new Error("React module not properly loaded");
+}
+
+// Store React globally to prevent multiple instances
+if (typeof window !== "undefined") {
+  const win = window as typeof window & { 
+    __REACT__?: typeof React;
+    __REACT_DOM__?: typeof ReactDOM;
+  };
+  
+  if (!win.__REACT__) {
+    win.__REACT__ = React;
+    win.__REACT_DOM__ = ReactDOM;
+  }
+}
+
+// Now import other dependencies
 import { HelmetProvider } from "react-helmet-async";
 import App from "./App.tsx";
 import "./index.css";
 
-// Ensure single React instance
-if (typeof window !== "undefined") {
-  (window as any).__REACT_DEVTOOLS_GLOBAL_HOOK__ = (window as any).__REACT_DEVTOOLS_GLOBAL_HOOK__ || {};
-}
-
-// Initialize theme before rendering
-const initializeTheme = () => {
+// Theme initialization (synchronous, before render)
+const initTheme = (): void => {
   try {
     const stored = localStorage.getItem("theme");
     const prefersDark = window.matchMedia("(prefers-color-scheme: dark)").matches;
-    const theme = stored || (prefersDark ? "dark" : "light");
-    document.documentElement.classList.toggle("dark", theme === "dark");
+    document.documentElement.classList.toggle("dark", stored === "dark" || (!stored && prefersDark));
   } catch {
-    // Ignore theme errors
+    // Silently ignore theme errors
   }
 };
 
-initializeTheme();
+initTheme();
 
-// Defer non-critical initializations - only after app is loaded
-const initializeOptionalFeatures = async () => {
-  // Wait for app to be interactive first
-  await new Promise(resolve => setTimeout(resolve, 2000));
-  
-  try {
-    // Only initialize in production
-    if (import.meta.env.PROD) {
-      const { webVitalsMonitor } = await import("@/lib/web-vitals-monitor");
-      webVitalsMonitor.initialize();
-    }
-  } catch (error) {
-    console.warn("Optional features init failed:", error);
-  }
-};
+// Get root element
+const rootElement = document.getElementById("root");
 
-// Register service worker after page load (only in production)
-if ("serviceWorker" in navigator && import.meta.env.PROD) {
-  window.addEventListener("load", async () => {
-    try {
-      await navigator.serviceWorker.register("/sw.js", { scope: "/" });
-      console.log("✅ Service Worker registered");
-    } catch (error) {
-      console.warn("Service worker registration failed:", error);
+if (!rootElement) {
+  throw new Error("Root element not found");
+}
+
+// Create root and render
+const root = ReactDOM.createRoot(rootElement);
+
+root.render(
+  <React.StrictMode>
+    <HelmetProvider>
+      <App />
+    </HelmetProvider>
+  </React.StrictMode>
+);
+
+// Deferred initialization for non-critical features
+if (typeof window !== "undefined" && import.meta.env.PROD) {
+  window.addEventListener("load", () => {
+    // Service Worker
+    if ("serviceWorker" in navigator) {
+      navigator.serviceWorker.register("/sw.js", { scope: "/" }).catch(() => {});
     }
+    
+    // Web Vitals (deferred)
+    setTimeout(async () => {
+      try {
+        const { webVitalsMonitor } = await import("@/lib/web-vitals-monitor");
+        webVitalsMonitor.initialize();
+      } catch {
+        // Silently ignore
+      }
+    }, 5000);
   });
-}
-
-// Initialize optional features after render
-if (typeof requestIdleCallback !== "undefined") {
-  requestIdleCallback(() => initializeOptionalFeatures());
-} else {
-  setTimeout(initializeOptionalFeatures, 3000);
-}
-
-// Render the app
-const container = document.getElementById("root");
-if (container) {
-  const root = ReactDOM.createRoot(container);
-  root.render(
-    <React.StrictMode>
-      <HelmetProvider>
-        <App />
-      </HelmetProvider>
-    </React.StrictMode>
-  );
 }

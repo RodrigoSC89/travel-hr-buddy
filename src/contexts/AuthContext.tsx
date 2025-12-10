@@ -1,10 +1,14 @@
-// AuthContext - PATCH 850.1 - Cache invalidation fix
-import { createContext, useContext, useState, useEffect, useCallback, useMemo } from "react";
-import type { ReactNode } from "react";
-import { User, Session } from "@supabase/supabase-js";
+/**
+ * AuthContext - PATCH 851.0 - Definitive React Hook Fix
+ * 
+ * Uses consistent React import pattern to prevent hook errors.
+ */
+
+// CRITICAL: Use namespace import for consistency
+import * as React from "react";
+import type { User, Session } from "@supabase/supabase-js";
 import { supabase } from "@/integrations/supabase/client";
 import { toast } from "sonner";
-import { Logger } from "@/lib/utils/logger";
 
 type OAuthProvider = "google" | "github" | "azure";
 
@@ -19,7 +23,7 @@ interface AuthContextType {
   resetPassword: (email: string) => Promise<{ error: Error | null }>;
 }
 
-// Default context value to prevent null errors
+// Default context value
 const defaultAuthValue: AuthContextType = {
   user: null,
   session: null,
@@ -31,127 +35,100 @@ const defaultAuthValue: AuthContextType = {
   resetPassword: async () => ({ error: null }),
 };
 
-const AuthContext = createContext<AuthContextType>(defaultAuthValue);
+// Create context with default value
+const AuthContext = React.createContext<AuthContextType>(defaultAuthValue);
 
-export const useAuth = (): AuthContextType => {
-  const context = useContext(AuthContext);
+// Custom hook to use auth context
+export function useAuth(): AuthContextType {
+  const context = React.useContext(AuthContext);
   if (!context) {
-    console.warn("useAuth called outside of AuthProvider, returning default value");
+    console.warn("useAuth called outside of AuthProvider");
     return defaultAuthValue;
   }
   return context;
-};
-
-interface AuthProviderProps {
-  children: ReactNode;
 }
 
+interface AuthProviderProps {
+  children: React.ReactNode;
+}
+
+// Auth Provider component
 export function AuthProvider({ children }: AuthProviderProps): JSX.Element {
-  const [user, setUser] = useState<User | null>(null);
-  const [session, setSession] = useState<Session | null>(null);
-  const [isLoading, setIsLoading] = useState(true);
-  const [isInitialized, setIsInitialized] = useState(false);
+  const [user, setUser] = React.useState<User | null>(null);
+  const [session, setSession] = React.useState<Session | null>(null);
+  const [isLoading, setIsLoading] = React.useState(true);
 
-  useEffect(() => {
+  React.useEffect(() => {
     let mounted = true;
-    let subscription: { unsubscribe: () => void } | null = null;
+    let authSubscription: { unsubscribe: () => void } | null = null;
 
-    const initializeAuth = async () => {
+    const initAuth = async (): Promise<void> => {
       try {
-        // Set up auth state listener FIRST
-        const { data } = supabase.auth.onAuthStateChange(
-          (event, currentSession) => {
-            if (!mounted) return;
-            
-            setSession(currentSession);
-            setUser(currentSession?.user ?? null);
-            setIsLoading(false);
-            setIsInitialized(true);
-            
-            // Use setTimeout to defer toast calls (avoid deadlock)
-            if (event === "SIGNED_IN") {
-              setTimeout(() => {
-                toast.success("Bem-vindo!", {
-                  description: "Login realizado com sucesso.",
-                });
-              }, 0);
-            } else if (event === "SIGNED_OUT") {
-              setTimeout(() => {
-                toast.info("Desconectado", {
-                  description: "Você foi desconectado com sucesso.",
-                });
-              }, 0);
-            }
+        // Set up auth state listener
+        const { data } = supabase.auth.onAuthStateChange((event, currentSession) => {
+          if (!mounted) return;
+          
+          setSession(currentSession);
+          setUser(currentSession?.user ?? null);
+          setIsLoading(false);
+          
+          // Defer toast to avoid React render cycle issues
+          if (event === "SIGNED_IN") {
+            setTimeout(() => toast.success("Bem-vindo!", { description: "Login realizado com sucesso." }), 0);
+          } else if (event === "SIGNED_OUT") {
+            setTimeout(() => toast.info("Desconectado", { description: "Você foi desconectado com sucesso." }), 0);
           }
-        );
+        });
         
-        subscription = data.subscription;
+        authSubscription = data.subscription;
 
-        // THEN check for existing session
+        // Get existing session
         const { data: sessionData, error } = await supabase.auth.getSession();
-
+        
         if (!mounted) return;
 
         if (error) {
-          Logger.warn("Error getting session", error, "AuthContext");
-          setTimeout(() => {
-            toast.error("Erro de Sessão", {
-              description: "Não foi possível recuperar a sessão.",
-            });
-          }, 0);
+          console.warn("Session error:", error);
         }
         
         setSession(sessionData.session);
         setUser(sessionData.session?.user ?? null);
         setIsLoading(false);
-        setIsInitialized(true);
       } catch (error) {
         if (!mounted) return;
-        Logger.warn("Error initializing auth", error, "AuthContext");
+        console.warn("Auth init error:", error);
         setIsLoading(false);
-        setIsInitialized(true);
       }
     };
 
-    initializeAuth();
+    initAuth();
 
     return () => {
       mounted = false;
-      if (subscription) {
-        subscription.unsubscribe();
-      }
+      authSubscription?.unsubscribe();
     };
   }, []);
 
-  const signUp = useCallback(async (email: string, password: string, fullName: string) => {
+  const signUp = React.useCallback(async (email: string, password: string, fullName: string) => {
     setIsLoading(true);
-    
-    const redirectUrl = `${window.location.origin}/`;
     
     try {
       const { error } = await supabase.auth.signUp({
         email,
         password,
         options: {
-          emailRedirectTo: redirectUrl,
-          data: {
-            full_name: fullName,
-          }
+          emailRedirectTo: `${window.location.origin}/`,
+          data: { full_name: fullName }
         }
       });
 
       if (error) {
-        toast.error("Erro no cadastro", {
-          description: error.message,
-        });
+        toast.error("Erro no cadastro", { description: error.message });
         setIsLoading(false);
         return { error };
       }
       
-      toast.success("Cadastro realizado!", {
-        description: "Verifique seu email para confirmar a conta.",
-      });
-      
+      toast.success("Cadastro realizado!", { description: "Verifique seu email para confirmar a conta." });
       setIsLoading(false);
       return { error: null };
     } catch (err) {
@@ -162,19 +139,14 @@ export function AuthProvider({ children }: AuthProviderProps): JSX.Element {
     }
   }, []);
 
-  const signIn = useCallback(async (email: string, password: string) => {
+  const signIn = React.useCallback(async (email: string, password: string) => {
     setIsLoading(true);
     
     try {
-      const { error } = await supabase.auth.signInWithPassword({
-        email,
-        password,
-      });
+      const { error } = await supabase.auth.signInWithPassword({ email, password });
 
       if (error) {
-        toast.error("Erro no login", {
-          description: error.message,
-        });
+        toast.error("Erro no login", { description: error.message });
         setIsLoading(false);
         return { error };
       }
@@ -189,23 +161,17 @@ export function AuthProvider({ children }: AuthProviderProps): JSX.Element {
     }
   }, []);
 
-  const signInWithOAuth = useCallback(async (provider: OAuthProvider) => {
+  const signInWithOAuth = React.useCallback(async (provider: OAuthProvider) => {
     setIsLoading(true);
-    
-    const redirectUrl = `${window.location.origin}/`;
     
     try {
       const { error } = await supabase.auth.signInWithOAuth({
         provider,
-        options: {
-          redirectTo: redirectUrl,
-        }
+        options: { redirectTo: `${window.location.origin}/` }
       });
 
       if (error) {
-        toast.error("Erro no login", {
-          description: error.message,
-        });
+        toast.error("Erro no login", { description: error.message });
         setIsLoading(false);
         return { error };
       }
@@ -220,36 +186,29 @@ export function AuthProvider({ children }: AuthProviderProps): JSX.Element {
     }
   }, []);
 
-  const signOut = useCallback(async () => {
+  const signOut = React.useCallback(async () => {
     setIsLoading(true);
     try {
       await supabase.auth.signOut();
     } catch (error) {
-      Logger.warn("Error signing out", error, "AuthContext");
+      console.warn("Sign out error:", error);
     } finally {
       setIsLoading(false);
     }
   }, []);
 
-  const resetPassword = useCallback(async (email: string) => {
-    const redirectUrl = `${window.location.origin}/auth?type=recovery`;
-    
+  const resetPassword = React.useCallback(async (email: string) => {
     try {
       const { error } = await supabase.auth.resetPasswordForEmail(email, {
-        redirectTo: redirectUrl,
+        redirectTo: `${window.location.origin}/auth?type=recovery`
       });
 
       if (error) {
-        toast.error("Erro", {
-          description: error.message,
-        });
+        toast.error("Erro", { description: error.message });
         return { error };
       }
       
-      toast.success("Email enviado!", {
-        description: "Verifique seu email para redefinir a senha.",
-      });
-
+      toast.success("Email enviado!", { description: "Verifique seu email para redefinir a senha." });
       return { error: null };
     } catch (err) {
       const error = err instanceof Error ? err : new Error("Erro desconhecido");
@@ -258,7 +217,8 @@ export function AuthProvider({ children }: AuthProviderProps): JSX.Element {
     }
   }, []);
 
-  const value: AuthContextType = useMemo(() => ({
+  // Memoize context value
+  const contextValue = React.useMemo<AuthContextType>(() => ({
     user,
     session,
     isLoading,
@@ -269,9 +229,8 @@ export function AuthProvider({ children }: AuthProviderProps): JSX.Element {
     resetPassword,
   }), [user, session, isLoading, signUp, signIn, signInWithOAuth, signOut, resetPassword]);
 
-  // Always render provider - children handle loading state
   return (
-    <AuthContext.Provider value={value}>
+    <AuthContext.Provider value={contextValue}>
       {children}
     </AuthContext.Provider>
   );
