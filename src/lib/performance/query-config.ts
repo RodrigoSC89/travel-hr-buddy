@@ -1,10 +1,11 @@
 /**
- * Query Configuration - PATCH 651.0
- * Optimized cache strategies for React Query
+ * Query Configuration - PATCH 854.0 - Definitive React Query Fix
+ * Optimized cache strategies for React Query with React initialization validation
  */
 
 import { QueryClient } from "@tanstack/react-query";
 import { logger } from "@/lib/logger";
+import React from "react";
 
 /**
  * Cache strategies by data type
@@ -46,14 +47,24 @@ function getConnectionQuality(): "fast" | "slow" | "critical" {
 
 /**
  * Optimized QueryClient configuration with slow network support
+ * CRITICAL FIX: Validates React is properly loaded before creating QueryClient
  */
 export function createOptimizedQueryClient(): QueryClient {
+  // CRITICAL: Validate React is properly initialized
+  if (!React || typeof React.useState !== "function" || typeof React.useEffect !== "function") {
+    const errorMsg = "CRITICAL: React is not properly initialized. Cannot create QueryClient.";
+    logger.error(errorMsg);
+    throw new Error(errorMsg);
+  }
+  
   const connectionQuality = getConnectionQuality();
   
   // Adjust settings based on connection
   const staleTimeMultiplier = connectionQuality === "critical" ? 5 : connectionQuality === "slow" ? 3 : 1;
   const gcTimeMultiplier = connectionQuality === "critical" ? 3 : connectionQuality === "slow" ? 2 : 1;
   const retryCount = connectionQuality === "critical" ? 3 : connectionQuality === "slow" ? 2 : 1;
+  
+  logger.info("Creating QueryClient with React validation passed");
   
   return new QueryClient({
     defaultOptions: {

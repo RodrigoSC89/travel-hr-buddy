@@ -216,11 +216,14 @@ export default defineConfig(({ mode }) => {
     resolve: {
       alias: {
         "@": path.resolve(__dirname, "./src"),
-        // CRITICAL: Force all React imports to resolve to the same location
+        // CRITICAL PATCH 854.0: Force all React imports to resolve to the same location
+        // This prevents "Cannot read properties of null (reading 'useEffect')" error
         "react": path.resolve(__dirname, "node_modules/react"),
         "react-dom": path.resolve(__dirname, "node_modules/react-dom"),
         "react/jsx-runtime": path.resolve(__dirname, "node_modules/react/jsx-runtime"),
         "react/jsx-dev-runtime": path.resolve(__dirname, "node_modules/react/jsx-dev-runtime"),
+        // CRITICAL: Also alias scheduler to prevent React internals mismatch
+        "scheduler": path.resolve(__dirname, "node_modules/scheduler"),
       },
       // CRITICAL: Ensure single React instance to prevent useState null error
       dedupe: [
@@ -229,7 +232,9 @@ export default defineConfig(({ mode }) => {
         "react-router-dom",
         "@tanstack/react-query",
         "react-helmet-async",
-        "scheduler"
+        "scheduler",
+        "react/jsx-runtime",
+        "react/jsx-dev-runtime"
       ],
     },
     build: {
@@ -464,7 +469,8 @@ export default defineConfig(({ mode }) => {
       },
     },
     // Use fresh cache directory - increment version to force rebuild
-    cacheDir: ".vite-cache-v4",
+    // PATCH 854.0: New cache version to clear corrupted React instances
+    cacheDir: ".vite-cache-v5",
     esbuild: {
       logOverride: { "this-is-undefined-in-esm": "silent" },
       logLevel: "silent",

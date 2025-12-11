@@ -45,8 +45,16 @@ const GlobalBrainProvider = lazy(() =>
   import("./components/global/GlobalBrainProvider").then(m => ({ default: m.GlobalBrainProvider }))
 );
 
-// Query client (singleton)
-const queryClient = createOptimizedQueryClient();
+// CRITICAL FIX: Query client initialization moved inside component to ensure React is fully loaded
+// This prevents "Cannot read properties of null (reading 'useEffect')" error
+let queryClientInstance: ReturnType<typeof createOptimizedQueryClient> | null = null;
+
+function getQueryClient(): ReturnType<typeof createOptimizedQueryClient> {
+  if (!queryClientInstance) {
+    queryClientInstance = createOptimizedQueryClient();
+  }
+  return queryClientInstance;
+}
 
 // Router selection
 const RouterComponent = import.meta.env.VITE_USE_HASH_ROUTER === "true" ? HashRouter : BrowserRouter;
@@ -278,8 +286,11 @@ class App extends React.Component<Record<string, never>, ErrorBoundaryState> {
       );
     }
 
-    // CRITICAL: Context providers are NOT lazy loaded
-    // They must be imported directly and rendered synchronously
+    // CRITICAL FIX: Get QueryClient instance lazily to ensure React is fully initialized
+    // This prevents "Cannot read properties of null (reading 'useEffect')" error
+    // Context providers are NOT lazy loaded - they must be imported directly and rendered synchronously
+    const queryClient = getQueryClient();
+    
     return (
       <QueryClientProvider client={queryClient}>
         <AuthProvider>
