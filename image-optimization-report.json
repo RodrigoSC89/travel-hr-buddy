@@ -1,0 +1,56 @@
+{
+  "timestamp": "2025-12-11T23:11:58.871Z",
+  "totalBefore": 4717074,
+  "totalAfter": 234966,
+  "reductionPercent": "95.0",
+  "files": [
+    {
+      "original": "src/assets/nautilus-logo.png",
+      "originalSize": 1572358,
+      "versions": [
+        {
+          "size": 21266,
+          "path": "src/assets/nautilus-logo-small.webp",
+          "reduction": "98.6%"
+        },
+        {
+          "size": 57056,
+          "path": "src/assets/nautilus-logo-medium.webp",
+          "reduction": "96.4%"
+        }
+      ]
+    },
+    {
+      "original": "src/assets/nautilus-logo-new.png",
+      "originalSize": 1572358,
+      "versions": [
+        {
+          "size": 21266,
+          "path": "src/assets/nautilus-logo-new-small.webp",
+          "reduction": "98.6%"
+        },
+        {
+          "size": 57056,
+          "path": "src/assets/nautilus-logo-new-medium.webp",
+          "reduction": "96.4%"
+        }
+      ]
+    },
+    {
+      "original": "public/nautilus-logo.png",
+      "originalSize": 1572358,
+      "versions": [
+        {
+          "size": 21266,
+          "path": "public/nautilus-logo-small.webp",
+          "reduction": "98.6%"
+        },
+        {
+          "size": 57056,
+          "path": "public/nautilus-logo-medium.webp",
+          "reduction": "96.4%"
+        }
+      ]
+    }
+  ]
+}

@@ -5,6 +5,7 @@ import { componentTagger } from "lovable-tagger";
 import { sentryVitePlugin } from "@sentry/vite-plugin";
 import { VitePWA } from "vite-plugin-pwa";
 import { createHtmlPlugin } from "vite-plugin-html";
+import viteCompression from "vite-plugin-compression";
 
 // https://vitejs.dev/config/
 export default defineConfig(({ mode }) => {
@@ -211,6 +212,30 @@ export default defineConfig(({ mode }) => {
           enabled: false,
           type: "module"
         }
+      }),
+      // FASE A.4: Brotli compression (melhor compressão para conexões lentas)
+      mode === "production" && viteCompression({
+        verbose: true,
+        disable: false,
+        threshold: 1024, // Comprimir tudo > 1KB
+        algorithm: "brotliCompress",
+        ext: ".br",
+        compressionOptions: {
+          level: 11, // Máxima compressão Brotli
+        },
+        deleteOriginFile: false,
+      }),
+      // FASE A.4: Gzip compression (fallback)
+      mode === "production" && viteCompression({
+        verbose: true,
+        disable: false,
+        threshold: 1024, // Comprimir tudo > 1KB
+        algorithm: "gzip",
+        ext: ".gz",
+        compressionOptions: {
+          level: 9, // Máxima compressão Gzip
+        },
+        deleteOriginFile: false,
       })
     ].filter(Boolean),
     resolve: {

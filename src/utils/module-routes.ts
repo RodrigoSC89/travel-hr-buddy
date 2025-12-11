@@ -1,4 +1,5 @@
 // PATCH 850.2 - Module Routes Loader (Simplified)
+// FASE A2 - Enhanced with critical route tracking
 import React from "react";
 import { getRoutableModules } from "@/modules/registry";
 
@@ -6,7 +7,27 @@ export type ModuleRoute = {
   id: string;
   path: string;
   component: React.LazyExoticComponent<React.ComponentType<unknown>>;
+  isCritical?: boolean;
 };
+
+// Lista de rotas críticas que requerem error boundary especial
+const CRITICAL_ROUTES = new Set([
+  'intelligence.ai-command',
+  'intelligence.workflow-command',
+  'features.alerts-command',
+  'intelligence.bi-dashboard',
+  'maintenance.command',
+  'planning.voyage-command',
+  'documents.reports-command',
+  'intelligence.ai-modules-status',
+  'intelligence.nautilus-command',
+  'intelligence.nautilus-llm',
+  'compliance.sgso',
+  'compliance.sgso-workflow',
+  'operations.fleet-command',
+  'finance.command',
+  'operations.maritime-command',
+]);
 
 // Glob import all pages - Vite handles this correctly
 const pageModules = import.meta.glob("../pages/**/*.tsx");
@@ -81,7 +102,15 @@ export function getModuleRoutes(): ModuleRoute[] {
         id: m.id,
         path: m.route as string,
         component: Component,
+        isCritical: CRITICAL_ROUTES.has(m.id),
       };
     })
     .filter((route): route is ModuleRoute => route !== null);
+}
+
+/**
+ * Get only critical routes for priority loading
+ */
+export function getCriticalRoutes(): ModuleRoute[] {
+  return getModuleRoutes().filter(route => route.isCritical);
 }

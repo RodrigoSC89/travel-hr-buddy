@@ -1292,6 +1292,20 @@ export const MODULE_REGISTRY: Record<string, ModuleDefinition> = {
     version: "650.0",
   },
 
+  "compliance.sgso-workflow": {
+    id: "compliance.sgso-workflow",
+    name: "SGSO Workflow",
+    category: "compliance",
+    path: "pages/sgso/SGSOWorkflow",
+    description: "FASE A2 - Workflow de processos SGSO com gerenciamento de tarefas, checklists e aprovações para compliance operacional",
+    status: "active",
+    completeness: "100%",
+    route: "/sgso/workflow",
+    icon: "Workflow",
+    lazy: true,
+    version: "A2.0",
+  },
+
   "compliance.imca-audit": {
     id: "compliance.imca-audit",
     name: "IMCA Audit",
@@ -1857,6 +1871,7 @@ export const MODULE_REGISTRY: Record<string, ModuleDefinition> = {
     status: "deprecated",
     completeness: "100%",
     route: "/fleet-tracking",
+    redirectTo: "/fleet-command",
     icon: "MapPin",
     lazy: true,
     version: "192.0",
@@ -2169,6 +2184,20 @@ export const MODULE_REGISTRY: Record<string, ModuleDefinition> = {
     icon: "Brain",
     lazy: true,
     version: "1.0.0",
+  },
+
+  "intelligence.nautilus-llm": {
+    id: "intelligence.nautilus-llm",
+    name: "Nautilus LLM",
+    category: "intelligence",
+    path: "pages/mission-control/nautilus-llm",
+    description: "FASE A2 - Interface avançada do Large Language Model Nautilus com capacidades de processamento de linguagem natural e análise preditiva",
+    status: "active",
+    completeness: "100%",
+    route: "/mission-control/nautilus-llm",
+    icon: "MessageSquare",
+    lazy: true,
+    version: "A2.0",
   },
 
   // DEPRECATED: Workflow Visual - Fusão no Workflow Command Center (PATCH UNIFY-12.0)

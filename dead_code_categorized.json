@@ -1,0 +1,337 @@
+{
+  "A_DELETABLE": [
+    {
+      "path": "src/modules/analytics/AnalyticsCore.tsx.backup",
+      "size": 7640,
+      "reason": "Arquivo tempor\u00e1rio/backup"
+    },
+    {
+      "path": "src/modules/api-gateway/ApiGateway.tsx.backup",
+      "size": 8685,
+      "reason": "Arquivo tempor\u00e1rio/backup"
+    },
+    {
+      "path": "backups_component_migration/pages/ReportsCommandCenter.tsx",
+      "size": 33132,
+      "reason": "Pasta de backup antiga (migration)"
+    },
+    {
+      "path": "backups_component_migration/pages/BusinessContinuityPlan.tsx",
+      "size": 3276,
+      "reason": "Pasta de backup antiga (migration)"
+    },
+    {
+      "path": "backups_component_migration/pages/FleetManagement.tsx",
+      "size": 18352,
+      "reason": "Pasta de backup antiga (migration)"
+    },
+    {
+      "path": "backups_component_migration/pages/OperationsCommandCenter.tsx",
+      "size": 44178,
+      "reason": "Pasta de backup antiga (migration)"
+    },
+    {
+      "path": "backups_component_migration/pages/FinanceCommandCenter.tsx",
+      "size": 57104,
+      "reason": "Pasta de backup antiga (migration)"
+    },
+    {
+      "path": "backups_component_migration/pages/FuelManagerPage.tsx",
+      "size": 892,
+      "reason": "Pasta de backup antiga (migration)"
+    },
+    {
+      "path": "backups_component_migration/pages/FuelOptimizerPage.tsx",
+      "size": 41595,
+      "reason": "Pasta de backup antiga (migration)"
+    },
+    {
+      "path": "backups_component_migration/pages/Maritime.tsx",
+      "size": 15264,
+      "reason": "Pasta de backup antiga (migration)"
+    },
+    {
+      "path": "backups_component_migration/pages/CommunicationCommandCenter.tsx",
+      "size": 21922,
+      "reason": "Pasta de backup antiga (migration)"
+    },
+    {
+      "path": "backups_component_migration/mobile/components/VirtualizedList.tsx",
+      "size": 5645,
+      "reason": "Pasta de backup antiga (migration)"
+    },
+    {
+      "path": "backups_component_migration/mobile/components/NetworkAwareImage.tsx",
+      "size": 6025,
+      "reason": "Pasta de backup antiga (migration)"
+    },
+    {
+      "path": "backups_component_migration/components/RouteSkeletons.tsx",
+      "size": 6604,
+      "reason": "Pasta de backup antiga (migration)"
+    },
+    {
+      "path": "backups_component_migration/components/LoadingStates.tsx",
+      "size": 6947,
+      "reason": "Pasta de backup antiga (migration)"
+    },
+    {
+      "path": "backups_component_migration/components/fleet/notification-center.tsx",
+      "size": 483,
+      "reason": "Pasta de backup antiga (migration)"
+    },
+    {
+      "path": "backups_component_migration/components/fleet/vessel-tracking-map.tsx",
+      "size": 14489,
+      "reason": "Pasta de backup antiga (migration)"
+    },
+    {
+      "path": "backups_component_migration/components/mobile/mobile-header.tsx",
+      "size": 2373,
+      "reason": "Pasta de backup antiga (migration)"
+    },
+    {
+      "path": "backups_component_migration/components/dashboard/LiveDashboardStats.tsx",
+      "size": 6268,
+      "reason": "Pasta de backup antiga (migration)"
+    },
+    {
+      "path": "backups_component_migration/components/dashboard/modularized-executive-dashboard.tsx",
+      "size": 8173,
+      "reason": "Pasta de backup antiga (migration)"
+    },
+    {
+      "path": "backups_component_migration/components/dashboard/index/OverviewCharts.tsx",
+      "size": 2042,
+      "reason": "Pasta de backup antiga (migration)"
+    },
+    {
+      "path": "backups_component_migration/components/dashboard/index/FinancialTab.tsx",
+      "size": 959,
+      "reason": "Pasta de backup antiga (migration)"
+    },
+    {
+      "path": "backups_component_migration/components/maritime/notification-center.tsx",
+      "size": 483,
+      "reason": "Pasta de backup antiga (migration)"
+    },
+    {
+      "path": "backups_component_migration/components/performance/DataLoader.tsx",
+      "size": 5952,
+      "reason": "Pasta de backup antiga (migration)"
+    },
+    {
+      "path": "backups_component_migration/components/performance/index.ts",
+      "size": 1601,
+      "reason": "Pasta de backup antiga (migration)"
+    },
+    {
+      "path": "backups_component_migration/components/ai/WorkflowAISuggestions.tsx",
+      "size": 20653,
+      "reason": "Pasta de backup antiga (migration)"
+    },
+    {
+      "path": "backups_component_migration/components/ai/AIAdoptionScorecard.tsx",
+      "size": 7992,
+      "reason": "Pasta de backup antiga (migration)"
+    },
+    {
+      "path": "backups_component_migration/components/communication/enhanced-communication-center.tsx",
+      "size": 10849,
+      "reason": "Pasta de backup antiga (migration)"
+    },
+    {
+      "path": "backups_component_migration/components/ui/enhanced-skeletons.tsx",
+      "size": 5919,
+      "reason": "Pasta de backup antiga (migration)"
+    },
+    {
+      "path": "backups_component_migration/components/ui/performance-components.ts",
+      "size": 1765,
+      "reason": "Pasta de backup antiga (migration)"
+    },
+    {
+      "path": "backups_component_migration/components/ui/sidebar.tsx",
+      "size": 23237,
+      "reason": "Pasta de backup antiga (migration)"
+    },
+    {
+      "path": "backups_component_migration/components/layout/LoadingWrapper.tsx",
+      "size": 2620,
+      "reason": "Pasta de backup antiga (migration)"
+    },
+    {
+      "path": "backups_component_migration/components/layout/header.tsx",
+      "size": 3554,
+      "reason": "Pasta de backup antiga (migration)"
+    },
+    {
+      "path": "backups_component_migration/components/maps/LazyMapbox.tsx",
+      "size": 4152,
+      "reason": "Pasta de backup antiga (migration)"
+    },
+    {
+      "path": "backups_component_migration/components/logistics/DeliveryMap.tsx",
+      "size": 10273,
+      "reason": "Pasta de backup antiga (migration)"
+    },
+    {
+      "path": "backups_component_migration/components/charts/AdaptiveChart.tsx",
+      "size": 2566,
+      "reason": "Pasta de backup antiga (migration)"
+    },
+    {
+      "path": "backups_component_migration/components/system/SystemBootstrap.tsx",
+      "size": 1606,
+      "reason": "Pasta de backup antiga (migration)"
+    },
+    {
+      "path": "backups_component_migration/components/ux/Skeletons.tsx",
+      "size": 5108,
+      "reason": "Pasta de backup antiga (migration)"
+    },
+    {
+      "path": "backups_component_migration/components/bi/JobsTrendChart.tsx",
+      "size": 3585,
+      "reason": "Pasta de backup antiga (migration)"
+    },
+    {
+      "path": "backups_component_migration/components/bi/JobsForecastReport.tsx",
+      "size": 2274,
+      "reason": "Pasta de backup antiga (migration)"
+    },
+    {
+      "path": "backups_component_migration/components/bi/DashboardJobs.tsx",
+      "size": 1952,
+      "reason": "Pasta de backup antiga (migration)"
+    },
+    {
+      "path": "backups_component_migration/modules/satellite-tracker/components/SatelliteMap.tsx",
+      "size": 5464,
+      "reason": "Pasta de backup antiga (migration)"
+    },
+    {
+      "path": "backups_component_migration/modules/satellite-tracker/components/SatelliteGlobeMap.tsx",
+      "size": 7900,
+      "reason": "Pasta de backup antiga (migration)"
+    },
+    {
+      "path": "backups_component_migration/lib/integrations.ts",
+      "size": 1228,
+      "reason": "Pasta de backup antiga (migration)"
+    },
+    {
+      "path": "backups_component_migration/lib/lazy-load.ts",
+      "size": 2805,
+      "reason": "Pasta de backup antiga (migration)"
+    },
+    {
+      "path": "tests/unit/document-hub-old.test.ts",
+      "size": 10499,
+      "reason": "Teste \u00f3rf\u00e3o/desabilitado"
+    },
+    {
+      "path": "src/vite-env.d.ts",
+      "size": 38,
+      "reason": "Arquivo quase vazio"
+    },
+    {
+      "path": "supabase/functions/index.ts",
+      "size": 47,
+      "reason": "Arquivo quase vazio"
+    }
+  ],
+  "B_ARCHIVABLE": [
+    {
+      "path": "src/components/legacy/notification_NotificationCenterProfessional.tsx",
+      "size": 52748,
+      "reason": "J\u00e1 em pasta legacy"
+    },
+    {
+      "path": "src/components/legacy/skeleton_SkeletonCard.tsx",
+      "size": 3332,
+      "reason": "J\u00e1 em pasta legacy"
+    },
+    {
+      "path": "src/components/legacy/notification_notification-center.tsx",
+      "size": 522,
+      "reason": "J\u00e1 em pasta legacy"
+    },
+    {
+      "path": "src/components/legacy/skeleton_enhanced-skeletons.tsx",
+      "size": 5933,
+      "reason": "J\u00e1 em pasta legacy"
+    },
+    {
+      "path": "src/components/legacy/skeleton_skeleton-loader.tsx",
+      "size": 4288,
+      "reason": "J\u00e1 em pasta legacy"
+    },
+    {
+      "path": "src/components/legacy/notification_real-time-notifications.tsx",
+      "size": 10440,
+      "reason": "J\u00e1 em pasta legacy"
+    },
+    {
+      "path": "src/components/legacy/skeleton_skeleton.tsx",
+      "size": 1957,
+      "reason": "J\u00e1 em pasta legacy"
+    },
+    {
+      "path": "src/components/legacy/skeleton_DashboardSkeleton.tsx",
+      "size": 4721,
+      "reason": "J\u00e1 em pasta legacy"
+    },
+    {
+      "path": "src/components/legacy/skeleton_adaptive-skeleton.tsx",
+      "size": 5479,
+      "reason": "J\u00e1 em pasta legacy"
+    },
+    {
+      "path": "src/components/legacy/skeleton_loading-skeleton.tsx",
+      "size": 380,
+      "reason": "J\u00e1 em pasta legacy"
+    },
+    {
+      "path": "src/components/legacy/skeleton_Skeletons.tsx",
+      "size": 5122,
+      "reason": "J\u00e1 em pasta legacy"
+    },
+    {
+      "path": "src/components/legacy/notification_real-time-notification-center.tsx",
+      "size": 20262,
+      "reason": "J\u00e1 em pasta legacy"
+    },
+    {
+      "path": "src/components/legacy/skeleton_skeleton-loaders.tsx",
+      "size": 6238,
+      "reason": "J\u00e1 em pasta legacy"
+    },
+    {
+      "path": "src/components/legacy/skeleton_SkeletonLoader.tsx",
+      "size": 3532,
+      "reason": "J\u00e1 em pasta legacy"
+    },
+    {
+      "path": "src/components/legacy/notification_enhanced-notification-center.tsx",
+      "size": 11343,
+      "reason": "J\u00e1 em pasta legacy"
+    },
+    {
+      "path": "src/components/legacy/skeleton_OptimizedSkeleton.tsx",
+      "size": 3569,
+      "reason": "J\u00e1 em pasta legacy"
+    },
+    {
+      "path": "src/components/legacy/notification_NotificationCenter.tsx",
+      "size": 14673,
+      "reason": "J\u00e1 em pasta legacy"
+    },
+    {
+      "path": "src/components/legacy/skeleton_SkeletonPro.tsx",
+      "size": 7171,
+      "reason": "J\u00e1 em pasta legacy"
+    }
+  ],
+  "C_UNCERTAIN": []
+}

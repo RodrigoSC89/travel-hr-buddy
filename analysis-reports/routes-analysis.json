@@ -1,0 +1,19 @@
+{
+  "timestamp": "2025-12-11T22:24:50Z",
+  "analysis": {
+    "routes_in_app": 53,
+    "modules_in_registry": 183,
+    "page_components": 341,
+    "error_boundaries": 8,
+    "fallbacks": 14,
+    "not_found_handlers": 3,
+    "lazy_routes": 13,
+    "broken_routes_markers": 0,
+    "redirects": 39,
+    "dynamic_routes": 0
+  },
+  "files": {
+    "all_pages": "/home/ubuntu/github_repos/travel-hr-buddy/analysis-reports/all-pages.txt",
+    "imported_pages": "/home/ubuntu/github_repos/travel-hr-buddy/analysis-reports/imported-pages.txt"
+  }
+}

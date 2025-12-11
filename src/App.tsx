@@ -15,7 +15,8 @@ import { TenantProvider } from "./contexts/TenantContext";
 import { OrganizationProvider } from "./contexts/OrganizationContext";
 
 // FASE 3.3: Error Boundaries
-import { GlobalErrorBoundary, RouteErrorBoundary, DashboardErrorBoundary } from "@/components/errors";
+// FASE A2: Critical Route Error Boundary
+import { GlobalErrorBoundary, RouteErrorBoundary, DashboardErrorBoundary, CriticalRouteErrorBoundary } from "@/components/errors";
 
 // UI Components
 import { Toaster } from "@/components/ui/toaster";
@@ -140,9 +141,19 @@ function AppRoutes(): JSX.Element {
                   key={route.id}
                   path={route.path}
                   element={
-                    <Suspense fallback={<Loader />}>
-                      <route.component />
-                    </Suspense>
+                    route.isCritical ? (
+                      <CriticalRouteErrorBoundary routeName={route.id} routeId={route.id}>
+                        <Suspense fallback={<Loader />}>
+                          <route.component />
+                        </Suspense>
+                      </CriticalRouteErrorBoundary>
+                    ) : (
+                      <RouteErrorBoundary routePath={route.path}>
+                        <Suspense fallback={<Loader />}>
+                          <route.component />
+                        </Suspense>
+                      </RouteErrorBoundary>
+                    )
                   }
                 />
               ))}

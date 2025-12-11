@@ -1,0 +1,175 @@
+        .from(
+      .from(
+      // Fetch data from various AI modules
+      // Load from modules-registry.json
+      // Load nodes from modules registry
+      // Try to query registered modules from tenant_modules or fall back to static results
+    const states = Array.from(this.modules.values());
+    return Array.from(this.modules.values()).filter(m => m.aiEnabled);
+    return Array.from(this.modules.values()).filter(m => m.category === category);
+    return Array.from(this.modules.values()).map(module => {
+    return Array.from(this.modules.values());
+   * Load nodes from modules registry
+  const categories = Array.from(new Set(modules.map((m) => m.category))).sort();
+ * - Context collection from multiple modules (navigation, weather, failures, crew)
+ * Consolidates StatusBadge from enhanced-status-components.tsx
+ * Consolidates StatusIndicator from enhanced-status-components.tsx
+ * Consolidates empty-state.tsx and EmptyState from enhanced-status-components.tsx
+ * Context data from modules
+ * Extracted from enhanced-status-components.tsx
+ * Re-exports from unified modules
+ * from the components directory to maintain backward compatibility.
+- **All Modules** — Data aggregation from all system modules
+../../modules/logs-center/types
+../components/ChecklistCard
+../components/IncidentTimeline
+./components
+./components/AIAssistantPanel
+./components/AIInsights
+./components/AISMarker
+./components/AcademyDashboard
+./components/ActionsList
+./components/AddCrewDialog
+./components/AddTransactionDialog
+./components/AdvancedCopilot
+./components/AlertsPanel
+./components/BudgetOverview
+./components/CareerDevelopment
+./components/CertificationsPanel
+./components/CertificationsSection
+./components/ChecklistCard
+./components/ChecklistInterface
+./components/ClimateEngagement
+./components/CollaboratorRegistry
+./components/CommunicationHistory
+./components/ComplianceHubDashboard
+./components/ConnectivityPanel
+./components/CoverageMap
+./components/CreateAlertForm
+./components/CreateIncidentDialog
+./components/CreateInspectionDialog
+./components/CreateMaintenancePlanDialog
+./components/CreatePlanDialog
+./components/CreateVoyageDialog
+./components/CrewAICopilot
+./components/CrewHealthTab
+./components/CrewList
+./components/CrewMetrics
+./components/CrewTrainingSection
+./components/DGNSSDashboard
+./components/DPAIAnalyzer
+./components/DPAnalyticsDashboard
+./components/DPCopilot
+./components/DPIntelligenceCenter
+./components/DPIntelligenceDashboard
+./components/DPOverview
+./components/DPRealtime
+./components/DPStatusCard
+./components/DiagnosticPanel
+./components/DigitalTwin
+./components/DrillsCalendarSection
+./components/EmissionsDashboard
+./components/EmployeeBenefits
+./components/EmployeeHistory
+./components/EmployeePayroll
+./components/EmployeePersonalDocuments
+./components/EmployeeRequests
+./components/EvidenceUploader
+./components/ExpenseChart
+./components/ExportActions
+./components/FallbackSimulator
+./components/FallbackStatus
+./components/FiltersDialog
+./components/FinanceAIPanel
+./components/FleetAICopilot
+./components/FleetCockpit
+./components/FleetHealthPanel
+./components/FleetMetrics
+./components/GanttChart
+./components/HRChatbot
+./components/HealthCheckIn
+./components/HealthCheckInForm
+./components/HealthCheckin
+./components/HealthMetricsDashboard
+./components/HourometerManager
+./components/ISPSCodeSection
+./components/IncidentDetailDialog
+./components/IncidentReplay
+./components/InfirmaryDashboard
+./components/InsightsPanel
+./components/InspectionsList
+./components/InspectorChatbot
+./components/InventorySection
+./components/InvoiceManager
+./components/ItemList
+./components/JobsCenter
+./components/LiveDecisionMap
+./components/MaintenanceAlertsPanel
+./components/MaintenanceCalendarView
+./components/MaintenancePanel
+./components/MaintenanceTasksTable
+./components/MaintenanceTimelineView
+./components/ManagerAlerts
+./components/MissionDashboard
+./components/MobileLayout
+./components/MoodDashboard
+./components/NautilusBrainChat
+./components/NetworkAwareImage
+./components/NotificationsDialog
+./components/NotificationsPanel
+./components/OfflineChecklist
+./components/OfflineIndicator
+./components/OnboardingFlow
+./components/OperationalKPIs
+./components/OrbitVisualization
+./components/PeopleAnalytics
+./components/PeopleDashboard
+./components/PerformanceCenter
+./components/PlansList
+./components/PredictiveInsights
+./components/PriceAlertsList
+./components/ProcurementDashboard
+./components/PurchaseOrdersSection
+./components/QuickActionsPanel
+./components/RecordsTab
+./components/RecruitmentPipeline
+./components/ReportsSection
+./components/ReportsTab
+./components/RequisitionsSection
+./components/RiskAlertPanel
+./components/SafetyDashboardComplete
+./components/SatcomStatus
+./components/SatcomTerminal
+./components/SatelliteAlerts
+./components/SatelliteDashboard
+./components/SatelliteMap
+./components/SatelliteStatus
+./components/SettingsDialog
+./components/SignalHistory
+./components/SonarAIDashboard
+./components/SuppliersSection
+./components/SuppliesTab
+./components/SystemHealthGrid
+./components/TemplateWYSIWYGEditor
+./components/TimeAttendance
+./components/TrainingCreatorSection
+./components/TrainingDashboardSection
+./components/TransactionList
+./components/VersionHistory
+./components/VesselGrid
+./components/VirtualizedList
+./components/VoiceInterface
+./components/VoyageAICopilot
+./components/VoyageDetailsDialog
+./components/VoyagesList
+./components/WeatherPanel
+./components/WeeklyAssessment
+./components/WellbeingDashboard
+./components/WellbeingHistory
+./components/WorkOrderManager
+./modules-definition
+./use-training-modules
+// Re-export from new unified components
+Consolidated from operations/fleet and operations/maritime-system modules.
+The Visão Geral (Overview) module provides an **executive-level overview and strategic dashboard** that consolidates high-level insights from all system modules for leadership and decision makers.
+const categories = Array.from(new Set(modules.map(m => m.category))).sort();
