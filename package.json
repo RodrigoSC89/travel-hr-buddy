@@ -68,17 +68,18 @@
     "export:build": "tsx scripts/export-build.ts",
     "verify:postbuild": "tsx scripts/verify-postbuild.ts",
     "deploy:helper": "tsx scripts/deploy-helper.ts",
-    "validate:patch-540": "./scripts/validate-patch-540.sh"
+    "validate:patch-540": "./scripts/validate-patch-540.sh",
+    "fix:react-error": "bash scripts/fix-react-error.sh"
   },
   "engines": {
     "node": ">=20.0.0 <23.0.0",
     "npm": ">=8.0.0"
   },
   "resolutions": {
-    "react": "19.2.1",
-    "react-dom": "19.2.1",
-    "@types/react": "18.3.23",
-    "@types/react-dom": "19.2.3"
+    "react": "^19.0.0",
+    "react-dom": "^19.0.0",
+    "@types/react": "^19.0.0",
+    "@types/react-dom": "^19.0.0"
   },
   "dependencies": {
     "@11labs/react": "^0.2.0",
@@ -214,8 +215,8 @@
     "@types/lodash": "^4.17.21",
     "@types/node": "^25.0.0",
     "@types/nodemailer": "^7.0.2",
-    "@types/react": "^19.2.7",
-    "@types/react-dom": "^19.2.3",
+    "@types/react": "^19.0.6",
+    "@types/react-dom": "^19.0.3",
     "@typescript-eslint/eslint-plugin": "^7.18.0",
     "@typescript-eslint/parser": "^7.18.0",
     "@vitejs/plugin-react-swc": "^3.11.0",
