@@ -142,6 +142,7 @@
     "@types/react-signature-canvas": "^1.0.7",
     "@types/react-window": "^2.0.0",
     "ai": "^5.0.76",
+    "axios": "^1.13.2",
     "chart.js": "^4.5.0",
     "class-variance-authority": "^0.7.1",
     "clsx": "^2.1.1",
