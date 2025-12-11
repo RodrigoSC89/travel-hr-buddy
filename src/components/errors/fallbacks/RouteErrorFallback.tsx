@@ -4,7 +4,7 @@
  */
 
 import React from 'react';
-import { MapPinOff as MapOff, Home, Search } from 'lucide-react';
+import { MapPinOff, Home, Search } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardFooter, CardHeader } from '@/components/ui/card';
 import { useNavigate } from 'react-router-dom';
@@ -26,25 +26,25 @@ export const RouteErrorFallback: React.FC<RouteErrorFallbackProps> = ({
         return {
           title: 'Página Não Encontrada',
           message: 'A página que você está procurando não existe ou foi movida.',
-          icon: MapOff,
+          icon: MapPinOff,
         };
       case 403:
         return {
           title: 'Acesso Negado',
           message: 'Você não tem permissão para acessar esta página.',
-          icon: MapOff,
+          icon: MapPinOff,
         };
       case 500:
         return {
           title: 'Erro do Servidor',
           message: 'Algo deu errado no servidor. Estamos trabalhando para resolver.',
-          icon: MapOff,
+          icon: MapPinOff,
         };
       default:
         return {
           title: 'Erro na Rota',
           message: 'Ocorreu um erro ao carregar esta página.',
-          icon: MapOff,
+          icon: MapPinOff,
         };
     }
   };
