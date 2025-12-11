@@ -1,7 +1,8 @@
 /**
- * App.tsx - PATCH 853.0 - Definitive React Hook Fix
+ * App.tsx - PATCH 853.0 - Definitive React Hook Fix + FASE 3.3 Error Boundaries
  * 
  * Uses standard React import pattern and loads context providers synchronously.
+ * Includes global error boundary and error tracking.
  */
 
 import React, { useMemo, Suspense, lazy } from "react";
@@ -12,6 +13,9 @@ import { QueryClientProvider } from "@tanstack/react-query";
 import { AuthProvider } from "./contexts/AuthContext";
 import { TenantProvider } from "./contexts/TenantContext";
 import { OrganizationProvider } from "./contexts/OrganizationContext";
+
+// FASE 3.3: Error Boundaries
+import { GlobalErrorBoundary, RouteErrorBoundary, DashboardErrorBoundary } from "@/components/errors";
 
 // UI Components
 import { Toaster } from "@/components/ui/toaster";
@@ -71,24 +75,6 @@ function Loader(): JSX.Element {
   );
 }
 
-// Error display component
-function ErrorDisplay({ message, onRetry }: { message: string; onRetry: () => void }): JSX.Element {
-  return (
-    <div className="min-h-screen flex items-center justify-center bg-background p-4">
-      <div className="text-center space-y-4 max-w-md">
-        <h1 className="text-2xl font-bold text-destructive">Erro ao carregar</h1>
-        <p className="text-muted-foreground">{message}</p>
-        <button 
-          onClick={onRetry}
-          className="px-4 py-2 bg-primary text-primary-foreground rounded-md hover:bg-primary/90"
-        >
-          Recarregar página
-        </button>
-      </div>
-    </div>
-  );
-}
-
 // Routes component (uses hooks safely inside providers)
 function AppRoutes(): JSX.Element {
   // FASE 2.5: Lazy preload hook para otimizar carregamento
@@ -134,14 +120,18 @@ function AppRoutes(): JSX.Element {
               </ProtectedRoute>
             }>
               <Route index element={
-                <Suspense fallback={<Loader />}>
-                  <Index />
-                </Suspense>
+                <RouteErrorBoundary routePath="/">
+                  <Suspense fallback={<Loader />}>
+                    <Index />
+                  </Suspense>
+                </RouteErrorBoundary>
               } />
               <Route path="dashboard" element={
-                <Suspense fallback={<Loader />}>
-                  <Dashboard />
-                </Suspense>
+                <DashboardErrorBoundary>
+                  <Suspense fallback={<Loader />}>
+                    <Dashboard />
+                  </Suspense>
+                </DashboardErrorBoundary>
               } />
               
               {/* Module Routes from Registry */}
@@ -258,46 +248,15 @@ function AppRoutes(): JSX.Element {
   );
 }
 
-// Error boundary state interface
-interface ErrorBoundaryState {
-  hasError: boolean;
-  error: Error | null;
-}
-
-// Main App component - Class component for error boundary
-class App extends React.Component<Record<string, never>, ErrorBoundaryState> {
-  constructor(props: Record<string, never>) {
-    super(props);
-    this.state = { hasError: false, error: null };
-  }
-
-  static getDerivedStateFromError(error: Error): ErrorBoundaryState {
-    return { hasError: true, error };
-  }
-
-  componentDidCatch(error: Error, errorInfo: React.ErrorInfo): void {
-  }
-
-  handleRetry = (): void => {
-    window.location.reload();
-  };
-
-  render(): React.ReactNode {
-    if (this.state.hasError) {
-      return (
-        <ErrorDisplay 
-          message={this.state.error?.message || "Erro desconhecido"} 
-          onRetry={this.handleRetry} 
-        />
-      );
-    }
-
-    // CRITICAL FIX: Get QueryClient instance lazily to ensure React is fully initialized
-    // This prevents "Cannot read properties of null (reading 'useEffect')" error
-    // Context providers are NOT lazy loaded - they must be imported directly and rendered synchronously
-    const queryClient = getQueryClient();
-    
-    return (
+// Main App component - FASE 3.3: Now with GlobalErrorBoundary
+function App(): JSX.Element {
+  // CRITICAL FIX: Get QueryClient instance lazily to ensure React is fully initialized
+  // This prevents "Cannot read properties of null (reading 'useEffect')" error
+  // Context providers are NOT lazy loaded - they must be imported directly and rendered synchronously
+  const queryClient = getQueryClient();
+  
+  return (
+    <GlobalErrorBoundary>
       <QueryClientProvider client={queryClient}>
         <AuthProvider>
           <TenantProvider>
@@ -307,8 +266,8 @@ class App extends React.Component<Record<string, never>, ErrorBoundaryState> {
           </TenantProvider>
         </AuthProvider>
       </QueryClientProvider>
-    );
-  }
+    </GlobalErrorBoundary>
+  );
 }
 
 export default App;
