@@ -1,28 +1,20 @@
 /**
- * PATCH 838: Accessibility Styles
- * Comprehensive accessibility CSS
+ * Estilos de Acessibilidade - WCAG 2.1 AA
+ * Nautilus One - Travel HR Buddy
+ * 
+ * @author DeepAgent - Abacus.AI
+ * @date 2025-12-11
+ * @phase FASE 3.2
  */
 
-/* Skip link for keyboard navigation */
-.skip-link {
-  position: absolute;
-  top: -40px;
-  left: 0;
-  background: hsl(var(--primary));
-  color: hsl(var(--primary-foreground));
-  padding: 8px 16px;
-  z-index: 9999;
-  text-decoration: none;
-  font-weight: 500;
-  border-radius: 0 0 8px 0;
-  transition: top 0.2s ease;
-}
+/* ============================================
+   SR-ONLY (Screen Reader Only)
+   ============================================ */
 
-.skip-link:focus {
-  top: 0;
-}
-
-/* Screen reader only */
+/**
+ * Classe para elementos visíveis apenas para screen readers
+ * Seguindo as melhores práticas do WebAIM
+ */
 .sr-only {
   position: absolute;
   width: 1px;
@@ -35,136 +27,351 @@
   border-width: 0;
 }
 
-/* High contrast mode */
-.high-contrast {
-  --background: 0 0% 0%;
-  --foreground: 0 0% 100%;
-  --card: 0 0% 5%;
-  --card-foreground: 0 0% 100%;
-  --popover: 0 0% 5%;
-  --popover-foreground: 0 0% 100%;
-  --primary: 60 100% 50%;
-  --primary-foreground: 0 0% 0%;
-  --secondary: 0 0% 20%;
-  --secondary-foreground: 0 0% 100%;
-  --muted: 0 0% 15%;
-  --muted-foreground: 0 0% 70%;
-  --accent: 180 100% 50%;
-  --accent-foreground: 0 0% 0%;
-  --destructive: 0 100% 50%;
-  --destructive-foreground: 0 0% 100%;
-  --border: 0 0% 30%;
-  --input: 0 0% 20%;
-  --ring: 60 100% 50%;
+/**
+ * Variante focável do sr-only
+ * Torna-se visível quando recebe foco (útil para skip links)
+ */
+.sr-only-focusable:focus,
+.sr-only-focusable:active {
+  position: static;
+  width: auto;
+  height: auto;
+  overflow: visible;
+  clip: auto;
+  white-space: normal;
 }
 
-.high-contrast * {
-  border-color: hsl(0 0% 50%) !important;
-}
+/* ============================================
+   FOCUS STYLES (WCAG 2.4.7 - Focus Visible)
+   ============================================ */
 
-.high-contrast button,
-.high-contrast a {
-  text-decoration: underline;
-}
-
-/* Large text mode */
-.large-text {
-  font-size: 18px;
-}
-
-.large-text h1 { font-size: 2.5rem; }
-.large-text h2 { font-size: 2rem; }
-.large-text h3 { font-size: 1.75rem; }
-.large-text h4 { font-size: 1.5rem; }
-.large-text p, .large-text span, .large-text li { font-size: 1.125rem; }
-
-/* Reduced motion */
-.reduce-motion * {
-  animation-duration: 0.01ms !important;
-  animation-iteration-count: 1 !important;
-  transition-duration: 0.01ms !important;
-  scroll-behavior: auto !important;
-}
-
-/* Focus indicators */
+/**
+ * Estilos de foco visíveis para todos os elementos interativos
+ * Contraste mínimo 3:1 conforme WCAG 2.1 AA
+ */
 :focus-visible {
-  outline: 3px solid hsl(var(--ring));
-  outline-offset: 2px;
-}
-
-.focus-visible-only :focus:not(:focus-visible) {
-  outline: none;
-}
-
-/* Dyslexia font */
-.dyslexia-font {
-  font-family: "OpenDyslexic", "Comic Sans MS", "Arial", sans-serif;
-  letter-spacing: 0.05em;
-  word-spacing: 0.1em;
-}
-
-/* Text spacing */
-[style*="--letter-spacing"] {
-  letter-spacing: var(--letter-spacing);
-}
-
-[style*="--word-spacing"] {
-  word-spacing: var(--word-spacing);
-}
-
-[style*="--line-height"] body {
-  line-height: var(--line-height);
-}
-
-/* Color blind modes */
-.protanopia {
-  filter: url('#protanopia-filter');
-}
-
-.deuteranopia {
-  filter: url('#deuteranopia-filter');
-}
-
-.tritanopia {
-  filter: url('#tritanopia-filter');
-}
-
-/* Touch targets for mobile */
-@media (pointer: coarse) {
-  button,
-  a,
-  input,
-  select,
-  textarea {
-    min-height: 44px;
-    min-width: 44px;
-  }
-}
-
-/* Ensure good color contrast */
-.high-contrast img {
-  filter: contrast(1.2);
-}
-
-/* Keyboard focus styles */
-*:focus {
-  outline: none;
-}
-
-*:focus-visible {
   outline: 3px solid hsl(var(--primary));
   outline-offset: 2px;
   border-radius: 4px;
 }
 
-/* Print styles for accessibility */
-@media print {
-  * {
-    background: white !important;
-    color: black !important;
+/* Remover outline padrão do navegador */
+:focus:not(:focus-visible) {
+  outline: none;
+}
+
+/* Focus para botões */
+button:focus-visible,
+.btn:focus-visible {
+  outline: 3px solid hsl(var(--primary));
+  outline-offset: 2px;
+  box-shadow: 0 0 0 4px hsl(var(--primary) / 0.2);
+}
+
+/* Focus para inputs */
+input:focus-visible,
+textarea:focus-visible,
+select:focus-visible {
+  outline: 3px solid hsl(var(--primary));
+  outline-offset: 1px;
+  border-color: hsl(var(--primary));
+}
+
+/* Focus para links */
+a:focus-visible {
+  outline: 3px solid hsl(var(--primary));
+  outline-offset: 3px;
+  text-decoration: underline;
+  text-decoration-thickness: 2px;
+}
+
+/* Focus para cards e elementos interativos */
+[role="button"]:focus-visible,
+[role="link"]:focus-visible,
+[role="tab"]:focus-visible,
+[role="menuitem"]:focus-visible {
+  outline: 3px solid hsl(var(--primary));
+  outline-offset: 2px;
+}
+
+/* ============================================
+   SKIP LINKS
+   ============================================ */
+
+/**
+ * Skip link para pular para o conteúdo principal
+ * Visível apenas quando focado
+ */
+.skip-link {
+  position: absolute;
+  top: -40px;
+  left: 0;
+  background: hsl(var(--primary));
+  color: hsl(var(--primary-foreground));
+  padding: 0.75rem 1.5rem;
+  text-decoration: none;
+  font-weight: 600;
+  z-index: 9999;
+  border-radius: 0 0 4px 0;
+  transition: top 0.3s ease;
+}
+
+.skip-link:focus {
+  top: 0;
+}
+
+/* ============================================
+   HIGH CONTRAST MODE
+   ============================================ */
+
+/**
+ * Suporte para modo de alto contraste do Windows
+ */
+@media (prefers-contrast: high) {
+  :root {
+    --border-width: 2px;
   }
   
-  a[href]:after {
-    content: " (" attr(href) ")";
+  button,
+  input,
+  select,
+  textarea {
+    border-width: 2px;
   }
+  
+  :focus-visible {
+    outline-width: 4px;
+  }
+}
+
+/* ============================================
+   REDUCED MOTION (WCAG 2.3.3)
+   ============================================ */
+
+/**
+ * Respeitar preferência de movimento reduzido
+ */
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
+}
+
+/* ============================================
+   KEYBOARD NAVIGATION INDICATORS
+   ============================================ */
+
+/**
+ * Indicadores visuais para navegação por teclado
+ */
+body.keyboard-navigation *:focus {
+  outline: 3px solid hsl(var(--primary));
+  outline-offset: 2px;
+}
+
+/* ============================================
+   ARIA LIVE REGIONS
+   ============================================ */
+
+/**
+ * Estilos para regiões de conteúdo dinâmico
+ */
+[aria-live] {
+  /* Garantir que a região seja acessível */
+  position: relative;
+}
+
+[aria-live="assertive"] {
+  /* Anúncios urgentes */
+  font-weight: 600;
+}
+
+/* ============================================
+   DISABLED STATES (WCAG 1.4.1)
+   ============================================ */
+
+/**
+ * Estados desabilitados com contraste adequado
+ */
+:disabled,
+[aria-disabled="true"] {
+  opacity: 0.6;
+  cursor: not-allowed;
+  pointer-events: none;
+}
+
+button:disabled,
+input:disabled,
+select:disabled,
+textarea:disabled {
+  background-color: hsl(var(--muted));
+  color: hsl(var(--muted-foreground));
+  border-color: hsl(var(--border));
+}
+
+/* ============================================
+   ERROR STATES (WCAG 3.3.1)
+   ============================================ */
+
+/**
+ * Estados de erro com contraste adequado
+ */
+[aria-invalid="true"],
+.input-error {
+  border-color: hsl(var(--destructive));
+  border-width: 2px;
+}
+
+[aria-invalid="true"]:focus-visible,
+.input-error:focus-visible {
+  outline-color: hsl(var(--destructive));
+  box-shadow: 0 0 0 4px hsl(var(--destructive) / 0.2);
+}
+
+/* Mensagens de erro */
+.error-message,
+[role="alert"] {
+  color: hsl(var(--destructive));
+  font-weight: 500;
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  margin-top: 0.25rem;
+}
+
+/* ============================================
+   TOOLTIP & POPOVER ACCESSIBILITY
+   ============================================ */
+
+/**
+ * Tooltips acessíveis
+ */
+[role="tooltip"] {
+  background: hsl(var(--popover));
+  color: hsl(var(--popover-foreground));
+  padding: 0.5rem 0.75rem;
+  border-radius: 6px;
+  font-size: 0.875rem;
+  box-shadow: 0 4px 6px -1px rgb(0 0 0 / 0.1);
+  z-index: 50;
+}
+
+/* ============================================
+   DIALOG/MODAL ACCESSIBILITY
+   ============================================ */
+
+/**
+ * Modals e diálogos acessíveis
+ */
+[role="dialog"],
+[role="alertdialog"] {
+  position: fixed;
+  z-index: 50;
+}
+
+/* Backdrop para modals */
+.modal-backdrop {
+  position: fixed;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.5);
+  z-index: 40;
+}
+
+/* ============================================
+   TABLE ACCESSIBILITY
+   ============================================ */
+
+/**
+ * Tabelas acessíveis
+ */
+table {
+  border-collapse: collapse;
+  width: 100%;
+}
+
+table caption {
+  font-weight: 600;
+  text-align: left;
+  padding: 0.75rem;
+  caption-side: top;
+}
+
+th {
+  font-weight: 600;
+  text-align: left;
+  padding: 0.75rem;
+  background: hsl(var(--muted));
+}
+
+td {
+  padding: 0.75rem;
+  border-bottom: 1px solid hsl(var(--border));
+}
+
+/* ============================================
+   RESPONSIVE TEXT (WCAG 1.4.4)
+   ============================================ */
+
+/**
+ * Garantir que o texto seja responsivo e legível
+ */
+html {
+  font-size: 100%; /* 16px base */
+}
+
+@media (max-width: 640px) {
+  html {
+    font-size: 87.5%; /* 14px em mobile */
+  }
+}
+
+/* ============================================
+   LANDMARK ROLES
+   ============================================ */
+
+/**
+ * Estilos para landmarks semânticos
+ */
+header[role="banner"],
+nav[role="navigation"],
+main[role="main"],
+footer[role="contentinfo"] {
+  /* Garantir que os landmarks sejam identificáveis */
+}
+
+/* ============================================
+   UTILITIES
+   ============================================ */
+
+/* Focusable: torna elemento focável por teclado */
+.focusable {
+  cursor: pointer;
+  -webkit-tap-highlight-color: transparent;
+}
+
+.focusable:focus-visible {
+  outline: 3px solid hsl(var(--primary));
+  outline-offset: 2px;
+}
+
+/* Not-focusable: remove foco de elementos decorativos */
+.not-focusable {
+  pointer-events: none;
+  user-select: none;
+}
+
+/* Visually hidden but accessible */
+.visually-hidden {
+  clip: rect(0 0 0 0);
+  clip-path: inset(50%);
+  height: 1px;
+  overflow: hidden;
+  position: absolute;
+  white-space: nowrap;
+  width: 1px;
 }

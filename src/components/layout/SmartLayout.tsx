@@ -28,24 +28,36 @@ export function SmartLayout() {
       {/* FASE 2.5: Preload Manager para lazy loading inteligente */}
       <PreloadManager />
       
-      {/* Skip to content link for accessibility */}
+      {/* FASE 3.2: Skip to content link for accessibility (WCAG 2.4.1) */}
       <SkipToContent targetId="main-content" />
       
-      <div className={`flex h-screen w-full overflow-hidden bg-background ${mobileClasses.safeAreaTop} ${mobileClasses.safeAreaBottom}`}>
-        {/* Smart Sidebar - hidden on mobile by default */}
-        <div className={mobileClasses.hideOnMobile}>
+      <div 
+        className={`flex h-screen w-full overflow-hidden bg-background ${mobileClasses.safeAreaTop} ${mobileClasses.safeAreaBottom}`}
+        role="application"
+        aria-label="Nautilus One - Sistema de Gestão Marítima"
+      >
+        {/* FASE 3.2: Navigation Landmark - Smart Sidebar (WCAG 2.4.1) */}
+        <aside 
+          className={mobileClasses.hideOnMobile}
+          role="navigation"
+          aria-label="Navegação principal"
+        >
           <SmartSidebar />
-        </div>
+        </aside>
 
         {/* Main Content Area */}
         <div className="flex-1 flex flex-col overflow-hidden">
-          {/* Smart Header - responsive */}
-          <SmartHeader />
+          {/* FASE 3.2: Banner Landmark - Smart Header (WCAG 2.4.1) */}
+          <header role="banner" aria-label="Cabeçalho principal">
+            <SmartHeader />
+          </header>
 
-          {/* Page Content - responsive padding */}
+          {/* FASE 3.2: Main Landmark - Page Content (WCAG 2.4.1) */}
           <main 
             id="main-content"
+            role="main"
             tabIndex={-1}
+            aria-label="Conteúdo principal"
             className={`flex-1 overflow-y-auto bg-zinc-50 dark:bg-zinc-900 ${mobileClasses.responsivePadding} focus:outline-none`}
           >
             <Suspense fallback={<LoadingFallback />}>
@@ -54,7 +66,7 @@ export function SmartLayout() {
           </main>
         </div>
 
-        {/* Toast Notifications */}
+        {/* Toast Notifications - Live Region (WCAG 4.1.3) */}
         <Toaster />
       </div>
     </ThemeProvider>

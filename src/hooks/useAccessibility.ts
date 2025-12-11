@@ -1,170 +1,269 @@
 /**
- * Accessibility React Hooks
- * WCAG 2.1 compliance utilities for React components
+ * Hook de Acessibilidade
+ * React hooks para gerenciar acessibilidade
+ * 
+ * @author DeepAgent - Abacus.AI
+ * @date 2025-12-11
+ * @phase FASE 3.2
  */
 
-import { useEffect, useRef, useCallback, useState } from 'react';
-import { 
-  createFocusTrap, 
-  announce, 
-  prefersReducedMotion,
-  prefersHighContrast,
-  prefersDarkMode,
-  isKeyPressed,
-  KeyboardKeys
-} from '@/lib/accessibility';
+import { useEffect, useRef, useState, useCallback } from 'react';
+import {
+  createFocusTrap,
+  announceToScreenReader,
+  detectKeyboardNavigation,
+  generateA11yId,
+} from '@/utils/accessibility';
 
-// Hook for focus trapping in modals/dialogs
-export function useFocusTrap(isActive: boolean = true) {
-  const containerRef = useRef<HTMLDivElement>(null);
-  
+/**
+ * Hook para gerenciar focus trap em modais
+ */
+export function useFocusTrap<T extends HTMLElement>(active = false) {
+  const ref = useRef<T>(null);
+
   useEffect(() => {
-    if (!isActive || !containerRef.current) return;
-    
-    const cleanup = createFocusTrap(containerRef.current);
-    return cleanup;
-  }, [isActive]);
-  
-  return containerRef;
-}
+    if (!active || !ref.current) return;
 
-// Hook for announcements to screen readers
-export function useAnnounce() {
-  return useCallback((message: string, priority: 'polite' | 'assertive' = 'polite') => {
-    announce(message, priority);
-  }, []);
-}
+    const focusTrap = createFocusTrap(ref.current);
+    focusTrap.activate();
 
-// Hook for keyboard navigation in lists
-export function useKeyboardNavigation<T extends HTMLElement>(
-  items: T[],
-  options: {
-    loop?: boolean;
-    orientation?: 'horizontal' | 'vertical';
-    onSelect?: (index: number) => void;
-  } = {}
-) {
-  const [activeIndex, setActiveIndex] = useState(0);
-  const { loop = true, orientation = 'vertical', onSelect } = options;
-  
-  const handleKeyDown = useCallback((event: KeyboardEvent) => {
-    const prevKey = orientation === 'vertical' ? 'ARROW_UP' : 'ARROW_LEFT';
-    const nextKey = orientation === 'vertical' ? 'ARROW_DOWN' : 'ARROW_RIGHT';
-    
-    if (isKeyPressed(event, prevKey as keyof typeof KeyboardKeys)) {
-      event.preventDefault();
-      setActiveIndex(prev => {
-        if (prev === 0) return loop ? items.length - 1 : 0;
-        return prev - 1;
-      });
-    } else if (isKeyPressed(event, nextKey as keyof typeof KeyboardKeys)) {
-      event.preventDefault();
-      setActiveIndex(prev => {
-        if (prev === items.length - 1) return loop ? 0 : items.length - 1;
-        return prev + 1;
-      });
-    } else if (isKeyPressed(event, 'HOME')) {
-      event.preventDefault();
-      setActiveIndex(0);
-    } else if (isKeyPressed(event, 'END')) {
-      event.preventDefault();
-      setActiveIndex(items.length - 1);
-    } else if (isKeyPressed(event, 'ENTER') || isKeyPressed(event, 'SPACE')) {
-      event.preventDefault();
-      onSelect?.(activeIndex);
-    }
-  }, [items.length, loop, orientation, activeIndex, onSelect]);
-  
-  useEffect(() => {
-    items[activeIndex]?.focus();
-  }, [activeIndex, items]);
-  
-  return { activeIndex, setActiveIndex, handleKeyDown };
-}
-
-// Hook for media query preferences
-export function useMediaPreferences() {
-  const [preferences, setPreferences] = useState({
-    reducedMotion: false,
-    highContrast: false,
-    darkMode: false,
-  });
-  
-  useEffect(() => {
-    setPreferences({
-      reducedMotion: prefersReducedMotion(),
-      highContrast: prefersHighContrast(),
-      darkMode: prefersDarkMode(),
-    });
-    
-    const reducedMotionQuery = window.matchMedia('(prefers-reduced-motion: reduce)');
-    const highContrastQuery = window.matchMedia('(prefers-contrast: high)');
-    const darkModeQuery = window.matchMedia('(prefers-color-scheme: dark)');
-    
-    const updatePreferences = () => {
-      setPreferences({
-        reducedMotion: reducedMotionQuery.matches,
-        highContrast: highContrastQuery.matches,
-        darkMode: darkModeQuery.matches,
-      });
-    };
-    
-    reducedMotionQuery.addEventListener('change', updatePreferences);
-    highContrastQuery.addEventListener('change', updatePreferences);
-    darkModeQuery.addEventListener('change', updatePreferences);
-    
     return () => {
-      reducedMotionQuery.removeEventListener('change', updatePreferences);
-      highContrastQuery.removeEventListener('change', updatePreferences);
-      darkModeQuery.removeEventListener('change', updatePreferences);
+      focusTrap.deactivate();
+    };
+  }, [active]);
+
+  return ref;
+}
+
+/**
+ * Hook para anunciar mensagens para screen readers
+ */
+export function useScreenReaderAnnouncement() {
+  const announce = useCallback(
+    (message: string, priority: 'polite' | 'assertive' = 'polite') => {
+      announceToScreenReader(message, priority);
+    },
+    []
+  );
+
+  return announce;
+}
+
+/**
+ * Hook para gerenciar IDs únicos acessíveis
+ */
+export function useA11yId(prefix?: string) {
+  const [id] = useState(() => generateA11yId(prefix));
+  return id;
+}
+
+/**
+ * Hook para detectar navegação por teclado
+ */
+export function useKeyboardNavigation() {
+  const [isKeyboardNavigating, setIsKeyboardNavigating] = useState(false);
+
+  useEffect(() => {
+    function handleKeyDown(event: KeyboardEvent) {
+      if (event.key === 'Tab') {
+        setIsKeyboardNavigating(true);
+      }
+    }
+
+    function handleMouseDown() {
+      setIsKeyboardNavigating(false);
+    }
+
+    const cleanup = detectKeyboardNavigation();
+
+    document.addEventListener('keydown', handleKeyDown);
+    document.addEventListener('mousedown', handleMouseDown);
+
+    return () => {
+      cleanup?.();
+      document.removeEventListener('keydown', handleKeyDown);
+      document.removeEventListener('mousedown', handleMouseDown);
     };
   }, []);
-  
-  return preferences;
+
+  return isKeyboardNavigating;
 }
 
-// Hook for skip link
-export function useSkipLink(targetId: string = 'main-content') {
+/**
+ * Hook para gerenciar fechamento de modal com Escape
+ */
+export function useEscapeKey(onEscape: () => void, active = true) {
   useEffect(() => {
-    const handleSkip = (e: KeyboardEvent) => {
-      if (e.key === 'Tab' && !e.shiftKey && document.activeElement === document.body) {
-        const skipLink = document.querySelector('[data-skip-link]');
-        if (skipLink) {
-          (skipLink as HTMLElement).focus();
-        }
-      }
-    };
-    
-    document.addEventListener('keydown', handleSkip);
-    return () => document.removeEventListener('keydown', handleSkip);
-  }, [targetId]);
-}
+    if (!active) return;
 
-// Hook for escape key to close modals
-export function useEscapeKey(onEscape: () => void, isActive: boolean = true) {
-  useEffect(() => {
-    if (!isActive) return;
-    
-    const handleKeyDown = (event: KeyboardEvent) => {
+    function handleKeyDown(event: KeyboardEvent) {
       if (event.key === 'Escape') {
         onEscape();
       }
-    };
-    
+    }
+
     document.addEventListener('keydown', handleKeyDown);
-    return () => document.removeEventListener('keydown', handleKeyDown);
-  }, [onEscape, isActive]);
+
+    return () => {
+      document.removeEventListener('keydown', handleKeyDown);
+    };
+  }, [onEscape, active]);
 }
 
-// Hook for returning focus after modal closes
-export function useReturnFocus() {
+/**
+ * Hook para gerenciar foco em elemento específico
+ */
+export function useFocusOnMount<T extends HTMLElement>() {
+  const ref = useRef<T>(null);
+
+  useEffect(() => {
+    if (ref.current) {
+      ref.current.focus();
+    }
+  }, []);
+
+  return ref;
+}
+
+/**
+ * Hook para restaurar foco após unmount
+ */
+export function useFocusRestore<T extends HTMLElement>() {
+  const ref = useRef<T>(null);
   const previousActiveElement = useRef<HTMLElement | null>(null);
-  
+
   useEffect(() => {
     previousActiveElement.current = document.activeElement as HTMLElement;
-    
+
     return () => {
-      previousActiveElement.current?.focus();
+      if (previousActiveElement.current) {
+        previousActiveElement.current.focus();
+      }
     };
   }, []);
+
+  return ref;
+}
+
+/**
+ * Hook para gerenciar estado expandido/colapsado com ARIA
+ */
+export function useAriaExpanded(initialExpanded = false) {
+  const [expanded, setExpanded] = useState(initialExpanded);
+  const id = useA11yId('expandable');
+
+  const triggerProps = {
+    'aria-expanded': expanded,
+    'aria-controls': id,
+  };
+
+  const contentProps = {
+    id,
+    hidden: !expanded,
+  };
+
+  return {
+    expanded,
+    setExpanded,
+    toggle: () => setExpanded(prev => !prev),
+    triggerProps,
+    contentProps,
+  };
+}
+
+/**
+ * Hook para gerenciar tabs acessíveis
+ */
+export function useAccessibleTabs(tabCount: number, defaultIndex = 0) {
+  const [selectedIndex, setSelectedIndex] = useState(defaultIndex);
+
+  const handleKeyDown = useCallback(
+    (event: React.KeyboardEvent) => {
+      switch (event.key) {
+        case 'ArrowRight':
+          event.preventDefault();
+          setSelectedIndex(prev => (prev + 1) % tabCount);
+          break;
+        case 'ArrowLeft':
+          event.preventDefault();
+          setSelectedIndex(prev => (prev - 1 + tabCount) % tabCount);
+          break;
+        case 'Home':
+          event.preventDefault();
+          setSelectedIndex(0);
+          break;
+        case 'End':
+          event.preventDefault();
+          setSelectedIndex(tabCount - 1);
+          break;
+      }
+    },
+    [tabCount]
+  );
+
+  return {
+    selectedIndex,
+    setSelectedIndex,
+    handleKeyDown,
+  };
+}
+
+/**
+ * Hook para criar props de tooltip acessível
+ */
+export function useAccessibleTooltip(content: string) {
+  const [visible, setVisible] = useState(false);
+  const id = useA11yId('tooltip');
+
+  const triggerProps = {
+    'aria-describedby': visible ? id : undefined,
+    onMouseEnter: () => setVisible(true),
+    onMouseLeave: () => setVisible(false),
+    onFocus: () => setVisible(true),
+    onBlur: () => setVisible(false),
+  };
+
+  const tooltipProps = {
+    id,
+    role: 'tooltip' as const,
+    hidden: !visible,
+  };
+
+  return {
+    visible,
+    setVisible,
+    triggerProps,
+    tooltipProps,
+    content,
+  };
+}
+
+/**
+ * Hook para gerenciar live regions (anúncios dinâmicos)
+ */
+export function useLiveRegion(priority: 'polite' | 'assertive' = 'polite') {
+  const [message, setMessage] = useState('');
+  const id = useA11yId('live-region');
+
+  useEffect(() => {
+    if (message) {
+      // Limpar mensagem após 3 segundos
+      const timer = setTimeout(() => setMessage(''), 3000);
+      return () => clearTimeout(timer);
+    }
+  }, [message]);
+
+  const regionProps = {
+    id,
+    role: 'status' as const,
+    'aria-live': priority,
+    'aria-atomic': true,
+    className: 'sr-only',
+  };
+
+  return {
+    message,
+    announce: setMessage,
+    regionProps,
+  };
 }
