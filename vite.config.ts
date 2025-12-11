@@ -533,11 +533,20 @@ export default defineConfig(({ mode }) => {
         "@tanstack/react-query-devtools",
         "react-helmet-async",
         "scheduler",
-        "mqtt"
+        "mqtt",
+        "lucide-react"
       ],
       exclude: [],
       // CRITICAL: Force rebuild of optimized deps to clear corrupted cache
-      force: false,
+      force: true, // ← CHANGED: Force rebuild to clear React errors
+      // CRITICAL FIX: Deduplicate React in optimizeDeps too
+      dedupe: [
+        "react",
+        "react-dom",
+        "react-router-dom",
+        "@tanstack/react-query",
+        "scheduler"
+      ],
       // Ensure single React instance by not allowing esbuild to bundle React separately
       esbuildOptions: {
         target: "esnext",

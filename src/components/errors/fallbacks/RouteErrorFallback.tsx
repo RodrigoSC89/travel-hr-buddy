@@ -4,7 +4,7 @@
  */
 
 import React from 'react';
-import { MapOff, Home, Search } from 'lucide-react';
+import { MapPinOff as MapOff, Home, Search } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardFooter, CardHeader } from '@/components/ui/card';
 import { useNavigate } from 'react-router-dom';
