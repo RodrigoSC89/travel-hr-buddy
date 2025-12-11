@@ -455,9 +455,15 @@ export default defineConfig(({ mode }) => {
       exclude: [],
       // CRITICAL: Force rebuild of optimized deps to clear corrupted cache
       force: true,
+      // Ensure single React instance by not allowing esbuild to bundle React separately
+      esbuildOptions: {
+        target: "esnext",
+        // Force React to be resolved from the same location
+        resolveExtensions: [".mjs", ".js", ".ts", ".jsx", ".tsx", ".json"],
+      },
     },
-    // Use unique cache directory to avoid corrupted cache issues
-    cacheDir: ".vite-cache-v2",
+    // Use fresh cache directory - increment version to force rebuild
+    cacheDir: ".vite-cache-v3",
     esbuild: {
       logOverride: { "this-is-undefined-in-esm": "silent" },
       logLevel: "silent",

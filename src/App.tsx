@@ -234,10 +234,11 @@ function AppRoutes(): JSX.Element {
             </Route>
           </Routes>
           
-          <Toaster />
-          <SonnerToaster position="top-right" richColors />
         </GlobalBrainProvider>
       </Suspense>
+      {/* CRITICAL: Toasters OUTSIDE lazy-loaded components to prevent React instance mismatch */}
+      <Toaster />
+      <SonnerToaster position="top-right" richColors />
     </RouterComponent>
   );
 }
