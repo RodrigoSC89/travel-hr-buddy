@@ -216,6 +216,11 @@ export default defineConfig(({ mode }) => {
     resolve: {
       alias: {
         "@": path.resolve(__dirname, "./src"),
+        // CRITICAL: Force all React imports to resolve to the same location
+        "react": path.resolve(__dirname, "node_modules/react"),
+        "react-dom": path.resolve(__dirname, "node_modules/react-dom"),
+        "react/jsx-runtime": path.resolve(__dirname, "node_modules/react/jsx-runtime"),
+        "react/jsx-dev-runtime": path.resolve(__dirname, "node_modules/react/jsx-dev-runtime"),
       },
       // CRITICAL: Ensure single React instance to prevent useState null error
       dedupe: [
@@ -223,7 +228,8 @@ export default defineConfig(({ mode }) => {
         "react-dom", 
         "react-router-dom",
         "@tanstack/react-query",
-        "react-helmet-async"
+        "react-helmet-async",
+        "scheduler"
       ],
     },
     build: {
@@ -443,12 +449,15 @@ export default defineConfig(({ mode }) => {
         "@supabase/supabase-js",
         "@tanstack/react-query",
         "react-helmet-async",
+        "scheduler",
         "mqtt"
       ],
-      // Remove force: true to prevent HMR issues
       exclude: [],
+      // CRITICAL: Force rebuild of optimized deps to clear corrupted cache
+      force: true,
     },
-    cacheDir: ".vite-cache",
+    // Use unique cache directory to avoid corrupted cache issues
+    cacheDir: ".vite-cache-v2",
     esbuild: {
       logOverride: { "this-is-undefined-in-esm": "silent" },
       logLevel: "silent",

@@ -1,11 +1,10 @@
 /**
- * AuthContext - PATCH 851.0 - Definitive React Hook Fix
+ * AuthContext - PATCH 853.0 - Definitive React Hook Fix
  * 
- * Uses consistent React import pattern to prevent hook errors.
+ * Uses default React import to match vite's expected import pattern.
  */
 
-// CRITICAL: Use namespace import for consistency
-import * as React from "react";
+import React, { createContext, useContext, useState, useEffect, useCallback, useMemo } from "react";
 import type { User, Session } from "@supabase/supabase-js";
 import { supabase } from "@/integrations/supabase/client";
 import { toast } from "sonner";
@@ -36,11 +35,11 @@ const defaultAuthValue: AuthContextType = {
 };
 
 // Create context with default value
-const AuthContext = React.createContext<AuthContextType>(defaultAuthValue);
+const AuthContext = createContext<AuthContextType>(defaultAuthValue);
 
 // Custom hook to use auth context
 export function useAuth(): AuthContextType {
-  const context = React.useContext(AuthContext);
+  const context = useContext(AuthContext);
   if (!context) {
     console.warn("useAuth called outside of AuthProvider");
     return defaultAuthValue;
@@ -54,11 +53,11 @@ interface AuthProviderProps {
 
 // Auth Provider component
 export function AuthProvider({ children }: AuthProviderProps): JSX.Element {
-  const [user, setUser] = React.useState<User | null>(null);
-  const [session, setSession] = React.useState<Session | null>(null);
-  const [isLoading, setIsLoading] = React.useState(true);
+  const [user, setUser] = useState<User | null>(null);
+  const [session, setSession] = useState<Session | null>(null);
+  const [isLoading, setIsLoading] = useState(true);
 
-  React.useEffect(() => {
+  useEffect(() => {
     let mounted = true;
     let authSubscription: { unsubscribe: () => void } | null = null;
 
@@ -109,7 +108,7 @@ export function AuthProvider({ children }: AuthProviderProps): JSX.Element {
     };
   }, []);
 
-  const signUp = React.useCallback(async (email: string, password: string, fullName: string) => {
+  const signUp = useCallback(async (email: string, password: string, fullName: string) => {
     setIsLoading(true);
     
     try {
@@ -139,7 +138,7 @@ export function AuthProvider({ children }: AuthProviderProps): JSX.Element {
     }
   }, []);
 
-  const signIn = React.useCallback(async (email: string, password: string) => {
+  const signIn = useCallback(async (email: string, password: string) => {
     setIsLoading(true);
     
     try {
@@ -161,7 +160,7 @@ export function AuthProvider({ children }: AuthProviderProps): JSX.Element {
     }
   }, []);
 
-  const signInWithOAuth = React.useCallback(async (provider: OAuthProvider) => {
+  const signInWithOAuth = useCallback(async (provider: OAuthProvider) => {
     setIsLoading(true);
     
     try {
@@ -186,7 +185,7 @@ export function AuthProvider({ children }: AuthProviderProps): JSX.Element {
     }
   }, []);
 
-  const signOut = React.useCallback(async () => {
+  const signOut = useCallback(async () => {
     setIsLoading(true);
     try {
       await supabase.auth.signOut();
@@ -197,7 +196,7 @@ export function AuthProvider({ children }: AuthProviderProps): JSX.Element {
     }
   }, []);
 
-  const resetPassword = React.useCallback(async (email: string) => {
+  const resetPassword = useCallback(async (email: string) => {
     try {
       const { error } = await supabase.auth.resetPasswordForEmail(email, {
         redirectTo: `${window.location.origin}/auth?type=recovery`
@@ -218,7 +217,7 @@ export function AuthProvider({ children }: AuthProviderProps): JSX.Element {
   }, []);
 
   // Memoize context value
-  const contextValue = React.useMemo<AuthContextType>(() => ({
+  const contextValue = useMemo<AuthContextType>(() => ({
     user,
     session,
     isLoading,
