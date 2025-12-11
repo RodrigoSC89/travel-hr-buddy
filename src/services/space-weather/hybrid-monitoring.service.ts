@@ -137,9 +137,7 @@ export class HybridSpaceWeatherService {
    * 
    * const status = await hybrid.getSpaceWeatherStatus(-22.9, -43.2);
    * 
-   * console.log(`Risk: ${status.risk_level}`);
-   * console.log(`DP Gate: ${status.dp_gate_status}`);
-   * console.log(`Source: ${status.data_source}`); // 'DP_ASOG' ou 'TYPESCRIPT'
+   *    *    * // 'DP_ASOG' ou 'TYPESCRIPT'
    * ```
    */
   async getSpaceWeatherStatus(
@@ -153,7 +151,6 @@ export class HybridSpaceWeatherService {
     // Check cache
     const cached = this.cache.get(cacheKey);
     if (cached) {
-      console.log('[HybridSpaceWeather] Using cached data');
       return { ...cached, data_source: 'CACHED' };
     }
 
@@ -168,15 +165,14 @@ export class HybridSpaceWeatherService {
           return { ...status, data_source: 'DP_ASOG' };
         } catch (error) {
           console.warn('[HybridSpaceWeather] DP ASOG failed:', error);
+          console.warn('[HybridSpaceWeather] DP ASOG failed:', error);
           
           if (!this.config.enable_fallback) {
             throw error;
           }
           
-          console.log('[HybridSpaceWeather] Falling back to TypeScript implementation');
         }
       } else {
-        console.log('[HybridSpaceWeather] DP ASOG unavailable, using TypeScript fallback');
       }
     }
 

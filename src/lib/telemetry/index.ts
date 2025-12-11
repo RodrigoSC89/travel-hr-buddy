@@ -55,12 +55,12 @@ class TelemetryService {
         persistence: "localStorage",
         opt_out_capturing_by_default: false,
         loaded: (posthog) => {
-          console.log("PostHog initialized");
           this.initialized = true;
           this.syncOfflineEvents();
         },
       });
     } catch (error) {
+      console.error("Failed to initialize PostHog:", error);
       console.error("Failed to initialize PostHog:", error);
     }
   }
@@ -75,7 +75,6 @@ class TelemetryService {
 
     // Check consent
     if (!ConsentManager.hasConsent()) {
-      console.log("Telemetry tracking skipped - no consent");
       return;
     }
 
@@ -98,6 +97,7 @@ class TelemetryService {
       posthog.capture(name, event.properties);
     } catch (error) {
       console.error("Failed to track event:", error);
+      console.error("Failed to track event:", error);
       // Queue for retry
       OfflineQueue.enqueue(event);
     }
@@ -115,6 +115,7 @@ class TelemetryService {
       posthog.identify(userId, properties);
     } catch (error) {
       console.error("Failed to identify user:", error);
+      console.error("Failed to identify user:", error);
     }
   }
 
@@ -129,6 +130,7 @@ class TelemetryService {
     try {
       posthog.reset();
     } catch (error) {
+      console.error("Failed to reset telemetry:", error);
       console.error("Failed to reset telemetry:", error);
     }
   }
@@ -145,8 +147,8 @@ class TelemetryService {
       await OfflineQueue.processQueue(async (event) => {
         posthog.capture(event.name, event.properties);
       });
-      console.log("Offline events synced successfully");
     } catch (error) {
+      console.error("Failed to sync offline events:", error);
       console.error("Failed to sync offline events:", error);
     }
   }

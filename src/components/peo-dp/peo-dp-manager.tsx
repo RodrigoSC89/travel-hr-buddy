@@ -207,7 +207,6 @@ export const PeoDpManager: React.FC = () => {
   };
 
   const handleAuditSave = (items: PEODPAuditItem[], score: number) => {
-    console.log("Audit saved:", { items, score });
     toast.success("Auditoria salva como rascunho");
   };
 
@@ -235,7 +234,6 @@ export const PeoDpManager: React.FC = () => {
   };
 
   const handleChecklistSave = (version: PEODPChecklistVersion) => {
-    console.log("Checklist saved:", version);
     setIsChecklistEditorOpen(false);
   };
 

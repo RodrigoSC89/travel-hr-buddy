@@ -62,11 +62,6 @@ export const useLoopGuard = (
         stackTrace: new Error().stack || 'No stack trace available',
       };
 
-      console.error(
-        `🔁 LOOP DETECTED in ${componentName}.${functionName}:`,
-        `${executionHistory.current.length} executions in ${timeWindow}ms`,
-        loopInfo
-      );
 
       // Call custom handler if provided
       if (onLoopDetected) {
@@ -129,10 +124,6 @@ export const withLoopGuard = <T extends (...args: any[]) => any>(
     executionHistory.push(...validExecutions, now);
 
     if (executionHistory.length >= maxExecutions) {
-      console.error(
-        `🔁 LOOP DETECTED in ${guardName}:`,
-        `${executionHistory.length} executions in ${timeWindow}ms. Execution blocked.`
-      );
       return Promise.resolve(undefined);
     }
 

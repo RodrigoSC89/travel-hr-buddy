@@ -184,7 +184,6 @@ class UnifiedLogger {
       }
     } else {
       // Production: structured JSON
-      console.error(JSON.stringify(entry));
     }
   }
 
@@ -294,7 +293,6 @@ class UnifiedLogger {
 
   table(data: unknown): void {
     if (isDevelopment) {
-      console.table(data);
     }
   }
 }

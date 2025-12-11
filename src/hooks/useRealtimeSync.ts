@@ -83,11 +83,13 @@ export function useRealtimeSync<T>({
 
     } catch (err) {
       console.error(`[RealtimeSync] Error fetching ${table}:`, err);
+      console.error(`[RealtimeSync] Error fetching ${table}:`, err);
 
       // Try to load from cache
       const cachedData = offlineCache.get<T>(cacheKey);
       
       if (cachedData) {
+        console.warn(`[RealtimeSync] Using cached data for ${table}`);
         console.warn(`[RealtimeSync] Using cached data for ${table}`);
         setData(cachedData);
         setSyncState({
@@ -102,7 +104,6 @@ export function useRealtimeSync<T>({
         // Schedule retry with exponential backoff
         if (retryCount < maxRetries) {
           const delay = retryDelay * Math.pow(2, retryCount);
-          console.log(`[RealtimeSync] Retrying in ${delay}ms (attempt ${retryCount + 1}/${maxRetries})`);
           
           retryTimeoutRef.current = setTimeout(() => {
             fetchData(retryCount + 1);
@@ -151,7 +152,6 @@ export function useRealtimeSync<T>({
           "postgres_changes",
           { event: "*", schema: "public", table },
           (payload) => {
-            console.log(`[RealtimeSync] Received update for ${table}:`, payload);
             
             // Update data based on event type
             if (payload.eventType === "INSERT" || payload.eventType === "UPDATE") {
@@ -167,6 +167,7 @@ export function useRealtimeSync<T>({
         )
         .subscribe();
     } catch (err) {
+      console.error("[RealtimeSync] Error setting up subscription:", err);
       console.error("[RealtimeSync] Error setting up subscription:", err);
     }
 

@@ -121,7 +121,6 @@ const ComplianceReports = () => {
       const { data, error } = await query;
       
       if (error) {
-        console.error("Error fetching compliance data:", error);
         // Use mock data if table doesn't exist
         setComplianceData([
           { id: 1, category: "Safety", severity: "high", status: "open", title: "Safety inspection pending", created_at: new Date().toISOString() },
@@ -131,6 +130,7 @@ const ComplianceReports = () => {
         setComplianceData(data || []);
       }
     } catch (error) {
+      console.error("Error:", error);
       console.error("Error:", error);
       // Use mock data on error
       setComplianceData([
@@ -185,6 +185,7 @@ const ComplianceReports = () => {
       });
     } catch (error) {
       console.error("Error generating PDF:", error);
+      console.error("Error generating PDF:", error);
       toast({
         title: "Erro ao gerar PDF",
         description: "Tente novamente",
@@ -222,6 +223,7 @@ const ComplianceReports = () => {
       });
     } catch (error) {
       console.error("Error generating CSV:", error);
+      console.error("Error generating CSV:", error);
       toast({
         title: "Erro ao gerar CSV",
         description: "Tente novamente",
@@ -252,6 +254,7 @@ const ComplianceReports = () => {
         description: "Download iniciado automaticamente"
       });
     } catch (error) {
+      console.error("Error generating Excel:", error);
       console.error("Error generating Excel:", error);
       toast({
         title: "Erro ao gerar Excel",
@@ -291,6 +294,7 @@ const ComplianceReports = () => {
         description: "Download iniciado automaticamente"
       });
     } catch (error) {
+      console.error("Error generating JSON:", error);
       console.error("Error generating JSON:", error);
       toast({
         title: "Erro ao gerar JSON",

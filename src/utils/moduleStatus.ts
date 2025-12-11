@@ -109,19 +109,10 @@ export function logModuleStatus(): void {
   const report = getModuleStatusReport();
   const incomplete = getIncompleteModules();
   
-  console.group('📊 Module Status Report');
-  console.log(`Total: ${report.totalModules}`);
-  console.log(`Active: ${report.activeModules}`);
-  console.log(`Incomplete: ${report.incompleteModules}`);
-  console.log(`Beta/Experimental: ${report.betaModules}`);
   
   if (incomplete.length > 0) {
-    console.group('⚠️ Incomplete Modules');
     incomplete.forEach((m) => {
-      console.log(`- ${m.name} (${m.id}): ${m.completeness}`);
     });
-    console.groupEnd();
   }
   
-  console.groupEnd();
 }

@@ -101,6 +101,7 @@ export const ReservationPaymentSystem: React.FC = () => {
       setReservations(data || []);
     } catch (error) {
       console.error("Error loading reservations:", error);
+      console.error("Error loading reservations:", error);
       toast.error("Failed to load reservations");
     } finally {
       setLoading(false);
@@ -158,6 +159,7 @@ export const ReservationPaymentSystem: React.FC = () => {
       loadReservations();
     } catch (error) {
       console.error("Error processing payment:", error);
+      console.error("Error processing payment:", error);
       toast.error("Payment failed. Please try again.");
     } finally {
       setProcessingPayment(false);
@@ -167,7 +169,6 @@ export const ReservationPaymentSystem: React.FC = () => {
   const sendConfirmationEmail = async (reservationId: string) => {
     try {
       // In production, integrate with email service (SendGrid, AWS SES, etc.)
-      console.log("Sending confirmation email for reservation:", reservationId);
       
       // Log notification
       await supabase.from("notifications").insert({
@@ -182,13 +183,13 @@ export const ReservationPaymentSystem: React.FC = () => {
       toast.info("Confirmation email sent");
     } catch (error) {
       console.error("Error sending email:", error);
+      console.error("Error sending email:", error);
     }
   };
 
   const sendPushNotification = async (reservationId: string, message: string) => {
     try {
       // In production, integrate with push notification service (Firebase, OneSignal, etc.)
-      console.log("Sending push notification:", message);
       
       await supabase.from("notifications").insert({
         user_id: selectedReservation?.user_id,
@@ -199,6 +200,7 @@ export const ReservationPaymentSystem: React.FC = () => {
         status: "sent",
       });
     } catch (error) {
+      console.error("Error sending push notification:", error);
       console.error("Error sending push notification:", error);
     }
   };
@@ -268,6 +270,7 @@ END:VCALENDAR`;
       toast.success("Synced to calendar");
     } catch (error) {
       console.error("Error syncing to calendar:", error);
+      console.error("Error syncing to calendar:", error);
       toast.error("Failed to sync calendar");
     }
   };
@@ -288,6 +291,7 @@ END:VCALENDAR`;
       toast.success("Refund processed successfully");
       loadReservations();
     } catch (error) {
+      console.error("Error processing refund:", error);
       console.error("Error processing refund:", error);
       toast.error("Failed to process refund");
     }
@@ -313,6 +317,7 @@ END:VCALENDAR`;
 
       loadReservations();
     } catch (error) {
+      console.error("Error cancelling reservation:", error);
       console.error("Error cancelling reservation:", error);
       toast.error("Failed to cancel reservation");
     }

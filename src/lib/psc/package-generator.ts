@@ -102,7 +102,6 @@ export async function createInspection(
     .single();
 
   if (error) {
-    console.error('Failed to create inspection:', error);
     return null;
   }
 
@@ -122,7 +121,6 @@ export async function getVesselInspections(
     .order('inspection_date', { ascending: false });
 
   if (error) {
-    console.error('Failed to fetch inspections:', error);
     return [];
   }
 
@@ -142,7 +140,6 @@ export async function addDeficiency(
     .single();
 
   if (error) {
-    console.error('Failed to add deficiency:', error);
     return null;
   }
 
@@ -162,6 +159,7 @@ export async function addDeficiency(
     }
   } catch (e) {
     console.error('Failed to update deficiency count:', e);
+    console.error('Failed to update deficiency count:', e);
   }
 
   return deficiency as unknown as PSCDeficiency;
@@ -180,7 +178,6 @@ export async function getDeficiencies(
     .order('created_at', { ascending: true });
 
   if (error) {
-    console.error('Failed to fetch deficiencies:', error);
     return [];
   }
 
@@ -201,7 +198,6 @@ export async function updateDeficiencyStatus(
     .eq('id', deficiencyId);
 
   if (error) {
-    console.error('Failed to update deficiency:', error);
     return false;
   }
 

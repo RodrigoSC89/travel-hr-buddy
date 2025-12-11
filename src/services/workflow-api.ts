@@ -59,7 +59,6 @@ export async function createWorkflow(
     });
 
     if (!seedResult.success) {
-      console.warn("Failed to seed suggestions:", seedResult.error);
     }
 
     return {
@@ -68,6 +67,7 @@ export async function createWorkflow(
       suggestions: seedResult.suggestions as WorkflowStep[],
     };
   } catch (error) {
+    console.error("Error creating workflow:", error);
     console.error("Error creating workflow:", error);
     throw error;
   }
@@ -87,12 +87,12 @@ export async function getWorkflow(workflowId: string): Promise<Workflow | null> 
       .single();
 
     if (error) {
-      console.error("Error fetching workflow:", error);
       return null;
     }
 
     return data as Workflow;
   } catch (error) {
+    console.error("Error in getWorkflow:", error);
     console.error("Error in getWorkflow:", error);
     return null;
   }
@@ -110,12 +110,12 @@ export async function getWorkflows(): Promise<Workflow[]> {
       .order("created_at", { ascending: false });
 
     if (error) {
-      console.error("Error fetching workflows:", error);
       return [];
     }
 
     return (data as Workflow[]) || [];
   } catch (error) {
+    console.error("Error in getWorkflows:", error);
     console.error("Error in getWorkflows:", error);
     return [];
   }
@@ -140,12 +140,12 @@ export async function updateWorkflow(
       .single();
 
     if (error) {
-      console.error("Error updating workflow:", error);
       return null;
     }
 
     return data as Workflow;
   } catch (error) {
+    console.error("Error in updateWorkflow:", error);
     console.error("Error in updateWorkflow:", error);
     return null;
   }
@@ -164,12 +164,12 @@ export async function deleteWorkflow(workflowId: string): Promise<boolean> {
       .eq("id", workflowId);
 
     if (error) {
-      console.error("Error deleting workflow:", error);
       return false;
     }
 
     return true;
   } catch (error) {
+    console.error("Error in deleteWorkflow:", error);
     console.error("Error in deleteWorkflow:", error);
     return false;
   }
@@ -189,12 +189,12 @@ export async function getWorkflowSteps(workflowId: string): Promise<WorkflowStep
       .order("position", { ascending: true });
 
     if (error) {
-      console.error("Error fetching workflow steps:", error);
       return [];
     }
 
     return (data as WorkflowStep[]) || [];
   } catch (error) {
+    console.error("Error in getWorkflowSteps:", error);
     console.error("Error in getWorkflowSteps:", error);
     return [];
   }
@@ -226,12 +226,12 @@ export async function createWorkflowStep(
       .single();
 
     if (error) {
-      console.error("Error creating workflow step:", error);
       return null;
     }
 
     return data as WorkflowStep;
   } catch (error) {
+    console.error("Error in createWorkflowStep:", error);
     console.error("Error in createWorkflowStep:", error);
     return null;
   }
@@ -256,12 +256,12 @@ export async function updateWorkflowStep(
       .single();
 
     if (error) {
-      console.error("Error updating workflow step:", error);
       return null;
     }
 
     return data as WorkflowStep;
   } catch (error) {
+    console.error("Error in updateWorkflowStep:", error);
     console.error("Error in updateWorkflowStep:", error);
     return null;
   }
@@ -280,12 +280,12 @@ export async function deleteWorkflowStep(stepId: string): Promise<boolean> {
       .eq("id", stepId);
 
     if (error) {
-      console.error("Error deleting workflow step:", error);
       return false;
     }
 
     return true;
   } catch (error) {
+    console.error("Error in deleteWorkflowStep:", error);
     console.error("Error in deleteWorkflowStep:", error);
     return false;
   }

@@ -450,7 +450,6 @@ export class VoiceService {
     };
 
     this.wakeWordDetector.onerror = (event) => {
-      console.error("Wake word detection error:", event.error);
       this.isWakeWordActive = false;
     };
 
@@ -545,6 +544,7 @@ export class VoiceService {
         created_at: timestamp,
       });
     } catch (error) {
+      console.error("Failed to log interaction:", error);
       console.error("Failed to log interaction:", error);
     }
   }

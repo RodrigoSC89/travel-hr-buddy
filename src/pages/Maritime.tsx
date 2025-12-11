@@ -6,7 +6,7 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Progress } from "@/components/ui/progress";
 import { ModulePageWrapper } from "@/components/ui/module-page-wrapper";
 import { ModuleHeader } from "@/components/ui/module-header";
-import { DashboardSkeleton } from "@/components/ui/loading-skeleton";
+import { DashboardSkeleton } from "@/components/unified/Skeletons.unified";
 import { supabase } from "@/integrations/supabase/client";
 import { 
   Ship, 

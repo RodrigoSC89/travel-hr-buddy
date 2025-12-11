@@ -27,7 +27,6 @@ describe("PATCH 508: RLS Security Tests", () => {
   const supabaseKey = import.meta.env.VITE_SUPABASE_PUBLISHABLE_KEY;
 
   if (!supabaseUrl || !supabaseKey) {
-    console.warn("Supabase credentials not found, skipping RLS tests");
     return;
   }
 

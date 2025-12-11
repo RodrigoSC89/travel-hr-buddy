@@ -215,7 +215,6 @@ export const AutonomousProcurementAI: React.FC = () => {
   };
 
   const executeAutoPurchase = async (rec: PurchaseRecommendation) => {
-    console.log('Executing auto purchase:', rec);
   };
 
   return (

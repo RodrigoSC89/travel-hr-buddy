@@ -46,6 +46,21 @@ class SyncQueue {
   }
 
   /**
+   * Add to queue (alias for compatibility with enhanced-sync-engine)
+   */
+  async addToQueue(params: {
+    table: string;
+    action: "create" | "update" | "delete" | "upsert";
+    data: any;
+    timestamp?: number;
+    priority?: SyncPriority;
+  }): Promise<string> {
+    const action = params.action === "upsert" ? "update" : params.action;
+    const priority = params.priority || this.getPriorityForTable(params.table, action);
+    return this.enqueue(params.table, params.data, action, priority);
+  }
+
+  /**
    * Get queue size
    */
   async getQueueSize(): Promise<number> {
@@ -61,7 +76,6 @@ class SyncQueue {
     total: number;
   }> {
     if (this.isSyncing) {
-      console.log("Sync already in progress");
       return { success: 0, failed: 0, total: 0 };
     }
 
@@ -76,7 +90,6 @@ class SyncQueue {
       const records = await sqliteStorage.getUnsyncedRecords();
       const totalCount = records.length;
 
-      console.log(`Processing ${totalCount} items in sync queue`);
 
       // Process in batches
       for (let i = 0; i < records.length; i += opts.batchSize!) {
@@ -95,6 +108,7 @@ class SyncQueue {
                 await sqliteStorage.deleteSyncedRecord(record.id);
               }
             } catch (error) {
+              console.error(`Failed to sync record ${record.id}:`, error);
               console.error(`Failed to sync record ${record.id}:`, error);
               failedCount++;
             }

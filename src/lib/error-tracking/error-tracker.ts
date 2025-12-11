@@ -146,7 +146,6 @@ class ErrorTracker {
     this.errorCount++;
 
     if (this.config.debug) {
-      console.error('[ErrorTracker] Captured:', report);
     }
 
     // Flush immediately for critical errors
@@ -165,7 +164,6 @@ class ErrorTracker {
     } else if (level === 'warning') {
       this.captureWarning(message);
     } else if (this.config.debug) {
-      console.log('[ErrorTracker] Message:', message);
     }
   }
 
@@ -198,10 +196,8 @@ class ErrorTracker {
         this.queue = [...errors, ...this.queue].slice(0, this.config.maxErrors);
         
         if (this.config.debug) {
-          console.error('[ErrorTracker] Flush failed:', error);
         }
       } else if (this.config.debug) {
-        console.log('[ErrorTracker] Flushed', errors.length, 'errors');
       }
     } catch (err) {
       this.queue = [...errors, ...this.queue].slice(0, this.config.maxErrors);

@@ -97,6 +97,7 @@ function AppRoutes(): JSX.Element {
       return getModuleRoutes();
     } catch (e) {
       console.warn("Failed to load module routes:", e);
+      console.warn("Failed to load module routes:", e);
       return [];
     }
   }, []);
@@ -269,7 +270,6 @@ class App extends React.Component<Record<string, never>, ErrorBoundaryState> {
   }
 
   componentDidCatch(error: Error, errorInfo: React.ErrorInfo): void {
-    console.error("App Error:", error, errorInfo);
   }
 
   handleRetry = (): void => {

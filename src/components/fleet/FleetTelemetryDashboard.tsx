@@ -117,7 +117,6 @@ export const FleetTelemetryDashboard: React.FC = () => {
         "postgres_changes",
         { event: "*", schema: "public", table: "iot_sensor_data" },
         (payload) => {
-          console.log("Telemetry update:", payload);
           loadTelemetryData();
         }
       )
@@ -185,6 +184,7 @@ export const FleetTelemetryDashboard: React.FC = () => {
       // Check for alerts
       await checkAndGenerateAlerts(sensorReadings || []);
     } catch (error) {
+      console.error("Error loading telemetry:", error);
       console.error("Error loading telemetry:", error);
       toast.error("Failed to load telemetry data");
     } finally {
@@ -320,6 +320,7 @@ export const FleetTelemetryDashboard: React.FC = () => {
       const { error } = await supabase.from("iot_sensor_data").insert(newReadings);
       if (error) throw error;
     } catch (error) {
+      console.error("Error inserting sensor data:", error);
       console.error("Error inserting sensor data:", error);
     }
   };

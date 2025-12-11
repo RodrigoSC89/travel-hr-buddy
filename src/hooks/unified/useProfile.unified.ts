@@ -83,13 +83,13 @@ export function useProfile(): UseProfileReturn {
           };
           setProfile(fallbackProfile);
         } else {
-          console.error("Error fetching profile:", fetchError);
           setError(new Error(fetchError.message));
         }
       } else {
         setProfile(data as Profile);
       }
     } catch (err) {
+      console.error("Error in fetchProfile:", err);
       console.error("Error in fetchProfile:", err);
       setError(err as Error);
     } finally {

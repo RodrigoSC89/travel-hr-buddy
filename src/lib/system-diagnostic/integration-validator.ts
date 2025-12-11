@@ -37,7 +37,6 @@ class ModuleIntegrationValidator {
    * Validate all module integrations
    */
   async validate(): Promise<IntegrationReport> {
-    console.log('[Integration] Validating module integrations...');
     
     const flows = this.analyzeFlows();
     const duplications = this.findDuplications();

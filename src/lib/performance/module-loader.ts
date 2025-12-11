@@ -58,7 +58,6 @@ class ModuleLoader {
   getComponent(moduleId: string): LazyExoticComponent<ComponentType<any>> | null {
     const config = this.modules.get(moduleId);
     if (!config || !config.enabled) {
-      console.warn(`[ModuleLoader] Module "${moduleId}" not found or disabled`);
       return null;
     }
     
@@ -102,13 +101,13 @@ class ModuleLoader {
       );
     }
     
-    console.log(`[ModuleLoader] Loading module: ${config.name}`);
     
     // Dynamic import based on path
     try {
       const module = await import(/* @vite-ignore */ config.path);
       return module;
     } catch (e) {
+      console.error(`[ModuleLoader] Failed to load "${moduleId}":`, e);
       console.error(`[ModuleLoader] Failed to load "${moduleId}":`, e);
       throw e;
     }
@@ -126,6 +125,7 @@ class ModuleLoader {
     try {
       await this.loadModule(moduleId);
     } catch (e) {
+      console.warn(`[ModuleLoader] Preload failed for "${moduleId}":`, e);
       console.warn(`[ModuleLoader] Preload failed for "${moduleId}":`, e);
     }
   }
@@ -181,7 +181,6 @@ class ModuleLoader {
    */
   unloadModule(moduleId: string): void {
     this.loadedModules.delete(moduleId);
-    console.log(`[ModuleLoader] Unloaded module: ${moduleId}`);
   }
   
   /**

@@ -20,7 +20,6 @@ export async function extractTextFromPDF(file: File): Promise<OCRResult> {
     const result = await Tesseract.recognize(file, "eng", {
       logger: (m) => {
         if (m.status === "recognizing text") {
-          console.log(`OCR Progress: ${Math.round(m.progress * 100)}%`);
         }
       },
     });
@@ -30,6 +29,7 @@ export async function extractTextFromPDF(file: File): Promise<OCRResult> {
       confidence: result.data.confidence / 100,
     };
   } catch (error) {
+    console.error("OCR Error:", error);
     console.error("OCR Error:", error);
     throw new Error("Failed to extract text from PDF");
   }
@@ -91,15 +91,12 @@ export function parseTextToISMItems(text: string, defaultCategory: string = "Gen
  */
 export async function extractISMChecklistFromPDF(file: File): Promise<ISMAuditItem[]> {
   try {
-    console.log("Starting OCR extraction from PDF...");
     
     // Extract text using OCR
     const ocrResult = await extractTextFromPDF(file);
-    console.log(`OCR completed with ${ocrResult.confidence * 100}% confidence`);
     
     // Parse text into structured items
     const items = parseTextToISMItems(ocrResult.text);
-    console.log(`Extracted ${items.length} checklist items`);
     
     if (items.length === 0) {
       throw new Error("No checklist items found in PDF. Please verify the document format.");
@@ -107,6 +104,7 @@ export async function extractISMChecklistFromPDF(file: File): Promise<ISMAuditIt
     
     return items;
   } catch (error) {
+    console.error("Error extracting ISM checklist from PDF:", error);
     console.error("Error extracting ISM checklist from PDF:", error);
     throw error;
   }

@@ -38,7 +38,6 @@ class MemoryLeakDetector {
   startMonitoring(intervalMs: number = 10000): void {
     if (this.intervalId) return;
     
-    console.log('[MemoryLeakDetector] Starting monitoring...');
     this.takeSnapshot();
     
     this.intervalId = window.setInterval(() => {
@@ -95,10 +94,6 @@ class MemoryLeakDetector {
     
     // Warning if growing more than 5MB in last 5 snapshots
     if (recentGrowth > 5 * 1024 * 1024) {
-      console.warn('[MemoryLeakDetector] Possible memory leak detected:', {
-        growthMB: (recentGrowth / 1024 / 1024).toFixed(2),
-        currentHeapMB: (this.snapshots[this.snapshots.length - 1].heapUsed / 1024 / 1024).toFixed(2)
-      });
     }
   }
   
@@ -182,7 +177,6 @@ class MemoryLeakDetector {
   requestGC(): void {
     if ((window as any).gc) {
       (window as any).gc();
-      console.log('[MemoryLeakDetector] GC requested');
     }
   }
   

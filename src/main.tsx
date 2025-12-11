@@ -11,7 +11,6 @@ import ReactDOM from "react-dom/client";
 
 // Validate React is properly loaded at runtime
 if (!React || typeof React.useState !== "function") {
-  console.error("CRITICAL: React is not properly loaded!");
   document.body.innerHTML = `
     <div style="display:flex;align-items:center;justify-content:center;height:100vh;flex-direction:column;font-family:system-ui;">
       <h1 style="color:red;">Erro Crítico</h1>

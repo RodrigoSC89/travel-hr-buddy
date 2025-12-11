@@ -21,7 +21,6 @@ export function useOfflineMode() {
   // Verificar itens pendentes de sync ao reconectar
   useEffect(() => {
     if (isOnline && pendingSync.length > 0) {
-      console.log('[Offline] Reconectado - itens pendentes:', pendingSync.length);
     }
   }, [isOnline, pendingSync]);
 
@@ -39,6 +38,7 @@ export function useOfflineMode() {
       localStorage.setItem(`${CACHE_PREFIX}${key}`, JSON.stringify(cacheItem));
       return true;
     } catch (error) {
+      console.warn('[Offline] Erro ao salvar cache:', error);
       console.warn('[Offline] Erro ao salvar cache:', error);
       return false;
     }

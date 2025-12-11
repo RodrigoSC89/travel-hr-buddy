@@ -28,6 +28,6 @@ export {
 } from "@/components/ui/Loading";
 export { EmptyState } from "@/components/ui/EmptyState";
 export { StatusBadge, StatusIndicator } from "@/components/ui/StatusBadge";
-export { NotificationCenter } from "@/components/ui/NotificationCenter";
+export { NotificationCenter } from "@/components/unified/NotificationCenter.unified";
 export { MetricCard, KPICard, StatsCard } from "@/components/ui/MetricCard";
 export { InfoCard } from "@/components/ui/InfoCard";

@@ -228,7 +228,6 @@ const SatcomDashboard = () => {
         vesselId="vessel-001"
         onTestComplete={() => {
           // Reload any necessary data after test
-          console.log("Diagnostic test completed");
         }}
       />
 

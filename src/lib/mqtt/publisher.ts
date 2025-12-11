@@ -15,8 +15,11 @@ export const publishEvent = (
   qos: 0 | 1 | 2 = 1
 ) => {
   client.publish(topic, JSON.stringify(payload), { qos }, (err) => {
-    if (err) console.error(`❌ Falha ao publicar em ${topic}:`, err);
-    else logger.info(`✅ Publicado em ${topic}:`, payload);
+    if (err) {
+      logger.error(`Erro ao publicar em ${topic}`, err);
+    } else {
+      logger.info(`✅ Publicado em ${topic}:`, payload);
+    }
   });
 };
 
@@ -28,8 +31,11 @@ export const subscribeTopic = (
   callback: (data: Record<string, unknown>) => void
 ) => {
   client.subscribe(topic, (err) => {
-    if (err) console.error(`❌ Falha ao subscrever ${topic}:`, err);
-    else logger.info(`✅ Subscreveu ${topic}`);
+    if (err) {
+      logger.error(`Erro ao subscrever ${topic}`, err);
+    } else {
+      logger.info(`✅ Subscreveu ${topic}`);
+    }
   });
 
   client.on("message", (receivedTopic, message) => {

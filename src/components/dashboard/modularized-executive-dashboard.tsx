@@ -6,7 +6,7 @@
 import React, { Suspense, useState } from "react";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
-import { Skeleton } from "@/components/ui/skeleton";
+import { Skeleton } from "@/components/unified/Skeletons.unified";
 import { CheckCircle, Layers, TrendingUp } from "lucide-react";
 import { KPIErrorBoundary } from "./kpis/KPIErrorBoundary";
 import { LayoutGrid } from "./LayoutGrid";
@@ -58,7 +58,6 @@ export function ModularizedExecutiveDashboard() {
     componentName: "ModularizedExecutiveDashboard",
     threshold: 3000,
     onSlowRender: (time) => {
-      console.warn(`Dashboard took ${time}ms to render - exceeds 3s threshold`);
     }
   });
 
@@ -87,7 +86,6 @@ export function ModularizedExecutiveDashboard() {
    * PATCH 626: Auto-heal function
    */
   const handleAutoHeal = () => {
-    console.log("[Dashboard] Auto-heal triggered, forcing re-render");
     setRefreshKey(prev => prev + 1);
   };
 

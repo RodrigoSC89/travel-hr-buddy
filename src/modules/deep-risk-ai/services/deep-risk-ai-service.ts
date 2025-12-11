@@ -13,7 +13,6 @@ export class DeepRiskAIService {
     // Simulate loading a TensorFlow/ONNX model
     await new Promise(resolve => setTimeout(resolve, 2000));
     this.modelLoaded = true;
-    console.log("Deep Risk AI model loaded (simulated)");
   }
 
   async runAnalysis(): Promise<void> {
@@ -22,7 +21,6 @@ export class DeepRiskAIService {
     }
     // Simulate running deep analysis
     await new Promise(resolve => setTimeout(resolve, 3000));
-    console.log("Deep risk analysis complete");
   }
 
   async getPredictions(filters?: { severity?: string }): Promise<RiskPrediction[]> {
@@ -124,13 +122,13 @@ export class DeepRiskAIService {
       if (error) throw error;
     } catch (error) {
       console.error("Error saving prediction:", error);
+      console.error("Error saving prediction:", error);
       throw error;
     }
   }
 
   async getHistoricalData(source: string, days: number = 30): Promise<HistoricalDataPoint[]> {
     // Simulate fetching historical data from performance-monitor
-    console.log(`Fetching ${days} days of data from ${source}`);
     return [];
   }
 }

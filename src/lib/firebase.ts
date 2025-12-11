@@ -36,14 +36,12 @@ export const initializeFirebase = async (): Promise<void> => {
   try {
     // Check if all required config is present
     if (!firebaseConfig.apiKey || !firebaseConfig.projectId) {
-      console.warn("Firebase configuration incomplete. Push notifications will not be available.");
       return;
     }
 
     // Check if messaging is supported
     const messagingSupported = await isSupported();
     if (!messagingSupported) {
-      console.warn("Firebase Messaging is not supported in this environment");
       return;
     }
 
@@ -57,6 +55,7 @@ export const initializeFirebase = async (): Promise<void> => {
       messaging = getMessaging(app);
     }
   } catch (error) {
+    console.error("Error initializing Firebase:", error);
     console.error("Error initializing Firebase:", error);
   }
 };
@@ -76,15 +75,14 @@ export const requestNotificationPermission = async (): Promise<string | null> =>
     // Request permission
     const permission = await Notification.requestPermission();
     if (permission !== "granted") {
-      console.log("Notification permission not granted");
       return null;
     }
 
     // Get FCM token
     const token = await getToken(messaging, { vapidKey: VAPID_KEY });
-    console.log("FCM Token obtained:", token);
     return token;
   } catch (error) {
+    console.error("Error getting FCM token:", error);
     console.error("Error getting FCM token:", error);
     return null;
   }
@@ -97,14 +95,15 @@ export const onForegroundMessage = (callback: (payload: any) => void): (() => vo
   try {
     if (!messaging) {
       console.warn("Messaging not initialized");
+      console.warn("Messaging not initialized");
       return null;
     }
 
     return onMessage(messaging, (payload) => {
-      console.log("Foreground message received:", payload);
       callback(payload);
     });
   } catch (error) {
+    console.error("Error setting up message listener:", error);
     console.error("Error setting up message listener:", error);
     return null;
   }
@@ -131,13 +130,12 @@ export const saveFCMTokenToSupabase = async (
       });
 
     if (error) {
-      console.error("Error saving FCM token to Supabase:", error);
       return false;
     }
 
-    console.log("FCM token saved to Supabase successfully");
     return true;
   } catch (error) {
+    console.error("Error in saveFCMTokenToSupabase:", error);
     console.error("Error in saveFCMTokenToSupabase:", error);
     return false;
   }

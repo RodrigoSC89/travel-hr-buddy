@@ -204,7 +204,6 @@ export const StarFixMockAPI = {
    * Registrar vessel no StarFix
    */
   async registerVessel(vesselData: Partial<StarFixVessel>): Promise<{ success: boolean; vessel: StarFixVessel }> {
-    console.log('🟡 [MOCK] StarFix: Registering vessel...');
     await simulateNetworkDelay();
     
     const vessel = generateMockVessel(
@@ -223,7 +222,6 @@ export const StarFixMockAPI = {
     }
     mockInspections.set(vessel.imo_number, initialInspections);
     
-    console.log('✅ [MOCK] StarFix: Vessel registered', vessel);
     return { success: true, vessel };
   },
   
@@ -231,7 +229,6 @@ export const StarFixMockAPI = {
    * Buscar inspeções do StarFix
    */
   async fetchInspections(imoNumber: string, startDate?: string, endDate?: string): Promise<StarFixInspection[]> {
-    console.log('🟡 [MOCK] StarFix: Fetching inspections...');
     await simulateNetworkDelay();
     
     let inspections = mockInspections.get(imoNumber) || [];
@@ -258,7 +255,6 @@ export const StarFixMockAPI = {
     // Ordenar por data (mais recente primeiro)
     inspections.sort((a, b) => new Date(b.inspection_date).getTime() - new Date(a.inspection_date).getTime());
     
-    console.log(`✅ [MOCK] StarFix: Found ${inspections.length} inspections`);
     return inspections;
   },
   
@@ -266,13 +262,11 @@ export const StarFixMockAPI = {
    * Obter métricas de performance
    */
   async getPerformanceMetrics(imoNumber: string): Promise<StarFixPerformanceMetrics> {
-    console.log('🟡 [MOCK] StarFix: Getting performance metrics...');
     await simulateNetworkDelay();
     
     const inspections = await this.fetchInspections(imoNumber);
     const metrics = generateMockPerformanceMetrics('vessel-id', imoNumber, inspections);
     
-    console.log('✅ [MOCK] StarFix: Metrics retrieved', metrics);
     return metrics;
   },
   
@@ -280,7 +274,6 @@ export const StarFixMockAPI = {
    * Submeter inspeção para StarFix
    */
   async submitInspection(inspection: Partial<StarFixInspection>): Promise<{ success: boolean; inspectionId: string }> {
-    console.log('🟡 [MOCK] StarFix: Submitting inspection...');
     await simulateNetworkDelay(300, 1000);
     
     const inspectionId = crypto.randomUUID();
@@ -308,7 +301,6 @@ export const StarFixMockAPI = {
     existingInspections.push(newInspection);
     mockInspections.set(imoNumber, existingInspections);
     
-    console.log('✅ [MOCK] StarFix: Inspection submitted', inspectionId);
     return { success: true, inspectionId };
   },
   
@@ -316,14 +308,12 @@ export const StarFixMockAPI = {
    * Sincronizar inspeções pendentes
    */
   async syncPendingInspections(vesselIds: string[]): Promise<{ synced: number; failed: number; errors: string[] }> {
-    console.log('🟡 [MOCK] StarFix: Syncing pending inspections...');
     await simulateNetworkDelay(500, 1500);
     
     const synced = vesselIds.length;
     const failed = Math.random() < 0.1 ? 1 : 0; // 10% de chance de falha
     const errors = failed > 0 ? ['Mock sync error for testing'] : [];
     
-    console.log(`✅ [MOCK] StarFix: Sync complete - ${synced} synced, ${failed} failed`);
     return { synced, failed, errors };
   },
   
@@ -335,7 +325,6 @@ export const StarFixMockAPI = {
     pending_count: number; 
     status: 'ok' | 'pending' | 'error' 
   }> {
-    console.log('🟡 [MOCK] StarFix: Getting sync status...');
     await simulateNetworkDelay(100, 300);
     
     const pendingCount = Math.floor(Math.random() * 3); // 0-2 pendentes
@@ -347,7 +336,6 @@ export const StarFixMockAPI = {
       status,
     };
     
-    console.log('✅ [MOCK] StarFix: Sync status retrieved', result);
     return result;
   },
 };
@@ -364,9 +352,6 @@ export function isUsingMockStarFix(): boolean {
  */
 export function logMockWarning(): void {
   if (USE_MOCK_API) {
-    console.warn('⚠️  STARFIX MOCK API EM USO');
-    console.warn('📘 Dados simulados para desenvolvimento');
-    console.warn('🔄 Configure VITE_USE_MOCK_STARFIX=false para usar API real');
   }
 }
 

@@ -39,7 +39,6 @@ export const ErrorFallback: React.FC<ErrorFallbackProps> = ({
 
   const handleReport = () => {
     // Could integrate with error reporting service
-    console.error('Error reported:', error);
     alert('Erro reportado. Obrigado pelo feedback!');
   };
 

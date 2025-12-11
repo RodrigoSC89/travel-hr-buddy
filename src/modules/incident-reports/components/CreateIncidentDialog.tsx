@@ -81,7 +81,6 @@ export const CreateIncidentDialog: React.FC<CreateIncidentDialogProps> = ({
       },
       (error) => {
         setGpsLoading(false);
-        console.error("GPS error:", error);
         toast({
           title: "Erro ao capturar GPS",
           description: "Não foi possível obter sua localização",
@@ -163,7 +162,6 @@ export const CreateIncidentDialog: React.FC<CreateIncidentDialogProps> = ({
               .upload(fileName, photo);
 
             if (uploadError) {
-              console.error("Photo upload error:", uploadError);
             } else if (uploadData) {
               const { data: urlData } = supabase.storage
                 .from("incident-reports")
@@ -172,6 +170,7 @@ export const CreateIncidentDialog: React.FC<CreateIncidentDialogProps> = ({
             }
           }
         } catch (uploadError) {
+          console.error("Error uploading photos:", uploadError);
           console.error("Error uploading photos:", uploadError);
           // Continue without photos if upload fails
         }
@@ -210,6 +209,7 @@ export const CreateIncidentDialog: React.FC<CreateIncidentDialogProps> = ({
       setPhotos([]);
       setPhotoPreviews([]);
     } catch (error) {
+      console.error("Error creating incident:", error);
       console.error("Error creating incident:", error);
       toast({
         title: "Erro",

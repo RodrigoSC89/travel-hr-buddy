@@ -164,7 +164,6 @@ export class HubMonitor {
       errors: errorCount,
     });
 
-    console.error(`Module ${moduleKey} error:`, error);
   }
 }
 

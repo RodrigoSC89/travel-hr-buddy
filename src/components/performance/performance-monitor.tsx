@@ -104,6 +104,7 @@ export const PerformanceMonitor: React.FC = () => {
       checkThresholds(newMetrics);
     } catch (error) {
       console.error("Error measuring performance:", error);
+      console.error("Error measuring performance:", error);
     }
   }, []);
 
@@ -120,9 +121,9 @@ export const PerformanceMonitor: React.FC = () => {
         });
 
       if (error) {
-        console.error("Error persisting metrics:", error);
       }
     } catch (error) {
+      console.error("Error in persistMetrics:", error);
       console.error("Error in persistMetrics:", error);
     }
   };
@@ -148,6 +149,7 @@ export const PerformanceMonitor: React.FC = () => {
         setHistoricalData(formatted);
       }
     } catch (error) {
+      console.error("Error loading historical data:", error);
       console.error("Error loading historical data:", error);
     }
   };

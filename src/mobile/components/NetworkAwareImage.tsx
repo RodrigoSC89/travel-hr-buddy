@@ -6,7 +6,7 @@
 import React, { useState, useEffect, useRef, memo } from "react";
 import { cn } from "@/lib/utils";
 import { networkDetector } from "../services/networkDetector";
-import { Skeleton } from "@/components/ui/skeleton";
+import { Skeleton } from "@/components/unified/Skeletons.unified";
 
 interface NetworkAwareImageProps {
   src: string;

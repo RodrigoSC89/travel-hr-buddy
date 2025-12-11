@@ -74,7 +74,6 @@ export function Patch601Validation() {
         description: `Processed ${steps.length} reasoning steps with coherent justifications`,
       });
       
-      console.log("PATCH 601 ✅ Strategic reasoning sequence:", steps);
     }, 1500);
   };
 

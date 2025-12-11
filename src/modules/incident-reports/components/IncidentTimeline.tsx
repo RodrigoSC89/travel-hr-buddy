@@ -93,7 +93,6 @@ export const IncidentTimeline: React.FC<IncidentTimelineProps> = ({
         .order("created_at", { ascending: false });
 
       if (error) {
-        console.error("Error loading incidents:", error);
         toast.error("Failed to load incidents");
         setIsLoading(false);
         return;
@@ -118,6 +117,7 @@ export const IncidentTimeline: React.FC<IncidentTimelineProps> = ({
         .sort();
       setAvailableModules(modules);
     } catch (error) {
+      console.error("Error loading incidents:", error);
       console.error("Error loading incidents:", error);
       toast.error("Failed to load incidents");
     } finally {
@@ -195,6 +195,7 @@ export const IncidentTimeline: React.FC<IncidentTimelineProps> = ({
 
       toast.success("Timeline exported successfully!");
     } catch (error) {
+      console.error("Error exporting timeline:", error);
       console.error("Error exporting timeline:", error);
       toast.error("Failed to export timeline");
     }

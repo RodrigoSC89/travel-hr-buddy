@@ -52,10 +52,6 @@ class WebVitalsMonitor {
 
       // Log to console in development
       if (import.meta.env.DEV) {
-        console.log(`[Web Vitals] ${metric.name}:`, {
-          value: metric.value.toFixed(2),
-          rating: metric.rating,
-        });
       }
     };
 
@@ -153,6 +149,7 @@ class WebVitalsMonitor {
           keepalive: true,
         });
       } catch (error) {
+        console.error('[Web Vitals] Failed to send report:', error);
         console.error('[Web Vitals] Failed to send report:', error);
       }
     }

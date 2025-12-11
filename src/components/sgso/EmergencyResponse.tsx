@@ -483,14 +483,12 @@ export const EmergencyResponse: React.FC = () => {
         open={newPlanOpen} 
         onOpenChange={setNewPlanOpen}
         onPlanCreated={(plan) => {
-          console.log("New plan created:", plan);
         }}
       />
       <ScheduleDrillDialog 
         open={scheduleDrillOpen} 
         onOpenChange={setScheduleDrillOpen}
         onDrillScheduled={(drill) => {
-          console.log("Drill scheduled:", drill);
         }}
       />
       <EmergencyReportDialog 

@@ -58,7 +58,6 @@ export class OptimizedWebSocket {
         this.ws = new WebSocket(this.options.url, this.options.protocols);
 
         this.ws.onopen = () => {
-          console.log('[WS] Connected');
           this.reconnectAttempt = 0;
           this.notifyStatus('connected');
           this.startHeartbeat();
@@ -70,13 +69,11 @@ export class OptimizedWebSocket {
         };
 
         this.ws.onerror = (error) => {
-          console.error('[WS] Error:', error);
           this.notifyStatus('error');
           reject(error);
         };
 
         this.ws.onclose = () => {
-          console.log('[WS] Closed');
           this.stopHeartbeat();
           this.notifyStatus('disconnected');
           
@@ -95,6 +92,7 @@ export class OptimizedWebSocket {
       const data = typeof rawData === 'string' ? JSON.parse(rawData) : rawData;
       this.messageHandlers.forEach(handler => handler(data));
     } catch (error) {
+      console.error('[WS] Failed to parse message:', error);
       console.error('[WS] Failed to parse message:', error);
     }
   }
@@ -172,12 +170,10 @@ export class OptimizedWebSocket {
 
   private attemptReconnect() {
     if (this.reconnectAttempt >= this.options.reconnectAttempts) {
-      console.log('[WS] Max reconnect attempts reached');
       return;
     }
 
     const delay = this.options.reconnectDelay * Math.pow(2, this.reconnectAttempt);
-    console.log(`[WS] Reconnecting in ${delay}ms (attempt ${this.reconnectAttempt + 1})`);
 
     this.reconnectTimeout = setTimeout(() => {
       this.reconnectAttempt++;

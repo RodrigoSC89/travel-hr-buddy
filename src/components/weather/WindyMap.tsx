@@ -53,7 +53,6 @@ export const WindyMap: React.FC<WindyMapProps> = ({
         });
 
         if (error) {
-          console.error("Error fetching API keys:", error);
           setMapError(true);
           setUseAlternative(true);
           return;
@@ -66,6 +65,7 @@ export const WindyMap: React.FC<WindyMapProps> = ({
           setUseAlternative(true);
         }
       } catch (err) {
+        console.error("Failed to fetch API keys:", err);
         console.error("Failed to fetch API keys:", err);
         setMapError(true);
         setUseAlternative(true);
@@ -87,6 +87,7 @@ export const WindyMap: React.FC<WindyMapProps> = ({
           setWeatherData(data.data);
         }
       } catch (err) {
+        console.error("Failed to fetch weather data:", err);
         console.error("Failed to fetch weather data:", err);
       }
     };

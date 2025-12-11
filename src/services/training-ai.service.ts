@@ -53,7 +53,6 @@ export class TrainingAIService {
       .order("created_at", { ascending: false });
 
     if (error) {
-      console.error("Error fetching training sessions:", error);
       throw error;
     }
 
@@ -75,7 +74,6 @@ export class TrainingAIService {
       .single();
 
     if (error) {
-      console.error("Error creating training session:", error);
       throw error;
     }
 
@@ -99,7 +97,6 @@ export class TrainingAIService {
       .single();
 
     if (error) {
-      console.error("Error updating training session:", error);
       throw error;
     }
 
@@ -134,7 +131,6 @@ export class TrainingAIService {
       .order("occurred_at", { ascending: true });
 
     if (error) {
-      console.error("Error fetching training history:", error);
       throw error;
     }
 
@@ -157,7 +153,6 @@ export class TrainingAIService {
       .single();
 
     if (error) {
-      console.error("Error adding training history:", error);
       throw error;
     }
 
@@ -175,7 +170,6 @@ export class TrainingAIService {
       .order("created_at", { ascending: false });
 
     if (error) {
-      console.error("Error fetching learning paths:", error);
       throw error;
     }
 
@@ -198,7 +192,6 @@ export class TrainingAIService {
       .single();
 
     if (error) {
-      console.error("Error creating learning path:", error);
       throw error;
     }
 
@@ -265,7 +258,6 @@ export class TrainingAIService {
     });
 
     if (error) {
-      console.error("Error generating LLM explanation:", error);
       throw error;
     }
 
@@ -283,7 +275,6 @@ export class TrainingAIService {
     });
 
     if (error) {
-      console.error("Error generating quiz:", error);
       throw error;
     }
 

@@ -83,6 +83,7 @@ class OfflineSyncManager {
       // Silently handle - background sync is an enhancement, not required
       if (error instanceof Error && !error.message.includes('without a window')) {
         console.warn('[OfflineSync] Background sync not available');
+        console.warn('[OfflineSync] Background sync not available');
       }
     }
   }
@@ -142,6 +143,7 @@ class OfflineSyncManager {
           
           if (mutation.retryCount >= 5) {
             // Move to dead letter queue or notify user
+            console.error('[OfflineSync] Mutation failed after max retries:', mutation);
             console.error('[OfflineSync] Mutation failed after max retries:', mutation);
             await this.db!.delete('pendingMutations', mutation.id);
             failed++;
@@ -236,12 +238,10 @@ class OfflineSyncManager {
   }
 
   private onOnline(): void {
-    console.log('[OfflineSync] Back online, syncing...');
     this.syncPendingMutations();
   }
 
   private onOffline(): void {
-    console.log('[OfflineSync] Offline mode activated');
     this.notifyListeners({ offline: true });
   }
 }

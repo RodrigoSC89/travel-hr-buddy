@@ -73,7 +73,6 @@ export function Patch604Validation() {
         description: `${newOpts.length} tactics optimized with ${avgImprovement}% avg improvement`,
       });
       
-      console.log("PATCH 604 ✅ Tactic optimizations:", newOpts);
     }, 2000);
   };
 

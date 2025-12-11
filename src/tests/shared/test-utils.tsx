@@ -133,10 +133,8 @@ export const createMockSession = (userOverrides = {}) => ({
 export const suppressConsoleError = () => {
   const originalError = console.error;
   beforeEach(() => {
-    console.error = vi.fn();
   });
   afterEach(() => {
-    console.error = originalError;
   });
 };
 

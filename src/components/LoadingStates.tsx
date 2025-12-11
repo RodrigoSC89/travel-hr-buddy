@@ -5,7 +5,7 @@
 
 import React, { memo, useState, useEffect } from "react";
 import { Card, CardContent, CardHeader } from "@/components/ui/card";
-import { Skeleton } from "@/components/ui/skeleton";
+import { Skeleton } from "@/components/unified/Skeletons.unified";
 import { Loader2, Ship, Waves, Compass, Anchor } from "lucide-react";
 import { cn } from "@/lib/utils";
 

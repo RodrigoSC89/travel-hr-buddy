@@ -45,7 +45,6 @@ class DataRetentionManager {
   }
 
   async runCleanup(force: boolean = false): Promise<CleanupResult[]> {
-    console.log('[DataRetention] Starting cleanup...');
     const results: CleanupResult[] = [];
     const now = Date.now();
 
@@ -65,7 +64,6 @@ class DataRetentionManager {
       this.cleanupHistory = this.cleanupHistory.slice(0, 50);
     }
 
-    console.log('[DataRetention] Cleanup complete:', results);
     return results;
   }
 
@@ -114,6 +112,7 @@ class DataRetentionManager {
       }
     } catch (e) {
       console.warn(`[DataRetention] Error cleaning ${policy.module}:`, e);
+      console.warn(`[DataRetention] Error cleaning ${policy.module}:`, e);
     }
 
     return {
@@ -132,7 +131,6 @@ class DataRetentionManager {
       for (const db of databases) {
         if (db.name?.includes('temp') || db.name?.includes('cache')) {
           // Could delete old temp databases
-          console.log(`[DataRetention] Found temp DB: ${db.name}`);
         }
       }
     } catch (e) {
@@ -173,6 +171,7 @@ class DataRetentionManager {
         });
       }
     } catch (e) {
+      console.warn('[DataRetention] Error getting storage stats:', e);
       console.warn('[DataRetention] Error getting storage stats:', e);
     }
 

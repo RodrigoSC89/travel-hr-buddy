@@ -184,13 +184,10 @@ class ErrorTracker {
     switch (error.severity) {
       case 'critical':
       case 'high':
-        console.error(prefix, error.message, error);
         break;
       case 'medium':
-        console.warn(prefix, error.message, error);
         break;
       case 'low':
-        console.info(prefix, error.message, error);
         break;
     }
   }

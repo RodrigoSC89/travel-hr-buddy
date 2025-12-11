@@ -85,7 +85,6 @@ export const AuditTrailViewer: React.FC = () => {
       const { data, error } = await query;
 
       if (error) {
-        console.error("Error loading audit logs:", error);
         toast({
           title: "Erro",
           description: "Não foi possível carregar os logs de auditoria.",
@@ -101,6 +100,7 @@ export const AuditTrailViewer: React.FC = () => {
       }));
       setLogs(typedData);
     } catch (error) {
+      console.error("Error loading audit logs:", error);
       console.error("Error loading audit logs:", error);
     } finally {
       setLoading(false);

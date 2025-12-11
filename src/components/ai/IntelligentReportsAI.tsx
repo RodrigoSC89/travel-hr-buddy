@@ -129,6 +129,7 @@ export const IntelligentReportsAI: React.FC = () => {
       setGeneratedReport(report);
     } catch (error) {
       console.error('Error generating report:', error);
+      console.error('Error generating report:', error);
     } finally {
       setIsGenerating(false);
     }
@@ -180,7 +181,6 @@ A análise contempla o período atual e inclui comparações com períodos anter
   };
 
   const exportReport = (format: 'pdf' | 'excel' | 'word') => {
-    console.log('Exporting report as:', format);
   };
 
   return (

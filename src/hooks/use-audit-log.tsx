@@ -75,12 +75,10 @@ export const useAuditLog = () => {
     details,
   }: LogActionParams) => {
     if (!user) {
-      console.warn("Cannot log action: User not authenticated");
       return null;
     }
 
     if (!action || !resourceType) {
-      console.warn("Cannot log action: Missing required fields", { action, resourceType });
       return null;
     }
 
@@ -99,12 +97,12 @@ export const useAuditLog = () => {
       });
 
       if (error) {
-        console.error("Error logging action:", error);
         return null;
       }
 
       return data;
     } catch (error) {
+      console.error("Error logging action:", error);
       console.error("Error logging action:", error);
       return null;
     }

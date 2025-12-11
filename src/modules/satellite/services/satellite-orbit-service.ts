@@ -83,7 +83,6 @@ class SatelliteOrbitService {
       const response = await fetch(url);
       
       if (!response.ok) {
-        console.warn(`N2YO API error for satellite ${noradId}, falling back to simulation`);
         return null;
       }
 
@@ -96,6 +95,7 @@ class SatelliteOrbitService {
         positions: data.positions
       } : null;
     } catch (error) {
+      console.error(`Error fetching satellite ${noradId} from N2YO:`, error);
       console.error(`Error fetching satellite ${noradId} from N2YO:`, error);
       return null;
     }
@@ -122,6 +122,7 @@ class SatelliteOrbitService {
       // Fallback to simulated data
       return this.getSimulatedTLEData();
     } catch (error) {
+      console.error("Error fetching TLE data:", error);
       console.error("Error fetching TLE data:", error);
       return this.getSimulatedTLEData();
     }
@@ -247,6 +248,7 @@ class SatelliteOrbitService {
         positions.push(position);
       } catch (error) {
         console.error(`Error fetching satellite ${sat.noradId}:`, error);
+        console.error(`Error fetching satellite ${sat.noradId}:`, error);
       }
     }
     
@@ -354,7 +356,6 @@ class SatelliteOrbitService {
    */
   async saveSatelliteOrbit(data: SatelliteOrbitData): Promise<void> {
     // In production, save to Supabase satellite_orbits table
-    console.log("Saving satellite orbit data:", data);
   }
 
   /**

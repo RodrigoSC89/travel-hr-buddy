@@ -129,7 +129,6 @@ export default function AdvancedCopilot() {
       });
 
       if (error) {
-        console.error("Supabase function error:", error);
         
         // Fallback: generate local response when edge function fails
         const fallbackResponse = generateLocalResponse(input);
@@ -163,6 +162,7 @@ export default function AdvancedCopilot() {
         speakResponse(data.response);
       }
     } catch (error) {
+      console.error("Copilot error:", error);
       console.error("Copilot error:", error);
       
       // Fallback response when request fails completely
@@ -222,6 +222,7 @@ export default function AdvancedCopilot() {
       speechSynthesis.speak(utterance);
     } catch (error) {
       console.error("TTS error:", error);
+      console.error("TTS error:", error);
       setIsSpeaking(false);
     }
   };
@@ -260,7 +261,6 @@ export default function AdvancedCopilot() {
 
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
     recognitionRef.current.onerror = (event: any) => {
-      console.error("Speech recognition error:", event.error);
       setIsListening(false);
     };
 

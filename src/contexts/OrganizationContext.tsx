@@ -59,7 +59,6 @@ const OrganizationContext = createContext<OrganizationContextType>(defaultContex
 export function useOrganization(): OrganizationContextType {
   const context = useContext(OrganizationContext);
   if (!context) {
-    console.warn("useOrganization called outside of OrganizationProvider");
     return defaultContextValue;
   }
   return context;

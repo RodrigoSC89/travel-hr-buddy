@@ -72,4 +72,4 @@ export {
   SkeletonSidebar,
   SkeletonForm,
   ConnectionAwareLoader as SkeletonConnectionLoader
-} from './SkeletonPro';
+} from "@/components/unified/Skeletons.unified";

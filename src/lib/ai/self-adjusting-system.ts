@@ -213,7 +213,6 @@ class SelfAdjustingSystem {
       this.adjustments = this.adjustments.slice(-100);
     }
 
-    console.log(`[SelfAdjust] ${adjustment.type}: ${adjustment.target} - ${adjustment.reason}`);
   }
 
   /**

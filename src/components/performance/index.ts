@@ -48,7 +48,7 @@ export {
   SkeletonTable, 
   SkeletonDashboard, 
   SkeletonList 
-} from './SkeletonLoader';
+} from "@/components/unified/Skeletons.unified";
 
 // Network status
 export { NetworkStatusIndicator } from './NetworkStatusIndicator';

@@ -3,7 +3,7 @@
  */
 import React, { Suspense } from 'react';
 import { FuelManager } from '@/modules/fuel-manager';
-import { Skeleton } from '@/components/ui/skeleton';
+import { Skeleton } from "@/components/unified/Skeletons.unified";
 
 const FuelManagerPage = () => {
   return (

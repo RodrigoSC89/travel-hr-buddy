@@ -31,7 +31,6 @@ export function KanbanAISuggestions({ suggestions = [] }: KanbanAISuggestionsPro
       const { error } = await (supabase as any).from("workflow_ai_suggestions").insert(payload);
 
       if (error) {
-        console.error("Error inserting AI suggestion:", error);
         toast({
           title: "Erro",
           description: "Não foi possível salvar a sugestão da IA",
@@ -47,6 +46,7 @@ export function KanbanAISuggestions({ suggestions = [] }: KanbanAISuggestionsPro
         description: "Sugestão da IA aceita e salva com sucesso!",
       });
     } catch (error) {
+      console.error("Error accepting suggestion:", error);
       console.error("Error accepting suggestion:", error);
       toast({
         title: "Erro",

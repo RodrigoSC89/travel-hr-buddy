@@ -62,7 +62,6 @@ export default function DPAIAnalyzer() {
     setAnalysis(null);
 
     try {
-      console.log("Starting DP analysis:", type, telemetry);
       
       const response = await fetch(
         `https://vnbptmixvwropvanyhdb.supabase.co/functions/v1/dp-intelligence-ai`,
@@ -77,6 +76,7 @@ export default function DPAIAnalyzer() {
 
       if (!response.ok) {
         const errorData = await response.json().catch(() => ({}));
+        console.error("Analysis error:", response.status, errorData);
         console.error("Analysis error:", response.status, errorData);
         
         if (response.status === 429) {
@@ -112,6 +112,7 @@ export default function DPAIAnalyzer() {
         description: `Análise ${getAnalysisLabel(type)} completada com sucesso.`,
       });
     } catch (err) {
+      console.error("Error:", err);
       console.error("Error:", err);
       toast.error("Erro de conexão", {
         description: "Não foi possível conectar ao serviço de IA. Verifique sua conexão.",

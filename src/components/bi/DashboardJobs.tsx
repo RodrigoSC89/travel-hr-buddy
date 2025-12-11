@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
 import { Card, CardContent } from "@/components/ui/card";
 import { ResponsiveContainer, BarChart, Bar, XAxis, YAxis, Tooltip, Legend } from "recharts";
-import { Skeleton } from "@/components/ui/skeleton";
+import { Skeleton } from "@/components/unified/Skeletons.unified";
 import { supabase } from "@/integrations/supabase/client";
 
 interface JobsByComponent {
@@ -20,12 +20,12 @@ export default function DashboardJobs() {
         const { data: result, error } = await supabase.functions.invoke("bi-jobs-by-component");
         
         if (error) {
-          console.error("Error fetching jobs by component:", error);
           setData([]);
         } else {
           setData(result || []);
         }
       } catch (error) {
+        console.error("Error invoking function:", error);
         console.error("Error invoking function:", error);
         setData([]);
       } finally {

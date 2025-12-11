@@ -105,15 +105,6 @@ class LoopDebugger {
 
     // If 5 executions within 1 second, it's likely a loop
     if (timeSpan < 1000) {
-      console.warn(
-        `⚠️ Potential loop detected: ${functionName} executed ${recentRecords.length} times in ${timeSpan}ms`,
-        {
-          records: recentRecords.map((r) => ({
-            timestamp: new Date(r.timestamp).toISOString(),
-            args: r.args,
-          })),
-        }
-      );
     }
   }
 

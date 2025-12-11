@@ -95,7 +95,6 @@ export function EmergencyMode() {
           });
         },
         (error) => {
-          console.error('GPS error:', error);
         },
         { enableHighAccuracy: true }
       );
@@ -110,6 +109,7 @@ export function EmergencyMode() {
       try {
         setIncidents(JSON.parse(cached));
       } catch (e) {
+        console.error('Failed to load cached incidents:', e);
         console.error('Failed to load cached incidents:', e);
       }
     }

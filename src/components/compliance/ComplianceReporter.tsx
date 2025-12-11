@@ -69,7 +69,6 @@ export default function ComplianceReporter() {
       .limit(50);
 
     if (error) {
-      console.error("Error fetching incidents:", error);
       return;
     }
 

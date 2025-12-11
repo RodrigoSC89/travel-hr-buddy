@@ -9,7 +9,7 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Progress } from "@/components/ui/progress";
 import { ScrollArea } from "@/components/ui/scroll-area";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
-import { Skeleton } from "@/components/ui/skeleton";
+import { Skeleton } from "@/components/unified/Skeletons.unified";
 import { supabase } from "@/integrations/supabase/client";
 import { useToast } from "@/hooks/use-toast";
 import { 
@@ -177,6 +177,7 @@ const FuelOptimizerPage = () => {
       }
     } catch (error) {
       console.error("Error fetching optimizations:", error);
+      console.error("Error fetching optimizations:", error);
     } finally {
       setLoading(false);
     }
@@ -212,7 +213,6 @@ const FuelOptimizerPage = () => {
       });
 
       if (error) {
-        console.error("AI analysis error:", error);
         return null;
       }
 
@@ -228,6 +228,7 @@ const FuelOptimizerPage = () => {
         }
       };
     } catch (error) {
+      console.error("AI analysis failed:", error);
       console.error("AI analysis failed:", error);
       return null;
     }
@@ -276,7 +277,6 @@ const FuelOptimizerPage = () => {
         const { data: { user } } = await supabase.auth.getUser();
         if (user) {
           // Attempt to save but don't block on errors
-          console.log("Attempting to save optimization to database");
         }
       } catch {
         // Ignore database errors
@@ -302,6 +302,7 @@ const FuelOptimizerPage = () => {
       });
 
     } catch (error) {
+      console.error("Error creating optimization:", error);
       console.error("Error creating optimization:", error);
       toast({ title: "Erro na análise", variant: "destructive" });
     } finally {

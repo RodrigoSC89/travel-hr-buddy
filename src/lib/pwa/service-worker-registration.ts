@@ -18,13 +18,11 @@ class ServiceWorkerManager {
     this.config = config;
 
     if (!('serviceWorker' in navigator)) {
-      console.log('[SW] Service Workers not supported');
       return;
     }
 
     // Only register in production
     if (import.meta.env.DEV) {
-      console.log('[SW] Skipping SW registration in development');
       return;
     }
 
@@ -43,11 +41,9 @@ class ServiceWorkerManager {
             if (newWorker.state === 'installed') {
               if (navigator.serviceWorker.controller) {
                 // New update available
-                console.log('[SW] New content available');
                 config.onUpdate?.(registration);
               } else {
                 // Content cached for offline use
-                console.log('[SW] Content cached for offline use');
                 config.onSuccess?.(registration);
               }
             }
@@ -57,29 +53,25 @@ class ServiceWorkerManager {
 
       // Handle controller change (new SW activated)
       navigator.serviceWorker.addEventListener('controllerchange', () => {
-        console.log('[SW] Controller changed');
       });
 
       // Listen for messages from SW
       navigator.serviceWorker.addEventListener('message', (event) => {
         if (event.data?.type === 'SYNC_COMPLETE') {
-          console.log('[SW] Background sync completed');
         }
       });
 
-      console.log('[SW] Service Worker registered successfully');
     } catch (error) {
+      console.error('[SW] Service Worker registration failed:', error);
       console.error('[SW] Service Worker registration failed:', error);
     }
 
     // Network status listeners
     window.addEventListener('online', () => {
-      console.log('[SW] Back online');
       config.onOnline?.();
     });
 
     window.addEventListener('offline', () => {
-      console.log('[SW] Gone offline');
       config.onOffline?.();
     });
   }
@@ -90,8 +82,8 @@ class ServiceWorkerManager {
     try {
       const registration = await navigator.serviceWorker.ready;
       await registration.unregister();
-      console.log('[SW] Service Worker unregistered');
     } catch (error) {
+      console.error('[SW] Unregister failed:', error);
       console.error('[SW] Unregister failed:', error);
     }
   }
@@ -100,8 +92,8 @@ class ServiceWorkerManager {
     if (this.registration) {
       try {
         await this.registration.update();
-        console.log('[SW] Service Worker updated');
       } catch (error) {
+        console.error('[SW] Update failed:', error);
         console.error('[SW] Update failed:', error);
       }
     }
@@ -139,6 +131,7 @@ class ServiceWorkerManager {
       });
       return subscription;
     } catch (error) {
+      console.error('[SW] Push subscription failed:', error);
       console.error('[SW] Push subscription failed:', error);
       return null;
     }

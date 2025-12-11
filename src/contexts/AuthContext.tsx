@@ -41,7 +41,6 @@ const AuthContext = createContext<AuthContextType>(defaultAuthValue);
 export function useAuth(): AuthContextType {
   const context = useContext(AuthContext);
   if (!context) {
-    console.warn("useAuth called outside of AuthProvider");
     return defaultAuthValue;
   }
   return context;
@@ -87,7 +86,6 @@ export function AuthProvider({ children }: AuthProviderProps): JSX.Element {
         if (!mounted) return;
 
         if (error) {
-          console.warn("Session error:", error);
         }
         
         setSession(sessionData.session);
@@ -95,6 +93,7 @@ export function AuthProvider({ children }: AuthProviderProps): JSX.Element {
         setIsLoading(false);
       } catch (error) {
         if (!mounted) return;
+        console.warn("Auth init error:", error);
         console.warn("Auth init error:", error);
         setIsLoading(false);
       }
@@ -190,6 +189,7 @@ export function AuthProvider({ children }: AuthProviderProps): JSX.Element {
     try {
       await supabase.auth.signOut();
     } catch (error) {
+      console.warn("Sign out error:", error);
       console.warn("Sign out error:", error);
     } finally {
       setIsLoading(false);

@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
 import { Card, CardContent } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
-import { Skeleton } from "@/components/ui/skeleton";
+import { Skeleton } from "@/components/unified/Skeletons.unified";
 import { supabase } from "@/integrations/supabase/client";
 
 interface TrendData {
@@ -29,7 +29,6 @@ export default function JobsForecastReport({ trend, onForecastUpdate }: JobsFore
       });
 
       if (error) {
-        console.error("Error fetching forecast:", error);
         const errorMsg = "Erro ao buscar previsão. Tente novamente.";
         setForecast(errorMsg);
         onForecastUpdate?.(errorMsg);
@@ -42,6 +41,7 @@ export default function JobsForecastReport({ trend, onForecastUpdate }: JobsFore
         onForecastUpdate?.(noDataMsg);
       }
     } catch (error) {
+      console.error("Error invoking forecast function:", error);
       console.error("Error invoking forecast function:", error);
       const errorMsg = "Erro ao buscar previsão. Tente novamente.";
       setForecast(errorMsg);

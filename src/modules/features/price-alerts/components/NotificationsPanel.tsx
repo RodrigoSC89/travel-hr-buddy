@@ -19,6 +19,7 @@ export const NotificationsPanel: React.FC = () => {
       setNotifications(data);
     } catch (error) {
       console.error("Error loading notifications:", error);
+      console.error("Error loading notifications:", error);
     } finally {
       setLoading(false);
     }
@@ -40,7 +41,6 @@ export const NotificationsPanel: React.FC = () => {
           table: "price_notifications"
         },
         (payload) => {
-          console.log("Notification change:", payload);
           loadNotifications();
           
           // Show toast for new notifications

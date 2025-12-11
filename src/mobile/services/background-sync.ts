@@ -41,7 +41,6 @@ class BackgroundSyncService {
    * Initialize background sync service
    */
   async initialize(): Promise<void> {
-    console.info("Initializing background sync service");
     
     // Register for background fetch (if supported)
     await this.registerBackgroundFetch();
@@ -58,7 +57,6 @@ class BackgroundSyncService {
    */
   private async registerBackgroundFetch(): Promise<void> {
     if (!BackgroundTask) {
-      console.debug("BackgroundTask not available, using fallback");
       return;
     }
 
@@ -69,8 +67,8 @@ class BackgroundSyncService {
         BackgroundTask.finish({ taskId });
       });
       
-      console.info("Background fetch registered", { taskId });
     } catch (error) {
+      console.error("Failed to register background fetch", error);
       console.error("Failed to register background fetch", error);
     }
   }
@@ -96,7 +94,6 @@ class BackgroundSyncService {
 
     document.addEventListener("visibilitychange", async () => {
       if (document.visibilityState === "visible") {
-        console.debug("App became visible, checking for sync");
         const shouldSync = await this.shouldSync();
         if (shouldSync) {
           await this.performSync();
@@ -155,7 +152,6 @@ class BackgroundSyncService {
     this.isSyncing = true;
     const startTime = Date.now();
     
-    console.info("Starting background sync");
 
     try {
       const result = await syncQueue.processQueue({
@@ -172,13 +168,13 @@ class BackgroundSyncService {
         duration: Date.now() - startTime,
       };
 
-      console.info("Background sync completed", syncResult);
       
       // Notify listeners
       this.notifyListeners(syncResult);
       
       return syncResult;
     } catch (error) {
+      console.error("Background sync failed", error);
       console.error("Background sync failed", error);
       
       const syncResult: SyncResult = {
@@ -221,6 +217,7 @@ class BackgroundSyncService {
         listener(result);
       } catch (error) {
         console.error("Error in sync listener", error);
+        console.error("Error in sync listener", error);
       }
     }
   }
@@ -245,7 +242,6 @@ class BackgroundSyncService {
    */
   configure(config: Partial<BackgroundSyncConfig>): void {
     this.config = { ...this.config, ...config };
-    console.info("Background sync config updated", this.config);
   }
 
   /**
@@ -256,7 +252,6 @@ class BackgroundSyncService {
       this.performSync();
     }, delayMs);
     
-    console.info("Sync scheduled", { delayMs });
   }
 }
 

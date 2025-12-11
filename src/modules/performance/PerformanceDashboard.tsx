@@ -77,12 +77,6 @@ const PerformanceDashboard: React.FC = () => {
     setIsLoading(true);
     try {
       // Log dashboard access
-      console.log("[Performance Dashboard] Loading data", {
-        period: selectedPeriod,
-        vessel: selectedVessel,
-        missionType: selectedMissionType,
-        timestamp: new Date().toISOString()
-      });
 
       // Calculate date range
       const endDate = new Date();
@@ -146,11 +140,6 @@ const PerformanceDashboard: React.FC = () => {
       const status = getPerformanceStatus(simulatedMetrics);
       setPerformanceStatus(status);
 
-      console.log("[Performance Dashboard] Data loaded successfully", {
-        metricsCount: Object.keys(simulatedMetrics).length,
-        aiConfidence: aiResponse.confidence,
-        status
-      });
 
       toast({
         title: "Dashboard Atualizado",
@@ -158,6 +147,7 @@ const PerformanceDashboard: React.FC = () => {
       });
 
     } catch (error) {
+      console.error("[Performance Dashboard] Error loading data:", error);
       console.error("[Performance Dashboard] Error loading data:", error);
       toast({
         title: "Erro",
@@ -195,11 +185,9 @@ const PerformanceDashboard: React.FC = () => {
         description: "Relatório de performance exportado com sucesso",
       });
 
-      console.log("[Performance Dashboard] PDF exported", {
-        timestamp: new Date().toISOString()
-      });
 
     } catch (error) {
+      console.error("[Performance Dashboard] PDF export error:", error);
       console.error("[Performance Dashboard] PDF export error:", error);
       toast({
         title: "Erro",

@@ -1,14 +1,8 @@
 /**
- * @deprecated This file is deprecated. Import from '@/components/ui/NotificationCenter' instead.
- * This file is kept for backward compatibility only.
+ * @deprecated Este componente foi movido para /src/components/legacy/
+ * Use @/components/unified/NotificationCenter.unified ao invés
+ * 
+ * Arquivo antigo: src/components/legacy/notification_notification-center.tsx
  */
 
-// Re-export from the new unified NotificationCenter component
-export { 
-  NotificationCenter,
-  type Notification,
-  type NotificationCenterProps
-} from "@/components/ui/NotificationCenter";
-
-// Export default for backward compatibility
-export { NotificationCenter as default } from "@/components/ui/NotificationCenter";
+export { /* Deprecated - use unified version */ } from "@/components/unified/NotificationCenter.unified";

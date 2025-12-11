@@ -71,9 +71,9 @@ export class WebVitalsService {
         });
       
       if (error) {
-        console.error("Error reporting Web Vitals metric:", error);
       }
     } catch (error) {
+      console.error("Failed to report metric:", error);
       console.error("Failed to report metric:", error);
     }
   }
@@ -108,9 +108,7 @@ export class WebVitalsService {
   private checkForDegradation(metric: WebVitalsData) {
     // Log warnings for degraded performance
     if (metric.rating === "poor") {
-      console.warn(`🔴 Critical performance issue: ${metric.name} = ${metric.value.toFixed(2)}${this.getMetricUnit(metric.name)} on ${this.pageUrl}`);
     } else if (metric.rating === "needs-improvement") {
-      console.warn(`🟡 Performance needs improvement: ${metric.name} = ${metric.value.toFixed(2)}${this.getMetricUnit(metric.name)} on ${this.pageUrl}`);
     }
   }
   

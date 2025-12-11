@@ -287,7 +287,6 @@ Métricas de Sistema:
       let responseContent: string;
 
       if (error) {
-        console.warn("Edge function error, using fallback:", error);
         responseContent = generateLocalFallback(textToSend);
         
         // Show toast for rate limit or payment errors
@@ -319,6 +318,7 @@ Métricas de Sistema:
 
       setMessages((prev) => [...prev, assistantMessage]);
     } catch (error) {
+      console.error("Error sending message:", error);
       console.error("Error sending message:", error);
       
       const fallbackMessage: Message = {

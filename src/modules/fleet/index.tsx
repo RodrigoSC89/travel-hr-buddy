@@ -37,6 +37,7 @@ const FleetModule = () => {
       setCrewAssignments((crewData as any[]) || []);
     } catch (error) {
       console.error("Error loading fleet data:", error);
+      console.error("Error loading fleet data:", error);
     } finally {
       setLoading(false);
     }
@@ -158,7 +159,7 @@ const FleetModule = () => {
 
         {/* AI Copilot Sidebar */}
         <div className="xl:col-span-1">
-          <FleetAICopilot vessels={vessels} onInsightGenerated={(insight) => console.log("Insight:", insight)} />
+          <FleetAICopilot vessels={vessels} onInsightGenerated={(insight) => {}} />
         </div>
       </div>
     </div>

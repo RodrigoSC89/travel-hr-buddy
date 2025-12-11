@@ -170,7 +170,6 @@ const TenantContext = createContext<TenantContextType>(defaultTenantValue);
 export function useTenant(): TenantContextType {
   const context = useContext(TenantContext);
   if (!context) {
-    console.warn("useTenant called outside of TenantProvider");
     return defaultTenantValue;
   }
   return context;

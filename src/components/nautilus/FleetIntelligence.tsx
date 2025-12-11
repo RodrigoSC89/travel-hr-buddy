@@ -46,7 +46,6 @@ export function FleetIntelligence() {
         .limit(10);
 
       if (error) {
-        console.error("Error loading vessels:", error);
         // Use demo data if no access
         setVessels(getDemoVessels());
         return;
@@ -73,6 +72,7 @@ export function FleetIntelligence() {
         setVessels(getDemoVessels());
       }
     } catch (error) {
+      console.error("Error loading fleet:", error);
       console.error("Error loading fleet:", error);
       setVessels(getDemoVessels());
     } finally {

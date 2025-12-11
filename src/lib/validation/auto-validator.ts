@@ -39,7 +39,6 @@ class AutoValidator {
    * Run complete system validation
    */
   async runFullValidation(): Promise<ValidationReport> {
-    console.log("[AutoValidator] Starting full system validation...");
 
     const results = await Promise.all([
       this.validatePerformance(),
