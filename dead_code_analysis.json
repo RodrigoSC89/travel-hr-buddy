@@ -1,0 +1,40 @@
+{
+  "category_a_deletable": [
+    {
+      "path": "src/modules/analytics/AnalyticsCore.tsx.backup",
+      "reason": "Arquivo tempor\u00e1rio/backup",
+      "size": 7640
+    },
+    {
+      "path": "src/modules/api-gateway/ApiGateway.tsx.backup",
+      "reason": "Arquivo tempor\u00e1rio/backup",
+      "size": 8685
+    },
+    {
+      "path": "postcss.config.js",
+      "size": 81
+    },
+    {
+      "path": "src/vite-env.d.ts",
+      "size": 38
+    },
+    {
+      "path": "src/components/operations/index.ts",
+      "size": 87
+    },
+    {
+      "path": "src/components/ui/use-toast.ts",
+      "size": 82
+    },
+    {
+      "path": "src/lib/failover/index.ts",
+      "size": 54
+    },
+    {
+      "path": "supabase/functions/index.ts",
+      "size": 47
+    }
+  ],
+  "category_b_archivable": [],
+  "category_c_uncertain": []
+}
