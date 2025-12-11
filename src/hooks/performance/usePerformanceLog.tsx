@@ -25,10 +25,8 @@ export function usePerformanceLog({
       mountTime.current = Date.now();
       const mountDuration = mountTime.current - renderStartTime.current;
       
-      console.log(`[Performance] ${componentName} mounted in ${mountDuration}ms`);
       
       if (mountDuration > threshold) {
-        console.warn(`[Performance] ${componentName} exceeded threshold (${threshold}ms)`);
         onSlowRender?.(mountDuration);
       }
     }

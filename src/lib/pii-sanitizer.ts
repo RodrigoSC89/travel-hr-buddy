@@ -138,7 +138,6 @@ export const sanitizePII = (
         sanitized = sanitized.replace(pattern, replacement);
         
         if (verbose) {
-          console.log(`[PII] Masked ${matches.length} ${name} instances`);
         }
       }
     }

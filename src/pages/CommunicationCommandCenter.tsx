@@ -5,7 +5,7 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
-import { Skeleton } from "@/components/ui/skeleton";
+import { Skeleton } from "@/components/unified/Skeletons.unified";
 import { 
   MessageSquare, 
   Bell,
@@ -31,7 +31,7 @@ import { useToast } from "@/hooks/use-toast";
 // Import existing components
 import { CommunicationCenterProfessional } from "@/components/communication/CommunicationCenterProfessional";
 import ChannelManagerProfessional from "@/components/channel-manager/ChannelManagerProfessional";
-import NotificationCenterProfessional from "@/components/notifications/NotificationCenterProfessional";
+import NotificationCenterProfessional from "@/components/unified/NotificationCenter.unified";
 
 interface CommandStats {
   totalMessages: number;

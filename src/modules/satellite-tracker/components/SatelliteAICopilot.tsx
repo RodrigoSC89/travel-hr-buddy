@@ -249,7 +249,6 @@ Para informações mais específicas, pergunte sobre:
 
       setMessages(prev => [...prev, assistantMessage]);
     } catch (error) {
-      console.log('Using local response fallback');
       
       const assistantMessage: Message = {
         id: (Date.now() + 1).toString(),

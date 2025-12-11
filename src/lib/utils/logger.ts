@@ -26,22 +26,16 @@ class UniversalLogger {
     
     switch (level) {
     case "debug":
-      if (this.isDevelopment) console.debug(formatted, context?.data);
-      break;
+      if (this.isDevelopment)       break;
     case "info":
-      console.info(formatted, context?.data);
       break;
     case "warn":
-      console.warn(formatted, context?.data);
       break;
     case "error":
-      console.error(formatted, context?.data);
       break;
     case "ai":
-      console.info(`🧠 ${formatted}`, context?.data);
       break;
     case "module":
-      console.info(`📦 ${formatted}`, context?.data);
       break;
     }
   }

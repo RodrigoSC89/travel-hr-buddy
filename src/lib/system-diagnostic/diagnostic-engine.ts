@@ -69,7 +69,6 @@ class SystemDiagnostic {
    * Run complete system diagnostic
    */
   async runDiagnostic(): Promise<DiagnosticReport> {
-    console.log('[Diagnostic] Starting system diagnostic...');
     
     const modules = await this.analyzeModules();
     const summary = this.generateSummary(modules);
@@ -91,7 +90,6 @@ class SystemDiagnostic {
       readinessChecklist
     };
     
-    console.log('[Diagnostic] Complete:', report);
     return report;
   }
 

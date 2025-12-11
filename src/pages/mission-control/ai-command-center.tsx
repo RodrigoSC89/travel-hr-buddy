@@ -66,7 +66,6 @@ const AICommandCenter = () => {
         onDelta: updateAssistant,
         onDone: () => setIsLoading(false),
         onError: (error) => {
-          console.error(error);
           toast({
             title: "Erro",
             description: "Não foi possível processar o comando",
@@ -76,6 +75,7 @@ const AICommandCenter = () => {
         },
       });
     } catch (error) {
+      console.error("Error sending message:", error);
       console.error("Error sending message:", error);
       setIsLoading(false);
     }

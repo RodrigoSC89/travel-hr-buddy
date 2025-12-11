@@ -117,7 +117,6 @@ class MQTTClientManager {
     });
 
     this.client.on("error", (error: Error) => {
-      console.error("📡 [MQTT] Erro:", error);
       this.isConnecting = false;
     });
 
@@ -169,7 +168,6 @@ class MQTTClientManager {
    */
   send(topic: string, payload: any): void {
     if (!this.client?.connected) {
-      console.warn("📡 [MQTT] Não conectado. Mensagem não enviada.");
       return;
     }
 
@@ -177,7 +175,6 @@ class MQTTClientManager {
     
     this.client.publish(topic, message, (err) => {
       if (err) {
-        console.error(`📡 [MQTT] Erro ao publicar em ${topic}:`, err);
       } else {
         logger.info(`📡 [MQTT] Mensagem publicada em ${topic}`);
       }
@@ -190,7 +187,6 @@ class MQTTClientManager {
    */
   subscribe(topic: string): void {
     if (!this.client?.connected) {
-      console.warn("📡 [MQTT] Não conectado. Adicionando tópico à lista de subscrição.");
       if (!this.config.topics?.includes(topic)) {
         this.config.topics?.push(topic);
       }
@@ -199,7 +195,6 @@ class MQTTClientManager {
 
     this.client.subscribe(topic, (err) => {
       if (err) {
-        console.error(`📡 [MQTT] Erro ao subscrever ${topic}:`, err);
       } else {
         logger.info(`📡 [MQTT] Subscrito a ${topic}`);
         if (!this.config.topics?.includes(topic)) {
@@ -215,13 +210,11 @@ class MQTTClientManager {
    */
   unsubscribe(topic: string): void {
     if (!this.client?.connected) {
-      console.warn("📡 [MQTT] Não conectado.");
       return;
     }
 
     this.client.unsubscribe(topic, (err) => {
       if (err) {
-        console.error(`📡 [MQTT] Erro ao remover subscrição de ${topic}:`, err);
       } else {
         logger.info(`📡 [MQTT] Subscrição removida de ${topic}`);
         const index = this.config.topics?.indexOf(topic);

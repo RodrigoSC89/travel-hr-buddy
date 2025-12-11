@@ -43,10 +43,6 @@ class WebVitalsMonitor {
 
       // Log in development
       if (import.meta.env.DEV) {
-        console.log(`[WebVitals] ${metric.name}:`, {
-          value: metric.value.toFixed(2),
-          rating: metric.rating,
-        });
       }
     };
 
@@ -133,6 +129,7 @@ class WebVitalsMonitor {
         keepalive: true,
       });
     } catch (error) {
+      console.warn('[WebVitals] Failed to send metrics:', error);
       console.warn('[WebVitals] Failed to send metrics:', error);
     }
   }

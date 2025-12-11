@@ -69,7 +69,6 @@ const handleVital = (metric: Metric) => {
   if (import.meta.env.DEV) {
     const color = report.rating === 'good' ? '🟢' : 
                   report.rating === 'needs-improvement' ? '🟡' : '🔴';
-    console.log(`${color} ${report.name}: ${report.value.toFixed(2)} (${report.rating})`);
   }
   
   // Schedule flush
@@ -93,7 +92,6 @@ const flushVitals = async () => {
   
   // Skip sending in development
   if (import.meta.env.DEV) {
-    console.log('[Web Vitals] Would send:', vitalsToSend);
     return;
   }
   
@@ -137,7 +135,6 @@ const checkForIssues = (vitals: VitalReport[]) => {
   });
   
   if (issues.length > 0 && import.meta.env.DEV) {
-    console.warn('[Web Vitals] Performance issues detected:', issues);
   }
   
   return issues;
@@ -166,9 +163,9 @@ export const initWebVitals = () => {
     window.addEventListener('beforeunload', flushVitals);
     
     if (import.meta.env.DEV) {
-      console.log('[Web Vitals] Initialized');
     }
   } catch (error) {
+    console.warn('[Web Vitals] Failed to initialize:', error);
     console.warn('[Web Vitals] Failed to initialize:', error);
   }
 };

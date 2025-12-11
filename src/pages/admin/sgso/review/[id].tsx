@@ -87,7 +87,6 @@ export default function SGSOAuditReviewPage() {
           .single();
 
         if (error) {
-          console.error("Error fetching audit:", error);
           toast({
             title: "Erro",
             description: "Não foi possível carregar a auditoria",
@@ -98,6 +97,7 @@ export default function SGSOAuditReviewPage() {
           setItems((data.sgso_audit_items || []).sort((a, b) => a.requirement_number - b.requirement_number));
         }
       } catch (err) {
+        console.error("Error:", err);
         console.error("Error:", err);
         toast({
           title: "Erro",
@@ -147,6 +147,7 @@ export default function SGSOAuditReviewPage() {
       });
     } catch (error) {
       console.error("Error saving:", error);
+      console.error("Error saving:", error);
       toast({
         title: "Erro",
         description: "Erro ao salvar alterações",
@@ -178,6 +179,7 @@ export default function SGSOAuditReviewPage() {
         description: "PDF exportado com sucesso"
       });
     } catch (error) {
+      console.error("Error exporting PDF:", error);
       console.error("Error exporting PDF:", error);
       toast({
         title: "Erro",

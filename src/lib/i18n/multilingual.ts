@@ -189,6 +189,7 @@ class MultilingualSystem {
       localStorage.setItem(STORAGE_KEY, this.currentLanguage);
     } catch (error) {
       console.warn('Failed to save language preference:', error);
+      console.warn('Failed to save language preference:', error);
     }
   }
 
@@ -204,7 +205,6 @@ class MultilingualSystem {
    */
   setLanguage(lang: SupportedLanguage): void {
     if (!['pt', 'en', 'es'].includes(lang)) {
-      console.warn(`Unsupported language: ${lang}`);
       return;
     }
 
@@ -232,7 +232,6 @@ class MultilingualSystem {
 
     for (const part of parts) {
       if (current[part] === undefined) {
-        console.warn(`Translation not found: ${key}`);
         return fallback || key;
       }
       current = current[part];
@@ -242,7 +241,6 @@ class MultilingualSystem {
       return current[this.currentLanguage];
     }
 
-    console.warn(`Translation missing for language ${this.currentLanguage}: ${key}`);
     return fallback || current.pt || key;
   }
 

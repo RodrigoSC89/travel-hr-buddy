@@ -58,7 +58,6 @@ class SatcomPingService {
       .order("priority", { ascending: false });
 
     if (error) {
-      console.error("Error fetching satcom links:", error);
       return [];
     }
 
@@ -76,7 +75,6 @@ class SatcomPingService {
       .single();
 
     if (error) {
-      console.error("Error upserting satcom link:", error);
       return null;
     }
 
@@ -221,7 +219,6 @@ class SatcomPingService {
     const { data, error } = await query;
 
     if (error) {
-      console.error("Error fetching satcom logs:", error);
       return [];
     }
 

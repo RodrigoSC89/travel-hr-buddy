@@ -96,7 +96,6 @@ export function useUserProfile(options: UseUserProfileOptions = {}): UseUserProf
           };
           setProfile(basicProfile);
         } else if (fetchError.code !== "PGRST116") {
-          console.error("Error fetching profile:", fetchError);
           setError(new Error(fetchError.message));
         }
       } else {
@@ -107,6 +106,7 @@ export function useUserProfile(options: UseUserProfileOptions = {}): UseUserProf
         } as UserProfile);
       }
     } catch (err) {
+      console.error("Error in fetchProfile:", err);
       console.error("Error in fetchProfile:", err);
       setError(err instanceof Error ? err : new Error("Unknown error"));
     } finally {

@@ -14,6 +14,7 @@ import { RealtimeChannel } from "@supabase/supabase-js";
 import { syncQueue } from "./syncQueue";
 import { networkDetector } from "./networkDetector";
 import { structuredLogger } from "@/lib/logger/structured-logger";
+import { localStorageService, StoredRecord } from "./local-storage-service";
 
 interface SyncConfig {
   tables: string[];
@@ -29,6 +30,15 @@ interface SyncStatus {
   mode: "realtime" | "polling" | "offline";
 }
 
+interface SyncChangeEvent {
+  table: string;
+  event: "insert" | "update" | "delete";
+  data: any;
+  timestamp: Date;
+}
+
+type ChangeListener = (event: SyncChangeEvent) => void;
+
 export class EnhancedSyncEngine {
   private channels: Map<string, RealtimeChannel> = new Map();
   private pollingIntervals: Map<string, NodeJS.Timeout> = new Map();
@@ -40,6 +50,7 @@ export class EnhancedSyncEngine {
     mode: "offline",
   };
   private listeners: Set<(status: SyncStatus) => void> = new Set();
+  private changeListeners: Set<ChangeListener> = new Set();
 
   constructor(config: SyncConfig) {
     this.config = {
@@ -264,43 +275,118 @@ export class EnhancedSyncEngine {
     newRecord: any,
     oldRecord?: any
   ): Promise<void> {
-    // Check for local pending changes
-    const localChanges = await syncQueue.getQueueStats();
-    
-    if (localChanges.total > 0) {
-      // Apply conflict resolution strategy
-      switch (this.config.conflictResolution) {
-      case "local":
-        // Keep local changes, ignore remote
-        structuredLogger.debug("Conflict: keeping local changes");
-        break;
-      case "remote":
-        // Accept remote changes, discard local
-        structuredLogger.debug("Conflict: accepting remote changes");
-        // TODO: Update local storage with remote data
-        break;
-      case "latest":
-        // Use timestamp to determine winner
-        const localTimestamp = oldRecord?.updated_at;
-        const remoteTimestamp = newRecord.updated_at;
-        if (remoteTimestamp > localTimestamp) {
-          structuredLogger.debug("Conflict: remote is newer");
-          // TODO: Update local storage with remote data
-        }
-        break;
+    try {
+      // Validate input
+      if (!newRecord?.id) {
+        structuredLogger.warn("Remote change missing ID", { table });
+        return;
       }
-    }
 
-    // Emit event for UI updates
-    this.emitChange(table, "update", newRecord);
+      // Get local record if exists
+      const localRecord = await localStorageService.getRecord(table, newRecord.id);
+      
+      // Check for conflicts
+      if (localRecord && !localRecord.synced && localRecord.local_changes) {
+        // Apply conflict resolution strategy
+        switch (this.config.conflictResolution) {
+        case "local":
+          // Keep local changes, ignore remote
+          structuredLogger.debug("Conflict: keeping local changes", {
+            table,
+            id: newRecord.id,
+            strategy: "local",
+          });
+          return; // Don't update local storage
+          
+        case "remote":
+          // Accept remote changes, discard local
+          structuredLogger.debug("Conflict: accepting remote changes", {
+            table,
+            id: newRecord.id,
+            strategy: "remote",
+          });
+          await localStorageService.storeRecord(table, newRecord.id, newRecord, true);
+          break;
+          
+        case "latest":
+          // Use timestamp to determine winner
+          const localTimestamp = new Date(localRecord.updated_at).getTime();
+          const remoteTimestamp = new Date(newRecord.updated_at).getTime();
+          
+          if (remoteTimestamp > localTimestamp) {
+            structuredLogger.debug("Conflict: remote is newer", {
+              table,
+              id: newRecord.id,
+              strategy: "latest",
+              localTime: localRecord.updated_at,
+              remoteTime: newRecord.updated_at,
+            });
+            await localStorageService.storeRecord(table, newRecord.id, newRecord, true);
+          } else {
+            structuredLogger.debug("Conflict: local is newer or equal", {
+              table,
+              id: newRecord.id,
+              strategy: "latest",
+            });
+            return; // Keep local version
+          }
+          break;
+        }
+      } else {
+        // No conflict, update local storage
+        await localStorageService.storeRecord(table, newRecord.id, newRecord, true);
+        
+        structuredLogger.debug("Remote change applied", {
+          table,
+          id: newRecord.id,
+          hasLocal: !!localRecord,
+        });
+      }
+
+      // Emit event for UI updates
+      this.emitChange(table, oldRecord ? "update" : "insert", newRecord);
+    } catch (error) {
+      structuredLogger.error("Failed to handle remote change", error as Error, {
+        table,
+        recordId: newRecord?.id,
+      });
+    }
   }
 
   /**
    * Handle remote delete
    */
   private async handleRemoteDelete(table: string, record: any): Promise<void> {
-    // TODO: Update local storage to mark as deleted
-    this.emitChange(table, "delete", record);
+    try {
+      // Validate input
+      if (!record?.id) {
+        structuredLogger.warn("Remote delete missing ID", { table });
+        return;
+      }
+
+      // Mark as deleted in local storage
+      const success = await localStorageService.markAsDeleted(table, record.id);
+      
+      if (success) {
+        structuredLogger.debug("Remote delete applied", {
+          table,
+          id: record.id,
+        });
+        
+        // Emit event for UI updates
+        this.emitChange(table, "delete", record);
+      } else {
+        structuredLogger.warn("Failed to apply remote delete", {
+          table,
+          id: record.id,
+        });
+      }
+    } catch (error) {
+      structuredLogger.error("Failed to handle remote delete", error as Error, {
+        table,
+        recordId: record?.id,
+      });
+    }
   }
 
   /**
@@ -351,9 +437,60 @@ export class EnhancedSyncEngine {
   /**
    * Emit change event for table
    */
-  private emitChange(table: string, event: string, data: any): void {
-    // TODO: Implement event emitter for UI updates
-    structuredLogger.debug("Change emitted", { table, event });
+  private emitChange(
+    table: string, 
+    event: "insert" | "update" | "delete", 
+    data: any
+  ): void {
+    try {
+      const changeEvent: SyncChangeEvent = {
+        table,
+        event,
+        data,
+        timestamp: new Date(),
+      };
+
+      // Notify all change listeners
+      for (const listener of this.changeListeners) {
+        try {
+          listener(changeEvent);
+        } catch (error) {
+          structuredLogger.error("Change listener error", error as Error, {
+            table,
+            event,
+          });
+        }
+      }
+
+      structuredLogger.debug("Change emitted to UI", { 
+        table, 
+        event,
+        listenerCount: this.changeListeners.size,
+      });
+    } catch (error) {
+      structuredLogger.error("Failed to emit change", error as Error, {
+        table,
+        event,
+      });
+    }
+  }
+
+  /**
+   * Add change listener for UI updates
+   */
+  public addChangeListener(listener: ChangeListener): () => void {
+    this.changeListeners.add(listener);
+    structuredLogger.debug("Change listener added", {
+      totalListeners: this.changeListeners.size,
+    });
+    
+    // Return unsubscribe function
+    return () => {
+      this.changeListeners.delete(listener);
+      structuredLogger.debug("Change listener removed", {
+        totalListeners: this.changeListeners.size,
+      });
+    };
   }
 
   /**
@@ -377,12 +514,212 @@ export class EnhancedSyncEngine {
   }
 
   /**
+   * Create or update a local record with sync queue
+   */
+  public async upsertLocal(
+    table: string,
+    id: string,
+    data: any
+  ): Promise<{ success: boolean; error?: string }> {
+    try {
+      // Validate input
+      if (!table || typeof table !== "string" || !this.config.tables.includes(table)) {
+        return {
+          success: false,
+          error: "Invalid table name",
+        };
+      }
+
+      if (!id || typeof id !== "string") {
+        return {
+          success: false,
+          error: "Invalid record ID",
+        };
+      }
+
+      if (!data || typeof data !== "object") {
+        return {
+          success: false,
+          error: "Invalid data object",
+        };
+      }
+
+      // Store locally with unsynced flag
+      const stored = await localStorageService.storeRecord(table, id, {
+        ...data,
+        id,
+        updated_at: new Date().toISOString(),
+      }, false);
+
+      if (!stored) {
+        return {
+          success: false,
+          error: "Failed to store record locally",
+        };
+      }
+
+      // Add to sync queue if online
+      if (this.status.isConnected) {
+        await syncQueue.addToQueue({
+          table,
+          action: "upsert",
+          data: { ...data, id },
+          timestamp: Date.now(),
+        });
+      }
+
+      structuredLogger.debug("Local upsert queued", { table, id });
+      
+      // Emit change event
+      this.emitChange(table, "update", { ...data, id });
+
+      return { success: true };
+    } catch (error) {
+      structuredLogger.error("Failed to upsert local record", error as Error, {
+        table,
+        id,
+      });
+      return {
+        success: false,
+        error: "Upsert operation failed",
+      };
+    }
+  }
+
+  /**
+   * Delete a local record with sync queue
+   */
+  public async deleteLocal(
+    table: string,
+    id: string
+  ): Promise<{ success: boolean; error?: string }> {
+    try {
+      // Validate input
+      if (!table || typeof table !== "string" || !this.config.tables.includes(table)) {
+        return {
+          success: false,
+          error: "Invalid table name",
+        };
+      }
+
+      if (!id || typeof id !== "string") {
+        return {
+          success: false,
+          error: "Invalid record ID",
+        };
+      }
+
+      // Mark as deleted locally
+      const deleted = await localStorageService.markAsDeleted(table, id);
+
+      if (!deleted) {
+        return {
+          success: false,
+          error: "Failed to mark record as deleted",
+        };
+      }
+
+      // Add to sync queue if online
+      if (this.status.isConnected) {
+        await syncQueue.addToQueue({
+          table,
+          action: "delete",
+          data: { id },
+          timestamp: Date.now(),
+        });
+      }
+
+      structuredLogger.debug("Local delete queued", { table, id });
+      
+      // Emit change event
+      this.emitChange(table, "delete", { id });
+
+      return { success: true };
+    } catch (error) {
+      structuredLogger.error("Failed to delete local record", error as Error, {
+        table,
+        id,
+      });
+      return {
+        success: false,
+        error: "Delete operation failed",
+      };
+    }
+  }
+
+  /**
+   * Get local records for a table
+   */
+  public async getLocalRecords(table: string): Promise<any[]> {
+    try {
+      if (!table || !this.config.tables.includes(table)) {
+        structuredLogger.warn("Invalid table for getLocalRecords", { table });
+        return [];
+      }
+
+      const records = await localStorageService.getTableRecords(table);
+      return records.map(r => r.data);
+    } catch (error) {
+      structuredLogger.error("Failed to get local records", error as Error, {
+        table,
+      });
+      return [];
+    }
+  }
+
+  /**
+   * Get storage statistics
+   */
+  public async getStorageStats() {
+    try {
+      const stats = await localStorageService.getStats();
+      
+      structuredLogger.debug("Storage stats retrieved", stats);
+      
+      return stats;
+    } catch (error) {
+      structuredLogger.error("Failed to get storage stats", error as Error);
+      return {
+        totalRecords: 0,
+        unsyncedRecords: 0,
+        tableBreakdown: {},
+      };
+    }
+  }
+
+  /**
+   * Clear all local data for a table
+   */
+  public async clearTableData(table: string): Promise<boolean> {
+    try {
+      if (!table || !this.config.tables.includes(table)) {
+        structuredLogger.warn("Invalid table for clearTableData", { table });
+        return false;
+      }
+
+      const success = await localStorageService.clearTable(table);
+      
+      if (success) {
+        structuredLogger.info("Table data cleared", { table });
+      }
+      
+      return success;
+    } catch (error) {
+      structuredLogger.error("Failed to clear table data", error as Error, {
+        table,
+      });
+      return false;
+    }
+  }
+
+  /**
    * Cleanup and shutdown
    */
   public shutdown(): void {
     this.stopRealtimeSync();
     this.stopPollingSync();
     this.listeners.clear();
+    this.changeListeners.clear();
     structuredLogger.info("Enhanced Sync Engine shutdown");
   }
 }

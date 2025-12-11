@@ -146,6 +146,7 @@ export const CompleteTemplateEditor: React.FC = () => {
       setTemplates(data || []);
     } catch (error) {
       console.error("Error loading templates:", error);
+      console.error("Error loading templates:", error);
       toast.error("Failed to load templates");
     } finally {
       setIsLoading(false);
@@ -201,6 +202,7 @@ export const CompleteTemplateEditor: React.FC = () => {
       loadTemplates();
     } catch (error) {
       console.error("Error saving template:", error);
+      console.error("Error saving template:", error);
       toast.error("Failed to save template");
     }
   };
@@ -222,6 +224,7 @@ export const CompleteTemplateEditor: React.FC = () => {
         editor?.commands.setContent("<p>Start typing or select a template...</p>");
       }
     } catch (error) {
+      console.error("Error deleting template:", error);
       console.error("Error deleting template:", error);
       toast.error("Failed to delete template");
     }
@@ -269,6 +272,7 @@ export const CompleteTemplateEditor: React.FC = () => {
       toast.success("PDF exported successfully");
     } catch (error) {
       console.error("Error exporting PDF:", error);
+      console.error("Error exporting PDF:", error);
       toast.error("Failed to export PDF");
     }
   };
@@ -291,6 +295,7 @@ export const CompleteTemplateEditor: React.FC = () => {
       
       toast.success("HTML exported successfully");
     } catch (error) {
+      console.error("Error exporting HTML:", error);
       console.error("Error exporting HTML:", error);
       toast.error("Failed to export HTML");
     }
@@ -324,6 +329,7 @@ export const CompleteTemplateEditor: React.FC = () => {
       
       toast.success("Word document exported successfully");
     } catch (error) {
+      console.error("Error exporting Word:", error);
       console.error("Error exporting Word:", error);
       toast.error("Failed to export Word document");
     }
@@ -363,9 +369,9 @@ export const CompleteTemplateEditor: React.FC = () => {
         });
       
       if (error) {
-        console.error("Error saving export history:", error);
       }
     } catch (error) {
+      console.error("Error saving export history:", error);
       console.error("Error saving export history:", error);
     }
   };

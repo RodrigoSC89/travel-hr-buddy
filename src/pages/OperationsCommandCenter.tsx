@@ -17,7 +17,7 @@ import { Separator } from "@/components/ui/separator";
 import { Sheet, SheetContent, SheetDescription, SheetHeader, SheetTitle, SheetFooter } from "@/components/ui/sheet";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger } from "@/components/ui/dropdown-menu";
-import { Skeleton } from "@/components/ui/skeleton";
+import { Skeleton } from "@/components/unified/Skeletons.unified";
 import { motion } from "framer-motion";
 import { 
   Ship, TrendingUp, TrendingDown, Users, Activity, BarChart3, Navigation, Gauge, AlertCircle,

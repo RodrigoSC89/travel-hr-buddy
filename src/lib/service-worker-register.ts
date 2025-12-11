@@ -5,7 +5,6 @@
 
 export async function registerServiceWorker(): Promise<ServiceWorkerRegistration | null> {
   if (!('serviceWorker' in navigator)) {
-    console.warn('[SW] Service Workers não suportados');
     return null;
   }
 
@@ -14,7 +13,6 @@ export async function registerServiceWorker(): Promise<ServiceWorkerRegistration
       scope: '/'
     });
 
-    console.log('[SW] Registrado com sucesso:', registration.scope);
 
     // Verificar atualizações periodicamente
     setInterval(() => {
@@ -44,6 +42,7 @@ export async function registerServiceWorker(): Promise<ServiceWorkerRegistration
     return registration;
   } catch (error) {
     console.error('[SW] Erro ao registrar:', error);
+    console.error('[SW] Erro ao registrar:', error);
     return null;
   }
 }
@@ -59,6 +58,7 @@ export async function requestBackgroundSync(tag: string = 'sync-data'): Promise<
     return true;
   } catch (error) {
     console.error('[SW] Erro ao solicitar sync:', error);
+    console.error('[SW] Erro ao solicitar sync:', error);
     return false;
   }
 }
@@ -66,7 +66,6 @@ export async function requestBackgroundSync(tag: string = 'sync-data'): Promise<
 export async function clearAllCaches(): Promise<void> {
   const keys = await caches.keys();
   await Promise.all(keys.map(key => caches.delete(key)));
-  console.log('[SW] Caches limpos');
 }
 
 export async function getCacheSize(): Promise<number> {

@@ -6,7 +6,7 @@
 import React, { memo } from "react";
 import { Card, CardContent } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
-import { Skeleton } from "@/components/ui/skeleton";
+import { Skeleton } from "@/components/unified/Skeletons.unified";
 import { 
   Ship, 
   Users, 

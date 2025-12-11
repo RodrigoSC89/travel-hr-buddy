@@ -144,7 +144,6 @@ class EnhancedSonarAIService {
       .single();
 
     if (error) {
-      console.error("Error saving sonar event:", error);
       return null;
     }
 
@@ -224,7 +223,6 @@ class EnhancedSonarAIService {
       .single();
 
     if (error) {
-      console.error("Error saving sonar risk:", error);
       return null;
     }
 
@@ -242,7 +240,6 @@ class EnhancedSonarAIService {
       .limit(limit);
 
     if (error) {
-      console.error("Error fetching sonar events:", error);
       return [];
     }
 
@@ -266,7 +263,6 @@ class EnhancedSonarAIService {
     const { data, error } = await query;
 
     if (error) {
-      console.error("Error fetching sonar risks:", error);
       return [];
     }
 
@@ -298,7 +294,6 @@ class EnhancedSonarAIService {
       .eq("id", riskId);
 
     if (error) {
-      console.error("Error updating risk status:", error);
       return false;
     }
 
@@ -325,7 +320,6 @@ class EnhancedSonarAIService {
     const { data, error } = await query;
 
     if (error) {
-      console.error("Error fetching risk statistics:", error);
       return { total: 0, byLevel: {}, byType: {} };
     }
 

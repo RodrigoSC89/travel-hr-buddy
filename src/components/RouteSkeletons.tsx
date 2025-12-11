@@ -1,4 +1,4 @@
-import { Skeleton } from "@/components/ui/skeleton";
+import { Skeleton } from "@/components/unified/Skeletons.unified";
 import { motion } from "framer-motion";
 
 // Dashboard Skeleton

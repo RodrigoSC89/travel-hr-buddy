@@ -136,14 +136,6 @@ class SocioCognitiveLayer {
       this.contextLog.shift();
     }
 
-    console.log("[SocioCognitive] Context logged:", {
-      commandId: context.commandId,
-      urgency: interpretation.urgency,
-      tone: interpretation.tone,
-      intent: interpretation.intent,
-      operationalLoad: interpretation.context.operationalLoad,
-      adaptations
-    });
   }
 
   /**

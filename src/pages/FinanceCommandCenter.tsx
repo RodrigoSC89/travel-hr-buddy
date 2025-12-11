@@ -20,7 +20,7 @@ import { Sheet, SheetContent, SheetDescription, SheetHeader, SheetTitle, SheetFo
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuSeparator, DropdownMenuTrigger } from "@/components/ui/dropdown-menu";
 import { Alert, AlertDescription } from "@/components/ui/alert";
-import { Skeleton } from "@/components/ui/skeleton";
+import { Skeleton } from "@/components/unified/Skeletons.unified";
 import {
   DollarSign, TrendingUp, TrendingDown, PiggyBank, Receipt, CreditCard,
   BarChart3, PieChart, ArrowUpRight, ArrowDownRight, Calendar, AlertCircle,

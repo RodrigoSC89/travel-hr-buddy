@@ -9,7 +9,6 @@ export function initSecureMQTT() {
   const url = import.meta.env.VITE_MQTT_URL;
   
   if (!url) {
-    console.warn("VITE_MQTT_URL not set, MQTT disabled");
   }
   
   // Connect to MQTT broker if not already connected

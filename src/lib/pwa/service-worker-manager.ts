@@ -25,7 +25,6 @@ class ServiceWorkerManager {
 
   async register(): Promise<boolean> {
     if (!('serviceWorker' in navigator)) {
-      console.warn('Service Workers not supported');
       return false;
     }
 
@@ -34,14 +33,12 @@ class ServiceWorkerManager {
         scope: this.config.scope,
       });
 
-      console.log('Service Worker registered:', this.registration.scope);
 
       // Setup update checking
       this.setupUpdateChecking();
 
       // Listen for controller changes
       navigator.serviceWorker.addEventListener('controllerchange', () => {
-        console.log('New Service Worker activated');
       });
 
       // Listen for messages from SW
@@ -49,6 +46,7 @@ class ServiceWorkerManager {
 
       return true;
     } catch (error) {
+      console.error('Service Worker registration failed:', error);
       console.error('Service Worker registration failed:', error);
       return false;
     }
@@ -61,10 +59,10 @@ class ServiceWorkerManager {
       const success = await this.registration.unregister();
       if (success) {
         this.registration = null;
-        console.log('Service Worker unregistered');
       }
       return success;
     } catch (error) {
+      console.error('Service Worker unregistration failed:', error);
       console.error('Service Worker unregistration failed:', error);
       return false;
     }
@@ -75,8 +73,8 @@ class ServiceWorkerManager {
 
     try {
       await this.registration.update();
-      console.log('Service Worker update check completed');
     } catch (error) {
+      console.error('Service Worker update failed:', error);
       console.error('Service Worker update failed:', error);
     }
   }
@@ -180,7 +178,6 @@ class ServiceWorkerManager {
 
     switch (type) {
       case 'CACHE_UPDATED':
-        console.log('Cache updated:', payload);
         break;
       case 'OFFLINE':
         this.config.onOffline?.();

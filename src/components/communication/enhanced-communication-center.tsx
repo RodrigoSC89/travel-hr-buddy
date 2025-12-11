@@ -30,7 +30,7 @@ import {
 import { InboxManager } from "./inbox-manager";
 import { ChannelManager } from "./channel-manager";
 import { MessageComposer } from "./message-composer";
-import { NotificationCenter } from "./notification-center";
+import { NotificationCenter } from "@/components/unified/NotificationCenter.unified";
 import { SettingsPanel } from "./settings-panel";
 import { CommunicationAnalytics } from "./communication-analytics";
 

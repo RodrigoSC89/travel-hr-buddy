@@ -256,7 +256,6 @@ const flushMetrics = (): void => {
   
   // Log to console in development
   if (import.meta.env.DEV) {
-    console.log('[LLM Metrics]', metricsBuffer);
   }
   
   // TODO: Send to analytics endpoint

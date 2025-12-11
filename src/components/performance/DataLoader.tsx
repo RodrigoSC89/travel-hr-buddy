@@ -16,7 +16,7 @@ import {
   ListSkeleton,
   DashboardSkeleton,
   FormSkeleton
-} from '@/components/ui/skeleton-loaders';
+} from "@/components/unified/Skeletons.unified";
 
 // Skeleton type options
 type SkeletonType = 'card' | 'table' | 'list' | 'dashboard' | 'form' | 'custom';

@@ -5,7 +5,7 @@
  */
 
 import React, { useEffect, useRef, useState } from "react";
-import { Skeleton } from "@/components/ui/skeleton";
+import { Skeleton } from "@/components/unified/Skeletons.unified";
 import { MapPin } from "lucide-react";
 import { loadMapboxGL } from "@/lib/performance/heavy-libs-loader";
 

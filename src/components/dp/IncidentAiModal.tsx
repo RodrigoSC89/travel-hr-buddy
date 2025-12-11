@@ -24,6 +24,7 @@ export default function IncidentAiModal() {
           localStorage.removeItem("incident_to_analyze");
         } catch (error) {
           console.error("Error parsing incident data:", error);
+          console.error("Error parsing incident data:", error);
         }
       }
     };
@@ -53,7 +54,6 @@ export default function IncidentAiModal() {
       });
 
       if (error) {
-        console.error("Error calling AI analysis:", error);
         toast.error("Erro ao analisar incidente", {
           description: error.message || "Tente novamente mais tarde",
         });
@@ -68,6 +68,7 @@ export default function IncidentAiModal() {
         setAnalysis("Análise não retornou resultados.");
       }
     } catch (err) {
+      console.error("Unexpected error:", err);
       console.error("Unexpected error:", err);
       toast.error("Erro inesperado ao analisar incidente");
       setAnalysis("Erro inesperado. Por favor, tente novamente.");

@@ -137,7 +137,6 @@ export async function searchDocuments(
     const { data: documents, error } = await dbQuery;
     
     if (error) {
-      console.error('RAG search error:', error);
       return [];
     }
     
@@ -168,6 +167,7 @@ export async function searchDocuments(
     
     return scoredResults;
   } catch (error) {
+    console.error('RAG search failed:', error);
     console.error('RAG search failed:', error);
     return [];
   }
@@ -243,6 +243,7 @@ async function createAuditEntry(
       },
     });
   } catch (error) {
+    console.error('Failed to create audit entry:', error);
     console.error('Failed to create audit entry:', error);
   }
   
@@ -329,6 +330,7 @@ export async function submitHITLValidation(
       feedback_data: { approved, feedback },
     });
   } catch (error) {
+    console.error('Failed to submit HITL validation:', error);
     console.error('Failed to submit HITL validation:', error);
     throw error;
   }

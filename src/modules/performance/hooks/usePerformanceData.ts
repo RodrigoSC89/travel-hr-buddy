@@ -70,7 +70,6 @@ export const usePerformanceData = (period: number = 7) => {
         calculateMetrics(fleetLogs || [], missions || [], fuelUsage || []);
       } else {
         // Show empty state with helpful message
-        console.warn("Some performance tables not found, showing empty state");
         setMetrics({
           fuelEfficiency: 0,
           navigationHours: 0,
@@ -84,6 +83,7 @@ export const usePerformanceData = (period: number = 7) => {
       }
 
     } catch (err: any) {
+      console.error("Error loading performance data:", err);
       console.error("Error loading performance data:", err);
       setError(err.message);
       // Show empty state on error

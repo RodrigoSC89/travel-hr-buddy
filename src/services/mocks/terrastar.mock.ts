@@ -225,10 +225,8 @@ export const TerrastarMockAPI = {
    * Obter dados ionosféricos
    */
   async getIonosphericData(latitude: number, longitude: number, altitude: number = 0): Promise<TerrastarIonosphereData> {
-    console.log('🟡 [MOCK] Terrastar: Getting ionospheric data...');
     await simulateNetworkDelay();
     const data = generateMockIonosphereData(latitude, longitude, altitude);
-    console.log('✅ [MOCK] Terrastar: Ionospheric data retrieved', data);
     return data;
   },
   
@@ -241,10 +239,8 @@ export const TerrastarMockAPI = {
     longitude: number,
     serviceLevel: 'BASIC' | 'PREMIUM' | 'RTK' = 'PREMIUM'
   ): Promise<TerrastarCorrection> {
-    console.log('🟡 [MOCK] Terrastar: Requesting position correction...');
     await simulateNetworkDelay();
     const correction = generateMockCorrection(vesselId, latitude, longitude, serviceLevel);
-    console.log('✅ [MOCK] Terrastar: Correction received', correction);
     return correction;
   },
   
@@ -252,10 +248,8 @@ export const TerrastarMockAPI = {
    * Obter alertas ativos
    */
   async getActiveAlerts(vesselId: string, latitude: number, longitude: number): Promise<TerrastarAlert[]> {
-    console.log('🟡 [MOCK] Terrastar: Getting active alerts...');
     await simulateNetworkDelay(50, 200);
     const alerts = generateMockAlerts(vesselId, latitude, longitude);
-    console.log(`✅ [MOCK] Terrastar: Found ${alerts.length} active alerts`);
     return alerts;
   },
   
@@ -263,10 +257,8 @@ export const TerrastarMockAPI = {
    * Obter previsão 24h
    */
   async getForecast(latitude: number, longitude: number): Promise<any> {
-    console.log('🟡 [MOCK] Terrastar: Getting 24h forecast...');
     await simulateNetworkDelay(200, 600);
     const forecast = generateMockForecast(latitude, longitude);
-    console.log('✅ [MOCK] Terrastar: Forecast retrieved', { hours: forecast.length });
     return forecast;
   },
   
@@ -274,10 +266,8 @@ export const TerrastarMockAPI = {
    * Obter estatísticas
    */
   async getStatistics(vesselId: string): Promise<any> {
-    console.log('🟡 [MOCK] Terrastar: Getting statistics...');
     await simulateNetworkDelay(100, 300);
     const stats = generateMockStatistics(vesselId);
-    console.log('✅ [MOCK] Terrastar: Statistics retrieved', stats);
     return stats;
   },
   
@@ -285,13 +275,11 @@ export const TerrastarMockAPI = {
    * Verificar status do serviço
    */
   async checkServiceStatus(): Promise<{ status: string; message: string }> {
-    console.log('🟡 [MOCK] Terrastar: Checking service status...');
     await simulateNetworkDelay(50, 150);
     const status = {
       status: 'operational',
       message: 'Mock service is operational. Replace with real API when ready.',
     };
-    console.log('✅ [MOCK] Terrastar: Service status OK');
     return status;
   },
 };
@@ -308,9 +296,6 @@ export function isUsingMockTerrastar(): boolean {
  */
 export function logMockWarning(): void {
   if (USE_MOCK_API) {
-    console.warn('⚠️  TERRASTAR MOCK API EM USO');
-    console.warn('📘 Dados simulados para desenvolvimento');
-    console.warn('🔄 Configure VITE_USE_MOCK_TERRASTAR=false para usar API real');
   }
 }
 

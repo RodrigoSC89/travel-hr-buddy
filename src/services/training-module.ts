@@ -83,7 +83,6 @@ export class TrainingModuleService {
       .single();
 
     if (error) {
-      console.error("Error fetching training module:", error);
       return null;
     }
 

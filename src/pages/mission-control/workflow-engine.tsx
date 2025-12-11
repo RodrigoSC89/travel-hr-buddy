@@ -60,7 +60,6 @@ const WorkflowEngine = () => {
       .order("created_at", { ascending: false });
 
     if (error) {
-      console.error("Error loading workflows:", error);
     } else {
       setWorkflows((data || []) as any);
     }

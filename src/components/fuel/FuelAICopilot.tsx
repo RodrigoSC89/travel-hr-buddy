@@ -182,7 +182,6 @@ Dados atuais do sistema:
       let responseContent: string;
 
       if (error || !data?.response) {
-        console.warn("Edge function failed, using local fallback:", error);
         responseContent = generateLocalFallback(textToSend);
       } else {
         responseContent = data.response;
@@ -197,6 +196,7 @@ Dados atuais do sistema:
 
       setMessages((prev) => [...prev, assistantMessage]);
     } catch (error) {
+      console.error("Error sending message:", error);
       console.error("Error sending message:", error);
       
       const fallbackMessage: Message = {

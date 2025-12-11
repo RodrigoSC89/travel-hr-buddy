@@ -537,7 +537,6 @@ class TranslationManager {
     }
 
     if (typeof value !== 'string') {
-      console.warn(`Translation not found: ${key}`);
       return key;
     }
 
@@ -560,7 +559,6 @@ class TranslationManager {
   // Set language
   setLanguage(lang: SupportedLanguage): void {
     if (!this.config.languages.includes(lang)) {
-      console.warn(`Unsupported language: ${lang}`);
       return;
     }
 

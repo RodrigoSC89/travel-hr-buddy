@@ -75,7 +75,6 @@ class SmartSyncManager {
       
       if (effectiveType === '2g' || effectiveType === 'slow-2g' || effectiveType === '3g') {
         this.config = SLOW_CONNECTION_CONFIG;
-        console.log('[SmartSync] Using slow connection config');
       }
 
       conn?.addEventListener('change', () => {
@@ -162,6 +161,7 @@ class SmartSyncManager {
       
     } catch (error) {
       console.warn(`[SmartSync] Failed to sync ${item.id}:`, error);
+      console.warn(`[SmartSync] Failed to sync ${item.id}:`, error);
       
       item.retries++;
       item.lastAttempt = Date.now();
@@ -192,7 +192,6 @@ class SmartSyncManager {
     const chunkSize = this.config.chunkSizeKB * 1024;
     const chunks = Math.ceil(dataStr.length / chunkSize);
     
-    console.log(`[SmartSync] Processing large item in ${chunks} chunks`);
     
     for (let i = 0; i < chunks; i++) {
       const chunk = dataStr.slice(i * chunkSize, (i + 1) * chunkSize);
@@ -249,6 +248,7 @@ class SmartSyncManager {
       localStorage.setItem('smart_sync_queue', JSON.stringify(this.queue));
     } catch (e) {
       console.warn('[SmartSync] Failed to save queue:', e);
+      console.warn('[SmartSync] Failed to save queue:', e);
     }
   }
 
@@ -270,6 +270,7 @@ class SmartSyncManager {
       if (failed.length > 100) failed.shift();
       localStorage.setItem('smart_sync_failed', JSON.stringify(failed));
     } catch (e) {
+      console.warn('[SmartSync] Failed to save failed item:', e);
       console.warn('[SmartSync] Failed to save failed item:', e);
     }
   }

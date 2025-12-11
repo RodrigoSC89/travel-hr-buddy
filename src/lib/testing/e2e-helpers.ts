@@ -198,6 +198,5 @@ export const perfUtils = {
    */
   logMarks() {
     const marks = performance.getEntriesByType('mark');
-    console.table(marks.map(m => ({ name: m.name, time: m.startTime.toFixed(2) })));
   },
 };

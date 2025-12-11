@@ -1,12 +1,8 @@
 /**
- * @deprecated This file is deprecated. Import from '@/components/ui/Loading' instead.
- * This file is kept for backward compatibility only.
+ * @deprecated Este componente foi movido para /src/components/legacy/
+ * Use @/components/unified/Skeletons.unified ao invés
+ * 
+ * Arquivo antigo: src/components/legacy/skeleton_loading-skeleton.tsx
  */
 
-// Re-export from the new unified Loading component
-export { 
-  LoadingSkeleton as Skeleton,
-  LoadingDashboard as DashboardSkeleton,
-  LoadingCard as CardSkeleton,
-  type LoadingSkeletonProps as SkeletonProps
-} from "./Loading";
+export { /* Deprecated - use unified version */ } from "@/components/unified/Skeletons.unified";

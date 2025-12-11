@@ -71,7 +71,6 @@ class ModuleIntegrationService {
   async executeAction(action: ModuleAction): Promise<any> {
     const handler = this.actionHandlers.get(action.action);
     if (!handler) {
-      console.warn(`No handler for action: ${action.action}`);
       return { success: false, error: "Action not found" };
     }
 
@@ -82,6 +81,7 @@ class ModuleIntegrationService {
       }
       return result;
     } catch (error) {
+      console.error(`Error executing action ${action.action}:`, error);
       console.error(`Error executing action ${action.action}:`, error);
       return { success: false, error };
     }

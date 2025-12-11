@@ -118,7 +118,6 @@ export const SimpleGlobalSearch: React.FC = () => {
         .eq("enabled", true);
       
       if (error) {
-        console.log("No tenant_modules table available, using static results");
         setSearchResults(staticResults);
         return;
       }
@@ -147,6 +146,7 @@ export const SimpleGlobalSearch: React.FC = () => {
       
       setSearchResults(allResults);
     } catch (error) {
+      console.error("Error loading modules:", error);
       console.error("Error loading modules:", error);
       // Fallback to static results on error
       setSearchResults(staticResults);

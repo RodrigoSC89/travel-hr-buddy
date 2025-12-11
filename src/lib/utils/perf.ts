@@ -7,7 +7,7 @@ export const optimizeEventLoop = () => {
   const t0 = performance.now();
   requestIdleCallback(() => {
     const duration = performance.now() - t0;
-    if (duration > 16) console.warn(`⚙️ Evento pesado: ${duration.toFixed(2)}ms`);
+    if (duration > 16) }ms`);
   });
 };
 

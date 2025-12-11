@@ -115,7 +115,6 @@ export async function createDocument(
     .single();
 
   if (error) {
-    console.error('Failed to create document:', error);
     return null;
   }
 
@@ -152,7 +151,6 @@ export async function getDocuments(
   const { data, error } = await query.order('created_at', { ascending: false });
 
   if (error) {
-    console.error('Failed to fetch documents:', error);
     return [];
   }
 
@@ -172,7 +170,6 @@ export async function updateDocumentStatus(
     .eq('id', documentId);
 
   if (error) {
-    console.error('Failed to update document status:', error);
     return false;
   }
 
@@ -195,7 +192,6 @@ export async function createNewVersion(
     .single();
 
   if (fetchError || !current) {
-    console.error('Failed to fetch document:', fetchError);
     return null;
   }
 
@@ -227,7 +223,6 @@ export async function createNewVersion(
     .single();
 
   if (createError) {
-    console.error('Failed to create new version:', createError);
     return null;
   }
 
@@ -261,7 +256,6 @@ export async function submitForApproval(
     .single();
 
   if (fetchError || !doc) {
-    console.error('Failed to fetch document:', fetchError);
     return false;
   }
 
@@ -280,7 +274,6 @@ export async function submitForApproval(
     .insert(steps);
 
   if (stepsError) {
-    console.error('Failed to create approval steps:', stepsError);
     return false;
   }
 
@@ -318,7 +311,6 @@ export async function processApproval(
     .eq('id', approvalId);
 
   if (error) {
-    console.error('Failed to process approval:', error);
     return false;
   }
 
@@ -356,7 +348,6 @@ export async function distributeDocument(
     .insert(records);
 
   if (error) {
-    console.error('Failed to distribute document:', error);
     return false;
   }
 
@@ -382,7 +373,6 @@ export async function acknowledgeDocument(
     .eq('id', distributionId);
 
   if (error) {
-    console.error('Failed to acknowledge document:', error);
     return false;
   }
 
@@ -402,7 +392,6 @@ export async function getApprovalHistory(
     .order('step_order', { ascending: true });
 
   if (error) {
-    console.error('Failed to fetch approval history:', error);
     return [];
   }
 
@@ -422,7 +411,6 @@ export async function getDistributionRecords(
     .order('distributed_at', { ascending: false });
 
   if (error) {
-    console.error('Failed to fetch distribution records:', error);
     return [];
   }
 

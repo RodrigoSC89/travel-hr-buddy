@@ -126,7 +126,6 @@ class AIResponseCache {
     
     if (bestMatch) {
       bestMatch.metadata.useCount++;
-      console.log(`[AICache] Semantic match found (${(bestScore * 100).toFixed(0)}% similar)`);
     }
     
     return bestMatch;
@@ -257,7 +256,6 @@ class AIResponseCache {
       }
     }
     
-    console.log(`[AICache] Evicted ${toRemove} least used entries`);
   }
   
   /**
@@ -318,6 +316,7 @@ class AIResponseCache {
       localStorage.setItem('ai_response_cache', JSON.stringify(data));
     } catch (e) {
       console.warn('[AICache] Failed to save to storage:', e);
+      console.warn('[AICache] Failed to save to storage:', e);
     }
   }
   
@@ -341,9 +340,9 @@ class AIResponseCache {
           }
         }
         
-        console.log(`[AICache] Loaded ${this.cache.size} cached responses`);
       }
     } catch (e) {
+      console.warn('[AICache] Failed to load from storage:', e);
       console.warn('[AICache] Failed to load from storage:', e);
     }
   }

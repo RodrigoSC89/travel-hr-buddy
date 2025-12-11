@@ -94,6 +94,7 @@ export function OfflineDataProvider({ children }: OfflineDataProviderProps) {
         }
       } catch (e) {
         console.error("Failed to fetch from server:", e);
+        console.error("Failed to fetch from server:", e);
       }
     }
 
@@ -120,6 +121,7 @@ export function OfflineDataProvider({ children }: OfflineDataProviderProps) {
           return data as T[];
         }
       } catch (e) {
+        console.error("Failed to fetch from server:", e);
         console.error("Failed to fetch from server:", e);
       }
     }
@@ -153,7 +155,6 @@ export function OfflineDataProvider({ children }: OfflineDataProviderProps) {
       try {
         await enhancedSyncEngine.forceSync();
       } catch (e) {
-        console.log("Sync queued for later:", e);
       }
     }
   }, [isOnline]);
@@ -177,7 +178,6 @@ export function OfflineDataProvider({ children }: OfflineDataProviderProps) {
       try {
         await enhancedSyncEngine.forceSync();
       } catch (e) {
-        console.log("Delete queued for later:", e);
       }
     }
   }, [isOnline]);

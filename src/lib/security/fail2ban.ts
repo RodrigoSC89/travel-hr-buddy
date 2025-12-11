@@ -118,7 +118,6 @@ export async function logLoginAttempt(attempt: LoginAttempt): Promise<{
       .gte("created_at", windowStart.toISOString());
     
     if (error) {
-      console.error("Error checking recent login attempts:", error);
       return { blocked: false };
     }
     
@@ -168,6 +167,7 @@ export async function logLoginAttempt(attempt: LoginAttempt): Promise<{
     };
     
   } catch (error) {
+    console.error("Error in logLoginAttempt:", error);
     console.error("Error in logLoginAttempt:", error);
     return { blocked: false };
   }
@@ -244,6 +244,7 @@ export async function logPasswordResetAttempt(
     };
     
   } catch (error) {
+    console.error("Error in logPasswordResetAttempt:", error);
     console.error("Error in logPasswordResetAttempt:", error);
     return { blocked: false };
   }

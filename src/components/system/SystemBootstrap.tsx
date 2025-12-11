@@ -10,7 +10,7 @@ import { OfflineIndicator } from '@/components/pwa/OfflineIndicator';
 import { UpdatePrompt } from '@/components/pwa/UpdatePrompt';
 import { InstallPrompt } from '@/components/pwa/InstallPrompt';
 import { VoiceCommandButton } from '@/components/voice/VoiceCommandButton';
-import { NotificationBell } from '@/components/notifications/NotificationCenter';
+import { NotificationBell } from "@/components/unified/NotificationCenter.unified";
 
 interface SystemBootstrapProps {
   children: React.ReactNode;

@@ -24,7 +24,6 @@ class SystemBenchmark {
   private readonly MAX_HISTORY = 10;
 
   async runFullBenchmark(): Promise<BenchmarkResult> {
-    console.log('[Benchmark] Starting full system benchmark...');
     
     const [
       diskRead,
@@ -63,7 +62,6 @@ class SystemBenchmark {
     };
 
     this.saveResult(result);
-    console.log('[Benchmark] Complete:', result);
     
     return result;
   }
@@ -245,6 +243,7 @@ class SystemBenchmark {
       }
       localStorage.setItem(this.STORAGE_KEY, JSON.stringify(history));
     } catch (e) {
+      console.warn('[Benchmark] Failed to save result:', e);
       console.warn('[Benchmark] Failed to save result:', e);
     }
   }

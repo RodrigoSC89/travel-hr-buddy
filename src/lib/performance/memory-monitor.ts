@@ -28,7 +28,6 @@ class MemoryMonitor {
    */
   startMonitoring(intervalMs: number = 5000): void {
     if (this.monitoringInterval) {
-      console.warn("Memory monitoring already started");
       return;
     }
 
@@ -39,7 +38,6 @@ class MemoryMonitor {
       this.takeSnapshot();
     }, intervalMs);
 
-    console.log("Memory monitoring started");
   }
 
   /**
@@ -59,7 +57,6 @@ class MemoryMonitor {
    */
   private takeSnapshot(): void {
     if (!(performance as any).memory) {
-      console.warn("Performance.memory API not available");
       return;
     }
 

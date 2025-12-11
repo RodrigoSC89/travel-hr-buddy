@@ -36,8 +36,7 @@ interface UseWorkerResult<T> {
  *     type: 'SORT_DATA',
  *     payload: { data: items, key: 'name', order: 'asc' }
  *   });
- *   console.log('Sorted:', sorted);
- * };
+ *    * };
  * ```
  */
 export function useWorker<T = any>(

@@ -55,6 +55,7 @@ class MemoryOptimizer {
       }
     } catch (e) {
       console.warn('[MemoryOptimizer] Error clearing localStorage:', e);
+      console.warn('[MemoryOptimizer] Error clearing localStorage:', e);
     }
   }
 
@@ -95,6 +96,7 @@ class MemoryOptimizer {
       }
     } catch (e) {
       console.warn('[MemoryOptimizer] Error clearing SW cache:', e);
+      console.warn('[MemoryOptimizer] Error clearing SW cache:', e);
     }
   }
 
@@ -116,7 +118,6 @@ class MemoryOptimizer {
   }
 
   async performCleanup(): Promise<void> {
-    console.log('[MemoryOptimizer] Performing memory cleanup...');
     
     this.clearLocalStorageOld(3);
     this.clearUnusedImages();

@@ -174,6 +174,7 @@ export const PredictiveMaintenanceAI: React.FC = () => {
       });
     } catch (error) {
       console.error('Error loading predictions:', error);
+      console.error('Error loading predictions:', error);
     } finally {
       setIsAnalyzing(false);
     }
@@ -201,7 +202,6 @@ export const PredictiveMaintenanceAI: React.FC = () => {
 
   const createMaintenanceOrder = async (prediction: PredictionResult) => {
     // Would create a maintenance work order
-    console.log('Creating maintenance order for:', prediction.componentName);
   };
 
   return (

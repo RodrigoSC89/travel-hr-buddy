@@ -112,8 +112,8 @@ export class CleanupManager {
  * const cleanup = useCleanup('MyComponent');
  * 
  * useEffect(() => {
- *   const timer = cleanup.setTimeout(() => console.log('done'), 1000);
- *   const interval = cleanup.setInterval(() => console.log('tick'), 500);
+ *   const timer = cleanup.setTimeout(() => , 1000);
+ *   const interval = cleanup.setInterval(() => , 500);
  *   
  *   cleanup.register(() => {
  *     // Custom cleanup logic

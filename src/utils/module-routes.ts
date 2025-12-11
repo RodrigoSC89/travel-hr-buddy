@@ -57,7 +57,6 @@ export function getModuleRoutes(): ModuleRoute[] {
       const resolvedPath = resolveModulePath(m.path);
       
       if (!resolvedPath || !allModules[resolvedPath]) {
-        console.warn(`[ModuleRoutes] Module not found: ${m.id} (path: ${m.path})`);
         return null;
       }
 
@@ -70,6 +69,7 @@ export function getModuleRoutes(): ModuleRoute[] {
           }
           throw new Error('Invalid module export');
         } catch (err) {
+          console.error(`[ModuleRoutes] Failed to load module: ${m.id}`, err);
           console.error(`[ModuleRoutes] Failed to load module: ${m.id}`, err);
           return { 
             default: () => React.createElement(ModuleLoadError, { moduleId: m.id })

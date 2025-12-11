@@ -4,7 +4,7 @@
  */
 
 import React, { Suspense, lazy, ComponentType } from "react";
-import { DashboardSkeleton, KPICardSkeleton, ChartSkeleton, TableSkeleton } from "@/components/dashboard/DashboardSkeleton";
+import { DashboardSkeleton, KPICardSkeleton, ChartSkeleton, TableSkeleton } from "@/components/unified/Skeletons.unified";
 import { useLightMode } from "@/hooks/useConnectionAdaptive";
 import { cn } from "@/lib/utils";
 

@@ -130,7 +130,6 @@ class AdvancedAnalytics {
     this.eventQueue.push(event);
 
     if (this.config.debug) {
-      console.log('[Analytics] Event:', event);
     }
 
     if (this.eventQueue.length >= this.config.batchSize) {
@@ -180,7 +179,6 @@ class AdvancedAnalytics {
     this.metricsQueue.push(metric);
 
     if (this.config.debug) {
-      console.log('[Analytics] Metric:', metric);
     }
   }
 
@@ -260,7 +258,6 @@ class AdvancedAnalytics {
     try {
       // In production, this would send to analytics backend
       if (this.config.debug) {
-        console.log('[Analytics] Flushing:', { events, metrics });
       }
 
       // Store locally for now

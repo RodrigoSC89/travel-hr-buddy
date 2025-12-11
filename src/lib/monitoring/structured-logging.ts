@@ -141,17 +141,12 @@ class StructuredLogger {
 
     const prefix = `[${entry.level.toUpperCase()}] ${entry.timestamp}`;
     
-    console.groupCollapsed(`%c${prefix} ${entry.message}`, style[entry.level]);
     if (entry.context && Object.keys(entry.context).length > 0) {
-      console.log('Context:', entry.context);
     }
     if (entry.error) {
-      console.error('Error:', entry.error);
     }
     if (entry.tags) {
-      console.log('Tags:', entry.tags);
     }
-    console.groupEnd();
   }
 
   private startFlushTimer() {
@@ -178,6 +173,7 @@ class StructuredLogger {
     } catch (error) {
       // Re-add to buffer on failure
       this.buffer = [...logs, ...this.buffer].slice(-100);
+      console.warn('[Logger] Failed to flush logs:', error);
       console.warn('[Logger] Failed to flush logs:', error);
     }
   }

@@ -207,7 +207,6 @@ export default function MentorDPProfessional() {
 
   // Call AI Edge Function with enhanced error handling
   const callMentorAI = async (action: string, params: any = {}): Promise<any> => {
-    console.log("[MentorDP] Calling edge function:", action, params);
     
     try {
       const response = await fetch(`https://vnbptmixvwropvanyhdb.supabase.co/functions/v1/dp-mentor-ai`, {
@@ -219,11 +218,9 @@ export default function MentorDPProfessional() {
         body: JSON.stringify({ action, ...params }),
       });
 
-      console.log("[MentorDP] Response status:", response.status);
 
       if (!response.ok) {
         const errorText = await response.text();
-        console.error("[MentorDP] Response error:", errorText);
         
         if (response.status === 429) {
           throw new Error("Limite de requisições excedido. Aguarde alguns minutos e tente novamente.");
@@ -235,7 +232,6 @@ export default function MentorDPProfessional() {
       }
 
       const data = await response.json();
-      console.log("[MentorDP] Response data:", { success: data.success, hasContent: !!data.content });
 
       if (!data.success && data.error) {
         throw new Error(data.error);
@@ -243,6 +239,7 @@ export default function MentorDPProfessional() {
 
       return data;
     } catch (error: any) {
+      console.error("[MentorDP] callMentorAI error:", error);
       console.error("[MentorDP] callMentorAI error:", error);
       throw error;
     }
@@ -343,7 +340,6 @@ export default function MentorDPProfessional() {
             quizContent = JSON.parse(jsonMatch[1] || jsonMatch[0]);
           }
         } catch (e) {
-          console.log("Quiz not in JSON format, displaying as text");
         }
       }
 

@@ -98,6 +98,7 @@ export default function CrewRotationModule() {
       setRotations(formattedRotations);
     } catch (error) {
       console.error("Error loading rotations:", error);
+      console.error("Error loading rotations:", error);
       toast({
         title: "Erro ao carregar rotações",
         description: "Não foi possível carregar as rotações de tripulação.",
@@ -119,7 +120,6 @@ export default function CrewRotationModule() {
           table: "crew_rotations"
         },
         (payload) => {
-          console.log("Rotation change detected:", payload);
           loadRotations();
           
           toast({
@@ -223,6 +223,7 @@ export default function CrewRotationModule() {
       
     } catch (error) {
       console.error("Error creating rotation:", error);
+      console.error("Error creating rotation:", error);
       toast({
         title: "Erro ao criar rotação",
         description: "Não foi possível criar a rotação.",
@@ -241,6 +242,7 @@ export default function CrewRotationModule() {
         read: false
       });
     } catch (error) {
+      console.error("Error sending notification:", error);
       console.error("Error sending notification:", error);
     }
   };

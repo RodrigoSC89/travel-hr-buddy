@@ -121,6 +121,7 @@ class StructuredLogger {
       // Fail silently - never throw from logger
       if (isDevelopment) {
         console.warn("[Logger] Failed to send to monitoring:", error);
+        console.warn("[Logger] Failed to send to monitoring:", error);
       }
     }
   }
@@ -161,7 +162,6 @@ class StructuredLogger {
       // In production, use structured JSON format for log aggregation
       // Only for errors and warnings
       if (entry.level === "error" || entry.level === "warn") {
-        console.error(JSON.stringify(entry));
       }
     }
   }

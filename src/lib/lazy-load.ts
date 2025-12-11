@@ -4,7 +4,7 @@
  */
 
 import React, { ComponentType, lazy, Suspense } from 'react';
-import { ModulePageSkeleton } from '@/components/ui/enhanced-skeletons';
+import { ModulePageSkeleton } from "@/components/unified/Skeletons.unified";
 
 interface LazyLoadOptions {
   fallback?: React.ReactNode;

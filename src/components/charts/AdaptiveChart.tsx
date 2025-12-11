@@ -1,6 +1,6 @@
 import React, { useMemo } from 'react';
 import { useConnectionAdaptive } from '@/hooks/useConnectionAdaptive';
-import { OptimizedSkeleton } from '@/components/ui/OptimizedSkeleton';
+import { OptimizedSkeleton } from "@/components/unified/Skeletons.unified";
 
 interface AdaptiveChartProps {
   children: React.ReactNode;

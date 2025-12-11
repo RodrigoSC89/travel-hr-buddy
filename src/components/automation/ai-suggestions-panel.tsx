@@ -115,7 +115,6 @@ export const AISuggestionsPanel: React.FC = () => {
         .limit(20);
 
       if (error) {
-        console.warn("Error loading from database, using mock data:", error);
         // Use mock data if database fails
         setSuggestions(MOCK_SUGGESTIONS);
         return;
@@ -135,6 +134,7 @@ export const AISuggestionsPanel: React.FC = () => {
         });
       }
     } catch (error) {
+      console.error("Error loading suggestions:", error);
       console.error("Error loading suggestions:", error);
       // Fallback to mock data
       setSuggestions(MOCK_SUGGESTIONS);
@@ -188,6 +188,7 @@ export const AISuggestionsPanel: React.FC = () => {
       }
     } catch (error) {
       console.error("Error refreshing with AI:", error);
+      console.error("Error refreshing with AI:", error);
       await loadSuggestions(true);
     } finally {
       setIsRefreshing(false);
@@ -225,6 +226,7 @@ export const AISuggestionsPanel: React.FC = () => {
           })
           .eq("id", suggestion.id);
       } catch (error) {
+        console.warn("Failed to update suggestion in database:", error);
         console.warn("Failed to update suggestion in database:", error);
       }
     }

@@ -166,7 +166,7 @@ export class DPASOGClient {
    * ```typescript
    * const client = new DPASOGClient();
    * const kp = await client.getKp();
-   * console.log(`Kp atual: ${kp.kp}`); // Kp atual: 3.0
+   * // Kp atual: 3.0
    * ```
    */
   async getKp(): Promise<DPASOGKpResponse> {
@@ -206,11 +206,8 @@ export class DPASOGClient {
    *   constellations: 'GPS,GALILEO'
    * });
    * 
-   * console.log(`Pior PDOP: ${pdop.worst_pdop}`);
-   * console.log(`Melhor PDOP: ${pdop.best_pdop}`);
-   * pdop.timeline.forEach(p => {
-   *   console.log(`${p.time}: PDOP=${p.pdop}, sats=${p.satellites}`);
-   * });
+   *    *    * pdop.timeline.forEach(p => {
+   *      * });
    * ```
    */
   async getPDOP(request: DPASOGPDOPRequest): Promise<DPASOGPDOPResponse> {
@@ -262,16 +259,13 @@ export class DPASOGClient {
    *   hours: 6
    * });
    * 
-   * console.log(`Status: ${status.status}`); // GREEN, AMBER ou RED
-   * console.log(`Razões: ${status.reasons.join(', ')}`);
+   * // GREEN, AMBER ou RED
+   * }`);
    * 
    * if (status.status === 'RED') {
-   *   console.log('🔴 HOLD DP operations!');
-   * } else if (status.status === 'AMBER') {
-   *   console.log('🟡 CAUTION - Monitor closely');
-   * } else {
-   *   console.log('🟢 PROCEED');
-   * }
+   *      * } else if (status.status === 'AMBER') {
+   *      * } else {
+   *      * }
    * ```
    */
   async getStatus(request: DPASOGStatusRequest): Promise<DPASOGStatusResponse> {

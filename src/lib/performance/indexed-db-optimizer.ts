@@ -104,8 +104,8 @@ class IndexedDBOptimizer {
         }
       });
       
-      console.log('[IndexedDBOptimizer] Database initialized');
     } catch (e) {
+      console.error('[IndexedDBOptimizer] Failed to initialize:', e);
       console.error('[IndexedDBOptimizer] Failed to initialize:', e);
     }
   }
@@ -277,7 +277,6 @@ class IndexedDBOptimizer {
       cursor = await cursor.continue();
     }
     
-    console.log(`[IndexedDBOptimizer] Cleaned ${deleted} expired entries`);
     return deleted;
   }
   
@@ -306,7 +305,6 @@ class IndexedDBOptimizer {
       cursor = await cursor.continue();
     }
     
-    console.log(`[IndexedDBOptimizer] Cleaned ${deleted} least accessed entries (${(deletedSize / 1024 / 1024).toFixed(2)}MB)`);
     return deleted;
   }
   

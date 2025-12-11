@@ -65,7 +65,6 @@ export class VoiceRecognitionEngine {
    */
   private initializeRecognition(): void {
     if (!this.isBrowserSupported()) {
-      console.warn('Web Speech API not supported in this browser');
       return;
     }
 
@@ -103,16 +102,13 @@ export class VoiceRecognitionEngine {
 
     this.recognition.onstart = () => {
       this.isListening = true;
-      console.log('Voice recognition started');
     };
 
     this.recognition.onend = () => {
       this.isListening = false;
-      console.log('Voice recognition ended');
     };
 
     this.recognition.onerror = (event: any) => {
-      console.error('Voice recognition error:', event.error);
       this.isListening = false;
     };
 
@@ -137,7 +133,6 @@ export class VoiceRecognitionEngine {
     };
 
     this.commandHistory.push(result);
-    console.log('Voice transcript:', transcript, 'Confidence:', confidence);
   }
 
   /**
@@ -145,18 +140,17 @@ export class VoiceRecognitionEngine {
    */
   start(): void {
     if (!this.recognition) {
-      console.error('Speech recognition not available');
       return;
     }
 
     if (this.isListening) {
-      console.warn('Already listening');
       return;
     }
 
     try {
       this.recognition.start();
     } catch (error) {
+      console.error('Failed to start recognition:', error);
       console.error('Failed to start recognition:', error);
     }
   }
@@ -173,6 +167,7 @@ export class VoiceRecognitionEngine {
       this.recognition.stop();
     } catch (error) {
       console.error('Failed to stop recognition:', error);
+      console.error('Failed to stop recognition:', error);
     }
   }
 
@@ -186,6 +181,7 @@ export class VoiceRecognitionEngine {
       this.recognition.abort();
       this.isListening = false;
     } catch (error) {
+      console.error('Failed to abort recognition:', error);
       console.error('Failed to abort recognition:', error);
     }
   }
@@ -232,7 +228,6 @@ export class VoiceCommandProcessor {
       keywords: ['iniciar', 'inspeção', 'psc', 'port state control'],
       alternativeKeywords: ['começar', 'abrir', 'psc'],
       action: () => {
-        console.log('Starting PSC inspection...');
         // Navigate to PSC module
         if (typeof window !== 'undefined') {
           window.location.hash = '#/psc-inspection';
@@ -246,7 +241,6 @@ export class VoiceCommandProcessor {
       keywords: ['abrir', 'painel', 'ism', 'safety management'],
       alternativeKeywords: ['mostrar', 'ism', 'gestão', 'segurança'],
       action: () => {
-        console.log('Opening ISM panel...');
         if (typeof window !== 'undefined') {
           window.location.hash = '#/ism-audit';
         }
@@ -259,7 +253,6 @@ export class VoiceCommandProcessor {
       keywords: ['abrir', 'painel', 'mlc', 'maritime labour'],
       alternativeKeywords: ['mostrar', 'mlc', 'trabalho', 'marítimo'],
       action: () => {
-        console.log('Opening MLC panel...');
         if (typeof window !== 'undefined') {
           window.location.hash = '#/mlc-inspection';
         }
@@ -272,7 +265,6 @@ export class VoiceCommandProcessor {
       keywords: ['abrir', 'painel', 'ovid', 'vessel inspection'],
       alternativeKeywords: ['mostrar', 'ovid', 'embarcação'],
       action: () => {
-        console.log('Opening OVID panel...');
         if (typeof window !== 'undefined') {
           window.location.hash = '#/ovid';
         }
@@ -285,7 +277,6 @@ export class VoiceCommandProcessor {
       keywords: ['abrir', 'painel', 'lsa', 'life saving', 'salva-vidas'],
       alternativeKeywords: ['mostrar', 'lsa', 'equipamento', 'salvamento'],
       action: () => {
-        console.log('Opening LSA panel...');
         if (typeof window !== 'undefined') {
           window.location.hash = '#/lsa-inspection';
         }
@@ -298,7 +289,6 @@ export class VoiceCommandProcessor {
       keywords: ['registrar', 'não conformidade', 'deficiência'],
       alternativeKeywords: ['anotar', 'documentar', 'problema'],
       action: () => {
-        console.log('Recording non-conformity...');
         // Open non-conformity recording modal/form
       },
       description: 'Registrar não conformidade',
@@ -309,7 +299,6 @@ export class VoiceCommandProcessor {
       keywords: ['mostrar', 'dashboard', 'painel', 'principal'],
       alternativeKeywords: ['voltar', 'início', 'home'],
       action: () => {
-        console.log('Showing dashboard...');
         if (typeof window !== 'undefined') {
           window.location.hash = '#/dashboard';
         }
@@ -322,7 +311,6 @@ export class VoiceCommandProcessor {
       keywords: ['abrir', 'relatórios', 'reports'],
       alternativeKeywords: ['mostrar', 'ver', 'relatórios'],
       action: () => {
-        console.log('Opening reports...');
         if (typeof window !== 'undefined') {
           window.location.hash = '#/reports';
         }
@@ -334,7 +322,6 @@ export class VoiceCommandProcessor {
       command: 'help',
       keywords: ['ajuda', 'help', 'comandos'],
       action: () => {
-        console.log('Showing help...');
         this.showAvailableCommands();
       },
       description: 'Mostrar ajuda',
@@ -344,7 +331,6 @@ export class VoiceCommandProcessor {
       command: 'cancel',
       keywords: ['cancelar', 'parar', 'cancel', 'stop'],
       action: () => {
-        console.log('Canceling...');
       },
       description: 'Cancelar',
     });
@@ -376,12 +362,12 @@ export class VoiceCommandProcessor {
           return command;
         } catch (error) {
           console.error('Error executing command:', error);
+          console.error('Error executing command:', error);
           return null;
         }
       }
     }
 
-    console.log('No matching command found for:', transcript);
     return null;
   }
 
@@ -432,9 +418,7 @@ export class VoiceCommandProcessor {
    * Show available commands
    */
   showAvailableCommands(): void {
-    console.log('Available voice commands:');
     this.commands.forEach((config) => {
-      console.log(`- ${config.description}: ${config.keywords.join(', ')}`);
     });
   }
 }
@@ -479,7 +463,6 @@ export class VoiceAssistant {
    */
   enable(): void {
     this.isEnabled = true;
-    console.log('Voice assistant enabled');
   }
 
   /**
@@ -488,7 +471,6 @@ export class VoiceAssistant {
   disable(): void {
     this.isEnabled = false;
     this.stop();
-    console.log('Voice assistant disabled');
   }
 
   /**
@@ -496,7 +478,6 @@ export class VoiceAssistant {
    */
   start(): void {
     if (!this.isEnabled) {
-      console.warn('Voice assistant is not enabled');
       return;
     }
 

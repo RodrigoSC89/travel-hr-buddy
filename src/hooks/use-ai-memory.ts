@@ -40,7 +40,6 @@ export function useAIMemory(): UseAIMemoryReturn {
 
     try {
       // TODO: Implement actual storage
-      console.log("Storing memory:", memory);
       return true;
     } catch (err) {
       const errorMessage = err instanceof Error ? err.message : "Unknown error";

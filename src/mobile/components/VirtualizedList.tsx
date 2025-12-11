@@ -7,7 +7,7 @@
 
 import React, { memo, useMemo } from "react";
 import { useVirtualizedList } from "../hooks/useVirtualizedList";
-import { Skeleton } from "@/components/ui/skeleton";
+import { Skeleton } from "@/components/unified/Skeletons.unified";
 import { cn } from "@/lib/utils";
 
 interface VirtualizedListProps<T> {

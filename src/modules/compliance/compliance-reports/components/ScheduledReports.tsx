@@ -77,6 +77,7 @@ export const ScheduledReports: React.FC = () => {
       }
     } catch (error) {
       console.error("Error fetching scheduled reports:", error);
+      console.error("Error fetching scheduled reports:", error);
       setReports([]);
     }
   };
@@ -104,7 +105,6 @@ export const ScheduledReports: React.FC = () => {
       });
 
       if (error) {
-        console.log("Schedule not saved (table may not exist) - using mock data");
       }
 
       toast({
@@ -115,6 +115,7 @@ export const ScheduledReports: React.FC = () => {
       setShowForm(false);
       fetchScheduledReports();
     } catch (error) {
+      console.error("Error creating schedule:", error);
       console.error("Error creating schedule:", error);
       toast({
         title: "Schedule Created (Demo)",
@@ -169,7 +170,6 @@ export const ScheduledReports: React.FC = () => {
             })
             .eq("id", reportId);
         } catch (dbError) {
-          console.log("Report metadata not updated (table may not exist)");
         }
 
         toast({
@@ -179,6 +179,7 @@ export const ScheduledReports: React.FC = () => {
 
         fetchScheduledReports();
       } catch (error) {
+        console.error("Error running report:", error);
         console.error("Error running report:", error);
         toast({
           title: "Generation Failed",
@@ -197,7 +198,6 @@ export const ScheduledReports: React.FC = () => {
         .eq("id", reportId);
 
       if (error) {
-        console.log("Schedule not deleted (table may not exist)");
       }
 
       toast({
@@ -207,6 +207,7 @@ export const ScheduledReports: React.FC = () => {
 
       fetchScheduledReports();
     } catch (error) {
+      console.error("Error deleting schedule:", error);
       console.error("Error deleting schedule:", error);
       toast({
         title: "Schedule Deleted (Demo)",

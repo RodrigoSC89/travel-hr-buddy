@@ -53,7 +53,6 @@ class TechnicalPackageGenerator {
    * Generate complete technical delivery package
    */
   async generate(): Promise<TechnicalPackage> {
-    console.log('[PackageGenerator] Generating technical package...');
     
     const diagnostic = await systemDiagnostic.runDiagnostic();
     const integration = await moduleIntegrationValidator.validate();
@@ -299,9 +298,6 @@ async function runBenchmark() {
   const { systemBenchmark } = await import('@/lib/performance');
   const result = await systemBenchmark.runFullBenchmark();
   
-  console.log('Score:', result.score);
-  console.log('Status:', result.status);
-  console.log('Recommendations:', result.recommendations);
   
   return result.score >= 70;
 }

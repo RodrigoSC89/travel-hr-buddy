@@ -63,7 +63,6 @@ class MemoryManager {
    * Trigger cleanup of non-essential resources
    */
   cleanup() {
-    console.log('[MemoryManager] Running cleanup...');
     
     // Clear image caches
     if ('caches' in window) {
@@ -79,6 +78,7 @@ class MemoryManager {
       try {
         cb();
       } catch (e) {
+        console.warn('[MemoryManager] Cleanup callback failed:', e);
         console.warn('[MemoryManager] Cleanup callback failed:', e);
       }
     });
@@ -99,7 +99,6 @@ class MemoryManager {
       const status = this.getStatus();
       
       if (status.available && status.recommendation !== this.lastStatus?.recommendation) {
-        console.log(`[MemoryManager] Status changed: ${status.recommendation} (${status.usage.toFixed(1)}%)`);
         
         if (status.recommendation === 'critical') {
           this.cleanup();

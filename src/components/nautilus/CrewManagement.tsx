@@ -48,7 +48,6 @@ export function CrewManagement() {
         .limit(20);
 
       if (error) {
-        console.error("Error loading crew:", error);
         setCrew(getDemoCrew());
         return;
       }
@@ -80,6 +79,7 @@ export function CrewManagement() {
         setCrew(getDemoCrew());
       }
     } catch (error) {
+      console.error("Error loading crew:", error);
       console.error("Error loading crew:", error);
       setCrew(getDemoCrew());
     } finally {

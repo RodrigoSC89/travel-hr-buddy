@@ -42,11 +42,11 @@ export default function SGSOAuditHistoryPage() {
           .order("audit_date", { ascending: false });
 
         if (error) {
-          console.error("Error fetching audits:", error);
         } else if (data) {
           setAudits(data as Audit[]);
         }
       } catch (err) {
+        console.error("Error:", err);
         console.error("Error:", err);
       } finally {
         setLoading(false);

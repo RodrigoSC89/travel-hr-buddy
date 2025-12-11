@@ -58,7 +58,6 @@ export const IncidentWorkflow: React.FC<IncidentWorkflowProps> = ({ incident, on
           performed_at: new Date().toISOString(),
         });
       } catch (logError) {
-        console.log("Workflow log not saved (table may not exist)");
       }
 
       toast({
@@ -68,6 +67,7 @@ export const IncidentWorkflow: React.FC<IncidentWorkflowProps> = ({ incident, on
 
       onUpdate();
     } catch (error) {
+      console.error("Error updating incident:", error);
       console.error("Error updating incident:", error);
       toast({
         title: "Error",
@@ -103,7 +103,6 @@ export const IncidentWorkflow: React.FC<IncidentWorkflowProps> = ({ incident, on
           uploaded_at: new Date().toISOString(),
         });
       } catch (dbError) {
-        console.log("File metadata not saved (table may not exist)");
       }
 
       toast({
@@ -111,6 +110,7 @@ export const IncidentWorkflow: React.FC<IncidentWorkflowProps> = ({ incident, on
         description: "Evidence file uploaded successfully",
       });
     } catch (error) {
+      console.error("Error uploading file:", error);
       console.error("Error uploading file:", error);
       toast({
         title: "Upload Failed",
@@ -149,6 +149,7 @@ export const IncidentWorkflow: React.FC<IncidentWorkflowProps> = ({ incident, on
         description: "Incident report downloaded successfully",
       });
     } catch (error) {
+      console.error("Error exporting PDF:", error);
       console.error("Error exporting PDF:", error);
       toast({
         title: "Export Failed",

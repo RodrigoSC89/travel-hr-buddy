@@ -54,14 +54,12 @@ export class CopilotVision {
 
   private async initialize() {
     try {
-      console.log("Initializing Copilot Vision...");
       
       const tfLib = await loadTF();
       const cocoLib = await loadCocoSsd();
       
       // Initialize TensorFlow.js backend
       await tfLib.ready();
-      console.log("TensorFlow.js backend ready:", tfLib.getBackend());
       
       // Load COCO-SSD model
       this.cocoModel = await cocoLib.load({
@@ -69,8 +67,8 @@ export class CopilotVision {
       });
       
       this.isInitialized = true;
-      console.log("Copilot Vision initialized successfully");
     } catch (error) {
+      console.error("Failed to initialize Copilot Vision:", error);
       console.error("Failed to initialize Copilot Vision:", error);
       this.isInitialized = false;
     }
@@ -123,6 +121,7 @@ export class CopilotVision {
       };
     } catch (error) {
       console.error("Error analyzing visual input:", error);
+      console.error("Error analyzing visual input:", error);
       throw error;
     }
   }
@@ -136,6 +135,7 @@ export class CopilotVision {
     try {
       if (!this.cocoModel) {
         console.warn("COCO model not loaded, skipping object detection");
+        console.warn("COCO model not loaded, skipping object detection");
         return [];
       }
 
@@ -147,6 +147,7 @@ export class CopilotVision {
         bbox: pred.bbox as [number, number, number, number],
       }));
     } catch (error) {
+      console.error("Error detecting objects:", error);
       console.error("Error detecting objects:", error);
       return [];
     }
@@ -162,7 +163,6 @@ export class CopilotVision {
       const result = await Tesseract.recognize(imageSource as any, "eng", {
         logger: (m) => {
           if (m.status === "recognizing text") {
-            console.log(`OCR Progress: ${(m.progress * 100).toFixed(0)}%`);
           }
         },
       });
@@ -181,6 +181,7 @@ export class CopilotVision {
           bbox: word.bbox,
         }));
     } catch (error) {
+      console.error("Error performing OCR:", error);
       console.error("Error performing OCR:", error);
       return [];
     }
@@ -281,6 +282,7 @@ export class CopilotVision {
         onUpdate(context);
       } catch (error) {
         console.error("Error in continuous analysis:", error);
+        console.error("Error in continuous analysis:", error);
       }
       
       if (isRunning) {
@@ -301,6 +303,7 @@ export class CopilotVision {
     try {
       await (supabase as any).from("ia_performance_log").insert(data);
     } catch (error) {
+      console.error("Failed to log performance:", error);
       console.error("Failed to log performance:", error);
     }
   }

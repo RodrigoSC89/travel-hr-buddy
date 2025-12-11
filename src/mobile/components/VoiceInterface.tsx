@@ -55,7 +55,6 @@ export const VoiceInterface: React.FC<VoiceInterfaceProps> = ({
     
     if (!SpeechRecognitionClass) {
       setIsSupported(false);
-      console.warn("Speech recognition not supported in this browser");
       return;
     }
 
@@ -66,7 +65,6 @@ export const VoiceInterface: React.FC<VoiceInterfaceProps> = ({
 
     recognition.onstart = () => {
       setIsListening(true);
-      console.log("Voice recognition started");
     };
 
     recognition.onresult = (event: any) => {
@@ -83,7 +81,6 @@ export const VoiceInterface: React.FC<VoiceInterfaceProps> = ({
     };
 
     recognition.onerror = (event: any) => {
-      console.error("Speech recognition error:", event.error);
       setIsListening(false);
       
       if (event.error === "no-speech") {
@@ -95,7 +92,6 @@ export const VoiceInterface: React.FC<VoiceInterfaceProps> = ({
 
     recognition.onend = () => {
       setIsListening(false);
-      console.log("Voice recognition ended");
     };
 
     recognitionRef.current = recognition;
@@ -190,7 +186,6 @@ export const VoiceInterface: React.FC<VoiceInterfaceProps> = ({
    */
   const speak = useCallback(async (text: string) => {
     if (!("speechSynthesis" in window)) {
-      console.warn("Speech synthesis not supported");
       return;
     }
 
@@ -211,7 +206,6 @@ export const VoiceInterface: React.FC<VoiceInterfaceProps> = ({
     };
 
     utterance.onerror = (event) => {
-      console.error("Speech synthesis error:", event);
       setIsSpeaking(false);
     };
 
@@ -231,6 +225,7 @@ export const VoiceInterface: React.FC<VoiceInterfaceProps> = ({
       recognitionRef.current.start();
     } catch (error) {
       console.error("Error starting recognition:", error);
+      console.error("Error starting recognition:", error);
       toast.error("Failed to start voice recognition");
     }
   }, []);
@@ -244,6 +239,7 @@ export const VoiceInterface: React.FC<VoiceInterfaceProps> = ({
     try {
       recognitionRef.current.stop();
     } catch (error) {
+      console.error("Error stopping recognition:", error);
       console.error("Error stopping recognition:", error);
     }
   }, []);
