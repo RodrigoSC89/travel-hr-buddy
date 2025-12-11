@@ -506,4 +506,5 @@ Esta correção resolve **definitivamente** o erro `Cannot read properties of nu
 **Autor:** AI Agent (Abacus.AI)  
 **Data:** 11 de Dezembro de 2025  
 **Patch:** 854.0  
-**PR:** #[será preenchido após criação]
+**PR:** #1640  
+**Link do PR:** https://github.com/RodrigoSC89/travel-hr-buddy/pull/1640
