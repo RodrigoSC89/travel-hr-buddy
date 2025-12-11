@@ -1,0 +1,22 @@
+{
+  "timestamp": "2025-12-11T22:25:43Z",
+  "analysis": {
+    "total_ts_files": 2962,
+    "total_imports": 14063,
+    "unused_exports": 0,
+    "all_components": 1386,
+    "imported_components": 175,
+    "orphan_components": 1211,
+    "util_files": 382,
+    "hook_files": 130,
+    "test_files": 333,
+    "total_source_files": 2960,
+    "dead_code_percentage": 87
+  },
+  "files": {
+    "all_components": "/home/ubuntu/github_repos/travel-hr-buddy/analysis-reports/all-components.txt",
+    "imported_components": "/home/ubuntu/github_repos/travel-hr-buddy/analysis-reports/imported-components.txt",
+    "all_source_files": "/home/ubuntu/github_repos/travel-hr-buddy/analysis-reports/all-source-files.txt",
+    "ts_prune_output": "/home/ubuntu/github_repos/travel-hr-buddy/analysis-reports/ts-prune-output.txt"
+  }
+}

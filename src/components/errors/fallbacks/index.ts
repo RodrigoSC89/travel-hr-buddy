@@ -1,16 +1,11 @@
 /**
- * FASE 3.3 - Fallback Components
- * Exports centralizados
+ * FASE A2 - Fallbacks Index
+ * Export centralizado de todos os componentes de fallback
  */
 
-export { ErrorFallback } from './ErrorFallback';
-export type { ErrorFallbackProps } from './ErrorFallback';
-
-export { NetworkErrorFallback } from './NetworkErrorFallback';
-export type { NetworkErrorFallbackProps } from './NetworkErrorFallback';
-
-export { ModuleErrorFallback } from './ModuleErrorFallback';
-export type { ModuleErrorFallbackProps } from './ModuleErrorFallback';
-
+export { ErrorFallback, InlineError, EmptyState } from '@/components/ui/ErrorFallback';
 export { RouteErrorFallback } from './RouteErrorFallback';
-export type { RouteErrorFallbackProps } from './RouteErrorFallback';
+export { NetworkErrorFallback } from './NetworkErrorFallback';
+export { ModuleErrorFallback } from './ModuleErrorFallback';
+export { ModuleNotFound } from './ModuleNotFound';
+export { DataEmpty } from './DataEmpty';

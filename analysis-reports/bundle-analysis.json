@@ -1,0 +1,30 @@
+{
+  "timestamp": "2025-12-11T22:27:13Z",
+  "analysis": {
+    "heavy_imports": 16,
+    "lazy_imports": 153,
+    "dynamic_imports": 578,
+    "total_lazy": 731,
+    "images": 8,
+    "large_images": 3,
+    "fonts": 0,
+    "lazy_loaders": 7,
+    "named_imports": 13703,
+    "default_imports": 1469,
+    "wildcard_imports": 86,
+    "treeshake_score": 99,
+    "blocking_scripts": 6,
+    "blocking_styles": 0
+  },
+  "files": {
+    "heavy_imports": "/home/ubuntu/github_repos/travel-hr-buddy/analysis-reports/heavy-imports.txt",
+    "large_images": "/home/ubuntu/github_repos/travel-hr-buddy/analysis-reports/large-images.txt"
+  },
+  "recommendations": [
+    "Implementar lazy loading para bibliotecas pesadas",
+    "Otimizar imagens grandes",
+    "Reduzir wildcard imports",
+    "Adicionar defer/async aos scripts",
+    "Configurar compressão Gzip/Brotli"
+  ]
+}

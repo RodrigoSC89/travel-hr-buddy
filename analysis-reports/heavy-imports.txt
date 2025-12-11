@@ -1,0 +1,16 @@
+src/ai/vision/copilotVision.ts:1:import type * as CocoSsdType from "@tensorflow-models/coco-ssd";
+src/ai/vision/copilotVision.ts:2:import type * as TFType from "@tensorflow/tfjs";
+src/lib/performance/BUNDLE_OPTIMIZATION.md:114:import mapboxgl from "mapbox-gl";
+src/pages/mission-control/insight-dashboard.tsx:14:} from "recharts";
+src/pages/dashboard/i18n.tsx:28:} from "recharts";
+src/pages/ai/learning-dashboard.tsx:25:import { LineChart, Line, BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, Legend, ResponsiveContainer } from "recharts";
+src/pages/ai/SmartAutomationPage.tsx:40:import { LineChart, Line, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer, BarChart, Bar } from "recharts";
+src/pages/ai/AIModelsLab.tsx:41:import { LineChart, Line, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer, BarChart, Bar, RadarChart, Radar, PolarGrid, PolarAngleAxis } from "recharts";
+src/pages/FuelOptimizerPage.tsx:35:} from "chart.js";
+src/pages/admin/dashboard/weather.tsx:16:} from "chart.js";
+src/pages/admin/api-status.tsx:23:} from "chart.js";
+src/pages/admin/performance-dashboard.tsx:15:import { Chart as ChartJS, CategoryScale, LinearScale, PointElement, LineElement, Title, Tooltip, Legend } from "chart.js";
+src/pages/admin/documents/restore-dashboard.tsx:27:} from "chart.js";
+src/components/documents/CollaborativeDocumentEditor.tsx:11:import { debounce } from "lodash";
+src/pages/admin/satellite-tracker.tsx:19:import { OrbitControls } from "three/examples/jsm/controls/OrbitControls";
+src/ai/simulation/scenarioSimulator.ts:11:import type { PerspectiveCamera, Scene, WebGLRenderer } from "three";
