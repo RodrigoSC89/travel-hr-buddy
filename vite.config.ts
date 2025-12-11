@@ -240,7 +240,7 @@ export default defineConfig(({ mode }) => {
     build: {
       outDir: "dist",
       sourcemap: false,
-      chunkSizeWarningLimit: 1000, // Reduzido para forçar chunks menores
+      chunkSizeWarningLimit: 500, // FASE 2.5: Reduzido para 500KB para forçar melhor splitting
       target: "esnext",
       cssCodeSplit: true,
       minify: "terser",
@@ -265,7 +265,7 @@ export default defineConfig(({ mode }) => {
       assetsInlineLimit: 4096, // Inline assets pequenos
       rollupOptions: {
         output: {
-          // PATCH 547: Otimização agressiva para chunks menores e melhor cache
+          // FASE 2.5: Otimização ultra-agressiva para reduzir bundle inicial
           manualChunks: (id) => {
             // Core vendors - carregados primeiro (prioritário)
             if (id.includes("node_modules")) {
@@ -429,15 +429,92 @@ export default defineConfig(({ mode }) => {
               return "modules-misc";
             }
             
-            // Pages - agrupar por área
+            // FASE 2.5: Pages - chunking ultra-granular para reduzir bundles
             if (id.includes("src/pages/")) {
+              // Admin pages separadas por funcionalidade
               if (id.includes("admin/")) {
-                return "pages-admin";
+                if (id.includes("admin/sgso") || id.includes("admin/templates") || id.includes("admin/training")) {
+                  return "pages-admin-docs";
+                }
+                if (id.includes("admin/ci-") || id.includes("admin/performance") || id.includes("admin/dashboard")) {
+                  return "pages-admin-monitoring";
+                }
+                if (id.includes("admin/restore")) {
+                  return "pages-admin-restore";
+                }
+                return "pages-admin-core";
               }
+              
+              // AI pages - separar do main
+              if (id.includes("pages/ai/")) {
+                return "pages-ai";
+              }
+              
+              // Emerging tech pages - lazy load
+              if (id.includes("pages/emerging/")) {
+                return "pages-emerging";
+              }
+              
+              // Developer pages
               if (id.includes("developer/")) {
                 return "pages-dev";
               }
-              return "pages-main";
+              
+              // Command Centers - páginas pesadas divididas
+              if (id.includes("CommandCenter") || id.includes("OperationsCommandCenter") || id.includes("FinanceCommandCenter")) {
+                return "pages-command-centers";
+              }
+              if (id.includes("WorkflowCommandCenter") || id.includes("VoyageCommandCenter") || id.includes("AlertsCommandCenter")) {
+                return "pages-workflow-centers";
+              }
+              
+              // Dashboards específicos
+              if (id.includes("BIDashboard") || id.includes("MMIDashboard") || id.includes("Dashboard")) {
+                return "pages-dashboards";
+              }
+              
+              // Fleet e Tracking - podem ter mapas
+              if (id.includes("FleetTracking") || id.includes("Fleet") || id.includes("Voyage")) {
+                return "pages-fleet";
+              }
+              
+              // Analytics e BI
+              if (id.includes("Analytics") || id.includes("Insights") || id.includes("Predictive") || id.includes("Forecast")) {
+                return "pages-analytics";
+              }
+              
+              // Experimental e features
+              if (id.includes("Experimental") || id.includes("AR.tsx") || id.includes("PluginManager")) {
+                return "pages-experimental";
+              }
+              
+              // Gamification e engagement
+              if (id.includes("Gamification") || id.includes("Notification") || id.includes("Alerts")) {
+                return "pages-engagement";
+              }
+              
+              // Sistema e configuração
+              if (id.includes("SystemHub") || id.includes("Settings") || id.includes("Admin.tsx")) {
+                return "pages-system";
+              }
+              
+              // Auth e profile
+              if (id.includes("Auth") || id.includes("user/profile")) {
+                return "pages-auth";
+              }
+              
+              // Finance específico
+              if (id.includes("Finance")) {
+                return "pages-finance";
+              }
+              
+              // Workflow e processos
+              if (id.includes("Workflow") || id.includes("Bridge") || id.includes("MMI")) {
+                return "pages-workflow";
+              }
+              
+              // Páginas principais lightweight (Index, etc.)
+              return "pages-core";
             }
           }
         }

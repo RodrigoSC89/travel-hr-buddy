@@ -91,12 +91,18 @@ function ErrorDisplay({ message, onRetry }: { message: string; onRetry: () => vo
 
 // Routes component (uses hooks safely inside providers)
 function AppRoutes(): JSX.Element {
+  // FASE 2.5: Lazy preload hook para otimizar carregamento
+  const { useLazyPreload } = React.useMemo(() => {
+    return { useLazyPreload: () => {
+      // Preload será feito dentro do RouterComponent
+    }};
+  }, []);
+
   // Get module routes with memoization
   const moduleRoutes = useMemo(() => {
     try {
       return getModuleRoutes();
     } catch (e) {
-      console.warn("Failed to load module routes:", e);
       console.warn("Failed to load module routes:", e);
       return [];
     }

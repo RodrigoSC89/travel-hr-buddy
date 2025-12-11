@@ -7,6 +7,7 @@ import { Toaster } from "@/components/ui/sonner";
 import { mobileClasses } from "@/styles/mobile-ui-kit";
 import { SkipToContent } from "@/components/ui/AccessibleButton";
 import { useScrollRestoration } from "@/hooks/useScrollRestoration";
+import { PreloadManager } from "@/components/lazy/PreloadManager";
 
 // Simple loading fallback component
 const LoadingFallback = () => (
@@ -24,6 +25,9 @@ export function SmartLayout() {
   
   return (
     <ThemeProvider defaultTheme="dark" storageKey="nautilus-ui-theme">
+      {/* FASE 2.5: Preload Manager para lazy loading inteligente */}
+      <PreloadManager />
+      
       {/* Skip to content link for accessibility */}
       <SkipToContent targetId="main-content" />
       

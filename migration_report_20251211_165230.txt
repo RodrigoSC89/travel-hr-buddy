@@ -1,0 +1,144 @@
+RELATÓRIO DE MIGRAÇÃO - COMPONENTES UNIFICADOS
+Data: 2025-12-11 16:52:30
+================================================================================
+
+Arquivos Skeleton migrados: 36
+Arquivos NotificationCenter migrados: 8
+Total de arquivos modificados: 43
+Total de mudanças: 44
+
+ARQUIVOS MODIFICADOS:
+================================================================================
+
+
+src/pages/ReportsCommandCenter.tsx (Skeleton):
+  - from "@/components/ui/skeleton" → from "@/components/unified/Skeletons.unified"
+
+src/pages/BusinessContinuityPlan.tsx (Skeleton):
+  - from "@/components/ui/skeleton" → from "@/components/unified/Skeletons.unified"
+
+src/pages/FleetManagement.tsx (Skeleton):
+  - from "@/components/ui/skeleton" → from "@/components/unified/Skeletons.unified"
+
+src/pages/OperationsCommandCenter.tsx (Skeleton):
+  - from "@/components/ui/skeleton" → from "@/components/unified/Skeletons.unified"
+
+src/pages/FinanceCommandCenter.tsx (Skeleton):
+  - from "@/components/ui/skeleton" → from "@/components/unified/Skeletons.unified"
+
+src/pages/FuelManagerPage.tsx (Skeleton):
+  - from '@/components/ui/skeleton' → from "@/components/unified/Skeletons.unified"
+
+src/pages/FuelOptimizerPage.tsx (Skeleton):
+  - from "@/components/ui/skeleton" → from "@/components/unified/Skeletons.unified"
+
+src/pages/Maritime.tsx (Skeleton):
+  - from "@/components/ui/loading-skeleton" → from "@/components/unified/Skeletons.unified"
+
+src/pages/CommunicationCommandCenter.tsx (Skeleton):
+  - from "@/components/ui/skeleton" → from "@/components/unified/Skeletons.unified"
+
+src/mobile/components/VirtualizedList.tsx (Skeleton):
+  - from "@/components/ui/skeleton" → from "@/components/unified/Skeletons.unified"
+
+src/mobile/components/NetworkAwareImage.tsx (Skeleton):
+  - from "@/components/ui/skeleton" → from "@/components/unified/Skeletons.unified"
+
+src/components/RouteSkeletons.tsx (Skeleton):
+  - from "@/components/ui/skeleton" → from "@/components/unified/Skeletons.unified"
+
+src/components/LoadingStates.tsx (Skeleton):
+  - from "@/components/ui/skeleton" → from "@/components/unified/Skeletons.unified"
+
+src/components/fleet/vessel-tracking-map.tsx (Skeleton):
+  - from "@/components/ui/skeleton" → from "@/components/unified/Skeletons.unified"
+
+src/components/dashboard/LiveDashboardStats.tsx (Skeleton):
+  - from "@/components/ui/skeleton" → from "@/components/unified/Skeletons.unified"
+
+src/components/dashboard/modularized-executive-dashboard.tsx (Skeleton):
+  - from "@/components/ui/skeleton" → from "@/components/unified/Skeletons.unified"
+
+src/components/dashboard/index/OverviewCharts.tsx (Skeleton):
+  - from "@/components/ui/skeleton" → from "@/components/unified/Skeletons.unified"
+
+src/components/dashboard/index/FinancialTab.tsx (Skeleton):
+  - from "@/components/ui/skeleton" → from "@/components/unified/Skeletons.unified"
+
+src/components/performance/DataLoader.tsx (Skeleton):
+  - from '@/components/ui/skeleton-loaders' → from "@/components/unified/Skeletons.unified"
+
+src/components/performance/index.ts (Skeleton):
+  - from './SkeletonLoader' → from "@/components/unified/Skeletons.unified"
+
+src/components/ai/WorkflowAISuggestions.tsx (Skeleton):
+  - from "@/components/ui/skeleton" → from "@/components/unified/Skeletons.unified"
+
+src/components/ai/AIAdoptionScorecard.tsx (Skeleton):
+  - from "@/components/ui/skeleton" → from "@/components/unified/Skeletons.unified"
+
+src/components/ui/enhanced-skeletons.tsx (Skeleton):
+  - from '@/components/ui/skeleton' → from "@/components/unified/Skeletons.unified"
+
+src/components/ui/performance-components.ts (Skeleton):
+  - from './SkeletonPro' → from "@/components/unified/Skeletons.unified"
+
+src/components/ui/sidebar.tsx (Skeleton):
+  - from "@/components/ui/skeleton" → from "@/components/unified/Skeletons.unified"
+
+src/components/layout/LoadingWrapper.tsx (Skeleton):
+  - from "@/components/dashboard/DashboardSkeleton" → from "@/components/unified/Skeletons.unified"
+
+src/components/maps/LazyMapbox.tsx (Skeleton):
+  - from "@/components/ui/skeleton" → from "@/components/unified/Skeletons.unified"
+
+src/components/logistics/DeliveryMap.tsx (Skeleton):
+  - from "@/components/ui/skeleton" → from "@/components/unified/Skeletons.unified"
+
+src/components/charts/AdaptiveChart.tsx (Skeleton):
+  - from '@/components/ui/OptimizedSkeleton' → from "@/components/unified/Skeletons.unified"
+
+src/components/ux/Skeletons.tsx (Skeleton):
+  - from "@/components/ui/skeleton" → from "@/components/unified/Skeletons.unified"
+
+src/components/bi/JobsTrendChart.tsx (Skeleton):
+  - from "@/components/ui/skeleton" → from "@/components/unified/Skeletons.unified"
+
+src/components/bi/JobsForecastReport.tsx (Skeleton):
+  - from "@/components/ui/skeleton" → from "@/components/unified/Skeletons.unified"
+
+src/components/bi/DashboardJobs.tsx (Skeleton):
+  - from "@/components/ui/skeleton" → from "@/components/unified/Skeletons.unified"
+
+src/modules/satellite-tracker/components/SatelliteMap.tsx (Skeleton):
+  - from "@/components/ui/skeleton" → from "@/components/unified/Skeletons.unified"
+
+src/modules/satellite-tracker/components/SatelliteGlobeMap.tsx (Skeleton):
+  - from "@/components/ui/skeleton" → from "@/components/unified/Skeletons.unified"
+
+src/lib/lazy-load.ts (Skeleton):
+  - from '@/components/ui/enhanced-skeletons' → from "@/components/unified/Skeletons.unified"
+
+src/pages/CommunicationCommandCenter.tsx (NotificationCenter):
+  - from "@/components/notifications/NotificationCenterProfessional" → from "@/components/unified/NotificationCenter.unified"
+
+src/components/fleet/notification-center.tsx (NotificationCenter):
+  - from '@/components/ui/NotificationCenter' → from "@/components/unified/NotificationCenter.unified"
+
+src/components/mobile/mobile-header.tsx (NotificationCenter):
+  - from "@/components/notifications/notification-center" → from "@/components/unified/NotificationCenter.unified"
+
+src/components/maritime/notification-center.tsx (NotificationCenter):
+  - from '@/components/ui/NotificationCenter' → from "@/components/unified/NotificationCenter.unified"
+
+src/components/communication/enhanced-communication-center.tsx (NotificationCenter):
+  - from "./notification-center" → from "@/components/unified/NotificationCenter.unified"
+
+src/components/layout/header.tsx (NotificationCenter):
+  - from "@/components/notifications/real-time-notification-center" → from "@/components/unified/NotificationCenter.unified"
+
+src/components/system/SystemBootstrap.tsx (NotificationCenter):
+  - from '@/components/notifications/NotificationCenter' → from "@/components/unified/NotificationCenter.unified"
+
+src/lib/integrations.ts (NotificationCenter):
+  - from "@/components/ui/NotificationCenter" → from "@/components/unified/NotificationCenter.unified"
