@@ -447,7 +447,7 @@ export default defineConfig(({ mode }) => {
         "react/jsx-dev-runtime",
         "react-router-dom",
         "@supabase/supabase-js",
-        "@tanstack/react-query",
+        "@tanstack/react-query-devtools",
         "react-helmet-async",
         "scheduler",
         "mqtt"
@@ -463,7 +463,7 @@ export default defineConfig(({ mode }) => {
       },
     },
     // Use fresh cache directory - increment version to force rebuild
-    cacheDir: ".vite-cache-v3",
+    cacheDir: ".vite-cache-v4",
     esbuild: {
       logOverride: { "this-is-undefined-in-esm": "silent" },
       logLevel: "silent",
