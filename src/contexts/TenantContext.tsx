@@ -1,12 +1,10 @@
 /**
- * TenantContext - PATCH 852.0 - Definitive React Hook Fix
+ * TenantContext - PATCH 853.0 - Definitive React Hook Fix
  * 
- * Uses consistent React namespace import pattern to prevent hook errors.
- * DO NOT use destructured imports from React.
+ * Uses standard React import pattern.
  */
 
-// CRITICAL: Use namespace import for consistency with all other files
-import * as React from "react";
+import React, { createContext, useContext, useState, useEffect, useCallback, useMemo } from "react";
 import { supabase } from "@/integrations/supabase/client";
 import { useAuth } from "./AuthContext";
 import { logger } from "@/lib/logger";
@@ -166,11 +164,11 @@ const defaultTenantValue: TenantContextType = {
 };
 
 // Create context with default value
-const TenantContext = React.createContext<TenantContextType>(defaultTenantValue);
+const TenantContext = createContext<TenantContextType>(defaultTenantValue);
 
 // Custom hook to use tenant context
 export function useTenant(): TenantContextType {
-  const context = React.useContext(TenantContext);
+  const context = useContext(TenantContext);
   if (!context) {
     console.warn("useTenant called outside of TenantProvider");
     return defaultTenantValue;
@@ -302,17 +300,17 @@ interface TenantProviderProps {
 export function TenantProvider({ children }: TenantProviderProps): JSX.Element {
   const { user } = useAuth();
   
-  const [currentTenant, setCurrentTenant] = React.useState<SaasTenant | null>(null);
-  const [currentBranding, setCurrentBranding] = React.useState<TenantBranding | null>(null);
-  const [currentUser, setCurrentUser] = React.useState<TenantUser | null>(null);
-  const [tenantPlans, setTenantPlans] = React.useState<SaasPlan[]>([]);
-  const [tenantUsage, setTenantUsage] = React.useState<TenantUsage | null>(null);
-  const [availableTenants, setAvailableTenants] = React.useState<SaasTenant[]>([]);
-  const [isLoading, setIsLoading] = React.useState(true);
-  const [error, setError] = React.useState<string | null>(null);
+  const [currentTenant, setCurrentTenant] = useState<SaasTenant | null>(null);
+  const [currentBranding, setCurrentBranding] = useState<TenantBranding | null>(null);
+  const [currentUser, setCurrentUser] = useState<TenantUser | null>(null);
+  const [tenantPlans, setTenantPlans] = useState<SaasPlan[]>([]);
+  const [tenantUsage, setTenantUsage] = useState<TenantUsage | null>(null);
+  const [availableTenants, setAvailableTenants] = useState<SaasTenant[]>([]);
+  const [isLoading, setIsLoading] = useState(true);
+  const [error, setError] = useState<string | null>(null);
 
   // Initialize with demo data immediately
-  React.useEffect(() => {
+  useEffect(() => {
     const initializeTenant = async (): Promise<void> => {
       try {
         // Always set demo data first for immediate display
@@ -362,14 +360,14 @@ export function TenantProvider({ children }: TenantProviderProps): JSX.Element {
   }, [user?.id]);
 
   // Memoized functions
-  const switchTenant = React.useCallback(async (tenantId: string): Promise<void> => {
+  const switchTenant = useCallback(async (tenantId: string): Promise<void> => {
     const tenant = availableTenants.find(t => t.id === tenantId);
     if (tenant) {
       setCurrentTenant(tenant);
     }
   }, [availableTenants]);
 
-  const updateBranding = React.useCallback(async (branding: Partial<TenantBranding>): Promise<void> => {
+  const updateBranding = useCallback(async (branding: Partial<TenantBranding>): Promise<void> => {
     if (!currentTenant) return;
     
     try {
@@ -392,7 +390,7 @@ export function TenantProvider({ children }: TenantProviderProps): JSX.Element {
     }
   }, [currentTenant]);
 
-  const updateTenantSettings = React.useCallback(async (settings: Partial<SaasTenant>): Promise<void> => {
+  const updateTenantSettings = useCallback(async (settings: Partial<SaasTenant>): Promise<void> => {
     if (!currentTenant) return;
     
     try {
@@ -414,60 +412,60 @@ export function TenantProvider({ children }: TenantProviderProps): JSX.Element {
     }
   }, [currentTenant]);
 
-  const inviteTenantUser = React.useCallback(async (email: string, role: string): Promise<void> => {
+  const inviteTenantUser = useCallback(async (email: string, role: string): Promise<void> => {
     logger.info("Inviting user:", { email, role });
   }, []);
 
-  const updateUserRole = React.useCallback(async (userId: string, role: string): Promise<void> => {
+  const updateUserRole = useCallback(async (userId: string, role: string): Promise<void> => {
     logger.info("Updating user role:", { userId, role });
   }, []);
 
-  const removeTenantUser = React.useCallback(async (userId: string): Promise<void> => {
+  const removeTenantUser = useCallback(async (userId: string): Promise<void> => {
     logger.info("Removing user:", { userId });
   }, []);
 
-  const getTenantUsers = React.useCallback(async (): Promise<TenantUser[]> => {
+  const getTenantUsers = useCallback(async (): Promise<TenantUser[]> => {
     return [];
   }, []);
 
-  const checkPermission = React.useCallback((permission: string): boolean => {
+  const checkPermission = useCallback((permission: string): boolean => {
     if (currentUser?.role === "admin" || currentUser?.role === "owner") return true;
     return false;
   }, [currentUser?.role]);
 
-  const checkFeatureAccess = React.useCallback((feature: string): boolean => {
+  const checkFeatureAccess = useCallback((feature: string): boolean => {
     return currentTenant?.features?.[feature] === true;
   }, [currentTenant?.features]);
 
-  const checkUsageLimits = React.useCallback((type: string): boolean => {
+  const checkUsageLimits = useCallback((type: string): boolean => {
     return true;
   }, []);
 
-  const upgradePlan = React.useCallback(async (planId: string): Promise<void> => {
+  const upgradePlan = useCallback(async (planId: string): Promise<void> => {
     logger.info("Upgrading plan:", { planId });
   }, []);
 
-  const downgradeplan = React.useCallback(async (planId: string): Promise<void> => {
+  const downgradeplan = useCallback(async (planId: string): Promise<void> => {
     logger.info("Downgrading plan:", { planId });
   }, []);
 
-  const formatCurrency = React.useCallback((amount: number): string => {
+  const formatCurrency = useCallback((amount: number): string => {
     return new Intl.NumberFormat(currentBranding?.default_language || "pt-BR", {
       style: "currency",
       currency: currentBranding?.default_currency || "BRL"
     }).format(amount);
   }, [currentBranding?.default_language, currentBranding?.default_currency]);
 
-  const formatDate = React.useCallback((date: string): string => {
+  const formatDate = useCallback((date: string): string => {
     return new Date(date).toLocaleDateString(currentBranding?.default_language || "pt-BR");
   }, [currentBranding?.default_language]);
 
-  const getSubdomain = React.useCallback((): string => {
+  const getSubdomain = useCallback((): string => {
     return currentTenant?.subdomain || "demo";
   }, [currentTenant?.subdomain]);
 
   // Memoize context value
-  const contextValue = React.useMemo<TenantContextType>(() => ({
+  const contextValue = useMemo<TenantContextType>(() => ({
     currentTenant,
     currentBranding,
     currentUser,

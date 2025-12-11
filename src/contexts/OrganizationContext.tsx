@@ -1,12 +1,10 @@
 /**
- * OrganizationContext - PATCH 852.0 - Definitive React Hook Fix
+ * OrganizationContext - PATCH 853.0 - Definitive React Hook Fix
  * 
- * Uses consistent React namespace import pattern to prevent hook errors.
- * DO NOT use destructured imports from React.
+ * Uses standard React import pattern.
  */
 
-// CRITICAL: Use namespace import for consistency with all other files
-import * as React from "react";
+import React, { createContext, useContext, useState, useEffect, useCallback, useMemo } from "react";
 import { supabase } from "@/integrations/supabase/client";
 import { useAuth } from "./AuthContext";
 import { logger } from "@/lib/logger";
@@ -55,11 +53,11 @@ const defaultContextValue: OrganizationContextType = {
 };
 
 // Create context with default value
-const OrganizationContext = React.createContext<OrganizationContextType>(defaultContextValue);
+const OrganizationContext = createContext<OrganizationContextType>(defaultContextValue);
 
 // Custom hook to use organization context
 export function useOrganization(): OrganizationContextType {
-  const context = React.useContext(OrganizationContext);
+  const context = useContext(OrganizationContext);
   if (!context) {
     console.warn("useOrganization called outside of OrganizationProvider");
     return defaultContextValue;
@@ -143,14 +141,14 @@ interface OrganizationProviderProps {
 // Organization Provider component
 export function OrganizationProvider({ children }: OrganizationProviderProps): JSX.Element {
   const { user } = useAuth();
-  const [currentOrganization, setCurrentOrganization] = React.useState<Organization | null>(null);
-  const [currentBranding, setCurrentBranding] = React.useState<OrganizationBranding | null>(null);
-  const [userRole, setUserRole] = React.useState<string | null>(null);
-  const [isLoading, setIsLoading] = React.useState(true);
-  const [error, setError] = React.useState<string | null>(null);
+  const [currentOrganization, setCurrentOrganization] = useState<Organization | null>(null);
+  const [currentBranding, setCurrentBranding] = useState<OrganizationBranding | null>(null);
+  const [userRole, setUserRole] = useState<string | null>(null);
+  const [isLoading, setIsLoading] = useState(true);
+  const [error, setError] = useState<string | null>(null);
 
   // Initialize with demo data immediately
-  React.useEffect(() => {
+  useEffect(() => {
     const initializeOrganization = async (): Promise<void> => {
       try {
         // Always set demo data first for immediate display
@@ -173,12 +171,12 @@ export function OrganizationProvider({ children }: OrganizationProviderProps): J
     initializeOrganization();
   }, []);
 
-  const switchOrganization = React.useCallback(async (orgId: string): Promise<void> => {
+  const switchOrganization = useCallback(async (orgId: string): Promise<void> => {
     // For now, keep demo organization
     return;
   }, []);
 
-  const updateBranding = React.useCallback(async (brandingUpdate: Partial<OrganizationBranding>): Promise<void> => {
+  const updateBranding = useCallback(async (brandingUpdate: Partial<OrganizationBranding>): Promise<void> => {
     if (!currentOrganization) return;
 
     try {
@@ -200,7 +198,7 @@ export function OrganizationProvider({ children }: OrganizationProviderProps): J
     }
   }, [currentOrganization]);
 
-  const checkPermission = React.useCallback((permission: string): boolean => {
+  const checkPermission = useCallback((permission: string): boolean => {
     // For demo, admin has all permissions
     if (userRole === "admin") return true;
     
@@ -217,7 +215,7 @@ export function OrganizationProvider({ children }: OrganizationProviderProps): J
     return userPermissions.includes(permission) || userPermissions.includes("all");
   }, [userRole]);
 
-  const getCurrentOrganizationUsers = React.useCallback(async () => {
+  const getCurrentOrganizationUsers = useCallback(async () => {
     return [
       {
         id: "1",
@@ -240,21 +238,21 @@ export function OrganizationProvider({ children }: OrganizationProviderProps): J
     ];
   }, []);
 
-  const inviteUser = React.useCallback(async (email: string, role: string): Promise<void> => {
+  const inviteUser = useCallback(async (email: string, role: string): Promise<void> => {
     if (!currentOrganization) throw new Error("Nenhuma organização selecionada");
     logger.info("Inviting user:", { email, role });
   }, [currentOrganization]);
 
-  const removeUser = React.useCallback(async (userId: string): Promise<void> => {
+  const removeUser = useCallback(async (userId: string): Promise<void> => {
     logger.info("Removing user:", { userId });
   }, []);
 
-  const updateUserRole = React.useCallback(async (userId: string, role: string): Promise<void> => {
+  const updateUserRole = useCallback(async (userId: string, role: string): Promise<void> => {
     logger.info("Updating user role:", { userId, role });
   }, []);
 
   // Memoize context value
-  const contextValue = React.useMemo<OrganizationContextType>(() => ({
+  const contextValue = useMemo<OrganizationContextType>(() => ({
     currentOrganization,
     currentBranding,
     userRole,

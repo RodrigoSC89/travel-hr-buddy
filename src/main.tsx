@@ -1,13 +1,42 @@
 /**
- * main.tsx - PATCH 852.0 - Definitive React Hook Fix
+ * main.tsx - PATCH 853.0 - Definitive React Hook Fix
  * 
  * CRITICAL: This file ensures a single React instance is used throughout the app.
- * The solution is to use consistent imports and NOT lazy load context providers.
+ * Added runtime validation to catch React initialization issues early.
  */
 
-// CRITICAL: Import React namespace FIRST before anything else
-import * as React from "react";
-import * as ReactDOM from "react-dom/client";
+// CRITICAL: Import React FIRST before anything else
+import React from "react";
+import ReactDOM from "react-dom/client";
+
+// Validate React is properly loaded at runtime
+if (!React || typeof React.useState !== "function") {
+  console.error("CRITICAL: React is not properly loaded!");
+  document.body.innerHTML = `
+    <div style="display:flex;align-items:center;justify-content:center;height:100vh;flex-direction:column;font-family:system-ui;">
+      <h1 style="color:red;">Erro Crítico</h1>
+      <p>React não foi carregado corretamente. Por favor, limpe o cache do navegador e recarregue.</p>
+      <button onclick="location.reload(true)" style="padding:10px 20px;margin-top:20px;cursor:pointer;">
+        Recarregar
+      </button>
+    </div>
+  `;
+  throw new Error("React module not properly loaded - useState is not a function");
+}
+
+// Store React globally to ensure single instance
+declare global {
+  interface Window {
+    __REACT__?: typeof React;
+    __REACT_DOM__?: typeof ReactDOM;
+  }
+}
+
+// Ensure global React instance
+if (typeof window !== "undefined") {
+  window.__REACT__ = React;
+  window.__REACT_DOM__ = ReactDOM;
+}
 
 // Import styles
 import "./index.css";

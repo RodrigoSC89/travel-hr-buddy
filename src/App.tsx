@@ -1,21 +1,19 @@
 /**
- * App.tsx - PATCH 852.0 - Definitive React Hook Fix
+ * App.tsx - PATCH 853.0 - Definitive React Hook Fix
  * 
- * CRITICAL FIX: Context providers are NOT lazy loaded.
- * Lazy loading context providers causes React hooks to fail.
+ * Uses standard React import pattern and loads context providers synchronously.
  */
 
-// CRITICAL: Use consistent React namespace import
-import * as React from "react";
+import React, { useMemo, Suspense, lazy } from "react";
 import { BrowserRouter, HashRouter, Routes, Route, Navigate } from "react-router-dom";
 import { QueryClientProvider } from "@tanstack/react-query";
 
-// CRITICAL: Import context providers directly - DO NOT LAZY LOAD
+// CRITICAL: Import context providers directly - NOT lazy loaded
 import { AuthProvider } from "./contexts/AuthContext";
 import { TenantProvider } from "./contexts/TenantContext";
 import { OrganizationProvider } from "./contexts/OrganizationContext";
 
-// UI Components - can be lazy loaded safely
+// UI Components
 import { Toaster } from "@/components/ui/toaster";
 import { Toaster as SonnerToaster } from "sonner";
 
@@ -24,26 +22,26 @@ import { getModuleRoutes } from "@/utils/module-routes";
 import { createOptimizedQueryClient } from "@/lib/performance/query-config";
 
 // Core pages - Lazy loading is safe for pages
-const Index = React.lazy(() => import("@/pages/Index"));
-const Dashboard = React.lazy(() => import("@/pages/Dashboard"));
-const Admin = React.lazy(() => import("@/pages/Admin"));
-const Settings = React.lazy(() => import("@/pages/Settings"));
-const HealthCheck = React.lazy(() => import("@/pages/HealthCheck"));
-const NotFound = React.lazy(() => import("@/pages/NotFoundProfessional"));
-const Unauthorized = React.lazy(() => import("@/pages/Unauthorized"));
-const Auth = React.lazy(() => import("@/pages/Auth"));
-const UserProfilePage = React.lazy(() => import("@/pages/user/profile"));
-const RevolutionaryAI = React.lazy(() => import("@/pages/RevolutionaryAI"));
-const AIEnhancedModules = React.lazy(() => import("@/pages/AIEnhancedModules"));
+const Index = lazy(() => import("@/pages/Index"));
+const Dashboard = lazy(() => import("@/pages/Dashboard"));
+const Admin = lazy(() => import("@/pages/Admin"));
+const Settings = lazy(() => import("@/pages/Settings"));
+const HealthCheck = lazy(() => import("@/pages/HealthCheck"));
+const NotFound = lazy(() => import("@/pages/NotFoundProfessional"));
+const Unauthorized = lazy(() => import("@/pages/Unauthorized"));
+const Auth = lazy(() => import("@/pages/Auth"));
+const UserProfilePage = lazy(() => import("@/pages/user/profile"));
+const RevolutionaryAI = lazy(() => import("@/pages/RevolutionaryAI"));
+const AIEnhancedModules = lazy(() => import("@/pages/AIEnhancedModules"));
 
 // Protected Route wrappers
 import { ProtectedRoute, AdminRoute } from "@/components/auth/protected-route";
 
 // Lazy load heavy components (NOT context providers)
-const SmartLayout = React.lazy(() => 
+const SmartLayout = lazy(() => 
   import("./components/layout/SmartLayout").then(m => ({ default: m.SmartLayout }))
 );
-const GlobalBrainProvider = React.lazy(() => 
+const GlobalBrainProvider = lazy(() => 
   import("./components/global/GlobalBrainProvider").then(m => ({ default: m.GlobalBrainProvider }))
 );
 
@@ -86,7 +84,7 @@ function ErrorDisplay({ message, onRetry }: { message: string; onRetry: () => vo
 // Routes component (uses hooks safely inside providers)
 function AppRoutes(): JSX.Element {
   // Get module routes with memoization
-  const moduleRoutes = React.useMemo(() => {
+  const moduleRoutes = useMemo(() => {
     try {
       return getModuleRoutes();
     } catch (e) {
@@ -97,38 +95,38 @@ function AppRoutes(): JSX.Element {
 
   return (
     <RouterComponent>
-      <React.Suspense fallback={<Loader />}>
+      <Suspense fallback={<Loader />}>
         <GlobalBrainProvider showTrigger={true}>
           <Routes>
             {/* Public Routes */}
             <Route path="/auth" element={
-              <React.Suspense fallback={<Loader />}>
+              <Suspense fallback={<Loader />}>
                 <Auth />
-              </React.Suspense>
+              </Suspense>
             } />
             <Route path="/unauthorized" element={
-              <React.Suspense fallback={<Loader />}>
+              <Suspense fallback={<Loader />}>
                 <Unauthorized />
-              </React.Suspense>
+              </Suspense>
             } />
             
             {/* Protected Routes */}
             <Route path="/" element={
               <ProtectedRoute>
-                <React.Suspense fallback={<Loader />}>
+                <Suspense fallback={<Loader />}>
                   <SmartLayout />
-                </React.Suspense>
+                </Suspense>
               </ProtectedRoute>
             }>
               <Route index element={
-                <React.Suspense fallback={<Loader />}>
+                <Suspense fallback={<Loader />}>
                   <Index />
-                </React.Suspense>
+                </Suspense>
               } />
               <Route path="dashboard" element={
-                <React.Suspense fallback={<Loader />}>
+                <Suspense fallback={<Loader />}>
                   <Dashboard />
-                </React.Suspense>
+                </Suspense>
               } />
               
               {/* Module Routes from Registry */}
@@ -137,9 +135,9 @@ function AppRoutes(): JSX.Element {
                   key={route.id}
                   path={route.path}
                   element={
-                    <React.Suspense fallback={<Loader />}>
+                    <Suspense fallback={<Loader />}>
                       <route.component />
-                    </React.Suspense>
+                    </Suspense>
                   }
                 />
               ))}
@@ -147,45 +145,45 @@ function AppRoutes(): JSX.Element {
               {/* Admin Routes */}
               <Route path="admin/*" element={
                 <AdminRoute>
-                  <React.Suspense fallback={<Loader />}>
+                  <Suspense fallback={<Loader />}>
                     <Admin />
-                  </React.Suspense>
+                  </Suspense>
                 </AdminRoute>
               } />
               
               {/* Settings */}
               <Route path="settings" element={
-                <React.Suspense fallback={<Loader />}>
+                <Suspense fallback={<Loader />}>
                   <Settings />
-                </React.Suspense>
+                </Suspense>
               } />
               
               {/* Profile */}
               <Route path="profile" element={
-                <React.Suspense fallback={<Loader />}>
+                <Suspense fallback={<Loader />}>
                   <UserProfilePage />
-                </React.Suspense>
+                </Suspense>
               } />
               
               {/* Health Check */}
               <Route path="health" element={
-                <React.Suspense fallback={<Loader />}>
+                <Suspense fallback={<Loader />}>
                   <HealthCheck />
-                </React.Suspense>
+                </Suspense>
               } />
               
               {/* Revolutionary AI Hub */}
               <Route path="revolutionary-ai/*" element={
-                <React.Suspense fallback={<Loader />}>
+                <Suspense fallback={<Loader />}>
                   <RevolutionaryAI />
-                </React.Suspense>
+                </Suspense>
               } />
               
               {/* AI Enhanced Modules */}
               <Route path="ai-modules" element={
-                <React.Suspense fallback={<Loader />}>
+                <Suspense fallback={<Loader />}>
                   <AIEnhancedModules />
-                </React.Suspense>
+                </Suspense>
               } />
               
               {/* Legacy Route Redirects */}
@@ -229,9 +227,9 @@ function AppRoutes(): JSX.Element {
               
               {/* 404 Route */}
               <Route path="*" element={
-                <React.Suspense fallback={<Loader />}>
+                <Suspense fallback={<Loader />}>
                   <NotFound />
-                </React.Suspense>
+                </Suspense>
               } />
             </Route>
           </Routes>
@@ -239,7 +237,7 @@ function AppRoutes(): JSX.Element {
           <Toaster />
           <SonnerToaster position="top-right" richColors />
         </GlobalBrainProvider>
-      </React.Suspense>
+      </Suspense>
     </RouterComponent>
   );
 }
