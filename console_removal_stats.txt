@@ -1,0 +1,20 @@
+ESTATÍSTICAS DE REMOÇÃO DE CONSOLE.*
+================================================================================
+
+Total removido: 585
+Total mantido: 852
+Arquivos modificados: 195
+Arquivos processados: 2915
+
+REMOVIDOS POR TIPO:
+  console.log: 315
+  console.error: 154
+  console.warn: 77
+  console.info: 19
+  console.debug: 9
+  console.group: 8
+  console.table: 3
+
+MANTIDOS POR TIPO:
+  console.error: 787
+  console.warn: 65

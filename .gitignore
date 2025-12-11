@@ -135,3 +135,7 @@ release/v3.5/*.md
 release/v3.5/*.txt
 public/api/quality-metrics.json
 reports/stress-screenshots/*.png
+
+# Core dumps
+core
+core.*

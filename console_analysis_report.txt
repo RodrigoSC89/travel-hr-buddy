@@ -1,0 +1,1911 @@
+RELATÓRIO DETALHADO DE CONSOLE.* NO PROJETO
+================================================================================
+
+Total: 1138 ocorrências
+
+POR TIPO:
+  console.error: 1015
+  console.warn: 102
+  console.log: 18
+  console.debug: 2
+  console.info: 1
+
+
+POR DIRETÓRIO:
+  src/modules: 360
+  src/lib: 234
+  src/components: 207
+  src/hooks: 101
+  src/pages: 74
+  src/mobile: 41
+  src/ai: 32
+  src/services: 31
+  src/utils: 18
+  src/tests: 9
+  src/middleware: 8
+  src/core: 6
+  src/config: 5
+  src/contexts: 4
+  src/integrations: 3
+  src/assistants: 3
+  src/App.tsx: 2
+
+
+POR ARQUIVO (todos):
+
+src/services/workflow-api.ts (18 ocorrências):
+  Linha 70: console.error - console.error("Error creating workflow:", error);
+  Linha 71: console.error - console.error("Error creating workflow:", error);
+  Linha 95: console.error - console.error("Error in getWorkflow:", error);
+  Linha 96: console.error - console.error("Error in getWorkflow:", error);
+  Linha 118: console.error - console.error("Error in getWorkflows:", error);
+  ... e mais 13 ocorrências
+
+src/hooks/useWorkflows.ts (16 ocorrências):
+  Linha 113: console.error - console.error("Error:", err);
+  Linha 114: console.error - console.error("Error:", err);
+  Linha 130: console.error - console.error("Error fetching rules:", ruleError);
+  Linha 131: console.error - console.error("Error fetching rules:", ruleError);
+  Linha 142: console.error - console.error("Error:", err);
+  ... e mais 11 ocorrências
+
+src/hooks/use-session-manager.ts (16 ocorrências):
+  Linha 91: console.error - console.error("Error loading sessions:", error);
+  Linha 92: console.error - console.error("Error loading sessions:", error);
+  Linha 132: console.error - console.error("Error creating session:", error);
+  Linha 133: console.error - console.error("Error creating session:", error);
+  Linha 166: console.error - console.error("Error revoking session:", error);
+  ... e mais 11 ocorrências
+
+src/mobile/hooks/usePushNotifications.ts (14 ocorrências):
+  Linha 79: console.error - console.error("Failed to request push permission", error);
+  Linha 80: console.error - console.error("Failed to request push permission", error);
+  Linha 93: console.warn - console.warn("Push notification permission denied");
+  Linha 94: console.warn - console.warn("Push notification permission denied");
+  Linha 111: console.error - console.error("Failed to register push notifications", error);
+  ... e mais 9 ocorrências
+
+src/ai/vision/copilotVision.ts (14 ocorrências):
+  Linha 71: console.error - console.error("Failed to initialize Copilot Vision:", error);
+  Linha 72: console.error - console.error("Failed to initialize Copilot Vision:", error);
+  Linha 123: console.error - console.error("Error analyzing visual input:", error);
+  Linha 124: console.error - console.error("Error analyzing visual input:", error);
+  Linha 137: console.warn - console.warn("COCO model not loaded, skipping object detection");
+  ... e mais 9 ocorrências
+
+src/components/reservations/ReservationPaymentSystem.tsx (14 ocorrências):
+  Linha 103: console.error - console.error("Error loading reservations:", error);
+  Linha 104: console.error - console.error("Error loading reservations:", error);
+  Linha 161: console.error - console.error("Error processing payment:", error);
+  Linha 162: console.error - console.error("Error processing payment:", error);
+  Linha 185: console.error - console.error("Error sending email:", error);
+  ... e mais 9 ocorrências
+
+src/modules/templates/index.tsx (14 ocorrências):
+  Linha 148: console.error - console.error("Error loading templates:", error);
+  Linha 149: console.error - console.error("Error loading templates:", error);
+  Linha 204: console.error - console.error("Error saving template:", error);
+  Linha 205: console.error - console.error("Error saving template:", error);
+  Linha 227: console.error - console.error("Error deleting template:", error);
+  ... e mais 9 ocorrências
+
+src/modules/satellite-tracker/services/satellite-tracking-service.ts (13 ocorrências):
+  Linha 56: console.error - console.error("Error fetching active satellites:", error);
+  Linha 86: console.error - console.error("Error fetching satellite:", error);
+  Linha 114: console.error - console.error("Error calculating satellite position:", error);
+  Linha 178: console.error - console.error("Error storing satellite position:", error);
+  Linha 206: console.error - console.error("Error fetching current position:", error);
+  ... e mais 8 ocorrências
+
+src/modules/price-alerts/services/price-alerts-service.ts (11 ocorrências):
+  Linha 75: console.error - console.error("Error creating price alert:", error);
+  Linha 117: console.error - console.error("Error fetching price alerts:", error);
+  Linha 157: console.error - console.error("Error updating price alert:", error);
+  Linha 174: console.error - console.error("Error deleting price alert:", error);
+  Linha 218: console.error - console.error("Error checking price:", error);
+  ... e mais 6 ocorrências
+
+src/modules/mission-control/services/mission-control-service.ts (10 ocorrências):
+  Linha 34: console.error - console.error("Error fetching missions:", error);
+  Linha 50: console.error - console.error("Error fetching mission:", error);
+  Linha 90: console.error - console.error("Error creating mission:", error);
+  Linha 123: console.error - console.error("Error updating mission:", error);
+  Linha 146: console.error - console.error("Error deleting mission:", error);
+  ... e mais 5 ocorrências
+
+src/lib/firebase.ts (10 ocorrências):
+  Linha 58: console.error - console.error("Error initializing Firebase:", error);
+  Linha 59: console.error - console.error("Error initializing Firebase:", error);
+  Linha 85: console.error - console.error("Error getting FCM token:", error);
+  Linha 86: console.error - console.error("Error getting FCM token:", error);
+  Linha 97: console.warn - console.warn("Messaging not initialized");
+  ... e mais 5 ocorrências
+
+src/lib/firebase-lazy.ts (10 ocorrências):
+  Linha 42: console.error - console.error("Failed to initialize Firebase:", error);
+  Linha 43: console.error - console.error("Failed to initialize Firebase:", error);
+  Linha 68: console.error - console.error("Failed to initialize Firebase Messaging:", error);
+  Linha 69: console.error - console.error("Failed to initialize Firebase Messaging:", error);
+  Linha 81: console.warn - console.warn("Notification permission denied");
+  ... e mais 5 ocorrências
+
+src/lib/telemetry/index.ts (10 ocorrências):
+  Linha 63: console.error - console.error("Failed to initialize PostHog:", error);
+  Linha 64: console.error - console.error("Failed to initialize PostHog:", error);
+  Linha 99: console.error - console.error("Failed to track event:", error);
+  Linha 100: console.error - console.error("Failed to track event:", error);
+  Linha 117: console.error - console.error("Failed to identify user:", error);
+  ... e mais 5 ocorrências
+
+src/pages/admin/workflows/detail.tsx (10 ocorrências):
+  Linha 137: console.error - console.error("Error exporting PDF:", error);
+  Linha 160: console.error - console.error("Error fetching workflow:", error);
+  Linha 181: console.error - console.error("Error fetching profiles:", error);
+  Linha 198: console.error - console.error("Error fetching steps:", error);
+  Linha 234: console.error - console.error("Error adding step:", error);
+  ... e mais 5 ocorrências
+
+src/modules/compliance/compliance-reports/index.tsx (10 ocorrências):
+  Linha 133: console.error - console.error("Error:", error);
+  Linha 134: console.error - console.error("Error:", error);
+  Linha 187: console.error - console.error("Error generating PDF:", error);
+  Linha 188: console.error - console.error("Error generating PDF:", error);
+  Linha 225: console.error - console.error("Error generating CSV:", error);
+  ... e mais 5 ocorrências
+
+src/lib/integrations/externalSources.ts (9 ocorrências):
+  Linha 126: console.error - console.error('Skyscanner API error:', error);
+  Linha 134: console.error - console.error('Google Flights API error:', error);
+  Linha 142: console.error - console.error('Brazilian airlines API error:', error);
+  Linha 167: console.error - console.error('Booking.com API error:', error);
+  Linha 175: console.error - console.error('Hoteis.com API error:', error);
+  ... e mais 4 ocorrências
+
+src/mobile/hooks/useSyncManager.ts (8 ocorrências):
+  Linha 54: console.error - console.error("Failed to update queue size:", error);
+  Linha 55: console.error - console.error("Failed to update queue size:", error);
+  Linha 119: console.error - console.error("Sync error:", error);
+  Linha 120: console.error - console.error("Sync error:", error);
+  Linha 154: console.error - console.error("Failed to enqueue change:", error);
+  ... e mais 3 ocorrências
+
+src/hooks/useTrainingAI.ts (8 ocorrências):
+  Linha 59: console.error - console.error("AI call error:", err);
+  Linha 80: console.error - console.error("Error generating recommendations:", err);
+  Linha 104: console.error - console.error("Error analyzing gaps:", err);
+  Linha 128: console.error - console.error("Error generating insights:", err);
+  Linha 151: console.error - console.error("Error generating content:", err);
+  ... e mais 3 ocorrências
+
+src/hooks/useTrainingAcademy.ts (8 ocorrências):
+  Linha 120: console.error - console.error("Error fetching courses:", err);
+  Linha 136: console.error - console.error("Error fetching progress:", err);
+  Linha 167: console.error - console.error("Error fetching crew:", err);
+  Linha 184: console.error - console.error("Error fetching sessions:", err);
+  Linha 256: console.error - console.error("Error creating course:", err);
+  ... e mais 3 ocorrências
+
+src/middleware/security.middleware.ts (8 ocorrências):
+  Linha 126: console.error - }).catch(console.error);
+  Linha 127: console.error - }).catch(console.error);
+  Linha 308: console.error - console.error('Security middleware error:', error);
+  Linha 309: console.error - console.error('Security middleware error:', error);
+  Linha 373: console.error - console.error(`Error in edge function (${requestId}):`, error);
+  ... e mais 3 ocorrências
+
+src/utils/code-analyzer.ts (8 ocorrências):
+  Linha 7: console.log - type: "console.log" | "any-type" | "empty-catch" | "heavy-operation" | "missing-
+  Linha 52: console.log - // Simulated console.log detection
+  Linha 55: console.log - type: "console.log",
+  Linha 59: console.log - message: "console.log statement found",
+  Linha 60: console.log - suggestion: "Remove console.log or use a proper logging service"
+  ... e mais 3 ocorrências
+
+src/lib/pwa/service-worker-registration.ts (8 ocorrências):
+  Linha 65: console.error - console.error('[SW] Service Worker registration failed:', error);
+  Linha 66: console.error - console.error('[SW] Service Worker registration failed:', error);
+  Linha 86: console.error - console.error('[SW] Unregister failed:', error);
+  Linha 87: console.error - console.error('[SW] Unregister failed:', error);
+  Linha 96: console.error - console.error('[SW] Update failed:', error);
+  ... e mais 3 ocorrências
+
+src/lib/ai/audit-logger.ts (8 ocorrências):
+  Linha 105: console.error - console.error('Error logging AI interaction:', error);
+  Linha 106: console.error - console.error('Error logging AI interaction:', error);
+  Linha 139: console.error - console.error('Error updating audit approval:', error);
+  Linha 140: console.error - console.error('Error updating audit approval:', error);
+  Linha 199: console.error - console.error('Error searching audit logs:', error);
+  ... e mais 3 ocorrências
+
+src/lib/storage/opfs-manager.ts (8 ocorrências):
+  Linha 76: console.error - console.error('Failed to load OPFS index:', error);
+  Linha 85: console.error - console.error('Failed to save OPFS index:', error);
+  Linha 93: console.warn - console.warn('OPFS not supported in this browser');
+  Linha 108: console.error - console.error('Failed to initialize OPFS:', error);
+  Linha 206: console.error - console.error('Failed to store file in OPFS:', error);
+  ... e mais 3 ocorrências
+
+src/lib/voice-assistant/index.ts (8 ocorrências):
+  Linha 153: console.error - console.error('Failed to start recognition:', error);
+  Linha 154: console.error - console.error('Failed to start recognition:', error);
+  Linha 169: console.error - console.error('Failed to stop recognition:', error);
+  Linha 170: console.error - console.error('Failed to stop recognition:', error);
+  Linha 184: console.error - console.error('Failed to abort recognition:', error);
+  ... e mais 3 ocorrências
+
+src/modules/compliance/compliance-reports/components/ScheduledReports.tsx (8 ocorrências):
+  Linha 79: console.error - console.error("Error fetching scheduled reports:", error);
+  Linha 80: console.error - console.error("Error fetching scheduled reports:", error);
+  Linha 118: console.error - console.error("Error creating schedule:", error);
+  Linha 119: console.error - console.error("Error creating schedule:", error);
+  Linha 182: console.error - console.error("Error running report:", error);
+  ... e mais 3 ocorrências
+
+src/modules/analytics/services/analytics-dashboard-service.ts (7 ocorrências):
+  Linha 65: console.error - console.error("Error creating dashboard:", error);
+  Linha 88: console.error - console.error("Error updating dashboard:", error);
+  Linha 102: console.error - console.error("Error deleting dashboard:", error);
+  Linha 117: console.error - console.error("Error fetching dashboards:", error);
+  Linha 133: console.error - console.error("Error fetching dashboard:", error);
+  ... e mais 2 ocorrências
+
+src/modules/travel/services/travel-service.ts (7 ocorrências):
+  Linha 79: console.error - console.error("Error creating itinerary:", error);
+  Linha 111: console.error - console.error("Error updating itinerary:", error);
+  Linha 125: console.error - console.error("Error deleting itinerary:", error);
+  Linha 140: console.error - console.error("Error fetching itineraries:", error);
+  Linha 165: console.error - console.error("Error creating price alert:", error);
+  ... e mais 2 ocorrências
+
+src/modules/compliance-hub/hooks/useComplianceAI.ts (7 ocorrências):
+  Linha 66: console.error - console.error('Error running compliance analysis:', error);
+  Linha 99: console.error - console.error('Error analyzing document:', error);
+  Linha 129: console.error - console.error('Error generating checklist:', error);
+  Linha 174: console.error - console.error('Error in compliance AI chat:', error);
+  Linha 194: console.error - console.error('Error predicting risks:', error);
+  ... e mais 2 ocorrências
+
+src/lib/logger/structured-logger.ts (7 ocorrências):
+  Linha 5: console.log - * - NO console.log/info/debug in production
+  Linha 123: console.warn - console.warn("[Logger] Failed to send to monitoring:", error);
+  Linha 124: console.warn - console.warn("[Logger] Failed to send to monitoring:", error);
+  Linha 146: console.debug - debug: console.debug,
+  Linha 147: console.info - info: console.info,
+  ... e mais 2 ocorrências
+
+src/mobile/services/background-sync.ts (6 ocorrências):
+  Linha 71: console.error - console.error("Failed to register background fetch", error);
+  Linha 72: console.error - console.error("Failed to register background fetch", error);
+  Linha 177: console.error - console.error("Background sync failed", error);
+  Linha 178: console.error - console.error("Background sync failed", error);
+  Linha 219: console.error - console.error("Error in sync listener", error);
+  ... e mais 1 ocorrências
+
+src/hooks/useRealtimeSync.ts (6 ocorrências):
+  Linha 85: console.error - console.error(`[RealtimeSync] Error fetching ${table}:`, err);
+  Linha 86: console.error - console.error(`[RealtimeSync] Error fetching ${table}:`, err);
+  Linha 92: console.warn - console.warn(`[RealtimeSync] Using cached data for ${table}`);
+  Linha 93: console.warn - console.warn(`[RealtimeSync] Using cached data for ${table}`);
+  Linha 170: console.error - console.error("[RealtimeSync] Error setting up subscription:", err);
+  ... e mais 1 ocorrências
+
+src/modules/mission-control/mobile/syncService.ts (6 ocorrências):
+  Linha 148: console.error - console.error(`Error syncing item ${item.id}:`, error);
+  Linha 149: console.error - console.error(`Error syncing item ${item.id}:`, error);
+  Linha 190: console.error - console.error("Sync error:", error);
+  Linha 191: console.error - console.error("Sync error:", error);
+  Linha 234: console.error - console.error("Error loading missions:", error);
+  ... e mais 1 ocorrências
+
+src/modules/incident-reports/services/incident-service.ts (6 ocorrências):
+  Linha 36: console.error - console.error("Error fetching incidents:", error);
+  Linha 37: console.error - console.error("Error fetching incidents:", error);
+  Linha 67: console.error - console.error("Error creating incident:", error);
+  Linha 68: console.error - console.error("Error creating incident:", error);
+  Linha 86: console.error - console.error("Error updating incident:", error);
+  ... e mais 1 ocorrências
+
+src/modules/satellite/services/satellite-orbit-service.ts (6 ocorrências):
+  Linha 98: console.error - console.error(`Error fetching satellite ${noradId} from N2YO:`, error);
+  Linha 99: console.error - console.error(`Error fetching satellite ${noradId} from N2YO:`, error);
+  Linha 125: console.error - console.error("Error fetching TLE data:", error);
+  Linha 126: console.error - console.error("Error fetching TLE data:", error);
+  Linha 250: console.error - console.error(`Error fetching satellite ${sat.noradId}:`, error);
+  ... e mais 1 ocorrências
+
+src/core/index.ts (6 ocorrências):
+  Linha 34: console.error - console.error("[CollectiveIntelligence] Failed to initialize context mesh:", err
+  Linha 41: console.error - console.error("[CollectiveIntelligence] Failed to initialize decision core:", er
+  Linha 48: console.error - console.error("[CollectiveIntelligence] Failed to initialize conscious core:", e
+  Linha 55: console.error - console.error("[CollectiveIntelligence] Failed to initialize collective loop:", 
+  Linha 63: console.error - console.error("[CollectiveIntelligence] Initialization failed:", error);
+  ... e mais 1 ocorrências
+
+src/lib/pwa/service-worker-manager.ts (6 ocorrências):
+  Linha 49: console.error - console.error('Service Worker registration failed:', error);
+  Linha 50: console.error - console.error('Service Worker registration failed:', error);
+  Linha 65: console.error - console.error('Service Worker unregistration failed:', error);
+  Linha 66: console.error - console.error('Service Worker unregistration failed:', error);
+  Linha 77: console.error - console.error('Service Worker update failed:', error);
+  ... e mais 1 ocorrências
+
+src/lib/performance/smart-sync.ts (6 ocorrências):
+  Linha 163: console.warn - console.warn(`[SmartSync] Failed to sync ${item.id}:`, error);
+  Linha 164: console.warn - console.warn(`[SmartSync] Failed to sync ${item.id}:`, error);
+  Linha 250: console.warn - console.warn('[SmartSync] Failed to save queue:', e);
+  Linha 251: console.warn - console.warn('[SmartSync] Failed to save queue:', e);
+  Linha 273: console.warn - console.warn('[SmartSync] Failed to save failed item:', e);
+  ... e mais 1 ocorrências
+
+src/lib/ai/rag-engine.ts (6 ocorrências):
+  Linha 170: console.error - console.error('RAG search failed:', error);
+  Linha 171: console.error - console.error('RAG search failed:', error);
+  Linha 246: console.error - console.error('Failed to create audit entry:', error);
+  Linha 247: console.error - console.error('Failed to create audit entry:', error);
+  Linha 333: console.error - console.error('Failed to submit HITL validation:', error);
+  ... e mais 1 ocorrências
+
+src/pages/FuelOptimizerPage.tsx (6 ocorrências):
+  Linha 179: console.error - console.error("Error fetching optimizations:", error);
+  Linha 180: console.error - console.error("Error fetching optimizations:", error);
+  Linha 231: console.error - console.error("AI analysis failed:", error);
+  Linha 232: console.error - console.error("AI analysis failed:", error);
+  Linha 305: console.error - console.error("Error creating optimization:", error);
+  ... e mais 1 ocorrências
+
+src/pages/admin/sgso/review/[id].tsx (6 ocorrências):
+  Linha 100: console.error - console.error("Error:", err);
+  Linha 101: console.error - console.error("Error:", err);
+  Linha 149: console.error - console.error("Error saving:", error);
+  Linha 150: console.error - console.error("Error saving:", error);
+  Linha 182: console.error - console.error("Error exporting PDF:", error);
+  ... e mais 1 ocorrências
+
+src/components/operations/OperationsDashboardRealTime.tsx (6 ocorrências):
+  Linha 169: console.error - console.error("MQTT connection error:", error);
+  Linha 170: console.error - console.error("MQTT connection error:", error);
+  Linha 182: console.error - console.error("WebSocket connection error:", error);
+  Linha 183: console.error - console.error("WebSocket connection error:", error);
+  Linha 342: console.error - console.error("Error loading real-time data:", error);
+  ... e mais 1 ocorrências
+
+src/components/auth/RoleConfigurator.tsx (6 ocorrências):
+  Linha 88: console.error - console.error("Error loading permissions:", error);
+  Linha 89: console.error - console.error("Error loading permissions:", error);
+  Linha 129: console.error - console.error("Error updating permission:", error);
+  Linha 130: console.error - console.error("Error updating permission:", error);
+  Linha 167: console.error - console.error("Error creating permission:", error);
+  ... e mais 1 ocorrências
+
+src/components/performance/performance-monitor.tsx (6 ocorrências):
+  Linha 106: console.error - console.error("Error measuring performance:", error);
+  Linha 107: console.error - console.error("Error measuring performance:", error);
+  Linha 126: console.error - console.error("Error in persistMetrics:", error);
+  Linha 127: console.error - console.error("Error in persistMetrics:", error);
+  Linha 152: console.error - console.error("Error loading historical data:", error);
+  ... e mais 1 ocorrências
+
+src/components/automation/ai-suggestions-panel.tsx (6 ocorrências):
+  Linha 137: console.error - console.error("Error loading suggestions:", error);
+  Linha 138: console.error - console.error("Error loading suggestions:", error);
+  Linha 190: console.error - console.error("Error refreshing with AI:", error);
+  Linha 191: console.error - console.error("Error refreshing with AI:", error);
+  Linha 229: console.warn - console.warn("Failed to update suggestion in database:", error);
+  ... e mais 1 ocorrências
+
+src/modules/analytics/AnalyticsCoreProfessional.tsx (6 ocorrências):
+  Linha 211: console.error - console.error("Error loading data:", error);
+  Linha 275: console.error - console.error("Error loading notifications:", error);
+  Linha 392: console.error - console.error("Error loading analytics data:", error);
+  Linha 532: console.error - console.error("Error generating insights:", error);
+  Linha 745: console.error - console.error("Error generating PDF:", error);
+  ... e mais 1 ocorrências
+
+src/modules/operations/crew-rotation/index.tsx (6 ocorrências):
+  Linha 100: console.error - console.error("Error loading rotations:", error);
+  Linha 101: console.error - console.error("Error loading rotations:", error);
+  Linha 225: console.error - console.error("Error creating rotation:", error);
+  Linha 226: console.error - console.error("Error creating rotation:", error);
+  Linha 245: console.error - console.error("Error sending notification:", error);
+  ... e mais 1 ocorrências
+
+src/modules/incident-reports/components/IncidentWorkflow.tsx (6 ocorrências):
+  Linha 70: console.error - console.error("Error updating incident:", error);
+  Linha 71: console.error - console.error("Error updating incident:", error);
+  Linha 113: console.error - console.error("Error uploading file:", error);
+  Linha 114: console.error - console.error("Error uploading file:", error);
+  Linha 152: console.error - console.error("Error exporting PDF:", error);
+  ... e mais 1 ocorrências
+
+src/modules/incident-reports/components/IncidentDetailDialog.tsx (6 ocorrências):
+  Linha 108: console.error - console.error("Error loading data:", error);
+  Linha 131: console.error - console.error("Error saving signature:", error);
+  Linha 169: console.error - console.error("Error adding action:", error);
+  Linha 200: console.error - console.error("Error updating status:", error);
+  Linha 310: console.error - console.error("Error adding signature image:", err);
+  ... e mais 1 ocorrências
+
+src/modules/mission-control/services/mission-logs-service.ts (5 ocorrências):
+  Linha 48: console.error - console.error("Error creating mission log:", error);
+  Linha 74: console.error - console.error("Error updating mission log:", error);
+  Linha 88: console.error - console.error("Error deleting mission log:", error);
+  Linha 115: console.error - console.error("Error fetching mission logs:", error);
+  Linha 131: console.error - console.error("Error fetching mission log:", error);
+
+src/modules/document-hub/templates/services/template-variables-service.ts (5 ocorrências):
+  Linha 38: console.error - console.error("Error creating template variable:", error);
+  Linha 62: console.error - console.error("Error updating template variable:", error);
+  Linha 76: console.error - console.error("Error deleting template variable:", error);
+  Linha 92: console.error - console.error("Error fetching template variables:", error);
+  Linha 108: console.error - console.error("Error fetching template variable:", error);
+
+src/modules/document-hub/templates/services/template-persistence.ts (5 ocorrências):
+  Linha 54: console.error - console.error("Error saving template:", error);
+  Linha 83: console.error - console.error("Error updating template:", error);
+  Linha 97: console.error - console.error("Error deleting template:", error);
+  Linha 113: console.error - console.error("Error fetching templates:", error);
+  Linha 130: console.error - console.error("Error fetching template:", error);
+
+src/lib/telemetry/consent.ts (5 ocorrências):
+  Linha 26: console.warn - console.warn("Failed to check telemetry consent:", error);
+  Linha 40: console.error - console.error("Failed to grant telemetry consent:", error);
+  Linha 52: console.error - console.error("Failed to revoke telemetry consent:", error);
+  Linha 75: console.warn - console.warn("Failed to get consent state:", error);
+  Linha 97: console.error - console.error("Failed to clear consent data:", error);
+
+src/components/documents/ai-documents-analyzer.tsx (5 ocorrências):
+  Linha 133: console.error - console.error("OCR Error:", error);
+  Linha 400: console.error - console.error("Error processing document:", error);
+  Linha 423: console.error - console.error("Error loading documents:", error);
+  Linha 452: console.error - console.error("Error loading document details:", error);
+  Linha 478: console.error - console.error("Error searching documents:", error);
+
+src/components/projects/project-timeline.tsx (5 ocorrências):
+  Linha 112: console.error - console.error("Error fetching tasks:", error);
+  Linha 132: console.error - console.error("Error fetching dependencies:", error);
+  Linha 170: console.error - console.error("Error creating task:", error);
+  Linha 196: console.error - console.error("Error updating task:", error);
+  Linha 219: console.error - console.error("Error deleting task:", error);
+
+src/components/crew/CrewRotationManager.tsx (5 ocorrências):
+  Linha 196: console.error - console.error("Error loading data:", error);
+  Linha 277: console.error - console.error("Error scheduling rotation:", error);
+  Linha 299: console.error - console.error("Error generating alert:", error);
+  Linha 324: console.error - console.error("Error creating rotation:", error);
+  Linha 349: console.error - console.error("Error updating rotation:", error);
+
+src/components/channel-manager/EnhancedChannelManager.tsx (5 ocorrências):
+  Linha 101: console.error - console.error("Error loading channels:", error);
+  Linha 124: console.error - console.error("Error loading messages:", error);
+  Linha 138: console.error - console.error("Error loading permissions:", error);
+  Linha 204: console.error - console.error("Error creating channel:", error);
+  Linha 233: console.error - console.error("Error sending message:", error);
+
+src/modules/document-hub/components/TemplateLibrary.tsx (5 ocorrências):
+  Linha 90: console.error - console.error("Error loading templates:", error);
+  Linha 112: console.error - console.error("Error loading versions:", error);
+  Linha 180: console.error - console.error("Error creating template:", error);
+  Linha 207: console.error - console.error("Error deleting template:", error);
+  Linha 274: console.error - console.error("Error generating PDF:", error);
+
+src/modules/price-alerts/index.tsx (5 ocorrências):
+  Linha 138: console.error - console.error("Error loading alerts:", error);
+  Linha 157: console.error - console.error("Error loading price history:", error);
+  Linha 196: console.error - console.error("Error creating alert:", error);
+  Linha 213: console.error - console.error("Error toggling alert:", error);
+  Linha 233: console.error - console.error("Error deleting alert:", error);
+
+src/hooks/useWorkflowAI.ts (4 ocorrências):
+  Linha 58: console.error - console.error("AI suggestion error:", err);
+  Linha 93: console.error - console.error("AI analysis error:", err);
+  Linha 124: console.error - console.error("AI generation error:", err);
+  Linha 157: console.error - console.error("AI optimization error:", err);
+
+src/services/dgnss-service.ts (4 ocorrências):
+  Linha 118: console.error - console.error("Error fetching satellites above:", error);
+  Linha 147: console.error - console.error("Error fetching satellite position:", error);
+  Linha 179: console.error - console.error("Error fetching satellite passes:", error);
+  Linha 199: console.error - console.error("Error fetching TLE:", error);
+
+src/ai/trust-engine/calculateTrustScore.ts (4 ocorrências):
+  Linha 171: console.error - console.error("Error calculating trust score:", error);
+  Linha 172: console.error - console.error("Error calculating trust score:", error);
+  Linha 213: console.error - console.error("Error in getTrustScoreHistory:", error);
+  Linha 214: console.error - console.error("Error in getTrustScoreHistory:", error);
+
+src/modules/mission-control/services/mission-logging.ts (4 ocorrências):
+  Linha 49: console.error - console.error("Error logging mission event:", error);
+  Linha 67: console.error - console.error("Error fetching mission logs:", error);
+  Linha 84: console.error - console.error("Error fetching recent logs:", error);
+  Linha 102: console.error - console.error("Error fetching logs by severity:", error);
+
+src/modules/analytics/services/event-tracking.ts (4 ocorrências):
+  Linha 41: console.error - console.error("Error initializing organization:", error);
+  Linha 42: console.error - console.error("Error initializing organization:", error);
+  Linha 75: console.error - console.error("Error in trackEvent:", error);
+  Linha 76: console.error - console.error("Error in trackEvent:", error);
+
+src/modules/safety-guardian/hooks/useSafetyAI.ts (4 ocorrências):
+  Linha 151: console.error - console.error('Error generating recommendations:', error);
+  Linha 198: console.error - console.error('Error generating insights:', error);
+  Linha 259: console.error - console.error('Error generating DDS:', error);
+  Linha 301: console.error - console.error('Error in AI chat:', error);
+
+src/modules/incident-reports/services/incidentReplayService.ts (4 ocorrências):
+  Linha 79: console.error - console.error("Failed to fetch incident:", error);
+  Linha 112: console.error - console.error("Failed to fetch incidents:", error);
+  Linha 182: console.error - console.error("Failed to build incident timeline:", error);
+  Linha 212: console.error - console.error("Failed to save analysis:", error);
+
+src/modules/control/bridgelink/services/bridge-link-api.ts (4 ocorrências):
+  Linha 25: console.error - console.error("Erro ao carregar dados do BridgeLink:", error);
+  Linha 61: console.error - console.error("Erro ao processar mensagem WebSocket:", error);
+  Linha 66: console.error - console.error("❌ Erro no WebSocket BridgeLink:", error);
+  Linha 73: console.error - console.error("Erro ao conectar WebSocket:", error);
+
+src/modules/document-hub/templates/services/template-pdf-renderer.ts (4 ocorrências):
+  Linha 137: console.error - console.error("Error rendering template to PDF:", error);
+  Linha 180: console.error - console.error("Error fetching rendered document:", error);
+  Linha 216: console.error - console.error("Error listing rendered documents:", error);
+  Linha 243: console.error - console.error("Error deleting rendered document:", error);
+
+src/modules/satellite/services/satellite-events-service.ts (4 ocorrências):
+  Linha 40: console.error - console.error("Error logging satellite event:", error);
+  Linha 62: console.error - console.error("Error fetching satellite events:", error);
+  Linha 79: console.error - console.error("Error fetching events by NORAD ID:", error);
+  Linha 96: console.error - console.error("Error fetching events by type:", error);
+
+src/lib/syncEngine.ts (4 ocorrências):
+  Linha 56: console.error - console.error(`Failed to sync record ${record.id}:`, error);
+  Linha 57: console.error - console.error(`Failed to sync record ${record.id}:`, error);
+  Linha 76: console.error - console.error("Error during sync:", error);
+  Linha 77: console.error - console.error("Error during sync:", error);
+
+src/lib/logger.ts (4 ocorrências):
+  Linha 108: console.warn - console.warn("Failed to send error to Sentry:", String(sentryError));
+  Linha 109: console.warn - console.warn("Failed to send error to Sentry:", String(sentryError));
+  Linha 144: console.warn - console.warn("Failed to send error to Sentry:", String(sentryError));
+  Linha 145: console.warn - console.warn("Failed to send error to Sentry:", String(sentryError));
+
+src/lib/service-worker-register.ts (4 ocorrências):
+  Linha 44: console.error - console.error('[SW] Erro ao registrar:', error);
+  Linha 45: console.error - console.error('[SW] Erro ao registrar:', error);
+  Linha 60: console.error - console.error('[SW] Erro ao solicitar sync:', error);
+  Linha 61: console.error - console.error('[SW] Erro ao solicitar sync:', error);
+
+src/lib/security/fail2ban.ts (4 ocorrências):
+  Linha 170: console.error - console.error("Error in logLoginAttempt:", error);
+  Linha 171: console.error - console.error("Error in logLoginAttempt:", error);
+  Linha 247: console.error - console.error("Error in logPasswordResetAttempt:", error);
+  Linha 248: console.error - console.error("Error in logPasswordResetAttempt:", error);
+
+src/lib/pwa/offline-sync-manager.ts (4 ocorrências):
+  Linha 85: console.warn - console.warn('[OfflineSync] Background sync not available');
+  Linha 86: console.warn - console.warn('[OfflineSync] Background sync not available');
+  Linha 146: console.error - console.error('[OfflineSync] Mutation failed after max retries:', mutation);
+  Linha 147: console.error - console.error('[OfflineSync] Mutation failed after max retries:', mutation);
+
+src/lib/ocr/pdfToISMChecklist.ts (4 ocorrências):
+  Linha 32: console.error - console.error("OCR Error:", error);
+  Linha 33: console.error - console.error("OCR Error:", error);
+  Linha 107: console.error - console.error("Error extracting ISM checklist from PDF:", error);
+  Linha 108: console.error - console.error("Error extracting ISM checklist from PDF:", error);
+
+src/lib/performance/data-retention.ts (4 ocorrências):
+  Linha 114: console.warn - console.warn(`[DataRetention] Error cleaning ${policy.module}:`, e);
+  Linha 115: console.warn - console.warn(`[DataRetention] Error cleaning ${policy.module}:`, e);
+  Linha 174: console.warn - console.warn('[DataRetention] Error getting storage stats:', e);
+  Linha 175: console.warn - console.warn('[DataRetention] Error getting storage stats:', e);
+
+src/lib/performance/ai-response-cache.ts (4 ocorrências):
+  Linha 318: console.warn - console.warn('[AICache] Failed to save to storage:', e);
+  Linha 319: console.warn - console.warn('[AICache] Failed to save to storage:', e);
+  Linha 345: console.warn - console.warn('[AICache] Failed to load from storage:', e);
+  Linha 346: console.warn - console.warn('[AICache] Failed to load from storage:', e);
+
+src/lib/performance/memory-optimizer.ts (4 ocorrências):
+  Linha 57: console.warn - console.warn('[MemoryOptimizer] Error clearing localStorage:', e);
+  Linha 58: console.warn - console.warn('[MemoryOptimizer] Error clearing localStorage:', e);
+  Linha 98: console.warn - console.warn('[MemoryOptimizer] Error clearing SW cache:', e);
+  Linha 99: console.warn - console.warn('[MemoryOptimizer] Error clearing SW cache:', e);
+
+src/lib/performance/module-loader.ts (4 ocorrências):
+  Linha 110: console.error - console.error(`[ModuleLoader] Failed to load "${moduleId}":`, e);
+  Linha 111: console.error - console.error(`[ModuleLoader] Failed to load "${moduleId}":`, e);
+  Linha 128: console.warn - console.warn(`[ModuleLoader] Preload failed for "${moduleId}":`, e);
+  Linha 129: console.warn - console.warn(`[ModuleLoader] Preload failed for "${moduleId}":`, e);
+
+src/lib/telemetry/offline-queue.ts (4 ocorrências):
+  Linha 32: console.warn - console.warn("Failed to enqueue telemetry event:", error);
+  Linha 44: console.warn - console.warn("Failed to get offline queue:", error);
+  Linha 56: console.warn - console.warn("Failed to clear offline queue:", error);
+  Linha 87: console.error - console.error("Failed to process queue batch:", error);
+
+src/mobile/components/VoiceInterface.tsx (4 ocorrências):
+  Linha 227: console.error - console.error("Error starting recognition:", error);
+  Linha 228: console.error - console.error("Error starting recognition:", error);
+  Linha 242: console.error - console.error("Error stopping recognition:", error);
+  Linha 243: console.error - console.error("Error stopping recognition:", error);
+
+src/mobile/providers/OfflineDataProvider.tsx (4 ocorrências):
+  Linha 96: console.error - console.error("Failed to fetch from server:", e);
+  Linha 97: console.error - console.error("Failed to fetch from server:", e);
+  Linha 124: console.error - console.error("Failed to fetch from server:", e);
+  Linha 125: console.error - console.error("Failed to fetch from server:", e);
+
+src/contexts/AuthContext.tsx (4 ocorrências):
+  Linha 96: console.warn - console.warn("Auth init error:", error);
+  Linha 97: console.warn - console.warn("Auth init error:", error);
+  Linha 192: console.warn - console.warn("Sign out error:", error);
+  Linha 193: console.warn - console.warn("Sign out error:", error);
+
+src/components/fleet/FleetTelemetryDashboard.tsx (4 ocorrências):
+  Linha 187: console.error - console.error("Error loading telemetry:", error);
+  Linha 188: console.error - console.error("Error loading telemetry:", error);
+  Linha 323: console.error - console.error("Error inserting sensor data:", error);
+  Linha 324: console.error - console.error("Error inserting sensor data:", error);
+
+src/components/weather/WindyMap.tsx (4 ocorrências):
+  Linha 68: console.error - console.error("Failed to fetch API keys:", err);
+  Linha 69: console.error - console.error("Failed to fetch API keys:", err);
+  Linha 90: console.error - console.error("Failed to fetch weather data:", err);
+  Linha 91: console.error - console.error("Failed to fetch weather data:", err);
+
+src/components/dp/IncidentAiModal.tsx (4 ocorrências):
+  Linha 26: console.error - console.error("Error parsing incident data:", error);
+  Linha 27: console.error - console.error("Error parsing incident data:", error);
+  Linha 71: console.error - console.error("Unexpected error:", err);
+  Linha 72: console.error - console.error("Unexpected error:", err);
+
+src/components/api/ApiKeyManagement.tsx (4 ocorrências):
+  Linha 88: console.error - console.error("Error fetching API keys:", error);
+  Linha 165: console.error - console.error("Error creating API key:", error);
+  Linha 182: console.error - console.error("Error toggling API key:", error);
+  Linha 199: console.error - console.error("Error deleting API key:", error);
+
+src/components/sync/SyncStatus.tsx (4 ocorrências):
+  Linha 60: console.error - console.error("Failed to load pending count:", error);
+  Linha 82: console.error - console.error("Failed to sync document:", error);
+  Linha 92: console.error - console.error("Failed to sync log:", error);
+  Linha 102: console.error - console.error("Failed to process action:", error);
+
+src/components/bi/PainelBI.tsx (4 ocorrências):
+  Linha 47: console.error - console.error("Error fetching compliance data:", err);
+  Linha 125: console.error - console.error("Error exporting CSV:", err);
+  Linha 153: console.error - console.error("Error generating PDF:", error);
+  Linha 157: console.error - console.error("Error in exportToPDF:", err);
+
+src/components/templates/TemplateEditor.tsx (4 ocorrências):
+  Linha 100: console.error - console.error("Error saving template:", error);
+  Linha 135: console.error - console.error("Error exporting PDF:", error);
+  Linha 164: console.error - console.error("Error exporting HTML:", error);
+  Linha 222: console.error - console.error("Error generating with AI:", error);
+
+src/utils/safeLazyImport.tsx (4 ocorrências):
+  Linha 49: console.warn - console.warn(
+  Linha 70: console.error - console.error(`❌ Erro ao carregar módulo ${name} após ${retries} tentativas:`, e
+  Linha 84: console.warn - console.warn('🔍 Debug info salvo em localStorage["safeLazyImport:lastError"]', e
+  Linha 86: console.warn - console.warn('Não foi possível salvar debug info no localStorage', storageErr);
+
+src/modules/maintenance-planner/components/AdvancedCopilot.tsx (4 ocorrências):
+  Linha 165: console.error - console.error("Copilot error:", error);
+  Linha 166: console.error - console.error("Copilot error:", error);
+  Linha 224: console.error - console.error("TTS error:", error);
+  Linha 225: console.error - console.error("TTS error:", error);
+
+src/modules/operations/fleet-telemetry/index.tsx (4 ocorrências):
+  Linha 123: console.error - console.error("Error loading telemetry:", error);
+  Linha 124: console.error - console.error("Error loading telemetry:", error);
+  Linha 205: console.error - console.error("Error generating sensor data:", error);
+  Linha 206: console.error - console.error("Error generating sensor data:", error);
+
+src/modules/performance/PerformanceDashboard.tsx (4 ocorrências):
+  Linha 150: console.error - console.error("[Performance Dashboard] Error loading data:", error);
+  Linha 151: console.error - console.error("[Performance Dashboard] Error loading data:", error);
+  Linha 190: console.error - console.error("[Performance Dashboard] PDF export error:", error);
+  Linha 191: console.error - console.error("[Performance Dashboard] PDF export error:", error);
+
+src/modules/incident-reports/components/IncidentTimeline.tsx (4 ocorrências):
+  Linha 120: console.error - console.error("Error loading incidents:", error);
+  Linha 121: console.error - console.error("Error loading incidents:", error);
+  Linha 198: console.error - console.error("Error exporting timeline:", error);
+  Linha 199: console.error - console.error("Error exporting timeline:", error);
+
+src/modules/incident-reports/components/CreateIncidentDialog.tsx (4 ocorrências):
+  Linha 173: console.error - console.error("Error uploading photos:", uploadError);
+  Linha 174: console.error - console.error("Error uploading photos:", uploadError);
+  Linha 212: console.error - console.error("Error creating incident:", error);
+  Linha 213: console.error - console.error("Error creating incident:", error);
+
+src/modules/intelligence/dp-intelligence/components/DPAIAnalyzer.tsx (4 ocorrências):
+  Linha 79: console.error - console.error("Analysis error:", response.status, errorData);
+  Linha 80: console.error - console.error("Analysis error:", response.status, errorData);
+  Linha 115: console.error - console.error("Error:", err);
+  Linha 116: console.error - console.error("Error:", err);
+
+src/modules/intelligence/smart-alerts/index.tsx (4 ocorrências):
+  Linha 107: console.error - console.error("Error loading smart alerts:", error);
+  Linha 139: console.error - console.error("Error loading AI insights:", error);
+  Linha 159: console.error - console.error("Error acknowledging alert:", error);
+  Linha 184: console.error - console.error("Error resolving alert:", error);
+
+src/modules/satellite/SatelliteTrackerEnhanced.tsx (4 ocorrências):
+  Linha 111: console.error - console.error("Error loading satellite data:", error);
+  Linha 133: console.error - console.error("Error loading coverage events:", error);
+  Linha 190: console.error - console.error("Error creating mock satellites:", error);
+  Linha 227: console.error - console.error("Error updating satellites:", error);
+
+src/hooks/use-ai-assistant.ts (3 ocorrências):
+  Linha 56: console.error - console.error("Failed to cache context:", error);
+  Linha 72: console.error - console.error("Failed to get cached context:", error);
+  Linha 164: console.error - console.error("AI Assistant error:", error);
+
+src/hooks/useTerrastar.ts (3 ocorrências):
+  Linha 158: console.error - console.error('Error refreshing alerts:', error);
+  Linha 226: console.error - console.error('Error fetching statistics:', error);
+  Linha 249: console.error - console.error('Error checking service status:', error);
+
+src/hooks/use-ai-navigation.ts (3 ocorrências):
+  Linha 51: console.error - console.error("Failed to track navigation:", error);
+  Linha 80: console.error - console.error("Failed to get navigation suggestions:", error);
+  Linha 145: console.error - console.error("Failed to record module access:", error);
+
+src/hooks/use-users.ts (3 ocorrências):
+  Linha 56: console.error - console.error("Error fetching users:", errorMessage);
+  Linha 93: console.error - console.error("Error updating user role:", errorMessage);
+  Linha 133: console.error - console.error("Error updating user profile:", errorMessage);
+
+src/ai/watchdog.ts (3 ocorrências):
+  Linha 24: console.error - private originalConsoleError: typeof console.error | null = null;
+  Linha 53: console.error - // Restore original console.error
+  Linha 60: console.error - // Only attach basic error handlers, don't intercept console.error
+
+src/config/lazy-modules.ts (3 ocorrências):
+  Linha 15: console.error - console.error('Erro ao carregar módulo:', error);
+  Linha 55: console.error - Promise.all(criticalModules).catch(console.error);
+  Linha 65: console.warn - console.warn(`Módulo ${moduleName} desabilitado: memória insuficiente`);
+
+src/modules/analytics/hooks/useRealtimeAnalytics.ts (3 ocorrências):
+  Linha 106: console.error - console.error("Error setting up realtime subscriptions:", err);
+  Linha 136: console.error - console.error("Error loading events:", err);
+  Linha 154: console.error - console.error("Error loading metrics:", err);
+
+src/modules/incident-reports/services/ai-incident-replay.ts (3 ocorrências):
+  Linha 87: console.error - console.error("Error replaying incident:", error);
+  Linha 284: console.error - console.error("Error finding similar incidents:", error);
+  Linha 303: console.error - console.error("Error fetching incident analysis:", error);
+
+src/modules/satellite/services/satellite-orbit-persistence.ts (3 ocorrências):
+  Linha 37: console.error - console.error("Error saving satellite orbits:", error);
+  Linha 67: console.error - console.error("Error fetching satellite orbits:", error);
+  Linha 100: console.error - console.error("Error fetching satellite by NORAD ID:", error);
+
+src/lib/idle-callback.ts (3 ocorrências):
+  Linha 63: console.error - console.error('Error in idle task:', error);
+  Linha 84: console.error - Promise.resolve(initFn()).catch(console.error);
+  Linha 89: console.error - Promise.resolve(initFn()).catch(console.error);
+
+src/lib/performance/offline-manager.ts (3 ocorrências):
+  Linha 92: console.warn - console.warn("Failed to save cache to localStorage:", error);
+  Linha 110: console.warn - console.warn("Failed to load cache from localStorage:", error);
+  Linha 191: console.warn - console.warn("Network failed, using cached data:", url);
+
+src/lib/api/unified-api-client.ts (3 ocorrências):
+  Linha 64: console.error - console.error('Failed to load pending requests:', error);
+  Linha 72: console.error - console.error('Failed to save pending requests:', error);
+  Linha 85: console.error - console.error('Failed to sync request:', error);
+
+src/lib/ai/predictive-engine.ts (3 ocorrências):
+  Linha 120: console.error - console.error('[PredictiveEngine] Error generating maintenance predictions:', er
+  Linha 200: console.error - console.error('[PredictiveEngine] Error analyzing crew training gaps:', error);
+  Linha 272: console.error - console.error('[PredictiveEngine] Error analyzing compliance risks:', error);
+
+src/lib/ui/themes/useThemeManager.ts (3 ocorrências):
+  Linha 28: console.error - console.error("Error reading theme from localStorage:", error);
+  Linha 62: console.error - console.error("Error saving theme to localStorage:", error);
+  Linha 185: console.error - console.error("Error reading theme from localStorage:", error);
+
+src/lib/llm/ismAssistant.ts (3 ocorrências):
+  Linha 85: console.error - console.error("Error analyzing ISM item:", error);
+  Linha 137: console.error - console.error("Error generating audit summary:", error);
+  Linha 181: console.error - console.error("Error suggesting improvements:", error);
+
+src/pages/admin/documents/templates-dynamic.tsx (3 ocorrências):
+  Linha 139: console.error - console.error("Error loading versions:", error);
+  Linha 154: console.error - console.error("Error loading history:", error);
+  Linha 212: console.error - console.error("Error fetching variables:", error);
+
+src/components/dp/IncidentCards.tsx (3 ocorrências):
+  Linha 169: console.error - console.error("Erro ao carregar incidentes:", error);
+  Linha 221: console.error - console.error("AI analysis error:", error);
+  Linha 308: console.error - console.error("PDF export error:", error);
+
+src/components/fuel/fuel-optimizer.tsx (3 ocorrências):
+  Linha 172: console.error - console.error("Error loading fuel data:", error);
+  Linha 219: console.error - console.error("Error running optimization:", error);
+  Linha 330: console.error - console.error("Error exporting PDF:", error);
+
+src/components/channel-manager/ChannelManagerProfessional.tsx (3 ocorrências):
+  Linha 533: console.error - console.error('Error creating channel:', error);
+  Linha 584: console.error - console.error('Error sending message:', error);
+  Linha 650: console.error - console.error('AI Error:', error);
+
+src/components/auditorias/ListaAuditoriasIMCA.tsx (3 ocorrências):
+  Linha 68: console.error - console.error("Erro ao carregar auditorias:", error);
+  Linha 128: console.error - console.error("Erro ao exportar PDF:", error);
+  Linha 162: console.error - console.error("Erro ao gerar análise IA:", error);
+
+src/components/mmi/ForecastGenerator.tsx (3 ocorrências):
+  Linha 65: console.error - console.error("Error saving forecast:", saveError);
+  Linha 69: console.error - console.error("Error generating forecast:", error);
+  Linha 98: console.error - console.error("Error creating task:", error);
+
+src/components/price-alerts/price-analytics-dashboard.tsx (3 ocorrências):
+  Linha 194: console.error - console.error("Error loading analytics:", error);
+  Linha 289: console.error - console.error("Export error:", error);
+  Linha 315: console.error - console.error("Export error:", error);
+
+src/components/telemetry/TelemetryExporter.tsx (3 ocorrências):
+  Linha 169: console.error - console.error("PDF export error:", error);
+  Linha 210: console.error - console.error("CSV export error:", error);
+  Linha 233: console.error - console.error("JSON export error:", error);
+
+src/modules/hr/crew-wellbeing/components/ManagerAlerts.tsx (3 ocorrências):
+  Linha 45: console.error - console.error("Error fetching alerts:", error);
+  Linha 75: console.error - console.error("Error acknowledging alert:", error);
+  Linha 103: console.error - console.error("Error resolving alert:", error);
+
+src/modules/incident-reports/components/IncidentReplay.tsx (3 ocorrências):
+  Linha 71: console.error - console.error("Failed to load incident data:", error);
+  Linha 84: console.error - console.error("Failed to analyze incident:", error);
+  Linha 208: console.error - console.error("Failed to export PDF:", error);
+
+src/modules/api-gateway/ApiGatewayEnhanced.tsx (3 ocorrências):
+  Linha 150: console.error - console.error("Error loading routes:", error);
+  Linha 164: console.error - console.error("Error loading API keys:", error);
+  Linha 179: console.error - console.error("Error loading rate limits:", error);
+
+src/modules/logs-center/VirtualizedLogsCenter.tsx (3 ocorrências):
+  Linha 57: console.error - console.error("Error fetching logs:", error);
+  Linha 94: console.error - console.error("Error exporting PDF:", error);
+  Linha 130: console.error - console.error("Error running AI diagnostic:", error);
+
+src/modules/logs-center/LogsCenter.tsx (3 ocorrências):
+  Linha 51: console.error - console.error("Error fetching logs:", error);
+  Linha 87: console.error - console.error("Error exporting PDF:", error);
+  Linha 125: console.error - console.error("Error running AI diagnostic:", error);
+
+src/modules/satcom/components/SatcomTerminal.tsx (3 ocorrências):
+  Linha 93: console.error - console.error("Error loading logs:", error);
+  Linha 148: console.error - console.error("Error logging transmission:", error);
+  Linha 223: console.error - }).then(() => {}).catch(console.error);
+
+src/modules/features/price-alerts/components/PriceAlertNotification.tsx (3 ocorrências):
+  Linha 70: console.error - console.error("Error loading settings:", error);
+  Linha 93: console.error - console.error("Error saving settings:", error);
+  Linha 126: console.error - console.error("Error sending test notification:", error);
+
+src/tests/pages/admin/performance-analysis.test.tsx (3 ocorrências):
+  Linha 48: console.log - type: "console.log",
+  Linha 52: console.log - message: "console.log statement found",
+  Linha 53: console.log - suggestion: "Remove console.log",
+
+src/mobile/services/syncQueue.ts (2 ocorrências):
+  Linha 96: console.error - console.error(`Failed to sync record ${record.id}:`, error);
+  Linha 97: console.error - console.error(`Failed to sync record ${record.id}:`, error);
+
+src/hooks/use-pdf-export.ts (2 ocorrências):
+  Linha 110: console.error - console.error("PDF export error:", error);
+  Linha 179: console.error - console.error("PDF table export error:", error);
+
+src/hooks/useOptimizedState.ts (2 ocorrências):
+  Linha 68: console.warn - console.warn(`Error saving to localStorage key "${key}":`, error);
+  Linha 69: console.warn - console.warn(`Error saving to localStorage key "${key}":`, error);
+
+src/hooks/use-feature-flag.ts (2 ocorrências):
+  Linha 47: console.error - console.error(`Feature flag error for "${key}":`, error);
+  Linha 48: console.error - console.error(`Feature flag error for "${key}":`, error);
+
+src/hooks/useOfflineMode.ts (2 ocorrências):
+  Linha 41: console.warn - console.warn('[Offline] Erro ao salvar cache:', error);
+  Linha 42: console.warn - console.warn('[Offline] Erro ao salvar cache:', error);
+
+src/hooks/use-maritime-checklists.ts (2 ocorrências):
+  Linha 145: console.warn - console.warn("Unable to parse template content as JSON", err);
+  Linha 405: console.error - console.error("Erro ao carregar templates", err);
+
+src/hooks/use-xlsx-export.ts (2 ocorrências):
+  Linha 76: console.error - console.error("XLSX export error:", error);
+  Linha 108: console.error - console.error("XLSX multi-sheet export error:", error);
+
+src/hooks/useTelemetryAI.ts (2 ocorrências):
+  Linha 130: console.error - console.error("AI analysis error:", error);
+  Linha 204: console.error - console.error("AI question error:", error);
+
+src/hooks/unified/useUserProfile.ts (2 ocorrências):
+  Linha 109: console.error - console.error("Error in fetchProfile:", err);
+  Linha 110: console.error - console.error("Error in fetchProfile:", err);
+
+src/hooks/unified/useProfile.unified.ts (2 ocorrências):
+  Linha 92: console.error - console.error("Error in fetchProfile:", err);
+  Linha 93: console.error - console.error("Error in fetchProfile:", err);
+
+src/services/module-integration.ts (2 ocorrências):
+  Linha 84: console.error - console.error(`Error executing action ${action.action}:`, error);
+  Linha 85: console.error - console.error(`Error executing action ${action.action}:`, error);
+
+src/services/voice.service.ts (2 ocorrências):
+  Linha 547: console.error - console.error("Failed to log interaction:", error);
+  Linha 548: console.error - console.error("Failed to log interaction:", error);
+
+src/services/web-vitals-service.ts (2 ocorrências):
+  Linha 76: console.error - console.error("Failed to report metric:", error);
+  Linha 77: console.error - console.error("Failed to report metric:", error);
+
+src/services/space-weather/hybrid-monitoring.service.ts (2 ocorrências):
+  Linha 167: console.warn - console.warn('[HybridSpaceWeather] DP ASOG failed:', error);
+  Linha 168: console.warn - console.warn('[HybridSpaceWeather] DP ASOG failed:', error);
+
+src/ai/nautilus-core/suggestFix.ts (2 ocorrências):
+  Linha 62: console.error - console.error("❌ Error calling OpenAI API:", error);
+  Linha 63: console.error - console.error("❌ Error calling OpenAI API:", error);
+
+src/ai/nautilus-core/memory/memoryEngine.ts (2 ocorrências):
+  Linha 41: console.warn - console.warn("⚠️  Failed to load memory, starting fresh:", error);
+  Linha 57: console.error - console.error("❌ Failed to save memory:", error);
+
+src/config/build-optimization.ts (2 ocorrências):
+  Linha 22: console.log - pure_funcs: ["console.log", "console.debug"],
+  Linha 22: console.debug - pure_funcs: ["console.log", "console.debug"],
+
+src/utils/module-routes.ts (2 ocorrências):
+  Linha 72: console.error - console.error(`[ModuleRoutes] Failed to load module: ${m.id}`, err);
+  Linha 73: console.error - console.error(`[ModuleRoutes] Failed to load module: ${m.id}`, err);
+
+src/utils/mqttClient.ts (2 ocorrências):
+  Linha 65: console.error - console.error("❌ Failed to create MQTT client:", error);
+  Linha 66: console.error - console.error("❌ Failed to create MQTT client:", error);
+
+src/modules/performance/hooks/usePerformanceData.ts (2 ocorrências):
+  Linha 86: console.error - console.error("Error loading performance data:", err);
+  Linha 87: console.error - console.error("Error loading performance data:", err);
+
+src/modules/ocean-sonar/services/bathymetryExporter.ts (2 ocorrências):
+  Linha 322: console.error - console.error("Failed to save bathymetry data to cache:", error);
+  Linha 344: console.error - console.error("Failed to load bathymetry data from cache:", error);
+
+src/modules/control/control-hub/hub_cache.ts (2 ocorrências):
+  Linha 125: console.error - console.error("Failed to parse cache:", error);
+  Linha 137: console.error - console.error("Failed to set cache:", error);
+
+src/modules/deep-risk-ai/services/deep-risk-ai-service.ts (2 ocorrências):
+  Linha 124: console.error - console.error("Error saving prediction:", error);
+  Linha 125: console.error - console.error("Error saving prediction:", error);
+
+src/tests/system-validation.test.ts (2 ocorrências):
+  Linha 162: console.log - expect(types).toContain("console.log");
+  Linha 243: console.log - const consoleLogIssues = issues.filter(i => i.type === "console.log").length;
+
+src/tests/auditoria-tendencia-api.test.ts (2 ocorrências):
+  Linha 286: console.error - const consoleMethod = "console.error";
+  Linha 287: console.error - expect(consoleMethod).toBe("console.error");
+
+src/lib/web-vitals-monitor.ts (2 ocorrências):
+  Linha 155: console.error - console.error('[WebVitals] Failed to report metrics:', error);
+  Linha 156: console.error - console.error('[WebVitals] Failed to report metrics:', error);
+
+src/lib/env-config.ts (2 ocorrências):
+  Linha 243: console.error - console.error('Failed to validate environment:', error);
+  Linha 244: console.error - console.error('Failed to validate environment:', error);
+
+src/lib/security.ts (2 ocorrências):
+  Linha 300: console.error - console.error('Failed to log security event:', error);
+  Linha 301: console.error - console.error('Failed to log security event:', error);
+
+src/lib/web-vitals-reporter.ts (2 ocorrências):
+  Linha 168: console.warn - console.warn('[Web Vitals] Failed to initialize:', error);
+  Linha 169: console.warn - console.warn('[Web Vitals] Failed to initialize:', error);
+
+src/lib/i18n/multilingual.ts (2 ocorrências):
+  Linha 191: console.warn - console.warn('Failed to save language preference:', error);
+  Linha 192: console.warn - console.warn('Failed to save language preference:', error);
+
+src/lib/failover/failover-core.ts (2 ocorrências):
+  Linha 52: console.error - console.error("❌ Falha ao executar recuperação:", err);
+  Linha 53: console.error - console.error("❌ Falha ao executar recuperação:", err);
+
+src/lib/analytics/analytics-client.ts (2 ocorrências):
+  Linha 186: console.error - console.error('[Analytics] Flush failed:', error);
+  Linha 187: console.error - console.error('[Analytics] Flush failed:', error);
+
+src/lib/unified/logger.unified.ts (2 ocorrências):
+  Linha 177: console.error - const consoleMethod = entry.level === "critical" ? console.error : console[entry
+  Linha 177: console.log - const consoleMethod = entry.level === "critical" ? console.error : console[entry
+
+src/lib/performance/web-vitals-monitor.ts (2 ocorrências):
+  Linha 152: console.error - console.error('[Web Vitals] Failed to send report:', error);
+  Linha 153: console.error - console.error('[Web Vitals] Failed to send report:', error);
+
+src/lib/performance/system-benchmark.ts (2 ocorrências):
+  Linha 246: console.warn - console.warn('[Benchmark] Failed to save result:', e);
+  Linha 247: console.warn - console.warn('[Benchmark] Failed to save result:', e);
+
+src/lib/performance/offline-sync.ts (2 ocorrências):
+  Linha 110: console.error - console.error('Failed to initialize offline sync DB:', error);
+  Linha 180: console.error - console.error('Sync error:', error);
+
+src/lib/performance/memory-manager.ts (2 ocorrências):
+  Linha 81: console.warn - console.warn('[MemoryManager] Cleanup callback failed:', e);
+  Linha 82: console.warn - console.warn('[MemoryManager] Cleanup callback failed:', e);
+
+src/lib/performance/indexed-db-optimizer.ts (2 ocorrências):
+  Linha 108: console.error - console.error('[IndexedDBOptimizer] Failed to initialize:', e);
+  Linha 109: console.error - console.error('[IndexedDBOptimizer] Failed to initialize:', e);
+
+src/lib/performance/optimistic-updates.ts (2 ocorrências):
+  Linha 359: console.error - console.error('Failed to save:', error);
+  Linha 383: console.error - console.error('Failed to save:', error);
+
+src/lib/qa/LovableValidator.ts (2 ocorrências):
+  Linha 67: console.error - // 5. Verifica console.error spam
+  Linha 256: console.error - // Hook into console.error to detect spam
+
+src/lib/ai/embedded-llm.ts (2 ocorrências):
+  Linha 177: console.error - console.error('Failed to process pending request:', error);
+  Linha 244: console.error - console.error('LLM query error:', error);
+
+src/lib/mqtt/index.ts (2 ocorrências):
+  Linha 57: console.error - console.error("❌ Failed to initialize MQTT client:", error);
+  Linha 58: console.error - console.error("❌ Failed to initialize MQTT client:", error);
+
+src/lib/psc/package-generator.ts (2 ocorrências):
+  Linha 161: console.error - console.error('Failed to update deficiency count:', e);
+  Linha 162: console.error - console.error('Failed to update deficiency count:', e);
+
+src/lib/monitoring/structured-logging.ts (2 ocorrências):
+  Linha 176: console.warn - console.warn('[Logger] Failed to flush logs:', error);
+  Linha 177: console.warn - console.warn('[Logger] Failed to flush logs:', error);
+
+src/lib/monitoring/web-vitals.ts (2 ocorrências):
+  Linha 132: console.warn - console.warn('[WebVitals] Failed to send metrics:', error);
+  Linha 133: console.warn - console.warn('[WebVitals] Failed to send metrics:', error);
+
+src/lib/workflows/seedSuggestions.ts (2 ocorrências):
+  Linha 284: console.error - console.error("Unexpected error in seedSuggestionsForWorkflow:", error);
+  Linha 285: console.error - console.error("Unexpected error in seedSuggestionsForWorkflow:", error);
+
+src/lib/system/system-config.ts (2 ocorrências):
+  Linha 109: console.error - console.error('Failed to load system config:', error);
+  Linha 118: console.error - console.error('Failed to save system config:', error);
+
+src/lib/theme/theme-utils.ts (2 ocorrências):
+  Linha 24: console.warn - console.warn("Failed to get stored theme:", error);
+  Linha 39: console.warn - console.warn("Failed to store theme:", error);
+
+src/lib/offline/local-permissions.ts (2 ocorrências):
+  Linha 137: console.warn - console.warn('Failed to load permissions from storage:', error);
+  Linha 152: console.warn - console.warn('Failed to save permissions to storage:', error);
+
+src/lib/offline/audit-protocol.ts (2 ocorrências):
+  Linha 99: console.warn - console.warn('Failed to load audit log:', error);
+  Linha 117: console.warn - console.warn('Failed to save audit log:', error);
+
+src/lib/realtime/websocket-optimizer.ts (2 ocorrências):
+  Linha 95: console.error - console.error('[WS] Failed to parse message:', error);
+  Linha 96: console.error - console.error('[WS] Failed to parse message:', error);
+
+src/lib/mmi/examples.ts (2 ocorrências):
+  Linha 135: console.error - console.error(`Failed to generate forecast for job ${job.id}:`, error);
+  Linha 172: console.error - console.error("Error running examples:", error);
+
+src/App.tsx (2 ocorrências):
+  Linha 99: console.warn - console.warn("Failed to load module routes:", e);
+  Linha 100: console.warn - console.warn("Failed to load module routes:", e);
+
+src/pages/MissionCommandCenter.tsx (2 ocorrências):
+  Linha 150: console.error - console.error("Error loading missions:", error);
+  Linha 167: console.error - console.error("Error loading logs:", error);
+
+src/pages/mission-control/ai-command-center.tsx (2 ocorrências):
+  Linha 78: console.error - console.error("Error sending message:", error);
+  Linha 79: console.error - console.error("Error sending message:", error);
+
+src/pages/dashboard/QualityDashboard.tsx (2 ocorrências):
+  Linha 128: console.error - console.error("Error loading metrics:", error);
+  Linha 147: console.warn - console.warn("Could not load test results, using defaults");
+
+src/pages/admin/restore/personal.tsx (2 ocorrências):
+  Linha 66: console.error - console.error("Error fetching stats:", error);
+  Linha 120: console.error - console.error("Error sending report:", error);
+
+src/pages/admin/sgso/history.tsx (2 ocorrências):
+  Linha 49: console.error - console.error("Error:", err);
+  Linha 50: console.error - console.error("Error:", err);
+
+src/pages/admin/workflows/index.tsx (2 ocorrências):
+  Linha 47: console.error - console.error("Error fetching workflows:", error);
+  Linha 88: console.error - console.error("Error creating workflow:", error);
+
+src/pages/admin/mmi/orders.tsx (2 ocorrências):
+  Linha 38: console.error - console.error("Error loading work orders:", error);
+  Linha 79: console.error - console.error("Error updating work order:", error);
+
+src/pages/admin/mmi/history.tsx (2 ocorrências):
+  Linha 42: console.error - console.error("Error loading data:", error);
+  Linha 139: console.error - console.error("Error exporting PDF:", error);
+
+src/pages/admin/mmi/forecast/page.tsx (2 ocorrências):
+  Linha 61: console.error - console.error("Error fetching forecasts:", error);
+  Linha 165: console.error - console.error("Error generating order:", error);
+
+src/pages/admin/mmi/forecast/ForecastHistory.tsx (2 ocorrências):
+  Linha 65: console.error - console.error("Error generating order:", error);
+  Linha 91: console.error - console.error("Error loading forecasts:", err);
+
+src/pages/admin/deep-risk-ai/index.tsx (2 ocorrências):
+  Linha 41: console.error - console.error("Error loading model:", error);
+  Linha 56: console.error - console.error("Error loading data:", error);
+
+src/pages/user/profile.tsx (2 ocorrências):
+  Linha 113: console.error - console.error("Error loading profile:", error);
+  Linha 147: console.error - console.error("Error saving profile:", error);
+
+src/hooks/use-audit-log.tsx (2 ocorrências):
+  Linha 105: console.error - console.error("Error logging action:", error);
+  Linha 106: console.error - console.error("Error logging action:", error);
+
+src/ai/trust-engine/TrustScoreDisplay.tsx (2 ocorrências):
+  Linha 70: console.error - console.error("Error loading trust score:", error);
+  Linha 81: console.error - console.error("Error loading trust history:", error);
+
+src/components/DPOperationsMonitor.tsx (2 ocorrências):
+  Linha 403: console.warn - console.warn('[DPMonitor] Audio alert failed:', error);
+  Linha 404: console.warn - console.warn('[DPMonitor] Audio alert failed:', error);
+
+src/components/weather/WeatherAICopilot.tsx (2 ocorrências):
+  Linha 246: console.error - console.error("Error sending message:", error);
+  Linha 247: console.error - console.error("Error sending message:", error);
+
+src/components/dashboard/DashboardActions.tsx (2 ocorrências):
+  Linha 105: console.error - console.error("Export error:", error);
+  Linha 143: console.error - console.error("Share error:", error);
+
+src/components/fuel/FuelAICopilot.tsx (2 ocorrências):
+  Linha 199: console.error - console.error("Error sending message:", error);
+  Linha 200: console.error - console.error("Error sending message:", error);
+
+src/components/auth/AuditTrailViewer.tsx (2 ocorrências):
+  Linha 103: console.error - console.error("Error loading audit logs:", error);
+  Linha 104: console.error - console.error("Error loading audit logs:", error);
+
+src/components/ai/PredictiveMaintenanceAI.tsx (2 ocorrências):
+  Linha 176: console.error - console.error('Error loading predictions:', error);
+  Linha 177: console.error - console.error('Error loading predictions:', error);
+
+src/components/ai/IntelligentReportsAI.tsx (2 ocorrências):
+  Linha 131: console.error - console.error('Error generating report:', error);
+  Linha 132: console.error - console.error('Error generating report:', error);
+
+src/components/mentor-dp/MentorDPProfessional.tsx (2 ocorrências):
+  Linha 242: console.error - console.error("[MentorDP] callMentorAI error:", error);
+  Linha 243: console.error - console.error("[MentorDP] callMentorAI error:", error);
+
+src/components/ui/simple-global-search.tsx (2 ocorrências):
+  Linha 149: console.error - console.error("Error loading modules:", error);
+  Linha 150: console.error - console.error("Error loading modules:", error);
+
+src/components/workflows/KanbanAISuggestions.tsx (2 ocorrências):
+  Linha 49: console.error - console.error("Error accepting suggestion:", error);
+  Linha 50: console.error - console.error("Error accepting suggestion:", error);
+
+src/components/maps/LazyMapbox.tsx (2 ocorrências):
+  Linha 94: console.error - console.error("Failed to load Mapbox:", err);
+  Linha 95: console.error - console.error("Failed to load Mapbox:", err);
+
+src/components/maps/WindyMapPlugin.tsx (2 ocorrências):
+  Linha 97: console.error - console.error("Error loading Windy:", err);
+  Linha 98: console.error - console.error("Error loading Windy:", err);
+
+src/components/global/NautilusBrainGlobal.tsx (2 ocorrências):
+  Linha 129: console.error - console.error('Error loading context:', error);
+  Linha 329: console.error - console.error('Brain error:', error);
+
+src/components/logistics/DeliveryMap.tsx (2 ocorrências):
+  Linha 73: console.error - console.error("Error initializing map:", error);
+  Linha 74: console.error - console.error("Error initializing map:", error);
+
+src/components/automation/automated-reports-manager.tsx (2 ocorrências):
+  Linha 197: console.error - console.error("Error generating report:", error);
+  Linha 242: console.error - console.error("Error getting AI suggestion:", error);
+
+src/components/nautilus/FleetIntelligence.tsx (2 ocorrências):
+  Linha 75: console.error - console.error("Error loading fleet:", error);
+  Linha 76: console.error - console.error("Error loading fleet:", error);
+
+src/components/nautilus/CrewManagement.tsx (2 ocorrências):
+  Linha 82: console.error - console.error("Error loading crew:", error);
+  Linha 83: console.error - console.error("Error loading crew:", error);
+
+src/components/peo-dp/dp-intel-center.tsx (2 ocorrências):
+  Linha 63: console.error - console.error('Error fetching incidents:', error);
+  Linha 83: console.error - console.error('Error analyzing incident:', error);
+
+src/components/bi/JobsTrendChart.tsx (2 ocorrências):
+  Linha 76: console.error - console.error("Error invoking function:", error);
+  Linha 77: console.error - console.error("Error invoking function:", error);
+
+src/components/bi/JobsForecastReport.tsx (2 ocorrências):
+  Linha 44: console.error - console.error("Error invoking forecast function:", error);
+  Linha 45: console.error - console.error("Error invoking forecast function:", error);
+
+src/components/bi/DashboardJobs.tsx (2 ocorrências):
+  Linha 28: console.error - console.error("Error invoking function:", error);
+  Linha 29: console.error - console.error("Error invoking function:", error);
+
+src/components/optimization/OptimizationAICopilot.tsx (2 ocorrências):
+  Linha 321: console.error - console.error("Error sending message:", error);
+  Linha 322: console.error - console.error("Error sending message:", error);
+
+src/components/emergency/EmergencyMode.tsx (2 ocorrências):
+  Linha 112: console.error - console.error('Failed to load cached incidents:', e);
+  Linha 113: console.error - console.error('Failed to load cached incidents:', e);
+
+src/components/reports/AIReportGenerator.tsx (2 ocorrências):
+  Linha 117: console.error - console.error("[AIReportGenerator] Error:", error);
+  Linha 118: console.error - console.error("[AIReportGenerator] Error:", error);
+
+src/modules/maintenance-planner/components/MMIIntegration.tsx (2 ocorrências):
+  Linha 83: console.error - console.error("Error fetching MMI predictions:", error);
+  Linha 114: console.error - console.error("Error scheduling maintenance:", error);
+
+src/modules/fleet/index.tsx (2 ocorrências):
+  Linha 39: console.error - console.error("Error loading fleet data:", error);
+  Linha 40: console.error - console.error("Error loading fleet data:", error);
+
+src/modules/satellite-tracker/components/DGNSSDashboard.tsx (2 ocorrências):
+  Linha 80: console.error - console.error("Error loading DGNSS data:", error);
+  Linha 107: console.error - console.error("Error updating DGNSS data:", error);
+
+src/modules/satellite-tracker/components/SatelliteAlerts.tsx (2 ocorrências):
+  Linha 43: console.error - console.error("Failed to load alerts:", error);
+  Linha 55: console.error - console.error("Failed to resolve alert:", error);
+
+src/modules/mission-control/mobile/MissionControlMobileDashboard.tsx (2 ocorrências):
+  Linha 72: console.error - console.error("Error loading missions:", error);
+  Linha 84: console.error - console.error("Error loading stats:", error);
+
+src/modules/mission-control/components/RealTimeMissionDashboard.tsx (2 ocorrências):
+  Linha 69: console.error - console.error("Error loading missions:", error);
+  Linha 89: console.error - console.error("Error loading logs:", error);
+
+src/modules/mission-control/components/MissionPlanner.tsx (2 ocorrências):
+  Linha 55: console.error - console.error("Error fetching missions:", error);
+  Linha 87: console.error - console.error("Activation error:", error);
+
+src/modules/performance/components/AlertsSystem.tsx (2 ocorrências):
+  Linha 103: console.error - console.error("Error fetching alerts:", error);
+  Linha 125: console.error - console.error("Error resolving alert:", error);
+
+src/modules/hr/crew-training/index.tsx (2 ocorrências):
+  Linha 79: console.error - console.error("Error loading training records:", error);
+  Linha 109: console.error - console.error("Error loading AI insights:", error);
+
+src/modules/sonar-ai/index.tsx (2 ocorrências):
+  Linha 82: console.error - console.error("Failed to load detection history:", error);
+  Linha 136: console.error - console.error("Scan failed:", error);
+
+src/modules/nautilus-academy/components/AcademyDashboard.tsx (2 ocorrências):
+  Linha 193: console.error - console.error("AI generation error:", error);
+  Linha 279: console.error - console.error("AI course generation error:", error);
+
+src/modules/travel/TravelManagement.tsx (2 ocorrências):
+  Linha 153: console.error - console.error("Error loading itineraries:", error);
+  Linha 176: console.error - console.error("Error loading conflicts:", error);
+
+src/modules/travel/components/TravelReservations.tsx (2 ocorrências):
+  Linha 83: console.error - console.error("Error loading reservations:", error);
+  Linha 125: console.error - console.error("Error creating reservation:", error);
+
+src/modules/document-hub/templates/DocumentTemplatesManager.tsx (2 ocorrências):
+  Linha 123: console.error - console.error("Error loading templates:", error);
+  Linha 145: console.error - console.error("Error loading versions:", error);
+
+src/modules/deep-risk-ai/index.tsx (2 ocorrências):
+  Linha 65: console.error - console.error("Failed to load event history:", error);
+  Linha 109: console.error - console.error("Risk analysis failed:", error);
+
+src/modules/compliance/compliance-checklist/index.tsx (2 ocorrências):
+  Linha 97: console.error - console.error("Error loading compliance records:", error);
+  Linha 142: console.error - console.error("Error loading AI insights:", error);
+
+src/modules/compliance/pre-psc/PrePSCForm.tsx (2 ocorrências):
+  Linha 63: console.error - console.error("Error loading inspection:", error);
+  Linha 157: console.error - console.error("Error saving inspection:", error);
+
+src/modules/compliance/mlc-inspection/components/ChecklistInterface.tsx (2 ocorrências):
+  Linha 48: console.error - console.error("Error loading findings:", error);
+  Linha 81: console.error - console.error("Error adding finding:", error);
+
+src/modules/satellite/SatelliteTracker.tsx (2 ocorrências):
+  Linha 58: console.error - console.error("Error fetching satellite orbits:", error);
+  Linha 79: console.error - console.error("Error fetching AIS data:", error);
+
+src/modules/features/price-alerts/components/NotificationsPanel.tsx (2 ocorrências):
+  Linha 21: console.error - console.error("Error loading notifications:", error);
+  Linha 22: console.error - console.error("Error loading notifications:", error);
+
+src/mobile/hooks/useAdaptivePolling.ts (1 ocorrências):
+  Linha 127: console.error - console.error("[AdaptivePolling] Poll failed:", error);
+
+src/mobile/services/networkDetector.ts (1 ocorrências):
+  Linha 127: console.error - console.error("Error in network status callback:", error);
+
+src/hooks/use-ai-modules-status.ts (1 ocorrências):
+  Linha 118: console.error - console.error("Error checking modules status:", error);
+
+src/hooks/use-enhanced-notifications.ts (1 ocorrências):
+  Linha 114: console.error - console.error("Error fetching notifications:", errorMessage);
+
+src/hooks/useSystemStats.ts (1 ocorrências):
+  Linha 63: console.error - console.error("Error fetching system stats:", error);
+
+src/hooks/useOrganizationStats.ts (1 ocorrências):
+  Linha 86: console.error - console.error("Error fetching organization stats:", error);
+
+src/hooks/use-performance-monitor.ts (1 ocorrências):
+  Linha 128: console.error - console.error('Error collecting performance metrics:', error);
+
+src/hooks/useUserManagement.ts (1 ocorrências):
+  Linha 131: console.error - console.error("Error fetching users:", err);
+
+src/hooks/useSpaceWeather.ts (1 ocorrências):
+  Linha 223: console.error - console.error('[useSpaceWeather] Error fetching status:', err);
+
+src/hooks/useStarFix.ts (1 ocorrências):
+  Linha 184: console.error - console.error('Error refreshing sync status:', error);
+
+src/hooks/useNautilusBrain.ts (1 ocorrências):
+  Linha 131: console.error - console.error('Nautilus Brain error:', error);
+
+src/hooks/useNautilusPredictions.ts (1 ocorrências):
+  Linha 64: console.error - console.error('Prediction error:', err);
+
+src/hooks/useNautilusEnhancementAI.ts (1 ocorrências):
+  Linha 78: console.error - console.error('[useNautilusEnhancementAI]', err);
+
+src/services/workflow-copilot.ts (1 ocorrências):
+  Linha 75: console.error - console.error("Error getting workflow suggestions:", error);
+
+src/ai/selfEvolutionModel.ts (1 ocorrências):
+  Linha 152: console.error - code_suggestion: `try {\n  // Original code\n} catch (error) {\n  console.error(
+
+src/utils/templates/exportToPDF.ts (1 ocorrências):
+  Linha 18: console.error - console.error("html2pdf.js not installed. Install with: npm install html2pdf.js"
+
+src/utils/templates/generateWithAI.ts (1 ocorrências):
+  Linha 68: console.error - console.error("Error generating template with AI:", error);
+
+src/modules/safety-guardian/hooks/useSafetyData.ts (1 ocorrências):
+  Linha 156: console.error - console.error('Error loading safety data:', error);
+
+src/modules/sonar-ai/services/sonarAIService.ts (1 ocorrências):
+  Linha 265: console.error - console.error("Failed to log detection:", error);
+
+src/modules/control/bridgelink/hooks/useBridgeLinkData.ts (1 ocorrências):
+  Linha 37: console.error - console.error("Erro ao buscar dados do BridgeLink:", err);
+
+src/modules/nautilus-command/hooks/useNautilusCommandAI.ts (1 ocorrências):
+  Linha 168: console.error - console.error("Command AI error:", error);
+
+src/modules/solas-training/hooks/useSolasAI.ts (1 ocorrências):
+  Linha 60: console.error - console.error('SOLAS AI error:', error);
+
+src/modules/compliance-hub/hooks/useComplianceData.ts (1 ocorrências):
+  Linha 326: console.error - console.error('Error fetching compliance data:', error);
+
+src/lib/lazy-load.ts (1 ocorrências):
+  Linha 37: console.error - console.error(`Failed to load module after ${retries} retries:`, error);
+
+src/lib/localSync.ts (1 ocorrências):
+  Linha 273: console.error - localSync.init().catch(console.error);
+
+src/lib/lazy-modules.ts (1 ocorrências):
+  Linha 46: console.error - console.error(`Failed to preload module: ${name}`, error);
+
+src/lib/safeLazyImport.ts (1 ocorrências):
+  Linha 15: console.error - console.error("⚠️ Falha ao importar módulo:", error);
+
+src/lib/pdf.ts (1 ocorrências):
+  Linha 124: console.error - console.error("Error exporting PDF:", error);
+
+src/lib/logger/exportToPDF.ts (1 ocorrências):
+  Linha 67: console.error - console.error("Failed to generate QR code:", error);
+
+src/lib/performance/virtual-scroll.ts (1 ocorrências):
+  Linha 208: console.error - console.error('Failed to load page:', error);
+
+src/lib/performance/low-bandwidth-optimizer.ts (1 ocorrências):
+  Linha 271: console.warn - console.warn('BandwidthOptimizer init failed:', error);
+
+src/lib/notifications/smart-notifications.ts (1 ocorrências):
+  Linha 266: console.error - console.error('Failed to show native notification:', error);
+
+src/lib/ai/smart-assistant.ts (1 ocorrências):
+  Linha 215: console.warn - console.warn('[SmartAssistant] LLM query failed, using fallback:', error);
+
+src/lib/images/image-optimizer.ts (1 ocorrências):
+  Linha 176: console.warn - console.warn("Failed to generate blur placeholder:", error);
+
+src/lib/feature-flags/index.ts (1 ocorrências):
+  Linha 118: console.warn - console.warn('[FeatureFlags] Failed to fetch remote flags:', error);
+
+src/lib/psc/PSCSignatureValidator.ts (1 ocorrências):
+  Linha 60: console.error - console.error('Error validating signature:', error);
+
+src/lib/utils/logger-enhanced.ts (1 ocorrências):
+  Linha 4: console.log - * PATCH 60.0 - Replaces all console.log usage
+
+src/lib/offline/indexeddb-sync.ts (1 ocorrências):
+  Linha 396: console.error - indexedDBSync.init().catch(console.error);
+
+src/lib/telemetry/performance-monitor.ts (1 ocorrências):
+  Linha 75: console.error - console.error("Failed to publish performance metrics:", error);
+
+src/lib/validation/auto-validator.ts (1 ocorrências):
+  Linha 194: console.log - // Check for console.log statements (potential data leaks)
+
+src/integrations/weather/api.ts (1 ocorrências):
+  Linha 89: console.error - console.error(`Failed to fetch weather for ${loc.name}:`, error);
+
+src/integrations/supabase/client.ts (1 ocorrências):
+  Linha 22: console.warn - console.warn("localStorage is not available, using in-memory storage fallback");
+
+src/integrations/interop/protocolAdapter.ts (1 ocorrências):
+  Linha 124: console.error - console.error("Failed to log interop event:", error);
+
+src/pages/MaintenanceCommandCenter.tsx (1 ocorrências):
+  Linha 104: console.error - console.error("Error fetching maintenance stats:", error);
+
+src/pages/ReportsCommandCenter.tsx (1 ocorrências):
+  Linha 132: console.error - console.error("Error loading analytics:", error);
+
+src/pages/OperationsCommandCenter.tsx (1 ocorrências):
+  Linha 294: console.error - console.error("Error fetching data:", err);
+
+src/pages/FinanceCommandCenter.tsx (1 ocorrências):
+  Linha 278: console.error - console.error("Error fetching data:", err);
+
+src/pages/Dashboard.tsx (1 ocorrências):
+  Linha 90: console.error - console.error("Error loading dashboard data:", error);
+
+src/pages/AnalyticsCommandCenter.tsx (1 ocorrências):
+  Linha 172: console.error - console.error("Error loading data:", error);
+
+src/pages/FleetCommandCenter.tsx (1 ocorrências):
+  Linha 376: console.error - console.error("Error loading fleet data:", error);
+
+src/pages/TravelCommandCenter.tsx (1 ocorrências):
+  Linha 263: console.error - console.error("Error fetching reservations:", error);
+
+src/pages/SecurityMonitoring.tsx (1 ocorrências):
+  Linha 130: console.error - console.error("Erro na análise:", err);
+
+src/pages/mission-control/insight-dashboard.tsx (1 ocorrências):
+  Linha 85: console.error - console.error("Erro ao gerar relatório:", error);
+
+src/pages/documents/ai.tsx (1 ocorrências):
+  Linha 197: console.error - console.error("OCR Error:", error);
+
+src/pages/qa/PreviewValidationDashboard.tsx (1 ocorrências):
+  Linha 195: console.error - "Silencie console.error para erros esperados",
+
+src/pages/ai/DocumentAnalysis.tsx (1 ocorrências):
+  Linha 109: console.error - console.error("Error analyzing document:", error);
+
+src/pages/ai/learning-dashboard.tsx (1 ocorrências):
+  Linha 87: console.error - console.error("Error loading AI learning data:", error);
+
+src/pages/ai/ComplianceAI.tsx (1 ocorrências):
+  Linha 178: console.error - console.error("Error analyzing compliance:", error);
+
+src/pages/ai/AICopilot.tsx (1 ocorrências):
+  Linha 114: console.error - console.error("Error calling AI:", error);
+
+src/pages/ai/PredictiveInsights.tsx (1 ocorrências):
+  Linha 175: console.error - console.error("Error generating insights:", error);
+
+src/pages/ai/NavigationAssistant.tsx (1 ocorrências):
+  Linha 128: console.error - console.error("Error analyzing route:", error);
+
+src/pages/emerging/GenerativeAIPage.tsx (1 ocorrências):
+  Linha 113: console.error - console.error("Error generating content:", error);
+
+src/pages/crew/index.tsx (1 ocorrências):
+  Linha 102: console.error - console.error("Error loading data:", error);
+
+src/pages/admin/mission-control/index.tsx (1 ocorrências):
+  Linha 57: console.error - console.error("Error loading mission data:", error);
+
+src/pages/admin/sgso/history/[vesselId].tsx (1 ocorrências):
+  Linha 52: console.error - console.error("Error fetching action plans:", error);
+
+src/pages/admin/incidents/index.tsx (1 ocorrências):
+  Linha 32: console.error - console.error("Error loading incidents:", error);
+
+src/pages/admin/bi/forecasts.tsx (1 ocorrências):
+  Linha 34: console.error - console.error("Error loading forecast data:", err);
+
+src/pages/compliance/PrePSCDashboard.tsx (1 ocorrências):
+  Linha 39: console.error - console.error("Error loading stats:", error);
+
+src/mobile/components/OfflineChecklist.tsx (1 ocorrências):
+  Linha 67: console.error - console.error("Failed to save checklist:", error);
+
+src/ai/security/validation/Patch614Validation.tsx (1 ocorrências):
+  Linha 259: console.error - console.error("Validation error:", error);
+
+src/ai/visual/validation/Patch606Validation.tsx (1 ocorrências):
+  Linha 106: console.error - console.error("Validation error:", error);
+
+src/ai/anomaly/validation/Patch607Validation.tsx (1 ocorrências):
+  Linha 119: console.error - console.error("Validation error:", error);
+
+src/ai/inference/validation/Patch612Validation.tsx (1 ocorrências):
+  Linha 146: console.error - console.error("Validation error:", error);
+
+src/components/unified-logs-panel.tsx (1 ocorrências):
+  Linha 100: console.error - console.error("Error loading logs:", error);
+
+src/components/fleet/vessel-tracking-map.tsx (1 ocorrências):
+  Linha 89: console.error - console.error("Failed to load map:", error);
+
+src/components/dashboard/index/DashboardDataProvider.tsx (1 ocorrências):
+  Linha 132: console.error - console.error("Error fetching dashboard metrics:", error);
+
+src/components/peotram/peotram-ai-assistant.tsx (1 ocorrências):
+  Linha 234: console.error - console.error("Error calling AI:", error);
+
+src/components/maritime/maritime-system-dashboard.tsx (1 ocorrências):
+  Linha 61: console.error - console.error("Error loading maritime data:", error);
+
+src/components/operations/operations-dashboard.tsx (1 ocorrências):
+  Linha 91: console.error - console.error("Error loading operational data:", error);
+
+src/components/dp/PlanStatusSelect.tsx (1 ocorrências):
+  Linha 50: console.error - console.error("Error updating status:", error);
+
+src/components/dp/DPSyncDashboard.tsx (1 ocorrências):
+  Linha 26: console.error - console.error("❌ Failed to run AI model:", error);
+
+src/components/unified/NotificationCenter.unified.tsx (1 ocorrências):
+  Linha 348: console.error - console.error("Error loading notifications:", error);
+
+src/components/sgso/SGSOTrendChart.tsx (1 ocorrências):
+  Linha 96: console.error - console.error("Erro ao buscar dados de tendência SGSO:", err);
+
+src/components/sgso/PainelMetricasRisco.tsx (1 ocorrências):
+  Linha 45: console.error - console.error("Erro ao buscar métricas:", error);
+
+src/components/sgso/IncidentAIClassificationModal.tsx (1 ocorrências):
+  Linha 67: console.error - console.error("Error classifying incident:", error);
+
+src/components/sgso/SGSOActionPlanGenerator.tsx (1 ocorrências):
+  Linha 132: console.error - console.error("Error generating action plan:", error);
+
+src/components/sgso/SGSOEnhancedAssistant.tsx (1 ocorrências):
+  Linha 155: console.error - console.error("Error calling SGSO assistant:", error);
+
+src/components/sgso/MetricasPanel.tsx (1 ocorrências):
+  Linha 86: console.error - console.error("Erro ao buscar métricas:", error);
+
+src/components/sgso/SGSOAssistant.tsx (1 ocorrências):
+  Linha 107: console.error - console.error("Error calling SGSO assistant:", error);
+
+src/components/documents/DocumentWorkflowPanel.tsx (1 ocorrências):
+  Linha 84: console.error - console.error('Error loading documents:', error);
+
+src/components/performance/SmartPrefetchProvider.tsx (1 ocorrências):
+  Linha 26: console.warn - console.warn('Prefetch initialization failed:', error);
+
+src/components/performance/VirtualizedList.tsx (1 ocorrências):
+  Linha 209: console.error - console.error('Failed to load more items:', error);
+
+src/components/qa/PreviewValidator.tsx (1 ocorrências):
+  Linha 36: console.error - console.error("Erro ao executar validação:", error);
+
+src/components/ovid/OVIDAIAssistant.tsx (1 ocorrências):
+  Linha 81: console.error - console.error(error);
+
+src/components/notifications/NotificationCenterProfessional.tsx (1 ocorrências):
+  Linha 525: console.error - console.error('AI Error:', error);
+
+src/components/copilot/SimilarExamples.tsx (1 ocorrências):
+  Linha 41: console.error - console.error("Erro ao buscar exemplos:", err);
+
+src/components/ai/PredictiveRecommendationsPanel.tsx (1 ocorrências):
+  Linha 213: console.error - console.error('Error loading predictive analysis:', error);
+
+src/components/ai/AIAuditPanel.tsx (1 ocorrências):
+  Linha 64: console.error - console.error('Error loading AI logs:', error);
+
+src/components/psc/PSCPackagePanel.tsx (1 ocorrências):
+  Linha 70: console.error - console.error('Error loading PSC data:', error);
+
+src/components/crew/crew-wellbeing-dashboard.tsx (1 ocorrências):
+  Linha 43: console.error - console.error("Error loading wellbeing data:", error);
+
+src/components/crew/crew-rotation-schedule.tsx (1 ocorrências):
+  Linha 30: console.error - console.error("Error loading rotations:", error);
+
+src/components/automation/automation-workflows-manager.tsx (1 ocorrências):
+  Linha 249: console.error - console.error("Error getting AI suggestion:", error);
+
+src/components/nautilus/SmartInventory.tsx (1 ocorrências):
+  Linha 72: console.error - console.error("Error loading inventory:", error);
+
+src/components/nautilus/NautilusCommandCenter.tsx (1 ocorrências):
+  Linha 128: console.error - console.error("Error loading data:", error);
+
+src/components/nautilus/OfflineIndicator.tsx (1 ocorrências):
+  Linha 20: console.error - console.error('Sync failed:', error);
+
+src/components/nautilus/MaintenanceHub.tsx (1 ocorrências):
+  Linha 119: console.error - console.error("Error loading maintenance:", error);
+
+src/components/peo-dp/peodp-ai-chat.tsx (1 ocorrências):
+  Linha 254: console.error - console.error("Error calling AI:", error);
+
+src/components/reservations/enhanced-reservations-dashboard.tsx (1 ocorrências):
+  Linha 143: console.error - console.error("Error fetching reservations:", error);
+
+src/components/maintenance/MaintenanceDashboard.tsx (1 ocorrências):
+  Linha 48: console.error - console.error("Failed to fetch maintenance status:", error);
+
+src/components/mmi/MMICopilot.tsx (1 ocorrências):
+  Linha 38: console.error - console.error("Error getting copilot suggestion:", error);
+
+src/components/mmi/mmi-copilot.tsx (1 ocorrências):
+  Linha 90: console.error - console.error('Error:', error);
+
+src/components/mmi/HistoryPanel.tsx (1 ocorrências):
+  Linha 36: console.error - console.error("Error fetching histories:", error);
+
+src/components/price-alerts/alert-form.tsx (1 ocorrências):
+  Linha 90: console.error - console.error("Error submitting form:", error);
+
+src/components/price-alerts/components/enhanced-history-stats.tsx (1 ocorrências):
+  Linha 113: console.error - console.error("Error loading price history:", error);
+
+src/components/price-alerts/components/price-range-config.tsx (1 ocorrências):
+  Linha 83: console.error - console.error("Error saving alert:", error);
+
+src/components/bi/ComplianceByVesselTable.tsx (1 ocorrências):
+  Linha 33: console.error - console.error("Error fetching compliance by vessel data:", err);
+
+src/components/bi/JobsForecastReport.examples.tsx (1 ocorrências):
+  Linha 38: console.error - console.error("Error fetching trend data:", error);
+
+src/components/debug/ErrorDebugBanner.tsx (1 ocorrências):
+  Linha 34: console.warn - console.warn('Failed to read error debug info', err);
+
+src/components/shared/ActionButton.tsx (1 ocorrências):
+  Linha 46: console.error - console.error("ActionButton error:", error);
+
+src/components/forecast/ForecastAI.tsx (1 ocorrências):
+  Linha 65: console.error - console.error("AI Forecast Error:", err);
+
+src/components/forecast/ForecastAIInsights.tsx (1 ocorrências):
+  Linha 25: console.error - console.error("AI Forecast Error:", err);
+
+src/components/integrations/integrations-hub-enhanced.tsx (1 ocorrências):
+  Linha 123: console.error - console.error("Error loading webhook events:", error);
+
+src/components/peodp-ai/peodp-audit-component.tsx (1 ocorrências):
+  Linha 78: console.error - console.error("Erro na auditoria:", error);
+
+src/components/templates/ApplyTemplateModal.tsx (1 ocorrências):
+  Linha 56: console.error - console.error("Error fetching templates:", error);
+
+src/components/templates/template-editor-with-rewrite.tsx (1 ocorrências):
+  Linha 63: console.error - console.error("Error rewriting selection:", err);
+
+src/modules/maintenance-planner/index.tsx (1 ocorrências):
+  Linha 57: console.error - console.error("Error fetching maintenance stats:", error);
+
+src/modules/maintenance-planner/components/MaintenanceTimelineView.tsx (1 ocorrências):
+  Linha 42: console.error - console.error("Error fetching tasks:", error);
+
+src/modules/maintenance-planner/components/MMICopilot.tsx (1 ocorrências):
+  Linha 123: console.error - console.error("Copilot error:", error);
+
+src/modules/maintenance-planner/components/MaintenanceCalendarView.tsx (1 ocorrências):
+  Linha 47: console.error - console.error("Error fetching tasks:", error);
+
+src/modules/fleet/components/FleetAICopilot.tsx (1 ocorrências):
+  Linha 126: console.error - console.error("Fleet AI error:", error);
+
+src/modules/satellite-tracker/components/SatelliteMap.tsx (1 ocorrências):
+  Linha 78: console.error - console.error("Failed to load Mapbox:", err);
+
+src/modules/satellite-tracker/components/SatelliteGlobeMap.tsx (1 ocorrências):
+  Linha 79: console.error - console.error("Failed to load Mapbox:", err);
+
+src/modules/mission-control/components/MissionControlConsolidation.tsx (1 ocorrências):
+  Linha 92: console.error - console.error("Failed to export report:", error);
+
+src/modules/analytics/components/AnalyticsQueryBuilder.tsx (1 ocorrências):
+  Linha 122: console.error - console.error("Error executing query:", error);
+
+src/modules/finance/FinanceHub.tsx (1 ocorrências):
+  Linha 95: console.error - console.error("Error loading financial data:", error);
+
+src/modules/finance/components/AddTransactionDialog.tsx (1 ocorrências):
+  Linha 92: console.error - console.error("Error adding transaction:", error);
+
+src/modules/safety-guardian/components/SafetyDashboard.tsx (1 ocorrências):
+  Linha 130: console.error - console.error("Error loading incidents:", error);
+
+src/modules/operations/index.tsx (1 ocorrências):
+  Linha 90: console.error - console.error("Error loading operations:", error);
+
+src/modules/operations/marine-ar-overlay/index.tsx (1 ocorrências):
+  Linha 120: console.error - console.error("Error accessing camera:", error);
+
+src/modules/operations/crew-wellbeing/components/AIInsights.tsx (1 ocorrências):
+  Linha 53: console.error - console.error("Error requesting analysis:", error);
+
+src/modules/workflow-visual/index.tsx (1 ocorrências):
+  Linha 242: console.error - console.error("AI analysis error:", error);
+
+src/modules/performance/PerformanceEngineV1.tsx (1 ocorrências):
+  Linha 87: console.error - console.error("Error fetching performance data:", error);
+
+src/modules/performance/PerformanceMonitoringDashboard.tsx (1 ocorrências):
+  Linha 87: console.error - console.error("Error fetching performance data:", error);
+
+src/modules/hr/peo-dp/components/DPCopilot.tsx (1 ocorrências):
+  Linha 189: console.error - console.error("Copilot error:", error);
+
+src/modules/hr/crew-wellbeing/components/WellbeingHistory.tsx (1 ocorrências):
+  Linha 73: console.error - console.error("Error fetching history:", error);
+
+src/modules/hr/crew-wellbeing/components/WeeklyAssessment.tsx (1 ocorrências):
+  Linha 83: console.error - console.error("Error submitting assessment:", error);
+
+src/modules/hr/crew-wellbeing/components/WellbeingDashboard.tsx (1 ocorrências):
+  Linha 77: console.error - console.error("Error fetching wellbeing data:", error);
+
+src/modules/hr/employee-portal/components/EmployeePayroll.tsx (1 ocorrências):
+  Linha 71: console.error - console.error("Error loading payroll:", error);
+
+src/modules/hr/employee-portal/components/EmployeeBenefits.tsx (1 ocorrências):
+  Linha 65: console.error - console.error("Error loading benefits:", error);
+
+src/modules/hr/employee-portal/components/EmployeePersonalDocuments.tsx (1 ocorrências):
+  Linha 84: console.error - console.error("Error loading documents:", error);
+
+src/modules/sonar-ai/components/SonarAIDashboard.tsx (1 ocorrências):
+  Linha 108: console.error - console.error("Error performing AI scan:", error);
+
+src/modules/sonar-ai/components/SonarDataUpload.tsx (1 ocorrências):
+  Linha 130: console.error - console.error("Upload error:", error);
+
+src/modules/incident-reports/IncidentReplayAI.tsx (1 ocorrências):
+  Linha 62: console.error - console.error("Failed to load incidents:", error);
+
+src/modules/incident-reports/index.tsx (1 ocorrências):
+  Linha 74: console.error - console.error("Error fetching incidents:", error);
+
+src/modules/incident-reports/components/IncidentMetricsDashboard.tsx (1 ocorrências):
+  Linha 50: console.error - console.error("Error fetching metrics:", error);
+
+src/modules/ocean-sonar/index.tsx (1 ocorrências):
+  Linha 147: console.error - console.error("Failed to export PNG:", error);
+
+src/modules/communication/validation/Patch551Validation.tsx (1 ocorrências):
+  Linha 42: console.error - console.error("Validation error:", error);
+
+src/modules/control/bridgelink/BridgeLinkDashboard.tsx (1 ocorrências):
+  Linha 52: console.error - console.error("Erro ao exportar relatório:", error);
+
+src/modules/nautilus-command/index.tsx (1 ocorrências):
+  Linha 202: console.error - console.error('Error loading system data:', error);
+
+src/modules/nautilus-command/components/FleetCockpit.tsx (1 ocorrências):
+  Linha 68: console.error - console.error('Error loading vessels:', error);
+
+src/modules/nautilus-command/components/NautilusBrainChat.tsx (1 ocorrências):
+  Linha 130: console.error - console.error('Brain error:', error);
+
+src/modules/admin/technical-validation/index.tsx (1 ocorrências):
+  Linha 97: console.error - console.error("Error analyzing modules:", error);
+
+src/modules/operational-calendar/index.tsx (1 ocorrências):
+  Linha 250: console.error - console.error("AI optimization error:", error);
+
+src/modules/intelligence/dp-intelligence/components/DPIntelligenceDashboard.tsx (1 ocorrências):
+  Linha 43: console.error - console.error("Error fetching stats:", err);
+
+src/modules/document-hub/templates/TemplatesPanel.tsx (1 ocorrências):
+  Linha 205: console.error - console.error(error);
+
+src/modules/document-hub/templates/components/CompleteTemplateManager.tsx (1 ocorrências):
+  Linha 90: console.error - console.error("Error saving template:", error);
+
+src/modules/document-hub/templates/components/TemplatePreview.tsx (1 ocorrências):
+  Linha 75: console.error - console.error("Error generating PDF:", error);
+
+src/modules/price-alerts/validation/Patch555Validation.tsx (1 ocorrências):
+  Linha 33: console.error - console.error("Validation error:", error);
+
+src/modules/compliance/sgso/SGSOSystem.tsx (1 ocorrências):
+  Linha 46: console.error - console.error("Error loading stats:", error);
+
+src/modules/compliance/mlc-inspection/MLCInspectionDashboard.tsx (1 ocorrências):
+  Linha 40: console.error - console.error("Error loading stats:", error);
+
+src/modules/compliance/mlc-inspection/components/InspectionsList.tsx (1 ocorrências):
+  Linha 29: console.error - console.error("Error loading inspections:", error);
+
+src/modules/compliance/mlc-inspection/components/EvidenceUploader.tsx (1 ocorrências):
+  Linha 49: console.error - console.error("Error uploading file:", error);
+
+src/modules/compliance/mlc-inspection/components/CreateInspectionDialog.tsx (1 ocorrências):
+  Linha 68: console.error - console.error("Error creating inspection:", error);
+
+src/modules/crew-management/index.tsx (1 ocorrências):
+  Linha 70: console.error - console.error("Error loading crew data:", error);
+
+src/modules/crew-management/components/CrewAICopilot.tsx (1 ocorrências):
+  Linha 147: console.error - console.error("AI Copilot error:", error);
+
+src/modules/crew-management/components/AddCrewDialog.tsx (1 ocorrências):
+  Linha 80: console.error - console.error("Error adding crew member:", error);
+
+src/modules/compliance-hub/components/CreateAuditDialog.tsx (1 ocorrências):
+  Linha 99: console.error - console.error('Error creating audit:', error);
+
+src/modules/compliance-hub/components/SettingsDialog.tsx (1 ocorrências):
+  Linha 111: console.error - console.error('Error saving settings:', error);
+
+src/modules/compliance-hub/components/TrainingMatrixPanel.tsx (1 ocorrências):
+  Linha 111: console.error - console.error('Error generating recommendation:', error);
+
+src/modules/planning/voyage-planner/components/VoyageAICopilot.tsx (1 ocorrências):
+  Linha 104: console.error - console.error("Error calling AI:", error);
+
+src/modules/satcom/components/ConnectivityPanel.tsx (1 ocorrências):
+  Linha 63: console.error - console.error("Error pinging links:", error);
+
+src/modules/satcom/components/CommunicationHistory.tsx (1 ocorrências):
+  Linha 103: console.error - console.error("Error loading history:", error);
+
+src/modules/features/price-alerts/index.tsx (1 ocorrências):
+  Linha 45: console.error - console.error("Error loading stats:", error);
+
+src/modules/features/price-alerts/components/CreateAlertForm.tsx (1 ocorrências):
+  Linha 65: console.error - console.error("Error creating/updating alert:", error);
+
+src/modules/features/price-alerts/components/PriceAlertsList.tsx (1 ocorrências):
+  Linha 26: console.error - console.error("Error loading alerts:", error);
+
+src/modules/workspace/real-time-workspace/RealTimeWorkspaceProfessional.tsx (1 ocorrências):
+  Linha 246: console.error - console.error('AI assist error:', error);
+
+src/modules/templates/validation/Patch554Validation.tsx (1 ocorrências):
+  Linha 40: console.error - console.error("Validation error:", error);
+
+src/assistants/voice/validation/Patch608Validation.tsx (1 ocorrências):
+  Linha 114: console.error - console.error("Validation error:", error);
+
+src/assistants/voice/validation/Patch609Validation.tsx (1 ocorrências):
+  Linha 126: console.error - console.error("Validation error:", error);
+
+src/assistants/voice/validation/Patch610Validation.tsx (1 ocorrências):
+  Linha 131: console.error - console.error("Validation error:", error);
+
+src/tests/safeLazyImport.test.tsx (1 ocorrências):
+  Linha 58: console.error - // Spy on console.error to verify error logging
+
+src/tests/shared/test-utils.tsx (1 ocorrências):
+  Linha 134: console.error - const originalError = console.error;

@@ -1,0 +1,197 @@
+
+> vite_react_shadcn_ts@0.0.0 build
+> NODE_OPTIONS='--max-old-space-size=4096' vite build
+
+vite v5.4.21 building for production...
+transforming...
+
+ WARN 
+/grid.svg referenced in /grid.svg didn't resolve at build time, it will remain unchanged to be resolved at runtime
+
+✓ 10150 modules transformed.
+
+ WARN  Generated an empty chunk: "firebase".
+
+rendering chunks...
+
+ WARN  [plugin:vite:reporter] [plugin vite:reporter] 
+(!) /home/ubuntu/github_repos/travel-hr-buddy/src/modules/mission-control/components/AICommander.tsx is dynamically imported by /home/ubuntu/github_repos/travel-hr-buddy/src/modules/mission-control/components/MissionControlConsolidation.tsx, /home/ubuntu/github_repos/travel-hr-buddy/src/utils/module-routes.ts but also statically imported by /home/ubuntu/github_repos/travel-hr-buddy/src/pages/MissionCommandCenter.tsx, dynamic import will not move module into another chunk.
+
+
+
+ WARN  [plugin:vite:reporter] [plugin vite:reporter] 
+(!) /home/ubuntu/github_repos/travel-hr-buddy/src/modules/mission-control/components/KPIDashboard.tsx is dynamically imported by /home/ubuntu/github_repos/travel-hr-buddy/src/modules/mission-control/components/MissionControlConsolidation.tsx, /home/ubuntu/github_repos/travel-hr-buddy/src/utils/module-routes.ts but also statically imported by /home/ubuntu/github_repos/travel-hr-buddy/src/pages/MissionCommandCenter.tsx, dynamic import will not move module into another chunk.
+
+
+
+ WARN  [plugin:vite:reporter] [plugin vite:reporter] 
+(!) /home/ubuntu/github_repos/travel-hr-buddy/src/modules/mission-control/components/MissionLogs.tsx is dynamically imported by /home/ubuntu/github_repos/travel-hr-buddy/src/modules/mission-control/components/MissionControlConsolidation.tsx, /home/ubuntu/github_repos/travel-hr-buddy/src/utils/module-routes.ts but also statically imported by /home/ubuntu/github_repos/travel-hr-buddy/src/pages/admin/mission-control/index.tsx, dynamic import will not move module into another chunk.
+
+
+
+ WARN  [plugin:vite:reporter] [plugin vite:reporter] 
+(!) /home/ubuntu/github_repos/travel-hr-buddy/src/ai/strategy/predictive-engine.ts is dynamically imported by /home/ubuntu/github_repos/travel-hr-buddy/src/ai/index.ts, /home/ubuntu/github_repos/travel-hr-buddy/src/ai/strategic-decision-system.ts but also statically imported by /home/ubuntu/github_repos/travel-hr-buddy/src/ai/strategic-decision-system.ts, dynamic import will not move module into another chunk.
+
+
+
+ WARN  [plugin:vite:reporter] [plugin vite:reporter] 
+(!) /home/ubuntu/github_repos/travel-hr-buddy/src/ai/decision-simulator/index.ts is dynamically imported by /home/ubuntu/github_repos/travel-hr-buddy/src/ai/index.ts, /home/ubuntu/github_repos/travel-hr-buddy/src/ai/strategic-decision-system.ts but also statically imported by /home/ubuntu/github_repos/travel-hr-buddy/src/ai/strategic-decision-system.ts, dynamic import will not move module into another chunk.
+
+
+
+ WARN  [plugin:vite:reporter] [plugin vite:reporter] 
+(!) /home/ubuntu/github_repos/travel-hr-buddy/src/ai/governance/neural-governance.ts is dynamically imported by /home/ubuntu/github_repos/travel-hr-buddy/src/ai/index.ts, /home/ubuntu/github_repos/travel-hr-buddy/src/ai/strategic-decision-system.ts but also statically imported by /home/ubuntu/github_repos/travel-hr-buddy/src/ai/strategic-decision-system.ts, dynamic import will not move module into another chunk.
+
+
+
+ WARN  [plugin:vite:reporter] [plugin vite:reporter] 
+(!) /home/ubuntu/github_repos/travel-hr-buddy/src/ai/agents/consensus-builder.ts is dynamically imported by /home/ubuntu/github_repos/travel-hr-buddy/src/ai/index.ts, /home/ubuntu/github_repos/travel-hr-buddy/src/ai/strategic-decision-system.ts but also statically imported by /home/ubuntu/github_repos/travel-hr-buddy/src/ai/strategic-decision-system.ts, dynamic import will not move module into another chunk.
+
+
+
+ WARN  [plugin:vite:reporter] [plugin vite:reporter] 
+(!) /home/ubuntu/github_repos/travel-hr-buddy/src/ai/reporting/executive-summary.tsx is dynamically imported by /home/ubuntu/github_repos/travel-hr-buddy/src/ai/index.ts but also statically imported by /home/ubuntu/github_repos/travel-hr-buddy/src/ai/strategic-decision-system.ts, dynamic import will not move module into another chunk.
+
+
+
+ WARN  [plugin:vite:reporter] [plugin vite:reporter] 
+(!) /home/ubuntu/github_repos/travel-hr-buddy/src/hooks/useTrainingAI.ts is dynamically imported by /home/ubuntu/github_repos/travel-hr-buddy/src/modules/nautilus-academy/components/AcademyDashboard.tsx but also statically imported by /home/ubuntu/github_repos/travel-hr-buddy/src/modules/nautilus-academy/components/AcademyDashboard.tsx, dynamic import will not move module into another chunk.
+
+
+dist/registerSW.js                                              0.13 kB
+dist/manifest.webmanifest                                       0.52 kB
+dist/index.html                                                 4.83 kB
+dist/assets/nautilus-logo-we0iW0YH.png                      1,572.36 kB
+dist/assets/ort-wasm-simd-threaded.jsep-CLmJQkb_.wasm      23,696.35 kB
+dist/assets/vendors-CUYLbSjY.css                               17.93 kB
+dist/assets/map-BbyR9nQ0.css                                   38.63 kB
+dist/assets/index-C6Rbi8tF.css                                325.12 kB
+dist/assets/firebase-l0sNRNKZ.js                                0.00 kB
+dist/assets/FleetChart-tiyVAJl5.js                              0.71 kB
+dist/assets/FinancialChart-lkd_4hmd.js                          0.82 kB
+dist/assets/RevenueChart-vOoA22Ie.js                            1.19 kB
+dist/assets/ForecastMap-BDDdXYQj.js                             1.28 kB
+dist/assets/memory-optimizer-Dv3LveGO.js                        1.85 kB
+dist/assets/BridgeLinkStatus-DaqpkME1.js                        1.86 kB
+dist/assets/FinancialTab-BhX-Tcrr.js                            1.90 kB
+dist/assets/QuickStats-3I_4nE1N.js                              1.97 kB
+dist/assets/ForecastPanel-B4RUBxeT.js                           2.05 kB
+dist/assets/LiveMetricsBar-DiqkHh0b.js                          2.05 kB
+dist/assets/ForecastAIInsights-DMMmlBIN.js                      2.11 kB
+dist/assets/BridgeLinkSync-BCURSsX7.js                          2.16 kB
+dist/assets/ForecastMetrics-jXc4duzr.js                         2.21 kB
+dist/assets/connection-resilience-DKgp6Goq.js                   2.36 kB
+dist/assets/resource-manager-NYmV0OTI.js                        2.40 kB
+dist/assets/OperationsTab-_3T2bc2v.js                           2.43 kB
+dist/assets/OverviewCharts-BqwzBowQ.js                          2.59 kB
+dist/assets/core-query-D3HUTdTk.js                              2.62 kB
+dist/assets/web-vitals-monitor-DvY4SJ_N.js                      2.94 kB
+dist/assets/NetworkStatusWidget-BN_0fwTE.js                     3.03 kB
+dist/assets/PerformanceMonitor-B3e1ouE-.js                      3.57 kB
+dist/assets/InstallPrompt-2byJdYQz.js                           3.64 kB
+dist/assets/KPIGrid-CZb777Wn.js                                 3.85 kB
+dist/assets/WelcomeOnboarding-OHiVqndl.js                       4.27 kB
+dist/assets/ForecastAI-BycYcon5.js                              4.30 kB
+dist/assets/AIModulesGrid-IOmwB4E2.js                           4.35 kB
+dist/assets/pages-admin-restore-DEuLRkD6.js                     4.91 kB
+dist/assets/peotram-template-manager-BXyhTm5q.js                4.92 kB
+dist/assets/AlertsDialog-C0bYlq9H.js                            4.98 kB
+dist/assets/DashboardActions-D_a3RMjh.js                        5.33 kB
+dist/assets/OfflineStatusBar-BIX73u9u.js                        5.63 kB
+dist/assets/QuickCopilotDialog-IEh_LCFD.js                      5.84 kB
+dist/assets/QuickActionsPanel-D_LbBRtX.js                       6.36 kB
+dist/assets/LiveDashboardStats-E4zjbRts.js                      7.31 kB
+dist/assets/ui-containers-DQTYmIjw.js                           7.86 kB
+dist/assets/peotram-non-conformities-BNSuyoFa.js                9.22 kB
+dist/assets/ui-modals-UPvPug_N.js                               9.36 kB
+dist/assets/peotram-checklist-version-manager-CQ-mvH1r.js       9.38 kB
+dist/assets/peotram-predictive-analytics-CT7a14Ur.js            9.43 kB
+dist/assets/peotram-workflow-manager-DbWgdt8X.js                9.52 kB
+dist/assets/peotram-risk-assessment-Rrcx2tNV.js                 9.64 kB
+dist/assets/core-supabase-Dfh6H83E.js                           9.65 kB
+dist/assets/peotram-emergency-response-D855pBWt.js              9.70 kB
+dist/assets/peotram-integration-hub-C1XIob4q.js                10.38 kB
+dist/assets/peotram-performance-kpi-Dt9qhc7C.js                10.68 kB
+dist/assets/SystemControlPanel-DYXF-jGE.js                     10.80 kB
+dist/assets/peotram-advanced-analytics-Cp8z2L7E.js             10.84 kB
+dist/assets/peotram-ocr-processor-CHlVZNhc.js                  10.87 kB
+dist/assets/gamification-system-BnJSaukY.js                    11.39 kB
+dist/assets/module-logistics-DEbQLgpS.js                       11.63 kB
+dist/assets/module-connectivity-DeY3yRSb.js                    11.69 kB
+dist/assets/peotram-ai-assistant-C_7EUrV3.js                   12.08 kB
+dist/assets/peotram-advanced-reporting-BQOBio20.js             12.37 kB
+dist/assets/peotram-compliance-tracker-radEtNpG.js             12.57 kB
+dist/assets/peotram-equipment-manager-CyZK9xmG.js              12.58 kB
+dist/assets/peotram-reports-generator-ev-eAuh6.js              13.14 kB
+dist/assets/peotram-analytics-panel-D8GuBrt9.js                13.20 kB
+dist/assets/peotram-environmental-monitor-BrG0Zoe3.js          13.33 kB
+dist/assets/peotram-realtime-monitoring-D_Ue2CRe.js            13.53 kB
+dist/assets/peotram-communication-center-DqmLJOCz.js           13.59 kB
+dist/assets/peotram-performance-indicators-LhklR2X5.js         13.65 kB
+dist/assets/peotram-document-manager-B7vjP8xI.js               13.69 kB
+dist/assets/peotram-compliance-checker-DSfMS0WB.js             14.01 kB
+dist/assets/peotram-training-management-DY_njfUK.js            14.18 kB
+dist/assets/peotram-cnpj-history-PO-jHLIB.js                   14.68 kB
+dist/assets/blockchain-documents-C_RW3wmT.js                   15.30 kB
+dist/assets/risk-management-dashboard-Dda2N6t2.js              15.32 kB
+dist/assets/compliance-audit-center-1rJMBb6M.js                15.41 kB
+dist/assets/continuous-testing-monitoring-DdpXBvW4.js          15.66 kB
+dist/assets/ar-interface-DkVhh5rx.js                           15.73 kB
+dist/assets/peotram-incident-manager-CbH574ax.js               16.43 kB
+dist/assets/ui-feedback-e8wojGWM.js                            17.64 kB
+dist/assets/backup-recovery-system-Lqt1mbpR.js                 18.25 kB
+dist/assets/peotram-audit-wizard-rcR7CuHJ.js                   18.44 kB
+dist/assets/enhanced-peotram-dashboard-DFlmNMrH.js             19.09 kB
+dist/assets/module-travel-BJnQ0Amp.js                          19.77 kB
+dist/assets/module-emergency-DNaC_-a5.js                       21.95 kB
+dist/assets/module-assistants-f8S2CvqA.js                      22.07 kB
+dist/assets/module-finance-DSUuQfGe.js                         23.42 kB
+dist/assets/forms-DdGvRRyG.js                                  24.13 kB
+dist/assets/SmartLayout-zmwUcGDO.js                            25.13 kB
+dist/assets/pages-auth-91SyuMHD.js                             26.22 kB
+dist/assets/ui-popovers-CgY7zi4T.js                            29.49 kB
+dist/assets/pages-emerging-BECSsE6v.js                         32.35 kB
+dist/assets/core-router-B3ipPoW5.js                            33.50 kB
+dist/assets/module-fleet-ZLmu5K1E.js                           42.12 kB
+dist/assets/pages-admin-monitoring-UBL96Has.js                 53.76 kB
+dist/assets/utils-date-BkEmHVjb.js                             57.32 kB
+dist/assets/module-intel-CujgpNwq.js                           70.83 kB
+dist/assets/ui-misc-X95cGagA.js                                74.38 kB
+dist/assets/3d_xr-BHsMmp6q.js                                  75.67 kB
+dist/assets/module-ops-C-vYK6b0.js                             91.73 kB
+dist/assets/pages-admin-docs-oT8R82hU.js                       95.43 kB
+dist/assets/utils-lodash-ByyE2rLj.js                           96.55 kB
+dist/assets/pages-ai-6j1bqlai.js                               96.96 kB
+dist/assets/motion-Cu9MOGIi.js                                109.93 kB
+dist/assets/module-hr-fc7Jdn0_.js                             123.08 kB
+dist/assets/pages-system-DpzkagOV.js                          146.57 kB
+dist/assets/editor-DG9YRTrO.js                                163.92 kB
+dist/assets/charts-chartjs-D5flCuY1.js                        166.42 kB
+dist/assets/index-DMTC0TYU.js                                 191.28 kB
+dist/assets/module-compliance-BnVMl2kX.js                     221.37 kB
+dist/assets/core-react-Dl7_yTLf.js                            296.73 kB
+dist/assets/mqtt-1PbmVONC.js                                  357.42 kB
+dist/assets/charts-recharts-Dh5KwEA7.js                       361.64 kB
+dist/assets/pages-command-centers-DAOK-xvj.js                 862.73 kB
+dist/assets/pages-admin-core-fjKE3cXI.js                      947.17 kB
+dist/assets/pdf-gen-D8O9ldbr.js                             1,036.39 kB
+dist/assets/ai-ml-C0jmxtck.js                               1,479.16 kB
+dist/assets/map-2MxLf67y.js                                 1,647.06 kB
+dist/assets/pages-core-CQmVyxt0.js                          1,905.19 kB
+dist/assets/modules-misc-BbUAc7Lo.js                        2,342.20 kB
+dist/assets/vendors-C06yY-CR.js                             2,711.27 kB
+
+ WARN 
+(!) Some chunks are larger than 500 kB after minification. Consider:
+- Using dynamic import() to code-split the application
+- Use build.rollupOptions.output.manualChunks to improve chunking: https://rollupjs.org/configuration-options/#output-manualchunks
+- Adjust chunk size limit for this warning via build.chunkSizeWarningLimit.
+
+✓ built in 1m 45s
+ℹ
+PWA v1.2.0
+mode      generateSW
+precache  132 entries (16783.95 KiB)
+files generated
+  dist/sw.js
+  dist/workbox-5835a82e.js
