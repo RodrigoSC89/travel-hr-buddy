@@ -35,7 +35,7 @@ jobs:
         run: npm run test:e2e -- --reporter=list --reporter=html
 
       - name: Upload test results
-        uses: actions/upload-artifact@v4
+        uses: actions/upload-artifact@v5
         if: always()
         with:
           name: e2e-test-results
@@ -45,7 +45,7 @@ jobs:
           retention-days: 30
 
       - name: Upload test report
-        uses: actions/upload-artifact@v4
+        uses: actions/upload-artifact@v5
         if: always()
         with:
           name: playwright-report
@@ -110,7 +110,7 @@ jobs:
         run: npm run test:e2e -- --project=firefox --reporter=list
 
       - name: Upload Firefox test results
-        uses: actions/upload-artifact@v4
+        uses: actions/upload-artifact@v5
         if: always()
         with:
           name: e2e-test-results-firefox

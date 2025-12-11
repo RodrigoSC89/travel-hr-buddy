@@ -111,7 +111,7 @@ jobs:
       
       - name: Upload coverage artifacts
         if: matrix.node-version == '22.x'
-        uses: actions/upload-artifact@v4
+        uses: actions/upload-artifact@v5
         with:
           name: coverage-report
           path: coverage/
@@ -135,7 +135,7 @@ jobs:
       
       - name: Upload test results on failure or cancellation
         if: always()
-        uses: actions/upload-artifact@v4
+        uses: actions/upload-artifact@v5
         with:
           name: quality-check-logs-${{ github.run_id }}
           path: |
