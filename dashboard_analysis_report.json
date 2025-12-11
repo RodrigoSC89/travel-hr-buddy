@@ -1,0 +1,873 @@
+{
+  "analysis_date": "2025-12-11T23:37:48+00:00",
+  "repository": "/home/ubuntu/github_repos/travel-hr-buddy",
+  "summary": {
+    "total_dashboards": 172,
+    "analytics_dashboards": 18,
+    "monitoring_dashboards": 16,
+    "management_dashboards": 25,
+    "operational_dashboards": 14
+  },
+  "files": [
+    {
+      "path": "src/components/InteropDashboard.tsx",
+      "lines": 558,
+      "size_bytes": 17038
+    },
+    {
+      "path": "src/components/PerformanceDashboard.tsx",
+      "lines": 202,
+      "size_bytes": 7360
+    },
+    {
+      "path": "src/components/admin/error-dashboard.tsx",
+      "lines": 367,
+      "size_bytes": 14755
+    },
+    {
+      "path": "src/components/admin/health-status-dashboard.tsx",
+      "lines": 395,
+      "size_bytes": 15223
+    },
+    {
+      "path": "src/components/admin/performance-dashboard.tsx",
+      "lines": 344,
+      "size_bytes": 14058
+    },
+    {
+      "path": "src/components/admin/super-admin-dashboard.tsx",
+      "lines": 427,
+      "size_bytes": 14772
+    },
+    {
+      "path": "src/components/admin/user-management-dashboard.tsx",
+      "lines": 516,
+      "size_bytes": 20323
+    },
+    {
+      "path": "src/components/ai/CognitiveDashboard.tsx",
+      "lines": 507,
+      "size_bytes": 20817
+    },
+    {
+      "path": "src/components/ai/CollectiveDashboard.tsx",
+      "lines": 568,
+      "size_bytes": 22446
+    },
+    {
+      "path": "src/components/ai/ai-modules-dashboard.tsx",
+      "lines": 202,
+      "size_bytes": 7775
+    },
+    {
+      "path": "src/components/ai/evolution/BehavioralEvolutionDashboard.tsx",
+      "lines": 358,
+      "size_bytes": 12704
+    },
+    {
+      "path": "src/components/analytics/AnalyticsDashboard.tsx",
+      "lines": 212,
+      "size_bytes": 6685
+    },
+    {
+      "path": "src/components/analytics/advanced-metrics-dashboard.tsx",
+      "lines": 419,
+      "size_bytes": 15149
+    },
+    {
+      "path": "src/components/analytics/analytics-dashboard.tsx",
+      "lines": 275,
+      "size_bytes": 13573
+    },
+    {
+      "path": "src/components/analytics/enhanced-metrics-dashboard.tsx",
+      "lines": 445,
+      "size_bytes": 17253
+    },
+    {
+      "path": "src/components/bcp/risk-management-dashboard.tsx",
+      "lines": 494,
+      "size_bytes": 20565
+    },
+    {
+      "path": "src/components/bi/BIDashboardBuilder.tsx",
+      "lines": 432,
+      "size_bytes": 16013
+    },
+    {
+      "path": "src/components/bi/DashboardJobs.tsx",
+      "lines": 59,
+      "size_bytes": 1966
+    },
+    {
+      "path": "src/components/bridgelink/BridgeLinkDashboard.tsx",
+      "lines": 62,
+      "size_bytes": 2044
+    },
+    {
+      "path": "src/components/compliance/ClassSurveyDashboard.tsx",
+      "lines": 343,
+      "size_bytes": 14198
+    },
+    {
+      "path": "src/components/compliance/ComplianceDashboard.tsx",
+      "lines": 40,
+      "size_bytes": 1561
+    },
+    {
+      "path": "src/components/crew/MLCComplianceDashboard.tsx",
+      "lines": 343,
+      "size_bytes": 14276
+    },
+    {
+      "path": "src/components/crew/crew-wellbeing-dashboard.tsx",
+      "lines": 271,
+      "size_bytes": 11165
+    },
+    {
+      "path": "src/components/dashboard/DashboardActions.tsx",
+      "lines": 283,
+      "size_bytes": 9440
+    },
+    {
+      "path": "src/components/dashboard/DashboardSkeleton.tsx",
+      "lines": 8,
+      "size_bytes": 309
+    },
+    {
+      "path": "src/components/dashboard/DashboardWatchdog.tsx",
+      "lines": 263,
+      "size_bytes": 8026
+    },
+    {
+      "path": "src/components/dashboard/LiveDashboardStats.tsx",
+      "lines": 182,
+      "size_bytes": 6282
+    },
+    {
+      "path": "src/components/dashboard/ai-evolution/AIEvolutionDashboard.tsx",
+      "lines": 361,
+      "size_bytes": 12362
+    },
+    {
+      "path": "src/components/dashboard/business-kpi-dashboard.tsx",
+      "lines": 440,
+      "size_bytes": 14469
+    },
+    {
+      "path": "src/components/dashboard/comprehensive-executive-dashboard.tsx",
+      "lines": 615,
+      "size_bytes": 18247
+    },
+    {
+      "path": "src/components/dashboard/dashboard-analytics.tsx",
+      "lines": 387,
+      "size_bytes": 12782
+    },
+    {
+      "path": "src/components/dashboard/dashboard-widgets.tsx",
+      "lines": 351,
+      "size_bytes": 11262
+    },
+    {
+      "path": "src/components/dashboard/enhanced-dashboard-filters.tsx",
+      "lines": 206,
+      "size_bytes": 7995
+    },
+    {
+      "path": "src/components/dashboard/enhanced-dashboard.tsx",
+      "lines": 642,
+      "size_bytes": 28621
+    },
+    {
+      "path": "src/components/dashboard/enhanced-unified-dashboard.tsx",
+      "lines": 991,
+      "size_bytes": 47511
+    },
+    {
+      "path": "src/components/dashboard/executive-dashboard.tsx",
+      "lines": 520,
+      "size_bytes": 19056
+    },
+    {
+      "path": "src/components/dashboard/global-dashboard.tsx",
+      "lines": 422,
+      "size_bytes": 23167
+    },
+    {
+      "path": "src/components/dashboard/index/DashboardDataProvider.tsx",
+      "lines": 202,
+      "size_bytes": 5951
+    },
+    {
+      "path": "src/components/dashboard/interactive-dashboard.tsx",
+      "lines": 266,
+      "size_bytes": 10333
+    },
+    {
+      "path": "src/components/dashboard/modern-executive-dashboard.tsx",
+      "lines": 283,
+      "size_bytes": 9788
+    },
+    {
+      "path": "src/components/dashboard/modularized-executive-dashboard.tsx",
+      "lines": 231,
+      "size_bytes": 8187
+    },
+    {
+      "path": "src/components/dashboard/professional-analytics-dashboard.tsx",
+      "lines": 459,
+      "size_bytes": 18261
+    },
+    {
+      "path": "src/components/dashboard/professional-fleet-dashboard.tsx",
+      "lines": 460,
+      "size_bytes": 17869
+    },
+    {
+      "path": "src/components/dashboard/professional-weather-dashboard.tsx",
+      "lines": 334,
+      "size_bytes": 13237
+    },
+    {
+      "path": "src/components/dashboard/responsive-dashboard.tsx",
+      "lines": 335,
+      "size_bytes": 13073
+    },
+    {
+      "path": "src/components/dashboard/strategic-dashboard.tsx",
+      "lines": 718,
+      "size_bytes": 30320
+    },
+    {
+      "path": "src/components/dashboard/unified-dashboard.tsx",
+      "lines": 437,
+      "size_bytes": 16779
+    },
+    {
+      "path": "src/components/dp/DPSyncDashboard.tsx",
+      "lines": 72,
+      "size_bytes": 2519
+    },
+    {
+      "path": "src/components/errors/DashboardErrorBoundary.tsx",
+      "lines": 65,
+      "size_bytes": 1372
+    },
+    {
+      "path": "src/components/external-audit/PerformanceDashboard.tsx",
+      "lines": 14,
+      "size_bytes": 379
+    },
+    {
+      "path": "src/components/fleet/FleetTelemetryDashboard.tsx",
+      "lines": 771,
+      "size_bytes": 27599
+    },
+    {
+      "path": "src/components/fleet/fleet-management-dashboard.tsx",
+      "lines": 316,
+      "size_bytes": 12456
+    },
+    {
+      "path": "src/components/fleet/fleet-overview-dashboard.tsx",
+      "lines": 424,
+      "size_bytes": 15337
+    },
+    {
+      "path": "src/components/hr/hr-dashboard.tsx",
+      "lines": 812,
+      "size_bytes": 31371
+    },
+    {
+      "path": "src/components/imca-audit/IMCADPAuditDashboard.tsx",
+      "lines": 541,
+      "size_bytes": 22330
+    },
+    {
+      "path": "src/components/innovation/SystemHealthDashboard.tsx",
+      "lines": 358,
+      "size_bytes": 13445
+    },
+    {
+      "path": "src/components/innovation/iot-dashboard.tsx",
+      "lines": 393,
+      "size_bytes": 13689
+    },
+    {
+      "path": "src/components/intelligence/ai-analytics-dashboard.tsx",
+      "lines": 354,
+      "size_bytes": 12274
+    },
+    {
+      "path": "src/components/legacy/skeleton_DashboardSkeleton.tsx",
+      "lines": 160,
+      "size_bytes": 4721
+    },
+    {
+      "path": "src/components/logistics/enhanced-logistics-dashboard.tsx",
+      "lines": 501,
+      "size_bytes": 23171
+    },
+    {
+      "path": "src/components/logistics/logistics-hub-dashboard.tsx",
+      "lines": 128,
+      "size_bytes": 4722
+    },
+    {
+      "path": "src/components/maintenance/MaintenanceDashboard.tsx",
+      "lines": 158,
+      "size_bytes": 5062
+    },
+    {
+      "path": "src/components/maritime/checklist-dashboard.tsx",
+      "lines": 262,
+      "size_bytes": 9326
+    },
+    {
+      "path": "src/components/maritime/crew-management-dashboard.tsx",
+      "lines": 390,
+      "size_bytes": 14848
+    },
+    {
+      "path": "src/components/maritime/hr-dashboard.tsx",
+      "lines": 844,
+      "size_bytes": 32917
+    },
+    {
+      "path": "src/components/maritime/iot-sensor-dashboard.tsx",
+      "lines": 558,
+      "size_bytes": 21475
+    },
+    {
+      "path": "src/components/maritime/logistics-dashboard.tsx",
+      "lines": 723,
+      "size_bytes": 28076
+    },
+    {
+      "path": "src/components/maritime/maritime-dashboard.tsx",
+      "lines": 445,
+      "size_bytes": 19943
+    },
+    {
+      "path": "src/components/maritime/maritime-system-dashboard.tsx",
+      "lines": 328,
+      "size_bytes": 12747
+    },
+    {
+      "path": "src/components/maritime/vessel-performance-dashboard.tsx",
+      "lines": 373,
+      "size_bytes": 14416
+    },
+    {
+      "path": "src/components/mlc/MLCInspectionDashboard.tsx",
+      "lines": 188,
+      "size_bytes": 12332
+    },
+    {
+      "path": "src/components/mmi/Dashboard.tsx",
+      "lines": 130,
+      "size_bytes": 4272
+    },
+    {
+      "path": "src/components/monitoring/RealTimeMonitoringDashboard.tsx",
+      "lines": 361,
+      "size_bytes": 14631
+    },
+    {
+      "path": "src/components/monitoring/system-monitoring-dashboard.tsx",
+      "lines": 569,
+      "size_bytes": 29715
+    },
+    {
+      "path": "src/components/nautilus/IoTDashboard.tsx",
+      "lines": 200,
+      "size_bytes": 6365
+    },
+    {
+      "path": "src/components/operations/OperationsDashboardRealTime.tsx",
+      "lines": 852,
+      "size_bytes": 30306
+    },
+    {
+      "path": "src/components/operations/operations-dashboard.tsx",
+      "lines": 291,
+      "size_bytes": 10857
+    },
+    {
+      "path": "src/components/ovid/OVIDInspectionDashboard.tsx",
+      "lines": 561,
+      "size_bytes": 23049
+    },
+    {
+      "path": "src/components/peotram/enhanced-peotram-dashboard.tsx",
+      "lines": 731,
+      "size_bytes": 31997
+    },
+    {
+      "path": "src/components/performance/PerformanceDashboard.tsx",
+      "lines": 201,
+      "size_bytes": 7200
+    },
+    {
+      "path": "src/components/performance/SystemHealthDashboard.tsx",
+      "lines": 377,
+      "size_bytes": 14170
+    },
+    {
+      "path": "src/components/performance/WebVitalsDashboard.tsx",
+      "lines": 168,
+      "size_bytes": 5347
+    },
+    {
+      "path": "src/components/price-alerts/components/statistics-dashboard.tsx",
+      "lines": 252,
+      "size_bytes": 8433
+    },
+    {
+      "path": "src/components/price-alerts/price-alert-dashboard.tsx",
+      "lines": 545,
+      "size_bytes": 18711
+    },
+    {
+      "path": "src/components/price-alerts/price-alerts-dashboard-integrated.tsx",
+      "lines": 225,
+      "size_bytes": 7614
+    },
+    {
+      "path": "src/components/price-alerts/price-analytics-dashboard.tsx",
+      "lines": 674,
+      "size_bytes": 25476
+    },
+    {
+      "path": "src/components/production/ProductionHealthDashboard.tsx",
+      "lines": 254,
+      "size_bytes": 8418
+    },
+    {
+      "path": "src/components/reports/functional-reports-dashboard.tsx",
+      "lines": 380,
+      "size_bytes": 14095
+    },
+    {
+      "path": "src/components/reports/reports-dashboard.tsx",
+      "lines": 148,
+      "size_bytes": 6173
+    },
+    {
+      "path": "src/components/reservations/enhanced-reservations-dashboard.tsx",
+      "lines": 422,
+      "size_bytes": 14489
+    },
+    {
+      "path": "src/components/reservations/reservations-dashboard.tsx",
+      "lines": 474,
+      "size_bytes": 16507
+    },
+    {
+      "path": "src/components/saas/saas-dashboard.tsx",
+      "lines": 512,
+      "size_bytes": 21306
+    },
+    {
+      "path": "src/components/security/security-dashboard.tsx",
+      "lines": 379,
+      "size_bytes": 12892
+    },
+    {
+      "path": "src/components/sgso/SgsoDashboard.tsx",
+      "lines": 839,
+      "size_bytes": 39648
+    },
+    {
+      "path": "src/components/strategic/AnalyticsDashboard.tsx",
+      "lines": 487,
+      "size_bytes": 17535
+    },
+    {
+      "path": "src/components/telemetry/TelemetryDashboard360.tsx",
+      "lines": 677,
+      "size_bytes": 27889
+    },
+    {
+      "path": "src/components/ui/back-to-dashboard.tsx",
+      "lines": 31,
+      "size_bytes": 843
+    },
+    {
+      "path": "src/components/ui/system-monitoring-dashboard.tsx",
+      "lines": 237,
+      "size_bytes": 9309
+    },
+    {
+      "path": "src/components/ui/system-status-dashboard.tsx",
+      "lines": 360,
+      "size_bytes": 13994
+    },
+    {
+      "path": "src/hooks/useDashboardStats.ts",
+      "lines": 88,
+      "size_bytes": 2160
+    },
+    {
+      "path": "src/lib/dashboard-utils.ts",
+      "lines": 287,
+      "size_bytes": 7460
+    },
+    {
+      "path": "src/lib/performance/dashboard-optimizer.ts",
+      "lines": 446,
+      "size_bytes": 11819
+    },
+    {
+      "path": "src/mobile/components/MissionDashboard.tsx",
+      "lines": 155,
+      "size_bytes": 5177
+    },
+    {
+      "path": "src/modules/analytics/services/analytics-dashboard-service.ts",
+      "lines": 221,
+      "size_bytes": 6119
+    },
+    {
+      "path": "src/modules/autonomous-procurement/components/ProcurementDashboard.tsx",
+      "lines": 404,
+      "size_bytes": 18368
+    },
+    {
+      "path": "src/modules/compliance-hub/components/ComplianceHubDashboard.tsx",
+      "lines": 275,
+      "size_bytes": 9797
+    },
+    {
+      "path": "src/modules/compliance/mlc-inspection/MLCInspectionDashboard.tsx",
+      "lines": 222,
+      "size_bytes": 8198
+    },
+    {
+      "path": "src/modules/control/bridgelink/BridgeLinkDashboard.tsx",
+      "lines": 215,
+      "size_bytes": 8297
+    },
+    {
+      "path": "src/modules/esg-emissions/components/EmissionsDashboard.tsx",
+      "lines": 441,
+      "size_bytes": 16952
+    },
+    {
+      "path": "src/modules/hr/crew-wellbeing/components/WellbeingDashboard.tsx",
+      "lines": 227,
+      "size_bytes": 7776
+    },
+    {
+      "path": "src/modules/hr/peo-dp/components/DPAnalyticsDashboard.tsx",
+      "lines": 415,
+      "size_bytes": 15156
+    },
+    {
+      "path": "src/modules/hr/training-academy/components/ProgressDashboard.tsx",
+      "lines": 148,
+      "size_bytes": 5188
+    },
+    {
+      "path": "src/modules/incident-reports/components/IncidentMetricsDashboard.tsx",
+      "lines": 217,
+      "size_bytes": 7771
+    },
+    {
+      "path": "src/modules/intelligence/dp-intelligence/components/DPIntelligenceDashboard.tsx",
+      "lines": 236,
+      "size_bytes": 7744
+    },
+    {
+      "path": "src/modules/intelligent-maintenance/components/MMIDashboardSection.tsx",
+      "lines": 307,
+      "size_bytes": 12937
+    },
+    {
+      "path": "src/modules/medical-infirmary/components/InfirmaryDashboard.tsx",
+      "lines": 298,
+      "size_bytes": 13701
+    },
+    {
+      "path": "src/modules/mission-control/components/KPIDashboard.tsx",
+      "lines": 75,
+      "size_bytes": 2453
+    },
+    {
+      "path": "src/modules/mission-control/components/RealTimeMissionDashboard.tsx",
+      "lines": 389,
+      "size_bytes": 13739
+    },
+    {
+      "path": "src/modules/mission-control/mobile/MissionControlMobileDashboard.tsx",
+      "lines": 255,
+      "size_bytes": 8594
+    },
+    {
+      "path": "src/modules/nautilus-academy/components/AcademyDashboard.tsx",
+      "lines": 1383,
+      "size_bytes": 67457
+    },
+    {
+      "path": "src/modules/nautilus-people/components/PeopleDashboard.tsx",
+      "lines": 330,
+      "size_bytes": 12784
+    },
+    {
+      "path": "src/modules/operations/crew-wellbeing/components/HealthMetricsDashboard.tsx",
+      "lines": 246,
+      "size_bytes": 8799
+    },
+    {
+      "path": "src/modules/operations/crew-wellbeing/components/MoodDashboard.tsx",
+      "lines": 279,
+      "size_bytes": 9947
+    },
+    {
+      "path": "src/modules/performance/PerformanceDashboard.tsx",
+      "lines": 447,
+      "size_bytes": 15632
+    },
+    {
+      "path": "src/modules/performance/PerformanceMonitoringDashboard.tsx",
+      "lines": 358,
+      "size_bytes": 12562
+    },
+    {
+      "path": "src/modules/procurement-inventory/components/ProcurementDashboard.tsx",
+      "lines": 486,
+      "size_bytes": 20070
+    },
+    {
+      "path": "src/modules/revolutionary-ai/ESGDashboard.tsx",
+      "lines": 351,
+      "size_bytes": 14154
+    },
+    {
+      "path": "src/modules/safety-guardian/components/SafetyDashboard.tsx",
+      "lines": 516,
+      "size_bytes": 20034
+    },
+    {
+      "path": "src/modules/safety-guardian/components/SafetyDashboardComplete.tsx",
+      "lines": 391,
+      "size_bytes": 12507
+    },
+    {
+      "path": "src/modules/safety-guardian/components/SafetyDashboardNew.tsx",
+      "lines": 138,
+      "size_bytes": 4441
+    },
+    {
+      "path": "src/modules/satellite-tracker/components/DGNSSDashboard.tsx",
+      "lines": 390,
+      "size_bytes": 14449
+    },
+    {
+      "path": "src/modules/satellite-tracker/components/SatelliteDashboard.tsx",
+      "lines": 411,
+      "size_bytes": 16563
+    },
+    {
+      "path": "src/modules/smart-mobility/components/MobilityDashboard.tsx",
+      "lines": 484,
+      "size_bytes": 18856
+    },
+    {
+      "path": "src/modules/solas-isps-training/components/TrainingDashboardSection.tsx",
+      "lines": 458,
+      "size_bytes": 19249
+    },
+    {
+      "path": "src/modules/solas-training/components/TrainingDashboard.tsx",
+      "lines": 320,
+      "size_bytes": 15133
+    },
+    {
+      "path": "src/modules/sonar-ai/components/SonarAIDashboard.tsx",
+      "lines": 416,
+      "size_bytes": 15661
+    },
+    {
+      "path": "src/modules/ui/dashboard/Dashboard.tsx",
+      "lines": 6,
+      "size_bytes": 182
+    },
+    {
+      "path": "src/pages/BIDashboard.tsx",
+      "lines": 22,
+      "size_bytes": 581
+    },
+    {
+      "path": "src/pages/Dashboard.tsx",
+      "lines": 360,
+      "size_bytes": 14094
+    },
+    {
+      "path": "src/pages/ExecutiveDashboard.tsx",
+      "lines": 6,
+      "size_bytes": 191
+    },
+    {
+      "path": "src/pages/FleetDashboard.tsx",
+      "lines": 6,
+      "size_bytes": 186
+    },
+    {
+      "path": "src/pages/MMIDashboard.tsx",
+      "lines": 15,
+      "size_bytes": 464
+    },
+    {
+      "path": "src/pages/WeatherDashboard.tsx",
+      "lines": 9,
+      "size_bytes": 231
+    },
+    {
+      "path": "src/pages/admin/LighthouseDashboard.tsx",
+      "lines": 344,
+      "size_bytes": 11162
+    },
+    {
+      "path": "src/pages/admin/advanced-analytics-dashboard.tsx",
+      "lines": 426,
+      "size_bytes": 12442
+    },
+    {
+      "path": "src/pages/admin/audit-dashboard.tsx",
+      "lines": 363,
+      "size_bytes": 12659
+    },
+    {
+      "path": "src/pages/admin/checklists-dashboard.tsx",
+      "lines": 155,
+      "size_bytes": 4573
+    },
+    {
+      "path": "src/pages/admin/compliance-dashboard.tsx",
+      "lines": 297,
+      "size_bytes": 11055
+    },
+    {
+      "path": "src/pages/admin/dashboard-auditorias.tsx",
+      "lines": 233,
+      "size_bytes": 7587
+    },
+    {
+      "path": "src/pages/admin/dashboard.tsx",
+      "lines": 514,
+      "size_bytes": 16667
+    },
+    {
+      "path": "src/pages/admin/documents/restore-dashboard.tsx",
+      "lines": 643,
+      "size_bytes": 20598
+    },
+    {
+      "path": "src/pages/admin/performance-dashboard.tsx",
+      "lines": 411,
+      "size_bytes": 14926
+    },
+    {
+      "path": "src/pages/admin/reports/dashboard-logs.tsx",
+      "lines": 241,
+      "size_bytes": 8659
+    },
+    {
+      "path": "src/pages/ai/AIDashboard.tsx",
+      "lines": 9,
+      "size_bytes": 216
+    },
+    {
+      "path": "src/pages/ai/learning-dashboard.tsx",
+      "lines": 395,
+      "size_bytes": 14147
+    },
+    {
+      "path": "src/pages/compliance/PrePSCDashboard.tsx",
+      "lines": 242,
+      "size_bytes": 8880
+    },
+    {
+      "path": "src/pages/dashboard/QualityDashboard.tsx",
+      "lines": 508,
+      "size_bytes": 18048
+    },
+    {
+      "path": "src/pages/mission-control/insight-dashboard.tsx",
+      "lines": 483,
+      "size_bytes": 18275
+    },
+    {
+      "path": "src/pages/qa/PreviewValidationDashboard.tsx",
+      "lines": 231,
+      "size_bytes": 8803
+    },
+    {
+      "path": "src/styles/dashboard.module.css",
+      "lines": 76,
+      "size_bytes": 1335
+    },
+    {
+      "path": "src/tests/bi-dashboard-jobs.test.tsx",
+      "lines": 86,
+      "size_bytes": 2389
+    },
+    {
+      "path": "src/tests/components/dp-intelligence/dp-intelligence-dashboard.test.tsx",
+      "lines": 253,
+      "size_bytes": 7700
+    },
+    {
+      "path": "src/tests/components/dp/DPSyncDashboard.test.tsx",
+      "lines": 91,
+      "size_bytes": 2517
+    },
+    {
+      "path": "src/tests/integration/auth-to-dashboard.test.tsx",
+      "lines": 136,
+      "size_bytes": 3929
+    },
+    {
+      "path": "src/tests/mmi-dashboard.test.ts",
+      "lines": 156,
+      "size_bytes": 4925
+    },
+    {
+      "path": "src/tests/modules/bridgelink/BridgeLinkDashboard.test.tsx",
+      "lines": 156,
+      "size_bytes": 4578
+    },
+    {
+      "path": "src/tests/pages/admin/dashboard.test.tsx",
+      "lines": 318,
+      "size_bytes": 9147
+    },
+    {
+      "path": "src/tests/pages/admin/documents/restore-dashboard-enhancements.test.tsx",
+      "lines": 190,
+      "size_bytes": 6106
+    },
+    {
+      "path": "src/tests/performance-dashboard.test.ts",
+      "lines": 353,
+      "size_bytes": 10218
+    },
+    {
+      "path": "src/tests/send-restore-dashboard-daily.test.ts",
+      "lines": 225,
+      "size_bytes": 7223
+    },
+    {
+      "path": "src/tests/send-restore-dashboard.test.ts",
+      "lines": 178,
+      "size_bytes": 5287
+    },
+    {
+      "path": "src/types/dashboard.ts",
+      "lines": 55,
+      "size_bytes": 1125
+    }
+  ]
+}

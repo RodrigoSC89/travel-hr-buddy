@@ -1,0 +1,686 @@
+{
+  "analysis_date": "2025-12-11T23:39:26+00:00",
+  "repository": "/home/ubuntu/github_repos/travel-hr-buddy",
+  "summary": {
+    "total_services": 105,
+    "total_utilities": 29,
+    "api_services": 2,
+    "data_services": 0,
+    "auth_services": 2,
+    "storage_services": 2
+  },
+  "services": [
+    {
+      "path": "src/components/integration/service-status-panel.tsx",
+      "lines": 98,
+      "size_bytes": 3663
+    },
+    {
+      "path": "src/core/telemetry/telemetryService.ts",
+      "lines": 137,
+      "size_bytes": 3252
+    },
+    {
+      "path": "src/hooks/use-service-integrations.ts",
+      "lines": 80,
+      "size_bytes": 2104
+    },
+    {
+      "path": "src/lib/documents/workflow-service.ts",
+      "lines": 428,
+      "size_bytes": 9747
+    },
+    {
+      "path": "src/lib/drone/command-service.ts",
+      "lines": 379,
+      "size_bytes": 9295
+    },
+    {
+      "path": "src/lib/errors/error-tracking-service.ts",
+      "lines": 449,
+      "size_bytes": 10937
+    },
+    {
+      "path": "src/lib/performance/service-worker-advanced.ts",
+      "lines": 404,
+      "size_bytes": 10798
+    },
+    {
+      "path": "src/lib/pwa/service-worker-config.ts",
+      "lines": 74,
+      "size_bytes": 1801
+    },
+    {
+      "path": "src/lib/pwa/service-worker-manager.ts",
+      "lines": 231,
+      "size_bytes": 6074
+    },
+    {
+      "path": "src/lib/pwa/service-worker-registration.ts",
+      "lines": 218,
+      "size_bytes": 5900
+    },
+    {
+      "path": "src/lib/service-worker-register.ts",
+      "lines": 77,
+      "size_bytes": 2268
+    },
+    {
+      "path": "src/mobile/services/compression-service.ts",
+      "lines": 40,
+      "size_bytes": 1035
+    },
+    {
+      "path": "src/mobile/services/local-storage-service.ts",
+      "lines": 450,
+      "size_bytes": 11175
+    },
+    {
+      "path": "src/modules/analytics/services/analytics-dashboard-service.ts",
+      "lines": 221,
+      "size_bytes": 6119
+    },
+    {
+      "path": "src/modules/analytics/services/export-service.ts",
+      "lines": 92,
+      "size_bytes": 2485
+    },
+    {
+      "path": "src/modules/compliance/ism-audit/export-service.ts",
+      "lines": 303,
+      "size_bytes": 9013
+    },
+    {
+      "path": "src/modules/deep-risk-ai/services/deep-risk-ai-service.ts",
+      "lines": 142,
+      "size_bytes": 4241
+    },
+    {
+      "path": "src/modules/deep-risk-ai/services/deepRiskAIService.ts",
+      "lines": 521,
+      "size_bytes": 16107
+    },
+    {
+      "path": "src/modules/document-hub/templates/services/template-variables-service.ts",
+      "lines": 174,
+      "size_bytes": 5216
+    },
+    {
+      "path": "src/modules/document-hub/templates/services/templateSystemService.ts",
+      "lines": 522,
+      "size_bytes": 14117
+    },
+    {
+      "path": "src/modules/features/checklists/services/checklistService.ts",
+      "lines": 236,
+      "size_bytes": 6710
+    },
+    {
+      "path": "src/modules/incident-reports/services/incident-service.ts",
+      "lines": 98,
+      "size_bytes": 3689
+    },
+    {
+      "path": "src/modules/incident-reports/services/incidentReplayService.ts",
+      "lines": 371,
+      "size_bytes": 10991
+    },
+    {
+      "path": "src/modules/mission-control/mobile/syncService.ts",
+      "lines": 291,
+      "size_bytes": 7951
+    },
+    {
+      "path": "src/modules/mission-control/services/mission-control-service.ts",
+      "lines": 322,
+      "size_bytes": 9020
+    },
+    {
+      "path": "src/modules/mission-control/services/mission-logs-service.ts",
+      "lines": 154,
+      "size_bytes": 4287
+    },
+    {
+      "path": "src/modules/ocean-sonar/services/sonarPersistenceService.ts",
+      "lines": 265,
+      "size_bytes": 7419
+    },
+    {
+      "path": "src/modules/price-alerts/services/price-alerts-service.ts",
+      "lines": 449,
+      "size_bytes": 11829
+    },
+    {
+      "path": "src/modules/satcom/services/failover-service.ts",
+      "lines": 353,
+      "size_bytes": 9499
+    },
+    {
+      "path": "src/modules/satcom/services/ping-service.ts",
+      "lines": 269,
+      "size_bytes": 6787
+    },
+    {
+      "path": "src/modules/satellite-tracker/services/satellite-tracking-service.ts",
+      "lines": 390,
+      "size_bytes": 10169
+    },
+    {
+      "path": "src/modules/satellite/services/satellite-events-service.ts",
+      "lines": 116,
+      "size_bytes": 3157
+    },
+    {
+      "path": "src/modules/satellite/services/satellite-orbit-service.ts",
+      "lines": 401,
+      "size_bytes": 13130
+    },
+    {
+      "path": "src/modules/sonar-ai/services/enhanced-ai-service.ts",
+      "lines": 371,
+      "size_bytes": 10037
+    },
+    {
+      "path": "src/modules/sonar-ai/services/sonarAIService.ts",
+      "lines": 453,
+      "size_bytes": 13178
+    },
+    {
+      "path": "src/modules/sonar-ai/sonar-service.ts",
+      "lines": 312,
+      "size_bytes": 8289
+    },
+    {
+      "path": "src/modules/system-watchdog/watchdog-service.ts",
+      "lines": 451,
+      "size_bytes": 12199
+    },
+    {
+      "path": "src/modules/travel/services/travel-service.ts",
+      "lines": 233,
+      "size_bytes": 6817
+    },
+    {
+      "path": "src/modules/underwater-drone/services/droneMissionService.ts",
+      "lines": 337,
+      "size_bytes": 9112
+    },
+    {
+      "path": "src/modules/underwater-drone/services/missionRecorderService.ts",
+      "lines": 356,
+      "size_bytes": 9505
+    },
+    {
+      "path": "src/modules/underwater-drone/services/underwaterMissionService.ts",
+      "lines": 314,
+      "size_bytes": 8519
+    },
+    {
+      "path": "src/services/ai-feedback-service.ts",
+      "lines": 154,
+      "size_bytes": 4587
+    },
+    {
+      "path": "src/services/ai-memory-service.ts",
+      "lines": 156,
+      "size_bytes": 4834
+    },
+    {
+      "path": "src/services/ai/distributed-ai.service.ts",
+      "lines": 124,
+      "size_bytes": 3778
+    },
+    {
+      "path": "src/services/ai/mission-coordination.service.ts",
+      "lines": 203,
+      "size_bytes": 5769
+    },
+    {
+      "path": "src/services/aiDocumentService.ts",
+      "lines": 378,
+      "size_bytes": 10564
+    },
+    {
+      "path": "src/services/analytics.service.ts",
+      "lines": 312,
+      "size_bytes": 8396
+    },
+    {
+      "path": "src/services/api/starfix/starfix.service.ts",
+      "lines": 382,
+      "size_bytes": 11491
+    },
+    {
+      "path": "src/services/api/terrastar/terrastar.service.ts",
+      "lines": 418,
+      "size_bytes": 11401
+    },
+    {
+      "path": "src/services/autonomy.service.ts",
+      "lines": 345,
+      "size_bytes": 8971
+    },
+    {
+      "path": "src/services/backup-service.ts",
+      "lines": 171,
+      "size_bytes": 4829
+    },
+    {
+      "path": "src/services/cognitive/clone.service.ts",
+      "lines": 188,
+      "size_bytes": 5285
+    },
+    {
+      "path": "src/services/cognitive/context-mesh.service.ts",
+      "lines": 145,
+      "size_bytes": 4017
+    },
+    {
+      "path": "src/services/cognitive/instance-controller.service.ts",
+      "lines": 168,
+      "size_bytes": 4147
+    },
+    {
+      "path": "src/services/cognitive/priority-balancer.service.ts",
+      "lines": 182,
+      "size_bytes": 5220
+    },
+    {
+      "path": "src/services/cognitive/translator.service.ts",
+      "lines": 197,
+      "size_bytes": 5120
+    },
+    {
+      "path": "src/services/coordinationAIService.ts",
+      "lines": 405,
+      "size_bytes": 11257
+    },
+    {
+      "path": "src/services/deepRiskAIService.ts",
+      "lines": 343,
+      "size_bytes": 9962
+    },
+    {
+      "path": "src/services/dgnss-service.ts",
+      "lines": 353,
+      "size_bytes": 9133
+    },
+    {
+      "path": "src/services/enhanced-auth-service.ts",
+      "lines": 273,
+      "size_bytes": 7153
+    },
+    {
+      "path": "src/services/finance-hub.service.ts",
+      "lines": 651,
+      "size_bytes": 18127
+    },
+    {
+      "path": "src/services/fuel-optimization-service.ts",
+      "lines": 313,
+      "size_bytes": 10032
+    },
+    {
+      "path": "src/services/imca-audit-service.ts",
+      "lines": 206,
+      "size_bytes": 5052
+    },
+    {
+      "path": "src/services/integration/nautilus-integration.service.ts",
+      "lines": 138,
+      "size_bytes": 5731
+    },
+    {
+      "path": "src/services/integrations.service.ts",
+      "lines": 596,
+      "size_bytes": 17486
+    },
+    {
+      "path": "src/services/messageService.ts",
+      "lines": 465,
+      "size_bytes": 13102
+    },
+    {
+      "path": "src/services/mission-control.service.ts",
+      "lines": 579,
+      "size_bytes": 16563
+    },
+    {
+      "path": "src/services/mlc-inspection.service.ts",
+      "lines": 306,
+      "size_bytes": 9286
+    },
+    {
+      "path": "src/services/mmi/embeddingService.ts",
+      "lines": 82,
+      "size_bytes": 2296
+    },
+    {
+      "path": "src/services/mmi/forecastService.ts",
+      "lines": 196,
+      "size_bytes": 7840
+    },
+    {
+      "path": "src/services/mmi/forecastStorageService.ts",
+      "lines": 76,
+      "size_bytes": 2050
+    },
+    {
+      "path": "src/services/mmi/historyService.ts",
+      "lines": 144,
+      "size_bytes": 3521
+    },
+    {
+      "path": "src/services/mmi/ordersService.ts",
+      "lines": 167,
+      "size_bytes": 3902
+    },
+    {
+      "path": "src/services/mmi/pdfReportService.ts",
+      "lines": 344,
+      "size_bytes": 10830
+    },
+    {
+      "path": "src/services/mmi/resolvedWorkOrdersService.ts",
+      "lines": 263,
+      "size_bytes": 7253
+    },
+    {
+      "path": "src/services/mmi/taskService.ts",
+      "lines": 275,
+      "size_bytes": 6961
+    },
+    {
+      "path": "src/services/nlp-service.ts",
+      "lines": 506,
+      "size_bytes": 14513
+    },
+    {
+      "path": "src/services/oauth-service.ts",
+      "lines": 441,
+      "size_bytes": 12590
+    },
+    {
+      "path": "src/services/oceanSonarAIService.ts",
+      "lines": 328,
+      "size_bytes": 9298
+    },
+    {
+      "path": "src/services/ocr-service.ts",
+      "lines": 161,
+      "size_bytes": 3966
+    },
+    {
+      "path": "src/services/peodp-inference-service.ts",
+      "lines": 497,
+      "size_bytes": 17246
+    },
+    {
+      "path": "src/services/pre-psc.service.ts",
+      "lines": 358,
+      "size_bytes": 10115
+    },
+    {
+      "path": "src/services/price-alerts-service.ts",
+      "lines": 232,
+      "size_bytes": 5675
+    },
+    {
+      "path": "src/services/reporting-engine.service.ts",
+      "lines": 219,
+      "size_bytes": 5061
+    },
+    {
+      "path": "src/services/risk-ops.service.ts",
+      "lines": 218,
+      "size_bytes": 5275
+    },
+    {
+      "path": "src/services/satellite.service.ts",
+      "lines": 669,
+      "size_bytes": 18226
+    },
+    {
+      "path": "src/services/sensorsHubService.ts",
+      "lines": 273,
+      "size_bytes": 7495
+    },
+    {
+      "path": "src/services/session-management-service.ts",
+      "lines": 159,
+      "size_bytes": 4623
+    },
+    {
+      "path": "src/services/sgso-audit-service.ts",
+      "lines": 106,
+      "size_bytes": 2648
+    },
+    {
+      "path": "src/services/smart-drills.service.ts",
+      "lines": 335,
+      "size_bytes": 8750
+    },
+    {
+      "path": "src/services/smart-scheduler.service.ts",
+      "lines": 183,
+      "size_bytes": 4517
+    },
+    {
+      "path": "src/services/space-weather/celestrak.service.ts",
+      "lines": 504,
+      "size_bytes": 14773
+    },
+    {
+      "path": "src/services/space-weather/dp-asog-client.service.ts",
+      "lines": 419,
+      "size_bytes": 12206
+    },
+    {
+      "path": "src/services/space-weather/hybrid-monitoring.service.ts",
+      "lines": 410,
+      "size_bytes": 11646
+    },
+    {
+      "path": "src/services/space-weather/noaa-swpc.service.ts",
+      "lines": 501,
+      "size_bytes": 12913
+    },
+    {
+      "path": "src/services/space-weather/space-weather-monitoring.service.ts",
+      "lines": 460,
+      "size_bytes": 14727
+    },
+    {
+      "path": "src/services/template-application.service.ts",
+      "lines": 305,
+      "size_bytes": 7872
+    },
+    {
+      "path": "src/services/training-ai.service.ts",
+      "lines": 535,
+      "size_bytes": 16840
+    },
+    {
+      "path": "src/services/travel-price-service.ts",
+      "lines": 326,
+      "size_bytes": 7701
+    },
+    {
+      "path": "src/services/unified/ai-engines.service.ts",
+      "lines": 419,
+      "size_bytes": 12220
+    },
+    {
+      "path": "src/services/unified/offline-cache.service.ts",
+      "lines": 365,
+      "size_bytes": 11368
+    },
+    {
+      "path": "src/services/unified/openai-client.service.ts",
+      "lines": 468,
+      "size_bytes": 11334
+    },
+    {
+      "path": "src/services/voice.service.ts",
+      "lines": 597,
+      "size_bytes": 16041
+    },
+    {
+      "path": "src/services/weatherService.ts",
+      "lines": 339,
+      "size_bytes": 8432
+    },
+    {
+      "path": "src/services/web-vitals-service.ts",
+      "lines": 125,
+      "size_bytes": 3350
+    }
+  ],
+  "utilities": [
+    {
+      "path": "src/ai/nautilus-core.ts",
+      "lines": 197,
+      "size_bytes": 5158
+    },
+    {
+      "path": "src/ai/nautilus-inference.ts",
+      "lines": 394,
+      "size_bytes": 11276
+    },
+    {
+      "path": "src/hooks/useNautilusAI.ts",
+      "lines": 175,
+      "size_bytes": 6811
+    },
+    {
+      "path": "src/hooks/useNautilusBrain.ts",
+      "lines": 154,
+      "size_bytes": 4896
+    },
+    {
+      "path": "src/hooks/useNautilusEnhancementAI.ts",
+      "lines": 160,
+      "size_bytes": 5409
+    },
+    {
+      "path": "src/hooks/useNautilusPredictions.ts",
+      "lines": 76,
+      "size_bytes": 2043
+    },
+    {
+      "path": "src/lib/accessibility/a11y-utils.ts",
+      "lines": 212,
+      "size_bytes": 5666
+    },
+    {
+      "path": "src/lib/ai/nautilus-command.ts",
+      "lines": 122,
+      "size_bytes": 3356
+    },
+    {
+      "path": "src/lib/ai/nautilusLLM.ts",
+      "lines": 183,
+      "size_bytes": 4974
+    },
+    {
+      "path": "src/lib/cleanup-utils.ts",
+      "lines": 322,
+      "size_bytes": 7103
+    },
+    {
+      "path": "src/lib/dashboard-utils.ts",
+      "lines": 287,
+      "size_bytes": 7460
+    },
+    {
+      "path": "src/lib/mobile/capacitor-utils.ts",
+      "lines": 152,
+      "size_bytes": 3992
+    },
+    {
+      "path": "src/lib/sgso-ai-helpers.ts",
+      "lines": 496,
+      "size_bytes": 16550
+    },
+    {
+      "path": "src/lib/status-utils.ts",
+      "lines": 111,
+      "size_bytes": 4296
+    },
+    {
+      "path": "src/lib/testing/e2e-helpers.ts",
+      "lines": 202,
+      "size_bytes": 4346
+    },
+    {
+      "path": "src/lib/theme/nautilus-theme.ts",
+      "lines": 92,
+      "size_bytes": 3068
+    },
+    {
+      "path": "src/lib/theme/theme-utils.ts",
+      "lines": 143,
+      "size_bytes": 3441
+    },
+    {
+      "path": "src/lib/type-helpers.ts",
+      "lines": 44,
+      "size_bytes": 1300
+    },
+    {
+      "path": "src/lib/unified/format-utils.unified.ts",
+      "lines": 324,
+      "size_bytes": 8254
+    },
+    {
+      "path": "src/lib/utils.ts",
+      "lines": 28,
+      "size_bytes": 748
+    },
+    {
+      "path": "src/modules/document-hub/templates/services/template-utils.ts",
+      "lines": 38,
+      "size_bytes": 1035
+    },
+    {
+      "path": "src/modules/nautilus-command/hooks/useNautilusCommandAI.ts",
+      "lines": 289,
+      "size_bytes": 9295
+    },
+    {
+      "path": "src/modules/nautilus-people/hooks/useNautilusPeopleAI.ts",
+      "lines": 116,
+      "size_bytes": 3782
+    },
+    {
+      "path": "src/services/integration/nautilus-integration.service.ts",
+      "lines": 138,
+      "size_bytes": 5731
+    },
+    {
+      "path": "src/utils/checklist-summary-helper.ts",
+      "lines": 192,
+      "size_bytes": 4727
+    },
+    {
+      "path": "src/utils/format-utils.ts",
+      "lines": 22,
+      "size_bytes": 455
+    },
+    {
+      "path": "src/utils/performance-utils.ts",
+      "lines": 415,
+      "size_bytes": 10922
+    },
+    {
+      "path": "src/utils/pwa-utils.ts",
+      "lines": 281,
+      "size_bytes": 7971
+    },
+    {
+      "path": "src/utils/supabase-helpers.ts",
+      "lines": 94,
+      "size_bytes": 2603
+    }
+  ]
+}

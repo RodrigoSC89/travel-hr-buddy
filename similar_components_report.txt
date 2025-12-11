@@ -1,0 +1,276 @@
+# ANÁLISE DE COMPONENTES SIMILARES - NAUTILUS ONE
+# Data: Thu Dec 11 23:38:14 UTC 2025
+# Repositório: /home/ubuntu/github_repos/travel-hr-buddy
+
+Total de componentes encontrados: 1860
+
+=================================================
+1. COMPONENTES COM NOMES SIMILARES
+=================================================
+
+[1.1] Componentes com sufixos de versão (-v2, -new, -old, etc):
+  - CopilotV2
+  - FleetCockpit360
+  - OceanSonarValidationV2
+  - Patch530MissionControlV2
+  - Patch533UnderwaterDroneV2
+  - PerformanceEngineV1
+  - SonarAIValidationV2
+  - SonarAIValidationV3
+  - TelemetryDashboard360
+  - UnderwaterDroneValidationV2
+  - crew-management-2
+  - maritime-gpt-3
+  - org-360
+
+  Total: 13 componentes versionados
+
+[1.2] Componentes com prefixos similares:
+
+
+=================================================
+2. ANÁLISE DE CÓDIGO DUPLICADO
+=================================================
+
+[2.1] Componentes com estrutura similar (mesmos imports):
+Grupo com 7 componentes com imports idênticos:
+  - src/ai/anomaly/validation/Patch607Validation.tsx
+  - src/ai/inference/validation/Patch612Validation.tsx
+  - src/ai/security/validation/Patch614Validation.tsx
+  - src/ai/visual/validation/Patch606Validation.tsx
+  - src/assistants/voice/validation/Patch608Validation.tsx
+  - src/assistants/voice/validation/Patch609Validation.tsx
+  - src/assistants/voice/validation/Patch610Validation.tsx
+
+
+=================================================
+3. COMPONENTES GENERALIZÁVEIS
+=================================================
+
+[3.1] Componentes de formulário (candidatos para FormBase):
+  - src/ai/decision-simulator/SimulationVisualization.tsx
+  - src/ai/decisions/validation/Patch613Validation.tsx
+  - src/ai/feedback/validation/Patch603Validation.tsx
+  - src/ai/reporting/executive-summary.tsx
+  - src/ai/trust-engine/TrustScoreDisplay.tsx
+  - src/components/CommandPalette.tsx
+  - src/components/RouteSkeletons.tsx
+  - src/components/admin/ModuleList.tsx
+  - src/components/admin/ProductionReadinessPanel.tsx
+  - src/components/admin/PromptPanel.tsx
+  - src/components/admin/UserManagementHub.tsx
+  - src/components/admin/knowledge-management.tsx
+  - src/components/admin/organization-customization.tsx
+  - src/components/admin/performance-dashboard.tsx
+  - src/components/admin/super-admin-dashboard.tsx
+  - src/components/admin/user-management-dashboard.tsx
+  - src/components/admin/user-management-multi-tenant.tsx
+  - src/components/ai/AIAuditPanel.tsx
+  - src/components/ai/AIModuleEnhancer.tsx
+  - src/components/ai/IntelligentReportsAI.tsx
+  Total: 635 componentes de formulário
+
+[3.2] Componentes de tabela (candidatos para TableBase):
+  - src/components/RouteSkeletons.tsx
+  - src/components/admin/UserManagementHub.tsx
+  - src/components/admin/system-backup-audit.tsx
+  - src/components/admin/user-management-dashboard.tsx
+  - src/components/admin/user-management-multi-tenant.tsx
+  - src/components/ai/AIAuditPanel.tsx
+  - src/components/auth/RoleConfigurator.tsx
+  - src/components/auth/SessionManagement.tsx
+  - src/components/bi/ComplianceByVesselTable.tsx
+  - src/components/bi/ExportPDF.tsx
+  - src/components/bi/PainelBI.tsx
+  - src/components/compliance/ComplianceReporter.tsx
+  - src/components/crew/STCWCompetencyMatrix.tsx
+  - src/components/crew/competency-heatmap.tsx
+  - src/components/crew/crew-schedule-manager.tsx
+  - src/components/dashboard/LayoutGrid.tsx
+  - src/components/finance/CrewPayrollManager.tsx
+  - src/components/fuel/fuel-optimizer.tsx
+  - src/components/hr/hr-dashboard.tsx
+  - src/components/imca-audit/IMCADPCompetencyMatrix.tsx
+  Total: 136 componentes de tabela
+
+[3.3] Componentes de card (candidatos para CardBase):
+  - src/ai/anomaly/validation/Patch607Validation.tsx
+  - src/ai/context/validation/Patch602Validation.tsx
+  - src/ai/decision-simulator/SimulationVisualization.tsx
+  - src/ai/decisions/validation/Patch613Validation.tsx
+  - src/ai/feedback/validation/Patch603Validation.tsx
+  - src/ai/inference/validation/Patch612Validation.tsx
+  - src/ai/learning/validation/Patch605Validation.tsx
+  - src/ai/reasoning/validation/Patch601Validation.tsx
+  - src/ai/reporting/executive-summary.tsx
+  - src/ai/security/validation/Patch614Validation.tsx
+  - src/ai/tactics/validation/Patch604Validation.tsx
+  - src/ai/trust-engine/TrustScoreDisplay.tsx
+  - src/ai/visual/validation/Patch606Validation.tsx
+  - src/assistants/voice/validation/Patch608Validation.tsx
+  - src/assistants/voice/validation/Patch609Validation.tsx
+  - src/assistants/voice/validation/Patch610Validation.tsx
+  - src/components/AnimatedCard.tsx
+  - src/components/InteropDashboard.tsx
+  - src/components/LoadingStates.tsx
+  - src/components/PerformanceDashboard.tsx
+  Total: 1315 componentes de card
+
+[3.4] Componentes de modal (candidatos para ModalBase):
+  - src/ai/feedback/validation/Patch603Validation.tsx
+  - src/components/CommandPalette.tsx
+  - src/components/admin/UserManagementHub.tsx
+  - src/components/admin/knowledge-management.tsx
+  - src/components/admin/super-admin-dashboard.tsx
+  - src/components/admin/user-management-dashboard.tsx
+  - src/components/admin/user-management-multi-tenant.tsx
+  - src/components/ai/advanced-ai-insights.tsx
+  - src/components/ai/integrated-ai-assistant.tsx
+  - src/components/ai/nautilus-copilot-advanced.tsx
+  - src/components/api/ApiKeyManagement.tsx
+  - src/components/automation/automated-reports-manager.tsx
+  - src/components/automation/automation-workflows-manager.tsx
+  - src/components/automation/smart-workflow-automation.tsx
+  - src/components/automation/workflow-automation-hub.tsx
+  - src/components/channel-manager/ChannelManagerHub.tsx
+  - src/components/channel-manager/ChannelManagerProfessional.tsx
+  - src/components/channel-manager/EnhancedChannelManager.tsx
+  - src/components/communication/CommunicationCenterProfessional.tsx
+  - src/components/communication/channel-manager.tsx
+  Total: 254 componentes de modal
+
+
+=================================================
+4. ANÁLISE DE PROPS E INTERFACES
+=================================================
+
+[4.1] Componentes com interfaces complexas (>10 props):
+  - src/ai/anomaly/validation/Patch607Validation.tsx (19 props)
+  - src/ai/decisions/validation/Patch613Validation.tsx (21 props)
+  - src/ai/inference/validation/Patch612Validation.tsx (25 props)
+  - src/ai/reporting/executive-summary.tsx (47 props)
+  - src/ai/security/validation/Patch614Validation.tsx (27 props)
+  - src/ai/trust-engine/TrustScoreDisplay.tsx (16 props)
+  - src/ai/visual/validation/Patch606Validation.tsx (15 props)
+  - src/assistants/voice/validation/Patch608Validation.tsx (20 props)
+  - src/assistants/voice/validation/Patch609Validation.tsx (19 props)
+  - src/assistants/voice/validation/Patch610Validation.tsx (21 props)
+  - src/components/AnimatedCard.tsx (12 props)
+  - src/components/DPOperationsMonitor.tsx (119 props)
+  - src/components/ErrorBoundary.tsx (28 props)
+  - src/components/InteropDashboard.tsx (35 props)
+  - src/components/OptimizedImage.tsx (11 props)
+  - src/components/PageTransition.tsx (21 props)
+  - src/components/admin/APIStatus.tsx (11 props)
+  - src/components/admin/devops-panel.tsx (16 props)
+  - src/components/admin/knowledge-management.tsx (27 props)
+  - src/components/admin/super-admin-dashboard.tsx (25 props)
+  - src/components/admin/user-management-multi-tenant.tsx (11 props)
+  - src/components/ai/AIModuleEnhancer.tsx (23 props)
+  - src/components/ai/AutonomousAgentPanel.tsx (21 props)
+  - src/components/ai/AutonomousProcurementAI.tsx (30 props)
+  - src/components/ai/CollectiveDashboard.tsx (17 props)
+  - src/components/ai/IntelligentReportsAI.tsx (21 props)
+  - src/components/ai/NaturalLanguageInterface.tsx (17 props)
+  - src/components/ai/PerformanceMonitor.tsx (22 props)
+  - src/components/ai/PredictiveMaintenanceAI.tsx (20 props)
+  - src/components/ai/PredictiveRecommendationsPanel.tsx (27 props)
+  - src/components/ai/ScenarioSimulatorPanel.tsx (12 props)
+  - src/components/ai/WorkflowAISuggestions.tsx (23 props)
+  - src/components/ai/ai-assistant.tsx (26 props)
+  - src/components/ai/evolution/BehavioralEvolutionDashboard.tsx (14 props)
+  - src/components/ai/integrated-ai-assistant.tsx (19 props)
+  - src/components/ai/nautilus-copilot-advanced.tsx (22 props)
+  - src/components/analytics/PredictiveAnalytics.tsx (12 props)
+  - src/components/analytics/RealTimeMetrics.tsx (14 props)
+  - src/components/analytics/advanced-fleet-analytics.tsx (36 props)
+  - src/components/analytics/advanced-metrics-dashboard.tsx (22 props)
+  - src/components/analytics/predictive-analytics-enhanced.tsx (25 props)
+  - src/components/analytics/real-time-analytics.tsx (14 props)
+  - src/components/api/ApiDocumentation.tsx (22 props)
+  - src/components/api/ApiKeyManagement.tsx (22 props)
+  - src/components/auth/AuditTrailViewer.tsx (16 props)
+  - src/components/auth/RoleGuard.tsx (17 props)
+
+
+=================================================
+5. PADRÕES DE REUTILIZAÇÃO
+=================================================
+
+[5.1] Hooks customizados mais utilizados:
+   5965 useState
+   1457 useEffect
+    869 useToast
+    343 useCallback
+    283 useRef
+    186 useNavigate
+    159 useMemo
+    143 useAuth
+     71 useQuery
+     46 useNautilusEnhancementAI
+     44 useContext
+     39 useNautilusAI
+     31 usePermissions
+     29 useNetworkStatus
+     28 useOptimizedPolling
+     28 useLocation
+     25 useEditor
+     24 useOrganization
+     24 useMaritimeActions
+     17 useOfflineSync
+
+[5.2] Componentes base mais importados:
+   1103  Button 
+   1097  Badge 
+    567  Card, CardContent, CardDescription, CardHeader, CardTitle 
+    485  Tabs, TabsContent, TabsList, TabsTrigger 
+    478  Input 
+    426  Card, CardContent, CardHeader, CardTitle 
+    391  Progress 
+    288  Label 
+    258  ScrollArea 
+    256  Select, SelectContent, SelectItem, SelectTrigger, SelectValue 
+    213  Textarea 
+    112  Card, CardContent, CardHeader, CardTitle, CardDescription 
+     91  Checkbox 
+     86  Switch 
+     68  ModulePageWrapper 
+     67  Separator 
+     66  Card, CardContent 
+     62  ModuleHeader 
+     50  Alert, AlertDescription 
+     39  Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger 
+
+
+=================================================
+6. MÉTRICAS DE COMPLEXIDADE
+=================================================
+
+Componente                                    | Linhas | JSX | Hooks | Complexidade
+----------------------------------------------|--------|-----|-------|-------------
+App.tsx                                       |    284 | 121 |     6 |          58
+Patch607Validation.tsx                        |    198 |  35 |     4 |          30
+Patch602Validation.tsx                        |    187 |  57 |     6 |          35
+
+
+=================================================
+7. SUMÁRIO E RECOMENDAÇÕES
+=================================================
+
+Total de componentes analisados: 1860
+
+OPORTUNIDADES DE CONSOLIDAÇÃO:
+
+Alta Prioridade:
+  - Remover 13 componentes versionados
+  - Criar FormBase genérico (635 candidatos)
+  - Criar TableBase genérico (136 candidatos)
+
+Média Prioridade:
+  - Criar CardBase genérico (1315 candidatos)
+  - Criar ModalBase genérico (254 candidatos)
+
+Baixa Prioridade:
+  - Refatorar componentes com alta complexidade
+  - Consolidar hooks customizados duplicados
+

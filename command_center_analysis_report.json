@@ -1,0 +1,624 @@
+{
+  "analysis_date": "2025-12-11T23:38:06+00:00",
+  "repository": "/home/ubuntu/github_repos/travel-hr-buddy",
+  "summary": {
+    "total_command_centers": 122,
+    "fleet_command": 8,
+    "operations_command": 4,
+    "mission_command": 14,
+    "control_centers": 24,
+    "generic_centers": 85
+  },
+  "files": [
+    {
+      "path": "src/assistants/voice/distributed-commands.ts.disabled",
+      "lines": 657,
+      "size_bytes": 18505
+    },
+    {
+      "path": "src/components/CommandPalette.tsx",
+      "lines": 88,
+      "size_bytes": 3121
+    },
+    {
+      "path": "src/components/bcp/compliance-audit-center.tsx",
+      "lines": 557,
+      "size_bytes": 22798
+    },
+    {
+      "path": "src/components/command/CommandCenterAI.tsx",
+      "lines": 134,
+      "size_bytes": 5276
+    },
+    {
+      "path": "src/components/communication/CommunicationCenterProfessional.tsx",
+      "lines": 934,
+      "size_bytes": 41135
+    },
+    {
+      "path": "src/components/communication/enhanced-communication-center.tsx",
+      "lines": 338,
+      "size_bytes": 10875
+    },
+    {
+      "path": "src/components/communication/maritime-communication-center.tsx",
+      "lines": 738,
+      "size_bytes": 28707
+    },
+    {
+      "path": "src/components/communication/notification-center.tsx",
+      "lines": 8,
+      "size_bytes": 333
+    },
+    {
+      "path": "src/components/deploy/production-deploy-center.tsx",
+      "lines": 618,
+      "size_bytes": 25095
+    },
+    {
+      "path": "src/components/documents/advanced-document-center.tsx",
+      "lines": 1356,
+      "size_bytes": 51826
+    },
+    {
+      "path": "src/components/documents/document-management-center.tsx",
+      "lines": 599,
+      "size_bytes": 23363
+    },
+    {
+      "path": "src/components/fleet/FleetCommandCenter.tsx",
+      "lines": 448,
+      "size_bytes": 17429
+    },
+    {
+      "path": "src/components/fleet/FleetCommandCenter.tsx",
+      "lines": 448,
+      "size_bytes": 17429
+    },
+    {
+      "path": "src/components/fleet/compliance-center.tsx",
+      "lines": 717,
+      "size_bytes": 29544
+    },
+    {
+      "path": "src/components/fleet/documentation-center.tsx",
+      "lines": 39,
+      "size_bytes": 1471
+    },
+    {
+      "path": "src/components/fleet/notification-center.tsx",
+      "lines": 8,
+      "size_bytes": 333
+    },
+    {
+      "path": "src/components/help/help-center.tsx",
+      "lines": 460,
+      "size_bytes": 16269
+    },
+    {
+      "path": "src/components/help/intelligent-help-center.tsx",
+      "lines": 604,
+      "size_bytes": 24380
+    },
+    {
+      "path": "src/components/intelligence/IntelligentNotificationCenter.tsx",
+      "lines": 437,
+      "size_bytes": 15856
+    },
+    {
+      "path": "src/components/legacy/notification_NotificationCenter.tsx",
+      "lines": 453,
+      "size_bytes": 14673
+    },
+    {
+      "path": "src/components/legacy/notification_NotificationCenterProfessional.tsx",
+      "lines": 1251,
+      "size_bytes": 52748
+    },
+    {
+      "path": "src/components/legacy/notification_enhanced-notification-center.tsx",
+      "lines": 367,
+      "size_bytes": 11343
+    },
+    {
+      "path": "src/components/legacy/notification_notification-center.tsx",
+      "lines": 14,
+      "size_bytes": 522
+    },
+    {
+      "path": "src/components/legacy/notification_real-time-notification-center.tsx",
+      "lines": 554,
+      "size_bytes": 20262
+    },
+    {
+      "path": "src/components/maritime/notification-center.tsx",
+      "lines": 8,
+      "size_bytes": 333
+    },
+    {
+      "path": "src/components/mobile/mobile-optimization-center.tsx",
+      "lines": 753,
+      "size_bytes": 31779
+    },
+    {
+      "path": "src/components/nautilus-os/apps/ModulesControl.tsx",
+      "lines": 28,
+      "size_bytes": 890
+    },
+    {
+      "path": "src/components/nautilus/NautilusCommandCenter.tsx",
+      "lines": 277,
+      "size_bytes": 11550
+    },
+    {
+      "path": "src/components/nautilus/NautilusCommandCenter.tsx",
+      "lines": 277,
+      "size_bytes": 11550
+    },
+    {
+      "path": "src/components/notifications/NotificationCenter.tsx",
+      "lines": 8,
+      "size_bytes": 332
+    },
+    {
+      "path": "src/components/notifications/NotificationCenterProfessional.tsx",
+      "lines": 8,
+      "size_bytes": 344
+    },
+    {
+      "path": "src/components/notifications/enhanced-notification-center.tsx",
+      "lines": 8,
+      "size_bytes": 342
+    },
+    {
+      "path": "src/components/notifications/notification-center.tsx",
+      "lines": 8,
+      "size_bytes": 333
+    },
+    {
+      "path": "src/components/notifications/real-time-notification-center.tsx",
+      "lines": 8,
+      "size_bytes": 343
+    },
+    {
+      "path": "src/components/onboarding/user-onboarding-center.tsx",
+      "lines": 527,
+      "size_bytes": 19265
+    },
+    {
+      "path": "src/components/operations/operational-command-center.tsx",
+      "lines": 478,
+      "size_bytes": 14978
+    },
+    {
+      "path": "src/components/optimization/intelligent-alerts-center.tsx",
+      "lines": 580,
+      "size_bytes": 20046
+    },
+    {
+      "path": "src/components/peo-dp/dp-intel-center.tsx",
+      "lines": 255,
+      "size_bytes": 9136
+    },
+    {
+      "path": "src/components/peo-dp/fleet-operations-center.tsx",
+      "lines": 500,
+      "size_bytes": 21684
+    },
+    {
+      "path": "src/components/peo-dp/lessons-learned-center.tsx",
+      "lines": 618,
+      "size_bytes": 28979
+    },
+    {
+      "path": "src/components/peotram/peotram-communication-center.tsx",
+      "lines": 584,
+      "size_bytes": 23250
+    },
+    {
+      "path": "src/components/security/advanced-security-center.tsx",
+      "lines": 587,
+      "size_bytes": 23191
+    },
+    {
+      "path": "src/components/system/SystemControlPanel.tsx",
+      "lines": 490,
+      "size_bytes": 16356
+    },
+    {
+      "path": "src/components/ui/NotificationCenter.tsx",
+      "lines": 8,
+      "size_bytes": 332
+    },
+    {
+      "path": "src/components/ui/command.tsx",
+      "lines": 132,
+      "size_bytes": 4883
+    },
+    {
+      "path": "src/components/ui/dropdown-test-center.tsx",
+      "lines": 422,
+      "size_bytes": 16534
+    },
+    {
+      "path": "src/components/unified/NotificationCenter.unified.tsx",
+      "lines": 1089,
+      "size_bytes": 32887
+    },
+    {
+      "path": "src/components/voice/VoiceCommandButton.tsx",
+      "lines": 156,
+      "size_bytes": 4748
+    },
+    {
+      "path": "src/core/mirrors/instanceController.ts",
+      "lines": 574,
+      "size_bytes": 16073
+    },
+    {
+      "path": "src/lib/ai/nautilus-command.ts",
+      "lines": 122,
+      "size_bytes": 3356
+    },
+    {
+      "path": "src/lib/drone/command-service.ts",
+      "lines": 379,
+      "size_bytes": 9295
+    },
+    {
+      "path": "src/lib/voice/advanced-voice-commands.ts",
+      "lines": 362,
+      "size_bytes": 9519
+    },
+    {
+      "path": "src/modules/control/control-hub/ControlHubPanel.tsx",
+      "lines": 228,
+      "size_bytes": 8307
+    },
+    {
+      "path": "src/modules/core/help-center/HelpCenter.tsx",
+      "lines": 10,
+      "size_bytes": 281
+    },
+    {
+      "path": "src/modules/intelligence/dp-intelligence/DPIntelligenceCenter.tsx",
+      "lines": 11,
+      "size_bytes": 365
+    },
+    {
+      "path": "src/modules/intelligence/dp-intelligence/components/DPIntelligenceCenter.tsx",
+      "lines": 490,
+      "size_bytes": 17938
+    },
+    {
+      "path": "src/modules/logs-center/LogsCenter.tsx",
+      "lines": 327,
+      "size_bytes": 12073
+    },
+    {
+      "path": "src/modules/logs-center/VirtualizedLogsCenter.tsx",
+      "lines": 316,
+      "size_bytes": 10575
+    },
+    {
+      "path": "src/modules/maintenance-planner/components/JobsCenter.tsx",
+      "lines": 252,
+      "size_bytes": 8321
+    },
+    {
+      "path": "src/modules/mission-control/components/AICommander.tsx",
+      "lines": 128,
+      "size_bytes": 4622
+    },
+    {
+      "path": "src/modules/mission-control/components/MissionControlConsolidation.tsx",
+      "lines": 252,
+      "size_bytes": 9180
+    },
+    {
+      "path": "src/modules/mission-control/mobile/MissionControlMobileDashboard.tsx",
+      "lines": 255,
+      "size_bytes": 8594
+    },
+    {
+      "path": "src/modules/mission-control/services/mission-control-service.ts",
+      "lines": 322,
+      "size_bytes": 9020
+    },
+    {
+      "path": "src/modules/mission-control/validation/MissionControlConsolidationValidation.tsx",
+      "lines": 116,
+      "size_bytes": 4227
+    },
+    {
+      "path": "src/modules/mission-control/validation/MissionControlRealtimeValidation.tsx",
+      "lines": 156,
+      "size_bytes": 5873
+    },
+    {
+      "path": "src/modules/mission-control/validation/MissionControlValidation.tsx",
+      "lines": 168,
+      "size_bytes": 5907
+    },
+    {
+      "path": "src/modules/nautilus-command/components/CommandBrainPanel.tsx",
+      "lines": 291,
+      "size_bytes": 10980
+    },
+    {
+      "path": "src/modules/nautilus-command/hooks/useNautilusCommandAI.ts",
+      "lines": 289,
+      "size_bytes": 9295
+    },
+    {
+      "path": "src/modules/nautilus-people/components/PerformanceCenter.tsx",
+      "lines": 716,
+      "size_bytes": 31301
+    },
+    {
+      "path": "src/modules/revolutionary-ai/NaturalLanguageCommand.tsx",
+      "lines": 318,
+      "size_bytes": 12053
+    },
+    {
+      "path": "src/modules/revolutionary-ai/VoiceCommandsAdvanced.tsx",
+      "lines": 350,
+      "size_bytes": 13298
+    },
+    {
+      "path": "src/pages/AICommandCenter.tsx",
+      "lines": 973,
+      "size_bytes": 46550
+    },
+    {
+      "path": "src/pages/AICommandCenter.tsx",
+      "lines": 973,
+      "size_bytes": 46550
+    },
+    {
+      "path": "src/pages/AlertsCommandCenter.tsx",
+      "lines": 766,
+      "size_bytes": 30200
+    },
+    {
+      "path": "src/pages/AlertsCommandCenter.tsx",
+      "lines": 766,
+      "size_bytes": 30200
+    },
+    {
+      "path": "src/pages/AnalyticsCommandCenter.tsx",
+      "lines": 1000,
+      "size_bytes": 41377
+    },
+    {
+      "path": "src/pages/AnalyticsCommandCenter.tsx",
+      "lines": 1000,
+      "size_bytes": 41377
+    },
+    {
+      "path": "src/pages/CommandCenter.tsx",
+      "lines": 829,
+      "size_bytes": 35992
+    },
+    {
+      "path": "src/pages/CommandCenter.tsx",
+      "lines": 829,
+      "size_bytes": 35992
+    },
+    {
+      "path": "src/pages/CommunicationCommandCenter.tsx",
+      "lines": 500,
+      "size_bytes": 21912
+    },
+    {
+      "path": "src/pages/CommunicationCommandCenter.tsx",
+      "lines": 500,
+      "size_bytes": 21912
+    },
+    {
+      "path": "src/pages/FinanceCommandCenter.tsx",
+      "lines": 1332,
+      "size_bytes": 57118
+    },
+    {
+      "path": "src/pages/FinanceCommandCenter.tsx",
+      "lines": 1332,
+      "size_bytes": 57118
+    },
+    {
+      "path": "src/pages/FleetCommandCenter.tsx",
+      "lines": 651,
+      "size_bytes": 30145
+    },
+    {
+      "path": "src/pages/FleetCommandCenter.tsx",
+      "lines": 651,
+      "size_bytes": 30145
+    },
+    {
+      "path": "src/pages/MaintenanceCommandCenter.tsx",
+      "lines": 581,
+      "size_bytes": 24033
+    },
+    {
+      "path": "src/pages/MaintenanceCommandCenter.tsx",
+      "lines": 581,
+      "size_bytes": 24033
+    },
+    {
+      "path": "src/pages/MaritimeCommandCenter.tsx",
+      "lines": 848,
+      "size_bytes": 35587
+    },
+    {
+      "path": "src/pages/MaritimeCommandCenter.tsx",
+      "lines": 848,
+      "size_bytes": 35587
+    },
+    {
+      "path": "src/pages/MissionCommandCenter.tsx",
+      "lines": 783,
+      "size_bytes": 33535
+    },
+    {
+      "path": "src/pages/MissionCommandCenter.tsx",
+      "lines": 783,
+      "size_bytes": 33535
+    },
+    {
+      "path": "src/pages/NautilusCommand.tsx",
+      "lines": 21,
+      "size_bytes": 563
+    },
+    {
+      "path": "src/pages/NotificationsCenter.tsx",
+      "lines": 9,
+      "size_bytes": 279
+    },
+    {
+      "path": "src/pages/OperationsCommandCenter.tsx",
+      "lines": 1047,
+      "size_bytes": 44192
+    },
+    {
+      "path": "src/pages/OperationsCommandCenter.tsx",
+      "lines": 1047,
+      "size_bytes": 44192
+    },
+    {
+      "path": "src/pages/ProcurementCommandCenter.tsx",
+      "lines": 1064,
+      "size_bytes": 44463
+    },
+    {
+      "path": "src/pages/ProcurementCommandCenter.tsx",
+      "lines": 1064,
+      "size_bytes": 44463
+    },
+    {
+      "path": "src/pages/ReportsCommandCenter.tsx",
+      "lines": 751,
+      "size_bytes": 33146
+    },
+    {
+      "path": "src/pages/ReportsCommandCenter.tsx",
+      "lines": 751,
+      "size_bytes": 33146
+    },
+    {
+      "path": "src/pages/TravelCommandCenter.tsx",
+      "lines": 915,
+      "size_bytes": 37566
+    },
+    {
+      "path": "src/pages/TravelCommandCenter.tsx",
+      "lines": 915,
+      "size_bytes": 37566
+    },
+    {
+      "path": "src/pages/VoyageCommandCenter.tsx",
+      "lines": 1131,
+      "size_bytes": 48928
+    },
+    {
+      "path": "src/pages/VoyageCommandCenter.tsx",
+      "lines": 1131,
+      "size_bytes": 48928
+    },
+    {
+      "path": "src/pages/WeatherCommandCenter.tsx",
+      "lines": 779,
+      "size_bytes": 32939
+    },
+    {
+      "path": "src/pages/WeatherCommandCenter.tsx",
+      "lines": 779,
+      "size_bytes": 32939
+    },
+    {
+      "path": "src/pages/WorkflowCommandCenter.tsx",
+      "lines": 903,
+      "size_bytes": 41422
+    },
+    {
+      "path": "src/pages/WorkflowCommandCenter.tsx",
+      "lines": 903,
+      "size_bytes": 41422
+    },
+    {
+      "path": "src/pages/admin/ControlCenter.tsx",
+      "lines": 422,
+      "size_bytes": 13786
+    },
+    {
+      "path": "src/pages/admin/Patch495InventoryControl.tsx",
+      "lines": 100,
+      "size_bytes": 4024
+    },
+    {
+      "path": "src/pages/admin/Patch505MissionControl.tsx",
+      "lines": 244,
+      "size_bytes": 9541
+    },
+    {
+      "path": "src/pages/admin/Patch530MissionControlV2.tsx",
+      "lines": 133,
+      "size_bytes": 5155
+    },
+    {
+      "path": "src/pages/admin/control-panel.tsx",
+      "lines": 420,
+      "size_bytes": 19239
+    },
+    {
+      "path": "src/pages/admin/module-control.tsx",
+      "lines": 267,
+      "size_bytes": 8869
+    },
+    {
+      "path": "src/pages/mission-control/ai-command-center.tsx",
+      "lines": 276,
+      "size_bytes": 9586
+    },
+    {
+      "path": "src/services/cognitive/instance-controller.service.ts",
+      "lines": 168,
+      "size_bytes": 4147
+    },
+    {
+      "path": "src/services/mission-control.service.ts",
+      "lines": 579,
+      "size_bytes": 16563
+    },
+    {
+      "path": "src/tests/components/documents/document-management-center.test.tsx",
+      "lines": 113,
+      "size_bytes": 3281
+    },
+    {
+      "path": "src/tests/components/dp-intelligence/dp-intelligence-center.test.tsx",
+      "lines": 428,
+      "size_bytes": 14509
+    },
+    {
+      "path": "src/tests/control-hub.test.ts",
+      "lines": 184,
+      "size_bytes": 5060
+    },
+    {
+      "path": "src/tests/mission-control.test.ts",
+      "lines": 974,
+      "size_bytes": 30042
+    },
+    {
+      "path": "src/types/access-control.ts",
+      "lines": 64,
+      "size_bytes": 1376
+    },
+    {
+      "path": "src/types/controlhub.ts",
+      "lines": 41,
+      "size_bytes": 864
+    }
+  ]
+}

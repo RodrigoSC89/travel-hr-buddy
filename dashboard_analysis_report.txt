@@ -1,0 +1,569 @@
+# ANÁLISE DE DASHBOARDS - NAUTILUS ONE
+# Data: Thu Dec 11 23:37:44 UTC 2025
+# Repositório: /home/ubuntu/github_repos/travel-hr-buddy
+
+=================================================
+1. DASHBOARDS IDENTIFICADOS
+=================================================
+
+Total de arquivos com 'dashboard' no nome: 172
+
+src/components/InteropDashboard.tsx
+src/components/PerformanceDashboard.tsx
+src/components/admin/error-dashboard.tsx
+src/components/admin/health-status-dashboard.tsx
+src/components/admin/performance-dashboard.tsx
+src/components/admin/super-admin-dashboard.tsx
+src/components/admin/user-management-dashboard.tsx
+src/components/ai/CognitiveDashboard.tsx
+src/components/ai/CollectiveDashboard.tsx
+src/components/ai/ai-modules-dashboard.tsx
+src/components/ai/evolution/BehavioralEvolutionDashboard.tsx
+src/components/analytics/AnalyticsDashboard.tsx
+src/components/analytics/advanced-metrics-dashboard.tsx
+src/components/analytics/analytics-dashboard.tsx
+src/components/analytics/enhanced-metrics-dashboard.tsx
+src/components/bcp/risk-management-dashboard.tsx
+src/components/bi/BIDashboardBuilder.tsx
+src/components/bi/DashboardJobs.tsx
+src/components/bridgelink/BridgeLinkDashboard.tsx
+src/components/compliance/ClassSurveyDashboard.tsx
+src/components/compliance/ComplianceDashboard.tsx
+src/components/crew/MLCComplianceDashboard.tsx
+src/components/crew/crew-wellbeing-dashboard.tsx
+src/components/dashboard/DashboardActions.tsx
+src/components/dashboard/DashboardSkeleton.tsx
+src/components/dashboard/DashboardWatchdog.tsx
+src/components/dashboard/LiveDashboardStats.tsx
+src/components/dashboard/ai-evolution/AIEvolutionDashboard.tsx
+src/components/dashboard/business-kpi-dashboard.tsx
+src/components/dashboard/comprehensive-executive-dashboard.tsx
+src/components/dashboard/dashboard-analytics.tsx
+src/components/dashboard/dashboard-widgets.tsx
+src/components/dashboard/enhanced-dashboard-filters.tsx
+src/components/dashboard/enhanced-dashboard.tsx
+src/components/dashboard/enhanced-unified-dashboard.tsx
+src/components/dashboard/executive-dashboard.tsx
+src/components/dashboard/global-dashboard.tsx
+src/components/dashboard/index/DashboardDataProvider.tsx
+src/components/dashboard/interactive-dashboard.tsx
+src/components/dashboard/modern-executive-dashboard.tsx
+src/components/dashboard/modularized-executive-dashboard.tsx
+src/components/dashboard/professional-analytics-dashboard.tsx
+src/components/dashboard/professional-fleet-dashboard.tsx
+src/components/dashboard/professional-weather-dashboard.tsx
+src/components/dashboard/responsive-dashboard.tsx
+src/components/dashboard/strategic-dashboard.tsx
+src/components/dashboard/unified-dashboard.tsx
+src/components/dp/DPSyncDashboard.tsx
+src/components/errors/DashboardErrorBoundary.tsx
+src/components/external-audit/PerformanceDashboard.tsx
+src/components/fleet/FleetTelemetryDashboard.tsx
+src/components/fleet/fleet-management-dashboard.tsx
+src/components/fleet/fleet-overview-dashboard.tsx
+src/components/hr/hr-dashboard.tsx
+src/components/imca-audit/IMCADPAuditDashboard.tsx
+src/components/innovation/SystemHealthDashboard.tsx
+src/components/innovation/iot-dashboard.tsx
+src/components/intelligence/ai-analytics-dashboard.tsx
+src/components/legacy/skeleton_DashboardSkeleton.tsx
+src/components/logistics/enhanced-logistics-dashboard.tsx
+src/components/logistics/logistics-hub-dashboard.tsx
+src/components/maintenance/MaintenanceDashboard.tsx
+src/components/maritime/checklist-dashboard.tsx
+src/components/maritime/crew-management-dashboard.tsx
+src/components/maritime/hr-dashboard.tsx
+src/components/maritime/iot-sensor-dashboard.tsx
+src/components/maritime/logistics-dashboard.tsx
+src/components/maritime/maritime-dashboard.tsx
+src/components/maritime/maritime-system-dashboard.tsx
+src/components/maritime/vessel-performance-dashboard.tsx
+src/components/mlc/MLCInspectionDashboard.tsx
+src/components/mmi/Dashboard.tsx
+src/components/monitoring/RealTimeMonitoringDashboard.tsx
+src/components/monitoring/system-monitoring-dashboard.tsx
+src/components/nautilus/IoTDashboard.tsx
+src/components/operations/OperationsDashboardRealTime.tsx
+src/components/operations/operations-dashboard.tsx
+src/components/ovid/OVIDInspectionDashboard.tsx
+src/components/peotram/enhanced-peotram-dashboard.tsx
+src/components/performance/PerformanceDashboard.tsx
+src/components/performance/SystemHealthDashboard.tsx
+src/components/performance/WebVitalsDashboard.tsx
+src/components/price-alerts/components/statistics-dashboard.tsx
+src/components/price-alerts/price-alert-dashboard.tsx
+src/components/price-alerts/price-alerts-dashboard-integrated.tsx
+src/components/price-alerts/price-analytics-dashboard.tsx
+src/components/production/ProductionHealthDashboard.tsx
+src/components/reports/functional-reports-dashboard.tsx
+src/components/reports/reports-dashboard.tsx
+src/components/reservations/enhanced-reservations-dashboard.tsx
+src/components/reservations/reservations-dashboard.tsx
+src/components/saas/saas-dashboard.tsx
+src/components/security/security-dashboard.tsx
+src/components/sgso/SgsoDashboard.tsx
+src/components/strategic/AnalyticsDashboard.tsx
+src/components/telemetry/TelemetryDashboard360.tsx
+src/components/ui/back-to-dashboard.tsx
+src/components/ui/system-monitoring-dashboard.tsx
+src/components/ui/system-status-dashboard.tsx
+src/hooks/useDashboardStats.ts
+src/lib/dashboard-utils.ts
+src/lib/performance/dashboard-optimizer.ts
+src/mobile/components/MissionDashboard.tsx
+src/modules/analytics/services/analytics-dashboard-service.ts
+src/modules/autonomous-procurement/components/ProcurementDashboard.tsx
+src/modules/compliance-hub/components/ComplianceHubDashboard.tsx
+src/modules/compliance/mlc-inspection/MLCInspectionDashboard.tsx
+src/modules/control/bridgelink/BridgeLinkDashboard.tsx
+src/modules/esg-emissions/components/EmissionsDashboard.tsx
+src/modules/hr/crew-wellbeing/components/WellbeingDashboard.tsx
+src/modules/hr/peo-dp/components/DPAnalyticsDashboard.tsx
+src/modules/hr/training-academy/components/ProgressDashboard.tsx
+src/modules/incident-reports/components/IncidentMetricsDashboard.tsx
+src/modules/intelligence/dp-intelligence/components/DPIntelligenceDashboard.tsx
+src/modules/intelligent-maintenance/components/MMIDashboardSection.tsx
+src/modules/medical-infirmary/components/InfirmaryDashboard.tsx
+src/modules/mission-control/components/KPIDashboard.tsx
+src/modules/mission-control/components/RealTimeMissionDashboard.tsx
+src/modules/mission-control/mobile/MissionControlMobileDashboard.tsx
+src/modules/nautilus-academy/components/AcademyDashboard.tsx
+src/modules/nautilus-people/components/PeopleDashboard.tsx
+src/modules/operations/crew-wellbeing/components/HealthMetricsDashboard.tsx
+src/modules/operations/crew-wellbeing/components/MoodDashboard.tsx
+src/modules/performance/PerformanceDashboard.tsx
+src/modules/performance/PerformanceMonitoringDashboard.tsx
+src/modules/procurement-inventory/components/ProcurementDashboard.tsx
+src/modules/revolutionary-ai/ESGDashboard.tsx
+src/modules/safety-guardian/components/SafetyDashboard.tsx
+src/modules/safety-guardian/components/SafetyDashboardComplete.tsx
+src/modules/safety-guardian/components/SafetyDashboardNew.tsx
+src/modules/satellite-tracker/components/DGNSSDashboard.tsx
+src/modules/satellite-tracker/components/SatelliteDashboard.tsx
+src/modules/smart-mobility/components/MobilityDashboard.tsx
+src/modules/solas-isps-training/components/TrainingDashboardSection.tsx
+src/modules/solas-training/components/TrainingDashboard.tsx
+src/modules/sonar-ai/components/SonarAIDashboard.tsx
+src/modules/ui/dashboard/Dashboard.tsx
+src/pages/BIDashboard.tsx
+src/pages/Dashboard.tsx
+src/pages/ExecutiveDashboard.tsx
+src/pages/FleetDashboard.tsx
+src/pages/MMIDashboard.tsx
+src/pages/WeatherDashboard.tsx
+src/pages/admin/LighthouseDashboard.tsx
+src/pages/admin/advanced-analytics-dashboard.tsx
+src/pages/admin/audit-dashboard.tsx
+src/pages/admin/checklists-dashboard.tsx
+src/pages/admin/compliance-dashboard.tsx
+src/pages/admin/dashboard-auditorias.tsx
+src/pages/admin/dashboard.tsx
+src/pages/admin/documents/restore-dashboard.tsx
+src/pages/admin/performance-dashboard.tsx
+src/pages/admin/reports/dashboard-logs.tsx
+src/pages/ai/AIDashboard.tsx
+src/pages/ai/learning-dashboard.tsx
+src/pages/compliance/PrePSCDashboard.tsx
+src/pages/dashboard/QualityDashboard.tsx
+src/pages/mission-control/insight-dashboard.tsx
+src/pages/qa/PreviewValidationDashboard.tsx
+src/styles/dashboard.module.css
+src/tests/bi-dashboard-jobs.test.tsx
+src/tests/components/dp-intelligence/dp-intelligence-dashboard.test.tsx
+src/tests/components/dp/DPSyncDashboard.test.tsx
+src/tests/integration/auth-to-dashboard.test.tsx
+src/tests/mmi-dashboard.test.ts
+src/tests/modules/bridgelink/BridgeLinkDashboard.test.tsx
+src/tests/pages/admin/dashboard.test.tsx
+src/tests/pages/admin/documents/restore-dashboard-enhancements.test.tsx
+src/tests/performance-dashboard.test.ts
+src/tests/send-restore-dashboard-daily.test.ts
+src/tests/send-restore-dashboard.test.ts
+src/types/dashboard.ts
+
+
+=================================================
+2. CATEGORIZAÇÃO POR FUNCIONALIDADE
+=================================================
+
+[2.1] ANALYTICS DASHBOARDS:
+src/components/analytics/AnalyticsDashboard.tsx
+src/components/analytics/advanced-metrics-dashboard.tsx
+src/components/analytics/analytics-dashboard.tsx
+src/components/analytics/enhanced-metrics-dashboard.tsx
+src/components/dashboard/dashboard-analytics.tsx
+src/components/dashboard/professional-analytics-dashboard.tsx
+src/components/intelligence/ai-analytics-dashboard.tsx
+src/components/price-alerts/components/statistics-dashboard.tsx
+src/components/price-alerts/price-analytics-dashboard.tsx
+src/components/reports/functional-reports-dashboard.tsx
+src/components/reports/reports-dashboard.tsx
+src/components/strategic/AnalyticsDashboard.tsx
+src/modules/analytics/services/analytics-dashboard-service.ts
+src/modules/hr/peo-dp/components/DPAnalyticsDashboard.tsx
+src/modules/incident-reports/components/IncidentMetricsDashboard.tsx
+src/modules/operations/crew-wellbeing/components/HealthMetricsDashboard.tsx
+src/pages/admin/advanced-analytics-dashboard.tsx
+src/pages/admin/reports/dashboard-logs.tsx
+   Total: 18
+
+[2.2] MONITORING DASHBOARDS:
+src/components/admin/health-status-dashboard.tsx
+src/components/innovation/SystemHealthDashboard.tsx
+src/components/monitoring/RealTimeMonitoringDashboard.tsx
+src/components/monitoring/system-monitoring-dashboard.tsx
+src/components/performance/SystemHealthDashboard.tsx
+src/components/price-alerts/components/statistics-dashboard.tsx
+src/components/price-alerts/price-alert-dashboard.tsx
+src/components/price-alerts/price-alerts-dashboard-integrated.tsx
+src/components/price-alerts/price-analytics-dashboard.tsx
+src/components/production/ProductionHealthDashboard.tsx
+src/components/ui/system-monitoring-dashboard.tsx
+src/components/ui/system-status-dashboard.tsx
+src/modules/operations/crew-wellbeing/components/HealthMetricsDashboard.tsx
+src/modules/performance/PerformanceMonitoringDashboard.tsx
+src/modules/satellite-tracker/components/DGNSSDashboard.tsx
+src/modules/satellite-tracker/components/SatelliteDashboard.tsx
+   Total: 16
+
+[2.3] MANAGEMENT DASHBOARDS:
+src/components/admin/error-dashboard.tsx
+src/components/admin/health-status-dashboard.tsx
+src/components/admin/performance-dashboard.tsx
+src/components/admin/super-admin-dashboard.tsx
+src/components/admin/user-management-dashboard.tsx
+src/components/bcp/risk-management-dashboard.tsx
+src/components/fleet/fleet-management-dashboard.tsx
+src/components/maritime/crew-management-dashboard.tsx
+src/modules/control/bridgelink/BridgeLinkDashboard.tsx
+src/modules/mission-control/components/KPIDashboard.tsx
+src/modules/mission-control/components/RealTimeMissionDashboard.tsx
+src/modules/mission-control/mobile/MissionControlMobileDashboard.tsx
+src/pages/admin/LighthouseDashboard.tsx
+src/pages/admin/advanced-analytics-dashboard.tsx
+src/pages/admin/audit-dashboard.tsx
+src/pages/admin/checklists-dashboard.tsx
+src/pages/admin/compliance-dashboard.tsx
+src/pages/admin/dashboard-auditorias.tsx
+src/pages/admin/dashboard.tsx
+src/pages/admin/documents/restore-dashboard.tsx
+src/pages/admin/performance-dashboard.tsx
+src/pages/admin/reports/dashboard-logs.tsx
+src/pages/mission-control/insight-dashboard.tsx
+src/tests/pages/admin/dashboard.test.tsx
+src/tests/pages/admin/documents/restore-dashboard-enhancements.test.tsx
+   Total: 25
+
+[2.4] OPERATIONAL DASHBOARDS:
+src/components/crew/MLCComplianceDashboard.tsx
+src/components/crew/crew-wellbeing-dashboard.tsx
+src/components/dashboard/professional-fleet-dashboard.tsx
+src/components/fleet/FleetTelemetryDashboard.tsx
+src/components/fleet/fleet-management-dashboard.tsx
+src/components/fleet/fleet-overview-dashboard.tsx
+src/components/maritime/crew-management-dashboard.tsx
+src/components/maritime/vessel-performance-dashboard.tsx
+src/components/operations/OperationsDashboardRealTime.tsx
+src/components/operations/operations-dashboard.tsx
+src/modules/hr/crew-wellbeing/components/WellbeingDashboard.tsx
+src/modules/operations/crew-wellbeing/components/HealthMetricsDashboard.tsx
+src/modules/operations/crew-wellbeing/components/MoodDashboard.tsx
+src/pages/FleetDashboard.tsx
+   Total: 14
+
+
+=================================================
+3. COMPONENTES COMUNS POR CATEGORIA
+=================================================
+
+[3.1] Imports mais comuns em dashboards:
+    108 import { Badge } from "@/components/ui/badge";
+    102 import { Button } from "@/components/ui/button";
+     74 import { 
+     63 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
+     62 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
+     53 import { Progress } from "@/components/ui/progress";
+     50 import { supabase } from "@/integrations/supabase/client";
+     46 import {
+     45 import { useToast } from "@/hooks/use-toast";
+     45 import React, { useState, useEffect } from "react";
+     44 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+     23 import { Input } from "@/components/ui/input";
+     22 import React, { useState } from "react";
+     19 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
+     18 import { toast } from "sonner";
+     17 import { logger } from "@/lib/logger";
+     14 import { ScrollArea } from "@/components/ui/scroll-area";
+     12 import { Label } from "@/components/ui/label";
+     11 import { useAuth } from "@/contexts/AuthContext";
+     11 import { Progress } from '@/components/ui/progress';
+
+
+=================================================
+4. TAMANHO E COMPLEXIDADE DOS DASHBOARDS
+=================================================
+
+Arquivo                                           | Linhas | Tamanho | Componentes React
+--------------------------------------------------|--------|---------|------------------
+components/InteropDashboard.tsx                    |    558 |     20K |               16
+components/PerformanceDashboard.tsx                |    202 |    8.0K |                4
+components/admin/error-dashboard.tsx               |    367 |     16K |                6
+components/admin/health-status-dashboard.tsx       |    395 |     16K |                7
+components/admin/performance-dashboard.tsx         |    344 |     16K |                4
+components/admin/super-admin-dashboard.tsx         |    427 |     16K |               10
+components/admin/user-management-dashboard.tsx     |    516 |     20K |                5
+components/ai/CognitiveDashboard.tsx               |    507 |     24K |               10
+components/ai/CollectiveDashboard.tsx              |    568 |     24K |               10
+components/ai/ai-modules-dashboard.tsx             |    202 |    8.0K |                4
+components/ai/evolution/BehavioralEvolutionDashboard.tsx |    358 |     16K |               11
+components/analytics/AnalyticsDashboard.tsx        |    212 |    8.0K |               11
+components/analytics/advanced-metrics-dashboard.tsx |    419 |     16K |                7
+components/analytics/analytics-dashboard.tsx       |    275 |     16K |                1
+components/analytics/enhanced-metrics-dashboard.tsx |    445 |     20K |                4
+components/bcp/risk-management-dashboard.tsx       |    494 |     24K |                6
+components/bi/BIDashboardBuilder.tsx               |    432 |     16K |                4
+components/bi/DashboardJobs.tsx                    |     59 |    4.0K |                2
+components/bridgelink/BridgeLinkDashboard.tsx      |     62 |    4.0K |                2
+components/compliance/ClassSurveyDashboard.tsx     |    343 |     16K |                8
+components/compliance/ComplianceDashboard.tsx      |     40 |    4.0K |                2
+components/crew/MLCComplianceDashboard.tsx         |    343 |     16K |                5
+components/crew/crew-wellbeing-dashboard.tsx       |    271 |     12K |                4
+components/dashboard/DashboardActions.tsx          |    283 |     12K |                3
+components/dashboard/DashboardSkeleton.tsx         |      8 |    4.0K |              0
+0
+components/dashboard/DashboardWatchdog.tsx         |    263 |    8.0K |               10
+components/dashboard/LiveDashboardStats.tsx        |    182 |    8.0K |                1
+components/dashboard/ai-evolution/AIEvolutionDashboard.tsx |    361 |     16K |                5
+components/dashboard/business-kpi-dashboard.tsx    |    440 |     16K |                5
+components/dashboard/comprehensive-executive-dashboard.tsx |    615 |     20K |                6
+components/dashboard/dashboard-analytics.tsx       |    387 |     16K |                6
+components/dashboard/dashboard-widgets.tsx         |    351 |     12K |                4
+components/dashboard/enhanced-dashboard-filters.tsx |    206 |    8.0K |                1
+components/dashboard/enhanced-dashboard.tsx        |    642 |     28K |                6
+components/dashboard/enhanced-unified-dashboard.tsx |    991 |     48K |                6
+components/dashboard/executive-dashboard.tsx       |    520 |     20K |                4
+components/dashboard/global-dashboard.tsx          |    422 |     24K |                1
+components/dashboard/index/DashboardDataProvider.tsx |    202 |    8.0K |                8
+components/dashboard/interactive-dashboard.tsx     |    266 |     12K |                5
+components/dashboard/modern-executive-dashboard.tsx |    283 |     12K |                1
+components/dashboard/modularized-executive-dashboard.tsx |    231 |    8.0K |                7
+components/dashboard/professional-analytics-dashboard.tsx |    459 |     20K |                2
+components/dashboard/professional-fleet-dashboard.tsx |    460 |     20K |                5
+components/dashboard/professional-weather-dashboard.tsx |    334 |     16K |                1
+components/dashboard/responsive-dashboard.tsx      |    335 |     16K |                5
+components/dashboard/strategic-dashboard.tsx       |    718 |     32K |               14
+components/dashboard/unified-dashboard.tsx         |    437 |     20K |                5
+components/dp/DPSyncDashboard.tsx                  |     72 |    4.0K |                4
+components/errors/DashboardErrorBoundary.tsx       |     65 |    4.0K |              0
+0
+components/external-audit/PerformanceDashboard.tsx |     14 |    4.0K |                1
+components/fleet/FleetTelemetryDashboard.tsx       |    771 |     28K |               12
+components/fleet/fleet-management-dashboard.tsx    |    316 |     16K |                6
+components/fleet/fleet-overview-dashboard.tsx      |    424 |     16K |                4
+components/hr/hr-dashboard.tsx                     |    812 |     32K |               11
+components/imca-audit/IMCADPAuditDashboard.tsx     |    541 |     24K |               14
+components/innovation/SystemHealthDashboard.tsx    |    358 |     16K |                7
+components/innovation/iot-dashboard.tsx            |    393 |     16K |                6
+components/intelligence/ai-analytics-dashboard.tsx |    354 |     12K |                4
+components/legacy/skeleton_DashboardSkeleton.tsx   |    160 |    8.0K |                5
+components/logistics/enhanced-logistics-dashboard.tsx |    501 |     24K |                6
+components/logistics/logistics-hub-dashboard.tsx   |    128 |    8.0K |                3
+components/maintenance/MaintenanceDashboard.tsx    |    158 |    8.0K |                4
+components/maritime/checklist-dashboard.tsx        |    262 |     12K |                7
+components/maritime/crew-management-dashboard.tsx  |    390 |     16K |                6
+components/maritime/hr-dashboard.tsx               |    844 |     36K |                9
+components/maritime/iot-sensor-dashboard.tsx       |    558 |     24K |                9
+components/maritime/logistics-dashboard.tsx        |    723 |     28K |                7
+components/maritime/maritime-dashboard.tsx         |    445 |     20K |                4
+components/maritime/maritime-system-dashboard.tsx  |    328 |     16K |                6
+components/maritime/vessel-performance-dashboard.tsx |    373 |     16K |                5
+components/mlc/MLCInspectionDashboard.tsx          |    188 |     16K |                7
+components/mmi/Dashboard.tsx                       |    130 |    8.0K |                2
+components/monitoring/RealTimeMonitoringDashboard.tsx |    361 |     16K |                7
+components/monitoring/system-monitoring-dashboard.tsx |    569 |     32K |                4
+components/nautilus/IoTDashboard.tsx               |    200 |    8.0K |              0
+0
+components/operations/OperationsDashboardRealTime.tsx |    852 |     32K |               20
+components/operations/operations-dashboard.tsx     |    291 |     12K |                4
+components/ovid/OVIDInspectionDashboard.tsx        |    561 |     24K |                5
+components/peotram/enhanced-peotram-dashboard.tsx  |    731 |     32K |                5
+components/performance/PerformanceDashboard.tsx    |    201 |    8.0K |                4
+components/performance/SystemHealthDashboard.tsx   |    377 |     16K |                8
+components/performance/WebVitalsDashboard.tsx      |    168 |    8.0K |                4
+components/price-alerts/components/statistics-dashboard.tsx |    252 |     12K |                5
+components/price-alerts/price-alert-dashboard.tsx  |    545 |     20K |               11
+components/price-alerts/price-alerts-dashboard-integrated.tsx |    225 |    8.0K |                7
+components/price-alerts/price-analytics-dashboard.tsx |    674 |     28K |               13
+components/production/ProductionHealthDashboard.tsx |    254 |     12K |                3
+components/reports/functional-reports-dashboard.tsx |    380 |     16K |                5
+components/reports/reports-dashboard.tsx           |    148 |    8.0K |                2
+components/reservations/enhanced-reservations-dashboard.tsx |    422 |     16K |               12
+components/reservations/reservations-dashboard.tsx |    474 |     20K |               10
+components/saas/saas-dashboard.tsx                 |    512 |     24K |                1
+components/security/security-dashboard.tsx         |    379 |     16K |                9
+components/sgso/SgsoDashboard.tsx                  |    839 |     40K |                6
+components/strategic/AnalyticsDashboard.tsx        |    487 |     20K |                5
+components/telemetry/TelemetryDashboard360.tsx     |    677 |     28K |                7
+components/ui/back-to-dashboard.tsx                |     31 |    4.0K |                1
+components/ui/system-monitoring-dashboard.tsx      |    237 |     12K |                4
+components/ui/system-status-dashboard.tsx          |    360 |     16K |                5
+hooks/useDashboardStats.ts                         |     88 |    4.0K |                2
+lib/dashboard-utils.ts                             |    287 |    8.0K |                4
+lib/performance/dashboard-optimizer.ts             |    446 |     12K |               10
+mobile/components/MissionDashboard.tsx             |    155 |    8.0K |                3
+modules/analytics/services/analytics-dashboard-service.ts |    221 |    8.0K |              0
+0
+modules/autonomous-procurement/components/ProcurementDashboard.tsx |    404 |     20K |                5
+modules/compliance-hub/components/ComplianceHubDashboard.tsx |    275 |     12K |                4
+modules/compliance/mlc-inspection/MLCInspectionDashboard.tsx |    222 |     12K |                3
+modules/control/bridgelink/BridgeLinkDashboard.tsx |    215 |     12K |                5
+modules/esg-emissions/components/EmissionsDashboard.tsx |    441 |     20K |                2
+modules/hr/crew-wellbeing/components/WellbeingDashboard.tsx |    227 |    8.0K |                4
+modules/hr/peo-dp/components/DPAnalyticsDashboard.tsx |    415 |     16K |                7
+modules/hr/training-academy/components/ProgressDashboard.tsx |    148 |    8.0K |                5
+modules/incident-reports/components/IncidentMetricsDashboard.tsx |    217 |    8.0K |                2
+modules/intelligence/dp-intelligence/components/DPIntelligenceDashboard.tsx |    236 |    8.0K |                3
+modules/intelligent-maintenance/components/MMIDashboardSection.tsx |    307 |     16K |                1
+modules/medical-infirmary/components/InfirmaryDashboard.tsx |    298 |     16K |                4
+modules/mission-control/components/KPIDashboard.tsx |     75 |    4.0K |                6
+modules/mission-control/components/RealTimeMissionDashboard.tsx |    389 |     16K |                7
+modules/mission-control/mobile/MissionControlMobileDashboard.tsx |    255 |     12K |                7
+modules/nautilus-academy/components/AcademyDashboard.tsx |   1383 |     68K |               21
+modules/nautilus-people/components/PeopleDashboard.tsx |    330 |     16K |                1
+modules/operations/crew-wellbeing/components/HealthMetricsDashboard.tsx |    246 |     12K |                8
+modules/operations/crew-wellbeing/components/MoodDashboard.tsx |    279 |     12K |               11
+modules/performance/PerformanceDashboard.tsx       |    447 |     16K |                4
+modules/performance/PerformanceMonitoringDashboard.tsx |    358 |     16K |                6
+modules/procurement-inventory/components/ProcurementDashboard.tsx |    486 |     20K |                1
+modules/revolutionary-ai/ESGDashboard.tsx          |    351 |     16K |                5
+modules/safety-guardian/components/SafetyDashboard.tsx |    516 |     20K |                6
+modules/safety-guardian/components/SafetyDashboardComplete.tsx |    391 |     16K |                6
+modules/safety-guardian/components/SafetyDashboardNew.tsx |    138 |    8.0K |                4
+modules/satellite-tracker/components/DGNSSDashboard.tsx |    390 |     16K |                6
+modules/satellite-tracker/components/SatelliteDashboard.tsx |    411 |     20K |               11
+modules/smart-mobility/components/MobilityDashboard.tsx |    484 |     20K |                5
+modules/solas-isps-training/components/TrainingDashboardSection.tsx |    458 |     20K |               10
+modules/solas-training/components/TrainingDashboard.tsx |    320 |     16K |                5
+modules/sonar-ai/components/SonarAIDashboard.tsx   |    416 |     16K |                8
+modules/ui/dashboard/Dashboard.tsx                 |      6 |    4.0K |                1
+pages/BIDashboard.tsx                              |     22 |    4.0K |                1
+pages/Dashboard.tsx                                |    360 |     16K |                3
+pages/ExecutiveDashboard.tsx                       |      6 |    4.0K |                1
+pages/FleetDashboard.tsx                           |      6 |    4.0K |                1
+pages/MMIDashboard.tsx                             |     15 |    4.0K |                1
+pages/WeatherDashboard.tsx                         |      9 |    4.0K |                1
+pages/admin/LighthouseDashboard.tsx                |    344 |     12K |                5
+pages/admin/advanced-analytics-dashboard.tsx       |    426 |     16K |                4
+pages/admin/audit-dashboard.tsx                    |    363 |     16K |                7
+pages/admin/checklists-dashboard.tsx               |    155 |    8.0K |                5
+pages/admin/compliance-dashboard.tsx               |    297 |     12K |                5
+pages/admin/dashboard-auditorias.tsx               |    233 |    8.0K |                4
+pages/admin/dashboard.tsx                          |    514 |     20K |                6
+pages/admin/documents/restore-dashboard.tsx        |    643 |     24K |                9
+pages/admin/performance-dashboard.tsx              |    411 |     16K |               14
+pages/admin/reports/dashboard-logs.tsx             |    241 |     12K |                3
+pages/ai/AIDashboard.tsx                           |      9 |    4.0K |                1
+pages/ai/learning-dashboard.tsx                    |    395 |     16K |                8
+pages/compliance/PrePSCDashboard.tsx               |    242 |     12K |                4
+pages/dashboard/QualityDashboard.tsx               |    508 |     20K |               11
+pages/mission-control/insight-dashboard.tsx        |    483 |     20K |                8
+pages/qa/PreviewValidationDashboard.tsx            |    231 |     12K |                3
+styles/dashboard.module.css                        |     76 |    4.0K |              0
+0
+tests/bi-dashboard-jobs.test.tsx                   |     86 |    4.0K |                2
+tests/components/dp-intelligence/dp-intelligence-dashboard.test.tsx |    253 |    8.0K |              0
+0
+tests/components/dp/DPSyncDashboard.test.tsx       |     91 |    4.0K |                1
+tests/integration/auth-to-dashboard.test.tsx       |    136 |    4.0K |              0
+0
+tests/mmi-dashboard.test.ts                        |    156 |    8.0K |                4
+tests/modules/bridgelink/BridgeLinkDashboard.test.tsx |    156 |    8.0K |              0
+0
+tests/pages/admin/dashboard.test.tsx               |    318 |     12K |              0
+0
+tests/pages/admin/documents/restore-dashboard-enhancements.test.tsx |    190 |    8.0K |              0
+0
+tests/performance-dashboard.test.ts                |    353 |     12K |              0
+0
+tests/send-restore-dashboard-daily.test.ts         |    225 |    8.0K |                4
+tests/send-restore-dashboard.test.ts               |    178 |    8.0K |                4
+types/dashboard.ts                                 |     55 |    4.0K |              0
+0
+
+
+=================================================
+5. PADRÕES DE DUPLICAÇÃO
+=================================================
+
+[5.1] Dashboards com nomes similares:
+
+
+=================================================
+6. ANÁLISE DE DEPENDÊNCIAS
+=================================================
+
+src/components/dashboard/enhanced-unified-dashboard.tsx: 2 dependências de outros dashboards
+  - import { EnhancedDashboardFilters } from "./enhanced-dashboard-filters";
+  - import SystemStatusDashboard from "@/components/ui/system-status-dashboard";
+
+src/components/dashboard/global-dashboard.tsx: 2 dependências de outros dashboards
+  - import { ResponsiveDashboard } from "./responsive-dashboard";
+  - import { EnhancedDashboard } from "./enhanced-dashboard";
+
+src/components/dashboard/strategic-dashboard.tsx: 3 dependências de outros dashboards
+  - import { MetricCard, AlertItem, ActivityItem, DashboardConfig } from "@/types/dashboard";
+  - import { DashboardCharts, AIInsightsPanel } from "@/components/dashboard/dashboard-analytics";
+  - import { DashboardKPIWidget, DashboardExportPanel, DashboardFilters } from "@/components/dashboard/dashboard-widgets";
+
+src/components/dashboard/unified-dashboard.tsx: 1 dependências de outros dashboards
+  - import { EnhancedDashboardFilters } from "./enhanced-dashboard-filters";
+
+src/lib/dashboard-utils.ts: 1 dependências de outros dashboards
+  - import { MetricCard, AlertItem, ActivityItem } from "@/types/dashboard";
+
+src/modules/analytics/services/analytics-dashboard-service.ts: 5 dependências de outros dashboards
+  -         .from("analytics_dashboards")
+  -         .from("analytics_dashboards")
+  -         .from("analytics_dashboards")
+  -         .from("analytics_dashboards")
+  -         .from("analytics_dashboards")
+
+src/pages/admin/advanced-analytics-dashboard.tsx: 2 dependências de outros dashboards
+  -         .from("dashboard_widgets")
+  -         .from("dashboard_widgets")
+
+src/pages/admin/reports/dashboard-logs.tsx: 1 dependências de outros dashboards
+  -         .from("dashboard_report_logs")
+
+src/tests/pages/admin/dashboard.test.tsx: 1 dependências de outros dashboards
+  - import AdminDashboard from "@/pages/admin/dashboard";
+
+src/tests/pages/admin/documents/restore-dashboard-enhancements.test.tsx: 1 dependências de outros dashboards
+  - import RestoreDashboard from "@/pages/admin/documents/restore-dashboard";
+
+
+=================================================
+7. SUMÁRIO E RECOMENDAÇÕES
+=================================================
+
+Total de dashboards identificados: 172
+
+Distribuição por categoria:
+  - Analytics:    18 dashboards
+  - Monitoring:   16 dashboards
+  - Management:   25 dashboards
+  - Operational:  14 dashboards
+
+OPORTUNIDADES DE CONSOLIDAÇÃO:
+
+Alta Prioridade:
+  - Dashboards com nomes similares (remover sufixos -v2, -old, etc)
+  - Dashboards analytics (consolidar em dashboard único parametrizado)
+
+Média Prioridade:
+  - Dashboards de monitoramento (unificar componentes comuns)
+  - Dashboards operacionais (criar base genérica)
+
+Baixa Prioridade:
+  - Dashboards de management (avaliar caso a caso)
+

@@ -1,0 +1,18 @@
+{
+  "analysis_date": "2025-12-11T23:38:34+00:00",
+  "repository": "/home/ubuntu/github_repos/travel-hr-buddy",
+  "summary": {
+    "total_components": 1860,
+    "versioned_components": 13,
+    "form_components": 635,
+    "table_components": 136,
+    "card_components": 1315,
+    "modal_components": 254
+  },
+  "generalization_opportunities": {
+    "form_base": 635,
+    "table_base": 136,
+    "card_base": 1315,
+    "modal_base": 254
+  }
+}

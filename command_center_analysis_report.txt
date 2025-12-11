@@ -1,0 +1,682 @@
+# ANÁLISE DE COMMAND CENTERS - NAUTILUS ONE
+# Data: Thu Dec 11 23:38:02 UTC 2025
+# Repositório: /home/ubuntu/github_repos/travel-hr-buddy
+
+=================================================
+1. COMMAND CENTERS IDENTIFICADOS
+=================================================
+
+Total de arquivos com 'command' no nome: 35
+
+src/assistants/voice/distributed-commands.ts.disabled
+src/components/CommandPalette.tsx
+src/components/command/CommandCenterAI.tsx
+src/components/fleet/FleetCommandCenter.tsx
+src/components/nautilus/NautilusCommandCenter.tsx
+src/components/operations/operational-command-center.tsx
+src/components/ui/command.tsx
+src/components/voice/VoiceCommandButton.tsx
+src/lib/ai/nautilus-command.ts
+src/lib/drone/command-service.ts
+src/lib/voice/advanced-voice-commands.ts
+src/modules/mission-control/components/AICommander.tsx
+src/modules/nautilus-command/components/CommandBrainPanel.tsx
+src/modules/nautilus-command/hooks/useNautilusCommandAI.ts
+src/modules/revolutionary-ai/NaturalLanguageCommand.tsx
+src/modules/revolutionary-ai/VoiceCommandsAdvanced.tsx
+src/pages/AICommandCenter.tsx
+src/pages/AlertsCommandCenter.tsx
+src/pages/AnalyticsCommandCenter.tsx
+src/pages/CommandCenter.tsx
+src/pages/CommunicationCommandCenter.tsx
+src/pages/FinanceCommandCenter.tsx
+src/pages/FleetCommandCenter.tsx
+src/pages/MaintenanceCommandCenter.tsx
+src/pages/MaritimeCommandCenter.tsx
+src/pages/MissionCommandCenter.tsx
+src/pages/NautilusCommand.tsx
+src/pages/OperationsCommandCenter.tsx
+src/pages/ProcurementCommandCenter.tsx
+src/pages/ReportsCommandCenter.tsx
+src/pages/TravelCommandCenter.tsx
+src/pages/VoyageCommandCenter.tsx
+src/pages/WeatherCommandCenter.tsx
+src/pages/WorkflowCommandCenter.tsx
+src/pages/mission-control/ai-command-center.tsx
+
+Total de arquivos com 'center/control' no nome: 87
+
+src/components/bcp/compliance-audit-center.tsx
+src/components/communication/CommunicationCenterProfessional.tsx
+src/components/communication/enhanced-communication-center.tsx
+src/components/communication/maritime-communication-center.tsx
+src/components/communication/notification-center.tsx
+src/components/deploy/production-deploy-center.tsx
+src/components/documents/advanced-document-center.tsx
+src/components/documents/document-management-center.tsx
+src/components/fleet/FleetCommandCenter.tsx
+src/components/fleet/compliance-center.tsx
+src/components/fleet/documentation-center.tsx
+src/components/fleet/notification-center.tsx
+src/components/help/help-center.tsx
+src/components/help/intelligent-help-center.tsx
+src/components/intelligence/IntelligentNotificationCenter.tsx
+src/components/legacy/notification_NotificationCenter.tsx
+src/components/legacy/notification_NotificationCenterProfessional.tsx
+src/components/legacy/notification_enhanced-notification-center.tsx
+src/components/legacy/notification_notification-center.tsx
+src/components/legacy/notification_real-time-notification-center.tsx
+src/components/maritime/notification-center.tsx
+src/components/mobile/mobile-optimization-center.tsx
+src/components/nautilus-os/apps/ModulesControl.tsx
+src/components/nautilus/NautilusCommandCenter.tsx
+src/components/notifications/NotificationCenter.tsx
+src/components/notifications/NotificationCenterProfessional.tsx
+src/components/notifications/enhanced-notification-center.tsx
+src/components/notifications/notification-center.tsx
+src/components/notifications/real-time-notification-center.tsx
+src/components/onboarding/user-onboarding-center.tsx
+src/components/optimization/intelligent-alerts-center.tsx
+src/components/peo-dp/dp-intel-center.tsx
+src/components/peo-dp/fleet-operations-center.tsx
+src/components/peo-dp/lessons-learned-center.tsx
+src/components/peotram/peotram-communication-center.tsx
+src/components/security/advanced-security-center.tsx
+src/components/system/SystemControlPanel.tsx
+src/components/ui/NotificationCenter.tsx
+src/components/ui/dropdown-test-center.tsx
+src/components/unified/NotificationCenter.unified.tsx
+src/core/mirrors/instanceController.ts
+src/modules/control/control-hub/ControlHubPanel.tsx
+src/modules/core/help-center/HelpCenter.tsx
+src/modules/intelligence/dp-intelligence/DPIntelligenceCenter.tsx
+src/modules/intelligence/dp-intelligence/components/DPIntelligenceCenter.tsx
+src/modules/logs-center/LogsCenter.tsx
+src/modules/logs-center/VirtualizedLogsCenter.tsx
+src/modules/maintenance-planner/components/JobsCenter.tsx
+src/modules/mission-control/components/MissionControlConsolidation.tsx
+src/modules/mission-control/mobile/MissionControlMobileDashboard.tsx
+src/modules/mission-control/services/mission-control-service.ts
+src/modules/mission-control/validation/MissionControlConsolidationValidation.tsx
+src/modules/mission-control/validation/MissionControlRealtimeValidation.tsx
+src/modules/mission-control/validation/MissionControlValidation.tsx
+src/modules/nautilus-people/components/PerformanceCenter.tsx
+src/pages/AICommandCenter.tsx
+src/pages/AlertsCommandCenter.tsx
+src/pages/AnalyticsCommandCenter.tsx
+src/pages/CommandCenter.tsx
+src/pages/CommunicationCommandCenter.tsx
+src/pages/FinanceCommandCenter.tsx
+src/pages/FleetCommandCenter.tsx
+src/pages/MaintenanceCommandCenter.tsx
+src/pages/MaritimeCommandCenter.tsx
+src/pages/MissionCommandCenter.tsx
+src/pages/NotificationsCenter.tsx
+src/pages/OperationsCommandCenter.tsx
+src/pages/ProcurementCommandCenter.tsx
+src/pages/ReportsCommandCenter.tsx
+src/pages/TravelCommandCenter.tsx
+src/pages/VoyageCommandCenter.tsx
+src/pages/WeatherCommandCenter.tsx
+src/pages/WorkflowCommandCenter.tsx
+src/pages/admin/ControlCenter.tsx
+src/pages/admin/Patch495InventoryControl.tsx
+src/pages/admin/Patch505MissionControl.tsx
+src/pages/admin/Patch530MissionControlV2.tsx
+src/pages/admin/control-panel.tsx
+src/pages/admin/module-control.tsx
+src/services/cognitive/instance-controller.service.ts
+src/services/mission-control.service.ts
+src/tests/components/documents/document-management-center.test.tsx
+src/tests/components/dp-intelligence/dp-intelligence-center.test.tsx
+src/tests/control-hub.test.ts
+src/tests/mission-control.test.ts
+src/types/access-control.ts
+src/types/controlhub.ts
+
+TOTAL GERAL: 122 arquivos
+
+
+=================================================
+2. CATEGORIZAÇÃO POR DOMÍNIO
+=================================================
+
+[2.1] FLEET COMMAND:
+src/components/fleet/FleetCommandCenter.tsx
+src/components/fleet/FleetCommandCenter.tsx
+src/components/fleet/compliance-center.tsx
+src/components/fleet/documentation-center.tsx
+src/components/fleet/notification-center.tsx
+src/components/peo-dp/fleet-operations-center.tsx
+src/pages/FleetCommandCenter.tsx
+src/pages/FleetCommandCenter.tsx
+   Total: 8
+
+[2.2] OPERATIONS COMMAND:
+src/components/operations/operational-command-center.tsx
+src/components/peo-dp/fleet-operations-center.tsx
+src/pages/OperationsCommandCenter.tsx
+src/pages/OperationsCommandCenter.tsx
+   Total: 4
+
+[2.3] MISSION COMMAND:
+src/modules/mission-control/components/AICommander.tsx
+src/modules/mission-control/components/MissionControlConsolidation.tsx
+src/modules/mission-control/mobile/MissionControlMobileDashboard.tsx
+src/modules/mission-control/services/mission-control-service.ts
+src/modules/mission-control/validation/MissionControlConsolidationValidation.tsx
+src/modules/mission-control/validation/MissionControlRealtimeValidation.tsx
+src/modules/mission-control/validation/MissionControlValidation.tsx
+src/pages/MissionCommandCenter.tsx
+src/pages/MissionCommandCenter.tsx
+src/pages/admin/Patch505MissionControl.tsx
+src/pages/admin/Patch530MissionControlV2.tsx
+src/pages/mission-control/ai-command-center.tsx
+src/services/mission-control.service.ts
+src/tests/mission-control.test.ts
+   Total: 14
+
+[2.4] CONTROL CENTERS:
+src/components/nautilus-os/apps/ModulesControl.tsx
+src/components/system/SystemControlPanel.tsx
+src/core/mirrors/instanceController.ts
+src/modules/control/control-hub/ControlHubPanel.tsx
+src/modules/mission-control/components/AICommander.tsx
+src/modules/mission-control/components/MissionControlConsolidation.tsx
+src/modules/mission-control/mobile/MissionControlMobileDashboard.tsx
+src/modules/mission-control/services/mission-control-service.ts
+src/modules/mission-control/validation/MissionControlConsolidationValidation.tsx
+src/modules/mission-control/validation/MissionControlRealtimeValidation.tsx
+src/modules/mission-control/validation/MissionControlValidation.tsx
+src/pages/admin/ControlCenter.tsx
+src/pages/admin/Patch495InventoryControl.tsx
+src/pages/admin/Patch505MissionControl.tsx
+src/pages/admin/Patch530MissionControlV2.tsx
+src/pages/admin/control-panel.tsx
+src/pages/admin/module-control.tsx
+src/pages/mission-control/ai-command-center.tsx
+src/services/cognitive/instance-controller.service.ts
+src/services/mission-control.service.ts
+src/tests/control-hub.test.ts
+src/tests/mission-control.test.ts
+src/types/access-control.ts
+src/types/controlhub.ts
+   Total: 24
+
+[2.5] GENERIC COMMAND/CENTERS:
+src/assistants/voice/distributed-commands.ts.disabled
+src/components/CommandPalette.tsx
+src/components/bcp/compliance-audit-center.tsx
+src/components/command/CommandCenterAI.tsx
+src/components/communication/CommunicationCenterProfessional.tsx
+src/components/communication/enhanced-communication-center.tsx
+src/components/communication/maritime-communication-center.tsx
+src/components/communication/notification-center.tsx
+src/components/deploy/production-deploy-center.tsx
+src/components/documents/advanced-document-center.tsx
+src/components/documents/document-management-center.tsx
+src/components/help/help-center.tsx
+src/components/help/intelligent-help-center.tsx
+src/components/intelligence/IntelligentNotificationCenter.tsx
+src/components/legacy/notification_NotificationCenter.tsx
+src/components/legacy/notification_NotificationCenterProfessional.tsx
+src/components/legacy/notification_enhanced-notification-center.tsx
+src/components/legacy/notification_notification-center.tsx
+src/components/legacy/notification_real-time-notification-center.tsx
+src/components/maritime/notification-center.tsx
+src/components/mobile/mobile-optimization-center.tsx
+src/components/nautilus/NautilusCommandCenter.tsx
+src/components/nautilus/NautilusCommandCenter.tsx
+src/components/notifications/NotificationCenter.tsx
+src/components/notifications/NotificationCenterProfessional.tsx
+src/components/notifications/enhanced-notification-center.tsx
+src/components/notifications/notification-center.tsx
+src/components/notifications/real-time-notification-center.tsx
+src/components/onboarding/user-onboarding-center.tsx
+src/components/optimization/intelligent-alerts-center.tsx
+src/components/peo-dp/dp-intel-center.tsx
+src/components/peo-dp/lessons-learned-center.tsx
+src/components/peotram/peotram-communication-center.tsx
+src/components/security/advanced-security-center.tsx
+src/components/ui/NotificationCenter.tsx
+src/components/ui/command.tsx
+src/components/ui/dropdown-test-center.tsx
+src/components/unified/NotificationCenter.unified.tsx
+src/components/voice/VoiceCommandButton.tsx
+src/lib/ai/nautilus-command.ts
+src/lib/drone/command-service.ts
+src/lib/voice/advanced-voice-commands.ts
+src/modules/core/help-center/HelpCenter.tsx
+src/modules/intelligence/dp-intelligence/DPIntelligenceCenter.tsx
+src/modules/intelligence/dp-intelligence/components/DPIntelligenceCenter.tsx
+src/modules/logs-center/LogsCenter.tsx
+src/modules/logs-center/VirtualizedLogsCenter.tsx
+src/modules/maintenance-planner/components/JobsCenter.tsx
+src/modules/nautilus-command/components/CommandBrainPanel.tsx
+src/modules/nautilus-command/hooks/useNautilusCommandAI.ts
+src/modules/nautilus-people/components/PerformanceCenter.tsx
+src/modules/revolutionary-ai/NaturalLanguageCommand.tsx
+src/modules/revolutionary-ai/VoiceCommandsAdvanced.tsx
+src/pages/AICommandCenter.tsx
+src/pages/AICommandCenter.tsx
+src/pages/AlertsCommandCenter.tsx
+src/pages/AlertsCommandCenter.tsx
+src/pages/AnalyticsCommandCenter.tsx
+src/pages/AnalyticsCommandCenter.tsx
+src/pages/CommandCenter.tsx
+src/pages/CommandCenter.tsx
+src/pages/CommunicationCommandCenter.tsx
+src/pages/CommunicationCommandCenter.tsx
+src/pages/FinanceCommandCenter.tsx
+src/pages/FinanceCommandCenter.tsx
+src/pages/MaintenanceCommandCenter.tsx
+src/pages/MaintenanceCommandCenter.tsx
+src/pages/MaritimeCommandCenter.tsx
+src/pages/MaritimeCommandCenter.tsx
+src/pages/NautilusCommand.tsx
+src/pages/NotificationsCenter.tsx
+src/pages/ProcurementCommandCenter.tsx
+src/pages/ProcurementCommandCenter.tsx
+src/pages/ReportsCommandCenter.tsx
+src/pages/ReportsCommandCenter.tsx
+src/pages/TravelCommandCenter.tsx
+src/pages/TravelCommandCenter.tsx
+src/pages/VoyageCommandCenter.tsx
+src/pages/VoyageCommandCenter.tsx
+src/pages/WeatherCommandCenter.tsx
+src/pages/WeatherCommandCenter.tsx
+src/pages/WorkflowCommandCenter.tsx
+src/pages/WorkflowCommandCenter.tsx
+src/tests/components/documents/document-management-center.test.tsx
+src/tests/components/dp-intelligence/dp-intelligence-center.test.tsx
+   Total: 85
+
+
+=================================================
+3. PADRÕES COMUNS
+=================================================
+
+[3.1] Imports mais comuns em command centers:
+     81 import { Button } from "@/components/ui/button";
+     81 import { Badge } from "@/components/ui/badge";
+     66 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
+     62 import { 
+     49 import { useToast } from "@/hooks/use-toast";
+     47 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
+     46 import { supabase } from "@/integrations/supabase/client";
+     44 import { Input } from "@/components/ui/input";
+     38 import { Progress } from "@/components/ui/progress";
+     36 import {
+     29 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
+     27 import { ScrollArea } from "@/components/ui/scroll-area";
+     27 import React, { useState, useEffect } from "react";
+     23 import { toast } from "sonner";
+     22 import { Label } from "@/components/ui/label";
+     22 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+     16 import { Textarea } from "@/components/ui/textarea";
+     15 import React, { useState } from "react";
+     14 import { motion } from "framer-motion";
+     14 import { logger } from "@/lib/logger";
+
+[3.2] Hooks mais utilizados:
+    677 useState
+    144 useEffect
+     99 useToast
+     78 useCallback
+     19 useRef
+     17 useAuth
+     14 useQuery
+     14 useNavigate
+     11 useMemo
+      6 useWorkflows
+      6 useWorkflowAI
+      6 useWatchdogAlerts
+      6 useSystemHealth
+      6 useOfflineSync
+      6 useNautilusEnhancementAI
+
+
+=================================================
+4. TAMANHO E COMPLEXIDADE
+=================================================
+
+Arquivo                                           | Linhas | Tamanho | Componentes
+--------------------------------------------------|--------|---------|-------------
+assistants/voice/distributed-commands.ts.disabled  |    657 |     20K |           1
+components/CommandPalette.tsx                      |     88 |    4.0K |           3
+components/bcp/compliance-audit-center.tsx         |    557 |     24K |           4
+components/command/CommandCenterAI.tsx             |    134 |    8.0K |           2
+components/communication/CommunicationCenterProfessional.tsx |    934 |     44K |          11
+components/communication/enhanced-communication-center.tsx |    338 |     12K |           3
+components/communication/maritime-communication-center.tsx |    738 |     32K |          14
+components/communication/notification-center.tsx   |      8 |    4.0K |         0
+0
+components/deploy/production-deploy-center.tsx     |    618 |     28K |           5
+components/documents/advanced-document-center.tsx  |   1356 |     52K |          19
+components/documents/document-management-center.tsx |    599 |     24K |          12
+components/fleet/FleetCommandCenter.tsx            |    448 |     20K |           3
+components/fleet/FleetCommandCenter.tsx            |    448 |     20K |           3
+components/fleet/compliance-center.tsx             |    717 |     32K |           9
+components/fleet/documentation-center.tsx          |     39 |    4.0K |           1
+components/fleet/notification-center.tsx           |      8 |    4.0K |         0
+0
+components/help/help-center.tsx                    |    460 |     16K |           5
+components/help/intelligent-help-center.tsx        |    604 |     24K |           5
+components/intelligence/IntelligentNotificationCenter.tsx |    437 |     16K |          12
+components/legacy/notification_NotificationCenter.tsx |    453 |     16K |          13
+components/legacy/notification_NotificationCenterProfessional.tsx |   1251 |     52K |          26
+components/legacy/notification_enhanced-notification-center.tsx |    367 |     12K |           9
+components/legacy/notification_notification-center.tsx |     14 |    4.0K |         0
+0
+components/legacy/notification_real-time-notification-center.tsx |    554 |     20K |          12
+components/maritime/notification-center.tsx        |      8 |    4.0K |         0
+0
+components/mobile/mobile-optimization-center.tsx   |    753 |     32K |          16
+components/nautilus-os/apps/ModulesControl.tsx     |     28 |    4.0K |           1
+components/nautilus/NautilusCommandCenter.tsx      |    277 |     12K |           8
+components/nautilus/NautilusCommandCenter.tsx      |    277 |     12K |           8
+components/notifications/NotificationCenter.tsx    |      8 |    4.0K |         0
+0
+components/notifications/NotificationCenterProfessional.tsx |      8 |    4.0K |         0
+0
+components/notifications/enhanced-notification-center.tsx |      8 |    4.0K |         0
+0
+components/notifications/notification-center.tsx   |      8 |    4.0K |         0
+0
+components/notifications/real-time-notification-center.tsx |      8 |    4.0K |         0
+0
+components/onboarding/user-onboarding-center.tsx   |    527 |     20K |           8
+components/operations/operational-command-center.tsx |    478 |     16K |          13
+components/optimization/intelligent-alerts-center.tsx |    580 |     20K |          11
+components/peo-dp/dp-intel-center.tsx              |    255 |     12K |           5
+components/peo-dp/fleet-operations-center.tsx      |    500 |     24K |           7
+components/peo-dp/lessons-learned-center.tsx       |    618 |     32K |           5
+components/peotram/peotram-communication-center.tsx |    584 |     24K |           8
+components/security/advanced-security-center.tsx   |    587 |     24K |           9
+components/system/SystemControlPanel.tsx           |    490 |     16K |          16
+components/ui/NotificationCenter.tsx               |      8 |    4.0K |         0
+0
+components/ui/command.tsx                          |    132 |    8.0K |           2
+components/ui/dropdown-test-center.tsx             |    422 |     20K |           1
+components/unified/NotificationCenter.unified.tsx  |   1089 |     36K |          13
+components/voice/VoiceCommandButton.tsx            |    156 |    8.0K |           3
+core/mirrors/instanceController.ts                 |    574 |     16K |         0
+0
+lib/ai/nautilus-command.ts                         |    122 |    4.0K |           1
+lib/drone/command-service.ts                       |    379 |     12K |         0
+0
+lib/voice/advanced-voice-commands.ts               |    362 |     12K |           8
+modules/control/control-hub/ControlHubPanel.tsx    |    228 |     12K |           6
+modules/core/help-center/HelpCenter.tsx            |     10 |    4.0K |           1
+modules/intelligence/dp-intelligence/DPIntelligenceCenter.tsx |     11 |    4.0K |         0
+0
+modules/intelligence/dp-intelligence/components/DPIntelligenceCenter.tsx |    490 |     20K |           5
+modules/logs-center/LogsCenter.tsx                 |    327 |     12K |           9
+modules/logs-center/VirtualizedLogsCenter.tsx      |    316 |     12K |           8
+modules/maintenance-planner/components/JobsCenter.tsx |    252 |     12K |           5
+modules/mission-control/components/AICommander.tsx |    128 |    8.0K |           3
+modules/mission-control/components/MissionControlConsolidation.tsx |    252 |     12K |           8
+modules/mission-control/mobile/MissionControlMobileDashboard.tsx |    255 |     12K |           7
+modules/mission-control/services/mission-control-service.ts |    322 |     12K |         0
+0
+modules/mission-control/validation/MissionControlConsolidationValidation.tsx |    116 |    8.0K |           2
+modules/mission-control/validation/MissionControlRealtimeValidation.tsx |    156 |    8.0K |           1
+modules/mission-control/validation/MissionControlValidation.tsx |    168 |    8.0K |           2
+modules/nautilus-command/components/CommandBrainPanel.tsx |    291 |     12K |           7
+modules/nautilus-command/hooks/useNautilusCommandAI.ts |    289 |     12K |           8
+modules/nautilus-people/components/PerformanceCenter.tsx |    716 |     32K |          10
+modules/revolutionary-ai/NaturalLanguageCommand.tsx |    318 |     12K |           6
+modules/revolutionary-ai/VoiceCommandsAdvanced.tsx |    350 |     16K |           4
+pages/AICommandCenter.tsx                          |    973 |     48K |           8
+pages/AICommandCenter.tsx                          |    973 |     48K |           8
+pages/AlertsCommandCenter.tsx                      |    766 |     32K |          10
+pages/AlertsCommandCenter.tsx                      |    766 |     32K |          10
+pages/AnalyticsCommandCenter.tsx                   |   1000 |     44K |          10
+pages/AnalyticsCommandCenter.tsx                   |   1000 |     44K |          10
+pages/CommandCenter.tsx                            |    829 |     36K |           6
+pages/CommandCenter.tsx                            |    829 |     36K |           6
+pages/CommunicationCommandCenter.tsx               |    500 |     24K |           2
+pages/CommunicationCommandCenter.tsx               |    500 |     24K |           2
+pages/FinanceCommandCenter.tsx                     |   1332 |     56K |          22
+pages/FinanceCommandCenter.tsx                     |   1332 |     56K |          22
+pages/FleetCommandCenter.tsx                       |    651 |     32K |          11
+pages/FleetCommandCenter.tsx                       |    651 |     32K |          11
+pages/MaintenanceCommandCenter.tsx                 |    581 |     24K |           3
+pages/MaintenanceCommandCenter.tsx                 |    581 |     24K |           3
+pages/MaritimeCommandCenter.tsx                    |    848 |     36K |           9
+pages/MaritimeCommandCenter.tsx                    |    848 |     36K |           9
+pages/MissionCommandCenter.tsx                     |    783 |     36K |          14
+pages/MissionCommandCenter.tsx                     |    783 |     36K |          14
+pages/NautilusCommand.tsx                          |     21 |    4.0K |           1
+pages/NotificationsCenter.tsx                      |      9 |    4.0K |           1
+pages/OperationsCommandCenter.tsx                  |   1047 |     44K |          14
+pages/OperationsCommandCenter.tsx                  |   1047 |     44K |          14
+pages/ProcurementCommandCenter.tsx                 |   1064 |     44K |          13
+pages/ProcurementCommandCenter.tsx                 |   1064 |     44K |          13
+pages/ReportsCommandCenter.tsx                     |    751 |     36K |           5
+pages/ReportsCommandCenter.tsx                     |    751 |     36K |           5
+pages/TravelCommandCenter.tsx                      |    915 |     40K |          14
+pages/TravelCommandCenter.tsx                      |    915 |     40K |          14
+pages/VoyageCommandCenter.tsx                      |   1131 |     48K |          10
+pages/VoyageCommandCenter.tsx                      |   1131 |     48K |          10
+pages/WeatherCommandCenter.tsx                     |    779 |     36K |          10
+pages/WeatherCommandCenter.tsx                     |    779 |     36K |          10
+pages/WorkflowCommandCenter.tsx                    |    903 |     44K |           8
+pages/WorkflowCommandCenter.tsx                    |    903 |     44K |           8
+pages/admin/ControlCenter.tsx                      |    422 |     16K |           2
+pages/admin/Patch495InventoryControl.tsx           |    100 |    4.0K |           1
+pages/admin/Patch505MissionControl.tsx             |    244 |     12K |           4
+pages/admin/Patch530MissionControlV2.tsx           |    133 |    8.0K |           2
+pages/admin/control-panel.tsx                      |    420 |     20K |           1
+pages/admin/module-control.tsx                     |    267 |     12K |           8
+pages/mission-control/ai-command-center.tsx        |    276 |     12K |           5
+services/cognitive/instance-controller.service.ts  |    168 |    8.0K |         0
+0
+services/mission-control.service.ts                |    579 |     20K |           3
+tests/components/documents/document-management-center.test.tsx |    113 |    4.0K |         0
+0
+tests/components/dp-intelligence/dp-intelligence-center.test.tsx |    428 |     16K |           1
+tests/control-hub.test.ts                          |    184 |    8.0K |           1
+tests/mission-control.test.ts                      |    974 |     32K |           7
+types/access-control.ts                            |     64 |    4.0K |         0
+0
+types/controlhub.ts                                |     41 |    4.0K |         0
+0
+
+
+=================================================
+5. DIFERENÇAS ESPECÍFICAS
+=================================================
+
+[5.1] Command Centers com funcionalidades únicas:
+src/assistants/voice/distributed-commands.ts.disabled:  map
+src/components/CommandPalette.tsx:  map
+src/components/bcp/compliance-audit-center.tsx:  map
+src/components/command/CommandCenterAI.tsx:  map table
+src/components/communication/CommunicationCenterProfessional.tsx:  map
+src/components/communication/maritime-communication-center.tsx:  map
+src/components/deploy/production-deploy-center.tsx:  map
+src/components/documents/advanced-document-center.tsx:  map
+src/components/documents/document-management-center.tsx:  map
+src/components/fleet/FleetCommandCenter.tsx:  map
+src/components/fleet/FleetCommandCenter.tsx:  map
+src/components/fleet/compliance-center.tsx:  map
+src/components/help/help-center.tsx:  map
+src/components/help/intelligent-help-center.tsx:  map
+src/components/intelligence/IntelligentNotificationCenter.tsx:  map table
+src/components/legacy/notification_NotificationCenter.tsx:  map table
+src/components/legacy/notification_NotificationCenterProfessional.tsx:  map
+src/components/legacy/notification_enhanced-notification-center.tsx:  realtime map table
+src/components/legacy/notification_real-time-notification-center.tsx:  map table
+src/components/mobile/mobile-optimization-center.tsx:  map chart table
+src/components/nautilus-os/apps/ModulesControl.tsx:  map
+src/components/nautilus/NautilusCommandCenter.tsx:  map
+src/components/nautilus/NautilusCommandCenter.tsx:  map
+src/components/onboarding/user-onboarding-center.tsx:  map
+src/components/operations/operational-command-center.tsx:  map table
+src/components/optimization/intelligent-alerts-center.tsx:  map table
+src/components/peo-dp/dp-intel-center.tsx:  map
+src/components/peo-dp/fleet-operations-center.tsx:  map
+src/components/peo-dp/lessons-learned-center.tsx:  map
+src/components/peotram/peotram-communication-center.tsx:  map
+src/components/security/advanced-security-center.tsx:  map table
+src/components/system/SystemControlPanel.tsx:  map
+src/components/unified/NotificationCenter.unified.tsx:  map table
+src/components/voice/VoiceCommandButton.tsx:  map
+src/core/mirrors/instanceController.ts:  table
+src/lib/voice/advanced-voice-commands.ts:  map
+src/modules/control/control-hub/ControlHubPanel.tsx:  map
+src/modules/intelligence/dp-intelligence/components/DPIntelligenceCenter.tsx:  map
+src/modules/logs-center/LogsCenter.tsx:  map table
+src/modules/logs-center/VirtualizedLogsCenter.tsx:  map
+src/modules/maintenance-planner/components/JobsCenter.tsx:  map
+src/modules/mission-control/components/AICommander.tsx:  map
+src/modules/mission-control/components/MissionControlConsolidation.tsx:  table
+src/modules/mission-control/mobile/MissionControlMobileDashboard.tsx:  map
+src/modules/mission-control/services/mission-control-service.ts:  map
+src/modules/mission-control/validation/MissionControlRealtimeValidation.tsx:  realtime
+src/modules/mission-control/validation/MissionControlValidation.tsx:  map
+src/modules/nautilus-command/components/CommandBrainPanel.tsx:  map
+src/modules/nautilus-command/hooks/useNautilusCommandAI.ts:  map
+src/modules/nautilus-people/components/PerformanceCenter.tsx:  map
+src/modules/revolutionary-ai/NaturalLanguageCommand.tsx:  map
+src/modules/revolutionary-ai/VoiceCommandsAdvanced.tsx:  map
+src/pages/AICommandCenter.tsx:  map chart table
+src/pages/AICommandCenter.tsx:  map chart table
+src/pages/AlertsCommandCenter.tsx:  map
+src/pages/AlertsCommandCenter.tsx:  map
+src/pages/AnalyticsCommandCenter.tsx:  map chart table
+src/pages/AnalyticsCommandCenter.tsx:  map chart table
+src/pages/CommandCenter.tsx:  map chart
+src/pages/CommandCenter.tsx:  map chart
+src/pages/CommunicationCommandCenter.tsx:  map
+src/pages/CommunicationCommandCenter.tsx:  map
+src/pages/FinanceCommandCenter.tsx:  map chart
+src/pages/FinanceCommandCenter.tsx:  map chart
+src/pages/FleetCommandCenter.tsx:  map chart
+src/pages/FleetCommandCenter.tsx:  map chart
+src/pages/MaritimeCommandCenter.tsx:  map
+src/pages/MaritimeCommandCenter.tsx:  map
+src/pages/MissionCommandCenter.tsx:  realtime map
+src/pages/MissionCommandCenter.tsx:  realtime map
+src/pages/OperationsCommandCenter.tsx:  map chart
+src/pages/OperationsCommandCenter.tsx:  map chart
+src/pages/ProcurementCommandCenter.tsx:  map table
+src/pages/ProcurementCommandCenter.tsx:  map table
+src/pages/ReportsCommandCenter.tsx:  map
+src/pages/ReportsCommandCenter.tsx:  map
+src/pages/TravelCommandCenter.tsx:  map
+src/pages/TravelCommandCenter.tsx:  map
+src/pages/VoyageCommandCenter.tsx:  map
+src/pages/VoyageCommandCenter.tsx:  map
+src/pages/WeatherCommandCenter.tsx:  map
+src/pages/WeatherCommandCenter.tsx:  map
+src/pages/WorkflowCommandCenter.tsx:  map
+src/pages/WorkflowCommandCenter.tsx:  map
+src/pages/admin/ControlCenter.tsx:  map
+src/pages/admin/Patch505MissionControl.tsx:  map table
+src/pages/admin/module-control.tsx:  map
+src/pages/mission-control/ai-command-center.tsx:  map
+src/services/mission-control.service.ts:  map table
+src/tests/control-hub.test.ts:  map
+src/types/controlhub.ts:  table
+
+
+=================================================
+6. ANÁLISE DE DEPENDÊNCIAS
+=================================================
+
+src/assistants/voice/distributed-commands.ts.disabled: 4 dependências
+  -    * Extract parameters from command text
+  -         .from("voice_command_modules")
+  -       await supabase.from("voice_command_logs").insert({
+  -       await supabase.from("voice_command_events").insert({
+
+src/components/CommandPalette.tsx: 1 dependências
+  - } from "@/components/ui/command";
+
+src/components/help/intelligent-help-center.tsx: 2 dependências
+  -         .from("help_center_analytics")
+  -         .from("help_center_analytics")
+
+src/components/nautilus/NautilusCommandCenter.tsx: 6 dependências
+  - import { CommandBrainPanel } from "@/modules/nautilus-command/components/CommandBrainPanel";
+  - import { AIInsightsPanel } from "@/modules/nautilus-command/components/AIInsightsPanel";
+  - import { NotificationsPanel } from "@/modules/nautilus-command/components/NotificationsPanel";
+  - import { QuickActionsGrid } from "@/modules/nautilus-command/components/QuickActionsGrid";
+  - import { SettingsDialog } from "@/modules/nautilus-command/components/SettingsDialog";
+  - import { SystemContext } from "@/modules/nautilus-command/hooks/useNautilusCommandAI";
+
+src/components/nautilus/NautilusCommandCenter.tsx: 6 dependências
+  - import { CommandBrainPanel } from "@/modules/nautilus-command/components/CommandBrainPanel";
+  - import { AIInsightsPanel } from "@/modules/nautilus-command/components/AIInsightsPanel";
+  - import { NotificationsPanel } from "@/modules/nautilus-command/components/NotificationsPanel";
+  - import { QuickActionsGrid } from "@/modules/nautilus-command/components/QuickActionsGrid";
+  - import { SettingsDialog } from "@/modules/nautilus-command/components/SettingsDialog";
+  - import { SystemContext } from "@/modules/nautilus-command/hooks/useNautilusCommandAI";
+
+src/components/voice/VoiceCommandButton.tsx: 1 dependências
+  - import { useVoiceCommands } from '@/lib/voice/advanced-voice-commands';
+
+src/modules/control/control-hub/ControlHubPanel.tsx: 4 dependências
+  - import { controlHub } from "@/modules/control/control-hub";
+  - } from "@/modules/control/control-hub/hub_ui";
+  - import { ControlHubState } from "@/modules/control/control-hub/types";
+  - import { hubBridge } from "@/modules/control/control-hub/hub_bridge";
+
+src/pages/FleetCommandCenter.tsx: 1 dependências
+  -             <div className="relative h-full bg-gradient-to-br from-blue-50 to-cyan-50 dark:from-blue-950/20 dark:to-cyan-950/20 rounded-lg flex items-center justify-center">
+
+src/pages/FleetCommandCenter.tsx: 1 dependências
+  -             <div className="relative h-full bg-gradient-to-br from-blue-50 to-cyan-50 dark:from-blue-950/20 dark:to-cyan-950/20 rounded-lg flex items-center justify-center">
+
+src/pages/MissionCommandCenter.tsx: 5 dependências
+  - import { missionLogsService, type MissionLog as MissionLogType } from "@/modules/mission-control/services/mission-logs-service";
+  - // Components from mission-control
+  - import { AICommander } from "@/modules/mission-control/components/AICommander";
+  - import { KPIDashboard } from "@/modules/mission-control/components/KPIDashboard";
+  - import { SystemLogs } from "@/modules/mission-control/components/SystemLogs";
+
+src/pages/MissionCommandCenter.tsx: 5 dependências
+  - import { missionLogsService, type MissionLog as MissionLogType } from "@/modules/mission-control/services/mission-logs-service";
+  - // Components from mission-control
+  - import { AICommander } from "@/modules/mission-control/components/AICommander";
+  - import { KPIDashboard } from "@/modules/mission-control/components/KPIDashboard";
+  - import { SystemLogs } from "@/modules/mission-control/components/SystemLogs";
+
+src/pages/mission-control/ai-command-center.tsx: 1 dependências
+  - import { streamCommandChat, Message, SystemContext } from "@/lib/ai/nautilus-command";
+
+src/tests/components/documents/document-management-center.test.tsx: 1 dependências
+  - import { DocumentManagementCenter } from "@/components/documents/document-management-center";
+
+src/tests/control-hub.test.ts: 1 dependências
+  - import { HubCache } from "@/modules/control_hub/hub_cache";
+
+
+=================================================
+7. SUMÁRIO E RECOMENDAÇÕES
+=================================================
+
+Total de command centers identificados: 122
+
+Distribuição por domínio:
+  - Fleet Command:      8
+  - Operations Command: 4
+  - Mission Command:    14
+  - Control Centers:    24
+  - Generic Centers:    85
+
+OPORTUNIDADES DE CONSOLIDAÇÃO:
+
+Alta Prioridade:
+  - Unificar command centers de mesmo domínio
+  - Criar BaseCommandCenter genérico
+
+Média Prioridade:
+  - Parametrizar diferenças específicas
+  - Consolidar componentes comuns
+
+Baixa Prioridade:
+  - Avaliar necessidade de cada center
+

@@ -1,0 +1,517 @@
+{
+  "analysis_date": "2025-12-11T23:37:48+00:00",
+  "repository": "/home/ubuntu/github_repos/travel-hr-buddy",
+  "summary": {
+    "dashboard_groups": 7,
+    "command_center_groups": 9,
+    "total_dashboards": 172,
+    "total_command_centers": 122,
+    "total_components": 1860,
+    "total_services": 105,
+    "total_utilities": 29
+  },
+  "dashboard_similarity_groups": {
+    "group_interopdashboard": {
+      "count": 99,
+      "total_lines": 43529,
+      "modules": [
+        "src/components/InteropDashboard.tsx",
+        "src/components/PerformanceDashboard.tsx",
+        "src/components/admin/error-dashboard.tsx",
+        "src/components/admin/health-status-dashboard.tsx",
+        "src/components/admin/performance-dashboard.tsx",
+        "src/components/admin/super-admin-dashboard.tsx",
+        "src/components/admin/user-management-dashboard.tsx",
+        "src/components/ai/CognitiveDashboard.tsx",
+        "src/components/ai/CollectiveDashboard.tsx",
+        "src/components/ai/ai-modules-dashboard.tsx",
+        "src/components/ai/evolution/BehavioralEvolutionDashboard.tsx",
+        "src/components/analytics/AnalyticsDashboard.tsx",
+        "src/components/analytics/advanced-metrics-dashboard.tsx",
+        "src/components/analytics/analytics-dashboard.tsx",
+        "src/components/analytics/enhanced-metrics-dashboard.tsx",
+        "src/components/bcp/risk-management-dashboard.tsx",
+        "src/components/bi/BIDashboardBuilder.tsx",
+        "src/components/compliance/ClassSurveyDashboard.tsx",
+        "src/components/crew/MLCComplianceDashboard.tsx",
+        "src/components/crew/crew-wellbeing-dashboard.tsx",
+        "src/components/dashboard/DashboardActions.tsx",
+        "src/components/dashboard/DashboardWatchdog.tsx",
+        "src/components/dashboard/ai-evolution/AIEvolutionDashboard.tsx",
+        "src/components/dashboard/business-kpi-dashboard.tsx",
+        "src/components/dashboard/comprehensive-executive-dashboard.tsx",
+        "src/components/dashboard/dashboard-analytics.tsx",
+        "src/components/dashboard/dashboard-widgets.tsx",
+        "src/components/dashboard/enhanced-dashboard-filters.tsx",
+        "src/components/dashboard/enhanced-dashboard.tsx",
+        "src/components/dashboard/enhanced-unified-dashboard.tsx",
+        "src/components/dashboard/executive-dashboard.tsx",
+        "src/components/dashboard/global-dashboard.tsx",
+        "src/components/dashboard/interactive-dashboard.tsx",
+        "src/components/dashboard/modern-executive-dashboard.tsx",
+        "src/components/dashboard/modularized-executive-dashboard.tsx",
+        "src/components/dashboard/professional-analytics-dashboard.tsx",
+        "src/components/dashboard/professional-fleet-dashboard.tsx",
+        "src/components/dashboard/professional-weather-dashboard.tsx",
+        "src/components/dashboard/responsive-dashboard.tsx",
+        "src/components/dashboard/strategic-dashboard.tsx",
+        "src/components/dashboard/unified-dashboard.tsx",
+        "src/components/fleet/FleetTelemetryDashboard.tsx",
+        "src/components/fleet/fleet-management-dashboard.tsx",
+        "src/components/fleet/fleet-overview-dashboard.tsx",
+        "src/components/hr/hr-dashboard.tsx",
+        "src/components/imca-audit/IMCADPAuditDashboard.tsx",
+        "src/components/innovation/SystemHealthDashboard.tsx",
+        "src/components/innovation/iot-dashboard.tsx",
+        "src/components/intelligence/ai-analytics-dashboard.tsx",
+        "src/components/logistics/enhanced-logistics-dashboard.tsx",
+        "src/components/maritime/checklist-dashboard.tsx",
+        "src/components/maritime/crew-management-dashboard.tsx",
+        "src/components/maritime/hr-dashboard.tsx",
+        "src/components/maritime/iot-sensor-dashboard.tsx",
+        "src/components/maritime/logistics-dashboard.tsx",
+        "src/components/maritime/maritime-dashboard.tsx",
+        "src/components/maritime/maritime-system-dashboard.tsx",
+        "src/components/maritime/vessel-performance-dashboard.tsx",
+        "src/components/mlc/MLCInspectionDashboard.tsx",
+        "src/components/monitoring/RealTimeMonitoringDashboard.tsx",
+        "src/components/monitoring/system-monitoring-dashboard.tsx",
+        "src/components/nautilus/IoTDashboard.tsx",
+        "src/components/operations/OperationsDashboardRealTime.tsx",
+        "src/components/operations/operations-dashboard.tsx",
+        "src/components/ovid/OVIDInspectionDashboard.tsx",
+        "src/components/peotram/enhanced-peotram-dashboard.tsx",
+        "src/components/performance/PerformanceDashboard.tsx",
+        "src/components/performance/SystemHealthDashboard.tsx",
+        "src/components/price-alerts/price-alert-dashboard.tsx",
+        "src/components/price-alerts/price-alerts-dashboard-integrated.tsx",
+        "src/components/price-alerts/price-analytics-dashboard.tsx",
+        "src/components/production/ProductionHealthDashboard.tsx",
+        "src/components/reports/functional-reports-dashboard.tsx",
+        "src/components/reservations/enhanced-reservations-dashboard.tsx",
+        "src/components/reservations/reservations-dashboard.tsx",
+        "src/components/saas/saas-dashboard.tsx",
+        "src/components/security/security-dashboard.tsx",
+        "src/components/sgso/SgsoDashboard.tsx",
+        "src/components/strategic/AnalyticsDashboard.tsx",
+        "src/components/telemetry/TelemetryDashboard360.tsx",
+        "src/components/ui/system-monitoring-dashboard.tsx",
+        "src/components/ui/system-status-dashboard.tsx",
+        "src/lib/dashboard-utils.ts",
+        "src/lib/performance/dashboard-optimizer.ts",
+        "src/modules/esg-emissions/components/EmissionsDashboard.tsx",
+        "src/modules/performance/PerformanceDashboard.tsx",
+        "src/modules/procurement-inventory/components/ProcurementDashboard.tsx",
+        "src/modules/safety-guardian/components/SafetyDashboard.tsx",
+        "src/modules/smart-mobility/components/MobilityDashboard.tsx",
+        "src/modules/solas-isps-training/components/TrainingDashboardSection.tsx",
+        "src/pages/Dashboard.tsx",
+        "src/pages/admin/advanced-analytics-dashboard.tsx",
+        "src/pages/admin/dashboard.tsx",
+        "src/pages/admin/documents/restore-dashboard.tsx",
+        "src/pages/admin/performance-dashboard.tsx",
+        "src/pages/ai/learning-dashboard.tsx",
+        "src/pages/dashboard/QualityDashboard.tsx",
+        "src/pages/mission-control/insight-dashboard.tsx",
+        "src/tests/performance-dashboard.test.ts"
+      ]
+    },
+    "group_dashboardjobs": {
+      "count": 17,
+      "total_lines": 1601,
+      "modules": [
+        "src/components/bi/DashboardJobs.tsx",
+        "src/components/bridgelink/BridgeLinkDashboard.tsx",
+        "src/components/compliance/ComplianceDashboard.tsx",
+        "src/components/dp/DPSyncDashboard.tsx",
+        "src/components/errors/DashboardErrorBoundary.tsx",
+        "src/components/legacy/skeleton_DashboardSkeleton.tsx",
+        "src/components/logistics/logistics-hub-dashboard.tsx",
+        "src/components/maintenance/MaintenanceDashboard.tsx",
+        "src/components/mmi/Dashboard.tsx",
+        "src/components/performance/WebVitalsDashboard.tsx",
+        "src/components/reports/reports-dashboard.tsx",
+        "src/components/ui/back-to-dashboard.tsx",
+        "src/hooks/useDashboardStats.ts",
+        "src/modules/mission-control/components/KPIDashboard.tsx",
+        "src/styles/dashboard.module.css",
+        "src/tests/bi-dashboard-jobs.test.tsx",
+        "src/types/dashboard.ts"
+      ]
+    },
+    "group_dashboardskeleton": {
+      "count": 8,
+      "total_lines": 240,
+      "modules": [
+        "src/components/dashboard/DashboardSkeleton.tsx",
+        "src/components/dashboard/LiveDashboardStats.tsx",
+        "src/components/external-audit/PerformanceDashboard.tsx",
+        "src/modules/ui/dashboard/Dashboard.tsx",
+        "src/pages/ExecutiveDashboard.tsx",
+        "src/pages/FleetDashboard.tsx",
+        "src/pages/WeatherDashboard.tsx",
+        "src/pages/ai/AIDashboard.tsx"
+      ]
+    },
+    "group_dashboarddataprovider": {
+      "count": 22,
+      "total_lines": 4708,
+      "modules": [
+        "src/components/dashboard/index/DashboardDataProvider.tsx",
+        "src/components/price-alerts/components/statistics-dashboard.tsx",
+        "src/mobile/components/MissionDashboard.tsx",
+        "src/modules/analytics/services/analytics-dashboard-service.ts",
+        "src/modules/compliance/mlc-inspection/MLCInspectionDashboard.tsx",
+        "src/modules/control/bridgelink/BridgeLinkDashboard.tsx",
+        "src/modules/hr/crew-wellbeing/components/WellbeingDashboard.tsx",
+        "src/modules/incident-reports/components/IncidentMetricsDashboard.tsx",
+        "src/modules/intelligence/dp-intelligence/components/DPIntelligenceDashboard.tsx",
+        "src/modules/mission-control/mobile/MissionControlMobileDashboard.tsx",
+        "src/modules/operations/crew-wellbeing/components/HealthMetricsDashboard.tsx",
+        "src/pages/admin/checklists-dashboard.tsx",
+        "src/pages/admin/dashboard-auditorias.tsx",
+        "src/pages/admin/reports/dashboard-logs.tsx",
+        "src/pages/compliance/PrePSCDashboard.tsx",
+        "src/pages/qa/PreviewValidationDashboard.tsx",
+        "src/tests/components/dp-intelligence/dp-intelligence-dashboard.test.tsx",
+        "src/tests/mmi-dashboard.test.ts",
+        "src/tests/modules/bridgelink/BridgeLinkDashboard.test.tsx",
+        "src/tests/pages/admin/documents/restore-dashboard-enhancements.test.tsx",
+        "src/tests/send-restore-dashboard-daily.test.ts",
+        "src/tests/send-restore-dashboard.test.ts"
+      ]
+    },
+    "group_procurementdashboard": {
+      "count": 18,
+      "total_lines": 6359,
+      "modules": [
+        "src/modules/autonomous-procurement/components/ProcurementDashboard.tsx",
+        "src/modules/compliance-hub/components/ComplianceHubDashboard.tsx",
+        "src/modules/hr/peo-dp/components/DPAnalyticsDashboard.tsx",
+        "src/modules/intelligent-maintenance/components/MMIDashboardSection.tsx",
+        "src/modules/medical-infirmary/components/InfirmaryDashboard.tsx",
+        "src/modules/mission-control/components/RealTimeMissionDashboard.tsx",
+        "src/modules/nautilus-people/components/PeopleDashboard.tsx",
+        "src/modules/operations/crew-wellbeing/components/MoodDashboard.tsx",
+        "src/modules/performance/PerformanceMonitoringDashboard.tsx",
+        "src/modules/revolutionary-ai/ESGDashboard.tsx",
+        "src/modules/safety-guardian/components/SafetyDashboardComplete.tsx",
+        "src/modules/satellite-tracker/components/DGNSSDashboard.tsx",
+        "src/modules/satellite-tracker/components/SatelliteDashboard.tsx",
+        "src/modules/solas-training/components/TrainingDashboard.tsx",
+        "src/modules/sonar-ai/components/SonarAIDashboard.tsx",
+        "src/pages/admin/LighthouseDashboard.tsx",
+        "src/pages/admin/audit-dashboard.tsx",
+        "src/tests/pages/admin/dashboard.test.tsx"
+      ]
+    },
+    "group_progressdashboard": {
+      "count": 3,
+      "total_lines": 422,
+      "modules": [
+        "src/modules/hr/training-academy/components/ProgressDashboard.tsx",
+        "src/modules/safety-guardian/components/SafetyDashboardNew.tsx",
+        "src/tests/integration/auth-to-dashboard.test.tsx"
+      ]
+    },
+    "group_bidashboard": {
+      "count": 2,
+      "total_lines": 37,
+      "modules": [
+        "src/pages/BIDashboard.tsx",
+        "src/pages/MMIDashboard.tsx"
+      ]
+    }
+  },
+  "command_center_similarity_groups": {
+    "group_distributed-commands.ts": {
+      "count": 50,
+      "total_lines": 34305,
+      "modules": [
+        "src/assistants/voice/distributed-commands.ts.disabled",
+        "src/components/bcp/compliance-audit-center.tsx",
+        "src/components/communication/CommunicationCenterProfessional.tsx",
+        "src/components/communication/maritime-communication-center.tsx",
+        "src/components/deploy/production-deploy-center.tsx",
+        "src/components/documents/document-management-center.tsx",
+        "src/components/fleet/FleetCommandCenter.tsx",
+        "src/components/fleet/FleetCommandCenter.tsx",
+        "src/components/fleet/compliance-center.tsx",
+        "src/components/help/help-center.tsx",
+        "src/components/help/intelligent-help-center.tsx",
+        "src/components/legacy/notification_NotificationCenter.tsx",
+        "src/components/legacy/notification_real-time-notification-center.tsx",
+        "src/components/mobile/mobile-optimization-center.tsx",
+        "src/components/onboarding/user-onboarding-center.tsx",
+        "src/components/operations/operational-command-center.tsx",
+        "src/components/optimization/intelligent-alerts-center.tsx",
+        "src/components/peo-dp/fleet-operations-center.tsx",
+        "src/components/peo-dp/lessons-learned-center.tsx",
+        "src/components/peotram/peotram-communication-center.tsx",
+        "src/components/security/advanced-security-center.tsx",
+        "src/components/system/SystemControlPanel.tsx",
+        "src/core/mirrors/instanceController.ts",
+        "src/modules/nautilus-people/components/PerformanceCenter.tsx",
+        "src/pages/AICommandCenter.tsx",
+        "src/pages/AICommandCenter.tsx",
+        "src/pages/AlertsCommandCenter.tsx",
+        "src/pages/AlertsCommandCenter.tsx",
+        "src/pages/CommandCenter.tsx",
+        "src/pages/CommandCenter.tsx",
+        "src/pages/CommunicationCommandCenter.tsx",
+        "src/pages/CommunicationCommandCenter.tsx",
+        "src/pages/FleetCommandCenter.tsx",
+        "src/pages/FleetCommandCenter.tsx",
+        "src/pages/MaintenanceCommandCenter.tsx",
+        "src/pages/MaintenanceCommandCenter.tsx",
+        "src/pages/MaritimeCommandCenter.tsx",
+        "src/pages/MaritimeCommandCenter.tsx",
+        "src/pages/MissionCommandCenter.tsx",
+        "src/pages/MissionCommandCenter.tsx",
+        "src/pages/ReportsCommandCenter.tsx",
+        "src/pages/ReportsCommandCenter.tsx",
+        "src/pages/TravelCommandCenter.tsx",
+        "src/pages/TravelCommandCenter.tsx",
+        "src/pages/WeatherCommandCenter.tsx",
+        "src/pages/WeatherCommandCenter.tsx",
+        "src/pages/WorkflowCommandCenter.tsx",
+        "src/pages/WorkflowCommandCenter.tsx",
+        "src/services/mission-control.service.ts",
+        "src/tests/mission-control.test.ts"
+      ]
+    },
+    "group_commandpalette": {
+      "count": 11,
+      "total_lines": 1319,
+      "modules": [
+        "src/components/CommandPalette.tsx",
+        "src/components/command/CommandCenterAI.tsx",
+        "src/components/fleet/documentation-center.tsx",
+        "src/components/peo-dp/dp-intel-center.tsx",
+        "src/components/ui/command.tsx",
+        "src/components/voice/VoiceCommandButton.tsx",
+        "src/lib/ai/nautilus-command.ts",
+        "src/modules/mission-control/validation/MissionControlConsolidationValidation.tsx",
+        "src/pages/admin/Patch495InventoryControl.tsx",
+        "src/tests/components/documents/document-management-center.test.tsx",
+        "src/types/access-control.ts"
+      ]
+    },
+    "group_enhanced-communication-center": {
+      "count": 23,
+      "total_lines": 7392,
+      "modules": [
+        "src/components/communication/enhanced-communication-center.tsx",
+        "src/components/communication/notification-center.tsx",
+        "src/components/intelligence/IntelligentNotificationCenter.tsx",
+        "src/components/legacy/notification_enhanced-notification-center.tsx",
+        "src/components/nautilus/NautilusCommandCenter.tsx",
+        "src/components/nautilus/NautilusCommandCenter.tsx",
+        "src/components/ui/dropdown-test-center.tsx",
+        "src/lib/drone/command-service.ts",
+        "src/lib/voice/advanced-voice-commands.ts",
+        "src/modules/logs-center/LogsCenter.tsx",
+        "src/modules/logs-center/VirtualizedLogsCenter.tsx",
+        "src/modules/mission-control/mobile/MissionControlMobileDashboard.tsx",
+        "src/modules/mission-control/services/mission-control-service.ts",
+        "src/modules/nautilus-command/components/CommandBrainPanel.tsx",
+        "src/modules/nautilus-command/hooks/useNautilusCommandAI.ts",
+        "src/modules/revolutionary-ai/NaturalLanguageCommand.tsx",
+        "src/modules/revolutionary-ai/VoiceCommandsAdvanced.tsx",
+        "src/pages/admin/ControlCenter.tsx",
+        "src/pages/admin/Patch505MissionControl.tsx",
+        "src/pages/admin/control-panel.tsx",
+        "src/pages/admin/module-control.tsx",
+        "src/pages/mission-control/ai-command-center.tsx",
+        "src/tests/components/dp-intelligence/dp-intelligence-center.test.tsx"
+      ]
+    },
+    "group_advanced-document-center": {
+      "count": 13,
+      "total_lines": 14844,
+      "modules": [
+        "src/components/documents/advanced-document-center.tsx",
+        "src/components/legacy/notification_NotificationCenterProfessional.tsx",
+        "src/components/unified/NotificationCenter.unified.tsx",
+        "src/pages/AnalyticsCommandCenter.tsx",
+        "src/pages/AnalyticsCommandCenter.tsx",
+        "src/pages/FinanceCommandCenter.tsx",
+        "src/pages/FinanceCommandCenter.tsx",
+        "src/pages/OperationsCommandCenter.tsx",
+        "src/pages/OperationsCommandCenter.tsx",
+        "src/pages/ProcurementCommandCenter.tsx",
+        "src/pages/ProcurementCommandCenter.tsx",
+        "src/pages/VoyageCommandCenter.tsx",
+        "src/pages/VoyageCommandCenter.tsx"
+      ]
+    },
+    "group_notification-center": {
+      "count": 11,
+      "total_lines": 97,
+      "modules": [
+        "src/components/fleet/notification-center.tsx",
+        "src/components/legacy/notification_notification-center.tsx",
+        "src/components/maritime/notification-center.tsx",
+        "src/components/notifications/NotificationCenter.tsx",
+        "src/components/notifications/NotificationCenterProfessional.tsx",
+        "src/components/notifications/enhanced-notification-center.tsx",
+        "src/components/notifications/notification-center.tsx",
+        "src/components/notifications/real-time-notification-center.tsx",
+        "src/components/ui/NotificationCenter.tsx",
+        "src/modules/core/help-center/HelpCenter.tsx",
+        "src/pages/NotificationsCenter.tsx"
+      ]
+    },
+    "group_modulescontrol": {
+      "count": 2,
+      "total_lines": 49,
+      "modules": [
+        "src/components/nautilus-os/apps/ModulesControl.tsx",
+        "src/pages/NautilusCommand.tsx"
+      ]
+    },
+    "group_controlhubpanel": {
+      "count": 7,
+      "total_lines": 1368,
+      "modules": [
+        "src/modules/control/control-hub/ControlHubPanel.tsx",
+        "src/modules/maintenance-planner/components/JobsCenter.tsx",
+        "src/modules/mission-control/components/AICommander.tsx",
+        "src/modules/mission-control/components/MissionControlConsolidation.tsx",
+        "src/modules/mission-control/validation/MissionControlRealtimeValidation.tsx",
+        "src/modules/mission-control/validation/MissionControlValidation.tsx",
+        "src/tests/control-hub.test.ts"
+      ]
+    },
+    "group_dpintelligencecenter": {
+      "count": 2,
+      "total_lines": 501,
+      "modules": [
+        "src/modules/intelligence/dp-intelligence/DPIntelligenceCenter.tsx",
+        "src/modules/intelligence/dp-intelligence/components/DPIntelligenceCenter.tsx"
+      ]
+    },
+    "group_patch530missioncontrolv2": {
+      "count": 2,
+      "total_lines": 301,
+      "modules": [
+        "src/pages/admin/Patch530MissionControlV2.tsx",
+        "src/services/cognitive/instance-controller.service.ts"
+      ]
+    }
+  },
+  "consolidation_priorities": [
+    {
+      "type": "dashboard",
+      "name": "group_interopdashboard",
+      "count": 99,
+      "total_lines": 43529,
+      "impact_score": 4309371
+    },
+    {
+      "type": "command_center",
+      "name": "group_distributed-commands.ts",
+      "count": 50,
+      "total_lines": 34305,
+      "impact_score": 1715250
+    },
+    {
+      "type": "command_center",
+      "name": "group_advanced-document-center",
+      "count": 13,
+      "total_lines": 14844,
+      "impact_score": 192972
+    },
+    {
+      "type": "command_center",
+      "name": "group_enhanced-communication-center",
+      "count": 23,
+      "total_lines": 7392,
+      "impact_score": 170016
+    },
+    {
+      "type": "dashboard",
+      "name": "group_procurementdashboard",
+      "count": 18,
+      "total_lines": 6359,
+      "impact_score": 114462
+    },
+    {
+      "type": "dashboard",
+      "name": "group_dashboarddataprovider",
+      "count": 22,
+      "total_lines": 4708,
+      "impact_score": 103576
+    },
+    {
+      "type": "dashboard",
+      "name": "group_dashboardjobs",
+      "count": 17,
+      "total_lines": 1601,
+      "impact_score": 27217
+    },
+    {
+      "type": "command_center",
+      "name": "group_commandpalette",
+      "count": 11,
+      "total_lines": 1319,
+      "impact_score": 14509
+    },
+    {
+      "type": "command_center",
+      "name": "group_controlhubpanel",
+      "count": 7,
+      "total_lines": 1368,
+      "impact_score": 9576
+    },
+    {
+      "type": "dashboard",
+      "name": "group_dashboardskeleton",
+      "count": 8,
+      "total_lines": 240,
+      "impact_score": 1920
+    },
+    {
+      "type": "dashboard",
+      "name": "group_progressdashboard",
+      "count": 3,
+      "total_lines": 422,
+      "impact_score": 1266
+    },
+    {
+      "type": "command_center",
+      "name": "group_notification-center",
+      "count": 11,
+      "total_lines": 97,
+      "impact_score": 1067
+    },
+    {
+      "type": "command_center",
+      "name": "group_dpintelligencecenter",
+      "count": 2,
+      "total_lines": 501,
+      "impact_score": 1002
+    },
+    {
+      "type": "command_center",
+      "name": "group_patch530missioncontrolv2",
+      "count": 2,
+      "total_lines": 301,
+      "impact_score": 602
+    },
+    {
+      "type": "command_center",
+      "name": "group_modulescontrol",
+      "count": 2,
+      "total_lines": 49,
+      "impact_score": 98
+    },
+    {
+      "type": "dashboard",
+      "name": "group_bidashboard",
+      "count": 2,
+      "total_lines": 37,
+      "impact_score": 74
+    }
+  ]
+}

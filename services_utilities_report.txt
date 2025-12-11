@@ -1,0 +1,292 @@
+# ANÁLISE DE SERVICES E UTILITIES - NAUTILUS ONE
+# Data: Thu Dec 11 23:39:24 UTC 2025
+# Repositório: /home/ubuntu/github_repos/travel-hr-buddy
+
+=================================================
+1. SERVICES IDENTIFICADOS
+=================================================
+
+Total de services: 105
+
+src/components/integration/service-status-panel.tsx
+src/core/telemetry/telemetryService.ts
+src/hooks/use-service-integrations.ts
+src/lib/documents/workflow-service.ts
+src/lib/drone/command-service.ts
+src/lib/errors/error-tracking-service.ts
+src/lib/performance/service-worker-advanced.ts
+src/lib/pwa/service-worker-config.ts
+src/lib/pwa/service-worker-manager.ts
+src/lib/pwa/service-worker-registration.ts
+src/lib/service-worker-register.ts
+src/mobile/services/compression-service.ts
+src/mobile/services/local-storage-service.ts
+src/modules/analytics/services/analytics-dashboard-service.ts
+src/modules/analytics/services/export-service.ts
+src/modules/compliance/ism-audit/export-service.ts
+src/modules/deep-risk-ai/services/deep-risk-ai-service.ts
+src/modules/deep-risk-ai/services/deepRiskAIService.ts
+src/modules/document-hub/templates/services/template-variables-service.ts
+src/modules/document-hub/templates/services/templateSystemService.ts
+src/modules/features/checklists/services/checklistService.ts
+src/modules/incident-reports/services/incident-service.ts
+src/modules/incident-reports/services/incidentReplayService.ts
+src/modules/mission-control/mobile/syncService.ts
+src/modules/mission-control/services/mission-control-service.ts
+src/modules/mission-control/services/mission-logs-service.ts
+src/modules/ocean-sonar/services/sonarPersistenceService.ts
+src/modules/price-alerts/services/price-alerts-service.ts
+src/modules/satcom/services/failover-service.ts
+src/modules/satcom/services/ping-service.ts
+src/modules/satellite-tracker/services/satellite-tracking-service.ts
+src/modules/satellite/services/satellite-events-service.ts
+src/modules/satellite/services/satellite-orbit-service.ts
+src/modules/sonar-ai/services/enhanced-ai-service.ts
+src/modules/sonar-ai/services/sonarAIService.ts
+src/modules/sonar-ai/sonar-service.ts
+src/modules/system-watchdog/watchdog-service.ts
+src/modules/travel/services/travel-service.ts
+src/modules/underwater-drone/services/droneMissionService.ts
+src/modules/underwater-drone/services/missionRecorderService.ts
+src/modules/underwater-drone/services/underwaterMissionService.ts
+src/services/ai-feedback-service.ts
+src/services/ai-memory-service.ts
+src/services/ai/distributed-ai.service.ts
+src/services/ai/mission-coordination.service.ts
+src/services/aiDocumentService.ts
+src/services/analytics.service.ts
+src/services/api/starfix/starfix.service.ts
+src/services/api/terrastar/terrastar.service.ts
+src/services/autonomy.service.ts
+src/services/backup-service.ts
+src/services/cognitive/clone.service.ts
+src/services/cognitive/context-mesh.service.ts
+src/services/cognitive/instance-controller.service.ts
+src/services/cognitive/priority-balancer.service.ts
+src/services/cognitive/translator.service.ts
+src/services/coordinationAIService.ts
+src/services/deepRiskAIService.ts
+src/services/dgnss-service.ts
+src/services/enhanced-auth-service.ts
+src/services/finance-hub.service.ts
+src/services/fuel-optimization-service.ts
+src/services/imca-audit-service.ts
+src/services/integration/nautilus-integration.service.ts
+src/services/integrations.service.ts
+src/services/messageService.ts
+src/services/mission-control.service.ts
+src/services/mlc-inspection.service.ts
+src/services/mmi/embeddingService.ts
+src/services/mmi/forecastService.ts
+src/services/mmi/forecastStorageService.ts
+src/services/mmi/historyService.ts
+src/services/mmi/ordersService.ts
+src/services/mmi/pdfReportService.ts
+src/services/mmi/resolvedWorkOrdersService.ts
+src/services/mmi/taskService.ts
+src/services/nlp-service.ts
+src/services/oauth-service.ts
+src/services/oceanSonarAIService.ts
+src/services/ocr-service.ts
+src/services/peodp-inference-service.ts
+src/services/pre-psc.service.ts
+src/services/price-alerts-service.ts
+src/services/reporting-engine.service.ts
+src/services/risk-ops.service.ts
+src/services/satellite.service.ts
+src/services/sensorsHubService.ts
+src/services/session-management-service.ts
+src/services/sgso-audit-service.ts
+src/services/smart-drills.service.ts
+src/services/smart-scheduler.service.ts
+src/services/space-weather/celestrak.service.ts
+src/services/space-weather/dp-asog-client.service.ts
+src/services/space-weather/hybrid-monitoring.service.ts
+src/services/space-weather/noaa-swpc.service.ts
+src/services/space-weather/space-weather-monitoring.service.ts
+src/services/template-application.service.ts
+src/services/training-ai.service.ts
+src/services/travel-price-service.ts
+src/services/unified/ai-engines.service.ts
+src/services/unified/offline-cache.service.ts
+src/services/unified/openai-client.service.ts
+src/services/voice.service.ts
+src/services/weatherService.ts
+src/services/web-vitals-service.ts
+
+
+=================================================
+2. UTILITIES IDENTIFICADAS
+=================================================
+
+Total de utilities: 29
+
+src/ai/nautilus-core.ts
+src/ai/nautilus-inference.ts
+src/hooks/useNautilusAI.ts
+src/hooks/useNautilusBrain.ts
+src/hooks/useNautilusEnhancementAI.ts
+src/hooks/useNautilusPredictions.ts
+src/lib/accessibility/a11y-utils.ts
+src/lib/ai/nautilus-command.ts
+src/lib/ai/nautilusLLM.ts
+src/lib/cleanup-utils.ts
+src/lib/dashboard-utils.ts
+src/lib/mobile/capacitor-utils.ts
+src/lib/sgso-ai-helpers.ts
+src/lib/status-utils.ts
+src/lib/testing/e2e-helpers.ts
+src/lib/theme/nautilus-theme.ts
+src/lib/theme/theme-utils.ts
+src/lib/type-helpers.ts
+src/lib/unified/format-utils.unified.ts
+src/lib/utils.ts
+src/modules/document-hub/templates/services/template-utils.ts
+src/modules/nautilus-command/hooks/useNautilusCommandAI.ts
+src/modules/nautilus-people/hooks/useNautilusPeopleAI.ts
+src/services/integration/nautilus-integration.service.ts
+src/utils/checklist-summary-helper.ts
+src/utils/format-utils.ts
+src/utils/performance-utils.ts
+src/utils/pwa-utils.ts
+src/utils/supabase-helpers.ts
+
+
+=================================================
+3. ANÁLISE DE FUNÇÕES DUPLICADAS
+=================================================
+
+[3.1] Funções exportadas em services:
+      1   src/services/web-vitals-service.ts: export const webVitalsService = WebVitalsService.getInstance();
+      1   src/services/weatherService.ts: export const weatherService = {
+      1   src/services/weatherService.ts: export async function getWeatherForecast(
+      1   src/services/weatherService.ts: export async function getWeatherAlerts(
+      1   src/services/weatherService.ts: export async function getMaritimeData(
+      1   src/services/weatherService.ts: export async function getCurrentWeather(
+      1   src/services/unified/openai-client.service.ts: export function isOpenAIConfigured(): boolean {
+      1   src/services/unified/openai-client.service.ts: export function getOpenAIClient(): OpenAI | null {
+      1   src/services/unified/openai-client.service.ts: export function getOpenAIApiKey(): string | null {
+      1   src/services/unified/openai-client.service.ts: export function generateMockEmbedding(dimensions: number = 1536): number[] {
+      1   src/services/unified/openai-client.service.ts: export async function testOpenAIConnection(): Promise<OpenAITestResult> {
+      1   src/services/unified/openai-client.service.ts: export async function simpleCompletionJSON<T>(
+      1   src/services/unified/openai-client.service.ts: export async function simpleCompletion(
+      1   src/services/unified/openai-client.service.ts: export async function generateReportSummary(
+      1   src/services/unified/openai-client.service.ts: export async function generateEmbedding(text: string): Promise<number[] | null> {
+      1   src/services/unified/openai-client.service.ts: export async function generateDrillScenario(
+      1   src/services/unified/openai-client.service.ts: export async function generateComplianceExplanation(
+      1   src/services/unified/openai-client.service.ts: export async function chatCompletionJSON<T>(
+      1   src/services/unified/openai-client.service.ts: export async function chatCompletion(
+      1   src/services/unified/offline-cache.service.ts: export const offlineCacheService = indexedDBCache;
+      1   src/services/unified/offline-cache.service.ts: export const offlineCache = localStorageCache;
+      1   src/services/unified/offline-cache.service.ts: export const localStorageCache = new LocalStorageCache();
+      1   src/services/unified/offline-cache.service.ts: export const indexedDBCache = new IndexedDBCache();
+      1   src/services/unified/ai-engines.service.ts: export const aiEngineService = new UnifiedAIEngineService();
+      1   src/services/unified/ai-engines.service.ts: export const MissionCoordinationService = {
+      1   src/services/unified/ai-engines.service.ts: export const DistributedAIService = {
+      1   src/services/travel-price-service.ts: export const travelPriceService = new TravelPriceService();
+      1   src/services/travel-price-service.ts: export const AIRPORT_CODES: Record<string, string> = {
+      1   src/services/travel-price-service.ts: export const AIRLINE_CODES: Record<string, string> = {
+      1   src/services/space-weather/space-weather-monitoring.service.ts: export const SpaceWeatherMonitoring = {
+
+[3.2] Funções exportadas em utilities:
+      1   src/utils/supabase-helpers.ts: export function toSupabaseJson(data: unknown): unknown {
+      1   src/utils/supabase-helpers.ts: export function jsonToRecord(json: unknown): Record<string, unknown> {
+      1   src/utils/supabase-helpers.ts: export function jsonToArray<T = unknown>(json: unknown): T[] {
+      1   src/utils/supabase-helpers.ts: export function isValidModuleStatus(status: string): status is "functional" | "pending" | "disabled" {
+      1   src/utils/supabase-helpers.ts: export function isValidDifficulty(difficulty: string): difficulty is "beginner" | "intermediate" | "advanced" {
+      1   src/utils/supabase-helpers.ts: export function isValidContentType(type: string): type is "tutorial" | "faq" | "guide" | "video" {
+      1   src/utils/supabase-helpers.ts: export function isRecord(value: unknown): value is Record<string, unknown> {
+      1   src/utils/supabase-helpers.ts: export async function withTimeout<T>(
+      1   src/utils/supabase-helpers.ts: export async function executeQuery<T>(
+      1   src/utils/pwa-utils.ts: export function setupInstallPrompt(
+      1   src/utils/pwa-utils.ts: export function monitorNetworkStatus(callback: (status: NetworkStatus) => void): () => void {
+      1   src/utils/pwa-utils.ts: export function isPWAInstalled(): boolean {
+      1   src/utils/pwa-utils.ts: export async function unsubscribeFromPush(): Promise<boolean> {
+      1   src/utils/pwa-utils.ts: export async function subscribeToPushNotifications(
+      1   src/utils/pwa-utils.ts: export async function skipWaitingAndActivate(): Promise<void> {
+      1   src/utils/pwa-utils.ts: export async function requestNotificationPermission(): Promise<NotificationPermission> {
+      1   src/utils/pwa-utils.ts: export async function registerServiceWorker(
+      1   src/utils/pwa-utils.ts: export async function getServiceWorkerState(): Promise<{
+      1   src/utils/pwa-utils.ts: export async function getCurrentSubscription(): Promise<PushSubscription | null> {
+      1   src/utils/performance-utils.ts: export function throttle<T extends (...args: unknown[]) => unknown>(
+      1   src/utils/performance-utils.ts: export function monitorMemory(
+      1   src/utils/performance-utils.ts: export function monitorLongTasks(threshold: number = 50): () => void {
+      1   src/utils/performance-utils.ts: export function measureWebVitals(callback: (vitals: WebVitals) => void): () => void {
+      1   src/utils/performance-utils.ts: export function measurePerformance(name: string, startMark: string, endMark: string): number {
+      1   src/utils/performance-utils.ts: export function measureExecutionTime<T extends (...args: unknown[]) => unknown>(
+      1   src/utils/performance-utils.ts: export function markPerformance(name: string): void {
+      1   src/utils/performance-utils.ts: export function getResourceTiming(): PerformanceResourceTiming[] {
+      1   src/utils/performance-utils.ts: export function getPerformanceMetrics(): PerformanceMetrics {
+      1   src/utils/performance-utils.ts: export function getPageLoadMetrics(): PageLoadMetrics | null {
+      1   src/utils/performance-utils.ts: export function debounce<T extends (...args: unknown[]) => unknown>(
+
+
+=================================================
+4. SERVICES SIMILARES
+=================================================
+
+[4.1] Services por categoria:
+
+API Services:
+  - src/services/api/starfix/starfix.service.ts
+  - src/services/api/terrastar/terrastar.service.ts
+  Total: 2
+
+Data Services:
+  Total: 0
+
+Auth Services:
+  - src/services/enhanced-auth-service.ts
+  - src/services/oauth-service.ts
+  Total: 2
+
+Storage Services:
+  - src/mobile/services/local-storage-service.ts
+  - src/services/mmi/forecastStorageService.ts
+  Total: 2
+
+
+=================================================
+5. ANÁLISE DE DEPENDÊNCIAS
+=================================================
+
+[5.1] Services mais importados:
+      1 import { useServiceIntegrations } from "@/hooks/use-service-integrations";
+      1 import { getDPASOGClient, mapDPASOGToSpaceWeatherStatus } from './dp-asog-client.service';
+      1 import { SpaceWeatherMonitoring, DEFAULT_THRESHOLDS } from './space-weather-monitoring.service';
+      1 import type { DPASOGStatusResponse, DPASOGPDOPResponse } from './dp-asog-client.service';
+      1 import NOAASWPC from './noaa-swpc.service';
+      1 import CelesTrak from './celestrak.service';
+
+[5.2] Utilities mais importadas:
+      1 } from "@/lib/unified/format-utils.unified";
+      1 import { useSummarizeChecklist } from "@/utils/checklist-summary-helper";
+
+
+=================================================
+6. SUMÁRIO E RECOMENDAÇÕES
+=================================================
+
+Total de services: 105
+Total de utilities: 29
+
+Distribuição de services:
+  - API Services:     2
+  - Data Services:    0
+  - Auth Services:    2
+  - Storage Services: 2
+
+OPORTUNIDADES DE CONSOLIDAÇÃO:
+
+Alta Prioridade:
+  - Consolidar API services similares
+  - Unificar utilities de formatação
+  - Centralizar lógica de validação
+
+Média Prioridade:
+  - Criar BaseService genérico
+  - Consolidar helpers de data/time
+
+Baixa Prioridade:
+  - Revisar dependências circulares
+

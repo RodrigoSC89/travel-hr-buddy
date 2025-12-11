@@ -1,0 +1,423 @@
+# MATRIZ DE SIMILARIDADE - NAUTILUS ONE
+# Data: 2025-12-11T23:37:48+00:00
+# Repositório: /home/ubuntu/github_repos/travel-hr-buddy
+
+======================================================================
+SUMÁRIO EXECUTIVO
+======================================================================
+
+Total de arquivos analisados:
+  - Dashboards:      172 arquivos
+  - Command Centers: 122 arquivos
+  - Componentes:     1860 arquivos
+  - Services:        105 arquivos
+  - Utilities:       29 arquivos
+
+Grupos de similaridade identificados:
+  - Dashboard Groups:      7 grupos
+  - Command Center Groups: 9 grupos
+
+======================================================================
+TOP 20 PRIORIDADES DE CONSOLIDAÇÃO
+======================================================================
+
+#    Tipo            Nome                           Módulos    Linhas     Impacto     
+-------------------------------------------------------------------------------------------
+1    dashboard       group_interopdashboard         99         43529      4309371     
+2    command_center  group_distributed-commands.ts  50         34305      1715250     
+3    command_center  group_advanced-document-center 13         14844      192972      
+4    command_center  group_enhanced-communication-center 23         7392       170016      
+5    dashboard       group_procurementdashboard     18         6359       114462      
+6    dashboard       group_dashboarddataprovider    22         4708       103576      
+7    dashboard       group_dashboardjobs            17         1601       27217       
+8    command_center  group_commandpalette           11         1319       14509       
+9    command_center  group_controlhubpanel          7          1368       9576        
+10   dashboard       group_dashboardskeleton        8          240        1920        
+11   dashboard       group_progressdashboard        3          422        1266        
+12   command_center  group_notification-center      11         97         1067        
+13   command_center  group_dpintelligencecenter     2          501        1002        
+14   command_center  group_patch530missioncontrolv2 2          301        602         
+15   command_center  group_modulescontrol           2          49         98          
+16   dashboard       group_bidashboard              2          37         74          
+
+
+======================================================================
+DASHBOARD SIMILARITY GROUPS (DETALHADO)
+======================================================================
+
+
+group_interopdashboard:
+  Módulos: 99
+  Total de linhas: 43529
+  Arquivos:
+    - src/components/InteropDashboard.tsx
+    - src/components/PerformanceDashboard.tsx
+    - src/components/admin/error-dashboard.tsx
+    - src/components/admin/health-status-dashboard.tsx
+    - src/components/admin/performance-dashboard.tsx
+    - src/components/admin/super-admin-dashboard.tsx
+    - src/components/admin/user-management-dashboard.tsx
+    - src/components/ai/CognitiveDashboard.tsx
+    - src/components/ai/CollectiveDashboard.tsx
+    - src/components/ai/ai-modules-dashboard.tsx
+    - src/components/ai/evolution/BehavioralEvolutionDashboard.tsx
+    - src/components/analytics/AnalyticsDashboard.tsx
+    - src/components/analytics/advanced-metrics-dashboard.tsx
+    - src/components/analytics/analytics-dashboard.tsx
+    - src/components/analytics/enhanced-metrics-dashboard.tsx
+    - src/components/bcp/risk-management-dashboard.tsx
+    - src/components/bi/BIDashboardBuilder.tsx
+    - src/components/compliance/ClassSurveyDashboard.tsx
+    - src/components/crew/MLCComplianceDashboard.tsx
+    - src/components/crew/crew-wellbeing-dashboard.tsx
+    - src/components/dashboard/DashboardActions.tsx
+    - src/components/dashboard/DashboardWatchdog.tsx
+    - src/components/dashboard/ai-evolution/AIEvolutionDashboard.tsx
+    - src/components/dashboard/business-kpi-dashboard.tsx
+    - src/components/dashboard/comprehensive-executive-dashboard.tsx
+    - src/components/dashboard/dashboard-analytics.tsx
+    - src/components/dashboard/dashboard-widgets.tsx
+    - src/components/dashboard/enhanced-dashboard-filters.tsx
+    - src/components/dashboard/enhanced-dashboard.tsx
+    - src/components/dashboard/enhanced-unified-dashboard.tsx
+    - src/components/dashboard/executive-dashboard.tsx
+    - src/components/dashboard/global-dashboard.tsx
+    - src/components/dashboard/interactive-dashboard.tsx
+    - src/components/dashboard/modern-executive-dashboard.tsx
+    - src/components/dashboard/modularized-executive-dashboard.tsx
+    - src/components/dashboard/professional-analytics-dashboard.tsx
+    - src/components/dashboard/professional-fleet-dashboard.tsx
+    - src/components/dashboard/professional-weather-dashboard.tsx
+    - src/components/dashboard/responsive-dashboard.tsx
+    - src/components/dashboard/strategic-dashboard.tsx
+    - src/components/dashboard/unified-dashboard.tsx
+    - src/components/fleet/FleetTelemetryDashboard.tsx
+    - src/components/fleet/fleet-management-dashboard.tsx
+    - src/components/fleet/fleet-overview-dashboard.tsx
+    - src/components/hr/hr-dashboard.tsx
+    - src/components/imca-audit/IMCADPAuditDashboard.tsx
+    - src/components/innovation/SystemHealthDashboard.tsx
+    - src/components/innovation/iot-dashboard.tsx
+    - src/components/intelligence/ai-analytics-dashboard.tsx
+    - src/components/logistics/enhanced-logistics-dashboard.tsx
+    - src/components/maritime/checklist-dashboard.tsx
+    - src/components/maritime/crew-management-dashboard.tsx
+    - src/components/maritime/hr-dashboard.tsx
+    - src/components/maritime/iot-sensor-dashboard.tsx
+    - src/components/maritime/logistics-dashboard.tsx
+    - src/components/maritime/maritime-dashboard.tsx
+    - src/components/maritime/maritime-system-dashboard.tsx
+    - src/components/maritime/vessel-performance-dashboard.tsx
+    - src/components/mlc/MLCInspectionDashboard.tsx
+    - src/components/monitoring/RealTimeMonitoringDashboard.tsx
+    - src/components/monitoring/system-monitoring-dashboard.tsx
+    - src/components/nautilus/IoTDashboard.tsx
+    - src/components/operations/OperationsDashboardRealTime.tsx
+    - src/components/operations/operations-dashboard.tsx
+    - src/components/ovid/OVIDInspectionDashboard.tsx
+    - src/components/peotram/enhanced-peotram-dashboard.tsx
+    - src/components/performance/PerformanceDashboard.tsx
+    - src/components/performance/SystemHealthDashboard.tsx
+    - src/components/price-alerts/price-alert-dashboard.tsx
+    - src/components/price-alerts/price-alerts-dashboard-integrated.tsx
+    - src/components/price-alerts/price-analytics-dashboard.tsx
+    - src/components/production/ProductionHealthDashboard.tsx
+    - src/components/reports/functional-reports-dashboard.tsx
+    - src/components/reservations/enhanced-reservations-dashboard.tsx
+    - src/components/reservations/reservations-dashboard.tsx
+    - src/components/saas/saas-dashboard.tsx
+    - src/components/security/security-dashboard.tsx
+    - src/components/sgso/SgsoDashboard.tsx
+    - src/components/strategic/AnalyticsDashboard.tsx
+    - src/components/telemetry/TelemetryDashboard360.tsx
+    - src/components/ui/system-monitoring-dashboard.tsx
+    - src/components/ui/system-status-dashboard.tsx
+    - src/lib/dashboard-utils.ts
+    - src/lib/performance/dashboard-optimizer.ts
+    - src/modules/esg-emissions/components/EmissionsDashboard.tsx
+    - src/modules/performance/PerformanceDashboard.tsx
+    - src/modules/procurement-inventory/components/ProcurementDashboard.tsx
+    - src/modules/safety-guardian/components/SafetyDashboard.tsx
+    - src/modules/smart-mobility/components/MobilityDashboard.tsx
+    - src/modules/solas-isps-training/components/TrainingDashboardSection.tsx
+    - src/pages/Dashboard.tsx
+    - src/pages/admin/advanced-analytics-dashboard.tsx
+    - src/pages/admin/dashboard.tsx
+    - src/pages/admin/documents/restore-dashboard.tsx
+    - src/pages/admin/performance-dashboard.tsx
+    - src/pages/ai/learning-dashboard.tsx
+    - src/pages/dashboard/QualityDashboard.tsx
+    - src/pages/mission-control/insight-dashboard.tsx
+    - src/tests/performance-dashboard.test.ts
+
+group_dashboarddataprovider:
+  Módulos: 22
+  Total de linhas: 4708
+  Arquivos:
+    - src/components/dashboard/index/DashboardDataProvider.tsx
+    - src/components/price-alerts/components/statistics-dashboard.tsx
+    - src/mobile/components/MissionDashboard.tsx
+    - src/modules/analytics/services/analytics-dashboard-service.ts
+    - src/modules/compliance/mlc-inspection/MLCInspectionDashboard.tsx
+    - src/modules/control/bridgelink/BridgeLinkDashboard.tsx
+    - src/modules/hr/crew-wellbeing/components/WellbeingDashboard.tsx
+    - src/modules/incident-reports/components/IncidentMetricsDashboard.tsx
+    - src/modules/intelligence/dp-intelligence/components/DPIntelligenceDashboard.tsx
+    - src/modules/mission-control/mobile/MissionControlMobileDashboard.tsx
+    - src/modules/operations/crew-wellbeing/components/HealthMetricsDashboard.tsx
+    - src/pages/admin/checklists-dashboard.tsx
+    - src/pages/admin/dashboard-auditorias.tsx
+    - src/pages/admin/reports/dashboard-logs.tsx
+    - src/pages/compliance/PrePSCDashboard.tsx
+    - src/pages/qa/PreviewValidationDashboard.tsx
+    - src/tests/components/dp-intelligence/dp-intelligence-dashboard.test.tsx
+    - src/tests/mmi-dashboard.test.ts
+    - src/tests/modules/bridgelink/BridgeLinkDashboard.test.tsx
+    - src/tests/pages/admin/documents/restore-dashboard-enhancements.test.tsx
+    - src/tests/send-restore-dashboard-daily.test.ts
+    - src/tests/send-restore-dashboard.test.ts
+
+group_procurementdashboard:
+  Módulos: 18
+  Total de linhas: 6359
+  Arquivos:
+    - src/modules/autonomous-procurement/components/ProcurementDashboard.tsx
+    - src/modules/compliance-hub/components/ComplianceHubDashboard.tsx
+    - src/modules/hr/peo-dp/components/DPAnalyticsDashboard.tsx
+    - src/modules/intelligent-maintenance/components/MMIDashboardSection.tsx
+    - src/modules/medical-infirmary/components/InfirmaryDashboard.tsx
+    - src/modules/mission-control/components/RealTimeMissionDashboard.tsx
+    - src/modules/nautilus-people/components/PeopleDashboard.tsx
+    - src/modules/operations/crew-wellbeing/components/MoodDashboard.tsx
+    - src/modules/performance/PerformanceMonitoringDashboard.tsx
+    - src/modules/revolutionary-ai/ESGDashboard.tsx
+    - src/modules/safety-guardian/components/SafetyDashboardComplete.tsx
+    - src/modules/satellite-tracker/components/DGNSSDashboard.tsx
+    - src/modules/satellite-tracker/components/SatelliteDashboard.tsx
+    - src/modules/solas-training/components/TrainingDashboard.tsx
+    - src/modules/sonar-ai/components/SonarAIDashboard.tsx
+    - src/pages/admin/LighthouseDashboard.tsx
+    - src/pages/admin/audit-dashboard.tsx
+    - src/tests/pages/admin/dashboard.test.tsx
+
+group_dashboardjobs:
+  Módulos: 17
+  Total de linhas: 1601
+  Arquivos:
+    - src/components/bi/DashboardJobs.tsx
+    - src/components/bridgelink/BridgeLinkDashboard.tsx
+    - src/components/compliance/ComplianceDashboard.tsx
+    - src/components/dp/DPSyncDashboard.tsx
+    - src/components/errors/DashboardErrorBoundary.tsx
+    - src/components/legacy/skeleton_DashboardSkeleton.tsx
+    - src/components/logistics/logistics-hub-dashboard.tsx
+    - src/components/maintenance/MaintenanceDashboard.tsx
+    - src/components/mmi/Dashboard.tsx
+    - src/components/performance/WebVitalsDashboard.tsx
+    - src/components/reports/reports-dashboard.tsx
+    - src/components/ui/back-to-dashboard.tsx
+    - src/hooks/useDashboardStats.ts
+    - src/modules/mission-control/components/KPIDashboard.tsx
+    - src/styles/dashboard.module.css
+    - src/tests/bi-dashboard-jobs.test.tsx
+    - src/types/dashboard.ts
+
+group_dashboardskeleton:
+  Módulos: 8
+  Total de linhas: 240
+  Arquivos:
+    - src/components/dashboard/DashboardSkeleton.tsx
+    - src/components/dashboard/LiveDashboardStats.tsx
+    - src/components/external-audit/PerformanceDashboard.tsx
+    - src/modules/ui/dashboard/Dashboard.tsx
+    - src/pages/ExecutiveDashboard.tsx
+    - src/pages/FleetDashboard.tsx
+    - src/pages/WeatherDashboard.tsx
+    - src/pages/ai/AIDashboard.tsx
+
+group_progressdashboard:
+  Módulos: 3
+  Total de linhas: 422
+  Arquivos:
+    - src/modules/hr/training-academy/components/ProgressDashboard.tsx
+    - src/modules/safety-guardian/components/SafetyDashboardNew.tsx
+    - src/tests/integration/auth-to-dashboard.test.tsx
+
+group_bidashboard:
+  Módulos: 2
+  Total de linhas: 37
+  Arquivos:
+    - src/pages/BIDashboard.tsx
+    - src/pages/MMIDashboard.tsx
+
+
+======================================================================
+COMMAND CENTER SIMILARITY GROUPS (DETALHADO)
+======================================================================
+
+
+group_distributed-commands.ts:
+  Módulos: 50
+  Total de linhas: 34305
+  Arquivos:
+    - src/assistants/voice/distributed-commands.ts.disabled
+    - src/components/bcp/compliance-audit-center.tsx
+    - src/components/communication/CommunicationCenterProfessional.tsx
+    - src/components/communication/maritime-communication-center.tsx
+    - src/components/deploy/production-deploy-center.tsx
+    - src/components/documents/document-management-center.tsx
+    - src/components/fleet/FleetCommandCenter.tsx
+    - src/components/fleet/FleetCommandCenter.tsx
+    - src/components/fleet/compliance-center.tsx
+    - src/components/help/help-center.tsx
+    - src/components/help/intelligent-help-center.tsx
+    - src/components/legacy/notification_NotificationCenter.tsx
+    - src/components/legacy/notification_real-time-notification-center.tsx
+    - src/components/mobile/mobile-optimization-center.tsx
+    - src/components/onboarding/user-onboarding-center.tsx
+    - src/components/operations/operational-command-center.tsx
+    - src/components/optimization/intelligent-alerts-center.tsx
+    - src/components/peo-dp/fleet-operations-center.tsx
+    - src/components/peo-dp/lessons-learned-center.tsx
+    - src/components/peotram/peotram-communication-center.tsx
+    - src/components/security/advanced-security-center.tsx
+    - src/components/system/SystemControlPanel.tsx
+    - src/core/mirrors/instanceController.ts
+    - src/modules/nautilus-people/components/PerformanceCenter.tsx
+    - src/pages/AICommandCenter.tsx
+    - src/pages/AICommandCenter.tsx
+    - src/pages/AlertsCommandCenter.tsx
+    - src/pages/AlertsCommandCenter.tsx
+    - src/pages/CommandCenter.tsx
+    - src/pages/CommandCenter.tsx
+    - src/pages/CommunicationCommandCenter.tsx
+    - src/pages/CommunicationCommandCenter.tsx
+    - src/pages/FleetCommandCenter.tsx
+    - src/pages/FleetCommandCenter.tsx
+    - src/pages/MaintenanceCommandCenter.tsx
+    - src/pages/MaintenanceCommandCenter.tsx
+    - src/pages/MaritimeCommandCenter.tsx
+    - src/pages/MaritimeCommandCenter.tsx
+    - src/pages/MissionCommandCenter.tsx
+    - src/pages/MissionCommandCenter.tsx
+    - src/pages/ReportsCommandCenter.tsx
+    - src/pages/ReportsCommandCenter.tsx
+    - src/pages/TravelCommandCenter.tsx
+    - src/pages/TravelCommandCenter.tsx
+    - src/pages/WeatherCommandCenter.tsx
+    - src/pages/WeatherCommandCenter.tsx
+    - src/pages/WorkflowCommandCenter.tsx
+    - src/pages/WorkflowCommandCenter.tsx
+    - src/services/mission-control.service.ts
+    - src/tests/mission-control.test.ts
+
+group_enhanced-communication-center:
+  Módulos: 23
+  Total de linhas: 7392
+  Arquivos:
+    - src/components/communication/enhanced-communication-center.tsx
+    - src/components/communication/notification-center.tsx
+    - src/components/intelligence/IntelligentNotificationCenter.tsx
+    - src/components/legacy/notification_enhanced-notification-center.tsx
+    - src/components/nautilus/NautilusCommandCenter.tsx
+    - src/components/nautilus/NautilusCommandCenter.tsx
+    - src/components/ui/dropdown-test-center.tsx
+    - src/lib/drone/command-service.ts
+    - src/lib/voice/advanced-voice-commands.ts
+    - src/modules/logs-center/LogsCenter.tsx
+    - src/modules/logs-center/VirtualizedLogsCenter.tsx
+    - src/modules/mission-control/mobile/MissionControlMobileDashboard.tsx
+    - src/modules/mission-control/services/mission-control-service.ts
+    - src/modules/nautilus-command/components/CommandBrainPanel.tsx
+    - src/modules/nautilus-command/hooks/useNautilusCommandAI.ts
+    - src/modules/revolutionary-ai/NaturalLanguageCommand.tsx
+    - src/modules/revolutionary-ai/VoiceCommandsAdvanced.tsx
+    - src/pages/admin/ControlCenter.tsx
+    - src/pages/admin/Patch505MissionControl.tsx
+    - src/pages/admin/control-panel.tsx
+    - src/pages/admin/module-control.tsx
+    - src/pages/mission-control/ai-command-center.tsx
+    - src/tests/components/dp-intelligence/dp-intelligence-center.test.tsx
+
+group_advanced-document-center:
+  Módulos: 13
+  Total de linhas: 14844
+  Arquivos:
+    - src/components/documents/advanced-document-center.tsx
+    - src/components/legacy/notification_NotificationCenterProfessional.tsx
+    - src/components/unified/NotificationCenter.unified.tsx
+    - src/pages/AnalyticsCommandCenter.tsx
+    - src/pages/AnalyticsCommandCenter.tsx
+    - src/pages/FinanceCommandCenter.tsx
+    - src/pages/FinanceCommandCenter.tsx
+    - src/pages/OperationsCommandCenter.tsx
+    - src/pages/OperationsCommandCenter.tsx
+    - src/pages/ProcurementCommandCenter.tsx
+    - src/pages/ProcurementCommandCenter.tsx
+    - src/pages/VoyageCommandCenter.tsx
+    - src/pages/VoyageCommandCenter.tsx
+
+group_commandpalette:
+  Módulos: 11
+  Total de linhas: 1319
+  Arquivos:
+    - src/components/CommandPalette.tsx
+    - src/components/command/CommandCenterAI.tsx
+    - src/components/fleet/documentation-center.tsx
+    - src/components/peo-dp/dp-intel-center.tsx
+    - src/components/ui/command.tsx
+    - src/components/voice/VoiceCommandButton.tsx
+    - src/lib/ai/nautilus-command.ts
+    - src/modules/mission-control/validation/MissionControlConsolidationValidation.tsx
+    - src/pages/admin/Patch495InventoryControl.tsx
+    - src/tests/components/documents/document-management-center.test.tsx
+    - src/types/access-control.ts
+
+group_notification-center:
+  Módulos: 11
+  Total de linhas: 97
+  Arquivos:
+    - src/components/fleet/notification-center.tsx
+    - src/components/legacy/notification_notification-center.tsx
+    - src/components/maritime/notification-center.tsx
+    - src/components/notifications/NotificationCenter.tsx
+    - src/components/notifications/NotificationCenterProfessional.tsx
+    - src/components/notifications/enhanced-notification-center.tsx
+    - src/components/notifications/notification-center.tsx
+    - src/components/notifications/real-time-notification-center.tsx
+    - src/components/ui/NotificationCenter.tsx
+    - src/modules/core/help-center/HelpCenter.tsx
+    - src/pages/NotificationsCenter.tsx
+
+group_controlhubpanel:
+  Módulos: 7
+  Total de linhas: 1368
+  Arquivos:
+    - src/modules/control/control-hub/ControlHubPanel.tsx
+    - src/modules/maintenance-planner/components/JobsCenter.tsx
+    - src/modules/mission-control/components/AICommander.tsx
+    - src/modules/mission-control/components/MissionControlConsolidation.tsx
+    - src/modules/mission-control/validation/MissionControlRealtimeValidation.tsx
+    - src/modules/mission-control/validation/MissionControlValidation.tsx
+    - src/tests/control-hub.test.ts
+
+group_modulescontrol:
+  Módulos: 2
+  Total de linhas: 49
+  Arquivos:
+    - src/components/nautilus-os/apps/ModulesControl.tsx
+    - src/pages/NautilusCommand.tsx
+
+group_dpintelligencecenter:
+  Módulos: 2
+  Total de linhas: 501
+  Arquivos:
+    - src/modules/intelligence/dp-intelligence/DPIntelligenceCenter.tsx
+    - src/modules/intelligence/dp-intelligence/components/DPIntelligenceCenter.tsx
+
+group_patch530missioncontrolv2:
+  Módulos: 2
+  Total de linhas: 301
+  Arquivos:
+    - src/pages/admin/Patch530MissionControlV2.tsx
+    - src/services/cognitive/instance-controller.service.ts
