@@ -1,22 +1,21 @@
 /**
- * App.tsx - PATCH 851.0 - Definitive React Hook Fix
+ * App.tsx - PATCH 852.0 - Definitive React Hook Fix
  * 
- * Architecture:
- * - App (class component with error boundary) 
- *   -> QueryClientProvider
- *     -> AuthProvider
- *       -> AppRoutes (functional component with hooks)
+ * CRITICAL FIX: Context providers are NOT lazy loaded.
+ * Lazy loading context providers causes React hooks to fail.
  */
 
-// CRITICAL: Use consistent React import
+// CRITICAL: Use consistent React namespace import
 import * as React from "react";
 import { BrowserRouter, HashRouter, Routes, Route, Navigate } from "react-router-dom";
 import { QueryClientProvider } from "@tanstack/react-query";
 
-// Contexts
+// CRITICAL: Import context providers directly - DO NOT LAZY LOAD
 import { AuthProvider } from "./contexts/AuthContext";
+import { TenantProvider } from "./contexts/TenantContext";
+import { OrganizationProvider } from "./contexts/OrganizationContext";
 
-// UI Components
+// UI Components - can be lazy loaded safely
 import { Toaster } from "@/components/ui/toaster";
 import { Toaster as SonnerToaster } from "sonner";
 
@@ -24,7 +23,7 @@ import { Toaster as SonnerToaster } from "sonner";
 import { getModuleRoutes } from "@/utils/module-routes";
 import { createOptimizedQueryClient } from "@/lib/performance/query-config";
 
-// Core pages - Lazy loading
+// Core pages - Lazy loading is safe for pages
 const Index = React.lazy(() => import("@/pages/Index"));
 const Dashboard = React.lazy(() => import("@/pages/Dashboard"));
 const Admin = React.lazy(() => import("@/pages/Admin"));
@@ -40,15 +39,9 @@ const AIEnhancedModules = React.lazy(() => import("@/pages/AIEnhancedModules"));
 // Protected Route wrappers
 import { ProtectedRoute, AdminRoute } from "@/components/auth/protected-route";
 
-// Lazy load heavy components
+// Lazy load heavy components (NOT context providers)
 const SmartLayout = React.lazy(() => 
   import("./components/layout/SmartLayout").then(m => ({ default: m.SmartLayout }))
-);
-const TenantProvider = React.lazy(() => 
-  import("./contexts/TenantContext").then(m => ({ default: m.TenantProvider }))
-);
-const OrganizationProvider = React.lazy(() => 
-  import("./contexts/OrganizationContext").then(m => ({ default: m.OrganizationProvider }))
 );
 const GlobalBrainProvider = React.lazy(() => 
   import("./components/global/GlobalBrainProvider").then(m => ({ default: m.GlobalBrainProvider }))
@@ -90,7 +83,7 @@ function ErrorDisplay({ message, onRetry }: { message: string; onRetry: () => vo
   );
 }
 
-// Routes component (uses hooks safely)
+// Routes component (uses hooks safely inside providers)
 function AppRoutes(): JSX.Element {
   // Get module routes with memoization
   const moduleRoutes = React.useMemo(() => {
@@ -103,155 +96,151 @@ function AppRoutes(): JSX.Element {
   }, []);
 
   return (
-    <React.Suspense fallback={<Loader />}>
-      <TenantProvider>
-        <OrganizationProvider>
-          <RouterComponent>
-            <GlobalBrainProvider showTrigger={true}>
-              <Routes>
-                {/* Public Routes */}
-                <Route path="/auth" element={
-                  <React.Suspense fallback={<Loader />}>
-                    <Auth />
-                  </React.Suspense>
-                } />
-                <Route path="/unauthorized" element={
-                  <React.Suspense fallback={<Loader />}>
-                    <Unauthorized />
-                  </React.Suspense>
-                } />
-                
-                {/* Protected Routes */}
-                <Route path="/" element={
-                  <ProtectedRoute>
-                    <React.Suspense fallback={<Loader />}>
-                      <SmartLayout />
-                    </React.Suspense>
-                  </ProtectedRoute>
-                }>
-                  <Route index element={
-                    <React.Suspense fallback={<Loader />}>
-                      <Index />
-                    </React.Suspense>
-                  } />
-                  <Route path="dashboard" element={
-                    <React.Suspense fallback={<Loader />}>
-                      <Dashboard />
-                    </React.Suspense>
-                  } />
-                  
-                  {/* Module Routes from Registry */}
-                  {moduleRoutes.map((route) => (
-                    <Route
-                      key={route.id}
-                      path={route.path}
-                      element={
-                        <React.Suspense fallback={<Loader />}>
-                          <route.component />
-                        </React.Suspense>
-                      }
-                    />
-                  ))}
-                  
-                  {/* Admin Routes */}
-                  <Route path="admin/*" element={
-                    <AdminRoute>
-                      <React.Suspense fallback={<Loader />}>
-                        <Admin />
-                      </React.Suspense>
-                    </AdminRoute>
-                  } />
-                  
-                  {/* Settings */}
-                  <Route path="settings" element={
-                    <React.Suspense fallback={<Loader />}>
-                      <Settings />
-                    </React.Suspense>
-                  } />
-                  
-                  {/* Profile */}
-                  <Route path="profile" element={
-                    <React.Suspense fallback={<Loader />}>
-                      <UserProfilePage />
-                    </React.Suspense>
-                  } />
-                  
-                  {/* Health Check */}
-                  <Route path="health" element={
-                    <React.Suspense fallback={<Loader />}>
-                      <HealthCheck />
-                    </React.Suspense>
-                  } />
-                  
-                  {/* Revolutionary AI Hub */}
-                  <Route path="revolutionary-ai/*" element={
-                    <React.Suspense fallback={<Loader />}>
-                      <RevolutionaryAI />
-                    </React.Suspense>
-                  } />
-                  
-                  {/* AI Enhanced Modules */}
-                  <Route path="ai-modules" element={
-                    <React.Suspense fallback={<Loader />}>
-                      <AIEnhancedModules />
-                    </React.Suspense>
-                  } />
-                  
-                  {/* Legacy Route Redirects */}
-                  <Route path="intelligent-documents" element={<Navigate to="/documents" replace />} />
-                  <Route path="document-ai" element={<Navigate to="/documents" replace />} />
-                  <Route path="ai-assistant" element={<Navigate to="/assistant/voice" replace />} />
-                  <Route path="voice" element={<Navigate to="/assistant/voice" replace />} />
-                  <Route path="voice-assistant" element={<Navigate to="/assistant/voice" replace />} />
-                  <Route path="task-automation" element={<Navigate to="/automation" replace />} />
-                  <Route path="comunicacao" element={<Navigate to="/communication" replace />} />
-                  <Route path="communication-center" element={<Navigate to="/communication" replace />} />
-                  <Route path="notification-center" element={<Navigate to="/notifications-center" replace />} />
-                  <Route path="documentos" element={<Navigate to="/documents" replace />} />
-                  <Route path="checklists" element={<Navigate to="/admin/checklists" replace />} />
-                  <Route path="checklists-inteligentes" element={<Navigate to="/admin/checklists" replace />} />
-                  <Route path="finance-hub" element={<Navigate to="/finance" replace />} />
-                  <Route path="reports-module" element={<Navigate to="/reports-command" replace />} />
-                  <Route path="smart-workflow" element={<Navigate to="/workflow" replace />} />
-                  <Route path="user-management" element={<Navigate to="/users" replace />} />
-                  <Route path="project-timeline" element={<Navigate to="/projects/timeline" replace />} />
-                  <Route path="analytics-core" element={<Navigate to="/analytics-command" replace />} />
-                  <Route path="analytics" element={<Navigate to="/analytics-command" replace />} />
-                  <Route path="advanced-analytics" element={<Navigate to="/analytics-command" replace />} />
-                  <Route path="predictive-analytics" element={<Navigate to="/analytics-command" replace />} />
-                  <Route path="portal" element={<Navigate to="/nautilus-academy" replace />} />
-                  <Route path="portal-funcionario" element={<Navigate to="/nautilus-academy" replace />} />
-                  <Route path="training-academy" element={<Navigate to="/nautilus-academy" replace />} />
-                  <Route path="mobile-optimization" element={<Navigate to="/optimization" replace />} />
-                  <Route path="alertas-precos" element={<Navigate to="/alerts-command" replace />} />
-                  <Route path="price-alerts" element={<Navigate to="/alerts-command" replace />} />
-                  <Route path="intelligent-alerts" element={<Navigate to="/alerts-command" replace />} />
-                  <Route path="help" element={<Navigate to="/notifications-center" replace />} />
-                  <Route path="audit-center" element={<Navigate to="/compliance-hub" replace />} />
-                  <Route path="crew-management" element={<Navigate to="/crew" replace />} />
-                  <Route path="vessels" element={<Navigate to="/fleet" replace />} />
-                  <Route path="schedule" element={<Navigate to="/calendar" replace />} />
-                  <Route path="schedules" element={<Navigate to="/calendar" replace />} />
-                  <Route path="missions/new" element={<Navigate to="/mission-logs" replace />} />
-                  <Route path="missions" element={<Navigate to="/mission-logs" replace />} />
-                  <Route path="maintenance/planner" element={<Navigate to="/maintenance-planner" replace />} />
-                  
-                  {/* 404 Route */}
-                  <Route path="*" element={
-                    <React.Suspense fallback={<Loader />}>
-                      <NotFound />
-                    </React.Suspense>
-                  } />
-                </Route>
-              </Routes>
+    <RouterComponent>
+      <React.Suspense fallback={<Loader />}>
+        <GlobalBrainProvider showTrigger={true}>
+          <Routes>
+            {/* Public Routes */}
+            <Route path="/auth" element={
+              <React.Suspense fallback={<Loader />}>
+                <Auth />
+              </React.Suspense>
+            } />
+            <Route path="/unauthorized" element={
+              <React.Suspense fallback={<Loader />}>
+                <Unauthorized />
+              </React.Suspense>
+            } />
+            
+            {/* Protected Routes */}
+            <Route path="/" element={
+              <ProtectedRoute>
+                <React.Suspense fallback={<Loader />}>
+                  <SmartLayout />
+                </React.Suspense>
+              </ProtectedRoute>
+            }>
+              <Route index element={
+                <React.Suspense fallback={<Loader />}>
+                  <Index />
+                </React.Suspense>
+              } />
+              <Route path="dashboard" element={
+                <React.Suspense fallback={<Loader />}>
+                  <Dashboard />
+                </React.Suspense>
+              } />
               
-              <Toaster />
-              <SonnerToaster position="top-right" richColors />
-            </GlobalBrainProvider>
-          </RouterComponent>
-        </OrganizationProvider>
-      </TenantProvider>
-    </React.Suspense>
+              {/* Module Routes from Registry */}
+              {moduleRoutes.map((route) => (
+                <Route
+                  key={route.id}
+                  path={route.path}
+                  element={
+                    <React.Suspense fallback={<Loader />}>
+                      <route.component />
+                    </React.Suspense>
+                  }
+                />
+              ))}
+              
+              {/* Admin Routes */}
+              <Route path="admin/*" element={
+                <AdminRoute>
+                  <React.Suspense fallback={<Loader />}>
+                    <Admin />
+                  </React.Suspense>
+                </AdminRoute>
+              } />
+              
+              {/* Settings */}
+              <Route path="settings" element={
+                <React.Suspense fallback={<Loader />}>
+                  <Settings />
+                </React.Suspense>
+              } />
+              
+              {/* Profile */}
+              <Route path="profile" element={
+                <React.Suspense fallback={<Loader />}>
+                  <UserProfilePage />
+                </React.Suspense>
+              } />
+              
+              {/* Health Check */}
+              <Route path="health" element={
+                <React.Suspense fallback={<Loader />}>
+                  <HealthCheck />
+                </React.Suspense>
+              } />
+              
+              {/* Revolutionary AI Hub */}
+              <Route path="revolutionary-ai/*" element={
+                <React.Suspense fallback={<Loader />}>
+                  <RevolutionaryAI />
+                </React.Suspense>
+              } />
+              
+              {/* AI Enhanced Modules */}
+              <Route path="ai-modules" element={
+                <React.Suspense fallback={<Loader />}>
+                  <AIEnhancedModules />
+                </React.Suspense>
+              } />
+              
+              {/* Legacy Route Redirects */}
+              <Route path="intelligent-documents" element={<Navigate to="/documents" replace />} />
+              <Route path="document-ai" element={<Navigate to="/documents" replace />} />
+              <Route path="ai-assistant" element={<Navigate to="/assistant/voice" replace />} />
+              <Route path="voice" element={<Navigate to="/assistant/voice" replace />} />
+              <Route path="voice-assistant" element={<Navigate to="/assistant/voice" replace />} />
+              <Route path="task-automation" element={<Navigate to="/automation" replace />} />
+              <Route path="comunicacao" element={<Navigate to="/communication" replace />} />
+              <Route path="communication-center" element={<Navigate to="/communication" replace />} />
+              <Route path="notification-center" element={<Navigate to="/notifications-center" replace />} />
+              <Route path="documentos" element={<Navigate to="/documents" replace />} />
+              <Route path="checklists" element={<Navigate to="/admin/checklists" replace />} />
+              <Route path="checklists-inteligentes" element={<Navigate to="/admin/checklists" replace />} />
+              <Route path="finance-hub" element={<Navigate to="/finance" replace />} />
+              <Route path="reports-module" element={<Navigate to="/reports-command" replace />} />
+              <Route path="smart-workflow" element={<Navigate to="/workflow" replace />} />
+              <Route path="user-management" element={<Navigate to="/users" replace />} />
+              <Route path="project-timeline" element={<Navigate to="/projects/timeline" replace />} />
+              <Route path="analytics-core" element={<Navigate to="/analytics-command" replace />} />
+              <Route path="analytics" element={<Navigate to="/analytics-command" replace />} />
+              <Route path="advanced-analytics" element={<Navigate to="/analytics-command" replace />} />
+              <Route path="predictive-analytics" element={<Navigate to="/analytics-command" replace />} />
+              <Route path="portal" element={<Navigate to="/nautilus-academy" replace />} />
+              <Route path="portal-funcionario" element={<Navigate to="/nautilus-academy" replace />} />
+              <Route path="training-academy" element={<Navigate to="/nautilus-academy" replace />} />
+              <Route path="mobile-optimization" element={<Navigate to="/optimization" replace />} />
+              <Route path="alertas-precos" element={<Navigate to="/alerts-command" replace />} />
+              <Route path="price-alerts" element={<Navigate to="/alerts-command" replace />} />
+              <Route path="intelligent-alerts" element={<Navigate to="/alerts-command" replace />} />
+              <Route path="help" element={<Navigate to="/notifications-center" replace />} />
+              <Route path="audit-center" element={<Navigate to="/compliance-hub" replace />} />
+              <Route path="crew-management" element={<Navigate to="/crew" replace />} />
+              <Route path="vessels" element={<Navigate to="/fleet" replace />} />
+              <Route path="schedule" element={<Navigate to="/calendar" replace />} />
+              <Route path="schedules" element={<Navigate to="/calendar" replace />} />
+              <Route path="missions/new" element={<Navigate to="/mission-logs" replace />} />
+              <Route path="missions" element={<Navigate to="/mission-logs" replace />} />
+              <Route path="maintenance/planner" element={<Navigate to="/maintenance-planner" replace />} />
+              
+              {/* 404 Route */}
+              <Route path="*" element={
+                <React.Suspense fallback={<Loader />}>
+                  <NotFound />
+                </React.Suspense>
+              } />
+            </Route>
+          </Routes>
+          
+          <Toaster />
+          <SonnerToaster position="top-right" richColors />
+        </GlobalBrainProvider>
+      </React.Suspense>
+    </RouterComponent>
   );
 }
 
@@ -290,10 +279,16 @@ class App extends React.Component<Record<string, never>, ErrorBoundaryState> {
       );
     }
 
+    // CRITICAL: Context providers are NOT lazy loaded
+    // They must be imported directly and rendered synchronously
     return (
       <QueryClientProvider client={queryClient}>
         <AuthProvider>
-          <AppRoutes />
+          <TenantProvider>
+            <OrganizationProvider>
+              <AppRoutes />
+            </OrganizationProvider>
+          </TenantProvider>
         </AuthProvider>
       </QueryClientProvider>
     );
