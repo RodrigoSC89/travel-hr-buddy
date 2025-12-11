@@ -447,6 +447,7 @@ export default defineConfig(({ mode }) => {
         "react/jsx-dev-runtime",
         "react-router-dom",
         "@supabase/supabase-js",
+        "@tanstack/react-query",
         "@tanstack/react-query-devtools",
         "react-helmet-async",
         "scheduler",
@@ -454,7 +455,7 @@ export default defineConfig(({ mode }) => {
       ],
       exclude: [],
       // CRITICAL: Force rebuild of optimized deps to clear corrupted cache
-      force: true,
+      force: false,
       // Ensure single React instance by not allowing esbuild to bundle React separately
       esbuildOptions: {
         target: "esnext",
