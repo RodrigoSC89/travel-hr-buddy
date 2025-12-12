@@ -39,4 +39,4 @@ export const ModulePageWrapper: React.FC<ModulePageWrapperProps> = ({
       </div>
     </div>
   );
-});
+};
