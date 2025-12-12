@@ -143,7 +143,7 @@ export const ProcurementIntelligenceAI = memo(function() {
       setSuppliers(sugs);
       toast.success("Fornecedores encontrados", {
         description: `${sugs.length} opções disponíveis`
-      };
+      });
     } catch (error) {
       toast.error("Erro ao buscar fornecedores");
     }
