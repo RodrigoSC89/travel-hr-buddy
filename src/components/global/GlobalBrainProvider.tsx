@@ -37,7 +37,7 @@ export const GlobalBrainProvider: React.FC<GlobalBrainProviderProps> = ({
   const openBrain = (ctx?: string) => {
     setContext(ctx || "");
     setIsOpen(true);
-  });
+  };
 
   const closeBrain = () => {
     setIsOpen(false);
