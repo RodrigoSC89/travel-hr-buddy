@@ -29,7 +29,7 @@ export class DashboardErrorBoundary extends Component<Props, State> {
     return {
       hasError: true,
       error,
-    });
+    };
   }
 
   componentDidCatch(error: Error, errorInfo: ErrorInfo): void {

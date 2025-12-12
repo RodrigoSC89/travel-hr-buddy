@@ -36,7 +36,7 @@ export class ModuleErrorBoundary extends Component<Props, State> {
     return {
       hasError: true,
       error,
-    });
+    };
   }
 
   async componentDidCatch(error: Error, errorInfo: ErrorInfo): Promise<void> {

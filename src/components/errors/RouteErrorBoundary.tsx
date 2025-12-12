@@ -30,7 +30,7 @@ export class RouteErrorBoundary extends Component<Props, State> {
     return {
       hasError: true,
       error,
-    });
+    };
   }
 
   componentDidCatch(error: Error, errorInfo: ErrorInfo): void {
