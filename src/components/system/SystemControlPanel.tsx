@@ -331,7 +331,7 @@ const NotificationControls = () => {
 };
 
 // Sistema Status Geral
-const SystemStatus = () => {
+const SystemStatus = memo(() => {
   const [status, setStatus] = useState({
     database: "operational",
     api: "operational",
