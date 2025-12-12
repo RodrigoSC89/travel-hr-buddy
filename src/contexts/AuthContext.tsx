@@ -167,7 +167,7 @@ export function AuthProvider({ children }: AuthProviderProps): JSX.Element {
       const { error } = await supabase.auth.signInWithOAuth({
         provider,
         options: { redirectTo: `${window.location.origin}/` }
-      };
+      });
 
       if (error) {
         toast.error("Erro no login", { description: error.message });
