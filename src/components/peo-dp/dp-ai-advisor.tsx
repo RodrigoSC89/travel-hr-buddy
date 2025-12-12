@@ -367,7 +367,7 @@ export const DPAIAdvisor: React.FC = () => {
                     placeholder="Digite sua pergunta sobre DP..."
                     value={input}
                     onChange={handleChange}
-                    onKeyPress={(e) => e.key === "Enter" && handleSend(}
+                    onKeyPress={(e) => e.key === "Enter" && handleSend()}
                     disabled={isLoading}
                   />
                   <Button onClick={handleSend} disabled={isLoading || !input.trim()}>

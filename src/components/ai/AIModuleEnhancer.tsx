@@ -163,7 +163,7 @@ export const AIModuleEnhancer = memo(function({
         <Input
           value={input}
           onChange={handleChange}
-          onKeyPress={(e) => e.key === "Enter" && handleSend(}
+          onKeyPress={(e) => e.key === "Enter" && handleSend()}
           placeholder="Pergunte à IA..."
           className="flex-1"
           disabled={isLoading}
@@ -222,7 +222,7 @@ export const AIModuleEnhancer = memo(function({
           <Input
             value={input}
             onChange={handleChange}
-            onKeyPress={(e) => e.key === "Enter" && handleSend(}
+            onKeyPress={(e) => e.key === "Enter" && handleSend()}
             placeholder="Ou faça sua pergunta..."
             disabled={isLoading}
           />

@@ -199,7 +199,7 @@ const DocumentListRow: React.FC<DocumentListRowProps> = ({
               </DropdownMenuItem>
             )}
             {actions.canPerform("download") && (
-              <DropdownMenuItem onClick={() => actions.download(}>
+              <DropdownMenuItem onClick={() => actions.download()}>
                 <Download className="w-4 h-4 mr-2" />
                 Download
               </DropdownMenuItem>

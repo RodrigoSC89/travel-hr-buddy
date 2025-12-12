@@ -62,7 +62,7 @@ export const ExpenseForm: React.FC<ExpenseFormProps> = ({
 
   return (
     <form onSubmit={handleSubmit(onSubmit} className="space-y-6">
-      {/* Amount */}
+      {/* Amount */)
       <div className="space-y-2">
         <Label htmlFor="amount" className="text-sm font-semibold text-foreground">
           Valor *

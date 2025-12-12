@@ -560,7 +560,7 @@ const RealTimeWorkspace: React.FC = () => {
                       placeholder="Digite sua mensagem..."
                       value={newMessage}
                       onChange={handleChange}
-                      onKeyPress={(e) => e.key === "Enter" && sendMessage(}
+                      onKeyPress={(e) => e.key === "Enter" && sendMessage()}
                       className="flex-1"
                     />
                     <Button onClick={sendMessage} disabled={!newMessage.trim()}>

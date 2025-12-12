@@ -560,7 +560,7 @@ const EnhancedAIChatbot: React.FC = () => {
                               <Button
                                 variant="ghost"
                                 size="sm"
-                                onClick={() => fileInputRef.current?.click(}
+                                onClick={() => fileInputRef.current?.click()}
                                 className="h-8 w-8 p-0"
                                 aria-label="Enviar arquivo"
                               >

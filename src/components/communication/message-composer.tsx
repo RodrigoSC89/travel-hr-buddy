@@ -592,7 +592,7 @@ export const MessageComposer: React.FC<MessageComposerProps> = ({
               <Button 
                 variant="outline" 
                 size="sm" 
-                onClick={() => document.getElementById("file-upload")?.click(}
+                onClick={() => document.getElementById("file-upload")?.click()}
                 type="button"
               >
                 <Paperclip className="h-4 w-4 mr-2" />

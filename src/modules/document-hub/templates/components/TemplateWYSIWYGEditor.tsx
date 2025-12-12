@@ -78,7 +78,7 @@ export const TemplateWYSIWYGEditor: React.FC<TemplateWYSIWYGEditorProps> = ({
         <Button
           variant="ghost"
           size="sm"
-          onClick={() => editor.chain().focus().toggleBold().run(}
+          onClick={() => editor.chain().focus().toggleBold().run()}
           className={editor.isActive("bold") ? "bg-accent" : ""}
           disabled={!editor.can().chain().focus().toggleBold().run()}
         >
@@ -87,7 +87,7 @@ export const TemplateWYSIWYGEditor: React.FC<TemplateWYSIWYGEditorProps> = ({
         <Button
           variant="ghost"
           size="sm"
-          onClick={() => editor.chain().focus().toggleItalic().run(}
+          onClick={() => editor.chain().focus().toggleItalic().run()}
           className={editor.isActive("italic") ? "bg-accent" : ""}
           disabled={!editor.can().chain().focus().toggleItalic().run()}
         >
@@ -96,7 +96,7 @@ export const TemplateWYSIWYGEditor: React.FC<TemplateWYSIWYGEditorProps> = ({
         <Button
           variant="ghost"
           size="sm"
-          onClick={() => editor.chain().focus().toggleCode().run(}
+          onClick={() => editor.chain().focus().toggleCode().run()}
           className={editor.isActive("code") ? "bg-accent" : ""}
           disabled={!editor.can().chain().focus().toggleCode().run()}
         >
@@ -123,7 +123,7 @@ export const TemplateWYSIWYGEditor: React.FC<TemplateWYSIWYGEditorProps> = ({
         <Button
           variant="ghost"
           size="sm"
-          onClick={() => editor.chain().focus().toggleBulletList().run(}
+          onClick={() => editor.chain().focus().toggleBulletList().run()}
           className={editor.isActive("bulletList") ? "bg-accent" : ""}
         >
           <List className="h-4 w-4" />
@@ -131,7 +131,7 @@ export const TemplateWYSIWYGEditor: React.FC<TemplateWYSIWYGEditorProps> = ({
         <Button
           variant="ghost"
           size="sm"
-          onClick={() => editor.chain().focus().toggleOrderedList().run(}
+          onClick={() => editor.chain().focus().toggleOrderedList().run()}
           className={editor.isActive("orderedList") ? "bg-accent" : ""}
         >
           <ListOrdered className="h-4 w-4" />
@@ -140,7 +140,7 @@ export const TemplateWYSIWYGEditor: React.FC<TemplateWYSIWYGEditorProps> = ({
         <Button
           variant="ghost"
           size="sm"
-          onClick={() => editor.chain().focus().undo().run(}
+          onClick={() => editor.chain().focus().undo().run()}
           disabled={!editor.can().chain().focus().undo().run()}
         >
           <Undo className="h-4 w-4" />
@@ -148,7 +148,7 @@ export const TemplateWYSIWYGEditor: React.FC<TemplateWYSIWYGEditorProps> = ({
         <Button
           variant="ghost"
           size="sm"
-          onClick={() => editor.chain().focus().redo().run(}
+          onClick={() => editor.chain().focus().redo().run()}
           disabled={!editor.can().chain().focus().redo().run()}
         >
           <Redo className="h-4 w-4" />

@@ -134,11 +134,11 @@ export const OVIDAIAssistant: React.FC<OVIDAIAssistantProps> = ({ vesselType }) 
             placeholder="Pergunte sobre OVIQ4, evidências, observações..."
             value={input}
             onChange={handleChange}
-            onKeyDown={(e) => e.key === "Enter" && !e.shiftKey && (e.preventDefault(), sendMessage(}
+            onKeyDown={(e) => e.key === "Enter" && !e.shiftKey && (e.preventDefault(), sendMessage()}
             className="resize-none"
             rows={2}
           />
-          <Button onClick={() => sendMessage(} disabled={isLoading || !input.trim()}>
+          <Button onClick={() => sendMessage()} disabled={isLoading || !input.trim()}>
             {isLoading ? <Loader2 className="w-4 h-4 animate-spin" /> : <Send className="w-4 h-4" />}
           </Button>
         </div>

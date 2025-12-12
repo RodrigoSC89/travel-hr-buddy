@@ -232,7 +232,7 @@ export const ImageRecognition: React.FC = () => {
                   uso de EPIs e outras verificações visuais
                 </p>
                 <div className="flex gap-2">
-                  <Button onClick={() => fileInputRef.current?.click(} className="gap-2">
+                  <Button onClick={() => fileInputRef.current?.click()} className="gap-2">
                     <Upload className="h-4 w-4" />
                     Selecionar Arquivo
                   </Button>

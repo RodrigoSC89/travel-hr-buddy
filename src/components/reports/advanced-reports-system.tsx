@@ -109,11 +109,11 @@ const AdvancedReportsSystem = () => {
           <p className="text-muted-foreground">Análises detalhadas e insights estratégicos</p>
         </div>
         <div className="flex items-center gap-2">
-          <Button variant="outline" onClick={() => generateReport(}>
+          <Button variant="outline" onClick={() => generateReport()}>
             <RefreshCw className="w-4 h-4 mr-2" />
             Atualizar
           </Button>
-          <Button onClick={() => generateReport(}>
+          <Button onClick={() => generateReport()}>
             <FileText className="w-4 h-4 mr-2" />
             Gerar Relatório
           </Button>

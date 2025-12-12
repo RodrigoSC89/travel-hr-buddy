@@ -183,7 +183,7 @@ export const DocumentUploader: React.FC<DocumentUploaderProps> = ({
                 <Button
                   type="button"
                   variant="outline"
-                  onClick={() => fileInputRef.current?.click(}
+                  onClick={() => fileInputRef.current?.click()}
                 >
                   Browse Files
                 </Button>

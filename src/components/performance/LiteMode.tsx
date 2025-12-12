@@ -148,7 +148,7 @@ export const LiteModeToggle = memo(function({ className }: { className?: string 
           <Button
             variant={isLiteMode ? "secondary" : "ghost"}
             size="icon"
-            onClick={() => toggleLiteMode(}
+            onClick={() => toggleLiteMode()}
             className={className}
           >
             {isLiteMode ? (

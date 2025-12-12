@@ -92,7 +92,7 @@ export default function CronMonitorPage() {
             Painel de monitoramento de cron jobs e tarefas SGSO
           </p>
         </div>
-        <Button onClick={() => refetch(}>
+        <Button onClick={() => refetch()}>
           <RefreshCw className="w-4 h-4 mr-2" />
           Atualizar
         </Button>

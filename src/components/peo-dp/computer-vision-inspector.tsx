@@ -172,7 +172,7 @@ export const ComputerVisionInspector: React.FC = () => {
             <Camera className="w-4 h-4 mr-2" />
             Câmera ao Vivo
           </Button>
-          <Button onClick={() => fileInputRef.current?.click(}>
+          <Button onClick={() => fileInputRef.current?.click()}>
             <Upload className="w-4 h-4 mr-2" />
             Upload Imagens
           </Button>

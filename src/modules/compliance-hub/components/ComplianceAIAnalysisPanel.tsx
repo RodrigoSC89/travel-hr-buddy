@@ -330,7 +330,7 @@ export const ComplianceAIAnalysisPanel = memo(function({
                 placeholder="Pergunte sobre ISM, SOLAS, PSC, MLC..."
                 value={question}
                 onChange={handleChange}
-                onKeyDown={(e) => e.key === "Enter" && !e.shiftKey && (e.preventDefault(), handleAskQuestion(}
+                onKeyDown={(e) => e.key === "Enter" && !e.shiftKey && (e.preventDefault(), handleAskQuestion()}
                 className="min-h-[40px] resize-none"
               />
               <Button onClick={handleAskQuestion} disabled={chatLoading || !question.trim()}>

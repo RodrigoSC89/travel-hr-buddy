@@ -359,7 +359,7 @@ export const CreateIncidentDialog: React.FC<CreateIncidentDialogProps> = ({
                 type="button"
                 variant="outline"
                 className="w-full"
-                onClick={() => fileInputRef.current?.click(}
+                onClick={() => fileInputRef.current?.click()}
                 disabled={photos.length >= 5}
               >
                 <Upload className="mr-2 h-4 w-4" />

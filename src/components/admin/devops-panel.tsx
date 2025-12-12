@@ -529,7 +529,7 @@ export const DevOpsPanel = memo(function() {
                   
                   <Button 
                     variant="outline" 
-                    onClick={() => networkQualityMonitor.runTest(}
+                    onClick={() => networkQualityMonitor.runTest()}
                     className="w-full"
                   >
                     <Activity className="h-4 w-4 mr-2" />

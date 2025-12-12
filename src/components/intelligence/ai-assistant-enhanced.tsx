@@ -366,7 +366,7 @@ const AIAssistantEnhanced: React.FC = () => {
                         value={inputMessage}
                         onChange={handleChange}
                         placeholder="Digite sua pergunta para a IA..."
-                        onKeyPress={(e) => e.key === "Enter" && handleSendMessage(}
+                        onKeyPress={(e) => e.key === "Enter" && handleSendMessage()}
                         className="bg-background/50 backdrop-blur-sm"
                       />
                     </div>

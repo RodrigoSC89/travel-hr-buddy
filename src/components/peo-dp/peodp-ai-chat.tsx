@@ -460,11 +460,11 @@ Por favor, tente novamente ou consulte diretamente:
                     placeholder="Pergunte sobre PEO-DP, ASOG, IMCA, NORMAM..."
                     value={input}
                     onChange={handleChange}
-                    onKeyPress={(e) => e.key === "Enter" && !isLoading && handleSend(}
+                    onKeyPress={(e) => e.key === "Enter" && !isLoading && handleSend()}
                     disabled={isLoading}
                     className="text-sm"
                   />
-                  <Button onClick={() => handleSend(} disabled={isLoading || !input.trim()}>
+                  <Button onClick={() => handleSend()} disabled={isLoading || !input.trim()}>
                     <Send className="h-4 w-4" />
                   </Button>
                 </div>

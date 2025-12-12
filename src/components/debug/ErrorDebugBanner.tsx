@@ -135,7 +135,7 @@ export const ErrorDebugBanner: React.FC = () => {
               variant="default"
               size="sm"
               className="flex-1 h-8 text-xs"
-              onClick={() => window.location.reload(}
+              onClick={() => window.location.reload()}
             >
               Recarregar Página
             </Button>

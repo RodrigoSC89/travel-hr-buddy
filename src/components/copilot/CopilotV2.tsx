@@ -155,7 +155,7 @@ export default function CopilotV2() {
                 placeholder="Ask me anything or type a command..."
                 value={input}
                 onChange={handleChange}
-                onKeyPress={(e) => e.key === "Enter" && handleTextInput(}
+                onKeyPress={(e) => e.key === "Enter" && handleTextInput()}
                 className="flex-1"
               />
               <Button onClick={handleTextInput} size="icon">

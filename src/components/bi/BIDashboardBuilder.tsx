@@ -199,7 +199,7 @@ export const BIDashboardBuilder: React.FC = () => {
               placeholder="Ex: Qual navio mais consumiu combustível por NM no trimestre?"
               value={aiQuery}
               onChange={handleChange}
-              onKeyDown={(e) => e.key === "Enter" && handleAIQuery(}
+              onKeyDown={(e) => e.key === "Enter" && handleAIQuery()}
               className="flex-1"
             />
             <Button onClick={handleAIQuery} disabled={isQuerying || !aiQuery.trim()}>

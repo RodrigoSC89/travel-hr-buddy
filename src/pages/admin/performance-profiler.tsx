@@ -253,7 +253,7 @@ export default function PerformanceProfiler() {
         <div className="flex gap-2">
           <Button
             variant={isMonitoring ? "destructive" : "default"}
-            onClick={() => (isMonitoring ? stopMonitoring() : startMonitoring(}
+            onClick={() => (isMonitoring ? stopMonitoring() : startMonitoring()}
           >
             {isMonitoring ? "Stop" : "Start"} Monitoring
           </Button>

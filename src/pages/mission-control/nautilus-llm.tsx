@@ -288,7 +288,7 @@ const NautilusLLM: React.FC = () => {
                 placeholder="Digite sua pergunta ou comando..."
                 value={prompt}
                 onChange={handleChange}
-                onKeyPress={(e) => e.key === "Enter" && handleSend(}
+                onKeyPress={(e) => e.key === "Enter" && handleSend()}
                 disabled={isLoading}
               />
               <Button onClick={handleSend} disabled={isLoading || !prompt.trim()}>

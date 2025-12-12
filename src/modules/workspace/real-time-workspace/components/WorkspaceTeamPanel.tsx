@@ -136,7 +136,7 @@ export const WorkspaceTeamPanel: React.FC<WorkspaceTeamPanelProps> = ({
                           variant="ghost" 
                           size="icon" 
                           className="h-7 w-7"
-                          onClick={(e) => e.stopPropagation(}
+                          onClick={(e) => e.stopPropagation()}
                         >
                           <MoreVertical className="h-3.5 w-3.5" />
                         </Button>

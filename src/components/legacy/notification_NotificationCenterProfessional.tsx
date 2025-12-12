@@ -750,7 +750,7 @@ export default function NotificationCenterProfessional() {
                             onCheckedChange={(checked) => {
                               handleSelectNotification(notification.id, !!checked);
                             }}
-                            onClick={(e) => e.stopPropagation(}
+                            onClick={(e) => e.stopPropagation()}
                           />
                           <div className="p-2 rounded-lg bg-background/50">
                             {getTypeIcon(notification.type)}
@@ -834,7 +834,7 @@ export default function NotificationCenterProfessional() {
                               </Tooltip>
 
                               <DropdownMenu>
-                                <DropdownMenuTrigger asChild onClick={(e) => e.stopPropagation(}>
+                                <DropdownMenuTrigger asChild onClick={(e) => e.stopPropagation()}>
                                   <Button variant="ghost" size="icon" className="h-8 w-8">
                                     <MoreVertical className="h-4 w-4" />
                                   </Button>
