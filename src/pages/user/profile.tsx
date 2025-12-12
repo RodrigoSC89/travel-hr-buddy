@@ -170,7 +170,7 @@ export default function UserProfilePage() {
       day: "2-digit",
       month: "long",
       year: "numeric"
-    };
+    });
   };
 
   if (isLoading) {
