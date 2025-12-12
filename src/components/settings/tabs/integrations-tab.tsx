@@ -131,7 +131,7 @@ export const IntegrationsTab: React.FC<IntegrationsTabProps> = ({
     toast({
       title: "Webhook Adicionado",
       description: "Webhook configurado com sucesso"
-    };
+    });
   };
 
   const removeWebhook = (id: string) => {
