@@ -109,7 +109,7 @@ export const SecurityAccessTab: React.FC<SecurityAccessTabProps> = ({
                   </div>
                   <Switch
                     checked={settings.passwordRules.requireNumbers}
-                    onCheckedChange={(checked) => updatePasswordRule("requireNumbers", checked}
+                    onCheckedChange={(checked) => updatePasswordRule("requireNumbers", checked)}
                   />
                 </div>
 
