@@ -286,7 +286,7 @@ const Auth: React.FC = () => {
 
                 {/* Sign In Form */}
                 <TabsContent value="signin" className="space-y-4">
-                  <form onSubmit={signInForm.handleSubmit(handleSignIn} className="space-y-4">
+                  <form onSubmit={signInForm.handleSubmit(handleSignIn) className="space-y-4">
                     <div className="space-y-2">
                       <Label htmlFor="signin-email">Email</Label>
                       <div className="relative">
@@ -301,7 +301,7 @@ const Auth: React.FC = () => {
                       </div>
                       {signInForm.formState.errors.email && (
                         <p className="text-sm text-red-500">{signInForm.formState.errors.email.message)</p>
-                      )}
+                      }
                     </div>
 
                     <div className="space-y-2">
@@ -355,7 +355,7 @@ const Auth: React.FC = () => {
 
                 {/* Sign Up Form */}
                 <TabsContent value="signup" className="space-y-4">
-                  <form onSubmit={signUpForm.handleSubmit(handleSignUp} className="space-y-4">
+                  <form onSubmit={signUpForm.handleSubmit(handleSignUp) className="space-y-4">
                     <div className="space-y-2">
                       <Label htmlFor="signup-name">Nome Completo</Label>
                       <div className="relative">
@@ -370,7 +370,7 @@ const Auth: React.FC = () => {
                       </div>
                       {signUpForm.formState.errors.fullName && (
                         <p className="text-sm text-red-500">{signUpForm.formState.errors.fullName.message)</p>
-                      )}
+                      }
                     </div>
 
                     <div className="space-y-2">
@@ -449,7 +449,7 @@ const Auth: React.FC = () => {
                 {/* Reset Password Tab */}
                 {activeTab === "reset" && (
                   <div className="space-y-4">
-                    <form onSubmit={resetForm.handleSubmit(handleResetPassword} className="space-y-4">
+                    <form onSubmit={resetForm.handleSubmit(handleResetPassword) className="space-y-4">
                       <div className="space-y-2">
                         <Label htmlFor="reset-email">Email</Label>
                         <div className="relative">
@@ -464,7 +464,7 @@ const Auth: React.FC = () => {
                         </div>
                         {resetForm.formState.errors.email && (
                           <p className="text-sm text-red-500">{resetForm.formState.errors.email.message)</p>
-                        )}
+                        }
                       </div>
 
                       <Button

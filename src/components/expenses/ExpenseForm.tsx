@@ -61,7 +61,7 @@ export const ExpenseForm: React.FC<ExpenseFormProps> = ({
   const category = watch("category");
 
   return (
-    <form onSubmit={handleSubmit(onSubmit} className="space-y-6">
+    <form onSubmit={handleSubmit(onSubmit) className="space-y-6">
       {/* Amount */)
       <div className="space-y-2">
         <Label htmlFor="amount" className="text-sm font-semibold text-foreground">
@@ -77,7 +77,7 @@ export const ExpenseForm: React.FC<ExpenseFormProps> = ({
             step="0.01"
             placeholder="0,00"
             className="pl-10 bg-card border-border text-foreground"
-            {...register("amount", { valueAsNumber: true ))}
+            {...register("amount", { valueAsNumber: true )}
           />
         </div>
         {errors.amount && (
