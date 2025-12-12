@@ -338,7 +338,7 @@ const SystemStatus = () => {
     storage: "operational",
     auth: "operational",
     cache: "operational"
-  };
+  });
 
   const statusColor = (s: string) => {
     switch (s) {
