@@ -50,7 +50,7 @@ export class ModuleErrorBoundary extends Component<Props, State> {
         componentStack: errorInfo.componentStack,
         retryCount: this.state.retryCount,
       },
-    };
+    });
 
     // Call custom error handler
     if (onError) {

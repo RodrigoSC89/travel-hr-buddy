@@ -41,7 +41,7 @@ export class RouteErrorBoundary extends Component<Props, State> {
       metadata: {
         componentStack: errorInfo.componentStack,
       },
-    };
+    });
   }
 
   render(): ReactNode {
