@@ -209,7 +209,7 @@ export function OrganizationProvider({ children }: OrganizationProviderProps): J
       operator: ["manage_data", "view_data"],
       member: ["view_data"],
       viewer: ["view_data"]
-    });
+    };
 
     const userPermissions = roleHierarchy[userRole || "viewer"] || [];
     return userPermissions.includes(permission) || userPermissions.includes("all");
