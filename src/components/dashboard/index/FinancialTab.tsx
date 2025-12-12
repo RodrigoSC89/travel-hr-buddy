@@ -26,6 +26,6 @@ export const FinancialTab = React.memo<FinancialTabProps>(({ data }) => {
       </CardContent>
     </Card>
   );
-};
+});
 
 FinancialTab.displayName = "FinancialTab";
