@@ -435,7 +435,7 @@ const EnhancedSettingsHubComponent: React.FC = () => {
       title: "📊 Configurações Exportadas",
       description: "Arquivo de backup baixado com sucesso.",
     });
-  });
+  };
 
   const importSettings = (event: React.ChangeEvent<HTMLInputElement>) => {
     const file = event.target.files?.[0];
