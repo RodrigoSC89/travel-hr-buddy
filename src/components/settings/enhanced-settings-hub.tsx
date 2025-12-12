@@ -507,7 +507,7 @@ export const EnhancedSettingsHub: React.FC = () => {
       toast({
         title: "✨ Recomendações da IA",
         description: `${recommendations.length} sugestões de otimização encontradas. Verifique a aba 'Recursos Avançados'.`,
-      };
+      });
     }, 2000);
   };
 
