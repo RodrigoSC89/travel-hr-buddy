@@ -12,7 +12,7 @@ import {
 } from "lucide-react";
 
 // AI Enhanced Components
-import { PredictiveMaintenanceAI } from "@/components/maintenance/PredictiveMaintenanceAI";
+import { PredictiveMaintenanceAI } from "@/components/ai/PredictiveMaintenanceAI";
 import { CrewIntelligenceAI } from "@/components/crew/CrewIntelligenceAI";
 import { ProcurementIntelligenceAI } from "@/components/procurement/ProcurementIntelligenceAI";
 import { VoyageIntelligenceAI } from "@/components/voyage/VoyageIntelligenceAI";
