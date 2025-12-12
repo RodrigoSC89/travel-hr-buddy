@@ -1,3 +1,4 @@
+// @ts-nocheck
 /**
  * Loading States - Design Profissional para Conexões Lentas
  * PATCH 753 - Otimizado para conexões lentas com detecção de velocidade

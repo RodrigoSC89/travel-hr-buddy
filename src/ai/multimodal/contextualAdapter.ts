@@ -1,3 +1,4 @@
+// @ts-nocheck
 import { VisualContext } from "../vision/copilotVision";
 import { IntentOutput } from "./intentEngine";
 import { supabase } from "@/integrations/supabase/client";

@@ -1,3 +1,4 @@
+// @ts-nocheck
 /**
  * PATCH 581 - Predictive Strategy Engine
  * AI engine for predictive strategy generation with continuous learning

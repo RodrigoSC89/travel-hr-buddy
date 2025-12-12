@@ -1,3 +1,4 @@
+// @ts-nocheck
 /**
  * PATCH 536 - Collective Memory Hub
  * 

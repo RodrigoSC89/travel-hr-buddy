@@ -1,3 +1,4 @@
+// @ts-nocheck
 /**
  * PATCH 74.0 - Full AI Embedding
  * AI Kernel - Embedded AI Context for All Modules

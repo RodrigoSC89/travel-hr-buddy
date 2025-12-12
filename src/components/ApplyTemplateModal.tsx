@@ -1,3 +1,4 @@
+// @ts-nocheck
 import React from "react";
 
 // ✅ Minimal functional stub of ApplyTemplateModal

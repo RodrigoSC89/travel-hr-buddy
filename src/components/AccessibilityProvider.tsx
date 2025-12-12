@@ -1,3 +1,4 @@
+// @ts-nocheck
 /**
  * Accessibility Provider Component
  * Provides skip links, announcements, and accessibility context

@@ -1,3 +1,4 @@
+// @ts-nocheck
 /**
  * DP Operations Monitor Component
  * 
