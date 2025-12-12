@@ -287,6 +287,6 @@ export const PEODPEnhancedAI = memo(function() {
       </Tabs>
     </div>
   );
-}
+});
 
 export default PEODPEnhancedAI;
