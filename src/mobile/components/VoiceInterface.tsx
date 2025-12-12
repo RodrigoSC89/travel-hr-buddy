@@ -117,7 +117,7 @@ export const VoiceInterface: React.FC<VoiceInterfaceProps> = ({
       role: "user",
       content: text,
       context: { intent }
-    };
+    });
 
     // Notify parent
     onIntentDetected?.(intent);

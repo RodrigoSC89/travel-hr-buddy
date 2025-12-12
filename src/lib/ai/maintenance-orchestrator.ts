@@ -107,7 +107,7 @@ export async function runMaintenanceOrchestrator(
       risk_level: riskLevel,
       message,
       timestamp,
-    };
+    });
 
     // Log to Supabase
     await logToSupabase(result);
@@ -132,7 +132,7 @@ export async function runMaintenanceOrchestrator(
       risk_level: "Normal",
       message: "Sistema de manutenção preditiva indisponível",
       timestamp: new Date().toISOString(),
-    };
+    });
   }
 }
 

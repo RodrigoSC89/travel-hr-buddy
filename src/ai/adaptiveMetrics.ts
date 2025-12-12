@@ -400,7 +400,7 @@ class AdaptiveMetricsEngine {
       timeoutDuration: this.parameters.get("timeoutDuration")!,
       cacheExpiry: this.parameters.get("cacheExpiry")!,
       maxConcurrency: this.parameters.get("maxConcurrency")!,
-    };
+    });
   }
 
   /**
@@ -456,7 +456,7 @@ class AdaptiveMetricsEngine {
       totalAdjustments,
       avgDeltaFromDefault: avgDeltaFromDefault * 100, // as percentage
       lastAdjustment: Math.max(...params.map(p => p.lastAdjusted.getTime())),
-    };
+    });
   }
 }
 

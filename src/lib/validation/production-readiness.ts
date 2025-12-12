@@ -366,7 +366,7 @@ class ProductionReadinessValidator {
       results: this.results,
       summary: { passed, failed, warnings, critical },
       recommendations
-    };
+    });
   }
 }
 

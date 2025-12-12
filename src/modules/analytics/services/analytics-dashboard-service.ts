@@ -197,7 +197,7 @@ export class AnalyticsDashboardService {
       isPublic: data.is_public,
       createdAt: data.created_at,
       updatedAt: data.updated_at
-    };
+    });
   }
 
   private mapToEvent(data: any): AnalyticsEvent {

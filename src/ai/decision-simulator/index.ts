@@ -154,7 +154,7 @@ class DecisionSimulatorCore {
       environmentalFactors: parameters.environmentalFactors || {},
       crewAvailability: parameters.crewAvailability || 80,
       resourceConstraints: parameters.resourceConstraints || {}
-    };
+    });
 
     // Create simulation result
     const result: SimulationResult = {
@@ -176,7 +176,7 @@ class DecisionSimulatorCore {
       startedAt: new Date(),
       missionId,
       metadata: {}
-    };
+    });
 
     this.activeSimulations.set(simulationId, result);
 
@@ -324,7 +324,7 @@ class DecisionSimulatorCore {
           avgTime: totalTime / completedSimulations.length
         },
         createdAt: new Date()
-      };
+      });
     } catch (error) {
       logger.error("[DecisionSimulator] Failed to get simulation archive", error);
       return null;
@@ -386,7 +386,7 @@ class DecisionSimulatorCore {
         }
       ],
       triggers: ["ideal_conditions", "full_resources", "high_crew_morale"]
-    };
+    });
   }
 
   private createExpectedCaseScenario(
@@ -415,7 +415,7 @@ class DecisionSimulatorCore {
         }
       ],
       triggers: ["normal_conditions", "standard_resources"]
-    };
+    });
   }
 
   private createWorstCaseScenario(
@@ -449,7 +449,7 @@ class DecisionSimulatorCore {
         }
       ],
       triggers: ["adverse_weather", "equipment_failure", "resource_shortage"]
-    };
+    });
   }
 
   private createRiskEventScenario(
@@ -483,7 +483,7 @@ class DecisionSimulatorCore {
         }
       ],
       triggers: ["critical_failure", "safety_incident", "environmental_hazard"]
-    };
+    });
   }
 
   private createResourceShortageScenario(
@@ -517,7 +517,7 @@ class DecisionSimulatorCore {
         }
       ],
       triggers: ["supply_chain_disruption", "crew_unavailability", "equipment_shortage"]
-    };
+    });
   }
 
   private async runMonteCarloSimulation(
@@ -531,7 +531,7 @@ class DecisionSimulatorCore {
       risks: [] as number[],
       times: [] as number[],
       crewImpacts: [] as number[]
-    };
+    });
 
     // Run Monte Carlo iterations
     for (let i = 0; i < iterations; i++) {
@@ -576,7 +576,7 @@ class DecisionSimulatorCore {
         average: results.crewImpacts.reduce((a, b) => a + b, 0) / results.crewImpacts.length,
         affectedCrew: Math.round(parameters.crewAvailability! * 0.7)
       }
-    };
+    });
   }
 
   private selectScenarioByProbability(scenarios: SimulationScenario[]): SimulationScenario {
@@ -619,7 +619,7 @@ class DecisionSimulatorCore {
       medium: 0,   // 31-60
       high: 0,     // 61-85
       critical: 0  // 86-100
-    };
+    });
 
     for (const risk of risks) {
       if (risk <= 30) distribution.low++;

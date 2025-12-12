@@ -95,7 +95,7 @@ class ONNXModelWrapper implements ONNXModel {
           data: (tensor as any).data as Float32Array,
           dims: (tensor as any).dims as number[],
           type: (tensor as any).type as ONNXTensor["type"],
-        };
+        });
       }
 
       return outputs;

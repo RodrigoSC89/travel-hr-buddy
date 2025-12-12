@@ -116,7 +116,7 @@ export default function ListaAuditoriasIMCA() {
         orientation: "portrait",
         unit: "mm",
         format: "a4",
-      };
+      });
 
       const imgWidth = 190;
       const imgHeight = (canvas.height * imgWidth) / canvas.width;

@@ -92,13 +92,13 @@ const AICopilot: React.FC = () => {
             title: "Limite de requisições",
             description: "Aguarde um momento e tente novamente.",
             variant: "destructive",
-          };
+          });
         } else if (data.error.includes("Payment")) {
           toast({
             title: "Créditos insuficientes",
             description: "Adicione créditos ao workspace para continuar.",
             variant: "destructive",
-          };
+          });
         }
         throw new Error(data.error);
       }
@@ -108,7 +108,7 @@ const AICopilot: React.FC = () => {
         role: "assistant",
         content: data?.response || "Desculpe, não consegui processar sua solicitação.",
         timestamp: new Date(),
-      };
+      });
 
       setMessages(prev => [...prev, assistantMessage]);
     } catch (error) {
@@ -117,7 +117,7 @@ const AICopilot: React.FC = () => {
         title: "Erro ao processar",
         description: "Não foi possível obter resposta da IA. Tente novamente.",
         variant: "destructive",
-      };
+      });
     } finally {
       setIsLoading(false);
     }
@@ -130,7 +130,7 @@ const AICopilot: React.FC = () => {
     toast({
       title: "Copiado!",
       description: "Texto copiado para a área de transferência.",
-    };
+    });
   };
 
   const clearChat = () => {
@@ -138,8 +138,8 @@ const AICopilot: React.FC = () => {
     toast({
       title: "Chat limpo",
       description: "Histórico de mensagens removido.",
-    };
-  };
+    });
+  });
 
   return (
     <div className="p-6 space-y-6 min-h-screen">

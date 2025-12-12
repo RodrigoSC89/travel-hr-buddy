@@ -32,7 +32,7 @@ export async function sendCriticalAlertEmail(
     return {
       success: false,
       error: "RESEND_API_KEY is not configured in environment variables",
-    };
+    });
   }
 
   const { auditoriaId, descricao } = params;
@@ -62,6 +62,6 @@ export async function sendCriticalAlertEmail(
     return {
       success: false,
       error: err instanceof Error ? err.message : "Unknown error occurred",
-    };
+    });
   }
 }

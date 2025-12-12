@@ -386,6 +386,6 @@ export const DGNSSDashboard: React.FC = () => {
       </Card>
     </div>
   );
-});
+};
 
 export default DGNSSDashboard;

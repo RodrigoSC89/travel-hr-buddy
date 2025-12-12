@@ -158,7 +158,7 @@ export default function AuditDashboard() {
     default:
       return "text-blue-600 bg-blue-50";
     }
-  };
+  });
 
   const getResultColor = (result: string) => {
     switch (result) {

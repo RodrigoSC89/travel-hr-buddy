@@ -62,7 +62,7 @@ describe("JobsForecastReport Component", () => {
     invokeMock.mockResolvedValue({
       data: { forecast: mockForecast },
       error: null,
-    };
+    });
 
     render(<JobsForecastReport trend={[{ date: "2025-01", jobs: 10 }]} />);
 

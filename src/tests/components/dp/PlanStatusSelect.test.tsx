@@ -68,7 +68,7 @@ describe("PlanStatusSelect Component", () => {
     const incident = {
       id: "test-1",
       plan_status: "pendente",
-    };
+    });
 
     render(<PlanStatusSelect incident={incident} />);
     
@@ -100,7 +100,7 @@ describe("PlanStatusSelect Component", () => {
     const incident = {
       id: "test-1",
       plan_status: "pendente",
-    };
+    });
 
     render(<PlanStatusSelect incident={incident} onUpdate={onUpdate} />);
     

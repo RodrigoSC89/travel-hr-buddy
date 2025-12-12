@@ -28,12 +28,12 @@ export const OptimizedSkeleton = memo(function({
     text: "rounded h-4",
     circular: "rounded-full",
     rectangular: "rounded-none",
-  };
+  });
 
   const style: React.CSSProperties = {
     width: typeof width === "number" ? `${width}px` : width,
     height: typeof height === "number" ? `${height}px` : height,
-  };
+  });
 
   if (lines > 1) {
     return (

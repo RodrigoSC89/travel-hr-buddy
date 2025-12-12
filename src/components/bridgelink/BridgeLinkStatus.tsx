@@ -13,8 +13,8 @@ export default function BridgeLinkStatus() {
         online: (data.online as boolean) ?? false,
         latency: (data.latency as number) ?? 0,
         lastSync: (data.lastSync as string) ?? "—"
-      };
-  };
+      });
+  });
     return () => {
       client.end();
     };

@@ -101,7 +101,7 @@ const NautilusLLM: React.FC = () => {
         title: "Erro na IA",
         description: "Não foi possível obter resposta da IA. Tentando fallback...",
         variant: "destructive"
-      };
+      });
     } finally {
       setIsLoading(false);
     }
@@ -140,7 +140,7 @@ const NautilusLLM: React.FC = () => {
         title: "Erro no Comando",
         description: "Não foi possível executar o comando rápido.",
         variant: "destructive"
-      };
+      });
     } finally {
       setIsLoading(false);
     }

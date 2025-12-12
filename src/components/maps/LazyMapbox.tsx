@@ -71,7 +71,7 @@ export const LazyMapbox: React.FC<LazyMapboxProps> = ({
           zoom,
           pitch,
           projection: projection as any
-        };
+        });
         
         map.current = mapInstance;
 

@@ -469,7 +469,7 @@ class MiniWikiEngine {
     return {
       articles: this.articles,
       faqs: this.faqs
-    };
+    });
   }
 
   /**

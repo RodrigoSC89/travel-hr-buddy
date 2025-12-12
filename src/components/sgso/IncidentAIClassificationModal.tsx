@@ -43,7 +43,7 @@ export const IncidentAIClassificationModal: React.FC<IncidentAIClassificationMod
         title: "⚠️ Descrição necessária",
         description: "Por favor, insira uma descrição do incidente para classificação.",
         variant: "destructive",
-};
+});
       return;
     }
 
@@ -56,13 +56,13 @@ export const IncidentAIClassificationModal: React.FC<IncidentAIClassificationMod
         toast({
           title: "✨ Classificação concluída",
           description: "IA analisou o incidente com sucesso!",
-        };
+        });
       } else {
         toast({
           title: "❌ Erro na classificação",
           description: "Não foi possível classificar o incidente. Tente novamente.",
           variant: "destructive",
-        };
+        });
       }
     } catch (error) {
       console.error("Error classifying incident:", error);
@@ -70,7 +70,7 @@ export const IncidentAIClassificationModal: React.FC<IncidentAIClassificationMod
         title: "❌ Erro na classificação",
         description: "Ocorreu um erro ao processar a classificação. Verifique sua conexão.",
         variant: "destructive",
-      };
+      });
     } finally {
       setIsClassifying(false);
     }

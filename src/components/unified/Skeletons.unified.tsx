@@ -142,13 +142,13 @@ export const Skeleton = memo(function Skeleton({
     text: "rounded h-4",
     circular: "rounded-full",
     rectangular: "rounded-none",
-  };
+  });
 
   const inlineStyle: React.CSSProperties = {
     ...style,
     width: typeof width === "number" ? `${width}px` : width,
     height: typeof height === "number" ? `${height}px` : height,
-  };
+  });
 
   // Multi-line support (OptimizedSkeleton.tsx)
   if (lines > 1) {
@@ -243,7 +243,7 @@ export const Loading = memo(function Loading({
     default:
       return <Loader2 className={cn("animate-spin text-primary", sizeClasses[size])} />;
     }
-  };
+  });
 
   const content = (
     <div className={cn("flex flex-col items-center justify-center gap-3", className)}>
@@ -752,7 +752,7 @@ export const SkeletonAvatar = memo(function SkeletonAvatar({
     sm: "h-8 w-8",
     md: "h-10 w-10",
     lg: "h-16 w-16",
-  };
+  });
 
   return <Skeleton className={cn("rounded-full", sizeClasses[size], className)} />;
 });
@@ -844,4 +844,4 @@ export default {
   LoadingDashboard,
   LoadingState,
   LoadingSpinner,
-};
+});

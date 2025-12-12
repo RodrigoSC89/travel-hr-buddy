@@ -299,7 +299,7 @@ class MLCInspectionService {
       totalFindings: findings?.length || 0,
       criticalFindings: findings?.filter((f: any) => f.severity === "critical").length || 0,
       nonCompliantFindings: findings?.filter((f: any) => !f.compliance).length || 0,
-    };
+    });
   }
 }
 

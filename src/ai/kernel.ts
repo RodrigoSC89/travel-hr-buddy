@@ -42,7 +42,7 @@ const MODULE_AI_PATTERNS: Record<string, (context: AIContextRequest) => Promise<
       confidence: 94.2,
       metadata: { maintenanceOverdue: true, days: 12 },
       timestamp: new Date()
-    };
+    });
   },
   
   "operations.crew": async (ctx) => {
@@ -52,7 +52,7 @@ const MODULE_AI_PATTERNS: Record<string, (context: AIContextRequest) => Promise<
       confidence: 87.5,
       metadata: { workloadHigh: true },
       timestamp: new Date()
-    };
+    });
   },
   
   "operations.performance": async (ctx) => {
@@ -61,7 +61,7 @@ const MODULE_AI_PATTERNS: Record<string, (context: AIContextRequest) => Promise<
       message: "Performance operacional estável. KPIs dentro dos parâmetros esperados.",
       confidence: 92.0,
       timestamp: new Date()
-    };
+    });
   },
   
   // HR modules
@@ -72,7 +72,7 @@ const MODULE_AI_PATTERNS: Record<string, (context: AIContextRequest) => Promise<
       confidence: 98.1,
       metadata: { certificationExpired: true, days: 5 },
       timestamp: new Date()
-    };
+    });
   },
   
   "hr.training": async (ctx) => {
@@ -81,7 +81,7 @@ const MODULE_AI_PATTERNS: Record<string, (context: AIContextRequest) => Promise<
       message: "3 tripulantes elegíveis para treinamento avançado de segurança. Agendar até fim do mês.",
       confidence: 89.3,
       timestamp: new Date()
-    };
+    });
   },
   
   "hr.peo-dp": async (ctx) => {
@@ -90,7 +90,7 @@ const MODULE_AI_PATTERNS: Record<string, (context: AIContextRequest) => Promise<
       message: "Novo protocolo PEO-DP disponível. Revisar e aplicar atualizações no checklist.",
       confidence: 91.7,
       timestamp: new Date()
-    };
+    });
   },
   
   // Documents modules
@@ -101,7 +101,7 @@ const MODULE_AI_PATTERNS: Record<string, (context: AIContextRequest) => Promise<
       confidence: 96.4,
       metadata: { signatureMissing: true, document: "Contrato Y" },
       timestamp: new Date()
-    };
+    });
   },
   
   // PATCH 91.1 - Document Hub AI Pattern
@@ -117,7 +117,7 @@ const MODULE_AI_PATTERNS: Record<string, (context: AIContextRequest) => Promise<
         indexed: true
       },
       timestamp: new Date()
-    };
+    });
   },
   
   "documents.incident-reports": async (ctx) => {
@@ -126,7 +126,7 @@ const MODULE_AI_PATTERNS: Record<string, (context: AIContextRequest) => Promise<
       message: "Padrão identificado: 3 incidentes similares no último trimestre. Revisar protocolo preventivo.",
       confidence: 88.9,
       timestamp: new Date()
-    };
+    });
   },
   
   "documents.templates": async (ctx) => {
@@ -135,7 +135,7 @@ const MODULE_AI_PATTERNS: Record<string, (context: AIContextRequest) => Promise<
       message: "Template de relatório pode ser otimizado. Sugestões de IA disponíveis.",
       confidence: 84.2,
       timestamp: new Date()
-    };
+    });
   },
   
   // Emergency modules
@@ -146,7 +146,7 @@ const MODULE_AI_PATTERNS: Record<string, (context: AIContextRequest) => Promise<
       confidence: 93.5,
       metadata: { duplicateEvent: true, eventId: "Z" },
       timestamp: new Date()
-    };
+    });
   },
   
   "emergency.response": async (ctx) => {
@@ -155,7 +155,7 @@ const MODULE_AI_PATTERNS: Record<string, (context: AIContextRequest) => Promise<
       message: "Protocolo de emergência atualizado disponível. Sincronizar com sistema.",
       confidence: 95.8,
       timestamp: new Date()
-    };
+    });
   },
   
   "emergency.risk-management": async (ctx) => {
@@ -164,7 +164,7 @@ const MODULE_AI_PATTERNS: Record<string, (context: AIContextRequest) => Promise<
       message: "Análise de risco indica baixa probabilidade de incidentes. Continuar monitoramento.",
       confidence: 90.3,
       timestamp: new Date()
-    };
+    });
   },
   
   "emergency.mission-control": async (ctx) => {
@@ -173,7 +173,7 @@ const MODULE_AI_PATTERNS: Record<string, (context: AIContextRequest) => Promise<
       message: "Missão atual: condições favoráveis. Otimizar rota para economia de combustível.",
       confidence: 86.7,
       timestamp: new Date()
-    };
+    });
   },
   
   // Compliance modules
@@ -184,7 +184,7 @@ const MODULE_AI_PATTERNS: Record<string, (context: AIContextRequest) => Promise<
       confidence: 94.8,
       metadata: { inconsistentItems: [2, 7] },
       timestamp: new Date()
-    };
+    });
   },
   
   "compliance.reports": async (ctx) => {
@@ -193,7 +193,7 @@ const MODULE_AI_PATTERNS: Record<string, (context: AIContextRequest) => Promise<
       message: "Relatório de conformidade pode incluir dados de auditoria recente.",
       confidence: 87.4,
       timestamp: new Date()
-    };
+    });
   },
   
   "compliance.hub": async (ctx) => {
@@ -202,7 +202,7 @@ const MODULE_AI_PATTERNS: Record<string, (context: AIContextRequest) => Promise<
       message: "Nova regulamentação NORMAM disponível. Atualizar checklist de conformidade.",
       confidence: 92.6,
       timestamp: new Date()
-    };
+    });
   },
   
   // Intelligence modules
@@ -212,7 +212,7 @@ const MODULE_AI_PATTERNS: Record<string, (context: AIContextRequest) => Promise<
       message: "Tendência positiva nos indicadores operacionais. Performance 8% acima da média.",
       confidence: 91.2,
       timestamp: new Date()
-    };
+    });
   },
   
   "intelligence.analytics": async (ctx) => {
@@ -221,7 +221,7 @@ const MODULE_AI_PATTERNS: Record<string, (context: AIContextRequest) => Promise<
       message: "Dashboard pode ser otimizado com novos KPIs sugeridos pela IA.",
       confidence: 85.9,
       timestamp: new Date()
-    };
+    });
   },
   
   "intelligence.automation": async (ctx) => {
@@ -230,7 +230,7 @@ const MODULE_AI_PATTERNS: Record<string, (context: AIContextRequest) => Promise<
       message: "Workflow automatizado detectou economia potencial de 15 horas/mês.",
       confidence: 89.7,
       timestamp: new Date()
-    };
+    });
   },
   
   // Maintenance module
@@ -241,7 +241,7 @@ const MODULE_AI_PATTERNS: Record<string, (context: AIContextRequest) => Promise<
       confidence: 93.1,
       metadata: { equipment: "X", daysUntilDue: 7 },
       timestamp: new Date()
-    };
+    });
   },
   
   // Logistics modules
@@ -251,7 +251,7 @@ const MODULE_AI_PATTERNS: Record<string, (context: AIContextRequest) => Promise<
       message: "Rota de suprimentos pode ser otimizada. Economia estimada: 12%.",
       confidence: 88.4,
       timestamp: new Date()
-    };
+    });
   },
   
   "logistics.fuel-optimizer": async (ctx) => {
@@ -260,7 +260,7 @@ const MODULE_AI_PATTERNS: Record<string, (context: AIContextRequest) => Promise<
       message: "Consumo de combustível 5% acima do ideal. Ajustar velocidade de cruzeiro.",
       confidence: 90.8,
       timestamp: new Date()
-    };
+    });
   },
   
   "logistics.satellite-tracker": async (ctx) => {
@@ -269,7 +269,7 @@ const MODULE_AI_PATTERNS: Record<string, (context: AIContextRequest) => Promise<
       message: "Rastreamento satellite operacional. Cobertura: 100%.",
       confidence: 97.3,
       timestamp: new Date()
-    };
+    });
   },
   
   // Planning module
@@ -279,7 +279,7 @@ const MODULE_AI_PATTERNS: Record<string, (context: AIContextRequest) => Promise<
       message: "Rota alternativa disponível com redução de 2 horas no tempo de viagem.",
       confidence: 86.2,
       timestamp: new Date()
-    };
+    });
   },
   
   // Connectivity modules
@@ -289,7 +289,7 @@ const MODULE_AI_PATTERNS: Record<string, (context: AIContextRequest) => Promise<
       message: "Canais de comunicação estáveis. Latência média: 45ms.",
       confidence: 94.5,
       timestamp: new Date()
-    };
+    });
   },
   
   "connectivity.notifications": async (ctx) => {
@@ -298,7 +298,7 @@ const MODULE_AI_PATTERNS: Record<string, (context: AIContextRequest) => Promise<
       message: "Notificações pendentes: 3. Configurar alertas prioritários.",
       confidence: 88.0,
       timestamp: new Date()
-    };
+    });
   },
   
   "connectivity.api-gateway": async (ctx) => {
@@ -307,7 +307,7 @@ const MODULE_AI_PATTERNS: Record<string, (context: AIContextRequest) => Promise<
       message: "API Gateway operacional. Taxa de sucesso: 99.2%.",
       confidence: 96.7,
       timestamp: new Date()
-    };
+    });
   },
   
   "connectivity.integrations-hub": async (ctx) => {
@@ -316,7 +316,7 @@ const MODULE_AI_PATTERNS: Record<string, (context: AIContextRequest) => Promise<
       message: "Nova integração disponível para sistema externo. Testar conectividade.",
       confidence: 84.9,
       timestamp: new Date()
-    };
+    });
   },
   
   "connectivity.communication": async (ctx) => {
@@ -325,7 +325,7 @@ const MODULE_AI_PATTERNS: Record<string, (context: AIContextRequest) => Promise<
       message: "Sistema de comunicação atualizado. Verificar compatibilidade com dispositivos.",
       confidence: 91.4,
       timestamp: new Date()
-    };
+    });
   },
   
   // Workspace modules
@@ -335,7 +335,7 @@ const MODULE_AI_PATTERNS: Record<string, (context: AIContextRequest) => Promise<
       message: "Colaboração em tempo real ativa. 5 usuários conectados.",
       confidence: 93.8,
       timestamp: new Date()
-    };
+    });
   },
   
   "workspace.collaboration": async (ctx) => {
@@ -344,7 +344,7 @@ const MODULE_AI_PATTERNS: Record<string, (context: AIContextRequest) => Promise<
       message: "Documento compartilhado tem alterações pendentes. Sincronizar agora.",
       confidence: 89.6,
       timestamp: new Date()
-    };
+    });
   },
   
   // Assistants module
@@ -354,7 +354,7 @@ const MODULE_AI_PATTERNS: Record<string, (context: AIContextRequest) => Promise<
       message: "Assistente de voz calibrado. Pronto para comandos.",
       confidence: 95.2,
       timestamp: new Date()
-    };
+    });
   },
   
   // Finance module
@@ -364,7 +364,7 @@ const MODULE_AI_PATTERNS: Record<string, (context: AIContextRequest) => Promise<
       message: "Despesas operacionais 3% abaixo do orçamento. Performance financeira positiva.",
       confidence: 92.4,
       timestamp: new Date()
-    };
+    });
   },
   
   // Configuration modules
@@ -374,7 +374,7 @@ const MODULE_AI_PATTERNS: Record<string, (context: AIContextRequest) => Promise<
       message: "Configuração de sistema pode ser otimizada. Aplicar configurações recomendadas?",
       confidence: 87.1,
       timestamp: new Date()
-    };
+    });
   },
   
   "config.user-management": async (ctx) => {
@@ -383,7 +383,7 @@ const MODULE_AI_PATTERNS: Record<string, (context: AIContextRequest) => Promise<
       message: "Usuário com permissões elevadas sem login nos últimos 30 dias. Revisar acesso.",
       confidence: 90.9,
       timestamp: new Date()
-    };
+    });
   },
   
   // Features modules
@@ -393,7 +393,7 @@ const MODULE_AI_PATTERNS: Record<string, (context: AIContextRequest) => Promise<
       message: "Checklist inteligente sugerido com base em operações recentes.",
       confidence: 86.5,
       timestamp: new Date()
-    };
+    });
   },
   
   "features.task-automation": async (ctx) => {
@@ -402,7 +402,7 @@ const MODULE_AI_PATTERNS: Record<string, (context: AIContextRequest) => Promise<
       message: "Tarefa automatizada concluída. Economia de 45 minutos.",
       confidence: 94.1,
       timestamp: new Date()
-    };
+    });
   },
   
   "features.smart-workflow": async (ctx) => {
@@ -411,7 +411,7 @@ const MODULE_AI_PATTERNS: Record<string, (context: AIContextRequest) => Promise<
       message: "Workflow pode ser otimizado. Sugestões de IA aplicadas.",
       confidence: 88.7,
       timestamp: new Date()
-    };
+    });
   },
   
   "features.weather": async (ctx) => {
@@ -420,7 +420,7 @@ const MODULE_AI_PATTERNS: Record<string, (context: AIContextRequest) => Promise<
       message: "Condições meteorológicas favoráveis nas próximas 48 horas.",
       confidence: 91.8,
       timestamp: new Date()
-    };
+    });
   },
   
   "features.vault-ai": async (ctx) => {
@@ -429,7 +429,7 @@ const MODULE_AI_PATTERNS: Record<string, (context: AIContextRequest) => Promise<
       message: "Documentos no vault podem ser indexados para busca rápida.",
       confidence: 85.3,
       timestamp: new Date()
-    };
+    });
   },
   
   "features.project-timeline": async (ctx) => {
@@ -438,7 +438,7 @@ const MODULE_AI_PATTERNS: Record<string, (context: AIContextRequest) => Promise<
       message: "Projeto no cronograma. Próximo milestone em 3 dias.",
       confidence: 92.7,
       timestamp: new Date()
-    };
+    });
   },
   
   "features.employee-portal": async (ctx) => {
@@ -447,7 +447,7 @@ const MODULE_AI_PATTERNS: Record<string, (context: AIContextRequest) => Promise<
       message: "Portal do colaborador atualizado. Novos recursos disponíveis.",
       confidence: 90.3,
       timestamp: new Date()
-    };
+    });
   },
   
   "features.communication": async (ctx) => {
@@ -456,7 +456,7 @@ const MODULE_AI_PATTERNS: Record<string, (context: AIContextRequest) => Promise<
       message: "Canal de comunicação pode ser criado para projeto atual.",
       confidence: 84.7,
       timestamp: new Date()
-    };
+    });
   },
   
   "features.bookings": async (ctx) => {
@@ -465,7 +465,7 @@ const MODULE_AI_PATTERNS: Record<string, (context: AIContextRequest) => Promise<
       message: "Reserva pendente de confirmação. Aprovar até fim do dia.",
       confidence: 89.2,
       timestamp: new Date()
-    };
+    });
   },
   
   "features.reservations": async (ctx) => {
@@ -474,7 +474,7 @@ const MODULE_AI_PATTERNS: Record<string, (context: AIContextRequest) => Promise<
       message: "Sistema de reservas operacional. Taxa de ocupação: 78%.",
       confidence: 93.4,
       timestamp: new Date()
-    };
+    });
   },
   
   "features.travel": async (ctx) => {
@@ -483,7 +483,7 @@ const MODULE_AI_PATTERNS: Record<string, (context: AIContextRequest) => Promise<
       message: "Viagem pode ser otimizada. Rota alternativa disponível.",
       confidence: 86.9,
       timestamp: new Date()
-    };
+    });
   },
   
   "operations.maritime-system": async (ctx) => {
@@ -492,7 +492,7 @@ const MODULE_AI_PATTERNS: Record<string, (context: AIContextRequest) => Promise<
       message: "Sistema marítimo atualizado. Sincronizar com autoridades portuárias e verificar checklists de conformidade.",
       confidence: 91.5,
       timestamp: new Date()
-    };
+    });
   },
   
   "features.price-alerts": async (ctx) => {
@@ -501,7 +501,7 @@ const MODULE_AI_PATTERNS: Record<string, (context: AIContextRequest) => Promise<
       message: "Alerta de preço ativado. Monitorando variações de combustível.",
       confidence: 95.6,
       timestamp: new Date()
-    };
+    });
   },
   
   // Core modules
@@ -511,7 +511,7 @@ const MODULE_AI_PATTERNS: Record<string, (context: AIContextRequest) => Promise<
       message: "Dashboard carregado. Todos os módulos operacionais.",
       confidence: 97.1,
       timestamp: new Date()
-    };
+    });
   },
   
   "core.shared": async (ctx) => {
@@ -520,7 +520,7 @@ const MODULE_AI_PATTERNS: Record<string, (context: AIContextRequest) => Promise<
       message: "Componentes compartilhados atualizados. Recarregar para aplicar mudanças.",
       confidence: 88.3,
       timestamp: new Date()
-    };
+    });
   },
   
   // PATCH 94.0 - Logs Center AI Pattern
@@ -580,7 +580,7 @@ const MODULE_AI_PATTERNS: Record<string, (context: AIContextRequest) => Promise<
         warnRate: warnRate.toFixed(2),
       },
       timestamp: new Date()
-    };
+    });
   },
 
   // PATCH 111.0 - Inventory Hub AI Pattern
@@ -616,7 +616,7 @@ const MODULE_AI_PATTERNS: Record<string, (context: AIContextRequest) => Promise<
       confidence,
       metadata: { criticalCount, lowCount, totalItems },
       timestamp: new Date()
-    };
+    });
   },
 
   // PATCH 112.0 - Crew Training AI Pattern
@@ -652,7 +652,7 @@ const MODULE_AI_PATTERNS: Record<string, (context: AIContextRequest) => Promise<
       confidence,
       metadata: { expiredCount, expiringCount, totalCrew },
       timestamp: new Date()
-    };
+    });
   },
 
   // PATCH 113.0 - Compliance Checklist AI Pattern
@@ -692,7 +692,7 @@ const MODULE_AI_PATTERNS: Record<string, (context: AIContextRequest) => Promise<
       confidence,
       metadata: { nonCompliantCount, riskCount, compliantCount, totalChecklists },
       timestamp: new Date()
-    };
+    });
   },
 
   // PATCH 114.0 - Smart Alerts AI Pattern
@@ -732,7 +732,7 @@ const MODULE_AI_PATTERNS: Record<string, (context: AIContextRequest) => Promise<
       confidence,
       metadata: { criticalAlerts, warningAlerts, predictedIssues, totalAlerts },
       timestamp: new Date()
-    };
+    });
   },
 
   // PATCH 115.0 - Workflow Automation AI Pattern
@@ -772,7 +772,7 @@ const MODULE_AI_PATTERNS: Record<string, (context: AIContextRequest) => Promise<
       confidence,
       metadata: { activeRules, executionsToday, timeSaved, suggestedAutomations },
       timestamp: new Date()
-    };
+    });
   }
 };
 
@@ -801,7 +801,7 @@ async function logAIContext(request: AIContextRequest, response: AIContextRespon
       confidence: response.confidence,
       message: response.message,
       timestamp: new Date().toISOString()
-    };
+    });
     
     // Store in localStorage for quick access
     const logs = JSON.parse(localStorage.getItem("ai_context_logs") || "[]");
@@ -842,7 +842,7 @@ export async function runAIContext(request: AIContextRequest): Promise<AIContext
       message: "Sistema de IA temporariamente indisponível. Operações continuam normalmente.",
       confidence: 50.0,
       timestamp: new Date()
-    };
+    });
   }
 }
 
@@ -882,7 +882,7 @@ export function getAIContextStats() {
       avgConfidence: 0,
       moduleUsage: {},
       typeDistribution: {}
-    };
+    });
   }
   
   const avgConfidence = logs.reduce((acc: number, log: any) => acc + (log.confidence || 0), 0) / logs.length;

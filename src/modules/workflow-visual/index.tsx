@@ -272,7 +272,7 @@ const WorkflowVisual = () => {
 
     // Remove from suggestions
     setAiSuggestions(prev => prev.filter(s => s !== suggestion));
-  });
+  };
 
   const askAI = async () => {
     if (!aiPrompt.trim()) return;

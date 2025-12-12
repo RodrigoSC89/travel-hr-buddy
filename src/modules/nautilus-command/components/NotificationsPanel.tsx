@@ -53,7 +53,7 @@ export const NotificationsPanel = memo(function({
     if (filter === "unread") return !n.read;
     if (filter === "critical") return n.type === "critical";
     return true;
-  };
+  });
 
   const unreadCount = notifications.filter(n => !n.read).length;
   const criticalCount = notifications.filter(n => n.type === "critical").length;
@@ -64,7 +64,7 @@ export const NotificationsPanel = memo(function({
     case "warning": return <AlertTriangle className="h-4 w-4 text-yellow-500" />;
     default: return <Info className="h-4 w-4 text-blue-500" />;
     }
-  };
+  });
 
   const getStyle = (type: string) => {
     switch (type) {
@@ -72,7 +72,7 @@ export const NotificationsPanel = memo(function({
     case "warning": return "border-l-yellow-500 bg-yellow-50/50 dark:bg-yellow-950/20";
     default: return "border-l-blue-500 bg-blue-50/50 dark:bg-blue-950/20";
     }
-  };
+  });
 
   const handleMarkAllRead = () => {
     onMarkAllRead();

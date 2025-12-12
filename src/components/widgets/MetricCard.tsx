@@ -38,21 +38,21 @@ export const MetricCard = memo(function MetricCard({
     if (trend > 0) return <TrendingUp className="h-3 w-3" />;
     if (trend < 0) return <TrendingDown className="h-3 w-3" />;
     return <Minus className="h-3 w-3" />;
-  };
+  });
 
   const getTrendColor = () => {
     if (trend === undefined) return "text-muted-foreground";
     if (trend > 0) return "text-green-500";
     if (trend < 0) return "text-red-500";
     return "text-muted-foreground";
-  };
+  });
 
   const statusColors = {
     success: "border-l-4 border-l-green-500",
     warning: "border-l-4 border-l-yellow-500",
     error: "border-l-4 border-l-red-500",
     neutral: ""
-  };
+  });
 
   if (variant === "compact") {
     return (
@@ -151,6 +151,6 @@ const Sparkline = memo(function Sparkline({ data }: { data: number[] }) {
       />
     </svg>
   );
-};
+});
 
 export default MetricCard;

@@ -130,7 +130,7 @@ export const IntegrationMonitoring: React.FC = () => {
     case "warning": return "text-warning";
     case "critical": return "text-destructive";
     }
-  };
+  });
 
   const getTrendIcon = (trend: MetricData["trend"]) => {
     switch (trend) {

@@ -279,7 +279,7 @@ export function validatePassword(password: string): { valid: boolean; errors: st
   return {
     valid: false,
     errors: result.error.errors.map(e => e.message),
-  };
+  });
 }
 
 /**

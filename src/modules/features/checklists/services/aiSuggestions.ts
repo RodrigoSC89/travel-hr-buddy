@@ -73,7 +73,7 @@ export class AIChecklistService {
         recommendations: data?.recommendations || [],
         missing_fields: data?.missing_fields || [],
         inconsistencies: data?.inconsistencies || []
-      };
+      });
     } catch (error) {
       logger.error("Error analyzing checklist:", error);
       throw error;
@@ -164,14 +164,14 @@ export class AIChecklistService {
         confidence: data?.confidence || 0,
         message: data?.message || "",
         suggestion: data?.suggestion
-      };
+      });
     } catch (error) {
       logger.error("Error validating item value:", error);
       return {
         valid: true,
         confidence: 0,
         message: "Validation unavailable"
-      };
+      });
     }
   }
 

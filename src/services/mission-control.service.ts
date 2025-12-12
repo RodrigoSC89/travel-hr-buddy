@@ -378,7 +378,7 @@ export class MissionControlService {
       systems_active: mission.assigned_systems?.length || 0,
       last_update: mission.updated_at,
       critical_events: criticalEvents,
-    };
+    });
   }
 
   static subscribeToMissionUpdates(
@@ -521,14 +521,14 @@ export class MissionControlService {
       agents_utilized: assignedAgents.length,
       duration_hours: mission.actual_duration_hours || 0,
       critical_events_count: status.critical_events.length,
-    };
+    });
 
     // Calculate resource utilization
     const resourceUtilization = {
       resources_allocated: mission.resources?.length || 0,
       resources_in_use: mission.resources?.filter(r => r.status === "in_use").length || 0,
       resource_types: [...new Set(mission.resources?.map(r => r.resource_type) || [])],
-    };
+    });
 
     return {
       mission,
@@ -538,7 +538,7 @@ export class MissionControlService {
       performance_metrics: performanceMetrics,
       resource_utilization: resourceUtilization,
       generated_at: new Date().toISOString(),
-    };
+    });
   }
 
   static async exportMissionReportToCSV(missionId: string): Promise<string> {

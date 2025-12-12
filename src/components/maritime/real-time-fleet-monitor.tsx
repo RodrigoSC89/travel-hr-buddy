@@ -131,13 +131,13 @@ export const RealTimeFleetMonitor = memo(() => {
     id: "fleet-monitor-vessel-positions",
     callback: updateVesselPositions,
     interval: 30000,
-  };
+  });
 
   const updateWeatherForVessel = async (vesselId: string, location: { lat: number; lon: number }) => {
     try {
       const { data, error } = await supabase.functions.invoke("maritime-weather", {
         body: { location, vesselId }
-};
+});
 
       if (error) throw error;
 

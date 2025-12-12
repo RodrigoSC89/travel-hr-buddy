@@ -152,11 +152,11 @@ export const ASOGStatusDisplay = memo(function({
     if (ratio >= 0.9) return "yellow";
     if (ratio >= 0.75) return "blue";
     return "green";
-  };
+  });
 
   const getParameterColor = (status: ASOGStatus) => {
     return STATUS_CONFIG[status].textColor;
-  };
+  });
 
   if (compact) {
     return (

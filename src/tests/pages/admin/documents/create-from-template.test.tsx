@@ -107,7 +107,7 @@ describe("CreateFromTemplate", () => {
       id: "template-456",
       title: "Simple Template",
       content: "<p>No variables here</p>",
-    };
+    });
 
     render(<CreateFromTemplate template={templateNoVars} />);
     

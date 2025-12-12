@@ -75,7 +75,7 @@ class TelemetryService {
     const eventWithTimestamp = {
       ...event,
       timestamp: new Date().toISOString()
-    };
+    });
 
     this.queue.push(eventWithTimestamp);
     logger.info(`[Telemetry] Event queued: ${event.event_type}/${event.component}/${event.metric_name} = ${event.metric_value}`);

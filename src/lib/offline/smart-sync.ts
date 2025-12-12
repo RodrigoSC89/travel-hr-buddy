@@ -104,7 +104,7 @@ class SmartSync {
       "3g": 3,
       "4g": 4,
       "unknown": 2.5,
-    };
+    });
     
     return (quality[newType] || 2.5) > (quality[oldType] || 2.5);
   }
@@ -243,7 +243,7 @@ class SmartSync {
       lastSyncTime: this.lastSyncTime,
       nextSyncIn: this.syncTimer ? this.calculateInterval() : null,
       connectionQuality: connectionResilience.getState().effectiveType,
-    };
+    });
   }
 }
 

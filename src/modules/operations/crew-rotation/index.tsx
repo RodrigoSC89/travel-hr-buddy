@@ -104,7 +104,7 @@ export default function CrewRotationModule() {
         title: "Erro ao carregar rotações",
         description: "Não foi possível carregar as rotações de tripulação.",
         variant: "destructive"
-      };
+      });
     } finally {
       setLoading(false);
     }
@@ -126,7 +126,7 @@ export default function CrewRotationModule() {
           toast({
             title: "Atualização em tempo real",
             description: "Uma rotação foi atualizada.",
-          };
+          });
         }
       )
       .subscribe();
@@ -156,7 +156,7 @@ export default function CrewRotationModule() {
         type: "overlap",
         message: `Conflito com ${overlapping.length} rotação(ões) existente(s)`,
         severity: "error"
-      };
+      });
     }
 
     // Check rotation duration (max 180 days)
@@ -174,7 +174,7 @@ export default function CrewRotationModule() {
     }
 
     return conflicts;
-  };
+  });
 
   const createRotation = async () => {
     const conflicts = detectConflicts(newRotation);
@@ -186,7 +186,7 @@ export default function CrewRotationModule() {
         title: "Conflitos detectados",
         description: conflicts.map(c => c.message).join(". "),
         variant: "destructive"
-      };
+      });
       return;
     }
 
@@ -200,14 +200,14 @@ export default function CrewRotationModule() {
           rotation_end: newRotation.end_date,
           status: "scheduled",
           conflicts: conflicts.map(c => c.message)
-        };
+        });
 
       if (error) throw error;
 
       toast({
         title: "Rotação criada",
         description: "A rotação foi agendada com sucesso.",
-      };
+      });
 
       setShowNewRotation(false);
       setNewRotation({
@@ -215,7 +215,7 @@ export default function CrewRotationModule() {
         vessel_id: "",
         start_date: "",
         end_date: ""
-      };
+      });
       
       loadRotations();
       
@@ -229,7 +229,7 @@ export default function CrewRotationModule() {
         title: "Erro ao criar rotação",
         description: "Não foi possível criar a rotação.",
         variant: "destructive"
-      };
+      });
     }
   };
 
@@ -241,7 +241,7 @@ export default function CrewRotationModule() {
         title: `Rotação ${type === "scheduled" ? "Agendada" : "Atualizada"}`,
         message: `Sua rotação foi ${type === "scheduled" ? "agendada" : "atualizada"} para ${format(new Date(rotation.start_date), "dd/MM/yyyy", { locale: ptBR })}`,
         read: false
-      };
+      });
     } catch (error) {
       console.error("Error sending notification:", error);
       console.error("Error sending notification:", error);

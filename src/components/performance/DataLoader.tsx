@@ -233,7 +233,7 @@ export const InlineLoader = memo(function({
     sm: "h-4 w-4",
     md: "h-5 w-5",
     lg: "h-6 w-6",
-  };
+  });
 
   return (
     <div className="flex items-center gap-2 text-muted-foreground">

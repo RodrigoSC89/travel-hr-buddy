@@ -56,7 +56,7 @@ export const DocumentEditor = memo(function({
       if (saveTimeoutRef.current) {
         clearTimeout(saveTimeoutRef.current);
       }
-    };
+    });
   }, [content, documentId]);
 
   async function saveContentToDB(content: string) {
@@ -72,7 +72,7 @@ export const DocumentEditor = memo(function({
           content,
           title,
           updated_by: user.id,
-        };
+        });
 
       if (docError) throw docError;
 
@@ -83,7 +83,7 @@ export const DocumentEditor = memo(function({
           document_id: documentId,
           content,
           updated_by: user.id,
-        };
+        });
 
       if (versionError) throw versionError;
 
@@ -98,14 +98,14 @@ export const DocumentEditor = memo(function({
       toast({
         title: "Auto-salvamento concluído",
         description: "Documento salvo automaticamente",
-      };
+      });
     } catch (error) {
       logger.error("Error saving document:", error);
       toast({
         title: "Erro ao salvar",
         description: "Não foi possível salvar o documento",
         variant: "destructive",
-      };
+      });
     } finally {
       setSaving(false);
     }
@@ -117,7 +117,7 @@ export const DocumentEditor = memo(function({
         title: "Erro de autenticação",
         description: "Você precisa estar logado para salvar documentos",
         variant: "destructive",
-      };
+      });
       return;
     }
 
@@ -126,7 +126,7 @@ export const DocumentEditor = memo(function({
         title: "Campos obrigatórios",
         description: "Por favor, preencha o título e o conteúdo",
         variant: "destructive",
-      };
+      });
       return;
     }
 
@@ -184,7 +184,7 @@ export const DocumentEditor = memo(function({
       toast({
         title: "Documento salvo",
         description: "Documento salvo com sucesso",
-      };
+      });
 
       if (onSave && currentDocId) {
         onSave(currentDocId);
@@ -195,7 +195,7 @@ export const DocumentEditor = memo(function({
         title: "Erro ao salvar",
         description: "Não foi possível salvar o documento",
         variant: "destructive",
-      };
+      });
     } finally {
       setSaving(false);
     }

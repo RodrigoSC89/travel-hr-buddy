@@ -229,7 +229,7 @@ export class OAuthService {
       refresh_token: tokens.refresh_token,
       expires_at: expiresAt,
       scope: tokens.scope
-    };
+    });
 
     const { error } = await supabase
       .from("integration_credentials" as any)

@@ -335,7 +335,7 @@ export class CoordinationEngine {
       confidence,
       reasoning,
       timestamp: new Date().toISOString()
-    };
+    });
 
     this.addAIRecommendation(aiRec);
     return aiRec;

@@ -43,7 +43,7 @@ export const MissionPlanning: React.FC<MissionPlanningProps> = ({ missions, onRe
         objectives: [],
         createdBy: "",
         metadata: {}
-      };
+      });
       toast.success("Mission created successfully");
       setShowDialog(false);
       setFormData({
@@ -54,7 +54,7 @@ export const MissionPlanning: React.FC<MissionPlanningProps> = ({ missions, onRe
         description: "",
         startDate: "",
         endDate: ""
-      };
+      });
       onRefresh();
     } catch (error) {
       toast.error("Failed to create mission");

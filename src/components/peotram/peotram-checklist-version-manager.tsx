@@ -146,10 +146,10 @@ export const PeotramChecklistVersionManager: React.FC = () => {
       ...selectedTemplate,
       elements: [...selectedTemplate.elements, newElement],
       updatedAt: new Date(),
-    };
+    });
 
     setEditingElement(newElement);
-  };
+  });
 
   const addRequirement = (elementId: string) => {
     if (!selectedTemplate) return;
@@ -175,7 +175,7 @@ export const PeotramChecklistVersionManager: React.FC = () => {
       ),
       updatedAt: new Date(),
     });
-  };
+  });
 
   const updateRequirement = (elementId: string, reqId: string, updates: Partial<ChecklistRequirement>) => {
     if (!selectedTemplate) return;
@@ -196,8 +196,8 @@ export const PeotramChecklistVersionManager: React.FC = () => {
           : elem
       ),
       updatedAt: new Date(),
-    };
-  };
+    });
+  });
 
   const deleteRequirement = (elementId: string, reqId: string) => {
     if (!selectedTemplate) return;
@@ -216,8 +216,8 @@ export const PeotramChecklistVersionManager: React.FC = () => {
           : elem
       ),
       updatedAt: new Date(),
-    };
-  };
+    });
+  });
 
   const saveTemplate = () => {
     if (!selectedTemplate) return;
@@ -279,11 +279,11 @@ export const PeotramChecklistVersionManager: React.FC = () => {
         ...selectedTemplate,
         elements,
         updatedAt: new Date(),
-      };
+      });
     }
 
     setDraggedItem(null);
-  };
+  });
 
   return (
     <div className="space-y-6">

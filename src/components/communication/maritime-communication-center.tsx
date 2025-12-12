@@ -67,7 +67,7 @@ export const MaritimeCommunicationCenter = memo(() => {
     content: "",
     priority: "normal" as const,
     coordinates: { latitude: 0, longitude: 0 }
-  };
+  });
   const [isNewMessageOpen, setIsNewMessageOpen] = useState(false);
   const [loading, setLoading] = useState(true);
   const { toast } = useToast();
@@ -78,7 +78,7 @@ export const MaritimeCommunicationCenter = memo(() => {
     const cleanup = setupRealTimeUpdates();
     return () => {
       cleanup();
-    };
+    });
   }, []);
 
   const loadCommunications = async () => {
@@ -159,7 +159,7 @@ export const MaritimeCommunicationCenter = memo(() => {
         title: "Erro",
         description: "Erro ao carregar comunicações",
         variant: "destructive"
-      };
+      });
     } finally {
       setLoading(false);
     }
@@ -224,7 +224,7 @@ export const MaritimeCommunicationCenter = memo(() => {
           title: "Erro",
           description: "Preencha todos os campos obrigatórios",
           variant: "destructive"
-        };
+        });
         return;
       }
 
@@ -237,7 +237,7 @@ export const MaritimeCommunicationCenter = memo(() => {
           priority: newMessage.priority,
           coordinates: newMessage.coordinates
         }
-      };
+      });
 
       if (error) {
         throw error;
@@ -246,7 +246,7 @@ export const MaritimeCommunicationCenter = memo(() => {
       toast({
         title: "Sucesso",
         description: "Mensagem enviada com sucesso",
-      };
+      });
 
       // Reset form and close dialog
       setNewMessage({
@@ -255,7 +255,7 @@ export const MaritimeCommunicationCenter = memo(() => {
         content: "",
         priority: "normal",
         coordinates: { latitude: 0, longitude: 0 }
-      };
+      });
       setIsNewMessageOpen(false);
 
       // Reload communications
@@ -265,7 +265,7 @@ export const MaritimeCommunicationCenter = memo(() => {
         title: "Erro",
         description: "Erro ao enviar mensagem",
         variant: "destructive"
-      };
+      });
     }
   };
 

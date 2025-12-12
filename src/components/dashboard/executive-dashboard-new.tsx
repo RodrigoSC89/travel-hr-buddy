@@ -19,8 +19,8 @@ export const ExecutiveDashboardNew = memo(() => {
       title: "Erro ao carregar dashboard",
       description: error.message,
       variant: "destructive",
-    };
-  };
+    });
+  });
 
   return (
     <ExecutiveDashboardBase

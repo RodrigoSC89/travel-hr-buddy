@@ -318,7 +318,7 @@ export const FuelOptimizer = memo(() => {
           body: tableData,
           theme: "striped",
           headStyles: { fillColor: [59, 130, 246] }
-        };
+        });
       }
       
       doc.save(`relatorio-combustivel-${new Date().toISOString().split("T")[0]}.pdf`);
@@ -326,14 +326,14 @@ export const FuelOptimizer = memo(() => {
       toast({
         title: "Relatório exportado",
         description: "PDF baixado com sucesso",
-      };
+      });
     } catch (error) {
       console.error("Error exporting PDF:", error);
       toast({
         title: "Erro ao exportar",
         description: "Não foi possível gerar o PDF",
         variant: "destructive",
-      };
+      });
     }
   };
 

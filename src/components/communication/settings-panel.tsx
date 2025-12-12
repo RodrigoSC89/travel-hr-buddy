@@ -154,13 +154,13 @@ export const SettingsPanel = memo(() => {
       toast({
         title: "Sucesso",
         description: "Configurações salvas com sucesso"
-      };
+      });
     } catch (error) {
       toast({
         title: "Erro",
         description: "Erro ao salvar configurações",
         variant: "destructive"
-      };
+      });
     } finally {
       setLoading(false);
     }
@@ -206,7 +206,7 @@ export const SettingsPanel = memo(() => {
       }
     });
     setHasChanges(true);
-  };
+  });
 
   const handleAvatarUpload = () => {
     const input = document.createElement("input");
@@ -222,7 +222,7 @@ export const SettingsPanel = memo(() => {
             title: "Erro",
             description: "A imagem deve ter no máximo 2MB",
             variant: "destructive"
-          };
+          });
           return;
         }
         
@@ -233,9 +233,9 @@ export const SettingsPanel = memo(() => {
         toast({
           title: "Sucesso",
           description: "Foto de perfil atualizada"
-        };
+        });
       }
-    };
+    });
     input.click();
   };
 
@@ -246,11 +246,11 @@ export const SettingsPanel = memo(() => {
         settings,
         messages: [], // Would include user messages
         export_date: new Date().toISOString()
-      };
+      });
       
       const blob = new Blob([JSON.stringify(dataToExport, null, 2)], {
         type: "application/json"
-      };
+      });
       
       const url = URL.createObjectURL(blob);
       const a = document.createElement("a");
@@ -264,13 +264,13 @@ export const SettingsPanel = memo(() => {
       toast({
         title: "Sucesso",
         description: "Dados exportados com sucesso"
-      };
+      });
     } catch (error) {
       toast({
         title: "Erro",
         description: "Erro ao exportar dados",
         variant: "destructive"
-      };
+      });
     }
   };
 
@@ -484,7 +484,7 @@ export const SettingsPanel = memo(() => {
                     {settings.notifications.sound_enabled ? 
                       <Volume2 className="h-4 w-4" /> : 
                       <VolumeX className="h-4 w-4" />
-                    };
+                    });
                     <Label>Som</Label>
                   </div>
                   <Switch 

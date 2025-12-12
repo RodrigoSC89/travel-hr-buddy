@@ -184,15 +184,15 @@ const AIDataLake: React.FC = () => {
     toast({
       title: "Abrindo Explorador de Dados",
       description: "Carregando schema e preview dos dados...",
-    };
-  };
+    });
+  });
 
   const handleSyncData = (sourceId: string) => {
     toast({
       title: "Sincronização Iniciada",
       description: "Os dados estão sendo sincronizados com o Data Lake.",
-    };
-  };
+    });
+  });
 
   return (
     <ModulePageWrapper gradient="blue">

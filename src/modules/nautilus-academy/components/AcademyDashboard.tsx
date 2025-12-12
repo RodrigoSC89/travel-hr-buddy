@@ -112,7 +112,7 @@ export default function AcademyDashboard() {
     const matchesCategory = categoryFilter === "all" || c.category === categoryFilter;
     const matchesLevel = levelFilter === "all" || c.level === levelFilter;
     return matchesSearch && matchesCategory && matchesLevel;
-  };
+  });
 
   // Handlers
   const handleCreateCourse = async () => {
@@ -189,13 +189,13 @@ export default function AcademyDashboard() {
       toast({ 
         title: "Análise IA completa", 
         description: `${totalInsights} insights e recomendações gerados com sucesso!` 
-      };
+      });
     } catch (error) {
       console.error("AI generation error:", error);
       toast({ 
         title: "Insights gerados localmente", 
         description: "Utilizando análise offline. Conecte-se para IA completa." 
-      };
+      });
     }
   }, [crewMembers, courses, myProgress, generateRecommendations, analyzeTrainingGaps, generatePredictiveInsights, toast]);
 
@@ -273,7 +273,7 @@ export default function AcademyDashboard() {
       toast({ 
         title: "Curso gerado com sucesso!", 
         description: `"${aiCoursePrompt.slice(0, 40)}..." foi criado com ${modules.length} módulos` 
-      };
+      });
       setShowAICourseGenerator(false);
       setAiCoursePrompt("");
     } catch (error) {
@@ -299,7 +299,7 @@ export default function AcademyDashboard() {
       toast({ 
         title: "Otimização registrada", 
         description: "Sugestão de otimização do módulo DP será analisada pela equipe pedagógica",
-      };
+      });
       // Update the suggestion as "applied"
       setAiSuggestions(prev => prev.map(s => 
         s.type === "optimization" 
@@ -307,7 +307,7 @@ export default function AcademyDashboard() {
           : s
       ));
     }
-  };
+  });
 
   const getLevelBadge = (level: string) => {
     const colors: Record<string, string> = {

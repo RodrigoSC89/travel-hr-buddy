@@ -92,7 +92,7 @@ export const ClassSurveyDashboard = memo(function() {
   const getSocietyName = (id: string) => {
     const society = societies.find(s => s.id === id);
     return society?.code || "N/A";
-  };
+  });
 
   const getSocietyFullName = (id: string) => {
     const society = societies.find(s => s.id === id);

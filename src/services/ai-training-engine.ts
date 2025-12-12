@@ -228,7 +228,7 @@ export async function explainNoncomplianceLLM(
       ai_analysis: explanation as unknown as Json,
       severity: finding.severity,
       organization_id: organizationId,
-    };
+    });
 
     const { error: dbError } = await supabase
       .from("noncompliance_explanations")
@@ -297,7 +297,7 @@ function parseExplanationResponse(content: string): ExplanationResult {
       correctiveActions: [],
       relatedRegulations: [],
       learningPoints: [],
-    };
+    });
   } catch (error) {
     logger.error("Error parsing explanation", error);
     throw new Error("Failed to parse AI explanation");
@@ -385,7 +385,7 @@ export async function generateQuizFromErrors(
       time_limit_minutes: quizData.estimatedDuration ?? 15,
       ai_generated: true,
       organization_id: organizationId,
-    };
+    });
 
     const { data: quiz, error } = await supabase
       .from("crew_training_quizzes")
@@ -492,7 +492,7 @@ export async function recordTrainingResult(
       passed,
       organization_id: organizationId,
       completed_at: new Date().toISOString(),
-    };
+    });
 
     const { error: insertError } = await supabase
       .from("crew_training_results")
@@ -549,7 +549,7 @@ async function updateLearningProgress({
       averageScore: nextStats.averageScore,
       lastScore: score,
       lastUpdatedAt: timestamp,
-    };
+    });
 
     const basePayload: CrewLearningProgressInsert = {
       crew_member_id: crewMemberId,
@@ -560,7 +560,7 @@ async function updateLearningProgress({
       total_time_minutes: (existing?.total_time_minutes ?? 0) + timeTakenMinutes,
       last_activity_at: timestamp,
       current_level: determineTrainingLevel(nextStats.averageScore),
-    };
+    });
 
     if (existing) {
       const { error: updateError } = await supabase

@@ -140,8 +140,8 @@ export const SmartWorkflow = memo(() => {
     toast({
       title: "Status atualizado",
       description: "Workflow foi pausado/reativado",
-    };
-  };
+    });
+  });
 
   const getStatusColor = (status: string) => {
     switch (status) {

@@ -84,7 +84,7 @@ const RecruitmentPipeline: React.FC = () => {
     case "media": return "bg-yellow-500 text-black";
     default: return "bg-blue-500 text-white";
     }
-  };
+  });
 
   const getCandidatosByEtapa = (etapa: string) => {
     return candidatos.filter(c => c.etapa === etapa);

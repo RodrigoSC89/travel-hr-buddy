@@ -40,7 +40,7 @@ export default function MMIOrdersPage() {
         title: "Erro ao carregar ordens de serviço",
         description: error instanceof Error ? error.message : "Erro desconhecido",
         variant: "destructive",
-      };
+      });
     } finally {
       setLoading(false);
     }
@@ -69,7 +69,7 @@ export default function MMIOrdersPage() {
         toast({
           title: "✅ Ordem de serviço atualizada",
           description: "As informações foram salvas com sucesso.",
-        };
+        });
         // Reload work orders to show updated data
         await loadWorkOrders();
       } else {
@@ -81,11 +81,11 @@ export default function MMIOrdersPage() {
         title: "❌ Erro ao atualizar",
         description: error instanceof Error ? error.message : "Erro desconhecido",
         variant: "destructive",
-      };
+      });
     } finally {
       setSavingId(null);
     }
-  };
+  });
 
   const exportToCSV = async () => {
     const xlsx = await loadXLSX();
@@ -108,7 +108,7 @@ export default function MMIOrdersPage() {
         })
         .save();
     }
-  };
+  });
 
   if (loading) {
     return (

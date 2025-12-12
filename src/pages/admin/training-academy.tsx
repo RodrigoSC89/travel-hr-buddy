@@ -113,7 +113,7 @@ export default function TrainingAcademyAdmin() {
         total_enrollments: enrollmentsCount.count || 0,
         completed_courses: completedCount.count || 0,
         active_certificates: certificatesCount.count || 0
-      };
+      });
     }
   });
 
@@ -139,7 +139,7 @@ export default function TrainingAcademyAdmin() {
       toast({
         title: "Curso criado",
         description: "O curso foi criado com sucesso.",
-      };
+      });
       setIsCreateDialogOpen(false);
       resetForm();
     },
@@ -148,9 +148,9 @@ export default function TrainingAcademyAdmin() {
         title: "Erro ao criar curso",
         description: error.message,
         variant: "destructive"
-      };
+      });
     }
-  };
+  });
 
   // Update course mutation
   const updateCourseMutation = useMutation({
@@ -170,7 +170,7 @@ export default function TrainingAcademyAdmin() {
       toast({
         title: "Curso atualizado",
         description: "O curso foi atualizado com sucesso.",
-};
+});
       setEditingCourse(null);
     },
     onError: (error: SupabaseError | null) => {
@@ -178,9 +178,9 @@ export default function TrainingAcademyAdmin() {
         title: "Erro ao atualizar curso",
         description: error.message,
         variant: "destructive"
-      };
+      });
     }
-  };
+  });
 
   // Delete course mutation
   const deleteCourseMutation = useMutation({
@@ -197,16 +197,16 @@ export default function TrainingAcademyAdmin() {
       toast({
         title: "Curso deletado",
         description: "O curso foi removido com sucesso.",
-      };
+      });
     },
     onError: (error: SupabaseError | null) => {
       toast({
         title: "Erro ao deletar curso",
         description: error.message,
         variant: "destructive"
-      };
+      });
     }
-  };
+  });
 
   const resetForm = () => {
     setNewCourse({
@@ -218,8 +218,8 @@ export default function TrainingAcademyAdmin() {
       is_published: false,
       is_mandatory: false,
       instructor_name: ""
-    };
-  };
+    });
+  });
 
   const handleCreateCourse = () => {
     createCourseMutation.mutate(newCourse);
@@ -229,8 +229,8 @@ export default function TrainingAcademyAdmin() {
     updateCourseMutation.mutate({
       id: course.id,
       updates: { is_published: !course.is_published }
-    };
-  };
+    });
+  });
 
   const handleDeleteCourse = (courseId: string) => {
     if (confirm("Tem certeza que deseja deletar este curso?")) {

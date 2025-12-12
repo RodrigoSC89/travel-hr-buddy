@@ -45,7 +45,7 @@ export class ErrorHandler {
       message: getErrorMessage(normalized),
       severity: "error" as const,
       details: error,
-    };
+    });
   }
 
   static handleSupabaseError(error: unknown, context?: string) {

@@ -72,17 +72,17 @@ export default function SGSOReportPage({
         image: { type: "jpeg" as const, quality: 0.98 },
         html2canvas: { scale: 2 },
         jsPDF: { unit: "in", format: "a4", orientation: "portrait" as const }
-      };
+      });
 
       await html2pdf().set(opt).from(element).save();
       toast.success("PDF gerado com sucesso!", { 
         description: "O relatório foi baixado para seu dispositivo." 
-      };
+      });
     } catch (error) {
       logger.error("Erro ao gerar PDF", { error });
       toast.error("Erro ao gerar PDF", {
         description: "Não foi possível gerar o relatório. Tente novamente." 
-      };
+      });
     } finally {
       setIsExporting(false);
     }

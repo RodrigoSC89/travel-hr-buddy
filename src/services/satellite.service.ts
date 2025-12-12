@@ -408,7 +408,7 @@ export class SatelliteService {
       mission_links: links,
       latest_telemetry: telemetry || undefined,
       upcoming_passes: passes,
-    };
+    });
   }
 
   static async getGlobalView(): Promise<GlobalSatelliteView> {
@@ -423,7 +423,7 @@ export class SatelliteService {
       positions,
       active_alerts: alerts,
       coverage_maps: [], // Would be populated from satellite_coverage_maps
-    };
+    });
   }
 
   // Coverage Maps
@@ -490,7 +490,7 @@ export class SatelliteService {
         return {
           line1: lines[1].trim(),
           line2: lines[2].trim(),
-        };
+        });
       }
       
       return null;
@@ -664,6 +664,6 @@ export class SatelliteService {
       upcoming_passes: view.upcoming_passes,
       recent_events: orbitalEvents,
       generated_at: new Date().toISOString(),
-    };
+    });
   }
 }

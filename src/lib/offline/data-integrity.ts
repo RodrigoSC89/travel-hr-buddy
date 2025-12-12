@@ -85,7 +85,7 @@ class DataIntegrity {
       timestamp: new Date().toISOString(),
       status: "pending",
       retries: 0,
-    };
+    });
 
     this.checks.set(check.id, check);
     this.saveToStorage();
@@ -187,7 +187,7 @@ class DataIntegrity {
       pending: checks.filter(c => c.status === "pending").length,
       verified: checks.filter(c => c.status === "verified").length,
       failed: checks.filter(c => c.status === "failed").length,
-    };
+    });
   }
 
   private saveToStorage(): void {

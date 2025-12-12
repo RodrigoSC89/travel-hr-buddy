@@ -93,7 +93,7 @@ export const useAuditLog = memo(() => {
         p_resource_id: resourceId ?? undefined,
         p_status: status,
         p_details: mergedDetails,
-      };
+      });
 
       if (error) {
         return null;

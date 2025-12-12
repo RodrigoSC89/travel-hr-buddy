@@ -93,7 +93,7 @@ export class AIIncidentReplayerV2 {
         reconstruction,
         statistics,
         insights,
-      };
+      });
 
       logger.info("[IncidentReplayerV2] Reconstruction completed", {
         events: timeline.length,
@@ -137,7 +137,7 @@ export class AIIncidentReplayerV2 {
           quality: 0.9,
           completeness: 0.85,
         },
-      };
+      });
 
       // Add sensor data if requested
       if (config.dataSources.includes("sensors")) {
@@ -179,7 +179,7 @@ export class AIIncidentReplayerV2 {
         lat: 40.7128 + Math.random() * 0.1,
         lon: -74.0060 + Math.random() * 0.1,
       },
-    };
+    });
   }
 
   /**
@@ -191,7 +191,7 @@ export class AIIncidentReplayerV2 {
       onDuty: ["Officer A", "Engineer B", "Navigator C"],
       actions: ["Monitoring systems", "Routine checks"],
       communications: ["All systems nominal"],
-    };
+    });
   }
 
   /**
@@ -204,7 +204,7 @@ export class AIIncidentReplayerV2 {
       confidence: 0.85,
       recommendations: ["Continue monitoring", "Maintain current course"],
       decisions: [],
-    };
+    });
   }
 
   /**
@@ -220,7 +220,7 @@ export class AIIncidentReplayerV2 {
       },
       alerts: [],
       errors: [],
-    };
+    });
   }
 
   /**
@@ -408,7 +408,7 @@ Respond only with valid JSON.`,
         confidence: 0.7,
         impact: "Analysis pending",
         lessons: [],
-      };
+      });
     }
 
     return {
@@ -435,7 +435,7 @@ Respond only with valid JSON.`,
         contextualFactors: explanation.contextualFactors || ["System state", "Risk assessment"],
         lessonsLearned: explanation.lessons || [],
       },
-    };
+    });
   }
 
   /**
@@ -450,7 +450,7 @@ Respond only with valid JSON.`,
       crewActivity: {},
       systemState: {},
       aiAnalysis: {},
-    };
+    });
 
     snapshots.forEach(snapshot => {
       if (snapshot.data.sensors) {
@@ -501,7 +501,7 @@ Respond only with valid JSON.`,
       systemResponsesCount: systemResponses.length,
       averageResponseTime,
       incidentDuration,
-    };
+    });
   }
 
   /**
@@ -544,7 +544,7 @@ Respond only with valid JSON.`,
         improvementAreas: ["Response time optimization"],
         successfulActions: ["Timely detection", "Effective coordination"],
         failedActions: [],
-      };
+      });
     }
   }
 

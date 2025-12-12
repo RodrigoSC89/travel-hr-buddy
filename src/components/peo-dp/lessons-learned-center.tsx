@@ -614,6 +614,6 @@ export const LessonsLearnedCenter: React.FC = () => {
       </Dialog>
     </div>
   );
-});
+};
 
 export default LessonsLearnedCenter;

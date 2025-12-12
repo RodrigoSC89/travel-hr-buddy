@@ -59,13 +59,13 @@ export default function ForecastPage() {
       toast({
         title: "Forecast Gerado com Sucesso ✅",
         description: `${mockForecasts.length} previsões mensais geradas com IA GPT-4`,
-      };
+      });
     } catch (error) {
       toast({
         title: "Erro ao Gerar Forecast",
         description: error instanceof Error ? error.message : "Erro desconhecido",
         variant: "destructive"
-      };
+      });
     } finally {
       setLoading(false);
     }

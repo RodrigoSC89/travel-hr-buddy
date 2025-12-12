@@ -33,19 +33,19 @@ export class WebRTCConnectionWrapper implements WebRTCPeerConnection {
       } else {
         logger.debug("[WebRTC] ICE gathering complete");
       }
-    };
+    });
 
     this.pc.oniceconnectionstatechange = () => {
       logger.info(`[WebRTC] ICE connection state: ${this.pc.iceConnectionState}`);
-    };
+    });
 
     this.pc.onconnectionstatechange = () => {
       logger.info(`[WebRTC] Connection state: ${this.pc.connectionState}`);
-    };
+    });
 
     this.pc.onsignalingstatechange = () => {
       logger.debug(`[WebRTC] Signaling state: ${this.pc.signalingState}`);
-    };
+    });
   }
 
   get localDescription(): RTCSessionDescription | null {
@@ -162,15 +162,15 @@ class WebRTCDataChannelWrapper implements WebRTCDataChannel {
   private setupEventListeners(): void {
     this.channel.onopen = () => {
       logger.info(`[WebRTC DataChannel] Opened: ${this.channel.label}`);
-    };
+    });
 
     this.channel.onclose = () => {
       logger.info(`[WebRTC DataChannel] Closed: ${this.channel.label}`);
-    };
+    });
 
     this.channel.onerror = (error) => {
       logger.error(`[WebRTC DataChannel] Error on ${this.channel.label}:`, error);
-    };
+    });
   }
 
   get label(): string {

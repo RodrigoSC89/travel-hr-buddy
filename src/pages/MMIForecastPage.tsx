@@ -39,7 +39,7 @@ export default function MMIForecastPage() {
           last_maintenance_dates: maintenanceDates.split("\n").filter((line) => line.trim()),
           current_hourmeter: Number(hourmeter),
         }),
-      };
+      });
 
       if (!response.ok) {
         throw new Error("Erro ao gerar forecast");
@@ -109,7 +109,7 @@ export default function MMIForecastPage() {
           last_maintenance: maintenanceDates.split("\n").filter((line) => line.trim()),
           forecast_text: forecast,
         }),
-      };
+      });
 
       const data = await res.json();
 

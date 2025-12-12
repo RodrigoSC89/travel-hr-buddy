@@ -83,7 +83,7 @@ export const PEODPChecklistEditor = memo(function({ onSave, existingVersion }: P
       reference: newReq.reference || undefined,
       mandatory: newReq.mandatory ?? true,
       weight: newReq.weight ?? 5
-    };
+    });
 
     setVersion(prev => ({
       ...prev,

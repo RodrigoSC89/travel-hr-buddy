@@ -73,7 +73,7 @@ const PerformanceCenter: React.FC = () => {
     default:
       return <Badge variant="outline">{status}</Badge>;
     }
-  };
+  });
 
   const getNotaColor = (nota: number) => {
     if (nota >= 4.5) return "text-green-500";
@@ -132,7 +132,7 @@ const PerformanceCenter: React.FC = () => {
     setIsNewOKROpen(false);
     setNewOKR({ objetivo: "", keyResults: "", responsavel: "", prazo: "" });
     toast.success("OKR criado com sucesso!");
-  });
+  };
 
   const handleGenerateOKRWithAI = async () => {
     toast.info("Gerando OKR com IA...");
@@ -146,7 +146,7 @@ const PerformanceCenter: React.FC = () => {
           keyResults: parsed.keyResults?.map((kr: { title: string }) => kr.title).join("\n") || "",
           responsavel: parsed.owner || "",
           prazo: parsed.quarter || ""
-        };
+        });
         toast.success("OKR gerado pela IA!");
       } catch {
         setNewOKR(prev => ({ ...prev, objetivo: result }));

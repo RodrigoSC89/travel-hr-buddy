@@ -248,7 +248,7 @@ export async function createWorkOrderFromTask(taskId: string): Promise<{ os_numb
     return {
       os_number: workOrder.os_number,
       id: workOrder.id,
-    };
+    });
   } catch (error) {
     logger.error("Error creating work order from task", error as Error, { taskId });
     return null;

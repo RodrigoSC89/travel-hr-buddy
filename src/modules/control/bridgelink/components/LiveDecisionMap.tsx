@@ -51,7 +51,7 @@ export const LiveDecisionMap = memo(function({ events }: LiveDecisionMapProps) {
     default:
       return "bg-gray-500";
     }
-  };
+  });
 
   const getSeverityBadge = (severity: string) => {
     switch (severity) {
@@ -64,7 +64,7 @@ export const LiveDecisionMap = memo(function({ events }: LiveDecisionMapProps) {
     default:
       return <Badge className="bg-gray-500">❔ Desconhecido</Badge>;
     }
-  };
+  });
 
   // Prepare chart data from events
   const sortedEvents = [...events]

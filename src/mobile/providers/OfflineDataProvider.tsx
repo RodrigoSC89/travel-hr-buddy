@@ -58,18 +58,18 @@ export const OfflineDataProvider = memo(function({ children }: OfflineDataProvid
     // Listen to network changes
     const unsubNetwork = networkDetector.addListener((online) => {
       setIsOnline(online);
-  };
+  });
 
     // Listen to sync status changes
     const unsubSync = enhancedSyncEngine.addStatusListener((status) => {
       setPendingChanges(status.pendingChanges);
       setLastSync(status.lastSync);
-  };
+  });
 
     return () => {
       unsubNetwork();
       unsubSync();
-    };
+    });
   }, []);
 
   /**

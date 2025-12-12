@@ -104,7 +104,7 @@ export async function logLoginAttempt(attempt: LoginAttempt): Promise<{
         blocked: true,
         reason: "IP address temporarily blocked due to excessive failed login attempts",
         blockExpiresAt: blockInfo?.expiresAt,
-      };
+      });
     }
     
     // Count recent failed attempts from this IP
@@ -157,7 +157,7 @@ export async function logLoginAttempt(attempt: LoginAttempt): Promise<{
         blocked: true,
         reason: "IP blocked due to excessive failed login attempts",
         blockExpiresAt: expiresAt,
-      };
+      });
     }
     
     // Return remaining attempts
@@ -235,7 +235,7 @@ export async function logPasswordResetAttempt(
       return {
         blocked: true,
         reason: "Too many password reset requests. Please try again later.",
-      };
+      });
     }
     
     return {

@@ -100,7 +100,7 @@ const VesselManagementSystem: React.FC<VesselManagementProps> = ({ onStatsUpdate
             toast({
               title: "Nova Embarcação",
               description: `${payload.new.name} foi adicionada à frota`,
-            };
+            });
           } else if (payload.eventType === "UPDATE") {
             setVessels(prev => prev.map(vessel => 
               vessel.id === payload.new.id ? payload.new as Vessel : vessel
@@ -110,7 +110,7 @@ const VesselManagementSystem: React.FC<VesselManagementProps> = ({ onStatsUpdate
             toast({
               title: "Embarcação Removida",
               description: "Uma embarcação foi removida da frota",
-            };
+            });
           }
         }
       )
@@ -208,7 +208,7 @@ const VesselManagementSystem: React.FC<VesselManagementProps> = ({ onStatsUpdate
         title: "Erro",
         description: "Não foi possível carregar as embarcações",
         variant: "destructive"
-      };
+      });
     } finally {
       setIsLoading(false);
     }
@@ -267,13 +267,13 @@ const VesselManagementSystem: React.FC<VesselManagementProps> = ({ onStatsUpdate
       toast({
         title: "Embarcação Adicionada",
         description: `${data.name} foi adicionada com sucesso à frota`,
-      };
+      });
     } catch (error) {
       toast({
         title: "Erro",
         description: "Não foi possível adicionar a embarcação",
         variant: "destructive"
-      };
+      });
     }
   };
 

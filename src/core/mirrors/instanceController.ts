@@ -66,7 +66,7 @@ export interface TelemetryData {
     network: {
       latency: number;
       bandwidth: number;
-    };
+    });
   };
   activeUsers: number;
   activeModules: string[];
@@ -163,7 +163,7 @@ class InstanceController {
         },
         version: "1.0.0",
         parentInstanceId: this.getMainInstanceId(),
-      };
+      });
 
       // Save to database
       await this.saveInstance(instance);
@@ -307,7 +307,7 @@ class InstanceController {
       progress: 0,
       itemsSynced: 0,
       totalItems: 0,
-    };
+    });
 
     this.syncOperations.set(operation.id, operation);
     return operation;
@@ -549,7 +549,7 @@ class InstanceController {
       metrics: data.metrics || { latency: 0, uptime: 0, memoryUsage: 0, storageUsage: 0 },
       version: data.version || "1.0.0",
       parentInstanceId: data.parent_instance_id,
-    };
+    });
   }
 
   /**
@@ -566,7 +566,7 @@ class InstanceController {
       ).length,
       telemetryConnected: this.telemetryConnected,
       contextMeshConnected: this.contextMeshConnected,
-    };
+    });
   }
 }
 

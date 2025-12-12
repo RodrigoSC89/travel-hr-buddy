@@ -529,6 +529,6 @@ export const SIMOPSManager: React.FC = () => {
       </Dialog>
     </div>
   );
-});
+};
 
 export default SIMOPSManager;

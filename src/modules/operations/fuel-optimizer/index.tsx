@@ -43,7 +43,7 @@ const FuelOptimizer = () => {
         title: "Dados incompletos",
         description: "Preencha todos os campos obrigatórios",
         variant: "destructive"
-      };
+      });
       return;
     }
 
@@ -63,15 +63,15 @@ const FuelOptimizer = () => {
         "Evitar correntes contrárias no trecho sul",
         "Janela de tempo favorável: próximas 48h"
       ]
-    };
+    });
 
     setOptimization(result);
     
     toast({
       title: "Otimização concluída",
       description: `Economia estimada: ${result.savings_liters}L (${result.savings_percentage}%)`
-    };
-  };
+    });
+  });
 
   const totalSavings = history.reduce((sum, h) => sum + h.savings, 0);
 

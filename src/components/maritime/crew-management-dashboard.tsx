@@ -117,7 +117,7 @@ export const CrewManagementDashboard = memo(() => {
         title: "Erro",
         description: "Erro ao carregar dados da tripulação",
         variant: "destructive"
-      };
+      });
     } finally {
       setLoading(false);
     }

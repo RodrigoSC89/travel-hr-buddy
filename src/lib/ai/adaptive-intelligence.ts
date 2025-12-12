@@ -151,7 +151,7 @@ export class PromptAdjuster {
       adjustments,
       learned_patterns: learnedPatterns,
       non_conformity_frequency: nonConformityFrequency,
-    };
+    });
 
     this.promptCache.set(inspectionType, config);
     return config;
@@ -255,7 +255,7 @@ Sua função é verificar equipamentos de salvamento, incluindo:
 - Sistemas de comunicação de emergência
 
 Assegure conformidade com SOLAS e identificque deficiências críticas.`,
-    };
+    });
   }
 
   private static generateAdjustments(
@@ -499,7 +499,7 @@ export class AdaptiveIntelligence {
       nonConformities,
       topIssues,
       learnedPatterns: config.learned_patterns,
-    };
+    });
   }
 }
 

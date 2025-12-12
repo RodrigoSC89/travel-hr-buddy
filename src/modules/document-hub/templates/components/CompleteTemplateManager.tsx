@@ -52,7 +52,7 @@ export const CompleteTemplateManager = memo(() => {
         title: "Validation Error",
         description: "Please provide a name and content for the template",
         variant: "destructive"
-      };
+      });
       return;
     }
 
@@ -73,14 +73,14 @@ export const CompleteTemplateManager = memo(() => {
           created_with: "template_editor_v1",
           patch: "417"
         }
-      };
+      });
 
       if (error) throw error;
 
       toast({
         title: "Template Saved",
         description: "Your template has been saved successfully",
-      };
+      });
 
       // Reset form
       setTemplateName("");
@@ -93,10 +93,10 @@ export const CompleteTemplateManager = memo(() => {
         title: "Error",
         description: "Failed to save template",
         variant: "destructive"
-      };
+      });
     } finally {
       setSaving(false);
-    };
+    });
   };
 
   return (

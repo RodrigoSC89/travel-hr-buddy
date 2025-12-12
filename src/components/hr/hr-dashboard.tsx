@@ -145,7 +145,7 @@ export const HRDashboard = memo(() => {
         title: "Erro",
         description: "Preencha todos os campos obrigatórios",
         variant: "destructive"
-      };
+      });
       return;
     }
 
@@ -161,7 +161,7 @@ export const HRDashboard = memo(() => {
       status: newEmployee.status as Employee["status"] || "active",
       certifications: newEmployee.certifications || [],
       rating: newEmployee.rating || 4.0
-    };
+    });
 
     setEmployees(prev => [...prev, employee]);
     setNewEmployee({
@@ -180,8 +180,8 @@ export const HRDashboard = memo(() => {
     toast({
       title: "Funcionário criado",
       description: `${employee.name} foi adicionado ao sistema`,
-    };
-  };
+    });
+  });
 
   const handleOpenCertificates = (employee: Employee) => {
     setSelectedEmployeeForCertificates(employee);
@@ -199,8 +199,8 @@ export const HRDashboard = memo(() => {
     toast({
       title: "Funcionário removido",
       description: `${employee.name} foi removido do sistema`,
-    };
-  };
+    });
+  });
 
   // Colunas para a tabela de funcionários
   const employeeColumns: Column[] = [
@@ -738,7 +738,7 @@ export const HRDashboard = memo(() => {
               toast({
                 title: "Edição em desenvolvimento",
                 description: "Funcionalidade de edição será implementada em breve",
-              };
+              });
             }}>
               Editar Funcionário
             </Button>

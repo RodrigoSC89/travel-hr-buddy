@@ -42,7 +42,7 @@ class AILogger {
         error_message: entry.error_message,
         metadata: entry.metadata || {},
         created_at: new Date().toISOString(),
-      };
+      });
 
       const { error } = await supabase
         .from("ai_logs")
@@ -180,7 +180,7 @@ class AILogger {
           successRate: 0,
           totalCalls: 0,
           avgTokens: 0,
-        };
+        });
       }
 
       const totalCalls = data.length;
@@ -193,7 +193,7 @@ class AILogger {
         successRate: Math.round((successCalls / totalCalls) * 100),
         totalCalls,
         avgTokens: Math.round(avgTokens),
-      };
+      });
     } catch (error) {
       logger.error("Error fetching AI metrics", error as Error, { service });
       return {
@@ -201,7 +201,7 @@ class AILogger {
         successRate: 0,
         totalCalls: 0,
         avgTokens: 0,
-      };
+      });
     }
   }
 }

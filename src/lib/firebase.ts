@@ -139,7 +139,7 @@ export const saveFCMTokenToSupabase = async (
     console.error("Error in saveFCMTokenToSupabase:", error);
     return false;
   }
-};
+});
 
 /**
  * Get device type for token tracking

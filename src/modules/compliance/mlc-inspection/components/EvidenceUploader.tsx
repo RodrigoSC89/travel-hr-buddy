@@ -22,7 +22,7 @@ export const EvidenceUploader = memo(function({ inspectionId, onUpdate }: Eviden
     if (file) {
       setSelectedFile(file);
     }
-  };
+  });
 
   const handleUpload = async () => {
     if (!selectedFile) {
@@ -30,7 +30,7 @@ export const EvidenceUploader = memo(function({ inspectionId, onUpdate }: Eviden
         title: "No file selected",
         description: "Please select a file to upload",
         variant: "destructive",
-      };
+      });
       return;
     }
 
@@ -42,7 +42,7 @@ export const EvidenceUploader = memo(function({ inspectionId, onUpdate }: Eviden
       toast({
         title: "Upload functionality",
         description: "File upload would be implemented with Supabase Storage integration",
-      };
+      });
       
       setSelectedFile(null);
       onUpdate();
@@ -52,7 +52,7 @@ export const EvidenceUploader = memo(function({ inspectionId, onUpdate }: Eviden
         title: "Error",
         description: "Failed to upload file",
         variant: "destructive",
-      };
+      });
     } finally {
       setUploading(false);
     }

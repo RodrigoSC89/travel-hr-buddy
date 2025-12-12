@@ -199,8 +199,8 @@ const GlobalSearch: React.FC<GlobalSearchProps> = ({ isOpen, onOpenChange }) => 
       title: "Navegando",
       description: `Abrindo ${result.title}...`,
       duration: 2000
-    };
-  };
+    });
+  });
 
   const getCategoryIcon = (category: string): React.ComponentType<{ className?: string }> => {
     switch (category.toLowerCase()) {

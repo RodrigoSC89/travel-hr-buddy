@@ -97,26 +97,26 @@ export const MMIIntegration: React.FC = () => {
         priority: prediction.probability > 0.7 ? "high" : "medium",
         status: "pending",
         notes: `MMI Prediction: ${prediction.failure_type} - ${prediction.recommended_action}`,
-      };
+      });
 
       if (error) {
         toast({
           title: "Maintenance Scheduled (Demo)",
           description: `Task would be created for ${prediction.equipment_name}`,
-        };
+        });
         return;
       }
 
       toast({
         title: "Maintenance Scheduled",
         description: `Task created for ${prediction.equipment_name}`,
-      };
+      });
     } catch (error) {
       console.error("Error scheduling maintenance:", error);
       toast({
         title: "Scheduled (Demo Mode)",
         description: "Feature demonstration - database not configured",
-      };
+      });
     }
   };
 

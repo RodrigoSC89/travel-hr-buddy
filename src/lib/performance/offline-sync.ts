@@ -240,7 +240,7 @@ class OfflineSyncManager {
       timestamp: Date.now(),
       expiry: Date.now() + (expiry || this.config.cacheExpiry),
       version: 1,
-    };
+    });
 
     await this.db.put("cachedData", item);
   }

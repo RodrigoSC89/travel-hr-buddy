@@ -32,7 +32,7 @@ export async function getStorageQuota(): Promise<StorageQuota> {
         usagePercent: 0,
         available: 0,
         persisted: false,
-      };
+      });
     }
 
     const estimate = await navigator.storage.estimate();
@@ -47,7 +47,7 @@ export async function getStorageQuota(): Promise<StorageQuota> {
       usagePercent,
       available: quota - usage,
       persisted,
-    };
+    });
   } catch (error) {
     logger.error("[StorageQuota] Failed to get storage estimate", { error });
     return {
@@ -56,7 +56,7 @@ export async function getStorageQuota(): Promise<StorageQuota> {
       usagePercent: 0,
       available: 0,
       persisted: false,
-    };
+    });
   }
 }
 

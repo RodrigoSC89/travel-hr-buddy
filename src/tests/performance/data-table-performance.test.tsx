@@ -27,7 +27,7 @@ describe("Performance: Data Table", () => {
     // Assert
     expect(renderedRows).toHaveLength(1000);
     expect(renderTime).toBeLessThan(1000); // Should render in under 1 second
-  };
+  });
 
   it("should sort 5000 rows efficiently", async () => {
     // Arrange
@@ -46,7 +46,7 @@ describe("Performance: Data Table", () => {
     expect(sorted).toHaveLength(5000);
     expect(sorted[0].value).toBeLessThan(sorted[4999].value);
     expect(sortTime).toBeLessThan(200); // Should sort in under 200ms
-  };
+  });
 
   it("should filter 10000 rows quickly", async () => {
     // Arrange
@@ -68,7 +68,7 @@ describe("Performance: Data Table", () => {
     expect(filtered.length).toBeGreaterThan(0);
     expect(filtered.length).toBeLessThan(10000);
     expect(filterTime).toBeLessThan(100); // Should filter in under 100ms
-  };
+  });
 
   it("should paginate large datasets without lag", async () => {
     // Arrange
@@ -95,7 +95,7 @@ describe("Performance: Data Table", () => {
     expect(pageData).toHaveLength(pageSize);
     expect(pageData[0].id).toBe(startIndex);
     expect(paginationTime).toBeLessThan(50); // Should paginate instantly
-  };
+  });
 
   it("should handle virtual scrolling efficiently", async () => {
     // Arrange
@@ -118,7 +118,7 @@ describe("Performance: Data Table", () => {
     // Assert
     expect(visibleData).toHaveLength(visibleRows);
     expect(scrollTime).toBeLessThan(16); // Must be under one frame (60fps)
-  };
+  });
 
   it("should update cell values without re-rendering entire table", async () => {
     // Arrange
@@ -141,5 +141,5 @@ describe("Performance: Data Table", () => {
     expect(updatedRows[500].value).toBe(999999);
     expect(updatedRows[499].value).toBe(rows[499].value); // Others unchanged
     expect(updateTime).toBeLessThan(10); // Should be instant
-  };
-};
+  });
+});

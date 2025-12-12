@@ -138,7 +138,7 @@ class CognitiveClone {
           environment: import.meta.env.MODE || "production",
           parentInstance: this.getInstanceId(),
         },
-      };
+      });
 
       // Save snapshot to database
       await this.saveSnapshot(snapshot);
@@ -187,7 +187,7 @@ class CognitiveClone {
         restrictions: options.restrictions || [],
         createdAt: new Date(),
         parentInstanceId: sourceSnapshot.metadata.parentInstance,
-      };
+      });
 
       // Register clone
       await this.registerClone(cloneConfig);
@@ -219,7 +219,7 @@ class CognitiveClone {
         learnings: config.aiContext.learnings,
         preferences: config.aiContext.preferences,
         llmConfig: config.llmConfig,
-      };
+      });
 
       // Save to local storage for offline access
       localStorage.setItem(`clone_context_${config.id}`, JSON.stringify(contextData));
@@ -397,7 +397,7 @@ class CognitiveClone {
       restrictions: data.restrictions || [],
       createdAt: new Date(data.created_at),
       parentInstanceId: data.parent_instance_id,
-    };
+    });
   }
 
   /**
@@ -408,7 +408,7 @@ class CognitiveClone {
       isInitialized: this.isInitialized,
       activeClonesCount: this.activeClones.size,
       activeCloneIds: Array.from(this.activeClones.keys()),
-    };
+    });
   }
 }
 

@@ -84,7 +84,7 @@ export class CollectiveMemoryHub {
       confidence: options.confidence ?? 1.0,
       tags: options.tags ?? [],
       metadata: options.metadata ?? {},
-    };
+    });
 
     try {
       const { data, error } = await (supabase as any)
@@ -187,7 +187,7 @@ export class CollectiveMemoryHub {
       updatedCount: 0,
       conflictCount: 0,
       conflicts: [],
-    };
+    });
 
     try {
       // Fetch knowledge from source instance
@@ -268,7 +268,7 @@ export class CollectiveMemoryHub {
       return {
         rolledBackCount,
         affectedCategories: Array.from(affectedCategories),
-      };
+      });
     } catch (error) {
       logger.error("Rollback failed", error);
       throw error;
@@ -380,7 +380,7 @@ export class CollectiveMemoryHub {
         localEntry: local,
         remoteEntry: remote,
         resolution: this.autoResolve(local, remote),
-      };
+      });
     }
 
     return null;
@@ -467,7 +467,7 @@ export class CollectiveMemoryHub {
       metadata: data.metadata || {},
       createdAt: data.created_at,
       updatedAt: data.updated_at,
-    };
+    });
   }
 }
 

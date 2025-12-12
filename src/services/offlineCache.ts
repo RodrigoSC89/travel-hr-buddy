@@ -53,7 +53,7 @@ class SupabaseOfflineCache {
         data,
         timestamp: Date.now(),
         expiresAt: Date.now() + ttl
-      };
+      });
 
       localStorage.setItem(cacheKey, JSON.stringify(entry));
       logger.debug("Stored in cache", { key, ttl: ttl / 1000 });

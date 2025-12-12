@@ -59,7 +59,7 @@ class AlertHandler {
       if (index > -1) {
         this.callbacks.splice(index, 1);
       }
-    };
+    });
   }
 
   /**
@@ -79,7 +79,7 @@ class AlertHandler {
       message,
       dismissed: false,
       ...options
-    };
+    });
 
     // Add to history
     this.alerts.unshift(alert);
@@ -330,7 +330,7 @@ class AlertHandler {
     this.config = {
       ...this.config,
       ...updates
-    };
+    });
 
     logger.info("[Alert Handler] Configuration updated", updates);
   }
@@ -384,7 +384,7 @@ class AlertHandler {
       bySeverity: {} as Record<string, number>,
       dismissed: this.alerts.filter(a => a.dismissed).length,
       active: this.alerts.filter(a => !a.dismissed).length
-    };
+    });
 
     this.alerts.forEach(alert => {
       // Count by severity

@@ -54,7 +54,7 @@ export default function NotificationsDialog({
     default:
       return <Info className="h-4 w-4 text-blue-500" />;
     }
-  };
+  });
 
   const unreadCount = notifications.filter(n => !n.read).length;
 

@@ -23,7 +23,7 @@ export interface Job {
     asset: {
       name: string;
       vessel: string;
-    };
+    });
   };
   suggestion_ia?: string;
   can_postpone?: boolean;
@@ -241,7 +241,7 @@ export const createJob = async (jobData: Partial<MMIJob>): Promise<MMIJob> => {
     logger.error("Failed to create job", error as Error, { jobData: { title: jobData.title, componentName: jobData.component_name } });
     throw new Error("Não foi possível criar o job");
   }
-};
+});
 
 /**
  * Postpones a job with AI justification via Supabase edge function
@@ -297,7 +297,7 @@ export const postponeJob = async (jobId: string): Promise<{ message: string; new
         return {
           message: data.message,
           new_date: newDate,
-        };
+        });
       }
     }
   } catch (error) {
@@ -313,7 +313,7 @@ export const postponeJob = async (jobId: string): Promise<{ message: string; new
   if (!job.can_postpone) {
     return {
       message: "Este job não pode ser postergado devido à prioridade crítica.",
-    };
+    });
   }
   
   const currentDate = new Date(job.due_date);
@@ -378,7 +378,7 @@ export const createWorkOrder = async (jobId: string): Promise<{ os_id: string; m
       return {
         os_id: data.os_id,
         message: data.message || "Ordem de Serviço criada com sucesso! 📋",
-      };
+      });
     }
   } catch (error) {
     logger.warn("Work order creation via edge function failed, using fallback", { error: error instanceof Error ? error.message : String(error), jobId });

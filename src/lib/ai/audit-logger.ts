@@ -242,7 +242,7 @@ export async function getAuditStatistics(
         ragUsageRate: 0,
         byModule: {},
         byModel: {},
-      };
+      });
     }
 
     const entries = data as unknown as AIAuditEntry[];
@@ -390,5 +390,5 @@ export function createAuditLogger(moduleName: string, organizationId?: string) {
       }
       return getAuditStatistics(organizationId);
     },
-  };
+  });
 }

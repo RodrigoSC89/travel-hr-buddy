@@ -52,14 +52,14 @@ class IndexedDBSync {
       request.onerror = () => {
         logger.error("[IndexedDBSync] Failed to open database", { error: request.error });
         reject(request.error);
-      };
+      });
 
       request.onsuccess = () => {
         this.db = request.result;
         this.isInitialized = true;
         logger.info("[IndexedDBSync] Database initialized");
         resolve();
-      };
+      });
 
       request.onupgradeneeded = (event) => {
         const db = (event.target as IDBOpenDBRequest).result;
@@ -85,7 +85,7 @@ class IndexedDBSync {
           const priorityStore = db.createObjectStore(STORES.PRIORITY_QUEUE, { keyPath: "id" });
           priorityStore.createIndex("priority", "priority", { unique: false });
         }
-      };
+      });
     });
 
     return this.initPromise;
@@ -119,7 +119,7 @@ class IndexedDBSync {
       priority,
       status: "pending",
       compressed: false,
-    };
+    });
 
     // Compress large payloads
     const dataSize = JSON.stringify(data).length;
@@ -134,7 +134,7 @@ class IndexedDBSync {
       request.onsuccess = () => {
         logger.debug("[IndexedDBSync] Queued operation", { id: item.id, table, operation });
         resolve(item.id);
-      };
+      });
       request.onerror = () => reject(request.error);
     });
   }
@@ -161,7 +161,7 @@ class IndexedDBSync {
           });
           resolve(items);
         }
-      };
+      });
       request.onerror = () => reject(request.error);
     });
   }
@@ -185,7 +185,7 @@ class IndexedDBSync {
         const putRequest = store.put(item);
         putRequest.onsuccess = () => resolve();
         putRequest.onerror = () => reject(putRequest.error);
-      };
+      });
       getRequest.onerror = () => reject(getRequest.error);
     });
   }
@@ -208,7 +208,7 @@ class IndexedDBSync {
           logger.info("[IndexedDBSync] Cleared completed operations", { count: cleared });
           resolve(cleared);
         }
-      };
+      });
       request.onerror = () => reject(request.error);
     });
   }
@@ -237,7 +237,7 @@ class IndexedDBSync {
         byHigh: 0,
         byNormal: 0,
         byLow: 0,
-      };
+      });
       
       const request = store.openCursor();
       
@@ -257,7 +257,7 @@ class IndexedDBSync {
         } else {
           resolve(stats);
         }
-      };
+      });
       request.onerror = () => reject(request.error);
     });
   }
@@ -282,7 +282,7 @@ class IndexedDBSync {
       timestamp: Date.now(),
       ttl,
       compressed,
-    };
+    });
 
     return new Promise((resolve, reject) => {
       const request = store.put(item);
@@ -320,7 +320,7 @@ class IndexedDBSync {
         }
         
         resolve(data as T);
-      };
+      });
       request.onerror = () => reject(request.error);
     });
   }
@@ -355,7 +355,7 @@ class IndexedDBSync {
         } else {
           resolve(cleared);
         }
-      };
+      });
       request.onerror = () => reject(request.error);
     });
   }
@@ -372,7 +372,7 @@ class IndexedDBSync {
       syncQueue: 0, // Would need to iterate
       cache: 0,
       total: estimate.usage || 0,
-    };
+    });
   }
 
   async clearAll(): Promise<void> {

@@ -113,7 +113,7 @@ export async function getIonosphericData(
       correction_type: data.correction.type,
       quality_indicator: data.quality.indicator,
       satellite_count: data.quality.satellite_count,
-    };
+    });
 
     return ionosphereData;
   } catch (error) {
@@ -166,7 +166,7 @@ export async function requestPositionCorrection(
       correction_age: data.correction_age_seconds,
       service_level: config.serviceLevel,
       signal_quality: data.signal_quality,
-    };
+    });
 
     // Store correction in database
     await supabase
@@ -347,7 +347,7 @@ export async function getCorrectionStatistics(
         min_accuracy: 0,
         average_correction_age: 0,
         signal_quality_avg: 0,
-      };
+      });
     }
 
     const accuracies = corrections.map((c: any) => c.horizontal_accuracy);
@@ -361,7 +361,7 @@ export async function getCorrectionStatistics(
       min_accuracy: Math.min(...accuracies),
       average_correction_age: correctionAges.reduce((a: number, b: number) => a + b, 0) / correctionAges.length,
       signal_quality_avg: signalQualities.reduce((a: number, b: number) => a + b, 0) / signalQualities.length,
-    };
+    });
   } catch (error) {
     logger.error("Error getting correction statistics", error as Error, { vesselId, days });
     throw error;
@@ -396,7 +396,7 @@ export async function validateServiceStatus(): Promise<{
         service_level: config.serviceLevel,
         latency_ms: latency,
         message: `Service unavailable: ${response.status}`,
-      };
+      });
     }
 
     const data = await response.json();
@@ -406,13 +406,13 @@ export async function validateServiceStatus(): Promise<{
       service_level: config.serviceLevel,
       latency_ms: latency,
       message: data.message,
-    };
+    });
   } catch (error) {
     return {
       available: false,
       service_level: "UNKNOWN",
       latency_ms: 0,
       message: error instanceof Error ? error.message : "Connection failed",
-    };
+    });
   }
 }

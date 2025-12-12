@@ -182,8 +182,8 @@ export const WorkspaceActivities: React.FC<WorkspaceActivitiesProps> = ({
     toast({
       title: "Filtros limpos",
       description: "Mostrando todas as atividades",
-    };
-  };
+    });
+  });
 
   const formatTime = (timestamp: string) => {
     try {
@@ -375,7 +375,7 @@ export const WorkspaceActivities: React.FC<WorkspaceActivitiesProps> = ({
                           toast({
                             title: activity.action,
                             description: activity.description,
-                          };
+                          });
                         }}
                       >
                         <div className={`p-2 rounded-full ${getActivityColor(activity.type)} flex-shrink-0`}>

@@ -46,7 +46,7 @@ export class MissionCoordinationService {
         status: "planned",
         created_at: new Date().toISOString(),
         updated_at: new Date().toISOString()
-      };
+      });
 
       this.missions.set(mission.id, mission);
       logger.info("[MissionCoordination] Mission created", { missionId: mission.id, name: mission.name, priority: mission.priority });
@@ -94,7 +94,7 @@ export class MissionCoordinationService {
         assigned_at: new Date().toISOString(),
         created_at: new Date().toISOString(),
         updated_at: new Date().toISOString()
-      };
+      });
 
       const existingVessels = this.vessels.get(missionId) || [];
       this.vessels.set(missionId, [...existingVessels, assignment]);
@@ -152,7 +152,7 @@ export class MissionCoordinationService {
         message,
         metadata: metadata || {},
         created_at: new Date().toISOString()
-      };
+      });
 
       const existingLogs = this.logs.get(missionId) || [];
       this.logs.set(missionId, [...existingLogs, log]);

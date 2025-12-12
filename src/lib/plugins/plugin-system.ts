@@ -136,7 +136,7 @@ class PluginRegistry {
         manifest,
         status: "loading",
         loadedAt: new Date(),
-      };
+      });
 
       this.plugins.set(manifest.id, instance);
 
@@ -277,7 +277,7 @@ class PluginRegistry {
     
     return () => {
       this.eventHandlers.get(event)?.delete(callback);
-    };
+    });
   }
 
   /**

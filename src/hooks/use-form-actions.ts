@@ -29,7 +29,7 @@ export const useFormActions = () => {
       return true;
     }
     return false;
-  };
+  });
 
   const handleResetForm = (formName: string) => {
     if (confirm(`Tem certeza que deseja restaurar ${formName} para os valores padrão?`)) {
@@ -40,7 +40,7 @@ export const useFormActions = () => {
       return true;
     }
     return false;
-  };
+  });
 
   const handleDeleteItem = (itemName: string, itemId?: string) => {
     if (confirm(`Tem certeza que deseja excluir ${itemName}? Esta ação não pode ser desfeita.`)) {

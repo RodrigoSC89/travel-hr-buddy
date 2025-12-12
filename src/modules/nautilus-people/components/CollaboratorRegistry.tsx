@@ -74,7 +74,7 @@ const CollaboratorRegistry: React.FC = () => {
     const matchesDepartment = selectedDepartment === "todos" || c.departamento === selectedDepartment;
     const matchesStatus = selectedStatus === "todos" || c.status === selectedStatus;
     return matchesSearch && matchesDepartment && matchesStatus;
-  };
+  });
 
   const getStatusColor = (status: string) => {
     switch (status) {
@@ -84,7 +84,7 @@ const CollaboratorRegistry: React.FC = () => {
     case "afastado": return "bg-red-500";
     default: return "bg-gray-500";
     }
-  };
+  });
 
   const getStatusLabel = (status: string) => {
     switch (status) {

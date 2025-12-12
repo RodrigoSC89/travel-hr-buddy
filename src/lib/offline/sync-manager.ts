@@ -82,7 +82,7 @@ class OfflineSyncManager {
       retryCount: 0,
       maxRetries: this.MAX_RETRIES,
       status: "pending"
-    };
+    });
 
     this.queue.push(item);
     this.saveQueueToStorage();
@@ -186,7 +186,7 @@ class OfflineSyncManager {
       completed: this.queue.filter(i => i.status === "completed").length,
       failed: this.queue.filter(i => i.status === "failed").length,
       pending: this.queue.filter(i => i.status === "pending").length
-    };
+    });
   }
 
   /**
@@ -228,7 +228,7 @@ class OfflineSyncManager {
     return {
       isOnline: this.isOnline,
       isSyncing: this.isSyncing
-    };
+    });
   }
 
   /**

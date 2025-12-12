@@ -193,6 +193,6 @@ export const FloatingActionButton: React.FC = () => {
       </Button>
     </div>
   );
-});
+};
 
 export default FloatingActionButton;

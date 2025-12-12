@@ -77,7 +77,7 @@ export async function nautilusRespond(options: NautilusLLMOptions): Promise<Naut
       confidenceScore: 0.5,
       usedCache: false,
       model: "fallback"
-    };
+    });
   }
 }
 
@@ -109,7 +109,7 @@ export async function updateSystemContext(contextId: string = "global") {
       timestamp: new Date().toISOString(),
       health: "operational",
       uptime: performance.now()
-    };
+    });
 
     const { error } = await supabase
       .from("system_context_snapshots")
@@ -166,7 +166,7 @@ export async function getIAStats() {
       averageConfidence: 0,
       averageExecutionTime: 0,
       cacheHitRate: 0
-    };
+    });
   }
 
   const totalRequests = data.length;

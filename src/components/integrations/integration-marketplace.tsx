@@ -181,13 +181,13 @@ export const IntegrationMarketplace: React.FC = () => {
     toast({
       title: "Instalando Integração",
       description: `${integration.name} está sendo instalado...`,
-    };
+    });
     
     setTimeout(() => {
       toast({
         title: "Instalação Concluída",
         description: `${integration.name} foi instalado com sucesso!`,
-      };
+      });
     }, 2000);
   };
 

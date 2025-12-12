@@ -197,7 +197,7 @@ export class APIHealthMonitor {
     // Return unsubscribe function
     return () => {
       this.listeners.delete(callback);
-    };
+    });
   }
 
   private notifyListeners() {

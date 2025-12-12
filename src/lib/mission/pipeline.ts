@@ -80,7 +80,7 @@ export class MissionPipeline {
         status: "pending",
         retryCount: 0
       }))
-    };
+    });
 
     this.missions.set(fullMission.id, fullMission);
     this.notifyListeners();
@@ -133,7 +133,7 @@ export class MissionPipeline {
         completedSteps: [],
         failedSteps: [],
         message: "Mission not found"
-      };
+      });
     }
 
     if (mission.status === "active") {
@@ -142,7 +142,7 @@ export class MissionPipeline {
         completedSteps: [],
         failedSteps: [],
         message: "Mission is already running"
-      };
+      });
     }
 
     this.updateMissionStatus(missionId, "active");
@@ -220,7 +220,7 @@ export class MissionPipeline {
           ? "Mission completed successfully" 
           : `Mission failed with ${failedSteps.length} failed step(s)`,
         duration
-      };
+      });
     } catch (error) {
       logger.error("Error executing mission:", error);
       this.updateMissionStatus(missionId, "failed");
@@ -230,7 +230,7 @@ export class MissionPipeline {
         failedSteps,
         message: error instanceof Error ? error.message : "Unknown error",
         duration: Date.now() - startTime
-      };
+      });
     }
   }
 
@@ -287,7 +287,7 @@ export class MissionPipeline {
     return { 
       success: true, 
       result: { scanned: true, data: "Sample scan data" } 
-    };
+    });
   }
 
   /**
@@ -298,7 +298,7 @@ export class MissionPipeline {
     return { 
       success: true, 
       result: { collected: true, samples: 5 } 
-    };
+    });
   }
 
   /**
@@ -309,7 +309,7 @@ export class MissionPipeline {
     return { 
       success: true, 
       result: { transmitted: true, bandwidth: "10Mbps" } 
-    };
+    });
   }
 
   /**
@@ -330,7 +330,7 @@ export class MissionPipeline {
     return { 
       success: true, 
       result: { moved: true, position: step.params?.target } 
-    };
+    });
   }
 
   /**
@@ -345,7 +345,7 @@ export class MissionPipeline {
     return { 
       success: true, 
       result: { coordinated: true, actions: actions.length } 
-    };
+    });
   }
 
   /**
@@ -424,7 +424,7 @@ export class MissionPipeline {
       reasoning,
       confidence,
       timestamp: new Date().toISOString()
-    };
+    });
 
     // Add to mission
     if (mission) {

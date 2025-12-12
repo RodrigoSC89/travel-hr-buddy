@@ -130,8 +130,8 @@ export const WindyMap: React.FC<WindyMapProps> = ({
       title: "Atualizando mapa",
       description: "Carregando dados meteorológicos...",
       duration: 2000,
-    };
-  };
+    });
+  });
 
   // Get tile URL with API key
   const getOWMTileUrl = (z: number, x: number, y: number) => {
@@ -263,7 +263,7 @@ export const WindyMap: React.FC<WindyMapProps> = ({
       radarRange: "-1",
     });
     return `https://embed.windy.com/embed2.html?${params.toString()}`;
-  };
+  });
 
   return (
     <Card className="overflow-hidden">

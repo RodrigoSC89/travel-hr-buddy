@@ -65,7 +65,7 @@ export const CreatePlanDialog: React.FC<CreatePlanDialogProps> = ({
       toast({
         title: "Plan created",
         description: "SGSO plan has been created successfully.",
-      };
+      });
 
       setFormData({
         title: "",
@@ -73,7 +73,7 @@ export const CreatePlanDialog: React.FC<CreatePlanDialogProps> = ({
         status: "draft",
         start_date: "",
         end_date: "",
-      };
+      });
 
       onOpenChange(false);
       onSuccess();
@@ -82,7 +82,7 @@ export const CreatePlanDialog: React.FC<CreatePlanDialogProps> = ({
         title: "Error creating plan",
         description: error.message,
         variant: "destructive",
-      };
+      });
     } finally {
       setIsSubmitting(false);
     }

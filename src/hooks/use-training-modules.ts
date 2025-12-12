@@ -86,7 +86,7 @@ export function useTrainingModule(moduleId: string) {
     isLoading,
     isLoadingStats,
     error,
-  };
+  });
 }
 
 /**

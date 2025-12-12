@@ -59,7 +59,7 @@ export function useNetworkQuality(): NetworkInfo {
         rtt,
         saveData,
       });
-    };
+    });
 
     updateNetworkInfo();
 

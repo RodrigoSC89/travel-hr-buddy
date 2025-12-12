@@ -229,8 +229,8 @@ const FinanceCommandCenter: React.FC = () => {
       showNotifications: true,
       currency: "BRL",
       fiscalYearStart: "01",
-    };
-  };
+    });
+  });
 
   const [newExpense, setNewExpense] = useState({
     description: "",
@@ -246,7 +246,7 @@ const FinanceCommandCenter: React.FC = () => {
       currency: "BRL",
       minimumFractionDigits: 0,
     }).format(value);
-  };
+  });
 
   // Fetch data
   const fetchData = useCallback(async (showToast = false) => {
@@ -481,7 +481,7 @@ const FinanceCommandCenter: React.FC = () => {
       toast({ 
         title: "Análise concluída", 
         description: `${result.response.opportunitiesCount || 3} oportunidades de economia identificadas` 
-      };
+      });
     } else {
       toast({ title: "Análise concluída", description: "Insights gerados com sucesso" });
     }

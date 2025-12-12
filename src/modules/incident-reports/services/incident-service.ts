@@ -62,7 +62,7 @@ export class IncidentService {
         reportedAt: data.reported_at, 
         evidence: [],
         replayStatus: data.replay_status
-      };
+      });
     } catch (error) {
       console.error("Error creating incident:", error);
       console.error("Error creating incident:", error);

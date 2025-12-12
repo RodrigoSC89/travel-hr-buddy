@@ -115,7 +115,7 @@ export default function VirtualizedLogsCenter() {
             message: log.message,
           })),
         },
-      };
+      });
 
       toast.success(
         <div>

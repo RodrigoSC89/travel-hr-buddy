@@ -92,7 +92,7 @@ export const HealthStatusDashboard: React.FC = () => {
     case "down":
       return <AlertCircle className="h-5 w-5 text-red-500" />;
     }
-  };
+  });
 
   const getStatusBadge = (status: "healthy" | "degraded" | "down") => {
     const variants: Record<string, "default" | "secondary" | "destructive" | "outline"> = {

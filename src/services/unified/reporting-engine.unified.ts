@@ -363,7 +363,7 @@ export const ReportingEngine = {
         reports_this_month: 0,
         average_generation_time: 0,
         most_used_template: "N/A"
-      };
+      });
     }
 
     return data as ReportStatistics;

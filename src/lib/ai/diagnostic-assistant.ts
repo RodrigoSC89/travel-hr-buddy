@@ -498,7 +498,7 @@ Ou contate o suporte técnico.`;
       resolved: resolved.length,
       escalated: escalated.length,
       avgResolutionTime: avgTime / 1000 // seconds
-    };
+    });
   }
 }
 

@@ -47,7 +47,7 @@ export const SystemHealthIndicator = memo(function({
     if (status.api === "down" || status.database === "down") return "critical";
     if (status.api === "degraded" || status.database === "degraded") return "warning";
     return "healthy";
-  };
+  });
 
   const overallStatus = getOverallStatus();
 
@@ -76,7 +76,7 @@ export const SystemHealthIndicator = memo(function({
       bg: "bg-gray-500/10",
       label: "Modo offline",
     },
-  };
+  });
 
   const config = statusConfig[overallStatus];
   const Icon = config.icon;

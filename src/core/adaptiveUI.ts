@@ -107,7 +107,7 @@ class AdaptiveUI {
       isOffline: network.quality === "offline",
       requiresSpeed: false,
       dataSensitive: false,
-    };
+    });
 
     // Generate initial configuration
     this.currentConfig = this.generateConfiguration(device, network, context);
@@ -215,7 +215,7 @@ class AdaptiveUI {
       cpuCores,
       batteryLevel,
       isLowPowerMode,
-    };
+    });
   }
 
   /**
@@ -289,7 +289,7 @@ class AdaptiveUI {
       isOffline,
       requiresSpeed: priority === "critical" || missionType === "emergency",
       dataSensitive: missionType === "tactical",
-    };
+    });
   }
 
   /**
@@ -326,7 +326,7 @@ class AdaptiveUI {
       autoRefresh: mode === "full" && network.quality === "excellent",
       heavyGraphics: componentSet === "heavy",
       backgroundSync: !context.isOffline && network.quality !== "poor",
-    };
+    });
 
     // Configure layout
     const layout: UIConfiguration["layout"] = {
@@ -336,7 +336,7 @@ class AdaptiveUI {
         mode === "minimal" || device.type === "mobile" ? "compact" : "full",
       panels: mode === "emergency" || device.type === "mobile" ? "modal" : 
         mode === "minimal" ? "single" : "multi",
-    };
+    });
 
     // Configure data strategy
     const dataStrategy: UIConfiguration["dataStrategy"] = {
@@ -346,7 +346,7 @@ class AdaptiveUI {
       lazyLoading: mode !== "emergency" && (device.type === "mobile" || network.quality !== "excellent"),
       compressionLevel: network.quality === "poor" ? "high" : 
         network.quality === "fair" ? "medium" : "low",
-    };
+    });
 
     return {
       mode,
@@ -354,7 +354,7 @@ class AdaptiveUI {
       features,
       layout,
       dataStrategy,
-    };
+    });
   }
 
   /**
@@ -455,7 +455,7 @@ class AdaptiveUI {
       contextMeshConnected: this.contextMeshConnected,
       currentMode: this.currentConfig?.mode,
       currentComponentSet: this.currentConfig?.componentSet,
-    };
+    });
   }
 }
 

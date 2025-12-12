@@ -89,7 +89,7 @@ export const ScheduledReports: React.FC = () => {
         title: "Missing Fields",
         description: "Please fill in all required fields",
         variant: "destructive",
-      };
+      });
       return;
     }
 
@@ -103,7 +103,7 @@ export const ScheduledReports: React.FC = () => {
         frequency: formData.frequency,
         next_run: nextRun,
         is_active: true,
-      };
+      });
 
       if (error) {
       }
@@ -111,7 +111,7 @@ export const ScheduledReports: React.FC = () => {
       toast({
         title: "Schedule Created (Demo)",
         description: `Report will be generated ${formData.frequency}`,
-      };
+      });
 
       setShowForm(false);
       fetchScheduledReports();
@@ -121,7 +121,7 @@ export const ScheduledReports: React.FC = () => {
       toast({
         title: "Schedule Created (Demo)",
         description: "Feature demonstration - database not configured",
-      };
+      });
     }
   };
 
@@ -148,7 +148,7 @@ export const ScheduledReports: React.FC = () => {
     toast({
       title: "Generating Report",
       description: "Report generation started...",
-    };
+    });
 
     // Simulate report generation
     setTimeout(async () => {
@@ -176,7 +176,7 @@ export const ScheduledReports: React.FC = () => {
         toast({
           title: "Report Generated",
           description: "Report has been stored and is ready for download",
-        };
+        });
 
         fetchScheduledReports();
       } catch (error) {
@@ -186,7 +186,7 @@ export const ScheduledReports: React.FC = () => {
           title: "Generation Failed",
           description: "Failed to generate report",
           variant: "destructive",
-        };
+        });
       }
     }, 2000);
   };
@@ -204,7 +204,7 @@ export const ScheduledReports: React.FC = () => {
       toast({
         title: "Schedule Deleted",
         description: "Report schedule has been removed",
-      };
+      });
 
       fetchScheduledReports();
     } catch (error) {
@@ -213,7 +213,7 @@ export const ScheduledReports: React.FC = () => {
       toast({
         title: "Schedule Deleted (Demo)",
         description: "Feature demonstration - database not configured",
-      };
+      });
     }
   };
 

@@ -193,7 +193,7 @@ class ErrorTracker {
       uniqueErrors: this.errors.size,
       errorsByType,
       recentErrors: recentErrors.slice(0, 10),
-    };
+    });
   }
 
   /**
@@ -289,7 +289,7 @@ export function handleApiError(error: unknown, context?: ErrorContext): {
         message: "Sessão expirada. Por favor, faça login novamente.",
         code: "AUTH_EXPIRED",
         canRetry: false,
-      };
+      });
     }
     
     if (error.statusCode === 403) {
@@ -297,7 +297,7 @@ export function handleApiError(error: unknown, context?: ErrorContext): {
         message: "Você não tem permissão para realizar esta ação.",
         code: "FORBIDDEN",
         canRetry: false,
-      };
+      });
     }
     
     if (error.statusCode === 404) {
@@ -305,7 +305,7 @@ export function handleApiError(error: unknown, context?: ErrorContext): {
         message: "Recurso não encontrado.",
         code: "NOT_FOUND",
         canRetry: false,
-      };
+      });
     }
     
     if (error.statusCode === 429) {
@@ -313,7 +313,7 @@ export function handleApiError(error: unknown, context?: ErrorContext): {
         message: "Muitas requisições. Por favor, aguarde um momento.",
         code: "RATE_LIMITED",
         canRetry: true,
-      };
+      });
     }
     
     if (error.statusCode >= 500) {
@@ -321,14 +321,14 @@ export function handleApiError(error: unknown, context?: ErrorContext): {
         message: "Erro no servidor. Por favor, tente novamente.",
         code: "SERVER_ERROR",
         canRetry: true,
-      };
+      });
     }
     
     return {
       message: error.message || "Erro na requisição.",
       code: "API_ERROR",
       canRetry: canRetry,
-    };
+    });
   }
 
   // Handle NetworkError
@@ -339,7 +339,7 @@ export function handleApiError(error: unknown, context?: ErrorContext): {
         : "Erro de conexão. Por favor, tente novamente.",
       code: "NETWORK_ERROR",
       canRetry: true,
-    };
+    });
   }
 
   // Handle ValidationError
@@ -348,7 +348,7 @@ export function handleApiError(error: unknown, context?: ErrorContext): {
       message: error.message,
       code: error.code || "VALIDATION_ERROR",
       canRetry: false,
-    };
+    });
   }
 
   // Handle CircuitOpenError
@@ -357,7 +357,7 @@ export function handleApiError(error: unknown, context?: ErrorContext): {
       message: "Serviço temporariamente indisponível. Tente novamente em breve.",
       code: "SERVICE_UNAVAILABLE",
       canRetry: true,
-    };
+    });
   }
 
   // Handle AuthError
@@ -366,7 +366,7 @@ export function handleApiError(error: unknown, context?: ErrorContext): {
       message: error.message,
       code: error.code,
       canRetry: error.code === "SESSION_EXPIRED",
-    };
+    });
   }
 
   // Generic error

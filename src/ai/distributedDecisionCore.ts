@@ -319,7 +319,7 @@ class DistributedDecisionCore {
       timeoutMs: rule.timeoutMs || 5000,
       executed: false,
       timestamp: new Date()
-    };
+    });
 
     this.pendingDecisions.set(decisionId, decision);
 
@@ -358,7 +358,7 @@ class DistributedDecisionCore {
       simulationResults: simulations,
       escalationReason: `${conflictingRules.length} conflicting rules found`,
       timestamp: new Date()
-    };
+    });
 
     // Publish escalation to context mesh
     await contextMesh.publish({
@@ -394,7 +394,7 @@ class DistributedDecisionCore {
       success: true,
       timestamp: new Date(),
       executedAt: new Date()
-    };
+    });
   }
 
   private async executeDecision(decision: Decision): Promise<Decision> {
@@ -445,7 +445,7 @@ class DistributedDecisionCore {
       confidence,
       risks: [`Risk A for ${scenario}`, `Risk B for ${scenario}`],
       benefits: [`Benefit A for ${scenario}`, `Benefit B for ${scenario}`]
-    };
+    });
   }
 
   private handleContextUpdate(contextData: Record<string, any>): void {
@@ -471,7 +471,7 @@ class DistributedDecisionCore {
       escalationReason: row.escalation_reason,
       timestamp: new Date(row.timestamp),
       executedAt: row.executed_at ? new Date(row.executed_at) : undefined
-    };
+    });
   }
 }
 

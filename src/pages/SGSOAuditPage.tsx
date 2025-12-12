@@ -56,7 +56,7 @@ export default function SGSOAuditPage() {
       if (!error && data) {
         setVessels(data);
       }
-    };
+    });
     fetchVessels();
   }, []);
 
@@ -80,7 +80,7 @@ export default function SGSOAuditPage() {
               compliance: match?.compliance_status || "compliant",
               evidence: match?.evidence || "",
               comment: match?.comment || ""
-            };
+            });
   };
 
           setAuditData(updatedData);
@@ -90,7 +90,7 @@ export default function SGSOAuditPage() {
         const error = err instanceof Error ? err : new Error(String(err));
         toast.error(`Erro ao carregar auditoria: ${error.message}`);
       }
-    };
+    });
 
     fetchAudit();
   }, [selectedVessel]);
@@ -149,7 +149,7 @@ export default function SGSOAuditPage() {
       })
       .from(element)
       .save();
-  };
+  });
 
   const handleExplainWithAI = async (index: number) => {
     const item = auditData[index];

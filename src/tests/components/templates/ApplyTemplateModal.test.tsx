@@ -272,8 +272,8 @@ describe("ApplyTemplateModal Component", () => {
         title: "Erro ao carregar templates",
         description: "Não foi possível carregar os templates.",
         variant: "destructive",
-      };
-  };
+      });
+  });
   };
 
   it("should close modal after applying template", async () => {

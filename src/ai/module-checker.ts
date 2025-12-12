@@ -141,7 +141,7 @@ export function generateMarkdownReport(results: ModuleCheckResult[]): string {
     ready: "✅",
     partial: "🟡",
     failed: "🔴",
-  };
+  });
 
   const readyCount = results.filter(r => r.status === "ready").length;
   const partialCount = results.filter(r => r.status === "partial").length;

@@ -190,7 +190,7 @@ export class SelfDiagnosisLoop {
       anomalies,
       timestamp: new Date().toISOString(),
       nextScanScheduled: new Date(Date.now() + this.scanInterval).toISOString(),
-    };
+    });
 
     await this.storeScan(scan);
 
@@ -210,7 +210,7 @@ export class SelfDiagnosisLoop {
       availability: 95 + Math.random() * 5,
       throughput: 100 + Math.random() * 200,
       memoryUsage: 50 + Math.random() * 40,
-    };
+    });
   }
 
   /**
@@ -376,7 +376,7 @@ export class SelfDiagnosisLoop {
       autoExecute,
       status: "proposed",
       timestamp: new Date().toISOString(),
-    };
+    });
 
     await this.storePlan(plan);
 
@@ -458,7 +458,7 @@ export class SelfDiagnosisLoop {
       parameters,
       estimatedImpact,
       requiredDowntime,
-    };
+    });
   }
 
   /**
@@ -536,7 +536,7 @@ export class SelfDiagnosisLoop {
     const afterState = {
       status: success ? "completed" : "failed",
       timestamp: endTime,
-    };
+    });
 
     const execution: RecoveryExecution = {
       executionId: `exec-${Date.now()}-${Math.random().toString(36).substr(2, 9)}`,
@@ -553,7 +553,7 @@ export class SelfDiagnosisLoop {
         performanceImprovement: success ? 10 + Math.random() * 20 : 0,
         errorsFixed: success ? Math.floor(Math.random() * 5) : 0,
       },
-    };
+    });
 
     await this.storeExecution(execution);
 
@@ -581,7 +581,7 @@ export class SelfDiagnosisLoop {
         status: lastScan?.status || "healthy",
         lastScan: lastScan?.timestamp || "Never",
         anomalyCount: lastScan?.anomalies.length || 0,
-      };
+      });
     });
   }
 
@@ -599,7 +599,7 @@ export class SelfDiagnosisLoop {
       plansCreated: number;
       actionsExecuted: number;
       successRate: number;
-    };
+    });
     } {
     const successfulExecutions = this.executions.filter(e => e.success).length;
     const successRate = this.executions.length > 0 
@@ -618,7 +618,7 @@ export class SelfDiagnosisLoop {
         actionsExecuted: this.executions.length,
         successRate,
       },
-    };
+    });
   }
 
   /**

@@ -183,7 +183,7 @@ const ComplianceReports = () => {
       toast({
         title: "PDF gerado",
         description: "Download iniciado automaticamente"
-      };
+      });
     } catch (error) {
       console.error("Error generating PDF:", error);
       console.error("Error generating PDF:", error);
@@ -191,7 +191,7 @@ const ComplianceReports = () => {
         title: "Erro ao gerar PDF",
         description: "Tente novamente",
         variant: "destructive"
-      };
+      });
     }
   };
 
@@ -221,7 +221,7 @@ const ComplianceReports = () => {
       toast({
         title: "CSV gerado",
         description: "Download iniciado automaticamente"
-      };
+      });
     } catch (error) {
       console.error("Error generating CSV:", error);
       console.error("Error generating CSV:", error);
@@ -229,9 +229,9 @@ const ComplianceReports = () => {
         title: "Erro ao gerar CSV",
         description: "Tente novamente",
         variant: "destructive"
-      };
+      });
     }
-  };
+  });
 
   // Excel Export using xlsx
   const exportToExcel = (data: unknown[]) => {
@@ -253,7 +253,7 @@ const ComplianceReports = () => {
       toast({
         title: "Excel gerado",
         description: "Download iniciado automaticamente"
-      };
+      });
     } catch (error) {
       console.error("Error generating Excel:", error);
       console.error("Error generating Excel:", error);
@@ -261,9 +261,9 @@ const ComplianceReports = () => {
         title: "Erro ao gerar Excel",
         description: "Tente novamente",
         variant: "destructive"
-      };
+      });
     }
-  };
+  });
 
   // JSON Export with metadata
   const exportToJSON = (data: unknown[]) => {
@@ -293,7 +293,7 @@ const ComplianceReports = () => {
       toast({
         title: "JSON gerado",
         description: "Download iniciado automaticamente"
-      };
+      });
     } catch (error) {
       console.error("Error generating JSON:", error);
       console.error("Error generating JSON:", error);
@@ -301,9 +301,9 @@ const ComplianceReports = () => {
         title: "Erro ao gerar JSON",
         description: "Tente novamente",
         variant: "destructive"
-      };
+      });
     }
-  };
+  });
 
   const handleCreateReport = async () => {
     if (!reportConfig.title || !reportConfig.template) {
@@ -311,7 +311,7 @@ const ComplianceReports = () => {
         title: "Campos obrigatórios",
         description: "Preencha título e template",
         variant: "destructive"
-      };
+      });
       return;
     }
 
@@ -325,7 +325,7 @@ const ComplianceReports = () => {
       generated_at: new Date().toISOString(),
       scheduled: reportConfig.schedule !== "manual",
       next_run: reportConfig.schedule !== "manual" ? new Date(Date.now() + 7 * 24 * 60 * 60 * 1000).toISOString().split("T")[0] : undefined
-    };
+    });
 
     setReports([report, ...reports]);
     setShowForm(false);
@@ -333,7 +333,7 @@ const ComplianceReports = () => {
     toast({
       title: "Relatório configurado",
       description: report.scheduled ? "Será gerado automaticamente" : "Iniciando geração"
-    };
+    });
 
     // If manual, generate immediately
     if (reportConfig.schedule === "manual") {
@@ -357,7 +357,7 @@ const ComplianceReports = () => {
       toast({
         title: "Relatório gerado",
         description: "Disponível para download"
-      };
+      });
     }, 2000);
   };
 

@@ -146,7 +146,7 @@ describe("ApplyTemplate", () => {
         title: "Erro",
         description: "Não foi possível salvar o documento.",
         variant: "destructive",
-      };
+      });
   });
   });
 

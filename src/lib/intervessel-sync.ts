@@ -119,7 +119,7 @@ export class IntervesselSync {
         id: crypto.randomUUID(),
         source_vessel_id: this.vesselId,
         timestamp: new Date().toISOString()
-      };
+      });
 
       // Store alert in database
       const { error: dbError } = await supabase
@@ -473,7 +473,7 @@ export class IntervesselSync {
         message_type: "status",
         payload: status,
         timestamp: new Date().toISOString()
-      };
+      });
 
       this.sendViaMQTT(message);
 
@@ -507,6 +507,6 @@ export class IntervesselSync {
       mqttConnected: MQTTClient.isConnected(),
       httpFallbackEnabled: this.httpFallbackEnabled,
       queueSize: this.messageQueue.length
-    };
+    });
   }
 }

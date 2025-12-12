@@ -145,7 +145,7 @@ export const OptimizationReportsManager = memo(() => {
       title: "Gerando Relatório",
       description: `Iniciando geração do relatório ${type}...`,
       duration: 2000
-    };
+    });
 
     // Simular geração do relatório
     setTimeout(() => {
@@ -165,7 +165,7 @@ export const OptimizationReportsManager = memo(() => {
         title: "Relatório Concluído",
         description: "Relatório gerado com sucesso e pronto para download!",
         duration: 3000
-      };
+      });
     }, 3000);
   };
 
@@ -180,8 +180,8 @@ export const OptimizationReportsManager = memo(() => {
       title: "Exportando Relatório",
       description: "Relatório exportado em PDF com sucesso!",
       duration: 2000
-    };
-  };
+    });
+  });
 
   const getStatusIcon = (status: string) => {
     switch (status) {

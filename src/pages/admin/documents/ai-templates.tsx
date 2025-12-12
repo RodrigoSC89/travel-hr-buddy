@@ -90,7 +90,7 @@ export default function AITemplatesPage() {
         title: "Erro ao carregar templates",
         description: "Não foi possível carregar a lista de templates.",
         variant: "destructive",
-      };
+      });
     } finally {
       setLoading(false);
     }
@@ -119,11 +119,11 @@ export default function AITemplatesPage() {
     toast({
       title: "Template aplicado",
       description: "Redirecionando para o editor...",
-    };
+    });
     
     // Navigate to editor
     navigate("/admin/documents/ai");
-  };
+  });
 
   const handleCopyTemplate = async (template: AIDocumentTemplate) => {
     try {
@@ -131,14 +131,14 @@ export default function AITemplatesPage() {
       toast({
         title: "Template copiado",
         description: "O conteúdo foi copiado para a área de transferência.",
-      };
+      });
     } catch (error) {
       logger.error("Error copying template:", error);
       toast({
         title: "Erro ao copiar",
         description: "Não foi possível copiar o template.",
         variant: "destructive",
-      };
+      });
     }
   };
 
@@ -158,14 +158,14 @@ export default function AITemplatesPage() {
       toast({
         title: template.is_favorite ? "Removido dos favoritos" : "Adicionado aos favoritos",
         description: "Template atualizado com sucesso.",
-      };
+      });
     } catch (error) {
       logger.error("Error toggling favorite:", error);
       toast({
         title: "Erro",
         description: "Não foi possível atualizar o template.",
         variant: "destructive",
-      };
+      });
     }
   };
 
@@ -185,14 +185,14 @@ export default function AITemplatesPage() {
       toast({
         title: template.is_private ? "Template tornado público" : "Template tornado privado",
         description: "Template atualizado com sucesso.",
-      };
+      });
     } catch (error) {
       logger.error("Error toggling private:", error);
       toast({
         title: "Erro",
         description: "Não foi possível atualizar o template.",
         variant: "destructive",
-      };
+      });
     }
   };
 
@@ -202,7 +202,7 @@ export default function AITemplatesPage() {
         title: "Erro de validação",
         description: "Título e conteúdo são obrigatórios.",
         variant: "destructive",
-      };
+      });
       return;
     }
 
@@ -225,7 +225,7 @@ export default function AITemplatesPage() {
         toast({
           title: "Template atualizado",
           description: "O template foi atualizado com sucesso.",
-        };
+        });
       } else {
         // Create new template
         const { error } = await (supabase as unknown)
@@ -237,14 +237,14 @@ export default function AITemplatesPage() {
             is_private: formData.is_private,
             tags: formData.tags,
             created_by: user.id,
-          };
+          });
 
         if (error) throw error;
 
         toast({
           title: "Template criado",
           description: "O template foi criado com sucesso.",
-        };
+        });
       }
 
       setShowCreateDialog(false);
@@ -257,7 +257,7 @@ export default function AITemplatesPage() {
         title: "Erro ao salvar template",
         description: "Não foi possível salvar o template.",
         variant: "destructive",
-      };
+      });
     }
   };
 
@@ -275,7 +275,7 @@ export default function AITemplatesPage() {
       toast({
         title: "Template excluído",
         description: "O template foi excluído com sucesso.",
-      };
+      });
 
       loadTemplates();
     } catch (error) {
@@ -284,7 +284,7 @@ export default function AITemplatesPage() {
         title: "Erro ao excluir template",
         description: "Não foi possível excluir o template.",
         variant: "destructive",
-      };
+      });
     }
   };
 
@@ -296,9 +296,9 @@ export default function AITemplatesPage() {
       is_favorite: template.is_favorite,
       is_private: template.is_private,
       tags: template.tags || [],
-    };
+    });
     setShowCreateDialog(true);
-  };
+  });
 
   const resetForm = () => {
     setFormData({
@@ -307,26 +307,26 @@ export default function AITemplatesPage() {
       is_favorite: false,
       is_private: false,
       tags: [],
-    };
+    });
     setTagInput("");
-  };
+  });
 
   const handleAddTag = () => {
     if (tagInput.trim() && !formData.tags.includes(tagInput.trim())) {
       setFormData({
         ...formData,
         tags: [...formData.tags, tagInput.trim()],
-      };
+      });
       setTagInput("");
     }
-  };
+  });
 
   const handleRemoveTag = (tag: string) => {
     setFormData({
       ...formData,
       tags: formData.tags.filter(t => t !== tag),
-    };
-  };
+    });
+  });
 
   return (
     <div className="container mx-auto p-6 space-y-6">

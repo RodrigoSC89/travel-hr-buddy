@@ -130,7 +130,7 @@ export const RealTimeSystemMonitor: React.FC = () => {
     case "critical": return "text-red-500";
     default: return "text-muted-foreground";
     }
-  };
+  });
 
   const getAlertColor = (type: string) => {
     switch (type) {

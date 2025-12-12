@@ -136,7 +136,7 @@ class LovableValidatorClass {
       __maxDataSize: 3072,
       __fallbackEnabled: true,
       __consoleErrorsSilenced: true
-    };
+    });
   }
 
   /**

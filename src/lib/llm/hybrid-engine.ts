@@ -170,7 +170,7 @@ class HybridLLMEngine {
         timestamp: Date.now(),
         source,
         expiresAt: Date.now() + this.config.cacheTTL,
-      };
+      });
 
       await db.put(STORE_NAME, cached);
 
@@ -264,7 +264,7 @@ class HybridLLMEngine {
           confidence: cached.confidence,
           source: "cache",
           latency: performance.now() - startTime,
-        };
+        });
       }
     }
 
@@ -280,7 +280,7 @@ class HybridLLMEngine {
             confidence: 0.9,
             source: "cloud",
             latency: performance.now() - startTime,
-          };
+          });
         }
 
         const requestPromise = this.fetchFromCloud(prompt, options?.context);
@@ -295,7 +295,7 @@ class HybridLLMEngine {
             confidence: 0.95,
             source: "cloud",
             latency: performance.now() - startTime,
-          };
+          });
         } finally {
           this.pendingRequests.delete(cacheKey);
         }
@@ -313,7 +313,7 @@ class HybridLLMEngine {
           confidence: offlineMatch.confidence,
           source: "local",
           latency: performance.now() - startTime,
-        };
+        });
       }
     }
 
@@ -323,7 +323,7 @@ class HybridLLMEngine {
       confidence: OFFLINE_RESPONSES["error"].confidence,
       source: "fallback",
       latency: performance.now() - startTime,
-    };
+    });
   }
 
   private async fetchFromCloud(prompt: string, context?: string): Promise<string> {
@@ -368,7 +368,7 @@ class HybridLLMEngine {
       cacheSize,
       isOnline: this.isOnline,
       config: this.config,
-    };
+    });
   }
 
   /**

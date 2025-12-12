@@ -48,7 +48,7 @@ const DocumentAnalysis: React.FC = () => {
         title: "Texto vazio",
         description: "Por favor, insira o texto do documento para análise.",
         variant: "destructive",
-      };
+      });
       return;
     }
 
@@ -78,7 +78,7 @@ Responda em formato estruturado usando markdown.`,
           type: "document_analysis",
           context: "Análise inteligente de documentos marítimos e operacionais",
         },
-      };
+      });
 
       setProgress(70);
 
@@ -105,14 +105,14 @@ Responda em formato estruturado usando markdown.`,
       toast({
         title: "Análise concluída!",
         description: "O documento foi analisado com sucesso.",
-      };
+      });
     } catch (error) {
       console.error("Error analyzing document:", error);
       toast({
         title: "Erro na análise",
         description: "Não foi possível analisar o documento. Tente novamente.",
         variant: "destructive",
-      };
+      });
     } finally {
       setIsAnalyzing(false);
       setTimeout(() => setProgress(0), 1000);
@@ -125,7 +125,7 @@ Responda em formato estruturado usando markdown.`,
       toast({
         title: "Copiado!",
         description: "Resultado copiado para a área de transferência.",
-      };
+      });
     }
   };
 

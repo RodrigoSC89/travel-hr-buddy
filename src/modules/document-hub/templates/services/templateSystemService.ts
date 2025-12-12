@@ -86,7 +86,7 @@ class TemplateSystemService {
         css: template.css,
         document_type: template.documentType,
         user_id: userId,
-      };
+      });
 
       if (template.id) {
         // Update existing template
@@ -235,7 +235,7 @@ class TemplateSystemService {
         generatedPdf: pdfBlob,
         createdAt: new Date().toISOString(),
         userId,
-      };
+      });
 
       // Save to database
       await this.saveGeneratedDocument(document);
@@ -445,7 +445,7 @@ class TemplateSystemService {
       css: data.css,
       documentType: data.document_type,
       userId: data.user_id,
-    };
+    });
   }
 
   /**
@@ -515,7 +515,7 @@ class TemplateSystemService {
         p { margin: 10px 0; line-height: 1.6; }
       `,
       documentType: "report",
-    };
+    });
   }
 }
 

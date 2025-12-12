@@ -203,7 +203,7 @@ export async function distributeTask(task: SwarmTask): Promise<DistributionResul
         agentType: "coordinator",
         success: false,
         error: "No capable agents available",
-      };
+      });
     }
 
     // Select agent with least current tasks (simple load balancing)
@@ -238,7 +238,7 @@ export async function distributeTask(task: SwarmTask): Promise<DistributionResul
       assignedTo: selectedAgent.id,
       agentType: selectedAgent.type,
       success: true,
-    };
+    });
   } catch (error) {
     const errorMsg = error instanceof Error ? error.message : String(error);
     logger.error("[AgentSwarmBridge] Failed to distribute task:", error);
@@ -248,7 +248,7 @@ export async function distributeTask(task: SwarmTask): Promise<DistributionResul
       agentType: "coordinator",
       success: false,
       error: errorMsg,
-    };
+    });
   }
 }
 

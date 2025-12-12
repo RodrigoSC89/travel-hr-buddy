@@ -102,7 +102,7 @@ export async function updateTaskStatus(
   const updates: any = {
     status: status,
     updated_at: new Date().toISOString()
-  };
+  });
 
   if (status === "completed" || status === "failed") {
     updates.completed_at = new Date().toISOString();

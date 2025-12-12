@@ -55,7 +55,7 @@ export const RealTimeCollaboration = memo(() => {
     
     return () => {
       // Cleanup subscriptions
-    };
+    });
   }, [user]);
 
   const initializeCollaboration = async () => {
@@ -175,7 +175,7 @@ export const RealTimeCollaboration = memo(() => {
 
     return () => {
       supabase.removeChannel(messagesSubscription);
-    };
+    });
   };
 
   const sendMessage = async () => {
@@ -188,7 +188,7 @@ export const RealTimeCollaboration = memo(() => {
             sender_id: user.id,
             content: newMessage,
             message_type: "text"
-          };
+          });
         
         if (error) throw error;
         
@@ -197,13 +197,13 @@ export const RealTimeCollaboration = memo(() => {
         toast({
           title: "Mensagem enviada",
           description: "Sua mensagem foi compartilhada com a equipe."
-        };
+        });
       } catch (error) {
         toast({
           title: "Erro",
           description: "Não foi possível enviar a mensagem.",
           variant: "destructive"
-        };
+        });
       }
     }
   };
@@ -223,7 +223,7 @@ export const RealTimeCollaboration = memo(() => {
     case "alert": return <Bell className="w-4 h-4 text-orange-500" />;
     case "achievement": return <Zap className="w-4 h-4 text-green-500" />;
     default: return <MessageCircle className="w-4 h-4 text-muted-foreground" />;
-    };
+    });
   };
 
   return (

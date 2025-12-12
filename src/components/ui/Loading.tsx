@@ -129,7 +129,7 @@ export const LoadingOverlay: React.FC<LoadingOverlayProps> = memo(function Loadi
       )}
     </div>
   );
-});
+};
 
 export interface LoadingSkeletonProps {
   className?: string;
@@ -148,7 +148,7 @@ export const LoadingSkeleton: React.FC<LoadingSkeletonProps> = ({ className }) =
       aria-hidden="true"
     />
   );
-};
+});
 
 export interface LoadingCardProps {
   variant?: "default" | "maritime";

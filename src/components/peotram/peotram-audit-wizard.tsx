@@ -260,25 +260,25 @@ export const PeotramAuditWizard: React.FC<PeotramAuditWizardProps> = ({
     toast({
       title: "📎 Upload de Arquivo",
       description: "Selecione arquivos PDF, imagens ou documentos como evidência"
-    };
+    });
     // TODO: Implement file upload dialog
-  };
+  });
 
   const handleCameraCapture = () => {
     toast({
       title: "📷 Captura de Foto",
       description: "Tire uma foto diretamente como evidência da auditoria"
-    };
+    });
     // TODO: Implement camera capture functionality
-  };
+  });
 
   const handleAudioRecording = () => {
     toast({
       title: "🎙️ Gravação de Áudio",
       description: "Grave notas de voz ou observações verbais da auditoria"
-    };
+    });
     // TODO: Implement audio recording functionality
-  };
+  });
 
   const renderStepIndicator = () => (
     <div className="flex items-center justify-center mb-8">

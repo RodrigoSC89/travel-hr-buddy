@@ -78,12 +78,12 @@ class AITranslator {
 
       request.onerror = () => {
         reject(new Error("Failed to open IndexedDB"));
-      };
+      });
 
       request.onsuccess = () => {
         this.db = request.result;
         resolve();
-      };
+      });
 
       request.onupgradeneeded = (event) => {
         const db = (event.target as IDBOpenDBRequest).result;
@@ -94,7 +94,7 @@ class AITranslator {
           objectStore.createIndex("lang", "lang", { unique: false });
           objectStore.createIndex("timestamp", "timestamp", { unique: false });
         }
-      };
+      });
     });
   }
 
@@ -117,11 +117,11 @@ class AITranslator {
         });
         logger.info(`[AITranslator] Loaded ${results.length} translations from cache`);
         resolve();
-      };
+      });
 
       request.onerror = () => {
         reject(new Error("Failed to load cache from IndexedDB"));
-      };
+      });
     });
   }
 
@@ -274,7 +274,7 @@ class AITranslator {
           source: cached.source,
           cached: true,
           confidence: 1.0,
-        };
+        });
       }
 
       // 2. Buscar no JSON
@@ -296,7 +296,7 @@ class AITranslator {
           source: "json",
           cached: false,
           confidence: 1.0,
-        };
+        });
       }
 
       // 3. Fallback para IA
@@ -316,7 +316,7 @@ class AITranslator {
         source: "ai",
         cached: false,
         confidence: 0.85,
-      };
+      });
     } catch (error) {
       logger.error("[AITranslator] Translation failed", error);
       
@@ -326,7 +326,7 @@ class AITranslator {
         source: "fallback",
         cached: false,
         confidence: 0.0,
-      };
+      });
     }
   }
 
@@ -383,7 +383,7 @@ class AITranslator {
         ai: 0,
         fallback: 0,
       },
-    };
+    });
 
     for (const cache of this.cache.values()) {
       stats.byLanguage[cache.lang] = (stats.byLanguage[cache.lang] || 0) + 1;

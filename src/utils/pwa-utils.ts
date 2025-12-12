@@ -48,7 +48,7 @@ export async function registerServiceWorker(
     return {
       success: false,
       error: new Error("Service Worker not supported in this browser")
-    };
+    });
   }
 
   try {
@@ -105,7 +105,7 @@ export async function subscribeToPushNotifications(
       return {
         success: false,
         error: new Error("Notification permission denied")
-      };
+      });
     }
 
     const subscription = await swRegistration.pushManager.subscribe({
@@ -181,7 +181,7 @@ interface NetworkInformation {
 type NavigatorWithExtensions = Navigator & {
   connection?: NetworkInformation;
   standalone?: boolean;
-};
+});
 
 /**
  * Monitor network connectivity status
@@ -190,7 +190,7 @@ export function monitorNetworkStatus(callback: (status: NetworkStatus) => void):
   const updateStatus = () => {
     const status: NetworkStatus = {
       online: navigator.onLine
-    };
+    });
 
     // Add connection info if available
     const connection = (navigator as NavigatorWithExtensions).connection;

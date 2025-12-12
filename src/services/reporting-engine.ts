@@ -336,7 +336,7 @@ export async function generateIntelligentReport(
       status: "completed",
       generation_time_ms: Date.now() - startTime,
       generated_by: userId,
-    };
+    });
 
     const { data: report, error: reportError } = await reportingClient
       .from("generated_reports")
@@ -419,7 +419,7 @@ async function collectReportData(
       data[source] = {
         error: "Failed to fetch data",
         details: error instanceof Error ? error.message : "Unknown error",
-      };
+      });
     }
   }
 
@@ -567,7 +567,7 @@ async function generateAISummary(
       executiveSummary: "Error generating executive summary",
       conclusions: [],
       recommendations: [],
-    };
+    });
   }
 }
 
@@ -580,7 +580,7 @@ function parseAiContent(rawContent: string): AISummaryContent {
       executiveSummary: parsed.executiveSummary ?? "",
       conclusions: parsed.conclusions ?? [],
       recommendations: parsed.recommendations ?? [],
-    };
+    });
   } catch (error) {
     logger.error("Failed to parse AI response", error, { rawContent });
     return {
@@ -589,7 +589,7 @@ function parseAiContent(rawContent: string): AISummaryContent {
       executiveSummary: "Error generating executive summary",
       conclusions: [],
       recommendations: [],
-    };
+    });
   }
 }
 

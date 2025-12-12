@@ -118,11 +118,11 @@ const AdvancedSystemMonitor: React.FC = () => {
         memory: Math.random() * 100,
         database: Math.random() * 50,
         requests: Math.floor(Math.random() * 1000)
-      };
+      });
     }
     
     return data;
-  };
+  });
 
   const loadSystemMetrics = async () => {
     try {
@@ -148,7 +148,7 @@ const AdvancedSystemMonitor: React.FC = () => {
         title: "Erro",
         description: "Falha ao carregar métricas do sistema",
         variant: "destructive"
-      };
+      });
     } finally {
       setIsLoading(false);
     }

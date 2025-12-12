@@ -156,14 +156,14 @@ export const ARInterface: React.FC = () => {
         title: "Permissão Necessária",
         description: "Permita o acesso à câmera para usar AR",
         variant: "destructive"
-      };
+      });
       return;
     }
 
     try {
       const stream = await navigator.mediaDevices.getUserMedia({ 
         video: { facingMode: "environment" } 
-      };
+      });
       
       if (videoRef.current) {
         videoRef.current.srcObject = stream;
@@ -174,13 +174,13 @@ export const ARInterface: React.FC = () => {
       toast({
         title: "AR Ativado",
         description: "Aponte a câmera para objetos com QR codes",
-      };
+      });
     } catch (error) {
       toast({
         title: "Erro",
         description: "Não foi possível acessar a câmera",
         variant: "destructive"
-      };
+      });
     }
   };
 
@@ -196,8 +196,8 @@ export const ARInterface: React.FC = () => {
     toast({
       title: "AR Desativado",
       description: "Sessão AR finalizada",
-    };
-  };
+    });
+  });
 
   const simulateObjectDetection = (objectId: string) => {
     const object = arObjects.find(obj => obj.id === objectId);
@@ -206,9 +206,9 @@ export const ARInterface: React.FC = () => {
       toast({
         title: "Objeto Detectado",
         description: `${object.name} identificado via AR`,
-      };
+      });
     }
-  };
+  });
 
   const getStatusColor = (status: string) => {
     switch (status) {

@@ -134,7 +134,7 @@ export const MaritimeCertificationManager = memo(() => {
         title: "Erro",
         description: "Erro ao carregar certificações",
         variant: "destructive"
-      };
+      });
     } finally {
       setLoading(false);
     }
@@ -377,7 +377,7 @@ export const MaritimeCertificationManager = memo(() => {
                         {alert.days_until_expiry > 0 
                           ? ` (${alert.days_until_expiry} dias)` 
                           : ` (vencida há ${Math.abs(alert.days_until_expiry)} dias)`
-                        };
+                        });
                       </p>
                     </div>
                     

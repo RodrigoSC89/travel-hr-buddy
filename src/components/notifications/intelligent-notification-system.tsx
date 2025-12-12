@@ -62,7 +62,7 @@ const IntelligentNotificationSystem = () => {
       operational: true,
       system: true
     }
-  };
+  });
   const { toast } = useToast();
 
   // Simulação de notificações
@@ -185,16 +185,16 @@ const IntelligentNotificationSystem = () => {
     toast({
       title: "Sucesso",
       description: "Todas as notificações foram marcadas como lidas",
-    };
-  };
+    });
+  });
 
   const deleteNotification = (id: string) => {
     setNotifications(prev => prev.filter(notif => notif.id !== id));
     toast({
       title: "Notificação removida",
       description: "A notificação foi removida com sucesso",
-    };
-  };
+    });
+  });
 
   const archiveNotification = (id: string) => {
     // Implementar lógica de arquivo
@@ -209,8 +209,8 @@ const IntelligentNotificationSystem = () => {
     toast({
       title: "Configurações atualizadas",
       description: "Suas preferências foram salvas",
-    };
-  };
+    });
+  });
 
   const getRelativeTime = (timestamp: Date) => {
     const now = new Date();

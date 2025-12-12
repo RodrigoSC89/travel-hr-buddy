@@ -105,7 +105,7 @@ export default function LogisticsHub() {
       const { error } = await supabase.from("logistics_requests").insert({
         ...requestForm,
         estimated_delivery: eta.toISOString(),
-      };
+      });
 
       if (error) throw error;
 
@@ -118,7 +118,7 @@ export default function LogisticsHub() {
         status: "pending",
         requested_by: "",
         notes: "",
-      };
+      });
       loadRequests();
     } catch (error) {
       logger.error("Failed to submit request", error);
@@ -169,7 +169,7 @@ export default function LogisticsHub() {
       medium: "bg-blue-500",
       high: "bg-orange-500",
       urgent: "bg-red-500",
-    };
+    });
     return colors[priority as keyof typeof colors] || "bg-gray-500";
   };
 
@@ -193,7 +193,7 @@ export default function LogisticsHub() {
       in_stock: "bg-green-500",
       low_stock: "bg-yellow-500",
       out_of_stock: "bg-red-500",
-    };
+    });
     return colors[status as keyof typeof colors] || "bg-gray-500";
   };
 

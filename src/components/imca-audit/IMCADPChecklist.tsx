@@ -22,7 +22,7 @@ export const IMCADPChecklist = memo(function({ selectedDPClass, auditData, setAu
       ...prev,
       [id]: { ...prev[id], [field]: value }
     }));
-  };
+  });
 
   const getStatusIcon = (status?: string) => {
     switch(status) {
@@ -31,7 +31,7 @@ export const IMCADPChecklist = memo(function({ selectedDPClass, auditData, setAu
     case "NA": return <MinusCircle className="h-5 w-5 text-gray-400" />;
     default: return <Clock className="h-5 w-5 text-amber-500" />;
     }
-  };
+  });
 
   return (
     <Card>

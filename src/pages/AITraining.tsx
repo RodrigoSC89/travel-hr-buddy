@@ -288,6 +288,6 @@ const AITraining: React.FC = () => {
       )}
     </div>
   );
-});
+};
 
 export default AITraining;

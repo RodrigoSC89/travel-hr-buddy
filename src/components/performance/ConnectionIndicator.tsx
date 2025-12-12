@@ -32,7 +32,7 @@ export const ConnectionIndicator = memo(function({
       
       const handleChange = () => {
         setDownlink(connection.downlink);
-      };
+      });
       
       connection.addEventListener("change", handleChange);
       return () => connection.removeEventListener("change", handleChange);
@@ -61,7 +61,7 @@ export const ConnectionIndicator = memo(function({
     "top-right": "top-4 right-4",
     "bottom-left": "bottom-4 left-4",
     "bottom-right": "bottom-4 right-4",
-  };
+  });
 
   const getConnectionIcon = () => {
     switch (connectionType) {
@@ -76,7 +76,7 @@ export const ConnectionIndicator = memo(function({
     default:
       return <SignalHigh className="h-4 w-4" />;
     }
-  };
+  });
 
   const getConnectionLabel = () => {
     switch (connectionType) {

@@ -68,7 +68,7 @@ export const ProductionHealthDashboard = memo(function({ autoRun = true, compact
       "ready": { variant: "default" as const, className: "bg-green-500", text: "Pronto para Produção" },
       "warning": { variant: "secondary" as const, className: "bg-yellow-500", text: "Atenção Necessária" },
       "not-ready": { variant: "destructive" as const, className: "", text: "Não Pronto" },
-    };
+    });
     
     const status = variants[report.overallStatus];
     return (
@@ -76,7 +76,7 @@ export const ProductionHealthDashboard = memo(function({ autoRun = true, compact
         {status.text}
       </Badge>
     );
-  };
+  });
 
   const renderCheck = (check: ReadinessCheck) => {
     const StatusIcon = statusIcons[check.status];

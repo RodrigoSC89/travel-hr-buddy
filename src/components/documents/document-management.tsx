@@ -159,7 +159,7 @@ export const DocumentManagement: React.FC = () => {
         title: "Erro",
         description: "Não foi possível carregar os documentos",
         variant: "destructive"
-      };
+      });
       setIsLoading(false);
     }
   };
@@ -193,7 +193,7 @@ export const DocumentManagement: React.FC = () => {
         version: 1,
         created_at: new Date().toISOString(),
         updated_at: new Date().toISOString()
-      };
+      });
       
       setDocuments([...documents, document]);
       setNewDocument({
@@ -209,13 +209,13 @@ export const DocumentManagement: React.FC = () => {
       toast({
         title: "Documento Adicionado",
         description: `${document.title} foi adicionado com sucesso`
-      };
+      });
     } catch (error) {
       toast({
         title: "Erro",
         description: "Não foi possível adicionar o documento",
         variant: "destructive"
-      };
+      });
     }
   };
 
@@ -225,26 +225,26 @@ export const DocumentManagement: React.FC = () => {
         id: Math.random().toString(),
         ...newCategory,
         count: 0
-      };
+      });
       
       setCategories([...categories, category]);
       setNewCategory({
         name: "",
         description: "",
         color: "#3b82f6"
-      };
+      });
       setShowAddCategoryDialog(false);
       
       toast({
         title: "Categoria Criada",
         description: `${category.name} foi criada com sucesso`
-      };
+      });
     } catch (error) {
       toast({
         title: "Erro",
         description: "Não foi possível criar a categoria",
         variant: "destructive"
-      };
+      });
     }
   };
 

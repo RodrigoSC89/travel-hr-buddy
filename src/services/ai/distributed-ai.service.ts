@@ -44,7 +44,7 @@ export class DistributedAIService {
         interaction_count: 0,
         created_at: new Date().toISOString(),
         updated_at: new Date().toISOString()
-      };
+      });
 
       this.CONTEXT_CACHE.set(vesselId, context);
       logger.info("[DistributedAI] Context created for vessel", { vesselId, contextId: context.context_id });
@@ -73,7 +73,7 @@ export class DistributedAIService {
         ...existing,
         ...updates,
         updated_at: new Date().toISOString()
-      };
+      });
 
       this.CONTEXT_CACHE.set(vesselId, updated);
       logger.info("[DistributedAI] Context updated for vessel", { vesselId, updates: Object.keys(updates) });

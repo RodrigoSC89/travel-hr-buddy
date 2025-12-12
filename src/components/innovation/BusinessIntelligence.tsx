@@ -90,14 +90,14 @@ export const BusinessIntelligence = memo(() => {
           period: selectedPeriod,
           department: selectedDepartment 
         }
-      };
+      });
       
       if (error) throw error;
       
       toast({
         title: "Relatório gerado!",
         description: "Novo relatório de BI foi criado com sucesso.",
-      };
+      });
       
       fetchReports();
     } catch (error) {
@@ -105,7 +105,7 @@ export const BusinessIntelligence = memo(() => {
         title: "Erro",
         description: "Não foi possível gerar o relatório.",
         variant: "destructive",
-      };
+      });
     } finally {
       setIsGenerating(false);
     }
@@ -277,7 +277,7 @@ export const BusinessIntelligence = memo(() => {
     case "below": return "text-danger";
     case "equal": return "text-warning";
     default: return "text-muted-foreground";
-    };
+    });
   };
 
   return (

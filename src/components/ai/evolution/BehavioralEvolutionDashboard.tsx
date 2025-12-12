@@ -60,7 +60,7 @@ export const BehavioralEvolutionDashboard = memo(function() {
 
     return () => {
       supabase.removeChannel(channel);
-    };
+    });
   }, []);
 
   const fetchSystemStatus = async () => {
@@ -92,7 +92,7 @@ export const BehavioralEvolutionDashboard = memo(function() {
         active_alerts: alerts?.length || 0,
         avg_strategic_alignment: avgAlignment,
         evolution_trend: trend,
-      };
+      });
 
       // Generate recent evolution data
       const evolutions = generateEvolutionData(perfData || []);

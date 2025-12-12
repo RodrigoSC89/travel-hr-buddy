@@ -136,7 +136,7 @@ export const usePerformanceData = (period: number = 7) => {
 
     // Generate chart data
     generateChartData(fuelUsage, missions, fleetLogs);
-  };
+  });
 
   const generateChartData = (
     fuelUsage: any[],

@@ -58,7 +58,7 @@ const FloatingMenu = () => {
         toast({
           title: "🧠 IA Assistant",
           description: "Abrindo assistente de inteligência artificial"
-        };
+        });
       }
     },
     { 
@@ -72,7 +72,7 @@ const FloatingMenu = () => {
         toast({
           title: "💬 Chat Premium",
           description: "Abrindo sistema de comunicação"
-        };
+        });
       }
     },
     { 
@@ -86,7 +86,7 @@ const FloatingMenu = () => {
         toast({
           title: "📊 Analytics",
           description: "Abrindo painel de análises"
-        };
+        });
       }
     },
     { 
@@ -100,9 +100,9 @@ const FloatingMenu = () => {
         toast({
           title: "🌍 Global Sync",
           description: "Abrindo relatórios e sincronização global"
-        };
+        });
       }
-    };
+    });
   ];
 
   return (
@@ -157,7 +157,7 @@ const FloatingMenu = () => {
               toast({
                 title: "🚀 Central Hub",
                 description: "Acesso rápido às principais funcionalidades do sistema"
-              };
+              });
             }}
             aria-label="Central Hub - Acesso rápido"
             className="w-16 h-16 rounded-full bg-gradient-to-r from-primary via-primary-glow to-primary 
@@ -202,7 +202,7 @@ const StatusWidget = () => {
         performance: 97,
         health: 100,
         efficiency: 94
-      };
+      });
     }, 1500);
     return () => clearTimeout(timer);
   }, []);

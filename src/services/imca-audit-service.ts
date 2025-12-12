@@ -110,7 +110,7 @@ export async function getAudit(id: string): Promise<IMCAAuditReport | null> {
     return {
       ...(data.report_data as IMCAAuditReport),
       id: data.id,
-    };
+    });
   } catch (error) {
     logger.error("Error fetching audit", error as Error, { auditId: id });
     return null;

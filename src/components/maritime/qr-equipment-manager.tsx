@@ -76,16 +76,16 @@ export const QREquipmentManager = memo(() => {
     toast({
       title: "Equipamento Cadastrado",
       description: "Novo equipamento foi cadastrado com QR code gerado.",
-    };
+    });
     setIsCreateOpen(false);
-  };
+  });
 
   const handleScanQR = () => {
     toast({
       title: "Scanner QR",
       description: "Abra a câmera para escanear o código QR do equipamento.",
-    };
-  };
+    });
+  });
 
   const generateQRCode = (equipment: QREquipment) => {
     // Simulate QR code generation

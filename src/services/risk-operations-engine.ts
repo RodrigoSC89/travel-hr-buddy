@@ -162,7 +162,7 @@ Format as JSON:
       factors: classification.factors,
       predictedImpact: classification.predictedImpact,
       recommendations: classification.recommendations,
-    };
+    });
   } catch (error) {
     logger.error("Error classifying risk", error as Error, { findingType: finding.type, severity: finding.severity });
     // Return default classification on error
@@ -171,7 +171,7 @@ Format as JSON:
       factors: ["Manual review required"],
       predictedImpact: "Unknown - requires manual assessment",
       recommendations: ["Conduct detailed risk assessment"],
-    };
+    });
   }
 }
 
@@ -191,7 +191,7 @@ export async function createRiskAssessment(
         factors: [],
         predictedImpact: "",
         recommendations: [],
-      };
+      });
 
     const { data, error } = await supabase
       .from("risk_assessments")
@@ -372,7 +372,7 @@ export async function calculateRiskTrends(
         lowRisksCount: 0,
         trendDirection: "stable",
         keyIssues: [],
-      };
+      });
     }
 
     const totalScore = data.reduce((sum: number, r: any) => sum + r.risk_score, 0);
@@ -412,7 +412,7 @@ export async function calculateRiskTrends(
       lowRisksCount,
       trendDirection,
       keyIssues,
-    };
+    });
 
     // Store trend data
     await supabase.from("risk_trends").insert({

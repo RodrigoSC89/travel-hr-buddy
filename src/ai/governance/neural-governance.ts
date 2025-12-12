@@ -162,7 +162,7 @@ class NeuralGovernance {
         policyCount: this.policies.size,
         violationCount: violations.length
       }
-    };
+    });
 
     // Cache evaluation
     this.evaluationCache.set(evaluationId, evaluation);
@@ -684,7 +684,7 @@ class NeuralGovernance {
       overrideRequirements: evaluation.riskCategory === "high" 
         ? ["senior_management_approval", "safety_review"] 
         : ["management_approval"]
-    };
+    });
 
     this.vetoRecords.set(vetoId, veto);
 

@@ -213,7 +213,7 @@ export class TravelService {
       metadata: data.metadata || {},
       createdAt: data.created_at,
       updatedAt: data.updated_at
-    };
+    });
   }
 
   private mapToPriceAlert(data: any): PriceAlert {

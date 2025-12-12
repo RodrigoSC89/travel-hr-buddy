@@ -156,7 +156,7 @@ export const TwoFactorSettings: React.FC<TwoFactorSettingsProps> = ({ onClose })
       title: "Copiado",
       description: "Código copiado para a área de transferência",
     });
-  };
+  });
 
   const renderSetupStep = () => (
     <div className="space-y-6">

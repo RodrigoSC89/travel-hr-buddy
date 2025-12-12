@@ -196,7 +196,7 @@ class MissionSyncService {
         return {
           success: false,
           error: "Max reconnect attempts reached",
-        };
+        });
       }
 
       return { success: false, error: String(error) };

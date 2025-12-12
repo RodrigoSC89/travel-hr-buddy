@@ -101,13 +101,13 @@ export const SystemHealthMonitor: React.FC = () => {
       toast({
         title: "Métricas Atualizadas",
         description: "Sistema monitorado com sucesso",
-      };
+      });
     } catch (error) {
       toast({
         title: "Erro",
         description: "Falha ao carregar métricas do sistema",
         variant: "destructive",
-      };
+      });
     } finally {
       setIsLoading(false);
     }

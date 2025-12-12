@@ -20,7 +20,7 @@ export const PerformancePanel = memo(function({ mqttClient }: PerformancePanelPr
     if (value >= thresholds.red) return "text-red-500";
     if (value >= thresholds.yellow) return "text-yellow-500";
     return "text-green-500";
-  };
+  });
 
   const cpuColor = getStatusColor(metrics.cpu, { yellow: 60, red: 80 });
   const memoryColor = getStatusColor(metrics.memory, { yellow: 512, red: 1024 });

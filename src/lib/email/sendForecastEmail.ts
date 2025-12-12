@@ -32,7 +32,7 @@ export async function resendEmail(options: ResendEmailOptions): Promise<ResendEm
     return { 
       success: false, 
       error: "RESEND_API_KEY is not configured in environment variables" 
-    };
+    });
   }
 
   const { to, subject, text, html } = options;
@@ -63,6 +63,6 @@ export async function resendEmail(options: ResendEmailOptions): Promise<ResendEm
     return { 
       success: false, 
       error: err instanceof Error ? err.message : "Unknown error occurred" 
-    };
+    });
   }
 }

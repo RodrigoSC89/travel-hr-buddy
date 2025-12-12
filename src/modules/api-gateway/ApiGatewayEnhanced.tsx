@@ -129,7 +129,7 @@ const ApiGatewayEnhanced = () => {
     return () => {
       supabase.removeChannel(routesChannel);
       supabase.removeChannel(keysChannel);
-    };
+    });
   }, []);
 
   const loadData = async () => {
@@ -194,14 +194,14 @@ const ApiGatewayEnhanced = () => {
           api_key: apiKey,
           tier: keyFormData.tier,
           status: "active"
-        };
+        });
 
       if (error) throw error;
 
       toast({
         title: "✅ API Key Created",
         description: `API key "${keyFormData.key_name}" has been created`,
-      };
+      });
 
       setShowNewKey(false);
       setKeyFormData({ key_name: "", tier: "basic" });
@@ -211,7 +211,7 @@ const ApiGatewayEnhanced = () => {
         title: "Error creating API key",
         description: error instanceof Error ? error.message : "Unknown error",
         variant: "destructive",
-      };
+      });
     }
   };
 
@@ -223,14 +223,14 @@ const ApiGatewayEnhanced = () => {
           ...routeFormData,
           status: "active",
           version: "v1"
-        };
+        });
 
       if (error) throw error;
 
       toast({
         title: "✅ Route Created",
         description: `API route "${routeFormData.route_name}" has been created`,
-      };
+      });
 
       setShowNewRoute(false);
       setRouteFormData({
@@ -240,14 +240,14 @@ const ApiGatewayEnhanced = () => {
         description: "",
         requires_auth: true,
         is_public: false
-      };
+      });
       loadRoutes();
     } catch (error: unknown) {
       toast({
         title: "Error creating route",
         description: error instanceof Error ? error.message : "Unknown error",
         variant: "destructive",
-      };
+      });
     }
   };
 
@@ -263,7 +263,7 @@ const ApiGatewayEnhanced = () => {
       toast({
         title: "API Key Revoked",
         description: "The API key has been revoked",
-      };
+      });
 
       loadKeys();
     } catch (error: unknown) {
@@ -271,7 +271,7 @@ const ApiGatewayEnhanced = () => {
         title: "Error revoking key",
         description: error instanceof Error ? error.message : "Unknown error",
         variant: "destructive",
-      };
+      });
     }
   };
 
@@ -322,13 +322,13 @@ const ApiGatewayEnhanced = () => {
       toast({
         title: "✅ Documentation Generated",
         description: "API documentation has been exported",
-      };
+      });
     } catch (error: unknown) {
       toast({
         title: "Error generating documentation",
         description: error instanceof Error ? error.message : "Unknown error",
         variant: "destructive",
-      };
+      });
     }
   };
 
@@ -337,8 +337,8 @@ const ApiGatewayEnhanced = () => {
     toast({
       title: "Copied!",
       description: "API key copied to clipboard",
-    };
-  };
+    });
+  });
 
   const getStatusIcon = (status: string) => {
     switch (status) {

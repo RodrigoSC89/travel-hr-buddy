@@ -60,7 +60,7 @@ export const NetworkStatusIndicator = memo(function({
     default:
       return <Wifi className={cn(sizeClasses[size], qualityColors.medium)} />;
     }
-  };
+  });
 
   const tooltipContent = (
     <div className="text-xs space-y-1">

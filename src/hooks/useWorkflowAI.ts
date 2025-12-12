@@ -257,7 +257,7 @@ function generateLocalAnalysis(workflow: Workflow): AIAnalysis {
     estimatedImpact: workflow.progress < 50 
       ? "Alto impacto potencial se não for acompanhado de perto"
       : "Impacto moderado - workflow progredindo normalmente",
-  };
+  });
 }
 
 function generateLocalWorkflow(description: string, category: string): Partial<Workflow> {

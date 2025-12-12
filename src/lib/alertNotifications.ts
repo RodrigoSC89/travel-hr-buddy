@@ -56,7 +56,7 @@ export async function sendSMSAlert(options: SMSAlertOptions): Promise<AlertRespo
     return {
       success: false,
       error: error instanceof Error ? error.message : "Unknown error",
-    };
+    });
   }
 }
 
@@ -83,7 +83,7 @@ export async function sendEmailAlert(options: EmailAlertOptions): Promise<AlertR
     return {
       success: false,
       error: error instanceof Error ? error.message : "Unknown error",
-    };
+    });
   }
 }
 

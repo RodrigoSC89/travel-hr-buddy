@@ -110,7 +110,7 @@ export default function UserManagement() {
     try {
       const { error } = await supabase.auth.resetPasswordForEmail(email, {
         redirectTo: `${window.location.origin}/reset-password`,
-      };
+      });
 
       if (error) throw error;
 
@@ -127,7 +127,7 @@ export default function UserManagement() {
       admin: "bg-red-500",
       manager: "bg-blue-500",
       user: "bg-gray-500",
-    };
+    });
     return (
       <Badge className={`${colors[role as keyof typeof colors]} text-white`}>
         {role.toUpperCase()}

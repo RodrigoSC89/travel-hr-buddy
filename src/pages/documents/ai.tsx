@@ -117,7 +117,7 @@ export default function AIDocuments() {
       toast({
         title: "Document uploaded",
         description: "OCR processing completed successfully",
-      };
+      });
       
       setSelectedFile(null);
     } catch (error: SupabaseError | null) {
@@ -125,7 +125,7 @@ export default function AIDocuments() {
         title: "Upload failed",
         description: error.message,
         variant: "destructive"
-      };
+      });
     } finally {
       setUploading(false);
       setProcessing(false);
@@ -181,7 +181,7 @@ export default function AIDocuments() {
           document_id: documentId,
           keyword: keyword.text,
           relevance_score: keyword.score
-        };
+        });
       }
       
       setOcrProgress(100);
@@ -192,7 +192,7 @@ export default function AIDocuments() {
         p_analysis_type: "ocr",
         p_status: "completed",
         p_results: { confidence, word_count: text.split(/\s+/).length }
-      };
+      });
       
     } catch (error: SupabaseError | null) {
       console.error("OCR Error:", error);

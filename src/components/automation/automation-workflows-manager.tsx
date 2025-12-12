@@ -123,7 +123,7 @@ export const AutomationWorkflowsManager = memo(() => {
       isActive: true,
       executionCount: 0,
       aiOptimized: newWorkflow.aiOptimized,
-    };
+    });
 
     setWorkflows([...workflows, workflow]);
     setIsCreating(false);

@@ -289,7 +289,7 @@ export async function validateAllAPIKeys(): Promise<APIValidationReport> {
     notConfiguredCount,
     results,
     summary,
-  };
+  });
 }
 
 /**

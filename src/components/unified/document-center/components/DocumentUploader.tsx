@@ -124,10 +124,10 @@ export const DocumentUploader: React.FC<DocumentUploaderProps> = ({
       category: "",
       tags: [],
       version: "1.0",
-    };
+    });
     setProgress(0);
     onClose();
-  };
+  });
 
   const maxSize = config.maxFileSize || 10;
   const acceptedTypes = config.acceptedFileTypes?.join(",") || "*";

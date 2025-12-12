@@ -415,5 +415,5 @@ export function mapDPASOGToSpaceWeatherStatus(
     kp_current: dpasogStatus.kp,
     pdop_current: dpasogStatus.worst_pdop,
     recommendations,
-  };
+  });
 }

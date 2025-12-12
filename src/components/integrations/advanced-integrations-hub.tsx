@@ -309,22 +309,22 @@ export const AdvancedIntegrationsHub: React.FC = () => {
     toast({
       title: "Status Atualizado",
       description: `${integration?.name} foi ${integration?.isEnabled ? "desabilitada" : "habilitada"}`,
-    };
-  };
+    });
+  });
 
   const handleTestConnection = (id: string) => {
     const integration = integrations.find(i => i.id === id);
     toast({
       title: "Testando Conexão",
       description: `Verificando conectividade com ${integration?.name}...`,
-    };
+    });
     
     // Simular teste de conexão
     setTimeout(() => {
       toast({
         title: "Teste Concluído",
         description: `Conexão com ${integration?.name} está funcionando corretamente`,
-      };
+      });
     }, 2000);
   };
 
@@ -971,7 +971,7 @@ const IntegrationWizard: React.FC<{
     method: "GET",
     headers: {},
     auth: ""
-};
+});
 
   const steps = [
     { title: "Tipo de Integração", description: "Selecione o tipo de integração" },

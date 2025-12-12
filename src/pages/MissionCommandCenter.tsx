@@ -222,9 +222,9 @@ const MissionCommandCenter: React.FC = () => {
       status: "planned",
       description: "",
       location: ""
-    };
+    });
     setEditingLog(null);
-  };
+  });
 
   const getStatusBadge = (status: string) => {
     const variants: Record<string, "default" | "secondary" | "destructive" | "outline"> = {

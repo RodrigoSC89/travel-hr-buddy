@@ -166,7 +166,7 @@ export const useVoiceNavigation = () => {
         "innovation": "Inovação",
         "intelligence": "Inteligência",
         "optimization": "Otimização"
-      };
+      });
 
       const moduleName = moduleNames[intent.module] || intent.module;
       
@@ -215,7 +215,7 @@ export const useVoiceNavigation = () => {
       success,
       intent,
       action: intent.action || "navigation"
-    };
+    });
   }, [parseVoiceCommand, executeNavigation, toast]);
 
   // Obter sugestões de comandos

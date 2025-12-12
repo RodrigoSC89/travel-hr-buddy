@@ -107,7 +107,7 @@ export class TokenRefreshManager {
       return {
         success: false, 
         error: error instanceof Error ? error.message : "Unknown error" 
-      };
+      });
     }
   }
 
@@ -160,7 +160,7 @@ export async function secureLogout(): Promise<{ success: boolean; error?: string
     return {
       success: false, 
       error: error instanceof Error ? error.message : "Unknown error" 
-    };
+    });
   }
 }
 
@@ -243,7 +243,7 @@ export async function getSessionMetadata(): Promise<SessionMetadata | null> {
       expiresIn: expiresInFormatted,
       tokenType: "Bearer",
       isExpiring: isExpiringSoon,
-    };
+    });
   } catch (error) {
     logger.error("Error getting session metadata", error as Error);
     return null;

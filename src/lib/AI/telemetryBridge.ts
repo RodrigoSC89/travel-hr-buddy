@@ -49,7 +49,7 @@ export async function analyzePerformanceMetrics(
       recommendations: ["Configure VITE_OPENAI_API_KEY to enable AI analysis"],
       severity: "low",
       timestamp: new Date().toISOString(),
-    };
+    });
   }
 
   try {
@@ -95,7 +95,7 @@ Format your response as JSON with keys: summary, recommendations (array), severi
         recommendations: parsed.recommendations || [],
         severity: parsed.severity || "low",
         timestamp: new Date().toISOString(),
-      };
+      });
     } catch {
       // Fallback: extract information from text
       return {
@@ -103,7 +103,7 @@ Format your response as JSON with keys: summary, recommendations (array), severi
         recommendations: ["Review the detailed analysis above"],
         severity: "medium",
         timestamp: new Date().toISOString(),
-      };
+      });
     }
   } catch (error) {
     logger.error("Failed to analyze performance metrics", error as Error, { 
@@ -116,7 +116,7 @@ Format your response as JSON with keys: summary, recommendations (array), severi
       recommendations: ["Check API configuration", "Review console logs"],
       severity: "low",
       timestamp: new Date().toISOString(),
-    };
+    });
   }
 }
 

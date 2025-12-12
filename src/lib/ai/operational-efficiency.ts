@@ -277,7 +277,7 @@ class OperationalEfficiencyEngine {
       insights: periodInsights,
       trends,
       recommendations
-    };
+    });
   }
 
   /**

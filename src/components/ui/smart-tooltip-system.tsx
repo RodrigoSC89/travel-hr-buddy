@@ -198,8 +198,8 @@ const SmartTooltipSystem: React.FC = () => {
     toast({
       title: "Tour Iniciado",
       description: "Siga as instruções para conhecer o sistema",
-    };
-  };
+    });
+  });
 
   const nextTourStep = () => {
     if (currentTour !== null && currentTour < tooltipDatabase.length - 1) {
@@ -215,24 +215,24 @@ const SmartTooltipSystem: React.FC = () => {
     toast({
       title: "Tour Concluído",
       description: "Agora você conhece as principais funcionalidades!",
-    };
-  };
+    });
+  });
 
   const openOptimizationPanel = () => {
     toast({
       title: "Painel de Otimização",
       description: "Redirecionando para sugestões de melhoria...",
-    };
+    });
     dismissAssistant("low-efficiency");
-  };
+  });
 
   const openIdentitySystem = () => {
     toast({
       title: "Sistema de Identidade",
       description: "Abrindo painel de customização...",
-    };
+    });
     dismissAssistant("new-feature");
-  };
+  });
 
   const getAssistantIcon = (type: ContextualAssistant["type"]) => {
     switch (type) {

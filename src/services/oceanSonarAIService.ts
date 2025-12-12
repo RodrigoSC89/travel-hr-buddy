@@ -27,7 +27,7 @@ class OceanSonarAIService {
       time_stamps: Array.from({ length: 360 }, (_, i) => i),
       range_bins: 200,
       sample_rate: 10000,
-    };
+    });
 
     const { data, error } = await supabase
       .from("sonar_data")
@@ -321,7 +321,7 @@ class OceanSonarAIService {
       avgConfidence: logs.length > 0
         ? logs.reduce((sum, l) => sum + l.confidence, 0) / logs.length
         : 0,
-    };
+    });
   }
 }
 

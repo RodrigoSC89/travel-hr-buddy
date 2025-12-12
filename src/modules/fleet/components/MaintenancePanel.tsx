@@ -78,7 +78,7 @@ export const MaintenancePanel: React.FC<MaintenancePanelProps> = ({
                          item.vessel_name?.toLowerCase().includes(searchTerm.toLowerCase());
     const matchesStatus = statusFilter === "all" || item.status === statusFilter;
     return matchesSearch && matchesStatus;
-  };
+  });
 
   const handleAddMaintenance = async () => {
     if (!newMaintenance.vessel_id || !newMaintenance.type || !newMaintenance.scheduled_date) {
@@ -86,7 +86,7 @@ export const MaintenancePanel: React.FC<MaintenancePanelProps> = ({
         title: "Erro",
         description: "Preencha todos os campos obrigatórios",
         variant: "destructive"
-      };
+      });
       return;
     }
 
@@ -107,7 +107,7 @@ export const MaintenancePanel: React.FC<MaintenancePanelProps> = ({
       toast({
         title: "Sucesso",
         description: "Manutenção agendada com sucesso!"
-      };
+      });
 
       setShowAddDialog(false);
       setNewMaintenance({
@@ -116,14 +116,14 @@ export const MaintenancePanel: React.FC<MaintenancePanelProps> = ({
         description: "",
         scheduled_date: "",
         priority: "medium",
-      };
+      });
       onRefresh();
     } catch (error) {
       toast({
         title: "Erro",
         description: "Falha ao agendar manutenção",
         variant: "destructive"
-      };
+      });
     }
   };
 

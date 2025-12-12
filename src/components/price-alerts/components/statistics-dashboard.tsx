@@ -66,7 +66,7 @@ export const StatisticsDashboard = memo(() => {
           active_alerts: data.active_alerts ?? 0,
           total_savings: data.total_savings ?? 0,
           alerts_triggered: data.alerts_triggered ?? 0
-        };
+        });
       }
     } catch (error) {
     }
@@ -113,7 +113,7 @@ export const StatisticsDashboard = memo(() => {
             discount_percentage: best_deal.discount_percentage || 0,
           } : null,
           categories,
-        };
+        });
       }
     } catch (error) {
     } finally {

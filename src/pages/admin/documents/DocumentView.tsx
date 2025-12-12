@@ -66,7 +66,7 @@ export default function DocumentViewPage() {
       if (realtimeChannel) {
         supabase.removeChannel(realtimeChannel);
       }
-    };
+    });
   }, [realtimeChannel]);
 
   const loadCurrentUser = async () => {
@@ -126,7 +126,7 @@ export default function DocumentViewPage() {
         generated_by: data.generated_by,
         author_email: profiles?.email,
         author_name: profiles?.full_name,
-      };
+      });
 
       setDoc(transformedData);
     } catch (error) {
@@ -135,7 +135,7 @@ export default function DocumentViewPage() {
         title: "Erro ao carregar documento",
         description: "Não foi possível carregar o documento.",
         variant: "destructive",
-      };
+      });
     } finally {
       setLoading(false);
     }
@@ -179,7 +179,7 @@ export default function DocumentViewPage() {
         title: "Erro ao carregar comentários",
         description: "Não foi possível carregar os comentários.",
         variant: "destructive",
-      };
+      });
     } finally {
       setLoadingComments(false);
     }
@@ -242,7 +242,7 @@ export default function DocumentViewPage() {
           document_id: id,
           user_id: user.id,
           content: newComment.trim(),
-        };
+        });
 
       if (error) throw error;
 
@@ -251,14 +251,14 @@ export default function DocumentViewPage() {
       toast({
         title: "Comentário adicionado",
         description: "Seu comentário foi adicionado com sucesso.",
-      };
+      });
     } catch (error) {
       logger.error("Error adding comment:", error);
       toast({
         title: "Erro ao adicionar comentário",
         description: "Não foi possível adicionar o comentário.",
         variant: "destructive",
-      };
+      });
     } finally {
       setSubmittingComment(false);
     }
@@ -277,14 +277,14 @@ export default function DocumentViewPage() {
       toast({
         title: "Comentário excluído",
         description: "O comentário foi excluído com sucesso.",
-      };
+      });
     } catch (error) {
       logger.error("Error deleting comment:", error);
       toast({
         title: "Erro ao excluir comentário",
         description: "Não foi possível excluir o comentário.",
         variant: "destructive",
-      };
+      });
     } finally {
       setDeletingCommentId(null);
     }

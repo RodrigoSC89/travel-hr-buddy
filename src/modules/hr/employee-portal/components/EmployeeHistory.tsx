@@ -44,7 +44,7 @@ export const EmployeeHistory = memo(function() {
 
       return events;
     },
-  };
+  });
 
   const getStatusIcon = (status: string) => {
     switch (status) {
@@ -55,7 +55,7 @@ export const EmployeeHistory = memo(function() {
     default:
       return <AlertCircle className="h-5 w-5 text-yellow-500" />;
     }
-  };
+  });
 
   const getStatusBadge = (status: string) => {
     switch (status) {

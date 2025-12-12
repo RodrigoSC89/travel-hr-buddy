@@ -53,13 +53,13 @@ export default function ForecastHistoryPage() {
         toast({
           title: "✅ Ordem de Serviço criada com sucesso!",
           description: `OS criada para ${forecast.system_name} - ${forecast.vessel_name}`,
-        };
+        });
       } else {
         toast({
           title: "❌ Falha ao gerar OS",
           description: "Erro ao criar ordem de serviço",
           variant: "destructive",
-        };
+        });
       }
     } catch (error) {
       console.error("Error generating order:", error);
@@ -67,7 +67,7 @@ export default function ForecastHistoryPage() {
         title: "❌ Erro ao gerar OS",
         description: "Não foi possível conectar ao servidor",
         variant: "destructive",
-      };
+      });
     } finally {
       setGeneratingOrderId(null);
     }

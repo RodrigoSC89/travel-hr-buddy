@@ -82,7 +82,7 @@ export const CrewPayrollManager = memo(function() {
   const getCrewName = (id: string) => {
     const crew = crewMembers.find(c => c.id === id);
     return crew?.full_name || "N/A";
-  };
+  });
 
   const getCrewRank = (id: string) => {
     const crew = crewMembers.find(c => c.id === id);

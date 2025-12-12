@@ -182,9 +182,9 @@ export const CAPAManager: React.FC = () => {
     toast({
       title: "CAPA Criada",
       description: "Nova ação corretiva/preventiva registrada com sucesso."
-    };
+    });
     setShowNewCAPADialog(false);
-  };
+  });
 
   return (
     <div className="space-y-6">
@@ -544,6 +544,6 @@ export const CAPAManager: React.FC = () => {
       </Card>
     </div>
   );
-});
+};
 
 export default CAPAManager;

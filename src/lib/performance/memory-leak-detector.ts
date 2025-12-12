@@ -168,7 +168,7 @@ class MemoryLeakDetector {
       averageGrowthKB: Math.round(avgGrowth / 1024),
       snapshotCount: this.snapshots.length,
       potentialLeaks: avgGrowth > 500 * 1024 // More than 500KB average growth
-    };
+    });
   }
   
   /**

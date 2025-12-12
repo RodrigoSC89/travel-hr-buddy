@@ -86,7 +86,7 @@ export const ActionPlanTab = memo(function({ auditId }: ActionPlanTabProps) {
           responsible: formData.responsible,
           deadline: formData.deadline,
           status: formData.status,
-        };
+        });
 
         if (error) throw error;
         toast.success("Action plan created");
@@ -99,7 +99,7 @@ export const ActionPlanTab = memo(function({ auditId }: ActionPlanTabProps) {
         responsible: "",
         deadline: "",
         status: "pending",
-      };
+      });
       loadActions();
     } catch (error) {
       logger.error("Failed to save action plan", error);
@@ -127,7 +127,7 @@ export const ActionPlanTab = memo(function({ auditId }: ActionPlanTabProps) {
       pending: "text-yellow-600",
       in_progress: "text-blue-600",
       completed: "text-green-600",
-    };
+    });
     return colors[status as keyof typeof colors] || "text-gray-600";
   };
 

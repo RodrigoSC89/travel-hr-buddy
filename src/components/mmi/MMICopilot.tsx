@@ -18,7 +18,7 @@ export default function MMICopilot() {
         title: "Atenção",
         description: "Por favor, descreva o problema de manutenção.",
         variant: "default",
-      };
+      });
       return;
     }
 
@@ -28,13 +28,13 @@ export default function MMICopilot() {
     try {
       await streamCopilotSuggestions(prompt, (chunk) => {
         setSuggestion((prev) => prev + chunk);
-  };
+  });
     } catch (error) {
       toast({
         title: "Erro",
         description: error instanceof Error ? error.message : "Não foi possível obter sugestões.",
         variant: "destructive",
-      };
+      });
       console.error("Error getting copilot suggestion:", error);
     } finally {
       setIsLoading(false);

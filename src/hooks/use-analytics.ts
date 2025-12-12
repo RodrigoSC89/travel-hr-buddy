@@ -254,6 +254,6 @@ export const trackPerformance = {
       properties: { duration }
     });
   }
-};
+});
 
 export default useAnalytics;

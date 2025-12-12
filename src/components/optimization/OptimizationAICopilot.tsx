@@ -296,13 +296,13 @@ Métricas de Sistema:
             title: "Limite de requisições",
             description: "Aguarde alguns segundos e tente novamente.",
             variant: "destructive"
-          };
+          });
         } else if (error.message?.includes("402") || error.message?.includes("Payment")) {
           toast({
             title: "Créditos insuficientes",
             description: "Adicione créditos ao seu workspace Lovable.",
             variant: "destructive"
-          };
+          });
         }
       } else if (!data?.response) {
         responseContent = generateLocalFallback(textToSend);
@@ -315,7 +315,7 @@ Métricas de Sistema:
         role: "assistant",
         content: responseContent,
         timestamp: new Date(),
-      };
+      });
 
       setMessages((prev) => [...prev, assistantMessage]);
     } catch (error) {

@@ -74,7 +74,7 @@ export const GestureArea = memo(function({
       onPullToRefresh?.();
       break;
     }
-  };
+  });
   
   const { bindGestures } = useGestureNavigation(handleGesture);
   

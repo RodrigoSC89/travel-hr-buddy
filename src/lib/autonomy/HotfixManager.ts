@@ -98,7 +98,7 @@ class HotfixManager {
       totalApplied: hotfixes.reduce((sum, h) => sum + h.appliedCount, 0),
       averageSuccessRate: 0,
       validated: hotfixes.filter(h => h.validatedByAI).length
-    };
+    });
   }
 }
 

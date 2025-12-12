@@ -396,7 +396,7 @@ export async function processVoiceCommand(transcript: string): Promise<{
       understood: true,
       command: "check-compliance",
       response: "Running compliance check..."
-    };
+    });
   }
 
   if (lowerTranscript.includes("explain") || lowerTranscript.includes("what is")) {

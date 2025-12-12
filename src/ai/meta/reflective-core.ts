@@ -76,7 +76,7 @@ export class ReflectiveCore {
       ...decision,
       id: `decision-${Date.now()}-${Math.random().toString(36).substr(2, 9)}`,
       timestamp: new Date().toISOString(),
-    };
+    });
 
     this.decisionHistory.push(record);
 
@@ -169,7 +169,7 @@ export class ReflectiveCore {
       strategyConfidences: Array.from(this.strategyConfidences.values()),
       overallLearning,
       timestamp: new Date().toISOString(),
-    };
+    });
 
     // Store reflection report
     await this.storeReflectionReport(report);
@@ -296,7 +296,7 @@ export class ReflectiveCore {
       ],
       confidenceAdjustment: -0.2 * (pattern.frequency / 10), // Reduce confidence
       timestamp: new Date().toISOString(),
-    };
+    });
   }
 
   /**
@@ -324,7 +324,7 @@ export class ReflectiveCore {
       ],
       confidenceAdjustment: 0.1 * (pattern.frequency / 10), // Increase confidence
       timestamp: new Date().toISOString(),
-    };
+    });
   }
 
   /**
@@ -352,7 +352,7 @@ export class ReflectiveCore {
       ],
       confidenceAdjustment: -0.1,
       timestamp: new Date().toISOString(),
-    };
+    });
   }
 
   /**
@@ -523,7 +523,7 @@ export class ReflectiveCore {
       decisions: this.decisionHistory,
       insights: this.insights,
       strategies: Array.from(this.strategyConfidences.values()),
-    };
+    });
   }
 }
 

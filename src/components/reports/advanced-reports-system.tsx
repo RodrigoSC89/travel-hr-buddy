@@ -56,13 +56,13 @@ const AdvancedReportsSystem = () => {
       toast({
         title: "Relatório Gerado",
         description: "O relatório foi gerado com sucesso!",
-      };
+      });
     } catch (error) {
       toast({
         title: "Erro ao Gerar Relatório",
         description: "Ocorreu um erro ao gerar o relatório.",
         variant: "destructive",
-      };
+      });
     } finally {
       setIsGenerating(false);
     }
@@ -87,7 +87,7 @@ const AdvancedReportsSystem = () => {
       toast({
         title: "Exportação Concluída",
         description: `Relatório exportado em formato ${format.toUpperCase()} com sucesso!`,
-      };
+      });
 
       // In a real implementation, this would trigger a file download
     } catch (error) {
@@ -95,7 +95,7 @@ const AdvancedReportsSystem = () => {
         title: "Erro na Exportação",
         description: "Falha ao exportar o relatório.",
         variant: "destructive",
-      };
+      });
     } finally {
       setIsExporting(false);
     }

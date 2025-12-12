@@ -54,8 +54,8 @@ export const AnalyticsQueryBuilder: React.FC = () => {
         ...queryConfig.filters,
         { field: "event_type", operator: "equals", value: "" }
       ]
-    };
-  };
+    });
+  });
 
   const removeFilter = (index: number) => {
     const newFilters = queryConfig.filters.filter((_, i) => i !== index);
@@ -118,14 +118,14 @@ export const AnalyticsQueryBuilder: React.FC = () => {
       toast({
         title: "Success",
         description: `Query returned ${data?.length || 0} results`
-      };
+      });
     } catch (error) {
       console.error("Error executing query:", error);
       toast({
         title: "Error",
         description: "Failed to execute query",
         variant: "destructive"
-      };
+      });
     } finally {
       setLoading(false);
     }
@@ -137,7 +137,7 @@ export const AnalyticsQueryBuilder: React.FC = () => {
         title: "No Data",
         description: "No data to export",
         variant: "destructive"
-      };
+      });
       return;
     }
 
@@ -163,8 +163,8 @@ export const AnalyticsQueryBuilder: React.FC = () => {
     toast({
       title: "Success",
       description: "Data exported to CSV"
-    };
-  };
+    });
+  });
 
   return (
     <div className="container mx-auto p-6 space-y-6">

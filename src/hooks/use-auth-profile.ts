@@ -166,7 +166,7 @@ export const useAuthProfile = () => {
         phone: data.phone,
         role: profile.role,
         preferences: profile.preferences
-      };
+      });
       setProfile(mappedProfile);
       toast({
         title: "Sucesso",

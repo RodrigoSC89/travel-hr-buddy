@@ -465,7 +465,7 @@ const EnhancedSettingsHubComponent: React.FC = () => {
           variant: "destructive",
         });
       }
-    };
+    });
     reader.readAsText(file);
   };
 
@@ -553,7 +553,7 @@ const EnhancedSettingsHubComponent: React.FC = () => {
         ? "Voltando ao modo produção. Alterações afetarão o sistema."
         : "Modo teste ativado. Alterações não afetarão outros usuários.",
     });
-  };
+  });
 
   const togglePreviewMode = () => {
     const newPreviewMode = !previewMode;
@@ -564,7 +564,7 @@ const EnhancedSettingsHubComponent: React.FC = () => {
         ? "Modo prévia ativado. Veja como as alterações afetarão o sistema."
         : "Voltando ao modo normal.",
     });
-  };
+  });
 
   const getHealthColor = (score: number) => {
     if (score >= 90) return "text-green-600";

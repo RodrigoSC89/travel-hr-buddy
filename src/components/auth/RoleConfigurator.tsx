@@ -80,7 +80,7 @@ export const RoleConfigurator: React.FC = () => {
           title: "Erro",
           description: "Não foi possível carregar as permissões.",
           variant: "destructive",
-        };
+        });
         return;
       }
 
@@ -111,7 +111,7 @@ export const RoleConfigurator: React.FC = () => {
           title: "Erro",
           description: "Não foi possível atualizar a permissão.",
           variant: "destructive",
-        };
+        });
         return;
       }
 
@@ -125,14 +125,14 @@ export const RoleConfigurator: React.FC = () => {
       toast({
         title: "Permissão Atualizada",
         description: "A permissão foi atualizada com sucesso.",
-      };
+      });
     } catch (error) {
       console.error("Error updating permission:", error);
       console.error("Error updating permission:", error);
     } finally {
       setSaving(false);
     }
-  };
+  });
 
   const createPermissionForModule = async (moduleName: string, role: string) => {
     try {
@@ -147,21 +147,21 @@ export const RoleConfigurator: React.FC = () => {
           can_write: false,
           can_delete: false,
           can_manage: false,
-        };
+        });
 
       if (error) {
         toast({
           title: "Erro",
           description: "Não foi possível criar a permissão.",
           variant: "destructive",
-        };
+        });
         return;
       }
 
       toast({
         title: "Permissão Criada",
         description: "A permissão foi criada com sucesso.",
-      };
+      });
 
       loadPermissions();
     } catch (error) {

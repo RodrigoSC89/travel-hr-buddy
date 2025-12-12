@@ -115,7 +115,7 @@ export const EnhancedHistoryStats = memo(function() {
         title: "Erro ao carregar histórico",
         description: "Não foi possível carregar os dados de histórico de preços",
         variant: "destructive",
-      };
+      });
     } finally {
       setIsLoading(false);
     }
@@ -272,8 +272,8 @@ export const EnhancedHistoryStats = memo(function() {
     toast({
       title: "CSV exportado",
       description: "O arquivo foi baixado com sucesso",
-    };
-  };
+    });
+  });
 
   const exportToPDF = async () => {
     const { jsPDF, autoTable } = await loadJsPDF();
@@ -336,7 +336,7 @@ export const EnhancedHistoryStats = memo(function() {
     toast({
       title: "PDF exportado",
       description: "O arquivo foi baixado com sucesso",
-    };
+    });
   };
 
   if (isLoading) {

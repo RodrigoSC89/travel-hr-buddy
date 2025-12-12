@@ -78,7 +78,7 @@ class ContextMesh {
         ...message,
         timestamp,
         syncStatus: "pending"
-      };
+      });
 
       // Notify local subscribers via event bus
       this.notifyLocalSubscribers(fullMessage);
@@ -351,14 +351,14 @@ class ContextMesh {
         
         transaction.oncomplete = () => resolve();
         transaction.onerror = () => reject(transaction.error);
-      };
+      });
       
       request.onupgradeneeded = (event) => {
         const db = (event.target as IDBOpenDBRequest).result;
         if (!db.objectStoreNames.contains("contexts")) {
           db.createObjectStore("contexts", { keyPath: "id" });
         }
-      };
+      });
     });
   }
 

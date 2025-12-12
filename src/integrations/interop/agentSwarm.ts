@@ -105,7 +105,7 @@ export async function distributeTask(task: SwarmTask): Promise<TaskResult[]> {
         result: { status: "completed", data: task.payload },
         duration_ms: duration,
         success: true
-      };
+      });
     } catch (error: any) {
       logger.error("Agent task failed", { agent_id: agentId, task_id: task.task_id, error });
       await updateAgentMetrics(agentId, false, Date.now() - taskStartTime);
@@ -121,7 +121,7 @@ export async function distributeTask(task: SwarmTask): Promise<TaskResult[]> {
         result: { error: error.message },
         duration_ms: Date.now() - taskStartTime,
         success: false
-      };
+      });
     }
   });
 
@@ -197,5 +197,5 @@ export function consolidateResults(results: TaskResult[]): any {
     ),
     results: successful.map(r => r.result),
     errors: failed.map(r => r.result)
-  };
+  });
 }

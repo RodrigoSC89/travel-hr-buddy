@@ -49,7 +49,7 @@ export async function validateEntityTrust(
       blocked: true,
       reason: "Entity not found",
       warnings: ["Entity does not exist in registry"]
-    };
+    });
   }
 
   const warnings: string[] = [];
@@ -185,7 +185,7 @@ export function validateTrustInput(input: any): { valid: boolean; errors: string
   return {
     valid: errors.length === 0,
     errors: errors
-  };
+  });
 }
 
 // Check if entity should trigger alert

@@ -195,7 +195,7 @@ const Templates = () => {
         template.description.toLowerCase().includes(searchQuery.toLowerCase());
       const matchesCategory = selectedCategory === "all" || template.category === selectedCategory;
       return matchesSearch && matchesCategory;
-  };
+  });
   }, [templates, searchQuery, selectedCategory]);
 
   const handleDownload = (template: Template) => {
@@ -216,7 +216,7 @@ const Templates = () => {
     ));
     
     toast.success(`Download concluído: ${template.name}`);
-  };
+  });
 
   const handlePreview = (template: Template) => {
     setSelectedTemplate(template);
@@ -248,9 +248,9 @@ const Templates = () => {
       category: template.category,
       type: template.type,
       content: template.content || ""
-    };
+    });
     setShowEditDialog(true);
-  };
+  });
 
   const handleCreateTemplate = () => {
     const template: Template = {
@@ -343,7 +343,7 @@ const Templates = () => {
     
     setIsGeneratingAI(false);
     toast.success("Conteúdo gerado com IA!");
-  });
+  };
 
   const handlePrint = (template: Template) => {
     const printWindow = window.open("", "_blank");

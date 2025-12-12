@@ -87,7 +87,7 @@ const VoiceAssistant: React.FC = () => {
         processCommand(transcriptText);
         setTranscript("");
       }
-    };
+    });
 
     recognitionRef.current.onerror = (event: unknown: unknown: unknown) => {
       logger.error("Speech recognition error", { error: event.error });
@@ -96,10 +96,10 @@ const VoiceAssistant: React.FC = () => {
           title: "Erro de reconhecimento",
           description: "Houve um problema com o microfone.",
           variant: "destructive",
-        };
+        });
       }
       setIsListening(false);
-    };
+    });
 
     recognitionRef.current.onend = () => {
       if (isListening) {
@@ -109,7 +109,7 @@ const VoiceAssistant: React.FC = () => {
           logger.error("Error restarting recognition", { error });
         }
       }
-    };
+    });
 
     synthRef.current = window.speechSynthesis;
     audioRef.current = new Audio();
@@ -118,7 +118,7 @@ const VoiceAssistant: React.FC = () => {
       recognitionRef.current?.stop();
       synthRef.current?.cancel();
       audioRef.current?.pause();
-    };
+    });
   }, [isListening]);
 
   useEffect(() => {
@@ -140,17 +140,17 @@ const VoiceAssistant: React.FC = () => {
         toast({
           title: "🎤 ARIA ativada",
           description: "Estou ouvindo. Como posso ajudar?",
-        };
+        });
       } catch (error) {
         logger.error("Error starting recognition", { error });
         toast({
           title: "Erro ao iniciar",
           description: "Não foi possível acessar o microfone.",
           variant: "destructive",
-        };
+        });
       }
     }
-  };
+  });
 
   const processCommand = async (command: string) => {
     if (!command.trim()) return;
@@ -165,7 +165,7 @@ const VoiceAssistant: React.FC = () => {
       type: "user",
       content: command,
       status: "success",
-    };
+    });
     setMessages(prev => [...prev, userMessage]);
 
     // Add pending assistant message
@@ -175,7 +175,7 @@ const VoiceAssistant: React.FC = () => {
       type: "assistant",
       content: "",
       status: "pending",
-    };
+    });
     setMessages(prev => [...prev, pendingMessage]);
     setIsProcessing(true);
 
@@ -186,7 +186,7 @@ const VoiceAssistant: React.FC = () => {
           message: command,
           conversationHistory,
         },
-      };
+      });
 
       if (error) throw error;
 
@@ -226,7 +226,7 @@ const VoiceAssistant: React.FC = () => {
           toast({
             title: "Navegando",
             description: `Indo para ${navigation}`,
-          };
+          });
         }, 1500);
       }
 
@@ -262,7 +262,7 @@ const VoiceAssistant: React.FC = () => {
             voice_id: "EXAVITQu4vr4xnSDxMaL", // Sarah - friendly female voice
             model_id: "eleven_multilingual_v2",
           },
-        };
+        });
 
         if (!error && data?.audioContent) {
           const audioSrc = `data:audio/mpeg;base64,${data.audioContent}`;
@@ -273,7 +273,7 @@ const VoiceAssistant: React.FC = () => {
             audioRef.current.onerror = () => {
               setIsSpeaking(false);
               fallbackSpeak(text);
-            };
+            });
             await audioRef.current.play();
             return;
           }
@@ -318,8 +318,8 @@ const VoiceAssistant: React.FC = () => {
     setVolume(newVolume);
     toast({
       title: newVolume > 0 ? "🔊 Som ativado" : "🔇 Som desativado",
-    };
-  };
+    });
+  });
 
   const clearHistory = () => {
     setMessages([]);

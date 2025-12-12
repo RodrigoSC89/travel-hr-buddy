@@ -65,7 +65,7 @@ const AIReportGenerator: React.FC<AIReportGeneratorProps> = ({ onReportGenerated
         title: "Erro",
         description: "Selecione um tipo de relatório",
         variant: "destructive",
-      };
+      });
       return;
     }
 
@@ -86,7 +86,7 @@ const AIReportGenerator: React.FC<AIReportGeneratorProps> = ({ onReportGenerated
           format,
           customPrompt: customPrompt || undefined
         })
-      };
+      });
 
       if (!response.ok) {
         const errorText = await response.text();
@@ -109,7 +109,7 @@ const AIReportGenerator: React.FC<AIReportGeneratorProps> = ({ onReportGenerated
         toast({
           title: "Relatório Gerado",
           description: "Relatório criado com sucesso usando IA generativa",
-        };
+        });
       } else {
         throw new Error(data.error || "Erro ao gerar relatório");
       }
@@ -120,7 +120,7 @@ const AIReportGenerator: React.FC<AIReportGeneratorProps> = ({ onReportGenerated
         title: "Erro",
         description: error instanceof Error ? error.message : "Falha ao gerar relatório",
         variant: "destructive",
-      };
+      });
     } finally {
       setIsGenerating(false);
     }
@@ -140,8 +140,8 @@ const AIReportGenerator: React.FC<AIReportGeneratorProps> = ({ onReportGenerated
     toast({
       title: "Download Iniciado",
       description: "Relatório salvo como arquivo Markdown",
-    };
-  };
+    });
+  });
 
   const handleModuleChange = (moduleId: string, checked: boolean) => {
     if (checked) {

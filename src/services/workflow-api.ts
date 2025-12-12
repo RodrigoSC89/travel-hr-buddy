@@ -65,7 +65,7 @@ export async function createWorkflow(
       success: true,
       workflow: workflow as Workflow,
       suggestions: seedResult.suggestions as WorkflowStep[],
-    };
+    });
   } catch (error) {
     console.error("Error creating workflow:", error);
     console.error("Error creating workflow:", error);

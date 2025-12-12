@@ -457,7 +457,7 @@ class MissionPlanner {
     const feedback: MissionFeedback = {
       timestamp: new Date().toISOString(),
       ...partial,
-    };
+    });
     
     this.feedbackLog.unshift(feedback);
     

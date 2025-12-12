@@ -59,7 +59,7 @@ export const IoTSensorDashboard = memo(() => {
         clearInterval(intervalRef.current);
         intervalRef.current = null;
       }
-    };
+    });
   }, []);
 
   const loadSensorData = () => {
@@ -197,7 +197,7 @@ export const IoTSensorDashboard = memo(() => {
           value: Number(newValue.toFixed(1)),
           status: newStatus,
           timestamp: new Date()
-        };
+        });
       })
     })));
   };
@@ -210,7 +210,7 @@ export const IoTSensorDashboard = memo(() => {
           vesselId,
           sensorType: sensorData.sensorType
         }
-      };
+      });
 
       if (error) throw error;
       

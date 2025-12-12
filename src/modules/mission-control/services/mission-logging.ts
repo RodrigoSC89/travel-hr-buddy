@@ -114,7 +114,7 @@ export class MissionLoggingService {
       severity: data.severity,
       message: data.message,
       createdAt: data.created_at
-    };
+    });
   }
 }
 

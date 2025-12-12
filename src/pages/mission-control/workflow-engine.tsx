@@ -72,7 +72,7 @@ const WorkflowEngine = () => {
         title: "Erro",
         description: "Workflow precisa de nome e pelo menos um passo",
         variant: "destructive",
-      };
+      });
       return;
     }
 
@@ -83,19 +83,19 @@ const WorkflowEngine = () => {
       description: newWorkflow.description,
       steps: newWorkflow.steps,
       created_by: user?.id,
-    };
+    });
 
     if (error) {
       toast({
         title: "Erro",
         description: "Não foi possível criar workflow",
         variant: "destructive",
-      };
+      });
     } else {
       toast({
         title: "Workflow criado",
         description: "Workflow salvo com sucesso",
-      };
+      });
       setIsCreating(false);
       setNewWorkflow({ name: "", description: "", steps: [] });
       loadWorkflows();
@@ -115,13 +115,13 @@ const WorkflowEngine = () => {
         title: "Erro",
         description: "Falha ao executar workflow",
         variant: "destructive",
-      };
+      });
     } else {
       setActiveExecution(data);
       toast({
         title: "Workflow iniciado",
         description: "Execução em andamento",
-      };
+      });
     }
   };
 
@@ -137,15 +137,15 @@ const WorkflowEngine = () => {
           requires_approval: false,
         },
       ],
-    };
-  };
+    });
+  });
 
   const removeStep = (index: number) => {
     setNewWorkflow({
       ...newWorkflow,
       steps: newWorkflow.steps.filter((_, i) => i !== index),
-    };
-  };
+    });
+  });
 
   const updateStep = (index: number, field: string, value: unknown: unknown: unknown) => {
     const updatedSteps = [...newWorkflow.steps];

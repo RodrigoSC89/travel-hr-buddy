@@ -249,7 +249,7 @@ class MissionRecorderService {
       energyUsed,
       attentionPoints,
       summary,
-    };
+    });
   }
 
   /**

@@ -140,7 +140,7 @@ const performSemanticAnalysis = async (text: string): Promise<SemanticAnalysis> 
     relationships,
     mainTheme,
     subThemes
-  };
+  });
 };
 
 const categorizeFeedback = async (feedbacks: string[]): Promise<Record<string, string[]>> => {

@@ -175,8 +175,8 @@ export const ClientCustomization = memo(() => {
     toast({
       title: "Tema Salvo",
       description: "As configurações de tema foram aplicadas com sucesso.",
-    };
-  };
+    });
+  });
 
   const cloneOrganization = (orgId: string) => {
     const org = organizations.find(o => o.id === orgId);
@@ -192,9 +192,9 @@ export const ClientCustomization = memo(() => {
       toast({
         title: "Organização Clonada",
         description: "Uma cópia da organização foi criada com sucesso.",
-      };
+      });
     }
-  };
+  });
 
   const getPlanColor = (plan: string) => {
     switch (plan) {

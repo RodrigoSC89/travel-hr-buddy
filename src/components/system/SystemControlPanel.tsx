@@ -187,7 +187,7 @@ const AccessibilityControls = memo(() => {
 
   const toggle = (key: keyof typeof settings) => {
     setSettings(prev => ({ ...prev, [key]: !prev[key] }));
-  };
+  });
 
   return (
     <Card className="bg-card/50 border-border/50">
@@ -344,7 +344,7 @@ const SystemStatus = memo(() => {
     case "down": return "text-red-500";
     default: return "text-muted-foreground";
     }
-  };
+  });
 
   const statusIcon = (s: string) => {
     switch (s) {

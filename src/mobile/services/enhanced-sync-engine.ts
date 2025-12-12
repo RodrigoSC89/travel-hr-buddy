@@ -582,7 +582,7 @@ export class EnhancedSyncEngine {
       return {
         success: false,
         error: "Upsert operation failed",
-      };
+      });
     }
   }
 
@@ -643,7 +643,7 @@ export class EnhancedSyncEngine {
       return {
         success: false,
         error: "Delete operation failed",
-      };
+      });
     }
   }
 

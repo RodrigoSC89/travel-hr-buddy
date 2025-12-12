@@ -43,13 +43,13 @@ export class GlobalErrorBoundary extends Component<Props, State> {
       metadata: {
         componentStack: errorInfo.componentStack,
       },
-    });
+    };
 
     // Update state
     this.setState({
       error,
       errorInfo,
-    });
+    };
   }
 
   handleReset = (): void => {
@@ -57,7 +57,7 @@ export class GlobalErrorBoundary extends Component<Props, State> {
       hasError: false,
       error: null,
       errorInfo: null,
-    });
+    };
   };
 
   handleReport = (): void => {

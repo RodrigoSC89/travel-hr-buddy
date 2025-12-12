@@ -128,7 +128,7 @@ export const WorkspaceDocuments: React.FC<WorkspaceDocumentsProps> = ({
       toast({
         title: "Upload concluído",
         description: `${selectedFile.name} foi enviado com sucesso`,
-      };
+      });
       setIsUploadOpen(false);
       setSelectedFile(null);
     } catch (error) {
@@ -136,7 +136,7 @@ export const WorkspaceDocuments: React.FC<WorkspaceDocumentsProps> = ({
         title: "Erro no upload",
         description: "Tente novamente",
         variant: "destructive",
-      };
+      });
     } finally {
       setIsUploading(false);
     }
@@ -164,13 +164,13 @@ export const WorkspaceDocuments: React.FC<WorkspaceDocumentsProps> = ({
       toast({
         title: "Download concluído",
         description: `${doc.name} foi baixado com sucesso`,
-      };
+      });
     } catch (error) {
       toast({
         title: "Erro no download",
         description: "Tente novamente",
         variant: "destructive",
-      };
+      });
     } finally {
       setIsDownloading(null);
     }
@@ -199,11 +199,11 @@ export const WorkspaceDocuments: React.FC<WorkspaceDocumentsProps> = ({
         title: "Documento excluído",
         description: `${selectedDoc.name} foi removido`,
         variant: "destructive",
-      };
+      });
     }
     setIsDeleteOpen(false);
     setSelectedDoc(null);
-  };
+  });
 
   const handleCopyLink = async () => {
     try {
@@ -213,13 +213,13 @@ export const WorkspaceDocuments: React.FC<WorkspaceDocumentsProps> = ({
       toast({
         title: "Link copiado",
         description: "O link foi copiado para a área de transferência",
-      };
+      });
     } catch (error) {
       toast({
         title: "Erro ao copiar",
         description: "Tente novamente",
         variant: "destructive",
-      };
+      });
     }
   };
 
@@ -229,11 +229,11 @@ export const WorkspaceDocuments: React.FC<WorkspaceDocumentsProps> = ({
       toast({
         title: "Documento compartilhado",
         description: `${selectedDoc.name} agora está compartilhado com a equipe`,
-      };
+      });
     }
     setIsShareOpen(false);
     setSelectedDoc(null);
-  };
+  });
 
   return (
     <Card className="h-full border-border/50 bg-card/50 backdrop-blur-sm">

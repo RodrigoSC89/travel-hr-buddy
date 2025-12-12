@@ -38,7 +38,7 @@ export default function JobCards() {
         title: "Erro ao carregar jobs",
         description: "Não foi possível carregar a lista de jobs.",
         variant: "destructive",
-      };
+      });
     } finally {
       setLoading(false);
     }
@@ -57,7 +57,7 @@ export default function JobCards() {
         title: "Erro",
         description: "Não foi possível obter recomendação da IA.",
         variant: "destructive",
-      };
+      });
       setShowAIModal(false);
     } finally {
       setLoadingAI(false);
@@ -72,14 +72,14 @@ export default function JobCards() {
         title: "Job Postergado",
         description: data.message,
         variant: "default",
-      };
+      });
       await loadJobs();
     } catch (error) {
       toast({
         title: "Erro",
         description: error instanceof Error ? error.message : "Não foi possível postergar o job.",
         variant: "destructive",
-      };
+      });
     } finally {
       setProcessingJobId(null);
     }
@@ -97,14 +97,14 @@ export default function JobCards() {
         title: "Ordem de Serviço Criada",
         description: `${data.message}\nOS ID: ${data.os_id}`,
         variant: "default",
-      };
+      });
       await loadJobs();
     } catch (error) {
       toast({
         title: "Erro",
         description: error instanceof Error ? error.message : "Não foi possível criar a OS.",
         variant: "destructive",
-      };
+      });
     } finally {
       setProcessingJobId(null);
     }
@@ -137,13 +137,13 @@ export default function JobCards() {
         title: "PDF Exportado",
         description: `Ordem de Serviço ${order.os_number} exportada com sucesso!`,
         variant: "default",
-      };
+      });
     } catch (error) {
       toast({
         title: "Erro",
         description: error instanceof Error ? error.message : "Não foi possível exportar o PDF da OS.",
         variant: "destructive",
-      };
+      });
     } finally {
       setExportingOrderPDF(null);
     }
@@ -167,7 +167,7 @@ export default function JobCards() {
         title: "Erro",
         description: "Não foi possível gerar o relatório PDF.",
         variant: "destructive",
-      };
+      });
     } finally {
       setGeneratingPDF(false);
     }
@@ -183,13 +183,13 @@ export default function JobCards() {
         title: "Relatório Gerado",
         description: `PDF do job "${job.title}" exportado com sucesso!`,
         variant: "default",
-      };
+      });
     } catch (error) {
       toast({
         title: "Erro",
         description: "Não foi possível gerar o relatório PDF do job.",
         variant: "destructive",
-      };
+      });
     } finally {
       setGeneratingJobPDF(null);
     }

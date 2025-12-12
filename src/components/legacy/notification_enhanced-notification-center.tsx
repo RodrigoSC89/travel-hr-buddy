@@ -61,7 +61,7 @@ export const EnhancedNotificationCenter: React.FC = () => {
         title: "Erro",
         description: "Falha ao carregar notificações",
         variant: "destructive"
-      };
+      });
     } finally {
       setIsLoading(false);
     }
@@ -85,13 +85,13 @@ export const EnhancedNotificationCenter: React.FC = () => {
       toast({
         title: "Marcado como lido",
         description: "Notificação marcada como lida"
-      };
+      });
     } catch (error) {
       toast({
         title: "Erro",
         description: "Falha ao marcar como lida",
         variant: "destructive"
-      };
+      });
     }
   };
 
@@ -112,13 +112,13 @@ export const EnhancedNotificationCenter: React.FC = () => {
       toast({
         title: "Sucesso",
         description: "Todas as notificações foram marcadas como lidas"
-      };
+      });
     } catch (error) {
       toast({
         title: "Erro",
         description: "Falha ao marcar todas como lidas",
         variant: "destructive"
-      };
+      });
     }
   };
 
@@ -136,13 +136,13 @@ export const EnhancedNotificationCenter: React.FC = () => {
       toast({
         title: "Removida",
         description: "Notificação removida com sucesso"
-      };
+      });
     } catch (error) {
       toast({
         title: "Erro",
         description: "Falha ao remover notificação",
         variant: "destructive"
-      };
+      });
     }
   };
 

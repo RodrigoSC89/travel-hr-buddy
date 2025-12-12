@@ -443,6 +443,6 @@ export const IncidentReplay: React.FC<IncidentReplayProps> = ({ incidentId, onCl
       </div>
     </div>
   );
-});
+};
 
 export default IncidentReplay;

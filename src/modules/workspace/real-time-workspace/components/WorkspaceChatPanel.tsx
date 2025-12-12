@@ -143,7 +143,7 @@ export const WorkspaceChatPanel: React.FC<WorkspaceChatPanelProps> = ({
       toast({
         title: "Digite uma mensagem",
         description: "O Copilot IA precisa de contexto para ajudar",
-      };
+      });
       return;
     }
     onAIAssist?.(newMessage);
@@ -156,7 +156,7 @@ export const WorkspaceChatPanel: React.FC<WorkspaceChatPanelProps> = ({
       toast({
         title: "Gravação concluída",
         description: `Mensagem de voz de ${formatRecordingTime(recordingTime)} pronta para envio`,
-      };
+      });
       // Simulate sending audio message
       onSendMessage(`🎤 Mensagem de voz (${formatRecordingTime(recordingTime)})`, "audio");
     } else {
@@ -167,13 +167,13 @@ export const WorkspaceChatPanel: React.FC<WorkspaceChatPanelProps> = ({
         toast({
           title: "Gravando...",
           description: "Fale agora para gravar sua mensagem de voz",
-        };
+        });
       } catch (error) {
         toast({
           title: "Erro ao acessar microfone",
           description: "Permita o acesso ao microfone para gravar",
           variant: "destructive",
-        };
+        });
       }
     }
   };
@@ -212,13 +212,13 @@ export const WorkspaceChatPanel: React.FC<WorkspaceChatPanelProps> = ({
       toast({
         title: "Arquivo enviado",
         description: selectedFile.name,
-      };
+      });
     } catch (error) {
       toast({
         title: "Erro ao enviar arquivo",
         description: "Tente novamente",
         variant: "destructive",
-      };
+      });
     } finally {
       setIsSendingFile(false);
       setSelectedFile(null);
@@ -240,18 +240,18 @@ export const WorkspaceChatPanel: React.FC<WorkspaceChatPanelProps> = ({
       setUserLocation({
         lat: position.coords.latitude,
         lng: position.coords.longitude,
-      };
+      });
       
       toast({
         title: "Localização obtida",
         description: "Pronta para compartilhar",
-      };
+      });
     } catch (error) {
       toast({
         title: "Erro ao obter localização",
         description: "Permita o acesso à localização",
         variant: "destructive",
-      };
+      });
     } finally {
       setIsGettingLocation(false);
     }
@@ -268,9 +268,9 @@ export const WorkspaceChatPanel: React.FC<WorkspaceChatPanelProps> = ({
       toast({
         title: "Localização compartilhada",
         description: "Sua localização foi enviada para o canal",
-      };
+      });
     }
-  };
+  });
 
   const formatTime = (timestamp: string) => {
     try {

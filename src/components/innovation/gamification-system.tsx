@@ -191,9 +191,9 @@ export const GamificationSystem: React.FC = () => {
       toast({
         title: "Recompensa Coletada!",
         description: `Você ganhou ${challenge.reward} pontos!`,
-      };
+      });
     }
-  };
+  });
 
   return (
     <div className="container mx-auto p-6 space-y-6">

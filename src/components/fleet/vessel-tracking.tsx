@@ -89,7 +89,7 @@ export const VesselTracking = memo(() => {
         title: "Erro",
         description: "Erro ao carregar dados dos navios",
         variant: "destructive"
-      };
+      });
     } finally {
       setLoading(false);
     }
@@ -117,7 +117,7 @@ export const VesselTracking = memo(() => {
     case "emergency": return "bg-red-500";
     default: return "bg-gray-500";
     }
-  };
+  });
 
   const getStatusText = (status: VesselPosition["status"]) => {
     switch (status) {

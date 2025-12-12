@@ -74,7 +74,7 @@ export function useTranslation(
         logger.error("[useTranslation] Failed to initialize translator", error);
         setIsLoading(false);
       }
-    };
+    });
 
     init();
   }, []);
@@ -163,7 +163,7 @@ export function useStaticTranslation(
       }
       
       setTranslations(newTranslations);
-    };
+    });
 
     loadTranslations();
   }, [keys, targetLang]);
@@ -254,7 +254,7 @@ export const useDateFormatter = memo(function() {
         es: "es-ES",
         fr: "fr-FR",
         de: "de-DE",
-      };
+      });
 
       const formats: Record<string, Intl.DateTimeFormatOptions> = {
         short: { year: "numeric", month: "2-digit", day: "2-digit" },
@@ -266,7 +266,7 @@ export const useDateFormatter = memo(function() {
           hour: "2-digit",
           minute: "2-digit",
         },
-      };
+      });
 
       return new Intl.DateTimeFormat(locales[language], formats[format]).format(
         dateObj
@@ -295,7 +295,7 @@ export const useNumberFormatter = memo(function() {
         es: "es-ES",
         fr: "fr-FR",
         de: "de-DE",
-      };
+      });
 
       return new Intl.NumberFormat(locales[language], options).format(number);
     },

@@ -77,7 +77,7 @@ export const TechnicalValidationPanel: React.FC = () => {
           hasDocumentation: !!hasDocumentation,
           hasDuplication,
           isActive: module.status === "active",
-        };
+        });
 
         return {
           id: module.id,
@@ -90,7 +90,7 @@ export const TechnicalValidationPanel: React.FC = () => {
           hasDuplication,
           healthScore,
           issues,
-        };
+        });
       });
 
       setModules(validations);

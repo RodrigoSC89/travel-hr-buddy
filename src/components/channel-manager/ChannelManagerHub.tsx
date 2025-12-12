@@ -98,11 +98,11 @@ export default function ChannelManagerHub() {
       toast({
         title: "Canal criado",
         description: "O canal foi criado com sucesso.",
-      };
+      });
       setIsDialogOpen(false);
       setChannelName("");
     },
-  };
+  });
 
   const sendMessageMutation = useMutation({
     mutationFn: async () => {
@@ -126,9 +126,9 @@ export default function ChannelManagerHub() {
       setMessageContent("");
       toast({
         title: "Mensagem enviada",
-      };
+      });
     },
-  };
+  });
 
   const toggleChannelMutation = useMutation({
     mutationFn: async ({ channelId, isActive }: { channelId: string; isActive: boolean }) => {
@@ -152,9 +152,9 @@ export default function ChannelManagerHub() {
       toast({
         title: "Status atualizado",
         description: "O status do canal foi alterado.",
-      };
+      });
     },
-  };
+  });
 
   return (
     <div className="container mx-auto p-6">

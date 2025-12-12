@@ -140,5 +140,5 @@ export function validateExtractedItems(items: ISMAuditItem[]): {
   return {
     valid: issues.length === 0,
     issues,
-  };
+  });
 }

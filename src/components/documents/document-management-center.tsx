@@ -170,7 +170,7 @@ export const DocumentManagementCenter = memo(() => {
         title: "Erro",
         description: "Erro ao carregar documentos",
         variant: "destructive"
-      };
+      });
     } finally {
       setLoading(false);
     }
@@ -204,8 +204,8 @@ export const DocumentManagementCenter = memo(() => {
       by_status: statusCount,
       recent_uploads: recentUploads,
       expiring_soon: expiringSoon
-    };
-  };
+    });
+  });
 
   useEffect(() => {
     calculateStats();

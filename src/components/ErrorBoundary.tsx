@@ -152,7 +152,7 @@ export function logError(error: Error, context?: ErrorContext): void {
   // if (window.Sentry) {
   //   window.Sentry.captureException(error, {
   //     extra: context,
-  //   });
+  //   };
   // }
 }
 

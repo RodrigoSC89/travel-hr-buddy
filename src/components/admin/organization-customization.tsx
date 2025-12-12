@@ -130,14 +130,14 @@ export const OrganizationCustomization: React.FC = () => {
         primary: computedStyle.getPropertyValue("--primary").trim() || "222.2 47.4% 11.2%",
         secondary: computedStyle.getPropertyValue("--secondary").trim() || "210 40% 96.1%",
         accent: computedStyle.getPropertyValue("--accent").trim() || "210 40% 96.1%"
-      };
+      });
     }
     
     // Aplicar cores do preview
     root.style.setProperty("--primary", hexToHsl(customization.primary_color));
     root.style.setProperty("--secondary", hexToHsl(customization.secondary_color));
     root.style.setProperty("--accent", hexToHsl(customization.accent_color));
-  };
+  });
 
   const resetPreviewTheme = () => {
     if (!originalTheme) return;
@@ -156,16 +156,16 @@ export const OrganizationCustomization: React.FC = () => {
       toast({
         title: "Pré-visualização Ativada",
         description: "As alterações de cor estão sendo aplicadas temporariamente",
-      };
+      });
     } else {
       resetPreviewTheme();
       setPreview(false);
       toast({
         title: "Pré-visualização Desativada",
         description: "Tema original restaurado",
-      };
+      });
     }
-  };
+  });
 
   // Aplicar preview quando as cores mudam e o preview está ativo
   useEffect(() => {
@@ -180,7 +180,7 @@ export const OrganizationCustomization: React.FC = () => {
         title: "Acesso Negado",
         description: "Você não tem permissão para alterar as configurações",
         variant: "destructive",
-      };
+      });
       return;
     }
 
@@ -201,7 +201,7 @@ export const OrganizationCustomization: React.FC = () => {
         title: "Erro",
         description: "Erro ao salvar personalização",
         variant: "destructive",
-      };
+      });
     } finally {
       setIsLoading(false);
     }

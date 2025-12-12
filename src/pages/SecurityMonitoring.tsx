@@ -90,7 +90,7 @@ export default function SecurityMonitoring() {
         title: "Consulta vazia",
         description: "Digite uma pergunta sobre segurança para análise.",
         variant: "destructive"
-      };
+      });
       return;
     }
 
@@ -117,7 +117,7 @@ Forneça análises detalhadas e recomendações de segurança.`;
             { role: "user", content: query }
           ]
         }
-      };
+      });
 
       if (error) throw error;
 
@@ -125,14 +125,14 @@ Forneça análises detalhadas e recomendações de segurança.`;
       toast({
         title: "Análise concluída",
         description: "A IA analisou sua consulta de segurança."
-      };
+      });
     } catch (err) {
       console.error("Erro na análise:", err);
       toast({
         title: "Erro na análise",
         description: "Não foi possível processar a análise de segurança.",
         variant: "destructive"
-      };
+      });
     } finally {
       setIsAnalyzing(false);
     }

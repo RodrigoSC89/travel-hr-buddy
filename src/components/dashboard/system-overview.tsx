@@ -28,7 +28,7 @@ const SystemOverview = () => {
     security: { status: "secure", threats: 0, lastScan: "2h ago" },
     users: { active: 42, peak: 67, sessions: 156 },
     performance: { score: 95, memory: 68, cpu: 34 }
-  };
+  });
 
   const [realTimeData, setRealTimeData] = useState([
     { time: "00:00", cpu: 25, memory: 45, users: 15 },
@@ -53,7 +53,7 @@ const SystemOverview = () => {
     default:
       return "text-muted-foreground bg-muted/20 border-muted/30";
     }
-  };
+  });
 
   const getStatusIcon = (status: string) => {
     switch (status) {

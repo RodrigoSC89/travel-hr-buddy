@@ -286,7 +286,7 @@ class TacticalAI {
       activeModules,
       systemLoad,
       recentDecisions,
-    };
+    });
   }
 
   /**
@@ -310,7 +310,7 @@ class TacticalAI {
         systemLoad: context.systemLoad,
       },
       executed: false,
-    };
+    });
   }
 
   /**
@@ -596,7 +596,7 @@ class TacticalAI {
       queueLength: this.decisionQueue.length,
       totalRules: this.rules.length,
       manualOverrides: this.manualOverrides.size,
-    };
+    });
   }
 }
 

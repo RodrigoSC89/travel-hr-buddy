@@ -208,7 +208,7 @@ describe("LSA-FFA Inspections Module - Unit Tests", () => {
         const inspectionRate = (inspectedItems / requiredItems) * 100;
         const passRate = inspectedItems > 0 ? (passedItems / inspectedItems) * 100 : 0;
         return Math.round((inspectionRate + passRate) / 2);
-      };
+      });
 
       expect(calculateCompliance(10, 10, 10)).toBe(100);
       expect(calculateCompliance(10, 10, 8)).toBe(90);
@@ -269,7 +269,7 @@ describe("OVID Precheck Module - Unit Tests", () => {
         return areas
           .filter(area => area.required && area.score < 80)
           .map(area => area.name);
-      };
+      });
 
       const areas: InspectionArea[] = [
         { name: "Safety Equipment", score: 95, required: true },

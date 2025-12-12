@@ -49,14 +49,14 @@ export default function SuppliesTab() {
     const matchesCategory = categoryFilter === "all" || supply.category === categoryFilter;
     const matchesStatus = statusFilter === "all" || supply.status === statusFilter;
     return matchesSearch && matchesCategory && matchesStatus;
-  };
+  });
 
   const statusCounts = {
     ok: supplies.filter(s => s.status === "ok").length,
     low: supplies.filter(s => s.status === "low").length,
     expiring: supplies.filter(s => s.status === "expiring").length,
     critical: supplies.filter(s => s.status === "critical").length
-  };
+  });
 
   const getStatusColor = (status: string) => {
     switch (status) {
@@ -106,9 +106,9 @@ export default function SuppliesTab() {
       expiryDate: "",
       batchNumber: "",
       location: ""
-    };
+    });
     toast.success("Item adicionado ao estoque");
-  };
+  });
 
   const handleRequestRestock = (supply: MedicalSupply) => {
     toast.success(`Solicitação de reposição enviada: ${supply.name}`);

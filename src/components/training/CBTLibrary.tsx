@@ -97,7 +97,7 @@ export const CBTLibrary = memo(function() {
 
   const getCourseProgress = (courseId: string) => {
     return progress.find(p => p.course_id === courseId);
-  };
+  });
 
   const filteredCourses = useMemo(() => {
     return courses.filter(course => {

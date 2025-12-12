@@ -68,20 +68,20 @@ const ApiGateway = () => {
     toast({
       title: "Testing Endpoint",
       description: `Testing ${route.service}...`
-    };
+    });
 
     try {
       await apiProxyRouter.proxyRequest(route.service, "/test");
       toast({
         title: "Success",
         description: `Endpoint ${route.service} is working correctly`,
-      };
+      });
     } catch (error) {
       toast({
         title: "Error",
         description: error instanceof Error ? error.message : "Unknown error",
         variant: "destructive"
-      };
+      });
     }
   };
 
@@ -90,7 +90,7 @@ const ApiGateway = () => {
     toast({
       title: "Endpoint Status",
       description: `Status: ${status.status}, Latency: ${status.latency}ms`
-    };
+    });
   };
 
   const handleCreateKey = () => {
@@ -99,7 +99,7 @@ const ApiGateway = () => {
         title: "Error",
         description: "Please enter a key name",
         variant: "destructive"
-      };
+      });
       return;
     }
 
@@ -111,8 +111,8 @@ const ApiGateway = () => {
     toast({
       title: "API Key Created",
       description: `Key "${key.name}" has been created successfully`
-    };
-  };
+    });
+  });
 
   const handleRevokeKey = (keyId: string) => {
     apiKeyManager.revokeKey(keyId);
@@ -120,16 +120,16 @@ const ApiGateway = () => {
     toast({
       title: "Key Revoked",
       description: "API key has been revoked"
-    };
-  };
+    });
+  });
 
   const handleCopyKey = (key: string) => {
     navigator.clipboard.writeText(key);
     toast({
       title: "Copied",
       description: "API key copied to clipboard"
-    };
-  };
+    });
+  });
 
   const handleCreateWebhook = () => {
     if (!newWebhookName.trim() || !newWebhookUrl.trim()) {
@@ -137,7 +137,7 @@ const ApiGateway = () => {
         title: "Error",
         description: "Please fill in all fields",
         variant: "destructive"
-      };
+      });
       return;
     }
 
@@ -150,8 +150,8 @@ const ApiGateway = () => {
     toast({
       title: "Webhook Created",
       description: `Webhook "${newWebhookName}" has been created`
-    };
-  };
+    });
+  });
 
   const handleDeleteWebhook = (webhookId: string) => {
     webhookManager.deleteWebhook(webhookId);
@@ -159,21 +159,21 @@ const ApiGateway = () => {
     toast({
       title: "Webhook Deleted",
       description: "Webhook has been removed"
-    };
-  };
+    });
+  });
 
   const handleTestWebhook = async (webhookId: string) => {
     toast({
       title: "Testing Webhook",
       description: "Sending test event..."
-    };
+    });
 
     await webhookManager.triggerWebhook("test.event", { test: true });
     
     toast({
       title: "Test Complete",
       description: "Check webhook logs for details"
-    };
+    });
   };
 
   return (

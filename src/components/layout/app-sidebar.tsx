@@ -794,7 +794,7 @@ export const AppSidebar = memo(function({ activeItem, onItemChange }: AppSidebar
         if (u) set.add(u);
         if (it.items) add(it.items);
       }
-    };
+    });
     add(dedupedNav);
     return set;
   }, [dedupedNav]);
@@ -802,7 +802,7 @@ export const AppSidebar = memo(function({ activeItem, onItemChange }: AppSidebar
   const hasUrl = (url: string) => {
     const u = canonicalizeUrl(url);
     return u ? navUrlSet.has(u) : false;
-  };
+  });
 
   const toggleItem = (itemUrl: string) => {
     setOpenItems(prev => 

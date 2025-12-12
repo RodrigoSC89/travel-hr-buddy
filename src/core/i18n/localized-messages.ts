@@ -243,7 +243,7 @@ class MultilingualMessageManager {
         es: translations.es || id,
         fr: translations.fr || id,
         de: translations.de || id,
-      };
+      });
     } else {
       // Merge com mensagens existentes
       Object.assign(DEFAULT_MESSAGES[id], translations);

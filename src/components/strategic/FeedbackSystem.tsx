@@ -127,7 +127,7 @@ export const FeedbackSystem = memo(() => {
     case "general": return "bg-info text-info-foreground";
     default: return "bg-muted text-muted-foreground";
     }
-  };
+  });
 
   const getStatusColor = (status: string) => {
     switch (status) {

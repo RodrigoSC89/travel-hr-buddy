@@ -38,7 +38,7 @@ export class PEORealTime {
       eventos: [],
       violations: 0,
       isActive: true,
-    };
+    });
 
     // If duration is specified, auto-stop after that time
     if (duration) {
@@ -159,7 +159,7 @@ export class PEORealTime {
       severity: this.determineSeverity(selectedType),
       vesselName: this.currentSession?.vesselName,
       source: "DP_LOG",
-    };
+    });
 
     return evento;
   }
@@ -176,7 +176,7 @@ export class PEORealTime {
       "Position Drift": "Medium",
       "Power Failure": "Critical",
       "System Normal": "Info",
-    };
+    });
 
     return severityMap[eventType];
   }
@@ -228,7 +228,7 @@ export class PEORealTime {
       violations,
       recommendations,
       generatedAt: new Date().toISOString(),
-    };
+    });
 
     logger.info("📋 Relatório de sessão gerado", {
       totalEvents: statistics.totalEvents,
@@ -250,7 +250,7 @@ export class PEORealTime {
       "Position Drift": 0,
       "Power Failure": 0,
       "System Normal": 0,
-    };
+    });
 
     this.eventos.forEach((evento) => {
       eventsByType[evento.evento]++;
@@ -275,7 +275,7 @@ export class PEORealTime {
       violationRate: totalEvents > 0 ? (criticalEvents / totalEvents) * 100 : 0,
       eventsByType,
       duration,
-    };
+    });
   }
 
   /**

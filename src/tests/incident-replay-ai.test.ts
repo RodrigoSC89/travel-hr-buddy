@@ -237,7 +237,7 @@ class IncidentReplayService {
       highlights: highlights || [],
       replayState: state,
       exportedAt: new Date()
-    };
+    });
   }
 
   clearIncidentData(incidentId: string): void {

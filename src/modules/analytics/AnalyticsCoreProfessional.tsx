@@ -222,7 +222,7 @@ const AnalyticsCoreProfessional: React.FC = () => {
       toast({
         title: "Dados atualizados",
         description: "Os dados foram atualizados com sucesso"
-      };
+      });
     } finally {
       setIsRefreshing(false);
     }
@@ -433,7 +433,7 @@ const AnalyticsCoreProfessional: React.FC = () => {
     toast({ 
       title: "Todas as notificações marcadas como lidas",
       description: `${unreadCount} notificações atualizadas`
-    };
+    });
   };
 
   const deleteNotification = (notificationId: string) => {
@@ -447,8 +447,8 @@ const AnalyticsCoreProfessional: React.FC = () => {
     toast({ 
       title: "Todas as notificações foram removidas",
       description: `${count} notificações excluídas`
-    };
-  };
+    });
+  });
 
   // AI Insights Generation
   const generateAIInsights = async () => {
@@ -525,7 +525,7 @@ const AnalyticsCoreProfessional: React.FC = () => {
         toast({
           title: "Insights Gerados com Sucesso",
           description: `${newInsights.length} insights de IA foram gerados`
-        };
+        });
       } else {
         throw new Error(response.error?.message || "Failed to generate insights");
       }
@@ -570,7 +570,7 @@ const AnalyticsCoreProfessional: React.FC = () => {
       toast({
         title: "Insights Gerados",
         description: "Insights de demonstração foram gerados"
-      };
+      });
     } finally {
       setIsGeneratingInsights(false);
       setTimeout(() => setReportProgress(0), 1000);
@@ -605,8 +605,8 @@ const AnalyticsCoreProfessional: React.FC = () => {
     toast({
       title: "Exportação CSV Concluída",
       description: "Arquivo CSV baixado com sucesso"
-    };
-  };
+    });
+  });
 
   // Export to PDF using jsPDF
   const exportToPDF = async () => {
@@ -616,7 +616,7 @@ const AnalyticsCoreProfessional: React.FC = () => {
       toast({
         title: "Gerando PDF",
         description: "Preparando relatório para download..."
-      };
+      });
 
       // Dynamic import of jsPDF
       const { default: jsPDF } = await import("jspdf");
@@ -663,7 +663,7 @@ const AnalyticsCoreProfessional: React.FC = () => {
         styles: { fontSize: 9, cellPadding: 3 },
         headStyles: { fillColor: [59, 130, 246], textColor: 255 },
         alternateRowStyles: { fillColor: [245, 247, 250] }
-      };
+      });
       
       yPosition = (doc as unknown).lastAutoTable.finalY + 15;
       
@@ -691,7 +691,7 @@ const AnalyticsCoreProfessional: React.FC = () => {
         theme: "grid",
         styles: { fontSize: 9, cellPadding: 3 },
         headStyles: { fillColor: [16, 185, 129], textColor: 255 }
-      };
+      });
       
       yPosition = (doc as unknown).lastAutoTable.finalY + 15;
       
@@ -722,7 +722,7 @@ const AnalyticsCoreProfessional: React.FC = () => {
           theme: "grid",
           styles: { fontSize: 9, cellPadding: 3 },
           headStyles: { fillColor: [139, 92, 246], textColor: 255 }
-        };
+        });
       }
       
       // Footer
@@ -741,14 +741,14 @@ const AnalyticsCoreProfessional: React.FC = () => {
       toast({
         title: "PDF Gerado com Sucesso",
         description: "Relatório PDF baixado"
-      };
+      });
     } catch (error) {
       console.error("Error generating PDF:", error);
       toast({
         title: "Erro ao gerar PDF",
         description: "Não foi possível gerar o relatório. Tente novamente.",
         variant: "destructive"
-      };
+      });
     } finally {
       setIsExportingPDF(false);
     }
@@ -786,7 +786,7 @@ const AnalyticsCoreProfessional: React.FC = () => {
         toast({
           title: "Relatório Gerado com Sucesso",
           description: "O relatório de IA está pronto para visualização"
-        };
+        });
       } else {
         throw new Error("Failed to generate report");
       }
@@ -824,7 +824,7 @@ Este relatório apresenta uma análise abrangente dos principais indicadores de 
       toast({
         title: "Relatório Gerado",
         description: "Relatório de demonstração foi gerado"
-      };
+      });
     } finally {
       setIsGeneratingReport(false);
       setTimeout(() => setReportProgress(0), 1000);
@@ -841,7 +841,7 @@ Este relatório apresenta uma análise abrangente dos principais indicadores de 
         title: "Erro ao copiar",
         description: "Não foi possível copiar o relatório",
         variant: "destructive"
-      };
+      });
     }
   };
 
@@ -882,8 +882,8 @@ Este relatório apresenta uma análise abrangente dos principais indicadores de 
     toast({ 
       title: "Ação aplicada",
       description: "A recomendação foi marcada como implementada"
-    };
-  };
+    });
+  });
 
   // Filter Functions
   const getFilteredNotifications = useCallback(() => {
@@ -918,9 +918,9 @@ Este relatório apresenta uma análise abrangente dos principais indicadores de 
     toast({
       title: "Configurações Salvas",
       description: "Suas preferências foram atualizadas"
-    };
+    });
     setSettingsOpen(false);
-  };
+  });
 
   // Reset Settings
   const resetSettings = () => {
@@ -947,8 +947,8 @@ Este relatório apresenta uma análise abrangente dos principais indicadores de 
     toast({ 
       title: "Filtros Aplicados",
       description: `${getFilteredNotifications().length} itens encontrados`
-    };
-  };
+    });
+  });
 
   // Clear Filters
   const clearFilters = () => {
@@ -959,7 +959,7 @@ Este relatório apresenta uma análise abrangente dos principais indicadores de 
       notificationTypes: [],
       sortBy: "date",
       sortOrder: "desc"
-    };
+    });
     toast({ title: "Filtros limpos" });
   };
 

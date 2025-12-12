@@ -178,8 +178,8 @@ export default function WeatherCommandCenter() {
         swell_height: 0.3 + Math.random() * 2,
         sea_temperature: 18 + Math.random() * 10
       }
-    };
-  };
+    });
+  });
 
   const fetchWeatherData = async (lat: number, lon: number, locationName: string) => {
     setLoading(true);
@@ -196,13 +196,13 @@ export default function WeatherCommandCenter() {
       toast({
         title: "Dados atualizados",
         description: `Meteorologia carregada para ${locationName}`,
-      };
+      });
     } catch (error: SupabaseError | null) {
       toast({
         title: "Erro ao carregar dados",
         description: error.message,
         variant: "destructive"
-      };
+      });
     } finally {
       setLoading(false);
     }
@@ -253,10 +253,10 @@ export default function WeatherCommandCenter() {
         toast({
           title: "Localização não encontrada",
           description: "Tente outra localização ou adicione manualmente",
-        };
+        });
       }
     }
-  };
+  });
 
   const weatherDataForCopilot = weatherData ? {
     location: weatherData.location.name,

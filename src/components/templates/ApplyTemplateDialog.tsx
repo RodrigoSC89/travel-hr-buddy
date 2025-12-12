@@ -69,7 +69,7 @@ export const ApplyTemplateDialog = memo(function({
       organization: {
         name: "Organization Name",
       },
-    };
+    });
   }, []);
 
   // Apply template with current variables
@@ -97,8 +97,8 @@ export const ApplyTemplateDialog = memo(function({
     toast({
       title: "Auto-fill applied",
       description: "Common variables have been filled automatically",
-    };
-  };
+    });
+  });
 
   const handleVariableChange = (varName: string, value: string) => {
     setVariables(prev => ({
@@ -124,13 +124,13 @@ export const ApplyTemplateDialog = memo(function({
       toast({
         title: "Export successful",
         description: `Document exported as ${format}`,
-      };
+      });
     } else {
       toast({
         title: "Export failed",
         description: result.error || "Failed to export document",
         variant: "destructive",
-      };
+      });
     }
   };
 
@@ -140,10 +140,10 @@ export const ApplyTemplateDialog = memo(function({
       toast({
         title: "Template applied",
         description: `${appliedResult.appliedVariables.length} variables applied`,
-      };
+      });
       onOpenChange(false);
     }
-  };
+  });
 
   const getVariableLabel = (varName: string): string => {
     return TemplateApplicationService.COMMON_VARIABLES[varName as keyof typeof TemplateApplicationService.COMMON_VARIABLES] || varName;

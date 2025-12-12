@@ -126,7 +126,7 @@ class SonarPersistenceService {
         warnings,
         ai_model: "sonar-analysis-v1",
         processed_at: new Date().toISOString(),
-      };
+      });
 
       const { data, error } = await supabase
         .from("sonar_ai_predictions")
@@ -254,7 +254,7 @@ class SonarPersistenceService {
         minDepth: depths.length > 0 ? Math.min(...depths) : 0,
         maxDepth: depths.length > 0 ? Math.max(...depths) : 0,
         totalPredictions: predictions?.length || 0,
-      };
+      });
     } catch (error) {
       logger.error("Error fetching sonar stats:", error);
       return null;

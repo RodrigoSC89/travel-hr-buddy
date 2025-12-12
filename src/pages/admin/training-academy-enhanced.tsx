@@ -81,7 +81,7 @@ export default function TrainingAcademyEnhanced() {
 
     return () => {
       supabase.removeChannel(progressChannel);
-    };
+    });
   }, []);
 
   const loadData = async () => {
@@ -112,7 +112,7 @@ export default function TrainingAcademyEnhanced() {
         title: "Erro",
         description: "Falha ao carregar dados",
         variant: "destructive"
-      };
+      });
     } finally {
       setLoading(false);
     }
@@ -197,7 +197,7 @@ export default function TrainingAcademyEnhanced() {
       toast({
         title: "🎓 Certificado Gerado",
         description: `Certificado ${certificateNumber} emitido com sucesso!`
-      };
+      });
 
       // Refresh certificates
       loadData();
@@ -207,7 +207,7 @@ export default function TrainingAcademyEnhanced() {
         title: "Erro",
         description: "Falha ao gerar certificado",
         variant: "destructive"
-      };
+      });
     }
   };
 
@@ -216,7 +216,7 @@ export default function TrainingAcademyEnhanced() {
       orientation: "landscape",
       unit: "mm",
       format: "a4"
-    };
+    });
 
     // Certificate border
     doc.setDrawColor(0, 51, 102);
@@ -268,8 +268,8 @@ export default function TrainingAcademyEnhanced() {
     toast({
       title: "Download Concluído",
       description: "Certificado baixado com sucesso"
-    };
-  };
+    });
+  });
 
   const updateProgress = async (enrollmentId: string, progress: number) => {
     try {
@@ -290,14 +290,14 @@ export default function TrainingAcademyEnhanced() {
       toast({
         title: "Progresso Atualizado",
         description: `Progresso salvo: ${progress}%`
-      };
+      });
     } catch (error) {
       logger.error("Error updating progress:", error);
       toast({
         title: "Erro",
         description: "Falha ao atualizar progresso",
         variant: "destructive"
-      };
+      });
     }
   };
 

@@ -91,7 +91,7 @@ class CognitiveFeedbackCore {
         operator_action: decision.operator_action || "accepted",
         confidence_score: decision.confidence_score || 0.5,
         created_at: new Date().toISOString(),
-      };
+      });
 
       const { data, error } = await (supabase as any)
         .from("cognitive_feedback")
@@ -305,7 +305,7 @@ class CognitiveFeedbackCore {
       rejected: "rejects",
       modified: "modifies",
       ignored: "ignores",
-    };
+    });
 
     return `Operator ${actionDescriptions[action as keyof typeof actionDescriptions] || action} ${module} suggestions when ${contextStr}`;
   }
@@ -404,7 +404,7 @@ class CognitiveFeedbackCore {
             accepted: 0,
             rejected: 0,
             success_rate: 0,
-          };
+          });
         }
         
         modulePerformance[moduleKey].total++;
@@ -435,7 +435,7 @@ class CognitiveFeedbackCore {
         top_patterns: patterns.slice(0, 10),
         key_insights: insights.slice(0, 5),
         module_performance: modulePerformance,
-      };
+      });
     } catch (error) {
       logger.error("Error generating weekly report:", error);
       return null;

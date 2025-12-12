@@ -80,7 +80,7 @@ export const MissionManager = memo(function() {
       status: "planned",
       agents: selectedAgents.map(a => ({ ...a, status: "assigned" as const })),
       createdAt: new Date()
-    };
+    });
 
     setMissions([mission, ...missions]);
     
@@ -109,7 +109,7 @@ export const MissionManager = memo(function() {
       priority: "medium",
       agents: []
     });
-  });
+  };
 
   const getPriorityColor = (priority: Mission["priority"]) => {
     switch (priority) {

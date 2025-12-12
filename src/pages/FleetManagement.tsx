@@ -79,7 +79,7 @@ const MaritimeFleetManagement = () => {
           maintenanceVessels: 3,
           criticalAlerts: 2,
           efficiency: 87.5
-        };
+        });
         setVessels([]);
       } else {
         // Calculate stats from real data
@@ -93,7 +93,7 @@ const MaritimeFleetManagement = () => {
           maintenanceVessels: maintenance,
           criticalAlerts: 2,
           efficiency: 87.5
-        };
+        });
         setVessels(vesselsData || []);
       }
     } catch (error) {
@@ -113,21 +113,21 @@ const MaritimeFleetManagement = () => {
       toast({
         title: "Exportando dados da frota",
         description: "O relatório será gerado em breve...",
-      };
+      });
       
       // Simulate export process
       setTimeout(() => {
         toast({
           title: "Exportação concluída",
           description: "Relatório da frota exportado com sucesso!",
-        };
+        });
       }, 2000);
     } catch (error) {
       toast({
         title: "Erro na exportação",
         description: "Não foi possível exportar os dados da frota",
         variant: "destructive"
-      };
+      });
     }
   };
 

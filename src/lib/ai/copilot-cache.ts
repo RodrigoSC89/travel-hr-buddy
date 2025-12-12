@@ -36,11 +36,11 @@ const initDB = (): Promise<IDBDatabase> => {
     request.onerror = () => {
       logger.error("Failed to open IndexedDB", request.error);
       reject(request.error);
-    };
+    });
 
     request.onsuccess = () => {
       resolve(request.result);
-    };
+    });
 
     request.onupgradeneeded = (event) => {
       const db = (event.target as IDBOpenDBRequest).result;
@@ -60,7 +60,7 @@ const initDB = (): Promise<IDBDatabase> => {
       }
 
       logger.info("IndexedDB initialized successfully");
-    };
+    });
   });
 };
 
@@ -159,7 +159,7 @@ export const getLastContext = async (): Promise<ChatContext | null> => {
         } else {
           resolve(null);
         }
-      };
+      });
       
       request.onerror = () => reject(request.error);
     });

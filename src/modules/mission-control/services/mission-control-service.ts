@@ -288,7 +288,7 @@ export class MissionControlService {
       createdBy: data.created_by,
       createdAt: data.created_at,
       metadata: data.metadata || {}
-    };
+    });
   }
 
   private mapToTask(data: any): MissionTask {

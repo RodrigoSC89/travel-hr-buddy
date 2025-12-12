@@ -130,7 +130,7 @@ export const ConnectionBadge = memo(function ConnectionBadge({
     sm: "h-4 w-4",
     md: "h-5 w-5",
     lg: "h-6 w-6",
-  };
+  });
 
   return (
     <Badge
@@ -186,7 +186,7 @@ export const AdaptiveLoader = memo(function AdaptiveLoader({
       setProgress(prev => {
         if (prev >= 95) return prev; // Don't go to 100% until actually complete
         return Math.min(95, prev + step);
-  };
+  });
     }, interval);
     
     return () => clearInterval(timer);
@@ -331,14 +331,14 @@ function getBannerConfig(quality: ConnectionQuality) {
       textClass: "text-destructive-foreground",
       icon: <WifiOff className="h-4 w-4" />,
       message: "Sem conexão com a internet",
-    };
+    });
   case "slow":
     return {
       bgClass: "bg-amber-500",
       textClass: "text-amber-950",
       icon: <AlertTriangle className="h-4 w-4" />,
       message: "Conexão lenta detectada. Carregando de forma otimizada...",
-    };
+    });
   case "moderate":
     return {
       bgClass: "bg-yellow-100",

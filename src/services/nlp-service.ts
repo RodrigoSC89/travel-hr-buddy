@@ -92,7 +92,7 @@ export class NLPService {
         summary,
         language,
         confidence
-      };
+      });
     } catch (error) {
       logger.error("Error in NLP analysis:", error);
       throw error;
@@ -493,7 +493,7 @@ export class NLPService {
         text: sentence,
         position: index,
         relevance: score / 10
-      };
+      });
     });
 
     return highlights

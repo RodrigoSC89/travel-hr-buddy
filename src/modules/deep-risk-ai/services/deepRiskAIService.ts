@@ -110,7 +110,7 @@ class DeepRiskAIService {
         },
         level,
         timestamp: new Date().toISOString(),
-      };
+      });
 
       return riskScore;
     } catch (error) {
@@ -300,7 +300,7 @@ class DeepRiskAIService {
           confidence: 0,
           trendDirection: "stable",
           recommendation: "Insufficient historical data for prediction",
-        };
+        });
       }
 
       // Calculate trend
@@ -341,7 +341,7 @@ class DeepRiskAIService {
         confidence,
         trendDirection,
         recommendation,
-      };
+      });
     } catch (error) {
       logger.error("Failed to predict risk", error);
       throw error;
@@ -490,7 +490,7 @@ class DeepRiskAIService {
       mechanical: 1.0,
       operational: 1.0,
       communication: 1.0,
-    };
+    });
 
     // Adjust weights based on incident types
     incidents.forEach((incident) => {

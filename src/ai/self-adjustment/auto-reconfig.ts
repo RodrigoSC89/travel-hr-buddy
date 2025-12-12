@@ -138,7 +138,7 @@ export class AutoReconfigurationEngine {
         cost: 6,
       },
       timestamp: new Date().toISOString(),
-    };
+    });
 
     this.currentConfig = defaultConfig;
     this.configHistory.push(defaultConfig);
@@ -212,7 +212,7 @@ export class AutoReconfigurationEngine {
       ...data,
       triggerId: `trigger-${Date.now()}-${Math.random().toString(36).substr(2, 9)}`,
       timestamp: new Date().toISOString(),
-    };
+    });
 
     this.triggers.push(trigger);
     await this.storeTrigger(trigger);
@@ -242,7 +242,7 @@ export class AutoReconfigurationEngine {
       changes: this.calculateChanges(beforeState, afterState),
       timestamp: new Date().toISOString(),
       status: "pending",
-    };
+    });
 
     try {
       // Apply the new configuration
@@ -406,7 +406,7 @@ export class AutoReconfigurationEngine {
       responseTime: beforeMetrics.responseTime - afterMetrics.responseTime, // Lower is better
       errorRate: beforeMetrics.errorRate - afterMetrics.errorRate, // Lower is better
       throughput: afterMetrics.throughput - beforeMetrics.throughput,
-    };
+    });
 
     // Determine verdict
     let verdict: PerformanceValidation["verdict"];
@@ -444,7 +444,7 @@ export class AutoReconfigurationEngine {
       verdict,
       recommendation,
       timestamp: new Date().toISOString(),
-    };
+    });
 
     this.validations.push(validation);
     await this.storeValidation(validation);
@@ -524,7 +524,7 @@ export class AutoReconfigurationEngine {
       validations: this.validations,
       currentConfig: this.currentConfig,
       configHistory: this.configHistory,
-    };
+    });
   }
 
   /**

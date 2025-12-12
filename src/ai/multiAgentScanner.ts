@@ -185,7 +185,7 @@ class MultiAgentScanner {
       avg_confidence: Math.random() * 0.3 + 0.7, // 70-100%
       uptime_percent: Math.random() * 10 + 90, // 90-100%
       last_updated: new Date().toISOString()
-    };
+    });
 
     this.metrics.set(agentId, updated);
 
@@ -242,7 +242,7 @@ class MultiAgentScanner {
       reason: "Performance degradation detected",
       timestamp: new Date().toISOString(),
       success: true
-    };
+    });
 
     await this.logFailoverEvent(event);
   }

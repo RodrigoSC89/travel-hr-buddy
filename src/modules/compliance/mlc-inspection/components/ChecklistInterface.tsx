@@ -51,7 +51,7 @@ export const ChecklistInterface = memo(function({ inspectionId, onUpdate }: Chec
         title: "Error",
         description: "Failed to load findings",
         variant: "destructive",
-      };
+      });
     } finally {
       setLoading(false);
     }
@@ -77,14 +77,14 @@ export const ChecklistInterface = memo(function({ inspectionId, onUpdate }: Chec
       toast({
         title: "Success",
         description: "Finding added successfully",
-      };
+      });
     } catch (error) {
       console.error("Error adding finding:", error);
       toast({
         title: "Error",
         description: "Failed to add finding",
         variant: "destructive",
-      };
+      });
     }
   };
 

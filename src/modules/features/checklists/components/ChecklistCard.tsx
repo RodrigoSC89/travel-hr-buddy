@@ -23,7 +23,7 @@ export const ChecklistCard = memo(function({ checklist, onView, onAnalyze }: Che
     case "approved": return "bg-purple-500";
     default: return "bg-gray-500";
     }
-  };
+  });
 
   return (
     <Card 

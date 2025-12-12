@@ -120,7 +120,7 @@ export function useVirtualizedList<T>({
     scrollToIndex,
     measureElement,
     isScrolling: virtualizer.isScrolling,
-  };
+  });
 }
 
 /**
@@ -162,5 +162,5 @@ export function useInfiniteVirtualList<T>({
     ...result,
     hasNextPage,
     isFetchingNextPage,
-  };
+  });
 }

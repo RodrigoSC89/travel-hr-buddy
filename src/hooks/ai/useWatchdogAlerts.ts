@@ -123,7 +123,7 @@ export function useWatchdogAlerts() {
 
     return () => {
       supabase.removeChannel(channel);
-    };
+    });
   }, []);
 
   return {

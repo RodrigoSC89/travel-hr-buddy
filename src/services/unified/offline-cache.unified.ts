@@ -56,7 +56,7 @@ export const localStorageCache = {
         data,
         timestamp: Date.now(),
         expiresAt: Date.now() + ttl
-      };
+      });
 
       localStorage.setItem(cacheKey, JSON.stringify(entry));
       logger.debug("Stored in localStorage cache", { key, ttl: ttl / 1000 });
@@ -148,7 +148,7 @@ export const localStorageCache = {
       return { count: 0, totalSize: 0 };
     }
   }
-};
+});
 
 // ============================================
 // PART 2: IndexedDB Cache (from offline-cache.ts)
@@ -163,7 +163,7 @@ const STORES = {
   VESSELS: "vessels",
   PENDING_ACTIONS: "pending_actions",
   CONFIG: "config",
-};
+});
 
 class IndexedDBCacheService {
   private db: IDBDatabase | null = null;
@@ -176,7 +176,7 @@ class IndexedDBCacheService {
       request.onsuccess = () => {
         this.db = request.result;
         resolve();
-      };
+      });
 
       request.onupgradeneeded = (event) => {
         const db = (event.target as IDBOpenDBRequest).result;
@@ -201,7 +201,7 @@ class IndexedDBCacheService {
         if (!db.objectStoreNames.contains(STORES.CONFIG)) {
           db.createObjectStore(STORES.CONFIG, { keyPath: "key" });
         }
-      };
+      });
     });
   }
 
@@ -304,7 +304,7 @@ class IndexedDBCacheService {
         } else {
           resolve();
         }
-      };
+      });
       request.onerror = () => reject(request.error);
     });
   }
@@ -332,7 +332,7 @@ class IndexedDBCacheService {
           pending_actions: pendingActions.length,
           cached_data_size: 0,
         });
-      };
+      });
       request.onerror = () => reject(request.error);
     });
   }
@@ -382,7 +382,7 @@ export const unifiedOfflineCache = {
     return {
       localStorage: localStorageCache.getStats(),
       indexedDB: await indexedDBCache.getOfflineStatus()
-    };
+    });
   }
 };
 

@@ -69,7 +69,7 @@ export const ExportarComentariosPDF = memo(function({ comentarios }: ExportarCom
         jsPDF: { unit: "mm", format: "a4", orientation: "portrait" }
       })
       .save();
-  };
+  });
 
   return (
     <Button

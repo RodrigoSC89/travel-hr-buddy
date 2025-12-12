@@ -117,8 +117,8 @@ export const SlowNetworkProvider = memo(function({ children }: SlowNetworkProvid
           downlink?: number;
           rtt?: number;
           saveData?: boolean;
-        };
-      };
+        });
+      });
 
       if (nav.connection) {
         const newQuality: NetworkQuality = {
@@ -126,7 +126,7 @@ export const SlowNetworkProvider = memo(function({ children }: SlowNetworkProvid
           downlink: nav.connection.downlink || 10,
           rtt: nav.connection.rtt || 50,
           saveData: nav.connection.saveData || false,
-        };
+        });
 
         setQuality(newQuality);
 

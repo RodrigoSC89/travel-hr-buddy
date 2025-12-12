@@ -105,7 +105,7 @@ export const ExecutiveDashboardBase = ({
     default:
       return null;
     }
-  };
+  });
 
   // Render loading state
   if (isLoading && !data) {

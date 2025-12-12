@@ -158,7 +158,7 @@ Sou seu assistente especializado em **Sistema de Gestão de Segurança Operacion
         title: "Erro na consulta",
         description: "Não foi possível processar sua solicitação. Tente novamente.",
         variant: "destructive"
-      };
+      });
       
       // Remove user message on error
       setMessages(prev => prev.filter(m => m.id !== userMessage.id));
@@ -172,8 +172,8 @@ Sou seu assistente especializado em **Sistema de Gestão de Segurança Operacion
     toast({
       title: "Copiado!",
       description: "Conteúdo copiado para a área de transferência"
-    };
-  };
+    });
+  });
 
   const getTypeIcon = (type: string) => {
     const typeConfig = GENERATION_TYPES.find(t => t.id === type);
@@ -423,6 +423,6 @@ Sou seu assistente especializado em **Sistema de Gestão de Segurança Operacion
       </div>
     </div>
   );
-});
+};
 
 export default SGSOEnhancedAssistant;

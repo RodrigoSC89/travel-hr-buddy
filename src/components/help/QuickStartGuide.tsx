@@ -420,7 +420,7 @@ export const FeatureHighlight = memo(function({
     localStorage.setItem(`feature_highlight_${feature}`, "true");
     setDismissed(true);
     setShown(false);
-  };
+  });
 
   const features = {
     offline: {
@@ -443,7 +443,7 @@ export const FeatureHighlight = memo(function({
       title: "Segurança Avançada",
       description: "Seus dados são criptografados e protegidos com RLS.",
     },
-  };
+  });
 
   const featureData = features[feature];
 

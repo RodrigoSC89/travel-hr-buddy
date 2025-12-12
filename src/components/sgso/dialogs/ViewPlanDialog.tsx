@@ -186,16 +186,16 @@ export const ViewPlanDialog: React.FC<ViewPlanDialogProps> = ({
     toast({
       title: "Download iniciado",
       description: `Baixando ${plan.title} em PDF...`,
-};
-  };
+});
+  });
 
   const handlePrint = () => {
     window.print();
     toast({
       title: "Preparando impressão",
       description: "Documento enviado para impressão",
-    };
-  };
+    });
+  });
 
   return (
     <Dialog open={open} onOpenChange={onOpenChange}>

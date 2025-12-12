@@ -123,7 +123,7 @@ export class BiometricAuthService {
         return {
           success: false,
           error: "No stored credentials found",
-        };
+        });
       }
 
       // Check if token is still valid
@@ -284,7 +284,7 @@ export class BiometricAuthService {
       return {
         success: true,
         token: data.session.access_token,
-      };
+      });
     } catch (error) {
       structuredLogger.error("Token refresh failed", error as Error);
       return {
@@ -548,7 +548,7 @@ export class BiometricAuthService {
         return {
           success: false,
           error: "Biometric authentication failed",
-        };
+        });
       }
 
       // Store credentials

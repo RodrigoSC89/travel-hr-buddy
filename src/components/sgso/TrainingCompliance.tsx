@@ -362,7 +362,7 @@ export const TrainingCompliance: React.FC = () => {
                 toast({
                   title: "📊 Gerando Relatório",
                   description: "Relatório de compliance de treinamentos está sendo gerado..."
-                };
+                });
               }}
             >
               <FileText className="h-6 w-6" />
@@ -374,7 +374,7 @@ export const TrainingCompliance: React.FC = () => {
                 toast({
                   title: "⚠️ Certificados Expirados",
                   description: "Listando certificados expirados que precisam de renovação..."
-                };
+                });
               }}
             >
               <AlertTriangle className="h-6 w-6" />
@@ -386,7 +386,7 @@ export const TrainingCompliance: React.FC = () => {
                 toast({
                   title: "👥 Matriz de Competências",
                   description: "Abrindo matriz de competências da tripulação..."
-                };
+                });
               }}
             >
               <Users className="h-6 w-6" />

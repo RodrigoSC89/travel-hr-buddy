@@ -45,7 +45,7 @@ export async function summarizeChecklist(
     return {
       summary: data.summary,
       timestamp: data.timestamp
-    };
+    });
   } catch (error) {
     logger.error("Error summarizing checklist:", error);
     throw error;
@@ -103,7 +103,7 @@ export function useSummarizeChecklist() {
     } finally {
       setIsLoading(false);
     }
-  };
+  });
 
   return { summarize, summary, isLoading, error };
 }

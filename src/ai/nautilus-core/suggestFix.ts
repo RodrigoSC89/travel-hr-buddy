@@ -148,7 +148,7 @@ function parseAIResponse(content: string, findings: Finding[]): FixSuggestion {
     suggestedChanges: suggestedChanges.trim() || "See findings for details",
     priority,
     estimatedImpact: impact.trim() || "Should resolve detected CI/CD issues"
-  };
+  });
 }
 
 /**

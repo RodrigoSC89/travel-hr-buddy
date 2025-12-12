@@ -131,7 +131,7 @@ export const ContinuousTestingMonitoring: React.FC = () => {
     case "failed": return "text-red-500";
     default: return "text-muted-foreground";
     }
-  };
+  });
 
   const getStatusBadge = (status: string) => {
     switch (status) {

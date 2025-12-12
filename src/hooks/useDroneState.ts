@@ -81,7 +81,7 @@ export function useDroneState(options: UseDroneStateOptions = {}) {
       } catch (error) {
         logger.error("Error in loadDronesFromSupabase:", error);
       }
-    };
+    });
 
     loadDronesFromSupabase();
 
@@ -117,7 +117,7 @@ export function useDroneState(options: UseDroneStateOptions = {}) {
 
     return () => {
       supabase.removeChannel(channel);
-    };
+    });
   }, [enableSupabase]);
 
   // Auto-refresh connection status
@@ -144,7 +144,7 @@ export function useDroneState(options: UseDroneStateOptions = {}) {
         command,
         message: "Another command is being sent",
         timestamp: new Date().toISOString()
-      };
+      });
     }
 
     setIsSending(true);
@@ -195,7 +195,7 @@ export function useDroneState(options: UseDroneStateOptions = {}) {
         command,
         message: error instanceof Error ? error.message : "Unknown error",
         timestamp: new Date().toISOString()
-      };
+      });
     } finally {
       setIsSending(false);
     }

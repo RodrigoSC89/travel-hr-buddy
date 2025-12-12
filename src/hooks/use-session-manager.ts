@@ -234,7 +234,7 @@ export const useSessionManager = () => {
         new Date(s.expires_at) <= new Date()
       ).length,
       revoked: sessions.filter(s => s.revoked === true).length,
-    };
+    });
   }, [sessions]);
 
   // Load sessions on mount
@@ -261,7 +261,7 @@ export const useSessionManager = () => {
     revokeAllOtherSessions,
     validateSession,
     getSessionStats,
-  };
+  });
 };
 
 /**

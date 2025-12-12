@@ -188,7 +188,7 @@ class DeepRiskAIService {
       factors,
       confidence: Math.round(confidence * 100) / 100,
       inferenceTime,
-    };
+    });
   }
 
   /**
@@ -327,7 +327,7 @@ class DeepRiskAIService {
       highCount: forecasts.filter(f => f.risk_level === "high").length,
       mediumCount: forecasts.filter(f => f.risk_level === "medium").length,
       lowCount: forecasts.filter(f => f.risk_level === "low").length,
-    };
+    });
 
     return stats;
   }

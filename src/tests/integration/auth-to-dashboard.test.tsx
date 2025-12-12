@@ -21,7 +21,7 @@ describe("Integration: Auth to Dashboard Flow", () => {
           error: null
         }),
       },
-    };
+    });
 
     // Act - Simulate login
     const result = await mockSupabase.auth.signInWithPassword({
@@ -51,7 +51,7 @@ describe("Integration: Auth to Dashboard Flow", () => {
           error: { message: "Invalid credentials" },
         }),
       },
-    };
+    });
 
     // Act
     const result = await mockSupabase.auth.signInWithPassword({

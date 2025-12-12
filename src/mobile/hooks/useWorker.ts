@@ -98,7 +98,7 @@ export function useWorker<T = any>(
             onError?.(event.data.error);
             reject(new Error(event.data.error));
           }
-        };
+        });
         
         worker.onerror = (err) => {
           if (timeoutRef.current) {
@@ -109,7 +109,7 @@ export function useWorker<T = any>(
           setError(err.message);
           onError?.(err.message);
           reject(err);
-        };
+        });
         
         // Send message to worker
         worker.postMessage(message);

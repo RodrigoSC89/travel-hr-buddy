@@ -95,7 +95,7 @@ export const SystemMonitoringTab: React.FC<SystemMonitoringTabProps> = ({
         [metric]: value
       }
     });
-  };
+  });
 
   const getStatusColor = (color: string) => {
     switch (color) {

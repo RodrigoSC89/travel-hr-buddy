@@ -71,7 +71,7 @@ export const AuditSubmissionForm = memo(function({ open, onClose }: AuditSubmiss
         recommendations: null,
         non_conformities_count: 0,
         compliance_score: null,
-      };
+      });
 
       const { error } = await supabase
         .from("sgso_audits")
@@ -82,7 +82,7 @@ export const AuditSubmissionForm = memo(function({ open, onClose }: AuditSubmiss
       toast({
         title: "Audit Created",
         description: "Audit has been successfully created.",
-      };
+      });
 
       onClose();
     } catch (error: unknown) {
@@ -91,7 +91,7 @@ export const AuditSubmissionForm = memo(function({ open, onClose }: AuditSubmiss
         title: "Error",
         description: message,
         variant: "destructive",
-      };
+      });
     } finally {
       setLoading(false);
     }

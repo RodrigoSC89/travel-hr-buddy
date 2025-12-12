@@ -108,7 +108,7 @@ export const Patch608Validation = memo(function() {
         commands: voiceCommands,
         modules: modulesActivated,
         logs: auditLogs
-      };
+      });
 
     } catch (error) {
       console.error("Validation error:", error);
@@ -119,7 +119,7 @@ export const Patch608Validation = memo(function() {
 
     setResults(testResults);
     setLoading(false);
-  });
+  };
 
   const allPassed = Object.values(results).every(v => v === true);
   const hasResults = Object.keys(results).length > 0;

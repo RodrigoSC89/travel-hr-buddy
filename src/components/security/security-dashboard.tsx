@@ -145,13 +145,13 @@ export const SecurityDashboard: React.FC = () => {
       toast({
         title: "Scan de Segurança Concluído",
         description: `${total} verificações realizadas`,
-      };
+      });
     } catch (error) {
       toast({
         title: "Erro",
         description: "Falha ao executar scan de segurança",
         variant: "destructive",
-      };
+      });
     } finally {
       setIsScanning(false);
     }

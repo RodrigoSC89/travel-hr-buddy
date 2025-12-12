@@ -187,7 +187,7 @@ export const OptimizationGeneralHub = memo(() => {
       title: "Otimização Geral Iniciada",
       description: "Executando análise completa do sistema...",
       duration: 3000
-    };
+    });
 
     // Simular processo de otimização
     for (let i = 0; i <= 100; i += 10) {
@@ -202,7 +202,7 @@ export const OptimizationGeneralHub = memo(() => {
       title: "Otimização Concluída",
       description: "Sistema otimizado com sucesso! Performance melhorada em 12%",
       duration: 4000
-    };
+    });
   };
 
   const applyOptimization = async (optimizationId: string) => {
@@ -219,7 +219,7 @@ export const OptimizationGeneralHub = memo(() => {
       title: "Aplicando Otimização",
       description: `Executando: ${optimization.title}`,
       duration: 2000
-    };
+    });
 
     setTimeout(() => {
       setOptimizations(prev => prev.map(opt => 
@@ -234,7 +234,7 @@ export const OptimizationGeneralHub = memo(() => {
         title: "Otimização Aplicada",
         description: `${optimization.title} foi implementada com sucesso!`,
         duration: 3000
-      };
+      });
     }, 3000);
   };
 

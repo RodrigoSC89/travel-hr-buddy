@@ -164,7 +164,7 @@ export default function QuizPage() {
     }
 
     return allQuestions;
-  };
+  });
 
   const handleAnswerSelect = () => {
     if (!selectedAnswer || !currentQuestion) return;

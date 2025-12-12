@@ -295,7 +295,7 @@ const EnhancedUnifiedDashboard = () => {
     toast({
       title: "Dashboard atualizado",
       description: "Dados atualizados com sucesso",
-    };
+    });
   };
 
   const handleKPIToggle = (kpi: string) => {
@@ -311,7 +311,7 @@ const EnhancedUnifiedDashboard = () => {
     callback: refreshData,
     interval: 60000,
     enabled: isAutoUpdate,
-  };
+  });
 
   const getStatusIcon = (type: string) => {
     switch (type) {
@@ -320,7 +320,7 @@ const EnhancedUnifiedDashboard = () => {
     case "info": return <Bell className="w-4 h-4 text-info" />;
     default: return <AlertCircle className="w-4 h-4 text-muted-foreground" />;
     }
-  };
+  });
 
   const getActivityIcon = (type: string) => {
     switch (type) {

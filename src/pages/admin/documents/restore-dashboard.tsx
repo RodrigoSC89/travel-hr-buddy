@@ -131,7 +131,7 @@ export default function RestoreDashboard() {
           title: "Erro ao carregar estatísticas",
           description: "Não foi possível carregar as estatísticas de restauração.",
           variant: "destructive",
-        };
+        });
       }
     } finally {
       setLoading(false);
@@ -145,7 +145,7 @@ export default function RestoreDashboard() {
         title: "Sem dados",
         description: "Não há dados para exportar.",
         variant: "destructive",
-      };
+      });
       return;
     }
 
@@ -177,14 +177,14 @@ export default function RestoreDashboard() {
       toast({
         title: "CSV exportado",
         description: "O arquivo CSV foi baixado com sucesso.",
-      };
+      });
     } catch (error) {
       logger.error("Error exporting CSV:", error);
       toast({
         title: "Erro ao exportar CSV",
         description: "Não foi possível exportar o arquivo CSV.",
         variant: "destructive",
-      };
+      });
     }
   }
 
@@ -194,7 +194,7 @@ export default function RestoreDashboard() {
         title: "Sem dados",
         description: "Não há dados para exportar.",
         variant: "destructive",
-      };
+      });
       return;
     }
 
@@ -250,7 +250,7 @@ export default function RestoreDashboard() {
           textColor: [255, 255, 255],
           fontStyle: "bold"
         },
-      };
+      });
       
       // Save PDF with date-stamped filename
       const filename = `restore-analytics-${format(new Date(), "yyyy-MM-dd")}.pdf`;
@@ -259,14 +259,14 @@ export default function RestoreDashboard() {
       toast({
         title: "PDF exportado",
         description: `Arquivo ${filename} foi baixado com sucesso.`,
-      };
+      });
     } catch (error) {
       logger.error("Error exporting PDF:", error);
       toast({
         title: "Erro ao exportar PDF",
         description: "Não foi possível exportar o arquivo PDF.",
         variant: "destructive",
-      };
+      });
     }
   }
 
@@ -276,7 +276,7 @@ export default function RestoreDashboard() {
         title: "Sem dados",
         description: "Não há dados para enviar.",
         variant: "destructive",
-      };
+      });
       return;
     }
 
@@ -291,7 +291,7 @@ export default function RestoreDashboard() {
           title: "Não autenticado",
           description: "Você precisa estar autenticado para enviar relatórios por email.",
           variant: "destructive",
-        };
+        });
         return;
       }
 
@@ -317,14 +317,14 @@ export default function RestoreDashboard() {
       toast({
         title: "Email enviado",
         description: "O relatório foi enviado por email com sucesso.",
-      };
+      });
     } catch (error) {
       logger.error("Error sending email:", error);
       toast({
         title: "Erro ao enviar email",
         description: "Não foi possível enviar o relatório por email.",
         variant: "destructive",
-      };
+      });
     } finally {
       setEmailSending(false);
     }
@@ -334,7 +334,7 @@ export default function RestoreDashboard() {
     if (e.key === "Enter") {
       fetchStats();
     }
-  };
+  });
 
   const chartData = {
     labels: dailyData.map((d) => format(new Date(d.day), "dd/MM")),

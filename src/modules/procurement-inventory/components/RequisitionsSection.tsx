@@ -166,7 +166,7 @@ export default function RequisitionsSection({ searchQuery }: RequisitionsSection
     const matchesStatus = filterStatus === "all" || req.status === filterStatus;
     const matchesPriority = filterPriority === "all" || req.priority === filterPriority;
     return matchesSearch && matchesStatus && matchesPriority;
-  };
+  });
 
   const handleCreateRequisition = () => {
     const newRequisition: Requisition = {
@@ -183,7 +183,7 @@ export default function RequisitionsSection({ searchQuery }: RequisitionsSection
       aiSuggested: false,
       estimatedCost: newReq.items.reduce((sum, i) => sum + (i.quantity * i.estimatedUnitCost), 0),
       costCenter: newReq.costCenter,
-    };
+    });
 
     setRequisitions(prev => [newRequisition, ...prev]);
     setShowNewRequisition(false);
@@ -196,7 +196,7 @@ export default function RequisitionsSection({ searchQuery }: RequisitionsSection
       items: [{ id: "1", name: "", quantity: 1, unit: "un", estimatedUnitCost: 0, suggestedSupplier: "" }],
     });
     toast.success("Requisição criada e enviada para aprovação!");
-  };
+  });
 
   const handleApprove = (req: Requisition) => {
     setRequisitions(prev => prev.map(r => 

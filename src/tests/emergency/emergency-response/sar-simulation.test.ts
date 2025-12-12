@@ -100,7 +100,7 @@ function calculateSearchArea(incident: any) {
     center: incident.location,
     radius,
     unit: "nautical_miles",
-  };
+  });
 }
 
 function deployVesselsForSAR(sarOperation: any, vessels: any[]) {

@@ -227,7 +227,7 @@ export const FleetTelemetryDashboard: React.FC = () => {
           recommended_action: `Inspect ${reading.sensor_location} immediately`,
           status: "active",
           created_at: reading.reading_timestamp,
-        };
+        });
       }
 
       // Check for anomalous patterns (vibration)

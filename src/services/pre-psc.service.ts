@@ -83,7 +83,7 @@ class PrePSCService {
         inspector_id: user.user?.id,
         status: inspection.status || "draft",
         inspection_type: inspection.inspection_type || "self-assessment",
-      };
+      });
 
       const { data, error } = await (supabase as any)
         .from("pre_psc_inspections")
@@ -321,7 +321,7 @@ class PrePSCService {
         averageScore: Math.round(averageScore),
         criticalItems: criticalItems?.length || 0,
         nonCompliantItems: nonCompliantItems?.length || 0,
-      };
+      });
     } catch (error) {
       logger.error("Error fetching inspection stats", { error });
       throw error;

@@ -191,7 +191,7 @@ class SmartSuggestionsEngine {
           dismissable: true,
         },
       ],
-    };
+    });
     
     return routeMap[route] || [];
   }

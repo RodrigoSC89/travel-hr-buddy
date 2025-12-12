@@ -27,7 +27,7 @@ class AIInsightsService {
         confidence: aiResponse.confidence,
         timestamp: aiResponse.timestamp,
         metadata: aiResponse.metadata
-      };
+      });
 
       this.insights.unshift(insight);
       this.insights = this.insights.slice(0, 50);

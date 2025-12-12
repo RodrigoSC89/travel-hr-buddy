@@ -93,7 +93,7 @@ export const TemplateLibrary: React.FC = () => {
         title: "Error",
         description: "Failed to load templates",
         variant: "destructive"
-      };
+      });
     } finally {
       setLoading(false);
     }
@@ -172,7 +172,7 @@ export const TemplateLibrary: React.FC = () => {
       toast({
         title: "Success",
         description: "Template created successfully"
-      };
+      });
 
       setIsCreateOpen(false);
       resetForm();
@@ -183,7 +183,7 @@ export const TemplateLibrary: React.FC = () => {
         title: "Error",
         description: "Failed to create template",
         variant: "destructive"
-      };
+      });
     }
   };
 
@@ -201,7 +201,7 @@ export const TemplateLibrary: React.FC = () => {
       toast({
         title: "Success",
         description: "Template deleted successfully"
-      };
+      });
 
       loadTemplates();
     } catch (error) {
@@ -210,7 +210,7 @@ export const TemplateLibrary: React.FC = () => {
         title: "Error",
         description: "Failed to delete template",
         variant: "destructive"
-      };
+      });
     }
   };
 
@@ -268,7 +268,7 @@ export const TemplateLibrary: React.FC = () => {
       toast({
         title: "Success",
         description: "PDF generated successfully"
-      };
+      });
 
       setIsGenerateOpen(false);
     } catch (error) {
@@ -277,9 +277,9 @@ export const TemplateLibrary: React.FC = () => {
         title: "Error",
         description: "Failed to generate PDF",
         variant: "destructive"
-      };
+      });
     }
-  };
+  });
 
   const resetForm = () => {
     setFormData({
@@ -288,8 +288,8 @@ export const TemplateLibrary: React.FC = () => {
       category: "general",
       content: "",
       is_public: false
-    };
-  };
+    });
+  });
 
   const getCategoryBadge = (category: string) => {
     const variants: Record<string, string> = {

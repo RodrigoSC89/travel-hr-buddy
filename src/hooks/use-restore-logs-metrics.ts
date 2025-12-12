@@ -54,7 +54,7 @@ export function useRestoreLogsMetrics(logs: RestoreLog[]): RestoreLogsMetrics {
       return {
         date: format(date, "dd/MM"),
         count: 0,
-      };
+      });
     });
 
     logs.forEach(log => {

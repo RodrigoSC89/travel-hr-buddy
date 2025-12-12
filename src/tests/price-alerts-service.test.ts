@@ -83,7 +83,7 @@ describe("Price Alerts Service", () => {
         target_price: 100,
         product_url: "https://example.com",
         is_active: true,
-      };
+      });
 
       const mockSelect = vi.fn().mockReturnValue({
         single: vi.fn().mockResolvedValue({
@@ -104,7 +104,7 @@ describe("Price Alerts Service", () => {
         product_name: "New Product",
         target_price: 100,
         product_url: "https://example.com",
-      };
+      });
 
       const result = await priceAlertsService.createAlert(input);
 
@@ -121,7 +121,7 @@ describe("Price Alerts Service", () => {
         product_name: "New Product",
         target_price: 100,
         product_url: "https://example.com",
-      };
+      });
 
       await expect(priceAlertsService.createAlert(input)).rejects.toThrow(
         "User not authenticated"

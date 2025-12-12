@@ -36,10 +36,10 @@ export const QuickActionsGrid = memo(function({
     } else {
       toast.info("Abrindo comunicação...", {
         description: "Redirecionando para o centro de comunicação"
-      };
+      });
       navigate("/communication-center");
     }
-  };
+  });
 
   const handleReorder = () => {
     if (onReorderClick) {
@@ -47,10 +47,10 @@ export const QuickActionsGrid = memo(function({
     } else {
       toast.info("Solicitação de reposição", {
         description: "Abrindo formulário de reposição de estoque"
-      };
+      });
       navigate("/procurement-inventory");
     }
-  };
+  });
 
   const handleCreateOrder = () => {
     if (onCreateOrderClick) {

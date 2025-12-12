@@ -93,7 +93,7 @@ export class DistributedAIEngine {
         last_sync: new Date().toISOString(),
         model_version: "1.0.0",
         interaction_count: 0
-      };
+      });
 
       const { data, error } = await supabase
         .from("vessel_ai_contexts")
@@ -148,7 +148,7 @@ export class DistributedAIEngine {
         ],
         temperature: 0.7,
         maxTokens: 1000
-      };
+      });
 
       // Try local AI first (using OpenAI as central for now)
       let response: AIEngineResponse;
@@ -178,7 +178,7 @@ export class DistributedAIEngine {
         reasoning: response.content,
         timestamp: new Date().toISOString(),
         model_used: modelUsed
-      };
+      });
 
       // Store decision for learning
       await this.storeDecision(decision);
@@ -244,7 +244,7 @@ Expected Behavior:
           },
           ...request.messages.slice(1)
         ]
-      };
+      });
 
       return await runOpenAI(fallbackRequest);
     } catch (error) {
@@ -254,7 +254,7 @@ Expected Behavior:
         content: "AI services temporarily unavailable. Please use manual procedures or contact fleet operations.",
         model: "fallback-mock",
         timestamp: new Date()
-      };
+      });
     }
   }
 
@@ -422,7 +422,7 @@ Expected Behavior:
       total_interactions: contexts.reduce((sum, ctx) => sum + (ctx.interaction_count || 0), 0),
       last_updated: new Date().toISOString(),
       shared_insights: []
-    };
+    });
 
     // Aggregate common patterns and insights
     for (const context of contexts) {
@@ -473,7 +473,7 @@ Expected Behavior:
       lastSync: this.lastGlobalSync,
       nextSync,
       cacheSize: this.CONTEXT_CACHE.size
-    };
+    });
   }
 }
 

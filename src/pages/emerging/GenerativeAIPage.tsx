@@ -79,7 +79,7 @@ const GenerativeAIPage: React.FC = () => {
         title: "Prompt vazio",
         description: "Por favor, insira uma descrição do que deseja gerar.",
         variant: "destructive",
-      };
+      });
       return;
     }
 
@@ -99,7 +99,7 @@ const GenerativeAIPage: React.FC = () => {
             { role: "user", content: prompt }
           ]
         }
-      };
+      });
 
       if (response.error) {
         throw new Error(response.error.message);
@@ -109,7 +109,7 @@ const GenerativeAIPage: React.FC = () => {
       toast({
         title: "Conteúdo Gerado",
         description: "O documento foi gerado com sucesso!",
-      };
+      });
     } catch (error) {
       console.error("Error generating content:", error);
       // Fallback com conteúdo simulado
@@ -144,7 +144,7 @@ Este documento foi gerado automaticamente e deve ser revisado antes do uso ofici
       toast({
         title: "Conteúdo Gerado (Demo)",
         description: "Conteúdo de demonstração gerado.",
-      };
+      });
     } finally {
       setIsGenerating(false);
     }
@@ -155,7 +155,7 @@ Este documento foi gerado automaticamente e deve ser revisado antes do uso ofici
     toast({
       title: "Copiado!",
       description: "Conteúdo copiado para a área de transferência.",
-    };
+    });
   }, [generatedContent, toast]);
 
   const getTypeBadge = (type: GeneratedContent["type"]) => {

@@ -51,7 +51,7 @@ export default function CrewTraining({
 
   const getMemberCertifications = (memberId: string) => {
     return certifications.filter(c => c.crewMemberId === memberId);
-  };
+  });
 
   const getComplianceScore = (memberId: string) => {
     const memberCerts = getMemberCertifications(memberId);

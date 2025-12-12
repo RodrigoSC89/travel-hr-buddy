@@ -186,7 +186,7 @@ export class MetaStrategyEngine {
       justification,
       confidence: this.calculateConfidence(bestEvaluation, evaluations[1]),
       alternatives,
-    };
+    });
 
     // Log to Supabase
     await this.logDecision(selectedStrategy, decision, evaluations);
@@ -353,7 +353,7 @@ export class MetaStrategyEngine {
         medium: "Major setbacks likely",
         high: "Critical failure probable",
       },
-    };
+    });
     
     return outcomes[scenario][strategy.riskLevel];
   }

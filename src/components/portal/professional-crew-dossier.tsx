@@ -139,7 +139,7 @@ export const ProfessionalCrewDossier: React.FC = () => {
         title: "Erro",
         description: "Erro ao carregar dados do dossiê",
         variant: "destructive"
-      };
+      });
     } finally {
       setLoading(false);
     }
@@ -172,13 +172,13 @@ export const ProfessionalCrewDossier: React.FC = () => {
       toast({
         title: "Perfil criado",
         description: "Seu perfil de tripulante foi criado com sucesso"
-      };
+      });
     } catch (error) {
       toast({
         title: "Erro",
         description: "Erro ao criar perfil de tripulante",
         variant: "destructive"
-      };
+      });
     }
   };
 
@@ -267,7 +267,7 @@ export const ProfessionalCrewDossier: React.FC = () => {
         title: "Erro",
         description: "Erro ao carregar dados do dossiê",
         variant: "destructive"
-      };
+      });
     } finally {
       setLoading(false);
     }

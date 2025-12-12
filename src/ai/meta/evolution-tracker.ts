@@ -100,7 +100,7 @@ export class EvolutionTracker {
       ...data,
       versionId: `v-${Date.now()}-${Math.random().toString(36).substr(2, 9)}`,
       timestamp: new Date().toISOString(),
-    };
+    });
 
     this.versions.set(version.versionId, version);
 
@@ -132,7 +132,7 @@ export class EvolutionTracker {
       ...metrics,
       versionId,
       timestamp: new Date().toISOString(),
-    };
+    });
 
     if (!this.metrics.has(versionId)) {
       this.metrics.set(versionId, []);
@@ -192,7 +192,7 @@ export class EvolutionTracker {
       benchmarkScore: proficiencyLevel,
       comparedToVersion,
       timestamp: new Date().toISOString(),
-    };
+    });
 
     if (!this.cognitiveProgress.has(versionId)) {
       this.cognitiveProgress.set(versionId, []);
@@ -310,7 +310,7 @@ export class EvolutionTracker {
       significantChanges,
       recommendation,
       timestamp: new Date().toISOString(),
-    };
+    });
 
     // Store comparison report
     await this.storeComparisonReport(report);
@@ -367,7 +367,7 @@ export class EvolutionTracker {
       metricsHistory,
       progressData,
       milestones,
-    };
+    });
   }
 
   /**
@@ -412,7 +412,7 @@ export class EvolutionTracker {
       firstVersion: string;
       currentVersion: string;
       overallImprovement: number;
-    };
+    });
     } {
     const versions = Array.from(this.versions.values());
     const metricsData: Record<string, PerformanceMetrics[]> = {};
@@ -453,7 +453,7 @@ export class EvolutionTracker {
         currentVersion: sortedVersions[sortedVersions.length - 1]?.versionNumber || "N/A",
         overallImprovement,
       },
-    };
+    });
   }
 
   /**

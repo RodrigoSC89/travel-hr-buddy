@@ -67,7 +67,7 @@ export default function DocumentHistoryPage() {
           created_at: version.created_at,
           updated_by: version.updated_by,
           author_email: profiles?.email || "Desconhecido",
-        };
+        });
   };
 
       setVersions(transformedData);
@@ -77,7 +77,7 @@ export default function DocumentHistoryPage() {
         title: "Erro ao carregar histórico",
         description: "Não foi possível carregar o histórico de versões.",
         variant: "destructive",
-      };
+      });
     } finally {
       setLoading(false);
     }
@@ -117,7 +117,7 @@ export default function DocumentHistoryPage() {
       toast({
         title: "✅ Versão restaurada com sucesso",
         description: "O documento foi atualizado com a versão selecionada.",
-      };
+      });
 
       // Navigate back to document view
       navigate(`/admin/documents/view/${id}`);
@@ -127,7 +127,7 @@ export default function DocumentHistoryPage() {
         title: "Erro ao restaurar versão",
         description: "Não foi possível restaurar esta versão do documento.",
         variant: "destructive",
-      };
+      });
     } finally {
       setRestoring(null);
     }

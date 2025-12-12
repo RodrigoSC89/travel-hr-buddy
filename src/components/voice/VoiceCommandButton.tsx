@@ -51,12 +51,12 @@ export const VoiceCommandButton = memo(function({
       startListening();
       setShowPanel(true);
     }
-  };
+  });
   
   const handleClose = () => {
     stopListening();
     setShowPanel(false);
-  };
+  });
   
   return (
     <div className={cn("fixed z-50", positionClasses[position], className)}>

@@ -225,7 +225,7 @@ export const SmartOptimization: React.FC = () => {
       toast({
         title: "Análise em Progresso",
         description: steps[i],
-      };
+      });
     }
     
     setIsScanning(false);
@@ -234,7 +234,7 @@ export const SmartOptimization: React.FC = () => {
     toast({
       title: "Análise Concluída",
       description: "4 novas otimizações foram identificadas.",
-    };
+    });
   };
 
   const implementSuggestion = (suggestionId: string) => {
@@ -243,14 +243,14 @@ export const SmartOptimization: React.FC = () => {
     toast({
       title: "Implementando Otimização",
       description: `Aplicando: ${suggestion?.title}`,
-    };
+    });
     
     // Simular implementação
     setTimeout(() => {
       toast({
         title: "Otimização Aplicada",
         description: "A melhoria foi implementada com sucesso.",
-      };
+      });
     }, 2000);
   };
 

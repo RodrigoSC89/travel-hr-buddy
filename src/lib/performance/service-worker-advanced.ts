@@ -381,7 +381,7 @@ export function useServiceWorker() {
     return () => {
       window.removeEventListener("sw:update-available", handleUpdateAvailable);
       window.removeEventListener("sw:offline-ready", handleOfflineReady);
-    };
+    });
   }, []);
 
   const update = useCallback(() => {

@@ -216,7 +216,7 @@ export default function VoyageCommandCenter() {
     onTimeRate: 94,
     totalCost: voyages.reduce((sum, v) => sum + (v.estimatedCost || 0), 0),
     fuelSaved: 245,
-  };
+  });
 
   const getStatusColor = (status: string) => {
     const colors: Record<string, string> = {

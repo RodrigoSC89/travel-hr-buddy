@@ -88,7 +88,7 @@ export const FleetCommandCenter: React.FC = () => {
       return data as VesselWithMission[];
     },
     refetchInterval: autoRefresh ? 30000 : false, // Refresh every 30 seconds if enabled
-  };
+  });
 
   // Fetch active missions
   const { data: missions, isLoading: missionsLoading } = useQuery({
@@ -120,7 +120,7 @@ export const FleetCommandCenter: React.FC = () => {
       return data;
     },
     enabled: !!selectedVessel,
-  };
+  });
 
   // Filter vessels by search query
   const filteredVessels = vessels?.filter(vessel => 
@@ -142,7 +142,7 @@ export const FleetCommandCenter: React.FC = () => {
     default:
       return { color: "bg-gray-500", icon: Ship, label: "Unknown" };
     }
-  };
+  });
 
   // Calculate fleet statistics
   const fleetStats = {

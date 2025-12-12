@@ -33,7 +33,7 @@ export const UserFeedback = memo(function UserFeedback({
       onSubmit?.({ rating, comment: comment || undefined });
       setSubmitted(true);
     }
-  };
+  });
 
   if (submitted) {
     return (

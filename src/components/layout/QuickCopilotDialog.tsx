@@ -86,7 +86,7 @@ export const QuickCopilotDialog = memo(function({ open, onOpenChange }: QuickCop
     }
     
     return `Entendi sua pergunta sobre "${userMessage}". \n\nPosso ajudar com:\n- Status da frota e embarcações\n- Manutenções programadas\n- KPIs e métricas operacionais\n- Alertas de segurança\n- Relatórios e análises\n\nPode reformular ou escolher uma das opções acima?`;
-  };
+  });
 
   const sendMessage = useCallback(async (messageText?: string) => {
     const text = messageText || input.trim();
@@ -130,7 +130,7 @@ export const QuickCopilotDialog = memo(function({ open, onOpenChange }: QuickCop
       e.preventDefault();
       sendMessage();
     }
-  };
+  });
 
   return (
     <Dialog open={open} onOpenChange={onOpenChange}>

@@ -274,12 +274,12 @@ export async function searchHotels(params: HotelSearchParams): Promise<HotelSear
       success: true,
       offers,
       cached: false,
-    };
+    });
   } catch (error) {
     return {
       success: false,
       offers: [],
       error: error instanceof Error ? error.message : "Unknown error",
-    };
+    });
   }
 }

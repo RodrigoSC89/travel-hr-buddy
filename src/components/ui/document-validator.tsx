@@ -50,7 +50,7 @@ export const DocumentValidator: React.FC<DocumentValidatorProps> = ({
     passport: "Passaporte",
     visa: "Visto",
     contract: "Contrato"
-  };
+  });
 
   const validateDocument = async () => {
     setIsValidating(true);
@@ -69,7 +69,7 @@ export const DocumentValidator: React.FC<DocumentValidatorProps> = ({
           field: "documentNumber",
           message: "Número do documento é obrigatório",
           severity: "high"
-        };
+        });
         score -= 25;
       }
 
@@ -151,7 +151,7 @@ export const DocumentValidator: React.FC<DocumentValidatorProps> = ({
         score: Math.max(0, score),
         issues,
         suggestions
-      };
+      });
 
       setValidationResult(result);
       onValidationComplete?.(result);
@@ -162,14 +162,14 @@ export const DocumentValidator: React.FC<DocumentValidatorProps> = ({
           ? "Documento validado com sucesso" 
           : `Encontrados ${issues.length} problema(s)`,
         variant: result.isValid ? "default" : "destructive"
-      };
+      });
 
     } catch (error) {
       toast({
         title: "Erro na validação",
         description: "Não foi possível validar o documento",
         variant: "destructive"
-      };
+      });
     } finally {
       setIsValidating(false);
     }
@@ -182,9 +182,9 @@ export const DocumentValidator: React.FC<DocumentValidatorProps> = ({
       toast({
         title: "Arquivo carregado",
         description: `${selectedFile.name} foi carregado com sucesso`
-      };
+      });
     }
-  };
+  });
 
   const getScoreColor = (score: number) => {
     if (score >= 80) return "text-green-600";

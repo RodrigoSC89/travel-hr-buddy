@@ -306,7 +306,7 @@ export default function ProcurementCommandCenter() {
         title: "Erro ao carregar inventário",
         description: error.message,
         variant: "destructive",
-      };
+      });
     } finally {
       setInventoryLoading(false);
     }
@@ -366,7 +366,7 @@ export default function ProcurementCommandCenter() {
     toast({
       title: "Compra Iniciada",
       description: `Pedido de ${rec.suggestedQuantity} ${rec.item.unit} de ${rec.item.name} enviado para ${rec.suggestedSupplier.name}`,
-    };
+    });
   };
 
   // ============================================

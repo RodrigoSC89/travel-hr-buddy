@@ -122,7 +122,7 @@ export const AdvancedMetricsDashboard: React.FC = () => {
         title: "Erro ao carregar métricas",
         description: "Não foi possível carregar os dados das métricas",
         variant: "destructive"
-      };
+      });
       setIsLoading(false);
     }
   }, [toast]);
@@ -147,13 +147,13 @@ export const AdvancedMetricsDashboard: React.FC = () => {
       toast({
         title: "Relatório gerado",
         description: "O relatório de análise foi gerado com sucesso",
-      };
+      });
     } catch (error) {
       toast({
         title: "Erro ao gerar relatório",
         description: "Não foi possível gerar o relatório",
         variant: "destructive"
-      };
+      });
     }
   };
 

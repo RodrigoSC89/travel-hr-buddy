@@ -256,7 +256,7 @@ export const AdvancedDocumentCenter: React.FC = () => {
     setDocuments(mockDocuments);
     setTemplates(mockTemplates);
     setIsLoading(false);
-  };
+  });
 
   useEffect(() => {
     generateMockData();
@@ -328,7 +328,7 @@ export const AdvancedDocumentCenter: React.FC = () => {
         title: "Nenhum arquivo selecionado",
         description: "Por favor, selecione pelo menos um arquivo para upload.",
         variant: "destructive"
-      };
+      });
       return;
     }
 
@@ -357,7 +357,7 @@ export const AdvancedDocumentCenter: React.FC = () => {
         viewCount: 0,
         collaborators: [user?.email || "Usuário"],
         approvals: []
-      };
+      });
     });
 
     setDocuments(prev => [...newDocuments, ...prev]);
@@ -372,7 +372,7 @@ export const AdvancedDocumentCenter: React.FC = () => {
     toast({
       title: "Upload concluído",
       description: `${uploadedFiles.length} arquivo(s) enviado(s) com sucesso.`,
-    };
+    });
   };
 
   const handleNewDocument = () => {
@@ -385,7 +385,7 @@ export const AdvancedDocumentCenter: React.FC = () => {
         title: "Título obrigatório",
         description: "Por favor, informe o título do documento.",
         variant: "destructive"
-      };
+      });
       return;
     }
 
@@ -408,7 +408,7 @@ export const AdvancedDocumentCenter: React.FC = () => {
       collaborators: [user?.email || "Usuário"],
       content: "",
       approvals: []
-    };
+    });
 
     setDocuments(prev => [newDoc, ...prev]);
     setNewDocForm({
@@ -423,7 +423,7 @@ export const AdvancedDocumentCenter: React.FC = () => {
     toast({
       title: "Documento criado",
       description: "O novo documento foi criado com sucesso.",
-    };
+    });
   };
 
   const handleDownload = (doc: Document) => {
@@ -462,8 +462,8 @@ Este é um documento de demonstração do Centro de Documentos.
     toast({
       title: "Download iniciado",
       description: `Baixando "${doc.title}"...`,
-    };
-  };
+    });
+  });
 
   const handleView = (document: Document) => {
     setDocuments(prev => prev.map(doc => 
@@ -486,8 +486,8 @@ Este é um documento de demonstração do Centro de Documentos.
     toast({
       title: "Status atualizado",
       description: `Documento marcado como ${newStatus}.`,
-    };
-  };
+    });
+  });
 
   const handleUseTemplate = (template: DocumentTemplate) => {
     setSelectedTemplate(template);
@@ -512,7 +512,7 @@ Este é um documento de demonstração do Centro de Documentos.
         title: "Campos obrigatórios",
         description: `Por favor, preencha: ${missingFields.join(", ")}`,
         variant: "destructive"
-      };
+      });
       return;
     }
 
@@ -540,7 +540,7 @@ Este é um documento de demonstração do Centro de Documentos.
       collaborators: [user?.email || "Usuário"],
       content: content,
       approvals: []
-    };
+    });
 
     setDocuments(prev => [newDoc, ...prev]);
     
@@ -558,8 +558,8 @@ Este é um documento de demonstração do Centro de Documentos.
     toast({
       title: "Documento criado",
       description: `Documento criado a partir do template "${selectedTemplate.name}".`,
-    };
-  };
+    });
+  });
 
   if (isLoading) {
     return (

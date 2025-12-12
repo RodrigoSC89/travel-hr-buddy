@@ -344,7 +344,7 @@ class AIDocumentService {
         summary,
         language: "en",
         processingTimeMs
-      };
+      });
     } catch (error) {
       const processingTimeMs = Date.now() - startTime;
       

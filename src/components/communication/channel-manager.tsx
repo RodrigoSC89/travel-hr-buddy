@@ -204,7 +204,7 @@ export const ChannelManager: React.FC<ChannelManagerProps> = ({
         title: "Erro",
         description: "Erro ao carregar canais",
         variant: "destructive"
-      };
+      });
     } finally {
       setLoading(false);
     }
@@ -236,13 +236,13 @@ export const ChannelManager: React.FC<ChannelManagerProps> = ({
       if (mounted) {
         await loadChannels();
       }
-    };
+    });
     
     init();
     
     return () => {
       mounted = false;
-    };
+    });
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
@@ -253,7 +253,7 @@ export const ChannelManager: React.FC<ChannelManagerProps> = ({
           title: "Erro",
           description: "Nome do canal é obrigatório",
           variant: "destructive"
-        };
+        });
         return;
       }
 
@@ -269,7 +269,7 @@ export const ChannelManager: React.FC<ChannelManagerProps> = ({
         member_count: 1,
         settings: { notifications: true },
         created_at: new Date().toISOString()
-      };
+      });
 
       setChannels(prev => [channel, ...prev]);
       setNewChannel({ name: "", description: "", type: "group", is_public: true });
@@ -278,13 +278,13 @@ export const ChannelManager: React.FC<ChannelManagerProps> = ({
       toast({
         title: "Sucesso",
         description: "Canal criado com sucesso"
-      };
+      });
     } catch (error) {
       toast({
         title: "Erro",
         description: "Erro ao criar canal",
         variant: "destructive"
-      };
+      });
     }
   };
 
@@ -302,14 +302,14 @@ export const ChannelManager: React.FC<ChannelManagerProps> = ({
       toast({
         title: "Sucesso",
         description: "Você entrou no canal"
-      };
+      });
     } catch (error) {
       logger.error("Failed to join channel:", error);
       toast({
         title: "Erro",
         description: "Não foi possível entrar no canal",
         variant: "destructive"
-      };
+      });
     }
   };
 
@@ -537,7 +537,7 @@ export const ChannelManager: React.FC<ChannelManagerProps> = ({
                           toast({
                             title: "Configurações",
                             description: `Abrindo configurações do canal ${channel.name}`
-                          };
+                          });
                         }}>
                           <Settings className="h-4 w-4 mr-2" />
                           Configurações
@@ -547,7 +547,7 @@ export const ChannelManager: React.FC<ChannelManagerProps> = ({
                           toast({
                             title: "Gerenciar Membros",
                             description: `Gerenciando ${channel.member_count} membros do canal ${channel.name}`
-                          };
+                          });
                         }}>
                           <Users className="h-4 w-4 mr-2" />
                           Gerenciar membros
@@ -561,7 +561,7 @@ export const ChannelManager: React.FC<ChannelManagerProps> = ({
                             toast({
                               title: "Canal excluído",
                               description: `O canal ${channel.name} foi excluído`
-                            };
+                            });
                           }}
                         >
                           <Trash2 className="h-4 w-4 mr-2" />

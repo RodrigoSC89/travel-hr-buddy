@@ -85,7 +85,7 @@ export const AdaptiveAIAdvisor: React.FC = () => {
   const { ask, loading, lastResponse } = useAIAdvisor({ 
     profile: selectedProfile,
     language: "pt-BR"
-  };
+  });
 
   const handleSendMessage = async () => {
     if (!inputMessage.trim() || loading) return;
@@ -96,7 +96,7 @@ export const AdaptiveAIAdvisor: React.FC = () => {
       content: inputMessage,
       timestamp: new Date().toISOString(),
       profile: selectedProfile
-    };
+    });
 
     setConversation(prev => [...prev, userMessage]);
     setInputMessage("");

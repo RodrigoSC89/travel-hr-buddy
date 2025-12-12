@@ -83,7 +83,7 @@ export const GanttChart = memo(() => {
         project_id: crypto.randomUUID(),
         organization_id: orgData.organization_id,
         created_by: user.id
-      };
+      });
 
     if (error) {
       toast({ title: "Erro ao criar tarefa", description: error.message, variant: "destructive" });
@@ -204,7 +204,7 @@ export const GanttChart = memo(() => {
         task_id: targetId,
         depends_on_task_id: sourceId,
         dependency_type: "finish_to_start"
-      };
+      });
 
     if (error) {
       toast({ title: "Erro ao criar dependência", description: error.message, variant: "destructive" });

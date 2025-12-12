@@ -171,14 +171,14 @@ Formate a resposta em markdown estruturado.`,
       toast({
         title: "Insights gerados!",
         description: "Análise preditiva atualizada com sucesso.",
-      };
+      });
     } catch (error) {
       console.error("Error generating insights:", error);
       toast({
         title: "Erro na análise",
         description: "Não foi possível gerar os insights. Tente novamente.",
         variant: "destructive",
-      };
+      });
     } finally {
       setIsLoading(false);
     }

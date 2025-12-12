@@ -53,7 +53,7 @@ export default function UserManagementRBAC() {
         title: "Error",
         description: "Failed to load user groups",
         variant: "destructive",
-      };
+      });
     } finally {
       setLoading(false);
     }
@@ -76,7 +76,7 @@ export default function UserManagementRBAC() {
         title: "Error",
         description: "Failed to load audit logs",
         variant: "destructive",
-      };
+      });
     } finally {
       setLoading(false);
     }
@@ -93,7 +93,7 @@ export default function UserManagementRBAC() {
       toast({
         title: "Success",
         description: "User group created successfully",
-      };
+      });
       fetchGroups();
     } catch (error) {
       logger.error("Error creating group:", error);
@@ -101,7 +101,7 @@ export default function UserManagementRBAC() {
         title: "Error",
         description: "Failed to create user group",
         variant: "destructive",
-      };
+      });
     }
   };
 
@@ -110,21 +110,21 @@ export default function UserManagementRBAC() {
       const { error } = await (supabase as unknown).rpc("add_user_to_group", {
         p_user_id: userId,
         p_group_id: groupId,
-      };
+      });
 
       if (error) throw error;
 
       toast({
         title: "Success",
         description: "User added to group successfully",
-      };
+      });
     } catch (error) {
       logger.error("Error adding user to group:", error);
       toast({
         title: "Error",
         description: "Failed to add user to group",
         variant: "destructive",
-      };
+      });
     }
   };
 

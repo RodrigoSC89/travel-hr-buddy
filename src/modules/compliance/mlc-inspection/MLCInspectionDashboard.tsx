@@ -43,7 +43,7 @@ export default function MLCInspectionDashboard() {
         title: "Error",
         description: "Failed to load inspection statistics",
         variant: "destructive",
-      };
+      });
     } finally {
       setLoading(false);
     }
@@ -57,8 +57,8 @@ export default function MLCInspectionDashboard() {
     toast({
       title: "Success",
       description: "Inspection created successfully",
-    };
-  };
+    });
+  });
 
   return (
     <div className="container mx-auto p-6 space-y-6">

@@ -69,7 +69,7 @@ export async function testOpenAIConnection(): Promise<OpenAITestResult> {
       success: false,
       message: "OpenAI API key not configured",
       error: "Missing VITE_OPENAI_API_KEY",
-    };
+    });
   }
 
   try {
@@ -101,7 +101,7 @@ export async function testOpenAIConnection(): Promise<OpenAITestResult> {
         message: `OpenAI API error: ${response.status} ${response.statusText}`,
         responseTime,
         error: errorData.error?.message || `HTTP ${response.status}`,
-      };
+      });
     }
 
     const data = await response.json();
@@ -115,7 +115,7 @@ export async function testOpenAIConnection(): Promise<OpenAITestResult> {
           model: data.model,
           response: data.choices[0].message.content,
         },
-      };
+      });
     }
 
     return {
@@ -123,13 +123,13 @@ export async function testOpenAIConnection(): Promise<OpenAITestResult> {
       message: "OpenAI API returned unexpected data",
       responseTime,
       error: "Invalid response format",
-    };
+    });
   } catch (error) {
     return {
       success: false,
       message: "Failed to connect to OpenAI API",
       responseTime: Date.now() - startTime,
       error: error instanceof Error ? error.message : "Unknown error",
-    };
+    });
   }
 }

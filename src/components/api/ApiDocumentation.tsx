@@ -433,6 +433,6 @@ export const ApiDocumentation: React.FC = () => {
       </Card>
     </div>
   );
-});
+};
 
 export default ApiDocumentation;

@@ -103,16 +103,16 @@ const VaultAI: React.FC = () => {
     toast({
       title: "Download iniciado",
       description: `Baixando ${item.name}...`,
-    };
-  };
+    });
+  });
 
   const handleDelete = (item: typeof vaultItems[0]) => {
     toast({
       title: "Confirmar exclusão",
       description: `Deseja realmente excluir ${item.name}?`,
       variant: "destructive",
-    };
-  };
+    });
+  });
 
   return (
     <ModulePageWrapper gradient="purple">

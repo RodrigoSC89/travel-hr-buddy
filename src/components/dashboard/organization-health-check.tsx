@@ -79,7 +79,7 @@ export const OrganizationHealthCheck: React.FC = () => {
             ? currentBranding.enabled_modules.length 
             : Object.keys(currentBranding.enabled_modules).length)
           : 0
-      };
+      });
 
       setStats(newStats);
 
@@ -101,7 +101,7 @@ export const OrganizationHealthCheck: React.FC = () => {
           action: "Configurar Agora",
           actionUrl: "/organization-setup",
           priority: "high"
-        };
+        });
       } else {
         checks.push({
           id: "setup",

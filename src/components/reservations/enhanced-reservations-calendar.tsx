@@ -99,8 +99,8 @@ export const EnhancedReservationsCalendar: React.FC = () => {
     toast({
       title: "Reserva Duplicada",
       description: `Reserva ${reservation.id} duplicada com sucesso. Nova reserva: ${reservation.id}-COPY`,
-    };
-  };
+    });
+  });
 
   const getStatusColor = (status: string) => {
     switch (status) {

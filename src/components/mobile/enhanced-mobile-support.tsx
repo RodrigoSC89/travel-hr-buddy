@@ -201,7 +201,7 @@ export const EnhancedMobileSupport: React.FC = () => {
         toast({
           title: "App instalado",
           description: "O app foi instalado na sua tela inicial"
-        };
+        });
         setPwaStatus(prev => ({ ...prev, canInstall: false, isInstalled: true }));
       }
       
@@ -220,7 +220,7 @@ export const EnhancedMobileSupport: React.FC = () => {
           toast({
             title: granted ? "Notificações ativadas" : "Notificações negadas",
             description: granted ? "Você receberá notificações importantes" : "Ative nas configurações do navegador"
-          };
+          });
         }
         break;
           
@@ -232,7 +232,7 @@ export const EnhancedMobileSupport: React.FC = () => {
               toast({
                 title: "Localização ativada",
                 description: "O app pode acessar sua localização"
-              };
+              });
             },
             () => {
               saveMobileSettings({ location: false });
@@ -240,7 +240,7 @@ export const EnhancedMobileSupport: React.FC = () => {
                 title: "Localização negada",
                 description: "Ative nas configurações do navegador",
                 variant: "destructive"
-              };
+              });
             }
           );
         }
@@ -255,14 +255,14 @@ export const EnhancedMobileSupport: React.FC = () => {
             toast({
               title: "Câmera ativada",
               description: "O app pode acessar a câmera"
-            };
+            });
           } catch (error) {
             saveMobileSettings({ camera: false });
             toast({
               title: "Câmera negada",
               description: "Ative nas configurações do navegador",
               variant: "destructive"
-            };
+            });
           }
         }
         break;
@@ -276,14 +276,14 @@ export const EnhancedMobileSupport: React.FC = () => {
             toast({
               title: "Microfone ativado",
               description: "O app pode acessar o microfone"
-            };
+            });
           } catch (error) {
             saveMobileSettings({ microphone: false });
             toast({
               title: "Microfone negado",
               description: "Ative nas configurações do navegador",
               variant: "destructive"
-            };
+            });
           }
         }
         break;
@@ -295,7 +295,7 @@ export const EnhancedMobileSupport: React.FC = () => {
           toast({
             title: "Vibração ativada",
             description: "O app pode usar vibração"
-          };
+          });
         }
         break;
       }
@@ -304,7 +304,7 @@ export const EnhancedMobileSupport: React.FC = () => {
         title: "Erro",
         description: `Não foi possível ativar ${permission}`,
         variant: "destructive"
-      };
+      });
     }
   };
 
@@ -315,8 +315,8 @@ export const EnhancedMobileSupport: React.FC = () => {
         toast({
           title: "Atualizando app",
           description: "A nova versão será carregada em breve"
-        };
-  };
+        });
+  });
     }
   };
 

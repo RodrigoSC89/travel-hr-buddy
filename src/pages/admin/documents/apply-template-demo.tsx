@@ -49,7 +49,7 @@ export default function ApplyTemplateDemo() {
         title: "Erro ao carregar templates",
         description: "Não foi possível carregar a lista de templates.",
         variant: "destructive",
-      };
+      });
     } finally {
       setLoading(false);
     }

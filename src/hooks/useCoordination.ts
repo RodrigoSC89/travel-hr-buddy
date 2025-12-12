@@ -73,7 +73,7 @@ export function useCoordination(options: UseCoordinationOptions = {}) {
 
     return () => {
       client.end();
-    };
+    });
   }, [enableMQTT]);
 
   // Supabase Integration
@@ -109,7 +109,7 @@ export function useCoordination(options: UseCoordinationOptions = {}) {
       } catch (error) {
         logger.error("Error in loadAgentsFromSupabase:", error);
       }
-    };
+    });
 
     loadAgentsFromSupabase();
 
@@ -144,7 +144,7 @@ export function useCoordination(options: UseCoordinationOptions = {}) {
 
     return () => {
       supabase.removeChannel(channel);
-    };
+    });
   }, [enableSupabase]);
 
   // Auto-execution interval
@@ -159,7 +159,7 @@ export function useCoordination(options: UseCoordinationOptions = {}) {
       if (intervalRef.current) {
         clearInterval(intervalRef.current);
       }
-    };
+    });
   }, [autoExecute, executionInterval]);
 
   // Register agent
@@ -167,7 +167,7 @@ export function useCoordination(options: UseCoordinationOptions = {}) {
     const fullAgent: Agent = {
       ...agent,
       lastUpdate: new Date().toISOString()
-    };
+    });
 
     coordinationEngine.registerAgent(fullAgent);
 

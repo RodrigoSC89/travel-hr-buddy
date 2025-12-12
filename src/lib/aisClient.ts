@@ -37,7 +37,7 @@ export class AISClient {
       apiKey: config.apiKey || "",
       baseUrl: config.baseUrl || "https://api.marinetraffic.com/api/exportvessel/v:5",
       timeout: config.timeout || 10000,
-    };
+    });
   }
 
   /**

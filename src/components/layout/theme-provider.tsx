@@ -57,7 +57,7 @@ export function ThemeProvider({
       localStorage.setItem(storageKey, theme);
       setTheme(theme);
     },
-  };
+  });
 
   return (
     <ThemeProviderContext.Provider {...props} value={value}>

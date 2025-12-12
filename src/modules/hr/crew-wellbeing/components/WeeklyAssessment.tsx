@@ -38,7 +38,7 @@ export const WeeklyAssessment: React.FC = () => {
           title: "Error",
           description: "You must be logged in to submit an assessment",
           variant: "destructive",
-        };
+        });
         return;
       }
 
@@ -58,14 +58,14 @@ export const WeeklyAssessment: React.FC = () => {
         water_intake_liters: formData.water_intake_liters,
         notes: formData.notes,
         concerns: concerns.length > 0 ? concerns : null,
-      };
+      });
 
       if (error) throw error;
 
       toast({
         title: "Success",
         description: "Your weekly assessment has been submitted",
-      };
+      });
 
       // Reset form
       setFormData({
@@ -79,14 +79,14 @@ export const WeeklyAssessment: React.FC = () => {
         water_intake_liters: 2.0,
         notes: "",
         concerns: "",
-      };
+      });
     } catch (error) {
       console.error("Error submitting assessment:", error);
       toast({
         title: "Error",
         description: "Failed to submit assessment. Please try again.",
         variant: "destructive",
-      };
+      });
     } finally {
       setSubmitting(false);
     }

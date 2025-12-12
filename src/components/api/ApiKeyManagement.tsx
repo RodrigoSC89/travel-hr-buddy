@@ -497,6 +497,6 @@ export const ApiKeyManagement: React.FC = () => {
       </Card>
     </div>
   );
-});
+};
 
 export default ApiKeyManagement;

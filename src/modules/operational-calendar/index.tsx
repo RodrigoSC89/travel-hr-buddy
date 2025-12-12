@@ -85,7 +85,7 @@ const eventTypeColors: Record<string, string> = {
   compliance: "#ef4444",
   training: "#eab308",
   other: "#6b7280",
-};
+});
 
 const eventTypeLabels: Record<string, string> = {
   maintenance: "Manutenção",
@@ -274,7 +274,7 @@ const OperationalCalendar = () => {
       priority: "medium",
       start: new Date(),
       end: addHours(new Date(), 2),
-    };
+    });
     toast({ title: "Evento Criado", description: event.title });
   };
 

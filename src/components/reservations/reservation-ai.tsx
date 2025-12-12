@@ -68,9 +68,9 @@ export const ReservationAI: React.FC<ReservationAIProps> = ({
           reservationIds: [reservation.id, ...conflicts.map(c => c.id)],
           suggestion: "Considere reagendar uma das reservas ou verificar se há sobreposição intencional.",
           automatable: false
-        };
+        });
       }
-    };
+    });
 
     // Detect upcoming check-ins
     const upcomingReservations = reservations.filter(r => {
@@ -93,7 +93,7 @@ export const ReservationAI: React.FC<ReservationAIProps> = ({
         reservationIds: [reservation.id],
         suggestion: "Confirme os detalhes da reserva e prepare a documentação necessária.",
         automatable: true
-      };
+      });
     });
 
     // Detect cost optimization opportunities
@@ -115,7 +115,7 @@ export const ReservationAI: React.FC<ReservationAIProps> = ({
           reservationIds: expensiveReservations.map(r => r.id),
           suggestion: "Considere negociar tarifas corporativas ou buscar alternativas mais econômicas.",
           automatable: false
-        };
+        });
       }
     }
 
@@ -134,12 +134,12 @@ export const ReservationAI: React.FC<ReservationAIProps> = ({
         reservationIds: incompleteReservations.map(r => r.id),
         suggestion: "Complete as informações faltantes para melhor organização e controle.",
         automatable: false
-      };
+      });
     }
 
     setInsights(newInsights);
     setLoading(false);
-  };
+  });
 
   const getSeverityColor = (severity: string) => {
     switch (severity) {
@@ -167,15 +167,15 @@ export const ReservationAI: React.FC<ReservationAIProps> = ({
       toast({
         title: "Ação Aplicada",
         description: "Sugestão aplicada automaticamente",
-      };
+      });
     } else {
       toast({
         title: "Ação Manual Necessária",
         description: "Esta sugestão requer ação manual",
         variant: "default"
-      };
+      });
     }
-  };
+  });
 
   return (
     <div className="space-y-6">

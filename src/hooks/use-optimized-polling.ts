@@ -95,7 +95,7 @@ export function useOptimizedPolling(options: UsePollingOptions): void {
     // Cleanup on unmount or deps change
     return () => {
       unregister();
-    };
+    });
   }, [id, interval, immediate, enabled, ...deps]);
 }
 

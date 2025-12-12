@@ -58,7 +58,7 @@ export const MissionPlanner: React.FC = () => {
         title: "Error",
         description: "Failed to load missions",
         variant: "destructive",
-      };
+      });
     } finally {
       setLoading(false);
     }
@@ -79,7 +79,7 @@ export const MissionPlanner: React.FC = () => {
         toast({
           title: "Mission Activated",
           description: `${result.mission_name} is now active`,
-        };
+        });
         fetchMissions(); // Refresh missions list
       } else {
         throw new Error(result.error || "Activation failed");
@@ -90,7 +90,7 @@ export const MissionPlanner: React.FC = () => {
         title: "Activation Failed",
         description: error.message || "Failed to activate mission",
         variant: "destructive",
-      };
+      });
     } finally {
       setActivating(null);
     }

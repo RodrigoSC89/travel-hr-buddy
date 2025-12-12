@@ -103,7 +103,7 @@ export function useNautilusAI() {
         references: data?.references || [],
         confidence: data?.confidence,
         metadata: data?.metadata
-      };
+      });
     } catch (err) {
       const message = err instanceof Error ? err.message : "Erro na consulta IA";
       setError(message);

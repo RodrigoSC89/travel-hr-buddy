@@ -86,7 +86,7 @@ export const OperationsDashboard = memo(function() {
         active_alerts: alertsRes.count || 0,
         avg_fuel_efficiency: avgEfficiency,
         total_voyages: voyagesRes.count || 0
-      };
+      });
     } catch (error) {
       console.error("Error loading operational data:", error);
       toast.error("Failed to load operational metrics");

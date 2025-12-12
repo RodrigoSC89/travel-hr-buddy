@@ -63,7 +63,7 @@ export const IMCAAuditGenerator = memo(function() {
         title: "Validation Error",
         description: validation.errors.join(", "),
         variant: "destructive",
-      };
+      });
       return;
     }
 
@@ -79,13 +79,13 @@ export const IMCAAuditGenerator = memo(function() {
       toast({
         title: "Audit Generated",
         description: "IMCA audit report generated successfully",
-      };
+      });
     } catch (error) {
       toast({
         title: "Error",
         description: "Failed to generate audit report",
         variant: "destructive",
-      };
+      });
     } finally {
       setLoading(false);
     }
@@ -97,9 +97,9 @@ export const IMCAAuditGenerator = memo(function() {
       toast({
         title: "Export Complete",
         description: "Audit report downloaded as Markdown",
-      };
+      });
     }
-  };
+  });
 
   const handleReset = () => {
     setVesselName("");

@@ -70,7 +70,7 @@ export default function PerformanceDashboard() {
             title: "⚠️ Performance Alert",
             description: newAlert.message,
             variant: "destructive"
-          };
+          });
         }
       })
       .subscribe();
@@ -78,7 +78,7 @@ export default function PerformanceDashboard() {
     return () => {
       supabase.removeChannel(metricsChannel);
       supabase.removeChannel(alertsChannel);
-    };
+    });
   }, [timeRange]);
 
   const loadDashboardData = async () => {
@@ -115,7 +115,7 @@ export default function PerformanceDashboard() {
         title: "Erro",
         description: "Falha ao carregar dados de performance",
         variant: "destructive"
-      };
+      });
     } finally {
       setLoading(false);
     }
@@ -170,7 +170,7 @@ export default function PerformanceDashboard() {
           tension: 0.1
         }
       ]
-    };
+    });
   };
 
   const webVitalsMetrics = ["CLS", "FCP", "LCP", "TTFB", "INP"];

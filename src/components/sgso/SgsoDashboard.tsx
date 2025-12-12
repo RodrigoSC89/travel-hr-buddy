@@ -115,7 +115,7 @@ export const SgsoDashboard: React.FC = () => {
       expiringSoon: 5,
       expired: 2
     }
-  };
+  });
 
   const handleSubmitIncident = () => {
     if (!incidentForm.title || !incidentForm.type || !incidentForm.severity) {
@@ -123,14 +123,14 @@ export const SgsoDashboard: React.FC = () => {
         title: "Campos obrigatórios",
         description: "Preencha todos os campos obrigatórios",
         variant: "destructive"
-      };
+      });
       return;
     }
     
     toast({
       title: "✅ Incidente Registrado",
       description: `Incidente "${incidentForm.title}" foi registrado com sucesso.`
-    };
+    });
     setIncidentDialogOpen(false);
     setIncidentForm({ title: "", type: "", severity: "", description: "", vessel: "", location: "" });
   };
@@ -141,7 +141,7 @@ export const SgsoDashboard: React.FC = () => {
         title: "Campos obrigatórios",
         description: "Preencha todos os campos obrigatórios",
         variant: "destructive"
-      };
+      });
       return;
     }
     
@@ -154,7 +154,7 @@ export const SgsoDashboard: React.FC = () => {
     toast({
       title: "✅ Risco Registrado",
       description: `Risco "${riskForm.title}" classificado como ${level} (Score: ${score}).`
-    };
+    });
     setRiskDialogOpen(false);
     setRiskForm({ title: "", category: "", probability: "", impact: "", description: "", mitigation: "" });
   };
@@ -165,14 +165,14 @@ export const SgsoDashboard: React.FC = () => {
         title: "Campos obrigatórios",
         description: "Preencha todos os campos obrigatórios",
         variant: "destructive"
-      };
+      });
       return;
     }
     
     toast({
       title: "✅ Auditoria Agendada",
       description: `Auditoria "${auditForm.title}" agendada para ${auditForm.scheduledDate}.`
-    };
+    });
     setAuditDialogOpen(false);
     setAuditForm({ title: "", type: "", scope: "", auditor: "", scheduledDate: "", practices: "" });
   };
@@ -181,9 +181,9 @@ export const SgsoDashboard: React.FC = () => {
     toast({
       title: "📊 Gerando Relatório ANP",
       description: "O relatório está sendo preparado. Você será notificado quando estiver pronto."
-    };
+    });
     setActiveTab("dossie");
-  };
+  });
 
   const navigateToTab = (tab: string) => {
     setActiveTab(tab);

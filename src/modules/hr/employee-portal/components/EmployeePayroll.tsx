@@ -74,7 +74,7 @@ export const EmployeePayroll: React.FC = () => {
         title: "Error loading payroll",
         description: error.message,
         variant: "destructive",
-      };
+      });
     } finally {
       setLoading(false);
     }
@@ -93,7 +93,7 @@ export const EmployeePayroll: React.FC = () => {
         title: "Payslip not available",
         description: "Payslip document is not available for this period",
         variant: "destructive",
-      };
+      });
     }
   };
 

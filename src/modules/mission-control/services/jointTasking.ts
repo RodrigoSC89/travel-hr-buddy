@@ -118,7 +118,7 @@ export async function createMission(
       completionPercentage: 0,
       syncStatus: "pending",
       syncErrors: [],
-    };
+    });
 
     // Store in database
     const { error } = await supabase.from("joint_mission_log").insert({
@@ -305,7 +305,7 @@ export async function syncMissionStatus(mission: JointMission): Promise<SyncResu
             })),
             timestamp: new Date().toISOString(),
           },
-        };
+        });
 
         // Send via protocol adapter
         const result = await protocolAdapter.processMessage(message);
@@ -347,7 +347,7 @@ export async function syncMissionStatus(mission: JointMission): Promise<SyncResu
       failedTasks,
       errors,
       latencyMs,
-    };
+    });
   } catch (error) {
     const latencyMs = Date.now() - startTime;
     const errorMsg = error instanceof Error ? error.message : String(error);
@@ -360,7 +360,7 @@ export async function syncMissionStatus(mission: JointMission): Promise<SyncResu
       failedTasks: mission.tasks.length,
       errors: [...errors, errorMsg],
       latencyMs,
-    };
+    });
   }
 }
 
@@ -467,7 +467,7 @@ export async function getMission(missionId: string): Promise<JointMission | null
       syncErrors: data.sync_errors || [],
       lastSyncAt: data.last_sync_at ? new Date(data.last_sync_at) : undefined,
       missionData: data.mission_data,
-    };
+    });
   } catch (error) {
     logger.error("[JointTasking] Error fetching mission:", error);
     return null;

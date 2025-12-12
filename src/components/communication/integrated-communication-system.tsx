@@ -172,7 +172,7 @@ export const IntegratedCommunicationSystem: React.FC<IntegratedCommunicationProp
         message_type: "text" as const,
         is_urgent: false,
         conversation_id: conversationId
-      };
+      });
 
       const { data, error } = await supabase
         .from("crew_communications")
@@ -195,13 +195,13 @@ export const IntegratedCommunicationSystem: React.FC<IntegratedCommunicationProp
       toast({
         title: "Mensagem enviada",
         description: `Mensagem enviada para ${selectedContact.full_name}`,
-      };
+      });
     } catch (error) {
       toast({
         title: "Erro ao enviar mensagem",
         description: "Não foi possível enviar a mensagem. Tente novamente.",
         variant: "destructive"
-      };
+      });
     }
   };
 
@@ -232,7 +232,7 @@ export const IntegratedCommunicationSystem: React.FC<IntegratedCommunicationProp
         file_url: publicUrl,
         is_urgent: false,
         conversation_id: conversationId
-      };
+      });
 
       const { data, error } = await supabase
         .from("crew_communications")
@@ -252,13 +252,13 @@ export const IntegratedCommunicationSystem: React.FC<IntegratedCommunicationProp
       toast({
         title: "Arquivo enviado",
         description: `Arquivo ${file.name} enviado com sucesso`,
-      };
+      });
     } catch (error) {
       toast({
         title: "Erro ao enviar arquivo",
         description: "Não foi possível enviar o arquivo. Tente novamente.",
         variant: "destructive"
-      };
+      });
     }
   };
 
@@ -268,8 +268,8 @@ export const IntegratedCommunicationSystem: React.FC<IntegratedCommunicationProp
     toast({
       title: "Gravação de voz",
       description: "Funcionalidade de voz será implementada em breve",
-    };
-  };
+    });
+  });
 
   const stopVoiceRecording = () => {
     setIsRecording(false);

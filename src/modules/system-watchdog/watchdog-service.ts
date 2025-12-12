@@ -111,7 +111,7 @@ class WatchdogService {
             latency: fallbackLatency,
             message: fallbackError.message,
             timestamp: new Date()
-          };
+          });
         }
 
         return {
@@ -119,7 +119,7 @@ class WatchdogService {
           status: "online",
           latency: fallbackLatency,
           timestamp: new Date()
-        };
+        });
       }
 
       return {
@@ -127,7 +127,7 @@ class WatchdogService {
         status: "online",
         latency,
         timestamp: new Date()
-      };
+      });
     } catch (err) {
       return {
         service: "supabase",
@@ -135,7 +135,7 @@ class WatchdogService {
         latency: Date.now() - startTime,
         message: err instanceof Error ? err.message : "Unknown error",
         timestamp: new Date()
-      };
+      });
     }
   }
 
@@ -158,7 +158,7 @@ class WatchdogService {
         status: response ? "online" : "degraded",
         latency,
         timestamp: new Date()
-      };
+      });
     } catch (err) {
       return {
         service: "ai-service",
@@ -166,7 +166,7 @@ class WatchdogService {
         latency: Date.now() - startTime,
         message: err instanceof Error ? err.message : "AI service unreachable",
         timestamp: new Date()
-      };
+      });
     }
   }
 
@@ -194,7 +194,7 @@ class WatchdogService {
           latency,
           message: `Route ${currentPath} may be invalid or not fully loaded`,
           timestamp: new Date()
-        };
+        });
       }
 
       return {
@@ -202,7 +202,7 @@ class WatchdogService {
         status: "online",
         latency,
         timestamp: new Date()
-      };
+      });
     } catch (err) {
       return {
         service: "routing",
@@ -210,7 +210,7 @@ class WatchdogService {
         latency: Date.now() - startTime,
         message: err instanceof Error ? err.message : "Routing check failed",
         timestamp: new Date()
-      };
+      });
     }
   }
 
@@ -379,7 +379,7 @@ class WatchdogService {
       ...event,
       id: `evt_${Date.now()}_${Math.random().toString(36).slice(2, 11)}`,
       timestamp: new Date()
-    };
+    });
 
     this.events.unshift(newEvent);
 
@@ -443,7 +443,7 @@ class WatchdogService {
       totalEvents: this.events.length,
       recentErrors: this.events.filter(e => e.type === "error").length,
       lastCheck: this.events[0]?.timestamp || null
-    };
+    });
   }
 }
 

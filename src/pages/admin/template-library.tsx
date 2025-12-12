@@ -50,15 +50,15 @@ export default function TemplateLibraryPage() {
     toast({
       title: "Copied!",
       description: "Template content copied to clipboard",
-    };
-  };
+    });
+  });
 
   const useTemplate = async (template: TemplateDefinition) => {
     // In a real implementation, this would save to Supabase ai_document_templates
     toast({
       title: "Template Loaded",
       description: `${template.name} ready for editing`,
-    };
+    });
     // Simulate save to database
     logger.info("Saving template to ai_document_templates", { templateId: template.id, templateName: template.name });
   };

@@ -37,7 +37,7 @@ export const PlansList: React.FC<PlansListProps> = ({ onSelectPlan, onRefresh })
         title: "Error loading plans",
         description: error.message,
         variant: "destructive",
-      };
+      });
     } finally {
       setIsLoading(false);
     }
@@ -61,13 +61,13 @@ export const PlansList: React.FC<PlansListProps> = ({ onSelectPlan, onRefresh })
       toast({
         title: "PDF generated",
         description: "SGSO report has been downloaded.",
-      };
+      });
     } catch (error: SupabaseError | null) {
       toast({
         title: "Error generating PDF",
         description: error.message,
         variant: "destructive",
-      };
+      });
     }
   };
 

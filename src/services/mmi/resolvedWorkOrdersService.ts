@@ -149,7 +149,7 @@ export const getResolvedWorkOrderStats = async (componente?: string) => {
         avgResolutionHours,
       },
       error: null,
-    };
+    });
   } catch (error) {
     logger.error("Unexpected error", error as Error);
     return { data: null, error: error as Error };
@@ -167,7 +167,7 @@ export const updateWorkOrderResult = async (
   try {
     const updateData: Partial<MmiOsResolvidasRow> = {
       resultado,
-    };
+    });
 
     if (tecnico_responsavel) {
       updateData.tecnico_responsavel = tecnico_responsavel;

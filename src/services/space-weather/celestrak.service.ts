@@ -330,7 +330,7 @@ export function calculateDOP(
         glonass: visibleSats.filter(s => s.constellation === "GLONASS").length,
         beidou: visibleSats.filter(s => s.constellation === "BEIDOU").length,
       },
-    };
+    });
   }
   
   // TODO: Implementar cálculo real de DOP usando matriz de geometria

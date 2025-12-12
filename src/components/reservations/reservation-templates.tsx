@@ -110,7 +110,7 @@ export const ReservationTemplates: React.FC<ReservationTemplatesProps> = ({
         title: "Erro",
         description: "Erro ao carregar templates",
         variant: "destructive"
-      };
+      });
     } finally {
       setLoading(false);
     }
@@ -122,7 +122,7 @@ export const ReservationTemplates: React.FC<ReservationTemplatesProps> = ({
         title: "Erro de validação",
         description: "Nome e título são obrigatórios",
         variant: "destructive"
-      };
+      });
       return;
     }
 
@@ -144,7 +144,7 @@ export const ReservationTemplates: React.FC<ReservationTemplatesProps> = ({
         },
         is_public: formData.is_public,
         created_by: user.id
-      };
+      });
 
       if (editingTemplate) {
         const { error } = await supabase
@@ -157,7 +157,7 @@ export const ReservationTemplates: React.FC<ReservationTemplatesProps> = ({
         toast({
           title: "Sucesso",
           description: "Template atualizado com sucesso!"
-        };
+        });
       } else {
         const { error } = await supabase
           .from("reservation_templates")
@@ -168,7 +168,7 @@ export const ReservationTemplates: React.FC<ReservationTemplatesProps> = ({
         toast({
           title: "Sucesso",
           description: "Template criado com sucesso!"
-        };
+        });
       }
 
       resetForm();
@@ -180,7 +180,7 @@ export const ReservationTemplates: React.FC<ReservationTemplatesProps> = ({
         title: "Erro",
         description: "Erro ao salvar template",
         variant: "destructive"
-      };
+      });
     }
   };
 
@@ -198,7 +198,7 @@ export const ReservationTemplates: React.FC<ReservationTemplatesProps> = ({
       toast({
         title: "Sucesso",
         description: "Template excluído com sucesso!"
-      };
+      });
 
       fetchTemplates();
     } catch (error) {
@@ -206,7 +206,7 @@ export const ReservationTemplates: React.FC<ReservationTemplatesProps> = ({
         title: "Erro",
         description: "Erro ao excluir template",
         variant: "destructive"
-      };
+      });
     }
   };
 
@@ -216,8 +216,8 @@ export const ReservationTemplates: React.FC<ReservationTemplatesProps> = ({
     toast({
       title: "Template aplicado",
       description: "Os dados do template foram preenchidos no formulário"
-    };
-  };
+    });
+  });
 
   const handleEditTemplate = (template: ReservationTemplate) => {
     setEditingTemplate(template);
@@ -235,9 +235,9 @@ export const ReservationTemplates: React.FC<ReservationTemplatesProps> = ({
       currency: template.template_data.currency || "BRL",
       notes: template.template_data.notes || "",
       is_public: template.is_public
-    };
+    });
     setShowCreateDialog(true);
-  };
+  });
 
   const resetForm = () => {
     setFormData({
@@ -254,8 +254,8 @@ export const ReservationTemplates: React.FC<ReservationTemplatesProps> = ({
       currency: "BRL",
       notes: "",
       is_public: false
-    };
-  };
+    });
+  });
 
   const getTypeIcon = (type: string) => {
     switch (type) {

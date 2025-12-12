@@ -109,7 +109,7 @@ export default function LogsCenter() {
             message: log.message,
           })),
         },
-      };
+      });
 
       // Show AI insights
       toast.success(

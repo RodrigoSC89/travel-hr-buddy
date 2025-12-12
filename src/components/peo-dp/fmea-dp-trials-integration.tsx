@@ -168,7 +168,7 @@ export const FMEADPTrialsIntegration: React.FC = () => {
         description: "Análise automática será iniciada."
       });
     }, 2000);
-  });
+  };
 
   const getRiskBadge = (risk: string) => {
     const colors = {

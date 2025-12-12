@@ -172,7 +172,7 @@ export function compressPayload<T>(data: T): CompressedPayload {
       d: jsonString,
       os: originalSize,
       ds: originalSize,
-    };
+    });
   }
   
   const compressed = compressString(jsonString);
@@ -187,7 +187,7 @@ export function compressPayload<T>(data: T): CompressedPayload {
       d: jsonString,
       os: originalSize,
       ds: originalSize,
-    };
+    });
   }
   
   logger.debug("[Compression] Payload compressed", {

@@ -301,7 +301,7 @@ export async function queryWithRAG(
     confidence,
     sources,
     requiresHumanValidation: needsHumanValidation,
-  };
+  });
   
   // Create audit entry
   const auditId = await createAuditEntry(userId, query, partialResponse, organizationId);
@@ -347,7 +347,7 @@ export function useRAG() {
     options?: Parameters<typeof queryWithRAG>[3]
   ) => {
     return queryWithRAG(queryText, userId, organizationId, options);
-  };
+  });
   
   const validate = async (
     auditId: string,

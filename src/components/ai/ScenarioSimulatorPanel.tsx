@@ -139,7 +139,7 @@ export const ScenarioSimulatorPanel = memo(function() {
     });
     setResults(null);
     setAiAnalysis("");
-  };
+  });
 
   const loadPreset = (scenarioId: string) => {
     setActiveScenario(scenarioId);
@@ -153,7 +153,7 @@ export const ScenarioSimulatorPanel = memo(function() {
         speedAdjustment: scenario.parameters.speedReduction || 0,
       });
     }
-  };
+  });
 
   const getImpactIcon = (impact: string) => {
     switch (impact) {

@@ -314,7 +314,7 @@ export function useComplianceData() {
       trainings.filter(t => t.status === "expired").length,
     trendPercentage: 5.4,
     trendDirection: "up",
-  };
+  });
 
   const fetchComplianceData = useCallback(async () => {
     setLoading(true);

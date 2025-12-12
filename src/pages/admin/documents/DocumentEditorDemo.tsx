@@ -18,16 +18,16 @@ export default function DocumentEditorDemo() {
     toast({
       title: "New Document ID Generated",
       description: "A new document ID has been created",
-    };
-  };
+    });
+  });
 
   const copyToClipboard = () => {
     navigator.clipboard.writeText(documentId);
     toast({
       title: "Copied!",
       description: "Document ID copied to clipboard",
-    };
-  };
+    });
+  });
 
   return (
     <RoleBasedAccess roles={["admin", "manager"]}>

@@ -352,7 +352,7 @@ class LinkFallbackManager {
       ...event,
       id: `fallback_${Date.now()}_${Math.random().toString(36).slice(2, 9)}`,
       timestamp: new Date()
-    };
+    });
 
     this.eventHistory.unshift(newEvent);
 
@@ -389,7 +389,7 @@ class LinkFallbackManager {
     this.policy = {
       ...this.policy,
       ...updates
-    };
+    });
 
     logger.info("[Fallback Manager] Policy updated", updates);
   }
@@ -405,7 +405,7 @@ class LinkFallbackManager {
       fallbackConnectionId: null,
       activeSince: null,
       reason: null
-    };
+    });
 
     this.stabilityTimers.forEach(timer => clearTimeout(timer));
     this.stabilityTimers.clear();

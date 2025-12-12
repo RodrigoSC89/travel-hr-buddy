@@ -97,7 +97,7 @@ export default function VaultAIComplete() {
         title: "Atenção",
         description: "Digite uma consulta de busca",
         variant: "destructive"
-      };
+      });
       return;
     }
 
@@ -129,7 +129,7 @@ export default function VaultAIComplete() {
       toast({
         title: "Busca Concluída",
         description: `${results.length} resultados encontrados em ${searchDuration}ms`
-      };
+      });
 
       loadSearchLogs();
     } catch (error) {
@@ -138,7 +138,7 @@ export default function VaultAIComplete() {
         title: "Erro",
         description: "Falha ao realizar busca",
         variant: "destructive"
-      };
+      });
     } finally {
       setLoading(false);
     }
@@ -178,7 +178,7 @@ export default function VaultAIComplete() {
           category: doc.category,
           similarity_score: score,
           highlighted_excerpt: excerpt
-        };
+        });
       })
       .filter(result => result.similarity_score >= similarityThreshold)
       .sort((a, b) => b.similarity_score - a.similarity_score);

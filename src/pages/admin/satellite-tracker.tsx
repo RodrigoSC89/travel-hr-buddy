@@ -75,7 +75,7 @@ export default function SatelliteTracker() {
             title: "Satellite Alert",
             description: payload.new.title,
             variant: payload.new.severity === "critical" ? "destructive" : "default",
-          };
+          });
           fetchAlerts();
         }
       )
@@ -84,7 +84,7 @@ export default function SatelliteTracker() {
     return () => {
       supabase.removeChannel(channel);
       cleanupVisualization();
-    };
+    });
   }, []);
 
   const fetchSatellites = async () => {
@@ -118,7 +118,7 @@ export default function SatelliteTracker() {
         title: "Error",
         description: "Failed to load satellites",
         variant: "destructive",
-      };
+      });
     } finally {
       setLoading(false);
     }
@@ -191,7 +191,7 @@ export default function SatelliteTracker() {
       earth.rotation.y += 0.001;
       controls.update();
       renderer.render(scene, camera);
-    };
+    });
     animate();
 
     // Handle resize
@@ -202,12 +202,12 @@ export default function SatelliteTracker() {
       camera.aspect = width / height;
       camera.updateProjectionMatrix();
       rendererRef.current.setSize(width, height);
-    };
+    });
     window.addEventListener("resize", handleResize);
 
     return () => {
       window.removeEventListener("resize", handleResize);
-    };
+    });
   };
 
   const cleanupVisualization = () => {
@@ -232,14 +232,14 @@ export default function SatelliteTracker() {
       toast({
         title: "Tracking Started",
         description: "Satellite tracking session initiated",
-      };
+      });
     } catch (error) {
       logger.error("Error starting satellite tracking", { error, satelliteId });
       toast({
         title: "Error",
         description: "Failed to start tracking session",
         variant: "destructive",
-      };
+      });
     }
   };
 
@@ -259,7 +259,7 @@ export default function SatelliteTracker() {
       toast({
         title: "Tracking Stopped",
         description: "Satellite tracking session ended",
-      };
+      });
     } catch (error) {
       logger.error("Error stopping satellite tracking", { error, trackingSessionId });
     }
@@ -276,7 +276,7 @@ export default function SatelliteTracker() {
       toast({
         title: "Alert Resolved",
         description: "Satellite alert marked as resolved",
-      };
+      });
 
       fetchAlerts();
     } catch (error) {

@@ -246,7 +246,7 @@ class CoordinationAIService {
     const updateData: any = {
       status,
       updated_at: new Date().toISOString(),
-    };
+    });
 
     if (status === "completed" || status === "failed") {
       updateData.completed_at = new Date().toISOString();
@@ -378,7 +378,7 @@ class CoordinationAIService {
       pendingTasks: tasks.filter((t) => t.status === "pending").length,
       completedTasks: tasks.filter((t) => t.status === "completed").length,
       failedTasks: tasks.filter((t) => t.status === "failed").length,
-    };
+    });
   }
 
   /**

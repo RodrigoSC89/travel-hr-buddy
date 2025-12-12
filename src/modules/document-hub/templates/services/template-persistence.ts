@@ -147,7 +147,7 @@ export class TemplatePersistence {
       metadata: data.metadata || {},
       createdAt: data.created_at,
       updatedAt: data.updated_at
-    };
+    });
   }
 }
 

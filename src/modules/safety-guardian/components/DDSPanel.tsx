@@ -55,7 +55,7 @@ export const DDSPanel: React.FC<DDSPanelProps> = ({ records, onCreateDDS, loadin
       participants_count: 0,
       duration_minutes: 15,
       notes: ""
-    };
+    });
     setDialogOpen(false);
     toast.success("DDS registrado com sucesso!");
   };
