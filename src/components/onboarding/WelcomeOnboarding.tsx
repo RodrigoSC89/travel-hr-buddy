@@ -83,7 +83,7 @@ export const WelcomeOnboarding: React.FC = () => {
       setCurrentStep(prev => prev + 1);
     } else {
       handleComplete();
-    };
+    }
   };
 
   const handleSkip = () => {
@@ -218,7 +218,7 @@ export const WelcomeOnboarding: React.FC = () => {
 };
 
 // Hook para resetar onboarding (útil para testes)
-export const useResetOnboarding = memo(() => {
+export const useResetOnboarding = () => {
   return () => {
     localStorage.removeItem(STORAGE_KEY);
     window.location.reload();
