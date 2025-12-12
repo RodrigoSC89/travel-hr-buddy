@@ -186,7 +186,7 @@ const AccessibilityControls = () => {
     dyslexiaFont: false,
     screenReader: false,
     colorBlindMode: "none" as "none" | "protanopia" | "deuteranopia" | "tritanopia"
-  };
+  });
 
   const toggle = (key: keyof typeof settings) => {
     setSettings(prev => ({ ...prev, [key]: !prev[key] }));
