@@ -353,6 +353,7 @@ export const ScenarioSimulatorPanel = memo(function() {
         )}
       </CardContent>
     </Card>
-    );
+      );
+    }
   }
-});
+);
