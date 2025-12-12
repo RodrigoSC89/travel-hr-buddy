@@ -166,7 +166,7 @@ export function OrganizationProvider({ children }: OrganizationProviderProps): J
       } finally {
         setIsLoading(false);
       }
-    });
+    };
 
     initializeOrganization();
   }, []);
