@@ -199,4 +199,4 @@ export const useDashboardData = memo(function() {
     markAllNotificationsAsRead,
     unreadCount: notifications.filter(n => !n.isRead).length
   };
-}
+});
