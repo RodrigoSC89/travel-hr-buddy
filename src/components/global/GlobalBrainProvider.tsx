@@ -25,7 +25,7 @@ export const useBrain = memo(() => {
 interface GlobalBrainProviderProps {
   children: ReactNode;
   showTrigger?: boolean;
-});
+};
 
 export const GlobalBrainProvider: React.FC<GlobalBrainProviderProps> = ({ 
   children, 
