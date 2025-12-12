@@ -92,7 +92,7 @@ export default function Dashboard() {
     } finally {
       setIsLoading(false);
     }
-  });
+  };
 
   const kpiCards = [
     {
