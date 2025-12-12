@@ -1,22 +1,26 @@
 {
   "version": 2,
-  "buildCommand": "rm -rf node_modules .vite* && npm install && npm run build",
-  "installCommand": "npm install",
+  "buildCommand": "npm run build",
+  "installCommand": "npm install --legacy-peer-deps",
   "framework": "vite",
   "outputDirectory": "dist",
   "env": {
-    "NODE_ENV": "production",
-    "NODE_VERSION": "20"
+    "NODE_ENV": "production"
   },
   "build": {
     "env": {
-      "NODE_OPTIONS": "--max-old-space-size=4096"
+      "NODE_OPTIONS": "--max-old-space-size=8192",
+      "CI": "true",
+      "VITE_BUILD_MODE": "production"
     }
   },
-  "routes": [
+  "functions": {
+    "maxDuration": 60
+  },
+  "rewrites": [
     {
-      "src": "/(.*)",
-      "dest": "/index.html"
+      "source": "/(.*)",
+      "destination": "/index.html"
     }
   ]
 }
