@@ -541,5 +541,3 @@ export const TrainingAcademyAI = memo(function() {
     </div>
   );
 });
-
-export const TrainingAcademyAI;
