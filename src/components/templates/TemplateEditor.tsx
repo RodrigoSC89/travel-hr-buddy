@@ -264,7 +264,7 @@ export default function TemplateEditor() {
                 type="button"
                 size="sm"
                 variant="ghost"
-                onClick={() => editor?.chain().focus().toggleBold().run()}
+                onClick={() => editor?.chain().focus().toggleBold().run(}
                 className={editor?.isActive("bold") ? "bg-muted" : ""}
                 disabled={!editor}
               >
@@ -274,7 +274,7 @@ export default function TemplateEditor() {
                 type="button"
                 size="sm"
                 variant="ghost"
-                onClick={() => editor?.chain().focus().toggleItalic().run()}
+                onClick={() => editor?.chain().focus().toggleItalic().run(}
                 className={editor?.isActive("italic") ? "bg-muted" : ""}
                 disabled={!editor}
               >
@@ -304,7 +304,7 @@ export default function TemplateEditor() {
                 type="button"
                 size="sm"
                 variant="ghost"
-                onClick={() => editor?.chain().focus().toggleBulletList().run()}
+                onClick={() => editor?.chain().focus().toggleBulletList().run(}
                 className={editor?.isActive("bulletList") ? "bg-muted" : ""}
                 disabled={!editor}
               >
@@ -314,7 +314,7 @@ export default function TemplateEditor() {
                 type="button"
                 size="sm"
                 variant="ghost"
-                onClick={() => editor?.chain().focus().toggleOrderedList().run()}
+                onClick={() => editor?.chain().focus().toggleOrderedList().run(}
                 className={editor?.isActive("orderedList") ? "bg-muted" : ""}
                 disabled={!editor}
               >
@@ -324,7 +324,7 @@ export default function TemplateEditor() {
                 type="button"
                 size="sm"
                 variant="ghost"
-                onClick={() => editor?.chain().focus().toggleCodeBlock().run()}
+                onClick={() => editor?.chain().focus().toggleCodeBlock().run(}
                 className={editor?.isActive("codeBlock") ? "bg-muted" : ""}
                 disabled={!editor}
               >

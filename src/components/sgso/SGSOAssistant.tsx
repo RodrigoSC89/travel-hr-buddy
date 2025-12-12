@@ -407,7 +407,7 @@ Por favor, reformule sua pergunta ou selecione um dos temas acima para que eu po
                 }}
               />
               <Button
-                onClick={() => handleSendMessage()}
+                onClick={() => handleSendMessage(}
                 disabled={isLoading || !input.trim()}
                 className="px-6"
               >

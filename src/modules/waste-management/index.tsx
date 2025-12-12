@@ -281,7 +281,7 @@ function WasteManagement() {
                         placeholder="Pergunte sobre MARPOL, descarte..."
                         value={chatMessage}
                         onChange={handleChange}
-                        onKeyDown={(e) => e.key === "Enter" && handleSendMessage()}
+                        onKeyDown={(e) => e.key === "Enter" && handleSendMessage(}
                       />
                       <Button size="icon" onClick={handleSendMessage}>
                         <Send className="h-4 w-4" />

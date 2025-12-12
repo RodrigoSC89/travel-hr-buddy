@@ -294,7 +294,7 @@ const NotificationItem: React.FC<NotificationItemProps> = ({
               <a
                 href={notification.actionUrl}
                 className="text-xs text-primary hover:underline flex items-center gap-1"
-                onClick={(e) => e.stopPropagation()}
+                onClick={(e) => e.stopPropagation(}
               >
                 {notification.actionLabel || "Ver mais"}
                 <ChevronRight className="w-3 h-3" />

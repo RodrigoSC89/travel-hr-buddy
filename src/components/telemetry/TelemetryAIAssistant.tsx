@@ -253,7 +253,7 @@ export const TelemetryAIAssistant = memo(function({
             value={input}
             onChange={handleChange}
             placeholder="Pergunte sobre os dados de telemetria..."
-            onKeyDown={(e) => e.key === "Enter" && handleSendMessage()}
+            onKeyDown={(e) => e.key === "Enter" && handleSendMessage(}
             disabled={isLoading}
             className="flex-1"
           />

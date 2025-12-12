@@ -910,7 +910,7 @@ export default function ChannelManagerProfessional() {
                             <Power className={`h-3 w-3 ${channel.is_active ? "text-green-500" : "text-muted-foreground"}`} />
                           </Button>
                           <DropdownMenu>
-                            <DropdownMenuTrigger asChild onClick={(e) => e.stopPropagation()}>
+                            <DropdownMenuTrigger asChild onClick={(e) => e.stopPropagation(}>
                               <Button variant="ghost" size="icon" className="h-6 w-6">
                                 <MoreVertical className="h-3 w-3" />
                               </Button>

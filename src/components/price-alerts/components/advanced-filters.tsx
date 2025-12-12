@@ -125,7 +125,7 @@ export const AdvancedFilters: React.FC<AdvancedFiltersProps> = ({
             placeholder="Buscar produtos..."
             value={tempFilters.search}
             onChange={handleChange}
-            onKeyDown={(e) => e.key === "Enter" && applyFilters()}
+            onKeyDown={(e) => e.key === "Enter" && applyFilters(}
             className="pl-10"
           />
         </div>

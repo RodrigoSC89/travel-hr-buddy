@@ -253,7 +253,7 @@ export const EnhancedNotificationCenter: React.FC = () => {
             <Button 
               variant="outline" 
               size="sm"
-              onClick={() => loadNotifications()}
+              onClick={() => loadNotifications(}
             >
               <RotateCcw className="w-4 h-4 mr-2" />
               Atualizar

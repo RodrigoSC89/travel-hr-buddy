@@ -306,7 +306,7 @@ Dados atuais do sistema:
               }}
             />
             <Button
-              onClick={() => sendMessage()}
+              onClick={() => sendMessage(}
               disabled={!input.trim() || isLoading}
               size="icon"
               className="h-10 w-10"

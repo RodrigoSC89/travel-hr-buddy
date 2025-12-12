@@ -393,7 +393,7 @@ export default function ProcurementCommandCenter() {
             </p>
           </div>
           <div className="flex gap-2">
-            <Button variant="outline" className="gap-2" onClick={() => loadAIProcurementData()}>
+            <Button variant="outline" className="gap-2" onClick={() => loadAIProcurementData(}>
               <RefreshCw className={cn("h-4 w-4", isAnalyzing && "animate-spin")} />
               Analisar
             </Button>

@@ -725,7 +725,7 @@ export const ChatInterface = memo(() => {
                   placeholder="Digite uma mensagem..."
                   value={newMessage}
                   onChange={handleChange}
-                  onKeyPress={(e) => e.key === "Enter" && sendMessage()}
+                  onKeyPress={(e) => e.key === "Enter" && sendMessage(}
                   className="flex-1"
                 />
                 <Button onClick={sendMessage} size="sm">

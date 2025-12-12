@@ -188,7 +188,7 @@ export default function InfirmaryDashboard() {
                 placeholder="Descreva sintomas ou dúvidas..."
                 value={chatMessage}
                 onChange={handleChange}
-                onKeyPress={(e) => e.key === "Enter" && handleSendMessage()}
+                onKeyPress={(e) => e.key === "Enter" && handleSendMessage(}
               />
               <Button size="icon" onClick={handleSendMessage}>
                 <Send className="h-4 w-4" />

@@ -223,10 +223,10 @@ const HRChatbot: React.FC = () => {
             placeholder="Digite sua pergunta..."
             value={input}
             onChange={handleChange}
-            onKeyDown={(e) => e.key === "Enter" && handleSend()}
+            onKeyDown={(e) => e.key === "Enter" && handleSend(}
             disabled={isLoading}
           />
-          <Button onClick={() => handleSend()} disabled={isLoading || !input.trim()}>
+          <Button onClick={() => handleSend(} disabled={isLoading || !input.trim()}>
             <Send className="w-4 h-4" />
           </Button>
         </div>

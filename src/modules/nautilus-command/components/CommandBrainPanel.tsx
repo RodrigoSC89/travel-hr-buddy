@@ -277,7 +277,7 @@ export const CommandBrainPanel = memo(function({ context, onSettingsClick }: Com
             ref={inputRef}
             value={input}
             onChange={handleChange}
-            onKeyPress={(e) => e.key === "Enter" && handleSend()}
+            onKeyPress={(e) => e.key === "Enter" && handleSend(}
             placeholder="Pergunte ao Nautilus Brain..."
             disabled={isLoading}
             className="flex-1"

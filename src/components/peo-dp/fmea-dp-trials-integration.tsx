@@ -212,7 +212,7 @@ export const FMEADPTrialsIntegration: React.FC = () => {
                 onChange={handleFileUpload}
               />
               <Button 
-                onClick={() => document.getElementById("fmea-upload")?.click()}
+                onClick={() => document.getElementById("fmea-upload")?.click(}
                 disabled={isUploading}
               >
                 {isUploading ? (

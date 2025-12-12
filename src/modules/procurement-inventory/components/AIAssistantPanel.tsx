@@ -274,7 +274,7 @@ export default function AIAssistantPanel({ onClose }: AIAssistantPanelProps) {
             placeholder="Pergunte sobre estoque, compras..."
             value={inputMessage}
             onChange={handleChange}
-            onKeyPress={(e) => e.key === "Enter" && handleSend()}
+            onKeyPress={(e) => e.key === "Enter" && handleSend(}
             disabled={isLoading}
             className="flex-1"
           />

@@ -261,7 +261,7 @@ export const EmployeeRequests = memo(function() {
               )}
 
               <Button
-                onClick={() => createRequestMutation.mutate()}
+                onClick={() => createRequestMutation.mutate(}
                 disabled={!title || createRequestMutation.isPending}
                 className="w-full"
               >

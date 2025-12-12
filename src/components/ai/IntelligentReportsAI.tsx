@@ -210,7 +210,7 @@ A análise contempla o período atual e inclui comparações com períodos anter
               disabled={isGenerating}
             />
             <Button 
-              onClick={() => handleGenerate()}
+              onClick={() => handleGenerate(}
               disabled={!prompt.trim() || isGenerating}
               className="bg-gradient-to-r from-purple-600 to-pink-500 hover:from-purple-700 hover:to-pink-600"
             >

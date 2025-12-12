@@ -299,7 +299,7 @@ const IntelligentDocumentManager = () => {
           />
           
           <Button 
-            onClick={() => fileInputRef.current?.click()}
+            onClick={() => fileInputRef.current?.click(}
             className="gap-2"
           >
             <Upload className="w-4 h-4" />

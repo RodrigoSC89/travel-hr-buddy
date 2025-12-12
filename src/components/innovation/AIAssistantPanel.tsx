@@ -234,7 +234,7 @@ export const AIAssistantPanel = memo(() => {
               placeholder="Ex: 'Analisar eficiência da frota no último trimestre'"
               value={query}
               onChange={handleChange}
-              onKeyPress={(e) => e.key === "Enter" && handleQuery()}
+              onKeyPress={(e) => e.key === "Enter" && handleQuery(}
               disabled={isProcessing}
             />
             <Button 

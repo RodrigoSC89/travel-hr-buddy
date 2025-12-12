@@ -400,7 +400,7 @@ What would you like assistance with today?`,
                       value={inputValue}
                       onChange={handleChange}
                       placeholder="Ask me anything about your maritime operations..."
-                      onKeyPress={(e) => e.key === "Enter" && handleSendMessage()}
+                      onKeyPress={(e) => e.key === "Enter" && handleSendMessage(}
                       disabled={isProcessing}
                     />
                   </div>

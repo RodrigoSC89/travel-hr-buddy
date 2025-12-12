@@ -345,7 +345,7 @@ export function DataTable<T extends Record<string, unknown>>({
                               <Button 
                                 variant="ghost" 
                                 size="sm"
-                                onClick={(e) => e.stopPropagation()}
+                                onClick={(e) => e.stopPropagation(}
                               >
                                 <MoreHorizontal size={16} />
                               </Button>
