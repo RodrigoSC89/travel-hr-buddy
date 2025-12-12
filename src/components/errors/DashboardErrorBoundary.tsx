@@ -46,7 +46,7 @@ export class DashboardErrorBoundary extends Component<Props, State> {
     this.setState({
       hasError: false,
       error: null,
-    };
+    });
   };
 
   render(): ReactNode {
