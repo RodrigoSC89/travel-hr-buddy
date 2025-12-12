@@ -72,7 +72,7 @@ export const MiniChart = memo(function MiniChart({
       trend, 
       min, 
       max 
-    };
+    });
   }, [data, type, width, height]);
 
   const trendColor = trend > 0 ? "text-green-500" : trend < 0 ? "text-red-500" : "text-muted-foreground";

@@ -36,7 +36,7 @@ export const CommandCenterAI = memo(function() {
       setBriefing(result.response);
       toast.success("Briefing gerado!");
     }
-  };
+  });
 
   const kpis = [
     { label: "Embarcações Ativas", value: "5/6", icon: Ship, color: "text-blue-500", trend: "stable" },

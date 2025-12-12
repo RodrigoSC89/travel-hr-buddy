@@ -63,7 +63,7 @@ export const SystemReadinessIndicator = memo(function SystemReadinessIndicator()
     operational: "Operacional",
     degraded: "Degradado",
     offline: "Offline"
-  };
+  });
 
   return (
     <TooltipProvider>

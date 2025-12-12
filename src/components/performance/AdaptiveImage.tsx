@@ -93,7 +93,7 @@ export const AdaptiveImage = memo(function AdaptiveImage({
   const handleError = () => {
     setHasError(true);
     onError?.();
-  };
+  });
 
   // Placeholder styles
   const placeholderStyle = placeholder === "blur" && blurDataURL

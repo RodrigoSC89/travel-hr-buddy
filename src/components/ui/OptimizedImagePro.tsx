@@ -83,7 +83,7 @@ export const OptimizedImagePro = memo(function OptimizedImagePro({
   const handleError = () => {
     setError(true);
     onError?.();
-  };
+  });
   
   const blurPlaceholder = createPlaceholder(
     optimalWidth || 100,

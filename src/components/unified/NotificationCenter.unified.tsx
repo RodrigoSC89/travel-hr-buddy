@@ -1065,7 +1065,7 @@ export const NotificationBell: React.FC<NotificationBellProps> = ({
       />
     </>
   );
-};
+});
 
 // ============================================
 // REAL-TIME NOTIFICATION CENTER (Alias)

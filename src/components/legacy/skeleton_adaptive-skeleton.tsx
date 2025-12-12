@@ -180,4 +180,4 @@ export const ModuleCardSkeleton = memo(function ModuleCardSkeleton() {
 // Export all
 export {
   AdaptiveSkeleton as Skeleton,
-};
+});
