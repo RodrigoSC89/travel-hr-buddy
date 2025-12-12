@@ -7,7 +7,7 @@ export interface IntegrationFlow {
   source: string;
   target: string;
   dataType: string;
-  status: 'working' | 'partial' | 'broken';
+  status: "working" | "partial" | "broken";
   latency?: number;
   issues: string[];
 }
@@ -27,7 +27,7 @@ export interface IntegrationReport {
   inconsistencies: {
     description: string;
     modules: string[];
-    severity: 'low' | 'medium' | 'high';
+    severity: "low" | "medium" | "high";
   }[];
   flowMap: string; // Mermaid diagram
 }
@@ -43,9 +43,9 @@ class ModuleIntegrationValidator {
     const inconsistencies = this.findInconsistencies();
     const flowMap = this.generateFlowMap(flows);
     
-    const working = flows.filter(f => f.status === 'working').length;
-    const partial = flows.filter(f => f.status === 'partial').length;
-    const broken = flows.filter(f => f.status === 'broken').length;
+    const working = flows.filter(f => f.status === "working").length;
+    const partial = flows.filter(f => f.status === "partial").length;
+    const broken = flows.filter(f => f.status === "broken").length;
     
     return {
       timestamp: Date.now(),
@@ -67,150 +67,150 @@ class ModuleIntegrationValidator {
     return [
       // Core → Operational
       {
-        source: 'auth',
-        target: 'dashboard',
-        dataType: 'user_session',
-        status: 'working',
+        source: "auth",
+        target: "dashboard",
+        dataType: "user_session",
+        status: "working",
         latency: 50,
         issues: []
       },
       {
-        source: 'auth',
-        target: 'all_modules',
-        dataType: 'permissions',
-        status: 'working',
+        source: "auth",
+        target: "all_modules",
+        dataType: "permissions",
+        status: "working",
         latency: 30,
         issues: []
       },
       // Fleet → Maintenance
       {
-        source: 'fleet',
-        target: 'maintenance',
-        dataType: 'vessel_data',
-        status: 'working',
+        source: "fleet",
+        target: "maintenance",
+        dataType: "vessel_data",
+        status: "working",
         latency: 100,
         issues: []
       },
       {
-        source: 'maintenance',
-        target: 'fleet',
-        dataType: 'maintenance_status',
-        status: 'working',
+        source: "maintenance",
+        target: "fleet",
+        dataType: "maintenance_status",
+        status: "working",
         latency: 80,
         issues: []
       },
       // Fleet → Compliance
       {
-        source: 'fleet',
-        target: 'compliance',
-        dataType: 'certificates',
-        status: 'working',
+        source: "fleet",
+        target: "compliance",
+        dataType: "certificates",
+        status: "working",
         latency: 120,
         issues: []
       },
       // HR → Training
       {
-        source: 'hr',
-        target: 'training',
-        dataType: 'crew_profiles',
-        status: 'working',
+        source: "hr",
+        target: "training",
+        dataType: "crew_profiles",
+        status: "working",
         latency: 90,
         issues: []
       },
       {
-        source: 'training',
-        target: 'hr',
-        dataType: 'certifications',
-        status: 'working',
+        source: "training",
+        target: "hr",
+        dataType: "certifications",
+        status: "working",
         latency: 85,
         issues: []
       },
       // Inventory → Maintenance
       {
-        source: 'inventory',
-        target: 'maintenance',
-        dataType: 'spare_parts',
-        status: 'working',
+        source: "inventory",
+        target: "maintenance",
+        dataType: "spare_parts",
+        status: "working",
         latency: 70,
         issues: []
       },
       {
-        source: 'maintenance',
-        target: 'inventory',
-        dataType: 'consumption_data',
-        status: 'working',
+        source: "maintenance",
+        target: "inventory",
+        dataType: "consumption_data",
+        status: "working",
         latency: 75,
         issues: []
       },
       // All → Reports
       {
-        source: 'all_modules',
-        target: 'reports',
-        dataType: 'aggregated_data',
-        status: 'working',
+        source: "all_modules",
+        target: "reports",
+        dataType: "aggregated_data",
+        status: "working",
         latency: 200,
         issues: []
       },
       // All → AI Insights
       {
-        source: 'all_modules',
-        target: 'ai-insights',
-        dataType: 'operational_data',
-        status: 'working',
+        source: "all_modules",
+        target: "ai-insights",
+        dataType: "operational_data",
+        status: "working",
         latency: 150,
         issues: []
       },
       // AI → All
       {
-        source: 'ai-insights',
-        target: 'all_modules',
-        dataType: 'recommendations',
-        status: 'working',
+        source: "ai-insights",
+        target: "all_modules",
+        dataType: "recommendations",
+        status: "working",
         latency: 100,
         issues: []
       },
       // Safety → Compliance
       {
-        source: 'safety',
-        target: 'compliance',
-        dataType: 'incident_reports',
-        status: 'working',
+        source: "safety",
+        target: "compliance",
+        dataType: "incident_reports",
+        status: "working",
         latency: 110,
         issues: []
       },
       // Logistics → Fleet
       {
-        source: 'logistics',
-        target: 'fleet',
-        dataType: 'route_plans',
-        status: 'working',
+        source: "logistics",
+        target: "fleet",
+        dataType: "route_plans",
+        status: "working",
         latency: 130,
         issues: []
       },
       // Documents → All
       {
-        source: 'documents',
-        target: 'all_modules',
-        dataType: 'document_references',
-        status: 'working',
+        source: "documents",
+        target: "all_modules",
+        dataType: "document_references",
+        status: "working",
         latency: 60,
         issues: []
       },
       // Offline → Sync
       {
-        source: 'offline',
-        target: 'sync_engine',
-        dataType: 'queued_actions',
-        status: 'working',
+        source: "offline",
+        target: "sync_engine",
+        dataType: "queued_actions",
+        status: "working",
         latency: 40,
         issues: []
       },
       // Notifications → All
       {
-        source: 'notifications',
-        target: 'all_modules',
-        dataType: 'alert_triggers',
-        status: 'working',
+        source: "notifications",
+        target: "all_modules",
+        dataType: "alert_triggers",
+        status: "working",
         latency: 25,
         issues: []
       }
@@ -220,12 +220,12 @@ class ModuleIntegrationValidator {
   /**
    * Find data duplications
    */
-  private findDuplications(): IntegrationReport['duplications'] {
+  private findDuplications(): IntegrationReport["duplications"] {
     return [
       {
-        entity: 'Informações de tripulação',
-        locations: ['hr', 'crew-management', 'training'],
-        recommendation: 'Centralizar em um único módulo de tripulação com referências'
+        entity: "Informações de tripulação",
+        locations: ["hr", "crew-management", "training"],
+        recommendation: "Centralizar em um único módulo de tripulação com referências"
       }
     ];
   }
@@ -233,12 +233,12 @@ class ModuleIntegrationValidator {
   /**
    * Find data inconsistencies
    */
-  private findInconsistencies(): IntegrationReport['inconsistencies'] {
+  private findInconsistencies(): IntegrationReport["inconsistencies"] {
     return [
       {
-        description: 'Formato de data inconsistente em alguns módulos (ISO vs locale)',
-        modules: ['reports', 'logistics'],
-        severity: 'low'
+        description: "Formato de data inconsistente em alguns módulos (ISO vs locale)",
+        modules: ["reports", "logistics"],
+        severity: "low"
       }
     ];
   }
@@ -247,54 +247,54 @@ class ModuleIntegrationValidator {
    * Generate Mermaid flow diagram
    */
   private generateFlowMap(flows: IntegrationFlow[]): string {
-    let diagram = 'flowchart TB\n';
-    diagram += '  subgraph Core\n';
-    diagram += '    auth[Auth]\n';
-    diagram += '    users[Users]\n';
-    diagram += '    settings[Settings]\n';
-    diagram += '  end\n\n';
+    let diagram = "flowchart TB\n";
+    diagram += "  subgraph Core\n";
+    diagram += "    auth[Auth]\n";
+    diagram += "    users[Users]\n";
+    diagram += "    settings[Settings]\n";
+    diagram += "  end\n\n";
     
-    diagram += '  subgraph Operations\n';
-    diagram += '    fleet[Fleet]\n';
-    diagram += '    maintenance[Maintenance]\n';
-    diagram += '    inventory[Inventory]\n';
-    diagram += '    logistics[Logistics]\n';
-    diagram += '  end\n\n';
+    diagram += "  subgraph Operations\n";
+    diagram += "    fleet[Fleet]\n";
+    diagram += "    maintenance[Maintenance]\n";
+    diagram += "    inventory[Inventory]\n";
+    diagram += "    logistics[Logistics]\n";
+    diagram += "  end\n\n";
     
-    diagram += '  subgraph Compliance\n';
-    diagram += '    compliance[Compliance]\n';
-    diagram += '    safety[Safety]\n';
-    diagram += '    documents[Documents]\n';
-    diagram += '  end\n\n';
+    diagram += "  subgraph Compliance\n";
+    diagram += "    compliance[Compliance]\n";
+    diagram += "    safety[Safety]\n";
+    diagram += "    documents[Documents]\n";
+    diagram += "  end\n\n";
     
-    diagram += '  subgraph HR\n';
-    diagram += '    hr[HR]\n';
-    diagram += '    training[Training]\n';
-    diagram += '  end\n\n';
+    diagram += "  subgraph HR\n";
+    diagram += "    hr[HR]\n";
+    diagram += "    training[Training]\n";
+    diagram += "  end\n\n";
     
-    diagram += '  subgraph Intelligence\n';
-    diagram += '    ai[AI Insights]\n';
-    diagram += '    reports[Reports]\n';
-    diagram += '    analytics[Analytics]\n';
-    diagram += '  end\n\n';
+    diagram += "  subgraph Intelligence\n";
+    diagram += "    ai[AI Insights]\n";
+    diagram += "    reports[Reports]\n";
+    diagram += "    analytics[Analytics]\n";
+    diagram += "  end\n\n";
     
     // Add connections
-    diagram += '  auth --> fleet\n';
-    diagram += '  auth --> maintenance\n';
-    diagram += '  fleet <--> maintenance\n';
-    diagram += '  fleet --> compliance\n';
-    diagram += '  maintenance <--> inventory\n';
-    diagram += '  hr <--> training\n';
-    diagram += '  safety --> compliance\n';
-    diagram += '  logistics --> fleet\n';
-    diagram += '  ai --> fleet\n';
-    diagram += '  ai --> maintenance\n';
-    diagram += '  ai --> hr\n';
-    diagram += '  documents --> compliance\n';
-    diagram += '  documents --> hr\n';
-    diagram += '  fleet --> reports\n';
-    diagram += '  maintenance --> reports\n';
-    diagram += '  compliance --> reports\n';
+    diagram += "  auth --> fleet\n";
+    diagram += "  auth --> maintenance\n";
+    diagram += "  fleet <--> maintenance\n";
+    diagram += "  fleet --> compliance\n";
+    diagram += "  maintenance <--> inventory\n";
+    diagram += "  hr <--> training\n";
+    diagram += "  safety --> compliance\n";
+    diagram += "  logistics --> fleet\n";
+    diagram += "  ai --> fleet\n";
+    diagram += "  ai --> maintenance\n";
+    diagram += "  ai --> hr\n";
+    diagram += "  documents --> compliance\n";
+    diagram += "  documents --> hr\n";
+    diagram += "  fleet --> reports\n";
+    diagram += "  maintenance --> reports\n";
+    diagram += "  compliance --> reports\n";
     
     return diagram;
   }

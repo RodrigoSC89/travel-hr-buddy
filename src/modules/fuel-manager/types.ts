@@ -8,7 +8,7 @@ export interface FuelConsumption {
   vessel_name?: string;
   voyage_id?: string;
   consumption_date: string;
-  fuel_type: 'MGO' | 'HFO' | 'VLSFO' | 'LNG';
+  fuel_type: "MGO" | "HFO" | "VLSFO" | "LNG";
   quantity_liters: number;
   cost_usd: number;
   distance_nm: number;

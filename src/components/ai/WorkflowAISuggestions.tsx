@@ -336,31 +336,31 @@ Gere sugestões em formato JSON array.`
 
   const getCriticidadeColor = (criticidade: string) => {
     switch (criticidade) {
-      case "crítica":
-        return "bg-red-500/10 text-red-500 border-red-500/20";
-      case "alta":
-        return "bg-orange-500/10 text-orange-500 border-orange-500/20";
-      case "média":
-        return "bg-yellow-500/10 text-yellow-500 border-yellow-500/20";
-      default:
-        return "bg-green-500/10 text-green-500 border-green-500/20";
+    case "crítica":
+      return "bg-red-500/10 text-red-500 border-red-500/20";
+    case "alta":
+      return "bg-orange-500/10 text-orange-500 border-orange-500/20";
+    case "média":
+      return "bg-yellow-500/10 text-yellow-500 border-yellow-500/20";
+    default:
+      return "bg-green-500/10 text-green-500 border-green-500/20";
     }
   };
 
   const getTipoIcon = (tipo: string) => {
     switch (tipo) {
-      case "Criar tarefa":
-        return <CheckCircle2 className="h-4 w-4 text-blue-500" />;
-      case "Ajustar prazo":
-        return <Clock className="h-4 w-4 text-yellow-500" />;
-      case "Trocar responsável":
-        return <User className="h-4 w-4 text-purple-500" />;
-      case "Escalar problema":
-        return <AlertTriangle className="h-4 w-4 text-red-500" />;
-      case "Otimizar processo":
-        return <Zap className="h-4 w-4 text-green-500" />;
-      default:
-        return <Lightbulb className="h-4 w-4 text-yellow-500" />;
+    case "Criar tarefa":
+      return <CheckCircle2 className="h-4 w-4 text-blue-500" />;
+    case "Ajustar prazo":
+      return <Clock className="h-4 w-4 text-yellow-500" />;
+    case "Trocar responsável":
+      return <User className="h-4 w-4 text-purple-500" />;
+    case "Escalar problema":
+      return <AlertTriangle className="h-4 w-4 text-red-500" />;
+    case "Otimizar processo":
+      return <Zap className="h-4 w-4 text-green-500" />;
+    default:
+      return <Lightbulb className="h-4 w-4 text-yellow-500" />;
     }
   };
 
@@ -466,8 +466,8 @@ Gere sugestões em formato JSON array.`
                         suggestion.status === "applied" 
                           ? "bg-green-500/5 border-green-500/20" 
                           : suggestion.status === "dismissed"
-                          ? "bg-muted/30 opacity-60"
-                          : "bg-card hover:bg-accent/50"
+                            ? "bg-muted/30 opacity-60"
+                            : "bg-card hover:bg-accent/50"
                       }`}
                     >
                       <div className="flex items-start justify-between gap-3">

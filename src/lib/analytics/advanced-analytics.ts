@@ -3,7 +3,7 @@
  * Comprehensive analytics for maritime operations
  */
 
-import { useState, useEffect, useCallback } from 'react';
+import { useState, useEffect, useCallback } from "react";
 
 export interface AnalyticsEvent {
   name: string;
@@ -70,7 +70,7 @@ class AdvancedAnalytics {
 
   private initSession(): void {
     // Track session start
-    this.track('session_start', 'system', {
+    this.track("session_start", "system", {
       referrer: document.referrer,
       url: window.location.href,
       userAgent: navigator.userAgent,
@@ -80,31 +80,31 @@ class AdvancedAnalytics {
     this.trackPageView();
 
     // Listen for page changes
-    window.addEventListener('popstate', () => this.trackPageView());
+    window.addEventListener("popstate", () => this.trackPageView());
 
     // Track session end
-    window.addEventListener('beforeunload', () => {
-      this.track('session_end', 'system', {
+    window.addEventListener("beforeunload", () => {
+      this.track("session_end", "system", {
         duration: Date.now() - this.getSessionStartTime(),
       });
       this.flush();
     });
 
     // Track visibility changes
-    document.addEventListener('visibilitychange', () => {
+    document.addEventListener("visibilitychange", () => {
       if (document.hidden) {
-        this.track('tab_hidden', 'engagement');
+        this.track("tab_hidden", "engagement");
       } else {
-        this.track('tab_visible', 'engagement');
+        this.track("tab_visible", "engagement");
       }
     });
   }
 
   private getSessionStartTime(): number {
-    const stored = sessionStorage.getItem('session_start');
+    const stored = sessionStorage.getItem("session_start");
     if (stored) return parseInt(stored, 10);
     const now = Date.now();
-    sessionStorage.setItem('session_start', now.toString());
+    sessionStorage.setItem("session_start", now.toString());
     return now;
   }
 
@@ -140,7 +140,7 @@ class AdvancedAnalytics {
   // Track page view
   trackPageView(path?: string): void {
     const currentPath = path || window.location.pathname;
-    this.track('page_view', 'navigation', {
+    this.track("page_view", "navigation", {
       path: currentPath,
       title: document.title,
       referrer: document.referrer,
@@ -149,7 +149,7 @@ class AdvancedAnalytics {
 
   // Track user interaction
   trackInteraction(element: string, action: string, properties?: Record<string, any>): void {
-    this.track('interaction', 'engagement', {
+    this.track("interaction", "engagement", {
       element,
       action,
       ...properties,
@@ -158,7 +158,7 @@ class AdvancedAnalytics {
 
   // Track error
   trackError(error: Error, context?: Record<string, any>): void {
-    this.track('error', 'system', {
+    this.track("error", "system", {
       message: error.message,
       stack: error.stack,
       ...context,
@@ -166,7 +166,7 @@ class AdvancedAnalytics {
   }
 
   // Track performance metric
-  trackMetric(name: string, value: number, unit: string = 'ms'): void {
+  trackMetric(name: string, value: number, unit: string = "ms"): void {
     if (!this.config.enabled) return;
 
     const metric: PerformanceMetric = {
@@ -184,35 +184,35 @@ class AdvancedAnalytics {
 
   // Track Web Vitals
   trackWebVitals(): void {
-    if ('performance' in window) {
+    if ("performance" in window) {
       // First Contentful Paint
-      const paintEntries = performance.getEntriesByType('paint');
-      const fcp = paintEntries.find(e => e.name === 'first-contentful-paint');
+      const paintEntries = performance.getEntriesByType("paint");
+      const fcp = paintEntries.find(e => e.name === "first-contentful-paint");
       if (fcp) {
-        this.trackMetric('FCP', fcp.startTime);
+        this.trackMetric("FCP", fcp.startTime);
       }
 
       // Time to First Byte
-      const navEntries = performance.getEntriesByType('navigation') as PerformanceNavigationTiming[];
+      const navEntries = performance.getEntriesByType("navigation") as PerformanceNavigationTiming[];
       if (navEntries.length > 0) {
         const ttfb = navEntries[0].responseStart - navEntries[0].requestStart;
-        this.trackMetric('TTFB', ttfb);
+        this.trackMetric("TTFB", ttfb);
       }
 
       // Largest Contentful Paint
       new PerformanceObserver((entryList) => {
         const entries = entryList.getEntries();
         const lastEntry = entries[entries.length - 1];
-        this.trackMetric('LCP', lastEntry.startTime);
-      }).observe({ type: 'largest-contentful-paint', buffered: true });
+        this.trackMetric("LCP", lastEntry.startTime);
+      }).observe({ type: "largest-contentful-paint", buffered: true });
 
       // First Input Delay
       new PerformanceObserver((entryList) => {
         const entries = entryList.getEntries() as PerformanceEventTiming[];
         entries.forEach(entry => {
-          this.trackMetric('FID', entry.processingStart - entry.startTime);
+          this.trackMetric("FID", entry.processingStart - entry.startTime);
         });
-      }).observe({ type: 'first-input', buffered: true });
+      }).observe({ type: "first-input", buffered: true });
 
       // Cumulative Layout Shift
       let clsValue = 0;
@@ -222,8 +222,8 @@ class AdvancedAnalytics {
             clsValue += entry.value;
           }
         }
-        this.trackMetric('CLS', clsValue, 'score');
-      }).observe({ type: 'layout-shift', buffered: true });
+        this.trackMetric("CLS", clsValue, "score");
+      }).observe({ type: "layout-shift", buffered: true });
     }
   }
 
@@ -232,7 +232,7 @@ class AdvancedAnalytics {
     events: AnalyticsEvent[];
     metrics: PerformanceMetric[];
     session: { id: string; duration: number };
-  } {
+    } {
     return {
       events: [...this.eventQueue],
       metrics: [...this.metricsQueue],
@@ -261,7 +261,7 @@ class AdvancedAnalytics {
       }
 
       // Store locally for now
-      const stored = JSON.parse(localStorage.getItem('analytics_history') || '[]');
+      const stored = JSON.parse(localStorage.getItem("analytics_history") || "[]");
       stored.push({ events, metrics, timestamp: new Date().toISOString() });
       
       // Keep only last 100 entries
@@ -269,7 +269,7 @@ class AdvancedAnalytics {
         stored.splice(0, stored.length - 100);
       }
       
-      localStorage.setItem('analytics_history', JSON.stringify(stored));
+      localStorage.setItem("analytics_history", JSON.stringify(stored));
     } catch (error) {
       // Re-queue on failure
       this.eventQueue = [...events, ...this.eventQueue];
@@ -294,7 +294,7 @@ class AdvancedAnalytics {
 export const analytics = new AdvancedAnalytics({ debug: false });
 
 // Initialize web vitals tracking
-if (typeof window !== 'undefined') {
+if (typeof window !== "undefined") {
   analytics.trackWebVitals();
 }
 

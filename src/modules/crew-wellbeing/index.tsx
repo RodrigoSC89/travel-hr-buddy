@@ -181,7 +181,7 @@ export default function CrewWellbeing() {
           </div>
         </div>
         <Button onClick={handleAIAnalysis} disabled={isAnalyzing}>
-          <Sparkles className={`h-4 w-4 mr-2 ${isAnalyzing ? 'animate-spin' : ''}`} />
+          <Sparkles className={`h-4 w-4 mr-2 ${isAnalyzing ? "animate-spin" : ""}`} />
           Análise IA
         </Button>
       </div>
@@ -226,11 +226,11 @@ export default function CrewWellbeing() {
             <div className="flex items-center justify-between">
               <div>
                 <p className="text-sm text-muted-foreground">Alertas Críticos</p>
-                <p className={`text-2xl font-bold ${criticalCount > 0 ? 'text-red-600' : ''}`}>
+                <p className={`text-2xl font-bold ${criticalCount > 0 ? "text-red-600" : ""}`}>
                   {criticalCount}
                 </p>
               </div>
-              <AlertTriangle className={`h-8 w-8 ${criticalCount > 0 ? 'text-red-500' : 'text-gray-300'} opacity-80`} />
+              <AlertTriangle className={`h-8 w-8 ${criticalCount > 0 ? "text-red-500" : "text-gray-300"} opacity-80`} />
             </div>
           </CardContent>
         </Card>
@@ -265,7 +265,7 @@ export default function CrewWellbeing() {
         {crew.map(member => (
           <Card 
             key={member.id} 
-            className={`overflow-hidden ${member.fatigueLevel === "critical" ? 'border-red-500 shadow-red-100' : member.fatigueLevel === "high" ? 'border-amber-500' : ''}`}
+            className={`overflow-hidden ${member.fatigueLevel === "critical" ? "border-red-500 shadow-red-100" : member.fatigueLevel === "high" ? "border-amber-500" : ""}`}
           >
             <CardHeader className="pb-3">
               <div className="flex items-start justify-between">
@@ -319,7 +319,7 @@ export default function CrewWellbeing() {
                 </div>
                 <Progress 
                   value={member.healthScore} 
-                  className={`h-2 ${member.healthScore >= 80 ? '[&>div]:bg-green-500' : member.healthScore >= 60 ? '[&>div]:bg-amber-500' : '[&>div]:bg-red-500'}`}
+                  className={`h-2 ${member.healthScore >= 80 ? "[&>div]:bg-green-500" : member.healthScore >= 60 ? "[&>div]:bg-amber-500" : "[&>div]:bg-red-500"}`}
                 />
               </div>
 
@@ -348,8 +348,8 @@ export default function CrewWellbeing() {
                 </div>
                 <ul className="space-y-1">
                   {member.recommendations.map((rec, idx) => (
-                    <li key={idx} className={`text-sm ${rec.startsWith('⚠️') || rec.startsWith('🚨') ? 'text-amber-600 font-medium' : 'text-muted-foreground'}`}>
-                      {!rec.startsWith('⚠️') && !rec.startsWith('🚨') && <CheckCircle2 className="h-3 w-3 inline mr-1 text-green-500" />}
+                    <li key={idx} className={`text-sm ${rec.startsWith("⚠️") || rec.startsWith("🚨") ? "text-amber-600 font-medium" : "text-muted-foreground"}`}>
+                      {!rec.startsWith("⚠️") && !rec.startsWith("🚨") && <CheckCircle2 className="h-3 w-3 inline mr-1 text-green-500" />}
                       {rec}
                     </li>
                   ))}

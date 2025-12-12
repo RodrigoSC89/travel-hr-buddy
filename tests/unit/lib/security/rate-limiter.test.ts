@@ -3,10 +3,10 @@
  * Tests for client-side rate limiting functionality
  */
 
-import { describe, it, expect, beforeEach, afterEach, vi } from 'vitest';
-import { rateLimiter, withRateLimit } from '@/lib/security/rate-limiter';
+import { describe, it, expect, beforeEach, afterEach, vi } from "vitest";
+import { rateLimiter, withRateLimit } from "@/lib/security/rate-limiter";
 
-describe('RateLimiter', () => {
+describe("RateLimiter", () => {
   beforeEach(() => {
     // Reset rate limiter state
     rateLimiter.reset();
@@ -20,17 +20,17 @@ describe('RateLimiter', () => {
     vi.clearAllMocks();
   });
 
-  describe('checkLimit', () => {
-    it('should allow requests within limit', () => {
-      const key = 'test-action';
+  describe("checkLimit", () => {
+    it("should allow requests within limit", () => {
+      const key = "test-action";
       
       expect(rateLimiter.checkLimit(key, 5, 60000)).toBe(true);
       expect(rateLimiter.checkLimit(key, 5, 60000)).toBe(true);
       expect(rateLimiter.checkLimit(key, 5, 60000)).toBe(true);
     });
 
-    it('should block requests exceeding limit', () => {
-      const key = 'test-action';
+    it("should block requests exceeding limit", () => {
+      const key = "test-action";
       const maxRequests = 3;
       
       // Make 3 requests (should all succeed)
@@ -42,8 +42,8 @@ describe('RateLimiter', () => {
       expect(rateLimiter.checkLimit(key, maxRequests, 60000)).toBe(false);
     });
 
-    it('should reset after window expires', () => {
-      const key = 'test-action';
+    it("should reset after window expires", () => {
+      const key = "test-action";
       const maxRequests = 3;
       const window = 60000; // 1 minute
       
@@ -62,9 +62,9 @@ describe('RateLimiter', () => {
       expect(rateLimiter.checkLimit(key, maxRequests, window)).toBe(true);
     });
 
-    it('should handle different keys independently', () => {
-      const key1 = 'action-1';
-      const key2 = 'action-2';
+    it("should handle different keys independently", () => {
+      const key1 = "action-1";
+      const key2 = "action-2";
       const maxRequests = 2;
       
       // Fill limit for key1
@@ -78,9 +78,9 @@ describe('RateLimiter', () => {
     });
   });
 
-  describe('getStats', () => {
-    it('should return correct statistics', () => {
-      const key = 'test-action';
+  describe("getStats", () => {
+    it("should return correct statistics", () => {
+      const key = "test-action";
       const maxRequests = 5;
       
       rateLimiter.checkLimit(key, maxRequests, 60000);
@@ -93,16 +93,16 @@ describe('RateLimiter', () => {
       expect(stats.resetAt).toBeGreaterThan(Date.now());
     });
 
-    it('should return null for non-existent key', () => {
-      const stats = rateLimiter.getStats('non-existent');
+    it("should return null for non-existent key", () => {
+      const stats = rateLimiter.getStats("non-existent");
       expect(stats).toBeNull();
     });
   });
 
-  describe('reset', () => {
-    it('should clear all rate limit data', () => {
-      const key1 = 'action-1';
-      const key2 = 'action-2';
+  describe("reset", () => {
+    it("should clear all rate limit data", () => {
+      const key1 = "action-1";
+      const key2 = "action-2";
       
       rateLimiter.checkLimit(key1, 5, 60000);
       rateLimiter.checkLimit(key2, 5, 60000);
@@ -113,8 +113,8 @@ describe('RateLimiter', () => {
       expect(rateLimiter.getStats(key2)).toBeNull();
     });
 
-    it('should allow requests after reset', () => {
-      const key = 'test-action';
+    it("should allow requests after reset", () => {
+      const key = "test-action";
       const maxRequests = 2;
       
       // Fill the limit
@@ -131,7 +131,7 @@ describe('RateLimiter', () => {
   });
 });
 
-describe('withRateLimit', () => {
+describe("withRateLimit", () => {
   beforeEach(() => {
     rateLimiter.reset();
     vi.useFakeTimers();
@@ -141,26 +141,26 @@ describe('withRateLimit', () => {
     vi.useRealTimers();
   });
 
-  it('should execute function when within limit', async () => {
-    const mockFn = vi.fn().mockResolvedValue('success');
+  it("should execute function when within limit", async () => {
+    const mockFn = vi.fn().mockResolvedValue("success");
     
     const rateLimitedFn = withRateLimit(mockFn, {
-      key: 'test-fn',
+      key: "test-fn",
       maxRequests: 5,
       windowMs: 60000
     });
 
-    const result = await rateLimitedFn('arg1', 'arg2');
+    const result = await rateLimitedFn("arg1", "arg2");
     
-    expect(mockFn).toHaveBeenCalledWith('arg1', 'arg2');
-    expect(result).toBe('success');
+    expect(mockFn).toHaveBeenCalledWith("arg1", "arg2");
+    expect(result).toBe("success");
   });
 
-  it('should throw error when rate limit exceeded', async () => {
-    const mockFn = vi.fn().mockResolvedValue('success');
+  it("should throw error when rate limit exceeded", async () => {
+    const mockFn = vi.fn().mockResolvedValue("success");
     
     const rateLimitedFn = withRateLimit(mockFn, {
-      key: 'test-fn',
+      key: "test-fn",
       maxRequests: 2,
       windowMs: 60000
     });
@@ -170,29 +170,29 @@ describe('withRateLimit', () => {
     await rateLimitedFn();
     
     // 3rd call should throw
-    await expect(rateLimitedFn()).rejects.toThrow('Rate limit exceeded');
+    await expect(rateLimitedFn()).rejects.toThrow("Rate limit exceeded");
   });
 
-  it('should use custom error message', async () => {
-    const mockFn = vi.fn().mockResolvedValue('success');
+  it("should use custom error message", async () => {
+    const mockFn = vi.fn().mockResolvedValue("success");
     
     const rateLimitedFn = withRateLimit(mockFn, {
-      key: 'test-fn',
+      key: "test-fn",
       maxRequests: 1,
       windowMs: 60000,
-      errorMessage: 'Custom error'
+      errorMessage: "Custom error"
     });
 
     await rateLimitedFn();
     
-    await expect(rateLimitedFn()).rejects.toThrow('Custom error');
+    await expect(rateLimitedFn()).rejects.toThrow("Custom error");
   });
 
-  it('should preserve function arguments and return value', async () => {
+  it("should preserve function arguments and return value", async () => {
     const mockFn = vi.fn().mockImplementation((a: number, b: number) => a + b);
     
     const rateLimitedFn = withRateLimit(mockFn, {
-      key: 'test-fn',
+      key: "test-fn",
       maxRequests: 5,
       windowMs: 60000
     });
@@ -204,12 +204,12 @@ describe('withRateLimit', () => {
   });
 });
 
-describe('Debug Tool', () => {
+describe("Debug Tool", () => {
   beforeEach(() => {
     rateLimiter.reset();
   });
 
-  it('should expose rateLimiter globally for debugging', () => {
+  it("should expose rateLimiter globally for debugging", () => {
     expect((window as any).__NAUTILUS_RATE_LIMITER__).toBeDefined();
     expect((window as any).__NAUTILUS_RATE_LIMITER__).toBe(rateLimiter);
   });

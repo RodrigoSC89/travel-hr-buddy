@@ -3,17 +3,17 @@
  * Reconhecimento de voz contextual por perfil
  */
 
-import React, { useState, useEffect, useCallback } from 'react';
-import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
-import { Button } from '@/components/ui/button';
-import { Badge } from '@/components/ui/badge';
-import { ScrollArea } from '@/components/ui/scroll-area';
+import React, { useState, useEffect, useCallback } from "react";
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import { Button } from "@/components/ui/button";
+import { Badge } from "@/components/ui/badge";
+import { ScrollArea } from "@/components/ui/scroll-area";
 import { 
   Mic, MicOff, Volume2, Command, History,
   CheckCircle, XCircle, Loader2, HelpCircle,
   Ship, Wrench, Package, Users, FileText
-} from 'lucide-react';
-import { motion, AnimatePresence } from 'framer-motion';
+} from "lucide-react";
+import { motion, AnimatePresence } from "framer-motion";
 
 interface VoiceCommand {
   id: string;
@@ -21,7 +21,7 @@ interface VoiceCommand {
   action: string;
   module: string;
   timestamp: Date;
-  status: 'success' | 'error' | 'processing';
+  status: "success" | "error" | "processing";
   result?: string;
 }
 
@@ -33,38 +33,38 @@ interface AvailableCommand {
 }
 
 const availableCommands: AvailableCommand[] = [
-  { phrase: 'Mostrar status da frota', description: 'Exibe o dashboard da frota', module: 'Frota', icon: <Ship className="h-4 w-4" /> },
-  { phrase: 'Abrir manutenções pendentes', description: 'Lista ordens de serviço abertas', module: 'Manutenção', icon: <Wrench className="h-4 w-4" /> },
-  { phrase: 'Verificar estoque do Sirius', description: 'Mostra estoque a bordo', module: 'Estoque', icon: <Package className="h-4 w-4" /> },
-  { phrase: 'Quem está embarcado no Vega', description: 'Lista tripulação atual', module: 'Tripulação', icon: <Users className="h-4 w-4" /> },
-  { phrase: 'Gerar relatório de consumo', description: 'Cria relatório de combustível', module: 'Relatórios', icon: <FileText className="h-4 w-4" /> },
-  { phrase: 'Certificados vencendo', description: 'Lista certificados próximos do vencimento', module: 'Compliance', icon: <FileText className="h-4 w-4" /> },
-  { phrase: 'Agendar manutenção preventiva', description: 'Cria ordem de serviço', module: 'Manutenção', icon: <Wrench className="h-4 w-4" /> },
-  { phrase: 'Comparar fornecedores de óleo', description: 'Abre comparador de preços', module: 'Compras', icon: <Package className="h-4 w-4" /> }
+  { phrase: "Mostrar status da frota", description: "Exibe o dashboard da frota", module: "Frota", icon: <Ship className="h-4 w-4" /> },
+  { phrase: "Abrir manutenções pendentes", description: "Lista ordens de serviço abertas", module: "Manutenção", icon: <Wrench className="h-4 w-4" /> },
+  { phrase: "Verificar estoque do Sirius", description: "Mostra estoque a bordo", module: "Estoque", icon: <Package className="h-4 w-4" /> },
+  { phrase: "Quem está embarcado no Vega", description: "Lista tripulação atual", module: "Tripulação", icon: <Users className="h-4 w-4" /> },
+  { phrase: "Gerar relatório de consumo", description: "Cria relatório de combustível", module: "Relatórios", icon: <FileText className="h-4 w-4" /> },
+  { phrase: "Certificados vencendo", description: "Lista certificados próximos do vencimento", module: "Compliance", icon: <FileText className="h-4 w-4" /> },
+  { phrase: "Agendar manutenção preventiva", description: "Cria ordem de serviço", module: "Manutenção", icon: <Wrench className="h-4 w-4" /> },
+  { phrase: "Comparar fornecedores de óleo", description: "Abre comparador de preços", module: "Compras", icon: <Package className="h-4 w-4" /> }
 ];
 
 export function VoiceCommandsAdvanced() {
   const [isListening, setIsListening] = useState(false);
-  const [transcript, setTranscript] = useState('');
+  const [transcript, setTranscript] = useState("");
   const [isProcessing, setIsProcessing] = useState(false);
   const [commandHistory, setCommandHistory] = useState<VoiceCommand[]>([
     {
-      id: '1',
-      phrase: 'Mostrar status da frota',
-      action: 'navigate',
-      module: 'Dashboard',
+      id: "1",
+      phrase: "Mostrar status da frota",
+      action: "navigate",
+      module: "Dashboard",
       timestamp: new Date(Date.now() - 300000),
-      status: 'success',
-      result: 'Dashboard da frota exibido'
+      status: "success",
+      result: "Dashboard da frota exibido"
     },
     {
-      id: '2',
-      phrase: 'Quantas manutenções estão atrasadas',
-      action: 'query',
-      module: 'Manutenção',
+      id: "2",
+      phrase: "Quantas manutenções estão atrasadas",
+      action: "query",
+      module: "Manutenção",
       timestamp: new Date(Date.now() - 600000),
-      status: 'success',
-      result: '3 manutenções atrasadas encontradas'
+      status: "success",
+      result: "3 manutenções atrasadas encontradas"
     }
   ]);
   const [showHelp, setShowHelp] = useState(false);
@@ -75,10 +75,10 @@ export function VoiceCommandsAdvanced() {
     const newCommand: VoiceCommand = {
       id: Date.now().toString(),
       phrase: text,
-      action: 'processing',
-      module: 'Sistema',
+      action: "processing",
+      module: "Sistema",
       timestamp: new Date(),
-      status: 'processing'
+      status: "processing"
     };
     
     setCommandHistory(prev => [newCommand, ...prev]);
@@ -90,16 +90,16 @@ export function VoiceCommandsAdvanced() {
     setCommandHistory(prev => prev.map(cmd => 
       cmd.id === newCommand.id 
         ? { 
-            ...cmd, 
-            status: 'success' as const, 
-            result: `Comando "${text}" executado com sucesso`,
-            action: 'executed'
-          }
+          ...cmd, 
+          status: "success" as const, 
+          result: `Comando "${text}" executado com sucesso`,
+          action: "executed"
+        }
         : cmd
     ));
 
     setIsProcessing(false);
-    setTranscript('');
+    setTranscript("");
   }, []);
 
   const toggleListening = () => {
@@ -110,23 +110,23 @@ export function VoiceCommandsAdvanced() {
       }
     } else {
       setIsListening(true);
-      setTranscript('');
+      setTranscript("");
       
       // Simulate voice recognition
       const phrases = [
-        'Mostrar status da frota',
-        'Verificar estoque crítico',
-        'Quem está embarcado hoje'
+        "Mostrar status da frota",
+        "Verificar estoque crítico",
+        "Quem está embarcado hoje"
       ];
       
       setTimeout(() => {
         const randomPhrase = phrases[Math.floor(Math.random() * phrases.length)];
-        let currentText = '';
-        const words = randomPhrase.split(' ');
+        let currentText = "";
+        const words = randomPhrase.split(" ");
         
         words.forEach((word, index) => {
           setTimeout(() => {
-            currentText += (index > 0 ? ' ' : '') + word;
+            currentText += (index > 0 ? " " : "") + word;
             setTranscript(currentText);
           }, index * 300);
         });
@@ -136,10 +136,10 @@ export function VoiceCommandsAdvanced() {
 
   const getStatusIcon = (status: string) => {
     switch (status) {
-      case 'success': return <CheckCircle className="h-4 w-4 text-green-500" />;
-      case 'error': return <XCircle className="h-4 w-4 text-destructive" />;
-      case 'processing': return <Loader2 className="h-4 w-4 text-primary animate-spin" />;
-      default: return null;
+    case "success": return <CheckCircle className="h-4 w-4 text-green-500" />;
+    case "error": return <XCircle className="h-4 w-4 text-destructive" />;
+    case "processing": return <Loader2 className="h-4 w-4 text-primary animate-spin" />;
+    default: return null;
     }
   };
 
@@ -154,12 +154,12 @@ export function VoiceCommandsAdvanced() {
               disabled={isProcessing}
               className={`relative inline-flex items-center justify-center w-32 h-32 rounded-full transition-all ${
                 isListening 
-                  ? 'bg-destructive text-destructive-foreground' 
-                  : 'bg-primary text-primary-foreground'
+                  ? "bg-destructive text-destructive-foreground" 
+                  : "bg-primary text-primary-foreground"
               }`}
               whileTap={{ scale: 0.95 }}
               animate={isListening ? { 
-                boxShadow: ['0 0 0 0 rgba(239, 68, 68, 0.4)', '0 0 0 20px rgba(239, 68, 68, 0)']
+                boxShadow: ["0 0 0 0 rgba(239, 68, 68, 0.4)", "0 0 0 20px rgba(239, 68, 68, 0)"]
               } : {}}
               transition={isListening ? { 
                 duration: 1.5, 
@@ -216,8 +216,8 @@ export function VoiceCommandsAdvanced() {
 
             <p className="mt-6 text-muted-foreground">
               {isListening 
-                ? 'Clique para parar e executar o comando' 
-                : 'Clique no microfone e fale seu comando'}
+                ? "Clique para parar e executar o comando" 
+                : "Clique no microfone e fale seu comando"}
             </p>
           </div>
         </CardContent>

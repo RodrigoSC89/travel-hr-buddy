@@ -17,19 +17,19 @@ class ServiceWorkerManager {
 
   constructor(config: Partial<ServiceWorkerConfig> = {}) {
     this.config = {
-      scope: '/',
+      scope: "/",
       updateInterval: 60 * 60 * 1000, // Check for updates every hour
       ...config,
     };
   }
 
   async register(): Promise<boolean> {
-    if (!('serviceWorker' in navigator)) {
+    if (!("serviceWorker" in navigator)) {
       return false;
     }
 
     try {
-      this.registration = await navigator.serviceWorker.register('/sw.js', {
+      this.registration = await navigator.serviceWorker.register("/sw.js", {
         scope: this.config.scope,
       });
 
@@ -38,16 +38,16 @@ class ServiceWorkerManager {
       this.setupUpdateChecking();
 
       // Listen for controller changes
-      navigator.serviceWorker.addEventListener('controllerchange', () => {
+      navigator.serviceWorker.addEventListener("controllerchange", () => {
       });
 
       // Listen for messages from SW
-      navigator.serviceWorker.addEventListener('message', this.handleMessage.bind(this));
+      navigator.serviceWorker.addEventListener("message", this.handleMessage.bind(this));
 
       return true;
     } catch (error) {
-      console.error('Service Worker registration failed:', error);
-      console.error('Service Worker registration failed:', error);
+      console.error("Service Worker registration failed:", error);
+      console.error("Service Worker registration failed:", error);
       return false;
     }
   }
@@ -62,8 +62,8 @@ class ServiceWorkerManager {
       }
       return success;
     } catch (error) {
-      console.error('Service Worker unregistration failed:', error);
-      console.error('Service Worker unregistration failed:', error);
+      console.error("Service Worker unregistration failed:", error);
+      console.error("Service Worker unregistration failed:", error);
       return false;
     }
   }
@@ -74,15 +74,15 @@ class ServiceWorkerManager {
     try {
       await this.registration.update();
     } catch (error) {
-      console.error('Service Worker update failed:', error);
-      console.error('Service Worker update failed:', error);
+      console.error("Service Worker update failed:", error);
+      console.error("Service Worker update failed:", error);
     }
   }
 
   // Skip waiting and activate new SW immediately
   skipWaiting(): void {
     if (this.registration?.waiting) {
-      this.registration.waiting.postMessage({ type: 'SKIP_WAITING' });
+      this.registration.waiting.postMessage({ type: "SKIP_WAITING" });
     }
   }
 
@@ -96,14 +96,14 @@ class ServiceWorkerManager {
   // Cache specific URLs
   async cacheUrls(urls: string[]): Promise<void> {
     this.postMessage({
-      type: 'CACHE_URLS',
+      type: "CACHE_URLS",
       payload: urls,
     });
   }
 
   // Clear specific cache
   async clearCache(cacheName: string): Promise<boolean> {
-    if ('caches' in window) {
+    if ("caches" in window) {
       return await caches.delete(cacheName);
     }
     return false;
@@ -111,7 +111,7 @@ class ServiceWorkerManager {
 
   // Get all cache names
   async getCacheNames(): Promise<string[]> {
-    if ('caches' in window) {
+    if ("caches" in window) {
       return await caches.keys();
     }
     return [];
@@ -119,7 +119,7 @@ class ServiceWorkerManager {
 
   // Get cache size
   async getCacheSize(): Promise<number> {
-    if (!('caches' in window)) return 0;
+    if (!("caches" in window)) return 0;
 
     const cacheNames = await caches.keys();
     let totalSize = 0;
@@ -146,23 +146,23 @@ class ServiceWorkerManager {
   }
 
   // Get SW status
-  getStatus(): 'installing' | 'waiting' | 'active' | 'none' {
-    if (!this.registration) return 'none';
-    if (this.registration.installing) return 'installing';
-    if (this.registration.waiting) return 'waiting';
-    if (this.registration.active) return 'active';
-    return 'none';
+  getStatus(): "installing" | "waiting" | "active" | "none" {
+    if (!this.registration) return "none";
+    if (this.registration.installing) return "installing";
+    if (this.registration.waiting) return "waiting";
+    if (this.registration.active) return "active";
+    return "none";
   }
 
   private setupUpdateChecking(): void {
     if (!this.registration) return;
 
     // Check for updates when SW updates
-    this.registration.addEventListener('updatefound', () => {
+    this.registration.addEventListener("updatefound", () => {
       const newWorker = this.registration!.installing;
       
-      newWorker?.addEventListener('statechange', () => {
-        if (newWorker.state === 'installed' && navigator.serviceWorker.controller) {
+      newWorker?.addEventListener("statechange", () => {
+        if (newWorker.state === "installed" && navigator.serviceWorker.controller) {
           // New version available
           this.config.onUpdateAvailable?.();
         }
@@ -177,14 +177,14 @@ class ServiceWorkerManager {
     const { type, payload } = event.data;
 
     switch (type) {
-      case 'CACHE_UPDATED':
-        break;
-      case 'OFFLINE':
-        this.config.onOffline?.();
-        break;
-      case 'ONLINE':
-        this.config.onOnline?.();
-        break;
+    case "CACHE_UPDATED":
+      break;
+    case "OFFLINE":
+      this.config.onOffline?.();
+      break;
+    case "ONLINE":
+      this.config.onOnline?.();
+      break;
     }
   }
 }
@@ -193,7 +193,7 @@ export const serviceWorkerManager = new ServiceWorkerManager();
 
 // React hook for SW management
 export function useServiceWorker() {
-  const [status, setStatus] = useState<'installing' | 'waiting' | 'active' | 'none'>('none');
+  const [status, setStatus] = useState<"installing" | "waiting" | "active" | "none">("none");
   const [updateAvailable, setUpdateAvailable] = useState(false);
   const [cacheSize, setCacheSize] = useState(0);
 
@@ -228,4 +228,4 @@ export function useServiceWorker() {
   };
 }
 
-import { useState, useEffect } from 'react';
+import { useState, useEffect } from "react";

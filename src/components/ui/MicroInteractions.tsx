@@ -3,29 +3,29 @@
  * Visual feedback components for better UX
  */
 
-import React, { useState, useEffect } from 'react';
-import { cn } from '@/lib/utils';
-import { Check, AlertCircle, Loader2, Info, X } from 'lucide-react';
-import { motion, AnimatePresence } from 'framer-motion';
+import React, { useState, useEffect } from "react";
+import { cn } from "@/lib/utils";
+import { Check, AlertCircle, Loader2, Info, X } from "lucide-react";
+import { motion, AnimatePresence } from "framer-motion";
 
 /**
  * Success Animation - Checkmark with pulse
  */
 interface SuccessAnimationProps {
   show: boolean;
-  size?: 'sm' | 'md' | 'lg';
+  size?: "sm" | "md" | "lg";
   onComplete?: () => void;
 }
 
 export const SuccessAnimation: React.FC<SuccessAnimationProps> = ({
   show,
-  size = 'md',
+  size = "md",
   onComplete
 }) => {
   const sizes = {
-    sm: 'h-6 w-6',
-    md: 'h-10 w-10',
-    lg: 'h-16 w-16'
+    sm: "h-6 w-6",
+    md: "h-10 w-10",
+    lg: "h-16 w-16"
   };
 
   useEffect(() => {
@@ -100,7 +100,7 @@ export const Ripple: React.FC<RippleProps> = ({ children, className, disabled })
           style={{
             left: ripple.x,
             top: ripple.y,
-            transform: 'translate(-50%, -50%)'
+            transform: "translate(-50%, -50%)"
           }}
         />
       ))}
@@ -112,25 +112,25 @@ export const Ripple: React.FC<RippleProps> = ({ children, className, disabled })
  * Pulse Dot - Activity indicator
  */
 interface PulseDotProps {
-  color?: 'green' | 'red' | 'yellow' | 'blue';
-  size?: 'sm' | 'md' | 'lg';
+  color?: "green" | "red" | "yellow" | "blue";
+  size?: "sm" | "md" | "lg";
 }
 
 export const PulseDot: React.FC<PulseDotProps> = ({ 
-  color = 'green',
-  size = 'md'
+  color = "green",
+  size = "md"
 }) => {
   const colors = {
-    green: 'bg-green-500',
-    red: 'bg-red-500',
-    yellow: 'bg-yellow-500',
-    blue: 'bg-blue-500'
+    green: "bg-green-500",
+    red: "bg-red-500",
+    yellow: "bg-yellow-500",
+    blue: "bg-blue-500"
   };
 
   const sizes = {
-    sm: 'h-2 w-2',
-    md: 'h-3 w-3',
-    lg: 'h-4 w-4'
+    sm: "h-2 w-2",
+    md: "h-3 w-3",
+    lg: "h-4 w-4"
   };
 
   return (
@@ -152,21 +152,21 @@ export const PulseDot: React.FC<PulseDotProps> = ({
  * Status Indicator with animation
  */
 interface StatusIndicatorProps {
-  status: 'online' | 'offline' | 'busy' | 'away';
+  status: "online" | "offline" | "busy" | "away";
   showLabel?: boolean;
-  size?: 'sm' | 'md';
+  size?: "sm" | "md";
 }
 
 export const StatusIndicator: React.FC<StatusIndicatorProps> = ({
   status,
   showLabel = false,
-  size = 'md'
+  size = "md"
 }) => {
   const config = {
-    online: { color: 'green', label: 'Online', pulse: true },
-    offline: { color: 'gray', label: 'Offline', pulse: false },
-    busy: { color: 'red', label: 'Ocupado', pulse: true },
-    away: { color: 'yellow', label: 'Ausente', pulse: false }
+    online: { color: "green", label: "Online", pulse: true },
+    offline: { color: "gray", label: "Offline", pulse: false },
+    busy: { color: "red", label: "Ocupado", pulse: true },
+    away: { color: "yellow", label: "Ausente", pulse: false }
   };
 
   const { color, label, pulse } = config[status];
@@ -174,12 +174,12 @@ export const StatusIndicator: React.FC<StatusIndicatorProps> = ({
   return (
     <div className="flex items-center gap-2">
       {pulse ? (
-        <PulseDot color={color as 'green' | 'red' | 'yellow'} size={size} />
+        <PulseDot color={color as "green" | "red" | "yellow"} size={size} />
       ) : (
         <span className={cn(
           "rounded-full",
-          size === 'sm' ? 'h-2 w-2' : 'h-3 w-3',
-          color === 'gray' ? 'bg-gray-400' : `bg-${color}-500`
+          size === "sm" ? "h-2 w-2" : "h-3 w-3",
+          color === "gray" ? "bg-gray-400" : `bg-${color}-500`
         )} />
       )}
       {showLabel && (

@@ -438,14 +438,14 @@ export function useAdaptiveDebounce<T extends (...args: any[]) => any>(
       if (connection) {
         const effectiveType = connection.effectiveType;
         switch (effectiveType) {
-          case "slow-2g":
-          case "2g":
-            return baseDelay * 3;
-          case "3g":
-            return baseDelay * 2;
-          case "4g":
-          default:
-            return baseDelay;
+        case "slow-2g":
+        case "2g":
+          return baseDelay * 3;
+        case "3g":
+          return baseDelay * 2;
+        case "4g":
+        default:
+          return baseDelay;
         }
       }
     }

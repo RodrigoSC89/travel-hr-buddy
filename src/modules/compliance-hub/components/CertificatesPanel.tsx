@@ -3,27 +3,27 @@
  * Painel completo de certificados com funcionalidades avançadas
  */
 
-import React, { useState } from 'react';
-import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
-import { Button } from '@/components/ui/button';
-import { Badge } from '@/components/ui/badge';
-import { Input } from '@/components/ui/input';
-import { Progress } from '@/components/ui/progress';
-import { ScrollArea } from '@/components/ui/scroll-area';
+import React, { useState } from "react";
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import { Button } from "@/components/ui/button";
+import { Badge } from "@/components/ui/badge";
+import { Input } from "@/components/ui/input";
+import { Progress } from "@/components/ui/progress";
+import { ScrollArea } from "@/components/ui/scroll-area";
 import {
   Select,
   SelectContent,
   SelectItem,
   SelectTrigger,
   SelectValue,
-} from '@/components/ui/select';
+} from "@/components/ui/select";
 import {
   DropdownMenu,
   DropdownMenuContent,
   DropdownMenuItem,
   DropdownMenuSeparator,
   DropdownMenuTrigger,
-} from '@/components/ui/dropdown-menu';
+} from "@/components/ui/dropdown-menu";
 import {
   Award,
   Search,
@@ -39,9 +39,9 @@ import {
   Bell,
   FileText,
   Clock,
-} from 'lucide-react';
-import { differenceInDays, parseISO } from 'date-fns';
-import type { Certificate } from '../types';
+} from "lucide-react";
+import { differenceInDays, parseISO } from "date-fns";
+import type { Certificate } from "../types";
 
 interface CertificatesPanelProps {
   certificates: Certificate[];
@@ -60,56 +60,56 @@ export function CertificatesPanel({
   onDownloadCertificate,
   onSetReminder,
 }: CertificatesPanelProps) {
-  const [searchTerm, setSearchTerm] = useState('');
-  const [statusFilter, setStatusFilter] = useState<string>('all');
-  const [typeFilter, setTypeFilter] = useState<string>('all');
+  const [searchTerm, setSearchTerm] = useState("");
+  const [statusFilter, setStatusFilter] = useState<string>("all");
+  const [typeFilter, setTypeFilter] = useState<string>("all");
 
-  const getStatusInfo = (status: Certificate['status'], expiryDate: string) => {
+  const getStatusInfo = (status: Certificate["status"], expiryDate: string) => {
     const today = new Date();
     const expiry = parseISO(expiryDate);
     const daysUntilExpiry = differenceInDays(expiry, today);
 
     switch (status) {
-      case 'valid':
-        return {
-          variant: 'default' as const,
-          label: 'Válido',
-          icon: <CheckCircle2 className="h-3 w-3" />,
-          color: 'text-green-500',
-          bgColor: 'bg-green-500/10',
-        };
-      case 'expiring-soon':
-        return {
-          variant: 'secondary' as const,
-          label: `Expira em ${daysUntilExpiry} dias`,
-          icon: <Clock className="h-3 w-3" />,
-          color: 'text-yellow-500',
-          bgColor: 'bg-yellow-500/10',
-        };
-      case 'expired':
-        return {
-          variant: 'destructive' as const,
-          label: 'Expirado',
-          icon: <XCircle className="h-3 w-3" />,
-          color: 'text-red-500',
-          bgColor: 'bg-red-500/10',
-        };
-      case 'pending-renewal':
-        return {
-          variant: 'outline' as const,
-          label: 'Aguardando Renovação',
-          icon: <AlertTriangle className="h-3 w-3" />,
-          color: 'text-orange-500',
-          bgColor: 'bg-orange-500/10',
-        };
-      default:
-        return {
-          variant: 'outline' as const,
-          label: status,
-          icon: null,
-          color: '',
-          bgColor: '',
-        };
+    case "valid":
+      return {
+        variant: "default" as const,
+        label: "Válido",
+        icon: <CheckCircle2 className="h-3 w-3" />,
+        color: "text-green-500",
+        bgColor: "bg-green-500/10",
+      };
+    case "expiring-soon":
+      return {
+        variant: "secondary" as const,
+        label: `Expira em ${daysUntilExpiry} dias`,
+        icon: <Clock className="h-3 w-3" />,
+        color: "text-yellow-500",
+        bgColor: "bg-yellow-500/10",
+      };
+    case "expired":
+      return {
+        variant: "destructive" as const,
+        label: "Expirado",
+        icon: <XCircle className="h-3 w-3" />,
+        color: "text-red-500",
+        bgColor: "bg-red-500/10",
+      };
+    case "pending-renewal":
+      return {
+        variant: "outline" as const,
+        label: "Aguardando Renovação",
+        icon: <AlertTriangle className="h-3 w-3" />,
+        color: "text-orange-500",
+        bgColor: "bg-orange-500/10",
+      };
+    default:
+      return {
+        variant: "outline" as const,
+        label: status,
+        icon: null,
+        color: "",
+        bgColor: "",
+      };
     }
   };
 
@@ -133,8 +133,8 @@ export function CertificatesPanel({
       cert.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
       cert.vesselName.toLowerCase().includes(searchTerm.toLowerCase()) ||
       cert.issuingAuthority.toLowerCase().includes(searchTerm.toLowerCase());
-    const matchesStatus = statusFilter === 'all' || cert.status === statusFilter;
-    const matchesType = typeFilter === 'all' || cert.type === typeFilter;
+    const matchesStatus = statusFilter === "all" || cert.status === statusFilter;
+    const matchesType = typeFilter === "all" || cert.type === typeFilter;
     return matchesSearch && matchesStatus && matchesType;
   });
 
@@ -143,10 +143,10 @@ export function CertificatesPanel({
   // Stats
   const stats = {
     total: certificates.length,
-    valid: certificates.filter((c) => c.status === 'valid').length,
-    expiringSoon: certificates.filter((c) => c.status === 'expiring-soon').length,
-    expired: certificates.filter((c) => c.status === 'expired').length,
-    pendingRenewal: certificates.filter((c) => c.status === 'pending-renewal').length,
+    valid: certificates.filter((c) => c.status === "valid").length,
+    expiringSoon: certificates.filter((c) => c.status === "expiring-soon").length,
+    expired: certificates.filter((c) => c.status === "expired").length,
+    pendingRenewal: certificates.filter((c) => c.status === "pending-renewal").length,
   };
 
   return (
@@ -350,20 +350,20 @@ export function CertificatesPanel({
                     <div className="pt-2 border-t space-y-2">
                       <div className="flex items-center justify-between text-sm">
                         <span className="text-muted-foreground">Validade</span>
-                        <span className={expiryInfo.daysLeft < 30 ? 'text-red-500' : ''}>
+                        <span className={expiryInfo.daysLeft < 30 ? "text-red-500" : ""}>
                           {cert.expiryDate}
                         </span>
                       </div>
                       <div className="space-y-1">
                         <div className="flex justify-between text-xs">
                           <span className="text-muted-foreground">Tempo restante</span>
-                          <span className={expiryInfo.daysLeft < 30 ? 'text-red-500' : 'text-muted-foreground'}>
-                            {expiryInfo.daysLeft > 0 ? `${expiryInfo.daysLeft} dias` : 'Expirado'}
+                          <span className={expiryInfo.daysLeft < 30 ? "text-red-500" : "text-muted-foreground"}>
+                            {expiryInfo.daysLeft > 0 ? `${expiryInfo.daysLeft} dias` : "Expirado"}
                           </span>
                         </div>
                         <Progress
                           value={expiryInfo.progress}
-                          className={`h-1.5 ${expiryInfo.daysLeft < 30 ? '[&>div]:bg-red-500' : ''}`}
+                          className={`h-1.5 ${expiryInfo.daysLeft < 30 ? "[&>div]:bg-red-500" : ""}`}
                         />
                       </div>
                     </div>

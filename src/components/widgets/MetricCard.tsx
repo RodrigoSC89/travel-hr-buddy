@@ -3,10 +3,10 @@
  * Displays a single metric with optional trend and sparkline
  */
 
-import React, { memo } from 'react';
-import { TrendingUp, TrendingDown, Minus, LucideIcon } from 'lucide-react';
-import { cn } from '@/lib/utils';
-import { Card, CardContent } from '@/components/ui/card';
+import React, { memo } from "react";
+import { TrendingUp, TrendingDown, Minus, LucideIcon } from "lucide-react";
+import { cn } from "@/lib/utils";
+import { Card, CardContent } from "@/components/ui/card";
 
 interface MetricCardProps {
   title: string;
@@ -17,8 +17,8 @@ interface MetricCardProps {
   trendLabel?: string;
   sparklineData?: number[];
   className?: string;
-  variant?: 'default' | 'compact' | 'highlighted';
-  status?: 'success' | 'warning' | 'error' | 'neutral';
+  variant?: "default" | "compact" | "highlighted";
+  status?: "success" | "warning" | "error" | "neutral";
 }
 
 export const MetricCard = memo(function MetricCard({
@@ -30,8 +30,8 @@ export const MetricCard = memo(function MetricCard({
   trendLabel,
   sparklineData,
   className,
-  variant = 'default',
-  status = 'neutral'
+  variant = "default",
+  status = "neutral"
 }: MetricCardProps) {
   const getTrendIcon = () => {
     if (trend === undefined) return null;
@@ -41,20 +41,20 @@ export const MetricCard = memo(function MetricCard({
   };
 
   const getTrendColor = () => {
-    if (trend === undefined) return 'text-muted-foreground';
-    if (trend > 0) return 'text-green-500';
-    if (trend < 0) return 'text-red-500';
-    return 'text-muted-foreground';
+    if (trend === undefined) return "text-muted-foreground";
+    if (trend > 0) return "text-green-500";
+    if (trend < 0) return "text-red-500";
+    return "text-muted-foreground";
   };
 
   const statusColors = {
-    success: 'border-l-4 border-l-green-500',
-    warning: 'border-l-4 border-l-yellow-500',
-    error: 'border-l-4 border-l-red-500',
-    neutral: ''
+    success: "border-l-4 border-l-green-500",
+    warning: "border-l-4 border-l-yellow-500",
+    error: "border-l-4 border-l-red-500",
+    neutral: ""
   };
 
-  if (variant === 'compact') {
+  if (variant === "compact") {
     return (
       <div className={cn(
         "flex items-center justify-between p-3 rounded-lg bg-card border",
@@ -81,7 +81,7 @@ export const MetricCard = memo(function MetricCard({
   return (
     <Card className={cn(
       statusColors[status],
-      variant === 'highlighted' && 'bg-primary/5 border-primary/20',
+      variant === "highlighted" && "bg-primary/5 border-primary/20",
       className
     )}>
       <CardContent className="p-4">
@@ -105,7 +105,7 @@ export const MetricCard = memo(function MetricCard({
             {trend !== undefined && (
               <div className={cn("flex items-center gap-1 text-sm", getTrendColor())}>
                 {getTrendIcon()}
-                <span>{trend > 0 ? '+' : ''}{trend}%</span>
+                <span>{trend > 0 ? "+" : ""}{trend}%</span>
                 {trendLabel && (
                   <span className="text-muted-foreground text-xs ml-1">
                     {trendLabel}
@@ -137,7 +137,7 @@ const Sparkline = memo(function Sparkline({ data }: { data: number[] }) {
     const x = (index / (data.length - 1)) * width;
     const y = height - ((value - min) / range) * height;
     return `${x},${y}`;
-  }).join(' L');
+  }).join(" L");
 
   return (
     <svg width={width} height={height} className="overflow-visible">

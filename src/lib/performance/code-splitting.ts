@@ -3,7 +3,7 @@
  * Dynamic imports and lazy loading for heavy modules
  */
 
-import { lazy, ComponentType, LazyExoticComponent } from 'react';
+import { lazy, ComponentType, LazyExoticComponent } from "react";
 
 type ModuleFactory<T> = () => Promise<{ default: T }>;
 
@@ -58,26 +58,26 @@ export function preloadModule<T>(key: string, factory: ModuleFactory<T>): Promis
  */
 export const HeavyModules = {
   // Charts
-  Chart: () => import('chart.js').then(m => m.Chart),
-  Recharts: () => import('recharts'),
+  Chart: () => import("chart.js").then(m => m.Chart),
+  Recharts: () => import("recharts"),
   
   // PDF
-  JsPDF: () => import('jspdf').then(m => m.default),
+  JsPDF: () => import("jspdf").then(m => m.default),
   
   // Excel
-  XLSX: () => import('xlsx'),
+  XLSX: () => import("xlsx"),
   
   // Maps
-  Mapbox: () => import('mapbox-gl'),
+  Mapbox: () => import("mapbox-gl"),
   
   // Rich Text
-  TipTap: () => import('@tiptap/react'),
+  TipTap: () => import("@tiptap/react"),
   
   // 3D
-  Three: () => import('three'),
+  Three: () => import("three"),
   
   // Date utilities
-  DateFns: () => import('date-fns'),
+  DateFns: () => import("date-fns"),
 };
 
 /**
@@ -85,11 +85,11 @@ export const HeavyModules = {
  */
 export function preloadRouteModules(route: string) {
   const routeModules: Record<string, (() => Promise<any>)[]> = {
-    '/dashboard': [HeavyModules.Recharts],
-    '/reports': [HeavyModules.JsPDF, HeavyModules.XLSX],
-    '/map': [HeavyModules.Mapbox],
-    '/editor': [HeavyModules.TipTap],
-    '/analytics': [HeavyModules.Recharts, HeavyModules.DateFns],
+    "/dashboard": [HeavyModules.Recharts],
+    "/reports": [HeavyModules.JsPDF, HeavyModules.XLSX],
+    "/map": [HeavyModules.Mapbox],
+    "/editor": [HeavyModules.TipTap],
+    "/analytics": [HeavyModules.Recharts, HeavyModules.DateFns],
   };
 
   const modules = routeModules[route];
@@ -119,7 +119,7 @@ export async function dynamicImport<T>(
  */
 export function lazyOnVisible<T extends ComponentType<any>>(
   factory: ModuleFactory<T>,
-  rootMargin = '200px'
+  rootMargin = "200px"
 ): LazyExoticComponent<T> {
   let componentPromise: Promise<{ default: T }> | null = null;
 
@@ -131,7 +131,7 @@ export function lazyOnVisible<T extends ComponentType<any>>(
   };
 
   // Preload on idle
-  if ('requestIdleCallback' in window) {
+  if ("requestIdleCallback" in window) {
     requestIdleCallback(() => {
       // Set up intersection observer for viewport-based preloading
       const observer = new IntersectionObserver(

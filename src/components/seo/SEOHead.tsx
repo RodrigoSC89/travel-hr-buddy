@@ -3,7 +3,7 @@
  * Dynamic meta tags for each page using react-helmet-async
  */
 
-import { Helmet } from 'react-helmet-async';
+import { Helmet } from "react-helmet-async";
 
 interface SEOHeadProps {
   title?: string;
@@ -11,50 +11,50 @@ interface SEOHeadProps {
   keywords?: string[];
   image?: string;
   url?: string;
-  type?: 'website' | 'article' | 'product';
+  type?: "website" | "article" | "product";
   noIndex?: boolean;
   canonical?: string;
   structuredData?: Record<string, unknown>;
 }
 
-const DEFAULT_TITLE = 'Nautilus One - Sistema de Gestão Empresarial';
-const DEFAULT_DESCRIPTION = 'Sistema revolucionário de gestão empresarial com módulos de RH, viagens, hospedagem e mais de 50 funcionalidades integradas.';
-const DEFAULT_IMAGE = '/nautilus-logo.png';
-const SITE_URL = typeof window !== 'undefined' ? window.location.origin : '';
+const DEFAULT_TITLE = "Nautilus One - Sistema de Gestão Empresarial";
+const DEFAULT_DESCRIPTION = "Sistema revolucionário de gestão empresarial com módulos de RH, viagens, hospedagem e mais de 50 funcionalidades integradas.";
+const DEFAULT_IMAGE = "/nautilus-logo.png";
+const SITE_URL = typeof window !== "undefined" ? window.location.origin : "";
 
 export const SEOHead: React.FC<SEOHeadProps> = ({
   title,
   description = DEFAULT_DESCRIPTION,
-  keywords = ['gestão empresarial', 'recursos humanos', 'viagens corporativas', 'sistema de gestão'],
+  keywords = ["gestão empresarial", "recursos humanos", "viagens corporativas", "sistema de gestão"],
   image = DEFAULT_IMAGE,
   url,
-  type = 'website',
+  type = "website",
   noIndex = false,
   canonical,
   structuredData
 }) => {
   const pageTitle = title ? `${title} | Nautilus One` : DEFAULT_TITLE;
-  const pageUrl = url || (typeof window !== 'undefined' ? window.location.href : '');
-  const imageUrl = image.startsWith('http') ? image : `${SITE_URL}${image}`;
+  const pageUrl = url || (typeof window !== "undefined" ? window.location.href : "");
+  const imageUrl = image.startsWith("http") ? image : `${SITE_URL}${image}`;
 
   const defaultStructuredData = {
-    '@context': 'https://schema.org',
-    '@type': 'WebApplication',
-    name: 'Nautilus One',
+    "@context": "https://schema.org",
+    "@type": "WebApplication",
+    name: "Nautilus One",
     description: DEFAULT_DESCRIPTION,
-    applicationCategory: 'BusinessApplication',
-    operatingSystem: 'Web Browser',
+    applicationCategory: "BusinessApplication",
+    operatingSystem: "Web Browser",
     offers: {
-      '@type': 'Offer',
-      price: '0',
-      priceCurrency: 'BRL'
+      "@type": "Offer",
+      price: "0",
+      priceCurrency: "BRL"
     },
     featureList: [
-      'Gestão de Recursos Humanos',
-      'Reserva de Viagens',
-      'Gestão Financeira',
-      'Automação de Processos',
-      'Analytics e Relatórios'
+      "Gestão de Recursos Humanos",
+      "Reserva de Viagens",
+      "Gestão Financeira",
+      "Automação de Processos",
+      "Analytics e Relatórios"
     ]
   };
 
@@ -63,7 +63,7 @@ export const SEOHead: React.FC<SEOHeadProps> = ({
       {/* Basic Meta Tags */}
       <title>{pageTitle}</title>
       <meta name="description" content={description} />
-      <meta name="keywords" content={keywords.join(', ')} />
+      <meta name="keywords" content={keywords.join(", ")} />
       
       {/* Robots */}
       {noIndex && <meta name="robots" content="noindex, nofollow" />}
@@ -97,44 +97,44 @@ export const SEOHead: React.FC<SEOHeadProps> = ({
 // Page-specific SEO configurations
 export const pageSEO = {
   dashboard: {
-    title: 'Dashboard',
-    description: 'Painel de controle centralizado com métricas em tempo real, insights de IA e visão geral de todos os módulos.',
-    keywords: ['dashboard', 'painel de controle', 'métricas', 'analytics']
+    title: "Dashboard",
+    description: "Painel de controle centralizado com métricas em tempo real, insights de IA e visão geral de todos os módulos.",
+    keywords: ["dashboard", "painel de controle", "métricas", "analytics"]
   },
   hr: {
-    title: 'Recursos Humanos',
-    description: 'Gestão completa de pessoas, certificados, treinamentos e documentos de tripulação.',
-    keywords: ['recursos humanos', 'gestão de pessoas', 'certificados', 'treinamentos']
+    title: "Recursos Humanos",
+    description: "Gestão completa de pessoas, certificados, treinamentos e documentos de tripulação.",
+    keywords: ["recursos humanos", "gestão de pessoas", "certificados", "treinamentos"]
   },
   finance: {
-    title: 'Financeiro',
-    description: 'Controle financeiro completo com contas a pagar, receber, fluxo de caixa e relatórios.',
-    keywords: ['financeiro', 'contas a pagar', 'contas a receber', 'fluxo de caixa']
+    title: "Financeiro",
+    description: "Controle financeiro completo com contas a pagar, receber, fluxo de caixa e relatórios.",
+    keywords: ["financeiro", "contas a pagar", "contas a receber", "fluxo de caixa"]
   },
   flights: {
-    title: 'Passagens Aéreas',
-    description: 'Busca e reserva de passagens aéreas com as melhores tarifas do mercado.',
-    keywords: ['passagens aéreas', 'voos', 'viagens', 'reservas']
+    title: "Passagens Aéreas",
+    description: "Busca e reserva de passagens aéreas com as melhores tarifas do mercado.",
+    keywords: ["passagens aéreas", "voos", "viagens", "reservas"]
   },
   hotels: {
-    title: 'Hotéis',
-    description: 'Busca e reserva de hospedagem com comparação de preços e avaliações.',
-    keywords: ['hotéis', 'hospedagem', 'reservas', 'viagens']
+    title: "Hotéis",
+    description: "Busca e reserva de hospedagem com comparação de preços e avaliações.",
+    keywords: ["hotéis", "hospedagem", "reservas", "viagens"]
   },
   documents: {
-    title: 'Documentos',
-    description: 'Gestão inteligente de documentos com OCR, assinatura digital e organização automática.',
-    keywords: ['documentos', 'gestão documental', 'OCR', 'assinatura digital']
+    title: "Documentos",
+    description: "Gestão inteligente de documentos com OCR, assinatura digital e organização automática.",
+    keywords: ["documentos", "gestão documental", "OCR", "assinatura digital"]
   },
   analytics: {
-    title: 'Analytics',
-    description: 'Análises avançadas e relatórios personalizados com insights de inteligência artificial.',
-    keywords: ['analytics', 'relatórios', 'métricas', 'business intelligence']
+    title: "Analytics",
+    description: "Análises avançadas e relatórios personalizados com insights de inteligência artificial.",
+    keywords: ["analytics", "relatórios", "métricas", "business intelligence"]
   },
   settings: {
-    title: 'Configurações',
-    description: 'Configurações do sistema, preferências de usuário e personalizações.',
-    keywords: ['configurações', 'preferências', 'personalização']
+    title: "Configurações",
+    description: "Configurações do sistema, preferências de usuário e personalizações.",
+    keywords: ["configurações", "preferências", "personalização"]
   }
 };
 

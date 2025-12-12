@@ -3,20 +3,20 @@
  * Painel de matriz de treinamentos com IA integrada
  */
 
-import React, { useState } from 'react';
-import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
-import { Button } from '@/components/ui/button';
-import { Badge } from '@/components/ui/badge';
-import { Progress } from '@/components/ui/progress';
-import { Input } from '@/components/ui/input';
-import { ScrollArea } from '@/components/ui/scroll-area';
+import React, { useState } from "react";
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import { Button } from "@/components/ui/button";
+import { Badge } from "@/components/ui/badge";
+import { Progress } from "@/components/ui/progress";
+import { Input } from "@/components/ui/input";
+import { ScrollArea } from "@/components/ui/scroll-area";
 import {
   Select,
   SelectContent,
   SelectItem,
   SelectTrigger,
   SelectValue,
-} from '@/components/ui/select';
+} from "@/components/ui/select";
 import {
   Table,
   TableBody,
@@ -24,13 +24,13 @@ import {
   TableHead,
   TableHeader,
   TableRow,
-} from '@/components/ui/table';
+} from "@/components/ui/table";
 import {
   Tooltip,
   TooltipContent,
   TooltipProvider,
   TooltipTrigger,
-} from '@/components/ui/tooltip';
+} from "@/components/ui/tooltip";
 import {
   Brain,
   Users,
@@ -44,8 +44,8 @@ import {
   XCircle,
   Loader2,
   Sparkles,
-} from 'lucide-react';
-import type { ComplianceTraining, TrainingMatrix } from '../types';
+} from "lucide-react";
+import type { ComplianceTraining, TrainingMatrix } from "../types";
 
 interface TrainingMatrixPanelProps {
   trainings: ComplianceTraining[];
@@ -60,34 +60,34 @@ export function TrainingMatrixPanel({
   onGenerateRecommendations,
   onExportMatrix,
 }: TrainingMatrixPanelProps) {
-  const [searchTerm, setSearchTerm] = useState('');
-  const [statusFilter, setStatusFilter] = useState<string>('all');
-  const [rankFilter, setRankFilter] = useState<string>('all');
+  const [searchTerm, setSearchTerm] = useState("");
+  const [statusFilter, setStatusFilter] = useState<string>("all");
+  const [rankFilter, setRankFilter] = useState<string>("all");
   const [loadingRecommendation, setLoadingRecommendation] = useState<string | null>(null);
   const [recommendations, setRecommendations] = useState<Record<string, string>>({});
 
-  const getStatusIcon = (status: ComplianceTraining['status']) => {
+  const getStatusIcon = (status: ComplianceTraining["status"]) => {
     switch (status) {
-      case 'completed':
-        return <CheckCircle2 className="h-4 w-4 text-green-500" />;
-      case 'in-progress':
-        return <Clock className="h-4 w-4 text-yellow-500" />;
-      case 'expired':
-        return <XCircle className="h-4 w-4 text-red-500" />;
-      default:
-        return <AlertTriangle className="h-4 w-4 text-muted-foreground" />;
+    case "completed":
+      return <CheckCircle2 className="h-4 w-4 text-green-500" />;
+    case "in-progress":
+      return <Clock className="h-4 w-4 text-yellow-500" />;
+    case "expired":
+      return <XCircle className="h-4 w-4 text-red-500" />;
+    default:
+      return <AlertTriangle className="h-4 w-4 text-muted-foreground" />;
     }
   };
 
-  const getStatusBadge = (status: ComplianceTraining['status']) => {
-    const variants: Record<string, { variant: 'default' | 'secondary' | 'destructive' | 'outline'; label: string }> = {
-      completed: { variant: 'default', label: 'Concluído' },
-      'in-progress': { variant: 'secondary', label: 'Em Progresso' },
-      expired: { variant: 'destructive', label: 'Expirado' },
-      'not-started': { variant: 'outline', label: 'Não Iniciado' },
+  const getStatusBadge = (status: ComplianceTraining["status"]) => {
+    const variants: Record<string, { variant: "default" | "secondary" | "destructive" | "outline"; label: string }> = {
+      completed: { variant: "default", label: "Concluído" },
+      "in-progress": { variant: "secondary", label: "Em Progresso" },
+      expired: { variant: "destructive", label: "Expirado" },
+      "not-started": { variant: "outline", label: "Não Iniciado" },
     };
 
-    const { variant, label } = variants[status] || variants['not-started'];
+    const { variant, label } = variants[status] || variants["not-started"];
     return <Badge variant={variant}>{label}</Badge>;
   };
 
@@ -95,8 +95,8 @@ export function TrainingMatrixPanel({
     const matchesSearch =
       training.crewMemberName.toLowerCase().includes(searchTerm.toLowerCase()) ||
       training.courseName.toLowerCase().includes(searchTerm.toLowerCase());
-    const matchesStatus = statusFilter === 'all' || training.status === statusFilter;
-    const matchesRank = rankFilter === 'all' || training.crewMemberRank === rankFilter;
+    const matchesStatus = statusFilter === "all" || training.status === statusFilter;
+    const matchesRank = rankFilter === "all" || training.crewMemberRank === rankFilter;
     return matchesSearch && matchesStatus && matchesRank;
   });
 
@@ -108,7 +108,7 @@ export function TrainingMatrixPanel({
       const recommendation = await onGenerateRecommendations(crewMemberId);
       setRecommendations((prev) => ({ ...prev, [crewMemberId]: recommendation }));
     } catch (error) {
-      console.error('Error generating recommendation:', error);
+      console.error("Error generating recommendation:", error);
     } finally {
       setLoadingRecommendation(null);
     }
@@ -117,10 +117,10 @@ export function TrainingMatrixPanel({
   // Stats calculation
   const stats = {
     total: trainings.length,
-    completed: trainings.filter((t) => t.status === 'completed').length,
-    inProgress: trainings.filter((t) => t.status === 'in-progress').length,
-    expired: trainings.filter((t) => t.status === 'expired').length,
-    notStarted: trainings.filter((t) => t.status === 'not-started').length,
+    completed: trainings.filter((t) => t.status === "completed").length,
+    inProgress: trainings.filter((t) => t.status === "in-progress").length,
+    expired: trainings.filter((t) => t.status === "expired").length,
+    notStarted: trainings.filter((t) => t.status === "not-started").length,
   };
 
   const complianceRate = stats.total > 0 
@@ -318,11 +318,11 @@ export function TrainingMatrixPanel({
                     </TableCell>
                     <TableCell>
                       {training.expiryDate ? (
-                        <span className={training.status === 'expired' ? 'text-red-500' : ''}>
+                        <span className={training.status === "expired" ? "text-red-500" : ""}>
                           {training.expiryDate}
                         </span>
                       ) : (
-                        '-'
+                        "-"
                       )}
                     </TableCell>
                     <TableCell className="text-right">

@@ -71,7 +71,7 @@ const NautilusAssistant: React.FC = () => {
       const assistantMessage: ChatMessage = {
         role: "assistant",
         content: response?.response 
-          ? (typeof response.response === 'string' ? response.response : JSON.stringify(response.response))
+          ? (typeof response.response === "string" ? response.response : JSON.stringify(response.response))
           : "Entendi sua solicitação. Com base nos dados disponíveis, posso ajudá-lo com análises operacionais, planejamento de viagens, gestão de manutenção e conformidade regulatória. Qual área específica você gostaria de explorar?",
         timestamp: new Date()
       };

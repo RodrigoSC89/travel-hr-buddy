@@ -2,15 +2,15 @@
  * useOfflineSync Hook - React hook for offline data synchronization
  */
 
-import { useState, useEffect, useCallback } from 'react';
-import { offlineManager } from '@/lib/offline/OfflineManager';
+import { useState, useEffect, useCallback } from "react";
+import { offlineManager } from "@/lib/offline/OfflineManager";
 
 interface UseOfflineSyncReturn {
   isOnline: boolean;
   isSyncing: boolean;
   pendingCount: number;
-  lastSyncStatus: 'synced' | 'syncing' | 'error' | null;
-  queueAction: (type: 'create' | 'update' | 'delete', table: string, data: Record<string, any>) => Promise<string>;
+  lastSyncStatus: "synced" | "syncing" | "error" | null;
+  queueAction: (type: "create" | "update" | "delete", table: string, data: Record<string, any>) => Promise<string>;
   cacheData: (table: string, data: Record<string, any>[], ttlMinutes?: number) => Promise<void>;
   getCachedData: <T>(table: string) => Promise<T[] | null>;
   forceSync: () => Promise<void>;
@@ -20,7 +20,7 @@ export function useOfflineSync(): UseOfflineSyncReturn {
   const [isOnline, setIsOnline] = useState(navigator.onLine);
   const [isSyncing, setIsSyncing] = useState(false);
   const [pendingCount, setPendingCount] = useState(0);
-  const [lastSyncStatus, setLastSyncStatus] = useState<'synced' | 'syncing' | 'error' | null>(null);
+  const [lastSyncStatus, setLastSyncStatus] = useState<"synced" | "syncing" | "error" | null>(null);
 
   useEffect(() => {
     // Initialize offline manager
@@ -37,7 +37,7 @@ export function useOfflineSync(): UseOfflineSyncReturn {
     // Subscribe to sync status
     const unsubscribe = offlineManager.onSyncStatus((status) => {
       setLastSyncStatus(status);
-      setIsSyncing(status === 'syncing');
+      setIsSyncing(status === "syncing");
       updatePendingCount();
     });
 
@@ -45,18 +45,18 @@ export function useOfflineSync(): UseOfflineSyncReturn {
     const handleOnline = () => setIsOnline(true);
     const handleOffline = () => setIsOnline(false);
 
-    window.addEventListener('online', handleOnline);
-    window.addEventListener('offline', handleOffline);
+    window.addEventListener("online", handleOnline);
+    window.addEventListener("offline", handleOffline);
 
     return () => {
       unsubscribe();
-      window.removeEventListener('online', handleOnline);
-      window.removeEventListener('offline', handleOffline);
+      window.removeEventListener("online", handleOnline);
+      window.removeEventListener("offline", handleOffline);
     };
   }, []);
 
   const queueAction = useCallback(async (
-    type: 'create' | 'update' | 'delete',
+    type: "create" | "update" | "delete",
     table: string,
     data: Record<string, any>
   ): Promise<string> => {

@@ -89,29 +89,29 @@ export default function MMIJobsPanelSection() {
 
   const getPriorityBadge = (priority: string) => {
     switch (priority) {
-      case "critical":
-        return <Badge className="bg-red-100 text-red-700 dark:bg-red-900/30 dark:text-red-300">Crítico</Badge>;
-      case "high":
-        return <Badge className="bg-orange-100 text-orange-700 dark:bg-orange-900/30 dark:text-orange-300">Alto</Badge>;
-      case "medium":
-        return <Badge className="bg-yellow-100 text-yellow-700 dark:bg-yellow-900/30 dark:text-yellow-300">Médio</Badge>;
-      case "low":
-        return <Badge className="bg-green-100 text-green-700 dark:bg-green-900/30 dark:text-green-300">Baixo</Badge>;
-      default:
-        return <Badge variant="secondary">{priority}</Badge>;
+    case "critical":
+      return <Badge className="bg-red-100 text-red-700 dark:bg-red-900/30 dark:text-red-300">Crítico</Badge>;
+    case "high":
+      return <Badge className="bg-orange-100 text-orange-700 dark:bg-orange-900/30 dark:text-orange-300">Alto</Badge>;
+    case "medium":
+      return <Badge className="bg-yellow-100 text-yellow-700 dark:bg-yellow-900/30 dark:text-yellow-300">Médio</Badge>;
+    case "low":
+      return <Badge className="bg-green-100 text-green-700 dark:bg-green-900/30 dark:text-green-300">Baixo</Badge>;
+    default:
+      return <Badge variant="secondary">{priority}</Badge>;
     }
   };
 
   const getStatusBadge = (status: string) => {
     switch (status) {
-      case "concluido":
-        return <Badge className="bg-green-500 text-white">Concluído</Badge>;
-      case "em_andamento":
-        return <Badge className="bg-blue-500 text-white">Em Andamento</Badge>;
-      case "pendente":
-        return <Badge variant="secondary">Pendente</Badge>;
-      default:
-        return <Badge variant="secondary">{status}</Badge>;
+    case "concluido":
+      return <Badge className="bg-green-500 text-white">Concluído</Badge>;
+    case "em_andamento":
+      return <Badge className="bg-blue-500 text-white">Em Andamento</Badge>;
+    case "pendente":
+      return <Badge variant="secondary">Pendente</Badge>;
+    default:
+      return <Badge variant="secondary">{status}</Badge>;
     }
   };
 

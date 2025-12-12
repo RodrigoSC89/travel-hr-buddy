@@ -47,18 +47,18 @@ export function formatMetricValue(value: number | string, unit: string): string 
   if (isNaN(numValue)) return String(value);
   
   switch (unit) {
-    case "percent":
-    case "%":
-      return `${numValue.toFixed(1)}%`;
-    case "currency":
-    case "BRL":
-      return formatCurrency(numValue);
-    case "bytes":
-      return formatBytes(numValue);
-    case "ms":
-      return formatDuration(numValue);
-    default:
-      return `${formatNumber(numValue)} ${unit}`;
+  case "percent":
+  case "%":
+    return `${numValue.toFixed(1)}%`;
+  case "currency":
+  case "BRL":
+    return formatCurrency(numValue);
+  case "bytes":
+    return formatBytes(numValue);
+  case "ms":
+    return formatDuration(numValue);
+  default:
+    return `${formatNumber(numValue)} ${unit}`;
   }
 }
 

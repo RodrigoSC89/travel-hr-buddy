@@ -305,7 +305,7 @@ export function ClassSurveyDashboard() {
                         <span className={cn(
                           "font-medium",
                           daysUntil <= 30 ? "text-amber-400" : 
-                          daysUntil <= 7 ? "text-destructive" : "text-muted-foreground"
+                            daysUntil <= 7 ? "text-destructive" : "text-muted-foreground"
                         )}>
                           {daysUntil} dias restantes
                         </span>

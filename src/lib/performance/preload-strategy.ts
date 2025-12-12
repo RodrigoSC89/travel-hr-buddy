@@ -3,13 +3,13 @@
  * Optimized for 2Mbps networks
  */
 
-type Priority = 'critical' | 'high' | 'medium' | 'low';
+type Priority = "critical" | "high" | "medium" | "low";
 
 interface PreloadConfig {
   url: string;
-  as: 'script' | 'style' | 'image' | 'font' | 'fetch';
+  as: "script" | "style" | "image" | "font" | "fetch";
   priority: Priority;
-  crossOrigin?: 'anonymous' | 'use-credentials';
+  crossOrigin?: "anonymous" | "use-credentials";
 }
 
 class PreloadStrategy {
@@ -23,7 +23,7 @@ class PreloadStrategy {
   preload(config: PreloadConfig): void {
     if (this.preloaded.has(config.url)) return;
     
-    if (config.priority === 'critical') {
+    if (config.priority === "critical") {
       this.executePreload(config);
     } else {
       this.queue.push(config);
@@ -47,14 +47,14 @@ class PreloadStrategy {
   preloadRoute(path: string): void {
     // Common route resources
     const routeResources: Record<string, PreloadConfig[]> = {
-      '/dashboard': [
-        { url: '/src/pages/Dashboard.tsx', as: 'script', priority: 'high' }
+      "/dashboard": [
+        { url: "/src/pages/Dashboard.tsx", as: "script", priority: "high" }
       ],
-      '/crew': [
-        { url: '/src/pages/modules/CrewManagement.tsx', as: 'script', priority: 'high' }
+      "/crew": [
+        { url: "/src/pages/modules/CrewManagement.tsx", as: "script", priority: "high" }
       ],
-      '/fleet': [
-        { url: '/src/pages/modules/FleetManagement.tsx', as: 'script', priority: 'high' }
+      "/fleet": [
+        { url: "/src/pages/modules/FleetManagement.tsx", as: "script", priority: "high" }
       ]
     };
 
@@ -68,8 +68,8 @@ class PreloadStrategy {
     if (this.preloaded.has(config.url)) return;
     this.preloaded.add(config.url);
 
-    const link = document.createElement('link');
-    link.rel = 'preload';
+    const link = document.createElement("link");
+    link.rel = "preload";
     link.href = config.url;
     link.as = config.as;
     
@@ -96,7 +96,7 @@ class PreloadStrategy {
     };
 
     // Use idle callback or timeout
-    if ('requestIdleCallback' in window) {
+    if ("requestIdleCallback" in window) {
       requestIdleCallback(process);
     } else {
       setTimeout(process, 100);

@@ -20,10 +20,10 @@ import type { Database, Json } from "@/integrations/supabase/types";
 
 export interface NoncomplianceFinding {
   id: string;
-  type: 'MLC' | 'PSC' | 'LSA_FFA' | 'OVID';
+  type: "MLC" | "PSC" | "LSA_FFA" | "OVID";
   code: string;
   description: string;
-  severity: 'critical' | 'major' | 'minor';
+  severity: "critical" | "major" | "minor";
   vesselId?: string;
   details?: Record<string, unknown>;
 }
@@ -38,7 +38,7 @@ export interface ExplanationResult {
 
 export interface CorrectiveAction {
   action: string;
-  priority: 'critical' | 'high' | 'medium' | 'low';
+  priority: "critical" | "high" | "medium" | "low";
   estimatedTime: string;
   responsible: string;
 }
@@ -319,8 +319,8 @@ function extractSection(text: string, sectionName: string): string {
 export async function generateQuizFromErrors(
   crewMemberId: string,
   errorHistory: NoncomplianceFinding[],
-  quizType: 'MLC' | 'PSC' | 'LSA_FFA' | 'OVID' | 'GENERAL',
-  difficulty: 'basic' | 'intermediate' | 'advanced' = 'intermediate'
+  quizType: "MLC" | "PSC" | "LSA_FFA" | "OVID" | "GENERAL",
+  difficulty: "basic" | "intermediate" | "advanced" = "intermediate"
 ): Promise<string> {
   try {
     const apiKey = (import.meta as { env: Record<string, string | undefined> }).env

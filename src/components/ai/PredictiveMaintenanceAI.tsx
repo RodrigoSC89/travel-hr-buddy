@@ -23,7 +23,7 @@ interface PredictionResult {
   failureProbability: number;
   predictedFailureDate: string;
   daysUntilFailure: number;
-  riskLevel: 'low' | 'medium' | 'high' | 'critical';
+  riskLevel: "low" | "medium" | "high" | "critical";
   recommendedAction: string;
   confidence: number;
   historicalData: {
@@ -35,8 +35,8 @@ interface PredictionResult {
 
 interface MaintenanceAlert {
   id: string;
-  type: 'predictive' | 'scheduled' | 'overdue';
-  severity: 'info' | 'warning' | 'critical';
+  type: "predictive" | "scheduled" | "overdue";
+  severity: "info" | "warning" | "critical";
   message: string;
   component: string;
   vessel: string;
@@ -68,14 +68,14 @@ export const PredictiveMaintenanceAI: React.FC = () => {
       // Generate predictive data based on patterns
       const mockPredictions: PredictionResult[] = [
         {
-          componentId: 'comp-001',
-          componentName: 'Motor Principal BB',
-          vesselName: 'Navio Atlas',
+          componentId: "comp-001",
+          componentName: "Motor Principal BB",
+          vesselName: "Navio Atlas",
           failureProbability: 0.78,
           predictedFailureDate: new Date(Date.now() + 15 * 24 * 60 * 60 * 1000).toISOString(),
           daysUntilFailure: 15,
-          riskLevel: 'high',
-          recommendedAction: 'Agendar manutenção preventiva imediata. Verificar sistema de injeção e filtros.',
+          riskLevel: "high",
+          recommendedAction: "Agendar manutenção preventiva imediata. Verificar sistema de injeção e filtros.",
           confidence: 0.92,
           historicalData: {
             lastMaintenance: new Date(Date.now() - 90 * 24 * 60 * 60 * 1000).toISOString(),
@@ -84,14 +84,14 @@ export const PredictiveMaintenanceAI: React.FC = () => {
           }
         },
         {
-          componentId: 'comp-002',
-          componentName: 'Bomba de Lastro #2',
-          vesselName: 'Navio Poseidon',
+          componentId: "comp-002",
+          componentName: "Bomba de Lastro #2",
+          vesselName: "Navio Poseidon",
           failureProbability: 0.45,
           predictedFailureDate: new Date(Date.now() + 45 * 24 * 60 * 60 * 1000).toISOString(),
           daysUntilFailure: 45,
-          riskLevel: 'medium',
-          recommendedAction: 'Programar inspeção para próxima docagem. Monitorar vibração.',
+          riskLevel: "medium",
+          recommendedAction: "Programar inspeção para próxima docagem. Monitorar vibração.",
           confidence: 0.85,
           historicalData: {
             lastMaintenance: new Date(Date.now() - 60 * 24 * 60 * 60 * 1000).toISOString(),
@@ -100,14 +100,14 @@ export const PredictiveMaintenanceAI: React.FC = () => {
           }
         },
         {
-          componentId: 'comp-003',
-          componentName: 'Gerador Auxiliar',
-          vesselName: 'Navio Tritão',
+          componentId: "comp-003",
+          componentName: "Gerador Auxiliar",
+          vesselName: "Navio Tritão",
           failureProbability: 0.92,
           predictedFailureDate: new Date(Date.now() + 5 * 24 * 60 * 60 * 1000).toISOString(),
           daysUntilFailure: 5,
-          riskLevel: 'critical',
-          recommendedAction: 'URGENTE: Parar operação e realizar manutenção corretiva. Risco de falha catastrófica.',
+          riskLevel: "critical",
+          recommendedAction: "URGENTE: Parar operação e realizar manutenção corretiva. Risco de falha catastrófica.",
           confidence: 0.96,
           historicalData: {
             lastMaintenance: new Date(Date.now() - 180 * 24 * 60 * 60 * 1000).toISOString(),
@@ -116,14 +116,14 @@ export const PredictiveMaintenanceAI: React.FC = () => {
           }
         },
         {
-          componentId: 'comp-004',
-          componentName: 'Sistema Hidráulico',
-          vesselName: 'Navio Atlas',
+          componentId: "comp-004",
+          componentName: "Sistema Hidráulico",
+          vesselName: "Navio Atlas",
           failureProbability: 0.22,
           predictedFailureDate: new Date(Date.now() + 90 * 24 * 60 * 60 * 1000).toISOString(),
           daysUntilFailure: 90,
-          riskLevel: 'low',
-          recommendedAction: 'Manutenção pode ser agendada conforme programação normal.',
+          riskLevel: "low",
+          recommendedAction: "Manutenção pode ser agendada conforme programação normal.",
           confidence: 0.88,
           historicalData: {
             lastMaintenance: new Date(Date.now() - 30 * 24 * 60 * 60 * 1000).toISOString(),
@@ -135,30 +135,30 @@ export const PredictiveMaintenanceAI: React.FC = () => {
 
       const mockAlerts: MaintenanceAlert[] = [
         {
-          id: 'alert-001',
-          type: 'predictive',
-          severity: 'critical',
-          message: 'Gerador Auxiliar do Tritão apresenta 92% de probabilidade de falha em 5 dias',
-          component: 'Gerador Auxiliar',
-          vessel: 'Navio Tritão',
+          id: "alert-001",
+          type: "predictive",
+          severity: "critical",
+          message: "Gerador Auxiliar do Tritão apresenta 92% de probabilidade de falha em 5 dias",
+          component: "Gerador Auxiliar",
+          vessel: "Navio Tritão",
           createdAt: new Date()
         },
         {
-          id: 'alert-002',
-          type: 'predictive',
-          severity: 'warning',
-          message: 'Motor Principal BB do Atlas requer atenção - risco elevado detectado',
-          component: 'Motor Principal BB',
-          vessel: 'Navio Atlas',
+          id: "alert-002",
+          type: "predictive",
+          severity: "warning",
+          message: "Motor Principal BB do Atlas requer atenção - risco elevado detectado",
+          component: "Motor Principal BB",
+          vessel: "Navio Atlas",
           createdAt: new Date(Date.now() - 2 * 60 * 60 * 1000)
         },
         {
-          id: 'alert-003',
-          type: 'scheduled',
-          severity: 'info',
-          message: 'Manutenção preventiva programada para próxima semana',
-          component: 'Bomba de Lastro #2',
-          vessel: 'Navio Poseidon',
+          id: "alert-003",
+          type: "scheduled",
+          severity: "info",
+          message: "Manutenção preventiva programada para próxima semana",
+          component: "Bomba de Lastro #2",
+          vessel: "Navio Poseidon",
           createdAt: new Date(Date.now() - 24 * 60 * 60 * 1000)
         }
       ];
@@ -173,8 +173,8 @@ export const PredictiveMaintenanceAI: React.FC = () => {
         accuracy: 94.2
       });
     } catch (error) {
-      console.error('Error loading predictions:', error);
-      console.error('Error loading predictions:', error);
+      console.error("Error loading predictions:", error);
+      console.error("Error loading predictions:", error);
     } finally {
       setIsAnalyzing(false);
     }
@@ -182,21 +182,21 @@ export const PredictiveMaintenanceAI: React.FC = () => {
 
   const getRiskColor = (level: string) => {
     switch (level) {
-      case 'critical': return 'bg-red-500 text-white';
-      case 'high': return 'bg-orange-500 text-white';
-      case 'medium': return 'bg-yellow-500 text-black';
-      case 'low': return 'bg-green-500 text-white';
-      default: return 'bg-gray-500 text-white';
+    case "critical": return "bg-red-500 text-white";
+    case "high": return "bg-orange-500 text-white";
+    case "medium": return "bg-yellow-500 text-black";
+    case "low": return "bg-green-500 text-white";
+    default: return "bg-gray-500 text-white";
     }
   };
 
   const getRiskIcon = (level: string) => {
     switch (level) {
-      case 'critical': return <XCircle className="h-4 w-4" />;
-      case 'high': return <AlertTriangle className="h-4 w-4" />;
-      case 'medium': return <Clock className="h-4 w-4" />;
-      case 'low': return <CheckCircle className="h-4 w-4" />;
-      default: return <Settings className="h-4 w-4" />;
+    case "critical": return <XCircle className="h-4 w-4" />;
+    case "high": return <AlertTriangle className="h-4 w-4" />;
+    case "medium": return <Clock className="h-4 w-4" />;
+    case "low": return <CheckCircle className="h-4 w-4" />;
+    default: return <Settings className="h-4 w-4" />;
     }
   };
 
@@ -291,22 +291,22 @@ export const PredictiveMaintenanceAI: React.FC = () => {
                   animate={{ opacity: 1, x: 0 }}
                   transition={{ delay: index * 0.1 }}
                   className={`p-3 rounded-lg border ${
-                    alert.severity === 'critical' 
-                      ? 'bg-red-500/10 border-red-500/30' 
-                      : alert.severity === 'warning'
-                        ? 'bg-yellow-500/10 border-yellow-500/30'
-                        : 'bg-blue-500/10 border-blue-500/30'
+                    alert.severity === "critical" 
+                      ? "bg-red-500/10 border-red-500/30" 
+                      : alert.severity === "warning"
+                        ? "bg-yellow-500/10 border-yellow-500/30"
+                        : "bg-blue-500/10 border-blue-500/30"
                   }`}
                 >
                   <div className="flex items-start justify-between gap-4">
                     <div className="flex items-start gap-3">
                       <div className={`p-1.5 rounded ${
-                        alert.severity === 'critical' ? 'bg-red-500/20' :
-                        alert.severity === 'warning' ? 'bg-yellow-500/20' : 'bg-blue-500/20'
+                        alert.severity === "critical" ? "bg-red-500/20" :
+                          alert.severity === "warning" ? "bg-yellow-500/20" : "bg-blue-500/20"
                       }`}>
-                        {alert.severity === 'critical' ? <XCircle className="h-4 w-4 text-red-500" /> :
-                         alert.severity === 'warning' ? <AlertTriangle className="h-4 w-4 text-yellow-500" /> :
-                         <Sparkles className="h-4 w-4 text-blue-500" />}
+                        {alert.severity === "critical" ? <XCircle className="h-4 w-4 text-red-500" /> :
+                          alert.severity === "warning" ? <AlertTriangle className="h-4 w-4 text-yellow-500" /> :
+                            <Sparkles className="h-4 w-4 text-blue-500" />}
                       </div>
                       <div>
                         <p className="text-sm font-medium">{alert.message}</p>
@@ -323,7 +323,7 @@ export const PredictiveMaintenanceAI: React.FC = () => {
                       </div>
                     </div>
                     <span className="text-xs text-muted-foreground whitespace-nowrap">
-                      {new Date(alert.createdAt).toLocaleTimeString('pt-BR', { hour: '2-digit', minute: '2-digit' })}
+                      {new Date(alert.createdAt).toLocaleTimeString("pt-BR", { hour: "2-digit", minute: "2-digit" })}
                     </span>
                   </div>
                 </motion.div>
@@ -371,9 +371,9 @@ export const PredictiveMaintenanceAI: React.FC = () => {
                   <Progress 
                     value={prediction.failureProbability * 100} 
                     className={`h-2 ${
-                      prediction.failureProbability > 0.7 ? '[&>div]:bg-red-500' :
-                      prediction.failureProbability > 0.4 ? '[&>div]:bg-yellow-500' :
-                      '[&>div]:bg-green-500'
+                      prediction.failureProbability > 0.7 ? "[&>div]:bg-red-500" :
+                        prediction.failureProbability > 0.4 ? "[&>div]:bg-yellow-500" :
+                          "[&>div]:bg-green-500"
                     }`}
                   />
                 </div>
@@ -385,9 +385,9 @@ export const PredictiveMaintenanceAI: React.FC = () => {
                     <span className="text-sm">Tempo estimado</span>
                   </div>
                   <span className={`font-bold ${
-                    prediction.daysUntilFailure <= 7 ? 'text-red-500' :
-                    prediction.daysUntilFailure <= 30 ? 'text-yellow-500' :
-                    'text-green-500'
+                    prediction.daysUntilFailure <= 7 ? "text-red-500" :
+                      prediction.daysUntilFailure <= 30 ? "text-yellow-500" :
+                        "text-green-500"
                   }`}>
                     {prediction.daysUntilFailure} dias
                   </span>
@@ -423,11 +423,11 @@ export const PredictiveMaintenanceAI: React.FC = () => {
                 {/* Action Button */}
                 <Button 
                   className="w-full" 
-                  variant={prediction.riskLevel === 'critical' ? 'destructive' : 'default'}
+                  variant={prediction.riskLevel === "critical" ? "destructive" : "default"}
                   onClick={() => createMaintenanceOrder(prediction)}
                 >
                   <Wrench className="h-4 w-4 mr-2" />
-                  {prediction.riskLevel === 'critical' ? 'Criar OS Urgente' : 'Agendar Manutenção'}
+                  {prediction.riskLevel === "critical" ? "Criar OS Urgente" : "Agendar Manutenção"}
                 </Button>
               </CardContent>
             </Card>
@@ -439,7 +439,7 @@ export const PredictiveMaintenanceAI: React.FC = () => {
       {lastAnalysis && (
         <div className="text-center text-sm text-muted-foreground">
           <Sparkles className="h-4 w-4 inline mr-1" />
-          Última análise ML: {lastAnalysis.toLocaleString('pt-BR')}
+          Última análise ML: {lastAnalysis.toLocaleString("pt-BR")}
         </div>
       )}
     </div>

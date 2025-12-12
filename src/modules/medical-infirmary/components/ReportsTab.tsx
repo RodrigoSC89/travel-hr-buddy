@@ -2,13 +2,13 @@
  * Reports Tab
  */
 
-import React, { useState } from 'react';
-import { Card, CardContent, CardHeader, CardTitle, CardDescription } from '@/components/ui/card';
-import { Button } from '@/components/ui/button';
-import { Badge } from '@/components/ui/badge';
-import { FileText, Download, Plus, Calendar, CheckCircle2, Clock, Shield, BarChart3, Brain } from 'lucide-react';
-import { mockReports } from '../data/mockData';
-import { toast } from 'sonner';
+import React, { useState } from "react";
+import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "@/components/ui/card";
+import { Button } from "@/components/ui/button";
+import { Badge } from "@/components/ui/badge";
+import { FileText, Download, Plus, Calendar, CheckCircle2, Clock, Shield, BarChart3, Brain } from "lucide-react";
+import { mockReports } from "../data/mockData";
+import { toast } from "sonner";
 
 export default function ReportsTab() {
   const [reports] = useState(mockReports);
@@ -18,27 +18,27 @@ export default function ReportsTab() {
   };
 
   const handleDownload = (id: string) => {
-    toast.success('Baixando relatório...');
+    toast.success("Baixando relatório...");
   };
 
   return (
     <div className="space-y-6">
       <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-        <Card className="cursor-pointer hover:border-primary/50" onClick={() => handleGenerate('MLC 2006')}>
+        <Card className="cursor-pointer hover:border-primary/50" onClick={() => handleGenerate("MLC 2006")}>
           <CardContent className="pt-6 text-center">
             <Shield className="h-12 w-12 mx-auto mb-4 text-blue-500" />
             <h3 className="font-medium">Relatório MLC 2006</h3>
             <p className="text-sm text-muted-foreground">Conformidade Maritime Labour Convention</p>
           </CardContent>
         </Card>
-        <Card className="cursor-pointer hover:border-primary/50" onClick={() => handleGenerate('Port State')}>
+        <Card className="cursor-pointer hover:border-primary/50" onClick={() => handleGenerate("Port State")}>
           <CardContent className="pt-6 text-center">
             <FileText className="h-12 w-12 mx-auto mb-4 text-green-500" />
             <h3 className="font-medium">Relatório Port State</h3>
             <p className="text-sm text-muted-foreground">Inspeção de Estado do Porto</p>
           </CardContent>
         </Card>
-        <Card className="cursor-pointer hover:border-primary/50" onClick={() => handleGenerate('Mensal')}>
+        <Card className="cursor-pointer hover:border-primary/50" onClick={() => handleGenerate("Mensal")}>
           <CardContent className="pt-6 text-center">
             <BarChart3 className="h-12 w-12 mx-auto mb-4 text-purple-500" />
             <h3 className="font-medium">Relatório Mensal</h3>
@@ -60,12 +60,12 @@ export default function ReportsTab() {
                   <FileText className="h-5 w-5 text-primary" />
                   <div>
                     <p className="font-medium">{report.title}</p>
-                    <p className="text-sm text-muted-foreground">Gerado em {new Date(report.generatedAt).toLocaleDateString('pt-BR')}</p>
+                    <p className="text-sm text-muted-foreground">Gerado em {new Date(report.generatedAt).toLocaleDateString("pt-BR")}</p>
                   </div>
                 </div>
                 <div className="flex items-center gap-3">
-                  <Badge variant={report.status === 'completed' ? 'default' : 'secondary'}>
-                    {report.status === 'completed' ? 'Concluído' : 'Rascunho'}
+                  <Badge variant={report.status === "completed" ? "default" : "secondary"}>
+                    {report.status === "completed" ? "Concluído" : "Rascunho"}
                   </Badge>
                   <Button variant="outline" size="sm" onClick={() => handleDownload(report.id)}>
                     <Download className="h-4 w-4" />

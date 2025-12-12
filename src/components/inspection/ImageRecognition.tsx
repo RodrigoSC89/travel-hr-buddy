@@ -159,38 +159,38 @@ export const ImageRecognition: React.FC = () => {
 
   const getStatusIcon = (status: string) => {
     switch (status) {
-      case "passed": return <CheckCircle className="h-5 w-5 text-green-500" />;
-      case "warning": return <AlertTriangle className="h-5 w-5 text-amber-500" />;
-      case "failed": return <XCircle className="h-5 w-5 text-red-500" />;
-      default: return null;
+    case "passed": return <CheckCircle className="h-5 w-5 text-green-500" />;
+    case "warning": return <AlertTriangle className="h-5 w-5 text-amber-500" />;
+    case "failed": return <XCircle className="h-5 w-5 text-red-500" />;
+    default: return null;
     }
   };
 
   const getStatusBadge = (status: string) => {
     switch (status) {
-      case "passed": return <Badge className="bg-green-500">Aprovado</Badge>;
-      case "warning": return <Badge className="bg-amber-500">Atenção</Badge>;
-      case "failed": return <Badge variant="destructive">Reprovado</Badge>;
-      default: return null;
+    case "passed": return <Badge className="bg-green-500">Aprovado</Badge>;
+    case "warning": return <Badge className="bg-amber-500">Atenção</Badge>;
+    case "failed": return <Badge variant="destructive">Reprovado</Badge>;
+    default: return null;
     }
   };
 
   const getSeverityColor = (severity: string) => {
     switch (severity) {
-      case "low": return "text-green-500";
-      case "medium": return "text-amber-500";
-      case "high": return "text-orange-500";
-      case "critical": return "text-red-500";
-      default: return "text-muted-foreground";
+    case "low": return "text-green-500";
+    case "medium": return "text-amber-500";
+    case "high": return "text-orange-500";
+    case "critical": return "text-red-500";
+    default: return "text-muted-foreground";
     }
   };
 
   const getAnalysisIcon = (type: string) => {
     switch (type) {
-      case "corrosion": return <Wrench className="h-4 w-4" />;
-      case "damage": return <AlertTriangle className="h-4 w-4" />;
-      case "ppe": return <HardHat className="h-4 w-4" />;
-      default: return <Eye className="h-4 w-4" />;
+    case "corrosion": return <Wrench className="h-4 w-4" />;
+    case "damage": return <AlertTriangle className="h-4 w-4" />;
+    case "ppe": return <HardHat className="h-4 w-4" />;
+    default: return <Eye className="h-4 w-4" />;
     }
   };
 
@@ -382,8 +382,8 @@ export const ImageRecognition: React.FC = () => {
                               <span className="flex items-center gap-1">
                                 {getAnalysisIcon(result.analysisType)}
                                 {result.analysisType === "corrosion" ? "Corrosão" :
-                                 result.analysisType === "damage" ? "Danos" :
-                                 result.analysisType === "ppe" ? "EPIs" : "Geral"}
+                                  result.analysisType === "damage" ? "Danos" :
+                                    result.analysisType === "ppe" ? "EPIs" : "Geral"}
                               </span>
                               <span>
                                 Confiança: {(result.confidence * 100).toFixed(0)}%
@@ -404,8 +404,8 @@ export const ImageRecognition: React.FC = () => {
                                 finding.severity === "high" || finding.severity === "critical"
                                   ? "bg-red-500/10"
                                   : finding.severity === "medium"
-                                  ? "bg-amber-500/10"
-                                  : "bg-muted"
+                                    ? "bg-amber-500/10"
+                                    : "bg-muted"
                               }`}
                             >
                               <div className="flex items-center gap-2 mb-1">

@@ -175,20 +175,20 @@ export const SIMOPSManager: React.FC = () => {
 
   const getRiskBadge = (risk: string) => {
     switch (risk) {
-      case "critical": return <Badge variant="destructive">Crítico</Badge>;
-      case "high": return <Badge className="bg-orange-500">Alto</Badge>;
-      case "medium": return <Badge className="bg-yellow-500 text-black">Médio</Badge>;
-      default: return <Badge variant="secondary">Baixo</Badge>;
+    case "critical": return <Badge variant="destructive">Crítico</Badge>;
+    case "high": return <Badge className="bg-orange-500">Alto</Badge>;
+    case "medium": return <Badge className="bg-yellow-500 text-black">Médio</Badge>;
+    default: return <Badge variant="secondary">Baixo</Badge>;
     }
   };
 
   const getStatusBadge = (status: string) => {
     switch (status) {
-      case "active": return <Badge className="bg-green-500">Ativo</Badge>;
-      case "planned": return <Badge className="bg-blue-500">Planejado</Badge>;
-      case "paused": return <Badge className="bg-yellow-500 text-black">Pausado</Badge>;
-      case "completed": return <Badge variant="secondary">Concluído</Badge>;
-      default: return <Badge variant="outline">{status}</Badge>;
+    case "active": return <Badge className="bg-green-500">Ativo</Badge>;
+    case "planned": return <Badge className="bg-blue-500">Planejado</Badge>;
+    case "paused": return <Badge className="bg-yellow-500 text-black">Pausado</Badge>;
+    case "completed": return <Badge variant="secondary">Concluído</Badge>;
+    default: return <Badge variant="outline">{status}</Badge>;
     }
   };
 

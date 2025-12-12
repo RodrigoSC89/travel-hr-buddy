@@ -3,9 +3,9 @@
  * Virtualized list for large datasets on slow networks
  */
 
-import React, { memo, useCallback, useMemo } from 'react';
-import { useNetworkStatus } from '@/hooks/use-network-status';
-import { cn } from '@/lib/utils';
+import React, { memo, useCallback, useMemo } from "react";
+import { useNetworkStatus } from "@/hooks/use-network-status";
+import { cn } from "@/lib/utils";
 
 interface OptimizedListProps<T> {
   items: T[];
@@ -22,7 +22,7 @@ function OptimizedListInner<T>({
   renderItem,
   keyExtractor,
   className,
-  emptyMessage = 'Nenhum item encontrado',
+  emptyMessage = "Nenhum item encontrado",
   loading = false,
   pageSize
 }: OptimizedListProps<T>) {
@@ -31,14 +31,14 @@ function OptimizedListInner<T>({
   // Adjust page size based on network
   const effectivePageSize = useMemo(() => {
     if (pageSize) return pageSize;
-    if (quality === 'slow') return 10;
-    if (quality === 'medium') return 25;
+    if (quality === "slow") return 10;
+    if (quality === "medium") return 25;
     return 50;
   }, [quality, pageSize]);
 
   // Only render visible items for slow connections
   const visibleItems = useMemo(() => {
-    if (quality === 'slow' && items.length > effectivePageSize) {
+    if (quality === "slow" && items.length > effectivePageSize) {
       return items.slice(0, effectivePageSize);
     }
     return items;
@@ -80,7 +80,7 @@ function OptimizedListInner<T>({
     <div className={cn("space-y-2", className)}>
       {visibleItems.map(renderListItem)}
       
-      {quality === 'slow' && items.length > effectivePageSize && (
+      {quality === "slow" && items.length > effectivePageSize && (
         <div className="text-center text-sm text-muted-foreground py-2">
           Mostrando {effectivePageSize} de {items.length} itens
           <br />

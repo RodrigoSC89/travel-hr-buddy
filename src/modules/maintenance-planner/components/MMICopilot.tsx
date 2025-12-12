@@ -95,7 +95,7 @@ export const MMICopilot: React.FC<MMICopilotProps> = ({ onJobCreated, context })
     setIsLoading(true);
 
     try {
-      const { data, error } = await supabase.functions.invoke('mmi-copilot', {
+      const { data, error } = await supabase.functions.invoke("mmi-copilot", {
         body: { 
           message: messageText,
           context: context,
@@ -157,19 +157,19 @@ export const MMICopilot: React.FC<MMICopilotProps> = ({ onJobCreated, context })
 
   const getCriticalityColor = (criticidade: string) => {
     switch (criticidade) {
-      case "alta": return "bg-red-500";
-      case "media": return "bg-yellow-500";
-      case "baixa": return "bg-green-500";
-      default: return "bg-gray-500";
+    case "alta": return "bg-red-500";
+    case "media": return "bg-yellow-500";
+    case "baixa": return "bg-green-500";
+    default: return "bg-gray-500";
     }
   };
 
   const getRiskColor = (risco: string) => {
     switch (risco) {
-      case "alto": return "text-red-500";
-      case "medio": return "text-yellow-500";
-      case "baixo": return "text-green-500";
-      default: return "text-gray-500";
+    case "alto": return "text-red-500";
+    case "medio": return "text-yellow-500";
+    case "baixo": return "text-green-500";
+    default: return "text-gray-500";
     }
   };
 

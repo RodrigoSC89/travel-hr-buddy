@@ -176,14 +176,14 @@ const AIModelsLab: React.FC = () => {
 
   const getStatusBadge = (status: MLModel["status"]) => {
     switch (status) {
-      case "ready":
-        return <Badge className="bg-green-500/20 text-green-400 border-green-500/30"><CheckCircle className="h-3 w-3 mr-1" />Pronto</Badge>;
-      case "training":
-        return <Badge className="bg-blue-500/20 text-blue-400 border-blue-500/30"><Activity className="h-3 w-3 mr-1 animate-pulse" />Treinando</Badge>;
-      case "evaluating":
-        return <Badge className="bg-yellow-500/20 text-yellow-400 border-yellow-500/30"><Target className="h-3 w-3 mr-1" />Avaliando</Badge>;
-      case "failed":
-        return <Badge className="bg-red-500/20 text-red-400 border-red-500/30"><XCircle className="h-3 w-3 mr-1" />Falhou</Badge>;
+    case "ready":
+      return <Badge className="bg-green-500/20 text-green-400 border-green-500/30"><CheckCircle className="h-3 w-3 mr-1" />Pronto</Badge>;
+    case "training":
+      return <Badge className="bg-blue-500/20 text-blue-400 border-blue-500/30"><Activity className="h-3 w-3 mr-1 animate-pulse" />Treinando</Badge>;
+    case "evaluating":
+      return <Badge className="bg-yellow-500/20 text-yellow-400 border-yellow-500/30"><Target className="h-3 w-3 mr-1" />Avaliando</Badge>;
+    case "failed":
+      return <Badge className="bg-red-500/20 text-red-400 border-red-500/30"><XCircle className="h-3 w-3 mr-1" />Falhou</Badge>;
     }
   };
 
@@ -374,8 +374,8 @@ const AIModelsLab: React.FC = () => {
                     <YAxis stroke="hsl(var(--muted-foreground))" />
                     <Tooltip 
                       contentStyle={{ 
-                        backgroundColor: 'hsl(var(--background))', 
-                        border: '1px solid hsl(var(--border))' 
+                        backgroundColor: "hsl(var(--background))", 
+                        border: "1px solid hsl(var(--border))" 
                       }} 
                     />
                     <Line type="monotone" dataKey="accuracy" stroke="hsl(var(--primary))" strokeWidth={2} name="Precisão" />
@@ -482,8 +482,8 @@ const AIModelsLab: React.FC = () => {
                     <YAxis stroke="hsl(var(--muted-foreground))" />
                     <Tooltip 
                       contentStyle={{ 
-                        backgroundColor: 'hsl(var(--background))', 
-                        border: '1px solid hsl(var(--border))' 
+                        backgroundColor: "hsl(var(--background))", 
+                        border: "1px solid hsl(var(--border))" 
                       }} 
                     />
                     <Bar dataKey="accuracy" fill="hsl(var(--primary))" name="Precisão" />

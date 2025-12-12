@@ -3,11 +3,11 @@
  * Real-time visualization of Core Web Vitals and performance metrics
  */
 
-import React, { useState } from 'react';
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
-import { Badge } from '@/components/ui/badge';
-import { Progress } from '@/components/ui/progress';
-import { Button } from '@/components/ui/button';
+import React, { useState } from "react";
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
+import { Badge } from "@/components/ui/badge";
+import { Progress } from "@/components/ui/progress";
+import { Button } from "@/components/ui/button";
 import { 
   Activity, 
   Zap, 
@@ -19,9 +19,9 @@ import {
   BarChart3,
   Database,
   Info
-} from 'lucide-react';
-import { usePerformanceMonitor, evaluatePerformance, type PerformanceMetrics } from '@/hooks/use-performance-monitor';
-import { Alert, AlertDescription, AlertTitle } from '@/components/ui/alert';
+} from "lucide-react";
+import { usePerformanceMonitor, evaluatePerformance, type PerformanceMetrics } from "@/hooks/use-performance-monitor";
+import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert";
 
 export const PerformanceDashboard: React.FC = () => {
   const [metrics, setMetrics] = useState<PerformanceMetrics>({
@@ -45,9 +45,9 @@ export const PerformanceDashboard: React.FC = () => {
   const evaluation = evaluatePerformance(metrics);
 
   const getScoreColor = (value: number, thresholds: { good: number; needsImprovement: number }) => {
-    if (value <= thresholds.good) return 'text-success';
-    if (value <= thresholds.needsImprovement) return 'text-warning';
-    return 'text-destructive';
+    if (value <= thresholds.good) return "text-success";
+    if (value <= thresholds.needsImprovement) return "text-warning";
+    return "text-destructive";
   };
 
   const getScoreBadge = (value: number, thresholds: { good: number; needsImprovement: number }) => {
@@ -58,16 +58,16 @@ export const PerformanceDashboard: React.FC = () => {
 
   const getRatingBadge = (rating: string) => {
     switch (rating) {
-      case 'excellent':
-        return <Badge className="bg-success/20 text-success border-success/30">Excelente</Badge>;
-      case 'good':
-        return <Badge className="bg-blue-500/20 text-blue-700 border-blue-500/30">Bom</Badge>;
-      case 'needs-improvement':
-        return <Badge className="bg-warning/20 text-warning border-warning/30">Precisa Melhorar</Badge>;
-      case 'poor':
-        return <Badge variant="destructive">Crítico</Badge>;
-      default:
-        return null;
+    case "excellent":
+      return <Badge className="bg-success/20 text-success border-success/30">Excelente</Badge>;
+    case "good":
+      return <Badge className="bg-blue-500/20 text-blue-700 border-blue-500/30">Bom</Badge>;
+    case "needs-improvement":
+      return <Badge className="bg-warning/20 text-warning border-warning/30">Precisa Melhorar</Badge>;
+    case "poor":
+      return <Badge variant="destructive">Crítico</Badge>;
+    default:
+      return null;
     }
   };
 
@@ -96,7 +96,7 @@ export const PerformanceDashboard: React.FC = () => {
                 size="sm"
                 onClick={() => setIsMonitoring(!isMonitoring)}
               >
-                {isMonitoring ? 'Pausar' : 'Retomar'}
+                {isMonitoring ? "Pausar" : "Retomar"}
               </Button>
               <Button 
                 variant="outline" 
@@ -141,9 +141,9 @@ export const PerformanceDashboard: React.FC = () => {
                     r="54"
                     stroke={
                       evaluation.score >= 90 ? "hsl(var(--success))" :
-                      evaluation.score >= 75 ? "hsl(var(--primary))" :
-                      evaluation.score >= 50 ? "hsl(var(--warning))" :
-                      "hsl(var(--destructive))"
+                        evaluation.score >= 75 ? "hsl(var(--primary))" :
+                          evaluation.score >= 50 ? "hsl(var(--warning))" :
+                            "hsl(var(--destructive))"
                     }
                     strokeWidth="8"
                     fill="none"
@@ -154,10 +154,10 @@ export const PerformanceDashboard: React.FC = () => {
                 <div className="absolute inset-0 flex items-center justify-center">
                   <div className="text-center">
                     <p className={`text-3xl font-bold ${
-                      evaluation.score >= 90 ? 'text-success' :
-                      evaluation.score >= 75 ? 'text-primary' :
-                      evaluation.score >= 50 ? 'text-warning' :
-                      'text-destructive'
+                      evaluation.score >= 90 ? "text-success" :
+                        evaluation.score >= 75 ? "text-primary" :
+                          evaluation.score >= 50 ? "text-warning" :
+                            "text-destructive"
                     }`}>
                       {evaluation.score}
                     </p>
@@ -200,8 +200,8 @@ export const PerformanceDashboard: React.FC = () => {
               </div>
               {metrics.lcp && getScoreBadge(metrics.lcp, { good: 2500, needsImprovement: 4000 })}
             </div>
-            <div className={`text-2xl font-bold ${metrics.lcp ? getScoreColor(metrics.lcp, { good: 2500, needsImprovement: 4000 }) : 'text-muted-foreground'}`}>
-              {metrics.lcp ? `${(metrics.lcp / 1000).toFixed(2)}s` : 'Medindo...'}
+            <div className={`text-2xl font-bold ${metrics.lcp ? getScoreColor(metrics.lcp, { good: 2500, needsImprovement: 4000 }) : "text-muted-foreground"}`}>
+              {metrics.lcp ? `${(metrics.lcp / 1000).toFixed(2)}s` : "Medindo..."}
             </div>
             <p className="text-xs text-muted-foreground mb-2">Largest Contentful Paint</p>
             <Progress 
@@ -224,8 +224,8 @@ export const PerformanceDashboard: React.FC = () => {
               </div>
               {metrics.fid !== null && getScoreBadge(metrics.fid, { good: 100, needsImprovement: 300 })}
             </div>
-            <div className={`text-2xl font-bold ${metrics.fid !== null ? getScoreColor(metrics.fid, { good: 100, needsImprovement: 300 }) : 'text-muted-foreground'}`}>
-              {metrics.fid !== null ? `${metrics.fid.toFixed(0)}ms` : 'Aguardando...'}
+            <div className={`text-2xl font-bold ${metrics.fid !== null ? getScoreColor(metrics.fid, { good: 100, needsImprovement: 300 }) : "text-muted-foreground"}`}>
+              {metrics.fid !== null ? `${metrics.fid.toFixed(0)}ms` : "Aguardando..."}
             </div>
             <p className="text-xs text-muted-foreground mb-2">First Input Delay</p>
             <Progress 
@@ -248,8 +248,8 @@ export const PerformanceDashboard: React.FC = () => {
               </div>
               {metrics.cls !== null && getScoreBadge(metrics.cls, { good: 0.1, needsImprovement: 0.25 })}
             </div>
-            <div className={`text-2xl font-bold ${metrics.cls !== null ? getScoreColor(metrics.cls, { good: 0.1, needsImprovement: 0.25 }) : 'text-muted-foreground'}`}>
-              {metrics.cls !== null ? metrics.cls.toFixed(3) : 'Medindo...'}
+            <div className={`text-2xl font-bold ${metrics.cls !== null ? getScoreColor(metrics.cls, { good: 0.1, needsImprovement: 0.25 }) : "text-muted-foreground"}`}>
+              {metrics.cls !== null ? metrics.cls.toFixed(3) : "Medindo..."}
             </div>
             <p className="text-xs text-muted-foreground mb-2">Cumulative Layout Shift</p>
             <Progress 
@@ -272,7 +272,7 @@ export const PerformanceDashboard: React.FC = () => {
               <span className="text-sm font-medium">TTFB</span>
             </div>
             <div className="text-2xl font-bold text-foreground">
-              {metrics.ttfb ? `${metrics.ttfb.toFixed(0)}ms` : 'Medindo...'}
+              {metrics.ttfb ? `${metrics.ttfb.toFixed(0)}ms` : "Medindo..."}
             </div>
             <p className="text-xs text-muted-foreground">Time to First Byte</p>
           </CardContent>
@@ -285,7 +285,7 @@ export const PerformanceDashboard: React.FC = () => {
               <span className="text-sm font-medium">FCP</span>
             </div>
             <div className="text-2xl font-bold text-foreground">
-              {metrics.fcp ? `${(metrics.fcp / 1000).toFixed(2)}s` : 'Medindo...'}
+              {metrics.fcp ? `${(metrics.fcp / 1000).toFixed(2)}s` : "Medindo..."}
             </div>
             <p className="text-xs text-muted-foreground">First Contentful Paint</p>
           </CardContent>
@@ -297,13 +297,13 @@ export const PerformanceDashboard: React.FC = () => {
               <Database className="w-4 h-4 text-muted-foreground" />
               <span className="text-sm font-medium">Memory Usage</span>
             </div>
-            <div className={`text-2xl font-bold ${metrics.memory && metrics.memory.percentage > 85 ? 'text-destructive' : 'text-foreground'}`}>
-              {metrics.memory ? `${metrics.memory.percentage.toFixed(1)}%` : 'N/A'}
+            <div className={`text-2xl font-bold ${metrics.memory && metrics.memory.percentage > 85 ? "text-destructive" : "text-foreground"}`}>
+              {metrics.memory ? `${metrics.memory.percentage.toFixed(1)}%` : "N/A"}
             </div>
             <p className="text-xs text-muted-foreground">
               {metrics.memory ? 
                 `${(metrics.memory.used / 1048576).toFixed(0)} MB / ${(metrics.memory.total / 1048576).toFixed(0)} MB` : 
-                'Chrome/Edge only'
+                "Chrome/Edge only"
               }
             </p>
           </CardContent>
@@ -334,7 +334,7 @@ export const PerformanceDashboard: React.FC = () => {
         <CardContent>
           <div className="text-xs font-mono text-muted-foreground space-y-1">
             <p>Última atualização: {new Date(metrics.timestamp).toLocaleTimeString()}</p>
-            <p>Monitoring: {isMonitoring ? '🟢 Ativo' : '🔴 Pausado'}</p>
+            <p>Monitoring: {isMonitoring ? "🟢 Ativo" : "🔴 Pausado"}</p>
             <p>Interval: 5000ms</p>
           </div>
         </CardContent>

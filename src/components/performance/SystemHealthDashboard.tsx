@@ -3,11 +3,11 @@
  * Visual display of system performance and health
  */
 
-import React, { useState, useEffect, useCallback, memo } from 'react';
-import { Card, CardContent, CardHeader, CardTitle, CardDescription } from '@/components/ui/card';
-import { Button } from '@/components/ui/button';
-import { Progress } from '@/components/ui/progress';
-import { Badge } from '@/components/ui/badge';
+import React, { useState, useEffect, useCallback, memo } from "react";
+import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "@/components/ui/card";
+import { Button } from "@/components/ui/button";
+import { Progress } from "@/components/ui/progress";
+import { Badge } from "@/components/ui/badge";
 import { 
   Activity, 
   Cpu, 
@@ -20,30 +20,30 @@ import {
   AlertTriangle,
   CheckCircle,
   Clock
-} from 'lucide-react';
-import { systemBenchmark, type BenchmarkResult } from '@/lib/performance/system-benchmark';
-import { dataRetentionManager } from '@/lib/performance/data-retention';
-import { smartSyncManager, type SyncStats } from '@/lib/performance/smart-sync';
-import { useResourceManager } from '@/hooks/use-resource-manager';
-import { useMemoryOptimizer } from '@/hooks/use-memory-optimizer';
-import { useToast } from '@/hooks/use-toast';
+} from "lucide-react";
+import { systemBenchmark, type BenchmarkResult } from "@/lib/performance/system-benchmark";
+import { dataRetentionManager } from "@/lib/performance/data-retention";
+import { smartSyncManager, type SyncStats } from "@/lib/performance/smart-sync";
+import { useResourceManager } from "@/hooks/use-resource-manager";
+import { useMemoryOptimizer } from "@/hooks/use-memory-optimizer";
+import { useToast } from "@/hooks/use-toast";
 
 const StatusBadge = memo(({ status }: { status: string }) => {
-  const variants: Record<string, { variant: 'default' | 'secondary' | 'destructive' | 'outline'; label: string }> = {
-    excellent: { variant: 'default', label: 'Excelente' },
-    good: { variant: 'secondary', label: 'Bom' },
-    fair: { variant: 'outline', label: 'Regular' },
-    critical: { variant: 'destructive', label: 'Crítico' },
+  const variants: Record<string, { variant: "default" | "secondary" | "destructive" | "outline"; label: string }> = {
+    excellent: { variant: "default", label: "Excelente" },
+    good: { variant: "secondary", label: "Bom" },
+    fair: { variant: "outline", label: "Regular" },
+    critical: { variant: "destructive", label: "Crítico" },
   };
   
   const config = variants[status] || variants.fair;
   return <Badge variant={config.variant}>{config.label}</Badge>;
 });
 
-StatusBadge.displayName = 'StatusBadge';
+StatusBadge.displayName = "StatusBadge";
 
 const ScoreCircle = memo(({ score, size = 80 }: { score: number; size?: number }) => {
-  const color = score >= 80 ? 'text-green-500' : score >= 60 ? 'text-yellow-500' : 'text-red-500';
+  const color = score >= 80 ? "text-green-500" : score >= 60 ? "text-yellow-500" : "text-red-500";
   const circumference = 2 * Math.PI * 35;
   const offset = circumference - (score / 100) * circumference;
   
@@ -79,7 +79,7 @@ const ScoreCircle = memo(({ score, size = 80 }: { score: number; size?: number }
   );
 });
 
-ScoreCircle.displayName = 'ScoreCircle';
+ScoreCircle.displayName = "ScoreCircle";
 
 export const SystemHealthDashboard = memo(() => {
   const [benchmark, setBenchmark] = useState<BenchmarkResult | null>(null);
@@ -111,14 +111,14 @@ export const SystemHealthDashboard = memo(() => {
       const result = await systemBenchmark.runFullBenchmark();
       setBenchmark(result);
       toast({
-        title: 'Benchmark Concluído',
+        title: "Benchmark Concluído",
         description: `Score: ${result.score}/100 - ${result.status}`,
       });
     } catch (error) {
       toast({
-        title: 'Erro',
-        description: 'Falha ao executar benchmark',
-        variant: 'destructive'
+        title: "Erro",
+        description: "Falha ao executar benchmark",
+        variant: "destructive"
       });
     } finally {
       setIsRunning(false);
@@ -133,7 +133,7 @@ export const SystemHealthDashboard = memo(() => {
       const totalItems = results.reduce((acc, r) => acc + r.itemsRemoved, 0);
       
       toast({
-        title: 'Limpeza Concluída',
+        title: "Limpeza Concluída",
         description: `${totalItems} itens removidos, ${(totalFreed / 1024).toFixed(1)}KB liberados`,
       });
       
@@ -163,8 +163,8 @@ export const SystemHealthDashboard = memo(() => {
         <div className="flex items-center gap-4">
           {benchmark && <ScoreCircle score={benchmark.score} />}
           <Button onClick={runBenchmark} disabled={isRunning}>
-            <RefreshCw className={`h-4 w-4 mr-2 ${isRunning ? 'animate-spin' : ''}`} />
-            {isRunning ? 'Testando...' : 'Executar Benchmark'}
+            <RefreshCw className={`h-4 w-4 mr-2 ${isRunning ? "animate-spin" : ""}`} />
+            {isRunning ? "Testando..." : "Executar Benchmark"}
           </Button>
         </div>
       </div>
@@ -178,8 +178,8 @@ export const SystemHealthDashboard = memo(() => {
               <span className="text-sm font-medium">CPU</span>
             </div>
             <div className="mt-2">
-              <Badge variant={resourceStatus.cpu === 'high' ? 'destructive' : 'secondary'}>
-                {resourceStatus.cpu === 'high' ? 'Alto' : resourceStatus.cpu === 'low' ? 'Baixo' : 'Normal'}
+              <Badge variant={resourceStatus.cpu === "high" ? "destructive" : "secondary"}>
+                {resourceStatus.cpu === "high" ? "Alto" : resourceStatus.cpu === "low" ? "Baixo" : "Normal"}
               </Badge>
             </div>
           </CardContent>
@@ -192,7 +192,7 @@ export const SystemHealthDashboard = memo(() => {
               <span className="text-sm font-medium">Memória</span>
             </div>
             <div className="mt-2">
-              <Badge variant={memoryStats.isCriticalMemory ? 'destructive' : memoryStats.isHighMemory ? 'outline' : 'secondary'}>
+              <Badge variant={memoryStats.isCriticalMemory ? "destructive" : memoryStats.isHighMemory ? "outline" : "secondary"}>
                 {Math.round(memoryStats.usage * 100)}%
               </Badge>
             </div>
@@ -206,10 +206,10 @@ export const SystemHealthDashboard = memo(() => {
               <span className="text-sm font-medium">Rede</span>
             </div>
             <div className="mt-2">
-              <Badge variant={resourceStatus.network === 'offline' ? 'destructive' : resourceStatus.network === 'slow' ? 'outline' : 'secondary'}>
-                {resourceStatus.network === 'offline' ? 'Offline' : 
-                 resourceStatus.network === 'slow' ? 'Lenta' : 
-                 resourceStatus.network === 'moderate' ? 'Moderada' : 'Rápida'}
+              <Badge variant={resourceStatus.network === "offline" ? "destructive" : resourceStatus.network === "slow" ? "outline" : "secondary"}>
+                {resourceStatus.network === "offline" ? "Offline" : 
+                  resourceStatus.network === "slow" ? "Lenta" : 
+                    resourceStatus.network === "moderate" ? "Moderada" : "Rápida"}
               </Badge>
             </div>
           </CardContent>
@@ -222,9 +222,9 @@ export const SystemHealthDashboard = memo(() => {
               <span className="text-sm font-medium">Bateria</span>
             </div>
             <div className="mt-2">
-              <Badge variant={resourceStatus.battery === 'low' ? 'destructive' : 'secondary'}>
-                {resourceStatus.battery === 'charging' ? 'Carregando' : 
-                 resourceStatus.battery === 'low' ? 'Baixa' : 'Normal'}
+              <Badge variant={resourceStatus.battery === "low" ? "destructive" : "secondary"}>
+                {resourceStatus.battery === "charging" ? "Carregando" : 
+                  resourceStatus.battery === "low" ? "Baixa" : "Normal"}
               </Badge>
             </div>
           </CardContent>
@@ -254,7 +254,7 @@ export const SystemHealthDashboard = memo(() => {
                 <div key={key} className="space-y-2">
                   <div className="flex items-center justify-between text-sm">
                     <span className="text-muted-foreground capitalize">
-                      {key.replace(/([A-Z])/g, ' $1').trim()}
+                      {key.replace(/([A-Z])/g, " $1").trim()}
                     </span>
                     <span className="font-medium">{value.score}/100</span>
                   </div>
@@ -300,9 +300,9 @@ export const SystemHealthDashboard = memo(() => {
             
             {cleanupSuggestion.shouldClean && (
               <div className={`flex items-center gap-2 p-3 rounded-lg ${
-                cleanupSuggestion.urgency === 'high' ? 'bg-destructive/10 text-destructive' :
-                cleanupSuggestion.urgency === 'medium' ? 'bg-yellow-500/10 text-yellow-600' :
-                'bg-muted'
+                cleanupSuggestion.urgency === "high" ? "bg-destructive/10 text-destructive" :
+                  cleanupSuggestion.urgency === "medium" ? "bg-yellow-500/10 text-yellow-600" :
+                    "bg-muted"
               }`}>
                 <AlertTriangle className="h-4 w-4" />
                 <span className="text-sm">{cleanupSuggestion.reason}</span>
@@ -315,8 +315,8 @@ export const SystemHealthDashboard = memo(() => {
               onClick={runCleanup}
               disabled={isCleaning}
             >
-              <Trash2 className={`h-4 w-4 mr-2 ${isCleaning ? 'animate-pulse' : ''}`} />
-              {isCleaning ? 'Limpando...' : 'Executar Limpeza'}
+              <Trash2 className={`h-4 w-4 mr-2 ${isCleaning ? "animate-pulse" : ""}`} />
+              {isCleaning ? "Limpando..." : "Executar Limpeza"}
             </Button>
           </CardContent>
         </Card>
@@ -372,6 +372,6 @@ export const SystemHealthDashboard = memo(() => {
   );
 });
 
-SystemHealthDashboard.displayName = 'SystemHealthDashboard';
+SystemHealthDashboard.displayName = "SystemHealthDashboard";
 
 export default SystemHealthDashboard;

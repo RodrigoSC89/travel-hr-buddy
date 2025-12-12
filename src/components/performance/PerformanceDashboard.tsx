@@ -3,19 +3,19 @@
  * Displays real-time performance metrics for debugging
  */
 
-import { useState, useEffect } from 'react';
-import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
-import { Badge } from '@/components/ui/badge';
-import { Button } from '@/components/ui/button';
-import { Progress } from '@/components/ui/progress';
-import { useNetworkStatus } from '@/hooks/use-network-status';
-import { memoryManager, getMemoryAwareSettings } from '@/lib/performance/memory-manager';
-import { getQueueStats } from '@/lib/offline/sync-queue';
+import { useState, useEffect } from "react";
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import { Badge } from "@/components/ui/badge";
+import { Button } from "@/components/ui/button";
+import { Progress } from "@/components/ui/progress";
+import { useNetworkStatus } from "@/hooks/use-network-status";
+import { memoryManager, getMemoryAwareSettings } from "@/lib/performance/memory-manager";
+import { getQueueStats } from "@/lib/offline/sync-queue";
 import { 
   Wifi, WifiOff, Zap, HardDrive, Clock, 
   RefreshCw, Trash2, Activity
-} from 'lucide-react';
-import { cn } from '@/lib/utils';
+} from "lucide-react";
+import { cn } from "@/lib/utils";
 
 interface PerformanceMetrics {
   memory: { usage: number; recommendation: string };
@@ -27,8 +27,8 @@ interface PerformanceMetrics {
 export function PerformanceDashboard() {
   const network = useNetworkStatus();
   const [metrics, setMetrics] = useState<PerformanceMetrics>({
-    memory: { usage: 0, recommendation: 'normal' },
-    network: { quality: 'medium', online: true },
+    memory: { usage: 0, recommendation: "normal" },
+    network: { quality: "medium", online: true },
     cache: { pending: 0, cached: 0 },
     timing: { fcp: null, lcp: null, fid: null },
   });
@@ -47,10 +47,10 @@ export function PerformanceDashboard() {
       }
 
       // Web Vitals
-      let timing = { fcp: null as number | null, lcp: null as number | null, fid: null as number | null };
-      if ('performance' in window) {
-        const entries = performance.getEntriesByType('paint');
-        const fcp = entries.find(e => e.name === 'first-contentful-paint');
+      const timing = { fcp: null as number | null, lcp: null as number | null, fid: null as number | null };
+      if ("performance" in window) {
+        const entries = performance.getEntriesByType("paint");
+        const fcp = entries.find(e => e.name === "first-contentful-paint");
         if (fcp) timing.fcp = fcp.startTime;
       }
 
@@ -68,7 +68,7 @@ export function PerformanceDashboard() {
   }, [network.quality, network.online]);
 
   const handleClearCache = async () => {
-    if ('caches' in window) {
+    if ("caches" in window) {
       const names = await caches.keys();
       await Promise.all(names.map(name => caches.delete(name)));
     }
@@ -76,16 +76,16 @@ export function PerformanceDashboard() {
   };
 
   const qualityColor = {
-    fast: 'bg-green-500',
-    medium: 'bg-yellow-500',
-    slow: 'bg-orange-500',
-    offline: 'bg-destructive',
+    fast: "bg-green-500",
+    medium: "bg-yellow-500",
+    slow: "bg-orange-500",
+    offline: "bg-destructive",
   };
 
   const memoryColor = {
-    normal: 'bg-green-500',
-    reduce: 'bg-yellow-500',
-    critical: 'bg-destructive',
+    normal: "bg-green-500",
+    reduce: "bg-yellow-500",
+    critical: "bg-destructive",
   };
 
   return (
@@ -102,11 +102,11 @@ export function PerformanceDashboard() {
         </CardHeader>
         <CardContent>
           <div className="flex items-center gap-2">
-            <div className={cn('h-2 w-2 rounded-full', qualityColor[network.quality])} />
+            <div className={cn("h-2 w-2 rounded-full", qualityColor[network.quality])} />
             <span className="text-2xl font-bold capitalize">{network.quality}</span>
           </div>
           <p className="text-xs text-muted-foreground mt-1">
-            {network.effectiveType?.toUpperCase() || 'N/A'} • {network.downlink || '?'} Mbps
+            {network.effectiveType?.toUpperCase() || "N/A"} • {network.downlink || "?"} Mbps
           </p>
         </CardContent>
       </Card>
@@ -120,10 +120,10 @@ export function PerformanceDashboard() {
         <CardContent>
           <div className="flex items-center gap-2">
             <span className="text-2xl font-bold">
-              {metrics.memory.usage > 0 ? `${metrics.memory.usage.toFixed(0)}%` : 'N/A'}
+              {metrics.memory.usage > 0 ? `${metrics.memory.usage.toFixed(0)}%` : "N/A"}
             </span>
             <Badge 
-              variant={metrics.memory.recommendation === 'normal' ? 'default' : 'destructive'}
+              variant={metrics.memory.recommendation === "normal" ? "default" : "destructive"}
               className="text-xs"
             >
               {metrics.memory.recommendation}
@@ -168,11 +168,11 @@ export function PerformanceDashboard() {
           <div className="space-y-1">
             <div className="flex justify-between text-sm">
               <span className="text-muted-foreground">FCP</span>
-              <span>{metrics.timing.fcp ? `${metrics.timing.fcp.toFixed(0)}ms` : 'N/A'}</span>
+              <span>{metrics.timing.fcp ? `${metrics.timing.fcp.toFixed(0)}ms` : "N/A"}</span>
             </div>
             <div className="flex justify-between text-sm">
               <span className="text-muted-foreground">LCP</span>
-              <span>{metrics.timing.lcp ? `${metrics.timing.lcp.toFixed(0)}ms` : 'N/A'}</span>
+              <span>{metrics.timing.lcp ? `${metrics.timing.lcp.toFixed(0)}ms` : "N/A"}</span>
             </div>
           </div>
         </CardContent>

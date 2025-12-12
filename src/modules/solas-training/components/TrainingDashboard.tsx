@@ -78,8 +78,8 @@ export default function TrainingDashboard() {
       
       const key = chatMessage.toLowerCase().includes("incêndio") || chatMessage.toLowerCase().includes("fogo") ? "incendio" 
         : chatMessage.toLowerCase().includes("abandon") ? "abandono"
-        : chatMessage.toLowerCase().includes("venc") || chatMessage.toLowerCase().includes("certificado") ? "vencimentos"
-        : "default";
+          : chatMessage.toLowerCase().includes("venc") || chatMessage.toLowerCase().includes("certificado") ? "vencimentos"
+            : "default";
         
       setChatHistory(prev => [...prev, { role: "assistant", content: responses[key] }]);
     }, 1000);
@@ -229,16 +229,16 @@ export default function TrainingDashboard() {
               {mockDrills.map((drill) => (
                 <div key={drill.id} className={`p-4 rounded-lg border ${
                   drill.status === "overdue" ? "bg-red-500/10 border-red-500/30" :
-                  drill.status === "due" ? "bg-amber-500/10 border-amber-500/30" :
-                  "bg-muted/30 border-border"
+                    drill.status === "due" ? "bg-amber-500/10 border-amber-500/30" :
+                      "bg-muted/30 border-border"
                 }`}>
                   <div className="flex items-start justify-between mb-2">
                     <div className="flex items-center gap-3">
                       <div className={`p-2 rounded-lg ${
                         drill.type === "fire" ? "bg-red-500/10 text-red-600" :
-                        drill.type === "abandon" ? "bg-blue-500/10 text-blue-600" :
-                        drill.type === "mob" ? "bg-cyan-500/10 text-cyan-600" :
-                        "bg-amber-500/10 text-amber-600"
+                          drill.type === "abandon" ? "bg-blue-500/10 text-blue-600" :
+                            drill.type === "mob" ? "bg-cyan-500/10 text-cyan-600" :
+                              "bg-amber-500/10 text-amber-600"
                       }`}>
                         {drill.type === "fire" && <Flame className="h-5 w-5" />}
                         {drill.type === "abandon" && <LifeBuoy className="h-5 w-5" />}
@@ -296,8 +296,8 @@ export default function TrainingDashboard() {
             {mockTrainings.map((training) => (
               <div key={training.id} className={`p-4 rounded-lg border ${
                 training.status === "expired" ? "bg-red-500/10 border-red-500/30" :
-                training.status === "expiring" ? "bg-amber-500/10 border-amber-500/30" :
-                "bg-muted/30 border-border"
+                  training.status === "expiring" ? "bg-amber-500/10 border-amber-500/30" :
+                    "bg-muted/30 border-border"
               }`}>
                 <div className="flex items-center justify-between mb-2">
                   <p className="font-medium">{training.crewMember}</p>

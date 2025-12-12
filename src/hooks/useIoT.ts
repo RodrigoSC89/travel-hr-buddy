@@ -2,8 +2,8 @@
  * useIoT Hook - React hook for IoT sensor integration
  */
 
-import { useState, useEffect, useCallback } from 'react';
-import { iotConnector, SensorReading, VesselTelemetry } from '@/lib/iot/IoTConnector';
+import { useState, useEffect, useCallback } from "react";
+import { iotConnector, SensorReading, VesselTelemetry } from "@/lib/iot/IoTConnector";
 
 interface UseIoTOptions {
   vesselId: string;
@@ -36,7 +36,7 @@ export function useIoT({ vesselId, autoConnect = true }: UseIoTOptions): UseIoTR
         setTelemetry(initialTelemetry);
       }
     } catch (err) {
-      setError(err instanceof Error ? err.message : 'Failed to connect to IoT sensors');
+      setError(err instanceof Error ? err.message : "Failed to connect to IoT sensors");
       setIsConnected(false);
     }
   }, [vesselId]);
@@ -68,21 +68,21 @@ export function useIoT({ vesselId, autoConnect = true }: UseIoTOptions): UseIoTR
         const updates: Partial<VesselTelemetry> = {};
         
         switch (reading.type) {
-          case 'fuel':
-            updates.fuelLevel = reading.value;
-            break;
-          case 'speed':
-            updates.speed = reading.value;
-            break;
-          case 'heading':
-            updates.heading = reading.value;
-            break;
-          case 'engine':
-            updates.engineRPM = reading.value;
-            break;
-          case 'temperature':
-            updates.temperature = reading.value;
-            break;
+        case "fuel":
+          updates.fuelLevel = reading.value;
+          break;
+        case "speed":
+          updates.speed = reading.value;
+          break;
+        case "heading":
+          updates.heading = reading.value;
+          break;
+        case "engine":
+          updates.engineRPM = reading.value;
+          break;
+        case "temperature":
+          updates.temperature = reading.value;
+          break;
         }
         
         return { ...prev, ...updates, lastUpdate: new Date() };

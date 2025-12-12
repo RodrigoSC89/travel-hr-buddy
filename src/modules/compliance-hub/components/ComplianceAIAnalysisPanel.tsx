@@ -3,14 +3,14 @@
  * Painel de análise preditiva e insights de IA
  */
 
-import React, { useState, useEffect } from 'react';
-import { Card, CardContent, CardHeader, CardTitle, CardDescription } from '@/components/ui/card';
-import { Button } from '@/components/ui/button';
-import { Badge } from '@/components/ui/badge';
-import { Progress } from '@/components/ui/progress';
-import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
-import { ScrollArea } from '@/components/ui/scroll-area';
-import { Textarea } from '@/components/ui/textarea';
+import React, { useState, useEffect } from "react";
+import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "@/components/ui/card";
+import { Button } from "@/components/ui/button";
+import { Badge } from "@/components/ui/badge";
+import { Progress } from "@/components/ui/progress";
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
+import { ScrollArea } from "@/components/ui/scroll-area";
+import { Textarea } from "@/components/ui/textarea";
 import { 
   Brain, 
   TrendingUp, 
@@ -24,8 +24,8 @@ import {
   Shield,
   Target,
   Zap
-} from 'lucide-react';
-import type { AIComplianceAnalysis, ComplianceItem, AuditSession, Certificate } from '../types';
+} from "lucide-react";
+import type { AIComplianceAnalysis, ComplianceItem, AuditSession, Certificate } from "../types";
 
 interface ComplianceAIAnalysisPanelProps {
   analysis: AIComplianceAnalysis | null;
@@ -48,36 +48,36 @@ export function ComplianceAIAnalysisPanel({
   audits,
   certificates,
 }: ComplianceAIAnalysisPanelProps) {
-  const [question, setQuestion] = useState('');
-  const [conversation, setConversation] = useState<{ role: 'user' | 'ai'; content: string }[]>([]);
-  const [activeTab, setActiveTab] = useState('overview');
+  const [question, setQuestion] = useState("");
+  const [conversation, setConversation] = useState<{ role: "user" | "ai"; content: string }[]>([]);
+  const [activeTab, setActiveTab] = useState("overview");
 
   const handleAskQuestion = async () => {
     if (!question.trim() || chatLoading) return;
     
     const userQuestion = question;
-    setConversation(prev => [...prev, { role: 'user', content: userQuestion }]);
-    setQuestion('');
+    setConversation(prev => [...prev, { role: "user", content: userQuestion }]);
+    setQuestion("");
     
     const response = await onAskAI(userQuestion);
-    setConversation(prev => [...prev, { role: 'ai', content: response }]);
+    setConversation(prev => [...prev, { role: "ai", content: response }]);
   };
 
   const getRiskLevelColor = (level: string) => {
     switch (level) {
-      case 'low': return 'text-green-500 bg-green-500/10';
-      case 'medium': return 'text-yellow-500 bg-yellow-500/10';
-      case 'high': return 'text-orange-500 bg-orange-500/10';
-      case 'critical': return 'text-red-500 bg-red-500/10';
-      default: return 'text-muted-foreground bg-muted';
+    case "low": return "text-green-500 bg-green-500/10";
+    case "medium": return "text-yellow-500 bg-yellow-500/10";
+    case "high": return "text-orange-500 bg-orange-500/10";
+    case "critical": return "text-red-500 bg-red-500/10";
+    default: return "text-muted-foreground bg-muted";
     }
   };
 
   const getTrendIcon = (trend: string) => {
     switch (trend) {
-      case 'improving': return <TrendingUp className="h-4 w-4 text-green-500" />;
-      case 'worsening': return <TrendingDown className="h-4 w-4 text-red-500" />;
-      default: return <div className="h-4 w-4 rounded-full bg-muted-foreground/30" />;
+    case "improving": return <TrendingUp className="h-4 w-4 text-green-500" />;
+    case "worsening": return <TrendingDown className="h-4 w-4 text-red-500" />;
+    default: return <div className="h-4 w-4 rounded-full bg-muted-foreground/30" />;
     }
   };
 
@@ -133,9 +133,9 @@ export function ComplianceAIAnalysisPanel({
                       <span className="font-semibold">Nível de Risco Geral</span>
                     </div>
                     <Badge variant="outline" className={getRiskLevelColor(analysis.overallRiskLevel)}>
-                      {analysis.overallRiskLevel === 'low' ? 'Baixo' :
-                       analysis.overallRiskLevel === 'medium' ? 'Médio' :
-                       analysis.overallRiskLevel === 'high' ? 'Alto' : 'Crítico'}
+                      {analysis.overallRiskLevel === "low" ? "Baixo" :
+                        analysis.overallRiskLevel === "medium" ? "Médio" :
+                          analysis.overallRiskLevel === "high" ? "Alto" : "Crítico"}
                     </Badge>
                   </div>
                   <p className="text-sm mt-2 opacity-90">{analysis.summary}</p>
@@ -174,11 +174,11 @@ export function ComplianceAIAnalysisPanel({
                         <div className="flex items-center justify-between mb-1">
                           <span className="font-medium text-sm">{gap.regulation}</span>
                           <Badge variant="outline" className={
-                            gap.priority === 'high' ? 'border-red-500/50 text-red-500' :
-                            gap.priority === 'medium' ? 'border-yellow-500/50 text-yellow-500' :
-                            'border-green-500/50 text-green-500'
+                            gap.priority === "high" ? "border-red-500/50 text-red-500" :
+                              gap.priority === "medium" ? "border-yellow-500/50 text-yellow-500" :
+                                "border-green-500/50 text-green-500"
                           }>
-                            {gap.priority === 'high' ? 'Alta' : gap.priority === 'medium' ? 'Média' : 'Baixa'}
+                            {gap.priority === "high" ? "Alta" : gap.priority === "medium" ? "Média" : "Baixa"}
                           </Badge>
                         </div>
                         <p className="text-xs text-muted-foreground">{gap.gap}</p>
@@ -235,8 +235,8 @@ export function ComplianceAIAnalysisPanel({
                   <div className="flex items-center gap-2">
                     <span className="text-sm text-muted-foreground">Prontidão:</span>
                     <Badge className={
-                      audit.readinessScore >= 90 ? 'bg-green-500' :
-                      audit.readinessScore >= 75 ? 'bg-yellow-500' : 'bg-red-500'
+                      audit.readinessScore >= 90 ? "bg-green-500" :
+                        audit.readinessScore >= 75 ? "bg-yellow-500" : "bg-red-500"
                     }>
                       {audit.readinessScore}%
                     </Badge>
@@ -281,7 +281,7 @@ export function ComplianceAIAnalysisPanel({
                     <Brain className="h-8 w-8 mx-auto mb-2 opacity-50" />
                     <p className="text-sm">Faça uma pergunta sobre compliance</p>
                     <div className="flex flex-wrap gap-1 mt-3 justify-center">
-                      {['Como preparar para PSC?', 'O que é ISM Code?', 'Requisitos MLC?'].map((q) => (
+                      {["Como preparar para PSC?", "O que é ISM Code?", "Requisitos MLC?"].map((q) => (
                         <Button
                           key={q}
                           variant="outline"
@@ -299,17 +299,17 @@ export function ComplianceAIAnalysisPanel({
                     <div
                       key={index}
                       className={`p-3 rounded-lg ${
-                        msg.role === 'user'
-                          ? 'bg-primary/10 ml-8'
-                          : 'bg-muted mr-8'
+                        msg.role === "user"
+                          ? "bg-primary/10 ml-8"
+                          : "bg-muted mr-8"
                       }`}
                     >
                       <div className="flex items-center gap-2 mb-1">
-                        {msg.role === 'ai' ? (
+                        {msg.role === "ai" ? (
                           <Brain className="h-4 w-4 text-primary" />
                         ) : null}
                         <span className="text-xs font-medium">
-                          {msg.role === 'ai' ? 'Nautilus AI' : 'Você'}
+                          {msg.role === "ai" ? "Nautilus AI" : "Você"}
                         </span>
                       </div>
                       <p className="text-sm">{msg.content}</p>
@@ -329,7 +329,7 @@ export function ComplianceAIAnalysisPanel({
                 placeholder="Pergunte sobre ISM, SOLAS, PSC, MLC..."
                 value={question}
                 onChange={(e) => setQuestion(e.target.value)}
-                onKeyDown={(e) => e.key === 'Enter' && !e.shiftKey && (e.preventDefault(), handleAskQuestion())}
+                onKeyDown={(e) => e.key === "Enter" && !e.shiftKey && (e.preventDefault(), handleAskQuestion())}
                 className="min-h-[40px] resize-none"
               />
               <Button onClick={handleAskQuestion} disabled={chatLoading || !question.trim()}>

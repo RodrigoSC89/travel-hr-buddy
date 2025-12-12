@@ -73,27 +73,27 @@ export function SystemStatusWidget({ compact = false }: { compact?: boolean }) {
 
   const getStatusIcon = (status: string) => {
     switch (status) {
-      case "online":
-        return <CheckCircle className="h-4 w-4 text-green-500" />;
-      case "degraded":
-        return <AlertTriangle className="h-4 w-4 text-yellow-500" />;
-      case "offline":
-        return <XCircle className="h-4 w-4 text-red-500" />;
-      default:
-        return <Activity className="h-4 w-4" />;
+    case "online":
+      return <CheckCircle className="h-4 w-4 text-green-500" />;
+    case "degraded":
+      return <AlertTriangle className="h-4 w-4 text-yellow-500" />;
+    case "offline":
+      return <XCircle className="h-4 w-4 text-red-500" />;
+    default:
+      return <Activity className="h-4 w-4" />;
     }
   };
 
   const getStatusBadge = (status: string) => {
     switch (status) {
-      case "online":
-        return <Badge className="bg-green-500/10 text-green-600 hover:bg-green-500/20">Online</Badge>;
-      case "degraded":
-        return <Badge className="bg-yellow-500/10 text-yellow-600 hover:bg-yellow-500/20">Degradado</Badge>;
-      case "offline":
-        return <Badge variant="destructive">Offline</Badge>;
-      default:
-        return <Badge variant="outline">Desconhecido</Badge>;
+    case "online":
+      return <Badge className="bg-green-500/10 text-green-600 hover:bg-green-500/20">Online</Badge>;
+    case "degraded":
+      return <Badge className="bg-yellow-500/10 text-yellow-600 hover:bg-yellow-500/20">Degradado</Badge>;
+    case "offline":
+      return <Badge variant="destructive">Offline</Badge>;
+    default:
+      return <Badge variant="outline">Desconhecido</Badge>;
     }
   };
 

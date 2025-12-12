@@ -4,14 +4,14 @@
  * Integração com Lovable AI Gateway
  */
 
-import { supabase } from '@/integrations/supabase/client';
+import { supabase } from "@/integrations/supabase/client";
 
 // Tipos
 export interface LLMRequest {
   prompt: string;
   context?: string;
   module?: string;
-  mode?: 'deterministic' | 'creative' | 'safe';
+  mode?: "deterministic" | "creative" | "safe";
   maxTokens?: number;
   useCache?: boolean;
 }
@@ -33,8 +33,8 @@ interface CachedResponse {
 }
 
 // IndexedDB para cache offline
-const DB_NAME = 'nautilus_llm_cache';
-const STORE_NAME = 'responses';
+const DB_NAME = "nautilus_llm_cache";
+const STORE_NAME = "responses";
 const DB_VERSION = 1;
 
 class EmbeddedLLMManager {
@@ -45,11 +45,11 @@ class EmbeddedLLMManager {
   
   // Respostas pré-definidas para modo offline
   private offlineFallbacks: Record<string, string> = {
-    'status': 'Sistema operando em modo offline. Dados em cache disponíveis.',
-    'help': 'Comandos disponíveis offline: status, historico, checklist, alertas',
-    'checklist': 'Checklists salvos localmente estão disponíveis para consulta.',
-    'alertas': 'Alertas críticos são armazenados offline para sua segurança.',
-    'default': 'Estou operando em modo offline com capacidades limitadas. Conecte-se à internet para funcionalidade completa.'
+    "status": "Sistema operando em modo offline. Dados em cache disponíveis.",
+    "help": "Comandos disponíveis offline: status, historico, checklist, alertas",
+    "checklist": "Checklists salvos localmente estão disponíveis para consulta.",
+    "alertas": "Alertas críticos são armazenados offline para sua segurança.",
+    "default": "Estou operando em modo offline com capacidades limitadas. Conecte-se à internet para funcionalidade completa."
   };
 
   constructor() {
@@ -72,21 +72,21 @@ class EmbeddedLLMManager {
         const db = (event.target as IDBOpenDBRequest).result;
         
         if (!db.objectStoreNames.contains(STORE_NAME)) {
-          const store = db.createObjectStore(STORE_NAME, { keyPath: 'prompt_hash' });
-          store.createIndex('created_at', 'created_at');
-          store.createIndex('usage_count', 'usage_count');
+          const store = db.createObjectStore(STORE_NAME, { keyPath: "prompt_hash" });
+          store.createIndex("created_at", "created_at");
+          store.createIndex("usage_count", "usage_count");
         }
       };
     });
   }
 
   private setupNetworkListeners(): void {
-    window.addEventListener('online', () => {
+    window.addEventListener("online", () => {
       this.isOnline = true;
       this.processPendingRequests();
     });
     
-    window.addEventListener('offline', () => {
+    window.addEventListener("offline", () => {
       this.isOnline = false;
     });
   }
@@ -117,7 +117,7 @@ class EmbeddedLLMManager {
     if (!this.db) return null;
     
     return new Promise((resolve) => {
-      const transaction = this.db!.transaction(STORE_NAME, 'readonly');
+      const transaction = this.db!.transaction(STORE_NAME, "readonly");
       const store = transaction.objectStore(STORE_NAME);
       const request = store.get(promptHash);
       
@@ -132,7 +132,7 @@ class EmbeddedLLMManager {
       content: response,
       confidence: 0.9,
       cached: true,
-      model: 'cache',
+      model: "cache",
       executionTime: 0,
       offline: false
     });
@@ -141,7 +141,7 @@ class EmbeddedLLMManager {
     if (!this.db) return;
     
     return new Promise((resolve) => {
-      const transaction = this.db!.transaction(STORE_NAME, 'readwrite');
+      const transaction = this.db!.transaction(STORE_NAME, "readwrite");
       const store = transaction.objectStore(STORE_NAME);
       
       store.put({
@@ -165,7 +165,7 @@ class EmbeddedLLMManager {
       }
     }
     
-    return this.offlineFallbacks['default'];
+    return this.offlineFallbacks["default"];
   }
 
   private async processPendingRequests(): Promise<void> {
@@ -174,14 +174,14 @@ class EmbeddedLLMManager {
         await this.query(request);
         this.pendingRequests.delete(hash);
       } catch (error) {
-        console.error('Failed to process pending request:', error);
+        console.error("Failed to process pending request:", error);
       }
     }
   }
 
   async query(request: LLMRequest): Promise<LLMResponse> {
     const startTime = performance.now();
-    const promptHash = this.generateHash(request.prompt + (request.context || ''));
+    const promptHash = this.generateHash(request.prompt + (request.context || ""));
     
     // 1. Verificar cache se permitido
     if (request.useCache !== false) {
@@ -191,7 +191,7 @@ class EmbeddedLLMManager {
           content: cached.response,
           confidence: 0.85,
           cached: true,
-          model: 'cache',
+          model: "cache",
           executionTime: performance.now() - startTime,
           offline: !this.isOnline
         };
@@ -207,7 +207,7 @@ class EmbeddedLLMManager {
         content: this.getOfflineFallback(request.prompt),
         confidence: 0.5,
         cached: false,
-        model: 'offline-fallback',
+        model: "offline-fallback",
         executionTime: performance.now() - startTime,
         offline: true
       };
@@ -215,13 +215,13 @@ class EmbeddedLLMManager {
 
     // 3. Chamar edge function com Lovable AI
     try {
-      const { data, error } = await supabase.functions.invoke('nautilus-llm', {
+      const { data, error } = await supabase.functions.invoke("nautilus-llm", {
         body: {
           prompt: request.prompt,
           contextId: request.context,
           moduleId: request.module,
           sessionId: crypto.randomUUID(),
-          mode: request.mode || 'safe'
+          mode: request.mode || "safe"
         }
       });
 
@@ -231,7 +231,7 @@ class EmbeddedLLMManager {
         content: data.response,
         confidence: data.confidenceScore || 0.9,
         cached: data.usedCache || false,
-        model: data.model || 'lovable-ai',
+        model: data.model || "lovable-ai",
         executionTime: performance.now() - startTime,
         offline: false
       };
@@ -241,7 +241,7 @@ class EmbeddedLLMManager {
 
       return response;
     } catch (error) {
-      console.error('LLM query error:', error);
+      console.error("LLM query error:", error);
       
       // Fallback para cache ou resposta padrão
       const cached = await this.getCachedResponse(promptHash);
@@ -250,17 +250,17 @@ class EmbeddedLLMManager {
           content: cached.response,
           confidence: 0.7,
           cached: true,
-          model: 'cache-fallback',
+          model: "cache-fallback",
           executionTime: performance.now() - startTime,
           offline: false
         };
       }
 
       return {
-        content: 'Desculpe, não foi possível processar sua solicitação no momento. Por favor, tente novamente.',
+        content: "Desculpe, não foi possível processar sua solicitação no momento. Por favor, tente novamente.",
         confidence: 0.3,
         cached: false,
-        model: 'error-fallback',
+        model: "error-fallback",
         executionTime: performance.now() - startTime,
         offline: false
       };
@@ -274,7 +274,7 @@ class EmbeddedLLMManager {
     if (!this.db) return;
     
     return new Promise((resolve) => {
-      const transaction = this.db!.transaction(STORE_NAME, 'readwrite');
+      const transaction = this.db!.transaction(STORE_NAME, "readwrite");
       const store = transaction.objectStore(STORE_NAME);
       store.clear();
       transaction.oncomplete = () => resolve();
@@ -285,7 +285,7 @@ class EmbeddedLLMManager {
     if (!this.db) return { count: 0, size: 0 };
     
     return new Promise((resolve) => {
-      const transaction = this.db!.transaction(STORE_NAME, 'readonly');
+      const transaction = this.db!.transaction(STORE_NAME, "readonly");
       const store = transaction.objectStore(STORE_NAME);
       const request = store.getAll();
       
@@ -312,7 +312,7 @@ class EmbeddedLLMManager {
 export const embeddedLLM = new EmbeddedLLMManager();
 
 // React Hook
-import { useState, useCallback } from 'react';
+import { useState, useCallback } from "react";
 
 export function useEmbeddedLLM() {
   const [isLoading, setIsLoading] = useState(false);
@@ -328,7 +328,7 @@ export function useEmbeddedLLM() {
       setLastResponse(response);
       return response;
     } catch (err) {
-      const message = err instanceof Error ? err.message : 'Erro desconhecido';
+      const message = err instanceof Error ? err.message : "Erro desconhecido";
       setError(message);
       throw err;
     } finally {

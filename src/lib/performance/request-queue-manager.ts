@@ -3,10 +3,10 @@
  * Manages API requests with offline queue, retry logic, and prioritization
  */
 
-import { logger } from '@/lib/monitoring/structured-logging';
+import { logger } from "@/lib/monitoring/structured-logging";
 
-type RequestPriority = 'high' | 'medium' | 'low';
-type RequestStatus = 'pending' | 'processing' | 'completed' | 'failed';
+type RequestPriority = "high" | "medium" | "low";
+type RequestStatus = "pending" | "processing" | "completed" | "failed";
 
 interface QueuedRequest {
   id: string;
@@ -40,7 +40,7 @@ const DEFAULT_CONFIG: RequestQueueConfig = {
   persistQueue: true,
 };
 
-const STORAGE_KEY = 'request-queue';
+const STORAGE_KEY = "request-queue";
 
 class RequestQueueManager {
   private queue: Map<string, QueuedRequest> = new Map();
@@ -63,12 +63,12 @@ class RequestQueueManager {
       if (stored) {
         const items: QueuedRequest[] = JSON.parse(stored);
         items.forEach((item) => {
-          item.status = 'pending'; // Reset status on load
+          item.status = "pending"; // Reset status on load
           this.queue.set(item.id, item);
         });
       }
     } catch (error) {
-      logger.warn('Failed to load request queue from storage', { error });
+      logger.warn("Failed to load request queue from storage", { error });
     }
   }
 
@@ -77,17 +77,17 @@ class RequestQueueManager {
 
     try {
       const items = Array.from(this.queue.values()).filter(
-        (r) => r.status === 'pending' || r.status === 'processing'
+        (r) => r.status === "pending" || r.status === "processing"
       );
       localStorage.setItem(STORAGE_KEY, JSON.stringify(items));
     } catch (error) {
-      logger.warn('Failed to save request queue to storage', { error });
+      logger.warn("Failed to save request queue to storage", { error });
     }
   }
 
   private setupNetworkListeners() {
-    window.addEventListener('online', () => {
-      logger.info('Network online, processing queue');
+    window.addEventListener("online", () => {
+      logger.info("Network online, processing queue");
       this.processQueue();
     });
   }
@@ -101,29 +101,29 @@ class RequestQueueManager {
       callback?: (response: Response | null, error?: Error) => void;
     } = {}
   ): string {
-    const { priority = 'medium', maxRetries = this.config.maxRetries, callback, ...fetchOptions } = options;
+    const { priority = "medium", maxRetries = this.config.maxRetries, callback, ...fetchOptions } = options;
 
     if (this.queue.size >= this.config.maxQueueSize) {
       // Remove oldest low priority request
       const lowPriorityRequests = Array.from(this.queue.values())
-        .filter((r) => r.priority === 'low' && r.status === 'pending')
+        .filter((r) => r.priority === "low" && r.status === "pending")
         .sort((a, b) => a.createdAt - b.createdAt);
 
       if (lowPriorityRequests.length > 0) {
         this.queue.delete(lowPriorityRequests[0].id);
       } else {
-        throw new Error('Request queue is full');
+        throw new Error("Request queue is full");
       }
     }
 
     const request: QueuedRequest = {
       id: `req-${Date.now()}-${Math.random().toString(36).substr(2, 9)}`,
       url,
-      method: fetchOptions.method || 'GET',
+      method: fetchOptions.method || "GET",
       body: fetchOptions.body as string | undefined,
       headers: fetchOptions.headers as Record<string, string> | undefined,
       priority,
-      status: 'pending',
+      status: "pending",
       retryCount: 0,
       maxRetries,
       createdAt: Date.now(),
@@ -151,7 +151,7 @@ class RequestQueueManager {
     try {
       // Sort by priority and creation time
       const pendingRequests = Array.from(this.queue.values())
-        .filter((r) => r.status === 'pending')
+        .filter((r) => r.status === "pending")
         .sort((a, b) => {
           const priorityOrder = { high: 0, medium: 1, low: 2 };
           const priorityDiff = priorityOrder[a.priority] - priorityOrder[b.priority];
@@ -176,7 +176,7 @@ class RequestQueueManager {
 
   private async executeRequest(request: QueuedRequest): Promise<void> {
     this.activeRequests++;
-    request.status = 'processing';
+    request.status = "processing";
     request.lastAttemptAt = Date.now();
     this.notifyListeners();
 
@@ -188,7 +188,7 @@ class RequestQueueManager {
       });
 
       if (response.ok) {
-        request.status = 'completed';
+        request.status = "completed";
         request.callback?.(response);
         this.queue.delete(request.id);
       } else {
@@ -196,18 +196,18 @@ class RequestQueueManager {
       }
     } catch (error) {
       request.retryCount++;
-      request.error = error instanceof Error ? error.message : 'Unknown error';
+      request.error = error instanceof Error ? error.message : "Unknown error";
 
       if (request.retryCount >= request.maxRetries) {
-        request.status = 'failed';
-        request.callback?.(null, error instanceof Error ? error : new Error('Request failed'));
-        logger.error('Request failed after max retries', undefined, {
+        request.status = "failed";
+        request.callback?.(null, error instanceof Error ? error : new Error("Request failed"));
+        logger.error("Request failed after max retries", undefined, {
           requestId: request.id,
           url: request.url,
           errorMessage: request.error,
         });
       } else {
-        request.status = 'pending';
+        request.status = "pending";
         // Schedule retry
         setTimeout(() => {
           if (this.queue.has(request.id)) {
@@ -230,7 +230,7 @@ class RequestQueueManager {
   // Cancel a request
   cancel(requestId: string): boolean {
     const request = this.queue.get(requestId);
-    if (request && request.status === 'pending') {
+    if (request && request.status === "pending") {
       this.queue.delete(requestId);
       this.saveToStorage();
       this.notifyListeners();
@@ -242,7 +242,7 @@ class RequestQueueManager {
   // Clear all pending requests
   clearPending(): void {
     for (const [id, request] of this.queue) {
-      if (request.status === 'pending') {
+      if (request.status === "pending") {
         this.queue.delete(id);
       }
     }
@@ -255,26 +255,26 @@ class RequestQueueManager {
     const requests = Array.from(this.queue.values());
     return {
       total: requests.length,
-      pending: requests.filter((r) => r.status === 'pending').length,
-      processing: requests.filter((r) => r.status === 'processing').length,
-      failed: requests.filter((r) => r.status === 'failed').length,
+      pending: requests.filter((r) => r.status === "pending").length,
+      processing: requests.filter((r) => r.status === "processing").length,
+      failed: requests.filter((r) => r.status === "failed").length,
       isOnline: navigator.onLine,
     };
   }
 
   getPendingCount(): number {
-    return Array.from(this.queue.values()).filter((r) => r.status === 'pending').length;
+    return Array.from(this.queue.values()).filter((r) => r.status === "pending").length;
   }
 
   getFailedRequests(): QueuedRequest[] {
-    return Array.from(this.queue.values()).filter((r) => r.status === 'failed');
+    return Array.from(this.queue.values()).filter((r) => r.status === "failed");
   }
 
   // Retry all failed requests
   retryFailed(): void {
     for (const request of this.queue.values()) {
-      if (request.status === 'failed') {
-        request.status = 'pending';
+      if (request.status === "failed") {
+        request.status = "pending";
         request.retryCount = 0;
         request.error = undefined;
       }
@@ -322,4 +322,4 @@ export function useRequestQueue() {
 }
 
 // Need React import for hook
-import React from 'react';
+import React from "react";

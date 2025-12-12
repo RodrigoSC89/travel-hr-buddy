@@ -4,8 +4,8 @@
  * Version: 1.0.0
  */
 
-import React, { useState } from 'react';
-import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
+import React, { useState } from "react";
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { 
   Users, 
   BarChart3, 
@@ -19,20 +19,20 @@ import {
   Award,
   TrendingUp,
   UserPlus
-} from 'lucide-react';
-import PeopleDashboard from './components/PeopleDashboard';
-import CollaboratorRegistry from './components/CollaboratorRegistry';
-import RecruitmentPipeline from './components/RecruitmentPipeline';
-import PerformanceCenter from './components/PerformanceCenter';
-import ClimateEngagement from './components/ClimateEngagement';
-import PeopleAnalytics from './components/PeopleAnalytics';
-import HRChatbot from './components/HRChatbot';
-import OnboardingFlow from './components/OnboardingFlow';
-import TimeAttendance from './components/TimeAttendance';
-import CareerDevelopment from './components/CareerDevelopment';
+} from "lucide-react";
+import PeopleDashboard from "./components/PeopleDashboard";
+import CollaboratorRegistry from "./components/CollaboratorRegistry";
+import RecruitmentPipeline from "./components/RecruitmentPipeline";
+import PerformanceCenter from "./components/PerformanceCenter";
+import ClimateEngagement from "./components/ClimateEngagement";
+import PeopleAnalytics from "./components/PeopleAnalytics";
+import HRChatbot from "./components/HRChatbot";
+import OnboardingFlow from "./components/OnboardingFlow";
+import TimeAttendance from "./components/TimeAttendance";
+import CareerDevelopment from "./components/CareerDevelopment";
 
 const NautilusPeopleHub: React.FC = () => {
-  const [activeTab, setActiveTab] = useState('dashboard');
+  const [activeTab, setActiveTab] = useState("dashboard");
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-background via-background to-primary/5">

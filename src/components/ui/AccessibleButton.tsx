@@ -3,10 +3,10 @@
  * WCAG 2.1 AA compliant button with proper focus management
  */
 
-import React, { forwardRef } from 'react';
-import { Button, ButtonProps } from './button';
-import { cn } from '@/lib/utils';
-import { Loader2 } from 'lucide-react';
+import React, { forwardRef } from "react";
+import { Button, ButtonProps } from "./button";
+import { cn } from "@/lib/utils";
+import { Loader2 } from "lucide-react";
 
 interface AccessibleButtonProps extends ButtonProps {
   /** Loading state */
@@ -16,7 +16,7 @@ interface AccessibleButtonProps extends ButtonProps {
   /** Icon to display */
   icon?: React.ReactNode;
   /** Icon position */
-  iconPosition?: 'left' | 'right';
+  iconPosition?: "left" | "right";
   /** Keyboard shortcut hint */
   shortcut?: string;
   /** Announce to screen readers on click */
@@ -27,9 +27,9 @@ export const AccessibleButton = forwardRef<HTMLButtonElement, AccessibleButtonPr
   ({
     children,
     isLoading = false,
-    loadingText = 'Carregando...',
+    loadingText = "Carregando...",
     icon,
-    iconPosition = 'left',
+    iconPosition = "left",
     shortcut,
     announceOnClick,
     disabled,
@@ -71,11 +71,11 @@ export const AccessibleButton = forwardRef<HTMLButtonElement, AccessibleButtonPr
           </>
         ) : (
           <>
-            {icon && iconPosition === 'left' && (
+            {icon && iconPosition === "left" && (
               <span className="mr-2" aria-hidden="true">{icon}</span>
             )}
             {children}
-            {icon && iconPosition === 'right' && (
+            {icon && iconPosition === "right" && (
               <span className="ml-2" aria-hidden="true">{icon}</span>
             )}
             {shortcut && (
@@ -90,17 +90,17 @@ export const AccessibleButton = forwardRef<HTMLButtonElement, AccessibleButtonPr
   }
 );
 
-AccessibleButton.displayName = 'AccessibleButton';
+AccessibleButton.displayName = "AccessibleButton";
 
 /**
  * Announce message to screen readers
  */
-function announceToScreenReader(message: string, priority: 'polite' | 'assertive' = 'polite') {
-  const announcement = document.createElement('div');
-  announcement.setAttribute('role', 'status');
-  announcement.setAttribute('aria-live', priority);
-  announcement.setAttribute('aria-atomic', 'true');
-  announcement.className = 'sr-only';
+function announceToScreenReader(message: string, priority: "polite" | "assertive" = "polite") {
+  const announcement = document.createElement("div");
+  announcement.setAttribute("role", "status");
+  announcement.setAttribute("aria-live", priority);
+  announcement.setAttribute("aria-atomic", "true");
+  announcement.className = "sr-only";
   announcement.textContent = message;
   
   document.body.appendChild(announcement);
@@ -113,7 +113,7 @@ function announceToScreenReader(message: string, priority: 'polite' | 'assertive
 /**
  * Skip to main content link
  */
-export const SkipToContent: React.FC<{ targetId?: string }> = ({ targetId = 'main-content' }) => (
+export const SkipToContent: React.FC<{ targetId?: string }> = ({ targetId = "main-content" }) => (
   <a
     href={`#${targetId}`}
     className={cn(
@@ -137,14 +137,14 @@ export const useFocusTrap = (isActive: boolean, containerRef: React.RefObject<HT
 
     const container = containerRef.current;
     const focusableElements = container.querySelectorAll<HTMLElement>(
-      'button, [href], input, select, textarea, [tabindex]:not([tabindex="-1"])'
+      "button, [href], input, select, textarea, [tabindex]:not([tabindex=\"-1\"])"
     );
     
     const firstElement = focusableElements[0];
     const lastElement = focusableElements[focusableElements.length - 1];
 
     const handleKeyDown = (e: KeyboardEvent) => {
-      if (e.key !== 'Tab') return;
+      if (e.key !== "Tab") return;
 
       if (e.shiftKey) {
         if (document.activeElement === firstElement) {
@@ -159,11 +159,11 @@ export const useFocusTrap = (isActive: boolean, containerRef: React.RefObject<HT
       }
     };
 
-    container.addEventListener('keydown', handleKeyDown);
+    container.addEventListener("keydown", handleKeyDown);
     firstElement?.focus();
 
     return () => {
-      container.removeEventListener('keydown', handleKeyDown);
+      container.removeEventListener("keydown", handleKeyDown);
     };
   }, [isActive, containerRef]);
 };

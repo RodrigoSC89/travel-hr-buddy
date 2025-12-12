@@ -6,4 +6,4 @@
 export { 
   automationManager, 
   useAutomationManager 
-} from './automation-manager';
+} from "./automation-manager";

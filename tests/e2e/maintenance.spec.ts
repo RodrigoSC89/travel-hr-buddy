@@ -13,7 +13,7 @@ test.describe("Maintenance Management", () => {
 
   test("should display maintenance dashboard", async ({ page }) => {
     await expect(
-      page.locator('[data-testid="maintenance-dashboard"]').or(
+      page.locator("[data-testid=\"maintenance-dashboard\"]").or(
         page.getByText(/manutenção|maintenance/i).first()
       )
     ).toBeVisible({ timeout: 10000 });
@@ -44,7 +44,7 @@ test.describe("Maintenance Management", () => {
   test("should show predictive maintenance alerts", async ({ page }) => {
     // Look for predictive maintenance section
     const predictiveSection = page.getByText(/preditiva|predictive/i).first().or(
-      page.locator('[data-testid="predictive-alerts"]')
+      page.locator("[data-testid=\"predictive-alerts\"]")
     );
     
     if (await predictiveSection.isVisible()) {
@@ -53,7 +53,7 @@ test.describe("Maintenance Management", () => {
   });
 
   test("should filter by priority", async ({ page }) => {
-    const priorityFilter = page.locator('[data-testid="priority-filter"]').or(
+    const priorityFilter = page.locator("[data-testid=\"priority-filter\"]").or(
       page.getByRole("combobox", { name: /prioridade|priority/i })
     );
     

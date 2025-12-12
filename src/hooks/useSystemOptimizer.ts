@@ -4,14 +4,14 @@
  * Optimized for 2Mbps networks
  */
 
-import { useState, useEffect, useCallback, useMemo } from 'react';
-import { useNetworkStatus, useAdaptiveSettings } from './use-network-status';
-import { bandwidthOptimizer } from '@/lib/performance/low-bandwidth-optimizer';
+import { useState, useEffect, useCallback, useMemo } from "react";
+import { useNetworkStatus, useAdaptiveSettings } from "./use-network-status";
+import { bandwidthOptimizer } from "@/lib/performance/low-bandwidth-optimizer";
 
 export interface SystemOptimizations {
   // Connection
   isOnline: boolean;
-  connectionQuality: 'fast' | 'medium' | 'slow' | 'offline';
+  connectionQuality: "fast" | "medium" | "slow" | "offline";
   isSaveData: boolean;
   
   // Adaptive settings
@@ -35,20 +35,20 @@ export function useSystemOptimizer(): SystemOptimizations {
 
   // Prefetch route with smart loading
   const prefetchRoute = useCallback((path: string) => {
-    if (networkStatus.quality === 'slow' || networkStatus.quality === 'offline') {
+    if (networkStatus.quality === "slow" || networkStatus.quality === "offline") {
       return; // Don't prefetch on slow connections
     }
     
     // Use link preload
-    const link = document.createElement('link');
-    link.rel = 'prefetch';
+    const link = document.createElement("link");
+    link.rel = "prefetch";
     link.href = path;
     document.head.appendChild(link);
   }, [networkStatus.quality]);
 
   // Preload image with quality adjustment
   const preloadImage = useCallback((src: string) => {
-    if (networkStatus.quality === 'offline') return;
+    if (networkStatus.quality === "offline") return;
     
     const img = new Image();
     img.src = src;
@@ -61,20 +61,20 @@ export function useSystemOptimizer(): SystemOptimizations {
     
     try {
       // Clear service worker caches
-      if ('caches' in window) {
+      if ("caches" in window) {
         const keys = await caches.keys();
         await Promise.all(keys.map(key => caches.delete(key)));
       }
       
       // Clear local storage cache entries
       Object.keys(localStorage).forEach(key => {
-        if (key.startsWith('cache_') || key.startsWith('nautilus_')) {
+        if (key.startsWith("cache_") || key.startsWith("nautilus_")) {
           localStorage.removeItem(key);
         }
       });
       
       // Reload service worker
-      if ('serviceWorker' in navigator) {
+      if ("serviceWorker" in navigator) {
         const registration = await navigator.serviceWorker.ready;
         await registration.update();
       }
@@ -87,14 +87,14 @@ export function useSystemOptimizer(): SystemOptimizations {
   useEffect(() => {
     const root = document.documentElement;
     
-    if (networkStatus.quality === 'slow' || networkStatus.saveData) {
-      root.classList.add('low-bandwidth');
+    if (networkStatus.quality === "slow" || networkStatus.saveData) {
+      root.classList.add("low-bandwidth");
     } else {
-      root.classList.remove('low-bandwidth');
+      root.classList.remove("low-bandwidth");
     }
 
     return () => {
-      root.classList.remove('low-bandwidth');
+      root.classList.remove("low-bandwidth");
     };
   }, [networkStatus.quality, networkStatus.saveData]);
 
@@ -115,15 +115,15 @@ export function useSystemOptimizer(): SystemOptimizations {
 export function useComponentOptimizer(componentName: string) {
   const { connectionQuality, enableAnimations } = useSystemOptimizer();
   
-  const shouldRender = useCallback((priority: 'high' | 'medium' | 'low') => {
-    if (connectionQuality === 'offline') return priority === 'high';
-    if (connectionQuality === 'slow') return priority !== 'low';
+  const shouldRender = useCallback((priority: "high" | "medium" | "low") => {
+    if (connectionQuality === "offline") return priority === "high";
+    if (connectionQuality === "slow") return priority !== "low";
     return true;
   }, [connectionQuality]);
 
   const getTransition = useCallback((defaultDuration: number = 300) => {
-    if (!enableAnimations) return '0ms';
-    if (connectionQuality === 'slow') return `${defaultDuration * 0.5}ms`;
+    if (!enableAnimations) return "0ms";
+    if (connectionQuality === "slow") return `${defaultDuration * 0.5}ms`;
     return `${defaultDuration}ms`;
   }, [enableAnimations, connectionQuality]);
 
@@ -131,7 +131,7 @@ export function useComponentOptimizer(componentName: string) {
     shouldRender,
     getTransition,
     enableAnimations,
-    isSlowConnection: connectionQuality === 'slow' || connectionQuality === 'offline',
+    isSlowConnection: connectionQuality === "slow" || connectionQuality === "offline",
   };
 }
 

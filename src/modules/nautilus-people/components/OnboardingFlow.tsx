@@ -2,13 +2,13 @@
  * Onboarding Flow - Fluxo de Integração Digital
  */
 
-import React, { useState } from 'react';
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
-import { Button } from '@/components/ui/button';
-import { Badge } from '@/components/ui/badge';
-import { Progress } from '@/components/ui/progress';
-import { Avatar, AvatarFallback } from '@/components/ui/avatar';
-import { Checkbox } from '@/components/ui/checkbox';
+import React, { useState } from "react";
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
+import { Button } from "@/components/ui/button";
+import { Badge } from "@/components/ui/badge";
+import { Progress } from "@/components/ui/progress";
+import { Avatar, AvatarFallback } from "@/components/ui/avatar";
+import { Checkbox } from "@/components/ui/checkbox";
 import {
   UserPlus,
   FileText,
@@ -27,8 +27,8 @@ import {
   MessageSquare,
   ChevronRight,
   Play
-} from 'lucide-react';
-import { motion } from 'framer-motion';
+} from "lucide-react";
+import { motion } from "framer-motion";
 
 interface OnboardingEmployee {
   id: string;
@@ -55,108 +55,108 @@ const OnboardingFlow: React.FC = () => {
 
   const onboardingEmployees: OnboardingEmployee[] = [
     {
-      id: '1',
-      nome: 'Felipe Rodrigues',
-      cargo: 'Analista de Dados',
-      departamento: 'TI',
-      dataAdmissao: '2025-12-02',
+      id: "1",
+      nome: "Felipe Rodrigues",
+      cargo: "Analista de Dados",
+      departamento: "TI",
+      dataAdmissao: "2025-12-02",
       progresso: 75,
       etapaAtual: 4,
-      gestor: 'Carlos Silva',
-      buddy: 'Ana Paula'
+      gestor: "Carlos Silva",
+      buddy: "Ana Paula"
     },
     {
-      id: '2',
-      nome: 'Juliana Mendes',
-      cargo: 'Engenheira de Processos',
-      departamento: 'Operações',
-      dataAdmissao: '2025-12-05',
+      id: "2",
+      nome: "Juliana Mendes",
+      cargo: "Engenheira de Processos",
+      departamento: "Operações",
+      dataAdmissao: "2025-12-05",
       progresso: 45,
       etapaAtual: 2,
-      gestor: 'Roberto Santos',
-      buddy: 'Pedro Lima'
+      gestor: "Roberto Santos",
+      buddy: "Pedro Lima"
     },
     {
-      id: '3',
-      nome: 'Lucas Oliveira',
-      cargo: 'Técnico de Manutenção',
-      departamento: 'Manutenção',
-      dataAdmissao: '2025-12-09',
+      id: "3",
+      nome: "Lucas Oliveira",
+      cargo: "Técnico de Manutenção",
+      departamento: "Manutenção",
+      dataAdmissao: "2025-12-09",
       progresso: 15,
       etapaAtual: 1,
-      gestor: 'Maria Costa',
-      buddy: 'João Silva'
+      gestor: "Maria Costa",
+      buddy: "João Silva"
     }
   ];
 
   const onboardingSteps: OnboardingStep[] = [
     {
       id: 1,
-      titulo: 'Boas-vindas',
-      descricao: 'Documentação inicial e acesso aos sistemas',
+      titulo: "Boas-vindas",
+      descricao: "Documentação inicial e acesso aos sistemas",
       icon: UserPlus,
       tarefas: [
-        { id: '1.1', titulo: 'Preencher formulário de admissão', concluida: true },
-        { id: '1.2', titulo: 'Enviar documentos pessoais', concluida: true },
-        { id: '1.3', titulo: 'Assinar contrato digital', concluida: true },
-        { id: '1.4', titulo: 'Foto para crachá', concluida: true }
+        { id: "1.1", titulo: "Preencher formulário de admissão", concluida: true },
+        { id: "1.2", titulo: "Enviar documentos pessoais", concluida: true },
+        { id: "1.3", titulo: "Assinar contrato digital", concluida: true },
+        { id: "1.4", titulo: "Foto para crachá", concluida: true }
       ]
     },
     {
       id: 2,
-      titulo: 'Acesso e Equipamentos',
-      descricao: 'Configuração de acessos e entrega de equipamentos',
+      titulo: "Acesso e Equipamentos",
+      descricao: "Configuração de acessos e entrega de equipamentos",
       icon: Laptop,
       tarefas: [
-        { id: '2.1', titulo: 'Receber credenciais de acesso', concluida: true },
-        { id: '2.2', titulo: 'Configurar e-mail corporativo', concluida: true },
-        { id: '2.3', titulo: 'Receber notebook/equipamentos', concluida: false },
-        { id: '2.4', titulo: 'Acesso a sistemas (ERP, RH, etc)', concluida: false }
+        { id: "2.1", titulo: "Receber credenciais de acesso", concluida: true },
+        { id: "2.2", titulo: "Configurar e-mail corporativo", concluida: true },
+        { id: "2.3", titulo: "Receber notebook/equipamentos", concluida: false },
+        { id: "2.4", titulo: "Acesso a sistemas (ERP, RH, etc)", concluida: false }
       ]
     },
     {
       id: 3,
-      titulo: 'Treinamentos Obrigatórios',
-      descricao: 'Cursos e certificações iniciais',
+      titulo: "Treinamentos Obrigatórios",
+      descricao: "Cursos e certificações iniciais",
       icon: GraduationCap,
       tarefas: [
-        { id: '3.1', titulo: 'Integração Institucional', concluida: false },
-        { id: '3.2', titulo: 'Segurança do Trabalho', concluida: false },
-        { id: '3.3', titulo: 'Compliance e Ética', concluida: false },
-        { id: '3.4', titulo: 'LGPD e Segurança da Informação', concluida: false }
+        { id: "3.1", titulo: "Integração Institucional", concluida: false },
+        { id: "3.2", titulo: "Segurança do Trabalho", concluida: false },
+        { id: "3.3", titulo: "Compliance e Ética", concluida: false },
+        { id: "3.4", titulo: "LGPD e Segurança da Informação", concluida: false }
       ]
     },
     {
       id: 4,
-      titulo: 'Conhecendo a Equipe',
-      descricao: 'Integração com colegas e liderança',
+      titulo: "Conhecendo a Equipe",
+      descricao: "Integração com colegas e liderança",
       icon: Users,
       tarefas: [
-        { id: '4.1', titulo: 'Reunião com gestor direto', concluida: true },
-        { id: '4.2', titulo: 'Conhecer o buddy/mentor', concluida: true },
-        { id: '4.3', titulo: 'Tour virtual/presencial', concluida: false },
-        { id: '4.4', titulo: 'Almoço de boas-vindas', concluida: false }
+        { id: "4.1", titulo: "Reunião com gestor direto", concluida: true },
+        { id: "4.2", titulo: "Conhecer o buddy/mentor", concluida: true },
+        { id: "4.3", titulo: "Tour virtual/presencial", concluida: false },
+        { id: "4.4", titulo: "Almoço de boas-vindas", concluida: false }
       ]
     },
     {
       id: 5,
-      titulo: 'Início das Atividades',
-      descricao: 'Primeiras tarefas e objetivos',
+      titulo: "Início das Atividades",
+      descricao: "Primeiras tarefas e objetivos",
       icon: Play,
       tarefas: [
-        { id: '5.1', titulo: 'Definir objetivos dos primeiros 30 dias', concluida: false },
-        { id: '5.2', titulo: 'Primeiro projeto/atividade', concluida: false },
-        { id: '5.3', titulo: 'Feedback da primeira semana', concluida: false },
-        { id: '5.4', titulo: 'Avaliação de 30 dias', concluida: false }
+        { id: "5.1", titulo: "Definir objetivos dos primeiros 30 dias", concluida: false },
+        { id: "5.2", titulo: "Primeiro projeto/atividade", concluida: false },
+        { id: "5.3", titulo: "Feedback da primeira semana", concluida: false },
+        { id: "5.4", titulo: "Avaliação de 30 dias", concluida: false }
       ]
     }
   ];
 
   const getProgressColor = (progresso: number) => {
-    if (progresso >= 75) return 'text-green-500';
-    if (progresso >= 50) return 'text-blue-500';
-    if (progresso >= 25) return 'text-yellow-500';
-    return 'text-orange-500';
+    if (progresso >= 75) return "text-green-500";
+    if (progresso >= 50) return "text-blue-500";
+    if (progresso >= 25) return "text-yellow-500";
+    return "text-orange-500";
   };
 
   return (
@@ -225,14 +225,14 @@ const OnboardingFlow: React.FC = () => {
                 animate={{ opacity: 1, x: 0 }}
                 transition={{ delay: index * 0.1 }}
                 className={`p-4 rounded-lg border cursor-pointer transition-all hover:border-primary/50 ${
-                  selectedEmployee?.id === employee.id ? 'border-primary bg-primary/5' : ''
+                  selectedEmployee?.id === employee.id ? "border-primary bg-primary/5" : ""
                 }`}
                 onClick={() => setSelectedEmployee(employee)}
               >
                 <div className="flex items-center gap-3">
                   <Avatar>
                     <AvatarFallback className="bg-primary/10 text-primary">
-                      {employee.nome.split(' ').map(n => n[0]).join('').slice(0, 2)}
+                      {employee.nome.split(" ").map(n => n[0]).join("").slice(0, 2)}
                     </AvatarFallback>
                   </Avatar>
                   <div className="flex-1 min-w-0">
@@ -253,7 +253,7 @@ const OnboardingFlow: React.FC = () => {
                 <div className="flex items-center gap-2 mt-2">
                   <Badge variant="outline" className="text-xs">
                     <Calendar className="w-3 h-3 mr-1" />
-                    {new Date(employee.dataAdmissao).toLocaleDateString('pt-BR')}
+                    {new Date(employee.dataAdmissao).toLocaleDateString("pt-BR")}
                   </Badge>
                   <Badge variant="secondary" className="text-xs">
                     Etapa {employee.etapaAtual}/5
@@ -271,7 +271,7 @@ const OnboardingFlow: React.FC = () => {
             <CardDescription>
               {selectedEmployee 
                 ? `Acompanhamento de ${selectedEmployee.nome}` 
-                : 'Selecione um colaborador para ver o progresso'
+                : "Selecione um colaborador para ver o progresso"
               }
             </CardDescription>
           </CardHeader>
@@ -283,7 +283,7 @@ const OnboardingFlow: React.FC = () => {
                   <div className="flex items-center gap-4">
                     <Avatar className="w-12 h-12">
                       <AvatarFallback className="bg-primary/10 text-primary text-lg">
-                        {selectedEmployee.nome.split(' ').map(n => n[0]).join('').slice(0, 2)}
+                        {selectedEmployee.nome.split(" ").map(n => n[0]).join("").slice(0, 2)}
                       </AvatarFallback>
                     </Avatar>
                     <div>
@@ -313,16 +313,16 @@ const OnboardingFlow: React.FC = () => {
                         animate={{ opacity: 1, y: 0 }}
                         transition={{ delay: stepIndex * 0.1 }}
                         className={`p-4 rounded-lg border ${
-                          isCompleted ? 'bg-green-500/5 border-green-500/30' :
-                          isCurrent ? 'bg-blue-500/5 border-blue-500/30' :
-                          'bg-muted/30'
+                          isCompleted ? "bg-green-500/5 border-green-500/30" :
+                            isCurrent ? "bg-blue-500/5 border-blue-500/30" :
+                              "bg-muted/30"
                         }`}
                       >
                         <div className="flex items-center gap-3 mb-3">
                           <div className={`w-10 h-10 rounded-full flex items-center justify-center ${
-                            isCompleted ? 'bg-green-500 text-white' :
-                            isCurrent ? 'bg-blue-500 text-white' :
-                            'bg-muted'
+                            isCompleted ? "bg-green-500 text-white" :
+                              isCurrent ? "bg-blue-500 text-white" :
+                                "bg-muted"
                           }`}>
                             {isCompleted ? (
                               <CheckCircle className="w-5 h-5" />
@@ -333,7 +333,7 @@ const OnboardingFlow: React.FC = () => {
                           <div className="flex-1">
                             <div className="flex items-center justify-between">
                               <h4 className="font-medium">{step.titulo}</h4>
-                              <Badge variant={isCompleted ? 'default' : isCurrent ? 'secondary' : 'outline'}>
+                              <Badge variant={isCompleted ? "default" : isCurrent ? "secondary" : "outline"}>
                                 {tarefasConcluidas}/{step.tarefas.length}
                               </Badge>
                             </div>
@@ -346,7 +346,7 @@ const OnboardingFlow: React.FC = () => {
                             {step.tarefas.map((tarefa) => (
                               <div key={tarefa.id} className="flex items-center gap-2">
                                 <Checkbox checked={tarefa.concluida} disabled />
-                                <span className={`text-sm ${tarefa.concluida ? 'line-through text-muted-foreground' : ''}`}>
+                                <span className={`text-sm ${tarefa.concluida ? "line-through text-muted-foreground" : ""}`}>
                                   {tarefa.titulo}
                                 </span>
                               </div>

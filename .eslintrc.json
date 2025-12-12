@@ -2,7 +2,14 @@
   "env": {
     "browser": true,
     "es2021": true,
-    "node": true
+    "node": true,
+    "serviceworker": true
+  },
+  "globals": {
+    "importScripts": "readonly",
+    "firebase": "readonly",
+    "clients": "readonly",
+    "workbox": "readonly"
   },
   "extends": [
     "eslint:recommended",
@@ -18,7 +25,7 @@
     "ecmaVersion": "latest",
     "sourceType": "module"
   },
-  "plugins": ["react", "@typescript-eslint"],
+  "plugins": ["react", "@typescript-eslint", "react-hooks"],
   "rules": {
     "react/react-in-jsx-scope": "off",
     "@typescript-eslint/no-unused-vars": "warn",
@@ -41,7 +48,11 @@
       {
         "allow": ["error", "warn"]
       }
-    ]
+    ],
+    "no-constant-condition": ["warn"],
+    "no-case-declarations": ["warn"],
+    "react/display-name": "off",
+    "no-useless-escape": "warn"
   },
   "settings": {
     "react": {
@@ -53,6 +64,54 @@
       "files": ["*.js"],
       "rules": {
         "@typescript-eslint/no-var-requires": "off"
+      }
+    },
+    {
+      "files": [
+        "**/*.test.ts",
+        "**/*.test.tsx",
+        "**/*.spec.ts",
+        "**/*.spec.tsx",
+        "**/tests/**",
+        "**/e2e/**",
+        "**/test/**",
+        "__tests__/**"
+      ],
+      "rules": {
+        "no-console": "off",
+        "@typescript-eslint/no-explicit-any": "off",
+        "@typescript-eslint/ban-ts-comment": "off"
+      }
+    },
+    {
+      "files": [
+        "*.config.ts",
+        "*.config.js",
+        "vite.config.ts",
+        "vitest.config.ts"
+      ],
+      "rules": {
+        "no-console": "off",
+        "@typescript-eslint/no-var-requires": "off"
+      }
+    },
+    {
+      "files": ["**/scripts/**/*.js", "**/scripts/**/*.ts"],
+      "rules": {
+        "no-console": "off"
+      }
+    },
+    {
+      "files": ["**/sw.js", "**/service-worker.js", "**/*-sw.js", "**/firebase-messaging-sw.js"],
+      "rules": {
+        "no-console": "off",
+        "no-undef": "off"
+      }
+    },
+    {
+      "files": ["**/sentry.*.config.ts", "**/*.config.ts"],
+      "rules": {
+        "no-console": "off"
       }
     }
   ]

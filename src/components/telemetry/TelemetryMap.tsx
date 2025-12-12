@@ -96,17 +96,17 @@ export function TelemetryMap({
 
   const getMarkerIcon = (type: string) => {
     switch (type) {
-      case "satellite": return <Satellite className="h-4 w-4 text-purple-500" />;
-      case "vessel": return <Ship className="h-4 w-4 text-blue-500" />;
-      default: return <MapPin className="h-4 w-4 text-green-500" />;
+    case "satellite": return <Satellite className="h-4 w-4 text-purple-500" />;
+    case "vessel": return <Ship className="h-4 w-4 text-blue-500" />;
+    default: return <MapPin className="h-4 w-4 text-green-500" />;
     }
   };
 
   const getMarkerColor = (type: string) => {
     switch (type) {
-      case "satellite": return "bg-purple-500";
-      case "vessel": return "bg-blue-500";
-      default: return "bg-green-500";
+    case "satellite": return "bg-purple-500";
+    case "vessel": return "bg-blue-500";
+    default: return "bg-green-500";
     }
   };
 
@@ -213,8 +213,8 @@ export function TelemetryMap({
                     <p>Vento: {selectedMarker.data.wind_speed} kt</p>
                     <Badge variant={
                       selectedMarker.data.risk_level === "danger" ? "destructive" :
-                      selectedMarker.data.risk_level === "warning" ? "default" :
-                      "secondary"
+                        selectedMarker.data.risk_level === "warning" ? "default" :
+                          "secondary"
                     } className="mt-1">
                       {selectedMarker.data.risk_level}
                     </Badge>

@@ -327,7 +327,7 @@ export function TenantProvider({ children }: TenantProviderProps): JSX.Element {
           try {
             const { data: userTenants } = await supabase
               .from("tenant_users")
-              .select(`*, saas_tenants!inner(*)`)
+              .select("*, saas_tenants!inner(*)")
               .eq("user_id", user.id)
               .eq("status", "active")
               .limit(5);

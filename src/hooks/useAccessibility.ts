@@ -7,13 +7,13 @@
  * @phase FASE 3.2
  */
 
-import { useEffect, useRef, useState, useCallback } from 'react';
+import { useEffect, useRef, useState, useCallback } from "react";
 import {
   createFocusTrap,
   announceToScreenReader,
   detectKeyboardNavigation,
   generateA11yId,
-} from '@/utils/accessibility';
+} from "@/utils/accessibility";
 
 /**
  * Hook para gerenciar focus trap em modais
@@ -40,7 +40,7 @@ export function useFocusTrap<T extends HTMLElement>(active = false) {
  */
 export function useScreenReaderAnnouncement() {
   const announce = useCallback(
-    (message: string, priority: 'polite' | 'assertive' = 'polite') => {
+    (message: string, priority: "polite" | "assertive" = "polite") => {
       announceToScreenReader(message, priority);
     },
     []
@@ -65,7 +65,7 @@ export function useKeyboardNavigation() {
 
   useEffect(() => {
     function handleKeyDown(event: KeyboardEvent) {
-      if (event.key === 'Tab') {
+      if (event.key === "Tab") {
         setIsKeyboardNavigating(true);
       }
     }
@@ -76,13 +76,13 @@ export function useKeyboardNavigation() {
 
     const cleanup = detectKeyboardNavigation();
 
-    document.addEventListener('keydown', handleKeyDown);
-    document.addEventListener('mousedown', handleMouseDown);
+    document.addEventListener("keydown", handleKeyDown);
+    document.addEventListener("mousedown", handleMouseDown);
 
     return () => {
       cleanup?.();
-      document.removeEventListener('keydown', handleKeyDown);
-      document.removeEventListener('mousedown', handleMouseDown);
+      document.removeEventListener("keydown", handleKeyDown);
+      document.removeEventListener("mousedown", handleMouseDown);
     };
   }, []);
 
@@ -97,15 +97,15 @@ export function useEscapeKey(onEscape: () => void, active = true) {
     if (!active) return;
 
     function handleKeyDown(event: KeyboardEvent) {
-      if (event.key === 'Escape') {
+      if (event.key === "Escape") {
         onEscape();
       }
     }
 
-    document.addEventListener('keydown', handleKeyDown);
+    document.addEventListener("keydown", handleKeyDown);
 
     return () => {
-      document.removeEventListener('keydown', handleKeyDown);
+      document.removeEventListener("keydown", handleKeyDown);
     };
   }, [onEscape, active]);
 }
@@ -150,11 +150,11 @@ export function useFocusRestore<T extends HTMLElement>() {
  */
 export function useAriaExpanded(initialExpanded = false) {
   const [expanded, setExpanded] = useState(initialExpanded);
-  const id = useA11yId('expandable');
+  const id = useA11yId("expandable");
 
   const triggerProps = {
-    'aria-expanded': expanded,
-    'aria-controls': id,
+    "aria-expanded": expanded,
+    "aria-controls": id,
   };
 
   const contentProps = {
@@ -180,22 +180,22 @@ export function useAccessibleTabs(tabCount: number, defaultIndex = 0) {
   const handleKeyDown = useCallback(
     (event: React.KeyboardEvent) => {
       switch (event.key) {
-        case 'ArrowRight':
-          event.preventDefault();
-          setSelectedIndex(prev => (prev + 1) % tabCount);
-          break;
-        case 'ArrowLeft':
-          event.preventDefault();
-          setSelectedIndex(prev => (prev - 1 + tabCount) % tabCount);
-          break;
-        case 'Home':
-          event.preventDefault();
-          setSelectedIndex(0);
-          break;
-        case 'End':
-          event.preventDefault();
-          setSelectedIndex(tabCount - 1);
-          break;
+      case "ArrowRight":
+        event.preventDefault();
+        setSelectedIndex(prev => (prev + 1) % tabCount);
+        break;
+      case "ArrowLeft":
+        event.preventDefault();
+        setSelectedIndex(prev => (prev - 1 + tabCount) % tabCount);
+        break;
+      case "Home":
+        event.preventDefault();
+        setSelectedIndex(0);
+        break;
+      case "End":
+        event.preventDefault();
+        setSelectedIndex(tabCount - 1);
+        break;
       }
     },
     [tabCount]
@@ -213,10 +213,10 @@ export function useAccessibleTabs(tabCount: number, defaultIndex = 0) {
  */
 export function useAccessibleTooltip(content: string) {
   const [visible, setVisible] = useState(false);
-  const id = useA11yId('tooltip');
+  const id = useA11yId("tooltip");
 
   const triggerProps = {
-    'aria-describedby': visible ? id : undefined,
+    "aria-describedby": visible ? id : undefined,
     onMouseEnter: () => setVisible(true),
     onMouseLeave: () => setVisible(false),
     onFocus: () => setVisible(true),
@@ -225,7 +225,7 @@ export function useAccessibleTooltip(content: string) {
 
   const tooltipProps = {
     id,
-    role: 'tooltip' as const,
+    role: "tooltip" as const,
     hidden: !visible,
   };
 
@@ -241,24 +241,24 @@ export function useAccessibleTooltip(content: string) {
 /**
  * Hook para gerenciar live regions (anúncios dinâmicos)
  */
-export function useLiveRegion(priority: 'polite' | 'assertive' = 'polite') {
-  const [message, setMessage] = useState('');
-  const id = useA11yId('live-region');
+export function useLiveRegion(priority: "polite" | "assertive" = "polite") {
+  const [message, setMessage] = useState("");
+  const id = useA11yId("live-region");
 
   useEffect(() => {
     if (message) {
       // Limpar mensagem após 3 segundos
-      const timer = setTimeout(() => setMessage(''), 3000);
+      const timer = setTimeout(() => setMessage(""), 3000);
       return () => clearTimeout(timer);
     }
   }, [message]);
 
   const regionProps = {
     id,
-    role: 'status' as const,
-    'aria-live': priority,
-    'aria-atomic': true,
-    className: 'sr-only',
+    role: "status" as const,
+    "aria-live": priority,
+    "aria-atomic": true,
+    className: "sr-only",
   };
 
   return {

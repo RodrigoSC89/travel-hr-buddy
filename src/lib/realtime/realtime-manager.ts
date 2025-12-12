@@ -3,11 +3,11 @@
  * PATCH 833: Centralized realtime subscription management
  */
 
-import { supabase } from '@/integrations/supabase/client';
-import { RealtimeChannel } from '@supabase/supabase-js';
+import { supabase } from "@/integrations/supabase/client";
+import { RealtimeChannel } from "@supabase/supabase-js";
 
-type ChangeType = 'INSERT' | 'UPDATE' | 'DELETE' | '*';
-type ConnectionStatus = 'connected' | 'connecting' | 'disconnected';
+type ChangeType = "INSERT" | "UPDATE" | "DELETE" | "*";
+type ConnectionStatus = "connected" | "connecting" | "disconnected";
 
 interface SubscriptionConfig {
   table: string;
@@ -25,11 +25,11 @@ interface Subscription {
 
 class RealtimeManager {
   private subscriptions = new Map<string, Subscription>();
-  private connectionStatus: ConnectionStatus = 'disconnected';
+  private connectionStatus: ConnectionStatus = "disconnected";
   private statusListeners = new Set<(status: ConnectionStatus) => void>();
 
   private getSubscriptionKey(config: SubscriptionConfig): string {
-    return `${config.schema || 'public'}:${config.table}:${config.event || '*'}:${config.filter || ''}`;
+    return `${config.schema || "public"}:${config.table}:${config.event || "*"}:${config.filter || ""}`;
   }
 
   subscribe(
@@ -46,10 +46,10 @@ class RealtimeManager {
       const channel = supabase.channel(`realtime:${key}`);
       
       channel.on(
-        'postgres_changes' as any,
+        "postgres_changes" as any,
         {
-          event: config.event || '*',
-          schema: config.schema || 'public',
+          event: config.event || "*",
+          schema: config.schema || "public",
           table: config.table,
           filter: config.filter,
         },
@@ -58,10 +58,10 @@ class RealtimeManager {
           sub?.callbacks.forEach(cb => cb(payload));
         }
       ).subscribe((status) => {
-        if (status === 'SUBSCRIBED') {
-          this.connectionStatus = 'connected';
-        } else if (status === 'CLOSED') {
-          this.connectionStatus = 'disconnected';
+        if (status === "SUBSCRIBED") {
+          this.connectionStatus = "connected";
+        } else if (status === "CLOSED") {
+          this.connectionStatus = "disconnected";
         }
         this.notifyStatusListeners();
       });
@@ -93,7 +93,7 @@ class RealtimeManager {
       sub.channel.unsubscribe();
     });
     this.subscriptions.clear();
-    this.connectionStatus = 'disconnected';
+    this.connectionStatus = "disconnected";
     this.notifyStatusListeners();
   }
 
@@ -118,7 +118,7 @@ class RealtimeManager {
 export const realtimeManager = new RealtimeManager();
 
 // React hooks
-import { useEffect, useState } from 'react';
+import { useEffect, useState } from "react";
 
 export function useRealtimeSubscription(
   config: SubscriptionConfig | null,

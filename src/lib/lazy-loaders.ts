@@ -176,7 +176,7 @@ export const loadReactFlow = async () => {
  * Precarrega módulos críticos em idle time para melhor UX
  */
 export const preloadCriticalModules = () => {
-  if ('requestIdleCallback' in window) {
+  if ("requestIdleCallback" in window) {
     requestIdleCallback(() => {
       // Preload apenas charts para dashboards
       loadRecharts().catch(() => {/* silent fail */});
@@ -188,25 +188,25 @@ export const preloadCriticalModules = () => {
  * Precarrega módulos baseado em rota atual
  */
 export const preloadForRoute = (route: string) => {
-  if ('requestIdleCallback' in window) {
+  if ("requestIdleCallback" in window) {
     requestIdleCallback(() => {
       // Admin routes - preload pdf
-      if (route.includes('/admin')) {
+      if (route.includes("/admin")) {
         loadJsPDF().catch(() => {/* silent fail */});
       }
       
       // Dashboard routes - preload charts
-      if (route.includes('/dashboard') || route.includes('/command-center')) {
+      if (route.includes("/dashboard") || route.includes("/command-center")) {
         loadRecharts().catch(() => {/* silent fail */});
       }
       
       // Map routes - preload mapbox
-      if (route.includes('/fleet') || route.includes('/tracking') || route.includes('/maritime')) {
+      if (route.includes("/fleet") || route.includes("/tracking") || route.includes("/maritime")) {
         loadMapbox().catch(() => {/* silent fail */});
       }
       
       // AI routes - preload tensorflow
-      if (route.includes('/ai')) {
+      if (route.includes("/ai")) {
         loadTensorFlow().catch(() => {/* silent fail */});
       }
     }, { timeout: 1000 });

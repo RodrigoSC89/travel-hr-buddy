@@ -3,9 +3,9 @@
  * Error boundary principal que envolve toda a aplicação
  */
 
-import React, { Component, ErrorInfo, ReactNode } from 'react';
-import { errorTrackingService } from '@/lib/errors';
-import { ErrorFallback } from './fallbacks';
+import React, { Component, ErrorInfo, ReactNode } from "react";
+import { errorTrackingService } from "@/lib/errors";
+import { ErrorFallback } from "./fallbacks";
 
 interface Props {
   children: ReactNode;
@@ -38,8 +38,8 @@ export class GlobalErrorBoundary extends Component<Props, State> {
   componentDidCatch(error: Error, errorInfo: ErrorInfo): void {
     // Track error
     errorTrackingService.trackRuntimeError(error, {
-      component: 'GlobalErrorBoundary',
-      action: 'componentDidCatch',
+      component: "GlobalErrorBoundary",
+      action: "componentDidCatch",
       metadata: {
         componentStack: errorInfo.componentStack,
       },
@@ -75,7 +75,7 @@ export class GlobalErrorBoundary extends Component<Props, State> {
       // Copy to clipboard
       navigator.clipboard.writeText(JSON.stringify(errorReport, null, 2));
       
-      alert('Detalhes do erro copiados para a área de transferência. Por favor, envie para o suporte.');
+      alert("Detalhes do erro copiados para a área de transferência. Por favor, envie para o suporte.");
     }
   };
 
@@ -91,7 +91,7 @@ export class GlobalErrorBoundary extends Component<Props, State> {
         <ErrorFallback
           error={this.state.error}
           resetError={this.handleReset}
-          showDetails={process.env.NODE_ENV === 'development'}
+          showDetails={process.env.NODE_ENV === "development"}
           onReport={this.handleReport}
         />
       );

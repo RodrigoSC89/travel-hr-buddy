@@ -75,14 +75,14 @@ export default function HourometerManager() {
       prev.map((h) =>
         h.id === id
           ? {
-              ...h,
-              currentHours: Number(newHours),
-              lastUpdate: new Date().toISOString().split("T")[0],
-              hoursUntilMaintenance: Math.max(
-                0,
-                h.maintenanceInterval - (Number(newHours) % h.maintenanceInterval)
-              ),
-            }
+            ...h,
+            currentHours: Number(newHours),
+            lastUpdate: new Date().toISOString().split("T")[0],
+            hoursUntilMaintenance: Math.max(
+              0,
+              h.maintenanceInterval - (Number(newHours) % h.maintenanceInterval)
+            ),
+          }
           : h
       )
     );

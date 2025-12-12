@@ -209,7 +209,7 @@ export default function MentorDPProfessional() {
   const callMentorAI = async (action: string, params: any = {}): Promise<any> => {
     
     try {
-      const response = await fetch(`https://vnbptmixvwropvanyhdb.supabase.co/functions/v1/dp-mentor-ai`, {
+      const response = await fetch("https://vnbptmixvwropvanyhdb.supabase.co/functions/v1/dp-mentor-ai", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
@@ -709,12 +709,12 @@ export default function MentorDPProfessional() {
                     <div className="flex items-center gap-3">
                       <div className={`p-2 rounded-lg ${
                         module.category === "fundamentals" ? "bg-blue-500/10 text-blue-500" :
-                        module.category === "sensors" ? "bg-purple-500/10 text-purple-500" :
-                        module.category === "thrusters" ? "bg-green-500/10 text-green-500" :
-                        module.category === "redundancy" ? "bg-amber-500/10 text-amber-500" :
-                        module.category === "operations" ? "bg-cyan-500/10 text-cyan-500" :
-                        module.category === "emergency" ? "bg-red-500/10 text-red-500" :
-                        "bg-gray-500/10 text-gray-500"
+                          module.category === "sensors" ? "bg-purple-500/10 text-purple-500" :
+                            module.category === "thrusters" ? "bg-green-500/10 text-green-500" :
+                              module.category === "redundancy" ? "bg-amber-500/10 text-amber-500" :
+                                module.category === "operations" ? "bg-cyan-500/10 text-cyan-500" :
+                                  module.category === "emergency" ? "bg-red-500/10 text-red-500" :
+                                    "bg-gray-500/10 text-gray-500"
                       }`}>
                         {module.icon}
                       </div>
@@ -901,14 +901,14 @@ export default function MentorDPProfessional() {
                       <div key={entry.id} className="flex items-start gap-4 p-4 bg-muted/50 rounded-lg">
                         <div className={`p-2 rounded-lg ${
                           entry.type === "chat" ? "bg-blue-500/10 text-blue-500" :
-                          entry.type === "lesson" ? "bg-purple-500/10 text-purple-500" :
-                          entry.type === "simulation" ? "bg-green-500/10 text-green-500" :
-                          "bg-amber-500/10 text-amber-500"
+                            entry.type === "lesson" ? "bg-purple-500/10 text-purple-500" :
+                              entry.type === "simulation" ? "bg-green-500/10 text-green-500" :
+                                "bg-amber-500/10 text-amber-500"
                         }`}>
                           {entry.type === "chat" ? <MessageSquare className="h-4 w-4" /> :
-                           entry.type === "lesson" ? <GraduationCap className="h-4 w-4" /> :
-                           entry.type === "simulation" ? <Play className="h-4 w-4" /> :
-                           <ClipboardList className="h-4 w-4" />}
+                            entry.type === "lesson" ? <GraduationCap className="h-4 w-4" /> :
+                              entry.type === "simulation" ? <Play className="h-4 w-4" /> :
+                                <ClipboardList className="h-4 w-4" />}
                         </div>
                         <div className="flex-1">
                           <div className="flex items-center justify-between">

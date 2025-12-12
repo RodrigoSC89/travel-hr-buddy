@@ -3,8 +3,8 @@
  * Fast loading placeholders
  */
 
-import React, { memo } from 'react';
-import { cn } from '@/lib/utils';
+import React, { memo } from "react";
+import { cn } from "@/lib/utils";
 
 interface SkeletonProps {
   className?: string;
@@ -18,8 +18,8 @@ export const Skeleton = memo(function Skeleton({
   return (
     <div
       className={cn(
-        'bg-muted rounded',
-        animate && 'skeleton-loading',
+        "bg-muted rounded",
+        animate && "skeleton-loading",
         className
       )}
     />
@@ -119,8 +119,8 @@ export const SkeletonList = memo(function SkeletonList({ items = 5 }: { items?: 
   );
 });
 
-Skeleton.displayName = 'Skeleton';
-SkeletonCard.displayName = 'SkeletonCard';
-SkeletonTable.displayName = 'SkeletonTable';
-SkeletonDashboard.displayName = 'SkeletonDashboard';
-SkeletonList.displayName = 'SkeletonList';
+Skeleton.displayName = "Skeleton";
+SkeletonCard.displayName = "SkeletonCard";
+SkeletonTable.displayName = "SkeletonTable";
+SkeletonDashboard.displayName = "SkeletonDashboard";
+SkeletonList.displayName = "SkeletonList";

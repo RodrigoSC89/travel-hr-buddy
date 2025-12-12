@@ -3,11 +3,11 @@
  * Banner de dias sem LTI
  */
 
-import React from 'react';
-import { Card, CardContent } from '@/components/ui/card';
-import { Badge } from '@/components/ui/badge';
-import { Progress } from '@/components/ui/progress';
-import { Shield, Trophy, Target } from 'lucide-react';
+import React from "react";
+import { Card, CardContent } from "@/components/ui/card";
+import { Badge } from "@/components/ui/badge";
+import { Progress } from "@/components/ui/progress";
+import { Shield, Trophy, Target } from "lucide-react";
 
 interface LTICounterBannerProps {
   daysWithoutLTI: number;

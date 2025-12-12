@@ -3,10 +3,10 @@
  * Intelligent image preloading based on connection and viewport
  */
 
-import { getConnectionInfo, isSlowConnection } from './connection-aware';
+import { getConnectionInfo, isSlowConnection } from "./connection-aware";
 
 interface PreloadOptions {
-  priority?: 'high' | 'low' | 'auto';
+  priority?: "high" | "low" | "auto";
   timeout?: number;
 }
 
@@ -27,7 +27,7 @@ class ImagePreloader {
     if (existing) return existing;
 
     // Skip preloading on slow connections unless high priority
-    if (isSlowConnection() && options.priority !== 'high') {
+    if (isSlowConnection() && options.priority !== "high") {
       return;
     }
 
@@ -77,7 +77,7 @@ class ImagePreloader {
       const img = new Image();
       const timeoutId = setTimeout(() => {
         this.activeLoads--;
-        reject(new Error('Image load timeout'));
+        reject(new Error("Image load timeout"));
       }, timeout);
 
       img.onload = () => {
@@ -129,12 +129,12 @@ export const imagePreloader = new ImagePreloader();
  */
 export function preloadVisibleImages(container?: HTMLElement): void {
   const root = container || document;
-  const images = root.querySelectorAll<HTMLImageElement>('img[data-preload]');
+  const images = root.querySelectorAll<HTMLImageElement>("img[data-preload]");
   
   images.forEach(img => {
     const src = img.dataset.preload || img.src;
     if (src) {
-      imagePreloader.preload(src, { priority: 'low' });
+      imagePreloader.preload(src, { priority: "low" });
     }
   });
 }
@@ -145,12 +145,12 @@ export function preloadVisibleImages(container?: HTMLElement): void {
 export function preloadRouteImages(route: string): void {
   // This could be extended to have a mapping of routes to images
   const routeImages: Record<string, string[]> = {
-    '/dashboard': ['/images/dashboard-bg.jpg'],
-    '/profile': ['/images/profile-default.png'],
+    "/dashboard": ["/images/dashboard-bg.jpg"],
+    "/profile": ["/images/profile-default.png"],
   };
 
   const images = routeImages[route];
   if (images) {
-    imagePreloader.preloadBatch(images, { priority: 'low' });
+    imagePreloader.preloadBatch(images, { priority: "low" });
   }
 }

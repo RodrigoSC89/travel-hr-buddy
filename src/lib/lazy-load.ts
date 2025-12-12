@@ -3,7 +3,7 @@
  * Enhanced lazy loading with retry and fallback support
  */
 
-import React, { ComponentType, lazy, Suspense } from 'react';
+import React, { ComponentType, lazy, Suspense } from "react";
 import { ModulePageSkeleton } from "@/components/unified/Skeletons.unified";
 
 interface LazyLoadOptions {
@@ -61,7 +61,7 @@ export function createLazyModule<T extends ComponentType<any>>(
     );
   }
 
-  WrappedComponent.displayName = `Lazy(${options.chunkName || 'Module'})`;
+  WrappedComponent.displayName = `Lazy(${options.chunkName || "Module"})`;
 
   return WrappedComponent;
 }
@@ -82,16 +82,16 @@ export function preloadComponent(
  */
 export const LazyModules = {
   // Dashboard modules
-  Dashboard: lazyWithRetry(() => import('@/pages/Dashboard'), { chunkName: 'Dashboard' }),
-  Analytics: lazyWithRetry(() => import('@/pages/Analytics'), { chunkName: 'Analytics' }),
+  Dashboard: lazyWithRetry(() => import("@/pages/Dashboard"), { chunkName: "Dashboard" }),
+  Analytics: lazyWithRetry(() => import("@/pages/Analytics"), { chunkName: "Analytics" }),
   
   // Admin modules
-  Admin: lazyWithRetry(() => import('@/pages/Admin'), { chunkName: 'Admin' }),
-  Settings: lazyWithRetry(() => import('@/pages/Settings'), { chunkName: 'Settings' }),
+  Admin: lazyWithRetry(() => import("@/pages/Admin"), { chunkName: "Admin" }),
+  Settings: lazyWithRetry(() => import("@/pages/Settings"), { chunkName: "Settings" }),
   
   // Error pages
-  NotFound: lazyWithRetry(() => import('@/pages/NotFound'), { chunkName: 'NotFound' }),
-  Unauthorized: lazyWithRetry(() => import('@/pages/Unauthorized'), { chunkName: 'Unauthorized' }),
+  NotFound: lazyWithRetry(() => import("@/pages/NotFound"), { chunkName: "NotFound" }),
+  Unauthorized: lazyWithRetry(() => import("@/pages/Unauthorized"), { chunkName: "Unauthorized" }),
 };
 
 export default {

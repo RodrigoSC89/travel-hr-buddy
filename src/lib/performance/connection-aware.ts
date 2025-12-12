@@ -4,7 +4,7 @@
  */
 
 export interface ConnectionInfo {
-  type: 'slow-2g' | '2g' | '3g' | '4g' | 'unknown';
+  type: "slow-2g" | "2g" | "3g" | "4g" | "unknown";
   saveData: boolean;
   downlink: number; // Mbps
   rtt: number; // Round-trip time in ms
@@ -21,20 +21,20 @@ export function getConnectionInfo(): ConnectionInfo {
 
   if (!conn) {
     return {
-      type: 'unknown',
+      type: "unknown",
       saveData: false,
       downlink: 10,
       rtt: 100,
-      effectiveType: '4g'
+      effectiveType: "4g"
     };
   }
 
   return {
-    type: conn.effectiveType || 'unknown',
+    type: conn.effectiveType || "unknown",
     saveData: conn.saveData || false,
     downlink: conn.downlink || 10,
     rtt: conn.rtt || 100,
-    effectiveType: conn.effectiveType || '4g'
+    effectiveType: conn.effectiveType || "4g"
   };
 }
 
@@ -43,7 +43,7 @@ export function getConnectionInfo(): ConnectionInfo {
  */
 export function isSlowConnection(): boolean {
   const { type, saveData, downlink } = getConnectionInfo();
-  return saveData || type === 'slow-2g' || type === '2g' || downlink <= 2;
+  return saveData || type === "slow-2g" || type === "2g" || downlink <= 2;
 }
 
 /**
@@ -56,35 +56,35 @@ export function isOffline(): boolean {
 /**
  * Get optimized image quality based on connection
  */
-export function getOptimalImageQuality(): 'low' | 'medium' | 'high' {
+export function getOptimalImageQuality(): "low" | "medium" | "high" {
   const { type, saveData } = getConnectionInfo();
   
-  if (saveData || type === 'slow-2g' || type === '2g') {
-    return 'low';
+  if (saveData || type === "slow-2g" || type === "2g") {
+    return "low";
   }
-  if (type === '3g') {
-    return 'medium';
+  if (type === "3g") {
+    return "medium";
   }
-  return 'high';
+  return "high";
 }
 
 /**
  * Get optimal animation complexity
  */
-export function getOptimalAnimationLevel(): 'none' | 'reduced' | 'full' {
+export function getOptimalAnimationLevel(): "none" | "reduced" | "full" {
   const { type, saveData } = getConnectionInfo();
   
   // Check for reduced motion preference
-  const prefersReducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
-  if (prefersReducedMotion) return 'none';
+  const prefersReducedMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+  if (prefersReducedMotion) return "none";
   
-  if (saveData || type === 'slow-2g' || type === '2g') {
-    return 'none';
+  if (saveData || type === "slow-2g" || type === "2g") {
+    return "none";
   }
-  if (type === '3g') {
-    return 'reduced';
+  if (type === "3g") {
+    return "reduced";
   }
-  return 'full';
+  return "full";
 }
 
 /**
@@ -93,13 +93,13 @@ export function getOptimalAnimationLevel(): 'none' | 'reduced' | 'full' {
 export function getOptimalPollingInterval(baseInterval: number): number {
   const { type, saveData } = getConnectionInfo();
   
-  if (saveData || type === 'slow-2g') {
+  if (saveData || type === "slow-2g") {
     return baseInterval * 4; // 4x slower
   }
-  if (type === '2g') {
+  if (type === "2g") {
     return baseInterval * 3; // 3x slower
   }
-  if (type === '3g') {
+  if (type === "3g") {
     return baseInterval * 2; // 2x slower
   }
   return baseInterval;
@@ -111,13 +111,13 @@ export function getOptimalPollingInterval(baseInterval: number): number {
 export function getOptimalTimeout(): number {
   const { type, saveData, rtt } = getConnectionInfo();
   
-  if (saveData || type === 'slow-2g') {
+  if (saveData || type === "slow-2g") {
     return Math.max(30000, rtt * 10); // 30s minimum
   }
-  if (type === '2g') {
+  if (type === "2g") {
     return Math.max(20000, rtt * 8); // 20s minimum
   }
-  if (type === '3g') {
+  if (type === "3g") {
     return Math.max(15000, rtt * 5); // 15s minimum
   }
   return 10000; // 10s for good connections
@@ -134,9 +134,9 @@ export function onConnectionChange(callback: (info: ConnectionInfo) => void): ()
   }
 
   const handler = () => callback(getConnectionInfo());
-  conn.addEventListener('change', handler);
+  conn.addEventListener("change", handler);
   
-  return () => conn.removeEventListener('change', handler);
+  return () => conn.removeEventListener("change", handler);
 }
 
 /**

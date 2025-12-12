@@ -247,8 +247,8 @@ export default function DrillsCalendarSection() {
                                 </div>
                                 <Badge variant={drill.status === "completed" ? "default" : "secondary"}>
                                   {drill.status === "scheduled" ? "Agendado" : 
-                                   drill.status === "in_progress" ? "Em Andamento" :
-                                   drill.status === "completed" ? "Concluído" : "Cancelado"}
+                                    drill.status === "in_progress" ? "Em Andamento" :
+                                      drill.status === "completed" ? "Concluído" : "Cancelado"}
                                 </Badge>
                               </div>
                             </div>

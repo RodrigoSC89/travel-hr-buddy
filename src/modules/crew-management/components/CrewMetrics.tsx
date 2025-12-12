@@ -51,11 +51,11 @@ export function CrewMetrics({ totalCrew, activeCrew, onLeaveCrew, expiringCerts 
           animate={{ opacity: 1, y: 0 }}
           transition={{ delay: index * 0.1 }}
         >
-          <Card className={`p-4 ${metric.highlight ? 'border-rose-500/50 bg-rose-500/5' : ''}`}>
+          <Card className={`p-4 ${metric.highlight ? "border-rose-500/50 bg-rose-500/5" : ""}`}>
             <div className="flex items-center justify-between">
               <div>
                 <p className="text-sm text-muted-foreground">{metric.label}</p>
-                <p className={`text-3xl font-bold mt-1 ${metric.highlight ? 'text-rose-500' : ''}`}>
+                <p className={`text-3xl font-bold mt-1 ${metric.highlight ? "text-rose-500" : ""}`}>
                   {metric.value}
                 </p>
               </div>

@@ -148,26 +148,26 @@ export default function ConnectivityPanel() {
     if (result?.response) {
       toast({ 
         title: "Análise IA", 
-        description: typeof result.response === 'string' ? result.response : "Análise de conectividade concluída"
+        description: typeof result.response === "string" ? result.response : "Análise de conectividade concluída"
       });
     }
   };
 
   const getStatusColor = (status: string) => {
     switch (status) {
-      case "online": return "bg-green-500";
-      case "unstable": return "bg-amber-500";
-      case "offline": return "bg-red-500";
-      default: return "bg-muted";
+    case "online": return "bg-green-500";
+    case "unstable": return "bg-amber-500";
+    case "offline": return "bg-red-500";
+    default: return "bg-muted";
     }
   };
 
   const getStatusIcon = (status: string) => {
     switch (status) {
-      case "online": return <Wifi className="h-4 w-4 text-green-500" />;
-      case "unstable": return <SignalMedium className="h-4 w-4 text-amber-500" />;
-      case "offline": return <WifiOff className="h-4 w-4 text-red-500" />;
-      default: return <Signal className="h-4 w-4" />;
+    case "online": return <Wifi className="h-4 w-4 text-green-500" />;
+    case "unstable": return <SignalMedium className="h-4 w-4 text-amber-500" />;
+    case "offline": return <WifiOff className="h-4 w-4 text-red-500" />;
+    default: return <Signal className="h-4 w-4" />;
     }
   };
 
@@ -198,7 +198,7 @@ export default function ConnectivityPanel() {
           </div>
         </div>
         <Button onClick={handleRefreshAll} disabled={isRefreshing}>
-          <RefreshCw className={`h-4 w-4 mr-2 ${isRefreshing ? 'animate-spin' : ''}`} />
+          <RefreshCw className={`h-4 w-4 mr-2 ${isRefreshing ? "animate-spin" : ""}`} />
           Atualizar Tudo
         </Button>
       </div>
@@ -221,9 +221,9 @@ export default function ConnectivityPanel() {
             <div className="flex items-center justify-between">
               <div>
                 <p className="text-sm text-muted-foreground">Offline</p>
-                <p className={`text-2xl font-bold ${offlineCount > 0 ? 'text-red-600' : ''}`}>{offlineCount}</p>
+                <p className={`text-2xl font-bold ${offlineCount > 0 ? "text-red-600" : ""}`}>{offlineCount}</p>
               </div>
-              <CloudOff className={`h-8 w-8 ${offlineCount > 0 ? 'text-red-500' : 'text-muted-foreground'} opacity-80`} />
+              <CloudOff className={`h-8 w-8 ${offlineCount > 0 ? "text-red-500" : "text-muted-foreground"} opacity-80`} />
             </div>
           </CardContent>
         </Card>
@@ -232,7 +232,7 @@ export default function ConnectivityPanel() {
             <div className="flex items-center justify-between">
               <div>
                 <p className="text-sm text-muted-foreground">Pendentes</p>
-                <p className={`text-2xl font-bold ${totalPending > 10 ? 'text-amber-600' : ''}`}>{totalPending}</p>
+                <p className={`text-2xl font-bold ${totalPending > 10 ? "text-amber-600" : ""}`}>{totalPending}</p>
               </div>
               <Database className="h-8 w-8 text-amber-500 opacity-80" />
             </div>
@@ -265,9 +265,9 @@ export default function ConnectivityPanel() {
               <div 
                 key={vessel.id} 
                 className={`p-4 rounded-lg border ${
-                  vessel.status === "offline" ? 'border-red-500/50 bg-red-500/5' :
-                  vessel.status === "unstable" ? 'border-amber-500/50 bg-amber-500/5' :
-                  'border-border'
+                  vessel.status === "offline" ? "border-red-500/50 bg-red-500/5" :
+                    vessel.status === "unstable" ? "border-amber-500/50 bg-amber-500/5" :
+                      "border-border"
                 }`}
               >
                 <div className="flex items-start justify-between mb-3">
@@ -297,14 +297,14 @@ export default function ConnectivityPanel() {
                     <Clock className="h-3 w-3 mx-auto mb-1" />
                     <span>{vessel.latency}ms</span>
                   </div>
-                  <div className={`p-2 rounded ${vessel.pendingSync > 0 ? 'bg-amber-500/20' : 'bg-muted/30'}`}>
+                  <div className={`p-2 rounded ${vessel.pendingSync > 0 ? "bg-amber-500/20" : "bg-muted/30"}`}>
                     <Database className="h-3 w-3 mx-auto mb-1" />
                     <span>{vessel.pendingSync} pend.</span>
                   </div>
                 </div>
 
                 <div className="flex items-center justify-between text-xs text-muted-foreground">
-                  <span>Última sync: {vessel.lastSync.toLocaleTimeString('pt-BR')}</span>
+                  <span>Última sync: {vessel.lastSync.toLocaleTimeString("pt-BR")}</span>
                   <div className="flex gap-2">
                     <Button 
                       variant="ghost" 
@@ -345,27 +345,27 @@ export default function ConnectivityPanel() {
                   <div key={event.id} className="flex items-center gap-3 p-3 bg-muted/30 rounded-lg">
                     <div className={`p-2 rounded-lg ${
                       event.status === "success" ? "bg-green-500/10" :
-                      event.status === "pending" ? "bg-amber-500/10" : "bg-red-500/10"
+                        event.status === "pending" ? "bg-amber-500/10" : "bg-red-500/10"
                     }`}>
                       {event.type === "upload" ? <Upload className="h-4 w-4" /> :
-                       event.type === "download" ? <Download className="h-4 w-4" /> :
-                       <RefreshCw className="h-4 w-4" />}
+                        event.type === "download" ? <Download className="h-4 w-4" /> :
+                          <RefreshCw className="h-4 w-4" />}
                     </div>
                     <div className="flex-1">
                       <div className="flex items-center gap-2">
                         <span className="font-medium text-sm">{event.module}</span>
                         <Badge variant="outline" className={`text-xs ${
                           event.status === "success" ? "text-green-600" :
-                          event.status === "pending" ? "text-amber-600" : "text-red-600"
+                            event.status === "pending" ? "text-amber-600" : "text-red-600"
                         }`}>
                           {event.status === "success" ? <CheckCircle className="h-3 w-3 mr-1" /> :
-                           event.status === "pending" ? <Clock className="h-3 w-3 mr-1" /> :
-                           <XCircle className="h-3 w-3 mr-1" />}
+                            event.status === "pending" ? <Clock className="h-3 w-3 mr-1" /> :
+                              <XCircle className="h-3 w-3 mr-1" />}
                           {event.status}
                         </Badge>
                       </div>
                       <p className="text-xs text-muted-foreground">
-                        {event.timestamp.toLocaleTimeString('pt-BR')} • {event.size.toFixed(1)} MB
+                        {event.timestamp.toLocaleTimeString("pt-BR")} • {event.size.toFixed(1)} MB
                       </p>
                     </div>
                   </div>

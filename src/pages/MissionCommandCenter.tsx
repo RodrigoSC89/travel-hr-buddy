@@ -237,52 +237,52 @@ const MissionCommandCenter: React.FC = () => {
 
   const getStatusColor = (status: ModuleStatus["status"]) => {
     switch (status) {
-      case "operational": return "text-green-500 bg-green-500/10";
-      case "warning": return "text-yellow-500 bg-yellow-500/10";
-      case "critical": return "text-red-500 bg-red-500/10";
-      case "offline": return "text-gray-500 bg-gray-500/10";
-      default: return "text-gray-500 bg-gray-500/10";
+    case "operational": return "text-green-500 bg-green-500/10";
+    case "warning": return "text-yellow-500 bg-yellow-500/10";
+    case "critical": return "text-red-500 bg-red-500/10";
+    case "offline": return "text-gray-500 bg-gray-500/10";
+    default: return "text-gray-500 bg-gray-500/10";
     }
   };
 
   const getStatusIcon = (moduleId: string) => {
     switch (moduleId) {
-      case "fleet": return <Ship className="w-5 h-5" />;
-      case "emergency": return <AlertTriangle className="w-5 h-5" />;
-      case "satellite": return <Satellite className="w-5 h-5" />;
-      case "weather": return <Cloud className="w-5 h-5" />;
-      default: return <Activity className="w-5 h-5" />;
+    case "fleet": return <Ship className="w-5 h-5" />;
+    case "emergency": return <AlertTriangle className="w-5 h-5" />;
+    case "satellite": return <Satellite className="w-5 h-5" />;
+    case "weather": return <Cloud className="w-5 h-5" />;
+    default: return <Activity className="w-5 h-5" />;
     }
   };
 
   const getMissionStatusIcon = (status: Mission["status"]) => {
     switch (status) {
-      case "in_progress": return <Activity className="w-4 h-4 text-blue-400 animate-pulse" />;
-      case "completed": return <CheckCircle2 className="w-4 h-4 text-green-400" />;
-      case "error": return <AlertCircle className="w-4 h-4 text-red-400" />;
-      case "paused": return <Pause className="w-4 h-4 text-yellow-400" />;
-      case "planning": return <Clock className="w-4 h-4 text-gray-400" />;
-      case "cancelled": return <XCircle className="w-4 h-4 text-gray-400" />;
-      default: return <Activity className="w-4 h-4" />;
+    case "in_progress": return <Activity className="w-4 h-4 text-blue-400 animate-pulse" />;
+    case "completed": return <CheckCircle2 className="w-4 h-4 text-green-400" />;
+    case "error": return <AlertCircle className="w-4 h-4 text-red-400" />;
+    case "paused": return <Pause className="w-4 h-4 text-yellow-400" />;
+    case "planning": return <Clock className="w-4 h-4 text-gray-400" />;
+    case "cancelled": return <XCircle className="w-4 h-4 text-gray-400" />;
+    default: return <Activity className="w-4 h-4" />;
     }
   };
 
   const getMissionStatusColor = (status: Mission["status"]) => {
     switch (status) {
-      case "in_progress": return "bg-blue-500/20 text-blue-400 border-blue-500/30";
-      case "completed": return "bg-green-500/20 text-green-400 border-green-500/30";
-      case "error": return "bg-red-500/20 text-red-400 border-red-500/30";
-      case "paused": return "bg-yellow-500/20 text-yellow-400 border-yellow-500/30";
-      default: return "bg-gray-500/20 text-gray-400 border-gray-500/30";
+    case "in_progress": return "bg-blue-500/20 text-blue-400 border-blue-500/30";
+    case "completed": return "bg-green-500/20 text-green-400 border-green-500/30";
+    case "error": return "bg-red-500/20 text-red-400 border-red-500/30";
+    case "paused": return "bg-yellow-500/20 text-yellow-400 border-yellow-500/30";
+    default: return "bg-gray-500/20 text-gray-400 border-gray-500/30";
     }
   };
 
   const getPriorityColor = (priority: Mission["priority"]) => {
     switch (priority) {
-      case "critical": return "bg-red-500/20 text-red-400 border-red-500/30";
-      case "high": return "bg-orange-500/20 text-orange-400 border-orange-500/30";
-      case "normal": return "bg-blue-500/20 text-blue-400 border-blue-500/30";
-      default: return "bg-gray-500/20 text-gray-400 border-gray-500/30";
+    case "critical": return "bg-red-500/20 text-red-400 border-red-500/30";
+    case "high": return "bg-orange-500/20 text-orange-400 border-orange-500/30";
+    case "normal": return "bg-blue-500/20 text-blue-400 border-blue-500/30";
+    default: return "bg-gray-500/20 text-gray-400 border-gray-500/30";
     }
   };
 

@@ -3,12 +3,12 @@
  * Comprehensive caching and offline strategy
  */
 
-import { logger } from '@/lib/logger';
+import { logger } from "@/lib/logger";
 
 interface CacheStrategy {
   name: string;
   match: (url: URL) => boolean;
-  strategy: 'cache-first' | 'network-first' | 'stale-while-revalidate' | 'cache-only' | 'network-only';
+  strategy: "cache-first" | "network-first" | "stale-while-revalidate" | "cache-only" | "network-only";
   maxAge?: number;
   maxEntries?: number;
 }
@@ -16,64 +16,64 @@ interface CacheStrategy {
 const CACHE_STRATEGIES: CacheStrategy[] = [
   // Static assets - cache first
   {
-    name: 'static-assets',
+    name: "static-assets",
     match: (url) => /\.(js|css|woff2?|ttf|eot|svg|png|jpg|jpeg|webp|ico)$/i.test(url.pathname),
-    strategy: 'cache-first',
+    strategy: "cache-first",
     maxAge: 30 * 24 * 60 * 60 * 1000, // 30 days
     maxEntries: 100,
   },
   // API requests - network first with fallback
   {
-    name: 'api-requests',
-    match: (url) => url.pathname.includes('/rest/v1/') || url.pathname.includes('/functions/v1/'),
-    strategy: 'network-first',
+    name: "api-requests",
+    match: (url) => url.pathname.includes("/rest/v1/") || url.pathname.includes("/functions/v1/"),
+    strategy: "network-first",
     maxAge: 5 * 60 * 1000, // 5 minutes
     maxEntries: 50,
   },
   // HTML pages - stale while revalidate
   {
-    name: 'html-pages',
-    match: (url) => url.pathname.endsWith('/') || url.pathname.endsWith('.html'),
-    strategy: 'stale-while-revalidate',
+    name: "html-pages",
+    match: (url) => url.pathname.endsWith("/") || url.pathname.endsWith(".html"),
+    strategy: "stale-while-revalidate",
     maxAge: 24 * 60 * 60 * 1000, // 24 hours
     maxEntries: 20,
   },
   // Supabase Auth - network only
   {
-    name: 'auth-requests',
-    match: (url) => url.pathname.includes('/auth/'),
-    strategy: 'network-only',
+    name: "auth-requests",
+    match: (url) => url.pathname.includes("/auth/"),
+    strategy: "network-only",
   },
 ];
 
 class ServiceWorkerManager {
   private registration: ServiceWorkerRegistration | null = null;
-  private isSupported = 'serviceWorker' in navigator;
+  private isSupported = "serviceWorker" in navigator;
 
   async register(): Promise<boolean> {
     if (!this.isSupported) {
-      logger.warn('[SW] Service Workers not supported');
+      logger.warn("[SW] Service Workers not supported");
       return false;
     }
 
     try {
       // Register the service worker
-      this.registration = await navigator.serviceWorker.register('/sw.js', {
-        scope: '/',
-        updateViaCache: 'none',
+      this.registration = await navigator.serviceWorker.register("/sw.js", {
+        scope: "/",
+        updateViaCache: "none",
       });
 
-      logger.info('[SW] Service Worker registered', {
+      logger.info("[SW] Service Worker registered", {
         scope: this.registration.scope,
       });
 
       // Listen for updates
-      this.registration.addEventListener('updatefound', () => {
+      this.registration.addEventListener("updatefound", () => {
         const newWorker = this.registration?.installing;
         
         if (newWorker) {
-          newWorker.addEventListener('statechange', () => {
-            if (newWorker.state === 'installed' && navigator.serviceWorker.controller) {
+          newWorker.addEventListener("statechange", () => {
+            if (newWorker.state === "installed" && navigator.serviceWorker.controller) {
               // New version available
               this.notifyUpdateAvailable();
             }
@@ -82,11 +82,11 @@ class ServiceWorkerManager {
       });
 
       // Handle messages from SW
-      navigator.serviceWorker.addEventListener('message', this.handleMessage.bind(this));
+      navigator.serviceWorker.addEventListener("message", this.handleMessage.bind(this));
 
       return true;
     } catch (error) {
-      logger.error('[SW] Registration failed', { error });
+      logger.error("[SW] Registration failed", { error });
       return false;
     }
   }
@@ -96,10 +96,10 @@ class ServiceWorkerManager {
 
     try {
       const success = await this.registration.unregister();
-      logger.info('[SW] Service Worker unregistered', { success });
+      logger.info("[SW] Service Worker unregistered", { success });
       return success;
     } catch (error) {
-      logger.error('[SW] Unregistration failed', { error });
+      logger.error("[SW] Unregistration failed", { error });
       return false;
     }
   }
@@ -109,16 +109,16 @@ class ServiceWorkerManager {
 
     try {
       await this.registration.update();
-      logger.info('[SW] Checked for updates');
+      logger.info("[SW] Checked for updates");
     } catch (error) {
-      logger.error('[SW] Update check failed', { error });
+      logger.error("[SW] Update check failed", { error });
     }
   }
 
   async skipWaiting(): Promise<void> {
     if (!this.registration?.waiting) return;
 
-    this.registration.waiting.postMessage({ type: 'SKIP_WAITING' });
+    this.registration.waiting.postMessage({ type: "SKIP_WAITING" });
   }
 
   async clearCaches(): Promise<void> {
@@ -128,7 +128,7 @@ class ServiceWorkerManager {
       cacheNames.map(name => caches.delete(name))
     );
 
-    logger.info('[SW] All caches cleared');
+    logger.info("[SW] All caches cleared");
   }
 
   async getCacheStats(): Promise<{
@@ -169,7 +169,7 @@ class ServiceWorkerManager {
     if (!this.registration?.active) return;
 
     this.registration.active.postMessage({
-      type: 'PRECACHE_URLS',
+      type: "PRECACHE_URLS",
       urls,
     });
   }
@@ -178,23 +178,23 @@ class ServiceWorkerManager {
     const { type, payload } = event.data;
 
     switch (type) {
-      case 'CACHE_UPDATED':
-        logger.debug('[SW] Cache updated', payload);
-        break;
-      case 'OFFLINE_READY':
-        logger.info('[SW] App ready for offline use');
-        this.dispatchEvent('offline-ready');
-        break;
-      case 'SYNC_COMPLETE':
-        logger.info('[SW] Background sync complete', payload);
-        this.dispatchEvent('sync-complete', payload);
-        break;
+    case "CACHE_UPDATED":
+      logger.debug("[SW] Cache updated", payload);
+      break;
+    case "OFFLINE_READY":
+      logger.info("[SW] App ready for offline use");
+      this.dispatchEvent("offline-ready");
+      break;
+    case "SYNC_COMPLETE":
+      logger.info("[SW] Background sync complete", payload);
+      this.dispatchEvent("sync-complete", payload);
+      break;
     }
   }
 
   private notifyUpdateAvailable(): void {
-    logger.info('[SW] New version available');
-    this.dispatchEvent('update-available');
+    logger.info("[SW] New version available");
+    this.dispatchEvent("update-available");
   }
 
   private dispatchEvent(name: string, detail?: any): void {
@@ -361,7 +361,7 @@ async function syncData() {
 }
 
 // React hook for service worker
-import { useState, useEffect, useCallback } from 'react';
+import { useState, useEffect, useCallback } from "react";
 
 export function useServiceWorker() {
   const [isRegistered, setIsRegistered] = useState(false);
@@ -372,15 +372,15 @@ export function useServiceWorker() {
     const handleUpdateAvailable = () => setIsUpdateAvailable(true);
     const handleOfflineReady = () => setIsOfflineReady(true);
 
-    window.addEventListener('sw:update-available', handleUpdateAvailable);
-    window.addEventListener('sw:offline-ready', handleOfflineReady);
+    window.addEventListener("sw:update-available", handleUpdateAvailable);
+    window.addEventListener("sw:offline-ready", handleOfflineReady);
 
     // Register on mount
     serviceWorkerManager.register().then(setIsRegistered);
 
     return () => {
-      window.removeEventListener('sw:update-available', handleUpdateAvailable);
-      window.removeEventListener('sw:offline-ready', handleOfflineReady);
+      window.removeEventListener("sw:update-available", handleUpdateAvailable);
+      window.removeEventListener("sw:offline-ready", handleOfflineReady);
     };
   }, []);
 

@@ -3,7 +3,7 @@
  * Smart indexing and fast access for local data
  */
 
-import { openDB, IDBPDatabase, DBSchema } from 'idb';
+import { openDB, IDBPDatabase, DBSchema } from "idb";
 
 interface CacheEntry {
   key: string;
@@ -25,10 +25,10 @@ interface OptimizedDBSchema extends DBSchema {
     key: string;
     value: CacheEntry;
     indexes: {
-      'by-module': string;
-      'by-timestamp': number;
-      'by-expires': number;
-      'by-access': number;
+      "by-module": string;
+      "by-timestamp": number;
+      "by-expires": number;
+      "by-access": number;
     };
   };
   search_index: {
@@ -40,8 +40,8 @@ interface OptimizedDBSchema extends DBSchema {
       keys: string[];
     };
     indexes: {
-      'by-module-field': [string, string];
-      'by-value': string;
+      "by-module-field": [string, string];
+      "by-value": string;
     };
   };
   sync_queue: {
@@ -49,23 +49,23 @@ interface OptimizedDBSchema extends DBSchema {
     value: {
       id: string;
       module: string;
-      action: 'create' | 'update' | 'delete';
+      action: "create" | "update" | "delete";
       data: any;
       timestamp: number;
       retries: number;
       priority: number;
     };
     indexes: {
-      'by-module': string;
-      'by-priority': number;
-      'by-timestamp': number;
+      "by-module": string;
+      "by-priority": number;
+      "by-timestamp": number;
     };
   };
 }
 
 class IndexedDBOptimizer {
   private db: IDBPDatabase<OptimizedDBSchema> | null = null;
-  private readonly DB_NAME = 'app_optimized_cache';
+  private readonly DB_NAME = "app_optimized_cache";
   private readonly DB_VERSION = 3;
   private searchCache: Map<string, any[]> = new Map();
   
@@ -79,34 +79,34 @@ class IndexedDBOptimizer {
       this.db = await openDB<OptimizedDBSchema>(this.DB_NAME, this.DB_VERSION, {
         upgrade(db, oldVersion) {
           // Cache store
-          if (!db.objectStoreNames.contains('cache')) {
-            const cacheStore = db.createObjectStore('cache', { keyPath: 'key' });
-            cacheStore.createIndex('by-module', 'module');
-            cacheStore.createIndex('by-timestamp', 'timestamp');
-            cacheStore.createIndex('by-expires', 'expiresAt');
-            cacheStore.createIndex('by-access', 'accessCount');
+          if (!db.objectStoreNames.contains("cache")) {
+            const cacheStore = db.createObjectStore("cache", { keyPath: "key" });
+            cacheStore.createIndex("by-module", "module");
+            cacheStore.createIndex("by-timestamp", "timestamp");
+            cacheStore.createIndex("by-expires", "expiresAt");
+            cacheStore.createIndex("by-access", "accessCount");
           }
           
           // Search index store
-          if (!db.objectStoreNames.contains('search_index')) {
-            const searchStore = db.createObjectStore('search_index', { keyPath: 'id', autoIncrement: true } as any);
-            searchStore.createIndex('by-module-field', ['module', 'field']);
-            searchStore.createIndex('by-value', 'value');
+          if (!db.objectStoreNames.contains("search_index")) {
+            const searchStore = db.createObjectStore("search_index", { keyPath: "id", autoIncrement: true } as any);
+            searchStore.createIndex("by-module-field", ["module", "field"]);
+            searchStore.createIndex("by-value", "value");
           }
           
           // Sync queue store
-          if (!db.objectStoreNames.contains('sync_queue')) {
-            const syncStore = db.createObjectStore('sync_queue', { keyPath: 'id' });
-            syncStore.createIndex('by-module', 'module');
-            syncStore.createIndex('by-priority', 'priority');
-            syncStore.createIndex('by-timestamp', 'timestamp');
+          if (!db.objectStoreNames.contains("sync_queue")) {
+            const syncStore = db.createObjectStore("sync_queue", { keyPath: "id" });
+            syncStore.createIndex("by-module", "module");
+            syncStore.createIndex("by-priority", "priority");
+            syncStore.createIndex("by-timestamp", "timestamp");
           }
         }
       });
       
     } catch (e) {
-      console.error('[IndexedDBOptimizer] Failed to initialize:', e);
-      console.error('[IndexedDBOptimizer] Failed to initialize:', e);
+      console.error("[IndexedDBOptimizer] Failed to initialize:", e);
+      console.error("[IndexedDBOptimizer] Failed to initialize:", e);
     }
   }
   
@@ -125,7 +125,7 @@ class IndexedDBOptimizer {
     await this.init();
     if (!this.db) return;
     
-    const { module = 'default', ttlMs = 24 * 60 * 60 * 1000, indexFields = [] } = options;
+    const { module = "default", ttlMs = 24 * 60 * 60 * 1000, indexFields = [] } = options;
     
     const entry: CacheEntry = {
       key,
@@ -137,10 +137,10 @@ class IndexedDBOptimizer {
       expiresAt: Date.now() + ttlMs
     };
     
-    await this.db.put('cache', entry);
+    await this.db.put("cache", entry);
     
     // Build search indexes
-    if (indexFields.length > 0 && typeof value === 'object') {
+    if (indexFields.length > 0 && typeof value === "object") {
       await this.buildIndexes(key, value, module, indexFields);
     }
   }
@@ -152,18 +152,18 @@ class IndexedDBOptimizer {
     await this.init();
     if (!this.db) return null;
     
-    const entry = await this.db.get('cache', key);
+    const entry = await this.db.get("cache", key);
     if (!entry) return null;
     
     // Check expiration
     if (entry.expiresAt < Date.now()) {
-      await this.db.delete('cache', key);
+      await this.db.delete("cache", key);
       return null;
     }
     
     // Update access count
     entry.accessCount++;
-    await this.db.put('cache', entry);
+    await this.db.put("cache", entry);
     
     return entry.value as T;
   }
@@ -188,8 +188,8 @@ class IndexedDBOptimizer {
       return this.searchCache.get(cacheKey)!;
     }
     
-    const tx = this.db.transaction('search_index', 'readonly');
-    const index = tx.store.index('by-module-field');
+    const tx = this.db.transaction("search_index", "readonly");
+    const index = tx.store.index("by-module-field");
     
     const results: any[] = [];
     const seenKeys = new Set<string>();
@@ -229,17 +229,17 @@ class IndexedDBOptimizer {
    */
   async getByModule(
     module: string,
-    options: { offset?: number; limit?: number; sortBy?: 'timestamp' | 'access' } = {}
+    options: { offset?: number; limit?: number; sortBy?: "timestamp" | "access" } = {}
   ): Promise<any[]> {
     await this.init();
     if (!this.db) return [];
     
-    const { offset = 0, limit = 50, sortBy = 'timestamp' } = options;
+    const { offset = 0, limit = 50, sortBy = "timestamp" } = options;
     
-    const tx = this.db.transaction('cache', 'readonly');
-    const index = tx.store.index('by-module');
+    const tx = this.db.transaction("cache", "readonly");
+    const index = tx.store.index("by-module");
     
-    let cursor = await index.openCursor(module, sortBy === 'access' ? 'prev' : 'prev');
+    let cursor = await index.openCursor(module, sortBy === "access" ? "prev" : "prev");
     const results: any[] = [];
     let skipped = 0;
     
@@ -264,8 +264,8 @@ class IndexedDBOptimizer {
     await this.init();
     if (!this.db) return 0;
     
-    const tx = this.db.transaction('cache', 'readwrite');
-    const index = tx.store.index('by-expires');
+    const tx = this.db.transaction("cache", "readwrite");
+    const index = tx.store.index("by-expires");
     const now = Date.now();
     
     let cursor = await index.openCursor(IDBKeyRange.upperBound(now));
@@ -291,8 +291,8 @@ class IndexedDBOptimizer {
     if (stats.totalSizeMB < targetSizeMB) return 0;
     
     const toDelete = stats.totalSizeMB - targetSizeMB;
-    const tx = this.db.transaction('cache', 'readwrite');
-    const index = tx.store.index('by-access');
+    const tx = this.db.transaction("cache", "readwrite");
+    const index = tx.store.index("by-access");
     
     let cursor = await index.openCursor(); // Ascending order = least accessed first
     let deleted = 0;
@@ -320,7 +320,7 @@ class IndexedDBOptimizer {
     await this.init();
     if (!this.db) return { totalEntries: 0, totalSizeMB: 0, byModule: {}, expiredCount: 0 };
     
-    const tx = this.db.transaction('cache', 'readonly');
+    const tx = this.db.transaction("cache", "readonly");
     const all = await tx.store.getAll();
     
     const now = Date.now();
@@ -362,7 +362,7 @@ class IndexedDBOptimizer {
   ): Promise<void> {
     if (!this.db) return;
     
-    const tx = this.db.transaction('search_index', 'readwrite');
+    const tx = this.db.transaction("search_index", "readwrite");
     
     for (const field of fields) {
       const fieldValue = this.getNestedValue(value, field);
@@ -383,7 +383,7 @@ class IndexedDBOptimizer {
    * Get nested value from object
    */
   private getNestedValue(obj: any, path: string): any {
-    return path.split('.').reduce((o, k) => o?.[k], obj);
+    return path.split(".").reduce((o, k) => o?.[k], obj);
   }
   
   /**
@@ -404,8 +404,8 @@ class IndexedDBOptimizer {
     await this.init();
     if (!this.db) return;
     
-    await this.db.clear('cache');
-    await this.db.clear('search_index');
+    await this.db.clear("cache");
+    await this.db.clear("search_index");
     this.searchCache.clear();
   }
 }

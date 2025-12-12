@@ -3,11 +3,11 @@
  * Error recovery, retry logic, and graceful degradation
  */
 
-import React, { Component, ReactNode, ErrorInfo } from 'react';
-import { Button } from '@/components/ui/button';
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
-import { AlertTriangle, RefreshCw, Home, Bug, WifiOff } from 'lucide-react';
-import { logger } from '@/lib/monitoring/structured-logging';
+import React, { Component, ReactNode, ErrorInfo } from "react";
+import { Button } from "@/components/ui/button";
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
+import { AlertTriangle, RefreshCw, Home, Bug, WifiOff } from "lucide-react";
+import { logger } from "@/lib/monitoring/structured-logging";
 
 interface ErrorBoundaryProps {
   children: ReactNode;
@@ -15,7 +15,7 @@ interface ErrorBoundaryProps {
   onError?: (error: Error, errorInfo: ErrorInfo) => void;
   onReset?: () => void;
   resetKeys?: unknown[];
-  level?: 'page' | 'section' | 'component';
+  level?: "page" | "section" | "component";
   showDetails?: boolean;
 }
 
@@ -49,7 +49,7 @@ export class ErrorBoundaryAdvanced extends Component<ErrorBoundaryProps, ErrorBo
     this.setState({ errorInfo });
 
     // Log the error
-    logger.error('React Error Boundary caught error', error, {
+    logger.error("React Error Boundary caught error", error, {
       componentStack: errorInfo.componentStack,
     });
 
@@ -101,12 +101,12 @@ export class ErrorBoundaryAdvanced extends Component<ErrorBoundaryProps, ErrorBo
   };
 
   goHome = () => {
-    window.location.href = '/';
+    window.location.href = "/";
   };
 
   render() {
     const { hasError, error, errorInfo, retryCount, isRetrying } = this.state;
-    const { children, fallback, level = 'section', showDetails = false } = this.props;
+    const { children, fallback, level = "section", showDetails = false } = this.props;
 
     if (!hasError) {
       return children;
@@ -118,10 +118,10 @@ export class ErrorBoundaryAdvanced extends Component<ErrorBoundaryProps, ErrorBo
     }
 
     // Check if offline error
-    const isOfflineError = !navigator.onLine || error?.message?.includes('network');
+    const isOfflineError = !navigator.onLine || error?.message?.includes("network");
 
     // Compact error for component level
-    if (level === 'component') {
+    if (level === "component") {
       return (
         <div className="flex items-center gap-2 p-2 text-sm text-destructive bg-destructive/10 rounded">
           <AlertTriangle className="h-4 w-4" />
@@ -133,14 +133,14 @@ export class ErrorBoundaryAdvanced extends Component<ErrorBoundaryProps, ErrorBo
             onClick={this.retry}
             disabled={isRetrying || retryCount >= MAX_RETRIES}
           >
-            <RefreshCw className={`h-3 w-3 ${isRetrying ? 'animate-spin' : ''}`} />
+            <RefreshCw className={`h-3 w-3 ${isRetrying ? "animate-spin" : ""}`} />
           </Button>
         </div>
       );
     }
 
     // Section level error
-    if (level === 'section') {
+    if (level === "section") {
       return (
         <Card className="border-destructive/50">
           <CardContent className="flex flex-col items-center justify-center py-8 text-center">
@@ -150,12 +150,12 @@ export class ErrorBoundaryAdvanced extends Component<ErrorBoundaryProps, ErrorBo
               <AlertTriangle className="h-10 w-10 text-destructive mb-4" />
             )}
             <h3 className="font-semibold mb-2">
-              {isOfflineError ? 'Sem conexão' : 'Algo deu errado'}
+              {isOfflineError ? "Sem conexão" : "Algo deu errado"}
             </h3>
             <p className="text-sm text-muted-foreground mb-4">
               {isOfflineError
-                ? 'Verifique sua conexão e tente novamente.'
-                : 'Ocorreu um erro ao carregar esta seção.'}
+                ? "Verifique sua conexão e tente novamente."
+                : "Ocorreu um erro ao carregar esta seção."}
             </p>
             <div className="flex gap-2">
               <Button
@@ -164,7 +164,7 @@ export class ErrorBoundaryAdvanced extends Component<ErrorBoundaryProps, ErrorBo
                 onClick={this.retry}
                 disabled={isRetrying || retryCount >= MAX_RETRIES}
               >
-                <RefreshCw className={`h-4 w-4 mr-2 ${isRetrying ? 'animate-spin' : ''}`} />
+                <RefreshCw className={`h-4 w-4 mr-2 ${isRetrying ? "animate-spin" : ""}`} />
                 Tentar novamente
                 {retryCount > 0 && ` (${retryCount}/${MAX_RETRIES})`}
               </Button>
@@ -185,12 +185,12 @@ export class ErrorBoundaryAdvanced extends Component<ErrorBoundaryProps, ErrorBo
               <Bug className="h-16 w-16 text-destructive mx-auto mb-4" />
             )}
             <CardTitle>
-              {isOfflineError ? 'Você está offline' : 'Oops! Algo deu errado'}
+              {isOfflineError ? "Você está offline" : "Oops! Algo deu errado"}
             </CardTitle>
             <CardDescription>
               {isOfflineError
-                ? 'Não foi possível conectar ao servidor. Verifique sua conexão com a internet.'
-                : 'Encontramos um problema inesperado. Nossa equipe foi notificada.'}
+                ? "Não foi possível conectar ao servidor. Verifique sua conexão com a internet."
+                : "Encontramos um problema inesperado. Nossa equipe foi notificada."}
             </CardDescription>
           </CardHeader>
           <CardContent className="space-y-4">
@@ -211,8 +211,8 @@ export class ErrorBoundaryAdvanced extends Component<ErrorBoundaryProps, ErrorBo
                 disabled={isRetrying || retryCount >= MAX_RETRIES}
                 className="w-full"
               >
-                <RefreshCw className={`h-4 w-4 mr-2 ${isRetrying ? 'animate-spin' : ''}`} />
-                {isRetrying ? 'Tentando...' : 'Tentar novamente'}
+                <RefreshCw className={`h-4 w-4 mr-2 ${isRetrying ? "animate-spin" : ""}`} />
+                {isRetrying ? "Tentando..." : "Tentar novamente"}
                 {retryCount > 0 && !isRetrying && ` (${retryCount}/${MAX_RETRIES})`}
               </Button>
 
@@ -245,9 +245,9 @@ export class ErrorBoundaryAdvanced extends Component<ErrorBoundaryProps, ErrorBo
 // HOC for wrapping components with error boundary
 export function withErrorBoundary<P extends object>(
   Component: React.ComponentType<P>,
-  options?: Omit<ErrorBoundaryProps, 'children'>
+  options?: Omit<ErrorBoundaryProps, "children">
 ) {
-  const displayName = Component.displayName || Component.name || 'Component';
+  const displayName = Component.displayName || Component.name || "Component";
 
   const WrappedComponent = (props: P) => (
     <ErrorBoundaryAdvanced {...options}>

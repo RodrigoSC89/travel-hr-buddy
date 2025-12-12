@@ -6,7 +6,7 @@
 export interface CursorPaginationParams {
   cursor?: string;
   limit: number;
-  direction: 'forward' | 'backward';
+  direction: "forward" | "backward";
 }
 
 export interface CursorPaginationResult<T> {
@@ -51,22 +51,22 @@ export function buildCursorQuery<T extends { id: string; created_at?: string }>(
   if (params.cursor) {
     const decoded = decodeCursor(params.cursor);
     if (decoded) {
-      if (params.direction === 'forward') {
+      if (params.direction === "forward") {
         query = query
           .or(`created_at.lt.${decoded.ts},and(created_at.eq.${decoded.ts},id.lt.${decoded.id})`)
-          .order('created_at', { ascending: false })
-          .order('id', { ascending: false });
+          .order("created_at", { ascending: false })
+          .order("id", { ascending: false });
       } else {
         query = query
           .or(`created_at.gt.${decoded.ts},and(created_at.eq.${decoded.ts},id.gt.${decoded.id})`)
-          .order('created_at', { ascending: true })
-          .order('id', { ascending: true });
+          .order("created_at", { ascending: true })
+          .order("id", { ascending: true });
       }
     }
   } else {
     query = query
-      .order('created_at', { ascending: false })
-      .order('id', { ascending: false });
+      .order("created_at", { ascending: false })
+      .order("id", { ascending: false });
   }
 
   // Fetch one extra to check if there's more
@@ -84,7 +84,7 @@ export function processCursorResults<T extends { id: string; created_at?: string
   const items = hasMore ? data.slice(0, params.limit) : data;
 
   // Reverse if we fetched backward
-  if (params.direction === 'backward') {
+  if (params.direction === "backward") {
     items.reverse();
   }
 
@@ -102,7 +102,7 @@ export function processCursorResults<T extends { id: string; created_at?: string
 /**
  * Hook for cursor pagination state management
  */
-import { useState, useCallback } from 'react';
+import { useState, useCallback } from "react";
 
 export function useCursorPagination<T extends { id: string; created_at?: string }>(
   fetchFn: (params: CursorPaginationParams) => Promise<CursorPaginationResult<T>>,
@@ -116,12 +116,12 @@ export function useCursorPagination<T extends { id: string; created_at?: string 
   const [hasMore, setHasMore] = useState(true);
   const [isLoading, setIsLoading] = useState(false);
 
-  const fetchPage = useCallback(async (cursor?: string, direction: 'forward' | 'backward' = 'forward') => {
+  const fetchPage = useCallback(async (cursor?: string, direction: "forward" | "backward" = "forward") => {
     setIsLoading(true);
     try {
       const result = await fetchFn({ cursor, limit: initialLimit, direction });
       
-      if (direction === 'forward' && cursor) {
+      if (direction === "forward" && cursor) {
         // Append for infinite scroll
         setData(prev => [...prev, ...result.data]);
       } else {
@@ -137,7 +137,7 @@ export function useCursorPagination<T extends { id: string; created_at?: string 
 
   const loadMore = useCallback(() => {
     if (cursors.next && !isLoading) {
-      fetchPage(cursors.next, 'forward');
+      fetchPage(cursors.next, "forward");
     }
   }, [cursors.next, isLoading, fetchPage]);
 

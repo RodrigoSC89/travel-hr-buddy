@@ -3,7 +3,7 @@
  * Standardized actions for all modules
  */
 
-import { toast } from 'sonner';
+import { toast } from "sonner";
 
 type ActionResult = { success: boolean; message?: string; data?: unknown };
 
@@ -23,9 +23,9 @@ export const moduleActions = {
     } = {}
   ): Promise<ActionResult> {
     const {
-      loadingMessage = 'Salvando...',
-      successMessage = 'Salvo com sucesso!',
-      errorMessage = 'Erro ao salvar'
+      loadingMessage = "Salvando...",
+      successMessage = "Salvo com sucesso!",
+      errorMessage = "Erro ao salvar"
     } = options;
 
     const toastId = toast.loading(loadingMessage);
@@ -53,8 +53,8 @@ export const moduleActions = {
     } = {}
   ): Promise<ActionResult> {
     const {
-      successMessage = 'Removido com sucesso!',
-      errorMessage = 'Erro ao remover'
+      successMessage = "Removido com sucesso!",
+      errorMessage = "Erro ao remover"
     } = options;
 
     try {
@@ -75,23 +75,23 @@ export const moduleActions = {
     exportFn: () => Promise<Blob | string>,
     filename: string,
     options: {
-      type?: 'pdf' | 'excel' | 'csv' | 'json';
+      type?: "pdf" | "excel" | "csv" | "json";
       successMessage?: string;
     } = {}
   ): Promise<ActionResult> {
-    const { type = 'pdf', successMessage = 'Exportado com sucesso!' } = options;
-    const toastId = toast.loading('Gerando arquivo...');
+    const { type = "pdf", successMessage = "Exportado com sucesso!" } = options;
+    const toastId = toast.loading("Gerando arquivo...");
 
     try {
       const data = await exportFn();
       
       // Create download link
-      const blob = typeof data === 'string' 
+      const blob = typeof data === "string" 
         ? new Blob([data], { type: getMimeType(type) })
         : data;
       
       const url = URL.createObjectURL(blob);
-      const a = document.createElement('a');
+      const a = document.createElement("a");
       a.href = url;
       a.download = filename;
       document.body.appendChild(a);
@@ -102,7 +102,7 @@ export const moduleActions = {
       toast.success(successMessage, { id: toastId });
       return { success: true };
     } catch (error) {
-      toast.error('Erro ao exportar arquivo', { id: toastId });
+      toast.error("Erro ao exportar arquivo", { id: toastId });
       return { success: false };
     }
   },
@@ -119,12 +119,12 @@ export const moduleActions = {
     try {
       const data = await refreshFn();
       if (!silent) {
-        toast.success('Dados atualizados');
+        toast.success("Dados atualizados");
       }
       return { success: true, data };
     } catch (error) {
       if (!silent) {
-        toast.error('Erro ao atualizar dados');
+        toast.error("Erro ao atualizar dados");
       }
       return { success: false };
     }
@@ -143,9 +143,9 @@ export const moduleActions = {
     } = {}
   ): Promise<ActionResult> {
     const {
-      loadingMessage = 'Processando...',
-      successMessage = 'Operação concluída!',
-      errorMessage = 'Erro na operação',
+      loadingMessage = "Processando...",
+      successMessage = "Operação concluída!",
+      errorMessage = "Erro na operação",
       showLoading = true
     } = options;
 
@@ -173,13 +173,13 @@ export const moduleActions = {
   /**
    * Copy to clipboard
    */
-  async copy(text: string, message = 'Copiado!'): Promise<ActionResult> {
+  async copy(text: string, message = "Copiado!"): Promise<ActionResult> {
     try {
       await navigator.clipboard.writeText(text);
       toast.success(message);
       return { success: true };
     } catch {
-      toast.error('Erro ao copiar');
+      toast.error("Erro ao copiar");
       return { success: false };
     }
   },
@@ -193,15 +193,15 @@ export const moduleActions = {
         await navigator.share(data);
         return { success: true };
       } catch (error) {
-        if ((error as Error).name !== 'AbortError') {
-          toast.error('Erro ao compartilhar');
+        if ((error as Error).name !== "AbortError") {
+          toast.error("Erro ao compartilhar");
         }
         return { success: false };
       }
     } else {
       // Fallback: copy link
       if (data.url) {
-        return moduleActions.copy(data.url, 'Link copiado!');
+        return moduleActions.copy(data.url, "Link copiado!");
       }
       return { success: false };
     }
@@ -217,12 +217,12 @@ export const moduleActions = {
 
 function getMimeType(type: string): string {
   const types: Record<string, string> = {
-    pdf: 'application/pdf',
-    excel: 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet',
-    csv: 'text/csv',
-    json: 'application/json'
+    pdf: "application/pdf",
+    excel: "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet",
+    csv: "text/csv",
+    json: "application/json"
   };
-  return types[type] || 'application/octet-stream';
+  return types[type] || "application/octet-stream";
 }
 
 /**

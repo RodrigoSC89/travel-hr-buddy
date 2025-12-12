@@ -342,7 +342,7 @@ export default function PurchaseOrdersSection({ searchQuery }: PurchaseOrdersSec
                         value={order.totalItems ? (order.receivedItems! / order.totalItems) * 100 : 0}
                         className={`h-2 ${
                           order.status === "delivered" ? "[&>div]:bg-green-500" :
-                          order.status === "delayed" ? "[&>div]:bg-destructive" : "[&>div]:bg-primary"
+                            order.status === "delayed" ? "[&>div]:bg-destructive" : "[&>div]:bg-primary"
                         }`}
                       />
                       <p className="text-xs text-muted-foreground mt-1 text-center">
@@ -367,21 +367,21 @@ export default function PurchaseOrdersSection({ searchQuery }: PurchaseOrdersSec
                   <TableCell>
                     <Badge variant={
                       order.status === "delivered" ? "default" :
-                      order.status === "delayed" ? "destructive" :
-                      order.status === "shipped" || order.status === "confirmed" ? "secondary" :
-                      order.status === "partial" ? "outline" : "outline"
+                        order.status === "delayed" ? "destructive" :
+                          order.status === "shipped" || order.status === "confirmed" ? "secondary" :
+                            order.status === "partial" ? "outline" : "outline"
                     }>
                       {order.status === "shipped" && <Truck className="h-3 w-3 mr-1" />}
                       {order.status === "delivered" && <CheckCircle2 className="h-3 w-3 mr-1" />}
                       {order.status === "delayed" && <AlertTriangle className="h-3 w-3 mr-1" />}
                       {order.status === "confirmed" && <Clock className="h-3 w-3 mr-1" />}
                       {order.status === "draft" ? "Rascunho" :
-                       order.status === "sent" ? "Enviado" :
-                       order.status === "confirmed" ? "Confirmado" :
-                       order.status === "shipped" ? "Em Trânsito" :
-                       order.status === "partial" ? "Parcial" :
-                       order.status === "delivered" ? "Entregue" :
-                       order.status === "delayed" ? "Atrasado" : "Cancelado"}
+                        order.status === "sent" ? "Enviado" :
+                          order.status === "confirmed" ? "Confirmado" :
+                            order.status === "shipped" ? "Em Trânsito" :
+                              order.status === "partial" ? "Parcial" :
+                                order.status === "delivered" ? "Entregue" :
+                                  order.status === "delayed" ? "Atrasado" : "Cancelado"}
                     </Badge>
                   </TableCell>
                   <TableCell className="text-right">
@@ -440,13 +440,13 @@ export default function PurchaseOrdersSection({ searchQuery }: PurchaseOrdersSec
                 </div>
                 <Badge variant={
                   selectedOrder.status === "delivered" ? "default" :
-                  selectedOrder.status === "delayed" ? "destructive" : "secondary"
+                    selectedOrder.status === "delayed" ? "destructive" : "secondary"
                 } className="text-sm">
                   {selectedOrder.status === "delivered" ? "Entregue" :
-                   selectedOrder.status === "delayed" ? "Atrasado" :
-                   selectedOrder.status === "confirmed" ? "Confirmado" :
-                   selectedOrder.status === "shipped" ? "Em Trânsito" :
-                   selectedOrder.status === "partial" ? "Parcial" : selectedOrder.status}
+                    selectedOrder.status === "delayed" ? "Atrasado" :
+                      selectedOrder.status === "confirmed" ? "Confirmado" :
+                        selectedOrder.status === "shipped" ? "Em Trânsito" :
+                          selectedOrder.status === "partial" ? "Parcial" : selectedOrder.status}
                 </Badge>
               </div>
 

@@ -188,21 +188,21 @@ export default function WorkflowCommandCenter() {
 
   const getNodeStatusColor = (status: string) => {
     switch (status) {
-      case "completed": return "bg-green-500";
-      case "running": return "bg-blue-500 animate-pulse";
-      case "error": return "bg-red-500";
-      default: return "bg-muted";
+    case "completed": return "bg-green-500";
+    case "running": return "bg-blue-500 animate-pulse";
+    case "error": return "bg-red-500";
+    default: return "bg-muted";
     }
   };
 
   const getNodeIcon = (type: string) => {
     switch (type) {
-      case "trigger": return <Zap className="h-4 w-4" />;
-      case "action": return <Play className="h-4 w-4" />;
-      case "condition": return <GitBranch className="h-4 w-4" />;
-      case "delay": return <Clock className="h-4 w-4" />;
-      case "end": return <CheckCircle2 className="h-4 w-4" />;
-      default: return <Workflow className="h-4 w-4" />;
+    case "trigger": return <Zap className="h-4 w-4" />;
+    case "action": return <Play className="h-4 w-4" />;
+    case "condition": return <GitBranch className="h-4 w-4" />;
+    case "delay": return <Clock className="h-4 w-4" />;
+    case "end": return <CheckCircle2 className="h-4 w-4" />;
+    default: return <Workflow className="h-4 w-4" />;
     }
   };
 
@@ -857,7 +857,7 @@ export default function WorkflowCommandCenter() {
                           <span className="text-xs text-center max-w-[100px]">{node.label}</span>
                           <Badge variant="outline" className="text-xs">
                             {node.status === "completed" ? "Concluído" : 
-                             node.status === "running" ? "Executando" : "Pendente"}
+                              node.status === "running" ? "Executando" : "Pendente"}
                           </Badge>
                         </div>
                         {i < selectedVisualWorkflow.nodes.length - 1 && (

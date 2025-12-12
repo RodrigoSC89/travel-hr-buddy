@@ -161,7 +161,7 @@ export default function InventorySection({ searchQuery }: InventorySectionProps)
   const handleAddItem = () => {
     const status = newItem.quantity <= newItem.minStock * 0.5 ? "critical" :
       newItem.quantity <= newItem.minStock ? "low" :
-      newItem.quantity >= newItem.maxStock ? "excess" : "ok";
+        newItem.quantity >= newItem.maxStock ? "excess" : "ok";
 
     const item: InventoryItem = {
       id: Date.now().toString(),
@@ -203,7 +203,7 @@ export default function InventorySection({ searchQuery }: InventorySectionProps)
       if (item.id === selectedItem.id) {
         const status = newQuantity <= item.minStock * 0.5 ? "critical" :
           newQuantity <= item.minStock ? "low" :
-          newQuantity >= item.maxStock ? "excess" : "ok";
+            newQuantity >= item.maxStock ? "excess" : "ok";
         return { ...item, quantity: newQuantity, status, lastMovement: new Date().toISOString().split("T")[0] };
       }
       return item;
@@ -389,8 +389,8 @@ export default function InventorySection({ searchQuery }: InventorySectionProps)
                             value={(item.quantity / item.maxStock) * 100} 
                             className={`h-2 ${
                               item.status === "critical" ? "[&>div]:bg-destructive" : 
-                              item.status === "low" ? "[&>div]:bg-amber-500" :
-                              item.status === "excess" ? "[&>div]:bg-purple-500" : "[&>div]:bg-green-500"
+                                item.status === "low" ? "[&>div]:bg-amber-500" :
+                                  item.status === "excess" ? "[&>div]:bg-purple-500" : "[&>div]:bg-green-500"
                             }`}
                           />
                           <p className="text-xs text-muted-foreground mt-1">
@@ -408,12 +408,12 @@ export default function InventorySection({ searchQuery }: InventorySectionProps)
                       <TableCell>
                         <Badge variant={
                           item.status === "critical" ? "destructive" :
-                          item.status === "low" ? "default" :
-                          item.status === "excess" ? "secondary" : "outline"
+                            item.status === "low" ? "default" :
+                              item.status === "excess" ? "secondary" : "outline"
                         }>
                           {item.status === "critical" ? "Crítico" :
-                           item.status === "low" ? "Baixo" :
-                           item.status === "excess" ? "Excesso" : "OK"}
+                            item.status === "low" ? "Baixo" :
+                              item.status === "excess" ? "Excesso" : "OK"}
                         </Badge>
                       </TableCell>
                       <TableCell className="text-right">
@@ -475,14 +475,14 @@ export default function InventorySection({ searchQuery }: InventorySectionProps)
                       <TableCell>
                         <Badge variant={
                           mov.type === "in" ? "default" :
-                          mov.type === "out" ? "destructive" :
-                          mov.type === "transfer" ? "secondary" : "outline"
+                            mov.type === "out" ? "destructive" :
+                              mov.type === "transfer" ? "secondary" : "outline"
                         }>
                           {mov.type === "in" && <ArrowDown className="h-3 w-3 mr-1" />}
                           {mov.type === "out" && <ArrowUp className="h-3 w-3 mr-1" />}
                           {mov.type === "in" ? "Entrada" :
-                           mov.type === "out" ? "Saída" :
-                           mov.type === "transfer" ? "Transferência" : "Ajuste"}
+                            mov.type === "out" ? "Saída" :
+                              mov.type === "transfer" ? "Transferência" : "Ajuste"}
                         </Badge>
                       </TableCell>
                       <TableCell className="font-medium">{mov.itemName}</TableCell>
@@ -676,7 +676,7 @@ export default function InventorySection({ searchQuery }: InventorySectionProps)
           <DialogHeader>
             <DialogTitle>
               {movementType === "in" ? "Entrada de Estoque" :
-               movementType === "out" ? "Saída de Estoque" : "Ajuste de Estoque"}
+                movementType === "out" ? "Saída de Estoque" : "Ajuste de Estoque"}
             </DialogTitle>
           </DialogHeader>
           {selectedItem && (

@@ -8,7 +8,7 @@
 // ============================================
 export const SECURITY_HEADERS = {
   // Content Security Policy
-  'Content-Security-Policy': [
+  "Content-Security-Policy": [
     "default-src 'self'",
     "script-src 'self' 'unsafe-inline' 'unsafe-eval' https://cdn.jsdelivr.net https://unpkg.com",
     "style-src 'self' 'unsafe-inline' https://fonts.googleapis.com",
@@ -18,31 +18,31 @@ export const SECURITY_HEADERS = {
     "frame-ancestors 'none'",
     "base-uri 'self'",
     "form-action 'self'",
-  ].join('; '),
+  ].join("; "),
   
   // Prevent clickjacking
-  'X-Frame-Options': 'DENY',
+  "X-Frame-Options": "DENY",
   
   // Prevent MIME sniffing
-  'X-Content-Type-Options': 'nosniff',
+  "X-Content-Type-Options": "nosniff",
   
   // Enable XSS protection
-  'X-XSS-Protection': '1; mode=block',
+  "X-XSS-Protection": "1; mode=block",
   
   // Referrer policy
-  'Referrer-Policy': 'strict-origin-when-cross-origin',
+  "Referrer-Policy": "strict-origin-when-cross-origin",
   
   // Permissions policy
-  'Permissions-Policy': [
-    'geolocation=(self)',
-    'microphone=()',
-    'camera=()',
-    'payment=()',
-    'usb=()',
-  ].join(', '),
+  "Permissions-Policy": [
+    "geolocation=(self)",
+    "microphone=()",
+    "camera=()",
+    "payment=()",
+    "usb=()",
+  ].join(", "),
   
   // Strict Transport Security (HSTS)
-  'Strict-Transport-Security': 'max-age=31536000; includeSubDomains; preload',
+  "Strict-Transport-Security": "max-age=31536000; includeSubDomains; preload",
 };
 
 // ============================================
@@ -59,28 +59,28 @@ export const RATE_LIMITS: Record<string, RateLimitConfig> = {
   api: {
     windowMs: 15 * 60 * 1000, // 15 minutes
     maxRequests: 100,
-    message: 'Too many API requests. Please try again later.',
+    message: "Too many API requests. Please try again later.",
   },
   
   // Authentication endpoints
   auth: {
     windowMs: 15 * 60 * 1000, // 15 minutes
     maxRequests: 5,
-    message: 'Too many authentication attempts. Please try again later.',
+    message: "Too many authentication attempts. Please try again later.",
   },
   
   // AI/LLM endpoints (more expensive)
   ai: {
     windowMs: 60 * 1000, // 1 minute
     maxRequests: 10,
-    message: 'Too many AI requests. Please slow down.',
+    message: "Too many AI requests. Please slow down.",
   },
   
   // File upload endpoints
   upload: {
     windowMs: 60 * 1000, // 1 minute
     maxRequests: 5,
-    message: 'Too many file uploads. Please try again later.',
+    message: "Too many file uploads. Please try again later.",
   },
 };
 
@@ -97,13 +97,13 @@ export const VALIDATION_RULES = {
   // File upload
   maxFileSize: 10 * 1024 * 1024, // 10MB
   allowedFileTypes: [
-    'application/pdf',
-    'image/jpeg',
-    'image/png',
-    'image/gif',
-    'application/vnd.ms-excel',
-    'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet',
-    'text/csv',
+    "application/pdf",
+    "image/jpeg",
+    "image/png",
+    "image/gif",
+    "application/vnd.ms-excel",
+    "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet",
+    "text/csv",
   ],
   
   // Password requirements
@@ -122,12 +122,12 @@ export const VALIDATION_RULES = {
  * Sanitize string input to prevent XSS
  */
 export function sanitizeString(input: string): string {
-  if (!input) return '';
+  if (!input) return "";
   
   return input
-    .replace(/[<>]/g, '') // Remove < and >
-    .replace(/javascript:/gi, '') // Remove javascript: protocol
-    .replace(/on\w+\s*=/gi, '') // Remove event handlers
+    .replace(/[<>]/g, "") // Remove < and >
+    .replace(/javascript:/gi, "") // Remove javascript: protocol
+    .replace(/on\w+\s*=/gi, "") // Remove event handlers
     .trim();
 }
 
@@ -135,17 +135,17 @@ export function sanitizeString(input: string): string {
  * Sanitize HTML input
  */
 export function sanitizeHTML(input: string): string {
-  if (!input) return '';
+  if (!input) return "";
   
   // List of allowed tags
-  const allowedTags = ['p', 'br', 'strong', 'em', 'u', 'li', 'ul', 'ol'];
+  const allowedTags = ["p", "br", "strong", "em", "u", "li", "ul", "ol"];
   
   // Remove all tags except allowed ones
   let sanitized = input;
   const tagPattern = /<\/?([a-z][a-z0-9]*)\b[^>]*>/gi;
   
   sanitized = sanitized.replace(tagPattern, (match, tag) => {
-    return allowedTags.includes(tag.toLowerCase()) ? match : '';
+    return allowedTags.includes(tag.toLowerCase()) ? match : "";
   });
   
   return sanitized;
@@ -170,19 +170,19 @@ export function isValidPassword(password: string): { valid: boolean; errors: str
   }
   
   if (VALIDATION_RULES.requireUppercase && !/[A-Z]/.test(password)) {
-    errors.push('Password must contain at least one uppercase letter');
+    errors.push("Password must contain at least one uppercase letter");
   }
   
   if (VALIDATION_RULES.requireLowercase && !/[a-z]/.test(password)) {
-    errors.push('Password must contain at least one lowercase letter');
+    errors.push("Password must contain at least one lowercase letter");
   }
   
   if (VALIDATION_RULES.requireNumber && !/\d/.test(password)) {
-    errors.push('Password must contain at least one number');
+    errors.push("Password must contain at least one number");
   }
   
   if (VALIDATION_RULES.requireSpecialChar && !/[!@#$%^&*(),.?":{}|<>]/.test(password)) {
-    errors.push('Password must contain at least one special character');
+    errors.push("Password must contain at least one special character");
   }
   
   return {
@@ -203,13 +203,13 @@ export function isValidUUID(uuid: string): boolean {
  * Sanitize SQL input (basic protection, use parameterized queries!)
  */
 export function sanitizeSQL(input: string): string {
-  if (!input) return '';
+  if (!input) return "";
   
   return input
-    .replace(/['";\\]/g, '') // Remove quotes and backslashes
-    .replace(/--/g, '') // Remove SQL comments
-    .replace(/\/\*/g, '') // Remove multiline comment start
-    .replace(/\*\//g, '') // Remove multiline comment end
+    .replace(/['";\\]/g, "") // Remove quotes and backslashes
+    .replace(/--/g, "") // Remove SQL comments
+    .replace(/\/\*/g, "") // Remove multiline comment start
+    .replace(/\*\//g, "") // Remove multiline comment end
     .trim();
 }
 
@@ -231,7 +231,7 @@ export function validateFileUpload(
   if (!VALIDATION_RULES.allowedFileTypes.includes(file.type)) {
     return {
       valid: false,
-      error: 'File type not allowed',
+      error: "File type not allowed",
     };
   }
   
@@ -243,18 +243,18 @@ export function validateFileUpload(
 // ============================================
 export const CORS_CONFIG = {
   allowedOrigins: [
-    'http://localhost:3000',
-    'http://localhost:5173',
-    'https://nautilus-one.com',
-    'https://*.nautilus-one.com',
+    "http://localhost:3000",
+    "http://localhost:5173",
+    "https://nautilus-one.com",
+    "https://*.nautilus-one.com",
   ],
-  allowedMethods: ['GET', 'POST', 'PUT', 'PATCH', 'DELETE', 'OPTIONS'],
+  allowedMethods: ["GET", "POST", "PUT", "PATCH", "DELETE", "OPTIONS"],
   allowedHeaders: [
-    'Content-Type',
-    'Authorization',
-    'X-Client-Info',
-    'apikey',
-    'X-Request-ID',
+    "Content-Type",
+    "Authorization",
+    "X-Client-Info",
+    "apikey",
+    "X-Request-ID",
   ],
   credentials: true,
   maxAge: 86400, // 24 hours
@@ -267,8 +267,8 @@ export function isAllowedOrigin(origin: string): boolean {
   if (!origin) return false;
   
   return CORS_CONFIG.allowedOrigins.some(allowed => {
-    if (allowed.includes('*')) {
-      const regex = new RegExp(allowed.replace('*', '.*'));
+    if (allowed.includes("*")) {
+      const regex = new RegExp(allowed.replace("*", ".*"));
       return regex.test(origin);
     }
     return allowed === origin;
@@ -279,8 +279,8 @@ export function isAllowedOrigin(origin: string): boolean {
 // Security Audit Logging
 // ============================================
 export interface SecurityEvent {
-  type: 'AUTH_ATTEMPT' | 'AUTH_SUCCESS' | 'AUTH_FAILURE' | 'RATE_LIMIT' | 'VALIDATION_ERROR' | 'SQL_INJECTION_ATTEMPT' | 'XSS_ATTEMPT';
-  severity: 'low' | 'medium' | 'high' | 'critical';
+  type: "AUTH_ATTEMPT" | "AUTH_SUCCESS" | "AUTH_FAILURE" | "RATE_LIMIT" | "VALIDATION_ERROR" | "SQL_INJECTION_ATTEMPT" | "XSS_ATTEMPT";
+  severity: "low" | "medium" | "high" | "critical";
   user_id?: string;
   ip_address?: string;
   details: Record<string, any>;
@@ -297,8 +297,8 @@ export async function logSecurityEvent(event: SecurityEvent): Promise<void> {
     // Store in database for audit trail
     // await supabase.from('security_audit_logs').insert(event);
   } catch (error) {
-    console.error('Failed to log security event:', error);
-    console.error('Failed to log security event:', error);
+    console.error("Failed to log security event:", error);
+    console.error("Failed to log security event:", error);
   }
 }
 
@@ -311,7 +311,7 @@ export async function logSecurityEvent(event: SecurityEvent): Promise<void> {
  */
 export function isValidAPIKey(key: string): boolean {
   // API keys should be at least 32 characters
-  return typeof key === 'string' && key.length >= 32;
+  return typeof key === "string" && key.length >= 32;
 }
 
 /**
@@ -321,10 +321,10 @@ export async function hashAPIKey(key: string): Promise<string> {
   // In production, use bcrypt or similar
   const encoder = new TextEncoder();
   const data = encoder.encode(key);
-  const hash = await crypto.subtle.digest('SHA-256', data);
+  const hash = await crypto.subtle.digest("SHA-256", data);
   return Array.from(new Uint8Array(hash))
-    .map(b => b.toString(16).padStart(2, '0'))
-    .join('');
+    .map(b => b.toString(16).padStart(2, "0"))
+    .join("");
 }
 
 /**
@@ -333,7 +333,7 @@ export async function hashAPIKey(key: string): Promise<string> {
 export function generateAPIKey(): string {
   const array = new Uint8Array(32);
   crypto.getRandomValues(array);
-  return Array.from(array, byte => byte.toString(16).padStart(2, '0')).join('');
+  return Array.from(array, byte => byte.toString(16).padStart(2, "0")).join("");
 }
 
 // ============================================

@@ -170,20 +170,20 @@ export const AISSimopsIntegration: React.FC = () => {
 
   const getRiskBadge = (risk: string) => {
     switch (risk) {
-      case "critical": return <Badge variant="destructive">Crítico</Badge>;
-      case "high": return <Badge className="bg-orange-500">Alto</Badge>;
-      case "medium": return <Badge className="bg-yellow-500 text-black">Médio</Badge>;
-      case "low": return <Badge className="bg-green-500">Baixo</Badge>;
-      default: return <Badge variant="secondary">Nenhum</Badge>;
+    case "critical": return <Badge variant="destructive">Crítico</Badge>;
+    case "high": return <Badge className="bg-orange-500">Alto</Badge>;
+    case "medium": return <Badge className="bg-yellow-500 text-black">Médio</Badge>;
+    case "low": return <Badge className="bg-green-500">Baixo</Badge>;
+    default: return <Badge variant="secondary">Nenhum</Badge>;
     }
   };
 
   const getStatusIcon = (status: string) => {
     switch (status) {
-      case "underway": return <Navigation className="h-4 w-4 text-green-500" />;
-      case "anchored": return <Anchor className="h-4 w-4 text-yellow-500" />;
-      case "moored": return <CircleDot className="h-4 w-4 text-blue-500" />;
-      default: return <AlertTriangle className="h-4 w-4 text-red-500" />;
+    case "underway": return <Navigation className="h-4 w-4 text-green-500" />;
+    case "anchored": return <Anchor className="h-4 w-4 text-yellow-500" />;
+    case "moored": return <CircleDot className="h-4 w-4 text-blue-500" />;
+    default: return <AlertTriangle className="h-4 w-4 text-red-500" />;
     }
   };
 

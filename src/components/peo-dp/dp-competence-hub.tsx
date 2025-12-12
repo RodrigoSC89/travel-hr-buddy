@@ -179,20 +179,20 @@ export const DPCompetenceHub: React.FC = () => {
 
   const getCertStatusBadge = (status: string) => {
     switch (status) {
-      case "valid": return <Badge className="bg-green-500">Válido</Badge>;
-      case "expiring": return <Badge className="bg-yellow-500 text-black">Vencendo</Badge>;
-      case "expired": return <Badge variant="destructive">Expirado</Badge>;
-      default: return <Badge variant="secondary">{status}</Badge>;
+    case "valid": return <Badge className="bg-green-500">Válido</Badge>;
+    case "expiring": return <Badge className="bg-yellow-500 text-black">Vencendo</Badge>;
+    case "expired": return <Badge variant="destructive">Expirado</Badge>;
+    default: return <Badge variant="secondary">{status}</Badge>;
     }
   };
 
   const getTrainingStatusBadge = (status: string) => {
     switch (status) {
-      case "completed": return <Badge className="bg-green-500">Concluído</Badge>;
-      case "in_progress": return <Badge className="bg-blue-500">Em Progresso</Badge>;
-      case "pending": return <Badge className="bg-yellow-500 text-black">Pendente</Badge>;
-      case "overdue": return <Badge variant="destructive">Atrasado</Badge>;
-      default: return <Badge variant="secondary">{status}</Badge>;
+    case "completed": return <Badge className="bg-green-500">Concluído</Badge>;
+    case "in_progress": return <Badge className="bg-blue-500">Em Progresso</Badge>;
+    case "pending": return <Badge className="bg-yellow-500 text-black">Pendente</Badge>;
+    case "overdue": return <Badge variant="destructive">Atrasado</Badge>;
+    default: return <Badge variant="secondary">{status}</Badge>;
     }
   };
 

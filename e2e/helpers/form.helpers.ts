@@ -3,7 +3,7 @@
  * Funções auxiliares para interação com formulários
  */
 
-import { Page, expect } from '@playwright/test';
+import { Page, expect } from "@playwright/test";
 
 /**
  * Preenche um campo de texto
@@ -80,9 +80,9 @@ export async function submitForm(page: Page, formSelector?: string): Promise<voi
   if (formSelector) {
     await page.locator(`${formSelector} button[type="submit"]`).click();
   } else {
-    await page.locator('button[type="submit"]').first().click();
+    await page.locator("button[type=\"submit\"]").first().click();
   }
-  await page.waitForLoadState('networkidle', { timeout: 10000 });
+  await page.waitForLoadState("networkidle", { timeout: 10000 });
 }
 
 /**
@@ -90,11 +90,11 @@ export async function submitForm(page: Page, formSelector?: string): Promise<voi
  */
 export async function expectValidationError(page: Page, errorText: string | RegExp): Promise<void> {
   const errorSelectors = [
-    '.error',
-    '.error-message',
-    '[role="alert"]',
-    '.validation-error',
-    '[class*="error"]'
+    ".error",
+    ".error-message",
+    "[role=\"alert\"]",
+    ".validation-error",
+    "[class*=\"error\"]"
   ];
   
   for (const selector of errorSelectors) {
@@ -106,7 +106,7 @@ export async function expectValidationError(page: Page, errorText: string | RegE
   }
   
   // Fallback: procurar em todo o body
-  await expect(page.locator('body')).toContainText(errorText);
+  await expect(page.locator("body")).toContainText(errorText);
 }
 
 /**
@@ -114,12 +114,12 @@ export async function expectValidationError(page: Page, errorText: string | RegE
  */
 export async function expectSuccessMessage(page: Page, successText: string | RegExp): Promise<void> {
   const successSelectors = [
-    '.success',
-    '.success-message',
-    '[role="status"]',
-    '.toast',
-    '[class*="success"]',
-    '[class*="toast"]'
+    ".success",
+    ".success-message",
+    "[role=\"status\"]",
+    ".toast",
+    "[class*=\"success\"]",
+    "[class*=\"toast\"]"
   ];
   
   for (const selector of successSelectors) {
@@ -131,15 +131,15 @@ export async function expectSuccessMessage(page: Page, successText: string | Reg
   }
   
   // Fallback: procurar em todo o body
-  await expect(page.locator('body')).toContainText(successText, { timeout: 5000 });
+  await expect(page.locator("body")).toContainText(successText, { timeout: 5000 });
 }
 
 /**
  * Aguarda formulário estar pronto
  */
 export async function waitForForm(page: Page, formSelector?: string): Promise<void> {
-  const selector = formSelector || 'form';
-  await page.waitForSelector(selector, { state: 'visible', timeout: 10000 });
+  const selector = formSelector || "form";
+  await page.waitForSelector(selector, { state: "visible", timeout: 10000 });
 }
 
 /**
@@ -154,7 +154,7 @@ export async function uploadFile(page: Page, inputSelector: string, filePath: st
  * Limpa todos os campos de um formulário
  */
 export async function clearForm(page: Page, formSelector?: string): Promise<void> {
-  const selector = formSelector ? `${formSelector} input, ${formSelector} textarea` : 'input, textarea';
+  const selector = formSelector ? `${formSelector} input, ${formSelector} textarea` : "input, textarea";
   const fields = page.locator(selector);
   const count = await fields.count();
   

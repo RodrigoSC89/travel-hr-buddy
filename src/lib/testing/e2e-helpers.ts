@@ -11,9 +11,9 @@ export const networkSimulator = {
    * Go offline
    */
   goOffline() {
-    if ('serviceWorker' in navigator) {
+    if ("serviceWorker" in navigator) {
       // Dispatch offline event
-      window.dispatchEvent(new Event('offline'));
+      window.dispatchEvent(new Event("offline"));
     }
   },
 
@@ -21,8 +21,8 @@ export const networkSimulator = {
    * Go online
    */
   goOnline() {
-    if ('serviceWorker' in navigator) {
-      window.dispatchEvent(new Event('online'));
+    if ("serviceWorker" in navigator) {
+      window.dispatchEvent(new Event("online"));
     }
   },
 
@@ -50,7 +50,7 @@ export const networkSimulator = {
 
     window.fetch = async (...args) => {
       if (Math.random() < failureRate) {
-        throw new Error('Simulated network failure');
+        throw new Error("Simulated network failure");
       }
       return originalFetch(...args);
     };
@@ -66,14 +66,14 @@ export const networkSimulator = {
  */
 export const testIds = {
   // Add test IDs to elements for E2E testing
-  create: (id: string) => ({ 'data-testid': id }),
+  create: (id: string) => ({ "data-testid": id }),
   
   // Common test IDs
-  LOADING_SPINNER: 'loading-spinner',
-  ERROR_MESSAGE: 'error-message',
-  OFFLINE_BANNER: 'offline-banner',
-  SYNC_STATUS: 'sync-status',
-  RETRY_BUTTON: 'retry-button',
+  LOADING_SPINNER: "loading-spinner",
+  ERROR_MESSAGE: "error-message",
+  OFFLINE_BANNER: "offline-banner",
+  SYNC_STATUS: "sync-status",
+  RETRY_BUTTON: "retry-button",
 };
 
 /**
@@ -101,7 +101,7 @@ export const waitUtils = {
   async waitForNetworkIdle(timeout: number = 5000): Promise<void> {
     return new Promise((resolve) => {
       let timer: NodeJS.Timeout;
-      let pendingRequests = 0;
+      const pendingRequests = 0;
 
       const checkIdle = () => {
         if (pendingRequests === 0) {
@@ -147,7 +147,7 @@ export const storageUtils = {
     localStorage.clear();
     sessionStorage.clear();
     
-    if ('indexedDB' in window) {
+    if ("indexedDB" in window) {
       indexedDB.databases?.().then(databases => {
         databases.forEach(db => {
           if (db.name) indexedDB.deleteDatabase(db.name);
@@ -197,6 +197,6 @@ export const perfUtils = {
    * Log performance marks
    */
   logMarks() {
-    const marks = performance.getEntriesByType('mark');
+    const marks = performance.getEntriesByType("mark");
   },
 };

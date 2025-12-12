@@ -2,16 +2,16 @@
  * IoT Dashboard - Real-time sensor monitoring
  */
 
-import React from 'react';
-import { Card, CardContent, CardHeader, CardTitle, CardDescription } from '@/components/ui/card';
-import { Badge } from '@/components/ui/badge';
-import { Progress } from '@/components/ui/progress';
-import { useIoT } from '@/hooks/useIoT';
-import { motion } from 'framer-motion';
+import React from "react";
+import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "@/components/ui/card";
+import { Badge } from "@/components/ui/badge";
+import { Progress } from "@/components/ui/progress";
+import { useIoT } from "@/hooks/useIoT";
+import { motion } from "framer-motion";
 import {
   Fuel, Thermometer, Gauge, Navigation, Anchor, Radio,
   Activity, Waves, AlertTriangle, CheckCircle
-} from 'lucide-react';
+} from "lucide-react";
 
 interface IoTDashboardProps {
   vesselId: string;
@@ -21,7 +21,7 @@ interface IoTDashboardProps {
 
 export const IoTDashboard: React.FC<IoTDashboardProps> = ({ 
   vesselId, 
-  vesselName = 'Vessel',
+  vesselName = "Vessel",
   compact = false 
 }) => {
   const { isConnected, telemetry, latestReadings, error } = useIoT({ vesselId });
@@ -54,53 +54,53 @@ export const IoTDashboard: React.FC<IoTDashboardProps> = ({
 
   const sensors = [
     {
-      id: 'fuel',
-      label: 'Combustível',
+      id: "fuel",
+      label: "Combustível",
       value: telemetry.fuelLevel,
-      unit: '%',
+      unit: "%",
       icon: Fuel,
-      color: telemetry.fuelLevel > 30 ? 'text-green-500' : telemetry.fuelLevel > 15 ? 'text-yellow-500' : 'text-red-500',
+      color: telemetry.fuelLevel > 30 ? "text-green-500" : telemetry.fuelLevel > 15 ? "text-yellow-500" : "text-red-500",
       showProgress: true
     },
     {
-      id: 'speed',
-      label: 'Velocidade',
+      id: "speed",
+      label: "Velocidade",
       value: telemetry.speed.toFixed(1),
-      unit: 'nós',
+      unit: "nós",
       icon: Navigation,
-      color: 'text-blue-500'
+      color: "text-blue-500"
     },
     {
-      id: 'heading',
-      label: 'Rumo',
+      id: "heading",
+      label: "Rumo",
       value: telemetry.heading,
-      unit: '°',
+      unit: "°",
       icon: Waves,
-      color: 'text-cyan-500'
+      color: "text-cyan-500"
     },
     {
-      id: 'engine',
-      label: 'Motor RPM',
+      id: "engine",
+      label: "Motor RPM",
       value: telemetry.engineRPM,
-      unit: 'RPM',
+      unit: "RPM",
       icon: Gauge,
-      color: 'text-orange-500'
+      color: "text-orange-500"
     },
     {
-      id: 'temperature',
-      label: 'Temperatura',
+      id: "temperature",
+      label: "Temperatura",
       value: telemetry.temperature.toFixed(1),
-      unit: '°C',
+      unit: "°C",
       icon: Thermometer,
-      color: telemetry.temperature < 90 ? 'text-green-500' : 'text-red-500'
+      color: telemetry.temperature < 90 ? "text-green-500" : "text-red-500"
     },
     {
-      id: 'hours',
-      label: 'Horas Motor',
+      id: "hours",
+      label: "Horas Motor",
       value: telemetry.engineHours.toLocaleString(),
-      unit: 'h',
+      unit: "h",
       icon: Activity,
-      color: 'text-purple-500'
+      color: "text-purple-500"
     }
   ];
 
@@ -114,8 +114,8 @@ export const IoTDashboard: React.FC<IoTDashboardProps> = ({
               <span className="font-medium text-sm">{vesselName}</span>
             </div>
             <Badge variant="outline" className="gap-1">
-              <Radio className={`h-2 w-2 ${isConnected ? 'text-green-500 animate-pulse' : 'text-red-500'}`} />
-              {isConnected ? 'Live' : 'Offline'}
+              <Radio className={`h-2 w-2 ${isConnected ? "text-green-500 animate-pulse" : "text-red-500"}`} />
+              {isConnected ? "Live" : "Offline"}
             </Badge>
           </div>
           <div className="grid grid-cols-3 gap-2">
@@ -145,9 +145,9 @@ export const IoTDashboard: React.FC<IoTDashboardProps> = ({
               Dados em tempo real dos sensores IoT
             </CardDescription>
           </div>
-          <Badge variant={isConnected ? 'default' : 'destructive'} className="gap-1">
-            <Radio className={`h-3 w-3 ${isConnected ? 'animate-pulse' : ''}`} />
-            {isConnected ? 'Conectado' : 'Desconectado'}
+          <Badge variant={isConnected ? "default" : "destructive"} className="gap-1">
+            <Radio className={`h-3 w-3 ${isConnected ? "animate-pulse" : ""}`} />
+            {isConnected ? "Conectado" : "Desconectado"}
           </Badge>
         </div>
       </CardHeader>

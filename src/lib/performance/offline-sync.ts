@@ -3,7 +3,7 @@
  * Handles data synchronization with offline support
  */
 
-import { openDB, DBSchema, IDBPDatabase } from 'idb';
+import { openDB, DBSchema, IDBPDatabase } from "idb";
 
 // Define IndexedDB schema
 interface OfflineSyncDB extends DBSchema {
@@ -11,17 +11,17 @@ interface OfflineSyncDB extends DBSchema {
     key: string;
     value: PendingOperation;
     indexes: {
-      'by-timestamp': number;
-      'by-table': string;
-      'by-status': OperationStatus;
+      "by-timestamp": number;
+      "by-table": string;
+      "by-status": OperationStatus;
     };
   };
   cachedData: {
     key: string;
     value: CachedItem;
     indexes: {
-      'by-table': string;
-      'by-expiry': number;
+      "by-table": string;
+      "by-expiry": number;
     };
   };
   syncMetadata: {
@@ -30,8 +30,8 @@ interface OfflineSyncDB extends DBSchema {
   };
 }
 
-type OperationStatus = 'pending' | 'syncing' | 'failed' | 'completed';
-type OperationType = 'create' | 'update' | 'delete';
+type OperationStatus = "pending" | "syncing" | "failed" | "completed";
+type OperationType = "create" | "update" | "delete";
 
 interface PendingOperation {
   id: string;
@@ -86,38 +86,38 @@ class OfflineSyncManager {
 
   private async init() {
     try {
-      this.db = await openDB<OfflineSyncDB>('offline-sync-db', 1, {
+      this.db = await openDB<OfflineSyncDB>("offline-sync-db", 1, {
         upgrade(db) {
           // Pending operations store
-          const pendingStore = db.createObjectStore('pendingOperations', { keyPath: 'id' });
-          pendingStore.createIndex('by-timestamp', 'timestamp');
-          pendingStore.createIndex('by-table', 'table');
-          pendingStore.createIndex('by-status', 'status');
+          const pendingStore = db.createObjectStore("pendingOperations", { keyPath: "id" });
+          pendingStore.createIndex("by-timestamp", "timestamp");
+          pendingStore.createIndex("by-table", "table");
+          pendingStore.createIndex("by-status", "status");
 
           // Cached data store
-          const cacheStore = db.createObjectStore('cachedData', { keyPath: 'key' });
-          cacheStore.createIndex('by-table', 'table');
-          cacheStore.createIndex('by-expiry', 'expiry');
+          const cacheStore = db.createObjectStore("cachedData", { keyPath: "key" });
+          cacheStore.createIndex("by-table", "table");
+          cacheStore.createIndex("by-expiry", "expiry");
 
           // Sync metadata store
-          db.createObjectStore('syncMetadata', { keyPath: 'table' });
+          db.createObjectStore("syncMetadata", { keyPath: "table" });
         },
       });
 
       // Start periodic sync when online
       this.setupNetworkListeners();
     } catch (error) {
-      console.error('Failed to initialize offline sync DB:', error);
+      console.error("Failed to initialize offline sync DB:", error);
     }
   }
 
   private setupNetworkListeners() {
-    window.addEventListener('online', () => {
+    window.addEventListener("online", () => {
       this.notifyListeners({ isOnline: true, pendingCount: 0, lastSync: null });
       this.processPendingOperations();
     });
 
-    window.addEventListener('offline', async () => {
+    window.addEventListener("offline", async () => {
       const pendingCount = await this.getPendingCount();
       this.notifyListeners({ isOnline: false, pendingCount, lastSync: null });
     });
@@ -129,7 +129,7 @@ class OfflineSyncManager {
     type: OperationType,
     data: Record<string, unknown>
   ): Promise<string> {
-    if (!this.db) throw new Error('DB not initialized');
+    if (!this.db) throw new Error("DB not initialized");
 
     const operation: PendingOperation = {
       id: `${table}-${Date.now()}-${Math.random().toString(36).substr(2, 9)}`,
@@ -137,11 +137,11 @@ class OfflineSyncManager {
       type,
       data,
       timestamp: Date.now(),
-      status: 'pending',
+      status: "pending",
       retryCount: 0,
     };
 
-    await this.db.put('pendingOperations', operation);
+    await this.db.put("pendingOperations", operation);
     
     // Try to sync immediately if online
     if (navigator.onLine) {
@@ -159,9 +159,9 @@ class OfflineSyncManager {
     this.notifyListeners({ isOnline: true, pendingCount: 0, lastSync: null, syncing: true });
 
     try {
-      const tx = this.db.transaction('pendingOperations', 'readwrite');
-      const index = tx.store.index('by-status');
-      const pending = await index.getAll('pending');
+      const tx = this.db.transaction("pendingOperations", "readwrite");
+      const index = tx.store.index("by-status");
+      const pending = await index.getAll("pending");
 
       // Process in batches
       for (let i = 0; i < pending.length; i += this.config.batchSize) {
@@ -177,7 +177,7 @@ class OfflineSyncManager {
         syncing: false,
       });
     } catch (error) {
-      console.error('Sync error:', error);
+      console.error("Sync error:", error);
     } finally {
       this.syncInProgress = false;
     }
@@ -189,25 +189,25 @@ class OfflineSyncManager {
     for (const op of operations) {
       try {
         // Mark as syncing
-        op.status = 'syncing';
-        await this.db.put('pendingOperations', op);
+        op.status = "syncing";
+        await this.db.put("pendingOperations", op);
 
         // Execute the operation (implement your sync logic here)
         await this.executeOperation(op);
 
         // Mark as completed and remove
-        await this.db.delete('pendingOperations', op.id);
+        await this.db.delete("pendingOperations", op.id);
       } catch (error) {
         op.retryCount++;
-        op.error = error instanceof Error ? error.message : 'Unknown error';
+        op.error = error instanceof Error ? error.message : "Unknown error";
 
         if (op.retryCount >= this.config.maxRetries) {
-          op.status = 'failed';
+          op.status = "failed";
         } else {
-          op.status = 'pending';
+          op.status = "pending";
         }
 
-        await this.db.put('pendingOperations', op);
+        await this.db.put("pendingOperations", op);
       }
     }
   }
@@ -215,7 +215,7 @@ class OfflineSyncManager {
   private async executeOperation(op: PendingOperation): Promise<void> {
     // This should be overridden or configured with actual sync logic
     // For now, we'll emit an event that can be handled externally
-    const event = new CustomEvent('offline-sync-operation', {
+    const event = new CustomEvent("offline-sync-operation", {
       detail: op,
     });
     window.dispatchEvent(event);
@@ -242,20 +242,20 @@ class OfflineSyncManager {
       version: 1,
     };
 
-    await this.db.put('cachedData', item);
+    await this.db.put("cachedData", item);
   }
 
   // Get cached data
   async getCachedData<T>(table: string, key: string): Promise<T | null> {
     if (!this.db) return null;
 
-    const item = await this.db.get('cachedData', `${table}:${key}`);
+    const item = await this.db.get("cachedData", `${table}:${key}`);
     
     if (!item) return null;
     
     // Check expiry
     if (item.expiry < Date.now()) {
-      await this.db.delete('cachedData', `${table}:${key}`);
+      await this.db.delete("cachedData", `${table}:${key}`);
       return null;
     }
 
@@ -266,7 +266,7 @@ class OfflineSyncManager {
   async getCachedTable<T>(table: string): Promise<T[]> {
     if (!this.db) return [];
 
-    const index = this.db.transaction('cachedData').store.index('by-table');
+    const index = this.db.transaction("cachedData").store.index("by-table");
     const items = await index.getAll(table);
     
     const now = Date.now();
@@ -279,8 +279,8 @@ class OfflineSyncManager {
   async clearExpiredCache(): Promise<void> {
     if (!this.db) return;
 
-    const tx = this.db.transaction('cachedData', 'readwrite');
-    const index = tx.store.index('by-expiry');
+    const tx = this.db.transaction("cachedData", "readwrite");
+    const index = tx.store.index("by-expiry");
     const now = Date.now();
     
     let cursor = await index.openCursor(IDBKeyRange.upperBound(now));
@@ -295,28 +295,28 @@ class OfflineSyncManager {
   async getPendingCount(): Promise<number> {
     if (!this.db) return 0;
     
-    const index = this.db.transaction('pendingOperations').store.index('by-status');
-    return await index.count('pending');
+    const index = this.db.transaction("pendingOperations").store.index("by-status");
+    return await index.count("pending");
   }
 
   // Get failed operations
   async getFailedOperations(): Promise<PendingOperation[]> {
     if (!this.db) return [];
     
-    const index = this.db.transaction('pendingOperations').store.index('by-status');
-    return await index.getAll('failed');
+    const index = this.db.transaction("pendingOperations").store.index("by-status");
+    return await index.getAll("failed");
   }
 
   // Retry failed operations
   async retryFailedOperations(): Promise<void> {
     if (!this.db) return;
 
-    const tx = this.db.transaction('pendingOperations', 'readwrite');
-    const index = tx.store.index('by-status');
-    const failed = await index.getAll('failed');
+    const tx = this.db.transaction("pendingOperations", "readwrite");
+    const index = tx.store.index("by-status");
+    const failed = await index.getAll("failed");
 
     for (const op of failed) {
-      op.status = 'pending';
+      op.status = "pending";
       op.retryCount = 0;
       op.error = undefined;
       await tx.store.put(op);
@@ -376,4 +376,4 @@ export function useOfflineSync() {
 }
 
 // Need React import for the hook
-import React from 'react';
+import React from "react";

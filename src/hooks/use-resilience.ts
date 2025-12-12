@@ -3,22 +3,22 @@
  * Comprehensive resilience status and utilities
  */
 
-import { useState, useEffect, useCallback, useMemo } from 'react';
-import { useConnectionResilience } from './use-connection-resilience';
+import { useState, useEffect, useCallback, useMemo } from "react";
+import { useConnectionResilience } from "./use-connection-resilience";
 import { 
   circuitBreakerRegistry, 
   type CircuitStats 
-} from '@/lib/offline/circuit-breaker';
+} from "@/lib/offline/circuit-breaker";
 import { 
   storageMonitor, 
   type StorageQuota,
   isStorageLow,
   clearOldCaches,
-} from '@/lib/offline/storage-quota';
+} from "@/lib/offline/storage-quota";
 import { 
   offlineSyncManager, 
   type SyncStats 
-} from '@/lib/offline/sync-manager';
+} from "@/lib/offline/sync-manager";
 
 export interface ResilienceStatus {
   // Connection
@@ -40,7 +40,7 @@ export interface ResilienceStatus {
   
   // Overall health
   healthScore: number;
-  healthStatus: 'healthy' | 'degraded' | 'critical';
+  healthStatus: "healthy" | "degraded" | "critical";
 }
 
 export function useResilience() {
@@ -104,8 +104,8 @@ export function useResilience() {
     }
     
     // Circuit breaker impact
-    const openCircuits = Object.values(circuits).filter(c => c.state === 'open').length;
-    const halfOpenCircuits = Object.values(circuits).filter(c => c.state === 'half-open').length;
+    const openCircuits = Object.values(circuits).filter(c => c.state === "open").length;
+    const halfOpenCircuits = Object.values(circuits).filter(c => c.state === "half-open").length;
     score -= openCircuits * 15;
     score -= halfOpenCircuits * 5;
     
@@ -119,14 +119,14 @@ export function useResilience() {
     return Math.max(0, Math.min(100, score));
   }, [connection, storageQuota, circuits, syncStats]);
 
-  const healthStatus = useMemo((): 'healthy' | 'degraded' | 'critical' => {
-    if (healthScore >= 80) return 'healthy';
-    if (healthScore >= 50) return 'degraded';
-    return 'critical';
+  const healthStatus = useMemo((): "healthy" | "degraded" | "critical" => {
+    if (healthScore >= 80) return "healthy";
+    if (healthScore >= 50) return "degraded";
+    return "critical";
   }, [healthScore]);
 
   const hasOpenCircuit = useMemo(() => {
-    return Object.values(circuits).some(c => c.state === 'open');
+    return Object.values(circuits).some(c => c.state === "open");
   }, [circuits]);
 
   const isLowStorage = useMemo(() => {
@@ -154,7 +154,7 @@ export function useResilience() {
     status: {
       isOnline: connection.isOnline,
       isSlowConnection: connection.isSlowConnection,
-      connectionType: connection.adaptiveSettings ? 'adaptive' : 'unknown',
+      connectionType: connection.adaptiveSettings ? "adaptive" : "unknown",
       storageQuota,
       isStorageLow: isLowStorage,
       circuits,

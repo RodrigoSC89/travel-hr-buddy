@@ -3,15 +3,15 @@
  * Interactive onboarding spotlight and tooltips
  */
 
-import React, { useEffect, useState, useRef } from 'react';
-import { createPortal } from 'react-dom';
-import { X, ChevronLeft, ChevronRight, Check } from 'lucide-react';
-import { Button } from '@/components/ui/button';
-import { Progress } from '@/components/ui/progress';
-import { cn } from '@/lib/utils';
-import { useOnboarding } from '@/lib/ux/onboarding-system';
-import { useHapticFeedback } from '@/lib/ux/haptic-feedback';
-import { useLocation } from 'react-router-dom';
+import React, { useEffect, useState, useRef } from "react";
+import { createPortal } from "react-dom";
+import { X, ChevronLeft, ChevronRight, Check } from "lucide-react";
+import { Button } from "@/components/ui/button";
+import { Progress } from "@/components/ui/progress";
+import { cn } from "@/lib/utils";
+import { useOnboarding } from "@/lib/ux/onboarding-system";
+import { useHapticFeedback } from "@/lib/ux/haptic-feedback";
+import { useLocation } from "react-router-dom";
 
 interface OnboardingOverlayProps {
   enabled?: boolean;
@@ -47,7 +47,7 @@ export function OnboardingOverlay({ enabled = true }: OnboardingOverlayProps) {
       setTargetRect(rect);
       
       // Calculate tooltip position
-      const position = currentStep.position || 'bottom';
+      const position = currentStep.position || "bottom";
       const tooltipWidth = 320;
       const tooltipHeight = 200;
       const padding = 16;
@@ -56,22 +56,22 @@ export function OnboardingOverlay({ enabled = true }: OnboardingOverlayProps) {
       let left = 0;
       
       switch (position) {
-        case 'top':
-          top = rect.top - tooltipHeight - padding;
-          left = rect.left + rect.width / 2 - tooltipWidth / 2;
-          break;
-        case 'bottom':
-          top = rect.bottom + padding;
-          left = rect.left + rect.width / 2 - tooltipWidth / 2;
-          break;
-        case 'left':
-          top = rect.top + rect.height / 2 - tooltipHeight / 2;
-          left = rect.left - tooltipWidth - padding;
-          break;
-        case 'right':
-          top = rect.top + rect.height / 2 - tooltipHeight / 2;
-          left = rect.right + padding;
-          break;
+      case "top":
+        top = rect.top - tooltipHeight - padding;
+        left = rect.left + rect.width / 2 - tooltipWidth / 2;
+        break;
+      case "bottom":
+        top = rect.bottom + padding;
+        left = rect.left + rect.width / 2 - tooltipWidth / 2;
+        break;
+      case "left":
+        top = rect.top + rect.height / 2 - tooltipHeight / 2;
+        left = rect.left - tooltipWidth - padding;
+        break;
+      case "right":
+        top = rect.top + rect.height / 2 - tooltipHeight / 2;
+        left = rect.right + padding;
+        break;
       }
       
       // Keep within viewport
@@ -81,7 +81,7 @@ export function OnboardingOverlay({ enabled = true }: OnboardingOverlayProps) {
       setTooltipPosition({ top, left });
       
       // Scroll target into view if needed
-      target.scrollIntoView({ behavior: 'smooth', block: 'center' });
+      target.scrollIntoView({ behavior: "smooth", block: "center" });
     }
   }, [isActive, currentStep]);
   
@@ -90,22 +90,22 @@ export function OnboardingOverlay({ enabled = true }: OnboardingOverlayProps) {
   }
   
   const handleNext = () => {
-    trigger('light');
+    trigger("light");
     next();
   };
   
   const handlePrev = () => {
-    trigger('light');
+    trigger("light");
     prev();
   };
   
   const handleSkip = () => {
-    trigger('medium');
+    trigger("medium");
     skip();
   };
   
   const handleComplete = () => {
-    trigger('success');
+    trigger("success");
     complete();
   };
   
@@ -244,7 +244,7 @@ interface OnboardingTargetProps {
 
 export function OnboardingTarget({ id, children, className }: OnboardingTargetProps) {
   return (
-    <div data-onboarding={id} className={cn('relative', className)}>
+    <div data-onboarding={id} className={cn("relative", className)}>
       {children}
     </div>
   );

@@ -373,33 +373,33 @@ class MissionAutonomyEngine {
     });
 
     switch (action.action_type) {
-      case "route_adjustment":
-        return {
-          success: true,
-          new_route: action.context.new_route,
-          estimated_time_saved: 15,
-        };
+    case "route_adjustment":
+      return {
+        success: true,
+        new_route: action.context.new_route,
+        estimated_time_saved: 15,
+      };
 
-      case "speed_change":
-        return {
-          success: true,
-          old_speed: action.context.current_speed,
-          new_speed: action.context.target_speed,
-          impact: "minimal",
-        };
+    case "speed_change":
+      return {
+        success: true,
+        old_speed: action.context.current_speed,
+        new_speed: action.context.target_speed,
+        impact: "minimal",
+      };
 
-      case "resource_allocation":
-        return {
-          success: true,
-          resources_allocated: action.context.resources,
-          allocation_complete: true,
-        };
+    case "resource_allocation":
+      return {
+        success: true,
+        resources_allocated: action.context.resources,
+        allocation_complete: true,
+      };
 
-      default:
-        return {
-          success: true,
-          message: `Action ${action.action_type} completed`,
-        };
+    default:
+      return {
+        success: true,
+        message: `Action ${action.action_type} completed`,
+      };
     }
   }
 

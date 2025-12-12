@@ -3,7 +3,7 @@
  * Debounced inputs, form state management, validation caching
  */
 
-import { useState, useCallback, useRef, useEffect, useMemo } from 'react';
+import { useState, useCallback, useRef, useEffect, useMemo } from "react";
 
 /**
  * Debounced input hook
@@ -387,7 +387,7 @@ export function useAutoSave<T>(
         setLastSaved(new Date());
         setHasUnsavedChanges(false);
       } catch (error) {
-        onError?.(error instanceof Error ? error : new Error('Save failed'));
+        onError?.(error instanceof Error ? error : new Error("Save failed"));
       } finally {
         setIsSaving(false);
         onSaveEnd?.();
@@ -416,7 +416,7 @@ export function useAutoSave<T>(
       setLastSaved(new Date());
       setHasUnsavedChanges(false);
     } catch (error) {
-      onError?.(error instanceof Error ? error : new Error('Save failed'));
+      onError?.(error instanceof Error ? error : new Error("Save failed"));
     } finally {
       setIsSaving(false);
       onSaveEnd?.();

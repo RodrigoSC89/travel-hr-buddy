@@ -3,10 +3,10 @@
  * Professional error handling with recovery options
  */
 
-import React from 'react';
-import { AlertTriangle, RefreshCw, Home, ArrowLeft, Bug } from 'lucide-react';
-import { Button } from './button';
-import { cn } from '@/lib/utils';
+import React from "react";
+import { AlertTriangle, RefreshCw, Home, ArrowLeft, Bug } from "lucide-react";
+import { Button } from "./button";
+import { cn } from "@/lib/utils";
 
 interface ErrorFallbackProps {
   error?: Error;
@@ -22,8 +22,8 @@ interface ErrorFallbackProps {
 export const ErrorFallback: React.FC<ErrorFallbackProps> = ({
   error,
   resetErrorBoundary,
-  title = 'Algo deu errado',
-  description = 'Ocorreu um erro inesperado. Por favor, tente novamente.',
+  title = "Algo deu errado",
+  description = "Ocorreu um erro inesperado. Por favor, tente novamente.",
   showHomeButton = true,
   showBackButton = true,
   showReportButton = false,
@@ -34,12 +34,12 @@ export const ErrorFallback: React.FC<ErrorFallbackProps> = ({
   };
 
   const handleGoHome = () => {
-    window.location.href = '/';
+    window.location.href = "/";
   };
 
   const handleReport = () => {
     // Could integrate with error reporting service
-    alert('Erro reportado. Obrigado pelo feedback!');
+    alert("Erro reportado. Obrigado pelo feedback!");
   };
 
   return (
@@ -63,7 +63,7 @@ export const ErrorFallback: React.FC<ErrorFallbackProps> = ({
         {description}
       </p>
 
-      {error && process.env.NODE_ENV === 'development' && (
+      {error && process.env.NODE_ENV === "development" && (
         <details className="mb-6 text-left w-full max-w-lg">
           <summary className="cursor-pointer text-sm text-muted-foreground hover:text-foreground">
             Detalhes técnicos

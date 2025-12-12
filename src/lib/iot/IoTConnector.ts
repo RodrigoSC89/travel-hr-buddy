@@ -9,7 +9,7 @@ import { logger } from "@/lib/logger";
 export interface SensorReading {
   sensorId: string;
   vesselId: string;
-  type: 'fuel' | 'engine' | 'gps' | 'temperature' | 'pressure' | 'speed' | 'heading';
+  type: "fuel" | "engine" | "gps" | "temperature" | "pressure" | "speed" | "heading";
   value: number;
   unit: string;
   timestamp: Date;
@@ -52,7 +52,7 @@ class IoTConnectorService {
       
       return true;
     } catch (error) {
-      logger.error('IoT connection failed:', error);
+      logger.error("IoT connection failed:", error);
       return this.handleReconnect(vesselId);
     }
   }
@@ -107,7 +107,7 @@ class IoTConnectorService {
    */
   async saveSensorReading(reading: SensorReading): Promise<void> {
     // IoT sensor table may not exist - this is handled gracefully
-    logger.debug('Sensor reading captured (local only):', { type: reading.type, value: reading.value });
+    logger.debug("Sensor reading captured (local only):", { type: reading.type, value: reading.value });
   }
 
   /**
@@ -120,7 +120,7 @@ class IoTConnectorService {
     endDate: Date
   ): Promise<SensorReading[]> {
     // Return empty array - IoT table may not exist yet
-    logger.debug('Historical data requested:', { vesselId, sensorType });
+    logger.debug("Historical data requested:", { vesselId, sensorType });
     return [];
   }
 
@@ -129,7 +129,7 @@ class IoTConnectorService {
    */
   private startMockDataStream(vesselId: string): void {
     const interval = setInterval(() => {
-      const sensorTypes: SensorReading['type'][] = ['fuel', 'engine', 'gps', 'temperature', 'speed'];
+      const sensorTypes: SensorReading["type"][] = ["fuel", "engine", "gps", "temperature", "speed"];
       
       sensorTypes.forEach(type => {
         const reading = this.generateMockReading(vesselId, type);
@@ -143,18 +143,18 @@ class IoTConnectorService {
   /**
    * Generate mock sensor reading
    */
-  private generateMockReading(vesselId: string, type: SensorReading['type']): SensorReading {
+  private generateMockReading(vesselId: string, type: SensorReading["type"]): SensorReading {
     const baseValues: Record<string, { value: number; unit: string }> = {
-      fuel: { value: 65 + Math.random() * 20, unit: '%' },
-      engine: { value: 1800 + Math.random() * 400, unit: 'RPM' },
-      gps: { value: -23.9618 + Math.random() * 0.01, unit: 'degrees' },
-      temperature: { value: 75 + Math.random() * 15, unit: '°C' },
-      speed: { value: 12 + Math.random() * 5, unit: 'knots' },
-      heading: { value: Math.floor(Math.random() * 360), unit: 'degrees' },
-      pressure: { value: 1013 + Math.random() * 20, unit: 'hPa' }
+      fuel: { value: 65 + Math.random() * 20, unit: "%" },
+      engine: { value: 1800 + Math.random() * 400, unit: "RPM" },
+      gps: { value: -23.9618 + Math.random() * 0.01, unit: "degrees" },
+      temperature: { value: 75 + Math.random() * 15, unit: "°C" },
+      speed: { value: 12 + Math.random() * 5, unit: "knots" },
+      heading: { value: Math.floor(Math.random() * 360), unit: "degrees" },
+      pressure: { value: 1013 + Math.random() * 20, unit: "hPa" }
     };
 
-    const { value, unit } = baseValues[type] || { value: 0, unit: '' };
+    const { value, unit } = baseValues[type] || { value: 0, unit: "" };
 
     return {
       sensorId: `sensor-${type}-${vesselId.slice(0, 8)}`,
@@ -176,7 +176,7 @@ class IoTConnectorService {
         try {
           listener(reading);
         } catch (err) {
-          logger.error('Error in IoT listener:', { error: String(err) });
+          logger.error("Error in IoT listener:", { error: String(err) });
         }
       });
     }
@@ -187,7 +187,7 @@ class IoTConnectorService {
    */
   private async handleReconnect(vesselId: string): Promise<boolean> {
     if (this.reconnectAttempts >= this.maxReconnectAttempts) {
-      logger.error('Max reconnection attempts reached');
+      logger.error("Max reconnection attempts reached");
       return false;
     }
 

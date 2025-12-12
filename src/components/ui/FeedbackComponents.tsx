@@ -3,12 +3,12 @@
  * Toast alternatives and inline feedback
  */
 
-import React, { useState, useEffect } from 'react';
-import { cn } from '@/lib/utils';
-import { Check, X, AlertTriangle, Info, Loader2 } from 'lucide-react';
-import { motion, AnimatePresence } from 'framer-motion';
+import React, { useState, useEffect } from "react";
+import { cn } from "@/lib/utils";
+import { Check, X, AlertTriangle, Info, Loader2 } from "lucide-react";
+import { motion, AnimatePresence } from "framer-motion";
 
-type FeedbackType = 'success' | 'error' | 'warning' | 'info' | 'loading';
+type FeedbackType = "success" | "error" | "warning" | "info" | "loading";
 
 interface InlineFeedbackProps {
   type: FeedbackType;
@@ -23,38 +23,38 @@ interface InlineFeedbackProps {
 const feedbackConfig = {
   success: {
     icon: Check,
-    bg: 'bg-green-500/10',
-    border: 'border-green-500/20',
-    text: 'text-green-600 dark:text-green-400',
-    iconBg: 'bg-green-500/20'
+    bg: "bg-green-500/10",
+    border: "border-green-500/20",
+    text: "text-green-600 dark:text-green-400",
+    iconBg: "bg-green-500/20"
   },
   error: {
     icon: X,
-    bg: 'bg-red-500/10',
-    border: 'border-red-500/20',
-    text: 'text-red-600 dark:text-red-400',
-    iconBg: 'bg-red-500/20'
+    bg: "bg-red-500/10",
+    border: "border-red-500/20",
+    text: "text-red-600 dark:text-red-400",
+    iconBg: "bg-red-500/20"
   },
   warning: {
     icon: AlertTriangle,
-    bg: 'bg-yellow-500/10',
-    border: 'border-yellow-500/20',
-    text: 'text-yellow-600 dark:text-yellow-400',
-    iconBg: 'bg-yellow-500/20'
+    bg: "bg-yellow-500/10",
+    border: "border-yellow-500/20",
+    text: "text-yellow-600 dark:text-yellow-400",
+    iconBg: "bg-yellow-500/20"
   },
   info: {
     icon: Info,
-    bg: 'bg-blue-500/10',
-    border: 'border-blue-500/20',
-    text: 'text-blue-600 dark:text-blue-400',
-    iconBg: 'bg-blue-500/20'
+    bg: "bg-blue-500/10",
+    border: "border-blue-500/20",
+    text: "text-blue-600 dark:text-blue-400",
+    iconBg: "bg-blue-500/20"
   },
   loading: {
     icon: Loader2,
-    bg: 'bg-primary/10',
-    border: 'border-primary/20',
-    text: 'text-primary',
-    iconBg: 'bg-primary/20'
+    bg: "bg-primary/10",
+    border: "border-primary/20",
+    text: "text-primary",
+    iconBg: "bg-primary/20"
   }
 };
 
@@ -82,7 +82,7 @@ export const InlineFeedback: React.FC<InlineFeedbackProps> = ({
       {show && (
         <motion.div
           initial={{ opacity: 0, y: -10, height: 0 }}
-          animate={{ opacity: 1, y: 0, height: 'auto' }}
+          animate={{ opacity: 1, y: 0, height: "auto" }}
           exit={{ opacity: 0, y: -10, height: 0 }}
           className={cn(
             "flex items-center gap-3 px-4 py-3 rounded-lg border",
@@ -96,14 +96,14 @@ export const InlineFeedback: React.FC<InlineFeedbackProps> = ({
               className={cn(
                 "h-4 w-4",
                 config.text,
-                type === 'loading' && "animate-spin"
+                type === "loading" && "animate-spin"
               )} 
             />
           </div>
           <span className={cn("text-sm font-medium flex-1", config.text)}>
             {message}
           </span>
-          {onDismiss && type !== 'loading' && (
+          {onDismiss && type !== "loading" && (
             <button
               onClick={onDismiss}
               className={cn("p-1 rounded hover:bg-black/5", config.text)}
@@ -121,7 +121,7 @@ export const InlineFeedback: React.FC<InlineFeedbackProps> = ({
  * Save Indicator - Shows save status
  */
 interface SaveIndicatorProps {
-  status: 'idle' | 'saving' | 'saved' | 'error';
+  status: "idle" | "saving" | "saved" | "error";
   className?: string;
 }
 
@@ -132,24 +132,24 @@ export const SaveIndicator: React.FC<SaveIndicatorProps> = ({
   const [showSaved, setShowSaved] = useState(false);
 
   useEffect(() => {
-    if (status === 'saved') {
+    if (status === "saved") {
       setShowSaved(true);
       const timer = setTimeout(() => setShowSaved(false), 2000);
       return () => clearTimeout(timer);
     }
   }, [status]);
 
-  if (status === 'idle' && !showSaved) return null;
+  if (status === "idle" && !showSaved) return null;
 
   return (
     <div className={cn("flex items-center gap-2 text-sm", className)}>
-      {status === 'saving' && (
+      {status === "saving" && (
         <>
           <Loader2 className="h-4 w-4 animate-spin text-muted-foreground" />
           <span className="text-muted-foreground">Salvando...</span>
         </>
       )}
-      {(status === 'saved' || showSaved) && (
+      {(status === "saved" || showSaved) && (
         <motion.div
           initial={{ opacity: 0, scale: 0.8 }}
           animate={{ opacity: 1, scale: 1 }}
@@ -160,7 +160,7 @@ export const SaveIndicator: React.FC<SaveIndicatorProps> = ({
           <span>Salvo</span>
         </motion.div>
       )}
-      {status === 'error' && (
+      {status === "error" && (
         <div className="flex items-center gap-1 text-red-600">
           <AlertTriangle className="h-4 w-4" />
           <span>Erro ao salvar</span>
@@ -259,7 +259,7 @@ export const FieldFeedback: React.FC<FieldFeedbackProps> = ({
  * Action Result Banner
  */
 interface ActionResultProps {
-  type: 'success' | 'error';
+  type: "success" | "error";
   title: string;
   description?: string;
   action?: {
@@ -276,7 +276,7 @@ export const ActionResult: React.FC<ActionResultProps> = ({
   action,
   onDismiss
 }) => {
-  const isSuccess = type === 'success';
+  const isSuccess = type === "success";
 
   return (
     <motion.div

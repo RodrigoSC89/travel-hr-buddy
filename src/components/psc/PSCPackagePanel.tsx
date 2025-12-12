@@ -1,10 +1,10 @@
-import React, { useState, useEffect } from 'react';
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
-import { Button } from '@/components/ui/button';
-import { Badge } from '@/components/ui/badge';
-import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
-import { ScrollArea } from '@/components/ui/scroll-area';
-import { Progress } from '@/components/ui/progress';
+import React, { useState, useEffect } from "react";
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
+import { Button } from "@/components/ui/button";
+import { Badge } from "@/components/ui/badge";
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
+import { ScrollArea } from "@/components/ui/scroll-area";
+import { Progress } from "@/components/ui/progress";
 import { 
   Shield, 
   AlertTriangle, 
@@ -15,7 +15,7 @@ import {
   TrendingUp,
   Clock,
   XCircle
-} from 'lucide-react';
+} from "lucide-react";
 import { 
   getVesselInspections, 
   getDeficiencies, 
@@ -25,21 +25,21 @@ import {
   exportInspectionsCSV,
   type PSCInspection, 
   type PSCDeficiency 
-} from '@/lib/psc';
-import { toast } from 'sonner';
+} from "@/lib/psc";
+import { toast } from "sonner";
 
 const severityColors: Record<string, string> = {
-  observation: 'bg-blue-500/20 text-blue-600',
-  deficiency: 'bg-yellow-500/20 text-yellow-600',
-  detainable: 'bg-red-500/20 text-red-600'
+  observation: "bg-blue-500/20 text-blue-600",
+  deficiency: "bg-yellow-500/20 text-yellow-600",
+  detainable: "bg-red-500/20 text-red-600"
 };
 
 const statusColors: Record<string, string> = {
-  open: 'bg-red-500/20 text-red-600',
-  in_progress: 'bg-yellow-500/20 text-yellow-600',
-  corrected: 'bg-green-500/20 text-green-600',
-  verified: 'bg-blue-500/20 text-blue-600',
-  closed: 'bg-gray-500/20 text-gray-600'
+  open: "bg-red-500/20 text-red-600",
+  in_progress: "bg-yellow-500/20 text-yellow-600",
+  corrected: "bg-green-500/20 text-green-600",
+  verified: "bg-blue-500/20 text-blue-600",
+  closed: "bg-gray-500/20 text-gray-600"
 };
 
 export const PSCPackagePanel: React.FC = () => {
@@ -58,8 +58,8 @@ export const PSCPackagePanel: React.FC = () => {
     setLoading(true);
     try {
       // Use empty vessel ID to get all inspections
-      const insp = await getVesselInspections('').catch(() => [] as PSCInspection[]);
-      const def = await getDeficiencies('').catch(() => [] as PSCDeficiency[]);
+      const insp = await getVesselInspections("").catch(() => [] as PSCInspection[]);
+      const def = await getDeficiencies("").catch(() => [] as PSCDeficiency[]);
       setInspections(insp);
       setDeficiencies(def);
       
@@ -67,29 +67,29 @@ export const PSCPackagePanel: React.FC = () => {
       const score = calculateRiskScore(insp, def);
       setRiskScore(score);
     } catch (error) {
-      console.error('Error loading PSC data:', error);
-      toast.error('Erro ao carregar dados PSC');
+      console.error("Error loading PSC data:", error);
+      toast.error("Erro ao carregar dados PSC");
     } finally {
       setLoading(false);
     }
   };
 
-  const handleGeneratePackage = async (format: 'pdf' | 'zip' | 'csv') => {
+  const handleGeneratePackage = async (format: "pdf" | "zip" | "csv") => {
     setGenerating(true);
     try {
       let result: Blob | string | null = null;
       const inspection = selectedInspection || inspections[0];
       
-      if (!inspection && format !== 'csv') {
-        toast.error('Selecione uma inspeção primeiro');
+      if (!inspection && format !== "csv") {
+        toast.error("Selecione uma inspeção primeiro");
         setGenerating(false);
         return;
       }
       
-      if (format === 'pdf' && inspection) {
-        result = await generatePDFPackage(inspection, deficiencies, 'Embarcação');
-      } else if (format === 'zip' && inspection) {
-        result = await generateZIPPackage(inspection, deficiencies, 'Embarcação', []);
+      if (format === "pdf" && inspection) {
+        result = await generatePDFPackage(inspection, deficiencies, "Embarcação");
+      } else if (format === "zip" && inspection) {
+        result = await generateZIPPackage(inspection, deficiencies, "Embarcação", []);
       } else {
         result = exportInspectionsCSV(inspections);
       }
@@ -98,22 +98,22 @@ export const PSCPackagePanel: React.FC = () => {
         toast.success(`Pacote ${format.toUpperCase()} gerado com sucesso`);
       }
     } catch (error) {
-      toast.error('Erro ao gerar pacote');
+      toast.error("Erro ao gerar pacote");
     } finally {
       setGenerating(false);
     }
   };
 
   const getRiskLevel = (score: number) => {
-    if (score <= 30) return { label: 'Baixo', color: 'text-green-500' };
-    if (score <= 60) return { label: 'Médio', color: 'text-yellow-500' };
-    if (score <= 80) return { label: 'Alto', color: 'text-orange-500' };
-    return { label: 'Crítico', color: 'text-red-500' };
+    if (score <= 30) return { label: "Baixo", color: "text-green-500" };
+    if (score <= 60) return { label: "Médio", color: "text-yellow-500" };
+    if (score <= 80) return { label: "Alto", color: "text-orange-500" };
+    return { label: "Crítico", color: "text-red-500" };
   };
 
   const risk = getRiskLevel(riskScore);
-  const openDeficiencies = deficiencies.filter(d => d.status === 'open' || d.status === 'in_progress');
-  const resolvedDeficiencies = deficiencies.filter(d => d.status === 'corrected' || d.status === 'verified' || d.status === 'closed');
+  const openDeficiencies = deficiencies.filter(d => d.status === "open" || d.status === "in_progress");
+  const resolvedDeficiencies = deficiencies.filter(d => d.status === "corrected" || d.status === "verified" || d.status === "closed");
 
   return (
     <div className="space-y-6">
@@ -126,7 +126,7 @@ export const PSCPackagePanel: React.FC = () => {
           <Button 
             variant="outline" 
             className="gap-2"
-            onClick={() => handleGeneratePackage('csv')}
+            onClick={() => handleGeneratePackage("csv")}
             disabled={generating}
           >
             <Download className="h-4 w-4" />
@@ -135,7 +135,7 @@ export const PSCPackagePanel: React.FC = () => {
           <Button 
             variant="outline" 
             className="gap-2"
-            onClick={() => handleGeneratePackage('pdf')}
+            onClick={() => handleGeneratePackage("pdf")}
             disabled={generating}
           >
             <FileText className="h-4 w-4" />
@@ -143,7 +143,7 @@ export const PSCPackagePanel: React.FC = () => {
           </Button>
           <Button 
             className="gap-2"
-            onClick={() => handleGeneratePackage('zip')}
+            onClick={() => handleGeneratePackage("zip")}
             disabled={generating}
           >
             <Package className="h-4 w-4" />
@@ -164,7 +164,7 @@ export const PSCPackagePanel: React.FC = () => {
             </div>
             <div className="text-right">
               <div className={`text-4xl font-bold ${risk.color}`}>{riskScore}</div>
-              <Badge className={severityColors[risk.label.toLowerCase()] || 'bg-muted'}>
+              <Badge className={severityColors[risk.label.toLowerCase()] || "bg-muted"}>
                 Risco {risk.label}
               </Badge>
             </div>
@@ -280,12 +280,12 @@ export const PSCPackagePanel: React.FC = () => {
                                 {def.severity}
                               </Badge>
                               <Badge className={statusColors[def.status]}>
-                                {def.status.replace('_', ' ')}
+                                {def.status.replace("_", " ")}
                               </Badge>
                             </div>
                             <h4 className="font-medium mt-2">{def.deficiency_description}</h4>
                             <p className="text-sm text-muted-foreground">
-                              Categoria: {def.category || 'N/A'} • Código: {def.action_code || 'N/A'}
+                              Categoria: {def.category || "N/A"} • Código: {def.action_code || "N/A"}
                             </p>
                             {def.corrective_action && (
                               <p className="text-sm text-green-600 mt-2">
@@ -297,7 +297,7 @@ export const PSCPackagePanel: React.FC = () => {
                             {def.corrective_deadline && (
                               <div className="flex items-center gap-1">
                                 <Clock className="h-3 w-3" />
-                                {new Date(def.corrective_deadline).toLocaleDateString('pt-BR')}
+                                {new Date(def.corrective_deadline).toLocaleDateString("pt-BR")}
                               </div>
                             )}
                           </div>
@@ -340,13 +340,13 @@ export const PSCPackagePanel: React.FC = () => {
                               <h4 className="font-medium">{insp.port_name}</h4>
                               <Badge variant="outline">{insp.inspection_type}</Badge>
                               <Badge className={
-                                !insp.detention ? 'bg-green-500/20 text-green-600' : 'bg-red-500/20 text-red-600'
+                                !insp.detention ? "bg-green-500/20 text-green-600" : "bg-red-500/20 text-red-600"
                               }>
-                                {insp.detention ? 'Detenção' : 'Aprovado'}
+                                {insp.detention ? "Detenção" : "Aprovado"}
                               </Badge>
                             </div>
                             <p className="text-sm text-muted-foreground">
-                              {new Date(insp.inspection_date).toLocaleDateString('pt-BR')} • 
+                              {new Date(insp.inspection_date).toLocaleDateString("pt-BR")} • 
                               {insp.port_country}
                             </p>
                             <p className="text-sm">
@@ -378,18 +378,18 @@ export const PSCPackagePanel: React.FC = () => {
             <CardContent>
               <div className="space-y-4">
                 {[
-                  { item: 'Certificados de Segurança', status: 'ok' },
-                  { item: 'Documentos ISM', status: 'ok' },
-                  { item: 'Registros de Treinamento', status: 'warning' },
-                  { item: 'Plano de Emergência', status: 'ok' },
-                  { item: 'Certificados de Tripulação (STCW)', status: 'ok' },
-                  { item: 'Acordos MLC', status: 'ok' },
-                  { item: 'Registros de Manutenção', status: 'warning' },
-                  { item: 'Relatórios de Auditoria', status: 'ok' }
+                  { item: "Certificados de Segurança", status: "ok" },
+                  { item: "Documentos ISM", status: "ok" },
+                  { item: "Registros de Treinamento", status: "warning" },
+                  { item: "Plano de Emergência", status: "ok" },
+                  { item: "Certificados de Tripulação (STCW)", status: "ok" },
+                  { item: "Acordos MLC", status: "ok" },
+                  { item: "Registros de Manutenção", status: "warning" },
+                  { item: "Relatórios de Auditoria", status: "ok" }
                 ].map((check, idx) => (
                   <div key={idx} className="flex items-center justify-between p-3 border rounded-lg">
                     <span>{check.item}</span>
-                    {check.status === 'ok' ? (
+                    {check.status === "ok" ? (
                       <CheckCircle className="h-5 w-5 text-green-500" />
                     ) : (
                       <AlertTriangle className="h-5 w-5 text-yellow-500" />

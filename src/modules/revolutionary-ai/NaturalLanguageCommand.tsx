@@ -3,33 +3,33 @@
  * Funcionalidade 1: Comando Universal por Linguagem Natural
  */
 
-import React, { useState, useCallback, useRef, useEffect } from 'react';
-import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
-import { Button } from '@/components/ui/button';
-import { Textarea } from '@/components/ui/textarea';
-import { Badge } from '@/components/ui/badge';
-import { ScrollArea } from '@/components/ui/scroll-area';
-import { Mic, MicOff, Send, Sparkles, Command, Loader2, CheckCircle, AlertCircle, Brain, Ship } from 'lucide-react';
-import { motion, AnimatePresence } from 'framer-motion';
-import { useNautilusBrain } from '@/hooks/useNautilusBrain';
-import { toast } from 'sonner';
+import React, { useState, useCallback, useRef, useEffect } from "react";
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import { Button } from "@/components/ui/button";
+import { Textarea } from "@/components/ui/textarea";
+import { Badge } from "@/components/ui/badge";
+import { ScrollArea } from "@/components/ui/scroll-area";
+import { Mic, MicOff, Send, Sparkles, Command, Loader2, CheckCircle, AlertCircle, Brain, Ship } from "lucide-react";
+import { motion, AnimatePresence } from "framer-motion";
+import { useNautilusBrain } from "@/hooks/useNautilusBrain";
+import { toast } from "sonner";
 
 interface CommandSuggestion {
   text: string;
-  category: 'maintenance' | 'inventory' | 'crew' | 'compliance' | 'analytics';
+  category: "maintenance" | "inventory" | "crew" | "compliance" | "analytics";
   confidence: number;
 }
 
 const COMMAND_EXAMPLES = [
-  { text: "Agende inspeção preventiva para o motor do Navio Sirius até sexta", category: 'maintenance' as const },
-  { text: "Quantos extintores temos vencendo no mês que vem?", category: 'inventory' as const },
-  { text: "Liste tripulantes com certificação STCW vencendo", category: 'crew' as const },
-  { text: "Gere relatório de compliance da última semana", category: 'compliance' as const },
-  { text: "Qual o consumo médio de combustível da frota?", category: 'analytics' as const },
+  { text: "Agende inspeção preventiva para o motor do Navio Sirius até sexta", category: "maintenance" as const },
+  { text: "Quantos extintores temos vencendo no mês que vem?", category: "inventory" as const },
+  { text: "Liste tripulantes com certificação STCW vencendo", category: "crew" as const },
+  { text: "Gere relatório de compliance da última semana", category: "compliance" as const },
+  { text: "Qual o consumo médio de combustível da frota?", category: "analytics" as const },
 ];
 
 export function NaturalLanguageCommand() {
-  const [command, setCommand] = useState('');
+  const [command, setCommand] = useState("");
   const [isListening, setIsListening] = useState(false);
   const [suggestions, setSuggestions] = useState<CommandSuggestion[]>([]);
   const [commandHistory, setCommandHistory] = useState<Array<{ command: string; result: string; timestamp: Date; success: boolean }>>([]);
@@ -60,25 +60,25 @@ export function NaturalLanguageCommand() {
   const handleVoiceToggle = useCallback(async () => {
     if (isListening) {
       setIsListening(false);
-      toast.info('Reconhecimento de voz desativado');
+      toast.info("Reconhecimento de voz desativado");
       return;
     }
 
     try {
       const SpeechRecognition = window.SpeechRecognition || (window as any).webkitSpeechRecognition;
       if (!SpeechRecognition) {
-        toast.error('Reconhecimento de voz não suportado neste navegador');
+        toast.error("Reconhecimento de voz não suportado neste navegador");
         return;
       }
 
       const recognition = new SpeechRecognition();
-      recognition.lang = 'pt-BR';
+      recognition.lang = "pt-BR";
       recognition.continuous = false;
       recognition.interimResults = true;
 
       recognition.onstart = () => {
         setIsListening(true);
-        toast.info('Ouvindo... Fale seu comando');
+        toast.info("Ouvindo... Fale seu comando");
       };
 
       recognition.onresult = (event: any) => {
@@ -88,7 +88,7 @@ export function NaturalLanguageCommand() {
 
       recognition.onerror = () => {
         setIsListening(false);
-        toast.error('Erro no reconhecimento de voz');
+        toast.error("Erro no reconhecimento de voz");
       };
 
       recognition.onend = () => {
@@ -97,7 +97,7 @@ export function NaturalLanguageCommand() {
 
       recognition.start();
     } catch (error) {
-      toast.error('Erro ao iniciar reconhecimento de voz');
+      toast.error("Erro ao iniciar reconhecimento de voz");
     }
   }, [isListening]);
 
@@ -105,20 +105,20 @@ export function NaturalLanguageCommand() {
     if (!command.trim() || isLoading) return;
 
     const currentCommand = command;
-    setCommand('');
+    setCommand("");
     
     try {
       await sendMessage(currentCommand);
       setCommandHistory(prev => [{
         command: currentCommand,
-        result: 'Processando...',
+        result: "Processando...",
         timestamp: new Date(),
         success: true
       }, ...prev.slice(0, 9)]);
     } catch (error) {
       setCommandHistory(prev => [{
         command: currentCommand,
-        result: 'Erro ao processar comando',
+        result: "Erro ao processar comando",
         timestamp: new Date(),
         success: false
       }, ...prev.slice(0, 9)]);
@@ -132,13 +132,13 @@ export function NaturalLanguageCommand() {
 
   const getCategoryColor = (category: string) => {
     const colors = {
-      maintenance: 'bg-amber-500/20 text-amber-400 border-amber-500/30',
-      inventory: 'bg-blue-500/20 text-blue-400 border-blue-500/30',
-      crew: 'bg-green-500/20 text-green-400 border-green-500/30',
-      compliance: 'bg-purple-500/20 text-purple-400 border-purple-500/30',
-      analytics: 'bg-cyan-500/20 text-cyan-400 border-cyan-500/30'
+      maintenance: "bg-amber-500/20 text-amber-400 border-amber-500/30",
+      inventory: "bg-blue-500/20 text-blue-400 border-blue-500/30",
+      crew: "bg-green-500/20 text-green-400 border-green-500/30",
+      compliance: "bg-purple-500/20 text-purple-400 border-purple-500/30",
+      analytics: "bg-cyan-500/20 text-cyan-400 border-cyan-500/30"
     };
-    return colors[category as keyof typeof colors] || 'bg-muted text-muted-foreground';
+    return colors[category as keyof typeof colors] || "bg-muted text-muted-foreground";
   };
 
   return (
@@ -172,7 +172,7 @@ export function NaturalLanguageCommand() {
               placeholder="Ex: 'Agende manutenção preventiva para o motor principal do Navio Atlas na próxima semana'"
               className="min-h-[100px] pr-24 resize-none bg-background/50 border-border/50 focus:border-primary/50"
               onKeyDown={(e) => {
-                if (e.key === 'Enter' && !e.shiftKey) {
+                if (e.key === "Enter" && !e.shiftKey) {
                   e.preventDefault();
                   handleSubmit();
                 }
@@ -183,7 +183,7 @@ export function NaturalLanguageCommand() {
                 variant="outline"
                 size="icon"
                 onClick={handleVoiceToggle}
-                className={isListening ? 'bg-red-500/20 border-red-500/50 text-red-400' : ''}
+                className={isListening ? "bg-red-500/20 border-red-500/50 text-red-400" : ""}
               >
                 {isListening ? <MicOff className="h-4 w-4" /> : <Mic className="h-4 w-4" />}
               </Button>
@@ -264,16 +264,16 @@ export function NaturalLanguageCommand() {
                 {messages.map((msg, i) => (
                   <motion.div
                     key={i}
-                    initial={{ opacity: 0, x: msg.role === 'user' ? 20 : -20 }}
+                    initial={{ opacity: 0, x: msg.role === "user" ? 20 : -20 }}
                     animate={{ opacity: 1, x: 0 }}
                     className={`p-3 rounded-lg ${
-                      msg.role === 'user' 
-                        ? 'bg-primary/10 ml-8' 
-                        : 'bg-muted/50 mr-8'
+                      msg.role === "user" 
+                        ? "bg-primary/10 ml-8" 
+                        : "bg-muted/50 mr-8"
                     }`}
                   >
                     <p className="text-xs text-muted-foreground mb-1">
-                      {msg.role === 'user' ? 'Você' : 'Nautilus Brain'}
+                      {msg.role === "user" ? "Você" : "Nautilus Brain"}
                     </p>
                     <p className="text-sm whitespace-pre-wrap">{msg.content}</p>
                   </motion.div>
@@ -302,7 +302,7 @@ export function NaturalLanguageCommand() {
                   <div className="flex-1 min-w-0">
                     <p className="truncate text-foreground">{item.command}</p>
                     <p className="text-muted-foreground">
-                      {item.timestamp.toLocaleTimeString('pt-BR')}
+                      {item.timestamp.toLocaleTimeString("pt-BR")}
                     </p>
                   </div>
                 </div>

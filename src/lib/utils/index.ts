@@ -8,7 +8,7 @@ export {
   moduleActions, 
   createNavigationHandler, 
   handleFormSubmit 
-} from './module-actions';
+} from "./module-actions";
 
 // Re-export common utils from parent
-export { cn } from '../utils';
+export { cn } from "../utils";

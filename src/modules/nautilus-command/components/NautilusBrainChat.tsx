@@ -20,7 +20,7 @@ import {
 
 interface Message {
   id: string;
-  role: 'user' | 'assistant';
+  role: "user" | "assistant";
   content: string;
   timestamp: Date;
   context?: string;
@@ -41,8 +41,8 @@ export const NautilusBrainChat: React.FC<NautilusBrainChatProps> = ({
   const { toast } = useToast();
   const [messages, setMessages] = useState<Message[]>([
     {
-      id: '1',
-      role: 'assistant',
+      id: "1",
+      role: "assistant",
       content: `Olá! Sou o **Nautilus Brain**, a IA central do sistema. Tenho visibilidade completa de toda operação:
 
 📊 **Status Atual:**
@@ -52,7 +52,7 @@ export const NautilusBrainChat: React.FC<NautilusBrainChatProps> = ({
 - 📦 ${systemStatus.inventory.lowStock} itens em baixo estoque
 - ✅ ${systemStatus.compliance.score}% score de compliance
 
-${alerts.length > 0 ? `\n⚠️ **Atenção:** ${alerts.length} alertas ativos requerem ação.` : ''}
+${alerts.length > 0 ? `\n⚠️ **Atenção:** ${alerts.length} alertas ativos requerem ação.` : ""}
 
 Como posso ajudar você hoje?`,
       timestamp: new Date(),
@@ -81,7 +81,7 @@ Como posso ajudar você hoje?`,
 
     const userMessage: Message = {
       id: Date.now().toString(),
-      role: 'user',
+      role: "user",
       content: input,
       timestamp: new Date()
     };
@@ -100,16 +100,16 @@ Sistema Nautilus One - Contexto Atual:
 - Estoque: ${systemStatus.inventory.lowStock} itens em baixo estoque
 - Compliance: ${systemStatus.compliance.score}% score
 - Alertas ativos: ${alerts.length}
-${alerts.map(a => `  - ${a.type}: ${a.title}`).join('\n')}
+${alerts.map(a => `  - ${a.type}: ${a.title}`).join("\n")}
       `;
 
-      const { data, error } = await supabase.functions.invoke('nautilus-llm', {
+      const { data, error } = await supabase.functions.invoke("nautilus-llm", {
         body: {
           prompt: input,
-          contextId: 'command-center',
-          moduleId: 'nautilus-brain',
+          contextId: "command-center",
+          moduleId: "nautilus-brain",
           sessionId: `brain-${Date.now()}`,
-          mode: 'safe'
+          mode: "safe"
         }
       });
 
@@ -117,7 +117,7 @@ ${alerts.map(a => `  - ${a.type}: ${a.title}`).join('\n')}
 
       const assistantMessage: Message = {
         id: (Date.now() + 1).toString(),
-        role: 'assistant',
+        role: "assistant",
         content: data.response || "Desculpe, não consegui processar sua solicitação. Tente novamente.",
         timestamp: new Date(),
         context: data.model,
@@ -127,12 +127,12 @@ ${alerts.map(a => `  - ${a.type}: ${a.title}`).join('\n')}
       setMessages(prev => [...prev, assistantMessage]);
 
     } catch (error) {
-      console.error('Brain error:', error);
+      console.error("Brain error:", error);
       
       // Fallback response
       const fallbackMessage: Message = {
         id: (Date.now() + 1).toString(),
-        role: 'assistant',
+        role: "assistant",
         content: generateFallbackResponse(input, systemStatus, alerts),
         timestamp: new Date(),
         suggestions: generateSuggestions(input)
@@ -147,7 +147,7 @@ ${alerts.map(a => `  - ${a.type}: ${a.title}`).join('\n')}
   const generateFallbackResponse = (query: string, status: any, alerts: any[]): string => {
     const q = query.toLowerCase();
     
-    if (q.includes('manutenção') || q.includes('manutencao')) {
+    if (q.includes("manutenção") || q.includes("manutencao")) {
       return `📊 **Análise de Manutenção:**
 
 - ✅ ${status.maintenance.completed} manutenções concluídas
@@ -163,7 +163,7 @@ ${alerts.map(a => `  - ${a.type}: ${a.title}`).join('\n')}
 Deseja que eu gere um plano de ação detalhado?`;
     }
 
-    if (q.includes('tripulação') || q.includes('tripulacao') || q.includes('certificado')) {
+    if (q.includes("tripulação") || q.includes("tripulacao") || q.includes("certificado")) {
       return `👥 **Status da Tripulação:**
 
 - Total: ${status.crew.total} tripulantes
@@ -175,7 +175,7 @@ Deseja que eu gere um plano de ação detalhado?`;
 Providenciar renovação dos certificados antes do vencimento para evitar não-conformidades regulatórias.`;
     }
 
-    if (q.includes('estoque') || q.includes('peças') || q.includes('pecas') || q.includes('compra')) {
+    if (q.includes("estoque") || q.includes("peças") || q.includes("pecas") || q.includes("compra")) {
       return `📦 **Análise de Estoque:**
 
 - ⚠️ ${status.inventory.lowStock} itens em baixo estoque
@@ -186,7 +186,7 @@ Providenciar renovação dos certificados antes do vencimento para evitar não-c
 Com base no consumo histórico, recomendo reabastecimento imediato dos itens críticos para evitar paradas operacionais.`;
     }
 
-    if (q.includes('frota') || q.includes('embarcação') || q.includes('navio')) {
+    if (q.includes("frota") || q.includes("embarcação") || q.includes("navio")) {
       return `🚢 **Status da Frota:**
 
 - Total: ${status.fleet.vessels} embarcações
@@ -197,7 +197,7 @@ Com base no consumo histórico, recomendo reabastecimento imediato dos itens cr�
 Todas as embarcações ativas estão operando dentro dos parâmetros normais.`;
     }
 
-    if (q.includes('compliance') || q.includes('auditoria') || q.includes('conformidade')) {
+    if (q.includes("compliance") || q.includes("auditoria") || q.includes("conformidade")) {
       return `✅ **Status de Compliance:**
 
 - Score geral: ${status.compliance.score}%
@@ -222,10 +222,10 @@ Qual área você gostaria de explorar em detalhes?`;
   const generateSuggestions = (query: string): string[] => {
     const q = query.toLowerCase();
     
-    if (q.includes('manutenção')) {
+    if (q.includes("manutenção")) {
       return ["Ver manutenções vencidas", "Gerar plano de manutenção", "Prever falhas"];
     }
-    if (q.includes('tripulação') || q.includes('certificado')) {
+    if (q.includes("tripulação") || q.includes("certificado")) {
       return ["Certificados expirando", "Escala de tripulação", "Avaliar desempenho"];
     }
     return ["Relatório geral", "Alertas críticos", "Previsões da IA"];
@@ -287,16 +287,16 @@ Qual área você gostaria de explorar em detalhes?`;
                 key={message.id}
                 initial={{ opacity: 0, y: 10 }}
                 animate={{ opacity: 1, y: 0 }}
-                className={`flex ${message.role === 'user' ? 'justify-end' : 'justify-start'}`}
+                className={`flex ${message.role === "user" ? "justify-end" : "justify-start"}`}
               >
                 <div
                   className={`max-w-[80%] rounded-2xl p-4 ${
-                    message.role === 'user'
-                      ? 'bg-primary text-primary-foreground'
-                      : 'bg-muted'
+                    message.role === "user"
+                      ? "bg-primary text-primary-foreground"
+                      : "bg-muted"
                   }`}
                 >
-                  {message.role === 'assistant' && (
+                  {message.role === "assistant" && (
                     <div className="flex items-center gap-2 mb-2">
                       <Brain className="h-4 w-4 text-purple-500" />
                       <span className="text-sm font-medium text-purple-600 dark:text-purple-400">
@@ -310,11 +310,11 @@ Qual área você gostaria de explorar em detalhes?`;
                     </div>
                   )}
                   <div className="prose prose-sm dark:prose-invert max-w-none">
-                    {message.content.split('\n').map((line, i) => (
+                    {message.content.split("\n").map((line, i) => (
                       <p key={i} className="mb-1 last:mb-0">
-                        {line.startsWith('**') && line.endsWith('**') 
+                        {line.startsWith("**") && line.endsWith("**") 
                           ? <strong>{line.slice(2, -2)}</strong>
-                          : line.startsWith('- ') 
+                          : line.startsWith("- ") 
                             ? <span className="block ml-2">{line}</span>
                             : line
                         }
@@ -323,7 +323,7 @@ Qual área você gostaria de explorar em detalhes?`;
                   </div>
                   
                   {/* Actions for assistant messages */}
-                  {message.role === 'assistant' && (
+                  {message.role === "assistant" && (
                     <div className="flex items-center gap-2 mt-3 pt-2 border-t border-border/50">
                       <Button variant="ghost" size="sm" onClick={() => copyMessage(message.content)}>
                         <Copy className="h-3 w-3 mr-1" />
@@ -391,7 +391,7 @@ Qual área você gostaria de explorar em detalhes?`;
               ref={inputRef}
               value={input}
               onChange={(e) => setInput(e.target.value)}
-              onKeyPress={(e) => e.key === 'Enter' && handleSend()}
+              onKeyPress={(e) => e.key === "Enter" && handleSend()}
               placeholder="Pergunte ao Nautilus Brain..."
               className="flex-1"
               disabled={isLoading}

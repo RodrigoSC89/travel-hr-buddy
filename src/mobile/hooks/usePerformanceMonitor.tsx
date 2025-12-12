@@ -92,10 +92,10 @@ export function usePerformanceMonitor(options: UsePerformanceMonitorOptions = {}
       const memory = (performance as any).memory;
       const memoryInfo = memory
         ? {
-            used: memory.usedJSHeapSize,
-            total: memory.jsHeapSizeLimit,
-            percentage: (memory.usedJSHeapSize / memory.jsHeapSizeLimit) * 100,
-          }
+          used: memory.usedJSHeapSize,
+          total: memory.jsHeapSizeLimit,
+          percentage: (memory.usedJSHeapSize / memory.jsHeapSizeLimit) * 100,
+        }
         : null;
 
       // Calculate heap growth

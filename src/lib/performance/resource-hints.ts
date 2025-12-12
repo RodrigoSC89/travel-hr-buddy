@@ -13,11 +13,11 @@ class ResourceHintsManager {
     const key = `preconnect:${origin}`;
     if (this.addedHints.has(key)) return;
 
-    const link = document.createElement('link');
-    link.rel = 'preconnect';
+    const link = document.createElement("link");
+    link.rel = "preconnect";
     link.href = origin;
     if (crossOrigin) {
-      link.crossOrigin = 'anonymous';
+      link.crossOrigin = "anonymous";
     }
     
     document.head.appendChild(link);
@@ -31,8 +31,8 @@ class ResourceHintsManager {
     const key = `dns-prefetch:${origin}`;
     if (this.addedHints.has(key)) return;
 
-    const link = document.createElement('link');
-    link.rel = 'dns-prefetch';
+    const link = document.createElement("link");
+    link.rel = "dns-prefetch";
     link.href = origin;
     
     document.head.appendChild(link);
@@ -46,8 +46,8 @@ class ResourceHintsManager {
     const key = `prefetch:${url}`;
     if (this.addedHints.has(key)) return;
 
-    const link = document.createElement('link');
-    link.rel = 'prefetch';
+    const link = document.createElement("link");
+    link.rel = "prefetch";
     link.href = url;
     if (as) {
       link.as = as;
@@ -64,8 +64,8 @@ class ResourceHintsManager {
     const key = `preload:${url}`;
     if (this.addedHints.has(key)) return;
 
-    const link = document.createElement('link');
-    link.rel = 'preload';
+    const link = document.createElement("link");
+    link.rel = "preload";
     link.href = url;
     link.as = as;
     if (type) {
@@ -83,8 +83,8 @@ class ResourceHintsManager {
     const key = `modulepreload:${url}`;
     if (this.addedHints.has(key)) return;
 
-    const link = document.createElement('link');
-    link.rel = 'modulepreload';
+    const link = document.createElement("link");
+    link.rel = "modulepreload";
     link.href = url;
     
     document.head.appendChild(link);
@@ -97,8 +97,8 @@ class ResourceHintsManager {
   initializeCommonHints(): void {
     // Preconnect to common external services
     const commonOrigins = [
-      'https://fonts.googleapis.com',
-      'https://fonts.gstatic.com',
+      "https://fonts.googleapis.com",
+      "https://fonts.gstatic.com",
     ];
 
     commonOrigins.forEach(origin => {
@@ -111,16 +111,16 @@ class ResourceHintsManager {
    */
   prefetchRoute(route: string): void {
     // In a real app, this would map routes to their chunk URLs
-    this.prefetch(route, 'document');
+    this.prefetch(route, "document");
   }
 
   /**
    * Clear all added hints
    */
   clear(): void {
-    const links = document.querySelectorAll('link[rel="preconnect"], link[rel="dns-prefetch"], link[rel="prefetch"], link[rel="preload"], link[rel="modulepreload"]');
+    const links = document.querySelectorAll("link[rel=\"preconnect\"], link[rel=\"dns-prefetch\"], link[rel=\"prefetch\"], link[rel=\"preload\"], link[rel=\"modulepreload\"]");
     links.forEach(link => {
-      const key = `${link.getAttribute('rel')}:${link.getAttribute('href')}`;
+      const key = `${link.getAttribute("rel")}:${link.getAttribute("href")}`;
       if (this.addedHints.has(key)) {
         link.remove();
       }
@@ -132,6 +132,6 @@ class ResourceHintsManager {
 export const resourceHints = new ResourceHintsManager();
 
 // Initialize common hints on module load
-if (typeof window !== 'undefined') {
+if (typeof window !== "undefined") {
   resourceHints.initializeCommonHints();
 }

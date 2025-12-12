@@ -41,7 +41,7 @@ export const PredictiveMaintenanceCard: React.FC<PredictiveMaintenanceCardProps>
       alerts: ["Vibração elevada no eixo principal", "Temperatura do óleo acima do normal"]
     };
 
-    const result = await getPredictions('maintenance', data);
+    const result = await getPredictions("maintenance", data);
     if (result) {
       setPredictions(result.predictions);
       setSummary(result.summary);
@@ -55,19 +55,19 @@ export const PredictiveMaintenanceCard: React.FC<PredictiveMaintenanceCardProps>
 
   const getSeverityColor = (severity: string) => {
     switch (severity) {
-      case 'critical': return 'text-red-500 bg-red-100 dark:bg-red-900/30';
-      case 'high': return 'text-orange-500 bg-orange-100 dark:bg-orange-900/30';
-      case 'medium': return 'text-yellow-500 bg-yellow-100 dark:bg-yellow-900/30';
-      default: return 'text-green-500 bg-green-100 dark:bg-green-900/30';
+    case "critical": return "text-red-500 bg-red-100 dark:bg-red-900/30";
+    case "high": return "text-orange-500 bg-orange-100 dark:bg-orange-900/30";
+    case "medium": return "text-yellow-500 bg-yellow-100 dark:bg-yellow-900/30";
+    default: return "text-green-500 bg-green-100 dark:bg-green-900/30";
     }
   };
 
   const getRiskBadge = (risk: string) => {
     const colors: Record<string, string> = {
-      critical: 'bg-red-500',
-      high: 'bg-orange-500',
-      medium: 'bg-yellow-500',
-      low: 'bg-green-500'
+      critical: "bg-red-500",
+      high: "bg-orange-500",
+      medium: "bg-yellow-500",
+      low: "bg-green-500"
     };
     return colors[risk] || colors.low;
   };
@@ -143,7 +143,7 @@ export const PredictiveMaintenanceCard: React.FC<PredictiveMaintenanceCardProps>
                 >
                   <div className="flex items-start gap-3">
                     <div className={`p-2 rounded-lg ${getSeverityColor(prediction.severity)}`}>
-                      {prediction.severity === 'critical' || prediction.severity === 'high' ? (
+                      {prediction.severity === "critical" || prediction.severity === "high" ? (
                         <AlertTriangle className="h-4 w-4" />
                       ) : (
                         <Wrench className="h-4 w-4" />

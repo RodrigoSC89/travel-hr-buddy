@@ -3,7 +3,7 @@
  * Zod schemas for input validation across the application
  */
 
-import { z } from 'zod';
+import { z } from "zod";
 
 // ============= Auth Schemas =============
 export const loginSchema = z.object({
@@ -64,8 +64,8 @@ export const complianceFormSchema = z.object({
     .trim()
     .max(2000, { message: "Descrição muito longa" })
     .optional(),
-  category: z.enum(['ism', 'solas', 'marpol', 'mlc', 'stcw', 'other']),
-  priority: z.enum(['low', 'medium', 'high', 'critical']),
+  category: z.enum(["ism", "solas", "marpol", "mlc", "stcw", "other"]),
+  priority: z.enum(["low", "medium", "high", "critical"]),
   dueDate: z.string().datetime().optional(),
   assigneeId: z.string().uuid().optional(),
 });
@@ -116,7 +116,7 @@ export const paginationSchema = z.object({
   page: z.coerce.number().min(1).default(1),
   pageSize: z.coerce.number().min(1).max(100).default(20),
   sortBy: z.string().optional(),
-  sortOrder: z.enum(['asc', 'desc']).default('desc'),
+  sortOrder: z.enum(["asc", "desc"]).default("desc"),
 });
 
 export const idParamSchema = z.object({

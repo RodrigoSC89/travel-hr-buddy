@@ -9,78 +9,78 @@ const PII_PATTERNS: Array<{
   name: string;
   pattern: RegExp;
   replacement: string;
-  sensitivity: 'high' | 'medium' | 'low';
+  sensitivity: "high" | "medium" | "low";
 }> = [
   // High sensitivity - always mask
   {
-    name: 'CPF (Brazilian ID)',
+    name: "CPF (Brazilian ID)",
     pattern: /\b\d{3}\.?\d{3}\.?\d{3}-?\d{2}\b/g,
-    replacement: '[CPF_MASKED]',
-    sensitivity: 'high',
+    replacement: "[CPF_MASKED]",
+    sensitivity: "high",
   },
   {
-    name: 'CNPJ (Brazilian Company ID)',
+    name: "CNPJ (Brazilian Company ID)",
     pattern: /\b\d{2}\.?\d{3}\.?\d{3}\/?\d{4}-?\d{2}\b/g,
-    replacement: '[CNPJ_MASKED]',
-    sensitivity: 'high',
+    replacement: "[CNPJ_MASKED]",
+    sensitivity: "high",
   },
   {
-    name: 'Credit Card',
+    name: "Credit Card",
     pattern: /\b(?:\d{4}[-\s]?){3}\d{4}\b/g,
-    replacement: '[CARD_MASKED]',
-    sensitivity: 'high',
+    replacement: "[CARD_MASKED]",
+    sensitivity: "high",
   },
   {
-    name: 'SSN (US)',
+    name: "SSN (US)",
     pattern: /\b\d{3}-\d{2}-\d{4}\b/g,
-    replacement: '[SSN_MASKED]',
-    sensitivity: 'high',
+    replacement: "[SSN_MASKED]",
+    sensitivity: "high",
   },
   {
-    name: 'Passport',
+    name: "Passport",
     pattern: /\b[A-Z]{1,2}\d{6,9}\b/gi,
-    replacement: '[PASSPORT_MASKED]',
-    sensitivity: 'high',
+    replacement: "[PASSPORT_MASKED]",
+    sensitivity: "high",
   },
   
   // Medium sensitivity - mask by default
   {
-    name: 'Email',
+    name: "Email",
     pattern: /\b[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\.[A-Z|a-z]{2,}\b/g,
-    replacement: '[EMAIL_MASKED]',
-    sensitivity: 'medium',
+    replacement: "[EMAIL_MASKED]",
+    sensitivity: "medium",
   },
   {
-    name: 'Phone (International)',
+    name: "Phone (International)",
     pattern: /\b(?:\+\d{1,3}[-.\s]?)?\(?\d{2,3}\)?[-.\s]?\d{3,5}[-.\s]?\d{4}\b/g,
-    replacement: '[PHONE_MASKED]',
-    sensitivity: 'medium',
+    replacement: "[PHONE_MASKED]",
+    sensitivity: "medium",
   },
   {
-    name: 'IP Address',
+    name: "IP Address",
     pattern: /\b(?:\d{1,3}\.){3}\d{1,3}\b/g,
-    replacement: '[IP_MASKED]',
-    sensitivity: 'medium',
+    replacement: "[IP_MASKED]",
+    sensitivity: "medium",
   },
   {
-    name: 'Brazilian Phone',
+    name: "Brazilian Phone",
     pattern: /\b\(?0?\d{2}\)?\s?\d{4,5}-?\d{4}\b/g,
-    replacement: '[PHONE_MASKED]',
-    sensitivity: 'medium',
+    replacement: "[PHONE_MASKED]",
+    sensitivity: "medium",
   },
   
   // Low sensitivity - optional masking
   {
-    name: 'Date of Birth Pattern',
+    name: "Date of Birth Pattern",
     pattern: /\b(?:nascido em|born on|dob|data de nascimento)[:\s]+\d{1,2}[\/\-]\d{1,2}[\/\-]\d{2,4}\b/gi,
-    replacement: '[DOB_MASKED]',
-    sensitivity: 'low',
+    replacement: "[DOB_MASKED]",
+    sensitivity: "low",
   },
   {
-    name: 'Address Pattern',
+    name: "Address Pattern",
     pattern: /\b(?:rua|avenida|av\.|r\.)\s+[A-Za-zÀ-ÿ\s]+,?\s*(?:n[°º]?\s*)?\d+/gi,
-    replacement: '[ADDRESS_MASKED]',
-    sensitivity: 'low',
+    replacement: "[ADDRESS_MASKED]",
+    sensitivity: "low",
   },
 ];
 
@@ -92,7 +92,7 @@ const NAME_INDICATORS = [
 
 export interface SanitizerOptions {
   // Which sensitivity levels to mask
-  sensitivity?: ('high' | 'medium' | 'low')[];
+  sensitivity?: ("high" | "medium" | "low")[];
   
   // Additional patterns to mask
   customPatterns?: Array<{ pattern: RegExp; replacement: string }>;
@@ -118,7 +118,7 @@ export const sanitizePII = (
   options: SanitizerOptions = {}
 ): SanitizeResult => {
   const {
-    sensitivity = ['high', 'medium'],
+    sensitivity = ["high", "medium"],
     customPatterns = [],
     maskNames = false,
     verbose = false,
@@ -148,7 +148,7 @@ export const sanitizePII = (
     const matches = sanitized.match(pattern);
     if (matches) {
       maskedCount += matches.length;
-      maskedTypes.push('Custom');
+      maskedTypes.push("Custom");
       sanitized = sanitized.replace(pattern, replacement);
     }
   });
@@ -159,9 +159,9 @@ export const sanitizePII = (
       const matches = sanitized.match(pattern);
       if (matches) {
         maskedCount += matches.length;
-        maskedTypes.push('Name');
+        maskedTypes.push("Name");
         sanitized = sanitized.replace(pattern, (match) => {
-          return match.replace(/([A-Za-zÀ-ÿ]+(?:\s+[A-Za-zÀ-ÿ]+){1,4})/, '[NAME_MASKED]');
+          return match.replace(/([A-Za-zÀ-ÿ]+(?:\s+[A-Za-zÀ-ÿ]+){1,4})/, "[NAME_MASKED]");
         });
       }
     });
@@ -179,7 +179,7 @@ export const sanitizePII = (
  */
 export const containsPII = (
   text: string,
-  sensitivity: ('high' | 'medium' | 'low')[] = ['high', 'medium']
+  sensitivity: ("high" | "medium" | "low")[] = ["high", "medium"]
 ): { hasPII: boolean; types: string[] } => {
   const types: string[] = [];
   
@@ -214,14 +214,14 @@ export const sanitizeMessages = (
 export const createSafePrompt = (
   userInput: string,
   systemPrompt: string,
-  options: SanitizerOptions = { sensitivity: ['high', 'medium'] }
+  options: SanitizerOptions = { sensitivity: ["high", "medium"] }
 ): { prompt: string; warnings: string[] } => {
   const warnings: string[] = [];
   
   // Check for PII in user input
   const piiCheck = containsPII(userInput);
   if (piiCheck.hasPII) {
-    warnings.push(`User input contains PII: ${piiCheck.types.join(', ')}`);
+    warnings.push(`User input contains PII: ${piiCheck.types.join(", ")}`);
   }
   
   // Sanitize user input

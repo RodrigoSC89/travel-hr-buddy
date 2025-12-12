@@ -70,30 +70,30 @@ export const useDashboardExport = () => {
         const filename = options.filename || `dashboard-export-${Date.now()}`;
 
         switch (options.format) {
-          case "csv":
-            exportToCSV(options.data, filename);
-            break;
+        case "csv":
+          exportToCSV(options.data, filename);
+          break;
 
-          case "json":
-            exportToJSON(options.data, filename);
-            break;
+        case "json":
+          exportToJSON(options.data, filename);
+          break;
 
-          case "excel":
-            toast({
-              title: "Em desenvolvimento",
-              description: "Exportação para Excel em breve",
-            });
-            break;
+        case "excel":
+          toast({
+            title: "Em desenvolvimento",
+            description: "Exportação para Excel em breve",
+          });
+          break;
 
-          case "pdf":
-            toast({
-              title: "Em desenvolvimento",
-              description: "Exportação para PDF em breve",
-            });
-            break;
+        case "pdf":
+          toast({
+            title: "Em desenvolvimento",
+            description: "Exportação para PDF em breve",
+          });
+          break;
 
-          default:
-            throw new Error(`Formato de exportação não suportado: ${options.format}`);
+        default:
+          throw new Error(`Formato de exportação não suportado: ${options.format}`);
         }
 
         toast({

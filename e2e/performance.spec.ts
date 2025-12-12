@@ -1,17 +1,17 @@
-import { test, expect } from '@playwright/test';
+import { test, expect } from "@playwright/test";
 
-test.describe('Performance Tests', () => {
-  test('should load homepage within acceptable time', async ({ page }) => {
+test.describe("Performance Tests", () => {
+  test("should load homepage within acceptable time", async ({ page }) => {
     const startTime = Date.now();
-    await page.goto('/');
+    await page.goto("/");
     const loadTime = Date.now() - startTime;
     
     // Page should load within 5 seconds
     expect(loadTime).toBeLessThan(5000);
   });
 
-  test('should have good Largest Contentful Paint', async ({ page }) => {
-    await page.goto('/');
+  test("should have good Largest Contentful Paint", async ({ page }) => {
+    await page.goto("/");
     
     const lcp = await page.evaluate(() => {
       return new Promise<number>((resolve) => {
@@ -19,7 +19,7 @@ test.describe('Performance Tests', () => {
           const entries = list.getEntries();
           const lastEntry = entries[entries.length - 1];
           resolve(lastEntry.startTime);
-        }).observe({ type: 'largest-contentful-paint', buffered: true });
+        }).observe({ type: "largest-contentful-paint", buffered: true });
         
         // Fallback timeout
         setTimeout(() => resolve(0), 5000);
@@ -30,8 +30,8 @@ test.describe('Performance Tests', () => {
     expect(lcp).toBeLessThan(4500); // Allowing some buffer for test environment
   });
 
-  test('should have minimal Cumulative Layout Shift', async ({ page }) => {
-    await page.goto('/');
+  test("should have minimal Cumulative Layout Shift", async ({ page }) => {
+    await page.goto("/");
     
     // Wait for page to stabilize
     await page.waitForTimeout(2000);
@@ -46,7 +46,7 @@ test.describe('Performance Tests', () => {
             }
           }
         });
-        observer.observe({ type: 'layout-shift', buffered: true });
+        observer.observe({ type: "layout-shift", buffered: true });
         
         setTimeout(() => resolve(clsValue), 2000);
       });
@@ -56,46 +56,46 @@ test.describe('Performance Tests', () => {
     expect(cls).toBeLessThan(0.25);
   });
 
-  test('should have no JavaScript errors on load', async ({ page }) => {
+  test("should have no JavaScript errors on load", async ({ page }) => {
     const errors: string[] = [];
     
-    page.on('pageerror', (error) => {
+    page.on("pageerror", (error) => {
       errors.push(error.message);
     });
     
-    await page.goto('/');
+    await page.goto("/");
     await page.waitForTimeout(2000);
     
     expect(errors).toEqual([]);
   });
 
-  test('should have no failed network requests', async ({ page }) => {
+  test("should have no failed network requests", async ({ page }) => {
     const failedRequests: string[] = [];
     
-    page.on('requestfailed', (request) => {
+    page.on("requestfailed", (request) => {
       failedRequests.push(`${request.url()} - ${request.failure()?.errorText}`);
     });
     
-    await page.goto('/');
+    await page.goto("/");
     await page.waitForTimeout(2000);
     
     expect(failedRequests).toEqual([]);
   });
 
-  test('should have proper caching headers for static assets', async ({ page }) => {
+  test("should have proper caching headers for static assets", async ({ page }) => {
     const staticAssets: { url: string; cacheControl?: string }[] = [];
     
-    page.on('response', (response) => {
+    page.on("response", (response) => {
       const url = response.url();
       if (url.match(/\.(js|css|png|jpg|jpeg|svg|woff2?)$/)) {
         staticAssets.push({
           url,
-          cacheControl: response.headers()['cache-control'],
+          cacheControl: response.headers()["cache-control"],
         });
       }
     });
     
-    await page.goto('/');
+    await page.goto("/");
     
     // Check that static assets have cache headers
     for (const asset of staticAssets) {
@@ -106,16 +106,16 @@ test.describe('Performance Tests', () => {
   });
 });
 
-test.describe('Core Web Vitals', () => {
-  test('should measure all Web Vitals', async ({ page }) => {
-    await page.goto('/');
+test.describe("Core Web Vitals", () => {
+  test("should measure all Web Vitals", async ({ page }) => {
+    await page.goto("/");
     
     const webVitals = await page.evaluate(() => {
       return new Promise<{ fcp: number; lcp: number; ttfb: number }>((resolve) => {
         const vitals = { fcp: 0, lcp: 0, ttfb: 0 };
         
         // TTFB
-        const navigation = performance.getEntriesByType('navigation')[0] as PerformanceNavigationTiming;
+        const navigation = performance.getEntriesByType("navigation")[0] as PerformanceNavigationTiming;
         vitals.ttfb = navigation.responseStart - navigation.requestStart;
         
         // FCP
@@ -123,20 +123,20 @@ test.describe('Core Web Vitals', () => {
           const entry = list.getEntries()[0];
           vitals.fcp = entry.startTime;
         });
-        fcpObserver.observe({ type: 'paint', buffered: true });
+        fcpObserver.observe({ type: "paint", buffered: true });
         
         // LCP
         const lcpObserver = new PerformanceObserver((list) => {
           const entries = list.getEntries();
           vitals.lcp = entries[entries.length - 1].startTime;
         });
-        lcpObserver.observe({ type: 'largest-contentful-paint', buffered: true });
+        lcpObserver.observe({ type: "largest-contentful-paint", buffered: true });
         
         setTimeout(() => resolve(vitals), 3000);
       });
     });
     
-    console.log('Web Vitals:', webVitals);
+    console.log("Web Vitals:", webVitals);
     
     // Assertions with reasonable thresholds
     expect(webVitals.ttfb).toBeLessThan(1500);

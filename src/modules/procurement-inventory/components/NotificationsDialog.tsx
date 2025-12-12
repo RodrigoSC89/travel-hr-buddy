@@ -43,16 +43,16 @@ export default function NotificationsDialog({
 }: NotificationsDialogProps) {
   const getIcon = (type: Notification["type"]) => {
     switch (type) {
-      case "warning":
-        return <AlertTriangle className="h-4 w-4 text-amber-500" />;
-      case "alert":
-        return <AlertTriangle className="h-4 w-4 text-destructive" />;
-      case "success":
-        return <CheckCircle2 className="h-4 w-4 text-green-500" />;
-      case "ai":
-        return <Brain className="h-4 w-4 text-purple-500" />;
-      default:
-        return <Info className="h-4 w-4 text-blue-500" />;
+    case "warning":
+      return <AlertTriangle className="h-4 w-4 text-amber-500" />;
+    case "alert":
+      return <AlertTriangle className="h-4 w-4 text-destructive" />;
+    case "success":
+      return <CheckCircle2 className="h-4 w-4 text-green-500" />;
+    case "ai":
+      return <Brain className="h-4 w-4 text-purple-500" />;
+    default:
+      return <Info className="h-4 w-4 text-blue-500" />;
     }
   };
 

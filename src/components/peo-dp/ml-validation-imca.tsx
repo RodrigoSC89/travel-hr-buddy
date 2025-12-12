@@ -306,7 +306,7 @@ export const MLValidationIMCA: React.FC = () => {
                 <Progress value={overallScore} className="h-4" />
                 <p className="text-sm text-muted-foreground mt-2">
                   {overallScore >= 80 ? "Plano em conformidade" : 
-                   overallScore >= 60 ? "Requer melhorias" : "Ação urgente necessária"}
+                    overallScore >= 60 ? "Requer melhorias" : "Ação urgente necessária"}
                 </p>
               </div>
             </div>
@@ -385,7 +385,7 @@ export const MLValidationIMCA: React.FC = () => {
                             <span>{finding.description}</span>
                             <Badge className={getSeverityBadge(finding.severity)} variant="outline">
                               {finding.severity === "high" ? "Alta" : 
-                               finding.severity === "medium" ? "Média" : "Baixa"}
+                                finding.severity === "medium" ? "Média" : "Baixa"}
                             </Badge>
                           </div>
                           <p className="text-xs text-muted-foreground mt-1">
@@ -424,8 +424,8 @@ export const MLValidationIMCA: React.FC = () => {
                   key={rec.id} 
                   className={`p-4 rounded-lg border-l-4 ${
                     rec.priority === "high" ? "border-l-red-500 bg-red-50" :
-                    rec.priority === "medium" ? "border-l-yellow-500 bg-yellow-50" :
-                    "border-l-blue-500 bg-blue-50"
+                      rec.priority === "medium" ? "border-l-yellow-500 bg-yellow-50" :
+                        "border-l-blue-500 bg-blue-50"
                   }`}
                 >
                   <div className="flex items-start justify-between">
@@ -437,7 +437,7 @@ export const MLValidationIMCA: React.FC = () => {
                         <span className="text-xs text-muted-foreground">§{rec.section}</span>
                         <Badge className={getSeverityBadge(rec.priority)}>
                           {rec.priority === "high" ? "Alta" : 
-                           rec.priority === "medium" ? "Média" : "Baixa"} prioridade
+                            rec.priority === "medium" ? "Média" : "Baixa"} prioridade
                         </Badge>
                       </div>
                       <p className="text-sm">{rec.recommendation}</p>
@@ -492,7 +492,7 @@ export const MLValidationIMCA: React.FC = () => {
                           <span className="text-muted-foreground">Adoção:</span>{" "}
                           <span className={`font-medium ${
                             practice.adoptionRate >= 80 ? "text-green-600" :
-                            practice.adoptionRate >= 60 ? "text-yellow-600" : "text-red-600"
+                              practice.adoptionRate >= 60 ? "text-yellow-600" : "text-red-600"
                           }`}>
                             {practice.adoptionRate}%
                           </span>
@@ -501,7 +501,7 @@ export const MLValidationIMCA: React.FC = () => {
                           <span className="text-muted-foreground">Impacto:</span>{" "}
                           <Badge variant="outline" className={
                             practice.impact === "high" ? "border-green-500 text-green-700" :
-                            "border-yellow-500 text-yellow-700"
+                              "border-yellow-500 text-yellow-700"
                           }>
                             {practice.impact === "high" ? "Alto" : "Médio"}
                           </Badge>

@@ -31,8 +31,8 @@ export interface CustomChecklistItem {
   isImperative: boolean;
   evidence: string;
   standards: string[];
-  applicableDPClass: ('DP1' | 'DP2' | 'DP3')[];
-  criticality: 'Alta' | 'Média' | 'Baixa';
+  applicableDPClass: ("DP1" | "DP2" | "DP3")[];
+  criticality: "Alta" | "Média" | "Baixa";
   createdAt: Date;
   createdBy?: string;
 }
@@ -170,11 +170,11 @@ export function IMCAAuditManager({
       items: customItems,
       exportedAt: new Date().toISOString()
     };
-    const blob = new Blob([JSON.stringify(exportData, null, 2)], { type: 'application/json' });
+    const blob = new Blob([JSON.stringify(exportData, null, 2)], { type: "application/json" });
     const url = URL.createObjectURL(blob);
-    const a = document.createElement('a');
+    const a = document.createElement("a");
     a.href = url;
-    a.download = `imca-audit-custom-${new Date().toISOString().split('T')[0]}.json`;
+    a.download = `imca-audit-custom-${new Date().toISOString().split("T")[0]}.json`;
     a.click();
     URL.revokeObjectURL(url);
 
@@ -198,7 +198,7 @@ export function IMCAAuditManager({
     }
   };
 
-  const toggleDPClass = (dpClass: 'DP1' | 'DP2' | 'DP3') => {
+  const toggleDPClass = (dpClass: "DP1" | "DP2" | "DP3") => {
     if (editingItem) {
       const classes = editingItem.applicableDPClass.includes(dpClass)
         ? editingItem.applicableDPClass.filter(c => c !== dpClass)
@@ -303,7 +303,7 @@ export function IMCAAuditManager({
                 <div className="space-y-2">
                   <Label>Classes DP Aplicáveis</Label>
                   <div className="flex gap-2">
-                    {(['DP1', 'DP2', 'DP3'] as const).map(dp => (
+                    {(["DP1", "DP2", "DP3"] as const).map(dp => (
                       <Button
                         key={dp}
                         type="button"
@@ -473,13 +473,13 @@ export function IMCAAuditManager({
                 {customItems.map(item => (
                   <div 
                     key={item.id} 
-                    className={`p-4 rounded-lg border ${item.isImperative ? 'border-destructive/50 bg-destructive/5' : 'bg-muted/30'}`}
+                    className={`p-4 rounded-lg border ${item.isImperative ? "border-destructive/50 bg-destructive/5" : "bg-muted/30"}`}
                   >
                     <div className="flex items-start justify-between gap-4">
                       <div className="flex-1 space-y-2">
                         <div className="flex items-center gap-2 flex-wrap">
                           <Badge variant="outline">{item.categoryCode}</Badge>
-                          <Badge variant={item.criticality === 'Alta' ? 'destructive' : item.criticality === 'Média' ? 'default' : 'secondary'}>
+                          <Badge variant={item.criticality === "Alta" ? "destructive" : item.criticality === "Média" ? "default" : "secondary"}>
                             {item.criticality}
                           </Badge>
                           {item.isImperative && (
@@ -610,7 +610,7 @@ export function IMCAAuditManager({
                 <div className="space-y-2">
                   <Label>Classes DP Aplicáveis</Label>
                   <div className="flex gap-2">
-                    {(['DP1', 'DP2', 'DP3'] as const).map(dp => (
+                    {(["DP1", "DP2", "DP3"] as const).map(dp => (
                       <Button
                         key={dp}
                         type="button"

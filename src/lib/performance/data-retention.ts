@@ -6,7 +6,7 @@
 export interface RetentionPolicy {
   module: string;
   maxAgeDays: number;
-  priority: 'low' | 'medium' | 'high';
+  priority: "low" | "medium" | "high";
   storageKey: string;
 }
 
@@ -18,13 +18,13 @@ export interface CleanupResult {
 }
 
 const DEFAULT_POLICIES: RetentionPolicy[] = [
-  { module: 'cache', maxAgeDays: 3, priority: 'low', storageKey: 'cache_' },
-  { module: 'sync_queue', maxAgeDays: 7, priority: 'high', storageKey: 'sync_' },
-  { module: 'ai_cache', maxAgeDays: 14, priority: 'medium', storageKey: 'ai_' },
-  { module: 'audit_logs', maxAgeDays: 90, priority: 'high', storageKey: 'audit_' },
-  { module: 'temp_data', maxAgeDays: 1, priority: 'low', storageKey: 'temp_' },
-  { module: 'form_drafts', maxAgeDays: 30, priority: 'medium', storageKey: 'draft_' },
-  { module: 'analytics', maxAgeDays: 60, priority: 'medium', storageKey: 'analytics_' },
+  { module: "cache", maxAgeDays: 3, priority: "low", storageKey: "cache_" },
+  { module: "sync_queue", maxAgeDays: 7, priority: "high", storageKey: "sync_" },
+  { module: "ai_cache", maxAgeDays: 14, priority: "medium", storageKey: "ai_" },
+  { module: "audit_logs", maxAgeDays: 90, priority: "high", storageKey: "audit_" },
+  { module: "temp_data", maxAgeDays: 1, priority: "low", storageKey: "temp_" },
+  { module: "form_drafts", maxAgeDays: 30, priority: "medium", storageKey: "draft_" },
+  { module: "analytics", maxAgeDays: 60, priority: "medium", storageKey: "analytics_" },
 ];
 
 class DataRetentionManager {
@@ -92,13 +92,13 @@ class DataRetentionManager {
             if (timestamp && (now - new Date(timestamp).getTime() > maxAge)) {
               keysToRemove.push(key);
               bytesFreed += item.length * 2; // UTF-16
-            } else if (force && policy.priority === 'low') {
+            } else if (force && policy.priority === "low") {
               keysToRemove.push(key);
               bytesFreed += item.length * 2;
             }
           } catch {
             // Invalid JSON, mark for removal
-            if (force || policy.priority === 'low') {
+            if (force || policy.priority === "low") {
               keysToRemove.push(key);
             }
           }
@@ -124,12 +124,12 @@ class DataRetentionManager {
   }
 
   private async cleanupIndexedDB(): Promise<void> {
-    if (!('indexedDB' in window)) return;
+    if (!("indexedDB" in window)) return;
 
     try {
       const databases = await indexedDB.databases?.() || [];
       for (const db of databases) {
-        if (db.name?.includes('temp') || db.name?.includes('cache')) {
+        if (db.name?.includes("temp") || db.name?.includes("cache")) {
           // Could delete old temp databases
         }
       }
@@ -143,7 +143,7 @@ class DataRetentionManager {
     used: number;
     available: number;
     byModule: Record<string, number>;
-  } {
+    } {
     let total = 5 * 1024 * 1024; // 5MB default localStorage limit
     let used = 0;
     const byModule: Record<string, number> = {};
@@ -152,7 +152,7 @@ class DataRetentionManager {
       for (let i = 0; i < localStorage.length; i++) {
         const key = localStorage.key(i);
         if (key) {
-          const item = localStorage.getItem(key) || '';
+          const item = localStorage.getItem(key) || "";
           const size = item.length * 2;
           used += size;
 
@@ -163,7 +163,7 @@ class DataRetentionManager {
       }
 
       // Try to get actual quota
-      if ('storage' in navigator && 'estimate' in navigator.storage) {
+      if ("storage" in navigator && "estimate" in navigator.storage) {
         navigator.storage.estimate().then(estimate => {
           if (estimate.quota) {
             total = estimate.quota;
@@ -171,8 +171,8 @@ class DataRetentionManager {
         });
       }
     } catch (e) {
-      console.warn('[DataRetention] Error getting storage stats:', e);
-      console.warn('[DataRetention] Error getting storage stats:', e);
+      console.warn("[DataRetention] Error getting storage stats:", e);
+      console.warn("[DataRetention] Error getting storage stats:", e);
     }
 
     return {
@@ -189,36 +189,36 @@ class DataRetentionManager {
         return policy.module;
       }
     }
-    return 'other';
+    return "other";
   }
 
   getCleanupHistory(): CleanupResult[] {
     return [...this.cleanupHistory];
   }
 
-  suggestCleanup(): { shouldClean: boolean; reason: string; urgency: 'low' | 'medium' | 'high' } {
+  suggestCleanup(): { shouldClean: boolean; reason: string; urgency: "low" | "medium" | "high" } {
     const stats = this.getStorageStats();
     const usagePercent = stats.used / stats.total;
 
     if (usagePercent > 0.9) {
       return { 
         shouldClean: true, 
-        reason: 'Armazenamento crítico: mais de 90% utilizado', 
-        urgency: 'high' 
+        reason: "Armazenamento crítico: mais de 90% utilizado", 
+        urgency: "high" 
       };
     }
     if (usagePercent > 0.7) {
       return { 
         shouldClean: true, 
-        reason: 'Armazenamento alto: mais de 70% utilizado', 
-        urgency: 'medium' 
+        reason: "Armazenamento alto: mais de 70% utilizado", 
+        urgency: "medium" 
       };
     }
     
     return { 
       shouldClean: false, 
-      reason: 'Armazenamento em níveis adequados', 
-      urgency: 'low' 
+      reason: "Armazenamento em níveis adequados", 
+      urgency: "low" 
     };
   }
 
@@ -250,7 +250,7 @@ class DataRetentionManager {
     }
 
     return new Blob([JSON.stringify(exportData, null, 2)], {
-      type: 'application/json'
+      type: "application/json"
     });
   }
 }

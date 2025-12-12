@@ -3,12 +3,12 @@
  * Track Core Web Vitals in production
  */
 
-import { onCLS, onFCP, onINP, onLCP, onTTFB, Metric } from 'web-vitals';
+import { onCLS, onFCP, onINP, onLCP, onTTFB, Metric } from "web-vitals";
 
 interface VitalMetric {
   name: string;
   value: number;
-  rating: 'good' | 'needs-improvement' | 'poor';
+  rating: "good" | "needs-improvement" | "poor";
   delta: number;
   id: string;
   navigationType: string;
@@ -35,7 +35,7 @@ class WebVitalsMonitor {
         rating: metric.rating,
         delta: metric.delta,
         id: metric.id,
-        navigationType: metric.navigationType || 'unknown',
+        navigationType: metric.navigationType || "unknown",
       };
 
       this.metrics.set(metric.name, vitalMetric);
@@ -89,9 +89,9 @@ class WebVitalsMonitor {
     };
 
     const scores: Record<string, Record<string, number>> = {
-      LCP: { good: 100, 'needs-improvement': 50, poor: 0 },
-      CLS: { good: 100, 'needs-improvement': 50, poor: 0 },
-      INP: { good: 100, 'needs-improvement': 50, poor: 0 },
+      LCP: { good: 100, "needs-improvement": 50, poor: 0 },
+      CLS: { good: 100, "needs-improvement": 50, poor: 0 },
+      INP: { good: 100, "needs-improvement": 50, poor: 0 },
     };
 
     let totalWeight = 0;
@@ -117,8 +117,8 @@ class WebVitalsMonitor {
 
     try {
       await fetch(endpoint, {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
           metrics,
           score: this.getScore(),
@@ -129,8 +129,8 @@ class WebVitalsMonitor {
         keepalive: true,
       });
     } catch (error) {
-      console.warn('[WebVitals] Failed to send metrics:', error);
-      console.warn('[WebVitals] Failed to send metrics:', error);
+      console.warn("[WebVitals] Failed to send metrics:", error);
+      console.warn("[WebVitals] Failed to send metrics:", error);
     }
   }
 }
@@ -140,7 +140,7 @@ export const webVitalsMonitor = new WebVitalsMonitor();
 /**
  * React hook for Web Vitals
  */
-import { useState, useEffect } from 'react';
+import { useState, useEffect } from "react";
 
 export function useWebVitals() {
   const [metrics, setMetrics] = useState<VitalMetric[]>([]);

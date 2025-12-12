@@ -3,36 +3,36 @@
  * Compliance Ambiental e Emissões
  */
 
-import React, { useState } from 'react';
-import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
-import { Button } from '@/components/ui/button';
-import { Badge } from '@/components/ui/badge';
-import { Progress } from '@/components/ui/progress';
-import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
+import React, { useState } from "react";
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import { Button } from "@/components/ui/button";
+import { Badge } from "@/components/ui/badge";
+import { Progress } from "@/components/ui/progress";
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { 
   Leaf, Droplets, Wind, Zap, TrendingDown,
   TrendingUp, AlertTriangle, Download, BarChart3,
   Globe, ThermometerSun, Waves, Factory
-} from 'lucide-react';
-import { motion } from 'framer-motion';
+} from "lucide-react";
+import { motion } from "framer-motion";
 
 interface EmissionData {
   vessel: string;
   co2: number;
   sox: number;
   nox: number;
-  trend: 'up' | 'down' | 'stable';
+  trend: "up" | "down" | "stable";
   efficiency: number;
 }
 
 export function ESGDashboard() {
-  const [selectedPeriod, setSelectedPeriod] = useState('month');
+  const [selectedPeriod, setSelectedPeriod] = useState("month");
   
   const emissionData: EmissionData[] = [
-    { vessel: 'Navio Sirius', co2: 245, sox: 0.8, nox: 1.2, trend: 'down', efficiency: 92 },
-    { vessel: 'Navio Vega', co2: 312, sox: 1.1, nox: 1.8, trend: 'up', efficiency: 78 },
-    { vessel: 'Navio Polaris', co2: 189, sox: 0.5, nox: 0.9, trend: 'down', efficiency: 95 },
-    { vessel: 'Navio Orion', co2: 278, sox: 0.9, nox: 1.5, trend: 'stable', efficiency: 85 }
+    { vessel: "Navio Sirius", co2: 245, sox: 0.8, nox: 1.2, trend: "down", efficiency: 92 },
+    { vessel: "Navio Vega", co2: 312, sox: 1.1, nox: 1.8, trend: "up", efficiency: 78 },
+    { vessel: "Navio Polaris", co2: 189, sox: 0.5, nox: 0.9, trend: "down", efficiency: 95 },
+    { vessel: "Navio Orion", co2: 278, sox: 0.9, nox: 1.5, trend: "stable", efficiency: 85 }
   ];
 
   const totalCO2 = emissionData.reduce((acc, curr) => acc + curr.co2, 0);
@@ -42,46 +42,46 @@ export function ESGDashboard() {
     environmental: {
       score: 78,
       items: [
-        { label: 'Emissões CO2', value: '1,024 ton', status: 'good' },
-        { label: 'Consumo Combustível', value: '42,500 L', status: 'warning' },
-        { label: 'Descarte Resíduos', value: '98% conforme', status: 'good' },
-        { label: 'Água Tratada', value: '100%', status: 'good' }
+        { label: "Emissões CO2", value: "1,024 ton", status: "good" },
+        { label: "Consumo Combustível", value: "42,500 L", status: "warning" },
+        { label: "Descarte Resíduos", value: "98% conforme", status: "good" },
+        { label: "Água Tratada", value: "100%", status: "good" }
       ]
     },
     social: {
       score: 85,
       items: [
-        { label: 'Segurança Tripulação', value: '0 acidentes', status: 'good' },
-        { label: 'Treinamentos', value: '95% completos', status: 'good' },
-        { label: 'Satisfação Equipe', value: '4.2/5', status: 'warning' },
-        { label: 'Horas Extras', value: 'Dentro do limite', status: 'good' }
+        { label: "Segurança Tripulação", value: "0 acidentes", status: "good" },
+        { label: "Treinamentos", value: "95% completos", status: "good" },
+        { label: "Satisfação Equipe", value: "4.2/5", status: "warning" },
+        { label: "Horas Extras", value: "Dentro do limite", status: "good" }
       ]
     },
     governance: {
       score: 92,
       items: [
-        { label: 'Certificações', value: '100% válidas', status: 'good' },
-        { label: 'Auditorias', value: '2 pendentes', status: 'warning' },
-        { label: 'Compliance ANTAQ', value: '100%', status: 'good' },
-        { label: 'Documentação', value: 'Atualizada', status: 'good' }
+        { label: "Certificações", value: "100% válidas", status: "good" },
+        { label: "Auditorias", value: "2 pendentes", status: "warning" },
+        { label: "Compliance ANTAQ", value: "100%", status: "good" },
+        { label: "Documentação", value: "Atualizada", status: "good" }
       ]
     }
   };
 
   const getStatusColor = (status: string) => {
     switch (status) {
-      case 'good': return 'text-green-500';
-      case 'warning': return 'text-warning';
-      case 'critical': return 'text-destructive';
-      default: return 'text-muted-foreground';
+    case "good": return "text-green-500";
+    case "warning": return "text-warning";
+    case "critical": return "text-destructive";
+    default: return "text-muted-foreground";
     }
   };
 
   const getTrendIcon = (trend: string) => {
     switch (trend) {
-      case 'up': return <TrendingUp className="h-4 w-4 text-destructive" />;
-      case 'down': return <TrendingDown className="h-4 w-4 text-green-500" />;
-      default: return <div className="h-4 w-4 bg-muted rounded" />;
+    case "up": return <TrendingUp className="h-4 w-4 text-destructive" />;
+    case "down": return <TrendingDown className="h-4 w-4 text-green-500" />;
+    default: return <div className="h-4 w-4 bg-muted rounded" />;
     }
   };
 
@@ -97,17 +97,17 @@ export function ESGDashboard() {
           <p className="text-muted-foreground">Monitoramento ambiental, social e governança</p>
         </div>
         <div className="flex gap-2">
-          {['week', 'month', 'quarter', 'year'].map(period => (
+          {["week", "month", "quarter", "year"].map(period => (
             <Button
               key={period}
-              variant={selectedPeriod === period ? 'default' : 'outline'}
+              variant={selectedPeriod === period ? "default" : "outline"}
               size="sm"
               onClick={() => setSelectedPeriod(period)}
             >
-              {period === 'week' && 'Semana'}
-              {period === 'month' && 'Mês'}
-              {period === 'quarter' && 'Trimestre'}
-              {period === 'year' && 'Ano'}
+              {period === "week" && "Semana"}
+              {period === "month" && "Mês"}
+              {period === "quarter" && "Trimestre"}
+              {period === "year" && "Ano"}
             </Button>
           ))}
           <Button variant="outline" size="sm" className="gap-2">
@@ -264,8 +264,8 @@ export function ESGDashboard() {
                 </CardHeader>
                 <CardContent>
                   <div className="space-y-3">
-                    {data.items.filter(i => i.status !== 'good').length > 0 ? (
-                      data.items.filter(i => i.status !== 'good').map((item, index) => (
+                    {data.items.filter(i => i.status !== "good").length > 0 ? (
+                      data.items.filter(i => i.status !== "good").map((item, index) => (
                         <motion.div
                           key={item.label}
                           initial={{ opacity: 0, y: 10 }}
@@ -320,7 +320,7 @@ export function ESGDashboard() {
                     <span className="font-medium">{vessel.vessel}</span>
                     {getTrendIcon(vessel.trend)}
                   </div>
-                  <Badge variant={vessel.efficiency >= 90 ? 'default' : 'secondary'}>
+                  <Badge variant={vessel.efficiency >= 90 ? "default" : "secondary"}>
                     Eficiência: {vessel.efficiency}%
                   </Badge>
                 </div>

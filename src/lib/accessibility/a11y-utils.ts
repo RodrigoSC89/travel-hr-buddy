@@ -8,13 +8,13 @@
  */
 export function announceToScreenReader(
   message: string,
-  priority: 'polite' | 'assertive' = 'polite'
+  priority: "polite" | "assertive" = "polite"
 ) {
-  const announcement = document.createElement('div');
-  announcement.setAttribute('role', 'status');
-  announcement.setAttribute('aria-live', priority);
-  announcement.setAttribute('aria-atomic', 'true');
-  announcement.className = 'sr-only';
+  const announcement = document.createElement("div");
+  announcement.setAttribute("role", "status");
+  announcement.setAttribute("aria-live", priority);
+  announcement.setAttribute("aria-atomic", "true");
+  announcement.className = "sr-only";
   announcement.textContent = message;
 
   document.body.appendChild(announcement);
@@ -34,13 +34,13 @@ export const focusUtils = {
    */
   getFocusableElements(container: HTMLElement): HTMLElement[] {
     const selector = [
-      'a[href]',
-      'button:not([disabled])',
-      'input:not([disabled])',
-      'select:not([disabled])',
-      'textarea:not([disabled])',
-      '[tabindex]:not([tabindex="-1"])',
-    ].join(', ');
+      "a[href]",
+      "button:not([disabled])",
+      "input:not([disabled])",
+      "select:not([disabled])",
+      "textarea:not([disabled])",
+      "[tabindex]:not([tabindex=\"-1\"])",
+    ].join(", ");
 
     return Array.from(container.querySelectorAll(selector));
   },
@@ -54,7 +54,7 @@ export const focusUtils = {
     const lastElement = focusable[focusable.length - 1];
 
     const handleKeyDown = (e: KeyboardEvent) => {
-      if (e.key !== 'Tab') return;
+      if (e.key !== "Tab") return;
 
       if (e.shiftKey && document.activeElement === firstElement) {
         e.preventDefault();
@@ -65,11 +65,11 @@ export const focusUtils = {
       }
     };
 
-    container.addEventListener('keydown', handleKeyDown);
+    container.addEventListener("keydown", handleKeyDown);
     firstElement?.focus();
 
     return () => {
-      container.removeEventListener('keydown', handleKeyDown);
+      container.removeEventListener("keydown", handleKeyDown);
     };
   },
 
@@ -156,8 +156,8 @@ export const keyboardUtils = {
   ): number {
     const { wrap = true, horizontal = false } = options;
     
-    const prevKey = horizontal ? 'ArrowLeft' : 'ArrowUp';
-    const nextKey = horizontal ? 'ArrowRight' : 'ArrowDown';
+    const prevKey = horizontal ? "ArrowLeft" : "ArrowUp";
+    const nextKey = horizontal ? "ArrowRight" : "ArrowDown";
 
     let newIndex = currentIndex;
 
@@ -173,10 +173,10 @@ export const keyboardUtils = {
       if (newIndex >= items.length) {
         newIndex = wrap ? 0 : items.length - 1;
       }
-    } else if (e.key === 'Home') {
+    } else if (e.key === "Home") {
       e.preventDefault();
       newIndex = 0;
-    } else if (e.key === 'End') {
+    } else if (e.key === "End") {
       e.preventDefault();
       newIndex = items.length - 1;
     }
@@ -189,10 +189,10 @@ export const keyboardUtils = {
 /**
  * Skip link component for keyboard navigation
  */
-export function createSkipLink(targetId: string, label = 'Pular para conteúdo principal'): HTMLAnchorElement {
-  const link = document.createElement('a');
+export function createSkipLink(targetId: string, label = "Pular para conteúdo principal"): HTMLAnchorElement {
+  const link = document.createElement("a");
   link.href = `#${targetId}`;
-  link.className = 'sr-only focus:not-sr-only focus:absolute focus:top-4 focus:left-4 focus:z-50 focus:bg-background focus:p-4 focus:rounded-md focus:shadow-lg';
+  link.className = "sr-only focus:not-sr-only focus:absolute focus:top-4 focus:left-4 focus:z-50 focus:bg-background focus:p-4 focus:rounded-md focus:shadow-lg";
   link.textContent = label;
   return link;
 }
@@ -201,12 +201,12 @@ export function createSkipLink(targetId: string, label = 'Pular para conteúdo p
  * Check reduced motion preference
  */
 export function prefersReducedMotion(): boolean {
-  return window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+  return window.matchMedia("(prefers-reduced-motion: reduce)").matches;
 }
 
 /**
  * Check high contrast preference
  */
 export function prefersHighContrast(): boolean {
-  return window.matchMedia('(prefers-contrast: more)').matches;
+  return window.matchMedia("(prefers-contrast: more)").matches;
 }

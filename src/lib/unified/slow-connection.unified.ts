@@ -83,7 +83,7 @@ export function detectConnectionQuality(): ConnectionMetrics {
 
 // ==================== ADAPTIVE FETCH ====================
 
-export interface AdaptiveFetchOptions extends Omit<RequestInit, 'cache'> {
+export interface AdaptiveFetchOptions extends Omit<RequestInit, "cache"> {
   timeout?: number;
   retries?: number;
   retryDelay?: number;
@@ -418,14 +418,14 @@ export function getLoadingMessage(connection?: ConnectionMetrics): string {
   const conn = connection || detectConnectionQuality();
   
   switch (conn.quality) {
-    case "offline":
-      return "Sem conexão. Usando dados em cache...";
-    case "slow":
-      return "Conexão lenta detectada. Carregando de forma otimizada...";
-    case "moderate":
-      return "Carregando...";
-    default:
-      return "Carregando...";
+  case "offline":
+    return "Sem conexão. Usando dados em cache...";
+  case "slow":
+    return "Conexão lenta detectada. Carregando de forma otimizada...";
+  case "moderate":
+    return "Carregando...";
+  default:
+    return "Carregando...";
   }
 }
 
@@ -557,15 +557,15 @@ export function useAdaptivePolling<T>(
     let interval = baseIntervalMs;
     
     switch (connection.quality) {
-      case "offline":
-        interval = Infinity; // Don't poll when offline
-        break;
-      case "slow":
-        interval = baseIntervalMs * 4; // Poll less frequently
-        break;
-      case "moderate":
-        interval = baseIntervalMs * 2;
-        break;
+    case "offline":
+      interval = Infinity; // Don't poll when offline
+      break;
+    case "slow":
+      interval = baseIntervalMs * 4; // Poll less frequently
+      break;
+    case "moderate":
+      interval = baseIntervalMs * 2;
+      break;
     }
     
     if (interval === Infinity) {

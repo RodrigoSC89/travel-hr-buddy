@@ -4,14 +4,14 @@
  * Development tool to visualize real-time performance metrics
  */
 
-import React, { useState } from 'react';
-import { useWebVitals } from '@/hooks/useWebVitals';
-import { cn } from '@/lib/utils';
-import { Activity, X, ChevronDown, ChevronUp } from 'lucide-react';
-import { Button } from '@/components/ui/button';
+import React, { useState } from "react";
+import { useWebVitals } from "@/hooks/useWebVitals";
+import { cn } from "@/lib/utils";
+import { Activity, X, ChevronDown, ChevronUp } from "lucide-react";
+import { Button } from "@/components/ui/button";
 
 interface WebVitalsOverlayProps {
-  position?: 'bottom-left' | 'bottom-right' | 'top-left' | 'top-right';
+  position?: "bottom-left" | "bottom-right" | "top-left" | "top-right";
   showInProduction?: boolean;
 }
 
@@ -21,16 +21,16 @@ const MetricBadge: React.FC<{
   rating: string;
 }> = ({ name, value, rating }) => {
   const ratingColors = {
-    good: 'bg-green-500/20 text-green-400 border-green-500/30',
-    'needs-improvement': 'bg-yellow-500/20 text-yellow-400 border-yellow-500/30',
-    poor: 'bg-red-500/20 text-red-400 border-red-500/30',
-    unknown: 'bg-gray-500/20 text-gray-400 border-gray-500/30'
+    good: "bg-green-500/20 text-green-400 border-green-500/30",
+    "needs-improvement": "bg-yellow-500/20 text-yellow-400 border-yellow-500/30",
+    poor: "bg-red-500/20 text-red-400 border-red-500/30",
+    unknown: "bg-gray-500/20 text-gray-400 border-gray-500/30"
   };
 
   return (
     <div 
       className={cn(
-        'flex items-center justify-between px-2 py-1 rounded border text-xs',
+        "flex items-center justify-between px-2 py-1 rounded border text-xs",
         ratingColors[rating as keyof typeof ratingColors] || ratingColors.unknown
       )}
     >
@@ -41,7 +41,7 @@ const MetricBadge: React.FC<{
 };
 
 export const WebVitalsOverlay: React.FC<WebVitalsOverlayProps> = ({
-  position = 'bottom-right',
+  position = "bottom-right",
   showInProduction = false
 }) => {
   const [isOpen, setIsOpen] = useState(false);
@@ -54,16 +54,16 @@ export const WebVitalsOverlay: React.FC<WebVitalsOverlayProps> = ({
   }
 
   const positionClasses = {
-    'bottom-left': 'bottom-4 left-4',
-    'bottom-right': 'bottom-4 right-4',
-    'top-left': 'top-4 left-4',
-    'top-right': 'top-4 right-4'
+    "bottom-left": "bottom-4 left-4",
+    "bottom-right": "bottom-4 right-4",
+    "top-left": "top-4 left-4",
+    "top-right": "top-4 right-4"
   };
 
   const scoreColors = {
-    good: 'text-green-400',
-    'needs-improvement': 'text-yellow-400',
-    poor: 'text-red-400'
+    good: "text-green-400",
+    "needs-improvement": "text-yellow-400",
+    poor: "text-red-400"
   };
 
   if (!isOpen) {
@@ -73,7 +73,7 @@ export const WebVitalsOverlay: React.FC<WebVitalsOverlayProps> = ({
         size="icon"
         onClick={() => setIsOpen(true)}
         className={cn(
-          'fixed z-50 bg-background/95 backdrop-blur-sm',
+          "fixed z-50 bg-background/95 backdrop-blur-sm",
           positionClasses[position]
         )}
       >
@@ -85,7 +85,7 @@ export const WebVitalsOverlay: React.FC<WebVitalsOverlayProps> = ({
   return (
     <div
       className={cn(
-        'fixed z-50 w-64 bg-background/95 backdrop-blur-sm border rounded-lg shadow-lg',
+        "fixed z-50 w-64 bg-background/95 backdrop-blur-sm border rounded-lg shadow-lg",
         positionClasses[position]
       )}
     >
@@ -94,7 +94,7 @@ export const WebVitalsOverlay: React.FC<WebVitalsOverlayProps> = ({
         <div className="flex items-center gap-2">
           <Activity className="h-4 w-4 text-primary" />
           <span className="text-sm font-medium">Web Vitals</span>
-          <span className={cn('text-sm font-bold', scoreColors[score.rating])}>
+          <span className={cn("text-sm font-bold", scoreColors[score.rating])}>
             {score.score}%
           </span>
         </div>
@@ -132,9 +132,9 @@ export const WebVitalsOverlay: React.FC<WebVitalsOverlayProps> = ({
           <MetricBadge name="FCP" value={fcp.formatted} rating={fcp.rating} />
           
           <div className="pt-2 text-[10px] text-muted-foreground text-center">
-            {score.rating === 'good' && '✓ All metrics passing'}
-            {score.rating === 'needs-improvement' && '⚠ Some metrics need work'}
-            {score.rating === 'poor' && '✗ Performance issues detected'}
+            {score.rating === "good" && "✓ All metrics passing"}
+            {score.rating === "needs-improvement" && "⚠ Some metrics need work"}
+            {score.rating === "poor" && "✗ Performance issues detected"}
           </div>
         </div>
       )}

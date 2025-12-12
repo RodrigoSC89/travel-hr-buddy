@@ -8,23 +8,23 @@
  * - Product roadmap and strategic planning
  */
 
-import React, { useState, useEffect, useMemo } from 'react';
-import { Card, CardContent, CardHeader, CardTitle, CardDescription } from '@/components/ui/card';
-import { Button } from '@/components/ui/button';
-import { Badge } from '@/components/ui/badge';
-import { Progress } from '@/components/ui/progress';
-import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
-import { ScrollArea } from '@/components/ui/scroll-area';
-import { Alert, AlertDescription } from '@/components/ui/alert';
+import React, { useState, useEffect, useMemo } from "react";
+import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "@/components/ui/card";
+import { Button } from "@/components/ui/button";
+import { Badge } from "@/components/ui/badge";
+import { Progress } from "@/components/ui/progress";
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
+import { ScrollArea } from "@/components/ui/scroll-area";
+import { Alert, AlertDescription } from "@/components/ui/alert";
 import { 
   Activity, CheckCircle2, AlertTriangle, XCircle, Download,
   Cpu, Database, Wifi, WifiOff, Brain, FileText, RefreshCw,
   Shield, Clock, Zap, HardDrive, BarChart3, Settings2,
   Server, MemoryStick, Globe, TrendingUp, TrendingDown,
   Calendar, Target, Rocket, Users, Map
-} from 'lucide-react';
-import { LineChart, Line, AreaChart, Area, XAxis, YAxis, CartesianGrid, Tooltip, Legend, ResponsiveContainer } from 'recharts';
-import { toast } from 'sonner';
+} from "lucide-react";
+import { LineChart, Line, AreaChart, Area, XAxis, YAxis, CartesianGrid, Tooltip, Legend, ResponsiveContainer } from "recharts";
+import { toast } from "sonner";
 
 // =====================================================
 // TYPES & INTERFACES
@@ -125,7 +125,7 @@ const roadmapPhases: Phase[] = [
 // =====================================================
 
 export default function SystemHub() {
-  const [activeTab, setActiveTab] = useState('overview');
+  const [activeTab, setActiveTab] = useState("overview");
   const [isRefreshing, setIsRefreshing] = useState(false);
   const [selectedPhase, setSelectedPhase] = useState(4);
 
@@ -150,7 +150,7 @@ export default function SystemHub() {
   // Diagnostic Summary
   const diagnostic = useMemo<DiagnosticSummary>(() => ({
     overallScore: 92,
-    systemStatus: 'production-ready',
+    systemStatus: "production-ready",
     readyModules: 85,
     totalModules: 90,
     aiCoverage: 78,
@@ -188,7 +188,7 @@ export default function SystemHub() {
       ...metric,
       value: Math.max(0, Math.min(100, metric.value + (Math.random() - 0.5) * 10)),
       status: metric.value > metric.threshold.critical ? "critical" : 
-              metric.value > metric.threshold.warning ? "warning" : "healthy"
+        metric.value > metric.threshold.warning ? "warning" : "healthy"
     })));
     
     setIsRefreshing(false);
@@ -205,11 +205,11 @@ export default function SystemHub() {
       roadmap: { ...roadmapStats, phases: roadmapPhases }
     };
     
-    const blob = new Blob([JSON.stringify(report, null, 2)], { type: 'application/json' });
+    const blob = new Blob([JSON.stringify(report, null, 2)], { type: "application/json" });
     const url = URL.createObjectURL(blob);
-    const a = document.createElement('a');
+    const a = document.createElement("a");
     a.href = url;
-    a.download = `system-report-${new Date().toISOString().split('T')[0]}.json`;
+    a.download = `system-report-${new Date().toISOString().split("T")[0]}.json`;
     a.click();
     URL.revokeObjectURL(url);
     toast.success("Relatório exportado!");
@@ -218,28 +218,28 @@ export default function SystemHub() {
   // Helper functions
   const getStatusIcon = (status: string) => {
     switch (status) {
-      case 'healthy': case 'online': case 'completed': case 'production-ready':
-        return <CheckCircle2 className="h-4 w-4 text-green-500" />;
-      case 'warning': case 'degraded': case 'in-progress':
-        return <AlertTriangle className="h-4 w-4 text-yellow-500" />;
-      default:
-        return <XCircle className="h-4 w-4 text-red-500" />;
+    case "healthy": case "online": case "completed": case "production-ready":
+      return <CheckCircle2 className="h-4 w-4 text-green-500" />;
+    case "warning": case "degraded": case "in-progress":
+      return <AlertTriangle className="h-4 w-4 text-yellow-500" />;
+    default:
+      return <XCircle className="h-4 w-4 text-red-500" />;
     }
   };
 
   const getStatusColor = (status: string) => {
     switch (status) {
-      case 'healthy': case 'online': case 'completed': return 'bg-green-500';
-      case 'warning': case 'degraded': case 'in-progress': return 'bg-yellow-500';
-      default: return 'bg-red-500';
+    case "healthy": case "online": case "completed": return "bg-green-500";
+    case "warning": case "degraded": case "in-progress": return "bg-yellow-500";
+    default: return "bg-red-500";
     }
   };
 
   const getTrendIcon = (trend: string) => {
     switch (trend) {
-      case "up": return <TrendingUp className="w-3 h-3 text-red-500" />;
-      case "down": return <TrendingDown className="w-3 h-3 text-green-500" />;
-      default: return <Activity className="w-3 h-3 text-muted-foreground" />;
+    case "up": return <TrendingUp className="w-3 h-3 text-red-500" />;
+    case "down": return <TrendingDown className="w-3 h-3 text-green-500" />;
+    default: return <Activity className="w-3 h-3 text-muted-foreground" />;
     }
   };
 
@@ -265,12 +265,12 @@ export default function SystemHub() {
           </div>
           <Badge className={`ml-2 ${getStatusColor(overallSystemStatus)} text-white`}>
             {overallSystemStatus === "healthy" ? "Sistema Saudável" : 
-             overallSystemStatus === "warning" ? "Atenção" : "Crítico"}
+              overallSystemStatus === "warning" ? "Atenção" : "Crítico"}
           </Badge>
         </div>
         <div className="flex gap-2">
           <Button onClick={handleRefresh} disabled={isRefreshing} variant="outline">
-            <RefreshCw className={`h-4 w-4 mr-2 ${isRefreshing ? 'animate-spin' : ''}`} />
+            <RefreshCw className={`h-4 w-4 mr-2 ${isRefreshing ? "animate-spin" : ""}`} />
             Atualizar
           </Button>
           <Button onClick={handleExport}>
@@ -409,10 +409,10 @@ export default function SystemHub() {
                   <div 
                     key={phase.id}
                     className={`flex-shrink-0 p-3 rounded-lg border-2 w-40 cursor-pointer transition-all
-                      ${phase.status === 'completed' ? 'border-green-500 bg-green-500/5' :
-                        phase.status === 'in-progress' ? 'border-yellow-500 bg-yellow-500/5' :
-                        'border-muted bg-muted/5'}`}
-                    onClick={() => { setSelectedPhase(phase.id); setActiveTab('roadmap'); }}
+                      ${phase.status === "completed" ? "border-green-500 bg-green-500/5" :
+                    phase.status === "in-progress" ? "border-yellow-500 bg-yellow-500/5" :
+                      "border-muted bg-muted/5"}`}
+                    onClick={() => { setSelectedPhase(phase.id); setActiveTab("roadmap"); }}
                   >
                     <div className="flex items-center justify-between mb-2">
                       <span className="text-xs font-medium">Fase {phase.id}</span>
@@ -499,8 +499,8 @@ export default function SystemHub() {
                   <div className="flex items-center justify-between mb-4">
                     <h3 className="font-semibold">{service.name}</h3>
                     <Badge className={`${getStatusColor(service.status)} text-white`}>
-                      {service.status === 'online' ? 'Online' : 
-                       service.status === 'degraded' ? 'Degradado' : 'Offline'}
+                      {service.status === "online" ? "Online" : 
+                        service.status === "degraded" ? "Degradado" : "Offline"}
                     </Badge>
                   </div>
                   
@@ -576,9 +576,9 @@ export default function SystemHub() {
                       <div className="flex-1">
                         <div className="flex items-center justify-between mb-2">
                           <h3 className="font-semibold">Fase {phase.id}: {phase.name}</h3>
-                          <Badge variant={phase.status === 'completed' ? 'default' : 'outline'}>
-                            {phase.status === 'completed' ? 'Concluída' : 
-                             phase.status === 'in-progress' ? 'Em Andamento' : 'Planejada'}
+                          <Badge variant={phase.status === "completed" ? "default" : "outline"}>
+                            {phase.status === "completed" ? "Concluída" : 
+                              phase.status === "in-progress" ? "Em Andamento" : "Planejada"}
                           </Badge>
                         </div>
                         <p className="text-sm text-muted-foreground mb-2">{phase.description}</p>
@@ -604,7 +604,7 @@ export default function SystemHub() {
               <CardContent>
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                   {currentPhase.sprints.map((sprint) => (
-                    <Card key={sprint.id} className="border-l-4" style={{ borderLeftColor: currentPhase.color.replace('bg-', '').includes('green') ? '#22c55e' : currentPhase.color.replace('bg-', '').includes('blue') ? '#3b82f6' : currentPhase.color.replace('bg-', '').includes('purple') ? '#a855f7' : currentPhase.color.replace('bg-', '').includes('orange') ? '#f97316' : '#ef4444' }}>
+                    <Card key={sprint.id} className="border-l-4" style={{ borderLeftColor: currentPhase.color.replace("bg-", "").includes("green") ? "#22c55e" : currentPhase.color.replace("bg-", "").includes("blue") ? "#3b82f6" : currentPhase.color.replace("bg-", "").includes("purple") ? "#a855f7" : currentPhase.color.replace("bg-", "").includes("orange") ? "#f97316" : "#ef4444" }}>
                       <CardContent className="p-4">
                         <div className="flex items-center justify-between mb-2">
                           <h4 className="font-semibold">Sprint {sprint.id}</h4>

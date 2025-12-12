@@ -13,9 +13,9 @@
 export function isScreenReaderVisible(element: HTMLElement): boolean {
   const style = window.getComputedStyle(element);
   return !(
-    style.display === 'none' ||
-    style.visibility === 'hidden' ||
-    element.hasAttribute('aria-hidden') && element.getAttribute('aria-hidden') === 'true'
+    style.display === "none" ||
+    style.visibility === "hidden" ||
+    element.hasAttribute("aria-hidden") && element.getAttribute("aria-hidden") === "true"
   );
 }
 
@@ -31,12 +31,12 @@ export function makeKeyboardAccessible(
     onClick,
     onKeyDown: (event: React.KeyboardEvent) => {
       // Enter ou Espaço ativam o elemento
-      if (event.key === 'Enter' || event.key === ' ') {
+      if (event.key === "Enter" || event.key === " ") {
         event.preventDefault();
         onClick(event);
       }
     },
-    role: 'button',
+    role: "button",
     tabIndex: 0,
   };
 }
@@ -45,7 +45,7 @@ export function makeKeyboardAccessible(
  * Gera um ID único para associar labels e inputs
  */
 let idCounter = 0;
-export function generateA11yId(prefix = 'a11y'): string {
+export function generateA11yId(prefix = "a11y"): string {
   idCounter++;
   return `${prefix}-${idCounter}-${Date.now()}`;
 }
@@ -61,19 +61,19 @@ export function createInputAriaProps(options: {
   disabled?: boolean;
 }) {
   const { label, description, error, required, disabled } = options;
-  const inputId = generateA11yId('input');
-  const descriptionId = description ? generateA11yId('description') : undefined;
-  const errorId = error ? generateA11yId('error') : undefined;
+  const inputId = generateA11yId("input");
+  const descriptionId = description ? generateA11yId("description") : undefined;
+  const errorId = error ? generateA11yId("error") : undefined;
 
   return {
     inputProps: {
       id: inputId,
-      'aria-describedby': [
+      "aria-describedby": [
         descriptionId,
         errorId,
-      ].filter(Boolean).join(' ') || undefined,
-      'aria-invalid': error ? true : undefined,
-      'aria-required': required ? true : undefined,
+      ].filter(Boolean).join(" ") || undefined,
+      "aria-invalid": error ? true : undefined,
+      "aria-required": required ? true : undefined,
       disabled,
     },
     labelProps: {
@@ -84,8 +84,8 @@ export function createInputAriaProps(options: {
     } : undefined,
     errorProps: errorId ? {
       id: errorId,
-      role: 'alert',
-      'aria-live': 'polite' as const,
+      role: "alert",
+      "aria-live": "polite" as const,
     } : undefined,
   };
 }
@@ -97,13 +97,13 @@ export function createFocusTrap(containerElement: HTMLElement | null) {
   if (!containerElement) return { activate: () => {}, deactivate: () => {} };
 
   const focusableSelectors = [
-    'a[href]',
-    'button:not([disabled])',
-    'textarea:not([disabled])',
-    'input:not([disabled])',
-    'select:not([disabled])',
-    '[tabindex]:not([tabindex="-1"])',
-  ].join(', ');
+    "a[href]",
+    "button:not([disabled])",
+    "textarea:not([disabled])",
+    "input:not([disabled])",
+    "select:not([disabled])",
+    "[tabindex]:not([tabindex=\"-1\"])",
+  ].join(", ");
 
   let previousActiveElement: HTMLElement | null = null;
 
@@ -114,7 +114,7 @@ export function createFocusTrap(containerElement: HTMLElement | null) {
   }
 
   function handleKeyDown(event: KeyboardEvent) {
-    if (event.key !== 'Tab') return;
+    if (event.key !== "Tab") return;
 
     const focusableElements = getFocusableElements();
     if (focusableElements.length === 0) return;
@@ -143,11 +143,11 @@ export function createFocusTrap(containerElement: HTMLElement | null) {
     if (focusableElements.length > 0) {
       focusableElements[0].focus();
     }
-    containerElement.addEventListener('keydown', handleKeyDown);
+    containerElement.addEventListener("keydown", handleKeyDown);
   }
 
   function deactivate() {
-    containerElement.removeEventListener('keydown', handleKeyDown);
+    containerElement.removeEventListener("keydown", handleKeyDown);
     if (previousActiveElement) {
       previousActiveElement.focus();
     }
@@ -161,13 +161,13 @@ export function createFocusTrap(containerElement: HTMLElement | null) {
  */
 export function announceToScreenReader(
   message: string,
-  priority: 'polite' | 'assertive' = 'polite'
+  priority: "polite" | "assertive" = "polite"
 ) {
-  const liveRegion = document.createElement('div');
-  liveRegion.setAttribute('role', 'status');
-  liveRegion.setAttribute('aria-live', priority);
-  liveRegion.setAttribute('aria-atomic', 'true');
-  liveRegion.className = 'sr-only';
+  const liveRegion = document.createElement("div");
+  liveRegion.setAttribute("role", "status");
+  liveRegion.setAttribute("aria-live", priority);
+  liveRegion.setAttribute("aria-atomic", "true");
+  liveRegion.className = "sr-only";
   liveRegion.textContent = message;
 
   document.body.appendChild(liveRegion);
@@ -228,10 +228,10 @@ function hexToRgb(hex: string): [number, number, number] | null {
   const result = /^#?([a-f\d]{2})([a-f\d]{2})([a-f\d]{2})$/i.exec(hex);
   return result
     ? [
-        parseInt(result[1], 16),
-        parseInt(result[2], 16),
-        parseInt(result[3], 16),
-      ]
+      parseInt(result[1], 16),
+      parseInt(result[2], 16),
+      parseInt(result[3], 16),
+    ]
     : null;
 }
 
@@ -240,51 +240,51 @@ function hexToRgb(hex: string): [number, number, number] | null {
  */
 export const ariaPresets = {
   button: (label: string, pressed?: boolean) => ({
-    role: 'button',
-    'aria-label': label,
-    'aria-pressed': pressed,
+    role: "button",
+    "aria-label": label,
+    "aria-pressed": pressed,
     tabIndex: 0,
   }),
 
   link: (label: string, external?: boolean) => ({
-    'aria-label': label,
+    "aria-label": label,
     ...(external && {
-      'aria-label': `${label} (abre em nova janela)`,
-      rel: 'noopener noreferrer',
+      "aria-label": `${label} (abre em nova janela)`,
+      rel: "noopener noreferrer",
     }),
   }),
 
   tab: (label: string, selected: boolean, controls: string) => ({
-    role: 'tab',
-    'aria-label': label,
-    'aria-selected': selected,
-    'aria-controls': controls,
+    role: "tab",
+    "aria-label": label,
+    "aria-selected": selected,
+    "aria-controls": controls,
     tabIndex: selected ? 0 : -1,
   }),
 
   tabpanel: (labelledBy: string, hidden: boolean) => ({
-    role: 'tabpanel',
-    'aria-labelledby': labelledBy,
+    role: "tabpanel",
+    "aria-labelledby": labelledBy,
     hidden,
     tabIndex: 0,
   }),
 
   dialog: (label: string, describedBy?: string) => ({
-    role: 'dialog',
-    'aria-label': label,
-    'aria-describedby': describedBy,
-    'aria-modal': true,
+    role: "dialog",
+    "aria-label": label,
+    "aria-describedby": describedBy,
+    "aria-modal": true,
   }),
 
   menu: (label: string, expanded: boolean) => ({
-    role: 'menu',
-    'aria-label': label,
-    'aria-expanded': expanded,
+    role: "menu",
+    "aria-label": label,
+    "aria-expanded": expanded,
   }),
 
   menuitem: (label: string) => ({
-    role: 'menuitem',
-    'aria-label': label,
+    role: "menuitem",
+    "aria-label": label,
     tabIndex: -1,
   }),
 };
@@ -293,28 +293,28 @@ export const ariaPresets = {
  * Hook para detectar navegação por teclado
  */
 export function detectKeyboardNavigation() {
-  if (typeof window === 'undefined') return;
+  if (typeof window === "undefined") return;
 
   let isUsingKeyboard = false;
 
   function handleMouseDown() {
     isUsingKeyboard = false;
-    document.body.classList.remove('keyboard-navigation');
+    document.body.classList.remove("keyboard-navigation");
   }
 
   function handleKeyDown(event: KeyboardEvent) {
-    if (event.key === 'Tab') {
+    if (event.key === "Tab") {
       isUsingKeyboard = true;
-      document.body.classList.add('keyboard-navigation');
+      document.body.classList.add("keyboard-navigation");
     }
   }
 
-  document.addEventListener('mousedown', handleMouseDown);
-  document.addEventListener('keydown', handleKeyDown);
+  document.addEventListener("mousedown", handleMouseDown);
+  document.addEventListener("keydown", handleKeyDown);
 
   return () => {
-    document.removeEventListener('mousedown', handleMouseDown);
-    document.removeEventListener('keydown', handleKeyDown);
+    document.removeEventListener("mousedown", handleMouseDown);
+    document.removeEventListener("keydown", handleKeyDown);
   };
 }
 
@@ -334,44 +334,44 @@ export function validateElementA11y(
   const warnings: string[] = [];
 
   // Verificar se imagens têm alt
-  if (element.tagName === 'IMG') {
-    if (!element.hasAttribute('alt')) {
-      errors.push('Imagem sem atributo alt');
+  if (element.tagName === "IMG") {
+    if (!element.hasAttribute("alt")) {
+      errors.push("Imagem sem atributo alt");
     }
   }
 
   // Verificar se botões têm label acessível
-  if (element.tagName === 'BUTTON') {
+  if (element.tagName === "BUTTON") {
     const hasText = element.textContent?.trim();
-    const hasAriaLabel = element.hasAttribute('aria-label');
-    const hasAriaLabelledBy = element.hasAttribute('aria-labelledby');
+    const hasAriaLabel = element.hasAttribute("aria-label");
+    const hasAriaLabelledBy = element.hasAttribute("aria-labelledby");
 
     if (!hasText && !hasAriaLabel && !hasAriaLabelledBy) {
-      errors.push('Botão sem texto ou aria-label');
+      errors.push("Botão sem texto ou aria-label");
     }
   }
 
   // Verificar se inputs têm labels
-  if (element.tagName === 'INPUT') {
+  if (element.tagName === "INPUT") {
     const hasLabel = document.querySelector(`label[for="${element.id}"]`);
-    const hasAriaLabel = element.hasAttribute('aria-label');
-    const hasAriaLabelledBy = element.hasAttribute('aria-labelledby');
+    const hasAriaLabel = element.hasAttribute("aria-label");
+    const hasAriaLabelledBy = element.hasAttribute("aria-labelledby");
 
     if (!hasLabel && !hasAriaLabel && !hasAriaLabelledBy) {
-      warnings.push('Input sem label associado');
+      warnings.push("Input sem label associado");
     }
   }
 
   // Verificar se elementos clicáveis são acessíveis por teclado
-  const hasOnClick = element.hasAttribute('onclick') || element.onclick;
+  const hasOnClick = element.hasAttribute("onclick") || element.onclick;
   if (hasOnClick) {
-    const isButton = element.tagName === 'BUTTON';
-    const isLink = element.tagName === 'A';
-    const hasTabIndex = element.hasAttribute('tabindex');
-    const hasRole = element.getAttribute('role') === 'button';
+    const isButton = element.tagName === "BUTTON";
+    const isLink = element.tagName === "A";
+    const hasTabIndex = element.hasAttribute("tabindex");
+    const hasRole = element.getAttribute("role") === "button";
 
     if (!isButton && !isLink && !hasTabIndex && !hasRole) {
-      errors.push('Elemento clicável não é acessível por teclado');
+      errors.push("Elemento clicável não é acessível por teclado");
     }
   }
 

@@ -73,9 +73,9 @@ export default function CertificationsTab({
 
   const stats = {
     total: certifications.length,
-    valid: certifications.filter(c => c.status === 'valid').length,
-    expiring: certifications.filter(c => c.status === 'expiring').length,
-    expired: certifications.filter(c => c.status === 'expired').length,
+    valid: certifications.filter(c => c.status === "valid").length,
+    expiring: certifications.filter(c => c.status === "expiring").length,
+    expired: certifications.filter(c => c.status === "expired").length,
   };
 
   const handleRenew = (cert: Certification) => {
@@ -111,16 +111,16 @@ export default function CertificationsTab({
       onUploadCertificate(selectedCert, file);
       toast({
         title: "Documento Enviado",
-        description: `O certificado foi atualizado com sucesso.`,
+        description: "O certificado foi atualizado com sucesso.",
       });
       setShowUploadDialog(false);
     }
   };
 
   const groupedByStatus = {
-    expired: filteredCerts.filter(c => c.status === 'expired'),
-    expiring: filteredCerts.filter(c => c.status === 'expiring'),
-    valid: filteredCerts.filter(c => c.status === 'valid'),
+    expired: filteredCerts.filter(c => c.status === "expired"),
+    expiring: filteredCerts.filter(c => c.status === "expiring"),
+    valid: filteredCerts.filter(c => c.status === "valid"),
   };
 
   return (
@@ -387,8 +387,8 @@ function CertificationsList({
               
               return (
                 <div key={cert.id} className={`p-4 rounded-lg border ${
-                  cert.status === 'expired' ? 'bg-destructive/5 border-destructive/30' :
-                  cert.status === 'expiring' ? 'bg-amber-500/5 border-amber-500/30' : ''
+                  cert.status === "expired" ? "bg-destructive/5 border-destructive/30" :
+                    cert.status === "expiring" ? "bg-amber-500/5 border-amber-500/30" : ""
                 }`}>
                   <div className="flex items-start justify-between">
                     <div className="flex-1">
@@ -397,7 +397,7 @@ function CertificationsList({
                         <Badge variant="outline">{cert.code}</Badge>
                       </div>
                       <p className="text-sm text-muted-foreground mb-2">
-                        Tripulante: {member?.name || 'N/A'} • {member?.position}
+                        Tripulante: {member?.name || "N/A"} • {member?.position}
                       </p>
                       <div className="flex items-center gap-4 text-sm text-muted-foreground">
                         <span>Emissão: {format(parseISO(cert.issueDate), "dd/MM/yyyy")}</span>
@@ -407,11 +407,11 @@ function CertificationsList({
                     </div>
                     <div className="text-right">
                       <Badge variant={
-                        cert.status === 'valid' ? 'outline' :
-                        cert.status === 'expiring' ? 'secondary' : 'destructive'
+                        cert.status === "valid" ? "outline" :
+                          cert.status === "expiring" ? "secondary" : "destructive"
                       }>
-                        {cert.status === 'valid' ? 'Válido' :
-                         cert.status === 'expiring' ? `Expira em ${daysUntilExpiry} dias` : 'Expirado'}
+                        {cert.status === "valid" ? "Válido" :
+                          cert.status === "expiring" ? `Expira em ${daysUntilExpiry} dias` : "Expirado"}
                       </Badge>
                     </div>
                   </div>
@@ -420,7 +420,7 @@ function CertificationsList({
                       <Eye className="h-4 w-4 mr-1" />
                       Ver Certificado
                     </Button>
-                    {(cert.status === 'expiring' || cert.status === 'expired') && (
+                    {(cert.status === "expiring" || cert.status === "expired") && (
                       <Button variant="ghost" size="sm" onClick={() => onRenew(cert)}>
                         <RefreshCw className="h-4 w-4 mr-1" />
                         Renovar

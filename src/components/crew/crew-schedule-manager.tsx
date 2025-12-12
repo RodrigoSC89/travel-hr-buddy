@@ -113,25 +113,25 @@ export const CrewScheduleManager = () => {
 
   const getStatusBadge = (status: Schedule["status"]) => {
     switch (status) {
-      case "active":
-        return <Badge className="bg-success text-success-foreground">Ativo</Badge>;
-      case "scheduled":
-        return <Badge className="bg-info text-info-foreground">Agendado</Badge>;
-      case "completed":
-        return <Badge variant="secondary">Concluído</Badge>;
-      case "cancelled":
-        return <Badge variant="destructive">Cancelado</Badge>;
+    case "active":
+      return <Badge className="bg-success text-success-foreground">Ativo</Badge>;
+    case "scheduled":
+      return <Badge className="bg-info text-info-foreground">Agendado</Badge>;
+    case "completed":
+      return <Badge variant="secondary">Concluído</Badge>;
+    case "cancelled":
+      return <Badge variant="destructive">Cancelado</Badge>;
     }
   };
 
   const getTypeBadge = (type: Schedule["type"]) => {
     switch (type) {
-      case "regular":
-        return <Badge variant="outline">Regular</Badge>;
-      case "emergency":
-        return <Badge variant="destructive">Emergência</Badge>;
-      case "transfer":
-        return <Badge variant="secondary">Transferência</Badge>;
+    case "regular":
+      return <Badge variant="outline">Regular</Badge>;
+    case "emergency":
+      return <Badge variant="destructive">Emergência</Badge>;
+    case "transfer":
+      return <Badge variant="secondary">Transferência</Badge>;
     }
   };
 

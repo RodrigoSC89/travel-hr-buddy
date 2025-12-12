@@ -3,9 +3,9 @@
  * Error boundary genérico para módulos
  */
 
-import React, { Component, ErrorInfo, ReactNode } from 'react';
-import { errorTrackingService, errorRecoveryManager } from '@/lib/errors';
-import { ModuleErrorFallback } from './fallbacks';
+import React, { Component, ErrorInfo, ReactNode } from "react";
+import { errorTrackingService, errorRecoveryManager } from "@/lib/errors";
+import { ModuleErrorFallback } from "./fallbacks";
 
 interface Props {
   children: ReactNode;
@@ -45,7 +45,7 @@ export class ModuleErrorBoundary extends Component<Props, State> {
     // Track error
     errorTrackingService.trackRuntimeError(error, {
       component: `ModuleErrorBoundary:${moduleName}`,
-      action: 'componentDidCatch',
+      action: "componentDidCatch",
       metadata: {
         componentStack: errorInfo.componentStack,
         retryCount: this.state.retryCount,

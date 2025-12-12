@@ -496,19 +496,19 @@ export const DocumentCenterProvider: React.FC<DocumentCenterProviderProps> = ({
       if (!document) return true;
 
       switch (action) {
-        case "view":
-          return document.permissions.canView;
-        case "edit":
-          return document.permissions.canEdit;
-        case "delete":
-          return document.permissions.canDelete;
-        case "share":
-          return document.permissions.canShare;
-        case "approve":
-        case "reject":
-          return document.permissions.canApprove || false;
-        default:
-          return true;
+      case "view":
+        return document.permissions.canView;
+      case "edit":
+        return document.permissions.canEdit;
+      case "delete":
+        return document.permissions.canDelete;
+      case "share":
+        return document.permissions.canShare;
+      case "approve":
+      case "reject":
+        return document.permissions.canApprove || false;
+      default:
+        return true;
       }
     },
     [config]

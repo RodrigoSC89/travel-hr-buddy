@@ -97,7 +97,7 @@ interface Notification {
   id: string;
   title: string;
   message: string;
-  type: 'critical' | 'warning' | 'info' | 'success' | 'system';
+  type: "critical" | "warning" | "info" | "success" | "system";
   category: string;
   isRead: boolean;
   isStarred: boolean;
@@ -114,131 +114,131 @@ interface Notification {
 // Mock data
 const mockNotifications: Notification[] = [
   {
-    id: '1',
-    title: 'Alerta de Emergência - Navio Alpha',
-    message: 'Detectada anomalia no sistema de navegação. Verificação imediata necessária.',
-    type: 'critical',
-    category: 'operacoes',
+    id: "1",
+    title: "Alerta de Emergência - Navio Alpha",
+    message: "Detectada anomalia no sistema de navegação. Verificação imediata necessária.",
+    type: "critical",
+    category: "operacoes",
     isRead: false,
     isStarred: true,
     isArchived: false,
     createdAt: new Date(Date.now() - 1000 * 60 * 5).toISOString(),
-    source: 'Sistema de Monitoramento',
-    action: { label: 'Ver Detalhes', url: '/operations' },
+    source: "Sistema de Monitoramento",
+    action: { label: "Ver Detalhes", url: "/operations" },
   },
   {
-    id: '2',
-    title: 'Certificado Expirando',
-    message: 'O certificado STCW do tripulante João Silva expira em 15 dias.',
-    type: 'warning',
-    category: 'rh',
+    id: "2",
+    title: "Certificado Expirando",
+    message: "O certificado STCW do tripulante João Silva expira em 15 dias.",
+    type: "warning",
+    category: "rh",
     isRead: false,
     isStarred: false,
     isArchived: false,
     createdAt: new Date(Date.now() - 1000 * 60 * 30).toISOString(),
-    source: 'Gestão de Tripulação',
-    action: { label: 'Renovar', url: '/crew' },
+    source: "Gestão de Tripulação",
+    action: { label: "Renovar", url: "/crew" },
   },
   {
-    id: '3',
-    title: 'Manutenção Programada',
-    message: 'Manutenção preventiva do motor principal agendada para amanhã às 08:00.',
-    type: 'info',
-    category: 'manutencao',
+    id: "3",
+    title: "Manutenção Programada",
+    message: "Manutenção preventiva do motor principal agendada para amanhã às 08:00.",
+    type: "info",
+    category: "manutencao",
     isRead: false,
     isStarred: false,
     isArchived: false,
     createdAt: new Date(Date.now() - 1000 * 60 * 60).toISOString(),
-    source: 'Sistema de Manutenção',
-    action: { label: 'Ver Agenda', url: '/maintenance' },
+    source: "Sistema de Manutenção",
+    action: { label: "Ver Agenda", url: "/maintenance" },
   },
   {
-    id: '4',
-    title: 'Operação Concluída',
-    message: 'Descarga de carga no Porto de Santos finalizada com sucesso.',
-    type: 'success',
-    category: 'operacoes',
+    id: "4",
+    title: "Operação Concluída",
+    message: "Descarga de carga no Porto de Santos finalizada com sucesso.",
+    type: "success",
+    category: "operacoes",
     isRead: true,
     isStarred: false,
     isArchived: false,
     createdAt: new Date(Date.now() - 1000 * 60 * 60 * 2).toISOString(),
-    source: 'Operações Portuárias',
+    source: "Operações Portuárias",
   },
   {
-    id: '5',
-    title: 'Novo Documento Disponível',
-    message: 'Relatório de inspeção mensal da frota está disponível para download.',
-    type: 'info',
-    category: 'documentos',
+    id: "5",
+    title: "Novo Documento Disponível",
+    message: "Relatório de inspeção mensal da frota está disponível para download.",
+    type: "info",
+    category: "documentos",
     isRead: true,
     isStarred: true,
     isArchived: false,
     createdAt: new Date(Date.now() - 1000 * 60 * 60 * 3).toISOString(),
-    source: 'Central de Documentos',
-    action: { label: 'Download', url: '/documents' },
+    source: "Central de Documentos",
+    action: { label: "Download", url: "/documents" },
   },
   {
-    id: '6',
-    title: 'Fatura Pendente',
-    message: 'Fatura de combustível no valor de R$ 45.000,00 aguarda aprovação.',
-    type: 'warning',
-    category: 'financeiro',
+    id: "6",
+    title: "Fatura Pendente",
+    message: "Fatura de combustível no valor de R$ 45.000,00 aguarda aprovação.",
+    type: "warning",
+    category: "financeiro",
     isRead: false,
     isStarred: false,
     isArchived: false,
     createdAt: new Date(Date.now() - 1000 * 60 * 60 * 4).toISOString(),
-    source: 'Financeiro',
-    action: { label: 'Aprovar', url: '/financial' },
+    source: "Financeiro",
+    action: { label: "Aprovar", url: "/financial" },
   },
   {
-    id: '7',
-    title: 'Atualização do Sistema',
-    message: 'Nova versão do Nautilus One disponível. Atualize para acessar novos recursos.',
-    type: 'system',
-    category: 'sistema',
+    id: "7",
+    title: "Atualização do Sistema",
+    message: "Nova versão do Nautilus One disponível. Atualize para acessar novos recursos.",
+    type: "system",
+    category: "sistema",
     isRead: true,
     isStarred: false,
     isArchived: false,
     createdAt: new Date(Date.now() - 1000 * 60 * 60 * 5).toISOString(),
-    source: 'Sistema',
+    source: "Sistema",
   },
   {
-    id: '8',
-    title: 'Análise de IA Disponível',
-    message: 'O relatório de análise preditiva de manutenção foi gerado pela IA.',
-    type: 'info',
-    category: 'ia',
+    id: "8",
+    title: "Análise de IA Disponível",
+    message: "O relatório de análise preditiva de manutenção foi gerado pela IA.",
+    type: "info",
+    category: "ia",
     isRead: false,
     isStarred: false,
     isArchived: false,
     createdAt: new Date(Date.now() - 1000 * 60 * 60 * 6).toISOString(),
-    source: 'Nautilus AI',
-    action: { label: 'Ver Análise', url: '/ai-insights' },
+    source: "Nautilus AI",
+    action: { label: "Ver Análise", url: "/ai-insights" },
   },
   {
-    id: '9',
-    title: 'Alerta de Compliance',
-    message: 'Prazo de conformidade MARPOL se aproxima. 10 dias restantes.',
-    type: 'warning',
-    category: 'compliance',
+    id: "9",
+    title: "Alerta de Compliance",
+    message: "Prazo de conformidade MARPOL se aproxima. 10 dias restantes.",
+    type: "warning",
+    category: "compliance",
     isRead: false,
     isStarred: true,
     isArchived: false,
     createdAt: new Date(Date.now() - 1000 * 60 * 60 * 8).toISOString(),
-    source: 'Compliance',
-    action: { label: 'Ver Requisitos', url: '/compliance' },
+    source: "Compliance",
+    action: { label: "Ver Requisitos", url: "/compliance" },
   },
   {
-    id: '10',
-    title: 'Viagem Confirmada',
-    message: 'Viagem Santos → Rotterdam confirmada. Partida em 48 horas.',
-    type: 'success',
-    category: 'operacoes',
+    id: "10",
+    title: "Viagem Confirmada",
+    message: "Viagem Santos → Rotterdam confirmada. Partida em 48 horas.",
+    type: "success",
+    category: "operacoes",
     isRead: true,
     isStarred: false,
     isArchived: false,
     createdAt: new Date(Date.now() - 1000 * 60 * 60 * 12).toISOString(),
-    source: 'Planejamento de Viagens',
+    source: "Planejamento de Viagens",
   },
 ];
 
@@ -248,43 +248,43 @@ const formatTime = (date: string) => {
   const now = new Date();
   const diff = now.getTime() - d.getTime();
   
-  if (diff < 60000) return 'Agora';
+  if (diff < 60000) return "Agora";
   if (diff < 3600000) return `${Math.floor(diff / 60000)} min`;
   if (diff < 86400000) return `${Math.floor(diff / 3600000)}h`;
   if (diff < 604800000) return `${Math.floor(diff / 86400000)}d`;
-  return d.toLocaleDateString('pt-BR', { day: '2-digit', month: '2-digit' });
+  return d.toLocaleDateString("pt-BR", { day: "2-digit", month: "2-digit" });
 };
 
 const getTypeIcon = (type: string) => {
   switch (type) {
-    case 'critical': return <AlertCircle className="h-5 w-5 text-destructive" />;
-    case 'warning': return <AlertTriangle className="h-5 w-5 text-yellow-500" />;
-    case 'success': return <CheckCircle className="h-5 w-5 text-green-500" />;
-    case 'system': return <Settings className="h-5 w-5 text-purple-500" />;
-    default: return <Info className="h-5 w-5 text-primary" />;
+  case "critical": return <AlertCircle className="h-5 w-5 text-destructive" />;
+  case "warning": return <AlertTriangle className="h-5 w-5 text-yellow-500" />;
+  case "success": return <CheckCircle className="h-5 w-5 text-green-500" />;
+  case "system": return <Settings className="h-5 w-5 text-purple-500" />;
+  default: return <Info className="h-5 w-5 text-primary" />;
   }
 };
 
 const getTypeBadge = (type: string) => {
   switch (type) {
-    case 'critical': return <Badge variant="destructive" className="text-xs">Crítica</Badge>;
-    case 'warning': return <Badge className="text-xs bg-yellow-500/20 text-yellow-600">Atenção</Badge>;
-    case 'success': return <Badge className="text-xs bg-green-500/20 text-green-600">Sucesso</Badge>;
-    case 'system': return <Badge className="text-xs bg-purple-500/20 text-purple-500">Sistema</Badge>;
-    default: return <Badge variant="secondary" className="text-xs">Info</Badge>;
+  case "critical": return <Badge variant="destructive" className="text-xs">Crítica</Badge>;
+  case "warning": return <Badge className="text-xs bg-yellow-500/20 text-yellow-600">Atenção</Badge>;
+  case "success": return <Badge className="text-xs bg-green-500/20 text-green-600">Sucesso</Badge>;
+  case "system": return <Badge className="text-xs bg-purple-500/20 text-purple-500">Sistema</Badge>;
+  default: return <Badge variant="secondary" className="text-xs">Info</Badge>;
   }
 };
 
 const getCategoryIcon = (category: string) => {
   switch (category) {
-    case 'operacoes': return <Ship className="h-4 w-4" />;
-    case 'manutencao': return <Settings className="h-4 w-4" />;
-    case 'rh': return <Users className="h-4 w-4" />;
-    case 'financeiro': return <DollarSign className="h-4 w-4" />;
-    case 'documentos': return <FileText className="h-4 w-4" />;
-    case 'compliance': return <Shield className="h-4 w-4" />;
-    case 'ia': return <Sparkles className="h-4 w-4" />;
-    default: return <Bell className="h-4 w-4" />;
+  case "operacoes": return <Ship className="h-4 w-4" />;
+  case "manutencao": return <Settings className="h-4 w-4" />;
+  case "rh": return <Users className="h-4 w-4" />;
+  case "financeiro": return <DollarSign className="h-4 w-4" />;
+  case "documentos": return <FileText className="h-4 w-4" />;
+  case "compliance": return <Shield className="h-4 w-4" />;
+  case "ia": return <Sparkles className="h-4 w-4" />;
+  default: return <Bell className="h-4 w-4" />;
   }
 };
 
@@ -298,7 +298,7 @@ const StatCard: React.FC<{
   isActive?: boolean;
 }> = ({ title, value, icon, subtitle, onClick, isActive }) => (
   <Card 
-    className={`bg-card/50 backdrop-blur border-border/50 cursor-pointer transition-all hover:border-primary/30 ${isActive ? 'border-primary ring-1 ring-primary/20' : ''}`}
+    className={`bg-card/50 backdrop-blur border-border/50 cursor-pointer transition-all hover:border-primary/30 ${isActive ? "border-primary ring-1 ring-primary/20" : ""}`}
     onClick={onClick}
   >
     <CardContent className="p-4">
@@ -352,7 +352,7 @@ export default function NotificationCenterProfessional() {
   const [filters, setFilters] = useState({
     types: [] as string[],
     categories: [] as string[],
-    dateRange: 'all',
+    dateRange: "all",
     showRead: true,
     showUnread: true,
   });
@@ -364,9 +364,9 @@ export default function NotificationCenterProfessional() {
   const stats = useMemo(() => ({
     total: notifications.filter(n => !n.isArchived).length,
     unread: notifications.filter(n => !n.isRead && !n.isArchived).length,
-    critical: notifications.filter(n => n.type === 'critical' && !n.isArchived).length,
+    critical: notifications.filter(n => n.type === "critical" && !n.isArchived).length,
     completed: notifications.filter(n => n.isRead && !n.isArchived).length,
-    info: notifications.filter(n => n.type === 'info' && !n.isArchived).length,
+    info: notifications.filter(n => n.type === "info" && !n.isArchived).length,
     starred: notifications.filter(n => n.isStarred && !n.isArchived).length,
   }), [notifications]);
 
@@ -374,10 +374,10 @@ export default function NotificationCenterProfessional() {
   const filteredNotifications = useMemo(() => {
     return notifications.filter(n => {
       // Tab filter
-      if (activeTab === 'unread' && n.isRead) return false;
-      if (activeTab === 'starred' && !n.isStarred) return false;
-      if (activeTab === 'archived' && !n.isArchived) return false;
-      if (activeTab !== 'archived' && n.isArchived) return false;
+      if (activeTab === "unread" && n.isRead) return false;
+      if (activeTab === "starred" && !n.isStarred) return false;
+      if (activeTab === "archived" && !n.isArchived) return false;
+      if (activeTab !== "archived" && n.isArchived) return false;
       
       // Type filter from stats
       if (selectedType && n.type !== selectedType) return false;
@@ -460,31 +460,31 @@ export default function NotificationCenterProfessional() {
     }
   }, [notificationToDelete, toast]);
 
-  const handleBulkAction = useCallback((action: 'read' | 'unread' | 'archive' | 'delete') => {
+  const handleBulkAction = useCallback((action: "read" | "unread" | "archive" | "delete") => {
     if (selectedNotifications.length === 0) return;
     
     switch (action) {
-      case 'read':
-        setNotifications(prev => prev.map(n => 
-          selectedNotifications.includes(n.id) ? { ...n, isRead: true } : n
-        ));
-        toast({ title: "Sucesso", description: `${selectedNotifications.length} notificações marcadas como lidas.` });
-        break;
-      case 'unread':
-        setNotifications(prev => prev.map(n => 
-          selectedNotifications.includes(n.id) ? { ...n, isRead: false } : n
-        ));
-        break;
-      case 'archive':
-        setNotifications(prev => prev.map(n => 
-          selectedNotifications.includes(n.id) ? { ...n, isArchived: true } : n
-        ));
-        toast({ title: "Sucesso", description: `${selectedNotifications.length} notificações arquivadas.` });
-        break;
-      case 'delete':
-        setNotifications(prev => prev.filter(n => !selectedNotifications.includes(n.id)));
-        toast({ title: "Sucesso", description: `${selectedNotifications.length} notificações excluídas.` });
-        break;
+    case "read":
+      setNotifications(prev => prev.map(n => 
+        selectedNotifications.includes(n.id) ? { ...n, isRead: true } : n
+      ));
+      toast({ title: "Sucesso", description: `${selectedNotifications.length} notificações marcadas como lidas.` });
+      break;
+    case "unread":
+      setNotifications(prev => prev.map(n => 
+        selectedNotifications.includes(n.id) ? { ...n, isRead: false } : n
+      ));
+      break;
+    case "archive":
+      setNotifications(prev => prev.map(n => 
+        selectedNotifications.includes(n.id) ? { ...n, isArchived: true } : n
+      ));
+      toast({ title: "Sucesso", description: `${selectedNotifications.length} notificações arquivadas.` });
+      break;
+    case "delete":
+      setNotifications(prev => prev.filter(n => !selectedNotifications.includes(n.id)));
+      toast({ title: "Sucesso", description: `${selectedNotifications.length} notificações excluídas.` });
+      break;
     }
     setSelectedNotifications([]);
   }, [selectedNotifications, toast]);
@@ -508,13 +508,13 @@ export default function NotificationCenterProfessional() {
   const handleAiAnalysis = useCallback(async () => {
     setIsAiLoading(true);
     try {
-      const unreadCritical = notifications.filter(n => !n.isRead && n.type === 'critical').length;
+      const unreadCritical = notifications.filter(n => !n.isRead && n.type === "critical").length;
       const unreadTotal = notifications.filter(n => !n.isRead).length;
       
-      const { data, error } = await supabase.functions.invoke('nautilus-llm', {
+      const { data, error } = await supabase.functions.invoke("nautilus-llm", {
         body: {
           prompt: `Analise as notificações do sistema: ${unreadTotal} não lidas, ${unreadCritical} críticas. Forneça um resumo executivo e recomendações de priorização.`,
-          context: 'notification_analysis',
+          context: "notification_analysis",
         },
       });
 
@@ -522,7 +522,7 @@ export default function NotificationCenterProfessional() {
       
       setAiSummary(data?.response || data?.text || `📊 **Resumo Executivo das Notificações**\n\n• Total não lidas: ${unreadTotal}\n• Notificações críticas: ${unreadCritical}\n\n**Recomendações:**\n1. Priorize as ${unreadCritical} notificações críticas imediatamente\n2. Revise alertas de compliance e certificados\n3. Configure auto-arquivamento para notificações informativas`);
     } catch (error) {
-      console.error('AI Error:', error);
+      console.error("AI Error:", error);
       setAiSummary(`📊 **Resumo Executivo das Notificações**\n\n• Total não lidas: ${stats.unread}\n• Notificações críticas: ${stats.critical}\n\n**Recomendações:**\n1. Priorize as notificações críticas imediatamente\n2. Revise alertas de compliance e certificados\n3. Configure auto-arquivamento para notificações informativas\n4. Ative notificações push para alertas críticos`);
     } finally {
       setIsAiLoading(false);
@@ -543,7 +543,7 @@ export default function NotificationCenterProfessional() {
     setFilters({
       types: [],
       categories: [],
-      dateRange: 'all',
+      dateRange: "all",
       showRead: true,
       showUnread: true,
     });
@@ -573,7 +573,7 @@ export default function NotificationCenterProfessional() {
             <Tooltip>
               <TooltipTrigger asChild>
                 <Button variant="outline" size="icon" onClick={handleRefresh} disabled={isRefreshing}>
-                  <RefreshCw className={`h-4 w-4 ${isRefreshing ? 'animate-spin' : ''}`} />
+                  <RefreshCw className={`h-4 w-4 ${isRefreshing ? "animate-spin" : ""}`} />
                 </Button>
               </TooltipTrigger>
               <TooltipContent>Atualizar</TooltipContent>
@@ -625,8 +625,8 @@ export default function NotificationCenterProfessional() {
             value={stats.critical}
             icon={<AlertCircle className="h-5 w-5 text-destructive" />}
             subtitle="Requerem atenção"
-            onClick={() => setSelectedType(selectedType === 'critical' ? null : 'critical')}
-            isActive={selectedType === 'critical'}
+            onClick={() => setSelectedType(selectedType === "critical" ? null : "critical")}
+            isActive={selectedType === "critical"}
           />
           <StatCard
             title="Concluídas"
@@ -640,8 +640,8 @@ export default function NotificationCenterProfessional() {
             value={stats.info}
             icon={<Info className="h-5 w-5 text-blue-500" />}
             subtitle="Atualizações gerais"
-            onClick={() => setSelectedType(selectedType === 'info' ? null : 'info')}
-            isActive={selectedType === 'info'}
+            onClick={() => setSelectedType(selectedType === "info" ? null : "info")}
+            isActive={selectedType === "info"}
           />
         </div>
 
@@ -704,15 +704,15 @@ export default function NotificationCenterProfessional() {
                   {selectedNotifications.length} selecionada(s)
                 </span>
                 <div className="flex-1" />
-                <Button variant="outline" size="sm" onClick={() => handleBulkAction('read')}>
+                <Button variant="outline" size="sm" onClick={() => handleBulkAction("read")}>
                   <Check className="h-4 w-4 mr-1" />
                   Marcar como lida
                 </Button>
-                <Button variant="outline" size="sm" onClick={() => handleBulkAction('archive')}>
+                <Button variant="outline" size="sm" onClick={() => handleBulkAction("archive")}>
                   <Archive className="h-4 w-4 mr-1" />
                   Arquivar
                 </Button>
-                <Button variant="outline" size="sm" className="text-destructive" onClick={() => handleBulkAction('delete')}>
+                <Button variant="outline" size="sm" className="text-destructive" onClick={() => handleBulkAction("delete")}>
                   <Trash2 className="h-4 w-4 mr-1" />
                   Excluir
                 </Button>
@@ -727,7 +727,7 @@ export default function NotificationCenterProfessional() {
                   <BellOff className="h-12 w-12 mb-4 opacity-30" />
                   <h3 className="font-medium text-lg">Nenhuma notificação encontrada</h3>
                   <p className="text-sm mt-1">
-                    {searchQuery ? 'Tente ajustar sua busca' : 'Você está em dia com tudo!'}
+                    {searchQuery ? "Tente ajustar sua busca" : "Você está em dia com tudo!"}
                   </p>
                 </div>
               ) : (
@@ -737,9 +737,9 @@ export default function NotificationCenterProfessional() {
                       key={notification.id}
                       className={`group p-4 rounded-lg border transition-all cursor-pointer ${
                         notification.isRead 
-                          ? 'bg-background/30 border-border/30' 
-                          : 'bg-primary/5 border-primary/20 hover:border-primary/40'
-                      } ${selectedNotifications.includes(notification.id) ? 'ring-2 ring-primary' : ''}`}
+                          ? "bg-background/30 border-border/30" 
+                          : "bg-primary/5 border-primary/20 hover:border-primary/40"
+                      } ${selectedNotifications.includes(notification.id) ? "ring-2 ring-primary" : ""}`}
                       onClick={() => handleViewDetail(notification)}
                     >
                       <div className="flex items-start gap-4">
@@ -760,7 +760,7 @@ export default function NotificationCenterProfessional() {
                           <div className="flex items-start justify-between gap-4">
                             <div className="min-w-0">
                               <div className="flex items-center gap-2 flex-wrap">
-                                <h4 className={`font-medium truncate ${!notification.isRead ? 'text-foreground' : 'text-muted-foreground'}`}>
+                                <h4 className={`font-medium truncate ${!notification.isRead ? "text-foreground" : "text-muted-foreground"}`}>
                                   {notification.title}
                                 </h4>
                                 {getTypeBadge(notification.type)}
@@ -792,10 +792,10 @@ export default function NotificationCenterProfessional() {
                                     className="h-8 w-8"
                                     onClick={(e) => { e.stopPropagation(); handleToggleStar(notification.id); }}
                                   >
-                                    <Star className={`h-4 w-4 ${notification.isStarred ? 'fill-yellow-500 text-yellow-500' : ''}`} />
+                                    <Star className={`h-4 w-4 ${notification.isStarred ? "fill-yellow-500 text-yellow-500" : ""}`} />
                                   </Button>
                                 </TooltipTrigger>
-                                <TooltipContent>{notification.isStarred ? 'Remover favorito' : 'Favoritar'}</TooltipContent>
+                                <TooltipContent>{notification.isStarred ? "Remover favorito" : "Favoritar"}</TooltipContent>
                               </Tooltip>
 
                               <Tooltip>
@@ -812,7 +812,7 @@ export default function NotificationCenterProfessional() {
                                     {notification.isRead ? <EyeOff className="h-4 w-4" /> : <Eye className="h-4 w-4" />}
                                   </Button>
                                 </TooltipTrigger>
-                                <TooltipContent>{notification.isRead ? 'Marcar como não lida' : 'Marcar como lida'}</TooltipContent>
+                                <TooltipContent>{notification.isRead ? "Marcar como não lida" : "Marcar como lida"}</TooltipContent>
                               </Tooltip>
 
                               <Tooltip>
@@ -829,7 +829,7 @@ export default function NotificationCenterProfessional() {
                                     {notification.isArchived ? <ArchiveX className="h-4 w-4" /> : <Archive className="h-4 w-4" />}
                                   </Button>
                                 </TooltipTrigger>
-                                <TooltipContent>{notification.isArchived ? 'Restaurar' : 'Arquivar'}</TooltipContent>
+                                <TooltipContent>{notification.isArchived ? "Restaurar" : "Arquivar"}</TooltipContent>
                               </Tooltip>
 
                               <DropdownMenu>
@@ -1008,7 +1008,7 @@ export default function NotificationCenterProfessional() {
               <div className="space-y-3">
                 <Label>Tipo de Notificação</Label>
                 <div className="grid grid-cols-2 gap-2">
-                  {['critical', 'warning', 'info', 'success', 'system'].map((type) => (
+                  {["critical", "warning", "info", "success", "system"].map((type) => (
                     <div key={type} className="flex items-center space-x-2">
                       <Checkbox 
                         id={`type-${type}`}
@@ -1023,10 +1023,10 @@ export default function NotificationCenterProfessional() {
                         }}
                       />
                       <label htmlFor={`type-${type}`} className="text-sm capitalize">
-                        {type === 'critical' ? 'Crítica' : 
-                         type === 'warning' ? 'Atenção' : 
-                         type === 'success' ? 'Sucesso' : 
-                         type === 'system' ? 'Sistema' : 'Info'}
+                        {type === "critical" ? "Crítica" : 
+                          type === "warning" ? "Atenção" : 
+                            type === "success" ? "Sucesso" : 
+                              type === "system" ? "Sistema" : "Info"}
                       </label>
                     </div>
                   ))}
@@ -1038,7 +1038,7 @@ export default function NotificationCenterProfessional() {
               <div className="space-y-3">
                 <Label>Categoria</Label>
                 <div className="grid grid-cols-2 gap-2">
-                  {['operacoes', 'manutencao', 'rh', 'financeiro', 'documentos', 'compliance', 'ia'].map((cat) => (
+                  {["operacoes", "manutencao", "rh", "financeiro", "documentos", "compliance", "ia"].map((cat) => (
                     <div key={cat} className="flex items-center space-x-2">
                       <Checkbox 
                         id={`cat-${cat}`}
@@ -1054,12 +1054,12 @@ export default function NotificationCenterProfessional() {
                       />
                       <label htmlFor={`cat-${cat}`} className="text-sm capitalize flex items-center gap-1">
                         {getCategoryIcon(cat)}
-                        {cat === 'operacoes' ? 'Operações' :
-                         cat === 'manutencao' ? 'Manutenção' :
-                         cat === 'rh' ? 'RH' :
-                         cat === 'financeiro' ? 'Financeiro' :
-                         cat === 'documentos' ? 'Documentos' :
-                         cat === 'compliance' ? 'Compliance' : 'IA'}
+                        {cat === "operacoes" ? "Operações" :
+                          cat === "manutencao" ? "Manutenção" :
+                            cat === "rh" ? "RH" :
+                              cat === "financeiro" ? "Financeiro" :
+                                cat === "documentos" ? "Documentos" :
+                                  cat === "compliance" ? "Compliance" : "IA"}
                       </label>
                     </div>
                   ))}
@@ -1158,7 +1158,7 @@ export default function NotificationCenterProfessional() {
             <DialogFooter>
               <Button variant="outline" onClick={() => setIsAiDialogOpen(false)}>Fechar</Button>
               <Button onClick={handleAiAnalysis} disabled={isAiLoading}>
-                {isAiLoading ? 'Analisando...' : 'Nova Análise'}
+                {isAiLoading ? "Analisando..." : "Nova Análise"}
               </Button>
             </DialogFooter>
           </DialogContent>
@@ -1176,7 +1176,7 @@ export default function NotificationCenterProfessional() {
                   <DialogTitle>{selectedNotification?.title}</DialogTitle>
                   <DialogDescription className="flex items-center gap-2 mt-1">
                     <Clock className="h-3 w-3" />
-                    {selectedNotification && new Date(selectedNotification.createdAt).toLocaleString('pt-BR')}
+                    {selectedNotification && new Date(selectedNotification.createdAt).toLocaleString("pt-BR")}
                   </DialogDescription>
                 </div>
               </div>
@@ -1205,7 +1205,7 @@ export default function NotificationCenterProfessional() {
                   size="icon"
                   onClick={() => selectedNotification && handleToggleStar(selectedNotification.id)}
                 >
-                  <Star className={`h-4 w-4 ${selectedNotification?.isStarred ? 'fill-yellow-500 text-yellow-500' : ''}`} />
+                  <Star className={`h-4 w-4 ${selectedNotification?.isStarred ? "fill-yellow-500 text-yellow-500" : ""}`} />
                 </Button>
                 <Button 
                   variant="outline" 

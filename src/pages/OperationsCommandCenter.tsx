@@ -316,18 +316,18 @@ export default function OperationsCommandCenter() {
   // Get insight type icon
   const getTypeIcon = (type: string) => {
     switch (type) {
-      case "opportunity": return <Lightbulb className="h-5 w-5 text-amber-500" />;
-      case "warning": return <AlertTriangle className="h-5 w-5 text-orange-500" />;
-      case "success": return <CheckCircle2 className="h-5 w-5 text-emerald-500" />;
-      default: return <Activity className="h-5 w-5 text-blue-500" />;
+    case "opportunity": return <Lightbulb className="h-5 w-5 text-amber-500" />;
+    case "warning": return <AlertTriangle className="h-5 w-5 text-orange-500" />;
+    case "success": return <CheckCircle2 className="h-5 w-5 text-emerald-500" />;
+    default: return <Activity className="h-5 w-5 text-blue-500" />;
     }
   };
 
   const getStatusBadge = (status: string) => {
     switch (status) {
-      case "completed": return <Badge className="bg-emerald-100 text-emerald-700 dark:bg-emerald-900 dark:text-emerald-300">Concluído</Badge>;
-      case "in_progress": return <Badge className="bg-blue-100 text-blue-700 dark:bg-blue-900 dark:text-blue-300">Em Progresso</Badge>;
-      default: return <Badge className="bg-amber-100 text-amber-700 dark:bg-amber-900 dark:text-amber-300">Pendente</Badge>;
+    case "completed": return <Badge className="bg-emerald-100 text-emerald-700 dark:bg-emerald-900 dark:text-emerald-300">Concluído</Badge>;
+    case "in_progress": return <Badge className="bg-blue-100 text-blue-700 dark:bg-blue-900 dark:text-blue-300">Em Progresso</Badge>;
+    default: return <Badge className="bg-amber-100 text-amber-700 dark:bg-amber-900 dark:text-amber-300">Pendente</Badge>;
     }
   };
 
@@ -801,8 +801,8 @@ export default function OperationsCommandCenter() {
                         <Badge variant="outline">{insight.category}</Badge>
                         <Badge className={
                           insight.impact === "Crítico" ? "bg-red-100 text-red-700 dark:bg-red-900 dark:text-red-300" :
-                          insight.impact === "Alto" ? "bg-orange-100 text-orange-700 dark:bg-orange-900 dark:text-orange-300" :
-                          "bg-blue-100 text-blue-700 dark:bg-blue-900 dark:text-blue-300"
+                            insight.impact === "Alto" ? "bg-orange-100 text-orange-700 dark:bg-orange-900 dark:text-orange-300" :
+                              "bg-blue-100 text-blue-700 dark:bg-blue-900 dark:text-blue-300"
                         }>
                           {insight.impact}
                         </Badge>

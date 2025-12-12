@@ -3,13 +3,13 @@
  * Dynamic module loading with isolation and resource management
  */
 
-import { lazy, ComponentType, LazyExoticComponent } from 'react';
+import { lazy, ComponentType, LazyExoticComponent } from "react";
 
 interface ModuleConfig {
   id: string;
   name: string;
   path: string;
-  priority: 'critical' | 'high' | 'normal' | 'low';
+  priority: "critical" | "high" | "normal" | "low";
   preload?: boolean;
   dependencies?: string[];
   estimatedSizeKB?: number;
@@ -143,11 +143,11 @@ class ModuleLoader {
       const configA = this.modules.get(a);
       const configB = this.modules.get(b);
       const priorities = { critical: 4, high: 3, normal: 2, low: 1 };
-      return (priorities[configB?.priority || 'low'] || 0) - (priorities[configA?.priority || 'low'] || 0);
+      return (priorities[configB?.priority || "low"] || 0) - (priorities[configA?.priority || "low"] || 0);
     });
     
     for (const moduleId of sorted) {
-      if ('requestIdleCallback' in window) {
+      if ("requestIdleCallback" in window) {
         await new Promise<void>(resolve => {
           requestIdleCallback(() => {
             this.preloadModule(moduleId).finally(resolve);
@@ -196,7 +196,7 @@ class ModuleLoader {
         module,
         config: this.modules.get(id)
       }))
-      .filter(e => e.config?.priority !== 'critical')
+      .filter(e => e.config?.priority !== "critical")
       .sort((a, b) => {
         // Sort by last used, then by use count
         const lastUsedDiff = (a.config?.lastUsed || 0) - (b.config?.lastUsed || 0);
@@ -234,7 +234,7 @@ class ModuleLoader {
     loaded: number;
     totalSizeKB: number;
     byPriority: Record<string, number>;
-  } {
+    } {
     const loaded = Array.from(this.loadedModules.values());
     const byPriority: Record<string, number> = { critical: 0, high: 0, normal: 0, low: 0 };
     
@@ -265,75 +265,75 @@ export const moduleLoader = new ModuleLoader();
 // Pre-register core modules
 moduleLoader.registerMany([
   {
-    id: 'dashboard',
-    name: 'Dashboard',
-    path: '@/pages/Dashboard',
-    priority: 'critical',
+    id: "dashboard",
+    name: "Dashboard",
+    path: "@/pages/Dashboard",
+    priority: "critical",
     preload: true,
     enabled: true,
     estimatedSizeKB: 150
   },
   {
-    id: 'maintenance',
-    name: 'Manutenção',
-    path: '@/pages/Maintenance',
-    priority: 'high',
+    id: "maintenance",
+    name: "Manutenção",
+    path: "@/pages/Maintenance",
+    priority: "high",
     enabled: true,
     estimatedSizeKB: 200
   },
   {
-    id: 'fleet',
-    name: 'Frota',
-    path: '@/pages/Fleet',
-    priority: 'high',
+    id: "fleet",
+    name: "Frota",
+    path: "@/pages/Fleet",
+    priority: "high",
     enabled: true,
     estimatedSizeKB: 180
   },
   {
-    id: 'compliance',
-    name: 'Compliance',
-    path: '@/pages/Compliance',
-    priority: 'normal',
+    id: "compliance",
+    name: "Compliance",
+    path: "@/pages/Compliance",
+    priority: "normal",
     enabled: true,
     estimatedSizeKB: 120
   },
   {
-    id: 'reports',
-    name: 'Relatórios',
-    path: '@/pages/Reports',
-    priority: 'normal',
+    id: "reports",
+    name: "Relatórios",
+    path: "@/pages/Reports",
+    priority: "normal",
     enabled: true,
     estimatedSizeKB: 100
   },
   {
-    id: 'hr',
-    name: 'Recursos Humanos',
-    path: '@/pages/HR',
-    priority: 'normal',
+    id: "hr",
+    name: "Recursos Humanos",
+    path: "@/pages/HR",
+    priority: "normal",
     enabled: true,
     estimatedSizeKB: 150
   },
   {
-    id: 'inventory',
-    name: 'Estoque',
-    path: '@/pages/Inventory',
-    priority: 'normal',
+    id: "inventory",
+    name: "Estoque",
+    path: "@/pages/Inventory",
+    priority: "normal",
     enabled: true,
     estimatedSizeKB: 130
   },
   {
-    id: 'ai-insights',
-    name: 'IA Insights',
-    path: '@/pages/AIInsights',
-    priority: 'low',
+    id: "ai-insights",
+    name: "IA Insights",
+    path: "@/pages/AIInsights",
+    priority: "low",
     enabled: true,
     estimatedSizeKB: 200
   },
   {
-    id: 'settings',
-    name: 'Configurações',
-    path: '@/pages/Settings',
-    priority: 'low',
+    id: "settings",
+    name: "Configurações",
+    path: "@/pages/Settings",
+    priority: "low",
     enabled: true,
     estimatedSizeKB: 80
   }

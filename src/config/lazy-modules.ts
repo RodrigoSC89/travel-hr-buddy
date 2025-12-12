@@ -3,7 +3,7 @@
  * Módulos pesados que causam travamento são carregados sob demanda
  */
 
-import { lazy, ComponentType } from 'react';
+import { lazy, ComponentType } from "react";
 
 // Wrapper para lazy loading com timeout e retry
 export const lazyWithRetry = <T extends ComponentType<any>>(
@@ -12,7 +12,7 @@ export const lazyWithRetry = <T extends ComponentType<any>>(
 ) => {
   return lazy(() =>
     importFn().catch((error) => {
-      console.error('Erro ao carregar módulo:', error);
+      console.error("Erro ao carregar módulo:", error);
       if (fallback) {
         return { default: fallback };
       }
@@ -33,12 +33,12 @@ export const lazyWithRetry = <T extends ComponentType<any>>(
 export const HEAVY_MODULES = {
   // AI/ML Modules (ONNX, TensorFlow)
   DPAIAnalyzer: lazyWithRetry(() => 
-    import('@/modules/intelligence/dp-intelligence/components/DPAIAnalyzer')
+    import("@/modules/intelligence/dp-intelligence/components/DPAIAnalyzer")
   ),
   
   // Large Data Modules
   SatelliteLive: lazyWithRetry(() => 
-    import('@/pages/satellite-live')
+    import("@/pages/satellite-live")
   ),
 };
 
@@ -48,8 +48,8 @@ export const preloadCriticalModules = () => {
   setTimeout(() => {
     // Pré-carregar apenas módulos mais usados
     const criticalModules = [
-      import('@/modules/intelligence/smart-alerts'),
-      import('@/modules/intelligence/smart-workflow'),
+      import("@/modules/intelligence/smart-alerts"),
+      import("@/modules/intelligence/smart-workflow"),
     ];
     
     Promise.all(criticalModules).catch(console.error);

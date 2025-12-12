@@ -77,11 +77,11 @@ export const EmissionsDashboard: React.FC = () => {
 
   const getEfficiencyColor = (efficiency: string) => {
     switch (efficiency) {
-      case "A+": return "bg-green-500";
-      case "A": return "bg-green-400";
-      case "B": return "bg-yellow-400";
-      case "C": return "bg-orange-400";
-      default: return "bg-red-400";
+    case "A+": return "bg-green-500";
+    case "A": return "bg-green-400";
+    case "B": return "bg-yellow-400";
+    case "C": return "bg-orange-400";
+    default: return "bg-red-400";
     }
   };
 
@@ -234,8 +234,8 @@ export const EmissionsDashboard: React.FC = () => {
                   <YAxis className="text-xs" />
                   <Tooltip 
                     contentStyle={{ 
-                      backgroundColor: 'hsl(var(--background))', 
-                      border: '1px solid hsl(var(--border))' 
+                      backgroundColor: "hsl(var(--background))", 
+                      border: "1px solid hsl(var(--border))" 
                     }} 
                   />
                   <Area 

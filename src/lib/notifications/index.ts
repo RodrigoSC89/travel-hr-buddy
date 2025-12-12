@@ -10,4 +10,4 @@ export {
   useNotificationPreferences,
   type NotificationCategory,
   type NotificationPriority,
-} from './smart-notifications';
+} from "./smart-notifications";

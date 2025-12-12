@@ -125,10 +125,10 @@ export function PredictiveMaintenanceAI() {
 
   const getSeverityColor = (severity: string) => {
     switch (severity) {
-      case "critical": return "bg-red-500";
-      case "high": return "bg-orange-500";
-      case "medium": return "bg-yellow-500";
-      default: return "bg-green-500";
+    case "critical": return "bg-red-500";
+    case "high": return "bg-orange-500";
+    case "medium": return "bg-yellow-500";
+    default: return "bg-green-500";
     }
   };
 
@@ -313,8 +313,8 @@ export function PredictiveMaintenanceAI() {
                         value={eq.healthScore}
                         className={`h-2 ${
                           eq.healthScore >= 80 ? "[&>div]:bg-green-500" :
-                          eq.healthScore >= 60 ? "[&>div]:bg-yellow-500" :
-                          "[&>div]:bg-red-500"
+                            eq.healthScore >= 60 ? "[&>div]:bg-yellow-500" :
+                              "[&>div]:bg-red-500"
                         }`}
                       />
                       <div className="flex justify-between text-xs text-muted-foreground mt-1">

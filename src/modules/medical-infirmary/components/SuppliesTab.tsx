@@ -2,78 +2,78 @@
  * Medical Supplies Management Tab
  */
 
-import React, { useState } from 'react';
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
-import { Button } from '@/components/ui/button';
-import { Badge } from '@/components/ui/badge';
-import { Input } from '@/components/ui/input';
-import { Progress } from '@/components/ui/progress';
-import { ScrollArea } from '@/components/ui/scroll-area';
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
-import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger, DialogFooter } from '@/components/ui/dialog';
-import { Label } from '@/components/ui/label';
+import React, { useState } from "react";
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
+import { Button } from "@/components/ui/button";
+import { Badge } from "@/components/ui/badge";
+import { Input } from "@/components/ui/input";
+import { Progress } from "@/components/ui/progress";
+import { ScrollArea } from "@/components/ui/scroll-area";
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
+import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger, DialogFooter } from "@/components/ui/dialog";
+import { Label } from "@/components/ui/label";
 import { 
   Pill, Search, Package, AlertTriangle, Calendar, 
   Plus, Download, Filter, Brain, ShoppingCart, BarChart3,
   CheckCircle2, Clock, MapPin, Trash2
-} from 'lucide-react';
-import { mockSupplies, medicalCategories } from '../data/mockData';
-import { MedicalSupply } from '../types';
-import { toast } from 'sonner';
-import { useMedicalAI } from '../hooks/useMedicalAI';
+} from "lucide-react";
+import { mockSupplies, medicalCategories } from "../data/mockData";
+import { MedicalSupply } from "../types";
+import { toast } from "sonner";
+import { useMedicalAI } from "../hooks/useMedicalAI";
 
 export default function SuppliesTab() {
   const { analyzeInventoryRisks, isLoading } = useMedicalAI();
   const [supplies, setSupplies] = useState<MedicalSupply[]>(mockSupplies);
-  const [searchQuery, setSearchQuery] = useState('');
-  const [categoryFilter, setCategoryFilter] = useState<string>('all');
-  const [statusFilter, setStatusFilter] = useState<string>('all');
+  const [searchQuery, setSearchQuery] = useState("");
+  const [categoryFilter, setCategoryFilter] = useState<string>("all");
+  const [statusFilter, setStatusFilter] = useState<string>("all");
   const [showFilters, setShowFilters] = useState(false);
   const [aiAnalysis, setAiAnalysis] = useState<any>(null);
   const [showAddDialog, setShowAddDialog] = useState(false);
   const [newItem, setNewItem] = useState({
-    name: '',
-    category: '',
+    name: "",
+    category: "",
     quantity: 0,
     minStock: 0,
-    unit: '',
-    expiryDate: '',
-    batchNumber: '',
-    location: ''
+    unit: "",
+    expiryDate: "",
+    batchNumber: "",
+    location: ""
   });
 
   const filteredSupplies = supplies.filter(supply => {
     const matchesSearch = supply.name.toLowerCase().includes(searchQuery.toLowerCase()) ||
       supply.batchNumber.toLowerCase().includes(searchQuery.toLowerCase());
-    const matchesCategory = categoryFilter === 'all' || supply.category === categoryFilter;
-    const matchesStatus = statusFilter === 'all' || supply.status === statusFilter;
+    const matchesCategory = categoryFilter === "all" || supply.category === categoryFilter;
+    const matchesStatus = statusFilter === "all" || supply.status === statusFilter;
     return matchesSearch && matchesCategory && matchesStatus;
   });
 
   const statusCounts = {
-    ok: supplies.filter(s => s.status === 'ok').length,
-    low: supplies.filter(s => s.status === 'low').length,
-    expiring: supplies.filter(s => s.status === 'expiring').length,
-    critical: supplies.filter(s => s.status === 'critical').length
+    ok: supplies.filter(s => s.status === "ok").length,
+    low: supplies.filter(s => s.status === "low").length,
+    expiring: supplies.filter(s => s.status === "expiring").length,
+    critical: supplies.filter(s => s.status === "critical").length
   };
 
   const getStatusColor = (status: string) => {
     switch (status) {
-      case 'ok': return 'bg-green-500/10 border-green-500/30 text-green-500';
-      case 'low': return 'bg-amber-500/10 border-amber-500/30 text-amber-500';
-      case 'expiring': return 'bg-orange-500/10 border-orange-500/30 text-orange-500';
-      case 'critical': return 'bg-red-500/10 border-red-500/30 text-red-500';
-      default: return '';
+    case "ok": return "bg-green-500/10 border-green-500/30 text-green-500";
+    case "low": return "bg-amber-500/10 border-amber-500/30 text-amber-500";
+    case "expiring": return "bg-orange-500/10 border-orange-500/30 text-orange-500";
+    case "critical": return "bg-red-500/10 border-red-500/30 text-red-500";
+    default: return "";
     }
   };
 
   const getStatusBadge = (status: string) => {
     switch (status) {
-      case 'ok': return <Badge className="bg-green-500/20 text-green-500">OK</Badge>;
-      case 'low': return <Badge className="bg-amber-500/20 text-amber-500">Baixo</Badge>;
-      case 'expiring': return <Badge className="bg-orange-500/20 text-orange-500">Vencendo</Badge>;
-      case 'critical': return <Badge className="bg-red-500/20 text-red-500">Crítico</Badge>;
-      default: return null;
+    case "ok": return <Badge className="bg-green-500/20 text-green-500">OK</Badge>;
+    case "low": return <Badge className="bg-amber-500/20 text-amber-500">Baixo</Badge>;
+    case "expiring": return <Badge className="bg-orange-500/20 text-orange-500">Vencendo</Badge>;
+    case "critical": return <Badge className="bg-red-500/20 text-red-500">Crítico</Badge>;
+    default: return null;
     }
   };
 
@@ -81,9 +81,9 @@ export default function SuppliesTab() {
     const result = await analyzeInventoryRisks(supplies);
     if (result) {
       setAiAnalysis(result);
-      toast.success('Análise de estoque concluída');
+      toast.success("Análise de estoque concluída");
     } else {
-      toast.error('Erro na análise');
+      toast.error("Erro na análise");
     }
   };
 
@@ -91,22 +91,22 @@ export default function SuppliesTab() {
     const newSupply: MedicalSupply = {
       id: Date.now().toString(),
       ...newItem,
-      status: newItem.quantity < newItem.minStock ? 'low' : 'ok',
-      lastRestock: new Date().toISOString().split('T')[0]
+      status: newItem.quantity < newItem.minStock ? "low" : "ok",
+      lastRestock: new Date().toISOString().split("T")[0]
     };
     setSupplies(prev => [...prev, newSupply]);
     setShowAddDialog(false);
     setNewItem({
-      name: '',
-      category: '',
+      name: "",
+      category: "",
       quantity: 0,
       minStock: 0,
-      unit: '',
-      expiryDate: '',
-      batchNumber: '',
-      location: ''
+      unit: "",
+      expiryDate: "",
+      batchNumber: "",
+      location: ""
     });
-    toast.success('Item adicionado ao estoque');
+    toast.success("Item adicionado ao estoque");
   };
 
   const handleRequestRestock = (supply: MedicalSupply) => {
@@ -114,7 +114,7 @@ export default function SuppliesTab() {
   };
 
   const handleExport = () => {
-    toast.success('Exportando inventário...');
+    toast.success("Exportando inventário...");
   };
 
   return (
@@ -263,30 +263,30 @@ export default function SuppliesTab() {
                 <Label className="text-xs">Status</Label>
                 <div className="flex gap-2">
                   <Button 
-                    variant={statusFilter === 'all' ? "default" : "outline"} 
+                    variant={statusFilter === "all" ? "default" : "outline"} 
                     size="sm"
-                    onClick={() => setStatusFilter('all')}
+                    onClick={() => setStatusFilter("all")}
                   >
                     Todos
                   </Button>
                   <Button 
-                    variant={statusFilter === 'critical' ? "default" : "outline"} 
+                    variant={statusFilter === "critical" ? "default" : "outline"} 
                     size="sm"
-                    onClick={() => setStatusFilter('critical')}
+                    onClick={() => setStatusFilter("critical")}
                   >
                     Crítico ({statusCounts.critical})
                   </Button>
                   <Button 
-                    variant={statusFilter === 'low' ? "default" : "outline"} 
+                    variant={statusFilter === "low" ? "default" : "outline"} 
                     size="sm"
-                    onClick={() => setStatusFilter('low')}
+                    onClick={() => setStatusFilter("low")}
                   >
                     Baixo ({statusCounts.low})
                   </Button>
                   <Button 
-                    variant={statusFilter === 'expiring' ? "default" : "outline"} 
+                    variant={statusFilter === "expiring" ? "default" : "outline"} 
                     size="sm"
-                    onClick={() => setStatusFilter('expiring')}
+                    onClick={() => setStatusFilter("expiring")}
                   >
                     Vencendo ({statusCounts.expiring})
                   </Button>
@@ -300,9 +300,9 @@ export default function SuppliesTab() {
       {/* AI Analysis */}
       {aiAnalysis && (
         <Card className={`border-l-4 ${
-          aiAnalysis.riskLevel === 'high' ? 'border-l-red-500 bg-red-500/5' :
-          aiAnalysis.riskLevel === 'medium' ? 'border-l-amber-500 bg-amber-500/5' :
-          'border-l-green-500 bg-green-500/5'
+          aiAnalysis.riskLevel === "high" ? "border-l-red-500 bg-red-500/5" :
+            aiAnalysis.riskLevel === "medium" ? "border-l-amber-500 bg-amber-500/5" :
+              "border-l-green-500 bg-green-500/5"
         }`}>
           <CardHeader className="pb-2">
             <CardTitle className="text-lg flex items-center gap-2">
@@ -460,7 +460,7 @@ export default function SuppliesTab() {
                   <div className="mt-3 pt-3 border-t border-border/50 space-y-1 text-xs">
                     <div className="flex items-center gap-2 text-muted-foreground">
                       <Calendar className="h-3 w-3" />
-                      Validade: {new Date(supply.expiryDate).toLocaleDateString('pt-BR')}
+                      Validade: {new Date(supply.expiryDate).toLocaleDateString("pt-BR")}
                     </div>
                     <div className="flex items-center gap-2 text-muted-foreground">
                       <MapPin className="h-3 w-3" />
@@ -471,7 +471,7 @@ export default function SuppliesTab() {
                     </div>
                   </div>
                   
-                  {(supply.status === 'low' || supply.status === 'critical') && (
+                  {(supply.status === "low" || supply.status === "critical") && (
                     <Button 
                       variant="outline" 
                       size="sm" 

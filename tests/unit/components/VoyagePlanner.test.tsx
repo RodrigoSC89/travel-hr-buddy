@@ -3,10 +3,10 @@
  * PATCH 838: Testes unitários para planejador de viagens
  */
 
-import { describe, it, expect, vi, beforeEach } from 'vitest';
-import { render, screen, fireEvent, waitFor } from '@testing-library/react';
-import userEvent from '@testing-library/user-event';
-import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
+import { describe, it, expect, vi, beforeEach } from "vitest";
+import { render, screen, fireEvent, waitFor } from "@testing-library/react";
+import userEvent from "@testing-library/user-event";
+import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 
 // Mock do componente VoyagePlanner
 const VoyagePlanner = ({ 
@@ -65,108 +65,108 @@ const createWrapper = () => {
   );
 };
 
-describe('VoyagePlanner Component', () => {
+describe("VoyagePlanner Component", () => {
   const mockOnSave = vi.fn();
   const mockVessels = [
-    { id: 'v1', name: 'MV Atlantic Star' },
-    { id: 'v2', name: 'MV Pacific Dawn' },
-    { id: 'v3', name: 'MV Nordic Light' },
+    { id: "v1", name: "MV Atlantic Star" },
+    { id: "v2", name: "MV Pacific Dawn" },
+    { id: "v3", name: "MV Nordic Light" },
   ];
   
   beforeEach(() => {
     vi.clearAllMocks();
   });
   
-  describe('Renderização', () => {
-    it('deve renderizar o planejador de viagens', () => {
+  describe("Renderização", () => {
+    it("deve renderizar o planejador de viagens", () => {
       render(<VoyagePlanner onSave={mockOnSave} vessels={mockVessels} />, { wrapper: createWrapper() });
       
-      expect(screen.getByTestId('voyage-planner')).toBeInTheDocument();
+      expect(screen.getByTestId("voyage-planner")).toBeInTheDocument();
     });
     
-    it('deve renderizar todos os campos necessários', () => {
+    it("deve renderizar todos os campos necessários", () => {
       render(<VoyagePlanner onSave={mockOnSave} vessels={mockVessels} />, { wrapper: createWrapper() });
       
-      expect(screen.getByTestId('vessel-select')).toBeInTheDocument();
-      expect(screen.getByTestId('voyage-name')).toBeInTheDocument();
-      expect(screen.getByTestId('departure-port')).toBeInTheDocument();
-      expect(screen.getByTestId('arrival-port')).toBeInTheDocument();
-      expect(screen.getByTestId('departure-date')).toBeInTheDocument();
-      expect(screen.getByTestId('arrival-date')).toBeInTheDocument();
-      expect(screen.getByTestId('voyage-notes')).toBeInTheDocument();
+      expect(screen.getByTestId("vessel-select")).toBeInTheDocument();
+      expect(screen.getByTestId("voyage-name")).toBeInTheDocument();
+      expect(screen.getByTestId("departure-port")).toBeInTheDocument();
+      expect(screen.getByTestId("arrival-port")).toBeInTheDocument();
+      expect(screen.getByTestId("departure-date")).toBeInTheDocument();
+      expect(screen.getByTestId("arrival-date")).toBeInTheDocument();
+      expect(screen.getByTestId("voyage-notes")).toBeInTheDocument();
     });
     
-    it('deve listar embarcações disponíveis', () => {
+    it("deve listar embarcações disponíveis", () => {
       render(<VoyagePlanner onSave={mockOnSave} vessels={mockVessels} />, { wrapper: createWrapper() });
       
-      const select = screen.getByTestId('vessel-select');
-      expect(select).toContainHTML('MV Atlantic Star');
-      expect(select).toContainHTML('MV Pacific Dawn');
-      expect(select).toContainHTML('MV Nordic Light');
+      const select = screen.getByTestId("vessel-select");
+      expect(select).toContainHTML("MV Atlantic Star");
+      expect(select).toContainHTML("MV Pacific Dawn");
+      expect(select).toContainHTML("MV Nordic Light");
     });
     
-    it('deve renderizar seção de waypoints', () => {
+    it("deve renderizar seção de waypoints", () => {
       render(<VoyagePlanner onSave={mockOnSave} vessels={mockVessels} />, { wrapper: createWrapper() });
       
-      expect(screen.getByTestId('route-waypoints')).toBeInTheDocument();
-      expect(screen.getByTestId('add-waypoint')).toBeInTheDocument();
+      expect(screen.getByTestId("route-waypoints")).toBeInTheDocument();
+      expect(screen.getByTestId("add-waypoint")).toBeInTheDocument();
     });
     
-    it('deve renderizar seção de carga', () => {
+    it("deve renderizar seção de carga", () => {
       render(<VoyagePlanner onSave={mockOnSave} vessels={mockVessels} />, { wrapper: createWrapper() });
       
-      expect(screen.getByTestId('cargo-info')).toBeInTheDocument();
-      expect(screen.getByTestId('cargo-type')).toBeInTheDocument();
-      expect(screen.getByTestId('cargo-weight')).toBeInTheDocument();
+      expect(screen.getByTestId("cargo-info")).toBeInTheDocument();
+      expect(screen.getByTestId("cargo-type")).toBeInTheDocument();
+      expect(screen.getByTestId("cargo-weight")).toBeInTheDocument();
     });
   });
   
-  describe('Interações', () => {
-    it('deve permitir selecionar embarcação', async () => {
+  describe("Interações", () => {
+    it("deve permitir selecionar embarcação", async () => {
       const user = userEvent.setup();
       render(<VoyagePlanner onSave={mockOnSave} vessels={mockVessels} />, { wrapper: createWrapper() });
       
-      await user.selectOptions(screen.getByTestId('vessel-select'), 'v1');
+      await user.selectOptions(screen.getByTestId("vessel-select"), "v1");
       
-      expect(screen.getByTestId('vessel-select')).toHaveValue('v1');
+      expect(screen.getByTestId("vessel-select")).toHaveValue("v1");
     });
     
-    it('deve permitir preencher portos', async () => {
+    it("deve permitir preencher portos", async () => {
       const user = userEvent.setup();
       render(<VoyagePlanner onSave={mockOnSave} vessels={mockVessels} />, { wrapper: createWrapper() });
       
-      await user.type(screen.getByTestId('departure-port'), 'Santos');
-      await user.type(screen.getByTestId('arrival-port'), 'Rotterdam');
+      await user.type(screen.getByTestId("departure-port"), "Santos");
+      await user.type(screen.getByTestId("arrival-port"), "Rotterdam");
       
-      expect(screen.getByTestId('departure-port')).toHaveValue('Santos');
-      expect(screen.getByTestId('arrival-port')).toHaveValue('Rotterdam');
+      expect(screen.getByTestId("departure-port")).toHaveValue("Santos");
+      expect(screen.getByTestId("arrival-port")).toHaveValue("Rotterdam");
     });
     
-    it('deve chamar onSave ao salvar viagem', async () => {
+    it("deve chamar onSave ao salvar viagem", async () => {
       const user = userEvent.setup();
       render(<VoyagePlanner onSave={mockOnSave} vessels={mockVessels} />, { wrapper: createWrapper() });
       
-      await user.click(screen.getByTestId('save-voyage'));
+      await user.click(screen.getByTestId("save-voyage"));
       
       expect(mockOnSave).toHaveBeenCalledTimes(1);
     });
     
-    it('deve ter botão de calcular ETA', () => {
+    it("deve ter botão de calcular ETA", () => {
       render(<VoyagePlanner onSave={mockOnSave} vessels={mockVessels} />, { wrapper: createWrapper() });
       
-      expect(screen.getByTestId('calculate-eta')).toBeInTheDocument();
-      expect(screen.getByTestId('calculate-eta')).toHaveTextContent('Calcular ETA');
+      expect(screen.getByTestId("calculate-eta")).toBeInTheDocument();
+      expect(screen.getByTestId("calculate-eta")).toHaveTextContent("Calcular ETA");
     });
   });
   
-  describe('Dados Iniciais', () => {
-    it('deve carregar dados iniciais corretamente', () => {
+  describe("Dados Iniciais", () => {
+    it("deve carregar dados iniciais corretamente", () => {
       const initialData = {
-        vessel_id: 'v2',
-        name: 'Viagem Santos-Rotterdam',
-        departure_port: 'Santos',
-        arrival_port: 'Rotterdam',
-        notes: 'Carga de containers',
+        vessel_id: "v2",
+        name: "Viagem Santos-Rotterdam",
+        departure_port: "Santos",
+        arrival_port: "Rotterdam",
+        notes: "Carga de containers",
       };
       
       render(
@@ -174,45 +174,45 @@ describe('VoyagePlanner Component', () => {
         { wrapper: createWrapper() }
       );
       
-      expect(screen.getByTestId('voyage-name')).toHaveValue('Viagem Santos-Rotterdam');
-      expect(screen.getByTestId('departure-port')).toHaveValue('Santos');
-      expect(screen.getByTestId('arrival-port')).toHaveValue('Rotterdam');
+      expect(screen.getByTestId("voyage-name")).toHaveValue("Viagem Santos-Rotterdam");
+      expect(screen.getByTestId("departure-port")).toHaveValue("Santos");
+      expect(screen.getByTestId("arrival-port")).toHaveValue("Rotterdam");
     });
   });
 });
 
-describe('VoyagePlanner Validações', () => {
-  it('deve validar que data de chegada é após partida', () => {
+describe("VoyagePlanner Validações", () => {
+  it("deve validar que data de chegada é após partida", () => {
     const isValidDateRange = (departure: string, arrival: string) => {
       return new Date(arrival) > new Date(departure);
     };
     
-    expect(isValidDateRange('2025-01-01T08:00', '2025-01-15T18:00')).toBe(true);
-    expect(isValidDateRange('2025-01-15T18:00', '2025-01-01T08:00')).toBe(false);
+    expect(isValidDateRange("2025-01-01T08:00", "2025-01-15T18:00")).toBe(true);
+    expect(isValidDateRange("2025-01-15T18:00", "2025-01-01T08:00")).toBe(false);
   });
   
-  it('deve validar portos diferentes', () => {
+  it("deve validar portos diferentes", () => {
     const arePortsDifferent = (departure: string, arrival: string) => {
       return departure.toLowerCase() !== arrival.toLowerCase();
     };
     
-    expect(arePortsDifferent('Santos', 'Rotterdam')).toBe(true);
-    expect(arePortsDifferent('Santos', 'santos')).toBe(false);
+    expect(arePortsDifferent("Santos", "Rotterdam")).toBe(true);
+    expect(arePortsDifferent("Santos", "santos")).toBe(false);
   });
   
-  it('deve calcular duração estimada', () => {
+  it("deve calcular duração estimada", () => {
     const calculateDuration = (departure: string, arrival: string) => {
       const diff = new Date(arrival).getTime() - new Date(departure).getTime();
       return Math.ceil(diff / (1000 * 60 * 60 * 24)); // dias
     };
     
-    expect(calculateDuration('2025-01-01', '2025-01-15')).toBe(14);
-    expect(calculateDuration('2025-01-01', '2025-01-02')).toBe(1);
+    expect(calculateDuration("2025-01-01", "2025-01-15")).toBe(14);
+    expect(calculateDuration("2025-01-01", "2025-01-02")).toBe(1);
   });
 });
 
-describe('VoyagePlanner Cálculos', () => {
-  it('deve calcular consumo estimado de combustível', () => {
+describe("VoyagePlanner Cálculos", () => {
+  it("deve calcular consumo estimado de combustível", () => {
     const estimateFuelConsumption = (
       distance: number, // milhas náuticas
       avgSpeed: number, // nós
@@ -226,7 +226,7 @@ describe('VoyagePlanner Cálculos', () => {
     expect(estimateFuelConsumption(5000, 15, 30)).toBeCloseTo(416.67, 1);
   });
   
-  it('deve calcular ETA baseado em velocidade', () => {
+  it("deve calcular ETA baseado em velocidade", () => {
     const calculateETA = (
       departureDate: Date,
       distance: number, // milhas náuticas
@@ -236,7 +236,7 @@ describe('VoyagePlanner Cálculos', () => {
       return new Date(departureDate.getTime() + hours * 60 * 60 * 1000);
     };
     
-    const departure = new Date('2025-01-01T08:00:00');
+    const departure = new Date("2025-01-01T08:00:00");
     const eta = calculateETA(departure, 360, 15); // 360 milhas a 15 nós = 24 horas
     
     expect(eta.getDate()).toBe(2); // Dia seguinte

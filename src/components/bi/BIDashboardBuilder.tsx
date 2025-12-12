@@ -97,9 +97,9 @@ export const BIDashboardBuilder: React.FC = () => {
       answer: generateMockAnswer(aiQuery),
       confidence: 0.85 + Math.random() * 0.15,
       chartType: aiQuery.toLowerCase().includes("consumo") ? "line" : 
-                 aiQuery.toLowerCase().includes("status") ? "pie" : "bar",
+        aiQuery.toLowerCase().includes("status") ? "pie" : "bar",
       data: aiQuery.toLowerCase().includes("consumo") ? fuelConsumptionData :
-            aiQuery.toLowerCase().includes("status") ? vesselStatusData : maintenanceData
+        aiQuery.toLowerCase().includes("status") ? vesselStatusData : maintenanceData
     };
     
     setQueryResults(prev => [mockResult, ...prev]);
@@ -126,56 +126,56 @@ export const BIDashboardBuilder: React.FC = () => {
     if (!result.data) return null;
 
     switch (result.chartType) {
-      case "pie":
-        return (
-          <ResponsiveContainer width="100%" height={250}>
-            <RechartsPieChart>
-              <Pie
-                data={result.data}
-                cx="50%"
-                cy="50%"
-                innerRadius={60}
-                outerRadius={80}
-                paddingAngle={5}
-                dataKey="value"
-                label={({ name, percent }) => `${name} ${(percent * 100).toFixed(0)}%`}
-              >
-                {result.data.map((_, index) => (
-                  <Cell key={`cell-${index}`} fill={COLORS[index % COLORS.length]} />
-                ))}
-              </Pie>
-              <Tooltip />
-            </RechartsPieChart>
-          </ResponsiveContainer>
-        );
-      case "line":
-        return (
-          <ResponsiveContainer width="100%" height={250}>
-            <RechartsLineChart data={result.data}>
-              <CartesianGrid strokeDasharray="3 3" className="opacity-30" />
-              <XAxis dataKey="month" />
-              <YAxis />
-              <Tooltip />
-              <Legend />
-              <Line type="monotone" dataKey="consumo" stroke="hsl(var(--primary))" strokeWidth={2} />
-              <Line type="monotone" dataKey="meta" stroke="hsl(var(--muted-foreground))" strokeDasharray="5 5" />
-            </RechartsLineChart>
-          </ResponsiveContainer>
-        );
-      default:
-        return (
-          <ResponsiveContainer width="100%" height={250}>
-            <BarChart data={result.data}>
-              <CartesianGrid strokeDasharray="3 3" className="opacity-30" />
-              <XAxis dataKey="vessel" />
-              <YAxis />
-              <Tooltip />
-              <Legend />
-              <Bar dataKey="pendentes" fill="hsl(var(--destructive))" name="Pendentes" />
-              <Bar dataKey="concluidas" fill="hsl(var(--primary))" name="Concluídas" />
-            </BarChart>
-          </ResponsiveContainer>
-        );
+    case "pie":
+      return (
+        <ResponsiveContainer width="100%" height={250}>
+          <RechartsPieChart>
+            <Pie
+              data={result.data}
+              cx="50%"
+              cy="50%"
+              innerRadius={60}
+              outerRadius={80}
+              paddingAngle={5}
+              dataKey="value"
+              label={({ name, percent }) => `${name} ${(percent * 100).toFixed(0)}%`}
+            >
+              {result.data.map((_, index) => (
+                <Cell key={`cell-${index}`} fill={COLORS[index % COLORS.length]} />
+              ))}
+            </Pie>
+            <Tooltip />
+          </RechartsPieChart>
+        </ResponsiveContainer>
+      );
+    case "line":
+      return (
+        <ResponsiveContainer width="100%" height={250}>
+          <RechartsLineChart data={result.data}>
+            <CartesianGrid strokeDasharray="3 3" className="opacity-30" />
+            <XAxis dataKey="month" />
+            <YAxis />
+            <Tooltip />
+            <Legend />
+            <Line type="monotone" dataKey="consumo" stroke="hsl(var(--primary))" strokeWidth={2} />
+            <Line type="monotone" dataKey="meta" stroke="hsl(var(--muted-foreground))" strokeDasharray="5 5" />
+          </RechartsLineChart>
+        </ResponsiveContainer>
+      );
+    default:
+      return (
+        <ResponsiveContainer width="100%" height={250}>
+          <BarChart data={result.data}>
+            <CartesianGrid strokeDasharray="3 3" className="opacity-30" />
+            <XAxis dataKey="vessel" />
+            <YAxis />
+            <Tooltip />
+            <Legend />
+            <Bar dataKey="pendentes" fill="hsl(var(--destructive))" name="Pendentes" />
+            <Bar dataKey="concluidas" fill="hsl(var(--primary))" name="Concluídas" />
+          </BarChart>
+        </ResponsiveContainer>
+      );
     }
   };
 

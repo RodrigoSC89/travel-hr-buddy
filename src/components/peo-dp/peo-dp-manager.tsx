@@ -285,8 +285,8 @@ export const PeoDpManager: React.FC = () => {
           status: asogStatus,
           statusLabel: asogStatus.toUpperCase(),
           statusDescription: asogStatus === "green" ? "Operações Normais" : 
-                            asogStatus === "blue" ? "Advisory" : 
-                            asogStatus === "yellow" ? "Degradado" : "Emergência",
+            asogStatus === "blue" ? "Advisory" : 
+              asogStatus === "yellow" ? "Degradado" : "Emergência",
           environmentalLimits: {
             windSpeed: { current: 12, limit: 25, unit: "kt" },
             waveHeight: { current: 1.8, limit: 3.5, unit: "m" },

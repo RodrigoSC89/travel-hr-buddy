@@ -6,7 +6,7 @@ import type {
   TaskFilter, 
   TaskGenerationRequest,
   TaskGenerationResponse 
-} from '@/types/smart-scheduler';
+} from "@/types/smart-scheduler";
 
 export class SmartSchedulerService {
   /**
@@ -14,39 +14,39 @@ export class SmartSchedulerService {
    */
   static async getTasks(filter?: TaskFilter): Promise<ScheduledTask[]> {
     let query = supabase
-      .from('scheduled_tasks')
-      .select('*')
-      .order('due_date', { ascending: true });
+      .from("scheduled_tasks")
+      .select("*")
+      .order("due_date", { ascending: true });
 
     if (filter?.module) {
-      query = query.eq('module', filter.module);
+      query = query.eq("module", filter.module);
     }
     if (filter?.status) {
-      query = query.eq('status', filter.status);
+      query = query.eq("status", filter.status);
     }
     if (filter?.priority) {
-      query = query.eq('priority', filter.priority);
+      query = query.eq("priority", filter.priority);
     }
     if (filter?.assigned_to) {
-      query = query.eq('assigned_to', filter.assigned_to);
+      query = query.eq("assigned_to", filter.assigned_to);
     }
     if (filter?.vessel_id) {
-      query = query.eq('vessel_id', filter.vessel_id);
+      query = query.eq("vessel_id", filter.vessel_id);
     }
     if (filter?.date_from) {
-      query = query.gte('due_date', filter.date_from);
+      query = query.gte("due_date", filter.date_from);
     }
     if (filter?.date_to) {
-      query = query.lte('due_date', filter.date_to);
+      query = query.lte("due_date", filter.date_to);
     }
     if (filter?.ai_generated !== undefined) {
-      query = query.eq('ai_generated', filter.ai_generated);
+      query = query.eq("ai_generated", filter.ai_generated);
     }
 
     const { data, error } = await query;
 
     if (error) {
-      logger.error('Error fetching tasks', error as Error, { filter });
+      logger.error("Error fetching tasks", error as Error, { filter });
       throw error;
     }
 
@@ -58,13 +58,13 @@ export class SmartSchedulerService {
    */
   static async createTask(task: Partial<ScheduledTask>): Promise<ScheduledTask> {
     const { data, error } = await supabase
-      .from('scheduled_tasks')
+      .from("scheduled_tasks")
       .insert(task as any)
       .select()
       .single();
 
     if (error) {
-      logger.error('Error creating task', error as Error, { taskTitle: task.title });
+      logger.error("Error creating task", error as Error, { taskTitle: task.title });
       throw error;
     }
 
@@ -76,14 +76,14 @@ export class SmartSchedulerService {
    */
   static async updateTask(id: string, updates: Partial<ScheduledTask>): Promise<ScheduledTask> {
     const { data, error } = await supabase
-      .from('scheduled_tasks')
+      .from("scheduled_tasks")
       .update(updates as any)
-      .eq('id', id)
+      .eq("id", id)
       .select()
       .single();
 
     if (error) {
-      logger.error('Error updating task', error as Error, { taskId: id });
+      logger.error("Error updating task", error as Error, { taskId: id });
       throw error;
     }
 
@@ -95,12 +95,12 @@ export class SmartSchedulerService {
    */
   static async deleteTask(id: string): Promise<void> {
     const { error } = await supabase
-      .from('scheduled_tasks')
+      .from("scheduled_tasks")
       .delete()
-      .eq('id', id);
+      .eq("id", id);
 
     if (error) {
-      logger.error('Error deleting task', error as Error, { taskId: id });
+      logger.error("Error deleting task", error as Error, { taskId: id });
       throw error;
     }
   }
@@ -110,7 +110,7 @@ export class SmartSchedulerService {
    */
   static async completeTask(id: string): Promise<ScheduledTask> {
     return this.updateTask(id, {
-      status: 'completed',
+      status: "completed",
       completed_at: new Date().toISOString(),
     });
   }
@@ -119,12 +119,12 @@ export class SmartSchedulerService {
    * Generate tasks using AI based on historical data
    */
   static async generateTasks(request: TaskGenerationRequest): Promise<TaskGenerationResponse> {
-    const { data, error } = await supabase.functions.invoke('generate-scheduled-tasks', {
+    const { data, error } = await supabase.functions.invoke("generate-scheduled-tasks", {
       body: request,
     });
 
     if (error) {
-      logger.error('Error generating tasks', error as Error, { vesselId: request.vessel_id });
+      logger.error("Error generating tasks", error as Error, { vesselId: request.vessel_id });
       throw error;
     }
 
@@ -135,10 +135,10 @@ export class SmartSchedulerService {
    * Mark overdue tasks
    */
   static async markOverdueTasks(): Promise<void> {
-    const { error } = await supabase.rpc('auto_mark_overdue_tasks');
+    const { error } = await supabase.rpc("auto_mark_overdue_tasks");
 
     if (error) {
-      logger.error('Error marking overdue tasks', error as Error);
+      logger.error("Error marking overdue tasks", error as Error);
       throw error;
     }
   }
@@ -147,10 +147,10 @@ export class SmartSchedulerService {
    * Generate recurring tasks
    */
   static async generateRecurringTasks(): Promise<void> {
-    const { error } = await supabase.rpc('generate_recurring_tasks' as any);
+    const { error } = await supabase.rpc("generate_recurring_tasks" as any);
 
     if (error) {
-      logger.error('Error generating recurring tasks', error as Error);
+      logger.error("Error generating recurring tasks", error as Error);
       throw error;
     }
   }

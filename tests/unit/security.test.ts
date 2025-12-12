@@ -131,7 +131,7 @@ describe("Security Utilities", () => {
 
   describe("escapeHtml", () => {
     it("should escape all HTML entities", () => {
-      const input = '<div class="test">Hello & "World"</div>';
+      const input = "<div class=\"test\">Hello & \"World\"</div>";
       const result = escapeHtml(input);
       expect(result).toBe("&lt;div class=&quot;test&quot;&gt;Hello &amp; &quot;World&quot;&lt;/div&gt;");
     });

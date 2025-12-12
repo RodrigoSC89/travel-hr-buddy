@@ -42,32 +42,32 @@ class AIResponseCache {
     this.templates = [
       {
         pattern: /como (criar|gerar|fazer) (um |uma )?(relatório|report)/i,
-        template: 'Para criar um relatório, acesse o módulo de Relatórios no menu principal. Selecione o tipo de relatório desejado, defina o período e clique em "Gerar". O relatório pode ser exportado em PDF ou Excel.',
+        template: "Para criar um relatório, acesse o módulo de Relatórios no menu principal. Selecione o tipo de relatório desejado, defina o período e clique em \"Gerar\". O relatório pode ser exportado em PDF ou Excel.",
         variables: [],
         priority: 10
       },
       {
         pattern: /qual (é |o )?status (da |de )?manutenção/i,
-        template: 'O status atual de manutenção pode ser consultado no Dashboard de Manutenção. Atualmente há {pendingCount} ordens pendentes e {criticalCount} itens críticos.',
-        variables: ['pendingCount', 'criticalCount'],
+        template: "O status atual de manutenção pode ser consultado no Dashboard de Manutenção. Atualmente há {pendingCount} ordens pendentes e {criticalCount} itens críticos.",
+        variables: ["pendingCount", "criticalCount"],
         priority: 9
       },
       {
         pattern: /funcionários? (em |com )?atraso (de |no |em )?treinamento/i,
-        template: 'Consultando registros de treinamento... Há {count} funcionários com certificações pendentes ou expiradas. Acesse o módulo de RH > Certificações para ver a lista completa.',
-        variables: ['count'],
+        template: "Consultando registros de treinamento... Há {count} funcionários com certificações pendentes ou expiradas. Acesse o módulo de RH > Certificações para ver a lista completa.",
+        variables: ["count"],
         priority: 8
       },
       {
         pattern: /próxim(a|o)s? vencimento(s)?/i,
-        template: 'Os próximos vencimentos incluem: {items}. Recomendo agendar as renovações com antecedência.',
-        variables: ['items'],
+        template: "Os próximos vencimentos incluem: {items}. Recomendo agendar as renovações com antecedência.",
+        variables: ["items"],
         priority: 7
       },
       {
         pattern: /resumo (do |da )?(dia|semana|mês)/i,
-        template: 'Resumo do período: {summary}. Para mais detalhes, acesse o Dashboard Executivo.',
-        variables: ['summary'],
+        template: "Resumo do período: {summary}. Para mais detalhes, acesse o Dashboard Executivo.",
+        variables: ["summary"],
         priority: 7
       }
     ];
@@ -83,7 +83,7 @@ class AIResponseCache {
         
         // Replace variables
         for (const varName of template.variables) {
-          const value = variables[varName] || '{dados não disponíveis}';
+          const value = variables[varName] || "{dados não disponíveis}";
           response = response.replace(`{${varName}}`, value);
         }
         
@@ -152,7 +152,7 @@ class AIResponseCache {
       queryTokens: tokens,
       response,
       metadata: {
-        module: metadata.module || 'general',
+        module: metadata.module || "general",
         context: metadata.context,
         timestamp: Date.now(),
         useCount: 1,
@@ -210,10 +210,10 @@ class AIResponseCache {
   private normalizeQuery(query: string): string {
     return query
       .toLowerCase()
-      .normalize('NFD')
-      .replace(/[\u0300-\u036f]/g, '')
-      .replace(/[^\w\s]/g, '')
-      .replace(/\s+/g, ' ')
+      .normalize("NFD")
+      .replace(/[\u0300-\u036f]/g, "")
+      .replace(/[^\w\s]/g, "")
+      .replace(/\s+/g, " ")
       .trim();
   }
   
@@ -222,12 +222,12 @@ class AIResponseCache {
    */
   private tokenize(query: string): string[] {
     const stopWords = new Set([
-      'o', 'a', 'os', 'as', 'um', 'uma', 'de', 'da', 'do', 'em', 'no', 'na',
-      'para', 'por', 'com', 'que', 'qual', 'como', 'e', 'ou', 'se', 'é', 'são'
+      "o", "a", "os", "as", "um", "uma", "de", "da", "do", "em", "no", "na",
+      "para", "por", "com", "que", "qual", "como", "e", "ou", "se", "é", "são"
     ]);
     
     return this.normalizeQuery(query)
-      .split(' ')
+      .split(" ")
       .filter(token => token.length > 2 && !stopWords.has(token));
   }
   
@@ -267,7 +267,7 @@ class AIResponseCache {
     hitRate: number;
     topQueries: Array<{ query: string; useCount: number }>;
     byModule: Record<string, number>;
-  } {
+    } {
     const entries = Array.from(this.cache.values());
     const totalUses = entries.reduce((sum, e) => sum + e.metadata.useCount, 0);
     
@@ -313,10 +313,10 @@ class AIResponseCache {
   private saveToStorage(): void {
     try {
       const data = Array.from(this.cache.entries());
-      localStorage.setItem('ai_response_cache', JSON.stringify(data));
+      localStorage.setItem("ai_response_cache", JSON.stringify(data));
     } catch (e) {
-      console.warn('[AICache] Failed to save to storage:', e);
-      console.warn('[AICache] Failed to save to storage:', e);
+      console.warn("[AICache] Failed to save to storage:", e);
+      console.warn("[AICache] Failed to save to storage:", e);
     }
   }
   
@@ -325,7 +325,7 @@ class AIResponseCache {
    */
   private loadFromStorage(): void {
     try {
-      const data = localStorage.getItem('ai_response_cache');
+      const data = localStorage.getItem("ai_response_cache");
       if (data) {
         const entries: [string, CachedResponse][] = JSON.parse(data);
         this.cache = new Map(entries);
@@ -342,8 +342,8 @@ class AIResponseCache {
         
       }
     } catch (e) {
-      console.warn('[AICache] Failed to load from storage:', e);
-      console.warn('[AICache] Failed to load from storage:', e);
+      console.warn("[AICache] Failed to load from storage:", e);
+      console.warn("[AICache] Failed to load from storage:", e);
     }
   }
   
@@ -353,7 +353,7 @@ class AIResponseCache {
   clear(): void {
     this.cache.clear();
     this.semanticIndex.clear();
-    localStorage.removeItem('ai_response_cache');
+    localStorage.removeItem("ai_response_cache");
   }
 }
 

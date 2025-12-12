@@ -3,10 +3,10 @@
  * PATCH 834: Optimized request handling for slow networks
  */
 
-import { bandwidthOptimizer } from './low-bandwidth-optimizer';
+import { bandwidthOptimizer } from "./low-bandwidth-optimizer";
 
 interface RequestConfig {
-  priority?: 'high' | 'normal' | 'low';
+  priority?: "high" | "normal" | "low";
   cache?: boolean;
   compress?: boolean;
   timeout?: number;
@@ -38,34 +38,34 @@ class RequestOptimizer {
 
   private updateConcurrency() {
     const connection = (navigator as any).connection;
-    const connectionType = connection?.effectiveType || '4g';
+    const connectionType = connection?.effectiveType || "4g";
     
     switch (connectionType) {
-      case 'slow-2g':
-        this.maxConcurrent = 1;
-        break;
-      case '2g':
-        this.maxConcurrent = 2;
-        break;
-      case '3g':
-        this.maxConcurrent = 4;
-        break;
-      default:
-        this.maxConcurrent = 6;
+    case "slow-2g":
+      this.maxConcurrent = 1;
+      break;
+    case "2g":
+      this.maxConcurrent = 2;
+      break;
+    case "3g":
+      this.maxConcurrent = 4;
+      break;
+    default:
+      this.maxConcurrent = 6;
     }
   }
 
   private setupConnectionListener() {
     const connection = (navigator as any).connection;
     if (connection) {
-      connection.addEventListener('change', () => {
+      connection.addEventListener("change", () => {
         this.updateConcurrency();
       });
     }
   }
 
   private getCacheKey(url: string, options: RequestInit): string {
-    return `${options.method || 'GET'}:${url}`;
+    return `${options.method || "GET"}:${url}`;
   }
 
   async request(
@@ -74,8 +74,8 @@ class RequestOptimizer {
     config: RequestConfig = {}
   ): Promise<Response> {
     const {
-      priority = 'normal',
-      cache = options.method === 'GET' || !options.method,
+      priority = "normal",
+      cache = options.method === "GET" || !options.method,
       compress = true,
       timeout = bandwidthOptimizer.getConfig().requestTimeout,
       retries = 3,
@@ -88,7 +88,7 @@ class RequestOptimizer {
       const cached = this.cache.get(cacheKey)!;
       if (Date.now() - cached.timestamp < cached.ttl) {
         return new Response(JSON.stringify(cached.data), {
-          headers: { 'X-Cache': 'HIT' },
+          headers: { "X-Cache": "HIT" },
         });
       }
       this.cache.delete(cacheKey);
@@ -97,7 +97,7 @@ class RequestOptimizer {
     // Add compression headers
     const headers = new Headers(options.headers);
     if (compress) {
-      headers.set('Accept-Encoding', 'gzip, deflate, br');
+      headers.set("Accept-Encoding", "gzip, deflate, br");
     }
 
     return new Promise((resolve, reject) => {
@@ -113,13 +113,13 @@ class RequestOptimizer {
       };
 
       // Insert based on priority
-      if (priority === 'high') {
+      if (priority === "high") {
         this.queue.unshift(request);
-      } else if (priority === 'low') {
+      } else if (priority === "low") {
         this.queue.push(request);
       } else {
         // Insert after high priority requests
-        const insertIndex = this.queue.findIndex(r => r.config.priority !== 'high');
+        const insertIndex = this.queue.findIndex(r => r.config.priority !== "high");
         if (insertIndex === -1) {
           this.queue.push(request);
         } else {
@@ -162,7 +162,7 @@ class RequestOptimizer {
       clearTimeout(timeoutId);
 
       // Cache successful GET responses
-      if (cache && response.ok && (!options.method || options.method === 'GET')) {
+      if (cache && response.ok && (!options.method || options.method === "GET")) {
         const clone = response.clone();
         const data = await clone.json().catch(() => null);
         if (data) {
@@ -198,7 +198,7 @@ class RequestOptimizer {
   // Cancel all pending requests
   cancelAll() {
     this.queue.forEach(request => {
-      request.reject(new Error('Request cancelled'));
+      request.reject(new Error("Request cancelled"));
     });
     this.queue = [];
   }
@@ -239,7 +239,7 @@ export async function optimizedFetch(
 }
 
 // React hook
-import { useCallback, useMemo } from 'react';
+import { useCallback, useMemo } from "react";
 
 export function useOptimizedFetch() {
   const fetch = useCallback((url: string, options?: RequestInit, config?: RequestConfig) => {

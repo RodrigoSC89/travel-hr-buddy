@@ -48,8 +48,8 @@ export const WindyMap: React.FC<WindyMapProps> = ({
   useEffect(() => {
     const fetchApiKey = async () => {
       try {
-        const { data, error } = await supabase.functions.invoke('weather-map-proxy', {
-          body: { action: 'get_keys' }
+        const { data, error } = await supabase.functions.invoke("weather-map-proxy", {
+          body: { action: "get_keys" }
         });
 
         if (error) {
@@ -79,8 +79,8 @@ export const WindyMap: React.FC<WindyMapProps> = ({
   useEffect(() => {
     const fetchWeatherData = async () => {
       try {
-        const { data, error } = await supabase.functions.invoke('weather-map-proxy', {
-          body: { action: 'weather_data', lat, lon }
+        const { data, error } = await supabase.functions.invoke("weather-map-proxy", {
+          body: { action: "weather_data", lat, lon }
         });
 
         if (!error && data?.data) {
@@ -134,7 +134,7 @@ export const WindyMap: React.FC<WindyMapProps> = ({
 
   // Get tile URL with API key
   const getOWMTileUrl = (z: number, x: number, y: number) => {
-    if (!apiKey) return '';
+    if (!apiKey) return "";
     const layer = layers.find(l => l.id === selectedLayer);
     return `https://tile.openweathermap.org/map/${layer?.owmLayer}/${z}/${x}/${y}.png?appid=${apiKey}`;
   };
@@ -153,7 +153,7 @@ export const WindyMap: React.FC<WindyMapProps> = ({
               linear-gradient(rgba(255,255,255,0.05) 1px, transparent 1px),
               linear-gradient(90deg, rgba(255,255,255,0.05) 1px, transparent 1px)
             `,
-            backgroundSize: '50px 50px'
+            backgroundSize: "50px 50px"
           }} />
           
           {/* Simulated weather cells */}
@@ -166,13 +166,13 @@ export const WindyMap: React.FC<WindyMapProps> = ({
                 top: `${Math.random() * 100}%`,
                 width: `${30 + Math.random() * 60}px`,
                 height: `${30 + Math.random() * 60}px`,
-                background: selectedLayer === 'temp' 
+                background: selectedLayer === "temp" 
                   ? `radial-gradient(circle, rgba(255,${100 + Math.random() * 155},0,0.4) 0%, transparent 70%)`
-                  : selectedLayer === 'precipitation'
-                  ? `radial-gradient(circle, rgba(0,100,255,0.4) 0%, transparent 70%)`
-                  : selectedLayer === 'clouds'
-                  ? `radial-gradient(circle, rgba(200,200,200,0.3) 0%, transparent 70%)`
-                  : `radial-gradient(circle, rgba(0,255,200,0.3) 0%, transparent 70%)`,
+                  : selectedLayer === "precipitation"
+                    ? "radial-gradient(circle, rgba(0,100,255,0.4) 0%, transparent 70%)"
+                    : selectedLayer === "clouds"
+                      ? "radial-gradient(circle, rgba(200,200,200,0.3) 0%, transparent 70%)"
+                      : "radial-gradient(circle, rgba(0,255,200,0.3) 0%, transparent 70%)",
                 animationDelay: `${Math.random() * 2}s`,
                 animationDuration: `${2 + Math.random() * 2}s`
               }}
@@ -180,12 +180,12 @@ export const WindyMap: React.FC<WindyMapProps> = ({
           ))}
           
           {/* Wind lines animation */}
-          {selectedLayer === 'wind' && [...Array(15)].map((_, i) => (
+          {selectedLayer === "wind" && [...Array(15)].map((_, i) => (
             <div
               key={`wind-${i}`}
               className="absolute h-0.5 bg-gradient-to-r from-transparent via-cyan-400 to-transparent animate-pulse"
               style={{
-                left: `-10%`,
+                left: "-10%",
                 top: `${10 + i * 6}%`,
                 width: `${60 + Math.random() * 40}%`,
                 opacity: 0.3 + Math.random() * 0.4,
@@ -247,7 +247,7 @@ export const WindyMap: React.FC<WindyMapProps> = ({
       height: "450",
       zoom: zoom.toString(),
       level: "surface",
-      overlay: selectedLayer === 'precipitation' ? 'rain' : selectedLayer,
+      overlay: selectedLayer === "precipitation" ? "rain" : selectedLayer,
       product: "ecmwf",
       menu: "",
       message: "true",

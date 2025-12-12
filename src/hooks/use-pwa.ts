@@ -3,8 +3,8 @@
  * PATCH 850: Hooks for PWA functionality
  */
 
-import { useState, useEffect, useCallback } from 'react';
-import { offlineSyncManager } from '@/lib/pwa/offline-sync-manager';
+import { useState, useEffect, useCallback } from "react";
+import { offlineSyncManager } from "@/lib/pwa/offline-sync-manager";
 
 // Hook for online/offline status
 export function useOnlineStatus() {
@@ -14,12 +14,12 @@ export function useOnlineStatus() {
     const handleOnline = () => setIsOnline(true);
     const handleOffline = () => setIsOnline(false);
 
-    window.addEventListener('online', handleOnline);
-    window.addEventListener('offline', handleOffline);
+    window.addEventListener("online", handleOnline);
+    window.addEventListener("offline", handleOffline);
 
     return () => {
-      window.removeEventListener('online', handleOnline);
-      window.removeEventListener('offline', handleOffline);
+      window.removeEventListener("online", handleOnline);
+      window.removeEventListener("offline", handleOffline);
     };
   }, []);
 
@@ -57,17 +57,17 @@ export function useOfflineMutations() {
   const isOnline = useOnlineStatus();
 
   const queueMutation = useCallback(async (
-    type: 'create' | 'update' | 'delete',
+    type: "create" | "update" | "delete",
     endpoint: string,
     payload: unknown,
-    priority: 'high' | 'medium' | 'low' = 'medium'
+    priority: "high" | "medium" | "low" = "medium"
   ) => {
     if (isOnline) {
       // Execute immediately if online
-      const method = type === 'delete' ? 'DELETE' : type === 'create' ? 'POST' : 'PUT';
+      const method = type === "delete" ? "DELETE" : type === "create" ? "POST" : "PUT";
       const response = await fetch(endpoint, {
         method,
-        headers: { 'Content-Type': 'application/json' },
+        headers: { "Content-Type": "application/json" },
         body: JSON.stringify(payload),
       });
       return response.json();
@@ -112,11 +112,11 @@ export function useCachedData<T>(key: string, fetcher: () => Promise<T>, ttl = 3
             await offlineSyncManager.cacheData(key, fresh, ttl);
           }
         } else if (!cached) {
-          throw new Error('No cached data available offline');
+          throw new Error("No cached data available offline");
         }
       } catch (err) {
         if (mounted) {
-          setError(err instanceof Error ? err : new Error('Unknown error'));
+          setError(err instanceof Error ? err : new Error("Unknown error"));
         }
       } finally {
         if (mounted) {
@@ -141,7 +141,7 @@ export function useCachedData<T>(key: string, fetcher: () => Promise<T>, ttl = 3
       setData(fresh);
       await offlineSyncManager.cacheData(key, fresh, ttl);
     } catch (err) {
-      setError(err instanceof Error ? err : new Error('Unknown error'));
+      setError(err instanceof Error ? err : new Error("Unknown error"));
     } finally {
       setLoading(false);
     }
@@ -157,7 +157,7 @@ export function usePWAInstall() {
 
   useEffect(() => {
     // Check if already installed
-    if (window.matchMedia('(display-mode: standalone)').matches) {
+    if (window.matchMedia("(display-mode: standalone)").matches) {
       setIsInstalled(true);
       return;
     }
@@ -172,12 +172,12 @@ export function usePWAInstall() {
       setCanInstall(false);
     };
 
-    window.addEventListener('beforeinstallprompt', handler);
-    window.addEventListener('appinstalled', installedHandler);
+    window.addEventListener("beforeinstallprompt", handler);
+    window.addEventListener("appinstalled", installedHandler);
 
     return () => {
-      window.removeEventListener('beforeinstallprompt', handler);
-      window.removeEventListener('appinstalled', installedHandler);
+      window.removeEventListener("beforeinstallprompt", handler);
+      window.removeEventListener("appinstalled", installedHandler);
     };
   }, []);
 

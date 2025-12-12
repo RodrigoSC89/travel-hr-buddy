@@ -3,14 +3,14 @@
  * Handle optimistic UI updates with rollback support
  */
 
-import { useState, useCallback, useRef } from 'react';
+import { useState, useCallback, useRef } from "react";
 
 interface OptimisticUpdate<T> {
   id: string;
   previousValue: T;
   optimisticValue: T;
   timestamp: number;
-  status: 'pending' | 'confirmed' | 'rolled-back';
+  status: "pending" | "confirmed" | "rolled-back";
 }
 
 interface OptimisticOptions<T> {
@@ -47,7 +47,7 @@ export function useOptimisticUpdate<T>(
         previousValue,
         optimisticValue,
         timestamp: Date.now(),
-        status: 'pending',
+        status: "pending",
       });
 
       // Apply optimistic update immediately
@@ -58,9 +58,9 @@ export function useOptimisticUpdate<T>(
       // Set up timeout for automatic rollback
       const timeoutId = setTimeout(() => {
         const update = pendingUpdatesRef.current.get(updateId);
-        if (update && update.status === 'pending') {
+        if (update && update.status === "pending") {
           rollback(updateId);
-          setError(new Error('Operation timed out'));
+          setError(new Error("Operation timed out"));
         }
       }, timeout);
 
@@ -72,7 +72,7 @@ export function useOptimisticUpdate<T>(
         // Mark as confirmed
         const update = pendingUpdatesRef.current.get(updateId);
         if (update) {
-          update.status = 'confirmed';
+          update.status = "confirmed";
         }
 
         // Update with server response
@@ -83,7 +83,7 @@ export function useOptimisticUpdate<T>(
       } catch (err) {
         clearTimeout(timeoutId);
         
-        const error = err instanceof Error ? err : new Error('Unknown error');
+        const error = err instanceof Error ? err : new Error("Unknown error");
         setError(error);
 
         // Rollback on error
@@ -103,8 +103,8 @@ export function useOptimisticUpdate<T>(
   const rollback = useCallback(
     (updateId: string) => {
       const update = pendingUpdatesRef.current.get(updateId);
-      if (update && update.status === 'pending') {
-        update.status = 'rolled-back';
+      if (update && update.status === "pending") {
+        update.status = "rolled-back";
         setValue(update.previousValue);
         options.onRollback?.(update.previousValue);
       }
@@ -138,7 +138,7 @@ export function useOptimisticUpdate<T>(
     reset,
     hasPendingUpdates: () => {
       return Array.from(pendingUpdatesRef.current.values()).some(
-        (u) => u.status === 'pending'
+        (u) => u.status === "pending"
       );
     },
   };
@@ -179,7 +179,7 @@ export function useOptimisticList<T extends { id: string | number }>(
       } catch (error) {
         // Rollback
         setItems((prev) => prev.filter((item) => item.id !== newItem.id));
-        options.onError?.(error instanceof Error ? error : new Error('Add failed'), 'add');
+        options.onError?.(error instanceof Error ? error : new Error("Add failed"), "add");
         return null;
       } finally {
         setPendingIds((prev) => {
@@ -219,7 +219,7 @@ export function useOptimisticList<T extends { id: string | number }>(
         setItems((prev) =>
           prev.map((item) => (item.id === updatedItem.id ? previousItem : item))
         );
-        options.onError?.(error instanceof Error ? error : new Error('Update failed'), 'update');
+        options.onError?.(error instanceof Error ? error : new Error("Update failed"), "update");
         return null;
       } finally {
         setPendingIds((prev) => {
@@ -251,7 +251,7 @@ export function useOptimisticList<T extends { id: string | number }>(
       } catch (error) {
         // Rollback
         setItems((prev) => [...prev, previousItem]);
-        options.onError?.(error instanceof Error ? error : new Error('Delete failed'), 'delete');
+        options.onError?.(error instanceof Error ? error : new Error("Delete failed"), "delete");
         return false;
       } finally {
         setPendingIds((prev) => {
@@ -315,7 +315,7 @@ export function createOptimisticMutation<TData, TVariables>(
     } catch (error) {
       // Rollback on error
       options.rollbackCache?.(variables);
-      options.onError?.(error instanceof Error ? error : new Error('Mutation failed'), variables);
+      options.onError?.(error instanceof Error ? error : new Error("Mutation failed"), variables);
       throw error;
     }
   };
@@ -356,7 +356,7 @@ export function useDebouncedOptimisticUpdate<T>(
             setLastSaved(new Date());
             pendingValueRef.current = null;
           } catch (error) {
-            console.error('Failed to save:', error);
+            console.error("Failed to save:", error);
           } finally {
             setIsSaving(false);
           }
@@ -380,7 +380,7 @@ export function useDebouncedOptimisticUpdate<T>(
         setLastSaved(new Date());
         pendingValueRef.current = null;
       } catch (error) {
-        console.error('Failed to save:', error);
+        console.error("Failed to save:", error);
       } finally {
         setIsSaving(false);
       }

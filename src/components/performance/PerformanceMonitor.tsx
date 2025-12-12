@@ -3,11 +3,11 @@
  * PATCH 833: Real-time performance metrics display
  */
 
-import React, { useState, useEffect } from 'react';
-import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
-import { Badge } from '@/components/ui/badge';
-import { Button } from '@/components/ui/button';
-import { Progress } from '@/components/ui/progress';
+import React, { useState, useEffect } from "react";
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import { Badge } from "@/components/ui/badge";
+import { Button } from "@/components/ui/button";
+import { Progress } from "@/components/ui/progress";
 import { 
   Activity, 
   Gauge, 
@@ -16,47 +16,47 @@ import {
   TrendingUp,
   RefreshCw,
   X
-} from 'lucide-react';
-import { useWebVitals } from '@/lib/performance/web-vitals-monitor';
-import { motion, AnimatePresence } from 'framer-motion';
+} from "lucide-react";
+import { useWebVitals } from "@/lib/performance/web-vitals-monitor";
+import { motion, AnimatePresence } from "framer-motion";
 
 interface PerformanceMonitorProps {
   visible?: boolean;
   onClose?: () => void;
-  position?: 'top-right' | 'bottom-right' | 'bottom-left';
+  position?: "top-right" | "bottom-right" | "bottom-left";
 }
 
 export function PerformanceMonitor({ 
   visible = true, 
   onClose,
-  position = 'bottom-right' 
+  position = "bottom-right" 
 }: PerformanceMonitorProps) {
   const { metrics, score } = useWebVitals();
   const [expanded, setExpanded] = useState(false);
 
   const positionClasses = {
-    'top-right': 'top-4 right-4',
-    'bottom-right': 'bottom-4 right-4',
-    'bottom-left': 'bottom-4 left-4',
+    "top-right": "top-4 right-4",
+    "bottom-right": "bottom-4 right-4",
+    "bottom-left": "bottom-4 left-4",
   };
 
   const getScoreColor = (score: number) => {
-    if (score >= 90) return 'text-green-500';
-    if (score >= 50) return 'text-yellow-500';
-    return 'text-red-500';
+    if (score >= 90) return "text-green-500";
+    if (score >= 50) return "text-yellow-500";
+    return "text-red-500";
   };
 
   const getRatingBadge = (rating: string) => {
     const variants = {
-      good: 'bg-green-500/10 text-green-500 border-green-500/20',
-      'needs-improvement': 'bg-yellow-500/10 text-yellow-500 border-yellow-500/20',
-      poor: 'bg-red-500/10 text-red-500 border-red-500/20',
+      good: "bg-green-500/10 text-green-500 border-green-500/20",
+      "needs-improvement": "bg-yellow-500/10 text-yellow-500 border-yellow-500/20",
+      poor: "bg-red-500/10 text-red-500 border-red-500/20",
     };
     return variants[rating as keyof typeof variants] || variants.poor;
   };
 
   const formatValue = (name: string, value: number) => {
-    if (name === 'CLS') return value.toFixed(3);
+    if (name === "CLS") return value.toFixed(3);
     return `${Math.round(value)}ms`;
   };
 
@@ -122,7 +122,7 @@ export function PerformanceMonitor({
               {expanded && (
                 <motion.div
                   initial={{ height: 0, opacity: 0 }}
-                  animate={{ height: 'auto', opacity: 1 }}
+                  animate={{ height: "auto", opacity: 1 }}
                   exit={{ height: 0, opacity: 0 }}
                   className="space-y-2 pt-2 border-t"
                 >
@@ -143,7 +143,7 @@ export function PerformanceMonitor({
                           variant="outline" 
                           className={`text-xs px-1.5 py-0 ${getRatingBadge(metric.rating)}`}
                         >
-                          {metric.rating === 'good' ? '✓' : metric.rating === 'needs-improvement' ? '!' : '✗'}
+                          {metric.rating === "good" ? "✓" : metric.rating === "needs-improvement" ? "!" : "✗"}
                         </Badge>
                       </div>
                     </div>
@@ -159,7 +159,7 @@ export function PerformanceMonitor({
               className="w-full text-xs"
               onClick={() => setExpanded(!expanded)}
             >
-              {expanded ? 'Mostrar menos' : 'Ver métricas detalhadas'}
+              {expanded ? "Mostrar menos" : "Ver métricas detalhadas"}
             </Button>
           </CardContent>
         </Card>
@@ -174,13 +174,13 @@ export function DevPerformanceOverlay() {
 
   useEffect(() => {
     const handleKeyPress = (e: KeyboardEvent) => {
-      if (e.ctrlKey && e.shiftKey && e.key === 'P') {
+      if (e.ctrlKey && e.shiftKey && e.key === "P") {
         setShow(prev => !prev);
       }
     };
 
-    window.addEventListener('keydown', handleKeyPress);
-    return () => window.removeEventListener('keydown', handleKeyPress);
+    window.addEventListener("keydown", handleKeyPress);
+    return () => window.removeEventListener("keydown", handleKeyPress);
   }, []);
 
   if (!import.meta.env.DEV) return null;

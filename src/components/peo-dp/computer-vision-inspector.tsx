@@ -121,19 +121,19 @@ export const ComputerVisionInspector: React.FC = () => {
 
   const getSeverityColor = (severity: string) => {
     switch (severity) {
-      case "critical": return "text-red-600 bg-red-100";
-      case "high": return "text-orange-600 bg-orange-100";
-      case "medium": return "text-yellow-600 bg-yellow-100";
-      default: return "text-green-600 bg-green-100";
+    case "critical": return "text-red-600 bg-red-100";
+    case "high": return "text-orange-600 bg-orange-100";
+    case "medium": return "text-yellow-600 bg-yellow-100";
+    default: return "text-green-600 bg-green-100";
     }
   };
 
   const getStatusIcon = (status: string) => {
     switch (status) {
-      case "passed": return <CheckCircle className="h-5 w-5 text-green-500" />;
-      case "warning": return <AlertTriangle className="h-5 w-5 text-yellow-500" />;
-      case "failed": return <XCircle className="h-5 w-5 text-red-500" />;
-      default: return <RefreshCw className="h-5 w-5 text-blue-500 animate-spin" />;
+    case "passed": return <CheckCircle className="h-5 w-5 text-green-500" />;
+    case "warning": return <AlertTriangle className="h-5 w-5 text-yellow-500" />;
+    case "failed": return <XCircle className="h-5 w-5 text-red-500" />;
+    default: return <RefreshCw className="h-5 w-5 text-blue-500 animate-spin" />;
     }
   };
 
@@ -316,8 +316,8 @@ export const ComputerVisionInspector: React.FC = () => {
                       key={finding.id}
                       className={`absolute border-2 border-dashed ${
                         finding.severity === "critical" ? "border-red-500" :
-                        finding.severity === "high" ? "border-orange-500" :
-                        finding.severity === "medium" ? "border-yellow-500" : "border-green-500"
+                          finding.severity === "high" ? "border-orange-500" :
+                            finding.severity === "medium" ? "border-yellow-500" : "border-green-500"
                       }`}
                       style={{
                         left: `${finding.location.x}px`,

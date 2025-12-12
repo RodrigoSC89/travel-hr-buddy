@@ -549,10 +549,10 @@ export const InboxManager: React.FC<InboxManagerProps> = ({
                                 onSelect={(e) => {
                                   e.preventDefault();
                                   // Create and download message as text file
-                                  const content = `De: ${message.sender_name} (${message.sender_role})\nData: ${new Date(message.created_at).toLocaleString('pt-BR')}\nPrioridade: ${message.priority}\n\n${message.content}`;
-                                  const blob = new Blob([content], { type: 'text/plain' });
+                                  const content = `De: ${message.sender_name} (${message.sender_role})\nData: ${new Date(message.created_at).toLocaleString("pt-BR")}\nPrioridade: ${message.priority}\n\n${message.content}`;
+                                  const blob = new Blob([content], { type: "text/plain" });
                                   const url = URL.createObjectURL(blob);
-                                  const a = document.createElement('a');
+                                  const a = document.createElement("a");
                                   a.href = url;
                                   a.download = `mensagem-${message.id}.txt`;
                                   document.body.appendChild(a);

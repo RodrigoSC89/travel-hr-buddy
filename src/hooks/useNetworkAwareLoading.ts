@@ -3,8 +3,8 @@
  * Adapts loading behavior based on connection quality
  */
 
-import { useState, useEffect, useCallback, useRef } from 'react';
-import { isSlowConnection, getConnectionInfo } from '@/lib/llm-optimizer';
+import { useState, useEffect, useCallback, useRef } from "react";
+import { isSlowConnection, getConnectionInfo } from "@/lib/llm-optimizer";
 
 interface NetworkState {
   isSlowConnection: boolean;
@@ -38,15 +38,15 @@ export const useNetworkState = (): NetworkState => {
       });
     };
 
-    window.addEventListener('online', updateState);
-    window.addEventListener('offline', updateState);
+    window.addEventListener("online", updateState);
+    window.addEventListener("offline", updateState);
     
     const nav = navigator as Navigator & { connection?: { addEventListener: (type: string, cb: () => void) => void } };
-    nav.connection?.addEventListener('change', updateState);
+    nav.connection?.addEventListener("change", updateState);
 
     return () => {
-      window.removeEventListener('online', updateState);
-      window.removeEventListener('offline', updateState);
+      window.removeEventListener("online", updateState);
+      window.removeEventListener("offline", updateState);
     };
   }, []);
 
@@ -179,8 +179,8 @@ export const usePrefetch = (routes: string[]): void => {
 
     routes.forEach(route => {
       if (!prefetchedRoutes.has(route)) {
-        const link = document.createElement('link');
-        link.rel = 'prefetch';
+        const link = document.createElement("link");
+        link.rel = "prefetch";
         link.href = route;
         document.head.appendChild(link);
         prefetchedRoutes.add(route);
@@ -191,22 +191,22 @@ export const usePrefetch = (routes: string[]): void => {
 
 // Image quality adapter
 export const useAdaptiveImageQuality = (): {
-  quality: 'low' | 'medium' | 'high';
-  format: 'webp' | 'avif' | 'auto';
+  quality: "low" | "medium" | "high";
+  format: "webp" | "avif" | "auto";
 } => {
   const network = useNetworkState();
 
   if (!network.isOnline) {
-    return { quality: 'low', format: 'webp' };
+    return { quality: "low", format: "webp" };
   }
 
   if (network.isSlowConnection) {
-    return { quality: 'low', format: 'webp' };
+    return { quality: "low", format: "webp" };
   }
 
   if (network.downlink < 5) {
-    return { quality: 'medium', format: 'webp' };
+    return { quality: "medium", format: "webp" };
   }
 
-  return { quality: 'high', format: 'avif' };
+  return { quality: "high", format: "avif" };
 };

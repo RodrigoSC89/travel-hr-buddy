@@ -3,9 +3,9 @@
  * Divides large data transfers into small chunks for 2Mbps networks
  */
 
-import { logger } from '@/lib/logger';
-import { compressPayload, decompressPayload, CompressedPayload } from './payload-compression';
-import { bandwidthOptimizer } from '@/lib/performance/low-bandwidth-optimizer';
+import { logger } from "@/lib/logger";
+import { compressPayload, decompressPayload, CompressedPayload } from "./payload-compression";
+import { bandwidthOptimizer } from "@/lib/performance/low-bandwidth-optimizer";
 
 interface SyncChunk {
   id: string;
@@ -37,11 +37,11 @@ const DEFAULT_CONFIG: ChunkedSyncConfig = {
 
 // Adaptive chunk sizes based on connection
 const CHUNK_SIZES: Record<string, number> = {
-  '4g': 65536,     // 64KB
-  '3g': 32768,     // 32KB
-  '2g': 8192,      // 8KB
-  'slow-2g': 4096, // 4KB
-  'offline': 2048, // 2KB (for storage only)
+  "4g": 65536,     // 64KB
+  "3g": 32768,     // 32KB
+  "2g": 8192,      // 8KB
+  "slow-2g": 4096, // 4KB
+  "offline": 2048, // 2KB (for storage only)
 };
 
 class ChunkedSyncManager {
@@ -89,7 +89,7 @@ class ChunkedSyncManager {
       });
     }
     
-    logger.debug('[ChunkedSync] Created chunks', {
+    logger.debug("[ChunkedSync] Created chunks", {
       id,
       totalChunks,
       chunkSize,
@@ -108,7 +108,7 @@ class ChunkedSyncManager {
     
     // Verify completeness
     if (sorted.length !== sorted[0]?.total) {
-      logger.error('[ChunkedSync] Incomplete chunks', {
+      logger.error("[ChunkedSync] Incomplete chunks", {
         received: sorted.length,
         expected: sorted[0]?.total,
       });
@@ -118,19 +118,19 @@ class ChunkedSyncManager {
     // Verify checksums
     for (const chunk of sorted) {
       if (this.generateChecksum(chunk.data) !== chunk.checksum) {
-        logger.error('[ChunkedSync] Checksum mismatch', { chunkId: chunk.id });
+        logger.error("[ChunkedSync] Checksum mismatch", { chunkId: chunk.id });
         return null;
       }
     }
     
     // Reassemble
-    const jsonString = sorted.map(c => c.data).join('');
+    const jsonString = sorted.map(c => c.data).join("");
     
     try {
       const compressed = JSON.parse(jsonString) as CompressedPayload;
       return decompressPayload<T>(compressed);
     } catch (error) {
-      logger.error('[ChunkedSync] Failed to parse reassembled data', { error });
+      logger.error("[ChunkedSync] Failed to parse reassembled data", { error });
       return null;
     }
   }
@@ -190,7 +190,7 @@ class ChunkedSyncManager {
     
     const success = failedChunks.length === 0;
     
-    logger.info('[ChunkedSync] Upload completed', {
+    logger.info("[ChunkedSync] Upload completed", {
       id,
       success,
       failedChunks: failedChunks.length,
@@ -210,7 +210,7 @@ class ChunkedSyncManager {
         const success = await uploadFn(chunk);
         if (success) return true;
       } catch (error) {
-        logger.warn('[ChunkedSync] Chunk upload failed', {
+        logger.warn("[ChunkedSync] Chunk upload failed", {
           chunkId: chunk.id,
           retry: retries,
           error,
@@ -234,7 +234,7 @@ class ChunkedSyncManager {
       hash = ((hash << 5) - hash) + char;
       hash = hash & hash;
     }
-    return Math.abs(hash).toString(16).padStart(8, '0');
+    return Math.abs(hash).toString(16).padStart(8, "0");
   }
 
   /**
@@ -263,7 +263,7 @@ class ChunkedSyncManager {
   cancelUpload(id: string): void {
     this.pendingChunks.delete(id);
     this.uploadProgress.delete(id);
-    logger.info('[ChunkedSync] Upload cancelled', { id });
+    logger.info("[ChunkedSync] Upload cancelled", { id });
   }
 
   /**
@@ -278,40 +278,40 @@ export const chunkedSyncManager = new ChunkedSyncManager();
 
 // Priority data types that should sync first
 export const CRITICAL_DATA_TYPES = [
-  'fleet_status',
-  'alerts',
-  'emergencies',
-  'vessel_position',
-  'crew_check_in',
+  "fleet_status",
+  "alerts",
+  "emergencies",
+  "vessel_position",
+  "crew_check_in",
 ] as const;
 
 export const HIGH_PRIORITY_DATA_TYPES = [
-  'maintenance_critical',
-  'compliance_alerts',
-  'weather_warnings',
-  'fuel_alerts',
+  "maintenance_critical",
+  "compliance_alerts",
+  "weather_warnings",
+  "fuel_alerts",
 ] as const;
 
 export const NORMAL_DATA_TYPES = [
-  'maintenance_scheduled',
-  'reports',
-  'checklists',
-  'documents',
+  "maintenance_scheduled",
+  "reports",
+  "checklists",
+  "documents",
 ] as const;
 
 export const LOW_PRIORITY_DATA_TYPES = [
-  'analytics',
-  'logs',
-  'historical_data',
-  'training_records',
+  "analytics",
+  "logs",
+  "historical_data",
+  "training_records",
 ] as const;
 
 /**
  * Get sync priority for a data type
  */
-export function getSyncPriority(table: string): 'critical' | 'high' | 'normal' | 'low' {
-  if (CRITICAL_DATA_TYPES.includes(table as any)) return 'critical';
-  if (HIGH_PRIORITY_DATA_TYPES.includes(table as any)) return 'high';
-  if (LOW_PRIORITY_DATA_TYPES.includes(table as any)) return 'low';
-  return 'normal';
+export function getSyncPriority(table: string): "critical" | "high" | "normal" | "low" {
+  if (CRITICAL_DATA_TYPES.includes(table as any)) return "critical";
+  if (HIGH_PRIORITY_DATA_TYPES.includes(table as any)) return "high";
+  if (LOW_PRIORITY_DATA_TYPES.includes(table as any)) return "low";
+  return "normal";
 }

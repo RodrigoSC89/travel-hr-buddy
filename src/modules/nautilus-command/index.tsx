@@ -50,7 +50,7 @@ interface SystemStatus {
 
 interface Alert {
   id: string;
-  type: 'critical' | 'warning' | 'info';
+  type: "critical" | "warning" | "info";
   module: string;
   title: string;
   description: string;
@@ -79,21 +79,21 @@ const NautilusCommandCenter = () => {
     
     // Real-time updates
     const channel = supabase
-      .channel('nautilus-command')
-      .on('postgres_changes', { event: '*', schema: 'public', table: 'vessels' }, () => loadSystemData())
-      .on('postgres_changes', { event: '*', schema: 'public', table: 'crew_members' }, () => loadSystemData())
+      .channel("nautilus-command")
+      .on("postgres_changes", { event: "*", schema: "public", table: "vessels" }, () => loadSystemData())
+      .on("postgres_changes", { event: "*", schema: "public", table: "crew_members" }, () => loadSystemData())
       .subscribe();
 
     // Online/offline detection
     const handleOnline = () => setIsOnline(true);
     const handleOffline = () => setIsOnline(false);
-    window.addEventListener('online', handleOnline);
-    window.addEventListener('offline', handleOffline);
+    window.addEventListener("online", handleOnline);
+    window.addEventListener("offline", handleOffline);
 
     return () => {
       supabase.removeChannel(channel);
-      window.removeEventListener('online', handleOnline);
-      window.removeEventListener('offline', handleOffline);
+      window.removeEventListener("online", handleOnline);
+      window.removeEventListener("offline", handleOffline);
     };
   }, []);
 
@@ -101,17 +101,17 @@ const NautilusCommandCenter = () => {
     setLoading(true);
     try {
       // Load fleet data
-      const { data: vessels } = await supabase.from('vessels').select('*');
+      const { data: vessels } = await supabase.from("vessels").select("*");
       const fleetData = {
         vessels: vessels?.length || 0,
-        active: vessels?.filter(v => v.status === 'active').length || 0,
-        maintenance: vessels?.filter(v => v.status === 'maintenance').length || 0,
-        alerts: vessels?.filter(v => v.status === 'alert').length || 0
+        active: vessels?.filter(v => v.status === "active").length || 0,
+        maintenance: vessels?.filter(v => v.status === "maintenance").length || 0,
+        alerts: vessels?.filter(v => v.status === "alert").length || 0
       };
 
       // Load crew data
-      const { data: crew } = await supabase.from('crew_members').select('*');
-      const { data: certs } = await supabase.from('employee_certificates').select('*');
+      const { data: crew } = await supabase.from("crew_members").select("*");
+      const { data: certs } = await supabase.from("employee_certificates").select("*");
       const today = new Date();
       const thirtyDays = new Date(today.getTime() + 30 * 24 * 60 * 60 * 1000);
       const expiringCerts = certs?.filter(c => {
@@ -121,8 +121,8 @@ const NautilusCommandCenter = () => {
 
       const crewData = {
         total: crew?.length || 0,
-        onboard: crew?.filter(c => c.status === 'active').length || 0,
-        onLeave: crew?.filter(c => c.status === 'on_leave').length || 0,
+        onboard: crew?.filter(c => c.status === "active").length || 0,
+        onLeave: crew?.filter(c => c.status === "on_leave").length || 0,
         expiringCerts
       };
 
@@ -161,11 +161,11 @@ const NautilusCommandCenter = () => {
       
       if (maintenanceData.overdue > 0) {
         generatedAlerts.push({
-          id: '1',
-          type: 'critical',
-          module: 'Manutenção',
+          id: "1",
+          type: "critical",
+          module: "Manutenção",
           title: `${maintenanceData.overdue} manutenções vencidas`,
-          description: 'Ações corretivas necessárias para evitar falhas operacionais',
+          description: "Ações corretivas necessárias para evitar falhas operacionais",
           timestamp: new Date(),
           actionRequired: true
         });
@@ -173,11 +173,11 @@ const NautilusCommandCenter = () => {
 
       if (expiringCerts > 0) {
         generatedAlerts.push({
-          id: '2',
-          type: 'warning',
-          module: 'Tripulação',
+          id: "2",
+          type: "warning",
+          module: "Tripulação",
           title: `${expiringCerts} certificados expirando`,
-          description: 'Certificações vencendo nos próximos 30 dias',
+          description: "Certificações vencendo nos próximos 30 dias",
           timestamp: new Date(),
           actionRequired: true
         });
@@ -185,11 +185,11 @@ const NautilusCommandCenter = () => {
 
       if (inventoryData.lowStock > 0) {
         generatedAlerts.push({
-          id: '3',
-          type: 'warning',
-          module: 'Estoque',
+          id: "3",
+          type: "warning",
+          module: "Estoque",
           title: `${inventoryData.lowStock} itens em baixo estoque`,
-          description: 'Reabastecimento recomendado pela IA',
+          description: "Reabastecimento recomendado pela IA",
           timestamp: new Date(),
           actionRequired: true
         });
@@ -199,7 +199,7 @@ const NautilusCommandCenter = () => {
       setLastSync(new Date());
 
     } catch (error) {
-      console.error('Error loading system data:', error);
+      console.error("Error loading system data:", error);
       toast({
         title: "Erro de Sincronização",
         description: "Operando em modo offline",
@@ -210,8 +210,8 @@ const NautilusCommandCenter = () => {
     }
   };
 
-  const criticalAlerts = alerts.filter(a => a.type === 'critical').length;
-  const warningAlerts = alerts.filter(a => a.type === 'warning').length;
+  const criticalAlerts = alerts.filter(a => a.type === "critical").length;
+  const warningAlerts = alerts.filter(a => a.type === "warning").length;
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-background via-background to-primary/5">
@@ -486,17 +486,17 @@ interface StatusCardProps {
   title: string;
   value: string;
   subtitle: string;
-  color: 'blue' | 'green' | 'orange' | 'purple' | 'cyan';
+  color: "blue" | "green" | "orange" | "purple" | "cyan";
   alerts?: number;
 }
 
 const StatusCard: React.FC<StatusCardProps> = ({ icon, title, value, subtitle, color, alerts = 0 }) => {
   const colorClasses = {
-    blue: 'from-blue-500 to-blue-600 text-blue-500',
-    green: 'from-green-500 to-green-600 text-green-500',
-    orange: 'from-orange-500 to-orange-600 text-orange-500',
-    purple: 'from-purple-500 to-purple-600 text-purple-500',
-    cyan: 'from-cyan-500 to-cyan-600 text-cyan-500'
+    blue: "from-blue-500 to-blue-600 text-blue-500",
+    green: "from-green-500 to-green-600 text-green-500",
+    orange: "from-orange-500 to-orange-600 text-orange-500",
+    purple: "from-purple-500 to-purple-600 text-purple-500",
+    cyan: "from-cyan-500 to-cyan-600 text-cyan-500"
   };
 
   return (
@@ -504,7 +504,7 @@ const StatusCard: React.FC<StatusCardProps> = ({ icon, title, value, subtitle, c
       <CardContent className="pt-4">
         <div className="flex items-center justify-between">
           <div className={`p-2 rounded-lg bg-gradient-to-br ${colorClasses[color]} bg-opacity-10`}>
-            {React.cloneElement(icon as React.ReactElement, { className: `h-5 w-5 ${colorClasses[color].split(' ')[2]}` })}
+            {React.cloneElement(icon as React.ReactElement, { className: `h-5 w-5 ${colorClasses[color].split(" ")[2]}` })}
           </div>
           {alerts > 0 && (
             <Badge variant="destructive" className="text-xs">
@@ -527,7 +527,7 @@ interface IntegratedModuleCardProps {
   title: string;
   subtitle: string;
   path: string;
-  color: 'blue' | 'green' | 'orange' | 'purple' | 'cyan';
+  color: "blue" | "green" | "orange" | "purple" | "cyan";
   alerts?: number;
 }
 
@@ -535,11 +535,11 @@ const IntegratedModuleCard: React.FC<IntegratedModuleCardProps> = ({ icon, title
   const navigate = useNavigate();
   
   const colorClasses = {
-    blue: 'text-blue-500 bg-blue-100 dark:bg-blue-900/30 hover:bg-blue-200 dark:hover:bg-blue-900/50',
-    green: 'text-green-500 bg-green-100 dark:bg-green-900/30 hover:bg-green-200 dark:hover:bg-green-900/50',
-    orange: 'text-orange-500 bg-orange-100 dark:bg-orange-900/30 hover:bg-orange-200 dark:hover:bg-orange-900/50',
-    purple: 'text-purple-500 bg-purple-100 dark:bg-purple-900/30 hover:bg-purple-200 dark:hover:bg-purple-900/50',
-    cyan: 'text-cyan-500 bg-cyan-100 dark:bg-cyan-900/30 hover:bg-cyan-200 dark:hover:bg-cyan-900/50'
+    blue: "text-blue-500 bg-blue-100 dark:bg-blue-900/30 hover:bg-blue-200 dark:hover:bg-blue-900/50",
+    green: "text-green-500 bg-green-100 dark:bg-green-900/30 hover:bg-green-200 dark:hover:bg-green-900/50",
+    orange: "text-orange-500 bg-orange-100 dark:bg-orange-900/30 hover:bg-orange-200 dark:hover:bg-orange-900/50",
+    purple: "text-purple-500 bg-purple-100 dark:bg-purple-900/30 hover:bg-purple-200 dark:hover:bg-purple-900/50",
+    cyan: "text-cyan-500 bg-cyan-100 dark:bg-cyan-900/30 hover:bg-cyan-200 dark:hover:bg-cyan-900/50"
   };
 
   return (
@@ -553,7 +553,7 @@ const IntegratedModuleCard: React.FC<IntegratedModuleCardProps> = ({ icon, title
         </Badge>
       )}
       <div className="p-2 rounded-full bg-background/50 group-hover:scale-110 transition-transform">
-        {React.cloneElement(icon as React.ReactElement, { className: `h-5 w-5 ${colorClasses[color].split(' ')[0]}` })}
+        {React.cloneElement(icon as React.ReactElement, { className: `h-5 w-5 ${colorClasses[color].split(" ")[0]}` })}
       </div>
       <span className="mt-2 font-medium text-sm">{title}</span>
       <span className="text-xs opacity-70">{subtitle}</span>

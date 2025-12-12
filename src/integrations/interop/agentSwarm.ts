@@ -107,7 +107,7 @@ export async function distributeTask(task: SwarmTask): Promise<TaskResult[]> {
         success: true
       };
     } catch (error: any) {
-      logger.error(`Agent task failed`, { agent_id: agentId, task_id: task.task_id, error });
+      logger.error("Agent task failed", { agent_id: agentId, task_id: task.task_id, error });
       await updateAgentMetrics(agentId, false, Date.now() - taskStartTime);
       
       await supabase

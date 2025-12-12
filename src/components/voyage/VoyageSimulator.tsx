@@ -128,19 +128,19 @@ export const VoyageSimulator: React.FC = () => {
 
   const getRiskColor = (risk: string) => {
     switch (risk) {
-      case "low": return "text-green-500";
-      case "medium": return "text-amber-500";
-      case "high": return "text-red-500";
-      default: return "text-muted-foreground";
+    case "low": return "text-green-500";
+    case "medium": return "text-amber-500";
+    case "high": return "text-red-500";
+    default: return "text-muted-foreground";
     }
   };
 
   const getRiskBadge = (risk: string) => {
     switch (risk) {
-      case "low": return "default";
-      case "medium": return "secondary";
-      case "high": return "destructive";
-      default: return "outline";
+    case "low": return "default";
+    case "medium": return "secondary";
+    case "high": return "destructive";
+    default: return "outline";
     }
   };
 

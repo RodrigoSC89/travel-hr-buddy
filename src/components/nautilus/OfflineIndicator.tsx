@@ -2,13 +2,13 @@
  * Offline Indicator - Shows sync status and pending actions
  */
 
-import React from 'react';
-import { Badge } from '@/components/ui/badge';
-import { Button } from '@/components/ui/button';
-import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from '@/components/ui/tooltip';
-import { useOfflineSync } from '@/hooks/useOfflineSync';
-import { Wifi, WifiOff, RefreshCw, Cloud, CloudOff, Loader2 } from 'lucide-react';
-import { motion, AnimatePresence } from 'framer-motion';
+import React from "react";
+import { Badge } from "@/components/ui/badge";
+import { Button } from "@/components/ui/button";
+import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from "@/components/ui/tooltip";
+import { useOfflineSync } from "@/hooks/useOfflineSync";
+import { Wifi, WifiOff, RefreshCw, Cloud, CloudOff, Loader2 } from "lucide-react";
+import { motion, AnimatePresence } from "framer-motion";
 
 export const OfflineIndicator: React.FC = () => {
   const { isOnline, isSyncing, pendingCount, lastSyncStatus, forceSync } = useOfflineSync();
@@ -17,7 +17,7 @@ export const OfflineIndicator: React.FC = () => {
     try {
       await forceSync();
     } catch (error) {
-      console.error('Sync failed:', error);
+      console.error("Sync failed:", error);
     }
   };
 
@@ -29,8 +29,8 @@ export const OfflineIndicator: React.FC = () => {
           <TooltipTrigger asChild>
             <div className={`flex items-center gap-1.5 px-2 py-1 rounded-full text-xs font-medium ${
               isOnline 
-                ? 'bg-green-100 text-green-700 dark:bg-green-900/30 dark:text-green-300' 
-                : 'bg-red-100 text-red-700 dark:bg-red-900/30 dark:text-red-300'
+                ? "bg-green-100 text-green-700 dark:bg-green-900/30 dark:text-green-300" 
+                : "bg-red-100 text-red-700 dark:bg-red-900/30 dark:text-red-300"
             }`}>
               {isOnline ? (
                 <>
@@ -47,8 +47,8 @@ export const OfflineIndicator: React.FC = () => {
           </TooltipTrigger>
           <TooltipContent>
             {isOnline 
-              ? 'Conectado - dados sincronizando em tempo real' 
-              : 'Modo offline - dados serão sincronizados quando a conexão for restaurada'}
+              ? "Conectado - dados sincronizando em tempo real" 
+              : "Modo offline - dados serão sincronizados quando a conexão for restaurada"}
           </TooltipContent>
         </Tooltip>
 
@@ -82,7 +82,7 @@ export const OfflineIndicator: React.FC = () => {
         </AnimatePresence>
 
         {/* Sync Status */}
-        {lastSyncStatus === 'synced' && pendingCount === 0 && isOnline && (
+        {lastSyncStatus === "synced" && pendingCount === 0 && isOnline && (
           <Tooltip>
             <TooltipTrigger asChild>
               <div className="flex items-center gap-1 text-green-600 dark:text-green-400">

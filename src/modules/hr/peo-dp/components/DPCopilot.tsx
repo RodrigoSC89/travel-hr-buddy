@@ -306,20 +306,20 @@ Por favor, forneça mais detalhes sobre a situação específica que está enfre
       {/* ASOG Status Banner */}
       <Card className={`border-l-4 ${
         currentASOG.level === "green" ? "border-l-green-500 bg-green-500/5" :
-        currentASOG.level === "yellow" ? "border-l-yellow-500 bg-yellow-500/5" :
-        "border-l-red-500 bg-red-500/5"
+          currentASOG.level === "yellow" ? "border-l-yellow-500 bg-yellow-500/5" :
+            "border-l-red-500 bg-red-500/5"
       }`}>
         <CardContent className="p-4">
           <div className="flex items-center justify-between">
             <div className="flex items-center gap-3">
               <div className={`p-2 rounded-full ${
                 currentASOG.level === "green" ? "bg-green-500/20" :
-                currentASOG.level === "yellow" ? "bg-yellow-500/20" :
-                "bg-red-500/20"
+                  currentASOG.level === "yellow" ? "bg-yellow-500/20" :
+                    "bg-red-500/20"
               }`}>
                 {currentASOG.level === "green" ? <CheckCircle className="h-5 w-5 text-green-500" /> :
-                 currentASOG.level === "yellow" ? <AlertTriangle className="h-5 w-5 text-yellow-500" /> :
-                 <XCircle className="h-5 w-5 text-red-500" />}
+                  currentASOG.level === "yellow" ? <AlertTriangle className="h-5 w-5 text-yellow-500" /> :
+                    <XCircle className="h-5 w-5 text-red-500" />}
               </div>
               <div>
                 <h4 className="font-semibold flex items-center gap-2">

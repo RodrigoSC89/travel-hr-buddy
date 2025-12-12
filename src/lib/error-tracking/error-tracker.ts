@@ -3,10 +3,10 @@
  * PATCH 833: Comprehensive error tracking and reporting
  */
 
-import { supabase } from '@/integrations/supabase/client';
+import { supabase } from "@/integrations/supabase/client";
 
 interface ErrorReport {
-  type: 'error' | 'warning' | 'unhandled_rejection' | 'network_error';
+  type: "error" | "warning" | "unhandled_rejection" | "network_error";
   message: string;
   stack?: string;
   component?: string;
@@ -50,9 +50,9 @@ class ErrorTracker {
 
   private setupGlobalHandlers() {
     // Global error handler
-    window.addEventListener('error', (event) => {
+    window.addEventListener("error", (event) => {
       this.captureError(event.error || new Error(event.message), {
-        type: 'error',
+        type: "error",
         filename: event.filename,
         lineno: event.lineno,
         colno: event.colno,
@@ -60,9 +60,9 @@ class ErrorTracker {
     });
 
     // Unhandled promise rejections
-    window.addEventListener('unhandledrejection', (event) => {
+    window.addEventListener("unhandledrejection", (event) => {
       this.captureError(event.reason, {
-        type: 'unhandled_rejection',
+        type: "unhandled_rejection",
       });
     });
 
@@ -73,7 +73,7 @@ class ErrorTracker {
         const response = await originalFetch(...args);
         if (!response.ok && response.status >= 500) {
           this.captureError(new Error(`HTTP ${response.status}`), {
-            type: 'network_error',
+            type: "network_error",
             url: args[0]?.toString(),
             status: response.status,
           });
@@ -81,7 +81,7 @@ class ErrorTracker {
         return response;
       } catch (error) {
         this.captureError(error as Error, {
-          type: 'network_error',
+          type: "network_error",
           url: args[0]?.toString(),
         });
         throw error;
@@ -115,13 +115,13 @@ class ErrorTracker {
     
     // Check ignore patterns
     if (this.config.ignorePatterns.some((pattern) => 
-      pattern.test(errorObj.message) || pattern.test(errorObj.stack || '')
+      pattern.test(errorObj.message) || pattern.test(errorObj.stack || "")
     )) {
       return;
     }
 
     const report: ErrorReport = {
-      type: context?.type || 'error',
+      type: context?.type || "error",
       message: errorObj.message,
       stack: errorObj.stack,
       component: context?.component,
@@ -155,13 +155,13 @@ class ErrorTracker {
   }
 
   captureWarning(message: string, context?: Record<string, any>) {
-    this.captureError(new Error(message), { ...context, type: 'warning' });
+    this.captureError(new Error(message), { ...context, type: "warning" });
   }
 
-  captureMessage(message: string, level: 'info' | 'warning' | 'error' = 'info') {
-    if (level === 'error') {
+  captureMessage(message: string, level: "info" | "warning" | "error" = "info") {
+    if (level === "error") {
       this.captureError(new Error(message));
-    } else if (level === 'warning') {
+    } else if (level === "warning") {
       this.captureWarning(message);
     } else if (this.config.debug) {
     }
@@ -175,7 +175,7 @@ class ErrorTracker {
 
     try {
       // Store errors in database
-      const { error } = await supabase.from('error_logs').insert(
+      const { error } = await supabase.from("error_logs").insert(
         errors.map((e) => ({
           error_message: e.message,
           error_stack: e.stack,
@@ -228,7 +228,7 @@ class ErrorTracker {
 export const errorTracker = new ErrorTracker();
 
 // React hook
-import { useEffect, useCallback } from 'react';
+import { useEffect, useCallback } from "react";
 
 export function useErrorTracking(componentName?: string) {
   useEffect(() => {

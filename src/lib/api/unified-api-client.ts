@@ -3,10 +3,10 @@
  * PATCH 833: Complete API integration layer with caching, retries, and offline support
  */
 
-import { supabase } from '@/integrations/supabase/client';
+import { supabase } from "@/integrations/supabase/client";
 
 interface RequestConfig {
-  method?: 'GET' | 'POST' | 'PUT' | 'PATCH' | 'DELETE';
+  method?: "GET" | "POST" | "PUT" | "PATCH" | "DELETE";
   headers?: Record<string, string>;
   body?: any;
   cache?: boolean;
@@ -14,7 +14,7 @@ interface RequestConfig {
   retry?: number;
   retryDelay?: number;
   timeout?: number;
-  priority?: 'high' | 'normal' | 'low';
+  priority?: "high" | "normal" | "low";
   offline?: boolean;
 }
 
@@ -40,36 +40,36 @@ class UnifiedAPIClient {
   private requestQueue: Map<string, Promise<any>> = new Map();
 
   constructor() {
-    window.addEventListener('online', () => {
+    window.addEventListener("online", () => {
       this.isOnline = true;
       this.syncPendingRequests();
     });
-    window.addEventListener('offline', () => {
+    window.addEventListener("offline", () => {
       this.isOnline = false;
     });
     this.loadPendingRequests();
   }
 
   private getCacheKey(url: string, config?: RequestConfig): string {
-    return `${config?.method || 'GET'}:${url}:${JSON.stringify(config?.body || {})}`;
+    return `${config?.method || "GET"}:${url}:${JSON.stringify(config?.body || {})}`;
   }
 
   private async loadPendingRequests() {
     try {
-      const stored = localStorage.getItem('api_pending_requests');
+      const stored = localStorage.getItem("api_pending_requests");
       if (stored) {
         this.pendingRequests = JSON.parse(stored);
       }
     } catch (error) {
-      console.error('Failed to load pending requests:', error);
+      console.error("Failed to load pending requests:", error);
     }
   }
 
   private savePendingRequests() {
     try {
-      localStorage.setItem('api_pending_requests', JSON.stringify(this.pendingRequests));
+      localStorage.setItem("api_pending_requests", JSON.stringify(this.pendingRequests));
     } catch (error) {
-      console.error('Failed to save pending requests:', error);
+      console.error("Failed to save pending requests:", error);
     }
   }
 
@@ -82,7 +82,7 @@ class UnifiedAPIClient {
       try {
         await this.request(request.url, { ...request.config, offline: false });
       } catch (error) {
-        console.error('Failed to sync request:', error);
+        console.error("Failed to sync request:", error);
         this.pendingRequests.push(request);
       }
     }
@@ -91,22 +91,22 @@ class UnifiedAPIClient {
 
   async request<T = any>(url: string, config: RequestConfig = {}): Promise<APIResponse<T>> {
     const {
-      method = 'GET',
+      method = "GET",
       headers = {},
       body,
-      cache = method === 'GET',
+      cache = method === "GET",
       cacheTTL = 5 * 60 * 1000, // 5 minutes
       retry = 3,
       retryDelay = 1000,
       timeout = 30000,
-      priority = 'normal',
+      priority = "normal",
       offline = true,
     } = config;
 
     const cacheKey = this.getCacheKey(url, config);
 
     // Check cache for GET requests
-    if (cache && method === 'GET') {
+    if (cache && method === "GET") {
       const cached = this.cache.get(cacheKey);
       if (cached && cached.expiry > Date.now()) {
         return {
@@ -121,7 +121,7 @@ class UnifiedAPIClient {
 
     // Handle offline mode
     if (!this.isOnline && offline) {
-      if (method !== 'GET') {
+      if (method !== "GET") {
         this.pendingRequests.push({
           id: crypto.randomUUID(),
           url,
@@ -153,7 +153,7 @@ class UnifiedAPIClient {
 
       return {
         data: null,
-        error: new Error('No network connection and no cached data'),
+        error: new Error("No network connection and no cached data"),
         status: 0,
         cached: false,
         timestamp: Date.now(),
@@ -162,7 +162,7 @@ class UnifiedAPIClient {
 
     // Request deduplication
     const existingRequest = this.requestQueue.get(cacheKey);
-    if (existingRequest && method === 'GET') {
+    if (existingRequest && method === "GET") {
       return existingRequest;
     }
 
@@ -175,7 +175,7 @@ class UnifiedAPIClient {
       timeout,
     });
 
-    if (method === 'GET') {
+    if (method === "GET") {
       this.requestQueue.set(cacheKey, requestPromise);
       requestPromise.finally(() => {
         this.requestQueue.delete(cacheKey);
@@ -185,7 +185,7 @@ class UnifiedAPIClient {
     const response = await requestPromise;
 
     // Cache successful GET responses
-    if (cache && method === 'GET' && response.data && !response.error) {
+    if (cache && method === "GET" && response.data && !response.error) {
       this.cache.set(cacheKey, {
         data: response.data,
         expiry: Date.now() + cacheTTL,
@@ -216,7 +216,7 @@ class UnifiedAPIClient {
         const response = await fetch(url, {
           method: config.method,
           headers: {
-            'Content-Type': 'application/json',
+            "Content-Type": "application/json",
             ...config.headers,
           },
           body: config.body ? JSON.stringify(config.body) : undefined,
@@ -274,7 +274,7 @@ class UnifiedAPIClient {
       const baseUrl = import.meta.env.VITE_SUPABASE_URL;
       const apiKey = import.meta.env.VITE_SUPABASE_ANON_KEY;
       
-      let url = `${baseUrl}/rest/v1/${table}?select=${query.select || '*'}`;
+      let url = `${baseUrl}/rest/v1/${table}?select=${query.select || "*"}`;
       
       if (query.filter) {
         Object.entries(query.filter).forEach(([key, value]) => {
@@ -283,7 +283,7 @@ class UnifiedAPIClient {
       }
       
       if (query.order) {
-        url += `&order=${query.order.column}.${query.order.ascending ? 'asc' : 'desc'}`;
+        url += `&order=${query.order.column}.${query.order.ascending ? "asc" : "desc"}`;
       }
       
       if (query.limit) {
@@ -296,8 +296,8 @@ class UnifiedAPIClient {
 
       const response = await fetch(url, {
         headers: {
-          'apikey': apiKey,
-          'Authorization': `Bearer ${sessionData?.session?.access_token || apiKey}`,
+          "apikey": apiKey,
+          "Authorization": `Bearer ${sessionData?.session?.access_token || apiKey}`,
         },
       });
 
@@ -305,7 +305,7 @@ class UnifiedAPIClient {
 
       return {
         data: data as T[],
-        error: response.ok ? null : new Error(data.message || 'Query failed'),
+        error: response.ok ? null : new Error(data.message || "Query failed"),
         status: response.status,
         cached: false,
         timestamp: Date.now(),
@@ -323,7 +323,7 @@ class UnifiedAPIClient {
 
   async supabaseMutation<T = any>(
     table: string,
-    operation: 'insert' | 'update' | 'upsert' | 'delete',
+    operation: "insert" | "update" | "upsert" | "delete",
     mutationData: any,
     filter?: Record<string, any>
   ): Promise<APIResponse<T>> {
@@ -333,48 +333,48 @@ class UnifiedAPIClient {
       const apiKey = import.meta.env.VITE_SUPABASE_ANON_KEY;
       
       let url = `${baseUrl}/rest/v1/${table}`;
-      let method = 'POST';
+      let method = "POST";
       const headers: Record<string, string> = {
-        'apikey': apiKey,
-        'Authorization': `Bearer ${sessionData?.session?.access_token || apiKey}`,
-        'Content-Type': 'application/json',
-        'Prefer': 'return=representation',
+        "apikey": apiKey,
+        "Authorization": `Bearer ${sessionData?.session?.access_token || apiKey}`,
+        "Content-Type": "application/json",
+        "Prefer": "return=representation",
       };
 
       if (filter) {
         const filterParams = Object.entries(filter)
           .map(([key, value]) => `${key}=eq.${value}`)
-          .join('&');
+          .join("&");
         url += `?${filterParams}`;
       }
 
       switch (operation) {
-        case 'insert':
-          method = 'POST';
-          break;
-        case 'update':
-          method = 'PATCH';
-          break;
-        case 'upsert':
-          method = 'POST';
-          headers['Prefer'] = 'resolution=merge-duplicates,return=representation';
-          break;
-        case 'delete':
-          method = 'DELETE';
-          break;
+      case "insert":
+        method = "POST";
+        break;
+      case "update":
+        method = "PATCH";
+        break;
+      case "upsert":
+        method = "POST";
+        headers["Prefer"] = "resolution=merge-duplicates,return=representation";
+        break;
+      case "delete":
+        method = "DELETE";
+        break;
       }
 
       const response = await fetch(url, {
         method,
         headers,
-        body: operation !== 'delete' ? JSON.stringify(mutationData) : undefined,
+        body: operation !== "delete" ? JSON.stringify(mutationData) : undefined,
       });
 
       const data = response.status !== 204 ? await response.json() : null;
 
       return {
         data: Array.isArray(data) ? data[0] : data,
-        error: response.ok ? null : new Error(data?.message || 'Mutation failed'),
+        error: response.ok ? null : new Error(data?.message || "Mutation failed"),
         status: response.status,
         cached: false,
         timestamp: Date.now(),
@@ -410,7 +410,7 @@ class UnifiedAPIClient {
 export const apiClient = new UnifiedAPIClient();
 
 // React hook
-import { useState, useCallback } from 'react';
+import { useState, useCallback } from "react";
 
 export function useAPI<T = any>(url: string, config?: RequestConfig) {
   const [data, setData] = useState<T | null>(null);

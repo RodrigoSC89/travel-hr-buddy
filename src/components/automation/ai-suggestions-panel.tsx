@@ -205,11 +205,11 @@ export const AISuggestionsPanel: React.FC = () => {
       prev.map(s => 
         s.id === suggestion.id 
           ? { 
-              ...s, 
-              is_read: true,
-              ...(actionType === "accept" && { is_acted_upon: true }),
-              ...(actionType === "dismiss" && { is_dismissed: true })
-            }
+            ...s, 
+            is_read: true,
+            ...(actionType === "accept" && { is_acted_upon: true }),
+            ...(actionType === "dismiss" && { is_dismissed: true })
+          }
           : s
       ).filter(s => !s.is_dismissed)
     );
@@ -255,39 +255,39 @@ export const AISuggestionsPanel: React.FC = () => {
 
   const getSuggestionIcon = (type: string) => {
     switch (type) {
-      case "action": return CheckCircle;
-      case "insight": return Lightbulb;
-      case "reminder": return Clock;
-      case "optimization": return TrendingUp;
-      default: return Zap;
+    case "action": return CheckCircle;
+    case "insight": return Lightbulb;
+    case "reminder": return Clock;
+    case "optimization": return TrendingUp;
+    default: return Zap;
     }
   };
 
   const getSuggestionColor = (priority: number) => {
     switch (priority) {
-      case 4: return "bg-red-100 text-red-800 border-red-200 dark:bg-red-900/30 dark:text-red-400";
-      case 3: return "bg-orange-100 text-orange-800 border-orange-200 dark:bg-orange-900/30 dark:text-orange-400";
-      case 2: return "bg-blue-100 text-blue-800 border-blue-200 dark:bg-blue-900/30 dark:text-blue-400";
-      default: return "bg-secondary text-secondary-foreground border-border";
+    case 4: return "bg-red-100 text-red-800 border-red-200 dark:bg-red-900/30 dark:text-red-400";
+    case 3: return "bg-orange-100 text-orange-800 border-orange-200 dark:bg-orange-900/30 dark:text-orange-400";
+    case 2: return "bg-blue-100 text-blue-800 border-blue-200 dark:bg-blue-900/30 dark:text-blue-400";
+    default: return "bg-secondary text-secondary-foreground border-border";
     }
   };
 
   const getPriorityLabel = (priority: number) => {
     switch (priority) {
-      case 4: return "Urgente";
-      case 3: return "Alta";
-      case 2: return "Média";
-      default: return "Baixa";
+    case 4: return "Urgente";
+    case 3: return "Alta";
+    case 2: return "Média";
+    default: return "Baixa";
     }
   };
 
   const getTypeLabel = (type: string) => {
     switch (type) {
-      case "action": return "Ação Requerida";
-      case "insight": return "Insight";
-      case "reminder": return "Lembrete";
-      case "optimization": return "Otimização";
-      default: return type;
+    case "action": return "Ação Requerida";
+    case "insight": return "Insight";
+    case "reminder": return "Lembrete";
+    case "optimization": return "Otimização";
+    default: return type;
     }
   };
 

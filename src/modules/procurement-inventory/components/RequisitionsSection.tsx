@@ -375,12 +375,12 @@ export default function RequisitionsSection({ searchQuery }: RequisitionsSection
                   <TableCell className="text-center">
                     <Badge variant={
                       req.priority === "urgent" ? "destructive" :
-                      req.priority === "high" ? "default" :
-                      req.priority === "medium" ? "secondary" : "outline"
+                        req.priority === "high" ? "default" :
+                          req.priority === "medium" ? "secondary" : "outline"
                     }>
                       {req.priority === "urgent" ? "Urgente" :
-                       req.priority === "high" ? "Alta" :
-                       req.priority === "medium" ? "Média" : "Baixa"}
+                        req.priority === "high" ? "Alta" :
+                          req.priority === "medium" ? "Média" : "Baixa"}
                     </Badge>
                   </TableCell>
                   <TableCell className="text-right font-semibold">
@@ -389,18 +389,18 @@ export default function RequisitionsSection({ searchQuery }: RequisitionsSection
                   <TableCell>
                     <Badge variant={
                       req.status === "approved" ? "default" :
-                      req.status === "rejected" ? "destructive" :
-                      req.status === "converted" ? "secondary" :
-                      req.status === "pending" ? "outline" : "outline"
+                        req.status === "rejected" ? "destructive" :
+                          req.status === "converted" ? "secondary" :
+                            req.status === "pending" ? "outline" : "outline"
                     }>
                       {req.status === "pending" && <Clock className="h-3 w-3 mr-1" />}
                       {req.status === "approved" && <CheckCircle2 className="h-3 w-3 mr-1" />}
                       {req.status === "rejected" && <XCircle className="h-3 w-3 mr-1" />}
                       {req.status === "converted" && <ArrowRight className="h-3 w-3 mr-1" />}
                       {req.status === "pending" ? "Pendente" :
-                       req.status === "approved" ? "Aprovada" :
-                       req.status === "rejected" ? "Rejeitada" :
-                       req.status === "converted" ? "Convertida" : "Rascunho"}
+                        req.status === "approved" ? "Aprovada" :
+                          req.status === "rejected" ? "Rejeitada" :
+                            req.status === "converted" ? "Convertida" : "Rascunho"}
                     </Badge>
                   </TableCell>
                   <TableCell className="text-right">
@@ -619,13 +619,13 @@ export default function RequisitionsSection({ searchQuery }: RequisitionsSection
                 </div>
                 <Badge variant={
                   selectedRequisition.status === "approved" ? "default" :
-                  selectedRequisition.status === "rejected" ? "destructive" :
-                  selectedRequisition.status === "converted" ? "secondary" : "outline"
+                    selectedRequisition.status === "rejected" ? "destructive" :
+                      selectedRequisition.status === "converted" ? "secondary" : "outline"
                 }>
                   {selectedRequisition.status === "pending" ? "Pendente" :
-                   selectedRequisition.status === "approved" ? "Aprovada" :
-                   selectedRequisition.status === "rejected" ? "Rejeitada" :
-                   selectedRequisition.status === "converted" ? "Convertida" : "Rascunho"}
+                    selectedRequisition.status === "approved" ? "Aprovada" :
+                      selectedRequisition.status === "rejected" ? "Rejeitada" :
+                        selectedRequisition.status === "converted" ? "Convertida" : "Rascunho"}
                 </Badge>
               </div>
 

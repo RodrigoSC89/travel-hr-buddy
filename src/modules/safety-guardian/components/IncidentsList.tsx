@@ -3,26 +3,26 @@
  * Lista de ocorrências com filtros e ações
  */
 
-import React, { useState } from 'react';
-import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
-import { Button } from '@/components/ui/button';
-import { Badge } from '@/components/ui/badge';
-import { Input } from '@/components/ui/input';
+import React, { useState } from "react";
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import { Button } from "@/components/ui/button";
+import { Badge } from "@/components/ui/badge";
+import { Input } from "@/components/ui/input";
 import {
   Select,
   SelectContent,
   SelectItem,
   SelectTrigger,
   SelectValue,
-} from '@/components/ui/select';
+} from "@/components/ui/select";
 import {
   DropdownMenu,
   DropdownMenuContent,
   DropdownMenuItem,
   DropdownMenuSeparator,
   DropdownMenuTrigger,
-} from '@/components/ui/dropdown-menu';
-import { ScrollArea } from '@/components/ui/scroll-area';
+} from "@/components/ui/dropdown-menu";
+import { ScrollArea } from "@/components/ui/scroll-area";
 import {
   Clock,
   AlertCircle,
@@ -36,8 +36,8 @@ import {
   MoreVertical,
   FileText,
   Download,
-} from 'lucide-react';
-import type { SafetyIncident, SafetyFilter } from '../types';
+} from "lucide-react";
+import type { SafetyIncident, SafetyFilter } from "../types";
 
 interface IncidentsListProps {
   incidents: SafetyIncident[];
@@ -49,25 +49,25 @@ interface IncidentsListProps {
 }
 
 const typeConfig = {
-  incident: { label: 'Incidente', icon: AlertCircle, bgColor: 'bg-destructive/10', textColor: 'text-destructive' },
-  near_miss: { label: 'Near Miss', icon: AlertTriangle, bgColor: 'bg-warning/10', textColor: 'text-warning' },
-  unsafe_condition: { label: 'Cond. Insegura', icon: Shield, bgColor: 'bg-blue-100 dark:bg-blue-900/30', textColor: 'text-blue-600 dark:text-blue-400' },
-  unsafe_act: { label: 'Ato Inseguro', icon: AlertTriangle, bgColor: 'bg-orange-100 dark:bg-orange-900/30', textColor: 'text-orange-600 dark:text-orange-400' },
+  incident: { label: "Incidente", icon: AlertCircle, bgColor: "bg-destructive/10", textColor: "text-destructive" },
+  near_miss: { label: "Near Miss", icon: AlertTriangle, bgColor: "bg-warning/10", textColor: "text-warning" },
+  unsafe_condition: { label: "Cond. Insegura", icon: Shield, bgColor: "bg-blue-100 dark:bg-blue-900/30", textColor: "text-blue-600 dark:text-blue-400" },
+  unsafe_act: { label: "Ato Inseguro", icon: AlertTriangle, bgColor: "bg-orange-100 dark:bg-orange-900/30", textColor: "text-orange-600 dark:text-orange-400" },
 };
 
 const statusConfig = {
-  open: { label: 'Aberto', color: 'bg-warning/10 text-warning border-warning/20' },
-  investigating: { label: 'Investigando', color: 'bg-blue-100 text-blue-700 border-blue-200 dark:bg-blue-900/30 dark:text-blue-400' },
-  action_pending: { label: 'Ação Pendente', color: 'bg-orange-100 text-orange-700 border-orange-200 dark:bg-orange-900/30 dark:text-orange-400' },
-  resolved: { label: 'Resolvido', color: 'bg-success/10 text-success border-success/20' },
-  closed: { label: 'Fechado', color: 'bg-muted text-muted-foreground' },
+  open: { label: "Aberto", color: "bg-warning/10 text-warning border-warning/20" },
+  investigating: { label: "Investigando", color: "bg-blue-100 text-blue-700 border-blue-200 dark:bg-blue-900/30 dark:text-blue-400" },
+  action_pending: { label: "Ação Pendente", color: "bg-orange-100 text-orange-700 border-orange-200 dark:bg-orange-900/30 dark:text-orange-400" },
+  resolved: { label: "Resolvido", color: "bg-success/10 text-success border-success/20" },
+  closed: { label: "Fechado", color: "bg-muted text-muted-foreground" },
 };
 
 const severityConfig = {
-  low: 'bg-success/10 text-success',
-  medium: 'bg-warning/10 text-warning',
-  high: 'bg-orange-100 text-orange-700 dark:bg-orange-900/30 dark:text-orange-400',
-  critical: 'bg-destructive/10 text-destructive',
+  low: "bg-success/10 text-success",
+  medium: "bg-warning/10 text-warning",
+  high: "bg-orange-100 text-orange-700 dark:bg-orange-900/30 dark:text-orange-400",
+  critical: "bg-destructive/10 text-destructive",
 };
 
 export const IncidentsList: React.FC<IncidentsListProps> = ({
@@ -95,7 +95,7 @@ export const IncidentsList: React.FC<IncidentsListProps> = ({
               <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-muted-foreground" />
               <Input
                 placeholder="Buscar ocorrências..."
-                value={filters.searchTerm || ''}
+                value={filters.searchTerm || ""}
                 onChange={(e) => onFilterChange({ ...filters, searchTerm: e.target.value })}
                 className="pl-9"
               />
@@ -104,7 +104,7 @@ export const IncidentsList: React.FC<IncidentsListProps> = ({
               variant="outline"
               size="icon"
               onClick={() => setShowFilters(!showFilters)}
-              className={showFilters ? 'bg-primary/10' : ''}
+              className={showFilters ? "bg-primary/10" : ""}
             >
               <Filter className="h-4 w-4" />
             </Button>
@@ -115,11 +115,11 @@ export const IncidentsList: React.FC<IncidentsListProps> = ({
         {showFilters && (
           <div className="grid grid-cols-1 sm:grid-cols-3 gap-4 pt-4 border-t mt-4">
             <Select
-              value={filters.types?.[0] || 'all'}
+              value={filters.types?.[0] || "all"}
               onValueChange={(value) =>
                 onFilterChange({
                   ...filters,
-                  types: value === 'all' ? undefined : [value],
+                  types: value === "all" ? undefined : [value],
                 })
               }
             >
@@ -136,11 +136,11 @@ export const IncidentsList: React.FC<IncidentsListProps> = ({
             </Select>
 
             <Select
-              value={filters.severities?.[0] || 'all'}
+              value={filters.severities?.[0] || "all"}
               onValueChange={(value) =>
                 onFilterChange({
                   ...filters,
-                  severities: value === 'all' ? undefined : [value],
+                  severities: value === "all" ? undefined : [value],
                 })
               }
             >
@@ -157,11 +157,11 @@ export const IncidentsList: React.FC<IncidentsListProps> = ({
             </Select>
 
             <Select
-              value={filters.statuses?.[0] || 'all'}
+              value={filters.statuses?.[0] || "all"}
               onValueChange={(value) =>
                 onFilterChange({
                   ...filters,
-                  statuses: value === 'all' ? undefined : [value],
+                  statuses: value === "all" ? undefined : [value],
                 })
               }
             >

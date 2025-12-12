@@ -47,7 +47,7 @@ export const FleetCockpit: React.FC<FleetCockpitProps> = ({ vessels: propVessels
 
   const loadVessels = async () => {
     try {
-      const { data } = await supabase.from('vessels').select('*').limit(20);
+      const { data } = await supabase.from("vessels").select("*").limit(20);
       
       // Map and enrich with mock operational data
       const enrichedVessels: Vessel[] = (data || []).map(v => ({
@@ -55,7 +55,7 @@ export const FleetCockpit: React.FC<FleetCockpitProps> = ({ vessels: propVessels
         name: v.name,
         imo_number: v.imo_number,
         vessel_type: v.vessel_type,
-        status: v.status || 'active',
+        status: v.status || "active",
         current_location: v.current_location,
         fuel_level: Math.floor(Math.random() * 40) + 60,
         speed: Math.floor(Math.random() * 15) + 5,
@@ -65,7 +65,7 @@ export const FleetCockpit: React.FC<FleetCockpitProps> = ({ vessels: propVessels
       
       setVessels(enrichedVessels);
     } catch (error) {
-      console.error('Error loading vessels:', error);
+      console.error("Error loading vessels:", error);
     } finally {
       setLoading(false);
     }
@@ -73,21 +73,21 @@ export const FleetCockpit: React.FC<FleetCockpitProps> = ({ vessels: propVessels
 
   const getStatusColor = (status: string) => {
     switch (status) {
-      case 'active': return 'bg-green-500';
-      case 'maintenance': return 'bg-yellow-500';
-      case 'docked': return 'bg-blue-500';
-      case 'alert': return 'bg-red-500';
-      default: return 'bg-gray-500';
+    case "active": return "bg-green-500";
+    case "maintenance": return "bg-yellow-500";
+    case "docked": return "bg-blue-500";
+    case "alert": return "bg-red-500";
+    default: return "bg-gray-500";
     }
   };
 
   const getStatusBadge = (status: string) => {
     switch (status) {
-      case 'active': return <Badge className="bg-green-100 text-green-800 dark:bg-green-900/30 dark:text-green-300">Operando</Badge>;
-      case 'maintenance': return <Badge className="bg-yellow-100 text-yellow-800 dark:bg-yellow-900/30 dark:text-yellow-300">Manutenção</Badge>;
-      case 'docked': return <Badge className="bg-blue-100 text-blue-800 dark:bg-blue-900/30 dark:text-blue-300">Atracado</Badge>;
-      case 'alert': return <Badge variant="destructive">Alerta</Badge>;
-      default: return <Badge variant="secondary">{status}</Badge>;
+    case "active": return <Badge className="bg-green-100 text-green-800 dark:bg-green-900/30 dark:text-green-300">Operando</Badge>;
+    case "maintenance": return <Badge className="bg-yellow-100 text-yellow-800 dark:bg-yellow-900/30 dark:text-yellow-300">Manutenção</Badge>;
+    case "docked": return <Badge className="bg-blue-100 text-blue-800 dark:bg-blue-900/30 dark:text-blue-300">Atracado</Badge>;
+    case "alert": return <Badge variant="destructive">Alerta</Badge>;
+    default: return <Badge variant="secondary">{status}</Badge>;
     }
   };
 
@@ -135,7 +135,7 @@ export const FleetCockpit: React.FC<FleetCockpitProps> = ({ vessels: propVessels
             </Button>
           </div>
         ) : (
-          <div className={`grid gap-4 ${expanded ? 'grid-cols-1 md:grid-cols-2 lg:grid-cols-3' : 'grid-cols-1 md:grid-cols-2'}`}>
+          <div className={`grid gap-4 ${expanded ? "grid-cols-1 md:grid-cols-2 lg:grid-cols-3" : "grid-cols-1 md:grid-cols-2"}`}>
             {vessels.slice(0, expanded ? vessels.length : 4).map((vessel, index) => (
               <motion.div
                 key={vessel.id}
@@ -144,7 +144,7 @@ export const FleetCockpit: React.FC<FleetCockpitProps> = ({ vessels: propVessels
                 transition={{ delay: index * 0.05 }}
               >
                 <Card className="relative overflow-hidden hover:shadow-md transition-all cursor-pointer border-l-4"
-                      style={{ borderLeftColor: getStatusColor(vessel.status).replace('bg-', '') }}>
+                  style={{ borderLeftColor: getStatusColor(vessel.status).replace("bg-", "") }}>
                   {/* Status indicator */}
                   <div className={`absolute top-2 right-2 w-2 h-2 rounded-full ${getStatusColor(vessel.status)} animate-pulse`} />
                   
@@ -153,7 +153,7 @@ export const FleetCockpit: React.FC<FleetCockpitProps> = ({ vessels: propVessels
                       <div>
                         <h4 className="font-semibold">{vessel.name}</h4>
                         <p className="text-xs text-muted-foreground">
-                          IMO: {vessel.imo_number || 'N/A'}
+                          IMO: {vessel.imo_number || "N/A"}
                         </p>
                       </div>
                       {getStatusBadge(vessel.status)}
@@ -164,7 +164,7 @@ export const FleetCockpit: React.FC<FleetCockpitProps> = ({ vessels: propVessels
                       <div className="flex items-center gap-2">
                         <MapPin className="h-3 w-3 text-muted-foreground" />
                         <span className="text-xs truncate">
-                          {vessel.current_location || 'Em trânsito'}
+                          {vessel.current_location || "Em trânsito"}
                         </span>
                       </div>
 

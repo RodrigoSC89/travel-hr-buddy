@@ -3,19 +3,19 @@
  * Button with Material Design ripple effect
  */
 
-import React, { forwardRef } from 'react';
-import { Button, ButtonProps } from '@/components/ui/button';
-import { useRippleEffect } from '@/lib/ux/micro-interactions';
-import { useHapticFeedback } from '@/lib/ux/haptic-feedback';
-import { cn } from '@/lib/utils';
+import React, { forwardRef } from "react";
+import { Button, ButtonProps } from "@/components/ui/button";
+import { useRippleEffect } from "@/lib/ux/micro-interactions";
+import { useHapticFeedback } from "@/lib/ux/haptic-feedback";
+import { cn } from "@/lib/utils";
 
 interface RippleButtonProps extends ButtonProps {
-  hapticType?: 'light' | 'medium' | 'heavy';
+  hapticType?: "light" | "medium" | "heavy";
   disableRipple?: boolean;
 }
 
 export const RippleButton = forwardRef<HTMLButtonElement, RippleButtonProps>(
-  ({ children, className, hapticType = 'light', disableRipple = false, onClick, ...props }, ref) => {
+  ({ children, className, hapticType = "light", disableRipple = false, onClick, ...props }, ref) => {
     const { ripples, createRipple } = useRippleEffect();
     const { trigger } = useHapticFeedback();
     
@@ -30,7 +30,7 @@ export const RippleButton = forwardRef<HTMLButtonElement, RippleButtonProps>(
     return (
       <Button
         ref={ref}
-        className={cn('relative overflow-hidden', className)}
+        className={cn("relative overflow-hidden", className)}
         onClick={handleClick}
         {...props}
       >
@@ -52,6 +52,6 @@ export const RippleButton = forwardRef<HTMLButtonElement, RippleButtonProps>(
   }
 );
 
-RippleButton.displayName = 'RippleButton';
+RippleButton.displayName = "RippleButton";
 
 export default RippleButton;

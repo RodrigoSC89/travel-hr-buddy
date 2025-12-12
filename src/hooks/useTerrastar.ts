@@ -3,8 +3,8 @@
  * React hook for Terrastar Ionosphere API integration
  */
 
-import { useState, useEffect, useCallback } from 'react';
-import { useToast } from '@/hooks/use-toast';
+import { useState, useEffect, useCallback } from "react";
+import { useToast } from "@/hooks/use-toast";
 import {
   getIonosphericData,
   requestPositionCorrection,
@@ -17,7 +17,7 @@ import {
   type TerrastarIonosphereData,
   type TerrastarCorrection,
   type TerrastarAlert,
-} from '@/services/api/terrastar/terrastar.service';
+} from "@/services/api/terrastar/terrastar.service";
 
 export function useTerrastar(vesselId?: string) {
   const { toast } = useToast();
@@ -32,9 +32,9 @@ export function useTerrastar(vesselId?: string) {
     message?: string;
   }>({
     available: false,
-    service_level: 'UNKNOWN',
+    service_level: "UNKNOWN",
     latency_ms: 0,
-    message: '',
+    message: "",
   });
   const [statistics, setStatistics] = useState({
     total_corrections: 0,
@@ -57,7 +57,7 @@ export function useTerrastar(vesselId?: string) {
     } catch (error) {
       toast({
         title: "❌ Ionosphere Data Error",
-        description: error instanceof Error ? error.message : 'Failed to fetch data',
+        description: error instanceof Error ? error.message : "Failed to fetch data",
         variant: "destructive",
       });
       throw error;
@@ -89,7 +89,7 @@ export function useTerrastar(vesselId?: string) {
     } catch (error) {
       toast({
         title: "❌ Correction Error",
-        description: error instanceof Error ? error.message : 'Failed to get correction',
+        description: error instanceof Error ? error.message : "Failed to get correction",
         variant: "destructive",
       });
       throw error;
@@ -126,7 +126,7 @@ export function useTerrastar(vesselId?: string) {
     } catch (error) {
       toast({
         title: "❌ Subscription Error",
-        description: error instanceof Error ? error.message : 'Failed to subscribe',
+        description: error instanceof Error ? error.message : "Failed to subscribe",
         variant: "destructive",
       });
       throw error;
@@ -144,7 +144,7 @@ export function useTerrastar(vesselId?: string) {
       setActiveAlerts(alerts);
       
       // Show critical alerts as toast
-      const criticalAlerts = alerts.filter(a => a.severity === 'critical');
+      const criticalAlerts = alerts.filter(a => a.severity === "critical");
       if (criticalAlerts.length > 0) {
         toast({
           title: "⚠️ Critical Ionospheric Alert",
@@ -155,7 +155,7 @@ export function useTerrastar(vesselId?: string) {
       
       return alerts;
     } catch (error) {
-      console.error('Error refreshing alerts:', error);
+      console.error("Error refreshing alerts:", error);
       return [];
     }
   }, [toast]);
@@ -183,7 +183,7 @@ export function useTerrastar(vesselId?: string) {
     } catch (error) {
       toast({
         title: "❌ Acknowledge Error",
-        description: error instanceof Error ? error.message : 'Failed to acknowledge',
+        description: error instanceof Error ? error.message : "Failed to acknowledge",
         variant: "destructive",
       });
       return false;
@@ -205,7 +205,7 @@ export function useTerrastar(vesselId?: string) {
     } catch (error) {
       toast({
         title: "❌ Forecast Error",
-        description: error instanceof Error ? error.message : 'Failed to get forecast',
+        description: error instanceof Error ? error.message : "Failed to get forecast",
         variant: "destructive",
       });
       throw error;
@@ -223,7 +223,7 @@ export function useTerrastar(vesselId?: string) {
       setStatistics(stats);
       return stats;
     } catch (error) {
-      console.error('Error fetching statistics:', error);
+      console.error("Error fetching statistics:", error);
       return statistics;
     }
   }, [statistics]);
@@ -246,7 +246,7 @@ export function useTerrastar(vesselId?: string) {
       
       return status;
     } catch (error) {
-      console.error('Error checking service status:', error);
+      console.error("Error checking service status:", error);
       return serviceStatus;
     }
   }, [toast, serviceStatus]);

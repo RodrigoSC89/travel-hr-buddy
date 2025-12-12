@@ -111,14 +111,14 @@ export function NaturalLanguageInterface() {
         prev.map(r =>
           r.id === pendingResult.id
             ? {
-                ...r,
-                response: response?.response || "Comando processado com sucesso.",
-                status: "success" as const,
-                actions: [
-                  { label: "Ver detalhes", action: "view" },
-                  { label: "Exportar", action: "export" },
-                ],
-              }
+              ...r,
+              response: response?.response || "Comando processado com sucesso.",
+              status: "success" as const,
+              actions: [
+                { label: "Ver detalhes", action: "view" },
+                { label: "Exportar", action: "export" },
+              ],
+            }
             : r
         )
       );
@@ -127,10 +127,10 @@ export function NaturalLanguageInterface() {
         prev.map(r =>
           r.id === pendingResult.id
             ? {
-                ...r,
-                response: "Erro ao processar comando. Tente novamente.",
-                status: "error",
-              }
+              ...r,
+              response: "Erro ao processar comando. Tente novamente.",
+              status: "error",
+            }
             : r
         )
       );

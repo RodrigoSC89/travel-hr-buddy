@@ -3,11 +3,11 @@
  * Real-time performance monitoring component
  */
 
-import { useState, useEffect } from 'react';
-import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
-import { Badge } from '@/components/ui/badge';
-import { Progress } from '@/components/ui/progress';
-import { Cpu, HardDrive, Wifi, Battery, Gauge } from 'lucide-react';
+import { useState, useEffect } from "react";
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import { Badge } from "@/components/ui/badge";
+import { Progress } from "@/components/ui/progress";
+import { Cpu, HardDrive, Wifi, Battery, Gauge } from "lucide-react";
 
 interface PerformanceMetrics {
   memory: { used: number; total: number; percent: number } | null;
@@ -75,11 +75,11 @@ export function PerformanceMonitor() {
     };
 
     updateConnection();
-    (navigator as any).connection?.addEventListener('change', updateConnection);
+    (navigator as any).connection?.addEventListener("change", updateConnection);
 
     // Battery monitoring
     const initBattery = async () => {
-      if ('getBattery' in navigator) {
+      if ("getBattery" in navigator) {
         try {
           const battery = await (navigator as any).getBattery();
           const updateBattery = () => {
@@ -92,8 +92,8 @@ export function PerformanceMonitor() {
             }));
           };
           updateBattery();
-          battery.addEventListener('levelchange', updateBattery);
-          battery.addEventListener('chargingchange', updateBattery);
+          battery.addEventListener("levelchange", updateBattery);
+          battery.addEventListener("chargingchange", updateBattery);
         } catch {}
       }
     };
@@ -106,9 +106,9 @@ export function PerformanceMonitor() {
   }, []);
 
   const getStatusColor = (value: number, thresholds: { warning: number; critical: number }) => {
-    if (value >= thresholds.critical) return 'text-red-500';
-    if (value >= thresholds.warning) return 'text-yellow-500';
-    return 'text-green-500';
+    if (value >= thresholds.critical) return "text-red-500";
+    if (value >= thresholds.warning) return "text-yellow-500";
+    return "text-green-500";
   };
 
   const formatBytes = (bytes: number) => {
@@ -130,7 +130,7 @@ export function PerformanceMonitor() {
             <Cpu className="h-4 w-4 text-muted-foreground" />
             <span className="text-sm">FPS</span>
           </div>
-          <Badge variant={metrics.fps >= 50 ? 'default' : metrics.fps >= 30 ? 'secondary' : 'destructive'}>
+          <Badge variant={metrics.fps >= 50 ? "default" : metrics.fps >= 30 ? "secondary" : "destructive"}>
             {metrics.fps}
           </Badge>
         </div>

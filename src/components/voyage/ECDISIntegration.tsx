@@ -181,7 +181,7 @@ export function ECDISIntegration() {
                 <span className={cn(
                   "text-5xl font-bold",
                   Number(complianceRate) >= 90 ? "text-emerald-400" :
-                  Number(complianceRate) >= 70 ? "text-amber-400" : "text-destructive"
+                    Number(complianceRate) >= 70 ? "text-amber-400" : "text-destructive"
                 )}>
                   {complianceRate}%
                 </span>
@@ -316,7 +316,7 @@ export function ECDISIntegration() {
                         <p className={cn(
                           "font-medium",
                           daysUntilUpdate && daysUntilUpdate <= 7 ? "text-destructive" :
-                          daysUntilUpdate && daysUntilUpdate <= 30 ? "text-amber-400" : "text-foreground"
+                            daysUntilUpdate && daysUntilUpdate <= 30 ? "text-amber-400" : "text-foreground"
                         )}>
                           {ecdis.next_update_due 
                             ? format(new Date(ecdis.next_update_due), "dd/MM/yyyy")

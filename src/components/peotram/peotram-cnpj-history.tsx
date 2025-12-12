@@ -258,7 +258,7 @@ export const PeotramCNPJHistory: React.FC = () => {
                   {getTrendIcon(selectedCompany.trend)}
                   <Badge className={getRiskBadge(selectedCompany.riskLevel)}>
                     Risco {selectedCompany.riskLevel === "low" ? "Baixo" : 
-                           selectedCompany.riskLevel === "medium" ? "Médio" : "Alto"}
+                      selectedCompany.riskLevel === "medium" ? "Médio" : "Alto"}
                   </Badge>
                   <div className={`text-3xl font-bold ${getScoreColor(selectedCompany.overallScore)}`}>
                     {selectedCompany.overallScore}%
@@ -423,11 +423,11 @@ export const PeotramCNPJHistory: React.FC = () => {
                           </div>
                           <Badge className={
                             audit.status === "completed" ? "bg-green-100 text-green-800" :
-                            audit.status === "in_progress" ? "bg-yellow-100 text-yellow-800" :
-                            "bg-gray-100 text-gray-800"
+                              audit.status === "in_progress" ? "bg-yellow-100 text-yellow-800" :
+                                "bg-gray-100 text-gray-800"
                           }>
                             {audit.status === "completed" ? "Concluída" :
-                             audit.status === "in_progress" ? "Em Andamento" : "Pendente"}
+                              audit.status === "in_progress" ? "Em Andamento" : "Pendente"}
                           </Badge>
                           <Button size="sm" variant="ghost">
                             <Eye className="h-4 w-4" />
@@ -445,8 +445,8 @@ export const PeotramCNPJHistory: React.FC = () => {
                                 key={finding.id}
                                 className={`text-sm p-2 rounded ${
                                   finding.severity === "critical" ? "bg-red-50 text-red-700" :
-                                  finding.severity === "major" ? "bg-yellow-50 text-yellow-700" :
-                                  "bg-blue-50 text-blue-700"
+                                    finding.severity === "major" ? "bg-yellow-50 text-yellow-700" :
+                                      "bg-blue-50 text-blue-700"
                                 }`}
                               >
                                 <span className="font-medium">{finding.element}:</span> {finding.description}
@@ -539,7 +539,7 @@ export const PeotramCNPJHistory: React.FC = () => {
                         {getTrendIcon(selectedCompany.trend)}
                         <span className="font-medium capitalize">
                           {selectedCompany.trend === "improving" ? "Melhorando" :
-                           selectedCompany.trend === "declining" ? "Declinando" : "Estável"}
+                            selectedCompany.trend === "declining" ? "Declinando" : "Estável"}
                         </span>
                       </div>
                     </div>
@@ -553,10 +553,10 @@ export const PeotramCNPJHistory: React.FC = () => {
                       <p className="text-sm text-muted-foreground">Risco de NC Crítica</p>
                       <div className={`text-xl font-bold ${
                         selectedCompany.riskLevel === "low" ? "text-green-600" :
-                        selectedCompany.riskLevel === "medium" ? "text-yellow-600" : "text-red-600"
+                          selectedCompany.riskLevel === "medium" ? "text-yellow-600" : "text-red-600"
                       }`}>
                         {selectedCompany.riskLevel === "low" ? "15%" :
-                         selectedCompany.riskLevel === "medium" ? "35%" : "60%"}
+                          selectedCompany.riskLevel === "medium" ? "35%" : "60%"}
                       </div>
                     </div>
                   </div>

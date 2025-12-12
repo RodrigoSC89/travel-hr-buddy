@@ -7,7 +7,7 @@ import { logger } from "@/lib/logger";
 
 interface PendingAction {
   id: string;
-  type: 'create' | 'update' | 'delete';
+  type: "create" | "update" | "delete";
   table: string;
   data: Record<string, any>;
   timestamp: number;
@@ -19,7 +19,7 @@ class OfflineManagerService {
   private pendingActions: PendingAction[] = [];
   private isOnline: boolean = navigator.onLine;
   private syncInProgress: boolean = false;
-  private syncListeners: Set<(status: 'syncing' | 'synced' | 'error') => void> = new Set();
+  private syncListeners: Set<(status: "syncing" | "synced" | "error") => void> = new Set();
 
   constructor() {
     this.initializeEventListeners();
@@ -28,7 +28,7 @@ class OfflineManagerService {
 
   private loadFromStorage(): void {
     try {
-      const stored = localStorage.getItem('nautilus_pending_actions');
+      const stored = localStorage.getItem("nautilus_pending_actions");
       if (stored) {
         this.pendingActions = JSON.parse(stored);
       }
@@ -39,33 +39,33 @@ class OfflineManagerService {
 
   private saveToStorage(): void {
     try {
-      localStorage.setItem('nautilus_pending_actions', JSON.stringify(this.pendingActions));
+      localStorage.setItem("nautilus_pending_actions", JSON.stringify(this.pendingActions));
     } catch {
-      logger.debug('Failed to save pending actions to storage');
+      logger.debug("Failed to save pending actions to storage");
     }
   }
 
   async initialize(): Promise<void> {
-    logger.info('Offline manager initialized');
+    logger.info("Offline manager initialized");
     if (this.isOnline) {
       this.syncPendingActions();
     }
   }
 
   private initializeEventListeners(): void {
-    window.addEventListener('online', () => {
+    window.addEventListener("online", () => {
       this.isOnline = true;
-      logger.info('Connection restored - starting sync');
+      logger.info("Connection restored - starting sync");
       this.syncPendingActions();
     });
 
-    window.addEventListener('offline', () => {
+    window.addEventListener("offline", () => {
       this.isOnline = false;
-      logger.info('Connection lost - entering offline mode');
+      logger.info("Connection lost - entering offline mode");
     });
   }
 
-  async queueAction(type: 'create' | 'update' | 'delete', table: string, data: Record<string, any>): Promise<string> {
+  async queueAction(type: "create" | "update" | "delete", table: string, data: Record<string, any>): Promise<string> {
     const id = `action-${Date.now()}-${Math.random().toString(36).slice(2)}`;
     
     this.pendingActions.push({
@@ -95,7 +95,7 @@ class OfflineManagerService {
         expiresAt: Date.now() + (ttlMinutes * 60 * 1000)
       }));
     } catch {
-      logger.debug('Failed to cache data');
+      logger.debug("Failed to cache data");
     }
   }
 
@@ -118,14 +118,14 @@ class OfflineManagerService {
 
   async bufferSensorReading(vesselId: string, reading: { sensorId: string; type: string; value: number; unit: string }): Promise<void> {
     // Simplified - just log for now
-    logger.debug('Sensor reading buffered', { vesselId, reading });
+    logger.debug("Sensor reading buffered", { vesselId, reading });
   }
 
   async syncPendingActions(): Promise<void> {
     if (this.syncInProgress || !this.isOnline) return;
 
     this.syncInProgress = true;
-    this.notifySyncListeners('syncing');
+    this.notifySyncListeners("syncing");
 
     try {
       const pending = this.pendingActions.filter(a => !a.synced);
@@ -144,38 +144,38 @@ class OfflineManagerService {
 
       this.pendingActions = this.pendingActions.filter(a => !a.synced || Date.now() - a.timestamp < 86400000);
       this.saveToStorage();
-      this.notifySyncListeners('synced');
+      this.notifySyncListeners("synced");
     } catch {
-      this.notifySyncListeners('error');
+      this.notifySyncListeners("error");
     } finally {
       this.syncInProgress = false;
     }
   }
 
   private async executeSyncAction(action: PendingAction): Promise<void> {
-    const { supabase } = await import('@/integrations/supabase/client');
+    const { supabase } = await import("@/integrations/supabase/client");
     const tableName = action.table as any;
 
     switch (action.type) {
-      case 'create':
-        await supabase.from(tableName).insert(action.data);
-        break;
-      case 'update':
-        const { id, ...updateData } = action.data;
-        await supabase.from(tableName).update(updateData).eq('id', id);
-        break;
-      case 'delete':
-        await supabase.from(tableName).delete().eq('id', action.data.id);
-        break;
+    case "create":
+      await supabase.from(tableName).insert(action.data);
+      break;
+    case "update":
+      const { id, ...updateData } = action.data;
+      await supabase.from(tableName).update(updateData).eq("id", id);
+      break;
+    case "delete":
+      await supabase.from(tableName).delete().eq("id", action.data.id);
+      break;
     }
   }
 
-  onSyncStatus(listener: (status: 'syncing' | 'synced' | 'error') => void): () => void {
+  onSyncStatus(listener: (status: "syncing" | "synced" | "error") => void): () => void {
     this.syncListeners.add(listener);
     return () => this.syncListeners.delete(listener);
   }
 
-  private notifySyncListeners(status: 'syncing' | 'synced' | 'error'): void {
+  private notifySyncListeners(status: "syncing" | "synced" | "error"): void {
     this.syncListeners.forEach(listener => listener(status));
   }
 
@@ -188,7 +188,7 @@ class OfflineManagerService {
   }
 
   async forceSync(): Promise<void> {
-    if (!this.isOnline) throw new Error('Cannot sync while offline');
+    if (!this.isOnline) throw new Error("Cannot sync while offline");
     await this.syncPendingActions();
   }
 }

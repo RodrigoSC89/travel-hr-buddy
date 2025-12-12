@@ -9,4 +9,4 @@ export {
   type OPFSFile,
   type TierConfig,
   type OPFSConfig,
-} from './opfs-manager';
+} from "./opfs-manager";

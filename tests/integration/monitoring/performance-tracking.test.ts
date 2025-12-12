@@ -3,13 +3,13 @@
  * Tests the integration between performance monitoring and error tracking systems
  */
 
-import { describe, it, expect, beforeEach, afterEach, vi } from 'vitest';
-import { renderHook, waitFor } from '@testing-library/react';
-import { usePerformanceMonitor, evaluatePerformance } from '@/hooks/use-performance-monitor';
-import { trackError } from '@/lib/error-tracker';
+import { describe, it, expect, beforeEach, afterEach, vi } from "vitest";
+import { renderHook, waitFor } from "@testing-library/react";
+import { usePerformanceMonitor, evaluatePerformance } from "@/hooks/use-performance-monitor";
+import { trackError } from "@/lib/error-tracker";
 
 // Mock error tracker
-vi.mock('@/lib/error-tracker', () => ({
+vi.mock("@/lib/error-tracker", () => ({
   trackError: vi.fn(),
   getErrorStats: vi.fn(() => ({
     total: 0,
@@ -19,7 +19,7 @@ vi.mock('@/lib/error-tracker', () => ({
   }))
 }));
 
-describe('Performance Monitoring Integration', () => {
+describe("Performance Monitoring Integration", () => {
   beforeEach(() => {
     vi.clearAllMocks();
     
@@ -31,10 +31,10 @@ describe('Performance Monitoring Integration', () => {
     })) as any;
 
     // Mock performance.getEntriesByType
-    vi.spyOn(performance, 'getEntriesByType').mockReturnValue([
+    vi.spyOn(performance, "getEntriesByType").mockReturnValue([
       {
-        name: 'navigation',
-        entryType: 'navigation',
+        name: "navigation",
+        entryType: "navigation",
         startTime: 0,
         duration: 1000,
         responseStart: 100,
@@ -49,8 +49,8 @@ describe('Performance Monitoring Integration', () => {
     vi.restoreAllMocks();
   });
 
-  describe('Performance Metrics Collection', () => {
-    it('should collect metrics on mount', () => {
+  describe("Performance Metrics Collection", () => {
+    it("should collect metrics on mount", () => {
       const onMetricsUpdate = vi.fn();
 
       renderHook(() => usePerformanceMonitor({
@@ -62,7 +62,7 @@ describe('Performance Monitoring Integration', () => {
       expect(PerformanceObserver).toHaveBeenCalled();
     });
 
-    it('should evaluate metrics and identify issues', () => {
+    it("should evaluate metrics and identify issues", () => {
       const poorMetrics = {
         lcp: 5000, // Poor LCP (> 4000ms)
         fid: 400, // Poor FID (> 300ms)
@@ -80,15 +80,15 @@ describe('Performance Monitoring Integration', () => {
       const evaluation = evaluatePerformance(poorMetrics);
 
       expect(evaluation.score).toBeLessThan(50);
-      expect(evaluation.rating).toBe('poor');
+      expect(evaluation.rating).toBe("poor");
       expect(evaluation.recommendations).toHaveLength(4);
-      expect(evaluation.recommendations).toContain('LCP too high - optimize largest content loading');
-      expect(evaluation.recommendations).toContain('FID too high - reduce JavaScript execution time');
-      expect(evaluation.recommendations).toContain('CLS too high - stabilize layout shifts');
-      expect(evaluation.recommendations).toContain('High memory usage - check for memory leaks');
+      expect(evaluation.recommendations).toContain("LCP too high - optimize largest content loading");
+      expect(evaluation.recommendations).toContain("FID too high - reduce JavaScript execution time");
+      expect(evaluation.recommendations).toContain("CLS too high - stabilize layout shifts");
+      expect(evaluation.recommendations).toContain("High memory usage - check for memory leaks");
     });
 
-    it('should rate excellent metrics correctly', () => {
+    it("should rate excellent metrics correctly", () => {
       const excellentMetrics = {
         lcp: 1500, // Excellent LCP
         fid: 50, // Excellent FID
@@ -106,11 +106,11 @@ describe('Performance Monitoring Integration', () => {
       const evaluation = evaluatePerformance(excellentMetrics);
 
       expect(evaluation.score).toBeGreaterThanOrEqual(90);
-      expect(evaluation.rating).toBe('excellent');
+      expect(evaluation.rating).toBe("excellent");
       expect(evaluation.recommendations).toHaveLength(0);
     });
 
-    it('should cleanup observers on unmount', () => {
+    it("should cleanup observers on unmount", () => {
       const { result, unmount } = renderHook(() => usePerformanceMonitor({
         enabled: true,
         interval: 1000
@@ -123,8 +123,8 @@ describe('Performance Monitoring Integration', () => {
     });
   });
 
-  describe('Integration with Error Tracking', () => {
-    it('should track performance degradation as errors', async () => {
+  describe("Integration with Error Tracking", () => {
+    it("should track performance degradation as errors", async () => {
       const poorMetrics = {
         lcp: 6000,
         fid: 500,
@@ -137,12 +137,12 @@ describe('Performance Monitoring Integration', () => {
 
       const evaluation = evaluatePerformance(poorMetrics);
 
-      if (evaluation.rating === 'poor') {
+      if (evaluation.rating === "poor") {
         trackError(
-          new Error('Performance degradation detected'),
+          new Error("Performance degradation detected"),
           {
-            category: 'Performance',
-            severity: 'high',
+            category: "Performance",
+            severity: "high",
             metadata: {
               metrics: poorMetrics,
               evaluation,
@@ -155,13 +155,13 @@ describe('Performance Monitoring Integration', () => {
       expect(trackError).toHaveBeenCalledWith(
         expect.any(Error),
         expect.objectContaining({
-          category: 'Performance',
-          severity: 'high'
+          category: "Performance",
+          severity: "high"
         })
       );
     });
 
-    it('should not track good performance as errors', () => {
+    it("should not track good performance as errors", () => {
       const goodMetrics = {
         lcp: 2000,
         fid: 80,
@@ -174,13 +174,13 @@ describe('Performance Monitoring Integration', () => {
 
       const evaluation = evaluatePerformance(goodMetrics);
 
-      expect(evaluation.rating).not.toBe('poor');
+      expect(evaluation.rating).not.toBe("poor");
       expect(trackError).not.toHaveBeenCalled();
     });
   });
 
-  describe('Performance Budget Monitoring', () => {
-    it('should detect when LCP exceeds budget', () => {
+  describe("Performance Budget Monitoring", () => {
+    it("should detect when LCP exceeds budget", () => {
       const metrics = {
         lcp: 3000, // Above 2.5s target
         fid: 50,
@@ -194,11 +194,11 @@ describe('Performance Monitoring Integration', () => {
       const evaluation = evaluatePerformance(metrics);
 
       expect(evaluation.recommendations.some(r => 
-        r.includes('LCP')
+        r.includes("LCP")
       )).toBe(true);
     });
 
-    it('should detect when FID exceeds budget', () => {
+    it("should detect when FID exceeds budget", () => {
       const metrics = {
         lcp: 2000,
         fid: 150, // Above 100ms target
@@ -216,7 +216,7 @@ describe('Performance Monitoring Integration', () => {
       expect(evaluation.score).toBeLessThan(100);
     });
 
-    it('should detect when CLS exceeds budget', () => {
+    it("should detect when CLS exceeds budget", () => {
       const metrics = {
         lcp: 2000,
         fid: 50,
@@ -230,7 +230,7 @@ describe('Performance Monitoring Integration', () => {
       const evaluation = evaluatePerformance(metrics);
 
       expect(evaluation.recommendations.some(r => 
-        r.includes('CLS')
+        r.includes("CLS")
       )).toBe(true);
     });
   });

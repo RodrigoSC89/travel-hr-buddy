@@ -3,10 +3,10 @@
  * Visual indicator for connection quality
  */
 
-import React, { memo } from 'react';
-import { Wifi, WifiOff, Zap, AlertTriangle } from 'lucide-react';
-import { useNetworkStatus } from '@/hooks/use-network-status';
-import { cn } from '@/lib/utils';
+import React, { memo } from "react";
+import { Wifi, WifiOff, Zap, AlertTriangle } from "lucide-react";
+import { useNetworkStatus } from "@/hooks/use-network-status";
+import { cn } from "@/lib/utils";
 
 interface NetworkStatusWidgetProps {
   showDetails?: boolean;
@@ -23,23 +23,23 @@ export const NetworkStatusWidget = memo(function NetworkStatusWidget({
 
   const getIcon = () => {
     if (!online) return <WifiOff className="h-4 w-4" />;
-    if (quality === 'fast') return <Zap className="h-4 w-4" />;
-    if (quality === 'slow') return <AlertTriangle className="h-4 w-4" />;
+    if (quality === "fast") return <Zap className="h-4 w-4" />;
+    if (quality === "slow") return <AlertTriangle className="h-4 w-4" />;
     return <Wifi className="h-4 w-4" />;
   };
 
   const getColor = () => {
-    if (!online) return 'text-destructive';
-    if (quality === 'fast') return 'text-green-500';
-    if (quality === 'slow') return 'text-yellow-500';
-    return 'text-blue-500';
+    if (!online) return "text-destructive";
+    if (quality === "fast") return "text-green-500";
+    if (quality === "slow") return "text-yellow-500";
+    return "text-blue-500";
   };
 
   const getLabel = () => {
-    if (!online) return 'Offline';
-    if (quality === 'fast') return 'Rápida';
-    if (quality === 'slow') return 'Lenta';
-    return 'Normal';
+    if (!online) return "Offline";
+    if (quality === "fast") return "Rápida";
+    if (quality === "slow") return "Lenta";
+    return "Normal";
   };
 
   if (compact) {
@@ -64,7 +64,7 @@ export const NetworkStatusWidget = memo(function NetworkStatusWidget({
         <span className="text-muted-foreground">
           {effectiveType && `${effectiveType.toUpperCase()}`}
           {downlink && ` • ${downlink.toFixed(1)} Mbps`}
-          {saveData && ' • Economia'}
+          {saveData && " • Economia"}
         </span>
       )}
     </div>

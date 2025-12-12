@@ -79,7 +79,7 @@ export const PageLoadingIndicator: React.FC<{ isLoading: boolean }> = ({ isLoadi
   return (
     <div className="fixed top-0 left-0 right-0 z-50 h-1 bg-muted overflow-hidden">
       <div className="h-full bg-primary animate-pulse w-1/3" 
-           style={{ animation: 'loading-bar 1.5s ease-in-out infinite' }} />
+        style={{ animation: "loading-bar 1.5s ease-in-out infinite" }} />
     </div>
   );
 };

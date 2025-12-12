@@ -151,25 +151,25 @@ const AIDataLake: React.FC = () => {
 
   const getStatusBadge = (status: DataSource["status"]) => {
     switch (status) {
-      case "active":
-        return <Badge className="bg-green-500/20 text-green-400"><CheckCircle className="h-3 w-3 mr-1" />Ativo</Badge>;
-      case "syncing":
-        return <Badge className="bg-blue-500/20 text-blue-400"><RefreshCw className="h-3 w-3 mr-1 animate-spin" />Sincronizando</Badge>;
-      case "error":
-        return <Badge className="bg-red-500/20 text-red-400"><Activity className="h-3 w-3 mr-1" />Erro</Badge>;
+    case "active":
+      return <Badge className="bg-green-500/20 text-green-400"><CheckCircle className="h-3 w-3 mr-1" />Ativo</Badge>;
+    case "syncing":
+      return <Badge className="bg-blue-500/20 text-blue-400"><RefreshCw className="h-3 w-3 mr-1 animate-spin" />Sincronizando</Badge>;
+    case "error":
+      return <Badge className="bg-red-500/20 text-red-400"><Activity className="h-3 w-3 mr-1" />Erro</Badge>;
     }
   };
 
   const getTypeBadge = (type: DataSource["type"]) => {
     switch (type) {
-      case "structured":
-        return <Badge variant="outline" className="border-blue-500/30 text-blue-400">Estruturado</Badge>;
-      case "unstructured":
-        return <Badge variant="outline" className="border-orange-500/30 text-orange-400">Não-Estruturado</Badge>;
-      case "semi-structured":
-        return <Badge variant="outline" className="border-purple-500/30 text-purple-400">Semi-Estruturado</Badge>;
-      case "streaming":
-        return <Badge variant="outline" className="border-green-500/30 text-green-400">Streaming</Badge>;
+    case "structured":
+      return <Badge variant="outline" className="border-blue-500/30 text-blue-400">Estruturado</Badge>;
+    case "unstructured":
+      return <Badge variant="outline" className="border-orange-500/30 text-orange-400">Não-Estruturado</Badge>;
+    case "semi-structured":
+      return <Badge variant="outline" className="border-purple-500/30 text-purple-400">Semi-Estruturado</Badge>;
+    case "streaming":
+      return <Badge variant="outline" className="border-green-500/30 text-green-400">Streaming</Badge>;
     }
   };
 
@@ -445,7 +445,7 @@ const AIDataLake: React.FC = () => {
                     <CartesianGrid strokeDasharray="3 3" stroke="hsl(var(--border))" />
                     <XAxis dataKey="month" stroke="hsl(var(--muted-foreground))" />
                     <YAxis domain={[85, 100]} stroke="hsl(var(--muted-foreground))" />
-                    <Tooltip contentStyle={{ backgroundColor: 'hsl(var(--background))', border: '1px solid hsl(var(--border))' }} />
+                    <Tooltip contentStyle={{ backgroundColor: "hsl(var(--background))", border: "1px solid hsl(var(--border))" }} />
                     <Bar dataKey="quality" fill="hsl(var(--primary))" name="Qualidade %" radius={[4, 4, 0, 0]} />
                   </BarChart>
                 </ResponsiveContainer>
@@ -531,9 +531,9 @@ const AIDataLake: React.FC = () => {
                           )}
                           <Badge className={
                             pipeline.status === "running" ? "bg-green-500/20 text-green-400" :
-                            pipeline.status === "scheduled" ? "bg-blue-500/20 text-blue-400" :
-                            pipeline.status === "failed" ? "bg-red-500/20 text-red-400" :
-                            "bg-gray-500/20 text-gray-400"
+                              pipeline.status === "scheduled" ? "bg-blue-500/20 text-blue-400" :
+                                pipeline.status === "failed" ? "bg-red-500/20 text-red-400" :
+                                  "bg-gray-500/20 text-gray-400"
                           }>
                             {pipeline.status}
                           </Badge>

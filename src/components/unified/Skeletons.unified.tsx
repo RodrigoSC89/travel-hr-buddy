@@ -106,7 +106,7 @@ function useConnectionQuality() {
   return {
     isSlowConnection: false,
     isFastConnection: true,
-    quality: 'good' as 'good' | 'slow' | 'offline',
+    quality: "good" as "good" | "slow" | "offline",
     isLightMode: false,
     isLowBandwidth: false,
   };
@@ -131,10 +131,10 @@ export const Skeleton = memo(function Skeleton({
 
   // Simpler animation on slow connections (adaptive-skeleton.tsx)
   const animationClass = animate && !isLowBandwidth
-    ? 'animate-pulse'
+    ? "animate-pulse"
     : isLowBandwidth
-      ? 'opacity-50'
-      : '';
+      ? "opacity-50"
+      : "";
 
   const variantStyles = {
     default: "rounded-md",
@@ -145,8 +145,8 @@ export const Skeleton = memo(function Skeleton({
 
   const inlineStyle: React.CSSProperties = {
     ...style,
-    width: typeof width === 'number' ? `${width}px` : width,
-    height: typeof height === 'number' ? `${height}px` : height,
+    width: typeof width === "number" ? `${width}px` : width,
+    height: typeof height === "number" ? `${height}px` : height,
   };
 
   // Multi-line support (OptimizedSkeleton.tsx)
@@ -164,7 +164,7 @@ export const Skeleton = memo(function Skeleton({
             )}
             style={{
               ...inlineStyle,
-              width: i === lines - 1 ? '75%' : inlineStyle.width,
+              width: i === lines - 1 ? "75%" : inlineStyle.width,
             }}
             aria-hidden="true"
             {...props}
@@ -216,31 +216,31 @@ export const Loading = memo(function Loading({
 }: LoadingProps) {
   const renderIcon = () => {
     switch (variant) {
-      case "maritime":
-        return <Anchor className="animate-pulse text-blue-600" size={iconSizes[size]} />;
-      case "offshore":
-        return (
-          <div className="relative">
-            <Ship className="animate-bounce text-blue-700" size={iconSizes[size]} />
-            <Waves
-              className="absolute -bottom-2 left-1/2 transform -translate-x-1/2 text-blue-400 animate-pulse"
-              size={iconSizes[size] / 2}
-            />
-          </div>
-        );
-      case "spinner":
-        return (
-          <div
-            className={cn(
-              "animate-spin rounded-full border-b-2 border-primary",
-              sizeClasses[size]
-            )}
-            role="status"
-            aria-label="Carregando"
+    case "maritime":
+      return <Anchor className="animate-pulse text-blue-600" size={iconSizes[size]} />;
+    case "offshore":
+      return (
+        <div className="relative">
+          <Ship className="animate-bounce text-blue-700" size={iconSizes[size]} />
+          <Waves
+            className="absolute -bottom-2 left-1/2 transform -translate-x-1/2 text-blue-400 animate-pulse"
+            size={iconSizes[size] / 2}
           />
-        );
-      default:
-        return <Loader2 className={cn("animate-spin text-primary", sizeClasses[size])} />;
+        </div>
+      );
+    case "spinner":
+      return (
+        <div
+          className={cn(
+            "animate-spin rounded-full border-b-2 border-primary",
+            sizeClasses[size]
+          )}
+          role="status"
+          aria-label="Carregando"
+        />
+      );
+    default:
+      return <Loader2 className={cn("animate-spin text-primary", sizeClasses[size])} />;
     }
   };
 
@@ -488,7 +488,7 @@ export const SkeletonDashboard = memo(function SkeletonDashboard({
   const { isSlowConnection, quality } = useConnectionQuality();
 
   // Minimal skeleton for slow connections (dashboard/DashboardSkeleton.tsx feature)
-  if (connectionAware && (isSlowConnection || quality === 'offline')) {
+  if (connectionAware && (isSlowConnection || quality === "offline")) {
     return (
       <div className={cn("space-y-6 p-6", className)}>
         {/* Header */}
@@ -691,7 +691,7 @@ export const SkeletonText = memo(function SkeletonText({
         <Skeleton
           key={i}
           className="h-4"
-          style={{ width: i === lines - 1 ? '60%' : '100%' }}
+          style={{ width: i === lines - 1 ? "60%" : "100%" }}
         />
       ))}
     </div>

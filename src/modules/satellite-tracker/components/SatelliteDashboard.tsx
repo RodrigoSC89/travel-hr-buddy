@@ -92,20 +92,20 @@ export const SatelliteDashboard: React.FC = () => {
 
   const getOrbitColor = (orbit: string) => {
     switch (orbit) {
-      case "LEO": return "bg-blue-500";
-      case "MEO": return "bg-green-500";
-      case "GEO": return "bg-purple-500";
-      case "HEO": return "bg-orange-500";
-      default: return "bg-gray-500";
+    case "LEO": return "bg-blue-500";
+    case "MEO": return "bg-green-500";
+    case "GEO": return "bg-purple-500";
+    case "HEO": return "bg-orange-500";
+    default: return "bg-gray-500";
     }
   };
 
   const getStatusBadge = (status: string) => {
     switch (status) {
-      case "active": return <Badge className="bg-green-500">Ativo</Badge>;
-      case "inactive": return <Badge variant="secondary">Inativo</Badge>;
-      case "maintenance": return <Badge className="bg-yellow-500">Manutenção</Badge>;
-      default: return <Badge variant="outline">{status}</Badge>;
+    case "active": return <Badge className="bg-green-500">Ativo</Badge>;
+    case "inactive": return <Badge variant="secondary">Inativo</Badge>;
+    case "maintenance": return <Badge className="bg-yellow-500">Manutenção</Badge>;
+    default: return <Badge variant="outline">{status}</Badge>;
     }
   };
 
@@ -147,7 +147,7 @@ export const SatelliteDashboard: React.FC = () => {
             size="sm"
             onClick={() => setShowAICopilot(!showAICopilot)}
           >
-            <Bot className={`h-4 w-4 mr-2 ${showAICopilot ? 'text-primary' : ''}`} />
+            <Bot className={`h-4 w-4 mr-2 ${showAICopilot ? "text-primary" : ""}`} />
             AI Copilot
           </Button>
           <Button onClick={handleRefresh} disabled={isUpdating}>
@@ -266,7 +266,7 @@ export const SatelliteDashboard: React.FC = () => {
                           <div className="flex items-center gap-2">
                             <Satellite className="h-4 w-4 text-primary" />
                             <span className="font-medium text-sm truncate max-w-[120px]">
-                              {sat.satellite_name.split(' ')[0]}
+                              {sat.satellite_name.split(" ")[0]}
                             </span>
                           </div>
                           <Badge className={`${getOrbitColor(sat.orbit_type)} text-xs`}>
@@ -289,8 +289,8 @@ export const SatelliteDashboard: React.FC = () => {
                           </div>
                           <div className="flex items-center gap-1 mt-1">
                             <Eye className={`h-3 w-3 ${
-                              sat.visibility === 'visible' ? 'text-green-500' : 
-                              sat.visibility === 'eclipsed' ? 'text-gray-500' : 'text-yellow-500'
+                              sat.visibility === "visible" ? "text-green-500" : 
+                                sat.visibility === "eclipsed" ? "text-gray-500" : "text-yellow-500"
                             }`} />
                             <span className="capitalize">{sat.visibility}</span>
                           </div>
@@ -303,7 +303,7 @@ export const SatelliteDashboard: React.FC = () => {
             </Card>
 
             {/* Center: Visualization */}
-            <Card className={`${showAICopilot ? 'lg:col-span-5' : 'lg:col-span-6'}`}>
+            <Card className={`${showAICopilot ? "lg:col-span-5" : "lg:col-span-6"}`}>
               <CardHeader className="pb-3">
                 <CardTitle className="text-lg flex items-center gap-2">
                   <Globe className="h-5 w-5" />
@@ -379,7 +379,7 @@ export const SatelliteDashboard: React.FC = () => {
             </Card>
 
             {/* Right Panel: Detail Panel or AI Copilot */}
-            <div className={`${showAICopilot ? 'lg:col-span-4' : 'lg:col-span-3'} space-y-4`}>
+            <div className={`${showAICopilot ? "lg:col-span-4" : "lg:col-span-3"} space-y-4`}>
               {selectedSatellite && (
                 <SatelliteDetailPanel satellite={selectedSatellite} />
               )}

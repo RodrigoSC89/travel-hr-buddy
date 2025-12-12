@@ -5,8 +5,8 @@
  * Captura erros React e exibe UI de fallback
  */
 
-import React, { Component, ErrorInfo, ReactNode } from 'react';
-import { logger } from '@/lib/logger';
+import React, { Component, ErrorInfo, ReactNode } from "react";
+import { logger } from "@/lib/logger";
 
 interface Props {
   children: ReactNode;
@@ -39,7 +39,7 @@ export class ErrorBoundary extends Component<Props, State> {
 
   componentDidCatch(error: Error, errorInfo: ErrorInfo): void {
     // Log error
-    logger.error('Error caught by boundary:', { error, errorInfo });
+    logger.error("Error caught by boundary:", { error, errorInfo });
     
     this.setState({
       error,
@@ -73,33 +73,33 @@ export class ErrorBoundary extends Component<Props, State> {
       // Default error UI
       return (
         <div style={{
-          padding: '2rem',
-          margin: '2rem auto',
-          maxWidth: '600px',
-          border: '2px solid #ef4444',
-          borderRadius: '8px',
-          backgroundColor: '#fef2f2',
+          padding: "2rem",
+          margin: "2rem auto",
+          maxWidth: "600px",
+          border: "2px solid #ef4444",
+          borderRadius: "8px",
+          backgroundColor: "#fef2f2",
         }}>
-          <h2 style={{ color: '#dc2626', marginBottom: '1rem' }}>
+          <h2 style={{ color: "#dc2626", marginBottom: "1rem" }}>
             ⚠️ Algo deu errado
           </h2>
           
-          <p style={{ marginBottom: '1rem' }}>
+          <p style={{ marginBottom: "1rem" }}>
             Desculpe, ocorreu um erro inesperado. Nossa equipe foi notificada.
           </p>
           
           {this.state.error && (
-            <details style={{ marginBottom: '1rem' }}>
-              <summary style={{ cursor: 'pointer', fontWeight: 'bold' }}>
+            <details style={{ marginBottom: "1rem" }}>
+              <summary style={{ cursor: "pointer", fontWeight: "bold" }}>
                 Detalhes do erro
               </summary>
               <pre style={{
-                padding: '1rem',
-                backgroundColor: '#fee2e2',
-                borderRadius: '4px',
-                overflow: 'auto',
-                fontSize: '0.875rem',
-                marginTop: '0.5rem',
+                padding: "1rem",
+                backgroundColor: "#fee2e2",
+                borderRadius: "4px",
+                overflow: "auto",
+                fontSize: "0.875rem",
+                marginTop: "0.5rem",
               }}>
                 {this.state.error.toString()}
                 {this.state.errorInfo && this.state.errorInfo.componentStack}
@@ -110,13 +110,13 @@ export class ErrorBoundary extends Component<Props, State> {
           <button
             onClick={this.handleReset}
             style={{
-              padding: '0.5rem 1rem',
-              backgroundColor: '#3b82f6',
-              color: 'white',
-              border: 'none',
-              borderRadius: '4px',
-              cursor: 'pointer',
-              fontWeight: 'bold',
+              padding: "0.5rem 1rem",
+              backgroundColor: "#3b82f6",
+              color: "white",
+              border: "none",
+              borderRadius: "4px",
+              cursor: "pointer",
+              fontWeight: "bold",
             }}
           >
             Tentar novamente
@@ -146,7 +146,7 @@ export interface ErrorContext {
  * Log error with context
  */
 export function logError(error: Error, context?: ErrorContext): void {
-  logger.error('Error:', { error, context });
+  logger.error("Error:", { error, context });
   
   // TODO: Send to error tracking service
   // if (window.Sentry) {
@@ -166,10 +166,10 @@ export function handleApiError(error: any, context?: ErrorContext): {
 } {
   // Network error
   if (!error.response) {
-    logError(new Error('Network error'), context);
+    logError(new Error("Network error"), context);
     return {
-      message: 'Erro de conexão. Verifique sua internet.',
-      code: 'NETWORK_ERROR',
+      message: "Erro de conexão. Verifique sua internet.",
+      code: "NETWORK_ERROR",
     };
   }
   
@@ -177,40 +177,40 @@ export function handleApiError(error: any, context?: ErrorContext): {
   const status = error.response?.status;
   const data = error.response?.data;
   
-  let message = 'Ocorreu um erro. Tente novamente.';
-  let code = 'UNKNOWN_ERROR';
+  let message = "Ocorreu um erro. Tente novamente.";
+  let code = "UNKNOWN_ERROR";
   
   switch (status) {
-    case 400:
-      message = data?.error || 'Dados inválidos. Verifique os campos.';
-      code = 'BAD_REQUEST';
-      break;
-    case 401:
-      message = 'Sessão expirada. Faça login novamente.';
-      code = 'UNAUTHORIZED';
-      break;
-    case 403:
-      message = 'Você não tem permissão para esta ação.';
-      code = 'FORBIDDEN';
-      break;
-    case 404:
-      message = 'Recurso não encontrado.';
-      code = 'NOT_FOUND';
-      break;
-    case 429:
-      message = 'Muitas requisições. Aguarde um momento.';
-      code = 'RATE_LIMIT';
-      break;
-    case 500:
-    case 502:
-    case 503:
-      message = 'Erro no servidor. Tente novamente em alguns minutos.';
-      code = 'SERVER_ERROR';
-      break;
-    default:
-      if (data?.error) {
-        message = data.error;
-      }
+  case 400:
+    message = data?.error || "Dados inválidos. Verifique os campos.";
+    code = "BAD_REQUEST";
+    break;
+  case 401:
+    message = "Sessão expirada. Faça login novamente.";
+    code = "UNAUTHORIZED";
+    break;
+  case 403:
+    message = "Você não tem permissão para esta ação.";
+    code = "FORBIDDEN";
+    break;
+  case 404:
+    message = "Recurso não encontrado.";
+    code = "NOT_FOUND";
+    break;
+  case 429:
+    message = "Muitas requisições. Aguarde um momento.";
+    code = "RATE_LIMIT";
+    break;
+  case 500:
+  case 502:
+  case 503:
+    message = "Erro no servidor. Tente novamente em alguns minutos.";
+    code = "SERVER_ERROR";
+    break;
+  default:
+    if (data?.error) {
+      message = data.error;
+    }
   }
   
   logError(new Error(message), { ...context, status, code });
@@ -251,8 +251,8 @@ export async function retryOperation<T>(
   }
   
   // All retries failed
-  logError(lastError || new Error('All retries failed'));
-  throw lastError || new Error('All retries failed');
+  logError(lastError || new Error("All retries failed"));
+  throw lastError || new Error("All retries failed");
 }
 
 /**
@@ -302,6 +302,6 @@ export function cleanupErrorCache(): void {
 }
 
 // Auto-cleanup every 5 minutes
-if (typeof window !== 'undefined') {
+if (typeof window !== "undefined") {
   setInterval(cleanupErrorCache, 5 * 60 * 1000);
 }

@@ -14,7 +14,7 @@ class StartupOptimizer {
     if (this.isInitialized) return;
     this.isInitialized = true;
 
-    this.recordMilestone('init');
+    this.recordMilestone("init");
     this.optimizeInitialLoad();
     this.setupPerformanceObserver();
   }
@@ -29,18 +29,18 @@ class StartupOptimizer {
     // Optimize images in viewport
     this.optimizeViewportImages();
     
-    this.recordMilestone('optimizations-applied');
+    this.recordMilestone("optimizations-applied");
   }
 
   private deferNonCriticalCSS() {
     // Find all stylesheets that aren't critical
-    const stylesheets = document.querySelectorAll('link[rel="stylesheet"]');
+    const stylesheets = document.querySelectorAll("link[rel=\"stylesheet\"]");
     stylesheets.forEach((link) => {
-      const href = link.getAttribute('href') || '';
+      const href = link.getAttribute("href") || "";
       // Keep critical styles, defer others
-      if (!href.includes('index') && !href.includes('critical')) {
-        link.setAttribute('media', 'print');
-        link.setAttribute('onload', "this.media='all'");
+      if (!href.includes("index") && !href.includes("critical")) {
+        link.setAttribute("media", "print");
+        link.setAttribute("onload", "this.media='all'");
       }
     });
   }
@@ -53,53 +53,53 @@ class StartupOptimizer {
     }
 
     // Preload fonts
-    this.addPreconnect('https://fonts.googleapis.com');
-    this.addPreconnect('https://fonts.gstatic.com');
+    this.addPreconnect("https://fonts.googleapis.com");
+    this.addPreconnect("https://fonts.gstatic.com");
   }
 
   private addPreconnect(url: string) {
     if (document.querySelector(`link[href="${url}"]`)) return;
     
-    const link = document.createElement('link');
-    link.rel = 'preconnect';
+    const link = document.createElement("link");
+    link.rel = "preconnect";
     link.href = url;
-    link.crossOrigin = 'anonymous';
+    link.crossOrigin = "anonymous";
     document.head.appendChild(link);
   }
 
   private optimizeViewportImages() {
     // Set loading="eager" for above-the-fold images
     requestIdleCallback(() => {
-      const images = document.querySelectorAll('img[data-critical="true"]');
+      const images = document.querySelectorAll("img[data-critical=\"true\"]");
       images.forEach((img) => {
-        img.setAttribute('loading', 'eager');
-        img.setAttribute('decoding', 'sync');
+        img.setAttribute("loading", "eager");
+        img.setAttribute("decoding", "sync");
       });
     }, { timeout: 100 });
   }
 
   private setupPerformanceObserver() {
-    if (!('PerformanceObserver' in window)) return;
+    if (!("PerformanceObserver" in window)) return;
 
     try {
       // Observe LCP
       const lcpObserver = new PerformanceObserver((list) => {
         const entries = list.getEntries();
         const lastEntry = entries[entries.length - 1];
-        this.recordMilestone('lcp', lastEntry.startTime);
+        this.recordMilestone("lcp", lastEntry.startTime);
       });
-      lcpObserver.observe({ type: 'largest-contentful-paint', buffered: true });
+      lcpObserver.observe({ type: "largest-contentful-paint", buffered: true });
 
       // Observe FCP
       const fcpObserver = new PerformanceObserver((list) => {
         const entries = list.getEntries();
         entries.forEach((entry) => {
-          if (entry.name === 'first-contentful-paint') {
-            this.recordMilestone('fcp', entry.startTime);
+          if (entry.name === "first-contentful-paint") {
+            this.recordMilestone("fcp", entry.startTime);
           }
         });
       });
-      fcpObserver.observe({ type: 'paint', buffered: true });
+      fcpObserver.observe({ type: "paint", buffered: true });
     } catch {
       // Ignore observer errors
     }
@@ -127,7 +127,7 @@ class StartupOptimizer {
     const metrics = {
       totalLoadTime: this.getLoadTime(),
       milestones: this.getMilestones(),
-      connection: (navigator as any).connection?.effectiveType || 'unknown',
+      connection: (navigator as any).connection?.effectiveType || "unknown",
       memory: (performance as any).memory?.usedJSHeapSize || 0,
     };
 
@@ -139,12 +139,12 @@ class StartupOptimizer {
 export const startupOptimizer = new StartupOptimizer();
 
 // Initialize immediately
-if (typeof window !== 'undefined') {
+if (typeof window !== "undefined") {
   startupOptimizer.init();
 }
 
 // Polyfill for requestIdleCallback
-if (typeof window !== 'undefined' && !('requestIdleCallback' in window)) {
+if (typeof window !== "undefined" && !("requestIdleCallback" in window)) {
   (window as any).requestIdleCallback = (cb: IdleRequestCallback, options?: IdleRequestOptions) => {
     const start = Date.now();
     return setTimeout(() => {

@@ -277,15 +277,15 @@ const Templates = () => {
     setTemplates(prev => prev.map(t => 
       t.id === selectedTemplate.id 
         ? {
-            ...t,
-            name: newTemplate.name,
-            description: newTemplate.description,
-            category: newTemplate.category,
-            type: newTemplate.type,
-            content: newTemplate.content,
-            lastModified: new Date().toISOString().split("T")[0],
-            variables: extractVariables(newTemplate.content)
-          }
+          ...t,
+          name: newTemplate.name,
+          description: newTemplate.description,
+          category: newTemplate.category,
+          type: newTemplate.type,
+          content: newTemplate.content,
+          lastModified: new Date().toISOString().split("T")[0],
+          variables: extractVariables(newTemplate.content)
+        }
         : t
     ));
     

@@ -55,7 +55,7 @@ const NautilusCommandHero = memo(() => {
   return (
     <Card 
       className="relative overflow-hidden border-2 border-primary/30 bg-gradient-to-br from-primary/10 via-background to-cyan-500/10 cursor-pointer hover:border-primary/50 transition-all duration-300 group"
-      onClick={() => navigate('/nautilus-command')}
+      onClick={() => navigate("/nautilus-command")}
     >
       <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_top_right,_var(--tw-gradient-stops))] from-primary/20 via-transparent to-transparent opacity-50" />
       <CardContent className="relative p-6">
@@ -84,11 +84,11 @@ const NautilusCommandHero = memo(() => {
         
         <div className="grid grid-cols-5 gap-3 mt-4">
           {[
-            { label: 'Frota', icon: Ship, color: 'text-blue-500' },
-            { label: 'Tripulação', icon: Users, color: 'text-emerald-500' },
-            { label: 'Estoque', icon: ShoppingCart, color: 'text-amber-500' },
-            { label: 'Manutenção', icon: Wrench, color: 'text-purple-500' },
-            { label: 'IoT', icon: Sparkles, color: 'text-cyan-500' },
+            { label: "Frota", icon: Ship, color: "text-blue-500" },
+            { label: "Tripulação", icon: Users, color: "text-emerald-500" },
+            { label: "Estoque", icon: ShoppingCart, color: "text-amber-500" },
+            { label: "Manutenção", icon: Wrench, color: "text-purple-500" },
+            { label: "IoT", icon: Sparkles, color: "text-cyan-500" },
           ].map((item) => (
             <div key={item.label} className="flex flex-col items-center gap-1 p-2 rounded-lg bg-muted/50">
               <item.icon className={`h-5 w-5 ${item.color}`} />
@@ -101,7 +101,7 @@ const NautilusCommandHero = memo(() => {
   );
 });
 
-NautilusCommandHero.displayName = 'NautilusCommandHero';
+NautilusCommandHero.displayName = "NautilusCommandHero";
 
 // Quick Access to AI Modules - Memoized
 const AIModulesPanel = memo(() => {
@@ -229,7 +229,7 @@ const AIModulesPanel = memo(() => {
   );
 });
 
-AIModulesPanel.displayName = 'AIModulesPanel';
+AIModulesPanel.displayName = "AIModulesPanel";
 
 const Index = () => {
   const [activeTab, setActiveTab] = useState("overview");
@@ -271,117 +271,117 @@ const Index = () => {
       </Suspense>
       
       <div className="space-y-6 p-6 bg-gradient-to-br from-background via-background to-primary/5 min-h-screen">
-      <div className="flex items-center justify-between">
-        <ProfessionalHeader
-          title="Dashboard Executivo"
-          subtitle="Visão estratégica e métricas em tempo real - Sistema Nautilus One"
-          showLogo={true}
-          showRealTime={true}
-        />
-        <Link to="/qa/preview">
-          <Button variant="outline" size="sm" className="gap-2">
-            <Shield className="h-4 w-4" />
+        <div className="flex items-center justify-between">
+          <ProfessionalHeader
+            title="Dashboard Executivo"
+            subtitle="Visão estratégica e métricas em tempo real - Sistema Nautilus One"
+            showLogo={true}
+            showRealTime={true}
+          />
+          <Link to="/qa/preview">
+            <Button variant="outline" size="sm" className="gap-2">
+              <Shield className="h-4 w-4" />
             QA Dashboard
-          </Button>
-        </Link>
-      </div>
+            </Button>
+          </Link>
+        </div>
 
-      {/* PATCH 1000: Nautilus Command Center Hero */}
-      <NautilusCommandHero />
+        {/* PATCH 1000: Nautilus Command Center Hero */}
+        <NautilusCommandHero />
 
-      {/* PATCH 549: AI Modules Quick Access */}
-      <AIModulesPanel />
+        {/* PATCH 549: AI Modules Quick Access */}
+        <AIModulesPanel />
 
-      {/* Live Dashboard Stats with real data */}
-      <Suspense fallback={<LoadingPlaceholder />}>
-        <LiveDashboardStats />
-      </Suspense>
+        {/* Live Dashboard Stats with real data */}
+        <Suspense fallback={<LoadingPlaceholder />}>
+          <LiveDashboardStats />
+        </Suspense>
 
-      {/* Dashboard Actions */}
-      <Suspense fallback={<LoadingPlaceholder />}>
-        <DashboardActions />
-      </Suspense>
+        {/* Dashboard Actions */}
+        <Suspense fallback={<LoadingPlaceholder />}>
+          <DashboardActions />
+        </Suspense>
 
-      {/* PATCH 801: Quick Actions, Network Status & Performance */}
-      <div className="grid lg:grid-cols-4 gap-4">
-        <div className="lg:col-span-2">
+        {/* PATCH 801: Quick Actions, Network Status & Performance */}
+        <div className="grid lg:grid-cols-4 gap-4">
+          <div className="lg:col-span-2">
+            <Suspense fallback={<LoadingPlaceholder />}>
+              <QuickActionsPanel />
+            </Suspense>
+          </div>
           <Suspense fallback={<LoadingPlaceholder />}>
-            <QuickActionsPanel />
+            <NetworkStatusWidget />
+          </Suspense>
+          <Suspense fallback={<LoadingPlaceholder />}>
+            <PerformanceMonitor />
           </Suspense>
         </div>
-        <Suspense fallback={<LoadingPlaceholder />}>
-          <NetworkStatusWidget />
-        </Suspense>
-        <Suspense fallback={<LoadingPlaceholder />}>
-          <PerformanceMonitor />
-        </Suspense>
-      </div>
 
-      {/* PATCH 802: AI Modules Grid */}
-      <Card className="border-primary/20">
-        <CardHeader className="pb-3">
-          <CardTitle className="flex items-center gap-2 text-lg">
-            <Brain className="h-5 w-5 text-primary" />
+        {/* PATCH 802: AI Modules Grid */}
+        <Card className="border-primary/20">
+          <CardHeader className="pb-3">
+            <CardTitle className="flex items-center gap-2 text-lg">
+              <Brain className="h-5 w-5 text-primary" />
             Central de Inteligência Artificial
-          </CardTitle>
-        </CardHeader>
-        <CardContent>
-          <Suspense fallback={<LoadingPlaceholder />}>
-            <AIModulesGrid />
-          </Suspense>
-        </CardContent>
-      </Card>
+            </CardTitle>
+          </CardHeader>
+          <CardContent>
+            <Suspense fallback={<LoadingPlaceholder />}>
+              <AIModulesGrid />
+            </Suspense>
+          </CardContent>
+        </Card>
 
-      {/* PATCH 800: Sistema de Controle Unificado */}
-      <Suspense fallback={<LoadingPlaceholder />}>
-        <SystemControlPanel />
-      </Suspense>
+        {/* PATCH 800: Sistema de Controle Unificado */}
+        <Suspense fallback={<LoadingPlaceholder />}>
+          <SystemControlPanel />
+        </Suspense>
 
-      {/* PATCH 584: KPIs Grid extracted to memoized component */}
-      <Suspense fallback={<LoadingPlaceholder />}>
-        <KPIGrid />
-      </Suspense>
+        {/* PATCH 584: KPIs Grid extracted to memoized component */}
+        <Suspense fallback={<LoadingPlaceholder />}>
+          <KPIGrid />
+        </Suspense>
 
-      {/* Main Tabs */}
-      <Tabs value={activeTab} onValueChange={handleTabChange} className="space-y-6">
-        <TabsList className="grid w-full grid-cols-3 bg-card/50 border border-primary/10">
-          <TabsTrigger value="overview" className="data-[state=active]:bg-primary data-[state=active]:text-primary-foreground">
+        {/* Main Tabs */}
+        <Tabs value={activeTab} onValueChange={handleTabChange} className="space-y-6">
+          <TabsList className="grid w-full grid-cols-3 bg-card/50 border border-primary/10">
+            <TabsTrigger value="overview" className="data-[state=active]:bg-primary data-[state=active]:text-primary-foreground">
             Visão Geral
-          </TabsTrigger>
-          <TabsTrigger value="financial" className="data-[state=active]:bg-primary data-[state=active]:text-primary-foreground">
+            </TabsTrigger>
+            <TabsTrigger value="financial" className="data-[state=active]:bg-primary data-[state=active]:text-primary-foreground">
             Financeiro
-          </TabsTrigger>
-          <TabsTrigger value="operations" className="data-[state=active]:bg-primary data-[state=active]:text-primary-foreground">
+            </TabsTrigger>
+            <TabsTrigger value="operations" className="data-[state=active]:bg-primary data-[state=active]:text-primary-foreground">
             Operações
-          </TabsTrigger>
-        </TabsList>
+            </TabsTrigger>
+          </TabsList>
 
-        <TabsContent value="overview" className="space-y-6">
-          {/* PATCH 584: Charts extracted to memoized component */}
-          <Suspense fallback={<LoadingPlaceholder />}>
-            <OverviewCharts revenueData={REVENUE_DATA} fleetData={FLEET_DATA} />
-          </Suspense>
+          <TabsContent value="overview" className="space-y-6">
+            {/* PATCH 584: Charts extracted to memoized component */}
+            <Suspense fallback={<LoadingPlaceholder />}>
+              <OverviewCharts revenueData={REVENUE_DATA} fleetData={FLEET_DATA} />
+            </Suspense>
           
-          {/* PATCH 584: Quick Stats extracted to memoized component */}
-          <Suspense fallback={<LoadingPlaceholder />}>
-            <QuickStats />
-          </Suspense>
-        </TabsContent>
+            {/* PATCH 584: Quick Stats extracted to memoized component */}
+            <Suspense fallback={<LoadingPlaceholder />}>
+              <QuickStats />
+            </Suspense>
+          </TabsContent>
 
-        <TabsContent value="financial">
-          {/* PATCH 584: Financial tab extracted to memoized component */}
-          <Suspense fallback={<LoadingPlaceholder />}>
-            <FinancialTab data={REVENUE_DATA} />
-          </Suspense>
-        </TabsContent>
+          <TabsContent value="financial">
+            {/* PATCH 584: Financial tab extracted to memoized component */}
+            <Suspense fallback={<LoadingPlaceholder />}>
+              <FinancialTab data={REVENUE_DATA} />
+            </Suspense>
+          </TabsContent>
 
-        <TabsContent value="operations">
-          {/* PATCH 584: Operations tab extracted to memoized component */}
-          <Suspense fallback={<LoadingPlaceholder />}>
-            <OperationsTab />
-          </Suspense>
-        </TabsContent>
-      </Tabs>
+          <TabsContent value="operations">
+            {/* PATCH 584: Operations tab extracted to memoized component */}
+            <Suspense fallback={<LoadingPlaceholder />}>
+              <OperationsTab />
+            </Suspense>
+          </TabsContent>
+        </Tabs>
       </div>
     </>
   );

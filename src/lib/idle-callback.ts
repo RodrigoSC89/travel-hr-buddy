@@ -5,24 +5,24 @@
 
 // Polyfill for requestIdleCallback
 export const requestIdleCallback = 
-  typeof window !== 'undefined' && 'requestIdleCallback' in window
+  typeof window !== "undefined" && "requestIdleCallback" in window
     ? window.requestIdleCallback
     : (cb: IdleRequestCallback): number => {
-        const start = Date.now();
-        return window.setTimeout(() => {
-          cb({
-            didTimeout: false,
-            timeRemaining: () => Math.max(0, 50 - (Date.now() - start)),
-          });
-        }, 1);
-      };
+      const start = Date.now();
+      return window.setTimeout(() => {
+        cb({
+          didTimeout: false,
+          timeRemaining: () => Math.max(0, 50 - (Date.now() - start)),
+        });
+      }, 1);
+    };
 
 export const cancelIdleCallback =
-  typeof window !== 'undefined' && 'cancelIdleCallback' in window
+  typeof window !== "undefined" && "cancelIdleCallback" in window
     ? window.cancelIdleCallback
     : (id: number): void => {
-        clearTimeout(id);
-      };
+      clearTimeout(id);
+    };
 
 /**
  * Schedule work during idle time
@@ -60,7 +60,7 @@ export function batchIdleTasks(
       try {
         tasks[taskIndex]();
       } catch (error) {
-        console.error('Error in idle task:', error);
+        console.error("Error in idle task:", error);
       }
       taskIndex++;
     }

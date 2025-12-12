@@ -19,7 +19,7 @@ import {
 
 interface Message {
   id: string;
-  role: 'user' | 'assistant';
+  role: "user" | "assistant";
   content: string;
   timestamp: Date;
 }
@@ -35,9 +35,9 @@ interface MMICopilotProps {
 export const MMICopilot: React.FC<MMICopilotProps> = ({ context }) => {
   const [messages, setMessages] = useState<Message[]>([
     {
-      id: '1',
-      role: 'assistant',
-      content: 'Olá! Sou o Copilot de Manutenção Inteligente. Posso ajudar você a:\n\n• Criar jobs de manutenção\n• Avaliar postergações\n• Gerar ordens de serviço\n• Consultar histórico técnico\n\nComo posso ajudar?',
+      id: "1",
+      role: "assistant",
+      content: "Olá! Sou o Copilot de Manutenção Inteligente. Posso ajudar você a:\n\n• Criar jobs de manutenção\n• Avaliar postergações\n• Gerar ordens de serviço\n• Consultar histórico técnico\n\nComo posso ajudar?",
       timestamp: new Date()
     }
   ]);
@@ -56,7 +56,7 @@ export const MMICopilot: React.FC<MMICopilotProps> = ({ context }) => {
 
     const userMessage: Message = {
       id: Date.now().toString(),
-      role: 'user',
+      role: "user",
       content: input.trim(),
       timestamp: new Date()
     };
@@ -66,7 +66,7 @@ export const MMICopilot: React.FC<MMICopilotProps> = ({ context }) => {
     setLoading(true);
 
     try {
-      const { data, error } = await supabase.functions.invoke('mmi-copilot', {
+      const { data, error } = await supabase.functions.invoke("mmi-copilot", {
         body: {
           messages: [...messages, userMessage].map(m => ({
             role: m.role,
@@ -80,20 +80,20 @@ export const MMICopilot: React.FC<MMICopilotProps> = ({ context }) => {
 
       const assistantMessage: Message = {
         id: (Date.now() + 1).toString(),
-        role: 'assistant',
-        content: data.reply || 'Desculpe, não consegui processar sua solicitação.',
+        role: "assistant",
+        content: data.reply || "Desculpe, não consegui processar sua solicitação.",
         timestamp: new Date()
       };
 
       setMessages(prev => [...prev, assistantMessage]);
     } catch (error) {
-      console.error('Error:', error);
-      toast.error('Erro ao processar mensagem');
+      console.error("Error:", error);
+      toast.error("Erro ao processar mensagem");
       
       const errorMessage: Message = {
         id: (Date.now() + 1).toString(),
-        role: 'assistant',
-        content: 'Ocorreu um erro ao processar sua solicitação. Tente novamente.',
+        role: "assistant",
+        content: "Ocorreu um erro ao processar sua solicitação. Tente novamente.",
         timestamp: new Date()
       };
       setMessages(prev => [...prev, errorMessage]);
@@ -103,7 +103,7 @@ export const MMICopilot: React.FC<MMICopilotProps> = ({ context }) => {
   };
 
   const handleKeyPress = (e: React.KeyboardEvent) => {
-    if (e.key === 'Enter' && !e.shiftKey) {
+    if (e.key === "Enter" && !e.shiftKey) {
       e.preventDefault();
       sendMessage();
     }
@@ -143,32 +143,32 @@ export const MMICopilot: React.FC<MMICopilotProps> = ({ context }) => {
             <div
               key={message.id}
               className={`flex gap-3 ${
-                message.role === 'user' ? 'flex-row-reverse' : ''
+                message.role === "user" ? "flex-row-reverse" : ""
               }`}
             >
               <div className={`shrink-0 p-2 rounded-full ${
-                message.role === 'user' 
-                  ? 'bg-primary text-primary-foreground' 
-                  : 'bg-muted'
+                message.role === "user" 
+                  ? "bg-primary text-primary-foreground" 
+                  : "bg-muted"
               }`}>
-                {message.role === 'user' ? (
+                {message.role === "user" ? (
                   <User className="h-4 w-4" />
                 ) : (
                   <Bot className="h-4 w-4" />
                 )}
               </div>
               <div className={`flex-1 ${
-                message.role === 'user' ? 'text-right' : ''
+                message.role === "user" ? "text-right" : ""
               }`}>
                 <div className={`inline-block p-3 rounded-lg text-sm max-w-[85%] ${
-                  message.role === 'user'
-                    ? 'bg-primary text-primary-foreground'
-                    : 'bg-muted'
+                  message.role === "user"
+                    ? "bg-primary text-primary-foreground"
+                    : "bg-muted"
                 }`}>
                   <div className="whitespace-pre-wrap">{message.content}</div>
                 </div>
                 <div className="text-xs text-muted-foreground mt-1">
-                  {message.timestamp.toLocaleTimeString('pt-BR', { hour: '2-digit', minute: '2-digit' })}
+                  {message.timestamp.toLocaleTimeString("pt-BR", { hour: "2-digit", minute: "2-digit" })}
                 </div>
               </div>
             </div>

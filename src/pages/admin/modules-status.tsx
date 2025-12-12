@@ -131,9 +131,9 @@ const ModulesStatusDashboard: React.FC = () => {
       prev.map((m) =>
         m.id === moduleId
           ? {
-              ...m,
-              status: m.status === "active" ? "inactive" : "active"
-            }
+            ...m,
+            status: m.status === "active" ? "inactive" : "active"
+          }
           : m
       )
     );
@@ -144,9 +144,9 @@ const ModulesStatusDashboard: React.FC = () => {
       prev.map((m) =>
         m.id === moduleId
           ? {
-              ...m,
-              status: m.status === "deprecated" ? "inactive" : "deprecated"
-            }
+            ...m,
+            status: m.status === "deprecated" ? "inactive" : "deprecated"
+          }
           : m
       )
     );

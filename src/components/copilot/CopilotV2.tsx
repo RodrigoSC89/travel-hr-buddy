@@ -166,7 +166,7 @@ export default function CopilotV2() {
                 size="icon"
                 variant={isListening ? "destructive" : "outline"}
               >
-                <Mic className={`h-4 w-4 ${isListening ? 'animate-pulse' : ''}`} />
+                <Mic className={`h-4 w-4 ${isListening ? "animate-pulse" : ""}`} />
               </Button>
             </div>
 

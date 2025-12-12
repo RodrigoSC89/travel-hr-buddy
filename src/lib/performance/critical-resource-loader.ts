@@ -5,9 +5,9 @@
 
 interface ResourcePriority {
   url: string;
-  type: 'script' | 'style' | 'font' | 'image' | 'fetch';
-  priority: 'critical' | 'high' | 'medium' | 'low';
-  crossOrigin?: 'anonymous' | 'use-credentials';
+  type: "script" | "style" | "font" | "image" | "fetch";
+  priority: "critical" | "high" | "medium" | "low";
+  crossOrigin?: "anonymous" | "use-credentials";
 }
 
 class CriticalResourceLoader {
@@ -18,7 +18,7 @@ class CriticalResourceLoader {
    * Preload critical resources immediately
    */
   preloadCritical(resources: ResourcePriority[]) {
-    const critical = resources.filter(r => r.priority === 'critical');
+    const critical = resources.filter(r => r.priority === "critical");
     critical.forEach(resource => this.preload(resource));
   }
 
@@ -47,8 +47,8 @@ class CriticalResourceLoader {
 
   private createPreload(resource: ResourcePriority): Promise<void> {
     return new Promise((resolve, reject) => {
-      const link = document.createElement('link');
-      link.rel = 'preload';
+      const link = document.createElement("link");
+      link.rel = "preload";
       link.href = resource.url;
       link.as = this.getAsType(resource.type);
       
@@ -56,8 +56,8 @@ class CriticalResourceLoader {
         link.crossOrigin = resource.crossOrigin;
       }
 
-      if (resource.type === 'font') {
-        link.crossOrigin = 'anonymous';
+      if (resource.type === "font") {
+        link.crossOrigin = "anonymous";
       }
 
       link.onload = () => resolve();
@@ -67,26 +67,26 @@ class CriticalResourceLoader {
     });
   }
 
-  private getAsType(type: ResourcePriority['type']): string {
+  private getAsType(type: ResourcePriority["type"]): string {
     const typeMap: Record<string, string> = {
-      script: 'script',
-      style: 'style',
-      font: 'font',
-      image: 'image',
-      fetch: 'fetch',
+      script: "script",
+      style: "style",
+      font: "font",
+      image: "image",
+      fetch: "fetch",
     };
-    return typeMap[type] || 'fetch';
+    return typeMap[type] || "fetch";
   }
 
   /**
    * Prefetch resources for future navigation
    */
   prefetchRoute(routePath: string, resources: string[]) {
-    if ('requestIdleCallback' in window) {
+    if ("requestIdleCallback" in window) {
       requestIdleCallback(() => {
         resources.forEach(url => {
-          const link = document.createElement('link');
-          link.rel = 'prefetch';
+          const link = document.createElement("link");
+          link.rel = "prefetch";
           link.href = url;
           document.head.appendChild(link);
         });
@@ -99,8 +99,8 @@ class CriticalResourceLoader {
    */
   dnsPrefetch(domains: string[]) {
     domains.forEach(domain => {
-      const link = document.createElement('link');
-      link.rel = 'dns-prefetch';
+      const link = document.createElement("link");
+      link.rel = "dns-prefetch";
       link.href = domain;
       document.head.appendChild(link);
     });
@@ -111,10 +111,10 @@ class CriticalResourceLoader {
    */
   preconnect(origins: string[]) {
     origins.forEach(origin => {
-      const link = document.createElement('link');
-      link.rel = 'preconnect';
+      const link = document.createElement("link");
+      link.rel = "preconnect";
       link.href = origin;
-      link.crossOrigin = 'anonymous';
+      link.crossOrigin = "anonymous";
       document.head.appendChild(link);
     });
   }
@@ -127,8 +127,8 @@ export const criticalResourceLoader = new CriticalResourceLoader();
  */
 export function useResourcePreload() {
   return {
-    preload: (url: string, type: ResourcePriority['type']) => {
-      criticalResourceLoader.preload({ url, type, priority: 'high' });
+    preload: (url: string, type: ResourcePriority["type"]) => {
+      criticalResourceLoader.preload({ url, type, priority: "high" });
     },
     prefetchRoute: criticalResourceLoader.prefetchRoute.bind(criticalResourceLoader),
     preconnect: criticalResourceLoader.preconnect.bind(criticalResourceLoader),

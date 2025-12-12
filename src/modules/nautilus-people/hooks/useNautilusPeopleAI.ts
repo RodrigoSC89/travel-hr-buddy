@@ -2,9 +2,9 @@
  * Hook para integração com a IA do Nautilus People Hub
  */
 
-import { useState, useCallback } from 'react';
-import { supabase } from '@/integrations/supabase/client';
-import { toast } from 'sonner';
+import { useState, useCallback } from "react";
+import { supabase } from "@/integrations/supabase/client";
+import { toast } from "sonner";
 
 interface AIResponse {
   success: boolean;
@@ -23,7 +23,7 @@ export const useNautilusPeopleAI = () => {
 
     try {
       const { data: response, error: fnError } = await supabase.functions.invoke<AIResponse>(
-        'nautilus-people-ai',
+        "nautilus-people-ai",
         { body: { action, data } }
       );
 
@@ -32,18 +32,18 @@ export const useNautilusPeopleAI = () => {
       }
 
       if (!response?.success) {
-        throw new Error(response?.error || 'Erro desconhecido');
+        throw new Error(response?.error || "Erro desconhecido");
       }
 
       return response.result;
     } catch (err) {
-      const errorMessage = err instanceof Error ? err.message : 'Erro ao processar IA';
+      const errorMessage = err instanceof Error ? err.message : "Erro ao processar IA";
       setError(errorMessage);
       
-      if (errorMessage.includes('429') || errorMessage.includes('limite')) {
-        toast.error('Limite de requisições excedido. Aguarde alguns minutos.');
-      } else if (errorMessage.includes('402') || errorMessage.includes('créditos')) {
-        toast.error('Créditos de IA esgotados. Adicione créditos ao workspace.');
+      if (errorMessage.includes("429") || errorMessage.includes("limite")) {
+        toast.error("Limite de requisições excedido. Aguarde alguns minutos.");
+      } else if (errorMessage.includes("402") || errorMessage.includes("créditos")) {
+        toast.error("Créditos de IA esgotados. Adicione créditos ao workspace.");
       } else {
         toast.error(`Erro na IA: ${errorMessage}`);
       }
@@ -55,35 +55,35 @@ export const useNautilusPeopleAI = () => {
   }, []);
 
   const chat = useCallback(async (message: string) => {
-    return callAI('chat', { message });
+    return callAI("chat", { message });
   }, [callAI]);
 
   const screenCandidate = useCallback(async (candidate: Record<string, unknown>, job: Record<string, unknown>) => {
-    return callAI('screenCandidate', { candidate, job });
+    return callAI("screenCandidate", { candidate, job });
   }, [callAI]);
 
   const generateJobDescription = useCallback(async (title: string, department: string, level: string, details?: string) => {
-    return callAI('generateJobDescription', { title, department, level, details });
+    return callAI("generateJobDescription", { title, department, level, details });
   }, [callAI]);
 
   const analyzePerformance = useCallback(async (employee: Record<string, unknown>, goals: unknown[], feedbacks?: unknown[]) => {
-    return callAI('analyzePerformance', { employee, goals, feedbacks });
+    return callAI("analyzePerformance", { employee, goals, feedbacks });
   }, [callAI]);
 
   const generateOKR = useCallback(async (context: string, department: string, period: string) => {
-    return callAI('generateOKR', { context, department, period });
+    return callAI("generateOKR", { context, department, period });
   }, [callAI]);
 
   const analyzeFeedback = useCallback(async (feedback: string, department: string) => {
-    return callAI('analyzeFeedback', { feedback, department });
+    return callAI("analyzeFeedback", { feedback, department });
   }, [callAI]);
 
   const generateInsights = useCallback(async (metrics: Record<string, unknown>) => {
-    return callAI('generateInsights', { metrics });
+    return callAI("generateInsights", { metrics });
   }, [callAI]);
 
   const predictTurnover = useCallback(async (employee: Record<string, unknown>, history?: Record<string, unknown>) => {
-    return callAI('predictTurnover', { employee, history });
+    return callAI("predictTurnover", { employee, history });
   }, [callAI]);
 
   const suggestTraining = useCallback(async (
@@ -92,11 +92,11 @@ export const useNautilusPeopleAI = () => {
     targetRole?: string,
     evaluations?: unknown[]
   ) => {
-    return callAI('suggestTraining', { employee, currentRole, targetRole, evaluations });
+    return callAI("suggestTraining", { employee, currentRole, targetRole, evaluations });
   }, [callAI]);
 
   const analyzeClimate = useCallback(async (climateData: Record<string, unknown>) => {
-    return callAI('analyzeClimate', { climateData });
+    return callAI("analyzeClimate", { climateData });
   }, [callAI]);
 
   return {

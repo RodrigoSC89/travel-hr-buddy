@@ -3,7 +3,7 @@
  * PATCH 624 - Utilitário para verificar e reportar status de módulos
  */
 
-import { MODULE_REGISTRY, ModuleDefinition, ModuleStatus, ModuleCompleteness } from '@/modules/registry';
+import { MODULE_REGISTRY, ModuleDefinition, ModuleStatus, ModuleCompleteness } from "@/modules/registry";
 
 export interface ModuleStatusReport {
   totalModules: number;
@@ -28,10 +28,10 @@ export function getModuleStatusReport(): ModuleStatusReport {
     deprecatedModules: 0,
     betaModules: 0,
     byCompleteness: {
-      '100%': [],
-      'partial': [],
-      'broken': [],
-      'deprecated': [],
+      "100%": [],
+      "partial": [],
+      "broken": [],
+      "deprecated": [],
     },
     byCategory: {},
   };
@@ -39,23 +39,23 @@ export function getModuleStatusReport(): ModuleStatusReport {
   modules.forEach((module) => {
     // Contagem por status
     switch (module.status) {
-      case 'active':
-        report.activeModules++;
-        break;
-      case 'incomplete':
-        report.incompleteModules++;
-        break;
-      case 'deprecated':
-        report.deprecatedModules++;
-        break;
-      case 'beta':
-      case 'experimental':
-        report.betaModules++;
-        break;
+    case "active":
+      report.activeModules++;
+      break;
+    case "incomplete":
+      report.incompleteModules++;
+      break;
+    case "deprecated":
+      report.deprecatedModules++;
+      break;
+    case "beta":
+    case "experimental":
+      report.betaModules++;
+      break;
     }
     
     // Contagem por completeness
-    const completeness = module.completeness || '100%';
+    const completeness = module.completeness || "100%";
     report.byCompleteness[completeness].push(module.id);
     
     // Contagem por categoria
@@ -70,7 +70,7 @@ export function getModuleStatusReport(): ModuleStatusReport {
  */
 export function getIncompleteModules(): ModuleDefinition[] {
   return Object.values(MODULE_REGISTRY).filter(
-    (m) => m.status === 'incomplete' || m.completeness === 'partial' || m.completeness === 'broken'
+    (m) => m.status === "incomplete" || m.completeness === "partial" || m.completeness === "broken"
   );
 }
 
@@ -79,7 +79,7 @@ export function getIncompleteModules(): ModuleDefinition[] {
  */
 export function getActiveModules(): ModuleDefinition[] {
   return Object.values(MODULE_REGISTRY).filter(
-    (m) => m.status === 'active' && m.completeness === '100%'
+    (m) => m.status === "active" && m.completeness === "100%"
   );
 }
 
@@ -90,7 +90,7 @@ export function isModuleReady(moduleId: string): boolean {
   const module = MODULE_REGISTRY[moduleId];
   if (!module) return false;
   
-  return module.status === 'active' && module.completeness === '100%';
+  return module.status === "active" && module.completeness === "100%";
 }
 
 /**
@@ -104,7 +104,7 @@ export function getModulesByCategory(category: string): ModuleDefinition[] {
  * Log do status dos módulos no console (dev only)
  */
 export function logModuleStatus(): void {
-  if (process.env.NODE_ENV !== 'development') return;
+  if (process.env.NODE_ENV !== "development") return;
   
   const report = getModuleStatusReport();
   const incomplete = getIncompleteModules();

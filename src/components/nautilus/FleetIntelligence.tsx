@@ -292,7 +292,7 @@ export function FleetIntelligence() {
                     <div className="flex items-center justify-between">
                       <div className="flex items-center gap-4">
                         <div className={`p-2 rounded-lg ${getStatusColor(vessel.status)}/20`}>
-                          <StatusIcon className={`h-5 w-5 ${getStatusColor(vessel.status).replace('bg-', 'text-')}`} />
+                          <StatusIcon className={`h-5 w-5 ${getStatusColor(vessel.status).replace("bg-", "text-")}`} />
                         </div>
                         <div>
                           <h4 className="font-semibold">{vessel.name}</h4>

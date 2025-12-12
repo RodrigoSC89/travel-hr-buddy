@@ -101,33 +101,33 @@ const historyData: HistoryItem[] = [
 
 const getStatusBadge = (status: string) => {
   switch (status) {
-    case "success":
-      return <Badge className="bg-emerald-100 text-emerald-700">Sucesso</Badge>;
-    case "warning":
-      return <Badge className="bg-amber-100 text-amber-700">Alerta</Badge>;
-    case "error":
-      return <Badge className="bg-red-100 text-red-700">Erro</Badge>;
-    case "info":
-      return <Badge className="bg-blue-100 text-blue-700">Info</Badge>;
-    default:
-      return <Badge>{status}</Badge>;
+  case "success":
+    return <Badge className="bg-emerald-100 text-emerald-700">Sucesso</Badge>;
+  case "warning":
+    return <Badge className="bg-amber-100 text-amber-700">Alerta</Badge>;
+  case "error":
+    return <Badge className="bg-red-100 text-red-700">Erro</Badge>;
+  case "info":
+    return <Badge className="bg-blue-100 text-blue-700">Info</Badge>;
+  default:
+    return <Badge>{status}</Badge>;
   }
 };
 
 const getTypeIcon = (type: string) => {
   switch (type) {
-    case "analysis":
-      return <TrendingUp className="h-4 w-4 text-purple-500" />;
-    case "operation":
-      return <Activity className="h-4 w-4 text-blue-500" />;
-    case "alert":
-      return <Activity className="h-4 w-4 text-amber-500" />;
-    case "optimization":
-      return <TrendingUp className="h-4 w-4 text-emerald-500" />;
-    case "maintenance":
-      return <Activity className="h-4 w-4 text-cyan-500" />;
-    default:
-      return <Clock className="h-4 w-4" />;
+  case "analysis":
+    return <TrendingUp className="h-4 w-4 text-purple-500" />;
+  case "operation":
+    return <Activity className="h-4 w-4 text-blue-500" />;
+  case "alert":
+    return <Activity className="h-4 w-4 text-amber-500" />;
+  case "optimization":
+    return <TrendingUp className="h-4 w-4 text-emerald-500" />;
+  case "maintenance":
+    return <Activity className="h-4 w-4 text-cyan-500" />;
+  default:
+    return <Clock className="h-4 w-4" />;
   }
 };
 

@@ -3,12 +3,12 @@
  * PATCH 860: UX Polimento Final - Toasts com animações
  */
 
-import React from 'react';
-import { motion, AnimatePresence } from 'framer-motion';
-import { CheckCircle2, XCircle, AlertTriangle, Info, X } from 'lucide-react';
-import { cn } from '@/lib/utils';
+import React from "react";
+import { motion, AnimatePresence } from "framer-motion";
+import { CheckCircle2, XCircle, AlertTriangle, Info, X } from "lucide-react";
+import { cn } from "@/lib/utils";
 
-type ToastType = 'success' | 'error' | 'warning' | 'info';
+type ToastType = "success" | "error" | "warning" | "info";
 
 interface EnhancedToastProps {
   type: ToastType;
@@ -17,7 +17,7 @@ interface EnhancedToastProps {
   isVisible: boolean;
   onClose: () => void;
   duration?: number;
-  position?: 'top-right' | 'top-center' | 'bottom-right' | 'bottom-center';
+  position?: "top-right" | "top-center" | "bottom-right" | "bottom-center";
 }
 
 const iconMap = {
@@ -28,17 +28,17 @@ const iconMap = {
 };
 
 const colorMap = {
-  success: 'border-green-500/50 bg-green-500/10 text-green-500',
-  error: 'border-red-500/50 bg-red-500/10 text-red-500',
-  warning: 'border-amber-500/50 bg-amber-500/10 text-amber-500',
-  info: 'border-blue-500/50 bg-blue-500/10 text-blue-500',
+  success: "border-green-500/50 bg-green-500/10 text-green-500",
+  error: "border-red-500/50 bg-red-500/10 text-red-500",
+  warning: "border-amber-500/50 bg-amber-500/10 text-amber-500",
+  info: "border-blue-500/50 bg-blue-500/10 text-blue-500",
 };
 
 const positionMap = {
-  'top-right': 'top-4 right-4',
-  'top-center': 'top-4 left-1/2 -translate-x-1/2',
-  'bottom-right': 'bottom-4 right-4',
-  'bottom-center': 'bottom-4 left-1/2 -translate-x-1/2',
+  "top-right": "top-4 right-4",
+  "top-center": "top-4 left-1/2 -translate-x-1/2",
+  "bottom-right": "bottom-4 right-4",
+  "bottom-center": "bottom-4 left-1/2 -translate-x-1/2",
 };
 
 export const EnhancedToast: React.FC<EnhancedToastProps> = ({
@@ -48,7 +48,7 @@ export const EnhancedToast: React.FC<EnhancedToastProps> = ({
   isVisible,
   onClose,
   duration = 5000,
-  position = 'top-right',
+  position = "top-right",
 }) => {
   const Icon = iconMap[type];
 
@@ -66,9 +66,9 @@ export const EnhancedToast: React.FC<EnhancedToastProps> = ({
           initial={{ opacity: 0, y: -20, scale: 0.95 }}
           animate={{ opacity: 1, y: 0, scale: 1 }}
           exit={{ opacity: 0, y: -20, scale: 0.95 }}
-          transition={{ type: 'spring', stiffness: 500, damping: 30 }}
+          transition={{ type: "spring", stiffness: 500, damping: 30 }}
           className={cn(
-            'fixed z-50 flex items-start gap-3 p-4 rounded-lg border backdrop-blur-sm shadow-lg max-w-sm',
+            "fixed z-50 flex items-start gap-3 p-4 rounded-lg border backdrop-blur-sm shadow-lg max-w-sm",
             colorMap[type],
             positionMap[position]
           )}
@@ -93,13 +93,13 @@ export const EnhancedToast: React.FC<EnhancedToastProps> = ({
           <motion.div
             initial={{ scaleX: 1 }}
             animate={{ scaleX: 0 }}
-            transition={{ duration: duration / 1000, ease: 'linear' }}
+            transition={{ duration: duration / 1000, ease: "linear" }}
             className={cn(
-              'absolute bottom-0 left-0 right-0 h-1 origin-left rounded-b-lg',
-              type === 'success' && 'bg-green-500',
-              type === 'error' && 'bg-red-500',
-              type === 'warning' && 'bg-amber-500',
-              type === 'info' && 'bg-blue-500'
+              "absolute bottom-0 left-0 right-0 h-1 origin-left rounded-b-lg",
+              type === "success" && "bg-green-500",
+              type === "error" && "bg-red-500",
+              type === "warning" && "bg-amber-500",
+              type === "info" && "bg-blue-500"
             )}
           />
         </motion.div>
@@ -132,16 +132,16 @@ export function useEnhancedToast() {
   }, []);
 
   const success = React.useCallback((title: string, description?: string) => 
-    showToast('success', title, description), [showToast]);
+    showToast("success", title, description), [showToast]);
   
   const error = React.useCallback((title: string, description?: string) => 
-    showToast('error', title, description), [showToast]);
+    showToast("error", title, description), [showToast]);
   
   const warning = React.useCallback((title: string, description?: string) => 
-    showToast('warning', title, description), [showToast]);
+    showToast("warning", title, description), [showToast]);
   
   const info = React.useCallback((title: string, description?: string) => 
-    showToast('info', title, description), [showToast]);
+    showToast("info", title, description), [showToast]);
 
   return { toasts, showToast, hideToast, success, error, warning, info };
 }

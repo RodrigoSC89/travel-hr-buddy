@@ -5,7 +5,7 @@
 
 export interface SafetyIncident {
   id: string;
-  type: 'incident' | 'near_miss' | 'unsafe_condition' | 'unsafe_act';
+  type: "incident" | "near_miss" | "unsafe_condition" | "unsafe_act";
   title: string;
   description: string;
   vessel_id?: string;
@@ -14,8 +14,8 @@ export interface SafetyIncident {
   incident_date: string;
   reported_by?: string;
   reporter_name?: string;
-  severity: 'low' | 'medium' | 'high' | 'critical';
-  status: 'open' | 'investigating' | 'action_pending' | 'resolved' | 'closed';
+  severity: "low" | "medium" | "high" | "critical";
+  status: "open" | "investigating" | "action_pending" | "resolved" | "closed";
   root_cause?: string;
   corrective_actions?: CorrectiveAction[];
   ai_analysis?: AIIncidentAnalysis;
@@ -30,7 +30,7 @@ export interface CorrectiveAction {
   description: string;
   responsible: string;
   due_date: string;
-  status: 'pending' | 'in_progress' | 'completed' | 'overdue';
+  status: "pending" | "in_progress" | "completed" | "overdue";
   completion_date?: string;
   evidence?: string[];
 }
@@ -49,10 +49,10 @@ export interface AIIncidentAnalysis {
 
 export interface SafetyAlert {
   id: string;
-  type: 'prediction' | 'pattern' | 'recommendation' | 'warning' | 'critical';
+  type: "prediction" | "pattern" | "recommendation" | "warning" | "critical";
   title: string;
   description: string;
-  severity: 'low' | 'medium' | 'high' | 'critical';
+  severity: "low" | "medium" | "high" | "critical";
   action: string;
   module?: string;
   read: boolean;
@@ -66,13 +66,13 @@ export interface SafetyTraining {
   crew_member_name: string;
   training_type: string;
   course_name: string;
-  status: 'pending' | 'in_progress' | 'completed' | 'expired';
+  status: "pending" | "in_progress" | "completed" | "expired";
   completion_date?: string;
   expiry_date?: string;
   score?: number;
   certificate_url?: string;
   ai_recommended: boolean;
-  priority: 'low' | 'medium' | 'high' | 'critical';
+  priority: "low" | "medium" | "high" | "critical";
 }
 
 export interface SafetyMetrics {

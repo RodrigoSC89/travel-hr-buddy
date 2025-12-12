@@ -1,9 +1,9 @@
-import React from 'react';
-import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
-import { Button } from '@/components/ui/button';
-import { Badge } from '@/components/ui/badge';
-import { FileText, Download, FileJson, FileSpreadsheet } from 'lucide-react';
-import { toast } from 'sonner';
+import React from "react";
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import { Button } from "@/components/ui/button";
+import { Badge } from "@/components/ui/badge";
+import { FileText, Download, FileJson, FileSpreadsheet } from "lucide-react";
+import { toast } from "sonner";
 
 interface OVIDReportsProps {
   vesselName: string;
@@ -11,7 +11,7 @@ interface OVIDReportsProps {
   inspectorName: string;
   inspectionDate: string;
   status: { compliant: number; nonCompliant: number; notApplicable: number; pending: number };
-  answers: Record<string, { answer: 'yes' | 'no' | 'na' | null; observation: string; evidence: string[] }>;
+  answers: Record<string, { answer: "yes" | "no" | "na" | null; observation: string; evidence: string[] }>;
 }
 
 export const OVIDReports: React.FC<OVIDReportsProps> = ({
@@ -43,19 +43,19 @@ export const OVIDReports: React.FC<OVIDReportsProps> = ({
           <div className="grid grid-cols-2 md:grid-cols-4 gap-4 mb-6">
             <div className="p-3 rounded-lg bg-muted/50">
               <p className="text-xs text-muted-foreground">Embarcação</p>
-              <p className="font-medium">{vesselName || '-'}</p>
+              <p className="font-medium">{vesselName || "-"}</p>
             </div>
             <div className="p-3 rounded-lg bg-muted/50">
               <p className="text-xs text-muted-foreground">IMO</p>
-              <p className="font-medium">{imoNumber || '-'}</p>
+              <p className="font-medium">{imoNumber || "-"}</p>
             </div>
             <div className="p-3 rounded-lg bg-muted/50">
               <p className="text-xs text-muted-foreground">Inspetor</p>
-              <p className="font-medium">{inspectorName || '-'}</p>
+              <p className="font-medium">{inspectorName || "-"}</p>
             </div>
             <div className="p-3 rounded-lg bg-muted/50">
               <p className="text-xs text-muted-foreground">Data</p>
-              <p className="font-medium">{inspectionDate || '-'}</p>
+              <p className="font-medium">{inspectionDate || "-"}</p>
             </div>
           </div>
 
@@ -83,15 +83,15 @@ export const OVIDReports: React.FC<OVIDReportsProps> = ({
           </div>
 
           <div className="flex flex-wrap gap-2">
-            <Button onClick={() => handleExport('pdf')}>
+            <Button onClick={() => handleExport("pdf")}>
               <Download className="w-4 h-4 mr-2" />
               Exportar PDF
             </Button>
-            <Button variant="outline" onClick={() => handleExport('xlsx')}>
+            <Button variant="outline" onClick={() => handleExport("xlsx")}>
               <FileSpreadsheet className="w-4 h-4 mr-2" />
               Exportar Excel
             </Button>
-            <Button variant="outline" onClick={() => handleExport('json')}>
+            <Button variant="outline" onClick={() => handleExport("json")}>
               <FileJson className="w-4 h-4 mr-2" />
               Exportar JSON
             </Button>

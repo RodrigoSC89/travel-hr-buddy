@@ -3,7 +3,7 @@
  * Centralized logging with levels, context, and remote reporting
  */
 
-type LogLevel = 'debug' | 'info' | 'warn' | 'error';
+type LogLevel = "debug" | "info" | "warn" | "error";
 
 interface LogEntry {
   level: LogLevel;
@@ -38,7 +38,7 @@ const LOG_LEVELS: Record<LogLevel, number> = {
 
 class StructuredLogger {
   private config: LoggerConfig = {
-    minLevel: import.meta.env.DEV ? 'debug' : 'info',
+    minLevel: import.meta.env.DEV ? "debug" : "info",
     enableConsole: true,
     enableRemote: import.meta.env.PROD,
     batchSize: 10,
@@ -55,8 +55,8 @@ class StructuredLogger {
     this.startFlushTimer();
 
     // Flush on page unload
-    if (typeof window !== 'undefined') {
-      window.addEventListener('beforeunload', () => this.flush());
+    if (typeof window !== "undefined") {
+      window.addEventListener("beforeunload", () => this.flush());
     }
   }
 
@@ -133,10 +133,10 @@ class StructuredLogger {
 
   private logToConsole(entry: LogEntry) {
     const style = {
-      debug: 'color: gray',
-      info: 'color: blue',
-      warn: 'color: orange',
-      error: 'color: red; font-weight: bold',
+      debug: "color: gray",
+      info: "color: blue",
+      warn: "color: orange",
+      error: "color: red; font-weight: bold",
     };
 
     const prefix = `[${entry.level.toUpperCase()}] ${entry.timestamp}`;
@@ -165,34 +165,34 @@ class StructuredLogger {
 
     try {
       await fetch(this.config.remoteEndpoint, {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ logs }),
         keepalive: true,
       });
     } catch (error) {
       // Re-add to buffer on failure
       this.buffer = [...logs, ...this.buffer].slice(-100);
-      console.warn('[Logger] Failed to flush logs:', error);
-      console.warn('[Logger] Failed to flush logs:', error);
+      console.warn("[Logger] Failed to flush logs:", error);
+      console.warn("[Logger] Failed to flush logs:", error);
     }
   }
 
   // Convenience methods
   debug(message: string, context?: Record<string, any>) {
-    this.log('debug', message, context);
+    this.log("debug", message, context);
   }
 
   info(message: string, context?: Record<string, any>, tags?: string[]) {
-    this.log('info', message, context, undefined, tags);
+    this.log("info", message, context, undefined, tags);
   }
 
   warn(message: string, context?: Record<string, any>, tags?: string[]) {
-    this.log('warn', message, context, undefined, tags);
+    this.log("warn", message, context, undefined, tags);
   }
 
   error(message: string, error?: Error, context?: Record<string, any>, tags?: string[]) {
-    this.log('error', message, context, error, tags);
+    this.log("error", message, context, error, tags);
   }
 
   /**

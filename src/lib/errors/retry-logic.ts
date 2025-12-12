@@ -3,7 +3,7 @@
  * Sistema robusto de retry com exponential backoff
  */
 
-import { RetryOptions } from './types';
+import { RetryOptions } from "./types";
 
 const DEFAULT_RETRY_OPTIONS: RetryOptions = {
   maxRetries: 3,
@@ -47,7 +47,7 @@ function isRetryableError(error: any, retryableStatuses: number[]): boolean {
   }
   
   // Timeout errors
-  if (error.code === 'ECONNABORTED' || error.message?.includes('timeout')) {
+  if (error.code === "ECONNABORTED" || error.message?.includes("timeout")) {
     return true;
   }
   
@@ -99,7 +99,7 @@ export async function retryWithBackoff<T>(
   }
   
   // All retries failed
-  throw lastError || new Error('All retries failed');
+  throw lastError || new Error("All retries failed");
 }
 
 /**
@@ -134,7 +134,7 @@ export async function retryWithCondition<T>(
     }
   }
   
-  throw lastError || new Error('All retries failed');
+  throw lastError || new Error("All retries failed");
 }
 
 /**
@@ -158,7 +158,7 @@ export async function safeAsyncWithRetry<T>(
 export async function withTimeout<T>(
   operation: Promise<T>,
   timeoutMs: number,
-  errorMessage: string = 'Operation timed out'
+  errorMessage: string = "Operation timed out"
 ): Promise<T> {
   return Promise.race([
     operation,

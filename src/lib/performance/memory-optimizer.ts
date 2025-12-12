@@ -41,9 +41,9 @@ class MemoryOptimizer {
       
       for (let i = localStorage.length - 1; i >= 0; i--) {
         const key = localStorage.key(i);
-        if (key?.startsWith('cache_')) {
+        if (key?.startsWith("cache_")) {
           try {
-            const item = JSON.parse(localStorage.getItem(key) || '{}');
+            const item = JSON.parse(localStorage.getItem(key) || "{}");
             if (item.timestamp && now - item.timestamp > maxAge) {
               localStorage.removeItem(key);
             }
@@ -54,20 +54,20 @@ class MemoryOptimizer {
         }
       }
     } catch (e) {
-      console.warn('[MemoryOptimizer] Error clearing localStorage:', e);
-      console.warn('[MemoryOptimizer] Error clearing localStorage:', e);
+      console.warn("[MemoryOptimizer] Error clearing localStorage:", e);
+      console.warn("[MemoryOptimizer] Error clearing localStorage:", e);
     }
   }
 
   clearUnusedImages(): void {
-    if (typeof document === 'undefined') return;
+    if (typeof document === "undefined") return;
     
-    const images = document.querySelectorAll('img[data-lazy]');
+    const images = document.querySelectorAll("img[data-lazy]");
     images.forEach((img) => {
       const htmlImg = img as HTMLImageElement;
       if (!this.isInViewport(htmlImg)) {
-        htmlImg.src = '';
-        htmlImg.removeAttribute('src');
+        htmlImg.src = "";
+        htmlImg.removeAttribute("src");
       }
     });
   }
@@ -83,20 +83,20 @@ class MemoryOptimizer {
   }
 
   async clearServiceWorkerCache(maxAgeDays: number = 3): Promise<void> {
-    if (!('caches' in window)) return;
+    if (!("caches" in window)) return;
     
     try {
       const cacheNames = await caches.keys();
       const maxAge = maxAgeDays * 24 * 60 * 60 * 1000;
       
       for (const name of cacheNames) {
-        if (name.includes('temp') || name.includes('old')) {
+        if (name.includes("temp") || name.includes("old")) {
           await caches.delete(name);
         }
       }
     } catch (e) {
-      console.warn('[MemoryOptimizer] Error clearing SW cache:', e);
-      console.warn('[MemoryOptimizer] Error clearing SW cache:', e);
+      console.warn("[MemoryOptimizer] Error clearing SW cache:", e);
+      console.warn("[MemoryOptimizer] Error clearing SW cache:", e);
     }
   }
 
@@ -124,21 +124,21 @@ class MemoryOptimizer {
     await this.clearServiceWorkerCache(1);
     
     // Force garbage collection hint
-    if (typeof window !== 'undefined') {
+    if (typeof window !== "undefined") {
       (window as any).gc?.();
     }
   }
 
-  getStats(): { usage: number; status: 'low' | 'normal' | 'high' | 'critical' } {
+  getStats(): { usage: number; status: "low" | "normal" | "high" | "critical" } {
     const usage = this.getMemoryUsage();
-    let status: 'low' | 'normal' | 'high' | 'critical' = 'normal';
+    let status: "low" | "normal" | "high" | "critical" = "normal";
     
     if (usage > this.CRITICAL_MEMORY_THRESHOLD) {
-      status = 'critical';
+      status = "critical";
     } else if (usage > this.HIGH_MEMORY_THRESHOLD) {
-      status = 'high';
+      status = "high";
     } else if (usage < 0.3) {
-      status = 'low';
+      status = "low";
     }
     
     return { usage, status };

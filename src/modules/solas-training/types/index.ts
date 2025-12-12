@@ -1,12 +1,12 @@
 export interface Drill {
   id: string;
   name: string;
-  type: 'fire' | 'abandon' | 'mob' | 'blackout' | 'collision' | 'pollution' | 'security' | 'medical';
-  frequency: 'weekly' | 'monthly' | 'quarterly' | 'semi-annual' | 'annual';
+  type: "fire" | "abandon" | "mob" | "blackout" | "collision" | "pollution" | "security" | "medical";
+  frequency: "weekly" | "monthly" | "quarterly" | "semi-annual" | "annual";
   frequencyLabel: string;
   lastExecution: string | null;
   nextDue: string;
-  status: 'completed' | 'due' | 'overdue' | 'scheduled';
+  status: "completed" | "due" | "overdue" | "scheduled";
   participants: string[];
   totalCrew: number;
   duration?: number; // minutes
@@ -20,7 +20,7 @@ export interface DrillExecution {
   id: string;
   drillId: string;
   drillName: string;
-  drillType: Drill['type'];
+  drillType: Drill["type"];
   executedAt: string;
   duration: number;
   participants: CrewMember[];
@@ -35,12 +35,12 @@ export interface CrewMember {
   id: string;
   name: string;
   position: string;
-  department: 'deck' | 'engine' | 'catering' | 'hotel';
+  department: "deck" | "engine" | "catering" | "hotel";
   joinDate: string;
   photoUrl?: string;
   certifications: Certification[];
   drillParticipation: DrillParticipation[];
-  trainingStatus: 'compliant' | 'expiring' | 'non-compliant';
+  trainingStatus: "compliant" | "expiring" | "non-compliant";
 }
 
 export interface Certification {
@@ -51,7 +51,7 @@ export interface Certification {
   issueDate: string;
   expiryDate: string;
   issuingAuthority: string;
-  status: 'valid' | 'expiring' | 'expired';
+  status: "valid" | "expiring" | "expired";
   documentUrl?: string;
   renewalScheduled?: boolean;
 }
@@ -59,15 +59,15 @@ export interface Certification {
 export interface DrillParticipation {
   drillId: string;
   drillName: string;
-  drillType: Drill['type'];
+  drillType: Drill["type"];
   participatedAt: string;
-  performance: 'excellent' | 'good' | 'satisfactory' | 'needs-improvement';
+  performance: "excellent" | "good" | "satisfactory" | "needs-improvement";
 }
 
 export interface TrainingAlert {
   id: string;
-  type: 'drill_overdue' | 'cert_expiring' | 'cert_expired' | 'drill_due' | 'training_gap';
-  severity: 'info' | 'warning' | 'critical';
+  type: "drill_overdue" | "cert_expiring" | "cert_expired" | "drill_due" | "training_gap";
+  severity: "info" | "warning" | "critical";
   title: string;
   description: string;
   relatedId: string;
@@ -78,7 +78,7 @@ export interface TrainingAlert {
 
 export interface TrainingReport {
   id: string;
-  type: 'drill_log' | 'compliance' | 'certification' | 'annual_summary';
+  type: "drill_log" | "compliance" | "certification" | "annual_summary";
   title: string;
   generatedAt: string;
   generatedBy: string;

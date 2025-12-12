@@ -10,14 +10,14 @@ import {
   ErrorCategory, 
   ErrorContext,
   ErrorTrackingConfig 
-} from './types';
+} from "./types";
 
 class ErrorTrackingService {
   private errors: ErrorLog[] = [];
   private listeners: Set<(error: ErrorLog) => void> = new Set();
   private config: ErrorTrackingConfig = {
     enabled: true,
-    environment: (import.meta.env.MODE as any) || 'development',
+    environment: (import.meta.env.MODE as any) || "development",
     sampleRate: 1.0,
     maxErrors: 100,
     enableConsoleLogging: true,
@@ -39,7 +39,7 @@ class ErrorTrackingService {
     this.initializeGlobalHandlers();
 
     // Expose to window for debugging
-    if (typeof window !== 'undefined') {
+    if (typeof window !== "undefined") {
       (window as any).__NAUTILUS_ERROR_TRACKER__ = this;
     }
   }
@@ -50,7 +50,7 @@ class ErrorTrackingService {
   private async initializeSentry(): Promise<void> {
     try {
       // Dynamic import of Sentry (only if needed)
-      const Sentry = await import('@sentry/react');
+      const Sentry = await import("@sentry/react");
 
       Sentry.init({
         dsn: this.config.sentryDsn,
@@ -67,9 +67,9 @@ class ErrorTrackingService {
         beforeSend(event, hint) {
           // Filter out non-critical errors in development
           if (
-            process.env.NODE_ENV === 'development' &&
+            process.env.NODE_ENV === "development" &&
             hint.originalException instanceof Error &&
-            hint.originalException.message?.includes('ResizeObserver')
+            hint.originalException.message?.includes("ResizeObserver")
           ) {
             return null;
           }
@@ -79,7 +79,7 @@ class ErrorTrackingService {
 
       this.sentryInitialized = true;
     } catch (error) {
-      console.error('Failed to initialize Sentry:', error);
+      console.error("Failed to initialize Sentry:", error);
     }
   }
 
@@ -88,8 +88,8 @@ class ErrorTrackingService {
    */
   track(
     error: Error | string,
-    severity: ErrorSeverity = 'error',
-    category: ErrorCategory = 'unknown',
+    severity: ErrorSeverity = "error",
+    category: ErrorCategory = "unknown",
     context?: ErrorContext
   ): ErrorLog {
     if (!this.config.enabled) {
@@ -121,29 +121,29 @@ class ErrorTrackingService {
    * Track network error
    */
   trackNetworkError(error: Error | string, context?: ErrorContext): ErrorLog {
-    return this.track(error, 'error', 'network', context);
+    return this.track(error, "error", "network", context);
   }
 
   /**
    * Track validation error
    */
   trackValidationError(error: Error | string, context?: ErrorContext): ErrorLog {
-    return this.track(error, 'warning', 'validation', context);
+    return this.track(error, "warning", "validation", context);
   }
 
   /**
    * Track authentication error
    */
   trackAuthError(error: Error | string, context?: ErrorContext): ErrorLog {
-    return this.track(error, 'error', 'authentication', context);
+    return this.track(error, "error", "authentication", context);
   }
 
   /**
    * Track API error
    */
   trackAPIError(error: Error | string, statusCode?: number, context?: ErrorContext): ErrorLog {
-    const severity: ErrorSeverity = statusCode && statusCode >= 500 ? 'critical' : 'error';
-    return this.track(error, severity, 'api', {
+    const severity: ErrorSeverity = statusCode && statusCode >= 500 ? "critical" : "error";
+    return this.track(error, severity, "api", {
       ...context,
       metadata: { ...context?.metadata, statusCode },
     });
@@ -153,7 +153,7 @@ class ErrorTrackingService {
    * Track runtime error
    */
   trackRuntimeError(error: Error | string, context?: ErrorContext): ErrorLog {
-    return this.track(error, 'critical', 'runtime', context);
+    return this.track(error, "critical", "runtime", context);
   }
 
   /**
@@ -165,7 +165,7 @@ class ErrorTrackingService {
     category: ErrorCategory,
     context?: ErrorContext
   ): ErrorLog {
-    const errorObj = typeof error === 'string' ? new Error(error) : error;
+    const errorObj = typeof error === "string" ? new Error(error) : error;
     const isRetryable = this.isRetryableError(errorObj, category);
 
     return {
@@ -178,8 +178,8 @@ class ErrorTrackingService {
       context: {
         ...context,
         timestamp: Date.now(),
-        route: typeof window !== 'undefined' ? window.location.pathname : undefined,
-        userAgent: typeof navigator !== 'undefined' ? navigator.userAgent : undefined,
+        route: typeof window !== "undefined" ? window.location.pathname : undefined,
+        userAgent: typeof navigator !== "undefined" ? navigator.userAgent : undefined,
       },
       isRetryable,
     };
@@ -189,10 +189,10 @@ class ErrorTrackingService {
    * Check if error is retryable
    */
   private isRetryableError(error: Error, category: ErrorCategory): boolean {
-    if (category === 'network') return true;
-    if (category === 'api') {
+    if (category === "network") return true;
+    if (category === "api") {
       // Check for retryable HTTP status codes in error message/context
-      const retryablePatterns = ['408', '429', '500', '502', '503', '504'];
+      const retryablePatterns = ["408", "429", "500", "502", "503", "504"];
       return retryablePatterns.some(pattern => error.message?.includes(pattern));
     }
     return false;
@@ -210,7 +210,7 @@ class ErrorTrackingService {
     }
 
     // Store in window for debugging
-    if (typeof window !== 'undefined') {
+    if (typeof window !== "undefined") {
       (window as any).__NAUTILUS_ERRORS__ = this.errors;
     }
   }
@@ -223,15 +223,15 @@ class ErrorTrackingService {
     const message = `${prefix} ${error.message}`;
 
     switch (error.severity) {
-      case 'critical':
-      case 'error':
-        console.error(message, error);
-        break;
-      case 'warning':
-        console.warn(message, error);
-        break;
-      case 'info':
-        break;
+    case "critical":
+    case "error":
+      console.error(message, error);
+      break;
+    case "warning":
+      console.warn(message, error);
+      break;
+    case "info":
+      break;
     }
   }
 
@@ -240,7 +240,7 @@ class ErrorTrackingService {
    */
   private async sendToSentry(errorLog: ErrorLog): Promise<void> {
     try {
-      const Sentry = await import('@sentry/react');
+      const Sentry = await import("@sentry/react");
       
       const sentryError = new Error(errorLog.message);
       if (errorLog.stack) {
@@ -268,16 +268,16 @@ class ErrorTrackingService {
    */
   private mapSeverityToSentryLevel(severity: ErrorSeverity): any {
     switch (severity) {
-      case 'critical':
-        return 'fatal';
-      case 'error':
-        return 'error';
-      case 'warning':
-        return 'warning';
-      case 'info':
-        return 'info';
-      default:
-        return 'error';
+    case "critical":
+      return "fatal";
+    case "error":
+      return "error";
+    case "warning":
+      return "warning";
+    case "info":
+      return "info";
+    default:
+      return "error";
     }
   }
 
@@ -285,17 +285,17 @@ class ErrorTrackingService {
    * Initialize global error handlers
    */
   private initializeGlobalHandlers(): void {
-    if (typeof window === 'undefined') return;
+    if (typeof window === "undefined") return;
 
     // Handle uncaught errors
-    window.addEventListener('error', (event) => {
+    window.addEventListener("error", (event) => {
       this.track(
         event.error || event.message,
-        'critical',
-        'runtime',
+        "critical",
+        "runtime",
         {
-          component: 'window',
-          action: 'uncaughtError',
+          component: "window",
+          action: "uncaughtError",
           metadata: {
             filename: event.filename,
             lineno: event.lineno,
@@ -306,18 +306,18 @@ class ErrorTrackingService {
     });
 
     // Handle unhandled promise rejections
-    window.addEventListener('unhandledrejection', (event) => {
+    window.addEventListener("unhandledrejection", (event) => {
       const error = event.reason instanceof Error 
         ? event.reason 
         : new Error(String(event.reason));
       
       this.track(
         error,
-        'critical',
-        'runtime',
+        "critical",
+        "runtime",
         {
-          component: 'window',
-          action: 'unhandledRejection',
+          component: "window",
+          action: "unhandledRejection",
         }
       );
     });
@@ -339,7 +339,7 @@ class ErrorTrackingService {
       try {
         listener(error);
       } catch (err) {
-        console.error('Error in error listener:', err);
+        console.error("Error in error listener:", err);
       }
     });
   }
@@ -405,7 +405,7 @@ class ErrorTrackingService {
    */
   clear(): void {
     this.errors = [];
-    if (typeof window !== 'undefined') {
+    if (typeof window !== "undefined") {
       (window as any).__NAUTILUS_ERRORS__ = [];
     }
   }
@@ -415,7 +415,7 @@ class ErrorTrackingService {
    */
   setUserContext(user: { id: string; email?: string; name?: string }): void {
     if (this.sentryInitialized) {
-      import('@sentry/react').then(Sentry => {
+      import("@sentry/react").then(Sentry => {
         Sentry.setUser({
           id: user.id,
           email: user.email,
@@ -430,7 +430,7 @@ class ErrorTrackingService {
    */
   clearUserContext(): void {
     if (this.sentryInitialized) {
-      import('@sentry/react').then(Sentry => {
+      import("@sentry/react").then(Sentry => {
         Sentry.setUser(null);
       });
     }
@@ -441,9 +441,9 @@ class ErrorTrackingService {
 export const errorTrackingService = new ErrorTrackingService();
 
 // Auto-initialize with environment variables
-if (typeof window !== 'undefined') {
+if (typeof window !== "undefined") {
   errorTrackingService.initialize({
     sentryDsn: import.meta.env.VITE_SENTRY_DSN,
-    environment: (import.meta.env.MODE as any) || 'development',
+    environment: (import.meta.env.MODE as any) || "development",
   });
 }
