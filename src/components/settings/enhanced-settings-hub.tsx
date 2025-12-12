@@ -567,12 +567,12 @@ export const EnhancedSettingsHub: React.FC = () => {
   const togglePreviewMode = () => {
     const newPreviewMode = !previewMode;
     setPreviewMode(newPreviewMode);
-    toast({
-      title: newPreviewMode ? "👁️ Modo Prévia" : "💾 Modo Normal",
-      description: newPreviewMode
-        ? "Modo prévia ativado. Veja como as alterações afetarão o sistema."
-        : "Voltando ao modo normal.",
-    };
+        toast({
+          title: "🔍 Modo Prévia",
+          description: settings.advanced.previewMode
+          ? "Modo prévia ativado. Veja como as alterações afetarão o sistema."
+          : "Voltando ao modo normal.",
+        });
   };
 
   const getHealthColor = (score: number) => {
