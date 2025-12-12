@@ -171,4 +171,4 @@ export const MissionAutonomy = memo(function() {
       </Card>
     </div>
   );
-}
+});

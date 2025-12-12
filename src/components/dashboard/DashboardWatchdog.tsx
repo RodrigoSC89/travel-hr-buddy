@@ -260,4 +260,4 @@ async function logWatchdogEvent(data: Record<string, unknown>) {
   } catch (error) {
     logger.error("[Watchdog] Error logging event:", error);
   }
-}
+});

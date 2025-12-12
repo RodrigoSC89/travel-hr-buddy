@@ -168,4 +168,4 @@ export const useSlowConnectionWarning = memo(function() {
     : "Conexão lenta detectada. O carregamento pode demorar mais.";
 
   return { showWarning, warningMessage, connectionType };
-}
+});

@@ -241,4 +241,4 @@ export const InlineLoader = memo(function({
       {text && <span className="text-sm">{text}</span>}
     </div>
   );
-}
+});

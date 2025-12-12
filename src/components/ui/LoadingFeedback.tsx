@@ -317,4 +317,4 @@ export const CardSkeletonGrid = memo(function({
       ))}
     </div>
   );
-}
+});

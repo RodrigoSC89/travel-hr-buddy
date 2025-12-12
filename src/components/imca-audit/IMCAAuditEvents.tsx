@@ -487,4 +487,4 @@ export const IMCAAuditEvents = memo(function({ selectedDPClass }: Props) {
       </Card>
     </div>
   );
-}
+});

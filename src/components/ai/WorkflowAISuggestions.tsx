@@ -554,4 +554,4 @@ Gere sugestões em formato JSON array.`
       </CardContent>
     </Card>
   );
-}
+});

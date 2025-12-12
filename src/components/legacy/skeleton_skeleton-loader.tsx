@@ -141,4 +141,4 @@ export const SkeletonForm = memo(function({ fields = 4, className }: SkeletonPro
       </div>
     </div>
   );
-}
+});

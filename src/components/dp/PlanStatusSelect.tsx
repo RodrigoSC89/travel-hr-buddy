@@ -82,4 +82,4 @@ export const PlanStatusSelect = memo(function({ incident, onUpdate }: PlanStatus
       )}
     </div>
   );
-}
+});

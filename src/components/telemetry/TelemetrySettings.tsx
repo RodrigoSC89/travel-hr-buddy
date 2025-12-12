@@ -336,4 +336,4 @@ export const TelemetrySettings = memo(function({ config, onSave, trigger }: Tele
       </DialogContent>
     </Dialog>
   );
-}
+});

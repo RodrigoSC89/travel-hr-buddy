@@ -229,4 +229,4 @@ export const ModularizedExecutiveDashboard = memo(function() {
       </Card>
     </div>
   );
-}
+});

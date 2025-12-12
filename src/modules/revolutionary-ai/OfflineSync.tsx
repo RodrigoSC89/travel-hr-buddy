@@ -285,4 +285,4 @@ export const OfflineSync = memo(function() {
       </Card>
     </div>
   );
-}
+});

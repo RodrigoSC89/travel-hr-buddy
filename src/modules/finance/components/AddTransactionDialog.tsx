@@ -225,4 +225,4 @@ export const AddTransactionDialog = memo(function({ open, onOpenChange, onSucces
       </DialogContent>
     </Dialog>
   );
-}
+});

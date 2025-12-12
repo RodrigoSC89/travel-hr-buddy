@@ -253,4 +253,4 @@ export const PriceRangeConfig = memo(function() {
       </CardContent>
     </Card>
   );
-}
+});

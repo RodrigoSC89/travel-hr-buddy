@@ -12,4 +12,4 @@ export const AuditSimulator = memo(function() {
       </CardContent>
     </Card>
   );
-}
+});

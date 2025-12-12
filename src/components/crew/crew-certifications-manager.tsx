@@ -448,4 +448,4 @@ export const CrewCertificationsManager = memo(function({ crewMembers = [] }: Cre
       </Card>
     </div>
   );
-}
+});

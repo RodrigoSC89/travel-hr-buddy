@@ -254,4 +254,4 @@ export const ResilienceBadge = memo(function({ className }: { className?: string
       {status.healthScore}%
     </Badge>
   );
-}
+});

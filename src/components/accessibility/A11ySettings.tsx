@@ -255,4 +255,4 @@ function QuickToggle({ active, onClick, icon, label }: QuickToggleProps) {
       {active && <Check className="w-3 h-3 ml-auto" />}
     </motion.button>
   );
-}
+});

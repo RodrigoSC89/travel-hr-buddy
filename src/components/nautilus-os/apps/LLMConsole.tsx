@@ -54,4 +54,4 @@ export const LLMConsole = memo(function() {
       )}
     </div>
   );
-}
+});

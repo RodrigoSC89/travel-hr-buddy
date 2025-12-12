@@ -202,4 +202,4 @@ export const AuditsList = memo(function({ onRefresh }: AuditsListProps) {
       </CardContent>
     </Card>
   );
-}
+});

@@ -213,4 +213,4 @@ export const PageSkeleton = memo(function() {
       </div>
     </div>
   );
-}
+});

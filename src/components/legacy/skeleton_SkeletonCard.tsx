@@ -120,4 +120,4 @@ export const SkeletonDashboard = memo(function() {
       </div>
     </div>
   );
-}
+});

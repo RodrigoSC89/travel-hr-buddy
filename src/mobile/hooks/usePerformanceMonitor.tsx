@@ -234,4 +234,4 @@ export const PerformanceOverlay = memo(function() {
       )}
     </div>
   );
-}
+});

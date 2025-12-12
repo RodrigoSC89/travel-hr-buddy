@@ -342,4 +342,4 @@ export const ComplianceAIAnalysisPanel = memo(function({
       </CardContent>
     </Card>
   );
-}
+});

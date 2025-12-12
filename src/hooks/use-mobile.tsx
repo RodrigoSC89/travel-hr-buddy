@@ -17,4 +17,4 @@ export const useIsMobile = memo(function() {
   }, []);
 
   return !!isMobile;
-}
+});

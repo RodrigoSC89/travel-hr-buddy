@@ -239,4 +239,4 @@ export const TextBlockSkeleton = memo(function({ lines = 3 }: { lines?: number }
       ))}
     </div>
   );
-}
+});

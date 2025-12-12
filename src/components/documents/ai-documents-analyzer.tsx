@@ -758,4 +758,4 @@ export const AIDocumentsAnalyzer = memo(function() {
       </Tabs>
     </div>
   );
-}
+});

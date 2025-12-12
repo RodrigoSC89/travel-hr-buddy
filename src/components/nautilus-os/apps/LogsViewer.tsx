@@ -29,4 +29,4 @@ export const LogsViewer = memo(function() {
       ))}
     </div>
   );
-}
+});

@@ -229,4 +229,4 @@ export const LiveDecisionMap = memo(function({ events }: LiveDecisionMapProps) {
       </CardContent>
     </Card>
   );
-}
+});

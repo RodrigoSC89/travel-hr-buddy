@@ -191,4 +191,4 @@ export const CollaborativeDocumentEditor = memo(function({
       </CardContent>
     </Card>
   );
-}
+});

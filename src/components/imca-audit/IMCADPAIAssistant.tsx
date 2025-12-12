@@ -146,4 +146,4 @@ export const IMCADPAIAssistant = memo(function({ selectedDPClass }: Props) {
       </CardContent>
     </Card>
   );
-}
+});

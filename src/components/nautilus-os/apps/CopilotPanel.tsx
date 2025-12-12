@@ -32,4 +32,4 @@ export const CopilotPanel = memo(function() {
       ))}
     </div>
   );
-}
+});

@@ -87,4 +87,4 @@ export const SatelliteStatus = memo(function({ satellites }: SatelliteStatusProp
       ))}
     </div>
   );
-}
+});

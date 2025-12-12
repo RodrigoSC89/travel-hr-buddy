@@ -288,4 +288,4 @@ export const OperationsDashboard = memo(function() {
       </div>
     </div>
   );
-}
+});

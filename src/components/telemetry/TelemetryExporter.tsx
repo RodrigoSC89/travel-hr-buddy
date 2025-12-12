@@ -264,4 +264,4 @@ export const TelemetryExporter = memo(function({
       </DropdownMenuContent>
     </DropdownMenu>
   );
-}
+});

@@ -241,4 +241,4 @@ export const SemanticDocumentSearch = memo(function() {
       </CardContent>
     </Card>
   );
-}
+});

@@ -165,4 +165,4 @@ export const ComplianceAlertsPanel = memo(function({
       </CardContent>
     </Card>
   );
-}
+});

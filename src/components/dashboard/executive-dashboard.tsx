@@ -517,4 +517,4 @@ export const ExecutiveDashboard = memo(function() {
       </Tabs>
     </div>
   );
-}
+});

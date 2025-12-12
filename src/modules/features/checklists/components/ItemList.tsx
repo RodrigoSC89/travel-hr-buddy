@@ -64,4 +64,4 @@ export const ItemList = memo(function({ items, onToggle, readonly = false }: Ite
       )}
     </div>
   );
-}
+});

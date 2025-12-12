@@ -115,4 +115,4 @@ export const IMCADPChecklist = memo(function({ selectedDPClass, auditData, setAu
       </CardContent>
     </Card>
   );
-}
+});

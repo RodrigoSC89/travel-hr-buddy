@@ -74,4 +74,4 @@ export const CoverageMap = memo(function({ coverageData }: CoverageMapProps) {
       </CardContent>
     </Card>
   );
-}
+});

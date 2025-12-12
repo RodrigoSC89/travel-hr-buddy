@@ -340,4 +340,4 @@ export const ClassSurveyDashboard = memo(function() {
       </Card>
     </div>
   );
-}
+});

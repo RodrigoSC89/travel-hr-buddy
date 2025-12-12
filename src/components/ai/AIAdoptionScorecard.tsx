@@ -220,4 +220,4 @@ export const AIAdoptionScorecard = memo(function({ organizationId, className }: 
       </CardContent>
     </Card>
   );
-}
+});

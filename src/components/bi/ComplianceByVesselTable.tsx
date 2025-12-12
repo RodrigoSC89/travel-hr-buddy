@@ -127,4 +127,4 @@ export const ComplianceByVesselTable = memo(function() {
       </CardContent>
     </Card>
   );
-}
+});

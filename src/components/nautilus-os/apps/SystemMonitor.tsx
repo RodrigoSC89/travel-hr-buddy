@@ -26,4 +26,4 @@ export const SystemMonitor = memo(function() {
       ))}
     </div>
   );
-}
+});

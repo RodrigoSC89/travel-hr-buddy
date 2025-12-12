@@ -72,4 +72,4 @@ export const MissionPlanning = memo(function() {
       </div>
     </div>
   );
-}
+});

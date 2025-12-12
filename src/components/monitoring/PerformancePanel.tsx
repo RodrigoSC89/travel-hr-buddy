@@ -66,4 +66,4 @@ export const PerformancePanel = memo(function({ mqttClient }: PerformancePanelPr
       </CardContent>
     </Card>
   );
-}
+});

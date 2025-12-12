@@ -60,4 +60,4 @@ export const IMCADPCompetencyMatrix = memo(function({ selectedDPClass }: Props) 
       </CardContent>
     </Card>
   );
-}
+});

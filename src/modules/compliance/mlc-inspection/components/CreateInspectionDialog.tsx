@@ -154,4 +154,4 @@ export const CreateInspectionDialog = memo(function({ open, onOpenChange, onInsp
       </DialogContent>
     </Dialog>
   );
-}
+});

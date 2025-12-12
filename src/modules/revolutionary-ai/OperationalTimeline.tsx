@@ -310,4 +310,4 @@ export const OperationalTimeline = memo(function() {
       </Card>
     </div>
   );
-}
+});

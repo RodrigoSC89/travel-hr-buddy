@@ -229,4 +229,4 @@ function MetricCard({
       </p>
     </div>
   );
-}
+});

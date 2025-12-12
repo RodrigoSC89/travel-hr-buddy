@@ -262,4 +262,4 @@ export const DocumentVersionHistory = memo(function({ documentId, onRestore }: D
       </Dialog>
     </>
   );
-}
+});

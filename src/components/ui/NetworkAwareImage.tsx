@@ -218,4 +218,4 @@ export const NetworkAwareAvatar = memo(function({
       )}
     </div>
   );
-}
+});

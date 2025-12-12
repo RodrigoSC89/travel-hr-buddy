@@ -349,4 +349,4 @@ export const ESGDashboard = memo(function() {
       </Card>
     </div>
   );
-}
+});

@@ -158,4 +158,4 @@ export function actionToast(
       onClick: action.onClick,
     },
   };
-}
+});

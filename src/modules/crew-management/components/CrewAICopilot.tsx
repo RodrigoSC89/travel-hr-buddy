@@ -275,4 +275,4 @@ export const CrewAICopilot = memo(function({ crewData, certificates }: CrewAICop
       </CardContent>
     </Card>
   );
-}
+});

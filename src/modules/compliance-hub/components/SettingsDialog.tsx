@@ -439,4 +439,4 @@ export const SettingsDialog = memo(function({
       </DialogContent>
     </Dialog>
   );
-}
+});

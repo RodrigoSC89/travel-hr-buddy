@@ -81,4 +81,4 @@ export const TelemetryConsentBanner = memo(function() {
       </Card>
     </div>
   );
-}
+});

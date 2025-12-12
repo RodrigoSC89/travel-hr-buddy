@@ -310,4 +310,4 @@ export const IncidentsSGSOPanel = memo(function() {
       </div>
     </div>
   );
-}
+});

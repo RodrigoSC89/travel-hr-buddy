@@ -268,4 +268,4 @@ export const DocumentEditor = memo(function({
       </CardContent>
     </Card>
   );
-}
+});

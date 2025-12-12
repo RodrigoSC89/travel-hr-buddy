@@ -242,4 +242,4 @@ export const CertificationsPanel = memo(function({ certificates, crewMembers }: 
       </CardContent>
     </Card>
   );
-}
+});

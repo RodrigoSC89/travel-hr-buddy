@@ -141,4 +141,4 @@ export const InspectorChatbot = memo(function() {
       </CardContent>
     </Card>
   );
-}
+});

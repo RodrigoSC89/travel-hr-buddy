@@ -239,4 +239,4 @@ function InspectionForm({ item, onSubmit, onCancel }: {
       </div>
     </div>
   );
-}
+});

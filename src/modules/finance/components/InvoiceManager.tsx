@@ -74,4 +74,4 @@ export const InvoiceManager = memo(function() {
       </CardContent>
     </Card>
   );
-}
+});

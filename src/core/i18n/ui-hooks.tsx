@@ -313,4 +313,4 @@ export const useNumberFormatter = memo(function() {
   );
 
   return { formatNumber, formatCurrency };
-}
+});

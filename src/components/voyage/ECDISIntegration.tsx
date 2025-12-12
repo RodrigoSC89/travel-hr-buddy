@@ -357,4 +357,4 @@ export const ECDISIntegration = memo(function() {
       </Card>
     </div>
   );
-}
+});

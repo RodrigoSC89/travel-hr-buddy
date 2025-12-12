@@ -204,4 +204,4 @@ export const QuickActionsGrid = memo(function({
       </CardContent>
     </Card>
   );
-}
+});

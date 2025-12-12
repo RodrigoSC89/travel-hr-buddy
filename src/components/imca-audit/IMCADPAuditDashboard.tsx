@@ -539,4 +539,4 @@ export const IMCADPAuditDashboard = memo(function() {
       </Tabs>
     </div>
   );
-}
+});

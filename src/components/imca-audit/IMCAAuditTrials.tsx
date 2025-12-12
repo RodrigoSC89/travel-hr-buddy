@@ -444,4 +444,4 @@ export const IMCAAuditTrials = memo(function({ selectedDPClass }: Props) {
       </Dialog>
     </div>
   );
-}
+});

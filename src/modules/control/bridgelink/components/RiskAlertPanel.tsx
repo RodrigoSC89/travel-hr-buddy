@@ -119,4 +119,4 @@ export const RiskAlertPanel = memo(function({ alerts }: RiskAlertPanelProps) {
       </CardContent>
     </Card>
   );
-}
+});

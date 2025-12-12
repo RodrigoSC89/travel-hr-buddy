@@ -42,4 +42,4 @@ export const LayoutGrid = memo(function({
       {children}
     </div>
   );
-}
+});

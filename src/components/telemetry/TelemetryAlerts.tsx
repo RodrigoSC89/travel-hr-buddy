@@ -308,4 +308,4 @@ export const TelemetryAlerts = memo(function({ alerts: initialAlerts, onAlertsCh
       </CardContent>
     </Card>
   );
-}
+});

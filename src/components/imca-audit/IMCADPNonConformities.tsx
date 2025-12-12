@@ -80,4 +80,4 @@ export const IMCADPNonConformities = memo(function({ auditData, selectedDPClass 
       </CardContent>
     </Card>
   );
-}
+});

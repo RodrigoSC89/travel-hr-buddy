@@ -201,4 +201,4 @@ export const ChecklistsPage = memo(function() {
       </Tabs>
     </div>
   );
-}
+});

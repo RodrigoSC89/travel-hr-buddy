@@ -325,4 +325,4 @@ export const MaritimeSystemDashboard = memo(function() {
       </Tabs>
     </div>
   );
-}
+});

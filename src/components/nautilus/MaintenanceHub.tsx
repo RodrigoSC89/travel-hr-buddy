@@ -457,4 +457,4 @@ export const MaintenanceHub = memo(function() {
       </Tabs>
     </div>
   );
-}
+});

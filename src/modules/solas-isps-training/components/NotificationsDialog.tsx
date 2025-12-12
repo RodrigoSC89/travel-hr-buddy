@@ -33,4 +33,4 @@ export const NotificationsDialog = memo(function({ open, onOpenChange, notificat
       </DialogContent>
     </Dialog>
   );
-}
+});

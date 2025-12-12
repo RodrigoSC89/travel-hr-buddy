@@ -90,4 +90,4 @@ export const RevenueKPI = memo(function() {
       </CardContent>
     </Card>
   );
-}
+});

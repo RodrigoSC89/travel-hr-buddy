@@ -58,4 +58,4 @@ export const TransactionList = memo(function({ transactions }: TransactionListPr
       </CardContent>
     </Card>
   );
-}
+});

@@ -499,4 +499,4 @@ export const EnhancedHistoryStats = memo(function() {
       </Card>
     </div>
   );
-}
+});

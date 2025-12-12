@@ -96,4 +96,4 @@ export const MobileLayout = memo(function({ children, showNav = true }: MobileLa
       </div>
     </ErrorBoundary>
   );
-}
+});

@@ -123,4 +123,4 @@ export const InspectionsList = memo(function({ onSelectInspection, onStatsUpdate
       ))}
     </div>
   );
-}
+});

@@ -224,4 +224,4 @@ export const SonarDataUpload = memo(function() {
       </CardContent>
     </Card>
   );
-}
+});

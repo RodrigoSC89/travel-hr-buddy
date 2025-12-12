@@ -124,4 +124,4 @@ export const ComplianceKPICards = memo(function({ kpis }: ComplianceKPICardsProp
       </Card>
     </div>
   );
-}
+});

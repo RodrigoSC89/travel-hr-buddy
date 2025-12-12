@@ -240,4 +240,4 @@ export const DynamicNavigation = memo(function({ className }: DynamicNavigationP
       </aside>
     </>
   );
-}
+});

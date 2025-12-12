@@ -204,4 +204,4 @@ export const FinanceAIPanel = memo(function({ transactions, income, expenses }: 
       </CardContent>
     </Card>
   );
-}
+});

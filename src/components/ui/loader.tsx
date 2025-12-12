@@ -13,4 +13,4 @@ export const Loader = memo(function() {
       className="w-6 h-6 border-4 border-[var(--nautilus-primary)] border-t-transparent rounded-full animate-spin"
     />
   );
-}
+});

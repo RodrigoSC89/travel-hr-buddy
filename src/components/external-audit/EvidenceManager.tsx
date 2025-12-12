@@ -12,4 +12,4 @@ export const EvidenceManager = memo(function() {
       </CardContent>
     </Card>
   );
-}
+});

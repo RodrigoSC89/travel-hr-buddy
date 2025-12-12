@@ -300,4 +300,4 @@ export const PEODPAuditComponent = memo(function() {
       </Tabs>
     </div>
   );
-}
+});

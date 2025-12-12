@@ -138,4 +138,4 @@ export const AnimatedCounter = memo(function({ value, className, duration = 1 }:
       </motion.span>
     </motion.span>
   );
-}
+});

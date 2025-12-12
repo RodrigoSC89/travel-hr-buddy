@@ -22,4 +22,4 @@ export const FiltersDialog = memo(function({ open, onOpenChange }: Props) {
       </DialogContent>
     </Dialog>
   );
-}
+});

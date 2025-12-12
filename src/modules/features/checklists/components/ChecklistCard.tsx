@@ -95,4 +95,4 @@ export const ChecklistCard = memo(function({ checklist, onView, onAnalyze }: Che
       </CardContent>
     </Card>
   );
-}
+});

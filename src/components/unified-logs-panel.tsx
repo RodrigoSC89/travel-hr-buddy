@@ -451,4 +451,4 @@ export const UnifiedLogsPanel = memo(function() {
       </Card>
     </div>
   );
-}
+});
