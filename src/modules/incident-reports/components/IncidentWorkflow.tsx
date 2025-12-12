@@ -57,7 +57,7 @@ export const IncidentWorkflow: React.FC<IncidentWorkflowProps> = ({ incident, on
           action: `Status changed to ${status}`,
           notes,
           performed_at: new Date().toISOString(),
-        };
+        });
       } catch (logError) {
       }
 
