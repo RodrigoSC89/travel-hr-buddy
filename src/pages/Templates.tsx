@@ -185,7 +185,7 @@ const Templates = () => {
     category: "operations",
     type: "report",
     content: ""
-  };
+  });
   
   const [isGeneratingAI, setIsGeneratingAI] = useState(false);
 

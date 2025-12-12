@@ -60,7 +60,7 @@ export const useKeyboardShortcuts = memo(() => {
 
   // Listen for key sequences
   useEffect(() => {
-    let keySequence: string[] = [];
+    let keySequence: string[] = []);
     let sequenceTimeout: NodeJS.Timeout;
 
     const handleKeyDown = (e: KeyboardEvent) => {

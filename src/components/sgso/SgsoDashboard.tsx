@@ -61,7 +61,7 @@ export const SgsoDashboard: React.FC = () => {
     description: "",
     vessel: "",
     location: ""
-  };
+  });
   
   const [riskForm, setRiskForm] = useState({
     title: "",

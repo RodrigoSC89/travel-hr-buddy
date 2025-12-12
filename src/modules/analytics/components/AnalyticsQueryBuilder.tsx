@@ -42,7 +42,7 @@ export const AnalyticsQueryBuilder: React.FC = () => {
     table: "analytics_events",
     filters: [],
     limit: 100
-  };
+  });
   const [queryResult, setQueryResult] = useState<QueryResult | null>(null);
   const [loading, setLoading] = useState(false);
   const { toast } = useToast();

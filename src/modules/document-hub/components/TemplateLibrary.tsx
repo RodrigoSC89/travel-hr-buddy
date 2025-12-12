@@ -65,7 +65,7 @@ export const TemplateLibrary: React.FC = () => {
     category: "general",
     content: "",
     is_public: false
-  };
+  });
 
   const [generateData, setGenerateData] = useState<Record<string, string>>({});
 

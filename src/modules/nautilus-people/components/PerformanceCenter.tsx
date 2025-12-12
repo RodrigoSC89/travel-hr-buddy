@@ -60,7 +60,7 @@ const PerformanceCenter: React.FC = () => {
     keyResults: "",
     responsavel: "",
     prazo: ""
-  };
+  });
 
   const getStatusBadge = (status: string) => {
     switch (status) {

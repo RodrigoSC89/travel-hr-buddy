@@ -58,7 +58,7 @@ export const TaskManagement: React.FC = () => {
     tags: [] as string[],
     related_vessel: "",
     related_crew: ""
-  };
+  });
 
   useEffect(() => {
     loadTasks();

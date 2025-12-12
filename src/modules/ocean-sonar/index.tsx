@@ -59,7 +59,7 @@ const OceanSonar: React.FC = () => {
     dangerReadings: 0,
     avgDepth: 0,
     totalPredictions: 0,
-  };
+  });
 
   // Check for cached data and load stats on mount
   useEffect(() => {

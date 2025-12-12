@@ -42,7 +42,7 @@ export const GanttChart = memo(() => {
     priority: "medium",
     description: "",
     parent_task_id: null as string | null
-  };
+  });
   const { toast } = useToast();
 
   useEffect(() => {

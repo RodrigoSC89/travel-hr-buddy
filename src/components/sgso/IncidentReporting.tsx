@@ -162,7 +162,7 @@ export const IncidentReporting: React.FC = () => {
     medium: true,
     low: true,
     negligible: true
-  };
+  });
   const [filterType, setFilterType] = useState({
     accident: true,
     near_miss: true,

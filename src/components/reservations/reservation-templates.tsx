@@ -76,7 +76,7 @@ export const ReservationTemplates: React.FC<ReservationTemplatesProps> = ({
     currency: "BRL",
     notes: "",
     is_public: false
-};
+});
 
   const { toast } = useToast();
   const { user } = useAuth();

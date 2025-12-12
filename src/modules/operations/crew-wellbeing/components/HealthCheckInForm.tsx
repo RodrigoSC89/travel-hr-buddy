@@ -23,7 +23,7 @@ export const HealthCheckInForm: React.FC<{ onSuccess: () => void }> = ({ onSucce
     stress_level: 5,
     energy_level: 5,
     notes: "",
-};
+});
   const [isSubmitting, setIsSubmitting] = useState(false);
   const { toast } = useToast();
 

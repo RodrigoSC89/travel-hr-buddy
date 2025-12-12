@@ -162,7 +162,7 @@ export default function DPHistory() {
     dateFrom: "",
     dateTo: "",
     searchText: "",
-  };
+  });
   const [activeFilters, setActiveFilters] = useState(filters);
 
   const allTypes = ["analysis", "operation", "alert", "optimization", "maintenance"];

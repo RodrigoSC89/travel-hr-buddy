@@ -78,7 +78,7 @@ export const EnhancedReservationsDashboard: React.FC = () => {
     dateRange: null,
     searchTerm: "",
     crewMember: "all"
-  };
+  });
 
   const { toast } = useToast();
   const { user } = useAuth();

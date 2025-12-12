@@ -34,7 +34,7 @@ export const DDSPanel: React.FC<DDSPanelProps> = ({ records, onCreateDDS, loadin
     participants_count: 0,
     duration_minutes: 15,
     notes: ""
-};
+});
 
   const handleSubmit = async () => {
     if (!formData.topic || !formData.vessel_name || !formData.conductor) {

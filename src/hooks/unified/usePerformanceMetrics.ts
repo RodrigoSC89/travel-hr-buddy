@@ -267,7 +267,7 @@ export function usePerformanceMetrics(options: UsePerformanceMetricsOptions = {}
 
   // Performance evaluation
   const evaluation = useMemo((): PerformanceEvaluation => {
-    const recommendations: string[] = [];
+    const recommendations: string[] = []);
     let score = 100;
 
     // LCP scoring

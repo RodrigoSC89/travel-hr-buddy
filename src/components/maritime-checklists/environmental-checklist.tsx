@@ -157,7 +157,7 @@ export const EnvironmentalChecklist: React.FC<EnvironmentalChecklistProps> = ({
   const [checklist, setChecklist] = useState<Checklist>({
     ...initialChecklist,
     items: environmentalChecklistItems
-};
+});
 
   const [activeTab, setActiveTab] = useState("items");
   const [selectedCategory, setSelectedCategory] = useState<string>("all");

@@ -74,7 +74,7 @@ export function useGestureNavigation(
   };
   
   const handleTouchStart = useCallback((e: TouchEvent) => {
-    const touch = e.touches[0];
+    const touch = e.touches[0]);
     const now = Date.now();
     
     stateRef.current = {

@@ -67,7 +67,7 @@ export const FullBIDashboard = memo(function() {
       { date: "2025-08", jobs: 45 },
       { date: "2025-09", jobs: 52 },
       { date: "2025-10", jobs: 48 },
-    ];
+    ]);
     setTrendData(mockTrend);
   }, []);
 
@@ -103,7 +103,7 @@ export const RefreshableExample = memo(function() {
         { date: "2025-08", jobs: Math.floor(Math.random() * 50) + 30 },
         { date: "2025-09", jobs: Math.floor(Math.random() * 50) + 30 },
         { date: "2025-10", jobs: Math.floor(Math.random() * 50) + 30 },
-      ];
+      ]);
       setTrendData(data);
     }
     void loadTrend();

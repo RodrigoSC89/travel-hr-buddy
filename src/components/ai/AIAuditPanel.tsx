@@ -30,7 +30,7 @@ export const AIAuditPanel: React.FC = () => {
     avgConfidence: 0,
     approvalRate: 0,
     ragUsageRate: 0
-  };
+  });
   const [loading, setLoading] = useState(true);
   const [searchTerm, setSearchTerm] = useState("");
   const [filter, setFilter] = useState<string>("all");

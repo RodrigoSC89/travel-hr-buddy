@@ -374,7 +374,7 @@ export function useVirtualDashboard<T>(
   const [filters, setFilters] = useState<Record<string, any>>({});
   
   const processedItems = useMemo(() => {
-    let result = [...items];
+    let result = [...items]);
     
     // Apply filters
     if (Object.keys(filters).length > 0) {

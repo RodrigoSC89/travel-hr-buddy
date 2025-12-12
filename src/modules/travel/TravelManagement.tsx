@@ -95,7 +95,7 @@ const TravelManagement = () => {
     arrival_date: "",
     travel_purpose: "",
     status: "pending"
-  };
+  });
 
   useEffect(() => {
     loadItineraries();

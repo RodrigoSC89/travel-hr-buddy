@@ -35,7 +35,7 @@ export const ScheduledReports: React.FC = () => {
     template: "",
     format: "pdf",
     frequency: "monthly" as const,
-  };
+  });
   const { toast } = useToast();
 
   useEffect(() => {

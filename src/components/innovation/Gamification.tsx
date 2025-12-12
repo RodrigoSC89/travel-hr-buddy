@@ -67,7 +67,7 @@ export const Gamification = memo(() => {
     completedTasks: 156,
     collaborationScore: 87,
     innovationIndex: 92
-  };
+  });
 
   const [achievements, setAchievements] = useState<Achievement[]>([
     {

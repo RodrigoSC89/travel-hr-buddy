@@ -117,7 +117,7 @@ export const CrewRotationPlanner: React.FC = () => {
           total: 850
         }
       }
-    ];
+    ]);
 
     const mockOptimizations: OptimizationSuggestion[] = [
       {

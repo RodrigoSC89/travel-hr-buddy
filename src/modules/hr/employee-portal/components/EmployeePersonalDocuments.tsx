@@ -61,7 +61,7 @@ export const EmployeePersonalDocuments: React.FC = () => {
     expiry_date: "",
     issuing_authority: "",
     file: null as File | null
-  };
+  });
 
   useEffect(() => {
     loadDocuments();

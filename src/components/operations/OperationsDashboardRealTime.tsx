@@ -82,7 +82,7 @@ export const OperationsDashboardRealTime: React.FC = () => {
     operation_type: "all",
     time_range: "24h",
     criticality: "all",
-  };
+  });
   const [mqttConnected, setMqttConnected] = useState(false);
   const [wsConnected, setWsConnected] = useState(false);
   const [autoRefresh, setAutoRefresh] = useState(true);

@@ -249,7 +249,7 @@ export const APIHubNautilus: React.FC = () => {
     routes: true,
     analytics: true,
     iot: true
-  };
+  });
 
   const handleDocumentation = () => {
     toast({

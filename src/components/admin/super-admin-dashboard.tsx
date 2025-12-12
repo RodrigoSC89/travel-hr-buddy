@@ -73,7 +73,7 @@ export const SuperAdminDashboard: React.FC = () => {
     max_vessels: 2,
     max_storage_gb: 1,
     billing_email: ""
-  };
+  });
 
   const loadOrganizations = useCallback(async () => {
     try {

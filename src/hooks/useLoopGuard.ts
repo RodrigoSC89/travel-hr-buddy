@@ -86,7 +86,7 @@ export const useLoopGuard = (
   // Cleanup on unmount
   useEffect(() => {
     return () => {
-      executionHistory.current = [];
+      executionHistory.current = []);
       isLoopDetected.current = false;
     };
   }, []);

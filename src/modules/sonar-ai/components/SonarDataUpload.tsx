@@ -18,7 +18,7 @@ export const SonarDataUpload = memo(function() {
   const { toast } = useToast();
 
   const handleFileUpload = useCallback(async (event: React.ChangeEvent<HTMLInputElement>) => {
-    const file = event.target.files?.[0];
+    const file = event.target.files?.[0]);
     if (!file) return;
 
     const fileType = file.name.split(".").pop()?.toUpperCase();

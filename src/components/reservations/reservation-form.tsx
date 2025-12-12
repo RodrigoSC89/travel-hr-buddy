@@ -57,7 +57,7 @@ export const ReservationForm: React.FC<ReservationFormProps> = ({
     currency: "BRL",
     status: "confirmed" as EnhancedReservation["status"],
     notes: ""
-};
+});
 
   const { toast } = useToast();
   const { user } = useAuth();

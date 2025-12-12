@@ -21,7 +21,7 @@ export const WellbeingDashboard: React.FC = () => {
     physical: 0,
     mental: 0,
     trend: "stable",
-  };
+  });
   const [loading, setLoading] = useState(true);
   const [recentAlerts, setRecentAlerts] = useState<any[]>([]);
   const { toast } = useToast();

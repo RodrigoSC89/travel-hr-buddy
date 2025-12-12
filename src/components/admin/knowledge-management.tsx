@@ -70,7 +70,7 @@ export const KnowledgeManagement: React.FC = () => {
     totalViews: 0,
     topModules: [],
     topContent: []
-  };
+  });
 
   const modules = [
     { id: "all", name: "Todos os Módulos" },

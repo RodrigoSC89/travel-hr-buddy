@@ -79,7 +79,7 @@ const DocumentTemplatesManager = () => {
     content: "",
     format: "html",
     tags: ""
-  };
+  });
 
   useEffect(() => {
     loadTemplates();

@@ -126,7 +126,7 @@ export const PeotramReportsGenerator: React.FC = () => {
     includeEvidence: false,
     includeRecommendations: true,
     sections: []
-  };
+  });
   const [isGenerating, setIsGenerating] = useState(false);
   const [generationProgress, setGenerationProgress] = useState(0);
 

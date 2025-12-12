@@ -54,7 +54,7 @@ const VesselManagement: React.FC = () => {
     flag_state: "",
     next_port: "",
     eta: ""
-  };
+  });
 
   useEffect(() => {
     loadVessels();

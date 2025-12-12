@@ -80,7 +80,7 @@ export const EnhancedMobileSupport: React.FC = () => {
     isStandalone: false,
     canInstall: false,
     updateAvailable: false
-  };
+  });
   const [mobileSettings, setMobileSettings] = useState<MobileSettings>({
     notifications: true,
     location: false,
@@ -92,7 +92,7 @@ export const EnhancedMobileSupport: React.FC = () => {
     autoSync: true,
     compressionLevel: "medium",
     dataUsage: "normal"
-  };
+  });
   const [isLoading, setIsLoading] = useState(true);
   const [installPrompt, setInstallPrompt] = useState<{
     prompt: () => void;

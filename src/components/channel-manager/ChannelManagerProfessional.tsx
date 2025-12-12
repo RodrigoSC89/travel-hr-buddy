@@ -410,7 +410,7 @@ export default function ChannelManagerProfessional() {
           last_message_time: new Date().toISOString(),
         })),
         ...mockChannels.filter(mc => !dbChannels.find(dc => dc.id === mc.id)),
-      ];
+      ]);
       setChannels(mergedChannels);
     }
   }, [dbChannels]);
@@ -463,7 +463,7 @@ export default function ChannelManagerProfessional() {
 
   // Channel messages
   const channelMessages = useMemo(() => {
-    if (!selectedChannel) return [];
+    if (!selectedChannel) return []);
     return messages.filter(m => m.channel_id === selectedChannel.id);
   }, [messages, selectedChannel]);
 
@@ -679,7 +679,7 @@ export default function ChannelManagerProfessional() {
   }, [selectedChannel, channelMessages, toast]);
 
   const handleUploadFile = useCallback((e: React.ChangeEvent<HTMLInputElement>) => {
-    const file = e.target.files?.[0];
+    const file = e.target.files?.[0]);
     if (file) {
       toast({ title: "Arquivo enviado", description: `${file.name} foi enviado com sucesso.` });
       setIsUploadDialogOpen(false);

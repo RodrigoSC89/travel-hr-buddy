@@ -109,7 +109,7 @@ export const CompletePriceAlertsUI: React.FC = () => {
     threshold_type: "below" as "below" | "above",
     email_notifications: true,
     visual_notifications: true,
-  };
+  });
 
   useEffect(() => {
     if (user) {

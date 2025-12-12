@@ -43,7 +43,7 @@ export const CreateIncidentDialog: React.FC<CreateIncidentDialogProps> = ({
     incident_type: "minor",
     incident_location: "",
     gps_coordinates: "",
-};
+});
   const [photos, setPhotos] = useState<File[]>([]);
   const [photoPreviews, setPhotoPreviews] = useState<string[]>([]);
   const [submitting, setSubmitting] = useState(false);

@@ -62,7 +62,7 @@ export const CreateMaintenancePlanDialog: React.FC<CreateMaintenancePlanDialogPr
     estimatedHours: "",
     assignee: "",
     notes: "",
-};
+});
   const { toast } = useToast();
 
   const handleSubmit = async (e: React.FormEvent) => {

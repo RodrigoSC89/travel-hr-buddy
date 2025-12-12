@@ -46,7 +46,7 @@ const ComplianceReports = () => {
     severities: [] as string[],
     dateFrom: "",
     dateTo: ""
-  };
+  });
 
   const [reports, setReports] = useState([
     {

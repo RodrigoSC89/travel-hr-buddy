@@ -38,7 +38,7 @@ export const ReservationsDashboard: React.FC = () => {
     end_date: "",
     location: "",
     status: "confirmed" as "pending" | "confirmed" | "cancelled"
-  };
+  });
 
   const { toast } = useToast();
   const { user } = useAuth();

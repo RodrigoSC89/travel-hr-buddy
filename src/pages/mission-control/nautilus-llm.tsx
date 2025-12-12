@@ -50,7 +50,7 @@ const NautilusLLM: React.FC = () => {
     averageConfidence: 0,
     averageExecutionTime: 0,
     cacheHitRate: 0
-  };
+  });
 
   useEffect(() => {
     loadStats();

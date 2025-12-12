@@ -67,7 +67,7 @@ const SystemPerformanceMonitor = () => {
     emailNotifications: true,
     pushNotifications: false,
     slackNotifications: false,
-  };
+  });
 
   // Dados simulados de métricas do sistema
   const [systemMetrics, setSystemMetrics] = useState<SystemMetric[]>([

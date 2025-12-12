@@ -38,7 +38,7 @@ const DeepRiskAIPage: React.FC = () => {
     highCount: 0,
     mediumCount: 0,
     lowCount: 0,
-  };
+  });
 
   // Input states
   const [forecastName, setForecastName] = useState("");

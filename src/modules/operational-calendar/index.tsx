@@ -189,10 +189,10 @@ const OperationalCalendar = () => {
     priority: "medium",
     start: new Date(),
     end: addHours(new Date(), 2),
-  };
+  });
 
   const vessels = useMemo(() => {
-    const uniqueVessels = [...new Set(events.filter(e => e.vessel).map(e => e.vessel))];
+    const uniqueVessels = [...new Set(events.filter(e => e.vessel).map(e => e.vessel))]);
     return uniqueVessels;
   }, [events]);
 

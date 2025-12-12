@@ -60,7 +60,7 @@ export const OperationalCommandCenter: React.FC = () => {
     active_vessels: 0,
     compliance_rate: 0,
     pending_alerts: 0
-  };
+  });
   const [isLoading, setIsLoading] = useState(true);
   const [realTimeEnabled, setRealTimeEnabled] = useState(false);
   const { toast } = useToast();

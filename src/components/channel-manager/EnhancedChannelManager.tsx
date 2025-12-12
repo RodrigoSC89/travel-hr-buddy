@@ -69,7 +69,7 @@ export const EnhancedChannelManager: React.FC = () => {
     description: "",
     channel_type: "general",
     max_members: 50
-  };
+  });
 
   useEffect(() => {
     loadChannels();

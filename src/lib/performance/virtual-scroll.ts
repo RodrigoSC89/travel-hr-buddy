@@ -217,7 +217,7 @@ export function useWindowedData<T>(
   }, [currentPage, loadPage]);
   
   const items = useMemo(() => {
-    const result: T[] = [];
+    const result: T[] = []);
     const sortedPages = Array.from(pages.keys()).sort((a, b) => a - b);
     
     for (const pageNum of sortedPages) {

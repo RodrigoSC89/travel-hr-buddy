@@ -83,7 +83,7 @@ export const DigitalTwinDP: React.FC = () => {
     windSpeed: 15,
     waveHeight: 1.5,
     current: 0.8
-  };
+  });
   const [liveComparison, setLiveComparison] = useState(false);
 
   const handleStartSimulation = () => {

@@ -71,7 +71,7 @@ export const DocumentManagement: React.FC = () => {
     access_level: "organization" as "public" | "organization" | "restricted",
     tags: [] as string[],
     expires_at: ""
-  };
+  });
 
   // Form state for new category
   const [newCategory, setNewCategory] = useState({

@@ -76,7 +76,7 @@ export const MessageComposer: React.FC<MessageComposerProps> = ({
 
   // Real-time validation
   useEffect(() => {
-    const errors: string[] = [];
+    const errors: string[] = []);
     
     if (messageContent.length > 5000) {
       errors.push("Mensagem excede o limite de 5000 caracteres");

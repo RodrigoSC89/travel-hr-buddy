@@ -15,7 +15,7 @@ const FuelOptimizer = () => {
     destination: "",
     cargo_weight: "",
     weather_condition: "normal"
-  };
+  });
 
   const [optimization, setOptimization] = useState<unknown>(null);
   const [history, setHistory] = useState([

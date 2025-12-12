@@ -134,7 +134,7 @@ const CompanyProfileStep: React.FC<{ data: OnboardingData; onNext: (data: StepDa
     fleet_size: "",
     primary_operations: [],
     key_challenges: []
-};
+});
 
   const operationTypes = [
     "Transporte de carga",

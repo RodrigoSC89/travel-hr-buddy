@@ -63,7 +63,7 @@ const StrategicDashboard: React.FC = () => {
     activeWidgets: ["metrics", "alerts", "activities", "charts"],
     refreshInterval: 30,
     userRole: "admin"
-  };
+  });
 
   // Helper function to format metric values
   const formatMetricValue = (value: number | string, unit: string = ""): string => {

@@ -49,7 +49,7 @@ export const FeedbackSystem = memo(() => {
     description: "",
     category: "",
     module: ""
-  };
+  });
 
   const feedbackItems: FeedbackItem[] = [
     {

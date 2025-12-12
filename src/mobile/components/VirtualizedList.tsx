@@ -152,7 +152,7 @@ function VirtualizedGridInner<T>({
 }: VirtualizedGridProps<T>) {
   // Group items into rows
   const rows = useMemo(() => {
-    const result: T[][] = [];
+    const result: T[][] = []);
     for (let i = 0; i < items.length; i += columns) {
       result.push(items.slice(i, i + columns));
     }

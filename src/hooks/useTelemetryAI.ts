@@ -20,7 +20,7 @@ export function useTelemetryAI() {
   const [streamingText, setStreamingText] = useState("");
 
   const analyzeData = useCallback(async (data: {
-    weatherData?: any[];
+    weatherData?: any[]);
     satelliteData?: any[];
     alerts?: any[];
     syncStatus?: any[];

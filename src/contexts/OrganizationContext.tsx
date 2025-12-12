@@ -235,7 +235,7 @@ export function OrganizationProvider({ children }: OrganizationProviderProps): J
         joined_at: new Date().toISOString(),
         last_active_at: new Date().toISOString()
       }
-    ];
+    ]);
   }, []);
 
   const inviteUser = useCallback(async (email: string, role: string): Promise<void> => {

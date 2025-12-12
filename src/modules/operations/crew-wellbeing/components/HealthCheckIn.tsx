@@ -43,7 +43,7 @@ export const HealthCheckin: React.FC = () => {
     exercise_minutes: 30,
     water_intake_liters: 2,
     notes: ""
-  };
+  });
 
   const handleSubmit = async () => {
     // TODO: Implement actual save to Supabase

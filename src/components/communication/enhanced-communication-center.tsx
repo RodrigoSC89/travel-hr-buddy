@@ -53,7 +53,7 @@ export const EnhancedCommunicationCenter = memo(() => {
     urgentMessages: 0,
     todayMessages: 0,
     responseRate: 95
-  };
+  });
   const [loading, setLoading] = useState(true);
   const { toast } = useToast();
 

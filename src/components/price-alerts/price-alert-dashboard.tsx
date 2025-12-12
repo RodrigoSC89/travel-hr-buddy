@@ -61,7 +61,7 @@ export const PriceAlertDashboardLegacy = memo(() => {
     product_name: "",
     target_price: "",
     product_url: ""
-  };
+  });
   const { toast } = useToast();
   const { user } = useAuth();
   const navigate = useNavigate();

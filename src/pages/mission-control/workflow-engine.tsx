@@ -48,7 +48,7 @@ const WorkflowEngine = () => {
     name: "",
     description: "",
     steps: [],
-  };
+  });
 
   useEffect(() => {
     loadWorkflows();

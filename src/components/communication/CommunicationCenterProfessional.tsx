@@ -260,7 +260,7 @@ export const CommunicationCenterProfessional: React.FC = () => {
 
   // Filtered messages
   const filteredMessages = useMemo(() => {
-    let result = [...messages];
+    let result = [...messages]);
 
     // Filter by inbox tab
     if (inboxTab === "unread") result = result.filter(m => m.status !== "read");

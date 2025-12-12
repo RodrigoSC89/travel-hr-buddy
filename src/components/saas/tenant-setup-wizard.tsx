@@ -56,7 +56,7 @@ export const TenantSetupWizard: React.FC = () => {
     admin_name: "",
     admin_email: "",
     admin_phone: ""
-  };
+  });
   const [isLoading, setIsLoading] = useState(false);
   
   const { tenantPlans } = useTenant();

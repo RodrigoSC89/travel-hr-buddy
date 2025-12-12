@@ -43,7 +43,7 @@ export const SupplyOrdersManagement = memo(() => {
     delivery_address: "",
     estimated_delivery_date: "",
     notes: ""
-  };
+  });
   const { toast } = useToast();
 
   useEffect(() => {

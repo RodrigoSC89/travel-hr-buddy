@@ -82,7 +82,7 @@ export const ReservationPaymentSystem: React.FC = () => {
     provider: "google",
     auto_sync: true,
     send_reminders: true,
-  };
+  });
   const [processingPayment, setProcessingPayment] = useState(false);
 
   useEffect(() => {

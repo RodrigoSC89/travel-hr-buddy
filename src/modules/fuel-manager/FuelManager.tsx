@@ -247,7 +247,7 @@ const ConsumptionForm = ({ onClose }: { onClose: () => void }) => {
     avg_speed_knots: "",
     weather_conditions: "Calm",
     notes: "",
-};
+});
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();

@@ -69,7 +69,7 @@ export const DocumentWorkflowPanel: React.FC = () => {
     title: "",
     category: "ism_procedure" as DocumentCategory,
     description: ""
-  };
+  });
 
   useEffect(() => {
     loadDocuments();

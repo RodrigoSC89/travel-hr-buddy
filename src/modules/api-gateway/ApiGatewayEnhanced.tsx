@@ -82,7 +82,7 @@ const ApiGatewayEnhanced = () => {
   const [keyFormData, setKeyFormData] = useState({
     key_name: "",
     tier: "basic"
-  };
+  });
 
   const [routeFormData, setRouteFormData] = useState({
     route_path: "",

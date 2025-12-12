@@ -53,7 +53,7 @@ export const PerformanceMonitor: React.FC = () => {
     networkLatency: 0,
     renderTime: 0,
     score: 0
-  };
+  });
   
   const [historicalData, setHistoricalData] = useState<HistoricalMetric[]>([]);
   const [showSettings, setShowSettings] = useState(false);

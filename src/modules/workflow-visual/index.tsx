@@ -206,7 +206,7 @@ const WorkflowVisual = () => {
     type: "other",
     description: "",
     status: "pending"
-  };
+  });
 
   const onConnect = useCallback(
     (params: Connection) => setEdges((eds) => addEdge({ ...params, markerEnd: { type: MarkerType.ArrowClosed } }, eds)),

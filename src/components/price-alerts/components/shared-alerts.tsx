@@ -65,7 +65,7 @@ export const SharedAlerts = memo(() => {
     alert_id: "",
     title: "",
     description: "",
-  };
+  });
   const [isShareDialogOpen, setIsShareDialogOpen] = useState(false);
   const [copiedUrl, setCopiedUrl] = useState<string | null>(null);
 
