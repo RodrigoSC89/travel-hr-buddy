@@ -118,7 +118,7 @@ export const LoadingOverlay: React.FC<LoadingOverlayProps> = memo(function Loadi
   children,
   variant = "default",
   size = "md",
-}) => {
+}: LoadingOverlayProps) {
   return (
     <div className="relative">
       {children}
