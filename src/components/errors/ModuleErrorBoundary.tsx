@@ -29,14 +29,14 @@ export class ModuleErrorBoundary extends Component<Props, State> {
       hasError: false,
       error: null,
       retryCount: 0,
-    };
+    });
   }
 
   static getDerivedStateFromError(error: Error): Partial<State> {
     return {
       hasError: true,
       error,
-    };
+    });
   }
 
   async componentDidCatch(error: Error, errorInfo: ErrorInfo): Promise<void> {
