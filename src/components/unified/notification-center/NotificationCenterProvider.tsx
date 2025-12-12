@@ -55,7 +55,7 @@ export const NotificationCenterProvider: React.FC<NotificationCenterProviderProp
         if (isRead !== readFilter) return false;
       }
       return true;
-    });
+  };
   }, [notifications, categoryFilter, priorityFilter, readFilter]);
 
   // Unread count

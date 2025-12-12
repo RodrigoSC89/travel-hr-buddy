@@ -168,7 +168,7 @@ const IntelligentNotificationSystem = () => {
     const matchesSearch = notification.title.toLowerCase().includes(searchTerm.toLowerCase()) ||
                          notification.message.toLowerCase().includes(searchTerm.toLowerCase());
     return matchesType && matchesPriority && matchesSearch;
-  });
+  };
 
   const markAsRead = (id: string) => {
     setNotifications(prev => 

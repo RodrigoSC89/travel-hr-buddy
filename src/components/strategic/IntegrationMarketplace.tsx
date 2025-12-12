@@ -137,7 +137,7 @@ export const IntegrationMarketplace: React.FC = () => {
                          integration.description.toLowerCase().includes(searchTerm.toLowerCase());
     const matchesCategory = selectedCategory === "all" || integration.category === selectedCategory;
     return matchesSearch && matchesCategory;
-  });
+  };
 
   const getPriceColor = (price: string) => {
     switch (price) {

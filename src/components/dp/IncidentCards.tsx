@@ -297,7 +297,7 @@ export default function IncidentCards() {
         }
         doc.text(`${i + 1}. ${rec}`, 14, yPos);
         yPos += 7;
-      });
+  };
 
       doc.save(`analise-incidente-${selectedIncident.id}.pdf`);
       toast({

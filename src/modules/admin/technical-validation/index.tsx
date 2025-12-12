@@ -152,7 +152,7 @@ export const TechnicalValidationPanel: React.FC = () => {
     if (filter === "issues") return m.issues.length > 0;
     if (filter === "healthy") return m.healthScore >= 80;
     return true;
-  });
+  };
 
   const stats = {
     total: modules.length,

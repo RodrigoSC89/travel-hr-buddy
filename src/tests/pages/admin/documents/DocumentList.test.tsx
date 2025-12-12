@@ -35,12 +35,12 @@ vi.mock("react-router-dom", async () => {
     ...actual,
     useNavigate: () => mockNavigate,
   };
-});
+  };
 
 describe("DocumentListPage Component", () => {
   beforeEach(() => {
     vi.clearAllMocks();
-  });
+  };
 
   it("should render the page title", async () => {
     render(
@@ -50,7 +50,7 @@ describe("DocumentListPage Component", () => {
     );
 
     expect(screen.getByText(/📄 Documentos Gerados com IA/i)).toBeInTheDocument();
-  });
+  };
 
   it("should render search input", async () => {
     render(
@@ -60,7 +60,7 @@ describe("DocumentListPage Component", () => {
     );
 
     expect(screen.getByPlaceholderText(/Digite para buscar.../i)).toBeInTheDocument();
-  });
+  };
 
   it("should render generate new document button", async () => {
     render(
@@ -70,7 +70,7 @@ describe("DocumentListPage Component", () => {
     );
 
     expect(screen.getByText(/✨ Gerar Novo Documento/i)).toBeInTheDocument();
-  });
+  };
 
   it("should show loading state", async () => {
     render(
@@ -80,7 +80,7 @@ describe("DocumentListPage Component", () => {
     );
 
     expect(screen.getByText(/Carregando documentos.../i)).toBeInTheDocument();
-  });
+  };
 
   it("should display empty state when no documents", async () => {
     render(
@@ -91,8 +91,8 @@ describe("DocumentListPage Component", () => {
 
     await waitFor(() => {
       expect(screen.getByText(/Nenhum documento ainda/i)).toBeInTheDocument();
-    });
-  });
+  };
+  };
 
   it("should display documents when data is loaded", async () => {
     // This test is skipped because we need dynamic mocking which is complex with vitest

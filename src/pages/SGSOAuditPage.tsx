@@ -81,7 +81,7 @@ export default function SGSOAuditPage() {
               evidence: match?.evidence || "",
               comment: match?.comment || ""
             };
-          });
+  };
 
           setAuditData(updatedData);
           toast.success("✅ Última auditoria carregada.");

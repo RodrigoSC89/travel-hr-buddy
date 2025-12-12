@@ -186,7 +186,7 @@ export const Patch613Validation = memo(function() {
       });
       Object.keys(testResults).forEach(key => {
         if (testResults[key] === undefined) testResults[key] = false;
-      });
+  };
     }
 
     setResults(testResults);

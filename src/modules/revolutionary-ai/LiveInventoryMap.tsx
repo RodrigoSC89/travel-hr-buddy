@@ -171,7 +171,7 @@ export const LiveInventoryMap = memo(function() {
       const matchesStatus = filterStatus === "all" || item.status === filterStatus;
       const matchesLocation = !selectedLocation || item.location === selectedLocation.name;
       return matchesSearch && matchesStatus && matchesLocation;
-    });
+  };
   }, [searchTerm, filterStatus, selectedLocation]);
 
   const stats = useMemo(() => ({

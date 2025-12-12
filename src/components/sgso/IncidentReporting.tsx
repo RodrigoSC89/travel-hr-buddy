@@ -234,7 +234,7 @@ export const IncidentReporting: React.FC = () => {
     const matchesType = filterType[incident.type];
     
     return matchesSearch && matchesSeverity && matchesType;
-  });
+  };
 
   return (
     <div className="space-y-6">

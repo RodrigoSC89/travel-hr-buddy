@@ -178,7 +178,7 @@ export const CertificationManager: React.FC = () => {
   const expiringCertifications = certifications.filter(cert => {
     const days = getDaysUntilExpiry(cert.expiryDate);
     return days <= 90 && days > 0;
-  });
+  };
 
   const expiredCertifications = certifications.filter(cert => 
     getDaysUntilExpiry(cert.expiryDate) < 0

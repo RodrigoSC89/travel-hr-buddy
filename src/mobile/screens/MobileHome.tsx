@@ -39,17 +39,17 @@ export const MobileHome: React.FC = () => {
     const unsubscribe = enhancedSyncEngine.addStatusListener((status) => {
       setSyncStatus(status);
       setPendingCount(status.pendingChanges);
-    });
+  };
 
     // Monitor network status
     const unsubscribeNetwork = networkDetector.addListener((online: boolean) => {
       setIsOnline(online);
-    });
+  };
 
     // Check biometric availability
     biometricAuthService.isAvailable().then((result) => {
       setBiometricAvailable(result.available);
-    });
+  };
 
     return () => {
       unsubscribe();

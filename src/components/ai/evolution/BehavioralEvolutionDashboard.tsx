@@ -141,7 +141,7 @@ export const BehavioralEvolutionDashboard = memo(function() {
         moduleData.set(d.module_name, []);
       }
       moduleData.get(d.module_name)?.push(d);
-    });
+  };
 
     const evolutions: BehaviorEvolution[] = [];
     moduleData.forEach((records, moduleName) => {

@@ -99,6 +99,6 @@ export const ConnectionAwareImage = memo(function ConnectionAwareImage({
       )}
     </div>
   );
-});
+  };
 
 export default ConnectionAwareImage;

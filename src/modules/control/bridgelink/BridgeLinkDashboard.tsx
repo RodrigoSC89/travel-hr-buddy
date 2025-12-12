@@ -33,7 +33,7 @@ export default function BridgeLinkDashboard() {
         description: event.description || "Evento do DP Intelligence Center",
         duration: 3000,
       });
-    });
+  };
 
     return cleanup;
   }, [isLiveMode]);

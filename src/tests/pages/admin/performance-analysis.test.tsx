@@ -108,7 +108,7 @@ describe("PerformanceAnalysis", () => {
       
       expect(screen.getByText("Performance Analysis Dashboard")).toBeInTheDocument();
       expect(screen.getByText("System Validation & Code Quality Monitoring")).toBeInTheDocument();
-    });
+  };
 
     it("should render the Run Analysis button", () => {
       renderWithRouter(<PerformanceAnalysis />);
@@ -116,15 +116,15 @@ describe("PerformanceAnalysis", () => {
       const button = screen.getByRole("button", { name: /run analysis/i });
       expect(button).toBeInTheDocument();
       expect(button).not.toBeDisabled();
-    });
+  };
 
     it("should not show results before analysis is run", () => {
       renderWithRouter(<PerformanceAnalysis />);
       
       // Tabs should not be visible initially
       expect(screen.queryByRole("tab", { name: /validation/i })).not.toBeInTheDocument();
-    });
-  });
+  };
+  };
 
   describe("Running Analysis", () => {
     it("should show loading state when analysis is running", async () => {
@@ -136,7 +136,7 @@ describe("PerformanceAnalysis", () => {
       // Button should be disabled during analysis
       expect(button).toBeDisabled();
       expect(screen.getByText(/analyzing system/i)).toBeInTheDocument();
-    });
+  };
 
     it("should display results after analysis completes", async () => {
       renderWithRouter(<PerformanceAnalysis />);
@@ -147,8 +147,8 @@ describe("PerformanceAnalysis", () => {
       // Wait for results to appear
       await waitFor(() => {
         expect(screen.getByRole("tab", { name: /validation/i })).toBeInTheDocument();
-      });
-    });
+  };
+  };
 
     it("should show all tabs after analysis", async () => {
       renderWithRouter(<PerformanceAnalysis />);
@@ -161,9 +161,9 @@ describe("PerformanceAnalysis", () => {
         expect(screen.getByRole("tab", { name: /issues/i })).toBeInTheDocument();
         expect(screen.getByRole("tab", { name: /recommendations/i })).toBeInTheDocument();
         expect(screen.getByRole("tab", { name: /metrics/i })).toBeInTheDocument();
-      });
-    });
-  });
+  };
+  };
+  };
 
   describe("Validation Tab", () => {
     it("should display system health overview", async () => {
@@ -176,8 +176,8 @@ describe("PerformanceAnalysis", () => {
         expect(screen.getByText("System Health Overview")).toBeInTheDocument();
         expect(screen.getByText(/overall status/i)).toBeInTheDocument();
         expect(screen.getByText(/health score/i)).toBeInTheDocument();
-      });
-    });
+  };
+  };
 
     it("should show health score", async () => {
       renderWithRouter(<PerformanceAnalysis />);
@@ -187,8 +187,8 @@ describe("PerformanceAnalysis", () => {
       
       await waitFor(() => {
         expect(screen.getByText("95%")).toBeInTheDocument();
-      });
-    });
+  };
+  };
 
     it("should display validation results", async () => {
       renderWithRouter(<PerformanceAnalysis />);
@@ -199,9 +199,9 @@ describe("PerformanceAnalysis", () => {
       await waitFor(() => {
         expect(screen.getByText("Validation Results")).toBeInTheDocument();
         expect(screen.getByText(/database connected/i)).toBeInTheDocument();
-      });
-    });
-  });
+  };
+  };
+  };
 
   describe("Issues Tab", () => {
     it("should have issues tab after analysis", async () => {
@@ -213,8 +213,8 @@ describe("PerformanceAnalysis", () => {
       await waitFor(() => {
         expect(screen.getByRole("tab", { name: /issues/i })).toBeInTheDocument();
       }, { timeout: 3000 });
-    });
-  });
+  };
+  };
 
   describe("Recommendations Tab", () => {
     it("should have recommendations tab after analysis", async () => {
@@ -226,8 +226,8 @@ describe("PerformanceAnalysis", () => {
       await waitFor(() => {
         expect(screen.getByRole("tab", { name: /recommendations/i })).toBeInTheDocument();
       }, { timeout: 3000 });
-    });
-  });
+  };
+  };
 
   describe("Metrics Tab", () => {
     it("should have metrics tab after analysis", async () => {
@@ -239,8 +239,8 @@ describe("PerformanceAnalysis", () => {
       await waitFor(() => {
         expect(screen.getByRole("tab", { name: /metrics/i })).toBeInTheDocument();
       }, { timeout: 3000 });
-    });
-  });
+  };
+  };
 
   describe("Accessibility", () => {
     it("should have accessible tab navigation", async () => {
@@ -255,17 +255,17 @@ describe("PerformanceAnalysis", () => {
         
         tabs.forEach(tab => {
           expect(tab).toHaveAttribute("role", "tab");
-        });
-      });
-    });
+  };
+  };
+  };
 
     it("should have descriptive button text", () => {
       renderWithRouter(<PerformanceAnalysis />);
       
       const button = screen.getByRole("button", { name: /run analysis/i });
       expect(button.textContent).toBeTruthy();
-    });
-  });
+  };
+  };
 
   describe("Error Handling", () => {
     it("should handle analysis button clicks without crashing", () => {
@@ -277,6 +277,6 @@ describe("PerformanceAnalysis", () => {
         fireEvent.click(button);
         fireEvent.click(button);
       }).not.toThrow();
-    });
-  });
+  };
+  };
 };

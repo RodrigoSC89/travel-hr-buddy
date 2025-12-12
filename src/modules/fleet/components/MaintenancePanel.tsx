@@ -78,7 +78,7 @@ export const MaintenancePanel: React.FC<MaintenancePanelProps> = ({
                          item.vessel_name?.toLowerCase().includes(searchTerm.toLowerCase());
     const matchesStatus = statusFilter === "all" || item.status === statusFilter;
     return matchesSearch && matchesStatus;
-  });
+  };
 
   const handleAddMaintenance = async () => {
     if (!newMaintenance.vessel_id || !newMaintenance.type || !newMaintenance.scheduled_date) {

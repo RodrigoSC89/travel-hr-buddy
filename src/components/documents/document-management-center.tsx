@@ -264,7 +264,7 @@ export const DocumentManagementCenter = memo(() => {
     const matchesType = typeFilter === "all" || doc.type === typeFilter;
     const matchesStatus = statusFilter === "all" || doc.status === statusFilter;
     return matchesSearch && matchesType && matchesStatus;
-  });
+  };
 
   if (loading) {
     return (

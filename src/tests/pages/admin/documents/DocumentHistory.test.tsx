@@ -81,14 +81,14 @@ vi.mock("react-router-dom", async () => {
     ...actual,
     useNavigate: () => mockNavigate,
   };
-});
+  };
 
 describe("DocumentHistoryPage Component", () => {
   beforeEach(() => {
     vi.clearAllMocks();
     // Default mock for empty versions
     vi.mocked(supabase.from).mockReturnValue(createVersionQueryBuilder());
-  });
+  };
 
   it("should render the page with loading state initially", async () => {
     render(
@@ -114,12 +114,12 @@ describe("DocumentHistoryPage Component", () => {
 
     await waitFor(() => {
       expect(screen.getByText(/Nenhuma versão encontrada/i)).toBeInTheDocument();
-    });
+  };
 
     await waitFor(() => {
       expect(screen.getByText(/Este documento ainda não possui versões anteriores./i)).toBeInTheDocument();
-    });
-  });
+  };
+  };
 
   it("should render back button that navigates to document view", async () => {
     render(
@@ -133,8 +133,8 @@ describe("DocumentHistoryPage Component", () => {
     await waitFor(() => {
       const backButton = screen.getByRole("button", { name: /Voltar/i });
       expect(backButton).toBeInTheDocument();
-    });
-  });
+  };
+  };
 
   it("should render advanced filters section", async () => {
     render(
@@ -147,14 +147,14 @@ describe("DocumentHistoryPage Component", () => {
 
     await waitFor(() => {
       expect(screen.getByText(/Filtros Avançados/i)).toBeInTheDocument();
-    });
+  };
 
     // Check email filter
     expect(screen.getByLabelText(/Filtrar por Email do Autor/i)).toBeInTheDocument();
     
     // Check date filter
     expect(screen.getByLabelText(/Filtrar por Data/i)).toBeInTheDocument();
-  });
+  };
 
   it("should filter versions by email", async () => {
     const mockVersions = [
@@ -188,7 +188,7 @@ describe("DocumentHistoryPage Component", () => {
 
     await waitFor(() => {
       expect(screen.getByText(/2 de 2 versão\(ões\) exibida\(s\)/i)).toBeInTheDocument();
-    });
+  };
 
     // Filter by email
     const emailInput = screen.getByLabelText(/Filtrar por Email do Autor/i);
@@ -196,8 +196,8 @@ describe("DocumentHistoryPage Component", () => {
 
     await waitFor(() => {
       expect(screen.getByText(/1 de 2 versão\(ões\) exibida\(s\)/i)).toBeInTheDocument();
-    });
-  });
+  };
+  };
 
   it("should filter versions by date", async () => {
     const mockVersions = [
@@ -231,7 +231,7 @@ describe("DocumentHistoryPage Component", () => {
 
     await waitFor(() => {
       expect(screen.getByText(/2 de 2 versão\(ões\) exibida\(s\)/i)).toBeInTheDocument();
-    });
+  };
 
     // Filter by date - only show versions from Oct 5 onwards
     const dateInput = screen.getByLabelText(/Filtrar por Data/i);
@@ -239,8 +239,8 @@ describe("DocumentHistoryPage Component", () => {
 
     await waitFor(() => {
       expect(screen.getByText(/1 de 2 versão\(ões\) exibida\(s\)/i)).toBeInTheDocument();
-    });
-  });
+  };
+  };
 
   it("should show clear filters button when filters are active", async () => {
     render(
@@ -253,7 +253,7 @@ describe("DocumentHistoryPage Component", () => {
 
     await waitFor(() => {
       expect(screen.getByText(/Nenhuma versão encontrada/i)).toBeInTheDocument();
-    });
+  };
 
     // Initially, clear filters button should not be visible
     expect(screen.queryByRole("button", { name: /Limpar Filtros/i })).not.toBeInTheDocument();
@@ -265,8 +265,8 @@ describe("DocumentHistoryPage Component", () => {
     // Clear filters button should now be visible
     await waitFor(() => {
       expect(screen.getByRole("button", { name: /Limpar Filtros/i })).toBeInTheDocument();
-    });
-  });
+  };
+  };
 
   it("should clear filters when clear button is clicked", async () => {
     render(
@@ -279,7 +279,7 @@ describe("DocumentHistoryPage Component", () => {
 
     await waitFor(() => {
       expect(screen.getByText(/Nenhuma versão encontrada/i)).toBeInTheDocument();
-    });
+  };
 
     // Add filters
     const emailInput = screen.getByLabelText(/Filtrar por Email do Autor/i) as HTMLInputElement;
@@ -291,7 +291,7 @@ describe("DocumentHistoryPage Component", () => {
     await waitFor(() => {
       expect(emailInput.value).toBe("test@example.com");
       expect(dateInput.value).toBe("2025-10-01");
-    });
+  };
 
     // Click clear filters button
     const clearButton = screen.getByRole("button", { name: /Limpar Filtros/i });
@@ -301,8 +301,8 @@ describe("DocumentHistoryPage Component", () => {
     await waitFor(() => {
       expect(emailInput.value).toBe("");
       expect(dateInput.value).toBe("");
-    });
-  });
+  };
+  };
 
   it("should show filter count badge when filters are active", async () => {
     render(
@@ -315,7 +315,7 @@ describe("DocumentHistoryPage Component", () => {
 
     await waitFor(() => {
       expect(screen.getByText(/Nenhuma versão encontrada/i)).toBeInTheDocument();
-    });
+  };
 
     // Add one filter
     const emailInput = screen.getByLabelText(/Filtrar por Email do Autor/i);
@@ -323,7 +323,7 @@ describe("DocumentHistoryPage Component", () => {
 
     await waitFor(() => {
       expect(screen.getByText(/1 filtro\(s\) ativo\(s\)/i)).toBeInTheDocument();
-    });
+  };
 
     // Add second filter
     const dateInput = screen.getByLabelText(/Filtrar por Data/i);
@@ -331,8 +331,8 @@ describe("DocumentHistoryPage Component", () => {
 
     await waitFor(() => {
       expect(screen.getByText(/2 filtro\(s\) ativo\(s\)/i)).toBeInTheDocument();
-    });
-  });
+  };
+  };
 
   it("should display character count for each version", async () => {
     const mockVersions = [
@@ -360,5 +360,5 @@ describe("DocumentHistoryPage Component", () => {
       expect(screen.getByText(/Caracteres:/i)).toBeInTheDocument();
       expect(screen.getByText(/13/)).toBeInTheDocument(); // "Short content" has 13 characters
     });
-  });
+  };
 };

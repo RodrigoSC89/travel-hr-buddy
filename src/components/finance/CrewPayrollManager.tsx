@@ -95,7 +95,7 @@ export const CrewPayrollManager = memo(function() {
     const matchesSearch = crewName.includes(searchQuery.toLowerCase());
     const matchesStatus = filterStatus === "all" || p.payment_status === filterStatus;
     return matchesSearch && matchesStatus;
-  });
+  };
 
   // Stats
   const stats = {

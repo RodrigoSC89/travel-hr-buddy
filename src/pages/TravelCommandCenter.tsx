@@ -371,7 +371,7 @@ export default function TravelCommandCenter() {
     if (filters.status !== "all" && reservation.status !== filters.status) return false;
     if (filters.searchTerm && !reservation.title.toLowerCase().includes(filters.searchTerm.toLowerCase())) return false;
     return true;
-  });
+  };
 
   const quickStats = [
     { icon: Plane, label: "Viagens Ativas", value: mockTrips.length.toString(), color: "primary" },

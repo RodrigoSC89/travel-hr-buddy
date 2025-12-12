@@ -77,7 +77,7 @@ export default function DrillsCalendar({ drills, onStartDrill, onScheduleDrill, 
         return isSameDay(parseISO(drill.nextDue), date);
       }
       return false;
-    });
+  };
   };
 
   const handleSchedule = (drill: Drill) => {

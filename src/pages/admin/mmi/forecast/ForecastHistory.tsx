@@ -93,7 +93,7 @@ export default function ForecastHistoryPage() {
       })
       .finally(() => {
         setLoading(false);
-      });
+  };
   }, []);
 
   if (loading) {

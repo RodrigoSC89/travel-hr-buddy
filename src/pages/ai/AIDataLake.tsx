@@ -178,7 +178,7 @@ const AIDataLake: React.FC = () => {
     const matchesSearch = source.name.toLowerCase().includes(searchQuery.toLowerCase());
     const matchesCategory = !selectedCategory || selectedCategory === "Todos" || source.category === selectedCategory;
     return matchesSearch && matchesCategory;
-  });
+  };
 
   const handleExploreData = (sourceId: string) => {
     toast({

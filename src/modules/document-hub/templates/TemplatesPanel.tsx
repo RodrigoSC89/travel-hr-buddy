@@ -149,7 +149,7 @@ export default function TemplatesPanel() {
     template.variables.forEach(v => {
       const varName = v.replace(/\{\{|\}\}/g, "");
       initialVariables[varName] = "";
-    });
+  };
     setPreviewVariables(initialVariables);
   };
 

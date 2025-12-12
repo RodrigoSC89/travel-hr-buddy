@@ -59,7 +59,7 @@ export default function APIGateway() {
         newSet.add(keyId);
       }
       return newSet;
-    });
+  };
   };
 
   const copyKey = (key: string) => {

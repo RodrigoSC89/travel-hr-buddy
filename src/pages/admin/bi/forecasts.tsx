@@ -36,7 +36,7 @@ export default function BIForecastsPage() {
       })
       .finally(() => {
         setLoading(false);
-      });
+  };
   }, []);
 
   return (

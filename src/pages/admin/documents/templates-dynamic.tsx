@@ -214,7 +214,7 @@ export const TemplatesDynamic = memo(() => {
       // Set default values
       DYNAMIC_VARIABLES.forEach((v) => {
         values[v.key] = `{{${v.key}}}`;
-      });
+  };
       setVariableValues(values);
     }
   };
@@ -226,7 +226,7 @@ export const TemplatesDynamic = memo(() => {
     Object.keys(variableValues).forEach((key) => {
       const regex = new RegExp(`{{${key}}}`, "g");
       html = html.replace(regex, variableValues[key] || `{{${key}}}`);
-    });
+  };
 
     setPreviewHtml(html);
   };

@@ -149,7 +149,7 @@ export default function DocumentTemplates() {
     Object.entries(variableValues).forEach(([key, value]) => {
       const regex = new RegExp(`{{${key}}}`, "g");
       preview = preview.replace(regex, value || `[${key}]`);
-    });
+  };
     
     setPreviewContent(preview);
   };

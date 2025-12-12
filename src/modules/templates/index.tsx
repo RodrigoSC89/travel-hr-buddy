@@ -129,7 +129,7 @@ export const CompleteTemplateEditor: React.FC = () => {
       const initialValues: PlaceholderValue = {};
       selectedTemplate.placeholders?.forEach(ph => {
         initialValues[ph] = "";
-      });
+  };
       setPlaceholderValues(initialValues);
     }
   }, [selectedTemplate, editor]);
@@ -246,7 +246,7 @@ export const CompleteTemplateEditor: React.FC = () => {
     Object.entries(placeholderValues).forEach(([key, value]) => {
       const regex = new RegExp(key.replace(/[{}]/g, "\\$&"), "g");
       content = content.replace(regex, value || key);
-    });
+  };
 
     editor.commands.setContent(content);
     setShowFillDialog(false);
@@ -346,7 +346,7 @@ export const CompleteTemplateEditor: React.FC = () => {
     Object.entries(placeholderValues).forEach(([key, value]) => {
       const regex = new RegExp(key.replace(/[{}]/g, "\\$&"), "g");
       content = content.replace(regex, value || `<span class="text-orange-500">${key}</span>`);
-    });
+  };
     
     setPreviewContent(content);
     setShowPreviewDialog(true);

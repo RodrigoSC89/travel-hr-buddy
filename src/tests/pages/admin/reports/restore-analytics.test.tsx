@@ -60,8 +60,8 @@ describe("RestoreAnalyticsPage", () => {
     );
     await waitFor(() => {
       expect(screen.getByText(/Painel de Auditoria - Restaurações/i)).toBeInTheDocument();
-    });
-  });
+  };
+  };
 
   it("renders the email filter input", async () => {
     render(
@@ -71,8 +71,8 @@ describe("RestoreAnalyticsPage", () => {
     );
     await waitFor(() => {
       expect(screen.getByPlaceholderText(/Filtrar por e-mail/i)).toBeInTheDocument();
-    });
-  });
+  };
+  };
 
   it("renders the search button", async () => {
     render(
@@ -82,8 +82,8 @@ describe("RestoreAnalyticsPage", () => {
     );
     await waitFor(() => {
       expect(screen.getByRole("button", { name: /Buscar/i })).toBeInTheDocument();
-    });
-  });
+  };
+  };
 
   it("renders the back button", async () => {
     render(
@@ -93,8 +93,8 @@ describe("RestoreAnalyticsPage", () => {
     );
     await waitFor(() => {
       expect(screen.getByRole("button", { name: /Voltar/i })).toBeInTheDocument();
-    });
-  });
+  };
+  };
 
   it("displays statistics when data is loaded", async () => {
     render(
@@ -107,8 +107,8 @@ describe("RestoreAnalyticsPage", () => {
       expect(screen.getByText(/Total de restaurações: 100/i)).toBeInTheDocument();
       expect(screen.getByText(/Documentos únicos restaurados: 50/i)).toBeInTheDocument();
       expect(screen.getByText(/Média por dia: 10/i)).toBeInTheDocument();
-    });
-  });
+  };
+  };
 
   it("renders CSV export button", async () => {
     render(
@@ -118,8 +118,8 @@ describe("RestoreAnalyticsPage", () => {
     );
     await waitFor(() => {
       expect(screen.getByRole("button", { name: /CSV/i })).toBeInTheDocument();
-    });
-  });
+  };
+  };
 
   it("renders PDF export button", async () => {
     render(
@@ -129,8 +129,8 @@ describe("RestoreAnalyticsPage", () => {
     );
     await waitFor(() => {
       expect(screen.getByRole("button", { name: /PDF/i })).toBeInTheDocument();
-    });
-  });
+  };
+  };
 
   it("renders the chart section", async () => {
     render(
@@ -140,6 +140,6 @@ describe("RestoreAnalyticsPage", () => {
     );
     await waitFor(() => {
       expect(screen.getByTestId("bar-chart")).toBeInTheDocument();
-    });
-  });
+  };
+  };
 };

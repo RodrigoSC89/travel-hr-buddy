@@ -138,7 +138,7 @@ export const AdvancedSearch: React.FC<AdvancedSearchProps> = ({ open, onOpenChan
         item.category.toLowerCase().includes(searchText) ||
         (item.tags && item.tags.some(tag => tag.toLowerCase().includes(searchText)))
       );
-    });
+  };
 
     // Apply filter
     const filteredByType = activeFilter === "all" 

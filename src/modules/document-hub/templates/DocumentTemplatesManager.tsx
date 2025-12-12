@@ -163,7 +163,7 @@ const DocumentTemplatesManager = () => {
     let result = content;
     Object.entries(variables).forEach(([key, value]) => {
       result = result.replace(new RegExp(`{{${key}}}`, "g"), value);
-    });
+  };
     return result;
   };
 
@@ -536,7 +536,7 @@ const DocumentTemplatesManager = () => {
                             const vars: Record<string, string> = {};
                             template.variables?.forEach(v => {
                               vars[v] = "";
-                            });
+  };
                             setPreviewVariables(vars);
                           }}
                         >

@@ -115,7 +115,7 @@ export const AuditTrailViewer: React.FC = () => {
       log.action.toLowerCase().includes(searchLower) ||
       log.module_accessed.toLowerCase().includes(searchLower)
     );
-  });
+  };
 
   const getResultConfig = (result: string) => {
     return RESULT_CONFIG[result] || RESULT_CONFIG.success;

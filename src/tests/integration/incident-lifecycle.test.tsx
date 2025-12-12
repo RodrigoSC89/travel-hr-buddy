@@ -4,7 +4,7 @@ import { mockIncident, mockCrew } from "../shared/mock-factories";
 describe("Integration: Incident Lifecycle", () => {
   beforeEach(() => {
     vi.clearAllMocks();
-  });
+  };
 
   it("should complete full incident lifecycle from creation to resolution", async () => {
     // Arrange
@@ -124,7 +124,7 @@ describe("Integration: Incident Lifecycle", () => {
 
     expect(validTransitions).toContain("resolved");
     expect(validTransitions).not.toContain(invalidTransition);
-  });
+  };
 
   it("should support multiple crew assignments", async () => {
     // Arrange

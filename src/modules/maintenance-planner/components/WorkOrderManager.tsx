@@ -176,7 +176,7 @@ export default function WorkOrderManager() {
   const filteredOrders = workOrders.filter((os) => {
     if (filter === "all") return true;
     return os.status === filter;
-  });
+  };
 
   return (
     <div className="space-y-4">

@@ -195,7 +195,7 @@ const Templates = () => {
         template.description.toLowerCase().includes(searchQuery.toLowerCase());
       const matchesCategory = selectedCategory === "all" || template.category === selectedCategory;
       return matchesSearch && matchesCategory;
-    });
+  };
   }, [templates, searchQuery, selectedCategory]);
 
   const handleDownload = (template: Template) => {

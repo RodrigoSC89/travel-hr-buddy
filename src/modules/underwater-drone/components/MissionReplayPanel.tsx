@@ -67,7 +67,7 @@ export const MissionReplayPanel: React.FC<MissionReplayProps> = ({ recording, on
             return totalDuration;
           }
           return next;
-        });
+  };
       }, 100);
     } else {
       if (playbackInterval.current) {

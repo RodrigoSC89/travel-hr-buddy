@@ -31,18 +31,18 @@ describe("ApplyTemplate", () => {
 
   beforeEach(() => {
     vi.clearAllMocks();
-  });
+  };
 
   it("should render the component with template title", () => {
     render(<ApplyTemplate template={mockTemplate} />);
     expect(screen.getByText("📄 Aplicar Template")).toBeInTheDocument();
-  });
+  };
 
   it("should extract variables from template content", () => {
     render(<ApplyTemplate template={mockTemplate} />);
     expect(screen.getByPlaceholderText("Preencher: name")).toBeInTheDocument();
     expect(screen.getByPlaceholderText("Preencher: item")).toBeInTheDocument();
-  });
+  };
 
   it("should show message when no variables found", () => {
     const templateNoVars = {
@@ -51,7 +51,7 @@ describe("ApplyTemplate", () => {
     };
     render(<ApplyTemplate template={templateNoVars} />);
     expect(screen.getByText("✅ Nenhuma variável para preencher.")).toBeInTheDocument();
-  });
+  };
 
   it("should update variable values on input change", () => {
     render(<ApplyTemplate template={mockTemplate} />);
@@ -60,7 +60,7 @@ describe("ApplyTemplate", () => {
     fireEvent.change(nameInput, { target: { value: "John" } });
     
     expect(nameInput).toHaveValue("John");
-  });
+  };
 
   it("should generate preview with substituted variables", async () => {
     render(<ApplyTemplate template={mockTemplate} />);
@@ -77,8 +77,8 @@ describe("ApplyTemplate", () => {
     await waitFor(() => {
       expect(screen.getByText("📋 Preview:")).toBeInTheDocument();
       expect(screen.getByTestId("tiptap-preview")).toHaveTextContent("Hello John, your order is ready!");
-    });
-  });
+  };
+  };
 
   it("should show error toast when trying to save without preview", async () => {
     render(<ApplyTemplate template={mockTemplate} />);
@@ -92,8 +92,8 @@ describe("ApplyTemplate", () => {
         description: "Por favor, gere o preview antes de salvar.",
         variant: "destructive",
       });
-    });
-  });
+  };
+  };
 
   it("should save document and show success toast", async () => {
     const { createDocument } = await React.lazy(() => import(import("@/lib/documents/api")));
@@ -108,7 +108,7 @@ describe("ApplyTemplate", () => {
     
     await waitFor(() => {
       expect(screen.getByText("📋 Preview:")).toBeInTheDocument();
-    });
+  };
     
     const saveButton = screen.getByText("💾 Salvar Documento");
     fireEvent.click(saveButton);
@@ -122,8 +122,8 @@ describe("ApplyTemplate", () => {
         title: "Sucesso",
         description: "Documento salvo com sucesso!",
       });
-    });
-  });
+  };
+  };
 
   it("should handle save failure gracefully", async () => {
     const { createDocument } = await React.lazy(() => import(import("@/lib/documents/api")));
@@ -136,7 +136,7 @@ describe("ApplyTemplate", () => {
     
     await waitFor(() => {
       expect(screen.getByText("📋 Preview:")).toBeInTheDocument();
-    });
+  };
     
     const saveButton = screen.getByText("💾 Salvar Documento");
     fireEvent.click(saveButton);
@@ -147,8 +147,8 @@ describe("ApplyTemplate", () => {
         description: "Não foi possível salvar o documento.",
         variant: "destructive",
       });
-    });
-  });
+  };
+  };
 
   it("should handle duplicate variable names correctly", () => {
     const templateDuplicateVars = {

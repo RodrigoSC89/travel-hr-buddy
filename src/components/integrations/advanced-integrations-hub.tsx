@@ -333,7 +333,7 @@ export const AdvancedIntegrationsHub: React.FC = () => {
     const matchesSearch = integration.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
                          integration.description.toLowerCase().includes(searchTerm.toLowerCase());
     return matchesCategory && matchesSearch;
-  });
+  };
 
   const connectedCount = integrations.filter(i => i.status === "connected").length;
   const errorCount = integrations.filter(i => i.status === "error").length;

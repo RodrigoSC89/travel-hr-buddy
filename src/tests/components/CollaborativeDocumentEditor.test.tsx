@@ -87,20 +87,20 @@ vi.mock("lodash", () => ({
 describe("CollaborativeDocumentEditor", () => {
   beforeEach(() => {
     vi.clearAllMocks();
-  });
+  };
 
   it("renders the editor component", () => {
     render(<CollaborativeDocumentEditor documentId="test-doc-123" />);
     
     expect(screen.getByTestId("editor-content")).toBeInTheDocument();
-  });
+  };
 
   it("displays the document title input", () => {
     render(<CollaborativeDocumentEditor documentId="test-doc-123" />);
     
     const titleInput = screen.getByPlaceholderText("Document Title");
     expect(titleInput).toBeInTheDocument();
-  });
+  };
 
   it("shows connected users count", async () => {
     render(<CollaborativeDocumentEditor documentId="test-doc-123" />);
@@ -108,8 +108,8 @@ describe("CollaborativeDocumentEditor", () => {
     // Should show current user + connected peers (1 + 2 = 3)
     await waitFor(() => {
       expect(screen.getByText(/3 online/i)).toBeInTheDocument();
-    });
-  });
+  };
+  };
 
   it("displays custom initial title", () => {
     render(
@@ -121,13 +121,13 @@ describe("CollaborativeDocumentEditor", () => {
     
     const titleInput = screen.getByDisplayValue("My Custom Document");
     expect(titleInput).toBeInTheDocument();
-  });
+  };
 
   it("shows clear content button", () => {
     render(<CollaborativeDocumentEditor documentId="test-doc-123" />);
     
     expect(screen.getByText("Clear Content")).toBeInTheDocument();
-  });
+  };
 
   it("displays collaborative editor info text", () => {
     render(<CollaborativeDocumentEditor documentId="test-doc-123" />);
@@ -135,21 +135,21 @@ describe("CollaborativeDocumentEditor", () => {
     expect(screen.getByText(/Real-time collaborative editor/i)).toBeInTheDocument();
     expect(screen.getByText(/Share the document ID/i)).toBeInTheDocument();
     expect(screen.getByText(/Changes sync automatically/i)).toBeInTheDocument();
-  });
+  };
 
   it("shows auto-save status", () => {
     render(<CollaborativeDocumentEditor documentId="test-doc-123" />);
     
     expect(screen.getByText(/Auto-save:/i)).toBeInTheDocument();
     expect(screen.getByText(/Not saved yet/i)).toBeInTheDocument();
-  });
+  };
 
   it("displays file icon", () => {
     render(<CollaborativeDocumentEditor documentId="test-doc-123" />);
     
     // Check for FileText icon by looking for the card title
     expect(screen.getByRole("heading")).toBeInTheDocument();
-  });
+  };
 
   it("initializes with correct document ID", () => {
     const documentId = "unique-doc-id-456";
@@ -157,5 +157,5 @@ describe("CollaborativeDocumentEditor", () => {
     
     // Component should render without errors
     expect(screen.getByTestId("editor-content")).toBeInTheDocument();
-  });
+  };
 };

@@ -125,7 +125,7 @@ const TemplateManager = () => {
                          template.description.toLowerCase().includes(searchTerm.toLowerCase()) ||
                          template.tags.some(tag => tag.toLowerCase().includes(searchTerm.toLowerCase()));
     return matchesCategory && matchesType && matchesSearch;
-  });
+  };
 
   const getTypeIcon = (type: string) => {
     switch (type) {

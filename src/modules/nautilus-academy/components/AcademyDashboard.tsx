@@ -112,7 +112,7 @@ export default function AcademyDashboard() {
     const matchesCategory = categoryFilter === "all" || c.category === categoryFilter;
     const matchesLevel = levelFilter === "all" || c.level === levelFilter;
     return matchesSearch && matchesCategory && matchesLevel;
-  });
+  };
 
   // Handlers
   const handleCreateCourse = async () => {

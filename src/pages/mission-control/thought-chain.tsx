@@ -41,8 +41,8 @@ const ThoughtChainPage = () => {
             return updated;
           }
           return [...prev, step];
-        });
-      });
+  };
+  };
 
       setTotalTime(result.totalTime);
 

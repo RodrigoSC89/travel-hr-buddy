@@ -37,7 +37,7 @@ export default function DPSyncDashboard() {
         publishEvent("nautilus/dp/alert", { type: "Alerta Crítico", risk, timestamp: Date.now() });
       }
       setSync("Última sync: " + new Date().toLocaleTimeString());
-    });
+  };
     return () => client.end();
   }, []);
 

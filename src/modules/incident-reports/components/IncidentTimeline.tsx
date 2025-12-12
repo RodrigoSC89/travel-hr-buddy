@@ -152,7 +152,7 @@ export const IncidentTimeline: React.FC<IncidentTimelineProps> = ({
       const severityDiff = severityOrder[b.severity] - severityOrder[a.severity];
       if (severityDiff !== 0) return severityDiff;
       return new Date(b.created_at).getTime() - new Date(a.created_at).getTime();
-    });
+  };
 
     setFilteredIncidents(filtered);
   };
@@ -168,7 +168,7 @@ export const IncidentTimeline: React.FC<IncidentTimelineProps> = ({
         groups[monthKey] = [];
       }
       groups[monthKey].push(incident);
-    });
+  };
 
     return Object.entries(groups).sort((a, b) => b[0].localeCompare(a[0]));
   };

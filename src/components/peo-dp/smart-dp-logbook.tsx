@@ -145,7 +145,7 @@ export const SmartDPLogbook: React.FC = () => {
     const matchesType = filterType === "all" || entry.eventType === filterType;
     const matchesSeverity = filterSeverity === "all" || entry.severity === filterSeverity;
     return matchesSearch && matchesType && matchesSeverity;
-  });
+  };
 
   const handleAddEntry = () => {
     if (!newEntry.description || !newEntry.operator) {

@@ -71,7 +71,7 @@ const CalendarView: React.FC = () => {
         taskDate.getMonth() === date.getMonth() &&
         taskDate.getFullYear() === date.getFullYear()
       );
-    });
+  };
   };
 
   const previousMonth = () => {

@@ -88,7 +88,7 @@ export const InventoryManagement = memo(() => {
     const matchesCategory = filterCategory === "all" || item.category === filterCategory;
     const matchesStatus = filterStatus === "all" || item.status === filterStatus;
     return matchesSearch && matchesCategory && matchesStatus;
-  });
+  };
 
   const getStatusBadge = (status: string) => {
     const variants: Record<string, "default" | "destructive" | "secondary" | "outline"> = {

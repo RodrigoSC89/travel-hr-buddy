@@ -201,7 +201,7 @@ const OperationalCalendar = () => {
       if (filterType !== "all" && event.type !== filterType) return false;
       if (filterVessel !== "all" && event.vessel !== filterVessel) return false;
       return true;
-    });
+  };
   }, [events, filterType, filterVessel]);
 
   const eventStyleGetter = (event: CalendarEvent) => {

@@ -5,7 +5,7 @@ import { createMockSession, createMockUser } from "../shared/test-utils";
 describe("Integration: Auth to Dashboard Flow", () => {
   beforeEach(() => {
     vi.clearAllMocks();
-  });
+  };
 
   it("should complete full authentication to dashboard flow", async () => {
     // Arrange

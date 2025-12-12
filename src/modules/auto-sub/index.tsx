@@ -60,7 +60,7 @@ const AutoSub: React.FC = () => {
   useEffect(() => {
     planner.onFeedback((fb) => {
       setFeedback(prev => [fb, ...prev].slice(0, 20));
-    });
+  };
   }, [planner]);
 
   const handleGeneratePlan = () => {

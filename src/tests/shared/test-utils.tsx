@@ -76,7 +76,7 @@ export const waitForLoadingToFinish = async () => {
       };
     };
     checkLoading();
-  });
+  };
 };
 
 /**

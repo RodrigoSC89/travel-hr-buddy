@@ -213,7 +213,7 @@ export const PluginManager: React.FC = () => {
                          plugin.description.toLowerCase().includes(searchQuery.toLowerCase());
     const matchesCategory = selectedCategory === "all" || plugin.category === selectedCategory;
     return matchesSearch && matchesCategory;
-  });
+  };
 
   const installedPlugins = plugins.filter(p => p.installed);
   const enabledCount = installedPlugins.filter(p => p.enabled).length;

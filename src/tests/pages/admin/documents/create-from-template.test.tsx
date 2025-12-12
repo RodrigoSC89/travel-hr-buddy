@@ -36,25 +36,25 @@ describe("CreateFromTemplate", () => {
 
   beforeEach(() => {
     vi.clearAllMocks();
-  });
+  };
 
   it("should render the page with template title", () => {
     render(<CreateFromTemplate template={mockTemplate} />);
     expect(screen.getByText(/Criar Documento a partir do Template/i)).toBeInTheDocument();
-  });
+  };
 
   it("should display title input with default value", () => {
     render(<CreateFromTemplate template={mockTemplate} />);
     const titleInput = screen.getByPlaceholderText("Título do Documento") as HTMLInputElement;
     expect(titleInput.value).toContain("Documento baseado em Welcome Letter");
-  });
+  };
 
   it("should extract variables from template content", () => {
     render(<CreateFromTemplate template={mockTemplate} />);
     expect(screen.getByText(/Preencha os campos variáveis/i)).toBeInTheDocument();
     expect(screen.getByText("name")).toBeInTheDocument();
     expect(screen.getByText("company")).toBeInTheDocument();
-  });
+  };
 
   it("should allow filling variable values", () => {
     render(<CreateFromTemplate template={mockTemplate} />);
@@ -82,8 +82,8 @@ describe("CreateFromTemplate", () => {
 
     await waitFor(() => {
       expect(screen.getByTestId("tiptap-editor")).toBeInTheDocument();
-    });
-  });
+  };
+  };
 
   it("should show editor immediately if no variables", () => {
     const templateNoVars = {
@@ -94,7 +94,7 @@ describe("CreateFromTemplate", () => {
 
     render(<CreateFromTemplate template={templateNoVars} />);
     expect(screen.getByTestId("tiptap-editor")).toBeInTheDocument();
-  });
+  };
 
   it("should call createDocument when save button is clicked", async () => {
     vi.mocked(createDocument).mockResolvedValue({
@@ -116,8 +116,8 @@ describe("CreateFromTemplate", () => {
 
     await waitFor(() => {
       expect(createDocument).toHaveBeenCalled();
-    });
-  });
+  };
+  };
 
   it("should call onSaved callback after successful save", async () => {
     const mockDoc = {
@@ -142,8 +142,8 @@ describe("CreateFromTemplate", () => {
 
     await waitFor(() => {
       expect(onSaved).toHaveBeenCalledWith(mockDoc);
-    });
-  });
+  };
+  };
 
   it("should handle save error gracefully", async () => {
     vi.mocked(createDocument).mockResolvedValue(null);
@@ -161,6 +161,6 @@ describe("CreateFromTemplate", () => {
 
     await waitFor(() => {
       expect(createDocument).toHaveBeenCalled();
-    });
-  });
+  };
+  };
 };

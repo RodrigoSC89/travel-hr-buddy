@@ -170,7 +170,7 @@ export const KnowledgeManagement: React.FC = () => {
     const matchesType = selectedType === "all" || item.type === selectedType;
     
     return matchesSearch && matchesModule && matchesType;
-  });
+  };
 
   const handleCreateNew = () => {
     setEditingItem({

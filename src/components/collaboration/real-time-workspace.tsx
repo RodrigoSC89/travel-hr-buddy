@@ -163,7 +163,7 @@ const RealTimeWorkspace: React.FC = () => {
               title: `${leftUser.name} saiu do workspace`,
               description: "Usuário desconectado",
 };
-          });
+  };
 
         // Configurar mensagens de chat
         channel.on("broadcast", { event: "chat_message" }, (payload) => {

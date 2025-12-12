@@ -23,12 +23,12 @@ vi.mock("@/lib/mqtt/publisher", () => ({
 describe("DPRealtime Component", () => {
   beforeEach(() => {
     vi.clearAllMocks();
-  });
+  };
 
   it("should render the telemetry title", () => {
     render(<DPRealtime />);
     expect(screen.getByText("DP Realtime Telemetry")).toBeInTheDocument();
-  });
+  };
 
   it("should display all telemetry metrics", () => {
     render(<DPRealtime />);
@@ -36,7 +36,7 @@ describe("DPRealtime Component", () => {
     expect(screen.getByText("Thrusters Ativos")).toBeInTheDocument();
     expect(screen.getByText("Potência Total")).toBeInTheDocument();
     expect(screen.getByText("Heading")).toBeInTheDocument();
-  });
+  };
 
   it("should display initial zero values", () => {
     render(<DPRealtime />);
@@ -48,7 +48,7 @@ describe("DPRealtime Component", () => {
     // Verify power and heading show decimal format
     expect(screen.getByText("MW")).toBeInTheDocument();
     expect(screen.getByText("°")).toBeInTheDocument();
-  });
+  };
 
   it("should display units for each metric", () => {
     render(<DPRealtime />);
@@ -64,19 +64,19 @@ describe("DPRealtime Component", () => {
     unmount();
     
     expect(mockMqttClient.end).toHaveBeenCalled();
-  });
+  };
 
   it("should render within a card component", () => {
     const { container } = render(<DPRealtime />);
     
     const card = container.querySelector("[class*=\"shadow-md\"]");
     expect(card).toBeTruthy();
-  });
+  };
 
   it("should display metrics in a grid layout", () => {
     const { container } = render(<DPRealtime />);
     
     const grid = container.querySelector("[class*=\"grid-cols-3\"]");
     expect(grid).toBeTruthy();
-  });
+  };
 };

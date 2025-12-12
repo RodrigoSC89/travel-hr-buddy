@@ -195,7 +195,7 @@ export const EmployeeManagement = memo(() => {
     const matchesDepartment = selectedDepartment === "all" || employee.department === selectedDepartment;
     const matchesStatus = selectedStatus === "all" || employee.status === selectedStatus;
     return matchesSearch && matchesDepartment && matchesStatus;
-  });
+  };
 
   const departments = [...new Set(employees.map(emp => emp.department))];
 

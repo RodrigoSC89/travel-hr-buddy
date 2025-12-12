@@ -92,7 +92,7 @@ export const EnhancedReservationsCalendar: React.FC = () => {
       const eventStart = new Date(event.startDate);
       const eventEnd = new Date(event.endDate);
       return date >= eventStart && date <= eventEnd;
-    });
+  };
   };
 
   const duplicateReservation = (reservation: ReservationEvent) => {

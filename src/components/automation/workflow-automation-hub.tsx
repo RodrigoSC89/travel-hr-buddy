@@ -50,7 +50,7 @@ export const WorkflowAutomationHub: React.FC = () => {
     const matchesCategory = categoryFilter === "all" || w.category === categoryFilter;
     const matchesPriority = priorityFilter === "all" || w.priority === priorityFilter;
     return matchesSearch && matchesStatus && matchesCategory && matchesPriority;
-  });
+  };
 
   const handleClearFilters = useCallback(() => {
     setSearchTerm("");

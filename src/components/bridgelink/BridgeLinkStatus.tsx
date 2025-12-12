@@ -14,7 +14,7 @@ export default function BridgeLinkStatus() {
         latency: (data.latency as number) ?? 0,
         lastSync: (data.lastSync as string) ?? "—"
       });
-    });
+  };
     return () => {
       client.end();
     };

@@ -28,7 +28,7 @@ vi.mock("@/components/copilot/SimilarExamples", () => ({
 describe("JobFormWithExamples Component", () => {
   beforeEach(() => {
     vi.clearAllMocks();
-  });
+  };
 
   it("should render the form with all required fields", () => {
     render(<JobFormWithExamples />);
@@ -37,21 +37,21 @@ describe("JobFormWithExamples Component", () => {
     expect(screen.getByLabelText(/Componente/i)).toBeInTheDocument();
     expect(screen.getByLabelText(/Descrição/i)).toBeInTheDocument();
     expect(screen.getByText(/✅ Criar Job/i)).toBeInTheDocument();
-  });
+  };
 
   it("should render similar examples section", () => {
     render(<JobFormWithExamples />);
 
     expect(screen.getByText(/💡 Exemplos Similares/i)).toBeInTheDocument();
     expect(screen.getByTestId("similar-examples")).toBeInTheDocument();
-  });
+  };
 
   it("should have submit button disabled when fields are empty", () => {
     render(<JobFormWithExamples />);
 
     const submitButton = screen.getByText(/✅ Criar Job/i);
     expect(submitButton).toBeDisabled();
-  });
+  };
 
   it("should enable submit button when both fields are filled", async () => {
     render(<JobFormWithExamples />);
@@ -65,8 +65,8 @@ describe("JobFormWithExamples Component", () => {
 
     await waitFor(() => {
       expect(submitButton).not.toBeDisabled();
-    });
-  });
+  };
+  };
 
   it("should show validation toast when trying to submit with empty fields", () => {
     render(<JobFormWithExamples />);
@@ -78,7 +78,7 @@ describe("JobFormWithExamples Component", () => {
 
     // Button should be disabled, so toast won't be called
     expect(mockToast).not.toHaveBeenCalled();
-  });
+  };
 
   it("should call onSubmit callback when form is submitted", async () => {
     const mockOnSubmit = vi.fn();
@@ -93,7 +93,7 @@ describe("JobFormWithExamples Component", () => {
 
     await waitFor(() => {
       expect(submitButton).not.toBeDisabled();
-    });
+  };
 
     fireEvent.click(submitButton);
 
@@ -102,8 +102,8 @@ describe("JobFormWithExamples Component", () => {
         component: "603.0004.02",
         description: "Problema no gerador",
       });
-    });
-  });
+  };
+  };
 
   it("should show success toast when job is created", async () => {
     render(<JobFormWithExamples />);
@@ -117,7 +117,7 @@ describe("JobFormWithExamples Component", () => {
 
     await waitFor(() => {
       expect(submitButton).not.toBeDisabled();
-    });
+  };
 
     fireEvent.click(submitButton);
 
@@ -126,8 +126,8 @@ describe("JobFormWithExamples Component", () => {
         title: "Job criado com sucesso!",
         description: "O job de manutenção foi registrado.",
       });
-    });
-  });
+  };
+  };
 
   it("should reset form after successful submission", async () => {
     render(<JobFormWithExamples />);
@@ -141,15 +141,15 @@ describe("JobFormWithExamples Component", () => {
 
     await waitFor(() => {
       expect(submitButton).not.toBeDisabled();
-    });
+  };
 
     fireEvent.click(submitButton);
 
     await waitFor(() => {
       expect(componentInput.value).toBe("");
       expect(descriptionInput.value).toBe("");
-    });
-  });
+  };
+  };
 
   it("should populate description when selecting a suggestion", async () => {
     render(<JobFormWithExamples />);
@@ -161,8 +161,8 @@ describe("JobFormWithExamples Component", () => {
 
     await waitFor(() => {
       expect(descriptionInput.value).toBe("Test suggestion from similar examples");
-    });
-  });
+  };
+  };
 
   it("should show toast when suggestion is applied", async () => {
     render(<JobFormWithExamples />);
@@ -176,8 +176,8 @@ describe("JobFormWithExamples Component", () => {
         title: "Exemplo aplicado",
         description: "A descrição foi preenchida com o exemplo selecionado.",
       });
-    });
-  });
+  };
+  };
 
   it("should pass input to SimilarExamples component", () => {
     render(<JobFormWithExamples />);
@@ -201,7 +201,7 @@ describe("JobFormWithExamples Component", () => {
 
     const similarExamplesInput = screen.getByTestId("similar-examples-input");
     expect(similarExamplesInput).toHaveTextContent("603.0004.02");
-  });
+  };
 
   it("should render form with proper ARIA labels", () => {
     render(<JobFormWithExamples />);
@@ -211,7 +211,7 @@ describe("JobFormWithExamples Component", () => {
 
     expect(componentInput).toHaveAttribute("id", "component");
     expect(descriptionInput).toHaveAttribute("id", "description");
-  });
+  };
 
   it("should have proper placeholder text", () => {
     render(<JobFormWithExamples />);
@@ -221,5 +221,5 @@ describe("JobFormWithExamples Component", () => {
 
     expect(componentInput).toBeInTheDocument();
     expect(descriptionInput).toBeInTheDocument();
-  });
+  };
 };

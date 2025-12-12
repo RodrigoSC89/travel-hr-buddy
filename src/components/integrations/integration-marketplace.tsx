@@ -163,7 +163,7 @@ export const IntegrationMarketplace: React.FC = () => {
                          integration.tags.some(tag => tag.toLowerCase().includes(searchTerm.toLowerCase()));
     const matchesCategory = selectedCategory === "all" || integration.category === selectedCategory;
     return matchesSearch && matchesCategory;
-  });
+  };
 
   const sortedIntegrations = [...filteredIntegrations].sort((a, b) => {
     switch (selectedFilter) {

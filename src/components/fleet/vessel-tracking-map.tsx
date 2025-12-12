@@ -210,7 +210,7 @@ const VesselTrackingMap = () => {
           zoom: 10,
           duration: 2000
         });
-      });
+  };
 
       new mapboxgl.Marker(el)
         .setLngLat([vessel.longitude, vessel.latitude])

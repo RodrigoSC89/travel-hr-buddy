@@ -84,13 +84,13 @@ describe("SGSOHistoryTable", () => {
       expect(screen.getByText("Loss of Position Due to Gyro Drift")).toBeInTheDocument();
       expect(screen.getByText("Thruster Control Software Failure")).toBeInTheDocument();
       expect(screen.getByText("Power Management System Malfunction")).toBeInTheDocument();
-    });
+  };
 
     it("should render empty state when no action plans", () => {
       render(<SGSOHistoryTable actionPlans={[]} />);
 
       expect(screen.getByText("Nenhum plano de ação encontrado para esta embarcação.")).toBeInTheDocument();
-    });
+  };
 
     it("should render table headers", () => {
       render(<SGSOHistoryTable actionPlans={mockActionPlans} />);
@@ -100,8 +100,8 @@ describe("SGSOHistoryTable", () => {
       expect(screen.getByText("Categoria SGSO")).toBeInTheDocument();
       expect(screen.getByText("Nível de Risco")).toBeInTheDocument();
       expect(screen.getByText("Status")).toBeInTheDocument();
-    });
-  });
+  };
+  };
 
   describe("Status Badges", () => {
     it("should render 'Aberto' status badge with red color", () => {
@@ -110,7 +110,7 @@ describe("SGSOHistoryTable", () => {
       const badge = screen.getByText("Aberto");
       expect(badge).toBeInTheDocument();
       expect(badge).toHaveClass("bg-destructive");
-    });
+  };
 
     it("should render 'Em Andamento' status badge with yellow color", () => {
       render(<SGSOHistoryTable actionPlans={[mockActionPlans[1]]} />);
@@ -118,7 +118,7 @@ describe("SGSOHistoryTable", () => {
       const badge = screen.getByText("Em Andamento");
       expect(badge).toBeInTheDocument();
       expect(badge).toHaveClass("bg-yellow-500");
-    });
+  };
 
     it("should render 'Resolvido' status badge with green color", () => {
       render(<SGSOHistoryTable actionPlans={[mockActionPlans[2]]} />);
@@ -126,27 +126,27 @@ describe("SGSOHistoryTable", () => {
       const badge = screen.getByText("Resolvido");
       expect(badge).toBeInTheDocument();
       expect(badge).toHaveClass("bg-green-600");
-    });
-  });
+  };
+  };
 
   describe("Risk Level Badges", () => {
     it("should render critical risk level", () => {
       render(<SGSOHistoryTable actionPlans={[mockActionPlans[0]]} />);
 
       expect(screen.getByText(/Crítico/)).toBeInTheDocument();
-    });
+  };
 
     it("should render high risk level", () => {
       render(<SGSOHistoryTable actionPlans={[mockActionPlans[1]]} />);
 
       expect(screen.getByText(/Alto/)).toBeInTheDocument();
-    });
+  };
 
     it("should render medium risk level", () => {
       render(<SGSOHistoryTable actionPlans={[mockActionPlans[2]]} />);
 
       expect(screen.getByText(/Médio/)).toBeInTheDocument();
-    });
+  };
 
     it("should render N/A for missing risk level", () => {
       const planWithoutRisk = {
@@ -156,8 +156,8 @@ describe("SGSOHistoryTable", () => {
       render(<SGSOHistoryTable actionPlans={[planWithoutRisk]} />);
 
       expect(screen.getByText("N/A")).toBeInTheDocument();
-    });
-  });
+  };
+  };
 
   describe("Date Formatting", () => {
     it("should format dates in pt-BR locale", () => {
@@ -165,14 +165,14 @@ describe("SGSOHistoryTable", () => {
 
       // Date should be formatted as DD/MM/YYYY
       expect(screen.getByText("12/09/2025")).toBeInTheDocument();
-    });
+  };
 
     it("should format created_at dates", () => {
       render(<SGSOHistoryTable actionPlans={[mockActionPlans[0]]} />);
 
       expect(screen.getByText("18/10/2025")).toBeInTheDocument();
-    });
-  });
+  };
+  };
 
   describe("Expandable Rows", () => {
     it("should expand row on button click", () => {
@@ -184,7 +184,7 @@ describe("SGSOHistoryTable", () => {
       expect(screen.getByText("📋 Ação Corretiva")).toBeInTheDocument();
       expect(screen.getByText("🛡️ Ação Preventiva")).toBeInTheDocument();
       expect(screen.getByText("💡 Recomendação")).toBeInTheDocument();
-    });
+  };
 
     it("should collapse row on second click", () => {
       render(<SGSOHistoryTable actionPlans={[mockActionPlans[0]]} />);
@@ -195,7 +195,7 @@ describe("SGSOHistoryTable", () => {
 
       fireEvent.click(expandButton);
       expect(screen.queryByText("📋 Ação Corretiva")).not.toBeInTheDocument();
-    });
+  };
 
     it("should show action plan details when expanded", () => {
       render(<SGSOHistoryTable actionPlans={[mockActionPlans[0]]} />);
@@ -206,7 +206,7 @@ describe("SGSOHistoryTable", () => {
       expect(screen.getByText("Immediate gyro recalibration and replacement of faulty sensor")).toBeInTheDocument();
       expect(screen.getByText("Implement automated gyro drift detection system")).toBeInTheDocument();
       expect(screen.getByText("Upgrade to redundant gyro system")).toBeInTheDocument();
-    });
+  };
 
     it("should show approval information when present", () => {
       render(<SGSOHistoryTable actionPlans={[mockActionPlans[1]]} />);
@@ -215,7 +215,7 @@ describe("SGSOHistoryTable", () => {
       fireEvent.click(expandButton);
 
       expect(screen.getByText(/João Silva - Safety Manager/)).toBeInTheDocument();
-    });
+  };
 
     it("should not show approval information when absent", () => {
       render(<SGSOHistoryTable actionPlans={[mockActionPlans[0]]} />);
@@ -224,15 +224,15 @@ describe("SGSOHistoryTable", () => {
       fireEvent.click(expandButton);
 
       expect(screen.queryByText(/Aprovado por:/)).not.toBeInTheDocument();
-    });
-  });
+  };
+  };
 
   describe("SGSO Category", () => {
     it("should render category badge", () => {
       render(<SGSOHistoryTable actionPlans={[mockActionPlans[0]]} />);
 
       expect(screen.getByText("Equipamento")).toBeInTheDocument();
-    });
+  };
 
     it("should render N/A for missing category", () => {
       const planWithoutCategory = {
@@ -244,7 +244,7 @@ describe("SGSOHistoryTable", () => {
       const rows = screen.getAllByRole("row");
       const dataRow = rows[1]; // First data row (after header)
       expect(within(dataRow).getByText("N/A")).toBeInTheDocument();
-    });
+  };
   });
 
   describe("Edit Functionality", () => {
@@ -253,13 +253,13 @@ describe("SGSOHistoryTable", () => {
       render(<SGSOHistoryTable actionPlans={[mockActionPlans[0]]} onEdit={onEdit} />);
 
       expect(screen.getByText("Editar")).toBeInTheDocument();
-    });
+  };
 
     it("should not render edit button when onEdit not provided", () => {
       render(<SGSOHistoryTable actionPlans={[mockActionPlans[0]]} />);
 
       expect(screen.queryByText("Editar")).not.toBeInTheDocument();
-    });
+  };
 
     it("should call onEdit with plan ID when edit button clicked", () => {
       const onEdit = vi.fn();
@@ -269,15 +269,15 @@ describe("SGSOHistoryTable", () => {
       fireEvent.click(editButton);
 
       expect(onEdit).toHaveBeenCalledWith("plan-1");
-    });
+  };
 
     it("should render Ações header when onEdit provided", () => {
       const onEdit = vi.fn();
       render(<SGSOHistoryTable actionPlans={[mockActionPlans[0]]} onEdit={onEdit} />);
 
       expect(screen.getByText("Ações")).toBeInTheDocument();
-    });
-  });
+  };
+  };
 
   describe("Missing Data Handling", () => {
     it("should handle missing incident title", () => {
@@ -288,7 +288,7 @@ describe("SGSOHistoryTable", () => {
       render(<SGSOHistoryTable actionPlans={[planWithoutTitle]} />);
 
       expect(screen.getByText("Sem título")).toBeInTheDocument();
-    });
+  };
 
     it("should handle missing action fields", () => {
       const planWithoutActions = {
@@ -313,7 +313,7 @@ describe("SGSOHistoryTable", () => {
 
       const expandButton = screen.getAllByRole("button", { name: /expandir detalhes/i })[0];
       expect(expandButton).toHaveAttribute("aria-label");
-    });
+  };
 
     it("should update aria-label when row is expanded", () => {
       render(<SGSOHistoryTable actionPlans={[mockActionPlans[0]]} />);
@@ -323,7 +323,7 @@ describe("SGSOHistoryTable", () => {
 
       const collapseButton = screen.getByRole("button", { name: /fechar detalhes/i });
       expect(collapseButton).toBeInTheDocument();
-    });
+  };
 
     it("should render semantic HTML table", () => {
       render(<SGSOHistoryTable actionPlans={mockActionPlans} />);
@@ -331,7 +331,7 @@ describe("SGSOHistoryTable", () => {
       expect(screen.getByRole("table")).toBeInTheDocument();
       expect(screen.getAllByRole("row")).toHaveLength(mockActionPlans.length + 1); // +1 for header
     });
-  });
+  };
 
   describe("Multiple Action Plans", () => {
     it("should render all action plans", () => {
@@ -340,7 +340,7 @@ describe("SGSOHistoryTable", () => {
       expect(screen.getByText("Loss of Position Due to Gyro Drift")).toBeInTheDocument();
       expect(screen.getByText("Thruster Control Software Failure")).toBeInTheDocument();
       expect(screen.getByText("Power Management System Malfunction")).toBeInTheDocument();
-    });
+  };
 
     it("should allow expanding multiple rows simultaneously", () => {
       render(<SGSOHistoryTable actionPlans={mockActionPlans} />);
@@ -351,6 +351,6 @@ describe("SGSOHistoryTable", () => {
 
       const correctionHeaders = screen.getAllByText("📋 Ação Corretiva");
       expect(correctionHeaders).toHaveLength(2);
-    });
-  });
+  };
+  };
 };

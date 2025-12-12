@@ -103,7 +103,7 @@ export const DigitalTwinDP: React.FC = () => {
           return 100;
         }
         return prev + 5;
-      });
+  };
     }, 500);
   };
 

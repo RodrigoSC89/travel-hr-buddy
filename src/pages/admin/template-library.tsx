@@ -43,7 +43,7 @@ export default function TemplateLibraryPage() {
       template.description.toLowerCase().includes(searchQuery.toLowerCase());
     const matchesType = selectedType === "all" || template.type === selectedType;
     return matchesSearch && matchesType;
-  });
+  };
 
   const copyToClipboard = (content: string) => {
     navigator.clipboard.writeText(content);

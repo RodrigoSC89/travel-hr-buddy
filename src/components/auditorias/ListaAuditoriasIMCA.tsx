@@ -78,7 +78,7 @@ export default function ListaAuditoriasIMCA() {
       a.item_auditado?.toLowerCase().includes(searchTerm) ||
       a.resultado?.toLowerCase().includes(searchTerm)
     );
-  });
+  };
 
   const exportarCSV = () => {
     const headers = ["Navio", "Data", "Norma", "Item Auditado", "Resultado", "Comentários"];

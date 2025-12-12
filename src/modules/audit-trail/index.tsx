@@ -171,7 +171,7 @@ export default function AuditTrail() {
     const matchesSeverity = !selectedSeverity || entry.severity === selectedSeverity;
     
     return matchesSearch && matchesSeverity;
-  });
+  };
 
   const runAIAnalysis = async () => {
     toast.info("Analisando padrões com IA...");

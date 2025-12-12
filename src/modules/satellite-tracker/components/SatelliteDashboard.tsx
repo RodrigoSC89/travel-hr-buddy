@@ -69,7 +69,7 @@ export const SatelliteDashboard: React.FC = () => {
           }
         }
         return updated;
-      });
+  };
       setLastUpdate(new Date());
     }, 10000);
     

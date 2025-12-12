@@ -178,7 +178,7 @@ export const MaintenanceAlertsPanel: React.FC<MaintenanceAlertsPanelProps> = ({
     if (activeTab === "overdue") return alert.type === "overdue";
     if (activeTab === "upcoming") return alert.type === "upcoming" || alert.type === "warning";
     return true;
-  });
+  };
 
   const overdueCount = alerts.filter(a => a.type === "overdue").length;
   const unreadCount = alerts.filter(a => !a.isRead).length;

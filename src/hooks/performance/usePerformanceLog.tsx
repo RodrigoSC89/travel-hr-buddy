@@ -35,5 +35,5 @@ export const usePerformanceLog = memo(function({
   // Reset render start time on each render
   useEffect(() => {
     renderStartTime.current = Date.now();
-  });
+  };
 }

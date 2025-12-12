@@ -10,7 +10,7 @@ const { mockUseEditor } = vi.hoisted(() => {
       state: {},
     })),
   };
-});
+  };
 
 vi.mock("@tiptap/react", () => ({
   useEditor: mockUseEditor,
@@ -27,19 +27,19 @@ describe("TipTapPreview", () => {
   it("should render the component", () => {
     render(<TipTapPreview content="Test content" />);
     expect(screen.getByTestId("editor-content")).toBeInTheDocument();
-  });
+  };
 
   it("should apply default className", () => {
     const { container } = render(<TipTapPreview content="Test content" />);
     const editorContainer = container.querySelector(".border.rounded-lg.bg-white");
     expect(editorContainer).toBeInTheDocument();
-  });
+  };
 
   it("should apply custom className", () => {
     const { container } = render(<TipTapPreview content="Test content" className="custom-class" />);
     const editorContainer = container.querySelector(".custom-class");
     expect(editorContainer).toBeInTheDocument();
-  });
+  };
 
   it("should be readonly by default", () => {
     render(<TipTapPreview content="Test content" />);
@@ -49,7 +49,7 @@ describe("TipTapPreview", () => {
         editable: false,
       })
     );
-  });
+  };
 
   it("should be editable when readOnly is false", () => {
     render(<TipTapPreview content="Test content" readOnly={false} />);
@@ -59,7 +59,7 @@ describe("TipTapPreview", () => {
         editable: true,
       })
     );
-  });
+  };
 
   it("should pass content to editor", () => {
     const testContent = "Hello, world!";
@@ -71,5 +71,5 @@ describe("TipTapPreview", () => {
         content: testContent,
       })
     );
-  });
+  };
 };

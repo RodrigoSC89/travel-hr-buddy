@@ -164,7 +164,7 @@ export const DPCompetenceHub: React.FC = () => {
       member.vessel.toLowerCase().includes(searchTerm.toLowerCase());
     const matchesRole = filterRole === "all" || member.role === filterRole;
     return matchesSearch && matchesRole;
-  });
+  };
 
   const getExpiringCerts = () => {
     return crewMembers.flatMap(m => m.certifications.filter(c => c.status === "expiring" || c.status === "expired").map(c => ({ ...c, crewName: m.name, crewRole: m.role })));

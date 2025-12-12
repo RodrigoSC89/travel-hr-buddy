@@ -11,7 +11,7 @@ vi.mock("react-router-dom", async () => {
     ...actual,
     useNavigate: () => mockNavigate,
   };
-});
+  };
 
 // Mock Supabase client
 const mockSupabaseFunctions = vi.fn();
@@ -44,7 +44,7 @@ vi.mock("@/integrations/supabase/client", () => ({
 describe("AssistantLogsPage Component", () => {
   beforeEach(() => {
     vi.clearAllMocks();
-  });
+  };
 
   it("should render the page title", async () => {
     render(
@@ -54,7 +54,7 @@ describe("AssistantLogsPage Component", () => {
     );
 
     expect(screen.getByText(/Histórico do Assistente IA/i)).toBeInTheDocument();
-  });
+  };
 
   it("should render filter controls", async () => {
     render(
@@ -65,7 +65,7 @@ describe("AssistantLogsPage Component", () => {
 
     expect(screen.getByText(/Filtros/i)).toBeInTheDocument();
     expect(screen.getByPlaceholderText(/Buscar em perguntas ou respostas/i)).toBeInTheDocument();
-  });
+  };
 
   it("should render email filter input", async () => {
     render(
@@ -76,8 +76,8 @@ describe("AssistantLogsPage Component", () => {
 
     await waitFor(() => {
       expect(screen.getByPlaceholderText(/Filtrar por e-mail/i)).toBeInTheDocument();
-    });
-  });
+  };
+  };
 
   it("should navigate back when back button is clicked", async () => {
     render(
@@ -102,7 +102,7 @@ describe("AssistantLogsPage Component", () => {
 
     // The loading text includes ellipsis
     expect(screen.getByText(/Carregando histórico\.\.\./i)).toBeInTheDocument();
-  });
+  };
 
   it("should display export buttons", async () => {
     render(
@@ -115,8 +115,8 @@ describe("AssistantLogsPage Component", () => {
       expect(screen.getByText(/CSV/i)).toBeInTheDocument();
       expect(screen.getByText(/PDF/i)).toBeInTheDocument();
       expect(screen.getByText(/Enviar E-mail/i)).toBeInTheDocument();
-    });
-  });
+  };
+  };
 
   it("should fetch logs on mount", async () => {
     render(
@@ -127,6 +127,6 @@ describe("AssistantLogsPage Component", () => {
 
     await waitFor(() => {
       expect(mockSupabaseFunctions).toHaveBeenCalledWith("assistant-logs");
-    });
-  });
+  };
+  };
 };

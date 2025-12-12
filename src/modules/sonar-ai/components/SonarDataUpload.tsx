@@ -59,7 +59,7 @@ export const SonarDataUpload = memo(function() {
             obj[header.trim()] = values[index]?.trim();
             return obj;
           }, {} as Record<string, string>);
-        });
+  };
       } else {
         parsedData = { raw: content };
       }

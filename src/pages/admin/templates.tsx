@@ -431,7 +431,7 @@ export default function TemplatesPage() {
         }
         pdf.text(line, margin, y);
         y += 7;
-      });
+  };
       
       pdf.save(`${template.title.replace(/[^a-z0-9]/gi, "_").toLowerCase()}.pdf`);
       
@@ -468,7 +468,7 @@ export default function TemplatesPage() {
     const matchesPrivate = !filterPrivate || template.is_private;
     
     return matchesSearch && matchesFavorites && matchesPrivate;
-  });
+  };
 
   return (
     <div className="space-y-6 p-8">

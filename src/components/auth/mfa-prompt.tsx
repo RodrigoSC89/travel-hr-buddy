@@ -201,7 +201,7 @@ export const useMFA = memo(() => {
     return new Promise((resolve) => {
       setMfaResolver({ resolve });
       setShowMFAPrompt(true);
-    });
+  };
   };
 
   const handleMFASuccess = () => {

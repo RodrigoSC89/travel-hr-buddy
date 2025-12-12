@@ -12,7 +12,7 @@ vi.mock("react-router-dom", async () => {
     ...actual,
     useNavigate: () => mockNavigate,
   };
-});
+  };
 
 // Mock Supabase client
 const mockGetSession = vi.fn();
@@ -44,7 +44,7 @@ describe("AssistantReportLogsPage - Cron Status", () => {
         },
       },
     });
-  });
+  };
 
   it("should display cron status badge when status is ok", async () => {
     // Mock successful fetch responses
@@ -78,12 +78,12 @@ describe("AssistantReportLogsPage - Cron Status", () => {
     await waitFor(() => {
       const statusBadge = screen.getByText(/Cron executado há 2 hora/i);
       expect(statusBadge).toBeDefined();
-    });
+  };
 
     // Check that the status badge contains the success emoji
     const statusBadge = screen.getByText(/Cron executado há 2 hora/i);
     expect(statusBadge.textContent).toContain("✅");
-  });
+  };
 
   it("should display warning badge when cron has not run recently", async () => {
     // Mock fetch responses with warning status
@@ -117,12 +117,12 @@ describe("AssistantReportLogsPage - Cron Status", () => {
     await waitFor(() => {
       const statusBadge = screen.getByText(/Última execução há 48 horas/i);
       expect(statusBadge).toBeDefined();
-    });
+  };
 
     // Check that the status badge contains the warning emoji
     const statusBadge = screen.getByText(/Última execução há 48 horas/i);
     expect(statusBadge.textContent).toContain("⚠️");
-  });
+  };
 
   it("should not display status badge if cron-status API fails", async () => {
     // Mock fetch responses where cron-status fails
@@ -151,12 +151,12 @@ describe("AssistantReportLogsPage - Cron Status", () => {
     await waitFor(() => {
       const heading = screen.getByText(/Logs de Envio de Relatórios/i);
       expect(heading).toBeDefined();
-    });
+  };
 
     // Check that no cron status badge is displayed
     expect(screen.queryByText(/Cron executado/i)).toBeNull();
     expect(screen.queryByText(/Última execução/i)).toBeNull();
-  });
+  };
 
   it("should render page title and filters", async () => {
     // Mock successful fetch responses

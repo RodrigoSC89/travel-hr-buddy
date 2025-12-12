@@ -288,7 +288,7 @@ export const DocumentManagement: React.FC = () => {
                          doc.tags.some(tag => tag.toLowerCase().includes(searchTerm.toLowerCase()));
     const matchesCategory = filterCategory === "all" || doc.category === filterCategory;
     return matchesSearch && matchesCategory;
-  });
+  };
 
   return (
     <div className="space-y-6">

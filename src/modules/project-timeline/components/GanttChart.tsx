@@ -254,7 +254,7 @@ export const GanttChart = memo(() => {
     // First pass: create map
     allTasks.forEach(task => {
       taskMap.set(task.id, { ...task, subtasks: [] });
-    });
+  };
 
     // Second pass: build hierarchy
     allTasks.forEach(task => {

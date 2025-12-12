@@ -87,7 +87,7 @@ export const MLCInspectionDashboard: React.FC = () => {
                       return prev.map((m, i) => i === prev.length - 1 ? { ...m, content: assistantContent } : m);
                     }
                     return [...prev, { role: "assistant", content: assistantContent }];
-                  });
+  };
                 }
               } catch {}
             }

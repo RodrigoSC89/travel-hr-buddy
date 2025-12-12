@@ -269,7 +269,7 @@ export default function MaritimeCommandCenter() {
                          member.employee_id.toLowerCase().includes(searchTerm.toLowerCase());
     const matchesStatus = statusFilter === "all" || member.status === statusFilter;
     return matchesSearch && matchesStatus;
-  });
+  };
 
   if (loading) {
     return (

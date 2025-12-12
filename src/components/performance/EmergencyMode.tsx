@@ -63,7 +63,7 @@ export const EmergencyModeProvider = memo(function({ children }: EmergencyModePr
         setSyncStatus("idle");
       }).catch(() => {
         setSyncStatus("error");
-      });
+  };
     };
 
     const handleOffline = () => {

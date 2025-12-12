@@ -40,7 +40,7 @@ describe("PerformanceMonitoringDashboard", () => {
   it("should render the performance monitoring dashboard", () => {
     render(<PerformanceMonitoringDashboard />);
     expect(screen.getByText("Performance Monitoring")).toBeInTheDocument();
-  });
+  };
 
   it("should display statistics cards", async () => {
     render(<PerformanceMonitoringDashboard />);
@@ -51,22 +51,22 @@ describe("PerformanceMonitoringDashboard", () => {
     expect(screen.getByText("Active Systems")).toBeInTheDocument();
     expect(screen.getByText("Warning Alerts")).toBeInTheDocument();
     expect(screen.getByText("Critical Alerts")).toBeInTheDocument();
-  });
+  };
 
   it("should have export logs functionality", () => {
     render(<PerformanceMonitoringDashboard />);
     expect(screen.getByText("Export Logs")).toBeInTheDocument();
-  });
+  };
 
   it("should have threshold configuration tab", () => {
     render(<PerformanceMonitoringDashboard />);
     expect(screen.getByText("Thresholds")).toBeInTheDocument();
-  });
-});
+  };
+  };
 
 describe("Threshold alerts", () => {
   it("should trigger toast notification for critical alerts", () => {
     const mockToast = vi.fn();
     expect(mockToast).toBeDefined();
-  });
+  };
 };

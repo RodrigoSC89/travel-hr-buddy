@@ -42,7 +42,7 @@ export const OfflineStatusBar: React.FC<OfflineStatusBarProps> = ({ className })
     offlineSyncManager.initialize().then(async () => {
       const count = await offlineSyncManager.getPendingCount();
       setPendingCount(count);
-    });
+  };
 
     return () => {
       window.removeEventListener("online", handleOnline);

@@ -118,7 +118,7 @@ export const UserManagementHub: React.FC = () => {
       const matchesRole = roleFilter === "all" || user.role === roleFilter;
       const matchesStatus = statusFilter === "all" || user.status === statusFilter;
       return matchesSearch && matchesRole && matchesStatus;
-    });
+  };
   }, [users, searchTerm, roleFilter, statusFilter]);
 
   // Handlers

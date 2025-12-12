@@ -87,7 +87,7 @@ export const DocumentProcessor: React.FC = () => {
             return 90;
           }
           return prev + 10;
-        });
+  };
       }, 200);
 
       // Convert file to base64 for processing
@@ -166,7 +166,7 @@ export const DocumentProcessor: React.FC = () => {
         }
       };
       reader.onerror = error => reject(error);
-    });
+  };
   };
 
   const exportAnalysis = (doc: ProcessedDocument) => {

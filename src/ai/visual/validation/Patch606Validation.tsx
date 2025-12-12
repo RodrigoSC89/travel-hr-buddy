@@ -106,7 +106,7 @@ export const Patch606Validation = memo(function() {
       console.error("Validation error:", error);
       Object.keys(testResults).forEach(key => {
         if (testResults[key] === undefined) testResults[key] = false;
-      });
+  };
     }
 
     setResults(testResults);

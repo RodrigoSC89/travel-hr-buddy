@@ -155,7 +155,7 @@ export const CrewCertificationsManager = memo(function({ crewMembers = [] }: Cre
       cert.number.toLowerCase().includes(searchTerm.toLowerCase());
     const matchesStatus = statusFilter === "all" || cert.status === statusFilter;
     return matchesSearch && matchesStatus;
-  });
+  };
 
   const stats = {
     total: certifications.length,

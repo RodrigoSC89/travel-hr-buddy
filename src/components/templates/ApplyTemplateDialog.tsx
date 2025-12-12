@@ -84,7 +84,7 @@ export const ApplyTemplateDialog = memo(function({
       extractedVariables.forEach(varName => {
         // Try to use auto-fill suggestions
         initialVars[varName] = autoFillSuggestions[varName] || "";
-      });
+  };
       setVariables(initialVars);
     }
   }, [open, extractedVariables, autoFillSuggestions]);

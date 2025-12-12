@@ -81,7 +81,7 @@ export const DocumentValidator: React.FC<DocumentValidatorProps> = ({
             return 90;
           }
           return prev + 10;
-        });
+  };
       }, 200);
 
       // Converter arquivo para base64
@@ -157,7 +157,7 @@ export const DocumentValidator: React.FC<DocumentValidatorProps> = ({
       };
       reader.onerror = reject;
       reader.readAsDataURL(file);
-    });
+  };
   };
 
   // Get validation status color

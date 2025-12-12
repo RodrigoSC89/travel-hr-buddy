@@ -31,22 +31,22 @@ vi.mock("recharts", () => ({
 describe("PainelSGSO", () => {
   beforeEach(() => {
     vi.clearAllMocks();
-  });
+  };
 
   it("should render the panel title", () => {
     render(<PainelSGSO />);
     expect(screen.getByText(/Painel SGSO - Risco Operacional por Embarcação/i)).toBeDefined();
-  });
+  };
 
   it("should render export CSV button", () => {
     render(<PainelSGSO />);
     expect(screen.getByText(/Exportar CSV/i)).toBeDefined();
-  });
+  };
 
   it("should render export PDF button", () => {
     render(<PainelSGSO />);
     expect(screen.getByText(/Exportar PDF/i)).toBeDefined();
-  });
+  };
 
   it("should render vessel cards", () => {
     render(<PainelSGSO />);
@@ -54,7 +54,7 @@ describe("PainelSGSO", () => {
     expect(screen.getByText(/AHTS Pacífico/i)).toBeDefined();
     expect(screen.getByText(/OSV Caribe/i)).toBeDefined();
     expect(screen.getByText(/PLSV Mediterrâneo/i)).toBeDefined();
-  });
+  };
 
   it("should render risk levels", () => {
     render(<PainelSGSO />);
@@ -62,7 +62,7 @@ describe("PainelSGSO", () => {
     expect(screen.getByText(/Risco: ALTO/i)).toBeDefined();
     expect(screen.getByText(/Risco: MÉDIO/i)).toBeDefined();
     expect(screen.getByText(/Risco: BAIXO/i)).toBeDefined();
-  });
+  };
 
   it("should render failure counts", () => {
     render(<PainelSGSO />);
@@ -70,17 +70,17 @@ describe("PainelSGSO", () => {
     expect(screen.getByText(/Falhas críticas: 8/i)).toBeDefined();
     expect(screen.getByText(/Falhas críticas: 4/i)).toBeDefined();
     expect(screen.getByText(/Falhas críticas: 2/i)).toBeDefined();
-  });
+  };
 
   it("should render monthly comparison chart title", () => {
     render(<PainelSGSO />);
     expect(screen.getByText(/Comparativo Mensal de Falhas/i)).toBeDefined();
-  });
+  };
 
   it("should render bar chart", () => {
     const { container } = render(<PainelSGSO />);
     expect(container.querySelector("[data-testid=\"bar-chart\"]")).toBeDefined();
-  });
+  };
 
   it("should call saveAs when CSV export button is clicked", async () => {
     const { saveAs } = await React.lazy(() => import(import("file-saver")));
@@ -93,7 +93,7 @@ describe("PainelSGSO", () => {
     const blob = (saveAs as unknown).mock.calls[0][0];
     expect(blob).toBeInstanceOf(Blob);
     expect((saveAs as unknown).mock.calls[0][1]).toBe("relatorio_sgso.csv");
-  });
+  };
 
   it("should call html2pdf when PDF export button is clicked", async () => {
     const html2pdf = (await React.lazy(() => import(import("html2pdf.js")))).default;
@@ -103,7 +103,7 @@ describe("PainelSGSO", () => {
     fireEvent.click(pdfButton);
 
     expect(html2pdf).toHaveBeenCalled();
-  });
+  };
 
   it("should have correct button styling", () => {
     const { container } = render(<PainelSGSO />);

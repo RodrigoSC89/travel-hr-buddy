@@ -143,7 +143,7 @@ const CrewTraining = () => {
       record.crew_position?.toLowerCase().includes(searchQuery.toLowerCase());
     
     return matchesStatus && matchesType && matchesSearch;
-  });
+  };
 
   const types = Array.from(new Set(records.map(r => r.training_type).filter(Boolean)));
 

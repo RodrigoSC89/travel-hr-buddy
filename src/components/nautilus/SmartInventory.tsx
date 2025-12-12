@@ -118,7 +118,7 @@ export const SmartInventory = memo(function() {
     const matchesSearch = item.name.toLowerCase().includes(searchTerm.toLowerCase());
     const matchesCategory = categoryFilter === "all" || item.category === categoryFilter;
     return matchesSearch && matchesCategory;
-  });
+  };
 
   const getStockStatus = (item: InventoryItem) => {
     if (item.currentStock < item.minStock) return { color: "text-red-500", bg: "bg-red-500/10", label: "Crítico" };

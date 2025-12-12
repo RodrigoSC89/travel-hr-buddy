@@ -325,7 +325,7 @@ export default function IncidentReportsComplete() {
       const statusMatch = filterStatus === "all" || inc.status === filterStatus;
       const severityMatch = filterSeverity === "all" || inc.severity === filterSeverity;
       return statusMatch && severityMatch;
-    });
+  };
   };
 
   const getSeverityColor = (severity: string) => {

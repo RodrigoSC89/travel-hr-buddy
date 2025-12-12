@@ -23,7 +23,7 @@ describe("DocumentEditor", () => {
   beforeEach(() => {
     vi.clearAllMocks();
     (useAuth as unknown).mockReturnValue({ user: mockUser });
-  });
+  };
 
   it("renders the document editor with title and content fields", () => {
     render(<DocumentEditor />);
@@ -31,7 +31,7 @@ describe("DocumentEditor", () => {
     expect(screen.getByPlaceholderText("Título do documento")).toBeInTheDocument();
     expect(screen.getByPlaceholderText(/Digite o conteúdo/)).toBeInTheDocument();
     expect(screen.getByRole("button", { name: /Salvar/i })).toBeInTheDocument();
-  });
+  };
 
   it("shows initial title and content when provided", () => {
     render(
@@ -43,14 +43,14 @@ describe("DocumentEditor", () => {
     
     expect(screen.getByDisplayValue("Test Document")).toBeInTheDocument();
     expect(screen.getByDisplayValue("Test content")).toBeInTheDocument();
-  });
+  };
 
   it("disables save button when title or content is empty", () => {
     render(<DocumentEditor />);
     
     const saveButton = screen.getByRole("button", { name: /Salvar/i });
     expect(saveButton).toBeDisabled();
-  });
+  };
 
   it("enables save button when both title and content are filled", async () => {
     render(<DocumentEditor />);
@@ -104,8 +104,8 @@ describe("DocumentEditor", () => {
       expect(mockInsert).toHaveBeenCalled();
       expect(mockVersionInsert).toHaveBeenCalled();
       expect(onSave).toHaveBeenCalledWith("doc-123");
-    });
-  });
+  };
+  };
 
   it("updates existing document and creates version on save", async () => {
     const mockUpdate = vi.fn().mockReturnValue({
@@ -143,18 +143,18 @@ describe("DocumentEditor", () => {
     await waitFor(() => {
       expect(mockUpdate).toHaveBeenCalled();
       expect(mockVersionInsert).toHaveBeenCalled();
-    });
-  });
+  };
+  };
 
   it("displays version count", async () => {
     render(<DocumentEditor />);
     
     expect(screen.getByText(/Total de versões salvas: 0/)).toBeInTheDocument();
-  });
+  };
 
   it("shows auto-save information", () => {
     render(<DocumentEditor />);
     
     expect(screen.getByText(/documento é salvo automaticamente 2 segundos/)).toBeInTheDocument();
-  });
+  };
 };

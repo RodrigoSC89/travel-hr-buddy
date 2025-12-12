@@ -146,7 +146,7 @@ export const ClientCustomization = memo(() => {
   useState(() => {
     setOrganizations(mockOrganizations);
     setCustomFields(defaultCustomFields);
-  });
+  };
 
   const addCustomField = () => {
     const newField: CustomField = {

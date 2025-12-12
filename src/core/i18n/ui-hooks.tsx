@@ -125,7 +125,7 @@ export function useTranslation(
         .catch((error) => {
           logger.error(`[useTranslation] Translation failed for ${key}`, error);
           translationCache.set(cacheKey, key);
-        });
+  };
 
       // Retornar chave enquanto traduz (evita flickering)
       return cached || key;

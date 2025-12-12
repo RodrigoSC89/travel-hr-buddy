@@ -152,7 +152,7 @@ export const TenantUserManagement: React.FC = () => {
     const matchesStatus = statusFilter === "all" || user.status === statusFilter;
     
     return matchesSearch && matchesRole && matchesStatus;
-  });
+  };
 
   const handleInviteUser = async () => {
     if (!newUserEmail || !newUserRole) {

@@ -73,7 +73,7 @@ export const IMCADPAIAssistant = memo(function({ selectedDPClass }: Props) {
                   const updated = [...prev];
                   updated[updated.length - 1] = { role: "assistant", content: assistantContent };
                   return updated;
-                });
+  };
               }
             } catch {}
           }

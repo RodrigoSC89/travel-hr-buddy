@@ -53,6 +53,6 @@ export const OptimizedCard = memo(({ children, className, ...props }: unknown: u
       {children}
     </div>
   );
-});
+  };
 
 OptimizedCard.displayName = "OptimizedCard";

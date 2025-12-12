@@ -47,7 +47,7 @@ export const MobileLogs: React.FC = () => {
     const matchesSearch = searchTerm === "" || 
       log.message.toLowerCase().includes(searchTerm.toLowerCase());
     return matchesFilter && matchesSearch;
-  });
+  };
 
   const getLogIcon = (level: LogLevel) => {
     switch (level) {

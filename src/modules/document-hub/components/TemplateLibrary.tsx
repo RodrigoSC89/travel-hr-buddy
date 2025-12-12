@@ -220,7 +220,7 @@ export const TemplateLibrary: React.FC = () => {
     const initialData: Record<string, string> = {};
     placeholders.forEach(p => {
       initialData[p] = "";
-    });
+  };
     setGenerateData(initialData);
     setIsGenerateOpen(true);
   };
@@ -235,7 +235,7 @@ export const TemplateLibrary: React.FC = () => {
       Object.keys(generateData).forEach(key => {
         const regex = new RegExp(`\\{\\{\\s*${key}\\s*\\}\\}`, "g");
         content = content.replace(regex, generateData[key] || `[${key}]`);
-      });
+  };
 
       // Generate PDF
       const doc = new jsPDF();

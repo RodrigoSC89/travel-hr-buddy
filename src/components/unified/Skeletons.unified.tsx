@@ -398,7 +398,7 @@ export const SkeletonTable = memo(function SkeletonTable({
       ))}
     </div>
   );
-});
+  };
 SkeletonTable.displayName = "SkeletonTable";
 
 // ==================== SKELETON LIST ====================
@@ -675,7 +675,7 @@ export const SkeletonProfile = memo(function SkeletonProfile({
       </div>
     </div>
   );
-});
+  };
 SkeletonProfile.displayName = "SkeletonProfile";
 
 // ==================== SKELETON TEXT ====================
@@ -697,7 +697,7 @@ export const SkeletonText = memo(function SkeletonText({
       ))}
     </div>
   );
-});
+  };
 SkeletonText.displayName = "SkeletonText";
 
 // ==================== SKELETON NAVIGATION ====================
@@ -718,7 +718,7 @@ export const SkeletonNav = memo(function SkeletonNav({
       ))}
     </div>
   );
-});
+  };
 SkeletonNav.displayName = "SkeletonNav";
 
 // ==================== SKELETON IMAGE ====================

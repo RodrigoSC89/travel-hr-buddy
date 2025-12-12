@@ -96,5 +96,5 @@ if (typeof window !== "undefined" && import.meta.env.PROD) {
         // Silently ignore
       }
     }, 5000);
-  });
+  };
 }

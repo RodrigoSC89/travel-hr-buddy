@@ -104,7 +104,7 @@ export const STCWCompetencyMatrix = memo(function() {
       const matchesArea = filterArea === "all" || c.function_area === filterArea;
       const matchesLevel = filterLevel === "all" || c.level === filterLevel;
       return matchesSearch && matchesArea && matchesLevel;
-    });
+  };
   }, [competencies, searchQuery, filterArea, filterLevel]);
 
   const getAssessmentStatus = (crewId: string, competencyId: string): string => {
@@ -133,8 +133,8 @@ export const STCWCompetencyMatrix = memo(function() {
         if (status === "competent") competent++;
         else if (status === "in_training") inTraining++;
         else gaps++;
-      });
-    });
+  };
+  };
 
     return {
       total,

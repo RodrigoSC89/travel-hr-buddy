@@ -273,7 +273,7 @@ export const MaintenanceTasksTable: React.FC<MaintenanceTasksTableProps> = ({ on
     const matchesStatus = statusFilter === "all" || task.status === statusFilter;
     const matchesType = typeFilter === "all" || task.type === typeFilter;
     return matchesSearch && matchesStatus && matchesType;
-  });
+  };
 
   return (
     <Card>

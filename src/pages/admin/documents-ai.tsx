@@ -170,7 +170,7 @@ export default function DocumentsAIPage() {
         }
         pdf.text(line, margin, y);
         y += 7;
-      });
+  };
       
       pdf.save(`${title.replace(/[^a-z0-9]/gi, "_").toLowerCase()}.pdf`);
       

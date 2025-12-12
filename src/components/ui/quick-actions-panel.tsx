@@ -85,7 +85,7 @@ export const QuickActionsPanel: React.FC = () => {
                          action.description.toLowerCase().includes(searchTerm.toLowerCase());
     const matchesCategory = selectedCategory === "Todos" || action.category === selectedCategory;
     return matchesSearch && matchesCategory;
-  });
+  };
 
   const handleQuickAction = (module: string) => {
     handleNavigation(module);

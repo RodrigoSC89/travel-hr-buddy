@@ -33,13 +33,13 @@ describe("ExportBIReport Component", () => {
   it("should render the export button", () => {
     render(<ExportBIReport trend={mockTrendData} forecast={mockForecast} />);
     expect(screen.getByText(/Exportar PDF/i)).toBeDefined();
-  });
+  };
 
   it("should render button with correct icon", () => {
     render(<ExportBIReport trend={mockTrendData} forecast={mockForecast} />);
     const button = screen.getByText(/📄 Exportar PDF/i);
     expect(button).toBeDefined();
-  });
+  };
 
   it("should call html2pdf when button is clicked", async () => {
     const html2pdf = await React.lazy(() => import(import("html2pdf.js")));
@@ -60,16 +60,16 @@ describe("ExportBIReport Component", () => {
     render(<ExportBIReport trend={[]} forecast={mockForecast} />);
     const button = screen.getByText(/📄 Exportar PDF/i);
     expect(button).toHaveProperty("disabled", true);
-  });
+  };
 
   it("should be enabled when trend data is provided", () => {
     render(<ExportBIReport trend={mockTrendData} forecast={mockForecast} />);
     const button = screen.getByText(/📄 Exportar PDF/i);
     expect(button).toHaveProperty("disabled", false);
-  });
+  };
 
   it("should render without errors with empty forecast", () => {
     const { container } = render(<ExportBIReport trend={mockTrendData} forecast="" />);
     expect(container).toBeDefined();
-  });
+  };
 };

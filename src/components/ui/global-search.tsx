@@ -188,7 +188,7 @@ const GlobalSearch: React.FC<GlobalSearchProps> = ({ isOpen, onOpenChange }) => 
     setRecentSearches(prev => {
       const updated = [result.title, ...prev.filter(item => item !== result.title)].slice(0, 5);
       return updated;
-    });
+  };
 
     // Navegar
     navigate(result.path);

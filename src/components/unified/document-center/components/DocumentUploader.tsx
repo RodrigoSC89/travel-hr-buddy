@@ -100,7 +100,7 @@ export const DocumentUploader: React.FC<DocumentUploaderProps> = ({
           return 90;
         }
         return prev + 10;
-      });
+  };
     }, 200);
 
     try {

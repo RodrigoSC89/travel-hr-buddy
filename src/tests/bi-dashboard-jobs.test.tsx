@@ -15,7 +15,7 @@ vi.mock("@/integrations/supabase/client", () => ({
 describe("DashboardJobs Component", () => {
   beforeEach(() => {
     vi.clearAllMocks();
-  });
+  };
 
   it("should render loading skeleton initially", () => {
     // Mock pending state
@@ -25,7 +25,7 @@ describe("DashboardJobs Component", () => {
 
     render(<DashboardJobs />);
     expect(screen.getByText(/📊 Falhas por Componente \+ Tempo Médio/i)).toBeDefined();
-  });
+  };
 
   it("should render the chart title", () => {
     vi.mocked(supabase.functions.invoke).mockResolvedValue({
@@ -35,7 +35,7 @@ describe("DashboardJobs Component", () => {
 
     render(<DashboardJobs />);
     expect(screen.getByText(/📊 Falhas por Componente \+ Tempo Médio/i)).toBeDefined();
-  });
+  };
 
   it("should call the bi-jobs-by-component function on mount", async () => {
     const mockData = [
@@ -52,8 +52,8 @@ describe("DashboardJobs Component", () => {
 
     await waitFor(() => {
       expect(supabase.functions.invoke).toHaveBeenCalledWith("bi-jobs-by-component");
-    });
-  });
+  };
+  };
 
   it("should handle errors gracefully", async () => {
     const mockError = new Error("API Error");
@@ -68,10 +68,10 @@ describe("DashboardJobs Component", () => {
 
     await waitFor(() => {
       expect(consoleSpy).toHaveBeenCalled();
-    });
+  };
 
     consoleSpy.mockRestore();
-  });
+  };
 
   it("should render without crashing", () => {
     vi.mocked(supabase.functions.invoke).mockResolvedValue({
@@ -82,5 +82,5 @@ describe("DashboardJobs Component", () => {
     const { container } = render(<DashboardJobs />);
     expect(container).toBeDefined();
     expect(container.firstChild).toBeDefined();
-  });
+  };
 };

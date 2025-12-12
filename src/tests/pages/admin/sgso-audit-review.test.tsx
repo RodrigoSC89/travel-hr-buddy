@@ -71,7 +71,7 @@ vi.mock("@/hooks/use-toast", () => ({
 describe("SGSOAuditReviewPage", () => {
   beforeEach(() => {
     vi.clearAllMocks();
-  });
+  };
 
   const renderWithRouter = (initialPath = "/admin/sgso/review/audit-1") => {
     window.history.pushState({}, "", initialPath);
@@ -88,54 +88,54 @@ describe("SGSOAuditReviewPage", () => {
     const { container } = renderWithRouter();
     const spinner = container.querySelector(".animate-spin");
     expect(spinner).toBeInTheDocument();
-  });
+  };
 
   it("should render page title after loading", async () => {
     renderWithRouter();
 
     await waitFor(() => {
       expect(screen.getByText("Revisão de Auditoria SGSO")).toBeInTheDocument();
-    });
-  });
+  };
+  };
 
   it("should render audit information", async () => {
     renderWithRouter();
 
     await waitFor(() => {
       expect(screen.getByText("PSV Atlântico")).toBeInTheDocument();
-    });
+  };
 
     expect(screen.getByText("João Silva")).toBeInTheDocument();
-  });
+  };
 
   it("should render audit items", async () => {
     renderWithRouter();
 
     await waitFor(() => {
       expect(screen.getByText(/Liderança e Responsabilidade/)).toBeInTheDocument();
-    });
+  };
 
     expect(screen.getByText(/Identificação de Perigos/)).toBeInTheDocument();
-  });
+  };
 
   it("should render action buttons", async () => {
     renderWithRouter();
 
     await waitFor(() => {
       expect(screen.getByText("Salvar Alterações")).toBeInTheDocument();
-    });
+  };
 
     expect(screen.getByText("Exportar PDF")).toBeInTheDocument();
     expect(screen.getByText("Voltar")).toBeInTheDocument();
-  });
+  };
 
   it("should render compliance status badges", async () => {
     renderWithRouter();
 
     await waitFor(() => {
       expect(screen.getAllByText("Conforme").length).toBeGreaterThan(0);
-    });
+  };
 
     expect(screen.getAllByText("Parcialmente Conforme").length).toBeGreaterThan(0);
-  });
+  };
 };

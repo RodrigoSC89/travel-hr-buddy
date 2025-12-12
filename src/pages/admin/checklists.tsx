@@ -174,7 +174,7 @@ export default function SmartChecklistsPage() {
     const matchesType = selectedType === "all" || c.type === selectedType;
     const matchesStatus = selectedStatus === "all" || c.status === selectedStatus;
     return matchesSearch && matchesType && matchesStatus;
-  });
+  };
 
   const getCriticalityColor = (criticality: string) => {
     switch (criticality) {

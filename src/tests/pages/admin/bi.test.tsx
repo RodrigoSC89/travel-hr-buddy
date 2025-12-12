@@ -28,7 +28,7 @@ vi.mock("@/components/bi", () => ({
 describe("AdminBI Page", () => {
   beforeEach(() => {
     vi.clearAllMocks();
-  });
+  };
 
   it("should render the page title", () => {
     vi.mocked(supabase.rpc).mockResolvedValue({

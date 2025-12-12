@@ -235,7 +235,7 @@ export const WorkspaceChatPanel: React.FC<WorkspaceChatPanelProps> = ({
           enableHighAccuracy: true,
           timeout: 10000,
         });
-      });
+  };
       
       setUserLocation({
         lat: position.coords.latitude,

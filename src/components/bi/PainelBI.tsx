@@ -152,7 +152,7 @@ export const PainelBI = memo(function() {
         .catch((error) => {
           console.error("Error generating PDF:", error);
           toast.error("Erro ao gerar PDF");
-        });
+  };
     } catch (err) {
       console.error("Error in exportToPDF:", err);
       toast.error("Erro ao gerar PDF");

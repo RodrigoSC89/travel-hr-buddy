@@ -309,7 +309,7 @@ export const AdvancedDocumentCenter: React.FC = () => {
     const matchesStatus = statusFilter === "all" || doc.status === statusFilter;
     
     return matchesSearch && matchesCategory && matchesStatus;
-  });
+  };
 
   const handleUpload = () => {
     setIsUploadDialogOpen(true);
@@ -494,7 +494,7 @@ Este é um documento de demonstração do Centro de Documentos.
     const initialData: Record<string, string> = {};
     template.fields.forEach(field => {
       initialData[field.name] = "";
-    });
+  };
     setTemplateFormData(initialData);
     setIsTemplateDialogOpen(true);
   };

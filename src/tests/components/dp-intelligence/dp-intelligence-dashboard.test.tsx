@@ -49,7 +49,7 @@ describe("DPIntelligenceDashboard Component", () => {
         json: () => Promise.resolve(mockStatsData),
       })
     ) as unknown;
-  });
+  };
 
   describe("Component Rendering", () => {
     it("should render dashboard title", async () => {
@@ -57,14 +57,14 @@ describe("DPIntelligenceDashboard Component", () => {
 
       await waitFor(() => {
         expect(screen.getByText(/📊 Resumo de Incidentes DP/i)).toBeInTheDocument();
-      });
-    });
+  };
+  };
 
     it("should display loading state initially", () => {
       render(<DPIntelligenceDashboard />);
 
       expect(screen.getByText("Carregando...")).toBeInTheDocument();
-    });
+  };
 
     it("should render three chart cards", async () => {
       render(<DPIntelligenceDashboard />);
@@ -73,17 +73,17 @@ describe("DPIntelligenceDashboard Component", () => {
         expect(screen.getByText("🚢 Por Navio")).toBeInTheDocument();
         expect(screen.getByText("🎯 Por Severidade")).toBeInTheDocument();
         expect(screen.getByText("📅 Por Mês")).toBeInTheDocument();
-      });
-    });
+  };
+  };
 
     it("should render insights section", async () => {
       render(<DPIntelligenceDashboard />);
 
       await waitFor(() => {
         expect(screen.getByText("📈 Insights Acionáveis")).toBeInTheDocument();
-      });
-    });
-  });
+  };
+  };
+  };
 
   describe("Data Loading", () => {
     it("should fetch data from API on mount", async () => {
@@ -91,8 +91,8 @@ describe("DPIntelligenceDashboard Component", () => {
 
       await waitFor(() => {
         expect(global.fetch).toHaveBeenCalledWith("/api/dp-intelligence/stats");
-      });
-    });
+  };
+  };
 
     it("should display data after loading", async () => {
       render(<DPIntelligenceDashboard />);
@@ -100,8 +100,8 @@ describe("DPIntelligenceDashboard Component", () => {
       await waitFor(() => {
         expect(screen.getByText(/📊 Resumo de Incidentes DP/i)).toBeInTheDocument();
         expect(screen.queryByText("Carregando...")).not.toBeInTheDocument();
-      });
-    });
+  };
+  };
 
     it("should display error message when fetch fails", async () => {
       global.fetch = vi.fn(() =>
@@ -112,8 +112,8 @@ describe("DPIntelligenceDashboard Component", () => {
 
       await waitFor(() => {
         expect(screen.getByText(/Erro ao carregar dados/i)).toBeInTheDocument();
-      });
-    });
+  };
+  };
 
     it("should display error message when API returns error", async () => {
       global.fetch = vi.fn(() =>
@@ -127,9 +127,9 @@ describe("DPIntelligenceDashboard Component", () => {
 
       await waitFor(() => {
         expect(screen.getByText(/Erro ao carregar dados/i)).toBeInTheDocument();
-      });
-    });
-  });
+  };
+  };
+  };
 
   describe("Charts Rendering", () => {
     it("should render bar charts for vessels and months", async () => {
@@ -138,16 +138,16 @@ describe("DPIntelligenceDashboard Component", () => {
       await waitFor(() => {
         const barCharts = screen.getAllByTestId("bar-chart");
         expect(barCharts.length).toBeGreaterThanOrEqual(2);
-      });
-    });
+  };
+  };
 
     it("should render pie chart for severity", async () => {
       render(<DPIntelligenceDashboard />);
 
       await waitFor(() => {
         expect(screen.getByTestId("pie-chart")).toBeInTheDocument();
-      });
-    });
+  };
+  };
 
     it("should use ResponsiveContainer for all charts", async () => {
       render(<DPIntelligenceDashboard />);
@@ -155,9 +155,9 @@ describe("DPIntelligenceDashboard Component", () => {
       await waitFor(() => {
         const responsiveContainers = screen.getAllByTestId("responsive-container");
         expect(responsiveContainers.length).toBeGreaterThanOrEqual(3);
-      });
-    });
-  });
+  };
+  };
+  };
 
   describe("Insights Section", () => {
     it("should display total incidents count", async () => {
@@ -167,7 +167,7 @@ describe("DPIntelligenceDashboard Component", () => {
         expect(screen.getByText(/Total de incidentes registrados/i)).toBeInTheDocument();
         expect(screen.getByText("6")).toBeInTheDocument(); // Sum of all vessels
       });
-    });
+  };
 
     it("should display vessel with most incidents", async () => {
       render(<DPIntelligenceDashboard />);
@@ -175,8 +175,8 @@ describe("DPIntelligenceDashboard Component", () => {
       await waitFor(() => {
         expect(screen.getByText(/Navio com mais incidentes/i)).toBeInTheDocument();
         expect(screen.getByText("DP Shuttle Tanker X")).toBeInTheDocument();
-      });
-    });
+  };
+  };
 
     it("should display most common severity", async () => {
       render(<DPIntelligenceDashboard />);
@@ -184,8 +184,8 @@ describe("DPIntelligenceDashboard Component", () => {
       await waitFor(() => {
         expect(screen.getByText(/Severidade mais comum/i)).toBeInTheDocument();
         expect(screen.getByText("Alta")).toBeInTheDocument();
-      });
-    });
+  };
+  };
 
     it("should display recommendations section", async () => {
       render(<DPIntelligenceDashboard />);
@@ -193,8 +193,8 @@ describe("DPIntelligenceDashboard Component", () => {
       await waitFor(() => {
         expect(screen.getByText("⚠️ Recomendações")).toBeInTheDocument();
         expect(screen.getByText(/protocolos de manutenção preventiva/i)).toBeInTheDocument();
-      });
-    });
+  };
+  };
 
     it("should display next steps section", async () => {
       render(<DPIntelligenceDashboard />);
@@ -202,17 +202,17 @@ describe("DPIntelligenceDashboard Component", () => {
       await waitFor(() => {
         expect(screen.getByText("✅ Próximos Passos")).toBeInTheDocument();
         expect(screen.getByText(/reuniões com equipes/i)).toBeInTheDocument();
-      });
-    });
+  };
+  };
 
     it("should display analysis section", async () => {
       render(<DPIntelligenceDashboard />);
 
       await waitFor(() => {
         expect(screen.getByText("🔍 Análise de Tendências")).toBeInTheDocument();
-      });
-    });
-  });
+  };
+  };
+  };
 
   describe("Edge Cases", () => {
     it("should handle empty data gracefully", async () => {
@@ -232,8 +232,8 @@ describe("DPIntelligenceDashboard Component", () => {
       await waitFor(() => {
         expect(screen.getByText(/📊 Resumo de Incidentes DP/i)).toBeInTheDocument();
         expect(screen.getByText("0")).toBeInTheDocument();
-      });
-    });
+  };
+  };
 
     it("should handle null data", async () => {
       global.fetch = vi.fn(() =>
@@ -247,7 +247,7 @@ describe("DPIntelligenceDashboard Component", () => {
 
       await waitFor(() => {
         expect(screen.getByText("Nenhum dado disponível")).toBeInTheDocument();
-      });
-    });
-  });
+  };
+  };
+  };
 };

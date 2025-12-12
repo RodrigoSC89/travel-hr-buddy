@@ -37,7 +37,7 @@ describe("DPIntelligenceCenter Component", () => {
     global.fetch = vi.fn(() =>
       Promise.reject(new Error("API not available"))
     ) as unknown;
-  });
+  };
 
   describe("Component Rendering", () => {
     it("should render statistics dashboard with correct metrics", async () => {
@@ -49,8 +49,8 @@ describe("DPIntelligenceCenter Component", () => {
         expect(screen.getAllByText("Analisados").length).toBeGreaterThan(0);
         expect(screen.getAllByText("Pendentes").length).toBeGreaterThan(0);
         expect(screen.getAllByText("Críticos").length).toBeGreaterThan(0);
-      });
-    });
+  };
+  };
 
     it("should render search input", async () => {
       render(<DPIntelligenceCenter />);
@@ -58,8 +58,8 @@ describe("DPIntelligenceCenter Component", () => {
       await waitFor(() => {
         const searchInput = screen.getByPlaceholderText(/Buscar por título, embarcação, local ou tags/i);
         expect(searchInput).toBeInTheDocument();
-      });
-    });
+  };
+  };
 
     it("should render DP class filter buttons", async () => {
       render(<DPIntelligenceCenter />);
@@ -69,8 +69,8 @@ describe("DPIntelligenceCenter Component", () => {
         expect(screen.getByRole("button", { name: (name) => name.includes("DP-1") })).toBeInTheDocument();
         expect(screen.getByRole("button", { name: (name) => name.includes("DP-2") })).toBeInTheDocument();
         expect(screen.getByRole("button", { name: (name) => name.includes("DP-3") })).toBeInTheDocument();
-      });
-    });
+  };
+  };
 
     it("should display loading state initially", async () => {
       render(<DPIntelligenceCenter />);
@@ -78,9 +78,9 @@ describe("DPIntelligenceCenter Component", () => {
       // ✅ Use flexible matcher for loading text
       await waitFor(() => {
         expect(screen.getByText((content) => /Carregando incidentes/i.test(content))).toBeInTheDocument();
-      });
-    });
-  });
+  };
+  };
+  };
 
   describe("Data Loading", () => {
     it("should load and display demo incidents", async () => {
@@ -89,8 +89,8 @@ describe("DPIntelligenceCenter Component", () => {
       await waitFor(() => {
         expect(screen.getByText(/Loss of Position Due to Gyro Drift/i)).toBeInTheDocument();
         expect(screen.getByText(/Thruster Control Software Failure/i)).toBeInTheDocument();
-      });
-    });
+  };
+  };
 
     it("should display incident details correctly", async () => {
       render(<DPIntelligenceCenter />);
@@ -103,8 +103,8 @@ describe("DPIntelligenceCenter Component", () => {
         // Check for location
         expect(screen.getByText(/Campos Basin/i)).toBeInTheDocument();
         expect(screen.getByText(/North Sea/i)).toBeInTheDocument();
-      });
-    });
+  };
+  };
 
     it("should calculate statistics correctly", async () => {
       render(<DPIntelligenceCenter />);
@@ -113,9 +113,9 @@ describe("DPIntelligenceCenter Component", () => {
         // Total should be 4 (demo data has 4 incidents)
         const totalCards = screen.getAllByText(/^4$/);
         expect(totalCards.length).toBeGreaterThan(0);
-      });
-    });
-  });
+  };
+  };
+  };
 
   describe("Filtering Functionality", () => {
     it("should filter incidents by search query", async () => {
@@ -123,7 +123,7 @@ describe("DPIntelligenceCenter Component", () => {
       
       await waitFor(() => {
         expect(screen.getByText(/Loss of Position Due to Gyro Drift/i)).toBeInTheDocument();
-      });
+  };
       
       const searchInput = screen.getByPlaceholderText(/Buscar por título, embarcação, local ou tags/i);
       fireEvent.change(searchInput, { target: { value: "gyro" } });
@@ -131,15 +131,15 @@ describe("DPIntelligenceCenter Component", () => {
       await waitFor(() => {
         // Should still show the gyro incident
         expect(screen.getByText(/Loss of Position Due to Gyro Drift/i)).toBeInTheDocument();
-      });
-    });
+  };
+  };
 
     it("should filter by DP class when button is clicked", async () => {
       render(<DPIntelligenceCenter />);
       
       await waitFor(() => {
         expect(screen.getByText(/Loss of Position Due to Gyro Drift/i)).toBeInTheDocument();
-      });
+  };
       
       const dp3Button = screen.getByRole("button", { name: "DP-3" });
       fireEvent.click(dp3Button);
@@ -147,67 +147,67 @@ describe("DPIntelligenceCenter Component", () => {
       await waitFor(() => {
         // Should show DP-3 incidents
         expect(screen.getByText(/Thruster Control Software Failure/i)).toBeInTheDocument();
-      });
-    });
+  };
+  };
 
     it("should display filter count when filters are applied", async () => {
       render(<DPIntelligenceCenter />);
       
       await waitFor(() => {
         expect(screen.getByText(/Loss of Position Due to Gyro Drift/i)).toBeInTheDocument();
-      });
+  };
       
       const searchInput = screen.getByPlaceholderText(/Buscar por título, embarcação, local ou tags/i);
       fireEvent.change(searchInput, { target: { value: "gyro" } });
       
       await waitFor(() => {
         expect(screen.getByText(/Mostrando.*de.*incidentes/i)).toBeInTheDocument();
-      });
-    });
+  };
+  };
 
     it("should show clear filter button when filters are active", async () => {
       render(<DPIntelligenceCenter />);
       
       await waitFor(() => {
         expect(screen.getByText(/Loss of Position Due to Gyro Drift/i)).toBeInTheDocument();
-      });
+  };
       
       const dp2Button = screen.getByRole("button", { name: "DP-2" });
       fireEvent.click(dp2Button);
       
       await waitFor(() => {
         expect(screen.getByText(/Limpar/i)).toBeInTheDocument();
-      });
-    });
+  };
+  };
 
     it("should clear filters when clear button is clicked", async () => {
       render(<DPIntelligenceCenter />);
       
       await waitFor(() => {
         expect(screen.getByText(/Loss of Position Due to Gyro Drift/i)).toBeInTheDocument();
-      });
+  };
       
       const dp2Button = screen.getByRole("button", { name: "DP-2" });
       fireEvent.click(dp2Button);
       
       await waitFor(() => {
         expect(screen.getByText(/Limpar/i)).toBeInTheDocument();
-      });
+  };
       
       const clearButton = screen.getByRole("button", { name: /Limpar/i });
       fireEvent.click(clearButton);
       
       await waitFor(() => {
         expect(screen.queryByText(/Limpar/i)).not.toBeInTheDocument();
-      });
-    });
+  };
+  };
 
     it("should filter by status (analyzed/pending)", async () => {
       render(<DPIntelligenceCenter />);
       
       await waitFor(() => {
         expect(screen.getByText(/Loss of Position Due to Gyro Drift/i)).toBeInTheDocument();
-      });
+  };
       
       const analyzedElements = screen.getAllByText("Analisados");
       const analyzedCard = analyzedElements[0].closest("div")?.parentElement;
@@ -217,10 +217,10 @@ describe("DPIntelligenceCenter Component", () => {
         await waitFor(() => {
           // Should show status filter in the count message
           expect(screen.getAllByText(/Analisados/i).length).toBeGreaterThan(0);
-        });
+  };
       }
     });
-  });
+  };
 
   describe("Incident Cards", () => {
     it("should display severity badges", async () => {
@@ -229,8 +229,8 @@ describe("DPIntelligenceCenter Component", () => {
       await waitFor(() => {
         expect(screen.getAllByText("critical").length).toBeGreaterThan(0);
         expect(screen.getAllByText("high").length).toBeGreaterThan(0);
-      });
-    });
+  };
+  };
 
     it("should display status badges", async () => {
       render(<DPIntelligenceCenter />);
@@ -238,8 +238,8 @@ describe("DPIntelligenceCenter Component", () => {
       await waitFor(() => {
         expect(screen.getAllByText("Analisado").length).toBeGreaterThan(0);
         expect(screen.getAllByText("Pendente").length).toBeGreaterThan(0);
-      });
-    });
+  };
+  };
 
     it("should display tags as badges", async () => {
       render(<DPIntelligenceCenter />);
@@ -248,8 +248,8 @@ describe("DPIntelligenceCenter Component", () => {
         expect(screen.getByText("gyro")).toBeInTheDocument();
         expect(screen.getByText("thruster")).toBeInTheDocument();
         expect(screen.getByText("pms")).toBeInTheDocument();
-      });
-    });
+  };
+  };
 
     it("should have Relatório button for each incident", async () => {
       render(<DPIntelligenceCenter />);
@@ -257,8 +257,8 @@ describe("DPIntelligenceCenter Component", () => {
       await waitFor(() => {
         const relatorioButtons = screen.getAllByText(/Relatório/i);
         expect(relatorioButtons.length).toBeGreaterThan(0);
-      });
-    });
+  };
+  };
 
     it("should have Analisar IA button for each incident", async () => {
       render(<DPIntelligenceCenter />);
@@ -266,8 +266,8 @@ describe("DPIntelligenceCenter Component", () => {
       await waitFor(() => {
         const analyzeButtons = screen.getAllByText(/Analisar IA/i);
         expect(analyzeButtons.length).toBeGreaterThan(0);
-      });
-    });
+  };
+  };
 
     it("should have Plano de Ação button for each incident", async () => {
       render(<DPIntelligenceCenter />);
@@ -275,9 +275,9 @@ describe("DPIntelligenceCenter Component", () => {
       await waitFor(() => {
         const actionButtons = screen.getAllByText(/Plano de Ação/i);
         expect(actionButtons.length).toBeGreaterThan(0);
-      });
-    });
-  });
+  };
+  };
+  };
 
   describe("Empty State", () => {
     it("should show empty state when no incidents match filters", async () => {
@@ -285,7 +285,7 @@ describe("DPIntelligenceCenter Component", () => {
       
       await waitFor(() => {
         expect(screen.getByText(/Loss of Position Due to Gyro Drift/i)).toBeInTheDocument();
-      });
+  };
       
       const searchInput = screen.getByPlaceholderText(/Buscar por título, embarcação, local ou tags/i);
       fireEvent.change(searchInput, { target: { value: "nonexistent-search-term-xyz" } });
@@ -293,9 +293,9 @@ describe("DPIntelligenceCenter Component", () => {
       await waitFor(() => {
         expect(screen.getByText("Nenhum incidente encontrado")).toBeInTheDocument();
         expect(screen.getByText("Tente ajustar os filtros de busca")).toBeInTheDocument();
-      });
-    });
-  });
+  };
+  };
+  };
 
   describe("Modal Interactions", () => {
     it("should open modal when Analisar IA button is clicked", async () => {
@@ -303,16 +303,16 @@ describe("DPIntelligenceCenter Component", () => {
       
       await waitFor(() => {
         expect(screen.getByText(/Loss of Position Due to Gyro Drift/i)).toBeInTheDocument();
-      });
+  };
       
       const analyzeButtons = screen.getAllByText(/Analisar IA/i);
       fireEvent.click(analyzeButtons[0]);
       
       await waitFor(() => {
         expect(screen.getByText(/Análise IA –/i)).toBeInTheDocument();
-      });
-    });
-  });
+  };
+  };
+  };
 
   describe("Action Plan Generation", () => {
     beforeEach(() => {
@@ -344,7 +344,7 @@ describe("DPIntelligenceCenter Component", () => {
       
       await waitFor(() => {
         expect(screen.getByText(/Loss of Position Due to Gyro Drift/i)).toBeInTheDocument();
-      });
+  };
       
       const actionButtons = screen.getAllByText(/Plano de Ação/i);
       const firstButton = actionButtons[0];
@@ -354,8 +354,8 @@ describe("DPIntelligenceCenter Component", () => {
       // Button should show "Gerando..." immediately
       await waitFor(() => {
         expect(screen.getByText(/Gerando\.\.\./i)).toBeInTheDocument();
-      });
-    });
+  };
+  };
 
     it("should call API when Plano de Ação button is clicked", async () => {
       const fetchSpy = vi.spyOn(global, "fetch");
@@ -364,7 +364,7 @@ describe("DPIntelligenceCenter Component", () => {
       
       await waitFor(() => {
         expect(screen.getByText(/Loss of Position Due to Gyro Drift/i)).toBeInTheDocument();
-      });
+  };
       
       const actionButtons = screen.getAllByText(/Plano de Ação/i);
       fireEvent.click(actionButtons[0]);
@@ -388,11 +388,11 @@ describe("DPIntelligenceCenter Component", () => {
       
       await waitFor(() => {
         expect(screen.getByText(/Loss of Position Due to Gyro Drift/i)).toBeInTheDocument();
-      });
+  };
       
       // Should not show the collapsible action plan
       expect(screen.queryByText(/📋 Plano de Ação Gerado/i)).not.toBeInTheDocument();
-    });
+  };
 
     it("should handle API errors gracefully", async () => {
       global.fetch = vi.fn((url) => {
@@ -414,7 +414,7 @@ describe("DPIntelligenceCenter Component", () => {
       
       await waitFor(() => {
         expect(screen.getByText(/Loss of Position Due to Gyro Drift/i)).toBeInTheDocument();
-      });
+  };
       
       const actionButtons = screen.getAllByText(/Plano de Ação/i);
       fireEvent.click(actionButtons[0]);
@@ -423,6 +423,6 @@ describe("DPIntelligenceCenter Component", () => {
         // Should show error toast
         expect(toastErrorSpy).toHaveBeenCalled();
       }, { timeout: 3000 });
-    });
-  });
+  };
+  };
 };

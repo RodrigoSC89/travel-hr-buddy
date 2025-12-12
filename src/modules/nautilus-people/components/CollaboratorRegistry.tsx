@@ -74,7 +74,7 @@ const CollaboratorRegistry: React.FC = () => {
     const matchesDepartment = selectedDepartment === "todos" || c.departamento === selectedDepartment;
     const matchesStatus = selectedStatus === "todos" || c.status === selectedStatus;
     return matchesSearch && matchesDepartment && matchesStatus;
-  });
+  };
 
   const getStatusColor = (status: string) => {
     switch (status) {

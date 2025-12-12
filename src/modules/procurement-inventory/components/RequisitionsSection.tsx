@@ -166,7 +166,7 @@ export default function RequisitionsSection({ searchQuery }: RequisitionsSection
     const matchesStatus = filterStatus === "all" || req.status === filterStatus;
     const matchesPriority = filterPriority === "all" || req.priority === filterPriority;
     return matchesSearch && matchesStatus && matchesPriority;
-  });
+  };
 
   const handleCreateRequisition = () => {
     const newRequisition: Requisition = {

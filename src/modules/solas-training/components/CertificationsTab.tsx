@@ -69,7 +69,7 @@ export default function CertificationsTab({
     const matchesStatus = statusFilter === "all" || cert.status === statusFilter;
     const matchesCategory = categoryFilter === "all" || cert.code.includes(categoryFilter);
     return matchesSearch && matchesStatus && matchesCategory;
-  });
+  };
 
   const stats = {
     total: certifications.length,

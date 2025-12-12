@@ -91,7 +91,7 @@ export const PeotramOCRProcessor: React.FC = () => {
           
           const result = await ocrService.processImage(file, (progress: OCRProgress) => {
             setCurrentProgress(progress.progress * 100);
-          });
+  };
 
           const extractedFields = await ocrService.extractFormFields(file);
 

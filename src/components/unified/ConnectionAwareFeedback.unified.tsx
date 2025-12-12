@@ -186,7 +186,7 @@ export const AdaptiveLoader = memo(function AdaptiveLoader({
       setProgress(prev => {
         if (prev >= 95) return prev; // Don't go to 100% until actually complete
         return Math.min(95, prev + step);
-      });
+  };
     }, interval);
     
     return () => clearInterval(timer);

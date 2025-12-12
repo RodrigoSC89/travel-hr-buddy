@@ -138,7 +138,7 @@ export const AuditsPanel = memo(function({
     const matchesStatus = statusFilter === "all" || audit.status === statusFilter;
     const matchesType = typeFilter === "all" || audit.auditType === typeFilter;
     return matchesSearch && matchesStatus && matchesType;
-  });
+  };
 
   const scheduledAudits = filteredAudits.filter((a) => a.status === "scheduled");
   const inProgressAudits = filteredAudits.filter((a) => a.status === "in-progress");

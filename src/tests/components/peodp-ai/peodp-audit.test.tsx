@@ -32,34 +32,34 @@ describe("PEODPAuditComponent", () => {
   it("renders the component with title", () => {
     renderComponent();
     expect(screen.getByText("PEO-DP Inteligente")).toBeInTheDocument();
-  });
+  };
 
   it("displays the correct description", () => {
     renderComponent();
     expect(
       screen.getByText(/Auditoria de Conformidade DP baseada em NORMAM-101 e IMCA M 117/i)
     ).toBeInTheDocument();
-  });
+  };
 
   it("shows vessel name input field", () => {
     renderComponent();
     expect(screen.getByLabelText(/Nome da Embarcação/i)).toBeInTheDocument();
-  });
+  };
 
   it("shows DP class selector", () => {
     renderComponent();
     expect(screen.getByText(/Classe DP/i)).toBeInTheDocument();
-  });
+  };
 
   it("displays the audit initiation button", () => {
     renderComponent();
     expect(screen.getByRole("button", { name: /Iniciar Auditoria PEO-DP/i })).toBeInTheDocument();
-  });
+  };
 
   it("shows information alert about standards", () => {
     renderComponent();
     expect(
       screen.getByText(/A auditoria verificará conformidade com NORMAM-101/i)
     ).toBeInTheDocument();
-  });
+  };
 };

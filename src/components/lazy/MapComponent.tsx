@@ -53,7 +53,7 @@ export default function MapComponent({
       });
     }).catch((error) => {
       console.error("Erro ao carregar mapa:", error);
-    });
+  };
 
     return () => {
       if (map.current) {

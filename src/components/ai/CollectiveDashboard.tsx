@@ -139,7 +139,7 @@ export const CollectiveDashboard: React.FC = () => {
       stats.total++;
       if (d.success) stats.successes++;
       else stats.failures++;
-    });
+  };
 
     return Array.from(moduleMap.entries()).map(([moduleName, stats]) => {
       const successRate = stats.total > 0 ? stats.successes / stats.total : 0;

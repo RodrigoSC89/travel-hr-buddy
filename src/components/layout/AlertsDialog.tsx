@@ -136,7 +136,7 @@ const AlertsDialog: React.FC<AlertsDialogProps> = ({ open, onOpenChange }) => {
     if (activeTab === "unread") return !a.isRead;
     if (activeTab === "warnings") return a.type === "warning" || a.type === "error";
     return true;
-  });
+  };
 
   return (
     <Dialog open={open} onOpenChange={onOpenChange}>

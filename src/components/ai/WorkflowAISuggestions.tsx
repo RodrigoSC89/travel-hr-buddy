@@ -316,7 +316,7 @@ Gere sugestões em formato JSON array.`
     setSuggestions(prev => {
       updateStats(prev);
       return prev;
-    });
+  };
   };
 
   const handleDismiss = (suggestion: WorkflowSuggestion) => {
@@ -332,7 +332,7 @@ Gere sugestões em formato JSON array.`
     setSuggestions(prev => {
       updateStats(prev);
       return prev;
-    });
+  };
   };
 
   const getCriticidadeColor = (criticidade: string) => {
@@ -370,7 +370,7 @@ Gere sugestões em formato JSON array.`
     if (activeTab === "applied") return s.status === "applied";
     if (activeTab === "critical") return s.criticidade === "crítica" || s.criticidade === "alta";
     return true;
-  });
+  };
 
   if (isLoading) {
     return (

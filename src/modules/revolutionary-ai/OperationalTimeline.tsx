@@ -117,7 +117,7 @@ export const OperationalTimeline = memo(function() {
     const matchesVessel = !selectedVessel || event.vessel === selectedVessel;
     const matchesType = selectedTypes.length === 0 || selectedTypes.includes(event.type);
     return matchesSearch && matchesVessel && matchesType;
-  });
+  };
 
   const getEventIcon = (type: string) => {
     switch (type) {

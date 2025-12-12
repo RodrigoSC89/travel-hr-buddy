@@ -186,7 +186,7 @@ export default function ForecastPage() {
         risk.level,
         f.forecast_text.replace(/"/g, "\"\"") // Escape quotes
       ];
-    });
+  };
 
     // PATCH 540: Otimização - pré-processar linhas CSV
     const csvRows = rows.map(row => row.map(cell => `"${cell}"`).join(","));

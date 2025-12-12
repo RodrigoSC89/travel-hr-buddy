@@ -135,7 +135,7 @@ export const WindyMapPlugin: React.FC<WindyMapPluginProps> = ({
       // Log current overlay changes
       store.on("overlay", (overlayName: string) => {
       });
-    });
+  };
   };
 
   const handleRefresh = () => {

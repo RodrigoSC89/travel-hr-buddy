@@ -153,7 +153,7 @@ export default function UserManagement() {
     const matchesStatus = statusFilter === "all" || user.status === statusFilter;
 
     return matchesSearch && matchesRole && matchesStatus;
-  });
+  };
 
   if (loading) {
     return (

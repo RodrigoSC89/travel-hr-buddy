@@ -34,7 +34,7 @@ describe("IncidentReports", () => {
   it("should render the incident reports page", () => {
     render(<IncidentReports />);
     expect(screen.getByText("Incident Reports")).toBeInTheDocument();
-  });
+  };
 
   it("should display statistics cards", async () => {
     render(<IncidentReports />);
@@ -45,11 +45,11 @@ describe("IncidentReports", () => {
     expect(screen.getByText("Total Incidents")).toBeInTheDocument();
     expect(screen.getByText("Open Cases")).toBeInTheDocument();
     expect(screen.getByText("Resolved")).toBeInTheDocument();
-  });
+  };
 
   it("should have main navigation tabs", () => {
     render(<IncidentReports />);
     expect(screen.getByText("Overview")).toBeInTheDocument();
     expect(screen.getByText("All Incidents")).toBeInTheDocument();
-  });
+  };
 };

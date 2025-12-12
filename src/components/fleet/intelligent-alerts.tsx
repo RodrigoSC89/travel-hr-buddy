@@ -330,7 +330,7 @@ const IntelligentAlerts: React.FC = () => {
     const matchesStatus = statusFilter === "all" || alert.status === statusFilter;
     
     return matchesSearch && matchesSeverity && matchesType && matchesStatus;
-  });
+  };
 
   const stats = {
     total: alerts.length,

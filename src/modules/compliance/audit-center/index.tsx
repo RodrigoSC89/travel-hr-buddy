@@ -130,7 +130,7 @@ const AuditCenter = () => {
     const initialChecklist: Record<string, ChecklistStatus> = {};
     items.forEach(item => {
       initialChecklist[item.id] = "not_checked";
-    });
+  };
     setChecklistData(audit.checklist_data || initialChecklist);
     
     Logger.module("audit-center", "Started audit", { auditId: audit.id, type: audit.type });

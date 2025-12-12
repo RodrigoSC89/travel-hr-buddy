@@ -46,7 +46,7 @@ vi.mock("@/hooks/use-toast", () => ({
 describe("SGSOAuditHistoryPage", () => {
   beforeEach(() => {
     vi.clearAllMocks();
-  });
+  };
 
   it("should render the page title", () => {
     render(
@@ -55,7 +55,7 @@ describe("SGSOAuditHistoryPage", () => {
       </BrowserRouter>
     );
     expect(screen.getByText("🗂️ Histórico de Auditorias SGSO")).toBeInTheDocument();
-  });
+  };
 
   it("should render loading state initially", () => {
     const { container } = render(
@@ -65,7 +65,7 @@ describe("SGSOAuditHistoryPage", () => {
     );
     const spinner = container.querySelector(".animate-spin");
     expect(spinner).toBeInTheDocument();
-  });
+  };
 
   it("should render audit cards after loading", async () => {
     render(
@@ -76,12 +76,12 @@ describe("SGSOAuditHistoryPage", () => {
 
     await waitFor(() => {
       expect(screen.getByText("PSV Atlântico")).toBeInTheDocument();
-    });
+  };
 
     expect(screen.getByText("AHTS Pacífico")).toBeInTheDocument();
     expect(screen.getByText("João Silva")).toBeInTheDocument();
     expect(screen.getByText("Maria Santos")).toBeInTheDocument();
-  });
+  };
 
   it("should render review links for each audit", async () => {
     render(
@@ -93,8 +93,8 @@ describe("SGSOAuditHistoryPage", () => {
     await waitFor(() => {
       const links = screen.getAllByText("🔍 Reabrir Auditoria");
       expect(links).toHaveLength(2);
-    });
-  });
+  };
+  };
 
   it("should render back button", () => {
     render(
@@ -103,5 +103,5 @@ describe("SGSOAuditHistoryPage", () => {
       </BrowserRouter>
     );
     expect(screen.getByText("Voltar")).toBeInTheDocument();
-  });
+  };
 };

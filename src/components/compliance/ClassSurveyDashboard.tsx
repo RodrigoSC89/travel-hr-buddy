@@ -103,7 +103,7 @@ export const ClassSurveyDashboard = memo(function() {
     const matchesStatus = filterStatus === "all" || survey.status === filterStatus;
     const matchesSociety = filterSociety === "all" || survey.classification_society_id === filterSociety;
     return matchesStatus && matchesSociety;
-  });
+  };
 
   // Calculate stats
   const stats = {

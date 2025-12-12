@@ -223,7 +223,7 @@ export const PeotramDocumentManager: React.FC = () => {
         if (category.id === "certificates") return doc.type === "certificate";
         if (category.id === "reports") return doc.type === "report";
         return false;
-      });
+  };
 
       return {
         ...category,

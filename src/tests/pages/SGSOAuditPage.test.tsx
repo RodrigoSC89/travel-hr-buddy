@@ -79,12 +79,12 @@ vi.mock("@/lib/ai/sgso", () => ({
 describe("SGSOAuditPage", () => {
   beforeEach(() => {
     vi.clearAllMocks();
-  });
+  };
 
   it("should render the page title", () => {
     render(<SGSOAuditPage />);
     expect(screen.getByText("🛡️ Auditoria SGSO - IBAMA")).toBeInTheDocument();
-  });
+  };
 
   it("should render vessel selector", async () => {
     render(<SGSOAuditPage />);
@@ -93,24 +93,24 @@ describe("SGSOAuditPage", () => {
     // Wait for vessels to be loaded
     await waitFor(() => {
       expect(screen.getByRole("combobox")).toBeInTheDocument();
-    });
-  });
+  };
+  };
 
   it("should render all 17 SGSO requirements", () => {
     render(<SGSOAuditPage />);
     expect(screen.getAllByText(/1\. Política de SMS/)[0]).toBeInTheDocument();
     expect(screen.getAllByText(/17\. Melhoria Contínua/)[0]).toBeInTheDocument();
-  });
+  };
 
   it("should render export PDF button", () => {
     render(<SGSOAuditPage />);
     expect(screen.getByText("📄 Exportar PDF")).toBeInTheDocument();
-  });
+  };
 
   it("should render submit button", () => {
     render(<SGSOAuditPage />);
     expect(screen.getByText("📤 Enviar Auditoria SGSO")).toBeInTheDocument();
-  });
+  };
 
   it("should call html2pdf when export PDF button is clicked", async () => {
     const html2pdf = (await React.lazy(() => import(import("html2pdf.js")))).default;
@@ -120,14 +120,14 @@ describe("SGSOAuditPage", () => {
     fireEvent.click(exportButton);
 
     expect(html2pdf).toHaveBeenCalled();
-  });
+  };
 
   it("should have hidden PDF container with correct id", () => {
     const { container } = render(<SGSOAuditPage />);
     const pdfContainer = container.querySelector("#sgso-audit-pdf");
     expect(pdfContainer).toBeInTheDocument();
     expect(pdfContainer).toHaveClass("hidden");
-  });
+  };
 
   it("should update audit data when evidence is entered", () => {
     render(<SGSOAuditPage />);
@@ -135,7 +135,7 @@ describe("SGSOAuditPage", () => {
     
     fireEvent.change(evidenceInputs[0], { target: { value: "Evidência teste" } });
     expect(evidenceInputs[0]).toHaveValue("Evidência teste");
-  });
+  };
 
   it("should update audit data when comment is entered", () => {
     render(<SGSOAuditPage />);
@@ -143,7 +143,7 @@ describe("SGSOAuditPage", () => {
     
     fireEvent.change(commentInputs[0], { target: { value: "Comentário teste" } });
     expect(commentInputs[0]).toHaveValue("Comentário teste");
-  });
+  };
 
   it("should not load audit data when no vessel is selected", async () => {
     vi.mocked(loadSGSOAudit).mockResolvedValue([]);
@@ -151,8 +151,8 @@ describe("SGSOAuditPage", () => {
     
     await waitFor(() => {
       expect(loadSGSOAudit).not.toHaveBeenCalled();
-    });
-  });
+  };
+  };
 
   it("should load and populate audit data when vessel is selected", async () => {
     const mockAuditData = [
@@ -187,7 +187,7 @@ describe("SGSOAuditPage", () => {
     // Wait for vessels to load
     await waitFor(() => {
       expect(screen.getByRole("combobox")).toBeInTheDocument();
-    });
+  };
 
     // Select a vessel (trigger the combobox)
     const combobox = screen.getByRole("combobox");
@@ -197,14 +197,14 @@ describe("SGSOAuditPage", () => {
     await waitFor(() => {
       const option = screen.getByText("PSV Atlântico");
       fireEvent.click(option);
-    });
+  };
 
     // Wait for loadSGSOAudit to be called
     await waitFor(() => {
       expect(loadSGSOAudit).toHaveBeenCalledWith("1");
       expect(toast.success).toHaveBeenCalledWith("✅ Última auditoria carregada.");
-    });
-  });
+  };
+  };
 
   it("should display error toast when loading audit fails", async () => {
     const errorMessage = "Failed to load audits";
@@ -216,7 +216,7 @@ describe("SGSOAuditPage", () => {
     // Wait for vessels to load
     await waitFor(() => {
       expect(screen.getByRole("combobox")).toBeInTheDocument();
-    });
+  };
 
     // Select a vessel
     const combobox = screen.getByRole("combobox");
@@ -225,13 +225,13 @@ describe("SGSOAuditPage", () => {
     await waitFor(() => {
       const option = screen.getByText("PSV Atlântico");
       fireEvent.click(option);
-    });
+  };
 
     // Wait for error toast
     await waitFor(() => {
       expect(toast.error).toHaveBeenCalledWith(`Erro ao carregar auditoria: ${errorMessage}`);
-    });
-  });
+  };
+  };
 
   it("should not display toast when no historical audits exist", async () => {
     vi.mocked(loadSGSOAudit).mockResolvedValue([]);
@@ -242,7 +242,7 @@ describe("SGSOAuditPage", () => {
     // Wait for vessels to load
     await waitFor(() => {
       expect(screen.getByRole("combobox")).toBeInTheDocument();
-    });
+  };
 
     // Select a vessel
     const combobox = screen.getByRole("combobox");
@@ -251,16 +251,16 @@ describe("SGSOAuditPage", () => {
     await waitFor(() => {
       const option = screen.getByText("PSV Atlântico");
       fireEvent.click(option);
-    });
+  };
 
     // Wait for loadSGSOAudit to be called
     await waitFor(() => {
       expect(loadSGSOAudit).toHaveBeenCalledWith("1");
-    });
+  };
 
     // Verify no success toast was shown
     expect(toast.success).not.toHaveBeenCalled();
-  });
+  };
 
   it("should render AI explanation button for each requirement", () => {
     render(<SGSOAuditPage />);
@@ -268,7 +268,7 @@ describe("SGSOAuditPage", () => {
     
     // Should have one button per requirement (17 requirements)
     expect(aiButtons).toHaveLength(17);
-  });
+  };
 
   it("should call AI explanation when button is clicked", async () => {
     const { explainRequirementSGSO } = await React.lazy(() => import(import("@/lib/ai/sgso")));
@@ -285,8 +285,8 @@ describe("SGSOAuditPage", () => {
     await waitFor(() => {
       expect(explainRequirementSGSO).toHaveBeenCalledWith("Política de SMS", "compliant");
       expect(toast.info).toHaveBeenCalledWith(mockExplanation, { duration: 12000 });
-    });
-  });
+  };
+  };
 
   it("should show error toast when AI explanation fails", async () => {
     const { explainRequirementSGSO } = await React.lazy(() => import(import("@/lib/ai/sgso")));
@@ -301,8 +301,8 @@ describe("SGSOAuditPage", () => {
     
     await waitFor(() => {
       expect(toast.error).toHaveBeenCalledWith("Não foi possível gerar explicação. Verifique a configuração da API.");
-    });
-  });
+  };
+  };
 
   it("should show error toast when AI explanation throws error", async () => {
     const { explainRequirementSGSO } = await React.lazy(() => import(import("@/lib/ai/sgso")));
@@ -317,8 +317,8 @@ describe("SGSOAuditPage", () => {
     
     await waitFor(() => {
       expect(toast.error).toHaveBeenCalledWith("Erro ao explicar requisito com IA");
-    });
-  });
+  };
+  };
 
   it("should disable AI button and show loading text while processing", async () => {
     const { explainRequirementSGSO } = await React.lazy(() => import(import("@/lib/ai/sgso")));
@@ -327,7 +327,7 @@ describe("SGSOAuditPage", () => {
     let resolveExplanation: (value: string) => void;
     const explanationPromise = new Promise<string>((resolve) => {
       resolveExplanation = resolve;
-    });
+  };
     
     vi.mocked(explainRequirementSGSO).mockReturnValue(explanationPromise);
     
@@ -339,7 +339,7 @@ describe("SGSOAuditPage", () => {
     // Check that button shows loading state
     await waitFor(() => {
       expect(screen.getByText(/🤖 Carregando\.\.\./)).toBeInTheDocument();
-    });
+  };
     
     // Resolve the promise
     resolveExplanation!("Explicação gerada");
@@ -347,6 +347,6 @@ describe("SGSOAuditPage", () => {
     // Wait for button to return to normal state
     await waitFor(() => {
       expect(screen.queryByText(/🤖 Carregando\.\.\./)).not.toBeInTheDocument();
-    });
-  });
+  };
+  };
 };

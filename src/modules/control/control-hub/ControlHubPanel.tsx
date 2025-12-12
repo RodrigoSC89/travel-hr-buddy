@@ -54,8 +54,8 @@ export default function ControlHubPanel() {
         }];
         // Keep only last 50 events
         return newLogs.slice(-50);
-      });
-    });
+  };
+  };
 
     // Check MQTT connection status
     const mqttStatusInterval = setInterval(() => {

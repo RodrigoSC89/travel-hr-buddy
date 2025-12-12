@@ -22,12 +22,12 @@ vi.mock("@/lib/mqtt/publisher", () => ({
 describe("DPStatusBoard Component", () => {
   beforeEach(() => {
     vi.clearAllMocks();
-  });
+  };
 
   it("should render the DP system status title", () => {
     render(<DPStatusBoard />);
     expect(screen.getByText("Estado do Sistema DP")).toBeInTheDocument();
-  });
+  };
 
   it("should display all metric labels", () => {
     render(<DPStatusBoard />);
@@ -35,26 +35,26 @@ describe("DPStatusBoard Component", () => {
     expect(screen.getByText("Posição Atual")).toBeInTheDocument();
     expect(screen.getByText("Status")).toBeInTheDocument();
     expect(screen.getByText("Integridade")).toBeInTheDocument();
-  });
+  };
 
   it("should render within a card component", () => {
     const { container } = render(<DPStatusBoard />);
     
     const card = container.querySelector("[class*=\"card\"]");
     expect(card).toBeTruthy();
-  });
+  };
 
   it("should display the anchor icon", () => {
     const { container } = render(<DPStatusBoard />);
     
     const svg = container.querySelector("svg");
     expect(svg).toBeTruthy();
-  });
+  };
 
   it("should have grid layout for metrics", () => {
     const { container } = render(<DPStatusBoard />);
     
     const gridContainer = container.querySelector(".grid.grid-cols-3");
     expect(gridContainer).toBeTruthy();
-  });
+  };
 };

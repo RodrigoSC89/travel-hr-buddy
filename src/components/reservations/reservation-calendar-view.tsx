@@ -85,7 +85,7 @@ export const ReservationCalendarView: React.FC<ReservationCalendarViewProps> = (
       
       // Check if reservation spans this day
       return startDate <= dayEnd && endDate >= dayStart;
-    });
+  };
   };
 
   const getStatusColor = (status: string) => {

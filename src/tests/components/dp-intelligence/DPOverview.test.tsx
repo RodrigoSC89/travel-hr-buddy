@@ -6,7 +6,7 @@ describe("DPOverview Component", () => {
   it("should render the operational summary title", () => {
     render(<DPOverview />);
     expect(screen.getByText("Resumo Operacional")).toBeInTheDocument();
-  });
+  };
 
   it("should display all system metrics", () => {
     render(<DPOverview />);
@@ -16,7 +16,7 @@ describe("DPOverview Component", () => {
     expect(screen.getByText("Bus B")).toBeInTheDocument();
     expect(screen.getByText("Gyro Drift")).toBeInTheDocument();
     expect(screen.getByText("DP Confidence")).toBeInTheDocument();
-  });
+  };
 
   it("should show correct status for each metric", () => {
     render(<DPOverview />);
@@ -26,7 +26,7 @@ describe("DPOverview Component", () => {
     expect(okStatuses).toHaveLength(2); // Bus A and Bus B
     expect(screen.getByText("0.02°/min")).toBeInTheDocument();
     expect(screen.getByText("98%")).toBeInTheDocument();
-  });
+  };
 
   it("should render within a card component", () => {
     const { container } = render(<DPOverview />);
@@ -34,5 +34,5 @@ describe("DPOverview Component", () => {
     // Check that the component renders inside a card
     const card = container.querySelector("[class*=\"card\"]");
     expect(card).toBeTruthy();
-  });
+  };
 };

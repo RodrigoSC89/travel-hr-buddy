@@ -68,13 +68,13 @@ export const DDSPanel: React.FC<DDSPanelProps> = ({ records, onCreateDDS, loadin
   const todayRecords = records.filter(r => {
     const today = new Date().toDateString();
     return new Date(r.date).toDateString() === today;
-  });
+  };
 
   const weekRecords = records.filter(r => {
     const weekAgo = new Date();
     weekAgo.setDate(weekAgo.getDate() - 7);
     return new Date(r.date) >= weekAgo;
-  });
+  };
 
   return (
     <div className="space-y-6">

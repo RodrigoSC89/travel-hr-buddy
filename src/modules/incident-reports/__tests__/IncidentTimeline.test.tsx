@@ -60,30 +60,30 @@ vi.mock("html2canvas", () => ({
 describe("IncidentTimeline", () => {
   beforeEach(() => {
     vi.clearAllMocks();
-  });
+  };
 
   it("renders the component title", async () => {
     render(<IncidentTimeline />);
     await waitFor(() => {
       expect(screen.getByText("Incident Timeline")).toBeInTheDocument();
-    });
-  });
+  };
+  };
 
   it("displays incidents grouped by month", async () => {
     render(<IncidentTimeline />);
     await waitFor(() => {
       expect(screen.getByText("Test Incident 1")).toBeInTheDocument();
       expect(screen.getByText("Test Incident 2")).toBeInTheDocument();
-    });
-  });
+  };
+  };
 
   it("shows severity badges", async () => {
     render(<IncidentTimeline />);
     await waitFor(() => {
       expect(screen.getByText("high")).toBeInTheDocument();
       expect(screen.getByText("critical")).toBeInTheDocument();
-    });
-  });
+  };
+  };
 
   it("displays filter controls", async () => {
     render(<IncidentTimeline />);
@@ -91,20 +91,20 @@ describe("IncidentTimeline", () => {
       expect(screen.getByText("Module Filter")).toBeInTheDocument();
       expect(screen.getByText("From Date")).toBeInTheDocument();
       expect(screen.getByText("To Date")).toBeInTheDocument();
-    });
-  });
+  };
+  };
 
   it("shows export button", async () => {
     render(<IncidentTimeline />);
     await waitFor(() => {
       expect(screen.getByText("Export PNG")).toBeInTheDocument();
-    });
-  });
+  };
+  };
 
   it("displays summary statistics", async () => {
     render(<IncidentTimeline />);
     await waitFor(() => {
       expect(screen.getByText("Total Incidents")).toBeInTheDocument();
-    });
-  });
+  };
+  };
 };

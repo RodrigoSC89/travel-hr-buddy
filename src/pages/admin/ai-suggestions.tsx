@@ -147,7 +147,7 @@ const AISuggestionsDashboard: React.FC = () => {
   const filteredSuggestions = suggestions.filter(s => {
     if (filter === "all") return true;
     return s.status === filter;
-  });
+  };
 
   const stats = {
     total: suggestions.length,

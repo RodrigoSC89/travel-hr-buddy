@@ -327,7 +327,7 @@ export const NotificationCenter: React.FC<NotificationCenterProps> = ({
     if (filter === "unread") return !n.isRead;
     if (filter === "high") return n.priority === "high" || n.priority === "critical";
     return true;
-  });
+  };
 
   if (loading) {
     return (

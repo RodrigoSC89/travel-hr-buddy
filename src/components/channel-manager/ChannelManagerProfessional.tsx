@@ -458,7 +458,7 @@ export default function ChannelManagerProfessional() {
       const matchesFavorites = !showFavoritesOnly || ch.is_favorite;
       
       return matchesSearch && matchesType && matchesStatus && matchesFavorites;
-    });
+  };
   }, [channels, searchQuery, filterType, filterStatus, showFavoritesOnly]);
 
   // Channel messages

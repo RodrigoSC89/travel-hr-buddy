@@ -892,7 +892,7 @@ Este relatório apresenta uma análise abrangente dos principais indicadores de 
       if (filters.categories.length > 0 && !filters.categories.includes(n.category)) return false;
       if (filters.notificationTypes.length > 0 && !filters.notificationTypes.includes(n.type)) return false;
       return true;
-    });
+  };
 
     // Sort
     filtered.sort((a, b) => {

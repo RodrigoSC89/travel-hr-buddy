@@ -154,7 +154,7 @@ export default function Patch520AIReplay() {
             return selectedMission.duration;
           }
           return next;
-        });
+  };
       }, 100);
     }
 

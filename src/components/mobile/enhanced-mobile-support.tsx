@@ -157,7 +157,7 @@ export const EnhancedMobileSupport: React.FC = () => {
       e.preventDefault();
       setInstallPrompt(e);
       setPwaStatus(prev => ({ ...prev, canInstall: true }));
-    });
+  };
 
     // Verificar se está rodando como PWA
     const isStandalone = window.matchMedia("(display-mode: standalone)").matches ||
@@ -316,7 +316,7 @@ export const EnhancedMobileSupport: React.FC = () => {
           title: "Atualizando app",
           description: "A nova versão será carregada em breve"
         });
-      });
+  };
     }
   };
 

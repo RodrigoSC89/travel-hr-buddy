@@ -145,7 +145,7 @@ const IntelligentDocumentManager = () => {
                          doc.tags.some(tag => tag.toLowerCase().includes(searchTerm.toLowerCase()));
     const matchesCategory = selectedCategory === "all" || doc.category === selectedCategory;
     return matchesSearch && matchesCategory;
-  });
+  };
 
   const getStatusIcon = (status: string) => {
     switch (status) {

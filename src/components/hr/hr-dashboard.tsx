@@ -306,7 +306,7 @@ export const HRDashboard = memo(() => {
                          employee.department.toLowerCase().includes(searchTerm.toLowerCase());
     const matchesDepartment = selectedDepartment === "all" || employee.department === selectedDepartment;
     return matchesSearch && matchesDepartment;
-  });
+  };
 
   const departments = [...new Set(employees.map(emp => emp.department))];
 

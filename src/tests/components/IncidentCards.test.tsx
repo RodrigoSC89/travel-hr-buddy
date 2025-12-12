@@ -12,15 +12,15 @@ describe("IncidentCards Component", () => {
     global.fetch = vi.fn(() =>
       Promise.reject(new Error("API not available"))
     ) as unknown;
-  });
+  };
 
   it("should render incident cards", async () => {
     render(<IncidentCards />);
     
     await waitFor(() => {
       expect(screen.getByText(/Perda de posição durante operação de perfuração/i)).toBeInTheDocument();
-    });
-  });
+  };
+  };
 
   it("should display incident details correctly", async () => {
     render(<IncidentCards />);
@@ -34,8 +34,8 @@ describe("IncidentCards Component", () => {
       
       // Check for location
       expect(screen.getByText(/Local: Golfo do México/i)).toBeInTheDocument();
-    });
-  });
+  };
+  };
 
   it("should render multiple incident cards", async () => {
     render(<IncidentCards />);
@@ -45,8 +45,8 @@ describe("IncidentCards Component", () => {
       expect(screen.getByText(/Perda de posição durante operação de perfuração/i)).toBeInTheDocument();
       expect(screen.getByText(/Falha de redundância em sistema DP2/i)).toBeInTheDocument();
       expect(screen.getByText(/Perda temporária de referência de posição/i)).toBeInTheDocument();
-    });
-  });
+  };
+  };
 
   it("should display tags as badges", async () => {
     render(<IncidentCards />);
@@ -55,8 +55,8 @@ describe("IncidentCards Component", () => {
       expect(screen.getByText("Propulsion")).toBeInTheDocument();
       expect(screen.getByText("Critical")).toBeInTheDocument();
       expect(screen.getByText("Weather")).toBeInTheDocument();
-    });
-  });
+  };
+  };
 
   it("should have Ver relatório button with correct link", async () => {
     render(<IncidentCards />);
@@ -66,8 +66,8 @@ describe("IncidentCards Component", () => {
       expect(links.length).toBeGreaterThan(0);
       expect(links[0]).toHaveAttribute("target", "_blank");
       expect(links[0]).toHaveAttribute("rel", "noopener noreferrer");
-    });
-  });
+  };
+  };
 
   it("should have Analisar com IA button", async () => {
     render(<IncidentCards />);
@@ -75,6 +75,6 @@ describe("IncidentCards Component", () => {
     await waitFor(() => {
       const aiButtons = screen.getAllByText(/Analisar com IA/i);
       expect(aiButtons.length).toBeGreaterThan(0);
-    });
-  });
+  };
+  };
 };

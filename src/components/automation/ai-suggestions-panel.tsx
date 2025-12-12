@@ -295,7 +295,7 @@ export const AISuggestionsPanel: React.FC = () => {
   const filteredSuggestions = suggestions.filter(suggestion => {
     if (filter === "all") return true;
     return suggestion.type === filter;
-  });
+  };
 
   if (isLoading) {
     return (

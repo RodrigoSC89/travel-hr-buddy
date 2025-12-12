@@ -217,7 +217,7 @@ export const OrganizationHealthCheck: React.FC = () => {
       .sort((a, b) => {
         const priorityOrder = { high: 3, medium: 2, low: 1 };
         return priorityOrder[b.priority] - priorityOrder[a.priority];
-      });
+  };
   };
 
   if (isLoading) {

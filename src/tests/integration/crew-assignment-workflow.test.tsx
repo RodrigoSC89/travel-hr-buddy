@@ -4,7 +4,7 @@ import { mockCrew, mockVessel, createMany } from "../shared/mock-factories";
 describe("Integration: Crew Assignment Workflow", () => {
   beforeEach(() => {
     vi.clearAllMocks();
-  });
+  };
 
   it("should complete full crew assignment workflow", async () => {
     // Arrange
@@ -143,5 +143,5 @@ describe("Integration: Crew Assignment Workflow", () => {
     // Assert
     expect(assignments).toHaveLength(20);
     expect(assignments.every(a => a.vessel_id === vessel.id)).toBe(true);
-  });
+  };
 };

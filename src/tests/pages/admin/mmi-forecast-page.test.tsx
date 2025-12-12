@@ -36,7 +36,7 @@ describe("MMI Forecast Page", () => {
         status: 200,
       } as unknown as Response;
     }));
-  });
+  };
 
   it("should render the page title", async () => {
     render(
@@ -48,8 +48,8 @@ describe("MMI Forecast Page", () => {
     // Wait for the component to finish loading
     await waitFor(() => {
       expect(screen.getByText(/Forecasts de Manutenção \(IA\)/i)).toBeDefined();
-    });
-  });
+  };
+  };
 
   it("should render filter fields", async () => {
     render(
@@ -63,8 +63,8 @@ describe("MMI Forecast Page", () => {
       expect(screen.getByText(/🚢 Embarcação/i)).toBeDefined();
       expect(screen.getByText(/⚙️ Sistema/i)).toBeDefined();
       expect(screen.getByText(/⚠️ Risco/i)).toBeDefined();
-    });
-  });
+  };
+  };
 
   it("should render export button", async () => {
     render(
@@ -76,8 +76,8 @@ describe("MMI Forecast Page", () => {
     // Wait for the component to finish loading
     await waitFor(() => {
       expect(screen.getByText(/📤 Exportar CSV/i)).toBeDefined();
-    });
-  });
+  };
+  };
 
   it("should render forecast table with data", async () => {
     render(
@@ -91,6 +91,6 @@ describe("MMI Forecast Page", () => {
       expect(screen.getByText(/Motor Principal/i)).toBeDefined();
       expect(screen.getByText(/PSV Ocean STAR/i)).toBeDefined();
       expect(screen.getByText(/➕ Gerar OS/i)).toBeDefined();
-    });
-  });
+  };
+  };
 };

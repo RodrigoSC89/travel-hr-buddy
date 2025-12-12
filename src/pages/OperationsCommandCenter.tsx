@@ -187,7 +187,7 @@ export default function OperationsCommandCenter() {
       showNotifications: true,
       compactMode: false,
     };
-  });
+  };
 
   const [performanceData] = useState([
     { day: "Seg", efficiency: 85, fuel: 120, voyages: 12 },

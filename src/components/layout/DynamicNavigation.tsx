@@ -57,7 +57,7 @@ export const DynamicNavigation = memo(function({ className }: DynamicNavigationP
       if (filterMode === "partial") return module.completeness === "partial";
       if (filterMode === "incomplete") return module.status === "incomplete" || module.completeness === "broken";
       return true;
-    });
+  };
   };
 
   const toggleSection = (category: string) => {

@@ -393,8 +393,8 @@ export default function PeoDpWizardComplete() {
             }
             doc.text(line, 25, yPos);
             yPos += 6;
-          });
-        });
+  };
+  };
         yPos += 5;
       }
 
@@ -418,8 +418,8 @@ export default function PeoDpWizardComplete() {
             }
             doc.text(line, 25, yPos);
             yPos += 6;
-          });
-        });
+  };
+  };
         doc.setTextColor(0, 0, 0);
       }
     }
@@ -442,7 +442,7 @@ export default function PeoDpWizardComplete() {
         const statusIcon = result.status === "pass" ? "✓" : result.status === "warning" ? "⚠" : "✗";
         doc.text(`${statusIcon} ${result.field}: ${result.message}`, 25, yPos);
         yPos += 6;
-      });
+  };
     }
 
     doc.save(`peodp-audit-${Date.now()}.pdf`);

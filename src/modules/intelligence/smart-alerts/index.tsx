@@ -224,7 +224,7 @@ const SmartAlerts = () => {
       alert.source_module.toLowerCase().includes(searchQuery.toLowerCase());
     
     return matchesLevel && matchesModule && matchesSearch;
-  });
+  };
 
   const modules = Array.from(new Set(alerts.map(a => a.source_module)));
 

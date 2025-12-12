@@ -140,7 +140,7 @@ export const SatelliteGlobeMap: React.FC<SatelliteGlobeMapProps> = ({
 
       el.addEventListener("click", () => {
         onSelectSatellite?.(sat);
-      });
+  };
 
       const marker = new mapboxgl.Marker(el)
         .setLngLat([sat.longitude, sat.latitude])
@@ -148,7 +148,7 @@ export const SatelliteGlobeMap: React.FC<SatelliteGlobeMapProps> = ({
         .addTo(map.current);
 
       markers.current.push(marker);
-    });
+  };
   };
 
   // Update markers when satellites or selection changes

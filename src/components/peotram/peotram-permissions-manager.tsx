@@ -257,7 +257,7 @@ export const PeotramPermissionsManager: React.FC = () => {
   const filteredPermissions = permissions.filter(permission => {
     const userName = permission.profiles?.full_name || users.find(u => u.id === permission.user_id)?.email || "";
     return userName.toLowerCase().includes(searchTerm.toLowerCase());
-  });
+  };
 
   const areas = [
     "Ponte de Comando",

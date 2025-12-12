@@ -141,7 +141,7 @@ export const CrewScheduleManager = memo(() => {
       schedule.vesselName.toLowerCase().includes(searchTerm.toLowerCase());
     const matchesStatus = statusFilter === "all" || schedule.status === statusFilter;
     return matchesSearch && matchesStatus;
-  });
+  };
 
   const activeCount = schedules.filter(s => s.status === "active").length;
   const scheduledCount = schedules.filter(s => s.status === "scheduled").length;
