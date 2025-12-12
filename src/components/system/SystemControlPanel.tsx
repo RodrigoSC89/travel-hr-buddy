@@ -178,7 +178,7 @@ const LanguageControls = memo(() => {
 });
 
 // Controles de Acessibilidade
-const AccessibilityControls = () => {
+const AccessibilityControls = memo(() => {
   const [settings, setSettings] = useState({
     highContrast: false,
     largeText: false,
