@@ -62,7 +62,7 @@ export const TwoFactorSettings: React.FC<TwoFactorSettingsProps> = ({ onClose })
     try {
       const { data, error } = await supabase.auth.mfa.enroll({
         factorType: "totp"
-      };
+      });
 
       if (error) throw error;
 
