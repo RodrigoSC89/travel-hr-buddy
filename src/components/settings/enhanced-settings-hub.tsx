@@ -466,13 +466,13 @@ export const EnhancedSettingsHub: React.FC = () => {
         toast({
           title: "📤 Configurações Importadas",
           description: `Configurações de ${importedData.metadata.exportedBy || "usuário desconhecido"} carregadas. Clique em 'Salvar' para aplicar.`,
-        };
+        });
       } catch (error) {
         toast({
           title: "❌ Erro na Importação",
           description: "Arquivo inválido ou corrompido.",
           variant: "destructive",
-        };
+        });
       }
     };
     reader.readAsText(file);
