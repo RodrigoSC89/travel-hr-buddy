@@ -902,7 +902,6 @@ export const EnhancedSettingsHub: React.FC = () => {
       </div>
       </div>
     );
-  }
-);
+});
 
 export default EnhancedSettingsHub;
