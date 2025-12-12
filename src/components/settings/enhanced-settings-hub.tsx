@@ -556,12 +556,12 @@ export const EnhancedSettingsHub: React.FC = () => {
 
   const toggleTestMode = () => {
     setTestMode(!testMode);
-    toast({
-      title: testMode ? "🔧 Modo Produção" : "🧪 Modo Teste",
-      description: testMode 
-        ? "Voltando ao modo produção. Alterações afetarão o sistema."
-        : "Modo teste ativado. Alterações não afetarão outros usuários.",
-    };
+        toast({
+          title: "🔄 Modo de Teste",
+          description: settings.advanced.testMode
+          ? "Voltando ao modo produção. Alterações afetarão o sistema."
+          : "Modo teste ativado. Alterações não afetarão outros usuários.",
+        });
   };
 
   const togglePreviewMode = () => {
