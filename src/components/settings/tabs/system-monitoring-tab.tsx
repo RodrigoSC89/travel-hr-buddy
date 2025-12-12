@@ -94,7 +94,7 @@ export const SystemMonitoringTab: React.FC<SystemMonitoringTabProps> = ({
         ...settings.alertThresholds,
         [metric]: value
       }
-    };
+    });
   };
 
   const getStatusColor = (color: string) => {
