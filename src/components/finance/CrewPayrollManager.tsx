@@ -1,4 +1,4 @@
-import { useState } from "react";;;
+import { memo, memo, useState } from "react";;;
 import { useQuery } from "@tanstack/react-query";
 import { supabase } from "@/integrations/supabase/client";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
@@ -50,7 +50,7 @@ const statusConfig: Record<string, { color: string; label: string; icon: typeof 
   cancelled: { color: "bg-destructive/20 text-destructive border-destructive/30", label: "Cancelado", icon: AlertCircle },
 };
 
-export function CrewPayrollManager() {
+export const CrewPayrollManager = memo(function() {
   const [searchQuery, setSearchQuery] = useState("");
   const [filterStatus, setFilterStatus] = useState<string>("all");
   const [filterPeriod, setFilterPeriod] = useState<string>("current");

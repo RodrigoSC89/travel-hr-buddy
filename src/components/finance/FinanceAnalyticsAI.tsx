@@ -38,7 +38,7 @@ interface CostOptimization {
   timeline: string;
 }
 
-export function FinanceAnalyticsAI() {
+export const FinanceAnalyticsAI = memo(function() {
   const { analyze, predict, suggest, isLoading } = useNautilusAI();
   const [optimizations, setOptimizations] = useState<CostOptimization[]>([]);
   const [forecast, setForecast] = useState<string>("");

@@ -9,7 +9,7 @@ import { useChecklists } from "../hooks/useChecklists";
 import { ChecklistCard } from "../components/ChecklistCard";
 import { supabase } from "@/integrations/supabase/client";
 
-export function ChecklistsPage() {
+export const ChecklistsPage = memo(function() {
   const [userId, setUserId] = useState<string>("");
   const [title, setTitle] = useState("");
   const [activeTab, setActiveTab] = useState("overview");

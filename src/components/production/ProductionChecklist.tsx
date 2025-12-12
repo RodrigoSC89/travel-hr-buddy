@@ -50,7 +50,7 @@ interface CheckCategory {
   items: CheckItem[];
 }
 
-export function ProductionChecklist() {
+export const ProductionChecklist = memo(function() {
   const [checks, setChecks] = useState<CheckCategory[]>([]);
   const [isRunning, setIsRunning] = useState(false);
   const [lastRun, setLastRun] = useState<Date | null>(null);

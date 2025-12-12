@@ -56,7 +56,7 @@ interface AlertRule {
   cooldown: number; // minutes
 }
 
-export const IntelligentAlertsCenter = () => {
+export const IntelligentAlertsCenter = memo(() => {
   const { toast } = useToast();
   
   const [alerts, setAlerts] = useState<SmartAlert[]>([
@@ -568,7 +568,7 @@ export const IntelligentAlertsCenter = () => {
                           ...prev,
                           severity: { ...prev.severity, [level]: checked }
                         }))
-                      }
+                      };
                     />
                   </div>
                 ))}

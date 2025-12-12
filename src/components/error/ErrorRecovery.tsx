@@ -3,7 +3,7 @@
  * Provides user-friendly error handling with recovery options
  */
 
-import { useState } from "react";;;
+import { memo, memo, useState } from "react";;;
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardFooter, CardHeader, CardTitle } from "@/components/ui/card";
 import { 
@@ -71,7 +71,7 @@ function detectErrorType(error?: Error | null): ErrorType {
   return "unknown";
 }
 
-export function ErrorRecovery({
+export const ErrorRecovery = memo(function({
   error,
   errorType,
   onRetry,

@@ -11,7 +11,7 @@ import { Progress } from "@/components/ui/progress";
 import { Badge } from "@/components/ui/badge";
 import { Play, Pause, Square, Activity } from "lucide-react";
 
-export function MissionExecution() {
+export const MissionExecution = memo(function() {
   const [activeMissions, setActiveMissions] = useState([
     {
       id: "1",

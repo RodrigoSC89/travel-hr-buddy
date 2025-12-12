@@ -159,7 +159,7 @@ const MOCK_ITEMS: InventoryItem[] = [
   }
 ];
 
-export function LiveInventoryMap() {
+export const LiveInventoryMap = memo(function() {
   const [searchTerm, setSearchTerm] = useState("");
   const [selectedLocation, setSelectedLocation] = useState<InventoryLocation | null>(null);
   const [filterStatus, setFilterStatus] = useState<string>("all");

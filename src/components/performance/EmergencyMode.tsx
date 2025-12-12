@@ -33,7 +33,7 @@ interface EmergencyModeContextType {
 
 const EmergencyModeContext = createContext<EmergencyModeContextType | null>(null);
 
-export function useEmergencyMode() {
+export const useEmergencyMode = memo(function() {
   const context = useContext(EmergencyModeContext);
   if (!context) {
     throw new Error("useEmergencyMode must be used within EmergencyModeProvider");
@@ -45,7 +45,7 @@ interface EmergencyModeProviderProps {
   children: ReactNode;
 }
 
-export function EmergencyModeProvider({ children }: EmergencyModeProviderProps) {
+export const EmergencyModeProvider = memo(function({ children }: EmergencyModeProviderProps) {
   const [isEmergencyMode, setIsEmergencyMode] = useState(false);
   const [isOffline, setIsOffline] = useState(!navigator.onLine);
   const [pendingSyncCount, setPendingSyncCount] = useState(0);
@@ -313,7 +313,7 @@ function EmergencyModeOverlay() {
 }
 
 // Emergency Indicator Component (for header/sidebar)
-export function EmergencyIndicator() {
+export const EmergencyIndicator = memo(function() {
   const emergency = useEmergencyMode();
 
   if (!emergency.isEmergencyMode && !emergency.isOffline) {

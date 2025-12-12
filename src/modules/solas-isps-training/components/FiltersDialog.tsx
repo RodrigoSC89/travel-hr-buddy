@@ -8,7 +8,7 @@ import { Filter } from "lucide-react";
 
 interface Props { open: boolean; onOpenChange: (open: boolean) => void; }
 
-export function FiltersDialog({ open, onOpenChange }: Props) {
+export const FiltersDialog = memo(function({ open, onOpenChange }: Props) {
   return (
     <Dialog open={open} onOpenChange={onOpenChange}>
       <DialogContent>

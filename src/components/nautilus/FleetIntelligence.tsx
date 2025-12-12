@@ -2,7 +2,7 @@
  * Fleet Intelligence - Real-time fleet monitoring with AI insights
  */
 
-import { useEffect, useState } from "react";;;
+import { memo, memo, useEffect, useState } from "react";;;
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
@@ -27,7 +27,7 @@ interface VesselStatus {
   efficiency: number;
 }
 
-export function FleetIntelligence() {
+export const FleetIntelligence = memo(function() {
   const [vessels, setVessels] = useState<VesselStatus[]>([]);
   const [selectedVessel, setSelectedVessel] = useState<string | null>(null);
   const [isLoading, setIsLoading] = useState(true);

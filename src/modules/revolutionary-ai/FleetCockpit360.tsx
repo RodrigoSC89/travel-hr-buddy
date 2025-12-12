@@ -87,7 +87,7 @@ const MOCK_VESSELS: VesselData[] = [
   }
 ];
 
-export function FleetCockpit360() {
+export const FleetCockpit360 = memo(function() {
   const [selectedVessel, setSelectedVessel] = useState<VesselData>(MOCK_VESSELS[0]);
   const [activeTab, setActiveTab] = useState("overview");
 

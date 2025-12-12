@@ -53,7 +53,7 @@ interface CertificatesPanelProps {
   onSetReminder: (certId: string) => void;
 }
 
-export function CertificatesPanel({
+export const CertificatesPanel = memo(function({
   certificates,
   onAddCertificate,
   onViewCertificate,

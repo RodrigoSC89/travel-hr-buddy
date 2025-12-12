@@ -43,7 +43,7 @@ const INITIAL_SCENARIO: ScenarioInput = {
   equipmentAge: 5
 };
 
-export function ScenarioSimulator() {
+export const ScenarioSimulator = memo(function() {
   const [scenario, setScenario] = useState<ScenarioInput>(INITIAL_SCENARIO);
   const [isSimulating, setIsSimulating] = useState(false);
   const [showResults, setShowResults] = useState(false);

@@ -442,7 +442,7 @@ export const CAPAManager: React.FC = () => {
                     <CardContent>
                       <div className="grid grid-cols-2 md:grid-cols-3 gap-4">
                         {Object.entries(selectedCAPA.fishbone).map(([key, value]) => {
-                          const labels: Record<string, string> = {
+                          const labels: Record<string key={string.id || index}, string> = {
                             metodo: "📋 Método",
                             maquina: "⚙️ Máquina",
                             mao_obra: "👷 Mão de Obra",

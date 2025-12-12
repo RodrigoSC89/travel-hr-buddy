@@ -1,5 +1,5 @@
 
-import { useEffect, useState } from "react";;;
+import { memo, memo, useEffect, useState } from "react";;;
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
@@ -32,7 +32,7 @@ interface SystemStatus {
   evolution_trend: "improving" | "stable" | "degrading";
 }
 
-export function BehavioralEvolutionDashboard() {
+export const BehavioralEvolutionDashboard = memo(function() {
   const [systemStatus, setSystemStatus] = useState<SystemStatus>({
     total_modules: 0,
     active_alerts: 0,

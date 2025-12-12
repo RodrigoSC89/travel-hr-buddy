@@ -43,7 +43,7 @@ interface PEODPChecklistEditorProps {
   existingVersion?: PEODPChecklistVersion;
 }
 
-export function PEODPChecklistEditor({ onSave, existingVersion }: PEODPChecklistEditorProps) {
+export const PEODPChecklistEditor = memo(function({ onSave, existingVersion }: PEODPChecklistEditorProps) {
   const currentYear = new Date().getFullYear();
   
   const [version, setVersion] = useState<Partial<PEODPChecklistVersion>>({

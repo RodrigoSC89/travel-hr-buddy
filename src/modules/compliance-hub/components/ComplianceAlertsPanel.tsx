@@ -26,7 +26,7 @@ interface ComplianceAlertsPanelProps {
   onMarkAllAsRead: () => void;
 }
 
-export function ComplianceAlertsPanel({ 
+export const ComplianceAlertsPanel = memo(function({ 
   alerts, 
   onMarkAsRead, 
   onMarkAllAsRead 

@@ -100,7 +100,7 @@ const mockEmployees: Employee[] = [
   }
 ];
 
-export const HRDashboard = () => {
+export const HRDashboard = memo(() => {
   const { toast } = useToast();
   const [employees, setEmployees] = useState<Employee[]>(mockEmployees);
   const [searchTerm, setSearchTerm] = useState("");
@@ -764,7 +764,7 @@ export const HRDashboard = () => {
                       if (selectedEmployee) {
                         handleRemoveEmployee(selectedEmployee);
                         setEmployeeProfileOpen(false);
-                      }
+                      };
                     }}
                     className="bg-destructive text-destructive-foreground hover:bg-destructive/90"
                   >

@@ -259,7 +259,7 @@ const PulsingNotificationCard = ({ title, description, time, priority = "medium"
   );
 };
 
-export const EnhancedDashboard = () => {
+export const EnhancedDashboard = memo(() => {
   const [selectedPeriod, setSelectedPeriod] = useState("30d");
   const [isLoaded, setIsLoaded] = useState(false);
   const { profile } = useProfile();
@@ -372,7 +372,7 @@ export const EnhancedDashboard = () => {
       time: "há 2 horas",
       priority: "low",
       icon: CheckCircle
-    }
+    };
   ];
 
   return (
@@ -517,7 +517,7 @@ export const EnhancedDashboard = () => {
                     ].map((kpi, index) => (
                       <div key={index} className="group space-y-4 p-6 rounded-xl bg-gradient-to-br from-background/50 to-primary/5 
                         hover:from-primary/10 hover:to-primary/5 transition-all duration-500 hover:scale-105 hover:shadow-lg">
-                        <div className="flex justify-between items-center">
+                        <div key={div.id || index} className="flex justify-between items-center">
                           <span className="text-sm font-semibold flex items-center gap-2">
                             <kpi.icon className="w-4 h-4 text-primary" />
                             {kpi.label}

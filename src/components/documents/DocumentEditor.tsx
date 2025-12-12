@@ -1,7 +1,7 @@
 
 "use client";
 
-import { useEffect, useRef, useState } from "react";;;
+import { memo, memo, useEffect, useRef, useState } from "react";;;
 import { supabase } from "@/integrations/supabase/client";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
@@ -24,7 +24,7 @@ interface Version {
   saved_at: string;
 }
 
-export function DocumentEditor({ 
+export const DocumentEditor = memo(function({ 
   documentId, 
   initialTitle = "", 
   initialContent = "",

@@ -35,7 +35,7 @@ interface VesselMetrics {
   weather?: unknown;
 }
 
-export const RealTimeFleetMonitor = () => {
+export const RealTimeFleetMonitor = memo(() => {
   const [vessels, setVessels] = useState<VesselMetrics[]>([]);
   const [selectedVessel, setSelectedVessel] = useState<string | null>(null);
   const [loading, setLoading] = useState(true);
@@ -181,7 +181,7 @@ export const RealTimeFleetMonitor = () => {
         </div>
       </div>
     );
-  }
+  };
 
   return (
     <div className="space-y-6">

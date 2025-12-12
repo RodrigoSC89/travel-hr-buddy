@@ -28,7 +28,7 @@ import { peodpCore } from "@/modules/hr/peo-dp";
 import type { PEODPAuditoria } from "@/types/peodp-audit";
 import { getScoreLevel, getScoreColor } from "@/types/peodp-audit";
 
-export function PEODPAuditComponent() {
+export const PEODPAuditComponent = memo(function() {
   const { toast } = useToast();
   const [activeTab, setActiveTab] = useState("input");
   const [loading, setLoading] = useState(false);

@@ -43,7 +43,7 @@ interface VettingPrep {
   recommendations: string[];
 }
 
-export function QHSEAutonomousAI() {
+export const QHSEAutonomousAI = memo(function() {
   const { analyze, generate, suggest, isLoading } = useNautilusAI();
   const [complianceData, setComplianceData] = useState<ComplianceItem[]>([
     {

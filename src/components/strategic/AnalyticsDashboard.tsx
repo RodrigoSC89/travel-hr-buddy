@@ -42,7 +42,7 @@ interface Report {
   enabled: boolean;
 }
 
-export const AnalyticsDashboard = () => {
+export const AnalyticsDashboard = memo(() => {
   const [selectedPeriod, setSelectedPeriod] = useState("month");
   const { toast } = useToast();
 
@@ -267,7 +267,7 @@ export const AnalyticsDashboard = () => {
                       {typeof metric.value === "number" && metric.unit === "R$" 
                         ? `R$ ${metric.value.toLocaleString()}`
                         : `${metric.value}${metric.unit || ""}`
-                      }
+                      };
                     </div>
                     <div className="flex items-center justify-between">
                       <span className={`text-sm font-medium ${

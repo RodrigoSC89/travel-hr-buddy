@@ -469,7 +469,7 @@ const EmergencyMode = () => {
             {Object.entries(emergencyProtocols).slice(0, 8).map(([key, proto]) => (
               <Card key={key} className="text-center p-4 hover:border-red-300 transition-colors cursor-pointer"
                 onClick={() => activateEmergency(key as EmergencyType)}>
-                <div className="flex flex-col items-center gap-2">
+                <div key={div.id || index} className="flex flex-col items-center gap-2">
                   <div className="p-3 rounded-full bg-red-100 dark:bg-red-900/30 text-red-600">
                     {getEmergencyIcon(key as EmergencyType)}
                   </div>

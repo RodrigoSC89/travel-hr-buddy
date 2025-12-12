@@ -93,7 +93,7 @@ const defaultSettings: ComplianceSettings = {
   },
 };
 
-export function SettingsDialog({
+export const SettingsDialog = memo(function({
   open,
   onOpenChange,
   settings = defaultSettings,

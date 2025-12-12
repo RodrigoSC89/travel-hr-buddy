@@ -39,7 +39,7 @@ interface ComplianceAIAnalysisPanelProps {
   certificates: Certificate[];
 }
 
-export function ComplianceAIAnalysisPanel({
+export const ComplianceAIAnalysisPanel = memo(function({
   analysis,
   loading,
   onRunAnalysis,

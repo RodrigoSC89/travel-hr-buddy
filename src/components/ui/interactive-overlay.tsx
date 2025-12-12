@@ -102,7 +102,7 @@ const FloatingMenu = () => {
           description: "Abrindo relatórios e sincronização global"
         });
       }
-    }
+    };
   ];
 
   return (
@@ -251,7 +251,7 @@ const StatusWidget = () => {
   );
 };
 
-export const InteractiveOverlay = () => {
+export const InteractiveOverlay = memo(() => {
   return (
     <>
       <FloatingMenu />

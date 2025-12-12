@@ -3,7 +3,7 @@
  * PATCH 624 - Loading progressivo com feedback visual melhorado
  */
 
-import { useEffect, useState } from "react";;;
+import { memo, memo, useEffect, useState } from "react";;;
 import { motion, AnimatePresence } from "framer-motion";
 import { cn } from "@/lib/utils";
 
@@ -15,7 +15,7 @@ interface ProgressiveLoaderProps {
   className?: string;
 }
 
-export function ProgressiveLoader({
+export const ProgressiveLoader = memo(function({
   isLoading,
   progress,
   message = "Carregando...",
@@ -92,7 +92,7 @@ export function ProgressiveLoader({
 /**
  * Skeleton com shimmer effect otimizado
  */
-export function ShimmerSkeleton({ className }: { className?: string }) {
+export const ShimmerSkeleton = memo(function({ className }: { className?: string }) {
   return (
     <div
       className={cn(
@@ -109,7 +109,7 @@ export function ShimmerSkeleton({ className }: { className?: string }) {
 /**
  * Card skeleton com layout realista
  */
-export function CardSkeleton() {
+export const CardSkeleton = memo(function() {
   return (
     <div className="rounded-xl border bg-card p-6 space-y-4">
       <div className="flex items-center justify-between">
@@ -125,7 +125,7 @@ export function CardSkeleton() {
 /**
  * Table skeleton
  */
-export function TableSkeleton({ rows = 5 }: { rows?: number }) {
+export const TableSkeleton = memo(function({ rows = 5 }: { rows?: number }) {
   return (
     <div className="rounded-xl border bg-card overflow-hidden">
       {/* Header */}

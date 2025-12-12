@@ -62,7 +62,7 @@ const STANDARD_OPTIONS = [
   "STCW 2010", "NORMAM-13", "DNV-RU-SHIP", "MTS DP Guidance", "NI DPO Scheme"
 ];
 
-export function IMCAAuditManager({
+export const IMCAAuditManager = memo(function({
   customItems,
   customCategories,
   onAddItem,

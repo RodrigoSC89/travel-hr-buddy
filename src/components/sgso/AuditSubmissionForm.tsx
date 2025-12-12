@@ -30,7 +30,7 @@ interface AuditSubmissionFormProps {
 
 type SgsoAuditInsert = Database["public"]["Tables"]["sgso_audits"]["Insert"];
 
-export function AuditSubmissionForm({ open, onClose }: AuditSubmissionFormProps) {
+export const AuditSubmissionForm = memo(function({ open, onClose }: AuditSubmissionFormProps) {
   const { toast } = useToast();
   const [loading, setLoading] = useState(false);
   const [formData, setFormData] = useState({

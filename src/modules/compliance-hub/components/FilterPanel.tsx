@@ -54,7 +54,7 @@ interface FilterPanelProps {
   regulations: { id: string; name: string }[];
 }
 
-export function FilterPanel({
+export const FilterPanel = memo(function({
   filters,
   onFilterChange,
   onClearFilters,

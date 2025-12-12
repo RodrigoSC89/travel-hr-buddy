@@ -30,7 +30,7 @@ interface NotificationSettings {
   weekly_report: boolean;
 }
 
-export const NotificationSettings = () => {
+export const NotificationSettings = memo(() => {
   const { user } = useAuth();
   const { toast } = useToast();
   const [settings, setSettings] = useState<NotificationSettings>({
@@ -171,7 +171,7 @@ export const NotificationSettings = () => {
         </CardContent>
       </Card>
     );
-  }
+  };
 
   return (
     <div className="space-y-6">

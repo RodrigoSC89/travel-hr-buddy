@@ -97,7 +97,7 @@ const MOCK_SUPPLIERS: Supplier[] = [
   }
 ];
 
-export function SupplierComparator() {
+export const SupplierComparator = memo(function() {
   const [searchTerm, setSearchTerm] = useState("");
   const [sortBy, setSortBy] = useState<string>("aiScore");
   const [selectedSupplier, setSelectedSupplier] = useState<Supplier | null>(null);

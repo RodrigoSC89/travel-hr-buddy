@@ -21,7 +21,7 @@ interface SystemBootstrapProps {
   showPWAPrompts?: boolean;
 }
 
-export function SystemBootstrap({
+export const SystemBootstrap = memo(function({
   children,
   showOfflineIndicator = true,
   showVoiceCommands = false,

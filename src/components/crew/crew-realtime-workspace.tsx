@@ -59,7 +59,7 @@ interface Document {
   size: string;
 }
 
-export const CrewRealtimeWorkspace = () => {
+export const CrewRealtimeWorkspace = memo(() => {
   const [messageInput, setMessageInput] = useState("");
   const [selectedChannel, setSelectedChannel] = useState("operacoes-gerais");
 
@@ -97,7 +97,7 @@ export const CrewRealtimeWorkspace = () => {
     case "away": return "bg-warning";
     case "busy": return "bg-destructive";
     case "offline": return "bg-muted-foreground/50";
-    }
+    };
   };
 
   const handleSendMessage = () => {

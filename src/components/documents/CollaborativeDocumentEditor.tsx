@@ -1,7 +1,7 @@
 
 "use client";
 
-import { useCallback, useEffect, useRef, useState } from "react";;;
+import { memo, memo, useCallback, useEffect, useRef, useState } from "react";;;
 import { useEditor, EditorContent } from "@tiptap/react";
 import StarterKit from "@tiptap/starter-kit";
 import Collaboration from "@tiptap/extension-collaboration";
@@ -23,7 +23,7 @@ interface CollaborativeDocumentEditorProps {
   initialTitle?: string;
 }
 
-export function CollaborativeDocumentEditor({ 
+export const CollaborativeDocumentEditor = memo(function({ 
   documentId,
   initialTitle = "Untitled Document"
 }: CollaborativeDocumentEditorProps) {

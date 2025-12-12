@@ -3,7 +3,7 @@
  * Tests learning system that adapts decision weights over time
  */
 
-import { useState } from "react";;;
+import { memo, memo, useState } from "react";;;
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
@@ -20,7 +20,7 @@ interface LearningEvent {
   accuracy: number;
 }
 
-export function Patch605Validation() {
+export const Patch605Validation = memo(function() {
   const [events, setEvents] = useState<LearningEvent[]>([]);
   const [isLearning, setIsLearning] = useState(false);
   const [currentIteration, setCurrentIteration] = useState(0);

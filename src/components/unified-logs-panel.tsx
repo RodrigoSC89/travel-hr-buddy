@@ -1,4 +1,4 @@
-import { useEffect, useMemo, useState } from "react";;;
+import { memo, memo, useEffect, useMemo, useState } from "react";;;
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -23,7 +23,7 @@ interface LogEntry {
   metadata?: Record<string, unknown>;
 }
 
-export function UnifiedLogsPanel() {
+export const UnifiedLogsPanel = memo(function() {
   const { user } = useAuth();
   const { toast } = useToast();
   const { getJsPDF, getAutoTable } = usePDFExport();

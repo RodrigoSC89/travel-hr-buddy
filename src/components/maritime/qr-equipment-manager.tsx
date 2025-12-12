@@ -24,7 +24,7 @@ interface QREquipment {
   notes?: string;
 }
 
-export const QREquipmentManager = () => {
+export const QREquipmentManager = memo(() => {
   const [equipment, setEquipment] = useState<QREquipment[]>([
     {
       id: "1",
@@ -69,7 +69,7 @@ export const QREquipmentManager = () => {
     case "maintenance": return <div className="w-2 h-2 bg-yellow-500 rounded-full" />;
     case "critical": return <AlertTriangle className="h-4 w-4 text-red-500" />;
     default: return <div className="w-2 h-2 bg-gray-500 rounded-full" />;
-    }
+    };
   };
 
   const handleCreateEquipment = () => {

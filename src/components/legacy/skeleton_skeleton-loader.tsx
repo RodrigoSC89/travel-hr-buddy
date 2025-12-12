@@ -1,3 +1,4 @@
+import { memo } from 'react';
 /**
  * Universal Skeleton Loaders
  * Consistent loading states for better UX on slow connections
@@ -9,7 +10,7 @@ interface SkeletonProps {
   className?: string;
 }
 
-export function Skeleton({ className }: SkeletonProps) {
+export const Skeleton = memo(function({ className }: SkeletonProps) {
   return (
     <div
       className={cn(
@@ -20,7 +21,7 @@ export function Skeleton({ className }: SkeletonProps) {
   );
 }
 
-export function SkeletonText({ lines = 3, className }: SkeletonProps & { lines?: number }) {
+export const SkeletonText = memo(function({ lines = 3, className }: SkeletonProps & { lines?: number }) {
   return (
     <div className={cn("space-y-2", className)}>
       {Array.from({ length: lines }).map((_, i) => (
@@ -33,7 +34,7 @@ export function SkeletonText({ lines = 3, className }: SkeletonProps & { lines?:
   );
 }
 
-export function SkeletonCard({ className }: SkeletonProps) {
+export const SkeletonCard = memo(function({ className }: SkeletonProps) {
   return (
     <div className={cn("rounded-lg border bg-card p-4 space-y-3", className)}>
       <Skeleton className="h-4 w-1/2" />
@@ -46,7 +47,7 @@ export function SkeletonCard({ className }: SkeletonProps) {
   );
 }
 
-export function SkeletonTable({ rows = 5, cols = 4, className }: SkeletonProps & { rows?: number; cols?: number }) {
+export const SkeletonTable = memo(function({ rows = 5, cols = 4, className }: SkeletonProps & { rows?: number; cols?: number }) {
   return (
     <div className={cn("rounded-lg border", className)}>
       {/* Header */}
@@ -67,7 +68,7 @@ export function SkeletonTable({ rows = 5, cols = 4, className }: SkeletonProps &
   );
 }
 
-export function SkeletonList({ items = 5, className }: SkeletonProps & { items?: number }) {
+export const SkeletonList = memo(function({ items = 5, className }: SkeletonProps & { items?: number }) {
   return (
     <div className={cn("space-y-3", className)}>
       {Array.from({ length: items }).map((_, i) => (
@@ -84,7 +85,7 @@ export function SkeletonList({ items = 5, className }: SkeletonProps & { items?:
   );
 }
 
-export function SkeletonDashboard({ className }: SkeletonProps) {
+export const SkeletonDashboard = memo(function({ className }: SkeletonProps) {
   return (
     <div className={cn("space-y-6", className)}>
       {/* Stats row */}
@@ -107,7 +108,7 @@ export function SkeletonDashboard({ className }: SkeletonProps) {
   );
 }
 
-export function SkeletonAvatar({ size = "md", className }: SkeletonProps & { size?: "sm" | "md" | "lg" }) {
+export const SkeletonAvatar = memo(function({ size = "md", className }: SkeletonProps & { size?: "sm" | "md" | "lg" }) {
   const sizeClasses = {
     sm: "h-8 w-8",
     md: "h-10 w-10",
@@ -117,7 +118,7 @@ export function SkeletonAvatar({ size = "md", className }: SkeletonProps & { siz
   return <Skeleton className={cn("rounded-full", sizeClasses[size], className)} />;
 }
 
-export function SkeletonImage({ aspectRatio = "16/9", className }: SkeletonProps & { aspectRatio?: string }) {
+export const SkeletonImage = memo(function({ aspectRatio = "16/9", className }: SkeletonProps & { aspectRatio?: string }) {
   return (
     <div className={cn("relative overflow-hidden rounded-lg", className)} style={{ aspectRatio }}>
       <Skeleton className="absolute inset-0" />
@@ -125,7 +126,7 @@ export function SkeletonImage({ aspectRatio = "16/9", className }: SkeletonProps
   );
 }
 
-export function SkeletonForm({ fields = 4, className }: SkeletonProps & { fields?: number }) {
+export const SkeletonForm = memo(function({ fields = 4, className }: SkeletonProps & { fields?: number }) {
   return (
     <div className={cn("space-y-4", className)}>
       {Array.from({ length: fields }).map((_, i) => (

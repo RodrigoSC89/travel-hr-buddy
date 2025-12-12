@@ -73,7 +73,7 @@ interface PredictiveInsight {
   timeline: string;
 }
 
-export const AdvancedFleetAnalytics = () => {
+export const AdvancedFleetAnalytics = memo(() => {
   const [metrics, setMetrics] = useState<FleetMetrics | null>(null);
   const [performanceData, setPerformanceData] = useState<PerformanceData[]>([]);
   const [vesselPerformance, setVesselPerformance] = useState<VesselPerformance[]>([]);
@@ -236,7 +236,7 @@ export const AdvancedFleetAnalytics = () => {
         <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-primary"></div>
       </div>
     );
-  }
+  };
 
   return (
     <div className="space-y-6">

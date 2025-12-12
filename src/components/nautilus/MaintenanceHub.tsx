@@ -3,7 +3,7 @@
  * Integrated with Supabase for real-time data
  */
 
-import { useEffect, useState } from "react";;;
+import { memo, memo, useEffect, useState } from "react";;;
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
@@ -44,7 +44,7 @@ interface ComponentHealth {
   lastMaintenance: string;
 }
 
-export function MaintenanceHub() {
+export const MaintenanceHub = memo(function() {
   const [tasks, setTasks] = useState<MaintenanceTask[]>([]);
   const [components, setComponents] = useState<ComponentHealth[]>([]);
   const [isLoading, setIsLoading] = useState(true);

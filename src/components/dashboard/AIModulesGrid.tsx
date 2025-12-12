@@ -3,7 +3,7 @@
  * PATCH 900: Removidas animações pesadas
  */
 
-import { memo, useCallback, useMemo, useState } from "react";;;
+import { memo, memo, memo, useCallback, useMemo, useState } from "react";;;
 import { useNavigate } from "react-router-dom";
 import { Card, CardContent } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";

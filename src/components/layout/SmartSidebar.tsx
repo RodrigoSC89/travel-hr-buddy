@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";;;
+import { memo, memo, useEffect, useState } from "react";;;
 import { Link, useLocation } from "react-router-dom";
 import { 
   ChevronDown,
@@ -166,7 +166,7 @@ interface SmartSidebarProps {
   className?: string;
 }
 
-export function SmartSidebar({ className }: SmartSidebarProps) {
+export const SmartSidebar = memo(function({ className }: SmartSidebarProps) {
   const [openSection, setOpenSection] = useState<string | null>(null);
   const [isMobileOpen, setIsMobileOpen] = useState(false);
   const location = useLocation();

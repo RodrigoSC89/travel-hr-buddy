@@ -31,7 +31,7 @@ interface DynamicNavigationProps {
 
 type FilterMode = "all" | "complete" | "partial" | "incomplete";
 
-export function DynamicNavigation({ className }: DynamicNavigationProps) {
+export const DynamicNavigation = memo(function({ className }: DynamicNavigationProps) {
   const [openSections, setOpenSections] = useState<Set<string>>(new Set(["core", "operations"]));
   const [isMobileOpen, setIsMobileOpen] = useState(false);
   const [filterMode, setFilterMode] = useState<FilterMode>("all");

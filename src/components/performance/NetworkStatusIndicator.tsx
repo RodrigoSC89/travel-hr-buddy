@@ -1,3 +1,4 @@
+import { memo } from 'react';
 /**
  * Network Status Indicator
  * Shows current connection quality and offline status
@@ -39,7 +40,7 @@ const qualityColors: Record<ConnectionQuality, string> = {
   offline: "text-destructive",
 };
 
-export function NetworkStatusIndicator({
+export const NetworkStatusIndicator = memo(function({
   className,
   showLabel = false,
   size = "md",

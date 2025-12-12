@@ -53,7 +53,7 @@ interface AuditsPanelProps {
   onExportAudit: (auditId: string) => void;
 }
 
-export function AuditsPanel({
+export const AuditsPanel = memo(function({
   audits,
   onCreateAudit,
   onViewAudit,

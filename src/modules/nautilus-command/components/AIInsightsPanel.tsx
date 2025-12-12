@@ -22,7 +22,7 @@ interface AIInsightsPanelProps {
   context: SystemContext;
 }
 
-export function AIInsightsPanel({ context }: AIInsightsPanelProps) {
+export const AIInsightsPanel = memo(function({ context }: AIInsightsPanelProps) {
   const { 
     generateBriefing, 
     analyzeAlerts, 

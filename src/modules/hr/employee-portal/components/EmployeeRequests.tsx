@@ -1,5 +1,5 @@
 
-import { useState } from "react";;;
+import { memo, memo, useState } from "react";;;
 import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
 import { supabase } from "@/integrations/supabase/client";
 import { Button } from "@/components/ui/button";
@@ -44,7 +44,7 @@ interface EmployeeRequest {
   };
 }
 
-export function EmployeeRequests() {
+export const EmployeeRequests = memo(function() {
   const { toast } = useToast();
   const queryClient = useQueryClient();
   const [isDialogOpen, setIsDialogOpen] = useState(false);

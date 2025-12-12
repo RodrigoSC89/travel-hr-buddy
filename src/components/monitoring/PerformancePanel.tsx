@@ -13,7 +13,7 @@ interface PerformancePanelProps {
   mqttClient?: MqttClient | null;
 }
 
-export function PerformancePanel({ mqttClient }: PerformancePanelProps) {
+export const PerformancePanel = memo(function({ mqttClient }: PerformancePanelProps) {
   const metrics = usePerformanceMonitor(mqttClient);
 
   const getStatusColor = (value: number, thresholds: { yellow: number; red: number }) => {

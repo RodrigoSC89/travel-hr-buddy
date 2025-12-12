@@ -3,7 +3,7 @@
  * User-friendly loading states for slow connections
  */
 
-import { useEffect, useState } from "react";;;
+import { memo, memo, useEffect, useState } from "react";;;
 import { cn } from "@/lib/utils";
 import { useSlowNetwork } from "@/components/performance/SlowNetworkOptimizer";
 import { Skeleton } from "./skeleton";
@@ -17,7 +17,7 @@ interface SlowConnectionBannerProps {
   message?: string;
 }
 
-export function SlowConnectionBanner({ onRetry, message }: SlowConnectionBannerProps) {
+export const SlowConnectionBanner = memo(function({ onRetry, message }: SlowConnectionBannerProps) {
   const { quality, isSlowNetwork, isCriticallySlowNetwork } = useSlowNetwork();
 
   if (!isSlowNetwork) return null;
@@ -64,7 +64,7 @@ interface ProgressiveLoadingProps {
   className?: string;
 }
 
-export function ProgressiveLoading({
+export const ProgressiveLoading = memo(function({
   progress,
   message = "Carregando...",
   showDetails = false,
@@ -156,7 +156,7 @@ interface TimeoutMessageProps {
   className?: string;
 }
 
-export function TimeoutMessage({ 
+export const TimeoutMessage = memo(function({ 
   onRetry, 
   message = "A solicitação demorou muito",
   className 
@@ -196,7 +196,7 @@ interface OfflineMessageProps {
   className?: string;
 }
 
-export function OfflineMessage({ onRetry, className }: OfflineMessageProps) {
+export const OfflineMessage = memo(function({ onRetry, className }: OfflineMessageProps) {
   const [isOnline, setIsOnline] = useState(navigator.onLine);
 
   useEffect(() => {
@@ -248,7 +248,7 @@ interface DataSkeletonProps {
   className?: string;
 }
 
-export function DataSkeleton({ rows = 5, columns = 4, className }: DataSkeletonProps) {
+export const DataSkeleton = memo(function({ rows = 5, columns = 4, className }: DataSkeletonProps) {
   return (
     <div className={cn("space-y-3", className)}>
       {/* Header */}
@@ -282,7 +282,7 @@ interface CardSkeletonGridProps {
   className?: string;
 }
 
-export function CardSkeletonGrid({ 
+export const CardSkeletonGrid = memo(function({ 
   count = 4, 
   columns = 4,
   className 

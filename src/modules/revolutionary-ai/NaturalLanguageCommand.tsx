@@ -29,7 +29,7 @@ const COMMAND_EXAMPLES = [
   { text: "Qual o consumo médio de combustível da frota?", category: "analytics" as const },
 ];
 
-export function NaturalLanguageCommand() {
+export const NaturalLanguageCommand = memo(function() {
   const [command, setCommand] = useState("");
   const [isListening, setIsListening] = useState(false);
   const [suggestions, setSuggestions] = useState<CommandSuggestion[]>([]);

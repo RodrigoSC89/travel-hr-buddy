@@ -72,7 +72,7 @@ interface SystemHealth {
   last_updated: string;
 }
 
-export const IntelligentAlertSystem = () => {
+export const IntelligentAlertSystem = memo(() => {
   const [smartAlerts, setSmartAlerts] = useState<SmartAlert[]>([]);
   const [aiInsights, setAiInsights] = useState<AIInsight[]>([]);
   const [systemHealth, setSystemHealth] = useState<SystemHealth | null>(null);
@@ -342,7 +342,7 @@ export const IntelligentAlertSystem = () => {
         <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-primary"></div>
       </div>
     );
-  }
+  };
 
   return (
     <div className="space-y-6">

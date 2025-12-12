@@ -64,7 +64,7 @@ const defaultConfig: TelemetryConfig = {
   darkMapTheme: true,
 };
 
-export function TelemetrySettings({ config, onSave, trigger }: TelemetrySettingsProps) {
+export const TelemetrySettings = memo(function({ config, onSave, trigger }: TelemetrySettingsProps) {
   const [open, setOpen] = useState(false);
   const [settings, setSettings] = useState<TelemetryConfig>({
     ...defaultConfig,

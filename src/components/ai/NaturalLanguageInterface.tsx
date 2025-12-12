@@ -2,7 +2,7 @@
  * Natural Language Interface - Execute commands via text/voice
  */
 
-import { useEffect, useRef, useState } from "react";;;
+import { memo, memo, useEffect, useRef, useState } from "react";;;
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -59,7 +59,7 @@ const SUGGESTED_COMMANDS = [
   { text: "Gere relatório de compliance QHSE", module: "qhse" },
 ];
 
-export function NaturalLanguageInterface() {
+export const NaturalLanguageInterface = memo(function() {
   const [input, setInput] = useState("");
   const [isListening, setIsListening] = useState(false);
   const [results, setResults] = useState<CommandResult[]>([]);

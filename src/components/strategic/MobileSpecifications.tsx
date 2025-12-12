@@ -33,7 +33,7 @@ interface TechnicalSpec {
   requirements: string[];
 }
 
-export const MobileSpecifications = () => {
+export const MobileSpecifications = memo(() => {
   const coreFeatures: MobileFeature[] = [
     {
       id: "1",
@@ -176,7 +176,7 @@ export const MobileSpecifications = () => {
     case "medium": return "bg-warning text-warning-foreground";
     case "low": return "bg-success text-success-foreground";
     default: return "bg-muted text-muted-foreground";
-    }
+    };
   };
 
   const getFeatureIcon = (name: string) => {

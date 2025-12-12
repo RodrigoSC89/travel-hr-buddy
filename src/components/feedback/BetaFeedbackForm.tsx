@@ -33,7 +33,7 @@ interface FeedbackData {
   sessionDuration: number;
 }
 
-export function BetaFeedbackForm() {
+export const BetaFeedbackForm = memo(function() {
   const { toast } = useToast();
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [sessionStart] = useState(Date.now());

@@ -31,7 +31,7 @@ interface SupplyOrder {
   } | null;
 }
 
-export const SupplyOrdersManagement = () => {
+export const SupplyOrdersManagement = memo(() => {
   const [orders, setOrders] = useState<SupplyOrder[]>([]);
   const [inventoryItems, setInventoryItems] = useState<any[]>([]);
   const [isCreating, setIsCreating] = useState(false);
@@ -165,7 +165,7 @@ export const SupplyOrdersManagement = () => {
   const getPriorityIcon = (priority: string) => {
     if (priority === "urgent" || priority === "high") {
       return <AlertTriangle className="h-4 w-4 text-red-500" />;
-    }
+    };
     return <Package className="h-4 w-4 text-blue-500" />;
   };
 

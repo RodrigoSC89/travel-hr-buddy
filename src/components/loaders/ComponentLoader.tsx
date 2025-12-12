@@ -1,3 +1,4 @@
+import { memo } from 'react';
 /**
  * ComponentLoader - FASE A.4
  * 
@@ -19,7 +20,7 @@ const sizeClasses = {
   lg: "h-8 w-8",
 };
 
-export function ComponentLoader({
+export const ComponentLoader = memo(function({
   message,
   size = "md",
   className,

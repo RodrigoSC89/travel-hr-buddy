@@ -3,7 +3,7 @@
  * Hook React para internacionalização com fallback AI
  */
 
-import { useCallback, useContext, useEffect, useState } from "react";;;
+import { memo, memo, useCallback, useContext, useEffect, useState } from "react";;;
 import { aiTranslator, SupportedLanguage, TranslationResult } from "./translator";
 import { logger } from "@/lib/logger";
 
@@ -174,7 +174,7 @@ export function useStaticTranslation(
 /**
  * Hook para mudança de idioma global
  */
-export function useLanguageSwitcher() {
+export const useLanguageSwitcher = memo(function() {
   const { language, setLanguage, availableLanguages } = useTranslation();
 
   const switchLanguage = useCallback(
@@ -210,7 +210,7 @@ interface I18nContextValue {
 
 const I18nContext = createContext<I18nContextValue | null>(null);
 
-export function I18nProvider({
+export const I18nProvider = memo(function({
   children,
   config,
 }: {
@@ -241,7 +241,7 @@ function isValidLanguage(lang: string): boolean {
 /**
  * Hook para formatação de datas com i18n
  */
-export function useDateFormatter() {
+export const useDateFormatter = memo(function() {
   const { language } = useTranslation();
 
   const formatDate = useCallback(
@@ -281,7 +281,7 @@ export function useDateFormatter() {
 /**
  * Hook para formatação de números com i18n
  */
-export function useNumberFormatter() {
+export const useNumberFormatter = memo(function() {
   const { language } = useTranslation();
 
   const formatNumber = useCallback(

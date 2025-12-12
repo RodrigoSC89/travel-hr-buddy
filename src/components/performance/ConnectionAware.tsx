@@ -77,7 +77,7 @@ function getConnectionInfo(): ConnectionInfo {
 }
 
 // Provider component
-export function ConnectionProvider({ children }: { children: ReactNode }) {
+export const ConnectionProvider = memo(function({ children }: { children: ReactNode }) {
   const [connectionInfo, setConnectionInfo] = useState<ConnectionInfo>(getConnectionInfo);
 
   useEffect(() => {
@@ -126,7 +126,7 @@ export function ConnectionProvider({ children }: { children: ReactNode }) {
 }
 
 // Hook to use connection info
-export function useConnection() {
+export const useConnection = memo(function() {
   const context = useContext(ConnectionContext);
   if (!context) {
     // Return default values if not wrapped in provider
@@ -143,7 +143,7 @@ export function useConnection() {
 }
 
 // Connection status indicator component
-export function ConnectionIndicator({ 
+export const ConnectionIndicator = memo(function({ 
   className,
   showLabel = false,
   size = "sm",
@@ -203,7 +203,7 @@ export function ConnectionIndicator({
 }
 
 // Offline banner component
-export function OfflineBanner({ className }: { className?: string }) {
+export const OfflineBanner = memo(function({ className }: { className?: string }) {
   const { isOnline } = useConnection();
   const [wasOffline, setWasOffline] = useState(false);
   const [showReconnected, setShowReconnected] = useState(false);
@@ -265,7 +265,7 @@ export function withConnectionAware<P extends object>(
 }
 
 // Conditional rendering based on connection
-export function ConnectionConditional({
+export const ConnectionConditional = memo(function({
   children,
   fallback,
   minQuality = "poor",

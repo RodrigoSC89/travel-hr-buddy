@@ -40,13 +40,13 @@ interface NotificationCenterContextValue {
 
 const NotificationCenterContext = createContext<NotificationCenterContextValue | undefined>(undefined);
 
-export const useNotificationCenterContext = () => {
+export const useNotificationCenterContext = memo(() => {
   const context = useContext(NotificationCenterContext);
   if (!context) {
     throw new Error(
       "useNotificationCenterContext must be used within NotificationCenterProvider"
     );
-  }
+  };
   return context;
 };
 

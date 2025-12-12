@@ -13,7 +13,7 @@ interface ChecklistCardProps {
   onAnalyze?: (checklistId: string) => void;
 }
 
-export function ChecklistCard({ checklist, onView, onAnalyze }: ChecklistCardProps) {
+export const ChecklistCard = memo(function({ checklist, onView, onAnalyze }: ChecklistCardProps) {
   const progress = calculateProgress(checklist.items);
   
   const getStatusColor = (status: string) => {

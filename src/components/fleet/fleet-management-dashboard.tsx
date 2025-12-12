@@ -11,7 +11,7 @@ import { Ship, MapPin, Fuel, AlertTriangle, Activity, TrendingUp } from "lucide-
 import { toast } from "sonner";
 import { logger } from "@/lib/logger";
 
-export function FleetManagementDashboard() {
+export const FleetManagementDashboard = memo(function() {
   const [vesselStatuses, setVesselStatuses] = useState<VesselStatus[]>([]);
   const [maintenanceAlerts, setMaintenanceAlerts] = useState<MaintenanceAlert[]>([]);
   const [fuelUsage, setFuelUsage] = useState<FuelUsage[]>([]);

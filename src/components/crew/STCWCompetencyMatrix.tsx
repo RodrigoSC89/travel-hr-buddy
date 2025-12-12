@@ -1,4 +1,4 @@
-import { useMemo, useState } from "react";;;
+import { memo, memo, useMemo, useState } from "react";;;
 import { useQuery } from "@tanstack/react-query";
 import { supabase } from "@/integrations/supabase/client";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
@@ -56,7 +56,7 @@ const functionAreas: Record<string, string> = {
   safety: "Segurança",
 };
 
-export function STCWCompetencyMatrix() {
+export const STCWCompetencyMatrix = memo(function() {
   const [searchQuery, setSearchQuery] = useState("");
   const [filterArea, setFilterArea] = useState<string>("all");
   const [filterLevel, setFilterLevel] = useState<string>("all");

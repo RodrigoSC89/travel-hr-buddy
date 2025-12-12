@@ -39,7 +39,7 @@ interface QuickAction {
   usage: number;
 }
 
-export const CopilotAI = () => {
+export const CopilotAI = memo(() => {
   const [query, setQuery] = useState("");
   const [isListening, setIsListening] = useState(false);
 
@@ -135,7 +135,7 @@ export const CopilotAI = () => {
     if (query.trim()) {
       // Aqui implementaria o processamento da query
       setQuery("");
-    }
+    };
   };
 
   return (

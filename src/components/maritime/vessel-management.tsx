@@ -68,7 +68,7 @@ const initialFormData: VesselFormData = {
   crew_capacity: 0
 };
 
-export function VesselManagement() {
+export const VesselManagement = memo(function() {
   const [vessels, setVessels] = useState<Vessel[]>([]);
   const [loading, setLoading] = useState(true);
   const [dialogOpen, setDialogOpen] = useState(false);

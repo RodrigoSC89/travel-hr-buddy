@@ -65,7 +65,7 @@ interface CoverageEvent {
   notified: boolean;
 }
 
-export const SatelliteTrackerEnhanced = () => {
+export const SatelliteTrackerEnhanced = memo(() => {
   const { toast } = useToast();
   const [satellites, setSatellites] = useState<SatelliteData[]>([]);
   const [coverageEvents, setCoverageEvents] = useState<CoverageEvent[]>([]);
@@ -290,7 +290,7 @@ export const SatelliteTrackerEnhanced = () => {
       return <AlertCircle className="h-4 w-4 text-gray-600" />;
     default:
       return <Radio className="h-4 w-4 text-blue-600" />;
-    }
+    };
   };
 
   return (

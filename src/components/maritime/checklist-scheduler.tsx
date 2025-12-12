@@ -23,7 +23,7 @@ interface ScheduledChecklist {
   notifications: boolean;
 }
 
-export const ChecklistScheduler = () => {
+export const ChecklistScheduler = memo(() => {
   const [schedules, setSchedules] = useState<ScheduledChecklist[]>([
     {
       id: "1",
@@ -58,7 +58,7 @@ export const ChecklistScheduler = () => {
     case "quarterly": return "bg-purple-100 text-purple-800";
     case "annually": return "bg-green-100 text-green-800";
     default: return "bg-secondary text-secondary-foreground";
-    }
+    };
   };
 
   const getStatusColor = (isActive: boolean) => {

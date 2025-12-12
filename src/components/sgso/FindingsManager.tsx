@@ -17,7 +17,7 @@ import {
 import { AlertTriangle, CheckCircle, Eye } from "lucide-react";
 import { format } from "date-fns";
 
-export function FindingsManager() {
+export const FindingsManager = memo(function() {
   const { toast } = useToast();
   const [findings, setFindings] = useState<any[]>([]);
   const [loading, setLoading] = useState(true);

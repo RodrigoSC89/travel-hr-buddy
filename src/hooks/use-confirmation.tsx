@@ -25,7 +25,7 @@ const defaultState: ConfirmationState = {
   onConfirm: () => {}
 };
 
-export function useConfirmation() {
+export const useConfirmation = memo(function() {
   const [state, setState] = useState<ConfirmationState>(defaultState);
   const [isLoading, setIsLoading] = useState(false);
 

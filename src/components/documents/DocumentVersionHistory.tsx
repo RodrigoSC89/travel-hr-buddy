@@ -1,5 +1,5 @@
 
-import { useEffect, useState } from "react";;;
+import { memo, memo, useEffect, useState } from "react";;;
 import { supabase } from "@/integrations/supabase/client";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
@@ -31,7 +31,7 @@ interface DocumentVersionHistoryProps {
   onRestore?: () => void;
 }
 
-export function DocumentVersionHistory({ documentId, onRestore }: DocumentVersionHistoryProps) {
+export const DocumentVersionHistory = memo(function({ documentId, onRestore }: DocumentVersionHistoryProps) {
   const [versions, setVersions] = useState<DocumentVersion[]>([]);
   const [loading, setLoading] = useState(true);
   const [restoring, setRestoring] = useState(false);

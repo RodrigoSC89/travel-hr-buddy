@@ -42,7 +42,7 @@ interface Notification {
   created_at: string;
 }
 
-export const PriceAlertDashboard = () => {
+export const PriceAlertDashboard = memo(() => {
   return (
     <div className="space-y-6">
       <EnhancedAlertManagement />
@@ -50,7 +50,7 @@ export const PriceAlertDashboard = () => {
   );
 };
 
-export const PriceAlertDashboardLegacy = () => {
+export const PriceAlertDashboardLegacy = memo(() => {
   const [alerts, setAlerts] = useState<PriceAlert[]>([]);
   const [notifications, setNotifications] = useState<Notification[]>([]);
   const [isAddingAlert, setIsAddingAlert] = useState(false);
@@ -513,7 +513,7 @@ export const PriceAlertDashboardLegacy = () => {
                           {alert.last_checked_at 
                             ? new Date(alert.last_checked_at).toLocaleString("pt-BR")
                             : "Nunca verificado"
-                          }
+                          };
                         </p>
                         <div className="flex gap-2 mt-2">
                           <Button

@@ -29,7 +29,7 @@ interface AllTheProvidersProps {
 /**
  * Wrapper component with all necessary providers
  */
-export const AllTheProviders = ({ children }: AllTheProvidersProps) => {
+export const AllTheProviders = memo(({ children }: AllTheProvidersProps) => {
   const queryClient = createTestQueryClient();
 
   return (
@@ -50,7 +50,7 @@ export const AllTheProviders = ({ children }: AllTheProvidersProps) => {
 /**
  * Custom render function that includes all providers
  */
-export const renderWithProviders = (
+export const renderWithProviders = memo((
   ui: ReactElement,
   options?: Omit<RenderOptions, "wrapper">,
 ) => {
@@ -73,7 +73,7 @@ export const waitForLoadingToFinish = async () => {
         resolve();
       } else {
         setTimeout(checkLoading, 50);
-      }
+      };
     };
     checkLoading();
   });
@@ -130,7 +130,7 @@ export const createMockSession = (userOverrides = {}) => ({
 /**
  * Suppress console errors during tests
  */
-export const suppressConsoleError = () => {
+export const suppressConsoleError = memo(() => {
   const originalError = console.error;
   beforeEach(() => {
   });
@@ -141,7 +141,7 @@ export const suppressConsoleError = () => {
 /**
  * Mock fetch for API tests
  */
-export const mockFetch = (response: SupabaseResponse<unknown>, options = {}) => {
+export const mockFetch = memo((response: SupabaseResponse<unknown>, options = {}) => {
   global.fetch = vi.fn(() =>
     Promise.resolve({
       ok: true,
@@ -154,7 +154,7 @@ export const mockFetch = (response: SupabaseResponse<unknown>, options = {}) => 
 /**
  * Reset all mocks between tests
  */
-export const resetAllMocks = () => {
+export const resetAllMocks = memo(() => {
   vi.clearAllMocks();
   vi.resetAllMocks();
 };

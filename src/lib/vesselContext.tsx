@@ -193,7 +193,7 @@ export const useVesselId = (): string | null => {
 /**
  * Hook to filter queries by current vessel
  */
-export const useVesselFilter = () => {
+export const useVesselFilter = memo(() => {
   const vesselId = useVesselId();
   
   return {
@@ -234,6 +234,6 @@ function clearVesselFromStorage(): void {
   } catch (error) {
     logger.error("Failed to clear vessel from storage:", error);
   }
-}
+};
 
 export default VesselProvider;

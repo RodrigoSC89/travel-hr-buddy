@@ -30,7 +30,7 @@ const MLC_CHECKLIST_ITEMS = [
   { title: "Title 5", regulation: "5.1", category: "Flag State Compliance", description: "Does the vessel comply with flag state requirements?" },
 ];
 
-export function ChecklistInterface({ inspectionId, onUpdate }: ChecklistInterfaceProps) {
+export const ChecklistInterface = memo(function({ inspectionId, onUpdate }: ChecklistInterfaceProps) {
   const [findings, setFindings] = useState<MLCFinding[]>([]);
   const [loading, setLoading] = useState(true);
   const [expandedItem, setExpandedItem] = useState<number | null>(null);

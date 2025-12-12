@@ -115,7 +115,7 @@ interface CrewCertificationsManagerProps {
   crewMembers?: unknown[];
 }
 
-export function CrewCertificationsManager({ crewMembers = [] }: CrewCertificationsManagerProps) {
+export const CrewCertificationsManager = memo(function({ crewMembers = [] }: CrewCertificationsManagerProps) {
   const [certifications] = useState<Certification[]>(demoCertifications);
   const [searchTerm, setSearchTerm] = useState("");
   const [statusFilter, setStatusFilter] = useState("all");

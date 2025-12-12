@@ -12,7 +12,7 @@ interface InspectionsListProps {
   onStatsUpdate: () => void;
 }
 
-export function InspectionsList({ onSelectInspection, onStatsUpdate }: InspectionsListProps) {
+export const InspectionsList = memo(function({ onSelectInspection, onStatsUpdate }: InspectionsListProps) {
   const [inspections, setInspections] = useState<MLCInspection[]>([]);
   const [loading, setLoading] = useState(true);
   const { toast } = useToast();

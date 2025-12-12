@@ -3,7 +3,7 @@
  * Fully functional with AI integration via edge function
  */
 
-import { useState } from "react";;;
+import { memo, memo, useState } from "react";;;
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -56,7 +56,7 @@ const TRIGGERS = [
   { value: "compliance", label: "Prazo de Compliance", icon: "✅" },
 ];
 
-export const AutomationWorkflowsManager = () => {
+export const AutomationWorkflowsManager = memo(() => {
   const [workflows, setWorkflows] = useState<AutomationWorkflow[]>([
     {
       id: "1",
@@ -296,7 +296,7 @@ export const AutomationWorkflowsManager = () => {
       toast.success("Workflow otimizado!");
     } finally {
       setOptimizingWorkflow(null);
-    }
+    };
   };
 
   return (

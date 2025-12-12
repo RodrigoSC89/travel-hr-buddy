@@ -37,7 +37,7 @@ function MapSkeleton({ height = "400px", width = "100%" }: { height?: string | n
 // Lazy load the actual map component
 const MapComponent = lazy(() => import("./MapComponent"));
 
-export function LazyMap({
+export const LazyMap = memo(function({
   center = [-46.6333, -23.5505], // São Paulo default
   zoom = 12,
   height = "400px",

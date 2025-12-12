@@ -3,7 +3,7 @@
  * Provides live metrics and stats for the dashboard
  */
 
-import { useCallback, useEffect, useState } from "react";;;
+import { memo, memo, useCallback, useEffect, useState } from "react";;;
 import { supabase } from "@/integrations/supabase/client";
 import { useToast } from "@/hooks/use-toast";
 
@@ -46,7 +46,7 @@ const defaultMetrics: DashboardMetrics = {
   isLoading: true
 };
 
-export function useDashboardData() {
+export const useDashboardData = memo(function() {
   const [metrics, setMetrics] = useState<DashboardMetrics>(defaultMetrics);
   const [notifications, setNotifications] = useState<RealtimeNotification[]>([]);
   const [isRefreshing, setIsRefreshing] = useState(false);

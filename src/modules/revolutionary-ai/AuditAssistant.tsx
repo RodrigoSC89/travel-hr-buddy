@@ -107,7 +107,7 @@ const MOCK_DOCUMENTS: DocumentItem[] = [
   { id: "5", name: "Declaração MLC", category: "Trabalhista", status: "missing" }
 ];
 
-export function AuditAssistant() {
+export const AuditAssistant = memo(function() {
   const [selectedPackage, setSelectedPackage] = useState<AuditPackage | null>(null);
   const [isGenerating, setIsGenerating] = useState<string | null>(null);
   const [searchTerm, setSearchTerm] = useState("");

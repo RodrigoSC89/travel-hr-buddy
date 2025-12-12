@@ -36,7 +36,7 @@ const commonVariables = [
   "signature"
 ];
 
-export const CompleteTemplateManager = () => {
+export const CompleteTemplateManager = memo(() => {
   const [templateName, setTemplateName] = useState("");
   const [templateDescription, setTemplateDescription] = useState("");
   const [templateCategory, setTemplateCategory] = useState("report");
@@ -96,7 +96,7 @@ export const CompleteTemplateManager = () => {
       });
     } finally {
       setSaving(false);
-    }
+    };
   };
 
   return (

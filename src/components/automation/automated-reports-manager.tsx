@@ -3,7 +3,7 @@
  * Fully functional with AI integration via edge function
  */
 
-import { useState } from "react";;;
+import { memo, memo, useState } from "react";;;
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -57,7 +57,7 @@ const SCHEDULES = [
   { value: "quarterly", label: "Trimestral", icon: "📊" },
 ];
 
-export const AutomatedReportsManager = () => {
+export const AutomatedReportsManager = memo(() => {
   const [reports, setReports] = useState<AutomatedReport[]>([
     {
       id: "1",
@@ -244,7 +244,7 @@ export const AutomatedReportsManager = () => {
       toast.success("Sugestões carregadas");
     } finally {
       setIsLoadingAI(false);
-    }
+    };
   };
 
   return (

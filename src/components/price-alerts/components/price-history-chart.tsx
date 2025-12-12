@@ -30,7 +30,7 @@ interface ChartData {
   target: number;
 }
 
-export const PriceHistoryChart = () => {
+export const PriceHistoryChart = memo(() => {
   const { user } = useAuth();
   const [alerts, setAlerts] = useState<Alert[]>([]);
   const [selectedAlert, setSelectedAlert] = useState<string>("");
@@ -174,7 +174,7 @@ export const PriceHistoryChart = () => {
         </CardContent>
       </Card>
     );
-  }
+  };
 
   return (
     <Card>

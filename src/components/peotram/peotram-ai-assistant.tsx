@@ -161,7 +161,7 @@ const QUICK_ACTIONS: QuickAction[] = [
   }
 ];
 
-export function PeotramAIAssistant() {
+export const PeotramAIAssistant = memo(function() {
   const [messages, setMessages] = useState<ChatMessage[]>([
     {
       id: "welcome",

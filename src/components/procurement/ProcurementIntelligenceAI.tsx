@@ -67,7 +67,7 @@ interface SupplierSuggestion {
   aiScore: number;
 }
 
-export function ProcurementIntelligenceAI() {
+export const ProcurementIntelligenceAI = memo(function() {
   const { predict, analyze, suggest, isLoading } = useNautilusAI();
   const [predictions, setPredictions] = useState<PurchasePrediction[]>([]);
   const [suppliers, setSuppliers] = useState<SupplierSuggestion[]>([]);

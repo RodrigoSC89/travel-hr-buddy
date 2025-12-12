@@ -319,7 +319,7 @@ export const NauticalRoutineChecklist: React.FC<NauticalRoutineChecklistProps> =
                     <Card key={item.id} className={`transition-colors ${
                       item.status === "completed" ? "bg-green-50 border-green-200" : ""
                     }`}>
-                      <CardHeader className="pb-3">
+                      <CardHeader key={CardHeader.id || index} className="pb-3">
                         <div className="flex items-start justify-between">
                           <div className="flex-1">
                             <div className="flex items-center gap-2">

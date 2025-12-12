@@ -35,7 +35,7 @@ interface MoodData {
   mood: number;
 }
 
-export const MoodDashboard = () => {
+export const MoodDashboard = memo(() => {
   const [moodHistory, setMoodHistory] = useState<MoodData[]>([]);
 
   // Constants for trend calculation
@@ -71,7 +71,7 @@ export const MoodDashboard = () => {
       }
       setMoodHistory(sampleData);
       localStorage.setItem("crew_mood_history", JSON.stringify(sampleData));
-    }
+    };
   }, []);
 
   const calculateAverage = (key: keyof Omit<MoodData, "date">) => {

@@ -75,7 +75,7 @@ const mockWorkflowContext = {
   ]
 };
 
-export function WorkflowAISuggestions({ 
+export const WorkflowAISuggestions = memo(function({ 
   workflowId, 
   limit = 10, 
   className,

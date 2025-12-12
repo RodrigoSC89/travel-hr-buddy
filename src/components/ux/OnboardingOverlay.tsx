@@ -18,7 +18,7 @@ interface OnboardingOverlayProps {
   enabled?: boolean;
 }
 
-export function OnboardingOverlay({ enabled = true }: OnboardingOverlayProps) {
+export const OnboardingOverlay = memo(function({ enabled = true }: OnboardingOverlayProps) {
   const location = useLocation();
   const {
     isActive,
@@ -243,7 +243,7 @@ interface OnboardingTargetProps {
   className?: string;
 }
 
-export function OnboardingTarget({ id, children, className }: OnboardingTargetProps) {
+export const OnboardingTarget = memo(function({ id, children, className }: OnboardingTargetProps) {
   return (
     <div data-onboarding={id} className={cn("relative", className)}>
       {children}

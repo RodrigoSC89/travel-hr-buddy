@@ -52,7 +52,7 @@ interface SDK {
   status: "stable" | "beta" | "deprecated";
 }
 
-export const PublicAPI = () => {
+export const PublicAPI = memo(() => {
   const [apiKey, setApiKey] = useState("naut_live_sk_1a2b3c4d5e6f7g8h9i0j");
   const [copiedKey, setCopiedKey] = useState(false);
   const { toast } = useToast();
@@ -225,7 +225,7 @@ export const PublicAPI = () => {
     case "beta": return "bg-warning text-warning-foreground";
     case "deprecated": return "bg-danger text-danger-foreground";
     default: return "bg-muted text-muted-foreground";
-    }
+    };
   };
 
   return (

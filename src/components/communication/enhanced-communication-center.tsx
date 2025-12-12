@@ -44,7 +44,7 @@ interface CommunicationStats {
   responseRate: number;
 }
 
-export const EnhancedCommunicationCenter = () => {
+export const EnhancedCommunicationCenter = memo(() => {
   const [activeTab, setActiveTab] = useState("inbox");
   const [stats, setStats] = useState<CommunicationStats>({
     totalMessages: 0,
@@ -110,7 +110,7 @@ export const EnhancedCommunicationCenter = () => {
         <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-primary"></div>
       </div>
     );
-  }
+  };
 
   return (
     <div className="space-y-6">

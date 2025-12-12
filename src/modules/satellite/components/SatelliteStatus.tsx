@@ -1,3 +1,4 @@
+import { memo } from 'react';
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { Satellite, Signal, Battery, Thermometer } from "lucide-react";
@@ -16,7 +17,7 @@ interface SatelliteStatusProps {
   satellites: SatelliteData[];
 }
 
-export function SatelliteStatus({ satellites }: SatelliteStatusProps) {
+export const SatelliteStatus = memo(function({ satellites }: SatelliteStatusProps) {
   const getStatusColor = (status: string) => {
     switch (status) {
     case "active": return "default";

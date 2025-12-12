@@ -101,7 +101,7 @@ const mockEmployees: Employee[] = [
   }
 ];
 
-export const EmployeeManagement = () => {
+export const EmployeeManagement = memo(() => {
   const { toast } = useToast();
   const [employees, setEmployees] = useState<Employee[]>(mockEmployees);
   const [searchTerm, setSearchTerm] = useState("");
@@ -216,7 +216,7 @@ export const EmployeeManagement = () => {
     case "travel": return "Viagem";
     case "inactive": return "Inativo";
     default: return "N/A";
-    }
+    };
   };
 
   return (

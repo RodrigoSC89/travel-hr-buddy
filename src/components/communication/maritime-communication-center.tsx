@@ -56,7 +56,7 @@ interface CommunicationChannel {
   last_activity: string;
 }
 
-export const MaritimeCommunicationCenter = () => {
+export const MaritimeCommunicationCenter = memo(() => {
   const [communications, setCommunications] = useState<MaritimeCommunication[]>([]);
   const [channels, setChannels] = useState<CommunicationChannel[]>([]);
   const [activeTab, setActiveTab] = useState("messages");
@@ -337,7 +337,7 @@ export const MaritimeCommunicationCenter = () => {
         <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-primary"></div>
       </div>
     );
-  }
+  };
 
   return (
     <div className="space-y-6">

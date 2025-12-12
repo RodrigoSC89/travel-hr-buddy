@@ -1,3 +1,4 @@
+import { memo } from 'react';
 /**
  * PATCH 800: Skeleton Loading Components
  * Provides visual feedback during data loading
@@ -9,7 +10,7 @@ interface SkeletonProps {
   style?: React.CSSProperties;
 }
 
-export function Skeleton({ className, style }: SkeletonProps) {
+export const Skeleton = memo(function({ className, style }: SkeletonProps) {
   return (
     <div
       className={cn(
@@ -21,7 +22,7 @@ export function Skeleton({ className, style }: SkeletonProps) {
   );
 }
 
-export function SkeletonCard({ className }: SkeletonProps) {
+export const SkeletonCard = memo(function({ className }: SkeletonProps) {
   return (
     <div className={cn("rounded-xl border bg-card p-6 space-y-4", className)}>
       <div className="flex items-center justify-between">
@@ -34,7 +35,7 @@ export function SkeletonCard({ className }: SkeletonProps) {
   );
 }
 
-export function SkeletonTable({ rows = 5 }: { rows?: number }) {
+export const SkeletonTable = memo(function({ rows = 5 }: { rows?: number }) {
   return (
     <div className="space-y-3">
       {/* Header */}
@@ -57,7 +58,7 @@ export function SkeletonTable({ rows = 5 }: { rows?: number }) {
   );
 }
 
-export function SkeletonList({ items = 5 }: { items?: number }) {
+export const SkeletonList = memo(function({ items = 5 }: { items?: number }) {
   return (
     <div className="space-y-3">
       {Array.from({ length: items }).map((_, i) => (
@@ -73,7 +74,7 @@ export function SkeletonList({ items = 5 }: { items?: number }) {
   );
 }
 
-export function SkeletonChart({ className }: SkeletonProps) {
+export const SkeletonChart = memo(function({ className }: SkeletonProps) {
   return (
     <div className={cn("rounded-xl border bg-card p-6", className)}>
       <Skeleton className="h-5 w-32 mb-6" />
@@ -90,7 +91,7 @@ export function SkeletonChart({ className }: SkeletonProps) {
   );
 }
 
-export function SkeletonDashboard() {
+export const SkeletonDashboard = memo(function() {
   return (
     <div className="space-y-6 p-6">
       {/* Header */}

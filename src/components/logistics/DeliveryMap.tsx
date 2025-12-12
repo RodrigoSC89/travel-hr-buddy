@@ -30,7 +30,7 @@ interface DeliveryMapProps {
   deliveries: DeliveryLocation[];
 }
 
-export function DeliveryMap({ deliveries }: DeliveryMapProps) {
+export const DeliveryMap = memo(function({ deliveries }: DeliveryMapProps) {
   const mapContainer = useRef<HTMLDivElement>(null);
   const map = useRef<any>(null);
   const mapboxRef = useRef<any>(null);

@@ -44,7 +44,7 @@ interface LogEntry {
   message: string;
 }
 
-export function DevOpsPanel() {
+export const DevOpsPanel = memo(function() {
   const { toast } = useToast();
   const networkQuality = useNetworkQuality();
   const [metrics, setMetrics] = useState<SystemMetrics | null>(null);

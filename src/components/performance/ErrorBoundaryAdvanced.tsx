@@ -262,7 +262,7 @@ export function withErrorBoundary<P extends object>(
 }
 
 // Hook for triggering error boundary
-export function useErrorBoundary() {
+export const useErrorBoundary = memo(function() {
   const [error, setError] = React.useState<Error | null>(null);
 
   if (error) {

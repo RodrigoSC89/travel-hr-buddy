@@ -55,7 +55,7 @@ interface TrainingMatrixPanelProps {
   onExportMatrix: () => void;
 }
 
-export function TrainingMatrixPanel({
+export const TrainingMatrixPanel = memo(function({
   trainings,
   matrix,
   onGenerateRecommendations,

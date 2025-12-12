@@ -31,7 +31,7 @@ interface Mission {
   endDate?: Date;
 }
 
-export function MissionManager() {
+export const MissionManager = memo(function() {
   const [missions, setMissions] = useState<Mission[]>([
     {
       id: "1",

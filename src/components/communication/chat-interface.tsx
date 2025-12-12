@@ -71,7 +71,7 @@ interface Conversation {
   unread_count?: number;
 }
 
-export const ChatInterface = () => {
+export const ChatInterface = memo(() => {
   const { toast } = useToast();
   const [conversations, setConversations] = useState<Conversation[]>([]);
   const [selectedConversation, setSelectedConversation] = useState<string | null>(null);
@@ -634,7 +634,7 @@ export const ChatInterface = () => {
                       ?.type === "group"
                       ? `${conversations.find(c => c.id === selectedConversation)?.participants.length} membros`
                       : "Online"
-                    }
+                    };
                   </p>
                 </div>
               </div>

@@ -2,7 +2,7 @@
  * Autonomous Agent Panel - Proactive AI monitoring and actions
  */
 
-import { useEffect, useState } from "react";;;
+import { memo, memo, useEffect, useState } from "react";;;
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
@@ -109,7 +109,7 @@ const MOCK_ACTIONS: AgentAction[] = [
   },
 ];
 
-export function AutonomousAgentPanel() {
+export const AutonomousAgentPanel = memo(function() {
   const [isActive, setIsActive] = useState(true);
   const [actions, setActions] = useState<AgentAction[]>(MOCK_ACTIONS);
   const [autoApprove, setAutoApprove] = useState(false);

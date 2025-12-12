@@ -772,7 +772,7 @@ interface AppSidebarProps {
   onItemChange?: (item: string) => void;
 }
 
-export function AppSidebar({ activeItem, onItemChange }: AppSidebarProps) {
+export const AppSidebar = memo(function({ activeItem, onItemChange }: AppSidebarProps) {
   const [openItems, setOpenItems] = useState<string[]>([]);
   const { state } = useSidebar();
   const collapsed = state === "collapsed";

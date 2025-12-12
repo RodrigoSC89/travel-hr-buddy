@@ -1,4 +1,4 @@
-import { useMemo, useState } from "react";;;
+import { memo, memo, useMemo, useState } from "react";;;
 import { useQuery } from "@tanstack/react-query";
 import { supabase } from "@/integrations/supabase/client";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
@@ -66,7 +66,7 @@ const statusColors: Record<string, string> = {
   expired: "bg-orange-500/20 text-orange-400",
 };
 
-export function CBTLibrary() {
+export const CBTLibrary = memo(function() {
   const [searchQuery, setSearchQuery] = useState("");
   const [filterCategory, setFilterCategory] = useState<string>("all");
   const [filterMandatory, setFilterMandatory] = useState<string>("all");

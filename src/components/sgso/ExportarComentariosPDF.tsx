@@ -1,3 +1,4 @@
+import { memo } from 'react';
 import html2pdf from "html2pdf.js";
 import { Button } from "@/components/ui/button";
 import { FileDown } from "lucide-react";
@@ -12,7 +13,7 @@ interface ExportarComentariosPDFProps {
   comentarios: Comentario[];
 }
 
-export function ExportarComentariosPDF({ comentarios }: ExportarComentariosPDFProps) {
+export const ExportarComentariosPDF = memo(function({ comentarios }: ExportarComentariosPDFProps) {
   const gerarPDF = () => {
     if (comentarios.length === 0) {
       return;

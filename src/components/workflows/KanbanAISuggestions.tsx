@@ -12,7 +12,7 @@ import type { Database } from "@/integrations/supabase/types";
 // Missing table in database schema - using any for now
 // type WorkflowAISuggestionInsert = Database["public"]["Tables"]["workflow_ai_suggestions"]["Insert"];
 
-export function KanbanAISuggestions({ suggestions = [] }: KanbanAISuggestionsProps) {
+export const KanbanAISuggestions = memo(function({ suggestions = [] }: KanbanAISuggestionsProps) {
   const [accepted, setAccepted] = useState<string[]>([]);
   const { toast } = useToast();
 

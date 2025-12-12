@@ -22,7 +22,7 @@ interface QuickActionsGridProps {
   onCreateOrderClick?: () => void;
 }
 
-export function QuickActionsGrid({
+export const QuickActionsGrid = memo(function({
   context,
   onContactClick,
   onReorderClick,

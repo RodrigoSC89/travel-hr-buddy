@@ -1,9 +1,10 @@
+import { memo } from 'react';
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { FileText, Download, Eye } from "lucide-react";
 
-export function InvoiceManager() {
+export const InvoiceManager = memo(function() {
   const invoices = [
     { id: "1", number: "INV-2024-001", date: "2024-01-15", amount: 45000, status: "paid" },
     { id: "2", number: "INV-2024-002", date: "2024-01-20", amount: 32000, status: "pending" },

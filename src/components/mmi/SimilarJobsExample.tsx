@@ -22,7 +22,7 @@ import { Loader2 } from "lucide-react";
 // Example 1: Find Similar Jobs by ID (GET mode)
 // ============================================================================
 
-export function SimilarJobsByIdExample() {
+export const SimilarJobsByIdExample = memo(function() {
   const [jobId, setJobId] = useState<string>("550e8400-e29b-41d4-a716-446655440001");
   const [activeJobId, setActiveJobId] = useState<string | null>(null);
   const { data, loading, error, similarJobs } = useSimilarJobsById(activeJobId);
@@ -74,7 +74,7 @@ export function SimilarJobsByIdExample() {
 // Example 2: Semantic Search (POST mode)
 // ============================================================================
 
-export function SemanticSearchExample() {
+export const SemanticSearchExample = memo(function() {
   const [query, setQuery] = useState<string>("hydraulic system maintenance");
   const [activeQuery, setActiveQuery] = useState<string | null>(null);
   const { data, loading, error, results } = useSemanticSearch(activeQuery);
@@ -126,7 +126,7 @@ export function SemanticSearchExample() {
 // Example 3: Duplicate Detection
 // ============================================================================
 
-export function DuplicateDetectionExample() {
+export const DuplicateDetectionExample = memo(function() {
   const [query, setQuery] = useState<string>("");
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);

@@ -35,7 +35,7 @@ interface TelemetryAIAssistantProps {
   syncStatus?: unknown[];
 }
 
-export function TelemetryAIAssistant({ 
+export const TelemetryAIAssistant = memo(function({ 
   weatherData, 
   satelliteData, 
   syncStatus 

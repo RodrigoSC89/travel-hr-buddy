@@ -27,7 +27,7 @@ interface PerformanceMonitorProps {
   position?: "top-right" | "bottom-right" | "bottom-left";
 }
 
-export function PerformanceMonitor({ 
+export const PerformanceMonitor = memo(function({ 
   visible = true, 
   onClose,
   position = "bottom-right" 
@@ -170,7 +170,7 @@ export function PerformanceMonitor({
 }
 
 // Dev-only performance overlay
-export function DevPerformanceOverlay() {
+export const DevPerformanceOverlay = memo(function() {
   const [show, setShow] = useState(false);
 
   useEffect(() => {

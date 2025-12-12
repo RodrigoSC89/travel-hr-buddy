@@ -181,7 +181,7 @@ Os 7 pilares estratégicos:
 
 Responda em português brasileiro, de forma técnica mas acessível. Inclua referências normativas quando aplicável. Formate suas respostas com markdown para melhor legibilidade.`;
 
-export function PEODPAIChat() {
+export const PEODPAIChat = memo(function() {
   const [messages, setMessages] = useState<ChatMessage[]>([
     {
       id: "welcome",

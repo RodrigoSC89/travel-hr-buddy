@@ -24,7 +24,7 @@ interface AccessibilityContextType {
 
 const AccessibilityContext = createContext<AccessibilityContextType | null>(null);
 
-export function useAccessibility() {
+export const useAccessibility = memo(function() {
   const context = useContext(AccessibilityContext);
   if (!context) {
     throw new Error("useAccessibility must be used within AccessibilityProvider");
@@ -33,7 +33,7 @@ export function useAccessibility() {
 }
 
 // Optional hook that doesn't throw
-export function useAccessibilityOptional() {
+export const useAccessibilityOptional = memo(function() {
   return useContext(AccessibilityContext);
 }
 
@@ -42,7 +42,7 @@ interface AccessibilityProviderProps {
   mainContentId?: string;
 }
 
-export function AccessibilityProvider({ 
+export const AccessibilityProvider = memo(function({ 
   children, 
   mainContentId = "main-content" 
 }: AccessibilityProviderProps) {

@@ -24,7 +24,7 @@ interface TelemetryExporterProps {
   autonomyActions: unknown[];
 }
 
-export function TelemetryExporter({
+export const TelemetryExporter = memo(function({
   weatherData,
   satelliteData,
   syncStatus,

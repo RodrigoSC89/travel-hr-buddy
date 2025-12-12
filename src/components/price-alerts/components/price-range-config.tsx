@@ -1,4 +1,4 @@
-import { useState } from "react";;;
+import { memo, memo, useState } from "react";;;
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Label } from "@/components/ui/label";
 import { Input } from "@/components/ui/input";
@@ -13,7 +13,7 @@ import { useAuth } from "@/contexts/AuthContext";
 import { CalendarIcon, Save, TrendingDown } from "lucide-react";
 import { format } from "date-fns";
 
-export function PriceRangeConfig() {
+export const PriceRangeConfig = memo(function() {
   const { user } = useAuth();
   const { toast } = useToast();
   const [origin, setOrigin] = useState("");

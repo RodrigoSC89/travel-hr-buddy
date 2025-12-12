@@ -1,4 +1,4 @@
-import { useState } from "react";;;
+import { memo, memo, useState } from "react";;;
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogDescription, DialogFooter } from "@/components/ui/dialog";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -15,7 +15,7 @@ interface AddCrewDialogProps {
   onSuccess: () => void;
 }
 
-export function AddCrewDialog({ open, onOpenChange, onSuccess }: AddCrewDialogProps) {
+export const AddCrewDialog = memo(function({ open, onOpenChange, onSuccess }: AddCrewDialogProps) {
   const { toast } = useToast();
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [formData, setFormData] = useState({

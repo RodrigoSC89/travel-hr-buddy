@@ -51,7 +51,7 @@ function KPILoadingFallback({ message }: { message: string }) {
   );
 }
 
-export function ModularizedExecutiveDashboard() {
+export const ModularizedExecutiveDashboard = memo(function() {
   const [refreshKey, setRefreshKey] = useState(0);
   
   // PATCH 623: Performance monitoring

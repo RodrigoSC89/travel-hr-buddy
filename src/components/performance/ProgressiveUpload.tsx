@@ -3,7 +3,7 @@
  * Shows detailed progress for uploads on slow connections
  */
 
-import { useCallback, useState } from "react";;;
+import { memo, memo, useCallback, useState } from "react";;;
 import { Upload, X, CheckCircle, AlertCircle, Loader2 } from "lucide-react";
 import { Progress } from "@/components/ui/progress";
 import { Button } from "@/components/ui/button";
@@ -27,7 +27,7 @@ interface ProgressiveUploadProps {
   className?: string;
 }
 
-export function ProgressiveUpload({
+export const ProgressiveUpload = memo(function({
   onUpload,
   accept = "*",
   multiple = false,
@@ -227,7 +227,7 @@ export function ProgressiveUpload({
 /**
  * Hook for programmatic upload with progress
  */
-export function useProgressiveUpload() {
+export const useProgressiveUpload = memo(function() {
   const [progress, setProgress] = useState(0);
   const [isUploading, setIsUploading] = useState(false);
 

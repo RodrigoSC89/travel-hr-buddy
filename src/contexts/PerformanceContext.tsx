@@ -30,7 +30,7 @@ interface PerformanceContextType {
 
 const PerformanceContext = createContext<PerformanceContextType | null>(null);
 
-export const usePerformance = () => {
+export const usePerformance = memo(() => {
   const context = useContext(PerformanceContext);
   if (!context) {
     throw new Error("usePerformance must be used within PerformanceProvider");
@@ -39,7 +39,7 @@ export const usePerformance = () => {
 };
 
 // Optional hook that doesn't throw
-export const usePerformanceOptional = () => {
+export const usePerformanceOptional = memo(() => {
   return useContext(PerformanceContext);
 };
 
@@ -185,7 +185,7 @@ export const PerformanceProvider: React.FC<PerformanceProviderProps> = ({ childr
       }
     } catch (e) {
       // Silently fail
-    }
+    };
   }, []);
 
   // Calculate image quality based on network

@@ -1,3 +1,4 @@
+import { memo } from 'react';
 import { Card } from "@/components/ui/card";
 import { Users, CheckCircle, Calendar, AlertTriangle } from "lucide-react";
 import { motion } from "framer-motion";
@@ -9,7 +10,7 @@ interface CrewMetricsProps {
   expiringCerts: number;
 }
 
-export function CrewMetrics({ totalCrew, activeCrew, onLeaveCrew, expiringCerts }: CrewMetricsProps) {
+export const CrewMetrics = memo(function({ totalCrew, activeCrew, onLeaveCrew, expiringCerts }: CrewMetricsProps) {
   const metrics = [
     {
       label: "Total de Tripulantes",

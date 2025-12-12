@@ -82,7 +82,7 @@ const DYNAMIC_VARIABLES = [
   { key: "fuel_consumption", label: "Total Fuel Consumption", source: "fuel_logs", field: "sum" },
 ];
 
-export const TemplatesDynamic = () => {
+export const TemplatesDynamic = memo(() => {
   const { toast } = useToast();
   const [templates, setTemplates] = useState<TemplateVersion[]>([]);
   const [selectedTemplate, setSelectedTemplate] = useState<TemplateVersion | null>(null);
@@ -427,7 +427,7 @@ export const TemplatesDynamic = () => {
       });
     } finally {
       setLoading(false);
-    }
+    };
   };
 
   const insertVariable = (variableKey: string) => {

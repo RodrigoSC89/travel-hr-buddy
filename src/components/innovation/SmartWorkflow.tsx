@@ -46,7 +46,7 @@ interface ActiveWorkflow {
   timeSaved: string;
 }
 
-export const SmartWorkflow = () => {
+export const SmartWorkflow = memo(() => {
   const [activeWorkflows, setActiveWorkflows] = useState<ActiveWorkflow[]>([]);
   const [templates, setTemplates] = useState<WorkflowTemplate[]>([]);
   const { toast } = useToast();
@@ -167,7 +167,7 @@ export const SmartWorkflow = () => {
     case "RH": return <Users className="h-4 w-4" />;
     case "Analytics": return <TrendingUp className="h-4 w-4" />;
     default: return <Workflow className="h-4 w-4" />;
-    }
+    };
   };
 
   return (

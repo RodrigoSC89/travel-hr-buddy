@@ -10,7 +10,7 @@ import { Wifi, WifiOff, Cloud, CloudOff, RefreshCw, Check, AlertTriangle } from 
 import { useOfflineSync } from "@/lib/pwa/offline-sync";
 import { cn } from "@/lib/utils";
 
-export function OfflineIndicator() {
+export const OfflineIndicator = memo(function() {
   const { status, queueStatus } = useOfflineSync();
   const [isOnline, setIsOnline] = React.useState(navigator.onLine);
 
@@ -77,7 +77,7 @@ export function OfflineIndicator() {
   );
 }
 
-export function SyncStatusBadge() {
+export const SyncStatusBadge = memo(function() {
   const { status, queueStatus } = useOfflineSync();
   const isOnline = navigator.onLine;
 

@@ -42,7 +42,7 @@ interface VesselPosition {
   eta: string;
 }
 
-export const VesselTracking = () => {
+export const VesselTracking = memo(() => {
   const [vessels, setVessels] = useState<VesselPosition[]>([]);
   const [selectedVessel, setSelectedVessel] = useState<VesselPosition | null>(null);
   const [trackingMode, setTrackingMode] = useState<"real-time" | "historical">("real-time");
@@ -140,7 +140,7 @@ export const VesselTracking = () => {
         <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-primary"></div>
       </div>
     );
-  }
+  };
 
   return (
     <div className="space-y-6">

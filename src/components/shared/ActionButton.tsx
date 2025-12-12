@@ -18,7 +18,7 @@ interface ActionButtonProps extends Omit<ButtonProps, "onClick"> {
   children: React.ReactNode;
 }
 
-export function ActionButton({
+export const ActionButton = memo(function({
   action,
   successMessage,
   errorMessage = "Ocorreu um erro. Tente novamente.",

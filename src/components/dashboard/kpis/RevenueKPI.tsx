@@ -5,10 +5,10 @@
 
 import { Card, CardContent } from "@/components/ui/card";
 import { TrendingUp } from "lucide-react";
-import { useEffect, useState } from "react";;;
+import { memo, memo, useEffect, useState } from "react";;;
 import { supabase } from "@/integrations/supabase/client";
 
-export function RevenueKPI() {
+export const RevenueKPI = memo(function() {
   const [revenue, setRevenue] = useState<number | null>(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<Error | null>(null);

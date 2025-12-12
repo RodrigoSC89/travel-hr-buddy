@@ -33,7 +33,7 @@ interface GestureAreaProps {
   enabled?: boolean;
 }
 
-export function GestureArea({
+export const GestureArea = memo(function({
   children,
   onGesture,
   onSwipeLeft,
@@ -101,7 +101,7 @@ interface PullToRefreshProps {
   disabled?: boolean;
 }
 
-export function PullToRefresh({
+export const PullToRefresh = memo(function({
   children,
   onRefresh,
   className,

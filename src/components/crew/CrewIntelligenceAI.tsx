@@ -65,7 +65,7 @@ interface FatigueAlert {
   recommendation: string;
 }
 
-export function CrewIntelligenceAI() {
+export const CrewIntelligenceAI = memo(function() {
   const { analyze, suggest, predict, isLoading } = useNautilusAI();
   const [matchResults, setMatchResults] = useState<MatchResult[]>([]);
   const [fatigueAlerts, setFatigueAlerts] = useState<FatigueAlert[]>([]);

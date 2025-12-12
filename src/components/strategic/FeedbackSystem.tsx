@@ -43,7 +43,7 @@ interface UserSatisfaction {
   trend: "up" | "down" | "stable";
 }
 
-export const FeedbackSystem = () => {
+export const FeedbackSystem = memo(() => {
   const [newFeedback, setNewFeedback] = useState({
     title: "",
     description: "",
@@ -163,7 +163,7 @@ export const FeedbackSystem = () => {
     case "up": return <TrendingUp className="h-4 w-4 text-success" />;
     case "down": return <TrendingUp className="h-4 w-4 text-danger rotate-180" />;
     default: return <TrendingUp className="h-4 w-4 text-muted-foreground" />;
-    }
+    };
   };
 
   const handleSubmitFeedback = () => {

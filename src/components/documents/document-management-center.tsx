@@ -54,7 +54,7 @@ interface DocumentStats {
   expiring_soon: number;
 }
 
-export const DocumentManagementCenter = () => {
+export const DocumentManagementCenter = memo(() => {
   const [documents, setDocuments] = useState<Document[]>([]);
   const [stats, setStats] = useState<DocumentStats | null>(null);
   const [activeTab, setActiveTab] = useState("overview");
@@ -272,7 +272,7 @@ export const DocumentManagementCenter = () => {
         <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-primary"></div>
       </div>
     );
-  }
+  };
 
   return (
     <RoleBasedAccess roles={["admin", "hr_manager"]}>

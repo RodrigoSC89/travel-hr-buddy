@@ -1,4 +1,4 @@
-import { useState } from "react";;;
+import { memo, memo, useState } from "react";;;
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
@@ -58,7 +58,7 @@ const statusStyles: Record<string, { label: string; className: string }> = {
   embarked: { label: "Embarcado", className: "bg-blue-500/10 text-blue-600 border-blue-500/20" },
 };
 
-export function CrewList({ crewMembers, onViewMember, onAddMember, onExport }: CrewListProps) {
+export const CrewList = memo(function({ crewMembers, onViewMember, onAddMember, onExport }: CrewListProps) {
   const [searchTerm, setSearchTerm] = useState("");
   const [statusFilter, setStatusFilter] = useState<string>("all");
   const [positionFilter, setPositionFilter] = useState<string>("all");

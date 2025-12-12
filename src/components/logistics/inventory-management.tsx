@@ -38,7 +38,7 @@ interface InventoryItem {
   location: string;
 }
 
-export const InventoryManagement = () => {
+export const InventoryManagement = memo(() => {
   const { toast } = useToast();
   const [items, setItems] = useState<InventoryItem[]>([]);
   const [loading, setLoading] = useState(true);
@@ -68,7 +68,7 @@ export const InventoryManagement = () => {
       });
     } finally {
       setLoading(false);
-    }
+    };
   };
 
   const getLowStockItems = () => {

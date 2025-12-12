@@ -130,7 +130,7 @@ function TestCaseItem({ test }: { test: TestCase }) {
   );
 }
 
-export function ProductionReadinessPanel() {
+export const ProductionReadinessPanel = memo(function() {
   const { readiness, isValidating, validate } = useProductionReadiness();
   const [activeCategory, setActiveCategory] = useState<string>("all");
 

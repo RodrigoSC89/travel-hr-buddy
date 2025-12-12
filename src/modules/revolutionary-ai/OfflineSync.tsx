@@ -26,7 +26,7 @@ interface SyncItem {
   description: string;
 }
 
-export function OfflineSync() {
+export const OfflineSync = memo(function() {
   const [isOnline, setIsOnline] = useState(navigator.onLine);
   const [syncProgress, setSyncProgress] = useState(0);
   const [isSyncing, setIsSyncing] = useState(false);

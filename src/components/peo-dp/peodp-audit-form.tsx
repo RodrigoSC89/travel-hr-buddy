@@ -65,7 +65,7 @@ interface PEODPAuditFormProps {
   onComplete?: (items: PEODPAuditItem[], score: number) => void;
 }
 
-export function PEODPAuditForm({
+export const PEODPAuditForm = memo(function({
   vesselName,
   vesselId,
   dpClass,

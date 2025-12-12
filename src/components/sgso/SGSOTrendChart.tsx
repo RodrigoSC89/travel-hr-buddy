@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useState } from "react";;;
+import { memo, memo, useEffect, useState } from "react";;;
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import {
   LineChart,
@@ -65,7 +65,7 @@ interface SGSOTrendChartProps {
   data?: RawDataEntry[];
 }
 
-export function SGSOTrendChart({ data: customData }: SGSOTrendChartProps = {}) {
+export const SGSOTrendChart = memo(function({ data: customData }: SGSOTrendChartProps = {}) {
   const [data, setData] = useState<RawDataEntry[]>([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);

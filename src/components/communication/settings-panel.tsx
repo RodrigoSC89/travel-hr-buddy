@@ -75,7 +75,7 @@ interface UserSettings {
   };
 }
 
-export const SettingsPanel = () => {
+export const SettingsPanel = memo(() => {
   const [settings, setSettings] = useState<UserSettings>({
     profile: {
       display_name: "João Silva",
@@ -484,7 +484,7 @@ export const SettingsPanel = () => {
                     {settings.notifications.sound_enabled ? 
                       <Volume2 className="h-4 w-4" /> : 
                       <VolumeX className="h-4 w-4" />
-                    }
+                    };
                     <Label>Som</Label>
                   </div>
                   <Switch 

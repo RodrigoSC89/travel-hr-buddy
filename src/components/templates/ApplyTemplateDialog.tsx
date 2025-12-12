@@ -42,7 +42,7 @@ interface ApplyTemplateDialogProps {
   onApply?: (result: string) => void;
 }
 
-export function ApplyTemplateDialog({
+export const ApplyTemplateDialog = memo(function({
   open,
   onOpenChange,
   templateContent,

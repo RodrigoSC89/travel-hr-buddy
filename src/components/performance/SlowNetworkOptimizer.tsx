@@ -3,7 +3,7 @@
  * Automatic optimizations for connections < 2 Mbps
  */
 
-import { ReactNode, createContext, useContext, useEffect, useState } from "react";;;
+import { memo, memo, ReactNode, createContext, useContext, useEffect, useState } from "react";;;
 import { logger } from "@/lib/logger";
 
 // ===== Types =====
@@ -105,7 +105,7 @@ interface SlowNetworkProviderProps {
   children: ReactNode;
 }
 
-export function SlowNetworkProvider({ children }: SlowNetworkProviderProps) {
+export const SlowNetworkProvider = memo(function({ children }: SlowNetworkProviderProps) {
   const [quality, setQuality] = useState<NetworkQuality>(DEFAULT_QUALITY);
   const [optimizations, setOptimizations] = useState<NetworkOptimizations>(FAST_NETWORK_OPTS);
 
@@ -187,7 +187,7 @@ export function SlowNetworkProvider({ children }: SlowNetworkProviderProps) {
 /**
  * Conditionally render based on network speed
  */
-export function NetworkAware({ 
+export const NetworkAware = memo(function({ 
   children, 
   fallback,
   minSpeed = 2, // Minimum Mbps to show full content
@@ -208,7 +208,7 @@ export function NetworkAware({
 /**
  * Defer loading on slow networks
  */
-export function DeferOnSlowNetwork({ 
+export const DeferOnSlowNetwork = memo(function({ 
   children,
   delay = 2000,
 }: { 
@@ -235,7 +235,7 @@ export function DeferOnSlowNetwork({
 /**
  * Network status indicator
  */
-export function NetworkStatusBadge() {
+export const NetworkStatusBadge = memo(function() {
   const { quality, isSlowNetwork, isCriticallySlowNetwork } = useSlowNetwork();
 
   if (!isSlowNetwork) return null;

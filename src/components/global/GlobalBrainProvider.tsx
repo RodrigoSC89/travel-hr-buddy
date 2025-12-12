@@ -14,7 +14,7 @@ interface BrainContextType {
 
 const BrainContext = createContext<BrainContextType | undefined>(undefined);
 
-export const useBrain = () => {
+export const useBrain = memo(() => {
   const context = useContext(BrainContext);
   if (!context) {
     throw new Error("useBrain must be used within GlobalBrainProvider");
@@ -25,7 +25,7 @@ export const useBrain = () => {
 interface GlobalBrainProviderProps {
   children: ReactNode;
   showTrigger?: boolean;
-}
+};
 
 export const GlobalBrainProvider: React.FC<GlobalBrainProviderProps> = ({ 
   children, 

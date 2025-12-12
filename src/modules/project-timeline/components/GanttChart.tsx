@@ -26,7 +26,7 @@ interface Task {
   subtasks?: Task[];
 }
 
-export const GanttChart = () => {
+export const GanttChart = memo(() => {
   const [tasks, setTasks] = useState<Task[]>([]);
   const [isCreating, setIsCreating] = useState(false);
   const [editingTask, setEditingTask] = useState<Task | null>(null);
@@ -267,7 +267,7 @@ export const GanttChart = () => {
         }
       } else {
         rootTasks.push(taskWithSubtasks);
-      }
+      };
     });
 
     return rootTasks;

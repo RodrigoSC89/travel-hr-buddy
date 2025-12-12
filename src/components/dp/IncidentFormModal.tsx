@@ -1,4 +1,4 @@
-import { useState } from "react";;;
+import { memo, memo, useState } from "react";;;
 import { Dialog, DialogContent, DialogDescription, DialogFooter, DialogHeader, DialogTitle } from "@/components/ui/dialog";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -15,7 +15,7 @@ interface IncidentFormModalProps {
   onSave: (incident: Partial<DPIncident>) => void;
 }
 
-export function IncidentFormModal({ open, onOpenChange, incident, onSave }: IncidentFormModalProps) {
+export const IncidentFormModal = memo(function({ open, onOpenChange, incident, onSave }: IncidentFormModalProps) {
   const [formData, setFormData] = useState<Partial<DPIncident>>({
     vessel: incident?.vessel || "",
     incident_date: incident?.incident_date || new Date().toISOString().split("T")[0],

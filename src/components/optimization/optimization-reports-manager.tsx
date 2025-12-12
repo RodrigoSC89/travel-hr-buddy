@@ -43,7 +43,7 @@ interface OptimizationHistory {
   status: "success" | "partial" | "failed";
 }
 
-export const OptimizationReportsManager = () => {
+export const OptimizationReportsManager = memo(() => {
   const { toast } = useToast();
   
   const [reports, setReports] = useState<OptimizationReport[]>([
@@ -207,7 +207,7 @@ export const OptimizationReportsManager = () => {
     case "monthly": return "bg-info/10 text-info border-info/20";
     case "quarterly": return "bg-success/10 text-success border-success/20";
     default: return "bg-muted text-muted-foreground border-muted";
-    }
+    };
   };
 
   return (

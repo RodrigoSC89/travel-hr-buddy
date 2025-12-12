@@ -51,7 +51,7 @@ function ChartSkeleton({ height = 300 }: { height?: number }) {
   );
 }
 
-export function LazyChart({ 
+export const LazyChart = memo(function({ 
   type = "line",
   data,
   config,

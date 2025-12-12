@@ -40,7 +40,7 @@ interface NotificationsPanelProps {
   onFilterClick: () => void;
 }
 
-export function NotificationsPanel({
+export const NotificationsPanel = memo(function({
   notifications,
   onMarkAllRead,
   onDismiss,

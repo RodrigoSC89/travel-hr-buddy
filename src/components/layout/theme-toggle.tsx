@@ -1,3 +1,4 @@
+import { memo } from 'react';
 import { Moon, Sun, Palette } from "lucide-react";
 
 import { Button } from "@/components/ui/button";
@@ -10,7 +11,7 @@ import {
 import { useTheme } from "@/components/layout/theme-provider";
 
 // PATCH 620: Extended theme toggle with nautilus and high-contrast themes
-export function ThemeToggle() {
+export const ThemeToggle = memo(function() {
   const { setTheme } = useTheme();
 
   return (

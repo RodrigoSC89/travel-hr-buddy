@@ -35,7 +35,7 @@ interface SystemHealthIndicatorProps {
   compact?: boolean;
 }
 
-export function SystemHealthIndicator({ 
+export const SystemHealthIndicator = memo(function({ 
   status = { api: "healthy", database: "healthy", realtime: "connected" },
   compact = true 
 }: SystemHealthIndicatorProps) {

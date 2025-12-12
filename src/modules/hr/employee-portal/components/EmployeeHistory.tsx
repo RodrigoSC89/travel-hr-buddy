@@ -1,3 +1,4 @@
+import { memo } from 'react';
 
 import { useQuery } from "@tanstack/react-query";
 import { supabase } from "@/integrations/supabase/client";
@@ -14,7 +15,7 @@ interface HistoryEvent {
   metadata?: Record<string, unknown>;
 }
 
-export function EmployeeHistory() {
+export const EmployeeHistory = memo(function() {
   const { data: history, isLoading } = useQuery({
     queryKey: ["employee-history"],
     queryFn: async () => {

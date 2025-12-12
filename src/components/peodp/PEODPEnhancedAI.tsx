@@ -38,7 +38,7 @@ interface ASOGStatus {
   recommendations: string[];
 }
 
-export function PEODPEnhancedAI() {
+export const PEODPEnhancedAI = memo(function() {
   const { analyze, generate, suggest, isLoading } = useNautilusAI();
   const [asogStatus, setAsogStatus] = useState<ASOGStatus>({
     current: "green",

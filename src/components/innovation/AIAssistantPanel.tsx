@@ -44,7 +44,7 @@ interface AITask {
   estimatedTime?: string;
 }
 
-export const AIAssistantPanel = () => {
+export const AIAssistantPanel = memo(() => {
   const [query, setQuery] = useState("");
   const [isProcessing, setIsProcessing] = useState(false);
   const [aiInsights, setAiInsights] = useState<AIInsight[]>([]);
@@ -185,7 +185,7 @@ export const AIAssistantPanel = () => {
       } finally {
         setIsProcessing(false);
       }
-    }
+    };
   };
 
   return (

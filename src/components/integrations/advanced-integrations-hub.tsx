@@ -1010,7 +1010,7 @@ const IntegrationWizard: React.FC<{
                 <Card key={type} className={`cursor-pointer transition-all hover:shadow-md border ${
                   formData.type === type ? "border-primary bg-primary/5" : "border-border"
                 }`} onClick={() => setFormData(prev => ({ ...prev, type }))}>
-                  <CardContent className="p-4 text-center">
+                  <CardContent key={CardContent.id || index} className="p-4 text-center">
                     <p className="font-medium text-foreground">{type}</p>
                   </CardContent>
                 </Card>

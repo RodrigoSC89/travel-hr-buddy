@@ -60,7 +60,7 @@ interface SystemOptimization {
   autoApplicable: boolean;
 }
 
-export const OptimizationGeneralHub = () => {
+export const OptimizationGeneralHub = memo(() => {
   const { toast } = useToast();
   const [overallScore, setOverallScore] = useState(78.5);
   const [isOptimizing, setIsOptimizing] = useState(false);
@@ -275,7 +275,7 @@ export const OptimizationGeneralHub = () => {
     case "medium": return "bg-warning/10 text-warning border-warning/20";
     case "low": return "bg-success/10 text-success border-success/20";
     default: return "bg-muted text-muted-foreground border-muted";
-    }
+    };
   };
 
   const filteredOptimizations = selectedCategory === "all" 

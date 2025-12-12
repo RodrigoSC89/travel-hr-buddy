@@ -49,7 +49,7 @@ interface AuditFormData {
   objectives: string;
 }
 
-export function CreateAuditDialog({
+export const CreateAuditDialog = memo(function({
   open,
   onOpenChange,
   onCreateAudit,

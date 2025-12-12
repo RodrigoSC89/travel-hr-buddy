@@ -105,7 +105,7 @@ interface Props {
   selectedDPClass: "DP1" | "DP2" | "DP3";
 }
 
-export function IMCAAuditEvents({ selectedDPClass }: Props) {
+export const IMCAAuditEvents = memo(function({ selectedDPClass }: Props) {
   const { toast } = useToast();
   const [events, setEvents] = useState<DPEvent[]>(SAMPLE_EVENTS);
   const [isAddEventOpen, setIsAddEventOpen] = useState(false);

@@ -44,7 +44,7 @@ const availableCommands: AvailableCommand[] = [
   { phrase: "Comparar fornecedores de óleo", description: "Abre comparador de preços", module: "Compras", icon: <Package className="h-4 w-4" /> }
 ];
 
-export function VoiceCommandsAdvanced() {
+export const VoiceCommandsAdvanced = memo(function() {
   const [isListening, setIsListening] = useState(false);
   const [transcript, setTranscript] = useState("");
   const [isProcessing, setIsProcessing] = useState(false);

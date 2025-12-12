@@ -38,7 +38,7 @@ interface Shipment {
   last_location_update?: string;
 }
 
-export const ShipmentTracking = () => {
+export const ShipmentTracking = memo(() => {
   const { toast } = useToast();
   const [shipments, setShipments] = useState<Shipment[]>([]);
   const [loading, setLoading] = useState(true);
@@ -297,7 +297,7 @@ export const ShipmentTracking = () => {
                           {shipment.estimated_arrival ? 
                             format(new Date(shipment.estimated_arrival), "MMM dd, yyyy") : 
                             "N/A"
-                          }
+                          };
                         </div>
                       </div>
                       {shipment.actual_arrival && (

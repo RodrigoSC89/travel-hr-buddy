@@ -64,7 +64,7 @@ const categoryIcons: Record<string, React.ReactNode> = {
   "EMG": <AlertTriangle className="h-5 w-5" />
 };
 
-export function IMCADPAuditDashboard() {
+export const IMCADPAuditDashboard = memo(function() {
   const { toast } = useToast();
   const [activeTab, setActiveTab] = useState("overview");
   const [selectedDPClass, setSelectedDPClass] = useState<"DP1" | "DP2" | "DP3">("DP2");

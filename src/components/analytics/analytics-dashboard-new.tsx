@@ -1,3 +1,4 @@
+import { memo } from 'react';
 /**
  * Analytics Dashboard (Migrated)
  * Dashboard migrado para usar AnalyticsDashboardBase
@@ -10,7 +11,7 @@ import { AnalyticsDashboardBase } from "@/components/dashboard-base";
 import { analyticsDashboardConfig } from "@/components/dashboard-base/configs/analytics-dashboard-example.config";
 import { useToast } from "@/hooks/use-toast";
 
-export const AnalyticsDashboardNew = () => {
+export const AnalyticsDashboardNew = memo(() => {
   const { toast } = useToast();
 
   const handleError = (error: Error) => {

@@ -20,7 +20,7 @@ interface LazyPDFGeneratorProps {
   useAutoTable?: boolean;
 }
 
-export function LazyPDFGenerator({
+export const LazyPDFGenerator = memo(function({
   fileName = "documento.pdf",
   buttonText = "Exportar PDF",
   buttonVariant = "outline",

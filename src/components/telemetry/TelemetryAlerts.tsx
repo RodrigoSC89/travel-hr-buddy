@@ -49,7 +49,7 @@ interface TelemetryAlertsProps {
   onAlertsChange?: (alerts: TelemetryAlert[]) => void;
 }
 
-export function TelemetryAlerts({ alerts: initialAlerts, onAlertsChange }: TelemetryAlertsProps) {
+export const TelemetryAlerts = memo(function({ alerts: initialAlerts, onAlertsChange }: TelemetryAlertsProps) {
   const [alerts, setAlerts] = useState<TelemetryAlert[]>(initialAlerts);
   const [filter, setFilter] = useState<string>("all");
   const [severityFilter, setSeverityFilter] = useState<string>("all");

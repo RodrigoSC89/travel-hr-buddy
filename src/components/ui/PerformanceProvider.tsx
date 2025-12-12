@@ -34,7 +34,7 @@ interface PerformanceContextValue {
 
 const PerformanceContext = createContext<PerformanceContextValue | null>(null);
 
-export function PerformanceProvider({ children }: { children: React.ReactNode }) {
+export const PerformanceProvider = memo(function({ children }: { children: React.ReactNode }) {
   const connection = useConnectionAdaptive();
   const offline = useOfflineMode();
   const [lightMode, setLightModeState] = useState(false);
@@ -85,7 +85,7 @@ export function PerformanceProvider({ children }: { children: React.ReactNode })
   );
 }
 
-export function usePerformance() {
+export const usePerformance = memo(function() {
   const context = useContext(PerformanceContext);
   if (!context) {
     throw new Error("usePerformance must be used within a PerformanceProvider");

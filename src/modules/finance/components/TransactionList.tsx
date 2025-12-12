@@ -1,3 +1,4 @@
+import { memo } from 'react';
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { format } from "date-fns";
@@ -16,7 +17,7 @@ interface TransactionListProps {
   transactions: Transaction[];
 }
 
-export function TransactionList({ transactions }: TransactionListProps) {
+export const TransactionList = memo(function({ transactions }: TransactionListProps) {
   return (
     <Card>
       <CardHeader>

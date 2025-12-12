@@ -52,7 +52,7 @@ interface Organization {
   status: "active" | "inactive";
 }
 
-export const ClientCustomization = () => {
+export const ClientCustomization = memo(() => {
   const [selectedTheme, setSelectedTheme] = useState("default");
   const [customFields, setCustomFields] = useState<CustomField[]>([]);
   const [organizations, setOrganizations] = useState<Organization[]>([]);
@@ -599,7 +599,7 @@ export const ClientCustomization = () => {
                     name: "Turismo Náutico",
                     description: "Configuração para turismo e embarcações de recreio",
                     modules: ["Dashboard", "Reservas", "Clientes", "Rotas"]
-                  }
+                  };
                 ].map((template, index) => (
                   <div key={index} className="border rounded-lg p-4 hover-lift">
                     <h4 className="font-semibold mb-2">{template.name}</h4>

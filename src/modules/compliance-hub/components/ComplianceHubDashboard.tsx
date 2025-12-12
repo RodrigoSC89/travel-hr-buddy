@@ -62,7 +62,7 @@ const defaultSettings: ComplianceSettings = {
   },
 };
 
-export function ComplianceHubDashboard() {
+export const ComplianceHubDashboard = memo(function() {
   const {
     complianceItems,
     audits,

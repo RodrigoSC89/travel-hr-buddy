@@ -1,4 +1,4 @@
-import { useEffect, useRef, useState } from "react";;;
+import { memo, memo, useEffect, useRef, useState } from "react";;;
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -57,7 +57,7 @@ const quickActions = [
   },
 ];
 
-export function CrewAICopilot({ crewData, certificates }: CrewAICopilotProps) {
+export const CrewAICopilot = memo(function({ crewData, certificates }: CrewAICopilotProps) {
   const [messages, setMessages] = useState<Message[]>([]);
   const [input, setInput] = useState("");
   const [isLoading, setIsLoading] = useState(false);

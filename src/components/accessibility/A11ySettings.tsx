@@ -32,7 +32,7 @@ interface A11ySettingsProps {
   compact?: boolean;
 }
 
-export function A11ySettings({ compact = false }: A11ySettingsProps) {
+export const A11ySettings = memo(function({ compact = false }: A11ySettingsProps) {
   const { settings, updateSetting, reset } = useA11y();
 
   const settingsGroups = [

@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useState } from "react";;;
+import { memo, memo, useEffect, useState } from "react";;;
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { 
@@ -28,7 +28,7 @@ interface TemporalData {
   falhas_criticas: number;
 }
 
-export function PainelMetricasRisco() {
+export const PainelMetricasRisco = memo(function() {
   const [dados, setDados] = useState<MetricData[]>([]);
   const [embarcacaoSelecionada, setEmbarcacaoSelecionada] = useState<string>("Todos");
   const [loading, setLoading] = useState(true);

@@ -66,7 +66,7 @@ interface SimulationScenario {
   skills: string[];
 }
 
-export function TrainingAcademyAI() {
+export const TrainingAcademyAI = memo(function() {
   const { generate, analyze, suggest, chat, isLoading } = useNautilusAI();
   const [learningPaths, setLearningPaths] = useState<LearningPath[]>([
     {

@@ -25,7 +25,7 @@ interface ActionPlanTabProps {
   auditId: string;
 }
 
-export function ActionPlanTab({ auditId }: ActionPlanTabProps) {
+export const ActionPlanTab = memo(function({ auditId }: ActionPlanTabProps) {
   const [actions, setActions] = useState<ActionPlan[]>([]);
   const [loading, setLoading] = useState(true);
   const [editMode, setEditMode] = useState(false);

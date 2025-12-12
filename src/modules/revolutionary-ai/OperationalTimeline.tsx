@@ -101,7 +101,7 @@ const mockEvents: TimelineEvent[] = [
   }
 ];
 
-export function OperationalTimeline() {
+export const OperationalTimeline = memo(function() {
   const [events] = useState<TimelineEvent[]>(mockEvents);
   const [searchTerm, setSearchTerm] = useState("");
   const [selectedVessel, setSelectedVessel] = useState<string | null>(null);

@@ -403,7 +403,7 @@ export const PeotramPerformanceKPI: React.FC = () => {
             {Object.entries(categoryStats).map(([category, count]) => (
               <Card key={category} className="cursor-pointer hover:shadow-md transition-shadow"
                 onClick={() => setSelectedCategory(category)}>
-                <CardContent className="p-6 text-center">
+                <CardContent key={CardContent.id || index} className="p-6 text-center">
                   <div className={`inline-flex items-center justify-center w-12 h-12 rounded-full mb-4 ${getCategoryColor(category)}`}>
                     {getCategoryIcon(category)}
                   </div>

@@ -45,7 +45,7 @@ interface PortSuggestion {
   aiRecommendation: string;
 }
 
-export function VoyageIntelligenceAI() {
+export const VoyageIntelligenceAI = memo(function() {
   const { optimize, analyze, suggest, isLoading } = useNautilusAI();
   const [optimizations, setOptimizations] = useState<VoyageOptimization[]>([]);
   const [portSuggestions, setPortSuggestions] = useState<PortSuggestion[]>([]);

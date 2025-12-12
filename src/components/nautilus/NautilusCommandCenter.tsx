@@ -2,7 +2,7 @@
  * Nautilus Command Center - Centro de Comando Unificado com IA
  */
 
-import { useEffect, useState } from "react";;;
+import { memo, memo, useEffect, useState } from "react";;;
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
@@ -40,7 +40,7 @@ interface Notification {
   read: boolean;
 }
 
-export function NautilusCommandCenter() {
+export const NautilusCommandCenter = memo(function() {
   const [activeTab, setActiveTab] = useState("command");
   const { isOnline, pendingCount, forceSync, isSyncing } = useOfflineSync();
   const [isRefreshing, setIsRefreshing] = useState(false);

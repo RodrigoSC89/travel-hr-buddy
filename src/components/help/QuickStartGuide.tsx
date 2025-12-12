@@ -134,7 +134,7 @@ const ONBOARDING_STEPS: Step[] = [
 
 const STORAGE_KEY = "nautilus_onboarding_progress";
 
-export function QuickStartGuide() {
+export const QuickStartGuide = memo(function() {
   const [isOpen, setIsOpen] = useState(false);
   const [currentStep, setCurrentStep] = useState(0);
   const [completedTasks, setCompletedTasks] = useState<Set<string>>(new Set());
@@ -394,7 +394,7 @@ export function QuickStartGuide() {
 /**
  * Feature highlights for specific features
  */
-export function FeatureHighlight({
+export const FeatureHighlight = memo(function({
   feature,
   children,
   position = "bottom",

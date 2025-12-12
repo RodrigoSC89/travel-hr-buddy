@@ -16,7 +16,7 @@ interface Props {
   setAuditData: React.Dispatch<React.SetStateAction<Record<number, { status: string; notes: string; evidence: string }>>>;
 }
 
-export function IMCADPChecklist({ selectedDPClass, auditData, setAuditData }: Props) {
+export const IMCADPChecklist = memo(function({ selectedDPClass, auditData, setAuditData }: Props) {
   const updateItem = (id: number, field: string, value: string) => {
     setAuditData(prev => ({
       ...prev,

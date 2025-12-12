@@ -39,7 +39,7 @@ interface LiveDecisionMapProps {
  * 🟡 Degradação  
  * 🔴 Falha crítica
  */
-export function LiveDecisionMap({ events }: LiveDecisionMapProps) {
+export const LiveDecisionMap = memo(function({ events }: LiveDecisionMapProps) {
   const getSeverityColor = (severity: string) => {
     switch (severity) {
     case "normal":

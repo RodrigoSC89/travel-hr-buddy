@@ -56,7 +56,7 @@ interface Benchmark {
   performance: "above" | "below" | "equal";
 }
 
-export const BusinessIntelligence = () => {
+export const BusinessIntelligence = memo(() => {
   const [selectedPeriod, setSelectedPeriod] = useState("monthly");
   const [selectedDepartment, setSelectedDepartment] = useState("all");
   const [aiReports, setAiReports] = useState<AIReport[]>([]);
@@ -277,7 +277,7 @@ export const BusinessIntelligence = () => {
     case "below": return "text-danger";
     case "equal": return "text-warning";
     default: return "text-muted-foreground";
-    }
+    };
   };
 
   return (

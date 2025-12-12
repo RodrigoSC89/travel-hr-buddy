@@ -316,7 +316,7 @@ const NotificationItem: React.FC<NotificationItemProps> = ({
 // MAIN HOOK
 // ============================================
 
-export function useUnifiedNotifications(userId?: string, autoRefresh = true, refreshInterval = 30000) {
+export const useUnifiedNotifications = memo(function(userId?: string, autoRefresh = true, refreshInterval = 30000) {
   const [notifications, setNotifications] = useState<UnifiedNotification[]>([]);
   const [loading, setLoading] = useState(true);
   const { toast } = useToast();

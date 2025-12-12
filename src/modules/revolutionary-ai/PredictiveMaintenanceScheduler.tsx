@@ -100,7 +100,7 @@ const MOCK_PREDICTIONS: PredictedMaintenance[] = [
   }
 ];
 
-export function PredictiveMaintenanceScheduler() {
+export const PredictiveMaintenanceScheduler = memo(function() {
   const [selectedPriority, setSelectedPriority] = useState<string>("all");
   const [selectedMaintenance, setSelectedMaintenance] = useState<PredictedMaintenance | null>(null);
 

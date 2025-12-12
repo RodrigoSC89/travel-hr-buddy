@@ -61,7 +61,7 @@ export interface DPOperationsMonitorProps {
 // Component
 // ============================================================================
 
-export function DPOperationsMonitor({
+export const DPOperationsMonitor = memo(function({
   vesselLatitude,
   vesselLongitude,
   vesselName = "Vessel",

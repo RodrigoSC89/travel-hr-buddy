@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useState } from "react";;;
+import { memo, memo, useEffect, useState } from "react";;;
 import { Card, CardContent } from "@/components/ui/card";
 import { BarChart, Bar, XAxis, YAxis, Tooltip, ResponsiveContainer, Legend } from "recharts";
 import { logger } from "@/lib/logger";
@@ -13,7 +13,7 @@ interface ComplianceByVesselData {
   pendente: number;
 }
 
-export function ComplianceByVesselChart() {
+export const ComplianceByVesselChart = memo(function() {
   const [data, setData] = useState<ComplianceByVesselData[]>([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);

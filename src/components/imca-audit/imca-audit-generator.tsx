@@ -35,7 +35,7 @@ import {
 } from "@/types/imca-audit";
 import { generateIMCAAudit, saveAudit, downloadAuditMarkdown } from "@/services/imca-audit-service";
 
-export function IMCAAuditGenerator() {
+export const IMCAAuditGenerator = memo(function() {
   const { toast } = useToast();
   const [activeTab, setActiveTab] = useState("basic");
   const [loading, setLoading] = useState(false);

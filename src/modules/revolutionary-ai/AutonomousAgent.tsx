@@ -108,7 +108,7 @@ const MOCK_METRICS: AgentMetrics = {
   activeRules: 18
 };
 
-export function AutonomousAgent() {
+export const AutonomousAgent = memo(function() {
   const [isAgentActive, setIsAgentActive] = useState(true);
   const [actions, setActions] = useState(MOCK_ACTIONS);
   const [metrics] = useState(MOCK_METRICS);

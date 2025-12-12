@@ -6,7 +6,7 @@ import { Input } from "@/components/ui/input";
 import { nautilusRespond } from "@/lib/ai/nautilusLLM";
 import { useToast } from "@/hooks/use-toast";
 
-export function LLMConsole() {
+export const LLMConsole = memo(function() {
   const [prompt, setPrompt] = useState("");
   const [response, setResponse] = useState("");
   const [isLoading, setIsLoading] = useState(false);

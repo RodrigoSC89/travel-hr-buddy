@@ -12,7 +12,7 @@ import { Upload, FileJson, FileText, Table, Loader2 } from "lucide-react";
 import { SonarAIService } from "../sonar-service";
 import { cn } from "@/lib/utils";
 
-export function SonarDataUpload() {
+export const SonarDataUpload = memo(function() {
   const [isUploading, setIsUploading] = useState(false);
   const [progress, setProgress] = useState(0);
   const { toast } = useToast();

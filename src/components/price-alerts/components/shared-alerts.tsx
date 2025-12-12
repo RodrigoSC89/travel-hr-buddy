@@ -55,7 +55,7 @@ interface ShareAlertForm {
   description: string;
 }
 
-export const SharedAlerts = () => {
+export const SharedAlerts = memo(() => {
   const { user } = useAuth();
   const { toast } = useToast();
   const [sharedAlerts, setSharedAlerts] = useState<SharedAlert[]>([]);
@@ -512,7 +512,7 @@ interface SharedAlertCardProps {
   onVote: (alertId: string, voteType: "upvote" | "downvote") => void;
   onCopyUrl: (url: string, productName: string) => void;
   copiedUrl: string | null;
-}
+};
 
 const SharedAlertCard: React.FC<SharedAlertCardProps> = ({ 
   alert, 

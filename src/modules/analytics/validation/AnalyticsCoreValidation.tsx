@@ -1,8 +1,9 @@
+import { memo } from 'react';
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { CheckCircle2, XCircle, Activity, Search, Download } from "lucide-react";
 import { Badge } from "@/components/ui/badge";
 
-export const AnalyticsCoreValidation = () => {
+export const AnalyticsCoreValidation = memo(() => {
   const validationChecks = [
     {
       id: "realtime",

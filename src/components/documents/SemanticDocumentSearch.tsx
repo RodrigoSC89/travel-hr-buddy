@@ -20,7 +20,7 @@ interface SearchResult {
   created_at: string;
 }
 
-export function SemanticDocumentSearch() {
+export const SemanticDocumentSearch = memo(function() {
   const { toast } = useToast();
   const [searchQuery, setSearchQuery] = useState("");
   const [searching, setSearching] = useState(false);

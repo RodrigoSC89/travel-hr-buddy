@@ -129,7 +129,7 @@ const demoOptimizationResults: OptimizationResult[] = [
   }
 ];
 
-export const FuelOptimizer = () => {
+export const FuelOptimizer = memo(() => {
   const { toast } = useToast();
   const [fuelRecords, setFuelRecords] = useState<FuelRecord[]>([]);
   const [routeComparisons, setRouteComparisons] = useState<RouteComparison[]>([]);
@@ -467,7 +467,7 @@ export const FuelOptimizer = () => {
                           text: "Consumo (Litros)"
                         }
                       }
-                    }
+                    };
                   }}
                 />
               </div>

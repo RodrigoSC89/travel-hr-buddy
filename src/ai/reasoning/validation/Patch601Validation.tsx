@@ -3,7 +3,7 @@
  * Tests strategic decision sequences with justifications
  */
 
-import { useState } from "react";;;
+import { memo, memo, useState } from "react";;;
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
@@ -18,7 +18,7 @@ interface ReasoningStep {
   efficiency: number;
 }
 
-export function Patch601Validation() {
+export const Patch601Validation = memo(function() {
   const [reasoning, setReasoning] = useState<ReasoningStep[]>([]);
   const [isProcessing, setIsProcessing] = useState(false);
   const { toast } = useToast();

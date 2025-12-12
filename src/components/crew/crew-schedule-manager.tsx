@@ -48,7 +48,7 @@ interface Vessel {
   currentCrew: number;
 }
 
-export const CrewScheduleManager = () => {
+export const CrewScheduleManager = memo(() => {
   const [schedules, setSchedules] = useState<Schedule[]>([
     {
       id: "1",
@@ -133,7 +133,7 @@ export const CrewScheduleManager = () => {
       return <Badge variant="destructive">Emergência</Badge>;
     case "transfer":
       return <Badge variant="secondary">Transferência</Badge>;
-    }
+    };
   };
 
   const filteredSchedules = schedules.filter(schedule => {

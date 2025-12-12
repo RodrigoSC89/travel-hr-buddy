@@ -200,7 +200,7 @@ const PILLARS: PillarData[] = [
   }
 ];
 
-export function PEODP7PillarsOverview() {
+export const PEODP7PillarsOverview = memo(function() {
   const [selectedPillar, setSelectedPillar] = useState<PillarData | null>(null);
   const [isDialogOpen, setIsDialogOpen] = useState(false);
 

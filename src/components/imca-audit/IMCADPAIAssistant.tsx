@@ -16,7 +16,7 @@ interface Props {
   selectedDPClass: "DP1" | "DP2" | "DP3";
 }
 
-export function IMCADPAIAssistant({ selectedDPClass }: Props) {
+export const IMCADPAIAssistant = memo(function({ selectedDPClass }: Props) {
   const [messages, setMessages] = useState<Message[]>([]);
   const [input, setInput] = useState("");
   const [isLoading, setIsLoading] = useState(false);

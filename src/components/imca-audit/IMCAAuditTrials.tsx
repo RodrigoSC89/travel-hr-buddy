@@ -155,7 +155,7 @@ interface Props {
   selectedDPClass: "DP1" | "DP2" | "DP3";
 }
 
-export function IMCAAuditTrials({ selectedDPClass }: Props) {
+export const IMCAAuditTrials = memo(function({ selectedDPClass }: Props) {
   const { toast } = useToast();
   const [tests, setTests] = useState<TrialTest[]>(ANNUAL_TRIAL_TESTS);
   const [selectedTest, setSelectedTest] = useState<TrialTest | null>(null);

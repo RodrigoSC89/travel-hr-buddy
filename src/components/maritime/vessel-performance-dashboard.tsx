@@ -44,7 +44,7 @@ interface VesselDetails {
   route: string;
 }
 
-export const VesselPerformanceDashboard = () => {
+export const VesselPerformanceDashboard = memo(() => {
   const [vessels, setVessels] = useState<VesselDetails[]>([]);
   const [selectedVessel, setSelectedVessel] = useState<string | null>(null);
   const [timeRange, setTimeRange] = useState<"24h" | "7d" | "30d">("7d");
@@ -123,7 +123,7 @@ export const VesselPerformanceDashboard = () => {
     case "docked": return "bg-green-100 text-green-800";
     case "maintenance": return "bg-red-100 text-red-800";
     default: return "bg-secondary text-secondary-foreground";
-    }
+    };
   };
 
   const selectedVesselData = vessels.find(v => v.id === selectedVessel);

@@ -76,7 +76,7 @@ const EMERGENCY_TYPES = [
   { id: "abandon", label: "Abandon Ship", color: "bg-purple-700", description: "Abandon vessel" },
 ];
 
-export function EmergencyMode() {
+export const EmergencyMode = memo(function() {
   const { t } = useTranslation("emergency");
   const [activeEmergency, setActiveEmergency] = useState<string | null>(null);
   const [position, setPosition] = useState<{ lat: number; lng: number } | null>(null);

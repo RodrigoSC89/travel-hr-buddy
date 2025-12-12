@@ -35,7 +35,7 @@ interface TelemetryMapProps {
   onRefresh?: () => void;
 }
 
-export function TelemetryMap({ 
+export const TelemetryMap = memo(function({ 
   satellites = [], 
   vessels = [], 
   weatherPoints = [],

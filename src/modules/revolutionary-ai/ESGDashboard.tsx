@@ -26,7 +26,7 @@ interface EmissionData {
   efficiency: number;
 }
 
-export function ESGDashboard() {
+export const ESGDashboard = memo(function() {
   const [selectedPeriod, setSelectedPeriod] = useState("month");
   
   const emissionData: EmissionData[] = [

@@ -1,4 +1,4 @@
-import { createContext, useContext, useEffect, useState } from "react";;;
+import { memo, memo, createContext, useContext, useEffect, useState } from "react";;;
 
 // PATCH 620: Extended theme support with nautilus theme
 type Theme = "dark" | "light" | "system" | "nautilus" | "high-contrast";
@@ -64,9 +64,9 @@ export function ThemeProvider({
       {children}
     </ThemeProviderContext.Provider>
   );
-}
+};
 
-export const useTheme = () => {
+export const useTheme = memo(() => {
   const context = useContext(ThemeProviderContext);
 
   if (context === undefined)

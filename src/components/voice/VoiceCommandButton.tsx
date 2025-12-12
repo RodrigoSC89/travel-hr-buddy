@@ -23,7 +23,7 @@ const positionClasses = {
   "top-right": "top-4 right-4",
 };
 
-export function VoiceCommandButton({
+export const VoiceCommandButton = memo(function({
   position = "bottom-right",
   className,
 }: VoiceCommandButtonProps) {

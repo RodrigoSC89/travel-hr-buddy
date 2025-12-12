@@ -25,7 +25,7 @@ interface AlertMetrics {
   categories: { [key: string]: number };
 }
 
-export const StatisticsDashboard = () => {
+export const StatisticsDashboard = memo(() => {
   const { user } = useAuth();
   const [statistics, setStatistics] = useState<UserStatistics>({
     total_alerts: 0,
@@ -139,7 +139,7 @@ export const StatisticsDashboard = () => {
         ))}
       </div>
     );
-  }
+  };
 
   return (
     <div className="space-y-6">

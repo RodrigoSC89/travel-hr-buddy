@@ -38,7 +38,7 @@ interface ResilienceIndicatorProps {
   className?: string;
 }
 
-export function ResilienceIndicator({
+export const ResilienceIndicator = memo(function({
   compact = false,
   showDetails = true,
   showActions = false,
@@ -230,7 +230,7 @@ export function ResilienceIndicator({
 /**
  * Minimal badge version
  */
-export function ResilienceBadge({ className }: { className?: string }) {
+export const ResilienceBadge = memo(function({ className }: { className?: string }) {
   const { status } = useResilience();
 
   return (

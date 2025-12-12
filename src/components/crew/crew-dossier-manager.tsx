@@ -78,7 +78,7 @@ interface ActivityLog {
   user: string;
 }
 
-export const CrewDossierManager = () => {
+export const CrewDossierManager = memo(() => {
   const [searchTerm, setSearchTerm] = useState("");
   const [selectedMember, setSelectedMember] = useState<CrewMember | null>(null);
   const [isDetailOpen, setIsDetailOpen] = useState(false);
@@ -190,7 +190,7 @@ export const CrewDossierManager = () => {
     case "professional": return <Briefcase className="h-4 w-4" />;
     case "medical": return <Heart className="h-4 w-4" />;
     case "training": return <GraduationCap className="h-4 w-4" />;
-    }
+    };
   };
 
   const filteredMembers = crewMembers.filter(member =>

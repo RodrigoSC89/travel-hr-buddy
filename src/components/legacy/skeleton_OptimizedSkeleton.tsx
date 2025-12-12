@@ -1,3 +1,4 @@
+import { memo } from 'react';
 /**
  * OptimizedSkeleton - Skeleton com performance otimizada
  * Usa CSS puro ao invés de animações JS para melhor performance
@@ -13,7 +14,7 @@ interface SkeletonProps {
   lines?: number;
 }
 
-export function OptimizedSkeleton({
+export const OptimizedSkeleton = memo(function({
   className,
   variant = "default",
   width,
@@ -60,7 +61,7 @@ export function OptimizedSkeleton({
 }
 
 // Presets comuns para uso rápido
-export function CardSkeleton() {
+export const CardSkeleton = memo(function() {
   return (
     <div className="rounded-lg border bg-card p-6 space-y-4">
       <OptimizedSkeleton height={24} width="60%" />
@@ -73,7 +74,7 @@ export function CardSkeleton() {
   );
 }
 
-export function TableSkeleton({ rows = 5 }: { rows?: number }) {
+export const TableSkeleton = memo(function({ rows = 5 }: { rows?: number }) {
   return (
     <div className="space-y-3">
       <div className="flex gap-4 pb-2 border-b">
@@ -94,7 +95,7 @@ export function TableSkeleton({ rows = 5 }: { rows?: number }) {
   );
 }
 
-export function DashboardSkeleton() {
+export const DashboardSkeleton = memo(function() {
   return (
     <div className="space-y-6">
       {/* Header */}

@@ -1,5 +1,5 @@
 
-import { useEffect, useState } from "react";;;
+import { memo, memo, useEffect, useState } from "react";;;
 import { supabase } from "@/integrations/supabase/client";
 import { IoTSensorData, ChecklistRecord } from "@/types/modules";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
@@ -9,7 +9,7 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Activity, Thermometer, Gauge, Zap, CheckSquare, AlertCircle } from "lucide-react";
 import { toast } from "sonner";
 
-export function MaritimeSystemDashboard() {
+export const MaritimeSystemDashboard = memo(function() {
   const [sensorData, setSensorData] = useState<IoTSensorData[]>([]);
   const [checklists, setChecklists] = useState<ChecklistRecord[]>([]);
   const [loading, setLoading] = useState(true);

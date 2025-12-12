@@ -110,7 +110,7 @@ const DEFAULT_ACTIONS: Record<AIModule, QuickAction[]> = {
   ]
 };
 
-export function AIModuleEnhancer({
+export const AIModuleEnhancer = memo(function({
   module,
   title,
   description,

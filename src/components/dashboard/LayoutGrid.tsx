@@ -3,7 +3,7 @@
  * PATCH 625 - Performance-optimized responsive layout
  */
 
-import { ReactNode } from "react";
+import { memo, memo, ReactNode } from "react";
 
 interface LayoutGridProps {
   children: ReactNode;
@@ -14,7 +14,7 @@ interface LayoutGridProps {
   };
 }
 
-export function LayoutGrid({ 
+export const LayoutGrid = memo(function({ 
   children, 
   columns = { mobile: 1, tablet: 2, desktop: 4 } 
 }: LayoutGridProps) {

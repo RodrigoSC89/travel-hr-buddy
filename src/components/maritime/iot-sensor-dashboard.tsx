@@ -39,7 +39,7 @@ interface VesselSensors {
   connectionStatus: "online" | "offline" | "unstable";
 }
 
-export const IoTSensorDashboard = () => {
+export const IoTSensorDashboard = memo(() => {
   const [vessels, setVessels] = useState<VesselSensors[]>([]);
   const [selectedVessel, setSelectedVessel] = useState<string | null>(null);
   const [alerts, setAlerts] = useState<any[]>([]);
@@ -280,7 +280,7 @@ export const IoTSensorDashboard = () => {
         </div>
       </div>
     );
-  }
+  };
 
   return (
     <div className="space-y-6">

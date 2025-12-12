@@ -43,7 +43,7 @@ const MODULES = [
   { id: "training", name: "Treinamento", icon: Brain }
 ];
 
-export function SystemStatusWidget({ compact = false }: { compact?: boolean }) {
+export const SystemStatusWidget = memo(function({ compact = false }: { compact?: boolean }) {
   const [statuses, setStatuses] = useState<ModuleStatus[]>([]);
   const [loading, setLoading] = useState(true);
 

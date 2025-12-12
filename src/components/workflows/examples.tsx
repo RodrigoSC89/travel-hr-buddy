@@ -5,7 +5,7 @@
  * into a workflow detail page with real AI-generated suggestions.
  */
 
-import { useEffect, useState } from "react";;;
+import { memo, memo, useEffect, useState } from "react";;;
 import { KanbanAISuggestions, type Suggestion } from "@/components/workflows";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { supabase } from "@/integrations/supabase/client";
@@ -15,7 +15,7 @@ import type { Database } from "@/integrations/supabase/types";
 // type SmartWorkflowStep = Database["public"]["Tables"]["smart_workflow_steps"]["Row"];
 
 // Example: Integration in a workflow detail page
-export function WorkflowDetailWithAISuggestions({ workflowId }: { workflowId: string }) {
+export const WorkflowDetailWithAISuggestions = memo(function({ workflowId }: { workflowId: string }) {
   const [aiSuggestions, setAiSuggestions] = useState<Suggestion[]>([]);
 
   useEffect(() => {

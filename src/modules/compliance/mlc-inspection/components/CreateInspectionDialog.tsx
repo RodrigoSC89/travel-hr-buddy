@@ -16,7 +16,7 @@ interface CreateInspectionDialogProps {
   onInspectionCreated: (inspectionId: string) => void;
 }
 
-export function CreateInspectionDialog({ open, onOpenChange, onInspectionCreated }: CreateInspectionDialogProps) {
+export const CreateInspectionDialog = memo(function({ open, onOpenChange, onInspectionCreated }: CreateInspectionDialogProps) {
   const [loading, setLoading] = useState(false);
   const [formData, setFormData] = useState({
     vessel_id: "",

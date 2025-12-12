@@ -2,7 +2,7 @@
  * Add Transaction Dialog - Dialog para adicionar novas transações
  */
 
-import { useState } from "react";;;
+import { memo, memo, useState } from "react";;;
 import { Dialog, DialogContent, DialogDescription, DialogFooter, DialogHeader, DialogTitle } from "@/components/ui/dialog";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -30,7 +30,7 @@ const categories = [
   { value: "outros", label: "Outros" },
 ];
 
-export function AddTransactionDialog({ open, onOpenChange, onSuccess }: AddTransactionDialogProps) {
+export const AddTransactionDialog = memo(function({ open, onOpenChange, onSuccess }: AddTransactionDialogProps) {
   const { toast } = useToast();
   const [isLoading, setIsLoading] = useState(false);
   const [formData, setFormData] = useState({

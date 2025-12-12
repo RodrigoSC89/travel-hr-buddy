@@ -11,7 +11,7 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/com
 import { usePWA } from "@/lib/pwa/service-worker-registration";
 import { motion, AnimatePresence } from "framer-motion";
 
-export function PWAInstallPrompt() {
+export const PWAInstallPrompt = memo(function() {
   const { isInstallable, isInstalled, install } = usePWA();
   const [dismissed, setDismissed] = useState(false);
   const [showPrompt, setShowPrompt] = useState(false);
@@ -117,7 +117,7 @@ export function PWAInstallPrompt() {
   );
 }
 
-export function PWAUpdatePrompt() {
+export const PWAUpdatePrompt = memo(function() {
   const { hasUpdate, updateApp } = usePWA();
   const [showPrompt, setShowPrompt] = useState(false);
 
@@ -160,7 +160,7 @@ export function PWAUpdatePrompt() {
   );
 }
 
-export function OfflineIndicator() {
+export const OfflineIndicator = memo(function() {
   const { isOffline } = usePWA();
 
   if (!isOffline) return null;

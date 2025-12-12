@@ -14,7 +14,7 @@ const QuickCopilotDialog = React.lazy(() =>
   import("@/components/layout/QuickCopilotDialog").then(m => ({ default: m.QuickCopilotDialog }))
 );
 
-export function SmartHeader() {
+export const SmartHeader = memo(function() {
   const { theme, setTheme } = useTheme();
   const [notificationCount] = useState(3);
   const [alertsOpen, setAlertsOpen] = useState(false);

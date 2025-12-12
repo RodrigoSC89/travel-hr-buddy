@@ -1,6 +1,7 @@
+import { memo } from 'react';
 import { motion } from "framer-motion";
 
-export function Loader() {
+export const Loader = memo(function() {
   return (
     <motion.div
       role="status"

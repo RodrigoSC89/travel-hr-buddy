@@ -23,7 +23,7 @@ interface CommandBrainPanelProps {
   onSettingsClick?: () => void;
 }
 
-export function CommandBrainPanel({ context, onSettingsClick }: CommandBrainPanelProps) {
+export const CommandBrainPanel = memo(function({ context, onSettingsClick }: CommandBrainPanelProps) {
   const { 
     messages, 
     isLoading, 

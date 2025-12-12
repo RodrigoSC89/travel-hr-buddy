@@ -125,7 +125,7 @@ export const AuthGuard: React.FC<AuthGuardProps> = ({
 /**
  * Hook to check if user is authenticated
  */
-export const useAuthGuard = () => {
+export const useAuthGuard = memo(() => {
   const { user, isLoading } = useAuth();
   
   const isAuthenticated = !isLoading && !!user;
@@ -173,4 +173,4 @@ export function withAuthGuard<P extends object>(
       <Component {...props} />
     </AuthGuard>
   );
-}
+};

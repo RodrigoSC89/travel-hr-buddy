@@ -26,7 +26,7 @@ interface AuditsListProps {
   onRefresh?: () => void;
 }
 
-export function AuditsList({ onRefresh }: AuditsListProps) {
+export const AuditsList = memo(function({ onRefresh }: AuditsListProps) {
   const { toast } = useToast();
   const [audits, setAudits] = useState<any[]>([]);
   const [loading, setLoading] = useState(true);

@@ -111,7 +111,7 @@ const mockActivities: Activity[] = [
   },
 ];
 
-export function ActivityFeed({
+export const ActivityFeed = memo(function({
   activities = mockActivities,
   maxItems = 10,
   className,
@@ -208,7 +208,7 @@ export function ActivityFeed({
 /**
  * Mini Activity Feed for sidebar
  */
-export function MiniActivityFeed({ className }: { className?: string }) {
+export const MiniActivityFeed = memo(function({ className }: { className?: string }) {
   return (
     <ActivityFeed
       maxItems={5}

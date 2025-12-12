@@ -29,7 +29,7 @@ interface LanguageSelectorProps {
   className?: string;
 }
 
-export function LanguageSelector({ variant = "icon", className }: LanguageSelectorProps) {
+export const LanguageSelector = memo(function({ variant = "icon", className }: LanguageSelectorProps) {
   const { language, changeLanguage, languages } = useTranslation();
 
   const currentLang = languages.find(l => l.code === language);
@@ -81,7 +81,7 @@ export function LanguageSelector({ variant = "icon", className }: LanguageSelect
 }
 
 // Compact version for mobile
-export function LanguageSelectorCompact() {
+export const LanguageSelectorCompact = memo(function() {
   const { language, changeLanguage, languages } = useTranslation();
 
   return (

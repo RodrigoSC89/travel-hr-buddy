@@ -12,7 +12,7 @@ interface EvidenceUploaderProps {
   onUpdate: () => void;
 }
 
-export function EvidenceUploader({ inspectionId, onUpdate }: EvidenceUploaderProps) {
+export const EvidenceUploader = memo(function({ inspectionId, onUpdate }: EvidenceUploaderProps) {
   const [selectedFile, setSelectedFile] = useState<File | null>(null);
   const [uploading, setUploading] = useState(false);
   const { toast } = useToast();

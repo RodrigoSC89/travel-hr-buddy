@@ -112,7 +112,7 @@ export default function HistoryPanel() {
       <p style="margin-bottom: 30px;">Total de registros: ${selectedRecords.length}</p>
       
       ${selectedRecords.map((history, index) => `
-        <div style="margin-bottom: 30px; padding: 15px; border: 1px solid #ddd; border-radius: 8px;">
+        <div key={div.id || index} style="margin-bottom: 30px; padding: 15px; border: 1px solid #ddd; border-radius: 8px;">
           <h3 style="color: #1e40af; margin-bottom: 10px;">${index + 1}. ${history.system_name}</h3>
           
           <div style="margin-bottom: 10px;">

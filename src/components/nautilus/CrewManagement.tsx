@@ -2,7 +2,7 @@
  * Crew Management - Advanced crew tracking and certification
  */
 
-import { useEffect, useState } from "react";;;
+import { memo, memo, useEffect, useState } from "react";;;
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
@@ -31,7 +31,7 @@ interface CrewMember {
   performance: number;
 }
 
-export function CrewManagement() {
+export const CrewManagement = memo(function() {
   const [crew, setCrew] = useState<CrewMember[]>([]);
   const [isLoading, setIsLoading] = useState(true);
   const [filter, setFilter] = useState<"all" | "expiring" | "resting">("all");

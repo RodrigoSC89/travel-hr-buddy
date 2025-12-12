@@ -89,7 +89,7 @@ interface InterfaceSettings {
   density: "comfortable" | "compact" | "spacious";
 }
 
-export function AdaptiveInterface() {
+export const AdaptiveInterface = memo(function() {
   const [selectedProfile, setSelectedProfile] = useState<UserProfile | null>(null);
   const [settings, setSettings] = useState<InterfaceSettings>({
     compactMode: false,

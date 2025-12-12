@@ -145,7 +145,7 @@ export const MFAPrompt: React.FC<MFAPromptProps> = ({ onSuccess, onCancel }) => 
               onKeyDown={(e) => {
                 if (e.key === "Enter" && code.length === 6) {
                   verifyMFA();
-                }
+                };
               }}
             />
           </div>
@@ -191,7 +191,7 @@ export const MFAPrompt: React.FC<MFAPromptProps> = ({ onSuccess, onCancel }) => 
 };
 
 // Hook for easier MFA verification
-export const useMFA = () => {
+export const useMFA = memo(() => {
   const [showMFAPrompt, setShowMFAPrompt] = useState(false);
   const [mfaResolver, setMfaResolver] = useState<{
     resolve: (success: boolean) => void;

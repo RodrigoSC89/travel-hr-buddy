@@ -73,7 +73,7 @@ const PROVIDERS = [
   { name: "Dropbox", type: "oauth", icon: "📦", scopes: ["files.content.read"] },
 ];
 
-export const IntegrationsHubEnhanced = () => {
+export const IntegrationsHubEnhanced = memo(() => {
   const { toast } = useToast();
   const [integrations, setIntegrations] = useState<Integration[]>([]);
   const [webhookEvents, setWebhookEvents] = useState<WebhookEvent[]>([]);
@@ -309,7 +309,7 @@ export const IntegrationsHubEnhanced = () => {
         description: error.message,
         variant: "destructive",
       });
-    }
+    };
   };
 
   const getStatusBadge = (status: string) => {

@@ -71,7 +71,7 @@ interface QuickAction {
   prompt: string;
 }
 
-export const AdvancedAIAssistant = () => {
+export const AdvancedAIAssistant = memo(() => {
   const [conversation, setConversation] = useState<ConversationMessage[]>([
     {
       id: "1",
@@ -214,7 +214,7 @@ export const AdvancedAIAssistant = () => {
     case "warning": return <AlertCircle className="w-4 h-4 text-yellow-500" />;
     case "opportunity": return <TrendingUp className="w-4 h-4 text-green-500" />;
     default: return <Lightbulb className="w-4 h-4 text-blue-500" />;
-    }
+    };
   };
 
   return (

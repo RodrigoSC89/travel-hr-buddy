@@ -21,7 +21,7 @@ const MLC_KNOWLEDGE_BASE: Record<string, string> = {
   "renewal": "The Maritime Labour Certificate (MLC) must be renewed every 5 years. Intermediate inspections are required between the second and third anniversary dates of the certificate.",
 };
 
-export function InspectorChatbot() {
+export const InspectorChatbot = memo(function() {
   const [messages, setMessages] = useState<Message[]>([
     {
       role: "assistant",

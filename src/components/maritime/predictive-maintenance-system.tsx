@@ -41,7 +41,7 @@ interface PerformanceMetric {
   unit: string;
 }
 
-export const PredictiveMaintenanceSystem = () => {
+export const PredictiveMaintenanceSystem = memo(() => {
   const [predictions, setPredictions] = useState<MaintenancePrediction[]>([]);
   const [metrics, setMetrics] = useState<PerformanceMetric[]>([]);
   const [selectedTimeframe, setSelectedTimeframe] = useState<"7d" | "30d" | "90d">("30d");
@@ -375,7 +375,7 @@ export const PredictiveMaintenanceSystem = () => {
                           metric.metric.includes("Custos") || metric.metric.includes("Consumo") || metric.metric.includes("Emissões")
                             ? Math.max(0, 100 - (metric.current / metric.target) * 100)
                             : (metric.current / metric.target) * 100
-                        } 
+                        } ;
                         className="h-2" 
                       />
                     </div>

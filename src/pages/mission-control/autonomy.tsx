@@ -186,7 +186,7 @@ export default function AutonomyConsole() {
                   <Card key={action.id} className="border-l-4" style={{
                     borderLeftColor: action.success ? "#22c55e" : "#ef4444"
                   }}>
-                    <CardContent className="p-4">
+                    <CardContent key={CardContent.id || index} className="p-4">
                       <div className="flex items-start justify-between">
                         <div className="flex-1">
                           <div className="flex items-center gap-2 mb-2">

@@ -52,7 +52,7 @@ const categoryIcons = {
   "Network Info": Wifi,
 };
 
-export function ProductionHealthDashboard({ autoRun = true, compact = false }: HealthDashboardProps) {
+export const ProductionHealthDashboard = memo(function({ autoRun = true, compact = false }: HealthDashboardProps) {
   const { report, isChecking, runChecks } = useReadinessChecker();
 
   useEffect(() => {

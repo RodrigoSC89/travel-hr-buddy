@@ -10,7 +10,7 @@ interface DPStatusCardProps {
 /**
  * Display DP system status with visual indicators
  */
-export function DPStatusCard({ status }: DPStatusCardProps) {
+export const DPStatusCard = memo(function({ status }: DPStatusCardProps) {
   const getStatusColor = (status: string) => {
     switch (status.toLowerCase()) {
     case "normal":

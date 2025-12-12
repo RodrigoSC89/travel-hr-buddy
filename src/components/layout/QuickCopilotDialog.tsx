@@ -3,7 +3,7 @@
  * Assistente IA rápido no header
  */
 
-import { useCallback, useEffect, useRef, useState } from "react";;;
+import { memo, memo, useCallback, useEffect, useRef, useState } from "react";;;
 import {
   Dialog,
   DialogContent,
@@ -45,7 +45,7 @@ const quickActions = [
   { label: "Ajuda Geral", icon: HelpCircle, prompt: "O que você pode fazer por mim?" },
 ];
 
-export function QuickCopilotDialog({ open, onOpenChange }: QuickCopilotDialogProps) {
+export const QuickCopilotDialog = memo(function({ open, onOpenChange }: QuickCopilotDialogProps) {
   const [messages, setMessages] = useState<Message[]>([
     {
       role: "assistant",

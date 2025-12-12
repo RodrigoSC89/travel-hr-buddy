@@ -8,7 +8,7 @@ import { Bell, CheckCircle } from "lucide-react";
 interface Notification { id: string; title: string; message: string; read: boolean; date: string; }
 interface Props { open: boolean; onOpenChange: (open: boolean) => void; notifications: Notification[]; onMarkAllAsRead: () => void; onNotificationClick: (id: string) => void; }
 
-export function NotificationsDialog({ open, onOpenChange, notifications, onMarkAllAsRead, onNotificationClick }: Props) {
+export const NotificationsDialog = memo(function({ open, onOpenChange, notifications, onMarkAllAsRead, onNotificationClick }: Props) {
   const unread = notifications.filter(n => !n.read).length;
   return (
     <Dialog open={open} onOpenChange={onOpenChange}>

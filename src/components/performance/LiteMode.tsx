@@ -3,7 +3,7 @@
  * Automatically activates reduced features for slow connections
  */
 
-import { ReactNode, createContext, useContext, useEffect, useState } from "react";;;
+import { memo, memo, ReactNode, createContext, useContext, useEffect, useState } from "react";;;
 import { useNetworkStatus } from "@/hooks/use-network-status";
 import { toast } from "@/hooks/use-toast";
 
@@ -41,7 +41,7 @@ const LiteModeContext = createContext<LiteModeContextType>({
   autoDetected: false,
 });
 
-export function useLiteMode() {
+export const useLiteMode = memo(function() {
   return useContext(LiteModeContext);
 }
 
@@ -50,7 +50,7 @@ interface LiteModeProviderProps {
   autoEnable?: boolean;
 }
 
-export function LiteModeProvider({ children, autoEnable = true }: LiteModeProviderProps) {
+export const LiteModeProvider = memo(function({ children, autoEnable = true }: LiteModeProviderProps) {
   const { quality, effectiveType } = useNetworkStatus();
   const [config, setConfig] = useState<LiteModeConfig>(defaultConfig);
   const [autoDetected, setAutoDetected] = useState(false);
@@ -138,7 +138,7 @@ import {
   TooltipTrigger,
 } from "@/components/ui/tooltip";
 
-export function LiteModeToggle({ className }: { className?: string }) {
+export const LiteModeToggle = memo(function({ className }: { className?: string }) {
   const { isLiteMode, toggleLiteMode, autoDetected } = useLiteMode();
 
   return (
