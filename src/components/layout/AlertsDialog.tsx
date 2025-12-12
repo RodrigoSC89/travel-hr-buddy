@@ -247,9 +247,8 @@ const AlertsDialog: React.FC<AlertsDialogProps> = ({ open, onOpenChange }) => {
             </ScrollArea>
           </TabsContent>
         </Tabs>
-      </DialogContent>
+       </DialogContent>
     </Dialog>
   );
-});
-
+};
 export { AlertsDialog };
