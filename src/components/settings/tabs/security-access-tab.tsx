@@ -204,7 +204,7 @@ export const SecurityAccessTab: React.FC<SecurityAccessTabProps> = ({
                 min="1"
                 max="10"
                 value={settings.maxLoginAttempts}
-                onChange={handleChange})}
+                onChange={handleChange}
               />
               <p className="text-xs text-muted-foreground">
                 Conta será bloqueada temporariamente após este número de tentativas
