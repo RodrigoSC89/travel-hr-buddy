@@ -900,8 +900,8 @@ export const EnhancedSettingsHub: React.FC = () => {
           </TabsContent>
         </Tabs>
       </div>
-      </div>
     );
-});
+  }
+);
 
 export default EnhancedSettingsHub;
