@@ -138,7 +138,7 @@ export const AIModuleEnhancer = memo(function({
       action: action.action,
       prompt,
       context
-    };
+    });
 
     if (result) {
       setResponse(result.response);
