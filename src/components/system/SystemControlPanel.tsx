@@ -139,7 +139,7 @@ const MetricCard = ({ icon: Icon, label, value, color, progress }: {
 );
 
 // Controles de Idioma
-const LanguageControls = () => {
+const LanguageControls = memo(() => {
   const [currentLang, setCurrentLang] = useState("pt-BR");
   const languages = [
     { code: "pt-BR", name: "Português", flag: "🇧🇷" },
