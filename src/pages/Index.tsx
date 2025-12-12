@@ -20,7 +20,7 @@ const OperationsTab = lazy(() => import("@/components/dashboard/index/Operations
 const SystemControlPanel = lazy(() => import("@/components/system/SystemControlPanel").then(m => ({ default: m.SystemControlPanel })));
 const QuickActionsPanel = lazy(() => import("@/components/dashboard/QuickActionsPanel").then(m => ({ default: m.QuickActionsPanel })));
 const NetworkStatusWidget = lazy(() => import("@/components/dashboard/NetworkStatusWidget").then(m => ({ default: m.NetworkStatusWidget })));
-const PerformanceMonitor = lazy(() => import("@/components/dashboard/PerformanceMonitor").then(m => ({ default: m.PerformanceMonitor })));
+const PerformanceMonitor = lazy(() => import("@/components/performance/PerformanceMonitor").then(m => ({ default: m.PerformanceMonitor })));
 const AIModulesGrid = lazy(() => import("@/components/dashboard/AIModulesGrid").then(m => ({ default: m.AIModulesGrid })));
 const LiveMetricsBar = lazy(() => import("@/components/dashboard/LiveMetricsBar").then(m => ({ default: m.LiveMetricsBar })));
 const LiveDashboardStats = lazy(() => import("@/components/dashboard/LiveDashboardStats").then(m => ({ default: m.LiveDashboardStats })));
