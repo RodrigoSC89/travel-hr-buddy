@@ -275,9 +275,8 @@ export const AIModuleEnhancer = memo(function({
             )}
           </div>
         )}
-      </CardContent>
+       </CardContent>
     </Card>
   );
-}
-
+});
 export default AIModuleEnhancer;
