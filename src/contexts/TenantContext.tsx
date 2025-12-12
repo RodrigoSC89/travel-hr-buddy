@@ -425,7 +425,7 @@ export function TenantProvider({ children }: TenantProviderProps): JSX.Element {
   }, []);
 
   const getTenantUsers = useCallback(async (): Promise<TenantUser[]> => {
-    return []);
+    return [];
   }, []);
 
   const checkPermission = useCallback((permission: string): boolean => {
