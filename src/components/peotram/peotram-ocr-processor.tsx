@@ -425,4 +425,4 @@ export const PeotramOCRProcessor: React.FC = () => {
       )}
     </div>
   );
-};
+});

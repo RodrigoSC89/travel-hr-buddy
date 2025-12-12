@@ -219,4 +219,4 @@ export const FleetCockpit: React.FC<FleetCockpitProps> = ({ vessels: propVessels
       </CardContent>
     </Card>
   );
-};
+});

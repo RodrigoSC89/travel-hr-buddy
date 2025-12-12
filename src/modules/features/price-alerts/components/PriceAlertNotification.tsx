@@ -256,4 +256,4 @@ export const PriceAlertNotification: React.FC<PriceAlertNotificationProps> = ({
       </CardContent>
     </Card>
   );
-};
+});

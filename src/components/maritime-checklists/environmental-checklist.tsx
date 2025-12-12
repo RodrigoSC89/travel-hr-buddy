@@ -555,4 +555,4 @@ export const EnvironmentalChecklist: React.FC<EnvironmentalChecklistProps> = ({
       </div>
     </div>
   );
-};
+});

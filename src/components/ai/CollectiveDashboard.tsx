@@ -566,4 +566,4 @@ export const CollectiveDashboard: React.FC = () => {
       </Tabs>
     </div>
   );
-};
+});

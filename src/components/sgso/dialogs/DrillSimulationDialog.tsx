@@ -357,4 +357,4 @@ export const DrillSimulationDialog: React.FC<DrillSimulationDialogProps> = ({
       </DialogContent>
     </Dialog>
   );
-};
+});

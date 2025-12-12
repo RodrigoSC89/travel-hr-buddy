@@ -253,4 +253,4 @@ export const WellbeingHistory: React.FC = () => {
       </div>
     </div>
   );
-};
+});

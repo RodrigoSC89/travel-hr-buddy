@@ -220,4 +220,4 @@ export const IncidentAIClassificationModal: React.FC<IncidentAIClassificationMod
       </DialogContent>
     </Dialog>
   );
-};
+});

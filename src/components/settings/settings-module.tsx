@@ -455,4 +455,4 @@ export const SettingsModule: React.FC = () => {
       </div>
     </div>
   );
-};
+});

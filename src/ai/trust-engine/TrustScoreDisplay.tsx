@@ -291,4 +291,4 @@ export const TrustScoreDisplay: React.FC<TrustScoreDisplayProps> = ({
       )}
     </div>
   );
-};
+});

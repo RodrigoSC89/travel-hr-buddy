@@ -330,4 +330,4 @@ export const MMICopilot: React.FC<MMICopilotProps> = ({ onJobCreated, context })
       </CardContent>
     </Card>
   );
-};
+});

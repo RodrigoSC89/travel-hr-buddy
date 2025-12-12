@@ -383,4 +383,4 @@ export const TenantSetupWizard: React.FC = () => {
       </Card>
     </div>
   );
-};
+});

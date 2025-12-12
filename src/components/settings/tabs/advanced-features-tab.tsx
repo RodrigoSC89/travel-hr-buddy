@@ -369,4 +369,4 @@ export const AdvancedFeaturesTab: React.FC<AdvancedFeaturesTabProps> = ({
       </Card>
     </div>
   );
-};
+});

@@ -439,4 +439,4 @@ export const EmissionsDashboard: React.FC = () => {
       </div>
     </div>
   );
-};
+});

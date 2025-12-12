@@ -107,4 +107,4 @@ export const MissionLogs: React.FC<MissionLogsProps> = ({ logs, onRefresh }) => 
       </CardContent>
     </Card>
   );
-};
+});

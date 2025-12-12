@@ -272,4 +272,4 @@ export const AnalyticsDashboardBase = ({
       </div>
     </div>
   );
-};
+});

@@ -137,4 +137,4 @@ export const ModuleToggleCard: React.FC<ModuleToggleCardProps> = ({
       </CardContent>
     </Card>
   );
-};
+});

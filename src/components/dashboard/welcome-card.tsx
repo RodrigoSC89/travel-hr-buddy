@@ -111,4 +111,4 @@ export const WelcomeCard: React.FC = () => {
       </CardContent>
     </Card>
   );
-};
+});

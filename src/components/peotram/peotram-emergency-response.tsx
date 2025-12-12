@@ -393,4 +393,4 @@ export const PeotramEmergencyResponse: React.FC = () => {
       </Tabs>
     </div>
   );
-};
+});

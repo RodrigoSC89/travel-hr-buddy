@@ -730,4 +730,4 @@ export const EnhancedPeotramDashboard: React.FC = () => {
       </div>
     </TooltipProvider>
   );
-};
+});

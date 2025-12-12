@@ -470,4 +470,4 @@ export const SmartInsights: React.FC = () => {
       </Card>
     </div>
   );
-};
+});

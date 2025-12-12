@@ -337,4 +337,4 @@ export const EnhancedCommunicationCenter = memo(() => {
       </Tabs>
     </div>
   );
-};
+});

@@ -327,4 +327,4 @@ export const RealTimeCollaboration = memo(() => {
       </Card>
     </div>
   );
-};
+});

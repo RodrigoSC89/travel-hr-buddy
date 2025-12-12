@@ -166,4 +166,4 @@ export const SignUpForm: React.FC<SignUpFormProps> = ({ onSignUp, onLoginToggle 
       </CardContent>
     </Card>
   );
-};
+});

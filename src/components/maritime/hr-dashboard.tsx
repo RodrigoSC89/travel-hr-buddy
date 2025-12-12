@@ -843,4 +843,4 @@ export const MaritimeHRDashboard: React.FC = () => {
       </Tabs>
     </div>
   );
-};
+});

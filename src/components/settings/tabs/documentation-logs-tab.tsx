@@ -383,4 +383,4 @@ export const DocumentationLogsTab: React.FC = () => {
       </Tabs>
     </div>
   );
-};
+});

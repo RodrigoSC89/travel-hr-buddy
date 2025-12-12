@@ -626,4 +626,4 @@ export const ClientCustomization = memo(() => {
       </Tabs>
     </div>
   );
-};
+});

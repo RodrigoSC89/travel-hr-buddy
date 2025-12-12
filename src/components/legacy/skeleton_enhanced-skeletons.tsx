@@ -203,4 +203,4 @@ export default {
   ProfileSkeleton,
   NavigationSkeleton,
   ModulePageSkeleton
-};
+});

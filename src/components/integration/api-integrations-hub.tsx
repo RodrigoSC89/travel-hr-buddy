@@ -493,4 +493,4 @@ export const APIIntegrationsHub: React.FC = () => {
       </Tabs>
     </div>
   );
-};
+});

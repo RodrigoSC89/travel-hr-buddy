@@ -654,4 +654,4 @@ export const IntelligentAlertSystem = memo(() => {
       </Tabs>
     </div>
   );
-};
+});

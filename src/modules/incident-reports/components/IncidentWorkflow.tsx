@@ -269,4 +269,4 @@ export const IncidentWorkflow: React.FC<IncidentWorkflowProps> = ({ incident, on
       </Card>
     </div>
   );
-};
+});

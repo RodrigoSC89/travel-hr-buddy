@@ -472,4 +472,4 @@ export const DPChecklist: React.FC<DPChecklistProps> = ({
       </div>
     </div>
   );
-};
+});

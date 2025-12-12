@@ -170,4 +170,4 @@ export const ModuleList: React.FC = () => {
       </CardContent>
     </Card>
   );
-};
+});

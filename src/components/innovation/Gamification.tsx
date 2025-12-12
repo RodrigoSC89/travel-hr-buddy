@@ -459,4 +459,4 @@ export const Gamification = memo(() => {
       </Card>
     </div>
   );
-};
+});

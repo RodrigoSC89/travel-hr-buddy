@@ -443,4 +443,4 @@ export const OptimizationReportsManager = memo(() => {
       </Card>
     </div>
   );
-};
+});

@@ -742,4 +742,4 @@ export const IntegrationAutomation: React.FC = () => {
       </Tabs>
     </div>
   );
-};
+});

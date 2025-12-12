@@ -152,4 +152,4 @@ export const TenantSwitcher: React.FC = () => {
       </DropdownMenuContent>
     </DropdownMenu>
   );
-};
+});

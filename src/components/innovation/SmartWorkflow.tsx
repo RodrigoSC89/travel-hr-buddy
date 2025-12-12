@@ -358,4 +358,4 @@ export const SmartWorkflow = memo(() => {
       </Tabs>
     </div>
   );
-};
+});

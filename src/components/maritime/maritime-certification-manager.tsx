@@ -569,4 +569,4 @@ export const MaritimeCertificationManager = memo(() => {
       </Tabs>
     </div>
   );
-};
+});

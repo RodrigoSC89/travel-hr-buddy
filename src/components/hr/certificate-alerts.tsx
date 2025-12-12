@@ -240,4 +240,4 @@ export const CertificateAlerts: React.FC = () => {
       </AlertDialog>
     </>
   );
-};
+});

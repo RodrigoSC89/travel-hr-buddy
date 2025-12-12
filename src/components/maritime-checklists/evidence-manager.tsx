@@ -338,4 +338,4 @@ export const EvidenceManager: React.FC<EvidenceManagerProps> = ({
       </CardContent>
     </Card>
   );
-};
+});

@@ -258,4 +258,4 @@ export const OperationalKPIs: React.FC<OperationalKPIsProps> = ({ status }) => {
       </Card>
     </div>
   );
-};
+});

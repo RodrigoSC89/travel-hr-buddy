@@ -62,4 +62,4 @@ export const ThemeToggle: React.FC = () => {
       </DropdownMenuContent>
     </DropdownMenu>
   );
-};
+});

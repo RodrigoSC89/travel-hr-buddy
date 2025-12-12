@@ -417,4 +417,4 @@ export const PeotramIntegrationHub: React.FC = () => {
       </Tabs>
     </div>
   );
-};
+});

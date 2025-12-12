@@ -174,4 +174,4 @@ export const TemplatePreview: React.FC<TemplatePreviewProps> = ({
       </CardContent>
     </Card>
   );
-};
+});

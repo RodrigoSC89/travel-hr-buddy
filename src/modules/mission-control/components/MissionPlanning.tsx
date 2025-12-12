@@ -229,4 +229,4 @@ export const MissionPlanning: React.FC<MissionPlanningProps> = ({ missions, onRe
       </CardContent>
     </Card>
   );
-};
+});

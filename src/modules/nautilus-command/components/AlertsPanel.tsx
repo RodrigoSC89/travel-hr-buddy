@@ -146,4 +146,4 @@ export const AlertsPanel: React.FC<AlertsPanelProps> = ({ alerts, onDismiss, exp
       </CardContent>
     </Card>
   );
-};
+});

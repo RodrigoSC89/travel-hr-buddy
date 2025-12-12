@@ -662,4 +662,4 @@ export const ARInterface: React.FC = () => {
       </Tabs>
     </div>
   );
-};
+});

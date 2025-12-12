@@ -510,4 +510,4 @@ const ReportCard = ({
       </CardContent>
     </Card>
   );
-};
+});

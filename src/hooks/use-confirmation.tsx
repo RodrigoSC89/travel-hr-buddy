@@ -170,4 +170,4 @@ export const ConfirmationDialog: React.FC<ConfirmationDialogProps> = ({
       </AlertDialogContent>
     </AlertDialog>
   );
-};
+});

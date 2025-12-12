@@ -316,4 +316,4 @@ export const NotificationsAlertsTab: React.FC<NotificationsAlertsTabProps> = ({
       </Card>
     </div>
   );
-};
+});

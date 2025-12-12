@@ -339,4 +339,4 @@ export const SupplyOrdersManagement = memo(() => {
       </div>
     </div>
   );
-};
+});

@@ -436,4 +436,4 @@ export const AdvancedFilters: React.FC<AdvancedFiltersProps> = ({
       )}
     </div>
   );
-};
+});

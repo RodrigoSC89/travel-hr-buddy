@@ -329,4 +329,4 @@ export const CopilotAI = memo(() => {
       </Card>
     </div>
   );
-};
+});

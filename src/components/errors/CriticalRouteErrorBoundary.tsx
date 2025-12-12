@@ -79,4 +79,4 @@ export const CriticalRouteErrorBoundary: React.FC<CriticalRouteErrorBoundaryProp
       {children}
     </ErrorBoundary>
   );
-};
+});

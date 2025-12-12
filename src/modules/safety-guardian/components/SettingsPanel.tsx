@@ -385,4 +385,4 @@ export const SettingsPanel: React.FC<SettingsPanelProps> = ({
       </Tabs>
     </div>
   );
-};
+});

@@ -146,4 +146,4 @@ export const SignatureDialog: React.FC<SignatureDialogProps> = ({
       </DialogContent>
     </Dialog>
   );
-};
+});

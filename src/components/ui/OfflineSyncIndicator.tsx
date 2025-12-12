@@ -125,4 +125,4 @@ export const OfflineSyncIndicator: React.FC<OfflineSyncIndicatorProps> = ({
       </Tooltip>
     </TooltipProvider>
   );
-};
+});

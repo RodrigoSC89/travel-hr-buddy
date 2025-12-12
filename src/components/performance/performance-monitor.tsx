@@ -497,4 +497,4 @@ export const PerformanceMonitor: React.FC = () => {
       )}
     </div>
   );
-};
+});

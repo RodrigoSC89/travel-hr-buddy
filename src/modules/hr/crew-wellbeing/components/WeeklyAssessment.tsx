@@ -298,4 +298,4 @@ export const WeeklyAssessment: React.FC = () => {
       </CardContent>
     </Card>
   );
-};
+});

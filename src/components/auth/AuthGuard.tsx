@@ -173,4 +173,4 @@ export function withAuthGuard<P extends object>(
       <Component {...props} />
     </AuthGuard>
   );
-};
+});

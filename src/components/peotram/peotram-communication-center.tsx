@@ -583,4 +583,4 @@ export const PeotramCommunicationCenter: React.FC = () => {
       </Tabs>
     </div>
   );
-};
+});

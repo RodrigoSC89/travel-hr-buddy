@@ -341,4 +341,4 @@ export const EmployeePayroll: React.FC = () => {
       </Dialog>
     </div>
   );
-};
+});

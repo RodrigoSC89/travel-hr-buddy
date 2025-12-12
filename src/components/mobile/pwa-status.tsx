@@ -314,4 +314,4 @@ export const PWAStatus: React.FC = () => {
       )}
     </div>
   );
-};
+});

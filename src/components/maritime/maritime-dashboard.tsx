@@ -444,4 +444,4 @@ const OverviewDashboard: React.FC<OverviewDashboardProps> = ({ onNavigate }) => 
       </Card>
     </div>
   );
-};
+});

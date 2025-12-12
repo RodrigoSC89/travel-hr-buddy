@@ -100,4 +100,4 @@ export const OVIDReports: React.FC<OVIDReportsProps> = ({
       </Card>
     </div>
   );
-};
+});

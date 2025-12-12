@@ -360,4 +360,4 @@ export const DocumentValidator: React.FC<DocumentValidatorProps> = ({
       )}
     </div>
   );
-};
+});

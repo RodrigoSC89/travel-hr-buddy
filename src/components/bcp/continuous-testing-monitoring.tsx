@@ -543,4 +543,4 @@ export const ContinuousTestingMonitoring: React.FC = () => {
       </Tabs>
     </div>
   );
-};
+});

@@ -313,4 +313,4 @@ export const IntegrationMarketplace: React.FC = () => {
       </Card>
     </div>
   );
-};
+});

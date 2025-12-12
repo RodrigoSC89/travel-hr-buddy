@@ -312,4 +312,4 @@ export const DocumentUploader: React.FC<DocumentUploaderProps> = ({
       </DialogContent>
     </Dialog>
   );
-};
+});

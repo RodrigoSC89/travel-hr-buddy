@@ -554,4 +554,4 @@ export const CertificateManager: React.FC<CertificateManagerProps> = ({ employee
       </DialogContent>
     </Dialog>
   );
-};
+});

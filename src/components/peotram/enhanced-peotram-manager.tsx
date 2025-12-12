@@ -770,4 +770,4 @@ export const EnhancedPeotramManager: React.FC = () => {
       </Tabs>
     </div>
   );
-};
+});

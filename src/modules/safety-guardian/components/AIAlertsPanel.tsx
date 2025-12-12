@@ -232,4 +232,4 @@ export const AIAlertsPanel: React.FC<AIAlertsPanelProps> = ({
       </Dialog>
     </>
   );
-};
+});

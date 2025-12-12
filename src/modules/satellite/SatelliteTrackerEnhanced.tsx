@@ -541,4 +541,4 @@ export const SatelliteTrackerEnhanced = memo(() => {
       </Card>
     </div>
   );
-};
+});

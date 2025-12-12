@@ -104,4 +104,4 @@ export const MobileNavigation: React.FC = () => {
       </div>
     </nav>
   );
-};
+});

@@ -64,4 +64,4 @@ export const AnomalyDetection: React.FC<Props> = ({ anomalies }) => {
       </CardContent>
     </Card>
   );
-};
+});

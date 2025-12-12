@@ -594,4 +594,4 @@ export const BackupRecoverySystem: React.FC = () => {
       </Tabs>
     </div>
   );
-};
+});

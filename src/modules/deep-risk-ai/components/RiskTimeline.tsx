@@ -52,4 +52,4 @@ export const RiskTimeline: React.FC<Props> = ({ anomalies, predictions }) => {
       </CardContent>
     </Card>
   );
-};
+});

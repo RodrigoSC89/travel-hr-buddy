@@ -180,4 +180,4 @@ export default {
   StatsGrid: StatsGridSkeleton,
   PageHeader: PageHeaderSkeleton,
   FullPage: FullPageSkeleton,
-};
+});

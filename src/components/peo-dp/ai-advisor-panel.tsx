@@ -380,4 +380,4 @@ export const AIAdvisorPanel: React.FC = () => {
       </Tabs>
     </div>
   );
-};
+});

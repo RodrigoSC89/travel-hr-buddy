@@ -518,4 +518,4 @@ export const EnhancedChannelManager: React.FC = () => {
       </Dialog>
     </div>
   );
-};
+});

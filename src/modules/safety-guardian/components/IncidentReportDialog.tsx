@@ -337,4 +337,4 @@ export const IncidentReportDialog: React.FC<IncidentReportDialogProps> = ({
       </DialogContent>
     </Dialog>
   );
-};
+});

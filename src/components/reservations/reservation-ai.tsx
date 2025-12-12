@@ -344,4 +344,4 @@ export const ReservationAI: React.FC<ReservationAIProps> = ({
       </div>
     </div>
   );
-};
+});

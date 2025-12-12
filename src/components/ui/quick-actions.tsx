@@ -41,4 +41,4 @@ export const QuickActions: React.FC = () => {
       </Button>
     </div>
   );
-};
+});

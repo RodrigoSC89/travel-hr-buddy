@@ -570,4 +570,4 @@ export const ReservationPDFGenerator: React.FC<ReservationPDFGeneratorProps> = (
       </DialogContent>
     </Dialog>
   );
-};
+});

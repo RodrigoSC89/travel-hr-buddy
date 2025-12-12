@@ -124,4 +124,4 @@ export const ModuleNotFound: React.FC<ModuleNotFoundProps> = ({
       </Card>
     </div>
   );
-};
+});

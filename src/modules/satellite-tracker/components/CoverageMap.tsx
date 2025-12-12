@@ -56,4 +56,4 @@ export const CoverageMap: React.FC<CoverageMapProps> = ({ satellite }) => {
       )}
     </div>
   );
-};
+});

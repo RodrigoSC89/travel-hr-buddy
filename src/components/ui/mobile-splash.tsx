@@ -49,4 +49,4 @@ export const MobileSplash = memo(() => {
       </div>
     </div>
   );
-};
+});

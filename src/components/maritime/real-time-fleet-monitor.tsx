@@ -414,4 +414,4 @@ export const RealTimeFleetMonitor = memo(() => {
       )}
     </div>
   );
-};
+});

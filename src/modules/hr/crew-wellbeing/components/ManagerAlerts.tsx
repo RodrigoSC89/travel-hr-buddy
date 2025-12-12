@@ -282,4 +282,4 @@ export const ManagerAlerts: React.FC = () => {
       )}
     </div>
   );
-};
+});

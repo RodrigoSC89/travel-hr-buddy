@@ -643,4 +643,4 @@ export const AdvancedFleetAnalytics = memo(() => {
       </Tabs>
     </div>
   );
-};
+});

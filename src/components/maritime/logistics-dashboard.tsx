@@ -722,4 +722,4 @@ export const MaritimeLogisticsDashboard: React.FC = () => {
       </Tabs>
     </div>
   );
-};
+});

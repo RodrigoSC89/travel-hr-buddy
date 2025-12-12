@@ -632,4 +632,4 @@ export const OptimizationGeneralHub = memo(() => {
       </main>
     </div>
   );
-};
+});

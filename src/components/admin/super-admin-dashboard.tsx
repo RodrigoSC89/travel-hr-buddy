@@ -426,4 +426,4 @@ export const SuperAdminDashboard: React.FC = () => {
       </Card>
     </div>
   );
-};
+});

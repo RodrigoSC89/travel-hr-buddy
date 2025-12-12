@@ -99,4 +99,4 @@ export const ModuleErrorFallback: React.FC<ModuleErrorFallbackProps> = ({
       </Card>
     </div>
   );
-};
+});

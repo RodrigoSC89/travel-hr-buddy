@@ -514,4 +514,4 @@ export const SafetyDashboard: React.FC = () => {
       </Card>
     </div>
   );
-};
+});

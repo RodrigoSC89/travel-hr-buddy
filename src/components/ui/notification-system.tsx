@@ -328,4 +328,4 @@ export const NotificationSystem = ({ className }: NotificationSystemProps) => {
       )}
     </div>
   );
-};
+});

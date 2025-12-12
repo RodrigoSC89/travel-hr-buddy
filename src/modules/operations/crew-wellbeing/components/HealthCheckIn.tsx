@@ -245,4 +245,4 @@ export const HealthCheckin: React.FC = () => {
       </Card>
     </div>
   );
-};
+});

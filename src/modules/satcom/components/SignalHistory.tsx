@@ -126,4 +126,4 @@ export const SignalHistory: React.FC<SignalHistoryProps> = ({ events }) => {
       </CardContent>
     </Card>
   );
-};
+});

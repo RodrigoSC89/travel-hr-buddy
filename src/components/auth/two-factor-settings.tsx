@@ -358,4 +358,4 @@ export const TwoFactorSettings: React.FC<TwoFactorSettingsProps> = ({ onClose })
       </CardContent>
     </Card>
   );
-};
+});

@@ -493,4 +493,4 @@ export const RiskManagementDashboard: React.FC = () => {
       </Tabs>
     </div>
   );
-};
+});

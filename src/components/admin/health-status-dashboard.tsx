@@ -393,4 +393,4 @@ export const HealthStatusDashboard: React.FC = () => {
       </Card>
     </div>
   );
-};
+});

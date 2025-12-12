@@ -400,4 +400,4 @@ export const EmployeeDossierSummary: React.FC = () => {
       </div>
     </div>
   );
-};
+});

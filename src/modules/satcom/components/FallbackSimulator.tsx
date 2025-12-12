@@ -149,4 +149,4 @@ export const FallbackSimulator: React.FC<FallbackSimulatorProps> = ({
       </CardContent>
     </Card>
   );
-};
+});

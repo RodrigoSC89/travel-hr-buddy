@@ -365,4 +365,4 @@ export const ErrorDashboard: React.FC = () => {
       </Alert>
     </div>
   );
-};
+});

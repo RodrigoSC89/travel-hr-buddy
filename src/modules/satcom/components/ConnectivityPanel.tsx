@@ -241,4 +241,4 @@ export const ConnectivityPanel: React.FC = () => {
       </Card>
     </div>
   );
-};
+});

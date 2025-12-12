@@ -246,4 +246,4 @@ export const MobileMissions: React.FC = () => {
       </div>
     </div>
   );
-};
+});

@@ -103,4 +103,4 @@ export const AutomationHub: React.FC = () => {
       </Tabs>
     </div>
   );
-};
+});

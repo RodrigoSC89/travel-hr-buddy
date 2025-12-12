@@ -336,4 +336,4 @@ export const VesselTracking = memo(() => {
       </div>
     </div>
   );
-};
+});

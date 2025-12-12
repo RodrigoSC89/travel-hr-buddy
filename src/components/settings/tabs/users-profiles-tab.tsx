@@ -389,4 +389,4 @@ export const UsersProfilesTab: React.FC<UsersProfilesTabProps> = ({ testMode }) 
       </Tabs>
     </div>
   );
-};
+});

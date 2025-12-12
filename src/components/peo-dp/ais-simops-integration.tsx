@@ -514,4 +514,4 @@ export const AISSimopsIntegration: React.FC = () => {
       )}
     </div>
   );
-};
+});

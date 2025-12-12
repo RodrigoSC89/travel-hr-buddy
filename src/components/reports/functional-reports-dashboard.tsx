@@ -379,4 +379,4 @@ export const FunctionalReportsDashboard: React.FC = () => {
       </Tabs>
     </div>
   );
-};
+});

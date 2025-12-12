@@ -342,4 +342,4 @@ export const RoleConfigurator: React.FC = () => {
       </div>
     </RoleGuard>
   );
-};
+});

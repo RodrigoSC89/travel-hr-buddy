@@ -392,4 +392,4 @@ export const IoTDashboard: React.FC = () => {
       </Tabs>
     </div>
   );
-};
+});

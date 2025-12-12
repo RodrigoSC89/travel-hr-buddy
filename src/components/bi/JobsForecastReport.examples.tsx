@@ -212,4 +212,4 @@ export default {
   RefreshableExample,
   IntegrateInExistingPage,
   RealtimeExample,
-};
+});

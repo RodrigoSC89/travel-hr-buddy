@@ -764,4 +764,4 @@ export const DocumentManagement: React.FC = () => {
       </Tabs>
     </div>
   );
-};
+});

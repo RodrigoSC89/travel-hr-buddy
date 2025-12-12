@@ -551,4 +551,4 @@ export const SafetyChecklist: React.FC<SafetyChecklistProps> = ({
       </div>
     </div>
   );
-};
+});

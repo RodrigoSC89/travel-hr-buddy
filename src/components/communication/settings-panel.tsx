@@ -826,4 +826,4 @@ export const SettingsPanel = memo(() => {
       </Tabs>
     </div>
   );
-};
+});

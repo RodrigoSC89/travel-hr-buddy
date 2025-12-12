@@ -305,4 +305,4 @@ export const PriceAlertsTable: React.FC<PriceAlertsTableProps> = ({
       </div>
     </div>
   );
-};
+});

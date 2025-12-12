@@ -337,4 +337,4 @@ export const ActionResult: React.FC<ActionResultProps> = ({
       </div>
     </motion.div>
   );
-};
+});

@@ -540,4 +540,4 @@ export const SmartOnboardingWizard: React.FC = () => {
       />
     </div>
   );
-};
+});

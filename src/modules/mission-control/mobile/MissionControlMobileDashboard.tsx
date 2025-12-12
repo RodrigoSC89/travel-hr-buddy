@@ -253,4 +253,4 @@ export const MissionControlMobileDashboard: React.FC = () => {
       </Card>
     </div>
   );
-};
+});

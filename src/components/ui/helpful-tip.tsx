@@ -54,4 +54,4 @@ export const HelpfulTip: React.FC<TipProps> = ({
       </CardContent>
     </Card>
   );
-};
+});

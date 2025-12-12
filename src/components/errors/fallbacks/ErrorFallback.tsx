@@ -151,4 +151,4 @@ export const ErrorFallback: React.FC<ErrorFallbackProps> = ({
       </Card>
     </div>
   );
-};
+});

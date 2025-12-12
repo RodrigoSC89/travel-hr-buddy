@@ -1127,4 +1127,4 @@ const IntegrationWizard: React.FC<{
       </div>
     </div>
   );
-};
+});

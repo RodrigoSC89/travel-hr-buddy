@@ -77,4 +77,4 @@ export const OVIDNonConformities: React.FC<OVIDNonConformitiesProps> = ({ answer
       </CardContent>
     </Card>
   );
-};
+});

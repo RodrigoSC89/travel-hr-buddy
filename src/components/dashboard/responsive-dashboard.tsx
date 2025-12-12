@@ -334,4 +334,4 @@ export const ResponsiveDashboard: React.FC = () => {
       </Tabs>
     </div>
   );
-};
+});

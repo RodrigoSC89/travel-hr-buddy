@@ -207,4 +207,4 @@ export const DocumentCard: React.FC<DocumentCardProps> = ({
       </CardFooter>
     </Card>
   );
-};
+});

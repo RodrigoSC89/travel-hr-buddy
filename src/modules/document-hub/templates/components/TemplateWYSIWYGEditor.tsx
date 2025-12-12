@@ -178,4 +178,4 @@ export const TemplateWYSIWYGEditor: React.FC<TemplateWYSIWYGEditorProps> = ({
       <EditorContent editor={editor} />
     </div>
   );
-};
+});

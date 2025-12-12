@@ -283,4 +283,4 @@ export const AuditTrailViewer: React.FC = () => {
       </div>
     </RoleGuard>
   );
-};
+});

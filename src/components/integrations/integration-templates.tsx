@@ -361,4 +361,4 @@ export const IntegrationTemplates: React.FC = () => {
       )}
     </div>
   );
-};
+});

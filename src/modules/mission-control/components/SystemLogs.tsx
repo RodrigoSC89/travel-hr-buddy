@@ -130,4 +130,4 @@ export const SystemLogs: React.FC = () => {
       </CardContent>
     </Card>
   );
-};
+});

@@ -250,4 +250,4 @@ export const JobsCenter: React.FC<JobsCenterProps> = ({ onCreateJob }) => {
       </CardContent>
     </Card>
   );
-};
+});

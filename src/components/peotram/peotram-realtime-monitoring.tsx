@@ -565,4 +565,4 @@ export const PeotramRealtimeMonitoring: React.FC = () => {
       </Tabs>
     </div>
   );
-};
+});

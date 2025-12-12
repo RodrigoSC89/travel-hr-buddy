@@ -31,4 +31,4 @@ export const appsRegistry = {
     icon: Settings,
     component: ModulesControl,
   },
-};
+});

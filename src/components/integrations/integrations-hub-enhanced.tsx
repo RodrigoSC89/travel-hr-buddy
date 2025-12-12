@@ -671,4 +671,4 @@ export const IntegrationsHubEnhanced = memo(() => {
       </Tabs>
     </div>
   );
-};
+});

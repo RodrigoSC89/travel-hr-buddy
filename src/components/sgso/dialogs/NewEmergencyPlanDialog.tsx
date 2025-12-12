@@ -268,4 +268,4 @@ export const NewEmergencyPlanDialog: React.FC<NewEmergencyPlanDialogProps> = ({
       </DialogContent>
     </Dialog>
   );
-};
+});

@@ -482,4 +482,4 @@ export const NeuralRouteOptimizer: React.FC = () => {
       </Card>
     </div>
   );
-};
+});

@@ -418,4 +418,4 @@ export const AdvancedMetricsDashboard: React.FC = () => {
       </Tabs>
     </div>
   );
-};
+});

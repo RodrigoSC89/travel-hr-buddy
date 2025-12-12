@@ -50,4 +50,4 @@ export const MultiTenantWrapper: React.FC<MultiTenantWrapperProps> = ({
   }
 
   return <>{children}</>;
-};
+});

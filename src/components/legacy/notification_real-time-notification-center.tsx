@@ -553,4 +553,4 @@ export const RealTimeNotificationCenter: React.FC = () => {
       </PopoverContent>
     </Popover>
   );
-};
+});

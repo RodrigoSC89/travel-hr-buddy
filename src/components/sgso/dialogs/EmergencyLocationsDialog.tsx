@@ -310,4 +310,4 @@ export const EmergencyLocationsDialog: React.FC<EmergencyLocationsDialogProps> =
       </DialogContent>
     </Dialog>
   );
-};
+});

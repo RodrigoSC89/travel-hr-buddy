@@ -386,4 +386,4 @@ export const IncidentTimeline: React.FC<IncidentTimelineProps> = ({
       </Card>
     </div>
   );
-};
+});

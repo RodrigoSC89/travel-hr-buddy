@@ -177,4 +177,4 @@ export const CreatePlanDialog: React.FC<CreatePlanDialogProps> = ({
       </DialogContent>
     </Dialog>
   );
-};
+});

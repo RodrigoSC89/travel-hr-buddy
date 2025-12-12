@@ -163,4 +163,4 @@ export const ChartWidget = ({ config, className }: ChartWidgetProps) => {
       </CardContent>
     </Card>
   );
-};
+});

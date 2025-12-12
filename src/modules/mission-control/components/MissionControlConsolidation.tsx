@@ -250,4 +250,4 @@ export const MissionControlConsolidation: React.FC = () => {
       </Card>
     </div>
   );
-};
+});

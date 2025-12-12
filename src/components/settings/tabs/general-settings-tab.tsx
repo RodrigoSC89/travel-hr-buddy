@@ -264,4 +264,4 @@ export const GeneralSettingsTab: React.FC<GeneralSettingsTabProps> = ({
       </Card>
     </div>
   );
-};
+});

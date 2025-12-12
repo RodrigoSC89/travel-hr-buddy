@@ -480,4 +480,4 @@ export const EnhancedAlertManagement: React.FC = () => {
       </Tabs>
     </div>
   );
-};
+});

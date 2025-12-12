@@ -549,4 +549,4 @@ export const QuantumSecurityShield: React.FC = () => {
       </Card>
     </div>
   );
-};
+});

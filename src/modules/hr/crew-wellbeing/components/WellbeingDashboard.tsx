@@ -225,4 +225,4 @@ export const WellbeingDashboard: React.FC = () => {
       )}
     </div>
   );
-};
+});

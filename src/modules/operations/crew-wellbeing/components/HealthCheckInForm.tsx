@@ -241,4 +241,4 @@ export const HealthCheckInForm: React.FC<{ onSuccess: () => void }> = ({ onSucce
       </CardContent>
     </Card>
   );
-};
+});

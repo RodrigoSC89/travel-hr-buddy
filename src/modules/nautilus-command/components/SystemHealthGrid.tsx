@@ -189,4 +189,4 @@ export const SystemHealthGrid: React.FC<SystemHealthGridProps> = ({ status, expa
       </CardContent>
     </Card>
   );
-};
+});

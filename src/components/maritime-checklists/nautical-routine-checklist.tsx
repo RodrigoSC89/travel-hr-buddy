@@ -509,4 +509,4 @@ export const NauticalRoutineChecklist: React.FC<NauticalRoutineChecklistProps> =
       </div>
     </div>
   );
-};
+});

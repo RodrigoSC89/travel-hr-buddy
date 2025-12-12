@@ -578,4 +578,4 @@ const WorkflowCard = ({
       </CardContent>
     </Card>
   );
-};
+});

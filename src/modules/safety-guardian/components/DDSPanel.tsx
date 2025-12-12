@@ -301,4 +301,4 @@ export const DDSPanel: React.FC<DDSPanelProps> = ({ records, onCreateDDS, loadin
       </Card>
     </div>
   );
-};
+});

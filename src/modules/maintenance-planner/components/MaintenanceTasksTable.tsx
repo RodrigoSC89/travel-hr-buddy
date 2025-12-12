@@ -430,4 +430,4 @@ export const MaintenanceTasksTable: React.FC<MaintenanceTasksTableProps> = ({ on
       </CardContent>
     </Card>
   );
-};
+});

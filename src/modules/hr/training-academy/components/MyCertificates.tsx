@@ -134,4 +134,4 @@ export const MyCertificates: React.FC = () => {
       )}
     </div>
   );
-};
+});

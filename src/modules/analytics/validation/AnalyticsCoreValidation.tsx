@@ -130,4 +130,4 @@ export const AnalyticsCoreValidation = memo(() => {
       </Card>
     </div>
   );
-};
+});

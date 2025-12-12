@@ -348,4 +348,4 @@ export const TrainingPanel: React.FC<TrainingPanelProps> = ({
       </Tabs>
     </div>
   );
-};
+});

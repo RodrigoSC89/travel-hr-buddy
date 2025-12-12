@@ -713,4 +713,4 @@ export const MessageComposer: React.FC<MessageComposerProps> = ({
       </Card>
     </div>
   );
-};
+});

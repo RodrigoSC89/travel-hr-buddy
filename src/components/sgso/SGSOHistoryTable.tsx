@@ -239,4 +239,4 @@ export const SGSOHistoryTable: React.FC<SGSOHistoryTableProps> = ({
       </div>
     </div>
   );
-};
+});

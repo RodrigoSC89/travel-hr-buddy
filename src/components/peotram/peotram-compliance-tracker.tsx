@@ -487,4 +487,4 @@ export const PeotramComplianceTracker: React.FC = () => {
       </Tabs>
     </div>
   );
-};
+});

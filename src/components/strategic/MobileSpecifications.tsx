@@ -401,4 +401,4 @@ export const MobileSpecifications = memo(() => {
       </Card>
     </div>
   );
-};
+});

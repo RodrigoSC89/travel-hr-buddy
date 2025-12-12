@@ -114,4 +114,4 @@ export const NavigationBar: React.FC = () => {
       </div>
     </div>
   );
-};
+});

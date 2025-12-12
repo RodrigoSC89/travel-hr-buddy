@@ -556,4 +556,4 @@ export const ComplianceAuditCenter: React.FC = () => {
       </Tabs>
     </div>
   );
-};
+});

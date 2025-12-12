@@ -465,4 +465,4 @@ export const RegulatorPortal: React.FC = () => {
       </Tabs>
     </div>
   );
-};
+});

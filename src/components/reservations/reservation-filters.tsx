@@ -157,4 +157,4 @@ export const ReservationFilters: React.FC<ReservationFiltersProps> = ({
       </CardContent>
     </Card>
   );
-};
+});

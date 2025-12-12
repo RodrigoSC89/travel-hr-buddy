@@ -230,4 +230,4 @@ export const DocumentFilters: React.FC<DocumentFiltersProps> = ({ className }) =
       )}
     </div>
   );
-};
+});

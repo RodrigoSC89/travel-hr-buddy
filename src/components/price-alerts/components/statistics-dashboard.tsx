@@ -251,4 +251,4 @@ export const StatisticsDashboard = memo(() => {
       </Card>
     </div>
   );
-};
+});

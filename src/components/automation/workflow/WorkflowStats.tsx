@@ -85,4 +85,4 @@ export const WorkflowStats: React.FC<WorkflowStatsProps> = ({
       ))}
     </div>
   );
-};
+});

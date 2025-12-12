@@ -360,4 +360,4 @@ export const VoiceInterface: React.FC<VoiceInterfaceProps> = ({
       </CardContent>
     </Card>
   );
-};
+});

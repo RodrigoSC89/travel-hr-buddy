@@ -306,4 +306,4 @@ export const SecurityAccessTab: React.FC<SecurityAccessTabProps> = ({
       </Card>
     </div>
   );
-};
+});

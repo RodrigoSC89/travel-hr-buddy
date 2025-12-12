@@ -569,4 +569,4 @@ export const PeotramCNPJHistory: React.FC = () => {
       )}
     </div>
   );
-};
+});

@@ -319,4 +319,4 @@ export const CreateMaintenancePlanDialog: React.FC<CreateMaintenancePlanDialogPr
       </DialogContent>
     </Dialog>
   );
-};
+});

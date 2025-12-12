@@ -571,4 +571,4 @@ export const DocumentCenterProvider: React.FC<DocumentCenterProviderProps> = ({
       {children}
     </DocumentCenterContext.Provider>
   );
-};
+});

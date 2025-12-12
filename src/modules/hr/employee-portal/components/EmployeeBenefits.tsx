@@ -225,4 +225,4 @@ export const EmployeeBenefits: React.FC = () => {
       </Card>
     </div>
   );
-};
+});

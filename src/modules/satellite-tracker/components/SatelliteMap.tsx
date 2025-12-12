@@ -172,4 +172,4 @@ export const SatelliteMap: React.FC<SatelliteMapProps> = ({ satellite }) => {
       )}
     </div>
   );
-};
+});

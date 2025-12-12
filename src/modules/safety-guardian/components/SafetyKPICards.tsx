@@ -121,4 +121,4 @@ export const SafetyKPICards: React.FC<SafetyKPICardsProps> = ({ metrics, loading
       ))}
     </div>
   );
-};
+});

@@ -205,4 +205,4 @@ export const VesselGrid: React.FC<VesselGridProps> = ({ vessels, onViewDetails, 
       ))}
     </div>
   );
-};
+});

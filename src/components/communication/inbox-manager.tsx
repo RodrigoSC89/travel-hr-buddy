@@ -598,4 +598,4 @@ export const InboxManager: React.FC<InboxManagerProps> = ({
       </div>
     </div>
   );
-};
+});

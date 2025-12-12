@@ -313,4 +313,4 @@ export const EnhancedReservationsCalendar: React.FC = () => {
       </div>
     </div>
   );
-};
+});

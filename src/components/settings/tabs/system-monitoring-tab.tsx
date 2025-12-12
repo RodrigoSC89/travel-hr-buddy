@@ -351,4 +351,4 @@ export const SystemMonitoringTab: React.FC<SystemMonitoringTabProps> = ({
       </Card>
     </div>
   );
-};
+});

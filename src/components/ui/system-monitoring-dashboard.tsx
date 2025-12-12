@@ -236,4 +236,4 @@ export const SystemMonitoringDashboard: React.FC = () => {
       </Card>
     </div>
   );
-};
+});

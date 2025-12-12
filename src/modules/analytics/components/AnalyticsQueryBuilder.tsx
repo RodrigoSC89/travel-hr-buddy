@@ -369,4 +369,4 @@ export const AnalyticsQueryBuilder: React.FC = () => {
       </div>
     </div>
   );
-};
+});

@@ -244,4 +244,4 @@ export const HealthMetricsDashboard: React.FC = () => {
       )}
     </div>
   );
-};
+});

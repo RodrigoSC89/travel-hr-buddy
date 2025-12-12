@@ -221,4 +221,4 @@ export const MMIIntegration: React.FC = () => {
       </CardContent>
     </Card>
   );
-};
+});

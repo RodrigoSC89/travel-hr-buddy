@@ -413,4 +413,4 @@ export const RealTimeMonitor = ({ className }: RealTimeMonitorProps) => {
       </div>
     </div>
   );
-};
+});

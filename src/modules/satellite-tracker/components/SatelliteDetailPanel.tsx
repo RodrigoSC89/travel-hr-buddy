@@ -200,4 +200,4 @@ export const SatelliteDetailPanel: React.FC<SatelliteDetailPanelProps> = ({ sate
       </CardContent>
     </Card>
   );
-};
+});

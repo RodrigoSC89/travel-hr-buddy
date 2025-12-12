@@ -404,4 +404,4 @@ export const ComputerVisionInspector: React.FC = () => {
       </div>
     </div>
   );
-};
+});

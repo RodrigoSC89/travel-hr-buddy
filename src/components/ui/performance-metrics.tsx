@@ -374,4 +374,4 @@ export const PerformanceMetrics = ({ className, compact = false }: PerformanceMe
       </div>
     </div>
   );
-};
+});

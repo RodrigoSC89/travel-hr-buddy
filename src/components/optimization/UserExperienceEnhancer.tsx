@@ -480,4 +480,4 @@ export const UserExperienceEnhancer: React.FC = () => {
       </Card>
     </div>
   );
-};
+});

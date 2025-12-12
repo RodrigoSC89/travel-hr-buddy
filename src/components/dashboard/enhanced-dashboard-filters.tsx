@@ -205,4 +205,4 @@ export const EnhancedDashboardFilters: React.FC<DashboardFiltersProps> = ({
       )}
     </div>
   );
-};
+});

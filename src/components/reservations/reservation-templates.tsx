@@ -566,4 +566,4 @@ export const ReservationTemplates: React.FC<ReservationTemplatesProps> = ({
       </Dialog>
     </>
   );
-};
+});

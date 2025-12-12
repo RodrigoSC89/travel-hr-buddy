@@ -205,4 +205,4 @@ export const SearchFilters: React.FC<SearchFiltersProps> = ({
       )}
     </div>
   );
-};
+});

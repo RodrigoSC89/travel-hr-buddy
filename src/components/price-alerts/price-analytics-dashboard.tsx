@@ -672,4 +672,4 @@ export const PriceAnalyticsDashboard: React.FC = () => {
       </Card>
     </div>
   );
-};
+});

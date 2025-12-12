@@ -366,4 +366,4 @@ export const EnhancedNotificationCenter: React.FC = () => {
       </CardContent>
     </Card>
   );
-};
+});

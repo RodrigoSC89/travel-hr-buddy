@@ -340,4 +340,4 @@ export const FleetAICopilot: React.FC<FleetAICopilotProps> = ({
       </CardContent>
     </Card>
   );
-};
+});

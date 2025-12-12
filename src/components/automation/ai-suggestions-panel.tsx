@@ -487,4 +487,4 @@ export const AISuggestionsPanel: React.FC = () => {
       )}
     </div>
   );
-};
+});

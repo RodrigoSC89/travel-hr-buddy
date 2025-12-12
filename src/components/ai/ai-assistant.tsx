@@ -379,4 +379,4 @@ export const AIAssistant: React.FC<AIAssistantProps> = ({
       </CardContent>
     </Card>
   );
-};
+});

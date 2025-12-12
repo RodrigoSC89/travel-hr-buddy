@@ -496,4 +496,4 @@ export const IntegratedCommunicationSystem: React.FC<IntegratedCommunicationProp
       </div>
     </div>
   );
-};
+});

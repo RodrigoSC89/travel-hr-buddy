@@ -402,4 +402,4 @@ export const CreateIncidentDialog: React.FC<CreateIncidentDialogProps> = ({
       </DialogContent>
     </Dialog>
   );
-};
+});

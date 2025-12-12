@@ -175,4 +175,4 @@ export const safeLazyImport = (
   SafeComponent.displayName = `SafeLazyWrapper(${name})`;
   
   return SafeComponent;
-};
+});

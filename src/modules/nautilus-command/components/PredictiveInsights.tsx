@@ -271,4 +271,4 @@ export const PredictiveInsights: React.FC<PredictiveInsightsProps> = ({ systemSt
       </Card>
     </div>
   );
-};
+});

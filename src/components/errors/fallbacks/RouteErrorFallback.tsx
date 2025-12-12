@@ -127,4 +127,4 @@ export const RouteErrorFallback: React.FC<RouteErrorFallbackProps> = ({
       </Card>
     </div>
   );
-};
+});

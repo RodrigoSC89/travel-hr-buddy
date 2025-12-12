@@ -675,4 +675,4 @@ export const TelemetryDashboard360: React.FC<TelemetryDashboard360Props> = ({ us
       </Tabs>
     </div>
   );
-};
+});

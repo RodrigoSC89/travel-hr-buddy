@@ -681,4 +681,4 @@ export const UserManagementHub: React.FC = () => {
       </Dialog>
     </div>
   );
-};
+});

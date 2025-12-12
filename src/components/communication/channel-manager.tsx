@@ -689,4 +689,4 @@ export const ChannelManager: React.FC<ChannelManagerProps> = ({
       </Dialog>
     </div>
   );
-};
+});

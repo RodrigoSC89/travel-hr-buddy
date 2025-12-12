@@ -227,4 +227,4 @@ export const useMFA = memo(() => {
     requireMFA,
     MFAPromptComponent
   };
-};
+});

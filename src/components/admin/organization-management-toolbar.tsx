@@ -98,4 +98,4 @@ export const OrganizationManagementToolbar: React.FC = () => {
       </CardContent>
     </Card>
   );
-};
+});

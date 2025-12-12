@@ -261,4 +261,4 @@ export const SmartJobCard: React.FC<SmartJobCardProps> = ({
       </Dialog>
     </>
   );
-};
+});

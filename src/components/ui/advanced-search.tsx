@@ -362,4 +362,4 @@ export const AdvancedSearch: React.FC<AdvancedSearchProps> = ({ open, onOpenChan
       </DialogContent>
     </Dialog>
   );
-};
+});

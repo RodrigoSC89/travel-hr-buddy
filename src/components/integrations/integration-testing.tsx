@@ -484,4 +484,4 @@ export const IntegrationTesting: React.FC = () => {
       </Tabs>
     </div>
   );
-};
+});

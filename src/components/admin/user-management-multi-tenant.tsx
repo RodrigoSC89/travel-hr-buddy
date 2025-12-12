@@ -296,4 +296,4 @@ export const UserManagementMultiTenant: React.FC = () => {
       </Card>
     </div>
   );
-};
+});

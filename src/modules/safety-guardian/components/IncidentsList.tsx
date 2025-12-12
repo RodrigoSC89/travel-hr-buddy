@@ -267,4 +267,4 @@ export const IncidentsList: React.FC<IncidentsListProps> = ({
       </CardContent>
     </Card>
   );
-};
+});

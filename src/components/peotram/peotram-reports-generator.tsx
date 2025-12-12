@@ -534,4 +534,4 @@ export const PeotramReportsGenerator: React.FC = () => {
       </div>
     </div>
   );
-};
+});

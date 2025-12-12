@@ -563,4 +563,4 @@ export const FuelOptimizer = memo(() => {
       </Tabs>
     </div>
   );
-};
+});

@@ -75,4 +75,4 @@ export const CacheIndicator: React.FC<{ isFromCache: boolean; className?: string
       Dados em cache
     </span>
   );
-};
+});

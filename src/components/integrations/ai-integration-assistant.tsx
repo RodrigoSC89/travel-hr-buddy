@@ -358,4 +358,4 @@ export const AIIntegrationAssistant: React.FC = () => {
       </Card>
     </div>
   );
-};
+});

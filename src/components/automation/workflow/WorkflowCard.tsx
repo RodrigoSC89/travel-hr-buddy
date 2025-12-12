@@ -275,4 +275,4 @@ export const WorkflowCard: React.FC<WorkflowCardProps> = ({
       </CardContent>
     </Card>
   );
-};
+});

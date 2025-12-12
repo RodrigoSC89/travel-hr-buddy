@@ -180,4 +180,4 @@ export const ExpenseForm: React.FC<ExpenseFormProps> = ({
       </div>
     </form>
   );
-};
+});

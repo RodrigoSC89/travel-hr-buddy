@@ -579,4 +579,4 @@ export const IntelligentAlertsCenter = memo(() => {
       </Card>
     </div>
   );
-};
+});

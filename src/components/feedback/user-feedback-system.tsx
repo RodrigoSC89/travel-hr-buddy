@@ -418,4 +418,4 @@ export const UserFeedbackSystem: React.FC = () => {
       </Tabs>
     </div>
   );
-};
+});

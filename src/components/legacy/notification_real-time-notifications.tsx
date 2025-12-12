@@ -314,4 +314,4 @@ export const NotificationCenter: React.FC = () => {
       )}
     </div>
   );
-};
+});

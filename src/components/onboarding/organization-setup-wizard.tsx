@@ -554,4 +554,4 @@ export const OrganizationSetupWizard: React.FC = () => {
       </div>
     </div>
   );
-};
+});

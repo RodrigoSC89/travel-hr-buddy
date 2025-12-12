@@ -192,4 +192,4 @@ export const CompleteTemplateManager = memo(() => {
       </div>
     </div>
   );
-};
+});

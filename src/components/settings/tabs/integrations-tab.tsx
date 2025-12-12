@@ -419,4 +419,4 @@ export const IntegrationsTab: React.FC<IntegrationsTabProps> = ({
       </Tabs>
     </div>
   );
-};
+});

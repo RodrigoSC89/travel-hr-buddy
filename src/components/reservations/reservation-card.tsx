@@ -271,4 +271,4 @@ export const ReservationCard: React.FC<ReservationCardProps> = ({
       />
     </Card>
   );
-};
+});

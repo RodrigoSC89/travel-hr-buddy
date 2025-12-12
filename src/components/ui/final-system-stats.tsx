@@ -131,4 +131,4 @@ export const FinalSystemStats: React.FC = () => {
       </Card>
     </div>
   );
-};
+});

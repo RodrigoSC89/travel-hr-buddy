@@ -412,4 +412,4 @@ Qual área você gostaria de explorar em detalhes?`;
       </motion.div>
     </motion.div>
   );
-};
+});

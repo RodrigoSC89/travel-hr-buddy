@@ -297,4 +297,4 @@ export const AIVoiceAssistant: React.FC<VoiceAssistantProps> = ({
       </CardContent>
     </Card>
   );
-};
+});

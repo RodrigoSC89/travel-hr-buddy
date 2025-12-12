@@ -145,4 +145,4 @@ export const OVIDAIAssistant: React.FC<OVIDAIAssistantProps> = ({ vesselType }) 
       </CardContent>
     </Card>
   );
-};
+});

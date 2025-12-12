@@ -792,4 +792,4 @@ export const MachineRoutineChecklist: React.FC<MachineRoutineChecklistProps> = (
       </div>
     </div>
   );
-};
+});
