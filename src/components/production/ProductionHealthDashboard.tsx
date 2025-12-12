@@ -250,6 +250,6 @@ export const ProductionHealthDashboard = memo(function({ autoRun = true, compact
       </CardContent>
     </Card>
   );
-}
+});
 
 export default ProductionHealthDashboard;
