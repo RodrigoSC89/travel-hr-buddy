@@ -173,7 +173,7 @@ export default function ExampleWorkflowPage() {
 
       // Combine and set suggestions
       setSuggestions([...staticSuggestions, ...dynamicSuggestions]);
-    });
+    };
 
     loadSuggestions();
   }, []);

@@ -62,18 +62,18 @@ describe("TemplateEditor Component", () => {
         <TemplateEditor />
       </QueryClientProvider>
     );
-  });
+  };
 
   it("should render the component successfully", () => {
     renderComponent();
     expect(screen.getByText(/Editor de Templates/i)).toBeInTheDocument();
-  });
+  };
 
   it("should render the title input field", () => {
     renderComponent();
     const titleInput = screen.getByPlaceholderText(/Digite o título do template/i);
     expect(titleInput).toBeInTheDocument();
-  });
+  };
 
   it("should render all action buttons", () => {
     renderComponent();

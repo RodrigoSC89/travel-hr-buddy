@@ -122,7 +122,7 @@ export const EmployeePortal: React.FC = () => {
         title: "Erro",
         description: "Preencha todos os campos obrigatórios",
         variant: "destructive"
-      });
+      };
       return;
     }
 
@@ -147,17 +147,17 @@ export const EmployeePortal: React.FC = () => {
         title: "Erro",
         description: "Selecione as datas de início e fim",
         variant: "destructive"
-      });
+      };
       return;
     }
 
     toast({
       title: "Solicitação enviada",
       description: "Sua solicitação de licença foi enviada para aprovação"
-    });
+    };
     
     setLeaveRequest({ startDate: "", endDate: "", type: "vacation", reason: "" });
-  });
+  };
 
   return (
     <div className="container mx-auto p-6 space-y-6">

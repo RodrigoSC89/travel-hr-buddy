@@ -99,7 +99,7 @@ const ApiGateway = () => {
         title: "Error",
         description: "Please enter a key name",
         variant: "destructive"
-      });
+      };
       return;
     }
 
@@ -111,8 +111,8 @@ const ApiGateway = () => {
     toast({
       title: "API Key Created",
       description: `Key "${key.name}" has been created successfully`
-    });
-  });
+    };
+  };
 
   const handleRevokeKey = (keyId: string) => {
     apiKeyManager.revokeKey(keyId);
@@ -137,7 +137,7 @@ const ApiGateway = () => {
         title: "Error",
         description: "Please fill in all fields",
         variant: "destructive"
-      });
+      };
       return;
     }
 
@@ -150,8 +150,8 @@ const ApiGateway = () => {
     toast({
       title: "Webhook Created",
       description: `Webhook "${newWebhookName}" has been created`
-    });
-  });
+    };
+  };
 
   const handleDeleteWebhook = (webhookId: string) => {
     webhookManager.deleteWebhook(webhookId);

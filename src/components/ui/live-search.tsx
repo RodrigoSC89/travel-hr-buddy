@@ -95,7 +95,7 @@ export const LiveSearch = ({
   const handleClear = () => {
     onChange("");
     setIsOpen(false);
-  });
+  };
 
   return (
     <div className="relative">

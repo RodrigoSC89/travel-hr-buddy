@@ -17,6 +17,6 @@ const PluginManagerPage: React.FC = () => {
       </div>
     </>
   );
-});
+};
 
 export default PluginManagerPage;

@@ -17,6 +17,6 @@ const BIDashboard: React.FC = () => {
       </div>
     </>
   );
-});
+};
 
 export default BIDashboard;

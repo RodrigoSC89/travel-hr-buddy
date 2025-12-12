@@ -118,14 +118,14 @@ export default function ApiStatusPage() {
   const downloadLog = () => {
     const blob = new Blob([JSON.stringify(history, null, 2)], {
       type: "application/json",
-    });
+    };
     const url = URL.createObjectURL(blob);
     const a = document.createElement("a");
     a.href = url;
     a.download = "api-status-log.json";
     a.click();
     URL.revokeObjectURL(url);
-  });
+  };
 
   // Prepare chart data
   const labels = history.map((h) => new Date(h.timestamp).toLocaleTimeString());

@@ -45,7 +45,7 @@ export const PEODPAuditComponent = memo(function() {
         title: "Campo obrigatório",
         description: "Por favor, informe o nome da embarcação",
         variant: "destructive",
-      });
+      };
       return;
     }
 
@@ -55,7 +55,7 @@ export const PEODPAuditComponent = memo(function() {
         vesselName,
         dpClass: dpClass || undefined,
         autoDownload: false,
-      });
+      };
 
       // Gerar recomendações
       const { PEOEngine } = await import("@/modules/hr/peo-dp");
@@ -88,7 +88,7 @@ export const PEODPAuditComponent = memo(function() {
       toast({
         title: "Download Iniciado",
         description: "Relatório PDF está sendo baixado",
-      });
+      };
     }
   };
 
@@ -98,7 +98,7 @@ export const PEODPAuditComponent = memo(function() {
       toast({
         title: "Download Iniciado",
         description: "Relatório Markdown está sendo baixado",
-      });
+      };
     }
   };
 

@@ -96,11 +96,11 @@ const RecruitmentPipeline: React.FC = () => {
 
   const handleDragEnd = () => {
     setDraggedCandidate(null);
-  });
+  };
 
   const handleDragOver = (e: React.DragEvent) => {
     e.preventDefault();
-  });
+  };
 
   const handleDrop = (etapaId: string) => {
     if (draggedCandidate) {
@@ -113,7 +113,7 @@ const RecruitmentPipeline: React.FC = () => {
       }));
     }
     setDraggedCandidate(null);
-  });
+  };
 
   const handleTriagemIA = async () => {
     const candidatosPendentes = candidatos.filter(c => c.etapa === "triagem" && !c.aiInsights);
@@ -185,7 +185,7 @@ const RecruitmentPipeline: React.FC = () => {
 
   const handleSendReminder = (candidato: Candidato) => {
     toast.success(`Lembrete enviado para ${candidato.nome}`);
-  });
+  };
 
   const handleScheduleMeeting = (candidato: Candidato) => {
     setSelectedCandidato(candidato);

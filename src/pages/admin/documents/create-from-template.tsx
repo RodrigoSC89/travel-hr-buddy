@@ -107,7 +107,7 @@ export default function CreateFromTemplate({
         toast({
           title: "✅ Documento salvo",
           description: "O documento foi salvo com sucesso!",
-        });
+        };
         if (onSaved) {
           onSaved(result);
         }
@@ -116,7 +116,7 @@ export default function CreateFromTemplate({
           title: "❌ Erro ao salvar",
           description: "Não foi possível salvar o documento.",
           variant: "destructive",
-        });
+        };
       }
     } catch (err) {
       toast({
@@ -132,7 +132,7 @@ export default function CreateFromTemplate({
    */
   const handleExportPDF = () => {
     window.print();
-  });
+  };
 
   const rawContent =
     typeof template.content === "string"

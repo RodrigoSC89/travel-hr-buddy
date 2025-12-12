@@ -35,7 +35,7 @@ export const ReservationFilters: React.FC<ReservationFiltersProps> = ({
       searchTerm: "",
       crewMember: "all"
 };
-  });
+  };
 
   const uniqueCrewMembers = Array.from(
     new Set(reservations.map(r => r.crew_member_name).filter(Boolean))

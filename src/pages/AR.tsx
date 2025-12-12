@@ -28,6 +28,6 @@ const AR: React.FC = () => {
       <ARInterface />
     </ModulePageWrapper>
   );
-});
+};
 
 export default AR;

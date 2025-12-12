@@ -88,7 +88,7 @@ export const CognitiveDashboard: React.FC = () => {
 
   const handleRefresh = () => {
     loadDashboardData();
-  });
+  };
 
   const getRiskColor = (level: string) => {
     switch (level) {

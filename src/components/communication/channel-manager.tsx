@@ -253,7 +253,7 @@ export const ChannelManager: React.FC<ChannelManagerProps> = ({
           title: "Erro",
           description: "Nome do canal é obrigatório",
           variant: "destructive"
-        });
+        };
         return;
       }
 

@@ -48,7 +48,7 @@ const useSystemMetrics = () => {
     fps: 60,
     cacheHit: 92,
     loadTime: 0
-  });
+  };
 
   const updateMetrics = useCallback(() => {
     const memory = (performance as unknown).memory;
@@ -186,11 +186,11 @@ const AccessibilityControls = () => {
     dyslexiaFont: false,
     screenReader: false,
     colorBlindMode: "none" as "none" | "protanopia" | "deuteranopia" | "tritanopia"
-  });
+  };
 
   const toggle = (key: keyof typeof settings) => {
     setSettings(prev => ({ ...prev, [key]: !prev[key] }));
-  });
+  };
 
   return (
     <Card className="bg-card/50 border-border/50">
@@ -298,7 +298,7 @@ const NotificationControls = () => {
   const requestPermission = async () => {
     const result = await Notification.requestPermission();
     setPermission(result);
-  });
+  };
 
   return (
     <Card className="bg-card/50 border-border/50">
@@ -338,7 +338,7 @@ const SystemStatus = () => {
     storage: "operational",
     auth: "operational",
     cache: "operational"
-  });
+  };
 
   const statusColor = (s: string) => {
     switch (s) {

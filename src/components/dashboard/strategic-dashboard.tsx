@@ -63,7 +63,7 @@ const StrategicDashboard: React.FC = () => {
     activeWidgets: ["metrics", "alerts", "activities", "charts"],
     refreshInterval: 30,
     userRole: "admin"
-  });
+  };
 
   // Helper function to format metric values
   const formatMetricValue = (value: number | string, unit: string = ""): string => {
@@ -232,8 +232,8 @@ const StrategicDashboard: React.FC = () => {
     toast({
       title: "Dashboard Atualizado",
       description: "Dados atualizados com sucesso!",
-    });
-  });
+    };
+  };
 
   // Export dashboard data
   const handleExport = async (format: string, options?: unknown: unknown: unknown) => {
@@ -272,27 +272,27 @@ const StrategicDashboard: React.FC = () => {
     toast({
       title: "Personalização",
       description: "Abrindo configurações de personalização do dashboard...",
-    });
+    };
     // Navigate to settings or open customization modal
     navigate("/settings?tab=dashboard");
-  });
+  };
 
   // Open alerts center
   const handleAlertsCenter = () => {
     toast({
       title: "Central de Alertas",
       description: "Abrindo central de alertas do sistema...",
-    });
+    };
     // Navigate to alerts page or open alerts panel
     setActiveTab("alerts");
-  });
+  };
 
   // Global search handler
   const handleGlobalSearch = () => {
     toast({
       title: "Busca Global",
       description: "Ativando busca global do sistema (Ctrl+K)...",
-    });
+    };
     // Focus on search input or open search modal
     const searchInput = document.querySelector("input[type=\"search\"]") as HTMLInputElement;
     if (searchInput) {
@@ -305,10 +305,10 @@ const StrategicDashboard: React.FC = () => {
     toast({
       title: "IA Insights",
       description: "Gerando insights inteligentes baseados em IA...",
-    });
+    };
     // Navigate to AI insights or open insights panel
     setActiveTab("ai-insights");
-  });
+  };
 
   // Initialize dashboard
   useEffect(() => {

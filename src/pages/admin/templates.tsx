@@ -123,7 +123,7 @@ export default function TemplatesPage() {
         title: "Título necessário",
         description: "Por favor, forneça um título para o template.",
         variant: "destructive",
-      });
+      };
       return;
     }
 
@@ -133,7 +133,7 @@ export default function TemplatesPage() {
       
       const { data, error } = await supabase.functions.invoke("generate-document", {
         body: { prompt: aiPrompt },
-      });
+      };
 
       if (error) throw error;
 
@@ -161,7 +161,7 @@ export default function TemplatesPage() {
         title: "Nenhum conteúdo para reformular",
         description: "Por favor, adicione conteúdo primeiro.",
         variant: "destructive",
-      });
+      };
       return;
     }
 
@@ -169,7 +169,7 @@ export default function TemplatesPage() {
     try {
       const { data, error } = await supabase.functions.invoke("rewrite-document", {
         body: { content },
-      });
+      };
 
       if (error) throw error;
 
@@ -197,7 +197,7 @@ export default function TemplatesPage() {
         title: "Nenhum conteúdo",
         description: "Por favor, adicione conteúdo primeiro.",
         variant: "destructive",
-      });
+      };
       return;
     }
 
@@ -206,7 +206,7 @@ export default function TemplatesPage() {
         body: { 
           prompt: `Com base no seguinte conteúdo, sugira um título curto e descritivo (máximo 60 caracteres):\n\n${content.substring(0, 500)}` 
         },
-      });
+      };
 
       if (error) throw error;
 
@@ -233,7 +233,7 @@ export default function TemplatesPage() {
         title: "Campos obrigatórios",
         description: "Por favor, preencha o título e o conteúdo.",
         variant: "destructive",
-      });
+      };
       return;
     }
 
@@ -246,7 +246,7 @@ export default function TemplatesPage() {
           title: "Erro de autenticação",
           description: "Você precisa estar logado.",
           variant: "destructive",
-        });
+        };
         return;
       }
 
@@ -458,7 +458,7 @@ export default function TemplatesPage() {
     setPrompt("");
     setCurrentTemplateId(null);
     setIsEditing(false);
-  });
+  };
 
   // Filter templates
   const filteredTemplates = templates.filter((template) => {
@@ -468,7 +468,7 @@ export default function TemplatesPage() {
     const matchesPrivate = !filterPrivate || template.is_private;
     
     return matchesSearch && matchesFavorites && matchesPrivate;
-  });
+  };
 
   return (
     <div className="space-y-6 p-8">

@@ -91,7 +91,7 @@ export default function UsageMetrics() {
     a.download = `usage-metrics-${new Date().toISOString().split("T")[0]}.csv`;
     a.click();
     URL.revokeObjectURL(url);
-  });
+  };
 
   if (loadingModules || loadingHours || loadingSessions) {
     return (

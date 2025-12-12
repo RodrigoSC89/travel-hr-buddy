@@ -25,7 +25,7 @@ const loadPDFLibs = async () => {
   const { default: jsPDF } = await import("jspdf");
   const { default: autoTable } = await import("jspdf-autotable");
   return { jsPDF, autoTable };
-});
+};
 
 interface AuditArea {
   id: string;
@@ -120,7 +120,7 @@ export default function SGSOAuditEditor() {
         title: "Erro",
         description: "Selecione uma embarcação",
         variant: "destructive"
-      });
+      };
       return;
     }
 

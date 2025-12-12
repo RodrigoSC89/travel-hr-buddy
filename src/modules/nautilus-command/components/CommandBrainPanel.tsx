@@ -51,7 +51,7 @@ export const CommandBrainPanel = memo(function({ context, onSettingsClick }: Com
     const message = input;
     setInput("");
     await sendMessage(message, context);
-  });
+  };
 
   const handleVoiceInput = () => {
     if (!("webkitSpeechRecognition" in window || "SpeechRecognition" in window)) {
@@ -111,11 +111,11 @@ export const CommandBrainPanel = memo(function({ context, onSettingsClick }: Com
 
   const exportChat = () => {
     exportConversation();
-  });
+  };
 
   const handleFeedback = (messageId: string, type: "positive" | "negative") => {
     setFeedback(messageId, type);
-  });
+  };
 
   const suggestions = [
     "Qual o status atual da frota?",

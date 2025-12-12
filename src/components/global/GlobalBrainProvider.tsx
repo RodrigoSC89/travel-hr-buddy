@@ -41,7 +41,7 @@ export const GlobalBrainProvider: React.FC<GlobalBrainProviderProps> = ({
 
   const closeBrain = () => {
     setIsOpen(false);
-  });
+  };
 
   return (
     <BrainContext.Provider value={{ openBrain, closeBrain, isOpen }}>
@@ -58,4 +58,4 @@ export const GlobalBrainProvider: React.FC<GlobalBrainProviderProps> = ({
       />
     </BrainContext.Provider>
   );
-});
+};

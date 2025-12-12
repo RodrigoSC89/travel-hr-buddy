@@ -8,7 +8,7 @@ const loadORT = async () => {
     ort = await import("onnxruntime-web");
   }
   return ort;
-});
+};
 import { publishEvent } from "@/lib/mqtt/publisher";
 
 type PredictionStatus = "loading" | "success" | "error" | "offline";

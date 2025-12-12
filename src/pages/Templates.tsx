@@ -185,7 +185,7 @@ const Templates = () => {
     category: "operations",
     type: "report",
     content: ""
-  });
+  };
   
   const [isGeneratingAI, setIsGeneratingAI] = useState(false);
 
@@ -270,7 +270,7 @@ const Templates = () => {
     setShowCreateDialog(false);
     setNewTemplate({ name: "", description: "", category: "operations", type: "report", content: "" });
     toast.success("Template criado com sucesso!");
-  });
+  };
 
   const handleUpdateTemplate = () => {
     if (!selectedTemplate) return;

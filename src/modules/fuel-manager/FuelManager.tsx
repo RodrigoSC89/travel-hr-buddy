@@ -351,8 +351,8 @@ const AIPredictions = () => {
     toast({
       title: "Previsões atualizadas",
       description: "A IA recalculou as previsões de consumo.",
-    });
-  });
+    };
+  };
 
   return (
     <Card>

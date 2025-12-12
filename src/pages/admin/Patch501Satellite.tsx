@@ -71,7 +71,7 @@ export default function Patch501Satellite() {
     setPrecisionScore(92);
     
     setValidationStatus("complete");
-  });
+  };
 
   const passCount = validationChecks.filter((c) => c.status === "pass").length;
   const totalCount = validationChecks.length;

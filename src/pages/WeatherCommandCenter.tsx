@@ -227,7 +227,7 @@ export default function WeatherCommandCenter() {
     if (desc.includes("snow") || desc.includes("neve")) return <CloudSnow className={size} />;
     if (desc.includes("cloud") || desc.includes("nubl")) return <Cloud className={size} />;
     return <Sun className={size} />;
-  });
+  };
 
   const getWindDirection = (deg: number) => {
     const directions = ["N", "NE", "E", "SE", "S", "SW", "W", "NW"];
@@ -253,7 +253,7 @@ export default function WeatherCommandCenter() {
         toast({
           title: "Localização não encontrada",
           description: "Tente outra localização ou adicione manualmente",
-        });
+        };
       }
     }
   };

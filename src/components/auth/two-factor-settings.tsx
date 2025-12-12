@@ -62,7 +62,7 @@ export const TwoFactorSettings: React.FC<TwoFactorSettingsProps> = ({ onClose })
     try {
       const { data, error } = await supabase.auth.mfa.enroll({
         factorType: "totp"
-      });
+      };
 
       if (error) throw error;
 
@@ -74,7 +74,7 @@ export const TwoFactorSettings: React.FC<TwoFactorSettingsProps> = ({ onClose })
       toast({
         title: "2FA Configurado",
         description: "Escaneie o QR Code com seu app autenticador",
-      });
+      };
     } catch (error) {
       toast({
         title: "Erro",
@@ -92,7 +92,7 @@ export const TwoFactorSettings: React.FC<TwoFactorSettingsProps> = ({ onClose })
         title: "Código Inválido",
         description: "Por favor, digite um código de 6 dígitos",
         variant: "destructive"
-      });
+      };
       return;
     }
 
@@ -102,7 +102,7 @@ export const TwoFactorSettings: React.FC<TwoFactorSettingsProps> = ({ onClose })
         factorId,
         challengeId: factorId,
         code: verificationCode
-      });
+      };
 
       if (error) throw error;
 

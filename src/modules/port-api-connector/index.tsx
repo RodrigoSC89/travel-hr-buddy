@@ -137,7 +137,7 @@ export default function PortAPIConnector() {
       setIsSyncing(false);
       toast.success("Sincronização concluída!");
     }, 2000);
-  });
+  };
 
   const toggleConnection = (id: string) => {
     setConnections(prev => prev.map(conn => {

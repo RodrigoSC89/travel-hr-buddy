@@ -156,11 +156,11 @@ export const NonConformityManager: React.FC = () => {
 
   const handleViewNC = (ncId: string, ncNumber: string) => {
     handleViewDetails(`não conformidade ${ncNumber}`, ncId);
-  });
+  };
 
   const handleUpdateNC = (ncId: string, ncNumber: string) => {
     handleUpdate(`não conformidade ${ncNumber}`);
-  });
+  };
 
   return (
     <div className="space-y-6">

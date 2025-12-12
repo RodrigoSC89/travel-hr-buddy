@@ -44,14 +44,14 @@ export default function ApplyTemplate({ template }: ApplyTemplateProps) {
       content = content.split(placeholder).join(variables[key] || "");
     }
     setPreview(content);
-  });
+  };
   const handleSave = async () => {
     if (!preview) {
       toast({
         title: "Erro",
         description: "Por favor, gere o preview antes de salvar.",
         variant: "destructive",
-      });
+      };
       return;
     }
 

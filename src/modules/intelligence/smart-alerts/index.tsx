@@ -131,7 +131,7 @@ const SmartAlerts = () => {
           predictedIssues,
           totalAlerts: alerts.filter(a => !a.resolved).length
         }
-      });
+      };
       
       if (response.message) {
         setAiInsight(response.message);

@@ -82,7 +82,7 @@ const ApiGatewayEnhanced = () => {
   const [keyFormData, setKeyFormData] = useState({
     key_name: "",
     tier: "basic"
-  });
+  };
 
   const [routeFormData, setRouteFormData] = useState({
     route_path: "",
@@ -194,7 +194,7 @@ const ApiGatewayEnhanced = () => {
           api_key: apiKey,
           tier: keyFormData.tier,
           status: "active"
-        });
+        };
 
       if (error) throw error;
 
@@ -223,14 +223,14 @@ const ApiGatewayEnhanced = () => {
           ...routeFormData,
           status: "active",
           version: "v1"
-        });
+        };
 
       if (error) throw error;
 
       toast({
         title: "✅ Route Created",
         description: `API route "${routeFormData.route_name}" has been created`,
-      });
+      };
 
       setShowNewRoute(false);
       setRouteFormData({

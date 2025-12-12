@@ -266,8 +266,8 @@ export const SatelliteTrackerEnhanced = memo(() => {
     toast({
       title: "Data refreshed",
       description: "Satellite data has been updated",
-    });
-  });
+    };
+  };
 
   const getVisibilityColor = (status: string) => {
     switch (status?.toLowerCase()) {

@@ -28,22 +28,22 @@ export const FleetAIInsights = ({ vessels }: FleetAIInsightsProps) => {
   const handlePredictMaintenance = async () => {
     const predictions = await predictMaintenance(vessels);
     setMaintenancePredictions(predictions);
-  });
+  };
 
   const handleOptimizeRoutes = async () => {
     const optimizations = await optimizeRoutes(vessels);
     setRouteOptimizations(optimizations);
-  });
+  };
 
   const handlePredictFuel = async () => {
     const predictions = await predictFuelConsumption(vessels);
     setFuelPredictions(predictions);
-  });
+  };
 
   const handleGenerateRecommendations = async () => {
     const recs = await generateFleetRecommendations(vessels);
     setRecommendations(recs);
-  });
+  };
 
   useEffect(() => {
     // Auto-generate recommendations on load

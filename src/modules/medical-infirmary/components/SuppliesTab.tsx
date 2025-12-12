@@ -106,9 +106,9 @@ export default function SuppliesTab() {
       expiryDate: "",
       batchNumber: "",
       location: ""
-    });
+    };
     toast.success("Item adicionado ao estoque");
-  });
+  };
 
   const handleRequestRestock = (supply: MedicalSupply) => {
     toast.success(`Solicitação de reposição enviada: ${supply.name}`);
@@ -116,7 +116,7 @@ export default function SuppliesTab() {
 
   const handleExport = () => {
     toast.success("Exportando inventário...");
-  });
+  };
 
   return (
     <div className="space-y-6">

@@ -56,7 +56,7 @@ export const UserFeedbackSystem: React.FC = () => {
     rating: 5,
     page_url: window.location.href,
     browser_info: navigator.userAgent
-  });
+  };
 
   // Carregar feedbacks do usuário
   const loadFeedbacks = async () => {
@@ -77,7 +77,7 @@ export const UserFeedbackSystem: React.FC = () => {
         title: "Erro",
         description: "Não foi possível carregar os feedbacks",
         variant: "destructive"
-      });
+      };
     } finally {
       setIsLoading(false);
     }
@@ -90,7 +90,7 @@ export const UserFeedbackSystem: React.FC = () => {
         title: "Campos obrigatórios",
         description: "Por favor, preencha título e descrição",
         variant: "destructive"
-      });
+      };
       return;
     }
 

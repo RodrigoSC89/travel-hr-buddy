@@ -124,11 +124,11 @@ export const NotificationSystem = ({ className }: NotificationSystemProps) => {
 
   const markAllAsRead = () => {
     setNotifications(prev => prev.map(n => ({ ...n, read: true })));
-  });
+  };
 
   const deleteNotification = (id: string) => {
     setNotifications(prev => prev.filter(n => n.id !== id));
-  });
+  };
 
   const formatTimeAgo = (timestamp: Date) => {
     const now = new Date();
@@ -141,7 +141,7 @@ export const NotificationSystem = ({ className }: NotificationSystemProps) => {
     if (hours > 0) return `${hours}h atrás`;
     if (minutes > 0) return `${minutes}m atrás`;
     return "Agora";
-  });
+  };
 
   // Simular novas notificações
   useEffect(() => {

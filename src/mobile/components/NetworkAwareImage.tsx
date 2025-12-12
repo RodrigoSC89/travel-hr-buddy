@@ -99,12 +99,12 @@ export const NetworkAwareImage = memo<NetworkAwareImageProps>(({
       const fullQualityImg = new Image();
       fullQualityImg.onload = () => {
         setCurrentSrc(src);
-      });
+      };
       fullQualityImg.src = src;
     }
     
     onLoad?.();
-  });
+  };
 
   // Handle image error
   const handleError = () => {
@@ -128,7 +128,7 @@ export const NetworkAwareImage = memo<NetworkAwareImageProps>(({
     }
     
     return undefined;
-  });
+  };
 
   return (
     <div

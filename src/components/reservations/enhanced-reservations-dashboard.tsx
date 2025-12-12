@@ -78,7 +78,7 @@ export const EnhancedReservationsDashboard: React.FC = () => {
     dateRange: null,
     searchTerm: "",
     crewMember: "all"
-  });
+  };
 
   const { toast } = useToast();
   const { user } = useAuth();
@@ -192,12 +192,12 @@ export const EnhancedReservationsDashboard: React.FC = () => {
     setIsFormOpen(false);
     setSelectedReservation(null);
     fetchReservations();
-  });
+  };
 
   const handleEdit = (reservation: EnhancedReservation) => {
     setSelectedReservation(reservation);
     setIsFormOpen(true);
-  });
+  };
 
   const handleDelete = async (id: string) => {
     if (!confirm("Tem certeza que deseja excluir esta reserva?")) return;

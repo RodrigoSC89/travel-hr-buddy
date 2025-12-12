@@ -22,7 +22,7 @@ export const SmartHeader = memo(function() {
 
   const toggleTheme = () => {
     setTheme(theme === "dark" ? "light" : "dark");
-  });
+  };
 
   return (
     <>

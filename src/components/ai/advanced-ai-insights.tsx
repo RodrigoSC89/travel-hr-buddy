@@ -111,7 +111,7 @@ const AdvancedAIInsights = () => {
     toast({
       title: "Análise IA iniciada",
       description: "Processando dados e gerando insights...",
-    });
+    };
 
     await new Promise(resolve => setTimeout(resolve, 4000));
     

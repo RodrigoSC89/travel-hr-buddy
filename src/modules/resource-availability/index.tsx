@@ -139,7 +139,7 @@ export default function ResourceAvailability() {
       toast({ 
         title: "Análise Preditiva Concluída", 
         description: "IA identificou potenciais gargalos futuros" 
-      });
+      };
     }
   };
 

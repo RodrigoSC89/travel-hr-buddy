@@ -45,7 +45,7 @@ export default function PrePSCForm({ inspectionId, onComplete }: PrePSCFormProps
   const initializeChecklist = () => {
     const template = getDefaultChecklistTemplate();
     setChecklistItems(template as PrePSCChecklistItem[]);
-  });
+  };
 
   const loadInspection = async () => {
     if (!currentInspectionId) return;
@@ -65,7 +65,7 @@ export default function PrePSCForm({ inspectionId, onComplete }: PrePSCFormProps
         title: "Error",
         description: "Failed to load inspection",
         variant: "destructive",
-      });
+      };
     } finally {
       setLoading(false);
     }
@@ -170,7 +170,7 @@ export default function PrePSCForm({ inspectionId, onComplete }: PrePSCFormProps
       item => item.status && item.status !== "pending"
     ).length;
     return Math.round((answered / checklistItems.length) * 100);
-  });
+  };
 
   const getStatusColor = (status: string) => {
     switch (status) {

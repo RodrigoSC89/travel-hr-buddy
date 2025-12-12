@@ -99,7 +99,7 @@ export default function DocumentHistoryPage() {
   const clearFilters = () => {
     setEmailFilter("");
     setDateFilter("");
-  });
+  };
 
   const handleRestore = async (versionId: string, versionContent: string) => {
     if (!id) return;

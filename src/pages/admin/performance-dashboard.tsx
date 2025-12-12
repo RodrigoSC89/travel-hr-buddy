@@ -133,12 +133,12 @@ export default function PerformanceDashboard() {
     }
     
     return filtered;
-  });
+  };
 
   const getUniquePages = () => {
     const pages = new Set(metrics.map(m => m.metadata?.page_url).filter(Boolean));
     return Array.from(pages);
-  });
+  };
 
   const getMetricStats = (metricName: string) => {
     const metricData = metrics.filter(m => m.metric_name === metricName);
@@ -151,7 +151,7 @@ export default function PerformanceDashboard() {
     const latest = metricData[0];
 
     return { avg, min, max, latest, count: values.length };
-  });
+  };
 
   const getChartData = (metricName: string) => {
     const metricData = metrics

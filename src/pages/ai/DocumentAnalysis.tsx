@@ -48,7 +48,7 @@ const DocumentAnalysis: React.FC = () => {
         title: "Texto vazio",
         description: "Por favor, insira o texto do documento para análise.",
         variant: "destructive",
-      });
+      };
       return;
     }
 
@@ -125,7 +125,7 @@ Responda em formato estruturado usando markdown.`,
       toast({
         title: "Copiado!",
         description: "Resultado copiado para a área de transferência.",
-      });
+      };
     }
   };
 
@@ -133,7 +133,7 @@ Responda em formato estruturado usando markdown.`,
     setDocumentText("");
     setAnalysisResult(null);
     setProgress(0);
-  });
+  };
 
   const sampleDocuments = [
     {

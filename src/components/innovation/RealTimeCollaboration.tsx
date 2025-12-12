@@ -188,7 +188,7 @@ export const RealTimeCollaboration = memo(() => {
             sender_id: user.id,
             content: newMessage,
             message_type: "text"
-          });
+          };
         
         if (error) throw error;
         
@@ -197,7 +197,7 @@ export const RealTimeCollaboration = memo(() => {
         toast({
           title: "Mensagem enviada",
           description: "Sua mensagem foi compartilhada com a equipe."
-        });
+        };
       } catch (error) {
         toast({
           title: "Erro",

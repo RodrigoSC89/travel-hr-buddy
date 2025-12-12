@@ -62,7 +62,7 @@ ${activeVoyages.map((v) => `- ${v.name}: ${v.distanceNm}nm, ETA ${v.estimatedDay
 Viagens planejadas:
 ${plannedVoyages.map((v) => `- ${v.name}: partida ${v.departureDate}, ${v.distanceNm}nm`).join("\n")}
 `;
-  });
+  };
 
   const sendMessage = async () => {
     if (!input.trim() || isLoading) return;

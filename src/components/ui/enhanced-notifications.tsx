@@ -281,12 +281,12 @@ const EnhancedNotifications: React.FC<EnhancedNotificationsProps> = ({ isOpen, o
     toast({
       title: "Notificações",
       description: "Todas as notificações foram marcadas como lidas"
-    });
-  });
+    };
+  };
 
   const removeNotification = (id: string) => {
     setNotifications(prev => prev.filter(notification => notification.id !== id));
-  });
+  };
 
   const filteredNotifications = notifications.filter(notification => {
     switch (filter) {
@@ -294,7 +294,7 @@ const EnhancedNotifications: React.FC<EnhancedNotificationsProps> = ({ isOpen, o
     case "urgent": return notification.priority === "urgent" || notification.priority === "high";
     default: return true;
     }
-  });
+  };
 
   const unreadCount = notifications.filter(n => !n.read).length;
   const urgentCount = notifications.filter(n => n.priority === "urgent").length;

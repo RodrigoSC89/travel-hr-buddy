@@ -46,7 +46,7 @@ const VesselTrackingMap = () => {
           title: "Erro de Configuração",
           description: "Token do Mapbox não configurado",
           variant: "destructive"
-        });
+        };
       }
     };
 
@@ -73,7 +73,7 @@ const VesselTrackingMap = () => {
           zoom: 2,
           center: [-40, -15],
           pitch: 45,
-        });
+        };
 
         map.current = mapInstance;
 

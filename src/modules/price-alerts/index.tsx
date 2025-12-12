@@ -109,7 +109,7 @@ export const CompletePriceAlertsUI: React.FC = () => {
     threshold_type: "below" as "below" | "above",
     email_notifications: true,
     visual_notifications: true,
-  });
+  };
 
   useEffect(() => {
     if (user) {
@@ -178,7 +178,7 @@ export const CompletePriceAlertsUI: React.FC = () => {
         visual_notifications: newAlert.visual_notifications,
         is_active: true,
         user_id: user?.id,
-      });
+      };
 
       if (error) throw error;
 
@@ -243,7 +243,7 @@ export const CompletePriceAlertsUI: React.FC = () => {
       toast.success("Prices checked and updated");
       loadAlerts();
     }, 2000);
-  });
+  };
 
   const sendTestEmail = async (alertId: string) => {
     toast.info("Sending test email notification...");
@@ -251,7 +251,7 @@ export const CompletePriceAlertsUI: React.FC = () => {
     setTimeout(() => {
       toast.success("Test email sent successfully");
     }, 1500);
-  });
+  };
 
   // Prepare chart data
   const getChartData = () => {

@@ -196,9 +196,9 @@ export const PublicAPI = memo(() => {
     toast({
       title: "Chave copiada",
       description: "A chave da API foi copiada para a área de transferência.",
-    });
+    };
     setTimeout(() => setCopiedKey(false), 2000);
-  });
+  };
 
   const generateNewKey = () => {
     const newKey = `naut_live_sk_${Math.random().toString(36).substring(2, 15)}`;
@@ -206,8 +206,8 @@ export const PublicAPI = memo(() => {
     toast({
       title: "Nova chave gerada",
       description: "Uma nova chave da API foi gerada com sucesso.",
-    });
-  });
+    };
+  };
 
   const getMethodColor = (method: string) => {
     switch (method) {

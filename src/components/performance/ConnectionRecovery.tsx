@@ -39,7 +39,7 @@ export const ConnectionRecovery = memo(function({ className, showAlways = false 
     const checkStats = () => {
       const syncStats = offlineSyncManager.getStats();
       setStats({ pending: syncStats.pending, failed: syncStats.failed });
-    });
+    };
 
     checkStats();
     const interval = setInterval(checkStats, 5000);

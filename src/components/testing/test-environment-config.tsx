@@ -30,13 +30,13 @@ export const TestEnvironmentConfig: React.FC = () => {
     errorReporting: true,
     performanceMonitoring: true,
     securityScanning: true
-  });
+  };
 
   const { toast } = useToast();
 
   const handleConfigChange = (key: keyof TestConfig, value: boolean | string) => {
     setConfig(prev => ({ ...prev, [key]: value }));
-  });
+  };
 
   const applyConfiguration = () => {
     // Simulate applying configuration
@@ -45,8 +45,8 @@ export const TestEnvironmentConfig: React.FC = () => {
     toast({
       title: "Configuração Aplicada",
       description: `Ambiente configurado para ${config.environment}`,
-    });
-  });
+    };
+  };
 
   const resetToDefaults = () => {
     setConfig({
@@ -58,13 +58,13 @@ export const TestEnvironmentConfig: React.FC = () => {
       errorReporting: true,
       performanceMonitoring: true,
       securityScanning: true
-    });
+    };
     
     toast({
       title: "Configuração Resetada",
       description: "Voltou às configurações padrão",
-    });
-  });
+    };
+  };
 
   const exportConfig = () => {
     const dataStr = JSON.stringify(config, null, 2);
@@ -80,8 +80,8 @@ export const TestEnvironmentConfig: React.FC = () => {
     toast({
       title: "Configuração Exportada",
       description: "Arquivo de configuração baixado",
-    });
-  });
+    };
+  };
 
   const getEnvironmentBadge = (env: string) => {
     switch (env) {

@@ -6,6 +6,6 @@ import { Navigate } from "react-router-dom";
 
 const PredictiveAnalyticsPage = () => {
   return <Navigate to="/analytics-command" replace />;
-});
+};
 
 export default PredictiveAnalyticsPage;

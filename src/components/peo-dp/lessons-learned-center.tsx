@@ -219,7 +219,7 @@ export const LessonsLearnedCenter: React.FC = () => {
     const matchesFailure = filterFailureType === "all" || lesson.failureType === filterFailureType;
     const matchesSeverity = filterSeverity === "all" || lesson.severity === filterSeverity;
     return matchesSearch && matchesSource && matchesFailure && matchesSeverity;
-  });
+  };
 
   const stats = {
     total: lessons.length,

@@ -201,7 +201,7 @@ const AIAssistantEnhanced: React.FC = () => {
   const handleQuickAction = (action: string, category: string) => {
     setInputMessage(action);
     setSelectedCapability(category);
-  });
+  };
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-background via-primary/5 to-secondary/10 relative overflow-hidden">

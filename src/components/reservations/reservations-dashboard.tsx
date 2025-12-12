@@ -38,7 +38,7 @@ export const ReservationsDashboard: React.FC = () => {
     end_date: "",
     location: "",
     status: "confirmed" as "pending" | "confirmed" | "cancelled"
-  });
+  };
 
   const { toast } = useToast();
   const { user } = useAuth();
@@ -72,7 +72,7 @@ export const ReservationsDashboard: React.FC = () => {
         title: "Erro",
         description: "Erro ao carregar reservas",
         variant: "destructive"
-      });
+      };
     } finally {
       setLoading(false);
     }
@@ -161,9 +161,9 @@ export const ReservationsDashboard: React.FC = () => {
       end_date: "",
       location: "",
       status: "confirmed" as "pending" | "confirmed" | "cancelled"
-    });
+    };
     setSelectedReservation(null);
-  });
+  };
 
   const openEditDialog = (reservation: Reservation) => {
     setSelectedReservation(reservation);
@@ -182,7 +182,7 @@ export const ReservationsDashboard: React.FC = () => {
   const openNewDialog = () => {
     resetForm();
     setIsDialogOpen(true);
-  });
+  };
 
   const getStatusColor = (status: string) => {
     switch (status) {

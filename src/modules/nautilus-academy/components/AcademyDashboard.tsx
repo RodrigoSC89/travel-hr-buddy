@@ -124,7 +124,7 @@ export default function AcademyDashboard() {
     setShowNewCourse(false);
     setNewCourseData({ course_name: "", course_description: "", duration_hours: 8, category: "Geral", level: "intermediate" });
     toast({ title: "Sucesso", description: "Curso criado com sucesso!" });
-  });
+  };
 
   const handleCreateCrew = async () => {
     if (!newCrewData.name || !newCrewData.position) {
@@ -135,18 +135,18 @@ export default function AcademyDashboard() {
     setShowNewCrew(false);
     setNewCrewData({ name: "", position: "", department: "", email: "", phone: "" });
     await refetch();
-  });
+  };
 
   const handleEnrollInCourse = async (courseId: string) => {
     await enrollInCourse(courseId);
     toast({ title: "Inscrito!", description: "Você foi inscrito no curso. Bom aprendizado!" });
-  });
+  };
 
   const handleContinueCourse = (course: Course, progress: CourseProgress) => {
     setSelectedCourse(course);
     setSelectedProgress(progress);
     setShowCoursePlayer(true);
-  });
+  };
 
   const handleViewCourseDetails = (course: Course) => {
     setSelectedCourse(course);
@@ -161,20 +161,20 @@ export default function AcademyDashboard() {
   const handleMarkAllRead = () => {
     setNotifications(prev => prev.map(n => ({ ...n, read: true })));
     toast({ title: "Notificações", description: "Todas as notificações foram marcadas como lidas" });
-  });
+  };
 
   const handleMarkAsRead = (id: string) => {
     setNotifications(prev => prev.map(n => n.id === id ? { ...n, read: true } : n));
-  });
+  };
 
   const handleDeleteNotification = (id: string) => {
     setNotifications(prev => prev.filter(n => n.id !== id));
-  });
+  };
 
   const handleSaveSettings = () => {
     toast({ title: "Configurações salvas", description: "Suas preferências foram atualizadas" });
     setShowSettings(false);
-  });
+  };
 
   const handleGenerateAI = useCallback(async () => {
     toast({ title: "Gerando insights...", description: "Analisando dados com IA" });
@@ -189,7 +189,7 @@ export default function AcademyDashboard() {
       toast({ 
         title: "Análise IA completa", 
         description: `${totalInsights} insights e recomendações gerados com sucesso!` 
-      });
+      };
     } catch (error) {
       console.error("AI generation error:", error);
       toast({ 
@@ -205,7 +205,7 @@ export default function AcademyDashboard() {
       await updateProgress(selectedProgress.id, {
         progress_percent: newProgress,
         status: newProgress >= 100 ? "completed" : "in_progress"
-      });
+      };
       toast({ title: "Progresso atualizado", description: `Progresso: ${newProgress}%` });
       if (newProgress >= 100) {
         toast({ title: "Parabéns!", description: "Você concluiu o curso!" });

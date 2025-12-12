@@ -69,7 +69,7 @@ export const DocumentWorkflowPanel: React.FC = () => {
     title: "",
     category: "ism_procedure" as DocumentCategory,
     description: ""
-  });
+  };
 
   useEffect(() => {
     loadDocuments();
@@ -98,7 +98,7 @@ export const DocumentWorkflowPanel: React.FC = () => {
         category: newDoc.category,
         description: newDoc.description,
         status: "draft"
-      });
+      };
       
       if (doc) {
         toast.success("Documento criado com sucesso");

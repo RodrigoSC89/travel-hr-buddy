@@ -117,7 +117,7 @@ export const KeyboardShortcutsHelp: React.FC = () => {
   const groupedShortcuts = shortcuts.reduce((acc, shortcut) => {
     if (!acc[shortcut.category]) {
       acc[shortcut.category] = [];
-    });
+    };
     acc[shortcut.category].push(shortcut);
     return acc;
   }, {} as Record<string, Shortcut[]>);

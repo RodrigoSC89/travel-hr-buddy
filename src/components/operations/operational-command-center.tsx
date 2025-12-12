@@ -60,7 +60,7 @@ export const OperationalCommandCenter: React.FC = () => {
     active_vessels: 0,
     compliance_rate: 0,
     pending_alerts: 0
-  });
+  };
   const [isLoading, setIsLoading] = useState(true);
   const [realTimeEnabled, setRealTimeEnabled] = useState(false);
   const { toast } = useToast();
@@ -89,7 +89,7 @@ export const OperationalCommandCenter: React.FC = () => {
         title: "Erro ao carregar dados",
         description: "Não foi possível carregar os dados do centro de comando.",
         variant: "destructive"
-      });
+      };
     } finally {
       setIsLoading(false);
     }
@@ -107,7 +107,7 @@ export const OperationalCommandCenter: React.FC = () => {
       ...metric,
       trend: metric.trend as "increasing" | "decreasing" | "stable"
     })));
-  });
+  };
 
   const loadAlerts = async () => {
     const { data, error } = await supabase
@@ -123,7 +123,7 @@ export const OperationalCommandCenter: React.FC = () => {
       severity: alert.severity as "low" | "medium" | "high" | "critical",
       status: alert.status as "active" | "acknowledged" | "resolved"
     })));
-  });
+  };
 
   const loadStats = async () => {
     // Simulated stats - in real implementation, these would come from aggregated queries
@@ -135,7 +135,7 @@ export const OperationalCommandCenter: React.FC = () => {
       pending_alerts: alerts.filter(a => a.status === "active").length
     };
     setStats(mockStats);
-  });
+  };
 
   const setupRealTimeSubscriptions = () => {
     // Setup real-time subscriptions for alerts and metrics

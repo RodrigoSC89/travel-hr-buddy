@@ -62,7 +62,7 @@ const AIProcessingHub: React.FC = () => {
         memory: Math.floor(60 + Math.random() * 30),
         throughput: Math.floor(800 + Math.random() * 400)
       };
-    });
+    };
 
     const initialData = Array.from({ length: 20 }, (_, i) => {
       const time = new Date(Date.now() - (19 - i) * 3000);
@@ -72,7 +72,7 @@ const AIProcessingHub: React.FC = () => {
         memory: Math.floor(60 + Math.random() * 30),
         throughput: Math.floor(800 + Math.random() * 400)
       };
-  });
+  };
     setRealtimeMetrics(initialData);
 
     const interval = setInterval(() => {

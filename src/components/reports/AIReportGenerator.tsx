@@ -65,7 +65,7 @@ const AIReportGenerator: React.FC<AIReportGeneratorProps> = ({ onReportGenerated
         title: "Erro",
         description: "Selecione um tipo de relatório",
         variant: "destructive",
-      });
+      };
       return;
     }
 
@@ -140,8 +140,8 @@ const AIReportGenerator: React.FC<AIReportGeneratorProps> = ({ onReportGenerated
     toast({
       title: "Download Iniciado",
       description: "Relatório salvo como arquivo Markdown",
-    });
-  });
+    };
+  };
 
   const handleModuleChange = (moduleId: string, checked: boolean) => {
     if (checked) {

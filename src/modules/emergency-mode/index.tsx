@@ -419,12 +419,12 @@ const EmergencyMode = () => {
     setEmergencyStartTime(null);
     setElapsedTime(0);
     toast({ title: "Emergência Encerrada", description: "Modo normal restaurado" });
-  });
+  };
 
   const getProgressPercentage = () => {
     if (steps.length === 0) return 0;
     return (steps.filter(s => s.completed).length / steps.length) * 100;
-  });
+  };
 
   const getEmergencyIcon = (type: EmergencyType) => {
     switch (type) {

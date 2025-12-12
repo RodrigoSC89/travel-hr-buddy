@@ -24,7 +24,7 @@ export const LoginForm: React.FC = () => {
   const [loginData, setLoginData] = useState({
     email: "",
     password: ""
-  });
+  };
 
   const handleLogin = async (e: React.FormEvent) => {
     e.preventDefault();

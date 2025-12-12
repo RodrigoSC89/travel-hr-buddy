@@ -147,7 +147,7 @@ export const NaturalLanguageInterface = memo(function() {
           const transcript = event.results[0][0].transcript;
           setInput(transcript);
           setIsListening(false);
-        });
+        };
         recognition.onerror = () => setIsListening(false);
         recognition.onend = () => setIsListening(false);
         recognition.start();

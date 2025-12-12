@@ -89,7 +89,7 @@ export const PriceAlertNotification: React.FC<PriceAlertNotificationProps> = ({
       toast({
         title: "Settings Saved",
         description: "Notification preferences updated successfully",
-      });
+      };
     } catch (error) {
       console.error("Error saving settings:", error);
       toast({
@@ -115,14 +115,14 @@ export const PriceAlertNotification: React.FC<PriceAlertNotificationProps> = ({
             test: true,
             timestamp: new Date().toISOString()
           }
-        });
+        };
 
       if (error) throw error;
 
       toast({
         title: "Test Notification Sent",
         description: "Check your notification center",
-      });
+      };
     } catch (error) {
       console.error("Error sending test notification:", error);
       toast({

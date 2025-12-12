@@ -26,6 +26,6 @@ const AIAssistantPage: React.FC = () => {
       <NavigationAssistant />
     </ModulePageWrapper>
   );
-});
+};
 
 export default AIAssistantPage;

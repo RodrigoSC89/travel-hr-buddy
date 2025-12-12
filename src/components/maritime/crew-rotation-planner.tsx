@@ -188,19 +188,19 @@ export const CrewRotationPlanner: React.FC = () => {
     toast({
       title: "🧠 IA Analisando",
       description: "Otimizando cronograma de rotações com IA...",
-    });
+    };
     
     setTimeout(() => {
       toast({
         title: "✅ Otimização Concluída",
         description: "Economia potencial de R$ 15.500 identificada!",
-      });
+      };
     }, 2000);
-  });
+  };
 
   const handleCreateRotation = () => {
     setIsDialogOpen(true);
-  });
+  };
 
   const totalCosts = rotations.reduce((sum, rotation) => sum + rotation.costs.total, 0);
   const potentialSavings = optimizations.reduce((sum, opt) => sum + opt.potential_savings, 0);

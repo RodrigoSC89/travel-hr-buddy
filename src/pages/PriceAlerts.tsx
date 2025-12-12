@@ -6,6 +6,6 @@ import { Navigate } from "react-router-dom";
 
 const PriceAlerts = () => {
   return <Navigate to="/alerts-command" replace />;
-});
+};
 
 export default PriceAlerts;

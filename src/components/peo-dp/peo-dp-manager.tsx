@@ -190,12 +190,12 @@ export const PeoDpManager: React.FC = () => {
 
   const createNewPlan = () => {
     setIsWizardOpen(true);
-  });
+  };
 
   const handleWizardComplete = async (data: unknown) => {
     setIsWizardOpen(false);
     toast.success("Plano PEO-DP criado com sucesso!");
-  });
+  };
 
   const handleStartAudit = () => {
     if (!newAuditVessel.trim()) {
@@ -205,11 +205,11 @@ export const PeoDpManager: React.FC = () => {
     setActiveAudit({ vesselName: newAuditVessel, dpClass: newAuditDpClass });
     setIsAuditDialogOpen(false);
     setActiveView("audits");
-  });
+  };
 
   const handleAuditSave = (items: PEODPAuditItem[], score: number) => {
     toast.success("Auditoria salva como rascunho");
-  });
+  };
 
   const handleAuditComplete = (items: PEODPAuditItem[], score: number) => {
     const newAudit: PEODPAudit = {
@@ -275,7 +275,7 @@ export const PeoDpManager: React.FC = () => {
 
   const handleAcknowledgeAlert = () => {
     toast.success("Alerta reconhecido e registrado no logbook");
-  });
+  };
 
   return (
     <div className="space-y-6">

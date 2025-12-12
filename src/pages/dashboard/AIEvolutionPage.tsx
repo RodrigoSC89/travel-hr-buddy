@@ -7,6 +7,6 @@ import { AIEvolutionDashboard } from "@/components/dashboard/ai-evolution/AIEvol
 
 const AIEvolutionPage: React.FC = () => {
   return <AIEvolutionDashboard />;
-});
+};
 
 export default AIEvolutionPage;

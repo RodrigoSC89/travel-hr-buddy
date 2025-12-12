@@ -75,7 +75,7 @@ export const FloatingActionButton: React.FC = () => {
     action.action();
     setIsOpen(false);
     setFocusedIndex(-1);
-  });
+  };
 
   // Keyboard navigation for FAB menu
   useEffect(() => {

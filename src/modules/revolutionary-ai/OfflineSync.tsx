@@ -109,7 +109,7 @@ export const OfflineSync = memo(function() {
     })));
 
     setIsSyncing(false);
-  });
+  };
 
   const pendingCount = syncQueue.filter(i => i.type === "pending").length;
   const errorCount = syncQueue.filter(i => i.type === "error").length;

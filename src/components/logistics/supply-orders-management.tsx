@@ -69,7 +69,7 @@ export const SupplyOrdersManagement = memo(() => {
     }
 
     setOrders(data || []);
-  });
+  };
 
   const fetchInventoryItems = async () => {
     const { data } = await supabase
@@ -78,7 +78,7 @@ export const SupplyOrdersManagement = memo(() => {
       .order("item_name");
     
     setInventoryItems(data || []);
-  });
+  };
 
   const createOrder = async () => {
     const orgId = await getCurrentOrgId();
@@ -92,7 +92,7 @@ export const SupplyOrdersManagement = memo(() => {
         order_number: orderNumber,
         ...newOrder,
         quantity: parseInt(newOrder.quantity)
-      });
+      };
 
     if (error) {
       toast({ title: "Erro ao criar ordem", description: error.message, variant: "destructive" });
@@ -148,7 +148,7 @@ export const SupplyOrdersManagement = memo(() => {
       .single();
 
     return data?.organization_id;
-  });
+  };
 
   const getStatusColor = (status: string) => {
     const colors: Record<string, string> = {

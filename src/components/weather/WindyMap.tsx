@@ -82,7 +82,7 @@ export const WindyMap: React.FC<WindyMapProps> = ({
       try {
         const { data, error } = await supabase.functions.invoke("weather-map-proxy", {
           body: { action: "weather_data", lat, lon }
-        });
+        };
 
         if (!error && data?.data) {
           setWeatherData(data.data);
@@ -112,13 +112,13 @@ export const WindyMap: React.FC<WindyMapProps> = ({
   const handleIframeLoad = () => {
     setIsLoading(false);
     setMapError(false);
-  });
+  };
 
   const handleIframeError = () => {
     setIsLoading(false);
     setMapError(true);
     setUseAlternative(true);
-  });
+  };
 
   const handleRefresh = () => {
     setIsLoading(true);
@@ -130,15 +130,15 @@ export const WindyMap: React.FC<WindyMapProps> = ({
       title: "Atualizando mapa",
       description: "Carregando dados meteorológicos...",
       duration: 2000,
-    });
-  });
+    };
+  };
 
   // Get tile URL with API key
   const getOWMTileUrl = (z: number, x: number, y: number) => {
     if (!apiKey) return "";
     const layer = layers.find(l => l.id === selectedLayer);
     return `https://tile.openweathermap.org/map/${layer?.owmLayer}/${z}/${x}/${y}.png?appid=${apiKey}`;
-  });
+  };
 
   // Alternative embedded weather visualization
   const renderAlternativeMap = () => {

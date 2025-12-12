@@ -48,7 +48,7 @@ export default function InsightDashboard() {
 
     // Build time series data
     updateTimeSeriesData(currentMetrics);
-  });
+  };
 
   const updateTimeSeriesData = (newMetrics: unknown) => {
     setTimeSeriesData(prev => {
@@ -72,7 +72,7 @@ export default function InsightDashboard() {
           systemStatus,
           logs: logs.slice(0, 20)
         }
-      });
+      };
 
       if (error) throw error;
       
@@ -80,7 +80,7 @@ export default function InsightDashboard() {
       toast({
         title: "Relatório Gerado",
         description: "Análise de IA concluída com sucesso",
-      });
+      };
     } catch (error) {
       console.error("Erro ao gerar relatório:", error);
       toast({
@@ -139,8 +139,8 @@ ${logs.slice(0, 10).map(log =>
     toast({
       title: "Enviando Relatório",
       description: "Funcionalidade em desenvolvimento (Supabase Edge Function)",
-    });
-  });
+    };
+  };
 
   // Chart colors
   const COLORS = ["#3b82f6", "#10b981", "#f59e0b", "#ef4444", "#8b5cf6"];

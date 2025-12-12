@@ -210,7 +210,7 @@ export default function AuditTrail() {
 
   const exportReport = () => {
     toast.success("Relatório de auditoria exportado!");
-  });
+  };
 
   const getSeverityColor = (severity: string) => {
     switch (severity) {

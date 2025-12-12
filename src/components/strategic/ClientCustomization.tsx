@@ -157,7 +157,7 @@ export const ClientCustomization = memo(() => {
       module: "crew"
     };
     setCustomFields([...customFields, newField]);
-  });
+  };
 
   const updateCustomField = (id: string, updates: Partial<CustomField>) => {
     setCustomFields(fields => 
@@ -165,7 +165,7 @@ export const ClientCustomization = memo(() => {
         field.id === id ? { ...field, ...updates } : field
       )
     );
-  });
+  };
 
   const removeCustomField = (id: string) => {
     setCustomFields(fields => fields.filter(field => field.id !== id));
@@ -175,8 +175,8 @@ export const ClientCustomization = memo(() => {
     toast({
       title: "Tema Salvo",
       description: "As configurações de tema foram aplicadas com sucesso.",
-    });
-  });
+    };
+  };
 
   const cloneOrganization = (orgId: string) => {
     const org = organizations.find(o => o.id === orgId);

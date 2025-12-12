@@ -242,7 +242,7 @@ export default function DocumentViewPage() {
           document_id: id,
           user_id: user.id,
           content: newComment.trim(),
-        });
+        };
 
       if (error) throw error;
 

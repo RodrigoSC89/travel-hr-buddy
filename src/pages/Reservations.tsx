@@ -13,6 +13,6 @@ const Reservations = () => {
   }, [navigate]);
 
   return null;
-});
+};
 
 export default Reservations;

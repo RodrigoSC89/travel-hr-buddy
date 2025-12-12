@@ -94,31 +94,31 @@ export const MissionReplayPanel: React.FC<MissionReplayProps> = ({ recording, on
 
   const handlePlayPause = () => {
     setIsPlaying(!isPlaying);
-  });
+  };
 
   const handleRestart = () => {
     setCurrentTime(0);
     setCurrentFrame(0);
     setIsPlaying(false);
-  });
+  };
 
   const handleSkipBack = () => {
     setCurrentTime(Math.max(0, currentTime - 5));
-  });
+  };
 
   const handleSkipForward = () => {
     setCurrentTime(Math.min(totalDuration, currentTime + 5));
-  });
+  };
 
   const handleTimelineChange = (value: number[]) => {
     setCurrentTime(value[0]);
-  });
+  };
 
   const formatTime = (seconds: number): string => {
     const mins = Math.floor(seconds / 60);
     const secs = Math.floor(seconds % 60);
     return `${mins}:${secs.toString().padStart(2, "0")}`;
-  });
+  };
 
   const currentTrajectory = getCurrentTrajectory();
   const nearbyAlerts = getNearbyAttentionPoints();

@@ -75,14 +75,14 @@ export const OperationsDashboardRealTime: React.FC = () => {
     crew_availability: 0,
     system_health: 100,
     last_update: new Date().toISOString(),
-  });
+  };
   const [alerts, setAlerts] = useState<RealTimeAlert[]>([]);
   const [loading, setLoading] = useState(true);
   const [filter, setFilter] = useState<FilterConfig>({
     operation_type: "all",
     time_range: "24h",
     criticality: "all",
-  });
+  };
   const [mqttConnected, setMqttConnected] = useState(false);
   const [wsConnected, setWsConnected] = useState(false);
   const [autoRefresh, setAutoRefresh] = useState(true);
@@ -119,7 +119,7 @@ export const OperationsDashboardRealTime: React.FC = () => {
 
     // Initialize WebSocket connection (if configured)
     setupWebSocketConnection();
-  });
+  };
 
   const setupSupabaseRealtime = () => {
     // Subscribe to multiple tables for real-time updates
@@ -225,7 +225,7 @@ export const OperationsDashboardRealTime: React.FC = () => {
       
       handleWebSocketMessage(wsData);
     }, 15000);
-  });
+  };
 
   const handleSupabaseUpdate = (payload: unknown, type: string) => {
     const newAlert: RealTimeAlert = {
@@ -413,7 +413,7 @@ export const OperationsDashboardRealTime: React.FC = () => {
     a.click();
 
     toast.success("Dashboard data exported");
-  });
+  };
 
   const getSeverityColor = (severity: string) => {
     const colors = {

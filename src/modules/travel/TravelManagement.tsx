@@ -38,7 +38,7 @@ const loadJsPDF = async () => {
   const { default: jsPDF } = await import("jspdf");
   await import("jspdf-autotable");
   return jsPDF;
-});
+};
 
 interface TravelItinerary {
   id: string;
@@ -95,7 +95,7 @@ const TravelManagement = () => {
     arrival_date: "",
     travel_purpose: "",
     status: "pending"
-  });
+  };
 
   useEffect(() => {
     loadItineraries();
@@ -156,7 +156,7 @@ const TravelManagement = () => {
         title: "Error loading itineraries",
         description: error.message,
         variant: "destructive",
-      });
+      };
     } finally {
       setLoading(false);
     }
@@ -185,14 +185,14 @@ const TravelManagement = () => {
         .insert({
           ...formData,
           status: "pending"
-        });
+        };
 
       if (error) throw error;
 
       toast({
         title: "✅ Itinerary Created",
         description: "Your travel itinerary has been created",
-      });
+      };
 
       setShowNewItinerary(false);
       setFormData({

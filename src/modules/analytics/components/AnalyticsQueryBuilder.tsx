@@ -42,7 +42,7 @@ export const AnalyticsQueryBuilder: React.FC = () => {
     table: "analytics_events",
     filters: [],
     limit: 100
-  });
+  };
   const [queryResult, setQueryResult] = useState<QueryResult | null>(null);
   const [loading, setLoading] = useState(false);
   const { toast } = useToast();
@@ -54,19 +54,19 @@ export const AnalyticsQueryBuilder: React.FC = () => {
         ...queryConfig.filters,
         { field: "event_type", operator: "equals", value: "" }
       ]
-    });
-  });
+    };
+  };
 
   const removeFilter = (index: number) => {
     const newFilters = queryConfig.filters.filter((_, i) => i !== index);
     setQueryConfig({ ...queryConfig, filters: newFilters });
-  });
+  };
 
   const updateFilter = (index: number, field: keyof QueryFilter, value: string) => {
     const newFilters = [...queryConfig.filters];
     newFilters[index] = { ...newFilters[index], [field]: value };
     setQueryConfig({ ...queryConfig, filters: newFilters });
-  });
+  };
 
   const executeQuery = async () => {
     try {
@@ -137,7 +137,7 @@ export const AnalyticsQueryBuilder: React.FC = () => {
         title: "No Data",
         description: "No data to export",
         variant: "destructive"
-      });
+      };
       return;
     }
 

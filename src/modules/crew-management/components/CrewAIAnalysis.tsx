@@ -271,7 +271,7 @@ const CrewCard = ({ crew }: { crew: CrewMemberAnalysis }) => {
         {labels[crew.fatigueRisk]}
       </Badge>
     );
-  });
+  };
 
   return (
     <Card className={`border-l-4 ${
@@ -372,12 +372,12 @@ export default function CrewAIAnalysis() {
     setCompetencyGaps(generateCompetencyGaps());
     setInsights(generateAIInsights(crew));
     setIsAnalyzing(false);
-  });
+  };
 
   const getOverallFatigueRisk = () => {
     const avgFatigue = crewData.reduce((acc, c) => acc + c.fatigueScore, 0) / crewData.length || 0;
     return avgFatigue;
-  });
+  };
 
   const criticalCount = crewData.filter(c => c.fatigueRisk === "critical" || c.fatigueRisk === "high").length;
 

@@ -152,7 +152,7 @@ export const ComplianceAutomation: React.FC = () => {
     nonCompliant: 0,
     pending: 0,
     expiring: 0
-  });
+  };
 
   useEffect(() => {
     const newStats = items.reduce((acc, item) => {
@@ -172,7 +172,7 @@ export const ComplianceAutomation: React.FC = () => {
     await new Promise(resolve => setTimeout(resolve, 1500));
     setIsRefreshing(false);
     toast.success("Verificação de conformidade atualizada");
-  });
+  };
 
   const getStatusIcon = (status: string) => {
     switch (status) {

@@ -18,7 +18,7 @@ const loadJsPDF = async () => {
     import("jspdf-autotable")
   ]);
   return { jsPDF, autoTable: autoTableModule.default };
-});
+};
 
 let XLSX: unknown = null;
 const loadXLSX = async () => {
@@ -26,7 +26,7 @@ const loadXLSX = async () => {
     XLSX = await import("xlsx");
   }
   return XLSX;
-});
+};
 import { format } from "date-fns";
 
 // PATCH 392 - Compliance Reports: Advanced Filtering & Multi-Format Export
@@ -46,7 +46,7 @@ const ComplianceReports = () => {
     severities: [] as string[],
     dateFrom: "",
     dateTo: ""
-  });
+  };
 
   const [reports, setReports] = useState([
     {
@@ -311,7 +311,7 @@ const ComplianceReports = () => {
         title: "Campos obrigatórios",
         description: "Preencha título e template",
         variant: "destructive"
-      });
+      };
       return;
     }
 

@@ -289,7 +289,7 @@ export const IntelligentAlertSystem = memo(() => {
     }, 30000);
 
     return () => clearInterval(interval);
-  });
+  };
 
   const getAlertIcon = (type: SmartAlert["type"]) => {
     switch (type) {

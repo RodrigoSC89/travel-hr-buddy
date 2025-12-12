@@ -41,7 +41,7 @@ export const OrganizationHealthCheck: React.FC = () => {
     vessels: 0,
     certificates: 0,
     modules: 0
-  });
+  };
 
   useEffect(() => {
     if (currentOrganization) {
@@ -217,8 +217,8 @@ export const OrganizationHealthCheck: React.FC = () => {
       .sort((a, b) => {
         const priorityOrder = { high: 3, medium: 2, low: 1 };
         return priorityOrder[b.priority] - priorityOrder[a.priority];
-  });
-  });
+  };
+  };
 
   if (isLoading) {
     return (

@@ -111,7 +111,7 @@ export const IntegrationsTab: React.FC<IntegrationsTabProps> = ({
         title: "Erro",
         description: "Nome e URL são obrigatórios",
         variant: "destructive"
-      });
+      };
       return;
     }
 
@@ -124,7 +124,7 @@ export const IntegrationsTab: React.FC<IntegrationsTabProps> = ({
 
     onUpdate({
       webhooks: [...settings.webhooks, webhook]
-    });
+    };
 
     setNewWebhook({ name: "", url: "" });
     

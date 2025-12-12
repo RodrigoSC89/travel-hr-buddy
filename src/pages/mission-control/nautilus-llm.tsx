@@ -50,7 +50,7 @@ const NautilusLLM: React.FC = () => {
     averageConfidence: 0,
     averageExecutionTime: 0,
     cacheHitRate: 0
-  });
+  };
 
   useEffect(() => {
     loadStats();
@@ -61,7 +61,7 @@ const NautilusLLM: React.FC = () => {
   const loadStats = async () => {
     const iaStats = await getIAStats();
     setStats(iaStats);
-  });
+  };
 
   const handleSend = async () => {
     if (!prompt.trim()) return;
@@ -81,7 +81,7 @@ const NautilusLLM: React.FC = () => {
       const response = await nautilusRespond({
         prompt: userMessage.content,
         mode
-      });
+      };
 
       const assistantMessage: Message = {
         id: response.sessionId,

@@ -206,7 +206,7 @@ const WorkflowVisual = () => {
     type: "other",
     description: "",
     status: "pending"
-  });
+  };
 
   const onConnect = useCallback(
     (params: Connection) => setEdges((eds) => addEdge({ ...params, markerEnd: { type: MarkerType.ArrowClosed } }, eds)),
@@ -305,14 +305,14 @@ const WorkflowVisual = () => {
     setShowNewNodeDialog(false);
     setNewNodeData({ label: "", type: "other", description: "", status: "pending" });
     toast({ title: "Etapa Adicionada", description: newNodeData.label });
-  });
+  };
 
   const deleteNode = (nodeId: string) => {
     setNodes(prev => prev.filter(n => n.id !== nodeId));
     setEdges(prev => prev.filter(e => e.source !== nodeId && e.target !== nodeId));
     setSelectedNode(null);
     toast({ title: "Etapa Removida" });
-  });
+  };
 
   const advanceNode = (nodeId: string) => {
     setNodes(prev => prev.map(n => 
@@ -335,7 +335,7 @@ const WorkflowVisual = () => {
     }
     
     toast({ title: "Workflow em Execução", description: "Etapas sendo processadas..." });
-  });
+  };
 
   const exportWorkflow = () => {
     const data = JSON.stringify({ nodes, edges }, null, 2);
@@ -346,7 +346,7 @@ const WorkflowVisual = () => {
     a.download = `workflow-${Date.now()}.json`;
     a.click();
     toast({ title: "Workflow Exportado" });
-  });
+  };
 
   const getWorkflowStats = () => {
     const completed = nodes.filter(n => n.data.status === "completed").length;
@@ -355,7 +355,7 @@ const WorkflowVisual = () => {
     const blocked = nodes.filter(n => n.data.status === "blocked").length;
     
     return { completed, inProgress, pending, blocked, total: nodes.length };
-  });
+  };
 
   const stats = getWorkflowStats();
 

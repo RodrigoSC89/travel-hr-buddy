@@ -78,14 +78,14 @@ export default function PerformanceProfiler() {
     const measureFPS = () => {
       frameCountRef.current++;
       animationFrameRef.current = requestAnimationFrame(measureFPS);
-    });
+    };
     measureFPS();
 
     // Collect metrics every 3 seconds
     intervalRef.current = setInterval(() => {
       collectMetrics();
     }, 3000);
-  });
+  };
 
   const stopMonitoring = () => {
     setIsMonitoring(false);
@@ -164,9 +164,9 @@ export default function PerformanceProfiler() {
             renderTime: Math.round(entry.duration),
             count: 1,
             lastSeen: Date.now(),
-          });
+          };
         }
-      });
+      };
 
       if (slowOnes.length > 0) {
         setSlowComponents((prev) => {

@@ -82,7 +82,7 @@ const CrewTraining = () => {
         title: "Error",
         description: "Failed to load training records",
         variant: "destructive",
-      });
+      };
     } finally {
       setLoading(false);
     }
@@ -101,7 +101,7 @@ const CrewTraining = () => {
           expiringCount,
           totalCrew: new Set(records.map(r => r.crew_id)).size
         }
-      });
+      };
       
       if (response.message) {
         setAiInsight(response.message);

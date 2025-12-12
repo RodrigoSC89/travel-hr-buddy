@@ -22,7 +22,7 @@ export default function TrainingCreatorSection() {
       setIsGenerating(false);
       toast.success("Treinamento gerado com sucesso!");
     }, 2000);
-  });
+  };
 
   return (
     <div className="space-y-6">

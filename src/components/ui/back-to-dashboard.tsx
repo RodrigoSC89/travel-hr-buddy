@@ -16,7 +16,7 @@ export const BackToDashboard: React.FC<BackToDashboardProps> = ({
 
   const handleBackToDashboard = () => {
     navigate("/");
-  });
+  };
 
   return (
     <Button
@@ -29,4 +29,4 @@ export const BackToDashboard: React.FC<BackToDashboardProps> = ({
       <span>Dashboard Principal</span>
     </Button>
   );
-});
+};

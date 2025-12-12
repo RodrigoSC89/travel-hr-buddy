@@ -23,7 +23,7 @@ import { logger } from "@/lib/logger";
 const loadJsPDF = async () => {
   const { default: jsPDF } = await import("jspdf");
   return jsPDF;
-});
+};
 
 import ApplyTemplateModal from "@/components/templates/ApplyTemplateModal";
 
@@ -74,7 +74,7 @@ export default function DocumentAIEditorPage() {
         title: "Erro ao salvar",
         description: "Por favor, preencha o título.",
         variant: "destructive",
-      });
+      };
       return;
     }
 
@@ -85,7 +85,7 @@ export default function DocumentAIEditorPage() {
         title: "Erro ao salvar",
         description: "O documento está vazio.",
         variant: "destructive",
-      });
+      };
       return;
     }
 
@@ -138,7 +138,7 @@ export default function DocumentAIEditorPage() {
         title: "Erro ao exportar",
         description: "Por favor, preencha o título.",
         variant: "destructive",
-      });
+      };
       return;
     }
 
@@ -149,7 +149,7 @@ export default function DocumentAIEditorPage() {
         title: "Erro ao exportar",
         description: "O documento está vazio.",
         variant: "destructive",
-      });
+      };
       return;
     }
 
@@ -212,7 +212,7 @@ export default function DocumentAIEditorPage() {
         title: "Nenhum texto selecionado",
         description: "Por favor, selecione um trecho de texto para reescrever.",
         variant: "destructive",
-      });
+      };
       return;
     }
 
@@ -220,7 +220,7 @@ export default function DocumentAIEditorPage() {
     try {
       const { data, error } = await supabase.functions.invoke("rewrite-document", {
         body: { content: selectedText },
-      });
+      };
 
       if (error) throw error;
 

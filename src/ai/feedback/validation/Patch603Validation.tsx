@@ -56,7 +56,7 @@ export const Patch603Validation = memo(function() {
 
   const simulateVoice = () => {
     addFeedback("voice", "Voice command: Increase priority of mission alpha");
-  });
+  };
 
   const submitText = () => {
     if (textInput.trim()) {
@@ -67,7 +67,7 @@ export const Patch603Validation = memo(function() {
 
   const simulateClick = () => {
     addFeedback("click", "User clicked: Optimize route for vessel-3");
-  });
+  };
 
   const getChannelIcon = (channel: string) => {
     switch (channel) {

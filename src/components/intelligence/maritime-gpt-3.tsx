@@ -400,15 +400,15 @@ Por favor, seja mais específico sobre o que precisa para que eu possa fornecer 
     toast({
       title: "📄 OCR Ativado",
       description: "Sistema de análise de documentos pronto. Selecione um arquivo para processar.",
-    });
-  });
+    };
+  };
 
   const generateReport = () => {
     toast({
       title: "📊 Gerando Relatório",
       description: "Relatório especializado sendo gerado em " + languages.find(l => l.code === selectedLanguage)?.name,
-    });
-  });
+    };
+  };
 
   return (
     <div className="space-y-6">

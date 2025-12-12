@@ -140,14 +140,14 @@ export const AdvancedMetricsDashboard: React.FC = () => {
           category: selectedCategory,
           userId: user?.id
         }
-      });
+      };
 
       if (error) throw error;
 
       toast({
         title: "Relatório gerado",
         description: "O relatório de análise foi gerado com sucesso",
-      });
+      };
     } catch (error) {
       toast({
         title: "Erro ao gerar relatório",

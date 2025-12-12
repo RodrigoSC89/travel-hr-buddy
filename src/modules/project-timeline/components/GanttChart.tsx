@@ -61,7 +61,7 @@ export const GanttChart = memo(() => {
     }
 
     setTasks(data || []);
-  });
+  };
 
   const createTask = async () => {
     const { data: { user } } = await supabase.auth.getUser();
@@ -83,7 +83,7 @@ export const GanttChart = memo(() => {
         project_id: crypto.randomUUID(),
         organization_id: orgData.organization_id,
         created_by: user.id
-      });
+      };
 
     if (error) {
       toast({ title: "Erro ao criar tarefa", description: error.message, variant: "destructive" });
@@ -144,7 +144,7 @@ export const GanttChart = memo(() => {
   const handleDragEnd = () => {
     setIsDragging(false);
     setDraggedTask(null);
-  });
+  };
 
   const handleDrop = async (newStartDate: Date) => {
     if (!draggedTask) return;

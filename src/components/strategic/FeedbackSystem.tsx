@@ -169,7 +169,7 @@ export const FeedbackSystem = memo(() => {
   const handleSubmitFeedback = () => {
     // Implementar lógica de envio do feedback
     setNewFeedback({ title: "", description: "", category: "", module: "" });
-  });
+  };
 
   return (
     <div className="space-y-6">

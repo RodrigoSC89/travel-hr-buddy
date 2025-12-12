@@ -103,8 +103,8 @@ export const ReservationForm: React.FC<ReservationFormProps> = ({
       currency: "BRL",
       status: "confirmed",
       notes: ""
-    });
-  });
+    };
+  };
 
   const handleTemplateUse = (templateData: unknown) => {
     setFormData({
@@ -128,7 +128,7 @@ export const ReservationForm: React.FC<ReservationFormProps> = ({
         title: "Erro de validação",
         description: "Título é obrigatório",
         variant: "destructive"
-      });
+      };
       return false;
     }
 
@@ -137,7 +137,7 @@ export const ReservationForm: React.FC<ReservationFormProps> = ({
         title: "Erro de validação",
         description: "Data de início e fim são obrigatórias",
         variant: "destructive"
-      });
+      };
       return false;
     }
 

@@ -39,7 +39,7 @@ export default function ForecastGenerator({
         system_name: systemName,
         component,
         maintenance_history: maintenanceHistory,
-      });
+      };
 
       setForecast(result);
       
@@ -83,7 +83,7 @@ export default function ForecastGenerator({
         system_name: systemName,
         vessel_id: vesselId,
         component_name: component.component_name,
-      });
+      };
 
       if (task) {
         toast.success("Tarefa criada automaticamente!");

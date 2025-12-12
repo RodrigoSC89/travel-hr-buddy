@@ -16,7 +16,7 @@ export const ProgressDashboard: React.FC = () => {
     totalCertificates: 0,
     averageScore: 0,
     progressData: [] as any[],
-  });
+  };
   const [isLoading, setIsLoading] = useState(true);
   const { toast } = useToast();
 

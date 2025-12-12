@@ -69,7 +69,7 @@ export const EnhancedChannelManager: React.FC = () => {
     description: "",
     channel_type: "general",
     max_members: 50
-  });
+  };
 
   useEffect(() => {
     loadChannels();
@@ -104,7 +104,7 @@ export const EnhancedChannelManager: React.FC = () => {
         title: "Error",
         description: "Failed to load channels",
         variant: "destructive"
-      });
+      };
     } finally {
       setLoading(false);
     }
@@ -196,7 +196,7 @@ export const EnhancedChannelManager: React.FC = () => {
       toast({
         title: "Success",
         description: "Channel created successfully"
-      });
+      };
 
       setIsCreateOpen(false);
       resetForm();
@@ -246,8 +246,8 @@ export const EnhancedChannelManager: React.FC = () => {
       description: "",
       channel_type: "general",
       max_members: 50
-    });
-  });
+    };
+  };
 
   const getChannelTypeBadge = (type: string) => {
     const variants: Record<string, string> = {
@@ -258,7 +258,7 @@ export const EnhancedChannelManager: React.FC = () => {
     };
 
     return <Badge className={variants[type] || "bg-gray-100"}>{type}</Badge>;
-  });
+  };
 
   return (
     <div className="container mx-auto p-6 space-y-6">

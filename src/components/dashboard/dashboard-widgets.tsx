@@ -79,7 +79,7 @@ const DashboardKPIWidget: React.FC<{
   const getProgressValue = (): number => {
     if (!kpi.target || typeof kpi.value !== "number") return 0;
     return Math.min((kpi.value / kpi.target) * 100, 100);
-  });
+  };
 
   return (
     <Card className="group hover:shadow-lg transition-all duration-300 border-l-4 border-l-transparent hover:border-l-primary">
@@ -251,8 +251,8 @@ const DashboardFilters: React.FC<{
       dateRange,
       modules: selectedModules,
       vessels: selectedVessels
-    });
-  });
+    };
+  };
 
   return (
     <Card>

@@ -63,7 +63,7 @@ export const ShipmentTracking = memo(() => {
         title: "Error loading shipments",
         description: error.message,
         variant: "destructive",
-      });
+      };
     } finally {
       setLoading(false);
     }
@@ -124,11 +124,11 @@ export const ShipmentTracking = memo(() => {
     return shipments.filter(s => 
       !["delivered", "cancelled", "lost"].includes(s.status)
     );
-  });
+  };
 
   const getDelayedShipments = () => {
     return shipments.filter(s => s.status === "delayed");
-  });
+  };
 
   return (
     <div className="space-y-6">

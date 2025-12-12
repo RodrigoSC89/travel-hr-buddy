@@ -58,7 +58,7 @@ export const TaskManagement: React.FC = () => {
     tags: [] as string[],
     related_vessel: "",
     related_crew: ""
-  });
+  };
 
   useEffect(() => {
     loadTasks();
@@ -158,7 +158,7 @@ export const TaskManagement: React.FC = () => {
         tags: [],
         related_vessel: "",
         related_crew: ""
-      });
+      };
       setShowAddDialog(false);
       
       toast({

@@ -42,7 +42,7 @@ const AITraining: React.FC = () => {
       const sessionsData = await TrainingAIService.getTrainingSessions(crewMemberId);
       const statsData = await TrainingAIService.getTrainingStats(crewMemberId, {
         sessions: sessionsData,
-      });
+      };
       setSessions(sessionsData);
       setStats(statsData);
     } catch (error) {

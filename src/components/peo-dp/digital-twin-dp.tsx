@@ -83,7 +83,7 @@ export const DigitalTwinDP: React.FC = () => {
     windSpeed: 15,
     waveHeight: 1.5,
     current: 0.8
-  });
+  };
   const [liveComparison, setLiveComparison] = useState(false);
 
   const handleStartSimulation = () => {
@@ -103,20 +103,20 @@ export const DigitalTwinDP: React.FC = () => {
           return 100;
         }
         return prev + 5;
-  });
+  };
     }, 500);
-  });
+  };
 
   const handleStopSimulation = () => {
     setIsSimulating(false);
     toast.info("Simulação pausada");
-  });
+  };
 
   const getHealthColor = (score: number) => {
     if (score >= 90) return "text-green-500";
     if (score >= 70) return "text-yellow-500";
     return "text-red-500";
-  });
+  };
 
   const getCategoryIcon = (category: string) => {
     switch (category) {

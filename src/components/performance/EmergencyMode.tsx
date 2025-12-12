@@ -63,8 +63,8 @@ export const EmergencyModeProvider = memo(function({ children }: EmergencyModePr
         setSyncStatus("idle");
       }).catch(() => {
         setSyncStatus("error");
-  });
-    });
+  };
+    };
 
     const handleOffline = () => {
       setIsOffline(true);
@@ -75,7 +75,7 @@ export const EmergencyModeProvider = memo(function({ children }: EmergencyModePr
           setIsEmergencyMode(true);
         }
       }, 30000);
-    });
+    };
 
     window.addEventListener("online", handleOnline);
     window.addEventListener("offline", handleOffline);
@@ -91,7 +91,7 @@ export const EmergencyModeProvider = memo(function({ children }: EmergencyModePr
     const checkPending = async () => {
       const stats = await indexedDBSync.getQueueStats();
       setPendingSyncCount(stats.pending + stats.failed);
-    });
+    };
 
     checkPending();
     const interval = setInterval(checkPending, 10000);
@@ -146,7 +146,7 @@ function EmergencyModeOverlay() {
         title: "Sem conexão",
         description: "Aguarde a conexão ser restabelecida para sincronizar",
         variant: "destructive",
-      });
+      };
       return;
     }
 
@@ -155,7 +155,7 @@ function EmergencyModeOverlay() {
       toast({
         title: "Sincronização concluída",
         description: "Dados sincronizados com sucesso",
-      });
+      };
     } catch {
       toast({
         title: "Erro na sincronização",

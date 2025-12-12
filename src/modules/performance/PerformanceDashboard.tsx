@@ -166,7 +166,7 @@ const PerformanceDashboard: React.FC = () => {
       toast({
         title: "Gerando PDF",
         description: "Preparando relatório de performance...",
-      });
+      };
 
       await exportPerformancePDF({
         metrics,
@@ -178,7 +178,7 @@ const PerformanceDashboard: React.FC = () => {
         period: selectedPeriod,
         vessel: selectedVessel,
         missionType: selectedMissionType
-      });
+      };
 
       toast({
         title: "PDF Gerado",

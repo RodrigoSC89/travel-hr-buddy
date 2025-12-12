@@ -30,7 +30,7 @@ export default function SimilarExamplesDemo() {
       title: jobTitle,
       description: jobDescription,
       component: component,
-    });
+    };
     // In a real application, this would call an API to save the job
   };
 
@@ -38,7 +38,7 @@ export default function SimilarExamplesDemo() {
     setJobTitle("");
     setJobDescription("");
     setComponent("");
-  });
+  };
 
   return (
     <div className="container mx-auto p-6 max-w-4xl">

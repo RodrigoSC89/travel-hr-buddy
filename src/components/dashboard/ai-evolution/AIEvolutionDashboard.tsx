@@ -84,7 +84,7 @@ export const AIEvolutionDashboard: React.FC = () => {
     URL.revokeObjectURL(url);
 
     logger.info("[AIEvolution] Exported", snapshots.length, "snapshots to CSV");
-  });
+  };
 
   // Prepare chart data
   const confidenceData = {

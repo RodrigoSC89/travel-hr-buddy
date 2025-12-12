@@ -48,7 +48,7 @@ export const ReservationPDFGenerator: React.FC<ReservationPDFGeneratorProps> = (
       // Trigger print after content loads
       printWindow.onload = () => {
         printWindow.print();
-      });
+      };
     } catch (error) {
     } finally {
       setGenerating(false);
@@ -412,7 +412,7 @@ export const ReservationPDFGenerator: React.FC<ReservationPDFGeneratorProps> = (
         title: `Reserva: ${reservation.title}`,
         text: `Detalhes da reserva de ${reservation.title} - ${getStatusLabel(reservation.status)}`,
         url: window.location.href
-      });
+      };
     } else {
       // Fallback - copy to clipboard
       const shareText = `Reserva: ${reservation.title}\nData: ${new Date(reservation.start_date).toLocaleDateString("pt-BR")}\nStatus: ${getStatusLabel(reservation.status)}`;

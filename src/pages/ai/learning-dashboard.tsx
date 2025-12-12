@@ -160,7 +160,7 @@ export default function AILearningDashboard() {
     if (insights.length === 0) return 0;
     const total = insights.reduce((sum, insight) => sum + insight.avg_composite_score, 0);
     return (total / insights.length) * 100;
-  });
+  };
 
   return (
     <div className="container mx-auto py-8 space-y-6">

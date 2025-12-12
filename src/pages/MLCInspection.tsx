@@ -21,6 +21,6 @@ const MLCInspection: React.FC = () => {
       <MLCInspectionDashboard />
     </ModulePageWrapper>
   );
-});
+};
 
 export default MLCInspection;

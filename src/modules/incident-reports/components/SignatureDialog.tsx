@@ -43,7 +43,7 @@ export const SignatureDialog: React.FC<SignatureDialogProps> = ({
 
   const handleClear = () => {
     signatureRef.current?.clear();
-  });
+  };
 
   const handleSave = () => {
     if (signatureRef.current?.isEmpty()) {
@@ -60,7 +60,7 @@ export const SignatureDialog: React.FC<SignatureDialogProps> = ({
         title: "Campos obrigatórios",
         description: "Preencha nome e cargo",
         variant: "destructive",
-      });
+      };
       return;
     }
 

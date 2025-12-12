@@ -48,7 +48,7 @@ export default function APIGateway() {
 
   const loadKeys = () => {
     setKeys(apiKeyManager.getAllKeys());
-  });
+  };
 
   const toggleKeyVisibility = (keyId: string) => {
     setVisibleKeys(prev => {
@@ -59,13 +59,13 @@ export default function APIGateway() {
         newSet.add(keyId);
       }
       return newSet;
-  });
-  });
+  };
+  };
 
   const copyKey = (key: string) => {
     navigator.clipboard.writeText(key);
     toast.success("Chave copiada para a área de transferência");
-  });
+  };
 
   const handleCreateKey = () => {
     if (!newKeyName.trim()) {
@@ -83,7 +83,7 @@ export default function APIGateway() {
     setNewKeyScope("*");
     setNewKeyExpiry("365");
     toast.success("Chave API criada com sucesso");
-  });
+  };
 
   const handleDeleteKey = (keyId: string) => {
     apiKeyManager.deleteKey(keyId);

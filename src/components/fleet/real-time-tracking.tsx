@@ -193,14 +193,14 @@ const RealTimeTracking: React.FC = () => {
       speed: vessel.status === "sailing" ? vessel.speed + (Math.random() - 0.5) * 2 : 0,
       lastUpdate: new Date().toISOString()
     })));
-  });
+  };
 
   // Real-time updates with optimized polling
   useOptimizedPolling({
     id: "fleet-real-time-tracking",
     callback: updateVesselPositions,
     interval: 30000,
-  });
+  };
 
   const getStatusColor = (status: string) => {
     switch (status) {

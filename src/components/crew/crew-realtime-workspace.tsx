@@ -115,7 +115,7 @@ export const CrewRealtimeWorkspace = memo(() => {
     
     setMessages(prev => [...prev, newMessage]);
     setMessageInput("");
-  });
+  };
 
   const onlineCount = teamMembers.filter(m => m.status === "online" || m.status === "away").length;
 

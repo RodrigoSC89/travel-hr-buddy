@@ -143,16 +143,16 @@ export const IntegrationSecurity: React.FC = () => {
     toast({
       title: "Scan de Segurança Iniciado",
       description: "Verificando vulnerabilidades em todas as integrações...",
-    });
+    };
 
     // Simular scan
     setTimeout(() => {
       toast({
         title: "Scan Concluído",
         description: "Nenhuma vulnerabilidade crítica encontrada",
-      });
+      };
     }, 3000);
-  });
+  };
 
   return (
     <div className="space-y-6">

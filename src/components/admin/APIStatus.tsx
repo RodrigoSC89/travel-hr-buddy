@@ -109,7 +109,7 @@ export const APIStatus: React.FC = () => {
     })));
     
     setIsRefreshing(false);
-  });
+  };
 
   const getStatusIcon = (status: APIService["status"]) => {
     switch (status) {

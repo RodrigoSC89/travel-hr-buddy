@@ -106,7 +106,7 @@ const MarineAROverlay = () => {
     try {
       const stream = await navigator.mediaDevices.getUserMedia({
         video: { facingMode: "environment", width: 1280, height: 720 },
-      });
+      };
       
       if (videoRef.current) {
         videoRef.current.srcObject = stream;
@@ -114,7 +114,7 @@ const MarineAROverlay = () => {
         toast({
           title: "Câmera Ativada",
           description: "AR overlay pronto para uso",
-        });
+        };
         drawOverlay();
       }
     } catch (error) {
@@ -137,7 +137,7 @@ const MarineAROverlay = () => {
       videoRef.current.srcObject = null;
     }
     setIsStreamActive(false);
-  });
+  };
 
   const drawOverlay = () => {
     const canvas = canvasRef.current;

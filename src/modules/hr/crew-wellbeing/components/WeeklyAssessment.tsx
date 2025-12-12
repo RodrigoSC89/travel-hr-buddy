@@ -23,7 +23,7 @@ export const WeeklyAssessment: React.FC = () => {
     water_intake_liters: 2.0,
     notes: "",
     concerns: "",
-  });
+  };
   const [submitting, setSubmitting] = useState(false);
   const { toast } = useToast();
 

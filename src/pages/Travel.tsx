@@ -13,6 +13,6 @@ const Travel = () => {
   }, [navigate]);
 
   return null;
-});
+};
 
 export default Travel;

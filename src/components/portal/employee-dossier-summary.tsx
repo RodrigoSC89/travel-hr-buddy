@@ -207,11 +207,11 @@ export const EmployeeDossierSummary: React.FC = () => {
     if (certifications.length === 0) return 0;
     const validCerts = certifications.filter(cert => cert.status === "valid").length;
     return Math.round((validCerts / certifications.length) * 100);
-  });
+  };
 
   const getTotalSeaTime = () => {
     return embarkations.reduce((total, embark) => total + (embark.hours_worked || 0), 0);
-  });
+  };
 
   if (loading) {
     return (

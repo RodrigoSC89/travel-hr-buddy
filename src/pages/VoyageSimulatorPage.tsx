@@ -17,6 +17,6 @@ const VoyageSimulatorPage: React.FC = () => {
       </div>
     </>
   );
-});
+};
 
 export default VoyageSimulatorPage;

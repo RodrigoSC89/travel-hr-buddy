@@ -24,7 +24,7 @@ export default function HealthCheckPage() {
       setHealth(result);
       setLoading(false);
     }, 500);
-  });
+  };
 
   useEffect(() => {
     runCheck();

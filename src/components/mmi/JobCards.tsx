@@ -38,7 +38,7 @@ export default function JobCards() {
         title: "Erro ao carregar jobs",
         description: "Não foi possível carregar a lista de jobs.",
         variant: "destructive",
-      });
+      };
     } finally {
       setLoading(false);
     }
@@ -156,18 +156,18 @@ export default function JobCards() {
         includeAIRecommendations: true,
         title: "Relatório MMI - Manutenção Inteligente",
         subtitle: "Nautilus One v1.1.0 - Sistema com IA Adaptativa",
-      });
+      };
       toast({
         title: "Relatório Gerado",
         description: "PDF exportado com sucesso!",
         variant: "default",
-      });
+      };
     } catch (error) {
       toast({
         title: "Erro",
         description: "Não foi possível gerar o relatório PDF.",
         variant: "destructive",
-      });
+      };
     } finally {
       setGeneratingPDF(false);
     }

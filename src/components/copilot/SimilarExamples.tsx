@@ -17,7 +17,7 @@ export default function SimilarExamples({ input, onSelect }: { input: string, on
         title: "⚠️ Campo vazio",
         description: "Por favor, digite uma descrição antes de buscar exemplos similares.",
         variant: "destructive",
-      });
+      };
       return;
     }
 
@@ -30,7 +30,7 @@ export default function SimilarExamples({ input, onSelect }: { input: string, on
         toast({
           title: "✅ Exemplos encontrados",
           description: `Encontrados ${result.length} casos similares com sucesso.`,
-        });
+        };
       } else {
         toast({
           title: "ℹ️ Nenhum resultado",

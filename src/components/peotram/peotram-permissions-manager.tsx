@@ -63,7 +63,7 @@ export const PeotramPermissionsManager: React.FC = () => {
     area_access: [] as string[],
     location_type: "vessel" as "vessel" | "shore" | "both",
     expires_at: ""
-  });
+  };
 
   useEffect(() => {
     fetchData();
@@ -154,7 +154,7 @@ export const PeotramPermissionsManager: React.FC = () => {
       toast({
         title: "Sucesso",
         description: "Permissão criada com sucesso!",
-      });
+      };
 
       setIsDialogOpen(false);
       setPermissionForm({

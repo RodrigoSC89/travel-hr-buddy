@@ -117,7 +117,7 @@ export const AccessibilityAuditor: React.FC = () => {
     setIssues(mockIssues);
     setScanComplete(true);
     setIsScanning(false);
-  });
+  };
 
   const getIssueIcon = (type: AccessibilityIssue["type"]) => {
     switch (type) {

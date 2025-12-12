@@ -67,7 +67,7 @@ const NautilusAssistant: React.FC = () => {
     try {
       const response = await invoke("audit_analyze", chatInput, {
         context: "Nautilus Assistant - Copiloto de IA Marítimo"
-      });
+      };
 
       const assistantMessage: ChatMessage = {
         role: "assistant",

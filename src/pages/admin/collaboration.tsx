@@ -145,8 +145,8 @@ export default function CollaborationPage() {
     toast({
       title: "Atualizado",
       description: "Comentários atualizados com sucesso.",
-    });
-  });
+    };
+  };
 
   const handleSubmit = async () => {
     if (!newComment.trim()) {
@@ -154,7 +154,7 @@ export default function CollaborationPage() {
         title: "Erro",
         description: "Por favor, escreva um comentário.",
         variant: "destructive",
-      });
+      };
       return;
     }
 

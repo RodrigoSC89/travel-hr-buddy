@@ -614,7 +614,7 @@ function ReceiveItemsForm({
       receivedQty: item.receivedQty + item.receivingQty,
     }));
     onConfirm(updatedItems);
-  });
+  };
 
   return (
     <div className="space-y-4 py-4">

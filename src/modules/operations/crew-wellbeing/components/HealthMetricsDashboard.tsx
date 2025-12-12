@@ -16,7 +16,7 @@ export const HealthMetricsDashboard: React.FC = () => {
     avgSleep: 0,
     avgStress: 0,
     avgHeartRate: 0,
-  });
+  };
   const [isLoading, setIsLoading] = useState(true);
   const { toast } = useToast();
 

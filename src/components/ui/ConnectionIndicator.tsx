@@ -45,7 +45,7 @@ export const ConnectionIndicator: React.FC<ConnectionIndicatorProps> = ({
     if (isModerate) return SignalMedium;
     if (isFast) return SignalHigh;
     return Signal;
-  });
+  };
 
   const getColor = () => {
     if (!isOnline) return "text-destructive";
@@ -53,7 +53,7 @@ export const ConnectionIndicator: React.FC<ConnectionIndicatorProps> = ({
     if (isModerate) return "text-info";
     if (isFast) return "text-success";
     return "text-muted-foreground";
-  });
+  };
 
   const getLabel = () => {
     if (!isOnline) return "Offline";
@@ -61,7 +61,7 @@ export const ConnectionIndicator: React.FC<ConnectionIndicatorProps> = ({
     if (isModerate) return "Conexão moderada";
     if (isFast) return "Conexão rápida";
     return "Verificando...";
-  });
+  };
 
   const Icon = getIcon();
 

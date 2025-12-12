@@ -181,7 +181,7 @@ export const SmartSidebar = memo(function({ className }: SmartSidebarProps) {
 
   const closeMobileMenu = () => {
     setIsMobileOpen(false);
-  });
+  };
 
   // Auto-open section containing current route
   useEffect(() => {

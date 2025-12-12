@@ -99,7 +99,7 @@ export const ProgressiveLoading = memo(function({
     if (elapsedTime > 15) return "Carregamento lento devido à conexão";
     if (elapsedTime > 5) return "Otimizando para sua conexão...";
     return null;
-  });
+  };
 
   const slowMessage = getSlowMessage();
 

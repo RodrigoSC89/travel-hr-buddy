@@ -44,7 +44,7 @@ const VoyagePlanner = () => {
   const handleCreateVoyage = (voyage: VoyageRoute) => {
     setVoyages((prev) => [voyage, ...prev]);
     toast.success(`Viagem ${voyage.name} criada com sucesso!`);
-  });
+  };
 
   const handleViewDetails = (voyage: VoyageRoute) => {
     setSelectedVoyage(voyage);

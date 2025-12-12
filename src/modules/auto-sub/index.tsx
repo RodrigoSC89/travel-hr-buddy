@@ -130,7 +130,7 @@ const AutoSub: React.FC = () => {
       high: "bg-red-500",
     };
     return colors[risk as keyof typeof colors] || "bg-gray-500";
-  });
+  };
 
   const getStatusBadge = (status: string) => {
     const colors = {

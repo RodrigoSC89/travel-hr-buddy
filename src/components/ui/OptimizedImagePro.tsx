@@ -78,12 +78,12 @@ export const OptimizedImagePro = memo(function OptimizedImagePro({
   const handleLoad = () => {
     setIsLoaded(true);
     onLoad?.();
-  });
+  };
   
   const handleError = () => {
     setError(true);
     onError?.();
-  });
+  };
   
   const blurPlaceholder = createPlaceholder(
     optimalWidth || 100,

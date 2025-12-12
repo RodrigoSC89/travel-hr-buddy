@@ -104,13 +104,13 @@ const SystemBackupAudit = () => {
           toast({
             title: "Backup Concluído",
             description: "Backup do sistema criado com sucesso"
-          });
+          };
           return 100;
         }
         return prev + 10;
-      });
+      };
     }, 500);
-  });
+  };
 
   const getStatusBadge = (status: string) => {
     switch (status) {

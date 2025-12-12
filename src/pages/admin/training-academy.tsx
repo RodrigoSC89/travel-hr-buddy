@@ -218,19 +218,19 @@ export default function TrainingAcademyAdmin() {
       is_published: false,
       is_mandatory: false,
       instructor_name: ""
-    });
-  });
+    };
+  };
 
   const handleCreateCourse = () => {
     createCourseMutation.mutate(newCourse);
-  });
+  };
 
   const togglePublishStatus = (course: Course) => {
     updateCourseMutation.mutate({
       id: course.id,
       updates: { is_published: !course.is_published }
-    });
-  });
+    };
+  };
 
   const handleDeleteCourse = (courseId: string) => {
     if (confirm("Tem certeza que deseja deletar este curso?")) {

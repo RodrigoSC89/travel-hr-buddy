@@ -39,7 +39,7 @@ const PerformanceOptimizer = () => {
     disk: { usage: 75, read: 125, write: 89 },
     network: { usage: 35, latency: 28, throughput: 850 },
     database: { connections: 24, queries: 1247, cache: 92 }
-  });
+  };
 
   const [optimizations, setOptimizations] = useState([
     {

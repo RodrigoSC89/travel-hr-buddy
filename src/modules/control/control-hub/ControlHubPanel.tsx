@@ -37,7 +37,7 @@ export default function ControlHubPanel() {
         await controlHub.iniciar();
       }
       updateState();
-    });
+    };
 
     init();
 
@@ -77,7 +77,7 @@ export default function ControlHubPanel() {
     const newState = controlHub.getState();
     setState(newState);
     setLastCheck(hubBridge.getLastCheck());
-  });
+  };
 
   const handleSync = async () => {
     setIsSyncing(true);

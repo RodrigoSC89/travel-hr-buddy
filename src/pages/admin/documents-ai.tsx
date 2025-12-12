@@ -15,7 +15,7 @@ import { logger } from "@/lib/logger";
 const loadJsPDF = async () => {
   const { default: jsPDF } = await import("jspdf");
   return jsPDF;
-});
+};
 
 export default function DocumentsAIPage() {
   const navigate = useNavigate();

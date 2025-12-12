@@ -209,14 +209,14 @@ export const OperationalWindowMonitor: React.FC = () => {
   const handleRefresh = () => {
     toast.success("Atualizando dados meteorológicos...");
     setLastUpdate(new Date());
-  });
+  };
 
   const getOverallStatus = () => {
     const statuses = conditions.map(c => getConditionStatus(c));
     if (statuses.includes("red")) return "critical";
     if (statuses.includes("yellow")) return "warning";
     return "normal";
-  });
+  };
 
   const getTrendIcon = (trend: string) => {
     switch (trend) {

@@ -81,7 +81,7 @@ export const SkipToMain: React.FC = () => {
       Pular para o conteúdo principal
     </a>
   );
-});
+};
 
 /**
  * Live Region for Dynamic Content Announcements

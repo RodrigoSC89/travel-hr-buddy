@@ -220,9 +220,9 @@ export const AdvancedSecurityCenter: React.FC = () => {
       toast({
         title: "Varredura concluída",
         description: "Nova análise de segurança foi executada com sucesso.",
-      });
+      };
     }, 3000);
-  });
+  };
 
   if (isLoading) {
     return (

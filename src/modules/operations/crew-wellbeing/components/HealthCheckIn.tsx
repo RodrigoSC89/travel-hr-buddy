@@ -43,15 +43,15 @@ export const HealthCheckin: React.FC = () => {
     exercise_minutes: 30,
     water_intake_liters: 2,
     notes: ""
-  });
+  };
 
   const handleSubmit = async () => {
     // TODO: Implement actual save to Supabase
     toast({
       title: "Health Check-in Saved",
       description: "Your health metrics have been recorded successfully"
-    });
-  });
+    };
+  };
 
   const getRatingColor = (rating: number, inverse: boolean = false) => {
     if (inverse) {
@@ -62,7 +62,7 @@ export const HealthCheckin: React.FC = () => {
     if (rating >= 4) return "text-green-500";
     if (rating === 3) return "text-yellow-500";
     return "text-red-500";
-  });
+  };
 
   const getRatingIcon = (value: number) => {
     if (value >= 4) return <TrendingUp className="h-4 w-4" />;

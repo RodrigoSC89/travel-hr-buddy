@@ -233,7 +233,7 @@ export default function AdvancedCopilot() {
         title: "Não suportado",
         description: "Reconhecimento de voz não disponível neste navegador",
         variant: "destructive",
-      });
+      };
       return;
     }
 
@@ -272,7 +272,7 @@ export default function AdvancedCopilot() {
       recognitionRef.current.stop();
     }
     setIsListening(false);
-  });
+  };
 
   const handleSuggestionAction = async (suggestion: ProactiveSuggestion) => {
     const actionMessages: Record<string, string> = {
@@ -283,7 +283,7 @@ export default function AdvancedCopilot() {
 
     setInput(actionMessages[suggestion.action || "view_details"] || suggestion.description);
     setSuggestions((prev) => prev.filter((s) => s.id !== suggestion.id));
-  });
+  };
 
   const getPriorityColor = (priority: string) => {
     switch (priority) {

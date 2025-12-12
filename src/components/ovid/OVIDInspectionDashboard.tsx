@@ -44,7 +44,7 @@ export const OVIDInspectionDashboard: React.FC = () => {
     nonCompliant: 0,
     notApplicable: 0,
     pending: getTotalQuestions(),
-  });
+  };
 
   const [checklistAnswers, setChecklistAnswers] = useState<Record<string, { 
     answer: "yes" | "no" | "na" | null;
@@ -68,7 +68,7 @@ export const OVIDInspectionDashboard: React.FC = () => {
     setInspectionStarted(true);
     setActiveTab("checklist");
     toast.success("Inspeção OVID iniciada");
-  });
+  };
 
   const handleAnswerChange = (questionId: string, answer: "yes" | "no" | "na", observation?: string) => {
     const prevAnswer = checklistAnswers[questionId]?.answer;
@@ -109,7 +109,7 @@ export const OVIDInspectionDashboard: React.FC = () => {
 
   const handleFilter = () => {
     toast.info("Filtros aplicados");
-  });
+  };
 
   return (
     <div className="space-y-6">

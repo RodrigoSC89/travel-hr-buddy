@@ -135,7 +135,7 @@ export default function UserProfilePage() {
           phone: profile.phone,
           department: profile.department,
           updated_at: new Date().toISOString()
-        });
+        };
 
       if (error) throw error;
 

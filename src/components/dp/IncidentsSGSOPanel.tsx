@@ -112,7 +112,7 @@ export const IncidentsSGSOPanel = memo(function() {
     setCategoryFilter("all");
     setRiskFilter("all");
     setVesselFilter("all");
-  });
+  };
 
   const activeFilterCount = [categoryFilter, riskFilter, vesselFilter].filter(f => f !== "all").length;
 
@@ -157,7 +157,7 @@ export const IncidentsSGSOPanel = memo(function() {
   // Export to PDF (placeholder - requires html2pdf.js)
   const exportToPDF = () => {
     alert("Funcionalidade de exportação PDF será implementada em breve!");
-  });
+  };
 
   return (
     <div className="space-y-6">

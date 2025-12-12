@@ -73,11 +73,11 @@ export const waitForLoadingToFinish = async () => {
         resolve();
       } else {
         setTimeout(checkLoading, 50);
-      });
-    });
+      };
+    };
     checkLoading();
-  });
-});
+  };
+};
 
 /**
  * Mock Supabase client for testing

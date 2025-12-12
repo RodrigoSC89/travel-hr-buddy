@@ -242,8 +242,8 @@ What would you like assistance with today?`,
     toast({
       title: isListening ? "Voice input stopped" : "Voice input started",
       description: isListening ? "Click again to start listening" : "Speak your question"
-    });
-  });
+    };
+  };
 
   const getCategoryColor = (category: CopilotCapability["category"]) => {
     switch (category) {
@@ -259,7 +259,7 @@ What would you like assistance with today?`,
     toast({
       title: "🔧 Agendar Manutenção",
       description: "Abrindo sistema de agendamento de manutenção preventiva"
-    });
+    };
     // TODO: Open maintenance scheduling dialog
   };
 
@@ -267,7 +267,7 @@ What would you like assistance with today?`,
     toast({
       title: "📄 Gerar Relatório",
       description: "Iniciando geração de relatório operacional"
-    });
+    };
     // TODO: Open report generation dialog
   };
 
@@ -275,7 +275,7 @@ What would you like assistance with today?`,
     toast({
       title: "👥 Planejamento de Tripulação",
       description: "Abrindo ferramenta de planejamento e escalas de tripulação"
-    });
+    };
     // TODO: Open crew planning interface
   };
 

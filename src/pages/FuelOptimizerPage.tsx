@@ -157,7 +157,7 @@ const FuelOptimizerPage = () => {
     estimated_consumption: "",
     vessel_type: "psv",
     current_speed: "12"
-  });
+  };
   const { toast } = useToast();
 
   useEffect(() => {

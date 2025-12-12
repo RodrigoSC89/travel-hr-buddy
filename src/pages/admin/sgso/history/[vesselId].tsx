@@ -23,7 +23,7 @@ const SGSOHistoryPage: React.FC = () => {
         title: "Erro",
         description: "ID da embarcação não fornecido",
         variant: "destructive",
-      });
+      };
       return;
     }
 
@@ -68,11 +68,11 @@ const SGSOHistoryPage: React.FC = () => {
 
   const handleRefresh = () => {
     fetchActionPlans(true);
-  });
+  };
 
   const handleBackToSGSO = () => {
     navigate("/admin/sgso");
-  });
+  };
 
   // Calculate summary statistics
   const openCount = actionPlans.filter((plan) => plan.status === "aberto").length;

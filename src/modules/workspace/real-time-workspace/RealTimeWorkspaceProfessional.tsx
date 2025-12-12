@@ -167,7 +167,7 @@ const RealTimeWorkspaceProfessional: React.FC = () => {
       toast({
         title: "Atualizado",
         description: "Todos os dados foram sincronizados",
-      });
+      };
     } catch (error) {
       toast({
         title: "Erro ao atualizar",
@@ -273,7 +273,7 @@ const RealTimeWorkspaceProfessional: React.FC = () => {
         title: "Nome obrigatório",
         description: "Digite um nome para o canal",
         variant: "destructive",
-      });
+      };
       return;
     }
     
@@ -329,7 +329,7 @@ const RealTimeWorkspaceProfessional: React.FC = () => {
       priority: "medium",
     };
     setActivities(prev => [activity, ...prev]);
-  });
+  };
 
   const handleCopyMeetingLink = async () => {
     try {
@@ -339,13 +339,13 @@ const RealTimeWorkspaceProfessional: React.FC = () => {
       toast({
         title: "Link copiado",
         description: "Compartilhe com a equipe",
-      });
+      };
     } catch (error) {
       toast({
         title: "Erro ao copiar",
         description: "Tente novamente",
         variant: "destructive",
-      });
+      };
     }
   };
 
@@ -354,15 +354,15 @@ const RealTimeWorkspaceProfessional: React.FC = () => {
     toast({
       title: "Entrando na reunião",
       description: "Abrindo em nova aba...",
-    });
-  });
+    };
+  };
 
   const handleMemberClick = (member: TeamMember) => {
     toast({
       title: member.name,
       description: `${member.role} - ${member.status === "online" ? "Online" : member.status === "away" ? "Ausente" : member.status === "busy" ? "Ocupado" : "Offline"}`,
-    });
-  });
+    };
+  };
 
   const handleDocumentUpload = (file: File) => {
     const newDoc: SharedDocument = {
@@ -400,7 +400,7 @@ const RealTimeWorkspaceProfessional: React.FC = () => {
   useEffect(() => {
     const handleFullscreenChange = () => {
       setIsFullscreen(!!document.fullscreenElement);
-    });
+    };
     document.addEventListener("fullscreenchange", handleFullscreenChange);
     return () => document.removeEventListener("fullscreenchange", handleFullscreenChange);
   }, []);

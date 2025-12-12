@@ -166,7 +166,7 @@ export const SystemHealthCheck: React.FC = () => {
           message: result.message,
           lastCheck: new Date(),
           duration: result.duration
-        });
+        };
       } catch (error) {
         results.push({
           id: check.id,

@@ -162,15 +162,15 @@ export const MaintenanceAlertsPanel: React.FC<MaintenanceAlertsPanelProps> = ({
     toast({
       title: "Todos os alertas marcados como lidos",
       description: `${alerts.filter(a => !a.isRead).length} alertas marcados`,
-    });
-  });
+    };
+  };
 
   const handleViewDetails = (alert: MaintenanceAlert) => {
     toast({
       title: alert.title,
       description: `${alert.equipment} - ${alert.description}`,
-    });
-  });
+    };
+  };
 
   const filteredAlerts = alerts.filter(alert => {
     if (activeTab === "all") return true;

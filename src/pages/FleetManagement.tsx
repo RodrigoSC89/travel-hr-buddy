@@ -56,7 +56,7 @@ const MaritimeFleetManagement = () => {
     maintenanceVessels: 0,
     criticalAlerts: 0,
     efficiency: 0
-  });
+  };
 
   // Vessels data for AI
   const [vessels, setVessels] = useState<any[]>([]);
@@ -113,21 +113,21 @@ const MaritimeFleetManagement = () => {
       toast({
         title: "Exportando dados da frota",
         description: "O relatório será gerado em breve...",
-      });
+      };
       
       // Simulate export process
       setTimeout(() => {
         toast({
           title: "Exportação concluída",
           description: "Relatório da frota exportado com sucesso!",
-        });
+        };
       }, 2000);
     } catch (error) {
       toast({
         title: "Erro na exportação",
         description: "Não foi possível exportar os dados da frota",
         variant: "destructive"
-      });
+      };
     }
   };
 

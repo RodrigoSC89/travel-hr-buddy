@@ -157,14 +157,14 @@ export default function I18nDashboard() {
 
     const blob = new Blob([JSON.stringify(dataToExport, null, 2)], {
       type: "application/json",
-    });
+    };
     const url = URL.createObjectURL(blob);
     const a = document.createElement("a");
     a.href = url;
     a.download = `i18n-dashboard-${new Date().toISOString()}.json`;
     a.click();
     URL.revokeObjectURL(url);
-  });
+  };
 
   // Agregar dados para gráficos
   const aggregateByLanguage = stats.reduce((acc, stat) => {

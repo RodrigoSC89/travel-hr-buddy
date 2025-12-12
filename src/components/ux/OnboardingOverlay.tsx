@@ -93,22 +93,22 @@ export const OnboardingOverlay = memo(function({ enabled = true }: OnboardingOve
   const handleNext = () => {
     trigger("light");
     next();
-  });
+  };
   
   const handlePrev = () => {
     trigger("light");
     prev();
-  });
+  };
   
   const handleSkip = () => {
     trigger("medium");
     skip();
-  });
+  };
   
   const handleComplete = () => {
     trigger("success");
     complete();
-  });
+  };
   
   const isLastStep = progress.current === progress.total;
   

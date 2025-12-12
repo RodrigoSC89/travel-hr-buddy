@@ -248,7 +248,7 @@ export default function QuizPage() {
     setStartTime(null);
     setCertificateId(null);
     setQuizConfig({ standard: "", difficulty: "" });
-  });
+  };
 
   // Configuration screen
   if (!quizStarted) {

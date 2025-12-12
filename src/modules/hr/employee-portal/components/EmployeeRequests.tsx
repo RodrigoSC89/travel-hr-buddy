@@ -124,7 +124,7 @@ export const EmployeeRequests = memo(function() {
     setEndDate("");
     setCertificateType("");
     setDestination("");
-  });
+  };
 
   const getStatusBadge = (status: RequestStatus) => {
     switch (status) {

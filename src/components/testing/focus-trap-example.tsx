@@ -25,7 +25,7 @@ export const FocusTrapExample: React.FC = () => {
       setIsModalOpen(false);
       setSubmitted(false);
     }, 1500);
-  });
+  };
 
   return (
     <div className="container mx-auto p-6 space-y-6">

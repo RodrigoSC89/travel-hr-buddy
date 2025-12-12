@@ -83,7 +83,7 @@ export const AdvancedFilters: React.FC<AdvancedFiltersProps> = ({
   const applyFilters = () => {
     onFiltersChange(tempFilters);
     setIsExpanded(false);
-  });
+  };
 
   const clearFilters = () => {
     const defaultFilters: FilterOptions = {
@@ -99,7 +99,7 @@ export const AdvancedFilters: React.FC<AdvancedFiltersProps> = ({
     };
     setTempFilters(defaultFilters);
     onFiltersChange(defaultFilters);
-  });
+  };
 
   const getActiveFiltersCount = () => {
     let count = 0;
@@ -111,7 +111,7 @@ export const AdvancedFilters: React.FC<AdvancedFiltersProps> = ({
     if (filters.status.length > 0) count++;
     if (filters.dateRange.from || filters.dateRange.to) count++;
     return count;
-  });
+  };
 
   const activeFiltersCount = getActiveFiltersCount();
 

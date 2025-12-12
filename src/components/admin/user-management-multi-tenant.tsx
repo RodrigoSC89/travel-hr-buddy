@@ -76,13 +76,13 @@ export const UserManagementMultiTenant: React.FC = () => {
       toast({
         title: "Convite Enviado",
         description: `Convite enviado para ${inviteEmail}`
-      });
+      };
     } catch (error) {
       toast({
         title: "Erro",
         description: "Não foi possível enviar o convite",
         variant: "destructive"
-      });
+      };
     }
   };
 

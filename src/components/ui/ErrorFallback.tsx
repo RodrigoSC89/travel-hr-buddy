@@ -31,16 +31,16 @@ export const ErrorFallback: React.FC<ErrorFallbackProps> = ({
 }) => {
   const handleGoBack = () => {
     window.history.back();
-  });
+  };
 
   const handleGoHome = () => {
     window.location.href = "/";
-  });
+  };
 
   const handleReport = () => {
     // Could integrate with error reporting service
     alert("Erro reportado. Obrigado pelo feedback!");
-  });
+  };
 
   return (
     <div 

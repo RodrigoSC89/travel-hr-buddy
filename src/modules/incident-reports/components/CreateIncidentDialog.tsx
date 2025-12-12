@@ -56,7 +56,7 @@ export const CreateIncidentDialog: React.FC<CreateIncidentDialogProps> = ({
     const timestamp = Date.now();
     const random = Math.floor(Math.random() * 10000).toString().padStart(4, "0");
     return `INC-${timestamp}-${random}`;
-  });
+  };
 
   // GPS capture via browser Geolocation API
   const captureGPS = () => {
@@ -65,7 +65,7 @@ export const CreateIncidentDialog: React.FC<CreateIncidentDialogProps> = ({
         title: "GPS não disponível",
         description: "Seu navegador não suporta geolocalização",
         variant: "destructive",
-      });
+      };
       return;
     }
 
@@ -78,7 +78,7 @@ export const CreateIncidentDialog: React.FC<CreateIncidentDialogProps> = ({
         toast({
           title: "GPS capturado",
           description: `Localização: ${coordinates}`,
-        });
+        };
       },
       (error) => {
         setGpsLoading(false);

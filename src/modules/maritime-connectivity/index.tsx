@@ -96,7 +96,7 @@ export default function MaritimeConnectivity() {
     
     setIsRefreshing(false);
     toast({ title: "Atualizado", description: "Status de conexões atualizado" });
-  });
+  };
 
   const handleForceSync = (vesselId: string) => {
     toast({ title: "Sincronizando...", description: "Forçando sincronização de dados" });

@@ -76,7 +76,7 @@ export const EnhancedDocumentScanner: React.FC = () => {
     multipage: false,
     ocrLanguage: "pt",
     outputFormat: "pdf"
-  });
+  };
   const [currentStep, setCurrentStep] = useState<"capture" | "preview" | "enhance" | "ocr" | "analysis">("capture");
   const [capturedImage, setCapturedImage] = useState<string | null>(null);
   const [isProcessing, setIsProcessing] = useState(false);
@@ -245,7 +245,7 @@ export const EnhancedDocumentScanner: React.FC = () => {
     setCapturedImage(null);
     setCurrentStep("capture");
     startCamera();
-  });
+  };
 
   const shareResult = (result: DocumentScanResult) => {
     if (navigator.share) {
@@ -253,13 +253,13 @@ export const EnhancedDocumentScanner: React.FC = () => {
         title: `Documento: ${result.fileName}`,
         text: result.extractedText,
         url: result.imageUrl
-      });
+      };
     } else {
       navigator.clipboard.writeText(result.extractedText);
       toast({
         title: "Texto copiado",
         description: "Texto extraído copiado para a área de transferência"
-      });
+      };
     }
   };
 

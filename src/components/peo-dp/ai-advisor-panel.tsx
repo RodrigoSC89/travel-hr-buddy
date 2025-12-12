@@ -93,7 +93,7 @@ export const AIAdvisorPanel: React.FC = () => {
   const { ask, loading, error } = useAIAdvisor({
     profile,
     language: "pt-BR",
-  });
+  };
 
   useEffect(() => {
     if (scrollRef.current) {
@@ -152,12 +152,12 @@ export const AIAdvisorPanel: React.FC = () => {
     a.download = `ai-advisor-chat-${Date.now()}.txt`;
     a.click();
     toast.success("Chat exportado");
-  });
+  };
 
   const clearChat = () => {
     setMessages([]);
     toast.info("Chat limpo");
-  });
+  };
 
   return (
     <div className="space-y-6">

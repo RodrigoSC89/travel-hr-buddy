@@ -126,7 +126,7 @@ export default function CrewRotationModule() {
           toast({
             title: "Atualização em tempo real",
             description: "Uma rotação foi atualizada.",
-          });
+          };
         }
       )
       .subscribe();
@@ -186,7 +186,7 @@ export default function CrewRotationModule() {
         title: "Conflitos detectados",
         description: conflicts.map(c => c.message).join(". "),
         variant: "destructive"
-      });
+      };
       return;
     }
 

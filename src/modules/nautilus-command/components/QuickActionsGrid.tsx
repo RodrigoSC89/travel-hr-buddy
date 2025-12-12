@@ -36,7 +36,7 @@ export const QuickActionsGrid = memo(function({
     } else {
       toast.info("Abrindo comunicação...", {
         description: "Redirecionando para o centro de comunicação"
-      });
+      };
       navigate("/communication-center");
     }
   };
@@ -47,7 +47,7 @@ export const QuickActionsGrid = memo(function({
     } else {
       toast.info("Solicitação de reposição", {
         description: "Abrindo formulário de reposição de estoque"
-      });
+      };
       navigate("/procurement-inventory");
     }
   };
@@ -58,7 +58,7 @@ export const QuickActionsGrid = memo(function({
     } else {
       toast.success("Criar pedido", {
         description: "Abrindo formulário de novo pedido"
-      });
+      };
       navigate("/procurement-inventory");
     }
   };

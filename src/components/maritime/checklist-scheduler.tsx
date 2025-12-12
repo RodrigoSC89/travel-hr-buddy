@@ -69,9 +69,9 @@ export const ChecklistScheduler = memo(() => {
     toast({
       title: "Agenda Criada",
       description: "Nova agenda de checklist foi criada com sucesso.",
-    });
+    };
     setIsCreateOpen(false);
-  });
+  };
 
   const toggleSchedule = (id: string) => {
     setSchedules(prev => prev.map(schedule => 
@@ -79,7 +79,7 @@ export const ChecklistScheduler = memo(() => {
         ? { ...schedule, isActive: !schedule.isActive }
         : schedule
     ));
-  });
+  };
 
   return (
     <div className="space-y-6">

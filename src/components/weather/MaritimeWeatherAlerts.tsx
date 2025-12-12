@@ -95,11 +95,11 @@ const severityStyles: Record<string, { bg: string; text: string; border: string;
 export const MaritimeWeatherAlerts: React.FC = () => {
   const formatTime = (date: Date) => {
     return date.toLocaleTimeString("pt-BR", { hour: "2-digit", minute: "2-digit" });
-  });
+  };
 
   const formatDate = (date: Date) => {
     return date.toLocaleDateString("pt-BR", { day: "2-digit", month: "short" });
-  });
+  };
 
   return (
     <Card>

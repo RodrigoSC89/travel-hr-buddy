@@ -62,12 +62,12 @@ export const OptimizedImage: React.FC<OptimizedImageProps> = ({
 
   const handleLoad = () => {
     setIsLoaded(true);
-  });
+  };
 
   const handleError = () => {
     setHasError(true);
     setIsLoaded(true);
-  });
+  };
 
   // Generate srcset for responsive images
   const srcSet = width && typeof width === "number"

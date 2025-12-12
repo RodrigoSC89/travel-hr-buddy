@@ -44,7 +44,7 @@ export const ConnectivityPanel: React.FC = () => {
       statsMap.set(link.id, linkStats);
     }
     setStats(statsMap);
-  });
+  };
 
   const performPingAll = async () => {
     setPinging(true);

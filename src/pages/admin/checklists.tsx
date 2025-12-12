@@ -236,7 +236,7 @@ export default function SmartChecklistsPage() {
     }));
     setNewItemTitle("");
     setNewItemCriticality("medium");
-  });
+  };
 
   const handleRemoveItem = (itemId: string) => {
     setNewChecklist(prev => ({

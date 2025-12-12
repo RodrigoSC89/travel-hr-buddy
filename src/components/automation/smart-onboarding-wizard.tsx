@@ -360,7 +360,7 @@ export const SmartOnboardingWizard: React.FC = () => {
     company_profile: {},
     preferences: {},
     completed_steps: []
-  });
+  };
   const [isLoading, setIsLoading] = useState(false);
   const { toast } = useToast();
 

@@ -197,7 +197,7 @@ export const PeotramAuditForm: React.FC<PeotramAuditFormProps> = ({
     toast({
       title: "Auditoria Concluída",
       description: `Auditoria finalizada com ${complianceScore}% de compliance.`,
-    });
+    };
 
     onComplete();
   };
@@ -206,7 +206,7 @@ export const PeotramAuditForm: React.FC<PeotramAuditFormProps> = ({
     const allResponses = Object.values(auditResponses).flat();
     const compliantResponses = allResponses.filter(r => r.score === "compliant").length;
     return allResponses.length > 0 ? Math.round((compliantResponses / allResponses.length) * 100) : 0;
-  });
+  };
 
   const getScoreColor = (score: string) => {
     switch (score) {
@@ -486,13 +486,13 @@ const RequirementForm: React.FC<{
         corrective_action: "",
         responsible_person: "",
         target_date: ""
-      });
+      };
     }
     
     toast({
       title: "Requisito Salvo",
       description: `Avaliação do requisito ${requirementCode} salva.`,
-    });
+    };
   };
 
   return (

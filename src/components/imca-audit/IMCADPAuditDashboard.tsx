@@ -150,7 +150,7 @@ export const IMCADPAuditDashboard = memo(function() {
     toast({
       title: "Exportando Auditoria",
       description: "Relatório sendo gerado em PDF..."
-    });
+    };
     // Implementation for PDF export would go here
   };
 
@@ -158,8 +158,8 @@ export const IMCADPAuditDashboard = memo(function() {
     toast({
       title: "Filtros",
       description: "Configurações de filtro abertas"
-    });
-  });
+    };
+  };
 
   return (
     <div className="container mx-auto p-4 space-y-6">

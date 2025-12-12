@@ -159,7 +159,7 @@ export const CrewRotationManager: React.FC = () => {
     status: "scheduled",
     documentation_status: "pending",
     medical_clearance: false,
-  });
+  };
 
   useEffect(() => {
     loadData();

@@ -89,7 +89,7 @@ export const PriceAlertDashboardLegacy = memo(() => {
         title: "Erro",
         description: "Não foi possível carregar os alertas",
         variant: "destructive"
-      });
+      };
     } finally {
       setIsLoading(false);
     }
@@ -135,7 +135,7 @@ export const PriceAlertDashboardLegacy = memo(() => {
         title: "Erro",
         description: "Preencha todos os campos obrigatórios",
         variant: "destructive"
-      });
+      };
       return;
     }
 
@@ -245,7 +245,7 @@ export const PriceAlertDashboardLegacy = memo(() => {
       // Use Supabase Edge Function instead of direct API call
       const { data, error } = await supabase.functions.invoke("monitor-prices", {
         body: { user_id: user?.id }
-      });
+      };
       
       if (error) throw error;
       
@@ -254,7 +254,7 @@ export const PriceAlertDashboardLegacy = memo(() => {
         toast({
           title: "Preços atualizados!",
           description: `${data.checked_alerts} alertas verificados`
-        });
+        };
       }
     } catch (error) {
       toast({

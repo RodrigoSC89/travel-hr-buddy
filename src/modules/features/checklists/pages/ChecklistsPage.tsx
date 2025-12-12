@@ -36,7 +36,7 @@ export const ChecklistsPage = memo(function() {
     if (!title) return;
     await createChecklist(title);
     setTitle("");
-  });
+  };
 
   const handleCreateWithAI = async () => {
     if (!title) return;
@@ -51,7 +51,7 @@ export const ChecklistsPage = memo(function() {
 
   const handleAnalyze = async (checklistId: string) => {
     await analyzeChecklist(checklistId);
-  });
+  };
 
   if (loading) {
     return <div className="p-6">Loading checklists...</div>;

@@ -90,7 +90,7 @@ export default function AITemplatesPage() {
         title: "Erro ao carregar templates",
         description: "Não foi possível carregar a lista de templates.",
         variant: "destructive",
-      });
+      };
     } finally {
       setLoading(false);
     }
@@ -109,7 +109,7 @@ export default function AITemplatesPage() {
         template.tags.some(tag => tag.toLowerCase().includes(searchTerm.toLowerCase()))
     );
     setFilteredTemplates(filtered);
-  });
+  };
 
   const handleApplyTemplate = (template: AIDocumentTemplate) => {
     // Save template to localStorage
@@ -202,7 +202,7 @@ export default function AITemplatesPage() {
         title: "Erro de validação",
         description: "Título e conteúdo são obrigatórios.",
         variant: "destructive",
-      });
+      };
       return;
     }
 
@@ -307,16 +307,16 @@ export default function AITemplatesPage() {
       is_favorite: false,
       is_private: false,
       tags: [],
-    });
+    };
     setTagInput("");
-  });
+  };
 
   const handleAddTag = () => {
     if (tagInput.trim() && !formData.tags.includes(tagInput.trim())) {
       setFormData({
         ...formData,
         tags: [...formData.tags, tagInput.trim()],
-      });
+      };
       setTagInput("");
     }
   };
@@ -325,8 +325,8 @@ export default function AITemplatesPage() {
     setFormData({
       ...formData,
       tags: formData.tags.filter(t => t !== tag),
-    });
-  });
+    };
+  };
 
   return (
     <div className="container mx-auto p-6 space-y-6">

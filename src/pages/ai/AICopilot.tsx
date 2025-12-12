@@ -138,8 +138,8 @@ const AICopilot: React.FC = () => {
     toast({
       title: "Chat limpo",
       description: "Histórico de mensagens removido.",
-    });
-  });
+    };
+  };
 
   return (
     <div className="p-6 space-y-6 min-h-screen">

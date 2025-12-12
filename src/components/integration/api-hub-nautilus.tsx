@@ -255,7 +255,7 @@ export const APIHubNautilus: React.FC = () => {
     toast({
       title: "📚 Documentação API",
       description: "Abrindo documentação completa com exemplos e referências"
-    });
+    };
     // TODO: Open documentation page or modal
   };
 
@@ -263,7 +263,7 @@ export const APIHubNautilus: React.FC = () => {
     toast({
       title: "🔑 Nova API Key",
       description: "Gerando nova chave de autenticação segura"
-    });
+    };
     // TODO: Open API key generation dialog
   };
 
@@ -271,7 +271,7 @@ export const APIHubNautilus: React.FC = () => {
     toast({
       title: "🧪 Testar API",
       description: `Abrindo console de testes para ${endpointName}`
-    });
+    };
     // TODO: Open API testing console
   };
 
@@ -279,7 +279,7 @@ export const APIHubNautilus: React.FC = () => {
     toast({
       title: "📚 Documentação",
       description: `Abrindo documentação detalhada de ${endpointName}`
-    });
+    };
     // TODO: Open API documentation modal
   };
 

@@ -118,7 +118,7 @@ export const DevOpsPanel = memo(function() {
       toast({
         title: "Sincronização concluída",
         description: `${stats.completed} operações sincronizadas`,
-      });
+      };
       await collectMetrics();
     } catch (error) {
       addLog("error", "Sync", `Erro na sincronização: ${error}`);
@@ -126,7 +126,7 @@ export const DevOpsPanel = memo(function() {
         title: "Erro na sincronização",
         description: "Verifique os logs para mais detalhes",
         variant: "destructive",
-      });
+      };
     }
   };
 
@@ -146,7 +146,7 @@ export const DevOpsPanel = memo(function() {
     circuitBreakerRegistry.resetAll();
     addLog("info", "Circuit", "Todos os circuit breakers resetados");
     collectMetrics();
-  });
+  };
 
   // Clear all caches
   const clearAllCaches = async () => {
@@ -157,7 +157,7 @@ export const DevOpsPanel = memo(function() {
       toast({
         title: "Caches limpos",
         description: "Todos os dados em cache foram removidos",
-      });
+      };
       await collectMetrics();
     } catch (error) {
       addLog("error", "Cache", `Erro ao limpar caches: ${error}`);
@@ -179,7 +179,7 @@ export const DevOpsPanel = memo(function() {
     URL.revokeObjectURL(url);
     
     addLog("info", "DevOps", "Logs exportados");
-  });
+  };
 
   // Auto refresh
   useEffect(() => {

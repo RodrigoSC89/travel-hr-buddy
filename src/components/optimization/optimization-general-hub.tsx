@@ -187,7 +187,7 @@ export const OptimizationGeneralHub = memo(() => {
       title: "Otimização Geral Iniciada",
       description: "Executando análise completa do sistema...",
       duration: 3000
-    });
+    };
 
     // Simular processo de otimização
     for (let i = 0; i <= 100; i += 10) {

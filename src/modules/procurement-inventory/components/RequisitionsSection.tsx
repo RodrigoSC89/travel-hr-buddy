@@ -228,14 +228,14 @@ export default function RequisitionsSection({ searchQuery }: RequisitionsSection
       ...prev,
       items: [...prev.items, { id: Date.now().toString(), name: "", quantity: 1, unit: "un", estimatedUnitCost: 0, suggestedSupplier: "" }],
     }));
-  });
+  };
 
   const updateItem = (index: number, field: string, value: string | number) => {
     setNewReq(prev => ({
       ...prev,
       items: prev.items.map((item, i) => i === index ? { ...item, [field]: value } : item),
     }));
-  });
+  };
 
   const pendingCount = requisitions.filter(r => r.status === "pending").length;
   const approvedCount = requisitions.filter(r => r.status === "approved").length;

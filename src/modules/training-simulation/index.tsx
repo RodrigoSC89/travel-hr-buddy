@@ -197,7 +197,7 @@ export default function TrainingSimulation() {
     setSelectedAnswer(null);
     setShowFeedback(false);
     toast.info("Simulação reiniciada");
-  });
+  };
 
   const getDifficultyColor = (difficulty: string) => {
     switch (difficulty) {

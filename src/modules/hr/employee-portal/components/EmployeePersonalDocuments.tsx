@@ -61,7 +61,7 @@ export const EmployeePersonalDocuments: React.FC = () => {
     expiry_date: "",
     issuing_authority: "",
     file: null as File | null
-  });
+  };
 
   useEffect(() => {
     loadDocuments();
@@ -87,7 +87,7 @@ export const EmployeePersonalDocuments: React.FC = () => {
         title: "Error loading documents",
         description: error.message,
         variant: "destructive",
-      });
+      };
     } finally {
       setLoading(false);
     }
@@ -204,8 +204,8 @@ export const EmployeePersonalDocuments: React.FC = () => {
       expiry_date: "",
       issuing_authority: "",
       file: null
-    });
-  });
+    };
+  };
 
   const getStatusBadge = (status: string, expiryDate?: string) => {
     const config: Record<string, { label: string; className: string; icon: unknown: unknown: unknown }> = {

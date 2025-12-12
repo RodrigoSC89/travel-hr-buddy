@@ -86,14 +86,14 @@ export const SyncStatusBadge = memo(function() {
     if (status?.type === "syncing") return "bg-primary animate-pulse";
     if (queueStatus.pending > 0) return "bg-warning";
     return "bg-success";
-  });
+  };
 
   const getStatusIcon = () => {
     if (!isOnline) return <CloudOff className="w-3 h-3" />;
     if (status?.type === "syncing") return <RefreshCw className="w-3 h-3 animate-spin" />;
     if (queueStatus.pending > 0) return <AlertTriangle className="w-3 h-3" />;
     return <Check className="w-3 h-3" />;
-  });
+  };
 
   return (
     <div className={cn(

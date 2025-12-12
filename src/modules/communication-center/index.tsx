@@ -12,6 +12,6 @@ export const CommunicationCenter: React.FC = () => {
       <CommunicationCenterProfessional />
     </ModulePageWrapper>
   );
-});
+};
 
 export default CommunicationCenter;

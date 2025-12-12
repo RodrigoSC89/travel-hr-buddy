@@ -72,7 +72,7 @@ export const PriceAlertsDashboard: React.FC = () => {
 
   const handleRefresh = async () => {
     await refreshAlerts();
-  });
+  };
 
   return (
     <div className="space-y-6">

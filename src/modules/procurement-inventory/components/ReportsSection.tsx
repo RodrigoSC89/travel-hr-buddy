@@ -104,7 +104,7 @@ export default function ReportsSection() {
 
   const handleGenerateAIReport = () => {
     toast.success("Relatório com análise IA sendo gerado...");
-  });
+  };
 
   return (
     <div className="space-y-6">

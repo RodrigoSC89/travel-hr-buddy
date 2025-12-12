@@ -150,7 +150,7 @@ export const PeotramRiskAssessment: React.FC = () => {
       matrix.push(row);
     }
     return matrix;
-  });
+  };
 
   return (
     <div className="space-y-6">

@@ -94,7 +94,7 @@ export const EmergencyReportDialog: React.FC<EmergencyReportDialogProps> = ({
   const handlePrint = () => {
     window.print();
     toast.success("Enviando para impressão...");
-  });
+  };
 
   return (
     <Dialog open={open} onOpenChange={onOpenChange}>

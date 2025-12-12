@@ -117,8 +117,8 @@ export const SlowNetworkProvider = memo(function({ children }: SlowNetworkProvid
           downlink?: number;
           rtt?: number;
           saveData?: boolean;
-        });
-      });
+        };
+      };
 
       if (nav.connection) {
         const newQuality: NetworkQuality = {

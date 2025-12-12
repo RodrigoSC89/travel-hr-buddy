@@ -162,7 +162,7 @@ export const FleetOperationsCenter: React.FC = () => {
   const handleAcknowledgeAlert = (alertId: string) => {
     setAlerts(alerts.map(a => a.id === alertId ? { ...a, acknowledged: true } : a));
     toast.success("Alerta reconhecido");
-  });
+  };
 
   const getAsogStatusColor = (status: string) => {
     switch (status) {

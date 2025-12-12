@@ -23,9 +23,9 @@ export const SyncStatus = memo(function() {
       toast({
         title: "Back online",
         description: "Connection restored. Syncing pending data...",
-      });
+      };
       syncPendingData();
-    });
+    };
 
     const handleOffline = () => {
       setIsOnline(false);
@@ -33,8 +33,8 @@ export const SyncStatus = memo(function() {
         title: "You're offline",
         description: "Changes will be saved locally and synced when reconnected",
         variant: "destructive",
-      });
-    });
+      };
+    };
 
     window.addEventListener("online", handleOnline);
     window.addEventListener("offline", handleOffline);

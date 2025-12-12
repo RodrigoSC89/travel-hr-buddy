@@ -74,7 +74,7 @@ export const EmployeePayroll: React.FC = () => {
         title: "Error loading payroll",
         description: error.message,
         variant: "destructive",
-      });
+      };
     } finally {
       setLoading(false);
     }
@@ -129,7 +129,7 @@ export const EmployeePayroll: React.FC = () => {
       deductionsTotal: ytdRecords.reduce((sum, r) => sum + r.deductions, 0),
       bonusesTotal: ytdRecords.reduce((sum, r) => sum + r.bonuses, 0),
     };
-  });
+  };
 
   const ytd = calculateYearToDate();
 

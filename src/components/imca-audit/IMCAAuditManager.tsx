@@ -101,7 +101,7 @@ export const IMCAAuditManager = memo(function({
         title: "Campos obrigatórios",
         description: "Preencha categoria e pergunta.",
         variant: "destructive"
-      });
+      };
       return;
     }
 
@@ -142,8 +142,8 @@ export const IMCAAuditManager = memo(function({
     toast({
       title: "Item atualizado",
       description: "Item de checklist atualizado com sucesso."
-    });
-  });
+    };
+  };
 
   const handleAddCategory = () => {
     if (!newCategory.code || !newCategory.name) {
@@ -151,7 +151,7 @@ export const IMCAAuditManager = memo(function({
         title: "Campos obrigatórios",
         description: "Preencha código e nome da categoria.",
         variant: "destructive"
-      });
+      };
       return;
     }
 
@@ -162,8 +162,8 @@ export const IMCAAuditManager = memo(function({
     toast({
       title: "Categoria criada",
       description: "Nova categoria de auditoria criada com sucesso."
-    });
-  });
+    };
+  };
 
   const handleExportItems = () => {
     const exportData = {
@@ -182,8 +182,8 @@ export const IMCAAuditManager = memo(function({
     toast({
       title: "Exportado",
       description: "Itens customizados exportados com sucesso."
-    });
-  });
+    };
+  };
 
   const toggleStandard = (std: string) => {
     if (editingItem) {

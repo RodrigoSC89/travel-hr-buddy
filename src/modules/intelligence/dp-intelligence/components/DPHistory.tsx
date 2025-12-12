@@ -207,8 +207,8 @@ export default function DPHistory() {
     setIsFilterOpen(false);
     toast.success("Filtros aplicados", {
       description: `${filteredData.length} eventos encontrados.`,
-    });
-  });
+    };
+  };
 
   const handleClearFilters = () => {
     const cleared = {
@@ -221,7 +221,7 @@ export default function DPHistory() {
     setFilters(cleared);
     setActiveFilters(cleared);
     toast.success("Filtros limpos");
-  });
+  };
 
   const handleToggleType = (type: string) => {
     setFilters((prev) => ({
@@ -230,7 +230,7 @@ export default function DPHistory() {
         ? prev.types.filter((t) => t !== type)
         : [...prev.types, type],
     }));
-  });
+  };
 
   const handleToggleStatus = (status: string) => {
     setFilters((prev) => ({

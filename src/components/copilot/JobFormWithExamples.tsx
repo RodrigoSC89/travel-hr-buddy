@@ -24,7 +24,7 @@ export default function JobFormWithExamples({ onSubmit }: JobFormWithExamplesPro
         title: "Campos obrigatórios",
         description: "Por favor, preencha o componente e a descrição.",
         variant: "destructive",
-      });
+      };
       return;
     }
 
@@ -37,7 +37,7 @@ export default function JobFormWithExamples({ onSubmit }: JobFormWithExamplesPro
     toast({
       title: "Job criado com sucesso!",
       description: "O job de manutenção foi registrado.",
-    });
+    };
 
     // Reset form
     setComponent("");

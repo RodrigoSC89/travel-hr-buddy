@@ -64,7 +64,7 @@ export const ApiKeyManagement: React.FC = () => {
     name: "",
     tier: "standard",
     expiresIn: "never"
-  });
+  };
   const [generatedKey, setGeneratedKey] = useState<string | null>(null);
   const [showKey, setShowKey] = useState(false);
 

@@ -33,7 +33,7 @@ vi.mock("mqtt", () => {
 const getMockMqttClient = () => {
   const mqttModule = vi.mocked(mqtt);
   return mqttModule.connect() as unknown;
-});
+};
 
 // Mock onnxruntime-web
 vi.mock("onnxruntime-web", () => ({

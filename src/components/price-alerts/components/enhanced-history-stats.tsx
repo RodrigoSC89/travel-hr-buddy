@@ -16,7 +16,7 @@ const loadJsPDF = async () => {
     import("jspdf-autotable")
   ]);
   return { jsPDF, autoTable: autoTableModule.default };
-});
+};
 import {
   Chart as ChartJS,
   CategoryScale,

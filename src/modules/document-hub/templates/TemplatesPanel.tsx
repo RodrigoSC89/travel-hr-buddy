@@ -136,12 +136,12 @@ export default function TemplatesPanel() {
     setTemplates(templates.map(t => t.id === updatedTemplate.id ? updatedTemplate : t));
     toast.success("Template atualizado com sucesso!");
     setEditingTemplate(null);
-  });
+  };
 
   const handleDeleteTemplate = (id: string) => {
     setTemplates(templates.filter(t => t.id !== id));
     toast.info("Template removido");
-  });
+  };
 
   const handlePreview = (template: Template) => {
     setPreviewTemplate(template);

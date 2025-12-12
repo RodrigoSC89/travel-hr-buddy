@@ -222,7 +222,7 @@ const AnalyticsCoreProfessional: React.FC = () => {
       toast({
         title: "Dados atualizados",
         description: "Os dados foram atualizados com sucesso"
-      });
+      };
     } finally {
       setIsRefreshing(false);
     }
@@ -433,7 +433,7 @@ const AnalyticsCoreProfessional: React.FC = () => {
     toast({ 
       title: "Todas as notificações marcadas como lidas",
       description: `${unreadCount} notificações atualizadas`
-    });
+    };
   });
 
   const deleteNotification = (notificationId: string) => {
@@ -447,8 +447,8 @@ const AnalyticsCoreProfessional: React.FC = () => {
     toast({ 
       title: "Todas as notificações foram removidas",
       description: `${count} notificações excluídas`
-    });
-  });
+    };
+  };
 
   // AI Insights Generation
   const generateAIInsights = async () => {
@@ -470,7 +470,7 @@ const AnalyticsCoreProfessional: React.FC = () => {
           format: "summary",
           modules: ["analytics", "operational"]
         }
-      });
+      };
 
       clearInterval(progressInterval);
       setReportProgress(100);
@@ -616,7 +616,7 @@ const AnalyticsCoreProfessional: React.FC = () => {
       toast({
         title: "Gerando PDF",
         description: "Preparando relatório para download..."
-      });
+      };
 
       // Dynamic import of jsPDF
       const { default: jsPDF } = await import("jspdf");
@@ -775,7 +775,7 @@ const AnalyticsCoreProfessional: React.FC = () => {
           modules: ["analytics", "operational", "hr"],
           customPrompt: reportConfig.customPrompt
         }
-      });
+      };
 
       clearInterval(progressInterval);
       setReportProgress(100);
@@ -841,7 +841,7 @@ Este relatório apresenta uma análise abrangente dos principais indicadores de 
         title: "Erro ao copiar",
         description: "Não foi possível copiar o relatório",
         variant: "destructive"
-      });
+      };
     }
   };
 
@@ -918,9 +918,9 @@ Este relatório apresenta uma análise abrangente dos principais indicadores de 
     toast({
       title: "Configurações Salvas",
       description: "Suas preferências foram atualizadas"
-    });
+    };
     setSettingsOpen(false);
-  });
+  };
 
   // Reset Settings
   const resetSettings = () => {
@@ -939,7 +939,7 @@ Este relatório apresenta uma análise abrangente dos principais indicadores de 
     setSettings(defaultSettings);
     localStorage.removeItem("analyticsSettings");
     toast({ title: "Configurações restauradas para o padrão" });
-  });
+  };
 
   // Apply Filters
   const applyFilters = () => {
@@ -947,8 +947,8 @@ Este relatório apresenta uma análise abrangente dos principais indicadores de 
     toast({ 
       title: "Filtros Aplicados",
       description: `${getFilteredNotifications().length} itens encontrados`
-    });
-  });
+    };
+  };
 
   // Clear Filters
   const clearFilters = () => {
@@ -959,9 +959,9 @@ Este relatório apresenta uma análise abrangente dos principais indicadores de 
       notificationTypes: [],
       sortBy: "date",
       sortOrder: "desc"
-    });
+    };
     toast({ title: "Filtros limpos" });
-  });
+  };
 
   // UI Components
   const unreadCount = notifications.filter(n => !n.isRead).length;

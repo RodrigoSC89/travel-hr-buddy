@@ -28,22 +28,22 @@ export const CrewAIInsights = ({ crew }: CrewAIInsightsProps) => {
   const handleGenerateRecommendations = async () => {
     const recs = await generateCrewRecommendations(crew);
     setRecommendations(recs);
-  });
+  };
 
   const handleOptimizeRotations = async () => {
     const opts = await optimizeRotations(crew);
     setRotations(opts);
-  });
+  };
 
   const handleAnalyzeSkills = async () => {
     const gaps = await analyzeSkillGaps(crew);
     setSkillGaps(gaps);
-  });
+  };
 
   const handleGenerateInsights = async () => {
     const ins = await generateCrewInsights(crew);
     setInsights(ins);
-  });
+  };
 
   useEffect(() => {
     if (crew.length > 0) {

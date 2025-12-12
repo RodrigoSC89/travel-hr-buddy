@@ -15,7 +15,7 @@ const loadTHREE = async () => {
     THREE = await import("three");
   }
   return THREE;
-});
+};
 import { OrbitControls } from "three/examples/jsm/controls/OrbitControls";
 
 interface SatelliteData {
@@ -29,7 +29,7 @@ interface SatelliteData {
     longitude: number;
     altitude: number;
     calculated_at: string;
-  });
+  };
 }
 
 interface SatelliteAlert {
@@ -191,7 +191,7 @@ export default function SatelliteTracker() {
       earth.rotation.y += 0.001;
       controls.update();
       renderer.render(scene, camera);
-    });
+    };
     animate();
 
     // Handle resize
@@ -202,7 +202,7 @@ export default function SatelliteTracker() {
       camera.aspect = width / height;
       camera.updateProjectionMatrix();
       rendererRef.current.setSize(width, height);
-    });
+    };
     window.addEventListener("resize", handleResize);
 
     return () => {
@@ -222,7 +222,7 @@ export default function SatelliteTracker() {
       const { data, error } = await supabase.rpc("start_tracking_session", {
         p_satellite_id: satelliteId,
         p_tracking_mode: "real-time"
-      });
+      };
 
       if (error) throw error;
 
@@ -249,7 +249,7 @@ export default function SatelliteTracker() {
     try {
       const { error } = await supabase.rpc("end_tracking_session", {
         p_session_id: trackingSessionId
-      });
+      };
 
       if (error) throw error;
 
@@ -259,7 +259,7 @@ export default function SatelliteTracker() {
       toast({
         title: "Tracking Stopped",
         description: "Satellite tracking session ended",
-      });
+      };
     } catch (error) {
       logger.error("Error stopping satellite tracking", { error, trackingSessionId });
     }

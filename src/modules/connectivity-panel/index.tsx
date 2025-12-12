@@ -117,7 +117,7 @@ export default function ConnectivityPanel() {
     
     setIsRefreshing(false);
     toast({ title: "Atualizado", description: "Status de conectividade atualizado" });
-  });
+  };
 
   const handleForceSync = async (vesselId: string) => {
     const vessel = vessels.find(v => v.id === vesselId);

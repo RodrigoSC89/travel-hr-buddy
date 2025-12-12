@@ -76,7 +76,7 @@ export const ProductionHealthDashboard = memo(function({ autoRun = true, compact
         {status.text}
       </Badge>
     );
-  });
+  };
 
   const renderCheck = (check: ReadinessCheck) => {
     const StatusIcon = statusIcons[check.status];

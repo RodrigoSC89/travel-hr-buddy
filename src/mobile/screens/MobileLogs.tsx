@@ -93,7 +93,7 @@ export const MobileLogs: React.FC = () => {
       info: logs.filter(l => l.level === "info").length,
       debug: logs.filter(l => l.level === "debug").length,
     };
-  });
+  };
 
   const stats = getLevelStats();
 

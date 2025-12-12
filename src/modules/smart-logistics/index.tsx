@@ -189,7 +189,7 @@ export default function SmartLogistics() {
       setIsAnalyzing(false);
       toast.success("Análise concluída!");
     }, 2000);
-  });
+  };
 
   const generateOrder = (itemId: string) => {
     const item = supplies.find(s => s.id === itemId);

@@ -144,7 +144,7 @@ const ReportsCommandCenter = () => {
     if (!analyticsData || analyticsData.reportsLastMonth === 0) return null;
     const growth = ((analyticsData.reportsThisMonth - analyticsData.reportsLastMonth) / analyticsData.reportsLastMonth) * 100;
     return growth.toFixed(1);
-  });
+  };
 
   const getTypeLabel = (type: string) => {
     const labels: Record<string, string> = {
@@ -155,7 +155,7 @@ const ReportsCommandCenter = () => {
       financial: "Financeiro"
     };
     return labels[type] || type;
-  });
+  };
 
   return (
     <ModulePageWrapper gradient="blue">

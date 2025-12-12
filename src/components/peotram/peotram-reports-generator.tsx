@@ -126,7 +126,7 @@ export const PeotramReportsGenerator: React.FC = () => {
     includeEvidence: false,
     includeRecommendations: true,
     sections: []
-  });
+  };
   const [isGenerating, setIsGenerating] = useState(false);
   const [generationProgress, setGenerationProgress] = useState(0);
 
@@ -186,11 +186,11 @@ export const PeotramReportsGenerator: React.FC = () => {
 
   const scheduleReport = () => {
     alert("Funcionalidade de agendamento de relatórios será implementada em breve.");
-  });
+  };
 
   const previewReport = () => {
     alert("Visualização do relatório será implementada em breve.");
-  });
+  };
 
   return (
     <div className="space-y-6">

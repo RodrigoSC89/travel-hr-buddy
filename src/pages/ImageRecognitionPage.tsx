@@ -17,6 +17,6 @@ const ImageRecognitionPage: React.FC = () => {
       </div>
     </>
   );
-});
+};
 
 export default ImageRecognitionPage;

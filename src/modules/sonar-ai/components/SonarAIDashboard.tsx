@@ -52,12 +52,12 @@ export const SonarAIDashboard: React.FC = () => {
     setEvents(eventsData);
     setRisks(risksData);
     setStatistics(stats);
-  });
+  };
 
   const generateDemoSpectrogram = () => {
     const demoData = enhancedSonarAIService.generateSpectrogram([], 80);
     setSpectrogramData(demoData);
-  });
+  };
 
   const performAIScan = async () => {
     setScanning(true);

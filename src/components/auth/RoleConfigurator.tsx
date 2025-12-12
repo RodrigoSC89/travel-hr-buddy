@@ -80,7 +80,7 @@ export const RoleConfigurator: React.FC = () => {
           title: "Erro",
           description: "Não foi possível carregar as permissões.",
           variant: "destructive",
-        });
+        };
         return;
       }
 

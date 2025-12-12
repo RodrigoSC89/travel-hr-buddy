@@ -5,7 +5,7 @@ import { Suggestion } from "./index";
 const loadJsPDF = async () => {
   const { default: jsPDF } = await import("jspdf");
   return jsPDF;
-});
+};
 
 /**
  * Export workflow AI suggestions to PDF format

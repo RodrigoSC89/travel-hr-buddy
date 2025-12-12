@@ -81,7 +81,7 @@ export default function LogisticsHub() {
     if (error) throw error;
     setRequests(data || []);
     logger.info("Material requests loaded", { count: data?.length });
-  });
+  };
 
   const loadInventory = async () => {
     const { data, error } = await supabase
@@ -92,7 +92,7 @@ export default function LogisticsHub() {
     if (error) throw error;
     setInventory(data || []);
     logger.info("Inventory items loaded", { count: data?.length });
-  });
+  };
 
   const handleRequestSubmit = async (e: React.FormEvent) => {
     e.preventDefault();

@@ -69,7 +69,7 @@ export const DocumentValidator: React.FC<DocumentValidatorProps> = ({
           field: "documentNumber",
           message: "Número do documento é obrigatório",
           severity: "high"
-        });
+        };
         score -= 25;
       }
 

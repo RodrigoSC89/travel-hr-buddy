@@ -60,7 +60,7 @@ const PerformanceCenter: React.FC = () => {
     keyResults: "",
     responsavel: "",
     prazo: ""
-  });
+  };
 
   const getStatusBadge = (status: string) => {
     switch (status) {
@@ -146,7 +146,7 @@ const PerformanceCenter: React.FC = () => {
           keyResults: parsed.keyResults?.map((kr: { title: string }) => kr.title).join("\n") || "",
           responsavel: parsed.owner || "",
           prazo: parsed.quarter || ""
-        });
+        };
         toast.success("OKR gerado pela IA!");
       } catch {
         setNewOKR(prev => ({ ...prev, objetivo: result }));
@@ -165,7 +165,7 @@ const PerformanceCenter: React.FC = () => {
     setFeedbackText("");
     setFeedbackTarget("");
     setIsFeedbackOpen(false);
-  });
+  };
 
   const handleExportNineBox = () => {
     const csvContent = "Colaborador,Performance,Potencial,Classificação\n" +
@@ -179,7 +179,7 @@ const PerformanceCenter: React.FC = () => {
     link.click();
     
     toast.success("Matriz 9-Box exportada!");
-  });
+  };
 
   const nineBoxGrid = [
     { row: 0, col: 0, label: "Enigma", performance: "low", potential: "high", color: "bg-yellow-500/20" },

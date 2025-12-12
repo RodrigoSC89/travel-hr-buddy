@@ -59,7 +59,7 @@ export const DeliveryMap = memo(function({ deliveries }: DeliveryMapProps) {
           style: "mapbox://styles/mapbox/streets-v12",
           center: [-50, -10],
           zoom: 3,
-        });
+        };
 
         map.current = mapInstance;
         mapInstance.addControl(new mapboxgl.NavigationControl(), "top-right");

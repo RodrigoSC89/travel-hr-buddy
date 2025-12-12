@@ -76,7 +76,7 @@ export const MFAPrompt: React.FC<MFAPromptProps> = ({ onSuccess, onCancel }) => 
         title: "Código Inválido",
         description: "Digite um código de 6 dígitos",
         variant: "destructive"
-      });
+      };
       return;
     }
 
@@ -90,7 +90,7 @@ export const MFAPrompt: React.FC<MFAPromptProps> = ({ onSuccess, onCancel }) => 
         factorId,
         challengeId: challenge.id,
         code
-      });
+      };
 
       if (error) throw error;
 
@@ -208,13 +208,13 @@ export const useMFA = memo(() => {
     setShowMFAPrompt(false);
     mfaResolver?.resolve(true);
     setMfaResolver(null);
-  });
+  };
 
   const handleMFACancel = () => {
     setShowMFAPrompt(false);
     mfaResolver?.resolve(false);
     setMfaResolver(null);
-  });
+  };
 
   const MFAPromptComponent = showMFAPrompt ? (
     <MFAPrompt 
@@ -227,4 +227,4 @@ export const useMFA = memo(() => {
     requireMFA,
     MFAPromptComponent
   };
-});
+};

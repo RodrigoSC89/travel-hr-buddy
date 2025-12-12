@@ -26,21 +26,21 @@ export const NetworkStatusWidget = memo(function NetworkStatusWidget({
     if (quality === "fast") return <Zap className="h-4 w-4" />;
     if (quality === "slow") return <AlertTriangle className="h-4 w-4" />;
     return <Wifi className="h-4 w-4" />;
-  });
+  };
 
   const getColor = () => {
     if (!online) return "text-destructive";
     if (quality === "fast") return "text-green-500";
     if (quality === "slow") return "text-yellow-500";
     return "text-blue-500";
-  });
+  };
 
   const getLabel = () => {
     if (!online) return "Offline";
     if (quality === "fast") return "Rápida";
     if (quality === "slow") return "Lenta";
     return "Normal";
-  });
+  };
 
   if (compact) {
     return (

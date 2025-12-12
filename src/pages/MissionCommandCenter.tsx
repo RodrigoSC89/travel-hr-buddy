@@ -111,7 +111,7 @@ const MissionCommandCenter: React.FC = () => {
     status: "planned",
     description: "",
     location: ""
-  });
+  };
 
   // Mission Control state
   const [missions, setMissions] = useState<Mission[]>([]);
@@ -133,7 +133,7 @@ const MissionCommandCenter: React.FC = () => {
     const data = await missionLogsService.getLogs(filters);
     setLogs(data);
     setLogsLoading(false);
-  });
+  };
 
   // Load Real-time Missions
   const loadMissions = useCallback(async () => {
@@ -222,9 +222,9 @@ const MissionCommandCenter: React.FC = () => {
       status: "planned",
       description: "",
       location: ""
-    });
+    };
     setEditingLog(null);
-  });
+  };
 
   const getStatusBadge = (status: string) => {
     const variants: Record<string, "default" | "secondary" | "destructive" | "outline"> = {
@@ -234,7 +234,7 @@ const MissionCommandCenter: React.FC = () => {
       "cancelled": "destructive"
     };
     return <Badge variant={variants[status] || "default"}>{status}</Badge>;
-  });
+  };
 
   const getStatusColor = (status: ModuleStatus["status"]) => {
     switch (status) {

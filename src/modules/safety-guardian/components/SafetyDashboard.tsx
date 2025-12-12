@@ -125,7 +125,7 @@ export const SafetyDashboard: React.FC = () => {
         data.forEach((inc: DPIncident) => {
           const month = new Date(inc.incident_date).toLocaleString("pt-BR", { month: "short" });
           grouped[month] = (grouped[month] || 0) + 1;
-  });
+  };
       }
     } catch (error) {
       console.error("Error loading incidents:", error);
@@ -157,7 +157,7 @@ export const SafetyDashboard: React.FC = () => {
     setIsReportDialogOpen(false);
     setReportType("");
     setReportDescription("");
-  });
+  };
 
   const getSeverityColor = (severity: string) => {
     switch (severity) {

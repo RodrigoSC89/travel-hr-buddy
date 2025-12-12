@@ -160,15 +160,15 @@ export const EnhancedAlertManagement: React.FC = () => {
     toast({
       title: "Alerta Atualizado",
       description: "Configuração do alerta foi modificada com sucesso.",
-    });
-  });
+    };
+  };
 
   const createAlertGroup = () => {
     toast({
       title: "Grupo Criado",
       description: "Novo grupo de alertas criado. Configure as regras personalizadas.",
-    });
-  });
+    };
+  };
 
   const getThresholdLabel = (alert: PriceAlert) => {
     switch (alert.thresholdType) {

@@ -87,7 +87,7 @@ export const TelemetryMap = memo(function({
   const handleRefresh = () => {
     onRefresh?.();
     toast.success("Posições atualizadas");
-  });
+  };
 
   // Simulated map rendering
   useEffect(() => {

@@ -23,7 +23,7 @@ export const WelcomeCard: React.FC = () => {
     else if (hour < 18) greeting = "Boa tarde";
     
     return `${greeting}, ${displayName}!`;
-  });
+  };
 
   const getQuickActions = () => {
     const actions = [];
@@ -34,7 +34,7 @@ export const WelcomeCard: React.FC = () => {
         label: "Gerenciar Usuários",
         action: () => navigate("/admin"),
         variant: "default" as const
-      });
+      };
     }
     
     if (userRole === "hr_manager" || userRole === "admin") {
@@ -43,7 +43,7 @@ export const WelcomeCard: React.FC = () => {
         label: "Relatórios de RH",
         action: () => navigate("/hr"),
         variant: "secondary" as const
-      });
+      };
     }
     
     actions.push({

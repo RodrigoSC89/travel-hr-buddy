@@ -33,7 +33,7 @@ export const SemanticDocumentSearch = memo(function() {
         title: "Empty query",
         description: "Please enter a search term",
         variant: "destructive",
-      });
+      };
       return;
     }
 

@@ -49,7 +49,7 @@ export const AIAnalysisComponent: React.FC<AIAnalysisProps> = ({
             complianceScore: checklist.complianceScore
           }
         }
-      });
+      };
 
       if (response.error) {
         throw new Error(response.error.message);

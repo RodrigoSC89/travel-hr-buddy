@@ -158,7 +158,7 @@ const UserOnboardingCenter: React.FC = () => {
 
     toast.success(`Convite enviado para ${newInvite.name}`);
     setNewInvite({ email: "", name: "", role: "", message: "" });
-  });
+  };
 
   const getStatusColor = (status: string) => {
     switch (status) {

@@ -18,7 +18,7 @@ import { useToast } from "@/hooks/use-toast";
 const loadJsPDF = async () => {
   const { default: jsPDF } = await import("jspdf");
   return jsPDF;
-});
+};
 
 interface IncidentWorkflowProps {
   incident: unknown: unknown: unknown;
@@ -57,7 +57,7 @@ export const IncidentWorkflow: React.FC<IncidentWorkflowProps> = ({ incident, on
           action: `Status changed to ${status}`,
           notes,
           performed_at: new Date().toISOString(),
-        });
+        };
       } catch (logError) {
       }
 

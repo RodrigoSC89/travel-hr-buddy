@@ -107,14 +107,14 @@ export const OperationsDashboard = memo(function() {
     ];
 
     setAiSuggestions(suggestions);
-  });
+  };
 
   const getMetricColor = (value: number, threshold: number, reverse = false) => {
     if (reverse) {
       return value <= threshold ? "text-green-500" : "text-red-500";
     }
     return value >= threshold ? "text-green-500" : "text-yellow-500";
-  });
+  };
 
   if (loading) {
     return (

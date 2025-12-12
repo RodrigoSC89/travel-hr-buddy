@@ -60,7 +60,7 @@ export const EnhancedReservationsCalendar: React.FC = () => {
     const newDate = new Date(currentDate);
     newDate.setMonth(currentDate.getMonth() + (direction === "next" ? 1 : -1));
     setCurrentDate(newDate);
-  });
+  };
 
   const getDaysInMonth = (date: Date) => {
     const year = date.getFullYear();

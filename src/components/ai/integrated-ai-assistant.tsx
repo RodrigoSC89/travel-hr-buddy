@@ -391,7 +391,7 @@ Como posso ajudá-lo especificamente hoje?`,
   const handleQuickAction = (action: QuickAction) => {
     setCurrentMessage(action.prompt);
     inputRef.current?.focus();
-  });
+  };
 
   const toggleListening = () => {
     setIsListening(!isListening);
@@ -400,12 +400,12 @@ Como posso ajudá-lo especificamente hoje?`,
       toast({
         title: "Reconhecimento de voz ativo",
         description: "Fale agora..."
-      });
+      };
     } else {
       toast({
         title: "Reconhecimento de voz desativado",
         description: "Voltando ao modo texto"
-      });
+      };
     }
   };
 
@@ -427,14 +427,14 @@ Como posso ajudá-lo especificamente hoje?`,
     toast({
       title: "Conversa exportada",
       description: "Arquivo baixado com sucesso"
-    });
-  });
+    };
+  };
 
   const handleSettingsClick = () => {
     toast({
       title: "⚙️ Configurações do Assistente",
       description: "Ajuste preferências de idioma, modelo de IA e comportamento"
-    });
+    };
     // TODO: Implement settings dialog with model selection, temperature, etc.
   };
 

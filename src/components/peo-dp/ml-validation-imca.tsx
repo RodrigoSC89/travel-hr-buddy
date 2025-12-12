@@ -208,16 +208,16 @@ export const MLValidationIMCA: React.FC = () => {
       setIsAnalyzing(false);
       toast.success("Validação concluída!", {
         description: "12 recomendações IMCA geradas"
-      });
+      };
     }, 3000);
-  });
+  };
 
   const getScoreColor = (score: number) => {
     if (score >= 90) return "text-green-600";
     if (score >= 75) return "text-blue-600";
     if (score >= 60) return "text-yellow-600";
     return "text-red-600";
-  });
+  };
 
   const getStatusBadge = (status: SectionScore["status"]) => {
     const styles = {

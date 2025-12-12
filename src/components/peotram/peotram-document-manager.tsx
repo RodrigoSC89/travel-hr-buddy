@@ -128,7 +128,7 @@ export const PeotramDocumentManager: React.FC = () => {
     auditId: "",
     elementId: "",
     requirementId: ""
-  });
+  };
 
   useEffect(() => {
     loadDocuments();

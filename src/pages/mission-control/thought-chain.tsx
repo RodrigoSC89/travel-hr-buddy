@@ -23,7 +23,7 @@ const ThoughtChainPage = () => {
         title: "Erro",
         description: "Por favor, adicione pelo menos um passo.",
         variant: "destructive",
-      });
+      };
       return;
     }
 
@@ -72,11 +72,11 @@ const ThoughtChainPage = () => {
   const handleRunChain = () => {
     const steps = parseNaturalLanguageToChain(input);
     executeChain(steps);
-  });
+  };
 
   const loadTemplate = (template: string[]) => {
     setInput(template.join("\n"));
-  });
+  };
 
   return (
     <div className="container mx-auto p-6 space-y-6">

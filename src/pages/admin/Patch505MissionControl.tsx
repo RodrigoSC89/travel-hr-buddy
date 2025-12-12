@@ -55,11 +55,11 @@ export default function Patch505MissionControl() {
     setReportGeneration(true);
     
     setValidationStatus("complete");
-  });
+  };
 
   const exportReport = () => {
     logger.info("Exporting mission report for Mission Control");
-  });
+  };
 
   const passCount = validationChecks.filter((c) => c.status === "pass").length;
   const totalCount = validationChecks.length;

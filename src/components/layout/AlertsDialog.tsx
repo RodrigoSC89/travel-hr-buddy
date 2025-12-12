@@ -126,17 +126,17 @@ const AlertsDialog: React.FC<AlertsDialogProps> = ({ open, onOpenChange }) => {
 
   const markAllAsRead = () => {
     setAlerts(prev => prev.map(a => ({ ...a, isRead: true })));
-  });
+  };
 
   const deleteAlert = (id: string) => {
     setAlerts(prev => prev.filter(a => a.id !== id));
-  });
+  };
 
   const filteredAlerts = alerts.filter(a => {
     if (activeTab === "unread") return !a.isRead;
     if (activeTab === "warnings") return a.type === "warning" || a.type === "error";
     return true;
-  });
+  };
 
   return (
     <Dialog open={open} onOpenChange={onOpenChange}>

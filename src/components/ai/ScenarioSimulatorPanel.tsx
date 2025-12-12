@@ -140,10 +140,10 @@ export const ScenarioSimulatorPanel = memo(function() {
       maintenanceBudget: 0,
       operationalDays: 0,
       speedAdjustment: 0,
-    });
+    };
     setResults(null);
     setAiAnalysis("");
-  });
+  };
 
   const loadPreset = (scenarioId: string) => {
     setActiveScenario(scenarioId);

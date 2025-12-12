@@ -55,7 +55,7 @@ export default function DocumentListPage() {
         title: "Erro ao carregar documentos",
         description: "Não foi possível carregar a lista de documentos.",
         variant: "destructive",
-      });
+      };
     } finally {
       setLoading(false);
     }
@@ -73,11 +73,11 @@ export default function DocumentListPage() {
         doc.content.toLowerCase().includes(searchTerm.toLowerCase())
     );
     setFilteredDocuments(filtered);
-  });
+  };
 
   const handleViewDocument = (id: string) => {
     navigate(`/admin/documents/view/${id}`);
-  });
+  };
 
   return (
     <RoleBasedAccess roles={["admin", "hr_manager"]}>

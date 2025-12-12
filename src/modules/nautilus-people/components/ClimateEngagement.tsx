@@ -148,7 +148,7 @@ const ClimateEngagement: React.FC = () => {
     
     toast.success("Respostas enviadas com sucesso! Obrigado pela participação.");
     setSurveyResponses({});
-  });
+  };
 
   const handleRegisterMood = async () => {
     if (!selectedMood) {
@@ -170,7 +170,7 @@ const ClimateEngagement: React.FC = () => {
     toast.success(`Humor "${moodLabels[selectedMood]}" registrado com sucesso!`);
     setSelectedMood(null);
     setMoodComment("");
-  });
+  };
 
   const handleSendFeedback = async () => {
     if (!feedbackText.trim()) {
@@ -189,7 +189,7 @@ const ClimateEngagement: React.FC = () => {
     }
     
     setFeedbackText("");
-  });
+  };
 
   const handleGenerateInsights = async () => {
     toast.info("Gerando insights com IA...");
@@ -198,7 +198,7 @@ const ClimateEngagement: React.FC = () => {
       results: climateResults,
       period: "Q4 2025",
       participationRate: 91
-    });
+    };
     
     if (result) {
       toast.success("Insights gerados! Confira o relatório completo.");

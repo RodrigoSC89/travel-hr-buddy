@@ -98,7 +98,7 @@ export default function ListaAuditoriasIMCA() {
     link.download = `auditorias-imca-${new Date().toISOString().split("T")[0]}.csv`;
     link.click();
     toast.success("CSV exportado com sucesso!");
-  });
+  };
 
   const exportarPDF = async () => {
     if (!pdfRef.current) return;
@@ -108,7 +108,7 @@ export default function ListaAuditoriasIMCA() {
       const canvas = await html2canvas(pdfRef.current, {
         scale: 2,
         backgroundColor: "#ffffff",
-      });
+      };
 
       const imgData = canvas.toDataURL("image/png");
       const jsPDF = await getJsPDF();
@@ -116,7 +116,7 @@ export default function ListaAuditoriasIMCA() {
         orientation: "portrait",
         unit: "mm",
         format: "a4",
-      });
+      };
 
       const imgWidth = 190;
       const imgHeight = (canvas.height * imgWidth) / canvas.width;

@@ -109,7 +109,7 @@ export const DynamicNavigation = memo(function({ className }: DynamicNavigationP
 
   const closeMobileMenu = () => {
     setIsMobileOpen(false);
-  });
+  };
 
   const getFilterLabel = (mode: FilterMode) => {
     const labels: Record<FilterMode, string> = {
@@ -119,7 +119,7 @@ export const DynamicNavigation = memo(function({ className }: DynamicNavigationP
       incomplete: "❌ Incomplete"
     };
     return labels[mode];
-  });
+  };
 
   return (
     <>

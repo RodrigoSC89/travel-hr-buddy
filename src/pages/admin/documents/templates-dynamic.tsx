@@ -43,7 +43,7 @@ import html2canvas from "html2canvas";
 const loadJsPDF = async () => {
   const { default: jsPDF } = await import("jspdf");
   return jsPDF;
-});
+};
 
 interface TemplateVersion {
   id: string;
@@ -122,7 +122,7 @@ export const TemplatesDynamic = memo(() => {
         title: "Error loading templates",
         description: error.message,
         variant: "destructive",
-      });
+      };
     }
   };
 
@@ -226,10 +226,10 @@ export const TemplatesDynamic = memo(() => {
     Object.keys(variableValues).forEach((key) => {
       const regex = new RegExp(`{{${key}}}`, "g");
       html = html.replace(regex, variableValues[key] || `{{${key}}}`);
-  });
+  };
 
     setPreviewHtml(html);
-  });
+  };
 
   const saveTemplate = async () => {
     if (!templateName || !templateContent) {
@@ -237,7 +237,7 @@ export const TemplatesDynamic = memo(() => {
         title: "Missing fields",
         description: "Please provide template name and content",
         variant: "destructive",
-      });
+      };
       return;
     }
 
@@ -441,7 +441,7 @@ export const TemplatesDynamic = memo(() => {
     setTemplateContent("");
     setVersions([]);
     setPreviewHtml("");
-  });
+  };
 
   return (
     <div className="space-y-6">

@@ -62,7 +62,7 @@ export const WorkflowAutomationHub: React.FC = () => {
   const handleMarkAllRead = () => {
     setUnreadCount(0);
     toast({ title: "Notificações", description: "Todas marcadas como lidas" });
-  });
+  };
 
   const handleNewWorkflow = async () => {
     if (!newWorkflowData.name) {
@@ -76,10 +76,10 @@ export const WorkflowAutomationHub: React.FC = () => {
       priority: newWorkflowData.priority as unknown,
       status: "draft",
       steps: [],
-    });
+    };
     setShowNewWorkflow(false);
     setNewWorkflowData({ name: "", description: "", category: "custom", priority: "medium" });
-  });
+  };
 
   const handleUseTemplate = async (template: typeof workflowTemplates[0]) => {
     await createWorkflow({

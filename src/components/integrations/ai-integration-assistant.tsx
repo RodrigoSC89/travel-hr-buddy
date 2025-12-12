@@ -133,7 +133,7 @@ export const AIIntegrationAssistant: React.FC = () => {
     // Simular análise IA
     await new Promise(resolve => setTimeout(resolve, 2000));
     setIsAnalyzing(false);
-  });
+  };
 
   return (
     <div className="space-y-6">

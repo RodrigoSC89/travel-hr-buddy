@@ -83,18 +83,18 @@ export const WelcomeOnboarding: React.FC = () => {
       setCurrentStep(prev => prev + 1);
     } else {
       handleComplete();
-    });
-  });
+    };
+  };
 
   const handleSkip = () => {
     handleComplete();
-  });
+  };
 
   const handleComplete = () => {
     localStorage.setItem(STORAGE_KEY, "true");
     setIsVisible(false);
     setIsCompleted(true);
-  });
+  };
 
   if (isCompleted || !isVisible) return null;
 

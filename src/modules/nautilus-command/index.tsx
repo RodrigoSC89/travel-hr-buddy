@@ -69,7 +69,7 @@ const NautilusCommandCenter = () => {
     maintenance: { scheduled: 0, overdue: 0, completed: 0, efficiency: 0 },
     inventory: { lowStock: 0, pendingOrders: 0, value: 0 },
     compliance: { score: 0, pendingAudits: 0, expiringDocs: 0 }
-  });
+  };
   const [alerts, setAlerts] = useState<Alert[]>([]);
   const [showBrain, setShowBrain] = useState(false);
   const [lastSync, setLastSync] = useState<Date>(new Date());

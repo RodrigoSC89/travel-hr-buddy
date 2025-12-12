@@ -111,11 +111,11 @@ const DocumentCenterContent: React.FC<{ className?: string }> = ({ className }) 
 
   const handleBulkArchive = async () => {
     await bulkArchive(selectedDocuments);
-  });
+  };
 
   const handleBulkDownload = async () => {
     await bulkDownload(selectedDocuments);
-  });
+  };
 
   return (
     <div className={cn("space-y-4", className)}>

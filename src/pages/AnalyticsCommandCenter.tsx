@@ -181,7 +181,7 @@ const AnalyticsCommandCenter: React.FC = () => {
     await loadAllData();
     toast({ title: "Dados atualizados", description: "Analytics atualizado com sucesso" });
     setIsRefreshing(false);
-  });
+  };
 
   const loadMetrics = async () => {
     const defaultMetrics: KPIMetric[] = [
@@ -195,7 +195,7 @@ const AnalyticsCommandCenter: React.FC = () => {
       { id: "8", name: "Índice de Segurança", value: 99.1, unit: "%", trend: "stable", change: 0.1, category: "safety" }
     ];
     setMetrics(defaultMetrics);
-  });
+  };
 
   const loadFleetMetrics = async () => {
     const mockMetrics: FleetMetrics = {
@@ -210,7 +210,7 @@ const AnalyticsCommandCenter: React.FC = () => {
       environmental_score: 88.7
     };
     setFleetMetrics(mockMetrics);
-  });
+  };
 
   const loadInsights = async () => {
     const mockInsights: AIInsight[] = [

@@ -225,7 +225,7 @@ export const SmartOptimization: React.FC = () => {
       toast({
         title: "Análise em Progresso",
         description: steps[i],
-      });
+      };
     }
     
     setIsScanning(false);

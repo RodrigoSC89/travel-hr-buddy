@@ -27,7 +27,7 @@ const loadPDFLibs = async () => {
   const { default: jsPDF } = await import("jspdf");
   const { default: autoTable } = await import("jspdf-autotable");
   return { jsPDF, autoTable };
-});
+};
 
 interface Incident {
   id: string;
@@ -145,7 +145,7 @@ export const IncidentDetailDialog: React.FC<IncidentDetailDialogProps> = ({
         title: "Campos obrigatórios",
         description: "Preencha descrição e responsável",
         variant: "destructive"
-      });
+      };
       return;
     }
 
@@ -155,7 +155,7 @@ export const IncidentDetailDialog: React.FC<IncidentDetailDialogProps> = ({
         .insert({
           incident_id: incident.id,
           ...newAction
-        });
+        };
 
       if (error) throw error;
 

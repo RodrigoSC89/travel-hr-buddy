@@ -182,8 +182,8 @@ export const WorkspaceActivities: React.FC<WorkspaceActivitiesProps> = ({
     toast({
       title: "Filtros limpos",
       description: "Mostrando todas as atividades",
-    });
-  });
+    };
+  };
 
   const formatTime = (timestamp: string) => {
     try {

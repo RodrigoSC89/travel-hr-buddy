@@ -88,12 +88,12 @@ export const AdaptiveImage = memo(function AdaptiveImage({
   const handleLoad = () => {
     setIsLoaded(true);
     onLoad?.();
-  });
+  };
 
   const handleError = () => {
     setHasError(true);
     onError?.();
-  });
+  };
 
   // Placeholder styles
   const placeholderStyle = placeholder === "blur" && blurDataURL

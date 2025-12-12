@@ -77,7 +77,7 @@ export default function SGSOReportPage({
       await html2pdf().set(opt).from(element).save();
       toast.success("PDF gerado com sucesso!", { 
         description: "O relatório foi baixado para seu dispositivo." 
-      });
+      };
     } catch (error) {
       logger.error("Erro ao gerar PDF", { error });
       toast.error("Erro ao gerar PDF", {

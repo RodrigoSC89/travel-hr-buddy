@@ -87,7 +87,7 @@ export const PainelSGSO: React.FC = () => {
     const csv = [header, ...rows].map((e) => e.join(",")).join("\n");
     const blob = new Blob([csv], { type: "text/csv;charset=utf-8;" });
     saveAs(blob, "relatorio_sgso.csv");
-  });
+  };
 
   const exportarPDF = () => {
     if (!pdfRef.current) return;
@@ -100,7 +100,7 @@ export const PainelSGSO: React.FC = () => {
         jsPDF: { unit: "in", format: "a4", orientation: "portrait" },
       })
       .save();
-  });
+  };
 
   return (
     <div className="space-y-6">

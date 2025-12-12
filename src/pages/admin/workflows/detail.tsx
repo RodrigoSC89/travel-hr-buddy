@@ -132,14 +132,14 @@ export default function WorkflowDetailPage() {
       toast({
         title: "Sucesso",
         description: "PDF exportado com sucesso!",
-      });
+      };
     } catch (error) {
       console.error("Error exporting PDF:", error);
       toast({
         title: "Erro",
         description: "Não foi possível exportar o PDF",
         variant: "destructive",
-      });
+      };
     }
   };
 

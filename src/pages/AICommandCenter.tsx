@@ -246,7 +246,7 @@ export default function AICommandCenter() {
       setIsAnalyzing(false);
       toast({ title: "Análise Completa", description: "Novos insights disponíveis!" });
     }, 3000);
-  });
+  };
 
   const renderRevolutionaryContent = () => {
     switch (activeFeature) {

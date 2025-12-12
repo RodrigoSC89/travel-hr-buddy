@@ -86,7 +86,7 @@ export const PersonalizedRecommendations: React.FC<PersonalizedRecommendationsPr
             notificationsEnabled: true
           }
         }
-      });
+      };
 
       if (error) throw error;
 

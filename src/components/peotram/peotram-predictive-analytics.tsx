@@ -121,9 +121,9 @@ export const PeotramPredictiveAnalytics: React.FC = () => {
       setIsAnalyzing(false);
       toast.success("Análise preditiva concluída!", {
         description: `${insights.length} insights gerados com confiança média de 81%`
-      });
+      };
     }, 3000);
-  });
+  };
 
   const getSeverityColor = (severity: "high" | "medium" | "low") => {
     const colors = {
@@ -132,7 +132,7 @@ export const PeotramPredictiveAnalytics: React.FC = () => {
       low: "bg-blue-100 text-blue-800 border-blue-200"
     };
     return colors[severity];
-  });
+  };
 
   const getImpactBadge = (impact: "critical" | "significant" | "moderate") => {
     const variants = {

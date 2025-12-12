@@ -91,7 +91,7 @@ const RealTimeWorkspace: React.FC = () => {
   // Scroll para última mensagem
   const scrollToBottom = () => {
     messagesEndRef.current?.scrollIntoView({ behavior: "smooth" });
-  });
+  };
 
   useEffect(() => {
     scrollToBottom();
@@ -112,7 +112,7 @@ const RealTimeWorkspace: React.FC = () => {
               key: user.id,
             },
           },
-        });
+        };
 
         channelRef.current = channel;
 
@@ -285,7 +285,7 @@ const RealTimeWorkspace: React.FC = () => {
           type: "text",
           room: selectedRoom
         }
-      });
+      };
 
       setNewMessage("");
     } catch (error) {

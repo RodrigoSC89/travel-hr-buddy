@@ -11,7 +11,7 @@ const loadORT = async () => {
     ort = await import("onnxruntime-web");
   }
   return ort;
-});
+};
 
 export default function DPSyncDashboard() {
   const [sync, setSync] = useState("Sincronizando...");

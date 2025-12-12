@@ -36,7 +36,7 @@ export default function TemplateEditorWithRewrite() {
         title: "Seleção inválida",
         description: "Selecione um trecho maior para reescrever.",
         variant: "destructive",
-      });
+      };
       return;
     }
 

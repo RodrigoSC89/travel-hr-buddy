@@ -224,7 +224,7 @@ export const MaritimeCommunicationCenter = memo(() => {
           title: "Erro",
           description: "Preencha todos os campos obrigatórios",
           variant: "destructive"
-        });
+        };
         return;
       }
 
@@ -237,7 +237,7 @@ export const MaritimeCommunicationCenter = memo(() => {
           priority: newMessage.priority,
           coordinates: newMessage.coordinates
         }
-      });
+      };
 
       if (error) {
         throw error;

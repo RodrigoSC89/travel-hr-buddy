@@ -106,7 +106,7 @@ export default function Patch516UnderwaterDrone() {
     setMissionActive(false);
     setDroneStatus((prev) => ({ ...prev, status: "idle", speed: 0 }));
     executeCommand("PAUSE_MISSION", "Missão pausada - Mantendo posição");
-  });
+  };
 
   const resetDrone = () => {
     setDroneStatus({
@@ -116,10 +116,10 @@ export default function Patch516UnderwaterDrone() {
       speed: 0,
       heading: 0,
       status: "idle",
-    });
+    };
     setMissionActive(false);
     executeCommand("RESET_DRONE", "Drone retornando à superfície e resetando sistemas");
-  });
+  };
 
   const getStatusColor = (status: string) => {
     switch (status) {

@@ -118,7 +118,7 @@ export const ChatInterface = memo(() => {
 
   const scrollToBottom = () => {
     messagesEndRef.current?.scrollIntoView({ behavior: "smooth" });
-  });
+  };
 
   const loadAllUsers = useCallback(async () => {
     try {
@@ -395,7 +395,7 @@ export const ChatInterface = memo(() => {
         title: "Erro",
         description: "Não foi possível enviar a mensagem",
         variant: "destructive",
-      });
+      };
     }
   };
 

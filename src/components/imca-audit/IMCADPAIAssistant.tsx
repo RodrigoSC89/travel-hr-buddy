@@ -45,7 +45,7 @@ export const IMCADPAIAssistant = memo(function({ selectedDPClass }: Props) {
           messages: [...messages, userMessage].map(m => ({ role: m.role, content: m.content })),
           context: { dpClass: selectedDPClass }
         }),
-      });
+      };
 
       if (!response.ok) throw new Error("Failed to get response");
 

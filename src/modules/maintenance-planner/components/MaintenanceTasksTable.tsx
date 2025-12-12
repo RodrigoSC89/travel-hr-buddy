@@ -235,8 +235,8 @@ export const MaintenanceTasksTable: React.FC<MaintenanceTasksTableProps> = ({ on
     toast({
       title: "Lista atualizada",
       description: "As tarefas foram atualizadas com sucesso",
-    });
-  });
+    };
+  };
 
   const handleStartTask = (taskId: string) => {
     setTasks(prev => 
@@ -247,7 +247,7 @@ export const MaintenanceTasksTable: React.FC<MaintenanceTasksTableProps> = ({ on
     toast({
       title: "Tarefa iniciada",
       description: "A tarefa foi marcada como em andamento",
-    });
+    };
   });
 
   const handleCompleteTask = (taskId: string) => {

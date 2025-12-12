@@ -52,8 +52,8 @@ export const SettingsModule: React.FC = () => {
     toast({
       title: "Configurações salvas",
       description: "Suas preferências foram atualizadas com sucesso.",
-    });
-  });
+    };
+  };
 
   const handleReset = () => {
     setSettings({
@@ -74,7 +74,7 @@ export const SettingsModule: React.FC = () => {
         currency: "BRL",
         theme: "system"
       }
-    });
+    };
     toast({
       title: "Configurações restauradas",
       description: "As configurações padrão foram restauradas.",

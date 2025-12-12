@@ -24,7 +24,7 @@ import html2canvas from "html2canvas";
 const loadJsPDF = async () => {
   const { default: jsPDF } = await import("jspdf");
   return jsPDF;
-});
+};
 
 interface DadosNavio {
   nome_navio: string;
@@ -95,7 +95,7 @@ export default function DashboardAuditorias() {
       const canvas = await html2canvas(chartRef.current, {
         scale: 2,
         backgroundColor: "#ffffff",
-      });
+      };
 
       const imgData = canvas.toDataURL("image/png");
       const jsPDF = await loadJsPDF();
@@ -103,7 +103,7 @@ export default function DashboardAuditorias() {
         orientation: "landscape",
         unit: "mm",
         format: "a4",
-      });
+      };
 
       const imgWidth = 280;
       const imgHeight = (canvas.height * imgWidth) / canvas.width;

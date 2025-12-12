@@ -137,7 +137,7 @@ export const SmartDPLogbook: React.FC = () => {
     eventType: "operation",
     severity: "info",
     dpMode: "Auto DP"
-  });
+  };
 
   const filteredEntries = entries.filter(entry => {
     const matchesSearch = entry.description.toLowerCase().includes(searchTerm.toLowerCase()) ||
@@ -145,7 +145,7 @@ export const SmartDPLogbook: React.FC = () => {
     const matchesType = filterType === "all" || entry.eventType === filterType;
     const matchesSeverity = filterSeverity === "all" || entry.severity === filterSeverity;
     return matchesSearch && matchesType && matchesSeverity;
-  });
+  };
 
   const handleAddEntry = () => {
     if (!newEntry.description || !newEntry.operator) {
@@ -179,7 +179,7 @@ export const SmartDPLogbook: React.FC = () => {
 
   const handleExportPDF = () => {
     toast.success("Exportando logbook para PDF...");
-  });
+  };
 
   const getSeverityBadge = (severity: string) => {
     switch (severity) {

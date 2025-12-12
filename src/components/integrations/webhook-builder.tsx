@@ -84,7 +84,7 @@ export const WebhookBuilder: React.FC = () => {
       maxRetries: 3,
       backoffStrategy: "exponential"
     }
-  });
+  };
 
   const [webhooks] = useState<WebhookConfig[]>([
     {
@@ -213,7 +213,7 @@ export const WebhookBuilder: React.FC = () => {
       toast({
         title: "Webhook Criado",
         description: `Webhook "${webhookConfig.name}" foi criado com sucesso.`,
-      });
+      };
       
       // Reset form
       setWebhookConfig({

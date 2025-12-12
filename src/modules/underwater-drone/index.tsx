@@ -132,24 +132,24 @@ const UnderwaterDrone: React.FC = () => {
       speed: 3,
     };
     droneCore.executeCommand(command);
-  });
+  };
 
   const handleChangeDepth = () => {
     droneCore.executeCommand({ type: "depth", target: { depth: targetDepth, lat: 0, lon: 0, altitude: 0 } });
-  });
+  };
 
   const handleHover = () => {
     droneCore.executeCommand({ type: "hover" });
-  });
+  };
 
   const handleSurface = () => {
     droneCore.executeCommand({ type: "surface" });
-  });
+  };
 
   const handleEmergencyStop = () => {
     droneCore.executeCommand({ type: "emergency_stop" });
     missionManager.abortMission("Emergency stop activated");
-  });
+  };
 
   const handleUploadMission = () => {
     setUploadError("");
@@ -182,7 +182,7 @@ const UnderwaterDrone: React.FC = () => {
 
   const handleLoadTemplate = () => {
     setMissionJson(missionManager.exportTemplate());
-  });
+  };
 
   const getStatusColor = (status: string) => {
     switch (status) {

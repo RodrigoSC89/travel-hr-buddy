@@ -21,7 +21,7 @@ const useAuditWorkflow = () => {
     };
     audits = [...audits, newAudit];
     return newAudit;
-  });
+  };
 
   const startAudit = async (auditId: string) => {
     const audit = audits.find((a: unknown: unknown: unknown) => a.id === auditId);
@@ -61,19 +61,19 @@ const createWrapper = () => {
       queries: { retry: false },
       mutations: { retry: false },
     },
-  });
+  };
 
   return ({ children }: { children: ReactNode }) => (
     <QueryClientProvider client={queryClient}>
       {children}
     </QueryClientProvider>
   );
-});
+};
 
 describe("Audit Center Workflow", () => {
   beforeEach(() => {
     vi.clearAllMocks();
-  });
+  };
 
   describe("Audit Creation", () => {
     it("should create new audit", async () => {

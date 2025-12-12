@@ -3,6 +3,6 @@ import PerformanceOptimizer from "@/components/optimization/performance-optimize
 
 const PerformanceOptimizerPage = () => {
   return <PerformanceOptimizer />;
-});
+};
 
 export default PerformanceOptimizerPage;

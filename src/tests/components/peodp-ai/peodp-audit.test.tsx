@@ -27,19 +27,19 @@ describe("PEODPAuditComponent", () => {
         <PEODPAuditComponent />
       </QueryClientProvider>
     );
-  });
+  };
 
   it("renders the component with title", () => {
     renderComponent();
     expect(screen.getByText("PEO-DP Inteligente")).toBeInTheDocument();
-  });
+  };
 
   it("displays the correct description", () => {
     renderComponent();
     expect(
       screen.getByText(/Auditoria de Conformidade DP baseada em NORMAM-101 e IMCA M 117/i)
     ).toBeInTheDocument();
-  });
+  };
 
   it("shows vessel name input field", () => {
     renderComponent();

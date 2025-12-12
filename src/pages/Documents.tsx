@@ -21,6 +21,6 @@ const DocumentsPage = () => {
       <AdvancedDocumentCenter />
     </ModulePageWrapper>
   );
-});
+};
 
 export default DocumentsPage;

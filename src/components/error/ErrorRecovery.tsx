@@ -100,7 +100,7 @@ export const ErrorRecovery = memo(function({
   const handleGoHome = () => {
     onReset?.();
     navigate("/");
-  });
+  };
 
   if (compact) {
     return (

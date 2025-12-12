@@ -66,7 +66,7 @@ export default function SystemWatchdog() {
   const loadRecentEvents = () => {
     const events = watchdogService.getRecentEvents(5);
     setRecentEvents(events);
-  });
+  };
 
   const handleRunDiagnosis = async () => {
     setIsRunningDiagnosis(true);
@@ -85,7 +85,7 @@ export default function SystemWatchdog() {
   const handleClearCache = async () => {
     await watchdogService.clearCache();
     loadRecentEvents();
-  });
+  };
 
   const getStatusIcon = (status: string) => {
     switch (status) {

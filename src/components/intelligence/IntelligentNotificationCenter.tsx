@@ -205,16 +205,16 @@ export const IntelligentNotificationCenter: React.FC<IntelligentNotificationCent
     toast({
       title: "Todas Marcadas como Lidas",
       description: "Todas as notificações foram marcadas como lidas",
-    });
-  });
+    };
+  };
 
   const dismissNotification = (id: string) => {
     setNotifications(prev => prev.filter(notif => notif.id !== id));
     toast({
       title: "Notificação Dispensada",
       description: "A notificação foi removida",
-    });
-  });
+    };
+  };
 
   const handleNotificationAction = (notification: IntelligentNotification) => {
     if (notification.actionType === "navigate" && notification.actionData?.module) {

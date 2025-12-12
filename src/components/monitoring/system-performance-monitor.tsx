@@ -67,7 +67,7 @@ const SystemPerformanceMonitor = () => {
     emailNotifications: true,
     pushNotifications: false,
     slackNotifications: false,
-  });
+  };
 
   // Dados simulados de métricas do sistema
   const [systemMetrics, setSystemMetrics] = useState<SystemMetric[]>([
@@ -159,7 +159,7 @@ const SystemPerformanceMonitor = () => {
     })));
 
     setIsRefreshing(false);
-  });
+  };
 
   const exportReport = async () => {
     setIsExporting(true);
@@ -181,7 +181,7 @@ const SystemPerformanceMonitor = () => {
       toast({
         title: "Relatório Exportado",
         description: "Relatório de performance do sistema exportado com sucesso!",
-      });
+      };
 
       // In production, this would trigger a file download
     } catch (error) {

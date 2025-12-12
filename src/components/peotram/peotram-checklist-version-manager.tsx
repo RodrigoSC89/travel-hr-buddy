@@ -99,7 +99,7 @@ export const PeotramChecklistVersionManager: React.FC = () => {
     setSelectedTemplate(newTemplate);
     setIsEditing(true);
     toast.success("Novo template criado!");
-  });
+  };
 
   const duplicateTemplate = (template: ChecklistTemplate) => {
     const newTemplate: ChecklistTemplate = {
@@ -146,10 +146,10 @@ export const PeotramChecklistVersionManager: React.FC = () => {
       ...selectedTemplate,
       elements: [...selectedTemplate.elements, newElement],
       updatedAt: new Date(),
-    });
+    };
 
     setEditingElement(newElement);
-  });
+  };
 
   const addRequirement = (elementId: string) => {
     if (!selectedTemplate) return;
@@ -228,7 +228,7 @@ export const PeotramChecklistVersionManager: React.FC = () => {
 
     setIsEditing(false);
     toast.success("Template salvo com sucesso!");
-  });
+  };
 
   const exportTemplate = (format: "json" | "excel" | "pdf") => {
     if (!selectedTemplate) return;
@@ -237,7 +237,7 @@ export const PeotramChecklistVersionManager: React.FC = () => {
     case "json": {
       const blob = new Blob([JSON.stringify(selectedTemplate, null, 2)], {
         type: "application/json",
-      });
+      };
       const url = URL.createObjectURL(blob);
       const a = document.createElement("a");
       a.href = url;

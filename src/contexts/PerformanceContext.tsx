@@ -145,7 +145,7 @@ export const PerformanceProvider: React.FC<PerformanceProviderProps> = ({ childr
         const score = webVitalsMonitor.getScore();
         setPerformanceScore(score.score);
         setPerformanceRating(score.rating);
-  });
+  };
       
       return unsubscribe;
     } catch (e) {

@@ -169,7 +169,7 @@ export function DataTable<T extends Record<string, unknown>>({
     a.download = `data-export-${new Date().toISOString().split("T")[0]}.csv`;
     a.click();
     URL.revokeObjectURL(url);
-  });
+  };
 
   return (
     <div className={cn("bg-card rounded-xl border border-border overflow-hidden", className)}>

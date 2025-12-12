@@ -89,7 +89,7 @@ export const IntegrationAutomation: React.FC = () => {
     retry: { enabled: true, maxAttempts: 3, backoffMultiplier: 2 },
     caching: { enabled: false, ttlSeconds: 300 },
     monitoring: { healthCheck: true, alerting: true, logging: true }
-  });
+  };
 
   const { toast } = useToast();
 
@@ -188,15 +188,15 @@ export const IntegrationAutomation: React.FC = () => {
     toast({
       title: "Configuração Salva",
       description: "As configurações da integração foram salvas com sucesso.",
-    });
-  });
+    };
+  };
 
   const handleToggleRule = (ruleId: string) => {
     toast({
       title: "Regra Atualizada",
       description: "Status da regra de automação foi alterado.",
-    });
-  });
+    };
+  };
 
   return (
     <div className="space-y-6">

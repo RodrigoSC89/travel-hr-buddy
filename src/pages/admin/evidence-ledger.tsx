@@ -106,7 +106,7 @@ export default function EvidenceLedgerPage() {
     a.download = `evidence-ledger-${new Date().toISOString()}.json`;
     a.click();
     URL.revokeObjectURL(url);
-  });
+  };
 
   const applyFilters = async () => {
     const filters: unknown = {};
@@ -116,14 +116,14 @@ export default function EvidenceLedgerPage() {
 
     const filtered = await queryLedger(filters);
     setEntries(filtered);
-  });
+  };
 
   const clearFilters = async () => {
     setFilterEventType("");
     setFilterModule("");
     const allEntries = await queryLedger({ limit: 100 });
     setEntries(allEntries);
-  });
+  };
 
   useEffect(() => {
     loadData();

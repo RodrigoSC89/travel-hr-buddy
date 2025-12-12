@@ -33,6 +33,6 @@ const SafetyGuardianModule: React.FC = () => {
       <SafetyDashboardComplete />
     </ModulePageWrapper>
   );
-});
+};
 
 export default SafetyGuardianModule;

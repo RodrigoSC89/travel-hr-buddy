@@ -132,7 +132,7 @@ export const ModernEmployeePortal: React.FC = () => {
         title: "Erro",
         description: "Erro ao carregar dados do portal",
         variant: "destructive"
-      });
+      };
     } finally {
       setLoading(false);
     }
@@ -253,7 +253,7 @@ export const ModernEmployeePortal: React.FC = () => {
       // Gerar insights de IA automaticamente
       await supabase.functions.invoke("crew-ai-insights", {
         body: { crewMemberId: userProfile.id }
-      });
+      };
 
       // Buscar insights da base de dados
       const { data: insights, error } = await supabase

@@ -58,7 +58,7 @@ export default function EditTemplatePage() {
           title: "Template não encontrado",
           description: "O template solicitado não foi encontrado.",
           variant: "destructive",
-        });
+        };
         navigate("/admin/templates");
       }
     } catch (err) {
@@ -81,7 +81,7 @@ export default function EditTemplatePage() {
         title: "Título necessário",
         description: "Por favor, forneça um título para o template.",
         variant: "destructive",
-      });
+      };
       return;
     }
 
@@ -91,7 +91,7 @@ export default function EditTemplatePage() {
       
       const { data, error } = await supabase.functions.invoke("generate-document", {
         body: { prompt: aiPrompt },
-      });
+      };
 
       if (error) throw error;
 
@@ -119,7 +119,7 @@ export default function EditTemplatePage() {
         title: "Nenhum conteúdo para reformular",
         description: "Por favor, adicione conteúdo primeiro.",
         variant: "destructive",
-      });
+      };
       return;
     }
 
@@ -127,7 +127,7 @@ export default function EditTemplatePage() {
     try {
       const { data, error } = await supabase.functions.invoke("rewrite-document", {
         body: { content },
-      });
+      };
 
       if (error) throw error;
 
@@ -155,7 +155,7 @@ export default function EditTemplatePage() {
         title: "Nenhum conteúdo",
         description: "Por favor, adicione conteúdo primeiro.",
         variant: "destructive",
-      });
+      };
       return;
     }
 
@@ -164,7 +164,7 @@ export default function EditTemplatePage() {
         body: { 
           prompt: `Com base no seguinte conteúdo, sugira um título curto e descritivo (máximo 60 caracteres):\n\n${content.substring(0, 500)}` 
         },
-      });
+      };
 
       if (error) throw error;
 
@@ -191,7 +191,7 @@ export default function EditTemplatePage() {
         title: "Campos obrigatórios",
         description: "Por favor, preencha o título e o conteúdo.",
         variant: "destructive",
-      });
+      };
       return;
     }
 

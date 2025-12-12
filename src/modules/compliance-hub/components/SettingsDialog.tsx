@@ -120,8 +120,8 @@ export const SettingsDialog = memo(function({
     setCurrentSettings({
       ...currentSettings,
       notifications: { ...currentSettings.notifications, [key]: value },
-    });
-  });
+    };
+  };
 
   const updateAI = (key: keyof ComplianceSettings["ai"], value: unknown: unknown: unknown) => {
     setCurrentSettings({

@@ -7,6 +7,6 @@ import { Navigate } from "react-router-dom";
 
 const MissionControl = () => {
   return <Navigate to="/mission-command" replace />;
-});
+};
 
 export default MissionControl;

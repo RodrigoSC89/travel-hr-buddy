@@ -214,7 +214,7 @@ export const ApiDocumentation: React.FC = () => {
         ? prev.filter(c => c !== category)
         : [...prev, category]
     );
-  });
+  };
 
   const getMethodColor = (method: string) => {
     switch (method) {

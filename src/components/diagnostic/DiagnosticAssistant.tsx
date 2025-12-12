@@ -221,7 +221,7 @@ Enquanto isso, verifiquei o histórico desta embarcação e não encontrei ocorr
     const response = generateDiagnosticResponse(input);
     setMessages(prev => [...prev, response]);
     setIsLoading(false);
-  });
+  };
 
   return (
     <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">

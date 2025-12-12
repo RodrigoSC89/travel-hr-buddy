@@ -67,7 +67,7 @@ const NavigationAssistant: React.FC = () => {
         title: "Campos obrigatórios",
         description: "Informe a origem e o destino da rota.",
         variant: "destructive",
-      });
+      };
       return;
     }
 

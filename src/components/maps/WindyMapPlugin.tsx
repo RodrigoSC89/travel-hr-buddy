@@ -86,7 +86,7 @@ export const WindyMapPlugin: React.FC<WindyMapPluginProps> = ({
 
       script.onload = () => {
         initializeWindy();
-      });
+      };
 
       script.onerror = () => {
         setError("Falha ao carregar Windy API");
@@ -153,12 +153,12 @@ export const WindyMapPlugin: React.FC<WindyMapPluginProps> = ({
       document.exitFullscreen?.();
     }
     setIsFullscreen(!isFullscreen);
-  });
+  };
 
   const getOverlayIcon = (overlayValue: string) => {
     const option = OVERLAY_OPTIONS.find(o => o.value === overlayValue);
     return option?.icon || Wind;
-  });
+  };
 
   const CurrentIcon = getOverlayIcon(currentOverlay);
 

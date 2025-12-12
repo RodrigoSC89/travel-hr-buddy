@@ -89,7 +89,7 @@ export default function CertificationsTab({
       toast({
         title: "Renovação Agendada",
         description: `A renovação de ${selectedCert.name} foi agendada com sucesso.`,
-      });
+      };
       setShowRenewDialog(false);
       setSelectedCert(null);
     }
@@ -98,12 +98,12 @@ export default function CertificationsTab({
   const handleView = (cert: Certification) => {
     setSelectedCert(cert);
     onViewCertificate(cert);
-  });
+  };
 
   const handleUpload = (cert: Certification) => {
     setSelectedCert(cert);
     setShowUploadDialog(true);
-  });
+  };
 
   const handleFileUpload = (e: React.ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0];

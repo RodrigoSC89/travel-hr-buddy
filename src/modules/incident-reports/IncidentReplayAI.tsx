@@ -69,7 +69,7 @@ export const IncidentReplayAI: React.FC = () => {
 
   const handleReplayIncident = (incidentId: string) => {
     setSelectedIncidentId(incidentId);
-  });
+  };
 
   const getSeverityColor = (severity: string) => {
     switch (severity) {

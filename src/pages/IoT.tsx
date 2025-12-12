@@ -21,6 +21,6 @@ const IoTPage: React.FC = () => {
       <IoTDashboard />
     </ModulePageWrapper>
   );
-});
+};
 
 export default IoTPage;

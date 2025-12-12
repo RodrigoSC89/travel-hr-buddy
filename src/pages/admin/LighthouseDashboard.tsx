@@ -142,7 +142,7 @@ export default function LighthouseDashboard() {
 
   const runLocalAudit = () => {
     window.open("/docs/LIGHTHOUSE_GUIDE.md", "_blank");
-  });
+  };
 
   return (
     <div className="container mx-auto p-6 space-y-6">

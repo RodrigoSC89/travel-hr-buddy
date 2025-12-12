@@ -70,7 +70,7 @@ export const KnowledgeManagement: React.FC = () => {
     totalViews: 0,
     topModules: [],
     topContent: []
-  });
+  };
 
   const modules = [
     { id: "all", name: "Todos os Módulos" },
@@ -190,9 +190,9 @@ export const KnowledgeManagement: React.FC = () => {
       helpful_votes: 0,
       steps: [],
       metadata: {}
-    });
+    };
     setIsEditDialogOpen(true);
-  });
+  };
 
   const handleEdit = (item: KnowledgeItem) => {
     setEditingItem({ ...item });
@@ -303,12 +303,12 @@ export const KnowledgeManagement: React.FC = () => {
     toast({
       title: "Exportação iniciada",
       description: "Base de conhecimento exportada com sucesso",
-    });
-  });
+    };
+  };
 
   const getModuleName = (moduleId: string) => {
     return modules.find(m => m.id === moduleId)?.name || moduleId;
-  });
+  };
 
   const getTypeIcon = (type: string) => {
     switch (type) {

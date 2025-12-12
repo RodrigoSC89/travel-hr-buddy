@@ -124,14 +124,14 @@ export const RealTimeFleetMonitor = memo(() => {
         lon: vessel.location.lon + (Math.random() - 0.5) * 0.01
       }
     })));
-  });
+  };
 
   // Periodic vessel position updates with optimized polling
   useOptimizedPolling({
     id: "fleet-monitor-vessel-positions",
     callback: updateVesselPositions,
     interval: 30000,
-  });
+  };
 
   const updateWeatherForVessel = async (vesselId: string, location: { lat: number; lon: number }) => {
     try {

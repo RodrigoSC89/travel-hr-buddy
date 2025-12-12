@@ -56,7 +56,7 @@ export default function AdminWallPage() {
             apikey: supabaseKey,
             Authorization: `Bearer ${supabaseKey}`,
           },
-        });
+        };
 
         if (!res.ok) {
           throw new Error(`HTTP error! status: ${res.status}`);

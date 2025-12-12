@@ -113,7 +113,7 @@ Com base no histórico fornecido e nos padrões de desgaste típicos, a IA ident
     setHourmeter("");
     setMaintenanceDates("");
     setForecast("");
-  });
+  };
 
   return (
     <div className="space-y-6">

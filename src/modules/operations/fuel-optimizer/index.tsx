@@ -15,7 +15,7 @@ const FuelOptimizer = () => {
     destination: "",
     cargo_weight: "",
     weather_condition: "normal"
-  });
+  };
 
   const [optimization, setOptimization] = useState<unknown>(null);
   const [history, setHistory] = useState([
@@ -43,7 +43,7 @@ const FuelOptimizer = () => {
         title: "Dados incompletos",
         description: "Preencha todos os campos obrigatórios",
         variant: "destructive"
-      });
+      };
       return;
     }
 

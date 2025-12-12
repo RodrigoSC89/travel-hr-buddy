@@ -51,8 +51,8 @@ export const SGSOActionPlanGenerator: React.FC = () => {
     toast({
       title: "Exemplo carregado",
       description: "Dados de exemplo foram carregados no formulário.",
-    });
-  });
+    };
+  };
 
   const handleClear = () => {
     setDescription("");
@@ -64,8 +64,8 @@ export const SGSOActionPlanGenerator: React.FC = () => {
     toast({
       title: "Formulário limpo",
       description: "Todos os campos foram resetados.",
-    });
-  });
+    };
+  };
 
   const handleGenerate = async () => {
     // Validation
@@ -74,7 +74,7 @@ export const SGSOActionPlanGenerator: React.FC = () => {
         title: "Erro de validação",
         description: "Por favor, insira a descrição do incidente.",
         variant: "destructive",
-      });
+      };
       return;
     }
 
@@ -83,7 +83,7 @@ export const SGSOActionPlanGenerator: React.FC = () => {
         title: "Erro de validação",
         description: "Por favor, selecione a categoria SGSO.",
         variant: "destructive",
-      });
+      };
       return;
     }
 

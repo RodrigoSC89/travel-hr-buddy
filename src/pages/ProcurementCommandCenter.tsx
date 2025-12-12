@@ -306,7 +306,7 @@ export default function ProcurementCommandCenter() {
         title: "Erro ao carregar inventário",
         description: error.message,
         variant: "destructive",
-      });
+      };
     } finally {
       setInventoryLoading(false);
     }

@@ -36,7 +36,7 @@ import { Document, Packer, Paragraph, TextRun } from "docx";
 const loadJsPDF = async () => {
   const { default: jsPDF } = await import("jspdf");
   return jsPDF;
-});
+};
 import { saveAs } from "file-saver";
 
 interface Template {
@@ -79,7 +79,7 @@ const DocumentTemplatesManager = () => {
     content: "",
     format: "html",
     tags: ""
-  });
+  };
 
   useEffect(() => {
     loadTemplates();
@@ -183,7 +183,7 @@ const DocumentTemplatesManager = () => {
           format: formData.format,
           tags,
           status: "active"
-        });
+        };
 
       if (error) throw error;
 

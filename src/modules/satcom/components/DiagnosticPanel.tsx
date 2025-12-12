@@ -149,7 +149,7 @@ export const DiagnosticPanel: React.FC<DiagnosticPanelProps> = ({
       activeConn.provider,
       fallbackConn.provider
     );
-  });
+  };
 
   const testRecovery = async () => {
     const disconnectedConn = connections.find((c) => c.status === "disconnected");
@@ -164,7 +164,7 @@ export const DiagnosticPanel: React.FC<DiagnosticPanelProps> = ({
       to_connection_id: disconnectedConn.id,
       reason: "Diagnostic test - recovery initiated",
       success: true,
-    });
+    };
 
     await new Promise((resolve) => setTimeout(resolve, 1500));
 
@@ -194,7 +194,7 @@ export const DiagnosticPanel: React.FC<DiagnosticPanelProps> = ({
     await testFailover();
     await new Promise((resolve) => setTimeout(resolve, 1000));
     await testRecovery();
-  });
+  };
 
   const testStress = async () => {
     // Rapid connection switching
@@ -209,7 +209,7 @@ export const DiagnosticPanel: React.FC<DiagnosticPanelProps> = ({
         to_provider: conn2.provider,
         reason: `Stress test iteration ${i + 1}`,
         success: true,
-      });
+      };
 
       await new Promise((resolve) => setTimeout(resolve, 300));
     }

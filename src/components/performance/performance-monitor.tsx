@@ -17,7 +17,7 @@ const loadJsPDF = async () => {
   const { default: jsPDF } = await import("jspdf");
   await import("jspdf-autotable");
   return jsPDF;
-});
+};
 
 ChartJS.register(CategoryScale, LinearScale, PointElement, LineElement, Title, Tooltip, Legend);
 
@@ -53,7 +53,7 @@ export const PerformanceMonitor: React.FC = () => {
     networkLatency: 0,
     renderTime: 0,
     score: 0
-  });
+  };
   
   const [historicalData, setHistoricalData] = useState<HistoricalMetric[]>([]);
   const [showSettings, setShowSettings] = useState(false);
@@ -188,7 +188,7 @@ export const PerformanceMonitor: React.FC = () => {
         title: "No data to export",
         description: "Historical data is not available yet",
         variant: "destructive",
-      });
+      };
       return;
     }
 

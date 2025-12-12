@@ -46,7 +46,7 @@ export const SatcomTerminal: React.FC<SatcomTerminalProps> = ({
 
   const scrollToBottom = () => {
     messagesEndRef.current?.scrollIntoView({ behavior: "smooth" });
-  });
+  };
 
   useEffect(() => {
     scrollToBottom();
@@ -114,7 +114,7 @@ export const SatcomTerminal: React.FC<SatcomTerminalProps> = ({
     }
 
     return { status, latency: Math.round(actualLatency) };
-  });
+  };
 
   const sendMessage = async () => {
     if (!inputMessage.trim() || isTransmitting) return;

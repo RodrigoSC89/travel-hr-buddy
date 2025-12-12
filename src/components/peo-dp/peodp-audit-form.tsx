@@ -164,7 +164,7 @@ export const PEODPAuditForm = memo(function({
   const handleSave = () => {
     onSave?.(items, totalScore);
     toast.success("Auditoria salva com sucesso!");
-  });
+  };
 
   const handleComplete = () => {
     const pendingCount = items.filter(i => i.status === "pendente").length;
@@ -174,7 +174,7 @@ export const PEODPAuditForm = memo(function({
     }
     onComplete?.(items, totalScore);
     toast.success("Auditoria concluída!");
-  });
+  };
 
   const getStatusIcon = (status: ComplianceStatus) => {
     switch (status) {

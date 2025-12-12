@@ -49,7 +49,7 @@ export const InspectorChatbot = memo(function() {
       setMessages(prev => [...prev, assistantMessage]);
       setLoading(false);
     }, 1000);
-  });
+  };
 
   const findRelevantResponse = (query: string): string => {
     const lowerQuery = query.toLowerCase();

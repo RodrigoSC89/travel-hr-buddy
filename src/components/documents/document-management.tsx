@@ -71,7 +71,7 @@ export const DocumentManagement: React.FC = () => {
     access_level: "organization" as "public" | "organization" | "restricted",
     tags: [] as string[],
     expires_at: ""
-  });
+  };
 
   // Form state for new category
   const [newCategory, setNewCategory] = useState({
@@ -232,13 +232,13 @@ export const DocumentManagement: React.FC = () => {
         name: "",
         description: "",
         color: "#3b82f6"
-      });
+      };
       setShowAddCategoryDialog(false);
       
       toast({
         title: "Categoria Criada",
         description: `${category.name} foi criada com sucesso`
-      });
+      };
     } catch (error) {
       toast({
         title: "Erro",

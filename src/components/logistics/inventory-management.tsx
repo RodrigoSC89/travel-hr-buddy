@@ -65,22 +65,22 @@ export const InventoryManagement = memo(() => {
         title: "Error loading inventory",
         description: error.message,
         variant: "destructive",
-      });
+      };
     } finally {
       setLoading(false);
-    });
-  });
+    };
+  };
 
   const getLowStockItems = () => {
     return items.filter(item => 
       item.current_stock <= item.minimum_stock && 
       item.status !== "discontinued"
     );
-  });
+  };
 
   const getTotalValue = () => {
     return items.reduce((sum, item) => sum + (item.total_value || 0), 0);
-  });
+  };
 
   const filteredItems = items.filter(item => {
     const matchesSearch = item.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
@@ -88,7 +88,7 @@ export const InventoryManagement = memo(() => {
     const matchesCategory = filterCategory === "all" || item.category === filterCategory;
     const matchesStatus = filterStatus === "all" || item.status === filterStatus;
     return matchesSearch && matchesCategory && matchesStatus;
-  });
+  };
 
   const getStatusBadge = (status: string) => {
     const variants: Record<string, "default" | "destructive" | "secondary" | "outline"> = {

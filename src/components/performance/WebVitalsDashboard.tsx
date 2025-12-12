@@ -158,7 +158,7 @@ export const WebVitalsIndicator = memo(function({ className }: { className?: str
     if (score >= 90) return "bg-green-500";
     if (score >= 50) return "bg-yellow-500";
     return "bg-red-500";
-  });
+  };
 
   return (
     <div className={cn("flex items-center gap-1.5", className)}>

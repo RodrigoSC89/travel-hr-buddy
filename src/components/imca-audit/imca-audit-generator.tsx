@@ -63,7 +63,7 @@ export const IMCAAuditGenerator = memo(function() {
         title: "Validation Error",
         description: validation.errors.join(", "),
         variant: "destructive",
-      });
+      };
       return;
     }
 
@@ -97,7 +97,7 @@ export const IMCAAuditGenerator = memo(function() {
       toast({
         title: "Export Complete",
         description: "Audit report downloaded as Markdown",
-      });
+      };
     }
   };
 
@@ -109,7 +109,7 @@ export const IMCAAuditGenerator = memo(function() {
     setOperationalData({});
     setReport(null);
     setActiveTab("basic");
-  });
+  };
 
   return (
     <div className="container mx-auto p-6 space-y-6">

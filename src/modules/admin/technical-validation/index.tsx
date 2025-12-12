@@ -77,7 +77,7 @@ export const TechnicalValidationPanel: React.FC = () => {
           hasDocumentation: !!hasDocumentation,
           hasDuplication,
           isActive: module.status === "active",
-        });
+        };
 
         return {
           id: module.id,
@@ -146,7 +146,7 @@ export const TechnicalValidationPanel: React.FC = () => {
     link.click();
     URL.revokeObjectURL(url);
     toast.success("CSV exported successfully");
-  });
+  };
 
   const filteredModules = modules.filter(m => {
     if (filter === "issues") return m.issues.length > 0;

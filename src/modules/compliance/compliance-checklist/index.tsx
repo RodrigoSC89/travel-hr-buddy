@@ -111,13 +111,13 @@ const ComplianceChecklist = () => {
   useEffect(() => {
     const loadData = async () => {
       await loadComplianceRecords();
-    });
+    };
     loadData();
   }, []);
 
   const loadAIInsights = async () => {
     await loadAIInsightsInternal(records);
-  });
+  };
 
   const loadAIInsightsInternal = async (currentRecords: unknown[]) => {
     try {
@@ -134,7 +134,7 @@ const ComplianceChecklist = () => {
           compliantCount,
           totalChecklists: currentRecords.filter(r => r.completion_status === "completed").length
         }
-      });
+      };
       
       if (response.message) {
         setAiInsight(response.message);

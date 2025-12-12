@@ -163,7 +163,7 @@ export function useStaticTranslation(
       }
       
       setTranslations(newTranslations);
-    });
+    };
 
     loadTranslations();
   }, [keys, targetLang]);

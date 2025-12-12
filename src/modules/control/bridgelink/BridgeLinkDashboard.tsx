@@ -59,7 +59,7 @@ export default function BridgeLinkDashboard() {
     toast.info("Atualizando dados...");
     await refetch();
     toast.success("Dados atualizados!");
-  });
+  };
 
   const toggleLiveMode = () => {
     setIsLiveMode((prev) => !prev);

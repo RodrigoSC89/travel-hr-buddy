@@ -57,7 +57,7 @@ export const DraggableFloating: React.FC<DraggableFloatingProps> = ({
       const maxX = window.innerWidth - rect.width - boundsPadding;
       const maxY = window.innerHeight - rect.height - boundsPadding;
       setPos((p) => ({ x: clamp(p.x, boundsPadding, maxX), y: clamp(p.y, boundsPadding, maxY) }));
-    });
+    };
     window.addEventListener("resize", handleResize);
     return () => window.removeEventListener("resize", handleResize);
   }, [boundsPadding]);

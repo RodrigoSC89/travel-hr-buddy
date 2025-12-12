@@ -54,7 +54,7 @@ export const PredictiveMaintenanceAI: React.FC = () => {
     atRisk: 0,
     preventedFailures: 0,
     accuracy: 0
-  });
+  };
 
   useEffect(() => {
     loadPredictions();

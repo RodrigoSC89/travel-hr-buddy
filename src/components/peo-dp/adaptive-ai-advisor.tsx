@@ -85,7 +85,7 @@ export const AdaptiveAIAdvisor: React.FC = () => {
   const { ask, loading, lastResponse } = useAIAdvisor({ 
     profile: selectedProfile,
     language: "pt-BR"
-  });
+  };
 
   const handleSendMessage = async () => {
     if (!inputMessage.trim() || loading) return;

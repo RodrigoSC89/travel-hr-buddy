@@ -64,7 +64,7 @@ export default function PEODPPanel() {
       const resultado = await peodpCore.iniciarAuditoria({
         vesselName,
         dpClass,
-      });
+      };
       setAuditoria(resultado);
       
       // Get recommendations from engine
@@ -75,7 +75,7 @@ export default function PEODPPanel() {
       
       toast.success("Auditoria PEO-DP concluída", {
         description: `Score: ${resultado.score}%`,
-      });
+      };
     } catch (error) {
       toast.error("Erro ao executar auditoria", {
         description: error instanceof Error ? error.message : "Erro desconhecido",
@@ -92,7 +92,7 @@ export default function PEODPPanel() {
       setIsMonitoring(true);
       toast.success("Monitoramento iniciado", {
         description: `Embarcação: ${vesselName}`,
-      });
+      };
     } catch (error) {
       toast.error("Erro ao iniciar monitoramento");
     }
@@ -110,7 +110,7 @@ export default function PEODPPanel() {
       
       toast.success("Monitoramento finalizado", {
         description: report ? `${report.statistics.totalEvents} eventos registrados` : "Sessão encerrada",
-      });
+      };
     } catch (error) {
       toast.error("Erro ao parar monitoramento");
     }
@@ -131,7 +131,7 @@ export default function PEODPPanel() {
     if (score >= 75) return "text-yellow-500";
     if (score >= 60) return "text-orange-500";
     return "text-red-500";
-  });
+  };
 
   const getStatusBadge = (status: string) => {
     switch (status) {

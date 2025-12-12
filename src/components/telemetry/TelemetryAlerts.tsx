@@ -88,20 +88,20 @@ export const TelemetryAlerts = memo(function({ alerts: initialAlerts, onAlertsCh
     setAlerts(updated);
     onAlertsChange?.(updated);
     toast.success("Todos os alertas marcados como lidos");
-  });
+  };
 
   const deleteAlert = (id: string) => {
     const updated = alerts.filter(a => a.id !== id);
     setAlerts(updated);
     onAlertsChange?.(updated);
     toast.success("Alerta removido");
-  });
+  };
 
   const clearAllAlerts = () => {
     setAlerts([]);
     onAlertsChange?.([]);
     toast.success("Todos os alertas foram limpos");
-  });
+  };
 
   const getSeverityColor = (severity: string) => {
     switch (severity) {

@@ -506,7 +506,7 @@ const FinanceCommandCenter: React.FC = () => {
             
             Forneça recomendações práticas para otimização financeira e redução de custos operacionais.`,
         },
-      });
+      };
 
       if (error) throw error;
       setAiInsight(response?.content || "Análise concluída com sucesso.");

@@ -31,13 +31,13 @@ const loadXLSX = async () => {
     XLSX = await import("xlsx");
   }
   return XLSX;
-});
+};
 
 // Lazy load jsPDF
 const loadJsPDF = async () => {
   const { default: jsPDF } = await import("jspdf");
   return jsPDF;
-});
+};
 
 interface ProjectTask {
   id: string;
@@ -115,7 +115,7 @@ export const ProjectTimeline: React.FC<ProjectTimelineProps> = () => {
         title: "Error",
         description: "Failed to load tasks",
         variant: "destructive"
-      });
+      };
     } finally {
       setLoading(false);
     }
@@ -150,7 +150,7 @@ export const ProjectTimeline: React.FC<ProjectTimelineProps> = () => {
     }
 
     setFilteredTasks(filtered);
-  });
+  };
 
   const createTask = async () => {
     try {
@@ -237,8 +237,8 @@ export const ProjectTimeline: React.FC<ProjectTimelineProps> = () => {
       start_date: new Date().toISOString().split("T")[0],
       end_date: new Date(Date.now() + 7 * 24 * 60 * 60 * 1000).toISOString().split("T")[0],
       progress: 0
-    });
-  });
+    };
+  };
 
   const openEditDialog = (task: ProjectTask) => {
     setSelectedTask(task);
@@ -273,7 +273,7 @@ export const ProjectTimeline: React.FC<ProjectTimelineProps> = () => {
     XLSX.writeFile(workbook, "project_timeline.xlsx");
 
     toast({ title: "Success", description: "Timeline exported to Excel" });
-  });
+  };
 
   const exportToPDF = () => {
     const doc = new jsPDF();

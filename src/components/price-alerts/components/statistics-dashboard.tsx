@@ -66,7 +66,7 @@ export const StatisticsDashboard = memo(() => {
           active_alerts: data.active_alerts ?? 0,
           total_savings: data.total_savings ?? 0,
           alerts_triggered: data.alerts_triggered ?? 0
-        });
+        };
       }
     } catch (error) {
     }
@@ -124,7 +124,7 @@ export const StatisticsDashboard = memo(() => {
   const getEfficiencyPercentage = () => {
     if (statistics.total_alerts === 0) return 0;
     return Math.round((statistics.alerts_triggered / statistics.total_alerts) * 100);
-  });
+  };
 
   if (loading) {
     return (
@@ -139,7 +139,7 @@ export const StatisticsDashboard = memo(() => {
         ))}
       </div>
     );
-  });
+  };
 
   return (
     <div className="space-y-6">

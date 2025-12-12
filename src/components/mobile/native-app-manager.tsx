@@ -40,9 +40,9 @@ export const NativeAppManager: React.FC = () => {
           return 100;
         }
         return prev + 10;
-  });
+  };
     }, 200);
-  });
+  };
 
   return (
     <div className="space-y-6">

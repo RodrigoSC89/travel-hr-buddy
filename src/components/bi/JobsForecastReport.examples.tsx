@@ -111,7 +111,7 @@ export const RefreshableExample = memo(function() {
 
   const handleRefresh = () => {
     setRefreshKey((prev) => prev + 1);
-  });
+  };
 
   return (
     <div className="container mx-auto p-6 space-y-4">

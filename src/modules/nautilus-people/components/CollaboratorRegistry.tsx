@@ -109,9 +109,9 @@ const CollaboratorRegistry: React.FC = () => {
         toast.success(`Arquivo "${file.name}" importado com sucesso! 15 colaboradores adicionados.`);
       }
       setIsLoading(false);
-    });
+    };
     input.click();
-  });
+  };
 
   const handleExport = async () => {
     setIsLoading(true);
@@ -133,7 +133,7 @@ const CollaboratorRegistry: React.FC = () => {
     
     setIsLoading(false);
     toast.success("Arquivo CSV exportado com sucesso!");
-  });
+  };
 
   const handleAddColaborador = async () => {
     if (!newColaborador.nome || !newColaborador.email || !newColaborador.cargo) {
@@ -183,7 +183,7 @@ const CollaboratorRegistry: React.FC = () => {
     setSelectedStatus("todos");
     setSearchTerm("");
     toast.info("Filtros limpos");
-  });
+  };
 
   return (
     <div className="space-y-6">

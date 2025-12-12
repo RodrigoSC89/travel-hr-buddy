@@ -219,8 +219,8 @@ export const APIIntegrationsHub: React.FC = () => {
     toast({
       title: "Chave API criada",
       description: "Nova chave API foi gerada com sucesso.",
-    });
-  });
+    };
+  };
 
   const revokeAPIKey = (keyId: string) => {
     setApiKeys(prev => prev.map(key => 
@@ -250,8 +250,8 @@ export const APIIntegrationsHub: React.FC = () => {
     toast({
       title: "Webhook criado",
       description: "Novo webhook foi configurado com sucesso.",
-    });
-  });
+    };
+  };
 
   return (
     <div className="space-y-6">

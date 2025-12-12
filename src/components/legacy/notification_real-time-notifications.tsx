@@ -132,11 +132,11 @@ export const NotificationCenter: React.FC = () => {
     setNotifications(prev => 
       prev.map(n => ({ ...n, isRead: true }))
     );
-  });
+  };
 
   const removeNotification = (id: string) => {
     setNotifications(prev => prev.filter(n => n.id !== id));
-  });
+  };
 
   const formatTimeAgo = (date: Date) => {
     const now = new Date();

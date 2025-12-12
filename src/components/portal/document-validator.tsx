@@ -171,7 +171,7 @@ export const DocumentValidator: React.FC<DocumentValidatorProps> = ({
   const clearResults = () => {
     setValidationResults([]);
     setSelectedFile(null);
-  });
+  };
 
   return (
     <div className="space-y-6">

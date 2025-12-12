@@ -110,8 +110,8 @@ export default function ExecutionRoadmap() {
         content += `- [${t.completed ? "x" : " "}] **Dia ${t.day}**: ${t.title}\n`;
         content += `  - Módulo: ${t.module} | Prioridade: ${t.priority} | Esforço: ${t.effort}\n`;
         content += `  - ${t.description}\n\n`;
-  });
-  });
+  };
+  };
     
     const blob = new Blob([content], { type: "text/markdown" });
     const url = URL.createObjectURL(blob);

@@ -129,7 +129,7 @@ export const ConsolidatedCrewManagement = memo(() => {
       expiringCerts,
       avgRating: avgRating.toFixed(1)
     };
-  });
+  };
 
   const stats = getCrewStats();
 

@@ -106,7 +106,7 @@ export default function DocumentTemplates() {
         title: "Error",
         description: "Failed to load templates",
         variant: "destructive",
-      });
+      };
     } finally {
       setLoading(false);
     }
@@ -149,10 +149,10 @@ export default function DocumentTemplates() {
     Object.entries(variableValues).forEach(([key, value]) => {
       const regex = new RegExp(`{{${key}}}`, "g");
       preview = preview.replace(regex, value || `[${key}]`);
-  });
+  };
     
     setPreviewContent(preview);
-  });
+  };
 
   const saveTemplate = async () => {
     if (!selectedTemplate) {
@@ -166,14 +166,14 @@ export default function DocumentTemplates() {
             category: templateCategory,
             content: templateContent,
             variables: extractVariables(templateContent)
-          });
+          };
 
         if (error) throw error;
 
         toast({
           title: "Template Created",
           description: "New template created successfully",
-        });
+        };
 
         fetchTemplates();
       } catch (error) {
@@ -223,14 +223,14 @@ export default function DocumentTemplates() {
         p_name: `${selectedTemplate.name} - ${new Date().toLocaleDateString()}`,
         p_variable_values: variableValues,
         p_format: "html"
-      });
+      };
 
       if (error) throw error;
 
       toast({
         title: "Document Generated",
         description: "Document created successfully",
-      });
+      };
 
       fetchGeneratedDocuments();
     } catch (error) {

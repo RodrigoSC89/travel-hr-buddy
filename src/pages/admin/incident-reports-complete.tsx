@@ -24,7 +24,7 @@ const loadJsPDF = async () => {
     import("jspdf-autotable")
   ]);
   return { jsPDF, autoTable: autoTableModule.default };
-});
+};
 
 interface IncidentReport {
   id: string;
@@ -118,7 +118,7 @@ export default function IncidentReportsComplete() {
         title: "Erro",
         description: "Falha ao carregar incidentes",
         variant: "destructive"
-      });
+      };
     } finally {
       setLoading(false);
     }
@@ -230,7 +230,7 @@ export default function IncidentReportsComplete() {
           created_by_name: user.email?.split("@")[0] || "Unknown",
           previous_status: selectedIncident.status,
           ...newFollowup
-        });
+        };
       
       if (error) throw error;
       
@@ -325,8 +325,8 @@ export default function IncidentReportsComplete() {
       const statusMatch = filterStatus === "all" || inc.status === filterStatus;
       const severityMatch = filterSeverity === "all" || inc.severity === filterSeverity;
       return statusMatch && severityMatch;
-  });
-  });
+  };
+  };
 
   const getSeverityColor = (severity: string) => {
     switch (severity) {

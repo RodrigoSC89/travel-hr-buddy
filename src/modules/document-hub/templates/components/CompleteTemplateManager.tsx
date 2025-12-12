@@ -52,7 +52,7 @@ export const CompleteTemplateManager = memo(() => {
         title: "Validation Error",
         description: "Please provide a name and content for the template",
         variant: "destructive"
-      });
+      };
       return;
     }
 

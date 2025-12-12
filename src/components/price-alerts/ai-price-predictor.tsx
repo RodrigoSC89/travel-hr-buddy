@@ -70,7 +70,7 @@ export const AIPricePredictor: React.FC = () => {
       setPredictions(JSON.parse(stored));
     }
     generateAIInsights();
-  });
+  };
 
   const generatePricePrediction = async () => {
     if (!selectedProduct || !productUrl) {
@@ -78,7 +78,7 @@ export const AIPricePredictor: React.FC = () => {
         title: "Campos obrigatórios",
         description: "Preencha o nome do produto e a URL",
         variant: "destructive"
-      });
+      };
       return;
     }
 
@@ -90,7 +90,7 @@ export const AIPricePredictor: React.FC = () => {
           product_name: selectedProduct,
           product_url: productUrl
         }
-      });
+      };
 
       const currentPrice = priceData?.price || 0;
 

@@ -8,7 +8,7 @@ const loadORT = async () => {
     ort = await import("onnxruntime-web");
   }
   return ort;
-});
+};
 
 export default function ForecastAIInsights() {
   const [prediction, setPrediction] = useState<number | string | null>(null);

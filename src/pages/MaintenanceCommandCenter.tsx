@@ -79,7 +79,7 @@ const MaintenanceCommandCenter = () => {
     efficiency: 0,
     activeTasks: 0,
     pendingForecasts: 0
-  });
+  };
   const [loading, setLoading] = useState(true);
   const [showCreateDialog, setShowCreateDialog] = useState(false);
   const [showAlertsPanel, setShowAlertsPanel] = useState(false);
@@ -100,7 +100,7 @@ const MaintenanceCommandCenter = () => {
         efficiency: 94,
         activeTasks: 15,
         pendingForecasts: 5
-      });
+      };
     } catch (error) {
       console.error("Error fetching maintenance stats:", error);
     } finally {
@@ -112,8 +112,8 @@ const MaintenanceCommandCenter = () => {
     toast({
       title: "Exportação",
       description: "Gerando relatório semanal de manutenção...",
-    });
-  });
+    };
+  };
 
   if (loading) {
     return (

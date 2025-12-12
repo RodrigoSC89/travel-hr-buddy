@@ -80,7 +80,7 @@ export const Patch605Validation = memo(function() {
       "Maintenance schedule adjustment"
     ];
     return decisions[Math.floor(Math.random() * decisions.length)];
-  });
+  };
 
   const exportReport = () => {
     const report = {
@@ -94,13 +94,13 @@ export const Patch605Validation = memo(function() {
       report,
       totalIterations: events.length,
       averageAccuracy: report.averageAccuracy
-    });
+    };
     
     toast({
       title: "Report Exported",
       description: "Learning report saved to console",
-    });
-  });
+    };
+  };
 
   const avgAccuracy = events.length > 0
     ? (events.reduce((sum, e) => sum + e.accuracy, 0) / events.length * 100).toFixed(1)

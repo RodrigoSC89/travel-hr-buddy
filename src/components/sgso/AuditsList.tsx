@@ -51,7 +51,7 @@ export const AuditsList = memo(function({ onRefresh }: AuditsListProps) {
         title: "Error loading audits",
         description: error.message,
         variant: "destructive",
-      });
+      };
     } finally {
       setLoading(false);
     }

@@ -37,7 +37,7 @@ const loadJsPDF = async () => {
     import("jspdf-autotable")
   ]);
   return { jsPDF, autoTable: autoTableModule.default };
-});
+};
 
 interface WizardStep {
   id: string;
@@ -154,7 +154,7 @@ export default function PeoDpWizardComplete() {
         incidents: incidentsData.data || [],
         training: trainingData.data || [],
         audits: auditsData.data || []
-      });
+      };
 
       // Run initial inference
       runInference(formData);
@@ -491,7 +491,7 @@ export default function PeoDpWizardComplete() {
           validation_results: validationResults,
           created_by: user?.id,
           audit_date: new Date().toISOString()
-        });
+        };
 
       if (error) throw error;
 

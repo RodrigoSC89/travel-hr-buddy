@@ -47,9 +47,9 @@ export const FinanceAIPanel = memo(function({ transactions, income, expenses }: 
       expenses,
       balance: income - expenses,
       margin: ((income - expenses) / income * 100).toFixed(1),
-    });
+    };
     setAnalysis(result?.response || "Análise não disponível no momento.");
-  });
+  };
 
   const handleForecast = async () => {
     const result = await analyze("finance", "Faça previsão orçamentária para os próximos meses", {
@@ -57,18 +57,18 @@ export const FinanceAIPanel = memo(function({ transactions, income, expenses }: 
       currentMonth: new Date().toISOString().slice(0, 7),
       income,
       expenses,
-    });
+    };
     setAnalysis(result?.response || "Previsão não disponível no momento.");
-  });
+  };
 
   const handleCostRecommendations = async () => {
     const result = await analyze("finance", "Sugira formas de reduzir custos operacionais", {
       expenses: transactions.filter(t => t.type === "expense"),
       categories: [...new Set(transactions.map(t => t.category))],
       totalExpenses: expenses,
-    });
+    };
     setAnalysis(result?.response || "Recomendações não disponíveis no momento.");
-  });
+  };
 
   const handleChat = async () => {
     if (!chatInput.trim()) return;
@@ -81,10 +81,10 @@ export const FinanceAIPanel = memo(function({ transactions, income, expenses }: 
       transactions: transactions.slice(0, 10),
       income,
       expenses,
-    });
+    };
     
     setChatHistory(prev => [...prev, { role: "assistant" as const, content: response?.response || "Desculpe, não consegui processar sua pergunta." }]);
-  });
+  };
 
   return (
     <Card className="bg-gradient-to-br from-primary/5 via-background to-purple-500/5 border-primary/20">

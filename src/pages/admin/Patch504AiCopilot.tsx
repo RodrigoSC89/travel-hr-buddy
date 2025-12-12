@@ -61,7 +61,7 @@ export default function Patch504AiCopilot() {
     setComprehensionScore(88);
     
     setValidationStatus("complete");
-  });
+  };
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();

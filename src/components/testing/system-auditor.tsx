@@ -320,7 +320,7 @@ const SystemAuditor: React.FC = () => {
     }
     setIsTesting(false);
     toast.success("Todos os testes de homologação concluídos");
-  });
+  };
 
   const getStatusIcon = (status: string) => {
     switch (status) {

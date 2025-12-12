@@ -8,6 +8,6 @@ const MentorDP = () => {
       <MentorDPProfessional />
     </ModulePageWrapper>
   );
-});
+};
 
 export default MentorDP;

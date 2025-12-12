@@ -92,7 +92,7 @@ export default function AdminDashboard() {
         const { data, error } = await (supabase as unknown)
           .rpc("get_restore_count_by_day_with_email", { 
             email_input: user?.email || "" 
-          });
+          };
 
         if (error) {
           logger.error("Error fetching trend data", { error });

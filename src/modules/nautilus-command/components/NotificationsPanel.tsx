@@ -77,7 +77,7 @@ export const NotificationsPanel = memo(function({
   const handleMarkAllRead = () => {
     onMarkAllRead();
     toast.success("Todas as notificações marcadas como lidas");
-  });
+  };
 
   return (
     <Card className="h-full flex flex-col">

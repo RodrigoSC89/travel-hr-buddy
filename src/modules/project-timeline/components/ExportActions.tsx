@@ -15,7 +15,7 @@ const loadPDFLibs = async () => {
   const { default: jsPDF } = await import("jspdf");
   const { default: autoTable } = await import("jspdf-autotable");
   return { jsPDF, autoTable };
-});
+};
 
 interface Task {
   id: string;
@@ -115,7 +115,7 @@ export const ExportActions: React.FC<ExportActionsProps> = ({ tasks }) => {
         title: "No tasks to export",
         description: "Create some tasks first",
         variant: "destructive",
-      });
+      };
       return;
     }
 

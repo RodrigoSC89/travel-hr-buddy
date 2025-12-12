@@ -139,7 +139,7 @@ export default function WorkOrderManager() {
         title: "Erro",
         description: "Preencha título e equipamento",
         variant: "destructive",
-      });
+      };
       return;
     }
 

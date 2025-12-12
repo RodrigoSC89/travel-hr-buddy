@@ -40,7 +40,7 @@ export const AIVoiceAssistant: React.FC<VoiceAssistantProps> = ({
         title: "Permissão negada",
         description: "Precisamos da permissão do microfone para o assistente por voz",
         variant: "destructive"
-      });
+      };
       return false;
     }
   };
@@ -59,13 +59,13 @@ export const AIVoiceAssistant: React.FC<VoiceAssistantProps> = ({
 
       mediaRecorderRef.current.ondataavailable = (event) => {
         audioChunksRef.current.push(event.data);
-      });
+      };
 
       mediaRecorderRef.current.onstop = () => {
         const audioBlob = new Blob(audioChunksRef.current, { type: "audio/webm" });
         processAudio(audioBlob);
         stream.getTracks().forEach(track => track.stop());
-      });
+      };
 
       mediaRecorderRef.current.start();
       setIsListening(true);
@@ -206,7 +206,7 @@ export const AIVoiceAssistant: React.FC<VoiceAssistantProps> = ({
       window.speechSynthesis.cancel();
     }
     setIsSpeaking(false);
-  });
+  };
 
   return (
     <Card className="w-full max-w-md">

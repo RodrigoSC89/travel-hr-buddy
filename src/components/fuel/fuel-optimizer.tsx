@@ -229,7 +229,7 @@ export const FuelOptimizer = memo(() => {
     }
     const total = fuelRecords.reduce((sum, record) => sum + record.quantity_consumed, 0);
     return total / fuelRecords.length;
-  });
+  };
 
   const getAverageEfficiency = () => {
     if (fuelRecords.length === 0) {
@@ -238,7 +238,7 @@ export const FuelOptimizer = memo(() => {
     }
     const total = fuelRecords.reduce((sum, record) => sum + (record.efficiency_rating || 0), 0);
     return total / fuelRecords.length;
-  });
+  };
 
   const getOptimizationSavings = () => {
     const savingsFromOptimization = optimizationResults.reduce((sum, result) => sum + result.savings_liters, 0);
@@ -255,7 +255,7 @@ export const FuelOptimizer = memo(() => {
       }
       return sum;
     }, 0);
-  });
+  };
 
   const getFuelTrend = () => {
     if (fuelRecords.length < 2) return "estável";
@@ -270,7 +270,7 @@ export const FuelOptimizer = memo(() => {
     if (recentAvg > olderAvg * 1.1) return "crescente";
     if (recentAvg < olderAvg * 0.9) return "decrescente";
     return "estável";
-  });
+  };
 
   const exportToPDF = async () => {
     try {
@@ -353,7 +353,7 @@ export const FuelOptimizer = memo(() => {
         }
       ]
     };
-  });
+  };
 
   const fuelDataForCopilot = {
     averageConsumption: getAverageFuelConsumption(),

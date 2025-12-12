@@ -162,12 +162,12 @@ export default function DPAlerts() {
   const applyFilters = () => {
     setFilterOpen(false);
     toast.success("Filtros aplicados");
-  });
+  };
 
   const clearFilters = () => {
     setFilters({ severity: [], source: [], acknowledged: null });
     toast.info("Filtros limpos");
-  });
+  };
 
   const getSeverityIcon = (severity: string) => {
     switch (severity) {

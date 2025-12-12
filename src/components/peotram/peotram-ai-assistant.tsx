@@ -284,7 +284,7 @@ Por favor, tente novamente ou consulte:
     a.click();
     URL.revokeObjectURL(url);
     toast.success("Chat exportado com sucesso!");
-  });
+  };
 
   const filteredActions = QUICK_ACTIONS.filter(a => a.category === activeCategory);
 

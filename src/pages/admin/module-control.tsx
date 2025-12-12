@@ -35,7 +35,7 @@ export const ModuleControl: React.FC = () => {
     includeDevelopment: true,
     includeExperimental: true,
     includeDeprecated: true,
-  });
+  };
 
   const [searchQuery, setSearchQuery] = useState("");
   const [selectedCategory, setSelectedCategory] = useState<string>("all");

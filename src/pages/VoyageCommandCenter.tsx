@@ -329,7 +329,7 @@ export default function VoyageCommandCenter() {
     }, 1500);
 
     setAiCopilotInput("");
-  });
+  };
 
   return (
     <div className="space-y-6 p-6">

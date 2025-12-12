@@ -28,7 +28,7 @@ const CalendarView: React.FC = () => {
       const data = await SmartSchedulerService.getTasks({
         date_from: firstDay.toISOString(),
         date_to: lastDay.toISOString(),
-      });
+      };
       setTasks(data);
     } catch (error) {
       logger.error("Error loading tasks", { error, currentMonth: currentDate.getMonth(), currentYear: currentDate.getFullYear() });
@@ -76,11 +76,11 @@ const CalendarView: React.FC = () => {
 
   const previousMonth = () => {
     setCurrentDate(new Date(currentDate.getFullYear(), currentDate.getMonth() - 1, 1));
-  });
+  };
 
   const nextMonth = () => {
     setCurrentDate(new Date(currentDate.getFullYear(), currentDate.getMonth() + 1, 1));
-  });
+  };
 
   const monthNames = [
     "January", "February", "March", "April", "May", "June",

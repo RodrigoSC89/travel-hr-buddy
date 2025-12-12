@@ -73,7 +73,7 @@ export const PeotramAdvancedAnalytics: React.FC = () => {
     pendingActions: 23,
     trend: "up",
     trendPercentage: 5.2
-  });
+  };
 
   const [complianceByElement, setComplianceByElement] = useState<ComplianceByElement[]>([
     { elementNumber: "ELEM_01", elementName: "Liderança e Gerenciamento", complianceScore: 92, trend: "up", auditCount: 45 },
@@ -177,7 +177,7 @@ export const PeotramAdvancedAnalytics: React.FC = () => {
     a.click();
     URL.revokeObjectURL(url);
     toast.success("Relatório exportado com sucesso!");
-  });
+  };
 
   return (
     <div className="space-y-6">

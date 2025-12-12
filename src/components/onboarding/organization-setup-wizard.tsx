@@ -62,7 +62,7 @@ export const OrganizationSetupWizard: React.FC = () => {
     modules: [],
     timezone: "America/Sao_Paulo",
     currency: "BRL"
-  });
+  };
 
   const steps: SetupStep[] = [
     {

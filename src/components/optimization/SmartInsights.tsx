@@ -67,7 +67,7 @@ export const SmartInsights: React.FC = () => {
             activeModule: "optimization"
           }
         }
-      });
+      };
 
       if (error) throw error;
 
@@ -173,7 +173,7 @@ export const SmartInsights: React.FC = () => {
           userId: "demo-user",
           category: "all"
         }
-      });
+      };
 
       if (error) throw error;
 

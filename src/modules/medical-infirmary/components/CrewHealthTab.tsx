@@ -72,7 +72,7 @@ export default function CrewHealthTab() {
 
   const handleExport = () => {
     toast.success("Exportando fichas médicas...");
-  });
+  };
 
   return (
     <div className="space-y-6">

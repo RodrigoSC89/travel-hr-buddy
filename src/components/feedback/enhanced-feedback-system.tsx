@@ -187,7 +187,7 @@ export const EnhancedFeedbackSystem: React.FC = () => {
           title: "Campos obrigatórios",
           description: "Preencha todos os campos obrigatórios",
           variant: "destructive"
-        });
+        };
         return;
       }
 
@@ -195,7 +195,7 @@ export const EnhancedFeedbackSystem: React.FC = () => {
       toast({
         title: "Feedback enviado",
         description: "Obrigado pelo seu feedback! Analisaremos em breve.",
-      });
+      };
 
       // Resetar formulário
       setNewFeedback({

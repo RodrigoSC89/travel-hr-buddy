@@ -375,7 +375,7 @@ export default function MentorDPProfessional() {
       if (quizAnswers[idx] === q.correctAnswer) {
         correctCount++;
       }
-    });
+    };
 
     const score = Math.round((correctCount / activeQuiz.questions.length) * 100);
     
@@ -383,7 +383,7 @@ export default function MentorDPProfessional() {
       title: score >= 70 ? "Parabéns!" : "Continue Estudando",
       description: `Você acertou ${correctCount} de ${activeQuiz.questions.length} questões (${score}%)`,
       variant: score >= 70 ? "default" : "destructive",
-    });
+    };
 
     // Update quiz history with score
     setQuizHistory(prev => prev.map((q, i) => i === 0 ? { ...q, score, completedAt: new Date() } : q));
@@ -478,7 +478,7 @@ export default function MentorDPProfessional() {
     setShowNewQuestionDialog(false);
     setNewQuestion("");
     toast({ title: "Pergunta Adicionada", description: "Sua pergunta foi adicionada ao repositório!" });
-  });
+  };
 
   // Vote on question
   const voteQuestion = (id: string) => {
@@ -505,7 +505,7 @@ export default function MentorDPProfessional() {
     URL.revokeObjectURL(url);
 
     toast({ title: "Exportado", description: "Diário exportado com sucesso!" });
-  });
+  };
 
   // Filter modules by difficulty
   const filteredModules = academyModules.filter(m => 

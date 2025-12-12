@@ -17,7 +17,7 @@ const AlertasPrecosModule = () => {
     priceIncreases: 0,
     priceDrops: 0,
     estimatedSavings: 0
-  });
+  };
 
   const loadStats = async () => {
     try {
@@ -61,7 +61,7 @@ const AlertasPrecosModule = () => {
     setShowCreateForm(false);
     setEditingAlert(null);
     loadStats();
-  });
+  };
 
   return (
     <div className="container mx-auto p-6 space-y-6">

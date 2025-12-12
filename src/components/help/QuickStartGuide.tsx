@@ -420,7 +420,7 @@ export const FeatureHighlight = memo(function({
     localStorage.setItem(`feature_highlight_${feature}`, "true");
     setDismissed(true);
     setShown(false);
-  });
+  };
 
   const features = {
     offline: {
