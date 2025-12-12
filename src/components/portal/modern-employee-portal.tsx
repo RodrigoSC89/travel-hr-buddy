@@ -772,7 +772,7 @@ export const ModernEmployeePortal: React.FC = () => {
                       onChange={handleChange}}
                     />
                     <Button 
-                      onClick={() => document.getElementById("file-upload")?.click(}
+                      onClick={() => document.getElementById("file-upload")?.click()}
                       disabled={uploadingDoc}
                     >
                       {uploadingDoc ? "Enviando..." : "Selecionar Arquivos"}

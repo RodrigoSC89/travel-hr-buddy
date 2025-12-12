@@ -630,7 +630,7 @@ Como posso ajudá-lo especificamente hoje?`,
                   ref={inputRef}
                   value={currentMessage}
                   onChange={handleChange}
-                  onKeyPress={(e) => e.key === "Enter" && handleSendMessage(}
+                  onKeyPress={(e) => e.key === "Enter" && handleSendMessage()}
                   placeholder="Digite sua mensagem ou escolha uma ação rápida..."
                   className="pr-12"
                   disabled={isLoading}

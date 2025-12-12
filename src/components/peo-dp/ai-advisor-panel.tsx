@@ -310,7 +310,7 @@ export const AIAdvisorPanel: React.FC = () => {
                   value={input}
                   onChange={handleChange}
                   placeholder={`Pergunte ao assistente ${profileConfig[profile].label}...`}
-                  onKeyDown={(e) => e.key === "Enter" && handleSend(}
+                  onKeyDown={(e) => e.key === "Enter" && handleSend()}
                   disabled={loading}
                 />
                 <Button onClick={handleSend} disabled={loading || !input.trim()}>

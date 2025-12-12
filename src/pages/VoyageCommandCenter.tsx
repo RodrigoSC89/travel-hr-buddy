@@ -694,7 +694,7 @@ export default function VoyageCommandCenter() {
                     placeholder="Pergunte ao Copiloto IA..."
                     value={aiCopilotInput}
                     onChange={e => setAiCopilotInput(e.target.value}
-                    onKeyDown={e => e.key === "Enter" && handleAiCopilotSend(}
+                    onKeyDown={e => e.key === "Enter" && handleAiCopilotSend()}
                   />
                   <Button onClick={handleAiCopilotSend}>
                     <Send className="h-4 w-4" />

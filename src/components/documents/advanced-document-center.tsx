@@ -1007,7 +1007,7 @@ Este é um documento de demonstração do Centro de Documentos.
           <div className="space-y-4">
             <div 
               className="border-2 border-dashed border-border rounded-lg p-8 text-center cursor-pointer hover:border-primary/50 transition-colors"
-              onClick={() => fileInputRef.current?.click(}
+              onClick={() => fileInputRef.current?.click()}
             >
               <Upload className="h-10 w-10 mx-auto text-muted-foreground mb-4" />
               <p className="text-sm font-medium">Clique para selecionar arquivos</p>

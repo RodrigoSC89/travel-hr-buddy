@@ -320,7 +320,7 @@ Enquanto isso, verifiquei o histórico desta embarcação e não encontrei ocorr
                 placeholder="Descreva o problema ou informe o código de erro..."
                 value={input}
                 onChange={handleChange}
-                onKeyDown={(e) => e.key === "Enter" && !isLoading && handleSend(}
+                onKeyDown={(e) => e.key === "Enter" && !isLoading && handleSend()}
                 disabled={isLoading}
               />
               <Button onClick={handleSend} disabled={isLoading || !input.trim()}>

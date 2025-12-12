@@ -208,7 +208,7 @@ export const QuickCopilotDialog = memo(function({ open, onOpenChange }: QuickCop
             className="flex-1"
           />
           <Button 
-            onClick={() => sendMessage(} 
+            onClick={() => sendMessage()} 
             disabled={!input.trim() || isLoading}
             size="icon"
           >

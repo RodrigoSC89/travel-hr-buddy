@@ -418,7 +418,7 @@ export const CertificateManager: React.FC<CertificateManagerProps> = ({ employee
                     </Button>
                     <Button 
                       variant="outline" 
-                      onClick={() => document.getElementById("file-input")?.click(}
+                      onClick={() => document.getElementById("file-input")?.click()}
                       className="flex-1"
                     >
                       <Upload className="mr-2 h-4 w-4" />

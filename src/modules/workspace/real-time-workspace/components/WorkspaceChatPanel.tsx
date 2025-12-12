@@ -426,11 +426,11 @@ export const WorkspaceChatPanel: React.FC<WorkspaceChatPanelProps> = ({
               </Button>
             </DropdownMenuTrigger>
             <DropdownMenuContent align="start" className="w-48 bg-background border">
-              <DropdownMenuItem onClick={() => fileInputRef.current?.click(}>
+              <DropdownMenuItem onClick={() => fileInputRef.current?.click()}>
                 <FileUp className="h-4 w-4 mr-2" />
                 Enviar arquivo
               </DropdownMenuItem>
-              <DropdownMenuItem onClick={() => imageInputRef.current?.click(}>
+              <DropdownMenuItem onClick={() => imageInputRef.current?.click()}>
                 <ImageIcon className="h-4 w-4 mr-2" />
                 Enviar imagem
               </DropdownMenuItem>
@@ -460,7 +460,7 @@ export const WorkspaceChatPanel: React.FC<WorkspaceChatPanelProps> = ({
               placeholder="Digite sua mensagem..."
               value={newMessage}
               onChange={handleChange}
-              onKeyDown={(e) => e.key === "Enter" && !e.shiftKey && handleSend(}
+              onKeyDown={(e) => e.key === "Enter" && !e.shiftKey && handleSend()}
               className="pr-10 bg-muted/50 border-border/50"
               disabled={isRecording}
             />

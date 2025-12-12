@@ -108,7 +108,7 @@ export default function AIAssistant() {
               placeholder="Pergunte sobre drills, SOLAS, STCW..."
               value={input}
               onChange={handleChange}
-              onKeyPress={(e) => e.key === "Enter" && handleSend(}
+              onKeyPress={(e) => e.key === "Enter" && handleSend()}
               disabled={isLoading}
             />
             <Button size="icon" onClick={handleSend} disabled={isLoading || !input.trim()}>

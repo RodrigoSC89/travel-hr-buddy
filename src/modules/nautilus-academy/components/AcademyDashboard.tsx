@@ -1317,7 +1317,7 @@ export default function AcademyDashboard() {
                 placeholder="Digite sua pergunta..."
                 value={chatInput}
                 onChange={handleChange}
-                onKeyDown={(e) => e.key === "Enter" && handleChatSend(}
+                onKeyDown={(e) => e.key === "Enter" && handleChatSend()}
               />
               <Button onClick={handleChatSend} disabled={isChatLoading}>
                 <Sparkles className="h-4 w-4" />

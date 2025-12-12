@@ -423,7 +423,7 @@ export default function RestoreDashboard() {
                 onKeyPress={handleKeyPress}
                 className="flex-1"
               />
-              <Button onClick={() => fetchStats(} disabled={loading} variant="default">
+              <Button onClick={() => fetchStats()} disabled={loading} variant="default">
                 🔍 Buscar
               </Button>
               <Button 

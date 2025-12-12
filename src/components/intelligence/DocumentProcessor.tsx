@@ -239,7 +239,7 @@ export const DocumentProcessor: React.FC = () => {
                   handleFileUpload(e.dataTransfer.files);
                 }
               }}
-              onDragOver={(e) => e.preventDefault(}
+              onDragOver={(e) => e.preventDefault()}
             >
               {isProcessing ? (
                 <div className="space-y-4">
@@ -260,7 +260,7 @@ export const DocumentProcessor: React.FC = () => {
                     </p>
                   </div>
                   <Button
-                    onClick={() => fileInputRef.current?.click(}
+                    onClick={() => fileInputRef.current?.click()}
                     variant="outline"
                     disabled={isProcessing}
                   >

@@ -304,7 +304,7 @@ export const EnhancedDocumentScanner: React.FC = () => {
             />
             
             <Button 
-              onClick={() => fileInputRef.current?.click(} 
+              onClick={() => fileInputRef.current?.click()} 
               variant="outline" 
               className="gap-2"
             >

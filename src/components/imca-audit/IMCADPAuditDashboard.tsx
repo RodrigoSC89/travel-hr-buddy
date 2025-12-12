@@ -444,7 +444,7 @@ export const IMCADPAuditDashboard = memo(function() {
         <TabsContent value="sections">
           <IMCAAuditSections 
             selectedDPClass={selectedDPClass}
-            sectionScores={getSectionScores(}
+            sectionScores={getSectionScores()}
           />
         </TabsContent>
 

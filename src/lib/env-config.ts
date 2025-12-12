@@ -26,7 +26,7 @@ interface EnvConfig {
   // Terrastar (opcional)
   terrastarApiKey?: string;
   terrastarApiUrl?: string;
-  terrastarServiceLevel?: 'BASIC' | 'PREMIUM' | 'RTK';
+  terrastarServiceLevel?: "BASIC" | "PREMIUM" | "RTK";
   
   // Security
   sessionSecret?: string;
@@ -34,7 +34,7 @@ interface EnvConfig {
   
   // App
   appUrl: string;
-  nodeEnv: 'development' | 'production' | 'test';
+  nodeEnv: "development" | "production" | "test";
 }
 
 /**
@@ -52,7 +52,7 @@ function getEnvVar(key: string, required: boolean = true, defaultValue?: string)
     throw new Error(`❌ Missing required environment variable: ${key}`);
   }
   
-  return value || '';
+  return value || "";
 }
 
 /**
@@ -92,73 +92,73 @@ export function loadEnvConfig(): EnvConfig {
   // === REQUIRED VARS ===
   
   // Supabase
-  const supabaseUrl = getEnvVar('SUPABASE_URL', false) || getEnvVar('VITE_SUPABASE_URL', false);
+  const supabaseUrl = getEnvVar("SUPABASE_URL", false) || getEnvVar("VITE_SUPABASE_URL", false);
   if (!supabaseUrl) {
-    errors.push('Missing SUPABASE_URL or VITE_SUPABASE_URL');
+    errors.push("Missing SUPABASE_URL or VITE_SUPABASE_URL");
   } else if (!isValidUrl(supabaseUrl)) {
-    errors.push('Invalid SUPABASE_URL format');
+    errors.push("Invalid SUPABASE_URL format");
   }
   
-  const supabaseAnonKey = getEnvVar('SUPABASE_ANON_KEY', false) || getEnvVar('VITE_SUPABASE_PUBLISHABLE_KEY', false);
+  const supabaseAnonKey = getEnvVar("SUPABASE_ANON_KEY", false) || getEnvVar("VITE_SUPABASE_PUBLISHABLE_KEY", false);
   if (!supabaseAnonKey) {
-    errors.push('Missing SUPABASE_ANON_KEY or VITE_SUPABASE_PUBLISHABLE_KEY');
+    errors.push("Missing SUPABASE_ANON_KEY or VITE_SUPABASE_PUBLISHABLE_KEY");
   }
   
   // OpenAI
-  const openaiApiKey = getEnvVar('OPENAI_API_KEY', false) || getEnvVar('VITE_OPENAI_API_KEY', false);
+  const openaiApiKey = getEnvVar("OPENAI_API_KEY", false) || getEnvVar("VITE_OPENAI_API_KEY", false);
   if (!openaiApiKey) {
-    errors.push('Missing OPENAI_API_KEY');
-  } else if (!isValidApiKey(openaiApiKey, 'sk-')) {
-    errors.push('Invalid OPENAI_API_KEY format (should start with sk-)');
+    errors.push("Missing OPENAI_API_KEY");
+  } else if (!isValidApiKey(openaiApiKey, "sk-")) {
+    errors.push("Invalid OPENAI_API_KEY format (should start with sk-)");
   }
   
-  const openaiModel = getEnvVar('OPENAI_MODEL', false, 'gpt-4o-mini');
+  const openaiModel = getEnvVar("OPENAI_MODEL", false, "gpt-4o-mini");
   
   // App URL
-  const appUrl = getEnvVar('APP_URL', false) || getEnvVar('NEXT_PUBLIC_APP_URL', false) || 'http://localhost:3000';
+  const appUrl = getEnvVar("APP_URL", false) || getEnvVar("NEXT_PUBLIC_APP_URL", false) || "http://localhost:3000";
   if (!isValidUrl(appUrl)) {
-    errors.push('Invalid APP_URL format');
+    errors.push("Invalid APP_URL format");
   }
   
   // Node ENV
-  const nodeEnv = (getEnvVar('NODE_ENV', false, 'development') as 'development' | 'production' | 'test');
+  const nodeEnv = (getEnvVar("NODE_ENV", false, "development") as "development" | "production" | "test");
   
   // === OPTIONAL VARS ===
   
   // Service Role Key (opcional, mas recomendado para produção)
-  const supabaseServiceRoleKey = getEnvVar('SUPABASE_SERVICE_ROLE_KEY', false);
-  if (nodeEnv === 'production' && !supabaseServiceRoleKey) {
-    warnings.push('SUPABASE_SERVICE_ROLE_KEY not set (recommended for production)');
+  const supabaseServiceRoleKey = getEnvVar("SUPABASE_SERVICE_ROLE_KEY", false);
+  if (nodeEnv === "production" && !supabaseServiceRoleKey) {
+    warnings.push("SUPABASE_SERVICE_ROLE_KEY not set (recommended for production)");
   }
   
   // StarFix (opcional)
-  const starfixApiKey = getEnvVar('STARFIX_API_KEY', false);
-  const starfixApiUrl = getEnvVar('STARFIX_API_URL', false);
-  const starfixOrgId = getEnvVar('STARFIX_ORG_ID', false);
+  const starfixApiKey = getEnvVar("STARFIX_API_KEY", false);
+  const starfixApiUrl = getEnvVar("STARFIX_API_URL", false);
+  const starfixOrgId = getEnvVar("STARFIX_ORG_ID", false);
   
   if (starfixApiKey && (!starfixApiUrl || !starfixOrgId)) {
-    warnings.push('STARFIX_API_KEY set but missing STARFIX_API_URL or STARFIX_ORG_ID');
+    warnings.push("STARFIX_API_KEY set but missing STARFIX_API_URL or STARFIX_ORG_ID");
   }
   
   // Terrastar (opcional)
-  const terrastarApiKey = getEnvVar('TERRASTAR_API_KEY', false);
-  const terrastarApiUrl = getEnvVar('TERRASTAR_API_URL', false);
-  const terrastarServiceLevel = getEnvVar('TERRASTAR_SERVICE_LEVEL', false, 'PREMIUM') as 'BASIC' | 'PREMIUM' | 'RTK';
+  const terrastarApiKey = getEnvVar("TERRASTAR_API_KEY", false);
+  const terrastarApiUrl = getEnvVar("TERRASTAR_API_URL", false);
+  const terrastarServiceLevel = getEnvVar("TERRASTAR_SERVICE_LEVEL", false, "PREMIUM") as "BASIC" | "PREMIUM" | "RTK";
   
   if (terrastarApiKey && !terrastarApiUrl) {
-    warnings.push('TERRASTAR_API_KEY set but missing TERRASTAR_API_URL');
+    warnings.push("TERRASTAR_API_KEY set but missing TERRASTAR_API_URL");
   }
   
   // Security (recomendado para produção)
-  const sessionSecret = getEnvVar('SESSION_SECRET', false);
-  const jwtSecret = getEnvVar('JWT_SECRET', false);
+  const sessionSecret = getEnvVar("SESSION_SECRET", false);
+  const jwtSecret = getEnvVar("JWT_SECRET", false);
   
-  if (nodeEnv === 'production') {
+  if (nodeEnv === "production") {
     if (!sessionSecret || sessionSecret.length < 32) {
-      warnings.push('SESSION_SECRET should be at least 32 characters in production');
+      warnings.push("SESSION_SECRET should be at least 32 characters in production");
     }
     if (!jwtSecret || jwtSecret.length < 32) {
-      warnings.push('JWT_SECRET should be at least 32 characters in production');
+      warnings.push("JWT_SECRET should be at least 32 characters in production");
     }
   }
   
@@ -166,14 +166,14 @@ export function loadEnvConfig(): EnvConfig {
   
   if (errors.length > 0) {
     errors.forEach(error => console.error(`❌ ENV ERROR: ${error}`));
-    throw new Error('Invalid environment configuration. Please check .env file.');
+    throw new Error("Invalid environment configuration. Please check .env file.");
   }
   
   if (warnings.length > 0) {
     warnings.forEach(warning => console.warn(`⚠️ ENV WARNING: ${warning}`));
   }
   
-  console.log('✅ Environment configuration validated successfully');
+  console.log("✅ Environment configuration validated successfully");
   return {
     supabaseUrl,
     supabaseAnonKey,
@@ -211,18 +211,18 @@ export function getConfig(): EnvConfig {
 /**
  * Check if feature is enabled
  */
-export function isFeatureEnabled(feature: 'starfix' | 'terrastar' | 'ai'): boolean {
+export function isFeatureEnabled(feature: "starfix" | "terrastar" | "ai"): boolean {
   const config = getConfig();
   
   switch (feature) {
-    case 'starfix':
-      return !!(config.starfixApiKey && config.starfixApiUrl && config.starfixOrgId);
-    case 'terrastar':
-      return !!(config.terrastarApiKey && config.terrastarApiUrl);
-    case 'ai':
-      return !!config.openaiApiKey;
-    default:
-      return false;
+  case "starfix":
+    return !!(config.starfixApiKey && config.starfixApiUrl && config.starfixOrgId);
+  case "terrastar":
+    return !!(config.terrastarApiKey && config.terrastarApiUrl);
+  case "ai":
+    return !!config.openaiApiKey;
+  default:
+    return false;
   }
 }
 
@@ -232,23 +232,23 @@ export function isFeatureEnabled(feature: 'starfix' | 'terrastar' | 'ai'): boole
 export function printConfigSummary(): void {
   const config = getConfig();
   
-  console.log('=== Environment Config Summary ===');
-  console.log(`Supabase URL: ${config.supabaseUrl ? '✅ Set' : '❌ Missing'}`);
-  console.log(`OpenAI API Key: ${config.openaiApiKey ? '✅ Set' : '❌ Missing'}`);
-  console.log(`StarFix: ${config.starfixApiKey ? '✅ Enabled' : '⚪ Disabled'}`);
-  console.log(`Terrastar: ${config.terrastarApiKey ? '✅ Enabled' : '⚪ Disabled'}`);
+  console.log("=== Environment Config Summary ===");
+  console.log(`Supabase URL: ${config.supabaseUrl ? "✅ Set" : "❌ Missing"}`);
+  console.log(`OpenAI API Key: ${config.openaiApiKey ? "✅ Set" : "❌ Missing"}`);
+  console.log(`StarFix: ${config.starfixApiKey ? "✅ Enabled" : "⚪ Disabled"}`);
+  console.log(`Terrastar: ${config.terrastarApiKey ? "✅ Enabled" : "⚪ Disabled"}`);
   console.log(`Environment: ${config.nodeEnv}`);
-  console.log('==================================');
+  console.log("==================================");
 }
 
 // Auto-validate on import (apenas em produção ou quando explicitamente configurado)
-if (process.env.NODE_ENV === 'production' || process.env.VALIDATE_ENV === 'true') {
+if (process.env.NODE_ENV === "production" || process.env.VALIDATE_ENV === "true") {
   try {
     loadEnvConfig();
     printConfigSummary();
   } catch (error) {
-    console.error('Failed to validate environment:', error);
-    console.error('Failed to validate environment:', error);
+    console.error("Failed to validate environment:", error);
+    console.error("Failed to validate environment:", error);
     process.exit(1);
   }
 }

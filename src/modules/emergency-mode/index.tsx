@@ -678,7 +678,7 @@ const EmergencyMode = () => {
                     onChange={handleChange}
                     placeholder="Pergunte à IA..."
                     className="bg-red-800/50 border-red-700 text-white placeholder:text-red-400"
-                    onKeyDown={(e) => e.key === "Enter" && askAI(}
+                    onKeyDown={(e) => e.key === "Enter" && askAI()}
                   />
                   <Button onClick={askAI} disabled={isAiProcessing}>
                     <Send className="h-4 w-4" />

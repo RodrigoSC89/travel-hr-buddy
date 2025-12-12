@@ -235,7 +235,7 @@ export const ReservationAttachments: React.FC<ReservationAttachmentsProps> = ({
                   className="hidden"
                 />
                 <Button
-                  onClick={() => fileInputRef.current?.click(}
+                  onClick={() => fileInputRef.current?.click()}
                   disabled={uploading}
                 >
                   {uploading ? "Enviando..." : "Selecionar Arquivos"}

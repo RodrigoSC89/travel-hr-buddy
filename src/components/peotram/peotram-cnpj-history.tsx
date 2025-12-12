@@ -213,7 +213,7 @@ export const PeotramCNPJHistory: React.FC = () => {
                 placeholder="Digite o CNPJ ou nome..."
                 value={searchCNPJ}
                 onChange={handleChange}
-                onKeyPress={(e) => e.key === "Enter" && handleSearch(}
+                onKeyPress={(e) => e.key === "Enter" && handleSearch()}
               />
             </div>
             <div className="flex items-end">

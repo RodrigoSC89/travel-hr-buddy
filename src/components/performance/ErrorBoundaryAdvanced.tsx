@@ -224,7 +224,7 @@ export class ErrorBoundaryAdvanced extends Component<ErrorBoundaryProps, ErrorBo
 
               <Button
                 variant="ghost"
-                onClick={() => window.location.reload(}
+                onClick={() => window.location.reload()}
                 className="w-full"
               >
                 Recarregar página

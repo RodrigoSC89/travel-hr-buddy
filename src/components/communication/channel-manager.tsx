@@ -514,7 +514,7 @@ export const ChannelManager: React.FC<ChannelManagerProps> = ({
                         <Button 
                           variant="ghost" 
                           size="sm"
-                          onClick={(e) => e.stopPropagation(}
+                          onClick={(e) => e.stopPropagation()}
                         >
                           <MoreHorizontal className="h-4 w-4" />
                         </Button>
@@ -522,7 +522,7 @@ export const ChannelManager: React.FC<ChannelManagerProps> = ({
                       <DropdownMenuContent 
                         align="end" 
                         className="bg-popover border z-50"
-                        onClick={(e) => e.stopPropagation(}
+                        onClick={(e) => e.stopPropagation()}
                       >
                         <DropdownMenuItem onSelect={(e) => {
                           e.preventDefault();

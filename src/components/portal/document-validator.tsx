@@ -229,7 +229,7 @@ export const DocumentValidator: React.FC<DocumentValidatorProps> = ({
                   onChange={handleFileSelect}
                 />
                 <Button 
-                  onClick={() => document.getElementById("doc-upload")?.click(}
+                  onClick={() => document.getElementById("doc-upload")?.click()}
                   disabled={isValidating}
                 >
                   <Camera className="h-4 w-4 mr-2" />

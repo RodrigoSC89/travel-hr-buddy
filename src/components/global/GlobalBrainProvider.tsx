@@ -48,7 +48,7 @@ export const GlobalBrainProvider: React.FC<GlobalBrainProviderProps> = ({
       {children}
       
       {showTrigger && !isOpen && (
-        <NautilusBrainTrigger onClick={() => openBrain(} />
+        <NautilusBrainTrigger onClick={() => openBrain()} />
       )}
       
       <NautilusBrainGlobal

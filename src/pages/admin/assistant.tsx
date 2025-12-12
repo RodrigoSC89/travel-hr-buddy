@@ -190,11 +190,11 @@ export default function AssistantPage() {
                   placeholder="Pergunte algo... (ex: 'criar checklist', 'resumir documento')"
                   value={input}
                   onChange={handleChange}
-                  onKeyDown={(e) => e.key === "Enter" && !loading && sendMessage(}
+                  onKeyDown={(e) => e.key === "Enter" && !loading && sendMessage()}
                   disabled={loading}
                   className="flex-1"
                 />
-                <Button onClick={() => sendMessage(} disabled={loading || !input.trim()}>
+                <Button onClick={() => sendMessage()} disabled={loading || !input.trim()}>
                   {loading ? (
                     <Loader2 className="w-4 h-4 animate-spin" />
                   ) : (

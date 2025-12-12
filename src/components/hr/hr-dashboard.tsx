@@ -615,7 +615,7 @@ export const HRDashboard = memo(() => {
                       size="sm" 
                       variant="destructive"
                       className="ml-2"
-                      onClick={(e) => e.stopPropagation(}
+                      onClick={(e) => e.stopPropagation()}
                     >
                       <UserMinus size={16} />
                     </Button>

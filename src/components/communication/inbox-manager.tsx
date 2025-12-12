@@ -510,7 +510,7 @@ export const InboxManager: React.FC<InboxManagerProps> = ({
                               <Button 
                                 variant="ghost" 
                                 size="sm"
-                                onClick={(e) => e.stopPropagation(}
+                                onClick={(e) => e.stopPropagation()}
                               >
                                 <MoreHorizontal className="h-4 w-4" />
                               </Button>
@@ -518,7 +518,7 @@ export const InboxManager: React.FC<InboxManagerProps> = ({
                             <DropdownMenuContent 
                               align="end" 
                               className="bg-popover border z-50"
-                              onClick={(e) => e.stopPropagation(}
+                              onClick={(e) => e.stopPropagation()}
                             >
                               <DropdownMenuItem 
                                 onSelect={(e) => {
