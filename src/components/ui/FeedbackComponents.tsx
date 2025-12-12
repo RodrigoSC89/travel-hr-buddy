@@ -198,7 +198,7 @@ export const CharacterCounter: React.FC<CharacterCounterProps> = ({
       {current}/{max}
     </span>
   );
-};
+});
 
 /**
  * Form Field Feedback

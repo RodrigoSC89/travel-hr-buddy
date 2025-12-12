@@ -57,14 +57,14 @@ export const IncidentWorkflow: React.FC<IncidentWorkflowProps> = ({ incident, on
           action: `Status changed to ${status}`,
           notes,
           performed_at: new Date().toISOString(),
-        });
+        };
       } catch (logError) {
       }
 
       toast({
         title: "Status Updated",
         description: `Incident status changed to ${status}`,
-      });
+      };
 
       onUpdate();
     } catch (error) {
@@ -74,7 +74,7 @@ export const IncidentWorkflow: React.FC<IncidentWorkflowProps> = ({ incident, on
         title: "Error",
         description: "Failed to update incident status",
         variant: "destructive",
-      });
+      };
     }
   };
 
@@ -102,14 +102,14 @@ export const IncidentWorkflow: React.FC<IncidentWorkflowProps> = ({ incident, on
           file_path: filePath,
           file_type: file.type,
           uploaded_at: new Date().toISOString(),
-        });
+        };
       } catch (dbError) {
       }
 
       toast({
         title: "File Uploaded",
         description: "Evidence file uploaded successfully",
-      });
+      };
     } catch (error) {
       console.error("Error uploading file:", error);
       console.error("Error uploading file:", error);
@@ -117,7 +117,7 @@ export const IncidentWorkflow: React.FC<IncidentWorkflowProps> = ({ incident, on
         title: "Upload Failed",
         description: "Failed to upload evidence file",
         variant: "destructive",
-      });
+      };
     } finally {
       setUploading(false);
     }
@@ -148,7 +148,7 @@ export const IncidentWorkflow: React.FC<IncidentWorkflowProps> = ({ incident, on
       toast({
         title: "PDF Exported",
         description: "Incident report downloaded successfully",
-      });
+      };
     } catch (error) {
       console.error("Error exporting PDF:", error);
       console.error("Error exporting PDF:", error);
@@ -156,7 +156,7 @@ export const IncidentWorkflow: React.FC<IncidentWorkflowProps> = ({ incident, on
         title: "Export Failed",
         description: "Failed to export PDF",
         variant: "destructive",
-      });
+      };
     }
   };
 

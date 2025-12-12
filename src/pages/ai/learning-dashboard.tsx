@@ -89,7 +89,7 @@ export default function AILearningDashboard() {
         title: "Error",
         description: "Failed to load learning data",
         variant: "destructive",
-      });
+      };
     } finally {
       setLoading(false);
     }
@@ -153,7 +153,7 @@ export default function AILearningDashboard() {
     toast({
       title: "Success",
       description: "Learning data exported successfully",
-    });
+    };
   };
 
   const calculateOverallScore = () => {

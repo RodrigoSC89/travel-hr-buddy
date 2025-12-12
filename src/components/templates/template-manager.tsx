@@ -125,7 +125,7 @@ const TemplateManager = () => {
                          template.description.toLowerCase().includes(searchTerm.toLowerCase()) ||
                          template.tags.some(tag => tag.toLowerCase().includes(searchTerm.toLowerCase()));
     return matchesCategory && matchesType && matchesSearch;
-  });
+  };
 
   const getTypeIcon = (type: string) => {
     switch (type) {
@@ -160,7 +160,7 @@ const TemplateManager = () => {
     toast({
       title: "Template duplicado",
       description: "Template copiado com sucesso",
-    });
+    };
   };
 
   const deleteTemplate = (id: string) => {
@@ -168,7 +168,7 @@ const TemplateManager = () => {
     toast({
       title: "Template removido",
       description: "Template excluído com sucesso",
-    });
+    };
   };
 
   const handleUseTemplate = (template: Template) => {
@@ -181,7 +181,7 @@ const TemplateManager = () => {
     toast({
       title: "Template aplicado",
       description: `Template "${template.name}" foi usado com sucesso`,
-    });
+    };
   };
 
   const getRelativeTime = (date?: Date) => {

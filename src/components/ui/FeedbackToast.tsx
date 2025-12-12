@@ -136,7 +136,7 @@ export function undoToast(
       label: "Desfazer",
       onClick: onUndo,
     },
-  });
+  };
 }
 
 /**
@@ -157,5 +157,5 @@ export function actionToast(
       label: action.label,
       onClick: action.onClick,
     },
-  });
+  };
 }

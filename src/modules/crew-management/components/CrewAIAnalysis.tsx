@@ -195,7 +195,7 @@ const generateAIInsights = (crew: CrewMemberAnalysis[]): AIInsight[] => {
       description: `${criticalFatigue.map(c => c.name).join(", ")} precisam de descanso imediato conforme MLC 2006.`,
       action: "Reorganizar escala",
       crewId: criticalFatigue[0].id
-    });
+    };
   }
 
   const promotionReady = crew.filter(c => c.readyForPromotion);
@@ -205,7 +205,7 @@ const generateAIInsights = (crew: CrewMemberAnalysis[]): AIInsight[] => {
       title: `${promotionReady.length} tripulante(s) prontos para promoção`,
       description: `Análise de performance indica que ${promotionReady.map(c => c.name).join(", ")} estão preparados para upgrade.`,
       action: "Ver análise"
-    });
+    };
   }
 
   const certGaps = crew.filter(c => c.certificationGaps.length > 0);
@@ -215,7 +215,7 @@ const generateAIInsights = (crew: CrewMemberAnalysis[]): AIInsight[] => {
       title: "Gaps de certificação detectados",
       description: `${certGaps.length} tripulantes precisam de treinamentos para manter compliance.`,
       action: "Planejar treinamentos"
-    });
+    };
   }
 
   insights.push({
@@ -223,7 +223,7 @@ const generateAIInsights = (crew: CrewMemberAnalysis[]): AIInsight[] => {
     title: "Otimização de escala sugerida",
     description: "IA identificou oportunidade de balancear carga de trabalho entre turnos, reduzindo fadiga média em 18%.",
     action: "Ver proposta"
-  });
+  };
 
   return insights;
 };
@@ -349,7 +349,7 @@ const CrewCard = ({ crew }: { crew: CrewMemberAnalysis }) => {
       </CardContent>
     </Card>
   );
-};
+});
 
 export default function CrewAIAnalysis() {
   const [crewData, setCrewData] = useState<CrewMemberAnalysis[]>([]);

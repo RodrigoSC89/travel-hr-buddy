@@ -102,7 +102,7 @@ export const PEODPChecklistEditor = memo(function({ onSave, existingVersion }: P
 
     setIsAddDialogOpen(false);
     toast.success("Requisito adicionado");
-  };
+  });
 
   const handleUpdateRequirement = () => {
     if (!editingReq) return;
@@ -268,7 +268,7 @@ export const PEODPChecklistEditor = memo(function({ onSave, existingVersion }: P
         <CardHeader>
           <div className="flex items-center justify-between">
             <div className="flex items-center gap-4">
-              <Select value={selectedSection} onValueChange={(v) => setSelectedSection(v as PEODPSection)}>
+              <Select value={selectedSection} onValueChange={(v) => setSelectedSection(v as PEODPSection}>
                 <SelectTrigger className="w-[250px]">
                   <SelectValue />
                 </SelectTrigger>
@@ -452,7 +452,7 @@ export const PEODPChecklistEditor = memo(function({ onSave, existingVersion }: P
       </Card>
 
       {/* Edit dialog */}
-      <Dialog open={!!editingReq} onOpenChange={() => setEditingReq(null)}>
+      <Dialog open={!!editingReq} onOpenChange={() => setEditingReq(null}>
         <DialogContent className="max-w-2xl">
           <DialogHeader>
             <DialogTitle>Editar Requisito</DialogTitle>

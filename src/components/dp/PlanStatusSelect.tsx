@@ -32,7 +32,7 @@ export const PlanStatusSelect = memo(function({ incident, onUpdate }: PlanStatus
           "Content-Type": "application/json",
         },
         body: JSON.stringify({ id: incident.id, status: newStatus }),
-      });
+      };
 
       const data = await response.json();
 

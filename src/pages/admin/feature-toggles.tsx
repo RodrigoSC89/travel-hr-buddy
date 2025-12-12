@@ -32,13 +32,13 @@ export default function FeatureToggles() {
       toast({
         title: "Feature flag updated",
         description: `${key} is now ${!currentEnabled ? "enabled" : "disabled"}`,
-      });
+      };
     } catch (error) {
       toast({
         title: "Error",
         description: "Failed to update feature flag",
         variant: "destructive",
-      });
+      };
     }
   };
 
@@ -165,7 +165,7 @@ function FeatureFlagsList({ flags, onToggle }: FeatureFlagsListProps) {
               </div>
               <Switch
                 checked={flag.enabled}
-                onCheckedChange={() => onToggle(flag.key, flag.enabled)}
+                onCheckedChange={() => onToggle(flag.key, flag.enabled}
               />
             </div>
           </CardHeader>

@@ -43,7 +43,7 @@ export const OVIDAIAssistant: React.FC<OVIDAIAssistantProps> = ({ vesselType }) 
           messages: [...messages, userMessage],
           vesselType,
         }),
-      });
+      };
 
       if (!response.ok) throw new Error("Falha na comunicação com IA");
 
@@ -71,7 +71,7 @@ export const OVIDAIAssistant: React.FC<OVIDAIAssistantProps> = ({ vesselType }) 
                   const updated = [...prev];
                   updated[updated.length - 1] = { role: "assistant", content: assistantContent };
                   return updated;
-                });
+  });
               }
             } catch {}
           }
@@ -134,7 +134,7 @@ export const OVIDAIAssistant: React.FC<OVIDAIAssistantProps> = ({ vesselType }) 
             placeholder="Pergunte sobre OVIQ4, evidências, observações..."
             value={input}
             onChange={handleChange}
-            onKeyDown={(e) => e.key === "Enter" && !e.shiftKey && (e.preventDefault(), sendMessage())}
+            onKeyDown={(e) => e.key === "Enter" && !e.shiftKey && (e.preventDefault(), sendMessage()}
             className="resize-none"
             rows={2}
           />
@@ -145,4 +145,4 @@ export const OVIDAIAssistant: React.FC<OVIDAIAssistantProps> = ({ vesselType }) 
       </CardContent>
     </Card>
   );
-};
+});

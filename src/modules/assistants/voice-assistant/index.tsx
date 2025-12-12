@@ -96,7 +96,7 @@ const VoiceAssistant: React.FC = () => {
           title: "Erro de reconhecimento",
           description: "Houve um problema com o microfone.",
           variant: "destructive",
-        });
+        };
       }
       setIsListening(false);
     };
@@ -140,14 +140,14 @@ const VoiceAssistant: React.FC = () => {
         toast({
           title: "🎤 ARIA ativada",
           description: "Estou ouvindo. Como posso ajudar?",
-        });
+        };
       } catch (error) {
         logger.error("Error starting recognition", { error });
         toast({
           title: "Erro ao iniciar",
           description: "Não foi possível acessar o microfone.",
           variant: "destructive",
-        });
+        };
       }
     }
   };
@@ -186,7 +186,7 @@ const VoiceAssistant: React.FC = () => {
           message: command,
           conversationHistory,
         },
-      });
+      };
 
       if (error) throw error;
 
@@ -226,7 +226,7 @@ const VoiceAssistant: React.FC = () => {
           toast({
             title: "Navegando",
             description: `Indo para ${navigation}`,
-          });
+          };
         }, 1500);
       }
 
@@ -262,7 +262,7 @@ const VoiceAssistant: React.FC = () => {
             voice_id: "EXAVITQu4vr4xnSDxMaL", // Sarah - friendly female voice
             model_id: "eleven_multilingual_v2",
           },
-        });
+        };
 
         if (!error && data?.audioContent) {
           const audioSrc = `data:audio/mpeg;base64,${data.audioContent}`;
@@ -318,7 +318,7 @@ const VoiceAssistant: React.FC = () => {
     setVolume(newVolume);
     toast({
       title: newVolume > 0 ? "🔊 Som ativado" : "🔇 Som desativado",
-    });
+    };
   };
 
   const clearHistory = () => {

@@ -151,6 +151,6 @@ const Sparkline = memo(function Sparkline({ data }: { data: number[] }) {
       />
     </svg>
   );
-});
+};
 
 export default MetricCard;

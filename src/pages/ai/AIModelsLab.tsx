@@ -193,7 +193,7 @@ const AIModelsLab: React.FC = () => {
     toast({
       title: "Treinamento Iniciado",
       description: "O modelo começou a ser treinado. Isso pode levar alguns minutos.",
-    });
+    };
     setTimeout(() => setIsTraining(false), 3000);
   }, [toast]);
 
@@ -201,7 +201,7 @@ const AIModelsLab: React.FC = () => {
     toast({
       title: "Exportando Modelo",
       description: "Preparando arquivo ONNX para download...",
-    });
+    };
   }, [toast]);
 
   return (

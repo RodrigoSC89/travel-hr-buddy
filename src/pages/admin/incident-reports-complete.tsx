@@ -118,7 +118,7 @@ export default function IncidentReportsComplete() {
         title: "Erro",
         description: "Falha ao carregar incidentes",
         variant: "destructive"
-      });
+      };
     } finally {
       setLoading(false);
     }
@@ -161,7 +161,7 @@ export default function IncidentReportsComplete() {
       toast({
         title: "Sucesso",
         description: `Incidente ${incidentNumber} criado com sucesso`
-      });
+      };
       
       setIsCreateDialogOpen(false);
       setNewIncident({
@@ -172,7 +172,7 @@ export default function IncidentReportsComplete() {
         incident_location: "",
         impact_level: "moderate",
         incident_date: new Date().toISOString(),
-      });
+      };
       
       // Auto-route to responsible team
       await autoRouteIncident(data);
@@ -183,7 +183,7 @@ export default function IncidentReportsComplete() {
         title: "Erro",
         description: "Falha ao criar incidente",
         variant: "destructive"
-      });
+      };
     }
   };
 
@@ -230,7 +230,7 @@ export default function IncidentReportsComplete() {
           created_by_name: user.email?.split("@")[0] || "Unknown",
           previous_status: selectedIncident.status,
           ...newFollowup
-        });
+        };
       
       if (error) throw error;
       
@@ -249,14 +249,14 @@ export default function IncidentReportsComplete() {
       toast({
         title: "Sucesso",
         description: "Atualização adicionada com sucesso"
-      });
+      };
       
       await loadFollowups(selectedIncident.id);
       setNewFollowup({
         followup_type: "update",
         description: "",
         new_status: ""
-      });
+      };
       
     } catch (error) {
       logger.error("Error adding followup", { error });
@@ -264,7 +264,7 @@ export default function IncidentReportsComplete() {
         title: "Erro",
         description: "Falha ao adicionar atualização",
         variant: "destructive"
-      });
+      };
     }
   };
 
@@ -317,7 +317,7 @@ export default function IncidentReportsComplete() {
     toast({
       title: "Sucesso",
       description: "PDF exportado com sucesso"
-    });
+    };
   };
 
   const getFilteredIncidents = () => {
@@ -325,7 +325,7 @@ export default function IncidentReportsComplete() {
       const statusMatch = filterStatus === "all" || inc.status === filterStatus;
       const severityMatch = filterSeverity === "all" || inc.severity === filterSeverity;
       return statusMatch && severityMatch;
-    });
+  };
   };
 
   const getSeverityColor = (severity: string) => {

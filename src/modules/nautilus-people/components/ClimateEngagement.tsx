@@ -198,7 +198,7 @@ const ClimateEngagement: React.FC = () => {
       results: climateResults,
       period: "Q4 2025",
       participationRate: 91
-    });
+    };
     
     if (result) {
       toast.success("Insights gerados! Confira o relatório completo.");

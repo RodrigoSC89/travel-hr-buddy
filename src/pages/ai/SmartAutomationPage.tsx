@@ -160,14 +160,14 @@ const SmartAutomationPage: React.FC = () => {
     toast({
       title: `Workflow ${newStatus}`,
       description: `O workflow foi ${newStatus} com sucesso.`,
-    });
+    };
   }, [toast]);
 
   const handleRunWorkflow = useCallback((workflowId: string) => {
     toast({
       title: "Executando Workflow",
       description: "O workflow está sendo executado manualmente...",
-    });
+    };
   }, [toast]);
 
   return (
@@ -318,7 +318,7 @@ const SmartAutomationPage: React.FC = () => {
                       <span className="text-sm text-muted-foreground">Ativo</span>
                       <Switch 
                         checked={workflow.status === "active"}
-                        onCheckedChange={() => handleToggleWorkflow(workflow.id, workflow.status)}
+                        onCheckedChange={() => handleToggleWorkflow(workflow.id, workflow.status}
                       />
                     </div>
                   </div>

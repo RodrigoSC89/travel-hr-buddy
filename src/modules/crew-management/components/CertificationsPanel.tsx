@@ -47,7 +47,7 @@ export const CertificationsPanel = memo(function({ certificates, crewMembers }: 
       ...cert,
       employee_name: crew?.full_name || "Desconhecido",
     };
-  });
+  };
 
   const today = new Date();
   const thirtyDaysFromNow = new Date(today.getTime() + 30 * 24 * 60 * 60 * 1000);

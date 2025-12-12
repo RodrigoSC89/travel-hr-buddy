@@ -81,7 +81,7 @@ export const DocumentValidator: React.FC<DocumentValidatorProps> = ({
             return 90;
           }
           return prev + 10;
-        });
+  };
       }, 200);
 
       // Converter arquivo para base64
@@ -96,7 +96,7 @@ export const DocumentValidator: React.FC<DocumentValidatorProps> = ({
           fileType: file.type,
           crewMemberId
         }
-      });
+      };
 
       clearInterval(progressInterval);
       setValidationProgress(100);
@@ -133,14 +133,14 @@ export const DocumentValidator: React.FC<DocumentValidatorProps> = ({
         title: result.isValid ? "Documento válido" : "Documento precisa de revisão",
         description: `Confiança: ${result.confidence}%`,
         variant: result.isValid ? "default" : "destructive"
-      });
+      };
 
     } catch (error) {
       toast({
         title: "Erro na validação",
         description: "Não foi possível validar o documento",
         variant: "destructive"
-      });
+      };
     } finally {
       setIsValidating(false);
       setValidationProgress(0);
@@ -157,7 +157,7 @@ export const DocumentValidator: React.FC<DocumentValidatorProps> = ({
       };
       reader.onerror = reject;
       reader.readAsDataURL(file);
-    });
+  };
   };
 
   // Get validation status color
@@ -198,7 +198,7 @@ export const DocumentValidator: React.FC<DocumentValidatorProps> = ({
               e.preventDefault();
               setIsDragOver(true);
             }}
-            onDragLeave={() => setIsDragOver(false)}
+            onDragLeave={() => setIsDragOver(false}
           >
             {isValidating ? (
               <div className="space-y-4">

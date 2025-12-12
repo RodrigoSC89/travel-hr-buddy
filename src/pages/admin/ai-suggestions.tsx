@@ -147,7 +147,7 @@ const AISuggestionsDashboard: React.FC = () => {
   const filteredSuggestions = suggestions.filter(s => {
     if (filter === "all") return true;
     return s.status === filter;
-  });
+  };
 
   const stats = {
     total: suggestions.length,
@@ -282,7 +282,7 @@ const AISuggestionsDashboard: React.FC = () => {
       </div>
 
       {/* Filter Tabs */}
-      <Tabs value={filter} onValueChange={(v) => setFilter(v as typeof filter)}>
+      <Tabs value={filter} onValueChange={(v) => setFilter(v as typeof filter}>
         <TabsList>
           <TabsTrigger value="pending">Pending</TabsTrigger>
           <TabsTrigger value="applied">Applied</TabsTrigger>

@@ -158,7 +158,7 @@ export const DrillSimulationDialog: React.FC<DrillSimulationDialogProps> = ({
     toast({
       title: "Simulado Iniciado",
       description: `${plan.title} em andamento`,
-    });
+    };
   };
 
   const handlePauseDrill = () => {
@@ -166,7 +166,7 @@ export const DrillSimulationDialog: React.FC<DrillSimulationDialogProps> = ({
     toast({
       title: isPaused ? "Simulado Retomado" : "Simulado Pausado",
       description: isPaused ? "Cronômetro retomado" : "Cronômetro pausado",
-    });
+    };
   };
 
   const handleStopDrill = () => {
@@ -175,7 +175,7 @@ export const DrillSimulationDialog: React.FC<DrillSimulationDialogProps> = ({
       title: "Simulado Encerrado",
       description: `Duração total: ${formatTime(elapsedTime)}`,
       variant: "destructive"
-    });
+    };
   };
 
   const handleStepToggle = (stepId: string) => {
@@ -196,7 +196,7 @@ export const DrillSimulationDialog: React.FC<DrillSimulationDialogProps> = ({
     toast({
       title: "Relatório Salvo",
       description: "O relatório do simulado foi salvo com sucesso",
-    });
+    };
     onOpenChange(false);
   };
 
@@ -288,7 +288,7 @@ export const DrillSimulationDialog: React.FC<DrillSimulationDialogProps> = ({
                     >
                       <Checkbox
                         checked={step.completed}
-                        onCheckedChange={() => handleStepToggle(step.id)}
+                        onCheckedChange={() => handleStepToggle(step.id}
                         disabled={!drillStarted}
                       />
                       <div className="flex-1">
@@ -357,4 +357,4 @@ export const DrillSimulationDialog: React.FC<DrillSimulationDialogProps> = ({
       </DialogContent>
     </Dialog>
   );
-};
+});

@@ -18,7 +18,7 @@ export const ItemList = memo(function({ items, onToggle, readonly = false }: Ite
         <div 
           key={item.id} 
           className="flex items-start gap-3 p-3 border rounded-lg hover:bg-muted/50 transition-colors"
-          onClick={() => !readonly && onToggle?.(item.id)}
+          onClick={() => !readonly && onToggle?.(item.id}
         >
           <Checkbox 
             checked={item.status === "completed"} 

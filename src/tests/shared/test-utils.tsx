@@ -20,7 +20,7 @@ export const createTestQueryClient = () => new QueryClient({
       retry: false,
     },
   },
-});
+};
 
 interface AllTheProvidersProps {
   children: React.ReactNode;
@@ -55,7 +55,7 @@ export const renderWithProviders = memo((
   options?: Omit<RenderOptions, "wrapper">,
 ) => {
   return render(ui, { wrapper: AllTheProviders, ...options });
-};
+});
 
 /**
  * Wait for all loading states to finish
@@ -76,7 +76,7 @@ export const waitForLoadingToFinish = async () => {
       };
     };
     checkLoading();
-  });
+  };
 };
 
 /**
@@ -102,7 +102,7 @@ export const createMockSupabaseClient = () => ({
       getPublicUrl: vi.fn().mockReturnValue({ data: { publicUrl: "mock-url" } }),
     })),
   },
-});
+};
 
 /**
  * Create mock user for authentication tests
@@ -115,7 +115,7 @@ export const createMockUser = (overrides = {}) => ({
     role: "operator",
   },
   ...overrides,
-});
+};
 
 /**
  * Create mock session for authentication tests
@@ -125,7 +125,7 @@ export const createMockSession = (userOverrides = {}) => ({
   refresh_token: "mock-refresh-token",
   expires_at: Date.now() + 3600000,
   user: createMockUser(userOverrides),
-});
+};
 
 /**
  * Suppress console errors during tests
@@ -133,9 +133,9 @@ export const createMockSession = (userOverrides = {}) => ({
 export const suppressConsoleError = memo(() => {
   const originalError = console.error;
   beforeEach(() => {
-  });
+  };
   afterEach(() => {
-  });
+  };
 };
 
 /**

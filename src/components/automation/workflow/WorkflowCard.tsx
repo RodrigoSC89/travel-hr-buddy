@@ -105,7 +105,7 @@ export const WorkflowCard: React.FC<WorkflowCardProps> = ({
       day: "2-digit",
       month: "2-digit",
       year: "numeric",
-    });
+};
   };
 
   const formatDuration = (minutes?: number) => {
@@ -275,4 +275,4 @@ export const WorkflowCard: React.FC<WorkflowCardProps> = ({
       </CardContent>
     </Card>
   );
-};
+});

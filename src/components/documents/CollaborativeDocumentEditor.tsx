@@ -51,7 +51,7 @@ export const CollaborativeDocumentEditor = memo(function({
           id: documentId,
           content,
           updated_by: user.id,
-        });
+        };
 
       if (error) throw error;
 
@@ -63,7 +63,7 @@ export const CollaborativeDocumentEditor = memo(function({
         title: "Error saving document",
         description: "Failed to save document to database",
         variant: "destructive",
-      });
+      };
     }
   }, [documentId, user]);
 
@@ -94,7 +94,7 @@ export const CollaborativeDocumentEditor = memo(function({
       const content = editor.getHTML();
       debouncedSave(content);
     },
-  });
+};
 
   useEffect(() => {
     // Initialize Yjs document
@@ -108,7 +108,7 @@ export const CollaborativeDocumentEditor = memo(function({
     // Track connected users
     provider.current.on("peers", (event: { added: string[]; removed: string[]; webrtcPeers: string[] }) => {
       setConnectedUsers(event.webrtcPeers.length);
-    });
+});
 
     // Update editor with collaboration extensions
     if (editor && !editor.isDestroyed) {

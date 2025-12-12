@@ -52,7 +52,7 @@ const PredictiveAnalytics: React.FC = () => {
           timeframe: selectedTimeframe,
           includeFactors: true
         }
-      });
+      };
 
       if (error) throw error;
 
@@ -63,7 +63,7 @@ const PredictiveAnalytics: React.FC = () => {
         toast({
           title: "Análises Atualizadas",
           description: "Previsões geradas com sucesso",
-        });
+        };
       } else {
         throw new Error(data.error || "Erro ao gerar previsões");
       }
@@ -125,7 +125,7 @@ const PredictiveAnalytics: React.FC = () => {
         title: "Usando dados simulados",
         description: "Conecte-se à API para obter previsões reais",
         variant: "destructive",
-      });
+      };
     } finally {
       setIsGenerating(false);
     }

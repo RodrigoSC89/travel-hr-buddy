@@ -391,6 +391,6 @@ export const AuditPlanner: React.FC = () => {
       </Card>
     </div>
   );
-};
+});
 
 export default AuditPlanner;

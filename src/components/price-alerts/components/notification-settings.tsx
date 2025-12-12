@@ -39,7 +39,7 @@ export const NotificationSettings = memo(() => {
     price_drop_threshold: 0,
     daily_summary: false,
     weekly_report: true,
-  });
+  };
   const [loading, setLoading] = useState(true);
   const [saving, setSaving] = useState(false);
   const [pushSupported, setPushSupported] = useState(false);
@@ -78,7 +78,7 @@ export const NotificationSettings = memo(() => {
           price_drop_threshold: data.price_drop_threshold ?? 0,
           daily_summary: data.daily_summary ?? false,
           weekly_report: data.weekly_report ?? true,
-        });
+        };
       }
     } catch (error) {
     } finally {
@@ -96,20 +96,20 @@ export const NotificationSettings = memo(() => {
         .upsert({
           user_id: user.id,
           ...settings,
-        });
+        };
 
       if (error) throw error;
 
       toast({
         title: "Configurações salvas",
         description: "Suas preferências de notificação foram atualizadas.",
-      });
+      };
     } catch (error) {
       toast({
         title: "Erro",
         description: "Erro ao salvar configurações. Tente novamente.",
         variant: "destructive",
-      });
+      };
     } finally {
       setSaving(false);
     }
@@ -127,13 +127,13 @@ export const NotificationSettings = memo(() => {
         toast({
           title: "Notificações ativadas",
           description: "Você receberá notificações push quando os preços baixarem.",
-        });
+        };
       } else {
         toast({
           title: "Permissão negada",
           description: "Não é possível enviar notificações push.",
           variant: "destructive",
-        });
+        };
       }
     } catch (error) {
     }
@@ -145,7 +145,7 @@ export const NotificationSettings = memo(() => {
         body: "Este é um exemplo de notificação! 🎉",
         icon: "/favicon.ico",
         badge: "/favicon.ico",
-      });
+      };
     }
   };
 
@@ -171,7 +171,7 @@ export const NotificationSettings = memo(() => {
         </CardContent>
       </Card>
     );
-  };
+  });
 
   return (
     <div className="space-y-6">
@@ -201,7 +201,7 @@ export const NotificationSettings = memo(() => {
               </div>
               <Switch
                 checked={settings.email_enabled}
-                onCheckedChange={(checked) => updateSetting("email_enabled", checked)}
+                onCheckedChange={(checked) => updateSetting("email_enabled", checked}
               />
             </div>
             <Separator />
@@ -250,7 +250,7 @@ export const NotificationSettings = memo(() => {
                 ) : (
                   <Switch
                     checked={settings.push_enabled && pushPermission === "granted"}
-                    onCheckedChange={(checked) => updateSetting("push_enabled", checked)}
+                    onCheckedChange={(checked) => updateSetting("push_enabled", checked}
                     disabled={!pushSupported || pushPermission !== "granted"}
                   />
                 )}
@@ -305,7 +305,7 @@ export const NotificationSettings = memo(() => {
                 </div>
                 <Switch
                   checked={settings.daily_summary}
-                  onCheckedChange={(checked) => updateSetting("daily_summary", checked)}
+                  onCheckedChange={(checked) => updateSetting("daily_summary", checked}
                 />
               </div>
               
@@ -318,7 +318,7 @@ export const NotificationSettings = memo(() => {
                 </div>
                 <Switch
                   checked={settings.weekly_report}
-                  onCheckedChange={(checked) => updateSetting("weekly_report", checked)}
+                  onCheckedChange={(checked) => updateSetting("weekly_report", checked}
                 />
               </div>
             </div>

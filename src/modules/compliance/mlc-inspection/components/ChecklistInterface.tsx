@@ -51,7 +51,7 @@ export const ChecklistInterface = memo(function({ inspectionId, onUpdate }: Chec
         title: "Error",
         description: "Failed to load findings",
         variant: "destructive",
-      });
+      };
     } finally {
       setLoading(false);
     }
@@ -69,7 +69,7 @@ export const ChecklistInterface = memo(function({ inspectionId, onUpdate }: Chec
         severity: severity as unknown,
         corrective_action,
         evidence_attached: false,
-      });
+      };
       
       await loadFindings();
       onUpdate();
@@ -77,14 +77,14 @@ export const ChecklistInterface = memo(function({ inspectionId, onUpdate }: Chec
       toast({
         title: "Success",
         description: "Finding added successfully",
-      });
+      };
     } catch (error) {
       console.error("Error adding finding:", error);
       toast({
         title: "Error",
         description: "Failed to add finding",
         variant: "destructive",
-      });
+      };
     }
   };
 
@@ -140,7 +140,7 @@ export const ChecklistInterface = memo(function({ inspectionId, onUpdate }: Chec
                         handleAddFinding(item, compliance, severity, corrective_action);
                         setExpandedItem(null);
                       }}
-                      onCancel={() => setExpandedItem(null)}
+                      onCancel={() => setExpandedItem(null}
                     />
                   </CardContent>
                 )}
@@ -189,7 +189,7 @@ function InspectionForm({ item, onSubmit, onCancel }: {
         <Checkbox
           id={`compliance-${item.regulation}`}
           checked={compliance}
-          onCheckedChange={(checked) => setCompliance(checked as boolean)}
+          onCheckedChange={(checked) => setCompliance(checked as boolean}
         />
         <Label htmlFor={`compliance-${item.regulation}`} className="text-sm font-medium">
           Item is compliant

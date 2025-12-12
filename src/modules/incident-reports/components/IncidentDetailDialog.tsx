@@ -74,7 +74,7 @@ export const IncidentDetailDialog: React.FC<IncidentDetailDialogProps> = ({
     assigned_to: "",
     due_date: "",
     status: "pending"
-  });
+};
   const [showActionForm, setShowActionForm] = useState(false);
   const [currentStatus, setCurrentStatus] = useState(incident?.status || "new");
   const { toast } = useToast();
@@ -119,7 +119,7 @@ export const IncidentDetailDialog: React.FC<IncidentDetailDialogProps> = ({
         .insert({
           incident_id: incident.id,
           ...signatureData
-        });
+        };
 
       if (error) throw error;
 
@@ -127,7 +127,7 @@ export const IncidentDetailDialog: React.FC<IncidentDetailDialogProps> = ({
       toast({
         title: "Assinatura salva",
         description: "A assinatura foi registrada com sucesso"
-      });
+      };
     } catch (error) {
       console.error("Error saving signature:", error);
       // Continue without database if it fails
@@ -135,7 +135,7 @@ export const IncidentDetailDialog: React.FC<IncidentDetailDialogProps> = ({
       toast({
         title: "Assinatura registrada",
         description: "Assinatura salva localmente"
-      });
+      };
     }
   };
 
@@ -145,7 +145,7 @@ export const IncidentDetailDialog: React.FC<IncidentDetailDialogProps> = ({
         title: "Campos obrigatórios",
         description: "Preencha descrição e responsável",
         variant: "destructive"
-      });
+      };
       return;
     }
 
@@ -155,7 +155,7 @@ export const IncidentDetailDialog: React.FC<IncidentDetailDialogProps> = ({
         .insert({
           incident_id: incident.id,
           ...newAction
-        });
+        };
 
       if (error) throw error;
 
@@ -165,7 +165,7 @@ export const IncidentDetailDialog: React.FC<IncidentDetailDialogProps> = ({
       toast({
         title: "Ação adicionada",
         description: "Ação corretiva registrada"
-      });
+      };
     } catch (error) {
       console.error("Error adding action:", error);
       // Continue without database if it fails
@@ -175,7 +175,7 @@ export const IncidentDetailDialog: React.FC<IncidentDetailDialogProps> = ({
       toast({
         title: "Ação registrada",
         description: "Ação salva localmente"
-      });
+      };
     }
   };
 
@@ -196,14 +196,14 @@ export const IncidentDetailDialog: React.FC<IncidentDetailDialogProps> = ({
       toast({
         title: "Status atualizado",
         description: `Status alterado para: ${newStatus}`
-      });
+      };
     } catch (error) {
       console.error("Error updating status:", error);
       setCurrentStatus(newStatus);
       toast({
         title: "Status atualizado",
         description: "Alteração registrada localmente"
-      });
+      };
     }
   };
 
@@ -275,7 +275,7 @@ export const IncidentDetailDialog: React.FC<IncidentDetailDialogProps> = ({
           head: [["Descrição", "Responsável", "Prazo", "Status"]],
           body: actionData,
           styles: { fontSize: 8 }
-        });
+        };
         
         yPos = (doc as unknown).lastAutoTable.finalY + 10;
       }
@@ -322,14 +322,14 @@ export const IncidentDetailDialog: React.FC<IncidentDetailDialogProps> = ({
       toast({
         title: "PDF gerado",
         description: "Download iniciado"
-      });
+      };
     } catch (error) {
       console.error("Error generating PDF:", error);
       toast({
         title: "Erro ao gerar PDF",
         description: "Tente novamente",
         variant: "destructive"
-      });
+      };
     }
   };
 
@@ -617,4 +617,4 @@ export const IncidentDetailDialog: React.FC<IncidentDetailDialogProps> = ({
       </DialogContent>
     </Dialog>
   );
-};
+});

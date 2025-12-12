@@ -20,7 +20,7 @@ export const OrganizationStatsCards: React.FC = () => {
     activeUsers: 0,
     vessels: 0,
     storageUsed: 0
-  });
+  };
   const [isLoading, setIsLoading] = useState(true);
 
   useEffect(() => {
@@ -59,7 +59,7 @@ export const OrganizationStatsCards: React.FC = () => {
         activeUsers: usersCount || 0,
         vessels: vesselsCount || 0,
         storageUsed: usageData?.storage_used_gb || 0
-      });
+      };
 
     } catch (error) {
       logger.error("Error fetching organization stats:", error);
@@ -67,7 +67,7 @@ export const OrganizationStatsCards: React.FC = () => {
         title: "Erro ao carregar estatísticas",
         description: "Não foi possível carregar os dados da organização",
         variant: "destructive"
-      });
+      };
     } finally {
       setIsLoading(false);
     }
@@ -120,4 +120,4 @@ export const OrganizationStatsCards: React.FC = () => {
       ))}
     </div>
   );
-};
+});

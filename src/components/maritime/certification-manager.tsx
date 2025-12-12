@@ -165,20 +165,20 @@ export const CertificationManager: React.FC = () => {
     toast({
       title: "🔄 Renovação em Massa",
       description: "Processando renovações automáticas...",
-    });
+    };
   };
 
   const handleGenerateReport = () => {
     toast({
       title: "📊 Relatório Gerado",
       description: "Relatório de compliance exportado com sucesso!",
-    });
+    };
   };
 
   const expiringCertifications = certifications.filter(cert => {
     const days = getDaysUntilExpiry(cert.expiryDate);
     return days <= 90 && days > 0;
-  });
+  };
 
   const expiredCertifications = certifications.filter(cert => 
     getDaysUntilExpiry(cert.expiryDate) < 0

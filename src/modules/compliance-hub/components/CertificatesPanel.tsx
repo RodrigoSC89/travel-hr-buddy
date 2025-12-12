@@ -137,7 +137,7 @@ export const CertificatesPanel = memo(function({
     const matchesStatus = statusFilter === "all" || cert.status === statusFilter;
     const matchesType = typeFilter === "all" || cert.type === typeFilter;
     return matchesSearch && matchesStatus && matchesType;
-  });
+  };
 
   const uniqueTypes = [...new Set(certificates.map((c) => c.type))];
 

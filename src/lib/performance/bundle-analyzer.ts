@@ -146,7 +146,7 @@ export function getBundleOptimizationRecommendations(): string[] {
 export function calculatePotentialSavings(): {
   total: string;
   breakdown: { action: string; savings: string }[];
-} {
+  } {
   return {
     total: "~3.5MB",
     breakdown: [
@@ -183,19 +183,19 @@ export function getCriticalDependencies(): string[] {
  * Log bundle analysis to console
  */
 export function logBundleAnalysis(): void {
-  console.log('=== Bundle Analysis ===');
+  console.log("=== Bundle Analysis ===");
   
-  console.log('\n🔴 Heavy Dependencies:');
+  console.log("\n🔴 Heavy Dependencies:");
   HEAVY_DEPENDENCIES
     .filter(d => d.category === "heavy")
     .forEach(d => console.log(`  - ${d.name}: ${d.estimatedSize} (${d.recommendation})`));
   
-  console.log('\n🟡 Medium Dependencies:');
+  console.log("\n🟡 Medium Dependencies:");
   HEAVY_DEPENDENCIES
     .filter(d => d.category === "medium")
     .forEach(d => console.log(`  - ${d.name}: ${d.estimatedSize}`));
   
-  console.log('\n📋 Recommendations:');
+  console.log("\n📋 Recommendations:");
   getBundleOptimizationRecommendations().forEach(r => console.log(`  ${r}`));
   
   const savings = calculatePotentialSavings();

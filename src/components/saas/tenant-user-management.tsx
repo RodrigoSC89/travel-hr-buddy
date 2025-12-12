@@ -152,7 +152,7 @@ export const TenantUserManagement: React.FC = () => {
     const matchesStatus = statusFilter === "all" || user.status === statusFilter;
     
     return matchesSearch && matchesRole && matchesStatus;
-  });
+  };
 
   const handleInviteUser = async () => {
     if (!newUserEmail || !newUserRole) {
@@ -160,7 +160,7 @@ export const TenantUserManagement: React.FC = () => {
         title: "Campos obrigatórios",
         description: "Preencha todos os campos.",
         variant: "destructive"
-      });
+      };
       return;
     }
 
@@ -184,7 +184,7 @@ export const TenantUserManagement: React.FC = () => {
     toast({
       title: "Convite enviado",
       description: `Convite enviado para ${newUserEmail}`,
-    });
+    };
   };
 
   const handleRoleChange = (userId: string, newRole: string) => {
@@ -199,7 +199,7 @@ export const TenantUserManagement: React.FC = () => {
     toast({
       title: "Função atualizada",
       description: "A função do usuário foi atualizada com sucesso.",
-    });
+    };
   };
 
   const handleStatusChange = (userId: string, newStatus: string) => {
@@ -214,7 +214,7 @@ export const TenantUserManagement: React.FC = () => {
     toast({
       title: "Status atualizado",
       description: "O status do usuário foi atualizado com sucesso.",
-    });
+    };
   };
 
   const formatLastSeen = (lastSeen?: string) => {

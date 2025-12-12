@@ -381,7 +381,7 @@ export const PeoDpManager: React.FC = () => {
       </div>
 
       {/* Main Content */}
-      <Tabs value={activeView} onValueChange={(v) => setActiveView(v as unknown)} className="space-y-6">
+      <Tabs value={activeView} onValueChange={(v) => setActiveView(v as unknown} className="space-y-6">
         <div className="flex items-center justify-between">
           <TabsList className="flex flex-wrap gap-1 h-auto p-1">
             <TabsTrigger value="dashboard" className="flex items-center gap-1 text-xs px-2 py-1">
@@ -866,7 +866,7 @@ export const PeoDpManager: React.FC = () => {
             </div>
             <div className="space-y-2">
               <Label>Classe DP</Label>
-              <Select value={newAuditDpClass} onValueChange={(v) => setNewAuditDpClass(v as unknown)}>
+              <Select value={newAuditDpClass} onValueChange={(v) => setNewAuditDpClass(v as unknown}>
                 <SelectTrigger>
                   <SelectValue />
                 </SelectTrigger>
@@ -904,10 +904,10 @@ export const PeoDpManager: React.FC = () => {
           </DialogHeader>
           <PeoDpWizard
             onComplete={handleWizardComplete}
-            onCancel={() => setIsWizardOpen(false)}
+            onCancel={() => setIsWizardOpen(false}
           />
         </DialogContent>
       </Dialog>
     </div>
   );
-};
+});

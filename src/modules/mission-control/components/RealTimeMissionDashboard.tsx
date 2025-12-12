@@ -119,7 +119,7 @@ export const RealTimeMissionDashboard = memo(() => {
             toast({
               title: "Mission Updated",
               description: "Mission status changed",
-            });
+            };
           }
         }
       )

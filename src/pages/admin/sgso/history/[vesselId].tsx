@@ -23,7 +23,7 @@ const SGSOHistoryPage: React.FC = () => {
         title: "Erro",
         description: "ID da embarcação não fornecido",
         variant: "destructive",
-      });
+      };
       return;
     }
 
@@ -47,7 +47,7 @@ const SGSOHistoryPage: React.FC = () => {
         toast({
           title: "Atualizado",
           description: "Histórico atualizado com sucesso",
-        });
+        };
       }
     } catch (error) {
       console.error("Error fetching action plans:", error);
@@ -55,7 +55,7 @@ const SGSOHistoryPage: React.FC = () => {
         title: "Erro",
         description: error instanceof Error ? error.message : "Erro ao buscar histórico de planos de ação",
         variant: "destructive",
-      });
+      };
     } finally {
       setLoading(false);
       setRefreshing(false);

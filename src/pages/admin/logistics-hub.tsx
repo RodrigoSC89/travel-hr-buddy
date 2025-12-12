@@ -105,7 +105,7 @@ export default function LogisticsHub() {
       const { error } = await supabase.from("logistics_requests").insert({
         ...requestForm,
         estimated_delivery: eta.toISOString(),
-      });
+      };
 
       if (error) throw error;
 
@@ -118,7 +118,7 @@ export default function LogisticsHub() {
         status: "pending",
         requested_by: "",
         notes: "",
-      });
+      };
       loadRequests();
     } catch (error) {
       logger.error("Failed to submit request", error);

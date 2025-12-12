@@ -196,21 +196,21 @@ export const MobileOptimizationCenter: React.FC = () => {
     toast({
       title: "Otimização iniciada",
       description: "Compressão de imagens para dispositivos móveis em andamento.",
-    });
+    };
   };
 
   const handleEnablePWA = () => {
     toast({
       title: "PWA habilitado",
       description: "Recursos de Progressive Web App foram ativados.",
-    });
+    };
   };
 
   const handleLazyLoad = () => {
     toast({
       title: "Lazy loading ativado",
       description: "Carregamento sob demanda configurado para componentes.",
-    });
+    };
   };
 
   if (isLoading) {

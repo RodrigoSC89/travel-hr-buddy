@@ -111,7 +111,7 @@ export const MaritimeSystemDashboard = memo(function() {
         grouped[sensor.sensor_type] = [];
       }
       grouped[sensor.sensor_type].push(sensor);
-    });
+  };
     return grouped;
   };
 

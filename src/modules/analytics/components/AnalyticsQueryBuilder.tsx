@@ -42,7 +42,7 @@ export const AnalyticsQueryBuilder: React.FC = () => {
     table: "analytics_events",
     filters: [],
     limit: 100
-  });
+  };
   const [queryResult, setQueryResult] = useState<QueryResult | null>(null);
   const [loading, setLoading] = useState(false);
   const { toast } = useToast();
@@ -54,7 +54,7 @@ export const AnalyticsQueryBuilder: React.FC = () => {
         ...queryConfig.filters,
         { field: "event_type", operator: "equals", value: "" }
       ]
-    });
+    };
   };
 
   const removeFilter = (index: number) => {
@@ -118,14 +118,14 @@ export const AnalyticsQueryBuilder: React.FC = () => {
       toast({
         title: "Success",
         description: `Query returned ${data?.length || 0} results`
-      });
+      };
     } catch (error) {
       console.error("Error executing query:", error);
       toast({
         title: "Error",
         description: "Failed to execute query",
         variant: "destructive"
-      });
+      };
     } finally {
       setLoading(false);
     }
@@ -137,7 +137,7 @@ export const AnalyticsQueryBuilder: React.FC = () => {
         title: "No Data",
         description: "No data to export",
         variant: "destructive"
-      });
+      };
       return;
     }
 
@@ -163,7 +163,7 @@ export const AnalyticsQueryBuilder: React.FC = () => {
     toast({
       title: "Success",
       description: "Data exported to CSV"
-    });
+    };
   };
 
   return (
@@ -233,7 +233,7 @@ export const AnalyticsQueryBuilder: React.FC = () => {
                     />
                     <Select
                       value={filter.operator}
-                      onValueChange={(value) => updateFilter(index, "operator", value)}
+                      onValueChange={(value) => updateFilter(index, "operator", value}
                     >
                       <SelectTrigger className="text-sm">
                         <SelectValue />

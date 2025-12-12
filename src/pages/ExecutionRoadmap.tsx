@@ -110,8 +110,8 @@ export default function ExecutionRoadmap() {
         content += `- [${t.completed ? "x" : " "}] **Dia ${t.day}**: ${t.title}\n`;
         content += `  - Módulo: ${t.module} | Prioridade: ${t.priority} | Esforço: ${t.effort}\n`;
         content += `  - ${t.description}\n\n`;
-      });
-    });
+  };
+  };
     
     const blob = new Blob([content], { type: "text/markdown" });
     const url = URL.createObjectURL(blob);
@@ -121,7 +121,7 @@ export default function ExecutionRoadmap() {
     a.click();
     URL.revokeObjectURL(url);
     toast.success("Roteiro exportado!");
-  };
+  });
 
   const getPriorityColor = (priority: string) => {
     switch (priority) {
@@ -301,7 +301,7 @@ function TaskList({
           >
             <Checkbox 
               checked={task.completed}
-              onCheckedChange={() => onToggle(task.id)}
+              onCheckedChange={() => onToggle(task.id}
               className="mt-1"
             />
             <div className="flex-1">

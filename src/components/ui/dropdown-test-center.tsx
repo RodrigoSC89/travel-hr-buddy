@@ -59,7 +59,7 @@ export const DropdownTestCenter: React.FC = () => {
     bookmarks: false,
     urls: false,
     person: false,
-  });
+  };
 
   return (
     <div className="space-y-8 p-6">

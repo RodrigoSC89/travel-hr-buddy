@@ -69,7 +69,7 @@ const NautilusCommandCenter = () => {
     maintenance: { scheduled: 0, overdue: 0, completed: 0, efficiency: 0 },
     inventory: { lowStock: 0, pendingOrders: 0, value: 0 },
     compliance: { score: 0, pendingAudits: 0, expiringDocs: 0 }
-  });
+  };
   const [alerts, setAlerts] = useState<Alert[]>([]);
   const [showBrain, setShowBrain] = useState(false);
   const [lastSync, setLastSync] = useState<Date>(new Date());
@@ -205,7 +205,7 @@ const NautilusCommandCenter = () => {
         title: "Erro de Sincronização",
         description: "Operando em modo offline",
         variant: "destructive"
-      });
+      };
     } finally {
       setLoading(false);
     }
@@ -439,7 +439,7 @@ const NautilusCommandCenter = () => {
                 <SystemHealthGrid status={systemStatus} />
               </div>
               <div className="space-y-6">
-                <AlertsPanel alerts={alerts} onDismiss={(id) => setAlerts(prev => prev.filter(a => a.id !== id))} />
+                <AlertsPanel alerts={alerts} onDismiss={(id) => setAlerts(prev => prev.filter(a => a.id !== id} />
                 <QuickActionsPanel />
               </div>
             </div>
@@ -454,7 +454,7 @@ const NautilusCommandCenter = () => {
           </TabsContent>
 
           <TabsContent value="alerts">
-            <AlertsPanel alerts={alerts} onDismiss={(id) => setAlerts(prev => prev.filter(a => a.id !== id))} expanded />
+            <AlertsPanel alerts={alerts} onDismiss={(id) => setAlerts(prev => prev.filter(a => a.id !== id} expanded />
           </TabsContent>
 
           <TabsContent value="insights">
@@ -470,7 +470,7 @@ const NautilusCommandCenter = () => {
         <AnimatePresence>
           {showBrain && (
             <NautilusBrainChat 
-              onClose={() => setShowBrain(false)}
+              onClose={() => setShowBrain(false}
               systemStatus={systemStatus}
               alerts={alerts}
             />
@@ -479,7 +479,7 @@ const NautilusCommandCenter = () => {
       </div>
     </div>
   );
-};
+});
 
 // Status Card Component
 interface StatusCardProps {
@@ -560,6 +560,6 @@ const IntegratedModuleCard: React.FC<IntegratedModuleCardProps> = ({ icon, title
       <span className="text-xs opacity-70">{subtitle}</span>
     </button>
   );
-};
+});
 
 export default NautilusCommandCenter;

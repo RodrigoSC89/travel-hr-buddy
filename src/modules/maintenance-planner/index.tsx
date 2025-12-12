@@ -35,7 +35,7 @@ const MaintenancePlanner = () => {
     completed: 0,
     overdue: 0,
     efficiency: 0
-  });
+  };
   const [loading, setLoading] = useState(true);
   const [showCreateDialog, setShowCreateDialog] = useState(false);
   const [showAlertsPanel, setShowAlertsPanel] = useState(false);
@@ -53,7 +53,7 @@ const MaintenancePlanner = () => {
         completed: 8,
         overdue: 3,
         efficiency: 94
-      });
+      };
     } catch (error) {
       console.error("Error fetching maintenance stats:", error);
     } finally {
@@ -65,14 +65,14 @@ const MaintenancePlanner = () => {
     toast({
       title: "Exportação",
       description: "Funcionalidade de exportação será implementada com dados reais.",
-    });
+    };
   };
 
   const handleJobCreated = (job: unknown) => {
     toast({
       title: "Job Criado via IA",
       description: `${job.nome} - ${job.equipamento_nome}`,
-    });
+    };
     fetchStats();
   };
 
@@ -223,7 +223,7 @@ const MaintenancePlanner = () => {
         </TabsContent>
 
         <TabsContent value="jobs" className="mt-6">
-          <JobsCenter onCreateJob={() => setShowCreateDialog(true)} />
+          <JobsCenter onCreateJob={() => setShowCreateDialog(true} />
         </TabsContent>
 
         <TabsContent value="horimetros" className="mt-6">

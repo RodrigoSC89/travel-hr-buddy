@@ -17,7 +17,7 @@ export default function SimilarExamples({ input, onSelect }: { input: string, on
         title: "⚠️ Campo vazio",
         description: "Por favor, digite uma descrição antes de buscar exemplos similares.",
         variant: "destructive",
-      });
+      };
       return;
     }
 
@@ -30,12 +30,12 @@ export default function SimilarExamples({ input, onSelect }: { input: string, on
         toast({
           title: "✅ Exemplos encontrados",
           description: `Encontrados ${result.length} casos similares com sucesso.`,
-        });
+        };
       } else {
         toast({
           title: "ℹ️ Nenhum resultado",
           description: "Não foram encontrados casos similares para esta descrição.",
-        });
+        };
       }
     } catch (err) {
       console.error("Erro ao buscar exemplos:", err);
@@ -43,7 +43,7 @@ export default function SimilarExamples({ input, onSelect }: { input: string, on
         title: "❌ Erro ao buscar",
         description: "Ocorreu um erro ao buscar exemplos. Tente novamente.",
         variant: "destructive",
-      });
+      };
     } finally {
       setLoading(false);
     }
@@ -55,7 +55,7 @@ export default function SimilarExamples({ input, onSelect }: { input: string, on
       toast({
         title: "📋 Copiado com sucesso",
         description: "A sugestão foi copiada para o formulário.",
-      });
+      };
     }
   };
 

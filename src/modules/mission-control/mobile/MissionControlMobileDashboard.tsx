@@ -54,7 +54,7 @@ export const MissionControlMobileDashboard: React.FC = () => {
       } else if (status === "offline") {
         toast.error("You are offline - changes will sync when reconnected");
       }
-    });
+    };
 
     loadMissions();
     loadStats();

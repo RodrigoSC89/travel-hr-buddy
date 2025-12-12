@@ -32,7 +32,7 @@ export const ProgressiveContent: React.FC<ProgressiveContentProps> = ({
     threshold: 0.1,
     triggerOnce: true,
     rootMargin: isSlowConnection ? "50px" : "200px"
-  });
+};
 
   useEffect(() => {
     if (priority === "high") {
@@ -96,7 +96,7 @@ export const ProgressiveImage: React.FC<ProgressiveImageProps> = ({
     threshold: 0,
     triggerOnce: true,
     rootMargin: "100px"
-  });
+};
 
   useEffect(() => {
     if (inView && !shouldReduceData) {
@@ -105,7 +105,7 @@ export const ProgressiveImage: React.FC<ProgressiveImageProps> = ({
       img.onload = () => {
         setCurrentSrc(src);
         setIsLoaded(true);
-      };
+      });
     } else if (inView && shouldReduceData) {
       // On slow connections, load directly without preloading
       setCurrentSrc(src);

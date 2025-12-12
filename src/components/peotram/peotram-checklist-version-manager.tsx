@@ -146,7 +146,7 @@ export const PeotramChecklistVersionManager: React.FC = () => {
       ...selectedTemplate,
       elements: [...selectedTemplate.elements, newElement],
       updatedAt: new Date(),
-    });
+    };
 
     setEditingElement(newElement);
   };
@@ -196,7 +196,7 @@ export const PeotramChecklistVersionManager: React.FC = () => {
           : elem
       ),
       updatedAt: new Date(),
-    });
+    };
   };
 
   const deleteRequirement = (elementId: string, reqId: string) => {
@@ -216,7 +216,7 @@ export const PeotramChecklistVersionManager: React.FC = () => {
           : elem
       ),
       updatedAt: new Date(),
-    });
+    };
   };
 
   const saveTemplate = () => {
@@ -237,7 +237,7 @@ export const PeotramChecklistVersionManager: React.FC = () => {
     case "json": {
       const blob = new Blob([JSON.stringify(selectedTemplate, null, 2)], {
         type: "application/json",
-      });
+      };
       const url = URL.createObjectURL(blob);
       const a = document.createElement("a");
       a.href = url;
@@ -279,7 +279,7 @@ export const PeotramChecklistVersionManager: React.FC = () => {
         ...selectedTemplate,
         elements,
         updatedAt: new Date(),
-      });
+      };
     }
 
     setDraggedItem(null);
@@ -490,9 +490,9 @@ export const PeotramChecklistVersionManager: React.FC = () => {
                     <div
                       key={element.id}
                       draggable={isEditing}
-                      onDragStart={() => handleDragStart(element.id)}
+                      onDragStart={() => handleDragStart(element.id}
                       onDragOver={handleDragOver}
-                      onDrop={() => handleDrop(element.id)}
+                      onDrop={() => handleDrop(element.id}
                       className="p-4 border rounded-lg space-y-3"
                     >
                       <div className="flex items-center gap-3">

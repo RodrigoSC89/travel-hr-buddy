@@ -34,7 +34,7 @@ export const ReservationFilters: React.FC<ReservationFiltersProps> = ({
       dateRange: null,
       searchTerm: "",
       crewMember: "all"
-    });
+};
   };
 
   const uniqueCrewMembers = Array.from(
@@ -72,7 +72,7 @@ export const ReservationFilters: React.FC<ReservationFiltersProps> = ({
             {/* Type Filter */}
             <Select
               value={filters.type}
-              onValueChange={(value) => handleFilterChange("type", value)}
+              onValueChange={(value) => handleFilterChange("type", value}
             >
               <SelectTrigger className="w-[150px]">
                 <SelectValue placeholder="Tipo" />
@@ -90,7 +90,7 @@ export const ReservationFilters: React.FC<ReservationFiltersProps> = ({
             {/* Status Filter */}
             <Select
               value={filters.status}
-              onValueChange={(value) => handleFilterChange("status", value)}
+              onValueChange={(value) => handleFilterChange("status", value}
             >
               <SelectTrigger className="w-[140px]">
                 <SelectValue placeholder="Status" />
@@ -107,7 +107,7 @@ export const ReservationFilters: React.FC<ReservationFiltersProps> = ({
             {/* Crew Member Filter */}
             <Select
               value={filters.crewMember}
-              onValueChange={(value) => handleFilterChange("crewMember", value)}
+              onValueChange={(value) => handleFilterChange("crewMember", value}
             >
               <SelectTrigger className="w-[160px]">
                 <SelectValue placeholder="Tripulante" />

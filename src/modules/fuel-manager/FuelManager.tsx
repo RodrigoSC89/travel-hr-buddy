@@ -247,14 +247,14 @@ const ConsumptionForm = ({ onClose }: { onClose: () => void }) => {
     avg_speed_knots: "",
     weather_conditions: "Calm",
     notes: "",
-  });
+};
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
     toast({
       title: "Consumo registrado",
       description: "O registro de consumo foi salvo com sucesso.",
-    });
+    };
     onClose();
   };
 
@@ -351,7 +351,7 @@ const AIPredictions = () => {
     toast({
       title: "Previsões atualizadas",
       description: "A IA recalculou as previsões de consumo.",
-    });
+    };
   };
 
   return (
@@ -465,7 +465,7 @@ const FuelManager = () => {
             <CardDescription>Adicione um novo registro de consumo de combustível</CardDescription>
           </CardHeader>
           <CardContent>
-            <ConsumptionForm onClose={() => setShowForm(false)} />
+            <ConsumptionForm onClose={() => setShowForm(false} />
           </CardContent>
         </Card>
       )}

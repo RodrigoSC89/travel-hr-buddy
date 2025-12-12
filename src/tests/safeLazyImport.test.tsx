@@ -13,7 +13,7 @@ describe("safeLazyImport", () => {
   beforeEach(() => {
     // Clear console mocks before each test
     vi.clearAllMocks();
-  });
+  };
 
   it("should successfully load and render a module", async () => {
     // Create a successful module import
@@ -31,7 +31,7 @@ describe("safeLazyImport", () => {
     // Wait for component to load
     await waitFor(() => {
       expect(screen.getByTestId("mock-component")).toBeInTheDocument();
-    });
+  };
 
     // Should render the actual component
     expect(screen.getByText("Test Component")).toBeInTheDocument();
@@ -52,7 +52,7 @@ describe("safeLazyImport", () => {
     // Check loading message contains module name
     expect(screen.getByText(/⏳ Carregando Dashboard.../i)).toBeInTheDocument();
     expect(screen.getByText(/Aguarde um momento/i)).toBeInTheDocument();
-  });
+  };
 
   it("should handle import errors and display error fallback", async () => {
     // Spy on console.error to verify error logging
@@ -69,7 +69,7 @@ describe("safeLazyImport", () => {
     // Wait for error state to appear
     await waitFor(() => {
       expect(screen.getByText(/⚠️ Falha ao carregar o módulo/i)).toBeInTheDocument();
-    });
+  };
 
     // Verify error message shows module name
     expect(screen.getByText("FailingModule")).toBeInTheDocument();
@@ -101,7 +101,7 @@ describe("safeLazyImport", () => {
     Object.defineProperty(window, "location", {
       writable: true,
       value: { reload: reloadMock },
-    });
+    };
 
     const mockImporter = vi.fn(() => 
       Promise.reject(new Error("Module load failed"))
@@ -115,7 +115,7 @@ describe("safeLazyImport", () => {
     // Wait for error state
     await waitFor(() => {
       expect(screen.getByText(/⚠️ Falha ao carregar o módulo/i)).toBeInTheDocument();
-    });
+  };
 
     // Click reload button
     const reloadButton = screen.getByRole("button", { name: /🔄 Atualizar página/i });
@@ -146,12 +146,12 @@ describe("safeLazyImport", () => {
     // Wait for component to load
     await waitFor(() => {
       expect(screen.getByTestId("props-component")).toBeInTheDocument();
-    });
+  };
 
     // Verify props were passed correctly
     expect(screen.getByText("Test Title")).toBeInTheDocument();
     expect(screen.getByText("42")).toBeInTheDocument();
-  });
+  };
 
   it("should have correct accessibility attributes in loading state", () => {
     const mockImporter = vi.fn(() => new Promise(() => {}));
@@ -163,7 +163,7 @@ describe("safeLazyImport", () => {
     // Check loading state has proper ARIA attributes
     const loadingContainer = screen.getByRole("status");
     expect(loadingContainer).toHaveAttribute("aria-live", "polite");
-  });
+  };
 
   it("should have correct accessibility attributes in error state", async () => {
     const consoleErrorSpy = vi.spyOn(console, "error").mockImplementation(() => {});
@@ -180,14 +180,14 @@ describe("safeLazyImport", () => {
     // Wait for error state
     await waitFor(() => {
       expect(screen.getByRole("alert")).toBeInTheDocument();
-    });
+  };
 
     // Check error state has proper ARIA attributes
     const errorContainer = screen.getByRole("alert");
     expect(errorContainer).toHaveAttribute("aria-live", "assertive");
 
     consoleErrorSpy.mockRestore();
-  });
+  };
 
   it("should set correct display name for debugging", () => {
     const mockImporter = vi.fn(() => 
@@ -201,7 +201,7 @@ describe("safeLazyImport", () => {
     // but we can verify it doesn't throw an error
     expect(LazyComponent).toBeDefined();
     expect(typeof LazyComponent).toBe("function");
-  });
+  };
 
   it("should handle network errors gracefully", async () => {
     const consoleErrorSpy = vi.spyOn(console, "error").mockImplementation(() => {});
@@ -219,12 +219,12 @@ describe("safeLazyImport", () => {
     // Wait for error state
     await waitFor(() => {
       expect(screen.getByText(/⚠️ Falha ao carregar o módulo/i)).toBeInTheDocument();
-    });
+  };
 
     // Verify appropriate error handling
     expect(screen.getByText("NetworkErrorModule")).toBeInTheDocument();
     expect(consoleErrorSpy).toHaveBeenCalled();
 
     consoleErrorSpy.mockRestore();
-  });
-});
+  };
+};

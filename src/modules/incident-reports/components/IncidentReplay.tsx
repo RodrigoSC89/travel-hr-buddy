@@ -101,7 +101,7 @@ export const IncidentReplay: React.FC<IncidentReplayProps> = ({ incidentId, onCl
           return prev;
         }
         return prev + 1;
-      });
+  };
     }, 2000);
   };
 
@@ -443,6 +443,6 @@ export const IncidentReplay: React.FC<IncidentReplayProps> = ({ incidentId, onCl
       </div>
     </div>
   );
-};
+});
 
 export default IncidentReplay;

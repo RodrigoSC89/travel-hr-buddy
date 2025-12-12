@@ -295,7 +295,7 @@ const EnhancedUnifiedDashboard = () => {
     toast({
       title: "Dashboard atualizado",
       description: "Dados atualizados com sucesso",
-    });
+    };
   };
 
   const handleKPIToggle = (kpi: string) => {
@@ -311,7 +311,7 @@ const EnhancedUnifiedDashboard = () => {
     callback: refreshData,
     interval: 60000,
     enabled: isAutoUpdate,
-  });
+  };
 
   const getStatusIcon = (type: string) => {
     switch (type) {

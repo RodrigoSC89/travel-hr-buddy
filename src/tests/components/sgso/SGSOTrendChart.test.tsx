@@ -29,7 +29,7 @@ describe("SGSOTrendChart", () => {
     
     await waitFor(() => {
       expect(screen.getByText(/📈 Evolução dos Riscos SGSO/i)).toBeDefined();
-    });
+  });
   });
 
   it("should render loading state initially", () => {
@@ -49,7 +49,7 @@ describe("SGSOTrendChart", () => {
     
     await waitFor(() => {
       expect(screen.getByTestId("line-chart")).toBeDefined();
-    });
+  });
   });
 
   it("should fetch data from API when no custom data provided", async () => {
@@ -67,7 +67,7 @@ describe("SGSOTrendChart", () => {
     
     await waitFor(() => {
       expect(mockFetch).toHaveBeenCalledWith("/api/bi/sgso-trend");
-    });
+  });
   });
 
   it("should use sample data when API fails and no custom data provided", async () => {
@@ -77,7 +77,7 @@ describe("SGSOTrendChart", () => {
     
     await waitFor(() => {
       expect(screen.getByTestId("line-chart")).toBeDefined();
-    });
+  });
   });
 
   it("should render chart description", async () => {
@@ -87,7 +87,7 @@ describe("SGSOTrendChart", () => {
     
     await waitFor(() => {
       expect(screen.getByText(/Tendência mensal dos incidentes classificados/i)).toBeDefined();
-    });
+  });
   });
 
   it("should display 'no data' message when chart data is empty", async () => {
@@ -101,7 +101,7 @@ describe("SGSOTrendChart", () => {
     
     await waitFor(() => {
       expect(screen.getByText(/Nenhum dado disponível para exibição/i)).toBeDefined();
-    });
+  });
   });
 
   it("should not fetch from API when custom data is provided", async () => {
@@ -113,7 +113,7 @@ describe("SGSOTrendChart", () => {
     
     await waitFor(() => {
       expect(mockFetch).not.toHaveBeenCalled();
-    });
+  });
   });
 
   it("should handle API error gracefully", async () => {
@@ -125,7 +125,7 @@ describe("SGSOTrendChart", () => {
       // Should still render with sample data, no error message
       expect(screen.queryByText(/error/i)).toBeNull();
       expect(screen.getByTestId("line-chart")).toBeDefined();
-    });
+  });
   });
 
   it("should format date correctly in Portuguese", async () => {
@@ -137,7 +137,7 @@ describe("SGSOTrendChart", () => {
     
     await waitFor(() => {
       expect(screen.getByTestId("line-chart")).toBeDefined();
-    });
+  });
   });
 
   it("should handle multiple risk levels in data", async () => {
@@ -152,7 +152,7 @@ describe("SGSOTrendChart", () => {
     
     await waitFor(() => {
       expect(screen.getByTestId("line-chart")).toBeDefined();
-    });
+  });
   });
 
   it("should render card component", async () => {
@@ -163,6 +163,6 @@ describe("SGSOTrendChart", () => {
     await waitFor(() => {
       // Card should be rendered (checking for the outer card structure)
       expect(container.querySelector("[class*=\"card\"]")).toBeDefined();
-    });
+  });
   });
 });

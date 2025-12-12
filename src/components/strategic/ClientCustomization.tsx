@@ -175,7 +175,7 @@ export const ClientCustomization = memo(() => {
     toast({
       title: "Tema Salvo",
       description: "As configurações de tema foram aplicadas com sucesso.",
-    });
+    };
   };
 
   const cloneOrganization = (orgId: string) => {
@@ -192,7 +192,7 @@ export const ClientCustomization = memo(() => {
       toast({
         title: "Organização Clonada",
         description: "Uma cópia da organização foi criada com sucesso.",
-      });
+      };
     }
   };
 
@@ -626,4 +626,4 @@ export const ClientCustomization = memo(() => {
       </Tabs>
     </div>
   );
-};
+});

@@ -78,7 +78,7 @@ export const AIPricePredictor: React.FC = () => {
         title: "Campos obrigatórios",
         description: "Preencha o nome do produto e a URL",
         variant: "destructive"
-      });
+      };
       return;
     }
 
@@ -90,7 +90,7 @@ export const AIPricePredictor: React.FC = () => {
           product_name: selectedProduct,
           product_url: productUrl
         }
-      });
+      };
 
       const currentPrice = priceData?.price || 0;
 
@@ -106,7 +106,7 @@ export const AIPricePredictor: React.FC = () => {
       toast({
         title: "Previsão gerada!",
         description: `Análise de IA criada para ${selectedProduct}`,
-      });
+      };
 
       // Clear form
       setSelectedProduct("");
@@ -120,7 +120,7 @@ export const AIPricePredictor: React.FC = () => {
         title: "Erro",
         description: "Não foi possível gerar a previsão",
         variant: "destructive"
-      });
+      };
     } finally {
       setIsLoading(false);
     }
@@ -488,4 +488,4 @@ export const AIPricePredictor: React.FC = () => {
       )}
     </div>
   );
-};
+});

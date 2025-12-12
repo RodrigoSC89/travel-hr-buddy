@@ -47,7 +47,7 @@ describe("ComplianceByVesselChart", () => {
 
     await waitFor(() => {
       expect(screen.getByText(/Conformidade de Planos de Ação por Navio/i)).toBeDefined();
-    });
+  });
   });
 
   it("should render error state and sample data on fetch failure", async () => {
@@ -58,7 +58,7 @@ describe("ComplianceByVesselChart", () => {
     await waitFor(() => {
       expect(screen.getByText(/Erro ao carregar dados de conformidade por navio/i)).toBeDefined();
       expect(screen.getByText(/exibindo dados de exemplo/i)).toBeDefined();
-    });
+  });
   });
 
   it("should display description text", async () => {
@@ -81,6 +81,6 @@ describe("ComplianceByVesselChart", () => {
 
     await waitFor(() => {
       expect(screen.getByText(/Status dos planos de ação de incidentes DP por embarcação/i)).toBeDefined();
-    });
+  });
   });
 });

@@ -76,7 +76,7 @@ export const IMCADPChecklist = memo(function({ selectedDPClass, auditData, setAu
                               </div>
                               <Select
                                 value={auditData[item.id]?.status || ""}
-                                onValueChange={(v) => updateItem(item.id, "status", v)}
+                                onValueChange={(v) => updateItem(item.id, "status", v}
                               >
                                 <SelectTrigger className="w-[140px]">
                                   <SelectValue placeholder="Status" />

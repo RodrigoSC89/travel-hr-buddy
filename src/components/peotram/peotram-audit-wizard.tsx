@@ -176,7 +176,7 @@ export const PeotramAuditWizard: React.FC<PeotramAuditWizardProps> = ({
     observations: "",
     auditors: [],
     auditees: []
-  });
+};
   const [elements, setElements] = useState<AuditElement[]>(PEOTRAM_ELEMENTS);
   const [isSaving, setIsSaving] = useState(false);
   const { toast } = useToast();
@@ -213,7 +213,7 @@ export const PeotramAuditWizard: React.FC<PeotramAuditWizardProps> = ({
       }
       
       return newElements;
-    });
+    };
   };
 
   const handleSave = async () => {
@@ -260,7 +260,7 @@ export const PeotramAuditWizard: React.FC<PeotramAuditWizardProps> = ({
     toast({
       title: "📎 Upload de Arquivo",
       description: "Selecione arquivos PDF, imagens ou documentos como evidência"
-    });
+    };
     // TODO: Implement file upload dialog
   };
 
@@ -268,7 +268,7 @@ export const PeotramAuditWizard: React.FC<PeotramAuditWizardProps> = ({
     toast({
       title: "📷 Captura de Foto",
       description: "Tire uma foto diretamente como evidência da auditoria"
-    });
+    };
     // TODO: Implement camera capture functionality
   };
 
@@ -276,7 +276,7 @@ export const PeotramAuditWizard: React.FC<PeotramAuditWizardProps> = ({
     toast({
       title: "🎙️ Gravação de Áudio",
       description: "Grave notas de voz ou observações verbais da auditoria"
-    });
+    };
     // TODO: Implement audio recording functionality
   };
 
@@ -739,7 +739,7 @@ export const PeotramAuditWizard: React.FC<PeotramAuditWizardProps> = ({
         </div>
       </div>
     );
-  };
+  });
 
   const renderReviewStep = () => (
     <div className="space-y-6">

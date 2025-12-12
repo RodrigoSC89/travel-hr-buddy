@@ -90,7 +90,7 @@ export const AuditTrailViewer: React.FC = () => {
           title: "Erro",
           description: "Não foi possível carregar os logs de auditoria.",
           variant: "destructive",
-        });
+        };
         return;
       }
 
@@ -115,7 +115,7 @@ export const AuditTrailViewer: React.FC = () => {
       log.action.toLowerCase().includes(searchLower) ||
       log.module_accessed.toLowerCase().includes(searchLower)
     );
-  });
+  };
 
   const getResultConfig = (result: string) => {
     return RESULT_CONFIG[result] || RESULT_CONFIG.success;
@@ -283,4 +283,4 @@ export const AuditTrailViewer: React.FC = () => {
       </div>
     </RoleGuard>
   );
-};
+});

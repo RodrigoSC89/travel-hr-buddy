@@ -65,7 +65,7 @@ export const ReservationCalendarView: React.FC<ReservationCalendarViewProps> = (
         date: new Date(currentDateIter),
         isCurrentMonth: currentDateIter.getMonth() === month,
         reservations: dayReservations
-      });
+      };
       
       currentDateIter.setDate(currentDateIter.getDate() + 1);
     }
@@ -85,7 +85,7 @@ export const ReservationCalendarView: React.FC<ReservationCalendarViewProps> = (
       
       // Check if reservation spans this day
       return startDate <= dayEnd && endDate >= dayStart;
-    });
+  };
   };
 
   const getStatusColor = (status: string) => {

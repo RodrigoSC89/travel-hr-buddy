@@ -282,4 +282,4 @@ export const AutonomousAgentPanel = memo(function() {
       </CardContent>
     </Card>
   );
-}
+});

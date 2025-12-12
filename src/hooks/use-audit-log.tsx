@@ -93,7 +93,7 @@ export const useAuditLog = memo(() => {
         p_resource_id: resourceId ?? undefined,
         p_status: status,
         p_details: mergedDetails,
-      });
+      };
 
       if (error) {
         return null;
@@ -155,7 +155,7 @@ export const useAuditLog = memo(() => {
     logFailure,
     logError,
   };
-};
+});
 
 /**
  * HOC to wrap components with automatic audit logging

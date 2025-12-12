@@ -70,7 +70,7 @@ export const KnowledgeManagement: React.FC = () => {
     totalViews: 0,
     topModules: [],
     topContent: []
-  });
+  };
 
   const modules = [
     { id: "all", name: "Todos os Módulos" },
@@ -146,14 +146,14 @@ export const KnowledgeManagement: React.FC = () => {
         totalViews,
         topModules,
         topContent
-      });
+      };
 
     } catch (error) {
       toast({
         title: "Erro ao carregar",
         description: "Não foi possível carregar os itens da base de conhecimento",
         variant: "destructive",
-      });
+      };
     }
   }, [toast]);
 
@@ -170,7 +170,7 @@ export const KnowledgeManagement: React.FC = () => {
     const matchesType = selectedType === "all" || item.type === selectedType;
     
     return matchesSearch && matchesModule && matchesType;
-  });
+  };
 
   const handleCreateNew = () => {
     setEditingItem({
@@ -190,7 +190,7 @@ export const KnowledgeManagement: React.FC = () => {
       helpful_votes: 0,
       steps: [],
       metadata: {}
-    });
+    };
     setIsEditDialogOpen(true);
   };
 
@@ -226,7 +226,7 @@ export const KnowledgeManagement: React.FC = () => {
         toast({
           title: "Item atualizado",
           description: "O conteúdo foi atualizado com sucesso",
-        });
+        };
       } else {
         // Criar novo item
         const { error } = await supabase
@@ -249,7 +249,7 @@ export const KnowledgeManagement: React.FC = () => {
         toast({
           title: "Item criado",
           description: "Novo conteúdo adicionado à base de conhecimento",
-        });
+        };
       }
       
       setIsEditDialogOpen(false);
@@ -261,7 +261,7 @@ export const KnowledgeManagement: React.FC = () => {
         title: "Erro",
         description: "Não foi possível salvar o item",
         variant: "destructive",
-      });
+      };
     }
   };
 
@@ -278,7 +278,7 @@ export const KnowledgeManagement: React.FC = () => {
         toast({
           title: "Item excluído",
           description: "O conteúdo foi removido da base de conhecimento",
-        });
+        };
 
         loadKnowledgeItems(); // Recarregar dados
       } catch (error) {
@@ -286,7 +286,7 @@ export const KnowledgeManagement: React.FC = () => {
           title: "Erro",
           description: "Não foi possível excluir o item",
           variant: "destructive",
-        });
+        };
       }
     }
   };
@@ -303,7 +303,7 @@ export const KnowledgeManagement: React.FC = () => {
     toast({
       title: "Exportação iniciada",
       description: "Base de conhecimento exportada com sucesso",
-    });
+    };
   };
 
   const getModuleName = (moduleId: string) => {

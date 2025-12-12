@@ -145,7 +145,7 @@ const IntelligentDocumentManager = () => {
                          doc.tags.some(tag => tag.toLowerCase().includes(searchTerm.toLowerCase()));
     const matchesCategory = selectedCategory === "all" || doc.category === selectedCategory;
     return matchesSearch && matchesCategory;
-  });
+  };
 
   const getStatusIcon = (status: string) => {
     switch (status) {
@@ -208,7 +208,7 @@ const IntelligentDocumentManager = () => {
           toast({
             title: "Upload concluído",
             description: `${files.length} arquivo(s) enviado(s) com sucesso`
-          });
+          };
           
           // Add new document to list
           const newDoc: Document = {
@@ -244,7 +244,7 @@ const IntelligentDocumentManager = () => {
     toast({
       title: "Documento excluído",
       description: "O documento foi removido permanentemente"
-    });
+    };
   };
 
   const analyzeDocument = (id: string) => {
@@ -266,7 +266,7 @@ const IntelligentDocumentManager = () => {
       toast({
         title: "Análise IA concluída",
         description: "Documento analisado com sucesso"
-      });
+      };
     }, 3000);
   };
 
@@ -274,7 +274,7 @@ const IntelligentDocumentManager = () => {
     toast({
       title: "Link de compartilhamento",
       description: "Link copiado para a área de transferência"
-    });
+    };
   };
 
   return (

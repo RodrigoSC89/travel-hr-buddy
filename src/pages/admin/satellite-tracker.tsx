@@ -75,7 +75,7 @@ export default function SatelliteTracker() {
             title: "Satellite Alert",
             description: payload.new.title,
             variant: payload.new.severity === "critical" ? "destructive" : "default",
-          });
+          };
           fetchAlerts();
         }
       )
@@ -118,7 +118,7 @@ export default function SatelliteTracker() {
         title: "Error",
         description: "Failed to load satellites",
         variant: "destructive",
-      });
+      };
     } finally {
       setLoading(false);
     }
@@ -222,7 +222,7 @@ export default function SatelliteTracker() {
       const { data, error } = await supabase.rpc("start_tracking_session", {
         p_satellite_id: satelliteId,
         p_tracking_mode: "real-time"
-      });
+      };
 
       if (error) throw error;
 
@@ -232,14 +232,14 @@ export default function SatelliteTracker() {
       toast({
         title: "Tracking Started",
         description: "Satellite tracking session initiated",
-      });
+      };
     } catch (error) {
       logger.error("Error starting satellite tracking", { error, satelliteId });
       toast({
         title: "Error",
         description: "Failed to start tracking session",
         variant: "destructive",
-      });
+      };
     }
   };
 
@@ -249,7 +249,7 @@ export default function SatelliteTracker() {
     try {
       const { error } = await supabase.rpc("end_tracking_session", {
         p_session_id: trackingSessionId
-      });
+      };
 
       if (error) throw error;
 
@@ -259,7 +259,7 @@ export default function SatelliteTracker() {
       toast({
         title: "Tracking Stopped",
         description: "Satellite tracking session ended",
-      });
+      };
     } catch (error) {
       logger.error("Error stopping satellite tracking", { error, trackingSessionId });
     }
@@ -269,14 +269,14 @@ export default function SatelliteTracker() {
     try {
       const { error } = await supabase.rpc("resolve_satellite_alert", {
         p_alert_id: alertId
-      });
+      };
 
       if (error) throw error;
 
       toast({
         title: "Alert Resolved",
         description: "Satellite alert marked as resolved",
-      });
+      };
 
       fetchAlerts();
     } catch (error) {

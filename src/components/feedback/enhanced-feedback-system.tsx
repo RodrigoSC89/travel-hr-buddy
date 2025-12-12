@@ -174,7 +174,7 @@ export const EnhancedFeedbackSystem: React.FC = () => {
         title: "Erro",
         description: "Falha ao carregar feedbacks",
         variant: "destructive"
-      });
+      };
     } finally {
       setIsLoading(false);
     }
@@ -187,7 +187,7 @@ export const EnhancedFeedbackSystem: React.FC = () => {
           title: "Campos obrigatórios",
           description: "Preencha todos os campos obrigatórios",
           variant: "destructive"
-        });
+        };
         return;
       }
 
@@ -195,7 +195,7 @@ export const EnhancedFeedbackSystem: React.FC = () => {
       toast({
         title: "Feedback enviado",
         description: "Obrigado pelo seu feedback! Analisaremos em breve.",
-      });
+      };
 
       // Resetar formulário
       setNewFeedback({
@@ -204,7 +204,7 @@ export const EnhancedFeedbackSystem: React.FC = () => {
         title: "",
         description: "",
         rating: 5
-      });
+      };
 
       // Recarregar feedbacks
       loadFeedbacks();
@@ -214,7 +214,7 @@ export const EnhancedFeedbackSystem: React.FC = () => {
         title: "Erro",
         description: "Falha ao enviar feedback",
         variant: "destructive"
-      });
+      };
     }
   };
 
@@ -256,7 +256,7 @@ export const EnhancedFeedbackSystem: React.FC = () => {
       );
     }
     return true;
-  });
+  };
 
   useEffect(() => {
     loadFeedbacks();
@@ -539,7 +539,7 @@ export const EnhancedFeedbackSystem: React.FC = () => {
 
               <div>
                 <Label htmlFor="rating">Avaliação Geral (1-5)</Label>
-                <Select value={newFeedback.rating.toString()} onValueChange={(value) => setNewFeedback({...newFeedback, rating: Number(value)})}>
+                <Select value={newFeedback.rating.toString()} onValueChange={(value) => setNewFeedback({...newFeedback, rating: Number(value})}>
                   <SelectTrigger>
                     <SelectValue />
                   </SelectTrigger>
@@ -563,4 +563,4 @@ export const EnhancedFeedbackSystem: React.FC = () => {
       </Tabs>
     </div>
   );
-};
+});

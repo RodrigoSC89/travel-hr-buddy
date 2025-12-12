@@ -142,7 +142,7 @@ export default function WorkflowCommandCenter() {
     const matchesCategory = categoryFilter === "all" || w.category === categoryFilter;
     const matchesPriority = priorityFilter === "all" || w.priority === priorityFilter;
     return matchesSearch && matchesStatus && matchesCategory && matchesPriority;
-  });
+  };
 
   const handleClearFilters = useCallback(() => {
     setSearchTerm("");
@@ -168,7 +168,7 @@ export default function WorkflowCommandCenter() {
       priority: newWorkflowData.priority as unknown,
       status: "draft",
       steps: [],
-    });
+    };
     setShowNewWorkflow(false);
     setNewWorkflowData({ name: "", description: "", category: "custom", priority: "medium" });
   };
@@ -183,7 +183,7 @@ export default function WorkflowCommandCenter() {
       steps: template.steps,
       estimated_duration: template.estimated_duration,
       tags: template.tags,
-    });
+    };
     toast({ title: "Template aplicado", description: `Workflow "${template.name}" criado` });
   };
 
@@ -827,7 +827,7 @@ export default function WorkflowCommandCenter() {
         </Dialog>
 
         {/* Visual Workflow Details Dialog */}
-        <Dialog open={!!selectedVisualWorkflow} onOpenChange={() => setSelectedVisualWorkflow(null)}>
+        <Dialog open={!!selectedVisualWorkflow} onOpenChange={() => setSelectedVisualWorkflow(null}>
           <DialogContent className="max-w-3xl">
             <DialogHeader>
               <DialogTitle className="flex items-center gap-2">

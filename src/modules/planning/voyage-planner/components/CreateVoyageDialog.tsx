@@ -39,7 +39,7 @@ const CreateVoyageDialog: React.FC<CreateVoyageDialogProps> = ({
     destinationId: "",
     vesselName: "",
     departureDate: "",
-  });
+};
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();

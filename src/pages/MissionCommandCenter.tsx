@@ -111,7 +111,7 @@ const MissionCommandCenter: React.FC = () => {
     status: "planned",
     description: "",
     location: ""
-  });
+  };
 
   // Mission Control state
   const [missions, setMissions] = useState<Mission[]>([]);
@@ -222,7 +222,7 @@ const MissionCommandCenter: React.FC = () => {
       status: "planned",
       description: "",
       location: ""
-    });
+    };
     setEditingLog(null);
   };
 
@@ -521,7 +521,7 @@ const MissionCommandCenter: React.FC = () => {
             <Card className="p-4 bg-zinc-800/50 border-zinc-700">
               <div className="flex items-center gap-4">
                 <Filter className="h-4 w-4" />
-                <Select value={statusFilter || "all"} onValueChange={(value) => setStatusFilter(value === "all" ? "" : value)}>
+                <Select value={statusFilter || "all"} onValueChange={(value) => setStatusFilter(value === "all" ? "" : value}>
                   <SelectTrigger className="w-48 bg-zinc-900 border-zinc-700">
                     <SelectValue placeholder="Filter by status" />
                   </SelectTrigger>
@@ -577,7 +577,7 @@ const MissionCommandCenter: React.FC = () => {
                           variant="outline"
                           size="sm"
                           className="border-zinc-600 hover:bg-zinc-700"
-                          onClick={() => log.id && handleDelete(log.id)}
+                          onClick={() => log.id && handleDelete(log.id}
                         >
                           <Trash2 className="h-4 w-4" />
                         </Button>

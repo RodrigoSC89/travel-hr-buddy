@@ -25,7 +25,7 @@ export default function TestDashboard() {
       })
       .catch(() => {
         setLogs(["Relatório de cobertura não disponível. Execute 'npm run test:coverage' para gerar."]);
-      });
+  };
   }, []);
 
   const validationChecks = [

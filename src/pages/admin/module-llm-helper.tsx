@@ -44,7 +44,7 @@ export const ModuleLLMHelper: React.FC = () => {
     includeDevelopment: true,
     includeExperimental: true,
     includeDeprecated: false,
-  });
+  };
 
   const [searchQuery, setSearchQuery] = useState("");
   const [selectedCategory, setSelectedCategory] = useState<string>("all");
@@ -96,13 +96,13 @@ export const ModuleLLMHelper: React.FC = () => {
       toast({
         title: "Copiado!",
         description: "Prompt copiado para a área de transferência",
-      });
+      };
     } catch (error) {
       toast({
         title: "Erro",
         description: "Falha ao copiar prompt",
         variant: "destructive",
-      });
+      };
     }
   };
 
@@ -126,7 +126,7 @@ export const ModuleLLMHelper: React.FC = () => {
     toast({
       title: "Exportado!",
       description: `${allPrompts.length} prompts exportados em ${format.toUpperCase()}`,
-    });
+    };
   };
 
   const handleSendToAI = () => {
@@ -134,7 +134,7 @@ export const ModuleLLMHelper: React.FC = () => {
     toast({
       title: "Enviado para IA",
       description: "Prompt enviado para processamento",
-    });
+    };
   };
 
   return (

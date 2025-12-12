@@ -237,4 +237,4 @@ export const ActiveSessionDisplay = memo(function() {
       </Card>
     </div>
   );
-}
+});

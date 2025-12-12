@@ -70,7 +70,7 @@ export const TelemetryAlerts = memo(function({ alerts: initialAlerts, onAlertsCh
         alert.message.toLowerCase().includes(searchQuery.toLowerCase());
       
       return matchesType && matchesSeverity && matchesSearch;
-    });
+  };
   }, [alerts, filter, severityFilter, searchQuery]);
 
   const unreadCount = alerts.filter(a => !a.read).length;

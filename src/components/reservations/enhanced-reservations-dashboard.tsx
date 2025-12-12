@@ -78,7 +78,7 @@ export const EnhancedReservationsDashboard: React.FC = () => {
     dateRange: null,
     searchTerm: "",
     crewMember: "all"
-  });
+  };
 
   const { toast } = useToast();
   const { user } = useAuth();
@@ -146,7 +146,7 @@ export const EnhancedReservationsDashboard: React.FC = () => {
         title: "Erro",
         description: "Erro ao carregar reservas",
         variant: "destructive"
-      });
+      };
       setReservations([]);
     } finally {
       setLoading(false);
@@ -171,7 +171,7 @@ export const EnhancedReservationsDashboard: React.FC = () => {
           "Verifique horários de check-in/check-out"
         ] : []
       };
-    });
+    };
   };
 
   const filteredReservations = reservations.filter(reservation => {
@@ -186,7 +186,7 @@ export const EnhancedReservationsDashboard: React.FC = () => {
       if (startDate < filterStart || startDate > filterEnd) return false;
     }
     return true;
-  });
+  };
 
   const handleReservationSaved = () => {
     setIsFormOpen(false);
@@ -213,14 +213,14 @@ export const EnhancedReservationsDashboard: React.FC = () => {
       toast({
         title: "Sucesso",
         description: "Reserva excluída com sucesso!"
-      });
+      };
       fetchReservations();
     } catch (error) {
       toast({
         title: "Erro",
         description: "Erro ao excluir reserva",
         variant: "destructive"
-      });
+      };
     }
   };
 
@@ -311,7 +311,7 @@ export const EnhancedReservationsDashboard: React.FC = () => {
           {/* Filters */}
           <ReservationFilters 
             filters={filters} 
-            onFiltersChange={(newFilters) => setFilters(newFilters as unknown)}
+            onFiltersChange={(newFilters) => setFilters(newFilters as unknown}
             reservations={reservations}
           />
 
@@ -421,4 +421,4 @@ export const EnhancedReservationsDashboard: React.FC = () => {
       />
     </div>
   );
-};
+});

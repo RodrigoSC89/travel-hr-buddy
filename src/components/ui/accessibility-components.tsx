@@ -32,7 +32,7 @@ export const AccessibleLoading: React.FC<{
       <SrOnly>{message}</SrOnly>
     </div>
   );
-};
+});
 
 /**
  * Accessible Button with proper ARIA labels
@@ -70,7 +70,7 @@ export const AccessibleButton: React.FC<AccessibleButtonProps> = ({
       {children}
     </button>
   );
-};
+});
 
 /**
  * Skip to Main Content Link (WCAG 2.1 requirement)
@@ -101,7 +101,7 @@ export const LiveRegion: React.FC<{
       {children}
     </div>
   );
-};
+});
 
 export default {
   SrOnly,

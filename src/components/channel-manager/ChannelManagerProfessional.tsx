@@ -458,7 +458,7 @@ export default function ChannelManagerProfessional() {
       const matchesFavorites = !showFavoritesOnly || ch.is_favorite;
       
       return matchesSearch && matchesType && matchesStatus && matchesFavorites;
-    });
+  };
   }, [channels, searchQuery, filterType, filterStatus, showFavoritesOnly]);
 
   // Channel messages
@@ -603,7 +603,7 @@ export default function ChannelManagerProfessional() {
     toast({
       title: channel.is_active ? "Canal desativado" : "Canal ativado",
       description: `${channel.name} foi ${channel.is_active ? "desativado" : "ativado"}.`,
-    });
+    };
   }, [toast]);
 
   const handleToggleFavorite = useCallback((channel: Channel) => {
@@ -612,7 +612,7 @@ export default function ChannelManagerProfessional() {
     ));
     toast({
       title: channel.is_favorite ? "Removido dos favoritos" : "Adicionado aos favoritos",
-    });
+    };
   }, [toast]);
 
   const handleToggleMute = useCallback((channel: Channel) => {
@@ -621,7 +621,7 @@ export default function ChannelManagerProfessional() {
     ));
     toast({
       title: channel.is_muted ? "Notificações ativadas" : "Notificações silenciadas",
-    });
+    };
   }, [toast]);
 
   const handleDeleteChannel = useCallback(() => {
@@ -642,7 +642,7 @@ export default function ChannelManagerProfessional() {
           prompt: `Análise de canal de comunicação: ${aiPrompt}\n\nContexto: Canal "${selectedChannel?.name}" com ${selectedChannel?.member_count} membros.`,
           context: "channel_management",
         },
-      });
+      };
 
       if (error) throw error;
       
@@ -1262,7 +1262,7 @@ export default function ChannelManagerProfessional() {
                                 <Label>Notificações</Label>
                                 <p className="text-xs text-muted-foreground">Receber alertas de novas mensagens</p>
                               </div>
-                              <Switch checked={!selectedChannel.is_muted} onCheckedChange={() => handleToggleMute(selectedChannel)} />
+                              <Switch checked={!selectedChannel.is_muted} onCheckedChange={() => handleToggleMute(selectedChannel} />
                             </div>
                             
                             <Separator />
@@ -1284,7 +1284,7 @@ export default function ChannelManagerProfessional() {
                               </div>
                               <Switch 
                                 checked={selectedChannel.is_active} 
-                                onCheckedChange={() => handleToggleChannel(selectedChannel)} 
+                                onCheckedChange={() => handleToggleChannel(selectedChannel} 
                               />
                             </div>
                           </div>

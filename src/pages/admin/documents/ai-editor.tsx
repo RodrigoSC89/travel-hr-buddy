@@ -64,7 +64,7 @@ export default function DocumentAIEditorPage() {
       toast({
         title: "Template aplicado",
         description: "O template foi carregado no editor.",
-      });
+      };
     }
   }, [editor]);
 
@@ -74,7 +74,7 @@ export default function DocumentAIEditorPage() {
         title: "Erro ao salvar",
         description: "Por favor, preencha o título.",
         variant: "destructive",
-      });
+      };
       return;
     }
 
@@ -85,7 +85,7 @@ export default function DocumentAIEditorPage() {
         title: "Erro ao salvar",
         description: "O documento está vazio.",
         variant: "destructive",
-      });
+      };
       return;
     }
 
@@ -98,7 +98,7 @@ export default function DocumentAIEditorPage() {
           title: "Erro de autenticação",
           description: "Você precisa estar logado para salvar documentos.",
           variant: "destructive",
-        });
+        };
         return;
       }
 
@@ -119,14 +119,14 @@ export default function DocumentAIEditorPage() {
       toast({
         title: "Documento salvo com sucesso",
         description: "O documento foi salvo no Supabase.",
-      });
+      };
     } catch (err) {
       logger.error("Error saving document:", err);
       toast({
         title: "Erro ao salvar documento",
         description: "Não foi possível salvar o documento.",
         variant: "destructive",
-      });
+      };
     } finally {
       setSaving(false);
     }
@@ -138,7 +138,7 @@ export default function DocumentAIEditorPage() {
         title: "Erro ao exportar",
         description: "Por favor, preencha o título.",
         variant: "destructive",
-      });
+      };
       return;
     }
 
@@ -149,7 +149,7 @@ export default function DocumentAIEditorPage() {
         title: "Erro ao exportar",
         description: "O documento está vazio.",
         variant: "destructive",
-      });
+      };
       return;
     }
 
@@ -181,21 +181,21 @@ export default function DocumentAIEditorPage() {
         }
         pdf.text(line, margin, y);
         y += 7;
-      });
+  });
       
       pdf.save(`${title.replace(/[^a-z0-9]/gi, "_").toLowerCase()}.pdf`);
       
       toast({
         title: "PDF exportado com sucesso",
         description: "O documento foi exportado como PDF.",
-      });
+      };
     } catch (err) {
       logger.error("Error exporting PDF:", err);
       toast({
         title: "Erro ao exportar PDF",
         description: "Não foi possível exportar o documento.",
         variant: "destructive",
-      });
+      };
     } finally {
       setExporting(false);
     }
@@ -212,7 +212,7 @@ export default function DocumentAIEditorPage() {
         title: "Nenhum texto selecionado",
         description: "Por favor, selecione um trecho de texto para reescrever.",
         variant: "destructive",
-      });
+      };
       return;
     }
 
@@ -220,7 +220,7 @@ export default function DocumentAIEditorPage() {
     try {
       const { data, error } = await supabase.functions.invoke("rewrite-document", {
         body: { content: selectedText },
-      });
+      };
 
       if (error) throw error;
 
@@ -232,14 +232,14 @@ export default function DocumentAIEditorPage() {
       toast({
         title: "Texto reformulado com sucesso",
         description: "O trecho selecionado foi reformulado com IA.",
-      });
+      };
     } catch (err) {
       logger.error("Error rewriting text:", err);
       toast({
         title: "Erro ao reformular texto",
         description: "Não foi possível reformular o texto selecionado.",
         variant: "destructive",
-      });
+      };
     } finally {
       setRewriting(false);
     }

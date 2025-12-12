@@ -122,7 +122,7 @@ export const IMCAAuditSections = memo(function({ selectedDPClass, sectionScores 
         weightedSum += sectionScore * section.weight;
         totalWeight += section.weight;
       }
-    });
+    };
 
     return totalWeight > 0 ? Math.round(weightedSum / totalWeight) : 0;
   };

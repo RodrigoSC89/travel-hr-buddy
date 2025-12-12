@@ -329,7 +329,7 @@ const EmergencyMode = () => {
       title: "EMERGÊNCIA ATIVADA",
       description: selectedProtocol.title,
       variant: "destructive",
-    });
+    };
   };
 
   const completeStep = (stepId: string) => {
@@ -368,7 +368,7 @@ const EmergencyMode = () => {
           question: aiInput,
           elapsedTime,
         }
-      });
+      };
 
       const aiResponse: AIMessage = {
         role: "assistant",
@@ -492,7 +492,7 @@ const EmergencyMode = () => {
               <p className="text-muted-foreground">
                 Selecione o tipo de emergência para ativar o protocolo correspondente:
               </p>
-              <Select onValueChange={(v) => activateEmergency(v as EmergencyType)}>
+              <Select onValueChange={(v) => activateEmergency(v as EmergencyType}>
                 <SelectTrigger>
                   <SelectValue placeholder="Tipo de emergência" />
                 </SelectTrigger>
@@ -575,7 +575,7 @@ const EmergencyMode = () => {
                           size="sm"
                           variant={step.completed ? "default" : "outline"}
                           className={step.completed ? "bg-green-600" : ""}
-                          onClick={() => !step.completed && completeStep(step.id)}
+                          onClick={() => !step.completed && completeStep(step.id}
                           disabled={step.completed}
                         >
                           {step.completed ? (
@@ -691,6 +691,6 @@ const EmergencyMode = () => {
       </div>
     </div>
   );
-};
+});
 
 export default EmergencyMode;

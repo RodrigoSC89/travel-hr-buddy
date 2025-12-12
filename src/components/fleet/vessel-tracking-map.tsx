@@ -46,7 +46,7 @@ const VesselTrackingMap = () => {
           title: "Erro de Configuração",
           description: "Token do Mapbox não configurado",
           variant: "destructive"
-        });
+        };
       }
     };
 
@@ -73,7 +73,7 @@ const VesselTrackingMap = () => {
           zoom: 2,
           center: [-40, -15],
           pitch: 45,
-        });
+        };
 
         map.current = mapInstance;
 
@@ -168,7 +168,7 @@ const VesselTrackingMap = () => {
         title: "Erro",
         description: "Falha ao carregar dados das embarcações",
         variant: "destructive"
-      });
+      };
     }
   };
 
@@ -210,13 +210,13 @@ const VesselTrackingMap = () => {
           zoom: 10,
           duration: 2000
         });
-      });
+  });
 
       new mapboxgl.Marker(el)
         .setLngLat([vessel.longitude, vessel.latitude])
         .addTo(map.current!);
     });
-  };
+  });
 
   // Real-time updates with optimized polling
   useOptimizedPolling({
@@ -258,7 +258,7 @@ const VesselTrackingMap = () => {
         center: [vessel.longitude, vessel.latitude],
         zoom: 12,
         duration: 2000
-      });
+      };
       setSelectedVessel(vessel);
     }
   };

@@ -143,7 +143,7 @@ export const AutoEvidenceBuilder: React.FC = () => {
   const { generateEvidence, loading: aiLoading } = useAIAdvisor({
     profile: "inspector",
     language: "pt-BR",
-  });
+  };
 
   const filteredItems = evidenceItems.filter(item =>
     item.name.toLowerCase().includes(searchTerm.toLowerCase()) ||

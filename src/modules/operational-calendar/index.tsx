@@ -189,7 +189,7 @@ const OperationalCalendar = () => {
     priority: "medium",
     start: new Date(),
     end: addHours(new Date(), 2),
-  });
+  };
 
   const vessels = useMemo(() => {
     const uniqueVessels = [...new Set(events.filter(e => e.vessel).map(e => e.vessel))];
@@ -201,7 +201,7 @@ const OperationalCalendar = () => {
       if (filterType !== "all" && event.type !== filterType) return false;
       if (filterVessel !== "all" && event.vessel !== filterVessel) return false;
       return true;
-    });
+  };
   }, [events, filterType, filterVessel]);
 
   const eventStyleGetter = (event: CalendarEvent) => {
@@ -232,7 +232,7 @@ const OperationalCalendar = () => {
     try {
       const response = await supabase.functions.invoke("ai-calendar-optimizer", {
         body: { events }
-      });
+};
 
       if (response.data?.optimizedEvents) {
         setEvents(response.data.optimizedEvents);
@@ -274,7 +274,7 @@ const OperationalCalendar = () => {
       priority: "medium",
       start: new Date(),
       end: addHours(new Date(), 2),
-    });
+    };
     toast({ title: "Evento Criado", description: event.title });
   };
 
@@ -414,7 +414,7 @@ const OperationalCalendar = () => {
                 onSelectSlot={handleSelectSlot}
                 selectable
                 view={view}
-                onView={(v) => setView(v)}
+                onView={(v) => setView(v}
                 date={date}
                 onNavigate={setDate}
                 messages={{

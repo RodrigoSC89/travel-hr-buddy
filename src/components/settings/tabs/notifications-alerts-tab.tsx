@@ -46,7 +46,7 @@ export const NotificationsAlertsTab: React.FC<NotificationsAlertsTabProps> = ({
         ...settings.moduleSettings,
         [module]: enabled
       }
-    });
+};
   };
 
   const notificationTypes = [
@@ -230,7 +230,7 @@ export const NotificationsAlertsTab: React.FC<NotificationsAlertsTabProps> = ({
                   </div>
                   <Switch
                     checked={module.enabled}
-                    onCheckedChange={(enabled) => updateModuleSetting(module.id, enabled)}
+                    onCheckedChange={(enabled) => updateModuleSetting(module.id, enabled}
                   />
                 </div>
                 {index < moduleNotifications.length - 1 && <Separator className="mt-4" />}

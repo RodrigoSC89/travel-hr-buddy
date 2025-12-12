@@ -64,7 +64,7 @@ export function ThemeProvider({
       {children}
     </ThemeProviderContext.Provider>
   );
-};
+}
 
 export const useTheme = memo(() => {
   const context = useContext(ThemeProviderContext);
@@ -73,4 +73,4 @@ export const useTheme = memo(() => {
     throw new Error("useTheme must be used within a ThemeProvider");
 
   return context;
-};
+});

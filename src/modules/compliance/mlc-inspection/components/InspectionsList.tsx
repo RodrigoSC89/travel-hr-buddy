@@ -32,7 +32,7 @@ export const InspectionsList = memo(function({ onSelectInspection, onStatsUpdate
         title: "Error",
         description: "Failed to load inspections",
         variant: "destructive",
-      });
+      };
     } finally {
       setLoading(false);
     }

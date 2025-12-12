@@ -64,7 +64,7 @@ describe("ExecutionLogsPage Component", () => {
       // Check for date input placeholders
       const dateInputs = screen.getAllByPlaceholderText(/Data/);
       expect(dateInputs.length).toBeGreaterThan(0);
-    });
+  });
   });
 
   it("should render export buttons", async () => {
@@ -80,7 +80,7 @@ describe("ExecutionLogsPage Component", () => {
       
       const pdfButtons = screen.getAllByText("PDF");
       expect(pdfButtons.length).toBeGreaterThan(0);
-    });
+  });
   });
 
   it("should display loading state initially", () => {
@@ -145,7 +145,7 @@ describe("ExecutionLogsPage Component", () => {
 
     await waitFor(() => {
       expect(screen.getByText("Test Workflow")).toBeInTheDocument();
-    });
+  });
   });
 
   it("should display empty state when no executions exist", async () => {
@@ -166,8 +166,8 @@ describe("ExecutionLogsPage Component", () => {
 
     await waitFor(() => {
       expect(screen.getByText("Nenhuma execução encontrada")).toBeInTheDocument();
-    });
-  });
+  };
+  };
 
   it("should render date filter inputs", () => {
     render(

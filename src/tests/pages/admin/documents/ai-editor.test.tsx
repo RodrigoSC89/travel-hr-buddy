@@ -77,7 +77,7 @@ vi.mock("react-router-dom", async () => {
     ...actual,
     useNavigate: () => mockNavigate,
   };
-});
+  });
 
 // Mock jsPDF
 vi.mock("jspdf", () => ({
@@ -142,7 +142,7 @@ describe("DocumentAIEditorPage", () => {
 
     await waitFor(() => {
       expect(mockSetContent).toHaveBeenCalledWith("<p>Template content</p>");
-    });
+  });
 
     const toastMod: unknown = await import("@/hooks/use-toast");
     expect(toastMod.toast).toHaveBeenCalledWith(
@@ -188,8 +188,8 @@ describe("DocumentAIEditorPage", () => {
           title: "Documento salvo com sucesso",
         })
       );
-    });
-  });
+  };
+  };
 
   it("should export document as PDF", async () => {
     const toastMod: unknown = await import("@/hooks/use-toast");
@@ -212,7 +212,7 @@ describe("DocumentAIEditorPage", () => {
           title: "PDF exportado com sucesso",
         })
       );
-    });
+  });
   });
 
   it("should show validation error when saving without title", async () => {
@@ -227,7 +227,7 @@ describe("DocumentAIEditorPage", () => {
     // Wait for component to be ready
     await waitFor(() => {
       expect(screen.getByPlaceholderText("Título do Documento")).toBeInTheDocument();
-    });
+  });
 
     const saveButton = screen.getByText("Salvar no Supabase");
     fireEvent.click(saveButton);
@@ -237,5 +237,5 @@ describe("DocumentAIEditorPage", () => {
     
     // Verify that supabase.from was NOT called (validation failed)
     expect(supaMod.supabase.from).not.toHaveBeenCalled();
-  });
-});
+  };
+};

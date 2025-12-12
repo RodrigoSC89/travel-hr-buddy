@@ -22,6 +22,6 @@ export const PreloadManager = memo(function() {
   }, [location.pathname]);
 
   return null; // Este componente não renderiza nada
-}
+});
 
 export default PreloadManager;

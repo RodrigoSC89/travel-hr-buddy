@@ -27,7 +27,7 @@ export const SonarDataUpload = memo(function() {
         title: "Invalid file type",
         description: "Please upload a JSON, CSV, or TXT file",
         variant: "destructive",
-      });
+      };
       return;
     }
 
@@ -59,7 +59,7 @@ export const SonarDataUpload = memo(function() {
             obj[header.trim()] = values[index]?.trim();
             return obj;
           }, {} as Record<string, string>);
-        });
+  });
       } else {
         parsedData = { raw: content };
       }
@@ -119,7 +119,7 @@ export const SonarDataUpload = memo(function() {
       toast({
         title: "Upload successful",
         description: `File ${file.name} analyzed successfully. ${mockAlerts.length} alerts generated.`,
-      });
+      };
 
       setProgress(100);
       setTimeout(() => {
@@ -133,7 +133,7 @@ export const SonarDataUpload = memo(function() {
         title: "Upload failed",
         description: error instanceof Error ? error.message : "Failed to process file",
         variant: "destructive",
-      });
+      };
       setIsUploading(false);
       setProgress(0);
     }

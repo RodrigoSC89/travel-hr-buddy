@@ -134,7 +134,7 @@ export const RegulatorPortal: React.FC = () => {
     const matchesStatus = filterStatus === "all" || pkg.status === filterStatus;
     const matchesRegulator = filterRegulator === "all" || pkg.regulator === filterRegulator;
     return matchesSearch && matchesStatus && matchesRegulator;
-  });
+  };
 
   const stats = {
     total: packages.length,

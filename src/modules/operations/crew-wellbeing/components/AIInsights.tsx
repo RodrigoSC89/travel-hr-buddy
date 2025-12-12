@@ -34,13 +34,13 @@ export const AIInsights = memo(() => {
           title: "Erro",
           description: "Você precisa estar autenticado",
           variant: "destructive",
-        });
+        };
         return;
       }
 
       const { data, error } = await supabase.functions.invoke("crew-ai-analysis" as unknown, {
         body: { crewMemberId: user.id, analysisType: "wellbeing" }
-      });
+      };
 
       if (error) throw error;
 
@@ -49,14 +49,14 @@ export const AIInsights = memo(() => {
       toast({
         title: "Análise concluída",
         description: "A IA gerou insights sobre seu bem-estar",
-      });
+      };
     } catch (error) {
       console.error("Error requesting analysis:", error);
       toast({
         title: "Erro",
         description: "Não foi possível gerar análise",
         variant: "destructive",
-      });
+      };
     } finally {
       setIsAnalyzing(false);
     }
@@ -162,4 +162,4 @@ export const AIInsights = memo(() => {
       </CardContent>
     </Card>
   );
-};
+});

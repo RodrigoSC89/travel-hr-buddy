@@ -69,7 +69,7 @@ export const EnhancedChannelManager: React.FC = () => {
     description: "",
     channel_type: "general",
     max_members: 50
-  });
+  };
 
   useEffect(() => {
     loadChannels();
@@ -104,7 +104,7 @@ export const EnhancedChannelManager: React.FC = () => {
         title: "Error",
         description: "Failed to load channels",
         variant: "destructive"
-      });
+      };
     } finally {
       setLoading(false);
     }
@@ -165,9 +165,9 @@ export const EnhancedChannelManager: React.FC = () => {
           toast({
             title: "Connected",
             description: "Real-time updates enabled",
-          });
+          };
         }
-      });
+      };
   };
 
   const unsubscribeFromChannel = () => {
@@ -196,7 +196,7 @@ export const EnhancedChannelManager: React.FC = () => {
       toast({
         title: "Success",
         description: "Channel created successfully"
-      });
+      };
 
       setIsCreateOpen(false);
       resetForm();
@@ -207,7 +207,7 @@ export const EnhancedChannelManager: React.FC = () => {
         title: "Error",
         description: "Failed to create channel",
         variant: "destructive"
-      });
+      };
     }
   };
 
@@ -236,7 +236,7 @@ export const EnhancedChannelManager: React.FC = () => {
         title: "Error",
         description: "Failed to send message",
         variant: "destructive"
-      });
+      };
     }
   };
 
@@ -246,7 +246,7 @@ export const EnhancedChannelManager: React.FC = () => {
       description: "",
       channel_type: "general",
       max_members: 50
-    });
+    };
   };
 
   const getChannelTypeBadge = (type: string) => {

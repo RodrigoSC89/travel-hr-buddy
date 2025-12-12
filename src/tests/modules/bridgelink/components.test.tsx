@@ -17,31 +17,31 @@ describe("BridgeLink Components", () => {
 
       expect(screen.getByText(/Status do Sistema DP/i)).toBeInTheDocument();
       expect(screen.getByText(/🟢 Normal/i)).toBeInTheDocument();
-    });
+  });
 
     it("should render degradation status correctly", () => {
       render(<DPStatusCard status="Degradation" />);
 
       expect(screen.getByText(/🟡 Degradação/i)).toBeInTheDocument();
-    });
+  });
 
     it("should render critical status correctly", () => {
       render(<DPStatusCard status="Critical" />);
 
       expect(screen.getByText(/🔴 Crítico/i)).toBeInTheDocument();
-    });
+  });
 
     it("should render offline status correctly", () => {
       render(<DPStatusCard status="Offline" />);
 
       expect(screen.getByText(/⚫ Offline/i)).toBeInTheDocument();
-    });
+  });
 
     it("should render unknown status correctly", () => {
       render(<DPStatusCard status="Unknown" />);
 
       expect(screen.getByText(/❔ Desconhecido/i)).toBeInTheDocument();
-    });
+  });
   });
 
   describe("RiskAlertPanel", () => {
@@ -50,7 +50,7 @@ describe("BridgeLink Components", () => {
 
       expect(screen.getByText(/Alertas de Risco/i)).toBeInTheDocument();
       expect(screen.getByText(/Nenhum alerta ativo/i)).toBeInTheDocument();
-    });
+  });
 
     it("should render alerts correctly", () => {
       const mockAlerts: RiskAlert[] = [
@@ -142,7 +142,7 @@ describe("BridgeLink Components", () => {
 
       expect(screen.getByText(/Mapa de Decisão Contextual/i)).toBeInTheDocument();
       expect(screen.getByText(/Nenhum evento registrado/i)).toBeInTheDocument();
-    });
+  });
 
     it("should render events correctly", () => {
       const mockEvents: DPEvent[] = [

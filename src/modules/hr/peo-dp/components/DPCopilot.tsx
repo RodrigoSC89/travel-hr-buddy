@@ -112,15 +112,15 @@ export default function DPCopilot() {
         const transcript = event.results[0][0].transcript;
         setInput(transcript);
         setIsListening(false);
-      };
+      });
 
       recognitionRef.current.onerror = () => {
         setIsListening(false);
-      };
+      });
 
       recognitionRef.current.onend = () => {
         setIsListening(false);
-      };
+      });
     }
   }, []);
 
@@ -164,7 +164,7 @@ export default function DPCopilot() {
           },
           history: messages.slice(-6).map(m => ({ role: m.role, content: m.content }))
         }
-      });
+      };
 
       if (response.error) throw response.error;
 
@@ -290,7 +290,7 @@ Por favor, forneça mais detalhes sobre a situação específica que está enfre
         title: `ASOG: ${scenario.category}`,
         description: scenario.description,
         variant: level === "red" ? "destructive" : "default"
-      });
+      };
     }
   };
 

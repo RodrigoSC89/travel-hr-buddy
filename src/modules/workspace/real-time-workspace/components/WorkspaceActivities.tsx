@@ -182,7 +182,7 @@ export const WorkspaceActivities: React.FC<WorkspaceActivitiesProps> = ({
     toast({
       title: "Filtros limpos",
       description: "Mostrando todas as atividades",
-    });
+    };
   };
 
   const formatTime = (timestamp: string) => {
@@ -301,7 +301,7 @@ export const WorkspaceActivities: React.FC<WorkspaceActivitiesProps> = ({
                         >
                           <Checkbox
                             checked={selectedTypes.has(type.value)}
-                            onCheckedChange={() => toggleType(type.value)}
+                            onCheckedChange={() => toggleType(type.value}
                           />
                           <span className="text-xs">{type.label}</span>
                         </label>
@@ -327,7 +327,7 @@ export const WorkspaceActivities: React.FC<WorkspaceActivitiesProps> = ({
                         >
                           <Checkbox
                             checked={selectedPriorities.has(priority.value)}
-                            onCheckedChange={() => togglePriority(priority.value)}
+                            onCheckedChange={() => togglePriority(priority.value}
                           />
                           <span className="text-xs">{priority.label}</span>
                         </label>
@@ -375,7 +375,7 @@ export const WorkspaceActivities: React.FC<WorkspaceActivitiesProps> = ({
                           toast({
                             title: activity.action,
                             description: activity.description,
-                          });
+                          };
                         }}
                       >
                         <div className={`p-2 rounded-full ${getActivityColor(activity.type)} flex-shrink-0`}>

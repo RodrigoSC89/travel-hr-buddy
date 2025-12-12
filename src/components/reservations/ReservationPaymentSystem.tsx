@@ -82,7 +82,7 @@ export const ReservationPaymentSystem: React.FC = () => {
     provider: "google",
     auto_sync: true,
     send_reminders: true,
-  });
+  };
   const [processingPayment, setProcessingPayment] = useState(false);
 
   useEffect(() => {
@@ -115,7 +115,7 @@ export const ReservationPaymentSystem: React.FC = () => {
       currency: reservation.currency || "USD",
       payment_method: "stripe",
       reservation_id: reservation.id,
-    });
+    };
     setIsPaymentDialogOpen(true);
   };
 
@@ -178,7 +178,7 @@ export const ReservationPaymentSystem: React.FC = () => {
         type: "reservation_confirmation",
         priority: "high",
         status: "sent",
-      });
+      };
 
       toast.info("Confirmation email sent");
     } catch (error) {
@@ -198,7 +198,7 @@ export const ReservationPaymentSystem: React.FC = () => {
         type: "push_notification",
         priority: "medium",
         status: "sent",
-      });
+      };
     } catch (error) {
       console.error("Error sending push notification:", error);
       console.error("Error sending push notification:", error);
@@ -764,6 +764,6 @@ END:VCALENDAR`;
       </Dialog>
     </div>
   );
-};
+});
 
 export default ReservationPaymentSystem;

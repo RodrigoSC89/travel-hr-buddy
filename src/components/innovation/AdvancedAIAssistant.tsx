@@ -89,7 +89,7 @@ export const AdvancedAIAssistant = memo(() => {
     recentActions: ["Visualizou dashboard", "Analisou KPIs", "Criou workflow"],
     preferences: { language: "pt-BR", timezone: "America/Sao_Paulo" },
     workPatterns: { peakHours: "9-11", preferredTasks: ["analysis", "reports"] }
-  });
+  };
 
   const [quickActions] = useState<QuickAction[]>([
     { id: 1, label: "Análise de Performance", icon: BarChart3, prompt: "Faça uma análise detalhada da performance da equipe nos últimos 30 dias" },
@@ -199,7 +199,7 @@ export const AdvancedAIAssistant = memo(() => {
         title: "Erro na IA",
         description: "Não foi possível processar sua solicitação. Tente novamente.",
         variant: "destructive"
-      });
+      };
     } finally {
       setIsTyping(false);
     }

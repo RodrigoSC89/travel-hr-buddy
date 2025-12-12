@@ -176,7 +176,7 @@ export const AdvancedFleetAnalytics = memo(() => {
         title: "Erro",
         description: "Erro ao carregar dados de analytics",
         variant: "destructive"
-      });
+      };
     } finally {
       setLoading(false);
     }

@@ -121,7 +121,7 @@ export const PeotramPredictiveAnalytics: React.FC = () => {
       setIsAnalyzing(false);
       toast.success("Análise preditiva concluída!", {
         description: `${insights.length} insights gerados com confiança média de 81%`
-      });
+      };
     }, 3000);
   };
 

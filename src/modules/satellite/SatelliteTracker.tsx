@@ -38,7 +38,7 @@ const SatelliteTracker = () => {
           setLastUpdate(latestUpdate);
           toast.success("Satellite positions loaded from cache", {
             description: `${cachedOrbits.length} satellites tracked`
-          });
+          };
           setIsLoadingSatellites(false);
           return;
         }
@@ -74,7 +74,7 @@ const SatelliteTracker = () => {
           maxLat: 50,
           minLon: -60,
           maxLon: 20,
-        });
+        };
         setVessels(vesselData);
       } catch (error) {
         console.error("Error fetching AIS data:", error);
@@ -354,13 +354,13 @@ const SatelliteTracker = () => {
       {selectedVessel && (
         <AISMapOverlay 
           vessel={selectedVessel}
-          onClose={() => setSelectedVessel(null)}
+          onClose={() => setSelectedVessel(null}
         />
       )}
 
       <CoverageMap coverageData={coverageData} />
     </div>
   );
-};
+});
 
 export default SatelliteTracker;

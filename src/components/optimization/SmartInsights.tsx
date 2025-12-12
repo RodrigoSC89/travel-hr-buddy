@@ -67,7 +67,7 @@ export const SmartInsights: React.FC = () => {
             activeModule: "optimization"
           }
         }
-      });
+      };
 
       if (error) throw error;
 
@@ -173,7 +173,7 @@ export const SmartInsights: React.FC = () => {
           userId: "demo-user",
           category: "all"
         }
-      });
+      };
 
       if (error) throw error;
 
@@ -258,19 +258,19 @@ export const SmartInsights: React.FC = () => {
         effort: "easy",
         estimated_improvement: insight.estimatedValue || "Melhoria significativa",
         status: "completed"
-      });
+      };
 
       if (error) throw error;
 
       toast({
         title: "Insight Implementado",
         description: `${insight.title} foi aplicado com sucesso!`,
-      });
+      };
     } catch (error) {
       toast({
         title: "Insight Implementado",
         description: `${insight.title} foi aplicado com sucesso!`,
-      });
+      };
     }
 
     setIsGenerating(false);

@@ -120,28 +120,28 @@ export const SettingsDialog = memo(function({
     setCurrentSettings({
       ...currentSettings,
       notifications: { ...currentSettings.notifications, [key]: value },
-    });
+    };
   };
 
   const updateAI = (key: keyof ComplianceSettings["ai"], value: unknown: unknown: unknown) => {
     setCurrentSettings({
       ...currentSettings,
       ai: { ...currentSettings.ai, [key]: value },
-    });
+    };
   };
 
   const updateAudit = (key: keyof ComplianceSettings["audit"], value: unknown: unknown: unknown) => {
     setCurrentSettings({
       ...currentSettings,
       audit: { ...currentSettings.audit, [key]: value },
-    });
+    };
   };
 
   const updateReports = (key: keyof ComplianceSettings["reports"], value: unknown: unknown: unknown) => {
     setCurrentSettings({
       ...currentSettings,
       reports: { ...currentSettings.reports, [key]: value },
-    });
+    };
   };
 
   return (
@@ -188,7 +188,7 @@ export const SettingsDialog = memo(function({
                 </div>
                 <Switch
                   checked={currentSettings.notifications.emailAlerts}
-                  onCheckedChange={(checked) => updateNotifications("emailAlerts", checked)}
+                  onCheckedChange={(checked) => updateNotifications("emailAlerts", checked}
                 />
               </div>
 
@@ -201,7 +201,7 @@ export const SettingsDialog = memo(function({
                 </div>
                 <Switch
                   checked={currentSettings.notifications.pushNotifications}
-                  onCheckedChange={(checked) => updateNotifications("pushNotifications", checked)}
+                  onCheckedChange={(checked) => updateNotifications("pushNotifications", checked}
                 />
               </div>
 
@@ -253,7 +253,7 @@ export const SettingsDialog = memo(function({
                 </div>
                 <Switch
                   checked={currentSettings.ai.autoAnalysis}
-                  onCheckedChange={(checked) => updateAI("autoAnalysis", checked)}
+                  onCheckedChange={(checked) => updateAI("autoAnalysis", checked}
                 />
               </div>
 
@@ -266,7 +266,7 @@ export const SettingsDialog = memo(function({
                 </div>
                 <Switch
                   checked={currentSettings.ai.predictiveAlerts}
-                  onCheckedChange={(checked) => updateAI("predictiveAlerts", checked)}
+                  onCheckedChange={(checked) => updateAI("predictiveAlerts", checked}
                 />
               </div>
 
@@ -279,7 +279,7 @@ export const SettingsDialog = memo(function({
                 </div>
                 <Switch
                   checked={currentSettings.ai.aiSuggestions}
-                  onCheckedChange={(checked) => updateAI("aiSuggestions", checked)}
+                  onCheckedChange={(checked) => updateAI("aiSuggestions", checked}
                 />
               </div>
 
@@ -315,7 +315,7 @@ export const SettingsDialog = memo(function({
                 </div>
                 <Switch
                   checked={currentSettings.audit.autoGenerateChecklist}
-                  onCheckedChange={(checked) => updateAudit("autoGenerateChecklist", checked)}
+                  onCheckedChange={(checked) => updateAudit("autoGenerateChecklist", checked}
                 />
               </div>
 
@@ -328,7 +328,7 @@ export const SettingsDialog = memo(function({
                 </div>
                 <Switch
                   checked={currentSettings.audit.requireEvidence}
-                  onCheckedChange={(checked) => updateAudit("requireEvidence", checked)}
+                  onCheckedChange={(checked) => updateAudit("requireEvidence", checked}
                 />
               </div>
 
@@ -341,7 +341,7 @@ export const SettingsDialog = memo(function({
                 </div>
                 <Switch
                   checked={currentSettings.audit.autoCloseFindings}
-                  onCheckedChange={(checked) => updateAudit("autoCloseFindings", checked)}
+                  onCheckedChange={(checked) => updateAudit("autoCloseFindings", checked}
                 />
               </div>
 
@@ -354,7 +354,7 @@ export const SettingsDialog = memo(function({
                 </div>
                 <Switch
                   checked={currentSettings.audit.findingAutoEscalation}
-                  onCheckedChange={(checked) => updateAudit("findingAutoEscalation", checked)}
+                  onCheckedChange={(checked) => updateAudit("findingAutoEscalation", checked}
                 />
               </div>
             </div>
@@ -371,7 +371,7 @@ export const SettingsDialog = memo(function({
                 </div>
                 <Switch
                   checked={currentSettings.reports.autoGenerateReports}
-                  onCheckedChange={(checked) => updateReports("autoGenerateReports", checked)}
+                  onCheckedChange={(checked) => updateReports("autoGenerateReports", checked}
                 />
               </div>
 
@@ -384,7 +384,7 @@ export const SettingsDialog = memo(function({
                 </div>
                 <Switch
                   checked={currentSettings.reports.includeAIAnalysis}
-                  onCheckedChange={(checked) => updateReports("includeAIAnalysis", checked)}
+                  onCheckedChange={(checked) => updateReports("includeAIAnalysis", checked}
                 />
               </div>
 
@@ -397,7 +397,7 @@ export const SettingsDialog = memo(function({
                 </div>
                 <Switch
                   checked={currentSettings.reports.emailReports}
-                  onCheckedChange={(checked) => updateReports("emailReports", checked)}
+                  onCheckedChange={(checked) => updateReports("emailReports", checked}
                 />
               </div>
 

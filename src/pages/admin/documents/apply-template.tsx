@@ -51,7 +51,7 @@ export default function ApplyTemplate({ template }: ApplyTemplateProps) {
         title: "Erro",
         description: "Por favor, gere o preview antes de salvar.",
         variant: "destructive",
-      });
+      };
       return;
     }
 
@@ -66,13 +66,13 @@ export default function ApplyTemplate({ template }: ApplyTemplateProps) {
       toast({
         title: "Sucesso",
         description: "Documento salvo com sucesso!",
-      });
+      };
     } else {
       toast({
         title: "Erro",
         description: "Não foi possível salvar o documento.",
         variant: "destructive",
-      });
+      };
     }
   };
 

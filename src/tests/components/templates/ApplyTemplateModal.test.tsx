@@ -43,8 +43,8 @@ type TemplateQueryResponse = Promise<{
 type TemplateQueryBuilder = {
   select: () => {
     order: () => TemplateQueryResponse;
-  };
-};
+  });
+});
 
 const createTemplateQueryBuilder = (
   response?: Partial<{ data: TemplateRecord[] | null; error: Error | null }>
@@ -81,7 +81,7 @@ const originalPrompt = window.prompt;
 beforeEach(() => {
   window.prompt = vi.fn();
   vi.clearAllMocks();
-});
+  });
 
 describe("ApplyTemplateModal Component", () => {
   it("should render the trigger button", () => {
@@ -101,7 +101,7 @@ describe("ApplyTemplateModal Component", () => {
     await waitFor(() => {
       expect(screen.getByText("Aplicar Template")).toBeInTheDocument();
       expect(screen.getByText(/Selecione um template para aplicar/i)).toBeInTheDocument();
-    });
+  });
   });
 
   it("should fetch templates when modal opens", async () => {
@@ -113,8 +113,8 @@ describe("ApplyTemplateModal Component", () => {
     
     await waitFor(() => {
       expect(supabase.from).toHaveBeenCalledWith("ai_document_templates");
-    });
-  });
+  };
+  };
 
   it("should display templates in the list", async () => {
     const onApply = vi.fn();
@@ -127,8 +127,8 @@ describe("ApplyTemplateModal Component", () => {
       expect(screen.getByText("Template 1")).toBeInTheDocument();
       expect(screen.getByText("Template 2")).toBeInTheDocument();
       expect(screen.getByText("Simple Template")).toBeInTheDocument();
-    });
-  });
+  };
+  };
 
   it("should filter templates based on search input", async () => {
     const onApply = vi.fn();
@@ -139,7 +139,7 @@ describe("ApplyTemplateModal Component", () => {
     
     await waitFor(() => {
       expect(screen.getByText("Template 1")).toBeInTheDocument();
-    });
+  });
     
     const searchInput = screen.getByPlaceholderText(/Buscar template/i);
     fireEvent.change(searchInput, { target: { value: "Simple" } });
@@ -148,7 +148,7 @@ describe("ApplyTemplateModal Component", () => {
       expect(screen.getByText("Simple Template")).toBeInTheDocument();
       expect(screen.queryByText("Template 1")).not.toBeInTheDocument();
       expect(screen.queryByText("Template 2")).not.toBeInTheDocument();
-    });
+  });
   });
 
   it("should show message when no templates match search", async () => {
@@ -160,14 +160,14 @@ describe("ApplyTemplateModal Component", () => {
     
     await waitFor(() => {
       expect(screen.getByText("Template 1")).toBeInTheDocument();
-    });
+  });
     
     const searchInput = screen.getByPlaceholderText(/Buscar template/i);
     fireEvent.change(searchInput, { target: { value: "NonExistent" } });
     
     await waitFor(() => {
       expect(screen.getByText("Nenhum template encontrado")).toBeInTheDocument();
-    });
+  });
   });
 
   it("should apply template without variables directly", async () => {
@@ -179,7 +179,7 @@ describe("ApplyTemplateModal Component", () => {
     
     await waitFor(() => {
       expect(screen.getByText("Simple Template")).toBeInTheDocument();
-    });
+  });
     
     const templateButton = screen.getByText("Simple Template").closest("button");
     fireEvent.click(templateButton!);
@@ -202,7 +202,7 @@ describe("ApplyTemplateModal Component", () => {
     
     await waitFor(() => {
       expect(screen.getByText("Template 1")).toBeInTheDocument();
-    });
+  });
     
     const templateButton = screen.getByText("Template 1").closest("button");
     fireEvent.click(templateButton!);
@@ -225,7 +225,7 @@ describe("ApplyTemplateModal Component", () => {
     
     await waitFor(() => {
       expect(screen.getByText("Template 2")).toBeInTheDocument();
-    });
+  });
     
     const templateButton = screen.getByText("Template 2").closest("button");
     fireEvent.click(templateButton!);
@@ -246,7 +246,7 @@ describe("ApplyTemplateModal Component", () => {
     
     await waitFor(() => {
       expect(screen.getByText("Template 1")).toBeInTheDocument();
-    });
+  });
     
     const templateButton = screen.getByText("Template 1").closest("button");
     fireEvent.click(templateButton!);
@@ -272,9 +272,9 @@ describe("ApplyTemplateModal Component", () => {
         title: "Erro ao carregar templates",
         description: "Não foi possível carregar os templates.",
         variant: "destructive",
-      });
-    });
-  });
+      };
+  };
+  };
 
   it("should close modal after applying template", async () => {
     const onApply = vi.fn();
@@ -285,16 +285,16 @@ describe("ApplyTemplateModal Component", () => {
     
     await waitFor(() => {
       expect(screen.getByText("Simple Template")).toBeInTheDocument();
-    });
+  });
     
     const templateButton = screen.getByText("Simple Template").closest("button");
     fireEvent.click(templateButton!);
     
     await waitFor(() => {
       expect(screen.queryByText("Aplicar Template")).not.toBeInTheDocument();
-    });
   });
-});
+  });
+  });
 
 afterEach(() => {
   window.prompt = originalPrompt;

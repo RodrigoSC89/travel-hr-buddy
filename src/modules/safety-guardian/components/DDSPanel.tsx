@@ -34,7 +34,7 @@ export const DDSPanel: React.FC<DDSPanelProps> = ({ records, onCreateDDS, loadin
     participants_count: 0,
     duration_minutes: 15,
     notes: ""
-  });
+};
 
   const handleSubmit = async () => {
     if (!formData.topic || !formData.vessel_name || !formData.conductor) {
@@ -46,7 +46,7 @@ export const DDSPanel: React.FC<DDSPanelProps> = ({ records, onCreateDDS, loadin
       ...formData,
       date: new Date().toISOString(),
       participants: []
-    });
+    };
 
     setFormData({
       topic: "",
@@ -55,7 +55,7 @@ export const DDSPanel: React.FC<DDSPanelProps> = ({ records, onCreateDDS, loadin
       participants_count: 0,
       duration_minutes: 15,
       notes: ""
-    });
+    };
     setDialogOpen(false);
     toast.success("DDS registrado com sucesso!");
   };
@@ -68,13 +68,13 @@ export const DDSPanel: React.FC<DDSPanelProps> = ({ records, onCreateDDS, loadin
   const todayRecords = records.filter(r => {
     const today = new Date().toDateString();
     return new Date(r.date).toDateString() === today;
-  });
+  };
 
   const weekRecords = records.filter(r => {
     const weekAgo = new Date();
     weekAgo.setDate(weekAgo.getDate() - 7);
     return new Date(r.date) >= weekAgo;
-  });
+  };
 
   return (
     <div className="space-y-6">

@@ -228,7 +228,7 @@ export default function UserProfilePage() {
                   <Input
                     id="fullName"
                     value={profile.full_name}
-                    onChange={handleChange})}
+                    onChange={handleChange}
                     placeholder="Seu nome completo"
                   />
                 </div>
@@ -241,7 +241,7 @@ export default function UserProfilePage() {
                       id="email"
                       type="email"
                       value={profile.email}
-                      onChange={handleChange})}
+                      onChange={handleChange}
                       className="pl-10"
                       placeholder="seu@email.com"
                     />
@@ -255,7 +255,7 @@ export default function UserProfilePage() {
                     <Input
                       id="phone"
                       value={profile.phone}
-                      onChange={handleChange})}
+                      onChange={handleChange}
                       className="pl-10"
                       placeholder="+55 (11) 99999-9999"
                     />
@@ -269,7 +269,7 @@ export default function UserProfilePage() {
                     <Input
                       id="department"
                       value={profile.department}
-                      onChange={handleChange})}
+                      onChange={handleChange}
                       className="pl-10"
                       placeholder="Seu departamento"
                     />
@@ -379,7 +379,7 @@ export default function UserProfilePage() {
                 <select
                   id="language"
                   value={preferences.language}
-                  onChange={handleChange})}
+                  onChange={handleChange}
                   className="w-full p-2 border border-border rounded-md bg-background text-foreground"
                 >
                   <option value="pt-BR">Português (Brasil)</option>

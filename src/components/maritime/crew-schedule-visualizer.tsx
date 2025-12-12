@@ -107,7 +107,7 @@ export const CrewScheduleVisualizer: React.FC = () => {
     toast({
       title: "Otimização de Escalas",
       description: "IA analisou e sugeriu otimizações para reduzir custos em 15% e melhorar bem-estar da tripulação.",
-    });
+    };
   };
 
   const generateGanttView = () => {

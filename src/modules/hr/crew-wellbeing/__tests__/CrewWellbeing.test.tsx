@@ -60,7 +60,7 @@ describe("CrewWellbeing Module", () => {
     const { container } = render(<CrewWellbeing />);
     expect(container.querySelector(".container")).toBeInTheDocument();
   });
-});
+  });
 
 describe("Wellbeing Score Calculator", () => {
   it("should calculate wellbeing score based on inputs", () => {
@@ -72,7 +72,7 @@ describe("Wellbeing Score Calculator", () => {
 
     expect(calculateScore(5, 2, 5, 8)).toBeGreaterThan(7);
     expect(calculateScore(2, 5, 2, 4)).toBeLessThan(5);
-  });
+  };
 
   it("should normalize score to 0-10 range", () => {
     const normalizeScore = (score: number) => Math.max(0, Math.min(10, score));
@@ -80,5 +80,5 @@ describe("Wellbeing Score Calculator", () => {
     expect(normalizeScore(15)).toBe(10);
     expect(normalizeScore(-5)).toBe(0);
     expect(normalizeScore(7.5)).toBe(7.5);
-  });
-});
+  };
+};

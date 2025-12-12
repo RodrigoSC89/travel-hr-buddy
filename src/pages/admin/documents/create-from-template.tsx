@@ -84,7 +84,7 @@ export default function CreateFromTemplate({
       toast({
         title: "✅ Variáveis aplicadas",
         description: "O conteúdo foi atualizado com sucesso.",
-      });
+      };
     } catch (err) {
       // If parsing fails, use as string
       setContent(raw);
@@ -92,7 +92,7 @@ export default function CreateFromTemplate({
       toast({
         title: "✅ Variáveis aplicadas",
         description: "O conteúdo foi atualizado com sucesso.",
-      });
+      };
     }
   };
 
@@ -107,7 +107,7 @@ export default function CreateFromTemplate({
         toast({
           title: "✅ Documento salvo",
           description: "O documento foi salvo com sucesso!",
-        });
+        };
         if (onSaved) {
           onSaved(result);
         }
@@ -116,14 +116,14 @@ export default function CreateFromTemplate({
           title: "❌ Erro ao salvar",
           description: "Não foi possível salvar o documento.",
           variant: "destructive",
-        });
+        };
       }
     } catch (err) {
       toast({
         title: "❌ Erro",
         description: "Ocorreu um erro ao salvar o documento.",
         variant: "destructive",
-      });
+      };
     }
   };
 

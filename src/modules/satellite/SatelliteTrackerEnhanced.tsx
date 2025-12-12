@@ -114,7 +114,7 @@ export const SatelliteTrackerEnhanced = memo(() => {
         title: "Error loading satellites",
         description: error.message,
         variant: "destructive",
-      });
+      };
     } finally {
       setLoading(false);
     }
@@ -219,7 +219,7 @@ export const SatelliteTrackerEnhanced = memo(() => {
           azimuth: update.azimuth,
           elevation: update.elevation,
           range_km: update.range_km,
-        });
+        };
       }
 
       // Check for coverage events
@@ -243,13 +243,13 @@ export const SatelliteTrackerEnhanced = memo(() => {
           duration_seconds: Math.floor(Math.random() * COVERAGE_EVENT_MAX_DURATION_SEC) + COVERAGE_EVENT_MIN_DURATION_SEC,
           start_time: new Date().toISOString(),
           end_time: new Date(Date.now() + COVERAGE_EVENT_DURATION_MS).toISOString(),
-        });
+        };
 
         if (eventType === "entry") {
           toast({
             title: "Satellite Coverage",
             description: `${sat.satellite_name} entering coverage area`,
-          });
+          };
         }
       }
     }
@@ -266,7 +266,7 @@ export const SatelliteTrackerEnhanced = memo(() => {
     toast({
       title: "Data refreshed",
       description: "Satellite data has been updated",
-    });
+    };
   };
 
   const getVisibilityColor = (status: string) => {

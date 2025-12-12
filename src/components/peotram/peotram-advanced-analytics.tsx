@@ -73,7 +73,7 @@ export const PeotramAdvancedAnalytics: React.FC = () => {
     pendingActions: 23,
     trend: "up",
     trendPercentage: 5.2
-  });
+  };
 
   const [complianceByElement, setComplianceByElement] = useState<ComplianceByElement[]>([
     { elementNumber: "ELEM_01", elementName: "Liderança e Gerenciamento", complianceScore: 92, trend: "up", auditCount: 45 },
@@ -422,7 +422,7 @@ export const PeotramAdvancedAnalytics: React.FC = () => {
                         alert.severity === "medium" ? "border-yellow-200 bg-yellow-50/50" :
                           "border-blue-200 bg-blue-50/50"
                     }`}
-                    onClick={() => !alert.isRead && markAlertAsRead(alert.id)}
+                    onClick={() => !alert.isRead && markAlertAsRead(alert.id}
                   >
                     <div className="flex items-start justify-between">
                       <div className="flex items-start gap-3 flex-1">

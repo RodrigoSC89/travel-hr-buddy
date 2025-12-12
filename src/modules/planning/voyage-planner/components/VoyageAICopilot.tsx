@@ -89,7 +89,7 @@ ${plannedVoyages.map((v) => `- ${v.name}: partida ${v.departureDate}, ${v.distan
           ],
           context,
         },
-      });
+      };
 
       if (response.error) throw response.error;
 
@@ -300,6 +300,6 @@ Faça sua pergunta e vou analisar com base nas suas viagens atuais.`;
       </CardContent>
     </Card>
   );
-};
+});
 
 export default VoyageAICopilot;

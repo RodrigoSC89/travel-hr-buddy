@@ -184,7 +184,7 @@ export const DPReplaySystem: React.FC = () => {
       <Card>
         <CardContent className="pt-4">
           <div className="flex items-center gap-4">
-            <Select value={selectedSession?.id || ""} onValueChange={(id) => setSelectedSession(sessions.find(s => s.id === id) || null)}>
+            <Select value={selectedSession?.id || ""} onValueChange={(id) => setSelectedSession(sessions.find(s => s.id === id) || null}>
               <SelectTrigger className="w-80">
                 <SelectValue placeholder="Selecionar sessão para replay..." />
               </SelectTrigger>
@@ -323,7 +323,7 @@ export const DPReplaySystem: React.FC = () => {
                     value={[currentTime]}
                     max={selectedSession.duration}
                     step={1}
-                    onValueChange={([v]) => setCurrentTime(v)}
+                    onValueChange={([v]) => setCurrentTime(v}
                     className="cursor-pointer"
                   />
                   <div className="flex justify-between text-sm text-muted-foreground">
@@ -352,7 +352,7 @@ export const DPReplaySystem: React.FC = () => {
                   
                   <div className="ml-4 flex items-center gap-2">
                     <span className="text-sm text-muted-foreground">Velocidade:</span>
-                    <Select value={playbackSpeed.toString()} onValueChange={(v) => setPlaybackSpeed(Number(v))}>
+                    <Select value={playbackSpeed.toString()} onValueChange={(v) => setPlaybackSpeed(Number(v}>
                       <SelectTrigger className="w-20">
                         <SelectValue />
                       </SelectTrigger>

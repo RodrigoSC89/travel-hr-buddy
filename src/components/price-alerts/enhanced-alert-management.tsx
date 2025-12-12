@@ -160,14 +160,14 @@ export const EnhancedAlertManagement: React.FC = () => {
     toast({
       title: "Alerta Atualizado",
       description: "Configuração do alerta foi modificada com sucesso.",
-    });
+    };
   };
 
   const createAlertGroup = () => {
     toast({
       title: "Grupo Criado",
       description: "Novo grupo de alertas criado. Configure as regras personalizadas.",
-    });
+    };
   };
 
   const getThresholdLabel = (alert: PriceAlert) => {
@@ -249,7 +249,7 @@ export const EnhancedAlertManagement: React.FC = () => {
                     </div>
                     <Switch
                       checked={alert.isActive}
-                      onCheckedChange={() => toggleAlert(alert.id)}
+                      onCheckedChange={() => toggleAlert(alert.id}
                     />
                   </div>
                 </CardHeader>

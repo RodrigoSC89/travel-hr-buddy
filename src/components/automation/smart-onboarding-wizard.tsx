@@ -121,7 +121,7 @@ const WelcomeStep: React.FC<{ data: OnboardingData; onNext: (data: StepData) => 
       </Card>
     </div>
   );
-};
+});
 
 const CompanyProfileStep: React.FC<{ data: OnboardingData; onNext: (data: StepData) => void }> = ({ data, onNext }) => {
   const [profile, setProfile] = useState<{
@@ -134,7 +134,7 @@ const CompanyProfileStep: React.FC<{ data: OnboardingData; onNext: (data: StepDa
     fleet_size: "",
     primary_operations: [],
     key_challenges: []
-  });
+};
 
   const operationTypes = [
     "Transporte de carga",
@@ -238,7 +238,7 @@ const CompanyProfileStep: React.FC<{ data: OnboardingData; onNext: (data: StepDa
       </Button>
     </div>
   );
-};
+});
 
 const ModuleRecommendationStep: React.FC<{ data: OnboardingData; onNext: (data: StepData) => void }> = ({ data, onNext }) => {
   const [selectedModules, setSelectedModules] = useState<string[]>([]);
@@ -351,7 +351,7 @@ const ModuleRecommendationStep: React.FC<{ data: OnboardingData; onNext: (data: 
       </Button>
     </div>
   );
-};
+});
 
 export const SmartOnboardingWizard: React.FC = () => {
   const [currentStep, setCurrentStep] = useState(0);
@@ -360,7 +360,7 @@ export const SmartOnboardingWizard: React.FC = () => {
     company_profile: {},
     preferences: {},
     completed_steps: []
-  });
+  };
   const [isLoading, setIsLoading] = useState(false);
   const { toast } = useToast();
 
@@ -409,7 +409,7 @@ export const SmartOnboardingWizard: React.FC = () => {
             company_profile: updatedData.company_profile,
             preferences: updatedData.preferences,
             is_completed: currentStep === steps.length - 1
-          });
+          };
       }
     } catch (error) {
       // Failed to save onboarding progress
@@ -418,7 +418,7 @@ export const SmartOnboardingWizard: React.FC = () => {
         title: "Aviso",
         description: "Progresso salvo localmente. Será sincronizado em breve.",
         variant: "default"
-      });
+      };
     }
 
     if (currentStep < steps.length - 1) {
@@ -429,7 +429,7 @@ export const SmartOnboardingWizard: React.FC = () => {
       toast({
         title: "Configuração concluída! 🎉",
         description: "Seu Nautilus One está pronto. Automações personalizadas foram ativadas.",
-      });
+      };
     }
   };
 
@@ -449,7 +449,7 @@ export const SmartOnboardingWizard: React.FC = () => {
             { type: "check_certificates", days_ahead: 30 },
             { type: "send_notification", template: "certificate_expiry" }
           ]
-        });
+        };
       }
 
       if (data.user_type === "admin") {
@@ -470,7 +470,7 @@ export const SmartOnboardingWizard: React.FC = () => {
         await supabase.from("automation_workflows").insert({
           ...automation,
           organization_id: (await supabase.auth.getUser()).data.user?.id // Temporário para demo
-        });
+        };
       }
 
     } catch (error) {
@@ -480,7 +480,7 @@ export const SmartOnboardingWizard: React.FC = () => {
         title: "Aviso",
         description: "Automações padrão não foram criadas. Você pode configurá-las manualmente depois.",
         variant: "default"
-      });
+      };
     } finally {
       setIsLoading(false);
     }

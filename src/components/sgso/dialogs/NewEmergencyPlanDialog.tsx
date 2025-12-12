@@ -67,7 +67,7 @@ export const NewEmergencyPlanDialog: React.FC<NewEmergencyPlanDialogProps> = ({
     procedures: "",
     equipmentRequired: "",
     contacts: "",
-  });
+};
   const [isSubmitting, setIsSubmitting] = useState(false);
 
   const handleChange = (field: string, value: string) => {
@@ -144,7 +144,7 @@ export const NewEmergencyPlanDialog: React.FC<NewEmergencyPlanDialogProps> = ({
             </div>
             <div className="space-y-2">
               <Label htmlFor="type">Tipo de Emergência *</Label>
-              <Select value={formData.type} onValueChange={(v) => handleChange("type", v)}>
+              <Select value={formData.type} onValueChange={(v) => handleChange("type", v}>
                 <SelectTrigger>
                   <SelectValue placeholder="Selecione o tipo" />
                 </SelectTrigger>
@@ -199,7 +199,7 @@ export const NewEmergencyPlanDialog: React.FC<NewEmergencyPlanDialogProps> = ({
           {/* Drill Frequency */}
           <div className="space-y-2">
             <Label htmlFor="drillFrequency">Frequência de Simulados</Label>
-            <Select value={formData.drillFrequency} onValueChange={(v) => handleChange("drillFrequency", v)}>
+            <Select value={formData.drillFrequency} onValueChange={(v) => handleChange("drillFrequency", v}>
               <SelectTrigger>
                 <SelectValue />
               </SelectTrigger>
@@ -268,4 +268,4 @@ export const NewEmergencyPlanDialog: React.FC<NewEmergencyPlanDialogProps> = ({
       </DialogContent>
     </Dialog>
   );
-};
+});

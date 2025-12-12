@@ -76,7 +76,7 @@ export const DocumentCenterBase: React.FC<DocumentCenterBaseProps> = ({
       <DocumentCenterContent className={className} />
     </DocumentCenterProvider>
   );
-};
+});
 
 // ============================================
 // CONTENT COMPONENT (uses context)
@@ -333,14 +333,14 @@ const DocumentCenterContent: React.FC<{ className?: string }> = ({ className }) 
       {/* Upload Dialog */}
       <DocumentUploader
         open={uploadDialogOpen}
-        onClose={() => setUploadDialogOpen(false)}
+        onClose={() => setUploadDialogOpen(false}
       />
 
       {/* Document View/Edit Dialog */}
       {/* TODO: Add DocumentViewer/DocumentEditor components */}
     </div>
   );
-};
+});
 
 // ============================================
 // EXPORTS

@@ -264,7 +264,7 @@ export const SkeletonTable = memo(function SkeletonTable({
       ))}
     </div>
   );
-});
+  });
 SkeletonTable.displayName = "SkeletonTable";
 
 // ==================== SKELETON LIST ====================
@@ -504,7 +504,7 @@ export const SkeletonProfile = memo(function SkeletonProfile({ className }: { cl
       </div>
     </div>
   );
-});
+  });
 SkeletonProfile.displayName = "SkeletonProfile";
 
 // ==================== LEGACY ALIASES ====================

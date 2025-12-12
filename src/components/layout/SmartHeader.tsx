@@ -96,4 +96,4 @@ export const SmartHeader = memo(function() {
       </React.Suspense>
     </>
   );
-}
+});

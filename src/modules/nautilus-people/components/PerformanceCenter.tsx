@@ -60,7 +60,7 @@ const PerformanceCenter: React.FC = () => {
     keyResults: "",
     responsavel: "",
     prazo: ""
-  });
+  };
 
   const getStatusBadge = (status: string) => {
     switch (status) {
@@ -132,7 +132,7 @@ const PerformanceCenter: React.FC = () => {
     setIsNewOKROpen(false);
     setNewOKR({ objetivo: "", keyResults: "", responsavel: "", prazo: "" });
     toast.success("OKR criado com sucesso!");
-  };
+  });
 
   const handleGenerateOKRWithAI = async () => {
     toast.info("Gerando OKR com IA...");
@@ -146,7 +146,7 @@ const PerformanceCenter: React.FC = () => {
           keyResults: parsed.keyResults?.map((kr: { title: string }) => kr.title).join("\n") || "",
           responsavel: parsed.owner || "",
           prazo: parsed.quarter || ""
-        });
+        };
         toast.success("OKR gerado pela IA!");
       } catch {
         setNewOKR(prev => ({ ...prev, objetivo: result }));
@@ -282,7 +282,7 @@ const PerformanceCenter: React.FC = () => {
                 <SelectItem value="q2-2025">Q2 2025</SelectItem>
               </SelectContent>
             </Select>
-            <Button onClick={() => toast.info("Funcionalidade de nova avaliação")}>
+            <Button onClick={() => toast.info("Funcionalidade de nova avaliação"}>
               <Plus className="w-4 h-4 mr-2" />
               Nova Avaliação
             </Button>
@@ -363,7 +363,7 @@ const PerformanceCenter: React.FC = () => {
                       <Button 
                         size="sm" 
                         className="flex-1"
-                        onClick={() => avaliacao.status === "pendente" ? handleStartAvaliacao(avaliacao) : handleContinueAvaliacao(avaliacao)}
+                        onClick={() => avaliacao.status === "pendente" ? handleStartAvaliacao(avaliacao) : handleContinueAvaliacao(avaliacao}
                         disabled={isLoading}
                       >
                         {isLoading ? (
@@ -712,6 +712,6 @@ const PerformanceCenter: React.FC = () => {
       </Dialog>
     </div>
   );
-};
+});
 
 export default PerformanceCenter;

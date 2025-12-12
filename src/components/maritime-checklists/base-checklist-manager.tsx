@@ -139,7 +139,7 @@ export const BaseChecklistManager: React.FC<BaseChecklistManagerProps> = ({
     const matchesStatus = statusFilter === "all" || checklist.status === statusFilter;
     const matchesType = typeFilter === "all" || checklist.type === typeFilter;
     return matchesSearch && matchesStatus && matchesType;
-  });
+  };
 
   const getStatusColor = (status: string) => {
     switch (status) {

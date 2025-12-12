@@ -66,7 +66,7 @@ export default function CrewTraining({
     const matchesDepartment = departmentFilter === "all" || member.department === departmentFilter;
     const matchesStatus = statusFilter === "all" || member.trainingStatus === statusFilter;
     return matchesSearch && matchesDepartment && matchesStatus;
-  });
+  };
 
   const handleViewDetails = (member: CrewMember) => {
     setSelectedMember(member);

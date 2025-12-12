@@ -118,7 +118,7 @@ export const UserManagementHub: React.FC = () => {
       const matchesRole = roleFilter === "all" || user.role === roleFilter;
       const matchesStatus = statusFilter === "all" || user.status === statusFilter;
       return matchesSearch && matchesRole && matchesStatus;
-    });
+  };
   }, [users, searchTerm, roleFilter, statusFilter]);
 
   // Handlers
@@ -218,7 +218,7 @@ export const UserManagementHub: React.FC = () => {
       day: "2-digit",
       month: "2-digit",
       year: "numeric",
-    });
+    };
   };
 
   const hasActiveFilters = searchTerm || roleFilter !== "all" || statusFilter !== "all";
@@ -467,7 +467,7 @@ export const UserManagementHub: React.FC = () => {
                       <TableCell>
                         <Checkbox
                           checked={selectedUsers.includes(user.id)}
-                          onCheckedChange={() => toggleSelectUser(user.id)}
+                          onCheckedChange={() => toggleSelectUser(user.id}
                         />
                       </TableCell>
                       <TableCell>

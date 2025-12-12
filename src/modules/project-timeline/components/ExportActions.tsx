@@ -42,7 +42,7 @@ export const ExportActions: React.FC<ExportActionsProps> = ({ tasks }) => {
         title: "No tasks to export",
         description: "Create some tasks first",
         variant: "destructive",
-      });
+};
       return;
     }
 
@@ -106,7 +106,7 @@ export const ExportActions: React.FC<ExportActionsProps> = ({ tasks }) => {
     toast({
       title: "PDF exported successfully",
       description: "Your project timeline has been downloaded",
-    });
+    };
   };
 
   const exportToICS = () => {
@@ -115,7 +115,7 @@ export const ExportActions: React.FC<ExportActionsProps> = ({ tasks }) => {
         title: "No tasks to export",
         description: "Create some tasks first",
         variant: "destructive",
-      });
+      };
       return;
     }
 
@@ -155,7 +155,7 @@ export const ExportActions: React.FC<ExportActionsProps> = ({ tasks }) => {
       ].join("\r\n");
 
       icsContent += "\r\n" + event;
-    });
+    };
 
     icsContent += "\r\nEND:VCALENDAR";
 
@@ -171,7 +171,7 @@ export const ExportActions: React.FC<ExportActionsProps> = ({ tasks }) => {
     toast({
       title: "Calendar exported successfully",
       description: "Import the .ics file to your calendar application",
-    });
+    };
   };
 
   return (

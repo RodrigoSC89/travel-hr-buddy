@@ -81,26 +81,26 @@ export default function SystemHealthPage() {
         toast({
           title: "Sistema Saudável ✅",
           description: "Todos os componentes estão operacionais",
-        });
+        };
       } else if (report.overallStatus === "degraded") {
         toast({
           title: "Sistema com Avisos ⚠️",
           description: `${report.summary.warnings} aviso(s) detectado(s)`,
           variant: "default"
-        });
+        };
       } else {
         toast({
           title: "Sistema Crítico ❌",
           description: `${report.summary.errors} erro(s) detectado(s)`,
           variant: "destructive"
-        });
+        };
       }
     } catch (error) {
       toast({
         title: "Erro na Validação",
         description: error instanceof Error ? error.message : "Erro desconhecido",
         variant: "destructive"
-      });
+      };
     } finally {
       setLoading(false);
     }

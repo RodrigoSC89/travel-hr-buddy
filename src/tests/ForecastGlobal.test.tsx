@@ -63,7 +63,7 @@ describe("ForecastGlobal Page", () => {
 
     await waitFor(() => {
       expect(screen.getByText("Forecast Global Intelligence")).toBeInTheDocument();
-    });
+  });
   });
 
   it("renders all three main components", async () => {
@@ -77,9 +77,9 @@ describe("ForecastGlobal Page", () => {
     await waitFor(() => {
       const element = document.querySelector("body");
       expect(element).toBeTruthy();
-    });
   });
-});
+  });
+  });
 
 describe("ForecastPanel Component", () => {
   beforeEach(() => {
@@ -103,7 +103,7 @@ describe("ForecastPanel Component", () => {
     });
     mockMqttClient.subscribe.mockImplementation((topic, callback) => {
       setTimeout(() => callback(null), 0);
-    });
+  });
   });
 
   it("renders weather metrics panel", async () => {
@@ -111,7 +111,7 @@ describe("ForecastPanel Component", () => {
 
     await waitFor(() => {
       expect(screen.getByText("Condições Atuais")).toBeInTheDocument();
-    });
+  });
   });
 
   it("displays all four weather metrics", async () => {
@@ -122,7 +122,7 @@ describe("ForecastPanel Component", () => {
       expect(screen.getByText("Ondas")).toBeInTheDocument();
       expect(screen.getByText("Temperatura")).toBeInTheDocument();
       expect(screen.getByText("Visibilidade")).toBeInTheDocument();
-    });
+  });
   });
 
   it("subscribes to MQTT forecast channel on mount", async () => {
@@ -134,7 +134,7 @@ describe("ForecastPanel Component", () => {
         "nautilus/forecast",
         expect.any(Function)
       );
-    });
+  });
   });
 
   it("cleans up MQTT connection on unmount", async () => {
@@ -145,9 +145,9 @@ describe("ForecastPanel Component", () => {
     const mockMqttClient = getMockMqttClient();
     await waitFor(() => {
       expect(mockMqttClient.end).toHaveBeenCalled();
-    });
   });
-});
+  });
+  });
 
 describe("ForecastMap Component", () => {
   it("renders map card with title", () => {
@@ -163,7 +163,7 @@ describe("ForecastMap Component", () => {
     expect(iframe).toBeInTheDocument();
     expect(iframe).toHaveAttribute("src", expect.stringContaining("earth.nullschool.net"));
   });
-});
+  });
 
 describe("ForecastAIInsights Component", () => {
   beforeEach(() => {
@@ -175,7 +175,7 @@ describe("ForecastAIInsights Component", () => {
 
     await waitFor(() => {
       expect(screen.getByText("Previsão IA")).toBeInTheDocument();
-    });
+  });
   });
 
   it("loads ONNX model and displays prediction", async () => {
@@ -184,12 +184,12 @@ describe("ForecastAIInsights Component", () => {
     // Wait for loading state to change
     await waitFor(() => {
       expect(screen.queryByText("Carregando modelo...")).not.toBeInTheDocument();
-    });
+  });
 
     // Check for prediction display
     await waitFor(() => {
       expect(screen.getByText("Probabilidade de instabilidade")).toBeInTheDocument();
-    });
+  });
   });
 
   it("handles model loading errors gracefully", async () => {
@@ -203,11 +203,11 @@ describe("ForecastAIInsights Component", () => {
 
     await waitFor(() => {
       expect(screen.getByText("Erro na previsão IA")).toBeInTheDocument();
-    });
+  };
 
     consoleError.mockRestore();
-  });
-});
+  };
+  };
 
 describe("MQTT Publisher Functions", () => {
   it("publishForecast sends data to correct topic", async () => {
@@ -218,7 +218,7 @@ describe("MQTT Publisher Functions", () => {
       if (event === "connect") {
         callback();
       }
-    });
+    };
 
     const testData = {
       wind: 15.2,
@@ -236,7 +236,7 @@ describe("MQTT Publisher Functions", () => {
         { qos: 1 },
         expect.any(Function)
       );
-    });
+  });
   });
 
   it("subscribeForecast returns mqtt client", async () => {
@@ -247,8 +247,8 @@ describe("MQTT Publisher Functions", () => {
 
     const mockMqttClient = getMockMqttClient();
     expect(client).toBe(mockMqttClient);
-  });
-});
+  };
+  };
 
 describe("Forecast Data Validation", () => {
   it("validates forecast data structure", () => {
@@ -275,7 +275,7 @@ describe("Forecast Data Validation", () => {
     riskPredictions.forEach((risk) => {
       expect(risk).toBeGreaterThanOrEqual(0);
       expect(risk).toBeLessThanOrEqual(1);
-    });
+  });
   });
 
   it("validates weather metrics are positive numbers", () => {
@@ -289,6 +289,6 @@ describe("Forecast Data Validation", () => {
     Object.values(metrics).forEach((value) => {
       expect(value).toBeGreaterThan(0);
       expect(typeof value).toBe("number");
-    });
+  });
   });
 });

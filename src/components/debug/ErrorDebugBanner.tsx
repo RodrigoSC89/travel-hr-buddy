@@ -149,4 +149,4 @@ export const ErrorDebugBanner: React.FC = () => {
       </Card>
     </div>
   );
-};
+});

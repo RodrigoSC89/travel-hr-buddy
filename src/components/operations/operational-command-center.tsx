@@ -60,7 +60,7 @@ export const OperationalCommandCenter: React.FC = () => {
     active_vessels: 0,
     compliance_rate: 0,
     pending_alerts: 0
-  });
+  };
   const [isLoading, setIsLoading] = useState(true);
   const [realTimeEnabled, setRealTimeEnabled] = useState(false);
   const { toast } = useToast();
@@ -89,7 +89,7 @@ export const OperationalCommandCenter: React.FC = () => {
         title: "Erro ao carregar dados",
         description: "Não foi possível carregar os dados do centro de comando.",
         variant: "destructive"
-      });
+      };
     } finally {
       setIsLoading(false);
     }
@@ -179,7 +179,7 @@ export const OperationalCommandCenter: React.FC = () => {
       toast({
         title: "Alerta reconhecido",
         description: "O alerta foi marcado como reconhecido.",
-      });
+      };
 
       loadAlerts();
     } catch (error) {
@@ -187,7 +187,7 @@ export const OperationalCommandCenter: React.FC = () => {
         title: "Erro",
         description: "Não foi possível reconhecer o alerta.",
         variant: "destructive"
-      });
+      };
     }
   };
 
@@ -206,7 +206,7 @@ export const OperationalCommandCenter: React.FC = () => {
       toast({
         title: "Alerta resolvido",
         description: "O alerta foi marcado como resolvido.",
-      });
+      };
 
       loadAlerts();
     } catch (error) {
@@ -214,7 +214,7 @@ export const OperationalCommandCenter: React.FC = () => {
         title: "Erro",
         description: "Não foi possível resolver o alerta.",
         variant: "destructive"
-      });
+      };
     }
   };
 

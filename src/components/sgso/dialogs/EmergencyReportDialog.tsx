@@ -263,4 +263,4 @@ export const EmergencyReportDialog: React.FC<EmergencyReportDialogProps> = ({
       </DialogContent>
     </Dialog>
   );
-};
+});

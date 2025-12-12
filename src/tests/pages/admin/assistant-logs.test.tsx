@@ -11,7 +11,7 @@ vi.mock("react-router-dom", async () => {
     ...actual,
     useNavigate: () => mockNavigate,
   };
-});
+  });
 
 // Mock Supabase client
 const mockSupabaseFunctions = vi.fn();
@@ -76,7 +76,7 @@ describe("AssistantLogsPage Component", () => {
 
     await waitFor(() => {
       expect(screen.getByPlaceholderText(/Filtrar por e-mail/i)).toBeInTheDocument();
-    });
+  });
   });
 
   it("should navigate back when back button is clicked", async () => {
@@ -115,7 +115,7 @@ describe("AssistantLogsPage Component", () => {
       expect(screen.getByText(/CSV/i)).toBeInTheDocument();
       expect(screen.getByText(/PDF/i)).toBeInTheDocument();
       expect(screen.getByText(/Enviar E-mail/i)).toBeInTheDocument();
-    });
+  });
   });
 
   it("should fetch logs on mount", async () => {
@@ -127,6 +127,6 @@ describe("AssistantLogsPage Component", () => {
 
     await waitFor(() => {
       expect(mockSupabaseFunctions).toHaveBeenCalledWith("assistant-logs");
-    });
+  });
   });
 });

@@ -163,7 +163,7 @@ export const IntegrationMarketplace: React.FC = () => {
                          integration.tags.some(tag => tag.toLowerCase().includes(searchTerm.toLowerCase()));
     const matchesCategory = selectedCategory === "all" || integration.category === selectedCategory;
     return matchesSearch && matchesCategory;
-  });
+  };
 
   const sortedIntegrations = [...filteredIntegrations].sort((a, b) => {
     switch (selectedFilter) {
@@ -175,19 +175,19 @@ export const IntegrationMarketplace: React.FC = () => {
     case "verified": return a.isVerified ? -1 : 1;
     default: return 0;
     }
-  });
+  };
 
   const handleInstall = (integration: IntegrationListing) => {
     toast({
       title: "Instalando Integração",
       description: `${integration.name} está sendo instalado...`,
-    });
+    };
     
     setTimeout(() => {
       toast({
         title: "Instalação Concluída",
         description: `${integration.name} foi instalado com sucesso!`,
-      });
+      };
     }, 2000);
   };
 

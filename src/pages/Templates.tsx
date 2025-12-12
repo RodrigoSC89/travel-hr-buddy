@@ -185,7 +185,7 @@ const Templates = () => {
     category: "operations",
     type: "report",
     content: ""
-  });
+  };
   
   const [isGeneratingAI, setIsGeneratingAI] = useState(false);
 
@@ -195,7 +195,7 @@ const Templates = () => {
         template.description.toLowerCase().includes(searchQuery.toLowerCase());
       const matchesCategory = selectedCategory === "all" || template.category === selectedCategory;
       return matchesSearch && matchesCategory;
-    });
+  };
   }, [templates, searchQuery, selectedCategory]);
 
   const handleDownload = (template: Template) => {
@@ -248,7 +248,7 @@ const Templates = () => {
       category: template.category,
       type: template.type,
       content: template.content || ""
-    });
+    };
     setShowEditDialog(true);
   };
 
@@ -343,7 +343,7 @@ const Templates = () => {
     
     setIsGeneratingAI(false);
     toast.success("Conteúdo gerado com IA!");
-  };
+  });
 
   const handlePrint = (template: Template) => {
     const printWindow = window.open("", "_blank");
@@ -566,15 +566,15 @@ const Templates = () => {
             </div>
           )}
           <DialogFooter className="gap-2">
-            <Button variant="outline" onClick={() => selectedTemplate && handlePrint(selectedTemplate)}>
+            <Button variant="outline" onClick={() => selectedTemplate && handlePrint(selectedTemplate}>
               <Printer className="h-4 w-4 mr-2" />
               Imprimir
             </Button>
-            <Button variant="outline" onClick={() => selectedTemplate && handleDuplicate(selectedTemplate)}>
+            <Button variant="outline" onClick={() => selectedTemplate && handleDuplicate(selectedTemplate}>
               <Copy className="h-4 w-4 mr-2" />
               Duplicar
             </Button>
-            <Button onClick={() => selectedTemplate && handleDownload(selectedTemplate)}>
+            <Button onClick={() => selectedTemplate && handleDownload(selectedTemplate}>
               <Download className="h-4 w-4 mr-2" />
               Baixar
             </Button>
@@ -799,6 +799,6 @@ const Templates = () => {
       </Dialog>
     </div>
   );
-};
+});
 
 export default Templates;

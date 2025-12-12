@@ -109,8 +109,8 @@ describe("CollaborationPage", () => {
 
     await waitFor(() => {
       expect(supabase.channel).toHaveBeenCalledWith("colab-comments-changes");
-    });
-  });
+  };
+  };
 
   it("shows back button", () => {
     render(
@@ -120,7 +120,7 @@ describe("CollaborationPage", () => {
     );
     
     expect(screen.getByText(/Voltar/i)).toBeInTheDocument();
-  });
+  };
 
   it("shows empty state when no comments", async () => {
     render(
@@ -131,7 +131,7 @@ describe("CollaborationPage", () => {
 
     await waitFor(() => {
       expect(screen.getByText(/Nenhum comentário ainda/i)).toBeInTheDocument();
-    });
+  });
   });
 
   it("shows submit button", () => {

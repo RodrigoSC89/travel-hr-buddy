@@ -119,7 +119,7 @@ export default function CrewWellbeing() {
     toast({ 
       title: "Análise concluída", 
       description: "2 alertas críticos identificados" 
-    });
+    };
     setIsAnalyzing(false);
   };
 
@@ -127,7 +127,7 @@ export default function CrewWellbeing() {
     toast({ 
       title: "Realocação sugerida", 
       description: "Notificação enviada para gestão de tripulação" 
-    });
+    };
   };
 
   const getFatigueColor = (level: string) => {

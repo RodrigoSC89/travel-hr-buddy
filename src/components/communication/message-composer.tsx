@@ -225,7 +225,7 @@ export const MessageComposer: React.FC<MessageComposerProps> = ({
           title: "Erro",
           description: `${invalidFiles.length} arquivo(s) excedem o tamanho máximo de 10MB`,
           variant: "destructive"
-        });
+        };
         return;
       }
       
@@ -233,7 +233,7 @@ export const MessageComposer: React.FC<MessageComposerProps> = ({
       toast({
         title: "Sucesso",
         description: `${files.length} imagem(ns) adicionada(s)`
-      });
+      };
     };
     input.click();
   };
@@ -254,7 +254,7 @@ export const MessageComposer: React.FC<MessageComposerProps> = ({
           title: "Erro",
           description: `${invalidFiles.length} arquivo(s) excedem o tamanho máximo de 25MB`,
           variant: "destructive"
-        });
+        };
         return;
       }
       
@@ -262,7 +262,7 @@ export const MessageComposer: React.FC<MessageComposerProps> = ({
       toast({
         title: "Sucesso",
         description: `${files.length} áudio(s) adicionado(s)`
-      });
+      };
     };
     input.click();
   };
@@ -271,7 +271,7 @@ export const MessageComposer: React.FC<MessageComposerProps> = ({
     toast({
       title: "Emoji Picker",
       description: "Funcionalidade de emojis em breve!"
-    });
+    };
   };
 
   const saveDraft = async () => {
@@ -281,7 +281,7 @@ export const MessageComposer: React.FC<MessageComposerProps> = ({
           title: "Aviso",
           description: "Não há conteúdo para salvar",
           variant: "destructive"
-        });
+        };
         return;
       }
 
@@ -293,13 +293,13 @@ export const MessageComposer: React.FC<MessageComposerProps> = ({
       toast({
         title: "Sucesso",
         description: "Rascunho salvo com sucesso"
-      });
+      };
     } catch (error) {
       toast({
         title: "Erro",
         description: "Erro ao salvar rascunho",
         variant: "destructive"
-      });
+      };
     } finally {
       setLoading(false);
     }
@@ -312,7 +312,7 @@ export const MessageComposer: React.FC<MessageComposerProps> = ({
           title: "Erro",
           description: "Selecione destinatários e escreva uma mensagem",
           variant: "destructive"
-        });
+        };
         return;
       }
 
@@ -338,7 +338,7 @@ export const MessageComposer: React.FC<MessageComposerProps> = ({
         title: "Erro",
         description: "Erro ao enviar mensagem",
         variant: "destructive"
-      });
+      };
     } finally {
       setLoading(false);
     }
@@ -456,7 +456,7 @@ export const MessageComposer: React.FC<MessageComposerProps> = ({
           <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
             <div>
               <Label>Prioridade</Label>
-              <Select value={priority} onValueChange={(value: "low" | "normal" | "high" | "critical") => setPriority(value)}>
+              <Select value={priority} onValueChange={(value: "low" | "normal" | "high" | "critical") => setPriority(value}>
                 <SelectTrigger>
                   <SelectValue />
                 </SelectTrigger>
@@ -471,7 +471,7 @@ export const MessageComposer: React.FC<MessageComposerProps> = ({
             
             <div>
               <Label>Categoria</Label>
-              <Select value={category} onValueChange={(value: "general" | "hr" | "operations" | "emergency") => setCategory(value)}>
+              <Select value={category} onValueChange={(value: "general" | "hr" | "operations" | "emergency") => setCategory(value}>
                 <SelectTrigger>
                   <SelectValue />
                 </SelectTrigger>

@@ -69,7 +69,7 @@ export const ChecklistScheduler = memo(() => {
     toast({
       title: "Agenda Criada",
       description: "Nova agenda de checklist foi criada com sucesso.",
-    });
+    };
     setIsCreateOpen(false);
   };
 
@@ -282,4 +282,4 @@ export const ChecklistScheduler = memo(() => {
       </Tabs>
     </div>
   );
-};
+});

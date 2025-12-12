@@ -56,13 +56,13 @@ export const ExpenseForm: React.FC<ExpenseFormProps> = ({
     defaultValues: defaultValues || {
       date: new Date().toISOString().split("T")[0],
     },
-  });
+};
 
   const category = watch("category");
 
   return (
-    <form onSubmit={handleSubmit(onSubmit)} className="space-y-6">
-      {/* Amount */}
+    <form onSubmit={handleSubmit(onSubmit) className="space-y-6">
+      {/* Amount */)
       <div className="space-y-2">
         <Label htmlFor="amount" className="text-sm font-semibold text-foreground">
           Valor *
@@ -77,7 +77,7 @@ export const ExpenseForm: React.FC<ExpenseFormProps> = ({
             step="0.01"
             placeholder="0,00"
             className="pl-10 bg-card border-border text-foreground"
-            {...register("amount", { valueAsNumber: true })}
+            {...register("amount", { valueAsNumber: true )}
           />
         </div>
         {errors.amount && (
@@ -92,7 +92,7 @@ export const ExpenseForm: React.FC<ExpenseFormProps> = ({
         </Label>
         <Select
           value={category}
-          onValueChange={(value) => setValue("category", value)}
+          onValueChange={(value) => setValue("category", value}
         >
           <SelectTrigger className="bg-card border-border text-foreground">
             <SelectValue placeholder="Selecione uma categoria" />

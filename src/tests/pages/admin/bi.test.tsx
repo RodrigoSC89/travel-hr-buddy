@@ -34,7 +34,7 @@ describe("AdminBI Page", () => {
     vi.mocked(supabase.rpc).mockResolvedValue({
       data: [],
       error: null,
-    });
+    };
 
     render(
       <BrowserRouter>
@@ -43,13 +43,13 @@ describe("AdminBI Page", () => {
     );
     
     expect(screen.getByText(/Business Intelligence Dashboard/i)).toBeDefined();
-  });
+  };
 
   it("should render the page description", () => {
     vi.mocked(supabase.rpc).mockResolvedValue({
       data: [],
       error: null,
-    });
+    };
 
     render(
       <BrowserRouter>
@@ -58,13 +58,13 @@ describe("AdminBI Page", () => {
     );
     
     expect(screen.getByText(/Análise de dados de manutenção com visualizações e previsões de IA/i)).toBeDefined();
-  });
+  };
 
   it("should render all BI components including compliance by vessel", () => {
     vi.mocked(supabase.rpc).mockResolvedValue({
       data: [],
       error: null,
-    });
+    };
 
     render(
       <BrowserRouter>
@@ -78,13 +78,13 @@ describe("AdminBI Page", () => {
     expect(screen.getByTestId("dashboard-jobs")).toBeDefined();
     expect(screen.getByTestId("jobs-trend-chart")).toBeDefined();
     expect(screen.getByTestId("jobs-forecast-report")).toBeDefined();
-  });
+  };
 
   it("should call jobs_trend_by_month RPC on mount", () => {
     vi.mocked(supabase.rpc).mockResolvedValue({
       data: [],
       error: null,
-    });
+    };
 
     render(
       <BrowserRouter>
@@ -93,14 +93,14 @@ describe("AdminBI Page", () => {
     );
     
     expect(supabase.rpc).toHaveBeenCalledWith("jobs_trend_by_month");
-  });
+  };
 
   it("should handle errors gracefully when fetching trend data", () => {
     const mockError = new Error("RPC Error");
     vi.mocked(supabase.rpc).mockResolvedValue({
       data: null,
       error: mockError,
-    });
+    };
 
     const consoleSpy = vi.spyOn(console, "error").mockImplementation(() => {});
 
@@ -114,5 +114,5 @@ describe("AdminBI Page", () => {
     expect(screen.getByText(/Business Intelligence Dashboard/i)).toBeDefined();
 
     consoleSpy.mockRestore();
-  });
-});
+  };
+};

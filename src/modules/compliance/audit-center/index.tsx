@@ -130,7 +130,7 @@ const AuditCenter = () => {
     const initialChecklist: Record<string, ChecklistStatus> = {};
     items.forEach(item => {
       initialChecklist[item.id] = "not_checked";
-    });
+  };
     setChecklistData(audit.checklist_data || initialChecklist);
     
     Logger.module("audit-center", "Started audit", { auditId: audit.id, type: audit.type });
@@ -396,7 +396,7 @@ const AuditCenter = () => {
                       </div>
                       <Select
                         value={checklistData[item.id] || "not_checked"}
-                        onValueChange={(value) => handleChecklistChange(item.id, value as ChecklistStatus)}
+                        onValueChange={(value) => handleChecklistChange(item.id, value as ChecklistStatus}
                       >
                         <SelectTrigger className="w-[140px]">
                           <SelectValue />

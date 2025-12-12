@@ -35,7 +35,7 @@ export const ModuleControl: React.FC = () => {
     includeDevelopment: true,
     includeExperimental: true,
     includeDeprecated: true,
-  });
+  };
 
   const [searchQuery, setSearchQuery] = useState("");
   const [selectedCategory, setSelectedCategory] = useState<string>("all");
@@ -79,7 +79,7 @@ export const ModuleControl: React.FC = () => {
         updated.delete(id);
       }
       return updated;
-    });
+  };
 
     // Log activation change
     logger.info("Module activation state changed", { moduleId: id, newState });
@@ -124,7 +124,7 @@ export const ModuleControl: React.FC = () => {
         ))}
       </div>
     );
-  };
+  });
 
   return (
     <main className="container mx-auto p-6 space-y-6" role="main" aria-label="Module Control Center">

@@ -188,7 +188,7 @@ const GlobalSearch: React.FC<GlobalSearchProps> = ({ isOpen, onOpenChange }) => 
     setRecentSearches(prev => {
       const updated = [result.title, ...prev.filter(item => item !== result.title)].slice(0, 5);
       return updated;
-    });
+  };
 
     // Navegar
     navigate(result.path);
@@ -199,7 +199,7 @@ const GlobalSearch: React.FC<GlobalSearchProps> = ({ isOpen, onOpenChange }) => 
       title: "Navegando",
       description: `Abrindo ${result.title}...`,
       duration: 2000
-    });
+    };
   };
 
   const getCategoryIcon = (category: string): React.ComponentType<{ className?: string }> => {

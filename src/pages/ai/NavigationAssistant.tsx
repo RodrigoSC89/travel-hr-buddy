@@ -67,7 +67,7 @@ const NavigationAssistant: React.FC = () => {
         title: "Campos obrigatórios",
         description: "Informe a origem e o destino da rota.",
         variant: "destructive",
-      });
+      };
       return;
     }
 
@@ -124,14 +124,14 @@ Formate a resposta em markdown estruturado com informações práticas para nave
       toast({
         title: "Rota analisada!",
         description: "Recomendações de navegação geradas com sucesso.",
-      });
+      };
     } catch (error) {
       console.error("Error analyzing route:", error);
       toast({
         title: "Erro na análise",
         description: "Não foi possível analisar a rota. Tente novamente.",
         variant: "destructive",
-      });
+      };
     } finally {
       setIsAnalyzing(false);
     }

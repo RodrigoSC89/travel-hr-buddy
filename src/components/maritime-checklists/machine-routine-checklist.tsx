@@ -725,7 +725,7 @@ export const MachineRoutineChecklist: React.FC<MachineRoutineChecklistProps> = (
                               toast({
                                 title: "Dados do sensor",
                                 description: "Dados atualizados do sensor IoT"
-                              });
+                              };
                             }}
                             disabled={readOnly}
                           >
@@ -739,7 +739,7 @@ export const MachineRoutineChecklist: React.FC<MachineRoutineChecklistProps> = (
                       <div className="flex items-center space-x-2">
                         <Switch
                           checked={item.value === true}
-                          onCheckedChange={(checked) => handleItemValueChange(item.id, checked)}
+                          onCheckedChange={(checked) => handleItemValueChange(item.id, checked}
                           disabled={readOnly}
                         />
                         <Label>
@@ -751,7 +751,7 @@ export const MachineRoutineChecklist: React.FC<MachineRoutineChecklistProps> = (
                     {item.type === "select" && (
                       <Select
                         value={String(item.value || "")}
-                        onValueChange={(value) => handleItemValueChange(item.id, value)}
+                        onValueChange={(value) => handleItemValueChange(item.id, value}
                         disabled={readOnly}
                       >
                         <SelectTrigger>

@@ -71,7 +71,7 @@ export const DocumentManagement: React.FC = () => {
     access_level: "organization" as "public" | "organization" | "restricted",
     tags: [] as string[],
     expires_at: ""
-  });
+  };
 
   // Form state for new category
   const [newCategory, setNewCategory] = useState({
@@ -159,7 +159,7 @@ export const DocumentManagement: React.FC = () => {
         title: "Erro",
         description: "Não foi possível carregar os documentos",
         variant: "destructive"
-      });
+      };
       setIsLoading(false);
     }
   };
@@ -209,13 +209,13 @@ export const DocumentManagement: React.FC = () => {
       toast({
         title: "Documento Adicionado",
         description: `${document.title} foi adicionado com sucesso`
-      });
+      };
     } catch (error) {
       toast({
         title: "Erro",
         description: "Não foi possível adicionar o documento",
         variant: "destructive"
-      });
+      };
     }
   };
 
@@ -232,19 +232,19 @@ export const DocumentManagement: React.FC = () => {
         name: "",
         description: "",
         color: "#3b82f6"
-      });
+      };
       setShowAddCategoryDialog(false);
       
       toast({
         title: "Categoria Criada",
         description: `${category.name} foi criada com sucesso`
-      });
+      };
     } catch (error) {
       toast({
         title: "Erro",
         description: "Não foi possível criar a categoria",
         variant: "destructive"
-      });
+      };
     }
   };
 
@@ -288,7 +288,7 @@ export const DocumentManagement: React.FC = () => {
                          doc.tags.some(tag => tag.toLowerCase().includes(searchTerm.toLowerCase()));
     const matchesCategory = filterCategory === "all" || doc.category === filterCategory;
     return matchesSearch && matchesCategory;
-  });
+  };
 
   return (
     <div className="space-y-6">

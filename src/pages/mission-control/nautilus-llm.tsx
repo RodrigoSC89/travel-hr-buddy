@@ -50,7 +50,7 @@ const NautilusLLM: React.FC = () => {
     averageConfidence: 0,
     averageExecutionTime: 0,
     cacheHitRate: 0
-  });
+  };
 
   useEffect(() => {
     loadStats();
@@ -81,7 +81,7 @@ const NautilusLLM: React.FC = () => {
       const response = await nautilusRespond({
         prompt: userMessage.content,
         mode
-      });
+      };
 
       const assistantMessage: Message = {
         id: response.sessionId,
@@ -101,7 +101,7 @@ const NautilusLLM: React.FC = () => {
         title: "Erro na IA",
         description: "Não foi possível obter resposta da IA. Tentando fallback...",
         variant: "destructive"
-      });
+      };
     } finally {
       setIsLoading(false);
     }
@@ -140,7 +140,7 @@ const NautilusLLM: React.FC = () => {
         title: "Erro no Comando",
         description: "Não foi possível executar o comando rápido.",
         variant: "destructive"
-      });
+      };
     } finally {
       setIsLoading(false);
     }
@@ -219,7 +219,7 @@ const NautilusLLM: React.FC = () => {
             </CardDescription>
           </CardHeader>
           <CardContent className="space-y-4">
-            <Tabs value={mode} onValueChange={(v) => setMode(v as NautilusMode)}>
+            <Tabs value={mode} onValueChange={(v) => setMode(v as NautilusMode}>
               <TabsList className="grid w-full grid-cols-3">
                 <TabsTrigger value="deterministic">Determinístico</TabsTrigger>
                 <TabsTrigger value="safe">Seguro</TabsTrigger>
@@ -326,6 +326,6 @@ const NautilusLLM: React.FC = () => {
       </div>
     </ModulePageWrapper>
   );
-};
+});
 
 export default NautilusLLM;

@@ -141,7 +141,7 @@ export const IntelligentNotificationCenter: React.FC<IntelligentNotificationCent
         title: "Erro",
         description: "Falha ao carregar notificações",
         variant: "destructive",
-      });
+      };
     } finally {
       setIsLoading(false);
     }
@@ -153,7 +153,7 @@ export const IntelligentNotificationCenter: React.FC<IntelligentNotificationCent
     toast({
       title: "Nova Notificação",
       description: payload.new.title,
-    });
+    };
   };
 
   const generateIntelligentNotification = async (type: string) => {
@@ -170,7 +170,7 @@ export const IntelligentNotificationCenter: React.FC<IntelligentNotificationCent
             timestamp: new Date().toISOString()
           }
         }
-      });
+      };
 
       if (error) throw error;
 
@@ -178,7 +178,7 @@ export const IntelligentNotificationCenter: React.FC<IntelligentNotificationCent
         toast({
           title: "Notificação Gerada",
           description: data.notification.title,
-        });
+        };
         loadNotifications();
       }
     } catch (error) {
@@ -186,7 +186,7 @@ export const IntelligentNotificationCenter: React.FC<IntelligentNotificationCent
         title: "Erro",
         description: "Falha ao gerar notificação",
         variant: "destructive",
-      });
+      };
     }
   };
 
@@ -205,7 +205,7 @@ export const IntelligentNotificationCenter: React.FC<IntelligentNotificationCent
     toast({
       title: "Todas Marcadas como Lidas",
       description: "Todas as notificações foram marcadas como lidas",
-    });
+    };
   };
 
   const dismissNotification = (id: string) => {
@@ -213,7 +213,7 @@ export const IntelligentNotificationCenter: React.FC<IntelligentNotificationCent
     toast({
       title: "Notificação Dispensada",
       description: "A notificação foi removida",
-    });
+    };
   };
 
   const handleNotificationAction = (notification: IntelligentNotification) => {
@@ -223,7 +223,7 @@ export const IntelligentNotificationCenter: React.FC<IntelligentNotificationCent
       toast({
         title: "Navegando",
         description: `Abrindo módulo: ${notification.actionData.module}`,
-      });
+      };
     }
   };
 
@@ -286,7 +286,7 @@ export const IntelligentNotificationCenter: React.FC<IntelligentNotificationCent
         </div>
       </CardHeader>
       <CardContent>
-        <Tabs value={filter} onValueChange={(value) => setFilter(value as unknown)} className="w-full">
+        <Tabs value={filter} onValueChange={(value) => setFilter(value as unknown} className="w-full">
           <TabsList className="grid w-full grid-cols-3">
             <TabsTrigger value="all">
               Todas ({notifications.length})
@@ -434,6 +434,6 @@ export const IntelligentNotificationCenter: React.FC<IntelligentNotificationCent
       </CardContent>
     </Card>
   );
-};
+});
 
 export default IntelligentNotificationCenter;

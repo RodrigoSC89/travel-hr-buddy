@@ -51,12 +51,12 @@ export default function IncidentAiModal() {
     try {
       const { data, error } = await supabase.functions.invoke("dp-intel-analyze", {
         body: { incident },
-      });
+      };
 
       if (error) {
         toast.error("Erro ao analisar incidente", {
           description: error.message || "Tente novamente mais tarde",
-        });
+        };
         setAnalysis("Erro ao processar análise. Por favor, tente novamente.");
         return;
       }

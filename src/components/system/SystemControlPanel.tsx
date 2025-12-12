@@ -139,7 +139,7 @@ const MetricCard = ({ icon: Icon, label, value, color, progress }: {
 );
 
 // Controles de Idioma
-const LanguageControls = () => {
+const LanguageControls = memo(() => {
   const [currentLang, setCurrentLang] = useState("pt-BR");
   const languages = [
     { code: "pt-BR", name: "Português", flag: "🇧🇷" },
@@ -175,10 +175,10 @@ const LanguageControls = () => {
       </CardContent>
     </Card>
   );
-};
+});
 
 // Controles de Acessibilidade
-const AccessibilityControls = () => {
+const AccessibilityControls = memo(() => {
   const [settings, setSettings] = useState({
     highContrast: false,
     largeText: false,
@@ -220,7 +220,7 @@ const AccessibilityControls = () => {
       </CardContent>
     </Card>
   );
-};
+});
 
 // PWA Controls
 const PWAControls = () => {
@@ -331,7 +331,7 @@ const NotificationControls = () => {
 };
 
 // Sistema Status Geral
-const SystemStatus = () => {
+const SystemStatus = memo(() => {
   const [status, setStatus] = useState({
     database: "operational",
     api: "operational",
@@ -394,7 +394,7 @@ const SystemStatus = () => {
       </CardContent>
     </Card>
   );
-};
+});
 
 // Painel Principal
 export const SystemControlPanel = () => {

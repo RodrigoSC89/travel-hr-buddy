@@ -152,10 +152,10 @@ export const IncidentTimeline: React.FC<IncidentTimelineProps> = ({
       const severityDiff = severityOrder[b.severity] - severityOrder[a.severity];
       if (severityDiff !== 0) return severityDiff;
       return new Date(b.created_at).getTime() - new Date(a.created_at).getTime();
-    });
+  });
 
     setFilteredIncidents(filtered);
-  };
+  });
 
   const groupByMonth = (incidents: Incident[]) => {
     const groups: { [key: string]: Incident[] } = {};
@@ -168,7 +168,7 @@ export const IncidentTimeline: React.FC<IncidentTimelineProps> = ({
         groups[monthKey] = [];
       }
       groups[monthKey].push(incident);
-    });
+  };
 
     return Object.entries(groups).sort((a, b) => b[0].localeCompare(a[0]));
   };
@@ -187,7 +187,7 @@ export const IncidentTimeline: React.FC<IncidentTimelineProps> = ({
       const canvas = await html2canvas(timelineRef.current, {
         backgroundColor: "#ffffff",
         scale: 2,
-      });
+      };
 
       const link = document.createElement("a");
       link.download = `incident-timeline-${Date.now()}.png`;
@@ -245,7 +245,7 @@ export const IncidentTimeline: React.FC<IncidentTimelineProps> = ({
           <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
             <div className="space-y-2">
               <Label>Module Filter</Label>
-              <Select value={moduleFilter || "all"} onValueChange={(value) => setModuleFilter(value === "all" ? "" : value)}>
+              <Select value={moduleFilter || "all"} onValueChange={(value) => setModuleFilter(value === "all" ? "" : value}>
                 <SelectTrigger>
                   <SelectValue placeholder="All modules" />
                 </SelectTrigger>
@@ -386,4 +386,4 @@ export const IncidentTimeline: React.FC<IncidentTimelineProps> = ({
       </Card>
     </div>
   );
-};
+});

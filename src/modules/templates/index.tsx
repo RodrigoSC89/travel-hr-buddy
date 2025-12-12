@@ -114,7 +114,7 @@ export const CompleteTemplateEditor: React.FC = () => {
         class: "prose prose-sm max-w-none focus:outline-none min-h-[400px] p-4 border rounded-md",
       },
     },
-  });
+  };
 
   useEffect(() => {
     loadTemplates();
@@ -129,7 +129,7 @@ export const CompleteTemplateEditor: React.FC = () => {
       const initialValues: PlaceholderValue = {};
       selectedTemplate.placeholders?.forEach(ph => {
         initialValues[ph] = "";
-      });
+  });
       setPlaceholderValues(initialValues);
     }
   }, [selectedTemplate, editor]);
@@ -246,7 +246,7 @@ export const CompleteTemplateEditor: React.FC = () => {
     Object.entries(placeholderValues).forEach(([key, value]) => {
       const regex = new RegExp(key.replace(/[{}]/g, "\\$&"), "g");
       content = content.replace(regex, value || key);
-    });
+  };
 
     editor.commands.setContent(content);
     setShowFillDialog(false);
@@ -319,7 +319,7 @@ export const CompleteTemplateEditor: React.FC = () => {
           properties: {},
           children: paragraphs
         }]
-      });
+      };
 
       const blob = await Packer.toBlob(doc);
       const filename = `${templateTitle || "document"}_${new Date().toISOString().split("T")[0]}.docx`;
@@ -346,7 +346,7 @@ export const CompleteTemplateEditor: React.FC = () => {
     Object.entries(placeholderValues).forEach(([key, value]) => {
       const regex = new RegExp(key.replace(/[{}]/g, "\\$&"), "g");
       content = content.replace(regex, value || `<span class="text-orange-500">${key}</span>`);
-    });
+  };
     
     setPreviewContent(content);
     setShowPreviewDialog(true);
@@ -367,7 +367,7 @@ export const CompleteTemplateEditor: React.FC = () => {
           exported_by: user.id,
           exported_at: new Date().toISOString(),
           placeholder_values: placeholderValues
-        });
+        };
       
       if (error) {
       }

@@ -92,14 +92,14 @@ export const EnhancedReservationsCalendar: React.FC = () => {
       const eventStart = new Date(event.startDate);
       const eventEnd = new Date(event.endDate);
       return date >= eventStart && date <= eventEnd;
-    });
+  };
   };
 
   const duplicateReservation = (reservation: ReservationEvent) => {
     toast({
       title: "Reserva Duplicada",
       description: `Reserva ${reservation.id} duplicada com sucesso. Nova reserva: ${reservation.id}-COPY`,
-    });
+    };
   };
 
   const getStatusColor = (status: string) => {
@@ -313,4 +313,4 @@ export const EnhancedReservationsCalendar: React.FC = () => {
       </div>
     </div>
   );
-};
+});

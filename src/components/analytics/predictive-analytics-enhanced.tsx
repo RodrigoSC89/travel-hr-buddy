@@ -65,7 +65,7 @@ const PredictiveAnalyticsEnhanced: React.FC = () => {
     market: true,
     safety: true,
     crew: false
-  });
+  };
 
   const predictions: Prediction[] = [
     {
@@ -514,6 +514,6 @@ const PredictiveAnalyticsEnhanced: React.FC = () => {
       </Tabs>
     </div>
   );
-};
+});
 
 export default PredictiveAnalyticsEnhanced;

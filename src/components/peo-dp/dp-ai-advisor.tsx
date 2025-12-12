@@ -263,7 +263,7 @@ export const DPAIAdvisor: React.FC = () => {
       setMessages(prev => [...prev, assistantMessage]);
       setIsLoading(false);
     }, 1500);
-  };
+  });
 
   const handleQuickQuestion = (question: string) => {
     setInput(question);

@@ -95,4 +95,4 @@ export const ServiceStatusPanel: React.FC = () => {
       </CardContent>
     </Card>
   );
-};
+});

@@ -61,7 +61,7 @@ export const CommandPalette = memo(() => {
             return (
               <CommandItem
                 key={action.id}
-                onSelect={() => handleSelect(() => navigate(action.action))}
+                onSelect={() => handleSelect(() => navigate(action.action}
               >
                 <Icon className="mr-2 h-4 w-4" />
                 <span>{action.label}</span>
@@ -74,7 +74,7 @@ export const CommandPalette = memo(() => {
           {NAUTILUS_MODULES.slice(0, 15).map((module: ModuleDefinition) => (
             <CommandItem
               key={module.id}
-              onSelect={() => handleSelect(() => navigate(module.path))}
+              onSelect={() => handleSelect(() => navigate(module.path}
             >
               <Ship className="mr-2 h-4 w-4" />
               <span>{module.name}</span>
@@ -87,4 +87,4 @@ export const CommandPalette = memo(() => {
       </CommandList>
     </CommandDialog>
   );
-};
+});

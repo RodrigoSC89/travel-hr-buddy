@@ -65,7 +65,7 @@ export const PerformanceWrapper = memo(function({
           if (enableAnalytics) {
             analytics.timing("performance", "lcp", lastEntry.startTime);
           }
-        });
+        };
         lcpObserver.observe({ type: "largest-contentful-paint", buffered: true });
 
         return () => {

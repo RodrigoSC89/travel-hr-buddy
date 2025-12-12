@@ -85,7 +85,7 @@ export const PriceAlertsList: React.FC<PriceAlertsListProps> = ({ onEdit, refres
     } else {
       return (b.is_active ? 1 : 0) - (a.is_active ? 1 : 0);
     }
-  });
+  };
 
   const isPriceDropped = (alert: PriceAlert) => {
     return alert.current_price && alert.current_price <= alert.target_price;
@@ -219,4 +219,4 @@ export const PriceAlertsList: React.FC<PriceAlertsListProps> = ({ onEdit, refres
       )}
     </div>
   );
-};
+});

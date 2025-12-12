@@ -59,7 +59,7 @@ export const FloatingShortcutButton: React.FC<FloatingShortcutButtonProps> = ({
     if (React.isValidElement(icon)) {
       return React.cloneElement(icon as React.ReactElement, {
         className: cn(iconSizes[size], spinning && "animate-spin")
-      });
+      };
     }
     const IconComp = icon as LucideIcon;
     return <IconComp className={cn(iconSizes[size], spinning && "animate-spin")} />;

@@ -17,7 +17,7 @@ const AlertasPrecosModule = () => {
     priceIncreases: 0,
     priceDrops: 0,
     estimatedSavings: 0
-  });
+  };
 
   const loadStats = async () => {
     try {
@@ -41,7 +41,7 @@ const AlertasPrecosModule = () => {
         priceIncreases,
         priceDrops,
         estimatedSavings
-      });
+      };
     } catch (error) {
       console.error("Error loading stats:", error);
     }
@@ -147,6 +147,6 @@ const AlertasPrecosModule = () => {
       </div>
     </div>
   );
-};
+});
 
 export default AlertasPrecosModule;

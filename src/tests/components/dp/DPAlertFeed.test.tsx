@@ -56,7 +56,7 @@ describe("DPAlertFeed Component", () => {
     
     await waitFor(() => {
       expect(screen.getByText("Alerta Crítico")).toBeInTheDocument();
-    });
+  });
   });
 
   it("should format risk percentage correctly", async () => {
@@ -64,7 +64,7 @@ describe("DPAlertFeed Component", () => {
     
     await waitFor(() => {
       expect(screen.getByText(/85\.0%/)).toBeInTheDocument();
-    });
+  });
   });
 
   it("should display timestamp in correct format", async () => {
@@ -74,6 +74,6 @@ describe("DPAlertFeed Component", () => {
       // Check if a time string is rendered (format varies by locale)
       const timeElement = screen.getByText(/Risco:/);
       expect(timeElement).toBeInTheDocument();
-    });
+  });
   });
 });

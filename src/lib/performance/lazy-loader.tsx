@@ -4,7 +4,7 @@ import { useEffect, useState, useCallback } from "react";;
  * Provides optimized lazy loading with retry, timeout, and fallback support
  */
 import React, { Suspense, ComponentType, lazy } from "react";
-import { OffshoreLoader } from "@/components/LoadingStates";
+import { FullScreenLoader as OffshoreLoader } from "@/components/ux/LoadingStates";
 
 interface LazyConfig {
   /** Timeout in ms before showing error (default: 10000) */

@@ -67,7 +67,7 @@ export const Gamification = memo(() => {
     completedTasks: 156,
     collaborationScore: 87,
     innovationIndex: 92
-  });
+  };
 
   const [achievements, setAchievements] = useState<Achievement[]>([
     {
@@ -194,7 +194,7 @@ export const Gamification = memo(() => {
       toast({
         title: "Recompensa Coletada! 🎉",
         description: `Você ganhou ${achievement.points} pontos por "${achievement.title}"`,
-      });
+      };
     }
   };
 

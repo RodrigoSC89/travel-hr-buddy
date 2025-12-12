@@ -40,7 +40,7 @@ export default function TemplateValidationReport() {
           ? "Editor TipTap carregado e funcional" 
           : "Editor disponível mas não montado nesta página",
         details: "Componente TemplateEditor.tsx com rich text editing completo"
-      });
+      };
     } catch (error) {
       testResults.push({
         test: "Editor Funcional",
@@ -171,7 +171,7 @@ export default function TemplateValidationReport() {
           status: "warning",
           message: "Usuário não autenticado",
           details: "Faça login para testar o salvamento de templates"
-        });
+        };
       } else {
         // Try to insert a test template (will rollback)
         const testTemplate = {

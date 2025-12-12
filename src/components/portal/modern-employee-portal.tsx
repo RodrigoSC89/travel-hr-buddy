@@ -132,7 +132,7 @@ export const ModernEmployeePortal: React.FC = () => {
         title: "Erro",
         description: "Erro ao carregar dados do portal",
         variant: "destructive"
-      });
+      };
     } finally {
       setLoading(false);
     }
@@ -210,7 +210,7 @@ export const ModernEmployeePortal: React.FC = () => {
         upcomingTraining: 0, // Implementar quando houver tabela de treinamentos
         recentPayments: [], // Implementar quando houver tabela de pagamentos
         nextEmbarkation: null
-      });
+      };
     } catch (error) {
     }
   };
@@ -241,7 +241,7 @@ export const ModernEmployeePortal: React.FC = () => {
         training: [], // Implementar quando houver tabela
         certifications: certifications.data || [],
         medicalExams: [] // Implementar quando houver tabela
-      });
+      };
     } catch (error) {
     }
   };
@@ -253,7 +253,7 @@ export const ModernEmployeePortal: React.FC = () => {
       // Gerar insights de IA automaticamente
       await supabase.functions.invoke("crew-ai-insights", {
         body: { crewMemberId: userProfile.id }
-      });
+      };
 
       // Buscar insights da base de dados
       const { data: insights, error } = await supabase
@@ -318,7 +318,7 @@ export const ModernEmployeePortal: React.FC = () => {
             personalCalendar
           }
         }
-      });
+      };
 
       if (error) throw error;
 
@@ -366,14 +366,14 @@ export const ModernEmployeePortal: React.FC = () => {
           file_size: file.size,
           uploaded_by: user?.id,
           verification_status: "pending"
-        });
+        };
 
       if (dbError) throw dbError;
 
       toast({
         title: "Documento enviado",
         description: "Seu documento foi enviado para verificação"
-      });
+      };
 
       await loadDocuments();
     } catch (error) {
@@ -381,7 +381,7 @@ export const ModernEmployeePortal: React.FC = () => {
         title: "Erro no upload",
         description: "Não foi possível enviar o documento",
         variant: "destructive"
-      });
+      };
     } finally {
       setUploadingDoc(false);
     }
@@ -502,7 +502,7 @@ export const ModernEmployeePortal: React.FC = () => {
                       placeholder="Digite sua mensagem..."
                       value={newMessage}
                       onChange={handleChange}
-                      onKeyPress={(e) => e.key === "Enter" && handleAIChat(newMessage)}
+                      onKeyPress={(e) => e.key === "Enter" && handleAIChat(newMessage}
                       disabled={isProcessing}
                     />
                     <Button 
@@ -879,7 +879,7 @@ export const ModernEmployeePortal: React.FC = () => {
                       Visualize todas suas informações profissionais, certificações e histórico
                     </p>
                     <Button 
-                      onClick={() => window.open("/crew-dossier", "_blank")}
+                      onClick={() => window.open("/crew-dossier", "_blank"}
                       className="w-full max-w-sm"
                     >
                       <ExternalLink className="h-4 w-4 mr-2" />

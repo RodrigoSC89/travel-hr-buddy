@@ -65,7 +65,7 @@ export const TemplateLibrary: React.FC = () => {
     category: "general",
     content: "",
     is_public: false
-  });
+  };
 
   const [generateData, setGenerateData] = useState<Record<string, string>>({});
 
@@ -93,7 +93,7 @@ export const TemplateLibrary: React.FC = () => {
         title: "Error",
         description: "Failed to load templates",
         variant: "destructive"
-      });
+      };
     } finally {
       setLoading(false);
     }
@@ -172,7 +172,7 @@ export const TemplateLibrary: React.FC = () => {
       toast({
         title: "Success",
         description: "Template created successfully"
-      });
+      };
 
       setIsCreateOpen(false);
       resetForm();
@@ -183,7 +183,7 @@ export const TemplateLibrary: React.FC = () => {
         title: "Error",
         description: "Failed to create template",
         variant: "destructive"
-      });
+      };
     }
   };
 
@@ -201,7 +201,7 @@ export const TemplateLibrary: React.FC = () => {
       toast({
         title: "Success",
         description: "Template deleted successfully"
-      });
+      };
 
       loadTemplates();
     } catch (error) {
@@ -210,7 +210,7 @@ export const TemplateLibrary: React.FC = () => {
         title: "Error",
         description: "Failed to delete template",
         variant: "destructive"
-      });
+      };
     }
   };
 
@@ -220,7 +220,7 @@ export const TemplateLibrary: React.FC = () => {
     const initialData: Record<string, string> = {};
     placeholders.forEach(p => {
       initialData[p] = "";
-    });
+  };
     setGenerateData(initialData);
     setIsGenerateOpen(true);
   };
@@ -235,7 +235,7 @@ export const TemplateLibrary: React.FC = () => {
       Object.keys(generateData).forEach(key => {
         const regex = new RegExp(`\\{\\{\\s*${key}\\s*\\}\\}`, "g");
         content = content.replace(regex, generateData[key] || `[${key}]`);
-      });
+  };
 
       // Generate PDF
       const doc = new jsPDF();
@@ -268,7 +268,7 @@ export const TemplateLibrary: React.FC = () => {
       toast({
         title: "Success",
         description: "PDF generated successfully"
-      });
+      };
 
       setIsGenerateOpen(false);
     } catch (error) {
@@ -277,7 +277,7 @@ export const TemplateLibrary: React.FC = () => {
         title: "Error",
         description: "Failed to generate PDF",
         variant: "destructive"
-      });
+      };
     }
   };
 
@@ -288,7 +288,7 @@ export const TemplateLibrary: React.FC = () => {
       category: "general",
       content: "",
       is_public: false
-    });
+    };
   };
 
   const getCategoryBadge = (category: string) => {

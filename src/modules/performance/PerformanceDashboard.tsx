@@ -144,7 +144,7 @@ const PerformanceDashboard: React.FC = () => {
       toast({
         title: "Dashboard Atualizado",
         description: "Dados de performance carregados com sucesso",
-      });
+      };
 
     } catch (error) {
       console.error("[Performance Dashboard] Error loading data:", error);
@@ -153,7 +153,7 @@ const PerformanceDashboard: React.FC = () => {
         title: "Erro",
         description: "Falha ao carregar dados de performance",
         variant: "destructive",
-      });
+      };
     } finally {
       setIsLoading(false);
     }
@@ -166,7 +166,7 @@ const PerformanceDashboard: React.FC = () => {
       toast({
         title: "Gerando PDF",
         description: "Preparando relatório de performance...",
-      });
+      };
 
       await exportPerformancePDF({
         metrics,
@@ -178,12 +178,12 @@ const PerformanceDashboard: React.FC = () => {
         period: selectedPeriod,
         vessel: selectedVessel,
         missionType: selectedMissionType
-      });
+      };
 
       toast({
         title: "PDF Gerado",
         description: "Relatório de performance exportado com sucesso",
-      });
+      };
 
     } catch (error) {
       console.error("[Performance Dashboard] PDF export error:", error);
@@ -192,7 +192,7 @@ const PerformanceDashboard: React.FC = () => {
         title: "Erro",
         description: "Falha ao gerar PDF",
         variant: "destructive",
-      });
+      };
     }
   };
 

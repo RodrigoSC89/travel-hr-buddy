@@ -96,13 +96,13 @@ export const AIAnalyticsDashboard: React.FC = () => {
       toast({
         title: "Analytics Carregadas",
         description: "Dados de IA atualizados com sucesso",
-      });
+      };
     } catch (error) {
       toast({
         title: "Erro",
         description: "Falha ao carregar analytics de IA",
         variant: "destructive",
-      });
+      };
     } finally {
       setIsLoading(false);
     }
@@ -351,6 +351,6 @@ export const AIAnalyticsDashboard: React.FC = () => {
       </Tabs>
     </div>
   );
-};
+});
 
 export default AIAnalyticsDashboard;

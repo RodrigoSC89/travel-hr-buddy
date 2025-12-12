@@ -232,7 +232,7 @@ const ComplianceCenter: React.FC = () => {
     const matchesType = typeFilter === "all" || cert.type === typeFilter;
     
     return matchesSearch && matchesStatus && matchesType;
-  });
+  };
 
   // Calculate compliance stats
   const stats = {

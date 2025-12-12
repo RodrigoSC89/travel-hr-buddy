@@ -115,7 +115,7 @@ export const EnhancedHistoryStats = memo(function() {
         title: "Erro ao carregar histórico",
         description: "Não foi possível carregar os dados de histórico de preços",
         variant: "destructive",
-      });
+      };
     } finally {
       setIsLoading(false);
     }
@@ -154,11 +154,11 @@ export const EnhancedHistoryStats = memo(function() {
     const flightPrices = labels.map((date) => {
       const prices = groupedByDate[date].flight;
       return prices.length > 0 ? prices.reduce((a, b) => a + b, 0) / prices.length : 0;
-    });
+  };
     const hotelPrices = labels.map((date) => {
       const prices = groupedByDate[date].hotel;
       return prices.length > 0 ? prices.reduce((a, b) => a + b, 0) / prices.length : 0;
-    });
+  };
 
     return {
       labels,
@@ -192,11 +192,11 @@ export const EnhancedHistoryStats = memo(function() {
       }
       routeStats[item.route].count++;
       routeStats[item.route].totalPrice += item.price;
-    });
+  };
 
     Object.keys(routeStats).forEach((route) => {
       routeStats[route].avgPrice = routeStats[route].totalPrice / routeStats[route].count;
-    });
+  };
 
     const sortedRoutes = Object.entries(routeStats)
       .sort(([, a], [, b]) => b.avgPrice - a.avgPrice)
@@ -272,7 +272,7 @@ export const EnhancedHistoryStats = memo(function() {
     toast({
       title: "CSV exportado",
       description: "O arquivo foi baixado com sucesso",
-    });
+    };
   };
 
   const exportToPDF = async () => {
@@ -336,7 +336,7 @@ export const EnhancedHistoryStats = memo(function() {
     toast({
       title: "PDF exportado",
       description: "O arquivo foi baixado com sucesso",
-    });
+    };
   };
 
   if (isLoading) {

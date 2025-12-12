@@ -117,7 +117,7 @@ export default function AIDocuments() {
       toast({
         title: "Document uploaded",
         description: "OCR processing completed successfully",
-      });
+      };
       
       setSelectedFile(null);
     } catch (error: SupabaseError | null) {
@@ -125,7 +125,7 @@ export default function AIDocuments() {
         title: "Upload failed",
         description: error.message,
         variant: "destructive"
-      });
+      };
     } finally {
       setUploading(false);
       setProcessing(false);
@@ -143,7 +143,7 @@ export default function AIDocuments() {
         p_document_id: documentId,
         p_analysis_type: "ocr",
         p_status: "started"
-      });
+      };
 
       const worker = await createWorker();
       
@@ -154,7 +154,7 @@ export default function AIDocuments() {
       
       const { data: { text, confidence } } = await worker.recognize(file, {}, (progress) => {
         setOcrProgress(30 + (progress.progress * 50));
-      });
+  };
       
       await worker.terminate();
       
@@ -181,7 +181,7 @@ export default function AIDocuments() {
           document_id: documentId,
           keyword: keyword.text,
           relevance_score: keyword.score
-        });
+        };
       }
       
       setOcrProgress(100);
@@ -192,7 +192,7 @@ export default function AIDocuments() {
         p_analysis_type: "ocr",
         p_status: "completed",
         p_results: { confidence, word_count: text.split(/\s+/).length }
-      });
+      };
       
     } catch (error: SupabaseError | null) {
       console.error("OCR Error:", error);
@@ -203,7 +203,7 @@ export default function AIDocuments() {
         p_analysis_type: "ocr",
         p_status: "failed",
         p_error: error.message
-      });
+      };
       
       throw error;
     }
@@ -237,7 +237,7 @@ export default function AIDocuments() {
     keywords.slice(0, 10).forEach(kw => {
       const regex = new RegExp(`\\b${kw.text || kw}\\b`, "gi");
       highlighted = highlighted.replace(regex, "<mark class=\"bg-yellow-200 dark:bg-yellow-800\">$&</mark>");
-    });
+  };
     
     return highlighted;
   };
@@ -423,7 +423,7 @@ export default function AIDocuments() {
                         <Button
                           variant="outline"
                           size="sm"
-                          onClick={() => window.open(doc.file_url, "_blank")}
+                          onClick={() => window.open(doc.file_url, "_blank"}
                         >
                           <Download className="w-4 h-4" />
                         </Button>

@@ -169,7 +169,7 @@ export const VesselProvider: React.FC<VesselProviderProps> = ({
       {children}
     </VesselContext.Provider>
   );
-};
+});
 
 /**
  * Hook to access vessel context

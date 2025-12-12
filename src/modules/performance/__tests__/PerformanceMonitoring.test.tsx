@@ -62,7 +62,7 @@ describe("PerformanceMonitoringDashboard", () => {
     render(<PerformanceMonitoringDashboard />);
     expect(screen.getByText("Thresholds")).toBeInTheDocument();
   });
-});
+  });
 
 describe("Threshold alerts", () => {
   it("should trigger toast notification for critical alerts", () => {

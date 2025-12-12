@@ -85,7 +85,7 @@ export const IncidentReportDialog: React.FC<IncidentReportDialogProps> = ({
     location: "",
     severity: "",
     witnesses: "",
-  });
+};
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -102,7 +102,7 @@ export const IncidentReportDialog: React.FC<IncidentReportDialogProps> = ({
         severity: formData.severity as SafetyIncident["severity"],
         incident_date: format(date, "yyyy-MM-dd"),
         witnesses: formData.witnesses ? formData.witnesses.split(",").map(w => w.trim()) : [],
-      });
+      };
       
       // Reset form
       setFormData({
@@ -207,7 +207,7 @@ export const IncidentReportDialog: React.FC<IncidentReportDialogProps> = ({
                   <Calendar
                     mode="single"
                     selected={date}
-                    onSelect={(d) => d && setDate(d)}
+                    onSelect={(d) => d && setDate(d}
                     disabled={(date) => date > new Date()}
                     initialFocus
                   />

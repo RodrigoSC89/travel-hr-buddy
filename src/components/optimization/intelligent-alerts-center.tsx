@@ -222,7 +222,7 @@ export const IntelligentAlertsCenter = memo(() => {
       title: "Novo Alerta Inteligente",
       description: newAlert.message,
       duration: 4000
-    });
+    };
   };
 
   const markAsRead = (alertId: string) => {
@@ -244,7 +244,7 @@ export const IntelligentAlertsCenter = memo(() => {
       title: "Regra Atualizada",
       description: "Configuração de alerta foi atualizada",
       duration: 2000
-    });
+    };
   };
 
   const updateThreshold = (ruleId: string, newThreshold: number) => {
@@ -462,7 +462,7 @@ export const IntelligentAlertsCenter = memo(() => {
                     
                     <Switch
                       checked={rule.enabled}
-                      onCheckedChange={() => toggleRule(rule.id)}
+                      onCheckedChange={() => toggleRule(rule.id}
                     />
                   </div>
                   
@@ -475,7 +475,7 @@ export const IntelligentAlertsCenter = memo(() => {
                           </label>
                           <Slider
                             value={[rule.threshold]}
-                            onValueChange={(value) => updateThreshold(rule.id, value[0])}
+                            onValueChange={(value) => updateThreshold(rule.id, value[0]}
                             max={100}
                             min={0}
                             step={5}
@@ -579,4 +579,4 @@ export const IntelligentAlertsCenter = memo(() => {
       </Card>
     </div>
   );
-};
+});

@@ -40,7 +40,7 @@ export const AIVoiceAssistant: React.FC<VoiceAssistantProps> = ({
         title: "Permissão negada",
         description: "Precisamos da permissão do microfone para o assistente por voz",
         variant: "destructive"
-      });
+      };
       return false;
     }
   };
@@ -75,7 +75,7 @@ export const AIVoiceAssistant: React.FC<VoiceAssistantProps> = ({
         title: "Erro",
         description: "Não foi possível iniciar a gravação",
         variant: "destructive"
-      });
+      };
     }
   };
 
@@ -108,7 +108,7 @@ export const AIVoiceAssistant: React.FC<VoiceAssistantProps> = ({
             audio: base64Audio,
             crewMemberId
           }
-        });
+        };
 
         if (error) throw error;
 
@@ -123,7 +123,7 @@ export const AIVoiceAssistant: React.FC<VoiceAssistantProps> = ({
             crewMemberId,
             responseFormat: "voice"
           }
-        });
+        };
 
         if (aiError) throw aiError;
 
@@ -142,7 +142,7 @@ export const AIVoiceAssistant: React.FC<VoiceAssistantProps> = ({
         title: "Erro",
         description: "Não foi possível processar o áudio",
         variant: "destructive"
-      });
+      };
     } finally {
       setIsProcessing(false);
     }
@@ -160,7 +160,7 @@ export const AIVoiceAssistant: React.FC<VoiceAssistantProps> = ({
           voiceId: "Sarah", // Voz padrão
           crewMemberId
         }
-      });
+      };
 
       if (error) throw error;
 
@@ -196,7 +196,7 @@ export const AIVoiceAssistant: React.FC<VoiceAssistantProps> = ({
         title: "Síntese de fala não disponível",
         description: "Seu navegador não suporta síntese de fala",
         variant: "destructive"
-      });
+      };
     }
   };
 

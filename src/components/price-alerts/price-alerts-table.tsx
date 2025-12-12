@@ -142,7 +142,7 @@ export const PriceAlertsTable: React.FC<PriceAlertsTableProps> = ({
           />
         </div>
         <div className="flex gap-2">
-          <Select value={filterStatus} onValueChange={(value: unknown) => setFilterStatus(value)}>
+          <Select value={filterStatus} onValueChange={(value: unknown) => setFilterStatus(value}>
             <SelectTrigger className="w-[180px]">
               <Filter className="w-4 h-4 mr-2" />
               <SelectValue placeholder="Filter by status" />
@@ -230,7 +230,7 @@ export const PriceAlertsTable: React.FC<PriceAlertsTableProps> = ({
                   <TableCell>
                     <Switch
                       checked={alert.is_active}
-                      onCheckedChange={(checked) => onToggle(alert.id, checked)}
+                      onCheckedChange={(checked) => onToggle(alert.id, checked}
                     />
                   </TableCell>
                   <TableCell className="font-medium">

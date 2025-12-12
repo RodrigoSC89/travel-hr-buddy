@@ -51,7 +51,7 @@ export const DocumentUploader: React.FC<DocumentUploaderProps> = ({
     category: "",
     tags: [],
     version: "1.0",
-  });
+};
   const [uploading, setUploading] = useState(false);
   const [progress, setProgress] = useState(0);
   const [dragActive, setDragActive] = useState(false);
@@ -100,7 +100,7 @@ export const DocumentUploader: React.FC<DocumentUploaderProps> = ({
           return 90;
         }
         return prev + 10;
-      });
+  };
     }, 200);
 
     try {
@@ -124,7 +124,7 @@ export const DocumentUploader: React.FC<DocumentUploaderProps> = ({
       category: "",
       tags: [],
       version: "1.0",
-    });
+    };
     setProgress(0);
     onClose();
   };

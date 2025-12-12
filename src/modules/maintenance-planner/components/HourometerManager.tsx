@@ -67,7 +67,7 @@ export default function HourometerManager() {
         title: "Erro",
         description: "Informe um valor válido de horas",
         variant: "destructive",
-      });
+      };
       return;
     }
 
@@ -90,7 +90,7 @@ export default function HourometerManager() {
     toast({
       title: "Horímetro atualizado",
       description: `Novo valor: ${newHours}h registrado com sucesso`,
-    });
+    };
 
     setEditingId(null);
     setNewHours("");

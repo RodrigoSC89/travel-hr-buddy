@@ -152,7 +152,7 @@ export default function DocumentHub() {
           fileType: selectedFile.type,
           fileSize: selectedFile.size,
         },
-      });
+      };
 
       setAiInsight(aiResponse.message);
       logger.info("AI analysis completed", { confidence: aiResponse.confidence });
@@ -166,7 +166,7 @@ export default function DocumentHub() {
           size: selectedFile.size,
           storage_path: uploadData.path,
           ai_analysis: aiResponse.message,
-        });
+        };
 
       if (dbError) {
         logger.warn("Failed to store document metadata", { error: dbError.message });

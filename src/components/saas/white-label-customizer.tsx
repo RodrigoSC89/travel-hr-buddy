@@ -78,7 +78,7 @@ export const WhiteLabelCustomizer: React.FC = () => {
         };
       }
       return prev;
-    });
+    };
     setHasChanges(true);
   };
 
@@ -92,13 +92,13 @@ export const WhiteLabelCustomizer: React.FC = () => {
       toast({
         title: "Personalização salva",
         description: "As configurações de marca foram atualizadas com sucesso",
-      });
+      };
     } catch (error) {
       toast({
         title: "Erro",
         description: "Não foi possível salvar as configurações",
         variant: "destructive",
-      });
+      };
     } finally {
       setIsLoading(false);
     }
@@ -120,7 +120,7 @@ export const WhiteLabelCustomizer: React.FC = () => {
       timezone: currentBranding?.timezone || "America/Sao_Paulo",
       enabled_modules: currentBranding?.enabled_modules || {},
       business_rules: currentBranding?.business_rules || {}
-    });
+    };
     setHasChanges(false);
   };
 
@@ -328,7 +328,7 @@ export const WhiteLabelCustomizer: React.FC = () => {
                 <h4 className="text-sm font-medium">Modo de Tema</h4>
                 <Select
                   value={formData.theme_mode}
-                  onValueChange={(value) => handleInputChange("theme_mode", value)}
+                  onValueChange={(value) => handleInputChange("theme_mode", value}
                 >
                   <SelectTrigger>
                     <SelectValue />
@@ -376,7 +376,7 @@ export const WhiteLabelCustomizer: React.FC = () => {
                   <Label>Idioma Padrão</Label>
                   <Select
                     value={formData.default_language}
-                    onValueChange={(value) => handleInputChange("default_language", value)}
+                    onValueChange={(value) => handleInputChange("default_language", value}
                   >
                     <SelectTrigger>
                       <SelectValue />
@@ -395,7 +395,7 @@ export const WhiteLabelCustomizer: React.FC = () => {
                   <Label>Moeda Padrão</Label>
                   <Select
                     value={formData.default_currency}
-                    onValueChange={(value) => handleInputChange("default_currency", value)}
+                    onValueChange={(value) => handleInputChange("default_currency", value}
                   >
                     <SelectTrigger>
                       <SelectValue />
@@ -414,7 +414,7 @@ export const WhiteLabelCustomizer: React.FC = () => {
                   <Label>Fuso Horário</Label>
                   <Select
                     value={formData.timezone}
-                    onValueChange={(value) => handleInputChange("timezone", value)}
+                    onValueChange={(value) => handleInputChange("timezone", value}
                   >
                     <SelectTrigger>
                       <SelectValue />

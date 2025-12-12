@@ -63,7 +63,7 @@ const MaritimeIdentitySystem: React.FC = () => {
     maritimeElements: true,
     navigationStyle: "modern",
     terminology: "maritime"
-  });
+  };
   
   const [previewMode, setPreviewMode] = useState(false);
   const [originalTheme, setOriginalTheme] = useState<{
@@ -207,7 +207,7 @@ const MaritimeIdentitySystem: React.FC = () => {
     toast({
       title: "Tema Aplicado",
       description: `${preset.name} foi selecionado com sucesso`,
-    });
+    };
   };
 
   const saveOriginalTheme = () => {
@@ -218,7 +218,7 @@ const MaritimeIdentitySystem: React.FC = () => {
       primary: computedStyle.getPropertyValue("--primary").trim() || "222.2 47.4% 11.2%",
       secondary: computedStyle.getPropertyValue("--secondary").trim() || "210 40% 96.1%",
       accent: computedStyle.getPropertyValue("--accent").trim() || "210 40% 96.1%"
-    });
+    };
   };
 
   const applyThemePreview = () => {
@@ -232,7 +232,7 @@ const MaritimeIdentitySystem: React.FC = () => {
     toast({
       title: "Preview Aplicado",
       description: "Visualização em tempo real ativada",
-    });
+    };
   };
 
   const resetThemePreview = () => {
@@ -246,7 +246,7 @@ const MaritimeIdentitySystem: React.FC = () => {
     toast({
       title: "Preview Desativado",
       description: "Tema original restaurado",
-    });
+    };
   };
 
   const togglePreviewMode = () => {
@@ -295,7 +295,7 @@ const MaritimeIdentitySystem: React.FC = () => {
     toast({
       title: "Configuração Salva",
       description: "Personalização aplicada permanentemente",
-    });
+    };
   };
 
   const exportConfiguration = () => {

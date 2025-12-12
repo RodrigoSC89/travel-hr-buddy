@@ -42,7 +42,7 @@ export const PriceAlertNotification: React.FC<PriceAlertNotificationProps> = ({
     push_enabled: true,
     sms_enabled: false,
     frequency: "once"
-  });
+};
   const [saving, setSaving] = useState(false);
   const { toast } = useToast();
 
@@ -89,14 +89,14 @@ export const PriceAlertNotification: React.FC<PriceAlertNotificationProps> = ({
       toast({
         title: "Settings Saved",
         description: "Notification preferences updated successfully",
-      });
+      };
     } catch (error) {
       console.error("Error saving settings:", error);
       toast({
         title: "Error",
         description: "Failed to save settings",
         variant: "destructive"
-      });
+      };
     } finally {
       setSaving(false);
     }
@@ -115,21 +115,21 @@ export const PriceAlertNotification: React.FC<PriceAlertNotificationProps> = ({
             test: true,
             timestamp: new Date().toISOString()
           }
-        });
+        };
 
       if (error) throw error;
 
       toast({
         title: "Test Notification Sent",
         description: "Check your notification center",
-      });
+      };
     } catch (error) {
       console.error("Error sending test notification:", error);
       toast({
         title: "Error",
         description: "Failed to send test notification",
         variant: "destructive"
-      });
+      };
     }
   };
 

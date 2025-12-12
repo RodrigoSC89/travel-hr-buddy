@@ -452,7 +452,7 @@ const NautilusAutomation: React.FC = () => {
                   <div className="flex items-center gap-4">
                     <Switch
                       checked={trigger.isActive}
-                      onCheckedChange={() => toggleTrigger(trigger.id)}
+                      onCheckedChange={() => toggleTrigger(trigger.id}
                     />
                     <Button variant="ghost" size="sm">
                       <Trash2 className="h-4 w-4 text-destructive" />

@@ -584,6 +584,6 @@ export const CrewManagement2: React.FC = () => {
       </Card>
     </div>
   );
-};
+});
 
 export default CrewManagement2;

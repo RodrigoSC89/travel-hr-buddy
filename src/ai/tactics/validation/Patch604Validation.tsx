@@ -71,7 +71,7 @@ export const Patch604Validation = memo(function() {
       toast({
         title: "Optimization Complete",
         description: `${newOpts.length} tactics optimized with ${avgImprovement}% avg improvement`,
-      });
+      };
       
     }, 2000);
   };

@@ -318,7 +318,7 @@ export const FuelOptimizer = memo(() => {
           body: tableData,
           theme: "striped",
           headStyles: { fillColor: [59, 130, 246] }
-        });
+        };
       }
       
       doc.save(`relatorio-combustivel-${new Date().toISOString().split("T")[0]}.pdf`);
@@ -326,14 +326,14 @@ export const FuelOptimizer = memo(() => {
       toast({
         title: "Relatório exportado",
         description: "PDF baixado com sucesso",
-      });
+      };
     } catch (error) {
       console.error("Error exporting PDF:", error);
       toast({
         title: "Erro ao exportar",
         description: "Não foi possível gerar o PDF",
         variant: "destructive",
-      });
+      };
     }
   };
 
@@ -552,7 +552,7 @@ export const FuelOptimizer = memo(() => {
         <TabsContent value="analysis">
           <FuelAnalysisPanel 
             averageEfficiency={getAverageEfficiency()}
-            totalConsumption={optimizationResults.reduce((sum, r) => sum + r.original_consumption, 0)}
+            totalConsumption={optimizationResults.reduce((sum, r) => sum + r.original_consumption, 0}
             targetReduction={15}
           />
         </TabsContent>
@@ -563,4 +563,4 @@ export const FuelOptimizer = memo(() => {
       </Tabs>
     </div>
   );
-};
+});

@@ -276,7 +276,7 @@ export const IntelligentAlertSystem = memo(() => {
         title: "Erro",
         description: "Erro ao carregar dados inteligentes",
         variant: "destructive"
-      });
+      };
     } finally {
       setLoading(false);
     }

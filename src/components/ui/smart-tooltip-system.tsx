@@ -198,7 +198,7 @@ const SmartTooltipSystem: React.FC = () => {
     toast({
       title: "Tour Iniciado",
       description: "Siga as instruções para conhecer o sistema",
-    });
+    };
   };
 
   const nextTourStep = () => {
@@ -215,14 +215,14 @@ const SmartTooltipSystem: React.FC = () => {
     toast({
       title: "Tour Concluído",
       description: "Agora você conhece as principais funcionalidades!",
-    });
+    };
   };
 
   const openOptimizationPanel = () => {
     toast({
       title: "Painel de Otimização",
       description: "Redirecionando para sugestões de melhoria...",
-    });
+    };
     dismissAssistant("low-efficiency");
   };
 
@@ -230,7 +230,7 @@ const SmartTooltipSystem: React.FC = () => {
     toast({
       title: "Sistema de Identidade",
       description: "Abrindo painel de customização...",
-    });
+    };
     dismissAssistant("new-feature");
   };
 
@@ -394,6 +394,6 @@ const SmartTooltipSystem: React.FC = () => {
       )}
     </>
   );
-};
+});
 
 export default SmartTooltipSystem;

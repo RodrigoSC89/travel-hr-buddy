@@ -83,8 +83,8 @@ describe("MMI History Admin Page", () => {
 
     await waitFor(() => {
       expect(screen.getByText("Histórico MMI - Admin")).toBeInTheDocument();
-    });
-  });
+  };
+  };
 
   it("should render statistics cards", async () => {
     const { fetchMMIHistory, getMMIHistoryStats } = await React.lazy(() => import(import("@/services/mmi/historyService")));
@@ -106,8 +106,8 @@ describe("MMI History Admin Page", () => {
       expect(screen.getByText("3")).toBeInTheDocument();
       expect(screen.getByText("Atrasados")).toBeInTheDocument();
       expect(screen.getByText("2")).toBeInTheDocument();
-    });
-  });
+  };
+  };
 
   it("should display history records", async () => {
     const { fetchMMIHistory, getMMIHistoryStats } = await React.lazy(() => import(import("@/services/mmi/historyService")));
@@ -125,8 +125,8 @@ describe("MMI History Admin Page", () => {
       expect(screen.getByText("Navigation System")).toBeInTheDocument();
       expect(screen.getByText("Ship Alpha")).toBeInTheDocument();
       expect(screen.getByText("Ship Beta")).toBeInTheDocument();
-    });
-  });
+  };
+  };
 
   it("should show loading state", async () => {
     const { fetchMMIHistory, getMMIHistoryStats } = await React.lazy(() => import(import("@/services/mmi/historyService")));
@@ -140,7 +140,7 @@ describe("MMI History Admin Page", () => {
     );
 
     expect(screen.getByText("Carregando dados...")).toBeInTheDocument();
-  });
+  };
 
   it("should display empty state when no records", async () => {
     const { fetchMMIHistory, getMMIHistoryStats } = await React.lazy(() => import(import("@/services/mmi/historyService")));
@@ -150,7 +150,7 @@ describe("MMI History Admin Page", () => {
       executado: 0,
       pendente: 0,
       atrasado: 0,
-    });
+    };
 
     render(
       <BrowserRouter>
@@ -160,8 +160,8 @@ describe("MMI History Admin Page", () => {
 
     await waitFor(() => {
       expect(screen.getByText("Nenhum registro encontrado")).toBeInTheDocument();
-    });
-  });
+  };
+  };
 
   it("should have an export PDF button", async () => {
     const { fetchMMIHistory, getMMIHistoryStats } = await React.lazy(() => import(import("@/services/mmi/historyService")));
@@ -176,8 +176,8 @@ describe("MMI History Admin Page", () => {
 
     await waitFor(() => {
       expect(screen.getByText("Exportar Relatório PDF")).toBeInTheDocument();
-    });
-  });
+  };
+  };
 
   it("should display status badges with correct styling", async () => {
     const { fetchMMIHistory, getMMIHistoryStats } = await React.lazy(() => import(import("@/services/mmi/historyService")));
@@ -196,8 +196,8 @@ describe("MMI History Admin Page", () => {
       
       expect(executadoBadge).toBeInTheDocument();
       expect(pendenteBadge).toBeInTheDocument();
-    });
-  });
+  };
+  };
 
   it("should have a status filter dropdown", async () => {
     const { fetchMMIHistory, getMMIHistoryStats } = await React.lazy(() => import(import("@/services/mmi/historyService")));
@@ -212,8 +212,8 @@ describe("MMI History Admin Page", () => {
 
     await waitFor(() => {
       expect(screen.getByText("Filtros")).toBeInTheDocument();
-    });
-  });
+  };
+  };
 
   it("should handle service errors gracefully", async () => {
     const { fetchMMIHistory, getMMIHistoryStats } = await React.lazy(() => import(import("@/services/mmi/historyService")));
@@ -230,6 +230,6 @@ describe("MMI History Admin Page", () => {
 
     await waitFor(() => {
       expect(toast.error).toHaveBeenCalledWith("Erro ao carregar dados");
-    });
-  });
-});
+  };
+  };
+};

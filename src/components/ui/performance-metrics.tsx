@@ -177,7 +177,7 @@ export const PerformanceMetrics = ({ className, compact = false }: PerformanceMe
         return metric.value === 0 ? 100 : Math.max(0, 100 - (metric.value * 20));
       }
       return (metric.value / metric.target) * 100;
-    });
+  };
     return Math.round(scores.reduce((sum, score) => sum + score, 0) / scores.length);
   };
 

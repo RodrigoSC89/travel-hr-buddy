@@ -55,7 +55,7 @@ export const CrewSelection: React.FC<CrewSelectionProps> = ({ onSelect }) => {
         title: "Erro ao carregar tripulantes",
         description: error.message,
         variant: "destructive"
-      });
+      };
     } finally {
       setLoading(false);
     }

@@ -97,7 +97,7 @@ export default function VaultAIComplete() {
         title: "Atenção",
         description: "Digite uma consulta de busca",
         variant: "destructive"
-      });
+      };
       return;
     }
 
@@ -129,7 +129,7 @@ export default function VaultAIComplete() {
       toast({
         title: "Busca Concluída",
         description: `${results.length} resultados encontrados em ${searchDuration}ms`
-      });
+      };
 
       loadSearchLogs();
     } catch (error) {
@@ -138,7 +138,7 @@ export default function VaultAIComplete() {
         title: "Erro",
         description: "Falha ao realizar busca",
         variant: "destructive"
-      });
+      };
     } finally {
       setLoading(false);
     }
@@ -157,7 +157,7 @@ export default function VaultAIComplete() {
         queryTerms.forEach(term => {
           const occurrences = (contentLower.match(new RegExp(term, "g")) || []).length;
           score += occurrences * 0.1;
-        });
+  };
 
         // Boost score for title matches
         if (doc.title.toLowerCase().includes(queryLower)) {
@@ -211,7 +211,7 @@ export default function VaultAIComplete() {
       let score = 0;
       queryTerms.forEach(term => {
         if (excerptLower.includes(term)) score++;
-      });
+  };
 
       if (score > bestScore) {
         bestScore = score;
@@ -224,12 +224,12 @@ export default function VaultAIComplete() {
     queryTerms.forEach(term => {
       const regex = new RegExp(`(${term})`, "gi");
       highlighted = highlighted.replace(regex, "<mark>$1</mark>");
-    });
+  });
 
     return highlighted.length > maxLength 
       ? highlighted.substring(0, maxLength) + "..."
       : highlighted;
-  };
+  });
 
   const getDocumentTypeIcon = (type: string) => {
     switch (type) {
@@ -326,7 +326,7 @@ export default function VaultAIComplete() {
               </SelectContent>
             </Select>
 
-            <Select value={similarityThreshold.toString()} onValueChange={(val) => setSimilarityThreshold(parseFloat(val))}>
+            <Select value={similarityThreshold.toString()} onValueChange={(val) => setSimilarityThreshold(parseFloat(val}>
               <SelectTrigger className="w-48">
                 <SelectValue />
               </SelectTrigger>

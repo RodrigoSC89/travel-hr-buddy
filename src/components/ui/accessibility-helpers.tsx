@@ -25,7 +25,7 @@ export const AccessibleText: React.FC<AccessibleTextProps> = ({
       {children}
     </span>
   );
-};
+});
 
 // Helper para fundos contrastados
 interface ContrastBackgroundProps {
@@ -53,7 +53,7 @@ export const ContrastBackground: React.FC<ContrastBackgroundProps> = ({
       {children}
     </div>
   );
-};
+});
 
 // Helper para indicadores visuais
 interface VisualIndicatorProps {

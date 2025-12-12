@@ -51,7 +51,7 @@ export const WindyMap: React.FC<WindyMapProps> = ({
       try {
         const { data, error } = await supabase.functions.invoke("weather-map-proxy", {
           body: { action: "get_keys" }
-        });
+};
 
         if (error) {
           setMapError(true);
@@ -82,7 +82,7 @@ export const WindyMap: React.FC<WindyMapProps> = ({
       try {
         const { data, error } = await supabase.functions.invoke("weather-map-proxy", {
           body: { action: "weather_data", lat, lon }
-        });
+        };
 
         if (!error && data?.data) {
           setWeatherData(data.data);
@@ -130,7 +130,7 @@ export const WindyMap: React.FC<WindyMapProps> = ({
       title: "Atualizando mapa",
       description: "Carregando dados meteorológicos...",
       duration: 2000,
-    });
+    };
   };
 
   // Get tile URL with API key
@@ -313,7 +313,7 @@ export const WindyMap: React.FC<WindyMapProps> = ({
           
           <div className="flex items-center gap-2">
             <span className="text-sm font-medium">Zoom:</span>
-            <Select value={zoom.toString()} onValueChange={(v) => setZoom(parseInt(v))}>
+            <Select value={zoom.toString()} onValueChange={(v) => setZoom(parseInt(v}>
               <SelectTrigger className="w-24 h-8">
                 <SelectValue />
               </SelectTrigger>

@@ -248,7 +248,7 @@ export default function CIHistoryPage() {
               value={branch} 
               onChange={handleChange} 
             />
-            <Select value={status || "all"} onValueChange={(val) => setStatus(val === "all" ? "" : val)}>
+            <Select value={status || "all"} onValueChange={(val) => setStatus(val === "all" ? "" : val}>
               <SelectTrigger className="w-40">
                 <SelectValue placeholder="Status" />
               </SelectTrigger>

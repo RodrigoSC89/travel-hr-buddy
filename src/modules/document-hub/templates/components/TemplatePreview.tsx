@@ -43,7 +43,7 @@ export const TemplatePreview: React.FC<TemplatePreviewProps> = ({
       const escapedKey = escapeRegexSpecialChars(key);
       const regex = new RegExp(`{{${escapedKey}}}`, "g");
       content = content.replace(regex, value || `<span style="color: red;">{{${key}}}</span>`);
-    });
+};
     
     setPreviewContent(content);
   };
@@ -71,14 +71,14 @@ export const TemplatePreview: React.FC<TemplatePreviewProps> = ({
       toast({
         title: "PDF Generated",
         description: "Your template has been exported to PDF",
-      });
+      };
     } catch (error) {
       console.error("Error generating PDF:", error);
       toast({
         title: "Error",
         description: "Failed to generate PDF",
         variant: "destructive"
-      });
+      };
     }
   };
 
@@ -94,7 +94,7 @@ export const TemplatePreview: React.FC<TemplatePreviewProps> = ({
     toast({
       title: "HTML Downloaded",
       description: "Your template has been exported to HTML",
-    });
+    };
   };
 
   return (

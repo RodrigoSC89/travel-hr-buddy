@@ -101,7 +101,7 @@ export const CrewAICopilot = memo(function({ crewData, certificates }: CrewAICop
             title: "Rate limit excedido",
             description: "Aguarde um momento antes de tentar novamente",
             variant: "destructive",
-          });
+          };
           return;
         }
         throw new Error("Failed to get response");
@@ -134,7 +134,7 @@ export const CrewAICopilot = memo(function({ crewData, certificates }: CrewAICop
                     const updated = [...prev];
                     updated[updated.length - 1] = { role: "assistant", content: assistantContent };
                     return updated;
-                  });
+  });
                 }
               } catch {
                 // Skip invalid JSON
@@ -149,7 +149,7 @@ export const CrewAICopilot = memo(function({ crewData, certificates }: CrewAICop
         title: "Erro",
         description: "Falha ao processar sua solicitação",
         variant: "destructive",
-      });
+      };
       setMessages(prev => prev.slice(0, -1));
     } finally {
       setIsLoading(false);

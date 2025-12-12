@@ -309,7 +309,7 @@ export const AdvancedIntegrationsHub: React.FC = () => {
     toast({
       title: "Status Atualizado",
       description: `${integration?.name} foi ${integration?.isEnabled ? "desabilitada" : "habilitada"}`,
-    });
+    };
   };
 
   const handleTestConnection = (id: string) => {
@@ -317,14 +317,14 @@ export const AdvancedIntegrationsHub: React.FC = () => {
     toast({
       title: "Testando Conexão",
       description: `Verificando conectividade com ${integration?.name}...`,
-    });
+    };
     
     // Simular teste de conexão
     setTimeout(() => {
       toast({
         title: "Teste Concluído",
         description: `Conexão com ${integration?.name} está funcionando corretamente`,
-      });
+      };
     }, 2000);
   };
 
@@ -333,7 +333,7 @@ export const AdvancedIntegrationsHub: React.FC = () => {
     const matchesSearch = integration.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
                          integration.description.toLowerCase().includes(searchTerm.toLowerCase());
     return matchesCategory && matchesSearch;
-  });
+  };
 
   const connectedCount = integrations.filter(i => i.status === "connected").length;
   const errorCount = integrations.filter(i => i.status === "error").length;
@@ -372,7 +372,7 @@ export const AdvancedIntegrationsHub: React.FC = () => {
                     Configure uma nova integração em poucos passos
                   </DialogDescription>
                 </DialogHeader>
-                <IntegrationWizard onClose={() => setIsWizardOpen(false)} />
+                <IntegrationWizard onClose={() => setIsWizardOpen(false} />
               </DialogContent>
             </Dialog>
           </div>
@@ -599,7 +599,7 @@ const IntegrationCard: React.FC<{
           </div>
           <Switch 
             checked={integration.isEnabled}
-            onCheckedChange={() => onToggle(integration.id)}
+            onCheckedChange={() => onToggle(integration.id}
           />
         </div>
       </CardHeader>
@@ -659,7 +659,7 @@ const IntegrationCard: React.FC<{
       </CardContent>
     </Card>
   );
-};
+});
 
 // Componente de Status do Sistema com IA
 const AISystemStatus: React.FC<{
@@ -831,7 +831,7 @@ const IntegrationTemplates: React.FC<{
       </div>
     </div>
   );
-};
+});
 
 // Componente de Logs
 const LogsViewer: React.FC<{
@@ -971,7 +971,7 @@ const IntegrationWizard: React.FC<{
     method: "GET",
     headers: {},
     auth: ""
-  });
+};
 
   const steps = [
     { title: "Tipo de Integração", description: "Selecione o tipo de integração" },
@@ -1127,4 +1127,4 @@ const IntegrationWizard: React.FC<{
       </div>
     </div>
   );
-};
+});

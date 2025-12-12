@@ -74,7 +74,7 @@ const CollaboratorRegistry: React.FC = () => {
     const matchesDepartment = selectedDepartment === "todos" || c.departamento === selectedDepartment;
     const matchesStatus = selectedStatus === "todos" || c.status === selectedStatus;
     return matchesSearch && matchesDepartment && matchesStatus;
-  });
+  };
 
   const getStatusColor = (status: string) => {
     switch (status) {
@@ -574,7 +574,7 @@ const CollaboratorRegistry: React.FC = () => {
                 <p>Nenhum documento cadastrado</p>
               </div>
             )}
-            <Button className="w-full" onClick={() => toast.success("Upload de documento iniciado")}>
+            <Button className="w-full" onClick={() => toast.success("Upload de documento iniciado"}>
               <Upload className="w-4 h-4 mr-2" />
               Adicionar Documento
             </Button>
@@ -614,7 +614,7 @@ const CollaboratorRegistry: React.FC = () => {
                 <p>Nenhuma formação cadastrada</p>
               </div>
             )}
-            <Button className="w-full" onClick={() => toast.success("Adicionar formação")}>
+            <Button className="w-full" onClick={() => toast.success("Adicionar formação"}>
               <Award className="w-4 h-4 mr-2" />
               Adicionar Formação
             </Button>
@@ -623,6 +623,6 @@ const CollaboratorRegistry: React.FC = () => {
       </Dialog>
     </div>
   );
-};
+});
 
 export default CollaboratorRegistry;

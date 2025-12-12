@@ -31,7 +31,7 @@ describe("Performance: Map Component", () => {
     // Assert
     expect(renderedMarkers).toHaveLength(100);
     expect(renderTime).toBeLessThan(500); // Should render in less than 500ms
-  });
+  };
 
   it("should update marker positions efficiently", async () => {
     // Arrange
@@ -56,7 +56,7 @@ describe("Performance: Map Component", () => {
     // Assert
     expect(updateTime).toBeLessThan(100); // Updates should be under 100ms
     expect(updatedMarkers[0].lat).not.toBe(initialMarkers[0].lat);
-  });
+  };
 
   it("should handle map zoom without lag", async () => {
     // Arrange
@@ -105,7 +105,7 @@ describe("Performance: Map Component", () => {
         clusters.set(key, []);
       }
       clusters.get(key)!.push(marker);
-    });
+  });
     
     const endTime = performance.now();
     const clusterTime = endTime - startTime;
@@ -143,5 +143,5 @@ describe("Performance: Map Component", () => {
     // Assert
     expect(avgFrameTime).toBeLessThan(FRAME_TIME); // Should maintain 60fps
     expect(Math.max(...frameTimes)).toBeLessThan(FRAME_TIME * 2); // No frame should spike too much
-  });
-});
+  };
+};

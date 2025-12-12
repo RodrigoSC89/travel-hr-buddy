@@ -157,21 +157,21 @@ export const BlockchainDocuments: React.FC = () => {
     toast({
       title: "Verificação Concluída",
       description: "Documento verificado com sucesso na blockchain",
-    });
+    };
   };
 
   const uploadDocument = () => {
     toast({
       title: "Upload Iniciado",
       description: "Documento sendo processado e adicionado à blockchain",
-    });
+    };
   };
 
   const downloadDocument = (document: BlockchainDocument) => {
     toast({
       title: "Download Iniciado",
       description: `Baixando ${document.name} do IPFS`,
-    });
+    };
   };
 
   return (

@@ -46,12 +46,12 @@ export const Patch603Validation = memo(function() {
       event,
       newScore,
       behaviorAdjustment: event.impact 
-    });
+    };
     
     toast({
       title: `${channel.charAt(0).toUpperCase() + channel.slice(1)} Feedback Recorded`,
       description: `Behavior score adjusted: ${(newScore * 100).toFixed(0)}%`,
-    });
+    };
   };
 
   const simulateVoice = () => {
@@ -139,7 +139,7 @@ export const Patch603Validation = memo(function() {
             placeholder="Enter text feedback..."
             value={textInput}
             onChange={handleChange}
-            onKeyPress={(e) => e.key === "Enter" && submitText()}
+            onKeyPress={(e) => e.key === "Enter" && submitText()
           />
           <Button onClick={submitText}>Send</Button>
         </div>

@@ -276,7 +276,7 @@ export default function IntelligentTriggersPage() {
                       <div className="flex items-center gap-4">
                         <Switch
                           checked={triggerStates[trigger.id]}
-                          onCheckedChange={() => toggleTrigger(trigger.id)}
+                          onCheckedChange={() => toggleTrigger(trigger.id}
                         />
                         <div className="flex gap-2">
                           <Button size="sm" variant="outline">
@@ -309,7 +309,7 @@ export default function IntelligentTriggersPage() {
                         </div>
                         <Switch
                           checked={triggerStates[trigger.id]}
-                          onCheckedChange={() => toggleTrigger(trigger.id)}
+                          onCheckedChange={() => toggleTrigger(trigger.id}
                         />
                       </div>
                     </CardContent>
@@ -333,7 +333,7 @@ export default function IntelligentTriggersPage() {
                         </div>
                         <Switch
                           checked={triggerStates[trigger.id]}
-                          onCheckedChange={() => toggleTrigger(trigger.id)}
+                          onCheckedChange={() => toggleTrigger(trigger.id}
                         />
                       </div>
                     </CardContent>
@@ -359,7 +359,7 @@ export default function IntelligentTriggersPage() {
                         </div>
                         <Switch
                           checked={triggerStates[trigger.id]}
-                          onCheckedChange={() => toggleTrigger(trigger.id)}
+                          onCheckedChange={() => toggleTrigger(trigger.id}
                         />
                       </div>
                     </CardContent>

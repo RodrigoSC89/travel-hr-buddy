@@ -92,7 +92,7 @@ export const BehavioralEvolutionDashboard = memo(function() {
         active_alerts: alerts?.length || 0,
         avg_strategic_alignment: avgAlignment,
         evolution_trend: trend,
-      });
+      };
 
       // Generate recent evolution data
       const evolutions = generateEvolutionData(perfData || []);
@@ -141,7 +141,7 @@ export const BehavioralEvolutionDashboard = memo(function() {
         moduleData.set(d.module_name, []);
       }
       moduleData.get(d.module_name)?.push(d);
-    });
+  };
 
     const evolutions: BehaviorEvolution[] = [];
     moduleData.forEach((records, moduleName) => {
@@ -159,7 +159,7 @@ export const BehavioralEvolutionDashboard = memo(function() {
     });
 
     return evolutions.slice(0, 10);
-  };
+  });
 
   const getTrendColor = (trend: string) => {
     switch (trend) {

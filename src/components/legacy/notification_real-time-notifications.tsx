@@ -173,7 +173,7 @@ export const NotificationCenter: React.FC = () => {
         toast({
           title: newNotification.title,
           description: newNotification.message,
-        });
+        };
       }
     }, 30000); // A cada 30 segundos
 

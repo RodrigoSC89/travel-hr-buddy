@@ -59,7 +59,7 @@ export const SystemStatusWidget = memo(function({ compact = false }: { compact?:
         icon: mod.icon,
         status: status.online ? "online" : "offline",
         lastCheck: new Date()
-      });
+      };
     }
 
     setStatuses(results);

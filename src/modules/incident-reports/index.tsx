@@ -77,7 +77,7 @@ const IncidentReports = () => {
         title: "Error",
         description: "Failed to load incidents",
         variant: "destructive",
-      });
+      };
     } finally {
       setLoading(false);
     }
@@ -423,11 +423,11 @@ const IncidentReports = () => {
         <IncidentDetailDialog
           incident={selectedIncident}
           open={!!selectedIncident}
-          onOpenChange={(open) => !open && setSelectedIncident(null)}
+          onOpenChange={(open) => !open && setSelectedIncident(null}
         />
       )}
     </div>
   );
-};
+});
 
 export default IncidentReports;

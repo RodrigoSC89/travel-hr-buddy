@@ -130,7 +130,7 @@ const VesselPerformanceMonitor = () => {
         speed: 15 + Math.random() * 8,
         fuel: 10 + Math.random() * 8,
         efficiency: 85 + Math.random() * 10
-      });
+      };
     }
     
     return points;

@@ -74,12 +74,12 @@ const UnderwaterDrone: React.FC = () => {
     // Setup telemetry alert callback
     telemetry.onAlert((alert) => {
       setAlerts(prev => [alert, ...prev].slice(0, 10));
-    });
+  });
 
     // Setup mission event callback
     missionManager.onEvent((event) => {
       setMissionEvents(prev => [event, ...prev].slice(0, 20));
-    });
+  });
 
     // Start drone simulation
     droneCore.startSimulation(100);
@@ -557,6 +557,6 @@ const UnderwaterDrone: React.FC = () => {
       </div>
     </div>
   );
-};
+});
 
 export default UnderwaterDrone;

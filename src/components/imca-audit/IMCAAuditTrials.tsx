@@ -194,7 +194,7 @@ export const IMCAAuditTrials = memo(function({ selectedDPClass }: Props) {
     toast({
       title: executionData.result === "pass" ? "Teste Aprovado" : "Teste Registrado",
       description: `${selectedTest.name} - Resultado: ${executionData.result === "pass" ? "PASSOU" : executionData.result === "fail" ? "FALHOU" : "PENDENTE"}`
-    });
+    };
   };
 
   const getResultIcon = (result?: string) => {

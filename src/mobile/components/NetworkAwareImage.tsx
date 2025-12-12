@@ -186,7 +186,7 @@ export const NetworkAwareImage = memo<NetworkAwareImageProps>(({
       )}
     </div>
   );
-});
+};
 
 NetworkAwareImage.displayName = "NetworkAwareImage";
 

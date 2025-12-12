@@ -242,7 +242,7 @@ export const NautilusCommandCenter = memo(function() {
 
           <TabsContent value="brain">
             <div className="h-[calc(100vh-250px)]">
-              <CommandBrainPanel context={context} onSettingsClick={() => setSettingsOpen(true)} />
+              <CommandBrainPanel context={context} onSettingsClick={() => setSettingsOpen(true} />
             </div>
           </TabsContent>
 
@@ -255,7 +255,7 @@ export const NautilusCommandCenter = memo(function() {
               notifications={notifications}
               onMarkAllRead={handleMarkAllRead}
               onDismiss={handleDismissNotification}
-              onSettingsClick={() => setSettingsOpen(true)}
+              onSettingsClick={() => setSettingsOpen(true}
               onFilterClick={() => {}}
             />
           </TabsContent>

@@ -67,7 +67,7 @@ export const WellbeingHistory: React.FC = () => {
           sleep: Math.min((checkin.sleep_hours || 0) / 2, 5), // Normalize to 0-5 scale
           wellbeing_score: log?.wellbeing_score || 0,
         };
-      });
+      };
 
       setHistoryData(chartData);
     } catch (error) {
@@ -76,7 +76,7 @@ export const WellbeingHistory: React.FC = () => {
         title: "Error",
         description: "Failed to load wellbeing history",
         variant: "destructive",
-      });
+      };
     } finally {
       setLoading(false);
     }

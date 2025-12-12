@@ -56,7 +56,7 @@ export default function AdminWallPage() {
             apikey: supabaseKey,
             Authorization: `Bearer ${supabaseKey}`,
           },
-        });
+        };
 
         if (!res.ok) {
           throw new Error(`HTTP error! status: ${res.status}`);
@@ -94,7 +94,7 @@ export default function AdminWallPage() {
             const updated = [newEntry, ...prev];
             localStorage.setItem("ci-wall-data", JSON.stringify(updated));
             return updated;
-          });
+  });
 
           // Trigger alerts on failure
           if (newEntry.status === "failure" && newEntry.commit_hash !== lastAlert) {

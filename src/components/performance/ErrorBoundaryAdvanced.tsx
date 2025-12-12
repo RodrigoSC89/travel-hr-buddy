@@ -52,7 +52,7 @@ export class ErrorBoundaryAdvanced extends Component<ErrorBoundaryProps, ErrorBo
     // Log the error
     logger.error("React Error Boundary caught error", error, {
       componentStack: errorInfo.componentStack,
-    });
+    };
 
     // Call custom error handler
     this.props.onError?.(error, errorInfo);
@@ -80,7 +80,7 @@ export class ErrorBoundaryAdvanced extends Component<ErrorBoundaryProps, ErrorBo
       isRetrying: false,
     });
     this.props.onReset?.();
-  };
+  });
 
   retry = async () => {
     if (this.state.retryCount >= MAX_RETRIES) {
@@ -99,11 +99,11 @@ export class ErrorBoundaryAdvanced extends Component<ErrorBoundaryProps, ErrorBo
       retryCount: state.retryCount + 1,
       isRetrying: false,
     }));
-  };
+  });
 
   goHome = () => {
     window.location.href = "/";
-  };
+  });
 
   render() {
     const { hasError, error, errorInfo, retryCount, isRetrying } = this.state;

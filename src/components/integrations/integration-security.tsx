@@ -136,21 +136,21 @@ export const IntegrationSecurity: React.FC = () => {
     toast({
       title: "Política Atualizada",
       description: `${policy?.name} foi ${policy?.enabled ? "desativada" : "ativada"}`,
-    });
+    };
   };
 
   const runSecurityScan = () => {
     toast({
       title: "Scan de Segurança Iniciado",
       description: "Verificando vulnerabilidades em todas as integrações...",
-    });
+    };
 
     // Simular scan
     setTimeout(() => {
       toast({
         title: "Scan Concluído",
         description: "Nenhuma vulnerabilidade crítica encontrada",
-      });
+      };
     }, 3000);
   };
 

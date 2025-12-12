@@ -110,7 +110,7 @@ export default function UserManagement() {
     try {
       const { error } = await supabase.auth.resetPasswordForEmail(email, {
         redirectTo: `${window.location.origin}/reset-password`,
-      });
+      };
 
       if (error) throw error;
 
@@ -153,7 +153,7 @@ export default function UserManagement() {
     const matchesStatus = statusFilter === "all" || user.status === statusFilter;
 
     return matchesSearch && matchesRole && matchesStatus;
-  });
+  };
 
   if (loading) {
     return (
@@ -256,7 +256,7 @@ export default function UserManagement() {
                   <TableCell>
                     <Select
                       value={user.role}
-                      onValueChange={(value) => handleRoleUpdate(user.id, value)}
+                      onValueChange={(value) => handleRoleUpdate(user.id, value}
                     >
                       <SelectTrigger className="w-32">
                         <SelectValue />

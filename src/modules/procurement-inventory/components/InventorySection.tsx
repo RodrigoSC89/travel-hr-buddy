@@ -148,7 +148,7 @@ export default function InventorySection({ searchQuery }: InventorySectionProps)
         return sortDirection === "asc" ? aVal - bVal : bVal - aVal;
       }
       return 0;
-    });
+  });
 
   const handleSort = (field: keyof InventoryItem) => {
     if (sortField === field) {
@@ -691,7 +691,7 @@ export default function InventorySection({ searchQuery }: InventorySectionProps)
                 <Label>Tipo de Movimentação</Label>
                 <Select 
                   value={movementType} 
-                  onValueChange={(v: "in" | "out" | "adjustment") => setMovementType(v)}
+                  onValueChange={(v: "in" | "out" | "adjustment") => setMovementType(v}
                 >
                   <SelectTrigger>
                     <SelectValue />

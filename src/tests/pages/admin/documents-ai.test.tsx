@@ -105,7 +105,7 @@ describe("DocumentsAIPage Component", () => {
     await waitFor(() => {
       const generateButton = screen.getByRole("button", { name: /Gerar com IA/i });
       expect(generateButton).not.toBeDisabled();
-    });
+  });
   });
 
   it("should not show save and export buttons initially", () => {

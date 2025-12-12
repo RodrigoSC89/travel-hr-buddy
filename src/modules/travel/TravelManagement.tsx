@@ -95,7 +95,7 @@ const TravelManagement = () => {
     arrival_date: "",
     travel_purpose: "",
     status: "pending"
-  });
+  };
 
   useEffect(() => {
     loadItineraries();
@@ -156,7 +156,7 @@ const TravelManagement = () => {
         title: "Error loading itineraries",
         description: error.message,
         variant: "destructive",
-      });
+      };
     } finally {
       setLoading(false);
     }
@@ -185,14 +185,14 @@ const TravelManagement = () => {
         .insert({
           ...formData,
           status: "pending"
-        });
+        };
 
       if (error) throw error;
 
       toast({
         title: "✅ Itinerary Created",
         description: "Your travel itinerary has been created",
-      });
+      };
 
       setShowNewItinerary(false);
       setFormData({
@@ -202,14 +202,14 @@ const TravelManagement = () => {
         arrival_date: "",
         travel_purpose: "",
         status: "pending"
-      });
+      };
       loadItineraries();
     } catch (error: SupabaseError | null) {
       toast({
         title: "Error creating itinerary",
         description: error.message,
         variant: "destructive",
-      });
+      };
     }
   };
 
@@ -254,7 +254,7 @@ const TravelManagement = () => {
         body: tableData,
         theme: "striped",
         headStyles: { fillColor: [59, 130, 246] },
-      });
+      };
     }
     
     // Footer
@@ -270,12 +270,12 @@ const TravelManagement = () => {
       export_type: "pdf",
       itinerary_id: itinerary.id,
       file_name: `travel-itinerary-${itinerary.itinerary_number}.pdf`
-    });
+    };
     
     toast({
       title: "✅ PDF Exported",
       description: "Itinerary exported successfully",
-    });
+    };
   };
 
   const resolveConflict = async (conflictId: string) => {
@@ -293,7 +293,7 @@ const TravelManagement = () => {
       toast({
         title: "✅ Conflict Resolved",
         description: "Travel conflict has been marked as resolved",
-      });
+      };
 
       loadConflicts();
     } catch (error: SupabaseError | null) {
@@ -301,7 +301,7 @@ const TravelManagement = () => {
         title: "Error resolving conflict",
         description: error.message,
         variant: "destructive",
-      });
+      };
     }
   };
 
@@ -613,6 +613,6 @@ const TravelManagement = () => {
       </Tabs>
     </div>
   );
-};
+});
 
 export default TravelManagement;

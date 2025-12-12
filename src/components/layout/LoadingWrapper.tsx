@@ -50,7 +50,7 @@ export const LoadingWrapper: React.FC<LoadingWrapperProps> = ({
       {children}
     </Suspense>
   );
-};
+});
 
 /**
  * HOC for lazy loading components with connection-aware fallback
@@ -67,7 +67,7 @@ export function withLoadingWrapper<T extends ComponentType<any>>(
         <LazyComponent {...props} />
       </LoadingWrapper>
     );
-  };
+  });
 }
 
 /**

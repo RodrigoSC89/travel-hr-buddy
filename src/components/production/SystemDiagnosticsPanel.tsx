@@ -107,4 +107,4 @@ export const SystemDiagnosticsPanel = memo(function() {
       </CardContent>
     </Card>
   );
-}
+});

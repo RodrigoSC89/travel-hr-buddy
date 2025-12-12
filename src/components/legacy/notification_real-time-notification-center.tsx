@@ -97,7 +97,7 @@ export const RealTimeNotificationCenter: React.FC = () => {
         title: "Erro",
         description: "Não foi possível carregar as notificações",
         variant: "destructive"
-      });
+      };
     } finally {
       setIsLoading(false);
     }
@@ -129,13 +129,13 @@ export const RealTimeNotificationCenter: React.FC = () => {
       toast({
         title: "Sucesso",
         description: "Notificação marcada como lida"
-      });
+      };
     } catch (error) {
       toast({
         title: "Erro",
         description: "Não foi possível marcar como lida",
         variant: "destructive"
-      });
+      };
     }
   };
 
@@ -168,13 +168,13 @@ export const RealTimeNotificationCenter: React.FC = () => {
       toast({
         title: "Sucesso",
         description: "Todas as notificações foram marcadas como lidas"
-      });
+      };
     } catch (error) {
       toast({
         title: "Erro",
         description: "Não foi possível marcar todas como lidas",
         variant: "destructive"
-      });
+      };
     }
   };
 
@@ -204,7 +204,7 @@ export const RealTimeNotificationCenter: React.FC = () => {
         title: "Erro",
         description: "Não foi possível executar a ação",
         variant: "destructive"
-      });
+      };
     }
   };
 
@@ -269,7 +269,7 @@ export const RealTimeNotificationCenter: React.FC = () => {
       default:
         return true;
       }
-    });
+    };
 
     return filtered;
   };
@@ -423,7 +423,7 @@ export const RealTimeNotificationCenter: React.FC = () => {
                         className={`p-2 border rounded text-xs transition-all cursor-pointer hover:bg-accent/50 ${
                           !notification.read ? "border-l-2 border-l-primary bg-accent/20" : ""
                         }`}
-                        onClick={() => !notification.read && markAsRead(notification.id)}
+                        onClick={() => !notification.read && markAsRead(notification.id}
                       >
                         <div className="flex items-start gap-2">
                           {getNotificationIcon(notification.type)}

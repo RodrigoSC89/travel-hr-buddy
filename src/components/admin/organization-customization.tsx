@@ -130,7 +130,7 @@ export const OrganizationCustomization: React.FC = () => {
         primary: computedStyle.getPropertyValue("--primary").trim() || "222.2 47.4% 11.2%",
         secondary: computedStyle.getPropertyValue("--secondary").trim() || "210 40% 96.1%",
         accent: computedStyle.getPropertyValue("--accent").trim() || "210 40% 96.1%"
-      });
+      };
     }
     
     // Aplicar cores do preview
@@ -156,14 +156,14 @@ export const OrganizationCustomization: React.FC = () => {
       toast({
         title: "Pré-visualização Ativada",
         description: "As alterações de cor estão sendo aplicadas temporariamente",
-      });
+      };
     } else {
       resetPreviewTheme();
       setPreview(false);
       toast({
         title: "Pré-visualização Desativada",
         description: "Tema original restaurado",
-      });
+      };
     }
   };
 
@@ -180,7 +180,7 @@ export const OrganizationCustomization: React.FC = () => {
         title: "Acesso Negado",
         description: "Você não tem permissão para alterar as configurações",
         variant: "destructive",
-      });
+      };
       return;
     }
 
@@ -190,18 +190,18 @@ export const OrganizationCustomization: React.FC = () => {
         ...customization,
         enabled_modules: customization.enabled_modules,
         business_rules: customization.business_rules
-      });
+      };
       
       toast({
         title: "Sucesso",
         description: "Personalização salva com sucesso",
-      });
+      };
     } catch (error) {
       toast({
         title: "Erro",
         description: "Erro ao salvar personalização",
         variant: "destructive",
-      });
+      };
     } finally {
       setIsLoading(false);
     }

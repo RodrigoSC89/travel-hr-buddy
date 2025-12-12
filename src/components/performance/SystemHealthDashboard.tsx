@@ -39,7 +39,7 @@ const StatusBadge = memo(({ status }: { status: string }) => {
   
   const config = variants[status] || variants.fair;
   return <Badge variant={config.variant}>{config.label}</Badge>;
-});
+};
 
 StatusBadge.displayName = "StatusBadge";
 
@@ -114,13 +114,13 @@ export const SystemHealthDashboard = memo(() => {
       toast({
         title: "Benchmark Concluído",
         description: `Score: ${result.score}/100 - ${result.status}`,
-      });
+      };
     } catch (error) {
       toast({
         title: "Erro",
         description: "Falha ao executar benchmark",
         variant: "destructive"
-      });
+      };
     } finally {
       setIsRunning(false);
     }
@@ -136,7 +136,7 @@ export const SystemHealthDashboard = memo(() => {
       toast({
         title: "Limpeza Concluída",
         description: `${totalItems} itens removidos, ${(totalFreed / 1024).toFixed(1)}KB liberados`,
-      });
+      };
       
       // Trigger memory cleanup too
       await memoryStats.performCleanup();

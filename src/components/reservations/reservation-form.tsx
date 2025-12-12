@@ -57,7 +57,7 @@ export const ReservationForm: React.FC<ReservationFormProps> = ({
     currency: "BRL",
     status: "confirmed" as EnhancedReservation["status"],
     notes: ""
-  });
+};
 
   const { toast } = useToast();
   const { user } = useAuth();
@@ -103,7 +103,7 @@ export const ReservationForm: React.FC<ReservationFormProps> = ({
       currency: "BRL",
       status: "confirmed",
       notes: ""
-    });
+    };
   };
 
   const handleTemplateUse = (templateData: unknown) => {
@@ -119,7 +119,7 @@ export const ReservationForm: React.FC<ReservationFormProps> = ({
       room_type: templateData.room_type || "",
       currency: templateData.currency || "BRL",
       notes: templateData.notes || ""
-    });
+    };
   };
 
   const validateForm = () => {
@@ -128,7 +128,7 @@ export const ReservationForm: React.FC<ReservationFormProps> = ({
         title: "Erro de validação",
         description: "Título é obrigatório",
         variant: "destructive"
-      });
+      };
       return false;
     }
 
@@ -137,7 +137,7 @@ export const ReservationForm: React.FC<ReservationFormProps> = ({
         title: "Erro de validação",
         description: "Data de início e fim são obrigatórias",
         variant: "destructive"
-      });
+      };
       return false;
     }
 
@@ -146,7 +146,7 @@ export const ReservationForm: React.FC<ReservationFormProps> = ({
         title: "Erro de validação",
         description: "Data de fim deve ser posterior à data de início",
         variant: "destructive"
-      });
+      };
       return false;
     }
 
@@ -191,7 +191,7 @@ export const ReservationForm: React.FC<ReservationFormProps> = ({
         toast({
           title: "Sucesso",
           description: "Reserva atualizada com sucesso!"
-        });
+        };
       } else {
         const { error } = await supabase
           .from("reservations")
@@ -205,7 +205,7 @@ export const ReservationForm: React.FC<ReservationFormProps> = ({
         toast({
           title: "Sucesso",
           description: "Reserva criada com sucesso!"
-        });
+        };
       }
 
       onSaved();
@@ -214,7 +214,7 @@ export const ReservationForm: React.FC<ReservationFormProps> = ({
         title: "Erro",
         description: "Erro ao salvar reserva. Tente novamente.",
         variant: "destructive"
-      });
+      };
     } finally {
       setLoading(false);
     }
@@ -528,9 +528,9 @@ export const ReservationForm: React.FC<ReservationFormProps> = ({
       {/* Templates Dialog */}
       <ReservationTemplates
         isOpen={showTemplates}
-        onClose={() => setShowTemplates(false)}
+        onClose={() => setShowTemplates(false}
         onUseTemplate={handleTemplateUse}
       />
     </>
   );
-};
+});

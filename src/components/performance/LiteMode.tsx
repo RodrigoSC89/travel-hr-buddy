@@ -77,7 +77,7 @@ export const LiteModeProvider = memo(function({ children, autoEnable = true }: L
       toast({
         title: "Modo Lite Ativado",
         description: "Conexão lenta detectada. Recursos reduzidos para melhor performance.",
-      });
+      };
     } else if (!isSlowConnection && autoDetected && userOverride === null) {
       setAutoDetected(false);
       setConfig(defaultConfig);
@@ -106,7 +106,7 @@ export const LiteModeProvider = memo(function({ children, autoEnable = true }: L
         reducePollingFrequency: true,
         disablePrefetch: true,
         simplifyUI: false,
-      });
+      };
     } else {
       setConfig(defaultConfig);
     }

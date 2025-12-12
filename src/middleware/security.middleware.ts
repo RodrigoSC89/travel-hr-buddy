@@ -15,7 +15,7 @@
 type NextRequest = any;
 type NextResponse = any;
 
-import { SECURITY_HEADERS, RATE_LIMITS, CORS_CONFIG, isAllowedOrigin, logSecurityEvent } from '@/lib/security';
+import { SECURITY_HEADERS, RATE_LIMITS, CORS_CONFIG, isAllowedOrigin, logSecurityEvent } from "@/lib/security";
 
 // Rate limit store (em produção, use Redis)
 const rateLimitStore = new Map<string, { count: number; resetAt: number }>();
@@ -31,7 +31,7 @@ export function cleanupRateLimits() {
 }
 
 // Executar limpeza a cada 5 minutos
-if (typeof window === 'undefined') {
+if (typeof window === "undefined") {
   setInterval(cleanupRateLimits, 5 * 60 * 1000);
 }
 
@@ -42,11 +42,11 @@ function checkRateLimit(ip: string, endpoint: string): { allowed: boolean; remai
   // Determinar qual configuração de rate limit usar
   let config = RATE_LIMITS.api;
   
-  if (endpoint.includes('/auth/')) {
+  if (endpoint.includes("/auth/")) {
     config = RATE_LIMITS.auth;
-  } else if (endpoint.includes('/ai/') || endpoint.includes('/generate-')) {
+  } else if (endpoint.includes("/ai/") || endpoint.includes("/generate-")) {
     config = RATE_LIMITS.ai;
-  } else if (endpoint.includes('/upload/')) {
+  } else if (endpoint.includes("/upload/")) {
     config = RATE_LIMITS.upload;
   }
 
@@ -83,25 +83,25 @@ function checkRateLimit(ip: string, endpoint: string): { allowed: boolean; remai
  */
 function getClientIP(request: NextRequest): string {
   // Tentar vários headers (para suporte a proxies/load balancers)
-  const forwarded = request.headers.get('x-forwarded-for');
+  const forwarded = request.headers.get("x-forwarded-for");
   if (forwarded) {
-    return forwarded.split(',')[0].trim();
+    return forwarded.split(",")[0].trim();
   }
   
-  const realIP = request.headers.get('x-real-ip');
+  const realIP = request.headers.get("x-real-ip");
   if (realIP) {
     return realIP;
   }
   
   // Fallback para IP direto (desenvolvimento)
-  return '127.0.0.1';
+  return "127.0.0.1";
 }
 
 /**
  * Valida origem CORS
  */
 function handleCORS(request: NextRequest): Response | null {
-  const origin = request.headers.get('origin');
+  const origin = request.headers.get("origin");
   const ip = getClientIP(request);
   
   // Se não tem origin header, permitir (requests do mesmo domínio)
@@ -113,23 +113,23 @@ function handleCORS(request: NextRequest): Response | null {
   if (!isAllowedOrigin(origin)) {
     // Log security event
     logSecurityEvent({
-      type: 'VALIDATION_ERROR',
-      severity: 'medium',
+      type: "VALIDATION_ERROR",
+      severity: "medium",
       ip_address: ip,
       details: {
         origin,
         endpoint: request.nextUrl.pathname,
         method: request.method,
-        reason: 'CORS_VIOLATION'
+        reason: "CORS_VIOLATION"
       },
       timestamp: new Date().toISOString(),
     }).catch(console.error);
     
     return new Response(
-      JSON.stringify({ error: 'CORS policy violation' }),
+      JSON.stringify({ error: "CORS policy violation" }),
       { 
         status: 403,
-        headers: { 'Content-Type': 'application/json' }
+        headers: { "Content-Type": "application/json" }
       }
     );
   }
@@ -142,7 +142,7 @@ function handleCORS(request: NextRequest): Response | null {
  */
 function detectSuspiciousPatterns(request: NextRequest): { suspicious: boolean; reason?: string } {
   const url = request.nextUrl.toString();
-  const body = request.body?.toString() || '';
+  const body = request.body?.toString() || "";
   
   // SQL Injection patterns
   const sqlPatterns = [
@@ -153,7 +153,7 @@ function detectSuspiciousPatterns(request: NextRequest): { suspicious: boolean; 
   
   for (const pattern of sqlPatterns) {
     if (pattern.test(url) || pattern.test(body)) {
-      return { suspicious: true, reason: 'SQL_INJECTION_PATTERN' };
+      return { suspicious: true, reason: "SQL_INJECTION_PATTERN" };
     }
   }
   
@@ -167,13 +167,13 @@ function detectSuspiciousPatterns(request: NextRequest): { suspicious: boolean; 
   
   for (const pattern of xssPatterns) {
     if (pattern.test(url) || pattern.test(body)) {
-      return { suspicious: true, reason: 'XSS_PATTERN' };
+      return { suspicious: true, reason: "XSS_PATTERN" };
     }
   }
   
   // Path traversal
   if (/\.\.[\/\\]/.test(url)) {
-    return { suspicious: true, reason: 'PATH_TRAVERSAL' };
+    return { suspicious: true, reason: "PATH_TRAVERSAL" };
   }
   
   return { suspicious: false };
@@ -200,8 +200,8 @@ export async function securityMiddleware(request: NextRequest): Promise<NextResp
     if (suspiciousCheck.suspicious) {
       // Log security event
       await logSecurityEvent({
-        type: suspiciousCheck.reason === 'SQL_INJECTION_PATTERN' ? 'SQL_INJECTION_ATTEMPT' : 'XSS_ATTEMPT',
-        severity: 'critical',
+        type: suspiciousCheck.reason === "SQL_INJECTION_PATTERN" ? "SQL_INJECTION_ATTEMPT" : "XSS_ATTEMPT",
+        severity: "critical",
         ip_address: ip,
         details: {
           ip,
@@ -214,10 +214,10 @@ export async function securityMiddleware(request: NextRequest): Promise<NextResp
       });
       
       return new Response(
-        JSON.stringify({ error: 'Request blocked for security reasons' }),
+        JSON.stringify({ error: "Request blocked for security reasons" }),
         { 
           status: 403,
-          headers: { 'Content-Type': 'application/json' }
+          headers: { "Content-Type": "application/json" }
         }
       );
     }
@@ -228,34 +228,34 @@ export async function securityMiddleware(request: NextRequest): Promise<NextResp
     if (!rateLimit.allowed) {
       // Log rate limit violation
       await logSecurityEvent({
-        type: 'RATE_LIMIT',
-        severity: 'medium',
+        type: "RATE_LIMIT",
+        severity: "medium",
         ip_address: ip,
         details: {
           ip,
           endpoint,
           method,
-          limit: 'exceeded',
+          limit: "exceeded",
         },
         timestamp: new Date().toISOString(),
       });
       
       const response = new Response(
         JSON.stringify({ 
-          error: 'Rate limit exceeded',
+          error: "Rate limit exceeded",
           retryAfter: new Date(rateLimit.resetAt).toISOString(),
         }),
         { 
           status: 429,
           headers: { 
-            'Content-Type': 'application/json',
-            'X-RateLimit-Limit': String(RATE_LIMITS.api.maxRequests),
-            'X-RateLimit-Remaining': '0',
-            'X-RateLimit-Reset': String(rateLimit.resetAt),
+            "Content-Type": "application/json",
+            "X-RateLimit-Limit": String(RATE_LIMITS.api.maxRequests),
+            "X-RateLimit-Remaining": "0",
+            "X-RateLimit-Reset": String(rateLimit.resetAt),
           }
         }
       );
-      response.headers.set('Retry-After', String(Math.ceil((rateLimit.resetAt - Date.now()) / 1000)));
+      response.headers.set("Retry-After", String(Math.ceil((rateLimit.resetAt - Date.now()) / 1000)));
       
       return response;
     }
@@ -272,25 +272,25 @@ export async function securityMiddleware(request: NextRequest): Promise<NextResp
     });
     
     // 6. Adicionar CORS headers se origem permitida
-    const origin = request.headers.get('origin');
+    const origin = request.headers.get("origin");
     if (origin && isAllowedOrigin(origin)) {
-      response.headers.set('Access-Control-Allow-Origin', origin);
-      response.headers.set('Access-Control-Allow-Methods', CORS_CONFIG.allowedMethods.join(', '));
-      response.headers.set('Access-Control-Allow-Headers', CORS_CONFIG.allowedHeaders.join(', '));
-      response.headers.set('Access-Control-Allow-Credentials', 'true');
+      response.headers.set("Access-Control-Allow-Origin", origin);
+      response.headers.set("Access-Control-Allow-Methods", CORS_CONFIG.allowedMethods.join(", "));
+      response.headers.set("Access-Control-Allow-Headers", CORS_CONFIG.allowedHeaders.join(", "));
+      response.headers.set("Access-Control-Allow-Credentials", "true");
     }
     
     // 7. Adicionar rate limit headers
-    response.headers.set('X-RateLimit-Limit', String(RATE_LIMITS.api.maxRequests));
-    response.headers.set('X-RateLimit-Remaining', String(rateLimit.remaining));
-    response.headers.set('X-RateLimit-Reset', String(rateLimit.resetAt));
+    response.headers.set("X-RateLimit-Limit", String(RATE_LIMITS.api.maxRequests));
+    response.headers.set("X-RateLimit-Remaining", String(rateLimit.remaining));
+    response.headers.set("X-RateLimit-Reset", String(rateLimit.resetAt));
     
     // 8. Adicionar request ID para tracking
     const requestId = crypto.randomUUID();
-    response.headers.set('X-Request-ID', requestId);
+    response.headers.set("X-Request-ID", requestId);
     
     // 9. Log request (apenas para endpoints importantes)
-    if (endpoint.startsWith('/api/') || endpoint.startsWith('/auth/')) {
+    if (endpoint.startsWith("/api/") || endpoint.startsWith("/auth/")) {
       const duration = Date.now() - startTime;
       
       // Log apenas se demorar mais de 1 segundo ou for erro
@@ -303,14 +303,14 @@ export async function securityMiddleware(request: NextRequest): Promise<NextResp
     
   } catch (error) {
     // Log error
-    console.error('Security middleware error:', error);
+    console.error("Security middleware error:", error);
     
     // Retornar erro genérico (não expor detalhes)
     return new Response(
-      JSON.stringify({ error: 'Internal server error' }),
+      JSON.stringify({ error: "Internal server error" }),
       { 
         status: 500,
-        headers: { 'Content-Type': 'application/json' }
+        headers: { "Content-Type": "application/json" }
       }
     );
   }
@@ -330,23 +330,23 @@ export function withSecurity<T>(
     try {
       // 1. Parse URL e extrair IP
       const url = new URL(req.url);
-      const ip = req.headers.get('x-forwarded-for')?.split(',')[0] || '127.0.0.1';
+      const ip = req.headers.get("x-forwarded-for")?.split(",")[0] || "127.0.0.1";
       
       // 2. Aplicar security headers
       const headers = new Headers(SECURITY_HEADERS);
-      headers.set('X-Request-ID', requestId);
+      headers.set("X-Request-ID", requestId);
       
       // 3. CORS
-      const origin = req.headers.get('origin');
+      const origin = req.headers.get("origin");
       if (origin && isAllowedOrigin(origin)) {
-        headers.set('Access-Control-Allow-Origin', origin);
-        headers.set('Access-Control-Allow-Methods', CORS_CONFIG.allowedMethods.join(', '));
-        headers.set('Access-Control-Allow-Headers', CORS_CONFIG.allowedHeaders.join(', '));
-        headers.set('Access-Control-Allow-Credentials', 'true');
+        headers.set("Access-Control-Allow-Origin", origin);
+        headers.set("Access-Control-Allow-Methods", CORS_CONFIG.allowedMethods.join(", "));
+        headers.set("Access-Control-Allow-Headers", CORS_CONFIG.allowedHeaders.join(", "));
+        headers.set("Access-Control-Allow-Credentials", "true");
       }
       
       // 4. Handle OPTIONS (preflight)
-      if (req.method === 'OPTIONS') {
+      if (req.method === "OPTIONS") {
         return new Response(null, { status: 204, headers });
       }
       
@@ -357,7 +357,7 @@ export function withSecurity<T>(
       Object.entries(SECURITY_HEADERS).forEach(([key, value]) => {
         response.headers.set(key, value);
       });
-      response.headers.set('X-Request-ID', requestId);
+      response.headers.set("X-Request-ID", requestId);
       
       // 7. Log performance
       const duration = Date.now() - startTime;
@@ -372,14 +372,14 @@ export function withSecurity<T>(
       
       return new Response(
         JSON.stringify({ 
-          error: 'Internal server error',
+          error: "Internal server error",
           requestId,
         }),
         { 
           status: 500,
           headers: { 
-            'Content-Type': 'application/json',
-            'X-Request-ID': requestId,
+            "Content-Type": "application/json",
+            "X-Request-ID": requestId,
             ...SECURITY_HEADERS,
           },
         }
@@ -393,10 +393,10 @@ export function withSecurity<T>(
  */
 export async function validateAuth(req: Request): Promise<{ valid: boolean; userId?: string; error?: string }> {
   try {
-    const authHeader = req.headers.get('Authorization');
+    const authHeader = req.headers.get("Authorization");
     
-    if (!authHeader || !authHeader.startsWith('Bearer ')) {
-      return { valid: false, error: 'Missing or invalid authorization header' };
+    if (!authHeader || !authHeader.startsWith("Bearer ")) {
+      return { valid: false, error: "Missing or invalid authorization header" };
     }
     
     const token = authHeader.substring(7);
@@ -404,17 +404,17 @@ export async function validateAuth(req: Request): Promise<{ valid: boolean; user
     // TODO: Implementar validação real do token JWT
     // Por enquanto, apenas verificar se existe
     if (!token || token.length < 10) {
-      return { valid: false, error: 'Invalid token' };
+      return { valid: false, error: "Invalid token" };
     }
     
     // Em produção, decodificar e validar o JWT aqui
     // const decoded = await verifyJWT(token);
     // return { valid: true, userId: decoded.sub };
     
-    return { valid: true, userId: 'user-id-placeholder' };
+    return { valid: true, userId: "user-id-placeholder" };
     
   } catch (error) {
-    console.error('Auth validation error:', error);
-    return { valid: false, error: 'Authentication failed' };
+    console.error("Auth validation error:", error);
+    return { valid: false, error: "Authentication failed" };
   }
 }

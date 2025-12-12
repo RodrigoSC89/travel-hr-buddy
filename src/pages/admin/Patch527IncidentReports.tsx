@@ -48,7 +48,7 @@ export default function Patch527IncidentReports() {
           <div className="flex items-start gap-3">
             <Checkbox
               checked={checks.singleModule}
-              onCheckedChange={() => toggleCheck("singleModule")}
+              onCheckedChange={() => toggleCheck("singleModule"}
             />
             <div className="flex-1">
               <div className="flex items-center gap-2">
@@ -65,7 +65,7 @@ export default function Patch527IncidentReports() {
           <div className="flex items-start gap-3">
             <Checkbox
               checked={checks.dataMigrated}
-              onCheckedChange={() => toggleCheck("dataMigrated")}
+              onCheckedChange={() => toggleCheck("dataMigrated"}
             />
             <div className="flex-1">
               <div className="flex items-center gap-2">
@@ -86,7 +86,7 @@ export default function Patch527IncidentReports() {
           <div className="flex items-start gap-3">
             <Checkbox
               checked={checks.aiReplayActive}
-              onCheckedChange={() => toggleCheck("aiReplayActive")}
+              onCheckedChange={() => toggleCheck("aiReplayActive"}
             />
             <div className="flex-1">
               <div className="flex items-center gap-2">
@@ -103,7 +103,7 @@ export default function Patch527IncidentReports() {
           <div className="flex items-start gap-3">
             <Checkbox
               checked={checks.logsAccessible}
-              onCheckedChange={() => toggleCheck("logsAccessible")}
+              onCheckedChange={() => toggleCheck("logsAccessible"}
             />
             <div className="flex-1">
               <div className="flex items-center gap-2">

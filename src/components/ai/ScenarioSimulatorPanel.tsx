@@ -151,8 +151,8 @@ export const ScenarioSimulatorPanel = memo(function() {
     if (scenario) {
       setParameters({
         fuelPrice: scenario.parameters.fuelPrice || 0,
-        crewCost: scenario.parameters.crewReduction ? scenario.parameters.crewReduction * -5 : 0,
-        maintenanceBudget: scenario.parameters.maintenanceDelay ? -10 : 0,
+        crewCost: scenario.parameters.crewCost || 0,
+        maintenanceBudget: scenario.parameters.maintenanceBudget || 0,
         operationalDays: 0,
         speedAdjustment: scenario.parameters.speedReduction || 0,
       });
@@ -353,5 +353,6 @@ export const ScenarioSimulatorPanel = memo(function() {
         )}
       </CardContent>
     </Card>
-  );
-}
+    );
+  }
+);

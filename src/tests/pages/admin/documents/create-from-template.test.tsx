@@ -82,7 +82,7 @@ describe("CreateFromTemplate", () => {
 
     await waitFor(() => {
       expect(screen.getByTestId("tiptap-editor")).toBeInTheDocument();
-    });
+  });
   });
 
   it("should show editor immediately if no variables", () => {
@@ -116,7 +116,7 @@ describe("CreateFromTemplate", () => {
 
     await waitFor(() => {
       expect(createDocument).toHaveBeenCalled();
-    });
+  });
   });
 
   it("should call onSaved callback after successful save", async () => {
@@ -142,7 +142,7 @@ describe("CreateFromTemplate", () => {
 
     await waitFor(() => {
       expect(onSaved).toHaveBeenCalledWith(mockDoc);
-    });
+  });
   });
 
   it("should handle save error gracefully", async () => {
@@ -161,6 +161,6 @@ describe("CreateFromTemplate", () => {
 
     await waitFor(() => {
       expect(createDocument).toHaveBeenCalled();
-    });
+  });
   });
 });

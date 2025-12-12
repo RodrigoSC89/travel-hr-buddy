@@ -219,7 +219,7 @@ export const LessonsLearnedCenter: React.FC = () => {
     const matchesFailure = filterFailureType === "all" || lesson.failureType === filterFailureType;
     const matchesSeverity = filterSeverity === "all" || lesson.severity === filterSeverity;
     return matchesSearch && matchesSource && matchesFailure && matchesSeverity;
-  });
+  };
 
   const stats = {
     total: lessons.length,
@@ -535,7 +535,7 @@ export const LessonsLearnedCenter: React.FC = () => {
       </Tabs>
 
       {/* Detail Dialog */}
-      <Dialog open={!!selectedLesson} onOpenChange={() => setSelectedLesson(null)}>
+      <Dialog open={!!selectedLesson} onOpenChange={() => setSelectedLesson(null}>
         <DialogContent className="max-w-4xl max-h-[90vh] overflow-y-auto">
           {selectedLesson && (
             <>
@@ -614,6 +614,6 @@ export const LessonsLearnedCenter: React.FC = () => {
       </Dialog>
     </div>
   );
-};
+});
 
 export default LessonsLearnedCenter;

@@ -91,12 +91,12 @@ export const PEODPAuditForm = memo(function({
         map.set(req.id, {
           requirementId: req.id,
           status: "pendente"
-        });
+        };
       }
-    });
+    };
     
     return map;
-  });
+  };
 
   // Group requirements by section
   const requirementsBySection = useMemo(() => {
@@ -111,7 +111,7 @@ export const PEODPAuditForm = memo(function({
     
     requirements.forEach(req => {
       grouped[req.section].push(req);
-    });
+  };
     
     return grouped;
   }, [requirements]);
@@ -135,7 +135,7 @@ export const PEODPAuditForm = memo(function({
         conformes: sectionItems.filter(item => item?.status === "conforme").length,
         naoConformes: sectionItems.filter(item => item?.status === "nao_conforme").length
       };
-    });
+  };
     
     return stats;
   }, [requirementsBySection, auditItems]);
@@ -146,7 +146,7 @@ export const PEODPAuditForm = memo(function({
       const existing = newMap.get(reqId) || { requirementId: reqId, status: "pendente" as ComplianceStatus };
       newMap.set(reqId, { ...existing, ...updates });
       return newMap;
-    });
+  };
   };
 
   const toggleExpanded = (reqId: string) => {
@@ -158,7 +158,7 @@ export const PEODPAuditForm = memo(function({
         newSet.add(reqId);
       }
       return newSet;
-    });
+  };
   };
 
   const handleSave = () => {
@@ -219,7 +219,7 @@ export const PEODPAuditForm = memo(function({
       </Card>
 
       {/* Section tabs */}
-      <Tabs value={activeSection} onValueChange={(v) => setActiveSection(v as PEODPSection)}>
+      <Tabs value={activeSection} onValueChange={(v) => setActiveSection(v as PEODPSection}>
         <TabsList className="grid w-full grid-cols-6 h-auto">
           {PEODP_SECTIONS.map(section => {
             const Icon = SECTION_ICONS[section.icon] || FileText;
@@ -267,7 +267,7 @@ export const PEODPAuditForm = memo(function({
                         <Collapsible
                           key={req.id}
                           open={isExpanded}
-                          onOpenChange={() => toggleExpanded(req.id)}
+                          onOpenChange={() => toggleExpanded(req.id}
                         >
                           <div className={`p-4 ${getStatusBgColor(item?.status || "pendente")}`}>
                             <CollapsibleTrigger className="w-full">

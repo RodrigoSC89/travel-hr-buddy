@@ -54,7 +54,7 @@ vi.mock("react-router-dom", async () => {
     ...actual,
     useNavigate: () => mockNavigate,
   };
-});
+  });
 
 describe("DocumentViewPage Component", () => {
   beforeEach(() => {
@@ -70,7 +70,7 @@ describe("DocumentViewPage Component", () => {
         }),
       }),
     } as unknown);
-  });
+  };
 
   it("should display document not found message", async () => {
     render(
@@ -83,7 +83,7 @@ describe("DocumentViewPage Component", () => {
 
     await waitFor(() => {
       expect(screen.getByText(/Documento não encontrado./i)).toBeInTheDocument();
-    });
+  });
   });
 
   it("should render back button in document view", async () => {
@@ -98,7 +98,7 @@ describe("DocumentViewPage Component", () => {
     await waitFor(() => {
       // Check if "Documento não encontrado" is shown first
       expect(screen.getByText(/Documento não encontrado./i)).toBeInTheDocument();
-    });
+  });
   });
 
   it("should display author information when available", async () => {
@@ -149,12 +149,12 @@ describe("DocumentViewPage Component", () => {
 
     await waitFor(() => {
       expect(screen.getByText(/Test Document/i)).toBeInTheDocument();
-    });
+  });
 
     // Check that author information is displayed
     await waitFor(() => {
       expect(screen.getByText(/Autor: Test User/i)).toBeInTheDocument();
-    });
+  });
   });
 
   it("should display author email to admin users", async () => {
@@ -229,12 +229,12 @@ describe("DocumentViewPage Component", () => {
 
     await waitFor(() => {
       expect(screen.getByText(/Test Document/i)).toBeInTheDocument();
-    });
+  });
 
     // Check that author email is displayed for admin
     await waitFor(() => {
       expect(screen.getByText(/author@example.com/i)).toBeInTheDocument();
-    });
+  });
   });
 
   it("should NOT display author email to non-admin users", async () => {
@@ -309,12 +309,12 @@ describe("DocumentViewPage Component", () => {
 
     await waitFor(() => {
       expect(screen.getByText(/Test Document/i)).toBeInTheDocument();
-    });
+  });
 
     // Check that author name is displayed
     await waitFor(() => {
       expect(screen.getByText(/Autor: Document Author/i)).toBeInTheDocument();
-    });
+  });
 
     // Check that author email is NOT displayed for non-admin
     expect(screen.queryByText(/author@example.com/i)).not.toBeInTheDocument();

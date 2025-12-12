@@ -14,7 +14,7 @@ export default function BridgeLinkDashboard() {
     publishEvent("nautilus/bridgelink/manual-sync", {
       timestamp: new Date().toISOString(),
       triggered_by: "manual",
-    });
+    };
     
     const timestamp = new Date().toLocaleTimeString();
     setLogs((prev) => [...prev, `[${timestamp}] Manual sync triggered`]);

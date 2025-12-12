@@ -108,7 +108,7 @@ export const DPChecklist: React.FC<DPChecklistProps> = ({
   const [checklist, setChecklist] = useState<Checklist>({
     ...initialChecklist,
     items: dpChecklistItems
-  });
+};
 
   const [activeTab, setActiveTab] = useState("items");
   const [selectedCategory, setSelectedCategory] = useState<string>("all");
@@ -160,7 +160,7 @@ export const DPChecklist: React.FC<DPChecklistProps> = ({
         ...checklist,
         status: "pending_review",
         completedAt: new Date().toISOString()
-      });
+      };
       toast.success("Checklist enviado para revisão!");
     } catch (error) {
       toast.error("Erro ao enviar checklist");
@@ -173,7 +173,7 @@ export const DPChecklist: React.FC<DPChecklistProps> = ({
       return (
         <Checkbox
           checked={item.value === true}
-          onCheckedChange={(checked) => handleItemChange(item.id, "value", checked)}
+          onCheckedChange={(checked) => handleItemChange(item.id, "value", checked}
           className="mr-2"
         />
       );

@@ -88,14 +88,14 @@ describe("SGSOAuditReviewPage", () => {
     const { container } = renderWithRouter();
     const spinner = container.querySelector(".animate-spin");
     expect(spinner).toBeInTheDocument();
-  });
+  };
 
   it("should render page title after loading", async () => {
     renderWithRouter();
 
     await waitFor(() => {
       expect(screen.getByText("Revisão de Auditoria SGSO")).toBeInTheDocument();
-    });
+  });
   });
 
   it("should render audit information", async () => {
@@ -103,7 +103,7 @@ describe("SGSOAuditReviewPage", () => {
 
     await waitFor(() => {
       expect(screen.getByText("PSV Atlântico")).toBeInTheDocument();
-    });
+  });
 
     expect(screen.getByText("João Silva")).toBeInTheDocument();
   });
@@ -113,7 +113,7 @@ describe("SGSOAuditReviewPage", () => {
 
     await waitFor(() => {
       expect(screen.getByText(/Liderança e Responsabilidade/)).toBeInTheDocument();
-    });
+  });
 
     expect(screen.getByText(/Identificação de Perigos/)).toBeInTheDocument();
   });
@@ -123,7 +123,7 @@ describe("SGSOAuditReviewPage", () => {
 
     await waitFor(() => {
       expect(screen.getByText("Salvar Alterações")).toBeInTheDocument();
-    });
+  });
 
     expect(screen.getByText("Exportar PDF")).toBeInTheDocument();
     expect(screen.getByText("Voltar")).toBeInTheDocument();
@@ -134,7 +134,7 @@ describe("SGSOAuditReviewPage", () => {
 
     await waitFor(() => {
       expect(screen.getAllByText("Conforme").length).toBeGreaterThan(0);
-    });
+  });
 
     expect(screen.getAllByText("Parcialmente Conforme").length).toBeGreaterThan(0);
   });

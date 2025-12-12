@@ -41,7 +41,7 @@ export const AppLayout: React.FC = () => {
             />
             <EnhancedNotifications 
               isOpen={isNotificationsOpen}
-              onClose={() => setIsNotificationsOpen(false)}
+              onClose={() => setIsNotificationsOpen(false}
             />
             
             {/* Floating Action Button */}
@@ -54,6 +54,6 @@ export const AppLayout: React.FC = () => {
       </SEOWrapper>
     </ThemeProvider>
   );
-};
+});
 
 export default AppLayout;

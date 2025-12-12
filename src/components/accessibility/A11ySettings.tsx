@@ -162,7 +162,7 @@ export const A11ySettings = memo(function({ compact = false }: A11ySettingsProps
                 <Switch
                   id={setting.key}
                   checked={settings[setting.key] as boolean}
-                  onCheckedChange={(checked) => updateSetting(setting.key, checked)}
+                  onCheckedChange={(checked) => updateSetting(setting.key, checked}
                 />
               </div>
             ))}
@@ -206,7 +206,7 @@ export const A11ySettings = memo(function({ compact = false }: A11ySettingsProps
         <div className="pl-6">
           <Select
             value={settings.colorBlindMode}
-            onValueChange={(value: unknown) => updateSetting("colorBlindMode", value)}
+            onValueChange={(value: unknown) => updateSetting("colorBlindMode", value}
           >
             <SelectTrigger className="w-full">
               <SelectValue />

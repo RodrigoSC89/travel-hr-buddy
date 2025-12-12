@@ -196,13 +196,13 @@ export default function WeatherCommandCenter() {
       toast({
         title: "Dados atualizados",
         description: `Meteorologia carregada para ${locationName}`,
-      });
+      };
     } catch (error: SupabaseError | null) {
       toast({
         title: "Erro ao carregar dados",
         description: error.message,
         variant: "destructive"
-      });
+      };
     } finally {
       setLoading(false);
     }
@@ -253,7 +253,7 @@ export default function WeatherCommandCenter() {
         toast({
           title: "Localização não encontrada",
           description: "Tente outra localização ou adicione manualmente",
-        });
+        };
       }
     }
   };

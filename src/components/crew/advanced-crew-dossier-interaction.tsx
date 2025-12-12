@@ -85,7 +85,7 @@ export const AdvancedCrewDossierInteraction: React.FC<VoiceInteractionPanelProps
           toast({
             title: "Transcrição completada",
             description: `"${transcribedText}"`,
-          });
+          };
           
           // Enviar para IA processar
           await processVoiceCommand(transcribedText);
@@ -95,14 +95,14 @@ export const AdvancedCrewDossierInteraction: React.FC<VoiceInteractionPanelProps
         toast({
           title: "Gravação iniciada",
           description: "Fale agora para interagir com seu dossiê...",
-        });
+        };
       }
     } catch (error) {
       toast({
         title: "Erro na interação por voz",
         description: "Tente novamente em alguns instantes.",
         variant: "destructive"
-      });
+      };
     }
   };
 
@@ -125,14 +125,14 @@ export const AdvancedCrewDossierInteraction: React.FC<VoiceInteractionPanelProps
           crew_member_id: crewMemberId,
           analysis_type: "comprehensive"
         }
-      });
+      };
 
       if (error) throw error;
 
       toast({
         title: "Análise de IA gerada",
         description: "Novos insights foram gerados para o seu perfil!",
-      });
+      };
 
       await loadAIInsights();
     } catch (error) {
@@ -140,7 +140,7 @@ export const AdvancedCrewDossierInteraction: React.FC<VoiceInteractionPanelProps
         title: "Erro ao gerar insights",
         description: "Não foi possível gerar a análise de IA.",
         variant: "destructive"
-      });
+      };
     } finally {
       setIsLoadingAI(false);
     }
@@ -170,7 +170,7 @@ export const AdvancedCrewDossierInteraction: React.FC<VoiceInteractionPanelProps
           crew_member_id: crewMemberId,
           action_type: "get_profile"
         }
-      });
+      };
 
       if (error) throw error;
       setGamificationProfile(data.profile);
@@ -188,7 +188,7 @@ export const AdvancedCrewDossierInteraction: React.FC<VoiceInteractionPanelProps
           crew_member_id: crewMemberId,
           action: "get_goals"
         }
-      });
+      };
 
       if (error) throw error;
       setGoals(data.result?.goals || []);
@@ -204,14 +204,14 @@ export const AdvancedCrewDossierInteraction: React.FC<VoiceInteractionPanelProps
           crew_member_id: crewMemberId,
           action: "suggest_goals"
         }
-      });
+      };
 
       if (error) throw error;
 
       toast({
         title: "Sugestões de metas geradas",
         description: "Novas metas personalizadas foram sugeridas para você!",
-      });
+      };
     } catch (error) {
       logger.error("Failed to create new goal:", error);
     }
@@ -247,7 +247,7 @@ export const AdvancedCrewDossierInteraction: React.FC<VoiceInteractionPanelProps
 
           <div className="flex items-center justify-center space-x-2">
             <Button
-              onClick={isSpeaking ? stopSpeaking : () => speak("Olá! Como posso ajudar você hoje?")}
+              onClick={isSpeaking ? stopSpeaking : () => speak("Olá! Como posso ajudar você hoje?"}
               variant="outline"
               size="sm"
             >

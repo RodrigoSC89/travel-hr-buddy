@@ -230,14 +230,14 @@ const FinanceCommandCenter: React.FC = () => {
       currency: "BRL",
       fiscalYearStart: "01",
     };
-  });
+  };
 
   const [newExpense, setNewExpense] = useState({
     description: "",
     amount: "",
     category: "other",
     notes: "",
-  });
+  };
 
   // Format currency
   const formatCurrency = (value: number) => {
@@ -372,7 +372,7 @@ const FinanceCommandCenter: React.FC = () => {
       const csvRows = ["Descrição,Valor,Data,Categoria,Status"];
       transactions.forEach(tx => {
         csvRows.push(`"${tx.description}",${tx.amount},"${tx.date}","${tx.category}","${tx.status}"`);
-      });
+  };
       const blob = new Blob([csvRows.join("\n")], { type: "text/csv" });
       const url = URL.createObjectURL(blob);
       const a = document.createElement("a");
@@ -430,7 +430,7 @@ const FinanceCommandCenter: React.FC = () => {
         const percentage = ((cat.spent / cat.allocated) * 100).toFixed(1);
         doc.text(`${cat.name}: ${formatCurrency(cat.spent)} / ${formatCurrency(cat.allocated)} (${percentage}%)`, 25, yPos);
         yPos += 7;
-      });
+  });
 
       yPos += 10;
 
@@ -444,7 +444,7 @@ const FinanceCommandCenter: React.FC = () => {
       routeCosts.forEach(cost => {
         doc.text(`${cost.route} (${cost.vessel}): ${formatCurrency(cost.totalCost)} - Eficiência: ${cost.efficiency}%`, 25, yPos);
         yPos += 6;
-      });
+  });
 
       doc.setFontSize(8);
       doc.setTextColor(128, 128, 128);
@@ -481,7 +481,7 @@ const FinanceCommandCenter: React.FC = () => {
       toast({ 
         title: "Análise concluída", 
         description: `${result.response.opportunitiesCount || 3} oportunidades de economia identificadas` 
-      });
+      };
     } else {
       toast({ title: "Análise concluída", description: "Insights gerados com sucesso" });
     }
@@ -506,7 +506,7 @@ const FinanceCommandCenter: React.FC = () => {
             
             Forneça recomendações práticas para otimização financeira e redução de custos operacionais.`,
         },
-      });
+      };
 
       if (error) throw error;
       setAiInsight(response?.content || "Análise concluída com sucesso.");
@@ -1328,6 +1328,6 @@ const FinanceCommandCenter: React.FC = () => {
       </Sheet>
     </div>
   );
-};
+});
 
 export default FinanceCommandCenter;

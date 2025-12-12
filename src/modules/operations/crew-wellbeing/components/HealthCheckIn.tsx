@@ -43,14 +43,14 @@ export const HealthCheckin: React.FC = () => {
     exercise_minutes: 30,
     water_intake_liters: 2,
     notes: ""
-  });
+  };
 
   const handleSubmit = async () => {
     // TODO: Implement actual save to Supabase
     toast({
       title: "Health Check-in Saved",
       description: "Your health metrics have been recorded successfully"
-    });
+    };
   };
 
   const getRatingColor = (rating: number, inverse: boolean = false) => {

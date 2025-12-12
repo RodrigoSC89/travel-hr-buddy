@@ -81,7 +81,7 @@ export default function SGSOAuditPage() {
               evidence: match?.evidence || "",
               comment: match?.comment || ""
             };
-          });
+  };
 
           setAuditData(updatedData);
           toast.success("✅ Última auditoria carregada.");
@@ -225,7 +225,7 @@ export default function SGSOAuditPage() {
             <RadioGroup
               defaultValue="compliant"
               className="flex gap-4 mt-2"
-              onValueChange={val => handleChange(idx, "compliance", val)}
+              onValueChange={val => handleChange(idx, "compliance", val}
             >
               <div className="flex items-center gap-1">
                 <RadioGroupItem value="compliant" id={`c-${idx}`} />
@@ -244,12 +244,12 @@ export default function SGSOAuditPage() {
             <Textarea
               placeholder="📄 Descreva a evidência observada"
               value={item.evidence}
-              onChange={e => handleChange(idx, "evidence", e.target.value)}
+              onChange={e => handleChange(idx, "evidence", e.target.value}
             />
             <Textarea
               placeholder="💬 Comentário adicional ou observação"
               value={item.comment}
-              onChange={e => handleChange(idx, "comment", e.target.value)}
+              onChange={e => handleChange(idx, "comment", e.target.value}
             />
             
             <Button

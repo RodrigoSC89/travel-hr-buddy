@@ -216,7 +216,7 @@ export default function MMITasksPage() {
       </div>
 
       {/* Task Details Dialog */}
-      <Dialog open={!!selectedTask} onOpenChange={() => setSelectedTask(null)}>
+      <Dialog open={!!selectedTask} onOpenChange={() => setSelectedTask(null}>
         <DialogContent className="max-w-2xl max-h-[80vh] overflow-y-auto">
           <DialogHeader>
             <DialogTitle>{selectedTask?.title}</DialogTitle>

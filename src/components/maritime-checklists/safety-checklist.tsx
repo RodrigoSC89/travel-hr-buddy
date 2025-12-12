@@ -149,7 +149,7 @@ export const SafetyChecklist: React.FC<SafetyChecklistProps> = ({
   const [checklist, setChecklist] = useState<Checklist>({
     ...initialChecklist,
     items: safetyChecklistItems
-  });
+};
 
   const [activeTab, setActiveTab] = useState("items");
   const [selectedCategory, setSelectedCategory] = useState<string>("all");
@@ -201,7 +201,7 @@ export const SafetyChecklist: React.FC<SafetyChecklistProps> = ({
         ...checklist,
         status: "pending_review",
         completedAt: new Date().toISOString()
-      });
+      };
       toast.success("Checklist enviado para revisão!");
     } catch (error) {
       toast.error("Erro ao enviar checklist");
@@ -214,7 +214,7 @@ export const SafetyChecklist: React.FC<SafetyChecklistProps> = ({
       return (
         <Checkbox
           checked={item.value === true}
-          onCheckedChange={(checked) => handleItemChange(item.id, "value", checked)}
+          onCheckedChange={(checked) => handleItemChange(item.id, "value", checked}
           className="mr-2"
         />
       );

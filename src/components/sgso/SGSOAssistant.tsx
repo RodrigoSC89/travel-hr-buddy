@@ -91,7 +91,7 @@ Todas as minhas respostas incluem **citações das normas** aplicáveis. Como po
     try {
       const { data, error } = await supabase.functions.invoke("sgso-assistant", {
         body: { question: messageText }
-      });
+      };
 
       if (error) throw error;
 
@@ -368,7 +368,7 @@ Por favor, reformule sua pergunta ou selecione um dos temas acima para que eu po
                                 key={idx}
                                 variant="outline"
                                 className="text-xs cursor-pointer hover:bg-primary/10"
-                                onClick={() => citation.link && window.open(citation.link, "_blank")}
+                                onClick={() => citation.link && window.open(citation.link, "_blank"}
                               >
                                 <BookOpen className="h-2 w-2 mr-1" />
                                 {citation.norma} - {citation.artigo}
@@ -447,6 +447,6 @@ Por favor, reformule sua pergunta ou selecione um dos temas acima para que eu po
       </div>
     </div>
   );
-};
+});
 
 export default SGSOAssistant;

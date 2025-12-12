@@ -107,7 +107,7 @@ describe("RestoreReportLogsPage Component", () => {
     await waitFor(() => {
       expect(screen.getByText("🧠 Auditoria de Relatórios Enviados")).toBeInTheDocument();
       expect(screen.getByText("(2 total)")).toBeInTheDocument();
-    });
+  });
   });
 
   it("should render back button", () => {
@@ -139,12 +139,12 @@ describe("RestoreReportLogsPage Component", () => {
 
     await waitFor(() => {
       expect(screen.getByText("Histórico de Execuções")).toBeInTheDocument();
-    });
+  });
 
     // Check for success log
     await waitFor(() => {
       expect(screen.getByText("Relatório enviado com sucesso.")).toBeInTheDocument();
-    });
+  });
   });
 
   it("should display summary cards", async () => {
@@ -158,7 +158,7 @@ describe("RestoreReportLogsPage Component", () => {
       expect(screen.getByText("Total de Execuções")).toBeInTheDocument();
       expect(screen.getByText("Sucessos")).toBeInTheDocument();
       expect(screen.getByText("Erros")).toBeInTheDocument();
-    });
+  });
   });
 
   it("should render filter controls without Buscar button", async () => {
@@ -174,7 +174,7 @@ describe("RestoreReportLogsPage Component", () => {
       expect(screen.getByText("Data Final")).toBeInTheDocument();
       expect(screen.getByText("Limpar Filtros")).toBeInTheDocument();
       expect(screen.queryByText("Buscar")).not.toBeInTheDocument();
-    });
+  });
   });
 
   it("should render export buttons", async () => {
@@ -187,7 +187,7 @@ describe("RestoreReportLogsPage Component", () => {
     await waitFor(() => {
       expect(screen.getByText("CSV")).toBeInTheDocument();
       expect(screen.getByText("PDF")).toBeInTheDocument();
-    });
+  });
   });
 
   it("should disable export buttons when no logs", async () => {
@@ -208,7 +208,7 @@ describe("RestoreReportLogsPage Component", () => {
       const pdfButton = screen.getByText("PDF").closest("button");
       expect(csvButton).toBeDisabled();
       expect(pdfButton).toBeDisabled();
-    });
+  });
   });
 
   it("should auto-apply filters when changed", async () => {
@@ -220,12 +220,12 @@ describe("RestoreReportLogsPage Component", () => {
 
     await waitFor(() => {
       expect(screen.getByText("Status")).toBeInTheDocument();
-    });
+  });
 
     // Filters should auto-apply without needing to click a button
     await waitFor(() => {
       expect(mockSelect).toHaveBeenCalled();
-    });
+  });
   });
 
   describe("Public Mode Functionality", () => {
@@ -238,8 +238,8 @@ describe("RestoreReportLogsPage Component", () => {
 
       await waitFor(() => {
         expect(screen.queryByText("Voltar")).not.toBeInTheDocument();
-      });
-    });
+  });
+  });
 
     it("should hide export buttons in public mode", async () => {
       render(
@@ -252,8 +252,8 @@ describe("RestoreReportLogsPage Component", () => {
         expect(screen.queryByText("CSV")).not.toBeInTheDocument();
         expect(screen.queryByText("PDF")).not.toBeInTheDocument();
         expect(screen.queryByText("Atualizar")).not.toBeInTheDocument();
-      });
-    });
+  });
+  });
 
     it("should hide filter controls in public mode", async () => {
       render(
@@ -267,8 +267,8 @@ describe("RestoreReportLogsPage Component", () => {
         expect(screen.queryByText("Data Inicial")).not.toBeInTheDocument();
         expect(screen.queryByText("Data Final")).not.toBeInTheDocument();
         expect(screen.queryByText("Limpar Filtros")).not.toBeInTheDocument();
-      });
-    });
+  });
+  });
 
     it("should display public mode indicator in public mode", async () => {
       render(
@@ -279,8 +279,8 @@ describe("RestoreReportLogsPage Component", () => {
 
       await waitFor(() => {
         expect(screen.getByText("Modo Somente Leitura (Visualização Pública)")).toBeInTheDocument();
-      });
-    });
+  });
+  });
 
     it("should show Eye icon in title when in public mode", async () => {
       const { container } = render(
@@ -295,8 +295,8 @@ describe("RestoreReportLogsPage Component", () => {
         // Eye icon should be inline with the title
         const eyeIcon = container.querySelector(".lucide-eye");
         expect(eyeIcon).toBeInTheDocument();
-      });
-    });
+  });
+  });
 
     it("should still display summary cards in public mode", async () => {
       render(
@@ -309,8 +309,8 @@ describe("RestoreReportLogsPage Component", () => {
         expect(screen.getByText("Total de Execuções")).toBeInTheDocument();
         expect(screen.getByText("Sucessos")).toBeInTheDocument();
         expect(screen.getByText("Erros")).toBeInTheDocument();
-      });
-    });
+  });
+  });
 
     it("should still display logs in public mode", async () => {
       render(
@@ -322,8 +322,8 @@ describe("RestoreReportLogsPage Component", () => {
       await waitFor(() => {
         expect(screen.getByText("Histórico de Execuções")).toBeInTheDocument();
         expect(screen.getByText("Relatório enviado com sucesso.")).toBeInTheDocument();
-      });
-    });
+  });
+  });
 
     it("should not display public mode indicator in normal mode", async () => {
       render(
@@ -334,8 +334,8 @@ describe("RestoreReportLogsPage Component", () => {
 
       await waitFor(() => {
         expect(screen.queryByText("Modo Somente Leitura (Visualização Pública)")).not.toBeInTheDocument();
-      });
-    });
   });
-});
+  });
+  });
+  });
 

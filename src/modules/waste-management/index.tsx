@@ -79,7 +79,7 @@ function WasteManagement() {
     }, 1000);
     
     setChatMessage("");
-  };
+  });
 
   const criticalTanks = mockTanks.filter(t => t.status === "critical").length;
   const warningTanks = mockTanks.filter(t => t.status === "warning").length;

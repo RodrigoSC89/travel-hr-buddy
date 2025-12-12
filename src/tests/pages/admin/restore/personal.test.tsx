@@ -82,7 +82,7 @@ describe("PersonalRestoreDashboard", () => {
 
     await waitFor(() => {
       expect(screen.getByText(/Seu Painel de Restaurações/i)).toBeInTheDocument();
-    });
+  });
   });
 
   it("displays loading state initially", () => {
@@ -109,7 +109,7 @@ describe("PersonalRestoreDashboard", () => {
       expect(screen.getByText("15")).toBeInTheDocument();
       expect(screen.getByText(/Média por dia/i)).toBeInTheDocument();
       expect(screen.getByText("5")).toBeInTheDocument();
-    });
+  });
   });
 
   it("renders the bar chart when data is available", async () => {
@@ -122,7 +122,7 @@ describe("PersonalRestoreDashboard", () => {
     await waitFor(() => {
       expect(screen.getByText(/Restaurações por Dia/i)).toBeInTheDocument();
       expect(screen.getByTestId("bar-chart")).toBeInTheDocument();
-    });
+  });
   });
 
   it("calls the correct RPC functions with user email", async () => {
@@ -137,10 +137,10 @@ describe("PersonalRestoreDashboard", () => {
     await waitFor(() => {
       expect(supabase.rpc).toHaveBeenCalledWith("get_restore_count_by_day_with_email", {
         email_input: "test@example.com",
-      });
+      };
       expect(supabase.rpc).toHaveBeenCalledWith("get_restore_summary", {
         email_input: "test@example.com",
-      });
-    });
-  });
-});
+      };
+  };
+  };
+};

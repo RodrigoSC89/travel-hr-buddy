@@ -428,7 +428,7 @@ export default function PortAPIConnector() {
                 </div>
               </div>
 
-              <Button onClick={() => toast.success("Configurações salvas!")}>
+              <Button onClick={() => toast.success("Configurações salvas!"}>
                 Salvar Configurações
               </Button>
             </CardContent>

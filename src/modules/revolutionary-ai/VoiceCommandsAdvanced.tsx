@@ -130,7 +130,7 @@ export const VoiceCommandsAdvanced = memo(function() {
             currentText += (index > 0 ? " " : "") + word;
             setTranscript(currentText);
           }, index * 300);
-        });
+  });
       }, 500);
     }
   };

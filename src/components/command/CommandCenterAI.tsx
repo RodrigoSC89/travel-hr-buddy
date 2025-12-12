@@ -130,6 +130,6 @@ export const CommandCenterAI = memo(function() {
       </Tabs>
     </div>
   );
-}
+});
 
 export default CommandCenterAI;

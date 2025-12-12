@@ -61,7 +61,7 @@ export const EmployeePersonalDocuments: React.FC = () => {
     expiry_date: "",
     issuing_authority: "",
     file: null as File | null
-  });
+  };
 
   useEffect(() => {
     loadDocuments();
@@ -87,7 +87,7 @@ export const EmployeePersonalDocuments: React.FC = () => {
         title: "Error loading documents",
         description: error.message,
         variant: "destructive",
-      });
+      };
     } finally {
       setLoading(false);
     }
@@ -153,7 +153,7 @@ export const EmployeePersonalDocuments: React.FC = () => {
       toast({
         title: "✅ Document Uploaded",
         description: "Your document has been uploaded successfully",
-      });
+      };
 
       setIsUploadOpen(false);
       resetForm();
@@ -163,7 +163,7 @@ export const EmployeePersonalDocuments: React.FC = () => {
         title: "Error uploading document",
         description: error.message,
         variant: "destructive",
-      });
+      };
     } finally {
       setUploading(false);
     }
@@ -183,7 +183,7 @@ export const EmployeePersonalDocuments: React.FC = () => {
       toast({
         title: "Document Deleted",
         description: "Document has been removed",
-      });
+      };
 
       loadDocuments();
     } catch (error: SupabaseError | null) {
@@ -191,7 +191,7 @@ export const EmployeePersonalDocuments: React.FC = () => {
         title: "Error deleting document",
         description: error.message,
         variant: "destructive",
-      });
+      };
     }
   };
 
@@ -204,7 +204,7 @@ export const EmployeePersonalDocuments: React.FC = () => {
       expiry_date: "",
       issuing_authority: "",
       file: null
-    });
+    };
   };
 
   const getStatusBadge = (status: string, expiryDate?: string) => {
@@ -417,10 +417,10 @@ export const EmployeePersonalDocuments: React.FC = () => {
                       <div className="flex items-center justify-end gap-2">
                         {doc.file_url && (
                           <>
-                            <Button size="sm" variant="outline" onClick={() => window.open(doc.file_url!, "_blank")}>
+                            <Button size="sm" variant="outline" onClick={() => window.open(doc.file_url!, "_blank"}>
                               <Eye className="h-4 w-4" />
                             </Button>
-                            <Button size="sm" variant="outline" onClick={() => window.open(doc.file_url!, "_blank")}>
+                            <Button size="sm" variant="outline" onClick={() => window.open(doc.file_url!, "_blank"}>
                               <Download className="h-4 w-4" />
                             </Button>
                           </>
@@ -439,4 +439,4 @@ export const EmployeePersonalDocuments: React.FC = () => {
       </Card>
     </div>
   );
-};
+});

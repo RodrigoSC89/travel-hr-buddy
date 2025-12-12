@@ -109,7 +109,7 @@ export const MissionManager = memo(function() {
       priority: "medium",
       agents: []
     });
-  };
+  });
 
   const getPriorityColor = (priority: Mission["priority"]) => {
     switch (priority) {

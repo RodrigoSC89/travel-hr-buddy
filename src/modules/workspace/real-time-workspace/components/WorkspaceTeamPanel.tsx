@@ -61,7 +61,7 @@ export const WorkspaceTeamPanel: React.FC<WorkspaceTeamPanelProps> = ({
   const sortedMembers = [...members].sort((a, b) => {
     const statusOrder = { online: 0, away: 1, busy: 2, offline: 3 };
     return statusOrder[a.status] - statusOrder[b.status];
-  });
+};
 
   return (
     <Card className="h-full border-border/50 bg-card/50 backdrop-blur-sm">
@@ -83,7 +83,7 @@ export const WorkspaceTeamPanel: React.FC<WorkspaceTeamPanelProps> = ({
               <TooltipProvider key={member.id}>
                 <div
                   className="group flex items-center gap-3 p-2.5 rounded-lg hover:bg-accent/50 cursor-pointer transition-all duration-200"
-                  onClick={() => onMemberClick?.(member)}
+                  onClick={() => onMemberClick?.(member}
                 >
                   <div className="relative flex-shrink-0">
                     <Avatar className="h-10 w-10 ring-2 ring-background">
@@ -142,7 +142,7 @@ export const WorkspaceTeamPanel: React.FC<WorkspaceTeamPanelProps> = ({
                         </Button>
                       </DropdownMenuTrigger>
                       <DropdownMenuContent align="end">
-                        <DropdownMenuItem onClick={() => onStartVideo?.(member)}>
+                        <DropdownMenuItem onClick={() => onStartVideo?.(member}>
                           <Video className="h-4 w-4 mr-2" />
                           Videochamada
                         </DropdownMenuItem>

@@ -49,7 +49,7 @@ export default function SuppliesTab() {
     const matchesCategory = categoryFilter === "all" || supply.category === categoryFilter;
     const matchesStatus = statusFilter === "all" || supply.status === statusFilter;
     return matchesSearch && matchesCategory && matchesStatus;
-  });
+  };
 
   const statusCounts = {
     ok: supplies.filter(s => s.status === "ok").length,
@@ -106,7 +106,7 @@ export default function SuppliesTab() {
       expiryDate: "",
       batchNumber: "",
       location: ""
-    });
+    };
     toast.success("Item adicionado ao estoque");
   };
 

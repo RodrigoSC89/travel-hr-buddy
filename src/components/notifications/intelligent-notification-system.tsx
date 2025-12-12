@@ -62,7 +62,7 @@ const IntelligentNotificationSystem = () => {
       operational: true,
       system: true
     }
-  });
+  };
   const { toast } = useToast();
 
   // Simulação de notificações
@@ -168,7 +168,7 @@ const IntelligentNotificationSystem = () => {
     const matchesSearch = notification.title.toLowerCase().includes(searchTerm.toLowerCase()) ||
                          notification.message.toLowerCase().includes(searchTerm.toLowerCase());
     return matchesType && matchesPriority && matchesSearch;
-  });
+  };
 
   const markAsRead = (id: string) => {
     setNotifications(prev => 
@@ -185,7 +185,7 @@ const IntelligentNotificationSystem = () => {
     toast({
       title: "Sucesso",
       description: "Todas as notificações foram marcadas como lidas",
-    });
+    };
   };
 
   const deleteNotification = (id: string) => {
@@ -193,7 +193,7 @@ const IntelligentNotificationSystem = () => {
     toast({
       title: "Notificação removida",
       description: "A notificação foi removida com sucesso",
-    });
+    };
   };
 
   const archiveNotification = (id: string) => {
@@ -209,7 +209,7 @@ const IntelligentNotificationSystem = () => {
     toast({
       title: "Configurações atualizadas",
       description: "Suas preferências foram salvas",
-    });
+    };
   };
 
   const getRelativeTime = (timestamp: Date) => {
@@ -444,7 +444,7 @@ const IntelligentNotificationSystem = () => {
                   </div>
                   <Switch 
                     checked={settings.emailEnabled}
-                    onCheckedChange={(checked) => updateSettings("emailEnabled", checked)}
+                    onCheckedChange={(checked) => updateSettings("emailEnabled", checked}
                   />
                 </div>
                 <div className="flex items-center justify-between">
@@ -454,7 +454,7 @@ const IntelligentNotificationSystem = () => {
                   </div>
                   <Switch 
                     checked={settings.pushEnabled}
-                    onCheckedChange={(checked) => updateSettings("pushEnabled", checked)}
+                    onCheckedChange={(checked) => updateSettings("pushEnabled", checked}
                   />
                 </div>
                 <div className="flex items-center justify-between">
@@ -464,7 +464,7 @@ const IntelligentNotificationSystem = () => {
                   </div>
                   <Switch 
                     checked={settings.smsEnabled}
-                    onCheckedChange={(checked) => updateSettings("smsEnabled", checked)}
+                    onCheckedChange={(checked) => updateSettings("smsEnabled", checked}
                   />
                 </div>
                 <div className="flex items-center justify-between">
@@ -474,7 +474,7 @@ const IntelligentNotificationSystem = () => {
                   </div>
                   <Switch 
                     checked={settings.aiInsights}
-                    onCheckedChange={(checked) => updateSettings("aiInsights", checked)}
+                    onCheckedChange={(checked) => updateSettings("aiInsights", checked}
                   />
                 </div>
               </CardContent>

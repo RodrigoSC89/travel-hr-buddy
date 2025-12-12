@@ -255,7 +255,7 @@ export const AdvancedFilters: React.FC<AdvancedFiltersProps> = ({
               </Label>
               <Slider
                 value={tempFilters.priceRange}
-                onValueChange={(value) => updateFilter("priceRange", value)}
+                onValueChange={(value) => updateFilter("priceRange", value}
                 max={maxPrice}
                 min={0}
                 step={10}
@@ -271,7 +271,7 @@ export const AdvancedFilters: React.FC<AdvancedFiltersProps> = ({
               </Label>
               <Slider
                 value={tempFilters.discountRange}
-                onValueChange={(value) => updateFilter("discountRange", value)}
+                onValueChange={(value) => updateFilter("discountRange", value}
                 max={100}
                 min={0}
                 step={5}

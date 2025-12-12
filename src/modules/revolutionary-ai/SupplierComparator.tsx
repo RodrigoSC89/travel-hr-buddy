@@ -123,7 +123,7 @@ export const SupplierComparator = memo(function() {
         const scoreA = Object.values(a.scores).reduce((acc, v) => acc + v, 0) / 5;
         const scoreB = Object.values(b.scores).reduce((acc, v) => acc + v, 0) / 5;
         return scoreB - scoreA;
-      });
+  };
     }
     return sorted;
   }, [sortBy]);

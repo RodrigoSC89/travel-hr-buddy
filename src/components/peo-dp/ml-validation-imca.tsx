@@ -208,7 +208,7 @@ export const MLValidationIMCA: React.FC = () => {
       setIsAnalyzing(false);
       toast.success("Validação concluída!", {
         description: "12 recomendações IMCA geradas"
-      });
+      };
     }, 3000);
   };
 

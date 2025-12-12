@@ -127,14 +127,14 @@ const ReportsCommandCenter = () => {
         reportsThisMonth: reportsThisMonth || 0,
         reportsLastMonth: reportsLastMonth || 0,
         incidentsThisMonth: incidentsThisMonth || 0
-      });
+};
     } catch (error) {
       console.error("Error loading analytics:", error);
       toast({
         title: "Erro",
         description: "Falha ao carregar dados de analytics",
         variant: "destructive"
-      });
+      };
     } finally {
       setIsLoadingAnalytics(false);
     }

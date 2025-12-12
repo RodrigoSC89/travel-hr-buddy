@@ -66,7 +66,7 @@ describe("IncidentTimeline", () => {
     render(<IncidentTimeline />);
     await waitFor(() => {
       expect(screen.getByText("Incident Timeline")).toBeInTheDocument();
-    });
+  });
   });
 
   it("displays incidents grouped by month", async () => {
@@ -74,7 +74,7 @@ describe("IncidentTimeline", () => {
     await waitFor(() => {
       expect(screen.getByText("Test Incident 1")).toBeInTheDocument();
       expect(screen.getByText("Test Incident 2")).toBeInTheDocument();
-    });
+  });
   });
 
   it("shows severity badges", async () => {
@@ -82,7 +82,7 @@ describe("IncidentTimeline", () => {
     await waitFor(() => {
       expect(screen.getByText("high")).toBeInTheDocument();
       expect(screen.getByText("critical")).toBeInTheDocument();
-    });
+  });
   });
 
   it("displays filter controls", async () => {
@@ -91,20 +91,20 @@ describe("IncidentTimeline", () => {
       expect(screen.getByText("Module Filter")).toBeInTheDocument();
       expect(screen.getByText("From Date")).toBeInTheDocument();
       expect(screen.getByText("To Date")).toBeInTheDocument();
-    });
+  });
   });
 
   it("shows export button", async () => {
     render(<IncidentTimeline />);
     await waitFor(() => {
       expect(screen.getByText("Export PNG")).toBeInTheDocument();
-    });
+  });
   });
 
   it("displays summary statistics", async () => {
     render(<IncidentTimeline />);
     await waitFor(() => {
       expect(screen.getByText("Total Incidents")).toBeInTheDocument();
-    });
+  });
   });
 });

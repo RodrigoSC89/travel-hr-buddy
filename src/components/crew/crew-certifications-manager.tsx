@@ -155,7 +155,7 @@ export const CrewCertificationsManager = memo(function({ crewMembers = [] }: Cre
       cert.number.toLowerCase().includes(searchTerm.toLowerCase());
     const matchesStatus = statusFilter === "all" || cert.status === statusFilter;
     return matchesSearch && matchesStatus;
-  });
+  };
 
   const stats = {
     total: certifications.length,
@@ -169,7 +169,7 @@ export const CrewCertificationsManager = memo(function({ crewMembers = [] }: Cre
     toast({
       title: "Certificação adicionada",
       description: "Nova certificação registrada com sucesso",
-    });
+    };
     setIsAddDialogOpen(false);
   };
 
@@ -177,7 +177,7 @@ export const CrewCertificationsManager = memo(function({ crewMembers = [] }: Cre
     toast({
       title: "Renovação iniciada",
       description: "Processo de renovação iniciado. Você receberá notificações sobre o andamento.",
-    });
+    };
   };
 
   return (

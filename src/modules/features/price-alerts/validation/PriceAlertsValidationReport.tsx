@@ -41,7 +41,7 @@ export const PriceAlertsValidationReport: React.FC = () => {
       updateTest("list", { 
         status: "passed", 
         message: `${alerts.length} alertas carregados com sucesso` 
-      });
+      };
     } catch (error) {
       updateTest("list", { status: "failed", message: String(error) });
     }

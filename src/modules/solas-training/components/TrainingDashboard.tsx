@@ -86,7 +86,7 @@ export default function TrainingDashboard() {
     }, 1000);
     
     setChatMessage("");
-  };
+  });
 
   const overdueDrills = mockDrills.filter(d => d.status === "overdue").length;
   const dueDrills = mockDrills.filter(d => d.status === "due").length;

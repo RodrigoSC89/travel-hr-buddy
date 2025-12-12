@@ -12,7 +12,7 @@ vi.mock("react-router-dom", async () => {
     ...actual,
     useNavigate: () => mockNavigate,
   };
-});
+  });
 
 // Mock Supabase client
 const mockGetSession = vi.fn();
@@ -78,7 +78,7 @@ describe("AssistantReportLogsPage - Cron Status", () => {
     await waitFor(() => {
       const statusBadge = screen.getByText(/Cron executado há 2 hora/i);
       expect(statusBadge).toBeDefined();
-    });
+  });
 
     // Check that the status badge contains the success emoji
     const statusBadge = screen.getByText(/Cron executado há 2 hora/i);
@@ -117,7 +117,7 @@ describe("AssistantReportLogsPage - Cron Status", () => {
     await waitFor(() => {
       const statusBadge = screen.getByText(/Última execução há 48 horas/i);
       expect(statusBadge).toBeDefined();
-    });
+  });
 
     // Check that the status badge contains the warning emoji
     const statusBadge = screen.getByText(/Última execução há 48 horas/i);
@@ -151,7 +151,7 @@ describe("AssistantReportLogsPage - Cron Status", () => {
     await waitFor(() => {
       const heading = screen.getByText(/Logs de Envio de Relatórios/i);
       expect(heading).toBeDefined();
-    });
+  });
 
     // Check that no cron status badge is displayed
     expect(screen.queryByText(/Cron executado/i)).toBeNull();
@@ -193,4 +193,4 @@ describe("AssistantReportLogsPage - Cron Status", () => {
     expect(screen.getByPlaceholderText(/E-mail do usuário/i)).toBeDefined();
     expect(screen.getByText(/🔍 Buscar/i)).toBeDefined();
   });
-});
+};

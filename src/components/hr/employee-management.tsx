@@ -121,7 +121,7 @@ export const EmployeeManagement = memo(() => {
     certifications: [],
     rating: 4.0,
     salary: 0
-  });
+  };
 
   const handleCreateEmployee = () => {
     if (!newEmployee.name || !newEmployee.position || !newEmployee.department || !newEmployee.email) {
@@ -129,7 +129,7 @@ export const EmployeeManagement = memo(() => {
         title: "Erro",
         description: "Preencha todos os campos obrigatórios",
         variant: "destructive"
-      });
+      };
       return;
     }
 
@@ -166,7 +166,7 @@ export const EmployeeManagement = memo(() => {
     toast({
       title: "Funcionário criado",
       description: `${employee.name} foi adicionado ao sistema`,
-    });
+    };
   };
 
   const handleRemoveEmployee = (id: string) => {
@@ -175,7 +175,7 @@ export const EmployeeManagement = memo(() => {
     toast({
       title: "Funcionário removido",
       description: `${employee?.name} foi removido do sistema`,
-    });
+    };
   };
 
   const handleStatusChange = (employeeId: string, newStatus: Employee["status"]) => {
@@ -185,7 +185,7 @@ export const EmployeeManagement = memo(() => {
     toast({
       title: "Status atualizado",
       description: "Status do funcionário foi alterado com sucesso"
-    });
+    };
   };
 
   const filteredEmployees = employees.filter(employee => {
@@ -195,7 +195,7 @@ export const EmployeeManagement = memo(() => {
     const matchesDepartment = selectedDepartment === "all" || employee.department === selectedDepartment;
     const matchesStatus = selectedStatus === "all" || employee.status === selectedStatus;
     return matchesSearch && matchesDepartment && matchesStatus;
-  });
+  };
 
   const departments = [...new Set(employees.map(emp => emp.department))];
 
@@ -432,7 +432,7 @@ export const EmployeeManagement = memo(() => {
                 </div>
 
                 <div className="flex flex-col gap-2 mt-4 md:mt-0">
-                  <Select value={employee.status} onValueChange={(value) => handleStatusChange(employee.id, value as Employee["status"])}>
+                  <Select value={employee.status} onValueChange={(value) => handleStatusChange(employee.id, value as Employee["status"]}>
                     <SelectTrigger className="w-32">
                       <SelectValue />
                     </SelectTrigger>

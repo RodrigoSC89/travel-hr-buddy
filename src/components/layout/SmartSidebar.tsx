@@ -275,6 +275,6 @@ export const SmartSidebar = memo(function({ className }: SmartSidebarProps) {
       </aside>
     </>
   );
-}
+});
 
 export default SmartSidebar;

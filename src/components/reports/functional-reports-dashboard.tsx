@@ -88,7 +88,7 @@ export const FunctionalReportsDashboard: React.FC = () => {
     toast({
       title: "Relatório em Geração",
       description: "Seu relatório está sendo criado. Isso pode levar alguns minutos.",
-    });
+    };
 
     // Simulate report generation
     setTimeout(() => {
@@ -103,7 +103,7 @@ export const FunctionalReportsDashboard: React.FC = () => {
       toast({
         title: "Relatório Concluído",
         description: "Seu relatório foi gerado com sucesso!",
-      });
+      };
     }, 3000);
   };
 
@@ -111,7 +111,7 @@ export const FunctionalReportsDashboard: React.FC = () => {
     toast({
       title: "Download Iniciado",
       description: "O download do seu relatório foi iniciado.",
-    });
+    };
   };
 
   const getStatusIcon = (status: Report["status"]) => {

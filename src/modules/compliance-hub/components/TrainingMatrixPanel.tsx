@@ -99,7 +99,7 @@ export const TrainingMatrixPanel = memo(function({
     const matchesStatus = statusFilter === "all" || training.status === statusFilter;
     const matchesRank = rankFilter === "all" || training.crewMemberRank === rankFilter;
     return matchesSearch && matchesStatus && matchesRank;
-  });
+  };
 
   const uniqueRanks = [...new Set(trainings.map((t) => t.crewMemberRank))];
 

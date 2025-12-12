@@ -42,7 +42,7 @@ export const GanttChart = memo(() => {
     priority: "medium",
     description: "",
     parent_task_id: null as string | null
-  });
+  };
   const { toast } = useToast();
 
   useEffect(() => {
@@ -83,7 +83,7 @@ export const GanttChart = memo(() => {
         project_id: crypto.randomUUID(),
         organization_id: orgData.organization_id,
         created_by: user.id
-      });
+      };
 
     if (error) {
       toast({ title: "Erro ao criar tarefa", description: error.message, variant: "destructive" });
@@ -204,7 +204,7 @@ export const GanttChart = memo(() => {
         task_id: targetId,
         depends_on_task_id: sourceId,
         dependency_type: "finish_to_start"
-      });
+      };
 
     if (error) {
       toast({ title: "Erro ao criar dependência", description: error.message, variant: "destructive" });
@@ -254,7 +254,7 @@ export const GanttChart = memo(() => {
     // First pass: create map
     allTasks.forEach(task => {
       taskMap.set(task.id, { ...task, subtasks: [] });
-    });
+  };
 
     // Second pass: build hierarchy
     allTasks.forEach(task => {
@@ -271,7 +271,7 @@ export const GanttChart = memo(() => {
     });
 
     return rootTasks;
-  };
+  });
 
   const renderTaskRow = (task: Task, level: number = 0) => {
     const indent = level * 20;
@@ -283,7 +283,7 @@ export const GanttChart = memo(() => {
             dependencyMode && dependencySource?.id === task.id ? "bg-blue-100" : ""
           }`}
           draggable
-          onDragStart={() => handleDragStart(task)}
+          onDragStart={() => handleDragStart(task}
           onDragEnd={handleDragEnd}
         >
           <div className="w-56 shrink-0" style={{ paddingLeft: `${indent}px` }}>
@@ -376,7 +376,7 @@ export const GanttChart = memo(() => {
         )}
       </div>
     );
-  };
+  });
 
   return (
     <div className="space-y-4">
@@ -497,4 +497,4 @@ export const GanttChart = memo(() => {
       </Dialog>
     </div>
   );
-};
+});

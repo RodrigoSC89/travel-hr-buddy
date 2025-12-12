@@ -55,7 +55,7 @@ export const SatelliteMap: React.FC<SatelliteMapProps> = ({ satellite }) => {
           center: [initialPosition.longitude, initialPosition.latitude],
           zoom: 3,
           projection: { name: "globe" }
-        });
+        };
 
         map.current.addControl(new mapboxgl.NavigationControl(), "top-right");
         map.current.addControl(new mapboxgl.FullscreenControl(), "top-right");
@@ -74,7 +74,7 @@ export const SatelliteMap: React.FC<SatelliteMapProps> = ({ satellite }) => {
 
         map.current.on("load", () => {
           if (mounted) setIsLoading(false);
-        });
+  });
       } catch (err) {
         console.error("Failed to load Mapbox:", err);
         if (mounted) {

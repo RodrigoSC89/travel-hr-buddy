@@ -15,7 +15,7 @@ const FuelOptimizer = () => {
     destination: "",
     cargo_weight: "",
     weather_condition: "normal"
-  });
+  };
 
   const [optimization, setOptimization] = useState<unknown>(null);
   const [history, setHistory] = useState([
@@ -43,7 +43,7 @@ const FuelOptimizer = () => {
         title: "Dados incompletos",
         description: "Preencha todos os campos obrigatórios",
         variant: "destructive"
-      });
+      };
       return;
     }
 
@@ -70,7 +70,7 @@ const FuelOptimizer = () => {
     toast({
       title: "Otimização concluída",
       description: `Economia estimada: ${result.savings_liters}L (${result.savings_percentage}%)`
-    });
+    };
   };
 
   const totalSavings = history.reduce((sum, h) => sum + h.savings, 0);

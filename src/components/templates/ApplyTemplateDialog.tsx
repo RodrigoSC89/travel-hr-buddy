@@ -69,7 +69,7 @@ export const ApplyTemplateDialog = memo(function({
       organization: {
         name: "Organization Name",
       },
-    });
+    };
   }, []);
 
   // Apply template with current variables
@@ -84,7 +84,7 @@ export const ApplyTemplateDialog = memo(function({
       extractedVariables.forEach(varName => {
         // Try to use auto-fill suggestions
         initialVars[varName] = autoFillSuggestions[varName] || "";
-      });
+  };
       setVariables(initialVars);
     }
   }, [open, extractedVariables, autoFillSuggestions]);
@@ -97,7 +97,7 @@ export const ApplyTemplateDialog = memo(function({
     toast({
       title: "Auto-fill applied",
       description: "Common variables have been filled automatically",
-    });
+    };
   };
 
   const handleVariableChange = (varName: string, value: string) => {
@@ -124,13 +124,13 @@ export const ApplyTemplateDialog = memo(function({
       toast({
         title: "Export successful",
         description: `Document exported as ${format}`,
-      });
+      };
     } else {
       toast({
         title: "Export failed",
         description: result.error || "Failed to export document",
         variant: "destructive",
-      });
+      };
     }
   };
 
@@ -140,7 +140,7 @@ export const ApplyTemplateDialog = memo(function({
       toast({
         title: "Template applied",
         description: `${appliedResult.appliedVariables.length} variables applied`,
-      });
+      };
       onOpenChange(false);
     }
   };
@@ -162,7 +162,7 @@ export const ApplyTemplateDialog = memo(function({
           </DialogDescription>
         </DialogHeader>
 
-        <Tabs value={activeTab} onValueChange={(val) => setActiveTab(val as "edit" | "preview")}>
+        <Tabs value={activeTab} onValueChange={(val) => setActiveTab(val as "edit" | "preview"}>
           <div className="flex items-center justify-between">
             <TabsList>
               <TabsTrigger value="edit" className="flex items-center gap-2">

@@ -55,7 +55,7 @@ export class ErrorBoundaryWrapper extends React.Component<
       error: null,
       errorInfo: null,
     });
-  };
+  });
 
   render() {
     if (this.state.hasError) {
@@ -119,4 +119,4 @@ const ErrorFallback: React.FC<ErrorFallbackProps> = ({ error, onRetry }) => {
       </Card>
     </div>
   );
-};
+});

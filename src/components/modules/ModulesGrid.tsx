@@ -101,7 +101,7 @@ export default function ModulesGrid() {
     const matchesSearch = m.name.toLowerCase().includes(search.toLowerCase());
     const matchesCategory = selectedCategory === "all" || m.category === selectedCategory;
     return matchesSearch && matchesCategory;
-  });
+  };
 
   const handleModuleClick = (slug: string, status?: string) => {
     if (status === "functional") {

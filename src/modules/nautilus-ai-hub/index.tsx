@@ -150,7 +150,7 @@ const NautilusAIHub: React.FC = () => {
     try {
       const response = await invoke("audit_analyze", userMessage, {
         context: "Nautilus AI Hub - Assistente de Inteligência Artificial Marítima"
-      });
+      };
 
       if (response?.response) {
         setChatMessages(prev => [...prev, { role: "assistant", content: typeof response.response === "string" ? response.response : JSON.stringify(response.response) }]);

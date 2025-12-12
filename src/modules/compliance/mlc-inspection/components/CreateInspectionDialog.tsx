@@ -34,7 +34,7 @@ export const CreateInspectionDialog = memo(function({ open, onOpenChange, onInsp
         title: "Validation Error",
         description: "Please fill in all required fields",
         variant: "destructive",
-      });
+      };
       return;
     }
 
@@ -54,7 +54,7 @@ export const CreateInspectionDialog = memo(function({ open, onOpenChange, onInsp
         inspection_type: formData.inspection_type,
         notes: formData.notes,
         status: "draft",
-      });
+      };
 
       onInspectionCreated(inspection.id);
       
@@ -71,7 +71,7 @@ export const CreateInspectionDialog = memo(function({ open, onOpenChange, onInsp
         title: "Error",
         description: "Failed to create inspection",
         variant: "destructive",
-      });
+      };
     } finally {
       setLoading(false);
     }

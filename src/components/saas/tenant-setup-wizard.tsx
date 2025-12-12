@@ -56,7 +56,7 @@ export const TenantSetupWizard: React.FC = () => {
     admin_name: "",
     admin_email: "",
     admin_phone: ""
-  });
+  };
   const [isLoading, setIsLoading] = useState(false);
   
   const { tenantPlans } = useTenant();
@@ -89,7 +89,7 @@ export const TenantSetupWizard: React.FC = () => {
         title: "Campos obrigatórios",
         description: "Preencha todos os campos obrigatórios antes de continuar.",
         variant: "destructive"
-      });
+      };
     }
   };
 
@@ -103,7 +103,7 @@ export const TenantSetupWizard: React.FC = () => {
       toast({
         title: "Tenant criado com sucesso!",
         description: "O ambiente da empresa foi configurado.",
-      });
+      };
       
       // Redirecionar para o dashboard do tenant
     } catch (error) {
@@ -111,7 +111,7 @@ export const TenantSetupWizard: React.FC = () => {
         title: "Erro ao criar tenant",
         description: "Tente novamente ou entre em contato com o suporte.",
         variant: "destructive"
-      });
+      };
     } finally {
       setIsLoading(false);
     }
@@ -204,7 +204,7 @@ export const TenantSetupWizard: React.FC = () => {
               
               <div className="space-y-2">
                 <Label htmlFor="industry">Setor *</Label>
-                <Select value={formData.industry} onValueChange={(value) => updateFormData("industry", value)}>
+                <Select value={formData.industry} onValueChange={(value) => updateFormData("industry", value}>
                   <SelectTrigger>
                     <SelectValue placeholder="Selecione o setor" />
                   </SelectTrigger>
@@ -221,7 +221,7 @@ export const TenantSetupWizard: React.FC = () => {
               
               <div className="space-y-2">
                 <Label htmlFor="company_size">Tamanho da Empresa</Label>
-                <Select value={formData.company_size} onValueChange={(value) => updateFormData("company_size", value)}>
+                <Select value={formData.company_size} onValueChange={(value) => updateFormData("company_size", value}>
                   <SelectTrigger>
                     <SelectValue placeholder="Selecione o tamanho" />
                   </SelectTrigger>
@@ -280,7 +280,7 @@ export const TenantSetupWizard: React.FC = () => {
             <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
               <div className="space-y-2">
                 <Label htmlFor="currency">Moeda Principal *</Label>
-                <Select value={formData.primary_currency} onValueChange={(value) => updateFormData("primary_currency", value)}>
+                <Select value={formData.primary_currency} onValueChange={(value) => updateFormData("primary_currency", value}>
                   <SelectTrigger>
                     <SelectValue />
                   </SelectTrigger>
@@ -294,7 +294,7 @@ export const TenantSetupWizard: React.FC = () => {
               
               <div className="space-y-2">
                 <Label htmlFor="timezone">Fuso Horário *</Label>
-                <Select value={formData.timezone} onValueChange={(value) => updateFormData("timezone", value)}>
+                <Select value={formData.timezone} onValueChange={(value) => updateFormData("timezone", value}>
                   <SelectTrigger>
                     <SelectValue />
                   </SelectTrigger>
@@ -308,7 +308,7 @@ export const TenantSetupWizard: React.FC = () => {
               
               <div className="space-y-2">
                 <Label htmlFor="language">Idioma *</Label>
-                <Select value={formData.language} onValueChange={(value) => updateFormData("language", value)}>
+                <Select value={formData.language} onValueChange={(value) => updateFormData("language", value}>
                   <SelectTrigger>
                     <SelectValue />
                   </SelectTrigger>

@@ -20,7 +20,7 @@ export const ModuleErrorBoundary: React.FC<ModuleErrorBoundaryProps> = ({
     Sentry.captureException(error, { 
       tags: { module: moduleName },
       contexts: { react: { componentStack: errorInfo.componentStack } }
-    });
+};
   };
 
   return (

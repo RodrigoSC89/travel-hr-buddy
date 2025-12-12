@@ -150,4 +150,4 @@ export const NotificationsPanel: React.FC = () => {
       </CardContent>
     </Card>
   );
-};
+});

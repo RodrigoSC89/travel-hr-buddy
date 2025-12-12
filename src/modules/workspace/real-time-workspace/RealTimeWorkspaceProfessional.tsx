@@ -167,13 +167,13 @@ const RealTimeWorkspaceProfessional: React.FC = () => {
       toast({
         title: "Atualizado",
         description: "Todos os dados foram sincronizados",
-      });
+      };
     } catch (error) {
       toast({
         title: "Erro ao atualizar",
         description: "Tente novamente",
         variant: "destructive",
-      });
+      };
     } finally {
       setIsRefreshing(false);
     }
@@ -215,7 +215,7 @@ const RealTimeWorkspaceProfessional: React.FC = () => {
           context: "workspace_chat",
           systemPrompt: "Você é um assistente de IA para um workspace marítimo. Ajude com operações, documentação, e comunicação da equipe. Responda de forma concisa e profissional em português."
         }
-      });
+      };
       
       let aiContent: string;
       
@@ -249,7 +249,7 @@ const RealTimeWorkspaceProfessional: React.FC = () => {
         title: "Erro",
         description: "Falha ao obter resposta da IA. Usando modo offline.",
         variant: "destructive",
-      });
+      };
       
       // Fallback message
       const fallbackMessage: ChatMessage = {
@@ -273,7 +273,7 @@ const RealTimeWorkspaceProfessional: React.FC = () => {
         title: "Nome obrigatório",
         description: "Digite um nome para o canal",
         variant: "destructive",
-      });
+      };
       return;
     }
     
@@ -297,7 +297,7 @@ const RealTimeWorkspaceProfessional: React.FC = () => {
       toast({
         title: "Canal criado",
         description: `#${newChannelName} está pronto para uso`,
-      });
+      };
       
       setShowNewChannelDialog(false);
       setNewChannelName("");
@@ -306,7 +306,7 @@ const RealTimeWorkspaceProfessional: React.FC = () => {
         title: "Erro ao criar canal",
         description: "Tente novamente",
         variant: "destructive",
-      });
+      };
     } finally {
       setIsCreatingChannel(false);
     }
@@ -339,13 +339,13 @@ const RealTimeWorkspaceProfessional: React.FC = () => {
       toast({
         title: "Link copiado",
         description: "Compartilhe com a equipe",
-      });
+      };
     } catch (error) {
       toast({
         title: "Erro ao copiar",
         description: "Tente novamente",
         variant: "destructive",
-      });
+      };
     }
   };
 
@@ -354,14 +354,14 @@ const RealTimeWorkspaceProfessional: React.FC = () => {
     toast({
       title: "Entrando na reunião",
       description: "Abrindo em nova aba...",
-    });
+    };
   };
 
   const handleMemberClick = (member: TeamMember) => {
     toast({
       title: member.name,
       description: `${member.role} - ${member.status === "online" ? "Online" : member.status === "away" ? "Ausente" : member.status === "busy" ? "Ocupado" : "Offline"}`,
-    });
+    };
   };
 
   const handleDocumentUpload = (file: File) => {
@@ -578,7 +578,7 @@ const RealTimeWorkspaceProfessional: React.FC = () => {
             </div>
             <div className="space-y-2">
               <Label>Tipo de Canal</Label>
-              <Select value={newChannelType} onValueChange={(v: "public" | "private") => setNewChannelType(v)}>
+              <Select value={newChannelType} onValueChange={(v: "public" | "private") => setNewChannelType(v}>
                 <SelectTrigger>
                   <SelectValue />
                 </SelectTrigger>

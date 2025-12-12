@@ -402,7 +402,7 @@ const ModuleCard = ({ module }: { module: typeof systemModules[0] }) => {
       </CardContent>
     </Card>
   );
-};
+});
 
 export const ComprehensiveExecutiveDashboard = memo(function() {
   const totalModules = systemModules.length;

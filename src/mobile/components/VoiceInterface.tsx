@@ -66,7 +66,7 @@ export const VoiceInterface: React.FC<VoiceInterfaceProps> = ({
 
     recognition.onstart = () => {
       setIsListening(true);
-    };
+    });
 
     recognition.onresult = (event: Event) => {
       const current = event.resultIndex;
@@ -93,7 +93,7 @@ export const VoiceInterface: React.FC<VoiceInterfaceProps> = ({
 
     recognition.onend = () => {
       setIsListening(false);
-    };
+    });
 
     recognitionRef.current = recognition;
 
@@ -117,7 +117,7 @@ export const VoiceInterface: React.FC<VoiceInterfaceProps> = ({
       role: "user",
       content: text,
       context: { intent }
-    });
+    };
 
     // Notify parent
     onIntentDetected?.(intent);
@@ -208,7 +208,7 @@ export const VoiceInterface: React.FC<VoiceInterfaceProps> = ({
 
     utterance.onerror = (event) => {
       setIsSpeaking(false);
-    };
+    });
 
     synthesisRef.current = utterance;
     window.speechSynthesis.speak(utterance);

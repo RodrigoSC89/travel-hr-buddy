@@ -63,7 +63,7 @@ export const ReactionMapper: React.FC<ReactionMapperProps> = ({
     logs: [],
     simulationMode: false,
     simulationSpeed: 1,
-  });
+};
 
   const [selectedNode, setSelectedNode] = useState<DecisionNode | null>(null);
   const [metrics, setMetrics] = useState<ReactionMetrics | null>(null);
@@ -106,7 +106,7 @@ export const ReactionMapper: React.FC<ReactionMapperProps> = ({
           ? (automatedNodes.length / layerNodes.length) * 100 
           : 0,
       };
-    });
+    };
 
     // Calculate path execution rates
     const pathExecutionRate: Record<string, number> = {};
@@ -115,7 +115,7 @@ export const ReactionMapper: React.FC<ReactionMapperProps> = ({
         l.nodeId === path.fromNodeId || l.nodeId === path.toNodeId
       ).length;
       pathExecutionRate[path.id] = executions;
-    });
+  };
 
     // Calculate critical path time
     const criticalPathTime = nodes.reduce((max, node) => {
@@ -165,7 +165,7 @@ export const ReactionMapper: React.FC<ReactionMapperProps> = ({
       BridgeLink.emit("reaction-mapper:simulation-started" as unknown, "ReactionMapper", {
         scenarioId: state.currentScenario.id,
         timestamp: Date.now(),
-      });
+      };
     }
 
     // Simulate nodes execution
@@ -269,7 +269,7 @@ export const ReactionMapper: React.FC<ReactionMapperProps> = ({
     if (integrateWithControlHub) {
       BridgeLink.emit("reaction-mapper:simulation-stopped" as unknown, "ReactionMapper", {
         timestamp: Date.now(),
-      });
+      };
     }
   }, [integrateWithControlHub]);
 

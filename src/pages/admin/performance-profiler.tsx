@@ -164,9 +164,9 @@ export default function PerformanceProfiler() {
             renderTime: Math.round(entry.duration),
             count: 1,
             lastSeen: Date.now(),
-          });
+          };
         }
-      });
+      };
 
       if (slowOnes.length > 0) {
         setSlowComponents((prev) => {
@@ -187,7 +187,7 @@ export default function PerformanceProfiler() {
           // Keep only recent ones (last 5 minutes)
           const fiveMinutesAgo = Date.now() - 5 * 60 * 1000;
           return merged.filter((x) => x.lastSeen > fiveMinutesAgo);
-        });
+        };
       }
     } catch (error) {
       logger.error("Error detecting slow components in performance profiler", { error });
@@ -253,7 +253,7 @@ export default function PerformanceProfiler() {
         <div className="flex gap-2">
           <Button
             variant={isMonitoring ? "destructive" : "default"}
-            onClick={() => (isMonitoring ? stopMonitoring() : startMonitoring())}
+            onClick={() => (isMonitoring ? stopMonitoring() : startMonitoring()}
           >
             {isMonitoring ? "Stop" : "Start"} Monitoring
           </Button>

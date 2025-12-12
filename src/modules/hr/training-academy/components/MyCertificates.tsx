@@ -37,7 +37,7 @@ export const MyCertificates: React.FC = () => {
         title: "Error loading certificates",
         description: error.message,
         variant: "destructive",
-      });
+      };
     } finally {
       setIsLoading(false);
     }
@@ -61,7 +61,7 @@ export const MyCertificates: React.FC = () => {
         issued_date: cert.issued_date,
         final_score: cert.final_score,
         user_name: profile?.full_name || user.email || "Student",
-      });
+      };
 
       const url = URL.createObjectURL(blob);
       const a = document.createElement("a");
@@ -73,13 +73,13 @@ export const MyCertificates: React.FC = () => {
       toast({
         title: "Certificate downloaded",
         description: "Your certificate has been downloaded.",
-      });
+      };
     } catch (error: SupabaseError | null) {
       toast({
         title: "Error downloading certificate",
         description: error.message,
         variant: "destructive",
-      });
+      };
     }
   };
 

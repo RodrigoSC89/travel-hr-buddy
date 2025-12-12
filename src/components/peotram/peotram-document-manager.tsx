@@ -128,7 +128,7 @@ export const PeotramDocumentManager: React.FC = () => {
     auditId: "",
     elementId: "",
     requirementId: ""
-  });
+  };
 
   useEffect(() => {
     loadDocuments();
@@ -223,7 +223,7 @@ export const PeotramDocumentManager: React.FC = () => {
         if (category.id === "certificates") return doc.type === "certificate";
         if (category.id === "reports") return doc.type === "report";
         return false;
-      });
+  };
 
       return {
         ...category,
@@ -350,7 +350,7 @@ export const PeotramDocumentManager: React.FC = () => {
       doc.tags.some(tag => tag.toLowerCase().includes(searchTerm.toLowerCase()));
 
     return matchesCategory && matchesSearch;
-  });
+  };
 
   return (
     <TooltipProvider>

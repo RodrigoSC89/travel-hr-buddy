@@ -178,7 +178,7 @@ Dados atuais do sistema:
             })),
           context,
         },
-      });
+      };
 
       let responseContent: string;
 
@@ -318,4 +318,4 @@ Dados atuais do sistema:
       </CardContent>
     </Card>
   );
-};
+});

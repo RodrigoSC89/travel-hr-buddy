@@ -53,7 +53,7 @@ export const NotificationsPanel = memo(function({
     if (filter === "unread") return !n.read;
     if (filter === "critical") return n.type === "critical";
     return true;
-  });
+  };
 
   const unreadCount = notifications.filter(n => !n.read).length;
   const criticalCount = notifications.filter(n => n.type === "critical").length;
@@ -196,7 +196,7 @@ export const NotificationsPanel = memo(function({
                               variant="ghost" 
                               size="sm" 
                               className="h-6 px-2 text-xs"
-                              onClick={() => toast.info("Ver detalhes")}
+                              onClick={() => toast.info("Ver detalhes"}
                             >
                               <Eye className="h-3 w-3 mr-1" />
                               Ver

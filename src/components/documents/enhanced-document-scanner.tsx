@@ -76,7 +76,7 @@ export const EnhancedDocumentScanner: React.FC = () => {
     multipage: false,
     ocrLanguage: "pt",
     outputFormat: "pdf"
-  });
+  };
   const [currentStep, setCurrentStep] = useState<"capture" | "preview" | "enhance" | "ocr" | "analysis">("capture");
   const [capturedImage, setCapturedImage] = useState<string | null>(null);
   const [isProcessing, setIsProcessing] = useState(false);
@@ -114,13 +114,13 @@ export const EnhancedDocumentScanner: React.FC = () => {
       toast({
         title: "Câmera ativada",
         description: "Posicione o documento e capture a imagem"
-      });
+      };
     } catch (error) {
       toast({
         title: "Erro na câmera",
         description: "Não foi possível acessar a câmera. Use o upload de arquivo.",
         variant: "destructive"
-      });
+      };
     }
   }, [isMobile, toast]);
 
@@ -155,7 +155,7 @@ export const EnhancedDocumentScanner: React.FC = () => {
     toast({
       title: "Imagem capturada",
       description: "Revise a imagem antes de processar"
-    });
+    };
   }, [stopCamera, toast]);
 
   const processDocument = async (imageFile: File | string) => {
@@ -211,14 +211,14 @@ export const EnhancedDocumentScanner: React.FC = () => {
       toast({
         title: "Processamento concluído",
         description: `Documento processado com ${mockResult.confidence}% de confiança`
-      });
+      };
 
     } catch (error) {
       toast({
         title: "Erro no processamento",
         description: "Não foi possível processar o documento",
         variant: "destructive"
-      });
+      };
     } finally {
       setIsProcessing(false);
       setIsScanning(false);
@@ -236,7 +236,7 @@ export const EnhancedDocumentScanner: React.FC = () => {
           title: "Formato não suportado",
           description: "Selecione uma imagem (JPG, PNG) ou PDF",
           variant: "destructive"
-        });
+        };
       }
     }
   };
@@ -253,13 +253,13 @@ export const EnhancedDocumentScanner: React.FC = () => {
         title: `Documento: ${result.fileName}`,
         text: result.extractedText,
         url: result.imageUrl
-      });
+      };
     } else {
       navigator.clipboard.writeText(result.extractedText);
       toast({
         title: "Texto copiado",
         description: "Texto extraído copiado para a área de transferência"
-      });
+      };
     }
   };
 
@@ -272,7 +272,7 @@ export const EnhancedDocumentScanner: React.FC = () => {
     toast({
       title: "Download iniciado",
       description: "Documento sendo baixado"
-    });
+    };
   };
 
   return (
@@ -594,4 +594,4 @@ export const EnhancedDocumentScanner: React.FC = () => {
       )}
     </div>
   );
-};
+});

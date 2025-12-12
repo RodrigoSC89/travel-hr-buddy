@@ -23,7 +23,7 @@ export const SyncStatus = memo(function() {
       toast({
         title: "Back online",
         description: "Connection restored. Syncing pending data...",
-      });
+      };
       syncPendingData();
     };
 
@@ -33,7 +33,7 @@ export const SyncStatus = memo(function() {
         title: "You're offline",
         description: "Changes will be saved locally and synced when reconnected",
         variant: "destructive",
-      });
+      };
     };
 
     window.addEventListener("online", handleOnline);
@@ -109,13 +109,13 @@ export const SyncStatus = memo(function() {
       toast({
         title: "Sync complete",
         description: "All pending changes have been synchronized",
-      });
+      };
     } catch (error) {
       toast({
         title: "Sync failed",
         description: "Failed to sync some changes. Will retry automatically.",
         variant: "destructive",
-      });
+      };
     } finally {
       setIsSyncing(false);
     }

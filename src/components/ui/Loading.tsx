@@ -128,7 +128,7 @@ export const LoadingOverlay: React.FC<LoadingOverlayProps> = ({
       )}
     </div>
   );
-};
+});
 
 export interface LoadingSkeletonProps {
   className?: string;
@@ -238,7 +238,7 @@ export const LoadingDashboard: React.FC = () => {
       </div>
     </div>
   );
-};
+});
 
 // Export legacy names for backward compatibility
 export const LoadingState = Loading;

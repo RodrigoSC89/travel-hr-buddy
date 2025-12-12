@@ -140,7 +140,7 @@ const UnifiedDashboard = () => {
     toast({
       title: "Dashboard atualizado",
       description: "Dados atualizados com sucesso",
-    });
+    };
   };
 
   const handleKPIToggle = (kpi: string) => {
@@ -434,6 +434,6 @@ const UnifiedDashboard = () => {
       </div>
     </div>
   );
-};
+});
 
 export default UnifiedDashboard;

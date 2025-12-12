@@ -79,7 +79,7 @@ export default function AIAssistantPanel({ onClose }: AIAssistantPanelProps) {
           message: inputMessage,
           context: "procurement-inventory"
         },
-      });
+      };
 
       if (error) throw error;
 

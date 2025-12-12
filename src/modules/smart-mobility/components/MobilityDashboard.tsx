@@ -164,7 +164,7 @@ export default function MobilityDashboard() {
     }, 1000);
     
     setChatMessage("");
-  };
+  });
 
   const totalCost = mockTrips.reduce((sum, t) => sum + t.cost, 0);
   const totalCarbon = mockTrips.reduce((sum, t) => sum + t.carbonFootprint, 0);

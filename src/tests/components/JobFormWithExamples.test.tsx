@@ -17,7 +17,7 @@ vi.mock("@/components/copilot/SimilarExamples", () => ({
       <div data-testid="similar-examples-input">{input}</div>
       <button
         data-testid="select-suggestion"
-        onClick={() => onSelect?.("Test suggestion from similar examples")}
+        onClick={() => onSelect?.("Test suggestion from similar examples"}
       >
         Use Suggestion
       </button>
@@ -65,7 +65,7 @@ describe("JobFormWithExamples Component", () => {
 
     await waitFor(() => {
       expect(submitButton).not.toBeDisabled();
-    });
+  });
   });
 
   it("should show validation toast when trying to submit with empty fields", () => {
@@ -93,7 +93,7 @@ describe("JobFormWithExamples Component", () => {
 
     await waitFor(() => {
       expect(submitButton).not.toBeDisabled();
-    });
+  });
 
     fireEvent.click(submitButton);
 
@@ -102,7 +102,7 @@ describe("JobFormWithExamples Component", () => {
         component: "603.0004.02",
         description: "Problema no gerador",
       });
-    });
+  });
   });
 
   it("should show success toast when job is created", async () => {
@@ -117,7 +117,7 @@ describe("JobFormWithExamples Component", () => {
 
     await waitFor(() => {
       expect(submitButton).not.toBeDisabled();
-    });
+  });
 
     fireEvent.click(submitButton);
 
@@ -126,7 +126,7 @@ describe("JobFormWithExamples Component", () => {
         title: "Job criado com sucesso!",
         description: "O job de manutenção foi registrado.",
       });
-    });
+  });
   });
 
   it("should reset form after successful submission", async () => {
@@ -141,14 +141,14 @@ describe("JobFormWithExamples Component", () => {
 
     await waitFor(() => {
       expect(submitButton).not.toBeDisabled();
-    });
+  });
 
     fireEvent.click(submitButton);
 
     await waitFor(() => {
       expect(componentInput.value).toBe("");
       expect(descriptionInput.value).toBe("");
-    });
+  });
   });
 
   it("should populate description when selecting a suggestion", async () => {
@@ -161,7 +161,7 @@ describe("JobFormWithExamples Component", () => {
 
     await waitFor(() => {
       expect(descriptionInput.value).toBe("Test suggestion from similar examples");
-    });
+  });
   });
 
   it("should show toast when suggestion is applied", async () => {
@@ -176,7 +176,7 @@ describe("JobFormWithExamples Component", () => {
         title: "Exemplo aplicado",
         description: "A descrição foi preenchida com o exemplo selecionado.",
       });
-    });
+  });
   });
 
   it("should pass input to SimilarExamples component", () => {

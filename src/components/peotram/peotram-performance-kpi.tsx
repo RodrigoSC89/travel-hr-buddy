@@ -418,4 +418,4 @@ export const PeotramPerformanceKPI: React.FC = () => {
       </Tabs>
     </div>
   );
-};
+});

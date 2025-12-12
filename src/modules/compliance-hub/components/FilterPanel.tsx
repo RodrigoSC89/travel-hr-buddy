@@ -92,7 +92,7 @@ export const FilterPanel = memo(function({
       ? currentArray.filter((v) => v !== value)
       : [...currentArray, value];
     onFilterChange({ ...filters, [key]: newArray });
-  };
+  });
 
   const activeFiltersCount = [
     filters.search ? 1 : 0,

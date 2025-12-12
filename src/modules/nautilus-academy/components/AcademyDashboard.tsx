@@ -112,7 +112,7 @@ export default function AcademyDashboard() {
     const matchesCategory = categoryFilter === "all" || c.category === categoryFilter;
     const matchesLevel = levelFilter === "all" || c.level === levelFilter;
     return matchesSearch && matchesCategory && matchesLevel;
-  });
+  };
 
   // Handlers
   const handleCreateCourse = async () => {
@@ -189,13 +189,13 @@ export default function AcademyDashboard() {
       toast({ 
         title: "Análise IA completa", 
         description: `${totalInsights} insights e recomendações gerados com sucesso!` 
-      });
+      };
     } catch (error) {
       console.error("AI generation error:", error);
       toast({ 
         title: "Insights gerados localmente", 
         description: "Utilizando análise offline. Conecte-se para IA completa." 
-      });
+      };
     }
   }, [crewMembers, courses, myProgress, generateRecommendations, analyzeTrainingGaps, generatePredictiveInsights, toast]);
 
@@ -205,7 +205,7 @@ export default function AcademyDashboard() {
       await updateProgress(selectedProgress.id, {
         progress_percent: newProgress,
         status: newProgress >= 100 ? "completed" : "in_progress"
-      });
+      };
       toast({ title: "Progresso atualizado", description: `Progresso: ${newProgress}%` });
       if (newProgress >= 100) {
         toast({ title: "Parabéns!", description: "Você concluiu o curso!" });
@@ -273,7 +273,7 @@ export default function AcademyDashboard() {
       toast({ 
         title: "Curso gerado com sucesso!", 
         description: `"${aiCoursePrompt.slice(0, 40)}..." foi criado com ${modules.length} módulos` 
-      });
+      };
       setShowAICourseGenerator(false);
       setAiCoursePrompt("");
     } catch (error) {
@@ -299,7 +299,7 @@ export default function AcademyDashboard() {
       toast({ 
         title: "Otimização registrada", 
         description: "Sugestão de otimização do módulo DP será analisada pela equipe pedagógica",
-      });
+      };
       // Update the suggestion as "applied"
       setAiSuggestions(prev => prev.map(s => 
         s.type === "optimization" 
@@ -1344,7 +1344,7 @@ export default function AcademyDashboard() {
           <div className="space-y-4 py-4">
             <div className="space-y-2">
               <Label>Tipo de Geração</Label>
-              <Select value={aiGenerationType} onValueChange={(v: "gap" | "incident" | "custom") => setAiGenerationType(v)}>
+              <Select value={aiGenerationType} onValueChange={(v: "gap" | "incident" | "custom") => setAiGenerationType(v}>
                 <SelectTrigger><SelectValue /></SelectTrigger>
                 <SelectContent>
                   <SelectItem value="gap">Gap de Auditoria</SelectItem>

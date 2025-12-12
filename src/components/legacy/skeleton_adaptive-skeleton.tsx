@@ -81,7 +81,7 @@ export const ChartSkeleton = memo(function ChartSkeleton() {
       </div>
     </div>
   );
-});
+  });
 
 export const DashboardSkeleton = memo(function DashboardSkeleton() {
   return (
@@ -119,7 +119,7 @@ export const DashboardSkeleton = memo(function DashboardSkeleton() {
       </div>
     </div>
   );
-});
+  });
 
 export const ListSkeleton = memo(function ListSkeleton({ count = 5 }: { count?: number }) {
   return (
@@ -180,4 +180,4 @@ export const ModuleCardSkeleton = memo(function ModuleCardSkeleton() {
 // Export all
 export {
   AdaptiveSkeleton as Skeleton,
-};
+});

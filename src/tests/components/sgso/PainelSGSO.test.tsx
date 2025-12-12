@@ -93,7 +93,7 @@ describe("PainelSGSO", () => {
     const blob = (saveAs as unknown).mock.calls[0][0];
     expect(blob).toBeInstanceOf(Blob);
     expect((saveAs as unknown).mock.calls[0][1]).toBe("relatorio_sgso.csv");
-  });
+  };
 
   it("should call html2pdf when PDF export button is clicked", async () => {
     const html2pdf = (await React.lazy(() => import(import("html2pdf.js")))).default;
@@ -103,7 +103,7 @@ describe("PainelSGSO", () => {
     fireEvent.click(pdfButton);
 
     expect(html2pdf).toHaveBeenCalled();
-  });
+  };
 
   it("should have correct button styling", () => {
     const { container } = render(<PainelSGSO />);
@@ -116,5 +116,5 @@ describe("PainelSGSO", () => {
     // PDF button should have zinc background
     const pdfButton = Array.from(buttons).find(btn => btn.textContent?.includes("Exportar PDF"));
     expect(pdfButton?.className).toContain("bg-zinc-800");
-  });
-});
+  };
+};

@@ -119,7 +119,7 @@ const generateInsights = (crew: CrewMemberAnalysis[]): AIInsight[] => {
       description: `${criticalFatigue.map(c => c.name).join(", ")} precisam de descanso conforme MLC 2006`,
       action: "Reorganizar Escala",
       priority: 1,
-    });
+    };
   }
 
   const promotionReady = crew.filter(c => c.readyForPromotion);
@@ -130,7 +130,7 @@ const generateInsights = (crew: CrewMemberAnalysis[]): AIInsight[] => {
       description: `Análise de performance indica que ${promotionReady.map(c => c.name).join(", ")} estão preparados`,
       action: "Ver Análise",
       priority: 3,
-    });
+    };
   }
 
   const certGaps = crew.filter(c => c.certificationGaps.length > 0);
@@ -141,7 +141,7 @@ const generateInsights = (crew: CrewMemberAnalysis[]): AIInsight[] => {
       description: `${certGaps.length} tripulantes precisam de treinamentos para manter compliance`,
       action: "Planejar Treinamentos",
       priority: 2,
-    });
+    };
   }
 
   insights.push({
@@ -150,7 +150,7 @@ const generateInsights = (crew: CrewMemberAnalysis[]): AIInsight[] => {
     description: "IA identificou oportunidade de balancear carga de trabalho, reduzindo fadiga média em 18%",
     action: "Ver Proposta",
     priority: 4,
-  });
+  };
 
   return insights.sort((a, b) => a.priority - b.priority);
 };

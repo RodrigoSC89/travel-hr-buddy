@@ -147,7 +147,7 @@ const QuickActionsPanelComponent: React.FC = () => {
                 key={action.id}
                 variant="ghost"
                 className={`h-auto flex-col gap-2 p-3 ${action.color} text-white relative shadow-md`}
-                onClick={() => handlehandleNavigate}
+                onClick={() => handleNavigate(action.route)}
                 onMouseEnter={() => handlePrefetch(action.route)}
               >
                 <action.icon className="h-6 w-6 drop-shadow-sm" />

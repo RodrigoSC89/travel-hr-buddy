@@ -359,7 +359,7 @@ export default function EpicsBoard() {
     linkElement.setAttribute("href", dataUri);
     linkElement.setAttribute("download", exportFileDefaultName);
     linkElement.click();
-  };
+  });
 
   const filteredEpics =
     selectedStatus === "all"

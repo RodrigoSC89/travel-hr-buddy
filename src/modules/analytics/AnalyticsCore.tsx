@@ -39,7 +39,7 @@ const AnalyticsCore = () => {
     toast({
       title: "Generating AI Insights",
       description: "Analyzing KPI data with runAIContext..."
-    });
+    };
 
     try {
       const generatedInsights = await aiInsightsService.generateKPIInsights();
@@ -47,13 +47,13 @@ const AnalyticsCore = () => {
       toast({
         title: "Insights Generated",
         description: `${generatedInsights.length} AI insights have been generated`
-      });
+      };
     } catch (error) {
       toast({
         title: "Error",
         description: "Failed to generate insights",
         variant: "destructive"
-      });
+      };
     } finally {
       setIsLoadingInsights(false);
     }
@@ -63,7 +63,7 @@ const AnalyticsCore = () => {
     toast({
       title: "Exporting to PDF",
       description: "Generating analytics report..."
-    });
+    };
 
     try {
       const consumptionData = await dataCollector.collectConsumptionVsPerformance();
@@ -81,13 +81,13 @@ const AnalyticsCore = () => {
       toast({
         title: "Export Complete",
         description: "PDF report has been downloaded"
-      });
+      };
     } catch (error) {
       toast({
         title: "Export Failed",
         description: "Could not generate PDF report",
         variant: "destructive"
-      });
+      };
     }
   };
 
@@ -95,7 +95,7 @@ const AnalyticsCore = () => {
     toast({
       title: "Exporting to CSV",
       description: "Generating CSV file..."
-    });
+    };
 
     try {
       await exportService.exportToCSV(
@@ -107,13 +107,13 @@ const AnalyticsCore = () => {
       toast({
         title: "Export Complete",
         description: "CSV file has been downloaded"
-      });
+      };
     } catch (error) {
       toast({
         title: "Export Failed",
         description: "Could not generate CSV file",
         variant: "destructive"
-      });
+      };
     }
   };
 

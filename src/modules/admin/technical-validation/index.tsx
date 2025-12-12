@@ -77,7 +77,7 @@ export const TechnicalValidationPanel: React.FC = () => {
           hasDocumentation: !!hasDocumentation,
           hasDuplication,
           isActive: module.status === "active",
-        });
+        };
 
         return {
           id: module.id,
@@ -114,7 +114,7 @@ export const TechnicalValidationPanel: React.FC = () => {
     if (factors.hasDuplication) score -= 25;
     if (!factors.isActive) score -= 20;
     return Math.max(0, score);
-  };
+  });
 
   const getHealthColor = (score: number): string => {
     if (score >= 80) return "text-green-500";
@@ -152,7 +152,7 @@ export const TechnicalValidationPanel: React.FC = () => {
     if (filter === "issues") return m.issues.length > 0;
     if (filter === "healthy") return m.healthScore >= 80;
     return true;
-  });
+  };
 
   const stats = {
     total: modules.length,
@@ -229,7 +229,7 @@ export const TechnicalValidationPanel: React.FC = () => {
         </Card>
       </div>
 
-      <Tabs defaultValue="all" onValueChange={(v) => setFilter(v as "all" | "issues" | "healthy")}>
+      <Tabs defaultValue="all" onValueChange={(v) => setFilter(v as "all" | "issues" | "healthy"}>
         <TabsList>
           <TabsTrigger value="all">All ({modules.length})</TabsTrigger>
           <TabsTrigger value="healthy">Healthy ({stats.healthy})</TabsTrigger>

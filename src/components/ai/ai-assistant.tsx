@@ -105,7 +105,7 @@ export const AIAssistant: React.FC<AIAssistantProps> = ({
         const transcript = event.results[0][0].transcript;
         setInput(transcript);
         setIsListening(false);
-      };
+      });
 
       recognition.onerror = () => {
         setIsListening(false);
@@ -113,7 +113,7 @@ export const AIAssistant: React.FC<AIAssistantProps> = ({
           title: "Erro no reconhecimento de voz",
           description: "Não foi possível capturar o áudio",
           variant: "destructive"
-        });
+        };
       };
 
       recognition.onend = () => {
@@ -154,7 +154,7 @@ export const AIAssistant: React.FC<AIAssistantProps> = ({
         title: "Recurso não disponível",
         description: "Reconhecimento de voz não é suportado neste navegador",
         variant: "destructive"
-      });
+      };
       return;
     }
 
@@ -191,7 +191,7 @@ export const AIAssistant: React.FC<AIAssistantProps> = ({
           user_id: user?.id,
           conversation_history: messages.slice(-5) // Last 5 messages for context
         }
-      });
+      };
 
       if (error) throw error;
 
@@ -211,7 +211,7 @@ export const AIAssistant: React.FC<AIAssistantProps> = ({
           if (onAction) {
             onAction(action.action, action.data);
           }
-        });
+};
       }
 
     } catch (error) {
@@ -227,7 +227,7 @@ export const AIAssistant: React.FC<AIAssistantProps> = ({
         title: "Erro no assistente",
         description: "Não foi possível processar sua mensagem",
         variant: "destructive"
-      });
+      };
     } finally {
       setIsLoading(false);
     }
@@ -245,7 +245,7 @@ export const AIAssistant: React.FC<AIAssistantProps> = ({
     toast({
       title: "Ação executada",
       description: `${action} foi executado com sucesso`,
-    });
+    };
   };
 
   const renderMessage = (message: Message) => {
@@ -314,7 +314,7 @@ export const AIAssistant: React.FC<AIAssistantProps> = ({
         </div>
       </div>
     );
-  };
+  });
 
   return (
     <Card className="h-[600px] flex flex-col">

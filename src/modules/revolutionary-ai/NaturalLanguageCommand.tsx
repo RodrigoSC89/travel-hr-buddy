@@ -80,21 +80,21 @@ export const NaturalLanguageCommand = memo(function() {
       recognition.onstart = () => {
         setIsListening(true);
         toast.info("Ouvindo... Fale seu comando");
-      };
+      });
 
       recognition.onresult = (event: Event) => {
         const transcript = event.results[0][0].transcript;
         setCommand(transcript);
-      };
+      });
 
       recognition.onerror = () => {
         setIsListening(false);
         toast.error("Erro no reconhecimento de voz");
-      };
+      });
 
       recognition.onend = () => {
         setIsListening(false);
-      };
+      });
 
       recognition.start();
     } catch (error) {

@@ -16,7 +16,7 @@ export const ProgressDashboard: React.FC = () => {
     totalCertificates: 0,
     averageScore: 0,
     progressData: [] as any[],
-  });
+  };
   const [isLoading, setIsLoading] = useState(true);
   const { toast } = useToast();
 
@@ -62,13 +62,13 @@ export const ProgressDashboard: React.FC = () => {
         totalCertificates: certificates?.length || 0,
         averageScore: Math.round(avgScore),
         progressData,
-      });
+      };
     } catch (error: SupabaseError | null) {
       toast({
         title: "Error loading progress",
         description: error.message,
         variant: "destructive",
-      });
+      };
     } finally {
       setIsLoading(false);
     }

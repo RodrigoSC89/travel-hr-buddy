@@ -195,7 +195,7 @@ Gere sugestões em formato JSON array.`
       toast({
         title: "Sugestões geradas com IA",
         description: `${aiSuggestions.length} novas sugestões disponíveis`
-      });
+      };
 
     } catch (error) {
       logger.error("Failed to generate AI suggestions", error);
@@ -208,7 +208,7 @@ Gere sugestões em formato JSON array.`
       toast({
         title: "Sugestões geradas",
         description: "Sugestões baseadas em análise de padrões"
-      });
+      };
     } finally {
       setIsRefreshing(false);
     }
@@ -295,7 +295,7 @@ Gere sugestões em formato JSON array.`
       pending: data.filter(s => s.status === "pending").length,
       applied: data.filter(s => s.status === "applied").length,
       dismissed: data.filter(s => s.status === "dismissed").length
-    });
+    };
   };
 
   const handleApply = (suggestion: WorkflowSuggestion) => {
@@ -306,7 +306,7 @@ Gere sugestões em formato JSON array.`
     toast({
       title: "Sugestão aplicada",
       description: suggestion.tipo_sugestao
-    });
+    };
 
     if (onApplySuggestion) {
       onApplySuggestion(suggestion);
@@ -316,7 +316,7 @@ Gere sugestões em formato JSON array.`
     setSuggestions(prev => {
       updateStats(prev);
       return prev;
-    });
+  };
   };
 
   const handleDismiss = (suggestion: WorkflowSuggestion) => {
@@ -327,12 +327,12 @@ Gere sugestões em formato JSON array.`
     toast({
       title: "Sugestão descartada",
       variant: "default"
-    });
+    };
 
     setSuggestions(prev => {
       updateStats(prev);
       return prev;
-    });
+  };
   };
 
   const getCriticidadeColor = (criticidade: string) => {
@@ -370,7 +370,7 @@ Gere sugestões em formato JSON array.`
     if (activeTab === "applied") return s.status === "applied";
     if (activeTab === "critical") return s.criticidade === "crítica" || s.criticidade === "alta";
     return true;
-  });
+  };
 
   if (isLoading) {
     return (

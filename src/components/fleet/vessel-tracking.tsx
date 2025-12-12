@@ -89,7 +89,7 @@ export const VesselTracking = memo(() => {
         title: "Erro",
         description: "Erro ao carregar dados dos navios",
         variant: "destructive"
-      });
+      };
     } finally {
       setLoading(false);
     }
@@ -153,7 +153,7 @@ export const VesselTracking = memo(() => {
           </p>
         </div>
         
-        <Tabs value={trackingMode} onValueChange={(value) => setTrackingMode(value as unknown)}>
+        <Tabs value={trackingMode} onValueChange={(value) => setTrackingMode(value as unknown}>
           <TabsList>
             <TabsTrigger value="real-time">Tempo Real</TabsTrigger>
             <TabsTrigger value="historical">Histórico</TabsTrigger>

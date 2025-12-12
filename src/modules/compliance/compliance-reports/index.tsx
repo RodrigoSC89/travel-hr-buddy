@@ -46,7 +46,7 @@ const ComplianceReports = () => {
     severities: [] as string[],
     dateFrom: "",
     dateTo: ""
-  });
+  };
 
   const [reports, setReports] = useState([
     {
@@ -175,7 +175,7 @@ const ComplianceReports = () => {
         startY: 42,
         styles: { fontSize: 8 },
         headStyles: { fillColor: [41, 128, 185] }
-      });
+      };
       
       // Save the PDF
       doc.save(`${reportConfig.title || "compliance-report"}.pdf`);
@@ -183,7 +183,7 @@ const ComplianceReports = () => {
       toast({
         title: "PDF gerado",
         description: "Download iniciado automaticamente"
-      });
+      };
     } catch (error) {
       console.error("Error generating PDF:", error);
       console.error("Error generating PDF:", error);
@@ -191,7 +191,7 @@ const ComplianceReports = () => {
         title: "Erro ao gerar PDF",
         description: "Tente novamente",
         variant: "destructive"
-      });
+      };
     }
   };
 
@@ -221,7 +221,7 @@ const ComplianceReports = () => {
       toast({
         title: "CSV gerado",
         description: "Download iniciado automaticamente"
-      });
+      };
     } catch (error) {
       console.error("Error generating CSV:", error);
       console.error("Error generating CSV:", error);
@@ -229,7 +229,7 @@ const ComplianceReports = () => {
         title: "Erro ao gerar CSV",
         description: "Tente novamente",
         variant: "destructive"
-      });
+      };
     }
   };
 
@@ -253,7 +253,7 @@ const ComplianceReports = () => {
       toast({
         title: "Excel gerado",
         description: "Download iniciado automaticamente"
-      });
+      };
     } catch (error) {
       console.error("Error generating Excel:", error);
       console.error("Error generating Excel:", error);
@@ -261,7 +261,7 @@ const ComplianceReports = () => {
         title: "Erro ao gerar Excel",
         description: "Tente novamente",
         variant: "destructive"
-      });
+      };
     }
   };
 
@@ -293,7 +293,7 @@ const ComplianceReports = () => {
       toast({
         title: "JSON gerado",
         description: "Download iniciado automaticamente"
-      });
+      };
     } catch (error) {
       console.error("Error generating JSON:", error);
       console.error("Error generating JSON:", error);
@@ -301,7 +301,7 @@ const ComplianceReports = () => {
         title: "Erro ao gerar JSON",
         description: "Tente novamente",
         variant: "destructive"
-      });
+      };
     }
   };
 
@@ -311,7 +311,7 @@ const ComplianceReports = () => {
         title: "Campos obrigatórios",
         description: "Preencha título e template",
         variant: "destructive"
-      });
+      };
       return;
     }
 
@@ -333,7 +333,7 @@ const ComplianceReports = () => {
     toast({
       title: "Relatório configurado",
       description: report.scheduled ? "Será gerado automaticamente" : "Iniciando geração"
-    });
+    };
 
     // If manual, generate immediately
     if (reportConfig.schedule === "manual") {
@@ -357,7 +357,7 @@ const ComplianceReports = () => {
       toast({
         title: "Relatório gerado",
         description: "Disponível para download"
-      });
+      };
     }, 2000);
   };
 
@@ -569,7 +569,7 @@ const ComplianceReports = () => {
                           <Checkbox
                             id={`cat-${category}`}
                             checked={reportConfig.categories.includes(category)}
-                            onCheckedChange={() => toggleCategory(category)}
+                            onCheckedChange={() => toggleCategory(category}
                           />
                           <label
                             htmlFor={`cat-${category}`}
@@ -591,7 +591,7 @@ const ComplianceReports = () => {
                           <Checkbox
                             id={`sev-${severity}`}
                             checked={reportConfig.severities.includes(severity)}
-                            onCheckedChange={() => toggleSeverity(severity)}
+                            onCheckedChange={() => toggleSeverity(severity}
                           />
                           <label
                             htmlFor={`sev-${severity}`}
@@ -703,6 +703,6 @@ const ComplianceReports = () => {
       </Card>
     </div>
   );
-};
+});
 
 export default ComplianceReports;

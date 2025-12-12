@@ -48,7 +48,7 @@ export default function Patch526Communication() {
           <div className="flex items-start gap-3">
             <Checkbox
               checked={checks.singleRoute}
-              onCheckedChange={() => toggleCheck("singleRoute")}
+              onCheckedChange={() => toggleCheck("singleRoute"}
             />
             <div className="flex-1">
               <div className="flex items-center gap-2">
@@ -65,7 +65,7 @@ export default function Patch526Communication() {
           <div className="flex items-start gap-3">
             <Checkbox
               checked={checks.historyPreserved}
-              onCheckedChange={() => toggleCheck("historyPreserved")}
+              onCheckedChange={() => toggleCheck("historyPreserved"}
             />
             <div className="flex-1">
               <div className="flex items-center gap-2">
@@ -82,7 +82,7 @@ export default function Patch526Communication() {
           <div className="flex items-start gap-3">
             <Checkbox
               checked={checks.realtimeActive}
-              onCheckedChange={() => toggleCheck("realtimeActive")}
+              onCheckedChange={() => toggleCheck("realtimeActive"}
             />
             <div className="flex-1">
               <div className="flex items-center gap-2">
@@ -103,7 +103,7 @@ export default function Patch526Communication() {
           <div className="flex items-start gap-3">
             <Checkbox
               checked={checks.responsiveUI}
-              onCheckedChange={() => toggleCheck("responsiveUI")}
+              onCheckedChange={() => toggleCheck("responsiveUI"}
             />
             <div className="flex-1">
               <div className="flex items-center gap-2">

@@ -64,7 +64,7 @@ describe("ExportarComentariosPDF", () => {
     fireEvent.click(button);
 
     expect(html2pdf).toHaveBeenCalled();
-  });
+  };
 
   it("should not call html2pdf when there are no comments", async () => {
     const html2pdf = (await React.lazy(() => import(import("html2pdf.js")))).default;
@@ -75,12 +75,12 @@ describe("ExportarComentariosPDF", () => {
     fireEvent.click(button);
 
     expect(html2pdf).not.toHaveBeenCalled();
-  });
+  };
 
   it("should render with correct styling classes", () => {
     const { container } = render(<ExportarComentariosPDF comentarios={mockComentarios} />);
     const button = container.querySelector("button");
     expect(button?.className).toContain("bg-slate-700");
     expect(button?.className).toContain("text-white");
-  });
-});
+  };
+};

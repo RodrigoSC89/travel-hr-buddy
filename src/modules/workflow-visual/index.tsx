@@ -206,7 +206,7 @@ const WorkflowVisual = () => {
     type: "other",
     description: "",
     status: "pending"
-  });
+  };
 
   const onConnect = useCallback(
     (params: Connection) => setEdges((eds) => addEdge({ ...params, markerEnd: { type: MarkerType.ArrowClosed } }, eds)),
@@ -272,7 +272,7 @@ const WorkflowVisual = () => {
 
     // Remove from suggestions
     setAiSuggestions(prev => prev.filter(s => s !== suggestion));
-  };
+  });
 
   const askAI = async () => {
     if (!aiPrompt.trim()) return;
@@ -411,7 +411,7 @@ const WorkflowVisual = () => {
                   onEdgesChange={onEdgesChange}
                   onConnect={onConnect}
                   nodeTypes={nodeTypes}
-                  onNodeClick={(_, node) => setSelectedNode(node)}
+                  onNodeClick={(_, node) => setSelectedNode(node}
                   fitView
                   attributionPosition="bottom-left"
                 >

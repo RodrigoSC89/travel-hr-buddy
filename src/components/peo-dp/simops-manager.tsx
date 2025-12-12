@@ -424,7 +424,7 @@ export const SIMOPSManager: React.FC = () => {
                         <p className="text-xs text-muted-foreground">{zone.radius}m</p>
                       </div>
                     </div>
-                    <Switch checked={zone.active} onCheckedChange={() => handleToggleZone(zone.id)} />
+                    <Switch checked={zone.active} onCheckedChange={() => handleToggleZone(zone.id} />
                   </div>
                 ))}
               </div>
@@ -468,7 +468,7 @@ export const SIMOPSManager: React.FC = () => {
       )}
 
       {/* Operation Detail Dialog */}
-      <Dialog open={!!selectedOperation} onOpenChange={() => setSelectedOperation(null)}>
+      <Dialog open={!!selectedOperation} onOpenChange={() => setSelectedOperation(null}>
         <DialogContent className="max-w-2xl">
           {selectedOperation && (
             <>
@@ -529,6 +529,6 @@ export const SIMOPSManager: React.FC = () => {
       </Dialog>
     </div>
   );
-};
+});
 
 export default SIMOPSManager;

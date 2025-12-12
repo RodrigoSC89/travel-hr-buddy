@@ -31,4 +31,4 @@ export const OrganizationLayout: React.FC<OrganizationLayoutProps> = ({
       </div>
     </MultiTenantWrapper>
   );
-};
+});

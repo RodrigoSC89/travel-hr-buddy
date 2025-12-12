@@ -63,7 +63,7 @@ export const AutonomousProcurementAI: React.FC = () => {
     autoOrders: 0,
     savingsThisMonth: 0,
     supplierScore: 0
-  });
+  };
 
   useEffect(() => {
     loadProcurementData();
@@ -192,7 +192,7 @@ export const AutonomousProcurementAI: React.FC = () => {
       autoOrders: 12,
       savingsThisMonth: 4850,
       supplierScore: 96
-    });
+    };
     setIsAnalyzing(false);
   };
 
@@ -487,6 +487,6 @@ export const AutonomousProcurementAI: React.FC = () => {
       </Tabs>
     </div>
   );
-};
+});
 
 export default AutonomousProcurementAI;

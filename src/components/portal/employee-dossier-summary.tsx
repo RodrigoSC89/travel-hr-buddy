@@ -167,7 +167,7 @@ export const EmployeeDossierSummary: React.FC = () => {
         title: "Erro",
         description: "Erro ao carregar dados do dossiê",
         variant: "destructive"
-      });
+      };
     } finally {
       setLoading(false);
     }
@@ -385,7 +385,7 @@ export const EmployeeDossierSummary: React.FC = () => {
       {/* Ações */}
       <div className="flex gap-4">
         <Button 
-          onClick={() => window.open("/crew-dossier", "_blank")} 
+          onClick={() => window.open("/crew-dossier", "_blank"} 
           className="flex-1"
         >
           <ExternalLink className="h-4 w-4 mr-2" />
@@ -400,4 +400,4 @@ export const EmployeeDossierSummary: React.FC = () => {
       </div>
     </div>
   );
-};
+});

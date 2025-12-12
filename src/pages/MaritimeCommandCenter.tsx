@@ -225,7 +225,7 @@ export default function MaritimeCommandCenter() {
         activeCrew: demoCrewMembers.filter(m => m.status === "active").length,
         certExpiring: 3,
         certValid: 12
-      });
+      };
       
     } catch (error) {
       toast.error("Erro ao carregar dados marítimos");
@@ -269,7 +269,7 @@ export default function MaritimeCommandCenter() {
                          member.employee_id.toLowerCase().includes(searchTerm.toLowerCase());
     const matchesStatus = statusFilter === "all" || member.status === statusFilter;
     return matchesSearch && matchesStatus;
-  });
+  };
 
   if (loading) {
     return (

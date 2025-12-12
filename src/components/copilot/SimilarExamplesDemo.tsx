@@ -30,7 +30,7 @@ export default function SimilarExamplesDemo() {
       title: jobTitle,
       description: jobDescription,
       component: component,
-    });
+    };
     // In a real application, this would call an API to save the job
   };
 

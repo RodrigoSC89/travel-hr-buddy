@@ -36,7 +36,7 @@ export const ChecklistDashboard = ({ userId }: { userId: string }) => {
     overdueChecklists: 0,
     complianceScore: 0,
     avgCompletionTime: 0
-  });
+};
 
   useEffect(() => {
     if (checklists.length > 0) {
@@ -72,7 +72,7 @@ export const ChecklistDashboard = ({ userId }: { userId: string }) => {
       overdueChecklists,
       complianceScore,
       avgCompletionTime: 45 // Mock data - would calculate from actual completion times
-    });
+    };
   };
 
   const MetricCard = ({ title, value, icon: Icon, variant = "default", subtitle }: unknown: unknown: unknown) => (

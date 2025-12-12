@@ -57,13 +57,13 @@ export const PeotramTemplateManager: React.FC<TemplateManagerProps> = ({
       toast({
         title: "Sucesso",
         description: "Template PEOTRAM criado com sucesso!",
-      });
+      };
     } catch (error) {
       toast({
         title: "Erro",
         description: "Não foi possível criar o template.",
         variant: "destructive",
-      });
+      };
     }
   };
 
@@ -82,13 +82,13 @@ export const PeotramTemplateManager: React.FC<TemplateManagerProps> = ({
       toast({
         title: "Sucesso",
         description: "Template atualizado com sucesso!",
-      });
+      };
     } catch (error) {
       toast({
         title: "Erro",
         description: "Não foi possível atualizar o template.",
         variant: "destructive",
-      });
+      };
     }
   };
 
@@ -271,4 +271,4 @@ export const PeotramTemplateManager: React.FC<TemplateManagerProps> = ({
       </Dialog>
     </div>
   );
-};
+});

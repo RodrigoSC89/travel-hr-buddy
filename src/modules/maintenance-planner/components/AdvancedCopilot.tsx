@@ -126,7 +126,7 @@ export default function AdvancedCopilot() {
             systems: ["Propulsão", "DP", "Geração"],
           },
         },
-      });
+      };
 
       if (error) {
         
@@ -233,7 +233,7 @@ export default function AdvancedCopilot() {
         title: "Não suportado",
         description: "Reconhecimento de voz não disponível neste navegador",
         variant: "destructive",
-      });
+      };
       return;
     }
 
@@ -262,10 +262,10 @@ export default function AdvancedCopilot() {
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
     recognitionRef.current.onerror = (event: unknown: unknown: unknown) => {
       setIsListening(false);
-    };
+    });
 
     recognitionRef.current.start();
-  };
+  });
 
   const stopListening = () => {
     if (recognitionRef.current) {

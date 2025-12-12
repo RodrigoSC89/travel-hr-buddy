@@ -78,7 +78,7 @@ describe("TestDashboard Component", () => {
     await waitFor(() => {
       const title = screen.getByRole("heading", { name: /Painel de Testes Automatizados/i });
       expect(title).toBeInTheDocument();
-    });
+  });
   });
 
   it("should display fallback message when coverage report is not available", async () => {
@@ -94,7 +94,7 @@ describe("TestDashboard Component", () => {
     
     await waitFor(() => {
       expect(screen.getByText(/Relatório de cobertura não disponível/i)).toBeInTheDocument();
-    });
+  });
   });
 
   it("should display coverage percentage when report is available", async () => {
@@ -113,7 +113,7 @@ describe("TestDashboard Component", () => {
     
     await waitFor(() => {
       expect(screen.getByText(/Cobertura total atual: 85%/i)).toBeInTheDocument();
-    });
+  });
   });
 
   it("should render link to full coverage report", async () => {
@@ -133,6 +133,6 @@ describe("TestDashboard Component", () => {
       expect(link).toBeInTheDocument();
       expect(link).toHaveAttribute("href", "/coverage/index.html");
       expect(link).toHaveAttribute("target", "_blank");
-    });
+  });
   });
 });

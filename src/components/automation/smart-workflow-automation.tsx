@@ -275,7 +275,7 @@ const SmartWorkflowAutomation = () => {
     toast({
       title: "Status atualizado",
       description: "Workflow foi ativado/desativado com sucesso"
-    });
+    };
   };
 
   const executeWorkflow = (id: string) => {
@@ -296,7 +296,7 @@ const SmartWorkflowAutomation = () => {
     toast({
       title: "Workflow iniciado",
       description: "Execução em andamento..."
-    });
+    };
   };
 
   const createWorkflow = () => {
@@ -323,7 +323,7 @@ const SmartWorkflowAutomation = () => {
     toast({
       title: "Workflow criado",
       description: "Novo workflow adicionado como rascunho"
-    });
+    };
   };
 
   const duplicateWorkflow = (workflow: Workflow) => {
@@ -342,7 +342,7 @@ const SmartWorkflowAutomation = () => {
     toast({
       title: "Workflow duplicado",
       description: "Cópia criada como rascunho"
-    });
+    };
   };
 
   const deleteWorkflow = (id: string) => {
@@ -350,7 +350,7 @@ const SmartWorkflowAutomation = () => {
     toast({
       title: "Workflow excluído",
       description: "Workflow removido permanentemente"
-    });
+    };
   };
 
   const getCategoryIcon = (category: string) => {

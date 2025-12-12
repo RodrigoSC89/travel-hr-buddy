@@ -135,7 +135,7 @@ export const NeuralRouteOptimizer: React.FC = () => {
         visibility: 5 + Math.random() * 10,
         conditions: i % 3 === 0 ? "Ensolarado" : i % 3 === 1 ? "Parcialmente nublado" : "Nublado",
         severity: i % 4 === 0 ? "calm" : i % 4 === 1 ? "moderate" : i % 4 === 2 ? "rough" : "moderate"
-      });
+      };
     }
 
     setWeatherForecast(forecast);
@@ -156,11 +156,11 @@ export const NeuralRouteOptimizer: React.FC = () => {
           toast({
             title: "✅ Otimização Completa",
             description: "Rota otimizada com 30% de economia de combustível e 25% menos tempo de viagem",
-          });
+          };
           return 100;
         }
         return prev + 10;
-      });
+      };
     }, 200);
   };
 

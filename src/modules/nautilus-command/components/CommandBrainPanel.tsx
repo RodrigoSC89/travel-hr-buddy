@@ -74,16 +74,16 @@ export const CommandBrainPanel = memo(function({ context, onSettingsClick }: Com
     recognition.onerror = () => {
       setIsListening(false);
       toast.error("Erro no reconhecimento de voz");
-    };
+    });
     recognition.onresult = (event: Event) => {
       const transcript = Array.from(event.results)
         .map((result: unknown) => result[0].transcript)
         .join("");
       setInput(transcript);
-    };
+    });
 
     recognition.start();
-  };
+  });
 
   const speakMessage = (content: string) => {
     if (!("speechSynthesis" in window)) {
@@ -143,7 +143,7 @@ export const CommandBrainPanel = memo(function({ context, onSettingsClick }: Com
             </div>
           </CardTitle>
           <div className="flex gap-1">
-            <Button variant="ghost" size="icon" className="h-8 w-8" onClick={() => toast.info("Histórico em desenvolvimento")}>
+            <Button variant="ghost" size="icon" className="h-8 w-8" onClick={() => toast.info("Histórico em desenvolvimento"}>
               <History className="h-4 w-4" />
             </Button>
             <Button variant="ghost" size="icon" className="h-8 w-8" onClick={exportChat}>

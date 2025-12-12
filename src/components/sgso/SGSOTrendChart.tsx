@@ -44,7 +44,7 @@ function formatData(rawData: RawDataEntry[]): ChartDataEntry[] {
     const displayMonth = date.toLocaleDateString("pt-BR", { 
       month: "short", 
       year: "numeric" 
-    });
+};
 
     if (!grouped[monthKey]) {
       grouped[monthKey] = { mes: displayMonth };

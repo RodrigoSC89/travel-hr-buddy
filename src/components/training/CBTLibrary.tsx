@@ -107,7 +107,7 @@ export const CBTLibrary = memo(function() {
       const matchesMandatory = filterMandatory === "all" || 
         (filterMandatory === "mandatory" ? course.is_mandatory : !course.is_mandatory);
       return matchesSearch && matchesCategory && matchesMandatory;
-    });
+  };
   }, [courses, searchQuery, filterCategory, filterMandatory]);
 
   // Stats

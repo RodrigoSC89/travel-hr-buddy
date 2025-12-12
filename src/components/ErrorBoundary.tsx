@@ -44,7 +44,7 @@ export class ErrorBoundary extends Component<Props, State> {
     this.setState({
       error,
       errorInfo,
-    });
+    };
     
     // Call custom error handler if provided
     if (this.props.onError) {
@@ -60,7 +60,7 @@ export class ErrorBoundary extends Component<Props, State> {
       hasError: false,
       error: null,
       errorInfo: null,
-    });
+    };
   };
 
   render(): ReactNode {

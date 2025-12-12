@@ -41,7 +41,7 @@ export const ModuleLoader = ({
       </div>
     </div>
   );
-};
+});
 
 /**
  * Compact loader for inline usage

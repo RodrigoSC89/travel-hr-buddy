@@ -93,7 +93,7 @@ export const AIAdvisorPanel: React.FC = () => {
   const { ask, loading, error } = useAIAdvisor({
     profile,
     language: "pt-BR",
-  });
+  };
 
   useEffect(() => {
     if (scrollRef.current) {
@@ -173,7 +173,7 @@ export const AIAdvisorPanel: React.FC = () => {
           </div>
         </div>
         <div className="flex items-center gap-3">
-          <Select value={profile} onValueChange={(v) => setProfile(v as UserProfile)}>
+          <Select value={profile} onValueChange={(v) => setProfile(v as UserProfile}>
             <SelectTrigger className="w-[180px]">
               <SelectValue />
             </SelectTrigger>
@@ -380,4 +380,4 @@ export const AIAdvisorPanel: React.FC = () => {
       </Tabs>
     </div>
   );
-};
+});

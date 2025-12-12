@@ -199,9 +199,9 @@ export function AuthProvider({ children }: AuthProviderProps): JSX.Element {
 
   const resetPassword = useCallback(async (email: string) => {
     try {
-      const { error } = await supabase.auth.resetPasswordForEmail(email, {
-        redirectTo: `${window.location.origin}/auth?type=recovery`
-      });
+        const { error } = await supabase.auth.resetPasswordForEmail(email, {
+          redirectTo: `${window.location.origin}/auth?type=recovery`
+        });
 
       if (error) {
         toast.error("Erro", { description: error.message });

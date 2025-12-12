@@ -109,7 +109,7 @@ describe("PlanStatusSelect Component", () => {
 
     await waitFor(() => {
       expect(onUpdate).toHaveBeenCalledWith("concluído");
-    });
+  });
   });
 
   it("should disable select while loading", async () => {
@@ -128,6 +128,6 @@ describe("PlanStatusSelect Component", () => {
 
     await waitFor(() => {
       expect(select.disabled).toBe(true);
-    });
+  });
   });
 });

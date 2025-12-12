@@ -18,7 +18,7 @@ export default function DocumentEditorDemo() {
     toast({
       title: "New Document ID Generated",
       description: "A new document ID has been created",
-    });
+    };
   };
 
   const copyToClipboard = () => {
@@ -26,7 +26,7 @@ export default function DocumentEditorDemo() {
     toast({
       title: "Copied!",
       description: "Document ID copied to clipboard",
-    });
+    };
   };
 
   return (

@@ -35,7 +35,7 @@ vi.mock("react-router-dom", async () => {
     ...actual,
     useNavigate: () => mockNavigate,
   };
-});
+  });
 
 describe("DocumentListPage Component", () => {
   beforeEach(() => {
@@ -91,7 +91,7 @@ describe("DocumentListPage Component", () => {
 
     await waitFor(() => {
       expect(screen.getByText(/Nenhum documento ainda/i)).toBeInTheDocument();
-    });
+  });
   });
 
   it("should display documents when data is loaded", async () => {

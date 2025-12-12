@@ -71,7 +71,7 @@ export const MoodDashboard = memo(() => {
       }
       setMoodHistory(sampleData);
       localStorage.setItem("crew_mood_history", JSON.stringify(sampleData));
-    };
+    });
   }, []);
 
   const calculateAverage = (key: keyof Omit<MoodData, "date">) => {

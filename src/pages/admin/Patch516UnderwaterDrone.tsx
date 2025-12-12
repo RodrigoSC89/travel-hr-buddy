@@ -116,7 +116,7 @@ export default function Patch516UnderwaterDrone() {
       speed: 0,
       heading: 0,
       status: "idle",
-    });
+    };
     setMissionActive(false);
     executeCommand("RESET_DRONE", "Drone retornando à superfície e resetando sistemas");
   };

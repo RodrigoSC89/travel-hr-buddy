@@ -91,7 +91,7 @@ export const WindyMapPlugin: React.FC<WindyMapPluginProps> = ({
       script.onerror = () => {
         setError("Falha ao carregar Windy API");
         setIsLoading(false);
-      };
+      });
 
       document.head.appendChild(script);
     } catch (err) {
@@ -130,13 +130,13 @@ export const WindyMapPlugin: React.FC<WindyMapPluginProps> = ({
       
       // Enable picker for point forecast
       picker.on("pickerOpened", (latLon: { lat: number; lon: number }) => {
-      });
+};
 
       // Log current overlay changes
       store.on("overlay", (overlayName: string) => {
       });
-    });
-  };
+  });
+  });
 
   const handleRefresh = () => {
     if (windyAPI) {

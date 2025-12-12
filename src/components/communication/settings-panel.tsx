@@ -154,13 +154,13 @@ export const SettingsPanel = memo(() => {
       toast({
         title: "Sucesso",
         description: "Configurações salvas com sucesso"
-      });
+      };
     } catch (error) {
       toast({
         title: "Erro",
         description: "Erro ao salvar configurações",
         variant: "destructive"
-      });
+      };
     } finally {
       setLoading(false);
     }
@@ -222,7 +222,7 @@ export const SettingsPanel = memo(() => {
             title: "Erro",
             description: "A imagem deve ter no máximo 2MB",
             variant: "destructive"
-          });
+          };
           return;
         }
         
@@ -233,7 +233,7 @@ export const SettingsPanel = memo(() => {
         toast({
           title: "Sucesso",
           description: "Foto de perfil atualizada"
-        });
+        };
       }
     };
     input.click();
@@ -250,7 +250,7 @@ export const SettingsPanel = memo(() => {
       
       const blob = new Blob([JSON.stringify(dataToExport, null, 2)], {
         type: "application/json"
-      });
+      };
       
       const url = URL.createObjectURL(blob);
       const a = document.createElement("a");
@@ -264,13 +264,13 @@ export const SettingsPanel = memo(() => {
       toast({
         title: "Sucesso",
         description: "Dados exportados com sucesso"
-      });
+      };
     } catch (error) {
       toast({
         title: "Erro",
         description: "Erro ao exportar dados",
         variant: "destructive"
-      });
+      };
     }
   };
 

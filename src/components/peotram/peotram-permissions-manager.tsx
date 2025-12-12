@@ -63,7 +63,7 @@ export const PeotramPermissionsManager: React.FC = () => {
     area_access: [] as string[],
     location_type: "vessel" as "vessel" | "shore" | "both",
     expires_at: ""
-  });
+  };
 
   useEffect(() => {
     fetchData();
@@ -154,7 +154,7 @@ export const PeotramPermissionsManager: React.FC = () => {
       toast({
         title: "Sucesso",
         description: "Permissão criada com sucesso!",
-      });
+      };
 
       setIsDialogOpen(false);
       setPermissionForm({
@@ -165,14 +165,14 @@ export const PeotramPermissionsManager: React.FC = () => {
         area_access: [],
         location_type: "both",
         expires_at: ""
-      });
+      };
       fetchPermissions();
     } catch (error) {
       toast({
         title: "Erro",
         description: "Não foi possível criar a permissão.",
         variant: "destructive",
-      });
+      };
     }
   };
 
@@ -188,7 +188,7 @@ export const PeotramPermissionsManager: React.FC = () => {
       toast({
         title: "Sucesso",
         description: "Permissão atualizada com sucesso!",
-      });
+      };
 
       fetchPermissions();
     } catch (error) {
@@ -196,7 +196,7 @@ export const PeotramPermissionsManager: React.FC = () => {
         title: "Erro",
         description: "Não foi possível atualizar a permissão.",
         variant: "destructive",
-      });
+      };
     }
   };
 
@@ -216,7 +216,7 @@ export const PeotramPermissionsManager: React.FC = () => {
       toast({
         title: "Sucesso",
         description: "Permissão removida com sucesso!",
-      });
+      };
 
       fetchPermissions();
     } catch (error) {
@@ -224,7 +224,7 @@ export const PeotramPermissionsManager: React.FC = () => {
         title: "Erro",
         description: "Não foi possível remover a permissão.",
         variant: "destructive",
-      });
+      };
     }
   };
 
@@ -257,7 +257,7 @@ export const PeotramPermissionsManager: React.FC = () => {
   const filteredPermissions = permissions.filter(permission => {
     const userName = permission.profiles?.full_name || users.find(u => u.id === permission.user_id)?.email || "";
     return userName.toLowerCase().includes(searchTerm.toLowerCase());
-  });
+  };
 
   const areas = [
     "Ponte de Comando",
@@ -662,4 +662,4 @@ export const PeotramPermissionsManager: React.FC = () => {
       </div>
     </div>
   );
-};
+});

@@ -76,7 +76,7 @@ export default function AssistantReportLogsPage() {
       const date = new Date(log.sent_at).toLocaleDateString("pt-BR", {
         day: "2-digit",
         month: "2-digit",
-      });
+      };
       acc[date] = (acc[date] || 0) + 1;
       return acc;
     }, {} as Record<string, number>);
@@ -86,7 +86,7 @@ export default function AssistantReportLogsPage() {
       const [dayA, monthA] = a.split("/");
       const [dayB, monthB] = b.split("/");
       return new Date(`2024-${monthA}-${dayA}`).getTime() - new Date(`2024-${monthB}-${dayB}`).getTime();
-    });
+  };
 
     return {
       labels: sortedDates,
@@ -140,7 +140,7 @@ export default function AssistantReportLogsPage() {
           title: "Não autenticado",
           description: "Você precisa estar autenticado para acessar esta página.",
           variant: "destructive",
-        });
+        };
         navigate("/auth");
         return;
       }
@@ -166,7 +166,7 @@ export default function AssistantReportLogsPage() {
         title: "Erro ao carregar logs",
         description: "Não foi possível carregar os logs de envio de relatórios.",
         variant: "destructive",
-      });
+      };
     } finally {
       setLoading(false);
     }
@@ -210,7 +210,7 @@ export default function AssistantReportLogsPage() {
         title: "Nenhum dado para exportar",
         description: "Não há logs para exportar.",
         variant: "destructive",
-      });
+      };
       return;
     }
 
@@ -234,7 +234,7 @@ export default function AssistantReportLogsPage() {
     toast({
       title: "PDF exportado",
       description: "O PDF foi baixado com sucesso.",
-    });
+    };
   }
 
   function exportCSV() {
@@ -243,7 +243,7 @@ export default function AssistantReportLogsPage() {
         title: "Nenhum dado para exportar",
         description: "Não há logs para exportar.",
         variant: "destructive",
-      });
+      };
       return;
     }
 
@@ -272,7 +272,7 @@ export default function AssistantReportLogsPage() {
     toast({
       title: "CSV exportado",
       description: "O CSV foi baixado com sucesso.",
-    });
+    };
   }
 
   return (

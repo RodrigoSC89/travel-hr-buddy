@@ -249,13 +249,13 @@ export const APIHubNautilus: React.FC = () => {
     routes: true,
     analytics: true,
     iot: true
-  });
+  };
 
   const handleDocumentation = () => {
     toast({
       title: "📚 Documentação API",
       description: "Abrindo documentação completa com exemplos e referências"
-    });
+    };
     // TODO: Open documentation page or modal
   };
 
@@ -263,7 +263,7 @@ export const APIHubNautilus: React.FC = () => {
     toast({
       title: "🔑 Nova API Key",
       description: "Gerando nova chave de autenticação segura"
-    });
+    };
     // TODO: Open API key generation dialog
   };
 
@@ -271,7 +271,7 @@ export const APIHubNautilus: React.FC = () => {
     toast({
       title: "🧪 Testar API",
       description: `Abrindo console de testes para ${endpointName}`
-    });
+    };
     // TODO: Open API testing console
   };
 
@@ -279,7 +279,7 @@ export const APIHubNautilus: React.FC = () => {
     toast({
       title: "📚 Documentação",
       description: `Abrindo documentação detalhada de ${endpointName}`
-    });
+    };
     // TODO: Open API documentation modal
   };
 
@@ -287,7 +287,7 @@ export const APIHubNautilus: React.FC = () => {
     toast({
       title: "📥 Baixar Exemplos",
       description: `Baixando exemplos de código para ${endpointName}`
-    });
+    };
     // TODO: Download code examples
   };
 
@@ -295,7 +295,7 @@ export const APIHubNautilus: React.FC = () => {
     toast({
       title: "⚙️ Configurar Integração",
       description: `Abrindo configurações de ${integrationName}`
-    });
+    };
     // TODO: Open integration configuration dialog
   };
 
@@ -303,7 +303,7 @@ export const APIHubNautilus: React.FC = () => {
     toast({
       title: "📋 Logs da Integração",
       description: `Visualizando logs de ${integrationName}`
-    });
+    };
     // TODO: Open logs viewer
   };
 
@@ -311,7 +311,7 @@ export const APIHubNautilus: React.FC = () => {
     toast({
       title: "🧪 Testar Integração",
       description: `Testando conexão com ${integrationName}`
-    });
+    };
     // TODO: Run integration test
   };
 
@@ -319,7 +319,7 @@ export const APIHubNautilus: React.FC = () => {
     toast({
       title: "📦 Baixar SDK",
       description: `Baixando ${sdkName}`
-    });
+    };
     // TODO: Download SDK package
   };
 

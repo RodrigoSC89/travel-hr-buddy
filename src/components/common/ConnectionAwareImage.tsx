@@ -88,8 +88,8 @@ export const ConnectionAwareImage = memo(function ConnectionAwareImage({
           height={height}
           loading={priority ? "eager" : "lazy"}
           decoding="async"
-          onLoad={() => setLoaded(true)}
-          onError={() => setError(true)}
+          onLoad={() => setLoaded(true}
+          onError={() => setError(true}
           className={cn(
             "transition-opacity duration-300",
             loaded ? "opacity-100" : "opacity-0",
@@ -99,6 +99,6 @@ export const ConnectionAwareImage = memo(function ConnectionAwareImage({
       )}
     </div>
   );
-});
+  });
 
 export default ConnectionAwareImage;

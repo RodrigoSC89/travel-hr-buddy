@@ -36,7 +36,7 @@ export default function TemplateEditorWithRewrite() {
         title: "Seleção inválida",
         description: "Selecione um trecho maior para reescrever.",
         variant: "destructive",
-      });
+      };
       return;
     }
 
@@ -44,7 +44,7 @@ export default function TemplateEditorWithRewrite() {
     try {
       const { data, error } = await supabase.functions.invoke("rewrite-selection", {
         body: { input: selectedText },
-      });
+      };
 
       if (error) throw error;
 
@@ -59,14 +59,14 @@ export default function TemplateEditorWithRewrite() {
       toast({
         title: "Texto reescrito com sucesso",
         description: "A seleção foi reformulada com IA.",
-      });
+      };
     } catch (err) {
       console.error("Error rewriting selection:", err);
       toast({
         title: "Erro ao reescrever",
         description: "Não foi possível reescrever o texto. Tente novamente.",
         variant: "destructive",
-      });
+      };
     } finally {
       setLoading(false);
     }

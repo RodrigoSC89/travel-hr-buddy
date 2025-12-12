@@ -19,7 +19,7 @@ export const AnalyticsDashboardNew = memo(() => {
       title: "Erro ao carregar analytics",
       description: error.message,
       variant: "destructive",
-    });
+    };
   };
 
   return (

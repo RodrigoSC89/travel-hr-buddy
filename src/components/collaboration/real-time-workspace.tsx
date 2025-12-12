@@ -112,7 +112,7 @@ const RealTimeWorkspace: React.FC = () => {
               key: user.id,
             },
           },
-        });
+        };
 
         channelRef.current = channel;
 
@@ -133,7 +133,7 @@ const RealTimeWorkspace: React.FC = () => {
                   last_seen?: string;
                   current_page?: string;
                   vessel_id?: string;
-                };
+                });
                 const status = presence.status as "online" | "busy" | "away" | "offline" | undefined;
                 users.push({
                   user_id: userId,
@@ -155,15 +155,15 @@ const RealTimeWorkspace: React.FC = () => {
             toast({
               title: `${newUser.name} entrou no workspace`,
               description: "Usuário conectado",
-            });
+};
           })
           .on("presence", { event: "leave" }, ({ key, leftPresences }) => {
             const leftUser = leftPresences[0];
             toast({
               title: `${leftUser.name} saiu do workspace`,
               description: "Usuário desconectado",
-            });
-          });
+};
+  };
 
         // Configurar mensagens de chat
         channel.on("broadcast", { event: "chat_message" }, (payload) => {
@@ -178,7 +178,7 @@ const RealTimeWorkspace: React.FC = () => {
           };
           
           setChatMessages(prev => [...prev, message]);
-        });
+        };
 
         // Configurar atualizações do workspace
         channel.on("broadcast", { event: "workspace_update" }, (payload) => {
@@ -222,7 +222,7 @@ const RealTimeWorkspace: React.FC = () => {
           title: "Erro",
           description: "Falha ao conectar ao workspace em tempo real",
           variant: "destructive"
-        });
+        };
       } finally {
         setIsLoading(false);
       }
@@ -285,7 +285,7 @@ const RealTimeWorkspace: React.FC = () => {
           type: "text",
           room: selectedRoom
         }
-      });
+      };
 
       setNewMessage("");
     } catch (error) {
@@ -293,7 +293,7 @@ const RealTimeWorkspace: React.FC = () => {
         title: "Erro",
         description: "Falha ao enviar mensagem",
         variant: "destructive"
-      });
+      };
     }
   };
 
@@ -313,7 +313,7 @@ const RealTimeWorkspace: React.FC = () => {
           timestamp: new Date().toISOString(),
           priority
         }
-      });
+      };
     } catch (error) {
       logger.error("Failed to send reaction:", error);
     }
@@ -334,7 +334,7 @@ const RealTimeWorkspace: React.FC = () => {
         status: newStatus,
         last_seen: new Date().toISOString(),
         current_page: window.location.pathname
-      });
+      };
     } catch (error) {
       logger.error("Failed to change status:", error);
     }

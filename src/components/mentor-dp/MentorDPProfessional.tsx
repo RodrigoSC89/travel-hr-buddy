@@ -217,7 +217,7 @@ export default function MentorDPProfessional() {
           "apikey": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InZuYnB0bWl4dndyb3B2YW55aGRiIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NTg1NzczNTEsImV4cCI6MjA3NDE1MzM1MX0.-LivvlGPJwz_Caj5nVk_dhVeheaXPCROmXc4G8UsJcE",
         },
         body: JSON.stringify({ action, ...params }),
-      });
+      };
 
       if (!response.ok) {
         const errorText = await response.text();
@@ -258,7 +258,7 @@ export default function MentorDPProfessional() {
     try {
       const data = await callMentorAI("chat", {
         messages: [...messages, userMessage].map(m => ({ role: m.role, content: m.content })),
-      });
+      };
 
       const assistantMessage: Message = { id: crypto.randomUUID(), role: "assistant", content: data.content, timestamp: new Date(), type: "chat" };
       setMessages(prev => [...prev, assistantMessage]);
@@ -301,7 +301,7 @@ export default function MentorDPProfessional() {
         scenarioType: scenario.type,
         difficulty: scenario.difficulty,
         context: { conditions: scenario.description },
-      });
+      };
 
       const simMessage: Message = { id: crypto.randomUUID(), role: "assistant", content: `## 🎮 Simulação: ${scenario.name}\n\n${data.content}`, timestamp: new Date(), type: "simulation" };
       setMessages([simMessage]);
@@ -375,7 +375,7 @@ export default function MentorDPProfessional() {
       if (quizAnswers[idx] === q.correctAnswer) {
         correctCount++;
       }
-    });
+    };
 
     const score = Math.round((correctCount / activeQuiz.questions.length) * 100);
     
@@ -383,7 +383,7 @@ export default function MentorDPProfessional() {
       title: score >= 70 ? "Parabéns!" : "Continue Estudando",
       description: `Você acertou ${correctCount} de ${activeQuiz.questions.length} questões (${score}%)`,
       variant: score >= 70 ? "default" : "destructive",
-    });
+    };
 
     // Update quiz history with score
     setQuizHistory(prev => prev.map((q, i) => i === 0 ? { ...q, score, completedAt: new Date() } : q));
@@ -447,7 +447,7 @@ export default function MentorDPProfessional() {
     try {
       const data = await callMentorAI("chat", {
         messages: [{ role: "user", content: question.question }],
-      });
+      };
 
       setRepositoryQuestions(prev => prev.map(q => q.id === question.id ? { ...q, answer: data.content, answers: q.answers + 1 } : q));
       setSelectedQuestion({ ...question, answer: data.content });
@@ -1141,7 +1141,7 @@ export default function MentorDPProfessional() {
                 <div className="text-center py-8">
                   <HelpCircle className="h-12 w-12 mx-auto text-muted-foreground/50 mb-4" />
                   <p className="text-muted-foreground mb-4">Esta pergunta ainda não foi respondida.</p>
-                  <Button onClick={() => selectedQuestion && answerQuestion(selectedQuestion)} disabled={isLoading}>
+                  <Button onClick={() => selectedQuestion && answerQuestion(selectedQuestion} disabled={isLoading}>
                     {isLoading ? <Loader2 className="h-4 w-4 animate-spin mr-2" /> : <Sparkles className="h-4 w-4 mr-2" />}
                     Gerar Resposta com IA
                   </Button>
@@ -1149,7 +1149,7 @@ export default function MentorDPProfessional() {
               )}
             </div>
             <div className="flex justify-between">
-              <Button variant="outline" onClick={() => selectedQuestion && voteQuestion(selectedQuestion.id)}>
+              <Button variant="outline" onClick={() => selectedQuestion && voteQuestion(selectedQuestion.id}>
                 <ThumbsUp className="h-4 w-4 mr-2" />
                 Útil ({selectedQuestion?.votes})
               </Button>

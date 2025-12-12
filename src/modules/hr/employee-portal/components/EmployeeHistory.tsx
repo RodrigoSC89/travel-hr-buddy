@@ -44,7 +44,7 @@ export const EmployeeHistory = memo(function() {
 
       return events;
     },
-  });
+  };
 
   const getStatusIcon = (status: string) => {
     switch (status) {

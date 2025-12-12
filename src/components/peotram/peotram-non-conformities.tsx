@@ -71,7 +71,7 @@ export const PeotramNonConformities: React.FC<NonConformitiesProps> = ({
     const matchesStatus = selectedStatus === "all" || nc.status === selectedStatus;
     
     return matchesSearch && matchesType && matchesStatus;
-  });
+};
 
   const getTypeLabel = (type: string) => {
     switch (type) {

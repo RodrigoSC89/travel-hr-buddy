@@ -13,7 +13,7 @@ vi.mock("html2pdf.js", () => {
   return {
     default: mockHtml2pdf,
   };
-});
+  };
 
 // Mock SGSOTrendChart
 vi.mock("@/components/sgso/SGSOTrendChart", () => ({
@@ -64,13 +64,13 @@ describe("SGSOReportPage", () => {
   it("should render the page title", () => {
     renderComponent();
     expect(screen.getByText(/Relatório SGSO - Gestão de Segurança Operacional/i)).toBeDefined();
-  });
+};
 
   it("should render the export PDF button", () => {
     renderComponent();
     const button = screen.getByText(/Exportar PDF/i);
     expect(button).toBeDefined();
-  });
+  };
 
   it("should render vessel name", () => {
     renderComponent({ vesselName: "Test Vessel" });
@@ -142,7 +142,7 @@ describe("SGSOReportPage", () => {
     // Just verify the button was clicked, html2pdf is mocked
     await waitFor(() => {
       expect(button).toBeDefined();
-    });
+  });
   });
 
   it("should display loading state during export", async () => {
@@ -154,7 +154,7 @@ describe("SGSOReportPage", () => {
     // Verify button exists after click
     await waitFor(() => {
       expect(button).toBeDefined();
-    });
+  });
   });
 
   it("should display statistics correctly", () => {

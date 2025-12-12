@@ -209,7 +209,7 @@ export const AISSimopsIntegration: React.FC = () => {
             <span className="text-sm text-muted-foreground">AIS Feed</span>
             <Switch checked={isAISEnabled} onCheckedChange={setIsAISEnabled} />
           </div>
-          <Button variant="outline" onClick={() => toast.info("Atualizando dados AIS...")}>
+          <Button variant="outline" onClick={() => toast.info("Atualizando dados AIS..."}>
             <RefreshCw className="w-4 h-4 mr-2" />
             Atualizar
           </Button>
@@ -409,7 +409,7 @@ export const AISSimopsIntegration: React.FC = () => {
                 </div>
                 <Slider
                   value={[guardZone]}
-                  onValueChange={([v]) => setGuardZone(v)}
+                  onValueChange={([v]) => setGuardZone(v}
                   min={100}
                   max={2000}
                   step={50}

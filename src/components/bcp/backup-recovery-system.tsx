@@ -29,7 +29,7 @@ export const BackupRecoverySystem: React.FC = () => {
     totalBackupSize: "2.4 TB",
     retentionPeriod: "90 dias",
     encryptionStatus: "AES-256 Ativo"
-  });
+  };
 
   const [backupLocations] = useState([
     {

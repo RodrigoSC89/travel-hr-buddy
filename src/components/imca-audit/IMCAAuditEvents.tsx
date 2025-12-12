@@ -188,7 +188,7 @@ export const IMCAAuditEvents = memo(function({ selectedDPClass }: Props) {
     toast({
       title: "Evento enviado ao IMCA",
       description: "O formulário IMCA foi preenchido e submetido ao banco de dados."
-    });
+    };
   };
 
   return (

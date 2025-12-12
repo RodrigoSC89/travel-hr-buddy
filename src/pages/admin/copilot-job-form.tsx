@@ -21,7 +21,7 @@ export default function CopilotJobFormPage() {
     toast({
       title: "✅ Job criado com sucesso!",
       description: `Job para ${data.component} foi registrado.`,
-    });
+};
   };
 
   return (
@@ -109,7 +109,7 @@ function MyMaintenancePage() {
     fetch('/api/jobs', {
       method: 'POST',
       body: JSON.stringify(data),
-    });
+    };
   };
 
   return (

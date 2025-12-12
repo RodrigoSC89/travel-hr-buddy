@@ -172,4 +172,4 @@ export const ProfessionalHeader = memo(function({
       </div>
     </motion.div>
   );
-}
+});

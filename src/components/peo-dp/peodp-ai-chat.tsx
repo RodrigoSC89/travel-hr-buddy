@@ -236,7 +236,7 @@ Use as **ações rápidas** abaixo ou faça sua pergunta diretamente!`,
           })),
           systemPrompt: SYSTEM_PROMPT
         }
-      });
+      };
 
       if (functionError) {
         throw new Error(functionError.message);

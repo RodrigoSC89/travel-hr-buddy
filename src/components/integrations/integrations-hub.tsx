@@ -130,7 +130,7 @@ export const IntegrationsHub: React.FC = () => {
     toast({
       title: "Integração Atualizada",
       description: `${integration?.name} foi ${integration?.isEnabled ? "desabilitada" : "habilitada"}`,
-    });
+    };
   };
 
   const handleTestConnection = (id: string) => {
@@ -138,7 +138,7 @@ export const IntegrationsHub: React.FC = () => {
     toast({
       title: "Testando Conexão",
       description: `Verificando conectividade com ${integration?.name}...`,
-    });
+    };
   };
 
   const getIntegrationsByCategory = (category: string) => {
@@ -237,7 +237,7 @@ export const IntegrationsHub: React.FC = () => {
                       </div>
                       <Switch 
                         checked={integration.isEnabled}
-                        onCheckedChange={() => handleToggleIntegration(integration.id)}
+                        onCheckedChange={() => handleToggleIntegration(integration.id}
                       />
                     </div>
                     <CardDescription>{integration.description}</CardDescription>

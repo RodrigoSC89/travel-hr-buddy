@@ -70,7 +70,7 @@ export default function PerformanceDashboard() {
             title: "⚠️ Performance Alert",
             description: newAlert.message,
             variant: "destructive"
-          });
+          };
         }
       })
       .subscribe();
@@ -115,7 +115,7 @@ export default function PerformanceDashboard() {
         title: "Erro",
         description: "Falha ao carregar dados de performance",
         variant: "destructive"
-      });
+      };
     } finally {
       setLoading(false);
     }

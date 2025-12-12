@@ -81,7 +81,7 @@ export default function AdminDashboard() {
         logger.error("Error fetching cron status:", error);
         setCronStatus("warning");
         setCronMessage("Erro ao carregar status do cron");
-      });
+  };
   }, []);
 
   // Fetch restore activity trend data
@@ -92,7 +92,7 @@ export default function AdminDashboard() {
         const { data, error } = await (supabase as unknown)
           .rpc("get_restore_count_by_day_with_email", { 
             email_input: user?.email || "" 
-          });
+          };
 
         if (error) {
           logger.error("Error fetching trend data", { error });
@@ -246,7 +246,7 @@ export default function AdminDashboard() {
           pdf.setFillColor(34, 197, 94); // Green color
           pdf.rect(margin + 60, yPosition - 3, barWidth, 4, "F");
           yPosition += 7;
-        });
+        };
         
         yPosition += 10;
       }
@@ -273,7 +273,7 @@ export default function AdminDashboard() {
           }
           pdf.text(`${item.day}: ${item.count} restaurações`, margin, yPosition);
           yPosition += 6;
-        });
+  });
       }
 
       // Save PDF
@@ -282,14 +282,14 @@ export default function AdminDashboard() {
       toast({
         title: "PDF exportado com sucesso",
         description: "O relatório foi baixado para o seu dispositivo",
-      });
+      };
     } catch (error) {
       logger.error("Error exporting PDF:", error);
       toast({
         title: "Erro ao exportar PDF",
         description: "Ocorreu um erro ao gerar o relatório",
         variant: "destructive",
-      });
+      };
     } finally {
       setExportingPDF(false);
     }

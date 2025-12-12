@@ -126,6 +126,6 @@ const VoyagesList: React.FC<VoyagesListProps> = ({ voyages, onViewDetails, onDel
       ))}
     </div>
   );
-};
+});
 
 export default VoyagesList;

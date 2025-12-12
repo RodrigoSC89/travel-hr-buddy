@@ -68,7 +68,7 @@ export const RiskAssessmentMatrix: React.FC = () => {
     toast({
       title: "📋 Detalhes do Risco",
       description: `Abrindo análise detalhada: ${riskTitle}`
-    });
+    };
     // TODO: Open risk details dialog
   };
 
@@ -76,7 +76,7 @@ export const RiskAssessmentMatrix: React.FC = () => {
     toast({
       title: "➕ Novo Registro de Risco",
       description: "Abrindo formulário de registro de risco"
-    });
+    };
     // TODO: Open new risk registration form
   };
 
@@ -273,6 +273,6 @@ export const RiskAssessmentMatrix: React.FC = () => {
       </Card>
     </div>
   );
-};
+});
 
 export default RiskAssessmentMatrix;

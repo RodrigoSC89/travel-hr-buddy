@@ -41,7 +41,7 @@ export const KPICardSkeleton: React.FC<{ count?: number }> = ({ count = 4 }) => 
       ))}
     </div>
   );
-};
+});
 
 // Chart Skeleton - minimal version
 export const ChartSkeleton: React.FC<{ height?: string }> = ({ height = "h-64" }) => {
@@ -67,7 +67,7 @@ export const ChartSkeleton: React.FC<{ height?: string }> = ({ height = "h-64" }
       </div>
     </div>
   );
-};
+});
 
 // Table Skeleton
 export const TableSkeleton: React.FC<{ rows?: number }> = ({ rows = 5 }) => {
@@ -94,7 +94,7 @@ export const TableSkeleton: React.FC<{ rows?: number }> = ({ rows = 5 }) => {
       ))}
     </div>
   );
-};
+});
 
 // Full Dashboard Skeleton
 export const DashboardSkeleton: React.FC = () => {
@@ -155,6 +155,6 @@ export const DashboardSkeleton: React.FC = () => {
       </div>
     </div>
   );
-};
+});
 
 export default DashboardSkeleton;

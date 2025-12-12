@@ -208,7 +208,7 @@ export default function IncidentCards() {
           },
           customPrompt: customPrompt || undefined
         }
-      });
+      };
 
       if (response.error) throw response.error;
 
@@ -216,7 +216,7 @@ export default function IncidentCards() {
       toast({
         title: "Análise Concluída",
         description: "A IA analisou o incidente com sucesso"
-      });
+      };
     } catch (error) {
       console.error("AI analysis error:", error);
       // Fallback to simulated analysis
@@ -248,7 +248,7 @@ export default function IncidentCards() {
       toast({
         title: "Análise Gerada",
         description: "Análise baseada em padrões conhecidos"
-      });
+      };
     } finally {
       setIsAnalyzing(false);
     }
@@ -297,20 +297,20 @@ export default function IncidentCards() {
         }
         doc.text(`${i + 1}. ${rec}`, 14, yPos);
         yPos += 7;
-      });
+  });
 
       doc.save(`analise-incidente-${selectedIncident.id}.pdf`);
       toast({
         title: "PDF Exportado",
         description: "Relatório de análise baixado com sucesso"
-      });
+      };
     } catch (error) {
       console.error("PDF export error:", error);
       toast({
         title: "Erro",
         description: "Não foi possível gerar o PDF",
         variant: "destructive"
-      });
+      };
     }
   };
 
@@ -358,7 +358,7 @@ export default function IncidentCards() {
                 <div className="pt-2 border-t">
                   <PlanStatusSelect 
                     incident={incident} 
-                    onUpdate={(status) => handleStatusUpdate(incident.id, status)}
+                    onUpdate={(status) => handleStatusUpdate(incident.id, status}
                   />
                 </div>
               )}
@@ -613,7 +613,7 @@ export default function IncidentCards() {
                 <div className="flex gap-2">
                   <Button 
                     variant="outline" 
-                    onClick={() => selectedIncident && handleAnalyzeWithAI(selectedIncident)}
+                    onClick={() => selectedIncident && handleAnalyzeWithAI(selectedIncident}
                     disabled={!customPrompt}
                   >
                     <Brain className="mr-2 h-4 w-4" />

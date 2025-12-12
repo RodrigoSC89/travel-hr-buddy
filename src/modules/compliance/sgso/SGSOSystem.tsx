@@ -42,7 +42,7 @@ export default function SGSOSystem() {
         activePlans: plans?.filter(p => p.status === "active").length || 0,
         totalActions: actions?.length || 0,
         pendingActions: actions?.filter(a => a.status === "pending").length || 0,
-      });
+      };
     } catch (error) {
       console.error("Error loading stats:", error);
     }

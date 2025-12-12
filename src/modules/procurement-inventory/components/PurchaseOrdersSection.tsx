@@ -174,7 +174,7 @@ export default function PurchaseOrdersSection({ searchQuery }: PurchaseOrdersSec
       order.supplier.toLowerCase().includes(searchQuery.toLowerCase());
     const matchesStatus = filterStatus === "all" || order.status === filterStatus;
     return matchesSearch && matchesStatus;
-  });
+  };
 
   const handleReceiveItems = (orderId: string, items: POItem[]) => {
     const totalReceived = items.reduce((sum, item) => sum + item.receivedQty, 0);
@@ -558,8 +558,8 @@ export default function PurchaseOrdersSection({ searchQuery }: PurchaseOrdersSec
           {selectedOrder && (
             <ReceiveItemsForm
               order={selectedOrder}
-              onConfirm={(items) => handleReceiveItems(selectedOrder.id, items)}
-              onCancel={() => setShowReceive(false)}
+              onConfirm={(items) => handleReceiveItems(selectedOrder.id, items}
+              onCancel={() => setShowReceive(false}
             />
           )}
         </DialogContent>

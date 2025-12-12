@@ -244,7 +244,7 @@ export const AutomatedReportsManager = memo(() => {
       toast.success("Sugestões carregadas");
     } finally {
       setIsLoadingAI(false);
-    };
+    });
   };
 
   return (
@@ -510,4 +510,4 @@ const ReportCard = ({
       </CardContent>
     </Card>
   );
-};
+});

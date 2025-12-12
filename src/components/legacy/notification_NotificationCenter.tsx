@@ -167,7 +167,7 @@ export const NotificationCenter: React.FC<NotificationCenterProps> = ({
         title: "Erro ao carregar notificações",
         description: "Não foi possível carregar as notificações",
         variant: "destructive"
-      });
+      };
     } finally {
       setLoading(false);
     }
@@ -193,7 +193,7 @@ export const NotificationCenter: React.FC<NotificationCenterProps> = ({
     toast({
       title: newNotification.title,
       description: newNotification.message,
-    });
+    };
   };
 
   const createNotificationFromAlert = (alert: unknown) => {
@@ -268,7 +268,7 @@ export const NotificationCenter: React.FC<NotificationCenterProps> = ({
       toast({
         title: "Notificações marcadas como lidas",
         description: `${unreadIds.length} notificações foram marcadas como lidas`,
-      });
+      };
     } catch (error) {
     }
   };
@@ -327,7 +327,7 @@ export const NotificationCenter: React.FC<NotificationCenterProps> = ({
     if (filter === "unread") return !n.isRead;
     if (filter === "high") return n.priority === "high" || n.priority === "critical";
     return true;
-  });
+  };
 
   if (loading) {
     return (
@@ -449,6 +449,6 @@ export const NotificationCenter: React.FC<NotificationCenterProps> = ({
       </CardContent>
     </Card>
   );
-};
+});
 
 export default NotificationCenter;

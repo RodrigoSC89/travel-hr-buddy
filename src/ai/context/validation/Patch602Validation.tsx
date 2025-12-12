@@ -68,7 +68,7 @@ export const Patch602Validation = memo(function() {
           awareness: 0.85 + Math.random() * 0.15,
           adaptation: 0.80 + Math.random() * 0.20
         }
-      });
+      };
       
       await new Promise(resolve => setTimeout(resolve, 1200));
     }
@@ -77,7 +77,7 @@ export const Patch602Validation = memo(function() {
     toast({
       title: "Context Awareness Complete",
       description: "Transitioned through all context layers successfully",
-    });
+    };
   };
 
   const getActionsForLevel = (level: string): string[] => {

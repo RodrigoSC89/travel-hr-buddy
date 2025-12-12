@@ -63,7 +63,7 @@ export default function FiltersDialog({ open, onOpenChange }: FiltersDialogProps
       minValue: "",
       maxValue: "",
       priority: [],
-    });
+    };
     toast.info("Filtros limpos");
   };
 

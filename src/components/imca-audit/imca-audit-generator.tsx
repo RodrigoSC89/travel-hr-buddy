@@ -63,7 +63,7 @@ export const IMCAAuditGenerator = memo(function() {
         title: "Validation Error",
         description: validation.errors.join(", "),
         variant: "destructive",
-      });
+      };
       return;
     }
 
@@ -79,13 +79,13 @@ export const IMCAAuditGenerator = memo(function() {
       toast({
         title: "Audit Generated",
         description: "IMCA audit report generated successfully",
-      });
+      };
     } catch (error) {
       toast({
         title: "Error",
         description: "Failed to generate audit report",
         variant: "destructive",
-      });
+      };
     } finally {
       setLoading(false);
     }
@@ -97,7 +97,7 @@ export const IMCAAuditGenerator = memo(function() {
       toast({
         title: "Export Complete",
         description: "Audit report downloaded as Markdown",
-      });
+      };
     }
   };
 
@@ -150,7 +150,7 @@ export const IMCAAuditGenerator = memo(function() {
 
                 <div className="grid gap-2">
                   <Label htmlFor="dpClass">DP Class *</Label>
-                  <Select value={dpClass} onValueChange={(value) => setDpClass(value as DPClass)}>
+                  <Select value={dpClass} onValueChange={(value) => setDpClass(value as DPClass}>
                     <SelectTrigger id="dpClass">
                       <SelectValue placeholder="Select DP Class" />
                     </SelectTrigger>

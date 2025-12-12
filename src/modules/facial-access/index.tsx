@@ -108,7 +108,7 @@ export default function FacialAccess() {
         success,
         message: success ? "Identificação confirmada" : "Usuário não reconhecido",
         confidence
-      });
+      };
       
       const newLog: AccessLog = {
         id: Date.now().toString(),
@@ -392,7 +392,7 @@ export default function FacialAccess() {
                     </Button>
                   </div>
 
-                  <Button className="w-full" onClick={() => toast.success("Usuário cadastrado com sucesso!")}>
+                  <Button className="w-full" onClick={() => toast.success("Usuário cadastrado com sucesso!"}>
                     <UserPlus className="h-4 w-4 mr-2" />
                     Cadastrar Usuário
                   </Button>

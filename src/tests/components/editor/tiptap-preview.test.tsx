@@ -10,7 +10,7 @@ const { mockUseEditor } = vi.hoisted(() => {
       state: {},
     })),
   };
-});
+  };
 
 vi.mock("@tiptap/react", () => ({
   useEditor: mockUseEditor,

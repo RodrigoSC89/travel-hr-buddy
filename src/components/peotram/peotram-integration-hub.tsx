@@ -303,7 +303,7 @@ export const PeotramIntegrationHub: React.FC = () => {
                       </Badge>
                       <Switch 
                         checked={integration.isActive}
-                        onCheckedChange={() => toggleIntegration(integration.id)}
+                        onCheckedChange={() => toggleIntegration(integration.id}
                       />
                     </div>
                   </div>

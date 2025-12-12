@@ -75,14 +75,14 @@ export const OperationsDashboardRealTime: React.FC = () => {
     crew_availability: 0,
     system_health: 100,
     last_update: new Date().toISOString(),
-  });
+  };
   const [alerts, setAlerts] = useState<RealTimeAlert[]>([]);
   const [loading, setLoading] = useState(true);
   const [filter, setFilter] = useState<FilterConfig>({
     operation_type: "all",
     time_range: "24h",
     criticality: "all",
-  });
+  };
   const [mqttConnected, setMqttConnected] = useState(false);
   const [wsConnected, setWsConnected] = useState(false);
   const [autoRefresh, setAutoRefresh] = useState(true);
@@ -151,7 +151,7 @@ export const OperationsDashboardRealTime: React.FC = () => {
           toast.success("Real-time data connected");
         }
       });
-  };
+  });
 
   const setupMQTTConnection = () => {
     try {
@@ -206,7 +206,7 @@ export const OperationsDashboardRealTime: React.FC = () => {
       
       handleMQTTMessage(mqttData);
     }, 5000);
-  };
+  });
 
   const simulateWebSocketMessages = () => {
     // Clear existing interval if any

@@ -136,7 +136,7 @@ export default function DPAlerts() {
         return false;
       }
       return true;
-    });
+    };
   }, [activeAlerts, filters]);
 
   const pendingFilteredAlerts = filteredAlerts.filter(a => !a.acknowledged);
@@ -311,7 +311,7 @@ export default function DPAlerts() {
                           <Checkbox
                             id={`severity-${option.value}`}
                             checked={filters.severity.includes(option.value)}
-                            onCheckedChange={() => toggleSeverityFilter(option.value)}
+                            onCheckedChange={() => toggleSeverityFilter(option.value}
                           />
                           <Label htmlFor={`severity-${option.value}`} className="text-sm cursor-pointer">
                             {option.label}
@@ -329,7 +329,7 @@ export default function DPAlerts() {
                           <Checkbox
                             id={`source-${source}`}
                             checked={filters.source.includes(source)}
-                            onCheckedChange={() => toggleSourceFilter(source)}
+                            onCheckedChange={() => toggleSourceFilter(source}
                           />
                           <Label htmlFor={`source-${source}`} className="text-sm cursor-pointer">
                             {source}
@@ -449,14 +449,14 @@ export default function DPAlerts() {
                         <span className="text-sm text-muted-foreground">Ativo</span>
                         <Switch
                           checked={item.enabled}
-                          onCheckedChange={() => toggleConfig(index, "enabled")}
+                          onCheckedChange={() => toggleConfig(index, "enabled"}
                         />
                       </div>
                       <div className="flex items-center gap-2">
                         <Volume2 className="h-4 w-4 text-muted-foreground" />
                         <Switch
                           checked={item.sound}
-                          onCheckedChange={() => toggleConfig(index, "sound")}
+                          onCheckedChange={() => toggleConfig(index, "sound"}
                         />
                       </div>
                     </div>

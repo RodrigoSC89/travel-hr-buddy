@@ -168,7 +168,7 @@ export const IntegrationTemplates: React.FC = () => {
                          template.description.toLowerCase().includes(searchTerm.toLowerCase());
     const matchesCategory = selectedCategory === "all" || template.category === selectedCategory;
     return matchesSearch && matchesCategory;
-  });
+  };
 
   const getDifficultyColor = (difficulty: IntegrationTemplate["difficulty"]) => {
     switch (difficulty) {

@@ -50,7 +50,7 @@ export const WorkflowAutomationHub: React.FC = () => {
     const matchesCategory = categoryFilter === "all" || w.category === categoryFilter;
     const matchesPriority = priorityFilter === "all" || w.priority === priorityFilter;
     return matchesSearch && matchesStatus && matchesCategory && matchesPriority;
-  });
+  };
 
   const handleClearFilters = useCallback(() => {
     setSearchTerm("");
@@ -76,7 +76,7 @@ export const WorkflowAutomationHub: React.FC = () => {
       priority: newWorkflowData.priority as unknown,
       status: "draft",
       steps: [],
-    });
+    };
     setShowNewWorkflow(false);
     setNewWorkflowData({ name: "", description: "", category: "custom", priority: "medium" });
   };
@@ -91,7 +91,7 @@ export const WorkflowAutomationHub: React.FC = () => {
       steps: template.steps,
       estimated_duration: template.estimated_duration,
       tags: template.tags,
-    });
+    };
     toast({ title: "Template aplicado", description: `Workflow "${template.name}" criado` });
   };
 
@@ -107,9 +107,9 @@ export const WorkflowAutomationHub: React.FC = () => {
     <div className="space-y-6 p-1">
       <WorkflowHeader
         onExport={exportWorkflows}
-        onNewWorkflow={() => setShowNewWorkflow(true)}
+        onNewWorkflow={() => setShowNewWorkflow(true}
         onRefresh={refetch}
-        onSettings={() => setShowSettings(true)}
+        onSettings={() => setShowSettings(true}
         onMarkAllRead={handleMarkAllRead}
         unreadCount={unreadCount}
         isLoading={isLoading}

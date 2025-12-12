@@ -60,7 +60,7 @@ export const UsageAnalytics: React.FC = () => {
       month: "2-digit", 
       hour: "2-digit", 
       minute: "2-digit" 
-    });
+    };
   };
 
   return (

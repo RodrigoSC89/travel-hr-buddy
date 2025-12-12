@@ -164,7 +164,7 @@ const SystemAuditor: React.FC = () => {
         status: "success",
         description: "Módulo implementado e funcional",
         severity: "low"
-      });
+      };
     }
 
     return results;
@@ -180,7 +180,7 @@ const SystemAuditor: React.FC = () => {
         status: "success",
         description: "Conexão segura ativa",
         severity: "low"
-      });
+      };
     } else {
       results.push({
         module: "Segurança HTTPS",
@@ -188,7 +188,7 @@ const SystemAuditor: React.FC = () => {
         description: "Ambiente de desenvolvimento detectado",
         severity: "medium",
         actionRequired: "Configurar HTTPS em produção"
-      });
+      };
     }
 
     // Verificar autenticação
@@ -200,7 +200,7 @@ const SystemAuditor: React.FC = () => {
           status: "success",
           description: "Sessão de usuário válida",
           severity: "low"
-        });
+        };
       } else {
         results.push({
           module: "Sistema de Autenticação",
@@ -208,7 +208,7 @@ const SystemAuditor: React.FC = () => {
           description: "Usuário não autenticado",
           severity: "medium",
           actionRequired: "Testar com usuário logado"
-        });
+        };
       }
     } catch (error) {
       results.push({
@@ -233,7 +233,7 @@ const SystemAuditor: React.FC = () => {
       status: "success",
       description: `Interface ${isMobile ? "mobile" : "desktop"} otimizada`,
       severity: "low"
-    });
+    };
 
     // Verificar performance geral
     results.push({
@@ -241,7 +241,7 @@ const SystemAuditor: React.FC = () => {
       status: "success",
       description: "Sistema otimizado e responsivo",
       severity: "low"
-    });
+    };
 
     return results;
   };
@@ -259,7 +259,7 @@ const SystemAuditor: React.FC = () => {
         status: "success",
         description: "Conexão com banco de dados ativa",
         severity: "low"
-      });
+      };
     } catch (error) {
       results.push({
         module: "Integração Supabase",
@@ -268,7 +268,7 @@ const SystemAuditor: React.FC = () => {
         severity: "critical",
         details: String(error),
         actionRequired: "Verificar configuração de conexão"
-      });
+      };
     }
 
     return results;

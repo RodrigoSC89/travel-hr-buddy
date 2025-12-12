@@ -40,11 +40,11 @@ export default function PersonalRestoreDashboard() {
 
       const { data: trendData } = await supabase.rpc("get_restore_count_by_day_with_email", {
         email_input: email,
-      });
+      };
 
       const { data: summaryData } = await supabase.rpc("get_restore_summary", {
         email_input: email,
-      });
+      };
 
       setTrend(trendData || []);
       setSummary(summaryData?.[0] || null);
@@ -161,7 +161,7 @@ export default function PersonalRestoreDashboard() {
         textColor: 255,
         fontStyle: "bold",
       },
-    });
+    };
     
     // Save the PDF
     doc.save(`restauracoes-pessoais-${format(new Date(), "yyyy-MM-dd-HHmmss")}.pdf`);

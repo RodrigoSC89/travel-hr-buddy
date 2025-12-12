@@ -225,7 +225,7 @@ Dados meteorológicos atuais:
             })),
           context,
         },
-      });
+      };
 
       let responseContent: string;
 
@@ -280,7 +280,7 @@ Dados meteorológicos atuais:
       }
       if (line.trim() === "") return <br key={i} />;
       return <p key={i}>{line}</p>;
-    });
+    };
   };
 
   return (
@@ -388,4 +388,4 @@ Dados meteorológicos atuais:
       </CardContent>
     </Card>
   );
-};
+});

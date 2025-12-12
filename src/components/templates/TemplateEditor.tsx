@@ -59,7 +59,7 @@ export default function TemplateEditor() {
         title: "Erro ao salvar",
         description: "Por favor, preencha o título do template.",
         variant: "destructive",
-      });
+      };
       return;
     }
 
@@ -73,7 +73,7 @@ export default function TemplateEditor() {
           title: "Erro de autenticação",
           description: "Você precisa estar logado para salvar templates.",
           variant: "destructive",
-        });
+        };
         return;
       }
 
@@ -92,7 +92,7 @@ export default function TemplateEditor() {
       toast({
         title: "Template salvo com sucesso!",
         description: "O template foi salvo e está disponível para uso.",
-      });
+      };
 
       // Reset form after successful save
       setTitle("");
@@ -103,7 +103,7 @@ export default function TemplateEditor() {
         title: "Erro ao salvar template",
         description: error instanceof Error ? error.message : "Erro desconhecido",
         variant: "destructive",
-      });
+      };
     } finally {
       setIsSaving(false);
     }
@@ -131,14 +131,14 @@ export default function TemplateEditor() {
       toast({
         title: "PDF exportado com sucesso!",
         description: "O arquivo foi baixado para o seu dispositivo.",
-      });
+      };
     } catch (error) {
       console.error("Error exporting PDF:", error);
       toast({
         title: "Erro ao exportar PDF",
         description: "Tente novamente mais tarde.",
         variant: "destructive",
-      });
+      };
     } finally {
       setIsExporting(false);
     }
@@ -160,14 +160,14 @@ export default function TemplateEditor() {
       toast({
         title: "HTML exportado com sucesso!",
         description: "O arquivo foi baixado para o seu dispositivo.",
-      });
+      };
     } catch (error) {
       console.error("Error exporting HTML:", error);
       toast({
         title: "Erro ao exportar HTML",
         description: "Tente novamente mais tarde.",
         variant: "destructive",
-      });
+      };
     }
   };
 
@@ -177,7 +177,7 @@ export default function TemplateEditor() {
         title: "Nome necessário",
         description: "Por favor, preencha o nome do placeholder.",
         variant: "destructive",
-      });
+      };
       return;
     }
 
@@ -188,7 +188,7 @@ export default function TemplateEditor() {
     toast({
       title: "Placeholder inserido!",
       description: `A variável {{${placeholderName.trim()}}} foi adicionada ao template.`,
-    });
+    };
   };
 
   const handleGenerateWithAI = async () => {
@@ -197,7 +197,7 @@ export default function TemplateEditor() {
         title: "Título necessário",
         description: "Por favor, preencha o título do template antes de gerar com IA.",
         variant: "destructive",
-      });
+      };
       return;
     }
 
@@ -206,7 +206,7 @@ export default function TemplateEditor() {
     try {
       const { data, error } = await supabase.functions.invoke("generate-template", {
         body: { title: title.trim() },
-      });
+      };
 
       if (error) throw error;
 
@@ -215,7 +215,7 @@ export default function TemplateEditor() {
         toast({
           title: "Conteúdo gerado com sucesso!",
           description: "O template foi gerado pela IA. Você pode editá-lo conforme necessário.",
-        });
+        };
       } else {
         throw new Error("Nenhum conteúdo foi gerado");
       }
@@ -225,7 +225,7 @@ export default function TemplateEditor() {
         title: "Erro ao gerar com IA",
         description: error instanceof Error ? error.message : "Erro desconhecido",
         variant: "destructive",
-      });
+      };
     } finally {
       setIsGenerating(false);
     }

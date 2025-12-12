@@ -54,7 +54,7 @@ const EdgeComputingPage: React.FC = () => {
       time: new Date().toLocaleTimeString(),
       latency: Math.floor(2 + Math.random() * 6),
       throughput: Math.floor(800 + Math.random() * 400)
-    });
+    };
 
     const initial = Array.from({ length: 20 }, () => generateData());
     setRealtimeData(initial);
@@ -92,7 +92,7 @@ const EdgeComputingPage: React.FC = () => {
     toast({
       title: "Reiniciando Nó",
       description: "O nó está sendo reiniciado. Isso pode levar alguns minutos.",
-    });
+    };
   };
 
   const onlineNodes = nodes.filter(n => n.status === "online").length;
@@ -303,6 +303,6 @@ const EdgeComputingPage: React.FC = () => {
       </Tabs>
     </ModulePageWrapper>
   );
-};
+});
 
 export default EdgeComputingPage;

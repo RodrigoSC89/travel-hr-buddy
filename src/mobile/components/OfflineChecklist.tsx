@@ -157,7 +157,7 @@ export const OfflineChecklist: React.FC<OfflineChecklistProps> = ({
                 <Checkbox
                   id={item.id}
                   checked={item.checked}
-                  onCheckedChange={() => handleToggleItem(item.id)}
+                  onCheckedChange={() => handleToggleItem(item.id}
                   className="mt-1"
                 />
                 <div className="flex-1">

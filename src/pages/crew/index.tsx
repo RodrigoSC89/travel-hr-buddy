@@ -105,7 +105,7 @@ export const ConsolidatedCrewManagement = memo(() => {
         title: "Error",
         description: "Failed to load crew data",
         variant: "destructive"
-      });
+      };
     } finally {
       setLoading(false);
     }
@@ -145,7 +145,7 @@ export const ConsolidatedCrewManagement = memo(() => {
         isExpiring: daysUntilExpiry <= 30 && daysUntilExpiry > 0,
         isExpired: daysUntilExpiry <= 0
       };
-    });
+  };
   }, [certifications]);
 
   const filteredCrew = crewMembers.filter(member =>

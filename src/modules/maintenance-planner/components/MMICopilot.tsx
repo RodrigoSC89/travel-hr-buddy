@@ -102,7 +102,7 @@ export const MMICopilot: React.FC<MMICopilotProps> = ({ onJobCreated, context })
           context: context,
           action: detectAction(messageText)
         }
-      });
+      };
 
       if (error) throw error;
 
@@ -136,7 +136,7 @@ export const MMICopilot: React.FC<MMICopilotProps> = ({ onJobCreated, context })
         title: "Erro no Copilot",
         description: error.message,
         variant: "destructive",
-      });
+      };
     } finally {
       setIsLoading(false);
     }

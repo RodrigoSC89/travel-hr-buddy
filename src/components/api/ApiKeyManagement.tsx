@@ -64,7 +64,7 @@ export const ApiKeyManagement: React.FC = () => {
     name: "",
     tier: "standard",
     expiresIn: "never"
-  });
+  };
   const [generatedKey, setGeneratedKey] = useState<string | null>(null);
   const [showKey, setShowKey] = useState(false);
 
@@ -478,7 +478,7 @@ export const ApiKeyManagement: React.FC = () => {
                   <div className="flex items-center gap-2">
                     <Switch
                       checked={key.is_active ?? false}
-                      onCheckedChange={() => toggleApiKey(key.id, key.is_active ?? false)}
+                      onCheckedChange={() => toggleApiKey(key.id, key.is_active ?? false}
                     />
                     <Button
                       variant="ghost"
@@ -497,6 +497,6 @@ export const ApiKeyManagement: React.FC = () => {
       </Card>
     </div>
   );
-};
+});
 
 export default ApiKeyManagement;

@@ -146,7 +146,7 @@ export const useDashboardData = memo(function() {
     toast({
       title: "Dados atualizados",
       description: "O dashboard foi atualizado com os dados mais recentes"
-    });
+    };
   }, [fetchMetrics, toast]);
 
   const markNotificationAsRead = useCallback(async (id: string) => {
@@ -176,7 +176,7 @@ export const useDashboardData = memo(function() {
     toast({
       title: "Notificações marcadas como lidas",
       description: `${unreadIds.length} notificações foram marcadas como lidas`
-    });
+    };
   }, [notifications, toast]);
 
   // Initial load

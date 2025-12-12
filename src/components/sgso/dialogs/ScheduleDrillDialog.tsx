@@ -68,7 +68,7 @@ export const ScheduleDrillDialog: React.FC<ScheduleDrillDialogProps> = ({
     participants: "",
     objectives: "",
     notes: "",
-  });
+};
   const [isSubmitting, setIsSubmitting] = useState(false);
 
   const handleChange = (field: string, value: string) => {
@@ -160,7 +160,7 @@ export const ScheduleDrillDialog: React.FC<ScheduleDrillDialogProps> = ({
             </div>
             <div className="space-y-2">
               <Label htmlFor="time">Horário *</Label>
-              <Select value={formData.time} onValueChange={(v) => handleChange("time", v)}>
+              <Select value={formData.time} onValueChange={(v) => handleChange("time", v}>
                 <SelectTrigger>
                   <SelectValue />
                 </SelectTrigger>
@@ -179,7 +179,7 @@ export const ScheduleDrillDialog: React.FC<ScheduleDrillDialogProps> = ({
           <div className="grid grid-cols-2 gap-4">
             <div className="space-y-2">
               <Label htmlFor="type">Tipo de Simulado *</Label>
-              <Select value={formData.type} onValueChange={(v) => handleChange("type", v)}>
+              <Select value={formData.type} onValueChange={(v) => handleChange("type", v}>
                 <SelectTrigger>
                   <SelectValue placeholder="Selecione o tipo" />
                 </SelectTrigger>
@@ -194,7 +194,7 @@ export const ScheduleDrillDialog: React.FC<ScheduleDrillDialogProps> = ({
             </div>
             <div className="space-y-2">
               <Label htmlFor="duration">Duração (minutos)</Label>
-              <Select value={formData.duration} onValueChange={(v) => handleChange("duration", v)}>
+              <Select value={formData.duration} onValueChange={(v) => handleChange("duration", v}>
                 <SelectTrigger>
                   <SelectValue />
                 </SelectTrigger>
@@ -286,4 +286,4 @@ export const ScheduleDrillDialog: React.FC<ScheduleDrillDialogProps> = ({
       </DialogContent>
     </Dialog>
   );
-};
+});

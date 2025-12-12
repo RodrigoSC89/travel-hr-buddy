@@ -112,7 +112,7 @@ ${alerts.map(a => `  - ${a.type}: ${a.title}`).join("\n")}
           sessionId: `brain-${Date.now()}`,
           mode: "safe"
         }
-      });
+      };
 
       if (error) throw error;
 
@@ -412,4 +412,4 @@ Qual área você gostaria de explorar em detalhes?`;
       </motion.div>
     </motion.div>
   );
-};
+});

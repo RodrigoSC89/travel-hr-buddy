@@ -38,7 +38,7 @@ export const ReservationsDashboard: React.FC = () => {
     end_date: "",
     location: "",
     status: "confirmed" as "pending" | "confirmed" | "cancelled"
-  });
+  };
 
   const { toast } = useToast();
   const { user } = useAuth();
@@ -72,7 +72,7 @@ export const ReservationsDashboard: React.FC = () => {
         title: "Erro",
         description: "Erro ao carregar reservas",
         variant: "destructive"
-      });
+      };
     } finally {
       setLoading(false);
     }
@@ -102,7 +102,7 @@ export const ReservationsDashboard: React.FC = () => {
         toast({
           title: "Sucesso",
           description: "Reserva atualizada com sucesso!"
-        });
+        };
       } else {
         const { error } = await supabase
           .from("reservations")
@@ -112,7 +112,7 @@ export const ReservationsDashboard: React.FC = () => {
         toast({
           title: "Sucesso",
           description: "Reserva criada com sucesso!"
-        });
+        };
       }
 
       setIsDialogOpen(false);
@@ -123,7 +123,7 @@ export const ReservationsDashboard: React.FC = () => {
         title: "Erro",
         description: "Erro ao salvar reserva",
         variant: "destructive"
-      });
+      };
     }
   };
 
@@ -141,14 +141,14 @@ export const ReservationsDashboard: React.FC = () => {
       toast({
         title: "Sucesso",
         description: "Reserva excluída com sucesso!"
-      });
+      };
       fetchReservations();
     } catch (error) {
       toast({
         title: "Erro",
         description: "Erro ao excluir reserva",
         variant: "destructive"
-      });
+      };
     }
   };
 
@@ -161,7 +161,7 @@ export const ReservationsDashboard: React.FC = () => {
       end_date: "",
       location: "",
       status: "confirmed" as "pending" | "confirmed" | "cancelled"
-    });
+    };
     setSelectedReservation(null);
   };
 
@@ -175,7 +175,7 @@ export const ReservationsDashboard: React.FC = () => {
       end_date: new Date(reservation.end_date).toISOString().slice(0, 16),
       location: reservation.location || "",
       status: reservation.status
-    });
+    };
     setIsDialogOpen(true);
   };
 

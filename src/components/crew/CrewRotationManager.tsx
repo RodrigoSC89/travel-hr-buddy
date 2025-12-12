@@ -80,7 +80,7 @@ const DraggableCrewCard: React.FC<{ member: CrewMember }> = ({ member }) => {
   const { attributes, listeners, setNodeRef, transform, isDragging } = useDraggable({
     id: member.id,
     data: member,
-  });
+};
 
   const style = transform
     ? {
@@ -120,7 +120,7 @@ const DroppableScheduleSlot: React.FC<{
 }> = ({ date, rotationType, rotations, onDrop }) => {
   const { setNodeRef, isOver } = useDroppable({
     id: `${date}-${rotationType}`,
-  });
+};
 
   const slotRotations = rotations.filter(
     (r) => r.scheduled_date === date && r.rotation_type === rotationType
@@ -143,7 +143,7 @@ const DroppableScheduleSlot: React.FC<{
       ))}
     </div>
   );
-};
+});
 
 export const CrewRotationManager: React.FC = () => {
   const [rotations, setRotations] = useState<CrewRotation[]>([]);
@@ -159,7 +159,7 @@ export const CrewRotationManager: React.FC = () => {
     status: "scheduled",
     documentation_status: "pending",
     medical_clearance: false,
-  });
+  };
 
   useEffect(() => {
     loadData();
@@ -220,7 +220,7 @@ export const CrewRotationManager: React.FC = () => {
           severity: "high",
           message: `Crew member has multiple rotations on ${rotation.scheduled_date}`,
           rotation_id: rotation.id,
-        });
+        };
       }
 
       // Check documentation expiry
@@ -265,7 +265,7 @@ export const CrewRotationManager: React.FC = () => {
           status: "scheduled",
           documentation_status: "pending",
           medical_clearance: false,
-        });
+        };
 
       if (error) throw error;
 
@@ -292,7 +292,7 @@ export const CrewRotationManager: React.FC = () => {
         type: "crew_rotation",
         priority: "high",
         status: "unread",
-      });
+      };
 
       // Log the alert
       toast.info("Alert generated for crew member");
@@ -342,7 +342,7 @@ export const CrewRotationManager: React.FC = () => {
         log_type: "status_change",
         description: `Status changed to ${newStatus}`,
         new_status: newStatus,
-      });
+      };
 
       toast.success("Rotation status updated");
       loadData();

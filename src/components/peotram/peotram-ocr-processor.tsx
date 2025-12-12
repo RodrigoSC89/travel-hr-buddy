@@ -91,7 +91,7 @@ export const PeotramOCRProcessor: React.FC = () => {
           
           const result = await ocrService.processImage(file, (progress: OCRProgress) => {
             setCurrentProgress(progress.progress * 100);
-          });
+  };
 
           const extractedFields = await ocrService.extractFormFields(file);
 
@@ -103,7 +103,7 @@ export const PeotramOCRProcessor: React.FC = () => {
             ocrResult: result,
             processedAt: new Date(),
             extractedFields,
-          });
+          };
         }
       }
 
@@ -146,7 +146,7 @@ export const PeotramOCRProcessor: React.FC = () => {
 
     const blob = new Blob([JSON.stringify(exportData, null, 2)], { 
       type: "application/json" 
-    });
+    };
     const url = URL.createObjectURL(blob);
     const a = document.createElement("a");
     a.href = url;

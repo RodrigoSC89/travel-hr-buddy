@@ -78,7 +78,7 @@ export default function ListaAuditoriasIMCA() {
       a.item_auditado?.toLowerCase().includes(searchTerm) ||
       a.resultado?.toLowerCase().includes(searchTerm)
     );
-  });
+  };
 
   const exportarCSV = () => {
     const headers = ["Navio", "Data", "Norma", "Item Auditado", "Resultado", "Comentários"];
@@ -108,7 +108,7 @@ export default function ListaAuditoriasIMCA() {
       const canvas = await html2canvas(pdfRef.current, {
         scale: 2,
         backgroundColor: "#ffffff",
-      });
+      };
 
       const imgData = canvas.toDataURL("image/png");
       const jsPDF = await getJsPDF();
@@ -116,7 +116,7 @@ export default function ListaAuditoriasIMCA() {
         orientation: "portrait",
         unit: "mm",
         format: "a4",
-      });
+      };
 
       const imgWidth = 190;
       const imgHeight = (canvas.height * imgWidth) / canvas.width;
@@ -141,7 +141,7 @@ export default function ListaAuditoriasIMCA() {
           "Content-Type": "application/json",
         },
         body: JSON.stringify({ navio, item, norma }),
-      });
+      };
       const dataExplain = await resExplain.json();
       setExplicacao((prev) => ({ ...prev, [id]: dataExplain.resultado }));
 
@@ -153,7 +153,7 @@ export default function ListaAuditoriasIMCA() {
           "Content-Type": "application/json",
         },
         body: JSON.stringify({ navio, item, norma }),
-      });
+      };
       const dataPlano = await resPlano.json();
       setPlano((prev) => ({ ...prev, [id]: dataPlano.plano }));
 

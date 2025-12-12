@@ -94,7 +94,7 @@ export default function ProcurementDashboard() {
     }, 1000);
     
     setChatMessage("");
-  };
+  });
 
   const totalCost = mockOrders.reduce((sum, o) => sum + o.cost, 0);
   const delayedOrders = mockOrders.filter(o => o.status === "delayed").length;

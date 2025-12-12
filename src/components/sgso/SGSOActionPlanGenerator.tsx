@@ -51,7 +51,7 @@ export const SGSOActionPlanGenerator: React.FC = () => {
     toast({
       title: "Exemplo carregado",
       description: "Dados de exemplo foram carregados no formulário.",
-    });
+    };
   };
 
   const handleClear = () => {
@@ -64,7 +64,7 @@ export const SGSOActionPlanGenerator: React.FC = () => {
     toast({
       title: "Formulário limpo",
       description: "Todos os campos foram resetados.",
-    });
+    };
   };
 
   const handleGenerate = async () => {
@@ -74,7 +74,7 @@ export const SGSOActionPlanGenerator: React.FC = () => {
         title: "Erro de validação",
         description: "Por favor, insira a descrição do incidente.",
         variant: "destructive",
-      });
+      };
       return;
     }
 
@@ -83,7 +83,7 @@ export const SGSOActionPlanGenerator: React.FC = () => {
         title: "Erro de validação",
         description: "Por favor, selecione a categoria SGSO.",
         variant: "destructive",
-      });
+      };
       return;
     }
 
@@ -92,7 +92,7 @@ export const SGSOActionPlanGenerator: React.FC = () => {
         title: "Erro de validação",
         description: "Por favor, insira a causa raiz.",
         variant: "destructive",
-      });
+      };
       return;
     }
 
@@ -101,7 +101,7 @@ export const SGSOActionPlanGenerator: React.FC = () => {
         title: "Erro de validação",
         description: "Por favor, selecione o nível de risco.",
         variant: "destructive",
-      });
+      };
       return;
     }
 
@@ -114,20 +114,20 @@ export const SGSOActionPlanGenerator: React.FC = () => {
         sgso_category: category,
         sgso_root_cause: rootCause,
         sgso_risk_level: riskLevel,
-      });
+      };
 
       if (plan) {
         setActionPlan(plan);
         toast({
           title: "Plano de ação gerado com sucesso",
           description: "A IA analisou o incidente e gerou recomendações completas.",
-        });
+        };
       } else {
         toast({
           title: "Erro ao gerar plano",
           description: "Não foi possível gerar o plano de ação. Tente novamente.",
           variant: "destructive",
-        });
+        };
       }
     } catch (error) {
       console.error("Error generating action plan:", error);
@@ -135,7 +135,7 @@ export const SGSOActionPlanGenerator: React.FC = () => {
         title: "Erro ao gerar plano",
         description: "Ocorreu um erro ao processar a solicitação.",
         variant: "destructive",
-      });
+      };
     } finally {
       setLoading(false);
     }

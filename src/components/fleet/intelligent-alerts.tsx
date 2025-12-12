@@ -231,7 +231,7 @@ const IntelligentAlerts: React.FC = () => {
         title: "⚠️ Novo Alerta Crítico",
         description: `${newAlert.title} - ${newAlert.vessel_name}`,
         variant: "destructive"
-      });
+      };
     }
   };
 
@@ -240,7 +240,7 @@ const IntelligentAlerts: React.FC = () => {
     id: "intelligent-alerts-generation",
     callback: generateNewAlert,
     interval: 45000,
-  });
+  };
 
   const acknowledgeAlert = (alertId: string) => {
     setAlerts(prev => prev.map(alert => 
@@ -258,7 +258,7 @@ const IntelligentAlerts: React.FC = () => {
     toast({
       title: "Alerta Reconhecido",
       description: "O alerta foi marcado como reconhecido",
-    });
+    };
   };
 
   const resolveAlert = (alertId: string, notes: string) => {
@@ -278,7 +278,7 @@ const IntelligentAlerts: React.FC = () => {
     toast({
       title: "Alerta Resolvido",
       description: "O alerta foi marcado como resolvido",
-    });
+    };
   };
 
   const getSeverityColor = (severity: string) => {
@@ -330,7 +330,7 @@ const IntelligentAlerts: React.FC = () => {
     const matchesStatus = statusFilter === "all" || alert.status === statusFilter;
     
     return matchesSearch && matchesSeverity && matchesType && matchesStatus;
-  });
+  };
 
   const stats = {
     total: alerts.length,

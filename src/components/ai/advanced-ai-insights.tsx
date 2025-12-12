@@ -111,7 +111,7 @@ const AdvancedAIInsights = () => {
     toast({
       title: "Análise IA iniciada",
       description: "Processando dados e gerando insights...",
-    });
+    };
 
     await new Promise(resolve => setTimeout(resolve, 4000));
     
@@ -138,7 +138,7 @@ const AdvancedAIInsights = () => {
     toast({
       title: "Análise concluída",
       description: "Novos insights foram gerados pela IA",
-    });
+    };
   };
 
   const getImpactColor = (impact: string) => {
@@ -172,7 +172,7 @@ const AdvancedAIInsights = () => {
     toast({
       title: "✨ Implementar Insight",
       description: `Iniciando implementação: ${insightTitle}`
-    });
+    };
     // TODO: Open implementation workflow dialog
   };
 
@@ -511,6 +511,6 @@ const AdvancedAIInsights = () => {
       </Tabs>
     </div>
   );
-};
+});
 
 export default AdvancedAIInsights;

@@ -105,13 +105,13 @@ export const PriceAnalyticsDashboard: React.FC = () => {
         const date = new Date(f.captured_at).toLocaleDateString("pt-BR");
         if (!pricesByDate[date]) pricesByDate[date] = { flights: [], hotels: [] };
         pricesByDate[date].flights.push(f.price || 0);
-      });
+  };
 
       hotels.forEach((h: unknown) => {
         const date = new Date(h.captured_at).toLocaleDateString("pt-BR");
         if (!pricesByDate[date]) pricesByDate[date] = { flights: [], hotels: [] };
         pricesByDate[date].hotels.push(h.total_price || 0);
-      });
+  });
 
       const priceHistory = Object.entries(pricesByDate)
         .slice(-30)
@@ -138,13 +138,13 @@ export const PriceAnalyticsDashboard: React.FC = () => {
         const route = f.route_code || "Unknown";
         if (!routeCounts[route]) routeCounts[route] = { count: 0, totalSavings: 0 };
         routeCounts[route].count++;
-      });
+  });
 
       hotels.forEach((h: unknown) => {
         const name = h.hotel_name || "Unknown";
         if (!routeCounts[name]) routeCounts[name] = { count: 0, totalSavings: 0 };
         routeCounts[name].count++;
-      });
+  });
 
       const topProducts = Object.entries(routeCounts)
         .sort(([, a], [, b]) => b.count - a.count)
@@ -209,7 +209,7 @@ export const PriceAnalyticsDashboard: React.FC = () => {
         date: date.toLocaleDateString("pt-BR"),
         viagens: 800 + Math.random() * 400,
         hospedagem: 300 + Math.random() * 200,
-      });
+      };
     }
     return data;
   };
@@ -245,7 +245,7 @@ export const PriceAnalyticsDashboard: React.FC = () => {
       avgDiscount: 18.5,
       successRate: 76,
     },
-  });
+  };
 
   const handleExportCSV = async () => {
     setIsExporting(true);
@@ -276,7 +276,7 @@ export const PriceAnalyticsDashboard: React.FC = () => {
           title: "Sem dados",
           description: "Não há dados para exportar no período selecionado",
           variant: "destructive",
-        });
+        };
         return;
       }
 
@@ -285,14 +285,14 @@ export const PriceAnalyticsDashboard: React.FC = () => {
       toast({
         title: "CSV Exportado",
         description: "Arquivo baixado com sucesso",
-      });
+      };
     } catch (error) {
       console.error("Export error:", error);
       toast({
         title: "Erro na exportação",
         description: "Não foi possível exportar os dados",
         variant: "destructive",
-      });
+      };
     } finally {
       setIsExporting(false);
     }
@@ -311,14 +311,14 @@ export const PriceAnalyticsDashboard: React.FC = () => {
       toast({
         title: "PDF Exportado",
         description: "Arquivo baixado com sucesso",
-      });
+      };
     } catch (error) {
       console.error("Export error:", error);
       toast({
         title: "Erro na exportação",
         description: "Não foi possível exportar o PDF",
         variant: "destructive",
-      });
+      };
     } finally {
       setIsExporting(false);
     }

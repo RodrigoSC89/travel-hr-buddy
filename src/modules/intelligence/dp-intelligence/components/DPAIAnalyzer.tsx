@@ -83,20 +83,20 @@ export default function DPAIAnalyzer() {
         if (response.status === 429) {
           toast.error("Limite de requisições", {
             description: "Muitas requisições. Aguarde alguns segundos e tente novamente.",
-          });
+          };
           return;
         }
         
         if (response.status === 402) {
           toast.error("Créditos insuficientes", {
             description: "Adicione créditos ao workspace para continuar usando a IA.",
-          });
+          };
           return;
         }
         
         toast.error("Erro na análise", {
           description: errorData.message || "Não foi possível completar a análise.",
-        });
+        };
         return;
       }
 

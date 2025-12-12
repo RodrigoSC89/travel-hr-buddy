@@ -120,7 +120,7 @@ export default function SGSOAuditEditor() {
         title: "Erro",
         description: "Selecione uma embarcação",
         variant: "destructive"
-      });
+      };
       return;
     }
 
@@ -155,13 +155,13 @@ export default function SGSOAuditEditor() {
           priority: "high",
           status: "open",
           assigned_to: user?.id
-        });
+        };
       }
 
       toast({
         title: "Auditoria salva",
         description: "Auditoria SGSO salva com sucesso"
-      });
+      };
 
       // Reset form
       setAuditResults([]);
@@ -170,7 +170,7 @@ export default function SGSOAuditEditor() {
         title: "Erro ao salvar",
         description: error instanceof Error ? error.message : "Erro desconhecido",
         variant: "destructive"
-      });
+      };
     } finally {
       setSaving(false);
     }
@@ -214,7 +214,7 @@ export default function SGSOAuditEditor() {
       startY: 45,
       styles: { fontSize: 9 },
       headStyles: { fillColor: [41, 128, 185] }
-    });
+    };
     
     // Summary
     const compliant = auditResults.filter(r => r.status === "compliant").length;
@@ -232,7 +232,7 @@ export default function SGSOAuditEditor() {
     toast({
       title: "PDF exportado",
       description: "Relatório exportado com sucesso"
-    });
+    };
   };
 
   const getStatusBadge = (status: string) => {

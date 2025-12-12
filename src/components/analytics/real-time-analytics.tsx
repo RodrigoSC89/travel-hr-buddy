@@ -157,14 +157,14 @@ const RealTimeAnalytics = () => {
     toast({
       title: "Exportando dados",
       description: "Relatório será enviado por email"
-    });
+    };
   };
 
   const shareReport = () => {
     toast({
       title: "Compartilhando relatório",
       description: "Link compartilhado copiado"
-    });
+    };
   };
 
   const getTrendIcon = (trend: string) => {

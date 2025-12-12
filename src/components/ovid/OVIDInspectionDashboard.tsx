@@ -44,7 +44,7 @@ export const OVIDInspectionDashboard: React.FC = () => {
     nonCompliant: 0,
     notApplicable: 0,
     pending: getTotalQuestions(),
-  });
+  };
 
   const [checklistAnswers, setChecklistAnswers] = useState<Record<string, { 
     answer: "yes" | "no" | "na" | null;
@@ -100,7 +100,7 @@ export const OVIDInspectionDashboard: React.FC = () => {
       
       return newStatus;
     });
-  };
+  });
 
   const handleExport = () => {
     toast.success("Exportando relatório OVID...");

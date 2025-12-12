@@ -50,7 +50,7 @@ export const ResourceHints: React.FC<ResourceHintsProps> = memo(({
       link.crossOrigin = "anonymous";
       document.head.appendChild(link);
       links.push(link);
-    });
+});
 
     // Cleanup on unmount
     return () => {
@@ -58,7 +58,7 @@ export const ResourceHints: React.FC<ResourceHintsProps> = memo(({
         if (link.parentNode) {
           link.parentNode.removeChild(link);
         }
-      });
+      };
     };
   }, [preconnectDomains]);
 

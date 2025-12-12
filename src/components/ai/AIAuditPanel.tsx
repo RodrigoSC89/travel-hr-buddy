@@ -30,7 +30,7 @@ export const AIAuditPanel: React.FC = () => {
     avgConfidence: 0,
     approvalRate: 0,
     ragUsageRate: 0
-  });
+  };
   const [loading, setLoading] = useState(true);
   const [searchTerm, setSearchTerm] = useState("");
   const [filter, setFilter] = useState<string>("all");
@@ -60,7 +60,7 @@ export const AIAuditPanel: React.FC = () => {
         avgConfidence: statsData.avgConfidence,
         approvalRate: statsData.approvalRate,
         ragUsageRate: statsData.ragUsageRate
-      });
+      };
     } catch (error) {
       console.error("Error loading AI logs:", error);
       toast.error("Erro ao carregar logs de IA");
@@ -97,7 +97,7 @@ export const AIAuditPanel: React.FC = () => {
       (filter === "rag" && log.rag_enabled);
     
     return matchesSearch && matchesFilter;
-  });
+  };
 
   const getConfidenceBadge = (confidence: number | undefined) => {
     if (!confidence) return null;

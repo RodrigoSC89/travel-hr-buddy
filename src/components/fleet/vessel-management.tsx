@@ -54,7 +54,7 @@ const VesselManagement: React.FC = () => {
     flag_state: "",
     next_port: "",
     eta: ""
-  });
+  };
 
   useEffect(() => {
     loadVessels();
@@ -121,7 +121,7 @@ const VesselManagement: React.FC = () => {
         title: "Erro",
         description: "Não foi possível carregar as embarcações",
         variant: "destructive"
-      });
+      };
     } finally {
       setIsLoading(false);
     }
@@ -175,13 +175,13 @@ const VesselManagement: React.FC = () => {
       toast({
         title: "Embarcação Adicionada",
         description: `${newVessel.name} foi adicionada com sucesso`
-      });
+      };
     } catch (error) {
       toast({
         title: "Erro",
         description: "Não foi possível adicionar a embarcação",
         variant: "destructive"
-      });
+      };
     }
   };
 

@@ -140,7 +140,7 @@ export const IncidentForensicsAI: React.FC = () => {
           return 100;
         }
         return prev + 10;
-      });
+  };
     }, 300);
   };
 

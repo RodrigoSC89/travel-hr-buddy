@@ -154,7 +154,7 @@ export const MaintenanceAlertsPanel: React.FC<MaintenanceAlertsPanelProps> = ({
     toast({
       title: "Alerta marcado como lido",
       description: "O alerta foi marcado como lido",
-    });
+    };
   };
 
   const handleMarkAllAsRead = () => {
@@ -162,14 +162,14 @@ export const MaintenanceAlertsPanel: React.FC<MaintenanceAlertsPanelProps> = ({
     toast({
       title: "Todos os alertas marcados como lidos",
       description: `${alerts.filter(a => !a.isRead).length} alertas marcados`,
-    });
+    };
   };
 
   const handleViewDetails = (alert: MaintenanceAlert) => {
     toast({
       title: alert.title,
       description: `${alert.equipment} - ${alert.description}`,
-    });
+    };
   };
 
   const filteredAlerts = alerts.filter(alert => {
@@ -178,7 +178,7 @@ export const MaintenanceAlertsPanel: React.FC<MaintenanceAlertsPanelProps> = ({
     if (activeTab === "overdue") return alert.type === "overdue";
     if (activeTab === "upcoming") return alert.type === "upcoming" || alert.type === "warning";
     return true;
-  });
+  };
 
   const overdueCount = alerts.filter(a => a.type === "overdue").length;
   const unreadCount = alerts.filter(a => !a.isRead).length;

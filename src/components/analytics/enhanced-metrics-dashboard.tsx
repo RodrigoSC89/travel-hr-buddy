@@ -57,7 +57,7 @@ const EnhancedMetricsDashboard = () => {
       retention: { value: 89.5, change: 5.2, trend: "up", target: 90 }
     },
     timeRange: "last30days"
-  });
+  };
 
   const monthlyData = [
     { month: "Jan", revenue: 2100000, users: 980, efficiency: 91.2 },
@@ -139,7 +139,7 @@ const EnhancedMetricsDashboard = () => {
     toast({
       title: "Métricas atualizadas",
       description: "Dados atualizados com sucesso",
-    });
+    };
   };
 
   const getTrendIcon = (trend: string) => {

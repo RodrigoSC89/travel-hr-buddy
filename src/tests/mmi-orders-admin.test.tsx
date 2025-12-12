@@ -65,8 +65,8 @@ describe("MMI Orders Admin Page", () => {
 
     await waitFor(() => {
       expect(screen.queryByText(/Carregando/i)).not.toBeInTheDocument();
-    });
-  });
+  };
+  };
 
   it("should display status badges", () => {
     const statuses = [
@@ -80,7 +80,7 @@ describe("MMI Orders Admin Page", () => {
       expect(status).toBeDefined();
       expect(label).toBeDefined();
       expect(emoji).toBeDefined();
-    });
+});
   });
 
   it("should disable editing for completed orders", () => {

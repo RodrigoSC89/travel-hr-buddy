@@ -72,7 +72,7 @@ const CrewManagement = () => {
         title: "Erro",
         description: "Falha ao carregar dados da tripulação",
         variant: "destructive",
-      });
+      };
     } finally {
       setLoading(false);
     }
@@ -164,7 +164,7 @@ const CrewManagement = () => {
               <CrewList
                 crewMembers={crewMembers}
                 onViewMember={setSelectedMember}
-                onAddMember={() => setShowAddDialog(true)}
+                onAddMember={() => setShowAddDialog(true}
                 onExport={handleExport}
               />
             </TabsContent>

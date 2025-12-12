@@ -112,7 +112,7 @@ export const PeotramAuditForm: React.FC<PeotramAuditFormProps> = ({
           responses: elementResponses,
           element_name: currentElement.name
         }
-      });
+      };
 
       if (error) throw error;
 
@@ -124,13 +124,13 @@ export const PeotramAuditForm: React.FC<PeotramAuditFormProps> = ({
       toast({
         title: "Análise AI Concluída",
         description: "A análise inteligente do elemento foi realizada com sucesso.",
-      });
+      };
     } catch (error) {
       toast({
         title: "Erro na Análise",
         description: "Não foi possível executar a análise IA.",
         variant: "destructive",
-      });
+      };
     } finally {
       setIsAnalyzing(false);
     }
@@ -166,7 +166,7 @@ export const PeotramAuditForm: React.FC<PeotramAuditFormProps> = ({
       toast({
         title: "Auditoria Salva",
         description: "Dados da auditoria salvos com sucesso.",
-      });
+      };
 
       onSave();
     } catch (error) {
@@ -174,7 +174,7 @@ export const PeotramAuditForm: React.FC<PeotramAuditFormProps> = ({
         title: "Erro",
         description: "Não foi possível salvar a auditoria.",
         variant: "destructive",
-      });
+      };
     }
   };
 
@@ -197,7 +197,7 @@ export const PeotramAuditForm: React.FC<PeotramAuditFormProps> = ({
     toast({
       title: "Auditoria Concluída",
       description: `Auditoria finalizada com ${complianceScore}% de compliance.`,
-    });
+    };
 
     onComplete();
   };
@@ -486,13 +486,13 @@ const RequirementForm: React.FC<{
         corrective_action: "",
         responsible_person: "",
         target_date: ""
-      });
+      };
     }
     
     toast({
       title: "Requisito Salvo",
       description: `Avaliação do requisito ${requirementCode} salva.`,
-    });
+    };
   };
 
   return (

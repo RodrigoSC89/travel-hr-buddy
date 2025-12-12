@@ -162,7 +162,7 @@ export const PeotramRealtimeMonitoring: React.FC = () => {
     fuelEfficiency: 89.2,
     emissionCompliance: 94.7,
     safetyIncidents: 0
-  });
+  };
 
   const metrics = getMetrics();
 

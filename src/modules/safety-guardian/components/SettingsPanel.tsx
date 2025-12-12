@@ -65,7 +65,7 @@ export const SettingsPanel: React.FC<SettingsPanelProps> = ({
       
       current[parts[parts.length - 1]] = value;
       return newSettings;
-    });
+    };
   };
 
   return (
@@ -160,7 +160,7 @@ export const SettingsPanel: React.FC<SettingsPanelProps> = ({
                 </div>
                 <Switch
                   checked={settings.ddsRequiredDaily}
-                  onCheckedChange={(checked) => updateSettings("ddsRequiredDaily", checked)}
+                  onCheckedChange={(checked) => updateSettings("ddsRequiredDaily", checked}
                 />
               </div>
             </CardContent>
@@ -252,7 +252,7 @@ export const SettingsPanel: React.FC<SettingsPanelProps> = ({
                 </div>
                 <Switch
                   checked={settings.notificationPreferences.email}
-                  onCheckedChange={(checked) => updateSettings("notificationPreferences.email", checked)}
+                  onCheckedChange={(checked) => updateSettings("notificationPreferences.email", checked}
                 />
               </div>
 
@@ -272,7 +272,7 @@ export const SettingsPanel: React.FC<SettingsPanelProps> = ({
                 </div>
                 <Switch
                   checked={settings.notificationPreferences.push}
-                  onCheckedChange={(checked) => updateSettings("notificationPreferences.push", checked)}
+                  onCheckedChange={(checked) => updateSettings("notificationPreferences.push", checked}
                 />
               </div>
 
@@ -292,7 +292,7 @@ export const SettingsPanel: React.FC<SettingsPanelProps> = ({
                 </div>
                 <Switch
                   checked={settings.notificationPreferences.sms}
-                  onCheckedChange={(checked) => updateSettings("notificationPreferences.sms", checked)}
+                  onCheckedChange={(checked) => updateSettings("notificationPreferences.sms", checked}
                 />
               </div>
             </CardContent>
@@ -325,7 +325,7 @@ export const SettingsPanel: React.FC<SettingsPanelProps> = ({
                 </div>
                 <Switch
                   checked={settings.aiSettings.predictiveAnalysisEnabled}
-                  onCheckedChange={(checked) => updateSettings("aiSettings.predictiveAnalysisEnabled", checked)}
+                  onCheckedChange={(checked) => updateSettings("aiSettings.predictiveAnalysisEnabled", checked}
                 />
               </div>
 
@@ -345,7 +345,7 @@ export const SettingsPanel: React.FC<SettingsPanelProps> = ({
                 </div>
                 <Switch
                   checked={settings.aiSettings.autoRecommendationsEnabled}
-                  onCheckedChange={(checked) => updateSettings("aiSettings.autoRecommendationsEnabled", checked)}
+                  onCheckedChange={(checked) => updateSettings("aiSettings.autoRecommendationsEnabled", checked}
                 />
               </div>
 
@@ -365,7 +365,7 @@ export const SettingsPanel: React.FC<SettingsPanelProps> = ({
                 </div>
                 <Switch
                   checked={settings.aiSettings.riskAssessmentEnabled}
-                  onCheckedChange={(checked) => updateSettings("aiSettings.riskAssessmentEnabled", checked)}
+                  onCheckedChange={(checked) => updateSettings("aiSettings.riskAssessmentEnabled", checked}
                 />
               </div>
 
@@ -385,4 +385,4 @@ export const SettingsPanel: React.FC<SettingsPanelProps> = ({
       </Tabs>
     </div>
   );
-};
+});

@@ -111,8 +111,8 @@ const InteractiveStatsCard = ({ icon: Icon, title, value, change, trend, descrip
         ${isVisible ? "opacity-100 translate-y-0" : "opacity-0 translate-y-8"}
         ${isHovered ? `scale-105 ${colors.glow} shadow-2xl` : "shadow-lg"}
         bg-gradient-to-br ${colors.gradient} ${colors.border} border backdrop-blur-sm`}
-      onMouseEnter={() => setIsHovered(true)}
-      onMouseLeave={() => setIsHovered(false)}
+      onMouseEnter={() => setIsHovered(true}
+      onMouseLeave={() => setIsHovered(false}
     >
       {/* Animated Background */}
       <div className="absolute inset-0 bg-gradient-to-br from-primary/5 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500" />
@@ -560,7 +560,7 @@ export const EnhancedDashboard = memo(() => {
                           size="sm" 
                           className="justify-start h-14 hover:scale-105 transition-all duration-300 group relative overflow-hidden
                             hover:border-primary/50 hover:bg-primary/5"
-                          onClick={() => window.open(action.url, "_blank")}
+                          onClick={() => window.open(action.url, "_blank"}
                         >
                           <div className="absolute inset-0 bg-gradient-to-r from-primary/10 to-transparent opacity-0 
                             group-hover:opacity-100 transition-opacity duration-300" />

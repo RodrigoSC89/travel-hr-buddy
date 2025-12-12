@@ -174,7 +174,7 @@ export default function PromptPanel() {
           title: currentPrompt.title,
           prompt: currentPrompt.prompt
         })
-      });
+      };
       
       if (!res.ok) {
         throw new Error(`HTTP ${res.status}`);

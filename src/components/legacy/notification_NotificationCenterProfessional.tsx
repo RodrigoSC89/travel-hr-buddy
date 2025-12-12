@@ -517,7 +517,7 @@ export default function NotificationCenterProfessional() {
           prompt: `Analise as notificações do sistema: ${unreadTotal} não lidas, ${unreadCritical} críticas. Forneça um resumo executivo e recomendações de priorização.`,
           context: "notification_analysis",
         },
-      });
+      };
 
       if (error) throw error;
       
@@ -547,7 +547,7 @@ export default function NotificationCenterProfessional() {
       dateRange: "all",
       showRead: true,
       showUnread: true,
-    });
+    };
     setSelectedType(null);
     setSearchQuery("");
     toast({ title: "Filtros limpos" });
@@ -699,7 +699,7 @@ export default function NotificationCenterProfessional() {
               <div className="flex items-center gap-2 pt-3 border-t mt-3">
                 <Checkbox
                   checked={selectedNotifications.length === filteredNotifications.length}
-                  onCheckedChange={(checked) => handleSelectAll(!!checked)}
+                  onCheckedChange={(checked) => handleSelectAll(!!checked}
                 />
                 <span className="text-sm text-muted-foreground">
                   {selectedNotifications.length} selecionada(s)
@@ -1204,14 +1204,14 @@ export default function NotificationCenterProfessional() {
                 <Button 
                   variant="outline" 
                   size="icon"
-                  onClick={() => selectedNotification && handleToggleStar(selectedNotification.id)}
+                  onClick={() => selectedNotification && handleToggleStar(selectedNotification.id}
                 >
                   <Star className={`h-4 w-4 ${selectedNotification?.isStarred ? "fill-yellow-500 text-yellow-500" : ""}`} />
                 </Button>
                 <Button 
                   variant="outline" 
                   size="icon"
-                  onClick={() => selectedNotification && handleArchive(selectedNotification.id)}
+                  onClick={() => selectedNotification && handleArchive(selectedNotification.id}
                 >
                   <Archive className="h-4 w-4" />
                 </Button>
@@ -1219,7 +1219,7 @@ export default function NotificationCenterProfessional() {
                   variant="outline" 
                   size="icon"
                   className="text-destructive"
-                  onClick={() => selectedNotification && handleDelete(selectedNotification)}
+                  onClick={() => selectedNotification && handleDelete(selectedNotification}
                 >
                   <Trash2 className="h-4 w-4" />
                 </Button>

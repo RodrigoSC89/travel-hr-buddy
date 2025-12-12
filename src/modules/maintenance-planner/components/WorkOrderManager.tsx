@@ -139,7 +139,7 @@ export default function WorkOrderManager() {
         title: "Erro",
         description: "Preencha título e equipamento",
         variant: "destructive",
-      });
+      };
       return;
     }
 
@@ -163,7 +163,7 @@ export default function WorkOrderManager() {
     toast({
       title: "OS Criada",
       description: `${newOrder.number} criada com sucesso`,
-    });
+    };
   };
 
   const handleApprove = (id: string) => {
@@ -176,7 +176,7 @@ export default function WorkOrderManager() {
   const filteredOrders = workOrders.filter((os) => {
     if (filter === "all") return true;
     return os.status === filter;
-  });
+  };
 
   return (
     <div className="space-y-4">

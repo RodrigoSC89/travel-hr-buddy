@@ -43,7 +43,7 @@ export const AuthGuard: React.FC<AuthGuardProps> = ({
       structuredLogger.warn("Unauthorized access attempt", {
         path: location.pathname,
         timestamp: new Date().toISOString(),
-      });
+};
       
       navigate(fallbackPath, {
         state: { from: location.pathname },
@@ -142,7 +142,7 @@ export const useAuthGuard = memo(() => {
     } else {
       structuredLogger.warn("Action requires authentication", {
         action: callback.name || "anonymous",
-      });
+      };
     }
   };
 

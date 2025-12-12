@@ -88,7 +88,7 @@ export const DashboardWatchdog = memo(function({ onHeal }: DashboardWatchdogProp
         blank_screen: blankScreen,
         frozen_ui: frozenUI,
         missing_metrics: missingMetrics
-      });
+      };
     }
 
     return blankScreen || frozenUI || missingMetrics;
@@ -110,7 +110,7 @@ export const DashboardWatchdog = memo(function({ onHeal }: DashboardWatchdogProp
         missing_metrics: state.hasMissingMetrics,
         action: "auto_heal_attempt",
         attempt_number: state.autoHealAttempts + 1
-      });
+      };
 
       // Trigger re-render
       if (onHeal) {
@@ -132,13 +132,13 @@ export const DashboardWatchdog = memo(function({ onHeal }: DashboardWatchdogProp
           logWatchdogEvent({
             action: "auto_heal_success",
             attempt_number: state.autoHealAttempts + 1
-          });
+          };
         } else {
           logger.warn("[Watchdog] Auto-heal failed, issues persist");
           logWatchdogEvent({
             action: "auto_heal_failed",
             attempt_number: state.autoHealAttempts + 1
-          });
+          };
         }
         
         setIsHealing(false);
@@ -154,7 +154,7 @@ export const DashboardWatchdog = memo(function({ onHeal }: DashboardWatchdogProp
       await logWatchdogEvent({
         action: "auto_heal_error",
         error: error instanceof Error ? error.message : "Unknown error"
-      });
+      };
     }
   }, [state, onHeal, runWatchdogChecks]);
 
@@ -172,7 +172,7 @@ export const DashboardWatchdog = memo(function({ onHeal }: DashboardWatchdogProp
     id: "dashboard-watchdog-checks",
     callback: () => { runWatchdogChecks(); }, // Wrap to return void
     interval: 5000, // Check every 5 seconds
-  });
+  };
 
   useEffect(() => {
     // Track user interactions

@@ -294,6 +294,6 @@ const IoTRealtimeSensors: React.FC = () => {
       </div>
     </div>
   );
-};
+});
 
 export default IoTRealtimeSensors;

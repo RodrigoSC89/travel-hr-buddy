@@ -145,7 +145,7 @@ export const HRDashboard = memo(() => {
         title: "Erro",
         description: "Preencha todos os campos obrigatórios",
         variant: "destructive"
-      });
+      };
       return;
     }
 
@@ -180,7 +180,7 @@ export const HRDashboard = memo(() => {
     toast({
       title: "Funcionário criado",
       description: `${employee.name} foi adicionado ao sistema`,
-    });
+    };
   };
 
   const handleOpenCertificates = (employee: Employee) => {
@@ -199,7 +199,7 @@ export const HRDashboard = memo(() => {
     toast({
       title: "Funcionário removido",
       description: `${employee.name} foi removido do sistema`,
-    });
+    };
   };
 
   // Colunas para a tabela de funcionários
@@ -306,7 +306,7 @@ export const HRDashboard = memo(() => {
                          employee.department.toLowerCase().includes(searchTerm.toLowerCase());
     const matchesDepartment = selectedDepartment === "all" || employee.department === selectedDepartment;
     return matchesSearch && matchesDepartment;
-  });
+  };
 
   const departments = [...new Set(employees.map(emp => emp.department))];
 
@@ -508,7 +508,7 @@ export const HRDashboard = memo(() => {
             edit: (employee) => handleViewProfile(employee),
             delete: (employee) => setEmployeeToRemove(employee)
           }}
-          onRowClick={(employee) => handleViewProfile(employee)}
+          onRowClick={(employee) => handleViewProfile(employee}
         />
       ) : (
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
@@ -738,7 +738,7 @@ export const HRDashboard = memo(() => {
               toast({
                 title: "Edição em desenvolvimento",
                 description: "Funcionalidade de edição será implementada em breve",
-              });
+              };
             }}>
               Editar Funcionário
             </Button>
@@ -764,7 +764,7 @@ export const HRDashboard = memo(() => {
                       if (selectedEmployee) {
                         handleRemoveEmployee(selectedEmployee);
                         setEmployeeProfileOpen(false);
-                      };
+                      });
                     }}
                     className="bg-destructive text-destructive-foreground hover:bg-destructive/90"
                   >
@@ -778,7 +778,7 @@ export const HRDashboard = memo(() => {
       </Dialog>
 
       {/* Remove Employee Confirmation Dialog */}
-      <AlertDialog open={!!employeeToRemove} onOpenChange={() => setEmployeeToRemove(null)}>
+      <AlertDialog open={!!employeeToRemove} onOpenChange={() => setEmployeeToRemove(null}>
         <AlertDialogContent>
           <AlertDialogHeader>
             <AlertDialogTitle>Remover Funcionário</AlertDialogTitle>
@@ -790,7 +790,7 @@ export const HRDashboard = memo(() => {
           <AlertDialogFooter>
             <AlertDialogCancel>Cancelar</AlertDialogCancel>
             <AlertDialogAction 
-              onClick={() => employeeToRemove && handleRemoveEmployee(employeeToRemove)}
+              onClick={() => employeeToRemove && handleRemoveEmployee(employeeToRemove}
               className="bg-destructive text-destructive-foreground hover:bg-destructive/90"
             >
               Remover
@@ -811,4 +811,4 @@ export const HRDashboard = memo(() => {
       )}
     </div>
   );
-};
+});

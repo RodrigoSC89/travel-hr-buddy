@@ -122,7 +122,7 @@ interface SettingsData {
   };
 }
 
-export const EnhancedSettingsHub: React.FC = () => {
+const EnhancedSettingsHubComponent: React.FC = () => {
   const { user } = useAuth();
   const { toast } = useToast();
   
@@ -441,7 +441,7 @@ export const EnhancedSettingsHub: React.FC = () => {
     link.click();
     
     toast({
-      title: "📥 Configurações Exportadas",
+      title: "📊 Configurações Exportadas",
       description: "Arquivo de backup baixado com sucesso.",
     });
   };
@@ -556,23 +556,23 @@ export const EnhancedSettingsHub: React.FC = () => {
 
   const toggleTestMode = () => {
     setTestMode(!testMode);
-    toast({
-      title: testMode ? "🔧 Modo Produção" : "🧪 Modo Teste",
-      description: testMode 
-        ? "Voltando ao modo produção. Alterações afetarão o sistema."
-        : "Modo teste ativado. Alterações não afetarão outros usuários.",
-    });
+        toast({
+          title: "🔄 Modo de Teste",
+          description: settings.advanced.testMode
+          ? "Voltando ao modo produção. Alterações afetarão o sistema."
+          : "Modo teste ativado. Alterações não afetarão outros usuários.",
+        });
   };
 
   const togglePreviewMode = () => {
     const newPreviewMode = !previewMode;
     setPreviewMode(newPreviewMode);
-    toast({
-      title: newPreviewMode ? "👁️ Modo Prévia" : "💾 Modo Normal",
-      description: newPreviewMode
-        ? "Modo prévia ativado. Veja como as alterações afetarão o sistema."
-        : "Voltando ao modo normal.",
-    });
+        toast({
+          title: "🔍 Modo Prévia",
+          description: settings.advanced.previewMode
+          ? "Modo prévia ativado. Veja como as alterações afetarão o sistema."
+          : "Voltando ao modo normal.",
+        });
   };
 
   const getHealthColor = (score: number) => {
@@ -900,8 +900,9 @@ export const EnhancedSettingsHub: React.FC = () => {
           </TabsContent>
         </Tabs>
       </div>
-    </div>
-  );
+      </div>
+    );
 };
 
+export const EnhancedSettingsHub = memo(EnhancedSettingsHubComponent);
 export default EnhancedSettingsHub;

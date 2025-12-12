@@ -235,7 +235,7 @@ export const MaintenanceTasksTable: React.FC<MaintenanceTasksTableProps> = ({ on
     toast({
       title: "Lista atualizada",
       description: "As tarefas foram atualizadas com sucesso",
-    });
+    };
   };
 
   const handleStartTask = (taskId: string) => {
@@ -247,7 +247,7 @@ export const MaintenanceTasksTable: React.FC<MaintenanceTasksTableProps> = ({ on
     toast({
       title: "Tarefa iniciada",
       description: "A tarefa foi marcada como em andamento",
-    });
+    };
   };
 
   const handleCompleteTask = (taskId: string) => {
@@ -261,7 +261,7 @@ export const MaintenanceTasksTable: React.FC<MaintenanceTasksTableProps> = ({ on
     toast({
       title: "Tarefa concluída",
       description: "A tarefa foi marcada como concluída",
-    });
+    };
   };
 
   const filteredTasks = tasks.filter(task => {
@@ -273,7 +273,7 @@ export const MaintenanceTasksTable: React.FC<MaintenanceTasksTableProps> = ({ on
     const matchesStatus = statusFilter === "all" || task.status === statusFilter;
     const matchesType = typeFilter === "all" || task.type === typeFilter;
     return matchesSearch && matchesStatus && matchesType;
-  });
+  };
 
   return (
     <Card>

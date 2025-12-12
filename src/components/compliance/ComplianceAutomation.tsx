@@ -152,7 +152,7 @@ export const ComplianceAutomation: React.FC = () => {
     nonCompliant: 0,
     pending: 0,
     expiring: 0
-  });
+  };
 
   useEffect(() => {
     const newStats = items.reduce((acc, item) => {

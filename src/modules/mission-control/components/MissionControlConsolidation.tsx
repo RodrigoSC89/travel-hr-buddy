@@ -45,7 +45,7 @@ export const MissionControlConsolidation: React.FC = () => {
     active: 0,
     completed: 0,
     failed: 0
-  });
+  };
   const [activeTab, setActiveTab] = useState("workflows");
 
   useEffect(() => {
@@ -59,7 +59,7 @@ export const MissionControlConsolidation: React.FC = () => {
       active: 5,
       completed: 35,
       failed: 2
-    });
+    };
   };
 
   const exportMissionReport = async () => {

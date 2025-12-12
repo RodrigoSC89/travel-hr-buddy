@@ -57,7 +57,7 @@ const AICommandCenter = () => {
           );
         }
         return [...prev, { role: "assistant", content: assistantContent, timestamp: new Date().toISOString() }];
-      });
+  };
     };
 
     try {
@@ -71,10 +71,10 @@ const AICommandCenter = () => {
             title: "Erro",
             description: "Não foi possível processar o comando",
             variant: "destructive",
-          });
+          };
           setIsLoading(false);
         },
-      });
+      };
     } catch (error) {
       console.error("Error sending message:", error);
       console.error("Error sending message:", error);
@@ -87,7 +87,7 @@ const AICommandCenter = () => {
     toast({
       title: "Chat limpo",
       description: "Histórico de conversação removido",
-    });
+    };
   };
 
   return (

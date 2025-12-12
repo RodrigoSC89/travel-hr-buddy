@@ -265,7 +265,7 @@ export const ApiDocumentation: React.FC = () => {
                 <Collapsible
                   key={category}
                   open={expandedCategories.includes(category)}
-                  onOpenChange={() => toggleCategory(category)}
+                  onOpenChange={() => toggleCategory(category}
                 >
                   <CollapsibleTrigger className="flex items-center gap-2 w-full p-2 rounded-lg hover:bg-muted transition-colors">
                     {expandedCategories.includes(category) 
@@ -373,7 +373,7 @@ export const ApiDocumentation: React.FC = () => {
                           variant="ghost"
                           size="icon"
                           className="absolute top-2 right-2"
-                          onClick={() => copyCode(JSON.stringify(selectedEndpoint.requestBody?.example, null, 2))}
+                          onClick={() => copyCode(JSON.stringify(selectedEndpoint.requestBody?.example, null, 2}
                         >
                           <Copy className="h-4 w-4" />
                         </Button>
@@ -396,7 +396,7 @@ export const ApiDocumentation: React.FC = () => {
                         variant="ghost"
                         size="icon"
                         className="absolute top-2 right-2"
-                        onClick={() => copyCode(JSON.stringify(selectedEndpoint.response.example, null, 2))}
+                        onClick={() => copyCode(JSON.stringify(selectedEndpoint.response.example, null, 2}
                       >
                         <Copy className="h-4 w-4" />
                       </Button>
@@ -413,7 +413,7 @@ export const ApiDocumentation: React.FC = () => {
                       variant="ghost"
                       size="icon"
                       className="absolute top-2 right-2"
-                      onClick={() => copyCode(generateCurlExample(selectedEndpoint))}
+                      onClick={() => copyCode(generateCurlExample(selectedEndpoint}
                     >
                       <Copy className="h-4 w-4" />
                     </Button>
@@ -433,6 +433,6 @@ export const ApiDocumentation: React.FC = () => {
       </Card>
     </div>
   );
-};
+});
 
 export default ApiDocumentation;

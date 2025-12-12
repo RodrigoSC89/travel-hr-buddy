@@ -226,7 +226,7 @@ const NotificationItem: React.FC<NotificationItemProps> = ({
           ? "bg-muted/30 border-border"
           : "bg-card border-primary/20 shadow-sm"
       )}
-      onClick={() => !isRead && onMarkAsRead(notification.id)}
+      onClick={() => !isRead && onMarkAsRead(notification.id}
     >
       <div className="flex gap-3">
         {/* Icon */}
@@ -310,7 +310,7 @@ const NotificationItem: React.FC<NotificationItemProps> = ({
       )}
     </motion.div>
   );
-};
+});
 
 // ============================================
 // MAIN HOOK
@@ -373,7 +373,7 @@ export const useUnifiedNotifications = memo(function(userId?: string, autoRefres
         title: "Erro",
         description: "Não foi possível marcar como lida",
         variant: "destructive",
-      });
+      };
     }
   }, [toast]);
 
@@ -396,13 +396,13 @@ export const useUnifiedNotifications = memo(function(userId?: string, autoRefres
       toast({
         title: "Sucesso",
         description: "Todas as notificações foram marcadas como lidas",
-      });
+      };
     } catch (error) {
       toast({
         title: "Erro",
         description: "Não foi possível marcar todas como lidas",
         variant: "destructive",
-      });
+      };
     }
   }, [effectiveUserId, toast]);
 
@@ -420,13 +420,13 @@ export const useUnifiedNotifications = memo(function(userId?: string, autoRefres
       toast({
         title: "Removida",
         description: "Notificação removida com sucesso",
-      });
+      };
     } catch (error) {
       toast({
         title: "Erro",
         description: "Não foi possível remover notificação",
         variant: "destructive",
-      });
+      };
     }
   }, [toast]);
 
@@ -446,13 +446,13 @@ export const useUnifiedNotifications = memo(function(userId?: string, autoRefres
       toast({
         title: "Sucesso",
         description: "Todas as notificações foram removidas",
-      });
+      };
     } catch (error) {
       toast({
         title: "Erro",
         description: "Não foi possível limpar notificações",
         variant: "destructive",
-      });
+      };
     }
   }, [effectiveUserId, toast]);
 
@@ -680,7 +680,7 @@ const PopoverVariant: React.FC<PopoverVariantProps> = ({
     default:
       return true;
     }
-  });
+};
 
   return (
     <Popover open={isOpen} onOpenChange={setIsOpen}>
@@ -844,7 +844,7 @@ const PageVariant: React.FC<PageVariantProps> = ({
     if (filter === "unread") return !n.read && !n.isRead && !n.is_read;
     if (filter === "high") return n.priority === "high" || n.priority === "urgent" || n.priority === "critical";
     return true;
-  });
+};
 
   if (loading) {
     return (
@@ -1060,12 +1060,12 @@ export const NotificationBell: React.FC<NotificationBellProps> = ({
       <NotificationCenter
         variant="panel"
         open={open}
-        onClose={() => setOpen(false)}
+        onClose={() => setOpen(false}
         userId={userId}
       />
     </>
   );
-};
+  });
 
 // ============================================
 // REAL-TIME NOTIFICATION CENTER (Alias)

@@ -131,18 +131,18 @@ export const SmartJobCard: React.FC<SmartJobCardProps> = ({
               </DropdownMenuTrigger>
               <DropdownMenuContent align="end">
                 {job.status === "pendente" && (
-                  <DropdownMenuItem onClick={() => onStatusChange?.(job.id, "em_andamento")}>
+                  <DropdownMenuItem onClick={() => onStatusChange?.(job.id, "em_andamento"}>
                     <Play className="h-4 w-4 mr-2" />
                     Iniciar
                   </DropdownMenuItem>
                 )}
                 {job.status === "em_andamento" && (
                   <>
-                    <DropdownMenuItem onClick={() => onStatusChange?.(job.id, "concluido")}>
+                    <DropdownMenuItem onClick={() => onStatusChange?.(job.id, "concluido"}>
                       <CheckCircle className="h-4 w-4 mr-2" />
                       Concluir
                     </DropdownMenuItem>
-                    <DropdownMenuItem onClick={() => onStatusChange?.(job.id, "pendente")}>
+                    <DropdownMenuItem onClick={() => onStatusChange?.(job.id, "pendente"}>
                       <Pause className="h-4 w-4 mr-2" />
                       Pausar
                     </DropdownMenuItem>
@@ -154,7 +154,7 @@ export const SmartJobCard: React.FC<SmartJobCardProps> = ({
                   Postergar
                 </DropdownMenuItem>
                 {!job.os_vinculada && (
-                  <DropdownMenuItem onClick={() => onOpenOS?.(job.id)}>
+                  <DropdownMenuItem onClick={() => onOpenOS?.(job.id}>
                     <Link2 className="h-4 w-4 mr-2" />
                     Abrir OS
                   </DropdownMenuItem>

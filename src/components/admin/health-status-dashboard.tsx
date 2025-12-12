@@ -35,7 +35,7 @@ export const HealthStatusDashboard: React.FC = () => {
     memoryUsage: 0,
     requestCount: 0,
     avgResponseTime: 0
-  });
+  };
   const [lastUpdate, setLastUpdate] = useState<Date>(new Date());
 
   // Calculate uptime since page load

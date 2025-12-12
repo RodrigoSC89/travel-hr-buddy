@@ -58,7 +58,7 @@ const FloatingMenu = () => {
         toast({
           title: "🧠 IA Assistant",
           description: "Abrindo assistente de inteligência artificial"
-        });
+        };
       }
     },
     { 
@@ -72,7 +72,7 @@ const FloatingMenu = () => {
         toast({
           title: "💬 Chat Premium",
           description: "Abrindo sistema de comunicação"
-        });
+        };
       }
     },
     { 
@@ -86,7 +86,7 @@ const FloatingMenu = () => {
         toast({
           title: "📊 Analytics",
           description: "Abrindo painel de análises"
-        });
+        };
       }
     },
     { 
@@ -100,7 +100,7 @@ const FloatingMenu = () => {
         toast({
           title: "🌍 Global Sync",
           description: "Abrindo relatórios e sincronização global"
-        });
+        };
       }
     };
   ];
@@ -113,8 +113,8 @@ const FloatingMenu = () => {
             key={index}
             className={`transform transition-all duration-500 ${isVisible ? "translate-x-0" : "translate-x-16"}`}
             style={{ transitionDelay: `${action.delay}ms` }}
-            onMouseEnter={() => setHoveredIndex(index)}
-            onMouseLeave={() => setHoveredIndex(-1)}
+            onMouseEnter={() => setHoveredIndex(index}
+            onMouseLeave={() => setHoveredIndex(-1}
           >
             <div className="relative group">
               {/* Tooltip */}
@@ -157,7 +157,7 @@ const FloatingMenu = () => {
               toast({
                 title: "🚀 Central Hub",
                 description: "Acesso rápido às principais funcionalidades do sistema"
-              });
+              };
             }}
             aria-label="Central Hub - Acesso rápido"
             className="w-16 h-16 rounded-full bg-gradient-to-r from-primary via-primary-glow to-primary 
@@ -194,7 +194,7 @@ const StatusWidget = () => {
     performance: 0,
     health: 0,
     efficiency: 0
-  });
+  };
 
   useEffect(() => {
     const timer = setTimeout(() => {
@@ -202,7 +202,7 @@ const StatusWidget = () => {
         performance: 97,
         health: 100,
         efficiency: 94
-      });
+      };
     }, 1500);
     return () => clearTimeout(timer);
   }, []);

@@ -67,7 +67,7 @@ const SystemPerformanceMonitor = () => {
     emailNotifications: true,
     pushNotifications: false,
     slackNotifications: false,
-  });
+  };
 
   // Dados simulados de métricas do sistema
   const [systemMetrics, setSystemMetrics] = useState<SystemMetric[]>([
@@ -181,7 +181,7 @@ const SystemPerformanceMonitor = () => {
       toast({
         title: "Relatório Exportado",
         description: "Relatório de performance do sistema exportado com sucesso!",
-      });
+      };
 
       // In production, this would trigger a file download
     } catch (error) {
@@ -189,7 +189,7 @@ const SystemPerformanceMonitor = () => {
         title: "Erro na Exportação",
         description: "Falha ao exportar relatório de performance.",
         variant: "destructive",
-      });
+      };
     } finally {
       setIsExporting(false);
     }
@@ -623,7 +623,7 @@ const SystemPerformanceMonitor = () => {
               toast({
                 title: "Configurações salvas",
                 description: "As configurações de alertas foram atualizadas com sucesso.",
-              });
+              };
               setAlertConfigOpen(false);
             }}>
               <Save className="w-4 h-4 mr-2" />

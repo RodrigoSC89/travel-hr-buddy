@@ -71,7 +71,7 @@ export const EmployeeRequests = memo(function() {
       if (error) throw error;
       return (data || []) as EmployeeRequest[];
     },
-  });
+  };
 
   const createRequestMutation = useMutation({
     mutationFn: async () => {
@@ -111,11 +111,11 @@ export const EmployeeRequests = memo(function() {
       toast({
         title: "Solicitação criada",
         description: "Sua solicitação foi enviada para aprovação.",
-      });
+      };
       resetForm();
       setIsDialogOpen(false);
     },
-  });
+  };
 
   const resetForm = () => {
     setTitle("");
@@ -166,7 +166,7 @@ export const EmployeeRequests = memo(function() {
             <div className="space-y-4">
               <div>
                 <label className="text-sm font-medium">Tipo de Solicitação</label>
-                <Select value={requestType} onValueChange={(v) => setRequestType(v as RequestType)}>
+                <Select value={requestType} onValueChange={(v) => setRequestType(v as RequestType}>
                   <SelectTrigger>
                     <SelectValue />
                   </SelectTrigger>

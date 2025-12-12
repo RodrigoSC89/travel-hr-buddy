@@ -51,7 +51,7 @@ export const DocumentProcessor: React.FC = () => {
         title: "Arquivo muito grande",
         description: "O arquivo deve ter no máximo 10MB",
         variant: "destructive",
-      });
+      };
       return;
     }
 
@@ -68,7 +68,7 @@ export const DocumentProcessor: React.FC = () => {
         title: "Tipo de arquivo não suportado",
         description: "Suportamos PDF, DOC, DOCX, TXT e CSV",
         variant: "destructive",
-      });
+      };
       return;
     }
 
@@ -87,7 +87,7 @@ export const DocumentProcessor: React.FC = () => {
             return 90;
           }
           return prev + 10;
-        });
+  });
       }, 200);
 
       // Convert file to base64 for processing
@@ -101,7 +101,7 @@ export const DocumentProcessor: React.FC = () => {
           fileContent,
           fileSize: file.size
         }
-      });
+      };
 
       if (progressIntervalRef.current) {
         clearInterval(progressIntervalRef.current);
@@ -130,7 +130,7 @@ export const DocumentProcessor: React.FC = () => {
         toast({
           title: "Documento Processado",
           description: `${file.name} foi analisado com sucesso`,
-        });
+        };
       } else {
         throw new Error(data.error || "Erro no processamento");
       }
@@ -144,7 +144,7 @@ export const DocumentProcessor: React.FC = () => {
         title: "Erro no Processamento",
         description: error instanceof Error ? error.message : "Falha ao processar documento",
         variant: "destructive",
-      });
+      };
     } finally {
       setIsProcessing(false);
       setUploadProgress(0);
@@ -166,7 +166,7 @@ export const DocumentProcessor: React.FC = () => {
         }
       };
       reader.onerror = error => reject(error);
-    });
+  };
   };
 
   const exportAnalysis = (doc: ProcessedDocument) => {
@@ -198,7 +198,7 @@ export const DocumentProcessor: React.FC = () => {
     toast({
       title: "Documento Removido",
       description: "Análise foi removida da lista",
-    });
+    };
   };
 
   const getSentimentColor = (sentiment: string) => {

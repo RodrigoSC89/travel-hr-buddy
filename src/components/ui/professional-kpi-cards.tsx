@@ -215,6 +215,6 @@ const ProfessionalKPICards = () => {
       })}
     </div>
   );
-};
+});
 
 export default ProfessionalKPICards;

@@ -81,7 +81,7 @@ const CrewWellbeing = () => {
         </TabsContent>
 
         <TabsContent value="checkin" className="space-y-6">
-          <HealthCheckInForm onSuccess={() => setActiveTab("dashboard")} />
+          <HealthCheckInForm onSuccess={() => setActiveTab("dashboard"} />
         </TabsContent>
 
         <TabsContent value="dashboard" className="space-y-6">

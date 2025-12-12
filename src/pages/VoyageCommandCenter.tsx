@@ -353,7 +353,7 @@ export default function VoyageCommandCenter() {
           </div>
         </div>
         <div className="flex gap-2">
-          <Button variant="outline" onClick={() => toast.info("Exportando relatório...")}>
+          <Button variant="outline" onClick={() => toast.info("Exportando relatório..."}>
             <Download className="h-4 w-4 mr-2" />
             Exportar
           </Button>
@@ -693,7 +693,7 @@ export default function VoyageCommandCenter() {
                   <Input 
                     placeholder="Pergunte ao Copiloto IA..."
                     value={aiCopilotInput}
-                    onChange={e => setAiCopilotInput(e.target.value)}
+                    onChange={e => setAiCopilotInput(e.target.value}
                     onKeyDown={e => e.key === "Enter" && handleAiCopilotSend()}
                   />
                   <Button onClick={handleAiCopilotSend}>

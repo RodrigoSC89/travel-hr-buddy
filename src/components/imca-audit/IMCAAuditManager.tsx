@@ -101,7 +101,7 @@ export const IMCAAuditManager = memo(function({
         title: "Campos obrigatórios",
         description: "Preencha categoria e pergunta.",
         variant: "destructive"
-      });
+      };
       return;
     }
 
@@ -132,7 +132,7 @@ export const IMCAAuditManager = memo(function({
     toast({
       title: "Item adicionado",
       description: "Novo item de checklist adicionado com sucesso."
-    });
+    };
   };
 
   const handleUpdateItem = () => {
@@ -142,7 +142,7 @@ export const IMCAAuditManager = memo(function({
     toast({
       title: "Item atualizado",
       description: "Item de checklist atualizado com sucesso."
-    });
+    };
   };
 
   const handleAddCategory = () => {
@@ -151,7 +151,7 @@ export const IMCAAuditManager = memo(function({
         title: "Campos obrigatórios",
         description: "Preencha código e nome da categoria.",
         variant: "destructive"
-      });
+      };
       return;
     }
 
@@ -162,7 +162,7 @@ export const IMCAAuditManager = memo(function({
     toast({
       title: "Categoria criada",
       description: "Nova categoria de auditoria criada com sucesso."
-    });
+    };
   };
 
   const handleExportItems = () => {
@@ -182,7 +182,7 @@ export const IMCAAuditManager = memo(function({
     toast({
       title: "Exportado",
       description: "Itens customizados exportados com sucesso."
-    });
+    };
   };
 
   const toggleStandard = (std: string) => {
@@ -538,7 +538,7 @@ export const IMCAAuditManager = memo(function({
       </Card>
 
       {/* Edit Item Dialog */}
-      <Dialog open={!!editingItem} onOpenChange={() => setEditingItem(null)}>
+      <Dialog open={!!editingItem} onOpenChange={() => setEditingItem(null}>
         <DialogContent className="max-w-2xl max-h-[90vh]">
           <DialogHeader>
             <DialogTitle>Editar Item de Checklist</DialogTitle>

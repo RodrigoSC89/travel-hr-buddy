@@ -209,7 +209,7 @@ export const AdvancedSecurityCenter: React.FC = () => {
     toast({
       title: "Alerta resolvido",
       description: "O alerta de segurança foi marcado como resolvido.",
-    });
+    };
   };
 
   const handleRunScan = () => {
@@ -220,7 +220,7 @@ export const AdvancedSecurityCenter: React.FC = () => {
       toast({
         title: "Varredura concluída",
         description: "Nova análise de segurança foi executada com sucesso.",
-      });
+      };
     }, 3000);
   };
 

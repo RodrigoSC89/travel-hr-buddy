@@ -129,7 +129,7 @@ export const AutomationWorkflowsManager = memo(() => {
     setIsCreating(false);
     setNewWorkflow({ name: "", description: "", trigger: "schedule", aiOptimized: true });
     toast.success("Workflow criado com sucesso!");
-  };
+  });
 
   const toggleWorkflow = (id: string) => {
     setWorkflows(workflows.map(w => 
