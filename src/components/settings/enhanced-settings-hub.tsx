@@ -535,7 +535,7 @@ export const EnhancedSettingsHub: React.FC = () => {
         toast({
           title: "📋 Link Copiado",
           description: "Link das configurações copiado para área de transferência."
-        };
+        });
       }
     } catch (error) {
     }
