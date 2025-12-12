@@ -147,6 +147,6 @@ const NotFoundProfessional: React.FC = () => {
       </div>
     </>
   );
-});
+};
 
 export default NotFoundProfessional;
