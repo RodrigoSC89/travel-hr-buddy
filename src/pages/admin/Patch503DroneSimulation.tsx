@@ -2,7 +2,7 @@ import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Plane, CheckCircle2, XCircle, Gamepad2, Database, Activity, Video } from "lucide-react";
-import { useState } from "react";;;
+import { useState, useMemo, useCallback } from "react";;;
 
 export default function Patch503DroneSimulation() {
   const [validationStatus, setValidationStatus] = useState<"idle" | "running" | "complete">("idle");

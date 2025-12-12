@@ -1,4 +1,4 @@
-import { useState } from "react";;
+import { useState, useMemo, useCallback } from "react";;
 import React, { useState } from "react";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
@@ -325,9 +325,9 @@ export const DPCompetenceHub: React.FC = () => {
               <div className="flex items-center gap-4">
                 <div className="relative flex-1">
                   <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 h-4 w-4 text-muted-foreground" />
-                  <Input placeholder="Buscar por nome ou embarcação..." value={searchTerm} onChange={(e) => setSearchTerm(e.target.value)} className="pl-10" />
+                  <Input placeholder="Buscar por nome ou embarcação..." value={searchTerm} onChange={handleChange} className="pl-10" />
                 </div>
-                <select className="border rounded-md px-3 py-2 text-sm" value={filterRole} onChange={(e) => setFilterRole(e.target.value)}>
+                <select className="border rounded-md px-3 py-2 text-sm" value={filterRole} onChange={handleChange}>
                   <option value="all">Todas as Funções</option>
                   <option value="SDPO">SDPO</option>
                   <option value="DPO">DPO</option>
@@ -342,7 +342,7 @@ export const DPCompetenceHub: React.FC = () => {
           {/* Crew List */}
           <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
             {filteredMembers.map((member) => (
-              <Card key={member.id} className="hover:shadow-lg transition-all cursor-pointer" onClick={() => setSelectedMember(member)}>
+              <Card key={member.id} className="hover:shadow-lg transition-all cursor-pointer" onClick={handleSetSelectedMember}>
                 <CardContent className="pt-4">
                   <div className="flex items-start gap-4">
                     <Avatar className="h-16 w-16">
@@ -402,7 +402,7 @@ export const DPCompetenceHub: React.FC = () => {
                     <span>Nota de Aprovação</span>
                     <span className="font-medium">{assessment.passScore}%</span>
                   </div>
-                  <Button className="w-full" onClick={() => handleStartAssessment(assessment)}>
+                  <Button className="w-full" onClick={() => handlehandleStartAssessment}>
                     <Play className="w-4 h-4 mr-2" />Iniciar Avaliação
                   </Button>
                 </CardContent>

@@ -1,5 +1,5 @@
 /**
-import { useState } from "react";;
+import { useState, useCallback } from "react";;
  * BI Dashboard Builder - PHASE 3
  * Dashboards customizáveis com IA para consultas inteligentes
  */
@@ -198,7 +198,7 @@ export const BIDashboardBuilder: React.FC = () => {
             <Input
               placeholder="Ex: Qual navio mais consumiu combustível por NM no trimestre?"
               value={aiQuery}
-              onChange={(e) => setAiQuery(e.target.value)}
+              onChange={handleChange}
               onKeyDown={(e) => e.key === "Enter" && handleAIQuery()}
               className="flex-1"
             />
@@ -217,7 +217,7 @@ export const BIDashboardBuilder: React.FC = () => {
                 key={suggestion}
                 variant="outline"
                 size="sm"
-                onClick={() => setAiQuery(suggestion)}
+                onClick={handleSetAiQuery}
                 className="text-xs"
               >
                 {suggestion}

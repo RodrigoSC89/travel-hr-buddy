@@ -1,5 +1,5 @@
 /**
-import { useState } from "react";;
+import { useState, useMemo, useCallback } from "react";;
  * PATCH 518 – Mission Engine Unificado
  * Workflow completo de missão configurável com estados sincronizados
  */
@@ -234,7 +234,7 @@ export default function Patch518MissionEngine() {
               <Input
                 id="mission-name"
                 value={newMissionName}
-                onChange={(e) => setNewMissionName(e.target.value)}
+                onChange={handleChange}
                 placeholder="Ex: Exploração Costeira Beta"
               />
             </div>
@@ -261,7 +261,7 @@ export default function Patch518MissionEngine() {
                 className={`cursor-pointer transition-all ${
                   selectedMission?.id === mission.id ? "ring-2 ring-primary" : ""
                 }`}
-                onClick={() => setSelectedMission(mission)}
+                onClick={handleSetSelectedMission}
               >
                 <CardHeader>
                   <CardTitle className="flex items-center justify-between">
@@ -372,7 +372,7 @@ export default function Patch518MissionEngine() {
                             {task.status === "pending" && (
                               <Button
                                 size="sm"
-                                onClick={() => updateTaskStatus(task.id, "in-progress")}
+                                onClick={() => handleupdateTaskStatus}
                               >
                                 Iniciar
                               </Button>
@@ -380,7 +380,7 @@ export default function Patch518MissionEngine() {
                             {task.status === "in-progress" && (
                               <Button
                                 size="sm"
-                                onClick={() => updateTaskStatus(task.id, "completed")}
+                                onClick={() => handleupdateTaskStatus}
                               >
                                 Concluir
                               </Button>

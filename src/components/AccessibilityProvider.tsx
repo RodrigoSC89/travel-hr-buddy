@@ -1,4 +1,4 @@
-import { useCallback, useContext, useEffect, useState } from "react";;
+import { useCallback, useMemo, useContext, useEffect, useState } from "react";;
 
 /**
  * Accessibility Provider Component
@@ -24,7 +24,7 @@ interface AccessibilityContextType {
 
 const AccessibilityContext = createContext<AccessibilityContextType | null>(null);
 
-export function useAccessibility() {
+export const useAccessibility = memo(function() {
   const context = useContext(AccessibilityContext);
   if (!context) {
     throw new Error("useAccessibility must be used within AccessibilityProvider");
@@ -33,7 +33,7 @@ export function useAccessibility() {
 }
 
 // Optional hook that doesn't throw
-export function useAccessibilityOptional() {
+export const useAccessibilityOptional = memo(function() {
   return useContext(AccessibilityContext);
 }
 
@@ -42,7 +42,7 @@ interface AccessibilityProviderProps {
   mainContentId?: string;
 }
 
-export function AccessibilityProvider({ 
+export const AccessibilityProvider = memo(function({ 
   children, 
   mainContentId = "main-content" 
 }: AccessibilityProviderProps) {
@@ -101,8 +101,8 @@ export function AccessibilityProvider({
           focus:translate-y-0 focus:outline-none focus:ring-2 focus:ring-ring
           ${isSkipLinkVisible ? "translate-y-0" : "-translate-y-full"}
         `}
-        onFocus={() => setIsSkipLinkVisible(true)}
-        onBlur={() => setIsSkipLinkVisible(false)}
+        onFocus={handleSetIsSkipLinkVisible}
+        onBlur={handleSetIsSkipLinkVisible}
         onClick={(e) => {
           e.preventDefault();
           skipToMain();

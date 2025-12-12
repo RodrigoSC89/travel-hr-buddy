@@ -1,3 +1,4 @@
+import { memo } from 'react';
 /**
  * SkeletonLoader - FASE A.4
  * 
@@ -15,7 +16,7 @@ interface SkeletonLoaderProps {
   className?: string;
 }
 
-export function SkeletonLoader({
+export const SkeletonLoader = memo(function({
   variant = "card",
   count = 3,
   className,

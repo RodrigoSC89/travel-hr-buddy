@@ -1,4 +1,4 @@
-import { useState } from "react";;
+import { useState, useCallback } from "react";;
 import React, { useState } from "react";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
@@ -35,7 +35,7 @@ import {
 } from "@/types/imca-audit";
 import { generateIMCAAudit, saveAudit, downloadAuditMarkdown } from "@/services/imca-audit-service";
 
-export function IMCAAuditGenerator() {
+export const IMCAAuditGenerator = memo(function() {
   const { toast } = useToast();
   const [activeTab, setActiveTab] = useState("basic");
   const [loading, setLoading] = useState(false);
@@ -143,7 +143,7 @@ export function IMCAAuditGenerator() {
                       id="vesselName"
                       placeholder="e.g., DP Construction Vessel Delta"
                       value={vesselName}
-                      onChange={(e) => setVesselName(e.target.value)}
+                      onChange={handleChange}
                     />
                   </div>
                 </div>
@@ -170,7 +170,7 @@ export function IMCAAuditGenerator() {
                       id="location"
                       placeholder="e.g., Santos Basin, Brazil"
                       value={location}
-                      onChange={(e) => setLocation(e.target.value)}
+                      onChange={handleChange}
                     />
                   </div>
                 </div>
@@ -183,7 +183,7 @@ export function IMCAAuditGenerator() {
                       id="objective"
                       placeholder="e.g., Post-incident technical evaluation"
                       value={auditObjective}
-                      onChange={(e) => setAuditObjective(e.target.value)}
+                      onChange={handleChange}
                       rows={3}
                     />
                   </div>
@@ -206,8 +206,7 @@ export function IMCAAuditGenerator() {
                     id="incidentDetails"
                     placeholder="Describe any incidents or issues..."
                     value={operationalData.incidentDetails || ""}
-                    onChange={(e) =>
-                      setOperationalData({ ...operationalData, incidentDetails: e.target.value })
+                    onChange={handleChange})
                     }
                     rows={3}
                   />
@@ -219,11 +218,7 @@ export function IMCAAuditGenerator() {
                     id="environmental"
                     placeholder="Weather, sea state, visibility..."
                     value={operationalData.environmentalConditions || ""}
-                    onChange={(e) =>
-                      setOperationalData({
-                        ...operationalData,
-                        environmentalConditions: e.target.value,
-                      })
+                    onChange={handleChange})
                     }
                     rows={2}
                   />
@@ -235,8 +230,7 @@ export function IMCAAuditGenerator() {
                     id="systemStatus"
                     placeholder="Current status of DP systems..."
                     value={operationalData.systemStatus || ""}
-                    onChange={(e) =>
-                      setOperationalData({ ...operationalData, systemStatus: e.target.value })
+                    onChange={handleChange})
                     }
                     rows={2}
                   />
@@ -248,11 +242,7 @@ export function IMCAAuditGenerator() {
                     id="crew"
                     placeholder="DPO certifications, training status..."
                     value={operationalData.crewQualifications || ""}
-                    onChange={(e) =>
-                      setOperationalData({
-                        ...operationalData,
-                        crewQualifications: e.target.value,
-                      })
+                    onChange={handleChange})
                     }
                     rows={2}
                   />
@@ -264,11 +254,7 @@ export function IMCAAuditGenerator() {
                     id="maintenance"
                     placeholder="Recent maintenance activities..."
                     value={operationalData.maintenanceHistory || ""}
-                    onChange={(e) =>
-                      setOperationalData({
-                        ...operationalData,
-                        maintenanceHistory: e.target.value,
-                      })
+                    onChange={handleChange})
                     }
                     rows={2}
                   />

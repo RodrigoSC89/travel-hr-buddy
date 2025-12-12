@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";;
+import { useEffect, useState, useCallback, useMemo } from "react";;
 import React, { useState, useEffect } from "react";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
@@ -322,7 +322,7 @@ export const DocumentManagement: React.FC = () => {
                   <Input
                     id="cat-name"
                     value={newCategory.name}
-                    onChange={(e) => setNewCategory({ ...newCategory, name: e.target.value })}
+                    onChange={handleChange})}
                     placeholder="Ex: Contratos"
                   />
                 </div>
@@ -331,7 +331,7 @@ export const DocumentManagement: React.FC = () => {
                   <Textarea
                     id="cat-desc"
                     value={newCategory.description}
-                    onChange={(e) => setNewCategory({ ...newCategory, description: e.target.value })}
+                    onChange={handleChange})}
                     placeholder="Descrição da categoria..."
                   />
                 </div>
@@ -341,7 +341,7 @@ export const DocumentManagement: React.FC = () => {
                     id="cat-color"
                     type="color"
                     value={newCategory.color}
-                    onChange={(e) => setNewCategory({ ...newCategory, color: e.target.value })}
+                    onChange={handleChange})}
                   />
                 </div>
               </div>
@@ -349,7 +349,7 @@ export const DocumentManagement: React.FC = () => {
                 <Button onClick={handleAddCategory} className="flex-1">
                   Criar Categoria
                 </Button>
-                <Button variant="outline" onClick={() => setShowAddCategoryDialog(false)}>
+                <Button variant="outline" onClick={handleSetShowAddCategoryDialog}>
                   Cancelar
                 </Button>
               </div>
@@ -373,7 +373,7 @@ export const DocumentManagement: React.FC = () => {
                   <Input
                     id="title"
                     value={newDocument.title}
-                    onChange={(e) => setNewDocument({ ...newDocument, title: e.target.value })}
+                    onChange={handleChange})}
                     placeholder="Ex: Manual de Procedimentos"
                   />
                 </div>
@@ -382,7 +382,7 @@ export const DocumentManagement: React.FC = () => {
                   <Textarea
                     id="description"
                     value={newDocument.description}
-                    onChange={(e) => setNewDocument({ ...newDocument, description: e.target.value })}
+                    onChange={handleChange})}
                     placeholder="Descrição do documento..."
                   />
                 </div>
@@ -428,7 +428,7 @@ export const DocumentManagement: React.FC = () => {
                     id="expires"
                     type="datetime-local"
                     value={newDocument.expires_at}
-                    onChange={(e) => setNewDocument({ ...newDocument, expires_at: e.target.value })}
+                    onChange={handleChange})}
                   />
                 </div>
                 <div>
@@ -446,7 +446,7 @@ export const DocumentManagement: React.FC = () => {
                 <Button onClick={handleAddDocument} className="flex-1">
                   Adicionar Documento
                 </Button>
-                <Button variant="outline" onClick={() => setShowAddDialog(false)}>
+                <Button variant="outline" onClick={handleSetShowAddDialog}>
                   Cancelar
                 </Button>
               </div>
@@ -528,7 +528,7 @@ export const DocumentManagement: React.FC = () => {
               <Input
                 placeholder="Buscar documentos..."
                 value={searchTerm}
-                onChange={(e) => setSearchTerm(e.target.value)}
+                onChange={handleChange}
                 className="w-64"
               />
             </div>
@@ -562,7 +562,7 @@ export const DocumentManagement: React.FC = () => {
                         className={`p-4 border rounded-lg cursor-pointer transition-colors hover:bg-muted/50 ${
                           selectedDocument?.id === doc.id ? "border-primary bg-primary/5" : ""
                         }`}
-                        onClick={() => setSelectedDocument(doc)}
+                        onClick={handleSetSelectedDocument}
                       >
                         <div className="flex items-start justify-between">
                           <div className="flex items-start gap-3 flex-1">

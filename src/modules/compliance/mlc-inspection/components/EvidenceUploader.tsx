@@ -1,4 +1,4 @@
-import { useState } from "react";;
+import { useState, useCallback } from "react";;
 import React, { useState } from "react";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
@@ -12,7 +12,7 @@ interface EvidenceUploaderProps {
   onUpdate: () => void;
 }
 
-export function EvidenceUploader({ inspectionId, onUpdate }: EvidenceUploaderProps) {
+export const EvidenceUploader = memo(function({ inspectionId, onUpdate }: EvidenceUploaderProps) {
   const [selectedFile, setSelectedFile] = useState<File | null>(null);
   const [uploading, setUploading] = useState(false);
   const { toast } = useToast();

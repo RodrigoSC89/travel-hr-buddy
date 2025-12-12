@@ -1,4 +1,4 @@
-import { useState } from "react";;
+import { useState, useCallback } from "react";;
 import React, { useState } from "react";
 import {
   Dialog,
@@ -30,7 +30,7 @@ interface AuditSubmissionFormProps {
 
 type SgsoAuditInsert = Database["public"]["Tables"]["sgso_audits"]["Insert"];
 
-export function AuditSubmissionForm({ open, onClose }: AuditSubmissionFormProps) {
+export const AuditSubmissionForm = memo(function({ open, onClose }: AuditSubmissionFormProps) {
   const { toast } = useToast();
   const [loading, setLoading] = useState(false);
   const [formData, setFormData] = useState({
@@ -133,7 +133,7 @@ export function AuditSubmissionForm({ open, onClose }: AuditSubmissionFormProps)
             <Textarea
               id="audit_scope"
               value={formData.audit_scope}
-              onChange={(e) => setFormData({...formData, audit_scope: e.target.value})}
+              onChange={handleChange})}
               placeholder="Describe the scope of this audit..."
               required
               rows={3}
@@ -146,7 +146,7 @@ export function AuditSubmissionForm({ open, onClose }: AuditSubmissionFormProps)
               id="audit_date"
               type="date"
               value={formData.audit_date}
-              onChange={(e) => setFormData({...formData, audit_date: e.target.value})}
+              onChange={handleChange})}
               required
             />
           </div>
@@ -156,7 +156,7 @@ export function AuditSubmissionForm({ open, onClose }: AuditSubmissionFormProps)
             <Input
               id="auditors"
               value={formData.auditors}
-              onChange={(e) => setFormData({...formData, auditors: e.target.value})}
+              onChange={handleChange})}
               placeholder="John Doe, Jane Smith, ..."
             />
           </div>
@@ -166,7 +166,7 @@ export function AuditSubmissionForm({ open, onClose }: AuditSubmissionFormProps)
             <Textarea
               id="notes"
               value={formData.notes}
-              onChange={(e) => setFormData({...formData, notes: e.target.value})}
+              onChange={handleChange})}
               placeholder="Any additional information..."
               rows={2}
             />

@@ -1,4 +1,4 @@
-import { useEffect, useMemo, useState } from "react";;
+import { useEffect, useMemo, useState, useCallback } from "react";;
 
 /**
  * PATCH 416: Consolidated Crew Management Page
@@ -57,7 +57,7 @@ interface PerformanceReview {
   comments?: string;
 }
 
-export const ConsolidatedCrewManagement = () => {
+export const ConsolidatedCrewManagement = memo(() => {
   const [crewMembers, setCrewMembers] = useState<CrewMember[]>([]);
   const [certifications, setCertifications] = useState<Certification[]>([]);
   const [performances, setPerformances] = useState<PerformanceReview[]>([]);
@@ -245,7 +245,7 @@ export const ConsolidatedCrewManagement = () => {
             <Input
               placeholder="Search crew members..."
               value={searchTerm}
-              onChange={(e) => setSearchTerm(e.target.value)}
+              onChange={handleChange}
               className="max-w-sm"
             />
           </div>
@@ -331,7 +331,7 @@ export const ConsolidatedCrewManagement = () => {
                               : cert.isExpiring
                                 ? "bg-yellow-500/20 text-yellow-400 border-yellow-500/30"
                                 : "bg-green-500/20 text-green-400 border-green-500/30"
-                          }
+                          };
                         >
                           {cert.isExpired ? "Expired" : cert.isExpiring ? "Expiring Soon" : "Valid"}
                         </Badge>

@@ -1,5 +1,5 @@
 /**
-import { useContext, useEffect } from "react";;
+import { useContext, useEffect, useCallback } from "react";;
  * PATCH 499: PostHog Provider Component
  * React provider for PostHog telemetry
  */
@@ -25,7 +25,7 @@ const TelemetryContext = createContext<TelemetryContextValue>({
   },
 });
 
-export function useTelemetry() {
+export const useTelemetry = memo(function() {
   return useContext(TelemetryContext);
 }
 
@@ -33,7 +33,7 @@ interface TelemetryProviderProps {
   children: React.ReactNode;
 }
 
-export function TelemetryProvider({ children }: TelemetryProviderProps) {
+export const TelemetryProvider = memo(function({ children }: TelemetryProviderProps) {
   useEffect(() => {
     // Initialize telemetry on mount
     initTelemetry();

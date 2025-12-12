@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";;
+import { useEffect, useState, useCallback } from "react";;
 import React, { useState, useEffect } from "react";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
@@ -320,7 +320,7 @@ export const ReservationAI: React.FC<ReservationAIProps> = ({
                   <div className="flex gap-2">
                     <Button
                       size="sm"
-                      onClick={() => handleApplySuggestion(insight)}
+                      onClick={() => handlehandleApplySuggestion}
                       disabled={!insight.automatable}
                     >
                       {insight.automatable ? "Aplicar Automaticamente" : "Ação Manual"}

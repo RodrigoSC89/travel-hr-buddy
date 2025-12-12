@@ -3,7 +3,7 @@
  * Integrated with Supabase for real-time data
  */
 
-import { useEffect, useState } from "react";;;
+import { memo, memo, useEffect, useState, useCallback, useMemo } from "react";;;
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
@@ -44,7 +44,7 @@ interface ComponentHealth {
   lastMaintenance: string;
 }
 
-export function MaintenanceHub() {
+export const MaintenanceHub = memo(function() {
   const [tasks, setTasks] = useState<MaintenanceTask[]>([]);
   const [components, setComponents] = useState<ComponentHealth[]>([]);
   const [isLoading, setIsLoading] = useState(true);
@@ -443,7 +443,7 @@ export function MaintenanceHub() {
                       A saúde atual está em <strong>{component.health}%</strong>.
                     </p>
                     <div className="flex gap-2 mt-3">
-                      <Button size="sm" onClick={() => handleScheduleMaintenance(component.id, component.name)}>
+                      <Button size="sm" onClick={() => handlehandleScheduleMaintenance}>
                         Agendar Manutenção
                       </Button>
                       <Button size="sm" variant="outline">Ver Detalhes</Button>

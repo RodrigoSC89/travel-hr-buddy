@@ -1,4 +1,4 @@
-import { useState } from "react";;
+import { useState, useMemo, useCallback } from "react";;
 import React, { useState } from "react";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
@@ -52,7 +52,7 @@ interface Organization {
   status: "active" | "inactive";
 }
 
-export const ClientCustomization = () => {
+export const ClientCustomization = memo(() => {
   const [selectedTheme, setSelectedTheme] = useState("default");
   const [customFields, setCustomFields] = useState<CustomField[]>([]);
   const [organizations, setOrganizations] = useState<Organization[]>([]);
@@ -259,7 +259,7 @@ export const ClientCustomization = () => {
                             ? "border-primary bg-primary/5" 
                             : "border-muted hover:border-border"
                         }`}
-                        onClick={() => setSelectedTheme(theme.id)}
+                        onClick={handleSetSelectedTheme}
                       >
                         <div className="flex items-center gap-2 mb-2">
                           <div 
@@ -365,7 +365,7 @@ export const ClientCustomization = () => {
                         <Label>Nome do Campo</Label>
                         <Input 
                           value={field.name}
-                          onChange={(e) => updateCustomField(field.id, { name: e.target.value })}
+                          onChange={handleChange})}
                           className="mt-1"
                         />
                       </div>
@@ -422,7 +422,7 @@ export const ClientCustomization = () => {
                         <Button 
                           variant="outline" 
                           size="sm"
-                          onClick={() => removeCustomField(field.id)}
+                          onClick={() => handleremoveCustomField}
                         >
                           ✕
                         </Button>
@@ -435,9 +435,7 @@ export const ClientCustomization = () => {
                         <Input 
                           placeholder="Opção 1, Opção 2, Opção 3"
                           value={field.options?.join(", ") || ""}
-                          onChange={(e) => updateCustomField(field.id, { 
-                            options: e.target.value.split(",").map(s => s.trim()).filter(Boolean)
-                          })}
+                          onChange={handleChange})}
                           className="mt-1"
                         />
                       </div>
@@ -505,7 +503,7 @@ export const ClientCustomization = () => {
                         <Button 
                           variant="outline" 
                           size="sm"
-                          onClick={() => cloneOrganization(org.id)}
+                          onClick={() => handlecloneOrganization}
                         >
                           <Copy className="h-4 w-4" />
                         </Button>
@@ -599,7 +597,7 @@ export const ClientCustomization = () => {
                     name: "Turismo Náutico",
                     description: "Configuração para turismo e embarcações de recreio",
                     modules: ["Dashboard", "Reservas", "Clientes", "Rotas"]
-                  }
+                  };
                 ].map((template, index) => (
                   <div key={index} className="border rounded-lg p-4 hover-lift">
                     <h4 className="font-semibold mb-2">{template.name}</h4>

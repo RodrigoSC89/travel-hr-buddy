@@ -2,7 +2,7 @@
  * Crew Management - Advanced crew tracking and certification
  */
 
-import { useEffect, useState } from "react";;;
+import { memo, memo, useEffect, useState, useCallback } from "react";;;
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
@@ -31,7 +31,7 @@ interface CrewMember {
   performance: number;
 }
 
-export function CrewManagement() {
+export const CrewManagement = memo(function() {
   const [crew, setCrew] = useState<CrewMember[]>([]);
   const [isLoading, setIsLoading] = useState(true);
   const [filter, setFilter] = useState<"all" | "expiring" | "resting">("all");
@@ -206,14 +206,14 @@ export function CrewManagement() {
         <Button 
           variant={filter === "all" ? "default" : "outline"} 
           size="sm"
-          onClick={() => setFilter("all")}
+          onClick={handleSetFilter}
         >
           Todos
         </Button>
         <Button 
           variant={filter === "expiring" ? "default" : "outline"} 
           size="sm"
-          onClick={() => setFilter("expiring")}
+          onClick={handleSetFilter}
         >
           <AlertCircle className="h-4 w-4 mr-1" />
           Certificados Expirando
@@ -221,7 +221,7 @@ export function CrewManagement() {
         <Button 
           variant={filter === "resting" ? "default" : "outline"} 
           size="sm"
-          onClick={() => setFilter("resting")}
+          onClick={handleSetFilter}
         >
           <Clock className="h-4 w-4 mr-1" />
           Em Descanso

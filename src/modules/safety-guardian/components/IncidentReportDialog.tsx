@@ -1,5 +1,5 @@
 /**
-import { useState } from "react";;
+import { useState, useCallback } from "react";;
  * Incident Report Dialog Component
  * Formulário completo para reportar ocorrências
  */
@@ -152,7 +152,7 @@ export const IncidentReportDialog: React.FC<IncidentReportDialogProps> = ({
                     "h-auto py-3 flex flex-col gap-1",
                     formData.type === type.value && "ring-2 ring-primary"
                   )}
-                  onClick={() => setFormData({ ...formData, type: type.value })}
+                  onClick={handleSetFormData}
                 >
                   <type.icon className={cn("h-5 w-5", formData.type !== type.value && type.color)} />
                   <span className="text-xs">{type.label}</span>
@@ -168,7 +168,7 @@ export const IncidentReportDialog: React.FC<IncidentReportDialogProps> = ({
               id="title"
               placeholder="Descreva brevemente a ocorrência..."
               value={formData.title}
-              onChange={(e) => setFormData({ ...formData, title: e.target.value })}
+              onChange={handleChange})}
               required
             />
           </div>
@@ -180,7 +180,7 @@ export const IncidentReportDialog: React.FC<IncidentReportDialogProps> = ({
               id="description"
               placeholder="Descreva em detalhes o que aconteceu, quando, onde e como..."
               value={formData.description}
-              onChange={(e) => setFormData({ ...formData, description: e.target.value })}
+              onChange={handleChange})}
               rows={4}
               required
             />
@@ -274,7 +274,7 @@ export const IncidentReportDialog: React.FC<IncidentReportDialogProps> = ({
                 id="location"
                 placeholder="Ex: Convés principal, Sala de máquinas..."
                 value={formData.location}
-                onChange={(e) => setFormData({ ...formData, location: e.target.value })}
+                onChange={handleChange})}
               />
             </div>
           </div>
@@ -289,7 +289,7 @@ export const IncidentReportDialog: React.FC<IncidentReportDialogProps> = ({
               id="witnesses"
               placeholder="Nomes separados por vírgula..."
               value={formData.witnesses}
-              onChange={(e) => setFormData({ ...formData, witnesses: e.target.value })}
+              onChange={handleChange})}
             />
           </div>
 
@@ -310,7 +310,7 @@ export const IncidentReportDialog: React.FC<IncidentReportDialogProps> = ({
               type="button"
               variant="outline"
               className="flex-1"
-              onClick={() => onOpenChange(false)}
+              onClick={() => handleonOpenChange}
               disabled={loading}
             >
               Cancelar

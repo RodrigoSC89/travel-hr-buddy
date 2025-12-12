@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";;
+import { useEffect, useState, useCallback, useMemo } from "react";;
 import React, { useState, useEffect } from "react";
 import { supabase } from "@/integrations/supabase/client";
 import { useToast } from "@/hooks/use-toast";
@@ -254,7 +254,7 @@ const AdvancedSystemMonitor: React.FC = () => {
                 <Input
                   type="number"
                   value={refreshInterval}
-                  onChange={(e) => setRefreshInterval(Number(e.target.value))}
+                  onChange={handleChange}
                   className="w-20"
                   min="10"
                   max="300"

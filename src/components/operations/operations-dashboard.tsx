@@ -1,5 +1,5 @@
 
-import { useEffect, useState } from "react";;;
+import { memo, memo, useEffect, useState, useCallback, useMemo } from "react";;;
 import { supabase } from "@/integrations/supabase/client";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
@@ -18,7 +18,7 @@ interface OperationalMetrics {
   total_voyages: number;
 }
 
-export function OperationsDashboard() {
+export const OperationsDashboard = memo(function() {
   const [metrics, setMetrics] = useState<OperationalMetrics>({
     total_vessels: 0,
     active_vessels: 0,

@@ -1,5 +1,5 @@
 /**
-import { useState } from "react";;
+import { useState, useMemo, useCallback } from "react";;
  * Time & Attendance - Controle de Frequência e Escalas
  */
 
@@ -403,7 +403,7 @@ const TimeAttendance: React.FC = () => {
                 <Button
                   size="lg"
                   className="h-20 flex-col gap-2 bg-green-500 hover:bg-green-600"
-                  onClick={() => setIsPontoActive(true)}
+                  onClick={handleSetIsPontoActive}
                 >
                   <LogIn className="w-6 h-6" />
                   Entrada
@@ -411,7 +411,7 @@ const TimeAttendance: React.FC = () => {
                 <Button
                   size="lg"
                   className="h-20 flex-col gap-2 bg-red-500 hover:bg-red-600"
-                  onClick={() => setIsPontoActive(false)}
+                  onClick={handleSetIsPontoActive}
                 >
                   <LogOut className="w-6 h-6" />
                   Saída

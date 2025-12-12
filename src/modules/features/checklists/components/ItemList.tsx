@@ -9,7 +9,7 @@ interface ItemListProps {
   readonly?: boolean;
 }
 
-export function ItemList({ items, onToggle, readonly = false }: ItemListProps) {
+export const ItemList = memo(function({ items, onToggle, readonly = false }: ItemListProps) {
   const sortedItems = [...items].sort((a, b) => a.order - b.order);
 
   return (

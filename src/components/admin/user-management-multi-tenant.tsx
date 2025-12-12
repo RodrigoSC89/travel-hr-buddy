@@ -180,7 +180,7 @@ export const UserManagementMultiTenant: React.FC = () => {
                   id="email"
                   type="email"
                   value={inviteEmail}
-                  onChange={(e) => setInviteEmail(e.target.value)}
+                  onChange={handleChange}
                   placeholder="usuario@exemplo.com"
                 />
               </div>
@@ -202,7 +202,7 @@ export const UserManagementMultiTenant: React.FC = () => {
                   <Mail className="h-4 w-4 mr-2" />
                   Enviar Convite
                 </Button>
-                <Button variant="outline" onClick={() => setShowInviteDialog(false)}>
+                <Button variant="outline" onClick={handleSetShowInviteDialog}>
                   Cancelar
                 </Button>
               </div>
@@ -278,7 +278,7 @@ export const UserManagementMultiTenant: React.FC = () => {
                               <Button
                                 variant="outline"
                                 size="sm"
-                                onClick={() => handleRemoveUser(user.id)}
+                                onClick={() => handlehandleRemoveUser}
                               >
                                 <Trash2 className="h-4 w-4" />
                               </Button>

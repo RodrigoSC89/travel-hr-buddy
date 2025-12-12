@@ -1,5 +1,5 @@
 /**
-import { useMemo } from "react";;
+import { useMemo, useCallback } from "react";;
  * UNIFIED Skeleton Loaders - Versão Consolidada Final
  * 
  * Este componente unifica TODAS as 14 versões de Skeleton encontradas:

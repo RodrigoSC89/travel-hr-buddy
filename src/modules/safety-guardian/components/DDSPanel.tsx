@@ -1,5 +1,5 @@
 /**
-import { useState } from "react";;
+import { useState, useCallback } from "react";;
  * DDS Panel - Diálogo Diário de Segurança
  */
 
@@ -150,7 +150,7 @@ export const DDSPanel: React.FC<DDSPanelProps> = ({ records, onCreateDDS, loadin
           <Input
             placeholder="Buscar DDS..."
             value={searchTerm}
-            onChange={(e) => setSearchTerm(e.target.value)}
+            onChange={handleChange}
             className="pl-10"
           />
         </div>
@@ -172,7 +172,7 @@ export const DDSPanel: React.FC<DDSPanelProps> = ({ records, onCreateDDS, loadin
                 <Input
                   placeholder="Ex: Uso correto de EPIs"
                   value={formData.topic}
-                  onChange={(e) => setFormData({ ...formData, topic: e.target.value })}
+                  onChange={handleChange})}
                 />
               </div>
 
@@ -200,7 +200,7 @@ export const DDSPanel: React.FC<DDSPanelProps> = ({ records, onCreateDDS, loadin
                   <Input
                     placeholder="Nome do condutor"
                     value={formData.conductor}
-                    onChange={(e) => setFormData({ ...formData, conductor: e.target.value })}
+                    onChange={handleChange})}
                   />
                 </div>
               </div>
@@ -212,7 +212,7 @@ export const DDSPanel: React.FC<DDSPanelProps> = ({ records, onCreateDDS, loadin
                     type="number"
                     min={0}
                     value={formData.participants_count}
-                    onChange={(e) => setFormData({ ...formData, participants_count: parseInt(e.target.value) || 0 })}
+                    onChange={handleChange})}
                   />
                 </div>
 
@@ -222,7 +222,7 @@ export const DDSPanel: React.FC<DDSPanelProps> = ({ records, onCreateDDS, loadin
                     type="number"
                     min={5}
                     value={formData.duration_minutes}
-                    onChange={(e) => setFormData({ ...formData, duration_minutes: parseInt(e.target.value) || 15 })}
+                    onChange={handleChange})}
                   />
                 </div>
               </div>
@@ -232,13 +232,13 @@ export const DDSPanel: React.FC<DDSPanelProps> = ({ records, onCreateDDS, loadin
                 <Textarea
                   placeholder="Anotações adicionais..."
                   value={formData.notes}
-                  onChange={(e) => setFormData({ ...formData, notes: e.target.value })}
+                  onChange={handleChange})}
                   rows={3}
                 />
               </div>
 
               <div className="flex justify-end gap-2 pt-4">
-                <Button variant="outline" onClick={() => setDialogOpen(false)}>
+                <Button variant="outline" onClick={handleSetDialogOpen}>
                   Cancelar
                 </Button>
                 <Button onClick={handleSubmit}>

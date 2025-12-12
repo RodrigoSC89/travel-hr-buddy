@@ -1,5 +1,5 @@
 /**
-import { useEffect, useState } from "react";;
+import { useEffect, useState, useCallback, useMemo } from "react";;
  * PATCH 479: Enhanced Sonar AI Dashboard
  * Real-time dashboard with AI classification and risk alerts
  */
@@ -303,7 +303,7 @@ export const SonarAIDashboard: React.FC = () => {
                             <Button
                               size="sm"
                               variant="outline"
-                              onClick={() => handleAcknowledgeRisk(risk.id!)}
+                              onClick={() => handlehandleAcknowledgeRisk}
                             >
                               <CheckCircle className="h-4 w-4 mr-1" />
                               Reconhecer
@@ -311,7 +311,7 @@ export const SonarAIDashboard: React.FC = () => {
                             <Button
                               size="sm"
                               variant="default"
-                              onClick={() => handleResolveRisk(risk.id!)}
+                              onClick={() => handlehandleResolveRisk}
                             >
                               <XCircle className="h-4 w-4 mr-1" />
                               Resolver

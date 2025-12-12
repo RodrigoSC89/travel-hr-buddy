@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";;
+import { useEffect, useState, useCallback } from "react";;
 
 import React, { useState, useEffect } from "react";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
@@ -129,7 +129,7 @@ const demoOptimizationResults: OptimizationResult[] = [
   }
 ];
 
-export const FuelOptimizer = () => {
+export const FuelOptimizer = memo(() => {
   const { toast } = useToast();
   const [fuelRecords, setFuelRecords] = useState<FuelRecord[]>([]);
   const [routeComparisons, setRouteComparisons] = useState<RouteComparison[]>([]);
@@ -467,7 +467,7 @@ export const FuelOptimizer = () => {
                           text: "Consumo (Litros)"
                         }
                       }
-                    }
+                    };
                   }}
                 />
               </div>

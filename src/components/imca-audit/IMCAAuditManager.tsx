@@ -1,4 +1,4 @@
-import { useState } from "react";;
+import { useState, useMemo, useCallback } from "react";;
 import React, { useState } from "react";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
@@ -62,7 +62,7 @@ const STANDARD_OPTIONS = [
   "STCW 2010", "NORMAM-13", "DNV-RU-SHIP", "MTS DP Guidance", "NI DPO Scheme"
 ];
 
-export function IMCAAuditManager({
+export const IMCAAuditManager = memo(function({
   customItems,
   customCategories,
   onAddItem,
@@ -310,7 +310,7 @@ export function IMCAAuditManager({
                         type="button"
                         variant={(newItem.applicableDPClass || []).includes(dp) ? "default" : "outline"}
                         size="sm"
-                        onClick={() => toggleDPClass(dp)}
+                        onClick={() => handletoggleDPClass}
                       >
                         {dp}
                       </Button>
@@ -337,7 +337,7 @@ export function IMCAAuditManager({
                         key={std}
                         variant={(newItem.standards || []).includes(std) ? "default" : "outline"}
                         className="cursor-pointer"
-                        onClick={() => toggleStandard(std)}
+                        onClick={() => handletoggleStandard}
                       >
                         {std}
                       </Badge>
@@ -347,7 +347,7 @@ export function IMCAAuditManager({
               </div>
             </ScrollArea>
             <DialogFooter>
-              <Button variant="outline" onClick={() => setIsAddItemOpen(false)}>
+              <Button variant="outline" onClick={handleSetIsAddItemOpen}>
                 Cancelar
               </Button>
               <Button onClick={handleAddItem} className="gap-2">
@@ -403,7 +403,7 @@ export function IMCAAuditManager({
               </div>
             </div>
             <DialogFooter>
-              <Button variant="outline" onClick={() => setIsAddCategoryOpen(false)}>
+              <Button variant="outline" onClick={handleSetIsAddCategoryOpen}>
                 Cancelar
               </Button>
               <Button onClick={handleAddCategory} className="gap-2">
@@ -439,7 +439,7 @@ export function IMCAAuditManager({
                     variant="ghost"
                     size="icon"
                     className="h-4 w-4 ml-1"
-                    onClick={() => onDeleteCategory(cat.code)}
+                    onClick={() => handleonDeleteCategory}
                   >
                     <Trash2 className="h-3 w-3" />
                   </Button>
@@ -513,7 +513,7 @@ export function IMCAAuditManager({
                         <Button
                           variant="ghost"
                           size="icon"
-                          onClick={() => setEditingItem(item)}
+                          onClick={handleSetEditingItem}
                         >
                           <Edit className="h-4 w-4" />
                         </Button>
@@ -617,7 +617,7 @@ export function IMCAAuditManager({
                         type="button"
                         variant={editingItem.applicableDPClass.includes(dp) ? "default" : "outline"}
                         size="sm"
-                        onClick={() => toggleDPClass(dp)}
+                        onClick={() => handletoggleDPClass}
                       >
                         {dp}
                       </Button>
@@ -644,7 +644,7 @@ export function IMCAAuditManager({
                         key={std}
                         variant={editingItem.standards.includes(std) ? "default" : "outline"}
                         className="cursor-pointer"
-                        onClick={() => toggleStandard(std)}
+                        onClick={() => handletoggleStandard}
                       >
                         {std}
                       </Badge>
@@ -655,7 +655,7 @@ export function IMCAAuditManager({
             </ScrollArea>
           )}
           <DialogFooter>
-            <Button variant="outline" onClick={() => setEditingItem(null)}>
+            <Button variant="outline" onClick={handleSetEditingItem}>
               Cancelar
             </Button>
             <Button onClick={handleUpdateItem} className="gap-2">

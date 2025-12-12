@@ -1,5 +1,5 @@
 /**
-import { useState } from "react";;
+import { useState, useMemo, useCallback } from "react";;
  * Medical Records Tab
  */
 
@@ -80,7 +80,7 @@ export default function RecordsTab() {
       <div className="flex gap-4 items-center justify-between">
         <div className="relative w-80">
           <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-muted-foreground" />
-          <Input placeholder="Buscar prontuário..." value={searchQuery} onChange={(e) => setSearchQuery(e.target.value)} className="pl-10" />
+          <Input placeholder="Buscar prontuário..." value={searchQuery} onChange={handleChange} className="pl-10" />
         </div>
         <Dialog open={showNewRecord} onOpenChange={setShowNewRecord}>
           <DialogTrigger asChild>
@@ -111,15 +111,15 @@ export default function RecordsTab() {
               </div>
               <div className="space-y-2">
                 <Label>Queixa Principal</Label>
-                <Input value={newRecord.chiefComplaint} onChange={(e) => setNewRecord(prev => ({ ...prev, chiefComplaint: e.target.value }))} />
+                <Input value={newRecord.chiefComplaint} onChange={handleChange}))} />
               </div>
               <div className="space-y-2">
                 <Label>Sintomas (separados por vírgula)</Label>
-                <Textarea value={newRecord.symptoms} onChange={(e) => setNewRecord(prev => ({ ...prev, symptoms: e.target.value }))} />
+                <Textarea value={newRecord.symptoms} onChange={handleChange}))} />
               </div>
             </div>
             <DialogFooter>
-              <Button variant="outline" onClick={() => setShowNewRecord(false)}>Cancelar</Button>
+              <Button variant="outline" onClick={handleSetShowNewRecord}>Cancelar</Button>
               <Button onClick={handleCreateRecord} disabled={isLoading}>
                 {isLoading ? "Analisando..." : "Criar com IA"}
               </Button>

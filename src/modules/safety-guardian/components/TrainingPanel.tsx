@@ -1,5 +1,5 @@
 /**
-import { useState } from "react";;
+import { useState, useCallback } from "react";;
  * Training Panel - Gestão de Treinamentos de Segurança
  */
 
@@ -165,7 +165,7 @@ export const TrainingPanel: React.FC<TrainingPanelProps> = ({
         <Input
           placeholder="Buscar por tripulante ou curso..."
           value={searchTerm}
-          onChange={(e) => setSearchTerm(e.target.value)}
+          onChange={handleChange}
           className="pl-10"
         />
       </div>

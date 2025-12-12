@@ -1,5 +1,5 @@
 /**
-import { useEffect, useState } from "react";;
+import { useEffect, useState, useCallback } from "react";;
  * UNIFIED Connection-Aware Feedback Components
  * 
  * Componentes visuais para feedback em conexões lentas:
@@ -98,7 +98,7 @@ export const ConnectionBanner = memo(function ConnectionBanner({
           <Button
             variant="ghost"
             size="sm"
-            onClick={() => setDismissed(true)}
+            onClick={handleSetDismissed}
             className="h-6 px-2 text-xs"
           >
             ✕

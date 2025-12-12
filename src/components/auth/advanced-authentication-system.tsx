@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";;
+import { useEffect, useState, useCallback, useMemo } from "react";;
 import React, { useState, useEffect } from "react";
 import { Card, CardHeader, CardTitle, CardContent } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
@@ -221,7 +221,7 @@ export const AdvancedAuthenticationSystem: React.FC = () => {
                   </p>
                   <div className="flex items-center gap-2">
                     <Input value={totpSecret} readOnly className="font-mono text-sm" />
-                    <Button size="sm" variant="outline" onClick={() => copyToClipboard(totpSecret)}>
+                    <Button size="sm" variant="outline" onClick={() => handlecopyToClipboard}>
                       <Copy className="w-4 h-4" />
                     </Button>
                   </div>
@@ -236,7 +236,7 @@ export const AdvancedAuthenticationSystem: React.FC = () => {
                     {backupCodes.map((code, index) => (
                       <div key={index} className="flex items-center gap-2">
                         <Input value={code} readOnly className="font-mono text-sm" />
-                        <Button size="sm" variant="outline" onClick={() => copyToClipboard(code)}>
+                        <Button size="sm" variant="outline" onClick={() => handlecopyToClipboard}>
                           <Copy className="w-4 h-4" />
                         </Button>
                       </div>
@@ -341,7 +341,7 @@ export const AdvancedAuthenticationSystem: React.FC = () => {
                     <Button
                       variant="outline"
                       size="sm"
-                      onClick={() => revokeSession(session.id)}
+                      onClick={() => handlerevokeSession}
                     >
                       Revogar
                     </Button>

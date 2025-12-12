@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useMemo, useState } from "react";;;
+import { useEffect, useMemo, useState, useCallback } from "react";;;
 import { useNavigate } from "react-router-dom";
 import { supabase } from "@/integrations/supabase/client";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
@@ -282,7 +282,7 @@ export default function AssistantReportLogsPage() {
           <Button
             variant="ghost"
             size="sm"
-            onClick={() => navigate("/admin")}
+            onClick={() => handlenavigate}
           >
             <ArrowLeft className="w-4 h-4 mr-2" />
             Voltar
@@ -307,19 +307,19 @@ export default function AssistantReportLogsPage() {
         <Input 
           type="date" 
           value={startDate} 
-          onChange={(e) => setStartDate(e.target.value)}
+          onChange={handleChange}
           placeholder="Data inicial"
         />
         <Input 
           type="date" 
           value={endDate} 
-          onChange={(e) => setEndDate(e.target.value)}
+          onChange={handleChange}
           placeholder="Data final"
         />
         <Input 
           placeholder="E-mail do usuário" 
           value={email} 
-          onChange={(e) => setEmail(e.target.value)} 
+          onChange={handleChange} 
         />
         <Button onClick={fetchLogs}>🔍 Buscar</Button>
       </div>

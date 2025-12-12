@@ -1,5 +1,5 @@
 /**
-import { useState } from "react";;
+import { useState, useCallback } from "react";;
  * Voyage Simulator - PHASE 5
  * Simulador de viagem com IA, clima e rotas otimizadas
  */

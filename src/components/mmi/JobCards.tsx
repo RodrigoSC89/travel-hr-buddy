@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";;;
+import { useEffect, useState, useCallback } from "react";;;
 import { Card, CardContent } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
@@ -256,7 +256,7 @@ export default function JobCards() {
                 <Button 
                   variant="default" 
                   size="sm" 
-                  onClick={() => handleCreateOS(job.id)}
+                  onClick={() => handlehandleCreateOS}
                   disabled={processingJobId === job.id || Boolean(createdOrders[job.id])}
                 >
                   {processingJobId === job.id ? (
@@ -270,7 +270,7 @@ export default function JobCards() {
                   <Button 
                     variant="outline" 
                     size="sm" 
-                    onClick={() => handleExportOrderPDF(job, createdOrders[job.id])}
+                    onClick={() => handlehandleExportOrderPDF}
                     disabled={exportingOrderPDF === job.id}
                   >
                     {exportingOrderPDF === job.id ? (
@@ -285,7 +285,7 @@ export default function JobCards() {
                   <Button 
                     variant="outline" 
                     size="sm" 
-                    onClick={() => handleAutoPostpone(job.id)}
+                    onClick={() => handlehandleAutoPostpone}
                     disabled={processingJobId === job.id}
                   >
                     {processingJobId === job.id ? (
@@ -299,7 +299,7 @@ export default function JobCards() {
                 <Button 
                   variant="secondary" 
                   size="sm" 
-                  onClick={() => handleGenerateJobReport(job)}
+                  onClick={() => handlehandleGenerateJobReport}
                   disabled={generatingJobPDF === job.id}
                 >
                   {generatingJobPDF === job.id ? (
@@ -312,7 +312,7 @@ export default function JobCards() {
                 <Button 
                   variant="outline" 
                   size="sm" 
-                  onClick={() => handleShowAIRecommendation(job.id)}
+                  onClick={() => handlehandleShowAIRecommendation}
                   className="ml-auto"
                 >
                   <Sparkles className="h-4 w-4 mr-1" />

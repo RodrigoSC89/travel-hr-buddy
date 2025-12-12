@@ -1,4 +1,4 @@
-import { useState } from "react";;
+import { useState, useMemo, useCallback } from "react";;
 import React, { useState } from "react";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
@@ -327,7 +327,7 @@ export const WebhookBuilder: React.FC = () => {
                   <Input
                     id="webhook-name"
                     value={webhookConfig.name}
-                    onChange={(e) => setWebhookConfig({...webhookConfig, name: e.target.value})}
+                    onChange={handleChange})}
                     placeholder="Ex: Notificações Slack"
                   />
                 </div>
@@ -337,7 +337,7 @@ export const WebhookBuilder: React.FC = () => {
                   <Input
                     id="webhook-url"
                     value={webhookConfig.url}
-                    onChange={(e) => setWebhookConfig({...webhookConfig, url: e.target.value})}
+                    onChange={handleChange})}
                     placeholder="https://hooks.slack.com/services/..."
                   />
                 </div>
@@ -368,13 +368,7 @@ export const WebhookBuilder: React.FC = () => {
                           type="checkbox"
                           id={trigger.value}
                           checked={webhookConfig.triggers?.includes(trigger.value)}
-                          onChange={(e) => {
-                            const triggers = webhookConfig.triggers || [];
-                            if (e.target.checked) {
-                              setWebhookConfig({
-                                ...webhookConfig,
-                                triggers: [...triggers, trigger.value]
-                              });
+                          onChange={handleChange});
                             } else {
                               setWebhookConfig({
                                 ...webhookConfig,
@@ -412,21 +406,21 @@ export const WebhookBuilder: React.FC = () => {
                       <Button 
                         size="sm" 
                         variant="outline" 
-                        onClick={() => loadTemplate("slack")}
+                        onClick={() => handleloadTemplate}
                       >
                         Slack
                       </Button>
                       <Button 
                         size="sm" 
                         variant="outline" 
-                        onClick={() => loadTemplate("teams")}
+                        onClick={() => handleloadTemplate}
                       >
                         Teams
                       </Button>
                       <Button 
                         size="sm" 
                         variant="outline" 
-                        onClick={() => loadTemplate("generic")}
+                        onClick={() => handleloadTemplate}
                       >
                         Generic
                       </Button>
@@ -434,7 +428,7 @@ export const WebhookBuilder: React.FC = () => {
                   </div>
                   <Textarea
                     value={webhookConfig.payload}
-                    onChange={(e) => setWebhookConfig({...webhookConfig, payload: e.target.value})}
+                    onChange={handleChange})}
                     placeholder="Payload JSON do webhook..."
                     className="font-mono text-sm min-h-32"
                   />
@@ -470,12 +464,7 @@ export const WebhookBuilder: React.FC = () => {
                     <Input
                       type="password"
                       value={webhookConfig.authentication?.value || ""}
-                      onChange={(e) => setWebhookConfig({
-                        ...webhookConfig,
-                        authentication: {
-                          type: webhookConfig.authentication?.type || "none",
-                          value: e.target.value
-                        }
+                      onChange={handleChange}
                       })}
                       placeholder="Token ou chave de autenticação"
                     />
@@ -544,7 +533,7 @@ export const WebhookBuilder: React.FC = () => {
                       <Button 
                         size="sm" 
                         variant="ghost" 
-                        onClick={() => copyWebhookUrl(webhook.url)}
+                        onClick={() => handlecopyWebhookUrl}
                       >
                         <Copy className="w-3 h-3" />
                       </Button>
@@ -567,7 +556,7 @@ export const WebhookBuilder: React.FC = () => {
                     <Button 
                       size="sm" 
                       variant="outline"
-                      onClick={() => handleTestWebhook(webhook.id)}
+                      onClick={() => handlehandleTestWebhook}
                       disabled={isTesting}
                     >
                       {isTesting ? (
@@ -657,7 +646,7 @@ export const WebhookBuilder: React.FC = () => {
                     size="sm" 
                     variant="outline" 
                     className="w-full"
-                    onClick={() => loadTemplate("slack")}
+                    onClick={() => handleloadTemplate}
                   >
                     <Download className="w-3 h-3 mr-1" />
                     Usar Template
@@ -686,7 +675,7 @@ export const WebhookBuilder: React.FC = () => {
                     size="sm" 
                     variant="outline" 
                     className="w-full"
-                    onClick={() => loadTemplate("teams")}
+                    onClick={() => handleloadTemplate}
                   >
                     <Download className="w-3 h-3 mr-1" />
                     Usar Template
@@ -715,7 +704,7 @@ export const WebhookBuilder: React.FC = () => {
                     size="sm" 
                     variant="outline" 
                     className="w-full"
-                    onClick={() => loadTemplate("generic")}
+                    onClick={() => handleloadTemplate}
                   >
                     <Download className="w-3 h-3 mr-1" />
                     Usar Template

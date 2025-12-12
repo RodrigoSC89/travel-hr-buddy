@@ -1,5 +1,5 @@
 /**
-import { useEffect, useState } from "react";;
+import { useEffect, useState, useCallback } from "react";;
  * Role Configurator Component
  * PATCH 122.0 - RBAC Configuration UI
  * 
@@ -213,7 +213,7 @@ export const RoleConfigurator: React.FC = () => {
                 <Button
                   key={module}
                   variant={selectedModule === module ? "default" : "outline"}
-                  onClick={() => setSelectedModule(module)}
+                  onClick={handleSetSelectedModule}
                   className="justify-start"
                 >
                   {module}
@@ -252,7 +252,7 @@ export const RoleConfigurator: React.FC = () => {
                             <Button
                               size="sm"
                               variant="outline"
-                              onClick={() => createPermissionForModule(selectedModule, role.value)}
+                              onClick={() => handlecreatePermissionForModule}
                               disabled={saving}
                             >
                               Criar Permissão

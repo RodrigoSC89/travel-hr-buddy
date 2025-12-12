@@ -2,7 +2,7 @@
  * Nautilus Command Center - Centro de Comando Unificado com IA
  */
 
-import { useEffect, useState } from "react";;;
+import { memo, memo, useEffect, useState, useCallback, useMemo } from "react";;;
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
@@ -40,7 +40,7 @@ interface Notification {
   read: boolean;
 }
 
-export function NautilusCommandCenter() {
+export const NautilusCommandCenter = memo(function() {
   const [activeTab, setActiveTab] = useState("command");
   const { isOnline, pendingCount, forceSync, isSyncing } = useOfflineSync();
   const [isRefreshing, setIsRefreshing] = useState(false);
@@ -188,7 +188,7 @@ export function NautilusCommandCenter() {
                 <RefreshCw className={`h-5 w-5 ${isRefreshing ? "animate-spin" : ""}`} />
               </Button>
 
-              <Button variant="ghost" size="icon" onClick={() => setSettingsOpen(true)}>
+              <Button variant="ghost" size="icon" onClick={handleSetSettingsOpen}>
                 <Settings className="h-5 w-5" />
               </Button>
             </div>

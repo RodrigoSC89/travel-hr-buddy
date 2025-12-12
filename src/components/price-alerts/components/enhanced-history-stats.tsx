@@ -1,4 +1,4 @@
-import { useEffect, useMemo, useState } from "react";;;
+import { memo, memo, useEffect, useMemo, useState, useCallback } from "react";;;
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
@@ -50,7 +50,7 @@ interface PriceHistory {
   source: string;
 }
 
-export function EnhancedHistoryStats() {
+export const EnhancedHistoryStats = memo(function() {
   const { user } = useAuth();
   const { toast } = useToast();
   const [dateFilter, setDateFilter] = useState("30d");

@@ -1,4 +1,4 @@
-import { useEffect, useRef, useState } from "react";;
+import { useEffect, useRef, useState, useCallback, useMemo } from "react";;
 import React, { useState, useRef, useEffect } from "react";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
@@ -354,7 +354,7 @@ What would you like assistance with today?`,
                                   key={index}
                                   variant="ghost"
                                   size="sm"
-                                  onClick={() => handleSuggestionClick(suggestion)}
+                                  onClick={() => handlehandleSuggestionClick}
                                   className="h-6 text-xs"
                                 >
                                   {suggestion}
@@ -398,7 +398,7 @@ What would you like assistance with today?`,
                   <div className="flex-1">
                     <Input
                       value={inputValue}
-                      onChange={(e) => setInputValue(e.target.value)}
+                      onChange={handleChange}
                       placeholder="Ask me anything about your maritime operations..."
                       onKeyPress={(e) => e.key === "Enter" && handleSendMessage()}
                       disabled={isProcessing}

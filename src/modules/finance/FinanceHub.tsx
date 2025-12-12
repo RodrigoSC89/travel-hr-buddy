@@ -3,7 +3,7 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { DollarSign, TrendingUp, TrendingDown, Wallet, Calendar, RefreshCw, Plus, Activity, Brain } from "lucide-react";
 import { supabase } from "@/integrations/supabase/client";
 import { Button } from "@/components/ui/button";
-import { useEffect, useState } from "react";;;
+import { useEffect, useState, useCallback, useMemo } from "react";;;
 import { TransactionList } from "./components/TransactionList";
 import { BudgetOverview } from "./components/BudgetOverview";
 import { ExpenseChart } from "./components/ExpenseChart";
@@ -144,7 +144,7 @@ export default function FinanceHub() {
           </div>
         </div>
         <div className="flex gap-2">
-          <Button onClick={() => setShowAddTransaction(true)}>
+          <Button onClick={handleSetShowAddTransaction}>
             <Plus className="h-4 w-4 mr-2" />
             Nova Transação
           </Button>
@@ -154,21 +154,21 @@ export default function FinanceHub() {
           </Button>
           <Button
             variant={selectedPeriod === "month" ? "default" : "outline"}
-            onClick={() => setSelectedPeriod("month")}
+            onClick={handleSetSelectedPeriod}
             size="sm"
           >
             Mês
           </Button>
           <Button
             variant={selectedPeriod === "quarter" ? "default" : "outline"}
-            onClick={() => setSelectedPeriod("quarter")}
+            onClick={handleSetSelectedPeriod}
             size="sm"
           >
             Trimestre
           </Button>
           <Button
             variant={selectedPeriod === "year" ? "default" : "outline"}
-            onClick={() => setSelectedPeriod("year")}
+            onClick={handleSetSelectedPeriod}
             size="sm"
           >
             Ano

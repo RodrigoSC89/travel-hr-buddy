@@ -1,5 +1,5 @@
 /**
-import { useEffect, useRef, useState } from "react";;
+import { useEffect, useRef, useState, useCallback, useMemo } from "react";;
  * Command Brain Panel - Painel de Chat com IA otimizado
  */
 
@@ -23,7 +23,7 @@ interface CommandBrainPanelProps {
   onSettingsClick?: () => void;
 }
 
-export function CommandBrainPanel({ context, onSettingsClick }: CommandBrainPanelProps) {
+export const CommandBrainPanel = memo(function({ context, onSettingsClick }: CommandBrainPanelProps) {
   const { 
     messages, 
     isLoading, 
@@ -225,7 +225,7 @@ export function CommandBrainPanel({ context, onSettingsClick }: CommandBrainPane
                             variant="ghost" 
                             size="sm" 
                             className="h-6 px-2"
-                            onClick={() => copyMessage(message.content)}
+                            onClick={() => handlecopyMessage}
                           >
                             <Copy className="h-3 w-3" />
                           </Button>
@@ -233,7 +233,7 @@ export function CommandBrainPanel({ context, onSettingsClick }: CommandBrainPane
                             variant="ghost" 
                             size="sm" 
                             className="h-6 px-2"
-                            onClick={() => speakMessage(message.content)}
+                            onClick={() => handlespeakMessage}
                           >
                             {isSpeaking ? <VolumeX className="h-3 w-3" /> : <Volume2 className="h-3 w-3" />}
                           </Button>
@@ -241,7 +241,7 @@ export function CommandBrainPanel({ context, onSettingsClick }: CommandBrainPane
                             variant="ghost" 
                             size="sm" 
                             className={`h-6 px-2 ${message.feedback === "positive" ? "text-green-500 bg-green-50" : ""}`}
-                            onClick={() => handleFeedback(message.id, "positive")}
+                            onClick={() => handlehandleFeedback}
                           >
                             <ThumbsUp className="h-3 w-3" />
                           </Button>
@@ -249,7 +249,7 @@ export function CommandBrainPanel({ context, onSettingsClick }: CommandBrainPane
                             variant="ghost" 
                             size="sm" 
                             className={`h-6 px-2 ${message.feedback === "negative" ? "text-red-500 bg-red-50" : ""}`}
-                            onClick={() => handleFeedback(message.id, "negative")}
+                            onClick={() => handlehandleFeedback}
                           >
                             <ThumbsDown className="h-3 w-3" />
                           </Button>
@@ -276,7 +276,7 @@ export function CommandBrainPanel({ context, onSettingsClick }: CommandBrainPane
           <Input
             ref={inputRef}
             value={input}
-            onChange={(e) => setInput(e.target.value)}
+            onChange={handleChange}
             onKeyPress={(e) => e.key === "Enter" && handleSend()}
             placeholder="Pergunte ao Nautilus Brain..."
             disabled={isLoading}

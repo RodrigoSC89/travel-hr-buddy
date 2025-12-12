@@ -1,5 +1,5 @@
 /**
-import { useEffect, useMemo, useState } from "react";;
+import { useEffect, useMemo, useState, useCallback } from "react";;
  * Telemetry Alerts Component
  * Real-time alert management with filtering and actions
  */
@@ -49,7 +49,7 @@ interface TelemetryAlertsProps {
   onAlertsChange?: (alerts: TelemetryAlert[]) => void;
 }
 
-export function TelemetryAlerts({ alerts: initialAlerts, onAlertsChange }: TelemetryAlertsProps) {
+export const TelemetryAlerts = memo(function({ alerts: initialAlerts, onAlertsChange }: TelemetryAlertsProps) {
   const [alerts, setAlerts] = useState<TelemetryAlert[]>(initialAlerts);
   const [filter, setFilter] = useState<string>("all");
   const [severityFilter, setSeverityFilter] = useState<string>("all");
@@ -147,7 +147,7 @@ export function TelemetryAlerts({ alerts: initialAlerts, onAlertsChange }: Telem
             <Button
               variant="ghost"
               size="sm"
-              onClick={() => setShowSettings(!showSettings)}
+              onClick={handleSetShowSettings}
             >
               <Settings className="h-4 w-4" />
             </Button>
@@ -169,7 +169,7 @@ export function TelemetryAlerts({ alerts: initialAlerts, onAlertsChange }: Telem
                   <Input
                     placeholder="Buscar alertas..."
                     value={searchQuery}
-                    onChange={(e) => setSearchQuery(e.target.value)}
+                    onChange={handleChange}
                     className="pl-8"
                   />
                 </div>
@@ -272,7 +272,7 @@ export function TelemetryAlerts({ alerts: initialAlerts, onAlertsChange }: Telem
                             variant="ghost"
                             size="icon"
                             className="h-6 w-6"
-                            onClick={() => markAsRead(alert.id)}
+                            onClick={() => handlemarkAsRead}
                           >
                             <Eye className="h-3 w-3" />
                           </Button>
@@ -281,7 +281,7 @@ export function TelemetryAlerts({ alerts: initialAlerts, onAlertsChange }: Telem
                           variant="ghost"
                           size="icon"
                           className="h-6 w-6 text-destructive"
-                          onClick={() => deleteAlert(alert.id)}
+                          onClick={() => handledeleteAlert}
                         >
                           <Trash2 className="h-3 w-3" />
                         </Button>

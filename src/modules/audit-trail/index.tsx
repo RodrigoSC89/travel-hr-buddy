@@ -1,5 +1,5 @@
 /**
-import { useState } from "react";;
+import { useState, useCallback } from "react";;
  * PATCH: Trilha de Auditoria com IA
  * Sistema inteligente de rastreamento e análise de ações
  */
@@ -339,7 +339,7 @@ export default function AuditTrail() {
                     <Input
                       placeholder="Buscar registros..."
                       value={searchQuery}
-                      onChange={(e) => setSearchQuery(e.target.value)}
+                      onChange={handleChange}
                       className="pl-9 w-64"
                     />
                   </div>
@@ -347,21 +347,21 @@ export default function AuditTrail() {
                     <Button
                       variant={selectedSeverity === null ? "default" : "outline"}
                       size="sm"
-                      onClick={() => setSelectedSeverity(null)}
+                      onClick={handleSetSelectedSeverity}
                     >
                       Todos
                     </Button>
                     <Button
                       variant={selectedSeverity === "critical" ? "default" : "outline"}
                       size="sm"
-                      onClick={() => setSelectedSeverity("critical")}
+                      onClick={handleSetSelectedSeverity}
                     >
                       Críticos
                     </Button>
                     <Button
                       variant={selectedSeverity === "warning" ? "default" : "outline"}
                       size="sm"
-                      onClick={() => setSelectedSeverity("warning")}
+                      onClick={handleSetSelectedSeverity}
                     >
                       Alertas
                     </Button>

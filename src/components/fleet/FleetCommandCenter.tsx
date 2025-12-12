@@ -1,5 +1,5 @@
 /**
-import { useEffect, useState } from "react";;
+import { useEffect, useState, useCallback, useMemo } from "react";;
  * PATCH 168.0: Nautilus Fleet Command Center (FCC)
  * Central dashboard for fleet-wide vessel monitoring and mission control
  * 
@@ -178,7 +178,7 @@ export const FleetCommandCenter: React.FC = () => {
           </Button>
           <Button
             variant={autoRefresh ? "default" : "outline"}
-            onClick={() => setAutoRefresh(!autoRefresh)}
+            onClick={handleSetAutoRefresh}
           >
             Auto Refresh: {autoRefresh ? "ON" : "OFF"}
           </Button>
@@ -252,7 +252,7 @@ export const FleetCommandCenter: React.FC = () => {
                     <Input
                       placeholder="Search vessels..."
                       value={searchQuery}
-                      onChange={(e) => setSearchQuery(e.target.value)}
+                      onChange={handleChange}
                       className="pl-8 w-64"
                     />
                   </div>
@@ -287,7 +287,7 @@ export const FleetCommandCenter: React.FC = () => {
                         className={`cursor-pointer transition-all hover:shadow-lg ${
                           selectedVessel === vessel.id ? "ring-2 ring-primary" : ""
                         }`}
-                        onClick={() => setSelectedVessel(vessel.id)}
+                        onClick={handleSetSelectedVessel}
                       >
                         <CardHeader className="pb-3">
                           <div className="flex items-start justify-between">

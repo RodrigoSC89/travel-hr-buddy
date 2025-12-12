@@ -1,5 +1,5 @@
 /**
-import { useEffect, useState } from "react";;
+import { useEffect, useState, useCallback, useMemo } from "react";;
  * API Key Management Component - PHASE 2
  * Gerenciamento de chaves de API para integrações externas
  */
@@ -253,7 +253,7 @@ export const ApiKeyManagement: React.FC = () => {
                     id="keyName"
                     placeholder="Ex: Integração ERP"
                     value={newKeyData.name}
-                    onChange={(e) => setNewKeyData(prev => ({ ...prev, name: e.target.value }))}
+                    onChange={handleChange}))}
                   />
                 </div>
                 
@@ -319,13 +319,13 @@ export const ApiKeyManagement: React.FC = () => {
                       />
                       <button
                         type="button"
-                        onClick={() => setShowKey(!showKey)}
+                        onClick={handleSetShowKey}
                         className="absolute right-3 top-1/2 -translate-y-1/2 text-muted-foreground hover:text-foreground"
                       >
                         {showKey ? <EyeOff className="h-4 w-4" /> : <Eye className="h-4 w-4" />}
                       </button>
                     </div>
-                    <Button variant="outline" size="icon" onClick={() => copyToClipboard(generatedKey)}>
+                    <Button variant="outline" size="icon" onClick={() => handlecopyToClipboard}>
                       <Copy className="h-4 w-4" />
                     </Button>
                   </div>
@@ -432,7 +432,7 @@ export const ApiKeyManagement: React.FC = () => {
               <Button 
                 variant="outline" 
                 className="mt-4"
-                onClick={() => setShowNewKeyDialog(true)}
+                onClick={handleSetShowNewKeyDialog}
               >
                 Criar Primeira Chave
               </Button>
@@ -484,7 +484,7 @@ export const ApiKeyManagement: React.FC = () => {
                       variant="ghost"
                       size="icon"
                       className="text-destructive hover:text-destructive"
-                      onClick={() => deleteApiKey(key.id)}
+                      onClick={() => handledeleteApiKey}
                     >
                       <Trash2 className="h-4 w-4" />
                     </Button>

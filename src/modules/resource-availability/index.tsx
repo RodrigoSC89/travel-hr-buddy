@@ -1,5 +1,5 @@
 /**
-import { useState } from "react";;
+import { useState, useMemo, useCallback } from "react";;
  * ANÁLISE DE DISPONIBILIDADE DE RECURSOS
  * Dashboard unificado com IA preditiva de gargalos
  */

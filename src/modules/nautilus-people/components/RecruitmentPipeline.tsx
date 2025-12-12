@@ -1,5 +1,5 @@
 /**
-import { useState } from "react";;
+import { useState, useMemo, useCallback } from "react";;
  * Recruitment Pipeline - Pipeline de Recrutamento com IA
  * Versão funcional com drag-and-drop e todas as ações
  */
@@ -217,7 +217,7 @@ const RecruitmentPipeline: React.FC = () => {
               placeholder="Buscar vaga ou candidato..." 
               className="pl-9"
               value={searchTerm}
-              onChange={(e) => setSearchTerm(e.target.value)}
+              onChange={handleChange}
             />
           </div>
           <Select value={filterStatus} onValueChange={setFilterStatus}>
@@ -256,7 +256,7 @@ const RecruitmentPipeline: React.FC = () => {
                   <Input 
                     placeholder="Ex: Engenheiro de Produção Sênior"
                     value={newVaga.titulo}
-                    onChange={(e) => setNewVaga({...newVaga, titulo: e.target.value})}
+                    onChange={handleChange})}
                   />
                 </div>
                 <div className="grid grid-cols-2 gap-4">
@@ -302,7 +302,7 @@ const RecruitmentPipeline: React.FC = () => {
                     placeholder="Descreva as responsabilidades e requisitos..." 
                     rows={4}
                     value={newVaga.descricao}
-                    onChange={(e) => setNewVaga({...newVaga, descricao: e.target.value})}
+                    onChange={handleChange})}
                   />
                 </div>
                 <div className="space-y-2">
@@ -310,12 +310,12 @@ const RecruitmentPipeline: React.FC = () => {
                   <Input 
                     placeholder="Python, SQL, 3+ anos experiência"
                     value={newVaga.requisitos}
-                    onChange={(e) => setNewVaga({...newVaga, requisitos: e.target.value})}
+                    onChange={handleChange})}
                   />
                 </div>
               </div>
               <DialogFooter>
-                <Button variant="outline" onClick={() => setIsNewVagaOpen(false)}>Cancelar</Button>
+                <Button variant="outline" onClick={handleSetIsNewVagaOpen}>Cancelar</Button>
                 <Button onClick={handleCreateVaga} disabled={isLoading}>
                   {isLoading ? <Loader2 className="w-4 h-4 mr-2 animate-spin" /> : <CheckCircle className="w-4 h-4 mr-2" />}
                   Criar Vaga
@@ -333,7 +333,7 @@ const RecruitmentPipeline: React.FC = () => {
             key={vaga.id}
             whileHover={{ scale: 1.02 }}
             className="cursor-pointer"
-            onClick={() => setSelectedVaga(vaga)}
+            onClick={handleSetSelectedVaga}
           >
             <Card className={`transition-all ${selectedVaga?.id === vaga.id ? "border-primary ring-2 ring-primary/20" : "hover:border-primary/50"}`}>
               <CardContent className="p-4">
@@ -619,7 +619,7 @@ const RecruitmentPipeline: React.FC = () => {
             </div>
           </div>
           <DialogFooter>
-            <Button variant="outline" onClick={() => setIsScheduleOpen(false)}>Cancelar</Button>
+            <Button variant="outline" onClick={handleSetIsScheduleOpen}>Cancelar</Button>
             <Button onClick={() => {
               toast.success(`Reunião agendada com ${selectedCandidato?.nome}`);
               setIsScheduleOpen(false);
@@ -649,7 +649,7 @@ const RecruitmentPipeline: React.FC = () => {
             </div>
           </div>
           <DialogFooter>
-            <Button variant="outline" onClick={() => setIsMessageOpen(false)}>Cancelar</Button>
+            <Button variant="outline" onClick={handleSetIsMessageOpen}>Cancelar</Button>
             <Button onClick={() => {
               toast.success(`Mensagem enviada para ${selectedCandidato?.nome}`);
               setIsMessageOpen(false);

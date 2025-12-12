@@ -1,5 +1,5 @@
 /**
-import { useEffect, useState } from "react";;
+import { useEffect, useState, useCallback, useMemo } from "react";;
  * PATCH 114.0 - Smart Alerts with AI Predictive Analysis
  * Smart Alerts - Intelligent operational alerts with anomaly detection
  */
@@ -246,7 +246,7 @@ const SmartAlerts = () => {
         <div className="flex gap-2">
           <Button 
             variant={showResolved ? "default" : "outline"} 
-            onClick={() => setShowResolved(!showResolved)}
+            onClick={handleSetShowResolved}
           >
             {showResolved ? "Hide" : "Show"} Resolved
           </Button>
@@ -331,7 +331,7 @@ const SmartAlerts = () => {
               <Input
                 placeholder="Search alerts..."
                 value={searchQuery}
-                onChange={(e) => setSearchQuery(e.target.value)}
+                onChange={handleChange}
                 className="pl-9"
               />
             </div>
@@ -469,7 +469,7 @@ const SmartAlerts = () => {
                             <Button 
                               variant="outline" 
                               size="sm"
-                              onClick={() => handleAcknowledge(alert.id)}
+                              onClick={() => handlehandleAcknowledge}
                             >
                               <Eye className="h-4 w-4 mr-2" />
                               Acknowledge
@@ -478,7 +478,7 @@ const SmartAlerts = () => {
                           <Button 
                             variant="default" 
                             size="sm"
-                            onClick={() => handleResolve(alert.id)}
+                            onClick={() => handlehandleResolve}
                           >
                             <CheckCircle className="h-4 w-4 mr-2" />
                             Resolve

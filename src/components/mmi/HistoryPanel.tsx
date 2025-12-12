@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";;;
+import { useEffect, useState, useCallback } from "react";;;
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
@@ -112,7 +112,7 @@ export default function HistoryPanel() {
       <p style="margin-bottom: 30px;">Total de registros: ${selectedRecords.length}</p>
       
       ${selectedRecords.map((history, index) => `
-        <div style="margin-bottom: 30px; padding: 15px; border: 1px solid #ddd; border-radius: 8px;">
+        <div key={div.id || index} style="margin-bottom: 30px; padding: 15px; border: 1px solid #ddd; border-radius: 8px;">
           <h3 style="color: #1e40af; margin-bottom: 10px;">${index + 1}. ${history.system_name}</h3>
           
           <div style="margin-bottom: 10px;">
@@ -265,7 +265,7 @@ export default function HistoryPanel() {
                   </div>
 
                   <Button
-                    onClick={() => exportSinglePDF(history)}
+                    onClick={() => handleexportSinglePDF}
                     variant="outline"
                     size="sm"
                   >

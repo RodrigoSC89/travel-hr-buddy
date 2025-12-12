@@ -1,5 +1,5 @@
 /**
-import { useState } from "react";;
+import { useState, useCallback } from "react";;
  * FASE 3.3 - Error Fallback (Genérico)
  * Componente de fallback UI elegante para erros genéricos
  */
@@ -68,7 +68,7 @@ export const ErrorFallback: React.FC<ErrorFallbackProps> = ({
           {showDetails && (
             <div className="space-y-2">
               <button
-                onClick={() => setDetailsOpen(!detailsOpen)}
+                onClick={handleSetDetailsOpen}
                 className="text-sm text-blue-600 dark:text-blue-400 hover:underline flex items-center gap-2"
               >
                 <Bug className="w-4 h-4" />

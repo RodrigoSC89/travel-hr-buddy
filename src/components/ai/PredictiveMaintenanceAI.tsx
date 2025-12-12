@@ -1,5 +1,5 @@
 /**
-import { useEffect, useState } from "react";;
+import { useEffect, useState, useCallback, useMemo } from "react";;
  * PREDICTIVE MAINTENANCE AI - Manutenção Preditiva com ML
  * Previsão de falhas, alertas automáticos, integração com manutenção
  */
@@ -425,7 +425,7 @@ export const PredictiveMaintenanceAI: React.FC = () => {
                 <Button 
                   className="w-full" 
                   variant={prediction.riskLevel === "critical" ? "destructive" : "default"}
-                  onClick={() => createMaintenanceOrder(prediction)}
+                  onClick={() => handlecreateMaintenanceOrder}
                 >
                   <Wrench className="h-4 w-4 mr-2" />
                   {prediction.riskLevel === "critical" ? "Criar OS Urgente" : "Agendar Manutenção"}

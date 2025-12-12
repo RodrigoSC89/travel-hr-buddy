@@ -6,7 +6,7 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/com
 import { Checkbox } from "@/components/ui/checkbox";
 import { Badge } from "@/components/ui/badge";
 import { CheckCircle2, Satellite, Activity, AlertCircle, BarChart3 } from "lucide-react";
-import { useState } from "react";;;
+import { useState, useCallback } from "react";;;
 
 export default function Patch476Validation() {
   const [checks, setChecks] = useState({

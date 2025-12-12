@@ -1,5 +1,5 @@
 /**
-import { useEffect, useState } from "react";;
+import { useEffect, useState, useCallback } from "react";;
  * PATCH 393 - MMI Integration for Predictive Maintenance
  * Integration with MMI (Machine Maintenance Intelligence) for failure prediction
  */
@@ -208,7 +208,7 @@ export const MMIIntegration: React.FC = () => {
                     </Badge>
                     <Button
                       size="sm"
-                      onClick={() => scheduleMaintenanceFromPrediction(prediction)}
+                      onClick={() => handlescheduleMaintenanceFromPrediction}
                     >
                       Schedule
                     </Button>

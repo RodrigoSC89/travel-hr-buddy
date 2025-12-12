@@ -1,4 +1,4 @@
-import { useState } from "react";;
+import { useState, useCallback } from "react";;
 import React, { useState } from "react";
 import { useAuth } from "@/contexts/AuthContext";
 import { Button } from "@/components/ui/button";
@@ -94,7 +94,7 @@ export const LoginForm: React.FC = () => {
                       type="email"
                       placeholder="seu@email.com"
                       value={loginData.email}
-                      onChange={(e) => setLoginData(prev => ({ ...prev, email: e.target.value }))}
+                      onChange={handleChange}))}
                       className="pl-10"
                       required
                     />
@@ -110,7 +110,7 @@ export const LoginForm: React.FC = () => {
                       type={showPassword ? "text" : "password"}
                       placeholder="••••••••"
                       value={loginData.password}
-                      onChange={(e) => setLoginData(prev => ({ ...prev, password: e.target.value }))}
+                      onChange={handleChange}))}
                       className="pl-10 pr-10"
                       required
                     />
@@ -119,7 +119,7 @@ export const LoginForm: React.FC = () => {
                       variant="ghost"
                       size="sm"
                       className="absolute right-0 top-0 h-full px-3 py-2 hover:bg-transparent"
-                      onClick={() => setShowPassword(!showPassword)}
+                      onClick={handleSetShowPassword}
                     >
                       {showPassword ? (
                         <EyeOff className="h-4 w-4" />

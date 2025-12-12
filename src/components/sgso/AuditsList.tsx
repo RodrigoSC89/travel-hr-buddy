@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";;
+import { useEffect, useState, useCallback } from "react";;
 import React, { useState, useEffect } from "react";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
@@ -26,7 +26,7 @@ interface AuditsListProps {
   onRefresh?: () => void;
 }
 
-export function AuditsList({ onRefresh }: AuditsListProps) {
+export const AuditsList = memo(function({ onRefresh }: AuditsListProps) {
   const { toast } = useToast();
   const [audits, setAudits] = useState<any[]>([]);
   const [loading, setLoading] = useState(true);
@@ -175,19 +175,19 @@ export function AuditsList({ onRefresh }: AuditsListProps) {
                         View Details
                       </DropdownMenuItem>
                       {audit.status === "planned" && (
-                        <DropdownMenuItem onClick={() => handleStatusChange(audit.id, "in_progress")}>
+                        <DropdownMenuItem onClick={() => handlehandleStatusChange}>
                           <Clock className="h-4 w-4 mr-2" />
                           Start Audit
                         </DropdownMenuItem>
                       )}
                       {audit.status === "in_progress" && (
-                        <DropdownMenuItem onClick={() => handleStatusChange(audit.id, "completed")}>
+                        <DropdownMenuItem onClick={() => handlehandleStatusChange}>
                           <CheckCircle className="h-4 w-4 mr-2" />
                           Mark Complete
                         </DropdownMenuItem>
                       )}
                       {audit.status === "completed" && (
-                        <DropdownMenuItem onClick={() => handleStatusChange(audit.id, "closed")}>
+                        <DropdownMenuItem onClick={() => handlehandleStatusChange}>
                           <CheckCircle className="h-4 w-4 mr-2" />
                           Close Audit
                         </DropdownMenuItem>

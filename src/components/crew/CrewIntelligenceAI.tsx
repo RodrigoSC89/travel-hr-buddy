@@ -1,5 +1,5 @@
 /**
-import { useState } from "react";;
+import { useState, useMemo } from "react";;
  * Crew Intelligence AI - Diferencial vs Adonis/Seafair/OneOcean
  * - Matching inteligente tripulante-embarcação
  * - Análise de fadiga (MLC 2006)
@@ -65,7 +65,7 @@ interface FatigueAlert {
   recommendation: string;
 }
 
-export function CrewIntelligenceAI() {
+export const CrewIntelligenceAI = memo(function() {
   const { analyze, suggest, predict, isLoading } = useNautilusAI();
   const [matchResults, setMatchResults] = useState<MatchResult[]>([]);
   const [fatigueAlerts, setFatigueAlerts] = useState<FatigueAlert[]>([]);

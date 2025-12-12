@@ -1,4 +1,4 @@
-import { useState } from "react";;
+import { useState, useCallback } from "react";;
 import React, { useState } from "react";
 import { FileText, Download, Calendar, Filter, BarChart3, TrendingUp, AlertTriangle } from "lucide-react";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
@@ -26,7 +26,7 @@ interface ReportData {
   };
 }
 
-export const ChecklistReports = () => {
+export const ChecklistReports = memo(() => {
   const [reports, setReports] = useState<ReportData[]>([
     {
       id: "1",
@@ -78,7 +78,7 @@ export const ChecklistReports = () => {
     case "audit": return <AlertTriangle className="h-4 w-4" />;
     case "trend": return <TrendingUp className="h-4 w-4" />;
     default: return <FileText className="h-4 w-4" />;
-    }
+    };
   };
 
   const handleGenerateReport = () => {
@@ -210,7 +210,7 @@ export const ChecklistReports = () => {
                     <Button 
                       variant="outline" 
                       size="sm"
-                      onClick={() => handleDownloadReport(report.id)}
+                      onClick={() => handlehandleDownloadReport}
                     >
                       <Download className="h-4 w-4 mr-1" />
                       Download

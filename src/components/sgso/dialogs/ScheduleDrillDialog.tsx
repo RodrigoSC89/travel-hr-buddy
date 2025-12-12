@@ -1,5 +1,5 @@
 /**
-import { useState } from "react";;
+import { useState, useCallback } from "react";;
  * Schedule Drill Dialog
  * Dialog to schedule emergency drills
  */
@@ -218,7 +218,7 @@ export const ScheduleDrillDialog: React.FC<ScheduleDrillDialogProps> = ({
             <Input
               id="location"
               value={formData.location}
-              onChange={(e) => handleChange("location", e.target.value)}
+              onChange={handleChange}
               placeholder="Ex: Convés principal, Praça de máquinas, etc."
             />
           </div>
@@ -232,7 +232,7 @@ export const ScheduleDrillDialog: React.FC<ScheduleDrillDialogProps> = ({
             <Input
               id="coordinator"
               value={formData.coordinator}
-              onChange={(e) => handleChange("coordinator", e.target.value)}
+              onChange={handleChange}
               placeholder="Nome do responsável pela condução"
             />
           </div>
@@ -243,7 +243,7 @@ export const ScheduleDrillDialog: React.FC<ScheduleDrillDialogProps> = ({
             <Textarea
               id="participants"
               value={formData.participants}
-              onChange={(e) => handleChange("participants", e.target.value)}
+              onChange={handleChange}
               placeholder="Liste os participantes ou equipes envolvidas..."
               rows={2}
             />
@@ -255,7 +255,7 @@ export const ScheduleDrillDialog: React.FC<ScheduleDrillDialogProps> = ({
             <Textarea
               id="objectives"
               value={formData.objectives}
-              onChange={(e) => handleChange("objectives", e.target.value)}
+              onChange={handleChange}
               placeholder="Descreva os objetivos a serem alcançados..."
               rows={3}
             />
@@ -267,7 +267,7 @@ export const ScheduleDrillDialog: React.FC<ScheduleDrillDialogProps> = ({
             <Textarea
               id="notes"
               value={formData.notes}
-              onChange={(e) => handleChange("notes", e.target.value)}
+              onChange={handleChange}
               placeholder="Notas adicionais..."
               rows={2}
             />
@@ -275,7 +275,7 @@ export const ScheduleDrillDialog: React.FC<ScheduleDrillDialogProps> = ({
         </div>
 
         <DialogFooter>
-          <Button variant="outline" onClick={() => onOpenChange(false)}>
+          <Button variant="outline" onClick={() => handleonOpenChange}>
             Cancelar
           </Button>
           <Button onClick={handleSubmit} disabled={isSubmitting}>

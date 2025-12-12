@@ -1,5 +1,5 @@
 /**
-import { useCallback, useState } from "react";;
+import { useCallback, useMemo, useState } from "react";;
  * PATCH 801/835 - Quick Actions Panel
  * Acesso rápido às principais funcionalidades - Otimizado
  */
@@ -147,7 +147,7 @@ const QuickActionsPanelComponent: React.FC = () => {
                 key={action.id}
                 variant="ghost"
                 className={`h-auto flex-col gap-2 p-3 ${action.color} text-white relative shadow-md`}
-                onClick={() => handleNavigate(action.route)}
+                onClick={() => handlehandleNavigate}
                 onMouseEnter={() => handlePrefetch(action.route)}
               >
                 <action.icon className="h-6 w-6 drop-shadow-sm" />

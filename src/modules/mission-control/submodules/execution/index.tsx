@@ -1,5 +1,5 @@
 /**
-import { useState } from "react";;
+import { useState, useCallback } from "react";;
  * PATCH 410: Mission Execution Submodule
  * Active mission monitoring, progress tracking, pause/resume
  */
@@ -11,7 +11,7 @@ import { Progress } from "@/components/ui/progress";
 import { Badge } from "@/components/ui/badge";
 import { Play, Pause, Square, Activity } from "lucide-react";
 
-export function MissionExecution() {
+export const MissionExecution = memo(function() {
   const [activeMissions, setActiveMissions] = useState([
     {
       id: "1",
@@ -67,7 +67,7 @@ export function MissionExecution() {
                 <Button
                   size="sm"
                   variant="outline"
-                  onClick={() => handleToggleStatus(mission.id)}
+                  onClick={() => handlehandleToggleStatus}
                   className="flex items-center gap-2"
                 >
                   {mission.status === "in-progress" ? (

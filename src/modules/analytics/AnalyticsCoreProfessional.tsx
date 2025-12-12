@@ -1,5 +1,5 @@
 /**
-import { useCallback, useEffect, useState } from "react";;
+import { useCallback, useMemo, useEffect, useState } from "react";;
  * Analytics Core Professional - Complete Module
  * Full-featured analytics with real data, AI insights, notifications, and export
  */
@@ -1102,7 +1102,7 @@ Este relatório apresenta uma análise abrangente dos principais indicadores de 
                           <Input 
                             type="date" 
                             value={filters.customStartDate || ""}
-                            onChange={(e) => setFilters(f => ({ ...f, customStartDate: e.target.value }))}
+                            onChange={handleChange}))}
                           />
                         </div>
                         <div className="space-y-2">
@@ -1110,7 +1110,7 @@ Este relatório apresenta uma análise abrangente dos principais indicadores de 
                           <Input 
                             type="date" 
                             value={filters.customEndDate || ""}
-                            onChange={(e) => setFilters(f => ({ ...f, customEndDate: e.target.value }))}
+                            onChange={handleChange}))}
                           />
                         </div>
                       </div>
@@ -1406,7 +1406,7 @@ Este relatório apresenta uma análise abrangente dos principais indicadores de 
                     <Button variant="outline" onClick={resetSettings}>
                       Restaurar Padrão
                     </Button>
-                    <Button variant="outline" onClick={() => setSettingsOpen(false)}>
+                    <Button variant="outline" onClick={handleSetSettingsOpen}>
                       Cancelar
                     </Button>
                     <Button onClick={saveSettings}>
@@ -1733,7 +1733,7 @@ Este relatório apresenta uma análise abrangente dos principais indicadores de 
                                   <Button 
                                     variant="ghost" 
                                     size="icon"
-                                    onClick={() => markAsRead(notification.id)}
+                                    onClick={() => handlemarkAsRead}
                                     title="Marcar como lida"
                                   >
                                     <Check className="h-4 w-4" />
@@ -1742,7 +1742,7 @@ Este relatório apresenta uma análise abrangente dos principais indicadores de 
                                 <Button 
                                   variant="ghost" 
                                   size="icon"
-                                  onClick={() => deleteNotification(notification.id)}
+                                  onClick={() => handledeleteNotification}
                                   title="Remover notificação"
                                 >
                                   <X className="h-4 w-4" />
@@ -1847,7 +1847,7 @@ Este relatório apresenta uma análise abrangente dos principais indicadores de 
                             variant="outline" 
                             size="sm" 
                             className="w-full"
-                            onClick={() => applyInsightAction(insight.id)}
+                            onClick={() => handleapplyInsightAction}
                           >
                             <Check className="h-4 w-4 mr-2" />
                             Marcar como Implementado
@@ -1987,21 +1987,21 @@ Este relatório apresenta uma análise abrangente dos principais indicadores de 
                       <Badge 
                         variant={reportConfig.includeCharts ? "default" : "outline"}
                         className="cursor-pointer"
-                        onClick={() => setReportConfig(c => ({ ...c, includeCharts: !c.includeCharts }))}
+                        onClick={handleSetReportConfig}
                       >
                         Gráficos
                       </Badge>
                       <Badge 
                         variant={reportConfig.includeMetrics ? "default" : "outline"}
                         className="cursor-pointer"
-                        onClick={() => setReportConfig(c => ({ ...c, includeMetrics: !c.includeMetrics }))}
+                        onClick={handleSetReportConfig}
                       >
                         Métricas
                       </Badge>
                       <Badge 
                         variant={reportConfig.includeInsights ? "default" : "outline"}
                         className="cursor-pointer"
-                        onClick={() => setReportConfig(c => ({ ...c, includeInsights: !c.includeInsights }))}
+                        onClick={handleSetReportConfig}
                       >
                         Insights
                       </Badge>
@@ -2015,7 +2015,7 @@ Este relatório apresenta uma análise abrangente dos principais indicadores de 
                     <Textarea 
                       placeholder="Descreva o que você deseja incluir no relatório..."
                       value={reportConfig.customPrompt || ""}
-                      onChange={(e) => setReportConfig(c => ({ ...c, customPrompt: e.target.value }))}
+                      onChange={handleChange}))}
                       rows={3}
                     />
                   </div>

@@ -29,7 +29,7 @@ interface LanguageSelectorProps {
   className?: string;
 }
 
-export function LanguageSelector({ variant = "icon", className }: LanguageSelectorProps) {
+export const LanguageSelector = memo(function({ variant = "icon", className }: LanguageSelectorProps) {
   const { language, changeLanguage, languages } = useTranslation();
 
   const currentLang = languages.find(l => l.code === language);
@@ -60,7 +60,7 @@ export function LanguageSelector({ variant = "icon", className }: LanguageSelect
         {languages.map((lang) => (
           <DropdownMenuItem
             key={lang.code}
-            onClick={() => changeLanguage(lang.code)}
+            onClick={() => handlechangeLanguage}
             className="flex items-center gap-3 cursor-pointer"
           >
             <span className="text-xl">{languageFlags[lang.code]}</span>
@@ -81,7 +81,7 @@ export function LanguageSelector({ variant = "icon", className }: LanguageSelect
 }
 
 // Compact version for mobile
-export function LanguageSelectorCompact() {
+export const LanguageSelectorCompact = memo(function() {
   const { language, changeLanguage, languages } = useTranslation();
 
   return (
@@ -89,7 +89,7 @@ export function LanguageSelectorCompact() {
       {languages.map((lang) => (
         <button
           key={lang.code}
-          onClick={() => changeLanguage(lang.code)}
+          onClick={() => handlechangeLanguage}
           className={cn(
             "p-2 rounded-lg transition-colors text-lg",
             language === lang.code

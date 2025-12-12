@@ -442,7 +442,7 @@ const RealTimeWorkspaceProfessional: React.FC = () => {
               variant="outline" 
               size="sm" 
               className="gap-2" 
-              onClick={() => setShowNewChannelDialog(true)}
+              onClick={handleSetShowNewChannelDialog}
             >
               <Plus className="h-4 w-4" />
               <span className="hidden sm:inline">Novo Canal</span>
@@ -495,7 +495,7 @@ const RealTimeWorkspaceProfessional: React.FC = () => {
                     variant="ghost" 
                     size="icon" 
                     className="h-8 w-8"
-                    onClick={() => setShowSettingsDialog(true)}
+                    onClick={handleSetShowSettingsDialog}
                   >
                     <Settings className="h-4 w-4" />
                   </Button>
@@ -573,7 +573,7 @@ const RealTimeWorkspaceProfessional: React.FC = () => {
                 id="channel-name"
                 placeholder="ex: operações-diárias"
                 value={newChannelName}
-                onChange={(e) => setNewChannelName(e.target.value)}
+                onChange={handleChange}
               />
             </div>
             <div className="space-y-2">
@@ -600,7 +600,7 @@ const RealTimeWorkspaceProfessional: React.FC = () => {
             </div>
           </div>
           <DialogFooter>
-            <Button variant="outline" onClick={() => setShowNewChannelDialog(false)}>
+            <Button variant="outline" onClick={handleSetShowNewChannelDialog}>
               Cancelar
             </Button>
             <Button onClick={handleCreateChannel} disabled={isCreatingChannel}>
@@ -653,7 +653,7 @@ const RealTimeWorkspaceProfessional: React.FC = () => {
             </div>
           </div>
           <DialogFooter>
-            <Button variant="outline" onClick={() => setShowMeetingDialog(false)}>
+            <Button variant="outline" onClick={handleSetShowMeetingDialog}>
               Fechar
             </Button>
             <Button onClick={handleJoinMeeting}>
@@ -733,7 +733,7 @@ const RealTimeWorkspaceProfessional: React.FC = () => {
             </div>
           </div>
           <DialogFooter>
-            <Button variant="outline" onClick={() => setShowSettingsDialog(false)}>
+            <Button variant="outline" onClick={handleSetShowSettingsDialog}>
               Fechar
             </Button>
             <Button onClick={() => {

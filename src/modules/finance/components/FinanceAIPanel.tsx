@@ -2,7 +2,7 @@
  * Finance AI Panel - Painel de IA para análise financeira
  */
 
-import { useState } from "react";;;
+import { memo, memo, useState, useCallback, useMemo } from "react";;;
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
@@ -34,7 +34,7 @@ interface FinanceAIPanelProps {
   expenses: number;
 }
 
-export function FinanceAIPanel({ transactions, income, expenses }: FinanceAIPanelProps) {
+export const FinanceAIPanel = memo(function({ transactions, income, expenses }: FinanceAIPanelProps) {
   const { analyze, chat, isLoading } = useNautilusAI();
   const [analysis, setAnalysis] = useState<string | null>(null);
   const [chatInput, setChatInput] = useState("");
@@ -187,7 +187,7 @@ export function FinanceAIPanel({ transactions, income, expenses }: FinanceAIPane
           <Textarea
             placeholder="Pergunte sobre suas finanças..."
             value={chatInput}
-            onChange={(e) => setChatInput(e.target.value)}
+            onChange={handleChange}
             rows={1}
             className="resize-none"
             onKeyDown={(e) => {

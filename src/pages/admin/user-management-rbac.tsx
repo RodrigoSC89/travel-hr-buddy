@@ -1,4 +1,4 @@
-import { useState } from "react";;;
+import { useState, useCallback } from "react";;;
 import { logger } from "@/lib/logger";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
@@ -185,7 +185,7 @@ export default function UserManagementRBAC() {
                       <Card
                         key={group.id}
                         className="cursor-pointer hover:bg-accent"
-                        onClick={() => setSelectedGroup(group.id)}
+                        onClick={handleSetSelectedGroup}
                       >
                         <CardContent className="p-4">
                           <div className="flex items-center justify-between">

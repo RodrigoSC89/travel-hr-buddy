@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";;
+import { useEffect, useState, useCallback } from "react";;
 import React, { useState, useEffect } from "react";
 import { cn } from "@/lib/utils";
 import { 
@@ -323,9 +323,7 @@ export const RealTimeMonitor = ({ className }: RealTimeMonitorProps) => {
               vessel.isOnline ? "border-border" : "border-danger/30",
               selectedVessel === vessel.vesselId && "ring-2 ring-primary"
             )}
-            onClick={() => setSelectedVessel(
-              selectedVessel === vessel.vesselId ? null : vessel.vesselId
-            )}
+            onClick={handleSetSelectedVessel}
           >
             {/* Vessel Header */}
             <div className="p-4 border-b border-border">

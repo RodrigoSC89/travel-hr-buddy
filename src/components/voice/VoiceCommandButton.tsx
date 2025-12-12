@@ -1,5 +1,5 @@
 /**
-import { useState } from "react";;
+import { useState, useCallback } from "react";;
  * Voice Command Button - PATCH 837
  * Floating voice command activation button
  */
@@ -23,7 +23,7 @@ const positionClasses = {
   "top-right": "top-4 right-4",
 };
 
-export function VoiceCommandButton({
+export const VoiceCommandButton = memo(function({
   position = "bottom-right",
   className,
 }: VoiceCommandButtonProps) {

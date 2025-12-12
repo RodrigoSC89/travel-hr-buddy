@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";;
+import { useEffect, useState, useCallback } from "react";;
 import React, { useState, useEffect } from "react";
 import { supabase } from "@/integrations/supabase/client";
 import { useToast } from "@/hooks/use-toast";
@@ -358,7 +358,7 @@ export const EnhancedFeedbackSystem: React.FC = () => {
                     <Input
                       placeholder="Título, descrição ou usuário..."
                       value={filter.search || ""}
-                      onChange={(e) => setFilter({...filter, search: e.target.value})}
+                      onChange={handleChange})}
                       className="pl-10"
                     />
                   </div>
@@ -522,7 +522,7 @@ export const EnhancedFeedbackSystem: React.FC = () => {
                   id="title"
                   placeholder="Resumo do seu feedback"
                   value={newFeedback.title}
-                  onChange={(e) => setNewFeedback({...newFeedback, title: e.target.value})}
+                  onChange={handleChange})}
                 />
               </div>
 
@@ -532,7 +532,7 @@ export const EnhancedFeedbackSystem: React.FC = () => {
                   id="description"
                   placeholder="Descreva detalhadamente seu feedback, sugestão ou problema"
                   value={newFeedback.description}
-                  onChange={(e) => setNewFeedback({...newFeedback, description: e.target.value})}
+                  onChange={handleChange})}
                   rows={4}
                 />
               </div>

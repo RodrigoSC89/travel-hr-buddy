@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";;
+import { useEffect, useState, useCallback } from "react";;
 import React, { useState, useEffect } from "react";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
@@ -161,7 +161,7 @@ export const DocumentWorkflowPanel: React.FC = () => {
                 <Input 
                   id="title"
                   value={newDoc.title}
-                  onChange={(e) => setNewDoc({ ...newDoc, title: e.target.value })}
+                  onChange={handleChange})}
                   placeholder="Nome do documento"
                 />
               </div>
@@ -186,13 +186,13 @@ export const DocumentWorkflowPanel: React.FC = () => {
                 <Textarea 
                   id="description"
                   value={newDoc.description}
-                  onChange={(e) => setNewDoc({ ...newDoc, description: e.target.value })}
+                  onChange={handleChange})}
                   placeholder="Descrição do documento"
                 />
               </div>
             </div>
             <DialogFooter>
-              <Button variant="outline" onClick={() => setIsCreateOpen(false)}>Cancelar</Button>
+              <Button variant="outline" onClick={handleSetIsCreateOpen}>Cancelar</Button>
               <Button onClick={handleCreateDocument}>Criar Documento</Button>
             </DialogFooter>
           </DialogContent>
@@ -288,7 +288,7 @@ export const DocumentWorkflowPanel: React.FC = () => {
                 <div className="text-center py-8 text-muted-foreground">
                   <FileText className="h-12 w-12 mx-auto mb-4 opacity-50" />
                   <p>Nenhum documento cadastrado</p>
-                  <Button className="mt-4" onClick={() => setIsCreateOpen(true)}>
+                  <Button className="mt-4" onClick={handleSetIsCreateOpen}>
                     Criar Primeiro Documento
                   </Button>
                 </div>
@@ -329,7 +329,7 @@ export const DocumentWorkflowPanel: React.FC = () => {
                               <Button 
                                 variant="outline" 
                                 size="sm"
-                                onClick={() => handleSubmitForApproval(doc.id)}
+                                onClick={() => handlehandleSubmitForApproval}
                               >
                                 <Send className="h-4 w-4 mr-1" />
                                 Enviar
@@ -378,13 +378,13 @@ export const DocumentWorkflowPanel: React.FC = () => {
                               variant="outline" 
                               size="sm"
                               className="text-red-600"
-                              onClick={() => handleApprove(approval.id, "rejected", "Documento rejeitado")}
+                              onClick={() => handlehandleApprove}
                             >
                               Rejeitar
                             </Button>
                             <Button 
                               size="sm"
-                              onClick={() => handleApprove(approval.id, "approved")}
+                              onClick={() => handlehandleApprove}
                             >
                               <CheckCircle className="h-4 w-4 mr-1" />
                               Aprovar

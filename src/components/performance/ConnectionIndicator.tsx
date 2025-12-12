@@ -1,5 +1,5 @@
 /**
-import { useEffect, useState } from "react";;
+import { useEffect, useState, useCallback } from "react";;
  * Connection Indicator Component
  * PATCH 834: Visual feedback for network status
  */
@@ -16,7 +16,7 @@ interface ConnectionIndicatorProps {
   showSpeed?: boolean;
 }
 
-export function ConnectionIndicator({
+export const ConnectionIndicator = memo(function({
   position = "bottom-left",
   showAlways = false,
   showSpeed = true,
@@ -136,7 +136,7 @@ export function ConnectionIndicator({
 }
 
 // Compact badge version
-export function ConnectionBadge({ className }: { className?: string }) {
+export const ConnectionBadge = memo(function({ className }: { className?: string }) {
   const { connectionType } = useBandwidthOptimizer();
   
   const isSlowConnection = ["2g", "slow-2g", "3g"].includes(connectionType);
@@ -159,7 +159,7 @@ export function ConnectionBadge({ className }: { className?: string }) {
 }
 
 // Hook to check if features should be disabled
-export function useSlowConnectionWarning() {
+export const useSlowConnectionWarning = memo(function() {
   const { connectionType, isLowBandwidth } = useBandwidthOptimizer();
   
   const showWarning = isLowBandwidth;

@@ -1,5 +1,5 @@
 /**
-import { useState } from "react";;
+import { useState, useMemo, useCallback } from "react";;
  * Certificates Panel Component
  * Painel completo de certificados com funcionalidades avançadas
  */
@@ -53,7 +53,7 @@ interface CertificatesPanelProps {
   onSetReminder: (certId: string) => void;
 }
 
-export function CertificatesPanel({
+export const CertificatesPanel = memo(function({
   certificates,
   onAddCertificate,
   onViewCertificate,
@@ -246,7 +246,7 @@ export function CertificatesPanel({
               <Input
                 placeholder="Buscar certificado..."
                 value={searchTerm}
-                onChange={(e) => setSearchTerm(e.target.value)}
+                onChange={handleChange}
                 className="pl-9"
               />
             </div>
@@ -306,22 +306,22 @@ export function CertificatesPanel({
                         </Button>
                       </DropdownMenuTrigger>
                       <DropdownMenuContent align="end">
-                        <DropdownMenuItem onClick={() => onViewCertificate(cert.id)}>
+                        <DropdownMenuItem onClick={() => handleonViewCertificate}>
                           <Eye className="h-4 w-4 mr-2" />
                           Visualizar
                         </DropdownMenuItem>
-                        <DropdownMenuItem onClick={() => onEditCertificate(cert.id)}>
+                        <DropdownMenuItem onClick={() => handleonEditCertificate}>
                           <Edit className="h-4 w-4 mr-2" />
                           Editar
                         </DropdownMenuItem>
                         {cert.documentUrl && (
-                          <DropdownMenuItem onClick={() => onDownloadCertificate(cert.id)}>
+                          <DropdownMenuItem onClick={() => handleonDownloadCertificate}>
                             <Download className="h-4 w-4 mr-2" />
                             Download
                           </DropdownMenuItem>
                         )}
                         <DropdownMenuSeparator />
-                        <DropdownMenuItem onClick={() => onSetReminder(cert.id)}>
+                        <DropdownMenuItem onClick={() => handleonSetReminder}>
                           <Bell className="h-4 w-4 mr-2" />
                           Configurar Lembrete
                         </DropdownMenuItem>

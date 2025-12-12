@@ -1,5 +1,5 @@
 /**
-import { useEffect, useState } from "react";;
+import { useEffect, useState, useCallback } from "react";;
  * PATCH 840: System Bootstrap Component
  * Initializes all system components and shows loading state
  */
@@ -21,7 +21,7 @@ interface SystemBootstrapProps {
   showPWAPrompts?: boolean;
 }
 
-export function SystemBootstrap({
+export const SystemBootstrap = memo(function({
   children,
   showOfflineIndicator = true,
   showVoiceCommands = false,

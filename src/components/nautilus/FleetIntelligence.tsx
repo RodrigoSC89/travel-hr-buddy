@@ -2,7 +2,7 @@
  * Fleet Intelligence - Real-time fleet monitoring with AI insights
  */
 
-import { useEffect, useState } from "react";;;
+import { memo, memo, useEffect, useState, useCallback, useMemo } from "react";;;
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
@@ -27,7 +27,7 @@ interface VesselStatus {
   efficiency: number;
 }
 
-export function FleetIntelligence() {
+export const FleetIntelligence = memo(function() {
   const [vessels, setVessels] = useState<VesselStatus[]>([]);
   const [selectedVessel, setSelectedVessel] = useState<string | null>(null);
   const [isLoading, setIsLoading] = useState(true);
@@ -287,7 +287,7 @@ export function FleetIntelligence() {
                     className={`p-4 rounded-lg border bg-card/50 hover:bg-card/80 transition-all cursor-pointer ${
                       selectedVessel === vessel.id ? "ring-2 ring-primary" : ""
                     }`}
-                    onClick={() => setSelectedVessel(vessel.id === selectedVessel ? null : vessel.id)}
+                    onClick={handleSetSelectedVessel}
                   >
                     <div className="flex items-center justify-between">
                       <div className="flex items-center gap-4">

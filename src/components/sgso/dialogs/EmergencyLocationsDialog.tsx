@@ -1,5 +1,5 @@
 /**
-import { useState } from "react";;
+import { useState, useCallback } from "react";;
  * Emergency Locations Dialog
  * Map view of emergency meeting points and equipment
  */
@@ -303,7 +303,7 @@ export const EmergencyLocationsDialog: React.FC<EmergencyLocationsDialogProps> =
         </Tabs>
 
         <div className="flex justify-end pt-4 border-t">
-          <Button variant="outline" onClick={() => onOpenChange(false)}>
+          <Button variant="outline" onClick={() => handleonOpenChange}>
             Fechar
           </Button>
         </div>

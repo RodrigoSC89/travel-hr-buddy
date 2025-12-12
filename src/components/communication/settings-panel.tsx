@@ -75,7 +75,7 @@ interface UserSettings {
   };
 }
 
-export const SettingsPanel = () => {
+export const SettingsPanel = memo(() => {
   const [settings, setSettings] = useState<UserSettings>({
     profile: {
       display_name: "João Silva",
@@ -342,7 +342,7 @@ export const SettingsPanel = () => {
                   <Label>Nome de Exibição</Label>
                   <Input
                     value={settings.profile.display_name}
-                    onChange={(e) => updateSettings("profile", { display_name: e.target.value })}
+                    onChange={handleChange})}
                     placeholder="Seu nome completo"
                   />
                 </div>
@@ -351,7 +351,7 @@ export const SettingsPanel = () => {
                   <Label>Assinatura</Label>
                   <Textarea
                     value={settings.profile.signature}
-                    onChange={(e) => updateSettings("profile", { signature: e.target.value })}
+                    onChange={handleChange})}
                     placeholder="Assinatura para suas mensagens"
                     className="min-h-20"
                   />
@@ -418,7 +418,7 @@ export const SettingsPanel = () => {
                   <Label>URL do Avatar</Label>
                   <Input
                     value={settings.profile.avatar_url}
-                    onChange={(e) => updateSettings("profile", { avatar_url: e.target.value })}
+                    onChange={handleChange})}
                     placeholder="https://exemplo.com/avatar.jpg"
                   />
                 </div>
@@ -484,7 +484,7 @@ export const SettingsPanel = () => {
                     {settings.notifications.sound_enabled ? 
                       <Volume2 className="h-4 w-4" /> : 
                       <VolumeX className="h-4 w-4" />
-                    }
+                    };
                     <Label>Som</Label>
                   </div>
                   <Switch 

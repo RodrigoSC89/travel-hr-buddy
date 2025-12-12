@@ -1,5 +1,5 @@
 /**
-import { useState } from "react";;
+import { useState, useCallback } from "react";;
  * PEO-DP Checklist Editor
  * Editor para criar/atualizar requisitos do checklist PEO-DP anualmente
  */
@@ -43,7 +43,7 @@ interface PEODPChecklistEditorProps {
   existingVersion?: PEODPChecklistVersion;
 }
 
-export function PEODPChecklistEditor({ onSave, existingVersion }: PEODPChecklistEditorProps) {
+export const PEODPChecklistEditor = memo(function({ onSave, existingVersion }: PEODPChecklistEditorProps) {
   const currentYear = new Date().getFullYear();
   
   const [version, setVersion] = useState<Partial<PEODPChecklistVersion>>({
@@ -225,7 +225,7 @@ export function PEODPChecklistEditor({ onSave, existingVersion }: PEODPChecklist
                 id="year"
                 type="number"
                 value={version.year}
-                onChange={(e) => setVersion(prev => ({ ...prev, year: parseInt(e.target.value) }))}
+                onChange={handleChange}))}
               />
             </div>
             <div className="space-y-2">
@@ -233,7 +233,7 @@ export function PEODPChecklistEditor({ onSave, existingVersion }: PEODPChecklist
               <Input
                 id="versionNum"
                 value={version.version}
-                onChange={(e) => setVersion(prev => ({ ...prev, version: e.target.value }))}
+                onChange={handleChange}))}
               />
             </div>
             <div className="space-y-2">
@@ -242,7 +242,7 @@ export function PEODPChecklistEditor({ onSave, existingVersion }: PEODPChecklist
                 id="effectiveDate"
                 type="date"
                 value={version.effectiveDate}
-                onChange={(e) => setVersion(prev => ({ ...prev, effectiveDate: e.target.value }))}
+                onChange={handleChange}))}
               />
             </div>
             <div className="space-y-2">
@@ -256,7 +256,7 @@ export function PEODPChecklistEditor({ onSave, existingVersion }: PEODPChecklist
               id="notes"
               placeholder="Observações sobre esta versão do checklist..."
               value={version.notes}
-              onChange={(e) => setVersion(prev => ({ ...prev, notes: e.target.value }))}
+              onChange={handleChange}))}
               rows={2}
             />
           </div>
@@ -323,7 +323,7 @@ export function PEODPChecklistEditor({ onSave, existingVersion }: PEODPChecklist
                       <Input
                         placeholder="Ex: 3.2.25"
                         value={newReq.code}
-                        onChange={(e) => setNewReq(prev => ({ ...prev, code: e.target.value }))}
+                        onChange={handleChange}))}
                       />
                     </div>
                   </div>
@@ -332,7 +332,7 @@ export function PEODPChecklistEditor({ onSave, existingVersion }: PEODPChecklist
                     <Input
                       placeholder="Título do requisito"
                       value={newReq.title}
-                      onChange={(e) => setNewReq(prev => ({ ...prev, title: e.target.value }))}
+                      onChange={handleChange}))}
                     />
                   </div>
                   <div className="space-y-2">
@@ -340,7 +340,7 @@ export function PEODPChecklistEditor({ onSave, existingVersion }: PEODPChecklist
                     <Textarea
                       placeholder="Descrição detalhada do requisito..."
                       value={newReq.description}
-                      onChange={(e) => setNewReq(prev => ({ ...prev, description: e.target.value }))}
+                      onChange={handleChange}))}
                       rows={3}
                     />
                   </div>
@@ -350,7 +350,7 @@ export function PEODPChecklistEditor({ onSave, existingVersion }: PEODPChecklist
                       <Input
                         placeholder="Ex: IMCA M 117"
                         value={newReq.reference}
-                        onChange={(e) => setNewReq(prev => ({ ...prev, reference: e.target.value }))}
+                        onChange={handleChange}))}
                       />
                     </div>
                     <div className="space-y-2">
@@ -360,7 +360,7 @@ export function PEODPChecklistEditor({ onSave, existingVersion }: PEODPChecklist
                         min={1}
                         max={10}
                         value={newReq.weight}
-                        onChange={(e) => setNewReq(prev => ({ ...prev, weight: parseInt(e.target.value) }))}
+                        onChange={handleChange}))}
                       />
                     </div>
                     <div className="space-y-2">
@@ -376,7 +376,7 @@ export function PEODPChecklistEditor({ onSave, existingVersion }: PEODPChecklist
                   </div>
                 </div>
                 <DialogFooter>
-                  <Button variant="outline" onClick={() => setIsAddDialogOpen(false)}>
+                  <Button variant="outline" onClick={handleSetIsAddDialogOpen}>
                     Cancelar
                   </Button>
                   <Button onClick={handleAddRequirement}>
@@ -430,14 +430,14 @@ export function PEODPChecklistEditor({ onSave, existingVersion }: PEODPChecklist
                         <Button
                           variant="ghost"
                           size="icon"
-                          onClick={() => setEditingReq(req)}
+                          onClick={handleSetEditingReq}
                         >
                           <Edit className="h-4 w-4" />
                         </Button>
                         <Button
                           variant="ghost"
                           size="icon"
-                          onClick={() => handleDeleteRequirement(req.id)}
+                          onClick={() => handlehandleDeleteRequirement}
                         >
                           <Trash2 className="h-4 w-4 text-destructive" />
                         </Button>
@@ -482,7 +482,7 @@ export function PEODPChecklistEditor({ onSave, existingVersion }: PEODPChecklist
                   <Label>Código</Label>
                   <Input
                     value={editingReq.code}
-                    onChange={(e) => setEditingReq({ ...editingReq, code: e.target.value })}
+                    onChange={handleChange})}
                   />
                 </div>
               </div>
@@ -490,14 +490,14 @@ export function PEODPChecklistEditor({ onSave, existingVersion }: PEODPChecklist
                 <Label>Título</Label>
                 <Input
                   value={editingReq.title}
-                  onChange={(e) => setEditingReq({ ...editingReq, title: e.target.value })}
+                  onChange={handleChange})}
                 />
               </div>
               <div className="space-y-2">
                 <Label>Descrição</Label>
                 <Textarea
                   value={editingReq.description}
-                  onChange={(e) => setEditingReq({ ...editingReq, description: e.target.value })}
+                  onChange={handleChange})}
                   rows={3}
                 />
               </div>
@@ -506,7 +506,7 @@ export function PEODPChecklistEditor({ onSave, existingVersion }: PEODPChecklist
                   <Label>Referência</Label>
                   <Input
                     value={editingReq.reference || ""}
-                    onChange={(e) => setEditingReq({ ...editingReq, reference: e.target.value })}
+                    onChange={handleChange})}
                   />
                 </div>
                 <div className="space-y-2">
@@ -516,7 +516,7 @@ export function PEODPChecklistEditor({ onSave, existingVersion }: PEODPChecklist
                     min={1}
                     max={10}
                     value={editingReq.weight}
-                    onChange={(e) => setEditingReq({ ...editingReq, weight: parseInt(e.target.value) })}
+                    onChange={handleChange})}
                   />
                 </div>
                 <div className="space-y-2">
@@ -533,7 +533,7 @@ export function PEODPChecklistEditor({ onSave, existingVersion }: PEODPChecklist
             </div>
           )}
           <DialogFooter>
-            <Button variant="outline" onClick={() => setEditingReq(null)}>
+            <Button variant="outline" onClick={handleSetEditingReq}>
               Cancelar
             </Button>
             <Button onClick={handleUpdateRequirement}>

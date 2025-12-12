@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";;
+import { useEffect, useState, useCallback, useMemo } from "react";;
 import React, { useState, useEffect } from "react";
 import {
   Dialog,
@@ -317,7 +317,7 @@ export const DrillSimulationDialog: React.FC<DrillSimulationDialogProps> = ({
               id="observations"
               placeholder="Registre observações, não-conformidades ou pontos de melhoria..."
               value={observations}
-              onChange={(e) => setObservations(e.target.value)}
+              onChange={handleChange}
               rows={3}
             />
           </div>
@@ -343,7 +343,7 @@ export const DrillSimulationDialog: React.FC<DrillSimulationDialogProps> = ({
         <Separator />
 
         <div className="flex justify-between">
-          <Button variant="outline" onClick={() => onOpenChange(false)}>
+          <Button variant="outline" onClick={() => handleonOpenChange}>
             Cancelar
           </Button>
           <Button 

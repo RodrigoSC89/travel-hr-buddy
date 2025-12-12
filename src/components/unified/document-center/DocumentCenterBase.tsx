@@ -1,5 +1,5 @@
 /**
-import { useState } from "react";;
+import { useState, useCallback } from "react";;
  * UNIFIED Document Center Base Component
  * 
  * Consolidates all document-related centers:
@@ -132,7 +132,7 @@ const DocumentCenterContent: React.FC<{ className?: string }> = ({ className }) 
         </div>
         <div className="flex items-center gap-2">
           {config.enableUpload && (
-            <Button onClick={() => setUploadDialogOpen(true)} className="gap-2">
+            <Button onClick={handleSetUploadDialogOpen} className="gap-2">
               <Upload className="w-4 h-4" />
               Upload
             </Button>
@@ -241,21 +241,21 @@ const DocumentCenterContent: React.FC<{ className?: string }> = ({ className }) 
           <Button
             variant={viewMode === "grid" ? "secondary" : "ghost"}
             size="icon"
-            onClick={() => setViewMode("grid")}
+            onClick={handleSetViewMode}
           >
             <Grid3x3 className="w-4 h-4" />
           </Button>
           <Button
             variant={viewMode === "list" ? "secondary" : "ghost"}
             size="icon"
-            onClick={() => setViewMode("list")}
+            onClick={handleSetViewMode}
           >
             <List className="w-4 h-4" />
           </Button>
           <Button
             variant={viewMode === "table" ? "secondary" : "ghost"}
             size="icon"
-            onClick={() => setViewMode("table")}
+            onClick={handleSetViewMode}
           >
             <TableIcon className="w-4 h-4" />
           </Button>
@@ -287,7 +287,7 @@ const DocumentCenterContent: React.FC<{ className?: string }> = ({ className }) 
               {config.emptyStateMessage || "Upload your first document to get started"}
             </p>
             {config.enableUpload && (
-              <Button onClick={() => setUploadDialogOpen(true)} className="gap-2">
+              <Button onClick={handleSetUploadDialogOpen} className="gap-2">
                 <Plus className="w-4 h-4" />
                 Upload Document
               </Button>

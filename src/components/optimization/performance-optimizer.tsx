@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";;
+import { useEffect, useState, useCallback } from "react";;
 import React, { useState, useEffect } from "react";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
@@ -192,7 +192,7 @@ const PerformanceOptimizer = () => {
             />
           </div>
           <Button 
-            onClick={() => runOptimization(optimizations[0])}
+            onClick={() => handlerunOptimization}
             disabled={isOptimizing}
           >
             {isOptimizing ? (
@@ -385,7 +385,7 @@ const PerformanceOptimizer = () => {
                 {optimization.status === "recommended" && (
                   <Button 
                     size="sm" 
-                    onClick={() => runOptimization(optimization)}
+                    onClick={() => handlerunOptimization}
                     disabled={isOptimizing}
                   >
                     Aplicar

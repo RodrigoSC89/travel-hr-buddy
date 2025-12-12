@@ -136,7 +136,7 @@ const STATUS_CONFIG: Record<ASOGStatus, {
   }
 };
 
-export function ASOGStatusDisplay({ 
+export const ASOGStatusDisplay = memo(function({ 
   data: propData, 
   onStatusChange, 
   onAcknowledgeAlert, 

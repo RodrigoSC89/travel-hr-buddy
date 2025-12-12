@@ -1,4 +1,4 @@
-import { useState } from "react";;
+import { useState, useMemo, useCallback } from "react";;
 import React from "react";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
@@ -213,7 +213,7 @@ export const ReservationCard: React.FC<ReservationCardProps> = ({
           <Button
             variant="outline"
             size="sm"
-            onClick={() => onEdit(reservation)}
+            onClick={() => handleonEdit}
             className="flex-1"
           >
             <Edit className="h-4 w-4 mr-1" />
@@ -223,7 +223,7 @@ export const ReservationCard: React.FC<ReservationCardProps> = ({
           <Button
             variant="outline"
             size="sm"
-            onClick={() => setShowAttachments(true)}
+            onClick={handleSetShowAttachments}
           >
             <Paperclip className="h-4 w-4" />
           </Button>
@@ -231,7 +231,7 @@ export const ReservationCard: React.FC<ReservationCardProps> = ({
           <Button
             variant="outline"
             size="sm"
-            onClick={() => setShowPDFGenerator(true)}
+            onClick={handleSetShowPDFGenerator}
           >
             <Download className="h-4 w-4" />
           </Button>
@@ -249,7 +249,7 @@ export const ReservationCard: React.FC<ReservationCardProps> = ({
           <Button
             variant="outline"
             size="sm"
-            onClick={() => onDelete(reservation.id)}
+            onClick={() => handleonDelete}
             className="text-red-600 hover:text-red-700 hover:bg-red-50 dark:hover:bg-red-950"
           >
             <Trash2 className="h-4 w-4" />

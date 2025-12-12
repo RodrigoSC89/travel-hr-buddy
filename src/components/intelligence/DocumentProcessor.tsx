@@ -1,4 +1,4 @@
-import { useRef, useState } from "react";;
+import { useRef, useState, useCallback, useMemo } from "react";;
 import React, { useState, useRef } from "react";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
@@ -276,7 +276,7 @@ export const DocumentProcessor: React.FC = () => {
               type="file"
               className="hidden"
               accept=".pdf,.doc,.docx,.txt,.csv"
-              onChange={(e) => handleFileUpload(e.target.files)}
+              onChange={handleChange}
             />
           </div>
         </CardContent>
@@ -301,7 +301,7 @@ export const DocumentProcessor: React.FC = () => {
                           ? "border-primary bg-primary/5" 
                           : "border-border hover:border-primary/50"
                       }`}
-                      onClick={() => setSelectedDoc(doc)}
+                      onClick={handleSetSelectedDoc}
                     >
                       <div className="flex items-start justify-between">
                         <div className="flex-1 min-w-0">

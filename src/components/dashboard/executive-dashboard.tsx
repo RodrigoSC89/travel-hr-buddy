@@ -3,7 +3,7 @@
  * Dashboard executivo com métricas, KPIs e visualizações avançadas
  */
 
-import { useState } from "react";;;
+import { memo, memo, useState, useMemo } from "react";;;
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
@@ -165,7 +165,7 @@ const VesselPerformanceCard = ({ vessel }: unknown: unknown: unknown) => (
   </Card>
 );
 
-export function ExecutiveDashboard() {
+export const ExecutiveDashboard = memo(function() {
   const [activeTab, setActiveTab] = useState("overview");
 
   return (

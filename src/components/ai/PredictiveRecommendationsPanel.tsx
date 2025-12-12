@@ -1,5 +1,5 @@
 /**
-import { useEffect, useState } from "react";;
+import { useEffect, useState, useCallback, useMemo } from "react";;
  * PREDICTIVE RECOMMENDATIONS PANEL - PHASE 1
  * Painel de recomendações preditivas com IA
  */
@@ -150,7 +150,7 @@ const RecommendationCard: React.FC<RecommendationCardProps> = ({ recommendation,
         <Button
           variant="ghost"
           size="sm"
-          onClick={() => setExpanded(!expanded)}
+          onClick={handleSetExpanded}
         >
           <ChevronRight className={`h-4 w-4 transition-transform ${expanded ? "rotate-90" : ""}`} />
         </Button>

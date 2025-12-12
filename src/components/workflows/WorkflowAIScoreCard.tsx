@@ -1,8 +1,9 @@
+import { memo } from 'react';
 "use client";
 
 import { Card, CardContent } from "@/components/ui/card";
 
-export function WorkflowAIScoreCard() {
+export const WorkflowAIScoreCard = memo(function() {
   // Mock data for now - TODO: Implement real workflow AI metrics
   const summary = {
     total: 0,

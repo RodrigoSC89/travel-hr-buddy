@@ -1,5 +1,5 @@
 /**
-import { useEffect, useState } from "react";;
+import { useEffect, useState, useCallback } from "react";;
  * PATCH 300: Enhanced API Gateway
  * Added documentation generation and Markdown export
  */
@@ -441,7 +441,7 @@ const ApiGatewayEnhanced = () => {
                         <Input
                           id="route_name"
                           value={routeFormData.route_name}
-                          onChange={(e) => setRouteFormData({ ...routeFormData, route_name: e.target.value })}
+                          onChange={handleChange})}
                           placeholder="e.g., Get User Profile"
                         />
                       </div>
@@ -470,7 +470,7 @@ const ApiGatewayEnhanced = () => {
                           <Input
                             id="route_path"
                             value={routeFormData.route_path}
-                            onChange={(e) => setRouteFormData({ ...routeFormData, route_path: e.target.value })}
+                            onChange={handleChange})}
                             placeholder="/api/v1/users/:id"
                           />
                         </div>
@@ -480,13 +480,13 @@ const ApiGatewayEnhanced = () => {
                         <Input
                           id="description"
                           value={routeFormData.description}
-                          onChange={(e) => setRouteFormData({ ...routeFormData, description: e.target.value })}
+                          onChange={handleChange})}
                           placeholder="Brief description of the endpoint"
                         />
                       </div>
                     </div>
                     <DialogFooter>
-                      <Button variant="outline" onClick={() => setShowNewRoute(false)}>
+                      <Button variant="outline" onClick={handleSetShowNewRoute}>
                         Cancel
                       </Button>
                       <Button onClick={createRoute}>
@@ -578,7 +578,7 @@ const ApiGatewayEnhanced = () => {
                         <Input
                           id="key_name"
                           value={keyFormData.key_name}
-                          onChange={(e) => setKeyFormData({ ...keyFormData, key_name: e.target.value })}
+                          onChange={handleChange})}
                           placeholder="e.g., Production API Key"
                         />
                       </div>
@@ -601,7 +601,7 @@ const ApiGatewayEnhanced = () => {
                       </div>
                     </div>
                     <DialogFooter>
-                      <Button variant="outline" onClick={() => setShowNewKey(false)}>
+                      <Button variant="outline" onClick={handleSetShowNewKey}>
                         Cancel
                       </Button>
                       <Button onClick={createApiKey}>
@@ -635,7 +635,7 @@ const ApiGatewayEnhanced = () => {
                               <Button
                                 size="sm"
                                 variant="ghost"
-                                onClick={() => copyToClipboard(key.api_key)}
+                                onClick={() => handlecopyToClipboard}
                               >
                                 <Copy className="h-3 w-3" />
                               </Button>
@@ -650,7 +650,7 @@ const ApiGatewayEnhanced = () => {
                         <Button
                           size="sm"
                           variant="outline"
-                          onClick={() => revokeKey(key.id)}
+                          onClick={() => handlerevokeKey}
                         >
                           <Trash2 className="h-4 w-4 mr-1" />
                           Revoke

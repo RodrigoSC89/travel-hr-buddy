@@ -1,5 +1,5 @@
 /**
-import { useState } from "react";;
+import { useState, useCallback } from "react";;
  * PATCH 837: PWA Update Prompt
  * Prompt users to update the app
  */
@@ -10,7 +10,7 @@ import { RefreshCw, X, Sparkles } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { useServiceWorker } from "@/lib/pwa/service-worker-manager";
 
-export function UpdatePrompt() {
+export const UpdatePrompt = memo(function() {
   const { updateAvailable, skipWaiting } = useServiceWorker();
   const [dismissed, setDismissed] = React.useState(false);
 
@@ -57,7 +57,7 @@ export function UpdatePrompt() {
                     Atualizar
                   </Button>
                   <Button
-                    onClick={() => setDismissed(true)}
+                    onClick={handleSetDismissed}
                     variant="ghost"
                     size="sm"
                   >
@@ -67,7 +67,7 @@ export function UpdatePrompt() {
               </div>
 
               <button
-                onClick={() => setDismissed(true)}
+                onClick={handleSetDismissed}
                 className="text-muted-foreground hover:text-foreground transition-colors"
               >
                 <X className="w-4 h-4" />

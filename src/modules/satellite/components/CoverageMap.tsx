@@ -1,3 +1,4 @@
+import { memo } from 'react';
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { Map, Globe } from "lucide-react";
@@ -13,7 +14,7 @@ interface CoverageMapProps {
   coverageData: Coverage[];
 }
 
-export function CoverageMap({ coverageData }: CoverageMapProps) {
+export const CoverageMap = memo(function({ coverageData }: CoverageMapProps) {
   const getQualityColor = (quality: string) => {
     switch (quality) {
     case "excellent": return "default";

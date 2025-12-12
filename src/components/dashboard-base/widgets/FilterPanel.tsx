@@ -66,7 +66,7 @@ export const FilterPanel = ({
             type="text"
             placeholder={filter.placeholder}
             value={value || ""}
-            onChange={(e) => onChange(filter.id, e.target.value)}
+            onChange={handleChange}
           />
         </div>
       );
@@ -78,7 +78,7 @@ export const FilterPanel = ({
           <Input
             type="date"
             value={value || ""}
-            onChange={(e) => onChange(filter.id, e.target.value)}
+            onChange={handleChange}
           />
         </div>
       );
@@ -92,13 +92,13 @@ export const FilterPanel = ({
               type="date"
               placeholder="Início"
               value={value?.start || ""}
-              onChange={(e) => onChange(filter.id, { ...value, start: e.target.value })}
+              onChange={handleChange})}
             />
             <Input
               type="date"
               placeholder="Fim"
               value={value?.end || ""}
-              onChange={(e) => onChange(filter.id, { ...value, end: e.target.value })}
+              onChange={handleChange})}
             />
           </div>
         </div>

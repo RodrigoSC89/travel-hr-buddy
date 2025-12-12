@@ -1,5 +1,5 @@
 /**
-import { useState } from "react";;
+import { useState, useCallback } from "react";;
  * Advanced Error Boundary - PATCH 832
  * Error recovery, retry logic, and graceful degradation
  */
@@ -262,7 +262,7 @@ export function withErrorBoundary<P extends object>(
 }
 
 // Hook for triggering error boundary
-export function useErrorBoundary() {
+export const useErrorBoundary = memo(function() {
   const [error, setError] = React.useState<Error | null>(null);
 
   if (error) {

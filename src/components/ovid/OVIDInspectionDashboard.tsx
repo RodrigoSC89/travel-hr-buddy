@@ -1,4 +1,4 @@
-import { useState } from "react";;
+import { useState, useMemo, useCallback } from "react";;
 import React, { useState } from "react";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
@@ -123,7 +123,7 @@ export const OVIDInspectionDashboard: React.FC = () => {
         </div>
         <div className="flex gap-2">
           {!inspectionStarted ? (
-            <Button onClick={() => setActiveTab("new")}>
+            <Button onClick={handleSetActiveTab}>
               <Plus className="w-4 h-4 mr-2" />
               Nova Inspeção
             </Button>
@@ -179,7 +179,7 @@ export const OVIDInspectionDashboard: React.FC = () => {
       {/* KPI Cards */}
       <div className="grid grid-cols-2 md:grid-cols-6 gap-4">
         <Card className="cursor-pointer hover:border-primary/50 transition-colors" 
-          onClick={() => setActiveTab("overview")}>
+          onClick={handleSetActiveTab}>
           <CardContent className="pt-4">
             <div className="flex items-center justify-between">
               <div>
@@ -192,7 +192,7 @@ export const OVIDInspectionDashboard: React.FC = () => {
         </Card>
 
         <Card className="cursor-pointer hover:border-green-500/50 transition-colors"
-          onClick={() => setActiveTab("checklist")}>
+          onClick={handleSetActiveTab}>
           <CardContent className="pt-4">
             <div className="flex items-center justify-between">
               <div>
@@ -205,7 +205,7 @@ export const OVIDInspectionDashboard: React.FC = () => {
         </Card>
 
         <Card className="cursor-pointer hover:border-red-500/50 transition-colors"
-          onClick={() => setActiveTab("ncs")}>
+          onClick={handleSetActiveTab}>
           <CardContent className="pt-4">
             <div className="flex items-center justify-between">
               <div>
@@ -218,7 +218,7 @@ export const OVIDInspectionDashboard: React.FC = () => {
         </Card>
 
         <Card className="cursor-pointer hover:border-muted-foreground/50 transition-colors"
-          onClick={() => setActiveTab("checklist")}>
+          onClick={handleSetActiveTab}>
           <CardContent className="pt-4">
             <div className="flex items-center justify-between">
               <div>
@@ -231,7 +231,7 @@ export const OVIDInspectionDashboard: React.FC = () => {
         </Card>
 
         <Card className="cursor-pointer hover:border-yellow-500/50 transition-colors"
-          onClick={() => setActiveTab("checklist")}>
+          onClick={handleSetActiveTab}>
           <CardContent className="pt-4">
             <div className="flex items-center justify-between">
               <div>
@@ -244,7 +244,7 @@ export const OVIDInspectionDashboard: React.FC = () => {
         </Card>
 
         <Card className="cursor-pointer hover:border-blue-500/50 transition-colors"
-          onClick={() => setActiveTab("checklist")}>
+          onClick={handleSetActiveTab}>
           <CardContent className="pt-4">
             <div className="flex items-center justify-between">
               <div>
@@ -408,7 +408,7 @@ export const OVIDInspectionDashboard: React.FC = () => {
                       id="vesselName"
                       placeholder="Ex: SKANDI NEPTUNE"
                       value={vesselName}
-                      onChange={(e) => setVesselName(e.target.value)}
+                      onChange={handleChange}
                     />
                   </div>
                   <div>
@@ -417,7 +417,7 @@ export const OVIDInspectionDashboard: React.FC = () => {
                       id="imoNumber"
                       placeholder="Ex: 9876543"
                       value={imoNumber}
-                      onChange={(e) => setImoNumber(e.target.value)}
+                      onChange={handleChange}
                     />
                   </div>
                   <div>
@@ -435,7 +435,7 @@ export const OVIDInspectionDashboard: React.FC = () => {
                       id="inspectorName"
                       placeholder="Seu nome completo"
                       value={inspectorName}
-                      onChange={(e) => setInspectorName(e.target.value)}
+                      onChange={handleChange}
                     />
                   </div>
                   <div>
@@ -444,7 +444,7 @@ export const OVIDInspectionDashboard: React.FC = () => {
                       id="inspectionDate"
                       type="date"
                       value={inspectionDate}
-                      onChange={(e) => setInspectionDate(e.target.value)}
+                      onChange={handleChange}
                     />
                   </div>
                   <div>

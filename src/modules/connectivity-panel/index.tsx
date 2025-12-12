@@ -1,5 +1,5 @@
 /**
-import { useEffect, useState } from "react";;
+import { useEffect, useState, useCallback, useMemo } from "react";;
  * PAINEL DE CONECTIVIDADE MARÍTIMA
  * Status online/offline, sincronização e heartbeat
  */
@@ -310,7 +310,7 @@ export default function ConnectivityPanel() {
                     <Button 
                       variant="ghost" 
                       size="sm" 
-                      onClick={() => handleAICheck(vessel.id)}
+                      onClick={() => handlehandleAICheck}
                       disabled={isLoading}
                     >
                       Analisar
@@ -318,7 +318,7 @@ export default function ConnectivityPanel() {
                     <Button 
                       variant="outline" 
                       size="sm" 
-                      onClick={() => handleForceSync(vessel.id)}
+                      onClick={() => handlehandleForceSync}
                       disabled={vessel.status === "offline"}
                     >
                       <RefreshCw className="h-3 w-3 mr-1" />

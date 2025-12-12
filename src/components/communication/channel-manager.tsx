@@ -390,7 +390,7 @@ export const ChannelManager: React.FC<ChannelManagerProps> = ({
                     <Input
                       placeholder="Ex: Equipe de Deck"
                       value={newChannel.name}
-                      onChange={(e) => setNewChannel(prev => ({ ...prev, name: e.target.value }))}
+                      onChange={handleChange}))}
                     />
                   </div>
                   <div>
@@ -398,7 +398,7 @@ export const ChannelManager: React.FC<ChannelManagerProps> = ({
                     <Textarea
                       placeholder="Descreva o propósito do canal..."
                       value={newChannel.description}
-                      onChange={(e) => setNewChannel(prev => ({ ...prev, description: e.target.value }))}
+                      onChange={handleChange}))}
                     />
                   </div>
                   <div>
@@ -423,7 +423,7 @@ export const ChannelManager: React.FC<ChannelManagerProps> = ({
                     />
                   </div>
                   <div className="flex justify-end gap-2">
-                    <Button variant="outline" onClick={() => setIsNewChannelOpen(false)}>
+                    <Button variant="outline" onClick={handleSetIsNewChannelOpen}>
                       Cancelar
                     </Button>
                     <Button onClick={createChannel}>
@@ -443,7 +443,7 @@ export const ChannelManager: React.FC<ChannelManagerProps> = ({
                 <Input
                   placeholder="Buscar canais..."
                   value={searchTerm}
-                  onChange={(e) => setSearchTerm(e.target.value)}
+                  onChange={handleChange}
                   className="pl-10"
                 />
               </div>
@@ -627,7 +627,7 @@ export const ChannelManager: React.FC<ChannelManagerProps> = ({
             <p className="text-muted-foreground mb-4">
               Tente ajustar os filtros ou crie um novo canal.
             </p>
-            <Button onClick={() => setIsNewChannelOpen(true)}>
+            <Button onClick={handleSetIsNewChannelOpen}>
               <Plus className="h-4 w-4 mr-2" />
               Criar Primeiro Canal
             </Button>

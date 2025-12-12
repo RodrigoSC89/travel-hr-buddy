@@ -1,3 +1,4 @@
+import { memo } from 'react';
 import { Button } from "@/components/ui/button";
 import html2pdf from "html2pdf.js";
 import { toast } from "sonner";
@@ -9,7 +10,7 @@ interface TrendData {
   monthLabel?: string;
 }
 
-export function ExportBIReport({ trend, forecast }: { trend: TrendData[]; forecast: string }) {
+export const ExportBIReport = memo(function({ trend, forecast }: { trend: TrendData[]; forecast: string }) {
   function handleExport() {
     try {
       toast.info("Gerando PDF...");

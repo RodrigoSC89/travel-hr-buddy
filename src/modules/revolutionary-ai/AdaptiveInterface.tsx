@@ -1,5 +1,5 @@
 /**
-import { useState } from "react";;
+import { useState, useMemo, useCallback } from "react";;
  * Adaptive Interface
  * Interface modular adaptativa por perfil de uso
  */
@@ -89,7 +89,7 @@ interface InterfaceSettings {
   density: "comfortable" | "compact" | "spacious";
 }
 
-export function AdaptiveInterface() {
+export const AdaptiveInterface = memo(function() {
   const [selectedProfile, setSelectedProfile] = useState<UserProfile | null>(null);
   const [settings, setSettings] = useState<InterfaceSettings>({
     compactMode: false,
@@ -163,7 +163,7 @@ export function AdaptiveInterface() {
                       ? "ring-2 ring-primary" 
                       : "hover:border-primary/50"
                   }`}
-                  onClick={() => handleApplyProfile(profile)}
+                  onClick={() => handlehandleApplyProfile}
                 >
                   <CardContent className="pt-6">
                     <div className="text-center mb-4">
@@ -281,7 +281,7 @@ export function AdaptiveInterface() {
                 <Button
                   variant={settings.viewMode === "grid" ? "default" : "outline"}
                   size="sm"
-                  onClick={() => setSettings(s => ({ ...s, viewMode: "grid" }))}
+                  onClick={handleSetSettings}
                   className="gap-2"
                 >
                   <Grid3X3 className="h-4 w-4" />
@@ -290,7 +290,7 @@ export function AdaptiveInterface() {
                 <Button
                   variant={settings.viewMode === "list" ? "default" : "outline"}
                   size="sm"
-                  onClick={() => setSettings(s => ({ ...s, viewMode: "list" }))}
+                  onClick={handleSetSettings}
                   className="gap-2"
                 >
                   <List className="h-4 w-4" />
@@ -307,7 +307,7 @@ export function AdaptiveInterface() {
                     key={density}
                     variant={settings.density === density ? "default" : "outline"}
                     size="sm"
-                    onClick={() => setSettings(s => ({ ...s, density: density as InterfaceSettings["density"] }))}
+                    onClick={handleSetSettings}
                   >
                     {density === "compact" && "Compacto"}
                     {density === "comfortable" && "Confortável"}

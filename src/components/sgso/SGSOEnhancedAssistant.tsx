@@ -1,4 +1,4 @@
-import { useEffect, useRef, useState } from "react";;
+import { useEffect, useRef, useState, useCallback, useMemo } from "react";;
 import React, { useState, useRef, useEffect } from "react";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
@@ -254,7 +254,7 @@ Sou seu assistente especializado em **Sistema de Gestão de Segurança Operacion
                     key={type.id}
                     variant={selectedType === type.id ? "default" : "outline"}
                     size="sm"
-                    onClick={() => setSelectedType(type.id)}
+                    onClick={handleSetSelectedType}
                     className="text-xs"
                     title={type.description}
                   >
@@ -300,7 +300,7 @@ Sou seu assistente especializado em **Sistema de Gestão de Segurança Operacion
                           variant="ghost"
                           size="icon"
                           className="absolute top-2 right-2 opacity-0 group-hover:opacity-100 transition-opacity h-6 w-6"
-                          onClick={() => copyToClipboard(message.content)}
+                          onClick={() => handlecopyToClipboard}
                         >
                           <Copy className="h-3 w-3" />
                         </Button>
@@ -347,7 +347,7 @@ Sou seu assistente especializado em **Sistema de Gestão de Segurança Operacion
             <div className="flex gap-2">
               <Textarea
                 value={input}
-                onChange={(e) => setInput(e.target.value)}
+                onChange={handleChange}
                 placeholder={`Digite sua pergunta ou solicitação de ${GENERATION_TYPES.find(t => t.id === selectedType)?.label.toLowerCase()}...`}
                 className="min-h-[60px] resize-none"
                 onKeyDown={(e) => {
@@ -408,7 +408,7 @@ Sou seu assistente especializado em **Sistema de Gestão de Segurança Operacion
                       key={idx}
                       variant="outline"
                       className="w-full justify-start text-left h-auto py-2.5 px-3 text-xs hover:bg-primary/5"
-                      onClick={() => handleSendMessage(action.query)}
+                      onClick={() => handlehandleSendMessage}
                       disabled={isLoading}
                     >
                       <FileText className="h-3 w-3 mr-2 shrink-0 text-primary" />

@@ -1,5 +1,5 @@
 /**
-import { useEffect, useState } from "react";;
+import { useEffect, useState, useCallback, useMemo } from "react";;
  * PATCH 94.0 - Logs Center
  * Centralized technical logs with filtering, AI audit, and PDF export
  */
@@ -173,7 +173,7 @@ export default function LogsCenter() {
               <Input
                 placeholder="Buscar logs..."
                 value={filters.search || ""}
-                onChange={(e) => setFilters({ ...filters, search: e.target.value })}
+                onChange={handleChange})}
               />
             </div>
 
@@ -198,13 +198,13 @@ export default function LogsCenter() {
               placeholder="Origem..."
               className="w-[200px]"
               value={filters.origin || ""}
-              onChange={(e) => setFilters({ ...filters, origin: e.target.value })}
+              onChange={handleChange})}
             />
 
             <Button
               variant="outline"
               size="icon"
-              onClick={() => setFilters({})}
+              onClick={handleSetFilters}
               title="Limpar filtros"
             >
               <Filter className="h-4 w-4" />
@@ -279,9 +279,7 @@ export default function LogsCenter() {
                               <Button
                                 variant="ghost"
                                 size="sm"
-                                onClick={() =>
-                                  setExpandedLog(expandedLog === log.id ? null : log.id)
-                                }
+                                onClick={handleSetExpandedLog}
                               >
                                 <ChevronDown
                                   className={`h-4 w-4 transition-transform ${

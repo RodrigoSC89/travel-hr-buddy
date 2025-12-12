@@ -1,4 +1,4 @@
-import { useEffect, useRef, useState } from "react";;
+import { useEffect, useRef, useState, useCallback, useMemo } from "react";;
 import React, { useState, useEffect, useRef } from "react";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
@@ -519,7 +519,7 @@ Por favor, seja mais específico sobre o que precisa para que eu possa fornecer 
                 <Languages className="h-4 w-4 text-muted-foreground" />
                 <select
                   value={selectedLanguage}
-                  onChange={(e) => setSelectedLanguage(e.target.value)}
+                  onChange={handleChange}
                   className="text-sm border rounded px-2 py-1"
                 >
                   {languages.map((lang) => (
@@ -611,7 +611,7 @@ Por favor, seja mais específico sobre o que precisa para que eu possa fornecer 
               <Textarea
                 placeholder="Digite sua consulta marítima... (ex: 'Requisitos SOLAS para embarcações', 'Compliance MARPOL', 'Certificações STCW')"
                 value={inputMessage}
-                onChange={(e) => setInputMessage(e.target.value)}
+                onChange={handleChange}
                 onKeyDown={(e) => {
                   if (e.key === "Enter" && !e.shiftKey) {
                     e.preventDefault();
@@ -622,7 +622,7 @@ Por favor, seja mais específico sobre o que precisa para que eu possa fornecer 
                 disabled={isProcessing}
               />
               <Button
-                onClick={() => processMessage(inputMessage)}
+                onClick={() => handleprocessMessage}
                 disabled={isProcessing || !inputMessage.trim()}
                 size="icon"
                 className="h-[60px] w-[60px]"
@@ -636,7 +636,7 @@ Por favor, seja mais específico sobre o que precisa para que eu possa fornecer 
               <Button
                 variant="outline"
                 size="sm"
-                onClick={() => setInputMessage("Quais são os requisitos SOLAS para equipamentos salva-vidas?")}
+                onClick={handleSetInputMessage}
               >
                 <Shield className="h-3 w-3 mr-1" />
                 SOLAS
@@ -644,7 +644,7 @@ Por favor, seja mais específico sobre o que precisa para que eu possa fornecer 
               <Button
                 variant="outline"
                 size="sm"
-                onClick={() => setInputMessage("Como fazer compliance com MARPOL Anexo VI?")}
+                onClick={handleSetInputMessage}
               >
                 <Anchor className="h-3 w-3 mr-1" />
                 MARPOL
@@ -652,7 +652,7 @@ Por favor, seja mais específico sobre o que precisa para que eu possa fornecer 
               <Button
                 variant="outline"
                 size="sm"
-                onClick={() => setInputMessage("Quais certificações STCW são necessárias para oficiais?")}
+                onClick={handleSetInputMessage}
               >
                 <FileText className="h-3 w-3 mr-1" />
                 STCW
@@ -660,7 +660,7 @@ Por favor, seja mais específico sobre o que precisa para que eu possa fornecer 
               <Button
                 variant="outline"
                 size="sm"
-                onClick={() => setInputMessage("Explique as regras COLREG para navegação em névoa")}
+                onClick={handleSetInputMessage}
               >
                 <Compass className="h-3 w-3 mr-1" />
                 COLREG

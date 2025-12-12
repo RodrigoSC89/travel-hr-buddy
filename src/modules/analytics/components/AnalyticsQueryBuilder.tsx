@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";;
+import { useEffect, useState, useCallback } from "react";;
 
 /**
  * PATCH 379: Analytics Query Builder
@@ -220,7 +220,7 @@ export const AnalyticsQueryBuilder: React.FC = () => {
                       <Button
                         size="sm"
                         variant="ghost"
-                        onClick={() => removeFilter(index)}
+                        onClick={() => handleremoveFilter}
                       >
                         <Trash2 className="h-3 w-3 text-red-500" />
                       </Button>
@@ -228,7 +228,7 @@ export const AnalyticsQueryBuilder: React.FC = () => {
                     <Input
                       placeholder="Field name"
                       value={filter.field}
-                      onChange={(e) => updateFilter(index, "field", e.target.value)}
+                      onChange={handleChange}
                       className="text-sm"
                     />
                     <Select
@@ -249,7 +249,7 @@ export const AnalyticsQueryBuilder: React.FC = () => {
                     <Input
                       placeholder="Value"
                       value={filter.value}
-                      onChange={(e) => updateFilter(index, "value", e.target.value)}
+                      onChange={handleChange}
                       className="text-sm"
                     />
                   </div>
@@ -279,7 +279,7 @@ export const AnalyticsQueryBuilder: React.FC = () => {
               <Input
                 type="number"
                 value={queryConfig.limit}
-                onChange={(e) => setQueryConfig({ ...queryConfig, limit: parseInt(e.target.value) || 100 })}
+                onChange={handleChange})}
               />
             </div>
 

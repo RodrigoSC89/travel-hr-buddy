@@ -344,7 +344,7 @@ export const ViewPlanDialog: React.FC<ViewPlanDialogProps> = ({
               Imprimir
             </Button>
           </div>
-          <Button onClick={() => onOpenChange(false)}>
+          <Button onClick={() => handleonOpenChange}>
             Fechar
           </Button>
         </div>

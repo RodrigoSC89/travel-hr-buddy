@@ -3,7 +3,7 @@
  * Tests feedback processing from voice, text, and click channels
  */
 
-import { useState } from "react";;;
+import { memo, memo, useState } from "react";;;
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
@@ -20,7 +20,7 @@ interface FeedbackEvent {
   timestamp: string;
 }
 
-export function Patch603Validation() {
+export const Patch603Validation = memo(function() {
   const [feedback, setFeedback] = useState<FeedbackEvent[]>([]);
   const [textInput, setTextInput] = useState("");
   const [behaviorScore, setBehaviorScore] = useState(0.5);
@@ -138,7 +138,7 @@ export function Patch603Validation() {
           <Input
             placeholder="Enter text feedback..."
             value={textInput}
-            onChange={(e) => setTextInput(e.target.value)}
+            onChange={handleChange}
             onKeyPress={(e) => e.key === "Enter" && submitText()}
           />
           <Button onClick={submitText}>Send</Button>

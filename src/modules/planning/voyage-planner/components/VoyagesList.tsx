@@ -107,14 +107,14 @@ const VoyagesList: React.FC<VoyagesListProps> = ({ voyages, onViewDetails, onDel
               </div>
 
               <div className="flex gap-2">
-                <Button variant="outline" size="sm" onClick={() => onViewDetails(voyage)}>
+                <Button variant="outline" size="sm" onClick={() => handleonViewDetails}>
                   <Eye className="w-4 h-4 mr-1" />
                   Detalhes
                 </Button>
                 <Button 
                   variant="outline" 
                   size="sm" 
-                  onClick={() => onDelete(voyage.id)}
+                  onClick={() => handleonDelete}
                   className="text-destructive hover:text-destructive"
                 >
                   <Trash2 className="w-4 h-4" />

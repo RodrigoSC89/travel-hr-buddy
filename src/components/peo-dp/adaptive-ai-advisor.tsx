@@ -1,4 +1,4 @@
-import { useState } from "react";;
+import { useState, useMemo, useCallback } from "react";;
 import React, { useState } from "react";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
@@ -155,7 +155,7 @@ export const AdaptiveAIAdvisor: React.FC = () => {
                   key={key}
                   variant={selectedProfile === key ? "default" : "outline"}
                   className="h-auto py-3 flex flex-col gap-2"
-                  onClick={() => setSelectedProfile(key)}
+                  onClick={handleSetSelectedProfile}
                 >
                   <div className={`p-2 rounded-full ${selectedProfile === key ? "bg-primary-foreground/20" : config.color + "/10"}`}>
                     <Icon className={`h-5 w-5 ${selectedProfile === key ? "" : config.color.replace("bg-", "text-")}`} />
@@ -241,7 +241,7 @@ export const AdaptiveAIAdvisor: React.FC = () => {
               <Textarea
                 placeholder={`Pergunte algo como ${profileConfig[selectedProfile].label}...`}
                 value={inputMessage}
-                onChange={(e) => setInputMessage(e.target.value)}
+                onChange={handleChange}
                 onKeyDown={(e) => {
                   if (e.key === "Enter" && !e.shiftKey) {
                     e.preventDefault();
@@ -275,7 +275,7 @@ export const AdaptiveAIAdvisor: React.FC = () => {
                     variant="outline"
                     size="sm"
                     className="w-full justify-start text-left h-auto py-2"
-                    onClick={() => handleSuggestedQuestion(q)}
+                    onClick={() => handlehandleSuggestedQuestion}
                   >
                     <span className="truncate">{q}</span>
                   </Button>

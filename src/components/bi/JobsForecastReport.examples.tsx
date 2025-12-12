@@ -1,13 +1,13 @@
 // Example Usage of JobsForecastReport Component
 // This file demonstrates how to integrate the JobsForecastReport component into your application
 
-import { useEffect, useState } from "react";;;
+import { memo, memo, useEffect, useState } from "react";;;
 import JobsForecastReport from "@/components/bi/JobsForecastReport";
 import DashboardJobs from "@/components/bi/DashboardJobs";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 
 // Example 1: Basic usage with hardcoded trend data
-export function BasicExample() {
+export const BasicExample = memo(function() {
   const trendData = [
     { date: "2025-08", jobs: 45 },
     { date: "2025-09", jobs: 52 },
@@ -23,7 +23,7 @@ export function BasicExample() {
 }
 
 // Example 2: Integration with API data
-export function ApiExample() {
+export const ApiExample = memo(function() {
   const [trendData, setTrendData] = useState<Array<{ date: string; jobs: number }>>([]);
   const [loading, setLoading] = useState(true);
 
@@ -57,7 +57,7 @@ export function ApiExample() {
 }
 
 // Example 3: Full BI Dashboard with multiple components
-export function FullBIDashboard() {
+export const FullBIDashboard = memo(function() {
   const [trendData, setTrendData] = useState<Array<{ date: string; jobs: number }>>([]);
 
   useEffect(() => {
@@ -92,7 +92,7 @@ export function FullBIDashboard() {
 }
 
 // Example 4: With manual refresh capability
-export function RefreshableExample() {
+export const RefreshableExample = memo(function() {
   const [trendData, setTrendData] = useState<Array<{ date: string; jobs: number }>>([]);
   const [refreshKey, setRefreshKey] = useState(0);
 
@@ -130,7 +130,7 @@ export function RefreshableExample() {
 }
 
 // Example 5: Integration in existing page
-export function IntegrateInExistingPage() {
+export const IntegrateInExistingPage = memo(function() {
   const [showForecast, setShowForecast] = useState(false);
   const [trendData] = useState([
     { date: "2025-08", jobs: 45 },
@@ -155,7 +155,7 @@ export function IntegrateInExistingPage() {
         <input
           type="checkbox"
           checked={showForecast}
-          onChange={(e) => setShowForecast(e.target.checked)}
+          onChange={handleChange}
           id="show-forecast"
         />
         <label htmlFor="show-forecast">Show AI Forecast</label>
@@ -168,7 +168,7 @@ export function IntegrateInExistingPage() {
 }
 
 // Example 6: With Supabase real-time data
-export function RealtimeExample() {
+export const RealtimeExample = memo(function() {
   const [trendData, setTrendData] = useState<Array<{ date: string; jobs: number }>>([]);
 
   useEffect(() => {

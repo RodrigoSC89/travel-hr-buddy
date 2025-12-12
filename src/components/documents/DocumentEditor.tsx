@@ -1,7 +1,7 @@
 
 "use client";
 
-import { useEffect, useRef, useState } from "react";;;
+import { memo, memo, useEffect, useRef, useState } from "react";;;
 import { supabase } from "@/integrations/supabase/client";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
@@ -24,7 +24,7 @@ interface Version {
   saved_at: string;
 }
 
-export function DocumentEditor({ 
+export const DocumentEditor = memo(function({ 
   documentId, 
   initialTitle = "", 
   initialContent = "",
@@ -219,7 +219,7 @@ export function DocumentEditor({
           <label className="text-sm font-medium">Título</label>
           <Input
             value={title}
-            onChange={(e) => setTitle(e.target.value)}
+            onChange={handleChange}
             placeholder="Título do documento"
           />
         </div>
@@ -228,7 +228,7 @@ export function DocumentEditor({
           <label className="text-sm font-medium">Conteúdo</label>
           <Textarea
             value={content}
-            onChange={(e) => setContent(e.target.value)}
+            onChange={handleChange}
             placeholder="Digite o conteúdo do documento aqui..."
             rows={15}
             className="font-mono"

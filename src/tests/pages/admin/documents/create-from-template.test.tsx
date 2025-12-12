@@ -21,7 +21,7 @@ vi.mock("@/components/editor/TipTapEditor", () => ({
       <textarea
         data-testid="editor-content"
         value={typeof content === "string" ? content : JSON.stringify(content)}
-        onChange={(e) => onChange && onChange(e.target.value)}
+        onChange={handleChange}
       />
     </div>
   ),

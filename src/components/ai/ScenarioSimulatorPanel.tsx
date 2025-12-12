@@ -2,7 +2,7 @@
  * Scenario Simulator Panel - What-If analysis with AI
  */
 
-import { useState } from "react";;;
+import { memo, memo, useState, useCallback, useMemo } from "react";;;
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
@@ -68,7 +68,7 @@ const PRESET_SCENARIOS: Scenario[] = [
   },
 ];
 
-export function ScenarioSimulatorPanel() {
+export const ScenarioSimulatorPanel = memo(function() {
   const [activeScenario, setActiveScenario] = useState<string>("custom");
   const [parameters, setParameters] = useState({
     fuelPrice: 0,
@@ -273,7 +273,7 @@ export function ScenarioSimulatorPanel() {
               <Button 
                 variant="outline" 
                 size="sm" 
-                onClick={() => loadPreset(scenario.id)}
+                onClick={() => handleloadPreset}
                 className="w-full"
               >
                 Carregar Parâmetros

@@ -2,7 +2,7 @@
  * MMI Jobs Panel Section - Painel de forecasts de jobs
  */
 
-import { useEffect, useState } from "react";;;
+import { useEffect, useState, useCallback } from "react";;;
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -131,7 +131,7 @@ export default function MMIJobsPanelSection() {
           <Input
             placeholder="Buscar por sistema, componente..."
             value={search}
-            onChange={(e) => setSearch(e.target.value)}
+            onChange={handleChange}
             className="pl-10"
           />
         </div>
@@ -158,7 +158,7 @@ export default function MMIJobsPanelSection() {
                       <Eye className="h-4 w-4 mr-2" />
                       Ver Detalhes
                     </DropdownMenuItem>
-                    <DropdownMenuItem onClick={() => handleExport(job)}>
+                    <DropdownMenuItem onClick={() => handlehandleExport}>
                       <Download className="h-4 w-4 mr-2" />
                       Exportar PDF
                     </DropdownMenuItem>
@@ -185,7 +185,7 @@ export default function MMIJobsPanelSection() {
               </p>
               
               <div className="flex gap-2 pt-2">
-                <Button variant="outline" size="sm" className="flex-1" onClick={() => handleExport(job)}>
+                <Button variant="outline" size="sm" className="flex-1" onClick={() => handlehandleExport}>
                   <Download className="h-4 w-4 mr-1" />
                   Exportar
                 </Button>

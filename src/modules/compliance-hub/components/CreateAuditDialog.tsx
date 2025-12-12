@@ -1,5 +1,5 @@
 /**
-import { useState } from "react";;
+import { useState, useCallback } from "react";;
  * Create Audit Dialog Component
  * Dialog para criar nova auditoria com formulário completo
  */
@@ -49,7 +49,7 @@ interface AuditFormData {
   objectives: string;
 }
 
-export function CreateAuditDialog({
+export const CreateAuditDialog = memo(function({
   open,
   onOpenChange,
   onCreateAudit,
@@ -165,7 +165,7 @@ export function CreateAuditDialog({
                 id="auditor"
                 placeholder="Nome do auditor"
                 value={formData.auditorName || ""}
-                onChange={(e) => setFormData({ ...formData, auditorName: e.target.value })}
+                onChange={handleChange})}
               />
             </div>
 
@@ -203,7 +203,7 @@ export function CreateAuditDialog({
               id="scope"
               placeholder="Descreva o escopo da auditoria..."
               value={formData.scope || ""}
-              onChange={(e) => setFormData({ ...formData, scope: e.target.value })}
+              onChange={handleChange})}
               rows={3}
             />
           </div>
@@ -214,13 +214,13 @@ export function CreateAuditDialog({
               id="objectives"
               placeholder="Liste os objetivos principais..."
               value={formData.objectives || ""}
-              onChange={(e) => setFormData({ ...formData, objectives: e.target.value })}
+              onChange={handleChange})}
               rows={3}
             />
           </div>
 
           <DialogFooter>
-            <Button type="button" variant="outline" onClick={() => onOpenChange(false)}>
+            <Button type="button" variant="outline" onClick={() => handleonOpenChange}>
               Cancelar
             </Button>
             <Button type="submit" disabled={loading}>

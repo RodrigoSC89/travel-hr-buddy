@@ -12,7 +12,7 @@ interface RiskAlertPanelProps {
 /**
  * Display risk alerts with severity levels
  */
-export function RiskAlertPanel({ alerts }: RiskAlertPanelProps) {
+export const RiskAlertPanel = memo(function({ alerts }: RiskAlertPanelProps) {
   const getAlertIcon = (level: string) => {
     switch (level) {
     case "critical":

@@ -110,7 +110,7 @@ function PerformanceGauge({ label, value, max, unit = "ms", thresholds }: Perfor
   );
 }
 
-export function RealTimeMetrics() {
+export const RealTimeMetrics = memo(function() {
   const { users } = usePresence();
   const networkStatus = useNetworkStatus();
   const webVitals = useWebVitals();

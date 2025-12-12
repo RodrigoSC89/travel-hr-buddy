@@ -1,4 +1,4 @@
-import { useState } from "react";;
+import { useState, useCallback } from "react";;
 import React, { useState } from "react";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
@@ -64,7 +64,7 @@ const categoryIcons: Record<string, React.ReactNode> = {
   "EMG": <AlertTriangle className="h-5 w-5" />
 };
 
-export function IMCADPAuditDashboard() {
+export const IMCADPAuditDashboard = memo(function() {
   const { toast } = useToast();
   const [activeTab, setActiveTab] = useState("overview");
   const [selectedDPClass, setSelectedDPClass] = useState<"DP1" | "DP2" | "DP3">("DP2");
@@ -181,7 +181,7 @@ export function IMCADPAuditDashboard() {
                 key={dpClass}
                 variant={selectedDPClass === dpClass ? "default" : "ghost"}
                 size="sm"
-                onClick={() => setSelectedDPClass(dpClass)}
+                onClick={handleSetSelectedDPClass}
               >
                 {dpClass}
               </Button>
@@ -190,7 +190,7 @@ export function IMCADPAuditDashboard() {
           <Button variant="outline" size="icon" onClick={handleFilterSettings}>
             <Filter className="h-4 w-4" />
           </Button>
-          <Button variant="outline" size="icon" onClick={() => setAuditData({})}>
+          <Button variant="outline" size="icon" onClick={handleSetAuditData}>
             <RefreshCw className="h-4 w-4" />
           </Button>
           <Button onClick={handleExportAudit}>
@@ -215,7 +215,7 @@ export function IMCADPAuditDashboard() {
           </CardContent>
         </Card>
 
-        <Card className="cursor-pointer hover:border-green-500/50 transition-colors" onClick={() => setActiveTab("checklist")}>
+        <Card className="cursor-pointer hover:border-green-500/50 transition-colors" onClick={handleSetActiveTab}>
           <CardContent className="pt-4">
             <div className="flex items-center justify-between">
               <div>
@@ -227,7 +227,7 @@ export function IMCADPAuditDashboard() {
           </CardContent>
         </Card>
 
-        <Card className="cursor-pointer hover:border-red-500/50 transition-colors" onClick={() => setActiveTab("nc")}>
+        <Card className="cursor-pointer hover:border-red-500/50 transition-colors" onClick={handleSetActiveTab}>
           <CardContent className="pt-4">
             <div className="flex items-center justify-between">
               <div>
@@ -239,7 +239,7 @@ export function IMCADPAuditDashboard() {
           </CardContent>
         </Card>
 
-        <Card className="cursor-pointer hover:border-amber-500/50 transition-colors" onClick={() => setActiveTab("checklist")}>
+        <Card className="cursor-pointer hover:border-amber-500/50 transition-colors" onClick={handleSetActiveTab}>
           <CardContent className="pt-4">
             <div className="flex items-center justify-between">
               <div>
@@ -251,7 +251,7 @@ export function IMCADPAuditDashboard() {
           </CardContent>
         </Card>
 
-        <Card className="cursor-pointer hover:border-destructive/50 transition-colors" onClick={() => setActiveTab("nc")}>
+        <Card className="cursor-pointer hover:border-destructive/50 transition-colors" onClick={handleSetActiveTab}>
           <CardContent className="pt-4">
             <div className="flex items-center justify-between">
               <div>
@@ -263,7 +263,7 @@ export function IMCADPAuditDashboard() {
           </CardContent>
         </Card>
 
-        <Card className="cursor-pointer hover:border-primary/50 transition-colors" onClick={() => setActiveTab("checklist")}>
+        <Card className="cursor-pointer hover:border-primary/50 transition-colors" onClick={handleSetActiveTab}>
           <CardContent className="pt-4">
             <div className="flex items-center justify-between">
               <div>
@@ -331,7 +331,7 @@ export function IMCADPAuditDashboard() {
                 <Card 
                   key={category.code}
                   className="cursor-pointer hover:shadow-lg transition-all hover:border-primary/50"
-                  onClick={() => setActiveTab("checklist")}
+                  onClick={handleSetActiveTab}
                 >
                   <CardHeader className="pb-2">
                     <div className="flex items-center justify-between">
@@ -522,11 +522,11 @@ export function IMCADPAuditDashboard() {
                       <Download className="h-4 w-4 mr-2" />
                       Exportar PDF
                     </Button>
-                    <Button variant="outline" onClick={() => toast({ title: "Excel", description: "Exportando para Excel..." })}>
+                    <Button variant="outline" onClick={() => handletoast}>
                       <Download className="h-4 w-4 mr-2" />
                       Exportar Excel
                     </Button>
-                    <Button variant="outline" onClick={() => toast({ title: "JSON", description: "Exportando dados..." })}>
+                    <Button variant="outline" onClick={() => handletoast}>
                       <Download className="h-4 w-4 mr-2" />
                       Exportar JSON
                     </Button>

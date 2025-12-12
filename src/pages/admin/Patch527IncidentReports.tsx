@@ -1,5 +1,5 @@
 /**
-import { useState } from "react";;
+import { useState, useCallback } from "react";;
  * PATCH 527 - Relatórios de Incidentes (unificação)
  */
 

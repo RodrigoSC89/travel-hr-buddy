@@ -25,7 +25,7 @@ interface SystemStatusProps {
   health: SystemHealth;
 }
 
-export function SystemStatus({ health }: SystemStatusProps) {
+export const SystemStatus = memo(function({ health }: SystemStatusProps) {
   const getHealthInfo = () => {
     switch (health) {
     case "healthy":
@@ -71,7 +71,7 @@ interface ConnectionStatusProps {
   lastCheck: Date | null;
 }
 
-export function ConnectionStatus({ quality, lastCheck }: ConnectionStatusProps) {
+export const ConnectionStatus = memo(function({ quality, lastCheck }: ConnectionStatusProps) {
   const getQualityInfo = () => {
     switch (quality) {
     case "excellent":
@@ -127,7 +127,7 @@ interface ModuleCardProps {
   module: ModuleState;
 }
 
-export function ModuleCard({ moduleKey, module }: ModuleCardProps) {
+export const ModuleCard = memo(function({ moduleKey, module }: ModuleCardProps) {
   const getStatusBadge = (status: ModuleStatus) => {
     switch (status) {
     case "operational":
@@ -185,7 +185,7 @@ interface CacheStatsProps {
   total: number;
 }
 
-export function CacheStats({ size, capacity, pending, total }: CacheStatsProps) {
+export const CacheStats = memo(function({ size, capacity, pending, total }: CacheStatsProps) {
   const usagePercent = (size / capacity) * 100;
   
   const formatBytes = (bytes: number) => {
@@ -241,7 +241,7 @@ interface SyncStatusProps {
   onSync: () => void;
 }
 
-export function SyncStatus({ lastSync, isSyncing, onSync }: SyncStatusProps) {
+export const SyncStatus = memo(function({ lastSync, isSyncing, onSync }: SyncStatusProps) {
   return (
     <Card>
       <CardHeader className="pb-3">

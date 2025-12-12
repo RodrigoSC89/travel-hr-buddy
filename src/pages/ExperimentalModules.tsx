@@ -1,4 +1,4 @@
-import { useMemo, useState } from "react";;;
+import { useMemo, useState, useCallback } from "react";;;
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { Input } from "@/components/ui/input";
@@ -352,7 +352,7 @@ const ExperimentalModules = () => {
               <Input
                 placeholder="Search modules..."
                 value={searchTerm}
-                onChange={(e) => setSearchTerm(e.target.value)}
+                onChange={handleChange}
                 className="pl-8"
               />
             </div>
@@ -408,7 +408,7 @@ const ExperimentalModules = () => {
                 className={`transition-all ${
                   module.route ? "cursor-pointer hover:shadow-lg hover:scale-[1.02]" : ""
                 }`}
-                onClick={() => handleModuleClick(module)}
+                onClick={() => handlehandleModuleClick}
               >
                 <CardHeader>
                   <div className="flex items-start justify-between">

@@ -1,4 +1,4 @@
-import { useEffect, useMemo, useState } from "react";;
+import { useEffect, useMemo, useState, useCallback } from "react";;
 
 /**
  * CALENDÁRIO OPERACIONAL UNIFICADO
@@ -317,7 +317,7 @@ const OperationalCalendar = () => {
               Otimizar com IA
             </Button>
 
-            <Button onClick={() => setShowNewEventDialog(true)}>
+            <Button onClick={handleSetShowNewEventDialog}>
               <Plus className="h-4 w-4 mr-2" />
               Novo Evento
             </Button>
@@ -347,7 +347,7 @@ const OperationalCalendar = () => {
                   variant="ghost" 
                   size="sm" 
                   className="ml-auto"
-                  onClick={() => setAiSuggestions([])}
+                  onClick={handleSetAiSuggestions}
                 >
                   <XCircle className="h-4 w-4" />
                 </Button>
@@ -496,7 +496,7 @@ const OperationalCalendar = () => {
               </div>
             )}
             <DialogFooter>
-              <Button variant="outline" onClick={() => setShowEventDialog(false)}>
+              <Button variant="outline" onClick={handleSetShowEventDialog}>
                 Fechar
               </Button>
               <Button>Editar</Button>
@@ -515,7 +515,7 @@ const OperationalCalendar = () => {
                 <Label>Título *</Label>
                 <Input 
                   value={newEvent.title}
-                  onChange={(e) => setNewEvent(prev => ({ ...prev, title: e.target.value }))}
+                  onChange={handleChange}))}
                   placeholder="Descrição do evento"
                 />
               </div>
@@ -557,7 +557,7 @@ const OperationalCalendar = () => {
                 <Label>Embarcação (opcional)</Label>
                 <Input 
                   value={newEvent.vessel}
-                  onChange={(e) => setNewEvent(prev => ({ ...prev, vessel: e.target.value }))}
+                  onChange={handleChange}))}
                   placeholder="Nome da embarcação"
                 />
               </div>
@@ -565,13 +565,13 @@ const OperationalCalendar = () => {
                 <Label>Descrição</Label>
                 <Textarea 
                   value={newEvent.description}
-                  onChange={(e) => setNewEvent(prev => ({ ...prev, description: e.target.value }))}
+                  onChange={handleChange}))}
                   placeholder="Detalhes do evento"
                 />
               </div>
             </div>
             <DialogFooter>
-              <Button variant="outline" onClick={() => setShowNewEventDialog(false)}>
+              <Button variant="outline" onClick={handleSetShowNewEventDialog}>
                 Cancelar
               </Button>
               <Button onClick={handleCreateEvent} disabled={!newEvent.title}>

@@ -1,4 +1,4 @@
-import { useState } from "react";;
+import { useState, useMemo, useCallback } from "react";;
 import React, { useState } from "react";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
@@ -393,7 +393,7 @@ const ProductRoadmap: React.FC = () => {
               <Button
                 key={phase.id}
                 variant={selectedPhase === phase.id ? "default" : "outline"}
-                onClick={() => setSelectedPhase(phase.id)}
+                onClick={handleSetSelectedPhase}
                 className="h-auto p-3 flex flex-col items-center gap-2"
               >
                 {phase.icon}

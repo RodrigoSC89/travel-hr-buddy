@@ -1,7 +1,7 @@
 
 "use client";
 
-import { useEffect, useState } from "react";;;
+import { useEffect, useState, useCallback, useMemo } from "react";;;
 import { useNavigate } from "react-router-dom";
 import { supabase } from "@/integrations/supabase/client";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
@@ -103,7 +103,7 @@ export default function DashboardLogs() {
             <Button
               variant="ghost"
               size="sm"
-              onClick={() => navigate("/admin")}
+              onClick={() => handlenavigate}
             >
               <ArrowLeft className="w-4 h-4 mr-2" />
               Voltar

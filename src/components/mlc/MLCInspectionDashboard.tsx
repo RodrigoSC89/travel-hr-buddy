@@ -1,4 +1,4 @@
-import { useState } from "react";;
+import { useState, useMemo, useCallback } from "react";;
 import React, { useState } from "react";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
@@ -117,7 +117,7 @@ export const MLCInspectionDashboard: React.FC = () => {
       </div>
 
       <div className="grid grid-cols-2 md:grid-cols-6 gap-4">
-        <Card className="cursor-pointer hover:border-primary/50" onClick={() => setActiveTab("overview")}>
+        <Card className="cursor-pointer hover:border-primary/50" onClick={handleSetActiveTab}>
           <CardContent className="pt-4"><p className="text-sm text-muted-foreground">Score</p><p className="text-2xl font-bold">{complianceScore}%</p></CardContent>
         </Card>
         <Card className="cursor-pointer hover:border-green-500/50"><CardContent className="pt-4"><p className="text-sm text-muted-foreground">Conforme</p><p className="text-2xl font-bold text-green-500">{compliantItems}</p></CardContent></Card>
@@ -157,7 +157,7 @@ export const MLCInspectionDashboard: React.FC = () => {
             <Card key={cat.id} className="mb-4"><CardHeader><CardTitle className="text-lg">{cat.regulation} - {cat.title}</CardTitle><CardDescription>{cat.description}</CardDescription></CardHeader>
               <CardContent className="space-y-3">{cat.items.map(item => (
                 <div key={item.id} className="p-3 rounded-lg border"><div className="flex justify-between items-start mb-2"><div><span className="font-medium">{item.id} - {item.title}</span>{item.critical && <Badge variant="destructive" className="ml-2">Crítico</Badge>}</div>
-                  <div className="flex gap-1">{["compliant","non-compliant","na"].map(a => <Button key={a} size="sm" variant={answers[item.id]?.answer === a ? (a === "compliant" ? "default" : a === "non-compliant" ? "destructive" : "secondary") : "outline"} onClick={() => handleAnswerChange(item.id, a as unknown)}>{a === "compliant" ? <CheckCircle className="w-4 h-4" /> : a === "non-compliant" ? <XCircle className="w-4 h-4" /> : "N/A"}</Button>)}</div>
+                  <div className="flex gap-1">{["compliant","non-compliant","na"].map(a => <Button key={a} size="sm" variant={answers[item.id]?.answer === a ? (a === "compliant" ? "default" : a === "non-compliant" ? "destructive" : "secondary") : "outline"} onClick={() => handlehandleAnswerChange}>{a === "compliant" ? <CheckCircle className="w-4 h-4" /> : a === "non-compliant" ? <XCircle className="w-4 h-4" /> : "N/A"}</Button>)}</div>
                 </div><p className="text-sm text-muted-foreground">{item.description}</p></div>
               ))}</CardContent></Card>
           ))}</ScrollArea>

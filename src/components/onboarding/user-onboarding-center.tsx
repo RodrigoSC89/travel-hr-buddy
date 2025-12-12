@@ -1,4 +1,4 @@
-import { useState } from "react";;
+import { useState, useMemo, useCallback } from "react";;
 import React, { useState } from "react";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
@@ -328,7 +328,7 @@ const UserOnboardingCenter: React.FC = () => {
                       type="email"
                       placeholder="usuario@empresa.com"
                       value={newInvite.email}
-                      onChange={(e) => setNewInvite(prev => ({ ...prev, email: e.target.value }))}
+                      onChange={handleChange}))}
                     />
                   </div>
 
@@ -338,7 +338,7 @@ const UserOnboardingCenter: React.FC = () => {
                       id="name"
                       placeholder="João Silva"
                       value={newInvite.name}
-                      onChange={(e) => setNewInvite(prev => ({ ...prev, name: e.target.value }))}
+                      onChange={handleChange}))}
                     />
                   </div>
 
@@ -348,7 +348,7 @@ const UserOnboardingCenter: React.FC = () => {
                       id="role"
                       placeholder="Engenheiro Senior"
                       value={newInvite.role}
-                      onChange={(e) => setNewInvite(prev => ({ ...prev, role: e.target.value }))}
+                      onChange={handleChange}))}
                     />
                   </div>
 
@@ -358,7 +358,7 @@ const UserOnboardingCenter: React.FC = () => {
                       id="message"
                       placeholder="Bem-vindo ao Nautilus One..."
                       value={newInvite.message}
-                      onChange={(e) => setNewInvite(prev => ({ ...prev, message: e.target.value }))}
+                      onChange={handleChange}))}
                       rows={3}
                     />
                   </div>

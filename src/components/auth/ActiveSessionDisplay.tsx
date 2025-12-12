@@ -3,7 +3,7 @@
  * Show current session information to users
  */
 
-import { useEffect, useState } from "react";;;
+import { memo, memo, useEffect, useState } from "react";;;
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
@@ -37,7 +37,7 @@ interface SessionMetadata {
   isExpiring: boolean;
 }
 
-export function ActiveSessionDisplay() {
+export const ActiveSessionDisplay = memo(function() {
   const [session, setSession] = useState<SessionMetadata | null>(null);
   const [loading, setLoading] = useState(true);
   const [loggingOut, setLoggingOut] = useState(false);

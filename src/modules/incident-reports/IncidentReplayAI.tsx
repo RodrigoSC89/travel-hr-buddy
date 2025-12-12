@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";;
+import { useEffect, useState, useCallback } from "react";;
 
 /**
  * PATCH 472 - Incident Replay AI Main Panel
@@ -91,7 +91,7 @@ export const IncidentReplayAI: React.FC = () => {
       <div className="container mx-auto p-6">
         <Button
           variant="outline"
-          onClick={() => setSelectedIncidentId(null)}
+          onClick={handleSetSelectedIncidentId}
           className="mb-4"
         >
           ← Voltar à lista
@@ -129,7 +129,7 @@ export const IncidentReplayAI: React.FC = () => {
               <Input
                 placeholder="Buscar por título, descrição, severidade ou status..."
                 value={searchQuery}
-                onChange={(e) => setSearchQuery(e.target.value)}
+                onChange={handleChange}
                 className="pl-10"
               />
             </div>
@@ -210,7 +210,7 @@ export const IncidentReplayAI: React.FC = () => {
                     </div>
                   </div>
                   <Button
-                    onClick={() => handleReplayIncident(incident.id)}
+                    onClick={() => handlehandleReplayIncident}
                     size="sm"
                   >
                     <Play className="w-4 h-4 mr-2" />

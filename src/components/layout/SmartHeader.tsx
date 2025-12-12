@@ -1,4 +1,4 @@
-import { useState } from "react";;
+import { useState, useCallback } from "react";;
 import React, { useState } from "react";
 import { Bell, Bot, Sun, Moon } from "lucide-react";
 import { Button } from "@/components/ui/button";
@@ -14,7 +14,7 @@ const QuickCopilotDialog = React.lazy(() =>
   import("@/components/layout/QuickCopilotDialog").then(m => ({ default: m.QuickCopilotDialog }))
 );
 
-export function SmartHeader() {
+export const SmartHeader = memo(function() {
   const { theme, setTheme } = useTheme();
   const [notificationCount] = useState(3);
   const [alertsOpen, setAlertsOpen] = useState(false);
@@ -58,7 +58,7 @@ export function SmartHeader() {
             className="relative rounded-full hover:bg-zinc-700 dark:hover:bg-zinc-800 transition-colors"
             title="Notificações"
             aria-label={`Notificações${notificationCount > 0 ? ` - ${notificationCount} novas` : ""}`}
-            onClick={() => setAlertsOpen(true)}
+            onClick={handleSetAlertsOpen}
           >
             <Bell className="w-5 h-5" />
             {notificationCount > 0 && (
@@ -75,7 +75,7 @@ export function SmartHeader() {
             className="rounded-full hover:bg-zinc-700 dark:hover:bg-zinc-800 transition-colors"
             title="Assistente IA"
             aria-label="Abrir Assistente de Inteligência Artificial"
-            onClick={() => setCopilotOpen(true)}
+            onClick={handleSetCopilotOpen}
           >
             <Bot className="w-5 h-5" />
           </Button>

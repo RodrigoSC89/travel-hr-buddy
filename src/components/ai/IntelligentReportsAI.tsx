@@ -1,5 +1,5 @@
 /**
-import { useState } from "react";;
+import { useState, useMemo, useCallback } from "react";;
  * INTELLIGENT REPORTS AI - Relatórios Inteligentes por Linguagem Natural
  * Geração de relatórios com IA, análises executivas, dashboards dinâmicos
  */
@@ -204,7 +204,7 @@ A análise contempla o período atual e inclui comparações com períodos anter
           <div className="flex gap-3">
             <Textarea
               value={prompt}
-              onChange={(e) => setPrompt(e.target.value)}
+              onChange={handleChange}
               placeholder="Ex: Gere um relatório executivo com análise de custos da frota no último trimestre, incluindo comparativo com o ano anterior e recomendações de economia..."
               className="min-h-[80px] flex-1"
               disabled={isGenerating}
@@ -245,7 +245,7 @@ A análise contempla o período atual e inclui comparações com períodos anter
                   className={`cursor-pointer transition-colors hover:border-purple-500/50 ${
                     selectedTemplate === template.id ? "border-purple-500 bg-purple-500/5" : ""
                   }`}
-                  onClick={() => handleGenerate(template.id)}
+                  onClick={() => handlehandleGenerate}
                 >
                   <CardContent className="p-4">
                     <div className="flex items-start gap-3">
@@ -332,11 +332,11 @@ A análise contempla o período atual e inclui comparações com períodos anter
                       </p>
                     </div>
                     <div className="flex gap-2">
-                      <Button variant="outline" size="sm" onClick={() => exportReport("pdf")}>
+                      <Button variant="outline" size="sm" onClick={() => handleexportReport}>
                         <Download className="h-4 w-4 mr-1" />
                         PDF
                       </Button>
-                      <Button variant="outline" size="sm" onClick={() => exportReport("excel")}>
+                      <Button variant="outline" size="sm" onClick={() => handleexportReport}>
                         <Download className="h-4 w-4 mr-1" />
                         Excel
                       </Button>

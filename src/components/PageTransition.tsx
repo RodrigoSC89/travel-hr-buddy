@@ -1,5 +1,5 @@
 import { motion, AnimatePresence } from "framer-motion";
-import { ReactNode } from "react";
+import { memo, memo, ReactNode } from "react";
 import { useLocation } from "react-router-dom";
 
 interface PageTransitionProps {
@@ -33,7 +33,7 @@ const pageVariants = {
   }
 };
 
-export function PageTransition({ children, className }: PageTransitionProps) {
+export const PageTransition = memo(function({ children, className }: PageTransitionProps) {
   const location = useLocation();
 
   return (

@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";;
+import { useEffect, useState, useCallback, useMemo } from "react";;
 
 import React, { useState, useEffect } from "react";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
@@ -42,7 +42,7 @@ interface Notification {
   created_at: string;
 }
 
-export const PriceAlertDashboard = () => {
+export const PriceAlertDashboard = memo(() => {
   return (
     <div className="space-y-6">
       <EnhancedAlertManagement />
@@ -50,7 +50,7 @@ export const PriceAlertDashboard = () => {
   );
 };
 
-export const PriceAlertDashboardLegacy = () => {
+export const PriceAlertDashboardLegacy = memo(() => {
   const [alerts, setAlerts] = useState<PriceAlert[]>([]);
   const [notifications, setNotifications] = useState<Notification[]>([]);
   const [isAddingAlert, setIsAddingAlert] = useState(false);
@@ -290,7 +290,7 @@ export const PriceAlertDashboardLegacy = () => {
           <Button 
             variant="outline" 
             size="sm"
-            onClick={() => navigate("/")}
+            onClick={() => handlenavigate}
             className="flex items-center gap-2"
           >
             <ArrowLeft className="w-4 h-4" />
@@ -329,7 +329,7 @@ export const PriceAlertDashboardLegacy = () => {
                   <Input
                     id="product"
                     value={newAlert.product_name}
-                    onChange={(e) => setNewAlert(prev => ({ ...prev, product_name: e.target.value }))}
+                    onChange={handleChange}))}
                     placeholder="Ex: iPhone 15 Pro"
                   />
                 </div>
@@ -339,7 +339,7 @@ export const PriceAlertDashboardLegacy = () => {
                     id="targetPrice"
                     type="number"
                     value={newAlert.target_price}
-                    onChange={(e) => setNewAlert(prev => ({ ...prev, target_price: e.target.value }))}
+                    onChange={handleChange}))}
                     placeholder="Ex: 6500"
                   />
                 </div>
@@ -348,12 +348,12 @@ export const PriceAlertDashboardLegacy = () => {
                   <Input
                     id="url"
                     value={newAlert.product_url}
-                    onChange={(e) => setNewAlert(prev => ({ ...prev, product_url: e.target.value }))}
+                    onChange={handleChange}))}
                     placeholder="https://exemplo.com/produto"
                   />
                 </div>
                 <div className="flex gap-2 justify-end">
-                  <Button variant="outline" onClick={() => setIsAddingAlert(false)}>
+                  <Button variant="outline" onClick={handleSetIsAddingAlert}>
                     Cancelar
                   </Button>
                   <Button onClick={handleAddAlert} disabled={isCreatingAlert}>
@@ -437,7 +437,7 @@ export const PriceAlertDashboardLegacy = () => {
               <p className="text-muted-foreground mb-4">
                 Comece adicionando seu primeiro alerta de preço
               </p>
-              <Button onClick={() => setIsAddingAlert(true)}>
+              <Button onClick={handleSetIsAddingAlert}>
                 <Plus className="w-4 h-4 mr-2" />
                 Adicionar Primeiro Alerta
               </Button>
@@ -513,20 +513,20 @@ export const PriceAlertDashboardLegacy = () => {
                           {alert.last_checked_at 
                             ? new Date(alert.last_checked_at).toLocaleString("pt-BR")
                             : "Nunca verificado"
-                          }
+                          };
                         </p>
                         <div className="flex gap-2 mt-2">
                           <Button
                             size="sm"
                             variant="outline"
-                            onClick={() => toggleAlert(alert.id)}
+                            onClick={() => handletoggleAlert}
                           >
                             {alert.is_active ? "Pausar" : "Ativar"}
                           </Button>
                           <Button
                             size="sm"
                             variant="destructive"
-                            onClick={() => removeAlert(alert.id)}
+                            onClick={() => handleremoveAlert}
                           >
                             Remover
                           </Button>

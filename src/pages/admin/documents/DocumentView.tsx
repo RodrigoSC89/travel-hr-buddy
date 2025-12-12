@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useState } from "react";;;
+import { useEffect, useState, useCallback } from "react";;;
 import { useParams, useNavigate } from "react-router-dom";
 import { supabase } from "@/integrations/supabase/client";
 import { RoleBasedAccess } from "@/components/auth/role-based-access";
@@ -313,7 +313,7 @@ export default function DocumentViewPage() {
           <Button
             variant="outline"
             size="sm"
-            onClick={() => navigate("/admin/documents")}
+            onClick={() => handlenavigate}
           >
             <ArrowLeft className="w-4 h-4 mr-2" />
             Voltar
@@ -322,7 +322,7 @@ export default function DocumentViewPage() {
           <Button
             variant="outline"
             size="sm"
-            onClick={() => navigate(`/admin/documents/history/${id}`)}
+            onClick={() => handlenavigate}
           >
             📜 Ver Histórico Completo
           </Button>
@@ -420,7 +420,7 @@ export default function DocumentViewPage() {
                                   <Button
                                     variant="ghost"
                                     size="sm"
-                                    onClick={() => deleteComment(comment.id)}
+                                    onClick={() => handledeleteComment}
                                     disabled={deletingCommentId === comment.id}
                                   >
                                     {deletingCommentId === comment.id ? (
@@ -449,7 +449,7 @@ export default function DocumentViewPage() {
                   <Textarea
                     placeholder="Adicione um comentário..."
                     value={newComment}
-                    onChange={(e) => setNewComment(e.target.value)}
+                    onChange={handleChange}
                     disabled={submittingComment}
                     className="min-h-20"
                   />

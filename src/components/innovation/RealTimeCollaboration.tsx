@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";;
+import { useEffect, useState, useCallback, useMemo } from "react";;
 import React, { useState, useEffect } from "react";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
@@ -39,7 +39,7 @@ interface RealtimeMessage {
   type: string;
 }
 
-export const RealTimeCollaboration = () => {
+export const RealTimeCollaboration = memo(() => {
   const [activeUsers, setActiveUsers] = useState<ActiveUser[]>([]);
   const [realtimeMessages, setRealtimeMessages] = useState<RealtimeMessage[]>([]);
   const [newMessage, setNewMessage] = useState("");
@@ -223,7 +223,7 @@ export const RealTimeCollaboration = () => {
     case "alert": return <Bell className="w-4 h-4 text-orange-500" />;
     case "achievement": return <Zap className="w-4 h-4 text-green-500" />;
     default: return <MessageCircle className="w-4 h-4 text-muted-foreground" />;
-    }
+    };
   };
 
   return (
@@ -294,7 +294,7 @@ export const RealTimeCollaboration = () => {
               <Input
                 placeholder="Compartilhe uma atualização..."
                 value={newMessage}
-                onChange={(e) => setNewMessage(e.target.value)}
+                onChange={handleChange}
                 onKeyPress={(e) => e.key === "Enter" && sendMessage()}
                 className="flex-1"
               />

@@ -358,7 +358,7 @@ export const ReactionMapper: React.FC<ReactionMapperProps> = ({
         className={`mb-2 cursor-pointer transition-all ${
           selectedNode?.id === node.id ? "ring-2 ring-blue-500" : ""
         } ${isActive ? "border-blue-500 shadow-lg" : ""}`}
-        onClick={() => setSelectedNode(node)}
+        onClick={handleSetSelectedNode}
       >
         <CardHeader className="p-3">
           <div className="flex items-start justify-between">

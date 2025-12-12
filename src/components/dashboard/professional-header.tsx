@@ -3,7 +3,7 @@
  * Header profissional com indicador de conexão
  */
 
-import { useCallback, useState } from "react";;;
+import { memo, memo, useCallback, useState } from "react";;;
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Download, RefreshCw, Loader2 } from "lucide-react";
@@ -22,7 +22,7 @@ interface ProfessionalHeaderProps {
   onExport?: () => void | Promise<void>;
 }
 
-export function ProfessionalHeader({ 
+export const ProfessionalHeader = memo(function({ 
   title, 
   subtitle, 
   showLogo = true,

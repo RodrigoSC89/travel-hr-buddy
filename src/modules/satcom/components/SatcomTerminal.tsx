@@ -1,4 +1,4 @@
-import { useEffect, useRef, useState } from "react";;
+import { useEffect, useRef, useState, useCallback, useMemo } from "react";;
 
 /**
  * PATCH 420: Satcom Interactive Terminal
@@ -296,7 +296,7 @@ export const SatcomTerminal: React.FC<SatcomTerminalProps> = ({
         <div className="flex-shrink-0 flex gap-2">
           <Input
             value={inputMessage}
-            onChange={(e) => setInputMessage(e.target.value)}
+            onChange={handleChange}
             onKeyPress={(e) => e.key === "Enter" && sendMessage()}
             placeholder="Type message to transmit..."
             disabled={isTransmitting || signalStrength < 20}

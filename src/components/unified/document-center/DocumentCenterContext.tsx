@@ -1,5 +1,5 @@
 /**
-import { useContext } from "react";;
+import { useContext, useCallback } from "react";;
  * Document Center Context
  * 
  * Provides state management for document operations
@@ -60,13 +60,13 @@ interface DocumentCenterContextValue extends DocumentCenterState {
 
 const DocumentCenterContext = createContext<DocumentCenterContextValue | undefined>(undefined);
 
-export const useDocumentCenterContext = () => {
+export const useDocumentCenterContext = memo(() => {
   const context = useContext(DocumentCenterContext);
   if (!context) {
     throw new Error(
       "useDocumentCenterContext must be used within DocumentCenterProvider"
     );
-  }
+  };
   return context;
 };
 

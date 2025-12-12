@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";;
+import { useEffect, useState, useCallback } from "react";;
 import React, { useState } from "react";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
@@ -213,7 +213,7 @@ const TemplateManager = () => {
             <Upload className="w-4 h-4 mr-2" />
             Importar
           </Button>
-          <Button onClick={() => setShowCreateForm(true)}>
+          <Button onClick={handleSetShowCreateForm}>
             <Plus className="w-4 h-4 mr-2" />
             Novo Template
           </Button>
@@ -227,7 +227,7 @@ const TemplateManager = () => {
           <Input
             placeholder="Buscar templates..."
             value={searchTerm}
-            onChange={(e) => setSearchTerm(e.target.value)}
+            onChange={handleChange}
             className="pl-10"
           />
         </div>
@@ -285,10 +285,10 @@ const TemplateManager = () => {
                       </div>
                     </div>
                     <div className="flex items-center gap-1">
-                      <Button variant="ghost" size="sm" onClick={() => handleUseTemplate(template)}>
+                      <Button variant="ghost" size="sm" onClick={() => handlehandleUseTemplate}>
                         <Eye className="w-4 h-4" />
                       </Button>
-                      <Button variant="ghost" size="sm" onClick={() => setEditingTemplate(template)}>
+                      <Button variant="ghost" size="sm" onClick={handleSetEditingTemplate}>
                         <Edit className="w-4 h-4" />
                       </Button>
                     </div>
@@ -326,16 +326,16 @@ const TemplateManager = () => {
                   </div>
                   
                   <div className="flex items-center gap-2 mt-4">
-                    <Button size="sm" onClick={() => handleUseTemplate(template)}>
+                    <Button size="sm" onClick={() => handlehandleUseTemplate}>
                       Usar Template
                     </Button>
-                    <Button variant="outline" size="sm" onClick={() => duplicateTemplate(template)}>
+                    <Button variant="outline" size="sm" onClick={() => handleduplicateTemplate}>
                       <Copy className="w-4 h-4" />
                     </Button>
                     <Button variant="outline" size="sm">
                       <Share className="w-4 h-4" />
                     </Button>
-                    <Button variant="outline" size="sm" onClick={() => deleteTemplate(template.id)}>
+                    <Button variant="outline" size="sm" onClick={() => handledeleteTemplate}>
                       <Trash2 className="w-4 h-4" />
                     </Button>
                   </div>
@@ -351,7 +351,7 @@ const TemplateManager = () => {
               <p className="text-muted-foreground mb-4">
                 Tente ajustar os filtros ou criar um novo template
               </p>
-              <Button onClick={() => setShowCreateForm(true)}>
+              <Button onClick={handleSetShowCreateForm}>
                 <Plus className="w-4 h-4 mr-2" />
                 Criar Primeiro Template
               </Button>
@@ -380,13 +380,13 @@ const TemplateManager = () => {
                     </div>
                   </div>
                   <div className="flex items-center gap-2">
-                    <Button size="sm" onClick={() => handleUseTemplate(template)}>
+                    <Button size="sm" onClick={() => handlehandleUseTemplate}>
                       Usar
                     </Button>
-                    <Button variant="outline" size="sm" onClick={() => duplicateTemplate(template)}>
+                    <Button variant="outline" size="sm" onClick={() => handleduplicateTemplate}>
                       <Copy className="w-4 h-4" />
                     </Button>
-                    <Button variant="outline" size="sm" onClick={() => setEditingTemplate(template)}>
+                    <Button variant="outline" size="sm" onClick={handleSetEditingTemplate}>
                       <Edit className="w-4 h-4" />
                     </Button>
                   </div>
@@ -419,7 +419,7 @@ const TemplateManager = () => {
                     </p>
                     <div className="flex items-center justify-between text-sm">
                       <span className="font-medium">{template.usageCount} usos</span>
-                      <Button size="sm" onClick={() => handleUseTemplate(template)}>
+                      <Button size="sm" onClick={() => handlehandleUseTemplate}>
                         Usar Template
                       </Button>
                     </div>
@@ -473,10 +473,10 @@ const TemplateManager = () => {
                 />
               </div>
               <div className="flex justify-end gap-2">
-                <Button variant="outline" onClick={() => setShowCreateForm(false)}>
+                <Button variant="outline" onClick={handleSetShowCreateForm}>
                   Cancelar
                 </Button>
-                <Button onClick={() => setShowCreateForm(false)}>
+                <Button onClick={handleSetShowCreateForm}>
                   Criar Template
                 </Button>
               </div>

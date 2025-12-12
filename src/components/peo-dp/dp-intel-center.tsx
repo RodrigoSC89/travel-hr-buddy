@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";;
+import { useEffect, useState, useCallback, useMemo } from "react";;
 import React, { useState, useEffect } from "react";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
@@ -137,7 +137,7 @@ export const DPIntelCenter: React.FC = () => {
             <Input
               placeholder="Buscar por título, embarcação ou tags..."
               value={searchTerm}
-              onChange={(e) => setSearchTerm(e.target.value)}
+              onChange={handleChange}
               className="pl-10"
             />
           </div>
@@ -148,7 +148,7 @@ export const DPIntelCenter: React.FC = () => {
               key={cls}
               variant={filterClass === cls ? "default" : "outline"}
               size="sm"
-              onClick={() => setFilterClass(cls)}
+              onClick={handleSetFilterClass}
             >
               {cls === "all" ? "Todas Classes" : cls}
             </Button>
@@ -200,7 +200,7 @@ export const DPIntelCenter: React.FC = () => {
                 <div className="flex gap-2 pt-2">
                   <Button 
                     size="sm" 
-                    onClick={() => analyzeIncident(incident)}
+                    onClick={() => handleanalyzeIncident}
                     disabled={analyzing}
                   >
                     <Brain className="h-3 w-3 mr-1" />

@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";;
+import { useEffect, useState, useCallback, useMemo } from "react";;
 import React, { useState, useEffect } from "react";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
@@ -460,7 +460,7 @@ const ComplianceCenter: React.FC = () => {
                     <Upload className="h-4 w-4 mr-2" />
                     Salvar Certificado
                   </Button>
-                  <Button variant="outline" onClick={() => setShowUploadDialog(false)}>
+                  <Button variant="outline" onClick={handleSetShowUploadDialog}>
                     Cancelar
                   </Button>
                 </div>
@@ -479,14 +479,14 @@ const ComplianceCenter: React.FC = () => {
               <Input
                 placeholder="Buscar certificados..."
                 value={searchTerm}
-                onChange={(e) => setSearchTerm(e.target.value)}
+                onChange={handleChange}
                 className="pl-10"
               />
             </div>
             
             <select 
               value={statusFilter} 
-              onChange={(e) => setStatusFilter(e.target.value)}
+              onChange={handleChange}
               className="px-3 py-2 border border-input bg-background rounded-md text-sm"
             >
               <option value="all">Todos os Status</option>
@@ -498,7 +498,7 @@ const ComplianceCenter: React.FC = () => {
             
             <select 
               value={typeFilter} 
-              onChange={(e) => setTypeFilter(e.target.value)}
+              onChange={handleChange}
               className="px-3 py-2 border border-input bg-background rounded-md text-sm"
             >
               <option value="all">Todos os Tipos</option>
@@ -601,7 +601,7 @@ const ComplianceCenter: React.FC = () => {
                         <Button 
                           variant="outline" 
                           size="sm"
-                          onClick={() => setSelectedCertificate(cert)}
+                          onClick={handleSetSelectedCertificate}
                         >
                           <Eye className="h-4 w-4 mr-2" />
                           Ver Detalhes

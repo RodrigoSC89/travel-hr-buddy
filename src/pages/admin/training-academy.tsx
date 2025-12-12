@@ -1,4 +1,4 @@
-import { useState } from "react";;
+import { useState, useCallback } from "react";;
 import React, { useState } from "react";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
@@ -271,7 +271,7 @@ export default function TrainingAcademyAdmin() {
                 <Input
                   id="title"
                   value={newCourse.title}
-                  onChange={(e) => setNewCourse({ ...newCourse, title: e.target.value })}
+                  onChange={handleChange})}
                   placeholder="Ex: Operações DP Avançadas"
                 />
               </div>
@@ -280,7 +280,7 @@ export default function TrainingAcademyAdmin() {
                 <Textarea
                   id="description"
                   value={newCourse.description}
-                  onChange={(e) => setNewCourse({ ...newCourse, description: e.target.value })}
+                  onChange={handleChange})}
                   placeholder="Descrição detalhada do curso"
                   rows={3}
                 />
@@ -331,7 +331,7 @@ export default function TrainingAcademyAdmin() {
                     min="0.5"
                     step="0.5"
                     value={newCourse.duration_hours}
-                    onChange={(e) => setNewCourse({ ...newCourse, duration_hours: parseFloat(e.target.value) })}
+                    onChange={handleChange})}
                   />
                 </div>
                 <div className="grid gap-2">
@@ -339,14 +339,14 @@ export default function TrainingAcademyAdmin() {
                   <Input
                     id="instructor"
                     value={newCourse.instructor_name}
-                    onChange={(e) => setNewCourse({ ...newCourse, instructor_name: e.target.value })}
+                    onChange={handleChange})}
                     placeholder="Nome do instrutor"
                   />
                 </div>
               </div>
             </div>
             <DialogFooter>
-              <Button variant="outline" onClick={() => setIsCreateDialogOpen(false)}>
+              <Button variant="outline" onClick={handleSetIsCreateDialogOpen}>
                 Cancelar
               </Button>
               <Button onClick={handleCreateCourse} disabled={!newCourse.title}>
@@ -474,7 +474,7 @@ export default function TrainingAcademyAdmin() {
                           <Button
                             variant="outline"
                             size="sm"
-                            onClick={() => togglePublishStatus(course)}
+                            onClick={() => handletogglePublishStatus}
                           >
                             {course.is_published ? (
                               <>
@@ -491,14 +491,14 @@ export default function TrainingAcademyAdmin() {
                           <Button
                             variant="outline"
                             size="sm"
-                            onClick={() => setEditingCourse(course)}
+                            onClick={handleSetEditingCourse}
                           >
                             <Edit2 className="w-4 h-4" />
                           </Button>
                           <Button
                             variant="outline"
                             size="sm"
-                            onClick={() => handleDeleteCourse(course.id)}
+                            onClick={() => handlehandleDeleteCourse}
                           >
                             <Trash2 className="w-4 h-4 text-destructive" />
                           </Button>

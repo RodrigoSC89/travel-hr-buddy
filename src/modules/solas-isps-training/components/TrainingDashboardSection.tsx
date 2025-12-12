@@ -1,4 +1,4 @@
-import { useState } from "react";;
+import { useState, useMemo, useCallback } from "react";;
 import React, { useState } from "react";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
@@ -347,7 +347,7 @@ Por favor, especifique o que precisa ou pergunte diretamente!`,
               <Input
                 placeholder="Pergunte sobre drills, SOLAS, ISPS..."
                 value={chatMessage}
-                onChange={(e) => setChatMessage(e.target.value)}
+                onChange={handleChange}
                 onKeyDown={(e) => e.key === "Enter" && handleSendMessage()}
                 disabled={isLoading}
               />
@@ -356,13 +356,13 @@ Por favor, especifique o que precisa ou pergunte diretamente!`,
               </Button>
             </div>
             <div className="flex flex-wrap gap-2 mt-3">
-              <Button variant="outline" size="sm" onClick={() => setChatMessage("Procedimento incêndio SOLAS")}>
+              <Button variant="outline" size="sm" onClick={handleSetChatMessage}>
                 Incêndio
               </Button>
-              <Button variant="outline" size="sm" onClick={() => setChatMessage("Treinamentos ISPS Code")}>
+              <Button variant="outline" size="sm" onClick={handleSetChatMessage}>
                 ISPS
               </Button>
-              <Button variant="outline" size="sm" onClick={() => setChatMessage("Verificar certificados expirando")}>
+              <Button variant="outline" size="sm" onClick={handleSetChatMessage}>
                 Certificados
               </Button>
             </div>
@@ -430,10 +430,10 @@ Por favor, especifique o que precisa ou pergunte diretamente!`,
                       <div className="flex gap-2">
                         {drill.status !== "completed" && (
                           <>
-                            <Button variant="outline" size="sm" onClick={() => handleScheduleDrill(drill)}>
+                            <Button variant="outline" size="sm" onClick={() => handlehandleScheduleDrill}>
                               Agendar
                             </Button>
-                            <Button size="sm" variant="default" onClick={() => handleStartDrill(drill)}>
+                            <Button size="sm" variant="default" onClick={() => handlehandleStartDrill}>
                               <Play className="h-3 w-3 mr-1" />
                               Iniciar
                             </Button>

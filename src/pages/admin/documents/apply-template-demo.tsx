@@ -1,5 +1,5 @@
 
-import { useEffect, useState } from "react";;;
+import { useEffect, useState, useCallback } from "react";;;
 import { supabase } from "@/integrations/supabase/client";
 import ApplyTemplate from "./apply-template";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
@@ -94,7 +94,7 @@ export default function ApplyTemplateDemo() {
                     {template.content.substring(0, 150)}...
                   </p>
                   <Button 
-                    onClick={() => setSelectedTemplate(template)}
+                    onClick={handleSetSelectedTemplate}
                     className="w-full"
                   >
                     Aplicar Template
@@ -108,7 +108,7 @@ export default function ApplyTemplateDemo() {
         <div className="space-y-4">
           <Button 
             variant="outline" 
-            onClick={() => setSelectedTemplate(null)}
+            onClick={handleSetSelectedTemplate}
           >
             ← Voltar para lista de templates
           </Button>

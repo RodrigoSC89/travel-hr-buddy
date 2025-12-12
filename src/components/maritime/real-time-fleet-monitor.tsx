@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";;
+import { useEffect, useState, useCallback, useMemo } from "react";;
 import React, { useState, useEffect } from "react";
 import { useOptimizedPolling } from "@/hooks/use-optimized-polling";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
@@ -35,7 +35,7 @@ interface VesselMetrics {
   weather?: unknown;
 }
 
-export const RealTimeFleetMonitor = () => {
+export const RealTimeFleetMonitor = memo(() => {
   const [vessels, setVessels] = useState<VesselMetrics[]>([]);
   const [selectedVessel, setSelectedVessel] = useState<string | null>(null);
   const [loading, setLoading] = useState(true);
@@ -181,7 +181,7 @@ export const RealTimeFleetMonitor = () => {
         </div>
       </div>
     );
-  }
+  };
 
   return (
     <div className="space-y-6">
@@ -402,7 +402,7 @@ export const RealTimeFleetMonitor = () => {
                   </div>
                 ) : (
                   <div className="text-center py-8">
-                    <Button onClick={() => updateWeatherForVessel(selectedVesselData.id, selectedVesselData.location)}>
+                    <Button onClick={() => handleupdateWeatherForVessel}>
                       Carregar Dados Meteorológicos
                     </Button>
                   </div>

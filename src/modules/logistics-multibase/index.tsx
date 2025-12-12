@@ -1,5 +1,5 @@
 /**
-import { useState } from "react";;
+import { useState, useCallback } from "react";;
  * REABASTECIMENTO LOGÍSTICO INTELIGENTE MULTIBASE
  * Cálculo automático do melhor ponto logístico com IA
  */
@@ -389,7 +389,7 @@ export default function LogisticsMultibase() {
                         <div 
                           key={rec.baseId} 
                           className="p-3 border rounded-lg hover:border-primary/50 cursor-pointer transition-colors"
-                          onClick={() => handleSelectBase(request.id, rec)}
+                          onClick={() => handlehandleSelectBase}
                         >
                           <div className="flex items-center justify-between mb-2">
                             <div className="flex items-center gap-2">
@@ -428,7 +428,7 @@ export default function LogisticsMultibase() {
                   {request.status === "pending" && (
                     <Button 
                       className="w-full" 
-                      onClick={() => handleOptimizeRoute(request.id)}
+                      onClick={() => handlehandleOptimizeRoute}
                       disabled={isLoading}
                     >
                       <Sparkles className={`h-4 w-4 mr-2 ${isLoading ? "animate-spin" : ""}`} />

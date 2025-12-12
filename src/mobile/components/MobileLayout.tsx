@@ -66,7 +66,7 @@ function LoadingFallback() {
   );
 }
 
-export function MobileLayout({ children, showNav = true }: MobileLayoutProps) {
+export const MobileLayout = memo(function({ children, showNav = true }: MobileLayoutProps) {
   const { isOnline, pendingChanges, isSyncing } = useOfflineSync();
 
   return (

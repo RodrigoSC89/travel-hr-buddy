@@ -1,5 +1,5 @@
 /**
-import { useEffect, useState } from "react";;
+import { useEffect, useState, useCallback, useMemo } from "react";;
  * PATCH 646 - Modules Status Dashboard
  * Central admin panel for module activation, monitoring, and control
  */
@@ -291,7 +291,7 @@ const ModulesStatusDashboard: React.FC = () => {
                 <Input
                   placeholder="Search modules..."
                   value={searchTerm}
-                  onChange={(e) => setSearchTerm(e.target.value)}
+                  onChange={handleChange}
                   className="pl-8"
                 />
               </div>
@@ -300,7 +300,7 @@ const ModulesStatusDashboard: React.FC = () => {
               <label className="text-sm font-medium">Category</label>
               <select
                 value={filterCategory}
-                onChange={(e) => setFilterCategory(e.target.value)}
+                onChange={handleChange}
                 className="w-full rounded-md border border-input bg-background px-3 py-2 text-sm"
               >
                 <option value="all">All Categories</option>
@@ -315,7 +315,7 @@ const ModulesStatusDashboard: React.FC = () => {
               <label className="text-sm font-medium">Status</label>
               <select
                 value={filterStatus}
-                onChange={(e) => setFilterStatus(e.target.value)}
+                onChange={handleChange}
                 className="w-full rounded-md border border-input bg-background px-3 py-2 text-sm"
               >
                 <option value="all">All Statuses</option>

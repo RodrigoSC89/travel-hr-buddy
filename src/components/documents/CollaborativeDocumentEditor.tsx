@@ -1,7 +1,7 @@
 
 "use client";
 
-import { useCallback, useEffect, useRef, useState } from "react";;;
+import { memo, memo, useCallback, useEffect, useRef, useState } from "react";;;
 import { useEditor, EditorContent } from "@tiptap/react";
 import StarterKit from "@tiptap/starter-kit";
 import Collaboration from "@tiptap/extension-collaboration";
@@ -23,7 +23,7 @@ interface CollaborativeDocumentEditorProps {
   initialTitle?: string;
 }
 
-export function CollaborativeDocumentEditor({ 
+export const CollaborativeDocumentEditor = memo(function({ 
   documentId,
   initialTitle = "Untitled Document"
 }: CollaborativeDocumentEditorProps) {
@@ -152,7 +152,7 @@ export function CollaborativeDocumentEditor({
             <FileText className="h-5 w-5" />
             <Input
               value={title}
-              onChange={(e) => setTitle(e.target.value)}
+              onChange={handleChange}
               className="text-lg font-semibold border-0 p-0 h-auto focus-visible:ring-0"
               placeholder="Document Title"
             />

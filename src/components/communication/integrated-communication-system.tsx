@@ -1,4 +1,4 @@
-import { useEffect, useRef, useState } from "react";;
+import { useEffect, useRef, useState, useCallback, useMemo } from "react";;
 
 import React, { useState, useRef, useEffect } from "react";
 import { Button } from "@/components/ui/button";
@@ -313,7 +313,7 @@ export const IntegratedCommunicationSystem: React.FC<IntegratedCommunicationProp
             <Input
               placeholder="Buscar contatos..."
               value={searchQuery}
-              onChange={(e) => setSearchQuery(e.target.value)}
+              onChange={handleChange}
               className="pl-10"
             />
           </div>
@@ -324,7 +324,7 @@ export const IntegratedCommunicationSystem: React.FC<IntegratedCommunicationProp
             {filteredContacts.map((contact) => (
               <div
                 key={contact.id}
-                onClick={() => setSelectedContact(contact)}
+                onClick={handleSetSelectedContact}
                 className={`flex items-center gap-3 p-3 rounded-lg cursor-pointer transition-colors ${
                   selectedContact?.id === contact.id 
                     ? "bg-primary/10 border border-primary/20" 
@@ -467,7 +467,7 @@ export const IntegratedCommunicationSystem: React.FC<IntegratedCommunicationProp
                 <Input
                   placeholder="Digite sua mensagem..."
                   value={newMessage}
-                  onChange={(e) => setNewMessage(e.target.value)}
+                  onChange={handleChange}
                   onKeyPress={(e) => e.key === "Enter" && sendMessage()}
                   className="flex-1"
                 />

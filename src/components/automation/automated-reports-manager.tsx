@@ -3,7 +3,7 @@
  * Fully functional with AI integration via edge function
  */
 
-import { useState } from "react";;;
+import { memo, memo, useState, useCallback } from "react";;;
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -57,7 +57,7 @@ const SCHEDULES = [
   { value: "quarterly", label: "Trimestral", icon: "📊" },
 ];
 
-export const AutomatedReportsManager = () => {
+export const AutomatedReportsManager = memo(() => {
   const [reports, setReports] = useState<AutomatedReport[]>([
     {
       id: "1",
@@ -244,7 +244,7 @@ export const AutomatedReportsManager = () => {
       toast.success("Sugestões carregadas");
     } finally {
       setIsLoadingAI(false);
-    }
+    };
   };
 
   return (
@@ -263,7 +263,7 @@ export const AutomatedReportsManager = () => {
             )}
             {isLoadingAI ? "Analisando..." : "Sugestões IA"}
           </Button>
-          <Button onClick={() => setIsCreating(true)}>
+          <Button onClick={handleSetIsCreating}>
             <Plus className="w-4 h-4 mr-2" />
             Novo Relatório
           </Button>
@@ -282,7 +282,7 @@ export const AutomatedReportsManager = () => {
               <Button 
                 variant="ghost" 
                 size="sm"
-                onClick={() => setAiSuggestion(null)}
+                onClick={handleSetAiSuggestion}
               >
                 ✕
               </Button>
@@ -350,7 +350,7 @@ export const AutomatedReportsManager = () => {
               <Label>Habilitar análise de IA (insights automáticos)</Label>
             </div>
             <div className="flex gap-2 justify-end">
-              <Button variant="outline" onClick={() => setIsCreating(false)}>Cancelar</Button>
+              <Button variant="outline" onClick={handleSetIsCreating}>Cancelar</Button>
               <Button onClick={handleCreateReport}>Criar Relatório</Button>
             </div>
           </CardContent>
@@ -409,7 +409,7 @@ export const AutomatedReportsManager = () => {
             </DialogDescription>
           </DialogHeader>
           <DialogFooter>
-            <Button variant="outline" onClick={() => setDeleteDialogOpen(false)}>
+            <Button variant="outline" onClick={handleSetDeleteDialogOpen}>
               Cancelar
             </Button>
             <Button variant="destructive" onClick={deleteReport}>
@@ -473,7 +473,7 @@ const ReportCard = ({
             <Button 
               variant="ghost" 
               size="sm" 
-              onClick={() => onRunNow(report)}
+              onClick={() => handleonRunNow}
               disabled={isGenerating}
             >
               {isGenerating ? (
@@ -486,7 +486,7 @@ const ReportCard = ({
             <Button 
               variant="ghost" 
               size="icon"
-              onClick={() => onToggle(report.id)}
+              onClick={() => handleonToggle}
               title={report.isActive ? "Pausar" : "Ativar"}
             >
               {report.isActive ? <Pause className="w-4 h-4" /> : <Play className="w-4 h-4" />}
@@ -494,7 +494,7 @@ const ReportCard = ({
             <Button 
               variant="ghost" 
               size="icon"
-              onClick={() => onDelete(report.id)}
+              onClick={() => handleonDelete}
               title="Excluir"
             >
               <Trash2 className="w-4 h-4 text-destructive" />

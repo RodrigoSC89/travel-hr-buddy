@@ -1,8 +1,8 @@
-import { useEffect, useState } from "react";;
+import { useEffect, useState, useCallback } from "react";;
 import React, { useEffect, useState } from "react";
 import { Plane, Users, AlertTriangle } from "lucide-react";
 
-export const MobileSplash = () => {
+export const MobileSplash = memo(() => {
   const [isVisible, setIsVisible] = useState(true);
 
   useEffect(() => {

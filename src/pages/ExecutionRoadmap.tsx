@@ -1,5 +1,5 @@
 /**
-import { useState } from "react";;
+import { useState, useMemo, useCallback } from "react";;
  * Execution Roadmap Page - PATCH 980
  * Technical execution roadmap for 7, 15, and 30 days
  */
@@ -163,7 +163,7 @@ export default function ExecutionRoadmap() {
         </Card>
 
         <Card className={activePhase === "week1" ? "ring-2 ring-primary" : ""}>
-          <CardContent className="pt-6 cursor-pointer" onClick={() => setActivePhase("week1")}>
+          <CardContent className="pt-6 cursor-pointer" onClick={handleSetActivePhase}>
             <div className="flex items-center justify-between mb-2">
               <span className="text-sm text-muted-foreground">Semana 1</span>
               <Calendar className="h-4 w-4 text-red-500" />
@@ -177,7 +177,7 @@ export default function ExecutionRoadmap() {
         </Card>
 
         <Card className={activePhase === "week2" ? "ring-2 ring-primary" : ""}>
-          <CardContent className="pt-6 cursor-pointer" onClick={() => setActivePhase("week2")}>
+          <CardContent className="pt-6 cursor-pointer" onClick={handleSetActivePhase}>
             <div className="flex items-center justify-between mb-2">
               <span className="text-sm text-muted-foreground">Semana 2</span>
               <Calendar className="h-4 w-4 text-yellow-500" />
@@ -191,7 +191,7 @@ export default function ExecutionRoadmap() {
         </Card>
 
         <Card className={activePhase === "week3_4" ? "ring-2 ring-primary" : ""}>
-          <CardContent className="pt-6 cursor-pointer" onClick={() => setActivePhase("week3_4")}>
+          <CardContent className="pt-6 cursor-pointer" onClick={handleSetActivePhase}>
             <div className="flex items-center justify-between mb-2">
               <span className="text-sm text-muted-foreground">Semanas 3-4</span>
               <Calendar className="h-4 w-4 text-green-500" />

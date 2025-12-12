@@ -110,7 +110,7 @@ interface Props {
   sectionScores: Record<string, { compliant: number; nonCompliant: number; total: number }>;
 }
 
-export function IMCAAuditSections({ selectedDPClass, sectionScores }: Props) {
+export const IMCAAuditSections = memo(function({ selectedDPClass, sectionScores }: Props) {
   const calculateOverallScore = () => {
     let weightedSum = 0;
     let totalWeight = 0;

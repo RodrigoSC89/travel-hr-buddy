@@ -1,3 +1,4 @@
+import { memo } from 'react';
 /**
  * Feedback Toast Component
  * PATCH 624 - Toasts melhorados para feedback do usuário
@@ -18,7 +19,7 @@ interface ToastOptions {
 /**
  * Toast de sucesso
  */
-export function successToast(message: string, options?: ToastOptions) {
+export const successToast = memo(function(message: string, options?: ToastOptions) {
   toast.success(message, {
     duration: options?.duration || 4000,
     description: options?.description,
@@ -35,7 +36,7 @@ export function successToast(message: string, options?: ToastOptions) {
 /**
  * Toast de erro
  */
-export function errorToast(message: string, options?: ToastOptions) {
+export const errorToast = memo(function(message: string, options?: ToastOptions) {
   toast.error(message, {
     duration: options?.duration || 6000,
     description: options?.description,
@@ -52,7 +53,7 @@ export function errorToast(message: string, options?: ToastOptions) {
 /**
  * Toast de aviso
  */
-export function warningToast(message: string, options?: ToastOptions) {
+export const warningToast = memo(function(message: string, options?: ToastOptions) {
   toast.warning(message, {
     duration: options?.duration || 5000,
     description: options?.description,
@@ -69,7 +70,7 @@ export function warningToast(message: string, options?: ToastOptions) {
 /**
  * Toast informativo
  */
-export function infoToast(message: string, options?: ToastOptions) {
+export const infoToast = memo(function(message: string, options?: ToastOptions) {
   toast.info(message, {
     duration: options?.duration || 4000,
     description: options?.description,
@@ -104,7 +105,7 @@ export function loadingToast<T>(
 /**
  * Toast de loading manual
  */
-export function showLoadingToast(message: string) {
+export const showLoadingToast = memo(function(message: string) {
   return toast.loading(message, {
     icon: <Loader2 className="h-5 w-5 animate-spin text-primary" />,
   });
@@ -113,7 +114,7 @@ export function showLoadingToast(message: string) {
 /**
  * Dismissar toast
  */
-export function dismissToast(toastId?: string | number) {
+export const dismissToast = memo(function(toastId?: string | number) {
   if (toastId) {
     toast.dismiss(toastId);
   } else {

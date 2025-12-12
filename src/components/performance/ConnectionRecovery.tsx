@@ -3,7 +3,7 @@
  * Shows connection status and handles reconnection
  */
 
-import { useEffect, useState } from "react";;;
+import { memo, memo, useEffect, useState, useCallback } from "react";;;
 import { useNetworkStatus } from "@/hooks/use-network-status";
 import { offlineSyncManager } from "@/lib/offline/sync-manager";
 import { Button } from "@/components/ui/button";
@@ -21,7 +21,7 @@ interface ConnectionRecoveryProps {
   showAlways?: boolean;
 }
 
-export function ConnectionRecovery({ className, showAlways = false }: ConnectionRecoveryProps) {
+export const ConnectionRecovery = memo(function({ className, showAlways = false }: ConnectionRecoveryProps) {
   const { online, quality } = useNetworkStatus();
   const [stats, setStats] = useState({ pending: 0, failed: 0 });
   const [isSyncing, setIsSyncing] = useState(false);

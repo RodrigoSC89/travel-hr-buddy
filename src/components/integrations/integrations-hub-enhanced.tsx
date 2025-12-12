@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";;
+import { useEffect, useState, useCallback } from "react";;
 
 import React, { useState, useEffect } from "react";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
@@ -73,7 +73,7 @@ const PROVIDERS = [
   { name: "Dropbox", type: "oauth", icon: "📦", scopes: ["files.content.read"] },
 ];
 
-export const IntegrationsHubEnhanced = () => {
+export const IntegrationsHubEnhanced = memo(() => {
   const { toast } = useToast();
   const [integrations, setIntegrations] = useState<Integration[]>([]);
   const [webhookEvents, setWebhookEvents] = useState<WebhookEvent[]>([]);
@@ -309,7 +309,7 @@ export const IntegrationsHubEnhanced = () => {
         description: error.message,
         variant: "destructive",
       });
-    }
+    };
   };
 
   const getStatusBadge = (status: string) => {
@@ -446,13 +446,13 @@ export const IntegrationsHubEnhanced = () => {
                           <Button
                             variant="destructive"
                             className="w-full"
-                            onClick={() => disconnectIntegration(connected.id)}
+                            onClick={() => handledisconnectIntegration}
                           >
                             <XCircle className="h-4 w-4 mr-2" />
                             Disconnect
                           </Button>
                         ) : (
-                          <Button className="w-full" onClick={() => connectOAuth(provider)}>
+                          <Button className="w-full" onClick={() => handleconnectOAuth}>
                             <Link2 className="h-4 w-4 mr-2" />
                             Connect
                           </Button>
@@ -510,7 +510,7 @@ export const IntegrationsHubEnhanced = () => {
                               <Button
                                 size="sm"
                                 variant="outline"
-                                onClick={() => testWebhook(integration)}
+                                onClick={() => handletestWebhook}
                               >
                                 <Send className="h-3 w-3" />
                               </Button>
@@ -518,7 +518,7 @@ export const IntegrationsHubEnhanced = () => {
                             <Button
                               size="sm"
                               variant="destructive"
-                              onClick={() => disconnectIntegration(integration.id)}
+                              onClick={() => handledisconnectIntegration}
                             >
                               <Trash2 className="h-3 w-3" />
                             </Button>
@@ -546,7 +546,7 @@ export const IntegrationsHubEnhanced = () => {
                 <Input
                   id="webhook-url"
                   value={webhookUrl}
-                  onChange={(e) => setWebhookUrl(e.target.value)}
+                  onChange={handleChange}
                   placeholder="https://your-domain.com/webhook"
                 />
               </div>
@@ -556,7 +556,7 @@ export const IntegrationsHubEnhanced = () => {
                   id="webhook-secret"
                   type="password"
                   value={webhookSecret}
-                  onChange={(e) => setWebhookSecret(e.target.value)}
+                  onChange={handleChange}
                   placeholder="Your webhook secret"
                 />
               </div>
@@ -565,7 +565,7 @@ export const IntegrationsHubEnhanced = () => {
                 <Textarea
                   id="test-payload"
                   value={testPayload}
-                  onChange={(e) => setTestPayload(e.target.value)}
+                  onChange={handleChange}
                   rows={6}
                   className="font-mono text-sm"
                 />
@@ -616,7 +616,7 @@ export const IntegrationsHubEnhanced = () => {
                           <div className="flex gap-2">
                             <Dialog>
                               <DialogTrigger asChild>
-                                <Button size="sm" variant="outline" onClick={() => setSelectedEvent(event)}>
+                                <Button size="sm" variant="outline" onClick={handleSetSelectedEvent}>
                                   <Eye className="h-3 w-3" />
                                 </Button>
                               </DialogTrigger>
@@ -651,7 +651,7 @@ export const IntegrationsHubEnhanced = () => {
                               <Button
                                 size="sm"
                                 variant="outline"
-                                onClick={() => retryWebhook(event.id)}
+                                onClick={() => handleretryWebhook}
                               >
                                 <Send className="h-3 w-3" />
                               </Button>

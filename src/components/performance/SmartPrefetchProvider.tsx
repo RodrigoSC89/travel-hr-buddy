@@ -1,5 +1,5 @@
 /**
-import { useContext, useEffect, useState } from "react";;
+import { useContext, useEffect, useState, useCallback } from "react";;
  * Smart Prefetch Provider
  * PATCH 900: Corrigido para evitar erro de useContext null
  */

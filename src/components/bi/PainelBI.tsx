@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useRef, useState } from "react";;;
+import { memo, memo, useEffect, useRef, useState } from "react";;;
 import { Card, CardContent } from "@/components/ui/card";
 import { BarChart, Bar, XAxis, YAxis, Tooltip, ResponsiveContainer, Legend } from "recharts";
 import { Button } from "@/components/ui/button";
@@ -23,7 +23,7 @@ interface ExportData {
   pendente: number;
 }
 
-export function PainelBI() {
+export const PainelBI = memo(function() {
   const [dados, setDados] = useState<ComplianceData[]>([]);
   const [filtroMes, setFiltroMes] = useState("");
   const [loading, setLoading] = useState(true);
@@ -167,7 +167,7 @@ export function PainelBI() {
 
   if (loading) {
     return (
-      <Card>
+      <Card key={Card.id || index}>
         <CardContent className="p-6">
           <div className="flex items-center justify-center h-64">
             <p className="text-muted-foreground">Carregando dados...</p>
@@ -196,7 +196,7 @@ export function PainelBI() {
               <select
                 className="border rounded-md p-2 bg-background text-foreground"
                 value={filtroMes}
-                onChange={(e) => setFiltroMes(e.target.value)}
+                onChange={handleChange}
               >
                 <option value="">Todos os meses</option>
                 {mesesDisponiveis.map((mes) => (

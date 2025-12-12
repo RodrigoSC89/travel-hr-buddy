@@ -1,5 +1,5 @@
 /**
-import { useState } from "react";;
+import { useState, useMemo, useCallback } from "react";;
  * Medical Supplies Management Tab
  */
 
@@ -128,11 +128,11 @@ export default function SuppliesTab() {
             <Input
               placeholder="Buscar medicamento ou lote..."
               value={searchQuery}
-              onChange={(e) => setSearchQuery(e.target.value)}
+              onChange={handleChange}
               className="pl-10"
             />
           </div>
-          <Button variant="outline" size="icon" onClick={() => setShowFilters(!showFilters)}>
+          <Button variant="outline" size="icon" onClick={handleSetShowFilters}>
             <Filter className="h-4 w-4" />
           </Button>
         </div>
@@ -161,7 +161,7 @@ export default function SuppliesTab() {
                   <Label>Nome do Medicamento</Label>
                   <Input 
                     value={newItem.name}
-                    onChange={(e) => setNewItem(prev => ({ ...prev, name: e.target.value }))}
+                    onChange={handleChange}))}
                     placeholder="Ex: Paracetamol 500mg"
                   />
                 </div>
@@ -183,7 +183,7 @@ export default function SuppliesTab() {
                     <Label>Unidade</Label>
                     <Input 
                       value={newItem.unit}
-                      onChange={(e) => setNewItem(prev => ({ ...prev, unit: e.target.value }))}
+                      onChange={handleChange}))}
                       placeholder="Ex: comprimidos"
                     />
                   </div>
@@ -194,7 +194,7 @@ export default function SuppliesTab() {
                     <Input 
                       type="number"
                       value={newItem.quantity}
-                      onChange={(e) => setNewItem(prev => ({ ...prev, quantity: parseInt(e.target.value) || 0 }))}
+                      onChange={handleChange}))}
                     />
                   </div>
                   <div className="space-y-2">
@@ -202,7 +202,7 @@ export default function SuppliesTab() {
                     <Input 
                       type="number"
                       value={newItem.minStock}
-                      onChange={(e) => setNewItem(prev => ({ ...prev, minStock: parseInt(e.target.value) || 0 }))}
+                      onChange={handleChange}))}
                     />
                   </div>
                 </div>
@@ -212,14 +212,14 @@ export default function SuppliesTab() {
                     <Input 
                       type="date"
                       value={newItem.expiryDate}
-                      onChange={(e) => setNewItem(prev => ({ ...prev, expiryDate: e.target.value }))}
+                      onChange={handleChange}))}
                     />
                   </div>
                   <div className="space-y-2">
                     <Label>Número do Lote</Label>
                     <Input 
                       value={newItem.batchNumber}
-                      onChange={(e) => setNewItem(prev => ({ ...prev, batchNumber: e.target.value }))}
+                      onChange={handleChange}))}
                     />
                   </div>
                 </div>
@@ -227,13 +227,13 @@ export default function SuppliesTab() {
                   <Label>Localização</Label>
                   <Input 
                     value={newItem.location}
-                    onChange={(e) => setNewItem(prev => ({ ...prev, location: e.target.value }))}
+                    onChange={handleChange}))}
                     placeholder="Ex: Armário A1"
                   />
                 </div>
               </div>
               <DialogFooter>
-                <Button variant="outline" onClick={() => setShowAddDialog(false)}>Cancelar</Button>
+                <Button variant="outline" onClick={handleSetShowAddDialog}>Cancelar</Button>
                 <Button onClick={handleAddItem}>Adicionar</Button>
               </DialogFooter>
             </DialogContent>
@@ -266,28 +266,28 @@ export default function SuppliesTab() {
                   <Button 
                     variant={statusFilter === "all" ? "default" : "outline"} 
                     size="sm"
-                    onClick={() => setStatusFilter("all")}
+                    onClick={handleSetStatusFilter}
                   >
                     Todos
                   </Button>
                   <Button 
                     variant={statusFilter === "critical" ? "default" : "outline"} 
                     size="sm"
-                    onClick={() => setStatusFilter("critical")}
+                    onClick={handleSetStatusFilter}
                   >
                     Crítico ({statusCounts.critical})
                   </Button>
                   <Button 
                     variant={statusFilter === "low" ? "default" : "outline"} 
                     size="sm"
-                    onClick={() => setStatusFilter("low")}
+                    onClick={handleSetStatusFilter}
                   >
                     Baixo ({statusCounts.low})
                   </Button>
                   <Button 
                     variant={statusFilter === "expiring" ? "default" : "outline"} 
                     size="sm"
-                    onClick={() => setStatusFilter("expiring")}
+                    onClick={handleSetStatusFilter}
                   >
                     Vencendo ({statusCounts.expiring})
                   </Button>
@@ -477,7 +477,7 @@ export default function SuppliesTab() {
                       variant="outline" 
                       size="sm" 
                       className="w-full mt-3"
-                      onClick={() => handleRequestRestock(supply)}
+                      onClick={() => handlehandleRequestRestock}
                     >
                       <ShoppingCart className="h-3 w-3 mr-2" />
                       Solicitar Reposição

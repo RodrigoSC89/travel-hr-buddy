@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";;
+import { useEffect, useState, useCallback } from "react";;
 import React, { useState, useEffect } from "react";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
@@ -57,7 +57,7 @@ export default function SGSOSystem() {
             Sistema de Gestão de Segurança e Saúde Operacional
           </p>
         </div>
-        <Button onClick={() => setShowCreateDialog(true)}>
+        <Button onClick={handleSetShowCreateDialog}>
           <Plus className="h-4 w-4 mr-2" />
           New Safety Plan
         </Button>

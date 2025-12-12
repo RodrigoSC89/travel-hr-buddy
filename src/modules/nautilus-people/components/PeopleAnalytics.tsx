@@ -1,5 +1,5 @@
 /**
-import { useState } from "react";;
+import { useState, useMemo, useCallback } from "react";;
  * People Analytics - Analytics Avançado de RH com IA
  */
 

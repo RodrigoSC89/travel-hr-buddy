@@ -1,5 +1,5 @@
 /**
-import { useState } from "react";;
+import { useState, useMemo, useCallback } from "react";;
  * PATCH 442 - SATCOM Diagnostic Panel
  * Interactive test panel for SATCOM failover testing
  */
@@ -274,7 +274,7 @@ export const DiagnosticPanel: React.FC<DiagnosticPanelProps> = ({
             return (
               <Button
                 key={testType}
-                onClick={() => runTest(testType)}
+                onClick={() => handlerunTest}
                 disabled={isRunningTest}
                 variant={isRunning ? "default" : "outline"}
                 className="flex flex-col items-center gap-2 h-auto py-4"

@@ -1,4 +1,4 @@
-import { useEffect, useRef, useState } from "react";;
+import { useEffect, useRef, useState, useCallback } from "react";;
 import React, { useRef, useEffect, useState } from "react";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
@@ -394,7 +394,7 @@ const MarineAROverlay = () => {
                     variant="outline" 
                     size="sm" 
                     className="w-full"
-                    onClick={() => setSelectedMarker(null)}
+                    onClick={handleSetSelectedMarker}
                   >
                     Fechar
                   </Button>
@@ -404,7 +404,7 @@ const MarineAROverlay = () => {
                   {markers.map((marker) => (
                     <button
                       key={marker.id}
-                      onClick={() => handleMarkerClick(marker)}
+                      onClick={() => handlehandleMarkerClick}
                       className="w-full text-left p-3 rounded-lg border hover:bg-muted transition-colors"
                     >
                       <div className="flex items-center justify-between">

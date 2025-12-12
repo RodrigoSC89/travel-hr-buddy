@@ -1,5 +1,5 @@
 /**
-import { useState } from "react";;
+import { useState, useMemo, useCallback } from "react";;
  * PATCH 394 - Complete Incident Workflow
  * Full lifecycle management: Report → Investigation → Resolution → Closure
  */
@@ -229,7 +229,7 @@ export const IncidentWorkflow: React.FC<IncidentWorkflowProps> = ({ incident, on
               <Textarea
                 placeholder="Add workflow notes..."
                 value={notes}
-                onChange={(e) => setNotes(e.target.value)}
+                onChange={handleChange}
                 rows={3}
               />
             </div>

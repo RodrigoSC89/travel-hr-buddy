@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";;
+import { useEffect, useState, useCallback } from "react";;
 
 import React, { useState, useEffect } from "react";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
@@ -25,7 +25,7 @@ interface ActionPlanTabProps {
   auditId: string;
 }
 
-export function ActionPlanTab({ auditId }: ActionPlanTabProps) {
+export const ActionPlanTab = memo(function({ auditId }: ActionPlanTabProps) {
   const [actions, setActions] = useState<ActionPlan[]>([]);
   const [loading, setLoading] = useState(true);
   const [editMode, setEditMode] = useState(false);
@@ -143,7 +143,7 @@ export function ActionPlanTab({ auditId }: ActionPlanTabProps) {
     <div className="space-y-4">
       <div className="flex justify-between items-center">
         <h2 className="text-xl font-semibold">Action Plans</h2>
-        <Button onClick={() => setEditMode(true)} size="sm">
+        <Button onClick={handleSetEditMode} size="sm">
           <Plus className="mr-2 h-4 w-4" />
           Add Action
         </Button>
@@ -161,8 +161,7 @@ export function ActionPlanTab({ auditId }: ActionPlanTabProps) {
                 <Textarea
                   id="action_description"
                   value={formData.action_description}
-                  onChange={(e) =>
-                    setFormData({ ...formData, action_description: e.target.value })
+                  onChange={handleChange})
                   }
                   required
                 />
@@ -174,8 +173,7 @@ export function ActionPlanTab({ auditId }: ActionPlanTabProps) {
                   <Input
                     id="responsible"
                     value={formData.responsible}
-                    onChange={(e) =>
-                      setFormData({ ...formData, responsible: e.target.value })
+                    onChange={handleChange})
                     }
                     required
                   />
@@ -187,8 +185,7 @@ export function ActionPlanTab({ auditId }: ActionPlanTabProps) {
                     id="deadline"
                     type="date"
                     value={formData.deadline}
-                    onChange={(e) =>
-                      setFormData({ ...formData, deadline: e.target.value })
+                    onChange={handleChange})
                     }
                     required
                   />
@@ -272,7 +269,7 @@ export function ActionPlanTab({ auditId }: ActionPlanTabProps) {
                 <Button
                   variant="destructive"
                   size="sm"
-                  onClick={() => handleDelete(action.id!)}
+                  onClick={() => handlehandleDelete}
                 >
                   <Trash2 className="h-4 w-4" />
                 </Button>

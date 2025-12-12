@@ -1,4 +1,4 @@
-import { useState } from "react";;
+import { useState, useCallback } from "react";;
 import React, { useState } from "react";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
@@ -252,7 +252,7 @@ export const MaintenancePanel: React.FC<MaintenancePanelProps> = ({
                   <Input
                     type="date"
                     value={newMaintenance.scheduled_date}
-                    onChange={(e) => setNewMaintenance(prev => ({ ...prev, scheduled_date: e.target.value }))}
+                    onChange={handleChange}))}
                   />
                 </div>
 
@@ -278,14 +278,14 @@ export const MaintenancePanel: React.FC<MaintenancePanelProps> = ({
                   <Label>Descrição</Label>
                   <Textarea
                     value={newMaintenance.description}
-                    onChange={(e) => setNewMaintenance(prev => ({ ...prev, description: e.target.value }))}
+                    onChange={handleChange}))}
                     placeholder="Descreva a manutenção..."
                   />
                 </div>
               </div>
 
               <DialogFooter>
-                <Button variant="outline" onClick={() => setShowAddDialog(false)}>Cancelar</Button>
+                <Button variant="outline" onClick={handleSetShowAddDialog}>Cancelar</Button>
                 <Button onClick={handleAddMaintenance}>Agendar</Button>
               </DialogFooter>
             </DialogContent>
@@ -300,7 +300,7 @@ export const MaintenancePanel: React.FC<MaintenancePanelProps> = ({
               <Input
                 placeholder="Buscar manutenção..."
                 value={searchTerm}
-                onChange={(e) => setSearchTerm(e.target.value)}
+                onChange={handleChange}
                 className="pl-10"
               />
             </div>

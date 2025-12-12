@@ -5,7 +5,7 @@
  * Hook for automatically logging user actions with role context
  */
 
-import { useCallback, useEffect, useMemo, useRef } from "react";;;
+import { memo, memo, useCallback, useEffect, useMemo, useRef } from "react";;;
 import type { ComponentType } from "react";
 import { supabase } from "@/integrations/supabase/client";
 import { useAuth } from "@/contexts/AuthContext";
@@ -45,7 +45,7 @@ const normalizeDetails = (details?: Json): JsonObject => {
 /**
  * Hook to log user actions with audit trail
  */
-export const useAuditLog = () => {
+export const useAuditLog = memo(() => {
   const { user } = useAuth();
 
   const userContextDetails = useMemo<JsonObject>(() => {
@@ -211,4 +211,4 @@ export function withAuditLog<Props extends Record<string, unknown>>(
   };
 
   return AuditLogWrapper;
-}
+};

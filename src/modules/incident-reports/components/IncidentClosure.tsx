@@ -49,7 +49,7 @@ export const IncidentClosure: React.FC<Props> = ({ incidents, onRefresh }) => {
                       Reported: {new Date(incident.reportedAt).toLocaleString()}
                     </p>
                   </div>
-                  <Button size="sm" variant="outline" onClick={() => handleClose(incident.id)}>
+                  <Button size="sm" variant="outline" onClick={() => handlehandleClose}>
                     <CheckCircle className="h-3 w-3 mr-1" />
                     Close
                   </Button>

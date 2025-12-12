@@ -1,5 +1,5 @@
 /**
-import { useEffect, useState } from "react";;
+import { useEffect, useState, useMemo } from "react";;
  * Audit Trail Viewer Component
  * PATCH 123.0 - Audit Trail por Role
  * 
@@ -152,7 +152,7 @@ export const AuditTrailViewer: React.FC = () => {
                 <Input
                   placeholder="Buscar ações..."
                   value={searchTerm}
-                  onChange={(e) => setSearchTerm(e.target.value)}
+                  onChange={handleChange}
                   className="pl-10"
                 />
               </div>

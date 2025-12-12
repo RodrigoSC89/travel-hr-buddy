@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";;
+import { useEffect, useState, useCallback } from "react";;
 import React, { useState, useEffect } from "react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -124,7 +124,7 @@ export const AdvancedFilters: React.FC<AdvancedFiltersProps> = ({
           <Input
             placeholder="Buscar produtos..."
             value={tempFilters.search}
-            onChange={(e) => updateFilter("search", e.target.value)}
+            onChange={handleChange}
             onKeyDown={(e) => e.key === "Enter" && applyFilters()}
             className="pl-10"
           />
@@ -133,7 +133,7 @@ export const AdvancedFilters: React.FC<AdvancedFiltersProps> = ({
         <div className="flex gap-2">
           <Button
             variant="outline"
-            onClick={() => setIsExpanded(!isExpanded)}
+            onClick={handleSetIsExpanded}
             className="flex items-center gap-2"
           >
             <Filter className="h-4 w-4" />
@@ -366,7 +366,7 @@ export const AdvancedFilters: React.FC<AdvancedFiltersProps> = ({
               <Button onClick={applyFilters} className="flex-1">
                 Aplicar Filtros
               </Button>
-              <Button variant="outline" onClick={() => setIsExpanded(false)}>
+              <Button variant="outline" onClick={handleSetIsExpanded}>
                 Cancelar
               </Button>
             </div>

@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";;
+import { useEffect, useState, useCallback } from "react";;
 import React, { useState, useEffect } from "react";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
@@ -127,7 +127,7 @@ export const PSCPackagePanel: React.FC = () => {
           <Button 
             variant="outline" 
             className="gap-2"
-            onClick={() => handleGeneratePackage("csv")}
+            onClick={() => handlehandleGeneratePackage}
             disabled={generating}
           >
             <Download className="h-4 w-4" />
@@ -136,7 +136,7 @@ export const PSCPackagePanel: React.FC = () => {
           <Button 
             variant="outline" 
             className="gap-2"
-            onClick={() => handleGeneratePackage("pdf")}
+            onClick={() => handlehandleGeneratePackage}
             disabled={generating}
           >
             <FileText className="h-4 w-4" />
@@ -144,7 +144,7 @@ export const PSCPackagePanel: React.FC = () => {
           </Button>
           <Button 
             className="gap-2"
-            onClick={() => handleGeneratePackage("zip")}
+            onClick={() => handlehandleGeneratePackage}
             disabled={generating}
           >
             <Package className="h-4 w-4" />
@@ -333,7 +333,7 @@ export const PSCPackagePanel: React.FC = () => {
                       <div 
                         key={insp.id} 
                         className="p-4 border rounded-lg cursor-pointer hover:bg-muted/50 transition-colors"
-                        onClick={() => setSelectedInspection(insp)}
+                        onClick={handleSetSelectedInspection}
                       >
                         <div className="flex items-start justify-between">
                           <div className="space-y-1">

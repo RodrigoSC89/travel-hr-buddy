@@ -8,7 +8,7 @@ import { Filter } from "lucide-react";
 
 interface Props { open: boolean; onOpenChange: (open: boolean) => void; }
 
-export function FiltersDialog({ open, onOpenChange }: Props) {
+export const FiltersDialog = memo(function({ open, onOpenChange }: Props) {
   return (
     <Dialog open={open} onOpenChange={onOpenChange}>
       <DialogContent>
@@ -18,7 +18,7 @@ export function FiltersDialog({ open, onOpenChange }: Props) {
           <div className="space-y-2"><Label>Tipo de Drill</Label><Select defaultValue="all"><SelectTrigger><SelectValue /></SelectTrigger><SelectContent><SelectItem value="all">Todos</SelectItem><SelectItem value="fire">Incêndio</SelectItem><SelectItem value="abandon">Abandono</SelectItem><SelectItem value="mob">MOB</SelectItem><SelectItem value="isps">ISPS</SelectItem></SelectContent></Select></div>
           <div className="space-y-2"><Label>Período</Label><Select defaultValue="all"><SelectTrigger><SelectValue /></SelectTrigger><SelectContent><SelectItem value="all">Todo o período</SelectItem><SelectItem value="week">Última semana</SelectItem><SelectItem value="month">Último mês</SelectItem><SelectItem value="quarter">Último trimestre</SelectItem></SelectContent></Select></div>
         </div>
-        <DialogFooter><Button variant="outline" onClick={() => onOpenChange(false)}>Limpar</Button><Button onClick={() => onOpenChange(false)}>Aplicar Filtros</Button></DialogFooter>
+        <DialogFooter><Button variant="outline" onClick={() => handleonOpenChange}>Limpar</Button><Button onClick={() => handleonOpenChange}>Aplicar Filtros</Button></DialogFooter>
       </DialogContent>
     </Dialog>
   );

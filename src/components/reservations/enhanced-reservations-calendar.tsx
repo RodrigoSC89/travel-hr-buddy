@@ -1,4 +1,4 @@
-import { useState } from "react";;
+import { useState, useMemo, useCallback } from "react";;
 import React, { useState } from "react";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
@@ -130,11 +130,11 @@ export const EnhancedReservationsCalendar: React.FC = () => {
               Calendário de Reservas
             </CardTitle>
             <div className="flex items-center gap-2">
-              <Button variant="outline" size="sm" onClick={() => navigateMonth("prev")}>
+              <Button variant="outline" size="sm" onClick={() => handlenavigateMonth}>
                 <ChevronLeft className="w-4 h-4" />
               </Button>
               <span className="font-medium text-lg capitalize">{monthName}</span>
-              <Button variant="outline" size="sm" onClick={() => navigateMonth("next")}>
+              <Button variant="outline" size="sm" onClick={() => handlenavigateMonth}>
                 <ChevronRight className="w-4 h-4" />
               </Button>
             </div>
@@ -176,7 +176,7 @@ export const EnhancedReservationsCalendar: React.FC = () => {
                           <div
                             key={event.id}
                             className={`text-xs p-1 rounded cursor-pointer hover:opacity-80 ${getTypeColor(event.type)}`}
-                            onClick={() => setSelectedEvent(event)}
+                            onClick={handleSetSelectedEvent}
                           >
                             <div className="font-medium truncate">{event.employee}</div>
                             <div className="truncate">{event.title}</div>
@@ -210,12 +210,12 @@ export const EnhancedReservationsCalendar: React.FC = () => {
                 <Button
                   variant="outline"
                   size="sm"
-                  onClick={() => duplicateReservation(selectedEvent)}
+                  onClick={() => handleduplicateReservation}
                 >
                   <Copy className="w-4 h-4 mr-2" />
                   Duplicar
                 </Button>
-                <Button variant="outline" size="sm" onClick={() => setSelectedEvent(null)}>
+                <Button variant="outline" size="sm" onClick={handleSetSelectedEvent}>
                   Fechar
                 </Button>
               </div>

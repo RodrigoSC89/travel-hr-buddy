@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";;
+import { useEffect, useState, useCallback } from "react";;
 import React, { useState, useEffect } from "react";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
@@ -331,9 +331,7 @@ export const AdvancedSettings: React.FC = () => {
                     id="language"
                     className="w-full p-2 border rounded-md"
                     value={settings.preferences.language}
-                    onChange={(e) => 
-                      handleSettingChange("preferences", "language", e.target.value)
-                    }
+                    onChange={handleChange}
                   >
                     <option value="pt-BR">Português (Brasil)</option>
                     <option value="en-US">English (US)</option>
@@ -347,9 +345,7 @@ export const AdvancedSettings: React.FC = () => {
                     id="timezone"
                     className="w-full p-2 border rounded-md"
                     value={settings.preferences.timezone}
-                    onChange={(e) => 
-                      handleSettingChange("preferences", "timezone", e.target.value)
-                    }
+                    onChange={handleChange}
                   >
                     <option value="America/Sao_Paulo">São Paulo (GMT-3)</option>
                     <option value="America/New_York">New York (GMT-5)</option>
@@ -363,9 +359,7 @@ export const AdvancedSettings: React.FC = () => {
                     id="theme"
                     className="w-full p-2 border rounded-md"
                     value={settings.preferences.theme}
-                    onChange={(e) => 
-                      handleSettingChange("preferences", "theme", e.target.value)
-                    }
+                    onChange={handleChange}
                   >
                     <option value="system">Sistema</option>
                     <option value="light">Claro</option>
@@ -379,9 +373,7 @@ export const AdvancedSettings: React.FC = () => {
                     id="currency"
                     className="w-full p-2 border rounded-md"
                     value={settings.preferences.currency}
-                    onChange={(e) => 
-                      handleSettingChange("preferences", "currency", e.target.value)
-                    }
+                    onChange={handleChange}
                   >
                     <option value="BRL">Real (R$)</option>
                     <option value="USD">Dólar ($)</option>
@@ -422,9 +414,7 @@ export const AdvancedSettings: React.FC = () => {
                   min="5"
                   max="480"
                   value={settings.security.sessionTimeout}
-                  onChange={(e) => 
-                    handleSettingChange("security", "sessionTimeout", parseInt(e.target.value))
-                  }
+                  onChange={handleChange}
                 />
               </div>
 

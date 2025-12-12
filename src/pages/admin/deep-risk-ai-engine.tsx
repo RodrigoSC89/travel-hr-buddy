@@ -1,5 +1,5 @@
 /**
-import { useEffect, useState } from "react";;
+import { useEffect, useState, useCallback, useMemo } from "react";;
  * PATCH 537 - Deep Risk AI with ONNX Runtime
  * Browser-based AI risk analysis with real-time scoring
  */
@@ -463,7 +463,7 @@ const DeepRiskAIPage: React.FC = () => {
                         <Input
                           id="forecast-name"
                           value={forecastName}
-                          onChange={(e) => setForecastName(e.target.value)}
+                          onChange={handleChange}
                           placeholder="e.g., North Atlantic Route Analysis"
                         />
                       </div>

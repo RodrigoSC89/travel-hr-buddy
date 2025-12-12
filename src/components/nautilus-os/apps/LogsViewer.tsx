@@ -1,7 +1,7 @@
 import React from "react";
 import { FileText, Info, AlertCircle, XCircle } from "lucide-react";
 
-export function LogsViewer() {
+export const LogsViewer = memo(function() {
   const logs = [
     { time: "10:45:32", level: "info", message: "Sistema inicializado com sucesso", icon: Info },
     { time: "10:45:48", level: "info", message: "Módulo de IA carregado", icon: Info },

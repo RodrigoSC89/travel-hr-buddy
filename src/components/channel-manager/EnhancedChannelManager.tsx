@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";;
+import { useEffect, useState, useCallback, useMemo } from "react";;
 
 /**
  * PATCH 378: Enhanced Channel Manager with Permissions & Real-time
@@ -299,7 +299,7 @@ export const EnhancedChannelManager: React.FC = () => {
                       <Label>Channel Name *</Label>
                       <Input
                         value={formData.name}
-                        onChange={(e) => setFormData({ ...formData, name: e.target.value })}
+                        onChange={handleChange})}
                         placeholder="Operations Team"
                       />
                     </div>
@@ -307,7 +307,7 @@ export const EnhancedChannelManager: React.FC = () => {
                       <Label>Description</Label>
                       <Textarea
                         value={formData.description}
-                        onChange={(e) => setFormData({ ...formData, description: e.target.value })}
+                        onChange={handleChange})}
                         placeholder="Channel description..."
                         rows={3}
                       />
@@ -335,13 +335,13 @@ export const EnhancedChannelManager: React.FC = () => {
                         <Input
                           type="number"
                           value={formData.max_members}
-                          onChange={(e) => setFormData({ ...formData, max_members: parseInt(e.target.value) || 50 })}
+                          onChange={handleChange})}
                         />
                       </div>
                     </div>
                   </div>
                   <DialogFooter>
-                    <Button variant="outline" onClick={() => setIsCreateOpen(false)}>
+                    <Button variant="outline" onClick={handleSetIsCreateOpen}>
                       Cancel
                     </Button>
                     <Button onClick={handleCreateChannel}>Create Channel</Button>
@@ -366,7 +366,7 @@ export const EnhancedChannelManager: React.FC = () => {
                       className={`cursor-pointer transition-all ${
                         selectedChannel?.id === channel.id ? "ring-2 ring-primary" : "hover:shadow-md"
                       }`}
-                      onClick={() => setSelectedChannel(channel)}
+                      onClick={handleSetSelectedChannel}
                     >
                       <CardContent className="p-3">
                         <div className="flex items-start justify-between">
@@ -419,7 +419,7 @@ export const EnhancedChannelManager: React.FC = () => {
                 <Button
                   size="sm"
                   variant="outline"
-                  onClick={() => setIsPermissionsOpen(true)}
+                  onClick={handleSetIsPermissionsOpen}
                 >
                   <Shield className="h-4 w-4 mr-2" />
                   Permissions
@@ -460,7 +460,7 @@ export const EnhancedChannelManager: React.FC = () => {
                 <div className="flex gap-2">
                   <Input
                     value={messageContent}
-                    onChange={(e) => setMessageContent(e.target.value)}
+                    onChange={handleChange}
                     placeholder="Type a message..."
                     onKeyPress={(e) => {
                       if (e.key === "Enter") {
@@ -512,7 +512,7 @@ export const EnhancedChannelManager: React.FC = () => {
             </div>
           </div>
           <DialogFooter>
-            <Button onClick={() => setIsPermissionsOpen(false)}>Close</Button>
+            <Button onClick={handleSetIsPermissionsOpen}>Close</Button>
           </DialogFooter>
         </DialogContent>
       </Dialog>

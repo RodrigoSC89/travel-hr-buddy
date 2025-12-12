@@ -1,4 +1,4 @@
-import { useState } from "react";;
+import { useState, useCallback } from "react";;
 import React, { useState } from "react";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
@@ -253,7 +253,7 @@ export const IntegrationMarketplace: React.FC = () => {
                       <Input
                         placeholder="Buscar integrações..."
                         value={searchTerm}
-                        onChange={(e) => setSearchTerm(e.target.value)}
+                        onChange={handleChange}
                         className="pl-10"
                       />
                     </div>
@@ -261,7 +261,7 @@ export const IntegrationMarketplace: React.FC = () => {
                   <div className="flex gap-2">
                     <select 
                       value={selectedFilter}
-                      onChange={(e) => setSelectedFilter(e.target.value)}
+                      onChange={handleChange}
                       className="px-3 py-2 border border-border rounded-lg bg-background text-foreground"
                     >
                       {filters.map(filter => (
@@ -281,7 +281,7 @@ export const IntegrationMarketplace: React.FC = () => {
                         key={category.id}
                         variant={selectedCategory === category.id ? "default" : "outline"}
                         size="sm"
-                        onClick={() => setSelectedCategory(category.id)}
+                        onClick={handleSetSelectedCategory}
                         className="whitespace-nowrap flex items-center gap-2"
                       >
                         <Icon className="w-4 h-4" />
@@ -369,7 +369,7 @@ export const IntegrationMarketplace: React.FC = () => {
                     <Button 
                       size="sm" 
                       className="flex-1 bg-primary hover:bg-primary/90"
-                      onClick={() => handleInstall(integration)}
+                      onClick={() => handlehandleInstall}
                     >
                       <Download className="w-3 h-3 mr-1" />
                       Instalar
@@ -429,7 +429,7 @@ export const IntegrationMarketplace: React.FC = () => {
                     </Button>
                     <Button 
                       className="flex-1 bg-primary hover:bg-primary/90"
-                      onClick={() => handleInstall(integration)}
+                      onClick={() => handlehandleInstall}
                     >
                       <Download className="w-4 h-4 mr-2" />
                       Instalar Agora
@@ -450,7 +450,7 @@ export const IntegrationMarketplace: React.FC = () => {
               <p className="text-muted-foreground mb-4">
                 Explore o marketplace e instale integrações para começar.
               </p>
-              <Button onClick={() => setSelectedTab("browse")} className="bg-primary hover:bg-primary/90">
+              <Button onClick={handleSetSelectedTab} className="bg-primary hover:bg-primary/90">
                 <Store className="w-4 h-4 mr-2" />
                 Explorar Marketplace
               </Button>

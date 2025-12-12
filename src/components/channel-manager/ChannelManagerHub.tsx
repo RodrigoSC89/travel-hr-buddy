@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";;;
+import { useEffect, useState, useCallback } from "react";;;
 import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
 import { supabase } from "@/integrations/supabase/client";
 import { Button } from "@/components/ui/button";
@@ -181,7 +181,7 @@ export default function ChannelManagerHub() {
                 <label className="text-sm font-medium">Nome do Canal</label>
                 <Input
                   value={channelName}
-                  onChange={(e) => setChannelName(e.target.value)}
+                  onChange={handleChange}
                   placeholder="Ex: Operações - Navio A"
                 />
               </div>
@@ -207,7 +207,7 @@ export default function ChannelManagerHub() {
                   <Button
                     variant={selectedChannel === channel.id ? "default" : "outline"}
                     className="w-full justify-start"
-                    onClick={() => setSelectedChannel(channel.id)}
+                    onClick={handleSetSelectedChannel}
                   >
                     <MessageSquare className="mr-2 h-4 w-4" />
                     {(channel as unknown).channel_name || (channel as unknown).name}
@@ -252,7 +252,7 @@ export default function ChannelManagerHub() {
                 <div className="flex gap-2">
                   <Input
                     value={messageContent}
-                    onChange={(e) => setMessageContent(e.target.value)}
+                    onChange={handleChange}
                     placeholder="Digite sua mensagem..."
                     onKeyPress={(e) => {
                       if (e.key === "Enter" && messageContent.trim()) {

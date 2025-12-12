@@ -1,4 +1,4 @@
-import { useState } from "react";;;
+import { useState, useMemo, useCallback } from "react";;;
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
@@ -73,7 +73,7 @@ export default function ReportsTab({ drills, certifications, crewMembers }: Repo
                   <p className="text-sm text-muted-foreground">{type.description}</p>
                 </div>
               </div>
-              <Button className="w-full mt-4" size="sm" onClick={() => handleGenerateReport(type.id)} disabled={isLoading}>
+              <Button className="w-full mt-4" size="sm" onClick={() => handlehandleGenerateReport} disabled={isLoading}>
                 {isLoading && reportType === type.id ? <Loader2 className="h-4 w-4 mr-2 animate-spin" /> : <Sparkles className="h-4 w-4 mr-2" />}
                 Gerar com IA
               </Button>

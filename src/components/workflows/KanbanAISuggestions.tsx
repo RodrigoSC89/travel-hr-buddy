@@ -1,4 +1,4 @@
-import { useState } from "react";;
+import { useState, useCallback } from "react";;
 "use client";
 
 import { Card, CardContent } from "@/components/ui/card";
@@ -12,7 +12,7 @@ import type { Database } from "@/integrations/supabase/types";
 // Missing table in database schema - using any for now
 // type WorkflowAISuggestionInsert = Database["public"]["Tables"]["workflow_ai_suggestions"]["Insert"];
 
-export function KanbanAISuggestions({ suggestions = [] }: KanbanAISuggestionsProps) {
+export const KanbanAISuggestions = memo(function({ suggestions = [] }: KanbanAISuggestionsProps) {
   const [accepted, setAccepted] = useState<string[]>([]);
   const { toast } = useToast();
 
@@ -94,7 +94,7 @@ export function KanbanAISuggestions({ suggestions = [] }: KanbanAISuggestionsPro
               </div>
               
               {!accepted.includes(s.etapa) && (
-                <Button onClick={() => handleAccept(s.etapa, s)} className="mt-4">
+                <Button onClick={() => handlehandleAccept} className="mt-4">
                   ✅ Aceitar sugestão
                 </Button>
               )}

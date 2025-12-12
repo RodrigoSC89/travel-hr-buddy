@@ -1,5 +1,5 @@
 /**
-import { useState } from "react";;
+import { useState, useMemo, useCallback } from "react";;
  * API Documentation Component - PHASE 2
  * Documentação interativa da API pública do Nautilus One
  */
@@ -282,7 +282,7 @@ export const ApiDocumentation: React.FC = () => {
                     {categoryEndpoints.map((endpoint, idx) => (
                       <button
                         key={idx}
-                        onClick={() => setSelectedEndpoint(endpoint)}
+                        onClick={handleSetSelectedEndpoint}
                         className={`w-full text-left p-2 rounded-lg hover:bg-muted transition-colors flex items-center gap-2 ${
                           selectedEndpoint?.path === endpoint.path ? "bg-primary/10" : ""
                         }`}

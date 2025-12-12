@@ -1,4 +1,4 @@
-import { useEffect, useRef, useState } from "react";;
+import { useEffect, useRef, useState, useCallback, useMemo } from "react";;
 import React, { useState, useRef, useEffect } from "react";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
@@ -16,7 +16,7 @@ interface Props {
   selectedDPClass: "DP1" | "DP2" | "DP3";
 }
 
-export function IMCADPAIAssistant({ selectedDPClass }: Props) {
+export const IMCADPAIAssistant = memo(function({ selectedDPClass }: Props) {
   const [messages, setMessages] = useState<Message[]>([]);
   const [input, setInput] = useState("");
   const [isLoading, setIsLoading] = useState(false);
@@ -111,7 +111,7 @@ export function IMCADPAIAssistant({ selectedDPClass }: Props) {
                 <p className="text-muted-foreground">Pergunte sobre normas IMCA, IMO, requisitos de auditoria DP...</p>
                 <div className="flex flex-wrap justify-center gap-2">
                   {quickActions.map(action => (
-                    <Button key={action.label} variant="outline" size="sm" onClick={() => setInput(action.prompt)}>
+                    <Button key={action.label} variant="outline" size="sm" onClick={handleSetInput}>
                       <action.icon className="h-4 w-4 mr-1" />
                       {action.label}
                     </Button>
@@ -133,7 +133,7 @@ export function IMCADPAIAssistant({ selectedDPClass }: Props) {
           <div className="flex gap-2">
             <Textarea
               value={input}
-              onChange={(e) => setInput(e.target.value)}
+              onChange={handleChange}
               placeholder="Pergunte sobre IMCA, IMO, FMEA, ASOG..."
               className="min-h-[60px]"
               onKeyDown={(e) => e.key === "Enter" && !e.shiftKey && (e.preventDefault(), sendMessage())}

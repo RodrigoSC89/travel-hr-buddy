@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";;
+import { useEffect, useState, useCallback, useMemo } from "react";;
 import React, { useState, useEffect } from "react";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
@@ -283,7 +283,7 @@ const IntelligentNotificationSystem = () => {
             <Input
               placeholder="Buscar notificações..."
               value={searchTerm}
-              onChange={(e) => setSearchTerm(e.target.value)}
+              onChange={handleChange}
               className="md:max-w-xs"
             />
             <Select value={filterType} onValueChange={setFilterType}>
@@ -360,7 +360,7 @@ const IntelligentNotificationSystem = () => {
                           <Button 
                             variant="ghost" 
                             size="sm"
-                            onClick={() => markAsRead(notification.id)}
+                            onClick={() => handlemarkAsRead}
                           >
                             <CheckCircle className="w-4 h-4" />
                           </Button>
@@ -368,14 +368,14 @@ const IntelligentNotificationSystem = () => {
                         <Button 
                           variant="ghost" 
                           size="sm"
-                          onClick={() => archiveNotification(notification.id)}
+                          onClick={() => handlearchiveNotification}
                         >
                           <Archive className="w-4 h-4" />
                         </Button>
                         <Button 
                           variant="ghost" 
                           size="sm"
-                          onClick={() => deleteNotification(notification.id)}
+                          onClick={() => handledeleteNotification}
                         >
                           <Trash2 className="w-4 h-4" />
                         </Button>
@@ -513,8 +513,7 @@ const IntelligentNotificationSystem = () => {
                   <Input 
                     type="time" 
                     value={settings.quietHours.start}
-                    onChange={(e) => 
-                      updateSettings("quietHours", { ...settings.quietHours, start: e.target.value })
+                    onChange={handleChange})
                     }
                   />
                 </div>
@@ -523,8 +522,7 @@ const IntelligentNotificationSystem = () => {
                   <Input 
                     type="time" 
                     value={settings.quietHours.end}
-                    onChange={(e) => 
-                      updateSettings("quietHours", { ...settings.quietHours, end: e.target.value })
+                    onChange={handleChange})
                     }
                   />
                 </div>

@@ -1,5 +1,5 @@
 /**
-import { useEffect, useState } from "react";;
+import { useEffect, useState, useCallback, useMemo } from "react";;
  * PATCH 465 - Technical Validation Panel
  * Dashboard for monitoring module health, tests, documentation, and duplications
  */

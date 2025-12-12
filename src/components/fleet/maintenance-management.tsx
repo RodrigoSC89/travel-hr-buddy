@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";;
+import { useEffect, useState, useCallback, useMemo } from "react";;
 import React, { useState, useEffect } from "react";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
@@ -372,7 +372,7 @@ const MaintenanceManagement: React.FC = () => {
                 <Input
                   id="vessel_name"
                   value={newMaintenance.vessel_name}
-                  onChange={(e) => setNewMaintenance({ ...newMaintenance, vessel_name: e.target.value })}
+                  onChange={handleChange})}
                   placeholder="Nome da embarcação"
                 />
               </div>
@@ -416,7 +416,7 @@ const MaintenanceManagement: React.FC = () => {
                   id="scheduled_date"
                   type="datetime-local"
                   value={newMaintenance.scheduled_date}
-                  onChange={(e) => setNewMaintenance({ ...newMaintenance, scheduled_date: e.target.value })}
+                  onChange={handleChange})}
                 />
               </div>
               <div className="md:col-span-2">
@@ -424,7 +424,7 @@ const MaintenanceManagement: React.FC = () => {
                 <Input
                   id="title"
                   value={newMaintenance.title}
-                  onChange={(e) => setNewMaintenance({ ...newMaintenance, title: e.target.value })}
+                  onChange={handleChange})}
                   placeholder="Ex: Inspeção do Motor Principal"
                 />
               </div>
@@ -433,7 +433,7 @@ const MaintenanceManagement: React.FC = () => {
                 <Textarea
                   id="description"
                   value={newMaintenance.description}
-                  onChange={(e) => setNewMaintenance({ ...newMaintenance, description: e.target.value })}
+                  onChange={handleChange})}
                   placeholder="Descrição detalhada da manutenção..."
                   rows={3}
                 />
@@ -444,7 +444,7 @@ const MaintenanceManagement: React.FC = () => {
                   id="estimated_duration"
                   type="number"
                   value={newMaintenance.estimated_duration}
-                  onChange={(e) => setNewMaintenance({ ...newMaintenance, estimated_duration: e.target.value })}
+                  onChange={handleChange})}
                   placeholder="Ex: 24"
                 />
               </div>
@@ -455,7 +455,7 @@ const MaintenanceManagement: React.FC = () => {
                   type="number"
                   step="0.01"
                   value={newMaintenance.cost_estimate}
-                  onChange={(e) => setNewMaintenance({ ...newMaintenance, cost_estimate: e.target.value })}
+                  onChange={handleChange})}
                   placeholder="Ex: 15000.00"
                 />
               </div>
@@ -464,7 +464,7 @@ const MaintenanceManagement: React.FC = () => {
                 <Input
                   id="assigned_technician"
                   value={newMaintenance.assigned_technician}
-                  onChange={(e) => setNewMaintenance({ ...newMaintenance, assigned_technician: e.target.value })}
+                  onChange={handleChange})}
                   placeholder="Nome do técnico"
                 />
               </div>
@@ -473,7 +473,7 @@ const MaintenanceManagement: React.FC = () => {
                 <Input
                   id="location"
                   value={newMaintenance.location}
-                  onChange={(e) => setNewMaintenance({ ...newMaintenance, location: e.target.value })}
+                  onChange={handleChange})}
                   placeholder="Ex: Porto de Santos"
                 />
               </div>
@@ -482,7 +482,7 @@ const MaintenanceManagement: React.FC = () => {
                 <Input
                   id="parts_required"
                   value={newMaintenance.parts_required}
-                  onChange={(e) => setNewMaintenance({ ...newMaintenance, parts_required: e.target.value })}
+                  onChange={handleChange})}
                   placeholder="Ex: Filtro de óleo, Junta do cabeçote (separadas por vírgula)"
                 />
               </div>
@@ -491,7 +491,7 @@ const MaintenanceManagement: React.FC = () => {
               <Button onClick={handleAddMaintenance} className="flex-1">
                 Agendar Manutenção
               </Button>
-              <Button variant="outline" onClick={() => setShowAddDialog(false)}>
+              <Button variant="outline" onClick={handleSetShowAddDialog}>
                 Cancelar
               </Button>
             </div>
@@ -508,7 +508,7 @@ const MaintenanceManagement: React.FC = () => {
               <Input
                 placeholder="Buscar por título, embarcação ou técnico..."
                 value={searchTerm}
-                onChange={(e) => setSearchTerm(e.target.value)}
+                onChange={handleChange}
                 className="pl-10"
               />
             </div>
@@ -563,7 +563,7 @@ const MaintenanceManagement: React.FC = () => {
                   : "Agende a primeira manutenção para sua frota"}
               </p>
               {!searchTerm && statusFilter === "all" && priorityFilter === "all" && (
-                <Button onClick={() => setShowAddDialog(true)}>
+                <Button onClick={handleSetShowAddDialog}>
                   <Plus className="h-4 w-4 mr-2" />
                   Agendar Manutenção
                 </Button>

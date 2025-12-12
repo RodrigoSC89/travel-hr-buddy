@@ -32,7 +32,7 @@ interface A11ySettingsProps {
   compact?: boolean;
 }
 
-export function A11ySettings({ compact = false }: A11ySettingsProps) {
+export const A11ySettings = memo(function({ compact = false }: A11ySettingsProps) {
   const { settings, updateSetting, reset } = useA11y();
 
   const settingsGroups = [
@@ -102,25 +102,25 @@ export function A11ySettings({ compact = false }: A11ySettingsProps) {
         <div className="grid grid-cols-2 gap-2">
           <QuickToggle
             active={settings.highContrast}
-            onClick={() => updateSetting("highContrast", !settings.highContrast)}
+            onClick={() => handleupdateSetting}
             icon={<Eye className="w-4 h-4" />}
             label="Contraste"
           />
           <QuickToggle
             active={settings.largeText}
-            onClick={() => updateSetting("largeText", !settings.largeText)}
+            onClick={() => handleupdateSetting}
             icon={<Type className="w-4 h-4" />}
             label="Texto grande"
           />
           <QuickToggle
             active={settings.reducedMotion}
-            onClick={() => updateSetting("reducedMotion", !settings.reducedMotion)}
+            onClick={() => handleupdateSetting}
             icon={<Zap className="w-4 h-4" />}
             label="Sem animação"
           />
           <QuickToggle
             active={settings.screenReaderMode}
-            onClick={() => updateSetting("screenReaderMode", !settings.screenReaderMode)}
+            onClick={() => handleupdateSetting}
             icon={<Volume2 className="w-4 h-4" />}
             label="Leitor de tela"
           />

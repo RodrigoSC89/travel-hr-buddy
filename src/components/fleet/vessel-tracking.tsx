@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";;
+import { useEffect, useState, useCallback, useMemo } from "react";;
 import React, { useState, useEffect } from "react";
 import { useOptimizedPolling } from "@/hooks/use-optimized-polling";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
@@ -42,7 +42,7 @@ interface VesselPosition {
   eta: string;
 }
 
-export const VesselTracking = () => {
+export const VesselTracking = memo(() => {
   const [vessels, setVessels] = useState<VesselPosition[]>([]);
   const [selectedVessel, setSelectedVessel] = useState<VesselPosition | null>(null);
   const [trackingMode, setTrackingMode] = useState<"real-time" | "historical">("real-time");
@@ -140,7 +140,7 @@ export const VesselTracking = () => {
         <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-primary"></div>
       </div>
     );
-  }
+  };
 
   return (
     <div className="space-y-6">
@@ -180,7 +180,7 @@ export const VesselTracking = () => {
                       ? "border-primary bg-primary/5" 
                       : "border-border hover:bg-accent"
                   }`}
-                  onClick={() => setSelectedVessel(vessel)}
+                  onClick={handleSetSelectedVessel}
                 >
                   <div className="flex items-center justify-between mb-2">
                     <h4 className="font-medium">{vessel.name}</h4>

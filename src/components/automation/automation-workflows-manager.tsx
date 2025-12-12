@@ -3,7 +3,7 @@
  * Fully functional with AI integration via edge function
  */
 
-import { useState } from "react";;;
+import { memo, memo, useState, useCallback, useMemo } from "react";;;
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -56,7 +56,7 @@ const TRIGGERS = [
   { value: "compliance", label: "Prazo de Compliance", icon: "✅" },
 ];
 
-export const AutomationWorkflowsManager = () => {
+export const AutomationWorkflowsManager = memo(() => {
   const [workflows, setWorkflows] = useState<AutomationWorkflow[]>([
     {
       id: "1",
@@ -296,7 +296,7 @@ export const AutomationWorkflowsManager = () => {
       toast.success("Workflow otimizado!");
     } finally {
       setOptimizingWorkflow(null);
-    }
+    };
   };
 
   return (
@@ -315,7 +315,7 @@ export const AutomationWorkflowsManager = () => {
             )}
             {isLoadingAI ? "Analisando..." : "Sugestões IA"}
           </Button>
-          <Button onClick={() => setIsCreating(true)}>
+          <Button onClick={handleSetIsCreating}>
             <Plus className="w-4 h-4 mr-2" />
             Novo Workflow
           </Button>
@@ -334,7 +334,7 @@ export const AutomationWorkflowsManager = () => {
               <Button 
                 variant="ghost" 
                 size="sm"
-                onClick={() => setAiSuggestion(null)}
+                onClick={handleSetAiSuggestion}
               >
                 ✕
               </Button>
@@ -389,7 +389,7 @@ export const AutomationWorkflowsManager = () => {
               <Label>Otimização por IA (ajuste automático de parâmetros)</Label>
             </div>
             <div className="flex gap-2 justify-end">
-              <Button variant="outline" onClick={() => setIsCreating(false)}>Cancelar</Button>
+              <Button variant="outline" onClick={handleSetIsCreating}>Cancelar</Button>
               <Button onClick={handleCreateWorkflow}>Criar Workflow</Button>
             </div>
           </CardContent>
@@ -419,7 +419,7 @@ export const AutomationWorkflowsManager = () => {
             <p className="text-sm text-muted-foreground mb-4">
               Crie seu primeiro workflow de automação para otimizar operações.
             </p>
-            <Button onClick={() => setIsCreating(true)}>
+            <Button onClick={handleSetIsCreating}>
               <Plus className="w-4 h-4 mr-2" />
               Criar Workflow
             </Button>
@@ -437,7 +437,7 @@ export const AutomationWorkflowsManager = () => {
             </DialogDescription>
           </DialogHeader>
           <DialogFooter>
-            <Button variant="outline" onClick={() => setDeleteDialogOpen(false)}>
+            <Button variant="outline" onClick={handleSetDeleteDialogOpen}>
               Cancelar
             </Button>
             <Button variant="destructive" onClick={deleteWorkflow}>
@@ -516,7 +516,7 @@ const WorkflowCard = ({
             <Button 
               variant="ghost" 
               size="sm" 
-              onClick={() => onRun(workflow)}
+              onClick={() => handleonRun}
               disabled={isExecuting}
             >
               {isExecuting ? (
@@ -530,7 +530,7 @@ const WorkflowCard = ({
               <Button 
                 variant="ghost" 
                 size="sm" 
-                onClick={() => onOptimize(workflow)}
+                onClick={() => handleonOptimize}
                 disabled={isOptimizing}
               >
                 {isOptimizing ? (
@@ -544,7 +544,7 @@ const WorkflowCard = ({
             <Button 
               variant="ghost" 
               size="icon"
-              onClick={() => onToggle(workflow.id)}
+              onClick={() => handleonToggle}
               title={workflow.isActive ? "Pausar" : "Ativar"}
             >
               {workflow.isActive ? <Pause className="w-4 h-4" /> : <Play className="w-4 h-4" />}
@@ -552,7 +552,7 @@ const WorkflowCard = ({
             <Button 
               variant="ghost" 
               size="icon"
-              onClick={() => onDelete(workflow.id)}
+              onClick={() => handleonDelete}
               title="Excluir"
             >
               <Trash2 className="w-4 h-4 text-destructive" />

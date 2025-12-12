@@ -281,7 +281,7 @@ export const UserManagementHub: React.FC = () => {
             </DropdownMenuContent>
           </DropdownMenu>
 
-          <Button variant="outline" size="icon" onClick={() => setShowSettingsDialog(true)}>
+          <Button variant="outline" size="icon" onClick={handleSetShowSettingsDialog}>
             <Settings className="h-4 w-4" />
           </Button>
 
@@ -294,7 +294,7 @@ export const UserManagementHub: React.FC = () => {
             Exportar
           </Button>
 
-          <Button onClick={() => setShowInviteDialog(true)}>
+          <Button onClick={handleSetShowInviteDialog}>
             <UserPlus className="h-4 w-4 mr-2" />
             Convidar Usuário
           </Button>
@@ -389,7 +389,7 @@ export const UserManagementHub: React.FC = () => {
               <Input
                 placeholder="Buscar por nome, e-mail ou departamento..."
                 value={searchTerm}
-                onChange={(e) => setSearchTerm(e.target.value)}
+                onChange={handleChange}
                 className="pl-9"
               />
             </div>
@@ -437,7 +437,7 @@ export const UserManagementHub: React.FC = () => {
             <div className="text-center py-12">
               <Users className="h-12 w-12 mx-auto text-muted-foreground mb-4" />
               <p className="text-muted-foreground">Nenhum usuário encontrado</p>
-              <Button className="mt-4" onClick={() => setShowInviteDialog(true)}>
+              <Button className="mt-4" onClick={handleSetShowInviteDialog}>
                 <UserPlus className="h-4 w-4 mr-2" />
                 Convidar Usuário
               </Button>
@@ -505,22 +505,22 @@ export const UserManagementHub: React.FC = () => {
                             </Button>
                           </DropdownMenuTrigger>
                           <DropdownMenuContent align="end">
-                            <DropdownMenuItem onClick={() => updateUserRole(user.id, "admin")}>
+                            <DropdownMenuItem onClick={() => handleupdateUserRole}>
                               <Shield className="h-4 w-4 mr-2" />
                               Promover a Admin
                             </DropdownMenuItem>
-                            <DropdownMenuItem onClick={() => toast({ title: "Editar", description: "Abrindo editor de usuário..." })}>
+                            <DropdownMenuItem onClick={() => handletoast}>
                               <Edit className="h-4 w-4 mr-2" />
                               Editar
                             </DropdownMenuItem>
                             <DropdownMenuSeparator />
                             {user.status === "active" ? (
-                              <DropdownMenuItem onClick={() => updateUserStatus(user.id, "inactive")}>
+                              <DropdownMenuItem onClick={() => handleupdateUserStatus}>
                                 <UserX className="h-4 w-4 mr-2" />
                                 Desativar
                               </DropdownMenuItem>
                             ) : (
-                              <DropdownMenuItem onClick={() => updateUserStatus(user.id, "active")}>
+                              <DropdownMenuItem onClick={() => handleupdateUserStatus}>
                                 <UserCheck className="h-4 w-4 mr-2" />
                                 Ativar
                               </DropdownMenuItem>
@@ -565,7 +565,7 @@ export const UserManagementHub: React.FC = () => {
                 type="email"
                 placeholder="usuario@exemplo.com"
                 value={inviteData.email}
-                onChange={(e) => setInviteData(p => ({ ...p, email: e.target.value }))}
+                onChange={handleChange}))}
               />
             </div>
             <div className="grid grid-cols-2 gap-4">
@@ -591,7 +591,7 @@ export const UserManagementHub: React.FC = () => {
                 <Input
                   placeholder="Ex: TI, RH, Operações"
                   value={inviteData.department}
-                  onChange={(e) => setInviteData(p => ({ ...p, department: e.target.value }))}
+                  onChange={handleChange}))}
                 />
               </div>
             </div>
@@ -600,12 +600,12 @@ export const UserManagementHub: React.FC = () => {
               <Textarea
                 placeholder="Adicione uma mensagem personalizada ao convite..."
                 value={inviteData.message}
-                onChange={(e) => setInviteData(p => ({ ...p, message: e.target.value }))}
+                onChange={handleChange}))}
               />
             </div>
           </div>
           <DialogFooter>
-            <Button variant="outline" onClick={() => setShowInviteDialog(false)}>
+            <Button variant="outline" onClick={handleSetShowInviteDialog}>
               Cancelar
             </Button>
             <Button onClick={handleInvite}>
@@ -629,7 +629,7 @@ export const UserManagementHub: React.FC = () => {
             </AlertDialogDescription>
           </AlertDialogHeader>
           <AlertDialogFooter>
-            <AlertDialogCancel onClick={() => setUserToDelete(null)}>
+            <AlertDialogCancel onClick={handleSetUserToDelete}>
               Cancelar
             </AlertDialogCancel>
             <AlertDialogAction 
@@ -675,7 +675,7 @@ export const UserManagementHub: React.FC = () => {
             </div>
           </div>
           <DialogFooter>
-            <Button onClick={() => setShowSettingsDialog(false)}>Fechar</Button>
+            <Button onClick={handleSetShowSettingsDialog}>Fechar</Button>
           </DialogFooter>
         </DialogContent>
       </Dialog>

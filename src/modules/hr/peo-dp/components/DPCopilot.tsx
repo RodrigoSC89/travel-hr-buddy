@@ -3,7 +3,7 @@
  * PATCH 549 - Advanced Maritime Intelligence
  */
 
-import { useEffect, useRef, useState } from "react";;;
+import { useEffect, useRef, useState, useCallback, useMemo } from "react";;;
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
@@ -332,10 +332,10 @@ Por favor, forneça mais detalhes sobre a situação específica que está enfre
               </div>
             </div>
             <div className="flex gap-2">
-              <Button variant="outline" size="sm" onClick={() => simulateASOGChange("green")}>
+              <Button variant="outline" size="sm" onClick={() => handlesimulateASOGChange}>
                 <CheckCircle className="h-4 w-4 mr-1" /> Normal
               </Button>
-              <Button variant="outline" size="sm" onClick={() => simulateASOGChange("yellow")}>
+              <Button variant="outline" size="sm" onClick={() => handlesimulateASOGChange}>
                 <AlertTriangle className="h-4 w-4 mr-1" /> Alerta
               </Button>
             </div>
@@ -414,7 +414,7 @@ Por favor, forneça mais detalhes sobre a situação específica que está enfre
               </Button>
               <Textarea
                 value={input}
-                onChange={(e) => setInput(e.target.value)}
+                onChange={handleChange}
                 onKeyDown={(e) => {
                   if (e.key === "Enter" && !e.shiftKey) {
                     e.preventDefault();

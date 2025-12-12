@@ -1,4 +1,4 @@
-import { useState } from "react";;
+import { useState, useCallback } from "react";;
 import React, { useState } from "react";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
@@ -101,7 +101,7 @@ const mockEmployees: Employee[] = [
   }
 ];
 
-export const EmployeeManagement = () => {
+export const EmployeeManagement = memo(() => {
   const { toast } = useToast();
   const [employees, setEmployees] = useState<Employee[]>(mockEmployees);
   const [searchTerm, setSearchTerm] = useState("");
@@ -216,7 +216,7 @@ export const EmployeeManagement = () => {
     case "travel": return "Viagem";
     case "inactive": return "Inativo";
     default: return "N/A";
-    }
+    };
   };
 
   return (
@@ -246,7 +246,7 @@ export const EmployeeManagement = () => {
                 <Input
                   id="name"
                   value={newEmployee.name || ""}
-                  onChange={(e) => setNewEmployee(prev => ({ ...prev, name: e.target.value }))}
+                  onChange={handleChange}))}
                   className="col-span-3"
                 />
               </div>
@@ -255,7 +255,7 @@ export const EmployeeManagement = () => {
                 <Input
                   id="position"
                   value={newEmployee.position || ""}
-                  onChange={(e) => setNewEmployee(prev => ({ ...prev, position: e.target.value }))}
+                  onChange={handleChange}))}
                   className="col-span-3"
                 />
               </div>
@@ -281,7 +281,7 @@ export const EmployeeManagement = () => {
                   id="email"
                   type="email"
                   value={newEmployee.email || ""}
-                  onChange={(e) => setNewEmployee(prev => ({ ...prev, email: e.target.value }))}
+                  onChange={handleChange}))}
                   className="col-span-3"
                 />
               </div>
@@ -290,7 +290,7 @@ export const EmployeeManagement = () => {
                 <Input
                   id="phone"
                   value={newEmployee.phone || ""}
-                  onChange={(e) => setNewEmployee(prev => ({ ...prev, phone: e.target.value }))}
+                  onChange={handleChange}))}
                   className="col-span-3"
                 />
               </div>
@@ -299,7 +299,7 @@ export const EmployeeManagement = () => {
                 <Input
                   id="location"
                   value={newEmployee.location || ""}
-                  onChange={(e) => setNewEmployee(prev => ({ ...prev, location: e.target.value }))}
+                  onChange={handleChange}))}
                   className="col-span-3"
                 />
               </div>
@@ -309,13 +309,13 @@ export const EmployeeManagement = () => {
                   id="salary"
                   type="number"
                   value={newEmployee.salary || ""}
-                  onChange={(e) => setNewEmployee(prev => ({ ...prev, salary: parseFloat(e.target.value) || 0 }))}
+                  onChange={handleChange}))}
                   className="col-span-3"
                 />
               </div>
             </div>
             <div className="flex justify-end gap-2">
-              <Button variant="outline" onClick={() => setIsCreatingEmployee(false)}>
+              <Button variant="outline" onClick={handleSetIsCreatingEmployee}>
                 Cancelar
               </Button>
               <Button onClick={handleCreateEmployee}>
@@ -334,7 +334,7 @@ export const EmployeeManagement = () => {
             <Input
               placeholder="Buscar funcionários..."
               value={searchTerm}
-              onChange={(e) => setSearchTerm(e.target.value)}
+              onChange={handleChange}
               className="pl-10"
             />
           </div>
@@ -458,7 +458,7 @@ export const EmployeeManagement = () => {
                     <Button 
                       size="sm" 
                       variant="outline"
-                      onClick={() => handleRemoveEmployee(employee.id)}
+                      onClick={() => handlehandleRemoveEmployee}
                     >
                       <Trash2 className="w-4 h-4 mr-1" />
                       Remover

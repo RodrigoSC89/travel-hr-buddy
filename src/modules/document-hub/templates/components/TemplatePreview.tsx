@@ -1,5 +1,5 @@
 /**
-import { useState } from "react";;
+import { useState, useCallback } from "react";;
  * PATCH 417: Template Preview and PDF Generator
  * Preview templates with variable substitution and export to PDF
  */
@@ -129,11 +129,7 @@ export const TemplatePreview: React.FC<TemplatePreviewProps> = ({
                     <Input
                       id={variable}
                       value={variableValues[variable] || ""}
-                      onChange={(e) =>
-                        setVariableValues({
-                          ...variableValues,
-                          [variable]: e.target.value
-                        })
+                      onChange={handleChange})
                       }
                       placeholder={`Enter value for ${variable}`}
                     />

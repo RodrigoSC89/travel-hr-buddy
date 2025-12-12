@@ -1,4 +1,4 @@
-import { useState } from "react";;
+import { useState, useCallback } from "react";;
 import React, { useState } from "react";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
@@ -31,7 +31,7 @@ interface Mission {
   endDate?: Date;
 }
 
-export function MissionManager() {
+export const MissionManager = memo(function() {
   const [missions, setMissions] = useState<Mission[]>([
     {
       id: "1",
@@ -167,7 +167,7 @@ export function MissionManager() {
                   id="name"
                   placeholder="Ex: Inspeção de Segurança"
                   value={newMission.name}
-                  onChange={(e) => setNewMission({ ...newMission, name: e.target.value })}
+                  onChange={handleChange})}
                 />
               </div>
               <div className="grid gap-2">
@@ -176,7 +176,7 @@ export function MissionManager() {
                   id="description"
                   placeholder="Descreva os objetivos e detalhes da missão"
                   value={newMission.description}
-                  onChange={(e) => setNewMission({ ...newMission, description: e.target.value })}
+                  onChange={handleChange})}
                   rows={3}
                 />
               </div>
@@ -209,9 +209,7 @@ export function MissionManager() {
                         type="checkbox"
                         checked={newMission.agents.includes(agent.id)}
                         disabled={agent.status === "assigned"}
-                        onChange={(e) => {
-                          if (e.target.checked) {
-                            setNewMission({ ...newMission, agents: [...newMission.agents, agent.id] });
+                        onChange={handleChange});
                           } else {
                             setNewMission({ ...newMission, agents: newMission.agents.filter(id => id !== agent.id) });
                           }
@@ -233,7 +231,7 @@ export function MissionManager() {
               </div>
             </div>
             <DialogFooter>
-              <Button variant="outline" onClick={() => setIsDialogOpen(false)}>
+              <Button variant="outline" onClick={handleSetIsDialogOpen}>
                 Cancelar
               </Button>
               <Button onClick={handleCreateMission}>

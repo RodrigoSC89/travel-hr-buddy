@@ -1,7 +1,7 @@
 
 "use client";
 
-import { useEffect, useState } from "react";;;
+import { useEffect, useState, useCallback } from "react";;;
 import { useParams, useNavigate } from "react-router-dom";
 import { Textarea } from "@/components/ui/textarea";
 import { Input } from "@/components/ui/input";
@@ -236,7 +236,7 @@ export default function EditTemplatePage() {
   return (
     <div className="space-y-6 p-8">
       <div className="flex items-center gap-4">
-        <Button variant="ghost" onClick={() => navigate("/admin/templates")}>
+        <Button variant="ghost" onClick={() => handlenavigate}>
           <ArrowLeft className="w-4 h-4 mr-2" />
           Voltar
         </Button>
@@ -259,7 +259,7 @@ export default function EditTemplatePage() {
               <Input
                 placeholder="Título do Template"
                 value={title}
-                onChange={(e) => setTitle(e.target.value)}
+                onChange={handleChange}
                 className="flex-1"
               />
               <Button
@@ -279,7 +279,7 @@ export default function EditTemplatePage() {
               rows={3}
               placeholder="Descreva o que você quer gerar... (opcional)"
               value={prompt}
-              onChange={(e) => setPrompt(e.target.value)}
+              onChange={handleChange}
             />
           </div>
 
@@ -325,7 +325,7 @@ export default function EditTemplatePage() {
               rows={12}
               placeholder="Digite ou gere o conteúdo do template..."
               value={content}
-              onChange={(e) => setContent(e.target.value)}
+              onChange={handleChange}
               className="font-mono"
             />
           </div>
@@ -348,7 +348,7 @@ export default function EditTemplatePage() {
               )}
             </Button>
 
-            <Button onClick={() => navigate("/admin/templates")} variant="outline">
+            <Button onClick={() => handlenavigate} variant="outline">
               Cancelar
             </Button>
           </div>

@@ -1,4 +1,4 @@
-import { useCallback, useEffect, useState } from "react";;
+import { useCallback, useMemo, useEffect, useState } from "react";;
 
 /**
  * PATCH 367 - Fleet Management - Telemetry & Maintenance Alerts
@@ -397,7 +397,7 @@ export const FleetTelemetryDashboard: React.FC = () => {
         <div className="flex gap-2">
           <Button
             variant="outline"
-            onClick={() => setAutoRefresh(!autoRefresh)}
+            onClick={handleSetAutoRefresh}
           >
             <RefreshCw className={`h-4 w-4 mr-2 ${autoRefresh ? "animate-spin" : ""}`} />
             {autoRefresh ? "Auto" : "Manual"}
@@ -556,7 +556,7 @@ export const FleetTelemetryDashboard: React.FC = () => {
                   <Button
                     variant="outline"
                     className="w-full mt-4"
-                    onClick={() => setSelectedVessel(vessel.vessel_id)}
+                    onClick={handleSetSelectedVessel}
                   >
                     View Details
                   </Button>

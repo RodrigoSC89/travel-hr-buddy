@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";;
+import { useEffect, useState, useCallback, useMemo } from "react";;
 import React, { useState, useEffect } from "react";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
@@ -60,7 +60,7 @@ interface SystemOptimization {
   autoApplicable: boolean;
 }
 
-export const OptimizationGeneralHub = () => {
+export const OptimizationGeneralHub = memo(() => {
   const { toast } = useToast();
   const [overallScore, setOverallScore] = useState(78.5);
   const [isOptimizing, setIsOptimizing] = useState(false);
@@ -275,7 +275,7 @@ export const OptimizationGeneralHub = () => {
     case "medium": return "bg-warning/10 text-warning border-warning/20";
     case "low": return "bg-success/10 text-success border-success/20";
     default: return "bg-muted text-muted-foreground border-muted";
-    }
+    };
   };
 
   const filteredOptimizations = selectedCategory === "all" 
@@ -530,7 +530,7 @@ export const OptimizationGeneralHub = () => {
                     <Button
                       variant={selectedCategory === "all" ? "default" : "outline"}
                       size="sm"
-                      onClick={() => setSelectedCategory("all")}
+                      onClick={handleSetSelectedCategory}
                     >
                       Todas
                     </Button>
@@ -539,7 +539,7 @@ export const OptimizationGeneralHub = () => {
                         key={category}
                         variant={selectedCategory === category ? "default" : "outline"}
                         size="sm"
-                        onClick={() => setSelectedCategory(category)}
+                        onClick={handleSetSelectedCategory}
                         className="capitalize"
                       >
                         {category}
@@ -601,7 +601,7 @@ export const OptimizationGeneralHub = () => {
                                   </Badge>
                                 ) : (
                                   <Button 
-                                    onClick={() => applyOptimization(optimization.id)}
+                                    onClick={() => handleapplyOptimization}
                                     size="sm"
                                     className="flex items-center gap-1"
                                   >

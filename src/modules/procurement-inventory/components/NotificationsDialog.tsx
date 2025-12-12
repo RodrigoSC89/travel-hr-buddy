@@ -100,7 +100,7 @@ export default function NotificationsDialog({
                       ? "bg-muted/30 hover:bg-muted/50"
                       : "bg-primary/5 hover:bg-primary/10 border-l-4 border-l-primary"
                   }`}
-                  onClick={() => onNotificationClick(notification.id)}
+                  onClick={() => handleonNotificationClick}
                 >
                   <div className="flex items-start gap-3">
                     <div className="mt-0.5">

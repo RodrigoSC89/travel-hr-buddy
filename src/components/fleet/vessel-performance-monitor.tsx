@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";;
+import { useEffect, useState, useCallback, useMemo } from "react";;
 import React, { useState, useEffect } from "react";
 import { useOptimizedPolling } from "@/hooks/use-optimized-polling";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
@@ -171,7 +171,7 @@ const VesselPerformanceMonitor = () => {
               <Button
                 key={vessel.id}
                 variant={selectedVessel === vessel.id ? "default" : "outline"}
-                onClick={() => setSelectedVessel(vessel.id)}
+                onClick={handleSetSelectedVessel}
                 className="mb-2"
               >
                 {vessel.name}

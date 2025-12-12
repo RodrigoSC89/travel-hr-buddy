@@ -1,4 +1,4 @@
-import { useState } from "react";;;
+import { memo, memo, useState, useCallback } from "react";;;
 import { Dialog, DialogContent, DialogDescription, DialogFooter, DialogHeader, DialogTitle } from "@/components/ui/dialog";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -15,7 +15,7 @@ interface IncidentFormModalProps {
   onSave: (incident: Partial<DPIncident>) => void;
 }
 
-export function IncidentFormModal({ open, onOpenChange, incident, onSave }: IncidentFormModalProps) {
+export const IncidentFormModal = memo(function({ open, onOpenChange, incident, onSave }: IncidentFormModalProps) {
   const [formData, setFormData] = useState<Partial<DPIncident>>({
     vessel: incident?.vessel || "",
     incident_date: incident?.incident_date || new Date().toISOString().split("T")[0],
@@ -65,7 +65,7 @@ export function IncidentFormModal({ open, onOpenChange, incident, onSave }: Inci
                 <Input
                   id="vessel"
                   value={formData.vessel}
-                  onChange={(e) => handleChange("vessel", e.target.value)}
+                  onChange={handleChange}
                   placeholder="Nome da embarcação"
                   required
                 />
@@ -77,7 +77,7 @@ export function IncidentFormModal({ open, onOpenChange, incident, onSave }: Inci
                   id="incident_date"
                   type="date"
                   value={formData.incident_date}
-                  onChange={(e) => handleChange("incident_date", e.target.value)}
+                  onChange={handleChange}
                   required
                 />
               </div>
@@ -124,7 +124,7 @@ export function IncidentFormModal({ open, onOpenChange, incident, onSave }: Inci
               <Input
                 id="location"
                 value={formData.location}
-                onChange={(e) => handleChange("location", e.target.value)}
+                onChange={handleChange}
                 placeholder="Ex: Santos Basin, Campos Basin"
               />
             </div>
@@ -134,7 +134,7 @@ export function IncidentFormModal({ open, onOpenChange, incident, onSave }: Inci
               <Input
                 id="title"
                 value={formData.title}
-                onChange={(e) => handleChange("title", e.target.value)}
+                onChange={handleChange}
                 placeholder="Breve descrição do incidente"
                 required
               />
@@ -145,7 +145,7 @@ export function IncidentFormModal({ open, onOpenChange, incident, onSave }: Inci
               <Textarea
                 id="description"
                 value={formData.description}
-                onChange={(e) => handleChange("description", e.target.value)}
+                onChange={handleChange}
                 placeholder="Descreva o incidente em detalhes..."
                 rows={3}
               />
@@ -156,7 +156,7 @@ export function IncidentFormModal({ open, onOpenChange, incident, onSave }: Inci
               <Input
                 id="root_cause"
                 value={formData.root_cause}
-                onChange={(e) => handleChange("root_cause", e.target.value)}
+                onChange={handleChange}
                 placeholder="Causa raiz identificada"
               />
             </div>
@@ -208,7 +208,7 @@ export function IncidentFormModal({ open, onOpenChange, incident, onSave }: Inci
               <Textarea
                 id="sgso_root_cause"
                 value={formData.sgso_root_cause}
-                onChange={(e) => handleChange("sgso_root_cause", e.target.value)}
+                onChange={handleChange}
                 placeholder="Causa raiz identificada dentro do framework SGSO..."
                 rows={2}
               />
@@ -216,7 +216,7 @@ export function IncidentFormModal({ open, onOpenChange, incident, onSave }: Inci
           </div>
 
           <DialogFooter>
-            <Button type="button" variant="outline" onClick={() => onOpenChange(false)}>
+            <Button type="button" variant="outline" onClick={() => handleonOpenChange}>
               Cancelar
             </Button>
             <Button type="submit">

@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";;
+import { useEffect, useState, useCallback, useMemo } from "react";;
 import React, { useState, useEffect } from "react";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
@@ -389,7 +389,7 @@ export const MessageComposer: React.FC<MessageComposerProps> = ({
               <Input
                 placeholder="Buscar usuários, canais ou departamentos..."
                 value={recipientSearch}
-                onChange={(e) => setRecipientSearch(e.target.value)}
+                onChange={handleChange}
                 className="pl-10"
               />
             </div>
@@ -410,7 +410,7 @@ export const MessageComposer: React.FC<MessageComposerProps> = ({
                         key={id} 
                         variant="secondary" 
                         className="gap-1 cursor-pointer"
-                        onClick={() => handleRecipientToggle(id)}
+                        onClick={() => handlehandleRecipientToggle}
                       >
                         <Icon className="h-3 w-3" />
                         {recipient.name}
@@ -436,7 +436,7 @@ export const MessageComposer: React.FC<MessageComposerProps> = ({
                         ? "bg-primary text-primary-foreground" 
                         : "hover:bg-muted"
                     }`}
-                    onClick={() => handleRecipientToggle(recipient.id)}
+                    onClick={() => handlehandleRecipientToggle}
                   >
                     <Icon className="h-4 w-4" />
                     <div className="flex-1 min-w-0">
@@ -502,7 +502,7 @@ export const MessageComposer: React.FC<MessageComposerProps> = ({
             <Input
               placeholder="Assunto da mensagem..."
               value={subject}
-              onChange={(e) => setSubject(e.target.value)}
+              onChange={handleChange}
             />
           </div>
 
@@ -527,7 +527,7 @@ export const MessageComposer: React.FC<MessageComposerProps> = ({
                         <div
                           key={template.id}
                           className="p-3 border rounded cursor-pointer hover:bg-muted transition-colors"
-                          onClick={() => handleTemplateSelect(template.id)}
+                          onClick={() => handlehandleTemplateSelect}
                         >
                           <div className="flex items-center justify-between mb-2">
                             <h4 className="font-medium">{template.name}</h4>
@@ -561,7 +561,7 @@ export const MessageComposer: React.FC<MessageComposerProps> = ({
             <Textarea
               placeholder="Digite sua mensagem aqui..."
               value={messageContent}
-              onChange={(e) => setMessageContent(e.target.value)}
+              onChange={handleChange}
               className="min-h-32"
             />
             
@@ -622,7 +622,7 @@ export const MessageComposer: React.FC<MessageComposerProps> = ({
                     <Button
                       variant="ghost"
                       size="sm"
-                      onClick={() => removeAttachment(index)}
+                      onClick={() => handleremoveAttachment}
                     >
                       ×
                     </Button>

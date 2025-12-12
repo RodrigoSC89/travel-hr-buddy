@@ -1,5 +1,5 @@
 // PATCH 488.0 - Template Library Page
-import { useState } from "react";;
+import { useState, useCallback } from "react";;
 // Gallery UI with type filtering, preview, copy-to-clipboard
 
 import React, { useState } from "react";
@@ -84,7 +84,7 @@ export default function TemplateLibraryPage() {
           <Input
             placeholder="Search templates..."
             value={searchQuery}
-            onChange={(e) => setSearchQuery(e.target.value)}
+            onChange={handleChange}
             className="pl-10"
           />
         </div>
@@ -141,7 +141,7 @@ export default function TemplateLibraryPage() {
                         <Button
                           size="sm"
                           variant="outline"
-                          onClick={() => setSelectedTemplate(template)}
+                          onClick={handleSetSelectedTemplate}
                           className="flex-1"
                         >
                           <Eye className="h-4 w-4 mr-2" />
@@ -149,7 +149,7 @@ export default function TemplateLibraryPage() {
                         </Button>
                         <Button
                           size="sm"
-                          onClick={() => useTemplate(template)}
+                          onClick={() => handleuseTemplate}
                           className="flex-1"
                         >
                           Use Template
@@ -206,7 +206,7 @@ export default function TemplateLibraryPage() {
 
               <div className="flex gap-2">
                 <Button
-                  onClick={() => copyToClipboard(selectedTemplate.content)}
+                  onClick={() => handlecopyToClipboard}
                   variant="outline"
                   className="flex-1"
                 >

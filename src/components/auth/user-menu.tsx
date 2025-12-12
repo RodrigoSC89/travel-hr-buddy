@@ -62,28 +62,28 @@ export const UserMenu: React.FC = () => {
         <DropdownMenuSeparator />
         <DropdownMenuItem 
           className="cursor-pointer"
-          onClick={() => handleNavigate("/profile")}
+          onClick={() => handlehandleNavigate}
         >
           <User className="mr-2 h-4 w-4 text-foreground/70" />
           <span className="text-foreground">Perfil</span>
         </DropdownMenuItem>
         <DropdownMenuItem 
           className="cursor-pointer"
-          onClick={() => handleNavigate("/settings")}
+          onClick={() => handlehandleNavigate}
         >
           <Settings className="mr-2 h-4 w-4 text-foreground/70" />
           <span className="text-foreground">Configurações</span>
         </DropdownMenuItem>
         <DropdownMenuItem 
           className="cursor-pointer"
-          onClick={() => handleNavigate("/notifications-center")}
+          onClick={() => handlehandleNavigate}
         >
           <Bell className="mr-2 h-4 w-4 text-foreground/70" />
           <span className="text-foreground">Notificações</span>
         </DropdownMenuItem>
         <DropdownMenuItem 
           className="cursor-pointer"
-          onClick={() => handleNavigate("/help")}
+          onClick={() => handlehandleNavigate}
         >
           <HelpCircle className="mr-2 h-4 w-4 text-foreground/70" />
           <span className="text-foreground">Ajuda</span>

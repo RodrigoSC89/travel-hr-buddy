@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";;
+import { useEffect, useState, useCallback, useMemo } from "react";;
 import React, { useState, useEffect } from "react";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
@@ -186,7 +186,7 @@ export const NotificationCenter: React.FC = () => {
       <Button
         variant="ghost"
         size="icon"
-        onClick={() => setIsOpen(!isOpen)}
+        onClick={handleSetIsOpen}
         className="relative"
       >
         <Bell className="h-5 w-5" />
@@ -210,14 +210,14 @@ export const NotificationCenter: React.FC = () => {
                 <Button
                   variant="ghost"
                   size="sm"
-                  onClick={() => setFilter(filter === "all" ? "unread" : "all")}
+                  onClick={handleSetFilter}
                 >
                   {filter === "all" ? "Não lidas" : "Todas"}
                 </Button>
                 <Button
                   variant="ghost"
                   size="icon"
-                  onClick={() => setIsOpen(false)}
+                  onClick={handleSetIsOpen}
                 >
                   <X className="h-4 w-4" />
                 </Button>
@@ -253,7 +253,7 @@ export const NotificationCenter: React.FC = () => {
                         className={`p-3 rounded-lg border cursor-pointer transition-colors hover:bg-muted/50 ${
                           !notification.isRead ? "bg-blue-50 border-blue-200" : "bg-background"
                         }`}
-                        onClick={() => markAsRead(notification.id)}
+                        onClick={() => handlemarkAsRead}
                       >
                         <div className="flex items-start gap-3">
                           <Icon className={`h-4 w-4 mt-1 ${getIconColor(notification.type)}`} />

@@ -1,4 +1,4 @@
-import { useRef, useState } from "react";;
+import { useRef, useState, useCallback } from "react";;
 
 // PATCH 393 - Digital Signature Component using react-signature-canvas
 import React, { useRef, useState } from "react";
@@ -98,7 +98,7 @@ export const SignatureDialog: React.FC<SignatureDialogProps> = ({
               <Label>Nome do Signatário *</Label>
               <Input
                 value={signatoryName}
-                onChange={(e) => setSignatoryName(e.target.value)}
+                onChange={handleChange}
                 placeholder="Nome completo"
               />
             </div>
@@ -106,7 +106,7 @@ export const SignatureDialog: React.FC<SignatureDialogProps> = ({
               <Label>Cargo *</Label>
               <Input
                 value={signatoryRole}
-                onChange={(e) => setSignatoryRole(e.target.value)}
+                onChange={handleChange}
                 placeholder="Ex: Capitão, Engenheiro"
               />
             </div>
@@ -135,7 +135,7 @@ export const SignatureDialog: React.FC<SignatureDialogProps> = ({
             <RotateCcw className="mr-2 h-4 w-4" />
             Limpar
           </Button>
-          <Button variant="outline" onClick={() => onOpenChange(false)}>
+          <Button variant="outline" onClick={() => handleonOpenChange}>
             Cancelar
           </Button>
           <Button onClick={handleSave}>

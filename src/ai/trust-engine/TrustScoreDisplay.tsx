@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";;
+import { useEffect, useState, useCallback } from "react";;
 
 /**
  * PATCH 547 - Trust Score Display Component
@@ -123,7 +123,7 @@ export const TrustScoreDisplay: React.FC<TrustScoreDisplayProps> = ({
               <Button
                 variant="ghost"
                 size="sm"
-                onClick={() => setShowHistoryView(!showHistoryView)}
+                onClick={handleSetShowHistoryView}
               >
                 <History className="h-4 w-4 mr-2" />
                 {showHistoryView ? "Hide" : "Show"} History

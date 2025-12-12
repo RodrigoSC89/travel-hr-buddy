@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";;
+import { useEffect, useState, useCallback } from "react";;
 
 import React, { useState, useEffect } from "react";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
@@ -38,7 +38,7 @@ interface Shipment {
   last_location_update?: string;
 }
 
-export const ShipmentTracking = () => {
+export const ShipmentTracking = memo(() => {
   const { toast } = useToast();
   const [shipments, setShipments] = useState<Shipment[]>([]);
   const [loading, setLoading] = useState(true);
@@ -201,7 +201,7 @@ export const ShipmentTracking = () => {
               <Input
                 placeholder="Search by shipment number, tracking number, or carrier..."
                 value={searchTerm}
-                onChange={(e) => setSearchTerm(e.target.value)}
+                onChange={handleChange}
                 className="pl-8"
               />
             </div>
@@ -297,7 +297,7 @@ export const ShipmentTracking = () => {
                           {shipment.estimated_arrival ? 
                             format(new Date(shipment.estimated_arrival), "MMM dd, yyyy") : 
                             "N/A"
-                          }
+                          };
                         </div>
                       </div>
                       {shipment.actual_arrival && (

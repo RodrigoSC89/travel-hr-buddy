@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useState } from "react";;;
+import { useEffect, useState, useCallback } from "react";;;
 import { useNavigate } from "react-router-dom";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
@@ -277,7 +277,7 @@ export default function AssistantLogsPage() {
             <Button
               variant="ghost"
               size="sm"
-              onClick={() => navigate("/admin/assistant")}
+              onClick={() => handlenavigate}
             >
               <ArrowLeft className="w-4 h-4 mr-2" />
               Voltar
@@ -304,7 +304,7 @@ export default function AssistantLogsPage() {
               Enviar E-mail
             </Button>
             <Button 
-              onClick={() => navigate("/admin/reports/assistant")} 
+              onClick={() => handlenavigate} 
               variant="secondary"
             >
               📬 Logs de Envio
@@ -330,7 +330,7 @@ export default function AssistantLogsPage() {
                 <Input
                   placeholder="Buscar em perguntas ou respostas..."
                   value={searchKeyword}
-                  onChange={(e) => setSearchKeyword(e.target.value)}
+                  onChange={handleChange}
                 />
               </div>
               <div className="space-y-2">
@@ -341,7 +341,7 @@ export default function AssistantLogsPage() {
                 <Input
                   type="date"
                   value={startDate}
-                  onChange={(e) => setStartDate(e.target.value)}
+                  onChange={handleChange}
                 />
               </div>
               <div className="space-y-2">
@@ -352,7 +352,7 @@ export default function AssistantLogsPage() {
                 <Input
                   type="date"
                   value={endDate}
-                  onChange={(e) => setEndDate(e.target.value)}
+                  onChange={handleChange}
                 />
               </div>
             </div>
@@ -368,7 +368,7 @@ export default function AssistantLogsPage() {
                 <Input
                   placeholder="Filtrar por e-mail..."
                   value={emailFilter}
-                  onChange={(e) => setEmailFilter(e.target.value)}
+                  onChange={handleChange}
                 />
               </div>
             </div>
@@ -462,7 +462,7 @@ export default function AssistantLogsPage() {
               variant="outline"
               size="sm"
               disabled={currentPage === 1}
-              onClick={() => setCurrentPage((p) => p - 1)}
+              onClick={handleSetCurrentPage}
             >
               Anterior
             </Button>
@@ -473,7 +473,7 @@ export default function AssistantLogsPage() {
               variant="outline"
               size="sm"
               disabled={currentPage === totalPages}
-              onClick={() => setCurrentPage((p) => p + 1)}
+              onClick={handleSetCurrentPage}
             >
               Próxima
             </Button>

@@ -1,4 +1,4 @@
-import { useState } from "react";;
+import { useState, useCallback } from "react";;
 import React, { useState } from "react";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
@@ -222,7 +222,7 @@ export default function CronMonitorPage() {
                           <Button
                             variant="outline"
                             size="sm"
-                            onClick={() => setSelectedJob(job.id)}
+                            onClick={handleSetSelectedJob}
                           >
                             <Eye className="w-4 h-4 mr-2" />
                             Ver Logs
@@ -249,7 +249,7 @@ export default function CronMonitorPage() {
                   Últimas 50 execuções do job selecionado
                 </CardDescription>
               </div>
-              <Button variant="outline" onClick={() => setSelectedJob(null)}>
+              <Button variant="outline" onClick={handleSetSelectedJob}>
                 Fechar
               </Button>
             </div>

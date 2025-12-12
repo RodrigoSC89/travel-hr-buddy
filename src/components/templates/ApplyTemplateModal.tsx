@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";;;
+import { useEffect, useState, useCallback } from "react";;;
 import {
   Dialog,
   DialogContent,
@@ -137,7 +137,7 @@ export default function ApplyTemplateModal({ onApply, tableName = "templates" }:
           <Input
             placeholder="🔍 Buscar template..."
             value={search}
-            onChange={(e) => setSearch(e.target.value)}
+            onChange={handleChange}
           />
 
           <div className="max-h-[300px] overflow-y-auto space-y-2">
@@ -151,7 +151,7 @@ export default function ApplyTemplateModal({ onApply, tableName = "templates" }:
                   key={template.id}
                   variant="ghost"
                   className="justify-start w-full text-left h-auto py-3"
-                  onClick={() => applyTemplate(template.content)}
+                  onClick={() => handleapplyTemplate}
                 >
                   <div className="flex flex-col items-start w-full">
                     <span className="font-medium">{template.title}</span>

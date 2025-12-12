@@ -1,4 +1,4 @@
-import { useState } from "react";;
+import { useState, useMemo, useCallback } from "react";;
 
 /**
  * Painel web para envio de prompts ao Lovable Dev
@@ -312,7 +312,7 @@ export default function PromptPanel() {
                   className={`p-3 rounded-lg border cursor-pointer transition-colors ${
                     selectedPrompt === p.id ? "border-primary bg-primary/5" : "hover:bg-muted"
                   }`}
-                  onClick={() => setSelectedPrompt(p.id)}
+                  onClick={handleSetSelectedPrompt}
                 >
                   <div className="flex items-center gap-2 mb-1">
                     {p.status === "completed" ? (

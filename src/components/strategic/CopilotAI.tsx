@@ -1,4 +1,4 @@
-import { useState } from "react";;
+import { useState, useCallback } from "react";;
 import React, { useState } from "react";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
@@ -39,7 +39,7 @@ interface QuickAction {
   usage: number;
 }
 
-export const CopilotAI = () => {
+export const CopilotAI = memo(() => {
   const [query, setQuery] = useState("");
   const [isListening, setIsListening] = useState(false);
 
@@ -135,7 +135,7 @@ export const CopilotAI = () => {
     if (query.trim()) {
       // Aqui implementaria o processamento da query
       setQuery("");
-    }
+    };
   };
 
   return (
@@ -185,7 +185,7 @@ export const CopilotAI = () => {
                 <Input
                   placeholder="Pergunte qualquer coisa sobre o sistema... Ex: 'Mostrar reservas da próxima semana'"
                   value={query}
-                  onChange={(e) => setQuery(e.target.value)}
+                  onChange={handleChange}
                   onKeyPress={(e) => e.key === "Enter" && handleSendQuery()}
                 />
               </div>

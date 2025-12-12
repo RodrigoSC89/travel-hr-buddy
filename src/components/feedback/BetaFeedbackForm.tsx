@@ -1,4 +1,4 @@
-import { useState } from "react";;
+import { useState, useCallback } from "react";;
 
 /**
  * PATCH 562 - Beta Feedback System
@@ -33,7 +33,7 @@ interface FeedbackData {
   sessionDuration: number;
 }
 
-export function BetaFeedbackForm() {
+export const BetaFeedbackForm = memo(function() {
   const { toast } = useToast();
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [sessionStart] = useState(Date.now());
@@ -131,7 +131,7 @@ export function BetaFeedbackForm() {
                 id="userName"
                 required
                 value={formData.userName}
-                onChange={(e) => setFormData({ ...formData, userName: e.target.value })}
+                onChange={handleChange})}
                 placeholder="Seu nome"
               />
             </div>
@@ -143,7 +143,7 @@ export function BetaFeedbackForm() {
                 type="email"
                 required
                 value={formData.email}
-                onChange={(e) => setFormData({ ...formData, email: e.target.value })}
+                onChange={handleChange})}
                 placeholder="seu.email@exemplo.com"
               />
             </div>
@@ -187,7 +187,7 @@ export function BetaFeedbackForm() {
               id="module"
               required
               value={formData.module}
-              onChange={(e) => setFormData({ ...formData, module: e.target.value })}
+              onChange={handleChange})}
               placeholder="Ex: Dashboard, Crew Management, Control Hub"
             />
           </div>
@@ -244,7 +244,7 @@ export function BetaFeedbackForm() {
             <Textarea
               id="comments"
               value={formData.comments}
-              onChange={(e) => setFormData({ ...formData, comments: e.target.value })}
+              onChange={handleChange})}
               placeholder="Compartilhe sua experiência geral com o sistema..."
               rows={4}
             />
@@ -256,7 +256,7 @@ export function BetaFeedbackForm() {
             <Textarea
               id="suggestions"
               value={formData.suggestions}
-              onChange={(e) => setFormData({ ...formData, suggestions: e.target.value })}
+              onChange={handleChange})}
               placeholder="O que você gostaria de ver melhorado ou adicionado?"
               rows={4}
             />
@@ -268,7 +268,7 @@ export function BetaFeedbackForm() {
             <Textarea
               id="bugs"
               value={formData.bugs}
-              onChange={(e) => setFormData({ ...formData, bugs: e.target.value })}
+              onChange={handleChange})}
               placeholder="Descreva qualquer bug ou problema que encontrou..."
               rows={4}
             />

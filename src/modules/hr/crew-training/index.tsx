@@ -1,5 +1,5 @@
 /**
-import { useEffect, useState } from "react";;
+import { useEffect, useState, useCallback } from "react";;
  * PATCH 112.0 - Crew Training & Certification System
  * Crew Training - Training records, certifications, and compliance tracking
  */
@@ -243,7 +243,7 @@ const CrewTraining = () => {
               <Input
                 placeholder="Search by course or crew..."
                 value={searchQuery}
-                onChange={(e) => setSearchQuery(e.target.value)}
+                onChange={handleChange}
                 className="pl-9"
               />
             </div>

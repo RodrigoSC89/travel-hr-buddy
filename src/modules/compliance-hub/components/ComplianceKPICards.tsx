@@ -22,7 +22,7 @@ interface ComplianceKPICardsProps {
   kpis: ComplianceKPIs;
 }
 
-export function ComplianceKPICards({ kpis }: ComplianceKPICardsProps) {
+export const ComplianceKPICards = memo(function({ kpis }: ComplianceKPICardsProps) {
   const TrendIcon = kpis.trendDirection === "up" ? TrendingUp : 
     kpis.trendDirection === "down" ? TrendingDown : TrendingUp;
   

@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";;
+import { useEffect, useState, useCallback, useMemo } from "react";;
 import React, { useState, useEffect } from "react";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
@@ -41,7 +41,7 @@ interface PerformanceMetric {
   unit: string;
 }
 
-export const PredictiveMaintenanceSystem = () => {
+export const PredictiveMaintenanceSystem = memo(() => {
   const [predictions, setPredictions] = useState<MaintenancePrediction[]>([]);
   const [metrics, setMetrics] = useState<PerformanceMetric[]>([]);
   const [selectedTimeframe, setSelectedTimeframe] = useState<"7d" | "30d" | "90d">("30d");
@@ -193,7 +193,7 @@ export const PredictiveMaintenanceSystem = () => {
               key={timeframe}
               variant={selectedTimeframe === timeframe ? "default" : "outline"}
               size="sm"
-              onClick={() => setSelectedTimeframe(timeframe)}
+              onClick={handleSetSelectedTimeframe}
             >
               {timeframe === "7d" ? "7 Dias" : timeframe === "30d" ? "30 Dias" : "90 Dias"}
             </Button>
@@ -375,7 +375,7 @@ export const PredictiveMaintenanceSystem = () => {
                           metric.metric.includes("Custos") || metric.metric.includes("Consumo") || metric.metric.includes("Emissões")
                             ? Math.max(0, 100 - (metric.current / metric.target) * 100)
                             : (metric.current / metric.target) * 100
-                        } 
+                        } ;
                         className="h-2" 
                       />
                     </div>

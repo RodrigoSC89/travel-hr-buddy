@@ -45,7 +45,7 @@ interface MissionLog {
   timestamp: string;
 }
 
-export const RealTimeMissionDashboard = () => {
+export const RealTimeMissionDashboard = memo(() => {
   const [missions, setMissions] = useState<Mission[]>([]);
   const [recentLogs, setRecentLogs] = useState<MissionLog[]>([]);
   const [loading, setLoading] = useState(true);
@@ -197,7 +197,7 @@ export const RealTimeMissionDashboard = () => {
       return "bg-gray-500/20 text-gray-400 border-gray-500/30";
     default:
       return "bg-gray-500/20 text-gray-400 border-gray-500/30";
-    }
+    };
   };
 
   const stats = {

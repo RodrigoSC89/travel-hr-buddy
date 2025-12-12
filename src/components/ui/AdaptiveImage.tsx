@@ -3,7 +3,7 @@
  * Carrega versões menores em conexões lentas
  */
 
-import { useEffect, useRef, useState } from "react";;;
+import { memo, memo, useEffect, useRef, useState, useCallback } from "react";;;
 import { cn } from "@/lib/utils";
 import { connectionAdaptive } from "@/lib/performance/connection-adaptive";
 
@@ -19,7 +19,7 @@ interface AdaptiveImageProps {
   onError?: () => void;
 }
 
-export function AdaptiveImage({
+export const AdaptiveImage = memo(function({
   src,
   alt,
   className,
@@ -102,7 +102,7 @@ export function AdaptiveImage({
 }
 
 // Avatar otimizado para listas
-export function AdaptiveAvatar({
+export const AdaptiveAvatar = memo(function({
   src,
   alt,
   size = 40,

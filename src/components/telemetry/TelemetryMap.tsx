@@ -1,5 +1,5 @@
 /**
-import { useEffect, useRef, useState } from "react";;
+import { useEffect, useRef, useState, useCallback, useMemo } from "react";;
  * Telemetry Map Component
  * Interactive map visualization for satellite and vessel positions
  */
@@ -35,7 +35,7 @@ interface TelemetryMapProps {
   onRefresh?: () => void;
 }
 
-export function TelemetryMap({ 
+export const TelemetryMap = memo(function({ 
   satellites = [], 
   vessels = [], 
   weatherPoints = [],
@@ -166,7 +166,7 @@ export function TelemetryMap({
                   left: `${20 + (idx * 8) % 60}%`, 
                   top: `${20 + (idx * 12) % 60}%` 
                 }}
-                onClick={() => setSelectedMarker(marker)}
+                onClick={handleSetSelectedMarker}
               >
                 <div className={`w-4 h-4 ${getMarkerColor(marker.type)} rounded-full animate-pulse`}>
                   <div className={`absolute inset-0 ${getMarkerColor(marker.type)} rounded-full animate-ping opacity-75`} />
@@ -188,7 +188,7 @@ export function TelemetryMap({
                   variant="ghost" 
                   size="icon" 
                   className="h-5 w-5 ml-auto"
-                  onClick={() => setSelectedMarker(null)}
+                  onClick={handleSetSelectedMarker}
                 >
                   ×
                 </Button>

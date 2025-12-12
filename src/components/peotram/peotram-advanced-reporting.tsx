@@ -1,4 +1,4 @@
-import { useState } from "react";;
+import { useState, useCallback } from "react";;
 import React, { useState } from "react";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
@@ -262,10 +262,10 @@ export const PeotramAdvancedReporting: React.FC = () => {
                 </div>
 
                 <div className="flex justify-end gap-2">
-                  <Button variant="outline" onClick={() => setIsNewReportOpen(false)}>
+                  <Button variant="outline" onClick={handleSetIsNewReportOpen}>
                     Cancelar
                   </Button>
-                  <Button onClick={() => setIsNewReportOpen(false)}>
+                  <Button onClick={handleSetIsNewReportOpen}>
                     Criar Relatório
                   </Button>
                 </div>
@@ -414,7 +414,7 @@ export const PeotramAdvancedReporting: React.FC = () => {
                       variant="outline" 
                       size="sm" 
                       className="flex-1"
-                      onClick={() => generateReport(report.id)}
+                      onClick={() => handlegenerateReport}
                     >
                       <Zap className="w-3 h-3 mr-1" />
                       Gerar
@@ -423,7 +423,7 @@ export const PeotramAdvancedReporting: React.FC = () => {
                       variant="outline" 
                       size="sm" 
                       className="flex-1"
-                      onClick={() => setSelectedReport(report)}
+                      onClick={handleSetSelectedReport}
                     >
                       <Eye className="w-3 h-3 mr-1" />
                       Visualizar
@@ -432,7 +432,7 @@ export const PeotramAdvancedReporting: React.FC = () => {
                       variant="outline" 
                       size="sm" 
                       className="flex-1"
-                      onClick={() => scheduleReport(report.id)}
+                      onClick={() => handlescheduleReport}
                     >
                       <Calendar className="w-3 h-3 mr-1" />
                       Agendar

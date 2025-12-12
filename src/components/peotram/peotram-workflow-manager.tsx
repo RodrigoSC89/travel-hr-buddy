@@ -1,4 +1,4 @@
-import { useState } from "react";;
+import { useState, useCallback } from "react";;
 import React, { useState } from "react";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
@@ -211,10 +211,10 @@ export const PeotramWorkflowManager: React.FC = () => {
                   <Textarea id="workflow-description" placeholder="Descrição do workflow" />
                 </div>
                 <div className="flex justify-end gap-2">
-                  <Button variant="outline" onClick={() => setIsNewWorkflowOpen(false)}>
+                  <Button variant="outline" onClick={handleSetIsNewWorkflowOpen}>
                     Cancelar
                   </Button>
-                  <Button onClick={() => setIsNewWorkflowOpen(false)}>
+                  <Button onClick={handleSetIsNewWorkflowOpen}>
                     Criar Workflow
                   </Button>
                 </div>

@@ -11,7 +11,7 @@ interface AppWindowProps {
   onClose: () => void;
 }
 
-export function AppWindow({ id, onClose }: AppWindowProps) {
+export const AppWindow = memo(function({ id, onClose }: AppWindowProps) {
   const app = appsRegistry[id];
   const AppComponent = app.component;
 

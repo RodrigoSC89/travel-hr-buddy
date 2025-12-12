@@ -1,5 +1,5 @@
 /**
-import { useState } from "react";;
+import { useState, useMemo, useCallback } from "react";;
  * Nautilus AI Hub - Módulo Unificado de Inteligência Artificial
  * PATCH UNIFY-2.0 - Fusão dos módulos de IA e Analytics
  * 
@@ -523,7 +523,7 @@ const NautilusAIHub: React.FC = () => {
               <div className="flex gap-2">
                 <Textarea
                   value={chatInput}
-                  onChange={(e) => setChatInput(e.target.value)}
+                  onChange={handleChange}
                   placeholder="Digite sua pergunta..."
                   className="min-h-[60px]"
                   onKeyDown={(e) => {

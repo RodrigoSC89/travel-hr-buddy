@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";;
+import { useEffect, useState, useCallback } from "react";;
 
 import React, { useState, useEffect } from "react";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
@@ -113,7 +113,7 @@ export const MyCertificates: React.FC = () => {
                   Final Score: {cert.final_score}%
                 </p>
               </div>
-              <Button onClick={() => handleDownload(cert)} variant="outline">
+              <Button onClick={() => handlehandleDownload} variant="outline">
                 <Download className="h-4 w-4 mr-2" />
                 Download PDF
               </Button>

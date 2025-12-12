@@ -1,5 +1,5 @@
 /**
-import { useState } from "react";;
+import { useState, useCallback } from "react";;
  * Crew Wellbeing Module - PATCH 390 Complete
  * Health and psychological support system with privacy and aggregated reporting
  */

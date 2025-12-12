@@ -1,4 +1,4 @@
-import { useState } from "react";;;
+import { memo, memo, useState } from "react";;;
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
@@ -41,7 +41,7 @@ interface SimulatorData {
   exports: ExportFormat[];
 }
 
-export function Patch613Validation() {
+export const Patch613Validation = memo(function() {
   const [results, setResults] = useState<Record<string, boolean>>({});
   const [loading, setLoading] = useState(false);
   const [simulatorData, setSimulatorData] = useState<SimulatorData | null>(null);

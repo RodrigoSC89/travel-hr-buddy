@@ -3,7 +3,7 @@
  * PATCH 900: Removidas animações pesadas
  */
 
-import { memo, useCallback, useMemo, useState } from "react";;;
+import { memo, memo, memo, useCallback, useMemo, useState } from "react";;;
 import { useNavigate } from "react-router-dom";
 import { Card, CardContent } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
@@ -210,7 +210,7 @@ function AIModulesGridComponent() {
             key={cat.id}
             variant={selectedCategory === cat.id ? "default" : "outline"}
             size="sm"
-            onClick={() => handleCategoryChange(cat.id)}
+            onClick={() => handlehandleCategoryChange}
             className="whitespace-nowrap"
           >
             {cat.name}
@@ -224,7 +224,7 @@ function AIModulesGridComponent() {
           <ModuleCard 
             key={module.id} 
             module={module} 
-            onClick={() => handleModuleClick(module)}
+            onClick={() => handlehandleModuleClick}
           />
         ))}
       </div>

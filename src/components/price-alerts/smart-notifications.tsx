@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";;
+import { useEffect, useState, useCallback } from "react";;
 import React, { useState, useEffect } from "react";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
@@ -449,10 +449,7 @@ export const SmartNotifications: React.FC = () => {
                       <Input
                         type="time"
                         value={settings.quiet_hours.start}
-                        onChange={(e) => 
-                          setSettings(prev => prev ? { 
-                            ...prev, 
-                            quiet_hours: { ...prev.quiet_hours, start: e.target.value } 
+                        onChange={handleChange} 
                           } : null)
                         }
                         className="text-sm border-primary/20"
@@ -463,10 +460,7 @@ export const SmartNotifications: React.FC = () => {
                       <Input
                         type="time"
                         value={settings.quiet_hours.end}
-                        onChange={(e) => 
-                          setSettings(prev => prev ? { 
-                            ...prev, 
-                            quiet_hours: { ...prev.quiet_hours, end: e.target.value } 
+                        onChange={handleChange} 
                           } : null)
                         }
                         className="text-sm border-primary/20"
@@ -494,13 +488,7 @@ export const SmartNotifications: React.FC = () => {
                 <Input
                   type="number"
                   value={settings.thresholds.min_discount_percentage}
-                  onChange={(e) => 
-                    setSettings(prev => prev ? { 
-                      ...prev, 
-                      thresholds: { 
-                        ...prev.thresholds, 
-                        min_discount_percentage: parseInt(e.target.value) || 0 
-                      } 
+                  onChange={handleChange} 
                     } : null)
                   }
                   className="border-primary/20"
@@ -516,13 +504,7 @@ export const SmartNotifications: React.FC = () => {
                 <Input
                   type="number"
                   value={settings.thresholds.min_savings_amount}
-                  onChange={(e) => 
-                    setSettings(prev => prev ? { 
-                      ...prev, 
-                      thresholds: { 
-                        ...prev.thresholds, 
-                        min_savings_amount: parseInt(e.target.value) || 0 
-                      } 
+                  onChange={handleChange} 
                     } : null)
                   }
                   className="border-primary/20"
@@ -565,8 +547,7 @@ export const SmartNotifications: React.FC = () => {
             
             <Input
               value={testNotification.message}
-              onChange={(e) => 
-                setTestNotification(prev => ({ ...prev, message: e.target.value }))
+              onChange={handleChange}))
               }
               placeholder="Mensagem de teste"
               className="flex-1 border-primary/20"

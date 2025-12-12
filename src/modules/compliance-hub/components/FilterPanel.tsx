@@ -54,7 +54,7 @@ interface FilterPanelProps {
   regulations: { id: string; name: string }[];
 }
 
-export function FilterPanel({
+export const FilterPanel = memo(function({
   filters,
   onFilterChange,
   onClearFilters,
@@ -133,7 +133,7 @@ export function FilterPanel({
             <Input
               placeholder="Buscar..."
               value={filters.search}
-              onChange={(e) => onFilterChange({ ...filters, search: e.target.value })}
+              onChange={handleChange})}
               className="pl-9"
             />
           </div>
@@ -240,7 +240,7 @@ export function FilterPanel({
               key={option.value}
               variant={filters.status.includes(option.value) ? "default" : "outline"}
               className="cursor-pointer"
-              onClick={() => toggleArrayFilter("status", option.value)}
+              onClick={() => handletoggleArrayFilter}
             >
               {option.label}
               {filters.status.includes(option.value) && (
@@ -260,7 +260,7 @@ export function FilterPanel({
               key={option.value}
               variant={filters.auditType.includes(option.value) ? "default" : "outline"}
               className="cursor-pointer"
-              onClick={() => toggleArrayFilter("auditType", option.value)}
+              onClick={() => handletoggleArrayFilter}
             >
               {option.label}
               {filters.auditType.includes(option.value) && (
@@ -284,7 +284,7 @@ export function FilterPanel({
                 option.value === "critical" && filters.severity.includes(option.value) && "bg-red-500",
                 option.value === "major" && filters.severity.includes(option.value) && "bg-orange-500"
               )}
-              onClick={() => toggleArrayFilter("severity", option.value)}
+              onClick={() => handletoggleArrayFilter}
             >
               {option.label}
               {filters.severity.includes(option.value) && (

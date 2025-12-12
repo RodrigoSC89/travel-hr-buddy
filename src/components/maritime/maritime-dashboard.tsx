@@ -1,4 +1,4 @@
-import { useState } from "react";;
+import { useState, useMemo, useCallback } from "react";;
 import React, { useState } from "react";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
@@ -239,7 +239,7 @@ const OverviewDashboard: React.FC<OverviewDashboardProps> = ({ onNavigate }) => 
             <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
               <div 
                 className="p-4 border rounded-lg cursor-pointer hover:bg-blue-50 transition-colors"
-                onClick={() => onNavigate("vessels")}
+                onClick={() => handleonNavigate}
               >
                 <div className="flex items-center gap-3 mb-3">
                   <div className="p-2 bg-blue-100 rounded-lg">
@@ -259,7 +259,7 @@ const OverviewDashboard: React.FC<OverviewDashboardProps> = ({ onNavigate }) => 
 
               <div 
                 className="p-4 border rounded-lg cursor-pointer hover:bg-green-50 transition-colors"
-                onClick={() => onNavigate("crew")}
+                onClick={() => handleonNavigate}
               >
                 <div className="flex items-center gap-3 mb-3">
                   <div className="p-2 bg-green-100 rounded-lg">
@@ -279,7 +279,7 @@ const OverviewDashboard: React.FC<OverviewDashboardProps> = ({ onNavigate }) => 
 
               <div 
                 className="p-4 border rounded-lg cursor-pointer hover:bg-purple-50 transition-colors"
-                onClick={() => onNavigate("certifications")}
+                onClick={() => handleonNavigate}
               >
                 <div className="flex items-center gap-3 mb-3">
                   <div className="p-2 bg-purple-100 rounded-lg">

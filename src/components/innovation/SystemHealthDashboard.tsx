@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";;
+import { useEffect, useState, useCallback, useMemo } from "react";;
 import React, { useState, useEffect } from "react";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Progress } from "@/components/ui/progress";
@@ -41,7 +41,7 @@ interface SecurityEvent {
   resolved: boolean;
 }
 
-export const SystemHealthDashboard = () => {
+export const SystemHealthDashboard = memo(() => {
   const [metrics, setMetrics] = useState<SystemMetric[]>([]);
   const [securityEvents, setSecurityEvents] = useState<SecurityEvent[]>([]);
   const [systemLoad, setSystemLoad] = useState(67);
@@ -144,7 +144,7 @@ export const SystemHealthDashboard = () => {
     case "active sessions": return <Activity className="h-4 w-4" />;
     case "response time": return <Clock className="h-4 w-4" />;
     default: return <Server className="h-4 w-4" />;
-    }
+    };
   };
 
   return (

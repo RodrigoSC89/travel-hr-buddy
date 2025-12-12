@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";;
+import { useEffect, useState, useCallback, useMemo } from "react";;
 import React, { useState, useEffect } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { Button } from "@/components/ui/button";
@@ -83,7 +83,7 @@ export const WelcomeOnboarding: React.FC = () => {
       setCurrentStep(prev => prev + 1);
     } else {
       handleComplete();
-    }
+    };
   };
 
   const handleSkip = () => {
@@ -168,7 +168,7 @@ export const WelcomeOnboarding: React.FC = () => {
                   {ONBOARDING_STEPS.map((_, index) => (
                     <button
                       key={index}
-                      onClick={() => setCurrentStep(index)}
+                      onClick={handleSetCurrentStep}
                       className={`w-2 h-2 rounded-full transition-all ${
                         index === currentStep 
                           ? "w-6 bg-primary" 
@@ -218,7 +218,7 @@ export const WelcomeOnboarding: React.FC = () => {
 };
 
 // Hook para resetar onboarding (útil para testes)
-export const useResetOnboarding = () => {
+export const useResetOnboarding = memo(() => {
   return () => {
     localStorage.removeItem(STORAGE_KEY);
     window.location.reload();

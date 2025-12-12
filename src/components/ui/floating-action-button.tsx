@@ -1,4 +1,4 @@
-import { useEffect, useRef, useState } from "react";;
+import { useEffect, useRef, useState, useCallback } from "react";;
 import React, { useState, useEffect, useRef } from "react";
 import { Button } from "@/components/ui/button";
 import { 
@@ -147,7 +147,7 @@ export const FloatingActionButton: React.FC = () => {
               transitionDelay: `${index * 50}ms`,
               zIndex: 60 
             }}
-            onClick={() => handleActionClick(action)}
+            onClick={() => handlehandleActionClick}
             onKeyDown={(e) => {
               if (e.key === "Enter" || e.key === " ") {
                 e.preventDefault();

@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";;
+import { useEffect, useState, useCallback, useMemo } from "react";;
 import React, { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import { useToast } from "@/hooks/use-toast";
@@ -102,7 +102,7 @@ const FloatingMenu = () => {
           description: "Abrindo relatórios e sincronização global"
         });
       }
-    }
+    };
   ];
 
   return (
@@ -251,7 +251,7 @@ const StatusWidget = () => {
   );
 };
 
-export const InteractiveOverlay = () => {
+export const InteractiveOverlay = memo(() => {
   return (
     <>
       <FloatingMenu />

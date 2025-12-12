@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";;
+import { useEffect, useState, useCallback, useMemo } from "react";;
 import React, { useState, useEffect } from "react";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
@@ -359,7 +359,7 @@ export const IntelligentNotificationCenter: React.FC<IntelligentNotificationCent
                               <div className="flex items-center gap-2">
                                 {notification.actionText && (
                                   <Button
-                                    onClick={() => handleNotificationAction(notification)}
+                                    onClick={() => handlehandleNotificationAction}
                                     size="sm"
                                     variant="outline"
                                   >
@@ -369,7 +369,7 @@ export const IntelligentNotificationCenter: React.FC<IntelligentNotificationCent
                                 
                                 {!notification.isRead && (
                                   <Button
-                                    onClick={() => markAsRead(notification.id)}
+                                    onClick={() => handlemarkAsRead}
                                     size="sm"
                                     variant="ghost"
                                   >
@@ -378,7 +378,7 @@ export const IntelligentNotificationCenter: React.FC<IntelligentNotificationCent
                                 )}
                                 
                                 <Button
-                                  onClick={() => dismissNotification(notification.id)}
+                                  onClick={() => handledismissNotification}
                                   size="sm"
                                   variant="ghost"
                                 >
@@ -402,28 +402,28 @@ export const IntelligentNotificationCenter: React.FC<IntelligentNotificationCent
           <h4 className="font-medium mb-3">Gerar Notificações de Teste</h4>
           <div className="flex flex-wrap gap-2">
             <Button
-              onClick={() => generateIntelligentNotification("smart_alert")}
+              onClick={() => handlegenerateIntelligentNotification}
               size="sm"
               variant="outline"
             >
               Alerta Inteligente
             </Button>
             <Button
-              onClick={() => generateIntelligentNotification("system_insight")}
+              onClick={() => handlegenerateIntelligentNotification}
               size="sm"
               variant="outline"
             >
               Insight do Sistema
             </Button>
             <Button
-              onClick={() => generateIntelligentNotification("recommendation_update")}
+              onClick={() => handlegenerateIntelligentNotification}
               size="sm"
               variant="outline"
             >
               Atualização de Recomendação
             </Button>
             <Button
-              onClick={() => generateIntelligentNotification("performance_summary")}
+              onClick={() => handlegenerateIntelligentNotification}
               size="sm"
               variant="outline"
             >

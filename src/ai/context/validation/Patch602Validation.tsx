@@ -3,7 +3,7 @@
  * Tests context recognition across layers with transitions
  */
 
-import { useState } from "react";;;
+import { memo, memo, useState } from "react";;;
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
@@ -21,7 +21,7 @@ interface ContextLayer {
   actions: string[];
 }
 
-export function Patch602Validation() {
+export const Patch602Validation = memo(function() {
   const [layers, setLayers] = useState<ContextLayer[]>([
     { level: "Strategic", status: "inactive", metrics: { awareness: 0, adaptation: 0 }, actions: [] },
     { level: "Operational", status: "inactive", metrics: { awareness: 0, adaptation: 0 }, actions: [] },

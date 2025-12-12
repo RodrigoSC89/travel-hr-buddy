@@ -1,5 +1,5 @@
 /**
-import { useEffect, useState } from "react";;
+import { useEffect, useState, useCallback, useMemo } from "react";;
  * Performance Monitor Component
  * PATCH 833: Real-time performance metrics display
  */
@@ -27,7 +27,7 @@ interface PerformanceMonitorProps {
   position?: "top-right" | "bottom-right" | "bottom-left";
 }
 
-export function PerformanceMonitor({ 
+export const PerformanceMonitor = memo(function({ 
   visible = true, 
   onClose,
   position = "bottom-right" 
@@ -91,7 +91,7 @@ export function PerformanceMonitor({
                   variant="ghost"
                   size="icon"
                   className="h-6 w-6"
-                  onClick={() => setExpanded(!expanded)}
+                  onClick={handleSetExpanded}
                 >
                   <RefreshCw className="h-3 w-3" />
                 </Button>
@@ -158,7 +158,7 @@ export function PerformanceMonitor({
               variant="ghost"
               size="sm"
               className="w-full text-xs"
-              onClick={() => setExpanded(!expanded)}
+              onClick={handleSetExpanded}
             >
               {expanded ? "Mostrar menos" : "Ver métricas detalhadas"}
             </Button>
@@ -170,7 +170,7 @@ export function PerformanceMonitor({
 }
 
 // Dev-only performance overlay
-export function DevPerformanceOverlay() {
+export const DevPerformanceOverlay = memo(function() {
   const [show, setShow] = useState(false);
 
   useEffect(() => {

@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useMemo, useState } from "react";;;
+import { useEffect, useMemo, useState, useCallback } from "react";;;
 import { useParams, useNavigate } from "react-router-dom";
 import { supabase } from "@/integrations/supabase/client";
 import { RoleBasedAccess } from "@/components/auth/role-based-access";
@@ -153,7 +153,7 @@ export default function DocumentHistoryPage() {
           <Button
             variant="outline"
             size="sm"
-            onClick={() => navigate(`/admin/documents/view/${id}`)}
+            onClick={() => handlenavigate}
           >
             <ArrowLeft className="w-4 h-4 mr-2" />
             Voltar
@@ -186,7 +186,7 @@ export default function DocumentHistoryPage() {
                   type="text"
                   placeholder="Digite o email ou parte dele..."
                   value={emailFilter}
-                  onChange={(e) => setEmailFilter(e.target.value)}
+                  onChange={handleChange}
                   className="w-full"
                 />
               </div>
@@ -200,7 +200,7 @@ export default function DocumentHistoryPage() {
                   id="date-filter"
                   type="date"
                   value={dateFilter}
-                  onChange={(e) => setDateFilter(e.target.value)}
+                  onChange={handleChange}
                   className="w-full"
                 />
               </div>
@@ -290,7 +290,7 @@ export default function DocumentHistoryPage() {
                               <Button
                                 variant="outline"
                                 size="sm"
-                                onClick={() => handleRestore(version.id, version.content)}
+                                onClick={() => handlehandleRestore}
                                 disabled={restoring !== null}
                                 className="ml-4 shrink-0"
                               >

@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";;
+import { useEffect, useState, useCallback, useMemo } from "react";;
 
 import React, { useState, useEffect } from "react";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
@@ -374,7 +374,7 @@ export const ProjectTimeline: React.FC<ProjectTimelineProps> = () => {
                 <Download className="h-4 w-4 mr-2" />
                 PDF
               </Button>
-              <Button onClick={() => setIsCreateOpen(true)}>
+              <Button onClick={handleSetIsCreateOpen}>
                 <Plus className="h-4 w-4 mr-2" />
                 New Task
               </Button>
@@ -414,13 +414,13 @@ export const ProjectTimeline: React.FC<ProjectTimelineProps> = () => {
             <div className="flex gap-2 ml-auto">
               <Button
                 variant={viewMode === "gantt" ? "default" : "outline"}
-                onClick={() => setViewMode("gantt")}
+                onClick={handleSetViewMode}
               >
                 Gantt View
               </Button>
               <Button
                 variant={viewMode === "list" ? "default" : "outline"}
-                onClick={() => setViewMode("list")}
+                onClick={handleSetViewMode}
               >
                 List View
               </Button>
@@ -486,14 +486,14 @@ export const ProjectTimeline: React.FC<ProjectTimelineProps> = () => {
                           <Button
                             size="sm"
                             variant="ghost"
-                            onClick={() => openEditDialog(task)}
+                            onClick={() => handleopenEditDialog}
                           >
                             <Edit className="h-4 w-4" />
                           </Button>
                           <Button
                             size="sm"
                             variant="ghost"
-                            onClick={() => deleteTask(task.id)}
+                            onClick={() => handledeleteTask}
                           >
                             <Trash2 className="h-4 w-4" />
                           </Button>
@@ -519,14 +519,14 @@ export const ProjectTimeline: React.FC<ProjectTimelineProps> = () => {
                         <Button
                           size="sm"
                           variant="outline"
-                          onClick={() => openEditDialog(task)}
+                          onClick={() => handleopenEditDialog}
                         >
                           <Edit className="h-4 w-4" />
                         </Button>
                         <Button
                           size="sm"
                           variant="outline"
-                          onClick={() => deleteTask(task.id)}
+                          onClick={() => handledeleteTask}
                         >
                           <Trash2 className="h-4 w-4" />
                         </Button>
@@ -585,7 +585,7 @@ export const ProjectTimeline: React.FC<ProjectTimelineProps> = () => {
               <Input
                 id="project_name"
                 value={formData.project_name}
-                onChange={(e) => setFormData({ ...formData, project_name: e.target.value })}
+                onChange={handleChange})}
                 placeholder="Enter project name"
               />
             </div>
@@ -594,7 +594,7 @@ export const ProjectTimeline: React.FC<ProjectTimelineProps> = () => {
               <Input
                 id="task_name"
                 value={formData.task_name}
-                onChange={(e) => setFormData({ ...formData, task_name: e.target.value })}
+                onChange={handleChange})}
                 placeholder="Enter task name"
               />
             </div>
@@ -603,7 +603,7 @@ export const ProjectTimeline: React.FC<ProjectTimelineProps> = () => {
               <Input
                 id="description"
                 value={formData.description}
-                onChange={(e) => setFormData({ ...formData, description: e.target.value })}
+                onChange={handleChange})}
                 placeholder="Enter description"
               />
             </div>
@@ -645,7 +645,7 @@ export const ProjectTimeline: React.FC<ProjectTimelineProps> = () => {
                   id="start_date"
                   type="date"
                   value={formData.start_date}
-                  onChange={(e) => setFormData({ ...formData, start_date: e.target.value })}
+                  onChange={handleChange})}
                 />
               </div>
               <div>
@@ -654,7 +654,7 @@ export const ProjectTimeline: React.FC<ProjectTimelineProps> = () => {
                   id="end_date"
                   type="date"
                   value={formData.end_date}
-                  onChange={(e) => setFormData({ ...formData, end_date: e.target.value })}
+                  onChange={handleChange})}
                 />
               </div>
             </div>
@@ -663,7 +663,7 @@ export const ProjectTimeline: React.FC<ProjectTimelineProps> = () => {
               <Input
                 id="assigned_to"
                 value={formData.assigned_to}
-                onChange={(e) => setFormData({ ...formData, assigned_to: e.target.value })}
+                onChange={handleChange})}
                 placeholder="Enter assignee"
               />
             </div>
@@ -675,7 +675,7 @@ export const ProjectTimeline: React.FC<ProjectTimelineProps> = () => {
                 min="0"
                 max="100"
                 value={formData.progress}
-                onChange={(e) => setFormData({ ...formData, progress: parseInt(e.target.value) || 0 })}
+                onChange={handleChange})}
               />
             </div>
             <div className="flex gap-2 justify-end">

@@ -1,5 +1,5 @@
 /**
-import { useState } from "react";;
+import { useState, useCallback } from "react";;
  * Training Academy AI - Diferencial vs OLP/Seagull/Videotel
  * - Trilhas adaptativas personalizadas
  * - Tutor IA 24/7
@@ -66,7 +66,7 @@ interface SimulationScenario {
   skills: string[];
 }
 
-export function TrainingAcademyAI() {
+export const TrainingAcademyAI = memo(function() {
   const { generate, analyze, suggest, chat, isLoading } = useNautilusAI();
   const [learningPaths, setLearningPaths] = useState<LearningPath[]>([
     {
@@ -395,13 +395,13 @@ export function TrainingAcademyAI() {
             <CardContent>
               <div className="mb-4">
                 <div className="flex gap-2">
-                  <Button variant="outline" onClick={() => generateQuiz("Operações DP e ASOG")}>
+                  <Button variant="outline" onClick={() => handlegenerateQuiz}>
                     Gerar Quiz: DP/ASOG
                   </Button>
-                  <Button variant="outline" onClick={() => generateQuiz("Segurança SOLAS")}>
+                  <Button variant="outline" onClick={() => handlegenerateQuiz}>
                     Gerar Quiz: SOLAS
                   </Button>
-                  <Button variant="outline" onClick={() => generateQuiz("Navegação ECDIS")}>
+                  <Button variant="outline" onClick={() => handlegenerateQuiz}>
                     Gerar Quiz: ECDIS
                   </Button>
                 </div>
@@ -424,7 +424,7 @@ export function TrainingAcademyAI() {
                               key={optIdx}
                               variant={selectedAnswer === optIdx ? (optIdx === q.correctAnswer ? "default" : "destructive") : "outline"}
                               className="w-full justify-start"
-                              onClick={() => checkAnswer(q.id, optIdx)}
+                              onClick={() => handlecheckAnswer}
                             >
                               {String.fromCharCode(65 + optIdx)}. {opt}
                             </Button>
@@ -491,7 +491,7 @@ export function TrainingAcademyAI() {
               <div className="flex gap-2">
                 <Textarea
                   value={tutorQuestion}
-                  onChange={(e) => setTutorQuestion(e.target.value)}
+                  onChange={handleChange}
                   placeholder="Faça qualquer pergunta sobre navegação, DP, segurança, procedimentos..."
                   className="flex-1"
                   rows={3}
@@ -526,7 +526,7 @@ export function TrainingAcademyAI() {
                       key={q}
                       variant="outline"
                       size="sm"
-                      onClick={() => setTutorQuestion(q)}
+                      onClick={handleSetTutorQuestion}
                     >
                       <Lightbulb className="h-3 w-3 mr-1" />
                       {q}

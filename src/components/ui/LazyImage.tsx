@@ -3,7 +3,7 @@
  * PATCH 624 - Carregamento otimizado de imagens
  */
 
-import { useEffect, useRef, useState } from "react";;;
+import { memo, memo, useEffect, useRef, useState, useCallback } from "react";;;
 import { cn } from "@/lib/utils";
 
 interface LazyImageProps {
@@ -18,7 +18,7 @@ interface LazyImageProps {
   onError?: () => void;
 }
 
-export function LazyImage({
+export const LazyImage = memo(function({
   src,
   alt,
   className,
@@ -114,7 +114,7 @@ export function LazyImage({
 /**
  * Avatar com lazy loading
  */
-export function LazyAvatar({
+export const LazyAvatar = memo(function({
   src,
   alt,
   fallback,

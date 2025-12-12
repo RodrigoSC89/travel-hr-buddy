@@ -1,4 +1,4 @@
-import { useState } from "react";;
+import { useState, useCallback } from "react";;
 import React, { useState } from "react";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
@@ -98,7 +98,7 @@ export const KeyboardAccessibilityDemo: React.FC = () => {
                 </AlertDialogHeader>
                 <AlertDialogFooter>
                   <AlertDialogCancel>Cancel (Esc)</AlertDialogCancel>
-                  <AlertDialogAction onClick={() => setSelectedAction("Confirmed!")}>
+                  <AlertDialogAction onClick={handleSetSelectedAction}>
                     Continue (Enter)
                   </AlertDialogAction>
                 </AlertDialogFooter>

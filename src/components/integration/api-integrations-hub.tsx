@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";;
+import { useEffect, useState, useCallback, useMemo } from "react";;
 import React, { useState, useEffect } from "react";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
@@ -274,7 +274,7 @@ export const APIIntegrationsHub: React.FC = () => {
             <Label>Filtrar por categoria:</Label>
             <select 
               value={selectedCategory}
-              onChange={(e) => setSelectedCategory(e.target.value)}
+              onChange={handleChange}
               className="px-3 py-1 border border-border rounded-md bg-background"
             >
               <option value="all">Todas</option>
@@ -328,7 +328,7 @@ export const APIIntegrationsHub: React.FC = () => {
                           <Button
                             size="sm"
                             variant="outline"
-                            onClick={() => handleSync(integration)}
+                            onClick={() => handlehandleSync}
                             className="flex-1"
                           >
                             <RefreshCw className="h-3 w-3 mr-1" />
@@ -337,7 +337,7 @@ export const APIIntegrationsHub: React.FC = () => {
                           <Button
                             size="sm"
                             variant="outline"
-                            onClick={() => handleDisconnect(integration)}
+                            onClick={() => handlehandleDisconnect}
                           >
                             Desconectar
                           </Button>
@@ -345,7 +345,7 @@ export const APIIntegrationsHub: React.FC = () => {
                       ) : (
                         <Button
                           size="sm"
-                          onClick={() => handleConnect(integration)}
+                          onClick={() => handlehandleConnect}
                           className="flex-1"
                         >
                           Conectar
@@ -378,7 +378,7 @@ export const APIIntegrationsHub: React.FC = () => {
                 <Input
                   placeholder="Nome da chave API"
                   value={newKeyName}
-                  onChange={(e) => setNewKeyName(e.target.value)}
+                  onChange={handleChange}
                 />
                 <Button onClick={createAPIKey}>
                   <Plus className="h-4 w-4 mr-2" />
@@ -401,7 +401,7 @@ export const APIIntegrationsHub: React.FC = () => {
                         <Button
                           size="sm"
                           variant="outline"
-                          onClick={() => revokeAPIKey(key.id)}
+                          onClick={() => handlerevokeAPIKey}
                           disabled={!key.active}
                         >
                           <Trash2 className="h-3 w-3" />
@@ -446,7 +446,7 @@ export const APIIntegrationsHub: React.FC = () => {
                 <Input
                   placeholder="URL do webhook"
                   value={newWebhookUrl}
-                  onChange={(e) => setNewWebhookUrl(e.target.value)}
+                  onChange={handleChange}
                 />
                 <Button onClick={createWebhook}>
                   <Plus className="h-4 w-4 mr-2" />

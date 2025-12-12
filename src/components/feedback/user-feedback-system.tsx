@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";;
+import { useEffect, useState, useCallback, useMemo } from "react";;
 
 import React, { useState, useEffect } from "react";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
@@ -302,7 +302,7 @@ export const UserFeedbackSystem: React.FC = () => {
                 <Input
                   id="title"
                   value={formData.title}
-                  onChange={(e) => setFormData(prev => ({ ...prev, title: e.target.value }))}
+                  onChange={handleChange}))}
                   placeholder="Título do seu feedback"
                 />
               </div>
@@ -312,7 +312,7 @@ export const UserFeedbackSystem: React.FC = () => {
                 <Textarea
                   id="description"
                   value={formData.description}
-                  onChange={(e) => setFormData(prev => ({ ...prev, description: e.target.value }))}
+                  onChange={handleChange}))}
                   placeholder="Descreva detalhadamente seu feedback..."
                   rows={4}
                 />
@@ -329,7 +329,7 @@ export const UserFeedbackSystem: React.FC = () => {
                           ? "text-yellow-500 fill-current" 
                           : "text-muted-foreground"
                       }`}
-                      onClick={() => setFormData(prev => ({ ...prev, rating }))}
+                      onClick={handleSetFormData}
                     />
                   ))}
                   <span className="ml-2 text-sm text-muted-foreground">
@@ -353,15 +353,7 @@ export const UserFeedbackSystem: React.FC = () => {
                 </Button>
                 <Button 
                   variant="outline"
-                  onClick={() => setFormData({
-                    title: "",
-                    description: "",
-                    type: "suggestion",
-                    priority: "medium",
-                    rating: 5,
-                    page_url: window.location.href,
-                    browser_info: navigator.userAgent
-                  })}
+                  onClick={handleSetFormData}
                 >
                   Limpar
                 </Button>

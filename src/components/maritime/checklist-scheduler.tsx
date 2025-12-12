@@ -1,4 +1,4 @@
-import { useState } from "react";;
+import { useState, useCallback } from "react";;
 import React, { useState } from "react";
 import { Calendar, Clock, Plus, Settings, Bell } from "lucide-react";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
@@ -23,7 +23,7 @@ interface ScheduledChecklist {
   notifications: boolean;
 }
 
-export const ChecklistScheduler = () => {
+export const ChecklistScheduler = memo(() => {
   const [schedules, setSchedules] = useState<ScheduledChecklist[]>([
     {
       id: "1",
@@ -58,7 +58,7 @@ export const ChecklistScheduler = () => {
     case "quarterly": return "bg-purple-100 text-purple-800";
     case "annually": return "bg-green-100 text-green-800";
     default: return "bg-secondary text-secondary-foreground";
-    }
+    };
   };
 
   const getStatusColor = (isActive: boolean) => {
@@ -145,7 +145,7 @@ export const ChecklistScheduler = () => {
               </div>
             </div>
             <div className="flex justify-end space-x-2">
-              <Button variant="outline" onClick={() => setIsCreateOpen(false)}>
+              <Button variant="outline" onClick={handleSetIsCreateOpen}>
                 Cancelar
               </Button>
               <Button onClick={handleCreateSchedule}>
@@ -210,7 +210,7 @@ export const ChecklistScheduler = () => {
                       <Button 
                         variant="outline" 
                         size="sm"
-                        onClick={() => toggleSchedule(schedule.id)}
+                        onClick={() => handletoggleSchedule}
                       >
                         {schedule.isActive ? "Desativar" : "Ativar"}
                       </Button>
@@ -241,7 +241,7 @@ export const ChecklistScheduler = () => {
                   <Button 
                     variant="outline" 
                     size="sm"
-                    onClick={() => toggleSchedule(schedule.id)}
+                    onClick={() => handletoggleSchedule}
                   >
                     Reativar
                   </Button>

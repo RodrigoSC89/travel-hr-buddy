@@ -1,3 +1,4 @@
+import { memo } from 'react';
 /**
  * PageLoader - FASE A.4
  * 
@@ -12,7 +13,7 @@ interface PageLoaderProps {
   className?: string;
 }
 
-export function PageLoader({ message = "Carregando...", className }: PageLoaderProps) {
+export const PageLoader = memo(function({ message = "Carregando...", className }: PageLoaderProps) {
   return (
     <div
       className={cn(

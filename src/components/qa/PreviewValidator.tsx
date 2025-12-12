@@ -3,7 +3,7 @@
  * PATCH 624 - Componente visual para validação de preview
  */
 
-import { useState } from "react";;;
+import { memo, memo, useState, useCallback } from "react";;;
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
@@ -17,7 +17,7 @@ interface PreviewValidatorProps {
   showDetails?: boolean;
 }
 
-export function PreviewValidator({ 
+export const PreviewValidator = memo(function({ 
   componentName, 
   autoRun = false,
   showDetails = true 

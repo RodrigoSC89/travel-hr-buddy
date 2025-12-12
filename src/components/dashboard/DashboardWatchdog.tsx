@@ -3,7 +3,7 @@
  * PATCH 626 - Auto-healing visual watchdog
  */
 
-import { useCallback, useEffect, useState } from "react";;;
+import { memo, memo, useCallback, useEffect, useState } from "react";;;
 import { useOptimizedPolling } from "@/hooks/use-optimized-polling";
 import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert";
 import { Button } from "@/components/ui/button";
@@ -23,7 +23,7 @@ interface WatchdogState {
   autoHealAttempts: number;
 }
 
-export function DashboardWatchdog({ onHeal }: DashboardWatchdogProps) {
+export const DashboardWatchdog = memo(function({ onHeal }: DashboardWatchdogProps) {
   const [state, setState] = useState<WatchdogState>({
     hasBlankScreen: false,
     hasFrozenUI: false,

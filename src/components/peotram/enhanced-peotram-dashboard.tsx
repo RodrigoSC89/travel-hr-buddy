@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";;
+import { useEffect, useState, useCallback, useMemo } from "react";;
 import React, { useState, useEffect } from "react";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
@@ -171,7 +171,7 @@ export const EnhancedPeotramDashboard: React.FC = () => {
           </div>
           
           <div className="flex gap-2">
-            <Button variant="outline" size="sm" onClick={() => setShowFilters(!showFilters)}>
+            <Button variant="outline" size="sm" onClick={handleSetShowFilters}>
               <Filter className="w-4 h-4 mr-2" />
               Filtros
             </Button>
@@ -194,7 +194,7 @@ export const EnhancedPeotramDashboard: React.FC = () => {
                 <label className="text-sm font-medium">Período</label>
                 <select 
                   value={selectedPeriod} 
-                  onChange={(e) => setSelectedPeriod(e.target.value)}
+                  onChange={handleChange}
                   className="w-full mt-1 p-2 border rounded-md bg-background"
                 >
                   <option value="2024">2024</option>
@@ -207,7 +207,7 @@ export const EnhancedPeotramDashboard: React.FC = () => {
                 <label className="text-sm font-medium">Tipo de Auditoria</label>
                 <select 
                   value={auditType} 
-                  onChange={(e) => setAuditType(e.target.value as unknown)}
+                  onChange={handleChange}
                   className="w-full mt-1 p-2 border rounded-md bg-background"
                 >
                   <option value="all">Todas</option>
@@ -224,7 +224,7 @@ export const EnhancedPeotramDashboard: React.FC = () => {
                     type="text"
                     placeholder="Buscar auditorias..."
                     value={searchTerm}
-                    onChange={(e) => setSearchTerm(e.target.value)}
+                    onChange={handleChange}
                     className="w-full pl-10 pr-4 py-2 border rounded-md bg-background"
                   />
                 </div>

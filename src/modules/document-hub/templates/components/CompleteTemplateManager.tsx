@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";;
+import { useEffect, useState, useCallback } from "react";;
 
 /**
  * PATCH 417: Complete Template Management Page
@@ -36,7 +36,7 @@ const commonVariables = [
   "signature"
 ];
 
-export const CompleteTemplateManager = () => {
+export const CompleteTemplateManager = memo(() => {
   const [templateName, setTemplateName] = useState("");
   const [templateDescription, setTemplateDescription] = useState("");
   const [templateCategory, setTemplateCategory] = useState("report");
@@ -96,7 +96,7 @@ export const CompleteTemplateManager = () => {
       });
     } finally {
       setSaving(false);
-    }
+    };
   };
 
   return (
@@ -110,7 +110,7 @@ export const CompleteTemplateManager = () => {
           </div>
         </div>
         <Button 
-          onClick={() => setShowPreview(!showPreview)}
+          onClick={handleSetShowPreview}
           variant="outline"
         >
           <Eye className="w-4 h-4 mr-2" />
@@ -130,7 +130,7 @@ export const CompleteTemplateManager = () => {
               <Input
                 id="template-name"
                 value={templateName}
-                onChange={(e) => setTemplateName(e.target.value)}
+                onChange={handleChange}
                 placeholder="e.g., Employee Contract"
               />
             </div>
@@ -158,7 +158,7 @@ export const CompleteTemplateManager = () => {
             <Textarea
               id="template-description"
               value={templateDescription}
-              onChange={(e) => setTemplateDescription(e.target.value)}
+              onChange={handleChange}
               placeholder="Brief description of this template..."
               rows={3}
             />

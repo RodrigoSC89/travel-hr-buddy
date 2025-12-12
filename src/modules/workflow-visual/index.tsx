@@ -1,4 +1,4 @@
-import { useCallback, useEffect, useState } from "react";;
+import { useCallback, useMemo, useEffect, useState } from "react";;
 
 /**
  * WORKFLOW VISUAL DINÂMICO COM IA INTEGRADA
@@ -421,7 +421,7 @@ const WorkflowVisual = () => {
                   
                   <Panel position="top-left" className="bg-background/80 backdrop-blur p-2 rounded-lg">
                     <div className="flex gap-2">
-                      <Button size="sm" variant="outline" onClick={() => setShowNewNodeDialog(true)}>
+                      <Button size="sm" variant="outline" onClick={handleSetShowNewNodeDialog}>
                         <Plus className="h-4 w-4 mr-1" />
                         Adicionar Etapa
                       </Button>
@@ -470,7 +470,7 @@ const WorkflowVisual = () => {
                             <Button 
                               size="sm" 
                               className="mt-2 w-full"
-                              onClick={() => executeAIAction(s)}
+                              onClick={() => handleexecuteAIAction}
                             >
                               <Zap className="h-3 w-3 mr-1" />
                               {s.action}
@@ -506,7 +506,7 @@ const WorkflowVisual = () => {
                   <Input
                     placeholder="Ex: Como otimizar este workflow?"
                     value={aiPrompt}
-                    onChange={(e) => setAiPrompt(e.target.value)}
+                    onChange={handleChange}
                     onKeyDown={(e) => e.key === "Enter" && askAI()}
                   />
                   <Button size="icon" onClick={askAI} disabled={isAnalyzing}>
@@ -536,11 +536,11 @@ const WorkflowVisual = () => {
                     <p><strong>ETA:</strong> {selectedNode.data.eta}</p>
                   )}
                   <div className="flex gap-2 pt-2">
-                    <Button size="sm" variant="outline" className="flex-1" onClick={() => advanceNode(selectedNode.id)}>
+                    <Button size="sm" variant="outline" className="flex-1" onClick={() => handleadvanceNode}>
                       <SkipForward className="h-3 w-3 mr-1" />
                       Avançar
                     </Button>
-                    <Button size="sm" variant="destructive" className="flex-1" onClick={() => deleteNode(selectedNode.id)}>
+                    <Button size="sm" variant="destructive" className="flex-1" onClick={() => handledeleteNode}>
                       <Trash2 className="h-3 w-3 mr-1" />
                       Remover
                     </Button>
@@ -586,7 +586,7 @@ const WorkflowVisual = () => {
                 <Label>Nome da Etapa</Label>
                 <Input 
                   value={newNodeData.label} 
-                  onChange={(e) => setNewNodeData(prev => ({ ...prev, label: e.target.value }))}
+                  onChange={handleChange}))}
                   placeholder="Ex: Aprovação Técnica"
                 />
               </div>
@@ -610,13 +610,13 @@ const WorkflowVisual = () => {
                 <Label>Descrição</Label>
                 <Textarea 
                   value={newNodeData.description}
-                  onChange={(e) => setNewNodeData(prev => ({ ...prev, description: e.target.value }))}
+                  onChange={handleChange}))}
                   placeholder="Descrição da etapa..."
                 />
               </div>
             </div>
             <DialogFooter>
-              <Button variant="outline" onClick={() => setShowNewNodeDialog(false)}>Cancelar</Button>
+              <Button variant="outline" onClick={handleSetShowNewNodeDialog}>Cancelar</Button>
               <Button onClick={addNewNode} disabled={!newNodeData.label}>
                 <Plus className="h-4 w-4 mr-2" />
                 Adicionar

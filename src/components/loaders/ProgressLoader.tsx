@@ -4,7 +4,7 @@
  * Loading state com progress bar para operações longas
  */
 
-import { useEffect, useState } from "react";;;
+import { memo, memo, useEffect, useState, useCallback } from "react";;;
 import { cn } from "@/lib/utils";
 import { Progress } from "@/components/ui/progress";
 
@@ -19,7 +19,7 @@ interface ProgressLoaderProps {
   className?: string;
 }
 
-export function ProgressLoader({
+export const ProgressLoader = memo(function({
   message = "Carregando...",
   timeout = 10,
   onTimeout,

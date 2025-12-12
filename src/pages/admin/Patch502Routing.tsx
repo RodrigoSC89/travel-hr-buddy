@@ -2,7 +2,7 @@ import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Navigation, CheckCircle2, XCircle, Map, Cloud, Sparkles, Smartphone } from "lucide-react";
-import { useState } from "react";;;
+import { useState, useMemo, useCallback } from "react";;;
 
 export default function Patch502Routing() {
   const [validationStatus, setValidationStatus] = useState<"idle" | "running" | "complete">("idle");

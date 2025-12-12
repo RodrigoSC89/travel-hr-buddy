@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";;
+import { useEffect, useState, useCallback } from "react";;
 
 import React, { useState, useEffect } from "react";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
@@ -38,7 +38,7 @@ interface InventoryItem {
   location: string;
 }
 
-export const InventoryManagement = () => {
+export const InventoryManagement = memo(() => {
   const { toast } = useToast();
   const [items, setItems] = useState<InventoryItem[]>([]);
   const [loading, setLoading] = useState(true);
@@ -68,7 +68,7 @@ export const InventoryManagement = () => {
       });
     } finally {
       setLoading(false);
-    }
+    };
   };
 
   const getLowStockItems = () => {
@@ -216,7 +216,7 @@ export const InventoryManagement = () => {
                 <Input
                   placeholder="Search items..."
                   value={searchTerm}
-                  onChange={(e) => setSearchTerm(e.target.value)}
+                  onChange={handleChange}
                   className="pl-8"
                 />
               </div>

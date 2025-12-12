@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";;
+import { useEffect, useState, useMemo } from "react";;
 
 /**
  * PATCH 210.0 - Cognitive Dashboard
@@ -178,7 +178,7 @@ export const CognitiveDashboard: React.FC = () => {
             <select
               className="w-full p-2 border rounded-md"
               value={filterModule}
-              onChange={(e) => setFilterModule(e.target.value)}
+              onChange={handleChange}
             >
               <option value="all">All Modules</option>
               {uniqueModules.map(mod => (
@@ -191,7 +191,7 @@ export const CognitiveDashboard: React.FC = () => {
             <select
               className="w-full p-2 border rounded-md"
               value={filterTimeRange}
-              onChange={(e) => setFilterTimeRange(e.target.value as unknown)}
+              onChange={handleChange}
             >
               <option value="1h">Last Hour</option>
               <option value="24h">Last 24 Hours</option>

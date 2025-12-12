@@ -1,5 +1,5 @@
 /**
-import { useEffect, useRef, useState } from "react";;
+import { useEffect, useRef, useState, useCallback, useMemo } from "react";;
  * Gesture Area - PATCH 836
  * Container with gesture detection
  */
@@ -33,7 +33,7 @@ interface GestureAreaProps {
   enabled?: boolean;
 }
 
-export function GestureArea({
+export const GestureArea = memo(function({
   children,
   onGesture,
   onSwipeLeft,
@@ -101,7 +101,7 @@ interface PullToRefreshProps {
   disabled?: boolean;
 }
 
-export function PullToRefresh({
+export const PullToRefresh = memo(function({
   children,
   onRefresh,
   className,

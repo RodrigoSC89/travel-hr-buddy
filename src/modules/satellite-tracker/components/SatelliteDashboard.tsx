@@ -1,5 +1,5 @@
 /**
-import { useCallback, useEffect, useState } from "react";;
+import { useCallback, useMemo, useEffect, useState } from "react";;
  * PATCH 501+: Enhanced Satellite Tracker Dashboard
  * Real-time satellite tracking with AI Copilot, DGNSS integration, and demo data
  */
@@ -146,7 +146,7 @@ export const SatelliteDashboard: React.FC = () => {
           <Button 
             variant="outline" 
             size="sm"
-            onClick={() => setShowAICopilot(!showAICopilot)}
+            onClick={handleSetShowAICopilot}
           >
             <Bot className={`h-4 w-4 mr-2 ${showAICopilot ? "text-primary" : ""}`} />
             AI Copilot
@@ -261,7 +261,7 @@ export const SatelliteDashboard: React.FC = () => {
                             ? "bg-primary/10 border-primary shadow-md"
                             : "hover:bg-muted"
                         }`}
-                        onClick={() => setSelectedSatellite(sat)}
+                        onClick={handleSetSelectedSatellite}
                       >
                         <div className="flex items-start justify-between mb-2">
                           <div className="flex items-center gap-2">

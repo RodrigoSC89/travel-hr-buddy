@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";;
+import { useEffect, useState, useCallback } from "react";;
 
 import React, { useState, useEffect } from "react";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
@@ -17,7 +17,7 @@ import {
 import { AlertTriangle, CheckCircle, Eye } from "lucide-react";
 import { format } from "date-fns";
 
-export function FindingsManager() {
+export const FindingsManager = memo(function() {
   const { toast } = useToast();
   const [findings, setFindings] = useState<any[]>([]);
   const [loading, setLoading] = useState(true);

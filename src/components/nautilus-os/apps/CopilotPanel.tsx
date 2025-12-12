@@ -1,7 +1,7 @@
 import React from "react";
 import { Compass, TrendingUp, AlertTriangle, CheckCircle } from "lucide-react";
 
-export function CopilotPanel() {
+export const CopilotPanel = memo(function() {
   const suggestions = [
     { icon: CheckCircle, text: "Sistema operando normalmente", type: "success" },
     { icon: TrendingUp, text: "Performance acima da média", type: "info" },

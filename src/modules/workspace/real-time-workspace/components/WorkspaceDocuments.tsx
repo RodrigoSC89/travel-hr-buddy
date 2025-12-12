@@ -1,4 +1,4 @@
-import { useCallback, useState } from "react";;
+import { useCallback, useMemo, useState } from "react";;
 import React, { useState, useCallback } from "react";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
@@ -243,7 +243,7 @@ export const WorkspaceDocuments: React.FC<WorkspaceDocumentsProps> = ({
             <FolderOpen className="h-5 w-5 text-primary" />
             Documentos Compartilhados
           </CardTitle>
-          <Button size="sm" className="gap-2" onClick={() => setIsUploadOpen(true)}>
+          <Button size="sm" className="gap-2" onClick={handleSetIsUploadOpen}>
             <Upload className="h-4 w-4" />
             Upload
           </Button>
@@ -253,7 +253,7 @@ export const WorkspaceDocuments: React.FC<WorkspaceDocumentsProps> = ({
           <Input 
             placeholder="Buscar documentos..." 
             value={searchQuery}
-            onChange={(e) => setSearchQuery(e.target.value)}
+            onChange={handleChange}
             className="pl-9 bg-muted/50"
           />
         </div>
@@ -272,7 +272,7 @@ export const WorkspaceDocuments: React.FC<WorkspaceDocumentsProps> = ({
                 <div
                   key={doc.id}
                   className="group flex items-center gap-3 p-3 rounded-lg border border-border/50 hover:bg-accent/50 hover:border-primary/30 cursor-pointer transition-all duration-200"
-                  onClick={() => handleViewDoc(doc)}
+                  onClick={() => handlehandleViewDoc}
                 >
                   <div className="p-2.5 rounded-lg bg-muted">
                     {getFileIcon(doc.type)}
@@ -402,10 +402,7 @@ export const WorkspaceDocuments: React.FC<WorkspaceDocumentsProps> = ({
               id="file-input" 
               type="file" 
               className="hidden" 
-              onChange={(e) => {
-                if (e.target.files?.[0]) {
-                  setSelectedFile(e.target.files[0]);
-                }
+              onChange={handleChange}
               }} 
             />
           </div>
@@ -454,7 +451,7 @@ export const WorkspaceDocuments: React.FC<WorkspaceDocumentsProps> = ({
             </div>
           </div>
           <DialogFooter>
-            <Button variant="outline" onClick={() => setIsViewOpen(false)}>
+            <Button variant="outline" onClick={handleSetIsViewOpen}>
               Fechar
             </Button>
             <Button onClick={() => selectedDoc && handleDownload(selectedDoc)}>
@@ -495,7 +492,7 @@ export const WorkspaceDocuments: React.FC<WorkspaceDocumentsProps> = ({
             </p>
           </div>
           <DialogFooter>
-            <Button variant="outline" onClick={() => setIsShareOpen(false)}>
+            <Button variant="outline" onClick={handleSetIsShareOpen}>
               Cancelar
             </Button>
             <Button onClick={confirmShare}>

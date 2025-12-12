@@ -11,7 +11,7 @@ interface Props {
   selectedDPClass: "DP1" | "DP2" | "DP3";
 }
 
-export function IMCADPNonConformities({ auditData, selectedDPClass }: Props) {
+export const IMCADPNonConformities = memo(function({ auditData, selectedDPClass }: Props) {
   const nonConformities = Object.entries(auditData)
     .filter(([_, v]) => v.status === "NC")
     .map(([id, data]) => {

@@ -1,4 +1,4 @@
-import { useEffect, useMemo, useState } from "react";;;
+import { useEffect, useMemo, useState, useCallback } from "react";;;
 import { ModulePageWrapper } from "@/components/ui/module-page-wrapper";
 import { ModuleHeader } from "@/components/ui/module-header";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
@@ -139,7 +139,7 @@ const CommunicationCommandCenter = () => {
                 </>
               ) : (
                 <>
-                  <Card className="cursor-pointer hover:shadow-md transition-shadow" onClick={() => setActiveTab("messages")}>
+                  <Card className="cursor-pointer hover:shadow-md transition-shadow" onClick={handleSetActiveTab}>
                     <CardContent className="pt-6">
                       <div className="flex items-center justify-between">
                         <div>
@@ -154,7 +154,7 @@ const CommunicationCommandCenter = () => {
                     </CardContent>
                   </Card>
 
-                  <Card className="cursor-pointer hover:shadow-md transition-shadow" onClick={() => setActiveTab("channels")}>
+                  <Card className="cursor-pointer hover:shadow-md transition-shadow" onClick={handleSetActiveTab}>
                     <CardContent className="pt-6">
                       <div className="flex items-center justify-between">
                         <div>
@@ -169,7 +169,7 @@ const CommunicationCommandCenter = () => {
                     </CardContent>
                   </Card>
 
-                  <Card className="cursor-pointer hover:shadow-md transition-shadow" onClick={() => setActiveTab("notifications")}>
+                  <Card className="cursor-pointer hover:shadow-md transition-shadow" onClick={handleSetActiveTab}>
                     <CardContent className="pt-6">
                       <div className="flex items-center justify-between">
                         <div>
@@ -218,7 +218,7 @@ const CommunicationCommandCenter = () => {
                   <Button 
                     variant="outline" 
                     className="h-auto py-4 flex flex-col items-center gap-2"
-                    onClick={() => setActiveTab("messages")}
+                    onClick={handleSetActiveTab}
                   >
                     <Send className="h-6 w-6 text-primary" />
                     <span className="font-medium">Nova Mensagem</span>
@@ -228,7 +228,7 @@ const CommunicationCommandCenter = () => {
                   <Button 
                     variant="outline" 
                     className="h-auto py-4 flex flex-col items-center gap-2"
-                    onClick={() => setActiveTab("channels")}
+                    onClick={handleSetActiveTab}
                   >
                     <Hash className="h-6 w-6 text-green-500" />
                     <span className="font-medium">Gerenciar Canais</span>
@@ -238,7 +238,7 @@ const CommunicationCommandCenter = () => {
                   <Button 
                     variant="outline" 
                     className="h-auto py-4 flex flex-col items-center gap-2"
-                    onClick={() => setActiveTab("notifications")}
+                    onClick={handleSetActiveTab}
                   >
                     <Bell className="h-6 w-6 text-orange-500" />
                     <span className="font-medium">Ver Notificações</span>
@@ -248,7 +248,7 @@ const CommunicationCommandCenter = () => {
                   <Button 
                     variant="outline" 
                     className="h-auto py-4 flex flex-col items-center gap-2"
-                    onClick={() => toast({ title: "IA Ativada", description: "Assistente de comunicação disponível" })}
+                    onClick={() => handletoast}
                   >
                     <Sparkles className="h-6 w-6 text-purple-500" />
                     <span className="font-medium">Assistente IA</span>

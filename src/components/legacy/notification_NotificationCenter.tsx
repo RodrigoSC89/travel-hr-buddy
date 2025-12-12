@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";;
+import { useEffect, useState, useCallback, useMemo } from "react";;
 import React, { useState, useEffect } from "react";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
@@ -426,14 +426,14 @@ export const NotificationCenter: React.FC<NotificationCenterProps> = ({
                       <div className="flex gap-2">
                         {!notification.isRead && (
                           <button
-                            onClick={() => markAsRead(notification.id)}
+                            onClick={() => handlemarkAsRead}
                             className="text-blue-600 hover:text-blue-800 font-medium"
                           >
                             Marcar como lida
                           </button>
                         )}
                         <button
-                          onClick={() => deleteNotification(notification.id)}
+                          onClick={() => handledeleteNotification}
                           className="text-red-600 hover:text-red-800 font-medium"
                         >
                           <X className="h-3 w-3" />

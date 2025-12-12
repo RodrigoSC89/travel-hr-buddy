@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";;
+import { useEffect, useState, useCallback } from "react";;
 import React, { useState } from "react";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
@@ -9,7 +9,7 @@ import { useChecklists } from "../hooks/useChecklists";
 import { ChecklistCard } from "../components/ChecklistCard";
 import { supabase } from "@/integrations/supabase/client";
 
-export function ChecklistsPage() {
+export const ChecklistsPage = memo(function() {
   const [userId, setUserId] = useState<string>("");
   const [title, setTitle] = useState("");
   const [activeTab, setActiveTab] = useState("overview");
@@ -75,7 +75,7 @@ export function ChecklistsPage() {
           placeholder="Descreva seu checklist..."
           className="min-w-[250px]"
           value={title}
-          onChange={(e) => setTitle(e.target.value)}
+          onChange={handleChange}
         />
         <Button onClick={handleCreateManual} disabled={!title}>
           <PlusCircle className="w-4 h-4 mr-1" /> Criar Manual

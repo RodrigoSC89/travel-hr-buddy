@@ -1,5 +1,5 @@
 /**
-import { useEffect, useState } from "react";;
+import { useEffect, useState, useCallback } from "react";;
  * Offline Sync Indicator Component
  * Shows pending offline actions and sync status
  */

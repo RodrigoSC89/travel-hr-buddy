@@ -1,5 +1,5 @@
 /**
-import { useState } from "react";;
+import { useState, useCallback } from "react";;
  * Audits Panel Component
  * Painel completo de auditorias com funcionalidades avançadas
  */
@@ -53,7 +53,7 @@ interface AuditsPanelProps {
   onExportAudit: (auditId: string) => void;
 }
 
-export function AuditsPanel({
+export const AuditsPanel = memo(function({
   audits,
   onCreateAudit,
   onViewAudit,
@@ -173,25 +173,25 @@ export function AuditsPanel({
             </Button>
           </DropdownMenuTrigger>
           <DropdownMenuContent align="end">
-            <DropdownMenuItem onClick={() => onViewAudit(audit.id)}>
+            <DropdownMenuItem onClick={() => handleonViewAudit}>
               <Eye className="h-4 w-4 mr-2" />
               Visualizar
             </DropdownMenuItem>
-            <DropdownMenuItem onClick={() => onEditAudit(audit.id)}>
+            <DropdownMenuItem onClick={() => handleonEditAudit}>
               <Edit className="h-4 w-4 mr-2" />
               Editar
             </DropdownMenuItem>
-            <DropdownMenuItem onClick={() => handleGenerateChecklist(audit.id)}>
+            <DropdownMenuItem onClick={() => handlehandleGenerateChecklist}>
               <Sparkles className="h-4 w-4 mr-2" />
               Gerar Checklist IA
             </DropdownMenuItem>
-            <DropdownMenuItem onClick={() => onExportAudit(audit.id)}>
+            <DropdownMenuItem onClick={() => handleonExportAudit}>
               <Download className="h-4 w-4 mr-2" />
               Exportar
             </DropdownMenuItem>
             <DropdownMenuSeparator />
             <DropdownMenuItem
-              onClick={() => onDeleteAudit(audit.id)}
+              onClick={() => handleonDeleteAudit}
               className="text-red-500"
             >
               <Trash2 className="h-4 w-4 mr-2" />
@@ -262,7 +262,7 @@ export function AuditsPanel({
               <Input
                 placeholder="Buscar auditoria..."
                 value={searchTerm}
-                onChange={(e) => setSearchTerm(e.target.value)}
+                onChange={handleChange}
                 className="pl-9"
               />
             </div>

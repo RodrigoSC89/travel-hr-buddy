@@ -1,4 +1,4 @@
-import { useCallback, useEffect, useRef, useState } from "react";;
+import { useCallback, useMemo, useEffect, useRef, useState } from "react";;
 import React, { useState, useEffect, useRef, useCallback } from "react";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
@@ -71,7 +71,7 @@ interface Conversation {
   unread_count?: number;
 }
 
-export const ChatInterface = () => {
+export const ChatInterface = memo(() => {
   const { toast } = useToast();
   const [conversations, setConversations] = useState<Conversation[]>([]);
   const [selectedConversation, setSelectedConversation] = useState<string | null>(null);
@@ -503,7 +503,7 @@ export const ChatInterface = () => {
             <h2 className="text-lg font-semibold">Mensagens</h2>
             <Button
               size="sm"
-              onClick={() => setShowNewChat(!showNewChat)}
+              onClick={handleSetShowNewChat}
               className="rounded-full"
             >
               <Plus className="h-4 w-4" />
@@ -515,7 +515,7 @@ export const ChatInterface = () => {
             <Input
               placeholder="Buscar conversas..."
               value={searchQuery}
-              onChange={(e) => setSearchQuery(e.target.value)}
+              onChange={handleChange}
               className="pl-10"
             />
           </div>
@@ -530,7 +530,7 @@ export const ChatInterface = () => {
                 <div
                   key={user.id}
                   className="flex items-center gap-3 p-2 hover:bg-muted rounded-lg cursor-pointer"
-                  onClick={() => createNewConversation(user.id)}
+                  onClick={() => handlecreateNewConversation}
                 >
                   <Avatar className="h-8 w-8">
                     <AvatarFallback>
@@ -556,7 +556,7 @@ export const ChatInterface = () => {
               className={`p-4 border-b cursor-pointer hover:bg-muted/50 transition-colors ${
                 selectedConversation === conversation.id ? "bg-muted" : ""
               }`}
-              onClick={() => setSelectedConversation(conversation.id)}
+              onClick={handleSetSelectedConversation}
             >
               <div className="flex items-center gap-3">
                 <Avatar>
@@ -634,7 +634,7 @@ export const ChatInterface = () => {
                       ?.type === "group"
                       ? `${conversations.find(c => c.id === selectedConversation)?.participants.length} membros`
                       : "Online"
-                    }
+                    };
                   </p>
                 </div>
               </div>
@@ -724,7 +724,7 @@ export const ChatInterface = () => {
                 <Input
                   placeholder="Digite uma mensagem..."
                   value={newMessage}
-                  onChange={(e) => setNewMessage(e.target.value)}
+                  onChange={handleChange}
                   onKeyPress={(e) => e.key === "Enter" && sendMessage()}
                   className="flex-1"
                 />

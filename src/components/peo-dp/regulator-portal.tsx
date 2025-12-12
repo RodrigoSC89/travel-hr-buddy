@@ -1,4 +1,4 @@
-import { useState } from "react";;
+import { useState, useCallback } from "react";;
 import React, { useState } from "react";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
@@ -253,7 +253,7 @@ export const RegulatorPortal: React.FC = () => {
           <Input
             placeholder="Buscar por embarcação ou IMO..."
             value={searchTerm}
-            onChange={(e) => setSearchTerm(e.target.value)}
+            onChange={handleChange}
             className="pl-10"
           />
         </div>
@@ -360,7 +360,7 @@ export const RegulatorPortal: React.FC = () => {
                   </div>
 
                   <div className="flex gap-2 pt-2">
-                    <Button variant="outline" size="sm" className="flex-1" onClick={() => setSelectedPackage(pkg)}>
+                    <Button variant="outline" size="sm" className="flex-1" onClick={handleSetSelectedPackage}>
                       <Eye className="w-4 h-4 mr-1" />
                       Ver
                     </Button>
@@ -368,7 +368,7 @@ export const RegulatorPortal: React.FC = () => {
                       <Download className="w-4 h-4" />
                     </Button>
                     {pkg.status === "draft" && (
-                      <Button size="sm" onClick={() => handleSubmitToRegulator(pkg.id)}>
+                      <Button size="sm" onClick={() => handlehandleSubmitToRegulator}>
                         <Send className="w-4 h-4 mr-1" />
                         Enviar
                       </Button>

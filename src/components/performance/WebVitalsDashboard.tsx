@@ -1,3 +1,4 @@
+import { memo } from 'react';
 /**
  * Web Vitals Dashboard Component
  * Displays Core Web Vitals metrics in real-time
@@ -59,7 +60,7 @@ const ratingBgColors = {
   poor: "bg-red-500",
 };
 
-export function WebVitalsDashboard({ className }: { className?: string }) {
+export const WebVitalsDashboard = memo(function({ className }: { className?: string }) {
   const { metrics, score } = useWebVitals();
 
   const getProgressValue = (name: string, value: number): number => {
@@ -150,7 +151,7 @@ export function WebVitalsDashboard({ className }: { className?: string }) {
 /**
  * Compact Web Vitals indicator
  */
-export function WebVitalsIndicator({ className }: { className?: string }) {
+export const WebVitalsIndicator = memo(function({ className }: { className?: string }) {
   const { score } = useWebVitals();
 
   const getColor = () => {

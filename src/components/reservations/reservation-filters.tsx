@@ -64,7 +64,7 @@ export const ReservationFilters: React.FC<ReservationFiltersProps> = ({
               <Input
                 placeholder="Buscar por título ou local..."
                 value={filters.searchTerm}
-                onChange={(e) => handleFilterChange("searchTerm", e.target.value)}
+                onChange={handleChange}
                 className="pl-10"
               />
             </div>
@@ -127,16 +127,14 @@ export const ReservationFilters: React.FC<ReservationFiltersProps> = ({
               <Input
                 type="date"
                 value={filters.dateRange?.from || ""}
-                onChange={(e) => handleFilterChange("dateRange", 
-                  e.target.value ? { ...filters.dateRange, from: e.target.value } : null
+                onChange={handleChange} : null
                 )}
                 className="w-[130px]"
               />
               <Input
                 type="date"
                 value={filters.dateRange?.to || ""}
-                onChange={(e) => handleFilterChange("dateRange", 
-                  filters.dateRange ? { ...filters.dateRange, to: e.target.value } : null
+                onChange={handleChange} : null
                 )}
                 className="w-[130px]"
               />

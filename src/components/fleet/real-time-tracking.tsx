@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";;
+import { useEffect, useState, useCallback, useMemo } from "react";;
 import React, { useState, useEffect } from "react";
 import { useOptimizedPolling } from "@/hooks/use-optimized-polling";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
@@ -274,7 +274,7 @@ const RealTimeTracking: React.FC = () => {
             <Input
               placeholder="Buscar embarcação ou destino..."
               value={searchTerm}
-              onChange={(e) => setSearchTerm(e.target.value)}
+              onChange={handleChange}
               className="pl-10"
             />
           </div>
@@ -302,7 +302,7 @@ const RealTimeTracking: React.FC = () => {
                         ? "border-primary bg-primary/5" 
                         : "border-border hover:border-primary/30"
                     }`}
-                    onClick={() => setSelectedVessel(vessel)}
+                    onClick={handleSetSelectedVessel}
                   >
                     <div className="flex items-center justify-between">
                       <div className="flex items-center gap-2">

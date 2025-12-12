@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";;
+import { useEffect, useState, useCallback, useMemo } from "react";;
 import React, { useState, useEffect } from "react";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
@@ -355,7 +355,7 @@ export const RealTimeNotificationCenter: React.FC = () => {
               type="text"
               placeholder="Buscar..."
               value={searchTerm}
-              onChange={(e) => setSearchTerm(e.target.value)}
+              onChange={handleChange}
               className="w-full pl-7 pr-3 py-1.5 text-xs border border-border rounded bg-background"
             />
           </div>
@@ -364,7 +364,7 @@ export const RealTimeNotificationCenter: React.FC = () => {
           <div className="flex gap-1 mt-2">
             <Button
               variant={filter === "all" ? "default" : "ghost"}
-              onClick={() => setFilter("all")}
+              onClick={handleSetFilter}
               size="sm"
               className="text-xs h-6 px-2"
             >
@@ -372,7 +372,7 @@ export const RealTimeNotificationCenter: React.FC = () => {
             </Button>
             <Button
               variant={filter === "unread" ? "default" : "ghost"}
-              onClick={() => setFilter("unread")}
+              onClick={handleSetFilter}
               size="sm"
               className="text-xs h-6 px-2"
             >
@@ -380,7 +380,7 @@ export const RealTimeNotificationCenter: React.FC = () => {
             </Button>
             <Button
               variant={filter === "priority" ? "default" : "ghost"}
-              onClick={() => setFilter("priority")}
+              onClick={handleSetFilter}
               size="sm"
               className="text-xs h-6 px-2"
             >
@@ -508,7 +508,7 @@ export const RealTimeNotificationCenter: React.FC = () => {
                             <div className="flex gap-1">
                               {notification.action_type && notification.action_text && (
                                 <Button 
-                                  onClick={() => executeAction(notification)}
+                                  onClick={() => handleexecuteAction}
                                   size="sm"
                                   className="h-6 px-2 text-xs"
                                 >
@@ -518,7 +518,7 @@ export const RealTimeNotificationCenter: React.FC = () => {
                               
                               {!notification.is_read && (
                                 <Button 
-                                  onClick={() => markAsRead(notification.id, true)}
+                                  onClick={() => handlemarkAsRead}
                                   variant="outline"
                                   size="sm"
                                   className="h-6 px-2 text-xs"

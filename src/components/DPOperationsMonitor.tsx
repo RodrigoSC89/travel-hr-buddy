@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";;
+import { useEffect, useState, useMemo } from "react";;
 
 /**
  * DP Operations Monitor Component
@@ -61,7 +61,7 @@ export interface DPOperationsMonitorProps {
 // Component
 // ============================================================================
 
-export function DPOperationsMonitor({
+export const DPOperationsMonitor = memo(function({
   vesselLatitude,
   vesselLongitude,
   vesselName = "Vessel",

@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";;
+import { useEffect, useState, useMemo } from "react";;
 
 import React, { useState, useEffect } from "react";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
@@ -328,7 +328,7 @@ export const OrganizationCustomization: React.FC = () => {
                   <Label>Nome da Empresa</Label>
                   <Input
                     value={customization.company_name}
-                    onChange={(e) => setCustomization({...customization, company_name: e.target.value})}
+                    onChange={handleChange})}
                     placeholder="Nome que aparecerá na interface"
                   />
                 </div>
@@ -338,7 +338,7 @@ export const OrganizationCustomization: React.FC = () => {
                   <div className="flex gap-2">
                     <Input
                       value={customization.logo_url}
-                      onChange={(e) => setCustomization({...customization, logo_url: e.target.value})}
+                      onChange={handleChange})}
                       placeholder="https://exemplo.com/logo.png"
                     />
                     <Button variant="outline" size="icon">
@@ -359,12 +359,12 @@ export const OrganizationCustomization: React.FC = () => {
                       <Input
                         type="color"
                         value={customization.primary_color}
-                        onChange={(e) => setCustomization({...customization, primary_color: e.target.value})}
+                        onChange={handleChange})}
                         className="w-16 h-10 p-1"
                       />
                       <Input
                         value={customization.primary_color}
-                        onChange={(e) => setCustomization({...customization, primary_color: e.target.value})}
+                        onChange={handleChange})}
                         placeholder="#1e40af"
                       />
                     </div>
@@ -376,12 +376,12 @@ export const OrganizationCustomization: React.FC = () => {
                       <Input
                         type="color"
                         value={customization.secondary_color}
-                        onChange={(e) => setCustomization({...customization, secondary_color: e.target.value})}
+                        onChange={handleChange})}
                         className="w-16 h-10 p-1"
                       />
                       <Input
                         value={customization.secondary_color}
-                        onChange={(e) => setCustomization({...customization, secondary_color: e.target.value})}
+                        onChange={handleChange})}
                         placeholder="#3b82f6"
                       />
                     </div>
@@ -393,12 +393,12 @@ export const OrganizationCustomization: React.FC = () => {
                       <Input
                         type="color"
                         value={customization.accent_color}
-                        onChange={(e) => setCustomization({...customization, accent_color: e.target.value})}
+                        onChange={handleChange})}
                         className="w-16 h-10 p-1"
                       />
                       <Input
                         value={customization.accent_color}
-                        onChange={(e) => setCustomization({...customization, accent_color: e.target.value})}
+                        onChange={handleChange})}
                         placeholder="#06b6d4"
                       />
                     </div>
@@ -589,10 +589,7 @@ export const OrganizationCustomization: React.FC = () => {
                     type="number"
                     placeholder="Ex: 5"
                     value={(customization.business_rules as BusinessRules)?.max_reservations || ""}
-                    onChange={(e) => setCustomization({
-                      ...customization,
-                      business_rules: {
-                        ...(customization.business_rules as BusinessRules || {}),
+                    onChange={handleChange}),
                         max_reservations: e.target.value
                       }
                     })}
@@ -605,10 +602,7 @@ export const OrganizationCustomization: React.FC = () => {
                     type="number"
                     placeholder="Ex: 24"
                     value={(customization.business_rules as BusinessRules)?.min_advance_hours || ""}
-                    onChange={(e) => setCustomization({
-                      ...customization,
-                      business_rules: {
-                        ...(customization.business_rules as BusinessRules || {}),
+                    onChange={handleChange}),
                         min_advance_hours: e.target.value
                       }
                     })}
@@ -621,10 +615,7 @@ export const OrganizationCustomization: React.FC = () => {
                 <Textarea
                   placeholder="Ex: Alerta de Manutenção Programada, Inspeção de Segurança..."
                   value={(customization.business_rules as BusinessRules)?.custom_alert_types || ""}
-                  onChange={(e) => setCustomization({
-                    ...customization,
-                    business_rules: {
-                      ...(customization.business_rules as BusinessRules || {}),
+                  onChange={handleChange}),
                       custom_alert_types: e.target.value
                     }
                   })}
@@ -636,10 +627,7 @@ export const OrganizationCustomization: React.FC = () => {
                 <Textarea
                   placeholder="APIs específicas, webhooks, integrações com sistemas legados..."
                   value={(customization.business_rules as BusinessRules)?.integration_settings || ""}
-                  onChange={(e) => setCustomization({
-                    ...customization,
-                    business_rules: {
-                      ...(customization.business_rules as BusinessRules || {}),
+                  onChange={handleChange}),
                       integration_settings: e.target.value
                     }
                   })}

@@ -1,3 +1,4 @@
+import { memo } from 'react';
 /**
  * System Diagnostics Panel - PATCH 850
  * Visual component for system diagnostics
@@ -9,7 +10,7 @@ import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { CheckCircle, XCircle, RefreshCw, Activity } from "lucide-react";
 
-export function SystemDiagnosticsPanel() {
+export const SystemDiagnosticsPanel = memo(function() {
   const { report, isRunning, runDiagnostics } = useSystemDiagnostics();
 
   return (

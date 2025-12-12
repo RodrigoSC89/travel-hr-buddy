@@ -1,4 +1,4 @@
-import { useEffect, useRef, useState } from "react";;
+import { useEffect, useRef, useState, useCallback, useMemo } from "react";;
 import React, { useState, useRef, useEffect } from "react";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
@@ -214,7 +214,7 @@ export const MMICopilot: React.FC<MMICopilotProps> = ({ context }) => {
           <Input
             placeholder="Digite sua mensagem..."
             value={input}
-            onChange={(e) => setInput(e.target.value)}
+            onChange={handleChange}
             onKeyPress={handleKeyPress}
             disabled={loading}
             className="flex-1"

@@ -1,7 +1,7 @@
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Badge } from "@/components/ui/badge";
 import { Recycle, LayoutDashboard, Droplets, Trash2, FileText, Brain } from "lucide-react";
-import { useState } from "react";;;
+import { useState, useMemo, useCallback } from "react";;;
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Progress } from "@/components/ui/progress";
@@ -280,7 +280,7 @@ function WasteManagement() {
                       <Input
                         placeholder="Pergunte sobre MARPOL, descarte..."
                         value={chatMessage}
-                        onChange={(e) => setChatMessage(e.target.value)}
+                        onChange={handleChange}
                         onKeyDown={(e) => e.key === "Enter" && handleSendMessage()}
                       />
                       <Button size="icon" onClick={handleSendMessage}>

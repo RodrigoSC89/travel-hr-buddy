@@ -1,4 +1,4 @@
-import { useState } from "react";;;
+import { memo, memo, useState } from "react";;;
 import { useQuery } from "@tanstack/react-query";
 import { supabase } from "@/integrations/supabase/client";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
@@ -52,7 +52,7 @@ const checklistItems = [
   { id: "crew_notified", label: "Tripulação informada dos horários", category: "A2.3" },
 ];
 
-export function MLCComplianceDashboard() {
+export const MLCComplianceDashboard = memo(function() {
   const [selectedVessel, setSelectedVessel] = useState<string>("all");
 
   const { data: restHours = [], isLoading } = useQuery({

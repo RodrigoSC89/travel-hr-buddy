@@ -1,4 +1,4 @@
-import { useState } from "react";;
+import { useState, useMemo, useCallback } from "react";;
 import React, { useState } from "react";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
@@ -208,7 +208,7 @@ export const SIMOPSManager: React.FC = () => {
         </div>
         <div className="flex gap-2">
           <Button variant="outline"><Radio className="w-4 h-4 mr-2" />Comunicações</Button>
-          <Button onClick={() => setShowNewOperation(true)}><Plus className="w-4 h-4 mr-2" />Nova Operação</Button>
+          <Button onClick={handleSetShowNewOperation}><Plus className="w-4 h-4 mr-2" />Nova Operação</Button>
         </div>
       </div>
 
@@ -340,7 +340,7 @@ export const SIMOPSManager: React.FC = () => {
                     key={op.id}
                     className={`absolute w-10 h-10 rounded-full ${config.color} flex items-center justify-center cursor-pointer transition-transform hover:scale-110 ${op.status === "active" ? "animate-pulse" : "opacity-60"}`}
                     style={{ top: `${40 + i * 15}%`, left: `${40 + i * 12}%` }}
-                    onClick={() => setSelectedOperation(op)}
+                    onClick={handleSetSelectedOperation}
                   >
                     <IconComponent className="h-5 w-5 text-white" />
                   </div>
@@ -386,7 +386,7 @@ export const SIMOPSManager: React.FC = () => {
                     const config = operationTypeConfig[op.type];
                     const IconComponent = config.icon;
                     return (
-                      <div key={op.id} className="p-2 rounded-lg border bg-card hover:shadow-md transition-all cursor-pointer" onClick={() => setSelectedOperation(op)}>
+                      <div key={op.id} className="p-2 rounded-lg border bg-card hover:shadow-md transition-all cursor-pointer" onClick={handleSetSelectedOperation}>
                         <div className="flex items-center gap-2">
                           <div className={`p-1.5 rounded ${config.color}`}>
                             <IconComponent className="h-3 w-3 text-white" />

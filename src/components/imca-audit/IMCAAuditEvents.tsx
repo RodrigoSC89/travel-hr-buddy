@@ -1,4 +1,4 @@
-import { useState } from "react";;
+import { useState, useMemo, useCallback } from "react";;
 import React, { useState } from "react";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
@@ -105,7 +105,7 @@ interface Props {
   selectedDPClass: "DP1" | "DP2" | "DP3";
 }
 
-export function IMCAAuditEvents({ selectedDPClass }: Props) {
+export const IMCAAuditEvents = memo(function({ selectedDPClass }: Props) {
   const { toast } = useToast();
   const [events, setEvents] = useState<DPEvent[]>(SAMPLE_EVENTS);
   const [isAddEventOpen, setIsAddEventOpen] = useState(false);
@@ -353,7 +353,7 @@ export function IMCAAuditEvents({ selectedDPClass }: Props) {
               </div>
             </div>
             <DialogFooter>
-              <Button variant="outline" onClick={() => setIsAddEventOpen(false)}>
+              <Button variant="outline" onClick={handleSetIsAddEventOpen}>
                 Cancelar
               </Button>
               <Button onClick={handleAddEvent}>
@@ -422,7 +422,7 @@ export function IMCAAuditEvents({ selectedDPClass }: Props) {
                     <Button 
                       variant="outline" 
                       size="sm"
-                      onClick={() => setSelectedEvent(event)}
+                      onClick={handleSetSelectedEvent}
                     >
                       Detalhes
                     </Button>
@@ -431,7 +431,7 @@ export function IMCAAuditEvents({ selectedDPClass }: Props) {
                         variant="outline" 
                         size="sm"
                         className="gap-1"
-                        onClick={() => handleSubmitToIMCA(event)}
+                        onClick={() => handlehandleSubmitToIMCA}
                       >
                         <Send className="h-3 w-3" />
                         IMCA

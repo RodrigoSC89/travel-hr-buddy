@@ -1,4 +1,4 @@
-import { useState } from "react";;
+import { useState, useMemo, useCallback } from "react";;
 import React, { useState } from "react";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
@@ -118,7 +118,7 @@ export const ReservationCalendarView: React.FC<ReservationCalendarViewProps> = (
             <Button
               variant="outline"
               size="sm"
-              onClick={() => navigateMonth("prev")}
+              onClick={() => handlenavigateMonth}
             >
               <ChevronLeft className="h-4 w-4" />
             </Button>
@@ -128,7 +128,7 @@ export const ReservationCalendarView: React.FC<ReservationCalendarViewProps> = (
             <Button
               variant="outline"
               size="sm"
-              onClick={() => navigateMonth("next")}
+              onClick={() => handlenavigateMonth}
             >
               <ChevronRight className="h-4 w-4" />
             </Button>
@@ -136,7 +136,7 @@ export const ReservationCalendarView: React.FC<ReservationCalendarViewProps> = (
           <Button
             variant="outline"
             size="sm"
-            onClick={() => setCurrentDate(new Date())}
+            onClick={handleSetCurrentDate}
           >
             Hoje
           </Button>
@@ -182,7 +182,7 @@ export const ReservationCalendarView: React.FC<ReservationCalendarViewProps> = (
                               ${getStatusColor(reservation.status)} text-white
                               hover:opacity-80 transition-opacity
                             `}
-                            onClick={() => setSelectedReservation(reservation)}
+                            onClick={handleSetSelectedReservation}
                           >
                             <div className="flex items-center gap-1">
                               {reservation.conflict_detected && (
@@ -270,7 +270,7 @@ export const ReservationCalendarView: React.FC<ReservationCalendarViewProps> = (
                   <div className="flex flex-col gap-2">
                     <Button
                       size="sm"
-                      onClick={() => onEdit(selectedReservation)}
+                      onClick={() => handleonEdit}
                       className="w-full"
                     >
                       <Edit className="h-4 w-4 mr-2" />
@@ -279,7 +279,7 @@ export const ReservationCalendarView: React.FC<ReservationCalendarViewProps> = (
                     <Button
                       size="sm"
                       variant="outline"
-                      onClick={() => onDelete(selectedReservation.id)}
+                      onClick={() => handleonDelete}
                       className="w-full text-red-600 hover:text-red-700"
                     >
                       <Trash2 className="h-4 w-4 mr-2" />

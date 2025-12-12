@@ -1,5 +1,5 @@
 /**
-import { useEffect, useState } from "react";;
+import { useEffect, useState, useCallback } from "react";;
  * Real-Time Monitoring Dashboard - PATCH 67.5
  * Live metrics visualization with performance, errors, and analytics
  */

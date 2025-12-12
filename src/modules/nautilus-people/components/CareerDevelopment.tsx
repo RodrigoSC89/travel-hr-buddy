@@ -1,5 +1,5 @@
 /**
-import { useState } from "react";;
+import { useState, useMemo, useCallback } from "react";;
  * Career Development - Plano de Carreira e Desenvolvimento
  */
 

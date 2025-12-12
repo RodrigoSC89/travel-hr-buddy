@@ -110,7 +110,7 @@ export const EnhancedToast: React.FC<EnhancedToastProps> = ({
 };
 
 // Hook for toast management
-export function useEnhancedToast() {
+export const useEnhancedToast = memo(function() {
   const [toasts, setToasts] = React.useState<Array<{
     id: string;
     type: ToastType;

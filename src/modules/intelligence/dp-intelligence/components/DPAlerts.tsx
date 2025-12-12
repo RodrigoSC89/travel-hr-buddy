@@ -1,4 +1,4 @@
-import { useMemo, useState } from "react";;
+import { useMemo, useState, useCallback } from "react";;
 import React, { useState, useMemo } from "react";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
@@ -378,7 +378,7 @@ export default function DPAlerts() {
                     <Button
                       size="sm"
                       variant="outline"
-                      onClick={() => acknowledgeAlert(alert.id)}
+                      onClick={() => handleacknowledgeAlert}
                     >
                       <CheckCircle2 className="h-4 w-4 mr-1" />
                       Reconhecer

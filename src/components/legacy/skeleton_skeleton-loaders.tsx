@@ -12,7 +12,7 @@ interface SkeletonProps {
   style?: React.CSSProperties;
 }
 
-export function Skeleton({ className, animate = true, style }: SkeletonProps) {
+export const Skeleton = memo(function({ className, animate = true, style }: SkeletonProps) {
   return (
     <div
       className={cn(
@@ -26,7 +26,7 @@ export function Skeleton({ className, animate = true, style }: SkeletonProps) {
 }
 
 // Card Skeleton
-export function CardSkeleton({ className }: { className?: string }) {
+export const CardSkeleton = memo(function({ className }: { className?: string }) {
   return (
     <div className={cn("p-4 space-y-3 border rounded-lg bg-card", className)}>
       <Skeleton className="h-4 w-3/4" />
@@ -41,7 +41,7 @@ export function CardSkeleton({ className }: { className?: string }) {
 }
 
 // Table Row Skeleton
-export function TableRowSkeleton({ columns = 5 }: { columns?: number }) {
+export const TableRowSkeleton = memo(function({ columns = 5 }: { columns?: number }) {
   return (
     <tr className="border-b">
       {Array.from({ length: columns }).map((_, i) => (
@@ -54,7 +54,7 @@ export function TableRowSkeleton({ columns = 5 }: { columns?: number }) {
 }
 
 // Table Skeleton
-export function TableSkeleton({ 
+export const TableSkeleton = memo(function({ 
   rows = 5, 
   columns = 5 
 }: { rows?: number; columns?: number }) {
@@ -81,7 +81,7 @@ export function TableSkeleton({
 }
 
 // List Skeleton
-export function ListSkeleton({ items = 5 }: { items?: number }) {
+export const ListSkeleton = memo(function({ items = 5 }: { items?: number }) {
   return (
     <div className="space-y-3">
       {Array.from({ length: items }).map((_, i) => (
@@ -98,7 +98,7 @@ export function ListSkeleton({ items = 5 }: { items?: number }) {
 }
 
 // Dashboard Skeleton
-export function DashboardSkeleton() {
+export const DashboardSkeleton = memo(function() {
   return (
     <div className="space-y-6">
       {/* Stats Row */}
@@ -124,7 +124,7 @@ export function DashboardSkeleton() {
 }
 
 // Form Skeleton
-export function FormSkeleton({ fields = 4 }: { fields?: number }) {
+export const FormSkeleton = memo(function({ fields = 4 }: { fields?: number }) {
   return (
     <div className="space-y-4">
       {Array.from({ length: fields }).map((_, i) => (
@@ -142,7 +142,7 @@ export function FormSkeleton({ fields = 4 }: { fields?: number }) {
 }
 
 // Profile Skeleton
-export function ProfileSkeleton() {
+export const ProfileSkeleton = memo(function() {
   return (
     <div className="space-y-6">
       <div className="flex items-center gap-4">
@@ -165,7 +165,7 @@ export function ProfileSkeleton() {
 }
 
 // Navigation Skeleton
-export function NavSkeleton() {
+export const NavSkeleton = memo(function() {
   return (
     <div className="space-y-2">
       {Array.from({ length: 8 }).map((_, i) => (
@@ -179,7 +179,7 @@ export function NavSkeleton() {
 }
 
 // Chart Skeleton
-export function ChartSkeleton({ type = "bar" }: { type?: "bar" | "line" | "pie" }) {
+export const ChartSkeleton = memo(function({ type = "bar" }: { type?: "bar" | "line" | "pie" }) {
   if (type === "pie") {
     return (
       <div className="flex items-center justify-center p-8">
@@ -209,7 +209,7 @@ export function ChartSkeleton({ type = "bar" }: { type?: "bar" | "line" | "pie" 
 }
 
 // Image Skeleton with aspect ratio
-export function ImageSkeleton({ 
+export const ImageSkeleton = memo(function({ 
   aspectRatio = "16/9",
   className 
 }: { 
@@ -227,7 +227,7 @@ export function ImageSkeleton({
 }
 
 // Text Block Skeleton
-export function TextBlockSkeleton({ lines = 3 }: { lines?: number }) {
+export const TextBlockSkeleton = memo(function({ lines = 3 }: { lines?: number }) {
   return (
     <div className="space-y-2">
       {Array.from({ length: lines }).map((_, i) => (

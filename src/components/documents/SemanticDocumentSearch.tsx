@@ -20,7 +20,7 @@ interface SearchResult {
   created_at: string;
 }
 
-export function SemanticDocumentSearch() {
+export const SemanticDocumentSearch = memo(function() {
   const { toast } = useToast();
   const [searchQuery, setSearchQuery] = useState("");
   const [searching, setSearching] = useState(false);
@@ -135,7 +135,7 @@ export function SemanticDocumentSearch() {
           <Input
             placeholder="Search for documents (e.g., 'safety procedures', 'fuel reports')..."
             value={searchQuery}
-            onChange={(e) => setSearchQuery(e.target.value)}
+            onChange={handleChange}
             onKeyDown={(e) => e.key === "Enter" && handleSearch()}
             className="flex-1"
           />

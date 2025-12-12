@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";;
+import { useEffect, useState, useCallback } from "react";;
 import React, { useState, useEffect } from "react";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
@@ -408,7 +408,7 @@ const SmartWorkflowAutomation = () => {
                   <label className="text-sm font-medium">Nome do Workflow</label>
                   <Input
                     value={newWorkflow.name}
-                    onChange={(e) => setNewWorkflow(prev => ({ ...prev, name: e.target.value }))}
+                    onChange={handleChange}))}
                     placeholder="Ex: Aprovação de Documentos"
                   />
                 </div>
@@ -416,7 +416,7 @@ const SmartWorkflowAutomation = () => {
                   <label className="text-sm font-medium">Descrição</label>
                   <Textarea
                     value={newWorkflow.description}
-                    onChange={(e) => setNewWorkflow(prev => ({ ...prev, description: e.target.value }))}
+                    onChange={handleChange}))}
                     placeholder="Descreva o objetivo deste workflow..."
                   />
                 </div>
@@ -440,12 +440,12 @@ const SmartWorkflowAutomation = () => {
                   <label className="text-sm font-medium">Trigger</label>
                   <Input
                     value={newWorkflow.trigger}
-                    onChange={(e) => setNewWorkflow(prev => ({ ...prev, trigger: e.target.value }))}
+                    onChange={handleChange}))}
                     placeholder="Ex: Documento Enviado"
                   />
                 </div>
                 <div className="flex justify-end gap-2">
-                  <Button variant="outline" onClick={() => setShowCreateDialog(false)}>
+                  <Button variant="outline" onClick={handleSetShowCreateDialog}>
                     Cancelar
                   </Button>
                   <Button onClick={createWorkflow}>
@@ -586,7 +586,7 @@ const SmartWorkflowAutomation = () => {
                   <div className="flex gap-2 pt-2">
                     <Button 
                       size="sm" 
-                      onClick={() => executeWorkflow(workflow.id)}
+                      onClick={() => handleexecuteWorkflow}
                       disabled={workflow.status !== "active"}
                       className="flex-1"
                     >
@@ -597,7 +597,7 @@ const SmartWorkflowAutomation = () => {
                     <Button 
                       size="sm" 
                       variant="outline"
-                      onClick={() => toggleWorkflowStatus(workflow.id)}
+                      onClick={() => handletoggleWorkflowStatus}
                     >
                       {workflow.status === "active" ? 
                         <Pause className="w-3 h-3" /> : 
@@ -608,7 +608,7 @@ const SmartWorkflowAutomation = () => {
                     <Button 
                       size="sm" 
                       variant="outline"
-                      onClick={() => duplicateWorkflow(workflow)}
+                      onClick={() => handleduplicateWorkflow}
                     >
                       <Copy className="w-3 h-3" />
                     </Button>

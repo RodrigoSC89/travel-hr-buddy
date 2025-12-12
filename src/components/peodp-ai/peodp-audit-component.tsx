@@ -1,5 +1,5 @@
 /**
-import { useState } from "react";;
+import { useState, useMemo, useCallback } from "react";;
  * PEO-DP Audit Component
  * Interface para auditoria PEO-DP Inteligente
  */
@@ -28,7 +28,7 @@ import { peodpCore } from "@/modules/hr/peo-dp";
 import type { PEODPAuditoria } from "@/types/peodp-audit";
 import { getScoreLevel, getScoreColor } from "@/types/peodp-audit";
 
-export function PEODPAuditComponent() {
+export const PEODPAuditComponent = memo(function() {
   const { toast } = useToast();
   const [activeTab, setActiveTab] = useState("input");
   const [loading, setLoading] = useState(false);
@@ -137,7 +137,7 @@ export function PEODPAuditComponent() {
                   id="vesselName"
                   placeholder="Ex: PSV Ocean Explorer"
                   value={vesselName}
-                  onChange={(e) => setVesselName(e.target.value)}
+                  onChange={handleChange}
                 />
               </div>
 

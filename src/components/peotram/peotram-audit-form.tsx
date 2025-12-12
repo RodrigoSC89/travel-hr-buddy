@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";;
+import { useEffect, useState, useCallback } from "react";;
 import React, { useState, useEffect } from "react";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
@@ -250,7 +250,7 @@ export const PeotramAuditForm: React.FC<PeotramAuditFormProps> = ({
               <Button
                 variant="outline"
                 size="sm"
-                onClick={() => runElementAnalysis(currentElement.number)}
+                onClick={() => handlerunElementAnalysis}
                 disabled={isAnalyzing || !auditResponses[currentElement.number]?.length}
               >
                 {isAnalyzing ? (
@@ -284,7 +284,7 @@ export const PeotramAuditForm: React.FC<PeotramAuditFormProps> = ({
                       key={element.number}
                       variant={index === currentElementIndex ? "default" : "ghost"}
                       className="w-full justify-start text-left h-auto p-3"
-                      onClick={() => setCurrentElementIndex(index)}
+                      onClick={handleSetCurrentElementIndex}
                     >
                       <div className="w-full">
                         <div className="flex items-center justify-between mb-1">
@@ -418,7 +418,7 @@ export const PeotramAuditForm: React.FC<PeotramAuditFormProps> = ({
           <div className="flex justify-between">
             <Button
               variant="outline"
-              onClick={() => setCurrentElementIndex(Math.max(0, currentElementIndex - 1))}
+              onClick={handleSetCurrentElementIndex}
               disabled={currentElementIndex === 0}
             >
               Elemento Anterior
@@ -437,7 +437,7 @@ export const PeotramAuditForm: React.FC<PeotramAuditFormProps> = ({
                 </Button>
               ) : (
                 <Button
-                  onClick={() => setCurrentElementIndex(Math.min(elements.length - 1, currentElementIndex + 1))}
+                  onClick={handleSetCurrentElementIndex}
                 >
                   Próximo Elemento
                 </Button>
@@ -546,7 +546,7 @@ const RequirementForm: React.FC<{
         <Label>Descrição da Evidência</Label>
         <Textarea
           value={formData.evidence_description}
-          onChange={(e) => setFormData(prev => ({ ...prev, evidence_description: e.target.value }))}
+          onChange={handleChange}))}
           placeholder="Descreva as evidências observadas..."
         />
       </div>
@@ -555,7 +555,7 @@ const RequirementForm: React.FC<{
         <Label>Comentários do Auditor</Label>
         <Textarea
           value={formData.auditor_comments}
-          onChange={(e) => setFormData(prev => ({ ...prev, auditor_comments: e.target.value }))}
+          onChange={handleChange}))}
           placeholder="Comentários e observações do auditor..."
         />
       </div>
@@ -564,7 +564,7 @@ const RequirementForm: React.FC<{
         <Label>Recomendações</Label>
         <Textarea
           value={formData.recommendations}
-          onChange={(e) => setFormData(prev => ({ ...prev, recommendations: e.target.value }))}
+          onChange={handleChange}))}
           placeholder="Recomendações para melhoria..."
         />
       </div>

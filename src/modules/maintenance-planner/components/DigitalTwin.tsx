@@ -3,7 +3,7 @@
  * PATCH 549 - Advanced Maritime Intelligence
  */
 
-import { useEffect, useRef, useState } from "react";;;
+import { useEffect, useRef, useState, useCallback, useMemo } from "react";;;
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
@@ -428,7 +428,7 @@ export default function DigitalTwin() {
           <Button
             variant={isLive ? "default" : "outline"}
             size="sm"
-            onClick={() => setIsLive(!isLive)}
+            onClick={handleSetIsLive}
           >
             {isLive ? (
               <>

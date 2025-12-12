@@ -1,4 +1,4 @@
-import { useState } from "react";;
+import { useState, useCallback } from "react";;
 import React, { useState } from "react";
 import {
   Dialog,
@@ -173,7 +173,7 @@ const CreateVoyageDialog: React.FC<CreateVoyageDialogProps> = ({
               id="vessel"
               placeholder="Ex: MV Atlantic Pioneer"
               value={formData.vesselName}
-              onChange={(e) => setFormData((p) => ({ ...p, vesselName: e.target.value }))}
+              onChange={handleChange}))}
             />
           </div>
 
@@ -183,12 +183,12 @@ const CreateVoyageDialog: React.FC<CreateVoyageDialogProps> = ({
               id="departure"
               type="date"
               value={formData.departureDate}
-              onChange={(e) => setFormData((p) => ({ ...p, departureDate: e.target.value }))}
+              onChange={handleChange}))}
             />
           </div>
 
           <DialogFooter>
-            <Button type="button" variant="outline" onClick={() => onOpenChange(false)}>
+            <Button type="button" variant="outline" onClick={() => handleonOpenChange}>
               Cancelar
             </Button>
             <Button 

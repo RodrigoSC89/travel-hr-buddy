@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";;
+import { useEffect, useState, useCallback } from "react";;
 import React, { useState, useEffect } from "react";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
@@ -428,7 +428,7 @@ const ComplianceReports = () => {
             <p className="text-muted-foreground">Geração e gerenciamento de relatórios de compliance</p>
           </div>
         </div>
-        <Button onClick={() => setShowForm(!showForm)}>
+        <Button onClick={handleSetShowForm}>
           <FileText className="mr-2 h-4 w-4" />
           Novo Relatório
         </Button>
@@ -485,7 +485,7 @@ const ComplianceReports = () => {
               <Label>Título do Relatório</Label>
               <Input
                 value={reportConfig.title}
-                onChange={(e) => setReportConfig({ ...reportConfig, title: e.target.value })}
+                onChange={handleChange})}
                 placeholder="Ex: Relatório Mensal de Compliance"
               />
             </div>
@@ -551,7 +551,7 @@ const ComplianceReports = () => {
                 <Button
                   variant="ghost"
                   size="sm"
-                  onClick={() => setShowFilters(!showFilters)}
+                  onClick={handleSetShowFilters}
                 >
                   <Filter className="h-4 w-4 mr-2" />
                   {showFilters ? "Ocultar" : "Mostrar"} Filtros
@@ -611,7 +611,7 @@ const ComplianceReports = () => {
                       <Input
                         type="date"
                         value={reportConfig.dateFrom}
-                        onChange={(e) => setReportConfig({ ...reportConfig, dateFrom: e.target.value })}
+                        onChange={handleChange})}
                       />
                     </div>
                     <div>
@@ -619,7 +619,7 @@ const ComplianceReports = () => {
                       <Input
                         type="date"
                         value={reportConfig.dateTo}
-                        onChange={(e) => setReportConfig({ ...reportConfig, dateTo: e.target.value })}
+                        onChange={handleChange})}
                       />
                     </div>
                   </div>
@@ -631,7 +631,7 @@ const ComplianceReports = () => {
               <Button onClick={handleCreateReport} disabled={loading}>
                 {loading ? "Processando..." : "Criar Relatório"}
               </Button>
-              <Button variant="outline" onClick={() => setShowForm(false)}>Cancelar</Button>
+              <Button variant="outline" onClick={handleSetShowForm}>Cancelar</Button>
             </div>
           </CardContent>
         </Card>
@@ -676,7 +676,7 @@ const ComplianceReports = () => {
                     <Button 
                       variant="outline" 
                       size="sm"
-                      onClick={() => handleGenerateNow(report.id)}
+                      onClick={() => handlehandleGenerateNow}
                     >
                       <Send className="mr-2 h-4 w-4" />
                       Gerar Agora
@@ -686,7 +686,7 @@ const ComplianceReports = () => {
                     <Button 
                       variant="outline" 
                       size="sm"
-                      onClick={() => handleDownload(report)}
+                      onClick={() => handlehandleDownload}
                     >
                       {report.format === "pdf" && <FileText className="mr-2 h-4 w-4" />}
                       {report.format === "excel" && <FileSpreadsheet className="mr-2 h-4 w-4" />}

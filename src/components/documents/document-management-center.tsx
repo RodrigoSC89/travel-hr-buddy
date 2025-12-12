@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";;
+import { useEffect, useState, useCallback } from "react";;
 import React, { useState, useEffect } from "react";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
@@ -54,7 +54,7 @@ interface DocumentStats {
   expiring_soon: number;
 }
 
-export const DocumentManagementCenter = () => {
+export const DocumentManagementCenter = memo(() => {
   const [documents, setDocuments] = useState<Document[]>([]);
   const [stats, setStats] = useState<DocumentStats | null>(null);
   const [activeTab, setActiveTab] = useState("overview");
@@ -272,7 +272,7 @@ export const DocumentManagementCenter = () => {
         <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-primary"></div>
       </div>
     );
-  }
+  };
 
   return (
     <RoleBasedAccess roles={["admin", "hr_manager"]}>
@@ -352,10 +352,10 @@ export const DocumentManagementCenter = () => {
                 </div>
               
                 <div className="flex justify-end gap-2 mt-6">
-                  <Button variant="outline" onClick={() => setIsUploadDialogOpen(false)}>
+                  <Button variant="outline" onClick={handleSetIsUploadDialogOpen}>
                   Cancelar
                   </Button>
-                  <Button onClick={() => setIsUploadDialogOpen(false)}>
+                  <Button onClick={handleSetIsUploadDialogOpen}>
                   Fazer Upload
                   </Button>
                 </div>
@@ -423,7 +423,7 @@ export const DocumentManagementCenter = () => {
                       <Input
                         placeholder="Buscar documentos, tags ou descrições..."
                         value={searchTerm}
-                        onChange={(e) => setSearchTerm(e.target.value)}
+                        onChange={handleChange}
                         className="pl-10"
                       />
                     </div>

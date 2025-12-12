@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";;
+import { useEffect, useState, useCallback, useMemo } from "react";;
 import React, { useState, useEffect } from "react";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
@@ -57,7 +57,7 @@ interface LeaderboardEntry {
   trend: "up" | "down" | "stable";
 }
 
-export const Gamification = () => {
+export const Gamification = memo(() => {
   const [userStats, setUserStats] = useState<UserStats>({
     totalPoints: 2847,
     level: 12,
@@ -223,7 +223,7 @@ export const Gamification = () => {
     case "up": return <TrendingUp className="w-4 h-4 text-green-500" />;
     case "down": return <TrendingUp className="w-4 h-4 text-red-500 rotate-180" />;
     default: return <TrendingUp className="w-4 h-4 text-muted-foreground rotate-90" />;
-    }
+    };
   };
 
   return (
@@ -337,7 +337,7 @@ export const Gamification = () => {
                           {achievement.unlocked ? (
                             <Button 
                               size="sm" 
-                              onClick={() => claimReward(achievement.id)}
+                              onClick={() => handleclaimReward}
                               className="h-6 text-xs"
                             >
                               <Gift className="w-3 h-3 mr-1" />

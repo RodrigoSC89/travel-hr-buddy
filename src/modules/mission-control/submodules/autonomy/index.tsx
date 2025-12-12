@@ -1,5 +1,5 @@
 /**
-import { useState } from "react";;
+import { useState, useCallback } from "react";;
  * PATCH 410: Mission Autonomy Submodule
  * AI optimization settings, insights, risk mitigation
  */
@@ -11,7 +11,7 @@ import { Label } from "@/components/ui/label";
 import { Badge } from "@/components/ui/badge";
 import { Brain, Shield, TrendingUp, Zap } from "lucide-react";
 
-export function MissionAutonomy() {
+export const MissionAutonomy = memo(function() {
   const [settings, setSettings] = useState({
     autoOptimization: true,
     riskMitigation: true,

@@ -418,7 +418,7 @@ export const CommunicationCenterProfessional: React.FC = () => {
                   <Textarea
                     placeholder="Digite sua mensagem..."
                     value={newMessage}
-                    onChange={(e) => setNewMessage(e.target.value)}
+                    onChange={handleChange}
                     rows={4}
                   />
                 </div>
@@ -448,7 +448,7 @@ export const CommunicationCenterProfessional: React.FC = () => {
                     </TooltipProvider>
                   </div>
                   <div className="flex items-center gap-2">
-                    <Button variant="outline" onClick={() => setIsComposeOpen(false)}>
+                    <Button variant="outline" onClick={handleSetIsComposeOpen}>
                       Cancelar
                     </Button>
                     <Button onClick={handleSendMessage} className="gap-2">
@@ -538,7 +538,7 @@ export const CommunicationCenterProfessional: React.FC = () => {
                   <Input
                     placeholder="Buscar mensagens..."
                     value={searchTerm}
-                    onChange={(e) => setSearchTerm(e.target.value)}
+                    onChange={handleChange}
                     className="pl-10 bg-muted/50"
                   />
                 </div>
@@ -616,7 +616,7 @@ export const CommunicationCenterProfessional: React.FC = () => {
                         className={`cursor-pointer transition-all hover:shadow-md border-border/50 ${
                           isUnread ? "bg-primary/5 border-primary/30" : ""
                         } ${message.isUrgent ? "border-l-4 border-l-destructive" : ""}`}
-                        onClick={() => setSelectedMessage(message)}
+                        onClick={handleSetSelectedMessage}
                       >
                         <CardContent className="p-4">
                           <div className="flex items-start gap-4">
@@ -793,7 +793,7 @@ export const CommunicationCenterProfessional: React.FC = () => {
                 <Textarea
                   placeholder="Digite sua mensagem..."
                   value={newMessage}
-                  onChange={(e) => setNewMessage(e.target.value)}
+                  onChange={handleChange}
                   rows={6}
                   className="resize-none"
                 />

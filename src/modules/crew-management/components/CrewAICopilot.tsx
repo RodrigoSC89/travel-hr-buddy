@@ -1,4 +1,4 @@
-import { useEffect, useRef, useState } from "react";;;
+import { memo, memo, useEffect, useRef, useState, useCallback, useMemo } from "react";;;
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -57,7 +57,7 @@ const quickActions = [
   },
 ];
 
-export function CrewAICopilot({ crewData, certificates }: CrewAICopilotProps) {
+export const CrewAICopilot = memo(function({ crewData, certificates }: CrewAICopilotProps) {
   const [messages, setMessages] = useState<Message[]>([]);
   const [input, setInput] = useState("");
   const [isLoading, setIsLoading] = useState(false);
@@ -203,7 +203,7 @@ export function CrewAICopilot({ crewData, certificates }: CrewAICopilotProps) {
                     <Button
                       variant="outline"
                       className="w-full justify-start h-auto py-3 px-4"
-                      onClick={() => handleQuickAction(action.prompt)}
+                      onClick={() => handlehandleQuickAction}
                     >
                       <action.icon className={`h-4 w-4 mr-3 ${action.color}`} />
                       <span className="text-sm">{action.label}</span>
@@ -253,15 +253,12 @@ export function CrewAICopilot({ crewData, certificates }: CrewAICopilotProps) {
         {/* Input */}
         <div className="p-4 border-t bg-background">
           <form
-            onSubmit={(e) => {
-              e.preventDefault();
-              sendMessage(input);
-            }}
+            onSubmit={handleSubmit}
             className="flex gap-2"
           >
             <Input
               value={input}
-              onChange={(e) => setInput(e.target.value)}
+              onChange={handleChange}
               placeholder="Pergunte sobre a tripulação..."
               disabled={isLoading}
               className="flex-1"

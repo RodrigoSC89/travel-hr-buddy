@@ -1,5 +1,5 @@
 /**
-import { useMemo, useState } from "react";;
+import { useMemo, useState, useCallback } from "react";;
  * PATCH 655 - Module LLM Helper Page
  * Generate and manage AI prompts for modules
  */
@@ -202,7 +202,7 @@ export const ModuleLLMHelper: React.FC = () => {
                 <Input
                   placeholder="Search modules..."
                   value={searchQuery}
-                  onChange={(e) => setSearchQuery(e.target.value)}
+                  onChange={handleChange}
                   className="pl-10"
                 />
               </div>
@@ -239,7 +239,7 @@ export const ModuleLLMHelper: React.FC = () => {
                 <Button
                   variant="outline"
                   size="sm"
-                  onClick={() => handleExportAll("markdown")}
+                  onClick={() => handlehandleExportAll}
                   className="flex-1"
                 >
                   <Download className="w-4 h-4 mr-2" />
@@ -248,7 +248,7 @@ export const ModuleLLMHelper: React.FC = () => {
                 <Button
                   variant="outline"
                   size="sm"
-                  onClick={() => handleExportAll("json")}
+                  onClick={() => handlehandleExportAll}
                   className="flex-1"
                 >
                   <Download className="w-4 h-4 mr-2" />
@@ -269,7 +269,7 @@ export const ModuleLLMHelper: React.FC = () => {
                     key={module.id}
                     variant={selectedModule === module.id ? "default" : "outline"}
                     className="w-full justify-start text-left h-auto py-3"
-                    onClick={() => handleGeneratePrompt(module.id)}
+                    onClick={() => handlehandleGeneratePrompt}
                   >
                     <div className="flex-1">
                       <div className="flex items-center gap-2">
@@ -308,7 +308,7 @@ export const ModuleLLMHelper: React.FC = () => {
             <CardContent className="space-y-4">
               <Textarea
                 value={generatedPrompt}
-                onChange={(e) => setGeneratedPrompt(e.target.value)}
+                onChange={handleChange}
                 placeholder="Generated prompt will appear here..."
                 className="min-h-[400px] font-mono text-sm"
               />

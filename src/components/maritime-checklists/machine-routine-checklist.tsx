@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";;
+import { useEffect, useState, useCallback } from "react";;
 import React, { useState, useEffect } from "react";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
@@ -577,11 +577,11 @@ export const MachineRoutineChecklist: React.FC<MachineRoutineChecklistProps> = (
         <div className="flex items-center gap-2">
           {!readOnly && (
             <>
-              <Button variant="outline" onClick={() => onSave(checklist)}>
+              <Button variant="outline" onClick={() => handleonSave}>
                 <Save className="w-4 h-4 mr-2" />
                 Salvar
               </Button>
-              <Button onClick={() => onSubmit(checklist)}>
+              <Button onClick={() => handleonSubmit}>
                 <Send className="w-4 h-4 mr-2" />
                 Enviar para Revisão
               </Button>
@@ -646,7 +646,7 @@ export const MachineRoutineChecklist: React.FC<MachineRoutineChecklistProps> = (
                   key={section.id}
                   variant={currentSection === index ? "default" : "outline"}
                   size="sm"
-                  onClick={() => setCurrentSection(index)}
+                  onClick={handleSetCurrentSection}
                   className="h-auto p-3 flex flex-col items-center gap-1"
                 >
                   {section.icon}
@@ -705,7 +705,7 @@ export const MachineRoutineChecklist: React.FC<MachineRoutineChecklistProps> = (
                         <Input
                           type="number"
                           value={String(item.value || "")}
-                          onChange={(e) => handleItemValueChange(item.id, parseFloat(e.target.value) || 0)}
+                          onChange={handleChange}
                           placeholder={`Valor${item.unit ? ` (${item.unit})` : ""}`}
                           disabled={readOnly}
                           min={item.minValue}
@@ -778,13 +778,13 @@ export const MachineRoutineChecklist: React.FC<MachineRoutineChecklistProps> = (
       <div className="flex justify-between">
         <Button
           variant="outline"
-          onClick={() => setCurrentSection(Math.max(0, currentSection - 1))}
+          onClick={handleSetCurrentSection}
           disabled={currentSection === 0}
         >
           ← Seção Anterior
         </Button>
         <Button
-          onClick={() => setCurrentSection(Math.min(sections.length - 1, currentSection + 1))}
+          onClick={handleSetCurrentSection}
           disabled={currentSection === sections.length - 1}
         >
           Próxima Seção →

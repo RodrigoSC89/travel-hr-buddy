@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";;
+import { useEffect, useState, useCallback } from "react";;
 import React, { useState, useEffect } from "react";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
@@ -30,7 +30,7 @@ interface NotificationSettings {
   weekly_report: boolean;
 }
 
-export const NotificationSettings = () => {
+export const NotificationSettings = memo(() => {
   const { user } = useAuth();
   const { toast } = useToast();
   const [settings, setSettings] = useState<NotificationSettings>({
@@ -171,7 +171,7 @@ export const NotificationSettings = () => {
         </CardContent>
       </Card>
     );
-  }
+  };
 
   return (
     <div className="space-y-6">
@@ -276,7 +276,7 @@ export const NotificationSettings = () => {
                 type="number"
                 placeholder="0"
                 value={settings.price_drop_threshold}
-                onChange={(e) => updateSetting("price_drop_threshold", Number(e.target.value))}
+                onChange={handleChange}
                 className="w-32"
                 min="0"
                 step="0.01"

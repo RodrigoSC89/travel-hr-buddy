@@ -1,4 +1,4 @@
-import { useState } from "react";;;
+import { useState, useCallback } from "react";;;
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -163,7 +163,7 @@ export default function MMIForecastPage() {
                 id="vessel"
                 placeholder="Ex: FPSO Alpha"
                 value={vesselName}
-                onChange={(e) => setVesselName(e.target.value)}
+                onChange={handleChange}
               />
             </div>
 
@@ -173,7 +173,7 @@ export default function MMIForecastPage() {
                 id="system"
                 placeholder="Ex: Sistema hidráulico do guindaste"
                 value={systemName}
-                onChange={(e) => setSystemName(e.target.value)}
+                onChange={handleChange}
               />
             </div>
 
@@ -184,7 +184,7 @@ export default function MMIForecastPage() {
                 type="number"
                 placeholder="Ex: 870"
                 value={hourmeter}
-                onChange={(e) => setHourmeter(e.target.value)}
+                onChange={handleChange}
               />
             </div>
 
@@ -194,7 +194,7 @@ export default function MMIForecastPage() {
                 id="maintenance"
                 placeholder="Uma data por linha. Ex:&#10;12/04/2025 - troca de óleo&#10;20/06/2025 - verificação de pressão"
                 value={maintenanceDates}
-                onChange={(e) => setMaintenanceDates(e.target.value)}
+                onChange={handleChange}
                 rows={5}
               />
             </div>

@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";;
+import { useEffect, useState, useCallback, useMemo } from "react";;
 import React, { useState, useEffect } from "react";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
@@ -12,7 +12,7 @@ interface InspectionsListProps {
   onStatsUpdate: () => void;
 }
 
-export function InspectionsList({ onSelectInspection, onStatsUpdate }: InspectionsListProps) {
+export const InspectionsList = memo(function({ onSelectInspection, onStatsUpdate }: InspectionsListProps) {
   const [inspections, setInspections] = useState<MLCInspection[]>([]);
   const [loading, setLoading] = useState(true);
   const { toast } = useToast();
@@ -86,7 +86,7 @@ export function InspectionsList({ onSelectInspection, onStatsUpdate }: Inspectio
         <Card 
           key={inspection.id}
           className="cursor-pointer hover:shadow-lg transition-shadow"
-          onClick={() => onSelectInspection(inspection.id)}
+          onClick={() => handleonSelectInspection}
         >
           <CardHeader>
             <div className="flex items-center justify-between">

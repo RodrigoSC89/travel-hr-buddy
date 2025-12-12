@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";;
+import { useEffect, useState, useCallback } from "react";;
 import React, { useState, useEffect } from "react";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
@@ -215,7 +215,7 @@ export const FunctionalReportsDashboard: React.FC = () => {
 
                 <Button 
                   className="w-full" 
-                  onClick={() => generateReport(selectedModule)}
+                  onClick={() => handlegenerateReport}
                   disabled={isGenerating}
                 >
                   <FileText className="h-4 w-4 mr-2" />
@@ -242,7 +242,7 @@ export const FunctionalReportsDashboard: React.FC = () => {
                       <Button 
                         size="sm" 
                         variant="outline"
-                        onClick={() => generateReport(type.id)}
+                        onClick={() => handlegenerateReport}
                         disabled={isGenerating}
                       >
                         <Download className="h-3 w-3" />
@@ -339,7 +339,7 @@ export const FunctionalReportsDashboard: React.FC = () => {
                         <Button 
                           size="sm" 
                           variant="outline"
-                          onClick={() => downloadReport(report.id)}
+                          onClick={() => handledownloadReport}
                         >
                           <Download className="h-3 w-3 mr-1" />
                           Baixar

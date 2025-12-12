@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";;
+import { useEffect, useState, useCallback } from "react";;
 
 /**
  * PATCH 353: Employee Personal Documents Component
@@ -310,7 +310,7 @@ export const EmployeePersonalDocuments: React.FC = () => {
                       <Input
                         id="document_name"
                         value={formData.document_name}
-                        onChange={(e) => setFormData({ ...formData, document_name: e.target.value })}
+                        onChange={handleChange})}
                         placeholder="e.g., National ID"
                       />
                     </div>
@@ -321,7 +321,7 @@ export const EmployeePersonalDocuments: React.FC = () => {
                       <Input
                         id="document_number"
                         value={formData.document_number}
-                        onChange={(e) => setFormData({ ...formData, document_number: e.target.value })}
+                        onChange={handleChange})}
                         placeholder="Optional"
                       />
                     </div>
@@ -330,7 +330,7 @@ export const EmployeePersonalDocuments: React.FC = () => {
                       <Input
                         id="issuing_authority"
                         value={formData.issuing_authority}
-                        onChange={(e) => setFormData({ ...formData, issuing_authority: e.target.value })}
+                        onChange={handleChange})}
                         placeholder="Optional"
                       />
                     </div>
@@ -342,7 +342,7 @@ export const EmployeePersonalDocuments: React.FC = () => {
                         id="issue_date"
                         type="date"
                         value={formData.issue_date}
-                        onChange={(e) => setFormData({ ...formData, issue_date: e.target.value })}
+                        onChange={handleChange})}
                       />
                     </div>
                     <div>
@@ -351,7 +351,7 @@ export const EmployeePersonalDocuments: React.FC = () => {
                         id="expiry_date"
                         type="date"
                         value={formData.expiry_date}
-                        onChange={(e) => setFormData({ ...formData, expiry_date: e.target.value })}
+                        onChange={handleChange})}
                       />
                     </div>
                   </div>
@@ -371,7 +371,7 @@ export const EmployeePersonalDocuments: React.FC = () => {
                   </div>
                 </div>
                 <DialogFooter>
-                  <Button variant="outline" onClick={() => setIsUploadOpen(false)}>
+                  <Button variant="outline" onClick={handleSetIsUploadOpen}>
                     Cancel
                   </Button>
                   <Button onClick={uploadDocument} disabled={uploading || !formData.document_name}>
@@ -425,7 +425,7 @@ export const EmployeePersonalDocuments: React.FC = () => {
                             </Button>
                           </>
                         )}
-                        <Button size="sm" variant="outline" onClick={() => deleteDocument(doc.id)}>
+                        <Button size="sm" variant="outline" onClick={() => handledeleteDocument}>
                           <Trash2 className="h-4 w-4" />
                         </Button>
                       </div>

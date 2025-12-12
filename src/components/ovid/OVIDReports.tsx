@@ -83,15 +83,15 @@ export const OVIDReports: React.FC<OVIDReportsProps> = ({
           </div>
 
           <div className="flex flex-wrap gap-2">
-            <Button onClick={() => handleExport("pdf")}>
+            <Button onClick={() => handlehandleExport}>
               <Download className="w-4 h-4 mr-2" />
               Exportar PDF
             </Button>
-            <Button variant="outline" onClick={() => handleExport("xlsx")}>
+            <Button variant="outline" onClick={() => handlehandleExport}>
               <FileSpreadsheet className="w-4 h-4 mr-2" />
               Exportar Excel
             </Button>
-            <Button variant="outline" onClick={() => handleExport("json")}>
+            <Button variant="outline" onClick={() => handlehandleExport}>
               <FileJson className="w-4 h-4 mr-2" />
               Exportar JSON
             </Button>

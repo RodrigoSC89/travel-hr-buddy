@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";;
+import { useEffect, useState, useCallback, useMemo } from "react";;
 import React, { useState, useEffect } from "react";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
@@ -105,7 +105,7 @@ const MaintenancePlanner = () => {
           </Badge>
         </div>
         <div className="flex gap-2">
-          <Button variant="outline" onClick={() => setShowAlertsPanel(true)}>
+          <Button variant="outline" onClick={handleSetShowAlertsPanel}>
             <Bell className="mr-2 h-4 w-4" />
             Alertas
             {stats.overdue > 0 && (
@@ -118,7 +118,7 @@ const MaintenancePlanner = () => {
             <Download className="mr-2 h-4 w-4" />
             Exportar
           </Button>
-          <Button onClick={() => setShowCreateDialog(true)}>
+          <Button onClick={handleSetShowCreateDialog}>
             <Plus className="mr-2 h-4 w-4" />
             Novo Plano
           </Button>

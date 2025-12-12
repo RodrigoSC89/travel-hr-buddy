@@ -62,7 +62,7 @@ const typeConfig = {
   },
 };
 
-export function SmartSuggestionCard({
+export const SmartSuggestionCard = memo(function({
   suggestion,
   onDismiss,
   onAction,
@@ -201,7 +201,7 @@ interface SmartSuggestionsListProps {
   className?: string;
 }
 
-export function SmartSuggestionsList({
+export const SmartSuggestionsList = memo(function({
   suggestions,
   onDismiss,
   maxVisible = 3,

@@ -1,4 +1,4 @@
-import { useEffect, useRef, useState } from "react";;
+import { useEffect, useRef, useState, useCallback, useMemo } from "react";;
 import React, { useState, useRef, useEffect } from "react";
 import { Card, CardContent } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
@@ -465,7 +465,7 @@ Como posso ajudá-lo especificamente hoje?`,
                   <Card 
                     key={action.id} 
                     className="cursor-pointer hover:bg-accent/50 transition-colors"
-                    onClick={() => handleQuickAction(action)}
+                    onClick={() => handlehandleQuickAction}
                   >
                     <CardContent className="p-3">
                       <div className="flex items-start gap-3">
@@ -629,7 +629,7 @@ Como posso ajudá-lo especificamente hoje?`,
                 <Input
                   ref={inputRef}
                   value={currentMessage}
-                  onChange={(e) => setCurrentMessage(e.target.value)}
+                  onChange={handleChange}
                   onKeyPress={(e) => e.key === "Enter" && handleSendMessage()}
                   placeholder="Digite sua mensagem ou escolha uma ação rápida..."
                   className="pr-12"

@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";;
+import { useEffect, useState, useCallback, useMemo } from "react";;
 import React, { useState, useEffect } from "react";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
@@ -312,7 +312,7 @@ export const PersonalizedRecommendations: React.FC<PersonalizedRecommendationsPr
                               
                               <div className="flex items-center gap-2">
                                 <Button
-                                  onClick={() => handleRecommendationAction(recommendation)}
+                                  onClick={() => handlehandleRecommendationAction}
                                   size="sm"
                                 >
                                   {recommendation.actionType === "navigate" ? (
@@ -329,7 +329,7 @@ export const PersonalizedRecommendations: React.FC<PersonalizedRecommendationsPr
                                 </Button>
                                 
                                 <Button
-                                  onClick={() => dismissRecommendation(recommendation.id)}
+                                  onClick={() => handledismissRecommendation}
                                   variant="ghost"
                                   size="sm"
                                 >

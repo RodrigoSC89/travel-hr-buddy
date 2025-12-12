@@ -1,4 +1,4 @@
-import { useState } from "react";;
+import { useState, useCallback } from "react";;
 import React, { useState } from "react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -115,8 +115,7 @@ export const AlertForm: React.FC<AlertFormProps> = ({
             <Input
               id="product_name"
               value={formData.product_name}
-              onChange={(e) =>
-                setFormData({ ...formData, product_name: e.target.value })
+              onChange={handleChange})
               }
               placeholder="e.g., Flight to New York"
               required
@@ -129,8 +128,7 @@ export const AlertForm: React.FC<AlertFormProps> = ({
             <Input
               id="route"
               value={formData.route || ""}
-              onChange={(e) =>
-                setFormData({ ...formData, route: e.target.value })
+              onChange={handleChange})
               }
               placeholder="e.g., São Paulo - Rio de Janeiro"
             />
@@ -174,11 +172,7 @@ export const AlertForm: React.FC<AlertFormProps> = ({
                 step="0.01"
                 min="0"
                 value={formData.target_price}
-                onChange={(e) =>
-                  setFormData({
-                    ...formData,
-                    target_price: parseFloat(e.target.value) || 0,
-                  })
+                onChange={handleChange})
                 }
                 placeholder="0.00"
                 required
@@ -193,11 +187,7 @@ export const AlertForm: React.FC<AlertFormProps> = ({
                 step="0.01"
                 min="0"
                 value={formData.current_price || ""}
-                onChange={(e) =>
-                  setFormData({
-                    ...formData,
-                    current_price: e.target.value ? parseFloat(e.target.value) : undefined,
-                  })
+                onChange={handleChange})
                 }
                 placeholder="0.00"
               />
@@ -211,8 +201,7 @@ export const AlertForm: React.FC<AlertFormProps> = ({
               id="product_url"
               type="url"
               value={formData.product_url}
-              onChange={(e) =>
-                setFormData({ ...formData, product_url: e.target.value })
+              onChange={handleChange})
               }
               placeholder="https://example.com/product"
               required
@@ -269,7 +258,7 @@ export const AlertForm: React.FC<AlertFormProps> = ({
             <Button
               type="button"
               variant="outline"
-              onClick={() => onOpenChange(false)}
+              onClick={() => handleonOpenChange}
               disabled={loading}
             >
               Cancel

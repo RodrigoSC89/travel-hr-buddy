@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";;
+import { useEffect, useState, useCallback } from "react";;
 
 import React, { useState, useEffect } from "react";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
@@ -82,7 +82,7 @@ const DYNAMIC_VARIABLES = [
   { key: "fuel_consumption", label: "Total Fuel Consumption", source: "fuel_logs", field: "sum" },
 ];
 
-export const TemplatesDynamic = () => {
+export const TemplatesDynamic = memo(() => {
   const { toast } = useToast();
   const [templates, setTemplates] = useState<TemplateVersion[]>([]);
   const [selectedTemplate, setSelectedTemplate] = useState<TemplateVersion | null>(null);
@@ -427,7 +427,7 @@ export const TemplatesDynamic = () => {
       });
     } finally {
       setLoading(false);
-    }
+    };
   };
 
   const insertVariable = (variableKey: string) => {
@@ -522,7 +522,7 @@ export const TemplatesDynamic = () => {
                 key={template.id}
                 variant={selectedTemplate?.id === template.id ? "default" : "outline"}
                 className="w-full justify-start text-left"
-                onClick={() => loadTemplate(template)}
+                onClick={() => handleloadTemplate}
               >
                 <div className="truncate">
                   <div className="font-medium truncate">{template.template_name}</div>
@@ -547,7 +547,7 @@ export const TemplatesDynamic = () => {
                 <Input
                   id="template-name"
                   value={templateName}
-                  onChange={(e) => setTemplateName(e.target.value)}
+                  onChange={handleChange}
                   placeholder="Enter template name"
                 />
               </div>
@@ -556,7 +556,7 @@ export const TemplatesDynamic = () => {
                 <Input
                   id="change-description"
                   value={changeDescription}
-                  onChange={(e) => setChangeDescription(e.target.value)}
+                  onChange={handleChange}
                   placeholder="Describe what changed in this version"
                 />
               </div>
@@ -576,7 +576,7 @@ export const TemplatesDynamic = () => {
                   <Label>Template Content</Label>
                   <Textarea
                     value={templateContent}
-                    onChange={(e) => setTemplateContent(e.target.value)}
+                    onChange={handleChange}
                     placeholder="Enter your template content with variables like {{voyage_number}}"
                     rows={15}
                     className="font-mono"
@@ -624,7 +624,7 @@ export const TemplatesDynamic = () => {
                           <Button
                             size="sm"
                             variant="ghost"
-                            onClick={() => insertVariable(variable.key)}
+                            onClick={() => handleinsertVariable}
                           >
                             <Copy className="h-3 w-3" />
                           </Button>
@@ -667,7 +667,7 @@ export const TemplatesDynamic = () => {
                                 <Button
                                   size="sm"
                                   variant="outline"
-                                  onClick={() => restoreVersion(version)}
+                                  onClick={() => handlerestoreVersion}
                                 >
                                   <History className="h-3 w-3 mr-2" />
                                   Restore

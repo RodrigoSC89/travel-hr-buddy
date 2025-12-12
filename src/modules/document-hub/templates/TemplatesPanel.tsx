@@ -1,5 +1,5 @@
 /**
-import { useEffect, useState } from "react";;
+import { useEffect, useState, useCallback } from "react";;
  * PATCH 275 - Document Templates Editor
  * Create and manage document templates with variable support
  */
@@ -254,7 +254,7 @@ export default function TemplatesPanel() {
                   id="name"
                   placeholder="Ex: Relatório de Inspeção"
                   value={newTemplate.name}
-                  onChange={(e) => setNewTemplate({ ...newTemplate, name: e.target.value })}
+                  onChange={handleChange})}
                 />
               </div>
               <div className="grid gap-2">
@@ -263,7 +263,7 @@ export default function TemplatesPanel() {
                   id="description"
                   placeholder="Descrição opcional"
                   value={newTemplate.description}
-                  onChange={(e) => setNewTemplate({ ...newTemplate, description: e.target.value })}
+                  onChange={handleChange})}
                 />
               </div>
               <div className="grid gap-2">
@@ -287,7 +287,7 @@ export default function TemplatesPanel() {
                     id="content"
                     placeholder={"<h1>Título</h1>\n<p>{{nome}}</p>\n<p>{{data}}</p>"}
                     value={newTemplate.content}
-                    onChange={(e) => setNewTemplate({ ...newTemplate, content: e.target.value })}
+                    onChange={handleChange})}
                     rows={15}
                     className="font-mono text-sm"
                   />
@@ -298,7 +298,7 @@ export default function TemplatesPanel() {
               </div>
             </div>
             <DialogFooter>
-              <Button variant="outline" onClick={() => setIsDialogOpen(false)}>
+              <Button variant="outline" onClick={handleSetIsDialogOpen}>
                 Cancelar
               </Button>
               <Button onClick={handleCreateTemplate}>
@@ -328,21 +328,21 @@ export default function TemplatesPanel() {
                   <Button
                     size="sm"
                     variant="outline"
-                    onClick={() => handlePreview(template)}
+                    onClick={() => handlehandlePreview}
                   >
                     <Eye className="h-4 w-4" />
                   </Button>
                   <Button
                     size="sm"
                     variant="outline"
-                    onClick={() => setEditingTemplate(template)}
+                    onClick={handleSetEditingTemplate}
                   >
                     <Edit className="h-4 w-4" />
                   </Button>
                   <Button
                     size="sm"
                     variant="outline"
-                    onClick={() => handleDeleteTemplate(template.id)}
+                    onClick={() => handlehandleDeleteTemplate}
                   >
                     <Trash2 className="h-4 w-4" />
                   </Button>
@@ -385,28 +385,28 @@ export default function TemplatesPanel() {
                 <Label>Nome</Label>
                 <Input
                   value={editingTemplate.name}
-                  onChange={(e) => setEditingTemplate({ ...editingTemplate, name: e.target.value })}
+                  onChange={handleChange})}
                 />
               </div>
               <div className="grid gap-2">
                 <Label>Descrição</Label>
                 <Input
                   value={editingTemplate.description}
-                  onChange={(e) => setEditingTemplate({ ...editingTemplate, description: e.target.value })}
+                  onChange={handleChange})}
                 />
               </div>
               <div className="grid gap-2">
                 <Label>Conteúdo HTML</Label>
                 <Textarea
                   value={editingTemplate.content}
-                  onChange={(e) => setEditingTemplate({ ...editingTemplate, content: e.target.value })}
+                  onChange={handleChange})}
                   rows={15}
                   className="font-mono text-sm"
                 />
               </div>
             </div>
             <DialogFooter>
-              <Button variant="outline" onClick={() => setEditingTemplate(null)}>
+              <Button variant="outline" onClick={handleSetEditingTemplate}>
                 Cancelar
               </Button>
               <Button onClick={handleUpdateTemplate}>
@@ -434,10 +434,7 @@ export default function TemplatesPanel() {
                       <Label className="text-sm">{variable}</Label>
                       <Input
                         value={previewVariables[varName] || ""}
-                        onChange={(e) => setPreviewVariables({
-                          ...previewVariables,
-                          [varName]: e.target.value
-                        })}
+                        onChange={handleChange})}
                         placeholder={`Valor para ${variable}`}
                       />
                     </div>
@@ -455,14 +452,14 @@ export default function TemplatesPanel() {
             <DialogFooter>
               <Button 
                 variant="outline" 
-                onClick={() => handleExportHTML(previewTemplate)}
+                onClick={() => handlehandleExportHTML}
                 className="gap-2"
               >
                 <FileType className="h-4 w-4" />
                 Exportar HTML
               </Button>
               <Button 
-                onClick={() => handleExportPDF(previewTemplate)}
+                onClick={() => handlehandleExportPDF}
                 className="gap-2"
               >
                 <Download className="h-4 w-4" />

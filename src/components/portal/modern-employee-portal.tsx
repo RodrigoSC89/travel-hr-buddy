@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";;
+import { useEffect, useState, useCallback, useMemo } from "react";;
 
 import React, { useState, useEffect } from "react";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
@@ -436,7 +436,7 @@ export const ModernEmployeePortal: React.FC = () => {
             <Button
               variant="secondary"
               size="sm"
-              onClick={() => setDarkMode(!darkMode)}
+              onClick={handleSetDarkMode}
               aria-label="Alternar tema"
             >
               {darkMode ? "☀️" : "🌙"}
@@ -501,12 +501,12 @@ export const ModernEmployeePortal: React.FC = () => {
                     <Input
                       placeholder="Digite sua mensagem..."
                       value={newMessage}
-                      onChange={(e) => setNewMessage(e.target.value)}
+                      onChange={handleChange}
                       onKeyPress={(e) => e.key === "Enter" && handleAIChat(newMessage)}
                       disabled={isProcessing}
                     />
                     <Button 
-                      onClick={() => handleAIChat(newMessage)}
+                      onClick={() => handlehandleAIChat}
                       disabled={isProcessing || !newMessage.trim()}
                       size="sm"
                     >
@@ -672,7 +672,7 @@ export const ModernEmployeePortal: React.FC = () => {
                     <Button 
                       variant="outline" 
                       className="w-full mt-4"
-                      onClick={() => setActiveTab("insights")}
+                      onClick={handleSetActiveTab}
                     >
                       Ver todos os insights ({aiInsights.length})
                     </Button>
@@ -769,10 +769,7 @@ export const ModernEmployeePortal: React.FC = () => {
                       className="hidden"
                       multiple
                       accept=".pdf,.jpg,.jpeg,.png,.doc,.docx"
-                      onChange={(e) => {
-                        const files = Array.from(e.target.files || []);
-                        files.forEach(handleDocumentUpload);
-                      }}
+                      onChange={handleChange}}
                     />
                     <Button 
                       onClick={() => document.getElementById("file-upload")?.click()}

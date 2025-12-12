@@ -12,7 +12,7 @@ import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
 import { X } from "lucide-react";
 
-export function TelemetryConsentBanner() {
+export const TelemetryConsentBanner = memo(function() {
   const [showBanner, setShowBanner] = useState(false);
 
   useEffect(() => {

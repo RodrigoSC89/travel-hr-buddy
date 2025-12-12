@@ -1,4 +1,4 @@
-import { useState } from "react";;
+import { useState, useMemo, useCallback } from "react";;
 import React, { useState } from "react";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
@@ -267,11 +267,11 @@ export const BlockchainDocuments: React.FC = () => {
             <Input
               placeholder="Digite o hash do documento (0x...)"
               value={searchHash}
-              onChange={(e) => setSearchHash(e.target.value)}
+              onChange={handleChange}
               className="flex-1"
             />
             <Button 
-              onClick={() => verifyDocument(searchHash)}
+              onClick={() => handleverifyDocument}
               disabled={isVerifying || !searchHash}
               className="flex items-center gap-2"
             >
@@ -366,7 +366,7 @@ export const BlockchainDocuments: React.FC = () => {
                     <Button 
                       size="sm" 
                       variant="outline"
-                      onClick={() => verifyDocument(document.hash)}
+                      onClick={() => handleverifyDocument}
                       className="flex items-center gap-1"
                     >
                       <Shield className="h-3 w-3" />
@@ -375,7 +375,7 @@ export const BlockchainDocuments: React.FC = () => {
                     <Button 
                       size="sm" 
                       variant="outline"
-                      onClick={() => downloadDocument(document)}
+                      onClick={() => handledownloadDocument}
                       className="flex items-center gap-1"
                     >
                       <Download className="h-3 w-3" />
@@ -384,7 +384,7 @@ export const BlockchainDocuments: React.FC = () => {
                     <Button 
                       size="sm" 
                       variant="outline"
-                      onClick={() => setSelectedDocument(document.id)}
+                      onClick={handleSetSelectedDocument}
                       className="flex items-center gap-1"
                     >
                       <Eye className="h-3 w-3" />

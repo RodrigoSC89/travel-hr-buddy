@@ -1,4 +1,4 @@
-import { useState } from "react";;;
+import { memo, memo, useState, useCallback } from "react";;;
 import { useQuery } from "@tanstack/react-query";
 import { supabase } from "@/integrations/supabase/client";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
@@ -45,7 +45,7 @@ const manufacturers = [
   { name: "Sperry Marine", models: ["VisionMaster FT", "VisionMaster"] },
 ];
 
-export function ECDISIntegration() {
+export const ECDISIntegration = memo(function() {
   const [selectedVessel, setSelectedVessel] = useState<string>("all");
 
   const { data: ecdisData = [], isLoading } = useQuery({

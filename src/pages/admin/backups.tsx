@@ -3,7 +3,7 @@
  * View, download, and manage system backups
  */
 
-import { useEffect, useState } from "react";;;
+import { useEffect, useState, useCallback } from "react";;;
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
@@ -314,7 +314,7 @@ export default function BackupsPage() {
                       <Button
                         variant="outline"
                         size="sm"
-                        onClick={() => downloadBackup(backup)}
+                        onClick={() => handledownloadBackup}
                       >
                         <Download className="w-4 h-4 mr-2" />
                         Download

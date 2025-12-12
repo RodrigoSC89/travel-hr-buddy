@@ -1,4 +1,4 @@
-import { useState } from "react";;
+import { useState, useCallback } from "react";;
 
 /**
  * Web Vitals Overlay Component
@@ -72,7 +72,7 @@ export const WebVitalsOverlay: React.FC<WebVitalsOverlayProps> = ({
       <Button
         variant="outline"
         size="icon"
-        onClick={() => setIsOpen(true)}
+        onClick={handleSetIsOpen}
         className={cn(
           "fixed z-50 bg-background/95 backdrop-blur-sm",
           positionClasses[position]
@@ -104,7 +104,7 @@ export const WebVitalsOverlay: React.FC<WebVitalsOverlayProps> = ({
             variant="ghost"
             size="icon"
             className="h-6 w-6"
-            onClick={() => setIsMinimized(!isMinimized)}
+            onClick={handleSetIsMinimized}
           >
             {isMinimized ? (
               <ChevronUp className="h-3 w-3" />
@@ -116,7 +116,7 @@ export const WebVitalsOverlay: React.FC<WebVitalsOverlayProps> = ({
             variant="ghost"
             size="icon"
             className="h-6 w-6"
-            onClick={() => setIsOpen(false)}
+            onClick={handleSetIsOpen}
           >
             <X className="h-3 w-3" />
           </Button>

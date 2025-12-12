@@ -1,4 +1,4 @@
-import { useState } from "react";;;
+import { memo, memo, useState } from "react";;;
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
@@ -52,7 +52,7 @@ interface ThreatData {
   scores: SituationalScore[];
 }
 
-export function Patch614Validation() {
+export const Patch614Validation = memo(function() {
   const [results, setResults] = useState<Record<string, boolean>>({});
   const [loading, setLoading] = useState(false);
   const [threatData, setThreatData] = useState<ThreatData | null>(null);

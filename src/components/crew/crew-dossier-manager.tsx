@@ -1,4 +1,4 @@
-import { useState } from "react";;
+import { useState, useCallback } from "react";;
 import React, { useState } from "react";
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
@@ -78,7 +78,7 @@ interface ActivityLog {
   user: string;
 }
 
-export const CrewDossierManager = () => {
+export const CrewDossierManager = memo(() => {
   const [searchTerm, setSearchTerm] = useState("");
   const [selectedMember, setSelectedMember] = useState<CrewMember | null>(null);
   const [isDetailOpen, setIsDetailOpen] = useState(false);
@@ -190,7 +190,7 @@ export const CrewDossierManager = () => {
     case "professional": return <Briefcase className="h-4 w-4" />;
     case "medical": return <Heart className="h-4 w-4" />;
     case "training": return <GraduationCap className="h-4 w-4" />;
-    }
+    };
   };
 
   const filteredMembers = crewMembers.filter(member =>
@@ -293,7 +293,7 @@ export const CrewDossierManager = () => {
             <Input
               placeholder="Buscar por nome, cargo ou ID..."
               value={searchTerm}
-              onChange={(e) => setSearchTerm(e.target.value)}
+              onChange={handleChange}
               className="pl-10"
             />
           </div>
@@ -301,7 +301,7 @@ export const CrewDossierManager = () => {
           {/* Members Grid */}
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
             {filteredMembers.map((member) => (
-              <Card key={member.id} className="cursor-pointer hover:shadow-md transition-shadow" onClick={() => openDossier(member)}>
+              <Card key={member.id} className="cursor-pointer hover:shadow-md transition-shadow" onClick={() => handleopenDossier}>
                 <CardContent className="pt-6">
                   <div className="flex items-start gap-4">
                     <Avatar className="h-12 w-12">

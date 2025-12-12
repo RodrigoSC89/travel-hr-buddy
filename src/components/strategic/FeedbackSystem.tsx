@@ -1,4 +1,4 @@
-import { useState } from "react";;
+import { useState, useMemo, useCallback } from "react";;
 import React, { useState } from "react";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
@@ -43,7 +43,7 @@ interface UserSatisfaction {
   trend: "up" | "down" | "stable";
 }
 
-export const FeedbackSystem = () => {
+export const FeedbackSystem = memo(() => {
   const [newFeedback, setNewFeedback] = useState({
     title: "",
     description: "",
@@ -163,7 +163,7 @@ export const FeedbackSystem = () => {
     case "up": return <TrendingUp className="h-4 w-4 text-success" />;
     case "down": return <TrendingUp className="h-4 w-4 text-danger rotate-180" />;
     default: return <TrendingUp className="h-4 w-4 text-muted-foreground" />;
-    }
+    };
   };
 
   const handleSubmitFeedback = () => {
@@ -219,7 +219,7 @@ export const FeedbackSystem = () => {
                 <Input
                   placeholder="Descreva sua sugestão em poucas palavras"
                   value={newFeedback.title}
-                  onChange={(e) => setNewFeedback({...newFeedback, title: e.target.value})}
+                  onChange={handleChange})}
                 />
               </div>
               <div>
@@ -261,7 +261,7 @@ export const FeedbackSystem = () => {
               <Textarea
                 placeholder="Descreva sua sugestão ou problema detalhadamente..."
                 value={newFeedback.description}
-                onChange={(e) => setNewFeedback({...newFeedback, description: e.target.value})}
+                onChange={handleChange})}
                 rows={4}
               />
             </div>

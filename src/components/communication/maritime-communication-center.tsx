@@ -1,4 +1,4 @@
-import { useCallback, useEffect, useState } from "react";;
+import { useCallback, useMemo, useEffect, useState } from "react";;
 import React, { useState, useEffect, useCallback } from "react";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
@@ -56,7 +56,7 @@ interface CommunicationChannel {
   last_activity: string;
 }
 
-export const MaritimeCommunicationCenter = () => {
+export const MaritimeCommunicationCenter = memo(() => {
   const [communications, setCommunications] = useState<MaritimeCommunication[]>([]);
   const [channels, setChannels] = useState<CommunicationChannel[]>([]);
   const [activeTab, setActiveTab] = useState("messages");
@@ -337,7 +337,7 @@ export const MaritimeCommunicationCenter = () => {
         <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-primary"></div>
       </div>
     );
-  }
+  };
 
   return (
     <div className="space-y-6">
@@ -428,7 +428,7 @@ export const MaritimeCommunicationCenter = () => {
                   <Textarea 
                     placeholder="Digite sua mensagem..."
                     value={newMessage.content}
-                    onChange={(e) => setNewMessage(prev => ({ ...prev, content: e.target.value }))}
+                    onChange={handleChange}))}
                     className="min-h-20"
                   />
                 </div>
@@ -440,9 +440,7 @@ export const MaritimeCommunicationCenter = () => {
                       type="number"
                       step="any"
                       value={newMessage.coordinates.latitude}
-                      onChange={(e) => setNewMessage(prev => ({ 
-                        ...prev, 
-                        coordinates: { ...prev.coordinates, latitude: parseFloat(e.target.value) }
+                      onChange={handleChange}
                       }))}
                     />
                   </div>
@@ -452,9 +450,7 @@ export const MaritimeCommunicationCenter = () => {
                       type="number"
                       step="any"
                       value={newMessage.coordinates.longitude}
-                      onChange={(e) => setNewMessage(prev => ({ 
-                        ...prev, 
-                        coordinates: { ...prev.coordinates, longitude: parseFloat(e.target.value) }
+                      onChange={handleChange}
                       }))}
                     />
                   </div>
@@ -462,7 +458,7 @@ export const MaritimeCommunicationCenter = () => {
               </div>
               
               <div className="flex justify-end gap-2 mt-6">
-                <Button variant="outline" onClick={() => setIsNewMessageOpen(false)}>
+                <Button variant="outline" onClick={handleSetIsNewMessageOpen}>
                   Cancelar
                 </Button>
                 <Button onClick={sendMessage}>
@@ -535,35 +531,35 @@ export const MaritimeCommunicationCenter = () => {
                 <Button 
                   variant={selectedChannel === "all" ? "default" : "outline"} 
                   size="sm"
-                  onClick={() => setSelectedChannel("all")}
+                  onClick={handleSetSelectedChannel}
                 >
                   Todas
                 </Button>
                 <Button 
                   variant={selectedChannel === "emergency" ? "default" : "outline"} 
                   size="sm"
-                  onClick={() => setSelectedChannel("emergency")}
+                  onClick={handleSetSelectedChannel}
                 >
                   Emergências
                 </Button>
                 <Button 
                   variant={selectedChannel === "navigation" ? "default" : "outline"} 
                   size="sm"
-                  onClick={() => setSelectedChannel("navigation")}
+                  onClick={handleSetSelectedChannel}
                 >
                   Navegação
                 </Button>
                 <Button 
                   variant={selectedChannel === "weather_alert" ? "default" : "outline"} 
                   size="sm"
-                  onClick={() => setSelectedChannel("weather_alert")}
+                  onClick={handleSetSelectedChannel}
                 >
                   Meteorológico
                 </Button>
                 <Button 
                   variant={selectedChannel === "maintenance" ? "default" : "outline"} 
                   size="sm"
-                  onClick={() => setSelectedChannel("maintenance")}
+                  onClick={handleSetSelectedChannel}
                 >
                   Manutenção
                 </Button>

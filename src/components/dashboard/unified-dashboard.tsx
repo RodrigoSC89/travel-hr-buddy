@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";;
+import { useEffect, useState, useCallback, useMemo } from "react";;
 import React, { useState, useEffect } from "react";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
@@ -216,7 +216,7 @@ const UnifiedDashboard = () => {
             <RefreshCw className={`w-4 h-4 mr-2 ${isRefreshing ? "animate-spin" : ""}`} />
             Atualizar
           </Button>
-          <Button onClick={() => navigate("/executive")}>
+          <Button onClick={() => handlenavigate}>
             <Target className="w-4 h-4 mr-2" />
             Visão Executiva
           </Button>
@@ -308,7 +308,7 @@ const UnifiedDashboard = () => {
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
             {quickActions.map((action, index) => (
               <Card key={index} className="hover:shadow-lg hover-lift transition-all cursor-pointer border-l-4 border-l-primary">
-                <CardContent className="p-4" onClick={() => navigate(action.path)}>
+                <CardContent className="p-4" onClick={() => handlenavigate}>
                   <div className="flex items-center justify-between">
                     <div className="flex items-center gap-3">
                       <div className="p-3 rounded-xl bg-gradient-to-br from-primary to-primary-light text-primary-foreground shadow-lg">
@@ -392,7 +392,7 @@ const UnifiedDashboard = () => {
           <CardHeader>
             <CardTitle className="flex items-center justify-between">
               Alertas e Notificações
-              <Button variant="outline" size="sm" onClick={() => navigate("/notification-center")}>
+              <Button variant="outline" size="sm" onClick={() => handlenavigate}>
                 Ver Todos
               </Button>
             </CardTitle>

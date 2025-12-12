@@ -1,5 +1,5 @@
 /**
-import { useState } from "react";;
+import { useState, useMemo, useCallback } from "react";;
  * Plugin Manager - PHASE 7
  * Sistema modular de plugins e extensões
  */
@@ -297,7 +297,7 @@ export const PluginManager: React.FC = () => {
               <Input
                 placeholder="Buscar plugins..."
                 value={searchQuery}
-                onChange={(e) => setSearchQuery(e.target.value)}
+                onChange={handleChange}
                 className="pl-9"
               />
             </div>
@@ -367,7 +367,7 @@ export const PluginManager: React.FC = () => {
                             variant="ghost"
                             size="sm"
                             className="text-destructive hover:text-destructive"
-                            onClick={() => uninstallPlugin(plugin.id)}
+                            onClick={() => handleuninstallPlugin}
                           >
                             Remover
                           </Button>
@@ -375,7 +375,7 @@ export const PluginManager: React.FC = () => {
                       ) : (
                         <Button
                           className="w-full gap-2"
-                          onClick={() => installPlugin(plugin.id)}
+                          onClick={() => handleinstallPlugin}
                           disabled={installingId === plugin.id}
                         >
                           {installingId === plugin.id ? (

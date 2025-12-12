@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";;;
+import { useEffect, useState, useCallback } from "react";;;
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
@@ -241,7 +241,7 @@ export default function DPIntelligenceCenter() {
         </Card>
         <Card
           className="cursor-pointer hover:bg-accent"
-          onClick={() => setSelectedStatus(selectedStatus === "analyzed" ? null : "analyzed")}
+          onClick={handleSetSelectedStatus}
         >
           <CardContent className="p-4">
             <div className="text-2xl font-bold">{stats.analyzed}</div>
@@ -250,7 +250,7 @@ export default function DPIntelligenceCenter() {
         </Card>
         <Card
           className="cursor-pointer hover:bg-accent"
-          onClick={() => setSelectedStatus(selectedStatus === "pending" ? null : "pending")}
+          onClick={handleSetSelectedStatus}
         >
           <CardContent className="p-4">
             <div className="text-2xl font-bold">{stats.pending}</div>
@@ -271,28 +271,28 @@ export default function DPIntelligenceCenter() {
           <Input
             placeholder="Buscar por título, embarcação, local ou tags..."
             value={searchQuery}
-            onChange={(e) => setSearchQuery(e.target.value)}
+            onChange={handleChange}
           />
           
           <div className="flex flex-wrap gap-2">
             <Button
               variant={selectedDPClass === "DP-1" ? "default" : "outline"}
               size="sm"
-              onClick={() => setSelectedDPClass(selectedDPClass === "DP-1" ? null : "DP-1")}
+              onClick={handleSetSelectedDPClass}
             >
               DP-1
             </Button>
             <Button
               variant={selectedDPClass === "DP-2" ? "default" : "outline"}
               size="sm"
-              onClick={() => setSelectedDPClass(selectedDPClass === "DP-2" ? null : "DP-2")}
+              onClick={handleSetSelectedDPClass}
             >
               DP-2
             </Button>
             <Button
               variant={selectedDPClass === "DP-3" ? "default" : "outline"}
               size="sm"
-              onClick={() => setSelectedDPClass(selectedDPClass === "DP-3" ? null : "DP-3")}
+              onClick={handleSetSelectedDPClass}
             >
               DP-3
             </Button>
@@ -375,7 +375,7 @@ export default function DPIntelligenceCenter() {
                   <Button
                     variant="outline"
                     size="sm"
-                    onClick={() => setSelectedIncident(incident)}
+                    onClick={handleSetSelectedIncident}
                   >
                     <Brain className="w-4 h-4 mr-2" />
                     Analisar IA
@@ -383,7 +383,7 @@ export default function DPIntelligenceCenter() {
                   <Button
                     variant="outline"
                     size="sm"
-                    onClick={() => generateActionPlan(incident)}
+                    onClick={() => handlegenerateActionPlan}
                     disabled={generatingPlan === incident.id}
                   >
                     <Zap className="w-4 h-4 mr-2" />

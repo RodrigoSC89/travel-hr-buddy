@@ -125,7 +125,7 @@ function getSkeletonComponent(
   }
 }
 
-export function DataLoader({
+export const DataLoader = memo(function({
   children,
   isLoading = false,
   error = null,
@@ -199,7 +199,7 @@ export function DataLoader({
 }
 
 // Suspense wrapper with skeleton
-export function SuspenseLoader({
+export const SuspenseLoader = memo(function({
   children,
   skeleton = "card",
   customSkeleton,
@@ -222,7 +222,7 @@ export function SuspenseLoader({
 }
 
 // Inline loading indicator
-export function InlineLoader({ 
+export const InlineLoader = memo(function({ 
   size = "sm",
   text 
 }: { 

@@ -1,4 +1,4 @@
-import { useState } from "react";;
+import { useState, useMemo, useCallback } from "react";;
 import React, { useState } from "react";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
@@ -223,7 +223,7 @@ const VaultAI: React.FC = () => {
                     placeholder="Buscar no cofre..."
                     className="pl-10"
                     value={searchQuery}
-                    onChange={(e) => setSearchQuery(e.target.value)}
+                    onChange={handleChange}
                   />
                 </div>
                 <Button>
@@ -253,7 +253,7 @@ const VaultAI: React.FC = () => {
                               variant="ghost"
                               size="sm"
                               className="h-6 w-6 p-0"
-                              onClick={() => handleToggleVisibility(item.id)}
+                              onClick={() => handlehandleToggleVisibility}
                             >
                               {showContent[item.id] ? (
                                 <EyeOff className="h-4 w-4" />
@@ -279,13 +279,13 @@ const VaultAI: React.FC = () => {
                         </div>
                       </div>
                       <div className="flex items-center gap-2">
-                        <Button variant="ghost" size="sm" onClick={() => handleDownload(item)}>
+                        <Button variant="ghost" size="sm" onClick={() => handlehandleDownload}>
                           <Download className="h-4 w-4" />
                         </Button>
                         <Button variant="ghost" size="sm">
                           <Share2 className="h-4 w-4" />
                         </Button>
-                        <Button variant="ghost" size="sm" className="text-destructive" onClick={() => handleDelete(item)}>
+                        <Button variant="ghost" size="sm" className="text-destructive" onClick={() => handlehandleDelete}>
                           <Trash2 className="h-4 w-4" />
                         </Button>
                       </div>

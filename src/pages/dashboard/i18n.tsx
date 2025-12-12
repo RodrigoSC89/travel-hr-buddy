@@ -3,7 +3,7 @@
  * Painel para monitorar uso multilíngue do sistema
  */
 
-import { useEffect, useState } from "react";;;
+import { useEffect, useState, useCallback } from "react";;;
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
@@ -222,21 +222,21 @@ export default function I18nDashboard() {
         <div className="flex gap-2">
           <Button
             variant="outline"
-            onClick={() => setTimeRange("day")}
+            onClick={handleSetTimeRange}
             className={timeRange === "day" ? "bg-primary text-white" : ""}
           >
             24h
           </Button>
           <Button
             variant="outline"
-            onClick={() => setTimeRange("week")}
+            onClick={handleSetTimeRange}
             className={timeRange === "week" ? "bg-primary text-white" : ""}
           >
             7d
           </Button>
           <Button
             variant="outline"
-            onClick={() => setTimeRange("month")}
+            onClick={handleSetTimeRange}
             className={timeRange === "month" ? "bg-primary text-white" : ""}
           >
             30d

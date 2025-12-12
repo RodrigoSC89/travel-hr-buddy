@@ -1,3 +1,4 @@
+import { memo } from 'react';
 /**
  * Executive Dashboard (Migrated)
  * Dashboard migrado para usar ExecutiveDashboardBase
@@ -10,7 +11,7 @@ import { ExecutiveDashboardBase } from "@/components/dashboard-base";
 import { executiveDashboardConfig } from "@/components/dashboard-base/configs/executive-dashboard-example.config";
 import { useToast } from "@/hooks/use-toast";
 
-export const ExecutiveDashboardNew = () => {
+export const ExecutiveDashboardNew = memo(() => {
   const { toast } = useToast();
 
   const handleError = (error: Error) => {

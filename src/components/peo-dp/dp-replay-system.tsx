@@ -1,4 +1,4 @@
-import { useState } from "react";;
+import { useState, useMemo, useCallback } from "react";;
 import React, { useState } from "react";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
@@ -298,7 +298,7 @@ export const DPReplaySystem: React.FC = () => {
                       <div
                         key={event.id}
                         className={`p-2 rounded-lg border cursor-pointer transition-all ${event.timestamp <= currentTime ? "opacity-100" : "opacity-40"} ${getSeverityColor(event.severity)}`}
-                        onClick={() => handleSkipToEvent(event.timestamp)}
+                        onClick={() => handlehandleSkipToEvent}
                       >
                         <div className="flex items-center justify-between">
                           <span className="text-xs font-mono">{formatTime(event.timestamp)}</span>
@@ -334,19 +334,19 @@ export const DPReplaySystem: React.FC = () => {
 
                 {/* Controls */}
                 <div className="flex items-center justify-center gap-4">
-                  <Button variant="outline" size="icon" onClick={() => setCurrentTime(0)}>
+                  <Button variant="outline" size="icon" onClick={handleSetCurrentTime}>
                     <SkipBack className="h-4 w-4" />
                   </Button>
-                  <Button variant="outline" size="icon" onClick={() => setCurrentTime(Math.max(0, currentTime - 300))}>
+                  <Button variant="outline" size="icon" onClick={handleSetCurrentTime}>
                     <Rewind className="h-4 w-4" />
                   </Button>
                   <Button size="lg" onClick={handlePlay} className="px-8">
                     {isPlaying ? <Pause className="h-5 w-5" /> : <Play className="h-5 w-5" />}
                   </Button>
-                  <Button variant="outline" size="icon" onClick={() => setCurrentTime(Math.min(selectedSession.duration, currentTime + 300))}>
+                  <Button variant="outline" size="icon" onClick={handleSetCurrentTime}>
                     <FastForward className="h-4 w-4" />
                   </Button>
-                  <Button variant="outline" size="icon" onClick={() => setCurrentTime(selectedSession.duration)}>
+                  <Button variant="outline" size="icon" onClick={handleSetCurrentTime}>
                     <SkipForward className="h-4 w-4" />
                   </Button>
                   

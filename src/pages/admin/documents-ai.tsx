@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useState } from "react";;;
+import { useEffect, useState, useCallback } from "react";;;
 import { useNavigate } from "react-router-dom";
 import { Textarea } from "@/components/ui/textarea";
 import { Input } from "@/components/ui/input";
@@ -266,7 +266,7 @@ export default function DocumentsAIPage() {
     <div className="space-y-6 p-8">
       <div className="flex items-center justify-between">
         <h1 className="text-2xl font-bold">📄 Documentos com IA</h1>
-        <Button variant="outline" onClick={() => navigate("/admin/documents")}>
+        <Button variant="outline" onClick={() => handlenavigate}>
           <List className="w-4 h-4 mr-2" />
           Ver Todos os Documentos
         </Button>
@@ -277,13 +277,13 @@ export default function DocumentsAIPage() {
           <Input
             placeholder="Título do Documento"
             value={title}
-            onChange={(e) => setTitle(e.target.value)}
+            onChange={handleChange}
           />
           <Textarea
             rows={4}
             placeholder="Descreva o que você quer gerar com a IA..."
             value={prompt}
-            onChange={(e) => setPrompt(e.target.value)}
+            onChange={handleChange}
           />
           <Button onClick={generateDocument} disabled={loading || !prompt}>
             {loading ? (

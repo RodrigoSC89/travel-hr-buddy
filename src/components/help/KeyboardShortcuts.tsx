@@ -36,7 +36,7 @@ const SHORTCUT_CATEGORIES = {
   system: "Sistema"
 };
 
-export const useKeyboardShortcuts = () => {
+export const useKeyboardShortcuts = memo(() => {
   const navigate = useNavigate();
   const [helpOpen, setHelpOpen] = useState(false);
 
@@ -117,7 +117,7 @@ export const KeyboardShortcutsHelp: React.FC = () => {
   const groupedShortcuts = shortcuts.reduce((acc, shortcut) => {
     if (!acc[shortcut.category]) {
       acc[shortcut.category] = [];
-    }
+    };
     acc[shortcut.category].push(shortcut);
     return acc;
   }, {} as Record<string, Shortcut[]>);

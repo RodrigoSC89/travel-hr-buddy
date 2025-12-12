@@ -3,7 +3,7 @@
  * Integrated with Supabase for real-time data
  */
 
-import { useEffect, useState } from "react";;;
+import { memo, memo, useEffect, useState, useCallback, useMemo } from "react";;;
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
@@ -31,7 +31,7 @@ interface InventoryItem {
   vessel?: string;
 }
 
-export function SmartInventory() {
+export const SmartInventory = memo(function() {
   const [items, setItems] = useState<InventoryItem[]>([]);
   const [isLoading, setIsLoading] = useState(true);
   const [searchTerm, setSearchTerm] = useState("");
@@ -210,7 +210,7 @@ export function SmartInventory() {
           <Input
             placeholder="Buscar itens..."
             value={searchTerm}
-            onChange={(e) => setSearchTerm(e.target.value)}
+            onChange={handleChange}
             className="pl-9"
           />
         </div>
@@ -220,7 +220,7 @@ export function SmartInventory() {
               key={cat}
               variant={categoryFilter === cat ? "default" : "outline"}
               size="sm"
-              onClick={() => setCategoryFilter(cat)}
+              onClick={handleSetCategoryFilter}
             >
               {cat === "all" ? "Todos" : cat}
             </Button>
@@ -297,7 +297,7 @@ export function SmartInventory() {
                         size="sm" 
                         variant="destructive" 
                         className="w-full mt-3"
-                        onClick={() => handleRequestRestock(item.id, item.name)}
+                        onClick={() => handlehandleRequestRestock}
                       >
                         Solicitar Reposição
                       </Button>

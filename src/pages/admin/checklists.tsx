@@ -1,5 +1,5 @@
 /**
-import { useEffect, useState } from "react";;
+import { useEffect, useState, useCallback, useMemo } from "react";;
  * Smart Checklists Module - Complete Professional Version
  * PATCH 1101: Full functionality with AI generation, analytics dashboard, and all buttons working
  */
@@ -368,7 +368,7 @@ export default function SmartChecklistsPage() {
               Ver Dashboard
             </Button>
           </Link>
-          <Button className="gap-2" onClick={() => setShowCreateDialog(true)}>
+          <Button className="gap-2" onClick={handleSetShowCreateDialog}>
             <Plus className="h-4 w-4" />
             Novo Checklist
           </Button>
@@ -457,7 +457,7 @@ export default function SmartChecklistsPage() {
                 <Input
                   placeholder="Descreva o checklist que deseja criar... Ex: Inspeção de segurança para operação de mergulho"
                   value={aiPrompt}
-                  onChange={(e) => setAiPrompt(e.target.value)}
+                  onChange={handleChange}
                   className="mt-2"
                 />
               </div>
@@ -507,7 +507,7 @@ export default function SmartChecklistsPage() {
               <Input
                 placeholder="Buscar..."
                 value={searchQuery}
-                onChange={(e) => setSearchQuery(e.target.value)}
+                onChange={handleChange}
                 className="pl-9 w-[200px]"
               />
             </div>
@@ -547,7 +547,7 @@ export default function SmartChecklistsPage() {
                   <p className="text-muted-foreground mt-1">
                     Crie um novo checklist ou ajuste os filtros
                   </p>
-                  <Button className="mt-4 gap-2" onClick={() => setShowCreateDialog(true)}>
+                  <Button className="mt-4 gap-2" onClick={handleSetShowCreateDialog}>
                     <Plus className="h-4 w-4" />
                     Criar Checklist
                   </Button>
@@ -612,7 +612,7 @@ export default function SmartChecklistsPage() {
                                 <div
                                   key={item.id}
                                   className="flex items-center gap-3 p-2 rounded-lg hover:bg-muted/50 cursor-pointer"
-                                  onClick={() => handleToggleItem(checklist.id, item.id)}
+                                  onClick={() => handlehandleToggleItem}
                                 >
                                   <Checkbox checked={item.completed} />
                                   <span className={item.completed ? "line-through text-muted-foreground" : ""}>
@@ -660,7 +660,7 @@ export default function SmartChecklistsPage() {
                               variant="outline"
                               size="sm"
                               className="gap-1"
-                              onClick={() => handleSummarize(checklist)}
+                              onClick={() => handlehandleSummarize}
                               disabled={isSummarizing}
                             >
                               {isSummarizing ? (
@@ -674,7 +674,7 @@ export default function SmartChecklistsPage() {
                               variant="outline"
                               size="sm"
                               className="gap-1"
-                              onClick={() => handleExportPDF(checklist)}
+                              onClick={() => handlehandleExportPDF}
                             >
                               <Download className="h-3 w-3" />
                               Exportar
@@ -683,7 +683,7 @@ export default function SmartChecklistsPage() {
                               variant="outline"
                               size="sm"
                               className="gap-1 text-destructive hover:text-destructive"
-                              onClick={() => handleDeleteChecklist(checklist.id)}
+                              onClick={() => handlehandleDeleteChecklist}
                             >
                               <Trash2 className="h-3 w-3" />
                             </Button>
@@ -772,7 +772,7 @@ export default function SmartChecklistsPage() {
                 <Label>Título</Label>
                 <Input
                   value={newChecklist.title}
-                  onChange={(e) => setNewChecklist(prev => ({ ...prev, title: e.target.value }))}
+                  onChange={handleChange}))}
                   placeholder="Ex: Inspeção de Segurança"
                 />
               </div>
@@ -798,7 +798,7 @@ export default function SmartChecklistsPage() {
               <Label>Descrição</Label>
               <Textarea
                 value={newChecklist.description}
-                onChange={(e) => setNewChecklist(prev => ({ ...prev, description: e.target.value }))}
+                onChange={handleChange}))}
                 placeholder="Descreva o propósito deste checklist"
               />
             </div>
@@ -808,7 +808,7 @@ export default function SmartChecklistsPage() {
                 <Label>Embarcação (opcional)</Label>
                 <Input
                   value={newChecklist.vessel}
-                  onChange={(e) => setNewChecklist(prev => ({ ...prev, vessel: e.target.value }))}
+                  onChange={handleChange}))}
                   placeholder="Ex: Navio Sirius"
                 />
               </div>
@@ -817,7 +817,7 @@ export default function SmartChecklistsPage() {
                 <Input
                   type="date"
                   value={newChecklist.dueDate}
-                  onChange={(e) => setNewChecklist(prev => ({ ...prev, dueDate: e.target.value }))}
+                  onChange={handleChange}))}
                 />
               </div>
             </div>
@@ -828,7 +828,7 @@ export default function SmartChecklistsPage() {
               <div className="flex gap-2">
                 <Input
                   value={newItemTitle}
-                  onChange={(e) => setNewItemTitle(e.target.value)}
+                  onChange={handleChange}
                   placeholder="Adicionar item..."
                   onKeyDown={(e) => e.key === "Enter" && handleAddItem()}
                 />
@@ -863,7 +863,7 @@ export default function SmartChecklistsPage() {
                       variant="ghost"
                       size="icon"
                       className="h-6 w-6"
-                      onClick={() => handleRemoveItem(item.id)}
+                      onClick={() => handlehandleRemoveItem}
                     >
                       <X className="h-3 w-3" />
                     </Button>
@@ -874,7 +874,7 @@ export default function SmartChecklistsPage() {
           </div>
 
           <DialogFooter>
-            <Button variant="outline" onClick={() => setShowCreateDialog(false)}>
+            <Button variant="outline" onClick={handleSetShowCreateDialog}>
               Cancelar
             </Button>
             <Button onClick={handleCreateChecklist} disabled={!newChecklist.title.trim()}>
@@ -914,7 +914,7 @@ export default function SmartChecklistsPage() {
                     <div
                       key={item.id}
                       className="flex items-center gap-3 p-3 rounded-lg border hover:bg-muted/50 cursor-pointer transition-colors"
-                      onClick={() => handleToggleItem(selectedChecklist.id, item.id)}
+                      onClick={() => handlehandleToggleItem}
                     >
                       <Checkbox checked={item.completed} />
                       <span className={`flex-1 ${item.completed ? "line-through text-muted-foreground" : ""}`}>

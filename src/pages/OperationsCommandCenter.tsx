@@ -1,5 +1,5 @@
 /**
-import { useCallback, useEffect, useState } from "react";;
+import { useCallback, useMemo, useEffect, useState } from "react";;
  * Operations Command Center - Unified Operations & Business Intelligence
  * PATCH UNIFY-OPS - Fusion of Business Insights + Operations Dashboard
  * Complete operational management with AI-powered business intelligence
@@ -500,7 +500,7 @@ export default function OperationsCommandCenter() {
           </div>
         </div>
         <div className="flex gap-2">
-          <Button variant="outline" onClick={() => fetchOperationalData(true)} disabled={isRefreshing}>
+          <Button variant="outline" onClick={() => handlefetchOperationalData} disabled={isRefreshing}>
             <RefreshCw className={`h-4 w-4 mr-2 ${isRefreshing ? "animate-spin" : ""}`} />
             Atualizar
           </Button>
@@ -518,7 +518,7 @@ export default function OperationsCommandCenter() {
               </DropdownMenuItem>
             </DropdownMenuContent>
           </DropdownMenu>
-          <Button variant="outline" onClick={() => setShowSettings(true)}>
+          <Button variant="outline" onClick={handleSetShowSettings}>
             <Settings className="h-4 w-4" />
           </Button>
         </div>
@@ -1025,7 +1025,7 @@ export default function OperationsCommandCenter() {
               <Input
                 type="number"
                 value={settings.refreshInterval}
-                onChange={(e) => setSettings((prev: unknown: unknown: unknown) => ({ ...prev, refreshInterval: parseInt(e.target.value) }))}
+                onChange={handleChange}))}
                 disabled={!settings.autoRefresh}
               />
             </div>

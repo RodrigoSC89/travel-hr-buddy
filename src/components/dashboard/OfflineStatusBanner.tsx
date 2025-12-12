@@ -1,3 +1,4 @@
+import { memo } from 'react';
 /**
  * Offline Status Banner
  * PATCH 624 - Visual indicator for cached/offline data
@@ -15,7 +16,7 @@ interface OfflineStatusBannerProps {
   maxRetries?: number;
 }
 
-export function OfflineStatusBanner({ 
+export const OfflineStatusBanner = memo(function({ 
   isFromCache, 
   lastSync, 
   onRetry,

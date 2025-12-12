@@ -3,7 +3,7 @@
  * Displays AI adoption metrics and trends
  */
 
-import { useEffect, useState } from "react";;;
+import { memo, memo, useEffect, useState, useMemo } from "react";;;
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Progress } from "@/components/ui/progress";
 import { Badge } from "@/components/ui/badge";
@@ -33,7 +33,7 @@ interface AIAdoptionScorecardProps {
   className?: string;
 }
 
-export function AIAdoptionScorecard({ organizationId, className }: AIAdoptionScorecardProps) {
+export const AIAdoptionScorecard = memo(function({ organizationId, className }: AIAdoptionScorecardProps) {
   const [metrics, setMetrics] = useState<AdoptionMetrics | null>(null);
   const [isLoading, setIsLoading] = useState(true);
 

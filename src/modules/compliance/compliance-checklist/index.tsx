@@ -1,5 +1,5 @@
 /**
-import { useEffect, useState } from "react";;
+import { useEffect, useState, useCallback } from "react";;
  * PATCH 113.0 - Compliance Checklist & Auto-Auditor
  * Compliance Checklist - Regulatory compliance tracking with AI auditing
  */
@@ -297,7 +297,7 @@ const ComplianceChecklist = () => {
               <Input
                 placeholder="Search checklists..."
                 value={searchQuery}
-                onChange={(e) => setSearchQuery(e.target.value)}
+                onChange={handleChange}
                 className="pl-9"
               />
             </div>

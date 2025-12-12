@@ -1,5 +1,5 @@
 /**
-import { useState } from "react";;
+import { useState, useMemo, useCallback } from "react";;
  * AI Insights Panel - Painel de Insights com IA
  */
 
@@ -22,7 +22,7 @@ interface AIInsightsPanelProps {
   context: SystemContext;
 }
 
-export function AIInsightsPanel({ context }: AIInsightsPanelProps) {
+export const AIInsightsPanel = memo(function({ context }: AIInsightsPanelProps) {
   const { 
     generateBriefing, 
     analyzeAlerts, 
@@ -168,7 +168,7 @@ export function AIInsightsPanel({ context }: AIInsightsPanelProps) {
                   variant="ghost" 
                   size="sm" 
                   className="h-7"
-                  onClick={() => exportInsight(insights[activeInsight], activeInsight)}
+                  onClick={() => handleexportInsight}
                 >
                   <Download className="h-3 w-3 mr-1" />
                   Exportar

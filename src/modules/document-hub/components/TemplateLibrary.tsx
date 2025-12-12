@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";;
+import { useEffect, useState, useCallback } from "react";;
 
 /**
  * PATCH 380: Document Template Library with PDF Generation
@@ -343,7 +343,7 @@ export const TemplateLibrary: React.FC = () => {
                       <Label>Template Name *</Label>
                       <Input
                         value={formData.name}
-                        onChange={(e) => setFormData({ ...formData, name: e.target.value })}
+                        onChange={handleChange})}
                         placeholder="Monthly Report Template"
                       />
                     </div>
@@ -370,7 +370,7 @@ export const TemplateLibrary: React.FC = () => {
                     <Label>Description</Label>
                     <Input
                       value={formData.description}
-                      onChange={(e) => setFormData({ ...formData, description: e.target.value })}
+                      onChange={handleChange})}
                       placeholder="Template description..."
                     />
                   </div>
@@ -379,7 +379,7 @@ export const TemplateLibrary: React.FC = () => {
                     <Label>Content *</Label>
                     <Textarea
                       value={formData.content}
-                      onChange={(e) => setFormData({ ...formData, content: e.target.value })}
+                      onChange={handleChange})}
                       placeholder="Use {{placeholder}} syntax for dynamic content..."
                       rows={15}
                       className="font-mono text-sm"
@@ -394,7 +394,7 @@ export const TemplateLibrary: React.FC = () => {
                       type="checkbox"
                       id="is_public"
                       checked={formData.is_public}
-                      onChange={(e) => setFormData({ ...formData, is_public: e.target.checked })}
+                      onChange={handleChange})}
                       className="rounded"
                     />
                     <Label htmlFor="is_public" className="cursor-pointer">
@@ -403,7 +403,7 @@ export const TemplateLibrary: React.FC = () => {
                   </div>
                 </div>
                 <DialogFooter>
-                  <Button variant="outline" onClick={() => setIsCreateOpen(false)}>
+                  <Button variant="outline" onClick={handleSetIsCreateOpen}>
                     Cancel
                   </Button>
                   <Button onClick={handleCreate}>Create Template</Button>
@@ -478,7 +478,7 @@ export const TemplateLibrary: React.FC = () => {
                           <Button
                             variant="ghost"
                             size="sm"
-                            onClick={() => openGenerateDialog(template)}
+                            onClick={() => handleopenGenerateDialog}
                           >
                             <Download className="h-4 w-4" />
                           </Button>
@@ -496,7 +496,7 @@ export const TemplateLibrary: React.FC = () => {
                           <Button
                             variant="ghost"
                             size="sm"
-                            onClick={() => handleDelete(template.id)}
+                            onClick={() => handlehandleDelete}
                           >
                             <Trash2 className="h-4 w-4 text-red-500" />
                           </Button>
@@ -526,14 +526,14 @@ export const TemplateLibrary: React.FC = () => {
                 <Label>{placeholder}</Label>
                 <Input
                   value={generateData[placeholder]}
-                  onChange={(e) => setGenerateData({ ...generateData, [placeholder]: e.target.value })}
+                  onChange={handleChange})}
                   placeholder={`Enter ${placeholder}...`}
                 />
               </div>
             ))}
           </div>
           <DialogFooter>
-            <Button variant="outline" onClick={() => setIsGenerateOpen(false)}>
+            <Button variant="outline" onClick={handleSetIsGenerateOpen}>
               Cancel
             </Button>
             <Button onClick={generatePDF}>
@@ -575,7 +575,7 @@ export const TemplateLibrary: React.FC = () => {
             )}
           </div>
           <DialogFooter>
-            <Button onClick={() => setIsVersionsOpen(false)}>Close</Button>
+            <Button onClick={handleSetIsVersionsOpen}>Close</Button>
           </DialogFooter>
         </DialogContent>
       </Dialog>

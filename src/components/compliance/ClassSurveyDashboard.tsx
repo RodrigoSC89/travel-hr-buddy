@@ -1,4 +1,4 @@
-import { useState } from "react";;;
+import { memo, memo, useState } from "react";;;
 import { useQuery } from "@tanstack/react-query";
 import { supabase } from "@/integrations/supabase/client";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
@@ -61,7 +61,7 @@ const surveyTypeLabels: Record<string, string> = {
   condition_of_class: "Condição de Classe",
 };
 
-export function ClassSurveyDashboard() {
+export const ClassSurveyDashboard = memo(function() {
   const [filterStatus, setFilterStatus] = useState<string>("all");
   const [filterSociety, setFilterSociety] = useState<string>("all");
 

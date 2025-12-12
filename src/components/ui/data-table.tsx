@@ -1,4 +1,4 @@
-import { useMemo, useState } from "react";;
+import { useMemo, useState, useCallback } from "react";;
 import React, { useState, useMemo } from "react";
 import { cn } from "@/lib/utils";
 import { 
@@ -201,7 +201,7 @@ export function DataTable<T extends Record<string, unknown>>({
                 <Input
                   placeholder="Buscar..."
                   value={searchTerm}
-                  onChange={(e) => setSearchTerm(e.target.value)}
+                  onChange={handleChange}
                   className="pl-10"
                 />
               </div>
@@ -232,7 +232,7 @@ export function DataTable<T extends Record<string, unknown>>({
                     column.align === "right" && "text-right"
                   )}
                   style={{ width: column.width }}
-                  onClick={() => handleSort(column.key)}
+                  onClick={() => handlehandleSort}
                 >
                   <div className="flex items-center space-x-2">
                     <span>{column.header}</span>
@@ -386,7 +386,7 @@ export function DataTable<T extends Record<string, unknown>>({
             <Button
               variant="outline"
               size="sm"
-              onClick={() => setCurrentPage(prev => Math.max(1, prev - 1))}
+              onClick={handleSetCurrentPage}
               disabled={currentPage === 1}
             >
               Anterior
@@ -402,7 +402,7 @@ export function DataTable<T extends Record<string, unknown>>({
                     key={page}
                     variant={isActive ? "default" : "outline"}
                     size="sm"
-                    onClick={() => setCurrentPage(page)}
+                    onClick={handleSetCurrentPage}
                     className="w-10"
                   >
                     {page}
@@ -414,7 +414,7 @@ export function DataTable<T extends Record<string, unknown>>({
             <Button
               variant="outline"
               size="sm"
-              onClick={() => setCurrentPage(prev => Math.min(totalPages, prev + 1))}
+              onClick={handleSetCurrentPage}
               disabled={currentPage === totalPages}
             >
               Próximo

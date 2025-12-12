@@ -1,5 +1,5 @@
 /**
-import { useEffect, useState } from "react";;
+import { useEffect, useState, useCallback } from "react";;
  * PATCH 838: Quick Start Guide
  * Onboarding guide for new users
  */
@@ -134,7 +134,7 @@ const ONBOARDING_STEPS: Step[] = [
 
 const STORAGE_KEY = "nautilus_onboarding_progress";
 
-export function QuickStartGuide() {
+export const QuickStartGuide = memo(function() {
   const [isOpen, setIsOpen] = useState(false);
   const [currentStep, setCurrentStep] = useState(0);
   const [completedTasks, setCompletedTasks] = useState<Set<string>>(new Set());
@@ -194,7 +194,7 @@ export function QuickStartGuide() {
             className="fixed bottom-6 right-6 z-50"
           >
             <Button
-              onClick={() => setIsOpen(true)}
+              onClick={handleSetIsOpen}
               size="lg"
               className="rounded-full h-14 px-6 shadow-xl bg-slate-900 dark:bg-slate-100 text-white dark:text-slate-900 hover:bg-slate-800 dark:hover:bg-slate-200 font-bold"
             >
@@ -260,7 +260,7 @@ export function QuickStartGuide() {
                     return (
                       <button
                         key={step.id}
-                        onClick={() => setCurrentStep(index)}
+                        onClick={handleSetCurrentStep}
                         className={cn(
                           "flex-1 min-w-[60px] p-3 flex flex-col items-center gap-1 transition-colors",
                           index === currentStep
@@ -309,7 +309,7 @@ export function QuickStartGuide() {
                               ? "bg-green-50 border-green-200 dark:bg-green-900/20 dark:border-green-800"
                               : "hover:bg-muted/50"
                           )}
-                          onClick={() => toggleTask(task.id)}
+                          onClick={() => handletoggleTask}
                         >
                           <Checkbox
                             checked={isCompleted}
@@ -362,7 +362,7 @@ export function QuickStartGuide() {
                   <Button
                     variant="outline"
                     size="sm"
-                    onClick={() => setCurrentStep(Math.max(0, currentStep - 1))}
+                    onClick={handleSetCurrentStep}
                     disabled={currentStep === 0}
                   >
                     <ChevronLeft className="w-4 h-4 mr-1" />
@@ -394,7 +394,7 @@ export function QuickStartGuide() {
 /**
  * Feature highlights for specific features
  */
-export function FeatureHighlight({
+export const FeatureHighlight = memo(function({
   feature,
   children,
   position = "bottom",

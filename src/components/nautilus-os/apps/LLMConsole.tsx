@@ -1,4 +1,4 @@
-import { useState } from "react";;
+import { useState, useCallback } from "react";;
 import React, { useState } from "react";
 import { Send, Loader2 } from "lucide-react";
 import { Button } from "@/components/ui/button";
@@ -6,7 +6,7 @@ import { Input } from "@/components/ui/input";
 import { nautilusRespond } from "@/lib/ai/nautilusLLM";
 import { useToast } from "@/hooks/use-toast";
 
-export function LLMConsole() {
+export const LLMConsole = memo(function() {
   const [prompt, setPrompt] = useState("");
   const [response, setResponse] = useState("");
   const [isLoading, setIsLoading] = useState(false);
@@ -37,7 +37,7 @@ export function LLMConsole() {
       <form onSubmit={handleSubmit} className="flex gap-2">
         <Input
           value={prompt}
-          onChange={(e) => setPrompt(e.target.value)}
+          onChange={handleChange}
           placeholder="Digite seu comando..."
           disabled={isLoading}
           className="flex-1"

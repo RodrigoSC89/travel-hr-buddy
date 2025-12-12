@@ -1,4 +1,4 @@
-import { useEffect, useRef, useState } from "react";;
+import { useEffect, useRef, useState, useCallback, useMemo } from "react";;
 import React, { useState, useEffect, useRef } from "react";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
@@ -39,7 +39,7 @@ interface VesselSensors {
   connectionStatus: "online" | "offline" | "unstable";
 }
 
-export const IoTSensorDashboard = () => {
+export const IoTSensorDashboard = memo(() => {
   const [vessels, setVessels] = useState<VesselSensors[]>([]);
   const [selectedVessel, setSelectedVessel] = useState<string | null>(null);
   const [alerts, setAlerts] = useState<any[]>([]);
@@ -280,7 +280,7 @@ export const IoTSensorDashboard = () => {
         </div>
       </div>
     );
-  }
+  };
 
   return (
     <div className="space-y-6">
@@ -300,7 +300,7 @@ export const IoTSensorDashboard = () => {
             className={`cursor-pointer transition-all hover:shadow-md ${
               selectedVessel === vessel.vesselId ? "ring-2 ring-primary" : ""
             }`}
-            onClick={() => setSelectedVessel(vessel.vesselId)}
+            onClick={handleSetSelectedVessel}
           >
             <CardHeader className="pb-3">
               <div className="flex items-center justify-between">

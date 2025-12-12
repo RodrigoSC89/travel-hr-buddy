@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useState } from "react";;;
+import { useEffect, useState, useCallback } from "react";;;
 import { useNavigate } from "react-router-dom";
 import { supabase } from "@/integrations/supabase/client";
 import { RoleBasedAccess } from "@/components/auth/role-based-access";
@@ -89,7 +89,7 @@ export default function DocumentListPage() {
               Visualize e gerencie todos os documentos gerados pela IA
             </p>
           </div>
-          <Button onClick={() => navigate("/admin/documents/ai")}>
+          <Button onClick={() => handlenavigate}>
             ✨ Gerar Novo Documento
           </Button>
         </div>
@@ -107,7 +107,7 @@ export default function DocumentListPage() {
               <Input
                 placeholder="Digite para buscar..."
                 value={searchTerm}
-                onChange={(e) => setSearchTerm(e.target.value)}
+                onChange={handleChange}
                 className="pl-10"
               />
             </div>
@@ -132,7 +132,7 @@ export default function DocumentListPage() {
                   : "Comece gerando seu primeiro documento com IA"}
               </p>
               {!searchTerm && (
-                <Button onClick={() => navigate("/admin/documents/ai")}>
+                <Button onClick={() => handlenavigate}>
                   ✨ Gerar Primeiro Documento
                 </Button>
               )}
@@ -141,7 +141,7 @@ export default function DocumentListPage() {
         ) : (
           <div className="grid gap-4">
             {filteredDocuments.map((doc) => (
-              <Card key={doc.id} className="hover:shadow-lg transition-shadow cursor-pointer" onClick={() => handleViewDocument(doc.id)}>
+              <Card key={doc.id} className="hover:shadow-lg transition-shadow cursor-pointer" onClick={() => handlehandleViewDocument}>
                 <CardContent className="p-6">
                   <div className="flex items-start justify-between">
                     <div className="flex-1 space-y-2">

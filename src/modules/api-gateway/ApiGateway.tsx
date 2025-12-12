@@ -1,5 +1,5 @@
 /**
-import { useEffect, useState } from "react";;
+import { useEffect, useState, useCallback } from "react";;
  * PATCH 100.0 - API Gateway Functional
  * Enhanced API Gateway with routing, rate limiting, and analytics
  */
@@ -278,14 +278,14 @@ const ApiGateway = () => {
                       <Button
                         variant="outline"
                         size="sm"
-                        onClick={() => handleTestEndpoint(route)}
+                        onClick={() => handlehandleTestEndpoint}
                       >
                         Test
                       </Button>
                       <Button
                         variant="outline"
                         size="sm"
-                        onClick={() => handleCheckStatus(route)}
+                        onClick={() => handlehandleCheckStatus}
                       >
                         Status
                       </Button>
@@ -422,7 +422,7 @@ const ApiGateway = () => {
                         id="keyName"
                         placeholder="Production API Key"
                         value={newKeyName}
-                        onChange={(e) => setNewKeyName(e.target.value)}
+                        onChange={handleChange}
                       />
                     </div>
                   </div>
@@ -452,14 +452,14 @@ const ApiGateway = () => {
                         <Button
                           variant="outline"
                           size="sm"
-                          onClick={() => handleCopyKey(key.key)}
+                          onClick={() => handlehandleCopyKey}
                         >
                           <Copy className="h-4 w-4" />
                         </Button>
                         <Button
                           variant="outline"
                           size="sm"
-                          onClick={() => handleRevokeKey(key.id)}
+                          onClick={() => handlehandleRevokeKey}
                           disabled={!key.isActive}
                         >
                           <Trash2 className="h-4 w-4" />
@@ -509,7 +509,7 @@ const ApiGateway = () => {
                         id="webhookName"
                         placeholder="My Webhook"
                         value={newWebhookName}
-                        onChange={(e) => setNewWebhookName(e.target.value)}
+                        onChange={handleChange}
                       />
                     </div>
                     <div className="space-y-2">
@@ -518,7 +518,7 @@ const ApiGateway = () => {
                         id="webhookUrl"
                         placeholder="https://example.com/webhook"
                         value={newWebhookUrl}
-                        onChange={(e) => setNewWebhookUrl(e.target.value)}
+                        onChange={handleChange}
                       />
                     </div>
                   </div>
@@ -547,14 +547,14 @@ const ApiGateway = () => {
                         <Button
                           variant="outline"
                           size="sm"
-                          onClick={() => handleTestWebhook(webhook.id)}
+                          onClick={() => handlehandleTestWebhook}
                         >
                           Test
                         </Button>
                         <Button
                           variant="outline"
                           size="sm"
-                          onClick={() => handleDeleteWebhook(webhook.id)}
+                          onClick={() => handlehandleDeleteWebhook}
                         >
                           <Trash2 className="h-4 w-4" />
                         </Button>

@@ -1,4 +1,4 @@
-import { useCallback, useState } from "react";;
+import { useCallback, useMemo, useState } from "react";;
 import React, { useState, useCallback } from "react";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
@@ -142,7 +142,7 @@ export const WorkflowAutomationHub: React.FC = () => {
             {filteredWorkflows.length === 0 ? (
               <Card className="p-8 text-center">
                 <p className="text-muted-foreground">Nenhum workflow encontrado</p>
-                <Button className="mt-4" onClick={() => setShowNewWorkflow(true)}>Criar Workflow</Button>
+                <Button className="mt-4" onClick={handleSetShowNewWorkflow}>Criar Workflow</Button>
               </Card>
             ) : (
               filteredWorkflows.map((workflow) => (
@@ -184,10 +184,10 @@ export const WorkflowAutomationHub: React.FC = () => {
                     </p>
                   </div>
                   <div className="flex gap-2">
-                    <Button size="sm" variant="outline" onClick={() => toast({ title: "Configurações", description: "Abrindo configurações da regra..." })}>
+                    <Button size="sm" variant="outline" onClick={() => handletoast}>
                       <Settings className="h-4 w-4" />
                     </Button>
-                    <Button size="sm" variant={rule.is_active ? "destructive" : "default"} onClick={() => toggleAutomationRule(rule.id)}>
+                    <Button size="sm" variant={rule.is_active ? "destructive" : "default"} onClick={() => handletoggleAutomationRule}>
                       {rule.is_active ? "Desativar" : "Ativar"}
                     </Button>
                   </div>
@@ -215,7 +215,7 @@ export const WorkflowAutomationHub: React.FC = () => {
                       <p className="text-sm text-muted-foreground mb-3">{template.description}</p>
                       <div className="flex items-center justify-between">
                         <span className="text-sm text-muted-foreground">{template.steps.length} etapas</span>
-                        <Button size="sm" onClick={() => handleUseTemplate(template)}>
+                        <Button size="sm" onClick={() => handlehandleUseTemplate}>
                           <Sparkles className="h-3 w-3 mr-1" />
                           Usar Template
                         </Button>
@@ -270,8 +270,8 @@ export const WorkflowAutomationHub: React.FC = () => {
             <DialogDescription>Crie um novo fluxo de trabalho</DialogDescription>
           </DialogHeader>
           <div className="space-y-4 py-4">
-            <Input placeholder="Nome do workflow" value={newWorkflowData.name} onChange={(e) => setNewWorkflowData(p => ({ ...p, name: e.target.value }))} />
-            <Textarea placeholder="Descrição" value={newWorkflowData.description} onChange={(e) => setNewWorkflowData(p => ({ ...p, description: e.target.value }))} />
+            <Input placeholder="Nome do workflow" value={newWorkflowData.name} onChange={handleChange}))} />
+            <Textarea placeholder="Descrição" value={newWorkflowData.description} onChange={handleChange}))} />
             <div className="grid grid-cols-2 gap-4">
               <Select value={newWorkflowData.category} onValueChange={(v) => setNewWorkflowData(p => ({ ...p, category: v }))}>
                 <SelectTrigger><SelectValue placeholder="Categoria" /></SelectTrigger>
@@ -294,7 +294,7 @@ export const WorkflowAutomationHub: React.FC = () => {
             </div>
           </div>
           <DialogFooter>
-            <Button variant="outline" onClick={() => setShowNewWorkflow(false)}>Cancelar</Button>
+            <Button variant="outline" onClick={handleSetShowNewWorkflow}>Cancelar</Button>
             <Button onClick={handleNewWorkflow}>Criar Workflow</Button>
           </DialogFooter>
         </DialogContent>
@@ -327,7 +327,7 @@ export const WorkflowAutomationHub: React.FC = () => {
             </div>
           )}
           <DialogFooter>
-            <Button variant="outline" onClick={() => setShowDetails(false)}>Fechar</Button>
+            <Button variant="outline" onClick={handleSetShowDetails}>Fechar</Button>
           </DialogFooter>
         </DialogContent>
       </Dialog>
@@ -343,7 +343,7 @@ export const WorkflowAutomationHub: React.FC = () => {
             <p className="text-sm text-muted-foreground">Notificações, integrações e preferências podem ser configuradas aqui.</p>
           </div>
           <DialogFooter>
-            <Button onClick={() => setShowSettings(false)}>Fechar</Button>
+            <Button onClick={handleSetShowSettings}>Fechar</Button>
           </DialogFooter>
         </DialogContent>
       </Dialog>

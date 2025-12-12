@@ -1,5 +1,5 @@
 
-import { useEffect, useState } from "react";;;
+import { memo, memo, useEffect, useState, useMemo } from "react";;;
 import { supabase } from "@/integrations/supabase/client";
 import { CrewHealthRecord, WellbeingAlert } from "@/types/modules";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
@@ -9,7 +9,7 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Heart, Activity, AlertTriangle, TrendingUp, Brain } from "lucide-react";
 import { toast } from "sonner";
 
-export function CrewWellbeingDashboard() {
+export const CrewWellbeingDashboard = memo(function() {
   const [healthRecords, setHealthRecords] = useState<CrewHealthRecord[]>([]);
   const [alerts, setAlerts] = useState<WellbeingAlert[]>([]);
   const [loading, setLoading] = useState(true);

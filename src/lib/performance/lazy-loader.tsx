@@ -1,5 +1,5 @@
 /**
-import { useEffect, useState } from "react";;
+import { useEffect, useState, useCallback } from "react";;
  * PATCH 800: Enhanced Lazy Loading System for Low Bandwidth
  * Provides optimized lazy loading with retry, timeout, and fallback support
  */
@@ -51,7 +51,7 @@ export function createLazyComponent<T extends ComponentType<any>>(
 /**
  * Wrapper component for lazy-loaded components with loading state
  */
-export function LazyWrapper({
+export const LazyWrapper = memo(function({
   children,
   fallback = <OffshoreLoader />,
 }: {

@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";;
+import { useEffect, useState, useCallback } from "react";;
 import React, { useState, useEffect } from "react";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
@@ -416,7 +416,7 @@ export const PeotramPermissionsManager: React.FC = () => {
                   <Input
                     type="date"
                     value={permissionForm.expires_at}
-                    onChange={(e) => setPermissionForm(prev => ({ ...prev, expires_at: e.target.value }))}
+                    onChange={handleChange}))}
                   />
                 </div>
               </div>
@@ -502,7 +502,7 @@ export const PeotramPermissionsManager: React.FC = () => {
               )}
               
               <div className="flex justify-end gap-2 pt-4 border-t">
-                <Button variant="outline" onClick={() => setIsDialogOpen(false)}>
+                <Button variant="outline" onClick={handleSetIsDialogOpen}>
                   Cancelar
                 </Button>
                 <Button 
@@ -525,7 +525,7 @@ export const PeotramPermissionsManager: React.FC = () => {
               <Input
                 placeholder="Buscar usuários..."
                 value={searchTerm}
-                onChange={(e) => setSearchTerm(e.target.value)}
+                onChange={handleChange}
               />
             </div>
           </div>
@@ -641,14 +641,14 @@ export const PeotramPermissionsManager: React.FC = () => {
                       <Button
                         variant="outline"
                         size="sm"
-                        onClick={() => togglePermissionStatus(permission)}
+                        onClick={() => handletogglePermissionStatus}
                       >
                         {permission.is_active ? "Desativar" : "Ativar"}
                       </Button>
                       <Button
                         variant="outline"
                         size="sm"
-                        onClick={() => deletePermission(permission.id)}
+                        onClick={() => handledeletePermission}
                       >
                         <Trash2 className="h-4 w-4" />
                       </Button>

@@ -1,7 +1,7 @@
 
 "use client";
 
-import { useEffect, useRef, useState } from "react";;;
+import { useEffect, useRef, useState, useCallback, useMemo } from "react";;;
 import { useParams, Link } from "react-router-dom";
 import { supabase } from "@/integrations/supabase/client";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
@@ -339,7 +339,7 @@ export default function SGSOAuditReviewPage() {
                     <label className="text-sm font-medium mb-1 block">Evidências</label>
                     <Textarea
                       value={item.evidence || ""}
-                      onChange={(e) => handleItemUpdate(item.id, "evidence", e.target.value)}
+                      onChange={handleChange}
                       placeholder="Descreva as evidências encontradas..."
                       rows={3}
                     />
@@ -349,7 +349,7 @@ export default function SGSOAuditReviewPage() {
                     <label className="text-sm font-medium mb-1 block">Comentários</label>
                     <Textarea
                       value={item.comment || ""}
-                      onChange={(e) => handleItemUpdate(item.id, "comment", e.target.value)}
+                      onChange={handleChange}
                       placeholder="Adicione comentários adicionais..."
                       rows={2}
                     />

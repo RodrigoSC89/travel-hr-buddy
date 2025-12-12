@@ -1,4 +1,4 @@
-import { useState } from "react";;
+import { useState, useMemo, useCallback } from "react";;
 import React, { useState } from "react";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
@@ -18,7 +18,7 @@ import {
   Shield
 } from "lucide-react";
 
-export const CommunicationModule = () => {
+export const CommunicationModule = memo(() => {
   const [activeTab, setActiveTab] = useState("chat");
 
   const communicationStats = [
@@ -108,7 +108,7 @@ export const CommunicationModule = () => {
       time: "1 hora atrás",
       icon: CheckCircle,
       priority: "medium"
-    }
+    };
   ];
 
   const renderOverview = () => (
@@ -144,7 +144,7 @@ export const CommunicationModule = () => {
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
         {communicationStats.map((stat, index) => {
           const Icon = stat.icon;
-          const colorClasses: Record<string, string> = {
+          const colorClasses: Record<string key={string.id || index}, string> = {
             blue: "from-blue-500/20 via-blue-400/10 to-cyan-500/20 border-blue-200/50 text-blue-600",
             green: "from-green-500/20 via-green-400/10 to-emerald-500/20 border-green-200/50 text-green-600",
             purple: "from-purple-500/20 via-purple-400/10 to-violet-500/20 border-purple-200/50 text-purple-600",
@@ -208,7 +208,7 @@ export const CommunicationModule = () => {
                     key={index}
                     variant="outline"
                     className="w-full justify-start h-auto p-4 hover:scale-105 transition-all duration-200"
-                    onClick={() => setActiveTab("chat")}
+                    onClick={handleSetActiveTab}
                   >
                     <div className={`p-2 rounded-lg ${action.color} mr-3`}>
                       <Icon className="h-4 w-4 text-azure-50" />
@@ -239,7 +239,7 @@ export const CommunicationModule = () => {
             <div className="space-y-4">
               {recentActivities.map((activity, index) => {
                 const Icon = activity.icon;
-                const priorityColors: Record<string, string> = {
+                const priorityColors: Record<string key={string.id || index}, string> = {
                   high: "border-l-red-500 bg-red-50 dark:bg-red-900/10",
                   medium: "border-l-blue-500 bg-blue-50 dark:bg-blue-900/10",
                   low: "border-l-green-500 bg-green-50 dark:bg-green-900/10"

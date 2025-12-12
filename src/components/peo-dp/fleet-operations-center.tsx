@@ -1,4 +1,4 @@
-import { useState } from "react";;
+import { useState, useMemo, useCallback } from "react";;
 import React, { useState } from "react";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
@@ -290,7 +290,7 @@ export const FleetOperationsCenter: React.FC = () => {
             <Input 
               placeholder="Buscar embarcação..." 
               value={searchTerm} 
-              onChange={(e) => setSearchTerm(e.target.value)} 
+              onChange={handleChange} 
               className="pl-10" 
             />
           </div>
@@ -301,7 +301,7 @@ export const FleetOperationsCenter: React.FC = () => {
               <Card 
                 key={vessel.id} 
                 className={`cursor-pointer transition-all hover:shadow-lg ${selectedVessel?.id === vessel.id ? "ring-2 ring-primary" : ""}`}
-                onClick={() => setSelectedVessel(vessel)}
+                onClick={handleSetSelectedVessel}
               >
                 <CardContent className="pt-4">
                   <div className="flex items-start justify-between mb-3">
@@ -400,7 +400,7 @@ export const FleetOperationsCenter: React.FC = () => {
                           </div>
                         </div>
                         {!alert.acknowledged && (
-                          <Button size="sm" variant="outline" onClick={() => handleAcknowledgeAlert(alert.id)}>
+                          <Button size="sm" variant="outline" onClick={() => handlehandleAcknowledgeAlert}>
                             Reconhecer
                           </Button>
                         )}

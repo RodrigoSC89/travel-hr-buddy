@@ -1,8 +1,9 @@
+import { memo } from 'react';
 import { Skeleton } from "@/components/unified/Skeletons.unified";
 import { motion } from "framer-motion";
 
 // Dashboard Skeleton
-export function DashboardSkeleton() {
+export const DashboardSkeleton = memo(function() {
   return (
     <div className="space-y-6 p-6 animate-fade-in">
       {/* Header */}
@@ -55,7 +56,7 @@ export function DashboardSkeleton() {
 }
 
 // Table/List Skeleton
-export function TableSkeleton({ rows = 5 }: { rows?: number }) {
+export const TableSkeleton = memo(function({ rows = 5 }: { rows?: number }) {
   return (
     <div className="rounded-lg border animate-fade-in">
       {/* Header */}
@@ -84,7 +85,7 @@ export function TableSkeleton({ rows = 5 }: { rows?: number }) {
 }
 
 // Form Skeleton
-export function FormSkeleton() {
+export const FormSkeleton = memo(function() {
   return (
     <div className="space-y-6 max-w-2xl animate-fade-in">
       <Skeleton className="h-8 w-48 mb-6" />
@@ -112,7 +113,7 @@ export function FormSkeleton() {
 }
 
 // Profile/Detail Skeleton
-export function ProfileSkeleton() {
+export const ProfileSkeleton = memo(function() {
   return (
     <div className="space-y-6 animate-fade-in">
       {/* Header */}
@@ -150,7 +151,7 @@ export function ProfileSkeleton() {
 }
 
 // Map/Chart Skeleton
-export function ChartSkeleton() {
+export const ChartSkeleton = memo(function() {
   return (
     <div className="rounded-lg border bg-card p-6 animate-fade-in">
       <div className="flex justify-between items-center mb-4">
@@ -177,7 +178,7 @@ export function ChartSkeleton() {
 }
 
 // Generic Page Skeleton
-export function PageSkeleton() {
+export const PageSkeleton = memo(function() {
   return (
     <div className="space-y-6 p-6 animate-fade-in">
       <div className="flex justify-between items-center">

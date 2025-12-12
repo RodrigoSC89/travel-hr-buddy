@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";;
+import { useEffect, useState, useCallback } from "react";;
 import React, { useState, useEffect } from "react";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
@@ -403,7 +403,7 @@ export const SmartInsights: React.FC = () => {
                     {insight.actionable && (
                       <Button 
                         size="sm"
-                        onClick={() => implementInsight(insight)}
+                        onClick={() => handleimplementInsight}
                         disabled={isGenerating}
                         className="hover-glow"
                       >

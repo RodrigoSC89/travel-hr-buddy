@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";;
+import { useEffect, useState, useCallback, useMemo } from "react";;
 import React, { useState, useEffect } from "react";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
@@ -95,7 +95,7 @@ export const NotificationsPanel: React.FC = () => {
             <Button
               variant="outline"
               size="sm"
-              onClick={() => setShowUnreadOnly(!showUnreadOnly)}
+              onClick={handleSetShowUnreadOnly}
             >
               {showUnreadOnly ? "Todas" : "Não Lidas"}
             </Button>
@@ -134,7 +134,7 @@ export const NotificationsPanel: React.FC = () => {
                     <Button
                       variant="ghost"
                       size="sm"
-                      onClick={() => handleMarkAsRead(notification.id)}
+                      onClick={() => handlehandleMarkAsRead}
                     >
                       <Check className="w-4 h-4" />
                     </Button>

@@ -1,5 +1,5 @@
 /**
-import { useState } from "react";;
+import { useState, useMemo, useCallback } from "react";;
  * Fleet Operations Center - Módulo Unificado de Frota
  * PATCH UNIFY-2.0 - Fusão dos módulos de frota e operações
  * 
@@ -191,7 +191,7 @@ const FleetOperationsCenter: React.FC = () => {
             <Input
               placeholder="Buscar embarcação..."
               value={searchQuery}
-              onChange={(e) => setSearchQuery(e.target.value)}
+              onChange={handleChange}
               className="pl-10 w-64"
             />
           </div>

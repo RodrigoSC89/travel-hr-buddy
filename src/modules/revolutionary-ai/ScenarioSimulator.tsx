@@ -1,5 +1,5 @@
 /**
-import { useMemo, useState } from "react";;
+import { useMemo, useState, useCallback } from "react";;
  * REVOLUTIONARY AI - Scenario Simulator
  * Funcionalidade 7: Simulador de Impacto Financeiro e Operacional
  */
@@ -43,7 +43,7 @@ const INITIAL_SCENARIO: ScenarioInput = {
   equipmentAge: 5
 };
 
-export function ScenarioSimulator() {
+export const ScenarioSimulator = memo(function() {
   const [scenario, setScenario] = useState<ScenarioInput>(INITIAL_SCENARIO);
   const [isSimulating, setIsSimulating] = useState(false);
   const [showResults, setShowResults] = useState(false);
@@ -264,7 +264,7 @@ export function ScenarioSimulator() {
               <Button
                 variant={scenario.routeAlternative ? "default" : "outline"}
                 size="sm"
-                onClick={() => setScenario(s => ({ ...s, routeAlternative: !s.routeAlternative }))}
+                onClick={handleSetScenario}
               >
                 {scenario.routeAlternative ? "Ativado" : "Desativado"}
               </Button>

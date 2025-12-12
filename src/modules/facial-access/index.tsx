@@ -1,5 +1,5 @@
 /**
-import { useCallback, useRef, useState } from "react";;
+import { useCallback, useMemo, useRef, useState } from "react";;
  * PATCH: Reconhecimento Facial para Controle de Acesso
  * Sistema de identificação biométrica para áreas restritas
  */

@@ -1,5 +1,5 @@
 /**
-import { useState } from "react";;
+import { useState, useCallback } from "react";;
  * Telemetry Exporter Component
  * PDF and data export functionality
  */
@@ -24,7 +24,7 @@ interface TelemetryExporterProps {
   autonomyActions: unknown[];
 }
 
-export function TelemetryExporter({
+export const TelemetryExporter = memo(function({
   weatherData,
   satelliteData,
   syncStatus,

@@ -28,7 +28,7 @@ const quickActions = [
   { id: "autonomy", label: "Autonomy Console", icon: Zap, action: "/mission-control/autonomy" },
 ];
 
-export const CommandPalette = () => {
+export const CommandPalette = memo(() => {
   const [open, setOpen] = useState(false);
   const navigate = useNavigate();
 
@@ -37,7 +37,7 @@ export const CommandPalette = () => {
       if (e.key === "k" && (e.metaKey || e.ctrlKey)) {
         e.preventDefault();
         setOpen((open) => !open);
-      }
+      };
     };
 
     document.addEventListener("keydown", down);

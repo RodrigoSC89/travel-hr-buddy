@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";;
+import { useEffect, useState, useCallback, useMemo } from "react";;
 import React, { useState, useEffect } from "react";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
@@ -30,7 +30,7 @@ interface ChartData {
   target: number;
 }
 
-export const PriceHistoryChart = () => {
+export const PriceHistoryChart = memo(() => {
   const { user } = useAuth();
   const [alerts, setAlerts] = useState<Alert[]>([]);
   const [selectedAlert, setSelectedAlert] = useState<string>("");
@@ -174,7 +174,7 @@ export const PriceHistoryChart = () => {
         </CardContent>
       </Card>
     );
-  }
+  };
 
   return (
     <Card>

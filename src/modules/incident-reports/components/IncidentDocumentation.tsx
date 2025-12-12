@@ -31,7 +31,7 @@ export const IncidentDocumentation: React.FC<Props> = ({ incidents, onExportPDF 
                   </div>
                   <p className="text-xs text-muted-foreground">{incident.description}</p>
                 </div>
-                <Button size="sm" variant="outline" onClick={() => onExportPDF(incident.id)}>
+                <Button size="sm" variant="outline" onClick={() => handleonExportPDF}>
                   <Download className="h-3 w-3 mr-1" />
                   Export PDF
                 </Button>

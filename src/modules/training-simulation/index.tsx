@@ -1,5 +1,5 @@
 /**
-import { useState } from "react";;
+import { useState, useMemo, useCallback } from "react";;
  * PATCH: Módulo de Treinamento & Simulação
  * Simulações interativas com cenários de emergência e operações
  */
@@ -285,7 +285,7 @@ export default function TrainingSimulation() {
                     </div>
                     <Button 
                       className="w-full" 
-                      onClick={() => startSimulation(sim)}
+                      onClick={() => handlestartSimulation}
                     >
                       <Play className="h-4 w-4 mr-2" />
                       {isCompleted ? "Refazer" : "Iniciar"}
@@ -330,7 +330,7 @@ export default function TrainingSimulation() {
                   {simulationSteps[currentStep].options.map((option, idx) => (
                     <button
                       key={idx}
-                      onClick={() => handleAnswer(idx)}
+                      onClick={() => handlehandleAnswer}
                       disabled={showFeedback}
                       className={`w-full p-4 rounded-lg border text-left transition-all ${
                         selectedAnswer === idx

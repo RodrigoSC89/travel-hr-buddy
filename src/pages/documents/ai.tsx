@@ -1,4 +1,4 @@
-import { useState } from "react";;
+import { useState, useCallback } from "react";;
 
 import React, { useState } from "react";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
@@ -287,7 +287,7 @@ export default function AIDocuments() {
                   id="file"
                   type="file"
                   accept=".pdf,.png,.jpg,.jpeg,.tiff"
-                  onChange={(e) => setSelectedFile(e.target.files?.[0] || null)}
+                  onChange={handleChange}
                   disabled={uploading}
                 />
               </div>
@@ -320,7 +320,7 @@ export default function AIDocuments() {
           <Input
             placeholder="Search documents..."
             value={searchTerm}
-            onChange={(e) => setSearchTerm(e.target.value)}
+            onChange={handleChange}
             className="pl-10"
           />
         </div>
@@ -415,7 +415,7 @@ export default function AIDocuments() {
                         <Button
                           variant="outline"
                           size="sm"
-                          onClick={() => setSelectedDocument(doc)}
+                          onClick={handleSetSelectedDocument}
                         >
                           <Eye className="w-4 h-4 mr-2" />
                           View
@@ -468,7 +468,7 @@ export default function AIDocuments() {
                 <Button
                   variant="ghost"
                   size="sm"
-                  onClick={() => setSelectedDocument(null)}
+                  onClick={handleSetSelectedDocument}
                 >
                   ✕
                 </Button>

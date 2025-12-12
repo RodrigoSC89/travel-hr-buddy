@@ -1,3 +1,4 @@
+import { memo } from 'react';
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer, Legend } from "recharts";
 
@@ -12,7 +13,7 @@ interface ExpenseChartProps {
   transactions: Transaction[];
 }
 
-export function ExpenseChart({ transactions }: ExpenseChartProps) {
+export const ExpenseChart = memo(function({ transactions }: ExpenseChartProps) {
   // Agregar dados por categoria
   const categoryData = transactions.reduce((acc, t) => {
     if (!acc[t.category]) {

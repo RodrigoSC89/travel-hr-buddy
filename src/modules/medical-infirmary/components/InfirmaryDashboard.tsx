@@ -1,4 +1,4 @@
-import { useState } from "react";;
+import { useState, useMemo, useCallback } from "react";;
 import React, { useState } from "react";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
@@ -187,7 +187,7 @@ export default function InfirmaryDashboard() {
               <Input
                 placeholder="Descreva sintomas ou dúvidas..."
                 value={chatMessage}
-                onChange={(e) => setChatMessage(e.target.value)}
+                onChange={handleChange}
                 onKeyPress={(e) => e.key === "Enter" && handleSendMessage()}
               />
               <Button size="icon" onClick={handleSendMessage}>
@@ -195,13 +195,13 @@ export default function InfirmaryDashboard() {
               </Button>
             </div>
             <div className="flex flex-wrap gap-2 mt-3">
-              <Button variant="outline" size="sm" onClick={() => setChatMessage("Protocolo para dor de cabeça")}>
+              <Button variant="outline" size="sm" onClick={handleSetChatMessage}>
                 Dor de cabeça
               </Button>
-              <Button variant="outline" size="sm" onClick={() => setChatMessage("Como tratar corte?")}>
+              <Button variant="outline" size="sm" onClick={handleSetChatMessage}>
                 Ferimentos
               </Button>
-              <Button variant="outline" size="sm" onClick={() => setChatMessage("Verificar estoque")}>
+              <Button variant="outline" size="sm" onClick={handleSetChatMessage}>
                 Estoque
               </Button>
             </div>

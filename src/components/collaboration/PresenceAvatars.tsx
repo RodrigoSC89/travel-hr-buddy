@@ -29,7 +29,7 @@ const overlapClasses = {
   lg: "-ml-4",
 };
 
-export function PresenceAvatars({
+export const PresenceAvatars = memo(function({
   maxVisible = 5,
   size = "md",
   className,
@@ -147,7 +147,7 @@ export function PresenceAvatars({
 /**
  * Compact presence indicator
  */
-export function PresenceIndicator({ className }: { className?: string }) {
+export const PresenceIndicator = memo(function({ className }: { className?: string }) {
   const { users, isConnected } = usePresence();
   
   if (!isConnected) {

@@ -4,7 +4,7 @@
  * Visualize AI self-reflection and continuous learning metrics
  */
 
-import { useEffect, useState } from "react";;;
+import { useEffect, useState, useCallback, useMemo } from "react";;;
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
@@ -190,7 +190,7 @@ export default function AILearningDashboard() {
           <Button
             key={days}
             variant={timeRange === days ? "default" : "outline"}
-            onClick={() => setTimeRange(days)}
+            onClick={handleSetTimeRange}
             size="sm"
           >
             Last {days} days

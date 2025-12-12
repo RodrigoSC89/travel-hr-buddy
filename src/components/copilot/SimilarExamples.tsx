@@ -1,4 +1,4 @@
-import { useState } from "react";;;
+import { useState, useMemo, useCallback } from "react";;;
 import { querySimilarJobs, type SimilarJobResult } from "@/lib/ai/copilot/querySimilarJobs";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
@@ -152,7 +152,7 @@ export default function SimilarExamples({ input, onSelect }: { input: string, on
                   <Button
                     variant="outline"
                     className="w-full"
-                    onClick={() => handleCopySuggestion(job.metadata.ai_suggestion || job.metadata.description || "")}
+                    onClick={() => handlehandleCopySuggestion}
                   >
                     <Copy className="mr-2 h-4 w-4" />
                     📋 Usar como base

@@ -5,7 +5,7 @@
  * Tracks metrics and provides optimization recommendations
  */
 
-import { useCallback, useEffect, useRef, useState } from "react";;;
+import { memo, memo, useCallback, useEffect, useRef, useState, useMemo } from "react";;;
 
 interface PerformanceMetrics {
   fps: number;
@@ -37,7 +37,7 @@ interface UsePerformanceMonitorOptions {
 /**
  * Hook for monitoring mobile app performance
  */
-export function usePerformanceMonitor(options: UsePerformanceMonitorOptions = {}) {
+export const usePerformanceMonitor = memo(function(options: UsePerformanceMonitorOptions = {}) {
   const {
     fpsThreshold = 30,
     memoryThreshold = 80,
@@ -201,7 +201,7 @@ export function usePerformanceMonitor(options: UsePerformanceMonitorOptions = {}
 /**
  * Component to display performance metrics (debug only)
  */
-export function PerformanceOverlay() {
+export const PerformanceOverlay = memo(function() {
   const { metrics, alerts, isHealthy } = usePerformanceMonitor();
 
   if (process.env.NODE_ENV === "production") {

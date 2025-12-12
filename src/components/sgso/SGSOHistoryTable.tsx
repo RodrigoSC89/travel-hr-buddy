@@ -1,4 +1,4 @@
-import { useState } from "react";;
+import { useState, useCallback } from "react";;
 import React, { useState } from "react";
 import {
   Table,
@@ -152,7 +152,7 @@ export const SGSOHistoryTable: React.FC<SGSOHistoryTableProps> = ({
                     <Button
                       variant="ghost"
                       size="sm"
-                      onClick={() => toggleRow(plan.id)}
+                      onClick={() => handletoggleRow}
                       aria-label={expandedRows.has(plan.id) ? "Fechar detalhes" : "Expandir detalhes"}
                     >
                       {expandedRows.has(plan.id) ? (

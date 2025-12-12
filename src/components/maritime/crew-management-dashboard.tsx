@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";;
+import { useEffect, useState, useCallback } from "react";;
 import React, { useState, useEffect } from "react";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
@@ -47,7 +47,7 @@ interface CrewAssignment {
   status: "active" | "completed" | "scheduled";
 }
 
-export const CrewManagementDashboard = () => {
+export const CrewManagementDashboard = memo(() => {
   const [crewMembers, setCrewMembers] = useState<CrewMember[]>([]);
   const [assignments, setAssignments] = useState<CrewAssignment[]>([]);
   const [activeTab, setActiveTab] = useState("overview");
@@ -164,7 +164,7 @@ export const CrewManagementDashboard = () => {
         <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-primary"></div>
       </div>
     );
-  }
+  };
 
   return (
     <div className="space-y-6">
@@ -248,7 +248,7 @@ export const CrewManagementDashboard = () => {
                     <Input
                       placeholder="Buscar por nome ou cargo..."
                       value={searchTerm}
-                      onChange={(e) => setSearchTerm(e.target.value)}
+                      onChange={handleChange}
                       className="pl-10"
                     />
                   </div>

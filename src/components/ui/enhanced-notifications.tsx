@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";;
+import { useEffect, useState, useCallback, useMemo } from "react";;
 import React, { useState, useEffect } from "react";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
@@ -328,7 +328,7 @@ const EnhancedNotifications: React.FC<EnhancedNotificationsProps> = ({ isOpen, o
               <Button
                 variant="ghost"
                 size="sm"
-                onClick={() => setSoundEnabled(!soundEnabled)}
+                onClick={handleSetSoundEnabled}
                 className="w-8 h-8 p-0"
               >
                 {soundEnabled ? <Volume2 className="w-4 h-4" /> : <VolumeX className="w-4 h-4" />}
@@ -349,7 +349,7 @@ const EnhancedNotifications: React.FC<EnhancedNotificationsProps> = ({ isOpen, o
             <Button
               variant={filter === "all" ? "default" : "outline"}
               size="sm"
-              onClick={() => setFilter("all")}
+              onClick={handleSetFilter}
               className="text-xs"
             >
               Todas ({notifications.length})
@@ -357,7 +357,7 @@ const EnhancedNotifications: React.FC<EnhancedNotificationsProps> = ({ isOpen, o
             <Button
               variant={filter === "unread" ? "default" : "outline"}
               size="sm"
-              onClick={() => setFilter("unread")}
+              onClick={handleSetFilter}
               className="text-xs"
             >
               Não lidas ({unreadCount})
@@ -365,7 +365,7 @@ const EnhancedNotifications: React.FC<EnhancedNotificationsProps> = ({ isOpen, o
             <Button
               variant={filter === "urgent" ? "destructive" : "outline"}
               size="sm"
-              onClick={() => setFilter("urgent")}
+              onClick={handleSetFilter}
               className="text-xs"
             >
               Urgentes ({urgentCount})
@@ -404,7 +404,7 @@ const EnhancedNotifications: React.FC<EnhancedNotificationsProps> = ({ isOpen, o
                           ? "bg-primary/5 border-primary/30 shadow-sm" 
                           : "bg-background border-border/30"
                       } hover:shadow-md hover:scale-[1.02]`}
-                      onClick={() => markAsRead(notification.id)}
+                      onClick={() => handlemarkAsRead}
                     >
                       <CardContent className="p-4">
                         <div className="flex items-start gap-3">

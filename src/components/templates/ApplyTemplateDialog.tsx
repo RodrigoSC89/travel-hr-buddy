@@ -1,5 +1,5 @@
 /**
-import { useEffect, useMemo, useState } from "react";;
+import { useEffect, useMemo, useState, useCallback } from "react";;
  * PATCH 409: Apply Template Dialog Component
  * Dialog for applying templates to documents with real-time preview
  */
@@ -42,7 +42,7 @@ interface ApplyTemplateDialogProps {
   onApply?: (result: string) => void;
 }
 
-export function ApplyTemplateDialog({
+export const ApplyTemplateDialog = memo(function({
   open,
   onOpenChange,
   templateContent,
@@ -206,7 +206,7 @@ export function ApplyTemplateDialog({
                       <Input
                         id={varName}
                         value={variables[varName] || ""}
-                        onChange={(e) => handleVariableChange(varName, e.target.value)}
+                        onChange={handleChange}
                         placeholder={`Enter ${getVariableLabel(varName)}`}
                       />
                     </div>
@@ -244,7 +244,7 @@ export function ApplyTemplateDialog({
               <Button
                 variant="outline"
                 size="sm"
-                onClick={() => handleExport("TXT")}
+                onClick={() => handlehandleExport}
                 className="flex items-center gap-2"
               >
                 <Download className="h-4 w-4" />
@@ -253,7 +253,7 @@ export function ApplyTemplateDialog({
               <Button
                 variant="outline"
                 size="sm"
-                onClick={() => handleExport("HTML")}
+                onClick={() => handlehandleExport}
                 className="flex items-center gap-2"
               >
                 <Download className="h-4 w-4" />
@@ -264,7 +264,7 @@ export function ApplyTemplateDialog({
         </Tabs>
 
         <DialogFooter>
-          <Button variant="outline" onClick={() => onOpenChange(false)}>
+          <Button variant="outline" onClick={() => handleonOpenChange}>
             Cancel
           </Button>
           <Button onClick={handleApply} disabled={!appliedResult.success}>

@@ -1,5 +1,5 @@
 /**
-import { useEffect, useRef, useState } from "react";;
+import { useEffect, useRef, useState, useCallback, useMemo } from "react";;
  * AI Advisor Panel - Copiloto Adaptativo para PEO-DP
  * Interface de chat com personalidade baseada no perfil do usuário
  */
@@ -279,7 +279,7 @@ export const AIAdvisorPanel: React.FC = () => {
                               variant="ghost"
                               size="sm"
                               className="h-6 px-2"
-                              onClick={() => copyToClipboard(message.content)}
+                              onClick={() => handlecopyToClipboard}
                             >
                               <Copy className="h-3 w-3" />
                             </Button>
@@ -308,7 +308,7 @@ export const AIAdvisorPanel: React.FC = () => {
               <div className="flex gap-2 mt-4 pt-4 border-t">
                 <Input
                   value={input}
-                  onChange={(e) => setInput(e.target.value)}
+                  onChange={handleChange}
                   placeholder={`Pergunte ao assistente ${profileConfig[profile].label}...`}
                   onKeyDown={(e) => e.key === "Enter" && handleSend()}
                   disabled={loading}

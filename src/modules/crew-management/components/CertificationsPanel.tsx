@@ -1,4 +1,4 @@
-import { useState } from "react";;;
+import { memo, memo, useState, useCallback, useMemo } from "react";;;
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
@@ -37,7 +37,7 @@ interface CertificationsPanelProps {
   crewMembers: { id: string; full_name: string; employee_id: string }[];
 }
 
-export function CertificationsPanel({ certificates, crewMembers }: CertificationsPanelProps) {
+export const CertificationsPanel = memo(function({ certificates, crewMembers }: CertificationsPanelProps) {
   const [searchTerm, setSearchTerm] = useState("");
   const [activeTab, setActiveTab] = useState("all");
 
@@ -175,7 +175,7 @@ export function CertificationsPanel({ certificates, crewMembers }: Certification
             <Input
               placeholder="Buscar certificado..."
               value={searchTerm}
-              onChange={(e) => setSearchTerm(e.target.value)}
+              onChange={handleChange}
               className="pl-10"
             />
           </div>

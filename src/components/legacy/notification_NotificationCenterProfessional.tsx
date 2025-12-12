@@ -594,12 +594,12 @@ export default function NotificationCenterProfessional() {
               <span className="hidden sm:inline">Marcar Todas como Lidas</span>
             </Button>
 
-            <Button variant="outline" onClick={() => setIsSettingsDialogOpen(true)} className="gap-2">
+            <Button variant="outline" onClick={handleSetIsSettingsDialogOpen} className="gap-2">
               <Settings className="h-4 w-4" />
               <span className="hidden sm:inline">Configurações</span>
             </Button>
 
-            <Button variant="outline" onClick={() => setIsFiltersDialogOpen(true)} className="gap-2">
+            <Button variant="outline" onClick={handleSetIsFiltersDialogOpen} className="gap-2">
               <Filter className="h-4 w-4" />
               <span className="hidden sm:inline">Filtros</span>
               {(filters.types.length > 0 || filters.categories.length > 0) && (
@@ -618,7 +618,7 @@ export default function NotificationCenterProfessional() {
             value={stats.unread}
             icon={<Bell className="h-5 w-5 text-primary" />}
             subtitle="Novas notificações"
-            onClick={() => setSelectedType(null)}
+            onClick={handleSetSelectedType}
             isActive={selectedType === null}
           />
           <StatCard
@@ -626,7 +626,7 @@ export default function NotificationCenterProfessional() {
             value={stats.critical}
             icon={<AlertCircle className="h-5 w-5 text-destructive" />}
             subtitle="Requerem atenção"
-            onClick={() => setSelectedType(selectedType === "critical" ? null : "critical")}
+            onClick={handleSetSelectedType}
             isActive={selectedType === "critical"}
           />
           <StatCard
@@ -634,14 +634,14 @@ export default function NotificationCenterProfessional() {
             value={stats.completed}
             icon={<CheckCircle className="h-5 w-5 text-green-500" />}
             subtitle="Esta semana"
-            onClick={() => setSelectedType(null)}
+            onClick={handleSetSelectedType}
           />
           <StatCard
             title="Informativas"
             value={stats.info}
             icon={<Info className="h-5 w-5 text-blue-500" />}
             subtitle="Atualizações gerais"
-            onClick={() => setSelectedType(selectedType === "info" ? null : "info")}
+            onClick={handleSetSelectedType}
             isActive={selectedType === "info"}
           />
         </div>
@@ -682,12 +682,12 @@ export default function NotificationCenterProfessional() {
                   <Input
                     placeholder="Buscar notificações..."
                     value={searchQuery}
-                    onChange={(e) => setSearchQuery(e.target.value)}
+                    onChange={handleChange}
                     className="pl-9 w-64 bg-background/50"
                   />
                 </div>
                 {selectedType && (
-                  <Button variant="ghost" size="sm" onClick={() => setSelectedType(null)}>
+                  <Button variant="ghost" size="sm" onClick={handleSetSelectedType}>
                     Limpar filtro
                   </Button>
                 )}
@@ -705,15 +705,15 @@ export default function NotificationCenterProfessional() {
                   {selectedNotifications.length} selecionada(s)
                 </span>
                 <div className="flex-1" />
-                <Button variant="outline" size="sm" onClick={() => handleBulkAction("read")}>
+                <Button variant="outline" size="sm" onClick={() => handlehandleBulkAction}>
                   <Check className="h-4 w-4 mr-1" />
                   Marcar como lida
                 </Button>
-                <Button variant="outline" size="sm" onClick={() => handleBulkAction("archive")}>
+                <Button variant="outline" size="sm" onClick={() => handlehandleBulkAction}>
                   <Archive className="h-4 w-4 mr-1" />
                   Arquivar
                 </Button>
-                <Button variant="outline" size="sm" className="text-destructive" onClick={() => handleBulkAction("delete")}>
+                <Button variant="outline" size="sm" className="text-destructive" onClick={() => handlehandleBulkAction}>
                   <Trash2 className="h-4 w-4 mr-1" />
                   Excluir
                 </Button>
@@ -741,7 +741,7 @@ export default function NotificationCenterProfessional() {
                           ? "bg-background/30 border-border/30" 
                           : "bg-primary/5 border-primary/20 hover:border-primary/40"
                       } ${selectedNotifications.includes(notification.id) ? "ring-2 ring-primary" : ""}`}
-                      onClick={() => handleViewDetail(notification)}
+                      onClick={() => handlehandleViewDetail}
                     >
                       <div className="flex items-start gap-4">
                         <div className="flex items-center gap-3">
@@ -840,7 +840,7 @@ export default function NotificationCenterProfessional() {
                                   </Button>
                                 </DropdownMenuTrigger>
                                 <DropdownMenuContent align="end">
-                                  <DropdownMenuItem onClick={() => handleViewDetail(notification)}>
+                                  <DropdownMenuItem onClick={() => handlehandleViewDetail}>
                                     <Eye className="h-4 w-4 mr-2" />
                                     Ver detalhes
                                   </DropdownMenuItem>
@@ -860,7 +860,7 @@ export default function NotificationCenterProfessional() {
                                   <DropdownMenuSeparator />
                                   <DropdownMenuItem 
                                     className="text-destructive"
-                                    onClick={() => handleDelete(notification)}
+                                    onClick={() => handlehandleDelete}
                                   >
                                     <Trash2 className="h-4 w-4 mr-2" />
                                     Excluir
@@ -990,7 +990,7 @@ export default function NotificationCenterProfessional() {
               </div>
             </div>
             <DialogFooter>
-              <Button variant="outline" onClick={() => setIsSettingsDialogOpen(false)}>Cancelar</Button>
+              <Button variant="outline" onClick={handleSetIsSettingsDialogOpen}>Cancelar</Button>
               <Button onClick={handleSaveSettings}>Salvar</Button>
             </DialogFooter>
           </DialogContent>
@@ -1157,7 +1157,7 @@ export default function NotificationCenterProfessional() {
               </div>
             </div>
             <DialogFooter>
-              <Button variant="outline" onClick={() => setIsAiDialogOpen(false)}>Fechar</Button>
+              <Button variant="outline" onClick={handleSetIsAiDialogOpen}>Fechar</Button>
               <Button onClick={handleAiAnalysis} disabled={isAiLoading}>
                 {isAiLoading ? "Analisando..." : "Nova Análise"}
               </Button>
@@ -1224,7 +1224,7 @@ export default function NotificationCenterProfessional() {
                   <Trash2 className="h-4 w-4" />
                 </Button>
               </div>
-              <Button onClick={() => setIsDetailDialogOpen(false)}>Fechar</Button>
+              <Button onClick={handleSetIsDetailDialogOpen}>Fechar</Button>
             </DialogFooter>
           </DialogContent>
         </Dialog>

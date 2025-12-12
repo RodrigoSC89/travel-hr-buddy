@@ -36,7 +36,7 @@ interface OfflineDataProviderProps {
   children: ReactNode;
 }
 
-export function OfflineDataProvider({ children }: OfflineDataProviderProps) {
+export const OfflineDataProvider = memo(function({ children }: OfflineDataProviderProps) {
   const [isOnline, setIsOnline] = useState(true);
   const [isSyncing, setIsSyncing] = useState(false);
   const [pendingChanges, setPendingChanges] = useState(0);

@@ -1,4 +1,4 @@
-import { useState } from "react";;;
+import { memo, memo, useState } from "react";;;
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
@@ -36,7 +36,7 @@ interface CommandData {
   logs: AuditLog[];
 }
 
-export function Patch608Validation() {
+export const Patch608Validation = memo(function() {
   const [results, setResults] = useState<Record<string, boolean>>({});
   const [loading, setLoading] = useState(false);
   const [commandData, setCommandData] = useState<CommandData | null>(null);

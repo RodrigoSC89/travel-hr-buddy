@@ -1,4 +1,4 @@
-import { useState } from "react";;
+import { useState, useMemo, useCallback } from "react";;
 import React, { useState } from "react";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
@@ -225,7 +225,7 @@ export const SafetyChecklist: React.FC<SafetyChecklistProps> = ({
           <Input
             type="number"
             value={String(item.value || "")}
-            onChange={(e) => handleItemChange(item.id, "value", parseFloat(e.target.value))}
+            onChange={handleChange}
             placeholder={`Min: ${item.minValue}, Max: ${item.maxValue}`}
             className="w-32"
           />
@@ -237,7 +237,7 @@ export const SafetyChecklist: React.FC<SafetyChecklistProps> = ({
       return (
         <Input
           value={String(item.value || "")}
-          onChange={(e) => handleItemChange(item.id, "value", e.target.value)}
+          onChange={handleChange}
           placeholder="Digite sua observação..."
           className="w-full"
         />
@@ -337,7 +337,7 @@ export const SafetyChecklist: React.FC<SafetyChecklistProps> = ({
                   <Button
                     variant={selectedCategory === "all" ? "default" : "outline"}
                     size="sm"
-                    onClick={() => setSelectedCategory("all")}
+                    onClick={handleSetSelectedCategory}
                   >
                     Todas as Categorias
                   </Button>
@@ -346,7 +346,7 @@ export const SafetyChecklist: React.FC<SafetyChecklistProps> = ({
                       key={category}
                       variant={selectedCategory === category ? "default" : "outline"}
                       size="sm"
-                      onClick={() => setSelectedCategory(category)}
+                      onClick={handleSetSelectedCategory}
                       className="flex items-center gap-2"
                     >
                       {getCategoryIcon(category)}
@@ -361,7 +361,7 @@ export const SafetyChecklist: React.FC<SafetyChecklistProps> = ({
                     <Card key={item.id} className={`transition-colors ${
                       item.status === "completed" ? "bg-green-50 border-green-200" : ""
                     }`}>
-                      <CardHeader className="pb-3">
+                      <CardHeader key={CardHeader.id || index} className="pb-3">
                         <div className="flex items-start justify-between">
                           <div className="flex-1">
                             <div className="flex items-center gap-2">
@@ -397,7 +397,7 @@ export const SafetyChecklist: React.FC<SafetyChecklistProps> = ({
                           <label className="text-sm font-medium">Observações:</label>
                           <Textarea
                             value={item.notes || ""}
-                            onChange={(e) => handleItemChange(item.id, "notes", e.target.value)}
+                            onChange={handleChange}
                             placeholder="Adicione observações sobre este item de segurança..."
                             className="mt-1"
                             rows={2}

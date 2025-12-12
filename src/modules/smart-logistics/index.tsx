@@ -1,5 +1,5 @@
 /**
-import { useState } from "react";;
+import { useState, useMemo, useCallback } from "react";;
  * PATCH: Reabastecimento Logístico Inteligente
  * Sistema de gestão de suprimentos com IA preditiva
  */
@@ -381,7 +381,7 @@ export default function SmartLogistics() {
                           <Button 
                             size="sm" 
                             variant={item.status === "critical" ? "destructive" : "outline"}
-                            onClick={() => generateOrder(item.id)}
+                            onClick={() => handlegenerateOrder}
                           >
                             <ShoppingCart className="h-3 w-3 mr-1" />
                             Reabastecer

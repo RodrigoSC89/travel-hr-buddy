@@ -76,7 +76,7 @@ const EMERGENCY_TYPES = [
   { id: "abandon", label: "Abandon Ship", color: "bg-purple-700", description: "Abandon vessel" },
 ];
 
-export function EmergencyMode() {
+export const EmergencyMode = memo(function() {
   const { t } = useTranslation("emergency");
   const [activeEmergency, setActiveEmergency] = useState<string | null>(null);
   const [position, setPosition] = useState<{ lat: number; lng: number } | null>(null);
@@ -184,7 +184,7 @@ export function EmergencyMode() {
         <Button 
           variant="outline" 
           className="border-red-400 text-red-100 hover:bg-red-900"
-          onClick={() => setShowExitConfirm(true)}
+          onClick={handleSetShowExitConfirm}
         >
           {t("exitEmergency")}
         </Button>
@@ -218,7 +218,7 @@ export function EmergencyMode() {
             <Button 
               variant="outline" 
               className="border-white"
-              onClick={() => setActiveEmergency(null)}
+              onClick={handleSetActiveEmergency}
             >
               Cancel Alert
             </Button>
@@ -306,7 +306,7 @@ export function EmergencyMode() {
                     size="sm"
                     variant={member.status === "safe" ? "default" : "outline"}
                     className={member.status === "safe" ? "bg-green-600" : "border-green-600"}
-                    onClick={() => updateCrewStatus(member.id, "safe")}
+                    onClick={() => handleupdateCrewStatus}
                   >
                     <CheckCircle className="h-4 w-4" />
                   </Button>
@@ -314,7 +314,7 @@ export function EmergencyMode() {
                     size="sm"
                     variant={member.status === "missing" ? "default" : "outline"}
                     className={member.status === "missing" ? "bg-red-600" : "border-red-600"}
-                    onClick={() => updateCrewStatus(member.id, "missing")}
+                    onClick={() => handleupdateCrewStatus}
                   >
                     <XCircle className="h-4 w-4" />
                   </Button>
@@ -336,7 +336,7 @@ export function EmergencyMode() {
             <div className="space-y-2 mb-3">
               <Textarea
                 value={newIncidentDesc}
-                onChange={(e) => setNewIncidentDesc(e.target.value)}
+                onChange={handleChange}
                 placeholder="Describe the incident..."
                 className="bg-red-800/50 border-red-600 text-white placeholder:text-red-300"
                 rows={2}
@@ -401,7 +401,7 @@ export function EmergencyMode() {
                 <Button 
                   variant="outline" 
                   className="flex-1 border-red-400"
-                  onClick={() => setShowExitConfirm(false)}
+                  onClick={handleSetShowExitConfirm}
                 >
                   {t("cancel", { ns: "common" })}
                 </Button>

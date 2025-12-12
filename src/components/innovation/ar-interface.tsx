@@ -1,4 +1,4 @@
-import { useEffect, useRef, useState } from "react";;
+import { useEffect, useRef, useState, useCallback, useMemo } from "react";;
 import React, { useState, useRef, useEffect } from "react";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
@@ -301,7 +301,7 @@ export const ARInterface: React.FC = () => {
                       left: `${object.position.x * 100}%`,
                       top: `${object.position.y * 100}%`
                     }}
-                    onClick={() => simulateObjectDetection(object.id)}
+                    onClick={() => handlesimulateObjectDetection}
                   >
                     <div className="bg-azure-100/90 backdrop-blur-sm rounded-lg p-2 shadow-lg border">
                       <div className="flex items-center gap-2">
@@ -419,7 +419,7 @@ export const ARInterface: React.FC = () => {
                     <Button 
                       size="sm" 
                       variant="outline"
-                      onClick={() => setSelectedObject(object)}
+                      onClick={handleSetSelectedObject}
                     >
                       <Eye className="h-4 w-4 mr-2" />
                       Visualizar

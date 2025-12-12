@@ -3,7 +3,7 @@ import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Bot, CheckCircle2, XCircle, MessageSquare, Volume2, Image, Brain } from "lucide-react";
-import { useState } from "react";;;
+import { useState, useMemo, useCallback } from "react";;;
 import { logger } from "@/lib/logger";
 
 export default function Patch504AiCopilot() {
@@ -128,7 +128,7 @@ export default function Patch504AiCopilot() {
                 <Input
                   placeholder="Digite seu comando..."
                   value={userInput}
-                  onChange={(e) => setUserInput(e.target.value)}
+                  onChange={handleChange}
                 />
                 <Button type="submit">Enviar</Button>
               </form>

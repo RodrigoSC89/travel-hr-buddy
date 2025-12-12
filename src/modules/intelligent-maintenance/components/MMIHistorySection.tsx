@@ -2,7 +2,7 @@
  * MMI History Section - Histórico de manutenções
  */
 
-import { useEffect, useState } from "react";;;
+import { useEffect, useState, useCallback } from "react";;;
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -184,7 +184,7 @@ export default function MMIHistorySection() {
               <Input
                 placeholder="Buscar por título, embarcação ou sistema..."
                 value={search}
-                onChange={(e) => setSearch(e.target.value)}
+                onChange={handleChange}
                 className="pl-10"
               />
             </div>
@@ -192,28 +192,28 @@ export default function MMIHistorySection() {
               <Button 
                 variant={filterType === null ? "default" : "outline"} 
                 size="sm"
-                onClick={() => setFilterType(null)}
+                onClick={handleSetFilterType}
               >
                 Todos
               </Button>
               <Button 
                 variant={filterType === "preventiva" ? "default" : "outline"} 
                 size="sm"
-                onClick={() => setFilterType("preventiva")}
+                onClick={handleSetFilterType}
               >
                 Preventiva
               </Button>
               <Button 
                 variant={filterType === "corretiva" ? "default" : "outline"} 
                 size="sm"
-                onClick={() => setFilterType("corretiva")}
+                onClick={handleSetFilterType}
               >
                 Corretiva
               </Button>
               <Button 
                 variant={filterType === "preditiva" ? "default" : "outline"} 
                 size="sm"
-                onClick={() => setFilterType("preditiva")}
+                onClick={handleSetFilterType}
               >
                 Preditiva
               </Button>

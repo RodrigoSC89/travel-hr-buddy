@@ -1,4 +1,4 @@
-import { useState } from "react";;
+import { useState, useMemo, useCallback } from "react";;
 import React, { useState } from "react";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
@@ -212,7 +212,7 @@ export const PeotramCNPJHistory: React.FC = () => {
               <Input
                 placeholder="Digite o CNPJ ou nome..."
                 value={searchCNPJ}
-                onChange={(e) => setSearchCNPJ(e.target.value)}
+                onChange={handleChange}
                 onKeyPress={(e) => e.key === "Enter" && handleSearch()}
               />
             </div>
@@ -233,7 +233,7 @@ export const PeotramCNPJHistory: React.FC = () => {
                   key={company.cnpj}
                   variant="outline"
                   size="sm"
-                  onClick={() => setSelectedCompany(company)}
+                  onClick={handleSetSelectedCompany}
                   className={selectedCompany?.cnpj === company.cnpj ? "border-primary" : ""}
                 >
                   {company.name}
@@ -322,7 +322,7 @@ export const PeotramCNPJHistory: React.FC = () => {
                     className={`cursor-pointer transition-all ${
                       selectedVessel?.id === vessel.id ? "border-primary shadow-lg" : "hover:shadow-md"
                     }`}
-                    onClick={() => setSelectedVessel(vessel)}
+                    onClick={handleSetSelectedVessel}
                   >
                     <CardHeader className="pb-2">
                       <div className="flex items-center justify-between">

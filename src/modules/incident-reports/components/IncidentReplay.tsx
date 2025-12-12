@@ -1,5 +1,5 @@
 /**
-import { useEffect, useState } from "react";;
+import { useEffect, useState, useCallback, useMemo } from "react";;
  * PATCH 472 - Incident Replay Component
  * Timeline-based incident replay with AI analysis
  */

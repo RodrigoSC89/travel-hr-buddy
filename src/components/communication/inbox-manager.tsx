@@ -1,4 +1,4 @@
-import { useEffect, useMemo, useState } from "react";;
+import { useEffect, useMemo, useState, useCallback } from "react";;
 import React, { useState, useEffect, useMemo } from "react";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
@@ -340,7 +340,7 @@ export const InboxManager: React.FC<InboxManagerProps> = ({
                 <Input
                   placeholder="Buscar mensagens..."
                   value={searchTerm}
-                  onChange={(e) => setSearchTerm(e.target.value)}
+                  onChange={handleChange}
                   className="pl-10"
                 />
               </div>
@@ -421,7 +421,7 @@ export const InboxManager: React.FC<InboxManagerProps> = ({
                 className={`cursor-pointer transition-all hover:shadow-md ${
                   isUnread ? "border-primary/50 bg-primary/5" : ""
                 } ${message.is_urgent ? "border-l-4 border-l-destructive" : ""}`}
-                onClick={() => setSelectedMessage(message)}
+                onClick={handleSetSelectedMessage}
               >
                 <CardContent className="p-4">
                   <div className="flex items-start gap-4">

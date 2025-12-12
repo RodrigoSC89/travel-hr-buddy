@@ -82,7 +82,7 @@ export const NavigationBar: React.FC = () => {
             <Button
               key={action.path}
               variant="ghost"
-              onClick={() => navigate(action.path)}
+              onClick={() => handlenavigate}
               className={`flex flex-col items-center gap-2 h-auto py-4 px-3 
                          transition-all duration-200 hover:scale-105 active:scale-95 
                          group relative ${action.bgColor} border border-border/30 

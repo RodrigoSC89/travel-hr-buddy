@@ -1,4 +1,4 @@
-import { useState } from "react";;
+import { useState, useCallback } from "react";;
 import React, { useState } from "react";
 import { BaseChecklistManager } from "./base-checklist-manager";
 import { DPChecklist } from "./dp-checklist";

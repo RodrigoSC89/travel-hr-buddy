@@ -1,5 +1,5 @@
 /**
-import { useEffect, useState } from "react";;
+import { useEffect, useState, useCallback } from "react";;
  * PATCH 839: Production Readiness Checklist
  * Visual checklist for go-live validation
  */
@@ -50,7 +50,7 @@ interface CheckCategory {
   items: CheckItem[];
 }
 
-export function ProductionChecklist() {
+export const ProductionChecklist = memo(function() {
   const [checks, setChecks] = useState<CheckCategory[]>([]);
   const [isRunning, setIsRunning] = useState(false);
   const [lastRun, setLastRun] = useState<Date | null>(null);

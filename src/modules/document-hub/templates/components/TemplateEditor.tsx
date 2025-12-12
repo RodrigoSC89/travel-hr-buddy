@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";;
+import { useEffect, useState, useCallback } from "react";;
 
 /**
  * PATCH 417: Document Templates WYSIWYG Editor
@@ -213,7 +213,7 @@ export const TemplateEditor: React.FC<TemplateEditorProps> = ({
                   key={variable}
                   variant="outline"
                   size="sm"
-                  onClick={() => insertVariable(variable)}
+                  onClick={() => handleinsertVariable}
                   className="text-xs"
                   type="button"
                 >

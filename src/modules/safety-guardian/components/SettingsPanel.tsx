@@ -1,5 +1,5 @@
 /**
-import { useState } from "react";;
+import { useState, useCallback } from "react";;
  * Settings Panel - Configurações do Safety Guardian
  */
 
@@ -126,7 +126,7 @@ export const SettingsPanel: React.FC<SettingsPanelProps> = ({
                     type="number"
                     min={1}
                     value={settings.ltiGoal}
-                    onChange={(e) => updateSettings("ltiGoal", parseInt(e.target.value) || 365)}
+                    onChange={handleChange}
                   />
                   <p className="text-xs text-muted-foreground">
                     Meta de dias consecutivos sem acidentes com afastamento
@@ -141,7 +141,7 @@ export const SettingsPanel: React.FC<SettingsPanelProps> = ({
                     step={0.01}
                     min={0}
                     value={settings.trirTarget}
-                    onChange={(e) => updateSettings("trirTarget", parseFloat(e.target.value) || 0)}
+                    onChange={handleChange}
                   />
                   <p className="text-xs text-muted-foreground">
                     Taxa de Incidentes Registráveis Total (por 200.000 horas)
@@ -187,10 +187,7 @@ export const SettingsPanel: React.FC<SettingsPanelProps> = ({
                     type="number"
                     min={1}
                     value={settings.autoAlertThresholds.certification_expiry_days}
-                    onChange={(e) => updateSettings(
-                      "autoAlertThresholds.certification_expiry_days", 
-                      parseInt(e.target.value) || 30
-                    )}
+                    onChange={handleChange}
                   />
                   <p className="text-xs text-muted-foreground">
                     Alertar X dias antes do vencimento
@@ -204,10 +201,7 @@ export const SettingsPanel: React.FC<SettingsPanelProps> = ({
                     type="number"
                     min={1}
                     value={settings.autoAlertThresholds.training_overdue_days}
-                    onChange={(e) => updateSettings(
-                      "autoAlertThresholds.training_overdue_days",
-                      parseInt(e.target.value) || 7
-                    )}
+                    onChange={handleChange}
                   />
                   <p className="text-xs text-muted-foreground">
                     Alertar após X dias de atraso
@@ -221,10 +215,7 @@ export const SettingsPanel: React.FC<SettingsPanelProps> = ({
                     type="number"
                     min={1}
                     value={settings.autoAlertThresholds.incident_escalation_hours}
-                    onChange={(e) => updateSettings(
-                      "autoAlertThresholds.incident_escalation_hours",
-                      parseInt(e.target.value) || 24
-                    )}
+                    onChange={handleChange}
                   />
                   <p className="text-xs text-muted-foreground">
                     Escalar incidente após X horas sem ação

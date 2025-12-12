@@ -1,4 +1,4 @@
-import { useCallback, useEffect, useState } from "react";;
+import { useCallback, useMemo, useEffect, useState } from "react";;
 import React, { useState, useEffect, useCallback } from "react";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
@@ -379,7 +379,7 @@ export const KnowledgeManagement: React.FC = () => {
                       <Input
                         placeholder="Buscar por título, conteúdo ou tags..."
                         value={searchQuery}
-                        onChange={(e) => setSearchQuery(e.target.value)}
+                        onChange={handleChange}
                         className="pl-10"
                       />
                     </div>
@@ -454,13 +454,13 @@ export const KnowledgeManagement: React.FC = () => {
                         <Button variant="ghost" size="sm">
                           <Eye className="w-4 h-4" />
                         </Button>
-                        <Button variant="ghost" size="sm" onClick={() => handleEdit(item)}>
+                        <Button variant="ghost" size="sm" onClick={() => handlehandleEdit}>
                           <Edit className="w-4 h-4" />
                         </Button>
                         <Button 
                           variant="ghost" 
                           size="sm"
-                          onClick={() => handleDelete(item.id)}
+                          onClick={() => handlehandleDelete}
                           className="text-red-500 hover:text-red-700"
                         >
                           <Trash2 className="w-4 h-4" />
@@ -635,7 +635,7 @@ export const KnowledgeManagement: React.FC = () => {
                     <label className="text-sm font-medium">Título</label>
                     <Input
                       value={editingItem.title}
-                      onChange={(e) => setEditingItem({ ...editingItem, title: e.target.value })}
+                      onChange={handleChange})}
                       placeholder="Título do conteúdo"
                     />
                   </div>
@@ -718,10 +718,7 @@ export const KnowledgeManagement: React.FC = () => {
                   <label className="text-sm font-medium">Tags (separadas por vírgula)</label>
                   <Input
                     value={editingItem.tags.join(", ")}
-                    onChange={(e) => setEditingItem({ 
-                      ...editingItem, 
-                      tags: e.target.value.split(",").map(tag => tag.trim()).filter(Boolean)
-                    })}
+                    onChange={handleChange})}
                     placeholder="tag1, tag2, tag3"
                   />
                 </div>
@@ -730,7 +727,7 @@ export const KnowledgeManagement: React.FC = () => {
                   <label className="text-sm font-medium">Conteúdo</label>
                   <Textarea
                     value={editingItem.content}
-                    onChange={(e) => setEditingItem({ ...editingItem, content: e.target.value })}
+                    onChange={handleChange})}
                     placeholder="Conteúdo do item"
                     rows={8}
                   />
@@ -739,7 +736,7 @@ export const KnowledgeManagement: React.FC = () => {
             )}
 
             <DialogFooter>
-              <Button variant="outline" onClick={() => setIsEditDialogOpen(false)}>
+              <Button variant="outline" onClick={handleSetIsEditDialogOpen}>
                 Cancelar
               </Button>
               <Button onClick={handleSave}>

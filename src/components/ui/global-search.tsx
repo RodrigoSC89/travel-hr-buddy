@@ -1,4 +1,4 @@
-import { useEffect, useRef, useState } from "react";;
+import { useEffect, useRef, useState, useCallback, useMemo } from "react";;
 import React, { useState, useEffect, useRef } from "react";
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from "@/components/ui/dialog";
 import { Input } from "@/components/ui/input";
@@ -241,7 +241,7 @@ const GlobalSearch: React.FC<GlobalSearchProps> = ({ isOpen, onOpenChange }) => 
             <Input
               ref={inputRef}
               value={query}
-              onChange={(e) => setQuery(e.target.value)}
+              onChange={handleChange}
               placeholder="Buscar módulos, auditorias, relatórios... (use / para ativar)"
               className="pl-10 pr-16 h-12 text-base bg-background border-2 border-primary/20 focus:border-primary/40 text-foreground placeholder:text-muted-foreground"
               autoComplete="off"
@@ -280,7 +280,7 @@ const GlobalSearch: React.FC<GlobalSearchProps> = ({ isOpen, onOpenChange }) => 
                         ? "bg-primary/10 shadow-md scale-[1.02] border-primary/30 border-2"
                         : "bg-background/50 hover:bg-accent/50 hover:shadow-sm"
                     }`}
-                    onClick={() => handleResultClick(result)}
+                    onClick={() => handlehandleResultClick}
                   >
                     <CardContent className="p-4">
                       <div className="flex items-start gap-3">

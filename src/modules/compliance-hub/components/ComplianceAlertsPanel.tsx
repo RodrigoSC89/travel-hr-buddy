@@ -26,7 +26,7 @@ interface ComplianceAlertsPanelProps {
   onMarkAllAsRead: () => void;
 }
 
-export function ComplianceAlertsPanel({ 
+export const ComplianceAlertsPanel = memo(function({ 
   alerts, 
   onMarkAsRead, 
   onMarkAllAsRead 
@@ -116,7 +116,7 @@ export function ComplianceAlertsPanel({
                       ? "bg-muted/30 border-border/50" 
                       : "bg-card border-border shadow-sm"
                   }`}
-                  onClick={() => handleAlertClick(alert)}
+                  onClick={() => handlehandleAlertClick}
                 >
                   {!alert.isRead && (
                     <div className="absolute top-3 right-3 w-2 h-2 rounded-full bg-primary animate-pulse" />

@@ -3,7 +3,7 @@
  * Dashboard de frota com visualizações avançadas e métricas operacionais
  */
 
-import { useState } from "react";;;
+import { memo, memo, useState, useMemo } from "react";;;
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
@@ -190,7 +190,7 @@ const VesselCard = ({ vessel }: unknown: unknown: unknown) => {
   );
 };
 
-export function ProfessionalFleetDashboard() {
+export const ProfessionalFleetDashboard = memo(function() {
   const [activeTab, setActiveTab] = useState("overview");
 
   const totalVessels = vessels.length;

@@ -1,4 +1,4 @@
-import { useState } from "react";;
+import { useState, useMemo, useCallback } from "react";;
 import React, { useState } from "react";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
@@ -16,7 +16,7 @@ interface Props {
   setAuditData: React.Dispatch<React.SetStateAction<Record<number, { status: string; notes: string; evidence: string }>>>;
 }
 
-export function IMCADPChecklist({ selectedDPClass, auditData, setAuditData }: Props) {
+export const IMCADPChecklist = memo(function({ selectedDPClass, auditData, setAuditData }: Props) {
   const updateItem = (id: number, field: string, value: string) => {
     setAuditData(prev => ({
       ...prev,
@@ -99,7 +99,7 @@ export function IMCADPChecklist({ selectedDPClass, auditData, setAuditData }: Pr
                             <Textarea
                               placeholder="Notas do auditor..."
                               value={auditData[item.id]?.notes || ""}
-                              onChange={(e) => updateItem(item.id, "notes", e.target.value)}
+                              onChange={handleChange}
                               className="min-h-[60px]"
                             />
                           </div>

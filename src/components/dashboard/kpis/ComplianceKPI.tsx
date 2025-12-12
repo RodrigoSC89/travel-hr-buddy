@@ -5,10 +5,10 @@
 
 import { Card, CardContent } from "@/components/ui/card";
 import { Shield } from "lucide-react";
-import { useEffect, useState } from "react";;;
+import { memo, memo, useEffect, useState } from "react";;;
 import { supabase } from "@/integrations/supabase/client";
 
-export function ComplianceKPI() {
+export const ComplianceKPI = memo(function() {
   const [compliance, setCompliance] = useState<number | null>(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<Error | null>(null);

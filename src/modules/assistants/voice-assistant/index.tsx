@@ -1,4 +1,4 @@
-import { useCallback, useEffect, useRef, useState } from "react";;
+import { useCallback, useMemo, useEffect, useRef, useState } from "react";;
 import React, { useState, useCallback, useEffect, useRef } from "react";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
@@ -498,7 +498,7 @@ const VoiceAssistant: React.FC = () => {
                 <Input
                   placeholder="Ou digite sua mensagem..."
                   value={textInput}
-                  onChange={(e) => setTextInput(e.target.value)}
+                  onChange={handleChange}
                   disabled={isProcessing}
                   className="flex-1"
                 />
@@ -528,7 +528,7 @@ const VoiceAssistant: React.FC = () => {
                     variant="outline"
                     size="sm"
                     className="justify-start"
-                    onClick={() => processCommand(cmd.command)}
+                    onClick={() => handleprocessCommand}
                     disabled={isProcessing}
                   >
                     {cmd.label}
@@ -559,7 +559,7 @@ const VoiceAssistant: React.FC = () => {
               <Button
                 variant="outline"
                 className="w-full justify-between"
-                onClick={() => setUseElevenLabs(!useElevenLabs)}
+                onClick={handleSetUseElevenLabs}
               >
                 <span>Voz Premium</span>
                 {useElevenLabs ? <CheckCircle className="h-4 w-4 text-green-500" /> : <AlertCircle className="h-4 w-4 text-muted-foreground" />}

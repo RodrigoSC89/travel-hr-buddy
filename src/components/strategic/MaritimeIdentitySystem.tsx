@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";;
+import { useEffect, useState, useCallback, useMemo } from "react";;
 import React, { useState, useEffect } from "react";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
@@ -356,7 +356,7 @@ const MaritimeIdentitySystem: React.FC = () => {
             <Button
               key={section.id}
               variant={activeSection === section.id ? "default" : "ghost"}
-              onClick={() => setActiveSection(section.id as unknown)}
+              onClick={handleSetActiveSection}
               className="flex items-center gap-2"
             >
               <Icon className="w-4 h-4" />
@@ -385,7 +385,7 @@ const MaritimeIdentitySystem: React.FC = () => {
                         <Input
                           id="companyName"
                           value={settings.companyName}
-                          onChange={(e) => setSettings(prev => ({ ...prev, companyName: e.target.value }))}
+                          onChange={handleChange}))}
                           placeholder="Nome da sua empresa"
                         />
                       </div>
@@ -434,7 +434,7 @@ const MaritimeIdentitySystem: React.FC = () => {
                       {themePresets.map((preset) => (
                         <div
                           key={preset.id}
-                          onClick={() => handlePresetSelect(preset)}
+                          onClick={() => handlehandlePresetSelect}
                           className={`p-4 border rounded-lg cursor-pointer transition-all hover:scale-105 ${
                             settings.theme === preset.id ? "border-primary bg-primary/5" : "border-muted"
                           }`}
@@ -468,12 +468,12 @@ const MaritimeIdentitySystem: React.FC = () => {
                             id="primaryColor"
                             type="color"
                             value={settings.primaryColor}
-                            onChange={(e) => handleColorChange("primaryColor", e.target.value)}
+                            onChange={handleChange}
                             className="w-16 h-10 p-1"
                           />
                           <Input
                             value={settings.primaryColor}
-                            onChange={(e) => handleColorChange("primaryColor", e.target.value)}
+                            onChange={handleChange}
                             placeholder="#2563eb"
                             className="flex-1"
                           />
@@ -487,12 +487,12 @@ const MaritimeIdentitySystem: React.FC = () => {
                             id="secondaryColor"
                             type="color"
                             value={settings.secondaryColor}
-                            onChange={(e) => handleColorChange("secondaryColor", e.target.value)}
+                            onChange={handleChange}
                             className="w-16 h-10 p-1"
                           />
                           <Input
                             value={settings.secondaryColor}
-                            onChange={(e) => handleColorChange("secondaryColor", e.target.value)}
+                            onChange={handleChange}
                             placeholder="#f59e0b"
                             className="flex-1"
                           />
@@ -506,12 +506,12 @@ const MaritimeIdentitySystem: React.FC = () => {
                             id="accentColor"
                             type="color"
                             value={settings.accentColor}
-                            onChange={(e) => handleColorChange("accentColor", e.target.value)}
+                            onChange={handleChange}
                             className="w-16 h-10 p-1"
                           />
                           <Input
                             value={settings.accentColor}
-                            onChange={(e) => handleColorChange("accentColor", e.target.value)}
+                            onChange={handleChange}
                             placeholder="#059669"
                             className="flex-1"
                           />
@@ -535,7 +535,7 @@ const MaritimeIdentitySystem: React.FC = () => {
                       return (
                         <div
                           key={style.id}
-                          onClick={() => setSettings(prev => ({ ...prev, navigationStyle: style.id as any }))}
+                          onClick={handleSetSettings}
                           className={`p-4 border rounded-lg cursor-pointer transition-all hover:scale-105 ${
                             settings.navigationStyle === style.id ? "border-primary bg-primary/5" : "border-muted"
                           }`}
@@ -567,7 +567,7 @@ const MaritimeIdentitySystem: React.FC = () => {
                       return (
                         <div
                           key={option.id}
-                          onClick={() => setSettings(prev => ({ ...prev, terminology: option.id as any }))}
+                          onClick={handleSetSettings}
                           className={`p-4 border rounded-lg cursor-pointer transition-all hover:scale-[1.02] ${
                             settings.terminology === option.id ? "border-primary bg-primary/5" : "border-muted"
                           }`}

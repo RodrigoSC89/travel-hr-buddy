@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";;
+import { useEffect, useState, useCallback, useMemo } from "react";;
 import React, { useState, useEffect } from "react";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Line } from "react-chartjs-2";
@@ -35,7 +35,7 @@ interface MoodData {
   mood: number;
 }
 
-export const MoodDashboard = () => {
+export const MoodDashboard = memo(() => {
   const [moodHistory, setMoodHistory] = useState<MoodData[]>([]);
 
   // Constants for trend calculation
@@ -71,7 +71,7 @@ export const MoodDashboard = () => {
       }
       setMoodHistory(sampleData);
       localStorage.setItem("crew_mood_history", JSON.stringify(sampleData));
-    }
+    };
   }, []);
 
   const calculateAverage = (key: keyof Omit<MoodData, "date">) => {

@@ -1,4 +1,4 @@
-import { useState } from "react";;
+import { useState, useCallback } from "react";;
 
 import React, { useState } from "react";
 import {
@@ -104,7 +104,7 @@ export const CreatePlanDialog: React.FC<CreatePlanDialogProps> = ({
             <Input
               id="title"
               value={formData.title}
-              onChange={(e) => setFormData({ ...formData, title: e.target.value })}
+              onChange={handleChange})}
               placeholder="Safety Management Plan 2025"
               required
             />
@@ -115,7 +115,7 @@ export const CreatePlanDialog: React.FC<CreatePlanDialogProps> = ({
             <Textarea
               id="description"
               value={formData.description}
-              onChange={(e) => setFormData({ ...formData, description: e.target.value })}
+              onChange={handleChange})}
               placeholder="Describe the safety management plan objectives and scope..."
               rows={4}
             />
@@ -128,7 +128,7 @@ export const CreatePlanDialog: React.FC<CreatePlanDialogProps> = ({
                 id="start_date"
                 type="date"
                 value={formData.start_date}
-                onChange={(e) => setFormData({ ...formData, start_date: e.target.value })}
+                onChange={handleChange})}
               />
             </div>
 
@@ -138,7 +138,7 @@ export const CreatePlanDialog: React.FC<CreatePlanDialogProps> = ({
                 id="end_date"
                 type="date"
                 value={formData.end_date}
-                onChange={(e) => setFormData({ ...formData, end_date: e.target.value })}
+                onChange={handleChange})}
               />
             </div>
           </div>
@@ -164,7 +164,7 @@ export const CreatePlanDialog: React.FC<CreatePlanDialogProps> = ({
             <Button
               type="button"
               variant="outline"
-              onClick={() => onOpenChange(false)}
+              onClick={() => handleonOpenChange}
               disabled={isSubmitting}
             >
               Cancel

@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";;
+import { useEffect, useState, useCallback } from "react";;
 
 // PATCH 393 - Enhanced with signatures, corrective actions, and PDF export
 // PATCH 653 - Lazy loading for jsPDF
@@ -409,7 +409,7 @@ export const IncidentDetailDialog: React.FC<IncidentDetailDialogProps> = ({
             <Card>
               <CardHeader className="flex flex-row items-center justify-between">
                 <CardTitle>Ações Corretivas</CardTitle>
-                <Button onClick={() => setShowActionForm(!showActionForm)} size="sm">
+                <Button onClick={handleSetShowActionForm} size="sm">
                   <Plus className="mr-2 h-4 w-4" />
                   Nova Ação
                 </Button>
@@ -421,7 +421,7 @@ export const IncidentDetailDialog: React.FC<IncidentDetailDialogProps> = ({
                       <Label>Descrição da Ação *</Label>
                       <Textarea
                         value={newAction.action_description}
-                        onChange={(e) => setNewAction({ ...newAction, action_description: e.target.value })}
+                        onChange={handleChange})}
                         placeholder="Descreva a ação corretiva necessária"
                         rows={3}
                       />
@@ -431,7 +431,7 @@ export const IncidentDetailDialog: React.FC<IncidentDetailDialogProps> = ({
                         <Label>Responsável *</Label>
                         <Input
                           value={newAction.assigned_to}
-                          onChange={(e) => setNewAction({ ...newAction, assigned_to: e.target.value })}
+                          onChange={handleChange})}
                           placeholder="Nome do responsável"
                         />
                       </div>
@@ -440,13 +440,13 @@ export const IncidentDetailDialog: React.FC<IncidentDetailDialogProps> = ({
                         <Input
                           type="date"
                           value={newAction.due_date}
-                          onChange={(e) => setNewAction({ ...newAction, due_date: e.target.value })}
+                          onChange={handleChange})}
                         />
                       </div>
                     </div>
                     <div className="flex gap-2">
                       <Button onClick={handleAddAction} size="sm">Adicionar</Button>
-                      <Button onClick={() => setShowActionForm(false)} variant="outline" size="sm">Cancelar</Button>
+                      <Button onClick={handleSetShowActionForm} variant="outline" size="sm">Cancelar</Button>
                     </div>
                   </div>
                 )}
@@ -484,7 +484,7 @@ export const IncidentDetailDialog: React.FC<IncidentDetailDialogProps> = ({
             <Card>
               <CardHeader className="flex flex-row items-center justify-between">
                 <CardTitle>Assinaturas Digitais</CardTitle>
-                <Button onClick={() => setShowSignatureDialog(true)} size="sm">
+                <Button onClick={handleSetShowSignatureDialog} size="sm">
                   <PenTool className="mr-2 h-4 w-4" />
                   Assinar
                 </Button>
@@ -565,21 +565,21 @@ export const IncidentDetailDialog: React.FC<IncidentDetailDialogProps> = ({
                   <div className="grid grid-cols-3 gap-2">
                     <Button
                       variant={currentStatus === "new" ? "default" : "outline"}
-                      onClick={() => handleStatusUpdate("new")}
+                      onClick={() => handlehandleStatusUpdate}
                       className="w-full"
                     >
                       Novo
                     </Button>
                     <Button
                       variant={currentStatus === "under_analysis" ? "default" : "outline"}
-                      onClick={() => handleStatusUpdate("under_analysis")}
+                      onClick={() => handlehandleStatusUpdate}
                       className="w-full"
                     >
                       Em Análise
                     </Button>
                     <Button
                       variant={currentStatus === "resolved" ? "default" : "outline"}
-                      onClick={() => handleStatusUpdate("resolved")}
+                      onClick={() => handlehandleStatusUpdate}
                       className="w-full"
                     >
                       Resolvido
@@ -602,7 +602,7 @@ export const IncidentDetailDialog: React.FC<IncidentDetailDialogProps> = ({
             <FileDown className="mr-2 h-4 w-4" />
             Exportar PDF
           </Button>
-          <Button variant="outline" onClick={() => onOpenChange(false)}>
+          <Button variant="outline" onClick={() => handleonOpenChange}>
             Fechar
           </Button>
         </div>

@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";;;
+import { memo, memo, useEffect, useState, useCallback } from "react";;;
 import { Link, useLocation } from "react-router-dom";
 import { 
   ChevronDown,
@@ -166,7 +166,7 @@ interface SmartSidebarProps {
   className?: string;
 }
 
-export function SmartSidebar({ className }: SmartSidebarProps) {
+export const SmartSidebar = memo(function({ className }: SmartSidebarProps) {
   const [openSection, setOpenSection] = useState<string | null>(null);
   const [isMobileOpen, setIsMobileOpen] = useState(false);
   const location = useLocation();
@@ -198,7 +198,7 @@ export function SmartSidebar({ className }: SmartSidebarProps) {
       {/* Mobile menu button */}
       <button
         className="lg:hidden fixed top-4 left-4 z-50 p-2 rounded-md bg-sidebar-background text-sidebar-foreground shadow-lg border border-sidebar-border"
-        onClick={() => setIsMobileOpen(!isMobileOpen)}
+        onClick={handleSetIsMobileOpen}
       >
         {isMobileOpen ? <X className="w-6 h-6" /> : <Menu className="w-6 h-6" />}
       </button>
@@ -235,7 +235,7 @@ export function SmartSidebar({ className }: SmartSidebarProps) {
                   "flex items-center justify-between w-full px-3 py-2.5 text-left text-sm font-medium rounded-md transition-colors text-sidebar-foreground hover:bg-sidebar-accent hover:text-sidebar-accent-foreground",
                   openSection === group.title && "bg-sidebar-accent text-sidebar-accent-foreground"
                 )}
-                onClick={() => toggleSection(group.title)}
+                onClick={() => handletoggleSection}
               >
                 <span>{group.title}</span>
                 {openSection === group.title ? (

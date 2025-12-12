@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";;
+import { useEffect, useState, useCallback, useMemo } from "react";;
 import React, { useState, useEffect } from "react";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
@@ -189,7 +189,7 @@ export default function AdminWallPage() {
                   </Badge>
                 )}
                 <Button
-                  onClick={() => setMuted(!muted)}
+                  onClick={handleSetMuted}
                   variant={muted ? "destructive" : "default"}
                   size="lg"
                   className="ml-auto"

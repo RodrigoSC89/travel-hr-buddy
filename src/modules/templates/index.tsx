@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";;
+import { useEffect, useState, useCallback, useMemo } from "react";;
 
 /**
  * PATCH 463 - Complete Template Editor
@@ -415,11 +415,11 @@ export const CompleteTemplateEditor: React.FC = () => {
             <Plus className="h-4 w-4 mr-2" />
             New Template
           </Button>
-          <Button variant="outline" onClick={() => setShowSaveDialog(true)}>
+          <Button variant="outline" onClick={handleSetShowSaveDialog}>
             <Save className="h-4 w-4 mr-2" />
             Save
           </Button>
-          <Button variant="outline" onClick={() => setShowFillDialog(true)}>
+          <Button variant="outline" onClick={handleSetShowFillDialog}>
             <Edit className="h-4 w-4 mr-2" />
             Fill Template
           </Button>
@@ -446,7 +446,7 @@ export const CompleteTemplateEditor: React.FC = () => {
                     className={`cursor-pointer transition-colors ${
                       selectedTemplate?.id === template.id ? "border-primary" : ""
                     }`}
-                    onClick={() => setSelectedTemplate(template)}
+                    onClick={handleSetSelectedTemplate}
                   >
                     <CardContent className="p-3">
                       <div className="flex items-start justify-between">
@@ -491,7 +491,7 @@ export const CompleteTemplateEditor: React.FC = () => {
                     variant="outline"
                     size="sm"
                     className="w-full justify-start text-xs"
-                    onClick={() => insertPlaceholder(placeholder.key)}
+                    onClick={() => handleinsertPlaceholder}
                   >
                     <Icon className="h-3 w-3 mr-2" />
                     {placeholder.label}
@@ -553,7 +553,7 @@ export const CompleteTemplateEditor: React.FC = () => {
             dangerouslySetInnerHTML={{ __html: previewContent }}
           />
           <DialogFooter>
-            <Button variant="outline" onClick={() => setShowPreviewDialog(false)}>
+            <Button variant="outline" onClick={handleSetShowPreviewDialog}>
               Close
             </Button>
             <Button onClick={() => {
@@ -584,7 +584,7 @@ export const CompleteTemplateEditor: React.FC = () => {
               <Input
                 id="templateTitle"
                 value={templateTitle}
-                onChange={(e) => setTemplateTitle(e.target.value)}
+                onChange={handleChange}
                 placeholder="e.g., Invoice Template"
               />
             </div>
@@ -602,7 +602,7 @@ export const CompleteTemplateEditor: React.FC = () => {
             )}
           </div>
           <DialogFooter>
-            <Button variant="outline" onClick={() => setShowSaveDialog(false)}>
+            <Button variant="outline" onClick={handleSetShowSaveDialog}>
               Cancel
             </Button>
             <Button onClick={saveTemplate}>
@@ -634,11 +634,7 @@ export const CompleteTemplateEditor: React.FC = () => {
                   </Label>
                   <Input
                     value={placeholderValues[placeholder] || ""}
-                    onChange={(e) =>
-                      setPlaceholderValues({
-                        ...placeholderValues,
-                        [placeholder]: e.target.value,
-                      })
+                    onChange={handleChange})
                     }
                     placeholder={`Enter ${placeholderInfo?.label || placeholder}`}
                   />
@@ -647,7 +643,7 @@ export const CompleteTemplateEditor: React.FC = () => {
             })}
           </div>
           <DialogFooter>
-            <Button variant="outline" onClick={() => setShowFillDialog(false)}>
+            <Button variant="outline" onClick={handleSetShowFillDialog}>
               Cancel
             </Button>
             <Button onClick={fillTemplate}>

@@ -1,4 +1,4 @@
-import { useMemo, useState } from "react";;
+import { useMemo, useState, useCallback } from "react";;
 
 import React, { useState, useMemo } from "react";
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "@/components/ui/card";
@@ -215,7 +215,7 @@ export const HistoricalWeatherChart: React.FC<HistoricalWeatherChartProps> = ({
                   key={p}
                   variant={period === p ? "default" : "ghost"}
                   size="sm"
-                  onClick={() => setPeriod(p)}
+                  onClick={handleSetPeriod}
                   className="rounded-none"
                 >
                   {p === "7d" ? "7 dias" : p === "30d" ? "30 dias" : "90 dias"}

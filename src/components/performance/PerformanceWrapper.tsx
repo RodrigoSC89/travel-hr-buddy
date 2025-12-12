@@ -21,7 +21,7 @@ interface PerformanceWrapperProps {
   enableWebVitals?: boolean;
 }
 
-export function PerformanceWrapper({
+export const PerformanceWrapper = memo(function({
   children,
   showConnectionIndicator = true,
   showPWAPrompts = true,
@@ -128,7 +128,7 @@ export function withPerformance<P extends object>(
 }
 
 // Performance context for children
-import { createContext, useContext, useEffect } from "react";;;
+import { createContext, useContext, useEffect, useCallback } from "react";;;
 
 interface PerformanceContextValue {
   connectionType: string;
@@ -140,7 +140,7 @@ interface PerformanceContextValue {
 
 const PerformanceContext = createContext<PerformanceContextValue | null>(null);
 
-export function PerformanceProvider({ children }: { children: ReactNode }) {
+export const PerformanceProvider = memo(function({ children }: { children: ReactNode }) {
   const optimizer = useBandwidthOptimizer();
 
   const value: PerformanceContextValue = {
@@ -158,7 +158,7 @@ export function PerformanceProvider({ children }: { children: ReactNode }) {
   );
 }
 
-export function usePerformanceContext() {
+export const usePerformanceContext = memo(function() {
   const context = useContext(PerformanceContext);
   if (!context) {
     throw new Error("usePerformanceContext must be used within PerformanceProvider");

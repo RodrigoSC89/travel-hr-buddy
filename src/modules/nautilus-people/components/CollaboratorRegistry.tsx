@@ -1,5 +1,5 @@
 /**
-import { useState } from "react";;
+import { useState, useMemo, useCallback } from "react";;
  * Collaborator Registry - Cadastro Completo de Colaboradores
  * Versão funcional com todas as ações implementadas
  */
@@ -195,7 +195,7 @@ const CollaboratorRegistry: React.FC = () => {
             <Input
               placeholder="Buscar colaborador..."
               value={searchTerm}
-              onChange={(e) => setSearchTerm(e.target.value)}
+              onChange={handleChange}
               className="pl-9"
             />
           </div>
@@ -257,7 +257,7 @@ const CollaboratorRegistry: React.FC = () => {
                   <Input 
                     placeholder="Nome do colaborador"
                     value={newColaborador.nome}
-                    onChange={(e) => setNewColaborador({...newColaborador, nome: e.target.value})}
+                    onChange={handleChange})}
                   />
                 </div>
                 <div className="space-y-2">
@@ -266,7 +266,7 @@ const CollaboratorRegistry: React.FC = () => {
                     type="email" 
                     placeholder="email@empresa.com"
                     value={newColaborador.email}
-                    onChange={(e) => setNewColaborador({...newColaborador, email: e.target.value})}
+                    onChange={handleChange})}
                   />
                 </div>
                 <div className="space-y-2">
@@ -274,7 +274,7 @@ const CollaboratorRegistry: React.FC = () => {
                   <Input 
                     placeholder="+55 11 99999-0000"
                     value={newColaborador.telefone}
-                    onChange={(e) => setNewColaborador({...newColaborador, telefone: e.target.value})}
+                    onChange={handleChange})}
                   />
                 </div>
                 <div className="space-y-2">
@@ -282,7 +282,7 @@ const CollaboratorRegistry: React.FC = () => {
                   <Input 
                     placeholder="000.000.000-00"
                     value={newColaborador.cpf}
-                    onChange={(e) => setNewColaborador({...newColaborador, cpf: e.target.value})}
+                    onChange={handleChange})}
                   />
                 </div>
                 <div className="space-y-2">
@@ -290,7 +290,7 @@ const CollaboratorRegistry: React.FC = () => {
                   <Input 
                     placeholder="Cargo do colaborador"
                     value={newColaborador.cargo}
-                    onChange={(e) => setNewColaborador({...newColaborador, cargo: e.target.value})}
+                    onChange={handleChange})}
                   />
                 </div>
                 <div className="space-y-2">
@@ -326,7 +326,7 @@ const CollaboratorRegistry: React.FC = () => {
                   <Input 
                     type="date"
                     value={newColaborador.dataAdmissao}
-                    onChange={(e) => setNewColaborador({...newColaborador, dataAdmissao: e.target.value})}
+                    onChange={handleChange})}
                   />
                 </div>
                 <div className="space-y-2 col-span-2">
@@ -346,7 +346,7 @@ const CollaboratorRegistry: React.FC = () => {
                 </div>
               </div>
               <DialogFooter>
-                <Button variant="outline" onClick={() => setIsAddDialogOpen(false)}>Cancelar</Button>
+                <Button variant="outline" onClick={handleSetIsAddDialogOpen}>Cancelar</Button>
                 <Button onClick={handleAddColaborador} disabled={isLoading}>
                   {isLoading ? <Loader2 className="w-4 h-4 mr-2 animate-spin" /> : <Check className="w-4 h-4 mr-2" />}
                   Salvar Colaborador
@@ -418,7 +418,7 @@ const CollaboratorRegistry: React.FC = () => {
                       className={`p-4 rounded-lg border cursor-pointer transition-all hover:border-primary/50 hover:bg-muted/50 ${
                         selectedColaborador?.id === colaborador.id ? "border-primary bg-primary/5" : ""
                       }`}
-                      onClick={() => setSelectedColaborador(colaborador)}
+                      onClick={handleSetSelectedColaborador}
                     >
                       <div className="flex items-center gap-4">
                         <Avatar className="w-12 h-12">
@@ -514,7 +514,7 @@ const CollaboratorRegistry: React.FC = () => {
                     variant="outline" 
                     size="sm" 
                     className="flex-1"
-                    onClick={() => handleViewDocuments(selectedColaborador)}
+                    onClick={() => handlehandleViewDocuments}
                   >
                     <FileText className="w-4 h-4 mr-1" />
                     Documentos
@@ -523,7 +523,7 @@ const CollaboratorRegistry: React.FC = () => {
                     variant="outline" 
                     size="sm" 
                     className="flex-1"
-                    onClick={() => handleViewTraining(selectedColaborador)}
+                    onClick={() => handlehandleViewTraining}
                   >
                     <GraduationCap className="w-4 h-4 mr-1" />
                     Formação

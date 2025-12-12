@@ -1,5 +1,5 @@
 /**
-import { useEffect, useState } from "react";;
+import { useEffect, useState, useCallback } from "react";;
  * PATCH 187.0 - Mobile Logs Screen
  * 
  * Real-time system logs and activity tracking for mobile app
@@ -144,7 +144,7 @@ export const MobileLogs: React.FC = () => {
         <Input
           placeholder="Buscar logs..."
           value={searchTerm}
-          onChange={(e) => setSearchTerm(e.target.value)}
+          onChange={handleChange}
           className="pl-10"
         />
       </div>
@@ -154,14 +154,14 @@ export const MobileLogs: React.FC = () => {
         <Button
           variant={filter === "all" ? "default" : "outline"}
           size="sm"
-          onClick={() => setFilter("all")}
+          onClick={handleSetFilter}
         >
           Todos
         </Button>
         <Button
           variant={filter === "error" ? "default" : "outline"}
           size="sm"
-          onClick={() => setFilter("error")}
+          onClick={handleSetFilter}
           className="whitespace-nowrap"
         >
           Erros ({stats.error})
@@ -169,7 +169,7 @@ export const MobileLogs: React.FC = () => {
         <Button
           variant={filter === "warn" ? "default" : "outline"}
           size="sm"
-          onClick={() => setFilter("warn")}
+          onClick={handleSetFilter}
           className="whitespace-nowrap"
         >
           Avisos ({stats.warn})
@@ -177,7 +177,7 @@ export const MobileLogs: React.FC = () => {
         <Button
           variant={filter === "info" ? "default" : "outline"}
           size="sm"
-          onClick={() => setFilter("info")}
+          onClick={handleSetFilter}
           className="whitespace-nowrap"
         >
           Info ({stats.info})

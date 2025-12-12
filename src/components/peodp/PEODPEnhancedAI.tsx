@@ -1,5 +1,5 @@
 /**
-import { useState } from "react";;
+import { useState, useMemo, useCallback } from "react";;
  * PEO-DP Enhanced AI - Conformidade Petrobras com IA
  * - Monitoramento ASOG em tempo real
  * - Geração automática de evidências
@@ -38,7 +38,7 @@ interface ASOGStatus {
   recommendations: string[];
 }
 
-export function PEODPEnhancedAI() {
+export const PEODPEnhancedAI = memo(function() {
   const { analyze, generate, suggest, isLoading } = useNautilusAI();
   const [asogStatus, setAsogStatus] = useState<ASOGStatus>({
     current: "green",
@@ -251,7 +251,7 @@ export function PEODPEnhancedAI() {
                     <span>Auditado: {pillar.lastAudit}</span>
                   </div>
                   <div className="flex justify-end mt-3">
-                    <Button size="sm" variant="outline" onClick={() => generateEvidence(pillar.name)}>
+                    <Button size="sm" variant="outline" onClick={() => handlegenerateEvidence}>
                       <FileText className="h-3 w-3 mr-1" />
                       Gerar Evidência
                     </Button>

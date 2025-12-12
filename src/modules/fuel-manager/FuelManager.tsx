@@ -1,5 +1,5 @@
 /**
-import { useState } from "react";;
+import { useState, useCallback } from "react";;
  * Fuel Manager Module - PATCH 838
  * Módulo de gestão de combustível com IA
  */
@@ -296,7 +296,7 @@ const ConsumptionForm = ({ onClose }: { onClose: () => void }) => {
             type="number" 
             id="quantity"
             value={formData.quantity_liters}
-            onChange={(e) => setFormData({...formData, quantity_liters: e.target.value})}
+            onChange={handleChange})}
             placeholder="Ex: 45000"
           />
         </div>
@@ -307,7 +307,7 @@ const ConsumptionForm = ({ onClose }: { onClose: () => void }) => {
             type="number" 
             id="cost"
             value={formData.cost_usd}
-            onChange={(e) => setFormData({...formData, cost_usd: e.target.value})}
+            onChange={handleChange})}
             placeholder="Ex: 67500"
           />
         </div>
@@ -318,7 +318,7 @@ const ConsumptionForm = ({ onClose }: { onClose: () => void }) => {
             type="number" 
             id="distance"
             value={formData.distance_nm}
-            onChange={(e) => setFormData({...formData, distance_nm: e.target.value})}
+            onChange={handleChange})}
             placeholder="Ex: 850"
           />
         </div>
@@ -330,7 +330,7 @@ const ConsumptionForm = ({ onClose }: { onClose: () => void }) => {
             id="speed"
             step="0.1"
             value={formData.avg_speed_knots}
-            onChange={(e) => setFormData({...formData, avg_speed_knots: e.target.value})}
+            onChange={handleChange})}
             placeholder="Ex: 14.5"
           />
         </div>
@@ -452,7 +452,7 @@ const FuelManager = () => {
             Gestão inteligente de combustível com análise preditiva
           </p>
         </div>
-        <Button onClick={() => setShowForm(!showForm)}>
+        <Button onClick={handleSetShowForm}>
           <Plus className="h-4 w-4 mr-2" />
           Novo Registro
         </Button>

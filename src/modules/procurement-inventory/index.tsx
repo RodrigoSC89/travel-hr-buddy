@@ -1,4 +1,4 @@
-import { useState } from "react";;
+import { useState, useMemo, useCallback } from "react";;
 import React, { useState } from "react";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Badge } from "@/components/ui/badge";
@@ -95,7 +95,7 @@ export default function ProcurementInventory() {
                   placeholder="Buscar itens, pedidos, fornecedores..."
                   className="pl-10 w-64"
                   value={searchQuery}
-                  onChange={(e) => setSearchQuery(e.target.value)}
+                  onChange={handleChange}
                 />
               </div>
 
@@ -103,14 +103,14 @@ export default function ProcurementInventory() {
               <Button
                 variant={showAIPanel ? "default" : "outline"}
                 size="icon"
-                onClick={() => setShowAIPanel(!showAIPanel)}
+                onClick={handleSetShowAIPanel}
                 className="relative"
               >
                 <Brain className="h-4 w-4" />
               </Button>
 
               {/* Filters */}
-              <Button variant="outline" size="icon" onClick={() => setShowFilters(true)}>
+              <Button variant="outline" size="icon" onClick={handleSetShowFilters}>
                 <Filter className="h-4 w-4" />
               </Button>
 
@@ -118,7 +118,7 @@ export default function ProcurementInventory() {
               <Button
                 variant="outline"
                 size="icon"
-                onClick={() => setShowNotifications(true)}
+                onClick={handleSetShowNotifications}
                 className="relative"
               >
                 <Bell className="h-4 w-4" />
@@ -130,7 +130,7 @@ export default function ProcurementInventory() {
               </Button>
 
               {/* Settings */}
-              <Button variant="outline" size="icon" onClick={() => setShowSettings(true)}>
+              <Button variant="outline" size="icon" onClick={handleSetShowSettings}>
                 <Settings className="h-4 w-4" />
               </Button>
 

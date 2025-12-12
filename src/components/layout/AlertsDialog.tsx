@@ -1,5 +1,5 @@
 /**
-import { useState } from "react";;
+import { useState, useMemo, useCallback } from "react";;
  * Alerts Dialog Component
  * Exibe notificações e alertas do sistema
  */
@@ -223,7 +223,7 @@ const AlertsDialog: React.FC<AlertsDialogProps> = ({ open, onOpenChange }) => {
                               variant="ghost"
                               size="icon"
                               className="h-7 w-7"
-                              onClick={() => markAsRead(alert.id)}
+                              onClick={() => handlemarkAsRead}
                               title="Marcar como lida"
                             >
                               <Check className="h-3 w-3" />
@@ -233,7 +233,7 @@ const AlertsDialog: React.FC<AlertsDialogProps> = ({ open, onOpenChange }) => {
                             variant="ghost"
                             size="icon"
                             className="h-7 w-7 text-muted-foreground hover:text-destructive"
-                            onClick={() => deleteAlert(alert.id)}
+                            onClick={() => handledeleteAlert}
                             title="Excluir"
                           >
                             <Trash2 className="h-3 w-3" />

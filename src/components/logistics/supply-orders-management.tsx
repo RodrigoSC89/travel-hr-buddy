@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";;
+import { useEffect, useState, useCallback } from "react";;
 import React, { useState, useEffect } from "react";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
@@ -31,7 +31,7 @@ interface SupplyOrder {
   } | null;
 }
 
-export const SupplyOrdersManagement = () => {
+export const SupplyOrdersManagement = memo(() => {
   const [orders, setOrders] = useState<SupplyOrder[]>([]);
   const [inventoryItems, setInventoryItems] = useState<any[]>([]);
   const [isCreating, setIsCreating] = useState(false);
@@ -165,7 +165,7 @@ export const SupplyOrdersManagement = () => {
   const getPriorityIcon = (priority: string) => {
     if (priority === "urgent" || priority === "high") {
       return <AlertTriangle className="h-4 w-4 text-red-500" />;
-    }
+    };
     return <Package className="h-4 w-4 text-blue-500" />;
   };
 
@@ -206,7 +206,7 @@ export const SupplyOrdersManagement = () => {
                   <Input
                     type="number"
                     value={newOrder.quantity}
-                    onChange={(e) => setNewOrder({...newOrder, quantity: e.target.value})}
+                    onChange={handleChange})}
                   />
                 </div>
                 <div className="grid gap-2">
@@ -228,14 +228,14 @@ export const SupplyOrdersManagement = () => {
                 <Label>Fornecedor</Label>
                 <Input
                   value={newOrder.supplier}
-                  onChange={(e) => setNewOrder({...newOrder, supplier: e.target.value})}
+                  onChange={handleChange})}
                 />
               </div>
               <div className="grid gap-2">
                 <Label>Endereço de Entrega</Label>
                 <Input
                   value={newOrder.delivery_address}
-                  onChange={(e) => setNewOrder({...newOrder, delivery_address: e.target.value})}
+                  onChange={handleChange})}
                 />
               </div>
               <div className="grid gap-2">
@@ -243,14 +243,14 @@ export const SupplyOrdersManagement = () => {
                 <Input
                   type="date"
                   value={newOrder.estimated_delivery_date}
-                  onChange={(e) => setNewOrder({...newOrder, estimated_delivery_date: e.target.value})}
+                  onChange={handleChange})}
                 />
               </div>
               <div className="grid gap-2">
                 <Label>Notas</Label>
                 <Textarea
                   value={newOrder.notes}
-                  onChange={(e) => setNewOrder({...newOrder, notes: e.target.value})}
+                  onChange={handleChange})}
                 />
               </div>
             </div>
@@ -306,18 +306,18 @@ export const SupplyOrdersManagement = () => {
               )}
               <div className="flex gap-2 mt-4">
                 {order.status === "pending" && (
-                  <Button size="sm" onClick={() => updateOrderStatus(order.id, "approved")}>
+                  <Button size="sm" onClick={() => handleupdateOrderStatus}>
                     Aprovar
                   </Button>
                 )}
                 {order.status === "approved" && (
-                  <Button size="sm" onClick={() => updateOrderStatus(order.id, "in_transit")}>
+                  <Button size="sm" onClick={() => handleupdateOrderStatus}>
                     Em Trânsito
                   </Button>
                 )}
                 {order.status === "in_transit" && (
                   <>
-                    <Button size="sm" onClick={() => updateOrderStatus(order.id, "delivered")}>
+                    <Button size="sm" onClick={() => handleupdateOrderStatus}>
                       Marcar como Entregue
                     </Button>
                     <Button 

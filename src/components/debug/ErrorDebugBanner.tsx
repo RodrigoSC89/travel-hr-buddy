@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";;
+import { useEffect, useState, useCallback } from "react";;
 import React, { useEffect, useState } from "react";
 import { AlertTriangle, X, Copy, ExternalLink } from "lucide-react";
 import { Button } from "@/components/ui/button";
@@ -107,7 +107,7 @@ export const ErrorDebugBanner: React.FC = () => {
                 variant="ghost"
                 size="sm"
                 className="h-7 text-xs"
-                onClick={() => setShowStack(!showStack)}
+                onClick={handleSetShowStack}
               >
                 {showStack ? "Ocultar" : "Mostrar"} Stack Trace
                 <ExternalLink className="h-3 w-3 ml-1" />

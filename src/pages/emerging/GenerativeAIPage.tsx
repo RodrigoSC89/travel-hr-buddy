@@ -277,7 +277,7 @@ Este documento foi gerado automaticamente e deve ser revisado antes do uso ofici
                     placeholder="Ex: Gere um relatório de viagem da embarcação Atlântico Sul de Santos para Rio de Janeiro, incluindo condições climáticas, consumo de combustível e observações da tripulação..."
                     className="min-h-[150px]"
                     value={prompt}
-                    onChange={(e) => setPrompt(e.target.value)}
+                    onChange={handleChange}
                   />
                 </div>
 

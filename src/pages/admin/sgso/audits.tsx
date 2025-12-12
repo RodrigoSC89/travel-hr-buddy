@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";;
+import { useEffect, useState, useCallback } from "react";;
 
 import React, { useState, useEffect } from "react";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
@@ -188,7 +188,7 @@ export default function SGSOAudits() {
           <h1 className="text-3xl font-bold">SGSO Audits</h1>
           <p className="text-muted-foreground">Safety Management System Audits</p>
         </div>
-        <Button onClick={() => setEditMode(true)}>
+        <Button onClick={handleSetEditMode}>
           <Plus className="mr-2 h-4 w-4" />
           New Audit
         </Button>
@@ -209,8 +209,7 @@ export default function SGSOAudits() {
                 <Input
                   id="title"
                   value={formData.title}
-                  onChange={(e) =>
-                    setFormData({ ...formData, title: e.target.value })
+                  onChange={handleChange})
                   }
                   required
                 />
@@ -221,8 +220,7 @@ export default function SGSOAudits() {
                 <Textarea
                   id="description"
                   value={formData.description}
-                  onChange={(e) =>
-                    setFormData({ ...formData, description: e.target.value })
+                  onChange={handleChange})
                   }
                   required
                 />
@@ -302,8 +300,7 @@ export default function SGSOAudits() {
                 <Input
                   id="responsible"
                   value={formData.responsible}
-                  onChange={(e) =>
-                    setFormData({ ...formData, responsible: e.target.value })
+                  onChange={handleChange})
                   }
                   required
                 />
@@ -350,14 +347,14 @@ export default function SGSOAudits() {
                   <Button
                     variant="outline"
                     size="sm"
-                    onClick={() => handleEdit(audit)}
+                    onClick={() => handlehandleEdit}
                   >
                     <Eye className="h-4 w-4" />
                   </Button>
                   <Button
                     variant="destructive"
                     size="sm"
-                    onClick={() => handleDelete(audit.id!)}
+                    onClick={() => handlehandleDelete}
                   >
                     <Trash2 className="h-4 w-4" />
                   </Button>

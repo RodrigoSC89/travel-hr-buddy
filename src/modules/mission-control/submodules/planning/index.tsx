@@ -1,5 +1,5 @@
 /**
-import { useState } from "react";;
+import { useState, useCallback } from "react";;
  * PATCH 410: Mission Planning Submodule
  * Mission scheduling, crew allocation, and equipment checks
  */
@@ -12,7 +12,7 @@ import { Label } from "@/components/ui/label";
 import { Badge } from "@/components/ui/badge";
 import { Calendar, Users, Package, Plus } from "lucide-react";
 
-export function MissionPlanning() {
+export const MissionPlanning = memo(function() {
   const [missions, setMissions] = useState([
     {
       id: "1",

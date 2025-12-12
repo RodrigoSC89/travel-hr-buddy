@@ -1,4 +1,4 @@
-import { useCallback, useRef, useState } from "react";;
+import { useCallback, useMemo, useRef, useState } from "react";;
 import React, { useState, useRef, useCallback } from "react";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
@@ -203,7 +203,7 @@ export const PeotramOCRProcessor: React.FC = () => {
               <select
                 className="w-full px-3 py-2 border rounded-md"
                 value={language}
-                onChange={(e) => setLanguage(e.target.value as unknown)}
+                onChange={handleChange}
                 disabled={isProcessing}
               >
                 <option value="por+eng">Português + Inglês</option>
@@ -219,7 +219,7 @@ export const PeotramOCRProcessor: React.FC = () => {
                   type="checkbox"
                   id="batchMode"
                   checked={batchMode}
-                  onChange={(e) => setBatchMode(e.target.checked)}
+                  onChange={handleChange}
                   disabled={isProcessing}
                   className="w-4 h-4"
                 />
@@ -300,7 +300,7 @@ export const PeotramOCRProcessor: React.FC = () => {
                       className={`p-4 border rounded-lg cursor-pointer transition-colors ${
                         selectedDoc?.id === doc.id ? "bg-primary/5 border-primary" : "hover:bg-muted/50"
                       }`}
-                      onClick={() => setSelectedDoc(doc)}
+                      onClick={handleSetSelectedDoc}
                     >
                       <div className="flex items-center justify-between">
                         <div className="flex items-center gap-3">

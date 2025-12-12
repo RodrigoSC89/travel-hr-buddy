@@ -1,5 +1,5 @@
 /**
-import { useMemo, useState } from "react";;
+import { useMemo, useState, useCallback } from "react";;
  * PEO-DP Audit Form
  * Formulário de auditoria com checklist dinâmico baseado no PEO-DP Petrobras
  */
@@ -65,7 +65,7 @@ interface PEODPAuditFormProps {
   onComplete?: (items: PEODPAuditItem[], score: number) => void;
 }
 
-export function PEODPAuditForm({
+export const PEODPAuditForm = memo(function({
   vesselName,
   vesselId,
   dpClass,
@@ -361,7 +361,7 @@ export function PEODPAuditForm({
                                     id={`${req.id}-evidence`}
                                     placeholder="Descreva as evidências encontradas..."
                                     value={item?.evidence || ""}
-                                    onChange={(e) => updateItem(req.id, { evidence: e.target.value })}
+                                    onChange={handleChange})}
                                     rows={3}
                                   />
                                 </div>
@@ -371,7 +371,7 @@ export function PEODPAuditForm({
                                     id={`${req.id}-observations`}
                                     placeholder="Observações adicionais..."
                                     value={item?.observations || ""}
-                                    onChange={(e) => updateItem(req.id, { observations: e.target.value })}
+                                    onChange={handleChange})}
                                     rows={3}
                                   />
                                 </div>
@@ -384,7 +384,7 @@ export function PEODPAuditForm({
                                     id={`${req.id}-action`}
                                     placeholder="Descreva a ação corretiva necessária..."
                                     value={item?.actionRequired || ""}
-                                    onChange={(e) => updateItem(req.id, { actionRequired: e.target.value })}
+                                    onChange={handleChange})}
                                     rows={2}
                                   />
                                 </div>

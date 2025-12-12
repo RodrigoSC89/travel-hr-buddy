@@ -1,5 +1,5 @@
 /**
-import { useState } from "react";;
+import { useState, useMemo, useCallback } from "react";;
  * AI Alerts Panel Component
  * Painel de alertas gerados por IA
  */
@@ -155,7 +155,7 @@ export const AIAlertsPanel: React.FC<AIAlertsPanelProps> = ({
                       <Button
                         size="sm"
                         variant="ghost"
-                        onClick={() => handleViewDetails(alert)}
+                        onClick={() => handlehandleViewDetails}
                         className="shrink-0"
                       >
                         <Eye className="h-4 w-4" />
@@ -219,7 +219,7 @@ export const AIAlertsPanel: React.FC<AIAlertsPanelProps> = ({
               </div>
               
               <div className="flex gap-2 pt-4">
-                <Button className="flex-1" onClick={() => setSelectedAlert(null)}>
+                <Button className="flex-1" onClick={handleSetSelectedAlert}>
                   Entendido
                 </Button>
                 <Button variant="outline" className="flex-1">

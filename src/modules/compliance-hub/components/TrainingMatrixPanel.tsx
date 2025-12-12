@@ -1,5 +1,5 @@
 /**
-import { useState } from "react";;
+import { useState, useCallback } from "react";;
  * Training Matrix Panel Component
  * Painel de matriz de treinamentos com IA integrada
  */
@@ -55,7 +55,7 @@ interface TrainingMatrixPanelProps {
   onExportMatrix: () => void;
 }
 
-export function TrainingMatrixPanel({
+export const TrainingMatrixPanel = memo(function({
   trainings,
   matrix,
   onGenerateRecommendations,
@@ -224,7 +224,7 @@ export function TrainingMatrixPanel({
               <Input
                 placeholder="Buscar tripulante ou curso..."
                 value={searchTerm}
-                onChange={(e) => setSearchTerm(e.target.value)}
+                onChange={handleChange}
                 className="pl-9"
               />
             </div>
@@ -333,7 +333,7 @@ export function TrainingMatrixPanel({
                             <Button
                               variant="ghost"
                               size="icon"
-                              onClick={() => handleGetRecommendation(training.crewMemberId)}
+                              onClick={() => handlehandleGetRecommendation}
                               disabled={loadingRecommendation === training.crewMemberId}
                             >
                               {loadingRecommendation === training.crewMemberId ? (

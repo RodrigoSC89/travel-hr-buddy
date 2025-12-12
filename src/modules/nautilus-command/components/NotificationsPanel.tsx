@@ -1,5 +1,5 @@
 /**
-import { useState } from "react";;
+import { useState, useMemo, useCallback } from "react";;
  * Notifications Panel - Painel de notificações com ações
  */
 
@@ -40,7 +40,7 @@ interface NotificationsPanelProps {
   onFilterClick: () => void;
 }
 
-export function NotificationsPanel({
+export const NotificationsPanel = memo(function({
   notifications,
   onMarkAllRead,
   onDismiss,
@@ -112,15 +112,15 @@ export function NotificationsPanel({
                 </Button>
               </DropdownMenuTrigger>
               <DropdownMenuContent align="end">
-                <DropdownMenuItem onClick={() => setFilter("all")}>
+                <DropdownMenuItem onClick={handleSetFilter}>
                   Todas
                   {filter === "all" && <Badge className="ml-2 h-4 px-1">✓</Badge>}
                 </DropdownMenuItem>
-                <DropdownMenuItem onClick={() => setFilter("unread")}>
+                <DropdownMenuItem onClick={handleSetFilter}>
                   Não lidas ({unreadCount})
                   {filter === "unread" && <Badge className="ml-2 h-4 px-1">✓</Badge>}
                 </DropdownMenuItem>
-                <DropdownMenuItem onClick={() => setFilter("critical")}>
+                <DropdownMenuItem onClick={handleSetFilter}>
                   Críticas ({criticalCount})
                   {filter === "critical" && <Badge className="ml-2 h-4 px-1">✓</Badge>}
                 </DropdownMenuItem>
@@ -205,7 +205,7 @@ export function NotificationsPanel({
                               variant="ghost" 
                               size="sm" 
                               className="h-6 px-2 text-xs text-destructive"
-                              onClick={() => onDismiss(notification.id)}
+                              onClick={() => handleonDismiss}
                             >
                               <X className="h-3 w-3" />
                             </Button>

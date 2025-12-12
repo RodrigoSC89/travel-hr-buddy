@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";;
+import { useEffect, useState, useCallback, useMemo } from "react";;
 
 import React, { useState, useEffect } from "react";
 import { Card, CardHeader, CardTitle, CardContent } from "@/components/ui/card";
@@ -111,7 +111,7 @@ const WelcomeStep: React.FC<{ data: OnboardingData; onNext: (data: StepData) => 
 
           <Button 
             className="w-full mt-6" 
-            onClick={() => onNext({ user_type: userType })}
+            onClick={() => handleonNext}
             disabled={!userType}
           >
             Continuar
@@ -230,7 +230,7 @@ const CompanyProfileStep: React.FC<{ data: OnboardingData; onNext: (data: StepDa
 
       <Button 
         className="w-full" 
-        onClick={() => onNext({ company_profile: profile })}
+        onClick={() => handleonNext}
         disabled={!profile.company_type || !profile.fleet_size}
       >
         Continuar
@@ -343,7 +343,7 @@ const ModuleRecommendationStep: React.FC<{ data: OnboardingData; onNext: (data: 
 
       <Button 
         className="w-full" 
-        onClick={() => onNext({ preferences: { enabled_modules: selectedModules } })}
+        onClick={() => handleonNext}
         disabled={selectedModules.length === 0}
       >
         Finalizar Configuração

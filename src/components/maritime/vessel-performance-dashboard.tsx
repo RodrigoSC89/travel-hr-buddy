@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";;
+import { useEffect, useState, useCallback, useMemo } from "react";;
 import React, { useState, useEffect } from "react";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
@@ -44,7 +44,7 @@ interface VesselDetails {
   route: string;
 }
 
-export const VesselPerformanceDashboard = () => {
+export const VesselPerformanceDashboard = memo(() => {
   const [vessels, setVessels] = useState<VesselDetails[]>([]);
   const [selectedVessel, setSelectedVessel] = useState<string | null>(null);
   const [timeRange, setTimeRange] = useState<"24h" | "7d" | "30d">("7d");
@@ -123,7 +123,7 @@ export const VesselPerformanceDashboard = () => {
     case "docked": return "bg-green-100 text-green-800";
     case "maintenance": return "bg-red-100 text-red-800";
     default: return "bg-secondary text-secondary-foreground";
-    }
+    };
   };
 
   const selectedVesselData = vessels.find(v => v.id === selectedVessel);
@@ -145,7 +145,7 @@ export const VesselPerformanceDashboard = () => {
             key={range}
             variant={timeRange === range ? "default" : "outline"}
             size="sm"
-            onClick={() => setTimeRange(range)}
+            onClick={handleSetTimeRange}
           >
             {range === "24h" ? "24 Horas" : range === "7d" ? "7 Dias" : "30 Dias"}
           </Button>
@@ -161,7 +161,7 @@ export const VesselPerformanceDashboard = () => {
               className={`cursor-pointer transition-all hover:shadow-md ${
                 selectedVessel === vessel.id ? "ring-2 ring-primary" : ""
               }`}
-              onClick={() => setSelectedVessel(vessel.id)}
+              onClick={handleSetSelectedVessel}
             >
               <CardHeader className="pb-3">
                 <div className="flex items-center justify-between">

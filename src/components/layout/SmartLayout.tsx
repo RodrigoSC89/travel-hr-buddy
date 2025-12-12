@@ -19,7 +19,7 @@ const LoadingFallback = () => (
   </div>
 );
 
-export function SmartLayout() {
+export const SmartLayout = memo(function() {
   // Restaurar posição do scroll entre navegações
   useScrollRestoration();
   

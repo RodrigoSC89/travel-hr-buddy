@@ -1,5 +1,5 @@
 
-import { useState } from "react";;;
+import { memo, memo, useState } from "react";;;
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
@@ -48,7 +48,7 @@ interface GraphData {
   logs: DecisionLog[];
 }
 
-export function Patch612Validation() {
+export const Patch612Validation = memo(function() {
   const [results, setResults] = useState<Record<string, boolean>>({});
   const [loading, setLoading] = useState(false);
   const [graphData, setGraphData] = useState<GraphData | null>(null);

@@ -316,7 +316,7 @@ const NotificationItem: React.FC<NotificationItemProps> = ({
 // MAIN HOOK
 // ============================================
 
-export function useUnifiedNotifications(userId?: string, autoRefresh = true, refreshInterval = 30000) {
+export const useUnifiedNotifications = memo(function(userId?: string, autoRefresh = true, refreshInterval = 30000) {
   const [notifications, setNotifications] = useState<UnifiedNotification[]>([]);
   const [loading, setLoading] = useState(true);
   const { toast } = useToast();
@@ -739,7 +739,7 @@ const PopoverVariant: React.FC<PopoverVariantProps> = ({
                 type="text"
                 placeholder="Buscar..."
                 value={searchTerm}
-                onChange={(e) => setSearchTerm(e.target.value)}
+                onChange={handleChange}
                 className="w-full pl-7 pr-3 py-1.5 text-xs border border-border rounded bg-background"
               />
             </div>
@@ -752,7 +752,7 @@ const PopoverVariant: React.FC<PopoverVariantProps> = ({
                 <Button
                   key={filterType}
                   variant={filter === filterType ? "default" : "ghost"}
-                  onClick={() => setFilter(filterType)}
+                  onClick={handleSetFilter}
                   size="sm"
                   className="text-xs h-6 px-2"
                 >
@@ -1038,7 +1038,7 @@ export const NotificationBell: React.FC<NotificationBellProps> = ({
   return (
     <>
       <button
-        onClick={() => setOpen(true)}
+        onClick={handleSetOpen}
         className={cn(
           "relative p-2 rounded-lg hover:bg-muted transition-colors",
           className

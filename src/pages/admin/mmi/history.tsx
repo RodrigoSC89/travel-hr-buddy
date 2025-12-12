@@ -1,5 +1,5 @@
 
-import { useEffect, useState } from "react";;;
+import { useEffect, useState, useCallback } from "react";;;
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
@@ -91,7 +91,7 @@ export default function MMIHistoryAdminPage() {
           <h2 style="margin-bottom: 15px;">Registros (${histories.length})</h2>
           
           ${histories.map((history, index) => `
-            <div style="margin-bottom: 20px; padding: 15px; border: 1px solid #ddd; border-radius: 8px;">
+            <div key={div.id || index} style="margin-bottom: 20px; padding: 15px; border: 1px solid #ddd; border-radius: 8px;">
               <h3 style="color: #1e40af; margin-bottom: 10px;">${index + 1}. ${history.system_name}</h3>
               
               <div style="margin-bottom: 8px;">

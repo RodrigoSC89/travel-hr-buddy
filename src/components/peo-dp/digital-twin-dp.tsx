@@ -1,4 +1,4 @@
-import { useState } from "react";;
+import { useState, useMemo, useCallback } from "react";;
 import React, { useState } from "react";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
@@ -225,7 +225,7 @@ export const DigitalTwinDP: React.FC = () => {
                           ? "border-primary bg-primary/5"
                           : "border-border hover:border-primary/50"
                       }`}
-                      onClick={() => setSelectedScenario(scenario)}
+                      onClick={handleSetSelectedScenario}
                     >
                       <div className="flex items-center justify-between mb-2">
                         <Badge variant={scenario.type === "failure" ? "destructive" : scenario.type === "stress" ? "default" : "secondary"}>
@@ -301,7 +301,7 @@ export const DigitalTwinDP: React.FC = () => {
                       <Play className="w-4 h-4 mr-2" />Iniciar Simulação
                     </Button>
                   )}
-                  <Button className="w-full" variant="outline" onClick={() => setSimulationProgress(0)}>
+                  <Button className="w-full" variant="outline" onClick={handleSetSimulationProgress}>
                     <RotateCcw className="w-4 h-4 mr-2" />Resetar
                   </Button>
                 </div>

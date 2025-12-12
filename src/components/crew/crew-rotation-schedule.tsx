@@ -1,5 +1,5 @@
 
-import { useEffect, useState } from "react";;;
+import { memo, memo, useEffect, useState } from "react";;;
 import { supabase } from "@/integrations/supabase/client";
 import { CrewRotation } from "@/types/modules";
 import { Button } from "@/components/ui/button";
@@ -9,7 +9,7 @@ import { Calendar, Ship, User, AlertCircle, CheckCircle, Clock } from "lucide-re
 import { format } from "date-fns";
 import { toast } from "sonner";
 
-export function CrewRotationSchedule() {
+export const CrewRotationSchedule = memo(function() {
   const [rotations, setRotations] = useState<CrewRotation[]>([]);
   const [loading, setLoading] = useState(true);
 

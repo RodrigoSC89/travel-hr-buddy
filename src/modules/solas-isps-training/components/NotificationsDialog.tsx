@@ -8,7 +8,7 @@ import { Bell, CheckCircle } from "lucide-react";
 interface Notification { id: string; title: string; message: string; read: boolean; date: string; }
 interface Props { open: boolean; onOpenChange: (open: boolean) => void; notifications: Notification[]; onMarkAllAsRead: () => void; onNotificationClick: (id: string) => void; }
 
-export function NotificationsDialog({ open, onOpenChange, notifications, onMarkAllAsRead, onNotificationClick }: Props) {
+export const NotificationsDialog = memo(function({ open, onOpenChange, notifications, onMarkAllAsRead, onNotificationClick }: Props) {
   const unread = notifications.filter(n => !n.read).length;
   return (
     <Dialog open={open} onOpenChange={onOpenChange}>
@@ -22,7 +22,7 @@ export function NotificationsDialog({ open, onOpenChange, notifications, onMarkA
         <ScrollArea className="h-80">
           <div className="space-y-2">
             {notifications.map(n => (
-              <div key={n.id} onClick={() => onNotificationClick(n.id)} className={`p-3 rounded-lg border cursor-pointer transition-colors ${n.read ? "bg-muted/30" : "bg-primary/5 border-primary/30"}`}>
+              <div key={n.id} onClick={() => handleonNotificationClick} className={`p-3 rounded-lg border cursor-pointer transition-colors ${n.read ? "bg-muted/30" : "bg-primary/5 border-primary/30"}`}>
                 <div className="flex items-start justify-between"><p className="font-medium text-sm">{n.title}</p>{!n.read && <Badge variant="secondary" className="text-xs">Novo</Badge>}</div>
                 <p className="text-xs text-muted-foreground mt-1">{n.message}</p>
                 <p className="text-xs text-muted-foreground mt-2">{n.date}</p>

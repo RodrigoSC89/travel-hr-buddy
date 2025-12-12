@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";;
+import { useEffect, useState, useCallback, useMemo } from "react";;
 import React, { useState, useEffect } from "react";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
@@ -54,7 +54,7 @@ interface CertificationAlert {
   alert_type: "expiring_soon" | "expired" | "renewal_required";
 }
 
-export const MaritimeCertificationManager = () => {
+export const MaritimeCertificationManager = memo(() => {
   const [certificates, setCertificates] = useState<MaritimeCertificate[]>([]);
   const [alerts, setAlerts] = useState<CertificationAlert[]>([]);
   const [activeTab, setActiveTab] = useState("overview");
@@ -297,10 +297,10 @@ export const MaritimeCertificationManager = () => {
               </div>
               
               <div className="flex justify-end gap-2 mt-6">
-                <Button variant="outline" onClick={() => setIsAddDialogOpen(false)}>
+                <Button variant="outline" onClick={handleSetIsAddDialogOpen}>
                   Cancelar
                 </Button>
-                <Button onClick={() => setIsAddDialogOpen(false)}>
+                <Button onClick={handleSetIsAddDialogOpen}>
                   Salvar Certificação
                 </Button>
               </div>
@@ -377,7 +377,7 @@ export const MaritimeCertificationManager = () => {
                         {alert.days_until_expiry > 0 
                           ? ` (${alert.days_until_expiry} dias)` 
                           : ` (vencida há ${Math.abs(alert.days_until_expiry)} dias)`
-                        }
+                        };
                       </p>
                     </div>
                     
@@ -414,7 +414,7 @@ export const MaritimeCertificationManager = () => {
                     <Input
                       placeholder="Buscar por tripulante ou certificação..."
                       value={searchTerm}
-                      onChange={(e) => setSearchTerm(e.target.value)}
+                      onChange={handleChange}
                       className="pl-10"
                     />
                   </div>

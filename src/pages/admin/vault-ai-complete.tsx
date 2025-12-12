@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";;
+import { useEffect, useState, useCallback, useMemo } from "react";;
 import React, { useState, useEffect } from "react";
 import { logger } from "@/lib/logger";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
@@ -286,7 +286,7 @@ export default function VaultAIComplete() {
             <Input
               placeholder="Digite sua busca... (ex: procedimentos de segurança, manutenção preventiva)"
               value={searchQuery}
-              onChange={(e) => setSearchQuery(e.target.value)}
+              onChange={handleChange}
               onKeyPress={(e) => e.key === "Enter" && performVectorSearch()}
               className="flex-1"
             />

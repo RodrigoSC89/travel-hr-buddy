@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";;
+import { useEffect, useState, useCallback } from "react";;
 
 /**
  * PATCH 353: Employee Payroll Component
@@ -236,11 +236,11 @@ export const EmployeePayroll: React.FC = () => {
                     <TableCell>{getStatusBadge(record.status)}</TableCell>
                     <TableCell>
                       <div className="flex items-center justify-end gap-2">
-                        <Button size="sm" variant="outline" onClick={() => viewRecord(record)}>
+                        <Button size="sm" variant="outline" onClick={() => handleviewRecord}>
                           <Eye className="h-4 w-4" />
                         </Button>
                         {record.payslip_url && (
-                          <Button size="sm" variant="outline" onClick={() => downloadPayslip(record)}>
+                          <Button size="sm" variant="outline" onClick={() => handledownloadPayslip}>
                             <Download className="h-4 w-4" />
                           </Button>
                         )}
@@ -326,12 +326,12 @@ export const EmployeePayroll: React.FC = () => {
 
               <div className="flex gap-2">
                 {selectedRecord.payslip_url && (
-                  <Button onClick={() => downloadPayslip(selectedRecord)} className="flex-1">
+                  <Button onClick={() => handledownloadPayslip} className="flex-1">
                     <Download className="h-4 w-4 mr-2" />
                     Download Payslip
                   </Button>
                 )}
-                <Button variant="outline" onClick={() => setIsViewOpen(false)}>
+                <Button variant="outline" onClick={handleSetIsViewOpen}>
                   Close
                 </Button>
               </div>

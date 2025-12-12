@@ -1,4 +1,4 @@
-import { useState } from "react";;
+import { useState, useMemo, useCallback } from "react";;
 import React, { useState } from "react";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
@@ -42,7 +42,7 @@ interface Report {
   enabled: boolean;
 }
 
-export const AnalyticsDashboard = () => {
+export const AnalyticsDashboard = memo(() => {
   const [selectedPeriod, setSelectedPeriod] = useState("month");
   const { toast } = useToast();
 
@@ -223,15 +223,15 @@ export const AnalyticsDashboard = () => {
               Dashboards dinâmicos, KPIs e relatórios automáticos para gestão estratégica.
             </p>
             <div className="flex gap-2">
-              <Button variant="outline" size="sm" onClick={() => exportDashboard("pdf")}>
+              <Button variant="outline" size="sm" onClick={() => handleexportDashboard}>
                 <Download className="h-4 w-4 mr-2" />
                 PDF
               </Button>
-              <Button variant="outline" size="sm" onClick={() => exportDashboard("excel")}>
+              <Button variant="outline" size="sm" onClick={() => handleexportDashboard}>
                 <Download className="h-4 w-4 mr-2" />
                 Excel
               </Button>
-              <Button variant="outline" size="sm" onClick={() => exportDashboard("powerbi")}>
+              <Button variant="outline" size="sm" onClick={() => handleexportDashboard}>
                 <Download className="h-4 w-4 mr-2" />
                 Power BI
               </Button>
@@ -267,7 +267,7 @@ export const AnalyticsDashboard = () => {
                       {typeof metric.value === "number" && metric.unit === "R$" 
                         ? `R$ ${metric.value.toLocaleString()}`
                         : `${metric.value}${metric.unit || ""}`
-                      }
+                      };
                     </div>
                     <div className="flex items-center justify-between">
                       <span className={`text-sm font-medium ${
@@ -362,7 +362,7 @@ export const AnalyticsDashboard = () => {
                     <div className="flex items-center gap-2">
                       <Button 
                         size="sm" 
-                        onClick={() => generateReport(report.id)}
+                        onClick={() => handlegenerateReport}
                         disabled={!report.enabled}
                       >
                         <Mail className="h-4 w-4 mr-2" />

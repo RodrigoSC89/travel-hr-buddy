@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";;
+import { useEffect, useState, useCallback, useMemo } from "react";;
 import React, { useState, useEffect } from "react";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
@@ -56,7 +56,7 @@ interface AlertRule {
   cooldown: number; // minutes
 }
 
-export const IntelligentAlertsCenter = () => {
+export const IntelligentAlertsCenter = memo(() => {
   const { toast } = useToast();
   
   const [alerts, setAlerts] = useState<SmartAlert[]>([
@@ -427,7 +427,7 @@ export const IntelligentAlertsCenter = () => {
                         <Button 
                           size="sm" 
                           variant="ghost"
-                          onClick={() => markAsRead(alert.id)}
+                          onClick={() => handlemarkAsRead}
                         >
                           Marcar como lido
                         </Button>
@@ -568,7 +568,7 @@ export const IntelligentAlertsCenter = () => {
                           ...prev,
                           severity: { ...prev.severity, [level]: checked }
                         }))
-                      }
+                      };
                     />
                   </div>
                 ))}

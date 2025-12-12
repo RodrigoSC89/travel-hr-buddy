@@ -1,4 +1,4 @@
-import { useEffect, useRef, useState } from "react";;
+import { useEffect, useRef, useState, useCallback, useMemo } from "react";;
 import React, { useState, useRef, useEffect } from "react";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
@@ -396,7 +396,7 @@ Por favor, reformule sua pergunta ou selecione um dos temas acima para que eu po
             <div className="flex gap-2">
               <Textarea
                 value={input}
-                onChange={(e) => setInput(e.target.value)}
+                onChange={handleChange}
                 placeholder="Digite sua dúvida sobre SGSO, práticas ANP, auditorias..."
                 className="min-h-[60px] resize-none"
                 onKeyDown={(e) => {
@@ -435,7 +435,7 @@ Por favor, reformule sua pergunta ou selecione um dos temas acima para que eu po
                 key={idx}
                 variant="outline"
                 className="w-full justify-start text-left h-auto py-3 px-4"
-                onClick={() => handleSendMessage(question)}
+                onClick={() => handlehandleSendMessage}
                 disabled={isLoading}
               >
                 <FileText className="h-4 w-4 mr-2 shrink-0" />

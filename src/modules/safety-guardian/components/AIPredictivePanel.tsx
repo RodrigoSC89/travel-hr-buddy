@@ -1,5 +1,5 @@
 /**
-import { useState } from "react";;
+import { useState, useCallback } from "react";;
  * AI Predictive Panel - Análises Preditivas e Insights de IA
  */
 

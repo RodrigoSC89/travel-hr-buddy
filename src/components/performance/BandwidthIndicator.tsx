@@ -1,5 +1,5 @@
 /**
-import { useEffect, useState } from "react";;
+import { useEffect, useState, useCallback } from "react";;
  * Bandwidth Indicator
  * Shows current connection quality to users - only visible on slow connections
  */
@@ -79,7 +79,7 @@ export const BandwidthIndicator = memo(function BandwidthIndicator({
           <Icon className="h-4 w-4 shrink-0" />
           <span className="text-sm font-medium">{label}</span>
           <button
-            onClick={() => setDismissed(true)}
+            onClick={handleSetDismissed}
             className="ml-1 p-0.5 rounded hover:bg-black/10 transition-colors"
             aria-label="Fechar"
           >

@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";;
+import { useEffect, useState, useCallback } from "react";;
 import React, { useState, useEffect, lazy, Suspense } from "react";
 
 // PATCH 549: Lazy load components to prevent bundle bloat and freezing
@@ -372,7 +372,7 @@ export const EnhancedPeotramManager: React.FC = () => {
               <Button
                 variant={managementSubView === "emergency" ? "default" : "ghost"}
                 size="sm"
-                onClick={() => setManagementSubView("emergency")}
+                onClick={handleSetManagementSubView}
                 className="flex items-center gap-2"
               >
                 <AlertTriangle className="w-4 h-4" />
@@ -381,7 +381,7 @@ export const EnhancedPeotramManager: React.FC = () => {
               <Button
                 variant={managementSubView === "equipment" ? "default" : "ghost"}
                 size="sm"
-                onClick={() => setManagementSubView("equipment")}
+                onClick={handleSetManagementSubView}
                 className="flex items-center gap-2"
               >
                 <Settings className="w-4 h-4" />
@@ -390,7 +390,7 @@ export const EnhancedPeotramManager: React.FC = () => {
               <Button
                 variant={managementSubView === "incidents" ? "default" : "ghost"}
                 size="sm"
-                onClick={() => setManagementSubView("incidents")}
+                onClick={handleSetManagementSubView}
                 className="flex items-center gap-2"
               >
                 <AlertTriangle className="w-4 h-4" />
@@ -399,7 +399,7 @@ export const EnhancedPeotramManager: React.FC = () => {
               <Button
                 variant={managementSubView === "communication" ? "default" : "ghost"}
                 size="sm"
-                onClick={() => setManagementSubView("communication")}
+                onClick={handleSetManagementSubView}
                 className="flex items-center gap-2"
               >
                 <Activity className="w-4 h-4" />
@@ -408,7 +408,7 @@ export const EnhancedPeotramManager: React.FC = () => {
               <Button
                 variant={managementSubView === "workflows" ? "default" : "ghost"}
                 size="sm"
-                onClick={() => setManagementSubView("workflows")}
+                onClick={handleSetManagementSubView}
                 className="flex items-center gap-2"
               >
                 <Zap className="w-4 h-4" />
@@ -417,7 +417,7 @@ export const EnhancedPeotramManager: React.FC = () => {
               <Button
                 variant={managementSubView === "integrations" ? "default" : "ghost"}
                 size="sm"
-                onClick={() => setManagementSubView("integrations")}
+                onClick={handleSetManagementSubView}
                 className="flex items-center gap-2"
               >
                 <Leaf className="w-4 h-4" />
@@ -428,7 +428,7 @@ export const EnhancedPeotramManager: React.FC = () => {
               <Button
                 variant={managementSubView === "non-conformities" ? "default" : "ghost"}
                 size="sm"
-                onClick={() => setManagementSubView("non-conformities")}
+                onClick={handleSetManagementSubView}
                 className="flex items-center gap-2"
               >
                 <AlertTriangle className="w-4 h-4" />
@@ -437,7 +437,7 @@ export const EnhancedPeotramManager: React.FC = () => {
               <Button
                 variant={managementSubView === "reports" ? "default" : "ghost"}
                 size="sm"
-                onClick={() => setManagementSubView("reports")}
+                onClick={handleSetManagementSubView}
                 className="flex items-center gap-2"
               >
                 <TrendingUp className="w-4 h-4" />
@@ -446,7 +446,7 @@ export const EnhancedPeotramManager: React.FC = () => {
               <Button
                 variant={managementSubView === "templates" ? "default" : "ghost"}
                 size="sm"
-                onClick={() => setManagementSubView("templates")}
+                onClick={handleSetManagementSubView}
                 className="flex items-center gap-2"
               >
                 <Settings className="w-4 h-4" />
@@ -455,7 +455,7 @@ export const EnhancedPeotramManager: React.FC = () => {
               <Button
                 variant={managementSubView === "analytics" ? "default" : "ghost"}
                 size="sm"
-                onClick={() => setManagementSubView("analytics")}
+                onClick={handleSetManagementSubView}
                 className="flex items-center gap-2"
               >
                 <BarChart3 className="w-4 h-4" />
@@ -464,7 +464,7 @@ export const EnhancedPeotramManager: React.FC = () => {
               <Button
                 variant={managementSubView === "compliance" ? "default" : "ghost"}
                 size="sm"
-                onClick={() => setManagementSubView("compliance")}
+                onClick={handleSetManagementSubView}
                 className="flex items-center gap-2"
               >
                 <Shield className="w-4 h-4" />
@@ -473,7 +473,7 @@ export const EnhancedPeotramManager: React.FC = () => {
               <Button
                 variant={managementSubView === "risk-assessment" ? "default" : "ghost"}
                 size="sm"
-                onClick={() => setManagementSubView("risk-assessment")}
+                onClick={handleSetManagementSubView}
                 className="flex items-center gap-2"
               >
                 <AlertTriangle className="w-4 h-4" />
@@ -482,7 +482,7 @@ export const EnhancedPeotramManager: React.FC = () => {
               <Button
                 variant={managementSubView === "training" ? "default" : "ghost"}
                 size="sm"
-                onClick={() => setManagementSubView("training")}
+                onClick={handleSetManagementSubView}
                 className="flex items-center gap-2"
               >
                 <Users className="w-4 h-4" />
@@ -491,7 +491,7 @@ export const EnhancedPeotramManager: React.FC = () => {
               <Button
                 variant={managementSubView === "workflows" ? "default" : "ghost"}
                 size="sm"
-                onClick={() => setManagementSubView("workflows")}
+                onClick={handleSetManagementSubView}
                 className="flex items-center gap-2"
               >
                 <Zap className="w-4 h-4" />
@@ -500,7 +500,7 @@ export const EnhancedPeotramManager: React.FC = () => {
               <Button
                 variant={managementSubView === "integrations" ? "default" : "ghost"}
                 size="sm"
-                onClick={() => setManagementSubView("integrations")}
+                onClick={handleSetManagementSubView}
                 className="flex items-center gap-2"
               >
                 <Leaf className="w-4 h-4" />
@@ -536,7 +536,7 @@ export const EnhancedPeotramManager: React.FC = () => {
               <Card
                 key={audit.id}
                 className="cursor-pointer hover:shadow-lg transition-all duration-300 hover:scale-[1.02] bg-gradient-to-br from-card to-accent/5"
-                onClick={() => setSelectedAudit(audit)}
+                onClick={handleSetSelectedAudit}
               >
                 <CardHeader className="pb-3">
                   <div className="flex items-center justify-between">
@@ -620,7 +620,7 @@ export const EnhancedPeotramManager: React.FC = () => {
             {/* Card para nova auditoria */}
             <Card 
               className="cursor-pointer hover:shadow-lg transition-all duration-300 hover:scale-[1.02] border-dashed border-2 border-primary/30 bg-gradient-to-br from-primary/5 to-primary/10"
-              onClick={() => setIsNewAuditOpen(true)}
+              onClick={handleSetIsNewAuditOpen}
             >
               <CardContent className="flex flex-col items-center justify-center h-48 text-primary">
                 <Plus className="w-12 h-12 mb-4" />

@@ -1,5 +1,5 @@
 /**
-import { useEffect, useState } from "react";;
+import { useEffect, useState, useCallback } from "react";;
  * Audit Center - Main Component
  * PATCH 62.0 - Complete Implementation with Supabase Integration
  */
@@ -303,7 +303,7 @@ const AuditCenter = () => {
                   <Card 
                     key={audit.id} 
                     className="hover:border-primary/50 transition-colors cursor-pointer"
-                    onClick={() => handleStartAudit(audit)}
+                    onClick={() => handlehandleStartAudit}
                   >
                     <CardHeader>
                       <div className="flex items-start justify-between">
@@ -349,7 +349,7 @@ const AuditCenter = () => {
         <div className="space-y-6">
           <div className="flex items-center justify-between">
             <div>
-              <Button variant="ghost" onClick={() => setSelectedAudit(null)}>
+              <Button variant="ghost" onClick={handleSetSelectedAudit}>
                 ← Back to Audits
               </Button>
               <h1 className="text-3xl font-bold mt-2">{selectedAudit.title}</h1>

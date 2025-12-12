@@ -3,7 +3,7 @@
  * Visual indicator of system health
  */
 
-import { memo } from "react";
+import { memo, useCallback } from "react";
 import { useSystemHealth, getHealthColor, formatBytes, formatMs } from "@/hooks/use-system-health";
 import {
   Tooltip,

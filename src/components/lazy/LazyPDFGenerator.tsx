@@ -1,5 +1,5 @@
 /**
-import { useState } from "react";;
+import { useState, useCallback } from "react";;
  * LazyPDFGenerator - FASE 2.5 Lazy Loading
  * Wrapper lazy para jsPDF (1.04MB)
  */
@@ -20,7 +20,7 @@ interface LazyPDFGeneratorProps {
   useAutoTable?: boolean;
 }
 
-export function LazyPDFGenerator({
+export const LazyPDFGenerator = memo(function({
   fileName = "documento.pdf",
   buttonText = "Exportar PDF",
   buttonVariant = "outline",

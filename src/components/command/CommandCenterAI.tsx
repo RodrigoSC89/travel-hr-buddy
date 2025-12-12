@@ -17,7 +17,7 @@ import {
 } from "lucide-react";
 import { toast } from "sonner";
 
-export function CommandCenterAI() {
+export const CommandCenterAI = memo(function() {
   const { analyze, isLoading } = useNautilusAI();
   const [briefing, setBriefing] = useState<string>("");
 

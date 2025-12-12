@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useState } from "react";;;
+import { useEffect, useState, useCallback } from "react";;;
 import { useNavigate } from "react-router-dom";
 import { useEditor, EditorContent } from "@tiptap/react";
 import StarterKit from "@tiptap/starter-kit";
@@ -250,11 +250,11 @@ export default function DocumentAIEditorPage() {
       <div className="flex items-center justify-between">
         <h1 className="text-2xl font-bold">📝 Editor de Documentos com IA</h1>
         <div className="flex gap-2">
-          <Button variant="outline" onClick={() => navigate("/admin/documents/ai/templates")}>
+          <Button variant="outline" onClick={() => handlenavigate}>
             <FileText className="w-4 h-4 mr-2" />
             Templates
           </Button>
-          <Button variant="outline" onClick={() => navigate("/admin/documents")}>
+          <Button variant="outline" onClick={() => handlenavigate}>
             <List className="w-4 h-4 mr-2" />
             Ver Documentos
           </Button>
@@ -269,7 +269,7 @@ export default function DocumentAIEditorPage() {
           <Input
             placeholder="Título do Documento"
             value={title}
-            onChange={(e) => setTitle(e.target.value)}
+            onChange={handleChange}
           />
         </CardContent>
       </Card>

@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";;
+import { useEffect, useState, useCallback, useMemo } from "react";;
 import React, { useState, useEffect } from "react";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
@@ -583,7 +583,7 @@ export const EnhancedMobileSupport: React.FC = () => {
               <Button 
                 size="sm" 
                 variant="outline" 
-                onClick={() => toast({ title: "Teste", description: "Notificação de teste" })}
+                onClick={() => handletoast}
                 className="gap-2"
               >
                 <Bell className="h-3 w-3" />

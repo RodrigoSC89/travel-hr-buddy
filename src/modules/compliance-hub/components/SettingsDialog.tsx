@@ -1,5 +1,5 @@
 /**
-import { useState } from "react";;
+import { useState, useCallback } from "react";;
  * Compliance Settings Dialog Component
  * Dialog para configurações do módulo de conformidade
  */
@@ -93,7 +93,7 @@ const defaultSettings: ComplianceSettings = {
   },
 };
 
-export function SettingsDialog({
+export const SettingsDialog = memo(function({
   open,
   onOpenChange,
   settings = defaultSettings,
@@ -213,7 +213,7 @@ export function SettingsDialog({
                   <Input
                     type="number"
                     value={currentSettings.notifications.certificateExpiryDays}
-                    onChange={(e) => updateNotifications("certificateExpiryDays", parseInt(e.target.value))}
+                    onChange={handleChange}
                     min={1}
                     max={90}
                   />
@@ -223,7 +223,7 @@ export function SettingsDialog({
                   <Input
                     type="number"
                     value={currentSettings.notifications.auditReminderDays}
-                    onChange={(e) => updateNotifications("auditReminderDays", parseInt(e.target.value))}
+                    onChange={handleChange}
                     min={1}
                     max={60}
                   />
@@ -233,7 +233,7 @@ export function SettingsDialog({
                   <Input
                     type="number"
                     value={currentSettings.notifications.findingOverdueDays}
-                    onChange={(e) => updateNotifications("findingOverdueDays", parseInt(e.target.value))}
+                    onChange={handleChange}
                     min={1}
                     max={30}
                   />
@@ -294,7 +294,7 @@ export function SettingsDialog({
                       type="button"
                       variant={currentSettings.ai.analysisFrequency === freq ? "default" : "outline"}
                       size="sm"
-                      onClick={() => updateAI("analysisFrequency", freq)}
+                      onClick={() => handleupdateAI}
                     >
                       {freq === "daily" ? "Diária" : freq === "weekly" ? "Semanal" : "Mensal"}
                     </Button>
@@ -412,7 +412,7 @@ export function SettingsDialog({
                       type="button"
                       variant={currentSettings.reports.reportFrequency === freq ? "default" : "outline"}
                       size="sm"
-                      onClick={() => updateReports("reportFrequency", freq)}
+                      onClick={() => handleupdateReports}
                     >
                       {freq === "weekly" ? "Semanal" : freq === "monthly" ? "Mensal" : "Trimestral"}
                     </Button>
@@ -424,7 +424,7 @@ export function SettingsDialog({
         </Tabs>
 
         <DialogFooter className="mt-6">
-          <Button type="button" variant="outline" onClick={() => onOpenChange(false)}>
+          <Button type="button" variant="outline" onClick={() => handleonOpenChange}>
             Cancelar
           </Button>
           <Button onClick={handleSave} disabled={loading}>

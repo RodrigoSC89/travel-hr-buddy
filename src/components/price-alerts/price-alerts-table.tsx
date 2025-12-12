@@ -1,4 +1,4 @@
-import { useMemo, useState } from "react";;
+import { useMemo, useState, useCallback } from "react";;
 import React, { useState, useMemo } from "react";
 import { 
   Table, 
@@ -137,7 +137,7 @@ export const PriceAlertsTable: React.FC<PriceAlertsTableProps> = ({
           <Input
             placeholder="Search by product name or route..."
             value={searchTerm}
-            onChange={(e) => setSearchTerm(e.target.value)}
+            onChange={handleChange}
             className="max-w-sm"
           />
         </div>
@@ -165,7 +165,7 @@ export const PriceAlertsTable: React.FC<PriceAlertsTableProps> = ({
               <TableHead>
                 <Button
                   variant="ghost"
-                  onClick={() => handleSort("product_name")}
+                  onClick={() => handlehandleSort}
                   className="flex items-center gap-1 p-0 h-auto font-semibold"
                 >
                   Product
@@ -176,7 +176,7 @@ export const PriceAlertsTable: React.FC<PriceAlertsTableProps> = ({
               <TableHead>
                 <Button
                   variant="ghost"
-                  onClick={() => handleSort("target_price")}
+                  onClick={() => handlehandleSort}
                   className="flex items-center gap-1 p-0 h-auto font-semibold"
                 >
                   Target Price
@@ -186,7 +186,7 @@ export const PriceAlertsTable: React.FC<PriceAlertsTableProps> = ({
               <TableHead>
                 <Button
                   variant="ghost"
-                  onClick={() => handleSort("current_price")}
+                  onClick={() => handlehandleSort}
                   className="flex items-center gap-1 p-0 h-auto font-semibold"
                 >
                   Current Price
@@ -197,7 +197,7 @@ export const PriceAlertsTable: React.FC<PriceAlertsTableProps> = ({
               <TableHead>
                 <Button
                   variant="ghost"
-                  onClick={() => handleSort("travel_date")}
+                  onClick={() => handlehandleSort}
                   className="flex items-center gap-1 p-0 h-auto font-semibold"
                 >
                   Travel Date
@@ -207,7 +207,7 @@ export const PriceAlertsTable: React.FC<PriceAlertsTableProps> = ({
               <TableHead>
                 <Button
                   variant="ghost"
-                  onClick={() => handleSort("created_at")}
+                  onClick={() => handlehandleSort}
                   className="flex items-center gap-1 p-0 h-auto font-semibold"
                 >
                   Created
@@ -274,16 +274,16 @@ export const PriceAlertsTable: React.FC<PriceAlertsTableProps> = ({
                         </Button>
                       </DropdownMenuTrigger>
                       <DropdownMenuContent align="end">
-                        <DropdownMenuItem onClick={() => onView(alert)}>
+                        <DropdownMenuItem onClick={() => handleonView}>
                           <Eye className="w-4 h-4 mr-2" />
                           View Details
                         </DropdownMenuItem>
-                        <DropdownMenuItem onClick={() => onEdit(alert)}>
+                        <DropdownMenuItem onClick={() => handleonEdit}>
                           <Pencil className="w-4 h-4 mr-2" />
                           Edit
                         </DropdownMenuItem>
                         <DropdownMenuItem
-                          onClick={() => onDelete(alert.id)}
+                          onClick={() => handleonDelete}
                           className="text-red-600"
                         >
                           <Trash2 className="w-4 h-4 mr-2" />

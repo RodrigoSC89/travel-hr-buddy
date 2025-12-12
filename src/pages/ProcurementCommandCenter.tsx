@@ -4,7 +4,7 @@
  * Gestão completa de compras, fornecedores, inventário e automação de procurement
  */
 
-import { useEffect, useState } from "react";;;
+import { useEffect, useState, useCallback, useMemo } from "react";;;
 import { Helmet } from "react-helmet-async";
 import { useQuery } from "@tanstack/react-query";
 import { supabase } from "@/integrations/supabase/client";
@@ -549,7 +549,7 @@ export default function ProcurementCommandCenter() {
                       </Badge>
                     </div>
                   ))}
-                  <Button variant="outline" className="w-full" onClick={() => setActiveTab("ai-recommendations")}>
+                  <Button variant="outline" className="w-full" onClick={handleSetActiveTab}>
                     Ver Todas Recomendações
                   </Button>
                 </CardContent>
@@ -577,7 +577,7 @@ export default function ProcurementCommandCenter() {
                       </Badge>
                     </div>
                   ))}
-                  <Button variant="outline" className="w-full" onClick={() => setActiveTab("inventory")}>
+                  <Button variant="outline" className="w-full" onClick={handleSetActiveTab}>
                     Ver Inventário Completo
                   </Button>
                 </CardContent>
@@ -603,7 +603,7 @@ export default function ProcurementCommandCenter() {
                       {renderStars(supplier.rating)}
                     </div>
                   ))}
-                  <Button variant="outline" className="w-full" onClick={() => setActiveTab("suppliers")}>
+                  <Button variant="outline" className="w-full" onClick={handleSetActiveTab}>
                     Ver Todos Fornecedores
                   </Button>
                 </CardContent>
@@ -629,7 +629,7 @@ export default function ProcurementCommandCenter() {
                       </Badge>
                     </div>
                   ))}
-                  <Button variant="outline" className="w-full" onClick={() => setActiveTab("rfq")}>
+                  <Button variant="outline" className="w-full" onClick={handleSetActiveTab}>
                     Ver Todas RFQs
                   </Button>
                 </CardContent>
@@ -707,7 +707,7 @@ export default function ProcurementCommandCenter() {
 
                       <div className="flex flex-col gap-2">
                         <Button 
-                          onClick={() => executeAutoPurchase(rec)}
+                          onClick={() => handleexecuteAutoPurchase}
                           className={rec.urgency === "immediate" ? "bg-red-500 hover:bg-red-600" : ""}
                         >
                           <ShoppingCart className="h-4 w-4 mr-2" />
@@ -796,7 +796,7 @@ export default function ProcurementCommandCenter() {
                   placeholder="Buscar itens..." 
                   className="pl-10"
                   value={searchQuery}
-                  onChange={(e) => setSearchQuery(e.target.value)}
+                  onChange={handleChange}
                 />
               </div>
               <Select value={filterCategory} onValueChange={setFilterCategory}>
@@ -896,7 +896,7 @@ export default function ProcurementCommandCenter() {
                   placeholder="Buscar fornecedores por nome, cidade ou país..." 
                   className="pl-10 bg-muted/30"
                   value={searchQuery}
-                  onChange={(e) => setSearchQuery(e.target.value)}
+                  onChange={handleChange}
                 />
               </div>
               <Button variant="outline" className="gap-2">

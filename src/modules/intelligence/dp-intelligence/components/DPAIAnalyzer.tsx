@@ -1,4 +1,4 @@
-import { useState } from "react";;
+import { useState, useMemo, useCallback } from "react";;
 import React, { useState } from "react";
 import { Card, CardHeader, CardTitle, CardContent } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
@@ -232,7 +232,7 @@ export default function DPAIAnalyzer() {
         {/* Analysis Actions */}
         <div className="flex flex-wrap gap-2">
           <Button
-            onClick={() => runAnalysis("full")}
+            onClick={() => handlerunAnalysis}
             disabled={isAnalyzing}
             className="flex-1 min-w-[150px]"
           >
@@ -244,7 +244,7 @@ export default function DPAIAnalyzer() {
             Análise Completa
           </Button>
           <Button
-            onClick={() => runAnalysis("predictive")}
+            onClick={() => handlerunAnalysis}
             disabled={isAnalyzing}
             variant="secondary"
             className="flex-1 min-w-[150px]"
@@ -257,7 +257,7 @@ export default function DPAIAnalyzer() {
             Análise Preditiva
           </Button>
           <Button
-            onClick={() => runAnalysis("optimization")}
+            onClick={() => handlerunAnalysis}
             disabled={isAnalyzing}
             variant="outline"
             className="flex-1 min-w-[150px]"
@@ -270,7 +270,7 @@ export default function DPAIAnalyzer() {
             Otimização
           </Button>
           <Button
-            onClick={() => runAnalysis("emergency")}
+            onClick={() => handlerunAnalysis}
             disabled={isAnalyzing}
             variant="destructive"
             className="flex-1 min-w-[150px]"

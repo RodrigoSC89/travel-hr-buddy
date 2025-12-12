@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";;
+import { useEffect, useState, useCallback, useMemo } from "react";;
 
 /**
  * PATCH 420: Satcom Communication History
@@ -145,14 +145,14 @@ export const CommunicationHistory: React.FC<CommunicationHistoryProps> = ({
             <Badge 
               variant={filter === "all" ? "default" : "outline"}
               className="cursor-pointer"
-              onClick={() => setFilter("all")}
+              onClick={handleSetFilter}
             >
               All ({stats.total})
             </Badge>
             <Badge 
               variant={filter === "send" ? "default" : "outline"}
               className="cursor-pointer"
-              onClick={() => setFilter("send")}
+              onClick={handleSetFilter}
             >
               <ArrowUp className="w-3 h-3 mr-1" />
               Sent ({stats.sent})
@@ -160,7 +160,7 @@ export const CommunicationHistory: React.FC<CommunicationHistoryProps> = ({
             <Badge 
               variant={filter === "receive" ? "default" : "outline"}
               className="cursor-pointer"
-              onClick={() => setFilter("receive")}
+              onClick={handleSetFilter}
             >
               <ArrowDown className="w-3 h-3 mr-1" />
               Received ({stats.received})
