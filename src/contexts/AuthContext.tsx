@@ -119,7 +119,7 @@ export function AuthProvider({ children }: AuthProviderProps): JSX.Element {
           emailRedirectTo: `${window.location.origin}/`,
           data: { full_name: fullName }
         }
-      };
+      });
 
       if (error) {
         toast.error("Erro no cadastro", { description: error.message });
