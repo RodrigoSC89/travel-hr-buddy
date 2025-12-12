@@ -72,7 +72,7 @@ export const ActiveSessionDisplay = memo(function() {
     } finally {
       setLoading(false);
     }
-  });
+  };
 
   const handleLogout = async () => {
     try {
