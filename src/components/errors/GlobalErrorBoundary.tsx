@@ -25,14 +25,14 @@ export class GlobalErrorBoundary extends Component<Props, State> {
       hasError: false,
       error: null,
       errorInfo: null,
-    };
+    });
   }
 
   static getDerivedStateFromError(error: Error): Partial<State> {
     return {
       hasError: true,
       error,
-    };
+    });
   }
 
   componentDidCatch(error: Error, errorInfo: ErrorInfo): void {
@@ -43,13 +43,13 @@ export class GlobalErrorBoundary extends Component<Props, State> {
       metadata: {
         componentStack: errorInfo.componentStack,
       },
-    };
+    });
 
     // Update state
     this.setState({
       error,
       errorInfo,
-    };
+    });
   }
 
   handleReset = (): void => {
@@ -57,7 +57,7 @@ export class GlobalErrorBoundary extends Component<Props, State> {
       hasError: false,
       error: null,
       errorInfo: null,
-    };
+    });
   };
 
   handleReport = (): void => {
@@ -70,7 +70,7 @@ export class GlobalErrorBoundary extends Component<Props, State> {
         timestamp: new Date().toISOString(),
         userAgent: navigator.userAgent,
         url: window.location.href,
-      };
+      });
 
       // Copy to clipboard
       navigator.clipboard.writeText(JSON.stringify(errorReport, null, 2));
