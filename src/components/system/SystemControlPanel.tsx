@@ -48,7 +48,7 @@ const useSystemMetrics = () => {
     fps: 60,
     cacheHit: 92,
     loadTime: 0
-  };
+  });
 
   const updateMetrics = useCallback(() => {
     const memory = (performance as unknown).memory;
