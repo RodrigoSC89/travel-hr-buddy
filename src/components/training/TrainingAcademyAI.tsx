@@ -218,7 +218,7 @@ export const TrainingAcademyAI = memo(function() {
       } else {
         toast.error("Resposta incorreta", {
           description: question.explanation
-        };
+        });
       }
     }
   };
