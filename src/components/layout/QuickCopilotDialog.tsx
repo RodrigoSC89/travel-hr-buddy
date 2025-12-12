@@ -222,4 +222,4 @@ export const QuickCopilotDialog = memo(function({ open, onOpenChange }: QuickCop
       </DialogContent>
     </Dialog>
   );
-}
+});
