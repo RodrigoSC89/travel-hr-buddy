@@ -296,7 +296,7 @@ const Auth: React.FC = () => {
                           type="email"
                           placeholder="seu@email.com"
                           className="pl-10"
-                          {...signInForm.register("email")
+                          {...signInForm.register("email")}
                         />
                       </div>
                       {signInForm.formState.errors.email && (
@@ -365,7 +365,7 @@ const Auth: React.FC = () => {
                           type="text"
                           placeholder="Seu nome completo"
                           className="pl-10"
-                          {...signUpForm.register("fullName")
+                          {...signUpForm.register("fullName")}
                         />
                       </div>
                       {signUpForm.formState.errors.fullName && (
@@ -459,7 +459,7 @@ const Auth: React.FC = () => {
                             type="email"
                             placeholder="seu@email.com"
                             className="pl-10"
-                            {...resetForm.register("email")
+                            {...resetForm.register("email")}
                           />
                         </div>
                         {resetForm.formState.errors.email && (
