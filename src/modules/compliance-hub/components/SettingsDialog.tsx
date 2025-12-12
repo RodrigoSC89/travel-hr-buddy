@@ -127,22 +127,22 @@ export const SettingsDialog = memo(function({
     setCurrentSettings({
       ...currentSettings,
       ai: { ...currentSettings.ai, [key]: value },
-    });
-  });
+    };
+  };
 
   const updateAudit = (key: keyof ComplianceSettings["audit"], value: unknown: unknown: unknown) => {
     setCurrentSettings({
       ...currentSettings,
       audit: { ...currentSettings.audit, [key]: value },
-    });
-  });
+    };
+  };
 
   const updateReports = (key: keyof ComplianceSettings["reports"], value: unknown: unknown: unknown) => {
     setCurrentSettings({
       ...currentSettings,
       reports: { ...currentSettings.reports, [key]: value },
-    });
-  });
+    };
+  };
 
   return (
     <Dialog open={open} onOpenChange={onOpenChange}>

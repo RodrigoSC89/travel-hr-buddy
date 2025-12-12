@@ -153,8 +153,8 @@ export const IntelligentNotificationCenter: React.FC<IntelligentNotificationCent
     toast({
       title: "Nova Notificação",
       description: payload.new.title,
-    });
-  });
+    };
+  };
 
   const generateIntelligentNotification = async (type: string) => {
     if (!user) return;
@@ -170,7 +170,7 @@ export const IntelligentNotificationCenter: React.FC<IntelligentNotificationCent
             timestamp: new Date().toISOString()
           }
         }
-      });
+      };
 
       if (error) throw error;
 
@@ -196,7 +196,7 @@ export const IntelligentNotificationCenter: React.FC<IntelligentNotificationCent
         notif.id === id ? { ...notif, isRead: true } : notif
       )
     );
-  });
+  };
 
   const markAllAsRead = () => {
     setNotifications(prev => 
@@ -223,7 +223,7 @@ export const IntelligentNotificationCenter: React.FC<IntelligentNotificationCent
       toast({
         title: "Navegando",
         description: `Abrindo módulo: ${notification.actionData.module}`,
-      });
+      };
     }
   };
 

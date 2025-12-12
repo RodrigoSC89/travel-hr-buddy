@@ -197,7 +197,7 @@ function AIModulesGridComponent() {
       title: module.name,
       description: `Acessando ${module.description.toLowerCase()}...`,
       duration: 2000,
-    });
+    };
     navigate(module.route);
   }, [navigate, toast]);
 

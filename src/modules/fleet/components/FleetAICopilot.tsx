@@ -144,7 +144,7 @@ export const FleetAICopilot: React.FC<FleetAICopilotProps> = ({
       fleet_insights: "Gerar insights estratégicos"
     };
     return labels[action] || action;
-  });
+  };
 
   const formatActionResponse = (action: string, data: unknown): string => {
     if (!data) return "Análise não disponível.";
@@ -208,7 +208,7 @@ export const FleetAICopilot: React.FC<FleetAICopilotProps> = ({
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
     sendMessage(input);
-  });
+  };
 
   return (
     <Card className={cn(

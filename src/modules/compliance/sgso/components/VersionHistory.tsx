@@ -40,7 +40,7 @@ export const VersionHistory: React.FC<VersionHistoryProps> = ({ selectedPlanId }
         title: "Error loading versions",
         description: error.message,
         variant: "destructive",
-      });
+      };
     } finally {
       setIsLoading(false);
     }

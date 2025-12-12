@@ -178,21 +178,21 @@ const AIDataLake: React.FC = () => {
     const matchesSearch = source.name.toLowerCase().includes(searchQuery.toLowerCase());
     const matchesCategory = !selectedCategory || selectedCategory === "Todos" || source.category === selectedCategory;
     return matchesSearch && matchesCategory;
-  });
+  };
 
   const handleExploreData = (sourceId: string) => {
     toast({
       title: "Abrindo Explorador de Dados",
       description: "Carregando schema e preview dos dados...",
-    });
-  });
+    };
+  };
 
   const handleSyncData = (sourceId: string) => {
     toast({
       title: "Sincronização Iniciada",
       description: "Os dados estão sendo sincronizados com o Data Lake.",
-    });
-  });
+    };
+  };
 
   return (
     <ModulePageWrapper gradient="blue">

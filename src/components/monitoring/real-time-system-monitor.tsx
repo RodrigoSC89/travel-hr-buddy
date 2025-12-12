@@ -145,7 +145,7 @@ export const RealTimeSystemMonitor: React.FC = () => {
     if (health >= 90) return "text-green-500";
     if (health >= 70) return "text-yellow-500";
     return "text-red-500";
-  });
+  };
 
   return (
     <div className="space-y-6">

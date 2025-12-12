@@ -213,7 +213,7 @@ export const WebhookBuilder: React.FC = () => {
       toast({
         title: "Webhook Criado",
         description: `Webhook "${webhookConfig.name}" foi criado com sucesso.`,
-      });
+      };
       
       // Reset form
       setWebhookConfig({
@@ -242,29 +242,29 @@ export const WebhookBuilder: React.FC = () => {
       toast({
         title: "Teste Concluído",
         description: "Webhook testado com sucesso. Status: 200 OK",
-      });
+      };
     }, 2000);
-  });
+  };
 
   const copyWebhookUrl = (url: string) => {
     navigator.clipboard.writeText(url);
     toast({
       title: "URL Copiada",
       description: "URL do webhook foi copiada para a área de transferência.",
-    });
-  });
+    };
+  };
 
   const loadTemplate = (template: string) => {
     setWebhookConfig({
       ...webhookConfig,
       payload: payloadTemplates[template as keyof typeof payloadTemplates]
-    });
+    };
     
     toast({
       title: "Template Carregado",
       description: `Template ${template} foi aplicado ao payload.`,
-    });
-  });
+    };
+  };
 
   const getStatusColor = (status: WebhookEvent["status"]) => {
     switch (status) {

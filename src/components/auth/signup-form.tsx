@@ -38,7 +38,7 @@ export const SignUpForm: React.FC<SignUpFormProps> = ({ onSignUp, onLoginToggle 
         title: "Erro",
         description: "As senhas não coincidem",
         variant: "destructive",
-      });
+      };
       return;
     }
 

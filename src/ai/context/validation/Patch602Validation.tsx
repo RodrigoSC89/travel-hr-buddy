@@ -88,7 +88,7 @@ export const Patch602Validation = memo(function() {
       Individual: ["Task execution", "Real-time adaptation", "Agent-specific actions"]
     };
     return actionMap[level] || [];
-  });
+  };
 
   return (
     <Card>

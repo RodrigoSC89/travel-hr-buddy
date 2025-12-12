@@ -156,7 +156,7 @@ const AIAssistantEnhanced: React.FC = () => {
       setIsProcessing(false);
     }, 1500);
     timeoutsRef.current.push(timeout);
-  });
+  };
 
   const generateAIResponse = (input: string, capability: string): string => {
     const responses = {

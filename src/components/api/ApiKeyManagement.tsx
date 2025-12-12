@@ -100,7 +100,7 @@ export const ApiKeyManagement: React.FC = () => {
       key += chars.charAt(Math.floor(Math.random() * chars.length));
     }
     return key;
-  });
+  };
 
   const hashApiKey = async (key: string): Promise<string> => {
     const encoder = new TextEncoder();
@@ -108,7 +108,7 @@ export const ApiKeyManagement: React.FC = () => {
     const hashBuffer = await crypto.subtle.digest("SHA-256", data);
     const hashArray = Array.from(new Uint8Array(hashBuffer));
     return hashArray.map(b => b.toString(16).padStart(2, "0")).join("");
-  });
+  };
 
   const createApiKey = async () => {
     try {
@@ -205,7 +205,7 @@ export const ApiKeyManagement: React.FC = () => {
   const copyToClipboard = (text: string) => {
     navigator.clipboard.writeText(text);
     toast.success("Copiado para a área de transferência");
-  });
+  };
 
   const getTierBadgeColor = (tier: string) => {
     switch (tier) {

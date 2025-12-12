@@ -77,7 +77,7 @@ export default function Patch516UnderwaterDrone() {
     };
     setCommandLogs((prev) => [newLog, ...prev]);
     toast.success(`Comando executado: ${command}`);
-  });
+  };
 
   const startMission = () => {
     setMissionActive(true);
@@ -100,7 +100,7 @@ export default function Patch516UnderwaterDrone() {
         executeCommand("REACH_DEPTH", "Profundidade operacional alcançada: 100m");
       }
     }, 500);
-  });
+  };
 
   const pauseMission = () => {
     setMissionActive(false);

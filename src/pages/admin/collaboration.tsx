@@ -154,7 +154,7 @@ export default function CollaborationPage() {
         title: "Erro",
         description: "Por favor, escreva um comentário.",
         variant: "destructive",
-      });
+      };
       return;
     }
 
@@ -273,7 +273,7 @@ export default function CollaborationPage() {
         title: "Erro",
         description: "Por favor, escreva uma resposta.",
         variant: "destructive",
-      });
+      };
       return;
     }
 

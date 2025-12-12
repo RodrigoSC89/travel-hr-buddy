@@ -17,7 +17,7 @@ export const AnomalyDetection: React.FC<Props> = ({ anomalies }) => {
     if (score > 0.8) return "bg-red-500/20 text-red-500";
     if (score > 0.6) return "bg-orange-500/20 text-orange-500";
     return "bg-yellow-500/20 text-yellow-500";
-  });
+  };
 
   return (
     <Card>

@@ -168,16 +168,16 @@ export const IncidentTimeline: React.FC<IncidentTimelineProps> = ({
         groups[monthKey] = [];
       }
       groups[monthKey].push(incident);
-  });
+  };
 
     return Object.entries(groups).sort((a, b) => b[0].localeCompare(a[0]));
-  });
+  };
 
   const formatMonthYear = (monthKey: string) => {
     const [year, month] = monthKey.split("-");
     const date = new Date(parseInt(year), parseInt(month) - 1);
     return date.toLocaleDateString("en-US", { month: "long", year: "numeric" });
-  });
+  };
 
   const exportToPNG = async () => {
     if (!timelineRef.current) return;

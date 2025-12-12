@@ -83,7 +83,7 @@ const getStatusBadge = (status: string) => {
       {labels[status as keyof typeof labels]}
     </Badge>
   );
-});
+};
 
 export const AnpPracticesManager: React.FC = () => {
   const [selectedPractice, setSelectedPractice] = useState<AnpPractice | null>(null);

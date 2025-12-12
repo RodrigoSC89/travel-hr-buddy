@@ -146,7 +146,7 @@ function EmergencyModeOverlay() {
         title: "Sem conexão",
         description: "Aguarde a conexão ser restabelecida para sincronizar",
         variant: "destructive",
-      });
+      };
       return;
     }
 
@@ -155,7 +155,7 @@ function EmergencyModeOverlay() {
       toast({
         title: "Sincronização concluída",
         description: "Dados sincronizados com sucesso",
-      });
+      };
     } catch {
       toast({
         title: "Erro na sincronização",

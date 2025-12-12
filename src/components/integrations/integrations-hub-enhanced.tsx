@@ -104,7 +104,7 @@ export const IntegrationsHubEnhanced = memo(() => {
         title: "Error loading integrations",
         description: error.message,
         variant: "destructive",
-      });
+      };
     } finally {
       setLoading(false);
     }
@@ -181,7 +181,7 @@ export const IntegrationsHubEnhanced = memo(() => {
       toast({
         title: "Integration disconnected",
         description: "Integration has been removed",
-      });
+      };
 
       await loadIntegrations();
     } catch (error: SupabaseError | null) {
@@ -189,7 +189,7 @@ export const IntegrationsHubEnhanced = memo(() => {
         title: "Error disconnecting",
         description: error.message,
         variant: "destructive",
-      });
+      };
     }
   };
 
@@ -199,7 +199,7 @@ export const IntegrationsHubEnhanced = memo(() => {
         title: "URL required",
         description: "Please enter a webhook URL",
         variant: "destructive",
-      });
+      };
       return;
     }
 
@@ -300,7 +300,7 @@ export const IntegrationsHubEnhanced = memo(() => {
       toast({
         title: "Webhook retried",
         description: "Webhook event has been retried successfully",
-      });
+      };
 
       await loadWebhookEvents();
     } catch (error: SupabaseError | null) {
@@ -327,7 +327,7 @@ export const IntegrationsHubEnhanced = memo(() => {
         {status}
       </Badge>
     );
-  });
+  };
 
   return (
     <div className="space-y-6">

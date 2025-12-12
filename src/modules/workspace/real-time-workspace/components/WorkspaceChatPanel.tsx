@@ -130,7 +130,7 @@ export const WorkspaceChatPanel: React.FC<WorkspaceChatPanelProps> = ({
     const mins = Math.floor(seconds / 60);
     const secs = seconds % 60;
     return `${mins.toString().padStart(2, "0")}:${secs.toString().padStart(2, "0")}`;
-  });
+  };
 
   const handleSend = () => {
     if (!newMessage.trim()) return;
@@ -143,7 +143,7 @@ export const WorkspaceChatPanel: React.FC<WorkspaceChatPanelProps> = ({
       toast({
         title: "Digite uma mensagem",
         description: "O Copilot IA precisa de contexto para ajudar",
-      });
+      };
       return;
     }
     onAIAssist?.(newMessage);
@@ -156,7 +156,7 @@ export const WorkspaceChatPanel: React.FC<WorkspaceChatPanelProps> = ({
       toast({
         title: "Gravação concluída",
         description: `Mensagem de voz de ${formatRecordingTime(recordingTime)} pronta para envio`,
-      });
+      };
       // Simulate sending audio message
       onSendMessage(`🎤 Mensagem de voz (${formatRecordingTime(recordingTime)})`, "audio");
     } else {
@@ -181,7 +181,7 @@ export const WorkspaceChatPanel: React.FC<WorkspaceChatPanelProps> = ({
   const handleEmojiSelect = (emoji: string) => {
     setNewMessage(prev => prev + emoji);
     setShowEmojiPicker(false);
-  });
+  };
 
   const handleFileSelect = (e: React.ChangeEvent<HTMLInputElement>, type: "file" | "image") => {
     const file = e.target.files?.[0];
@@ -212,7 +212,7 @@ export const WorkspaceChatPanel: React.FC<WorkspaceChatPanelProps> = ({
       toast({
         title: "Arquivo enviado",
         description: selectedFile.name,
-      });
+      };
     } catch (error) {
       toast({
         title: "Erro ao enviar arquivo",
@@ -240,12 +240,12 @@ export const WorkspaceChatPanel: React.FC<WorkspaceChatPanelProps> = ({
       setUserLocation({
         lat: position.coords.latitude,
         lng: position.coords.longitude,
-      });
+      };
       
       toast({
         title: "Localização obtida",
         description: "Pronta para compartilhar",
-      });
+      };
     } catch (error) {
       toast({
         title: "Erro ao obter localização",
@@ -268,7 +268,7 @@ export const WorkspaceChatPanel: React.FC<WorkspaceChatPanelProps> = ({
       toast({
         title: "Localização compartilhada",
         description: "Sua localização foi enviada para o canal",
-      });
+      };
     }
   };
 

@@ -130,8 +130,8 @@ const AICopilot: React.FC = () => {
     toast({
       title: "Copiado!",
       description: "Texto copiado para a área de transferência.",
-    });
-  });
+    };
+  };
 
   const clearChat = () => {
     setMessages([]);

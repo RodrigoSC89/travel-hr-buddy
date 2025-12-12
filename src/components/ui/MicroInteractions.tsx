@@ -86,7 +86,7 @@ export const Ripple: React.FC<RippleProps> = ({ children, className, disabled })
     setTimeout(() => {
       setRipples(prev => prev.filter(r => r.id !== id));
     }, 600);
-  });
+  };
 
   return (
     <div 

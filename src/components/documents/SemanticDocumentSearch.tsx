@@ -33,7 +33,7 @@ export const SemanticDocumentSearch = memo(function() {
         title: "Empty query",
         description: "Please enter a search term",
         variant: "destructive",
-      });
+      };
       return;
     }
 
@@ -78,7 +78,7 @@ export const SemanticDocumentSearch = memo(function() {
           ...doc,
           similarity,
         };
-      });
+      };
 
       // Sort by similarity
       resultsWithSimilarity.sort((a, b) => b.similarity - a.similarity);

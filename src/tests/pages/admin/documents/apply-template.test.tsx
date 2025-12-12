@@ -108,7 +108,7 @@ describe("ApplyTemplate", () => {
     
     await waitFor(() => {
       expect(screen.getByText("📋 Preview:")).toBeInTheDocument();
-  });
+  };
     
     const saveButton = screen.getByText("💾 Salvar Documento");
     fireEvent.click(saveButton);
@@ -136,7 +136,7 @@ describe("ApplyTemplate", () => {
     
     await waitFor(() => {
       expect(screen.getByText("📋 Preview:")).toBeInTheDocument();
-  });
+  };
     
     const saveButton = screen.getByText("💾 Salvar Documento");
     fireEvent.click(saveButton);
@@ -146,7 +146,7 @@ describe("ApplyTemplate", () => {
         title: "Erro",
         description: "Não foi possível salvar o documento.",
         variant: "destructive",
-      });
+      };
   });
   });
 

@@ -99,7 +99,7 @@ export default function SGSOAuditPage() {
     const updated = [...auditData];
     (updated[index] as unknown)[field] = value;
     setAuditData(updated);
-  });
+  };
 
   const handleSubmit = async () => {
     if (!user) {

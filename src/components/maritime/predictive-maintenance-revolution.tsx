@@ -180,7 +180,7 @@ export const PredictiveMaintenanceRevolution: React.FC = () => {
       toast({
         title: "✅ Análise IA Completa",
         description: `${predictions.length} predições atualizadas com ${systemAccuracy.toFixed(1)}% de precisão`,
-      });
+      };
     }, 2000);
   };
 

@@ -160,7 +160,7 @@ export const RealTimeFleetMonitor = memo(() => {
     if (level > 50) return "text-green-600";
     if (level > 25) return "text-yellow-600";
     return "text-red-600";
-  });
+  };
 
   const selectedVesselData = vessels.find(v => v.id === selectedVessel);
 
@@ -181,7 +181,7 @@ export const RealTimeFleetMonitor = memo(() => {
         </div>
       </div>
     );
-  });
+  };
 
   return (
     <div className="space-y-6">

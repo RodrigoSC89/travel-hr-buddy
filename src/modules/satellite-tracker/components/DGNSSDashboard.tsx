@@ -125,7 +125,7 @@ export const DGNSSDashboard: React.FC = () => {
     if (pdop <= 4) return { label: "Bom", color: "text-blue-500" };
     if (pdop <= 6) return { label: "Moderado", color: "text-yellow-500" };
     return { label: "Ruim", color: "text-red-500" };
-  });
+  };
 
   const getConstellationIcon = (constellation: string) => {
     switch (constellation) {

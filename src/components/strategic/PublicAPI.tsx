@@ -225,8 +225,8 @@ export const PublicAPI = memo(() => {
     case "beta": return "bg-warning text-warning-foreground";
     case "deprecated": return "bg-danger text-danger-foreground";
     default: return "bg-muted text-muted-foreground";
-    });
-  });
+    };
+  };
 
   return (
     <div className="space-y-6">

@@ -254,7 +254,7 @@ const formatTime = (date: string) => {
   if (diff < 86400000) return `${Math.floor(diff / 3600000)}h`;
   if (diff < 604800000) return `${Math.floor(diff / 86400000)}d`;
   return d.toLocaleDateString("pt-BR", { day: "2-digit", month: "2-digit" });
-});
+};
 
 const getTypeIcon = (type: string) => {
   switch (type) {
@@ -517,7 +517,7 @@ export default function NotificationCenterProfessional() {
           prompt: `Analise as notificações do sistema: ${unreadTotal} não lidas, ${unreadCritical} críticas. Forneça um resumo executivo e recomendações de priorização.`,
           context: "notification_analysis",
         },
-      });
+      };
 
       if (error) throw error;
       
@@ -547,7 +547,7 @@ export default function NotificationCenterProfessional() {
       dateRange: "all",
       showRead: true,
       showUnread: true,
-    });
+    };
     setSelectedType(null);
     setSearchQuery("");
     toast({ title: "Filtros limpos" });

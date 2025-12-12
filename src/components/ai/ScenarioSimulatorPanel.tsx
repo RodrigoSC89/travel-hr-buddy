@@ -155,7 +155,7 @@ export const ScenarioSimulatorPanel = memo(function() {
         maintenanceBudget: scenario.parameters.maintenanceDelay ? -10 : 0,
         operationalDays: 0,
         speedAdjustment: scenario.parameters.speedReduction || 0,
-      });
+      };
     }
   };
 

@@ -400,12 +400,12 @@ Como posso ajudá-lo especificamente hoje?`,
       toast({
         title: "Reconhecimento de voz ativo",
         description: "Fale agora..."
-      });
+      };
     } else {
       toast({
         title: "Reconhecimento de voz desativado",
         description: "Voltando ao modo texto"
-      });
+      };
     }
   };
 

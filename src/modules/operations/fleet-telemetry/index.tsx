@@ -182,7 +182,7 @@ export default function FleetTelemetryModule() {
     }
     
     return "normal";
-  });
+  };
 
   const generateMockSensorData = async () => {
     // Generate realistic sensor data for demo

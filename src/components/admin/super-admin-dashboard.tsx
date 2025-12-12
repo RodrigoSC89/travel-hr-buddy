@@ -107,7 +107,7 @@ export const SuperAdminDashboard: React.FC = () => {
         title: "Erro",
         description: "Erro ao carregar organizações",
         variant: "destructive",
-      });
+      };
     } finally {
       setIsLoading(false);
     }
@@ -181,7 +181,7 @@ export const SuperAdminDashboard: React.FC = () => {
       toast({
         title: "Sucesso",
         description: `Status da organização atualizado para ${status}`,
-      });
+      };
 
       loadOrganizations();
     } catch (error) {
@@ -189,7 +189,7 @@ export const SuperAdminDashboard: React.FC = () => {
         title: "Erro",
         description: "Erro ao atualizar status da organização",
         variant: "destructive",
-      });
+      };
     }
   };
 

@@ -115,9 +115,9 @@ export const ReservationPaymentSystem: React.FC = () => {
       currency: reservation.currency || "USD",
       payment_method: "stripe",
       reservation_id: reservation.id,
-    });
+    };
     setIsPaymentDialogOpen(true);
-  });
+  };
 
   const processPayment = async () => {
     if (!paymentIntent || !selectedReservation) return;
@@ -178,7 +178,7 @@ export const ReservationPaymentSystem: React.FC = () => {
         type: "reservation_confirmation",
         priority: "high",
         status: "sent",
-      });
+      };
 
       toast.info("Confirmation email sent");
     } catch (error) {
@@ -198,7 +198,7 @@ export const ReservationPaymentSystem: React.FC = () => {
         type: "push_notification",
         priority: "medium",
         status: "sent",
-      });
+      };
     } catch (error) {
       console.error("Error sending push notification:", error);
       console.error("Error sending push notification:", error);
@@ -364,7 +364,7 @@ END:VCALENDAR`;
         {status?.toUpperCase() || "PENDING"}
       </Badge>
     );
-  });
+  };
 
   const getStatusBadge = (status: string) => {
     const variants = {
@@ -377,7 +377,7 @@ END:VCALENDAR`;
         {status.toUpperCase()}
       </Badge>
     );
-  });
+  };
 
   if (loading) {
     return (

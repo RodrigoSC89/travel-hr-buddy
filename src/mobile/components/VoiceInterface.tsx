@@ -117,7 +117,7 @@ export const VoiceInterface: React.FC<VoiceInterfaceProps> = ({
       role: "user",
       content: text,
       context: { intent }
-    });
+    };
 
     // Notify parent
     onIntentDetected?.(intent);
@@ -200,11 +200,11 @@ export const VoiceInterface: React.FC<VoiceInterfaceProps> = ({
 
     utterance.onstart = () => {
       setIsSpeaking(true);
-    });
+    };
 
     utterance.onend = () => {
       setIsSpeaking(false);
-    });
+    };
 
     utterance.onerror = (event) => {
       setIsSpeaking(false);

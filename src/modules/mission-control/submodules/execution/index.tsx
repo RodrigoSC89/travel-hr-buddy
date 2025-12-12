@@ -37,7 +37,7 @@ export const MissionExecution = memo(function() {
           : mission
       )
     );
-  });
+  };
 
   return (
     <div className="space-y-4">

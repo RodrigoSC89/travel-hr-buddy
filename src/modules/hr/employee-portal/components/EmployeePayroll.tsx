@@ -74,7 +74,7 @@ export const EmployeePayroll: React.FC = () => {
         title: "Error loading payroll",
         description: error.message,
         variant: "destructive",
-      });
+      };
     } finally {
       setLoading(false);
     }
@@ -83,7 +83,7 @@ export const EmployeePayroll: React.FC = () => {
   const viewRecord = (record: PayrollRecord) => {
     setSelectedRecord(record);
     setIsViewOpen(true);
-  });
+  };
 
   const downloadPayslip = async (record: PayrollRecord) => {
     if (record.payslip_url) {
@@ -93,7 +93,7 @@ export const EmployeePayroll: React.FC = () => {
         title: "Payslip not available",
         description: "Payslip document is not available for this period",
         variant: "destructive",
-      });
+      };
     }
   };
 
@@ -114,7 +114,7 @@ export const EmployeePayroll: React.FC = () => {
         {statusConfig.label}
       </Badge>
     );
-  });
+  };
 
   const calculateYearToDate = () => {
     const currentYear = new Date().getFullYear();

@@ -93,7 +93,7 @@ export const TemplateLibrary: React.FC = () => {
         title: "Error",
         description: "Failed to load templates",
         variant: "destructive"
-      });
+      };
     } finally {
       setLoading(false);
     }
@@ -136,7 +136,7 @@ export const TemplateLibrary: React.FC = () => {
     }
 
     return placeholders;
-  });
+  };
 
   const handleCreate = async () => {
     try {
@@ -201,7 +201,7 @@ export const TemplateLibrary: React.FC = () => {
       toast({
         title: "Success",
         description: "Template deleted successfully"
-      });
+      };
 
       loadTemplates();
     } catch (error) {
@@ -220,10 +220,10 @@ export const TemplateLibrary: React.FC = () => {
     const initialData: Record<string, string> = {};
     placeholders.forEach(p => {
       initialData[p] = "";
-  });
+  };
     setGenerateData(initialData);
     setIsGenerateOpen(true);
-  });
+  };
 
   const generatePDF = () => {
     if (!selectedTemplate) return;

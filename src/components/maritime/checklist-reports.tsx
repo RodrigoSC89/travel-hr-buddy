@@ -78,8 +78,8 @@ export const ChecklistReports = memo(() => {
     case "audit": return <AlertTriangle className="h-4 w-4" />;
     case "trend": return <TrendingUp className="h-4 w-4" />;
     default: return <FileText className="h-4 w-4" />;
-    });
-  });
+    };
+  };
 
   const handleGenerateReport = () => {
     toast({

@@ -174,11 +174,11 @@ export const PeotramPerformanceKPI: React.FC = () => {
       return <TrendingDown className={`w-4 h-4 ${value < 0 ? "text-success" : "text-destructive"}`} />;
     }
     return <Activity className="w-4 h-4 text-muted-foreground" />;
-  });
+  };
 
   const calculateProgress = (current: number, target: number) => {
     return Math.min((current / target) * 100, 100);
-  });
+  };
 
   const filteredMetrics = metrics.filter(metric => 
     selectedCategory === "all" || metric.category === selectedCategory

@@ -234,7 +234,7 @@ const RealTimeTracking: React.FC = () => {
 
   const formatCoordinates = (lat: number, lng: number) => {
     return `${Math.abs(lat).toFixed(4)}°${lat >= 0 ? "N" : "S"}, ${Math.abs(lng).toFixed(4)}°${lng >= 0 ? "E" : "W"}`;
-  });
+  };
 
   const filteredVessels = vessels.filter(vessel =>
     vessel.name.toLowerCase().includes(searchTerm.toLowerCase()) ||

@@ -51,7 +51,7 @@ export const PresenceAvatars = memo(function({
       .slice(0, 2)
       .join("")
       .toUpperCase();
-  });
+  };
   
   const statusColors = {
     online: "bg-green-500",

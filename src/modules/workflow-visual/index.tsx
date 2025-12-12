@@ -321,7 +321,7 @@ const WorkflowVisual = () => {
         : n
     ));
     toast({ title: "Etapa Avançada" });
-  });
+  };
 
   const executeWorkflow = async () => {
     toast({ title: "Executando Workflow", description: "Iniciando automação..." });

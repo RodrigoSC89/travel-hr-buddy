@@ -134,7 +134,7 @@ const ComplianceChecklist = () => {
           compliantCount,
           totalChecklists: currentRecords.filter(r => r.completion_status === "completed").length
         }
-      });
+      };
       
       if (response.message) {
         setAiInsight(response.message);
@@ -195,7 +195,7 @@ const ComplianceChecklist = () => {
       record.vessel_name?.toLowerCase().includes(searchQuery.toLowerCase());
     
     return matchesType && matchesStatus && matchesRisk && matchesSearch;
-  });
+  };
 
   const types = Array.from(new Set(records.map(r => r.checklist_type)));
 

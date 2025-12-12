@@ -137,7 +137,7 @@ export const IMCAAuditSections = memo(function({ selectedDPClass, sectionScores 
     if (score >= 90) return <Badge className="bg-green-500">Conforme</Badge>;
     if (score >= 70) return <Badge className="bg-amber-500">Atenção</Badge>;
     return <Badge variant="destructive">Não Conforme</Badge>;
-  });
+  };
 
   const overallScore = calculateOverallScore();
 

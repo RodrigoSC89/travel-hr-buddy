@@ -42,7 +42,7 @@ export default function SystemBenchmark() {
       poor: "destructive"
     } as const;
     return variants[status as keyof typeof variants] || "outline";
-  });
+  };
 
   return (
     <div className="container mx-auto p-6 space-y-6">

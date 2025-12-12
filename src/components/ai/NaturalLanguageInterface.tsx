@@ -82,7 +82,7 @@ export const NaturalLanguageInterface = memo(function() {
     if (lower.includes("qhse") || lower.includes("segurança") || lower.includes("compliance")) return "qhse";
     if (lower.includes("financ") || lower.includes("custo") || lower.includes("orçamento")) return "finance";
     return "general";
-  });
+  };
 
   const executeCommand = async (command: string) => {
     if (!command.trim()) return;

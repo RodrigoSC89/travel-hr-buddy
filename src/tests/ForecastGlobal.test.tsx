@@ -203,11 +203,11 @@ describe("ForecastAIInsights Component", () => {
 
     await waitFor(() => {
       expect(screen.getByText("Erro na previsão IA")).toBeInTheDocument();
-  });
+  };
 
     consoleError.mockRestore();
-  });
-  });
+  };
+  };
 
 describe("MQTT Publisher Functions", () => {
   it("publishForecast sends data to correct topic", async () => {
@@ -218,7 +218,7 @@ describe("MQTT Publisher Functions", () => {
       if (event === "connect") {
         callback();
       }
-    });
+    };
 
     const testData = {
       wind: 15.2,
@@ -247,8 +247,8 @@ describe("MQTT Publisher Functions", () => {
 
     const mockMqttClient = getMockMqttClient();
     expect(client).toBe(mockMqttClient);
-  });
-  });
+  };
+  };
 
 describe("Forecast Data Validation", () => {
   it("validates forecast data structure", () => {

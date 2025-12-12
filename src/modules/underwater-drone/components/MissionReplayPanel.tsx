@@ -42,7 +42,7 @@ export const MissionReplayPanel: React.FC<MissionReplayProps> = ({ recording, on
   const getCurrentTrajectory = (): RecordedTrajectory | null => {
     if (trajectory.length === 0) return null;
     return trajectory[currentFrame] || trajectory[trajectory.length - 1];
-  });
+  };
 
   // Get attention points near current time
   const getNearbyAttentionPoints = (): AttentionPoint[] => {
@@ -54,7 +54,7 @@ export const MissionReplayPanel: React.FC<MissionReplayProps> = ({ recording, on
     return recording.analysis.attentionPoints.filter(point => 
       Math.abs(point.timestamp - currentTimestamp) < timeWindow
     );
-  });
+  };
 
   // Play/Pause control
   useEffect(() => {

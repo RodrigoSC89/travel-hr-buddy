@@ -102,12 +102,12 @@ export const CommandBrainPanel = memo(function({ context, onSettingsClick }: Com
     utterance.onstart = () => setIsSpeaking(true);
     utterance.onend = () => setIsSpeaking(false);
     window.speechSynthesis.speak(utterance);
-  });
+  };
 
   const copyMessage = (content: string) => {
     navigator.clipboard.writeText(content);
     toast.success("Mensagem copiada!");
-  });
+  };
 
   const exportChat = () => {
     exportConversation();

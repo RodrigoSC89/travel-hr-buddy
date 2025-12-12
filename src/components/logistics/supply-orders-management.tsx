@@ -43,7 +43,7 @@ export const SupplyOrdersManagement = memo(() => {
     delivery_address: "",
     estimated_delivery_date: "",
     notes: ""
-  });
+  };
   const { toast } = useToast();
 
   useEffect(() => {
@@ -92,7 +92,7 @@ export const SupplyOrdersManagement = memo(() => {
         order_number: orderNumber,
         ...newOrder,
         quantity: parseInt(newOrder.quantity)
-      });
+      };
 
     if (error) {
       toast({ title: "Erro ao criar ordem", description: error.message, variant: "destructive" });
@@ -160,14 +160,14 @@ export const SupplyOrdersManagement = memo(() => {
       cancelled: "bg-gray-500"
     };
     return colors[status] || "bg-gray-500";
-  });
+  };
 
   const getPriorityIcon = (priority: string) => {
     if (priority === "urgent" || priority === "high") {
       return <AlertTriangle className="h-4 w-4 text-red-500" />;
-    });
+    };
     return <Package className="h-4 w-4 text-blue-500" />;
-  });
+  };
 
   return (
     <div className="space-y-4">

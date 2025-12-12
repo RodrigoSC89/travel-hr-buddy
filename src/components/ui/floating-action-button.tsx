@@ -99,7 +99,7 @@ export const FloatingActionButton: React.FC = () => {
           if (newIndex < 0) return actions.length - 1;
           if (newIndex >= actions.length) return 0;
           return newIndex;
-  });
+  };
         break;
       }
         

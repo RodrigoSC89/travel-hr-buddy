@@ -106,7 +106,7 @@ export const LiteModeProvider = memo(function({ children, autoEnable = true }: L
         reducePollingFrequency: true,
         disablePrefetch: true,
         simplifyUI: false,
-      });
+      };
     } else {
       setConfig(defaultConfig);
     }

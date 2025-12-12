@@ -194,7 +194,7 @@ export default function SuppliersSection({ searchQuery }: SuppliersSectionProps)
     const matchesStatus = filterStatus === "all" || supplier.status === filterStatus;
     const matchesCategory = filterCategory === "all" || supplier.category.includes(filterCategory);
     return matchesSearch && matchesStatus && matchesCategory;
-  });
+  };
 
   const preferredCount = suppliers.filter(s => s.status === "preferred").length;
   const activeCount = suppliers.filter(s => s.status === "active").length;

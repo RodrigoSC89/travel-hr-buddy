@@ -68,9 +68,9 @@ export const ReservationAI: React.FC<ReservationAIProps> = ({
           reservationIds: [reservation.id, ...conflicts.map(c => c.id)],
           suggestion: "Considere reagendar uma das reservas ou verificar se há sobreposição intencional.",
           automatable: false
-        });
+        };
       }
-    });
+    };
 
     // Detect upcoming check-ins
     const upcomingReservations = reservations.filter(r => {
@@ -78,7 +78,7 @@ export const ReservationAI: React.FC<ReservationAIProps> = ({
       const now = new Date();
       const daysDiff = (startDate.getTime() - now.getTime()) / (1000 * 3600 * 24);
       return daysDiff <= 7 && daysDiff > 0 && r.status === "confirmed";
-  });
+  };
 
     upcomingReservations.forEach(reservation => {
       const startDate = new Date(reservation.start_date);
@@ -93,7 +93,7 @@ export const ReservationAI: React.FC<ReservationAIProps> = ({
         reservationIds: [reservation.id],
         suggestion: "Confirme os detalhes da reserva e prepare a documentação necessária.",
         automatable: true
-      });
+      };
     });
 
     // Detect cost optimization opportunities
@@ -115,7 +115,7 @@ export const ReservationAI: React.FC<ReservationAIProps> = ({
           reservationIds: expensiveReservations.map(r => r.id),
           suggestion: "Considere negociar tarifas corporativas ou buscar alternativas mais econômicas.",
           automatable: false
-        });
+        };
       }
     }
 
@@ -134,7 +134,7 @@ export const ReservationAI: React.FC<ReservationAIProps> = ({
         reservationIds: incompleteReservations.map(r => r.id),
         suggestion: "Complete as informações faltantes para melhor organização e controle.",
         automatable: false
-      });
+      };
     }
 
     setInsights(newInsights);
@@ -167,13 +167,13 @@ export const ReservationAI: React.FC<ReservationAIProps> = ({
       toast({
         title: "Ação Aplicada",
         description: "Sugestão aplicada automaticamente",
-      });
+      };
     } else {
       toast({
         title: "Ação Manual Necessária",
         description: "Esta sugestão requer ação manual",
         variant: "default"
-      });
+      };
     }
   };
 

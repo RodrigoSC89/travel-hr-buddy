@@ -235,7 +235,7 @@ export const MLValidationIMCA: React.FC = () => {
       critical: "Crítico"
     };
     return <Badge className={styles[status]}>{labels[status]}</Badge>;
-  });
+  };
 
   const getSeverityBadge = (severity: string) => {
     const styles = {
@@ -244,7 +244,7 @@ export const MLValidationIMCA: React.FC = () => {
       low: "bg-blue-100 text-blue-800"
     };
     return styles[severity as keyof typeof styles] || styles.low;
-  });
+  };
 
   const totalFindings = sectionScores.reduce((sum, s) => sum + s.findings.length, 0);
   const totalRecommendations = sectionScores.reduce((sum, s) => sum + s.recommendations.length, 0);

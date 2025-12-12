@@ -131,7 +131,7 @@ const SmartAlerts = () => {
           predictedIssues,
           totalAlerts: alerts.filter(a => !a.resolved).length
         }
-      });
+      };
       
       if (response.message) {
         setAiInsight(response.message);
@@ -153,7 +153,7 @@ const SmartAlerts = () => {
       toast({
         title: "Success",
         description: "Alert acknowledged",
-      });
+      };
 
       loadSmartAlerts();
     } catch (error) {
@@ -178,7 +178,7 @@ const SmartAlerts = () => {
       toast({
         title: "Success",
         description: "Alert resolved",
-      });
+      };
 
       loadSmartAlerts();
     } catch (error) {
@@ -224,7 +224,7 @@ const SmartAlerts = () => {
       alert.source_module.toLowerCase().includes(searchQuery.toLowerCase());
     
     return matchesLevel && matchesModule && matchesSearch;
-  });
+  };
 
   const modules = Array.from(new Set(alerts.map(a => a.source_module)));
 

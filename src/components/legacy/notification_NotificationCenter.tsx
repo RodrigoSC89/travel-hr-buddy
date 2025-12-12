@@ -193,7 +193,7 @@ export const NotificationCenter: React.FC<NotificationCenterProps> = ({
     toast({
       title: newNotification.title,
       description: newNotification.message,
-    });
+    };
   };
 
   const createNotificationFromAlert = (alert: unknown) => {
@@ -210,7 +210,7 @@ export const NotificationCenter: React.FC<NotificationCenterProps> = ({
 
     setNotifications(prev => [notification, ...prev]);
     setUnreadCount(prev => prev + 1);
-  });
+  };
 
   const createNotificationFromMaintenance = (maintenance: unknown) => {
     const notification: Notification = {
@@ -226,7 +226,7 @@ export const NotificationCenter: React.FC<NotificationCenterProps> = ({
 
     setNotifications(prev => [notification, ...prev]);
     setUnreadCount(prev => prev + 1);
-  });
+  };
 
   const markAsRead = async (notificationId: string) => {
     try {
@@ -268,7 +268,7 @@ export const NotificationCenter: React.FC<NotificationCenterProps> = ({
       toast({
         title: "Notificações marcadas como lidas",
         description: `${unreadIds.length} notificações foram marcadas como lidas`,
-      });
+      };
     } catch (error) {
     }
   };
@@ -327,7 +327,7 @@ export const NotificationCenter: React.FC<NotificationCenterProps> = ({
     if (filter === "unread") return !n.isRead;
     if (filter === "high") return n.priority === "high" || n.priority === "critical";
     return true;
-  });
+  };
 
   if (loading) {
     return (

@@ -68,7 +68,7 @@ export const EmployeeBenefits: React.FC = () => {
         title: "Error loading benefits",
         description: error.message,
         variant: "destructive",
-      });
+      };
     } finally {
       setLoading(false);
     }
@@ -110,7 +110,7 @@ export const EmployeeBenefits: React.FC = () => {
         {statusConfig.label}
       </Badge>
     );
-  });
+  };
 
   const getBenefitTypeLabel = (type: string): string => {
     const labels: Record<string, string> = {
@@ -124,7 +124,7 @@ export const EmployeeBenefits: React.FC = () => {
       other: "Other Benefits"
     };
     return labels[type] || type;
-  });
+  };
 
   const groupedBenefits = benefits.reduce((acc, benefit) => {
     const type = benefit.benefit_type;

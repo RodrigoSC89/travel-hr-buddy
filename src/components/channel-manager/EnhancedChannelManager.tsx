@@ -104,7 +104,7 @@ export const EnhancedChannelManager: React.FC = () => {
         title: "Error",
         description: "Failed to load channels",
         variant: "destructive"
-      });
+      };
     } finally {
       setLoading(false);
     }
@@ -196,7 +196,7 @@ export const EnhancedChannelManager: React.FC = () => {
       toast({
         title: "Success",
         description: "Channel created successfully"
-      });
+      };
 
       setIsCreateOpen(false);
       resetForm();

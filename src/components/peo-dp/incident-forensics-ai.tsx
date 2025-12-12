@@ -142,11 +142,11 @@ export const IncidentForensicsAI: React.FC = () => {
         return prev + 10;
   };
     }, 300);
-  });
+  };
 
   const handleExportReport = (format: string) => {
     toast.success(`Exportando relatório em formato ${format.toUpperCase()}`);
-  });
+  };
 
   const getSeverityBadge = (severity: string) => {
     switch (severity) {

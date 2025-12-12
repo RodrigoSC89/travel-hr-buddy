@@ -72,7 +72,7 @@ const WorkflowEngine = () => {
         title: "Erro",
         description: "Workflow precisa de nome e pelo menos um passo",
         variant: "destructive",
-      });
+      };
       return;
     }
 
@@ -108,20 +108,20 @@ const WorkflowEngine = () => {
         workflow_id: workflowId,
         action: "execute",
       },
-    });
+    };
 
     if (error) {
       toast({
         title: "Erro",
         description: "Falha ao executar workflow",
         variant: "destructive",
-      });
+      };
     } else {
       setActiveExecution(data);
       toast({
         title: "Workflow iniciado",
         description: "Execução em andamento",
-      });
+      };
     }
   };
 
@@ -151,7 +151,7 @@ const WorkflowEngine = () => {
     const updatedSteps = [...newWorkflow.steps];
     updatedSteps[index] = { ...updatedSteps[index], [field]: value };
     setNewWorkflow({ ...newWorkflow, steps: updatedSteps });
-  });
+  };
 
   return (
     <div className="container mx-auto p-6 space-y-6">

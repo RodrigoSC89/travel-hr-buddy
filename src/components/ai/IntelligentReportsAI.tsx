@@ -140,7 +140,7 @@ export const IntelligentReportsAI: React.FC = () => {
     return `Este relatório foi gerado automaticamente pelo Nautilus Brain com base na análise dos dados operacionais do sistema.
 
 A análise contempla o período atual e inclui comparações com períodos anteriores para identificar tendências e oportunidades de melhoria.`;
-  });
+  };
 
   const generateReportSections = (input: string): ReportSection[] => {
     return [

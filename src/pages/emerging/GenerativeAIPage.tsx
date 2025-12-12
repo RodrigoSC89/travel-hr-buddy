@@ -79,7 +79,7 @@ const GenerativeAIPage: React.FC = () => {
         title: "Prompt vazio",
         description: "Por favor, insira uma descrição do que deseja gerar.",
         variant: "destructive",
-      });
+      };
       return;
     }
 
@@ -155,7 +155,7 @@ Este documento foi gerado automaticamente e deve ser revisado antes do uso ofici
     toast({
       title: "Copiado!",
       description: "Conteúdo copiado para a área de transferência.",
-    });
+    };
   }, [generatedContent, toast]);
 
   const getTypeBadge = (type: GeneratedContent["type"]) => {

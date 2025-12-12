@@ -207,8 +207,8 @@ const MaritimeIdentitySystem: React.FC = () => {
     toast({
       title: "Tema Aplicado",
       description: `${preset.name} foi selecionado com sucesso`,
-    });
-  });
+    };
+  };
 
   const saveOriginalTheme = () => {
     const root = document.documentElement;

@@ -146,7 +146,7 @@ export const EnhancedReservationsDashboard: React.FC = () => {
         title: "Erro",
         description: "Erro ao carregar reservas",
         variant: "destructive"
-      });
+      };
       setReservations([]);
     } finally {
       setLoading(false);
@@ -171,8 +171,8 @@ export const EnhancedReservationsDashboard: React.FC = () => {
           "Verifique horários de check-in/check-out"
         ] : []
       };
-    });
-  });
+    };
+  };
 
   const filteredReservations = reservations.filter(reservation => {
     if (filters.type !== "all" && reservation.reservation_type !== filters.type) return false;
@@ -186,7 +186,7 @@ export const EnhancedReservationsDashboard: React.FC = () => {
       if (startDate < filterStart || startDate > filterEnd) return false;
     }
     return true;
-  });
+  };
 
   const handleReservationSaved = () => {
     setIsFormOpen(false);
@@ -213,7 +213,7 @@ export const EnhancedReservationsDashboard: React.FC = () => {
       toast({
         title: "Sucesso",
         description: "Reserva excluída com sucesso!"
-      });
+      };
       fetchReservations();
     } catch (error) {
       toast({

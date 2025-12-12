@@ -46,8 +46,8 @@ export const useNotificationCenterContext = memo(() => {
     throw new Error(
       "useNotificationCenterContext must be used within NotificationCenterProvider"
     );
-  });
+  };
   return context;
-});
+};
 
 export default NotificationCenterContext;

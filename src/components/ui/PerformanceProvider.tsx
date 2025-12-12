@@ -51,7 +51,7 @@ export const PerformanceProvider = memo(function({ children }: { children: React
   const setLightMode = (value: boolean) => {
     setLightModeState(value);
     localStorage.setItem("lightMode", String(value));
-  });
+  };
   
   // Determinar se deve carregar imagens
   const shouldLoadImages = !lightMode && connection.quality !== "slow" && connection.quality !== "offline";

@@ -90,7 +90,7 @@ export default function AITemplatesPage() {
         title: "Erro ao carregar templates",
         description: "Não foi possível carregar a lista de templates.",
         variant: "destructive",
-      });
+      };
     } finally {
       setLoading(false);
     }
@@ -119,11 +119,11 @@ export default function AITemplatesPage() {
     toast({
       title: "Template aplicado",
       description: "Redirecionando para o editor...",
-    });
+    };
     
     // Navigate to editor
     navigate("/admin/documents/ai");
-  });
+  };
 
   const handleCopyTemplate = async (template: AIDocumentTemplate) => {
     try {
@@ -131,14 +131,14 @@ export default function AITemplatesPage() {
       toast({
         title: "Template copiado",
         description: "O conteúdo foi copiado para a área de transferência.",
-      });
+      };
     } catch (error) {
       logger.error("Error copying template:", error);
       toast({
         title: "Erro ao copiar",
         description: "Não foi possível copiar o template.",
         variant: "destructive",
-      });
+      };
     }
   };
 
@@ -158,7 +158,7 @@ export default function AITemplatesPage() {
       toast({
         title: template.is_favorite ? "Removido dos favoritos" : "Adicionado aos favoritos",
         description: "Template atualizado com sucesso.",
-      });
+      };
     } catch (error) {
       logger.error("Error toggling favorite:", error);
       toast({
@@ -185,7 +185,7 @@ export default function AITemplatesPage() {
       toast({
         title: template.is_private ? "Template tornado público" : "Template tornado privado",
         description: "Template atualizado com sucesso.",
-      });
+      };
     } catch (error) {
       logger.error("Error toggling private:", error);
       toast({
@@ -202,7 +202,7 @@ export default function AITemplatesPage() {
         title: "Erro de validação",
         description: "Título e conteúdo são obrigatórios.",
         variant: "destructive",
-      });
+      };
       return;
     }
 
@@ -275,7 +275,7 @@ export default function AITemplatesPage() {
       toast({
         title: "Template excluído",
         description: "O template foi excluído com sucesso.",
-      });
+      };
 
       loadTemplates();
     } catch (error) {
@@ -296,9 +296,9 @@ export default function AITemplatesPage() {
       is_favorite: template.is_favorite,
       is_private: template.is_private,
       tags: template.tags || [],
-    });
+    };
     setShowCreateDialog(true);
-  });
+  };
 
   const resetForm = () => {
     setFormData({
@@ -316,7 +316,7 @@ export default function AITemplatesPage() {
       setFormData({
         ...formData,
         tags: [...formData.tags, tagInput.trim()],
-      });
+      };
       setTagInput("");
     }
   };

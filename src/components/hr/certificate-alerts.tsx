@@ -67,7 +67,7 @@ export const CertificateAlerts: React.FC = () => {
           employee_name: `Funcionário ${cert.employee_id.slice(-3)}`, // Simulated name
           days_until_expiry: daysUntilExpiry
         } as CertificateAlert;
-  });
+  };
 
       setAlerts(alertsWithEmployeeNames);
     } catch (error) {
@@ -103,7 +103,7 @@ export const CertificateAlerts: React.FC = () => {
       );
     }
     return null;
-  });
+  };
 
   const expiredCount = alerts.filter(alert => alert.status === "expired").length;
   const expiringSoonCount = alerts.filter(alert => alert.status === "expiring_soon").length;

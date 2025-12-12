@@ -49,18 +49,18 @@ export const SafetyDashboard: React.FC = () => {
 
   const handleSubmitReport = async (incident: Partial<SafetyIncident>) => {
     await createIncident(incident);
-  });
+  };
 
   const handleViewDetails = (incident: SafetyIncident) => {
     setSelectedIncident(incident);
     setDetailsDialogOpen(true);
-  });
+  };
 
   const handleAnalyzeIncident = async (incident: SafetyIncident) => {
     setSelectedIncident(incident);
     setDetailsDialogOpen(true);
     return analyzeIncident(incident);
-  });
+  };
 
   const filteredIncidents = getFilteredIncidents();
 

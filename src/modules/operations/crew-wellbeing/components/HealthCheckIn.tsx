@@ -67,7 +67,7 @@ export const HealthCheckin: React.FC = () => {
   const getRatingIcon = (value: number) => {
     if (value >= 4) return <TrendingUp className="h-4 w-4" />;
     return <TrendingDown className="h-4 w-4" />;
-  });
+  };
 
   return (
     <div className="space-y-6">

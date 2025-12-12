@@ -79,7 +79,7 @@ export const MobileMissions: React.FC = () => {
     if (filter === "active") return mission.status === "active";
     if (filter === "completed") return mission.status === "completed";
     return true;
-  });
+  };
 
   const getStatusIcon = (status: Mission["status"]) => {
     switch (status) {
@@ -114,7 +114,7 @@ export const MobileMissions: React.FC = () => {
         {labels[status]}
       </Badge>
     );
-  });
+  };
 
   const getPriorityColor = (priority: Mission["priority"]) => {
     switch (priority) {

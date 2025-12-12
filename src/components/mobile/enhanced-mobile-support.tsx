@@ -220,7 +220,7 @@ export const EnhancedMobileSupport: React.FC = () => {
           toast({
             title: granted ? "Notificações ativadas" : "Notificações negadas",
             description: granted ? "Você receberá notificações importantes" : "Ative nas configurações do navegador"
-          });
+          };
         }
         break;
           

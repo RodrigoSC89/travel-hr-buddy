@@ -206,8 +206,8 @@ export default function ExecutionLogsPage() {
         date: format(date, "dd/MM"),
         success: 0,
         failed: 0,
-      });
-  });
+      };
+  };
 
     filteredExecutions.forEach(exec => {
       const execDate = new Date(exec.started_at);
@@ -219,7 +219,7 @@ export default function ExecutionLogsPage() {
           last7Days[6 - daysDiff].failed++;
         }
       }
-    });
+    };
 
     // Count by workflow
     const workflowCounts = filteredExecutions.reduce((acc, exec) => {

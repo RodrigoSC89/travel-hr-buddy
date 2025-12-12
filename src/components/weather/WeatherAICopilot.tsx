@@ -75,7 +75,7 @@ export const WeatherAICopilot: React.FC<WeatherAICopilotProps> = ({ weatherData 
     if (windSpeed < 56) return "10 - Tempestade";
     if (windSpeed < 64) return "11 - Tempestade violenta";
     return "12 - Furacão";
-  });
+  };
 
   const generateLocalFallback = (userMessage: string): string => {
     const lowerMessage = userMessage.toLowerCase();
@@ -280,8 +280,8 @@ Dados meteorológicos atuais:
       }
       if (line.trim() === "") return <br key={i} />;
       return <p key={i}>{line}</p>;
-    });
-  });
+    };
+  };
 
   return (
     <Card className="h-[500px] flex flex-col">

@@ -223,8 +223,8 @@ export const RealTimeCollaboration = memo(() => {
     case "alert": return <Bell className="w-4 h-4 text-orange-500" />;
     case "achievement": return <Zap className="w-4 h-4 text-green-500" />;
     default: return <MessageCircle className="w-4 h-4 text-muted-foreground" />;
-    });
-  });
+    };
+  };
 
   return (
     <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">

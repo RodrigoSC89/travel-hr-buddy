@@ -23,7 +23,7 @@ const SGSOHistoryPage: React.FC = () => {
         title: "Erro",
         description: "ID da embarcação não fornecido",
         variant: "destructive",
-      });
+      };
       return;
     }
 

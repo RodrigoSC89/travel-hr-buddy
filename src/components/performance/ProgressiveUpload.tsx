@@ -43,14 +43,14 @@ export const ProgressiveUpload = memo(function({
     const sizes = ["B", "KB", "MB", "GB"];
     const i = Math.floor(Math.log(bytes) / Math.log(k));
     return parseFloat((bytes / Math.pow(k, i)).toFixed(1)) + " " + sizes[i];
-  });
+  };
 
   const formatTime = (seconds: number) => {
     if (seconds < 60) return `${Math.round(seconds)}s`;
     const minutes = Math.floor(seconds / 60);
     const secs = Math.round(seconds % 60);
     return `${minutes}m ${secs}s`;
-  });
+  };
 
   const handleFiles = useCallback(async (fileList: FileList) => {
     const newFiles: UploadFile[] = Array.from(fileList)
@@ -120,7 +120,7 @@ export const ProgressiveUpload = memo(function({
 
   const removeFile = (id: string) => {
     setFiles(prev => prev.filter(f => f.id !== id));
-  });
+  };
 
   return (
     <div className={cn("space-y-4", className)}>

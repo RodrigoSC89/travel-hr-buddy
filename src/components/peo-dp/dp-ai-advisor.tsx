@@ -234,7 +234,7 @@ export const DPAIAdvisor: React.FC = () => {
       answer: `Entendi sua pergunta sobre "${question}". Baseado no meu conhecimento das normas IMCA e práticas de DP, posso sugerir:\n\n1. Consulte o DPOM (DP Operations Manual) da embarcação\n2. Verifique o ASOG específico para a operação\n3. Revise as guidelines IMCA relevantes (M103, M117, M182, M190)\n\nPosso ajudar a detalhar algum desses pontos específicos?`,
       references: ["DPOM", "ASOG", "IMCA Guidelines"]
     };
-  });
+  };
 
   const handleSend = async () => {
     if (!input.trim()) return;
@@ -267,17 +267,17 @@ export const DPAIAdvisor: React.FC = () => {
 
   const handleQuickQuestion = (question: string) => {
     setInput(question);
-  });
+  };
 
   const handleRating = (messageId: string, rating: "positive" | "negative") => {
     setMessages(prev => prev.map(m => m.id === messageId ? { ...m, rating } : m));
     toast.success(rating === "positive" ? "Obrigado pelo feedback positivo!" : "Feedback registrado. Vamos melhorar!");
-  });
+  };
 
   const handleCopy = (content: string) => {
     navigator.clipboard.writeText(content);
     toast.success("Copiado para a área de transferência");
-  });
+  };
 
   return (
     <div className="space-y-6">

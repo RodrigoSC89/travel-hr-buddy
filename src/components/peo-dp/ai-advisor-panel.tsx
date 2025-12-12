@@ -134,12 +134,12 @@ export const AIAdvisorPanel: React.FC = () => {
 
   const handleQuickAction = (action: string) => {
     setInput(action);
-  });
+  };
 
   const copyToClipboard = (content: string) => {
     navigator.clipboard.writeText(content);
     toast.success("Copiado para a área de transferência");
-  });
+  };
 
   const exportChat = () => {
     const content = messages

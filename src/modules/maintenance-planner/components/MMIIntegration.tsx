@@ -97,13 +97,13 @@ export const MMIIntegration: React.FC = () => {
         priority: prediction.probability > 0.7 ? "high" : "medium",
         status: "pending",
         notes: `MMI Prediction: ${prediction.failure_type} - ${prediction.recommended_action}`,
-      });
+      };
 
       if (error) {
         toast({
           title: "Maintenance Scheduled (Demo)",
           description: `Task would be created for ${prediction.equipment_name}`,
-        });
+        };
         return;
       }
 
@@ -124,13 +124,13 @@ export const MMIIntegration: React.FC = () => {
     if (probability >= 0.7) return "text-red-600";
     if (probability >= 0.5) return "text-orange-600";
     return "text-yellow-600";
-  });
+  };
 
   const getProbabilityBadge = (probability: number) => {
     if (probability >= 0.7) return "destructive";
     if (probability >= 0.5) return "secondary";
     return "default";
-  });
+  };
 
   if (loading) {
     return (

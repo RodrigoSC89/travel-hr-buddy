@@ -195,7 +195,7 @@ const Templates = () => {
         template.description.toLowerCase().includes(searchQuery.toLowerCase());
       const matchesCategory = selectedCategory === "all" || template.category === selectedCategory;
       return matchesSearch && matchesCategory;
-  });
+  };
   }, [templates, searchQuery, selectedCategory]);
 
   const handleDownload = (template: Template) => {
@@ -216,12 +216,12 @@ const Templates = () => {
     ));
     
     toast.success(`Download concluído: ${template.name}`);
-  });
+  };
 
   const handlePreview = (template: Template) => {
     setSelectedTemplate(template);
     setShowPreviewDialog(true);
-  });
+  };
 
   const handleDuplicate = (template: Template) => {
     const duplicated: Template = {
@@ -233,12 +233,12 @@ const Templates = () => {
     };
     setTemplates(prev => [duplicated, ...prev]);
     toast.success(`Template duplicado: ${template.name}`);
-  });
+  };
 
   const handleDelete = (template: Template) => {
     setTemplates(prev => prev.filter(t => t.id !== template.id));
     toast.success(`Template removido: ${template.name}`);
-  });
+  };
 
   const handleEdit = (template: Template) => {
     setSelectedTemplate(template);
@@ -248,9 +248,9 @@ const Templates = () => {
       category: template.category,
       type: template.type,
       content: template.content || ""
-    });
+    };
     setShowEditDialog(true);
-  });
+  };
 
   const handleCreateTemplate = () => {
     const template: Template = {
@@ -299,7 +299,7 @@ const Templates = () => {
     const regex = /\{\{(\w+)\}\}/g;
     const matches = content.matchAll(regex);
     return [...new Set([...matches].map(m => m[1]))];
-  });
+  };
 
   const generateWithAI = async () => {
     if (!newTemplate.name) {

@@ -118,7 +118,7 @@ export const CompetencyHeatmap: React.FC = () => {
   const getSkillLevel = (member: CrewMember, skill: string) => {
     const comp = member.competencies.find(c => c.skill === skill);
     return comp ? comp.level : 0;
-  });
+  };
 
   const getSkillStatus = (member: CrewMember, skill: string) => {
     const comp = member.competencies.find(c => c.skill === skill);
@@ -131,7 +131,7 @@ export const CompetencyHeatmap: React.FC = () => {
       if (daysUntilExpiry < 90) return "expiring";
     }
     return "good";
-  });
+  };
 
   const getHeatmapColor = (level: number, status: string) => {
     if (status === "none") return "bg-gray-100 dark:bg-gray-800";
@@ -141,7 +141,7 @@ export const CompetencyHeatmap: React.FC = () => {
     if (level >= 75) return "bg-green-400";
     if (level >= 60) return "bg-yellow-400";
     return "bg-orange-400";
-  });
+  };
 
   const totalGaps = crew.reduce((sum, m) => sum + m.gaps, 0);
   const avgScore = Math.round(crew.reduce((sum, m) => sum + m.overallScore, 0) / crew.length);

@@ -176,8 +176,8 @@ export const MobileSpecifications = memo(() => {
     case "medium": return "bg-warning text-warning-foreground";
     case "low": return "bg-success text-success-foreground";
     default: return "bg-muted text-muted-foreground";
-    });
-  });
+    };
+  };
 
   const getFeatureIcon = (name: string) => {
     if (name.includes("Offline")) return <WifiOff className="h-5 w-5" />;
@@ -189,7 +189,7 @@ export const MobileSpecifications = memo(() => {
     if (name.includes("Emergência")) return <Shield className="h-5 w-5" />;
     if (name.includes("Biometria")) return <Shield className="h-5 w-5" />;
     return <Smartphone className="h-5 w-5" />;
-  });
+  };
 
   const totalDays = coreFeatures.reduce((sum, feature) => sum + feature.estimatedDays, 0);
   const averageComplexity = coreFeatures.filter(f => f.complexity === "high").length / coreFeatures.length;

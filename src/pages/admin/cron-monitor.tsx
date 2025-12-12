@@ -63,7 +63,7 @@ export default function CronMonitorPage() {
       error: { className: "bg-red-100 text-red-800", label: "Erro" },
     };
     return variants[status] || variants.inactive;
-  });
+  };
 
   const getExecutionStatusBadge = (status: string) => {
     const variants: Record<string, { className: string; label: string }> = {
@@ -73,7 +73,7 @@ export default function CronMonitorPage() {
       cancelled: { className: "bg-gray-100 text-gray-800", label: "Cancelado" },
     };
     return variants[status] || variants.cancelled;
-  });
+  };
 
   const formatDuration = (ms?: number) => {
     if (!ms) return "N/A";
@@ -81,7 +81,7 @@ export default function CronMonitorPage() {
     const minutes = Math.floor(seconds / 60);
     const remainingSeconds = seconds % 60;
     return minutes > 0 ? `${minutes}m ${remainingSeconds}s` : `${seconds}s`;
-  });
+  };
 
   return (
     <div className="container mx-auto p-6 space-y-6">

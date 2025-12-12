@@ -63,7 +63,7 @@ export const ShipmentTracking = memo(() => {
         title: "Error loading shipments",
         description: error.message,
         variant: "destructive",
-      });
+      };
     } finally {
       setLoading(false);
     }
@@ -112,7 +112,7 @@ export const ShipmentTracking = memo(() => {
         {status.replace("_", " ")}
       </Badge>
     );
-  });
+  };
 
   const filteredShipments = shipments.filter(shipment =>
     shipment.shipment_number.toLowerCase().includes(searchTerm.toLowerCase()) ||

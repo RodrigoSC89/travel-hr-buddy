@@ -167,7 +167,7 @@ const RealTimeWorkspaceProfessional: React.FC = () => {
       toast({
         title: "Atualizado",
         description: "Todos os dados foram sincronizados",
-      });
+      };
     } catch (error) {
       toast({
         title: "Erro ao atualizar",
@@ -215,7 +215,7 @@ const RealTimeWorkspaceProfessional: React.FC = () => {
           context: "workspace_chat",
           systemPrompt: "Você é um assistente de IA para um workspace marítimo. Ajude com operações, documentação, e comunicação da equipe. Responda de forma concisa e profissional em português."
         }
-      });
+      };
       
       let aiContent: string;
       
@@ -273,7 +273,7 @@ const RealTimeWorkspaceProfessional: React.FC = () => {
         title: "Nome obrigatório",
         description: "Digite um nome para o canal",
         variant: "destructive",
-      });
+      };
       return;
     }
     
@@ -339,13 +339,13 @@ const RealTimeWorkspaceProfessional: React.FC = () => {
       toast({
         title: "Link copiado",
         description: "Compartilhe com a equipe",
-      });
+      };
     } catch (error) {
       toast({
         title: "Erro ao copiar",
         description: "Tente novamente",
         variant: "destructive",
-      });
+      };
     }
   };
 

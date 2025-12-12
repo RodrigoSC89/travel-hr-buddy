@@ -174,7 +174,7 @@ export default function PurchaseOrdersSection({ searchQuery }: PurchaseOrdersSec
       order.supplier.toLowerCase().includes(searchQuery.toLowerCase());
     const matchesStatus = filterStatus === "all" || order.status === filterStatus;
     return matchesSearch && matchesStatus;
-  });
+  };
 
   const handleReceiveItems = (orderId: string, items: POItem[]) => {
     const totalReceived = items.reduce((sum, item) => sum + item.receivedQty, 0);
@@ -196,7 +196,7 @@ export default function PurchaseOrdersSection({ searchQuery }: PurchaseOrdersSec
     
     setShowReceive(false);
     toast.success("Recebimento registrado com sucesso!");
-  });
+  };
 
   const activeOrders = orders.filter(o => !["delivered", "cancelled"].includes(o.status)).length;
   const delayedOrders = orders.filter(o => o.status === "delayed").length;
@@ -606,7 +606,7 @@ function ReceiveItemsForm({
     setItems(prev => prev.map(item => 
       item.id === id ? { ...item, receivingQty: qty } : item
     ));
-  });
+  };
 
   const handleConfirm = () => {
     const updatedItems = items.map(item => ({

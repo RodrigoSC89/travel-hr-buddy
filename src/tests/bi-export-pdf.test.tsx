@@ -54,13 +54,13 @@ describe("ExportBIReport Component", () => {
     fireEvent.click(button);
 
     expect(html2pdf.default).toHaveBeenCalled();
-  });
+  };
 
   it("should be disabled when no trend data is provided", () => {
     render(<ExportBIReport trend={[]} forecast={mockForecast} />);
     const button = screen.getByText(/📄 Exportar PDF/i);
     expect(button).toHaveProperty("disabled", true);
-  });
+  };
 
   it("should be enabled when trend data is provided", () => {
     render(<ExportBIReport trend={mockTrendData} forecast={mockForecast} />);

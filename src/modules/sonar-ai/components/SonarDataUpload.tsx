@@ -27,7 +27,7 @@ export const SonarDataUpload = memo(function() {
         title: "Invalid file type",
         description: "Please upload a JSON, CSV, or TXT file",
         variant: "destructive",
-      });
+      };
       return;
     }
 

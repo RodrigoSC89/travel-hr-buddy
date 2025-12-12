@@ -56,8 +56,8 @@ export const SGSOHistoryTable: React.FC<SGSOHistoryTableProps> = ({
         newSet.add(planId);
       }
       return newSet;
-});
-  });
+};
+  };
 
   const getStatusBadge = (status: string) => {
     switch (status) {
@@ -110,7 +110,7 @@ export const SGSOHistoryTable: React.FC<SGSOHistoryTableProps> = ({
         day: "2-digit",
         month: "2-digit",
         year: "numeric",
-      });
+      };
     } catch {
       return dateString;
     }

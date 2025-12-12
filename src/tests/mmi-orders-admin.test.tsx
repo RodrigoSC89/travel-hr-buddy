@@ -65,8 +65,8 @@ describe("MMI Orders Admin Page", () => {
 
     await waitFor(() => {
       expect(screen.queryByText(/Carregando/i)).not.toBeInTheDocument();
-  });
-  });
+  };
+  };
 
   it("should display status badges", () => {
     const statuses = [

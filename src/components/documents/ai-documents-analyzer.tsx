@@ -89,7 +89,7 @@ export const AIDocumentsAnalyzer = memo(function() {
           title: "Tipo de arquivo inválido",
           description: "Por favor, selecione um PDF ou imagem (JPG, PNG, GIF, BMP, TIFF)",
           variant: "destructive",
-        });
+        };
         return;
       }
 
@@ -99,7 +99,7 @@ export const AIDocumentsAnalyzer = memo(function() {
           title: "Arquivo muito grande",
           description: "O tamanho máximo do arquivo é 10MB",
           variant: "destructive",
-        });
+        };
         return;
       }
 
@@ -121,7 +121,7 @@ export const AIDocumentsAnalyzer = memo(function() {
             setProgress(10 + (m.progress * 70));
           }
         },
-      });
+      };
 
       setProgress(80);
 
@@ -148,8 +148,8 @@ export const AIDocumentsAnalyzer = memo(function() {
         entity_value: email,
         entity_label: "Email",
         confidence_score: 95,
-      });
-  });
+      };
+  };
 
     // Extract dates (DD/MM/YYYY or DD-MM-YYYY)
     const dateRegex = /\b\d{1,2}[/-]\d{1,2}[/-]\d{2,4}\b/g;
@@ -241,7 +241,7 @@ export const AIDocumentsAnalyzer = memo(function() {
     const frequency: Record<string, number> = {};
     words.forEach(word => {
       frequency[word] = (frequency[word] || 0) + 1;
-  });
+  };
 
     // Get top 10 most frequent words as topics
     const sorted = Object.entries(frequency)
@@ -282,7 +282,7 @@ export const AIDocumentsAnalyzer = memo(function() {
         title: "Nenhum arquivo selecionado",
         description: "Por favor, selecione um arquivo primeiro",
         variant: "destructive",
-      });
+      };
       return;
     }
 
@@ -425,7 +425,7 @@ export const AIDocumentsAnalyzer = memo(function() {
         title: "Erro ao carregar documentos",
         description: "Tente novamente mais tarde",
         variant: "destructive",
-      });
+      };
     }
   };
 
@@ -507,7 +507,7 @@ export const AIDocumentsAnalyzer = memo(function() {
       name: "bg-indigo-100 text-indigo-800",
     };
     return colors[entityType] || "bg-gray-100 text-gray-800";
-  });
+  };
 
   return (
     <div className="container mx-auto p-6 space-y-6">

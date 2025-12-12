@@ -74,7 +74,7 @@ export default function RestoreAnalyticsPage() {
           title: "Não autenticado",
           description: "Você precisa estar autenticado para acessar esta página.",
           variant: "destructive",
-        });
+        };
         navigate("/auth");
         return;
       }
@@ -203,7 +203,7 @@ export default function RestoreAnalyticsPage() {
         body: tableData,
         theme: "grid",
         headStyles: { fillColor: [59, 130, 246] },
-      });
+      };
       
       // Save PDF
       doc.save(`restauracoes_${format(new Date(), "yyyy-MM-dd")}.pdf`);
@@ -211,7 +211,7 @@ export default function RestoreAnalyticsPage() {
       toast({
         title: "PDF exportado",
         description: "O arquivo PDF foi baixado com sucesso.",
-      });
+      };
     } catch (error) {
       logger.error("Error exporting PDF:", error);
       toast({

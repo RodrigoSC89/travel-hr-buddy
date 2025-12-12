@@ -115,7 +115,7 @@ export const ProjectTimeline: React.FC<ProjectTimelineProps> = () => {
         title: "Error",
         description: "Failed to load tasks",
         variant: "destructive"
-      });
+      };
     } finally {
       setLoading(false);
     }
@@ -222,7 +222,7 @@ export const ProjectTimeline: React.FC<ProjectTimelineProps> = () => {
         title: "Error",
         description: "Failed to delete task",
         variant: "destructive"
-      });
+      };
     }
   };
 
@@ -252,9 +252,9 @@ export const ProjectTimeline: React.FC<ProjectTimelineProps> = () => {
       start_date: task.start_date.split("T")[0],
       end_date: task.end_date.split("T")[0],
       progress: task.progress
-    });
+    };
     setIsEditOpen(true);
-  });
+  };
 
   const exportToExcel = () => {
     const worksheet = XLSX.utils.json_to_sheet(filteredTasks.map(task => ({
@@ -341,7 +341,7 @@ export const ProjectTimeline: React.FC<ProjectTimelineProps> = () => {
       left: `${(start / total) * 100}%`,
       width: `${(duration / total) * 100}%`
     };
-  });
+  };
 
   const minDate = filteredTasks.length > 0 
     ? filteredTasks.reduce((min, task) => task.start_date < min ? task.start_date : min, filteredTasks[0].start_date)

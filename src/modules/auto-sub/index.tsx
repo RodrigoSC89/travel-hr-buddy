@@ -141,7 +141,7 @@ const AutoSub: React.FC = () => {
       aborted: "bg-red-500",
     };
     return colors[status as keyof typeof colors] || "bg-gray-500";
-  });
+  };
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-blue-950 via-indigo-900 to-black text-white p-6">

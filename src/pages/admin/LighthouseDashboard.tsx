@@ -123,13 +123,13 @@ export default function LighthouseDashboard() {
     if (score >= target) return "text-green-600";
     if (score >= target - 10) return "text-yellow-600";
     return "text-red-600";
-  });
+  };
 
   const getScoreBadge = (score: number, target: number): string => {
     if (score >= target) return "default";
     if (score >= target - 10) return "secondary";
     return "destructive";
-  });
+  };
 
   const getVitalStatusColor = (status: string): string => {
     switch (status) {

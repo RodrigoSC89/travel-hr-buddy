@@ -240,7 +240,7 @@ export const OperationsDashboardRealTime: React.FC = () => {
     
     setAlerts((prev) => [newAlert, ...prev].slice(0, 100));
     loadRealTimeData();
-  });
+  };
 
   const handleMQTTMessage = (data: unknown) => {
     const newAlert: RealTimeAlert = {
@@ -254,7 +254,7 @@ export const OperationsDashboardRealTime: React.FC = () => {
     };
     
     setAlerts((prev) => [newAlert, ...prev].slice(0, 100));
-  });
+  };
 
   const handleWebSocketMessage = (data: unknown) => {
     const newAlert: RealTimeAlert = {
@@ -268,7 +268,7 @@ export const OperationsDashboardRealTime: React.FC = () => {
     };
     
     setAlerts((prev) => [newAlert, ...prev].slice(0, 100));
-  });
+  };
 
   const loadRealTimeData = async () => {
     try {
@@ -375,7 +375,7 @@ export const OperationsDashboardRealTime: React.FC = () => {
     const alertPenalty = Math.min(criticalAlerts * 5, 30);
 
     return Math.max(0, Math.round(healthScore - alertPenalty));
-  });
+  };
 
   const cleanup = () => {
     if (realtimeChannelRef.current) {
@@ -423,7 +423,7 @@ export const OperationsDashboardRealTime: React.FC = () => {
       critical: "text-red-500",
     };
     return colors[severity] || "text-gray-500";
-  });
+  };
 
   const getSeverityBadge = (severity: string) => {
     const variants = {
@@ -433,7 +433,7 @@ export const OperationsDashboardRealTime: React.FC = () => {
       critical: "destructive",
     };
     return <Badge variant={variants[severity] || "secondary"}>{severity.toUpperCase()}</Badge>;
-  });
+  };
 
   if (loading) {
     return (

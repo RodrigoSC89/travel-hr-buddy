@@ -159,7 +159,7 @@ export const CertificationManager: React.FC = () => {
     const today = new Date();
     const diffTime = expiryDate.getTime() - today.getTime();
     return Math.ceil(diffTime / (1000 * 60 * 60 * 24));
-  });
+  };
 
   const handleBulkRenewal = () => {
     toast({

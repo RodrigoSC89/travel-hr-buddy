@@ -142,7 +142,7 @@ export default function WorkflowCommandCenter() {
     const matchesCategory = categoryFilter === "all" || w.category === categoryFilter;
     const matchesPriority = priorityFilter === "all" || w.priority === priorityFilter;
     return matchesSearch && matchesStatus && matchesCategory && matchesPriority;
-  });
+  };
 
   const handleClearFilters = useCallback(() => {
     setSearchTerm("");
@@ -183,9 +183,9 @@ export default function WorkflowCommandCenter() {
       steps: template.steps,
       estimated_duration: template.estimated_duration,
       tags: template.tags,
-    });
+    };
     toast({ title: "Template aplicado", description: `Workflow "${template.name}" criado` });
-  });
+  };
 
   const getNodeStatusColor = (status: string) => {
     switch (status) {

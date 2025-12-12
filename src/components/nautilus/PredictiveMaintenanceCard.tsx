@@ -71,7 +71,7 @@ export const PredictiveMaintenanceCard: React.FC<PredictiveMaintenanceCardProps>
       low: "bg-green-500"
     };
     return colors[risk] || colors.low;
-  });
+  };
 
   return (
     <Card>

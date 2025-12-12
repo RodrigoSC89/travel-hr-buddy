@@ -6,7 +6,7 @@ import { logger } from "@/lib/logger";
 export default function DocumentEditorPage() {
   const handleSave = (documentId: string) => {
     logger.info("Document saved with ID:", documentId);
-  });
+  };
 
   return (
     <RoleBasedAccess roles={["admin", "manager"]}>

@@ -178,7 +178,7 @@ export const AISuggestionsPanel: React.FC = () => {
             toast({
               title: "Novas sugestões",
               description: `${newSuggestions.length} sugestões geradas pela IA.`,
-            });
+            };
           }
         } catch {
           // If parsing fails, just reload from database
@@ -295,7 +295,7 @@ export const AISuggestionsPanel: React.FC = () => {
   const filteredSuggestions = suggestions.filter(suggestion => {
     if (filter === "all") return true;
     return suggestion.type === filter;
-  });
+  };
 
   if (isLoading) {
     return (

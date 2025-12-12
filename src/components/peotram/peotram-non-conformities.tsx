@@ -71,7 +71,7 @@ export const PeotramNonConformities: React.FC<NonConformitiesProps> = ({
     const matchesStatus = selectedStatus === "all" || nc.status === selectedStatus;
     
     return matchesSearch && matchesType && matchesStatus;
-});
+};
 
   const getTypeLabel = (type: string) => {
     switch (type) {
@@ -104,7 +104,7 @@ export const PeotramNonConformities: React.FC<NonConformitiesProps> = ({
 
   const isOverdue = (targetDate: string) => {
     return new Date(targetDate) < new Date();
-  });
+  };
 
   const getDaysUntilDue = (targetDate: string) => {
     const today = new Date();
@@ -112,7 +112,7 @@ export const PeotramNonConformities: React.FC<NonConformitiesProps> = ({
     const diffTime = due.getTime() - today.getTime();
     const diffDays = Math.ceil(diffTime / (1000 * 60 * 60 * 24));
     return diffDays;
-  });
+  };
 
   // Statistics
   const stats = {

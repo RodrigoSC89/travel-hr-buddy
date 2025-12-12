@@ -44,7 +44,7 @@ export const SearchFilters: React.FC<SearchFiltersProps> = ({
     const newFilters = { ...localFilters, [key]: value };
     setLocalFilters(newFilters);
     onFiltersChange?.(newFilters);
-  });
+  };
 
   const clearFilters = () => {
     const clearedFilters = {};
@@ -205,4 +205,4 @@ export const SearchFilters: React.FC<SearchFiltersProps> = ({
       )}
     </div>
   );
-});
+};

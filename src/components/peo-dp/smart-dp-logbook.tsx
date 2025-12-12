@@ -175,7 +175,7 @@ export const SmartDPLogbook: React.FC = () => {
   const handleAcknowledge = (id: string) => {
     setEntries(entries.map(e => e.id === id ? { ...e, acknowledged: true } : e));
     toast.success("Entrada reconhecida");
-  });
+  };
 
   const handleExportPDF = () => {
     toast.success("Exportando logbook para PDF...");

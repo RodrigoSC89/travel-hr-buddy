@@ -38,7 +38,7 @@ export const WeeklyAssessment: React.FC = () => {
           title: "Error",
           description: "You must be logged in to submit an assessment",
           variant: "destructive",
-        });
+        };
         return;
       }
 

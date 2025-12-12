@@ -63,7 +63,7 @@ export const WhiteLabelCustomizer: React.FC = () => {
       [field]: value
     }));
     setHasChanges(true);
-  });
+  };
 
   const handleNestedChange = (parent: string, field: string, value: unknown) => {
     setFormData(prev => {
@@ -78,9 +78,9 @@ export const WhiteLabelCustomizer: React.FC = () => {
         };
       }
       return prev;
-    });
+    };
     setHasChanges(true);
-  });
+  };
 
   const handleSave = async () => {
     if (!currentBranding) return;
@@ -92,13 +92,13 @@ export const WhiteLabelCustomizer: React.FC = () => {
       toast({
         title: "Personalização salva",
         description: "As configurações de marca foram atualizadas com sucesso",
-      });
+      };
     } catch (error) {
       toast({
         title: "Erro",
         description: "Não foi possível salvar as configurações",
         variant: "destructive",
-      });
+      };
     } finally {
       setIsLoading(false);
     }

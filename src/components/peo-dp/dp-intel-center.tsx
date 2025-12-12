@@ -76,7 +76,7 @@ export const DPIntelCenter: React.FC = () => {
     try {
       const { data, error } = await supabase.functions.invoke("dp-intel-analyze", {
         body: { incident, action: "analyze" }
-      });
+      };
 
       if (error) throw error;
       setAnalysisResult(data.result);
@@ -105,7 +105,7 @@ export const DPIntelCenter: React.FC = () => {
     const matchesClass = filterClass === "all" || incident.dp_class?.includes(filterClass);
     
     return matchesSearch && matchesClass;
-  });
+  };
 
   return (
     <div className="space-y-6">

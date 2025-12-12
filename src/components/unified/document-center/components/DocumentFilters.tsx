@@ -38,19 +38,19 @@ export const DocumentFilters: React.FC<DocumentFiltersProps> = ({ className }) =
   const handleSearch = (value: string) => {
     setLocalSearchTerm(value);
     setFilter({ searchTerm: value });
-  });
+  };
 
   const handleTypeFilter = (types: DocumentType[]) => {
     setFilter({ types });
-  });
+  };
 
   const handleStatusFilter = (statuses: DocumentStatus[]) => {
     setFilter({ statuses });
-  });
+  };
 
   const handleCategoryFilter = (categories: string[]) => {
     setFilter({ categories });
-  });
+  };
 
   const activeFiltersCount = (
     (filter.types?.length || 0) +

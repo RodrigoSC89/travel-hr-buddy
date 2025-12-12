@@ -49,7 +49,7 @@ export const MobileHome: React.FC = () => {
     // Check biometric availability
     biometricAuthService.isAvailable().then((result) => {
       setBiometricAvailable(result.available);
-  });
+  };
 
     return () => {
       unsubscribe();

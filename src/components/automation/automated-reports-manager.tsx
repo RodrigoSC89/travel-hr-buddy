@@ -127,12 +127,12 @@ export const AutomatedReportsManager = memo(() => {
     ));
     const report = reports.find(r => r.id === id);
     toast.success(report?.isActive ? "Relatório pausado" : "Relatório ativado");
-  });
+  };
 
   const confirmDeleteReport = (id: string) => {
     setReportToDelete(id);
     setDeleteDialogOpen(true);
-  });
+  };
 
   const deleteReport = () => {
     if (reportToDelete) {

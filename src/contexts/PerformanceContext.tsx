@@ -36,12 +36,12 @@ export const usePerformance = memo(() => {
     throw new Error("usePerformance must be used within PerformanceProvider");
   }
   return context;
-});
+};
 
 // Optional hook that doesn't throw
 export const usePerformanceOptional = memo(() => {
   return useContext(PerformanceContext);
-});
+};
 
 interface PerformanceProviderProps {
   children: ReactNode;

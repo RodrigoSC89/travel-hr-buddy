@@ -43,7 +43,7 @@ export const OVIDAIAssistant: React.FC<OVIDAIAssistantProps> = ({ vesselType }) 
           messages: [...messages, userMessage],
           vesselType,
         }),
-      });
+      };
 
       if (!response.ok) throw new Error("Falha na comunicação com IA");
 

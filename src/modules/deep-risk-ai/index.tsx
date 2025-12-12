@@ -153,7 +153,7 @@ const DeepRiskAI: React.FC = () => {
       critical: "bg-red-700",
     };
     return colors[level as keyof typeof colors] || "bg-gray-500";
-  });
+  };
 
   const getPriorityColor = (priority: string) => {
     const colors = {
@@ -163,7 +163,7 @@ const DeepRiskAI: React.FC = () => {
       critical: "bg-red-500/20 text-red-400 border-red-500/30",
     };
     return colors[priority as keyof typeof colors] || "bg-gray-500/20 text-gray-400";
-  });
+  };
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-blue-950 via-indigo-900 to-black text-white p-6">

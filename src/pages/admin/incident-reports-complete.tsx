@@ -118,7 +118,7 @@ export default function IncidentReportsComplete() {
         title: "Erro",
         description: "Falha ao carregar incidentes",
         variant: "destructive"
-      });
+      };
     } finally {
       setLoading(false);
     }
@@ -352,7 +352,7 @@ export default function IncidentReportsComplete() {
     setSelectedIncident(incident);
     await loadFollowups(incident.id);
     setIsDetailDialogOpen(true);
-  });
+  };
 
   const activeIncidents = incidents.filter(i => ["pending", "under_analysis"].includes(i.status));
   const resolvedIncidents = incidents.filter(i => ["resolved", "closed"].includes(i.status));

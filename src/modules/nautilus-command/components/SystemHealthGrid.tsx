@@ -103,13 +103,13 @@ export const SystemHealthGrid: React.FC<SystemHealthGridProps> = ({ status, expa
     if (health >= 90) return "text-green-500";
     if (health >= 70) return "text-yellow-500";
     return "text-red-500";
-  });
+  };
 
   const getHealthBg = (health: number) => {
     if (health >= 90) return "bg-green-500";
     if (health >= 70) return "bg-yellow-500";
     return "bg-red-500";
-  });
+  };
 
   const getTrendIcon = (trend: string) => {
     switch (trend) {

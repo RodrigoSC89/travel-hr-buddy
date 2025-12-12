@@ -154,7 +154,7 @@ export const PeotramPermissionsManager: React.FC = () => {
       toast({
         title: "Sucesso",
         description: "Permissão criada com sucesso!",
-      });
+      };
 
       setIsDialogOpen(false);
       setPermissionForm({
@@ -188,7 +188,7 @@ export const PeotramPermissionsManager: React.FC = () => {
       toast({
         title: "Sucesso",
         description: "Permissão atualizada com sucesso!",
-      });
+      };
 
       fetchPermissions();
     } catch (error) {
@@ -196,13 +196,13 @@ export const PeotramPermissionsManager: React.FC = () => {
         title: "Erro",
         description: "Não foi possível atualizar a permissão.",
         variant: "destructive",
-      });
+      };
     }
   };
 
   const togglePermissionStatus = async (permission: UserPermission) => {
     await updatePermission(permission.id, { is_active: !permission.is_active });
-  });
+  };
 
   const deletePermission = async (id: string) => {
     try {
@@ -216,7 +216,7 @@ export const PeotramPermissionsManager: React.FC = () => {
       toast({
         title: "Sucesso",
         description: "Permissão removida com sucesso!",
-      });
+      };
 
       fetchPermissions();
     } catch (error) {
@@ -224,7 +224,7 @@ export const PeotramPermissionsManager: React.FC = () => {
         title: "Erro",
         description: "Não foi possível remover a permissão.",
         variant: "destructive",
-      });
+      };
     }
   };
 
@@ -257,7 +257,7 @@ export const PeotramPermissionsManager: React.FC = () => {
   const filteredPermissions = permissions.filter(permission => {
     const userName = permission.profiles?.full_name || users.find(u => u.id === permission.user_id)?.email || "";
     return userName.toLowerCase().includes(searchTerm.toLowerCase());
-  });
+  };
 
   const areas = [
     "Ponte de Comando",

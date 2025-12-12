@@ -92,7 +92,7 @@ export const BehavioralEvolutionDashboard = memo(function() {
         active_alerts: alerts?.length || 0,
         avg_strategic_alignment: avgAlignment,
         evolution_trend: trend,
-      });
+      };
 
       // Generate recent evolution data
       const evolutions = generateEvolutionData(perfData || []);
@@ -114,7 +114,7 @@ export const BehavioralEvolutionDashboard = memo(function() {
       return acc + ((precision + recall) / 2);
     }, 0);
     return (sum / data.length) * 100;
-  });
+  };
 
   const determineEvolutionTrend = (data: unknown[]): "improving" | "stable" | "degrading" => {
     if (data.length < 10) return "stable";
@@ -131,7 +131,7 @@ export const BehavioralEvolutionDashboard = memo(function() {
     if (diff > 0.05) return "improving";
     if (diff < -0.05) return "degrading";
     return "stable";
-  });
+  };
 
   const generateEvolutionData = (data: unknown[]): BehaviorEvolution[] => {
     const moduleData = new Map<string, any[]>();
@@ -141,7 +141,7 @@ export const BehavioralEvolutionDashboard = memo(function() {
         moduleData.set(d.module_name, []);
       }
       moduleData.get(d.module_name)?.push(d);
-  });
+  };
 
     const evolutions: BehaviorEvolution[] = [];
     moduleData.forEach((records, moduleName) => {

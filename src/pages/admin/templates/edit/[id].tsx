@@ -81,7 +81,7 @@ export default function EditTemplatePage() {
         title: "Título necessário",
         description: "Por favor, forneça um título para o template.",
         variant: "destructive",
-      });
+      };
       return;
     }
 
@@ -119,7 +119,7 @@ export default function EditTemplatePage() {
         title: "Nenhum conteúdo para reformular",
         description: "Por favor, adicione conteúdo primeiro.",
         variant: "destructive",
-      });
+      };
       return;
     }
 
@@ -155,7 +155,7 @@ export default function EditTemplatePage() {
         title: "Nenhum conteúdo",
         description: "Por favor, adicione conteúdo primeiro.",
         variant: "destructive",
-      });
+      };
       return;
     }
 
@@ -191,7 +191,7 @@ export default function EditTemplatePage() {
         title: "Campos obrigatórios",
         description: "Por favor, preencha o título e o conteúdo.",
         variant: "destructive",
-      });
+      };
       return;
     }
 

@@ -279,7 +279,7 @@ const formatTime = (date: string | undefined) => {
   if (diff < 3600000) return `${Math.floor(diff / 60000)}min`;
   if (diff < 86400000) return d.toLocaleTimeString("pt-BR", { hour: "2-digit", minute: "2-digit" });
   return d.toLocaleDateString("pt-BR", { day: "2-digit", month: "2-digit" });
-});
+};
 
 const getChannelTypeIcon = (type?: string) => {
   switch (type) {
@@ -458,7 +458,7 @@ export default function ChannelManagerProfessional() {
       const matchesFavorites = !showFavoritesOnly || ch.is_favorite;
       
       return matchesSearch && matchesType && matchesStatus && matchesFavorites;
-  });
+  };
   }, [channels, searchQuery, filterType, filterStatus, showFavoritesOnly]);
 
   // Channel messages
@@ -603,7 +603,7 @@ export default function ChannelManagerProfessional() {
     toast({
       title: channel.is_active ? "Canal desativado" : "Canal ativado",
       description: `${channel.name} foi ${channel.is_active ? "desativado" : "ativado"}.`,
-    });
+    };
   }, [toast]);
 
   const handleToggleFavorite = useCallback((channel: Channel) => {
@@ -612,7 +612,7 @@ export default function ChannelManagerProfessional() {
     ));
     toast({
       title: channel.is_favorite ? "Removido dos favoritos" : "Adicionado aos favoritos",
-    });
+    };
   }, [toast]);
 
   const handleToggleMute = useCallback((channel: Channel) => {
@@ -621,7 +621,7 @@ export default function ChannelManagerProfessional() {
     ));
     toast({
       title: channel.is_muted ? "Notificações ativadas" : "Notificações silenciadas",
-    });
+    };
   }, [toast]);
 
   const handleDeleteChannel = useCallback(() => {
@@ -642,7 +642,7 @@ export default function ChannelManagerProfessional() {
           prompt: `Análise de canal de comunicação: ${aiPrompt}\n\nContexto: Canal "${selectedChannel?.name}" com ${selectedChannel?.member_count} membros.`,
           context: "channel_management",
         },
-      });
+      };
 
       if (error) throw error;
       

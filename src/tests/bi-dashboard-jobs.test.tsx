@@ -68,19 +68,19 @@ describe("DashboardJobs Component", () => {
 
     await waitFor(() => {
       expect(consoleSpy).toHaveBeenCalled();
-  });
+  };
 
     consoleSpy.mockRestore();
-  });
+  };
 
   it("should render without crashing", () => {
     vi.mocked(supabase.functions.invoke).mockResolvedValue({
       data: [],
       error: null,
-    });
+    };
 
     const { container } = render(<DashboardJobs />);
     expect(container).toBeDefined();
     expect(container.firstChild).toBeDefined();
-  });
+  };
 });

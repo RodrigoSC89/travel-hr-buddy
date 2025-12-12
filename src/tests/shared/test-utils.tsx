@@ -20,7 +20,7 @@ export const createTestQueryClient = () => new QueryClient({
       retry: false,
     },
   },
-});
+};
 
 interface AllTheProvidersProps {
   children: React.ReactNode;
@@ -45,7 +45,7 @@ export const AllTheProviders = memo(({ children }: AllTheProvidersProps) => {
       </BrowserRouter>
     </QueryClientProvider>
   );
-});
+};
 
 /**
  * Custom render function that includes all providers
@@ -102,7 +102,7 @@ export const createMockSupabaseClient = () => ({
       getPublicUrl: vi.fn().mockReturnValue({ data: { publicUrl: "mock-url" } }),
     })),
   },
-});
+};
 
 /**
  * Create mock user for authentication tests
@@ -115,7 +115,7 @@ export const createMockUser = (overrides = {}) => ({
     role: "operator",
   },
   ...overrides,
-});
+};
 
 /**
  * Create mock session for authentication tests
@@ -125,7 +125,7 @@ export const createMockSession = (userOverrides = {}) => ({
   refresh_token: "mock-refresh-token",
   expires_at: Date.now() + 3600000,
   user: createMockUser(userOverrides),
-});
+};
 
 /**
  * Suppress console errors during tests
@@ -133,10 +133,10 @@ export const createMockSession = (userOverrides = {}) => ({
 export const suppressConsoleError = memo(() => {
   const originalError = console.error;
   beforeEach(() => {
-  });
+  };
   afterEach(() => {
-  });
-});
+  };
+};
 
 /**
  * Mock fetch for API tests
@@ -149,7 +149,7 @@ export const mockFetch = memo((response: SupabaseResponse<unknown>, options = {}
       ...options,
     })
   ) as unknown;
-});
+};
 
 /**
  * Reset all mocks between tests
@@ -157,7 +157,7 @@ export const mockFetch = memo((response: SupabaseResponse<unknown>, options = {}
 export const resetAllMocks = memo(() => {
   vi.clearAllMocks();
   vi.resetAllMocks();
-});
+};
 
 // Re-export testing library utilities
 export * from "@testing-library/react";

@@ -153,7 +153,7 @@ export default function AdvancedAnalyticsDashboard() {
         title: "Error",
         description: "Failed to load dashboard data",
         variant: "destructive",
-      });
+      };
     } finally {
       setLoading(false);
     }
@@ -169,14 +169,14 @@ export default function AdvancedAnalyticsDashboard() {
           data_source: "default",
           chart_type: chartType,
           position: { x: 0, y: 0, w: 4, h: 3 }
-        });
+        };
 
       if (error) throw error;
 
       toast({
         title: "Success",
         description: "Widget added successfully",
-      });
+      };
       
       fetchDashboardData();
     } catch (error) {

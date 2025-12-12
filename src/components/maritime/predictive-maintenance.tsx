@@ -175,7 +175,7 @@ export const PredictiveMaintenanceSystem: React.FC = () => {
     if (score >= 85) return "text-green-600";
     if (score >= 70) return "text-yellow-600";
     return "text-red-600";
-  });
+  };
 
   const getTypeIcon = (type: string) => {
     switch (type) {

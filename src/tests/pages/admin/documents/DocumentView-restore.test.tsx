@@ -83,7 +83,7 @@ describe("DocumentViewPage - Version Restoration", () => {
     // Import the component fresh for each test
     const module = await React.lazy(() => import(import("@/pages/admin/documents/DocumentView")));
     DocumentViewPage = module.default;
-  });
+  };
 
   it("should render document with version history component", async () => {
     mockSupabase.from.mockImplementation((table: string) => {

@@ -449,7 +449,7 @@ export const SmartOnboardingWizard: React.FC = () => {
             { type: "check_certificates", days_ahead: 30 },
             { type: "send_notification", template: "certificate_expiry" }
           ]
-        });
+        };
       }
 
       if (data.user_type === "admin") {

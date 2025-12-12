@@ -174,13 +174,13 @@ export const PersonalizedRecommendations: React.FC<PersonalizedRecommendationsPr
       toast({
         title: "Navegando",
         description: `Abrindo módulo: ${recommendation.actionData.module}`,
-      });
+      };
     } else if (recommendation.actionType === "configure") {
       // Handle configuration actions
       toast({
         title: "Configuração",
         description: "Abrindo configurações relevantes",
-      });
+      };
     }
   };
 
@@ -189,8 +189,8 @@ export const PersonalizedRecommendations: React.FC<PersonalizedRecommendationsPr
     toast({
       title: "Recomendação Dispensada",
       description: "Você pode atualizá-las a qualquer momento",
-    });
-  });
+    };
+  };
 
   const getPriorityColor = (priority: string) => {
     switch (priority) {

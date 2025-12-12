@@ -277,14 +277,14 @@ export default function DocumentViewPage() {
       toast({
         title: "Comentário excluído",
         description: "O comentário foi excluído com sucesso.",
-      });
+      };
     } catch (error) {
       logger.error("Error deleting comment:", error);
       toast({
         title: "Erro ao excluir comentário",
         description: "Não foi possível excluir o comentário.",
         variant: "destructive",
-      });
+      };
     } finally {
       setDeletingCommentId(null);
     }

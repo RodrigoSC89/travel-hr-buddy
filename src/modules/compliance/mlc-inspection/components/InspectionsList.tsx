@@ -32,7 +32,7 @@ export const InspectionsList = memo(function({ onSelectInspection, onStatsUpdate
         title: "Error",
         description: "Failed to load inspections",
         variant: "destructive",
-      });
+      };
     } finally {
       setLoading(false);
     }
@@ -47,14 +47,14 @@ export const InspectionsList = memo(function({ onSelectInspection, onStatsUpdate
       approved: "bg-green-500",
     };
     return colors[status] || "bg-gray-500";
-  });
+  };
 
   const getComplianceColor = (score?: number) => {
     if (!score) return "text-gray-500";
     if (score >= 90) return "text-green-500";
     if (score >= 75) return "text-yellow-500";
     return "text-red-500";
-  });
+  };
 
   if (loading) {
     return (

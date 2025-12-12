@@ -67,7 +67,7 @@ export const Gamification = memo(() => {
     completedTasks: 156,
     collaborationScore: 87,
     innovationIndex: 92
-  });
+  };
 
   const [achievements, setAchievements] = useState<Achievement[]>([
     {
@@ -194,7 +194,7 @@ export const Gamification = memo(() => {
       toast({
         title: "Recompensa Coletada! 🎉",
         description: `Você ganhou ${achievement.points} pontos por "${achievement.title}"`,
-      });
+      };
     }
   };
 
@@ -223,8 +223,8 @@ export const Gamification = memo(() => {
     case "up": return <TrendingUp className="w-4 h-4 text-green-500" />;
     case "down": return <TrendingUp className="w-4 h-4 text-red-500 rotate-180" />;
     default: return <TrendingUp className="w-4 h-4 text-muted-foreground rotate-90" />;
-    });
-  });
+    };
+  };
 
   return (
     <div className="space-y-6">

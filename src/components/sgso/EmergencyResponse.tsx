@@ -150,7 +150,7 @@ const getStatusConfig = (status: string) => {
     }
   };
   return configs[status as keyof typeof configs] || configs.active;
-});
+};
 
 export const EmergencyResponse: React.FC = () => {
   const [selectedType, setSelectedType] = useState<string>("all");
@@ -181,12 +181,12 @@ export const EmergencyResponse: React.FC = () => {
   const handleViewPlan = (plan: EmergencyPlan) => {
     setSelectedPlan(plan);
     setViewPlanOpen(true);
-  });
+  };
 
   const handleStartDrill = (plan: EmergencyPlan) => {
     setSelectedPlan(plan);
     setDrillSimOpen(true);
-  });
+  };
 
   return (
     <div className="space-y-6">

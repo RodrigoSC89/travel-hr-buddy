@@ -181,8 +181,8 @@ describe("DPIntelligencePage", () => {
             error: null,
           }),
         }),
-      });
-    });
+      };
+    };
 
     (supabase.from as unknown).mockImplementation(mockFrom);
     (supabase.functions.invoke as unknown).mockImplementation(mockInvoke);
@@ -290,8 +290,8 @@ describe("DPIntelligencePage", () => {
             error: null,
           }),
         }),
-      });
-    });
+      };
+    };
 
     (supabase.from as unknown).mockImplementation(mockFrom);
     (supabase.functions.invoke as unknown).mockImplementation(mockInvoke);

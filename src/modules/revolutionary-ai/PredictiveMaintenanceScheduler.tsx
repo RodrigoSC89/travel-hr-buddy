@@ -127,14 +127,14 @@ export const PredictiveMaintenanceScheduler = memo(function() {
       low: "bg-green-500/20 text-green-400 border-green-500/30"
     };
     return colors[priority as keyof typeof colors] || "bg-muted";
-  });
+  };
 
   const getHealthColor = (score: number) => {
     if (score >= 80) return "text-green-400";
     if (score >= 60) return "text-amber-400";
     if (score >= 40) return "text-orange-400";
     return "text-red-400";
-  });
+  };
 
   return (
     <div className="space-y-6">

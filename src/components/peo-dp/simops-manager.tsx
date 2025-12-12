@@ -172,7 +172,7 @@ export const SIMOPSManager: React.FC = () => {
   const handlePauseOperation = (opId: string) => {
     setOperations(operations.map(op => op.id === opId ? { ...op, status: "paused" } : op));
     toast.warning("Operação pausada");
-  });
+  };
 
   const getRiskBadge = (risk: string) => {
     switch (risk) {

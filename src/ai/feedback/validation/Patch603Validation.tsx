@@ -46,7 +46,7 @@ export const Patch603Validation = memo(function() {
       event,
       newScore,
       behaviorAdjustment: event.impact 
-    });
+    };
     
     toast({
       title: `${channel.charAt(0).toUpperCase() + channel.slice(1)} Feedback Recorded`,

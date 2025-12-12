@@ -95,14 +95,14 @@ const CreateVoyageDialog: React.FC<CreateVoyageDialogProps> = ({
         Math.sin(dLon / 2);
     const c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a));
     return R * c;
-  });
+  };
 
   const calculateArrivalDate = (departure: string, days: number): string => {
     if (!departure) return "";
     const date = new Date(departure);
     date.setDate(date.getDate() + days);
     return date.toISOString().split("T")[0];
-  });
+  };
 
   const origins = DEMO_PORTS.filter((p) => p.type === "origin" || p.type === "waypoint");
   const destinations = DEMO_PORTS.filter((p) => p.type === "destination" || p.type === "waypoint");

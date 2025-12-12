@@ -255,7 +255,7 @@ const StrategicDashboard: React.FC = () => {
       toast({
         title: "Exportação Concluída",
         description: `Dashboard exportado em formato ${format.toUpperCase()} com sucesso!`,
-      });
+      };
     } catch (error) {
       toast({
         title: "Erro na Exportação",

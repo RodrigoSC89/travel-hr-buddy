@@ -57,7 +57,7 @@ export const PeotramTemplateManager: React.FC<TemplateManagerProps> = ({
       toast({
         title: "Sucesso",
         description: "Template PEOTRAM criado com sucesso!",
-      });
+      };
     } catch (error) {
       toast({
         title: "Erro",
@@ -82,7 +82,7 @@ export const PeotramTemplateManager: React.FC<TemplateManagerProps> = ({
       toast({
         title: "Sucesso",
         description: "Template atualizado com sucesso!",
-      });
+      };
     } catch (error) {
       toast({
         title: "Erro",
@@ -94,7 +94,7 @@ export const PeotramTemplateManager: React.FC<TemplateManagerProps> = ({
 
   const toggleTemplateStatus = async (template: PeotramTemplate) => {
     await updateTemplate(template.id, { is_active: !template.is_active });
-  });
+  };
 
   const currentYear = new Date().getFullYear();
   const vesselTemplates = templates.filter(t => t.checklist_type === "vessel");

@@ -85,7 +85,7 @@ export const EnhancedNotificationCenter: React.FC = () => {
       toast({
         title: "Marcado como lido",
         description: "Notificação marcada como lida"
-      });
+      };
     } catch (error) {
       toast({
         title: "Erro",
@@ -112,7 +112,7 @@ export const EnhancedNotificationCenter: React.FC = () => {
       toast({
         title: "Sucesso",
         description: "Todas as notificações foram marcadas como lidas"
-      });
+      };
     } catch (error) {
       toast({
         title: "Erro",
@@ -136,13 +136,13 @@ export const EnhancedNotificationCenter: React.FC = () => {
       toast({
         title: "Removida",
         description: "Notificação removida com sucesso"
-      });
+      };
     } catch (error) {
       toast({
         title: "Erro",
         description: "Falha ao remover notificação",
         variant: "destructive"
-      });
+      };
     }
   };
 
@@ -183,7 +183,7 @@ export const EnhancedNotificationCenter: React.FC = () => {
     default:
       return true;
     }
-  });
+  };
 
   const unreadCount = notifications.filter(n => !n.is_read).length;
 

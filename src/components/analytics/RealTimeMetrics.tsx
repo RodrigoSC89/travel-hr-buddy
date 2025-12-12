@@ -119,7 +119,7 @@ export const RealTimeMetrics = memo(function() {
   const getMetricValue = (name: string): number => {
     const metric = webVitals.metrics.find(m => m.name === name);
     return metric?.value || 0;
-  });
+  };
   
   const lcp = getMetricValue("LCP");
   const fid = getMetricValue("FID");
@@ -149,7 +149,7 @@ export const RealTimeMetrics = memo(function() {
     const mins = Math.floor(seconds / 60);
     const secs = seconds % 60;
     return `${mins}:${secs.toString().padStart(2, "0")}`;
-  });
+  };
   
   const getNetworkColor = () => {
     switch (networkStatus.quality) {

@@ -101,7 +101,7 @@ describe("DocumentViewPage - Comments Feature", () => {
     // Import the component fresh for each test
     const module = await React.lazy(() => import(import("@/pages/admin/documents/DocumentView")));
     DocumentViewPage = module.default;
-  });
+  };
 
   it("should load and display comments when 'Ver Comentários' is clicked", async () => {
     mockSupabase.from.mockImplementation((table: string) => {
@@ -432,7 +432,7 @@ describe("DocumentViewPage - Comments Feature", () => {
     const deleteButton = deleteButtons.find((btn) => {
       const svg = btn.querySelector("svg");
       return svg && svg.classList.contains("lucide-trash-2");
-  });
+  };
 
     if (deleteButton) {
       fireEvent.click(deleteButton);
@@ -444,9 +444,9 @@ describe("DocumentViewPage - Comments Feature", () => {
             title: "Comentário excluído",
           })
         );
-  });
+  };
     }
-  });
+  };
 
   it("should handle comment loading errors gracefully", async () => {
     mockSupabase.from.mockImplementation((table: string) => {

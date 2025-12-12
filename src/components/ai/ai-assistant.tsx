@@ -154,7 +154,7 @@ export const AIAssistant: React.FC<AIAssistantProps> = ({
         title: "Recurso não disponível",
         description: "Reconhecimento de voz não é suportado neste navegador",
         variant: "destructive"
-      });
+      };
       return;
     }
 
@@ -235,7 +235,7 @@ export const AIAssistant: React.FC<AIAssistantProps> = ({
 
   const handleSuggestionClick = (suggestion: string) => {
     setInput(suggestion);
-  });
+  };
 
   const handleActionClick = (action: string, data?: Record<string, unknown>) => {
     if (onAction) {
@@ -245,8 +245,8 @@ export const AIAssistant: React.FC<AIAssistantProps> = ({
     toast({
       title: "Ação executada",
       description: `${action} foi executado com sucesso`,
-    });
-  });
+    };
+  };
 
   const renderMessage = (message: Message) => {
     const isUser = message.type === "user";

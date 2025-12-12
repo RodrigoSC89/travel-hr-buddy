@@ -18,7 +18,7 @@ export default function MMICopilot() {
         title: "Atenção",
         description: "Por favor, descreva o problema de manutenção.",
         variant: "default",
-      });
+      };
       return;
     }
 
@@ -44,7 +44,7 @@ export default function MMICopilot() {
   const handleExamplePrompt = (example: string) => {
     setPrompt(example);
     setSuggestion("");
-  });
+  };
 
   return (
     <Card className="w-full">

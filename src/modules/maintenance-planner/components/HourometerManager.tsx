@@ -67,7 +67,7 @@ export default function HourometerManager() {
         title: "Erro",
         description: "Informe um valor válido de horas",
         variant: "destructive",
-      });
+      };
       return;
     }
 
@@ -101,7 +101,7 @@ export default function HourometerManager() {
     if (percent <= 10) return "bg-destructive";
     if (percent <= 30) return "bg-warning";
     return "bg-success";
-  });
+  };
 
   const getTrendBadge = (trend: string, percent: number) => {
     if (trend === "above") {

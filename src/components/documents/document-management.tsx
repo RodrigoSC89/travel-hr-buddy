@@ -232,13 +232,13 @@ export const DocumentManagement: React.FC = () => {
         name: "",
         description: "",
         color: "#3b82f6"
-      });
+      };
       setShowAddCategoryDialog(false);
       
       toast({
         title: "Categoria Criada",
         description: `${category.name} foi criada com sucesso`
-      });
+      };
     } catch (error) {
       toast({
         title: "Erro",
@@ -254,7 +254,7 @@ export const DocumentManagement: React.FC = () => {
     const sizes = ["Bytes", "KB", "MB", "GB"];
     const i = Math.floor(Math.log(bytes) / Math.log(k));
     return parseFloat((bytes / Math.pow(k, i)).toFixed(2)) + " " + sizes[i];
-  });
+  };
 
   const getFileTypeIcon = (fileType: string) => {
     if (fileType.includes("pdf")) return "📄";
@@ -262,7 +262,7 @@ export const DocumentManagement: React.FC = () => {
     if (fileType.includes("excel") || fileType.includes("spreadsheet")) return "📊";
     if (fileType.includes("image")) return "🖼️";
     return "📁";
-  });
+  };
 
   const getAccessLevelColor = (level: string) => {
     switch (level) {
@@ -288,7 +288,7 @@ export const DocumentManagement: React.FC = () => {
                          doc.tags.some(tag => tag.toLowerCase().includes(searchTerm.toLowerCase()));
     const matchesCategory = filterCategory === "all" || doc.category === filterCategory;
     return matchesSearch && matchesCategory;
-  });
+  };
 
   return (
     <div className="space-y-6">

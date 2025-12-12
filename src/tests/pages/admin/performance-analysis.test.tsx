@@ -99,7 +99,7 @@ vi.mock("@/hooks/use-toast", () => ({
 
 const renderWithRouter = (component: React.ReactElement) => {
   return render(<BrowserRouter>{component}</BrowserRouter>);
-});
+};
 
 describe("PerformanceAnalysis", () => {
   describe("Initial Render", () => {
@@ -108,7 +108,7 @@ describe("PerformanceAnalysis", () => {
       
       expect(screen.getByText("Performance Analysis Dashboard")).toBeInTheDocument();
       expect(screen.getByText("System Validation & Code Quality Monitoring")).toBeInTheDocument();
-  });
+  };
 
     it("should render the Run Analysis button", () => {
       renderWithRouter(<PerformanceAnalysis />);
@@ -116,7 +116,7 @@ describe("PerformanceAnalysis", () => {
       const button = screen.getByRole("button", { name: /run analysis/i });
       expect(button).toBeInTheDocument();
       expect(button).not.toBeDisabled();
-  });
+  };
 
     it("should not show results before analysis is run", () => {
       renderWithRouter(<PerformanceAnalysis />);

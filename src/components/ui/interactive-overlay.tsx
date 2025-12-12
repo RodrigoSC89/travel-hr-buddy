@@ -58,7 +58,7 @@ const FloatingMenu = () => {
         toast({
           title: "🧠 IA Assistant",
           description: "Abrindo assistente de inteligência artificial"
-        });
+        };
       }
     },
     { 
@@ -202,7 +202,7 @@ const StatusWidget = () => {
         performance: 97,
         health: 100,
         efficiency: 94
-      });
+      };
     }, 1500);
     return () => clearTimeout(timer);
   }, []);
@@ -258,4 +258,4 @@ export const InteractiveOverlay = memo(() => {
       <StatusWidget />
     </>
   );
-});
+};

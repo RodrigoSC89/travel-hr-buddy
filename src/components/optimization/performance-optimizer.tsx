@@ -95,7 +95,7 @@ const PerformanceOptimizer = () => {
     toast({
       title: "Otimização iniciada",
       description: `Executando: ${optimization.title}`,
-    });
+    };
 
     // Simular otimização
     await new Promise(resolve => setTimeout(resolve, 3000));

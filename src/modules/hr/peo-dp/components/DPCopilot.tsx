@@ -205,7 +205,7 @@ export default function DPCopilot() {
     if (lower.includes("alerta") || lower.includes("alarme")) return "alert";
     if (lower.includes("recomend") || lower.includes("sugest")) return "recommendation";
     return "text";
-  });
+  };
 
   const generateLocalResponse = (query: string): string => {
     const lower = query.toLowerCase();
@@ -290,7 +290,7 @@ Por favor, forneça mais detalhes sobre a situação específica que está enfre
         title: `ASOG: ${scenario.category}`,
         description: scenario.description,
         variant: level === "red" ? "destructive" : "default"
-      });
+      };
     }
   };
 

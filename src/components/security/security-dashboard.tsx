@@ -145,7 +145,7 @@ export const SecurityDashboard: React.FC = () => {
       toast({
         title: "Scan de Segurança Concluído",
         description: `${total} verificações realizadas`,
-      });
+      };
     } catch (error) {
       toast({
         title: "Erro",
@@ -187,7 +187,7 @@ export const SecurityDashboard: React.FC = () => {
       critical: "bg-red-100 text-red-800"
     };
     return variants[severity as keyof typeof variants] || variants.low;
-  });
+  };
 
   const getCategoryIcon = (category: string) => {
     switch (category.toLowerCase()) {

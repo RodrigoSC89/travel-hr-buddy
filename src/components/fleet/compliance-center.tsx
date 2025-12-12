@@ -221,7 +221,7 @@ const ComplianceCenter: React.FC = () => {
     const today = new Date();
     const diffTime = expiry.getTime() - today.getTime();
     return Math.ceil(diffTime / (1000 * 60 * 60 * 24));
-  });
+  };
 
   const filteredCertificates = certificates.filter(cert => {
     const matchesSearch = cert.certificate_name.toLowerCase().includes(searchTerm.toLowerCase()) ||
@@ -232,7 +232,7 @@ const ComplianceCenter: React.FC = () => {
     const matchesType = typeFilter === "all" || cert.type === typeFilter;
     
     return matchesSearch && matchesStatus && matchesType;
-  });
+  };
 
   // Calculate compliance stats
   const stats = {

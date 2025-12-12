@@ -64,7 +64,7 @@ export const TenantSetupWizard: React.FC = () => {
 
   const updateFormData = (field: keyof TenantSetupData, value: string) => {
     setFormData(prev => ({ ...prev, [field]: value }));
-  });
+  };
 
   const validateStep = (step: number): boolean => {
     switch (step) {
@@ -89,7 +89,7 @@ export const TenantSetupWizard: React.FC = () => {
         title: "Campos obrigatórios",
         description: "Preencha todos os campos obrigatórios antes de continuar.",
         variant: "destructive"
-      });
+      };
     }
   };
 
@@ -103,7 +103,7 @@ export const TenantSetupWizard: React.FC = () => {
       toast({
         title: "Tenant criado com sucesso!",
         description: "O ambiente da empresa foi configurado.",
-      });
+      };
       
       // Redirecionar para o dashboard do tenant
     } catch (error) {
@@ -111,7 +111,7 @@ export const TenantSetupWizard: React.FC = () => {
         title: "Erro ao criar tenant",
         description: "Tente novamente ou entre em contato com o suporte.",
         variant: "destructive"
-      });
+      };
     } finally {
       setIsLoading(false);
     }

@@ -78,7 +78,7 @@ describe("DPSyncDashboard Component", () => {
         timestamp: expect.any(String),
       })
     );
-  });
+  };
 
   it("should display sync status message", () => {
     render(<DPSyncDashboard />);

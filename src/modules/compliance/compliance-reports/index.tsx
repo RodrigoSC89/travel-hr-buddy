@@ -175,7 +175,7 @@ const ComplianceReports = () => {
         startY: 42,
         styles: { fontSize: 8 },
         headStyles: { fillColor: [41, 128, 185] }
-      });
+      };
       
       // Save the PDF
       doc.save(`${reportConfig.title || "compliance-report"}.pdf`);
@@ -221,7 +221,7 @@ const ComplianceReports = () => {
       toast({
         title: "CSV gerado",
         description: "Download iniciado automaticamente"
-      });
+      };
     } catch (error) {
       console.error("Error generating CSV:", error);
       console.error("Error generating CSV:", error);
@@ -229,7 +229,7 @@ const ComplianceReports = () => {
         title: "Erro ao gerar CSV",
         description: "Tente novamente",
         variant: "destructive"
-      });
+      };
     }
   };
 
@@ -253,7 +253,7 @@ const ComplianceReports = () => {
       toast({
         title: "Excel gerado",
         description: "Download iniciado automaticamente"
-      });
+      };
     } catch (error) {
       console.error("Error generating Excel:", error);
       console.error("Error generating Excel:", error);
@@ -311,7 +311,7 @@ const ComplianceReports = () => {
         title: "Campos obrigatórios",
         description: "Preencha título e template",
         variant: "destructive"
-      });
+      };
       return;
     }
 
@@ -357,9 +357,9 @@ const ComplianceReports = () => {
       toast({
         title: "Relatório gerado",
         description: "Disponível para download"
-      });
+      };
     }, 2000);
-  });
+  };
 
   const handleDownload = (report: unknown) => {
     // Export based on format
@@ -376,7 +376,7 @@ const ComplianceReports = () => {
 
   const handleGenerateNow = (reportId: string) => {
     handleGenerateReport(reportId);
-  });
+  };
 
   const toggleCategory = (category: string) => {
     setReportConfig(prev => ({
@@ -385,7 +385,7 @@ const ComplianceReports = () => {
         ? prev.categories.filter(c => c !== category)
         : [...prev.categories, category]
     }));
-  });
+  };
 
   const toggleSeverity = (severity: string) => {
     setReportConfig(prev => ({
@@ -394,7 +394,7 @@ const ComplianceReports = () => {
         ? prev.severities.filter(s => s !== severity)
         : [...prev.severities, severity]
     }));
-  });
+  };
 
   const getStatusColor = (status: string) => {
     const colors: Record<string, string> = {
@@ -405,7 +405,7 @@ const ComplianceReports = () => {
       error: "bg-destructive"
     };
     return colors[status] || "bg-muted";
-  });
+  };
 
   const getStatusText = (status: string) => {
     const texts: Record<string, string> = {
@@ -416,7 +416,7 @@ const ComplianceReports = () => {
       error: "Erro"
     };
     return texts[status] || status;
-  });
+  };
 
   return (
     <div className="container mx-auto p-6 space-y-6">

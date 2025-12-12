@@ -91,7 +91,7 @@ export const PeotramOCRProcessor: React.FC = () => {
           
           const result = await ocrService.processImage(file, (progress: OCRProgress) => {
             setCurrentProgress(progress.progress * 100);
-  });
+  };
 
           const extractedFields = await ocrService.extractFormFields(file);
 
@@ -103,7 +103,7 @@ export const PeotramOCRProcessor: React.FC = () => {
             ocrResult: result,
             processedAt: new Date(),
             extractedFields,
-          });
+          };
         }
       }
 
@@ -161,7 +161,7 @@ export const PeotramOCRProcessor: React.FC = () => {
     if (percent >= 75) return { color: "text-blue-600", label: "Bom" };
     if (percent >= 60) return { color: "text-yellow-600", label: "Regular" };
     return { color: "text-red-600", label: "Baixo" };
-  });
+  };
 
   return (
     <div className="space-y-6">

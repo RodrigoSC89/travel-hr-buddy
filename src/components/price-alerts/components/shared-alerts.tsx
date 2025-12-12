@@ -65,7 +65,7 @@ export const SharedAlerts = memo(() => {
     alert_id: "",
     title: "",
     description: "",
-  });
+  };
   const [isShareDialogOpen, setIsShareDialogOpen] = useState(false);
   const [copiedUrl, setCopiedUrl] = useState<string | null>(null);
 
@@ -182,7 +182,7 @@ export const SharedAlerts = memo(() => {
         title: "Login necessário",
         description: "Faça login para votar nos alertas compartilhados.",
         variant: "destructive",
-      });
+      };
       return;
     }
 
@@ -282,7 +282,7 @@ export const SharedAlerts = memo(() => {
         title: "Erro",
         description: "Preencha todos os campos obrigatórios.",
         variant: "destructive",
-      });
+      };
       return;
     }
 
@@ -324,13 +324,13 @@ export const SharedAlerts = memo(() => {
       toast({
         title: "Link copiado",
         description: `Link do produto "${productName}" copiado!`,
-      });
+      };
     } catch (error) {
       toast({
         title: "Erro",
         description: "Não foi possível copiar o link.",
         variant: "destructive",
-      });
+      };
     }
   };
 

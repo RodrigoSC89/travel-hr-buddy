@@ -43,7 +43,7 @@ export const AccessibleButton = forwardRef<HTMLButtonElement, AccessibleButtonPr
         announceToScreenReader(announceOnClick);
       }
       onClick?.(e);
-    });
+    };
 
     const isDisabled = disabled || isLoading;
 

@@ -104,7 +104,7 @@ export default function UsageSimulation() {
   const addLog = (message: string) => {
     const timestamp = new Date().toLocaleTimeString("pt-BR");
     setLogs(prev => [...prev, `[${timestamp}] ${message}`]);
-  });
+  };
 
   const runStep = async (step: SimulationStep, index: number) => {
     setSteps(prev => prev.map((s, i) => 

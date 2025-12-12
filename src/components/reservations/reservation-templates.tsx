@@ -122,7 +122,7 @@ export const ReservationTemplates: React.FC<ReservationTemplatesProps> = ({
         title: "Erro de validação",
         description: "Nome e título são obrigatórios",
         variant: "destructive"
-      });
+      };
       return;
     }
 
@@ -198,7 +198,7 @@ export const ReservationTemplates: React.FC<ReservationTemplatesProps> = ({
       toast({
         title: "Sucesso",
         description: "Template excluído com sucesso!"
-      });
+      };
 
       fetchTemplates();
     } catch (error) {
@@ -216,8 +216,8 @@ export const ReservationTemplates: React.FC<ReservationTemplatesProps> = ({
     toast({
       title: "Template aplicado",
       description: "Os dados do template foram preenchidos no formulário"
-    });
-  });
+    };
+  };
 
   const handleEditTemplate = (template: ReservationTemplate) => {
     setEditingTemplate(template);
@@ -235,9 +235,9 @@ export const ReservationTemplates: React.FC<ReservationTemplatesProps> = ({
       currency: template.template_data.currency || "BRL",
       notes: template.template_data.notes || "",
       is_public: template.is_public
-    });
+    };
     setShowCreateDialog(true);
-  });
+  };
 
   const resetForm = () => {
     setFormData({

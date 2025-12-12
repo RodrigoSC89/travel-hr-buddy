@@ -103,7 +103,7 @@ export default function DashboardAuditorias() {
         orientation: "landscape",
         unit: "mm",
         format: "a4",
-      });
+      };
 
       const imgWidth = 280;
       const imgHeight = (canvas.height * imgWidth) / canvas.width;

@@ -76,7 +76,7 @@ export default function AssistantReportLogsPage() {
       const date = new Date(log.sent_at).toLocaleDateString("pt-BR", {
         day: "2-digit",
         month: "2-digit",
-      });
+      };
       acc[date] = (acc[date] || 0) + 1;
       return acc;
     }, {} as Record<string, number>);
@@ -86,7 +86,7 @@ export default function AssistantReportLogsPage() {
       const [dayA, monthA] = a.split("/");
       const [dayB, monthB] = b.split("/");
       return new Date(`2024-${monthA}-${dayA}`).getTime() - new Date(`2024-${monthB}-${dayB}`).getTime();
-  });
+  };
 
     return {
       labels: sortedDates,

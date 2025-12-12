@@ -194,7 +194,7 @@ const FuelOptimizerPage = () => {
       temperature: 18 + Math.random() * 12,
       visibility_nm: 5 + Math.random() * 10
     };
-  });
+  };
 
   const analyzeWithAI = async (routeData: NewRoute): Promise<AIAnalysis | null> => {
     try {
@@ -211,7 +211,7 @@ const FuelOptimizerPage = () => {
           current_speed: parseFloat(routeData.current_speed),
           weather_conditions: weather
         }
-      });
+      };
 
       if (error) {
         return null;
@@ -366,7 +366,7 @@ const FuelOptimizerPage = () => {
     if (score >= 80) return "text-green-500";
     if (score >= 60) return "text-yellow-500";
     return "text-red-500";
-  });
+  };
 
   return (
     <div className="container mx-auto p-6 space-y-6">

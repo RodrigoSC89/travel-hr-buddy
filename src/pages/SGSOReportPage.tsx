@@ -94,7 +94,7 @@ export default function SGSOReportPage({
     if (levelLower === "alto") return "text-orange-900 bg-orange-100";
     if (levelLower === "médio") return "text-yellow-900 bg-yellow-100";
     return "text-green-900 bg-green-100";
-  });
+  };
 
   // Calculate statistics
   const stats = {

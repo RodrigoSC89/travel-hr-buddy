@@ -100,7 +100,7 @@ export default function ReportsSection() {
 
   const handleExport = (format: string) => {
     toast.success(`Relatório exportado em formato ${format.toUpperCase()}`);
-  });
+  };
 
   const handleGenerateAIReport = () => {
     toast.success("Relatório com análise IA sendo gerado...");

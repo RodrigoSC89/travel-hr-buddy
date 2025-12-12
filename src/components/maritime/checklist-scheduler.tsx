@@ -58,12 +58,12 @@ export const ChecklistScheduler = memo(() => {
     case "quarterly": return "bg-purple-100 text-purple-800";
     case "annually": return "bg-green-100 text-green-800";
     default: return "bg-secondary text-secondary-foreground";
-    });
-  });
+    };
+  };
 
   const getStatusColor = (isActive: boolean) => {
     return isActive ? "bg-green-100 text-green-800" : "bg-secondary text-secondary-foreground";
-  });
+  };
 
   const handleCreateSchedule = () => {
     toast({

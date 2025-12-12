@@ -132,7 +132,7 @@ export const PeotramRiskAssessment: React.FC = () => {
 
   const calculateRiskScore = (probability: number, impact: number) => {
     return probability * impact;
-  });
+  };
 
   const getRiskMatrix = () => {
     const matrix = [];

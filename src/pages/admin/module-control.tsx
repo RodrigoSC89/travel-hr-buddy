@@ -79,15 +79,15 @@ export const ModuleControl: React.FC = () => {
         updated.delete(id);
       }
       return updated;
-  });
+  };
 
     // Log activation change
     logger.info("Module activation state changed", { moduleId: id, newState });
-  });
+  };
 
   const handleNavigate = (path: string) => {
     navigate(path);
-  });
+  };
 
   const handleViewHistory = (id: string) => {
     logger.info("Viewing module history", { moduleId: id });

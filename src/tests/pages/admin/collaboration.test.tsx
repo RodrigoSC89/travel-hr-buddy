@@ -109,8 +109,8 @@ describe("CollaborationPage", () => {
 
     await waitFor(() => {
       expect(supabase.channel).toHaveBeenCalledWith("colab-comments-changes");
-  });
-  });
+  };
+  };
 
   it("shows back button", () => {
     render(

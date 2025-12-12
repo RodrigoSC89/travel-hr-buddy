@@ -214,7 +214,7 @@ export const MaintenanceTasksTable: React.FC<MaintenanceTasksTableProps> = ({ on
     };
     const config = configs[type] || configs.preventive;
     return <Badge className={config.className} variant="secondary">{config.label}</Badge>;
-  });
+  };
 
   const getPriorityBadge = (priority: string) => {
     const configs: Record<string, { label: string; className: string }> = {
@@ -225,7 +225,7 @@ export const MaintenanceTasksTable: React.FC<MaintenanceTasksTableProps> = ({ on
     };
     const config = configs[priority] || configs.medium;
     return <Badge className={config.className} variant="secondary">{config.label}</Badge>;
-  });
+  };
 
   const handleRefresh = async () => {
     setIsRefreshing(true);
@@ -248,7 +248,7 @@ export const MaintenanceTasksTable: React.FC<MaintenanceTasksTableProps> = ({ on
       title: "Tarefa iniciada",
       description: "A tarefa foi marcada como em andamento",
     };
-  });
+  };
 
   const handleCompleteTask = (taskId: string) => {
     setTasks(prev => 
@@ -261,8 +261,8 @@ export const MaintenanceTasksTable: React.FC<MaintenanceTasksTableProps> = ({ on
     toast({
       title: "Tarefa concluída",
       description: "A tarefa foi marcada como concluída",
-    });
-  });
+    };
+  };
 
   const filteredTasks = tasks.filter(task => {
     const matchesSearch = 
@@ -273,7 +273,7 @@ export const MaintenanceTasksTable: React.FC<MaintenanceTasksTableProps> = ({ on
     const matchesStatus = statusFilter === "all" || task.status === statusFilter;
     const matchesType = typeFilter === "all" || task.type === typeFilter;
     return matchesSearch && matchesStatus && matchesType;
-  });
+  };
 
   return (
     <Card>

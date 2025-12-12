@@ -158,7 +158,7 @@ export const CompleteTemplateEditor: React.FC = () => {
     const regex = /\{\{([^}]+)\}\}/g;
     const matches = content.match(regex) || [];
     return [...new Set(matches)];
-  });
+  };
 
   const saveTemplate = async () => {
     if (!editor) return;
@@ -319,7 +319,7 @@ export const CompleteTemplateEditor: React.FC = () => {
           properties: {},
           children: paragraphs
         }]
-      });
+      };
 
       const blob = await Packer.toBlob(doc);
       const filename = `${templateTitle || "document"}_${new Date().toISOString().split("T")[0]}.docx`;
@@ -367,7 +367,7 @@ export const CompleteTemplateEditor: React.FC = () => {
           exported_by: user.id,
           exported_at: new Date().toISOString(),
           placeholder_values: placeholderValues
-        });
+        };
       
       if (error) {
       }

@@ -115,16 +115,16 @@ export const ComplianceHubDashboard = memo(function() {
   const handleCreateAudit = async (auditData: unknown: unknown: unknown) => {
     toast.success("Auditoria criada com sucesso");
     setShowCreateAudit(false);
-  });
+  };
 
   const handleSaveSettings = async (newSettings: ComplianceSettings) => {
     setSettings(newSettings);
     toast.success("Configurações salvas");
-  });
+  };
 
   const handleGenerateRecommendations = async (crewMemberId: string) => {
     return await askComplianceAI(`Gere recomendações de treinamento para o tripulante ${crewMemberId}`);
-  });
+  };
 
   return (
     <div className="container mx-auto p-6 space-y-6">

@@ -179,14 +179,14 @@ const NautilusAutomation: React.FC = () => {
         : wf
     ));
     toast.success("Status do workflow atualizado");
-  });
+  };
 
   const toggleTrigger = (id: string) => {
     setTriggers(prev => prev.map(t => 
       t.id === id ? { ...t, isActive: !t.isActive } : t
     ));
     toast.success("Status do trigger atualizado");
-  });
+  };
 
   const runWorkflow = async (id: string) => {
     toast.info("Executando workflow...");
@@ -199,7 +199,7 @@ const NautilusAutomation: React.FC = () => {
       ));
       toast.success("Workflow executado com sucesso");
     }, 2000);
-  });
+  };
 
   const getStatusBadge = (status: string) => {
     switch (status) {

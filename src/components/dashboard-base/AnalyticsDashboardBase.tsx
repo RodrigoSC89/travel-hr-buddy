@@ -62,7 +62,7 @@ export const AnalyticsDashboardBase = ({
         title: "Erro",
         description: "Nenhum dado disponível para exportar",
         variant: "destructive",
-      });
+      };
       return;
     }
 
@@ -70,8 +70,8 @@ export const AnalyticsDashboardBase = ({
       data,
       format,
       filename: `${config.id}-${timeRange}-${Date.now()}`,
-    });
-  });
+    };
+  };
 
   // Render widget
   const renderWidget = (widget: unknown) => {

@@ -45,7 +45,7 @@ export const MaintenanceTimelineView: React.FC = () => {
         title: "Error",
         description: "Failed to load maintenance timeline",
         variant: "destructive",
-      });
+      };
     } finally {
       setLoading(false);
     }
@@ -68,7 +68,7 @@ export const MaintenanceTimelineView: React.FC = () => {
     if (days === 0) return "Today";
     if (days === 1) return "Tomorrow";
     return `In ${days} days`;
-  });
+  };
 
   const getPriorityColor = (priority: string) => {
     switch (priority) {

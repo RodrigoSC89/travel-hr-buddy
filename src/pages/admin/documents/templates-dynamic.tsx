@@ -122,7 +122,7 @@ export const TemplatesDynamic = memo(() => {
         title: "Error loading templates",
         description: error.message,
         variant: "destructive",
-      });
+      };
     }
   };
 
@@ -214,7 +214,7 @@ export const TemplatesDynamic = memo(() => {
       // Set default values
       DYNAMIC_VARIABLES.forEach((v) => {
         values[v.key] = `{{${v.key}}}`;
-  });
+  };
       setVariableValues(values);
     }
   };
@@ -237,7 +237,7 @@ export const TemplatesDynamic = memo(() => {
         title: "Missing fields",
         description: "Please provide template name and content",
         variant: "destructive",
-      });
+      };
       return;
     }
 
@@ -306,7 +306,7 @@ export const TemplatesDynamic = memo(() => {
     setTemplateName(template.template_name);
     setTemplateContent(template.template_content);
     loadVersions(template.template_id);
-  });
+  };
 
   const restoreVersion = async (version: TemplateVersion) => {
     try {
@@ -327,7 +327,7 @@ export const TemplatesDynamic = memo(() => {
       toast({
         title: "Version restored",
         description: `Restored to version ${version.version_number}`,
-      });
+      };
 
       loadTemplate(version);
       await loadTemplates();
@@ -433,7 +433,7 @@ export const TemplatesDynamic = memo(() => {
   const insertVariable = (variableKey: string) => {
     const newContent = templateContent + `{{${variableKey}}}`;
     setTemplateContent(newContent);
-  });
+  };
 
   const newTemplate = () => {
     setSelectedTemplate(null);

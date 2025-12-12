@@ -118,7 +118,7 @@ export const DevOpsPanel = memo(function() {
       toast({
         title: "Sincronização concluída",
         description: `${stats.completed} operações sincronizadas`,
-      });
+      };
       await collectMetrics();
     } catch (error) {
       addLog("error", "Sync", `Erro na sincronização: ${error}`);
@@ -126,7 +126,7 @@ export const DevOpsPanel = memo(function() {
         title: "Erro na sincronização",
         description: "Verifique os logs para mais detalhes",
         variant: "destructive",
-      });
+      };
     }
   };
 
@@ -157,7 +157,7 @@ export const DevOpsPanel = memo(function() {
       toast({
         title: "Caches limpos",
         description: "Todos os dados em cache foram removidos",
-      });
+      };
       await collectMetrics();
     } catch (error) {
       addLog("error", "Cache", `Erro ao limpar caches: ${error}`);
@@ -197,13 +197,13 @@ export const DevOpsPanel = memo(function() {
     const sizes = ["B", "KB", "MB", "GB"];
     const i = Math.floor(Math.log(bytes) / Math.log(k));
     return `${(bytes / Math.pow(k, i)).toFixed(1)} ${sizes[i]}`;
-  });
+  };
 
   const formatUptime = (ms: number) => {
     const hours = Math.floor(ms / 3600000);
     const minutes = Math.floor((ms % 3600000) / 60000);
     return `${hours}h ${minutes}m`;
-  });
+  };
 
   return (
     <div className="p-4 space-y-4">

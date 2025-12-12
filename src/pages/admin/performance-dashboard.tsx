@@ -171,7 +171,7 @@ export default function PerformanceDashboard() {
         }
       ]
     };
-  });
+  };
 
   const webVitalsMetrics = ["CLS", "FCP", "LCP", "TTFB", "INP"];
 

@@ -92,18 +92,18 @@ export const ClassSurveyDashboard = memo(function() {
   const getSocietyName = (id: string) => {
     const society = societies.find(s => s.id === id);
     return society?.code || "N/A";
-  });
+  };
 
   const getSocietyFullName = (id: string) => {
     const society = societies.find(s => s.id === id);
     return society?.name || "N/A";
-  });
+  };
 
   const filteredSurveys = surveys.filter(survey => {
     const matchesStatus = filterStatus === "all" || survey.status === filterStatus;
     const matchesSociety = filterSociety === "all" || survey.classification_society_id === filterSociety;
     return matchesStatus && matchesSociety;
-  });
+  };
 
   // Calculate stats
   const stats = {

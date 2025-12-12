@@ -48,7 +48,7 @@ export const PriceAlertDashboard = memo(() => {
       <EnhancedAlertManagement />
     </div>
   );
-});
+};
 
 export const PriceAlertDashboardLegacy = memo(() => {
   const [alerts, setAlerts] = useState<PriceAlert[]>([]);
@@ -61,7 +61,7 @@ export const PriceAlertDashboardLegacy = memo(() => {
     product_name: "",
     target_price: "",
     product_url: ""
-  });
+  };
   const { toast } = useToast();
   const { user } = useAuth();
   const navigate = useNavigate();
@@ -89,7 +89,7 @@ export const PriceAlertDashboardLegacy = memo(() => {
         title: "Erro",
         description: "Não foi possível carregar os alertas",
         variant: "destructive"
-      });
+      };
     } finally {
       setIsLoading(false);
     }
@@ -119,7 +119,7 @@ export const PriceAlertDashboardLegacy = memo(() => {
           product_name: alert.product_name,
           product_url: alert.product_url
         }
-      });
+      };
 
       if (error) throw error;
       return data?.price || 0;
@@ -135,7 +135,7 @@ export const PriceAlertDashboardLegacy = memo(() => {
         title: "Erro",
         description: "Preencha todos os campos obrigatórios",
         variant: "destructive"
-      });
+      };
       return;
     }
 
@@ -212,7 +212,7 @@ export const PriceAlertDashboardLegacy = memo(() => {
         title: "Erro",
         description: "Não foi possível atualizar o alerta",
         variant: "destructive"
-      });
+      };
     }
   };
 
@@ -229,13 +229,13 @@ export const PriceAlertDashboardLegacy = memo(() => {
       toast({
         title: "Alerta removido",
         description: "O alerta de preço foi removido com sucesso."
-      });
+      };
     } catch (error) {
       toast({
         title: "Erro",
         description: "Não foi possível remover o alerta",
         variant: "destructive"
-      });
+      };
     }
   };
 

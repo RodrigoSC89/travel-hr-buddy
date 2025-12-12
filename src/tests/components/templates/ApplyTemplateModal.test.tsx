@@ -57,7 +57,7 @@ const createTemplateQueryBuilder = (
       order: orderFn,
     })),
   };
-});
+};
 
 // Mock Supabase client
 vi.mock("@/integrations/supabase/client", () => ({

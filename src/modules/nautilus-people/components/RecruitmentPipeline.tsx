@@ -88,11 +88,11 @@ const RecruitmentPipeline: React.FC = () => {
 
   const getCandidatosByEtapa = (etapa: string) => {
     return candidatos.filter(c => c.etapa === etapa);
-  });
+  };
 
   const handleDragStart = (candidatoId: string) => {
     setDraggedCandidate(candidatoId);
-  });
+  };
 
   const handleDragEnd = () => {
     setDraggedCandidate(null);
@@ -190,17 +190,17 @@ const RecruitmentPipeline: React.FC = () => {
   const handleScheduleMeeting = (candidato: Candidato) => {
     setSelectedCandidato(candidato);
     setIsScheduleOpen(true);
-  });
+  };
 
   const handleSendMessage = (candidato: Candidato) => {
     setSelectedCandidato(candidato);
     setIsMessageOpen(true);
-  });
+  };
 
   const handleViewDetails = (candidato: Candidato) => {
     setSelectedCandidato(candidato);
     setIsDetailOpen(true);
-  });
+  };
 
   const filteredVagas = vagas.filter(v => 
     filterStatus === "todas" || v.status === filterStatus

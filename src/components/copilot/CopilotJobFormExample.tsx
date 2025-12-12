@@ -128,8 +128,8 @@ function MyMaintenancePage() {
     fetch('/api/jobs', {
       method: 'POST',
       body: JSON.stringify(data),
-    });
-  });
+    };
+  };
 
   return (
     <JobFormWithExamples onSubmit={handleJobSubmit} />

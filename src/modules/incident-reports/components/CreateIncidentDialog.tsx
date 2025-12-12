@@ -65,7 +65,7 @@ export const CreateIncidentDialog: React.FC<CreateIncidentDialogProps> = ({
         title: "GPS não disponível",
         description: "Seu navegador não suporta geolocalização",
         variant: "destructive",
-      });
+      };
       return;
     }
 
@@ -101,7 +101,7 @@ export const CreateIncidentDialog: React.FC<CreateIncidentDialogProps> = ({
         title: "Limite excedido",
         description: "Máximo de 5 fotos permitidas",
         variant: "destructive",
-      });
+      };
       return;
     }
 
@@ -112,7 +112,7 @@ export const CreateIncidentDialog: React.FC<CreateIncidentDialogProps> = ({
         title: "Arquivo muito grande",
         description: "Cada foto deve ter no máximo 5MB",
         variant: "destructive",
-      });
+      };
       return;
     }
 
@@ -123,7 +123,7 @@ export const CreateIncidentDialog: React.FC<CreateIncidentDialogProps> = ({
         title: "Tipo inválido",
         description: "Apenas imagens são permitidas",
         variant: "destructive",
-      });
+      };
       return;
     }
 
@@ -139,7 +139,7 @@ export const CreateIncidentDialog: React.FC<CreateIncidentDialogProps> = ({
     URL.revokeObjectURL(photoPreviews[index]); // Clean up object URL
     setPhotos(newPhotos);
     setPhotoPreviews(newPreviews);
-  });
+  };
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();

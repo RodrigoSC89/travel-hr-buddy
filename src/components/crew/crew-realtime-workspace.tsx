@@ -97,8 +97,8 @@ export const CrewRealtimeWorkspace = memo(() => {
     case "away": return "bg-warning";
     case "busy": return "bg-destructive";
     case "offline": return "bg-muted-foreground/50";
-    });
-  });
+    };
+  };
 
   const handleSendMessage = () => {
     if (!messageInput.trim()) return;

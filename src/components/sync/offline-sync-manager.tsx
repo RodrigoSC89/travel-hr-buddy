@@ -67,7 +67,7 @@ export const OfflineSyncManager: React.FC = () => {
         title: "Sync Impossível",
         description: "Você precisa estar online para sincronizar",
         variant: "destructive"
-      });
+      };
       return;
     }
 
@@ -185,13 +185,13 @@ export const OfflineSyncManager: React.FC = () => {
       toast({
         title: "Cache Limpo",
         description: "Todos os dados em cache foram removidos",
-      });
+      };
     } catch (error) {
       toast({
         title: "Erro",
         description: "Não foi possível limpar o cache",
         variant: "destructive"
-      });
+      };
     }
   };
 

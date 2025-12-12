@@ -10,7 +10,7 @@ export const SrOnly: React.FC<{ children: React.ReactNode }> = ({ children }) =>
       {children}
     </span>
   );
-});
+};
 
 /**
  * Loading State with Accessibility

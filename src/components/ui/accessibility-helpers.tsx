@@ -109,7 +109,7 @@ export const ScreenReaderText: React.FC<ScreenReaderTextProps> = ({ children }) 
       {children}
     </span>
   );
-});
+};
 
 // Helper para skips de navegação
 interface SkipLinkProps {
@@ -126,4 +126,4 @@ export const SkipLink: React.FC<SkipLinkProps> = ({ href, children }) => {
       {children}
     </a>
   );
-});
+};

@@ -194,12 +194,12 @@ const SmartIntegrationHub: React.FC = () => {
         toast({
           title: `Integração ${newStatus === "connected" ? "Ativada" : "Desativada"}`,
           description: `${integration.name} foi ${newStatus === "connected" ? "conectada" : "desconectada"}`,
-        });
+        };
         return { ...integration, status: newStatus, lastSync: new Date() };
       }
       return integration;
     }));
-  });
+  };
 
   const syncIntegration = (id: string) => {
     setIntegrations(prev => prev.map(integration => {
@@ -207,12 +207,12 @@ const SmartIntegrationHub: React.FC = () => {
         toast({
           title: "Sincronização Iniciada",
           description: `Atualizando dados de ${integration.name}...`,
-        });
+        };
         return { ...integration, lastSync: new Date() };
       }
       return integration;
     }));
-  });
+  };
 
   const toggleAutomationRule = (id: string) => {
     setAutomationRules(prev => prev.map(rule => {
@@ -221,12 +221,12 @@ const SmartIntegrationHub: React.FC = () => {
         toast({
           title: `Automação ${newStatus === "active" ? "Ativada" : "Desativada"}`,
           description: rule.name,
-        });
+        };
         return { ...rule, status: newStatus };
       }
       return rule;
     }));
-  });
+  };
 
   const getStatusIcon = (status: Integration["status"]) => {
     switch (status) {

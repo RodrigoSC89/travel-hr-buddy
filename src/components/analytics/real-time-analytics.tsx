@@ -151,7 +151,7 @@ const RealTimeAnalytics = () => {
   const generateRandomChange = (): string => {
     const change = (Math.random() * 20 - 10).toFixed(1);
     return `${Number(change) > 0 ? "+" : ""}${change}%`;
-  });
+  };
 
   const exportData = () => {
     toast({

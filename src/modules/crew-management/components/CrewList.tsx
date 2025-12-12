@@ -73,15 +73,15 @@ export const CrewList = memo(function({ crewMembers, onViewMember, onAddMember, 
     const matchesPosition = positionFilter === "all" || member.position === positionFilter;
     
     return matchesSearch && matchesStatus && matchesPosition;
-  });
+  };
 
   const getPositionInfo = (position: string) => {
     return positionLabels[position] || { label: position, badge: "" };
-  });
+  };
 
   const getStatusInfo = (status: string | null) => {
     return statusStyles[status || "inactive"] || statusStyles.inactive;
-  });
+  };
 
   return (
     <Card>

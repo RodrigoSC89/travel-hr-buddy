@@ -195,7 +195,7 @@ export const EnhancedFeedbackSystem: React.FC = () => {
       toast({
         title: "Feedback enviado",
         description: "Obrigado pelo seu feedback! Analisaremos em breve.",
-      });
+      };
 
       // Resetar formulário
       setNewFeedback({
@@ -236,12 +236,12 @@ export const EnhancedFeedbackSystem: React.FC = () => {
   const getTypeColor = (type: string) => {
     const typeConfig = feedbackTypes.find(t => t.value === type);
     return typeConfig?.color || "bg-muted";
-  });
+  };
 
   const getStatusColor = (status: string) => {
     const statusConfig = statusOptions.find(s => s.value === status);
     return statusConfig?.color || "bg-muted";
-  });
+  };
 
   const filteredFeedbacks = feedbacks.filter(feedback => {
     if (filter.type && feedback.type !== filter.type) return false;
@@ -256,7 +256,7 @@ export const EnhancedFeedbackSystem: React.FC = () => {
       );
     }
     return true;
-  });
+  };
 
   useEffect(() => {
     loadFeedbacks();

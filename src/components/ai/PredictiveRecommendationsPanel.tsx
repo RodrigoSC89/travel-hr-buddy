@@ -226,7 +226,7 @@ export const PredictiveRecommendationsPanel: React.FC = () => {
     if (!analysis) return [];
     if (type === "all") return analysis.recommendations;
     return analysis.recommendations.filter(r => r.type === type);
-  });
+  };
 
   const criticalCount = analysis?.recommendations.filter(r => r.priority === "critical").length || 0;
   const highCount = analysis?.recommendations.filter(r => r.priority === "high").length || 0;

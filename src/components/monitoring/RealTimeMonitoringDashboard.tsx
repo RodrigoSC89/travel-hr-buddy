@@ -31,12 +31,12 @@ export default function RealTimeMonitoringDashboard() {
         ...prev,
         [metric.name]: metric,
       }));
-  });
+  };
 
     // Subscribe to errors
     const unsubscribeErrors = errorTracker.subscribe((error) => {
       setRecentErrors(prev => [error, ...prev].slice(0, 10));
-  });
+  };
 
     // Update snapshot every 5 seconds
     const interval = setInterval(() => {
@@ -80,7 +80,7 @@ export default function RealTimeMonitoringDashboard() {
       return metric.value.toFixed(3);
     }
     return `${Math.round(metric.value)}ms`;
-  });
+  };
 
   const errorStats = errorTracker.getStats();
 

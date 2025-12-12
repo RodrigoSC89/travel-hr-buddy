@@ -31,11 +31,11 @@ export const AnimatedButton = React.forwardRef<HTMLButtonElement, AnimatedButton
           x: e.clientX - rect.left,
           y: e.clientY - rect.top,
           show: true,
-        });
+        };
         setTimeout(() => setRippleStyle(prev => ({ ...prev, show: false })), 600);
       }
       onClick?.(e);
-    });
+    };
 
     return (
       <motion.div

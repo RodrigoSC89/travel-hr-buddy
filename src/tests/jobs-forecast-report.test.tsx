@@ -54,15 +54,15 @@ describe("JobsForecastReport Component", () => {
     await waitFor(() => {
       const skeletons = document.querySelectorAll(".animate-pulse");
       expect(skeletons.length).toBeGreaterThan(0);
-  });
-  });
+  };
+  };
 
   it("should display forecast when data is loaded", async () => {
     const mockForecast = "Previsão: Esperamos um aumento de 15% nos próximos 2 meses";
     invokeMock.mockResolvedValue({
       data: { forecast: mockForecast },
       error: null,
-    });
+    };
 
     render(<JobsForecastReport trend={[{ date: "2025-01", jobs: 10 }]} />);
 

@@ -146,7 +146,7 @@ export const KnowledgeManagement: React.FC = () => {
         totalViews,
         topModules,
         topContent
-      });
+      };
 
     } catch (error) {
       toast({
@@ -170,7 +170,7 @@ export const KnowledgeManagement: React.FC = () => {
     const matchesType = selectedType === "all" || item.type === selectedType;
     
     return matchesSearch && matchesModule && matchesType;
-  });
+  };
 
   const handleCreateNew = () => {
     setEditingItem({
@@ -197,7 +197,7 @@ export const KnowledgeManagement: React.FC = () => {
   const handleEdit = (item: KnowledgeItem) => {
     setEditingItem({ ...item });
     setIsEditDialogOpen(true);
-  });
+  };
 
   const handleSave = async () => {
     if (!editingItem) return;
@@ -278,7 +278,7 @@ export const KnowledgeManagement: React.FC = () => {
         toast({
           title: "Item excluído",
           description: "O conteúdo foi removido da base de conhecimento",
-        });
+        };
 
         loadKnowledgeItems(); // Recarregar dados
       } catch (error) {

@@ -49,7 +49,7 @@ export const FeedbackSystem = memo(() => {
     description: "",
     category: "",
     module: ""
-  });
+  };
 
   const feedbackItems: FeedbackItem[] = [
     {
@@ -163,8 +163,8 @@ export const FeedbackSystem = memo(() => {
     case "up": return <TrendingUp className="h-4 w-4 text-success" />;
     case "down": return <TrendingUp className="h-4 w-4 text-danger rotate-180" />;
     default: return <TrendingUp className="h-4 w-4 text-muted-foreground" />;
-    });
-  });
+    };
+  };
 
   const handleSubmitFeedback = () => {
     // Implementar lógica de envio do feedback

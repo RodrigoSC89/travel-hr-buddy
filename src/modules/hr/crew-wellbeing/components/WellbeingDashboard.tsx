@@ -90,14 +90,14 @@ export const WellbeingDashboard: React.FC = () => {
     if (score >= 8) return "text-green-600";
     if (score >= 6) return "text-yellow-600";
     return "text-red-600";
-  });
+  };
 
   const getScoreLabel = (score: number) => {
     if (score >= 8) return "Excellent";
     if (score >= 6) return "Good";
     if (score >= 4) return "Fair";
     return "Needs Attention";
-  });
+  };
 
   if (loading) {
     return (

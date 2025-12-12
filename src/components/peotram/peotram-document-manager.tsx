@@ -223,7 +223,7 @@ export const PeotramDocumentManager: React.FC = () => {
         if (category.id === "certificates") return doc.type === "certificate";
         if (category.id === "reports") return doc.type === "report";
         return false;
-  });
+  };
 
       return {
         ...category,
@@ -231,7 +231,7 @@ export const PeotramDocumentManager: React.FC = () => {
         completionRate: categoryDocs.length > 0 ? Math.min((categoryDocs.length / 5) * 100, 100) : 0
       };
     }));
-  });
+  };
 
   const handleFileUpload = async (files: FileList | null) => {
     if (!files || files.length === 0) return;
@@ -294,7 +294,7 @@ export const PeotramDocumentManager: React.FC = () => {
     if (mimeType.startsWith("audio/")) return "audio";
     if (mimeType === "application/pdf") return "report";
     return "evidence";
-  });
+  };
 
   const getFileIcon = (type: Document["type"], format: string) => {
     switch (type) {
@@ -335,7 +335,7 @@ export const PeotramDocumentManager: React.FC = () => {
     const sizes = ["Bytes", "KB", "MB", "GB"];
     const i = Math.floor(Math.log(bytes) / Math.log(k));
     return parseFloat((bytes / Math.pow(k, i)).toFixed(2)) + " " + sizes[i];
-  });
+  };
 
   const filteredDocuments = documents.filter(doc => {
     const matchesCategory = selectedCategory === "all" || 
@@ -350,7 +350,7 @@ export const PeotramDocumentManager: React.FC = () => {
       doc.tags.some(tag => tag.toLowerCase().includes(searchTerm.toLowerCase()));
 
     return matchesCategory && matchesSearch;
-  });
+  };
 
   return (
     <TooltipProvider>

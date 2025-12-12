@@ -327,7 +327,7 @@ export const IntelligentAlertSystem = memo(() => {
     if (score >= 90) return "text-green-600";
     if (score >= 75) return "text-yellow-600";
     return "text-red-600";
-  });
+  };
 
   const filteredAlerts = smartAlerts.filter(alert => 
     filterType === "all" || alert.category === filterType
@@ -342,7 +342,7 @@ export const IntelligentAlertSystem = memo(() => {
         <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-primary"></div>
       </div>
     );
-  });
+  };
 
   return (
     <div className="space-y-6">

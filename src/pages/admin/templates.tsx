@@ -86,7 +86,7 @@ export default function TemplatesPage() {
           title: "Erro de autenticação",
           description: "Você precisa estar logado.",
           variant: "destructive",
-        });
+        };
         return;
       }
 
@@ -123,7 +123,7 @@ export default function TemplatesPage() {
         title: "Título necessário",
         description: "Por favor, forneça um título para o template.",
         variant: "destructive",
-      });
+      };
       return;
     }
 
@@ -161,7 +161,7 @@ export default function TemplatesPage() {
         title: "Nenhum conteúdo para reformular",
         description: "Por favor, adicione conteúdo primeiro.",
         variant: "destructive",
-      });
+      };
       return;
     }
 
@@ -197,7 +197,7 @@ export default function TemplatesPage() {
         title: "Nenhum conteúdo",
         description: "Por favor, adicione conteúdo primeiro.",
         variant: "destructive",
-      });
+      };
       return;
     }
 
@@ -233,7 +233,7 @@ export default function TemplatesPage() {
         title: "Campos obrigatórios",
         description: "Por favor, preencha o título e o conteúdo.",
         variant: "destructive",
-      });
+      };
       return;
     }
 
@@ -312,7 +312,7 @@ export default function TemplatesPage() {
       toast({
         title: template.is_favorite ? "Removido dos favoritos" : "Adicionado aos favoritos",
         description: `Template "${template.title}" ${template.is_favorite ? "removido de" : "adicionado aos"} favoritos.`,
-      });
+      };
 
       loadTemplates();
     } catch (err) {
@@ -338,7 +338,7 @@ export default function TemplatesPage() {
       toast({
         title: template.is_private ? "Template público" : "Template privado",
         description: `Template "${template.title}" agora é ${template.is_private ? "público" : "privado"}.`,
-      });
+      };
 
       loadTemplates();
     } catch (err) {
@@ -364,7 +364,7 @@ export default function TemplatesPage() {
       toast({
         title: "Template excluído",
         description: "O template foi excluído com sucesso.",
-      });
+      };
 
       loadTemplates();
     } catch (err) {
@@ -380,7 +380,7 @@ export default function TemplatesPage() {
   // Load template for editing
   const editTemplate = (id: string) => {
     navigate(`/admin/templates/edit/${id}`);
-  });
+  };
 
   // Duplicate template
   const duplicateTemplate = async (template: Template) => {
@@ -389,7 +389,7 @@ export default function TemplatesPage() {
     setCurrentTemplateId(null);
     setIsEditing(false);
     window.scrollTo({ top: 0, behavior: "smooth" });
-  });
+  };
 
   // Apply template to documents-ai
   const applyTemplate = (template: Template) => {
@@ -400,7 +400,7 @@ export default function TemplatesPage() {
     }));
     
     navigate("/admin/documents/ai");
-  });
+  };
 
   // Export template as PDF
   const exportToPDF = async (template: Template) => {

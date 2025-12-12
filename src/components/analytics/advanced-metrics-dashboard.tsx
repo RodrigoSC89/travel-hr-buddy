@@ -122,7 +122,7 @@ export const AdvancedMetricsDashboard: React.FC = () => {
         title: "Erro ao carregar métricas",
         description: "Não foi possível carregar os dados das métricas",
         variant: "destructive"
-      });
+      };
       setIsLoading(false);
     }
   }, [toast]);
@@ -147,7 +147,7 @@ export const AdvancedMetricsDashboard: React.FC = () => {
       toast({
         title: "Relatório gerado",
         description: "O relatório de análise foi gerado com sucesso",
-      });
+      };
     } catch (error) {
       toast({
         title: "Erro ao gerar relatório",
@@ -163,13 +163,13 @@ export const AdvancedMetricsDashboard: React.FC = () => {
     if (percentage >= 95) return "text-green-600";
     if (percentage >= 80) return "text-yellow-600";
     return "text-red-600";
-  });
+  };
 
   const getTrendIcon = (trend: number) => {
     if (trend > 0) return <TrendingUp className="w-4 h-4 text-green-600" />;
     if (trend < 0) return <TrendingDown className="w-4 h-4 text-red-600" />;
     return <Activity className="w-4 h-4 text-muted-foreground" />;
-  });
+  };
 
   const getImpactColor = (impact: PerformanceInsight["impact"]) => {
     switch (impact) {

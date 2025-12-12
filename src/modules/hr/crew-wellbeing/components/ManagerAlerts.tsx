@@ -48,7 +48,7 @@ export const ManagerAlerts: React.FC = () => {
         title: "Error",
         description: "Failed to load wellbeing alerts",
         variant: "destructive",
-      });
+      };
     } finally {
       setLoading(false);
     }
@@ -69,7 +69,7 @@ export const ManagerAlerts: React.FC = () => {
       toast({
         title: "Success",
         description: "Alert acknowledged",
-      });
+      };
 
       fetchAlerts();
     } catch (error) {
@@ -97,7 +97,7 @@ export const ManagerAlerts: React.FC = () => {
       toast({
         title: "Success",
         description: "Alert resolved",
-      });
+      };
 
       fetchAlerts();
     } catch (error) {

@@ -90,14 +90,14 @@ export const BusinessIntelligence = memo(() => {
           period: selectedPeriod,
           department: selectedDepartment 
         }
-      });
+      };
       
       if (error) throw error;
       
       toast({
         title: "Relatório gerado!",
         description: "Novo relatório de BI foi criado com sucesso.",
-      });
+      };
       
       fetchReports();
     } catch (error) {
@@ -250,7 +250,7 @@ export const BusinessIntelligence = memo(() => {
     if (trend === "up") return <TrendingUp className="h-4 w-4 text-success" />;
     if (trend === "down") return <TrendingUp className="h-4 w-4 text-danger rotate-180" />;
     return <div className="h-4 w-4 bg-muted rounded-full" />;
-  });
+  };
 
   const getReportIcon = (type: string) => {
     switch (type) {
@@ -277,8 +277,8 @@ export const BusinessIntelligence = memo(() => {
     case "below": return "text-danger";
     case "equal": return "text-warning";
     default: return "text-muted-foreground";
-    });
-  });
+    };
+  };
 
   return (
     <div className="space-y-6">

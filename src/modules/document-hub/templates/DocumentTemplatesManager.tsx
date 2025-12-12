@@ -126,7 +126,7 @@ const DocumentTemplatesManager = () => {
         title: "Error loading templates",
         description: error.message,
         variant: "destructive",
-      });
+      };
     } finally {
       setLoading(false);
     }
@@ -157,15 +157,15 @@ const DocumentTemplatesManager = () => {
     }
     
     return [...new Set(matches)];
-  });
+  };
 
   const substituteVariables = (content: string, variables: Record<string, string>): string => {
     let result = content;
     Object.entries(variables).forEach(([key, value]) => {
       result = result.replace(new RegExp(`{{${key}}}`, "g"), value);
-  });
+  };
     return result;
-  });
+  };
 
   const createTemplate = async () => {
     try {
@@ -190,7 +190,7 @@ const DocumentTemplatesManager = () => {
       toast({
         title: "✅ Template Created",
         description: "Document template has been created successfully",
-      });
+      };
 
       setShowNewTemplate(false);
       setFormData({
@@ -223,7 +223,7 @@ const DocumentTemplatesManager = () => {
       toast({
         title: "✅ Template Updated",
         description: "Template has been updated and versioned",
-      });
+      };
 
       loadTemplates();
     } catch (error: SupabaseError | null) {
@@ -231,7 +231,7 @@ const DocumentTemplatesManager = () => {
         title: "Error updating template",
         description: error.message,
         variant: "destructive",
-      });
+      };
     }
   };
 
@@ -247,7 +247,7 @@ const DocumentTemplatesManager = () => {
       toast({
         title: "Template Archived",
         description: "Template has been archived",
-      });
+      };
 
       loadTemplates();
     } catch (error: SupabaseError | null) {
@@ -255,7 +255,7 @@ const DocumentTemplatesManager = () => {
         title: "Error archiving template",
         description: error.message,
         variant: "destructive",
-      });
+      };
     }
   };
 
@@ -314,7 +314,7 @@ const DocumentTemplatesManager = () => {
           })
         ]
       }]
-    });
+    };
     
     const blob = await Packer.toBlob(doc);
     const fileName = `${template.template_code}.docx`;

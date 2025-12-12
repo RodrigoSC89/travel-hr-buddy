@@ -158,7 +158,7 @@ export const TaskManagement: React.FC = () => {
         tags: [],
         related_vessel: "",
         related_crew: ""
-      });
+      };
       setShowAddDialog(false);
       
       toast({
@@ -188,8 +188,8 @@ export const TaskManagement: React.FC = () => {
     toast({
       title: "Status Atualizado",
       description: "Status da tarefa foi atualizado com sucesso"
-    });
-  });
+    };
+  };
 
   const getPriorityColor = (priority: string) => {
     switch (priority) {
@@ -245,7 +245,7 @@ export const TaskManagement: React.FC = () => {
                          task.assigned_to?.toLowerCase().includes(searchTerm.toLowerCase());
     const matchesStatus = filterStatus === "all" || task.status === filterStatus;
     return matchesSearch && matchesStatus;
-  });
+  };
 
   const tasksByStatus = {
     pending: tasks.filter(t => t.status === "pending").length,

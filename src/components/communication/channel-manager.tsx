@@ -302,7 +302,7 @@ export const ChannelManager: React.FC<ChannelManagerProps> = ({
       toast({
         title: "Sucesso",
         description: "Você entrou no canal"
-      });
+      };
     } catch (error) {
       logger.error("Failed to join channel:", error);
       toast({
@@ -353,7 +353,7 @@ export const ChannelManager: React.FC<ChannelManagerProps> = ({
     if (diffInHours < 1) return "Agora mesmo";
     if (diffInHours < 24) return `${diffInHours}h atrás`;
     return `${Math.floor(diffInHours / 24)}d atrás`;
-  });
+  };
 
   if (loading) {
     return (

@@ -258,7 +258,7 @@ export const SmartInsights: React.FC = () => {
         effort: "easy",
         estimated_improvement: insight.estimatedValue || "Melhoria significativa",
         status: "completed"
-      });
+      };
 
       if (error) throw error;
 

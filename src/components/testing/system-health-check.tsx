@@ -191,17 +191,17 @@ export const SystemHealthCheck: React.FC = () => {
         title: "Verificação Concluída",
         description: `${failing} falha(s) detectada(s)`,
         variant: "destructive"
-      });
+      };
     } else if (warning > 0) {
       toast({
         title: "Verificação Concluída",
         description: `${warning} aviso(s) encontrado(s)`,
-      });
+      };
     } else {
       toast({
         title: "Sistema Saudável",
         description: "Todos os testes passaram com sucesso",
-      });
+      };
     }
   };
 

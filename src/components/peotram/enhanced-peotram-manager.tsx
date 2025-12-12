@@ -237,17 +237,17 @@ export const EnhancedPeotramManager: React.FC = () => {
     setSelectedAudit(null);
     // Implementar finalização na API
     await loadData();
-  });
+  };
 
   const handleUpdateNonConformity = async (id: string, updates: Record<string, unknown>) => {
     // Implementar atualização na API
     await loadData();
-  });
+  };
 
   const handleUpdateTemplate = async (template: unknown) => {
     // Implementar atualização na API
     await loadData();
-  });
+  };
 
   const getStatusColor = (status: string) => {
     switch (status) {

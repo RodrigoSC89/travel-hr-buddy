@@ -117,7 +117,7 @@ export const AuditAssistant = memo(function() {
     setTimeout(() => {
       setIsGenerating(null);
     }, 3000);
-  });
+  };
 
   const getStatusColor = (status: string) => {
     const colors = {
@@ -127,7 +127,7 @@ export const AuditAssistant = memo(function() {
       incomplete: "bg-red-500/20 text-red-400 border-red-500/30"
     };
     return colors[status as keyof typeof colors] || "bg-muted";
-  });
+  };
 
   const getStatusLabel = (status: string) => {
     const labels = {
@@ -137,7 +137,7 @@ export const AuditAssistant = memo(function() {
       incomplete: "Incompleto"
     };
     return labels[status as keyof typeof labels] || status;
-  });
+  };
 
   const getDocStatusColor = (status: string) => {
     const colors = {
@@ -147,7 +147,7 @@ export const AuditAssistant = memo(function() {
       missing: "bg-purple-500/20 text-purple-400"
     };
     return colors[status as keyof typeof colors] || "bg-muted";
-  });
+  };
 
   const getTypeColor = (type: string) => {
     const colors: Record<string, string> = {
@@ -161,7 +161,7 @@ export const AuditAssistant = memo(function() {
       ISO: "bg-indigo-500/20 text-indigo-400 border-indigo-500/30"
     };
     return colors[type] || "bg-muted";
-  });
+  };
 
   return (
     <div className="space-y-6">

@@ -132,7 +132,7 @@ export const AdvancedCrewDossierInteraction: React.FC<VoiceInteractionPanelProps
       toast({
         title: "Análise de IA gerada",
         description: "Novos insights foram gerados para o seu perfil!",
-      });
+      };
 
       await loadAIInsights();
     } catch (error) {
@@ -211,7 +211,7 @@ export const AdvancedCrewDossierInteraction: React.FC<VoiceInteractionPanelProps
       toast({
         title: "Sugestões de metas geradas",
         description: "Novas metas personalizadas foram sugeridas para você!",
-      });
+      };
     } catch (error) {
       logger.error("Failed to create new goal:", error);
     }

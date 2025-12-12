@@ -46,7 +46,7 @@ export const RiskAlertPanel = memo(function({ alerts }: RiskAlertPanelProps) {
   const sortedAlerts = [...alerts].sort((a, b) => {
     const levelOrder = { critical: 0, high: 1, medium: 2, low: 3 };
     return levelOrder[a.level] - levelOrder[b.level];
-  });
+  };
 
   return (
     <Card className="border-2 hover:shadow-lg transition-shadow">

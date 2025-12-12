@@ -177,7 +177,7 @@ export const useHasRole = (roles: UserRole | UserRole[]): boolean => {
   
   const rolesArray = Array.isArray(roles) ? roles : [roles];
   return rolesArray.includes(userRole);
-});
+};
 
 /**
  * Hook to check minimum role level
@@ -191,4 +191,4 @@ export const useHasMinRole = (minRole: UserRole): boolean => {
   const minRoleLevel = ROLE_HIERARCHY[minRole] || 0;
   
   return userRoleLevel >= minRoleLevel;
-});
+};

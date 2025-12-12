@@ -307,7 +307,7 @@ const EmergencyMode = () => {
     const mins = Math.floor(seconds / 60);
     const secs = seconds % 60;
     return `${mins.toString().padStart(2, "0")}:${secs.toString().padStart(2, "0")}`;
-  });
+  };
 
   const activateEmergency = (type: EmergencyType) => {
     const selectedProtocol = emergencyProtocols[type];
@@ -329,7 +329,7 @@ const EmergencyMode = () => {
       title: "EMERGÊNCIA ATIVADA",
       description: selectedProtocol.title,
       variant: "destructive",
-    });
+    };
   };
 
   const completeStep = (stepId: string) => {
@@ -408,7 +408,7 @@ const EmergencyMode = () => {
     }
     
     return `Para emergências de ${protocol?.title}, mantenha a calma e siga o protocolo estabelecido. Posso ajudar com:\n• "próxima etapa" - ver próxima ação\n• "contatos" - listar números de emergência\n• "status" - resumo da situação`;
-  });
+  };
 
   const deactivateEmergency = () => {
     setIsEmergencyActive(false);

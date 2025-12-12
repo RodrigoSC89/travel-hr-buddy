@@ -318,7 +318,7 @@ export const FuelOptimizer = memo(() => {
           body: tableData,
           theme: "striped",
           headStyles: { fillColor: [59, 130, 246] }
-        });
+        };
       }
       
       doc.save(`relatorio-combustivel-${new Date().toISOString().split("T")[0]}.pdf`);

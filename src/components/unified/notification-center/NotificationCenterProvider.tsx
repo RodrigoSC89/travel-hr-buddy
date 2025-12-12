@@ -55,7 +55,7 @@ export const NotificationCenterProvider: React.FC<NotificationCenterProviderProp
         if (isRead !== readFilter) return false;
       }
       return true;
-  });
+  };
   }, [notifications, categoryFilter, priorityFilter, readFilter]);
 
   // Unread count
@@ -201,7 +201,7 @@ export const NotificationCenterProvider: React.FC<NotificationCenterProviderProp
       toast({
         title: "Success",
         description: "All notifications marked as read",
-      });
+      };
     } catch (err) {
       toast({
         title: "Error",
@@ -249,13 +249,13 @@ export const NotificationCenterProvider: React.FC<NotificationCenterProviderProp
       toast({
         title: "Cleared",
         description: "All notifications deleted",
-      });
+      };
     } catch (err) {
       toast({
         title: "Error",
         description: "Failed to clear notifications",
         variant: "destructive",
-      });
+      };
     }
   }, [effectiveUserId, toast]);
 

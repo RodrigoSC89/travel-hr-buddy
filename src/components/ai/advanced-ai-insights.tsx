@@ -172,7 +172,7 @@ const AdvancedAIInsights = () => {
     toast({
       title: "✨ Implementar Insight",
       description: `Iniciando implementação: ${insightTitle}`
-    });
+    };
     // TODO: Open implementation workflow dialog
   };
 

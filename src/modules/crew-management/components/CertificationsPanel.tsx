@@ -47,7 +47,7 @@ export const CertificationsPanel = memo(function({ certificates, crewMembers }: 
       ...cert,
       employee_name: crew?.full_name || "Desconhecido",
     };
-  });
+  };
 
   const today = new Date();
   const thirtyDaysFromNow = new Date(today.getTime() + 30 * 24 * 60 * 60 * 1000);
@@ -89,7 +89,7 @@ export const CertificationsPanel = memo(function({ certificates, crewMembers }: 
       return { label: `${daysUntilExpiry} dias`, variant: "secondary" as const, icon: Clock, color: "text-yellow-500" };
     }
     return { label: "Válido", variant: "outline" as const, icon: CheckCircle, color: "text-emerald-500" };
-  });
+  };
 
   return (
     <Card>

@@ -99,7 +99,7 @@ export const FleetCockpit360 = memo(function() {
       offline: "bg-red-500/20 text-red-400 border-red-500/30"
     };
     return colors[status as keyof typeof colors] || "bg-muted";
-  });
+  };
 
   const getStatusLabel = (status: string) => {
     const labels = {
@@ -109,7 +109,7 @@ export const FleetCockpit360 = memo(function() {
       offline: "Offline"
     };
     return labels[status as keyof typeof labels] || status;
-  });
+  };
 
   return (
     <div className="space-y-6">

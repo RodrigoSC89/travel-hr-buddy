@@ -19,8 +19,8 @@ export const AnalyticsDashboardNew = memo(() => {
       title: "Erro ao carregar analytics",
       description: error.message,
       variant: "destructive",
-    });
-  });
+    };
+  };
 
   return (
     <AnalyticsDashboardBase
@@ -28,6 +28,6 @@ export const AnalyticsDashboardNew = memo(() => {
       onError={handleError}
     />
   );
-});
+};
 
 export default AnalyticsDashboardNew;

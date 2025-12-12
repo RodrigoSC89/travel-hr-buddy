@@ -137,7 +137,7 @@ export default function AssistantLogsPage() {
       const answer = `"${log.answer.replace(/"/g, "\"\"").replace(/<[^>]*>/g, "")}"`;
       const origin = `"${log.origin}"`;
       return [date, userEmail, question, answer, origin].join(",");
-  });
+  };
 
     // Combine headers and rows
     const csv = [headers.join(","), ...rows].join("\n");

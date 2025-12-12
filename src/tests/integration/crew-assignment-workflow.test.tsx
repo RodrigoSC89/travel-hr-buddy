@@ -66,13 +66,13 @@ describe("Integration: Crew Assignment Workflow", () => {
 
     // Assert
     expect(hasAllCertifications).toBe(true);
-  });
+  };
 
   it("should reject assignment when certifications are missing", async () => {
     // Arrange
     const crew = mockCrew({ 
       certifications: ["STCW"]
-    });
+    };
     const requiredCerts = ["STCW", "HUET", "Advanced Fire Fighting"];
 
     // Act
@@ -82,7 +82,7 @@ describe("Integration: Crew Assignment Workflow", () => {
 
     // Assert
     expect(hasAllCertifications).toBe(false);
-  });
+  };
 
   it("should track crew work hours and enforce limits", async () => {
     // Arrange
@@ -104,7 +104,7 @@ describe("Integration: Crew Assignment Workflow", () => {
     expect(totalHours).toBe(46);
     expect(averageHours).toBe(9.2);
     expect(totalHours).toBeLessThanOrEqual(MAX_WEEKLY_HOURS);
-  });
+  };
 
   it("should handle emergency crew replacement", async () => {
     // Arrange
@@ -143,5 +143,5 @@ describe("Integration: Crew Assignment Workflow", () => {
     // Assert
     expect(assignments).toHaveLength(20);
     expect(assignments.every(a => a.vessel_id === vessel.id)).toBe(true);
-  });
-});
+  };
+};

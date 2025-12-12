@@ -75,7 +75,7 @@ export default function ExecutionRoadmap() {
     setTasks(prev => prev.map(t => 
       t.id === id ? { ...t, completed: !t.completed } : t
     ));
-  });
+  };
 
   const getPhaseStats = (startDay: number, endDay: number) => {
     const phaseTasks = tasks.filter(t => t.day >= startDay && t.day <= endDay);
@@ -85,7 +85,7 @@ export default function ExecutionRoadmap() {
       completed,
       percentage: Math.round((completed / phaseTasks.length) * 100) || 0
     };
-  });
+  };
 
   const week1Stats = getPhaseStats(1, 7);
   const week2Stats = getPhaseStats(8, 15);

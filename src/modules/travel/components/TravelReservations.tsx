@@ -86,7 +86,7 @@ export const TravelReservations: React.FC = () => {
         title: "Error",
         description: "Failed to load reservations",
         variant: "destructive"
-      });
+      };
     } finally {
       setLoading(false);
     }
@@ -117,7 +117,7 @@ export const TravelReservations: React.FC = () => {
       toast({
         title: "Success",
         description: "Reservation created successfully"
-      });
+      };
 
       setIsCreateOpen(false);
       resetForm();
@@ -159,7 +159,7 @@ export const TravelReservations: React.FC = () => {
     };
 
     return <Badge className={variants[status] || "bg-gray-100"}>{status}</Badge>;
-  });
+  };
 
   const getPaymentBadge = (status: string) => {
     const variants: Record<string, string> = {
@@ -170,7 +170,7 @@ export const TravelReservations: React.FC = () => {
     };
 
     return <Badge className={variants[status] || "bg-gray-100"}>{status}</Badge>;
-  });
+  };
 
   return (
     <Card>

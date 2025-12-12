@@ -57,8 +57,8 @@ const AICommandCenter = () => {
           );
         }
         return [...prev, { role: "assistant", content: assistantContent, timestamp: new Date().toISOString() }];
-  });
-    });
+  };
+    };
 
     try {
       await streamCommandChat({

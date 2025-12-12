@@ -245,7 +245,7 @@ export const Patch614Validation = memo(function() {
           },
           wasAdjusted: adjustedScore !== baseScore
         };
-      });
+      };
 
       testResults["scores_adjusted"] = situationalScores.every(s => s.wasAdjusted === true);
 

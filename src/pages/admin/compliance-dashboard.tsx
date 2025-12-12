@@ -63,7 +63,7 @@ export default function ComplianceDashboard() {
     if (level === "critical" || level === "high") return "destructive";
     if (level === "medium") return "default";
     return "secondary";
-  });
+  };
 
   if (loading && !summary) {
     return (

@@ -93,7 +93,7 @@ export const PainelBI = memo(function() {
     }, {} as Record<string, ExportData>);
 
     return Object.values(dadosAgrupados);
-  });
+  };
 
   const exportToCSV = () => {
     try {

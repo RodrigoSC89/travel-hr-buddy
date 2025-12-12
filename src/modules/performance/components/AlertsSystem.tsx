@@ -121,14 +121,14 @@ export const AlertsSystem: React.FC = () => {
       toast({
         title: "Alert Resolved",
         description: "Alert marked as resolved",
-      });
+      };
     } catch (error) {
       console.error("Error resolving alert:", error);
       toast({
         title: "Error",
         description: "Failed to resolve alert",
         variant: "destructive",
-      });
+      };
     }
   };
 

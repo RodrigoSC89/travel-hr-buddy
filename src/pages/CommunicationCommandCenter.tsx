@@ -74,7 +74,7 @@ const CommunicationCommandCenter = () => {
         criticalNotifications: 2,
         urgentMessages: 3,
         todayMessages: 18
-      });
+      };
       
       setIsLoading(false);
     };

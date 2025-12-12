@@ -39,7 +39,7 @@ export const ProgressLoader = memo(function({
           return 100;
         }
         return next;
-  });
+  };
     }, 100);
 
     return () => clearInterval(interval);

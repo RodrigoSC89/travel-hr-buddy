@@ -149,7 +149,7 @@ const UnifiedDashboard = () => {
         ? prev.filter(k => k !== kpi)
         : [...prev, kpi]
     );
-  });
+  };
 
   // Auto-update effect
   React.useEffect(() => {

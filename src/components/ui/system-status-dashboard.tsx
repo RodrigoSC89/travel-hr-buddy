@@ -95,7 +95,7 @@ const SystemStatusDashboard = () => {
       critical: "text-red-600 bg-red-100"
     };
     return statusColors[status as keyof typeof statusColors] || statusColors.good;
-  });
+  };
 
   const getIconColor = (color: string) => {
     const iconColors = {
@@ -106,7 +106,7 @@ const SystemStatusDashboard = () => {
       purple: "bg-purple-100 text-purple-600"
     };
     return iconColors[color as keyof typeof iconColors] || iconColors.blue;
-  });
+  };
 
   const overallHealth = {
     score: 96.8,
@@ -145,7 +145,7 @@ const SystemStatusDashboard = () => {
       ERROR: "text-red-600 bg-red-50"
     };
     return colors[level as keyof typeof colors] || colors.INFO;
-  });
+  };
 
   const getStatusBadge = (status: string) => {
     const colors = {
@@ -154,7 +154,7 @@ const SystemStatusDashboard = () => {
       "In Progress": "bg-blue-100 text-blue-800"
     };
     return colors[status as keyof typeof colors] || colors.Completed;
-  });
+  };
 
   return (
     <Card className="border-2 border-primary/10 shadow-xl">

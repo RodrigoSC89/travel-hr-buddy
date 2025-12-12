@@ -91,7 +91,7 @@ Todas as minhas respostas incluem **citações das normas** aplicáveis. Como po
     try {
       const { data, error } = await supabase.functions.invoke("sgso-assistant", {
         body: { question: messageText }
-      });
+      };
 
       if (error) throw error;
 

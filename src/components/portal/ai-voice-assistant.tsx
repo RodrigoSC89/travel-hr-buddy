@@ -40,7 +40,7 @@ export const AIVoiceAssistant: React.FC<VoiceAssistantProps> = ({
         title: "Permissão negada",
         description: "Precisamos da permissão do microfone para o assistente por voz",
         variant: "destructive"
-      });
+      };
       return false;
     }
   };
@@ -59,7 +59,7 @@ export const AIVoiceAssistant: React.FC<VoiceAssistantProps> = ({
 
       mediaRecorderRef.current.ondataavailable = (event) => {
         audioChunksRef.current.push(event.data);
-      });
+      };
 
       mediaRecorderRef.current.onstop = () => {
         const audioBlob = new Blob(audioChunksRef.current, { type: "audio/webm" });
@@ -108,7 +108,7 @@ export const AIVoiceAssistant: React.FC<VoiceAssistantProps> = ({
             audio: base64Audio,
             crewMemberId
           }
-        });
+        };
 
         if (error) throw error;
 
@@ -160,7 +160,7 @@ export const AIVoiceAssistant: React.FC<VoiceAssistantProps> = ({
           voiceId: "Sarah", // Voz padrão
           crewMemberId
         }
-      });
+      };
 
       if (error) throw error;
 
@@ -196,7 +196,7 @@ export const AIVoiceAssistant: React.FC<VoiceAssistantProps> = ({
         title: "Síntese de fala não disponível",
         description: "Seu navegador não suporta síntese de fala",
         variant: "destructive"
-      });
+      };
     }
   };
 

@@ -156,7 +156,7 @@ const TravelManagement = () => {
         title: "Error loading itineraries",
         description: error.message,
         variant: "destructive",
-      });
+      };
     } finally {
       setLoading(false);
     }
@@ -192,7 +192,7 @@ const TravelManagement = () => {
       toast({
         title: "✅ Itinerary Created",
         description: "Your travel itinerary has been created",
-      });
+      };
 
       setShowNewItinerary(false);
       setFormData({
@@ -254,7 +254,7 @@ const TravelManagement = () => {
         body: tableData,
         theme: "striped",
         headStyles: { fillColor: [59, 130, 246] },
-      });
+      };
     }
     
     // Footer
@@ -293,7 +293,7 @@ const TravelManagement = () => {
       toast({
         title: "✅ Conflict Resolved",
         description: "Travel conflict has been marked as resolved",
-      });
+      };
 
       loadConflicts();
     } catch (error: SupabaseError | null) {

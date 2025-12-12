@@ -51,7 +51,7 @@ export const ChecklistInterface = memo(function({ inspectionId, onUpdate }: Chec
         title: "Error",
         description: "Failed to load findings",
         variant: "destructive",
-      });
+      };
     } finally {
       setLoading(false);
     }
@@ -69,7 +69,7 @@ export const ChecklistInterface = memo(function({ inspectionId, onUpdate }: Chec
         severity: severity as unknown,
         corrective_action,
         evidence_attached: false,
-      });
+      };
       
       await loadFindings();
       onUpdate();
@@ -77,7 +77,7 @@ export const ChecklistInterface = memo(function({ inspectionId, onUpdate }: Chec
       toast({
         title: "Success",
         description: "Finding added successfully",
-      });
+      };
     } catch (error) {
       console.error("Error adding finding:", error);
       toast({
@@ -90,7 +90,7 @@ export const ChecklistInterface = memo(function({ inspectionId, onUpdate }: Chec
 
   const getFindingForItem = (regulation: string) => {
     return findings.find(f => f.mlc_regulation === regulation);
-  });
+  };
 
   return (
     <div className="space-y-4">

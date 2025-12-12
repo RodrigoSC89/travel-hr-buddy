@@ -41,7 +41,7 @@ const AlertasPrecosModule = () => {
         priceIncreases,
         priceDrops,
         estimatedSavings
-      });
+      };
     } catch (error) {
       console.error("Error loading stats:", error);
     }
@@ -54,7 +54,7 @@ const AlertasPrecosModule = () => {
   const handleEdit = (alert: PriceAlert) => {
     setEditingAlert(alert);
     setShowCreateForm(true);
-  });
+  };
 
   const handleFormSuccess = () => {
     setRefreshTrigger(prev => prev + 1);

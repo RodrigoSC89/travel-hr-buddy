@@ -90,7 +90,7 @@ export default function SecurityMonitoring() {
         title: "Consulta vazia",
         description: "Digite uma pergunta sobre segurança para análise.",
         variant: "destructive"
-      });
+      };
       return;
     }
 

@@ -161,7 +161,7 @@ export default function PersonalRestoreDashboard() {
         textColor: 255,
         fontStyle: "bold",
       },
-    });
+    };
     
     // Save the PDF
     doc.save(`restauracoes-pessoais-${format(new Date(), "yyyy-MM-dd-HHmmss")}.pdf`);

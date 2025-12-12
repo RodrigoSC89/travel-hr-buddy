@@ -316,7 +316,7 @@ export default function EpicsBoard() {
         {status.replace("_", " ")}
       </Badge>
     );
-  });
+  };
 
   const getValidationBadge = (status: string) => {
     const colors = {
@@ -329,7 +329,7 @@ export default function EpicsBoard() {
         {status}
       </Badge>
     );
-  });
+  };
 
   const exportProgressJSON = () => {
     const exportData = {

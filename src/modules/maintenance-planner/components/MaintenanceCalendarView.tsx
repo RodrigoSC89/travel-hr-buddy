@@ -60,7 +60,7 @@ export const MaintenanceCalendarView: React.FC = () => {
     return tasks.filter(task => 
       isSameDay(new Date(task.scheduled_date), date)
     );
-  });
+  };
 
   const selectedDateTasks = selectedDate ? getTasksForDate(selectedDate) : [];
 

@@ -65,7 +65,7 @@ const AIReportGenerator: React.FC<AIReportGeneratorProps> = ({ onReportGenerated
         title: "Erro",
         description: "Selecione um tipo de relatório",
         variant: "destructive",
-      });
+      };
       return;
     }
 
@@ -154,7 +154,7 @@ const AIReportGenerator: React.FC<AIReportGeneratorProps> = ({ onReportGenerated
   const getTypeIcon = (typeValue: string) => {
     const type = reportTypes.find(t => t.value === typeValue);
     return type?.icon || FileText;
-  });
+  };
 
   return (
     <div className="space-y-6">

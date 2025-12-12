@@ -235,12 +235,12 @@ export const LessonsLearnedCenter: React.FC = () => {
 
   const handleDownloadPDF = (lesson: LessonLearned) => {
     toast.success(`Baixando PDF: ${lesson.id}`);
-  });
+  };
 
   const handleLinkToTraining = (lesson: LessonLearned) => {
     setLessons(lessons.map(l => l.id === lesson.id ? { ...l, usedInTraining: true } : l));
     toast.success("Lição vinculada ao treinamento CPD");
-  });
+  };
 
   const getSeverityBadge = (severity: string) => {
     switch (severity) {

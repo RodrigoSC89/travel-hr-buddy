@@ -73,7 +73,7 @@ export const WebVitalsDashboard = memo(function({ className }: { className?: str
     
     // Linear interpolation between good and poor
     return Math.round(100 * (budget.poor - value) / (budget.poor - budget.good));
-  });
+  };
 
   return (
     <Card className={cn("", className)}>

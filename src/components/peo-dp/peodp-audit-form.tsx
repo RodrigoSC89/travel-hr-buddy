@@ -91,12 +91,12 @@ export const PEODPAuditForm = memo(function({
         map.set(req.id, {
           requirementId: req.id,
           status: "pendente"
-        });
+        };
       }
-    });
+    };
     
     return map;
-  });
+  };
 
   // Group requirements by section
   const requirementsBySection = useMemo(() => {
@@ -111,7 +111,7 @@ export const PEODPAuditForm = memo(function({
     
     requirements.forEach(req => {
       grouped[req.section].push(req);
-  });
+  };
     
     return grouped;
   }, [requirements]);
@@ -135,7 +135,7 @@ export const PEODPAuditForm = memo(function({
         conformes: sectionItems.filter(item => item?.status === "conforme").length,
         naoConformes: sectionItems.filter(item => item?.status === "nao_conforme").length
       };
-  });
+  };
     
     return stats;
   }, [requirementsBySection, auditItems]);
@@ -146,8 +146,8 @@ export const PEODPAuditForm = memo(function({
       const existing = newMap.get(reqId) || { requirementId: reqId, status: "pendente" as ComplianceStatus };
       newMap.set(reqId, { ...existing, ...updates });
       return newMap;
-  });
-  });
+  };
+  };
 
   const toggleExpanded = (reqId: string) => {
     setExpandedItems(prev => {
@@ -158,8 +158,8 @@ export const PEODPAuditForm = memo(function({
         newSet.add(reqId);
       }
       return newSet;
-  });
-  });
+  };
+  };
 
   const handleSave = () => {
     onSave?.(items, totalScore);

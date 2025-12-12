@@ -63,7 +63,7 @@ export const ComplianceAlertsPanel = memo(function({
         {labels[severity]}
       </Badge>
     );
-  });
+  };
 
   const handleAlertClick = (alert: ComplianceAlert) => {
     if (!alert.isRead) {

@@ -63,7 +63,7 @@ export default function ForecastPage() {
           title: "❌ Erro ao carregar forecasts",
           description: "Não foi possível carregar os forecasts",
           variant: "destructive"
-        });
+        };
       } finally {
         setLoading(false);
       }
@@ -145,7 +145,7 @@ export default function ForecastPage() {
           description: forecast.forecast_text,
           priority: priority.value,
         }),
-      });
+      };
 
       const data = await res.json();
 
@@ -205,8 +205,8 @@ export default function ForecastPage() {
     toast({
       title: "✅ CSV exportado",
       description: `${filteredForecasts.length} forecast(s) exportado(s)`,
-    });
-  });
+    };
+  };
 
   if (loading) {
     return (

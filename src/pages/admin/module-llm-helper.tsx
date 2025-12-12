@@ -88,7 +88,7 @@ export const ModuleLLMHelper: React.FC = () => {
     const promptTemplate = generateModulePrompt(module);
     setGeneratedPrompt(promptTemplate.prompt);
     setSelectedModule(moduleId);
-  });
+  };
 
   const handleCopyToClipboard = async () => {
     try {
@@ -96,13 +96,13 @@ export const ModuleLLMHelper: React.FC = () => {
       toast({
         title: "Copiado!",
         description: "Prompt copiado para a área de transferência",
-      });
+      };
     } catch (error) {
       toast({
         title: "Erro",
         description: "Falha ao copiar prompt",
         variant: "destructive",
-      });
+      };
     }
   };
 
@@ -126,7 +126,7 @@ export const ModuleLLMHelper: React.FC = () => {
     toast({
       title: "Exportado!",
       description: `${allPrompts.length} prompts exportados em ${format.toUpperCase()}`,
-    });
+    };
   };
 
   const handleSendToAI = () => {

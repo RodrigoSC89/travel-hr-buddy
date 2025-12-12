@@ -162,7 +162,7 @@ function VirtualizedGridInner<T>({
   const { containerRef, virtualItems, totalSize } = useVirtualizedList({
     items: rows,
     estimateSize: estimateSize + gap,
-  });
+  };
 
   if (loading) {
     return (

@@ -34,7 +34,7 @@ export const UserProfileBadge: React.FC<UserProfileBadgeProps> = ({
       .join("")
       .toUpperCase()
       .slice(0, 2);
-  });
+  };
 
   const displayName = user.user_metadata?.full_name || user.email?.split("@")[0] || "Usuário";
   

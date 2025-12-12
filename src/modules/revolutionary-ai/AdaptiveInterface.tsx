@@ -108,7 +108,7 @@ export const AdaptiveInterface = memo(function() {
     await new Promise(resolve => setTimeout(resolve, 1500));
     
     setIsApplying(false);
-  });
+  };
 
   const getThemeColors = (theme: string) => {
     switch (theme) {

@@ -216,7 +216,7 @@ export default function TrainingAcademyEnhanced() {
       orientation: "landscape",
       unit: "mm",
       format: "a4"
-    });
+    };
 
     // Certificate border
     doc.setDrawColor(0, 51, 102);
@@ -290,7 +290,7 @@ export default function TrainingAcademyEnhanced() {
       toast({
         title: "Progresso Atualizado",
         description: `Progresso salvo: ${progress}%`
-      });
+      };
     } catch (error) {
       logger.error("Error updating progress:", error);
       toast({

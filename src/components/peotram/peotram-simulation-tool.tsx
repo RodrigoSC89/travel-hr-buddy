@@ -279,7 +279,7 @@ export const PeotramSimulationTool: React.FC = () => {
         simulatedValue: value
       }
     }));
-  });
+  };
 
   const resetToDefaults = () => {
     setParameters(SIMULATION_PARAMETERS);

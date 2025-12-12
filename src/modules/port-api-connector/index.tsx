@@ -148,7 +148,7 @@ export default function PortAPIConnector() {
       }
       return conn;
     }));
-  });
+  };
 
   const testConnection = async (id: string) => {
     const conn = connections.find(c => c.id === id);

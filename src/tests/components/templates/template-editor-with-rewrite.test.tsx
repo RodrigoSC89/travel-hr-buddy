@@ -67,14 +67,14 @@ describe("TemplateEditorWithRewrite Component", () => {
     render(<TemplateEditorWithRewrite />);
     const button = screen.getByRole("button", {
       name: /Reescrever seleção com IA/i,
-    });
+    };
 
     fireEvent.click(button);
 
     await waitFor(() => {
       expect(screen.getByText(/Reescrevendo.../i)).toBeInTheDocument();
-  });
-  });
+  };
+  };
 
   it("should call supabase function on button click", async () => {
     const { supabase } = await React.lazy(() => import(import("@/integrations/supabase/client")));
@@ -86,16 +86,16 @@ describe("TemplateEditorWithRewrite Component", () => {
     render(<TemplateEditorWithRewrite />);
     const button = screen.getByRole("button", {
       name: /Reescrever seleção com IA/i,
-    });
+    };
 
     fireEvent.click(button);
 
     await waitFor(() => {
       expect(supabase.functions.invoke).toHaveBeenCalledWith("rewrite-selection", {
         body: { input: "Test text to rewrite" },
-      });
-  });
-  });
+      };
+  };
+  };
 
   it("should show success toast on successful rewrite", async () => {
     const { supabase } = await React.lazy(() => import(import("@/integrations/supabase/client")));
@@ -109,7 +109,7 @@ describe("TemplateEditorWithRewrite Component", () => {
     render(<TemplateEditorWithRewrite />);
     const button = screen.getByRole("button", {
       name: /Reescrever seleção com IA/i,
-    });
+    };
 
     fireEvent.click(button);
 
@@ -117,9 +117,9 @@ describe("TemplateEditorWithRewrite Component", () => {
       expect(toast).toHaveBeenCalledWith({
         title: "Texto reescrito com sucesso",
         description: "A seleção foi reformulada com IA.",
-      });
-  });
-  });
+      };
+  };
+  };
 
   it("should show error toast on failure", async () => {
     const { supabase } = await React.lazy(() => import(import("@/integrations/supabase/client")));
@@ -133,7 +133,7 @@ describe("TemplateEditorWithRewrite Component", () => {
     render(<TemplateEditorWithRewrite />);
     const button = screen.getByRole("button", {
       name: /Reescrever seleção com IA/i,
-    });
+    };
 
     fireEvent.click(button);
 
@@ -142,7 +142,7 @@ describe("TemplateEditorWithRewrite Component", () => {
         title: "Erro ao reescrever",
         description: "Não foi possível reescrever o texto. Tente novamente.",
         variant: "destructive",
-      });
-  });
+      };
+  };
   });
 });

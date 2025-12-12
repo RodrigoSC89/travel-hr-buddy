@@ -40,7 +40,7 @@ export const AIInsights = memo(() => {
 
       const { data, error } = await supabase.functions.invoke("crew-ai-analysis" as unknown, {
         body: { crewMemberId: user.id, analysisType: "wellbeing" }
-      });
+      };
 
       if (error) throw error;
 
@@ -69,8 +69,8 @@ export const AIInsights = memo(() => {
     case "high": return "text-orange-500";
     case "critical": return "text-red-500";
     default: return "text-gray-500";
-    });
-  });
+    };
+  };
 
   return (
     <Card>

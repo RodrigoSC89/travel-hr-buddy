@@ -50,7 +50,7 @@ export const WorkflowAutomationHub: React.FC = () => {
     const matchesCategory = categoryFilter === "all" || w.category === categoryFilter;
     const matchesPriority = priorityFilter === "all" || w.priority === priorityFilter;
     return matchesSearch && matchesStatus && matchesCategory && matchesPriority;
-  });
+  };
 
   const handleClearFilters = useCallback(() => {
     setSearchTerm("");
@@ -91,9 +91,9 @@ export const WorkflowAutomationHub: React.FC = () => {
       steps: template.steps,
       estimated_duration: template.estimated_duration,
       tags: template.tags,
-    });
+    };
     toast({ title: "Template aplicado", description: `Workflow "${template.name}" criado` });
-  });
+  };
 
   if (isLoading) {
     return (

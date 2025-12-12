@@ -125,7 +125,7 @@ const TemplateManager = () => {
                          template.description.toLowerCase().includes(searchTerm.toLowerCase()) ||
                          template.tags.some(tag => tag.toLowerCase().includes(searchTerm.toLowerCase()));
     return matchesCategory && matchesType && matchesSearch;
-  });
+  };
 
   const getTypeIcon = (type: string) => {
     switch (type) {
@@ -160,16 +160,16 @@ const TemplateManager = () => {
     toast({
       title: "Template duplicado",
       description: "Template copiado com sucesso",
-    });
-  });
+    };
+  };
 
   const deleteTemplate = (id: string) => {
     setTemplates(prev => prev.filter(template => template.id !== id));
     toast({
       title: "Template removido",
       description: "Template excluído com sucesso",
-    });
-  });
+    };
+  };
 
   const handleUseTemplate = (template: Template) => {
     // Simular uso do template
@@ -181,8 +181,8 @@ const TemplateManager = () => {
     toast({
       title: "Template aplicado",
       description: `Template "${template.name}" foi usado com sucesso`,
-    });
-  });
+    };
+  };
 
   const getRelativeTime = (date?: Date) => {
     if (!date) return "Nunca";
@@ -194,7 +194,7 @@ const TemplateManager = () => {
     if (diffInDays < 30) return `${diffInDays} dias atrás`;
     if (diffInDays < 365) return `${Math.floor(diffInDays / 30)} meses atrás`;
     return `${Math.floor(diffInDays / 365)} anos atrás`;
-  });
+  };
 
   return (
     <div className="space-y-6">

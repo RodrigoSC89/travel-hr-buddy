@@ -108,7 +108,7 @@ export const Patch608Validation = memo(function() {
         commands: voiceCommands,
         modules: modulesActivated,
         logs: auditLogs
-      });
+      };
 
     } catch (error) {
       console.error("Validation error:", error);

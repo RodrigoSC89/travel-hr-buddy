@@ -145,7 +145,7 @@ export const OptimizationReportsManager = memo(() => {
       title: "Gerando Relatório",
       description: `Iniciando geração do relatório ${type}...`,
       duration: 2000
-    });
+    };
 
     // Simular geração do relatório
     setTimeout(() => {
@@ -180,8 +180,8 @@ export const OptimizationReportsManager = memo(() => {
       title: "Exportando Relatório",
       description: "Relatório exportado em PDF com sucesso!",
       duration: 2000
-    });
-  });
+    };
+  };
 
   const getStatusIcon = (status: string) => {
     switch (status) {
@@ -207,8 +207,8 @@ export const OptimizationReportsManager = memo(() => {
     case "monthly": return "bg-info/10 text-info border-info/20";
     case "quarterly": return "bg-success/10 text-success border-success/20";
     default: return "bg-muted text-muted-foreground border-muted";
-    });
-  });
+    };
+  };
 
   return (
     <div className="space-y-6">

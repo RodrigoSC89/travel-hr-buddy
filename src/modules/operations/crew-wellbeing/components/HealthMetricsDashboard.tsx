@@ -59,7 +59,7 @@ export const HealthMetricsDashboard: React.FC = () => {
           avgSleep: Math.round(avgSleep * 10) / 10,
           avgStress: Math.round(avgStress * 10) / 10,
           avgHeartRate: Math.round(avgHeartRate),
-        });
+        };
       }
 
       // Load recent anomalies

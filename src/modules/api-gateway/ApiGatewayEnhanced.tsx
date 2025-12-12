@@ -201,7 +201,7 @@ const ApiGatewayEnhanced = () => {
       toast({
         title: "✅ API Key Created",
         description: `API key "${keyFormData.key_name}" has been created`,
-      });
+      };
 
       setShowNewKey(false);
       setKeyFormData({ key_name: "", tier: "basic" });
@@ -230,7 +230,7 @@ const ApiGatewayEnhanced = () => {
       toast({
         title: "✅ Route Created",
         description: `API route "${routeFormData.route_name}" has been created`,
-      });
+      };
 
       setShowNewRoute(false);
       setRouteFormData({
@@ -263,7 +263,7 @@ const ApiGatewayEnhanced = () => {
       toast({
         title: "API Key Revoked",
         description: "The API key has been revoked",
-      });
+      };
 
       loadKeys();
     } catch (error: unknown) {
@@ -271,7 +271,7 @@ const ApiGatewayEnhanced = () => {
         title: "Error revoking key",
         description: error instanceof Error ? error.message : "Unknown error",
         variant: "destructive",
-      });
+      };
     }
   };
 
@@ -337,8 +337,8 @@ const ApiGatewayEnhanced = () => {
     toast({
       title: "Copied!",
       description: "API key copied to clipboard",
-    });
-  });
+    };
+  };
 
   const getStatusIcon = (status: string) => {
     switch (status) {
@@ -364,7 +364,7 @@ const ApiGatewayEnhanced = () => {
       OPTIONS: "bg-gray-500"
     };
     return <Badge className={colors[method] || "bg-gray-500"}>{method}</Badge>;
-  });
+  };
 
   const getTierBadge = (tier: string) => {
     const colors: Record<string, string> = {
@@ -374,7 +374,7 @@ const ApiGatewayEnhanced = () => {
       unlimited: "bg-green-500"
     };
     return <Badge className={colors[tier] || "bg-gray-500"}>{tier}</Badge>;
-  });
+  };
 
   return (
     <div className="container mx-auto p-6 space-y-6">

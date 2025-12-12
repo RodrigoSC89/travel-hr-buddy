@@ -189,7 +189,7 @@ const SmartTooltipSystem: React.FC = () => {
 
   const dismissAssistant = (id: string) => {
     setAssistantMessages(prev => prev.filter(m => m.id !== id));
-  });
+  };
 
   const startGuidedTour = () => {
     setCurrentTour(0);

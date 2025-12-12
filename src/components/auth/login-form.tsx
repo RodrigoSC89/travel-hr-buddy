@@ -40,12 +40,12 @@ export const LoginForm: React.FC = () => {
           title: "Erro no login",
           description: error.message,
           variant: "destructive",
-        });
+        };
       } else {
         toast({
           title: "Login realizado",
           description: "Bem-vindo de volta!",
-        });
+        };
         navigate("/");
       }
     } catch (err) {

@@ -56,7 +56,7 @@ export function useTranslation(
 
     // 3. Usar default
     return defaultLanguage;
-  });
+  };
 
   const [language, setLanguageState] = useState<SupportedLanguage>(
     getInitialLanguage()

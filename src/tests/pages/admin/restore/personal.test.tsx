@@ -137,10 +137,10 @@ describe("PersonalRestoreDashboard", () => {
     await waitFor(() => {
       expect(supabase.rpc).toHaveBeenCalledWith("get_restore_count_by_day_with_email", {
         email_input: "test@example.com",
-      });
+      };
       expect(supabase.rpc).toHaveBeenCalledWith("get_restore_summary", {
         email_input: "test@example.com",
-      });
-  });
-  });
-});
+      };
+  };
+  };
+};

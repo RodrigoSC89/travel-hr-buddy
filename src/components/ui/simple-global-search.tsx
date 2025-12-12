@@ -142,7 +142,7 @@ export const SimpleGlobalSearch: React.FC = () => {
         if (!allResults.some(r => r.id === dynResult.id)) {
           allResults.push(dynResult);
         }
-      });
+      };
       
       setSearchResults(allResults);
     } catch (error) {
@@ -174,13 +174,13 @@ export const SimpleGlobalSearch: React.FC = () => {
       result.description.toLowerCase().includes(searchLower) ||
       result.keywords.some(keyword => keyword.toLowerCase().includes(searchLower))
     );
-  });
+  };
 
   const handleSelect = (path: string) => {
     setOpen(false);
     setSearch("");
     navigate(path);
-  });
+  };
 
   const groupedResults = filteredResults.reduce((acc, result) => {
     if (!acc[result.category]) {

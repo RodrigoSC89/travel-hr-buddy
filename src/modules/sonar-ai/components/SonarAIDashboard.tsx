@@ -156,7 +156,7 @@ export const SonarAIDashboard: React.FC = () => {
       low: "secondary",
     };
     return colors[level as keyof typeof colors] || "secondary";
-  });
+  };
 
   return (
     <div className="space-y-6">

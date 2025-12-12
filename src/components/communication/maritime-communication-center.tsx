@@ -67,7 +67,7 @@ export const MaritimeCommunicationCenter = memo(() => {
     content: "",
     priority: "normal" as const,
     coordinates: { latitude: 0, longitude: 0 }
-  });
+  };
   const [isNewMessageOpen, setIsNewMessageOpen] = useState(false);
   const [loading, setLoading] = useState(true);
   const { toast } = useToast();

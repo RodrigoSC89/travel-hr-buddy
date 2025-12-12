@@ -53,7 +53,7 @@ export const NotificationsPanel = memo(function({
     if (filter === "unread") return !n.read;
     if (filter === "critical") return n.type === "critical";
     return true;
-  });
+  };
 
   const unreadCount = notifications.filter(n => !n.read).length;
   const criticalCount = notifications.filter(n => n.type === "critical").length;

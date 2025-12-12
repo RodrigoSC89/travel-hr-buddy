@@ -236,7 +236,7 @@ export const EnhancedDocumentScanner: React.FC = () => {
           title: "Formato não suportado",
           description: "Selecione uma imagem (JPG, PNG) ou PDF",
           variant: "destructive"
-        });
+        };
       }
     }
   };
@@ -253,13 +253,13 @@ export const EnhancedDocumentScanner: React.FC = () => {
         title: `Documento: ${result.fileName}`,
         text: result.extractedText,
         url: result.imageUrl
-      });
+      };
     } else {
       navigator.clipboard.writeText(result.extractedText);
       toast({
         title: "Texto copiado",
         description: "Texto extraído copiado para a área de transferência"
-      });
+      };
     }
   };
 
@@ -272,8 +272,8 @@ export const EnhancedDocumentScanner: React.FC = () => {
     toast({
       title: "Download iniciado",
       description: "Documento sendo baixado"
-    });
-  });
+    };
+  };
 
   return (
     <div className="space-y-6">

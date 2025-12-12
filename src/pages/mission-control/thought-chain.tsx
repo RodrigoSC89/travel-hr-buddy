@@ -23,7 +23,7 @@ const ThoughtChainPage = () => {
         title: "Erro",
         description: "Por favor, adicione pelo menos um passo.",
         variant: "destructive",
-      });
+      };
       return;
     }
 
@@ -41,8 +41,8 @@ const ThoughtChainPage = () => {
             return updated;
           }
           return [...prev, step];
-  });
-  });
+  };
+  };
 
       setTotalTime(result.totalTime);
 
@@ -50,7 +50,7 @@ const ThoughtChainPage = () => {
         toast({
           title: "Cadeia Concluída",
           description: `${result.steps.length} etapas executadas em ${(result.totalTime / 1000).toFixed(2)}s`,
-        });
+        };
       } else {
         toast({
           title: "Erro na Cadeia",

@@ -243,7 +243,7 @@ export const InboxManager: React.FC<InboxManagerProps> = ({
       toast({
         title: "Sucesso",
         description: "Mensagem marcada como lida"
-      });
+      };
     } catch (error) {
       logger.error("Failed to mark message as read:", error);
       toast({
@@ -267,14 +267,14 @@ export const InboxManager: React.FC<InboxManagerProps> = ({
       toast({
         title: "Sucesso",
         description: "Mensagem arquivada"
-      });
+      };
     } catch (error) {
       logger.error("Failed to archive message:", error);
       toast({
         title: "Erro",
         description: "Não foi possível arquivar a mensagem",
         variant: "destructive"
-      });
+      };
     }
   };
 
@@ -307,7 +307,7 @@ export const InboxManager: React.FC<InboxManagerProps> = ({
     if (diffInHours < 1) return "Agora mesmo";
     if (diffInHours < 24) return `${diffInHours}h atrás`;
     return `${Math.floor(diffInHours / 24)}d atrás`;
-  });
+  };
 
   if (loading) {
     return (

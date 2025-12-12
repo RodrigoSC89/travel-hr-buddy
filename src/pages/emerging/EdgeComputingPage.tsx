@@ -92,8 +92,8 @@ const EdgeComputingPage: React.FC = () => {
     toast({
       title: "Reiniciando Nó",
       description: "O nó está sendo reiniciado. Isso pode levar alguns minutos.",
-    });
-  });
+    };
+  };
 
   const onlineNodes = nodes.filter(n => n.status === "online").length;
   const avgLatency = nodes.filter(n => n.status === "online").reduce((a, b) => a + b.latency, 0) / onlineNodes;

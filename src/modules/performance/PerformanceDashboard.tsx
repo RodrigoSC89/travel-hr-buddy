@@ -166,7 +166,7 @@ const PerformanceDashboard: React.FC = () => {
       toast({
         title: "Gerando PDF",
         description: "Preparando relatório de performance...",
-      });
+      };
 
       await exportPerformancePDF({
         metrics,
@@ -178,7 +178,7 @@ const PerformanceDashboard: React.FC = () => {
         period: selectedPeriod,
         vessel: selectedVessel,
         missionType: selectedMissionType
-      });
+      };
 
       toast({
         title: "PDF Gerado",
@@ -206,7 +206,7 @@ const PerformanceDashboard: React.FC = () => {
 
     const config = variants[status] || variants.loading;
     return <Badge variant={config.variant}>{config.label}</Badge>;
-  });
+  };
 
   return (
     <div className="container mx-auto p-6 space-y-6">

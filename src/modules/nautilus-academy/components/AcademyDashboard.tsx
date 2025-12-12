@@ -112,7 +112,7 @@ export default function AcademyDashboard() {
     const matchesCategory = categoryFilter === "all" || c.category === categoryFilter;
     const matchesLevel = levelFilter === "all" || c.level === levelFilter;
     return matchesSearch && matchesCategory && matchesLevel;
-  });
+  };
 
   // Handlers
   const handleCreateCourse = async () => {
@@ -151,12 +151,12 @@ export default function AcademyDashboard() {
   const handleViewCourseDetails = (course: Course) => {
     setSelectedCourse(course);
     setShowCourseDetails(true);
-  });
+  };
 
   const handleViewCrewDetails = (crew: CrewMember) => {
     setSelectedCrew(crew);
     setShowCrewDetails(true);
-  });
+  };
 
   const handleMarkAllRead = () => {
     setNotifications(prev => prev.map(n => ({ ...n, read: true })));
@@ -189,13 +189,13 @@ export default function AcademyDashboard() {
       toast({ 
         title: "Análise IA completa", 
         description: `${totalInsights} insights e recomendações gerados com sucesso!` 
-      });
+      };
     } catch (error) {
       console.error("AI generation error:", error);
       toast({ 
         title: "Insights gerados localmente", 
         description: "Utilizando análise offline. Conecte-se para IA completa." 
-      });
+      };
     }
   }, [crewMembers, courses, myProgress, generateRecommendations, analyzeTrainingGaps, generatePredictiveInsights, toast]);
 
@@ -299,7 +299,7 @@ export default function AcademyDashboard() {
       toast({ 
         title: "Otimização registrada", 
         description: "Sugestão de otimização do módulo DP será analisada pela equipe pedagógica",
-      });
+      };
       // Update the suggestion as "applied"
       setAiSuggestions(prev => prev.map(s => 
         s.type === "optimization" 
@@ -316,12 +316,12 @@ export default function AcademyDashboard() {
       advanced: "bg-purple-500/10 text-purple-600"
     };
     return colors[level] || colors.intermediate;
-  });
+  };
 
   const getLevelLabel = (level: string) => {
     const labels: Record<string, string> = { beginner: "Iniciante", intermediate: "Intermediário", advanced: "Avançado" };
     return labels[level] || level;
-  });
+  };
 
   if (isLoading) {
     return (

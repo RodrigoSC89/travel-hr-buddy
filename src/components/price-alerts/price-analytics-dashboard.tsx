@@ -105,7 +105,7 @@ export const PriceAnalyticsDashboard: React.FC = () => {
         const date = new Date(f.captured_at).toLocaleDateString("pt-BR");
         if (!pricesByDate[date]) pricesByDate[date] = { flights: [], hotels: [] };
         pricesByDate[date].flights.push(f.price || 0);
-  });
+  };
 
       hotels.forEach((h: unknown) => {
         const date = new Date(h.captured_at).toLocaleDateString("pt-BR");
@@ -209,7 +209,7 @@ export const PriceAnalyticsDashboard: React.FC = () => {
         date: date.toLocaleDateString("pt-BR"),
         viagens: 800 + Math.random() * 400,
         hospedagem: 300 + Math.random() * 200,
-      });
+      };
     }
     return data;
   };
@@ -245,7 +245,7 @@ export const PriceAnalyticsDashboard: React.FC = () => {
       avgDiscount: 18.5,
       successRate: 76,
     },
-  });
+  };
 
   const handleExportCSV = async () => {
     setIsExporting(true);
@@ -311,14 +311,14 @@ export const PriceAnalyticsDashboard: React.FC = () => {
       toast({
         title: "PDF Exportado",
         description: "Arquivo baixado com sucesso",
-      });
+      };
     } catch (error) {
       console.error("Export error:", error);
       toast({
         title: "Erro na exportação",
         description: "Não foi possível exportar o PDF",
         variant: "destructive",
-      });
+      };
     } finally {
       setIsExporting(false);
     }

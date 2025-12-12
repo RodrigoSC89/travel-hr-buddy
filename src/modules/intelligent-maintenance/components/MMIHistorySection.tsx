@@ -105,7 +105,7 @@ export default function MMIHistorySection() {
     const matchesType = !filterType || record.type === filterType;
     
     return matchesSearch && matchesType;
-  });
+  };
 
   const getTypeBadge = (type: string) => {
     switch (type) {

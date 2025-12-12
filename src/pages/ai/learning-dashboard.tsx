@@ -117,7 +117,7 @@ export default function AILearningDashboard() {
       poor: "destructive",
     };
     return <Badge variant={variants[trend] || "secondary"}>{trend.replace("_", " ")}</Badge>;
-  });
+  };
 
   const getPriorityColor = (priority: number) => {
     switch (priority) {

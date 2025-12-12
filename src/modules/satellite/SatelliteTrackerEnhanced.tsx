@@ -243,13 +243,13 @@ export const SatelliteTrackerEnhanced = memo(() => {
           duration_seconds: Math.floor(Math.random() * COVERAGE_EVENT_MAX_DURATION_SEC) + COVERAGE_EVENT_MIN_DURATION_SEC,
           start_time: new Date().toISOString(),
           end_time: new Date(Date.now() + COVERAGE_EVENT_DURATION_MS).toISOString(),
-        });
+        };
 
         if (eventType === "entry") {
           toast({
             title: "Satellite Coverage",
             description: `${sat.satellite_name} entering coverage area`,
-          });
+          };
         }
       }
     }
@@ -290,8 +290,8 @@ export const SatelliteTrackerEnhanced = memo(() => {
       return <AlertCircle className="h-4 w-4 text-gray-600" />;
     default:
       return <Radio className="h-4 w-4 text-blue-600" />;
-    });
-  });
+    };
+  };
 
   return (
     <div className="space-y-6">

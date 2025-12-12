@@ -20,7 +20,7 @@ export const useBrain = memo(() => {
     throw new Error("useBrain must be used within GlobalBrainProvider");
   }
   return context;
-});
+};
 
 interface GlobalBrainProviderProps {
   children: ReactNode;

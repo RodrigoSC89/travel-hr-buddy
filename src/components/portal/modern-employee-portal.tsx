@@ -132,7 +132,7 @@ export const ModernEmployeePortal: React.FC = () => {
         title: "Erro",
         description: "Erro ao carregar dados do portal",
         variant: "destructive"
-      });
+      };
     } finally {
       setLoading(false);
     }
@@ -210,7 +210,7 @@ export const ModernEmployeePortal: React.FC = () => {
         upcomingTraining: 0, // Implementar quando houver tabela de treinamentos
         recentPayments: [], // Implementar quando houver tabela de pagamentos
         nextEmbarkation: null
-      });
+      };
     } catch (error) {
     }
   };
@@ -318,7 +318,7 @@ export const ModernEmployeePortal: React.FC = () => {
             personalCalendar
           }
         }
-      });
+      };
 
       if (error) throw error;
 

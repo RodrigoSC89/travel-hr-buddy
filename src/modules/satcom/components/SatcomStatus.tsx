@@ -45,14 +45,14 @@ export const SatcomStatus: React.FC<SatcomStatusProps> = ({ connections }) => {
     if (strength >= 80) return "text-green-500";
     if (strength >= 50) return "text-yellow-500";
     return "text-red-500";
-  });
+  };
 
   const formatBandwidth = (kbps: number) => {
     if (kbps >= 1000) {
       return `${(kbps / 1000).toFixed(1)} Mbps`;
     }
     return `${kbps} Kbps`;
-  });
+  };
 
   const getTimeSince = (timestamp: string) => {
     const seconds = Math.floor((Date.now() - new Date(timestamp).getTime()) / 1000);
@@ -61,7 +61,7 @@ export const SatcomStatus: React.FC<SatcomStatusProps> = ({ connections }) => {
     if (minutes < 60) return `${minutes}m atrás`;
     const hours = Math.floor(minutes / 60);
     return `${hours}h atrás`;
-  });
+  };
 
   return (
     <Card>

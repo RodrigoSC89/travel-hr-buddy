@@ -272,7 +272,7 @@ const EnhancedNotifications: React.FC<EnhancedNotificationsProps> = ({ isOpen, o
           : notification
       )
     );
-  });
+  };
 
   const markAllAsRead = () => {
     setNotifications(prev => 

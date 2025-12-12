@@ -22,14 +22,14 @@ describe("Accessibility: Navigation", () => {
     const handleKeyDown = (key: string) => {
       const supportedKeys = ["Enter", "Space", "ArrowUp", "ArrowDown", "Tab"];
       return supportedKeys.includes(key);
-    });
+    };
 
     // Act & Assert
     expect(handleKeyDown("Enter")).toBe(true);
     expect(handleKeyDown("Space")).toBe(true);
     expect(handleKeyDown("ArrowUp")).toBe(true);
     expect(handleKeyDown("Tab")).toBe(true);
-  });
+  };
 
   it("should have skip to main content link", () => {
     // Arrange
@@ -60,7 +60,7 @@ describe("Accessibility: Navigation", () => {
     // Assert
     expect(activeItem).toBeDefined();
     expect(activeItem?.href).toBe(currentPath);
-  });
+  };
 
   it("should have proper heading hierarchy", () => {
     // Arrange

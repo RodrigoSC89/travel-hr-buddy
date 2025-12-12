@@ -151,7 +151,7 @@ export const PeotramReportsGenerator: React.FC = () => {
         ? [...prev.sections, sectionId]
         : prev.sections.filter(id => id !== sectionId)
     }));
-  });
+  };
 
   const generateReport = async () => {
     setIsGenerating(true);

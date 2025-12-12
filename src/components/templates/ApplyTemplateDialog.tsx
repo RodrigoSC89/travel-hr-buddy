@@ -69,7 +69,7 @@ export const ApplyTemplateDialog = memo(function({
       organization: {
         name: "Organization Name",
       },
-    });
+    };
   }, []);
 
   // Apply template with current variables
@@ -84,7 +84,7 @@ export const ApplyTemplateDialog = memo(function({
       extractedVariables.forEach(varName => {
         // Try to use auto-fill suggestions
         initialVars[varName] = autoFillSuggestions[varName] || "";
-  });
+  };
       setVariables(initialVars);
     }
   }, [open, extractedVariables, autoFillSuggestions]);
@@ -124,7 +124,7 @@ export const ApplyTemplateDialog = memo(function({
       toast({
         title: "Export successful",
         description: `Document exported as ${format}`,
-      });
+      };
     } else {
       toast({
         title: "Export failed",
@@ -140,7 +140,7 @@ export const ApplyTemplateDialog = memo(function({
       toast({
         title: "Template applied",
         description: `${appliedResult.appliedVariables.length} variables applied`,
-      });
+      };
       onOpenChange(false);
     }
   };

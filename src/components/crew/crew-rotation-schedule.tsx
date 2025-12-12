@@ -48,7 +48,7 @@ export const CrewRotationSchedule = memo(function() {
         {status.charAt(0).toUpperCase() + status.slice(1)}
       </Badge>
     );
-  });
+  };
 
   const getRotationTypeIcon = (type: string) => {
     const icons: Record<string, React.ReactNode> = {
@@ -60,7 +60,7 @@ export const CrewRotationSchedule = memo(function() {
     };
 
     return icons[type] || <Calendar className="h-4 w-4" />;
-  });
+  };
 
   if (loading) {
     return (

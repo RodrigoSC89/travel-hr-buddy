@@ -101,7 +101,7 @@ export const CertificateManager: React.FC<CertificateManagerProps> = ({ employee
         title: "Erro",
         description: "Erro ao carregar certificados",
         variant: "destructive"
-      });
+      };
     }
   };
 
@@ -112,7 +112,7 @@ export const CertificateManager: React.FC<CertificateManagerProps> = ({ employee
         allowEditing: true,
         resultType: CameraResultType.DataUrl,
         source: CameraSource.Camera,
-      });
+      };
 
       if (image.dataUrl) {
         setCapturedImage(image.dataUrl);
@@ -147,7 +147,7 @@ export const CertificateManager: React.FC<CertificateManagerProps> = ({ employee
         const reader = new FileReader();
         reader.onload = (e) => {
           setCapturedImage(e.target?.result as string);
-        });
+        };
         reader.readAsDataURL(file);
       }
     }
@@ -160,7 +160,7 @@ export const CertificateManager: React.FC<CertificateManagerProps> = ({ employee
         title: "Campos obrigatórios",
         description: "Preencha todos os campos e selecione um arquivo",
         variant: "destructive"
-      });
+      };
       return;
     }
 
@@ -240,7 +240,7 @@ export const CertificateManager: React.FC<CertificateManagerProps> = ({ employee
         title: "Erro no download",
         description: "Erro ao baixar certificado",
         variant: "destructive"
-      });
+      };
     }
   };
 
@@ -264,7 +264,7 @@ export const CertificateManager: React.FC<CertificateManagerProps> = ({ employee
       toast({
         title: "Certificado removido",
         description: "Certificado removido com sucesso"
-      });
+      };
 
       loadCertificates();
     } catch (error) {
@@ -295,7 +295,7 @@ export const CertificateManager: React.FC<CertificateManagerProps> = ({ employee
     const diffTime = expiry.getTime() - today.getTime();
     const diffDays = Math.ceil(diffTime / (1000 * 60 * 60 * 24));
     return diffDays;
-  });
+  };
 
   return (
     <Dialog open={true} onOpenChange={onClose}>

@@ -114,13 +114,13 @@ export const NotificationSystem = ({ className }: NotificationSystemProps) => {
     if (filter === "unread") return !notification.read;
     if (filter === "critical") return notification.priority === "critical";
     return true;
-  });
+  };
 
   const markAsRead = (id: string) => {
     setNotifications(prev => 
       prev.map(n => n.id === id ? { ...n, read: true } : n)
     );
-  });
+  };
 
   const markAllAsRead = () => {
     setNotifications(prev => prev.map(n => ({ ...n, read: true })));

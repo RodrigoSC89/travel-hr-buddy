@@ -90,8 +90,8 @@ export const SystemLogs: React.FC = () => {
       hour: "2-digit", 
       minute: "2-digit",
       second: "2-digit"
-    });
-  });
+    };
+  };
 
   return (
     <Card className="bg-zinc-800/50 border-zinc-700">

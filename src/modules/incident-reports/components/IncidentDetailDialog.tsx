@@ -119,7 +119,7 @@ export const IncidentDetailDialog: React.FC<IncidentDetailDialogProps> = ({
         .insert({
           incident_id: incident.id,
           ...signatureData
-        });
+        };
 
       if (error) throw error;
 
@@ -127,7 +127,7 @@ export const IncidentDetailDialog: React.FC<IncidentDetailDialogProps> = ({
       toast({
         title: "Assinatura salva",
         description: "A assinatura foi registrada com sucesso"
-      });
+      };
     } catch (error) {
       console.error("Error saving signature:", error);
       // Continue without database if it fails
@@ -145,7 +145,7 @@ export const IncidentDetailDialog: React.FC<IncidentDetailDialogProps> = ({
         title: "Campos obrigatórios",
         description: "Preencha descrição e responsável",
         variant: "destructive"
-      });
+      };
       return;
     }
 
@@ -196,7 +196,7 @@ export const IncidentDetailDialog: React.FC<IncidentDetailDialogProps> = ({
       toast({
         title: "Status atualizado",
         description: `Status alterado para: ${newStatus}`
-      });
+      };
     } catch (error) {
       console.error("Error updating status:", error);
       setCurrentStatus(newStatus);
@@ -275,7 +275,7 @@ export const IncidentDetailDialog: React.FC<IncidentDetailDialogProps> = ({
           head: [["Descrição", "Responsável", "Prazo", "Status"]],
           body: actionData,
           styles: { fontSize: 8 }
-        });
+        };
         
         yPos = (doc as unknown).lastAutoTable.finalY + 10;
       }

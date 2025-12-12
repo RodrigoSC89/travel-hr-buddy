@@ -213,8 +213,8 @@ export const PeotramAuditWizard: React.FC<PeotramAuditWizardProps> = ({
       }
       
       return newElements;
-    });
-  });
+    };
+  };
 
   const handleSave = async () => {
     setIsSaving(true);

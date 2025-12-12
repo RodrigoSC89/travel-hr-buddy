@@ -192,15 +192,15 @@ Por favor, especifique o que precisa ou pergunte diretamente!`,
     toast({
       title: "Agendar Drill",
       description: `Abrindo agendamento para ${drill.name}`,
-    });
-  });
+    };
+  };
 
   const handleStartDrill = (drill: Drill) => {
     toast({
       title: "Iniciar Drill",
       description: `Iniciando simulado: ${drill.name}`,
-    });
-  });
+    };
+  };
 
   const getDrillIcon = (type: string) => {
     switch (type) {

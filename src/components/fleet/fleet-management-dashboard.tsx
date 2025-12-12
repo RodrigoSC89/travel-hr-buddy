@@ -94,7 +94,7 @@ export const FleetManagementDashboard = memo(function() {
         {status.replace("_", " ").toUpperCase()}
       </Badge>
     );
-  });
+  };
 
   const getSeverityBadge = (severity: string) => {
     const variants: Record<string, "default" | "secondary" | "destructive" | "outline"> = {
@@ -109,13 +109,13 @@ export const FleetManagementDashboard = memo(function() {
         {severity.toUpperCase()}
       </Badge>
     );
-  });
+  };
 
   const calculateFuelEfficiency = (usage: FuelUsage[]) => {
     if (usage.length === 0) return 0;
     const avgEfficiency = usage.reduce((sum, u) => sum + (u.efficiency_rating || 0), 0) / usage.length;
     return avgEfficiency.toFixed(2);
-  });
+  };
 
   if (loading) {
     return (

@@ -25,7 +25,7 @@ export const RippleButton = forwardRef<HTMLButtonElement, RippleButtonProps>(
       }
       trigger(hapticType);
       onClick?.(e);
-    });
+    };
     
     return (
       <Button

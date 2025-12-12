@@ -106,7 +106,7 @@ const MarineAROverlay = () => {
     try {
       const stream = await navigator.mediaDevices.getUserMedia({
         video: { facingMode: "environment", width: 1280, height: 720 },
-      });
+      };
       
       if (videoRef.current) {
         videoRef.current.srcObject = stream;
@@ -237,7 +237,7 @@ const MarineAROverlay = () => {
 
   const handleMarkerClick = (marker: MarkerData) => {
     setSelectedMarker(marker);
-  });
+  };
 
   const getStatusIcon = (status: string) => {
     switch (status) {

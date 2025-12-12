@@ -395,7 +395,7 @@ export const ChatInterface = memo(() => {
         title: "Erro",
         description: "Não foi possível enviar a mensagem",
         variant: "destructive",
-      });
+      };
     }
   };
 
@@ -479,7 +479,7 @@ export const ChatInterface = memo(() => {
     }
     
     return `Grupo (${conversation.participants.length} membros)`;
-  });
+  };
 
   const filteredConversations = conversations.filter(conv =>
     getConversationTitle(conv).toLowerCase().includes(searchQuery.toLowerCase())

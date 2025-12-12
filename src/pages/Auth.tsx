@@ -60,7 +60,7 @@ const Auth: React.FC = () => {
       email: "",
       password: ""
     }
-  });
+  };
 
   const signUpForm = useForm<SignUpFormData>({
     resolver: zodResolver(signUpSchema),

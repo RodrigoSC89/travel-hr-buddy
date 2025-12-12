@@ -123,20 +123,20 @@ export const SupplierComparator = memo(function() {
         const scoreA = Object.values(a.scores).reduce((acc, v) => acc + v, 0) / 5;
         const scoreB = Object.values(b.scores).reduce((acc, v) => acc + v, 0) / 5;
         return scoreB - scoreA;
-  });
+  };
     }
     return sorted;
   }, [sortBy]);
 
   const calculateOverallScore = (supplier: Supplier): number => {
     return Math.round(Object.values(supplier.scores).reduce((acc, v) => acc + v, 0) / 5);
-  });
+  };
 
   const getScoreColor = (score: number) => {
     if (score >= 90) return "text-green-400";
     if (score >= 75) return "text-amber-400";
     return "text-red-400";
-  });
+  };
 
   return (
     <div className="space-y-6">

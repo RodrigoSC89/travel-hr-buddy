@@ -92,15 +92,15 @@ export const EnhancedReservationsCalendar: React.FC = () => {
       const eventStart = new Date(event.startDate);
       const eventEnd = new Date(event.endDate);
       return date >= eventStart && date <= eventEnd;
-  });
-  });
+  };
+  };
 
   const duplicateReservation = (reservation: ReservationEvent) => {
     toast({
       title: "Reserva Duplicada",
       description: `Reserva ${reservation.id} duplicada com sucesso. Nova reserva: ${reservation.id}-COPY`,
-    });
-  });
+    };
+  };
 
   const getStatusColor = (status: string) => {
     switch (status) {
@@ -114,7 +114,7 @@ export const EnhancedReservationsCalendar: React.FC = () => {
 
   const getTypeColor = (type: string) => {
     return type === "flight" ? "bg-primary/10 text-primary" : "bg-secondary/10 text-secondary";
-  });
+  };
 
   const days = getDaysInMonth(currentDate);
   const monthName = currentDate.toLocaleDateString("pt-BR", { month: "long", year: "numeric" });

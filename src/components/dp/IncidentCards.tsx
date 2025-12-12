@@ -178,12 +178,12 @@ export default function IncidentCards() {
           : inc
       )
     );
-  });
+  };
 
   const handleViewReport = (incident: Incident) => {
     setSelectedIncident(incident);
     setShowDetailDialog(true);
-  });
+  };
 
   const handleAnalyzeWithAI = async (incident: Incident) => {
     setSelectedIncident(incident);

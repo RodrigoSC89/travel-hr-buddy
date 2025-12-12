@@ -135,7 +135,7 @@ export default function UserProfilePage() {
           phone: profile.phone,
           department: profile.department,
           updated_at: new Date().toISOString()
-        });
+        };
 
       if (error) throw error;
 
@@ -170,7 +170,7 @@ export default function UserProfilePage() {
       day: "2-digit",
       month: "long",
       year: "numeric"
-    });
+    };
   };
 
   if (isLoading) {

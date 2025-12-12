@@ -119,7 +119,7 @@ export const DashboardActions: React.FC<DashboardActionsProps> = ({
     toast({
       title: "Preparando impressão",
       description: "Abrindo visualização para impressão..."
-    });
+    };
     setTimeout(() => window.print(), 500);
   }, [toast]);
 
@@ -138,7 +138,7 @@ export const DashboardActions: React.FC<DashboardActionsProps> = ({
         toast({
           title: "Link copiado",
           description: "O link foi copiado para a área de transferência"
-        });
+        };
       }
     } catch (error) {
       console.error("Share error:", error);

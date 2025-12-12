@@ -26,7 +26,7 @@ export const MaritimeChecklistSystem: React.FC<MaritimeChecklistSystemProps> = (
   const handleChecklistSelect = (checklist: Checklist) => {
     setSelectedChecklist(checklist);
     setCurrentView("checklist");
-  });
+  };
 
   const handleTemplateSelect = (template: ChecklistTemplate) => {
     setSelectedTemplate(template);

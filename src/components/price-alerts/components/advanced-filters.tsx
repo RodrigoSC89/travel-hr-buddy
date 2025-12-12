@@ -78,7 +78,7 @@ export const AdvancedFilters: React.FC<AdvancedFiltersProps> = ({
   const updateFilter = (key: keyof FilterOptions, value: unknown) => {
     const newFilters = { ...tempFilters, [key]: value };
     setTempFilters(newFilters);
-  });
+  };
 
   const applyFilters = () => {
     onFiltersChange(tempFilters);
@@ -436,4 +436,4 @@ export const AdvancedFilters: React.FC<AdvancedFiltersProps> = ({
       )}
     </div>
   );
-});
+};

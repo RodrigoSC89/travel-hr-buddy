@@ -182,30 +182,30 @@ export const AnalyticsDashboard = memo(() => {
     toast({
       title: "Gerando Relatório",
       description: "O relatório está sendo processado...",
-    });
+    };
 
     // Simular geração
     setTimeout(() => {
       toast({
         title: "Relatório Gerado",
         description: "O relatório foi enviado para os destinatários configurados.",
-      });
+      };
     }, 2000);
-  });
+  };
 
   const exportDashboard = async (format: string) => {
     toast({
       title: "Exportando Dashboard",
       description: `Exportando dashboard em formato ${format.toUpperCase()}...`,
-    });
+    };
 
     setTimeout(() => {
       toast({
         title: "Dashboard Exportado",
         description: `Dashboard exportado com sucesso em ${format.toUpperCase()}.`,
-      });
+      };
     }, 1500);
-  });
+  };
 
   return (
     <div className="space-y-6">

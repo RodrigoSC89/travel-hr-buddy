@@ -154,7 +154,7 @@ export default function PeoDpWizardComplete() {
         incidents: incidentsData.data || [],
         training: trainingData.data || [],
         audits: auditsData.data || []
-      });
+      };
 
       // Run initial inference
       runInference(formData);
@@ -216,7 +216,7 @@ export default function PeoDpWizardComplete() {
       if (!data[field] || data[field].length < 10) {
         score -= 15;
       }
-    });
+    };
 
     // Bonus for comprehensive documentation
     if (data.fmea && data.fmea.length > 500) score += 5;
@@ -224,7 +224,7 @@ export default function PeoDpWizardComplete() {
     if (data.contingency_plan && data.contingency_plan.length > 300) score += 5;
 
     return Math.max(0, Math.min(100, score));
-  });
+  };
 
   const generateRecommendations = (data: unknown): string[] => {
     const recommendations: string[] = [];
@@ -277,7 +277,7 @@ export default function PeoDpWizardComplete() {
     }
 
     return findings;
-  });
+  };
 
   const performCrossValidation = (data: unknown, inference: unknown: unknown: unknown) => {
     const validations: ValidationResult[] = [];
@@ -293,13 +293,13 @@ export default function PeoDpWizardComplete() {
           field: "training_plan",
           status: "warning",
           message: "Histórico de treinamento limitado nos últimos 12 meses"
-        });
+        };
       } else {
         validations.push({
           field: "training_plan",
           status: "pass",
           message: `${recentTraining.length} treinamentos registrados nos últimos 12 meses`
-        });
+        };
       }
     }
 
@@ -314,13 +314,13 @@ export default function PeoDpWizardComplete() {
           field: "operation",
           status: "fail",
           message: `${criticalIncidents.length} incidentes críticos identificados - revisão operacional necessária`
-        });
+        };
       } else if (criticalIncidents.length > 0) {
         validations.push({
           field: "operation",
           status: "warning",
           message: `${criticalIncidents.length} incidentes críticos registrados`
-        });
+        };
       }
     }
 

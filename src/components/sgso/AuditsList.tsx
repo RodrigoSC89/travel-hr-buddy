@@ -51,7 +51,7 @@ export const AuditsList = memo(function({ onRefresh }: AuditsListProps) {
         title: "Error loading audits",
         description: error.message,
         variant: "destructive",
-      });
+      };
     } finally {
       setLoading(false);
     }
@@ -75,7 +75,7 @@ export const AuditsList = memo(function({ onRefresh }: AuditsListProps) {
         {status.replace("_", " ")}
       </Badge>
     );
-  });
+  };
 
   const handleStatusChange = async (auditId: string, newStatus: string) => {
     try {
@@ -89,7 +89,7 @@ export const AuditsList = memo(function({ onRefresh }: AuditsListProps) {
       toast({
         title: "Status Updated",
         description: `Audit status changed to ${newStatus}`,
-      });
+      };
 
       loadAudits();
       if (onRefresh) onRefresh();

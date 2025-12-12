@@ -82,6 +82,6 @@ export const PageLoadingIndicator: React.FC<{ isLoading: boolean }> = ({ isLoadi
         style={{ animation: "loading-bar 1.5s ease-in-out infinite" }} />
     </div>
   );
-});
+};
 
 export default LoadingWrapper;

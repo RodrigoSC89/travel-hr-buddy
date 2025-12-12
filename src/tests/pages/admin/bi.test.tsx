@@ -114,5 +114,5 @@ describe("AdminBI Page", () => {
     expect(screen.getByText(/Business Intelligence Dashboard/i)).toBeDefined();
 
     consoleSpy.mockRestore();
-  });
-});
+  };
+};

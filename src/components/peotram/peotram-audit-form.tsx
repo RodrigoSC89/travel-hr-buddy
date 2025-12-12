@@ -87,18 +87,18 @@ export const PeotramAuditForm: React.FC<PeotramAuditFormProps> = ({
       ...prev,
       [elementNumber]: [...(prev[elementNumber] || []), response]
     }));
-  });
+  };
 
   const updateResponse = (elementNumber: string, index: number, response: AuditResponse) => {
     setAuditResponses(prev => ({
       ...prev,
       [elementNumber]: prev[elementNumber].map((r, i) => i === index ? response : r)
     }));
-  });
+  };
 
   const addNonConformity = (nc: NonConformity) => {
     setNonConformities(prev => [...prev, nc]);
-  });
+  };
 
   const runElementAnalysis = async (elementNumber: string) => {
     setIsAnalyzing(true);
@@ -112,7 +112,7 @@ export const PeotramAuditForm: React.FC<PeotramAuditFormProps> = ({
           responses: elementResponses,
           element_name: currentElement.name
         }
-      });
+      };
 
       if (error) throw error;
 
@@ -486,7 +486,7 @@ const RequirementForm: React.FC<{
         corrective_action: "",
         responsible_person: "",
         target_date: ""
-      });
+      };
     }
     
     toast({

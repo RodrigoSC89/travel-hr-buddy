@@ -340,7 +340,7 @@ export const DocumentCenterProvider: React.FC<DocumentCenterProviderProps> = ({
           title: "Download failed",
           description: "Document URL not found",
           variant: "destructive",
-        });
+        };
         return;
       }
 

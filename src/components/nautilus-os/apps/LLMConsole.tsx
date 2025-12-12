@@ -26,7 +26,7 @@ export const LLMConsole = memo(function() {
         title: "Erro",
         description: "Falha ao comunicar com a IA",
         variant: "destructive",
-      });
+      };
     } finally {
       setIsLoading(false);
     }

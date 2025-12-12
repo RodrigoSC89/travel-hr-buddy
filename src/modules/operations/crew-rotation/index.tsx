@@ -156,7 +156,7 @@ export default function CrewRotationModule() {
         type: "overlap",
         message: `Conflito com ${overlapping.length} rotação(ões) existente(s)`,
         severity: "error"
-      });
+      };
     }
 
     // Check rotation duration (max 180 days)
@@ -186,7 +186,7 @@ export default function CrewRotationModule() {
         title: "Conflitos detectados",
         description: conflicts.map(c => c.message).join(". "),
         variant: "destructive"
-      });
+      };
       return;
     }
 
@@ -241,7 +241,7 @@ export default function CrewRotationModule() {
         title: `Rotação ${type === "scheduled" ? "Agendada" : "Atualizada"}`,
         message: `Sua rotação foi ${type === "scheduled" ? "agendada" : "atualizada"} para ${format(new Date(rotation.start_date), "dd/MM/yyyy", { locale: ptBR })}`,
         read: false
-      });
+      };
     } catch (error) {
       console.error("Error sending notification:", error);
       console.error("Error sending notification:", error);

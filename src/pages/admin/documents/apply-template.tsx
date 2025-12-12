@@ -28,13 +28,13 @@ export default function ApplyTemplate({ template }: ApplyTemplateProps) {
   const extractVariables = (content: string) => {
     const matches = content.match(/{{(.*?)}}/g) || [];
     return Array.from(new Set(matches.map((m) => m.replace(/[{}]/g, "").trim())));
-  });
+  };
 
   const vars = extractVariables(template.content);
 
   const handleChange = (key: string, value: string) => {
     setVariables((prev) => ({ ...prev, [key]: value }));
-  });
+  };
 
   const generatePreview = () => {
     let content = template.content;
@@ -51,7 +51,7 @@ export default function ApplyTemplate({ template }: ApplyTemplateProps) {
         title: "Erro",
         description: "Por favor, gere o preview antes de salvar.",
         variant: "destructive",
-      });
+      };
       return;
     }
 

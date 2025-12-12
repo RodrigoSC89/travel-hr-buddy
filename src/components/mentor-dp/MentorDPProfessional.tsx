@@ -217,7 +217,7 @@ export default function MentorDPProfessional() {
           "apikey": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InZuYnB0bWl4dndyb3B2YW55aGRiIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NTg1NzczNTEsImV4cCI6MjA3NDE1MzM1MX0.-LivvlGPJwz_Caj5nVk_dhVeheaXPCROmXc4G8UsJcE",
         },
         body: JSON.stringify({ action, ...params }),
-      });
+      };
 
       if (!response.ok) {
         const errorText = await response.text();
@@ -258,7 +258,7 @@ export default function MentorDPProfessional() {
     try {
       const data = await callMentorAI("chat", {
         messages: [...messages, userMessage].map(m => ({ role: m.role, content: m.content })),
-      });
+      };
 
       const assistantMessage: Message = { id: crypto.randomUUID(), role: "assistant", content: data.content, timestamp: new Date(), type: "chat" };
       setMessages(prev => [...prev, assistantMessage]);
@@ -301,7 +301,7 @@ export default function MentorDPProfessional() {
         scenarioType: scenario.type,
         difficulty: scenario.difficulty,
         context: { conditions: scenario.description },
-      });
+      };
 
       const simMessage: Message = { id: crypto.randomUUID(), role: "assistant", content: `## 🎮 Simulação: ${scenario.name}\n\n${data.content}`, timestamp: new Date(), type: "simulation" };
       setMessages([simMessage]);
@@ -447,7 +447,7 @@ export default function MentorDPProfessional() {
     try {
       const data = await callMentorAI("chat", {
         messages: [{ role: "user", content: question.question }],
-      });
+      };
 
       setRepositoryQuestions(prev => prev.map(q => q.id === question.id ? { ...q, answer: data.content, answers: q.answers + 1 } : q));
       setSelectedQuestion({ ...question, answer: data.content });
@@ -483,7 +483,7 @@ export default function MentorDPProfessional() {
   // Vote on question
   const voteQuestion = (id: string) => {
     setRepositoryQuestions(prev => prev.map(q => q.id === id ? { ...q, votes: q.votes + 1 } : q));
-  });
+  };
 
   // Export logbook
   const exportLogbook = () => {

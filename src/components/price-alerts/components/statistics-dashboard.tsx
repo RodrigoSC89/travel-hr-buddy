@@ -32,13 +32,13 @@ export const StatisticsDashboard = memo(() => {
     active_alerts: 0,
     total_savings: 0,
     alerts_triggered: 0,
-  });
+  };
   const [metrics, setMetrics] = useState<AlertMetrics>({
     total_products: 0,
     average_discount: 0,
     best_deal: null,
     categories: {},
-  });
+  };
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
@@ -113,7 +113,7 @@ export const StatisticsDashboard = memo(() => {
             discount_percentage: best_deal.discount_percentage || 0,
           } : null,
           categories,
-        });
+        };
       }
     } catch (error) {
     } finally {

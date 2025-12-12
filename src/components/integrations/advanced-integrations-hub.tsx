@@ -309,31 +309,31 @@ export const AdvancedIntegrationsHub: React.FC = () => {
     toast({
       title: "Status Atualizado",
       description: `${integration?.name} foi ${integration?.isEnabled ? "desabilitada" : "habilitada"}`,
-    });
-  });
+    };
+  };
 
   const handleTestConnection = (id: string) => {
     const integration = integrations.find(i => i.id === id);
     toast({
       title: "Testando Conexão",
       description: `Verificando conectividade com ${integration?.name}...`,
-    });
+    };
     
     // Simular teste de conexão
     setTimeout(() => {
       toast({
         title: "Teste Concluído",
         description: `Conexão com ${integration?.name} está funcionando corretamente`,
-      });
+      };
     }, 2000);
-  });
+  };
 
   const filteredIntegrations = integrations.filter(integration => {
     const matchesCategory = selectedCategory === "all" || integration.category === selectedCategory;
     const matchesSearch = integration.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
                          integration.description.toLowerCase().includes(searchTerm.toLowerCase());
     return matchesCategory && matchesSearch;
-  });
+  };
 
   const connectedCount = integrations.filter(i => i.status === "connected").length;
   const errorCount = integrations.filter(i => i.status === "error").length;

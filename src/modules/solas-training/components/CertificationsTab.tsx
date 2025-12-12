@@ -69,7 +69,7 @@ export default function CertificationsTab({
     const matchesStatus = statusFilter === "all" || cert.status === statusFilter;
     const matchesCategory = categoryFilter === "all" || cert.code.includes(categoryFilter);
     return matchesSearch && matchesStatus && matchesCategory;
-  });
+  };
 
   const stats = {
     total: certifications.length,
@@ -81,7 +81,7 @@ export default function CertificationsTab({
   const handleRenew = (cert: Certification) => {
     setSelectedCert(cert);
     setShowRenewDialog(true);
-  });
+  };
 
   const handleConfirmRenew = () => {
     if (selectedCert) {
@@ -89,7 +89,7 @@ export default function CertificationsTab({
       toast({
         title: "Renovação Agendada",
         description: `A renovação de ${selectedCert.name} foi agendada com sucesso.`,
-      });
+      };
       setShowRenewDialog(false);
       setSelectedCert(null);
     }
@@ -112,7 +112,7 @@ export default function CertificationsTab({
       toast({
         title: "Documento Enviado",
         description: "O certificado foi atualizado com sucesso.",
-      });
+      };
       setShowUploadDialog(false);
     }
   };

@@ -220,7 +220,7 @@ export const CrewRotationManager: React.FC = () => {
           severity: "high",
           message: `Crew member has multiple rotations on ${rotation.scheduled_date}`,
           rotation_id: rotation.id,
-        });
+        };
       }
 
       // Check documentation expiry
@@ -265,7 +265,7 @@ export const CrewRotationManager: React.FC = () => {
           status: "scheduled",
           documentation_status: "pending",
           medical_clearance: false,
-        });
+        };
 
       if (error) throw error;
 
@@ -292,7 +292,7 @@ export const CrewRotationManager: React.FC = () => {
         type: "crew_rotation",
         priority: "high",
         status: "unread",
-      });
+      };
 
       // Log the alert
       toast.info("Alert generated for crew member");
@@ -342,7 +342,7 @@ export const CrewRotationManager: React.FC = () => {
         log_type: "status_change",
         description: `Status changed to ${newStatus}`,
         new_status: newStatus,
-      });
+      };
 
       toast.success("Rotation status updated");
       loadData();
@@ -392,7 +392,7 @@ END:VCALENDAR`;
       delayed: "bg-yellow-500",
     };
     return colors[status] || "bg-gray-500";
-  });
+  };
 
   if (loading) {
     return (

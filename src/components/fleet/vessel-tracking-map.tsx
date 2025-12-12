@@ -250,7 +250,7 @@ const VesselTrackingMap = () => {
 
     const config = statusConfig[status as keyof typeof statusConfig] || statusConfig.active;
     return <Badge variant={config.variant}>{config.label}</Badge>;
-  });
+  };
 
   const centerOnVessel = (vessel: VesselLocation) => {
     if (map.current) {
@@ -258,7 +258,7 @@ const VesselTrackingMap = () => {
         center: [vessel.longitude, vessel.latitude],
         zoom: 12,
         duration: 2000
-      });
+      };
       setSelectedVessel(vessel);
     }
   };

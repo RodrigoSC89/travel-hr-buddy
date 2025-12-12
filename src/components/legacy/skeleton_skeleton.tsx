@@ -13,7 +13,7 @@ export const Skeleton: React.FC<SkeletonProps> = ({ className, ...props }) => {
       {...props}
     />
   );
-});
+};
 
 // Skeleton específicos para diferentes componentes
 export const CardSkeleton: React.FC = () => (

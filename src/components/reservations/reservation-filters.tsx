@@ -25,7 +25,7 @@ export const ReservationFilters: React.FC<ReservationFiltersProps> = ({
 }) => {
   const handleFilterChange = (key: string, value: unknown) => {
     onFiltersChange({ ...filters, [key]: value });
-  });
+  };
 
   const clearFilters = () => {
     onFiltersChange({

@@ -119,8 +119,8 @@ export const ReservationForm: React.FC<ReservationFormProps> = ({
       room_type: templateData.room_type || "",
       currency: templateData.currency || "BRL",
       notes: templateData.notes || ""
-    });
-  });
+    };
+  };
 
   const validateForm = () => {
     if (!formData.title.trim()) {
@@ -128,7 +128,7 @@ export const ReservationForm: React.FC<ReservationFormProps> = ({
         title: "Erro de validação",
         description: "Título é obrigatório",
         variant: "destructive"
-      });
+      };
       return false;
     }
 
@@ -137,7 +137,7 @@ export const ReservationForm: React.FC<ReservationFormProps> = ({
         title: "Erro de validação",
         description: "Data de início e fim são obrigatórias",
         variant: "destructive"
-      });
+      };
       return false;
     }
 

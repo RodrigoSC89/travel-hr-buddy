@@ -414,7 +414,7 @@ describe("DPIntelligenceCenter Component", () => {
       
       await waitFor(() => {
         expect(screen.getByText(/Loss of Position Due to Gyro Drift/i)).toBeInTheDocument();
-  });
+  };
       
       const actionButtons = screen.getAllByText(/Plano de Ação/i);
       fireEvent.click(actionButtons[0]);
@@ -423,6 +423,6 @@ describe("DPIntelligenceCenter Component", () => {
         // Should show error toast
         expect(toastErrorSpy).toHaveBeenCalled();
       }, { timeout: 3000 });
-  });
-  });
-});
+  };
+  };
+};

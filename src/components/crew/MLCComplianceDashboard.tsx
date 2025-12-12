@@ -83,7 +83,7 @@ export const MLCComplianceDashboard = memo(function() {
   const getCrewName = (id: string) => {
     const crew = crewMembers.find(c => c.id === id);
     return crew?.full_name || "N/A";
-  });
+  };
 
   // Calculate stats
   const totalRecords = restHours.length;

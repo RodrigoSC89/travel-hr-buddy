@@ -65,7 +65,7 @@ export const InventoryManagement = memo(() => {
         title: "Error loading inventory",
         description: error.message,
         variant: "destructive",
-      });
+      };
     } finally {
       setLoading(false);
     };
@@ -99,14 +99,14 @@ export const InventoryManagement = memo(() => {
       expired: "destructive"
     };
     return <Badge variant={variants[status] || "default"}>{status.replace("_", " ")}</Badge>;
-  });
+  };
 
   const getStockIndicator = (item: InventoryItem) => {
     const percentage = (item.current_stock / item.maximum_stock) * 100;
     if (percentage <= 25) return <TrendingDown className="h-4 w-4 text-red-500" />;
     if (percentage <= 50) return <AlertTriangle className="h-4 w-4 text-yellow-500" />;
     return <TrendingUp className="h-4 w-4 text-green-500" />;
-  });
+  };
 
   return (
     <div className="space-y-6">

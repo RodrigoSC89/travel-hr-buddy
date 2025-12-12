@@ -107,7 +107,7 @@ export const QuickCopilotDialog = memo(function({ open, onOpenChange }: QuickCop
           })),
           context: "quick_assistant"
         }
-      });
+      };
 
       if (error || !data?.response) {
         // Fallback to local response

@@ -51,14 +51,14 @@ export const SimulationVisualization: React.FC<SimulationVisualizationProps> = (
     if (risk <= 60) return "text-yellow-600";
     if (risk <= 85) return "text-orange-600";
     return "text-red-600";
-  });
+  };
 
   const formatCurrency = (value: number) => {
     return new Intl.NumberFormat("pt-BR", {
       style: "currency",
       currency: "BRL"
     }).format(value);
-  });
+  };
 
   return (
     <div className="space-y-6">

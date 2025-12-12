@@ -72,7 +72,7 @@ export const ReservationsDashboard: React.FC = () => {
         title: "Erro",
         description: "Erro ao carregar reservas",
         variant: "destructive"
-      });
+      };
     } finally {
       setLoading(false);
     }
@@ -141,7 +141,7 @@ export const ReservationsDashboard: React.FC = () => {
       toast({
         title: "Sucesso",
         description: "Reserva excluída com sucesso!"
-      });
+      };
       fetchReservations();
     } catch (error) {
       toast({
@@ -175,9 +175,9 @@ export const ReservationsDashboard: React.FC = () => {
       end_date: new Date(reservation.end_date).toISOString().slice(0, 16),
       location: reservation.location || "",
       status: reservation.status
-    });
+    };
     setIsDialogOpen(true);
-  });
+  };
 
   const openNewDialog = () => {
     resetForm();

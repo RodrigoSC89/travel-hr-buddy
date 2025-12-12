@@ -126,7 +126,7 @@ const getTypeLabel = (type: string) => {
     certification: "Certificação"
   };
   return labels[type as keyof typeof labels] || type;
-});
+};
 
 export const AuditPlanner: React.FC = () => {
   const [selectedType, setSelectedType] = useState<string>("all");

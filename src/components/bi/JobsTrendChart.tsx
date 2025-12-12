@@ -22,7 +22,7 @@ const formatMonthLabel = (month: string): string => {
   const monthAbbr = monthNames[monthIndex];
   
   return `${monthAbbr} de ${year}`;
-});
+};
 
 // Initialize last 6 months with zero counts
 const initializeLast6Months = (): JobTrendData[] => {
@@ -39,11 +39,11 @@ const initializeLast6Months = (): JobTrendData[] => {
       month: monthKey,
       total_jobs: 0,
       monthLabel: formatMonthLabel(monthKey)
-    });
+    };
   }
   
   return months;
-});
+};
 
 export default function JobsTrendChart() {
   const [data, setData] = useState<JobTrendData[]>([]);

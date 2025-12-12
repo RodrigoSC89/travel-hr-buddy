@@ -149,9 +149,9 @@ export default function TemplatesPanel() {
     template.variables.forEach(v => {
       const varName = v.replace(/\{\{|\}\}/g, "");
       initialVariables[varName] = "";
-  });
+  };
     setPreviewVariables(initialVariables);
-  });
+  };
 
   const renderPreview = (): string => {
     if (!previewTemplate) return "";
@@ -219,7 +219,7 @@ export default function TemplatesPanel() {
     document.body.removeChild(a);
     URL.revokeObjectURL(url);
     toast.success("HTML exportado com sucesso!");
-  });
+  };
 
   return (
     <div className="container mx-auto p-6 space-y-6">

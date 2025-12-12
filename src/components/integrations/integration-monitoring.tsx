@@ -146,7 +146,7 @@ export const IntegrationMonitoring: React.FC = () => {
     const uptimeScore = metric.uptime;
     
     return Math.round((responseScore + successScore + uptimeScore) / 3);
-  });
+  };
 
   return (
     <div className="space-y-6">

@@ -107,7 +107,7 @@ export default function DrillsCalendarSection() {
       return <Icon className={cn("h-5 w-5", drillType.color)} />;
     }
     return <CalendarIcon className="h-5 w-5" />;
-  });
+  };
 
   const handleScheduleDrill = () => {
     if (!selectedDate || !formData.type || !formData.coordinator) {
@@ -146,7 +146,7 @@ export default function DrillsCalendarSection() {
   const handleStartDrill = (drill: ScheduledDrill) => {
     setSelectedDrill(drill);
     setDrillSimulationOpen(true);
-  });
+  };
 
   const handleCompleteDrill = () => {
     if (selectedDrill) {

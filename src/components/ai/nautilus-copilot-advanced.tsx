@@ -231,11 +231,11 @@ What would you like assistance with today?`,
     ];
     
     return responses[Math.floor(Math.random() * responses.length)];
-  });
+  };
 
   const handleSuggestionClick = (suggestion: string) => {
     setInputValue(suggestion);
-  });
+  };
 
   const handleVoiceToggle = () => {
     setIsListening(!isListening);

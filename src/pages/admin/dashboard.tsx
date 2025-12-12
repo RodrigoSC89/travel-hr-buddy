@@ -246,7 +246,7 @@ export default function AdminDashboard() {
           pdf.setFillColor(34, 197, 94); // Green color
           pdf.rect(margin + 60, yPosition - 3, barWidth, 4, "F");
           yPosition += 7;
-        });
+        };
         
         yPosition += 10;
       }

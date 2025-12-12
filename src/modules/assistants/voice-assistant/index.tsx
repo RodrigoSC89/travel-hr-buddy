@@ -262,7 +262,7 @@ const VoiceAssistant: React.FC = () => {
             voice_id: "EXAVITQu4vr4xnSDxMaL", // Sarah - friendly female voice
             model_id: "eleven_multilingual_v2",
           },
-        });
+        };
 
         if (!error && data?.audioContent) {
           const audioSrc = `data:audio/mpeg;base64,${data.audioContent}`;
@@ -303,7 +303,7 @@ const VoiceAssistant: React.FC = () => {
     utterance.onend = () => setIsSpeaking(false);
     utterance.onerror = () => setIsSpeaking(false);
     synthRef.current.speak(utterance);
-  });
+  };
 
   const handleTextSubmit = (e: React.FormEvent) => {
     e.preventDefault();

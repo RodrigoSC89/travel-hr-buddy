@@ -313,7 +313,7 @@ const RealTimeWorkspace: React.FC = () => {
           timestamp: new Date().toISOString(),
           priority
         }
-      });
+      };
     } catch (error) {
       logger.error("Failed to send reaction:", error);
     }
@@ -334,7 +334,7 @@ const RealTimeWorkspace: React.FC = () => {
         status: newStatus,
         last_seen: new Date().toISOString(),
         current_page: window.location.pathname
-      });
+      };
     } catch (error) {
       logger.error("Failed to change status:", error);
     }

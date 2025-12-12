@@ -88,7 +88,7 @@ export const AdvancedSettings: React.FC = () => {
       }
     }));
     setHasChanges(true);
-  });
+  };
 
   const saveSettings = async () => {
     setIsSaving(true);
@@ -103,13 +103,13 @@ export const AdvancedSettings: React.FC = () => {
       toast({
         title: "Configurações Salvas",
         description: "Suas preferências foram atualizadas com sucesso",
-      });
+      };
     } catch (error) {
       toast({
         title: "Erro",
         description: "Falha ao salvar configurações",
         variant: "destructive",
-      });
+      };
     } finally {
       setIsSaving(false);
     }

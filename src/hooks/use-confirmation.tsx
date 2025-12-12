@@ -72,7 +72,7 @@ export const useConfirmation = memo(function() {
       confirmText: "Excluir",
       variant: "destructive",
       onConfirm
-    });
+    };
   }, [confirm]);
 
   const confirmAction = useCallback((

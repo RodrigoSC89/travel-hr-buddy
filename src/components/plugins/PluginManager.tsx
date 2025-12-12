@@ -197,7 +197,7 @@ export const PluginManager: React.FC = () => {
     const plugin = plugins.find(p => p.id === pluginId);
     toast.success(`${plugin?.name} instalado com sucesso!`);
     setInstallingId(null);
-  });
+  };
 
   const uninstallPlugin = (pluginId: string) => {
     setPlugins(prev => prev.map(p => 
@@ -206,14 +206,14 @@ export const PluginManager: React.FC = () => {
     
     const plugin = plugins.find(p => p.id === pluginId);
     toast.success(`${plugin?.name} removido`);
-  });
+  };
 
   const filteredPlugins = plugins.filter(plugin => {
     const matchesSearch = plugin.name.toLowerCase().includes(searchQuery.toLowerCase()) ||
                          plugin.description.toLowerCase().includes(searchQuery.toLowerCase());
     const matchesCategory = selectedCategory === "all" || plugin.category === selectedCategory;
     return matchesSearch && matchesCategory;
-  });
+  };
 
   const installedPlugins = plugins.filter(p => p.installed);
   const enabledCount = installedPlugins.filter(p => p.enabled).length;

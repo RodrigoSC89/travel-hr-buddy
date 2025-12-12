@@ -47,10 +47,10 @@ export async function exportSuggestionsToPDF(suggestions: Suggestion[]): Promise
       }
       doc.text(line, x, currentY);
       currentY += fontSize * 0.5;
-  });
+  };
     
     return currentY;
-  });
+  };
 
   // Process each suggestion
   suggestions.forEach((suggestion, index) => {

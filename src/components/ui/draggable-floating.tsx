@@ -39,14 +39,14 @@ export const DraggableFloating: React.FC<DraggableFloatingProps> = ({
     }
     const initial = typeof defaultPosition === "function" ? (defaultPosition as () => Position)() : defaultPosition;
     return initial;
-});
+};
   const dragState = useRef<{ dragging: boolean; startX: number; startY: number; origX: number; origY: number }>({
     dragging: false,
     startX: 0,
     startY: 0,
     origX: 0,
     origY: 0,
-  });
+  };
 
   // Keep inside viewport on resize
   useEffect(() => {

@@ -66,7 +66,7 @@ export default function ComplianceStatusPage() {
     if (score >= 90) return "text-green-600";
     if (score >= 75) return "text-yellow-600";
     return "text-red-600";
-  });
+  };
 
   const getStatusBadge = (status: string) => {
     const variants: Record<string, { variant: unknown: unknown: unknown; className: string }> = {
@@ -76,7 +76,7 @@ export default function ComplianceStatusPage() {
       not_applicable: { variant: "secondary", className: "bg-gray-100 text-gray-800" }
     };
     return variants[status] || variants.not_applicable;
-  });
+  };
 
   if (loading && !report) {
     return (

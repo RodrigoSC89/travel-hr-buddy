@@ -165,7 +165,7 @@ export const EmergencyMode = memo(function() {
     const latDir = pos.lat >= 0 ? "N" : "S";
     const lngDir = pos.lng >= 0 ? "E" : "W";
     return `${Math.abs(pos.lat).toFixed(4)}°${latDir} ${Math.abs(pos.lng).toFixed(4)}°${lngDir}`;
-  });
+  };
 
   const safeCount = crewStatus.filter(c => c.status === "safe").length;
   const missingCount = crewStatus.filter(c => c.status === "missing" || c.status === "unknown").length;

@@ -354,7 +354,7 @@ const AlertsCommandCenter = () => {
     if (score >= 90) return "text-green-600";
     if (score >= 75) return "text-yellow-600";
     return "text-red-600";
-  });
+  };
 
   const filteredAlerts = smartAlerts.filter(alert => 
     filterType === "all" || alert.category === filterType

@@ -50,7 +50,7 @@ export default function Org360Dashboard() {
         activeRate: data?.length ? (activeToday / data.length) * 100 : 0,
       };
     },
-  });
+  };
 
   const { data: aiUsage, isLoading: loadingAI } = useQuery({
     queryKey: ["ai-usage-360"],

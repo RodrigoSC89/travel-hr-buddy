@@ -51,7 +51,7 @@ export const DocumentProcessor: React.FC = () => {
         title: "Arquivo muito grande",
         description: "O arquivo deve ter no máximo 10MB",
         variant: "destructive",
-      });
+      };
       return;
     }
 
@@ -166,8 +166,8 @@ export const DocumentProcessor: React.FC = () => {
         }
       };
       reader.onerror = error => reject(error);
-  });
-  });
+  };
+  };
 
   const exportAnalysis = (doc: ProcessedDocument) => {
     const analysis = {
@@ -187,7 +187,7 @@ export const DocumentProcessor: React.FC = () => {
     a.download = `analise-${doc.fileName.replace(/\.[^/.]+$/, "")}.json`;
     a.click();
     URL.revokeObjectURL(url);
-  });
+  };
 
   const deleteDocument = (docId: string) => {
     setProcessedDocs(prev => prev.filter(doc => doc.id !== docId));
@@ -198,8 +198,8 @@ export const DocumentProcessor: React.FC = () => {
     toast({
       title: "Documento Removido",
       description: "Análise foi removida da lista",
-    });
-  });
+    };
+  };
 
   const getSentimentColor = (sentiment: string) => {
     switch (sentiment) {

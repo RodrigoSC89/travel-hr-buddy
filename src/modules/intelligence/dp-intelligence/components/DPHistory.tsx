@@ -141,7 +141,7 @@ const getTypeLabel = (type: string) => {
     maintenance: "Manutenção",
   };
   return labels[type] || type;
-});
+};
 
 const getStatusLabel = (status: string) => {
   const labels: Record<string, string> = {
@@ -151,7 +151,7 @@ const getStatusLabel = (status: string) => {
     info: "Info",
   };
   return labels[status] || status;
-});
+};
 
 export default function DPHistory() {
   const [isFilterOpen, setIsFilterOpen] = useState(false);
@@ -162,7 +162,7 @@ export default function DPHistory() {
     dateFrom: "",
     dateTo: "",
     searchText: "",
-  });
+  };
   const [activeFilters, setActiveFilters] = useState(filters);
 
   const allTypes = ["analysis", "operation", "alert", "optimization", "maintenance"];
@@ -239,7 +239,7 @@ export default function DPHistory() {
         ? prev.statuses.filter((s) => s !== status)
         : [...prev.statuses, status],
     }));
-  });
+  };
 
   const handleExport = (format: "csv" | "json" | "pdf") => {
     const dataToExport = filteredData;

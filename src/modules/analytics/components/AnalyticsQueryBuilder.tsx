@@ -137,7 +137,7 @@ export const AnalyticsQueryBuilder: React.FC = () => {
         title: "No Data",
         description: "No data to export",
         variant: "destructive"
-      });
+      };
       return;
     }
 

@@ -110,7 +110,7 @@ const DeepRiskAIPage: React.FC = () => {
         fuel_status: fuelStatus,
         equipment_status: equipmentStatus,
         communication_quality: communicationQuality,
-      });
+      };
 
       setCurrentAnalysis(result);
       toast.success(`Risk analysis complete: ${result.level.toUpperCase()} (${result.score.toFixed(1)})`);
@@ -169,7 +169,7 @@ const DeepRiskAIPage: React.FC = () => {
       critical: "text-red-600 bg-red-100 border-red-300",
     };
     return colors[level] || "text-gray-600 bg-gray-100 border-gray-300";
-  });
+  };
 
   const getRiskIcon = (level: string) => {
     switch (level) {

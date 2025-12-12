@@ -43,25 +43,25 @@ export default function TemplateLibraryPage() {
       template.description.toLowerCase().includes(searchQuery.toLowerCase());
     const matchesType = selectedType === "all" || template.type === selectedType;
     return matchesSearch && matchesType;
-  });
+  };
 
   const copyToClipboard = (content: string) => {
     navigator.clipboard.writeText(content);
     toast({
       title: "Copied!",
       description: "Template content copied to clipboard",
-    });
-  });
+    };
+  };
 
   const useTemplate = async (template: TemplateDefinition) => {
     // In a real implementation, this would save to Supabase ai_document_templates
     toast({
       title: "Template Loaded",
       description: `${template.name} ready for editing`,
-    });
+    };
     // Simulate save to database
     logger.info("Saving template to ai_document_templates", { templateId: template.id, templateName: template.name });
-  });
+  };
 
   const types = ["all", "document", "incident", "fmea", "contract", "report", "checklist"];
 

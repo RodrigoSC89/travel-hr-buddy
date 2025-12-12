@@ -197,8 +197,8 @@ export const RealTimeMissionDashboard = memo(() => {
       return "bg-gray-500/20 text-gray-400 border-gray-500/30";
     default:
       return "bg-gray-500/20 text-gray-400 border-gray-500/30";
-    });
-  });
+    };
+  };
 
   const stats = {
     total: missions.length,

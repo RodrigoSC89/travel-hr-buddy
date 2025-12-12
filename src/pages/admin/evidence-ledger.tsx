@@ -139,7 +139,7 @@ export default function EvidenceLedgerPage() {
       training: "bg-indigo-100 text-indigo-800"
     };
     return colors[type] || "bg-gray-100 text-gray-800";
-  });
+  };
 
   if (loading) {
     return (

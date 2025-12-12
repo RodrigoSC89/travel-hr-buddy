@@ -24,7 +24,7 @@ export const OVIDReports: React.FC<OVIDReportsProps> = ({
 }) => {
   const handleExport = (format: string) => {
     toast.success(`Exportando relatório em formato ${format.toUpperCase()}...`);
-  });
+  };
 
   const answeredCount = status.compliant + status.nonCompliant + status.notApplicable;
   const totalCount = answeredCount + status.pending;

@@ -102,7 +102,7 @@ export const IncidentReportDialog: React.FC<IncidentReportDialogProps> = ({
         severity: formData.severity as SafetyIncident["severity"],
         incident_date: format(date, "yyyy-MM-dd"),
         witnesses: formData.witnesses ? formData.witnesses.split(",").map(w => w.trim()) : [],
-      });
+      };
       
       // Reset form
       setFormData({

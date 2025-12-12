@@ -17,7 +17,7 @@ export const loadMapbox = async (): Promise<any> => {
     mapboxgl = module.default || module;
   }
   return mapboxgl;
-});
+};
 
 interface LazyMapboxProps {
   token: string;

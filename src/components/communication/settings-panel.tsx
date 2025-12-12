@@ -154,13 +154,13 @@ export const SettingsPanel = memo(() => {
       toast({
         title: "Sucesso",
         description: "Configurações salvas com sucesso"
-      });
+      };
     } catch (error) {
       toast({
         title: "Erro",
         description: "Erro ao salvar configurações",
         variant: "destructive"
-      });
+      };
     } finally {
       setLoading(false);
     }

@@ -113,7 +113,7 @@ export const CognitiveDashboard: React.FC = () => {
   const formatTimestamp = (date: Date | string) => {
     const d = typeof date === "string" ? new Date(date) : date;
     return d.toLocaleString();
-  });
+  };
 
   const filteredPredictions = predictions.filter(p => {
     if (filterModule !== "all" && p.module_name !== filterModule) return false;
@@ -127,7 +127,7 @@ export const CognitiveDashboard: React.FC = () => {
       "30d": 30 * 24 * 60 * 60 * 1000,
     };
     return now - predTime <= ranges[filterTimeRange];
-  });
+  };
 
   const filteredDecisions = decisions.filter(d => {
     if (filterModule !== "all" && d.moduleName !== filterModule) return false;
@@ -140,7 +140,7 @@ export const CognitiveDashboard: React.FC = () => {
       "30d": 30 * 24 * 60 * 60 * 1000,
     };
     return now - decTime <= ranges[filterTimeRange];
-  });
+  };
 
   const uniqueModules = Array.from(new Set([
     ...predictions.map(p => p.module_name),

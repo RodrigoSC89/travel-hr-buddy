@@ -118,7 +118,7 @@ export const EvidenceManager: React.FC<EvidenceManagerProps> = ({
         const blob = new Blob(chunks, { type: "audio/wav" });
         await uploadAudioBlob(blob);
         stream.getTracks().forEach(track => track.stop());
-      });
+      };
 
       recorder.start();
       setMediaRecorder(recorder);
@@ -221,7 +221,7 @@ export const EvidenceManager: React.FC<EvidenceManagerProps> = ({
     const sizes = ["Bytes", "KB", "MB", "GB"];
     const i = Math.floor(Math.log(bytes) / Math.log(k));
     return parseFloat((bytes / Math.pow(k, i)).toFixed(2)) + " " + sizes[i];
-  });
+  };
 
   const getEvidenceIcon = (type: string) => {
     switch (type) {

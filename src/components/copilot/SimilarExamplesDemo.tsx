@@ -23,7 +23,7 @@ export default function SimilarExamplesDemo() {
   const handleSelectSuggestion = (suggestion: string) => {
     // Populate the description field with the selected suggestion
     setJobDescription(suggestion);
-  });
+  };
 
   const handleSaveJob = () => {
     logger.info("Saving job:", {

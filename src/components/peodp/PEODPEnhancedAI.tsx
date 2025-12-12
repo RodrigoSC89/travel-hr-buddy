@@ -139,7 +139,7 @@ export const PEODPEnhancedAI = memo(function() {
     case "red": return "bg-red-500";
     default: return "bg-gray-500";
     }
-  });
+  };
 
   return (
     <div className="space-y-6">

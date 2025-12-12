@@ -762,7 +762,7 @@ function dedupeNavigation(items: NavigationItem[]): NavigationItem[] {
     }
 
     return { ...item, ...(canonicalUrl ? { url: canonicalUrl } : {}), ...(children ? { items: children } : {}) };
-  });
+  };
 
   return items.map(dedupeItem).filter(Boolean) as NavigationItem[];
 }
@@ -802,7 +802,7 @@ export const AppSidebar = memo(function({ activeItem, onItemChange }: AppSidebar
   const hasUrl = (url: string) => {
     const u = canonicalizeUrl(url);
     return u ? navUrlSet.has(u) : false;
-  });
+  };
 
   const toggleItem = (itemUrl: string) => {
     setOpenItems(prev => 
@@ -810,11 +810,11 @@ export const AppSidebar = memo(function({ activeItem, onItemChange }: AppSidebar
         ? prev.filter(item => item !== itemUrl)
         : [...prev, itemUrl]
     );
-  });
+  };
 
   const isItemActive = (moduleKey: string) => {
     return activeItem === moduleKey;
-  });
+  };
 
   const canAccessItem = (item: NavigationItem) => {
     if (item.alwaysVisible) return true;
@@ -830,12 +830,12 @@ export const AppSidebar = memo(function({ activeItem, onItemChange }: AppSidebar
     }
     
     return true;
-  });
+  };
 
   const handleItemClick = (item: string) => {
     handleNavigation(item);
     onItemChange?.(item);
-  });
+  };
 
   // Determinar se o grupo de navegação principal deve estar aberto
   const isMainGroupOpen = dedupedNav.some(item => 

@@ -64,7 +64,7 @@ export const DocumentList: React.FC<DocumentListProps> = ({
     const mb = size / (1024 * 1024);
     if (mb < 1) return `${(size / 1024).toFixed(1)} KB`;
     return `${mb.toFixed(1)} MB`;
-  });
+  };
 
   return (
     <div className={cn("border rounded-lg", className)}>
@@ -134,7 +134,7 @@ const DocumentListRow: React.FC<DocumentListRowProps> = ({
     const mb = size / (1024 * 1024);
     if (mb < 1) return `${(size / 1024).toFixed(1)} KB`;
     return `${mb.toFixed(1)} MB`;
-  });
+  };
 
   return (
     <TableRow className={cn(selected && "bg-muted/50")}>

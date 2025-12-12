@@ -59,7 +59,7 @@ export const ProgressiveContent: React.FC<ProgressiveContentProps> = ({
       {shouldRender ? children : (placeholder || <ContentPlaceholder />)}
     </div>
   );
-});
+};
 
 const ContentPlaceholder: React.FC = () => (
   <div className="space-y-3">

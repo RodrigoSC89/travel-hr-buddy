@@ -82,7 +82,7 @@ export const AuditsPanel = memo(function({
         {label}
       </Badge>
     );
-  });
+  };
 
   const getTypeBadge = (type: AuditSession["auditType"]) => {
     const labels: Record<string, string> = {
@@ -93,7 +93,7 @@ export const AuditsPanel = memo(function({
       psc: "PSC",
     };
     return <Badge variant="outline">{labels[type] || type}</Badge>;
-  });
+  };
 
   const getFindingsSummary = (findings: AuditFinding[]) => {
     const critical = findings.filter((f) => f.severity === "critical").length;
@@ -138,7 +138,7 @@ export const AuditsPanel = memo(function({
     const matchesStatus = statusFilter === "all" || audit.status === statusFilter;
     const matchesType = typeFilter === "all" || audit.auditType === typeFilter;
     return matchesSearch && matchesStatus && matchesType;
-  });
+  };
 
   const scheduledAudits = filteredAudits.filter((a) => a.status === "scheduled");
   const inProgressAudits = filteredAudits.filter((a) => a.status === "in-progress");

@@ -319,7 +319,7 @@ const VesselManagementSystem: React.FC<VesselManagementProps> = ({ onStatsUpdate
     const matchesType = typeFilter === "all" || vessel.vessel_type === typeFilter;
     
     return matchesSearch && matchesStatus && matchesType;
-  });
+  };
 
   const vesselTypes = [...new Set(vessels.map(v => v.vessel_type))];
 

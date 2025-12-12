@@ -181,7 +181,7 @@ const SystemPerformanceMonitor = () => {
       toast({
         title: "Relatório Exportado",
         description: "Relatório de performance do sistema exportado com sucesso!",
-      });
+      };
 
       // In production, this would trigger a file download
     } catch (error) {

@@ -119,7 +119,7 @@ export const PerformanceMonitor: React.FC = () => {
           network_latency: newMetrics.networkLatency,
           score: newMetrics.score,
           measured_at: new Date().toISOString()
-        });
+        };
 
       if (error) {
       }
@@ -169,10 +169,10 @@ export const PerformanceMonitor: React.FC = () => {
           title: `Performance Alert: ${threshold.label}`,
           description: `${threshold.label} is ${value}${threshold.unit}, exceeding threshold of ${threshold.threshold}${threshold.unit}`,
           variant: "destructive",
-        });
+        };
       }
-    });
-  });
+    };
+  };
 
   const toggleThreshold = (metric: string) => {
     setThresholds(prev =>
@@ -180,7 +180,7 @@ export const PerformanceMonitor: React.FC = () => {
         t.metric === metric ? { ...t, enabled: !t.enabled } : t
       )
     );
-  });
+  };
 
   const exportToCSV = () => {
     if (historicalData.length === 0) {
@@ -188,7 +188,7 @@ export const PerformanceMonitor: React.FC = () => {
         title: "No data to export",
         description: "Historical data is not available yet",
         variant: "destructive",
-      });
+      };
       return;
     }
 
@@ -254,7 +254,7 @@ export const PerformanceMonitor: React.FC = () => {
       body: thresholdData,
       theme: "striped",
       headStyles: { fillColor: [59, 130, 246] }
-    });
+    };
 
     // Historical Data
     if (historicalData.length > 0) {
@@ -276,7 +276,7 @@ export const PerformanceMonitor: React.FC = () => {
         body: histData,
         theme: "striped",
         headStyles: { fillColor: [59, 130, 246] }
-      });
+      };
     }
 
     doc.save(`performance-report-${new Date().toISOString().split("T")[0]}.pdf`);
@@ -315,13 +315,13 @@ export const PerformanceMonitor: React.FC = () => {
     if (score >= 90) return "text-green-500";
     if (score >= 70) return "text-yellow-500";
     return "text-red-500";
-  });
+  };
 
   const getScoreBadge = (score: number) => {
     if (score >= 90) return { variant: "default" as const, text: "Excelente" };
     if (score >= 70) return { variant: "secondary" as const, text: "Bom" };
     return { variant: "destructive" as const, text: "Precisa Melhorar" };
-  });
+  };
 
   return (
     <div className="space-y-6">

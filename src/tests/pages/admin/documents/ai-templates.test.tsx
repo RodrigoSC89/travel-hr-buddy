@@ -168,7 +168,7 @@ describe("AITemplatesPage", () => {
         title: "Template aplicado",
       })
     );
-  });
+  };
 
   it("should copy template to clipboard", async () => {
     render(
@@ -179,7 +179,7 @@ describe("AITemplatesPage", () => {
 
     await waitFor(() => {
       expect(screen.getByText("Template 1")).toBeInTheDocument();
-  });
+  };
 
     const copyButtons = screen.getAllByText("Copiar");
     fireEvent.click(copyButtons[0]);
@@ -193,8 +193,8 @@ describe("AITemplatesPage", () => {
           title: "Template copiado",
         })
       );
-  });
-  });
+  };
+  };
 
   it("should toggle favorite status", async () => {
     const { supabase } = await React.lazy(() => import(import("@/integrations/supabase/client")));
@@ -207,7 +207,7 @@ describe("AITemplatesPage", () => {
 
     await waitFor(() => {
       expect(screen.getByText("Template 1")).toBeInTheDocument();
-  });
+  };
 
     // Find star buttons (favorite toggle)
     const starButtons = screen.getAllByRole("button").filter(
@@ -221,8 +221,8 @@ describe("AITemplatesPage", () => {
     await waitFor(() => {
       expect(supabase.from).toHaveBeenCalledWith("ai_document_templates");
       expect(toast).toHaveBeenCalled();
-  });
-  });
+  };
+  };
 
   it("should open create dialog", async () => {
     render(
@@ -255,7 +255,7 @@ describe("AITemplatesPage", () => {
 
     await waitFor(() => {
       expect(screen.getByLabelText("Título *")).toBeInTheDocument();
-  });
+  };
 
     // Fill in form
     const titleInput = screen.getByLabelText("Título *");
@@ -277,8 +277,8 @@ describe("AITemplatesPage", () => {
           title: "Template criado",
         })
       );
-  });
-  });
+  };
+  };
 
   it("should show validation error when creating template without required fields", async () => {
     render(
@@ -308,8 +308,8 @@ describe("AITemplatesPage", () => {
           variant: "destructive",
         })
       );
-  });
-  });
+  };
+  };
 
   it("should add and remove tags", async () => {
     render(

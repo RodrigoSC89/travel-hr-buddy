@@ -147,14 +147,14 @@ export const RoleConfigurator: React.FC = () => {
           can_write: false,
           can_delete: false,
           can_manage: false,
-        });
+        };
 
       if (error) {
         toast({
           title: "Erro",
           description: "Não foi possível criar a permissão.",
           variant: "destructive",
-        });
+        };
         return;
       }
 
@@ -174,7 +174,7 @@ export const RoleConfigurator: React.FC = () => {
 
   const getPermissionForModuleAndRole = (moduleName: string, role: string) => {
     return permissions.find(p => p.module_name === moduleName && p.role === role);
-  });
+  };
 
   if (loading) {
     return (

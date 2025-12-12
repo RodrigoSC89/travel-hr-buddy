@@ -304,14 +304,14 @@ const EnhancedUnifiedDashboard = () => {
         ? prev.filter(k => k !== kpi)
         : [...prev, kpi]
     );
-  });
+  };
 
   useOptimizedPolling({
     id: "enhanced-unified-dashboard-refresh",
     callback: refreshData,
     interval: 60000,
     enabled: isAutoUpdate,
-  });
+  };
 
   const getStatusIcon = (type: string) => {
     switch (type) {

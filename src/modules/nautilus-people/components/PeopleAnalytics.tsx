@@ -123,7 +123,7 @@ const PeopleAnalytics: React.FC = () => {
       );
     }
     return null;
-  });
+  };
 
   return (
     <div className="space-y-6">

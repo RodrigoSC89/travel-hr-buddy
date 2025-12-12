@@ -542,7 +542,7 @@ export const MachineRoutineChecklist: React.FC<MachineRoutineChecklistProps> = (
       ),
       updatedAt: new Date().toISOString()
     }));
-  });
+  };
 
   const handleAutoSave = async () => {
     try {

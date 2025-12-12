@@ -39,7 +39,7 @@ export const NotificationSettings = memo(() => {
     price_drop_threshold: 0,
     daily_summary: false,
     weekly_report: true,
-  });
+  };
   const [loading, setLoading] = useState(true);
   const [saving, setSaving] = useState(false);
   const [pushSupported, setPushSupported] = useState(false);
@@ -103,7 +103,7 @@ export const NotificationSettings = memo(() => {
       toast({
         title: "Configurações salvas",
         description: "Suas preferências de notificação foram atualizadas.",
-      });
+      };
     } catch (error) {
       toast({
         title: "Erro",

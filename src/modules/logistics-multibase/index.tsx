@@ -212,7 +212,7 @@ export default function LogisticsMultibase() {
     setRecommendations([]);
     setSelectedRequest(null);
     toast({ title: "Rota Selecionada", description: `${rec.baseName} confirmada` });
-  });
+  };
 
   const getTypeIcon = (type: string) => {
     switch (type) {

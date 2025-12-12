@@ -59,7 +59,7 @@ export const DocumentVersionHistory = memo(function({ documentId, onRestore }: D
         title: "Erro ao carregar histórico",
         description: "Não foi possível carregar o histórico de versões.",
         variant: "destructive",
-      });
+      };
     } finally {
       setLoading(false);
     }
@@ -68,7 +68,7 @@ export const DocumentVersionHistory = memo(function({ documentId, onRestore }: D
   const handleRestoreClick = (version: DocumentVersion) => {
     setSelectedVersion(version);
     setShowRestoreDialog(true);
-  });
+  };
 
   const handleRestoreConfirm = async () => {
     if (!selectedVersion) return;

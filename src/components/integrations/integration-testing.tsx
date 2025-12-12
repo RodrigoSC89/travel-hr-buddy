@@ -138,7 +138,7 @@ export const IntegrationTesting: React.FC = () => {
 
   const copyToClipboard = (text: string) => {
     navigator.clipboard.writeText(text);
-  });
+  };
 
   return (
     <div className="space-y-6">

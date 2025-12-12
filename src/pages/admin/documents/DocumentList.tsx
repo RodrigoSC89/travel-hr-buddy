@@ -55,7 +55,7 @@ export default function DocumentListPage() {
         title: "Erro ao carregar documentos",
         description: "Não foi possível carregar a lista de documentos.",
         variant: "destructive",
-      });
+      };
     } finally {
       setLoading(false);
     }

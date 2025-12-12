@@ -121,14 +121,14 @@ export const TechnicalValidationPanel: React.FC = () => {
     if (score >= 60) return "text-yellow-500";
     if (score >= 40) return "text-orange-500";
     return "text-red-500";
-  });
+  };
 
   const getHealthBadge = (score: number) => {
     if (score >= 80) return <Badge className="bg-green-500">Healthy</Badge>;
     if (score >= 60) return <Badge className="bg-yellow-500">Warning</Badge>;
     if (score >= 40) return <Badge className="bg-orange-500">Issues</Badge>;
     return <Badge className="bg-red-500">Critical</Badge>;
-  });
+  };
 
   const exportToCSV = () => {
     const headers = ["ID", "Name", "Status", "Health Score", "Tests", "Documentation", "Issues"];
@@ -152,7 +152,7 @@ export const TechnicalValidationPanel: React.FC = () => {
     if (filter === "issues") return m.issues.length > 0;
     if (filter === "healthy") return m.healthScore >= 80;
     return true;
-  });
+  };
 
   const stats = {
     total: modules.length,

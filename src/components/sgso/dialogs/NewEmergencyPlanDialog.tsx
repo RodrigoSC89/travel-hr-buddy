@@ -72,7 +72,7 @@ export const NewEmergencyPlanDialog: React.FC<NewEmergencyPlanDialogProps> = ({
 
   const handleChange = (field: string, value: string) => {
     setFormData(prev => ({ ...prev, [field]: value }));
-  });
+  };
 
   const handleSubmit = async () => {
     if (!formData.title || !formData.type || !formData.responsible) {

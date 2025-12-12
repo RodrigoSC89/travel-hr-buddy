@@ -51,7 +51,7 @@ export const CollaborativeDocumentEditor = memo(function({
           id: documentId,
           content,
           updated_by: user.id,
-        });
+        };
 
       if (error) throw error;
 

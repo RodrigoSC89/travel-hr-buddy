@@ -65,8 +65,8 @@ export const SettingsPanel: React.FC<SettingsPanelProps> = ({
       
       current[parts[parts.length - 1]] = value;
       return newSettings;
-    });
-  });
+    };
+  };
 
   return (
     <div className="space-y-6">

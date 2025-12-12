@@ -226,7 +226,7 @@ export default function VoyageCommandCenter() {
       cancelled: "bg-red-500/10 text-red-600"
     };
     return colors[status] || colors.planned;
-  });
+  };
 
   const getWeatherColor = (risk: string) => {
     const colors: Record<string, string> = {
@@ -235,7 +235,7 @@ export default function VoyageCommandCenter() {
       high: "text-red-500"
     };
     return colors[risk] || colors.medium;
-  });
+  };
 
   const getWeatherBgColor = (risk: string) => {
     const colors: Record<string, string> = {
@@ -244,7 +244,7 @@ export default function VoyageCommandCenter() {
       high: "bg-red-500/10"
     };
     return colors[risk] || colors.medium;
-  });
+  };
 
   const handleOptimizeRoute = async (voyageId: string) => {
     setIsOptimizing(true);
@@ -307,7 +307,7 @@ export default function VoyageCommandCenter() {
   const handleDeleteVoyage = (id: string) => {
     setVoyages(prev => prev.filter(v => v.id !== id));
     toast.success("Viagem removida");
-  });
+  };
 
   const handleAiCopilotSend = () => {
     if (!aiCopilotInput.trim()) return;

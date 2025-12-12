@@ -34,7 +34,7 @@ export const SystemStatus = memo(function({ health }: SystemStatusProps) {
         text: "Sistema Operacional",
         bgColor: "bg-green-50",
         borderColor: "border-green-200",
-      });
+      };
     case "degraded":
       return {
         icon: <AlertTriangle className="h-5 w-5 text-yellow-500" />,
@@ -80,7 +80,7 @@ export const ConnectionStatus = memo(function({ quality, lastCheck }: Connection
         text: "Excelente",
         color: "text-green-600",
         bgColor: "bg-green-100",
-      });
+      };
     case "good":
       return {
         icon: <Wifi className="h-4 w-4 text-blue-500" />,
@@ -145,7 +145,7 @@ export const ModuleCard = memo(function({ moduleKey, module }: ModuleCardProps) 
     const hours = Math.floor(seconds / 3600);
     const minutes = Math.floor((seconds % 3600) / 60);
     return `${hours}h ${minutes}m`;
-  });
+  };
 
   return (
     <Card>
@@ -194,7 +194,7 @@ export const CacheStats = memo(function({ size, capacity, pending, total }: Cach
     const sizes = ["Bytes", "KB", "MB", "GB"];
     const i = Math.floor(Math.log(bytes) / Math.log(k));
     return Math.round(bytes / Math.pow(k, i) * 100) / 100 + " " + sizes[i];
-  });
+  };
 
   return (
     <Card>

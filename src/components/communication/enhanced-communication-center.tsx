@@ -53,7 +53,7 @@ export const EnhancedCommunicationCenter = memo(() => {
     urgentMessages: 0,
     todayMessages: 0,
     responseRate: 95
-  });
+  };
   const [loading, setLoading] = useState(true);
   const { toast } = useToast();
 
@@ -110,7 +110,7 @@ export const EnhancedCommunicationCenter = memo(() => {
         <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-primary"></div>
       </div>
     );
-  });
+  };
 
   return (
     <div className="space-y-6">

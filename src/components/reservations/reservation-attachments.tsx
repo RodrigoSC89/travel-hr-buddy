@@ -93,7 +93,7 @@ export const ReservationAttachments: React.FC<ReservationAttachmentsProps> = ({
             title: "Arquivo muito grande",
             description: `${file.name} excede o limite de 10MB`,
             variant: "destructive"
-          });
+          };
           continue;
         }
 
@@ -168,7 +168,7 @@ export const ReservationAttachments: React.FC<ReservationAttachmentsProps> = ({
       toast({
         title: "Sucesso",
         description: "Anexo excluído com sucesso!"
-      });
+      };
 
       fetchAttachments();
     } catch (error) {
@@ -184,7 +184,7 @@ export const ReservationAttachments: React.FC<ReservationAttachmentsProps> = ({
     if (fileType.startsWith("image/")) return <Image className="h-4 w-4" />;
     if (fileType === "application/pdf") return <FileText className="h-4 w-4" />;
     return <File className="h-4 w-4" />;
-  });
+  };
 
   const formatFileSize = (bytes: number) => {
     if (bytes === 0) return "0 Bytes";
@@ -192,7 +192,7 @@ export const ReservationAttachments: React.FC<ReservationAttachmentsProps> = ({
     const sizes = ["Bytes", "KB", "MB", "GB"];
     const i = Math.floor(Math.log(bytes) / Math.log(k));
     return parseFloat((bytes / Math.pow(k, i)).toFixed(2)) + " " + sizes[i];
-  });
+  };
 
   const getFilePathFromUrl = (url: string) => {
     // Extract file path from Supabase storage URL

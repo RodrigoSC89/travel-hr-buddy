@@ -396,7 +396,7 @@ export const useUnifiedNotifications = memo(function(userId?: string, autoRefres
       toast({
         title: "Sucesso",
         description: "Todas as notificações foram marcadas como lidas",
-      });
+      };
     } catch (error) {
       toast({
         title: "Erro",
@@ -420,13 +420,13 @@ export const useUnifiedNotifications = memo(function(userId?: string, autoRefres
       toast({
         title: "Removida",
         description: "Notificação removida com sucesso",
-      });
+      };
     } catch (error) {
       toast({
         title: "Erro",
         description: "Não foi possível remover notificação",
         variant: "destructive",
-      });
+      };
     }
   }, [toast]);
 
@@ -446,7 +446,7 @@ export const useUnifiedNotifications = memo(function(userId?: string, autoRefres
       toast({
         title: "Sucesso",
         description: "Todas as notificações foram removidas",
-      });
+      };
     } catch (error) {
       toast({
         title: "Erro",
@@ -844,7 +844,7 @@ const PageVariant: React.FC<PageVariantProps> = ({
     if (filter === "unread") return !n.read && !n.isRead && !n.is_read;
     if (filter === "high") return n.priority === "high" || n.priority === "urgent" || n.priority === "critical";
     return true;
-});
+};
 
   if (loading) {
     return (

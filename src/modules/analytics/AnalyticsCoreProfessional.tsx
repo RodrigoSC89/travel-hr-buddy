@@ -150,7 +150,7 @@ const AnalyticsCoreProfessional: React.FC = () => {
       chartAnimations: true,
       soundNotifications: false
     };
-  });
+  };
 
   const [reportConfig, setReportConfig] = useState<ReportConfig>({
     type: "analytics",
@@ -222,7 +222,7 @@ const AnalyticsCoreProfessional: React.FC = () => {
       toast({
         title: "Dados atualizados",
         description: "Os dados foram atualizados com sucesso"
-      });
+      };
     } finally {
       setIsRefreshing(false);
     }
@@ -411,7 +411,7 @@ const AnalyticsCoreProfessional: React.FC = () => {
     }
     
     toast({ title: "Notificação marcada como lida" });
-  });
+  };
 
   const markAllAsRead = async () => {
     const unreadCount = notifications.filter(n => !n.isRead).length;
@@ -434,12 +434,12 @@ const AnalyticsCoreProfessional: React.FC = () => {
       title: "Todas as notificações marcadas como lidas",
       description: `${unreadCount} notificações atualizadas`
     };
-  });
+  };
 
   const deleteNotification = (notificationId: string) => {
     setNotifications(prev => prev.filter(n => n.id !== notificationId));
     toast({ title: "Notificação removida" });
-  });
+  };
 
   const clearAllNotifications = () => {
     const count = notifications.length;
@@ -616,7 +616,7 @@ const AnalyticsCoreProfessional: React.FC = () => {
       toast({
         title: "Gerando PDF",
         description: "Preparando relatório para download..."
-      });
+      };
 
       // Dynamic import of jsPDF
       const { default: jsPDF } = await import("jspdf");
@@ -663,7 +663,7 @@ const AnalyticsCoreProfessional: React.FC = () => {
         styles: { fontSize: 9, cellPadding: 3 },
         headStyles: { fillColor: [59, 130, 246], textColor: 255 },
         alternateRowStyles: { fillColor: [245, 247, 250] }
-      });
+      };
       
       yPosition = (doc as unknown).lastAutoTable.finalY + 15;
       
@@ -691,7 +691,7 @@ const AnalyticsCoreProfessional: React.FC = () => {
         theme: "grid",
         styles: { fontSize: 9, cellPadding: 3 },
         headStyles: { fillColor: [16, 185, 129], textColor: 255 }
-      });
+      };
       
       yPosition = (doc as unknown).lastAutoTable.finalY + 15;
       
@@ -722,7 +722,7 @@ const AnalyticsCoreProfessional: React.FC = () => {
           theme: "grid",
           styles: { fontSize: 9, cellPadding: 3 },
           headStyles: { fillColor: [139, 92, 246], textColor: 255 }
-        });
+        };
       }
       
       // Footer
@@ -841,7 +841,7 @@ Este relatório apresenta uma análise abrangente dos principais indicadores de 
         title: "Erro ao copiar",
         description: "Não foi possível copiar o relatório",
         variant: "destructive"
-      });
+      };
     }
   };
 
@@ -882,8 +882,8 @@ Este relatório apresenta uma análise abrangente dos principais indicadores de 
     toast({ 
       title: "Ação aplicada",
       description: "A recomendação foi marcada como implementada"
-    });
-  });
+    };
+  };
 
   // Filter Functions
   const getFilteredNotifications = useCallback(() => {
@@ -892,7 +892,7 @@ Este relatório apresenta uma análise abrangente dos principais indicadores de 
       if (filters.categories.length > 0 && !filters.categories.includes(n.category)) return false;
       if (filters.notificationTypes.length > 0 && !filters.notificationTypes.includes(n.type)) return false;
       return true;
-  });
+  };
 
     // Sort
     filtered.sort((a, b) => {
@@ -907,7 +907,7 @@ Este relatório apresenta uma análise abrangente dos principais indicadores de 
           : a.category.localeCompare(b.category);
       }
       return 0;
-    });
+    };
 
     return filtered;
   }, [notifications, filters]);
@@ -996,7 +996,7 @@ Este relatório apresenta uma análise abrangente dos principais indicadores de 
       low: "Baixa"
     };
     return <Badge variant={variants[priority] || "default"}>{labels[priority] || priority}</Badge>;
-  });
+  };
 
   const getInsightTypeBadge = (type: string) => {
     const config: Record<string, { label: string; color: string }> = {
@@ -1007,7 +1007,7 @@ Este relatório apresenta uma análise abrangente dos principais indicadores de 
     };
     const { label, color } = config[type] || { label: type, color: "bg-gray-500/10 text-gray-500" };
     return <Badge className={`${color} border-0`}>{label}</Badge>;
-  });
+  };
 
   if (isLoading) {
     return (

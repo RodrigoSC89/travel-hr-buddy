@@ -139,7 +139,7 @@ const getStatusConfig = (status: string) => {
     }
   };
   return configs[status as keyof typeof configs] || configs.open;
-});
+};
 
 export const NonConformityManager: React.FC = () => {
   const [selectedType, setSelectedType] = useState<string>("all");

@@ -50,7 +50,7 @@ export const AddTransactionDialog = memo(function({ open, onOpenChange, onSucces
         title: "Campos obrigatórios",
         description: "Preencha todos os campos obrigatórios.",
         variant: "destructive",
-      });
+      };
       return;
     }
 

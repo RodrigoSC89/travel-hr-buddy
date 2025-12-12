@@ -212,7 +212,7 @@ export const AdvancedPriceAlerts: React.FC = () => {
       best_time_to_buy: trend === "falling" ? "Agora" : "Aguardar 1-2 semanas",
       predicted_low: alert.current_price ? alert.current_price * (0.9 + Math.random() * 0.1) : undefined
     };
-  });
+  };
 
   const createAlert = async () => {
     if (!newAlert.product_name || !newAlert.target_price || !newAlert.product_url) {
@@ -220,7 +220,7 @@ export const AdvancedPriceAlerts: React.FC = () => {
         title: "Campos obrigatórios",
         description: "Preencha todos os campos obrigatórios",
         variant: "destructive"
-      });
+      };
       return;
     }
 
@@ -315,7 +315,7 @@ export const AdvancedPriceAlerts: React.FC = () => {
       toast({
         title: alert.is_active ? "Alerta pausado" : "Alerta ativado",
         description: `O alerta foi ${alert.is_active ? "pausado" : "ativado"} com sucesso.`,
-      });
+      };
     } catch (error) {
       toast({
         title: "Erro",
@@ -338,13 +338,13 @@ export const AdvancedPriceAlerts: React.FC = () => {
       toast({
         title: "Preços atualizados!",
         description: `${data?.checked_alerts || 0} alertas foram verificados`,
-      });
+      };
     } catch (error) {
       toast({
         title: "Erro",
         description: "Não foi possível atualizar os preços",
         variant: "destructive"
-      });
+      };
     } finally {
       setIsRefreshing(false);
     }
@@ -353,7 +353,7 @@ export const AdvancedPriceAlerts: React.FC = () => {
   const navigateToTravel = (alert: PriceAlert) => {
     // Navigate to travel module with pre-filled data
     window.open(`/travel?search=${encodeURIComponent(alert.product_name)}&url=${encodeURIComponent(alert.product_url)}`, "_blank");
-  });
+  };
 
   const getStatusBadge = (alert: PriceAlert) => {
     if (!alert.is_active) {
@@ -365,7 +365,7 @@ export const AdvancedPriceAlerts: React.FC = () => {
     }
     
     return <Badge className="bg-primary text-primary-foreground">Monitorando</Badge>;
-  });
+  };
 
   const getTrendIcon = (trend?: string) => {
     switch (trend) {
@@ -378,7 +378,7 @@ export const AdvancedPriceAlerts: React.FC = () => {
   const getPriceChangeColor = (current?: number, target?: number) => {
     if (!current || !target) return "text-muted-foreground";
     return current <= target ? "text-success" : "text-muted-foreground";
-  });
+  };
 
   const filteredAlerts = alerts.filter(alert => 
     selectedCategory === "all" || alert.category === selectedCategory
@@ -397,7 +397,7 @@ export const AdvancedPriceAlerts: React.FC = () => {
     default:
       return new Date(b.created_at).getTime() - new Date(a.created_at).getTime();
     }
-  });
+  };
 
   if (isLoading) {
     return (

@@ -160,7 +160,7 @@ const IoTRealtimeSensors: React.FC = () => {
 
   const calculateProgress = (value: number, min: number, max: number) => {
     return ((value - min) / (max - min)) * 100;
-  });
+  };
 
   return (
     <div className="space-y-6">

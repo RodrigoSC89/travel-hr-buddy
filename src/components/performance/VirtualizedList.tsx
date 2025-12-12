@@ -59,7 +59,7 @@ export function VirtualizedList<T>({
     items.forEach((_, index) => {
       positions.push(total);
       total += getItemHeight(index);
-  });
+  };
 
     return { totalHeight: total, itemPositions: positions };
   }, [items, getItemHeight]);
@@ -125,7 +125,7 @@ export function VirtualizedList<T>({
       for (const entry of entries) {
         setContainerHeight(entry.contentRect.height);
       }
-    });
+    };
 
     resizeObserver.observe(container);
     setContainerHeight(container.clientHeight);

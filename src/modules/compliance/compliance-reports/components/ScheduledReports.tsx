@@ -89,7 +89,7 @@ export const ScheduledReports: React.FC = () => {
         title: "Missing Fields",
         description: "Please fill in all required fields",
         variant: "destructive",
-      });
+      };
       return;
     }
 
@@ -103,7 +103,7 @@ export const ScheduledReports: React.FC = () => {
         frequency: formData.frequency,
         next_run: nextRun,
         is_active: true,
-      });
+      };
 
       if (error) {
       }
@@ -142,13 +142,13 @@ export const ScheduledReports: React.FC = () => {
       break;
     }
     return now.toISOString();
-  });
+  };
 
   const runReportNow = async (reportId: string) => {
     toast({
       title: "Generating Report",
       description: "Report generation started...",
-    });
+    };
 
     // Simulate report generation
     setTimeout(async () => {
@@ -204,7 +204,7 @@ export const ScheduledReports: React.FC = () => {
       toast({
         title: "Schedule Deleted",
         description: "Report schedule has been removed",
-      });
+      };
 
       fetchScheduledReports();
     } catch (error) {
@@ -225,7 +225,7 @@ export const ScheduledReports: React.FC = () => {
       quarterly: "bg-orange-500",
     };
     return colors[frequency] || "bg-gray-500";
-  });
+  };
 
   return (
     <Card>

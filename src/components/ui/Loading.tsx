@@ -147,7 +147,7 @@ export const LoadingSkeleton: React.FC<LoadingSkeletonProps> = ({ className }) =
       aria-hidden="true"
     />
   );
-});
+};
 
 export interface LoadingCardProps {
   variant?: "default" | "maritime";

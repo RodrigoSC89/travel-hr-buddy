@@ -141,13 +141,13 @@ export const PeotramPredictiveAnalytics: React.FC = () => {
       moderate: "bg-yellow-100 text-yellow-800"
     };
     return variants[impact];
-  });
+  };
 
   const getTrendIcon = (trend: "improving" | "declining" | "stable") => {
     if (trend === "improving") return <TrendingUp className="h-4 w-4 text-green-600" />;
     if (trend === "declining") return <Activity className="h-4 w-4 text-red-600" />;
     return <Activity className="h-4 w-4 text-muted-foreground" />;
-  });
+  };
 
   const getTypeIcon = (type: PredictiveInsight["type"]) => {
     const icons = {
@@ -157,7 +157,7 @@ export const PeotramPredictiveAnalytics: React.FC = () => {
       risk: <Target className="h-5 w-5 text-orange-600" />
     };
     return icons[type];
-  });
+  };
 
   return (
     <div className="space-y-6">

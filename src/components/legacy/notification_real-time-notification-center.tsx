@@ -97,7 +97,7 @@ export const RealTimeNotificationCenter: React.FC = () => {
         title: "Erro",
         description: "Não foi possível carregar as notificações",
         variant: "destructive"
-      });
+      };
     } finally {
       setIsLoading(false);
     }
@@ -269,10 +269,10 @@ export const RealTimeNotificationCenter: React.FC = () => {
       default:
         return true;
       }
-    });
+    };
 
     return filtered;
-  });
+  };
 
   const getNotificationIcon = (type: string) => {
     switch (type) {

@@ -169,7 +169,7 @@ export const ClientCustomization = memo(() => {
 
   const removeCustomField = (id: string) => {
     setCustomFields(fields => fields.filter(field => field.id !== id));
-  });
+  };
 
   const saveTheme = () => {
     toast({
@@ -192,7 +192,7 @@ export const ClientCustomization = memo(() => {
       toast({
         title: "Organização Clonada",
         description: "Uma cópia da organização foi criada com sucesso.",
-      });
+      };
     }
   };
 
@@ -209,7 +209,7 @@ export const ClientCustomization = memo(() => {
     return status === "active" 
       ? "bg-success text-success-foreground" 
       : "bg-muted text-muted-foreground";
-  });
+  };
 
   return (
     <div className="space-y-6">

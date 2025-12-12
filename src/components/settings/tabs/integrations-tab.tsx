@@ -103,7 +103,7 @@ export const IntegrationsTab: React.FC<IntegrationsTabProps> = ({
       ...prev,
       [keyId]: !prev[keyId]
     }));
-  });
+  };
 
   const addWebhook = () => {
     if (!newWebhook.name || !newWebhook.url) {
@@ -111,7 +111,7 @@ export const IntegrationsTab: React.FC<IntegrationsTabProps> = ({
         title: "Erro",
         description: "Nome e URL são obrigatórios",
         variant: "destructive"
-      });
+      };
       return;
     }
 
@@ -137,28 +137,28 @@ export const IntegrationsTab: React.FC<IntegrationsTabProps> = ({
   const removeWebhook = (id: string) => {
     onUpdate({
       webhooks: settings.webhooks.filter(w => w.id !== id)
-    });
+    };
     
     toast({
       title: "Webhook Removido",
       description: "Webhook foi removido das configurações"
-    });
-  });
+    };
+  };
 
   const testWebhook = async (webhook: unknown) => {
     toast({
       title: "Testando Webhook",
       description: "Enviando payload de teste..."
-    });
+    };
 
     // Simulate webhook test
     setTimeout(() => {
       toast({
         title: "Webhook Testado",
         description: "Resposta: 200 OK - Webhook funcionando corretamente"
-      });
+      };
     }, 2000);
-  });
+  };
 
   const getStatusBadge = (status: string) => {
     if (status === "connected") {
@@ -175,7 +175,7 @@ export const IntegrationsTab: React.FC<IntegrationsTabProps> = ({
         Desconectado
       </Badge>
     );
-  });
+  };
 
   return (
     <div className="space-y-6">

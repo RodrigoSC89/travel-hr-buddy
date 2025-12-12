@@ -49,7 +49,7 @@ export const SecurityAccessTab: React.FC<SecurityAccessTabProps> = ({
         [rule]: value
       }
 };
-  });
+  };
 
   const getPasswordStrength = () => {
     const { passwordRules } = settings;

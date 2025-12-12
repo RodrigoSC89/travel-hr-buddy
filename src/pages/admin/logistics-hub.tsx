@@ -105,7 +105,7 @@ export default function LogisticsHub() {
       const { error } = await supabase.from("logistics_requests").insert({
         ...requestForm,
         estimated_delivery: eta.toISOString(),
-      });
+      };
 
       if (error) throw error;
 
@@ -171,7 +171,7 @@ export default function LogisticsHub() {
       urgent: "bg-red-500",
     };
     return colors[priority as keyof typeof colors] || "bg-gray-500";
-  });
+  };
 
   const getStatusIcon = (status: string) => {
     switch (status) {
@@ -195,7 +195,7 @@ export default function LogisticsHub() {
       out_of_stock: "bg-red-500",
     };
     return colors[status as keyof typeof colors] || "bg-gray-500";
-  });
+  };
 
   const calculateETA = (createdAt: string): number => {
     const created = new Date(createdAt);
@@ -205,7 +205,7 @@ export default function LogisticsHub() {
     const now = new Date();
     const daysLeft = Math.ceil((delivery.getTime() - now.getTime()) / (1000 * 60 * 60 * 24));
     return Math.max(0, daysLeft);
-  });
+  };
 
   if (loading) {
     return (

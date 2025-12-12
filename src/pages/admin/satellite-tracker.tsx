@@ -118,7 +118,7 @@ export default function SatelliteTracker() {
         title: "Error",
         description: "Failed to load satellites",
         variant: "destructive",
-      });
+      };
     } finally {
       setLoading(false);
     }
@@ -232,7 +232,7 @@ export default function SatelliteTracker() {
       toast({
         title: "Tracking Started",
         description: "Satellite tracking session initiated",
-      });
+      };
     } catch (error) {
       logger.error("Error starting satellite tracking", { error, satelliteId });
       toast({
@@ -259,7 +259,7 @@ export default function SatelliteTracker() {
       toast({
         title: "Tracking Stopped",
         description: "Satellite tracking session ended",
-      });
+      };
     } catch (error) {
       logger.error("Error stopping satellite tracking", { error, trackingSessionId });
     }
@@ -269,14 +269,14 @@ export default function SatelliteTracker() {
     try {
       const { error } = await supabase.rpc("resolve_satellite_alert", {
         p_alert_id: alertId
-      });
+      };
 
       if (error) throw error;
 
       toast({
         title: "Alert Resolved",
         description: "Satellite alert marked as resolved",
-      });
+      };
 
       fetchAlerts();
     } catch (error) {

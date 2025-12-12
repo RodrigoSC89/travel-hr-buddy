@@ -99,7 +99,7 @@ export const ConnectivityPanel: React.FC = () => {
     if (strength >= 80) return "text-green-500";
     if (strength >= 50) return "text-yellow-500";
     return "text-red-500";
-  });
+  };
 
   const formatBandwidth = (kbps: number | null) => {
     if (!kbps) return "N/A";
@@ -107,7 +107,7 @@ export const ConnectivityPanel: React.FC = () => {
       return `${(kbps / 1000).toFixed(1)} Mbps`;
     }
     return `${kbps} Kbps`;
-  });
+  };
 
   const getTimeSince = (timestamp: string | null) => {
     if (!timestamp) return "Nunca";
@@ -119,7 +119,7 @@ export const ConnectivityPanel: React.FC = () => {
     if (hours < 24) return `${hours}h atrás`;
     const days = Math.floor(hours / 24);
     return `${days}d atrás`;
-  });
+  };
 
   return (
     <div className="space-y-4">

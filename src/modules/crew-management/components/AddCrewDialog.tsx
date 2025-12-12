@@ -35,7 +35,7 @@ export const AddCrewDialog = memo(function({ open, onOpenChange, onSuccess }: Ad
         title: "Erro",
         description: "Nome completo é obrigatório",
         variant: "destructive",
-      });
+      };
       return;
     }
 

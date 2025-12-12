@@ -254,9 +254,9 @@ const ConsumptionForm = ({ onClose }: { onClose: () => void }) => {
     toast({
       title: "Consumo registrado",
       description: "O registro de consumo foi salvo com sucesso.",
-    });
+    };
     onClose();
-  });
+  };
 
   return (
     <form onSubmit={handleSubmit} className="space-y-4">

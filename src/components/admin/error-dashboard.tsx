@@ -52,7 +52,7 @@ export const ErrorDashboard: React.FC = () => {
       low: <Badge className="bg-blue-500/20 text-blue-700 border-blue-500/30">Baixo</Badge>,
     };
     return variants[severity];
-  });
+  };
 
   const getCategoryIcon = (category: ErrorCategory) => {
     switch (category) {
@@ -87,7 +87,7 @@ export const ErrorDashboard: React.FC = () => {
   const formatTimestamp = (timestamp: number) => {
     const date = new Date(timestamp);
     return date.toLocaleString("pt-BR");
-  });
+  };
 
   const hasErrors = stats.total > 0;
   const hasCriticalErrors = stats.bySeverity.critical > 0;

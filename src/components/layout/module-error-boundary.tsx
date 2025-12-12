@@ -21,13 +21,13 @@ export const ModuleErrorBoundary: React.FC<ModuleErrorBoundaryProps> = ({
       tags: { module: moduleName },
       contexts: { react: { componentStack: errorInfo.componentStack } }
 };
-  });
+  };
 
   return (
     <ErrorBoundary onError={handleError}>
       {children}
     </ErrorBoundary>
   );
-});
+};
 
 export default ModuleErrorBoundary;

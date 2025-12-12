@@ -172,7 +172,7 @@ export const CrewIntelligenceAI = memo(function() {
     if (level < 60) return "text-yellow-500";
     if (level < 80) return "text-orange-500";
     return "text-red-500";
-  });
+  };
 
   const getTurnoverColor = (risk: string) => {
     switch (risk) {

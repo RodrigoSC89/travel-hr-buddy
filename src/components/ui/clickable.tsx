@@ -70,7 +70,7 @@ export const Clickable = React.forwardRef<HTMLDivElement, ClickableProps>(
     const handleClick = (event: React.MouseEvent<HTMLDivElement>) => {
       if (disabled) return;
       onClick?.(event);
-    });
+    };
 
     const handleKeyDown = (event: React.KeyboardEvent<HTMLDivElement>) => {
       if (disabled) return;
@@ -190,7 +190,7 @@ export const ClickableListItem = React.forwardRef<HTMLLIElement, ClickableListIt
     const handleClick = (event: React.MouseEvent<HTMLLIElement>) => {
       if (disabled) return;
       onClick?.(event);
-    });
+    };
 
     const handleKeyDown = (event: React.KeyboardEvent<HTMLLIElement>) => {
       if (disabled) return;

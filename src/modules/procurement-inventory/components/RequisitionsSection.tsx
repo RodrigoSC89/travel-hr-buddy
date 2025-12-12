@@ -166,7 +166,7 @@ export default function RequisitionsSection({ searchQuery }: RequisitionsSection
     const matchesStatus = filterStatus === "all" || req.status === filterStatus;
     const matchesPriority = filterPriority === "all" || req.priority === filterPriority;
     return matchesSearch && matchesStatus && matchesPriority;
-  });
+  };
 
   const handleCreateRequisition = () => {
     const newRequisition: Requisition = {
@@ -205,7 +205,7 @@ export default function RequisitionsSection({ searchQuery }: RequisitionsSection
         : r
     ));
     toast.success(`Requisição ${req.number} aprovada!`);
-  });
+  };
 
   const handleReject = (req: Requisition, reason: string) => {
     setRequisitions(prev => prev.map(r => 
@@ -214,14 +214,14 @@ export default function RequisitionsSection({ searchQuery }: RequisitionsSection
         : r
     ));
     toast.error(`Requisição ${req.number} rejeitada.`);
-  });
+  };
 
   const handleConvertToPO = (req: Requisition) => {
     setRequisitions(prev => prev.map(r => 
       r.id === req.id ? { ...r, status: "converted" as const } : r
     ));
     toast.success(`Requisição ${req.number} convertida em Pedido de Compra!`);
-  });
+  };
 
   const addItem = () => {
     setNewReq(prev => ({

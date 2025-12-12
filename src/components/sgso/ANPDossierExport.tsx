@@ -64,7 +64,7 @@ const getStatusConfig = (status: PracticeStatus["status"]) => {
     pendente: { color: "bg-secondary text-secondary-foreground", icon: Clock, label: "Pendente" }
   };
   return configs[status];
-});
+};
 
 export const ANPDossierExport: React.FC = () => {
   const { toast } = useToast();
@@ -129,7 +129,7 @@ export const ANPDossierExport: React.FC = () => {
         ? prev.filter(p => p !== id)
         : [...prev, id]
     );
-  });
+  };
 
   return (
     <div className="space-y-6">

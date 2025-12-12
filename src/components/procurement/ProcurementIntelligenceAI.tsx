@@ -143,7 +143,7 @@ export const ProcurementIntelligenceAI = memo(function() {
       setSuppliers(sugs);
       toast.success("Fornecedores encontrados", {
         description: `${sugs.length} opções disponíveis`
-      });
+      };
     } catch (error) {
       toast.error("Erro ao buscar fornecedores");
     }
@@ -154,7 +154,7 @@ export const ProcurementIntelligenceAI = memo(function() {
     if (ratio < 1) return { color: "text-red-500", label: "Crítico" };
     if (ratio < 1.5) return { color: "text-yellow-500", label: "Baixo" };
     return { color: "text-green-500", label: "OK" };
-  });
+  };
 
   return (
     <div className="space-y-6">

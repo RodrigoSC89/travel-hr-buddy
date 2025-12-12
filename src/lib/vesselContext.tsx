@@ -180,7 +180,7 @@ export const useVessel = (): VesselContextType => {
     throw new Error("useVessel must be used within a VesselProvider");
   }
   return context;
-});
+};
 
 /**
  * Hook to get current vessel ID (convenience)
@@ -188,7 +188,7 @@ export const useVessel = (): VesselContextType => {
 export const useVesselId = (): string | null => {
   const { currentVessel } = useVessel();
   return currentVessel?.id || null;
-});
+};
 
 /**
  * Hook to filter queries by current vessel
@@ -205,7 +205,7 @@ export const useVesselFilter = memo(() => {
       return query;
     },
   };
-});
+};
 
 // ==================== Storage Helpers ====================
 

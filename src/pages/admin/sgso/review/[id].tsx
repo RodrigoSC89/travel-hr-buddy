@@ -116,7 +116,7 @@ export default function SGSOAuditReviewPage() {
     setItems(items.map(item => 
       item.id === itemId ? { ...item, [field]: value } : item
     ));
-  });
+  };
 
   const handleSave = async () => {
     setSaving(true);
@@ -177,7 +177,7 @@ export default function SGSOAuditReviewPage() {
       toast({
         title: "Sucesso",
         description: "PDF exportado com sucesso"
-      });
+      };
     } catch (error) {
       console.error("Error exporting PDF:", error);
       console.error("Error exporting PDF:", error);

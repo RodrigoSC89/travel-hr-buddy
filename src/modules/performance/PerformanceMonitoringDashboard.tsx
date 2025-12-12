@@ -82,7 +82,7 @@ export const PerformanceMonitoringDashboard: React.FC = () => {
           title: "Critical Alert",
           description: `${criticalAlerts.length} critical performance alert(s) detected`,
           variant: "destructive",
-        });
+        };
       }
     } catch (error) {
       console.error("Error fetching performance data:", error);
@@ -144,7 +144,7 @@ export const PerformanceMonitoringDashboard: React.FC = () => {
       warning: systemData.filter((m) => m.status === "warning").length,
       critical: systemData.filter((m) => m.status === "critical").length,
     };
-  });
+  };
 
   const stats = {
     totalMetrics: metrics.length,

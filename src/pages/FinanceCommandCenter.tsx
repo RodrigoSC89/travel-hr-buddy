@@ -230,14 +230,14 @@ const FinanceCommandCenter: React.FC = () => {
       currency: "BRL",
       fiscalYearStart: "01",
     };
-  });
+  };
 
   const [newExpense, setNewExpense] = useState({
     description: "",
     amount: "",
     category: "other",
     notes: "",
-  });
+  };
 
   // Format currency
   const formatCurrency = (value: number) => {
@@ -246,7 +246,7 @@ const FinanceCommandCenter: React.FC = () => {
       currency: "BRL",
       minimumFractionDigits: 0,
     }).format(value);
-  });
+  };
 
   // Fetch data
   const fetchData = useCallback(async (showToast = false) => {
@@ -320,12 +320,12 @@ const FinanceCommandCenter: React.FC = () => {
       setTransactions(prev => [{ ...approved, status: "approved" }, ...prev]);
     }
     toast({ title: "Aprovado", description: "A solicitação foi aprovada com sucesso." });
-  });
+  };
 
   const handleReject = (id: string) => {
     setPendingApprovals(prev => prev.filter(p => p.id !== id));
     toast({ title: "Rejeitado", description: "A solicitação foi rejeitada.", variant: "destructive" });
-  });
+  };
 
   // Create expense
   const handleCreateExpense = () => {
@@ -372,7 +372,7 @@ const FinanceCommandCenter: React.FC = () => {
       const csvRows = ["Descrição,Valor,Data,Categoria,Status"];
       transactions.forEach(tx => {
         csvRows.push(`"${tx.description}",${tx.amount},"${tx.date}","${tx.category}","${tx.status}"`);
-  });
+  };
       const blob = new Blob([csvRows.join("\n")], { type: "text/csv" });
       const url = URL.createObjectURL(blob);
       const a = document.createElement("a");
@@ -481,7 +481,7 @@ const FinanceCommandCenter: React.FC = () => {
       toast({ 
         title: "Análise concluída", 
         description: `${result.response.opportunitiesCount || 3} oportunidades de economia identificadas` 
-      });
+      };
     } else {
       toast({ title: "Análise concluída", description: "Insights gerados com sucesso" });
     }
@@ -548,13 +548,13 @@ const FinanceCommandCenter: React.FC = () => {
     if (variance <= 0) return "text-green-600";
     if (variance <= 5) return "text-amber-600";
     return "text-red-600";
-  });
+  };
 
   const getEfficiencyColor = (efficiency: number) => {
     if (efficiency >= 90) return "bg-green-500";
     if (efficiency >= 80) return "bg-amber-500";
     return "bg-red-500";
-  });
+  };
 
   if (isLoading) {
     return (

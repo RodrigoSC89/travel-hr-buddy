@@ -140,7 +140,7 @@ export const PredictiveMaintenanceSystem = memo(() => {
     if (probability >= 80) return "text-red-600";
     if (probability >= 60) return "text-yellow-600";
     return "text-green-600";
-  });
+  };
 
   const getTrendIcon = (trend: string) => {
     switch (trend) {
@@ -156,7 +156,7 @@ export const PredictiveMaintenanceSystem = memo(() => {
       ? current <= target
       : current >= target;
     return isGood;
-  });
+  };
 
   if (loading) {
     return (

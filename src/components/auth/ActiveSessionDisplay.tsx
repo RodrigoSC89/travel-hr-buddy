@@ -69,7 +69,7 @@ export const ActiveSessionDisplay = memo(function() {
         title: "Error",
         description: "Failed to load session information",
         variant: "destructive",
-      });
+      };
     } finally {
       setLoading(false);
     }
@@ -87,7 +87,7 @@ export const ActiveSessionDisplay = memo(function() {
       toast({
         title: "Success",
         description: "Logged out successfully",
-      });
+      };
 
       navigate("/auth/login");
     } catch (error) {

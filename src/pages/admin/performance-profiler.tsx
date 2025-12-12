@@ -166,7 +166,7 @@ export default function PerformanceProfiler() {
             lastSeen: Date.now(),
           };
         }
-      });
+      };
 
       if (slowOnes.length > 0) {
         setSlowComponents((prev) => {
@@ -187,7 +187,7 @@ export default function PerformanceProfiler() {
           // Keep only recent ones (last 5 minutes)
           const fiveMinutesAgo = Date.now() - 5 * 60 * 1000;
           return merged.filter((x) => x.lastSeen > fiveMinutesAgo);
-        });
+        };
       }
     } catch (error) {
       logger.error("Error detecting slow components in performance profiler", { error });
@@ -238,7 +238,7 @@ export default function PerformanceProfiler() {
     if (value >= thresholds.critical) return "text-red-500";
     if (value >= thresholds.warning) return "text-yellow-500";
     return "text-green-500";
-  });
+  };
 
   return (
     <div className="space-y-6 p-6">

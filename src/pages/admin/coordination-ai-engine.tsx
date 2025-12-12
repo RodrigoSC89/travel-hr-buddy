@@ -98,7 +98,7 @@ const CoordinationAIEnginePage: React.FC = () => {
         priority_level: 5,
         max_concurrent_tasks: 3,
         metadata: {},
-      });
+      };
 
       if (agent) {
         toast.success(`Agent ${newAgentName} registered successfully`);
@@ -130,7 +130,7 @@ const CoordinationAIEnginePage: React.FC = () => {
         required_capabilities: [`${newAgentType}_capability`],
         payload: { created_from: "coordination_ui" },
         timeout_seconds: 300,
-      });
+      };
 
       if (task) {
         toast.success(`Task ${newTaskName} created and assigned`);
@@ -163,7 +163,7 @@ const CoordinationAIEnginePage: React.FC = () => {
       timeout: "bg-orange-500",
     };
     return colors[status] || "bg-gray-500";
-  });
+  };
 
   const getStatusIcon = (status: TaskStatus) => {
     switch (status) {

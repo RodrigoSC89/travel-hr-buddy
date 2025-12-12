@@ -171,7 +171,7 @@ export const QuickStartGuide = memo(function() {
       newCompleted.add(taskId);
     }
     setCompletedTasks(newCompleted);
-  });
+  };
 
   const totalTasks = ONBOARDING_STEPS.reduce((acc, step) => acc + step.tasks.length, 0);
   const completedCount = completedTasks.size;

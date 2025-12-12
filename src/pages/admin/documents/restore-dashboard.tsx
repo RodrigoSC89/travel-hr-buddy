@@ -250,7 +250,7 @@ export default function RestoreDashboard() {
           textColor: [255, 255, 255],
           fontStyle: "bold"
         },
-      });
+      };
       
       // Save PDF with date-stamped filename
       const filename = `restore-analytics-${format(new Date(), "yyyy-MM-dd")}.pdf`;

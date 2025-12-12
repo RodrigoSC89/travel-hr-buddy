@@ -13,7 +13,7 @@ vi.mock("html2pdf.js", () => {
   return {
     default: mockHtml2pdf,
   };
-  });
+  };
 
 // Mock SGSOTrendChart
 vi.mock("@/components/sgso/SGSOTrendChart", () => ({
@@ -59,18 +59,18 @@ describe("SGSOReportPage", () => {
         <SGSOReportPage {...props} />
       </BrowserRouter>
     );
-  });
+  };
 
   it("should render the page title", () => {
     renderComponent();
     expect(screen.getByText(/Relatório SGSO - Gestão de Segurança Operacional/i)).toBeDefined();
-});
+};
 
   it("should render the export PDF button", () => {
     renderComponent();
     const button = screen.getByText(/Exportar PDF/i);
     expect(button).toBeDefined();
-  });
+  };
 
   it("should render vessel name", () => {
     renderComponent({ vesselName: "Test Vessel" });

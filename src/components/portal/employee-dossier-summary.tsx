@@ -167,7 +167,7 @@ export const EmployeeDossierSummary: React.FC = () => {
         title: "Erro",
         description: "Erro ao carregar dados do dossiê",
         variant: "destructive"
-      });
+      };
     } finally {
       setLoading(false);
     }

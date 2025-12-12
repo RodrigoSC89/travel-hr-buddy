@@ -24,7 +24,7 @@ export default function JobFormWithExamples({ onSubmit }: JobFormWithExamplesPro
         title: "Campos obrigatórios",
         description: "Por favor, preencha o componente e a descrição.",
         variant: "destructive",
-      });
+      };
       return;
     }
 
@@ -49,8 +49,8 @@ export default function JobFormWithExamples({ onSubmit }: JobFormWithExamplesPro
     toast({
       title: "Exemplo aplicado",
       description: "A descrição foi preenchida com o exemplo selecionado.",
-    });
-  });
+    };
+  };
 
   return (
     <div className="space-y-6">

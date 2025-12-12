@@ -73,7 +73,7 @@ export const CreateMaintenancePlanDialog: React.FC<CreateMaintenancePlanDialogPr
         title: "Campos obrigatórios",
         description: "Preencha todos os campos obrigatórios",
         variant: "destructive",
-      });
+      };
       return;
     }
 
@@ -88,7 +88,7 @@ export const CreateMaintenancePlanDialog: React.FC<CreateMaintenancePlanDialogPr
       toast({
         title: "Plano de Manutenção Criado",
         description: `${formData.title} - ${equipment?.name} agendado para ${format(formData.scheduledDate, "dd/MM/yyyy", { locale: ptBR })}`,
-      });
+      };
 
       // Reset form
       setFormData({
@@ -101,7 +101,7 @@ export const CreateMaintenancePlanDialog: React.FC<CreateMaintenancePlanDialogPr
         estimatedHours: "",
         assignee: "",
         notes: "",
-      });
+      };
 
       onSuccess();
       onOpenChange(false);

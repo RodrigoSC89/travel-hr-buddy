@@ -226,7 +226,7 @@ export default function CommandCenter() {
       settings: CheckCircle
     };
     return iconMap[moduleName || ""] || Activity;
-  });
+  };
 
   useEffect(() => {
     const orgId = currentOrganization?.id;

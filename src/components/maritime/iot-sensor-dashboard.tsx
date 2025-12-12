@@ -210,7 +210,7 @@ export const IoTSensorDashboard = memo(() => {
           vesselId,
           sensorType: sensorData.sensorType
         }
-      });
+      };
 
       if (error) throw error;
       
@@ -280,7 +280,7 @@ export const IoTSensorDashboard = memo(() => {
         </div>
       </div>
     );
-  });
+  };
 
   return (
     <div className="space-y-6">

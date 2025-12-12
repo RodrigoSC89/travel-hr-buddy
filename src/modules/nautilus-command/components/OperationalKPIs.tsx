@@ -181,7 +181,7 @@ export const OperationalKPIs: React.FC<OperationalKPIsProps> = ({ status }) => {
     if (value >= target) return "text-green-600";
     if (value >= target * 0.8) return "text-yellow-600";
     return "text-red-600";
-  });
+  };
 
   return (
     <div className="space-y-6">

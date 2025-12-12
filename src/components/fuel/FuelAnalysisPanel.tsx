@@ -72,7 +72,7 @@ export const FuelAnalysisPanel: React.FC<FuelAnalysisPanelProps> = ({
     if (current < target) return <TrendingDown className="h-4 w-4 text-green-500" />;
     if (current > target) return <TrendingUp className="h-4 w-4 text-red-500" />;
     return <Minus className="h-4 w-4 text-gray-500" />;
-  });
+  };
 
   return (
     <div className="space-y-6">

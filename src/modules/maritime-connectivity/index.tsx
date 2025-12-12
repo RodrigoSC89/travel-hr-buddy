@@ -109,7 +109,7 @@ export default function MaritimeConnectivity() {
       ));
       toast({ title: "Sincronizado!", description: "Dados sincronizados com sucesso" });
     }, 2000);
-  });
+  };
 
   const getStatusColor = (status: string) => {
     const colors: Record<string, string> = {
@@ -118,7 +118,7 @@ export default function MaritimeConnectivity() {
       offline: "bg-red-500/10 text-red-600"
     };
     return colors[status] || colors.offline;
-  });
+  };
 
   const getConnectionIcon = (type: string) => {
     switch (type) {
@@ -134,12 +134,12 @@ export default function MaritimeConnectivity() {
     if (strength >= 40) return <SignalLow className="h-4 w-4 text-amber-500" />;
     if (strength > 0) return <SignalZero className="h-4 w-4 text-red-500" />;
     return <WifiOff className="h-4 w-4 text-muted-foreground" />;
-  });
+  };
 
   const formatBytes = (kbps: number) => {
     if (kbps >= 1024) return `${(kbps / 1024).toFixed(1)} Mbps`;
     return `${kbps} Kbps`;
-  });
+  };
 
   const onlineCount = connections.filter(c => c.status === "online").length;
   const degradedCount = connections.filter(c => c.status === "degraded").length;

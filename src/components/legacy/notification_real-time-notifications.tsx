@@ -126,7 +126,7 @@ export const NotificationCenter: React.FC = () => {
     setNotifications(prev => 
       prev.map(n => n.id === id ? { ...n, isRead: true } : n)
     );
-  });
+  };
 
   const markAllAsRead = () => {
     setNotifications(prev => 
@@ -150,7 +150,7 @@ export const NotificationCenter: React.FC = () => {
     
     const diffInDays = Math.floor(diffInHours / 24);
     return `${diffInDays}d atrás`;
-  });
+  };
 
   // Simular notificações em tempo real
   useEffect(() => {
@@ -173,7 +173,7 @@ export const NotificationCenter: React.FC = () => {
         toast({
           title: newNotification.title,
           description: newNotification.message,
-        });
+        };
       }
     }, 30000); // A cada 30 segundos
 

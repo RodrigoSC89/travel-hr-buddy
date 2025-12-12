@@ -78,7 +78,7 @@ export const MoodDashboard = memo(() => {
     if (moodHistory.length === 0) return 0;
     const sum = moodHistory.reduce((acc, curr) => acc + curr[key], 0);
     return sum / moodHistory.length;
-  });
+  };
 
   const calculateTrend = (key: keyof Omit<MoodData, "date">) => {
     if (moodHistory.length < MIN_HISTORY_FOR_TREND) return 0;
@@ -89,13 +89,13 @@ export const MoodDashboard = memo(() => {
     const olderAvg = older.reduce((acc, curr) => acc + curr[key], 0) / older.length;
     
     return recentAvg - olderAvg;
-  });
+  };
 
   const getTrendIcon = (trend: number) => {
     if (trend > 5) return <TrendingUp className="h-4 w-4 text-green-500" />;
     if (trend < -5) return <TrendingDown className="h-4 w-4 text-red-500" />;
     return <span className="text-xs text-muted-foreground">Estável</span>;
-  });
+  };
 
   const chartData = {
     labels: moodHistory.map(d => d.date.toLocaleDateString("pt-BR", { day: "2-digit", month: "short" })),
@@ -164,13 +164,13 @@ export const MoodDashboard = memo(() => {
     if (value >= 70) return "text-green-600 bg-green-50 dark:bg-green-950";
     if (value >= 50) return "text-yellow-600 bg-yellow-50 dark:bg-yellow-950";
     return "text-red-600 bg-red-50 dark:bg-red-950";
-  });
+  };
 
   const getStatusBadge = (value: number) => {
     if (value >= 70) return <Badge className="bg-green-600">Excelente</Badge>;
     if (value >= 50) return <Badge className="bg-yellow-600">Moderado</Badge>;
     return <Badge variant="destructive">Atenção</Badge>;
-  });
+  };
 
   return (
     <div className="space-y-4">

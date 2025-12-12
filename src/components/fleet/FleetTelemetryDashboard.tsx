@@ -178,7 +178,7 @@ export const FleetTelemetryDashboard: React.FC = () => {
           health_score: healthScore,
           last_update: vesselSensors[0]?.reading_timestamp || new Date().toISOString(),
         };
-      });
+      };
 
       setVessels(telemetryByVessel);
 
@@ -209,7 +209,7 @@ export const FleetTelemetryDashboard: React.FC = () => {
     );
 
     return Math.round((totalWeight / sensors.length) * 100);
-  });
+  };
 
   const checkAndGenerateAlerts = async (readings: SensorReading[]) => {
     const newAlerts: MaintenanceAlert[] = [];
@@ -227,7 +227,7 @@ export const FleetTelemetryDashboard: React.FC = () => {
           recommended_action: `Inspect ${reading.sensor_location} immediately`,
           status: "active",
           created_at: reading.reading_timestamp,
-        });
+        };
       }
 
       // Check for anomalous patterns (vibration)
@@ -271,7 +271,7 @@ export const FleetTelemetryDashboard: React.FC = () => {
       if (criticalAlerts.length > 0) {
         toast.error(`${criticalAlerts.length} critical alert(s) detected!`, {
           duration: 10000,
-        });
+        };
       }
     }
   };
@@ -336,7 +336,7 @@ export const FleetTelemetryDashboard: React.FC = () => {
     };
     const Icon = icons[type] || Activity;
     return <Icon className="h-4 w-4" />;
-  });
+  };
 
   const getStatusColor = (status: string) => {
     const colors = {
@@ -346,7 +346,7 @@ export const FleetTelemetryDashboard: React.FC = () => {
       offline: "text-gray-500",
     };
     return colors[status] || "text-gray-500";
-  });
+  };
 
   const exportTelemetryData = () => {
     const csvData = sensorData.map((s) => ({

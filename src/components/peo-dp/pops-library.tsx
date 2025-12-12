@@ -151,13 +151,13 @@ export const POPsLibrary: React.FC = () => {
   const toggleFavorite = (id: string) => {
     setPOPs(pops.map(p => p.id === id ? { ...p, isFavorite: !p.isFavorite } : p));
     toast.success("Favoritos atualizados");
-  });
+  };
 
   const handleViewPOP = (pop: POP) => {
     setSelectedPOP(pop);
     setShowPOPDialog(true);
     setAISummary("");
-  });
+  };
 
   const handleGenerateSummary = async () => {
     if (!selectedPOP) return;

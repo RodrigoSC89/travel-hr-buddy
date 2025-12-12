@@ -58,7 +58,7 @@ export default function ApplyTemplateModal({ onApply, tableName = "templates" }:
         title: "Erro ao carregar templates",
         description: "Não foi possível carregar os templates.",
         variant: "destructive",
-      });
+      };
     }
   }
 
@@ -110,7 +110,7 @@ export default function ApplyTemplateModal({ onApply, tableName = "templates" }:
     toast({
       title: "Template aplicado com sucesso",
       description: "O template foi aplicado ao editor.",
-    });
+    };
   }
 
   const filteredTemplates = templates.filter((template) =>

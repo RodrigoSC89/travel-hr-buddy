@@ -171,7 +171,7 @@ export const CommunicationAnalytics: React.FC<CommunicationAnalyticsProps> = ({ 
     const previous = data[data.length - 2];
     const change = ((current - previous) / previous) * 100;
     return { value: Math.abs(change), isPositive: change >= 0 };
-  });
+  };
 
   const exportReport = () => {
     // Mock report export

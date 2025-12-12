@@ -172,13 +172,13 @@ Sou seu assistente especializado em **Sistema de Gestão de Segurança Operacion
     toast({
       title: "Copiado!",
       description: "Conteúdo copiado para a área de transferência"
-    });
-  });
+    };
+  };
 
   const getTypeIcon = (type: string) => {
     const typeConfig = GENERATION_TYPES.find(t => t.id === type);
     return typeConfig?.icon || Search;
-  });
+  };
 
   const getTypeBadge = (type: string) => {
     const typeConfig = GENERATION_TYPES.find(t => t.id === type);
@@ -197,7 +197,7 @@ Sou seu assistente especializado em **Sistema de Gestão de Segurança Operacion
         {typeConfig.label}
       </Badge>
     );
-  });
+  };
 
   return (
     <div className="space-y-6">

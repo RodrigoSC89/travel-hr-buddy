@@ -165,13 +165,13 @@ export const SmartNotifications: React.FC = () => {
       toast({
         title: "Configurações salvas!",
         description: "Suas preferências de notificação foram atualizadas.",
-      });
+      };
     } catch (error) {
       toast({
         title: "Erro",
         description: "Não foi possível salvar as configurações",
         variant: "destructive"
-      });
+      };
     } finally {
       setIsSaving(false);
     }
@@ -196,7 +196,7 @@ export const SmartNotifications: React.FC = () => {
       toast({
         title: "Notificação de teste enviada!",
         description: `Teste enviado via ${testNotification.type}`,
-      });
+      };
     } catch (error) {
       toast({
         title: "Erro",

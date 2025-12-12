@@ -36,13 +36,13 @@ export const OfflineStatusBar: React.FC<OfflineStatusBarProps> = ({ className })
         setShowSuccess(true);
         setTimeout(() => setShowSuccess(false), 3000);
       }
-    });
+    };
 
     // Initialize and get pending count
     offlineSyncManager.initialize().then(async () => {
       const count = await offlineSyncManager.getPendingCount();
       setPendingCount(count);
-  });
+  };
 
     return () => {
       window.removeEventListener("online", handleOnline);

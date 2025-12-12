@@ -89,7 +89,7 @@ export const AdvancedAIAssistant = memo(() => {
     recentActions: ["Visualizou dashboard", "Analisou KPIs", "Criou workflow"],
     preferences: { language: "pt-BR", timezone: "America/Sao_Paulo" },
     workPatterns: { peakHours: "9-11", preferredTasks: ["analysis", "reports"] }
-  });
+  };
 
   const [quickActions] = useState<QuickAction[]>([
     { id: 1, label: "Análise de Performance", icon: BarChart3, prompt: "Faça uma análise detalhada da performance da equipe nos últimos 30 dias" },
@@ -207,15 +207,15 @@ export const AdvancedAIAssistant = memo(() => {
 
   const handleQuickAction = (action: QuickAction) => {
     setInputMessage(action.prompt);
-  });
+  };
 
   const getInsightIcon = (type: string) => {
     switch (type) {
     case "warning": return <AlertCircle className="w-4 h-4 text-yellow-500" />;
     case "opportunity": return <TrendingUp className="w-4 h-4 text-green-500" />;
     default: return <Lightbulb className="w-4 h-4 text-blue-500" />;
-    });
-  });
+    };
+  };
 
   return (
     <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">

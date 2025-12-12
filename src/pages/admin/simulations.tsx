@@ -52,7 +52,7 @@ export default function SimulationsPage() {
       cancelled: "bg-gray-100 text-gray-800",
     };
     return variants[status] || variants.scheduled;
-  });
+  };
 
   return (
     <div className="container mx-auto p-6 space-y-6">

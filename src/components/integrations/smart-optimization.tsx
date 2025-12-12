@@ -225,7 +225,7 @@ export const SmartOptimization: React.FC = () => {
       toast({
         title: "Análise em Progresso",
         description: steps[i],
-      });
+      };
     }
     
     setIsScanning(false);
@@ -243,16 +243,16 @@ export const SmartOptimization: React.FC = () => {
     toast({
       title: "Implementando Otimização",
       description: `Aplicando: ${suggestion?.title}`,
-    });
+    };
     
     // Simular implementação
     setTimeout(() => {
       toast({
         title: "Otimização Aplicada",
         description: "A melhoria foi implementada com sucesso.",
-      });
+      };
     }, 2000);
-  });
+  };
 
   return (
     <div className="space-y-6">

@@ -36,7 +36,7 @@ export const KanbanAISuggestions = memo(function({ suggestions = [] }: KanbanAIS
           title: "Erro",
           description: "Não foi possível salvar a sugestão da IA",
           variant: "destructive",
-        });
+        };
         // Revert the accepted state on error
         setAccepted((prev) => prev.filter(e => e !== etapa));
         return;

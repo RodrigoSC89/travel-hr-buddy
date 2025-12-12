@@ -80,7 +80,7 @@ const PerformanceCenter: React.FC = () => {
     if (nota >= 3.5) return "text-blue-500";
     if (nota >= 2.5) return "text-yellow-500";
     return "text-red-500";
-  });
+  };
 
   const handleStartAvaliacao = async (avaliacao: Avaliacao) => {
     toast.info(`Iniciando avaliação de ${avaliacao.colaborador}...`);
@@ -104,7 +104,7 @@ const PerformanceCenter: React.FC = () => {
   const handleContinueAvaliacao = (avaliacao: Avaliacao) => {
     setSelectedAvaliacao(avaliacao);
     setIsDetailOpen(true);
-  });
+  };
 
   const handleCreateOKR = async () => {
     if (!newOKR.objetivo || !newOKR.responsavel) {
@@ -195,7 +195,7 @@ const PerformanceCenter: React.FC = () => {
 
   const getCollaboratorsInBox = (performance: string, potential: string) => {
     return mockNineBox.filter(n => n.performance === performance && n.potential === potential);
-  });
+  };
 
   return (
     <div className="space-y-6">

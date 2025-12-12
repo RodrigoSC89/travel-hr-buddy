@@ -106,13 +106,13 @@ export default function SGSOAuditEditor() {
       comments: "",
       evidence: []
     }]);
-  });
+  };
 
   const handleUpdateResult = (index: number, updates: Partial<AuditResult>) => {
     const updated = [...auditResults];
     updated[index] = { ...updated[index], ...updates };
     setAuditResults(updated);
-  });
+  };
 
   const handleSaveAudit = async () => {
     if (!vesselId) {
@@ -120,7 +120,7 @@ export default function SGSOAuditEditor() {
         title: "Erro",
         description: "Selecione uma embarcação",
         variant: "destructive"
-      });
+      };
       return;
     }
 
@@ -155,13 +155,13 @@ export default function SGSOAuditEditor() {
           priority: "high",
           status: "open",
           assigned_to: user?.id
-        });
+        };
       }
 
       toast({
         title: "Auditoria salva",
         description: "Auditoria SGSO salva com sucesso"
-      });
+      };
 
       // Reset form
       setAuditResults([]);
@@ -187,7 +187,7 @@ export default function SGSOAuditEditor() {
     if (ratio > 0.3) return "high";
     if (ratio > 0.1) return "medium";
     return "low";
-  });
+  };
 
   const exportToPDF = () => {
     const doc = new jsPDF();
@@ -214,7 +214,7 @@ export default function SGSOAuditEditor() {
       startY: 45,
       styles: { fontSize: 9 },
       headStyles: { fillColor: [41, 128, 185] }
-    });
+    };
     
     // Summary
     const compliant = auditResults.filter(r => r.status === "compliant").length;
@@ -232,7 +232,7 @@ export default function SGSOAuditEditor() {
     toast({
       title: "PDF exportado",
       description: "Relatório exportado com sucesso"
-    });
+    };
   };
 
   const getStatusBadge = (status: string) => {
@@ -252,7 +252,7 @@ export default function SGSOAuditEditor() {
         {status}
       </Badge>
     );
-  });
+  };
 
   return (
     <div className="container mx-auto p-6 space-y-6">

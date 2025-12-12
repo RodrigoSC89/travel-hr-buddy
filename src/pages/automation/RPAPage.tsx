@@ -113,7 +113,7 @@ export default function RPAPage() {
 
   const toggleBot = (id: number) => {
     setBotStates((prev) => ({ ...prev, [id]: !prev[id] }));
-  });
+  };
 
   const getStatusBadge = (status: string, isActive: boolean) => {
     if (isActive && status !== "scheduled") {
@@ -123,7 +123,7 @@ export default function RPAPage() {
       return <Badge className="bg-blue-100 text-blue-700">Agendado</Badge>;
     }
     return <Badge className="bg-gray-100 text-gray-700">Pausado</Badge>;
-  });
+  };
 
   return (
     <ModulePageWrapper gradient="orange">

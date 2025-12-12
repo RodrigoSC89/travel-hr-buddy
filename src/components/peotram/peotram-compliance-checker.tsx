@@ -219,7 +219,7 @@ export const PeotramComplianceChecker: React.FC = () => {
     if (percentage >= 90) return "text-success";
     if (percentage >= 70) return "text-warning";
     return "text-destructive";
-  });
+  };
 
   if (isLoading) {
     return (

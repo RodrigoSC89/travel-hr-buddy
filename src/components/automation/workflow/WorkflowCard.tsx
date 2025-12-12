@@ -106,7 +106,7 @@ export const WorkflowCard: React.FC<WorkflowCardProps> = ({
       month: "2-digit",
       year: "numeric",
 };
-  });
+  };
 
   const formatDuration = (minutes?: number) => {
     if (!minutes) return "N/A";
@@ -115,7 +115,7 @@ export const WorkflowCard: React.FC<WorkflowCardProps> = ({
     if (hours < 24) return `${hours}h`;
     const days = Math.floor(hours / 24);
     return `${days}d`;
-  });
+  };
 
   return (
     <Card className="group overflow-hidden border-border/50 hover:border-primary/30 transition-all duration-300 hover:shadow-lg hover:shadow-primary/5">

@@ -51,14 +51,14 @@ export default function CrewTraining({
 
   const getMemberCertifications = (memberId: string) => {
     return certifications.filter(c => c.crewMemberId === memberId);
-  });
+  };
 
   const getComplianceScore = (memberId: string) => {
     const memberCerts = getMemberCertifications(memberId);
     if (memberCerts.length === 0) return 0;
     const validCerts = memberCerts.filter(c => c.status === "valid").length;
     return Math.round((validCerts / memberCerts.length) * 100);
-  });
+  };
 
   const filteredMembers = crewMembers.filter(member => {
     const matchesSearch = member.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
@@ -66,19 +66,19 @@ export default function CrewTraining({
     const matchesDepartment = departmentFilter === "all" || member.department === departmentFilter;
     const matchesStatus = statusFilter === "all" || member.trainingStatus === statusFilter;
     return matchesSearch && matchesDepartment && matchesStatus;
-  });
+  };
 
   const handleViewDetails = (member: CrewMember) => {
     setSelectedMember(member);
     setShowDetailsDialog(true);
     onViewDetails(member);
-  });
+  };
 
   const handleViewCertificate = (cert: Certification) => {
     setSelectedCert(cert);
     setShowCertDialog(true);
     onViewCertificate(cert);
-  });
+  };
 
   const stats = {
     total: crewMembers.length,

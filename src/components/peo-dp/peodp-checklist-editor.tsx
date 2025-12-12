@@ -169,7 +169,7 @@ export const PEODPChecklistEditor = memo(function({ onSave, existingVersion }: P
       }
     };
     reader.readAsText(file);
-  });
+  };
 
   const handleCopyFromPrevious = () => {
     setVersion(prev => ({

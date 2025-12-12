@@ -66,7 +66,7 @@ export default function BackupsPage() {
         title: "Error",
         description: "Failed to load backups",
         variant: "destructive",
-      });
+      };
     } finally {
       setLoading(false);
     }
@@ -92,7 +92,7 @@ export default function BackupsPage() {
       toast({
         title: "Backup Started",
         description: "Manual backup is being created...",
-      });
+      };
 
       const { data: { session } } = await supabase.auth.getSession();
       if (!session) {
@@ -175,7 +175,7 @@ export default function BackupsPage() {
     const sizes = ["Bytes", "KB", "MB", "GB"];
     const i = Math.floor(Math.log(bytes) / Math.log(k));
     return Math.round(bytes / Math.pow(k, i) * 100) / 100 + " " + sizes[i];
-  });
+  };
 
   const getStatusBadge = (status: string) => {
     const variants: Record<string, "default" | "secondary" | "destructive"> = {
@@ -185,7 +185,7 @@ export default function BackupsPage() {
       pending: "secondary",
     };
     return <Badge variant={variants[status] || "secondary"}>{status}</Badge>;
-  });
+  };
 
   return (
     <div className="container mx-auto py-8 space-y-6">

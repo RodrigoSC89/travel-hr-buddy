@@ -82,13 +82,13 @@ describe("SGSOAuditReviewPage", () => {
         </Routes>
       </BrowserRouter>
     );
-  });
+  };
 
   it("should render loading state initially", () => {
     const { container } = renderWithRouter();
     const spinner = container.querySelector(".animate-spin");
     expect(spinner).toBeInTheDocument();
-  });
+  };
 
   it("should render page title after loading", async () => {
     renderWithRouter();

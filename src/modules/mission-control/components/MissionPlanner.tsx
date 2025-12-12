@@ -58,7 +58,7 @@ export const MissionPlanner: React.FC = () => {
         title: "Error",
         description: "Failed to load missions",
         variant: "destructive",
-      });
+      };
     } finally {
       setLoading(false);
     }
@@ -69,7 +69,7 @@ export const MissionPlanner: React.FC = () => {
     try {
       const { data, error } = await supabase.rpc("activate_mission", {
         p_mission_id: missionId,
-      });
+      };
 
       if (error) throw error;
 
@@ -79,7 +79,7 @@ export const MissionPlanner: React.FC = () => {
         toast({
           title: "Mission Activated",
           description: `${result.mission_name} is now active`,
-        });
+        };
         fetchMissions(); // Refresh missions list
       } else {
         throw new Error(result.error || "Activation failed");

@@ -67,7 +67,7 @@ const NavigationAssistant: React.FC = () => {
         title: "Campos obrigatórios",
         description: "Informe a origem e o destino da rota.",
         variant: "destructive",
-      });
+      };
       return;
     }
 
@@ -140,7 +140,7 @@ Formate a resposta em markdown estruturado com informações práticas para nave
   const selectRoute = (route: typeof commonRoutes[0]) => {
     setOrigin(route.origin);
     setDestination(route.destination);
-  });
+  };
 
   return (
     <div className="p-6 space-y-6 min-h-screen">

@@ -299,7 +299,7 @@ export const AdvancedDocumentCenter: React.FC = () => {
     const sizes = ["Bytes", "KB", "MB", "GB"];
     const i = Math.floor(Math.log(bytes) / Math.log(k));
     return parseFloat((bytes / Math.pow(k, i)).toFixed(2)) + " " + sizes[i];
-  });
+  };
 
   const filteredDocuments = documents.filter(doc => {
     const matchesSearch = doc.title.toLowerCase().includes(searchTerm.toLowerCase()) ||
@@ -309,7 +309,7 @@ export const AdvancedDocumentCenter: React.FC = () => {
     const matchesStatus = statusFilter === "all" || doc.status === statusFilter;
     
     return matchesSearch && matchesCategory && matchesStatus;
-  });
+  };
 
   const handleUpload = () => {
     setIsUploadDialogOpen(true);
@@ -328,7 +328,7 @@ export const AdvancedDocumentCenter: React.FC = () => {
         title: "Nenhum arquivo selecionado",
         description: "Por favor, selecione pelo menos um arquivo para upload.",
         variant: "destructive"
-      });
+      };
       return;
     }
 
@@ -385,7 +385,7 @@ export const AdvancedDocumentCenter: React.FC = () => {
         title: "Título obrigatório",
         description: "Por favor, informe o título do documento.",
         variant: "destructive"
-      });
+      };
       return;
     }
 
@@ -474,7 +474,7 @@ Este é um documento de demonstração do Centro de Documentos.
     
     setSelectedDocument(document);
     setIsViewDialogOpen(true);
-  });
+  };
 
   const handleStatusChange = (documentId: string, newStatus: Document["status"]) => {
     setDocuments(prev => prev.map(doc => 
@@ -486,18 +486,18 @@ Este é um documento de demonstração do Centro de Documentos.
     toast({
       title: "Status atualizado",
       description: `Documento marcado como ${newStatus}.`,
-    });
-  });
+    };
+  };
 
   const handleUseTemplate = (template: DocumentTemplate) => {
     setSelectedTemplate(template);
     const initialData: Record<string, string> = {};
     template.fields.forEach(field => {
       initialData[field.name] = "";
-  });
+  };
     setTemplateFormData(initialData);
     setIsTemplateDialogOpen(true);
-  });
+  };
 
   const handleTemplateSubmit = () => {
     if (!selectedTemplate) return;
@@ -512,7 +512,7 @@ Este é um documento de demonstração do Centro de Documentos.
         title: "Campos obrigatórios",
         description: `Por favor, preencha: ${missingFields.join(", ")}`,
         variant: "destructive"
-      });
+      };
       return;
     }
 

@@ -78,7 +78,7 @@ export const AIPricePredictor: React.FC = () => {
         title: "Campos obrigatórios",
         description: "Preencha o nome do produto e a URL",
         variant: "destructive"
-      });
+      };
       return;
     }
 

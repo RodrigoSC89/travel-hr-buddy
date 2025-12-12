@@ -139,7 +139,7 @@ export const CollectiveDashboard: React.FC = () => {
       stats.total++;
       if (d.success) stats.successes++;
       else stats.failures++;
-  });
+  };
 
     return Array.from(moduleMap.entries()).map(([moduleName, stats]) => {
       const successRate = stats.total > 0 ? stats.successes / stats.total : 0;
@@ -185,7 +185,7 @@ export const CollectiveDashboard: React.FC = () => {
       critical: "destructive"
     };
     return <Badge variant={variants[severity] || "default"}>{severity}</Badge>;
-  });
+  };
 
   const getDecisionLevelBadge = (level: string) => {
     const colors: Record<string, string> = {
@@ -199,7 +199,7 @@ export const CollectiveDashboard: React.FC = () => {
         {level}
       </Badge>
     );
-  });
+  };
 
   return (
     <div className="container mx-auto p-6 space-y-6">

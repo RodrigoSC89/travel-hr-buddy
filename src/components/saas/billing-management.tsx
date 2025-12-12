@@ -130,17 +130,17 @@ export const BillingManagement: React.FC = () => {
       style: "currency",
       currency: "BRL"
     }).format(amount);
-  });
+  };
 
   const getUsagePercentage = (current: number, limit: number) => {
     return Math.min((current / limit) * 100, 100);
-  });
+  };
 
   const getUsageColor = (percentage: number) => {
     if (percentage >= 90) return "bg-red-500";
     if (percentage >= 75) return "bg-yellow-500";
     return "bg-green-500";
-  });
+  };
 
   return (
     <div className="space-y-6">

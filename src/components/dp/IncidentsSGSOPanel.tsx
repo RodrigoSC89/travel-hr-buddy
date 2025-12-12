@@ -152,7 +152,7 @@ export const IncidentsSGSOPanel = memo(function() {
 
     const blob = new Blob([csvContent], { type: "text/csv;charset=utf-8;" });
     saveAs(blob, `incidentes-sgso-${new Date().toISOString().split("T")[0]}.csv`);
-  });
+  };
 
   // Export to PDF (placeholder - requires html2pdf.js)
   const exportToPDF = () => {

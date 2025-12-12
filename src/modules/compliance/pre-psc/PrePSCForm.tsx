@@ -65,7 +65,7 @@ export default function PrePSCForm({ inspectionId, onComplete }: PrePSCFormProps
         title: "Error",
         description: "Failed to load inspection",
         variant: "destructive",
-      });
+      };
     } finally {
       setLoading(false);
     }
@@ -81,7 +81,7 @@ export default function PrePSCForm({ inspectionId, onComplete }: PrePSCFormProps
     }
     
     setChecklistItems(updated);
-  });
+  };
 
   const handleSaveInspection = async (submit: boolean = false) => {
     if (!inspectorName.trim()) {
@@ -89,7 +89,7 @@ export default function PrePSCForm({ inspectionId, onComplete }: PrePSCFormProps
         title: "Validation Error",
         description: "Inspector name is required",
         variant: "destructive",
-      });
+      };
       return;
     }
 
@@ -148,7 +148,7 @@ export default function PrePSCForm({ inspectionId, onComplete }: PrePSCFormProps
         description: submit 
           ? "Inspection submitted successfully" 
           : "Inspection saved successfully",
-      });
+      };
 
       if (submit && onComplete) {
         onComplete(inspId);

@@ -185,7 +185,7 @@ export const EnhancedAlertManagement: React.FC = () => {
 
   const getStatusColor = (isActive: boolean) => {
     return isActive ? "bg-success text-azure-50" : "bg-muted text-muted-foreground";
-  });
+  };
 
   const getActionColor = (action: string) => {
     switch (action) {

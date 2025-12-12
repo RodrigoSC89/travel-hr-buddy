@@ -66,8 +66,8 @@ export const useDocumentCenterContext = memo(() => {
     throw new Error(
       "useDocumentCenterContext must be used within DocumentCenterProvider"
     );
-  });
+  };
   return context;
-});
+};
 
 export default DocumentCenterContext;

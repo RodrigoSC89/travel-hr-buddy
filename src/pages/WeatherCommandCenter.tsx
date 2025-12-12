@@ -196,7 +196,7 @@ export default function WeatherCommandCenter() {
       toast({
         title: "Dados atualizados",
         description: `Meteorologia carregada para ${locationName}`,
-      });
+      };
     } catch (error: SupabaseError | null) {
       toast({
         title: "Erro ao carregar dados",
@@ -232,7 +232,7 @@ export default function WeatherCommandCenter() {
   const getWindDirection = (deg: number) => {
     const directions = ["N", "NE", "E", "SE", "S", "SW", "W", "NW"];
     return directions[Math.round(deg / 45) % 8];
-  });
+  };
 
   const getSeverityColor = (severity: string) => {
     switch (severity) {

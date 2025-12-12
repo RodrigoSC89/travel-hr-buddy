@@ -118,11 +118,11 @@ const AlertsDialog: React.FC<AlertsDialogProps> = ({ open, onOpenChange }) => {
       error: "bg-red-500/10 text-red-500 border-red-500/20"
     };
     return variants[type];
-  });
+  };
 
   const markAsRead = (id: string) => {
     setAlerts(prev => prev.map(a => a.id === id ? { ...a, isRead: true } : a));
-  });
+  };
 
   const markAllAsRead = () => {
     setAlerts(prev => prev.map(a => ({ ...a, isRead: true })));

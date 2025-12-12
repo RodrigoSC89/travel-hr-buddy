@@ -185,7 +185,7 @@ export const EnvironmentalChecklist: React.FC<EnvironmentalChecklistProps> = ({
           : item
       )
     }));
-  });
+  };
 
   const handleSave = async () => {
     try {
@@ -209,7 +209,7 @@ export const EnvironmentalChecklist: React.FC<EnvironmentalChecklistProps> = ({
         ...checklist,
         status: "pending_review",
         completedAt: new Date().toISOString()
-      });
+      };
       toast.success("Checklist enviado para revisão!");
     } catch (error) {
       toast.error("Erro ao enviar checklist");

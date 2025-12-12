@@ -87,7 +87,7 @@ export const EmployeePersonalDocuments: React.FC = () => {
         title: "Error loading documents",
         description: error.message,
         variant: "destructive",
-      });
+      };
     } finally {
       setLoading(false);
     }
@@ -183,7 +183,7 @@ export const EmployeePersonalDocuments: React.FC = () => {
       toast({
         title: "Document Deleted",
         description: "Document has been removed",
-      });
+      };
 
       loadDocuments();
     } catch (error: SupabaseError | null) {
@@ -244,7 +244,7 @@ export const EmployeePersonalDocuments: React.FC = () => {
       other: "Other"
     };
     return labels[type] || type;
-  });
+  };
 
   const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     if (e.target.files && e.target.files[0]) {

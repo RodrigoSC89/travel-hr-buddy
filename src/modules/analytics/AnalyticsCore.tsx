@@ -47,13 +47,13 @@ const AnalyticsCore = () => {
       toast({
         title: "Insights Generated",
         description: `${generatedInsights.length} AI insights have been generated`
-      });
+      };
     } catch (error) {
       toast({
         title: "Error",
         description: "Failed to generate insights",
         variant: "destructive"
-      });
+      };
     } finally {
       setIsLoadingInsights(false);
     }
@@ -107,7 +107,7 @@ const AnalyticsCore = () => {
       toast({
         title: "Export Complete",
         description: "CSV file has been downloaded"
-      });
+      };
     } catch (error) {
       toast({
         title: "Export Failed",
@@ -135,7 +135,7 @@ const AnalyticsCore = () => {
       alert: "destructive"
     };
     return <Badge variant={variants[type] || "default"}>{type}</Badge>;
-  });
+  };
 
   return (
     <div className="container mx-auto p-6 space-y-6">

@@ -87,13 +87,13 @@ vi.mock("lodash", () => ({
 describe("CollaborativeDocumentEditor", () => {
   beforeEach(() => {
     vi.clearAllMocks();
-  });
+  };
 
   it("renders the editor component", () => {
     render(<CollaborativeDocumentEditor documentId="test-doc-123" />);
     
     expect(screen.getByTestId("editor-content")).toBeInTheDocument();
-  });
+  };
 
   it("displays the document title input", () => {
     render(<CollaborativeDocumentEditor documentId="test-doc-123" />);

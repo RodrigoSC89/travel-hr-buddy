@@ -43,7 +43,7 @@ export const MLCInspectionDashboard: React.FC = () => {
       ...prev,
       [itemId]: { ...prev[itemId], answer, observation: prev[itemId]?.observation || "", evidence: prev[itemId]?.evidence || [] }
     }));
-  });
+  };
 
   const sendAiMessage = async () => {
     if (!aiInput.trim()) return;
@@ -60,7 +60,7 @@ export const MLCInspectionDashboard: React.FC = () => {
           "Authorization": `Bearer ${import.meta.env.VITE_SUPABASE_PUBLISHABLE_KEY}`,
         },
         body: JSON.stringify({ messages: [...aiMessages, userMessage] }),
-      });
+      };
 
       if (!response.ok) throw new Error("AI request failed");
 
@@ -184,6 +184,6 @@ export const MLCInspectionDashboard: React.FC = () => {
       </Tabs>
     </div>
   );
-});
+};
 
 export default MLCInspectionDashboard;

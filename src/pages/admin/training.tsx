@@ -85,12 +85,12 @@ export default function TrainingPage() {
       "Technical": "bg-gray-100 text-gray-800",
     };
     return variants[category || ""] || variants.Technical;
-  });
+  };
 
   const isExpired = (validUntil?: string) => {
     if (!validUntil) return false;
     return new Date(validUntil) < new Date();
-  });
+  };
 
   const isExpiringSoon = (validUntil?: string) => {
     if (!validUntil) return false;
@@ -98,7 +98,7 @@ export default function TrainingPage() {
     const now = new Date();
     const daysUntilExpiration = Math.floor((date.getTime() - now.getTime()) / (1000 * 60 * 60 * 24));
     return daysUntilExpiration > 0 && daysUntilExpiration <= 30;
-  });
+  };
 
   return (
     <div className="container mx-auto p-6 space-y-6">

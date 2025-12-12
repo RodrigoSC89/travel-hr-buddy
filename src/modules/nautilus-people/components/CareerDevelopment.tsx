@@ -135,7 +135,7 @@ const CareerDevelopment: React.FC = () => {
     if (nivel >= 60) return "bg-blue-500";
     if (nivel >= 40) return "bg-yellow-500";
     return "bg-orange-500";
-  });
+  };
 
   return (
     <div className="space-y-6">

@@ -52,7 +52,7 @@ const PredictiveAnalytics: React.FC = () => {
           timeframe: selectedTimeframe,
           includeFactors: true
         }
-      });
+      };
 
       if (error) throw error;
 
@@ -63,7 +63,7 @@ const PredictiveAnalytics: React.FC = () => {
         toast({
           title: "Análises Atualizadas",
           description: "Previsões geradas com sucesso",
-        });
+        };
       } else {
         throw new Error(data.error || "Erro ao gerar previsões");
       }
@@ -155,7 +155,7 @@ const PredictiveAnalytics: React.FC = () => {
     if (confidence >= 85) return "text-green-600";
     if (confidence >= 70) return "text-yellow-600";
     return "text-red-600";
-  });
+  };
 
   const formatValue = (value: number, metric: string) => {
     if (metric.includes("Receita") || metric.includes("Custos")) {
@@ -165,12 +165,12 @@ const PredictiveAnalytics: React.FC = () => {
       return `${value}%`;
     }
     return value.toString();
-  });
+  };
 
   const calculateChange = (current: number, predicted: number) => {
     const change = ((predicted - current) / current) * 100;
     return change;
-  });
+  };
 
   return (
     <div className="space-y-6">

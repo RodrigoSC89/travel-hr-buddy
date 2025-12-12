@@ -199,7 +199,7 @@ export default function SmartLogistics() {
       s.id === itemId ? { ...s, status: "ordered" as const } : s
     ));
     toast.success(`Pedido gerado para ${item.name}`);
-  });
+  };
 
   const getCategoryIcon = (category: string) => {
     switch (category) {
