@@ -117,7 +117,7 @@ const UserManagementDashboard = () => {
     const matchesStatus = statusFilter === "all" || user.status === statusFilter;
     
     return matchesSearch && matchesRole && matchesStatus;
-  };
+  });
 
   const handleUserAction = (action: string, userId: number) => {
     toast({
