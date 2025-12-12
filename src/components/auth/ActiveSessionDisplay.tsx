@@ -99,7 +99,7 @@ export const ActiveSessionDisplay = memo(function() {
     } finally {
       setLoggingOut(false);
     }
-  });
+  };
 
   if (loading) {
     return (

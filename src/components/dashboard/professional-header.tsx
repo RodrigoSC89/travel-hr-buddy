@@ -62,7 +62,7 @@ export const ProfessionalHeader = memo(function({
           exportedAt: new Date().toISOString(),
           title,
           type: "dashboard_export"
-        });
+        };
         const blob = new Blob([JSON.stringify(data, null, 2)], { type: "application/json" });
         const url = URL.createObjectURL(blob);
         const a = document.createElement("a");

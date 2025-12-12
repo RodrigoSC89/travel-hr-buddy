@@ -39,20 +39,20 @@ export const PerformanceMonitor = memo(function({
     "top-right": "top-4 right-4",
     "bottom-right": "bottom-4 right-4",
     "bottom-left": "bottom-4 left-4",
-  });
+  };
 
   const getScoreColor = (score: number) => {
     if (score >= 90) return "text-green-500";
     if (score >= 50) return "text-yellow-500";
     return "text-red-500";
-  });
+  };
 
   const getRatingBadge = (rating: string) => {
     const variants = {
       good: "bg-green-500/10 text-green-500 border-green-500/20",
       "needs-improvement": "bg-yellow-500/10 text-yellow-500 border-yellow-500/20",
       poor: "bg-red-500/10 text-red-500 border-red-500/20",
-    });
+    };
     return variants[rating as keyof typeof variants] || variants.poor;
   };
 

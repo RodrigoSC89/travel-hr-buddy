@@ -160,7 +160,7 @@ function toast({ ...props }: Toast) {
     id: id,
     dismiss,
     update,
-  });
+  };
 }
 
 function useToast() {
