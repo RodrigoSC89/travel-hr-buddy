@@ -244,7 +244,7 @@ export const UserExperienceEnhancer: React.FC = () => {
     toast({
       title: "Aplicando Melhoria UX",
       description: `Implementando: ${improvement.title}`,
-    };
+    });
 
     // Simular aplicação
     await new Promise(resolve => setTimeout(resolve, 2500));
@@ -252,10 +252,10 @@ export const UserExperienceEnhancer: React.FC = () => {
     toast({
       title: "Melhoria Aplicada",
       description: `${improvement.title} foi implementada com sucesso!`,
-    };
+    });
 
     setIsApplying(false);
-  };
+  });
 
   const getStatusColor = (status: string) => {
     switch (status) {

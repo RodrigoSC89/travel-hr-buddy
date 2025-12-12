@@ -78,13 +78,13 @@ export const NotificationSettings = memo(() => {
           price_drop_threshold: data.price_drop_threshold ?? 0,
           daily_summary: data.daily_summary ?? false,
           weekly_report: data.weekly_report ?? true,
-        };
+        });
       }
     } catch (error) {
     } finally {
       setLoading(false);
     }
-  };
+  });
 
   const saveSettings = async () => {
     if (!user) return;
@@ -96,24 +96,24 @@ export const NotificationSettings = memo(() => {
         .upsert({
           user_id: user.id,
           ...settings,
-        };
+        });
 
       if (error) throw error;
 
       toast({
         title: "Configurações salvas",
         description: "Suas preferências de notificação foram atualizadas.",
-      };
+      });
     } catch (error) {
       toast({
         title: "Erro",
         description: "Erro ao salvar configurações. Tente novamente.",
         variant: "destructive",
-      };
+      });
     } finally {
       setSaving(false);
     }
-  };
+  });
 
   const requestPushPermission = async () => {
     if (!pushSupported) return;
@@ -127,17 +127,17 @@ export const NotificationSettings = memo(() => {
         toast({
           title: "Notificações ativadas",
           description: "Você receberá notificações push quando os preços baixarem.",
-        };
+        });
       } else {
         toast({
           title: "Permissão negada",
           description: "Não é possível enviar notificações push.",
           variant: "destructive",
-        };
+        });
       }
     } catch (error) {
     }
-  };
+  });
 
   const testPushNotification = () => {
     if (pushPermission === "granted") {

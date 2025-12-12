@@ -122,9 +122,9 @@ export const TemplatesDynamic = memo(() => {
         title: "Error loading templates",
         description: error.message,
         variant: "destructive",
-      };
+      });
     }
-  };
+  });
 
   const loadVersions = async (templateId: string) => {
     try {
@@ -237,7 +237,7 @@ export const TemplatesDynamic = memo(() => {
         title: "Missing fields",
         description: "Please provide template name and content",
         variant: "destructive",
-      };
+      });
       return;
     }
 
@@ -284,7 +284,7 @@ export const TemplatesDynamic = memo(() => {
       toast({
         title: "Template saved",
         description: `Template saved as version ${nextVersion}`,
-      };
+      });
 
       setSelectedTemplate(data);
       setChangeDescription("");
@@ -295,11 +295,11 @@ export const TemplatesDynamic = memo(() => {
         title: "Error saving template",
         description: error.message,
         variant: "destructive",
-      };
+      });
     } finally {
       setLoading(false);
     }
-  };
+  });
 
   const loadTemplate = (template: TemplateVersion) => {
     setSelectedTemplate(template);
@@ -327,7 +327,7 @@ export const TemplatesDynamic = memo(() => {
       toast({
         title: "Version restored",
         description: `Restored to version ${version.version_number}`,
-      };
+      });
 
       loadTemplate(version);
       await loadTemplates();
@@ -336,9 +336,9 @@ export const TemplatesDynamic = memo(() => {
         title: "Error restoring version",
         description: error.message,
         variant: "destructive",
-      };
+      });
     }
-  };
+  });
 
   const exportToPDF = async () => {
     try {
@@ -368,24 +368,24 @@ export const TemplatesDynamic = memo(() => {
         output_format: "pdf",
         generation_duration_ms: Date.now() - startTime,
         status: "completed",
-      };
+      });
 
       await loadGenerationHistory();
 
       toast({
         title: "PDF exported",
         description: "Document has been exported successfully",
-      };
+      });
     } catch (error: SupabaseError | null) {
       toast({
         title: "Export failed",
         description: error.message,
         variant: "destructive",
-      };
+      });
     } finally {
       setLoading(false);
     }
-  };
+  });
 
   const exportToDOCX = async () => {
     try {
@@ -411,23 +411,23 @@ export const TemplatesDynamic = memo(() => {
         output_format: "docx",
         generation_duration_ms: Date.now() - startTime,
         status: "completed",
-      };
+      });
 
       await loadGenerationHistory();
 
       toast({
         title: "Document exported",
         description: "Document has been exported as HTML",
-      };
+      });
     } catch (error: SupabaseError | null) {
       toast({
         title: "Export failed",
         description: error.message,
         variant: "destructive",
-      };
+      });
     } finally {
       setLoading(false);
-    };
+    });
   };
 
   const insertVariable = (variableKey: string) => {

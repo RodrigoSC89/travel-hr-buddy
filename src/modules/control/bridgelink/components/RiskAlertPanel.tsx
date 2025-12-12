@@ -26,7 +26,7 @@ export const RiskAlertPanel = memo(function({ alerts }: RiskAlertPanelProps) {
     default:
       return <Info className="h-5 w-5 text-gray-500" />;
     }
-  };
+  });
 
   const getAlertBadge = (level: string) => {
     switch (level) {
@@ -41,7 +41,7 @@ export const RiskAlertPanel = memo(function({ alerts }: RiskAlertPanelProps) {
     default:
       return <Badge className="bg-gray-500">Desconhecido</Badge>;
     }
-  };
+  });
 
   const sortedAlerts = [...alerts].sort((a, b) => {
     const levelOrder = { critical: 0, high: 1, medium: 2, low: 3 };

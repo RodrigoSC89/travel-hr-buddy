@@ -297,7 +297,7 @@ export async function generateFullPredictiveAnalysis(): Promise<PredictiveAnalys
     const criticals = typeRecs.filter(r => r.priority === "critical").length;
     const highs = typeRecs.filter(r => r.priority === "high").length;
     return Math.max(0, 100 - (criticals * 20) - (highs * 10));
-  };
+  });
 
   return {
     timestamp: new Date(),

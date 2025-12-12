@@ -91,7 +91,7 @@ const Auth: React.FC = () => {
     } finally {
       setIsLoading(false);
     }
-  };
+  });
 
   const handleSignUp = async (data: SignUpFormData) => {
     setIsLoading(true);

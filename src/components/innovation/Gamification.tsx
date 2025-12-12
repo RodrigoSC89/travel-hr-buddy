@@ -194,9 +194,9 @@ export const Gamification = memo(() => {
       toast({
         title: "Recompensa Coletada! 🎉",
         description: `Você ganhou ${achievement.points} pontos por "${achievement.title}"`,
-      };
+      });
     }
-  };
+  });
 
   const getCategoryIcon = (category: string) => {
     switch (category) {

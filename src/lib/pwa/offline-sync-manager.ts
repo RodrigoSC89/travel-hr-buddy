@@ -186,7 +186,7 @@ class OfflineSyncManager {
       timestamp: Date.now(),
       expiry: Date.now() + ttlSeconds * 1000,
       version: "1.0",
-    };
+    });
 
     await this.db!.put("cachedData", entry);
   }

@@ -55,7 +55,7 @@ export const LazyPDFGenerator = memo(function({
     } finally {
       setLoading(false);
     }
-  };
+  });
 
   return (
     <Button

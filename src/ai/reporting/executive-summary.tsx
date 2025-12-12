@@ -943,7 +943,7 @@ async function saveSummaryToDatabase(summaryData: ExecutiveSummaryData): Promise
       recommendations: summaryData.recommendations,
       key_metrics: summaryData.keyMetrics,
       created_at: summaryData.generatedAt.toISOString()
-    };
+    });
 
     logger.info("[ExecutiveSummary] Summary saved to database", { summaryId: summaryData.id });
   } catch (error) {

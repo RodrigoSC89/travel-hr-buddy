@@ -216,7 +216,7 @@ export default function IncidentCards() {
       toast({
         title: "Análise Concluída",
         description: "A IA analisou o incidente com sucesso"
-      };
+      });
     } catch (error) {
       console.error("AI analysis error:", error);
       // Fallback to simulated analysis
@@ -248,11 +248,11 @@ export default function IncidentCards() {
       toast({
         title: "Análise Gerada",
         description: "Análise baseada em padrões conhecidos"
-      };
+      });
     } finally {
       setIsAnalyzing(false);
     }
-  };
+  });
 
   const exportAnalysisToPDF = async () => {
     if (!selectedIncident || !aiAnalysis) return;
@@ -303,16 +303,16 @@ export default function IncidentCards() {
       toast({
         title: "PDF Exportado",
         description: "Relatório de análise baixado com sucesso"
-      };
+      });
     } catch (error) {
       console.error("PDF export error:", error);
       toast({
         title: "Erro",
         description: "Não foi possível gerar o PDF",
         variant: "destructive"
-      };
+      });
     }
-  };
+  });
 
   return (
     <div className="space-y-4">

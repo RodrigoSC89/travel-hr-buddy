@@ -50,13 +50,13 @@ export const MiniChart = memo(function MiniChart({
         const x = padding + (index / (data.length - 1)) * effectiveWidth;
         const y = padding + effectiveHeight - ((value - min) / range) * effectiveHeight;
         return `${x},${y}`;
-  };
+  });
       return { 
         path: `M${points.join(" L")}`, 
         trend, 
         min, 
         max 
-      };
+      });
     }
 
     // Bar chart
@@ -66,13 +66,13 @@ export const MiniChart = memo(function MiniChart({
       const barHeight = ((value - min) / range) * effectiveHeight;
       const y = padding + effectiveHeight - barHeight;
       return `M${x},${padding + effectiveHeight} L${x},${y} L${x + barWidth},${y} L${x + barWidth},${padding + effectiveHeight}`;
-  };
+  });
     return { 
       path: bars.join(" "), 
       trend, 
       min, 
       max 
-    };
+    });
   }, [data, type, width, height]);
 
   const trendColor = trend > 0 ? "text-green-500" : trend < 0 ? "text-red-500" : "text-muted-foreground";

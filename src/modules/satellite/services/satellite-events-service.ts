@@ -109,7 +109,7 @@ export class SatelliteEventsService {
       longitude: data.longitude,
       altitude: data.altitude,
       timestamp: data.timestamp
-    };
+    });
   }
 }
 

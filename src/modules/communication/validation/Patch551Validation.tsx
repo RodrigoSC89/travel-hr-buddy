@@ -37,13 +37,13 @@ export default function Patch551Validation() {
         realTimeSend: !channelsError,
         realTimeReceive: !messagesError,
         historyVisible: messages ? messages.length > 0 : false,
-      };
+      });
     } catch (error) {
       console.error("Validation error:", error);
     } finally {
       setLoading(false);
     }
-  };
+  });
 
   const allPassed = Object.values(checks).every(Boolean);
 

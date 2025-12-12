@@ -23,7 +23,7 @@ export const useSystemActions = () => {
       title: "Navegando",
       description: "Redirecionando para configurações",
     });
-  };
+  });
 
   const handleNavigateToReports = () => {
     navigate("/reports");
@@ -31,7 +31,7 @@ export const useSystemActions = () => {
       title: "Navegando",
       description: "Redirecionando para relatórios",
     });
-  };
+  });
 
   const handleNavigateToProfile = () => {
     toast({
@@ -39,7 +39,7 @@ export const useSystemActions = () => {
       description: "Abrindo perfil do usuário",
     });
     // Implementar abertura de modal de perfil ou navegação
-  };
+  });
 
   const handleExportData = (format: string) => {
     toast({
@@ -104,7 +104,7 @@ export const useSystemActions = () => {
         variant: "destructive",
       });
     }
-  };
+  });
 
   const handlePrintReport = () => {
     toast({
@@ -112,7 +112,7 @@ export const useSystemActions = () => {
       description: "Preparando relatório para impressão",
     });
     window.print();
-  };
+  });
 
   const handleOfflineAction = (action: string, data: any) => {
     if (!isOnline) {
@@ -122,7 +122,7 @@ export const useSystemActions = () => {
         description: "Será sincronizada quando voltar online",
       });
     }
-  };
+  });
 
   return {
     handleGlobalSearch,

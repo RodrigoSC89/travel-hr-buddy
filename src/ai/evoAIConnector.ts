@@ -503,7 +503,7 @@ class EvoAIConnector {
         tactical: performanceData.tactical_score ?? 0,
         timestamp: new Date(performanceData.timestamp ?? new Date().toISOString()),
         trend: (performanceData.trend ?? "stable") as PerformanceScore["trend"],
-      };
+      });
 
       const insights: FeedbackInsight[] = (insightsData || []).map(i => ({
         category: i.category,

@@ -61,7 +61,7 @@ describe("Integration: Incident Lifecycle", () => {
       severity: "high",
       escalatedAt: new Date(),
       escalationReason: "Situation worsened",
-    };
+    });
 
     // Assert
     expect(escalated.severity).toBe("high");

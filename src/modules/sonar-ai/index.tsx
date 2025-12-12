@@ -139,7 +139,7 @@ const SonarAI: React.FC = () => {
     } finally {
       setIsScanning(false);
     }
-  };
+  });
 
   // Auto-scan effect
   useEffect(() => {

@@ -115,11 +115,11 @@ export const ProjectTimeline: React.FC<ProjectTimelineProps> = () => {
         title: "Error",
         description: "Failed to load tasks",
         variant: "destructive"
-      };
+      });
     } finally {
       setLoading(false);
     }
-  };
+  });
 
   const fetchDependencies = async () => {
     try {
@@ -173,9 +173,9 @@ export const ProjectTimeline: React.FC<ProjectTimelineProps> = () => {
         title: "Error",
         description: "Failed to create task",
         variant: "destructive"
-      };
+      });
     }
-  };
+  });
 
   const updateTask = async () => {
     if (!selectedTask) return;
@@ -199,9 +199,9 @@ export const ProjectTimeline: React.FC<ProjectTimelineProps> = () => {
         title: "Error",
         description: "Failed to update task",
         variant: "destructive"
-      };
+      });
     }
-  };
+  });
 
   const deleteTask = async (id: string) => {
     if (!confirm("Are you sure you want to delete this task?")) return;
@@ -222,9 +222,9 @@ export const ProjectTimeline: React.FC<ProjectTimelineProps> = () => {
         title: "Error",
         description: "Failed to delete task",
         variant: "destructive"
-      };
+      });
     }
-  };
+  });
 
   const resetForm = () => {
     setFormData({
@@ -237,8 +237,8 @@ export const ProjectTimeline: React.FC<ProjectTimelineProps> = () => {
       start_date: new Date().toISOString().split("T")[0],
       end_date: new Date(Date.now() + 7 * 24 * 60 * 60 * 1000).toISOString().split("T")[0],
       progress: 0
-    };
-  };
+    });
+  });
 
   const openEditDialog = (task: ProjectTask) => {
     setSelectedTask(task);
@@ -252,9 +252,9 @@ export const ProjectTimeline: React.FC<ProjectTimelineProps> = () => {
       start_date: task.start_date.split("T")[0],
       end_date: task.end_date.split("T")[0],
       progress: task.progress
-    };
+    });
     setIsEditOpen(true);
-  };
+  });
 
   const exportToExcel = () => {
     const worksheet = XLSX.utils.json_to_sheet(filteredTasks.map(task => ({

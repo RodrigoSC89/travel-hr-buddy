@@ -163,7 +163,7 @@ class FeedbackResponder {
       detectedEmotions,
       primaryEmotion: primaryEmotion.emotion,
       timestamp: new Date()
-    };
+    });
 
     this.emotionHistory.push(feedback);
 
@@ -304,7 +304,7 @@ class FeedbackResponder {
       adjustments,
       suggestions,
       emotionalContext: feedback.detectedEmotions
-    };
+    });
   }
 
   /**

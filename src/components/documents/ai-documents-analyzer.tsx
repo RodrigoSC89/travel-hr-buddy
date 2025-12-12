@@ -89,7 +89,7 @@ export const AIDocumentsAnalyzer = memo(function() {
           title: "Tipo de arquivo inválido",
           description: "Por favor, selecione um PDF ou imagem (JPG, PNG, GIF, BMP, TIFF)",
           variant: "destructive",
-        };
+        });
         return;
       }
 
@@ -99,7 +99,7 @@ export const AIDocumentsAnalyzer = memo(function() {
           title: "Arquivo muito grande",
           description: "O tamanho máximo do arquivo é 10MB",
           variant: "destructive",
-        };
+        });
         return;
       }
 
@@ -107,9 +107,9 @@ export const AIDocumentsAnalyzer = memo(function() {
       toast({
         title: "Arquivo selecionado",
         description: `${file.name} pronto para upload`,
-      };
+      });
     }
-  };
+  });
 
   const performOCR = async (file: File): Promise<{ text: string; confidence: number }> => {
     try {
@@ -148,8 +148,8 @@ export const AIDocumentsAnalyzer = memo(function() {
         entity_value: email,
         entity_label: "Email",
         confidence_score: 95,
-      };
-  };
+      });
+  });
 
     // Extract dates (DD/MM/YYYY or DD-MM-YYYY)
     const dateRegex = /\b\d{1,2}[/-]\d{1,2}[/-]\d{2,4}\b/g;
@@ -282,7 +282,7 @@ export const AIDocumentsAnalyzer = memo(function() {
         title: "Nenhum arquivo selecionado",
         description: "Por favor, selecione um arquivo primeiro",
         variant: "destructive",
-      };
+      });
       return;
     }
 
@@ -387,7 +387,7 @@ export const AIDocumentsAnalyzer = memo(function() {
       toast({
         title: "Documento processado com sucesso",
         description: `${extractedEntities.length} entidades extraídas`,
-      };
+      });
 
       // Refresh documents list
       await loadDocuments();
@@ -402,12 +402,12 @@ export const AIDocumentsAnalyzer = memo(function() {
         title: "Erro ao processar documento",
         description: error.message || "Tente novamente mais tarde",
         variant: "destructive",
-      };
+      });
     } finally {
       setUploading(false);
       setProcessing(false);
     }
-  };
+  });
 
   const loadDocuments = async () => {
     try {
@@ -425,9 +425,9 @@ export const AIDocumentsAnalyzer = memo(function() {
         title: "Erro ao carregar documentos",
         description: "Tente novamente mais tarde",
         variant: "destructive",
-      };
+      });
     }
-  };
+  });
 
   const loadDocumentDetails = async (documentId: string) => {
     try {
@@ -454,9 +454,9 @@ export const AIDocumentsAnalyzer = memo(function() {
         title: "Erro ao carregar detalhes",
         description: "Tente novamente mais tarde",
         variant: "destructive",
-      };
+      });
     }
-  };
+  });
 
   const handleSearch = async () => {
     if (!searchQuery.trim()) {
@@ -480,9 +480,9 @@ export const AIDocumentsAnalyzer = memo(function() {
         title: "Erro na busca",
         description: "Tente novamente mais tarde",
         variant: "destructive",
-      };
+      });
     }
-  };
+  });
 
   const getStatusIcon = (status: string) => {
     switch (status) {

@@ -493,7 +493,7 @@ export class NLPService {
         text: sentence,
         position: index,
         relevance: score / 10
-      };
+      });
     });
 
     return highlights

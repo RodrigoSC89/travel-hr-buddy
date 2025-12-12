@@ -68,7 +68,7 @@ export function usePerformanceLog({
       performance.clearMarks(markName);
       performance.clearMarks(`${componentName}-end`);
       performance.clearMeasures(measureName);
-    };
+    });
   }, [componentName, threshold, onSlowRender]);
 
   return {

@@ -363,7 +363,7 @@ class LocalPermissionsSystem {
       permissions: this.permissions.filter(p => !PERMISSIONS.find(bp => bp.id === p.id)),
       roles: this.roles.filter(r => !r.isSystem),
       userPermissions: Array.from(this.userPermissions.values())
-    };
+    });
   }
 
   /**

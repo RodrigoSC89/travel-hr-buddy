@@ -109,7 +109,7 @@ export default function LogsCenter() {
             message: log.message,
           })),
         },
-      };
+      });
 
       // Show AI insights
       toast.success(
@@ -128,7 +128,7 @@ export default function LogsCenter() {
     } finally {
       setAiLoading(false);
     }
-  };
+  });
 
   const getLevelIcon = (level: LogLevel) => {
     switch (level) {

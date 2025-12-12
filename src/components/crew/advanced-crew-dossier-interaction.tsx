@@ -85,7 +85,7 @@ export const AdvancedCrewDossierInteraction: React.FC<VoiceInteractionPanelProps
           toast({
             title: "Transcrição completada",
             description: `"${transcribedText}"`,
-          };
+          });
           
           // Enviar para IA processar
           await processVoiceCommand(transcribedText);
@@ -95,16 +95,16 @@ export const AdvancedCrewDossierInteraction: React.FC<VoiceInteractionPanelProps
         toast({
           title: "Gravação iniciada",
           description: "Fale agora para interagir com seu dossiê...",
-        };
+        });
       }
     } catch (error) {
       toast({
         title: "Erro na interação por voz",
         description: "Tente novamente em alguns instantes.",
         variant: "destructive"
-      };
+      });
     }
-  };
+  });
 
   const processVoiceCommand = async (text: string) => {
     try {
@@ -132,7 +132,7 @@ export const AdvancedCrewDossierInteraction: React.FC<VoiceInteractionPanelProps
       toast({
         title: "Análise de IA gerada",
         description: "Novos insights foram gerados para o seu perfil!",
-      };
+      });
 
       await loadAIInsights();
     } catch (error) {
@@ -140,11 +140,11 @@ export const AdvancedCrewDossierInteraction: React.FC<VoiceInteractionPanelProps
         title: "Erro ao gerar insights",
         description: "Não foi possível gerar a análise de IA.",
         variant: "destructive"
-      };
+      });
     } finally {
       setIsLoadingAI(false);
     }
-  };
+  });
 
   const loadAIInsights = async () => {
     try {
@@ -211,11 +211,11 @@ export const AdvancedCrewDossierInteraction: React.FC<VoiceInteractionPanelProps
       toast({
         title: "Sugestões de metas geradas",
         description: "Novas metas personalizadas foram sugeridas para você!",
-      };
+      });
     } catch (error) {
       logger.error("Failed to create new goal:", error);
     }
-  };
+  });
 
   const renderVoiceTab = () => (
     <div className="space-y-4">

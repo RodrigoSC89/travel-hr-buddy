@@ -228,7 +228,7 @@ export const CrewIntelligenceSystem: React.FC = () => {
       toast({
         title: "✅ Análise Completa",
         description: `${optimizations.length} otimizações de escala identificadas`,
-      };
+      });
     }, 2000);
   };
 

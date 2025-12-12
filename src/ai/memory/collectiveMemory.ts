@@ -187,7 +187,7 @@ export class CollectiveMemoryHub {
       updatedCount: 0,
       conflictCount: 0,
       conflicts: [],
-    };
+    });
 
     try {
       // Fetch knowledge from source instance
@@ -380,7 +380,7 @@ export class CollectiveMemoryHub {
         localEntry: local,
         remoteEntry: remote,
         resolution: this.autoResolve(local, remote),
-      };
+      });
     }
 
     return null;
@@ -467,7 +467,7 @@ export class CollectiveMemoryHub {
       metadata: data.metadata || {},
       createdAt: data.created_at,
       updatedAt: data.updated_at,
-    };
+    });
   }
 }
 

@@ -65,13 +65,13 @@ export const ReservationCalendarView: React.FC<ReservationCalendarViewProps> = (
         date: new Date(currentDateIter),
         isCurrentMonth: currentDateIter.getMonth() === month,
         reservations: dayReservations
-      };
+      });
       
       currentDateIter.setDate(currentDateIter.getDate() + 1);
     }
     
     return days;
-  };
+  });
 
   const getReservationsForDay = (date: Date): EnhancedReservation[] => {
     const dayStart = new Date(date);

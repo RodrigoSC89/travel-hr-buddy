@@ -89,7 +89,7 @@ class MissionUploadSub {
       return { 
         success: false, 
         error: error instanceof Error ? error.message : "Invalid JSON format" 
-      };
+      });
     }
   }
 
@@ -349,7 +349,7 @@ class MissionUploadSub {
       missionId: this.currentMission?.id || "unknown",
       timestamp: new Date().toISOString(),
       ...partial,
-    };
+    });
 
     this.events.unshift(event);
     

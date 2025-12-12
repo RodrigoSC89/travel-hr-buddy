@@ -101,7 +101,7 @@ export const CrewAICopilot = memo(function({ crewData, certificates }: CrewAICop
             title: "Rate limit excedido",
             description: "Aguarde um momento antes de tentar novamente",
             variant: "destructive",
-          };
+          });
           return;
         }
         throw new Error("Failed to get response");
@@ -149,12 +149,12 @@ export const CrewAICopilot = memo(function({ crewData, certificates }: CrewAICop
         title: "Erro",
         description: "Falha ao processar sua solicitação",
         variant: "destructive",
-      };
+      });
       setMessages(prev => prev.slice(0, -1));
     } finally {
       setIsLoading(false);
     }
-  };
+  });
 
   const handleQuickAction = (prompt: string) => {
     sendMessage(prompt);

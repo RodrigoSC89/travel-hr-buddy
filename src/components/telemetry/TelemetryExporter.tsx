@@ -172,7 +172,7 @@ export const TelemetryExporter = memo(function({
     } finally {
       setIsExporting(false);
     }
-  };
+  });
 
   const exportToCSV = () => {
     try {
@@ -183,14 +183,14 @@ export const TelemetryExporter = memo(function({
       rows.push("Local,Temperatura,Vento,Visibilidade,Risco,Latitude,Longitude");
       weatherData.forEach(w => {
         rows.push(`"${w.location_name || "N/A"}",${w.temperature},${w.wind_speed},${w.visibility},"${w.risk_level}",${w.latitude},${w.longitude}`);
-  };
+  });
       
       rows.push("");
       rows.push("=== DADOS DE SATÉLITE ===");
       rows.push("Fonte,Tipo,Latitude,Longitude,Timestamp");
       satelliteData.forEach(s => {
         rows.push(`"${s.source}","${s.data_type}",${s.latitude},${s.longitude},"${s.timestamp}"`);
-  };
+  });
 
       rows.push("");
       rows.push("=== STATUS DE SINCRONIZAÇÃO ===");
@@ -211,7 +211,7 @@ export const TelemetryExporter = memo(function({
       console.error("CSV export error:", error);
       toast.error("Erro ao exportar CSV");
     }
-  };
+  });
 
   const exportToJSON = () => {
     try {

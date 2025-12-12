@@ -68,17 +68,17 @@ export const RiskAssessmentMatrix: React.FC = () => {
     toast({
       title: "📋 Detalhes do Risco",
       description: `Abrindo análise detalhada: ${riskTitle}`
-    };
+    });
     // TODO: Open risk details dialog
-  };
+  });
 
   const handleNewRisk = () => {
     toast({
       title: "➕ Novo Registro de Risco",
       description: "Abrindo formulário de registro de risco"
-    };
+    });
     // TODO: Open new risk registration form
-  };
+  });
 
   const probabilityLabels = ["Muito Baixa (1)", "Baixa (2)", "Média (3)", "Alta (4)", "Muito Alta (5)"];
   const impactLabels = ["Insignificante (1)", "Menor (2)", "Moderado (3)", "Maior (4)", "Catastrófico (5)"];
@@ -273,6 +273,6 @@ export const RiskAssessmentMatrix: React.FC = () => {
       </Card>
     </div>
   );
-});
+};
 
 export default RiskAssessmentMatrix;

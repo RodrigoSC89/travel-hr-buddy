@@ -59,7 +59,7 @@ export const HealthMetricsDashboard: React.FC = () => {
           avgSleep: Math.round(avgSleep * 10) / 10,
           avgStress: Math.round(avgStress * 10) / 10,
           avgHeartRate: Math.round(avgHeartRate),
-        };
+        });
       }
 
       // Load recent anomalies
@@ -78,11 +78,11 @@ export const HealthMetricsDashboard: React.FC = () => {
         title: "Error loading health data",
         description: error.message,
         variant: "destructive",
-      };
+      });
     } finally {
       setIsLoading(false);
     }
-  };
+  });
 
   const chartData = metrics.map(m => ({
     date: new Date(m.recorded_at).toLocaleDateString(),

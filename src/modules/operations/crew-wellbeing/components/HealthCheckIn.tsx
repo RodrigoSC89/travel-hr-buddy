@@ -50,8 +50,8 @@ export const HealthCheckin: React.FC = () => {
     toast({
       title: "Health Check-in Saved",
       description: "Your health metrics have been recorded successfully"
-    };
-  };
+    });
+  });
 
   const getRatingColor = (rating: number, inverse: boolean = false) => {
     if (inverse) {

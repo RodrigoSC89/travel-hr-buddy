@@ -140,7 +140,7 @@ export default function AssistantReportLogsPage() {
           title: "Não autenticado",
           description: "Você precisa estar autenticado para acessar esta página.",
           variant: "destructive",
-        };
+        });
         navigate("/auth");
         return;
       }
@@ -166,7 +166,7 @@ export default function AssistantReportLogsPage() {
         title: "Erro ao carregar logs",
         description: "Não foi possível carregar os logs de envio de relatórios.",
         variant: "destructive",
-      };
+      });
     } finally {
       setLoading(false);
     }
@@ -210,7 +210,7 @@ export default function AssistantReportLogsPage() {
         title: "Nenhum dado para exportar",
         description: "Não há logs para exportar.",
         variant: "destructive",
-      };
+      });
       return;
     }
 
@@ -234,7 +234,7 @@ export default function AssistantReportLogsPage() {
     toast({
       title: "PDF exportado",
       description: "O PDF foi baixado com sucesso.",
-    };
+    });
   }
 
   function exportCSV() {
@@ -243,7 +243,7 @@ export default function AssistantReportLogsPage() {
         title: "Nenhum dado para exportar",
         description: "Não há logs para exportar.",
         variant: "destructive",
-      };
+      });
       return;
     }
 
@@ -272,7 +272,7 @@ export default function AssistantReportLogsPage() {
     toast({
       title: "CSV exportado",
       description: "O CSV foi baixado com sucesso.",
-    };
+    });
   }
 
   return (

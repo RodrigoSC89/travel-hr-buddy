@@ -82,14 +82,14 @@ export const PerformanceMonitoringDashboard: React.FC = () => {
           title: "Critical Alert",
           description: `${criticalAlerts.length} critical performance alert(s) detected`,
           variant: "destructive",
-        };
+        });
       }
     } catch (error) {
       console.error("Error fetching performance data:", error);
     } finally {
       setLoading(false);
     }
-  };
+  });
 
   const exportLogs = async () => {
     try {
@@ -117,15 +117,15 @@ export const PerformanceMonitoringDashboard: React.FC = () => {
       toast({
         title: "Export Complete",
         description: "Performance logs exported successfully",
-      };
+      });
     } catch (error) {
       toast({
         title: "Export Failed",
         description: "Failed to export logs",
         variant: "destructive",
-      };
+      });
     }
-  };
+  });
 
   // Group metrics by system for charts
   const systemMetrics = metrics.reduce((acc, metric) => {

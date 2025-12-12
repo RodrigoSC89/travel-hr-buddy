@@ -184,7 +184,7 @@ Respond in JSON format with:
         urgency: "low",
         actionRequired: false,
         timestamp: new Date().toISOString(),
-      };
+      });
     }
   }
 

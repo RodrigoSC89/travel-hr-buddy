@@ -166,7 +166,7 @@ export default function SmartChecklistsPage() {
         return acc + (total > 0 ? (done / total) * 100 : 0);
       }, 0) / (checklists.length || 1)
     ),
-  };
+  });
 
   const filteredChecklists = checklists.filter(c => {
     const matchesSearch = c.title.toLowerCase().includes(searchQuery.toLowerCase()) ||

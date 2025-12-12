@@ -150,7 +150,7 @@ describe("MMI History Admin Page", () => {
       executado: 0,
       pendente: 0,
       atrasado: 0,
-    };
+    });
 
     render(
       <BrowserRouter>
@@ -160,7 +160,7 @@ describe("MMI History Admin Page", () => {
 
     await waitFor(() => {
       expect(screen.getByText("Nenhum registro encontrado")).toBeInTheDocument();
-  };
+  });
   };
 
   it("should have an export PDF button", async () => {

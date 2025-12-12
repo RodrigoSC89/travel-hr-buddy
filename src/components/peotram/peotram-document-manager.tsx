@@ -213,7 +213,7 @@ export const PeotramDocumentManager: React.FC = () => {
       updateCategoryCompletion(mockDocuments);
     } catch (error) {
     }
-  };
+  });
 
   const updateCategoryCompletion = (docs: Document[]) => {
     setCategories(prev => prev.map(category => {
@@ -286,7 +286,7 @@ export const PeotramDocumentManager: React.FC = () => {
       elementId: "",
       requirementId: ""
     });
-  };
+  });
 
   const getDocumentType = (mimeType: string): Document["type"] => {
     if (mimeType.startsWith("image/")) return "photo";

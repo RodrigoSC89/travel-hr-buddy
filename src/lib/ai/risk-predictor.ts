@@ -125,7 +125,7 @@ export function calculateRiskScore(
     recommendedActions,
     lastInspectionDate: module.lastInspection,
     daysWithoutInspection: daysSinceInspection
-  };
+  });
 }
 
 /**

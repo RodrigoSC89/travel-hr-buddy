@@ -75,7 +75,7 @@ export default function PEODPPanel() {
       
       toast.success("Auditoria PEO-DP concluída", {
         description: `Score: ${resultado.score}%`,
-      };
+      });
     } catch (error) {
       toast.error("Erro ao executar auditoria", {
         description: error instanceof Error ? error.message : "Erro desconhecido",
@@ -83,7 +83,7 @@ export default function PEODPPanel() {
     } finally {
       setIsLoading(false);
     }
-  };
+  });
 
   const handleStartMonitoring = () => {
     try {

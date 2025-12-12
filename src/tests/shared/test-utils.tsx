@@ -20,7 +20,7 @@ export const createTestQueryClient = () => new QueryClient({
       retry: false,
     },
   },
-};
+});
 
 interface AllTheProvidersProps {
   children: React.ReactNode;
@@ -45,7 +45,7 @@ export const AllTheProviders = memo(({ children }: AllTheProvidersProps) => {
       </BrowserRouter>
     </QueryClientProvider>
   );
-};
+});
 
 /**
  * Custom render function that includes all providers

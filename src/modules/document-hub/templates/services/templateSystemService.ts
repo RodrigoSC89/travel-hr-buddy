@@ -445,7 +445,7 @@ class TemplateSystemService {
       css: data.css,
       documentType: data.document_type,
       userId: data.user_id,
-    };
+    });
   }
 
   /**

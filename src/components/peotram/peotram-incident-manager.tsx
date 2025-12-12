@@ -94,7 +94,7 @@ export const PeotramIncidentManager: React.FC = () => {
     
     // Trigger a custom event to notify the modal
     window.dispatchEvent(new Event("storage"));
-  };
+  });
 
   function getDemoIncidents(): Incident[] {
     return [
@@ -192,7 +192,7 @@ export const PeotramIncidentManager: React.FC = () => {
     case "low": return "bg-info/20 text-info border-info/30";
     default: return "bg-muted/20 text-muted-foreground border-muted/30";
     }
-  };
+  });
 
   const getStatusColor = (status: string) => {
     switch (status) {

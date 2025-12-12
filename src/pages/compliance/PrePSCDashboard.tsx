@@ -41,9 +41,9 @@ export default function PrePSCDashboard() {
         title: "Error",
         description: "Failed to load inspection statistics",
         variant: "destructive",
-      };
+      });
     }
-  };
+  });
 
   const handleNewInspection = () => {
     setSelectedInspection(null);
@@ -58,8 +58,8 @@ export default function PrePSCDashboard() {
     toast({
       title: "Success",
       description: "Inspection completed successfully",
-    };
-  };
+    });
+  });
 
   return (
     <div className="container mx-auto p-6 space-y-6">

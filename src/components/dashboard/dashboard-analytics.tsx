@@ -275,7 +275,7 @@ const AIInsightsPanel: React.FC<{ profile: string }> = ({ profile }) => {
       toast({
         title: "IA Insights Gerados",
         description: `${sampleInsights.length} insights foram gerados com base nos dados atuais.`,
-      };
+      });
     }, 2000);
   }, [isGenerating, toast]);
 

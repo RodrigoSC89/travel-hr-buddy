@@ -305,7 +305,7 @@ const EnhancedSettingsHubComponent: React.FC = () => {
     } finally {
       setIsSaving(false);
     }
-  };
+  });
 
   const validateSettings = (settings: SettingsData): string[] => {
     const errors: string[] = [];
@@ -410,7 +410,7 @@ const EnhancedSettingsHubComponent: React.FC = () => {
       title: "🔄 Configurações Restauradas",
       description: "Todas as configurações foram restauradas aos valores padrão.",
     });
-  };
+  });
 
   const exportSettings = () => {
     const exportData = {
@@ -435,7 +435,7 @@ const EnhancedSettingsHubComponent: React.FC = () => {
       title: "📊 Configurações Exportadas",
       description: "Arquivo de backup baixado com sucesso.",
     });
-  };
+  });
 
   const importSettings = (event: React.ChangeEvent<HTMLInputElement>) => {
     const file = event.target.files?.[0];
@@ -465,7 +465,7 @@ const EnhancedSettingsHubComponent: React.FC = () => {
           variant: "destructive",
         });
       }
-    };
+    });
     reader.readAsText(file);
   };
 
@@ -530,7 +530,7 @@ const EnhancedSettingsHubComponent: React.FC = () => {
       }
     } catch (error) {
     }
-  };
+  });
 
   const logSettingsChange = async (action: string, data: unknown) => {
     const logEntry = {
@@ -553,7 +553,7 @@ const EnhancedSettingsHubComponent: React.FC = () => {
         ? "Voltando ao modo produção. Alterações afetarão o sistema."
         : "Modo teste ativado. Alterações não afetarão outros usuários.",
     });
-  };
+  });
 
   const togglePreviewMode = () => {
     const newPreviewMode = !previewMode;
@@ -564,7 +564,7 @@ const EnhancedSettingsHubComponent: React.FC = () => {
         ? "Modo prévia ativado. Veja como as alterações afetarão o sistema."
         : "Voltando ao modo normal.",
     });
-  };
+  });
 
   const getHealthColor = (score: number) => {
     if (score >= 90) return "text-green-600";

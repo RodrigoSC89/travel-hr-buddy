@@ -89,7 +89,7 @@ export const useCrewAI = () => {
             promotion: "Elegível para Promoção",
             certificate: "Certificação Próxima ao Vencimento",
             performance: "Avaliação de Desempenho Pendente",
-          };
+          });
 
           const descMap = {
             training: `${member.full_name} precisa de treinamento atualizado em operações marítimas modernas`,
@@ -97,7 +97,7 @@ export const useCrewAI = () => {
             promotion: "Performance consistente qualifica para próximo nível hierárquico",
             certificate: "Certificação STCW expira em 60 dias, renovação necessária",
             performance: "Revisão trimestral de desempenho aguardando conclusão",
-          };
+          });
 
           return {
             crewId: member.id,
@@ -136,7 +136,7 @@ export const useCrewAI = () => {
     } finally {
       setIsAnalyzing(false);
     }
-  };
+  });
 
   /**
    * Otimiza rotações de tripulação entre embarcações
@@ -187,7 +187,7 @@ export const useCrewAI = () => {
     } finally {
       setIsAnalyzing(false);
     }
-  };
+  });
 
   /**
    * Analisa lacunas de habilidades na tripulação
@@ -227,7 +227,7 @@ export const useCrewAI = () => {
             "Treinamento em sistemas modernos",
           ],
           priority: gapPercentage > 50 ? "critical" : gapPercentage > 30 ? "high" : gapPercentage > 15 ? "medium" : "low",
-        };
+        });
       });
 
       toast({
@@ -246,7 +246,7 @@ export const useCrewAI = () => {
     } finally {
       setIsAnalyzing(false);
     }
-  };
+  });
 
   /**
    * Gera insights gerais sobre a tripulação
@@ -281,7 +281,7 @@ export const useCrewAI = () => {
           "Agendar treinamentos preventivos",
           "Planejar sucessão para posições críticas",
         ],
-      };
+      });
     } catch (error) {
       toast({
         title: "Erro ao Gerar Insights",
@@ -292,7 +292,7 @@ export const useCrewAI = () => {
     } finally {
       setIsAnalyzing(false);
     }
-  };
+  });
 
   return {
     isAnalyzing,

@@ -331,7 +331,7 @@ class NeuroHumanAdapter {
       hesitationCount: 0,
       confirmationRequired: false,
       inputHistory: []
-    };
+    });
   }
 
   /**

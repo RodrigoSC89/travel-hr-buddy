@@ -193,7 +193,7 @@ class ErrorTracker {
       uniqueErrors: this.errors.size,
       errorsByType,
       recentErrors: recentErrors.slice(0, 10),
-    };
+    });
   }
 
   /**

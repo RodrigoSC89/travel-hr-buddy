@@ -104,11 +104,11 @@ export const IntegrationsHubEnhanced = memo(() => {
         title: "Error loading integrations",
         description: error.message,
         variant: "destructive",
-      };
+      });
     } finally {
       setLoading(false);
     }
-  };
+  });
 
   const loadWebhookEvents = async () => {
     try {
@@ -157,7 +157,7 @@ export const IntegrationsHubEnhanced = memo(() => {
       toast({
         title: "Integration connected",
         description: `Successfully connected to ${provider.name}`,
-      };
+      });
 
       await loadIntegrations();
     } catch (error: SupabaseError | null) {
@@ -165,9 +165,9 @@ export const IntegrationsHubEnhanced = memo(() => {
         title: "Connection failed",
         description: error.message,
         variant: "destructive",
-      };
+      });
     }
-  };
+  });
 
   const disconnectIntegration = async (integrationId: string) => {
     try {
@@ -181,7 +181,7 @@ export const IntegrationsHubEnhanced = memo(() => {
       toast({
         title: "Integration disconnected",
         description: "Integration has been removed",
-      };
+      });
 
       await loadIntegrations();
     } catch (error: SupabaseError | null) {
@@ -189,9 +189,9 @@ export const IntegrationsHubEnhanced = memo(() => {
         title: "Error disconnecting",
         description: error.message,
         variant: "destructive",
-      };
+      });
     }
-  };
+  });
 
   const createWebhook = async () => {
     if (!webhookUrl) {
@@ -199,7 +199,7 @@ export const IntegrationsHubEnhanced = memo(() => {
         title: "URL required",
         description: "Please enter a webhook URL",
         variant: "destructive",
-      };
+      });
       return;
     }
 
@@ -228,7 +228,7 @@ export const IntegrationsHubEnhanced = memo(() => {
       toast({
         title: "Webhook created",
         description: "Webhook has been configured successfully",
-      };
+      });
 
       setWebhookUrl("");
       setWebhookSecret("");
@@ -238,9 +238,9 @@ export const IntegrationsHubEnhanced = memo(() => {
         title: "Error creating webhook",
         description: error.message,
         variant: "destructive",
-      };
+      });
     }
-  };
+  });
 
   const testWebhook = async (integration: Integration) => {
     try {
@@ -268,7 +268,7 @@ export const IntegrationsHubEnhanced = memo(() => {
       toast({
         title: "Webhook triggered",
         description: "Test webhook sent successfully",
-      };
+      });
 
       await loadWebhookEvents();
     } catch (error: SupabaseError | null) {
@@ -276,9 +276,9 @@ export const IntegrationsHubEnhanced = memo(() => {
         title: "Webhook test failed",
         description: error.message,
         variant: "destructive",
-      };
+      });
     }
-  };
+  });
 
   const retryWebhook = async (eventId: string) => {
     try {
@@ -300,7 +300,7 @@ export const IntegrationsHubEnhanced = memo(() => {
       toast({
         title: "Webhook retried",
         description: "Webhook event has been retried successfully",
-      };
+      });
 
       await loadWebhookEvents();
     } catch (error: SupabaseError | null) {
@@ -308,8 +308,8 @@ export const IntegrationsHubEnhanced = memo(() => {
         title: "Retry failed",
         description: error.message,
         variant: "destructive",
-      };
-    };
+      });
+    });
   };
 
   const getStatusBadge = (status: string) => {

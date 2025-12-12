@@ -96,7 +96,7 @@ const createIncidentTracker = (): IncidentTracker => {
     unsubscribe: () => {
       subscribers.length = 0;
     }
-  };
+  });
 };
 
 describe("DP Intelligence - Incident Tracking Tests", () => {

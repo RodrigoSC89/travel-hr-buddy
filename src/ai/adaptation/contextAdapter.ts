@@ -372,7 +372,7 @@ class ContextualResponseAdapter {
       visual: 0,
       xr: 0,
       gesture: 0
-    };
+    });
 
     this.adaptationHistory.forEach(a => {
       modeBreakdown[a.mode]++;

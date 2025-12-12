@@ -207,7 +207,7 @@ export const useAdaptivePolling = (config: AdaptivePollingConfig) => {
           resume();
         }
       }
-    };
+    });
     document.addEventListener("visibilitychange", handleVisibilityChange);
 
     return () => {
@@ -217,7 +217,7 @@ export const useAdaptivePolling = (config: AdaptivePollingConfig) => {
       }
       unsubscribeNetwork();
       document.removeEventListener("visibilitychange", handleVisibilityChange);
-    };
+    });
   }, []);
 
   return {

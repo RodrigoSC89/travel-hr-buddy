@@ -103,7 +103,7 @@ export default function DashboardAuditorias() {
         orientation: "landscape",
         unit: "mm",
         format: "a4",
-      };
+      });
 
       const imgWidth = 280;
       const imgHeight = (canvas.height * imgWidth) / canvas.width;
@@ -115,7 +115,7 @@ export default function DashboardAuditorias() {
       logger.error("Erro ao exportar PDF de auditorias", { error });
       toast.error("Erro ao exportar PDF");
     }
-  };
+  });
 
   return (
     <div className="space-y-6 p-6">

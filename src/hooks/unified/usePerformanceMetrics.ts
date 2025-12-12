@@ -387,7 +387,7 @@ export const usePerformanceMonitor = (options?: { enabled?: boolean; interval?: 
     monitorFps: options?.enabled ?? true,
     interval: options?.interval ?? 5000,
   });
-};
+});
 
 /** @deprecated Use usePerformanceMetrics instead */
 export const usePerformance = usePerformanceMetrics;

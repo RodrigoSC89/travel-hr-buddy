@@ -206,7 +206,7 @@ export const SafetyChecklist: React.FC<SafetyChecklistProps> = ({
     } catch (error) {
       toast.error("Erro ao enviar checklist");
     }
-  };
+  });
 
   const renderItemInput = (item: ChecklistItem) => {
     switch (item.type) {

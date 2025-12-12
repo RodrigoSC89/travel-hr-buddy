@@ -78,7 +78,7 @@ export const AIPricePredictor: React.FC = () => {
         title: "Campos obrigatórios",
         description: "Preencha o nome do produto e a URL",
         variant: "destructive"
-      };
+      });
       return;
     }
 
@@ -90,7 +90,7 @@ export const AIPricePredictor: React.FC = () => {
           product_name: selectedProduct,
           product_url: productUrl
         }
-      };
+      });
 
       const currentPrice = priceData?.price || 0;
 
@@ -106,7 +106,7 @@ export const AIPricePredictor: React.FC = () => {
       toast({
         title: "Previsão gerada!",
         description: `Análise de IA criada para ${selectedProduct}`,
-      };
+      });
 
       // Clear form
       setSelectedProduct("");
@@ -120,11 +120,11 @@ export const AIPricePredictor: React.FC = () => {
         title: "Erro",
         description: "Não foi possível gerar a previsão",
         variant: "destructive"
-      };
+      });
     } finally {
       setIsLoading(false);
     }
-  };
+  });
 
   const generateAIPredictionData = async (productName: string, currentPrice: number): Promise<PricePrediction> => {
     // Simulated AI prediction logic - in production, this would use real ML models
@@ -175,7 +175,7 @@ export const AIPricePredictor: React.FC = () => {
         "Fatores econômicos externos"
       ],
       historical_data: historicalData
-    };
+    });
   };
 
   const generateAIInsights = () => {

@@ -23,7 +23,7 @@ export const CoverageMap = memo(function({ coverageData }: CoverageMapProps) {
     case "poor": return "destructive";
     default: return "secondary";
     }
-  };
+  });
 
   const getQualityLabel = (quality: string) => {
     switch (quality) {
@@ -33,7 +33,7 @@ export const CoverageMap = memo(function({ coverageData }: CoverageMapProps) {
     case "poor": return "Fraca";
     default: return quality;
     }
-  };
+  });
 
   return (
     <Card>

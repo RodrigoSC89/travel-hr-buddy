@@ -154,11 +154,11 @@ export const AdvancedPriceAlerts: React.FC = () => {
         title: "Erro",
         description: "Não foi possível carregar os alertas",
         variant: "destructive"
-      };
+      });
     } finally {
       setIsLoading(false);
     }
-  };
+  });
 
   const loadHistory = async () => {
     try {
@@ -220,7 +220,7 @@ export const AdvancedPriceAlerts: React.FC = () => {
         title: "Campos obrigatórios",
         description: "Preencha todos os campos obrigatórios",
         variant: "destructive"
-      };
+      });
       return;
     }
 
@@ -232,7 +232,7 @@ export const AdvancedPriceAlerts: React.FC = () => {
           product_name: newAlert.product_name,
           product_url: newAlert.product_url
         }
-      };
+      });
 
       const currentPrice = priceData?.price || 0;
 
@@ -283,18 +283,18 @@ export const AdvancedPriceAlerts: React.FC = () => {
       toast({
         title: "Alerta criado!",
         description: `Alerta para ${newAlert.product_name} foi configurado com sucesso.`,
-      };
+      });
 
     } catch (error) {
       toast({
         title: "Erro",
         description: "Não foi possível criar o alerta",
         variant: "destructive"
-      };
+      });
     } finally {
       setIsCreating(false);
     }
-  };
+  });
 
   const toggleAlert = async (alertId: string) => {
     const alert = alerts.find(a => a.id === alertId);
@@ -315,15 +315,15 @@ export const AdvancedPriceAlerts: React.FC = () => {
       toast({
         title: alert.is_active ? "Alerta pausado" : "Alerta ativado",
         description: `O alerta foi ${alert.is_active ? "pausado" : "ativado"} com sucesso.`,
-      };
+      });
     } catch (error) {
       toast({
         title: "Erro",
         description: "Não foi possível atualizar o alerta",
         variant: "destructive"
-      };
+      });
     }
-  };
+  });
 
   const refreshPrices = async () => {
     setIsRefreshing(true);
@@ -338,17 +338,17 @@ export const AdvancedPriceAlerts: React.FC = () => {
       toast({
         title: "Preços atualizados!",
         description: `${data?.checked_alerts || 0} alertas foram verificados`,
-      };
+      });
     } catch (error) {
       toast({
         title: "Erro",
         description: "Não foi possível atualizar os preços",
         variant: "destructive"
-      };
+      });
     } finally {
       setIsRefreshing(false);
     }
-  };
+  });
 
   const navigateToTravel = (alert: PriceAlert) => {
     // Navigate to travel module with pre-filled data

@@ -130,7 +130,7 @@ export async function exportISMAuditPDF(
       non_conformity: checklist.filter(i => i.compliance_status === "non_conformity").length,
       major_non_conformity: checklist.filter(i => i.compliance_status === "major_non_conformity").length,
       not_verified: checklist.filter(i => i.compliance_status === "not_verified").length
-    };
+    });
 
     const summaryData = [
       ["Compliant", `${checklistSummary.compliant}`],
@@ -224,7 +224,7 @@ export async function exportISMAuditPDF(
     return {
       success: true,
       blob
-    };
+    });
   } catch (error) {
     Logger.error("Failed to export PDF", error, "ism-audit-export");
     return {

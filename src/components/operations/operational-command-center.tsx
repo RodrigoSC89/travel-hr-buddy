@@ -89,11 +89,11 @@ export const OperationalCommandCenter: React.FC = () => {
         title: "Erro ao carregar dados",
         description: "Não foi possível carregar os dados do centro de comando.",
         variant: "destructive"
-      };
+      });
     } finally {
       setIsLoading(false);
     }
-  };
+  });
 
   const loadMetrics = async () => {
     const { data, error } = await supabase
@@ -179,7 +179,7 @@ export const OperationalCommandCenter: React.FC = () => {
       toast({
         title: "Alerta reconhecido",
         description: "O alerta foi marcado como reconhecido.",
-      };
+      });
 
       loadAlerts();
     } catch (error) {
@@ -187,9 +187,9 @@ export const OperationalCommandCenter: React.FC = () => {
         title: "Erro",
         description: "Não foi possível reconhecer o alerta.",
         variant: "destructive"
-      };
+      });
     }
-  };
+  });
 
   const resolveAlert = async (alertId: string) => {
     try {
@@ -206,7 +206,7 @@ export const OperationalCommandCenter: React.FC = () => {
       toast({
         title: "Alerta resolvido",
         description: "O alerta foi marcado como resolvido.",
-      };
+      });
 
       loadAlerts();
     } catch (error) {
@@ -214,9 +214,9 @@ export const OperationalCommandCenter: React.FC = () => {
         title: "Erro",
         description: "Não foi possível resolver o alerta.",
         variant: "destructive"
-      };
+      });
     }
-  };
+  });
 
   const getSeverityColor = (severity: string) => {
     switch (severity) {

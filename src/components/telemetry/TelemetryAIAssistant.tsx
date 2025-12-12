@@ -56,7 +56,7 @@ export const TelemetryAIAssistant = memo(function({
       role: "user",
       content: "Analise os dados de telemetria atuais e forneça um relatório completo.",
       timestamp: new Date(),
-    };
+    });
     setMessages(prev => [...prev, userMsg]);
 
     try {

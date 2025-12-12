@@ -199,11 +199,11 @@ export const AdvancedAIAssistant = memo(() => {
         title: "Erro na IA",
         description: "Não foi possível processar sua solicitação. Tente novamente.",
         variant: "destructive"
-      };
+      });
     } finally {
       setIsTyping(false);
     }
-  };
+  });
 
   const handleQuickAction = (action: QuickAction) => {
     setInputMessage(action.prompt);

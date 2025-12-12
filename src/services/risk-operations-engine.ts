@@ -372,7 +372,7 @@ export async function calculateRiskTrends(
         lowRisksCount: 0,
         trendDirection: "stable",
         keyIssues: [],
-      };
+      });
     }
 
     const totalScore = data.reduce((sum: number, r: any) => sum + r.risk_score, 0);

@@ -146,14 +146,14 @@ export const KnowledgeManagement: React.FC = () => {
         totalViews,
         topModules,
         topContent
-      };
+      });
 
     } catch (error) {
       toast({
         title: "Erro ao carregar",
         description: "Não foi possível carregar os itens da base de conhecimento",
         variant: "destructive",
-      };
+      });
     }
   }, [toast]);
 
@@ -190,9 +190,9 @@ export const KnowledgeManagement: React.FC = () => {
       helpful_votes: 0,
       steps: [],
       metadata: {}
-    };
+    });
     setIsEditDialogOpen(true);
-  };
+  });
 
   const handleEdit = (item: KnowledgeItem) => {
     setEditingItem({ ...item });
@@ -226,7 +226,7 @@ export const KnowledgeManagement: React.FC = () => {
         toast({
           title: "Item atualizado",
           description: "O conteúdo foi atualizado com sucesso",
-        };
+        });
       } else {
         // Criar novo item
         const { error } = await supabase
@@ -249,7 +249,7 @@ export const KnowledgeManagement: React.FC = () => {
         toast({
           title: "Item criado",
           description: "Novo conteúdo adicionado à base de conhecimento",
-        };
+        });
       }
       
       setIsEditDialogOpen(false);
@@ -261,9 +261,9 @@ export const KnowledgeManagement: React.FC = () => {
         title: "Erro",
         description: "Não foi possível salvar o item",
         variant: "destructive",
-      };
+      });
     }
-  };
+  });
 
   const handleDelete = async (id: string) => {
     if (confirm("Tem certeza que deseja excluir este item?")) {
@@ -278,7 +278,7 @@ export const KnowledgeManagement: React.FC = () => {
         toast({
           title: "Item excluído",
           description: "O conteúdo foi removido da base de conhecimento",
-        };
+        });
 
         loadKnowledgeItems(); // Recarregar dados
       } catch (error) {
@@ -286,10 +286,10 @@ export const KnowledgeManagement: React.FC = () => {
           title: "Erro",
           description: "Não foi possível excluir o item",
           variant: "destructive",
-        };
+        });
       }
     }
-  };
+  });
 
   const handleExport = () => {
     const dataStr = JSON.stringify(knowledgeItems, null, 2);
@@ -303,8 +303,8 @@ export const KnowledgeManagement: React.FC = () => {
     toast({
       title: "Exportação iniciada",
       description: "Base de conhecimento exportada com sucesso",
-    };
-  };
+    });
+  });
 
   const getModuleName = (moduleId: string) => {
     return modules.find(m => m.id === moduleId)?.name || moduleId;

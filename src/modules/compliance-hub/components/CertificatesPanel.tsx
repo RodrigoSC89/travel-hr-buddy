@@ -78,7 +78,7 @@ export const CertificatesPanel = memo(function({
         icon: <CheckCircle2 className="h-3 w-3" />,
         color: "text-green-500",
         bgColor: "bg-green-500/10",
-      };
+      });
     case "expiring-soon":
       return {
         variant: "secondary" as const,
@@ -86,7 +86,7 @@ export const CertificatesPanel = memo(function({
         icon: <Clock className="h-3 w-3" />,
         color: "text-yellow-500",
         bgColor: "bg-yellow-500/10",
-      };
+      });
     case "expired":
       return {
         variant: "destructive" as const,
@@ -94,7 +94,7 @@ export const CertificatesPanel = memo(function({
         icon: <XCircle className="h-3 w-3" />,
         color: "text-red-500",
         bgColor: "bg-red-500/10",
-      };
+      });
     case "pending-renewal":
       return {
         variant: "outline" as const,

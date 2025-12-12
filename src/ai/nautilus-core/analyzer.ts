@@ -125,7 +125,7 @@ export function analyzeLogs(logs: string, workflowName: string = "Unknown", runI
     workflowRun: runId,
     findings,
     hasIssues: findings.length > 0
-  };
+  });
 }
 
 /**

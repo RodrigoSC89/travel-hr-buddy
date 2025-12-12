@@ -99,7 +99,7 @@ export const PersonalizedRecommendations: React.FC<PersonalizedRecommendationsPr
         toast({
           title: "Recomendações Atualizadas",
           description: `${data.recommendations?.length || 0} recomendações personalizadas geradas`,
-        };
+        });
       } else {
         throw new Error(data.error || "Erro ao gerar recomendações");
       }
@@ -162,11 +162,11 @@ export const PersonalizedRecommendations: React.FC<PersonalizedRecommendationsPr
         title: "Usando dados simulados",
         description: "Conecte-se à API para obter recomendações reais",
         variant: "destructive",
-      };
+      });
     } finally {
       setIsLoading(false);
     }
-  };
+  });
 
   const handleRecommendationAction = (recommendation: Recommendation) => {
     if (recommendation.actionType === "navigate" && recommendation.actionData?.module) {
@@ -174,23 +174,23 @@ export const PersonalizedRecommendations: React.FC<PersonalizedRecommendationsPr
       toast({
         title: "Navegando",
         description: `Abrindo módulo: ${recommendation.actionData.module}`,
-      };
+      });
     } else if (recommendation.actionType === "configure") {
       // Handle configuration actions
       toast({
         title: "Configuração",
         description: "Abrindo configurações relevantes",
-      };
+      });
     }
-  };
+  });
 
   const dismissRecommendation = (id: string) => {
     setDismissedRecommendations(prev => [...prev, id]);
     toast({
       title: "Recomendação Dispensada",
       description: "Você pode atualizá-las a qualquer momento",
-    };
-  };
+    });
+  });
 
   const getPriorityColor = (priority: string) => {
     switch (priority) {

@@ -56,7 +56,7 @@ export function useStarFix(vesselId?: string) {
     } finally {
       setLoading(false);
     }
-  };
+  });
 
   /**
    * Fetch inspections from StarFix
@@ -83,7 +83,7 @@ export function useStarFix(vesselId?: string) {
     } finally {
       setLoading(false);
     }
-  };
+  });
 
   /**
    * Get performance metrics
@@ -104,7 +104,7 @@ export function useStarFix(vesselId?: string) {
     } finally {
       setLoading(false);
     }
-  };
+  });
 
   /**
    * Submit inspection to StarFix
@@ -139,7 +139,7 @@ export function useStarFix(vesselId?: string) {
     } finally {
       setLoading(false);
     }
-  };
+  });
 
   /**
    * Sync all pending inspections
@@ -170,7 +170,7 @@ export function useStarFix(vesselId?: string) {
     } finally {
       setLoading(false);
     }
-  };
+  });
 
   /**
    * Refresh sync status

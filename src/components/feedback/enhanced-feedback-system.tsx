@@ -174,11 +174,11 @@ export const EnhancedFeedbackSystem: React.FC = () => {
         title: "Erro",
         description: "Falha ao carregar feedbacks",
         variant: "destructive"
-      };
+      });
     } finally {
       setIsLoading(false);
     }
-  };
+  });
 
   const submitFeedback = async () => {
     try {
@@ -187,7 +187,7 @@ export const EnhancedFeedbackSystem: React.FC = () => {
           title: "Campos obrigatórios",
           description: "Preencha todos os campos obrigatórios",
           variant: "destructive"
-        };
+        });
         return;
       }
 
@@ -195,7 +195,7 @@ export const EnhancedFeedbackSystem: React.FC = () => {
       toast({
         title: "Feedback enviado",
         description: "Obrigado pelo seu feedback! Analisaremos em breve.",
-      };
+      });
 
       // Resetar formulário
       setNewFeedback({
@@ -204,7 +204,7 @@ export const EnhancedFeedbackSystem: React.FC = () => {
         title: "",
         description: "",
         rating: 5
-      };
+      });
 
       // Recarregar feedbacks
       loadFeedbacks();
@@ -214,9 +214,9 @@ export const EnhancedFeedbackSystem: React.FC = () => {
         title: "Erro",
         description: "Falha ao enviar feedback",
         variant: "destructive"
-      };
+      });
     }
-  };
+  });
 
   const getTypeIcon = (type: string) => {
     switch (type) {

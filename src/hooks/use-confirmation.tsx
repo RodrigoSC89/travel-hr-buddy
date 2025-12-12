@@ -45,7 +45,7 @@ export const useConfirmation = memo(function() {
       cancelText: options.cancelText || "Cancelar",
       variant: options.variant || "default",
       onConfirm: options.onConfirm
-};
+});
   }, []);
 
   const handleConfirm = useCallback(async () => {
@@ -72,7 +72,7 @@ export const useConfirmation = memo(function() {
       confirmText: "Excluir",
       variant: "destructive",
       onConfirm
-    };
+    });
   }, [confirm]);
 
   const confirmAction = useCallback((

@@ -105,4 +105,4 @@ export const generateCertificatePDF = async (certificate: Certificate): Promise<
   );
 
   return doc.output("blob");
-};
+});

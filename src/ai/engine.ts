@@ -73,7 +73,7 @@ export const runOpenAI = async (request: AIEngineRequest): Promise<AIEngineRespo
       } : undefined,
       model: response.model,
       timestamp: new Date()
-    };
+    });
   } catch (error) {
     logger.error("Error calling OpenAI API", { error });
     throw new Error(`AI Engine Error: ${error instanceof Error ? error.message : "Unknown error"}`);
@@ -118,7 +118,7 @@ const storeInteraction = async (request: AIEngineRequest, response: string): Pro
   } catch (error) {
     logger.warn("Failed to store AI interaction", { error });
   }
-};
+});
 
 /**
  * Generate system prompt with module context

@@ -134,11 +134,11 @@ export const MaritimeCertificationManager = memo(() => {
         title: "Erro",
         description: "Erro ao carregar certificações",
         variant: "destructive"
-      };
+      });
     } finally {
       setLoading(false);
     }
-  };
+  });
 
   const loadAlerts = async () => {
     try {

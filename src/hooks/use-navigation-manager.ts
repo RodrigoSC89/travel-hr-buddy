@@ -34,7 +34,7 @@ export const useNavigationManager = () => {
         variant: "destructive",
       });
     }
-  };
+  });
 
   const navigateBack = () => {
     try {
@@ -46,7 +46,7 @@ export const useNavigationManager = () => {
         variant: "destructive",
       });
     }
-  };
+  });
 
   const navigateHome = () => {
     navigateTo("/", { replace: true });

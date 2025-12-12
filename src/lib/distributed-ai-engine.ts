@@ -422,7 +422,7 @@ Expected Behavior:
       total_interactions: contexts.reduce((sum, ctx) => sum + (ctx.interaction_count || 0), 0),
       last_updated: new Date().toISOString(),
       shared_insights: []
-    };
+    });
 
     // Aggregate common patterns and insights
     for (const context of contexts) {
@@ -473,7 +473,7 @@ Expected Behavior:
       lastSync: this.lastGlobalSync,
       nextSync,
       cacheSize: this.CONTEXT_CACHE.size
-    };
+    });
   }
 }
 

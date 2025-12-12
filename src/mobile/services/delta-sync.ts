@@ -196,7 +196,7 @@ class DeltaSyncService {
       changes,
       timestamp: Date.now(),
       checksum: await this.calculateChecksum(newData)
-    };
+    });
 
     // Update local state
     this.localState.set(entityType, {

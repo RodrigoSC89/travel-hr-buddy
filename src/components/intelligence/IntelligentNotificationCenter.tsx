@@ -141,11 +141,11 @@ export const IntelligentNotificationCenter: React.FC<IntelligentNotificationCent
         title: "Erro",
         description: "Falha ao carregar notificações",
         variant: "destructive",
-      };
+      });
     } finally {
       setIsLoading(false);
     }
-  };
+  });
 
   const handleNewNotification = (payload: unknown) => {
     loadNotifications(); // Reload notifications
@@ -153,8 +153,8 @@ export const IntelligentNotificationCenter: React.FC<IntelligentNotificationCent
     toast({
       title: "Nova Notificação",
       description: payload.new.title,
-    };
-  };
+    });
+  });
 
   const generateIntelligentNotification = async (type: string) => {
     if (!user) return;
@@ -178,7 +178,7 @@ export const IntelligentNotificationCenter: React.FC<IntelligentNotificationCent
         toast({
           title: "Notificação Gerada",
           description: data.notification.title,
-        };
+        });
         loadNotifications();
       }
     } catch (error) {
@@ -186,9 +186,9 @@ export const IntelligentNotificationCenter: React.FC<IntelligentNotificationCent
         title: "Erro",
         description: "Falha ao gerar notificação",
         variant: "destructive",
-      };
+      });
     }
-  };
+  });
 
   const markAsRead = (id: string) => {
     setNotifications(prev => 
@@ -205,16 +205,16 @@ export const IntelligentNotificationCenter: React.FC<IntelligentNotificationCent
     toast({
       title: "Todas Marcadas como Lidas",
       description: "Todas as notificações foram marcadas como lidas",
-    };
-  };
+    });
+  });
 
   const dismissNotification = (id: string) => {
     setNotifications(prev => prev.filter(notif => notif.id !== id));
     toast({
       title: "Notificação Dispensada",
       description: "A notificação foi removida",
-    };
-  };
+    });
+  });
 
   const handleNotificationAction = (notification: IntelligentNotification) => {
     if (notification.actionType === "navigate" && notification.actionData?.module) {
@@ -223,9 +223,9 @@ export const IntelligentNotificationCenter: React.FC<IntelligentNotificationCent
       toast({
         title: "Navegando",
         description: `Abrindo módulo: ${notification.actionData.module}`,
-      };
+      });
     }
-  };
+  });
 
   const getPriorityIcon = (priority: string) => {
     switch (priority) {
@@ -434,6 +434,6 @@ export const IntelligentNotificationCenter: React.FC<IntelligentNotificationCent
       </CardContent>
     </Card>
   );
-});
+};
 
 export default IntelligentNotificationCenter;

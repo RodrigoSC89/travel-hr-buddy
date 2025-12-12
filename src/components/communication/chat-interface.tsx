@@ -219,7 +219,7 @@ export const ChatInterface = memo(() => {
         title: "Erro",
         description: "Não foi possível carregar as conversas",
         variant: "destructive",
-      };
+      });
     } finally {
       setLoading(false);
     }
@@ -395,9 +395,9 @@ export const ChatInterface = memo(() => {
         title: "Erro",
         description: "Não foi possível enviar a mensagem",
         variant: "destructive",
-      };
+      });
     }
-  };
+  });
 
   const createNewConversation = async (userId: string) => {
     try {
@@ -460,15 +460,15 @@ export const ChatInterface = memo(() => {
       toast({
         title: "Sucesso",
         description: "Nova conversa criada",
-      };
+      });
     } catch (error) {
       toast({
         title: "Erro",
         description: "Não foi possível criar a conversa",
         variant: "destructive",
-      };
+      });
     }
-  };
+  });
 
   const getConversationTitle = (conversation: Conversation) => {
     if (conversation.title) return conversation.title;

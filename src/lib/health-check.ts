@@ -321,7 +321,7 @@ export class HealthMonitor {
     this.callbacks.push(callback);
     return () => {
       this.callbacks = this.callbacks.filter((cb) => cb !== callback);
-    };
+    });
   }
 
   private async runCheck(): Promise<void> {

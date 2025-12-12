@@ -175,7 +175,7 @@ class MetaStrategyEngine {
       alternatives,
       context,
       timestamp: new Date().toISOString()
-    };
+    });
 
     logger.info("Selected strategy", { name: selected.name, score: selected.score });
 

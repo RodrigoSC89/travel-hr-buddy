@@ -142,7 +142,7 @@ export default function QualityDashboard() {
           passed: data.summary.passed || 0,
           failed: data.summary.failed || 0,
           successRate: parseFloat(data.summary.successRate) || 0,
-        };
+        });
       }
     } catch (error) {
       console.warn("Could not load test results, using defaults");

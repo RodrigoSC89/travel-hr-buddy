@@ -153,7 +153,7 @@ describe("DPIntelligencePage", () => {
     const mockInvoke = vi.fn().mockResolvedValue({
       data: { result: "Análise de IA completa" },
       error: null,
-    };
+    });
 
     const mockUpdate = vi.fn().mockReturnValue({
       eq: vi.fn().mockResolvedValue({
@@ -259,7 +259,7 @@ describe("DPIntelligencePage", () => {
             resolve({
               data: { result: "Análise de IA completa" },
               error: null,
-            };
+            });
           }, 100);
         })
     );

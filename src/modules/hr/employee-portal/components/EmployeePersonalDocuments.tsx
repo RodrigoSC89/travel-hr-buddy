@@ -87,11 +87,11 @@ export const EmployeePersonalDocuments: React.FC = () => {
         title: "Error loading documents",
         description: error.message,
         variant: "destructive",
-      };
+      });
     } finally {
       setLoading(false);
     }
-  };
+  });
 
   const uploadDocument = async () => {
     try {
@@ -153,7 +153,7 @@ export const EmployeePersonalDocuments: React.FC = () => {
       toast({
         title: "✅ Document Uploaded",
         description: "Your document has been uploaded successfully",
-      };
+      });
 
       setIsUploadOpen(false);
       resetForm();
@@ -163,11 +163,11 @@ export const EmployeePersonalDocuments: React.FC = () => {
         title: "Error uploading document",
         description: error.message,
         variant: "destructive",
-      };
+      });
     } finally {
       setUploading(false);
     }
-  };
+  });
 
   const deleteDocument = async (documentId: string) => {
     if (!confirm("Are you sure you want to delete this document?")) return;
@@ -183,7 +183,7 @@ export const EmployeePersonalDocuments: React.FC = () => {
       toast({
         title: "Document Deleted",
         description: "Document has been removed",
-      };
+      });
 
       loadDocuments();
     } catch (error: SupabaseError | null) {
@@ -191,9 +191,9 @@ export const EmployeePersonalDocuments: React.FC = () => {
         title: "Error deleting document",
         description: error.message,
         variant: "destructive",
-      };
+      });
     }
-  };
+  });
 
   const resetForm = () => {
     setFormData({
@@ -204,8 +204,8 @@ export const EmployeePersonalDocuments: React.FC = () => {
       expiry_date: "",
       issuing_authority: "",
       file: null
-    };
-  };
+    });
+  });
 
   const getStatusBadge = (status: string, expiryDate?: string) => {
     const config: Record<string, { label: string; className: string; icon: unknown: unknown: unknown }> = {

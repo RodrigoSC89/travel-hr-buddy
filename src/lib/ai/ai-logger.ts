@@ -180,7 +180,7 @@ class AILogger {
           successRate: 0,
           totalCalls: 0,
           avgTokens: 0,
-        };
+        });
       }
 
       const totalCalls = data.length;

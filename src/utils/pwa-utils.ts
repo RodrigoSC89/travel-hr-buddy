@@ -181,7 +181,7 @@ interface NetworkInformation {
 type NavigatorWithExtensions = Navigator & {
   connection?: NetworkInformation;
   standalone?: boolean;
-};
+});
 
 /**
  * Monitor network connectivity status

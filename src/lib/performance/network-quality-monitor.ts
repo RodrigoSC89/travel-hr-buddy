@@ -181,7 +181,7 @@ class NetworkQualityMonitor {
       saveData: info.saveData,
       isOnline: navigator.onLine,
       timestamp: Date.now(),
-    };
+    });
   }
 
   private getConnectionInfo(): {

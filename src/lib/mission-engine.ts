@@ -180,7 +180,7 @@ export class MissionEngine {
       return {
         ...mission,
         vessels
-      };
+      });
     } catch (error) {
       logger.error("Error in getMissionById:", error);
       return null;

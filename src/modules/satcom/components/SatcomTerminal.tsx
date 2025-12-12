@@ -144,7 +144,7 @@ export const SatcomTerminal: React.FC<SatcomTerminalProps> = ({
         latency_ms: latency,
         status,
         metadata: { simulated: true }
-      };
+      });
     } catch (error) {
       console.error("Error logging transmission:", error);
     }
@@ -161,29 +161,29 @@ export const SatcomTerminal: React.FC<SatcomTerminalProps> = ({
       toast({
         title: "Message Sent",
         description: `Transmitted via ${activeProvider} (${latency}ms)`,
-      };
+      });
     } else if (status === "failed") {
       toast({
         title: "Transmission Failed",
         description: "Signal too weak, message not sent",
         variant: "destructive"
-      };
+      });
     } else if (status === "degraded") {
       toast({
         title: "Degraded Transmission",
         description: "Message sent with reduced quality",
         variant: "default"
-      };
+      });
     } else {
       toast({
         title: "Timeout",
         description: "Transmission timeout, retrying...",
         variant: "destructive"
-      };
+      });
     }
 
     setTimeout(() => setIsTransmitting(false), latency);
-  };
+  });
 
   const receiveMessage = () => {
     const messages = [
@@ -222,7 +222,7 @@ export const SatcomTerminal: React.FC<SatcomTerminalProps> = ({
       status,
       metadata: { simulated: true, auto_generated: true }
     }).then(() => {}).catch(console.error);
-  };
+  });
 
   const getStatusColor = (status: string) => {
     switch (status) {

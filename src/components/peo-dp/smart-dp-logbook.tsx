@@ -422,6 +422,6 @@ export const SmartDPLogbook: React.FC = () => {
       </Card>
     </div>
   );
-});
+};
 
 export default SmartDPLogbook;

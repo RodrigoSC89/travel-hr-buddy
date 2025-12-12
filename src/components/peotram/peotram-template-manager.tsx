@@ -57,15 +57,15 @@ export const PeotramTemplateManager: React.FC<TemplateManagerProps> = ({
       toast({
         title: "Sucesso",
         description: "Template PEOTRAM criado com sucesso!",
-      };
+      });
     } catch (error) {
       toast({
         title: "Erro",
         description: "Não foi possível criar o template.",
         variant: "destructive",
-      };
+      });
     }
-  };
+  });
 
   const updateTemplate = async (id: string, updates: Record<string, unknown>) => {
     try {
@@ -82,15 +82,15 @@ export const PeotramTemplateManager: React.FC<TemplateManagerProps> = ({
       toast({
         title: "Sucesso",
         description: "Template atualizado com sucesso!",
-      };
+      });
     } catch (error) {
       toast({
         title: "Erro",
         description: "Não foi possível atualizar o template.",
         variant: "destructive",
-      };
+      });
     }
-  };
+  });
 
   const toggleTemplateStatus = async (template: PeotramTemplate) => {
     await updateTemplate(template.id, { is_active: !template.is_active });

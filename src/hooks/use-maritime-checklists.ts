@@ -451,7 +451,7 @@ export const useMaritimeChecklists = (userId: string) => {
       toast.error("Erro ao salvar checklist");
       throw err;
     }
-  };
+  });
 
   // Submit checklist for review
   const submitChecklist = async (checklist: Checklist) => {
@@ -475,7 +475,7 @@ export const useMaritimeChecklists = (userId: string) => {
       toast.error("Erro ao enviar checklist");
       throw err;
     }
-  };
+  });
 
   // Create new checklist from template
   const createChecklistFromTemplate = async (template: ChecklistTemplate, vesselId?: string) => {
@@ -516,7 +516,7 @@ export const useMaritimeChecklists = (userId: string) => {
       toast.error("Erro ao criar checklist");
       throw err;
     }
-  };
+  });
 
   useEffect(() => {
     if (userId) {

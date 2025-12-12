@@ -44,7 +44,7 @@ export const generateEmbedding = async (text: string): Promise<number[]> => {
     logger.warn("Falling back to mock embedding");
     return generateMockEmbedding();
   }
-};
+});
 
 /**
  * Generate embedding from job data

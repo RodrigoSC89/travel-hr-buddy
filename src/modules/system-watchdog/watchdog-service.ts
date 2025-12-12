@@ -111,7 +111,7 @@ class WatchdogService {
             latency: fallbackLatency,
             message: fallbackError.message,
             timestamp: new Date()
-          };
+          });
         }
 
         return {
@@ -158,7 +158,7 @@ class WatchdogService {
         status: response ? "online" : "degraded",
         latency,
         timestamp: new Date()
-      };
+      });
     } catch (err) {
       return {
         service: "ai-service",
@@ -379,7 +379,7 @@ class WatchdogService {
       ...event,
       id: `evt_${Date.now()}_${Math.random().toString(36).slice(2, 11)}`,
       timestamp: new Date()
-    };
+    });
 
     this.events.unshift(newEvent);
 
@@ -443,7 +443,7 @@ class WatchdogService {
       totalEvents: this.events.length,
       recentErrors: this.events.filter(e => e.type === "error").length,
       lastCheck: this.events[0]?.timestamp || null
-    };
+    });
   }
 }
 

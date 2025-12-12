@@ -48,9 +48,9 @@ export default function Org360Dashboard() {
         total: data?.length || 0,
         activeToday,
         activeRate: data?.length ? (activeToday / data.length) * 100 : 0,
-      };
+      });
     },
-  };
+  });
 
   const { data: aiUsage, isLoading: loadingAI } = useQuery({
     queryKey: ["ai-usage-360"],
@@ -65,7 +65,7 @@ export default function Org360Dashboard() {
           { name: "Compliance", requests: 412 },
           { name: "Maintenance", requests: 511 },
         ],
-      };
+      });
     },
   });
 
@@ -84,7 +84,7 @@ export default function Org360Dashboard() {
         medium: 12,
         low: 8,
         total: 27,
-      };
+      });
     },
   });
 

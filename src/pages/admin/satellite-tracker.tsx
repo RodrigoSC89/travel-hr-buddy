@@ -75,7 +75,7 @@ export default function SatelliteTracker() {
             title: "Satellite Alert",
             description: payload.new.title,
             variant: payload.new.severity === "critical" ? "destructive" : "default",
-          };
+          });
           fetchAlerts();
         }
       )
@@ -118,11 +118,11 @@ export default function SatelliteTracker() {
         title: "Error",
         description: "Failed to load satellites",
         variant: "destructive",
-      };
+      });
     } finally {
       setLoading(false);
     }
-  };
+  });
 
   const fetchAlerts = async () => {
     try {
@@ -191,7 +191,7 @@ export default function SatelliteTracker() {
       earth.rotation.y += 0.001;
       controls.update();
       renderer.render(scene, camera);
-    };
+    });
     animate();
 
     // Handle resize
@@ -232,16 +232,16 @@ export default function SatelliteTracker() {
       toast({
         title: "Tracking Started",
         description: "Satellite tracking session initiated",
-      };
+      });
     } catch (error) {
       logger.error("Error starting satellite tracking", { error, satelliteId });
       toast({
         title: "Error",
         description: "Failed to start tracking session",
         variant: "destructive",
-      };
+      });
     }
-  };
+  });
 
   const stopTracking = async () => {
     if (!trackingSessionId) return;
@@ -259,11 +259,11 @@ export default function SatelliteTracker() {
       toast({
         title: "Tracking Stopped",
         description: "Satellite tracking session ended",
-      };
+      });
     } catch (error) {
       logger.error("Error stopping satellite tracking", { error, trackingSessionId });
     }
-  };
+  });
 
   const resolveAlert = async (alertId: string) => {
     try {
@@ -276,13 +276,13 @@ export default function SatelliteTracker() {
       toast({
         title: "Alert Resolved",
         description: "Satellite alert marked as resolved",
-      };
+      });
 
       fetchAlerts();
     } catch (error) {
       logger.error("Error resolving satellite alert", { error, alertId });
     }
-  };
+  });
 
   return (
     <div className="container mx-auto p-6 space-y-6">

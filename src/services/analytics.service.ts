@@ -146,7 +146,7 @@ export class AnalyticsService {
       errors_last_5min: errors,
       avg_response_time_ms: 0, // Would be calculated from API call events
       active_sessions: sessions.length,
-    };
+    });
   }
 
   // Time Series Data

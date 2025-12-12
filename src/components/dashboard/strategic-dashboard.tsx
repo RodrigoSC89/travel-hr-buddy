@@ -219,7 +219,7 @@ const StrategicDashboard: React.FC = () => {
         title: "Erro",
         description: "Falha ao carregar dados do dashboard",
         variant: "destructive"
-      };
+      });
     } finally {
       setIsLoading(false);
       loadingRef.current = false;
@@ -232,8 +232,8 @@ const StrategicDashboard: React.FC = () => {
     toast({
       title: "Dashboard Atualizado",
       description: "Dados atualizados com sucesso!",
-    };
-  };
+    });
+  });
 
   // Export dashboard data
   const handleExport = async (format: string, options?: unknown: unknown: unknown) => {
@@ -255,60 +255,60 @@ const StrategicDashboard: React.FC = () => {
       toast({
         title: "Exportação Concluída",
         description: `Dashboard exportado em formato ${format.toUpperCase()} com sucesso!`,
-      };
+      });
     } catch (error) {
       toast({
         title: "Erro na Exportação",
         description: "Falha ao exportar dados do dashboard",
         variant: "destructive"
-      };
+      });
     } finally {
       setIsExporting(false);
     }
-  };
+  });
 
   // Customize dashboard
   const handleCustomizeDashboard = () => {
     toast({
       title: "Personalização",
       description: "Abrindo configurações de personalização do dashboard...",
-    };
+    });
     // Navigate to settings or open customization modal
     navigate("/settings?tab=dashboard");
-  };
+  });
 
   // Open alerts center
   const handleAlertsCenter = () => {
     toast({
       title: "Central de Alertas",
       description: "Abrindo central de alertas do sistema...",
-    };
+    });
     // Navigate to alerts page or open alerts panel
     setActiveTab("alerts");
-  };
+  });
 
   // Global search handler
   const handleGlobalSearch = () => {
     toast({
       title: "Busca Global",
       description: "Ativando busca global do sistema (Ctrl+K)...",
-    };
+    });
     // Focus on search input or open search modal
     const searchInput = document.querySelector("input[type=\"search\"]") as HTMLInputElement;
     if (searchInput) {
       searchInput.focus();
     }
-  };
+  });
 
   // AI Insights handler
   const handleAIInsights = () => {
     toast({
       title: "IA Insights",
       description: "Gerando insights inteligentes baseados em IA...",
-    };
+    });
     // Navigate to AI insights or open insights panel
     setActiveTab("ai-insights");
-  };
+  });
 
   // Initialize dashboard
   useEffect(() => {

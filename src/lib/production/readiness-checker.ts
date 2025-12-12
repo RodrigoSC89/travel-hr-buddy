@@ -424,7 +424,7 @@ class ProductionReadinessChecker {
       checks: this.checks,
       score,
       recommendations,
-    };
+    });
 
     logger.info("[ReadinessCheck] Report generated", {
       status: overallStatus,

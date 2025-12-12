@@ -41,11 +41,11 @@ const AlertasPrecosModule = () => {
         priceIncreases,
         priceDrops,
         estimatedSavings
-      };
+      });
     } catch (error) {
       console.error("Error loading stats:", error);
     }
-  };
+  });
 
   useEffect(() => {
     loadStats();

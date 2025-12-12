@@ -136,7 +136,7 @@ export function useSystemHealth(interval: number = 10000): SystemHealth {
         isHealthy,
         issues
       });
-    };
+    });
 
     const timer = setInterval(updateMetrics, interval);
 

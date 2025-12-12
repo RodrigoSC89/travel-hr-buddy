@@ -403,7 +403,7 @@ export async function planGNSSWindow(
     skyplots,
     space_weather_risk: spaceWeatherRisk,
     recommended_windows: recommendedWindows.slice(0, 5), // Top 5
-  };
+  });
 }
 
 // ============================================

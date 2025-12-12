@@ -118,7 +118,7 @@ export const DevOpsPanel = memo(function() {
       toast({
         title: "Sincronização concluída",
         description: `${stats.completed} operações sincronizadas`,
-      };
+      });
       await collectMetrics();
     } catch (error) {
       addLog("error", "Sync", `Erro na sincronização: ${error}`);
@@ -126,9 +126,9 @@ export const DevOpsPanel = memo(function() {
         title: "Erro na sincronização",
         description: "Verifique os logs para mais detalhes",
         variant: "destructive",
-      };
+      });
     }
-  };
+  });
 
   // Clear completed operations
   const clearCompleted = async () => {
@@ -157,12 +157,12 @@ export const DevOpsPanel = memo(function() {
       toast({
         title: "Caches limpos",
         description: "Todos os dados em cache foram removidos",
-      };
+      });
       await collectMetrics();
     } catch (error) {
       addLog("error", "Cache", `Erro ao limpar caches: ${error}`);
     }
-  };
+  });
 
   // Export logs
   const exportLogs = () => {

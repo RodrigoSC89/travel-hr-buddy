@@ -55,11 +55,11 @@ export const CrewSelection: React.FC<CrewSelectionProps> = ({ onSelect }) => {
         title: "Erro ao carregar tripulantes",
         description: error.message,
         variant: "destructive"
-      };
+      });
     } finally {
       setLoading(false);
     }
-  };
+  });
 
   const filteredCrewMembers = crewMembers.filter(member =>
     member.full_name.toLowerCase().includes(searchTerm.toLowerCase()) ||

@@ -141,7 +141,7 @@ const PredictiveAnalyticsEnhanced: React.FC = () => {
     case "low": return "bg-success text-success-foreground";
     default: return "bg-muted text-muted-foreground";
     }
-  };
+  });
 
   const getTrendIcon = (trend: Prediction["trend"]) => {
     switch (trend) {

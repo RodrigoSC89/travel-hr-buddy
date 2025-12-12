@@ -225,7 +225,7 @@ export default function MaritimeCommandCenter() {
         activeCrew: demoCrewMembers.filter(m => m.status === "active").length,
         certExpiring: 3,
         certValid: 12
-      };
+      });
       
     } catch (error) {
       toast.error("Erro ao carregar dados marítimos");

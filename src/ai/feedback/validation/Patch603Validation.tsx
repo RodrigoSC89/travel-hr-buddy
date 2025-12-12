@@ -51,8 +51,8 @@ export const Patch603Validation = memo(function() {
     toast({
       title: `${channel.charAt(0).toUpperCase() + channel.slice(1)} Feedback Recorded`,
       description: `Behavior score adjusted: ${(newScore * 100).toFixed(0)}%`,
-    };
-  };
+    });
+  });
 
   const simulateVoice = () => {
     addFeedback("voice", "Voice command: Increase priority of mission alpha");

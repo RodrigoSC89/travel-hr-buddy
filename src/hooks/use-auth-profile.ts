@@ -129,7 +129,7 @@ export const useAuthProfile = () => {
       } finally {
         setIsLoading(false);
       }
-    };
+    });
 
     fetchProfile();
   }, [user]);
@@ -166,7 +166,7 @@ export const useAuthProfile = () => {
         phone: data.phone,
         role: profile.role,
         preferences: profile.preferences
-      };
+      });
       setProfile(mappedProfile);
       toast({
         title: "Sucesso",
@@ -183,7 +183,7 @@ export const useAuthProfile = () => {
     } finally {
       setIsUpdating(false);
     }
-  };
+  });
 
   const uploadAvatar = async (file: File) => {
     if (!profile) return false;
@@ -230,7 +230,7 @@ export const useAuthProfile = () => {
     } finally {
       setIsUpdating(false);
     }
-  };
+  });
 
   return {
     profile,

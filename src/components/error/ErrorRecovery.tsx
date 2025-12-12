@@ -95,12 +95,12 @@ export const ErrorRecovery = memo(function({
     } finally {
       setIsRetrying(false);
     }
-  };
+  });
 
   const handleGoHome = () => {
     onReset?.();
     navigate("/");
-  };
+  });
 
   if (compact) {
     return (

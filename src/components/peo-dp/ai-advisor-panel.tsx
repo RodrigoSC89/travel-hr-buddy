@@ -93,7 +93,7 @@ export const AIAdvisorPanel: React.FC = () => {
   const { ask, loading, error } = useAIAdvisor({
     profile,
     language: "pt-BR",
-  };
+  });
 
   useEffect(() => {
     if (scrollRef.current) {
@@ -109,7 +109,7 @@ export const AIAdvisorPanel: React.FC = () => {
       role: "user",
       content: input,
       timestamp: new Date(),
-    };
+    });
 
     setMessages((prev) => [...prev, userMessage]);
     setInput("");

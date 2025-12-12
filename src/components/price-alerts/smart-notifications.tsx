@@ -114,7 +114,7 @@ export const SmartNotifications: React.FC = () => {
             min_discount_percentage: 10,
             min_savings_amount: 50
           }
-        };
+        });
         setSettings(defaultSettings);
       }
     } catch (error) {
@@ -165,17 +165,17 @@ export const SmartNotifications: React.FC = () => {
       toast({
         title: "Configurações salvas!",
         description: "Suas preferências de notificação foram atualizadas.",
-      };
+      });
     } catch (error) {
       toast({
         title: "Erro",
         description: "Não foi possível salvar as configurações",
         variant: "destructive"
-      };
+      });
     } finally {
       setIsSaving(false);
     }
-  };
+  });
 
   const sendTestNotification = async () => {
     try {
@@ -196,15 +196,15 @@ export const SmartNotifications: React.FC = () => {
       toast({
         title: "Notificação de teste enviada!",
         description: `Teste enviado via ${testNotification.type}`,
-      };
+      });
     } catch (error) {
       toast({
         title: "Erro",
         description: "Não foi possível enviar a notificação de teste",
         variant: "destructive"
-      };
+      });
     }
-  };
+  });
 
   const getStatusIcon = (status: string) => {
     switch (status) {

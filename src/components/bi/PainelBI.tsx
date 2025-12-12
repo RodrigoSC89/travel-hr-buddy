@@ -157,7 +157,7 @@ export const PainelBI = memo(function() {
       console.error("Error in exportToPDF:", err);
       toast.error("Erro ao gerar PDF");
     }
-  };
+  });
 
   const dadosFiltrados = filtroMes 
     ? dados.filter((d) => d.mes === filtroMes) 

@@ -86,7 +86,7 @@ export const AIAnalysisComponent: React.FC<AIAnalysisProps> = ({
       setAnalyzing(false);
       setLoading(false);
     }
-  };
+  });
 
   const getSeverityColor = (severity: string) => {
     switch (severity) {

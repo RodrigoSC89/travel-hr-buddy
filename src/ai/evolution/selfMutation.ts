@@ -140,7 +140,7 @@ export class SelfEvolutionModel {
       mutationType,
       hypothesis: this.formHypothesis(candidate, mutationType),
       createdAt: new Date().toISOString(),
-    };
+    });
 
     return alternative;
   }

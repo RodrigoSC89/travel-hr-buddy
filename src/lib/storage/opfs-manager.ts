@@ -196,7 +196,7 @@ class OPFSManager {
         accessCount: 0,
         priority: options.priority ?? 1,
         metadata: options.metadata,
-      };
+      });
 
       this.fileIndex.set(path, fileInfo);
       this.saveIndex();

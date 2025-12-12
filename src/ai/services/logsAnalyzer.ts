@@ -262,7 +262,7 @@ Regras:
     // Return fallback recommendations
     return generateFallbackRecommendations(anomalies);
   }
-};
+});
 
 /**
  * Parse AI recommendations response
@@ -371,7 +371,7 @@ export const storeAutoFixHistory = async (
     logger.error("Error storing autofix history", error);
     return false;
   }
-};
+});
 
 // Helper functions
 

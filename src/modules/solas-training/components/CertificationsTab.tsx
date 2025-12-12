@@ -69,14 +69,14 @@ export default function CertificationsTab({
     const matchesStatus = statusFilter === "all" || cert.status === statusFilter;
     const matchesCategory = categoryFilter === "all" || cert.code.includes(categoryFilter);
     return matchesSearch && matchesStatus && matchesCategory;
-  };
+  });
 
   const stats = {
     total: certifications.length,
     valid: certifications.filter(c => c.status === "valid").length,
     expiring: certifications.filter(c => c.status === "expiring").length,
     expired: certifications.filter(c => c.status === "expired").length,
-  };
+  });
 
   const handleRenew = (cert: Certification) => {
     setSelectedCert(cert);
@@ -89,11 +89,11 @@ export default function CertificationsTab({
       toast({
         title: "Renovação Agendada",
         description: `A renovação de ${selectedCert.name} foi agendada com sucesso.`,
-      };
+      });
       setShowRenewDialog(false);
       setSelectedCert(null);
     }
-  };
+  });
 
   const handleView = (cert: Certification) => {
     setSelectedCert(cert);
@@ -112,10 +112,10 @@ export default function CertificationsTab({
       toast({
         title: "Documento Enviado",
         description: "O certificado foi atualizado com sucesso.",
-      };
+      });
       setShowUploadDialog(false);
     }
-  };
+  });
 
   const groupedByStatus = {
     expired: filteredCerts.filter(c => c.status === "expired"),

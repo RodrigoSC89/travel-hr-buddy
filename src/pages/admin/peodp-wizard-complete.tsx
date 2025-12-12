@@ -154,14 +154,14 @@ export default function PeoDpWizardComplete() {
         incidents: incidentsData.data || [],
         training: trainingData.data || [],
         audits: auditsData.data || []
-      };
+      });
 
       // Run initial inference
       runInference(formData);
     } catch (error) {
       logger.error("Error loading PEO-DP historical data", { error });
     }
-  };
+  });
 
   const runInference = async (data: unknown) => {
     try {
@@ -293,13 +293,13 @@ export default function PeoDpWizardComplete() {
           field: "training_plan",
           status: "warning",
           message: "Histórico de treinamento limitado nos últimos 12 meses"
-        };
+        });
       } else {
         validations.push({
           field: "training_plan",
           status: "pass",
           message: `${recentTraining.length} treinamentos registrados nos últimos 12 meses`
-        };
+        });
       }
     }
 
@@ -314,13 +314,13 @@ export default function PeoDpWizardComplete() {
           field: "operation",
           status: "fail",
           message: `${criticalIncidents.length} incidentes críticos identificados - revisão operacional necessária`
-        };
+        });
       } else if (criticalIncidents.length > 0) {
         validations.push({
           field: "operation",
           status: "warning",
           message: `${criticalIncidents.length} incidentes críticos registrados`
-        };
+        });
       }
     }
 
@@ -340,7 +340,7 @@ export default function PeoDpWizardComplete() {
     }
 
     setValidationResults(validations);
-  };
+  });
 
   const exportToPDF = async () => {
     const doc = new jsPDF();
@@ -450,8 +450,8 @@ export default function PeoDpWizardComplete() {
     toast({
       title: "PDF Exportado",
       description: "Relatório de auditoria PEO-DP salvo com sucesso"
-    };
-  };
+    });
+  });
 
   const handleFieldChange = (field: string, value: unknown: unknown: unknown) => {
     const newData = { ...formData, [field]: value };
@@ -491,14 +491,14 @@ export default function PeoDpWizardComplete() {
           validation_results: validationResults,
           created_by: user?.id,
           audit_date: new Date().toISOString()
-        };
+        });
 
       if (error) throw error;
 
       toast({
         title: "Auditoria Salva",
         description: "Auditoria PEO-DP registrada com sucesso"
-      };
+      });
 
       // Auto-export PDF
       await exportToPDF();
@@ -508,11 +508,11 @@ export default function PeoDpWizardComplete() {
         title: "Erro",
         description: "Falha ao salvar auditoria",
         variant: "destructive"
-      };
+      });
     } finally {
       setIsSubmitting(false);
     }
-  };
+  });
 
   const currentWizardStep = WIZARD_STEPS[currentStep];
   const progress = ((currentStep + 1) / WIZARD_STEPS.length) * 100;

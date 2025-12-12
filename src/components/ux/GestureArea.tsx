@@ -74,7 +74,7 @@ export const GestureArea = memo(function({
       onPullToRefresh?.();
       break;
     }
-  };
+  });
   
   const { bindGestures } = useGestureNavigation(handleGesture);
   
@@ -120,7 +120,7 @@ export const PullToRefresh = memo(function({
       setIsRefreshing(false);
       setPullProgress(0);
     }
-  };
+  });
   
   return (
     <GestureArea

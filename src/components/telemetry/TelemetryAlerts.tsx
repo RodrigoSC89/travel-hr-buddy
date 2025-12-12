@@ -70,7 +70,7 @@ export const TelemetryAlerts = memo(function({ alerts: initialAlerts, onAlertsCh
         alert.message.toLowerCase().includes(searchQuery.toLowerCase());
       
       return matchesType && matchesSeverity && matchesSearch;
-  };
+  });
   }, [alerts, filter, severityFilter, searchQuery]);
 
   const unreadCount = alerts.filter(a => !a.read).length;
@@ -81,14 +81,14 @@ export const TelemetryAlerts = memo(function({ alerts: initialAlerts, onAlertsCh
     );
     setAlerts(updated);
     onAlertsChange?.(updated);
-  };
+  });
 
   const markAllAsRead = () => {
     const updated = alerts.map(a => ({ ...a, read: true }));
     setAlerts(updated);
     onAlertsChange?.(updated);
     toast.success("Todos os alertas marcados como lidos");
-  };
+  });
 
   const deleteAlert = (id: string) => {
     const updated = alerts.filter(a => a.id !== id);

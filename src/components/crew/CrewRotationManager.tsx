@@ -80,7 +80,7 @@ const DraggableCrewCard: React.FC<{ member: CrewMember }> = ({ member }) => {
   const { attributes, listeners, setNodeRef, transform, isDragging } = useDraggable({
     id: member.id,
     data: member,
-};
+});
 
   const style = transform
     ? {
@@ -109,7 +109,7 @@ const DraggableCrewCard: React.FC<{ member: CrewMember }> = ({ member }) => {
       </div>
     </div>
   );
-};
+});
 
 // Droppable Schedule Slot
 const DroppableScheduleSlot: React.FC<{
@@ -120,7 +120,7 @@ const DroppableScheduleSlot: React.FC<{
 }> = ({ date, rotationType, rotations, onDrop }) => {
   const { setNodeRef, isOver } = useDroppable({
     id: `${date}-${rotationType}`,
-};
+});
 
   const slotRotations = rotations.filter(
     (r) => r.scheduled_date === date && r.rotation_type === rotationType
@@ -220,7 +220,7 @@ export const CrewRotationManager: React.FC = () => {
           severity: "high",
           message: `Crew member has multiple rotations on ${rotation.scheduled_date}`,
           rotation_id: rotation.id,
-        };
+        });
       }
 
       // Check documentation expiry
@@ -265,7 +265,7 @@ export const CrewRotationManager: React.FC = () => {
           status: "scheduled",
           documentation_status: "pending",
           medical_clearance: false,
-        };
+        });
 
       if (error) throw error;
 
@@ -278,7 +278,7 @@ export const CrewRotationManager: React.FC = () => {
       console.error("Error scheduling rotation:", error);
       toast.error("Failed to schedule rotation");
     }
-  };
+  });
 
   const generateRotationAlert = async (crewMemberId: string, date: string, type: string) => {
     try {
@@ -292,14 +292,14 @@ export const CrewRotationManager: React.FC = () => {
         type: "crew_rotation",
         priority: "high",
         status: "unread",
-      };
+      });
 
       // Log the alert
       toast.info("Alert generated for crew member");
     } catch (error) {
       console.error("Error generating alert:", error);
     }
-  };
+  });
 
   const handleCreateRotation = async () => {
     try {
@@ -342,7 +342,7 @@ export const CrewRotationManager: React.FC = () => {
         log_type: "status_change",
         description: `Status changed to ${newStatus}`,
         new_status: newStatus,
-      };
+      });
 
       toast.success("Rotation status updated");
       loadData();
@@ -350,7 +350,7 @@ export const CrewRotationManager: React.FC = () => {
       console.error("Error updating rotation:", error);
       toast.error("Failed to update rotation");
     }
-  };
+  });
 
   const exportToCalendar = (rotation: CrewRotation) => {
     // Generate iCal format

@@ -128,7 +128,7 @@ export const CrewCertificationsManager = memo(function({ crewMembers = [] }: Cre
     case "expired": return "bg-destructive text-destructive-foreground";
     default: return "bg-muted";
     }
-  };
+  });
 
   const getStatusLabel = (status: string) => {
     switch (status) {
@@ -137,7 +137,7 @@ export const CrewCertificationsManager = memo(function({ crewMembers = [] }: Cre
     case "expired": return "Vencido";
     default: return status;
     }
-  };
+  });
 
   const getStatusIcon = (status: string) => {
     switch (status) {
@@ -169,16 +169,16 @@ export const CrewCertificationsManager = memo(function({ crewMembers = [] }: Cre
     toast({
       title: "Certificação adicionada",
       description: "Nova certificação registrada com sucesso",
-    };
+    });
     setIsAddDialogOpen(false);
-  };
+  });
 
   const handleRenew = (certId: string) => {
     toast({
       title: "Renovação iniciada",
       description: "Processo de renovação iniciado. Você receberá notificações sobre o andamento.",
-    };
-  };
+    });
+  });
 
   return (
     <div className="space-y-6">

@@ -60,7 +60,7 @@ export const ActionPlanTab = memo(function({ auditId }: ActionPlanTabProps) {
     } finally {
       setLoading(false);
     }
-  };
+  });
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -86,7 +86,7 @@ export const ActionPlanTab = memo(function({ auditId }: ActionPlanTabProps) {
           responsible: formData.responsible,
           deadline: formData.deadline,
           status: formData.status,
-        };
+        });
 
         if (error) throw error;
         toast.success("Action plan created");
@@ -99,13 +99,13 @@ export const ActionPlanTab = memo(function({ auditId }: ActionPlanTabProps) {
         responsible: "",
         deadline: "",
         status: "pending",
-      };
+      });
       loadActions();
     } catch (error) {
       logger.error("Failed to save action plan", error);
       toast.error("Failed to save action plan");
     }
-  };
+  });
 
   const handleDelete = async (id: string) => {
     if (!confirm("Delete this action plan?")) return;

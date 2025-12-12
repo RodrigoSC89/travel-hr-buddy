@@ -304,7 +304,7 @@ class DroneMissionService {
       status: data.status,
       completionPercentage: data.completion_percentage,
       userId: data.user_id,
-    };
+    });
   }
 
   /**

@@ -132,11 +132,11 @@ export const TaskManagement: React.FC = () => {
         title: "Erro",
         description: "Não foi possível carregar as tarefas",
         variant: "destructive"
-      };
+      });
     } finally {
       setIsLoading(false);
     }
-  };
+  });
 
   const handleAddTask = async () => {
     try {
@@ -158,21 +158,21 @@ export const TaskManagement: React.FC = () => {
         tags: [],
         related_vessel: "",
         related_crew: ""
-      };
+      });
       setShowAddDialog(false);
       
       toast({
         title: "Tarefa Criada",
         description: `${task.title} foi criada com sucesso`
-      };
+      });
     } catch (error) {
       toast({
         title: "Erro",
         description: "Não foi possível criar a tarefa",
         variant: "destructive"
-      };
+      });
     }
-  };
+  });
 
   const updateTaskStatus = (taskId: string, newStatus: Task["status"]) => {
     setTasks(tasks.map(task => 
@@ -188,8 +188,8 @@ export const TaskManagement: React.FC = () => {
     toast({
       title: "Status Atualizado",
       description: "Status da tarefa foi atualizado com sucesso"
-    };
-  };
+    });
+  });
 
   const getPriorityColor = (priority: string) => {
     switch (priority) {

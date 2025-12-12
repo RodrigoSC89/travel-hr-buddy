@@ -88,7 +88,7 @@ export const AIAdoptionScorecard = memo(function({ organizationId, className }: 
         if (p.module_name) {
           moduleBreakdown[p.module_name] = (moduleBreakdown[p.module_name] || 0) + 1;
         }
-      };
+      });
 
       setMetrics({
         totalInteractions,
@@ -104,7 +104,7 @@ export const AIAdoptionScorecard = memo(function({ organizationId, className }: 
     } finally {
       setIsLoading(false);
     }
-  };
+  });
 
   if (isLoading) {
     return (

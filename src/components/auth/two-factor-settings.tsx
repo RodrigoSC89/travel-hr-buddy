@@ -84,7 +84,7 @@ export const TwoFactorSettings: React.FC<TwoFactorSettingsProps> = ({ onClose })
     } finally {
       setIsLoading(false);
     }
-  };
+  });
 
   const verifyTwoFactor = async () => {
     if (!verificationCode || verificationCode.length !== 6) {
@@ -122,7 +122,7 @@ export const TwoFactorSettings: React.FC<TwoFactorSettingsProps> = ({ onClose })
     } finally {
       setIsLoading(false);
     }
-  };
+  });
 
   const disableTwoFactor = async (factorId: string) => {
     setIsLoading(true);
@@ -146,7 +146,7 @@ export const TwoFactorSettings: React.FC<TwoFactorSettingsProps> = ({ onClose })
     } finally {
       setIsLoading(false);
     }
-  };
+  });
 
   const copyToClipboard = (text: string) => {
     navigator.clipboard.writeText(text);
@@ -156,7 +156,7 @@ export const TwoFactorSettings: React.FC<TwoFactorSettingsProps> = ({ onClose })
       title: "Copiado",
       description: "Código copiado para a área de transferência",
     });
-  };
+  });
 
   const renderSetupStep = () => (
     <div className="space-y-6">

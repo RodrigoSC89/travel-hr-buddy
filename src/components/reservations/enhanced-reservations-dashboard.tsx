@@ -146,12 +146,12 @@ export const EnhancedReservationsDashboard: React.FC = () => {
         title: "Erro",
         description: "Erro ao carregar reservas",
         variant: "destructive"
-      };
+      });
       setReservations([]);
     } finally {
       setLoading(false);
     }
-  };
+  });
 
   const detectConflicts = (reservations: EnhancedReservation[]): EnhancedReservation[] => {
     return reservations.map(reservation => {
@@ -213,16 +213,16 @@ export const EnhancedReservationsDashboard: React.FC = () => {
       toast({
         title: "Sucesso",
         description: "Reserva excluída com sucesso!"
-      };
+      });
       fetchReservations();
     } catch (error) {
       toast({
         title: "Erro",
         description: "Erro ao excluir reserva",
         variant: "destructive"
-      };
+      });
     }
-  };
+  });
 
   const exportReservations = () => {
     const csv = [

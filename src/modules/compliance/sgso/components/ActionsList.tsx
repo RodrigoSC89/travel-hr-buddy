@@ -40,11 +40,11 @@ export const ActionsList: React.FC<ActionsListProps> = ({ selectedPlanId, onRefr
         title: "Error loading actions",
         description: error.message,
         variant: "destructive",
-      };
+      });
     } finally {
       setIsLoading(false);
     }
-  };
+  });
 
   const getStatusIcon = (status: string) => {
     switch (status) {

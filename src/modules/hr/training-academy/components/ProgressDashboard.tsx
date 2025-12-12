@@ -62,17 +62,17 @@ export const ProgressDashboard: React.FC = () => {
         totalCertificates: certificates?.length || 0,
         averageScore: Math.round(avgScore),
         progressData,
-      };
+      });
     } catch (error: SupabaseError | null) {
       toast({
         title: "Error loading progress",
         description: error.message,
         variant: "destructive",
-      };
+      });
     } finally {
       setIsLoading(false);
     }
-  };
+  });
 
   const completionRate = stats.totalCourses > 0
     ? Math.round((stats.completedCourses / stats.totalCourses) * 100)

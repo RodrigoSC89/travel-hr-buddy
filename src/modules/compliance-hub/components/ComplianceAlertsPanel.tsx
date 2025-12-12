@@ -43,20 +43,20 @@ export const ComplianceAlertsPanel = memo(function({
     default:
       return <Info className="h-4 w-4 text-blue-500" />;
     }
-  };
+  });
 
   const getSeverityBadge = (severity: ComplianceAlert["severity"]) => {
     const variants: Record<string, string> = {
       critical: "bg-red-500/10 text-red-500 border-red-500/20",
       warning: "bg-yellow-500/10 text-yellow-500 border-yellow-500/20",
       info: "bg-blue-500/10 text-blue-500 border-blue-500/20",
-    };
+    });
     
     const labels: Record<string, string> = {
       critical: "Crítico",
       warning: "Atenção",
       info: "Info",
-    };
+    });
     
     return (
       <Badge variant="outline" className={variants[severity]}>

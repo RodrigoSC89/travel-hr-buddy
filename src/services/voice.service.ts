@@ -145,7 +145,7 @@ export class VoiceService {
         confidence: result[0].confidence,
         is_final: result.isFinal,
       });
-    };
+    });
 
     this.recognition.onerror = (event) => {
       if (onError) {
@@ -364,7 +364,7 @@ export class VoiceService {
       create_mission: "Iniciando criação de nova missão...",
       check_alerts: "Não há alertas ativos no momento.",
       help: "Posso ajudar com status da frota, criar missões, verificar alertas e muito mais.",
-    };
+    });
 
     const responseText = responses[intent] || "Comando não reconhecido.";
 
@@ -590,7 +590,7 @@ export class VoiceService {
       } else {
         this.synthesis!.onvoiceschanged = () => {
           resolve(this.synthesis!.getVoices());
-        };
+        });
       }
     });
   }

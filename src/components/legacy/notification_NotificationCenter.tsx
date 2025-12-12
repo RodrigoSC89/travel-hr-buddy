@@ -167,11 +167,11 @@ export const NotificationCenter: React.FC<NotificationCenterProps> = ({
         title: "Erro ao carregar notificações",
         description: "Não foi possível carregar as notificações",
         variant: "destructive"
-      };
+      });
     } finally {
       setLoading(false);
     }
-  };
+  });
 
   const handleNewNotification = (payload: unknown) => {
     const newNotification: Notification = {
@@ -193,8 +193,8 @@ export const NotificationCenter: React.FC<NotificationCenterProps> = ({
     toast({
       title: newNotification.title,
       description: newNotification.message,
-    };
-  };
+    });
+  });
 
   const createNotificationFromAlert = (alert: unknown) => {
     const notification: Notification = {
@@ -268,10 +268,10 @@ export const NotificationCenter: React.FC<NotificationCenterProps> = ({
       toast({
         title: "Notificações marcadas como lidas",
         description: `${unreadIds.length} notificações foram marcadas como lidas`,
-      };
+      });
     } catch (error) {
     }
-  };
+  });
 
   const deleteNotification = async (notificationId: string) => {
     try {

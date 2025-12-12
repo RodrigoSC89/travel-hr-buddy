@@ -116,7 +116,7 @@ export default function ListaAuditoriasIMCA() {
         orientation: "portrait",
         unit: "mm",
         format: "a4",
-      };
+      });
 
       const imgWidth = 190;
       const imgHeight = (canvas.height * imgWidth) / canvas.width;
@@ -128,7 +128,7 @@ export default function ListaAuditoriasIMCA() {
       console.error("Erro ao exportar PDF:", error);
       toast.error("Erro ao exportar PDF");
     }
-  };
+  });
 
   const explicarIA = async (id: string, navio: string, item: string, norma: string) => {
     setLoadingIA(id);

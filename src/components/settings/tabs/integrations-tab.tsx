@@ -120,7 +120,7 @@ export const IntegrationsTab: React.FC<IntegrationsTabProps> = ({
       name: newWebhook.name,
       url: newWebhook.url,
       active: true
-    };
+    });
 
     onUpdate({
       webhooks: [...settings.webhooks, webhook]
@@ -132,7 +132,7 @@ export const IntegrationsTab: React.FC<IntegrationsTabProps> = ({
       title: "Webhook Adicionado",
       description: "Webhook configurado com sucesso"
     });
-  };
+  });
 
   const removeWebhook = (id: string) => {
     onUpdate({
@@ -143,7 +143,7 @@ export const IntegrationsTab: React.FC<IntegrationsTabProps> = ({
       title: "Webhook Removido",
       description: "Webhook foi removido das configurações"
     });
-  };
+  });
 
   const testWebhook = async (webhook: unknown) => {
     toast({

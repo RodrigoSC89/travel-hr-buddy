@@ -118,7 +118,7 @@ export class CopilotVision {
         sceneClassification,
         confidence,
         timestamp: new Date().toISOString(),
-      };
+      });
     } catch (error) {
       console.error("Error analyzing visual input:", error);
       console.error("Error analyzing visual input:", error);

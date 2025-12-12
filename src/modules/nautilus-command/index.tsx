@@ -205,11 +205,11 @@ const NautilusCommandCenter = () => {
         title: "Erro de Sincronização",
         description: "Operando em modo offline",
         variant: "destructive"
-      };
+      });
     } finally {
       setLoading(false);
     }
-  };
+  });
 
   const criticalAlerts = alerts.filter(a => a.type === "critical").length;
   const warningAlerts = alerts.filter(a => a.type === "warning").length;

@@ -166,7 +166,7 @@ class BackgroundSyncService {
         synced: result.success,
         failed: result.failed,
         duration: Date.now() - startTime,
-      };
+      });
 
       
       // Notify listeners

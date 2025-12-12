@@ -102,11 +102,11 @@ export const UnifiedLogsPanel = memo(function() {
         title: "Erro ao carregar logs",
         description: "Não foi possível carregar os logs do sistema",
         variant: "destructive",
-      };
+      });
     } finally {
       setIsLoading(false);
     }
-  };
+  });
 
   const filteredLogs = useMemo(() => {
     return logs.filter((log) => {
@@ -222,8 +222,8 @@ export const UnifiedLogsPanel = memo(function() {
     toast({
       title: "CSV exportado",
       description: "O arquivo foi baixado com sucesso",
-    };
-  };
+    });
+  });
 
   const exportToPDF = async () => {
     const jsPDF = await getJsPDF();
@@ -279,8 +279,8 @@ export const UnifiedLogsPanel = memo(function() {
     toast({
       title: "PDF exportado",
       description: "O arquivo foi baixado com sucesso",
-    };
-  };
+    });
+  });
 
   if (isLoading) {
     return (

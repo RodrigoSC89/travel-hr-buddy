@@ -121,9 +121,9 @@ export const TelemetryDashboard360: React.FC<TelemetryDashboard360Props> = ({ us
           timestamp: new Date(),
           read: false,
           source: "Sistema Meteorológico",
-        };
+        });
       }
-    };
+    });
 
     // Check sync errors
     status.forEach((s) => {

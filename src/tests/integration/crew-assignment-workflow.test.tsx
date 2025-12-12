@@ -66,13 +66,13 @@ describe("Integration: Crew Assignment Workflow", () => {
 
     // Assert
     expect(hasAllCertifications).toBe(true);
-  };
+  });
 
   it("should reject assignment when certifications are missing", async () => {
     // Arrange
     const crew = mockCrew({ 
       certifications: ["STCW"]
-    };
+    });
     const requiredCerts = ["STCW", "HUET", "Advanced Fire Fighting"];
 
     // Act
@@ -82,7 +82,7 @@ describe("Integration: Crew Assignment Workflow", () => {
 
     // Assert
     expect(hasAllCertifications).toBe(false);
-  };
+  });
 
   it("should track crew work hours and enforce limits", async () => {
     // Arrange

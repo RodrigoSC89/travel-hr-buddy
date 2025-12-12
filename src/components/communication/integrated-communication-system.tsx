@@ -159,7 +159,7 @@ export const IntegratedCommunicationSystem: React.FC<IntegratedCommunicationProp
     } catch (error) {
       logger.error("Failed to mark messages as read:", error);
     }
-  };
+  });
 
   const sendMessage = async () => {
     if (!newMessage.trim() || !selectedContact) return;
@@ -195,15 +195,15 @@ export const IntegratedCommunicationSystem: React.FC<IntegratedCommunicationProp
       toast({
         title: "Mensagem enviada",
         description: `Mensagem enviada para ${selectedContact.full_name}`,
-      };
+      });
     } catch (error) {
       toast({
         title: "Erro ao enviar mensagem",
         description: "Não foi possível enviar a mensagem. Tente novamente.",
         variant: "destructive"
-      };
+      });
     }
-  };
+  });
 
   const handleFileUpload = async (event: React.ChangeEvent<HTMLInputElement>) => {
     const file = event.target.files?.[0];
@@ -252,15 +252,15 @@ export const IntegratedCommunicationSystem: React.FC<IntegratedCommunicationProp
       toast({
         title: "Arquivo enviado",
         description: `Arquivo ${file.name} enviado com sucesso`,
-      };
+      });
     } catch (error) {
       toast({
         title: "Erro ao enviar arquivo",
         description: "Não foi possível enviar o arquivo. Tente novamente.",
         variant: "destructive"
-      };
+      });
     }
-  };
+  });
 
   const startVoiceRecording = () => {
     setIsRecording(true);
@@ -268,8 +268,8 @@ export const IntegratedCommunicationSystem: React.FC<IntegratedCommunicationProp
     toast({
       title: "Gravação de voz",
       description: "Funcionalidade de voz será implementada em breve",
-    };
-  };
+    });
+  });
 
   const stopVoiceRecording = () => {
     setIsRecording(false);

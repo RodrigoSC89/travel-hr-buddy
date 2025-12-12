@@ -360,7 +360,7 @@ class EmpathyCore {
       stressLevel: "low",
       cognitiveLoad: 0.5,
       timestamp: new Date()
-    };
+    });
   }
 }
 

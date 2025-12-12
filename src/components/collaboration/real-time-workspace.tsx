@@ -155,15 +155,15 @@ const RealTimeWorkspace: React.FC = () => {
             toast({
               title: `${newUser.name} entrou no workspace`,
               description: "Usuário conectado",
-};
+});
           })
           .on("presence", { event: "leave" }, ({ key, leftPresences }) => {
             const leftUser = leftPresences[0];
             toast({
               title: `${leftUser.name} saiu do workspace`,
               description: "Usuário desconectado",
-};
-  };
+});
+  });
 
         // Configurar mensagens de chat
         channel.on("broadcast", { event: "chat_message" }, (payload) => {
@@ -222,11 +222,11 @@ const RealTimeWorkspace: React.FC = () => {
           title: "Erro",
           description: "Falha ao conectar ao workspace em tempo real",
           variant: "destructive"
-        };
+        });
       } finally {
         setIsLoading(false);
       }
-    };
+    });
 
     setupRealtime();
 
@@ -285,7 +285,7 @@ const RealTimeWorkspace: React.FC = () => {
           type: "text",
           room: selectedRoom
         }
-      };
+      });
 
       setNewMessage("");
     } catch (error) {
@@ -293,9 +293,9 @@ const RealTimeWorkspace: React.FC = () => {
         title: "Erro",
         description: "Falha ao enviar mensagem",
         variant: "destructive"
-      };
+      });
     }
-  };
+  });
 
   // Enviar atualização do workspace
   const sendWorkspaceUpdate = async (action: string, description: string, priority: "low" | "medium" | "high" = "medium") => {
@@ -313,11 +313,11 @@ const RealTimeWorkspace: React.FC = () => {
           timestamp: new Date().toISOString(),
           priority
         }
-      };
+      });
     } catch (error) {
       logger.error("Failed to send reaction:", error);
     }
-  };
+  });
 
   // Alterar status
   const changeStatus = async (newStatus: "online" | "busy" | "away") => {
@@ -338,7 +338,7 @@ const RealTimeWorkspace: React.FC = () => {
     } catch (error) {
       logger.error("Failed to change status:", error);
     }
-  };
+  });
 
   // Obter cor do status
   const getStatusColor = (status: string) => {

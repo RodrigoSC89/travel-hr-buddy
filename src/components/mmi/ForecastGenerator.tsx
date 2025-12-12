@@ -71,7 +71,7 @@ export default function ForecastGenerator({
     } finally {
       setGenerating(false);
     }
-  };
+  });
 
   const handleCreateTask = async () => {
     if (!forecast) return;
@@ -100,7 +100,7 @@ export default function ForecastGenerator({
     } finally {
       setCreatingTask(false);
     }
-  };
+  });
 
   const getPriorityColor = (priority: string) => {
     switch (priority) {

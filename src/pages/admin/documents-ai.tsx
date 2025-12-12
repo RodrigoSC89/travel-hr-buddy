@@ -42,7 +42,7 @@ export default function DocumentsAIPage() {
         toast({
           title: "Template aplicado",
           description: "O template foi carregado com sucesso.",
-        };
+        });
       } catch (err) {
         logger.error("Error loading applied template:", err);
       }
@@ -65,7 +65,7 @@ export default function DocumentsAIPage() {
       toast({
         title: "Documento gerado com sucesso",
         description: "Você pode agora salvar ou exportar o documento.",
-      };
+      });
     } catch (err) {
       logger.error("Error generating document:", err);
       setGenerated("❌ Erro ao gerar documento.");
@@ -73,7 +73,7 @@ export default function DocumentsAIPage() {
         title: "Erro ao gerar documento",
         description: "Tente novamente mais tarde.",
         variant: "destructive",
-      };
+      });
     }
     setLoading(false);
   }
@@ -84,7 +84,7 @@ export default function DocumentsAIPage() {
         title: "Erro ao salvar",
         description: "Por favor, preencha o título e gere um documento.",
         variant: "destructive",
-      };
+      });
       return;
     }
 
@@ -97,7 +97,7 @@ export default function DocumentsAIPage() {
           title: "Erro de autenticação",
           description: "Você precisa estar logado para salvar documentos.",
           variant: "destructive",
-        };
+        });
         return;
       }
 
@@ -118,14 +118,14 @@ export default function DocumentsAIPage() {
       toast({
         title: "Documento salvo com sucesso",
         description: "O documento foi salvo no Supabase.",
-      };
+      });
     } catch (err) {
       logger.error("Error saving document:", err);
       toast({
         title: "Erro ao salvar documento",
         description: "Não foi possível salvar o documento.",
         variant: "destructive",
-      };
+      });
     } finally {
       setSaving(false);
     }
@@ -137,7 +137,7 @@ export default function DocumentsAIPage() {
         title: "Erro ao exportar",
         description: "Por favor, preencha o título e gere um documento.",
         variant: "destructive",
-      };
+      });
       return;
     }
 
@@ -177,14 +177,14 @@ export default function DocumentsAIPage() {
       toast({
         title: "PDF exportado com sucesso",
         description: "O documento foi exportado como PDF.",
-      };
+      });
     } catch (err) {
       logger.error("Error exporting PDF:", err);
       toast({
         title: "Erro ao exportar PDF",
         description: "Não foi possível exportar o documento.",
         variant: "destructive",
-      };
+      });
     } finally {
       setExporting(false);
     }
@@ -196,7 +196,7 @@ export default function DocumentsAIPage() {
         title: "Erro ao resumir",
         description: "Não há documento para resumir.",
         variant: "destructive",
-      };
+      });
       return;
     }
 
@@ -205,7 +205,7 @@ export default function DocumentsAIPage() {
     try {
       const { data, error } = await supabase.functions.invoke("summarize-document", {
         body: { content: generated },
-      };
+      });
 
       if (error) throw error;
 
@@ -213,14 +213,14 @@ export default function DocumentsAIPage() {
       toast({
         title: "Resumo gerado com sucesso",
         description: "O documento foi resumido com IA.",
-      };
+      });
     } catch (err) {
       logger.error("Error summarizing document:", err);
       toast({
         title: "Erro ao resumir documento",
         description: "Não foi possível resumir o documento.",
         variant: "destructive",
-      };
+      });
     } finally {
       setSummarizing(false);
     }
@@ -232,7 +232,7 @@ export default function DocumentsAIPage() {
         title: "Erro ao reformular",
         description: "Não há documento para reformular.",
         variant: "destructive",
-      };
+      });
       return;
     }
 
@@ -240,7 +240,7 @@ export default function DocumentsAIPage() {
     try {
       const { data, error } = await supabase.functions.invoke("rewrite-document", {
         body: { content: generated },
-      };
+      });
 
       if (error) throw error;
 
@@ -249,14 +249,14 @@ export default function DocumentsAIPage() {
       toast({
         title: "Documento reformulado com sucesso",
         description: "O documento foi reformulado com IA.",
-      };
+      });
     } catch (err) {
       logger.error("Error rewriting document:", err);
       toast({
         title: "Erro ao reformular documento",
         description: "Não foi possível reformular o documento.",
         variant: "destructive",
-      };
+      });
     } finally {
       setRewriting(false);
     }

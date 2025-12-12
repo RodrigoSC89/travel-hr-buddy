@@ -55,7 +55,7 @@ export const WorkflowDetailWithAISuggestions = memo(function({ workflowId }: { w
       ]);
 
       setAiSuggestions(suggestions);
-    };
+    });
 
     generateAISuggestions();
   }, [workflowId]);
@@ -107,7 +107,7 @@ export async function generateAISuggestionsForWorkflow(workflowId: string): Prom
       conteudo: `${stepsWithoutDescription.length} etapas sem descrição detalhada. Adicionar descrições melhora a clareza do processo.`,
       criticidade: "Baixa",
       responsavel_sugerido: "Gerente de Projeto"
-    };
+    });
   }
 
   // Detect high priority tasks without assignment
@@ -133,7 +133,7 @@ export async function generateAISuggestionsForWorkflow(workflowId: string): Prom
       conteudo: `${inProgressTasks.length} tarefas em progresso. Considerar adicionar mais recursos ou priorizar conclusão de tarefas existentes.`,
       criticidade: "Média",
       responsavel_sugerido: "Scrum Master"
-    };
+    });
   }
 
   // Suggest automation for repetitive tasks
@@ -145,7 +145,7 @@ export async function generateAISuggestionsForWorkflow(workflowId: string): Prom
       conteudo: `Grande volume de tarefas pendentes (${pendingTasks.length}). Considerar templates ou automação para criação de tarefas recorrentes.`,
       criticidade: "Média",
       responsavel_sugerido: "Tech Lead"
-    };
+    });
   }
 
   return suggestions;
@@ -173,7 +173,7 @@ export default function ExampleWorkflowPage() {
 
       // Combine and set suggestions
       setSuggestions([...staticSuggestions, ...dynamicSuggestions]);
-    };
+    });
 
     loadSuggestions();
   }, []);

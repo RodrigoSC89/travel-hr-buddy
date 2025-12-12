@@ -130,7 +130,7 @@ export function generateMockInspection(vesselId: string, imoNumber: string): Sta
     deficiencies,
     starfix_sync_status: "synced",
     last_sync_date: new Date().toISOString(),
-  };
+  });
 }
 
 /**

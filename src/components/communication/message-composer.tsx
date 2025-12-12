@@ -225,7 +225,7 @@ export const MessageComposer: React.FC<MessageComposerProps> = ({
           title: "Erro",
           description: `${invalidFiles.length} arquivo(s) excedem o tamanho máximo de 10MB`,
           variant: "destructive"
-        };
+        });
         return;
       }
       
@@ -233,8 +233,8 @@ export const MessageComposer: React.FC<MessageComposerProps> = ({
       toast({
         title: "Sucesso",
         description: `${files.length} imagem(ns) adicionada(s)`
-      };
-    };
+      });
+    });
     input.click();
   };
 
@@ -254,7 +254,7 @@ export const MessageComposer: React.FC<MessageComposerProps> = ({
           title: "Erro",
           description: `${invalidFiles.length} arquivo(s) excedem o tamanho máximo de 25MB`,
           variant: "destructive"
-        };
+        });
         return;
       }
       
@@ -262,8 +262,8 @@ export const MessageComposer: React.FC<MessageComposerProps> = ({
       toast({
         title: "Sucesso",
         description: `${files.length} áudio(s) adicionado(s)`
-      };
-    };
+      });
+    });
     input.click();
   };
 
@@ -271,8 +271,8 @@ export const MessageComposer: React.FC<MessageComposerProps> = ({
     toast({
       title: "Emoji Picker",
       description: "Funcionalidade de emojis em breve!"
-    };
-  };
+    });
+  });
 
   const saveDraft = async () => {
     try {
@@ -281,7 +281,7 @@ export const MessageComposer: React.FC<MessageComposerProps> = ({
           title: "Aviso",
           description: "Não há conteúdo para salvar",
           variant: "destructive"
-        };
+        });
         return;
       }
 
@@ -293,17 +293,17 @@ export const MessageComposer: React.FC<MessageComposerProps> = ({
       toast({
         title: "Sucesso",
         description: "Rascunho salvo com sucesso"
-      };
+      });
     } catch (error) {
       toast({
         title: "Erro",
         description: "Erro ao salvar rascunho",
         variant: "destructive"
-      };
+      });
     } finally {
       setLoading(false);
     }
-  };
+  });
 
   const sendMessage = async () => {
     try {
@@ -312,7 +312,7 @@ export const MessageComposer: React.FC<MessageComposerProps> = ({
           title: "Erro",
           description: "Selecione destinatários e escreva uma mensagem",
           variant: "destructive"
-        };
+        });
         return;
       }
 
@@ -338,11 +338,11 @@ export const MessageComposer: React.FC<MessageComposerProps> = ({
         title: "Erro",
         description: "Erro ao enviar mensagem",
         variant: "destructive"
-      };
+      });
     } finally {
       setLoading(false);
     }
-  };
+  });
 
   const getRecipientIcon = (type: string) => {
     switch (type) {

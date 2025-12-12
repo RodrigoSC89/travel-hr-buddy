@@ -113,7 +113,7 @@ export const AutomatedReportsManager = memo(() => {
       isActive: true,
       nextRun: new Date(Date.now() + 86400000).toISOString(),
       aiEnabled: newReport.aiEnabled,
-    };
+    });
 
     setReports([...reports, report]);
     setIsCreating(false);

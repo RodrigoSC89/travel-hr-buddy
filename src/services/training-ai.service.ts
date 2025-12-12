@@ -482,7 +482,7 @@ export class TrainingAIService {
       interaction_data: interactionData,
       correctness: history.is_correct ?? null,
       occurred_at: history.timestamp ?? new Date().toISOString(),
-    };
+    });
   }
 
   private static buildLearningPathInsert(

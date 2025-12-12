@@ -172,7 +172,7 @@ class AutomationManager {
       serviceWorker: "serviceWorker" in navigator,
       indexedDB: "indexedDB" in window,
       localStorage: typeof localStorage !== "undefined",
-    };
+    });
 
     // Emit health status event
     window.dispatchEvent(new CustomEvent("automation-health-check", { detail: health }));

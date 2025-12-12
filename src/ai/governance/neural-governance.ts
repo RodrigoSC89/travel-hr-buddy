@@ -684,7 +684,7 @@ class NeuralGovernance {
       overrideRequirements: evaluation.riskCategory === "high" 
         ? ["senior_management_approval", "safety_review"] 
         : ["management_approval"]
-    };
+    });
 
     this.vetoRecords.set(vetoId, veto);
 

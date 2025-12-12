@@ -286,7 +286,7 @@ export class SonarAIService {
       return { 
         data: { input: inputData, analysis: analysisData, alerts: alertsData }, 
         error: null 
-      };
+      });
     } catch (error) {
       logger.error("Failed to save complete sonar scan", { error });
       return { data: null, error };

@@ -71,16 +71,16 @@ export const TemplatePreview: React.FC<TemplatePreviewProps> = ({
       toast({
         title: "PDF Generated",
         description: "Your template has been exported to PDF",
-      };
+      });
     } catch (error) {
       console.error("Error generating PDF:", error);
       toast({
         title: "Error",
         description: "Failed to generate PDF",
         variant: "destructive"
-      };
+      });
     }
-  };
+  });
 
   const generateHTML = () => {
     const blob = new Blob([previewContent], { type: "text/html" });
@@ -94,8 +94,8 @@ export const TemplatePreview: React.FC<TemplatePreviewProps> = ({
     toast({
       title: "HTML Downloaded",
       description: "Your template has been exported to HTML",
-    };
-  };
+    });
+  });
 
   return (
     <Card>

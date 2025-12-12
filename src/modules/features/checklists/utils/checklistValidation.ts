@@ -206,7 +206,7 @@ export function validateChecklist(checklist: Checklist): {
     errors,
     warnings,
     canSubmit: errors.length === 0 && incompleteRequired.length === 0
-  };
+  });
 }
 
 /**

@@ -280,6 +280,6 @@ const SatcomDashboard = () => {
       </Card>
     </div>
   );
-};
+});
 
 export default SatcomDashboard;

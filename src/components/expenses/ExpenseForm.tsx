@@ -37,7 +37,7 @@ const categoryLabels: Record<string, string> = {
   transport: "Transporte",
   equipment: "Equipamentos",
   other: "Outros",
-};
+});
 
 export const ExpenseForm: React.FC<ExpenseFormProps> = ({
   onSubmit,

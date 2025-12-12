@@ -71,7 +71,7 @@ export const EmployeeRequests = memo(function() {
       if (error) throw error;
       return (data || []) as EmployeeRequest[];
     },
-  };
+  });
 
   const createRequestMutation = useMutation({
     mutationFn: async () => {
@@ -111,11 +111,11 @@ export const EmployeeRequests = memo(function() {
       toast({
         title: "Solicitação criada",
         description: "Sua solicitação foi enviada para aprovação.",
-      };
+      });
       resetForm();
       setIsDialogOpen(false);
     },
-  };
+  });
 
   const resetForm = () => {
     setTitle("");

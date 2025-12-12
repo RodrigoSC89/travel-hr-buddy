@@ -32,7 +32,7 @@ export const ProgressiveContent: React.FC<ProgressiveContentProps> = ({
     threshold: 0.1,
     triggerOnce: true,
     rootMargin: isSlowConnection ? "50px" : "200px"
-};
+});
 
   useEffect(() => {
     if (priority === "high") {
@@ -59,7 +59,7 @@ export const ProgressiveContent: React.FC<ProgressiveContentProps> = ({
       {shouldRender ? children : (placeholder || <ContentPlaceholder />)}
     </div>
   );
-};
+});
 
 const ContentPlaceholder: React.FC = () => (
   <div className="space-y-3">
@@ -96,7 +96,7 @@ export const ProgressiveImage: React.FC<ProgressiveImageProps> = ({
     threshold: 0,
     triggerOnce: true,
     rootMargin: "100px"
-};
+});
 
   useEffect(() => {
     if (inView && !shouldReduceData) {

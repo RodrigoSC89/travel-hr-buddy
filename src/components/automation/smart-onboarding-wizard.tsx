@@ -409,7 +409,7 @@ export const SmartOnboardingWizard: React.FC = () => {
             company_profile: updatedData.company_profile,
             preferences: updatedData.preferences,
             is_completed: currentStep === steps.length - 1
-          };
+          });
       }
     } catch (error) {
       // Failed to save onboarding progress
@@ -418,7 +418,7 @@ export const SmartOnboardingWizard: React.FC = () => {
         title: "Aviso",
         description: "Progresso salvo localmente. Será sincronizado em breve.",
         variant: "default"
-      };
+      });
     }
 
     if (currentStep < steps.length - 1) {
@@ -429,9 +429,9 @@ export const SmartOnboardingWizard: React.FC = () => {
       toast({
         title: "Configuração concluída! 🎉",
         description: "Seu Nautilus One está pronto. Automações personalizadas foram ativadas.",
-      };
+      });
     }
-  };
+  });
 
   const generateWelcomeAutomations = async (data: OnboardingData) => {
     setIsLoading(true);
@@ -449,7 +449,7 @@ export const SmartOnboardingWizard: React.FC = () => {
             { type: "check_certificates", days_ahead: 30 },
             { type: "send_notification", template: "certificate_expiry" }
           ]
-        };
+        });
       }
 
       if (data.user_type === "admin") {
@@ -470,7 +470,7 @@ export const SmartOnboardingWizard: React.FC = () => {
         await supabase.from("automation_workflows").insert({
           ...automation,
           organization_id: (await supabase.auth.getUser()).data.user?.id // Temporário para demo
-        };
+        });
       }
 
     } catch (error) {
@@ -480,11 +480,11 @@ export const SmartOnboardingWizard: React.FC = () => {
         title: "Aviso",
         description: "Automações padrão não foram criadas. Você pode configurá-las manualmente depois.",
         variant: "default"
-      };
+      });
     } finally {
       setIsLoading(false);
     }
-  };
+  });
 
   const progress = ((currentStep + 1) / steps.length) * 100;
   const CurrentStepComponent = steps[currentStep].component;

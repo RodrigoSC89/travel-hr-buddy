@@ -97,7 +97,7 @@ export const useLogisticsAI = () => {
     } finally {
       setIsAnalyzing(false);
     }
-  };
+  });
 
   /**
    * Prevê atrasos em operações logísticas
@@ -136,7 +136,7 @@ export const useLogisticsAI = () => {
             mitigationActions: hasHighRisk
               ? ["Rota alternativa disponível", "Expeditar documentação", "Alocar recursos adicionais"]
               : ["Manter rota atual"],
-          };
+          });
         });
 
       toast({
@@ -155,7 +155,7 @@ export const useLogisticsAI = () => {
     } finally {
       setIsAnalyzing(false);
     }
-  };
+  });
 
   /**
    * Otimiza gestão de inventário
@@ -187,7 +187,7 @@ export const useLogisticsAI = () => {
               ? `Reduzir estoque em ${Math.abs(gap)} unidades`
               : "Nível adequado",
           priority: Math.abs(gap) > 150 ? "high" : Math.abs(gap) > 50 ? "medium" : "low",
-        };
+        });
       });
 
       toast({
@@ -206,7 +206,7 @@ export const useLogisticsAI = () => {
     } finally {
       setIsAnalyzing(false);
     }
-  };
+  });
 
   /**
    * Gera insights gerais de logística
@@ -238,7 +238,7 @@ export const useLogisticsAI = () => {
           "Revisar contratos com fornecedores de transporte",
         ],
         alerts: response.metadata?.alerts || [],
-      };
+      });
     } catch (error) {
       toast({
         title: "Erro ao Gerar Insights",
@@ -249,7 +249,7 @@ export const useLogisticsAI = () => {
     } finally {
       setIsAnalyzing(false);
     }
-  };
+  });
 
   return {
     isAnalyzing,

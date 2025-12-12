@@ -407,6 +407,6 @@ export const NonConformityManager: React.FC = () => {
       </Card>
     </div>
   );
-});
+};
 
 export default NonConformityManager;

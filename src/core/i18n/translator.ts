@@ -274,7 +274,7 @@ class AITranslator {
           source: cached.source,
           cached: true,
           confidence: 1.0,
-        };
+        });
       }
 
       // 2. Buscar no JSON
@@ -296,7 +296,7 @@ class AITranslator {
           source: "json",
           cached: false,
           confidence: 1.0,
-        };
+        });
       }
 
       // 3. Fallback para IA
@@ -316,7 +316,7 @@ class AITranslator {
         source: "ai",
         cached: false,
         confidence: 0.85,
-      };
+      });
     } catch (error) {
       logger.error("[AITranslator] Translation failed", error);
       

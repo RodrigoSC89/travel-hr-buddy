@@ -111,7 +111,7 @@ const DeepRiskAI: React.FC = () => {
     } finally {
       setIsAnalyzing(false);
     }
-  };
+  });
 
   const exportReport = () => {
     const report = {

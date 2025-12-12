@@ -50,11 +50,11 @@ export const MaintenanceCalendarView: React.FC = () => {
         title: "Error",
         description: "Failed to load maintenance tasks",
         variant: "destructive",
-      };
+      });
     } finally {
       setLoading(false);
     }
-  };
+  });
 
   const getTasksForDate = (date: Date) => {
     return tasks.filter(task => 

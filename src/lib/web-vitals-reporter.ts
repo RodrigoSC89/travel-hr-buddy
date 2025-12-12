@@ -122,7 +122,7 @@ const flushVitals = async () => {
   } catch {
     // Silent fail
   }
-};
+});
 
 // Check for performance issues
 const checkForIssues = (vitals: VitalReport[]) => {

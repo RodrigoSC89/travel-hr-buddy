@@ -596,7 +596,7 @@ class TacticalAI {
       queueLength: this.decisionQueue.length,
       totalRules: this.rules.length,
       manualOverrides: this.manualOverrides.size,
-    };
+    });
   }
 }
 

@@ -123,7 +123,7 @@ export const AutonomousAgentPanel = memo(function() {
     setActions(prev =>
       prev.map(a => (a.id === id ? { ...a, status: "approved" } : a))
     );
-  };
+  });
 
   const handleReject = (id: string) => {
     setActions(prev =>

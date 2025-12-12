@@ -158,16 +158,16 @@ export const DrillSimulationDialog: React.FC<DrillSimulationDialogProps> = ({
     toast({
       title: "Simulado Iniciado",
       description: `${plan.title} em andamento`,
-    };
-  };
+    });
+  });
 
   const handlePauseDrill = () => {
     setIsPaused(!isPaused);
     toast({
       title: isPaused ? "Simulado Retomado" : "Simulado Pausado",
       description: isPaused ? "Cronômetro retomado" : "Cronômetro pausado",
-    };
-  };
+    });
+  });
 
   const handleStopDrill = () => {
     setIsRunning(false);
@@ -175,8 +175,8 @@ export const DrillSimulationDialog: React.FC<DrillSimulationDialogProps> = ({
       title: "Simulado Encerrado",
       description: `Duração total: ${formatTime(elapsedTime)}`,
       variant: "destructive"
-    };
-  };
+    });
+  });
 
   const handleStepToggle = (stepId: string) => {
     setSteps(prev => prev.map(step => {
@@ -196,9 +196,9 @@ export const DrillSimulationDialog: React.FC<DrillSimulationDialogProps> = ({
     toast({
       title: "Relatório Salvo",
       description: "O relatório do simulado foi salvo com sucesso",
-    };
+    });
     onOpenChange(false);
-  };
+  });
 
   const allCompleted = steps.every(s => s.completed);
 

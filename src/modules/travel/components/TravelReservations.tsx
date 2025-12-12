@@ -86,11 +86,11 @@ export const TravelReservations: React.FC = () => {
         title: "Error",
         description: "Failed to load reservations",
         variant: "destructive"
-      };
+      });
     } finally {
       setLoading(false);
     }
-  };
+  });
 
   const applyFilters = () => {
     let filtered = [...reservations];
@@ -117,7 +117,7 @@ export const TravelReservations: React.FC = () => {
       toast({
         title: "Success",
         description: "Reservation created successfully"
-      };
+      });
 
       setIsCreateOpen(false);
       resetForm();
@@ -128,9 +128,9 @@ export const TravelReservations: React.FC = () => {
         title: "Error",
         description: "Failed to create reservation",
         variant: "destructive"
-      };
+      });
     }
-  };
+  });
 
   const resetForm = () => {
     setFormData({
@@ -146,8 +146,8 @@ export const TravelReservations: React.FC = () => {
       currency: "USD",
       payment_status: "pending",
       notes: ""
-    };
-  };
+    });
+  });
 
   const getStatusBadge = (status: string) => {
     const variants: Record<string, string> = {

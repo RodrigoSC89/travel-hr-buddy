@@ -51,7 +51,7 @@ export function usePreviewSafeMode({
         // Silently track validation failures without console output
         // Issues are available in the result for debugging if needed
       }
-    };
+    });
 
     // Run validation after component stabilizes
     const timeoutId = setTimeout(validate, 2000);

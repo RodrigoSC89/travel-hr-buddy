@@ -185,7 +185,7 @@ class PredictiveStrategyEngine {
       analysisContext: this.buildAnalysisContext(),
       proposedAt: new Date(),
       missionId
-    };
+    });
 
     // Log proposal
     await this.logStrategyProposal(proposal);
@@ -247,7 +247,7 @@ class PredictiveStrategyEngine {
       stats[type] = {
         successRate,
         feedbackCount: this.getFeedbackCountForType(type)
-      };
+      });
     }
 
     return stats;
@@ -593,7 +593,7 @@ class PredictiveStrategyEngine {
       avgSignalPriority: this.calculateAverageSignalPriority(),
       learningModelVersion: "1.0.0",
       timestamp: new Date().toISOString()
-    };
+    });
   }
 
   private calculateAverageSignalPriority(): number {

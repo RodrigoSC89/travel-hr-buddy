@@ -176,7 +176,7 @@ export default function I18nDashboard() {
         language: LANGUAGE_NAMES[stat.language] || stat.language,
         count: stat.translation_count,
         color: COLORS[stat.language as keyof typeof COLORS],
-      };
+      });
     }
     return acc;
   }, [] as Array<{ language: string; count: number; color: string }>);

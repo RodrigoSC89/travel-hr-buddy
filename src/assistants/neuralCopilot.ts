@@ -132,7 +132,7 @@ class NeuralCopilotEngine {
         status: "active",
         created_at: new Date(data.created_at),
         updated_at: new Date(data.updated_at),
-      };
+      });
 
       this.activeSessions.set(session.id, session);
 

@@ -208,7 +208,7 @@ class EnhancedSonarAIService {
       recommended_action: this.generateRecommendedAction(riskLevel, riskType, distanceKm),
       urgency,
       status: "active",
-    };
+    });
   }
 
   /**

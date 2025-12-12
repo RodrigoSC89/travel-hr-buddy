@@ -34,11 +34,11 @@ export const IncidentFormModal = memo(function({ open, onOpenChange, incident, o
     e.preventDefault();
     onSave(formData);
     onOpenChange(false);
-  };
+  });
 
   const handleChange = (field: keyof DPIncident, value: string) => {
     setFormData(prev => ({ ...prev, [field]: value }));
-  };
+  });
 
   return (
     <Dialog open={open} onOpenChange={onOpenChange}>

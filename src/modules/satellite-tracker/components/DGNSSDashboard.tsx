@@ -83,7 +83,7 @@ export const DGNSSDashboard: React.FC = () => {
     } finally {
       setIsLoading(false);
     }
-  };
+  });
 
   const updateData = async () => {
     if (isUpdating) return;
@@ -386,6 +386,6 @@ export const DGNSSDashboard: React.FC = () => {
       </Card>
     </div>
   );
-});
+};
 
 export default DGNSSDashboard;

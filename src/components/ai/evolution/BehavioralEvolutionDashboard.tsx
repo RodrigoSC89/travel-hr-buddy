@@ -92,7 +92,7 @@ export const BehavioralEvolutionDashboard = memo(function() {
         active_alerts: alerts?.length || 0,
         avg_strategic_alignment: avgAlignment,
         evolution_trend: trend,
-      };
+      });
 
       // Generate recent evolution data
       const evolutions = generateEvolutionData(perfData || []);
@@ -104,7 +104,7 @@ export const BehavioralEvolutionDashboard = memo(function() {
     } finally {
       setLoading(false);
     }
-  };
+  });
 
   const calculateAverageAlignment = (data: unknown[]): number => {
     if (data.length === 0) return 0;

@@ -206,7 +206,7 @@ export async function evaluateTrust(
     failedChecks,
     alerts,
     recommendations,
-  };
+  });
 }
 
 /**

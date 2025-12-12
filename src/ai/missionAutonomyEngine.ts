@@ -270,7 +270,7 @@ class MissionAutonomyEngine {
           risk_score,
           created_at: new Date(),
           updated_at: new Date(),
-        };
+        });
         this.inMemoryActions.set(action.id!, action);
         logger.info("[MissionAutonomy] Action created in memory", { actionId: action.id });
         return action;
@@ -304,7 +304,7 @@ class MissionAutonomyEngine {
         risk_score: record.risk_score,
         created_at: new Date(record.created_at),
         updated_at: new Date(record.updated_at),
-      };
+      });
 
       logger.info("[MissionAutonomy] Action created", { actionId: action.id });
 
@@ -538,7 +538,7 @@ class MissionAutonomyEngine {
         result: record.result,
         created_at: new Date(record.created_at),
         updated_at: new Date(record.updated_at),
-      };
+      });
     } catch (error) {
       logger.warn("[MissionAutonomy] Failed to get action", { error });
       return null;

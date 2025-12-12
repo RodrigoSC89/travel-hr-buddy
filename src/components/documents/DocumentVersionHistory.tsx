@@ -59,11 +59,11 @@ export const DocumentVersionHistory = memo(function({ documentId, onRestore }: D
         title: "Erro ao carregar histórico",
         description: "Não foi possível carregar o histórico de versões.",
         variant: "destructive",
-      };
+      });
     } finally {
       setLoading(false);
     }
-  };
+  });
 
   const handleRestoreClick = (version: DocumentVersion) => {
     setSelectedVersion(version);
@@ -99,7 +99,7 @@ export const DocumentVersionHistory = memo(function({ documentId, onRestore }: D
       toast({
         title: "Versão restaurada com sucesso",
         description: `A versão de ${format(new Date(selectedVersion.created_at), "dd/MM/yyyy 'às' HH:mm", { locale: ptBR })} foi restaurada.`,
-      };
+      });
 
       setShowRestoreDialog(false);
       setSelectedVersion(null);
@@ -117,11 +117,11 @@ export const DocumentVersionHistory = memo(function({ documentId, onRestore }: D
         title: "Erro ao restaurar versão",
         description: "Não foi possível restaurar esta versão do documento.",
         variant: "destructive",
-      };
+      });
     } finally {
       setRestoring(false);
     }
-  };
+  });
 
   if (loading) {
     return (

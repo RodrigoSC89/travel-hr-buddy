@@ -65,11 +65,11 @@ export default function PrePSCForm({ inspectionId, onComplete }: PrePSCFormProps
         title: "Error",
         description: "Failed to load inspection",
         variant: "destructive",
-      };
+      });
     } finally {
       setLoading(false);
     }
-  };
+  });
 
   const handleItemChange = (index: number, field: keyof PrePSCChecklistItem, value: unknown: unknown: unknown) => {
     const updated = [...checklistItems];
@@ -89,7 +89,7 @@ export default function PrePSCForm({ inspectionId, onComplete }: PrePSCFormProps
         title: "Validation Error",
         description: "Inspector name is required",
         variant: "destructive",
-      };
+      });
       return;
     }
 
@@ -105,7 +105,7 @@ export default function PrePSCForm({ inspectionId, onComplete }: PrePSCFormProps
           port_country: portCountry,
           inspection_date: inspectionDate,
           status: submit ? "submitted" : "draft",
-        };
+        });
 
         const created = await prePSCService.createInspection(inspection);
         inspId = created.id!;
@@ -148,7 +148,7 @@ export default function PrePSCForm({ inspectionId, onComplete }: PrePSCFormProps
         description: submit 
           ? "Inspection submitted successfully" 
           : "Inspection saved successfully",
-      };
+      });
 
       if (submit && onComplete) {
         onComplete(inspId);
@@ -159,11 +159,11 @@ export default function PrePSCForm({ inspectionId, onComplete }: PrePSCFormProps
         title: "Error",
         description: "Failed to save inspection",
         variant: "destructive",
-      };
+      });
     } finally {
       setSaving(false);
     }
-  };
+  });
 
   const getCompletionProgress = () => {
     const answered = checklistItems.filter(

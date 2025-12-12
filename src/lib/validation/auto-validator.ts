@@ -161,7 +161,7 @@ class AutoValidator {
         score: hasLeak ? 50 : 100,
         details: "Memory",
         checks
-      };
+      });
     } catch (error) {
       return {
         status: "warning",
@@ -218,7 +218,7 @@ class AutoValidator {
       score: Math.round(((checks.length - failedChecks) / checks.length) * 100),
       details: "Security",
       checks
-    };
+    });
   }
 
   /**
@@ -266,7 +266,7 @@ class AutoValidator {
       score: Math.round(((checks.length - criticalIssues) / checks.length) * 100),
       details: "QA",
       checks
-    };
+    });
   }
 
   /**

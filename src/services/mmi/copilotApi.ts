@@ -120,7 +120,7 @@ Responda APENAS com JSON válido, sem texto adicional.`;
     return {
       ...recommendation,
       similar_cases: similarCases,
-    };
+    });
   } catch (error) {
     logger.error("Error generating AI recommendation", error as Error, { jobDescriptionLength: jobDescription.length });
     // Return fallback recommendation

@@ -329,8 +329,8 @@ const EmergencyMode = () => {
       title: "EMERGÊNCIA ATIVADA",
       description: selectedProtocol.title,
       variant: "destructive",
-    };
-  };
+    });
+  });
 
   const completeStep = (stepId: string) => {
     setSteps(prev => prev.map(s => 

@@ -310,7 +310,7 @@ describe("Mission Control Tests", () => {
         resources: [],
         assignedAgents: ["agent-1"],
         estimatedDuration: 120
-      };
+      });
 
       const mission = await service.createMission(missionData);
 
@@ -333,7 +333,7 @@ describe("Mission Control Tests", () => {
         resources: [],
         assignedAgents: [],
         estimatedDuration: 180
-      };
+      });
 
       const mission = await service.createMission(missionData);
 
@@ -350,7 +350,7 @@ describe("Mission Control Tests", () => {
         resources: [],
         assignedAgents: ["agent-1", "agent-2", "agent-3"],
         estimatedDuration: 240
-      };
+      });
 
       const mission = await service.createMission(missionData);
 

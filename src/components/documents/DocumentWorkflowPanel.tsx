@@ -87,7 +87,7 @@ export const DocumentWorkflowPanel: React.FC = () => {
     } finally {
       setLoading(false);
     }
-  };
+  });
 
   const handleCreateDocument = async () => {
     try {
@@ -98,7 +98,7 @@ export const DocumentWorkflowPanel: React.FC = () => {
         category: newDoc.category,
         description: newDoc.description,
         status: "draft"
-      };
+      });
       
       if (doc) {
         toast.success("Documento criado com sucesso");

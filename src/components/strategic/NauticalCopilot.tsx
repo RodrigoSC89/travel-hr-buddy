@@ -204,16 +204,16 @@ const NauticalCopilot: React.FC = () => {
     toast({
       title: "Ação Executada",
       description: "Informações atualizadas pelo Copilot",
-    };
-  };
+    });
+  });
 
   const toggleVoiceInput = () => {
     setIsListening(!isListening);
     toast({
       title: isListening ? "Microfone Desligado" : "Microfone Ligado",
       description: isListening ? "Comando de voz desativado" : "Fale agora para enviar comando",
-    };
-  };
+    });
+  });
 
   const getCategoryIcon = (category?: CopilotMessage["category"]) => {
     switch (category) {

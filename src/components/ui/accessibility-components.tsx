@@ -101,7 +101,7 @@ export const LiveRegion: React.FC<{
       {children}
     </div>
   );
-});
+};
 
 export default {
   SrOnly,

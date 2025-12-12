@@ -442,7 +442,7 @@ export class FinanceHubService {
           total_amount: 0,
           transaction_count: 0,
           percentage: 0,
-        };
+        });
 
         existing.total_amount += txn.amount;
         existing.transaction_count += 1;

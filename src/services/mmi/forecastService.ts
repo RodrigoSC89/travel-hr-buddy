@@ -110,7 +110,7 @@ Formate sua resposta como JSON com esta estrutura:
             date: h.executed_at ? new Date(h.executed_at).toLocaleDateString("pt-BR") : "N/A",
             action: h.task_description,
           })),
-        };
+        });
       } else {
         throw new Error("No JSON found in response");
       }

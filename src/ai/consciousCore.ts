@@ -140,7 +140,7 @@ class ConsciousCore {
       activeObservations,
       criticalIssues,
       lastUpdate: new Date()
-    };
+    });
   }
 
   /**
@@ -406,7 +406,7 @@ class ConsciousCore {
       observation.autoCorrectionResult = {
         success: false,
         error: error instanceof Error ? error.message : "Unknown error"
-      };
+      });
       logger.error("[ConsciousCore] Auto-correction failed", error);
     }
   }

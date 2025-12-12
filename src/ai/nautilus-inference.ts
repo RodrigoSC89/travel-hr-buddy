@@ -112,7 +112,7 @@ class NautilusInferenceEngine {
         text: `🧩 Análise IA: ${text.substring(0, 50)}...`,
         confidence: Math.min(Math.max(confidence, 0), 1),
         timestamp: Date.now()
-      };
+      });
     } catch (error) {
       logger.error("🧠 [Nautilus] Erro durante inferência", { error });
       return this.fallbackAnalyze(text);

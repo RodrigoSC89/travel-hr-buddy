@@ -63,7 +63,7 @@ export const WhiteLabelCustomizer: React.FC = () => {
       [field]: value
     }));
     setHasChanges(true);
-  };
+  });
 
   const handleNestedChange = (parent: string, field: string, value: unknown) => {
     setFormData(prev => {
@@ -92,17 +92,17 @@ export const WhiteLabelCustomizer: React.FC = () => {
       toast({
         title: "Personalização salva",
         description: "As configurações de marca foram atualizadas com sucesso",
-      };
+      });
     } catch (error) {
       toast({
         title: "Erro",
         description: "Não foi possível salvar as configurações",
         variant: "destructive",
-      };
+      });
     } finally {
       setIsLoading(false);
     }
-  };
+  });
 
   const handleReset = () => {
     setFormData({
@@ -120,9 +120,9 @@ export const WhiteLabelCustomizer: React.FC = () => {
       timezone: currentBranding?.timezone || "America/Sao_Paulo",
       enabled_modules: currentBranding?.enabled_modules || {},
       business_rules: currentBranding?.business_rules || {}
-    };
+    });
     setHasChanges(false);
-  };
+  });
 
   const languages = [
     { value: "pt-BR", label: "Português (Brasil)" },

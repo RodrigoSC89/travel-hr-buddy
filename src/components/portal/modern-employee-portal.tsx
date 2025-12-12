@@ -132,11 +132,11 @@ export const ModernEmployeePortal: React.FC = () => {
         title: "Erro",
         description: "Erro ao carregar dados do portal",
         variant: "destructive"
-      };
+      });
     } finally {
       setLoading(false);
     }
-  };
+  });
 
   const loadUserProfile = async () => {
     try {
@@ -173,7 +173,7 @@ export const ModernEmployeePortal: React.FC = () => {
       }
     } catch (error) {
     }
-  };
+  });
 
   const loadDashboardStats = async () => {
     if (!userProfile) return;
@@ -210,10 +210,10 @@ export const ModernEmployeePortal: React.FC = () => {
         upcomingTraining: 0, // Implementar quando houver tabela de treinamentos
         recentPayments: [], // Implementar quando houver tabela de pagamentos
         nextEmbarkation: null
-      };
+      });
     } catch (error) {
     }
-  };
+  });
 
   const loadPersonalCalendar = async () => {
     if (!userProfile) return;
@@ -241,10 +241,10 @@ export const ModernEmployeePortal: React.FC = () => {
         training: [], // Implementar quando houver tabela
         certifications: certifications.data || [],
         medicalExams: [] // Implementar quando houver tabela
-      };
+      });
     } catch (error) {
     }
-  };
+  });
 
   const loadAIInsights = async () => {
     if (!userProfile) return;
@@ -366,14 +366,14 @@ export const ModernEmployeePortal: React.FC = () => {
           file_size: file.size,
           uploaded_by: user?.id,
           verification_status: "pending"
-        };
+        });
 
       if (dbError) throw dbError;
 
       toast({
         title: "Documento enviado",
         description: "Seu documento foi enviado para verificação"
-      };
+      });
 
       await loadDocuments();
     } catch (error) {
@@ -381,11 +381,11 @@ export const ModernEmployeePortal: React.FC = () => {
         title: "Erro no upload",
         description: "Não foi possível enviar o documento",
         variant: "destructive"
-      };
+      });
     } finally {
       setUploadingDoc(false);
     }
-  };
+  });
 
   const getPriorityColor = (priority: string) => {
     switch (priority) {

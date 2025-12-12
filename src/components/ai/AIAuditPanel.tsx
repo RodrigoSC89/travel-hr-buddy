@@ -60,14 +60,14 @@ export const AIAuditPanel: React.FC = () => {
         avgConfidence: statsData.avgConfidence,
         approvalRate: statsData.approvalRate,
         ragUsageRate: statsData.ragUsageRate
-      };
+      });
     } catch (error) {
       console.error("Error loading AI logs:", error);
       toast.error("Erro ao carregar logs de IA");
     } finally {
       setLoading(false);
     }
-  };
+  });
 
   const handleExport = async () => {
     try {

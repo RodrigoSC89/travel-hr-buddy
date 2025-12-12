@@ -281,7 +281,7 @@ class RiskInterpreter {
       medium: 25,
       high: 50,
       critical: 100,
-    };
+    });
 
     let totalRisk = 0;
     for (const hazard of hazards) {

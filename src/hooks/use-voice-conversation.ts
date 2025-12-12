@@ -28,7 +28,7 @@ export class VoiceRecorder {
       if (event.data.size > 0) {
         this.audioChunks.push(event.data);
       }
-    };
+    });
     
     this.mediaRecorder.start(1000); // Collect data every second
   }

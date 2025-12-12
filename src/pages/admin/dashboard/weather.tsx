@@ -71,7 +71,7 @@ export default function WeatherDashboard() {
         backgroundColor: "rgba(53, 162, 235, 0.5)",
       },
     ],
-  };
+  });
 
   return (
     <div className="container mx-auto py-8 space-y-6">

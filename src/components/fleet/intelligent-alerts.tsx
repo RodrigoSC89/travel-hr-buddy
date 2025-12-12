@@ -231,16 +231,16 @@ const IntelligentAlerts: React.FC = () => {
         title: "⚠️ Novo Alerta Crítico",
         description: `${newAlert.title} - ${newAlert.vessel_name}`,
         variant: "destructive"
-      };
+      });
     }
-  };
+  });
 
   // Real-time alert generation with optimized polling
   useOptimizedPolling({
     id: "intelligent-alerts-generation",
     callback: generateNewAlert,
     interval: 45000,
-  };
+  });
 
   const acknowledgeAlert = (alertId: string) => {
     setAlerts(prev => prev.map(alert => 
@@ -258,8 +258,8 @@ const IntelligentAlerts: React.FC = () => {
     toast({
       title: "Alerta Reconhecido",
       description: "O alerta foi marcado como reconhecido",
-    };
-  };
+    });
+  });
 
   const resolveAlert = (alertId: string, notes: string) => {
     setAlerts(prev => prev.map(alert => 
@@ -278,8 +278,8 @@ const IntelligentAlerts: React.FC = () => {
     toast({
       title: "Alerta Resolvido",
       description: "O alerta foi marcado como resolvido",
-    };
-  };
+    });
+  });
 
   const getSeverityColor = (severity: string) => {
     switch (severity) {

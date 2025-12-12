@@ -226,7 +226,7 @@ class SelfEvolutionModel {
       after_state: { failures: 0 },
       improvement: 0.8,
       timestamp: new Date().toISOString()
-    };
+    });
 
     // Log mutation
     await this.logMutation(result);

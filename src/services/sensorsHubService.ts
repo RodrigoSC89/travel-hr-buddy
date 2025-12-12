@@ -240,7 +240,7 @@ class SensorsHubService {
       totalReadings: logs.length,
       activeAlerts: alerts.length,
       criticalAlerts: alerts.filter(a => a.severity === "critical").length,
-    };
+    });
   }
 
   /**

@@ -376,7 +376,7 @@ export class SelfDiagnosisLoop {
       autoExecute,
       status: "proposed",
       timestamp: new Date().toISOString(),
-    };
+    });
 
     await this.storePlan(plan);
 

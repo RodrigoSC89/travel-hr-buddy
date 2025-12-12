@@ -62,7 +62,7 @@ describe("TemplateEditor Component", () => {
         <TemplateEditor />
       </QueryClientProvider>
     );
-  };
+  });
 
   it("should render the component successfully", () => {
     renderComponent();

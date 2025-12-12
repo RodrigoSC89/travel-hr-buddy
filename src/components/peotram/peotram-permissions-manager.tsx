@@ -80,7 +80,7 @@ export const PeotramPermissionsManager: React.FC = () => {
     } finally {
       setLoading(false);
     }
-  };
+  });
 
   const fetchUsers = async () => {
     try {
@@ -154,7 +154,7 @@ export const PeotramPermissionsManager: React.FC = () => {
       toast({
         title: "Sucesso",
         description: "Permissão criada com sucesso!",
-      };
+      });
 
       setIsDialogOpen(false);
       setPermissionForm({
@@ -165,16 +165,16 @@ export const PeotramPermissionsManager: React.FC = () => {
         area_access: [],
         location_type: "both",
         expires_at: ""
-      };
+      });
       fetchPermissions();
     } catch (error) {
       toast({
         title: "Erro",
         description: "Não foi possível criar a permissão.",
         variant: "destructive",
-      };
+      });
     }
-  };
+  });
 
   const updatePermission = async (id: string, updates: Record<string, unknown>) => {
     try {
@@ -188,7 +188,7 @@ export const PeotramPermissionsManager: React.FC = () => {
       toast({
         title: "Sucesso",
         description: "Permissão atualizada com sucesso!",
-      };
+      });
 
       fetchPermissions();
     } catch (error) {
@@ -196,9 +196,9 @@ export const PeotramPermissionsManager: React.FC = () => {
         title: "Erro",
         description: "Não foi possível atualizar a permissão.",
         variant: "destructive",
-      };
+      });
     }
-  };
+  });
 
   const togglePermissionStatus = async (permission: UserPermission) => {
     await updatePermission(permission.id, { is_active: !permission.is_active });
@@ -216,7 +216,7 @@ export const PeotramPermissionsManager: React.FC = () => {
       toast({
         title: "Sucesso",
         description: "Permissão removida com sucesso!",
-      };
+      });
 
       fetchPermissions();
     } catch (error) {
@@ -224,9 +224,9 @@ export const PeotramPermissionsManager: React.FC = () => {
         title: "Erro",
         description: "Não foi possível remover a permissão.",
         variant: "destructive",
-      };
+      });
     }
-  };
+  });
 
   const getPermissionLevelColor = (level: string) => {
     switch (level) {

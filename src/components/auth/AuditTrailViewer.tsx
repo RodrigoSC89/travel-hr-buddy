@@ -90,7 +90,7 @@ export const AuditTrailViewer: React.FC = () => {
           title: "Erro",
           description: "Não foi possível carregar os logs de auditoria.",
           variant: "destructive",
-        };
+        });
         return;
       }
 
@@ -106,7 +106,7 @@ export const AuditTrailViewer: React.FC = () => {
     } finally {
       setLoading(false);
     }
-  };
+  });
 
   const filteredLogs = logs.filter(log => {
     if (!searchTerm) return true;

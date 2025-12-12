@@ -80,6 +80,6 @@ export const AnimatedCardGrid: React.FC<{
       {children}
     </motion.div>
   );
-});
+};
 
 export default AnimatedCard;

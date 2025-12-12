@@ -178,11 +178,11 @@ export const InboxManager: React.FC<InboxManagerProps> = ({
         title: "Erro",
         description: "Erro ao carregar mensagens",
         variant: "destructive"
-      };
+      });
     } finally {
       setLoading(false);
     }
-  };
+  });
 
   // Realtime subscription removed to prevent infinite re-render loops
   // Enable only when connected to real database with proper debouncing
@@ -243,16 +243,16 @@ export const InboxManager: React.FC<InboxManagerProps> = ({
       toast({
         title: "Sucesso",
         description: "Mensagem marcada como lida"
-      };
+      });
     } catch (error) {
       logger.error("Failed to mark message as read:", error);
       toast({
         title: "Erro",
         description: "Não foi possível marcar a mensagem como lida",
         variant: "destructive"
-      };
+      });
     }
-  };
+  });
 
   const archiveMessage = async (messageId: string) => {
     try {
@@ -267,16 +267,16 @@ export const InboxManager: React.FC<InboxManagerProps> = ({
       toast({
         title: "Sucesso",
         description: "Mensagem arquivada"
-      };
+      });
     } catch (error) {
       logger.error("Failed to archive message:", error);
       toast({
         title: "Erro",
         description: "Não foi possível arquivar a mensagem",
         variant: "destructive"
-      };
+      });
     }
-  };
+  });
 
   const getPriorityColor = (priority: string) => {
     switch (priority) {
@@ -527,7 +527,7 @@ export const InboxManager: React.FC<InboxManagerProps> = ({
                                   toast({
                                     title: "Responder Mensagem",
                                     description: `Abrindo resposta para ${message.sender_name}`,
-                                  };
+                                  });
                                 }}
                               >
                                 <Reply className="h-4 w-4 mr-2" />
@@ -540,7 +540,7 @@ export const InboxManager: React.FC<InboxManagerProps> = ({
                                   toast({
                                     title: "Encaminhar Mensagem",
                                     description: "Conteúdo copiado. Selecione o destinatário para encaminhar.",
-                                  };
+                                  });
                                 }}
                               >
                                 <Forward className="h-4 w-4 mr-2" />
@@ -563,7 +563,7 @@ export const InboxManager: React.FC<InboxManagerProps> = ({
                                   toast({
                                     title: "Download Concluído",
                                     description: "Mensagem baixada com sucesso",
-                                  };
+                                  });
                                 }}
                               >
                                 <Download className="h-4 w-4 mr-2" />
@@ -577,7 +577,7 @@ export const InboxManager: React.FC<InboxManagerProps> = ({
                                   toast({
                                     title: "Mensagem Excluída",
                                     description: "A mensagem foi removida com sucesso",
-                                  };
+                                  });
                                 }}
                                 className="text-destructive focus:text-destructive"
                               >

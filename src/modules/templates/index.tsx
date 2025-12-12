@@ -114,7 +114,7 @@ export const CompleteTemplateEditor: React.FC = () => {
         class: "prose prose-sm max-w-none focus:outline-none min-h-[400px] p-4 border rounded-md",
       },
     },
-  };
+  });
 
   useEffect(() => {
     loadTemplates();
@@ -152,7 +152,7 @@ export const CompleteTemplateEditor: React.FC = () => {
     } finally {
       setIsLoading(false);
     }
-  };
+  });
 
   const extractPlaceholders = (content: string): string[] => {
     const regex = /\{\{([^}]+)\}\}/g;
@@ -319,7 +319,7 @@ export const CompleteTemplateEditor: React.FC = () => {
           properties: {},
           children: paragraphs
         }]
-      };
+      });
 
       const blob = await Packer.toBlob(doc);
       const filename = `${templateTitle || "document"}_${new Date().toISOString().split("T")[0]}.docx`;
@@ -334,7 +334,7 @@ export const CompleteTemplateEditor: React.FC = () => {
       console.error("Error exporting Word:", error);
       toast.error("Failed to export Word document");
     }
-  };
+  });
 
   // PATCH 493: Preview before export
   const showPreview = () => {
@@ -367,7 +367,7 @@ export const CompleteTemplateEditor: React.FC = () => {
           exported_by: user.id,
           exported_at: new Date().toISOString(),
           placeholder_values: placeholderValues
-        };
+        });
       
       if (error) {
       }
@@ -375,7 +375,7 @@ export const CompleteTemplateEditor: React.FC = () => {
       console.error("Error saving export history:", error);
       console.error("Error saving export history:", error);
     }
-  };
+  });
 
   const createNewTemplate = () => {
     setSelectedTemplate(null);

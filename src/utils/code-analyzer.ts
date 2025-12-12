@@ -278,7 +278,7 @@ export function calculateMetrics(issues: CodeIssue[]) {
     heavyOperationCount: issues.filter(i => i.type === "heavy-operation").length,
     missingOptimizationCount: issues.filter(i => i.type === "missing-optimization").length,
     unnecessaryApiCallCount: issues.filter(i => i.type === "unnecessary-api-call").length
-  };
+  });
 }
 
 /**

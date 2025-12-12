@@ -108,7 +108,7 @@ class MobileAICore {
       content: "I'm currently operating in offline mode. I can help with basic queries about mission status, location, weather, and checklists based on cached data.",
       source: "local",
       confidence: 0.3
-    };
+    });
   }
 
   /**
@@ -258,7 +258,7 @@ class MobileAICore {
       content,
       source: "gpt4",
       confidence: 0.95
-    };
+    });
   }
 
   /**

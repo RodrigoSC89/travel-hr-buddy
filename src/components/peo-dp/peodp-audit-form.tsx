@@ -91,12 +91,12 @@ export const PEODPAuditForm = memo(function({
         map.set(req.id, {
           requirementId: req.id,
           status: "pendente"
-        };
+        });
       }
-    };
+    });
     
     return map;
-  };
+  });
 
   // Group requirements by section
   const requirementsBySection = useMemo(() => {
@@ -107,11 +107,11 @@ export const PEODPAuditForm = memo(function({
       operacao: [],
       manutencao: [],
       testes_anuais: []
-    };
+    });
     
     requirements.forEach(req => {
       grouped[req.section].push(req);
-  };
+  });
     
     return grouped;
   }, [requirements]);

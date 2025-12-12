@@ -76,7 +76,7 @@ const generateHistoricalData = (days: number, metric: MetricType) => {
   }
   
   return data;
-};
+});
 
 const metricConfig: Record<MetricType, { label: string; unit: string; color: string; icon: React.ElementType }> = {
   temperature: { label: "Temperatura", unit: "°C", color: "rgb(239, 68, 68)", icon: Thermometer },

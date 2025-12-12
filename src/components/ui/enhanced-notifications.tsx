@@ -281,8 +281,8 @@ const EnhancedNotifications: React.FC<EnhancedNotificationsProps> = ({ isOpen, o
     toast({
       title: "Notificações",
       description: "Todas as notificações foram marcadas como lidas"
-    };
-  };
+    });
+  });
 
   const removeNotification = (id: string) => {
     setNotifications(prev => prev.filter(notification => notification.id !== id));

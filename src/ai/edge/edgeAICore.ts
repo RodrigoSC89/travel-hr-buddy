@@ -469,7 +469,7 @@ class EdgeAICore {
       cacheSize: this.resultsCache.size,
       queueLength: this.inferenceQueue.length,
       webGPUAvailable: this.webGPUDevice !== null,
-    };
+    });
   }
 }
 

@@ -157,7 +157,7 @@ export default function InventorySection({ searchQuery }: InventorySectionProps)
       setSortField(field);
       setSortDirection("asc");
     }
-  };
+  });
 
   const handleAddItem = () => {
     const status = newItem.quantity <= newItem.minStock * 0.5 ? "critical" :
@@ -188,7 +188,7 @@ export default function InventorySection({ searchQuery }: InventorySectionProps)
       unitCost: 0,
     });
     toast.success("Item adicionado ao estoque com sucesso!");
-  };
+  });
 
   const handleMovement = () => {
     if (!selectedItem) return;

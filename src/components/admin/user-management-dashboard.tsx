@@ -124,7 +124,7 @@ const UserManagementDashboard = () => {
       title: "Ação Executada",
       description: `${action} aplicada ao usuário ID: ${userId}`,
     });
-  };
+  });
 
   return (
     <div className="container mx-auto p-6 space-y-6">

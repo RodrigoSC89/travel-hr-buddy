@@ -203,7 +203,7 @@ const ClimateEngagement: React.FC = () => {
     if (result) {
       toast.success("Insights gerados! Confira o relatório completo.");
     }
-  };
+  });
 
   return (
     <div className="space-y-6">

@@ -73,7 +73,7 @@ const CreateVoyageDialog: React.FC<CreateVoyageDialogProps> = ({
       arrivalDate: calculateArrivalDate(formData.departureDate, estimatedDays),
       weatherRisk: "low",
       createdAt: new Date().toISOString(),
-    };
+    });
 
     await new Promise((r) => setTimeout(r, 500));
     onCreateVoyage(newVoyage);

@@ -132,7 +132,7 @@ export const AISuggestionsPanel: React.FC = () => {
         toast({
           title: "Atualizado",
           description: "Sugestões de IA atualizadas com sucesso.",
-        };
+        });
       }
     } catch (error) {
       console.error("Error loading suggestions:", error);
@@ -178,7 +178,7 @@ export const AISuggestionsPanel: React.FC = () => {
             toast({
               title: "Novas sugestões",
               description: `${newSuggestions.length} sugestões geradas pela IA.`,
-            };
+            });
           }
         } catch {
           // If parsing fails, just reload from database
@@ -194,7 +194,7 @@ export const AISuggestionsPanel: React.FC = () => {
     } finally {
       setIsRefreshing(false);
     }
-  };
+  });
 
   useEffect(() => {
     loadSuggestions();
@@ -237,14 +237,14 @@ export const AISuggestionsPanel: React.FC = () => {
       toast({
         title: "Ação executada!",
         description: "A sugestão da IA foi implementada com sucesso.",
-      };
+      });
     } else {
       toast({
         title: "Sugestão dispensada",
         description: "A sugestão foi removida da sua lista.",
-      };
+      });
     }
-  };
+  });
 
   const executeAction = async (suggestion: AISuggestion) => {
     const { action_data } = suggestion;

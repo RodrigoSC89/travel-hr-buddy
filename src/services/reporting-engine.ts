@@ -419,7 +419,7 @@ async function collectReportData(
       data[source] = {
         error: "Failed to fetch data",
         details: error instanceof Error ? error.message : "Unknown error",
-      };
+      });
     }
   }
 

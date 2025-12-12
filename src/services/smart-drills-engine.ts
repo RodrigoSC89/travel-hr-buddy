@@ -810,7 +810,7 @@ export async function setupDrillSchedule(
       auto_schedule: true,
       active: true,
       created_by: createdBy,
-    };
+    });
 
     const { data, error } = await smartDrillsClient
       .from("drill_schedule")

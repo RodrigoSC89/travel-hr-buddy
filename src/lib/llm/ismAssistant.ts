@@ -70,7 +70,7 @@ Seja objetivo, técnico e foque na conformidade com padrões ISM.
         recommendations: analysis.recommendations || [],
         confidence: analysis.confidence || result.confidenceScore || 0.7,
         riskLevel: analysis.riskLevel || "medium"
-      };
+      });
     }
     
     // Fallback if JSON parsing fails

@@ -378,7 +378,7 @@ export class MissionControlService {
       systems_active: mission.assigned_systems?.length || 0,
       last_update: mission.updated_at,
       critical_events: criticalEvents,
-    };
+    });
   }
 
   static subscribeToMissionUpdates(
@@ -521,7 +521,7 @@ export class MissionControlService {
       agents_utilized: assignedAgents.length,
       duration_hours: mission.actual_duration_hours || 0,
       critical_events_count: status.critical_events.length,
-    };
+    });
 
     // Calculate resource utilization
     const resourceUtilization = {

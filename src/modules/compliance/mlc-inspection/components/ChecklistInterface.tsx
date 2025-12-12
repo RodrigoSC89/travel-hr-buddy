@@ -51,11 +51,11 @@ export const ChecklistInterface = memo(function({ inspectionId, onUpdate }: Chec
         title: "Error",
         description: "Failed to load findings",
         variant: "destructive",
-      };
+      });
     } finally {
       setLoading(false);
     }
-  };
+  });
 
   const handleAddFinding = async (item: typeof MLC_CHECKLIST_ITEMS[0], compliance: boolean, severity?: string, corrective_action?: string) => {
     try {
@@ -77,16 +77,16 @@ export const ChecklistInterface = memo(function({ inspectionId, onUpdate }: Chec
       toast({
         title: "Success",
         description: "Finding added successfully",
-      };
+      });
     } catch (error) {
       console.error("Error adding finding:", error);
       toast({
         title: "Error",
         description: "Failed to add finding",
         variant: "destructive",
-      };
+      });
     }
-  };
+  });
 
   const getFindingForItem = (regulation: string) => {
     return findings.find(f => f.mlc_regulation === regulation);

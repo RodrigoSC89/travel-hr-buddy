@@ -72,7 +72,7 @@ export class TranslatorService {
           source: "json",
           cached: false,
           confidence: 1.0,
-        };
+        });
       }
 
       // Fallback to key

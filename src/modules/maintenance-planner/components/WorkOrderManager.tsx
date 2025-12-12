@@ -112,7 +112,7 @@ export default function WorkOrderManager() {
       in_progress: { label: "Em Execução", variant: "default" as const, icon: AlertCircle },
       completed: { label: "Concluída", variant: "outline" as const, icon: CheckCircle2 },
       cancelled: { label: "Cancelada", variant: "destructive" as const, icon: AlertCircle },
-    };
+    });
     const { label, variant, icon: Icon } = config[status];
     return (
       <Badge variant={variant} className="flex items-center gap-1">
@@ -139,7 +139,7 @@ export default function WorkOrderManager() {
         title: "Erro",
         description: "Preencha título e equipamento",
         variant: "destructive",
-      };
+      });
       return;
     }
 
@@ -154,7 +154,7 @@ export default function WorkOrderManager() {
       equipmentCode: "XXX.XXXX.XX",
       requestedParts: [],
       createdAt: new Date().toISOString().split("T")[0],
-    };
+    });
 
     setWorkOrders((prev) => [newOrder, ...prev]);
     setIsCreating(false);
@@ -163,8 +163,8 @@ export default function WorkOrderManager() {
     toast({
       title: "OS Criada",
       description: `${newOrder.number} criada com sucesso`,
-    };
-  };
+    });
+  });
 
   const handleApprove = (id: string) => {
     setWorkOrders((prev) =>

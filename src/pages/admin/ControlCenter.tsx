@@ -51,11 +51,11 @@ export default function ControlCenter() {
       setHealthStatus({
         healthy: false,
         message: "Health check failed"
-      };
+      });
     } finally {
       setIsChecking(false);
     }
-  };
+  });
 
   const toolCategories = [
     {

@@ -319,7 +319,7 @@ class DistributedDecisionCore {
       timeoutMs: rule.timeoutMs || 5000,
       executed: false,
       timestamp: new Date()
-    };
+    });
 
     this.pendingDecisions.set(decisionId, decision);
 
@@ -394,7 +394,7 @@ class DistributedDecisionCore {
       success: true,
       timestamp: new Date(),
       executedAt: new Date()
-    };
+    });
   }
 
   private async executeDecision(decision: Decision): Promise<Decision> {

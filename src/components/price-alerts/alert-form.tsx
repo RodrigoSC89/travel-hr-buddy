@@ -92,7 +92,7 @@ export const AlertForm: React.FC<AlertFormProps> = ({
     } finally {
       setLoading(false);
     }
-  };
+  });
 
   return (
     <Dialog open={open} onOpenChange={onOpenChange}>

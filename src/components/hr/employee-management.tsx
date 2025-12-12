@@ -129,7 +129,7 @@ export const EmployeeManagement = memo(() => {
         title: "Erro",
         description: "Preencha todos os campos obrigatórios",
         variant: "destructive"
-      };
+      });
       return;
     }
 
@@ -146,7 +146,7 @@ export const EmployeeManagement = memo(() => {
       certifications: newEmployee.certifications || [],
       rating: newEmployee.rating || 4.0,
       salary: newEmployee.salary || 0
-    };
+    });
 
     setEmployees(prev => [...prev, employee]);
     setNewEmployee({
@@ -166,8 +166,8 @@ export const EmployeeManagement = memo(() => {
     toast({
       title: "Funcionário criado",
       description: `${employee.name} foi adicionado ao sistema`,
-    };
-  };
+    });
+  });
 
   const handleRemoveEmployee = (id: string) => {
     const employee = employees.find(e => e.id === id);
@@ -175,8 +175,8 @@ export const EmployeeManagement = memo(() => {
     toast({
       title: "Funcionário removido",
       description: `${employee?.name} foi removido do sistema`,
-    };
-  };
+    });
+  });
 
   const handleStatusChange = (employeeId: string, newStatus: Employee["status"]) => {
     setEmployees(prev => prev.map(emp => 
@@ -185,8 +185,8 @@ export const EmployeeManagement = memo(() => {
     toast({
       title: "Status atualizado",
       description: "Status do funcionário foi alterado com sucesso"
-    };
-  };
+    });
+  });
 
   const filteredEmployees = employees.filter(employee => {
     const matchesSearch = employee.name.toLowerCase().includes(searchTerm.toLowerCase()) ||

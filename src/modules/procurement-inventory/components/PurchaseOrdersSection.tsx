@@ -606,7 +606,7 @@ function ReceiveItemsForm({
     setItems(prev => prev.map(item => 
       item.id === id ? { ...item, receivingQty: qty } : item
     ));
-  };
+  });
 
   const handleConfirm = () => {
     const updatedItems = items.map(item => ({

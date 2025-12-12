@@ -132,7 +132,7 @@ export class TemplatePDFRenderer {
       return {
         pdfUrl: urlData.publicUrl,
         documentId: renderedDoc.id
-      };
+      });
     } catch (error) {
       console.error("Error rendering template to PDF:", error);
       throw error;

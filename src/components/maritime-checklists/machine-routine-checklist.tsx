@@ -725,7 +725,7 @@ export const MachineRoutineChecklist: React.FC<MachineRoutineChecklistProps> = (
                               toast({
                                 title: "Dados do sensor",
                                 description: "Dados atualizados do sensor IoT"
-                              };
+                              });
                             }}
                             disabled={readOnly}
                           >

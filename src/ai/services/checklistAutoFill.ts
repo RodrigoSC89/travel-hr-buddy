@@ -205,7 +205,7 @@ Regras:
     logger.error("Error generating AI completions", error);
     throw error;
   }
-};
+});
 
 /**
  * Parse AI response for checklist completions

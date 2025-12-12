@@ -57,7 +57,7 @@ export default function SGSOWorkflow() {
         pending_audits: audits?.filter(a => a.status === "planned" || a.status === "in_progress").length || 0,
         approved_audits: audits?.filter(a => a.status === "completed" || a.status === "closed").length || 0,
         rejected_audits: 0
-      };
+      });
 
       // Get findings statistics
       const { data: findings, error: findingsError } = await supabase
@@ -77,11 +77,11 @@ export default function SGSOWorkflow() {
         title: "Error loading stats",
         description: error.message,
         variant: "destructive",
-      };
+      });
     } finally {
       setLoading(false);
     }
-  };
+  });
 
   return (
     <div className="container mx-auto p-6 space-y-6">

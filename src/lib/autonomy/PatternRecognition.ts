@@ -148,7 +148,7 @@ class PatternRecognition {
         ? patterns.reduce((sum, p) => sum + p.successRate, 0) / patterns.length
         : 0,
       knownFailures: this.failurePatterns.size
-    };
+    });
   }
 }
 

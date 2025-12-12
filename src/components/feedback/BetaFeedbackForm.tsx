@@ -62,7 +62,7 @@ export const BetaFeedbackForm = memo(function() {
         userId: crypto.randomUUID(),
         timestamp: new Date().toISOString(),
         sessionDuration,
-      };
+      });
 
       // Store in Supabase
       const { error } = await supabase
@@ -87,7 +87,7 @@ export const BetaFeedbackForm = memo(function() {
       toast({
         title: "Feedback Enviado!",
         description: "Obrigado por sua contribuição ao Travel HR Buddy Beta.",
-      };
+      });
 
       // Reset form
       setFormData({
@@ -100,18 +100,18 @@ export const BetaFeedbackForm = memo(function() {
         comments: "",
         suggestions: "",
         bugs: "",
-      };
+      });
     } catch (error) {
       logger.error("[BetaFeedbackForm] Error submitting feedback:", error as Error);
       toast({
         title: "Erro",
         description: "Não foi possível enviar o feedback. Tente novamente.",
         variant: "destructive",
-      };
+      });
     } finally {
       setIsSubmitting(false);
     }
-  };
+  });
 
   return (
     <Card className="w-full max-w-3xl mx-auto">

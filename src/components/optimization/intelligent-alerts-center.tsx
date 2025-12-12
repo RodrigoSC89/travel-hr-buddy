@@ -214,7 +214,7 @@ export const IntelligentAlertsCenter = memo(() => {
         current: Math.floor(Math.random() * 100),
         trend: Math.random() > 0.5 ? "up" : "down"
       }
-    };
+    });
 
     setAlerts(prev => [newAlert, ...prev]);
     
@@ -222,8 +222,8 @@ export const IntelligentAlertsCenter = memo(() => {
       title: "Novo Alerta Inteligente",
       description: newAlert.message,
       duration: 4000
-    };
-  };
+    });
+  });
 
   const markAsRead = (alertId: string) => {
     setAlerts(prev => prev.map(alert => 
@@ -244,8 +244,8 @@ export const IntelligentAlertsCenter = memo(() => {
       title: "Regra Atualizada",
       description: "Configuração de alerta foi atualizada",
       duration: 2000
-    };
-  };
+    });
+  });
 
   const updateThreshold = (ruleId: string, newThreshold: number) => {
     setAlertRules(prev => prev.map(rule => 

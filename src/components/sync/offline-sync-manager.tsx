@@ -67,7 +67,7 @@ export const OfflineSyncManager: React.FC = () => {
         title: "Sync Impossível",
         description: "Você precisa estar online para sincronizar",
         variant: "destructive"
-      };
+      });
       return;
     }
 
@@ -81,7 +81,7 @@ export const OfflineSyncManager: React.FC = () => {
         toast({
           title: "Nada para Sincronizar",
           description: "Todos os dados estão atualizados",
-        };
+        });
         setIsSync(false);
         return;
       }
@@ -109,7 +109,7 @@ export const OfflineSyncManager: React.FC = () => {
       toast({
         title: "Sincronização Completa",
         description: `${pendingItems.length} item(s) sincronizado(s) com sucesso`,
-      };
+      });
 
       // Recarregar itens
       await loadPendingItems();
@@ -119,12 +119,12 @@ export const OfflineSyncManager: React.FC = () => {
         title: "Erro na Sincronização",
         description: "Alguns itens podem não ter sido sincronizados",
         variant: "destructive"
-      };
+      });
     } finally {
       setIsSync(false);
       setSyncProgress(0);
     }
-  };
+  });
 
   // Simular ação de sincronização
   const simulateSyncAction = async (item: SyncItem) => {
@@ -171,10 +171,10 @@ export const OfflineSyncManager: React.FC = () => {
     toast({
       title: "Ação Offline Criada",
       description: `Ação "${randomAction.action}" será sincronizada quando online`,
-    };
+    });
 
     await loadPendingItems();
-  };
+  });
 
   // Limpar dados em cache
   const handleClearCache = async () => {
@@ -185,15 +185,15 @@ export const OfflineSyncManager: React.FC = () => {
       toast({
         title: "Cache Limpo",
         description: "Todos os dados em cache foram removidos",
-      };
+      });
     } catch (error) {
       toast({
         title: "Erro",
         description: "Não foi possível limpar o cache",
         variant: "destructive"
-      };
+      });
     }
-  };
+  });
 
   useEffect(() => {
     loadPendingItems();

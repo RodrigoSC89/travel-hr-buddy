@@ -108,7 +108,7 @@ export default function FacialAccess() {
         success,
         message: success ? "Identificação confirmada" : "Usuário não reconhecido",
         confidence
-      };
+      });
       
       const newLog: AccessLog = {
         id: Date.now().toString(),
@@ -119,7 +119,7 @@ export default function FacialAccess() {
         status: success ? "granted" : "denied",
         method: "facial",
         confidence
-      };
+      });
       
       setAccessLogs(prev => [newLog, ...prev]);
       setIsScanning(false);

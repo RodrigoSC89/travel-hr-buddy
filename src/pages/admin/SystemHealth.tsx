@@ -36,17 +36,17 @@ export default function SystemHealth() {
         title: "Validation Complete",
         description: `System status: ${result.overallStatus.toUpperCase()}`,
         variant: result.overallStatus === "fail" ? "destructive" : "default"
-      };
+      });
     } catch (error) {
       toast({
         title: "Validation Failed",
         description: "Unable to complete system validation",
         variant: "destructive"
-      };
+      });
     } finally {
       setIsValidating(false);
     }
-  };
+  });
 
   const getStatusColor = (status: string) => {
     switch (status) {

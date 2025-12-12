@@ -46,8 +46,8 @@ export const CertificationsPanel = memo(function({ certificates, crewMembers }: 
     return {
       ...cert,
       employee_name: crew?.full_name || "Desconhecido",
-    };
-  };
+    });
+  });
 
   const today = new Date();
   const thirtyDaysFromNow = new Date(today.getTime() + 30 * 24 * 60 * 60 * 1000);
@@ -68,7 +68,7 @@ export const CertificationsPanel = memo(function({ certificates, crewMembers }: 
       const expiry = new Date(c.expiry_date);
       return expiry > sixtyDaysFromNow;
     }),
-  };
+  });
 
   const filteredCerts = categorizedCerts[activeTab as keyof typeof categorizedCerts]?.filter(cert =>
     cert.employee_name?.toLowerCase().includes(searchTerm.toLowerCase()) ||

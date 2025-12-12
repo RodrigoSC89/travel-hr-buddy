@@ -160,16 +160,16 @@ const TemplateManager = () => {
     toast({
       title: "Template duplicado",
       description: "Template copiado com sucesso",
-    };
-  };
+    });
+  });
 
   const deleteTemplate = (id: string) => {
     setTemplates(prev => prev.filter(template => template.id !== id));
     toast({
       title: "Template removido",
       description: "Template excluído com sucesso",
-    };
-  };
+    });
+  });
 
   const handleUseTemplate = (template: Template) => {
     // Simular uso do template
@@ -181,8 +181,8 @@ const TemplateManager = () => {
     toast({
       title: "Template aplicado",
       description: `Template "${template.name}" foi usado com sucesso`,
-    };
-  };
+    });
+  });
 
   const getRelativeTime = (date?: Date) => {
     if (!date) return "Nunca";

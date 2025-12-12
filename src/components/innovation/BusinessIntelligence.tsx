@@ -97,7 +97,7 @@ export const BusinessIntelligence = memo(() => {
       toast({
         title: "Relatório gerado!",
         description: "Novo relatório de BI foi criado com sucesso.",
-      };
+      });
       
       fetchReports();
     } catch (error) {
@@ -105,11 +105,11 @@ export const BusinessIntelligence = memo(() => {
         title: "Erro",
         description: "Não foi possível gerar o relatório.",
         variant: "destructive",
-      };
+      });
     } finally {
       setIsGenerating(false);
     }
-  };
+  });
 
   const kpiMetrics: KPIMetric[] = [
     {

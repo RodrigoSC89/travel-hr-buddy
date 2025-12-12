@@ -351,7 +351,7 @@ class ContextMesh {
         
         transaction.oncomplete = () => resolve();
         transaction.onerror = () => reject(transaction.error);
-      };
+      });
       
       request.onupgradeneeded = (event) => {
         const db = (event.target as IDBOpenDBRequest).result;

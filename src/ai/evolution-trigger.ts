@@ -354,7 +354,7 @@ AI Performance Alert:
       overall_trend: trend,
       critical_issues: [...new Set(criticalIssues)],
       patch_suggestions: [...new Set(patchSuggestions)],
-    };
+    });
   }
 
   /**

@@ -130,7 +130,7 @@ export const DiagnosticPanel: React.FC<DiagnosticPanelProps> = ({
       reason: "Diagnostic test - connection restored",
       success: true,
     });
-  };
+  });
 
   const testFailover = async () => {
     const activeConn = connections.find((c) => c.status === "connected");
@@ -185,7 +185,7 @@ export const DiagnosticPanel: React.FC<DiagnosticPanelProps> = ({
       status: "connected",
       signal_strength: 90,
     });
-  };
+  });
 
   const testFullCycle = async () => {
     // Run all tests in sequence
@@ -209,11 +209,11 @@ export const DiagnosticPanel: React.FC<DiagnosticPanelProps> = ({
         to_provider: conn2.provider,
         reason: `Stress test iteration ${i + 1}`,
         success: true,
-      };
+      });
 
       await new Promise((resolve) => setTimeout(resolve, 300));
     }
-  };
+  });
 
   const getTestIcon = (testType: TestType) => {
     switch (testType) {

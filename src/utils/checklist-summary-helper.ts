@@ -103,7 +103,7 @@ export function useSummarizeChecklist() {
     } finally {
       setIsLoading(false);
     }
-  };
+  });
 
   return { summarize, summary, isLoading, error };
 }

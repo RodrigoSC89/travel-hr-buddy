@@ -520,7 +520,7 @@ export default function ChannelManagerProfessional() {
         unread_count: 0,
         is_favorite: false,
         is_muted: false,
-      };
+      });
 
       setChannels(prev => [newChannel, ...prev]);
       setIsCreateDialogOpen(false);
@@ -576,7 +576,7 @@ export default function ChannelManagerProfessional() {
         message_content: messageContent,
         created_at: new Date().toISOString(),
         message_type: "text",
-      };
+      });
 
       setMessages(prev => [...prev, newMessage]);
       setMessageContent("");
@@ -603,7 +603,7 @@ export default function ChannelManagerProfessional() {
     toast({
       title: channel.is_active ? "Canal desativado" : "Canal ativado",
       description: `${channel.name} foi ${channel.is_active ? "desativado" : "ativado"}.`,
-    };
+    });
   }, [toast]);
 
   const handleToggleFavorite = useCallback((channel: Channel) => {
@@ -612,7 +612,7 @@ export default function ChannelManagerProfessional() {
     ));
     toast({
       title: channel.is_favorite ? "Removido dos favoritos" : "Adicionado aos favoritos",
-    };
+    });
   }, [toast]);
 
   const handleToggleMute = useCallback((channel: Channel) => {
@@ -621,7 +621,7 @@ export default function ChannelManagerProfessional() {
     ));
     toast({
       title: channel.is_muted ? "Notificações ativadas" : "Notificações silenciadas",
-    };
+    });
   }, [toast]);
 
   const handleDeleteChannel = useCallback(() => {

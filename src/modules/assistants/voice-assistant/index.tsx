@@ -96,10 +96,10 @@ const VoiceAssistant: React.FC = () => {
           title: "Erro de reconhecimento",
           description: "Houve um problema com o microfone.",
           variant: "destructive",
-        };
+        });
       }
       setIsListening(false);
-    };
+    });
 
     recognitionRef.current.onend = () => {
       if (isListening) {
@@ -140,17 +140,17 @@ const VoiceAssistant: React.FC = () => {
         toast({
           title: "🎤 ARIA ativada",
           description: "Estou ouvindo. Como posso ajudar?",
-        };
+        });
       } catch (error) {
         logger.error("Error starting recognition", { error });
         toast({
           title: "Erro ao iniciar",
           description: "Não foi possível acessar o microfone.",
           variant: "destructive",
-        };
+        });
       }
     }
-  };
+  });
 
   const processCommand = async (command: string) => {
     if (!command.trim()) return;
@@ -226,7 +226,7 @@ const VoiceAssistant: React.FC = () => {
           toast({
             title: "Navegando",
             description: `Indo para ${navigation}`,
-          };
+          });
         }, 1500);
       }
 
@@ -318,8 +318,8 @@ const VoiceAssistant: React.FC = () => {
     setVolume(newVolume);
     toast({
       title: newVolume > 0 ? "🔊 Som ativado" : "🔇 Som desativado",
-    };
-  };
+    });
+  });
 
   const clearHistory = () => {
     setMessages([]);

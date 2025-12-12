@@ -73,7 +73,7 @@ export const AuditsPanel = memo(function({
       "in-progress": { variant: "default", label: "Em Andamento", icon: <Clock className="h-3 w-3" /> },
       completed: { variant: "outline", label: "Concluída", icon: <CheckCircle2 className="h-3 w-3" /> },
       cancelled: { variant: "destructive", label: "Cancelada", icon: <XCircle className="h-3 w-3" /> },
-    };
+    });
 
     const { variant, label, icon } = variants[status] || variants.scheduled;
     return (
@@ -82,7 +82,7 @@ export const AuditsPanel = memo(function({
         {label}
       </Badge>
     );
-  };
+  });
 
   const getTypeBadge = (type: AuditSession["auditType"]) => {
     const labels: Record<string, string> = {
@@ -91,7 +91,7 @@ export const AuditsPanel = memo(function({
       "flag-state": "Bandeira",
       class: "Classificadora",
       psc: "PSC",
-    };
+    });
     return <Badge variant="outline">{labels[type] || type}</Badge>;
   };
 

@@ -68,11 +68,11 @@ export const EmployeeBenefits: React.FC = () => {
         title: "Error loading benefits",
         description: error.message,
         variant: "destructive",
-      };
+      });
     } finally {
       setLoading(false);
     }
-  };
+  });
 
   const getBenefitIcon = (type: string) => {
     switch (type) {

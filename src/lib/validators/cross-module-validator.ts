@@ -123,7 +123,7 @@ export async function validateAIToAnalytics(): Promise<ValidationResult> {
     status,
     checks,
     score,
-  };
+  });
 }
 
 /**
@@ -187,7 +187,7 @@ export async function validateHealthToPerformance(): Promise<ValidationResult> {
     status,
     checks,
     score,
-  };
+  });
 }
 
 /**
@@ -272,7 +272,7 @@ export async function validateCrewToOperations(): Promise<ValidationResult> {
     status,
     checks,
     score,
-  };
+  });
 }
 
 /**

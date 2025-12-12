@@ -255,73 +255,73 @@ export const APIHubNautilus: React.FC = () => {
     toast({
       title: "📚 Documentação API",
       description: "Abrindo documentação completa com exemplos e referências"
-    };
+    });
     // TODO: Open documentation page or modal
-  };
+  });
 
   const handleNewAPIKey = () => {
     toast({
       title: "🔑 Nova API Key",
       description: "Gerando nova chave de autenticação segura"
-    };
+    });
     // TODO: Open API key generation dialog
-  };
+  });
 
   const handleTestAPI = (endpointName: string) => {
     toast({
       title: "🧪 Testar API",
       description: `Abrindo console de testes para ${endpointName}`
-    };
+    });
     // TODO: Open API testing console
-  };
+  });
 
   const handleViewDocumentation = (endpointName: string) => {
     toast({
       title: "📚 Documentação",
       description: `Abrindo documentação detalhada de ${endpointName}`
-    };
+    });
     // TODO: Open API documentation modal
-  };
+  });
 
   const handleDownloadExamples = (endpointName: string) => {
     toast({
       title: "📥 Baixar Exemplos",
       description: `Baixando exemplos de código para ${endpointName}`
-    };
+    });
     // TODO: Download code examples
-  };
+  });
 
   const handleConfigureIntegration = (integrationName: string) => {
     toast({
       title: "⚙️ Configurar Integração",
       description: `Abrindo configurações de ${integrationName}`
-    };
+    });
     // TODO: Open integration configuration dialog
-  };
+  });
 
   const handleViewLogs = (integrationName: string) => {
     toast({
       title: "📋 Logs da Integração",
       description: `Visualizando logs de ${integrationName}`
-    };
+    });
     // TODO: Open logs viewer
-  };
+  });
 
   const handleTestIntegration = (integrationName: string) => {
     toast({
       title: "🧪 Testar Integração",
       description: `Testando conexão com ${integrationName}`
-    };
+    });
     // TODO: Run integration test
-  };
+  });
 
   const handleDownloadSDK = (sdkName: string) => {
     toast({
       title: "📦 Baixar SDK",
       description: `Baixando ${sdkName}`
-    };
+    });
     // TODO: Download SDK package
-  };
+  });
 
   return (
     <div className="space-y-6">

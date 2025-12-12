@@ -197,5 +197,5 @@ export function consolidateResults(results: TaskResult[]): any {
     ),
     results: successful.map(r => r.result),
     errors: failed.map(r => r.result)
-  };
+  });
 }

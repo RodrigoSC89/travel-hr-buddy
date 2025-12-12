@@ -101,7 +101,7 @@ export const useFleetAI = () => {
     } finally {
       setIsAnalyzing(false);
     }
-  };
+  });
 
   /**
    * Otimiza rotas de embarcações
@@ -151,7 +151,7 @@ export const useFleetAI = () => {
     } finally {
       setIsAnalyzing(false);
     }
-  };
+  });
 
   /**
    * Prevê consumo de combustível e recomenda reabastecimento
@@ -187,7 +187,7 @@ export const useFleetAI = () => {
           estimatedRange: Math.floor((currentLevel / consumption) * 100),
           optimalRefuelPort: "Porto mais próximo",
           reasoning: response.message || "Previsão baseada em consumo histórico e condições operacionais",
-        };
+        });
       });
 
       toast({
@@ -206,7 +206,7 @@ export const useFleetAI = () => {
     } finally {
       setIsAnalyzing(false);
     }
-  };
+  });
 
   /**
    * Gera recomendações gerais para a frota
@@ -238,7 +238,7 @@ export const useFleetAI = () => {
           "Otimize rotas para reduzir consumo de combustível em 12%",
         ],
         alerts: response.metadata?.alerts || [],
-      };
+      });
     } catch (error) {
       toast({
         title: "Erro ao Gerar Recomendações",
@@ -249,7 +249,7 @@ export const useFleetAI = () => {
     } finally {
       setIsAnalyzing(false);
     }
-  };
+  });
 
   return {
     isAnalyzing,

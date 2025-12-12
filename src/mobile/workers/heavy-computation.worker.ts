@@ -91,7 +91,7 @@ self.onmessage = async (event: MessageEvent<WorkerMessage>) => {
       error: error instanceof Error ? error.message : "Unknown error"
     } as WorkerResponse);
   }
-};
+});
 
 // Sort data by key
 function sortData(data: any[], key: string, order: "asc" | "desc"): any[] {

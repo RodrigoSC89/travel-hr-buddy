@@ -52,7 +52,7 @@ export const UserManagementMultiTenant: React.FC = () => {
         title: "Erro",
         description: "Não foi possível carregar os usuários da organização",
         variant: "destructive"
-      };
+      });
     } finally {
       setIsLoading(false);
     }
@@ -76,15 +76,15 @@ export const UserManagementMultiTenant: React.FC = () => {
       toast({
         title: "Convite Enviado",
         description: `Convite enviado para ${inviteEmail}`
-      };
+      });
     } catch (error) {
       toast({
         title: "Erro",
         description: "Não foi possível enviar o convite",
         variant: "destructive"
-      };
+      });
     }
-  };
+  });
 
   const handleUpdateRole = async (userId: string, newRole: string) => {
     try {
@@ -93,15 +93,15 @@ export const UserManagementMultiTenant: React.FC = () => {
       toast({
         title: "Função Atualizada",
         description: "A função do usuário foi atualizada com sucesso"
-      };
+      });
     } catch (error) {
       toast({
         title: "Erro",
         description: "Não foi possível atualizar a função do usuário",
         variant: "destructive"
-      };
+      });
     }
-  };
+  });
 
   const handleRemoveUser = async (userId: string) => {
     try {
@@ -110,15 +110,15 @@ export const UserManagementMultiTenant: React.FC = () => {
       toast({
         title: "Usuário Removido",
         description: "O usuário foi removido da organização"
-      };
+      });
     } catch (error) {
       toast({
         title: "Erro",
         description: "Não foi possível remover o usuário",
         variant: "destructive"
-      };
+      });
     }
-  };
+  });
 
   const getRoleBadgeVariant = (role: string) => {
     switch (role) {

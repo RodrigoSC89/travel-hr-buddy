@@ -87,7 +87,7 @@ export class MultimodalIntentEngine {
         ...intentResult,
         inputType,
         timestamp: new Date().toISOString(),
-      };
+      });
     } catch (error) {
       logger.error("Error processing intent", { error });
       throw error;
@@ -203,7 +203,7 @@ export class MultimodalIntentEngine {
         confidence: intent.confidence,
         action: intent.action,
         parameters: intent.parameters,
-      };
+      });
     } catch (error) {
       logger.error("Error classifying intent", { error });
       

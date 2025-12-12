@@ -119,16 +119,16 @@ export default function CrewWellbeing() {
     toast({ 
       title: "Análise concluída", 
       description: "2 alertas críticos identificados" 
-    };
+    });
     setIsAnalyzing(false);
-  };
+  });
 
   const handleRecommendRealocation = (crewId: string) => {
     toast({ 
       title: "Realocação sugerida", 
       description: "Notificação enviada para gestão de tripulação" 
-    };
-  };
+    });
+  });
 
   const getFatigueColor = (level: string) => {
     const colors: Record<string, string> = {

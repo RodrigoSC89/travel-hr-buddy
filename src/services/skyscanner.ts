@@ -250,7 +250,7 @@ export async function searchFlights(params: FlightSearchParams): Promise<FlightS
           success: false,
           offers: [],
           error: "Invalid return date format. Use YYYY-MM-DD.",
-        };
+        });
       }
       
       requestBody.query.queryLegs.push({
@@ -275,7 +275,7 @@ export async function searchFlights(params: FlightSearchParams): Promise<FlightS
         success: false,
         offers: [],
         error: `API error: ${response.status} ${response.statusText}`,
-      };
+      });
     }
 
     const data: SkyscannerSearchResponse = await response.json();
@@ -312,12 +312,12 @@ export async function searchFlights(params: FlightSearchParams): Promise<FlightS
       success: true,
       offers,
       cached: false,
-    };
+    });
   } catch (error) {
     return {
       success: false,
       offers: [],
       error: error instanceof Error ? error.message : "Unknown error",
-    };
+    });
   }
 }

@@ -61,14 +61,14 @@ const createWrapper = () => {
       queries: { retry: false },
       mutations: { retry: false },
     },
-  };
+  });
 
   return ({ children }: { children: ReactNode }) => (
     <QueryClientProvider client={queryClient}>
       {children}
     </QueryClientProvider>
   );
-};
+});
 
 describe("Audit Center Workflow", () => {
   beforeEach(() => {
@@ -87,15 +87,15 @@ describe("Audit Center Workflow", () => {
           vessel: "vessel-001",
           inspector: "inspector-001",
         });
-  };
+  });
 
       expect(result.current.audits).toHaveLength(1);
       expect(result.current.audits[0]).toMatchObject({
         type: "safety",
         vessel: "vessel-001",
         status: "pending",
-      };
-    };
+      });
+    });
 
     it("should assign unique ID to audit", async () => {
       const { result } = renderHook(() => useAuditWorkflow(), {

@@ -101,7 +101,7 @@ const DocumentTemplatesManager = () => {
 
     return () => {
       supabase.removeChannel(channel);
-    };
+    });
   }, []);
 
   const loadTemplates = async () => {
@@ -126,11 +126,11 @@ const DocumentTemplatesManager = () => {
         title: "Error loading templates",
         description: error.message,
         variant: "destructive",
-      };
+      });
     } finally {
       setLoading(false);
     }
-  };
+  });
 
   const loadVersions = async (templateId: string) => {
     try {
@@ -183,14 +183,14 @@ const DocumentTemplatesManager = () => {
           format: formData.format,
           tags,
           status: "active"
-        };
+        });
 
       if (error) throw error;
 
       toast({
         title: "✅ Template Created",
         description: "Document template has been created successfully",
-      };
+      });
 
       setShowNewTemplate(false);
       setFormData({
@@ -200,16 +200,16 @@ const DocumentTemplatesManager = () => {
         content: "",
         format: "html",
         tags: ""
-      };
+      });
       loadTemplates();
     } catch (error: SupabaseError | null) {
       toast({
         title: "Error creating template",
         description: error.message,
         variant: "destructive",
-      };
+      });
     }
-  };
+  });
 
   const updateTemplate = async (templateId: string, newContent: string) => {
     try {
@@ -223,7 +223,7 @@ const DocumentTemplatesManager = () => {
       toast({
         title: "✅ Template Updated",
         description: "Template has been updated and versioned",
-      };
+      });
 
       loadTemplates();
     } catch (error: SupabaseError | null) {
@@ -231,9 +231,9 @@ const DocumentTemplatesManager = () => {
         title: "Error updating template",
         description: error.message,
         variant: "destructive",
-      };
+      });
     }
-  };
+  });
 
   const deleteTemplate = async (templateId: string) => {
     try {
@@ -247,7 +247,7 @@ const DocumentTemplatesManager = () => {
       toast({
         title: "Template Archived",
         description: "Template has been archived",
-      };
+      });
 
       loadTemplates();
     } catch (error: SupabaseError | null) {
@@ -255,9 +255,9 @@ const DocumentTemplatesManager = () => {
         title: "Error archiving template",
         description: error.message,
         variant: "destructive",
-      };
+      });
     }
-  };
+  });
 
   const exportToPDF = (template: Template, variables: Record<string, string>) => {
     const startTime = Date.now();
@@ -286,13 +286,13 @@ const DocumentTemplatesManager = () => {
       variables_used: variables,
       generation_time_ms: processingTime,
       success: true
-    };
+    });
     
     toast({
       title: "✅ PDF Exported",
       description: `Template exported to ${fileName}`,
-    };
-  };
+    });
+  });
 
   const exportToWord = async (template: Template, variables: Record<string, string>) => {
     const startTime = Date.now();
@@ -314,7 +314,7 @@ const DocumentTemplatesManager = () => {
           })
         ]
       }]
-    };
+    });
     
     const blob = await Packer.toBlob(doc);
     const fileName = `${template.template_code}.docx`;
@@ -330,13 +330,13 @@ const DocumentTemplatesManager = () => {
       variables_used: variables,
       generation_time_ms: processingTime,
       success: true
-    };
+    });
     
     toast({
       title: "✅ Word Document Exported",
       description: `Template exported to ${fileName}`,
-    };
-  };
+    });
+  });
 
   const getCategoryBadge = (category: string) => {
     switch (category) {

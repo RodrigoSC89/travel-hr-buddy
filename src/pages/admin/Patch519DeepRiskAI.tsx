@@ -141,7 +141,7 @@ export default function Patch519DeepRiskAI() {
         "Implementar monitoramento contínuo dos fatores de risco",
         "Estabelecer pontos de verificação regulares",
       ],
-    };
+    });
 
     setAnalyses((prev) => [newAnalysis, ...prev]);
     setSelectedAnalysis(newAnalysis);

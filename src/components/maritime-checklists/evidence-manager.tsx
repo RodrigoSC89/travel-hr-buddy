@@ -105,7 +105,7 @@ export const EvidenceManager: React.FC<EvidenceManagerProps> = ({
     } finally {
       setUploading(false);
     }
-  };
+  });
 
   const startRecording = async () => {
     try {
@@ -184,7 +184,7 @@ export const EvidenceManager: React.FC<EvidenceManagerProps> = ({
     } finally {
       setUploading(false);
     }
-  };
+  });
 
   const removeEvidence = async (evidenceId: string) => {
     try {

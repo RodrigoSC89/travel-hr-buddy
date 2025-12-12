@@ -129,7 +129,7 @@ export const IMCAAuditEvents = memo(function({ selectedDPClass }: Props) {
     case "undesired": return <AlertCircle className="h-5 w-5 text-amber-600" />;
     case "observation": return <Eye className="h-5 w-5 text-blue-600" />;
     }
-  };
+  });
 
   const getSeverityBadge = (severity: EventSeverity) => {
     switch (severity) {
@@ -137,7 +137,7 @@ export const IMCAAuditEvents = memo(function({ selectedDPClass }: Props) {
     case "medium": return <Badge className="bg-amber-500">Média</Badge>;
     case "low": return <Badge variant="secondary">Baixa</Badge>;
     }
-  };
+  });
 
   const getStatusBadge = (status: EventStatus) => {
     switch (status) {
@@ -188,8 +188,8 @@ export const IMCAAuditEvents = memo(function({ selectedDPClass }: Props) {
     toast({
       title: "Evento enviado ao IMCA",
       description: "O formulário IMCA foi preenchido e submetido ao banco de dados."
-    };
-  };
+    });
+  });
 
   return (
     <div className="space-y-6">

@@ -42,11 +42,11 @@ export const FindingsManager = memo(function() {
         title: "Error loading findings",
         description: error.message,
         variant: "destructive",
-      };
+      });
     } finally {
       setLoading(false);
     }
-  };
+  });
 
   const getSeverityBadge = (type: string) => {
     const severityConfig: Record<string, { variant: unknown: unknown: unknown; color: string }> = {

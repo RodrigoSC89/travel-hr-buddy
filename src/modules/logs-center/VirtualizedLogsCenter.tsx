@@ -60,7 +60,7 @@ export default function VirtualizedLogsCenter() {
     } finally {
       setLoading(false);
     }
-  };
+  });
 
   const applyFilters = () => {
     let filtered = [...logs];
@@ -115,7 +115,7 @@ export default function VirtualizedLogsCenter() {
             message: log.message,
           })),
         },
-      };
+      });
 
       toast.success(
         <div>
@@ -133,7 +133,7 @@ export default function VirtualizedLogsCenter() {
     } finally {
       setAiLoading(false);
     }
-  };
+  });
 
   const getLevelIcon = (level: LogLevel) => {
     switch (level) {

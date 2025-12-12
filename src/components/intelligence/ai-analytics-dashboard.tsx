@@ -96,17 +96,17 @@ export const AIAnalyticsDashboard: React.FC = () => {
       toast({
         title: "Analytics Carregadas",
         description: "Dados de IA atualizados com sucesso",
-      };
+      });
     } catch (error) {
       toast({
         title: "Erro",
         description: "Falha ao carregar analytics de IA",
         variant: "destructive",
-      };
+      });
     } finally {
       setIsLoading(false);
     }
-  };
+  });
 
   const getAccuracyColor = (accuracy: number) => {
     if (accuracy >= 95) return "text-green-600";
@@ -351,6 +351,6 @@ export const AIAnalyticsDashboard: React.FC = () => {
       </Tabs>
     </div>
   );
-});
+};
 
 export default AIAnalyticsDashboard;

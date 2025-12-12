@@ -149,7 +149,7 @@ export default function SGSOAuditPage() {
       })
       .from(element)
       .save();
-  };
+  });
 
   const handleExplainWithAI = async (index: number) => {
     const item = auditData[index];

@@ -45,11 +45,11 @@ export const MaintenanceTimelineView: React.FC = () => {
         title: "Error",
         description: "Failed to load maintenance timeline",
         variant: "destructive",
-      };
+      });
     } finally {
       setLoading(false);
     }
-  };
+  });
 
   const getTaskIcon = (status: string) => {
     switch (status) {

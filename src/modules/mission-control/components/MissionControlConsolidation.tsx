@@ -59,8 +59,8 @@ export const MissionControlConsolidation: React.FC = () => {
       active: 5,
       completed: 35,
       failed: 2
-    };
-  };
+    });
+  });
 
   const exportMissionReport = async () => {
     try {

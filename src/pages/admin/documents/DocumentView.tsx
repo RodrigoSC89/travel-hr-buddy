@@ -135,11 +135,11 @@ export default function DocumentViewPage() {
         title: "Erro ao carregar documento",
         description: "Não foi possível carregar o documento.",
         variant: "destructive",
-      };
+      });
     } finally {
       setLoading(false);
     }
-  };
+  });
 
   const loadComments = async () => {
     if (!id) return;
@@ -179,11 +179,11 @@ export default function DocumentViewPage() {
         title: "Erro ao carregar comentários",
         description: "Não foi possível carregar os comentários.",
         variant: "destructive",
-      };
+      });
     } finally {
       setLoadingComments(false);
     }
-  };
+  });
 
   const subscribeToComments = () => {
     if (!id || realtimeChannel) return;
@@ -242,7 +242,7 @@ export default function DocumentViewPage() {
           document_id: id,
           user_id: user.id,
           content: newComment.trim(),
-        };
+        });
 
       if (error) throw error;
 
@@ -251,18 +251,18 @@ export default function DocumentViewPage() {
       toast({
         title: "Comentário adicionado",
         description: "Seu comentário foi adicionado com sucesso.",
-      };
+      });
     } catch (error) {
       logger.error("Error adding comment:", error);
       toast({
         title: "Erro ao adicionar comentário",
         description: "Não foi possível adicionar o comentário.",
         variant: "destructive",
-      };
+      });
     } finally {
       setSubmittingComment(false);
     }
-  };
+  });
 
   const deleteComment = async (commentId: string) => {
     setDeletingCommentId(commentId);
@@ -277,18 +277,18 @@ export default function DocumentViewPage() {
       toast({
         title: "Comentário excluído",
         description: "O comentário foi excluído com sucesso.",
-      };
+      });
     } catch (error) {
       logger.error("Error deleting comment:", error);
       toast({
         title: "Erro ao excluir comentário",
         description: "Não foi possível excluir o comentário.",
         variant: "destructive",
-      };
+      });
     } finally {
       setDeletingCommentId(null);
     }
-  };
+  });
 
   if (loading)
     return (

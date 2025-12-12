@@ -126,7 +126,7 @@ export const ActivityFeed = memo(function({
   
   const formatTime = (date: Date) => {
     return formatDistanceToNow(date, { addSuffix: true, locale: ptBR });
-  };
+  });
   
   if (items.length === 0) {
     return (

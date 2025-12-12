@@ -89,18 +89,18 @@ export const PriceAlertNotification: React.FC<PriceAlertNotificationProps> = ({
       toast({
         title: "Settings Saved",
         description: "Notification preferences updated successfully",
-      };
+      });
     } catch (error) {
       console.error("Error saving settings:", error);
       toast({
         title: "Error",
         description: "Failed to save settings",
         variant: "destructive"
-      };
+      });
     } finally {
       setSaving(false);
     }
-  };
+  });
 
   const testNotification = async () => {
     try {
@@ -115,23 +115,23 @@ export const PriceAlertNotification: React.FC<PriceAlertNotificationProps> = ({
             test: true,
             timestamp: new Date().toISOString()
           }
-        };
+        });
 
       if (error) throw error;
 
       toast({
         title: "Test Notification Sent",
         description: "Check your notification center",
-      };
+      });
     } catch (error) {
       console.error("Error sending test notification:", error);
       toast({
         title: "Error",
         description: "Failed to send test notification",
         variant: "destructive"
-      };
+      });
     }
-  };
+  });
 
   return (
     <Card>

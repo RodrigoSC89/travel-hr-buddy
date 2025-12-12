@@ -51,13 +51,13 @@ export const PresenceAvatars = memo(function({
       .slice(0, 2)
       .join("")
       .toUpperCase();
-  };
+  });
   
   const statusColors = {
     online: "bg-green-500",
     away: "bg-yellow-500",
     busy: "bg-red-500",
-  };
+  });
   
   return (
     <TooltipProvider>

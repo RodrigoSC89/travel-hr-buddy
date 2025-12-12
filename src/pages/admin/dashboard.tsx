@@ -282,18 +282,18 @@ export default function AdminDashboard() {
       toast({
         title: "PDF exportado com sucesso",
         description: "O relatório foi baixado para o seu dispositivo",
-      };
+      });
     } catch (error) {
       logger.error("Error exporting PDF:", error);
       toast({
         title: "Erro ao exportar PDF",
         description: "Ocorreu um erro ao gerar o relatório",
         variant: "destructive",
-      };
+      });
     } finally {
       setExportingPDF(false);
     }
-  };
+  });
 
   return (
     <div className="p-6 space-y-6">

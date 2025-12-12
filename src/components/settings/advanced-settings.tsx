@@ -103,17 +103,17 @@ export const AdvancedSettings: React.FC = () => {
       toast({
         title: "Configurações Salvas",
         description: "Suas preferências foram atualizadas com sucesso",
-      };
+      });
     } catch (error) {
       toast({
         title: "Erro",
         description: "Falha ao salvar configurações",
         variant: "destructive",
-      };
+      });
     } finally {
       setIsSaving(false);
     }
-  };
+  });
 
   const resetSettings = () => {
     setSettings({
@@ -141,7 +141,7 @@ export const AdvancedSettings: React.FC = () => {
       }
     });
     setHasChanges(true);
-  };
+  });
 
   return (
     <div className="space-y-6">
@@ -438,6 +438,6 @@ export const AdvancedSettings: React.FC = () => {
       </Tabs>
     </div>
   );
-});
+};
 
 export default AdvancedSettings;

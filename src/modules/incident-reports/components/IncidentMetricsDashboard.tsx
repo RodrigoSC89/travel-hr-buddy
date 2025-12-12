@@ -53,11 +53,11 @@ export const IncidentMetricsDashboard: React.FC = () => {
         title: "Error",
         description: "Failed to load incident metrics",
         variant: "destructive",
-      };
+      });
     } finally {
       setLoading(false);
     }
-  };
+  });
 
   // Calculate aggregate metrics
   const latestMetrics = metrics[metrics.length - 1];

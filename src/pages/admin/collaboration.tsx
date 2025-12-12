@@ -132,11 +132,11 @@ export default function CollaborationPage() {
         title: "Erro ao carregar comentários",
         description: "Não foi possível carregar os comentários.",
         variant: "destructive",
-      };
+      });
     } finally {
       setLoading(false);
     }
-  };
+  });
 
   const handleRefresh = async () => {
     setRefreshing(true);
@@ -145,8 +145,8 @@ export default function CollaborationPage() {
     toast({
       title: "Atualizado",
       description: "Comentários atualizados com sucesso.",
-    };
-  };
+    });
+  });
 
   const handleSubmit = async () => {
     if (!newComment.trim()) {
@@ -154,7 +154,7 @@ export default function CollaborationPage() {
         title: "Erro",
         description: "Por favor, escreva um comentário.",
         variant: "destructive",
-      };
+      });
       return;
     }
 
@@ -171,7 +171,7 @@ export default function CollaborationPage() {
         .insert({
           author_id: user.id,
           text: newComment.trim(),
-        };
+        });
 
       if (error) throw error;
 
@@ -179,18 +179,18 @@ export default function CollaborationPage() {
       toast({
         title: "Sucesso",
         description: "Comentário enviado com sucesso!",
-      };
+      });
     } catch (error) {
       logger.error("Error submitting comment:", error);
       toast({
         title: "Erro ao enviar comentário",
         description: "Não foi possível enviar o comentário.",
         variant: "destructive",
-      };
+      });
     } finally {
       setSubmitting(false);
     }
-  };
+  });
 
   const fetchReplies = async (commentId: string) => {
     try {
@@ -262,9 +262,9 @@ export default function CollaborationPage() {
         title: "Erro ao adicionar reação",
         description: "Não foi possível adicionar a reação.",
         variant: "destructive",
-      };
+      });
     }
-  };
+  });
 
   const submitReply = async (commentId: string) => {
     const replyText = replyTexts[commentId];
@@ -273,7 +273,7 @@ export default function CollaborationPage() {
         title: "Erro",
         description: "Por favor, escreva uma resposta.",
         variant: "destructive",
-      };
+      });
       return;
     }
 
@@ -290,7 +290,7 @@ export default function CollaborationPage() {
           comment_id: commentId,
           author_id: user.id,
           text: replyText.trim(),
-        };
+        });
 
       if (error) throw error;
 
@@ -300,16 +300,16 @@ export default function CollaborationPage() {
       toast({
         title: "Sucesso",
         description: "Resposta enviada com sucesso!",
-      };
+      });
     } catch (error) {
       logger.error("Error submitting reply:", error);
       toast({
         title: "Erro ao enviar resposta",
         description: "Não foi possível enviar a resposta.",
         variant: "destructive",
-      };
+      });
     }
-  };
+  });
 
   return (
     <div className="container mx-auto p-6 space-y-6">

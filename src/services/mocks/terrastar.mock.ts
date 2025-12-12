@@ -205,7 +205,7 @@ export function generateMockStatistics(vesselId: string) {
     min_accuracy: 2.5,
     availability: 98.5, // porcentagem
     average_signal_quality: 87,
-  };
+  });
 }
 
 /**

@@ -68,8 +68,8 @@ export const Patch605Validation = memo(function() {
     toast({
       title: "Learning Loop Complete",
       description: `Processed ${iterations} iterations with weight adjustments`,
-    };
-  };
+    });
+  });
 
   const getRandomDecision = () => {
     const decisions = [
@@ -99,8 +99,8 @@ export const Patch605Validation = memo(function() {
     toast({
       title: "Report Exported",
       description: "Learning report saved to console",
-    };
-  };
+    });
+  });
 
   const avgAccuracy = events.length > 0
     ? (events.reduce((sum, e) => sum + e.accuracy, 0) / events.length * 100).toFixed(1)

@@ -97,11 +97,11 @@ export const RealTimeNotificationCenter: React.FC = () => {
         title: "Erro",
         description: "Não foi possível carregar as notificações",
         variant: "destructive"
-      };
+      });
     } finally {
       setIsLoading(false);
     }
-  };
+  });
 
   // Marcar notificação como lida
   const markAsRead = async (notificationId: string, isIntelligent = false) => {
@@ -129,15 +129,15 @@ export const RealTimeNotificationCenter: React.FC = () => {
       toast({
         title: "Sucesso",
         description: "Notificação marcada como lida"
-      };
+      });
     } catch (error) {
       toast({
         title: "Erro",
         description: "Não foi possível marcar como lida",
         variant: "destructive"
-      };
+      });
     }
-  };
+  });
 
   // Marcar todas como lidas
   const markAllAsRead = async () => {
@@ -168,15 +168,15 @@ export const RealTimeNotificationCenter: React.FC = () => {
       toast({
         title: "Sucesso",
         description: "Todas as notificações foram marcadas como lidas"
-      };
+      });
     } catch (error) {
       toast({
         title: "Erro",
         description: "Não foi possível marcar todas como lidas",
         variant: "destructive"
-      };
+      });
     }
-  };
+  });
 
   // Executar ação de notificação inteligente
   const executeAction = async (notification: IntelligentNotification) => {
@@ -204,9 +204,9 @@ export const RealTimeNotificationCenter: React.FC = () => {
         title: "Erro",
         description: "Não foi possível executar a ação",
         variant: "destructive"
-      };
+      });
     }
-  };
+  });
 
   // Configurar real-time subscriptions
   useEffect(() => {

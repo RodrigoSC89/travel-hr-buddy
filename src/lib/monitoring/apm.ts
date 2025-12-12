@@ -159,7 +159,7 @@ class APMService {
       unit,
       timestamp: Date.now(),
       tags,
-    };
+    });
 
     this.metrics.push(metric);
 

@@ -120,7 +120,7 @@ export default function SGSOAuditEditor() {
         title: "Erro",
         description: "Selecione uma embarcação",
         variant: "destructive"
-      };
+      });
       return;
     }
 
@@ -155,13 +155,13 @@ export default function SGSOAuditEditor() {
           priority: "high",
           status: "open",
           assigned_to: user?.id
-        };
+        });
       }
 
       toast({
         title: "Auditoria salva",
         description: "Auditoria SGSO salva com sucesso"
-      };
+      });
 
       // Reset form
       setAuditResults([]);
@@ -170,11 +170,11 @@ export default function SGSOAuditEditor() {
         title: "Erro ao salvar",
         description: error instanceof Error ? error.message : "Erro desconhecido",
         variant: "destructive"
-      };
+      });
     } finally {
       setSaving(false);
     }
-  };
+  });
 
   const calculateOverallSeverity = (): string => {
     const nonCompliances = auditResults.filter(r => r.status === "non_compliant").length;
@@ -232,8 +232,8 @@ export default function SGSOAuditEditor() {
     toast({
       title: "PDF exportado",
       description: "Relatório exportado com sucesso"
-    };
-  };
+    });
+  });
 
   const getStatusBadge = (status: string) => {
     const variants = {

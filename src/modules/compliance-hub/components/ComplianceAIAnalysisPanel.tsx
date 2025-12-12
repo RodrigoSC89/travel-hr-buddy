@@ -62,7 +62,7 @@ export const ComplianceAIAnalysisPanel = memo(function({
     
     const response = await onAskAI(userQuestion);
     setConversation(prev => [...prev, { role: "ai", content: response }]);
-  };
+  });
 
   const getRiskLevelColor = (level: string) => {
     switch (level) {
@@ -72,7 +72,7 @@ export const ComplianceAIAnalysisPanel = memo(function({
     case "critical": return "text-red-500 bg-red-500/10";
     default: return "text-muted-foreground bg-muted";
     }
-  };
+  });
 
   const getTrendIcon = (trend: string) => {
     switch (trend) {
@@ -80,7 +80,7 @@ export const ComplianceAIAnalysisPanel = memo(function({
     case "worsening": return <TrendingDown className="h-4 w-4 text-red-500" />;
     default: return <div className="h-4 w-4 rounded-full bg-muted-foreground/30" />;
     }
-  };
+  });
 
   return (
     <Card className="h-full">

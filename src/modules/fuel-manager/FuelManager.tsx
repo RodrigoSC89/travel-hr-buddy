@@ -254,9 +254,9 @@ const ConsumptionForm = ({ onClose }: { onClose: () => void }) => {
     toast({
       title: "Consumo registrado",
       description: "O registro de consumo foi salvo com sucesso.",
-    };
+    });
     onClose();
-  };
+  });
 
   return (
     <form onSubmit={handleSubmit} className="space-y-4">
@@ -351,8 +351,8 @@ const AIPredictions = () => {
     toast({
       title: "Previsões atualizadas",
       description: "A IA recalculou as previsões de consumo.",
-    };
-  };
+    });
+  });
 
   return (
     <Card>

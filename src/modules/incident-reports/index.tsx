@@ -77,11 +77,11 @@ const IncidentReports = () => {
         title: "Error",
         description: "Failed to load incidents",
         variant: "destructive",
-      };
+      });
     } finally {
       setLoading(false);
     }
-  };
+  });
 
   const getSeverityColor = (severity: string) => {
     switch (severity) {

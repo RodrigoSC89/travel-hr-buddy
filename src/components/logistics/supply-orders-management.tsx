@@ -92,7 +92,7 @@ export const SupplyOrdersManagement = memo(() => {
         order_number: orderNumber,
         ...newOrder,
         quantity: parseInt(newOrder.quantity)
-      };
+      });
 
     if (error) {
       toast({ title: "Erro ao criar ordem", description: error.message, variant: "destructive" });
@@ -109,9 +109,9 @@ export const SupplyOrdersManagement = memo(() => {
       delivery_address: "",
       estimated_delivery_date: "",
       notes: ""
-    };
+    });
     fetchOrders();
-  };
+  });
 
   const updateOrderStatus = async (orderId: string, status: string, failureReason?: string) => {
     const updates: unknown = { status };

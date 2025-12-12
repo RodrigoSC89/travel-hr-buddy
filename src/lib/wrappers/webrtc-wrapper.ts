@@ -33,7 +33,7 @@ export class WebRTCConnectionWrapper implements WebRTCPeerConnection {
       } else {
         logger.debug("[WebRTC] ICE gathering complete");
       }
-    };
+    });
 
     this.pc.oniceconnectionstatechange = () => {
       logger.info(`[WebRTC] ICE connection state: ${this.pc.iceConnectionState}`);

@@ -251,8 +251,8 @@ const DashboardFilters: React.FC<{
       dateRange,
       modules: selectedModules,
       vessels: selectedVessels
-    };
-  };
+    });
+  });
 
   return (
     <Card>

@@ -74,7 +74,7 @@ export default function RestoreAnalyticsPage() {
           title: "Não autenticado",
           description: "Você precisa estar autenticado para acessar esta página.",
           variant: "destructive",
-        };
+        });
         navigate("/auth");
         return;
       }
@@ -104,7 +104,7 @@ export default function RestoreAnalyticsPage() {
         title: "Erro ao carregar estatísticas",
         description: "Não foi possível carregar as estatísticas de restauração.",
         variant: "destructive",
-      };
+      });
     } finally {
       setLoading(false);
     }
@@ -116,7 +116,7 @@ export default function RestoreAnalyticsPage() {
         title: "Sem dados",
         description: "Não há dados para exportar.",
         variant: "destructive",
-      };
+      });
       return;
     }
 
@@ -148,14 +148,14 @@ export default function RestoreAnalyticsPage() {
       toast({
         title: "CSV exportado",
         description: "O arquivo CSV foi baixado com sucesso.",
-      };
+      });
     } catch (error) {
       logger.error("Error exporting CSV:", error);
       toast({
         title: "Erro ao exportar CSV",
         description: "Não foi possível exportar o arquivo CSV.",
         variant: "destructive",
-      };
+      });
     }
   }
 
@@ -165,7 +165,7 @@ export default function RestoreAnalyticsPage() {
         title: "Sem dados",
         description: "Não há dados para exportar.",
         variant: "destructive",
-      };
+      });
       return;
     }
 
@@ -203,7 +203,7 @@ export default function RestoreAnalyticsPage() {
         body: tableData,
         theme: "grid",
         headStyles: { fillColor: [59, 130, 246] },
-      };
+      });
       
       // Save PDF
       doc.save(`restauracoes_${format(new Date(), "yyyy-MM-dd")}.pdf`);
@@ -211,14 +211,14 @@ export default function RestoreAnalyticsPage() {
       toast({
         title: "PDF exportado",
         description: "O arquivo PDF foi baixado com sucesso.",
-      };
+      });
     } catch (error) {
       logger.error("Error exporting PDF:", error);
       toast({
         title: "Erro ao exportar PDF",
         description: "Não foi possível exportar o arquivo PDF.",
         variant: "destructive",
-      };
+      });
     }
   }
 
@@ -231,7 +231,7 @@ export default function RestoreAnalyticsPage() {
         backgroundColor: "#3b82f6",
       },
     ],
-  };
+  });
 
   return (
     <div className="p-6 space-y-6">

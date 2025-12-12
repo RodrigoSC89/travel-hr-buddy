@@ -50,7 +50,7 @@ export const AddTransactionDialog = memo(function({ open, onOpenChange, onSucces
         title: "Campos obrigatórios",
         description: "Preencha todos os campos obrigatórios.",
         variant: "destructive",
-      };
+      });
       return;
     }
 
@@ -75,7 +75,7 @@ export const AddTransactionDialog = memo(function({ open, onOpenChange, onSucces
       toast({
         title: "Transação registrada",
         description: `${formData.type === "income" ? "Receita" : "Despesa"} de R$ ${Math.abs(amount).toLocaleString("pt-BR", { minimumFractionDigits: 2 })} registrada com sucesso.`,
-      };
+      });
 
       setFormData({
         type: "expense",
@@ -84,7 +84,7 @@ export const AddTransactionDialog = memo(function({ open, onOpenChange, onSucces
         category: "",
         transaction_date: new Date().toISOString().split("T")[0],
         notes: "",
-      };
+      });
       onOpenChange(false);
       onSuccess?.();
 
@@ -94,11 +94,11 @@ export const AddTransactionDialog = memo(function({ open, onOpenChange, onSucces
         title: "Erro",
         description: "Falha ao registrar transação. Tente novamente.",
         variant: "destructive",
-      };
+      });
     } finally {
       setIsLoading(false);
     }
-  };
+  });
 
   return (
     <Dialog open={open} onOpenChange={onOpenChange}>

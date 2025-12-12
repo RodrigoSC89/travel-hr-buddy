@@ -86,7 +86,7 @@ export default function TemplatesPage() {
           title: "Erro de autenticação",
           description: "Você precisa estar logado.",
           variant: "destructive",
-        };
+        });
         return;
       }
 
@@ -106,7 +106,7 @@ export default function TemplatesPage() {
         title: "Erro ao carregar templates",
         description: "Não foi possível carregar os templates.",
         variant: "destructive",
-      };
+      });
     } finally {
       setLoading(false);
     }
@@ -123,7 +123,7 @@ export default function TemplatesPage() {
         title: "Título necessário",
         description: "Por favor, forneça um título para o template.",
         variant: "destructive",
-      };
+      });
       return;
     }
 
@@ -133,7 +133,7 @@ export default function TemplatesPage() {
       
       const { data, error } = await supabase.functions.invoke("generate-document", {
         body: { prompt: aiPrompt },
-      };
+      });
 
       if (error) throw error;
 
@@ -141,18 +141,18 @@ export default function TemplatesPage() {
       toast({
         title: "Conteúdo gerado com sucesso",
         description: "O template foi gerado com IA.",
-      };
+      });
     } catch (err) {
       logger.error("Error generating content:", err);
       toast({
         title: "Erro ao gerar conteúdo",
         description: "Não foi possível gerar o conteúdo com IA.",
         variant: "destructive",
-      };
+      });
     } finally {
       setGenerating(false);
     }
-  };
+  });
 
   // Rewrite content with AI
   const rewriteContent = async () => {
@@ -161,7 +161,7 @@ export default function TemplatesPage() {
         title: "Nenhum conteúdo para reformular",
         description: "Por favor, adicione conteúdo primeiro.",
         variant: "destructive",
-      };
+      });
       return;
     }
 
@@ -169,7 +169,7 @@ export default function TemplatesPage() {
     try {
       const { data, error } = await supabase.functions.invoke("rewrite-document", {
         body: { content },
-      };
+      });
 
       if (error) throw error;
 
@@ -177,18 +177,18 @@ export default function TemplatesPage() {
       toast({
         title: "Conteúdo reformulado com sucesso",
         description: "O template foi reformulado com IA.",
-      };
+      });
     } catch (err) {
       logger.error("Error rewriting content:", err);
       toast({
         title: "Erro ao reformular conteúdo",
         description: "Não foi possível reformular o conteúdo.",
         variant: "destructive",
-      };
+      });
     } finally {
       setRewriting(false);
     }
-  };
+  });
 
   // Auto-suggest title from content
   const suggestTitle = async () => {
@@ -197,7 +197,7 @@ export default function TemplatesPage() {
         title: "Nenhum conteúdo",
         description: "Por favor, adicione conteúdo primeiro.",
         variant: "destructive",
-      };
+      });
       return;
     }
 
@@ -206,7 +206,7 @@ export default function TemplatesPage() {
         body: { 
           prompt: `Com base no seguinte conteúdo, sugira um título curto e descritivo (máximo 60 caracteres):\n\n${content.substring(0, 500)}` 
         },
-      };
+      });
 
       if (error) throw error;
 
@@ -215,16 +215,16 @@ export default function TemplatesPage() {
       toast({
         title: "Título sugerido",
         description: "Um título foi sugerido com base no conteúdo.",
-      };
+      });
     } catch (err) {
       logger.error("Error suggesting title:", err);
       toast({
         title: "Erro ao sugerir título",
         description: "Não foi possível sugerir um título.",
         variant: "destructive",
-      };
+      });
     }
-  };
+  });
 
   // Save or update template
   const saveTemplate = async () => {
@@ -233,7 +233,7 @@ export default function TemplatesPage() {
         title: "Campos obrigatórios",
         description: "Por favor, preencha o título e o conteúdo.",
         variant: "destructive",
-      };
+      });
       return;
     }
 
@@ -246,7 +246,7 @@ export default function TemplatesPage() {
           title: "Erro de autenticação",
           description: "Você precisa estar logado.",
           variant: "destructive",
-        };
+        });
         return;
       }
 
@@ -265,7 +265,7 @@ export default function TemplatesPage() {
         toast({
           title: "Template atualizado",
           description: "O template foi atualizado com sucesso.",
-        };
+        });
       } else {
         // Create new template
         const { error } = await (supabase as unknown)
@@ -274,14 +274,14 @@ export default function TemplatesPage() {
             title: title.trim(),
             content: content.trim(),
             created_by: user.id,
-          };
+          });
 
         if (error) throw error;
 
         toast({
           title: "Template salvo",
           description: "O template foi salvo com sucesso.",
-        };
+        });
       }
 
       // Reset form and reload templates
@@ -293,11 +293,11 @@ export default function TemplatesPage() {
         title: "Erro ao salvar template",
         description: "Não foi possível salvar o template.",
         variant: "destructive",
-      };
+      });
     } finally {
       setSaving(false);
     }
-  };
+  });
 
   // Toggle favorite
   const toggleFavorite = async (template: Template) => {
@@ -312,7 +312,7 @@ export default function TemplatesPage() {
       toast({
         title: template.is_favorite ? "Removido dos favoritos" : "Adicionado aos favoritos",
         description: `Template "${template.title}" ${template.is_favorite ? "removido de" : "adicionado aos"} favoritos.`,
-      };
+      });
 
       loadTemplates();
     } catch (err) {
@@ -321,9 +321,9 @@ export default function TemplatesPage() {
         title: "Erro",
         description: "Não foi possível alterar o favorito.",
         variant: "destructive",
-      };
+      });
     }
-  };
+  });
 
   // Toggle private
   const togglePrivate = async (template: Template) => {
@@ -338,7 +338,7 @@ export default function TemplatesPage() {
       toast({
         title: template.is_private ? "Template público" : "Template privado",
         description: `Template "${template.title}" agora é ${template.is_private ? "público" : "privado"}.`,
-      };
+      });
 
       loadTemplates();
     } catch (err) {
@@ -347,9 +347,9 @@ export default function TemplatesPage() {
         title: "Erro",
         description: "Não foi possível alterar a privacidade.",
         variant: "destructive",
-      };
+      });
     }
-  };
+  });
 
   // Delete template
   const deleteTemplate = async (id: string) => {
@@ -364,7 +364,7 @@ export default function TemplatesPage() {
       toast({
         title: "Template excluído",
         description: "O template foi excluído com sucesso.",
-      };
+      });
 
       loadTemplates();
     } catch (err) {
@@ -373,9 +373,9 @@ export default function TemplatesPage() {
         title: "Erro ao excluir",
         description: "Não foi possível excluir o template.",
         variant: "destructive",
-      };
+      });
     }
-  };
+  });
 
   // Load template for editing
   const editTemplate = (id: string) => {
@@ -400,7 +400,7 @@ export default function TemplatesPage() {
     }));
     
     navigate("/admin/documents/ai");
-  };
+  });
 
   // Export template as PDF
   const exportToPDF = async (template: Template) => {
@@ -438,18 +438,18 @@ export default function TemplatesPage() {
       toast({
         title: "PDF exportado",
         description: "O template foi exportado como PDF.",
-      };
+      });
     } catch (err) {
       logger.error("Error exporting PDF:", err);
       toast({
         title: "Erro ao exportar",
         description: "Não foi possível exportar o template.",
         variant: "destructive",
-      };
+      });
     } finally {
       setExporting(false);
     }
-  };
+  });
 
   // Reset form
   const resetForm = () => {

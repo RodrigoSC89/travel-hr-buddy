@@ -478,7 +478,7 @@ class MissionSimulationCore {
         medium: 1.5,
         high: 3,
         critical: 5,
-      };
+      });
       return sum + severityScore[i.severity];
     }, 0));
 

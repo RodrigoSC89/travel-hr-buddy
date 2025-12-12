@@ -96,7 +96,7 @@ export class SonarEngine {
       maxDepth,
       avgDepth: totalDepth / readings.length,
       readings
-    };
+    });
   }
 
   /**

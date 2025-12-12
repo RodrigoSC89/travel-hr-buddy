@@ -201,7 +201,7 @@ export default function AICommandCenter() {
     case "down": return <ArrowDown className="h-4 w-4 text-red-500" />;
     default: return <span className="h-4 w-4 text-muted-foreground">-</span>;
     }
-  };
+  });
 
   const getHealthStatusColor = (status?: string) => {
     switch (status) {

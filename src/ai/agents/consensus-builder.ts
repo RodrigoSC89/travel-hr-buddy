@@ -728,7 +728,7 @@ class StrategicConsensusBuilder {
       return { 
         decision: "reject", 
         rule: "Safety Override - safety agent strongly opposes" 
-      };
+      });
     }
 
     // Check critical disagreement

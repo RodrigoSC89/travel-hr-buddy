@@ -55,12 +55,12 @@ export const AlertsSystem: React.FC = () => {
               title: "🚨 Critical Alert",
               description: newAlert.message,
               variant: "destructive",
-            };
+            });
           } else {
             toast({
               title: "⚠️ Warning Alert",
               description: newAlert.message,
-            };
+            });
           }
         }
       )
@@ -121,16 +121,16 @@ export const AlertsSystem: React.FC = () => {
       toast({
         title: "Alert Resolved",
         description: "Alert marked as resolved",
-      };
+      });
     } catch (error) {
       console.error("Error resolving alert:", error);
       toast({
         title: "Error",
         description: "Failed to resolve alert",
         variant: "destructive",
-      };
+      });
     }
-  };
+  });
 
   if (loading) {
     return (

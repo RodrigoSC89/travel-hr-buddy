@@ -108,7 +108,7 @@ export const useTrainingAcademy = () => {
           enrolledCount: meta?.enrolledCount || Math.floor(Math.random() * 50) + 10,
           rating: meta?.rating || 4 + Math.random(),
           tags: meta?.tags || ["marítimo", "segurança"],
-        };
+        });
       });
 
       if (mappedCourses.length === 0) {

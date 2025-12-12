@@ -115,9 +115,9 @@ export const ReservationPaymentSystem: React.FC = () => {
       currency: reservation.currency || "USD",
       payment_method: "stripe",
       reservation_id: reservation.id,
-    };
+    });
     setIsPaymentDialogOpen(true);
-  };
+  });
 
   const processPayment = async () => {
     if (!paymentIntent || !selectedReservation) return;
@@ -164,7 +164,7 @@ export const ReservationPaymentSystem: React.FC = () => {
     } finally {
       setProcessingPayment(false);
     }
-  };
+  });
 
   const sendConfirmationEmail = async (reservationId: string) => {
     try {
@@ -178,14 +178,14 @@ export const ReservationPaymentSystem: React.FC = () => {
         type: "reservation_confirmation",
         priority: "high",
         status: "sent",
-      };
+      });
 
       toast.info("Confirmation email sent");
     } catch (error) {
       console.error("Error sending email:", error);
       console.error("Error sending email:", error);
     }
-  };
+  });
 
   const sendPushNotification = async (reservationId: string, message: string) => {
     try {
@@ -198,12 +198,12 @@ export const ReservationPaymentSystem: React.FC = () => {
         type: "push_notification",
         priority: "medium",
         status: "sent",
-      };
+      });
     } catch (error) {
       console.error("Error sending push notification:", error);
       console.error("Error sending push notification:", error);
     }
-  };
+  });
 
   const syncToCalendar = async (reservation: Reservation) => {
     try {
@@ -295,7 +295,7 @@ END:VCALENDAR`;
       console.error("Error processing refund:", error);
       toast.error("Failed to process refund");
     }
-  };
+  });
 
   const cancelReservation = async (reservationId: string) => {
     try {
@@ -764,6 +764,6 @@ END:VCALENDAR`;
       </Dialog>
     </div>
   );
-});
+};
 
 export default ReservationPaymentSystem;

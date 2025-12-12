@@ -78,7 +78,7 @@ const DeepRiskAIPage: React.FC = () => {
       logger.error("Error initializing deep risk AI model", { error });
       toast.error("Error initializing model");
     }
-  };
+  });
 
   const loadData = async () => {
     try {
@@ -120,7 +120,7 @@ const DeepRiskAIPage: React.FC = () => {
     } finally {
       setLoading(false);
     }
-  };
+  });
 
   const handleSaveForecast = async () => {
     if (!currentAnalysis) {

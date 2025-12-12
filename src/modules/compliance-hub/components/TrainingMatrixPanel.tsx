@@ -78,7 +78,7 @@ export const TrainingMatrixPanel = memo(function({
     default:
       return <AlertTriangle className="h-4 w-4 text-muted-foreground" />;
     }
-  };
+  });
 
   const getStatusBadge = (status: ComplianceTraining["status"]) => {
     const variants: Record<string, { variant: "default" | "secondary" | "destructive" | "outline"; label: string }> = {
@@ -86,11 +86,11 @@ export const TrainingMatrixPanel = memo(function({
       "in-progress": { variant: "secondary", label: "Em Progresso" },
       expired: { variant: "destructive", label: "Expirado" },
       "not-started": { variant: "outline", label: "Não Iniciado" },
-    };
+    });
 
     const { variant, label } = variants[status] || variants["not-started"];
     return <Badge variant={variant}>{label}</Badge>;
-  };
+  });
 
   const filteredTrainings = trainings.filter((training) => {
     const matchesSearch =

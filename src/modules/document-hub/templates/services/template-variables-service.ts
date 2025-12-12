@@ -154,7 +154,7 @@ export class TemplateVariablesService {
     return {
       valid: errors.length === 0,
       errors
-    };
+    });
   }
 
   private mapToVariable(data: any): TemplateVariable {

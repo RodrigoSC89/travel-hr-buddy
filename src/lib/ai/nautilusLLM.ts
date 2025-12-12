@@ -166,7 +166,7 @@ export async function getIAStats() {
       averageConfidence: 0,
       averageExecutionTime: 0,
       cacheHitRate: 0
-    };
+    });
   }
 
   const totalRequests = data.length;

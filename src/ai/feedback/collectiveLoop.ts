@@ -137,7 +137,7 @@ class CollectiveLoopEngine {
       processed: false,
       learningApplied: false,
       timestamp: new Date()
-    };
+    });
 
     await this.recordFeedback(feedback);
     logger.info(`[CollectiveLoop] Human feedback submitted for ${sourceModule}`);
@@ -496,7 +496,7 @@ class CollectiveLoopEngine {
       recall: 0.2,
       f1Score: 0.2,
       successRate: 0.1
-    };
+    });
 
     let score = 0;
     let totalWeight = 0;

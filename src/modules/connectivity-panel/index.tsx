@@ -150,9 +150,9 @@ export default function ConnectivityPanel() {
       toast({ 
         title: "Análise IA", 
         description: typeof result.response === "string" ? result.response : "Análise de conectividade concluída"
-      };
+      });
     }
-  };
+  });
 
   const getStatusColor = (status: string) => {
     switch (status) {

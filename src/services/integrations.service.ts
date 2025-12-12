@@ -376,7 +376,7 @@ export class IntegrationsService {
         event: "test",
         timestamp: new Date().toISOString(),
         data: { message: "This is a test webhook event" },
-      };
+      });
 
       await this.dispatchWebhookEvent(integrationId, "test", testPayload);
       
@@ -512,7 +512,7 @@ export class IntegrationsService {
         connected: conn.status === "connected",
         last_sync: conn.last_sync_at,
         expires_at: conn.expires_at,
-      };
+      });
       return acc;
     }, {} as Record<string, any>);
 

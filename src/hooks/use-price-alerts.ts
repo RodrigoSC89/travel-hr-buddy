@@ -49,7 +49,7 @@ export const usePriceAlerts = () => {
     } finally {
       setLoading(false);
     }
-  };
+  });
 
   useEffect(() => {
     loadAlerts();
@@ -73,7 +73,7 @@ export const usePriceAlerts = () => {
       });
       throw err;
     }
-  };
+  });
 
   const updateAlert = async (id: string, input: UpdatePriceAlertInput) => {
     try {
@@ -95,7 +95,7 @@ export const usePriceAlerts = () => {
       });
       throw err;
     }
-  };
+  });
 
   const deleteAlert = async (id: string) => {
     try {
@@ -114,7 +114,7 @@ export const usePriceAlerts = () => {
       });
       throw err;
     }
-  };
+  });
 
   const toggleAlert = async (id: string, isActive: boolean) => {
     try {
@@ -136,7 +136,7 @@ export const usePriceAlerts = () => {
       });
       throw err;
     }
-  };
+  });
 
   return {
     alerts,
@@ -232,7 +232,7 @@ export const usePriceNotifications = () => {
         variant: "destructive",
       });
     }
-  };
+  });
 
   const markAllAsRead = async () => {
     try {
@@ -252,7 +252,7 @@ export const usePriceNotifications = () => {
         variant: "destructive",
       });
     }
-  };
+  });
 
   return {
     notifications,

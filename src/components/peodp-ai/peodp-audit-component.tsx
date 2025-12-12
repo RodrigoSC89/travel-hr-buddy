@@ -45,7 +45,7 @@ export const PEODPAuditComponent = memo(function() {
         title: "Campo obrigatório",
         description: "Por favor, informe o nome da embarcação",
         variant: "destructive",
-      };
+      });
       return;
     }
 
@@ -69,18 +69,18 @@ export const PEODPAuditComponent = memo(function() {
       toast({
         title: "Auditoria Concluída",
         description: `Score: ${resultado.score}% - ${getScoreLevel(resultado.score)}`,
-      };
+      });
     } catch (error) {
       toast({
         title: "Erro",
         description: "Falha ao executar auditoria PEO-DP",
         variant: "destructive",
-      };
+      });
       console.error("Erro na auditoria:", error);
     } finally {
       setLoading(false);
     }
-  };
+  });
 
   const handleDownloadPDF = () => {
     if (auditoria) {
@@ -88,9 +88,9 @@ export const PEODPAuditComponent = memo(function() {
       toast({
         title: "Download Iniciado",
         description: "Relatório PDF está sendo baixado",
-      };
+      });
     }
-  };
+  });
 
   const handleDownloadMarkdown = () => {
     if (auditoria) {
@@ -98,9 +98,9 @@ export const PEODPAuditComponent = memo(function() {
       toast({
         title: "Download Iniciado",
         description: "Relatório Markdown está sendo baixado",
-      };
+      });
     }
-  };
+  });
 
   return (
     <div className="container mx-auto p-6 max-w-6xl">

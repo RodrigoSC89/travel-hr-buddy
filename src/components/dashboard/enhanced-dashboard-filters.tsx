@@ -52,8 +52,8 @@ export const EnhancedDashboardFilters: React.FC<DashboardFiltersProps> = ({
     toast({
       title: "📊 Layout Alterado",
       description: `Dashboard exibindo em modo ${layout}`
-};
-  };
+});
+  });
 
   return (
     <div className="space-y-4">

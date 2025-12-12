@@ -71,18 +71,18 @@ export const EnhancedCommunicationCenter = memo(() => {
             urgentMessages: 3,
             todayMessages: 47,
             responseRate: 95
-          };
+          });
         } catch (error) {
           toast({
             title: "Erro",
             description: "Erro ao carregar estatísticas de comunicação",
             variant: "destructive"
-          };
+          });
         } finally {
           setLoading(false);
         }
       }
-    };
+    });
     
     init();
     
@@ -308,7 +308,7 @@ export const EnhancedCommunicationCenter = memo(() => {
               toast({
                 title: "Sucesso",
                 description: "Mensagem enviada com sucesso"
-              };
+              });
               // Stats will be refreshed on next page load
               setStats(prev => ({
                 ...prev,

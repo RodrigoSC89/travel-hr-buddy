@@ -106,11 +106,11 @@ export default function DocumentTemplates() {
         title: "Error",
         description: "Failed to load templates",
         variant: "destructive",
-      };
+      });
     } finally {
       setLoading(false);
     }
-  };
+  });
 
   const fetchGeneratedDocuments = async () => {
     try {
@@ -166,14 +166,14 @@ export default function DocumentTemplates() {
             category: templateCategory,
             content: templateContent,
             variables: extractVariables(templateContent)
-          };
+          });
 
         if (error) throw error;
 
         toast({
           title: "Template Created",
           description: "New template created successfully",
-        };
+        });
 
         fetchTemplates();
       } catch (error) {
@@ -182,7 +182,7 @@ export default function DocumentTemplates() {
           title: "Error",
           description: "Failed to create template",
           variant: "destructive",
-        };
+        });
       }
     } else {
       // Update existing template (create new version)
@@ -192,14 +192,14 @@ export default function DocumentTemplates() {
           p_content: templateContent,
           p_variables: extractVariables(templateContent),
           p_change_summary: "Manual update"
-        };
+        });
 
         if (error) throw error;
 
         toast({
           title: "Template Updated",
           description: "New version created successfully",
-        };
+        });
 
         fetchTemplates();
         fetchTemplateVersions(selectedTemplate.id);
@@ -209,10 +209,10 @@ export default function DocumentTemplates() {
           title: "Error",
           description: "Failed to update template",
           variant: "destructive",
-        };
+        });
       }
     }
-  };
+  });
 
   const generateDocument = async () => {
     if (!selectedTemplate) return;
@@ -230,7 +230,7 @@ export default function DocumentTemplates() {
       toast({
         title: "Document Generated",
         description: "Document created successfully",
-      };
+      });
 
       fetchGeneratedDocuments();
     } catch (error) {
@@ -239,9 +239,9 @@ export default function DocumentTemplates() {
         title: "Error",
         description: "Failed to generate document",
         variant: "destructive",
-      };
+      });
     }
-  };
+  });
 
   const rollbackVersion = async (version: number) => {
     if (!selectedTemplate) return;
@@ -257,7 +257,7 @@ export default function DocumentTemplates() {
       toast({
         title: "Version Restored",
         description: `Rolled back to version ${version}`,
-      };
+      });
 
       fetchTemplates();
       fetchTemplateVersions(selectedTemplate.id);
@@ -267,9 +267,9 @@ export default function DocumentTemplates() {
         title: "Error",
         description: "Failed to rollback version",
         variant: "destructive",
-      };
+      });
     }
-  };
+  });
 
   const extractVariables = (content: string): unknown[] => {
     const matches = content.match(/\{\{([a-zA-Z0-9_]+)\}\}/g) || [];
@@ -286,7 +286,7 @@ export default function DocumentTemplates() {
     toast({
       title: "Exporting Document",
       description: `Generating ${format.toUpperCase()} file...`,
-    };
+    });
 
     // In production, this would trigger actual export
     // For now, just mark as exported
@@ -294,20 +294,20 @@ export default function DocumentTemplates() {
       const { error } = await (supabase as unknown).rpc("export_document", {
         p_document_id: documentId,
         p_file_url: `/exports/${documentId}.${format}`
-      };
+      });
 
       if (error) throw error;
 
       toast({
         title: "Export Complete",
         description: "Document exported successfully",
-      };
+      });
 
       fetchGeneratedDocuments();
     } catch (error) {
       logger.error("Error exporting document", { error });
     }
-  };
+  });
 
   return (
     <div className="container mx-auto p-6 space-y-6">

@@ -344,5 +344,5 @@ function generateLocalPerformanceAnalysis() {
     trend: "improving",
     recommendations: ["Focar em treinamentos práticos", "Revisar material teórico"],
     predictedPerformance: 88,
-  };
+  });
 }

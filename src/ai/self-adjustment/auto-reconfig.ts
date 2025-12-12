@@ -212,7 +212,7 @@ export class AutoReconfigurationEngine {
       ...data,
       triggerId: `trigger-${Date.now()}-${Math.random().toString(36).substr(2, 9)}`,
       timestamp: new Date().toISOString(),
-    };
+    });
 
     this.triggers.push(trigger);
     await this.storeTrigger(trigger);
@@ -406,7 +406,7 @@ export class AutoReconfigurationEngine {
       responseTime: beforeMetrics.responseTime - afterMetrics.responseTime, // Lower is better
       errorRate: beforeMetrics.errorRate - afterMetrics.errorRate, // Lower is better
       throughput: afterMetrics.throughput - beforeMetrics.throughput,
-    };
+    });
 
     // Determine verdict
     let verdict: PerformanceValidation["verdict"];

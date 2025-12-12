@@ -82,12 +82,12 @@ export const TelemetryMap = memo(function({
       document.exitFullscreen();
       setIsFullscreen(false);
     }
-  };
+  });
 
   const handleRefresh = () => {
     onRefresh?.();
     toast.success("Posições atualizadas");
-  };
+  });
 
   // Simulated map rendering
   useEffect(() => {
@@ -101,7 +101,7 @@ export const TelemetryMap = memo(function({
     case "vessel": return <Ship className="h-4 w-4 text-blue-500" />;
     default: return <MapPin className="h-4 w-4 text-green-500" />;
     }
-  };
+  });
 
   const getMarkerColor = (type: string) => {
     switch (type) {

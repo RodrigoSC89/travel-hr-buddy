@@ -270,6 +270,6 @@ export const commonActions = {
     
     return { success: true, message: "Exportação CSV concluída" };
   }
-};
+});
 
 export default executeAction;

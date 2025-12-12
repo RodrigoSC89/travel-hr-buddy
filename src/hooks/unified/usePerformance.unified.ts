@@ -326,7 +326,7 @@ export function useMemoryMonitor(interval: number = 5000): MemoryMetrics | null 
         total: mem.totalJSHeapSize,
         percentage: (mem.usedJSHeapSize / mem.totalJSHeapSize) * 100
       });
-    };
+    });
 
     update();
     const intervalId = setInterval(update, interval);

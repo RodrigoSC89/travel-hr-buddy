@@ -151,7 +151,7 @@ export class PromptAdjuster {
       adjustments,
       learned_patterns: learnedPatterns,
       non_conformity_frequency: nonConformityFrequency,
-    };
+    });
 
     this.promptCache.set(inspectionType, config);
     return config;
@@ -499,7 +499,7 @@ export class AdaptiveIntelligence {
       nonConformities,
       topIssues,
       learnedPatterns: config.learned_patterns,
-    };
+    });
   }
 }
 

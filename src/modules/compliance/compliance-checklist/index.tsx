@@ -100,11 +100,11 @@ const ComplianceChecklist = () => {
         title: "Error",
         description: "Failed to load compliance records",
         variant: "destructive",
-      };
+      });
     } finally {
       setLoading(false);
     }
-  };
+  });
 
   // PATCH 549: Moved loadAIInsights inside loadComplianceRecords to avoid stale state dependency
   // and useEffect after both functions
@@ -134,7 +134,7 @@ const ComplianceChecklist = () => {
           compliantCount,
           totalChecklists: currentRecords.filter(r => r.completion_status === "completed").length
         }
-      };
+      });
       
       if (response.message) {
         setAiInsight(response.message);
@@ -142,7 +142,7 @@ const ComplianceChecklist = () => {
     } catch (error) {
       console.error("Error loading AI insights:", error);
     }
-  };
+  });
 
   const getRiskBadge = (risk: string | null) => {
     switch (risk) {

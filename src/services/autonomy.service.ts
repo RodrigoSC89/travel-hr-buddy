@@ -325,7 +325,7 @@ export class AutonomyService {
       avg_confidence: Math.round(avgConfidence * 100) / 100,
       recent_tasks: allTasks.slice(0, 10),
       recent_decisions: recentDecisions.slice(0, 10),
-    };
+    });
   }
 
   // Metrics

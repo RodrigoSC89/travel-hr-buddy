@@ -58,17 +58,17 @@ const PerformanceAnalysis: React.FC = () => {
       toast({
         title: "Analysis Complete",
         description: "System validation and performance analysis completed successfully",
-      };
+      });
     } catch (error) {
       toast({
         title: "Analysis Failed",
         description: error instanceof Error ? error.message : "Unknown error occurred",
         variant: "destructive"
-      };
+      });
     } finally {
       setIsAnalyzing(false);
     }
-  };
+  });
 
   const getStatusIcon = (status: string) => {
     switch (status) {

@@ -141,7 +141,7 @@ export const CompletePriceAlertsUI: React.FC = () => {
     } finally {
       setIsLoading(false);
     }
-  };
+  });
 
   const loadPriceHistory = async (alertId: string) => {
     try {
@@ -178,7 +178,7 @@ export const CompletePriceAlertsUI: React.FC = () => {
         visual_notifications: newAlert.visual_notifications,
         is_active: true,
         user_id: user?.id,
-      };
+      });
 
       if (error) throw error;
 
@@ -197,7 +197,7 @@ export const CompletePriceAlertsUI: React.FC = () => {
       console.error("Error creating alert:", error);
       toast.error("Failed to create price alert");
     }
-  };
+  });
 
   const toggleAlert = async (alertId: string, currentState: boolean) => {
     try {
@@ -607,6 +607,6 @@ export const CompletePriceAlertsUI: React.FC = () => {
       </Dialog>
     </div>
   );
-});
+};
 
 export default CompletePriceAlertsUI;

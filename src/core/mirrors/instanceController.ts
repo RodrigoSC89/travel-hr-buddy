@@ -549,7 +549,7 @@ class InstanceController {
       metrics: data.metrics || { latency: 0, uptime: 0, memoryUsage: 0, storageUsage: 0 },
       version: data.version || "1.0.0",
       parentInstanceId: data.parent_instance_id,
-    };
+    });
   }
 
   /**

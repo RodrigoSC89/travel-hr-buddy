@@ -191,8 +191,8 @@ export const IncidentReporting: React.FC = () => {
     toast({
       title: "🔍 Busca de Incidentes",
       description: "Digite o número do incidente, título ou palavra-chave"
-    };
-  };
+    });
+  });
 
   const handleOpenAIClassification = () => {
     setShowAIModal(true);
@@ -203,9 +203,9 @@ export const IncidentReporting: React.FC = () => {
     toast({
       title: "✨ Classificação aplicada",
       description: `Categoria: ${classification.sgso_category}, Risco: ${classification.sgso_risk_level}`,
-    };
+    });
     logger.info("AI Classification applied:", classification);
-  };
+  });
 
   const handleSubmitIncident = () => {
     if (!incidentForm.title || !incidentForm.type || !incidentForm.severity) {
@@ -213,13 +213,13 @@ export const IncidentReporting: React.FC = () => {
         title: "Campos obrigatórios",
         description: "Preencha título, tipo e severidade",
         variant: "destructive"
-      };
+      });
       return;
     }
     toast({
       title: "✅ Incidente Registrado",
       description: `Incidente "${incidentForm.title}" foi registrado com sucesso.`
-    };
+    });
     setNewIncidentDialogOpen(false);
     setIncidentForm({ title: "", type: "", severity: "", description: "", vessel: "", location: "", reportedBy: "" });
   };

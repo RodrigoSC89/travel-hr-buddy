@@ -89,11 +89,11 @@ export const PriceAlertDashboardLegacy = memo(() => {
         title: "Erro",
         description: "Não foi possível carregar os alertas",
         variant: "destructive"
-      };
+      });
     } finally {
       setIsLoading(false);
     }
-  };
+  });
 
   const loadNotifications = async () => {
     try {
@@ -135,7 +135,7 @@ export const PriceAlertDashboardLegacy = memo(() => {
         title: "Erro",
         description: "Preencha todos os campos obrigatórios",
         variant: "destructive"
-      };
+      });
       return;
     }
 
@@ -180,17 +180,17 @@ export const PriceAlertDashboardLegacy = memo(() => {
       toast({
         title: "Alerta criado!",
         description: `Alerta para ${newAlert.product_name} foi adicionado com sucesso.`
-      };
+      });
     } catch (error) {
       toast({
         title: "Erro",
         description: "Não foi possível criar o alerta",
         variant: "destructive"
-      };
+      });
     } finally {
       setIsCreatingAlert(false);
     }
-  };
+  });
 
   const toggleAlert = async (id: string) => {
     const alert = alerts.find(a => a.id === id);
@@ -212,9 +212,9 @@ export const PriceAlertDashboardLegacy = memo(() => {
         title: "Erro",
         description: "Não foi possível atualizar o alerta",
         variant: "destructive"
-      };
+      });
     }
-  };
+  });
 
   const removeAlert = async (id: string) => {
     try {
@@ -229,15 +229,15 @@ export const PriceAlertDashboardLegacy = memo(() => {
       toast({
         title: "Alerta removido",
         description: "O alerta de preço foi removido com sucesso."
-      };
+      });
     } catch (error) {
       toast({
         title: "Erro",
         description: "Não foi possível remover o alerta",
         variant: "destructive"
-      };
+      });
     }
-  };
+  });
 
   const refreshPrices = async () => {
     setIsCheckingPrices(true);
@@ -254,18 +254,18 @@ export const PriceAlertDashboardLegacy = memo(() => {
         toast({
           title: "Preços atualizados!",
           description: `${data.checked_alerts} alertas verificados`
-        };
+        });
       }
     } catch (error) {
       toast({
         title: "Erro",
         description: "Não foi possível atualizar os preços",
         variant: "destructive"
-      };
+      });
     } finally {
       setIsCheckingPrices(false);
     }
-  };
+  });
 
   // Mock price change calculation (will be replaced with real history)
   const getPriceChange = (alert: PriceAlert) => {

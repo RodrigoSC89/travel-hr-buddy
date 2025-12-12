@@ -169,7 +169,7 @@ export class ReflectiveCore {
       strategyConfidences: Array.from(this.strategyConfidences.values()),
       overallLearning,
       timestamp: new Date().toISOString(),
-    };
+    });
 
     // Store reflection report
     await this.storeReflectionReport(report);
@@ -296,7 +296,7 @@ export class ReflectiveCore {
       ],
       confidenceAdjustment: -0.2 * (pattern.frequency / 10), // Reduce confidence
       timestamp: new Date().toISOString(),
-    };
+    });
   }
 
   /**
@@ -523,7 +523,7 @@ export class ReflectiveCore {
       decisions: this.decisionHistory,
       insights: this.insights,
       strategies: Array.from(this.strategyConfidences.values()),
-    };
+    });
   }
 }
 

@@ -201,7 +201,7 @@ Format the response as structured data.`;
       risk_assessment: this.assessRisk(mission, vessels, missionData),
       ai_confidence: aiResponse?.confidence || 0.7,
       created_at: new Date().toISOString()
-    };
+    });
 
     return plan;
   }
@@ -366,7 +366,7 @@ Format the response as structured data.`;
         "No major incidents",
         "Documentation complete"
       ]
-    };
+    });
 
     return criteria[missionType] || criteria.custom;
   }

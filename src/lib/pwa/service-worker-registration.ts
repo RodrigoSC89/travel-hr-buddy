@@ -165,7 +165,7 @@ export function usePWA() {
       e.preventDefault();
       setDeferredPrompt(e);
       setIsInstallable(true);
-    };
+    });
 
     window.addEventListener("beforeinstallprompt", handleBeforeInstall);
 
@@ -187,7 +187,7 @@ export function usePWA() {
       window.removeEventListener("beforeinstallprompt", handleBeforeInstall);
       window.removeEventListener("online", handleOnline);
       window.removeEventListener("offline", handleOffline);
-    };
+    });
   }, []);
 
   const install = async () => {

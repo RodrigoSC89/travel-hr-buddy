@@ -91,7 +91,7 @@ export default function SGSOAuditReviewPage() {
             title: "Erro",
             description: "Não foi possível carregar a auditoria",
             variant: "destructive"
-          };
+          });
         } else if (data) {
           setAudit(data as Audit);
           setItems((data.sgso_audit_items || []).sort((a, b) => a.requirement_number - b.requirement_number));
@@ -103,11 +103,11 @@ export default function SGSOAuditReviewPage() {
           title: "Erro",
           description: "Erro ao buscar auditoria",
           variant: "destructive"
-        };
+        });
       } finally {
         setLoading(false);
       }
-    };
+    });
 
     fetchAudit();
   }, [id, toast]);
@@ -144,7 +144,7 @@ export default function SGSOAuditReviewPage() {
       toast({
         title: "Sucesso",
         description: "Auditoria atualizada com sucesso"
-      };
+      });
     } catch (error) {
       console.error("Error saving:", error);
       console.error("Error saving:", error);
@@ -152,11 +152,11 @@ export default function SGSOAuditReviewPage() {
         title: "Erro",
         description: "Erro ao salvar alterações",
         variant: "destructive"
-      };
+      });
     } finally {
       setSaving(false);
     }
-  };
+  });
 
   const handleExportPDF = async () => {
     if (!contentRef.current) return;
@@ -177,7 +177,7 @@ export default function SGSOAuditReviewPage() {
       toast({
         title: "Sucesso",
         description: "PDF exportado com sucesso"
-      };
+      });
     } catch (error) {
       console.error("Error exporting PDF:", error);
       console.error("Error exporting PDF:", error);
@@ -185,11 +185,11 @@ export default function SGSOAuditReviewPage() {
         title: "Erro",
         description: "Erro ao exportar PDF",
         variant: "destructive"
-      };
+      });
     } finally {
       setExporting(false);
     }
-  };
+  });
 
   if (loading) {
     return (

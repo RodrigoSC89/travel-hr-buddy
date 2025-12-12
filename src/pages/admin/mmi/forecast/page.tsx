@@ -63,11 +63,11 @@ export default function ForecastPage() {
           title: "❌ Erro ao carregar forecasts",
           description: "Não foi possível carregar os forecasts",
           variant: "destructive"
-        };
+        });
       } finally {
         setLoading(false);
       }
-    };
+    });
 
     fetchForecasts();
   }, [toast]);
@@ -145,7 +145,7 @@ export default function ForecastPage() {
           description: forecast.forecast_text,
           priority: priority.value,
         }),
-      };
+      });
 
       const data = await res.json();
 
@@ -153,13 +153,13 @@ export default function ForecastPage() {
         toast({
           title: "✅ OS criada com sucesso!",
           description: `Ordem de Serviço para ${forecast.system_name}`,
-        };
+        });
       } else {
         toast({
           title: "❌ Falha ao gerar OS",
           description: data.error || "Erro desconhecido",
           variant: "destructive",
-        };
+        });
       }
     } catch (error) {
       console.error("Error generating order:", error);
@@ -167,11 +167,11 @@ export default function ForecastPage() {
         title: "❌ Erro ao gerar OS",
         description: "Não foi possível conectar ao servidor",
         variant: "destructive",
-      };
+      });
     } finally {
       setGeneratingOrderId(null);
     }
-  };
+  });
 
   // Export to CSV
   const exportToCSV = () => {
@@ -205,8 +205,8 @@ export default function ForecastPage() {
     toast({
       title: "✅ CSV exportado",
       description: `${filteredForecasts.length} forecast(s) exportado(s)`,
-    };
-  };
+    });
+  });
 
   if (loading) {
     return (

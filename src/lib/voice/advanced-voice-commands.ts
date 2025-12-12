@@ -82,7 +82,7 @@ class AdvancedVoiceEngine {
       if (results.isFinal) {
         this.processCommand(transcript);
       }
-    };
+    });
     
     this.recognition.onerror = (event: { error: string }) => {
       this.updateState({ 
@@ -91,7 +91,7 @@ class AdvancedVoiceEngine {
         isProcessing: false,
       });
       hapticFeedback.trigger("error");
-    };
+    });
   }
   
   private registerDefaultCommands(): void {

@@ -32,15 +32,15 @@ export default function FeatureToggles() {
       toast({
         title: "Feature flag updated",
         description: `${key} is now ${!currentEnabled ? "enabled" : "disabled"}`,
-      };
+      });
     } catch (error) {
       toast({
         title: "Error",
         description: "Failed to update feature flag",
         variant: "destructive",
-      };
+      });
     }
-  };
+  });
 
   if (isLoading) {
     return (

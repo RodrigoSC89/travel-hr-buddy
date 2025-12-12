@@ -34,7 +34,7 @@ export const WelcomeCard: React.FC = () => {
         label: "Gerenciar Usuários",
         action: () => navigate("/admin"),
         variant: "default" as const
-      };
+      });
     }
     
     if (userRole === "hr_manager" || userRole === "admin") {
@@ -43,7 +43,7 @@ export const WelcomeCard: React.FC = () => {
         label: "Relatórios de RH",
         action: () => navigate("/hr"),
         variant: "secondary" as const
-      };
+      });
     }
     
     actions.push({
@@ -61,7 +61,7 @@ export const WelcomeCard: React.FC = () => {
     });
     
     return actions.slice(0, 3); // Limitar a 3 ações
-  };
+  });
 
   return (
     <Card className="border-primary/30 bg-gradient-to-br from-primary/8 via-background to-secondary/8">

@@ -101,9 +101,9 @@ export const CertificateManager: React.FC<CertificateManagerProps> = ({ employee
         title: "Erro",
         description: "Erro ao carregar certificados",
         variant: "destructive"
-      };
+      });
     }
-  };
+  });
 
   const captureFromCamera = async () => {
     try {
@@ -125,16 +125,16 @@ export const CertificateManager: React.FC<CertificateManagerProps> = ({ employee
         toast({
           title: "Foto capturada",
           description: "Foto do certificado capturada com sucesso"
-        };
+        });
       }
     } catch (error) {
       toast({
         title: "Erro na câmera",
         description: "Não foi possível acessar a câmera. Tente fazer upload de um arquivo.",
         variant: "destructive"
-      };
+      });
     }
-  };
+  });
 
   const handleFileSelect = (event: React.ChangeEvent<HTMLInputElement>) => {
     const file = event.target.files?.[0];
@@ -160,7 +160,7 @@ export const CertificateManager: React.FC<CertificateManagerProps> = ({ employee
         title: "Campos obrigatórios",
         description: "Preencha todos os campos e selecione um arquivo",
         variant: "destructive"
-      };
+      });
       return;
     }
 
@@ -188,14 +188,14 @@ export const CertificateManager: React.FC<CertificateManagerProps> = ({ employee
           issue_date: format(newCertificate.issue_date, "yyyy-MM-dd"),
           expiry_date: format(newCertificate.expiry_date, "yyyy-MM-dd"),
           issuer: newCertificate.issuer || null
-        };
+        });
 
       if (insertError) throw insertError;
 
       toast({
         title: "Certificado adicionado",
         description: "Certificado enviado com sucesso"
-      };
+      });
 
       // Reset form
       setNewCertificate({
@@ -204,7 +204,7 @@ export const CertificateManager: React.FC<CertificateManagerProps> = ({ employee
         issuer: "",
         issue_date: null,
         expiry_date: null
-      };
+      });
       setSelectedFile(null);
       setCapturedImage(null);
       setIsAddingCertificate(false);
@@ -215,11 +215,11 @@ export const CertificateManager: React.FC<CertificateManagerProps> = ({ employee
         title: "Erro no upload",
         description: "Erro ao enviar certificado",
         variant: "destructive"
-      };
+      });
     } finally {
       setIsUploading(false);
     }
-  };
+  });
 
   const downloadCertificate = async (certificate: Certificate) => {
     try {
@@ -240,9 +240,9 @@ export const CertificateManager: React.FC<CertificateManagerProps> = ({ employee
         title: "Erro no download",
         description: "Erro ao baixar certificado",
         variant: "destructive"
-      };
+      });
     }
-  };
+  });
 
   const deleteCertificate = async (certificate: Certificate) => {
     try {
@@ -264,7 +264,7 @@ export const CertificateManager: React.FC<CertificateManagerProps> = ({ employee
       toast({
         title: "Certificado removido",
         description: "Certificado removido com sucesso"
-      };
+      });
 
       loadCertificates();
     } catch (error) {
@@ -272,9 +272,9 @@ export const CertificateManager: React.FC<CertificateManagerProps> = ({ employee
         title: "Erro ao remover",
         description: "Erro ao remover certificado",
         variant: "destructive"
-      };
+      });
     }
-  };
+  });
 
   const getStatusBadge = (status: string) => {
     switch (status) {

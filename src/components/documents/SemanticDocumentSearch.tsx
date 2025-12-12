@@ -33,7 +33,7 @@ export const SemanticDocumentSearch = memo(function() {
         title: "Empty query",
         description: "Please enter a search term",
         variant: "destructive",
-      };
+      });
       return;
     }
 
@@ -77,7 +77,7 @@ export const SemanticDocumentSearch = memo(function() {
         return {
           ...doc,
           similarity,
-        };
+        });
       };
 
       // Sort by similarity
@@ -89,17 +89,17 @@ export const SemanticDocumentSearch = memo(function() {
       toast({
         title: "Search complete",
         description: `Found ${resultsWithSimilarity.length} documents in ${searchTime}ms`,
-      };
+      });
     } catch (error: SupabaseError | null) {
       toast({
         title: "Search failed",
         description: error.message,
         variant: "destructive",
-      };
+      });
     } finally {
       setSearching(false);
     }
-  };
+  });
 
   const getCategoryColor = (category?: string) => {
     switch (category) {

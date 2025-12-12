@@ -49,7 +49,7 @@ export const AIInsightsPanel = memo(function({ context }: AIInsightsPanelProps) 
     } finally {
       setLoadingAction(null);
     }
-  };
+  });
 
   const exportInsight = (content: string, title: string) => {
     const blob = new Blob([content], { type: "text/plain" });
@@ -60,7 +60,7 @@ export const AIInsightsPanel = memo(function({ context }: AIInsightsPanelProps) 
     a.click();
     URL.revokeObjectURL(url);
     toast.success("Insight exportado!");
-  };
+  });
 
   const quickActions = [
     {

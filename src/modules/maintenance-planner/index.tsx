@@ -53,28 +53,28 @@ const MaintenancePlanner = () => {
         completed: 8,
         overdue: 3,
         efficiency: 94
-      };
+      });
     } catch (error) {
       console.error("Error fetching maintenance stats:", error);
     } finally {
       setLoading(false);
     }
-  };
+  });
 
   const handleExportWeeklySchedule = async () => {
     toast({
       title: "Exportação",
       description: "Funcionalidade de exportação será implementada com dados reais.",
-    };
-  };
+    });
+  });
 
   const handleJobCreated = (job: unknown) => {
     toast({
       title: "Job Criado via IA",
       description: `${job.nome} - ${job.equipamento_nome}`,
-    };
+    });
     fetchStats();
-  };
+  });
 
   if (loading) {
     return (

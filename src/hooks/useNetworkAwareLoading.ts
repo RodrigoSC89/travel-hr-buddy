@@ -36,7 +36,7 @@ export const useNetworkState = (): NetworkState => {
         isOnline: navigator.onLine,
         saveData: conn.saveData
       });
-    };
+    });
 
     window.addEventListener("online", updateState);
     window.addEventListener("offline", updateState);

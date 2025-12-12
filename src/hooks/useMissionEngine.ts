@@ -178,7 +178,7 @@ export function useMissionEngine(options: UseMissionEngineOptions = {}) {
         completedSteps: [],
         failedSteps: [],
         message: error instanceof Error ? error.message : "Unknown error"
-      };
+      });
     } finally {
       setIsExecuting(false);
     }

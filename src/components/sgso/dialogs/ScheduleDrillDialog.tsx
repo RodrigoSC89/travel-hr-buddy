@@ -73,7 +73,7 @@ export const ScheduleDrillDialog: React.FC<ScheduleDrillDialogProps> = ({
 
   const handleChange = (field: string, value: string) => {
     setFormData(prev => ({ ...prev, [field]: value }));
-  };
+  });
 
   const handleSubmit = async () => {
     if (!date || !formData.type || !formData.coordinator) {
@@ -114,7 +114,7 @@ export const ScheduleDrillDialog: React.FC<ScheduleDrillDialogProps> = ({
     } finally {
       setIsSubmitting(false);
     }
-  };
+  });
 
   return (
     <Dialog open={open} onOpenChange={onOpenChange}>

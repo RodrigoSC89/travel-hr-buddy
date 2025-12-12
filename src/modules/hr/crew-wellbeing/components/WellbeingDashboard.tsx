@@ -80,11 +80,11 @@ export const WellbeingDashboard: React.FC = () => {
         title: "Error",
         description: "Failed to load wellbeing data",
         variant: "destructive",
-      };
+      });
     } finally {
       setLoading(false);
     }
-  };
+  });
 
   const getScoreColor = (score: number) => {
     if (score >= 8) return "text-green-600";

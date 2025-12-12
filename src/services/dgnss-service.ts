@@ -346,7 +346,7 @@ class DGNSSService {
       ra: Math.random() * 360,
       dec: (Math.random() - 0.5) * 180,
       timestamp: Math.floor(now / 1000),
-    };
+    });
   }
 }
 

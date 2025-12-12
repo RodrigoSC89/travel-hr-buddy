@@ -198,7 +198,7 @@ export const PriceAnalyticsDashboard: React.FC = () => {
     } finally {
       setIsLoading(false);
     }
-  };
+  });
 
   const generateMockPriceHistory = () => {
     const data = [];
@@ -209,10 +209,10 @@ export const PriceAnalyticsDashboard: React.FC = () => {
         date: date.toLocaleDateString("pt-BR"),
         viagens: 800 + Math.random() * 400,
         hospedagem: 300 + Math.random() * 200,
-      };
+      });
     }
     return data;
-  };
+  });
 
   const generateMockSavings = () => {
     const months = ["Jan", "Fev", "Mar", "Abr", "Mai", "Jun"];
@@ -276,7 +276,7 @@ export const PriceAnalyticsDashboard: React.FC = () => {
           title: "Sem dados",
           description: "Não há dados para exportar no período selecionado",
           variant: "destructive",
-        };
+        });
         return;
       }
 
@@ -285,18 +285,18 @@ export const PriceAnalyticsDashboard: React.FC = () => {
       toast({
         title: "CSV Exportado",
         description: "Arquivo baixado com sucesso",
-      };
+      });
     } catch (error) {
       console.error("Export error:", error);
       toast({
         title: "Erro na exportação",
         description: "Não foi possível exportar os dados",
         variant: "destructive",
-      };
+      });
     } finally {
       setIsExporting(false);
     }
-  };
+  });
 
   const handleExportPDF = async () => {
     setIsExporting(true);
@@ -311,18 +311,18 @@ export const PriceAnalyticsDashboard: React.FC = () => {
       toast({
         title: "PDF Exportado",
         description: "Arquivo baixado com sucesso",
-      };
+      });
     } catch (error) {
       console.error("Export error:", error);
       toast({
         title: "Erro na exportação",
         description: "Não foi possível exportar o PDF",
         variant: "destructive",
-      };
+      });
     } finally {
       setIsExporting(false);
     }
-  };
+  });
 
   const formatCurrency = (value: number) => `R$ ${value.toLocaleString("pt-BR")}`;
   const formatPercentage = (value: number) => `${value}%`;

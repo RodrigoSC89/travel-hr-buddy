@@ -130,7 +130,7 @@ export class AutoPriorityBalancer {
     return {
       updatedPriorities: priorities,
       shifts,
-    };
+    });
   }
 
   /**

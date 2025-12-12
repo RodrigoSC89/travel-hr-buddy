@@ -37,11 +37,11 @@ export const MyCertificates: React.FC = () => {
         title: "Error loading certificates",
         description: error.message,
         variant: "destructive",
-      };
+      });
     } finally {
       setIsLoading(false);
     }
-  };
+  });
 
   const handleDownload = async (cert: unknown: unknown: unknown) => {
     try {
@@ -73,15 +73,15 @@ export const MyCertificates: React.FC = () => {
       toast({
         title: "Certificate downloaded",
         description: "Your certificate has been downloaded.",
-      };
+      });
     } catch (error: SupabaseError | null) {
       toast({
         title: "Error downloading certificate",
         description: error.message,
         variant: "destructive",
-      };
+      });
     }
-  };
+  });
 
   if (isLoading) {
     return <div className="text-center py-8">Loading certificates...</div>;

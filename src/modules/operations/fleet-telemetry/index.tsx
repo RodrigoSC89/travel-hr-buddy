@@ -127,11 +127,11 @@ export default function FleetTelemetryModule() {
         title: "Erro ao carregar telemetria",
         description: "Não foi possível carregar os dados dos sensores.",
         variant: "destructive"
-      };
+      });
     } finally {
       setLoading(false);
     }
-  };
+  });
 
   const setupRealtimeSubscription = () => {
     const channel = supabase
@@ -159,7 +159,7 @@ export default function FleetTelemetryModule() {
             title: "Novo alerta de manutenção",
             description: payload.new.message,
             variant: "destructive"
-          };
+          });
           loadTelemetryData();
         }
       )

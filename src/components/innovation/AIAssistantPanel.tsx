@@ -172,7 +172,7 @@ export const AIAssistantPanel = memo(() => {
         toast({
           title: "Análise concluída!",
           description: "Nova análise foi gerada com base em sua consulta.",
-        };
+        });
         
         setQuery("");
         fetchAIInsights(); // Refresh insights
@@ -181,11 +181,11 @@ export const AIAssistantPanel = memo(() => {
           title: "Erro na análise",
           description: "Não foi possível processar sua consulta.",
           variant: "destructive",
-        };
+        });
       } finally {
         setIsProcessing(false);
       }
-    };
+    });
   };
 
   return (

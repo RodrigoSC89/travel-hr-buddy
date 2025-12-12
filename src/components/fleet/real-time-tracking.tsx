@@ -200,7 +200,7 @@ const RealTimeTracking: React.FC = () => {
     id: "fleet-real-time-tracking",
     callback: updateVesselPositions,
     interval: 30000,
-  };
+  });
 
   const getStatusColor = (status: string) => {
     switch (status) {
@@ -210,7 +210,7 @@ const RealTimeTracking: React.FC = () => {
     case "emergency": return "bg-destructive text-destructive-foreground";
     default: return "bg-muted text-muted-foreground";
     }
-  };
+  });
 
   const getStatusText = (status: string) => {
     switch (status) {

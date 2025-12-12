@@ -65,10 +65,10 @@ export const InventoryManagement = memo(() => {
         title: "Error loading inventory",
         description: error.message,
         variant: "destructive",
-      };
+      });
     } finally {
       setLoading(false);
-    };
+    });
   };
 
   const getLowStockItems = () => {

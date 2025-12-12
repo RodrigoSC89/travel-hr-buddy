@@ -43,7 +43,7 @@ export default function PreviewValidationDashboard() {
       high: "destructive",
       medium: "default",
       low: "secondary"
-    };
+    });
     return <Badge variant={variants[priority] || "default"}>{priority}</Badge>;
   };
 

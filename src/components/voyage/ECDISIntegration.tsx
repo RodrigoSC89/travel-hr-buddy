@@ -67,7 +67,7 @@ export const ECDISIntegration = memo(function() {
     expiring: ecdisData.filter(e => e.enc_permit_status === "expiring").length,
     expired: ecdisData.filter(e => e.enc_permit_status === "expired").length,
     totalCells: ecdisData.reduce((sum, e) => sum + (e.enc_cells_installed || 0), 0),
-  };
+  });
 
   const complianceRate = stats.total > 0 
     ? ((stats.valid / stats.total) * 100).toFixed(0)

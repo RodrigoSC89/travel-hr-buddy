@@ -528,7 +528,7 @@ class ScenarioSimulator {
       events: this.events,
       decisions: this.decisions,
       duration: this.startTime ? Date.now() - this.startTime : 0
-    };
+    });
   }
 
   /**

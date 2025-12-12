@@ -159,10 +159,10 @@ export const DocumentManagement: React.FC = () => {
         title: "Erro",
         description: "Não foi possível carregar os documentos",
         variant: "destructive"
-      };
+      });
       setIsLoading(false);
     }
-  };
+  });
 
   const loadCategories = async () => {
     try {
@@ -209,15 +209,15 @@ export const DocumentManagement: React.FC = () => {
       toast({
         title: "Documento Adicionado",
         description: `${document.title} foi adicionado com sucesso`
-      };
+      });
     } catch (error) {
       toast({
         title: "Erro",
         description: "Não foi possível adicionar o documento",
         variant: "destructive"
-      };
+      });
     }
-  };
+  });
 
   const handleAddCategory = async () => {
     try {
@@ -232,21 +232,21 @@ export const DocumentManagement: React.FC = () => {
         name: "",
         description: "",
         color: "#3b82f6"
-      };
+      });
       setShowAddCategoryDialog(false);
       
       toast({
         title: "Categoria Criada",
         description: `${category.name} foi criada com sucesso`
-      };
+      });
     } catch (error) {
       toast({
         title: "Erro",
         description: "Não foi possível criar a categoria",
         variant: "destructive"
-      };
+      });
     }
-  };
+  });
 
   const formatFileSize = (bytes: number) => {
     if (bytes === 0) return "0 Bytes";

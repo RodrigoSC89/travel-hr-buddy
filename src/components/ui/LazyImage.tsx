@@ -60,12 +60,12 @@ export const LazyImage = memo(function({
   const handleLoad = () => {
     setIsLoaded(true);
     onLoad?.();
-  };
+  });
 
   const handleError = () => {
     setHasError(true);
     onError?.();
-  };
+  });
 
   return (
     <div

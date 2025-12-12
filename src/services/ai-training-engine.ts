@@ -549,7 +549,7 @@ async function updateLearningProgress({
       averageScore: nextStats.averageScore,
       lastScore: score,
       lastUpdatedAt: timestamp,
-    };
+    });
 
     const basePayload: CrewLearningProgressInsert = {
       crew_member_id: crewMemberId,

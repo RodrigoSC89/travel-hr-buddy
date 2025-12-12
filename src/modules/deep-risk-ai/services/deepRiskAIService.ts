@@ -300,7 +300,7 @@ class DeepRiskAIService {
           confidence: 0,
           trendDirection: "stable",
           recommendation: "Insufficient historical data for prediction",
-        };
+        });
       }
 
       // Calculate trend

@@ -148,7 +148,7 @@ export const localStorageCache = {
       return { count: 0, totalSize: 0 };
     }
   }
-};
+});
 
 // ============================================
 // PART 2: IndexedDB Cache (from offline-cache.ts)
@@ -163,7 +163,7 @@ const STORES = {
   VESSELS: "vessels",
   PENDING_ACTIONS: "pending_actions",
   CONFIG: "config",
-};
+});
 
 class IndexedDBCacheService {
   private db: IDBDatabase | null = null;
@@ -304,7 +304,7 @@ class IndexedDBCacheService {
         } else {
           resolve();
         }
-      };
+      });
       request.onerror = () => reject(request.error);
     });
   }
@@ -332,7 +332,7 @@ class IndexedDBCacheService {
           pending_actions: pendingActions.length,
           cached_data_size: 0,
         });
-      };
+      });
       request.onerror = () => reject(request.error);
     });
   }

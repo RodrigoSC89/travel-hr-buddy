@@ -45,7 +45,7 @@ export const MissionAutonomy = memo(function() {
 
   const handleToggle = (key: keyof typeof settings) => {
     setSettings((prev) => ({ ...prev, [key]: !prev[key] }));
-  };
+  });
 
   const getImpactColor = (impact: string) => {
     switch (impact) {

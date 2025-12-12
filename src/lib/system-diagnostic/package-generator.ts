@@ -247,7 +247,7 @@ async function healthCheck() {
     storage: await checkStorage(),
     offline: await checkOfflineCapability(),
     ai: await checkAIIntegration()
-  };
+  });
   
   return Object.entries(checks).every(([, v]) => v === true);
 }

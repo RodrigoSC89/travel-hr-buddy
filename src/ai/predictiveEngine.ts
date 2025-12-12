@@ -201,7 +201,7 @@ class PredictiveEngine {
         confidence,
         factors,
         predictedAt: new Date(),
-      };
+      });
 
       // Cache the prediction
       this.predictionCache.set(moduleName, prediction);

@@ -58,7 +58,7 @@ export class GlobalErrorBoundary extends Component<Props, State> {
       error: null,
       errorInfo: null,
     });
-  };
+  });
 
   handleReport = (): void => {
     if (this.state.error) {

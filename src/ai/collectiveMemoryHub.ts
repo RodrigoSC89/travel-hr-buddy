@@ -261,7 +261,7 @@ class CollectiveMemoryHub {
         last_sync: new Date().toISOString(),
         entries_synced: entriesSynced,
         status: "synced"
-      };
+      });
 
       if (entriesSynced > 0) {
         logger.debug("CollectiveMemory sync completed", { entriesSynced });

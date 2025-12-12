@@ -386,7 +386,7 @@ export function startMetricCollection(intervalMs: number = 30000): () => void {
     if (metrics.length > 0) {
       anomalyDetectionEngine.recordMetrics(metrics);
     }
-  };
+  });
 
   const intervalId = setInterval(collectMetrics, intervalMs);
   collectMetrics(); // Initial collection

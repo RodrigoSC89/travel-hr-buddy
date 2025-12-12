@@ -55,14 +55,14 @@ export const ExportBIReport = memo(function({ trend, forecast }: { trend: TrendD
         image: { type: "jpeg" as const, quality: 0.98 },
         html2canvas: { scale: 2 },
         jsPDF: { unit: "mm", format: "a4", orientation: "portrait" as const }
-      };
+      });
 
       html2pdf().set(opt).from(content).save().then(() => {
         toast.success("PDF exportado com sucesso!");
       }).catch((error) => {
         logger.error("Error generating PDF", error);
         toast.error("Erro ao gerar PDF. Tente novamente.");
-  };
+  });
     } catch (error) {
       logger.error("Error in handleExport", error);
       toast.error("Erro ao gerar PDF. Tente novamente.");

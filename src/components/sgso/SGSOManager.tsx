@@ -60,7 +60,7 @@ export default function SGSOManager() {
       toast({
         title: "Plano SGSO criado",
         description: "O plano foi criado com sucesso.",
-      };
+      });
       setIsDialogOpen(false);
       setPlanName("");
       setPlanContent("");
@@ -70,9 +70,9 @@ export default function SGSOManager() {
         title: "Erro ao criar plano",
         description: error.message,
         variant: "destructive",
-      };
+      });
     },
-  };
+  });
 
   const getStatusBadge = (status: string) => {
     const variants: Record<string, "default" | "secondary" | "outline"> = {

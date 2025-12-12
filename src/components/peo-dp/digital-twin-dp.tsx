@@ -103,9 +103,9 @@ export const DigitalTwinDP: React.FC = () => {
           return 100;
         }
         return prev + 5;
-  };
+  });
     }, 500);
-  };
+  });
 
   const handleStopSimulation = () => {
     setIsSimulating(false);
@@ -457,6 +457,6 @@ export const DigitalTwinDP: React.FC = () => {
       </Tabs>
     </div>
   );
-});
+};
 
 export default DigitalTwinDP;

@@ -83,7 +83,7 @@ export const ConnectionProvider = memo(function({ children }: { children: ReactN
   useEffect(() => {
     const updateConnection = () => {
       setConnectionInfo(getConnectionInfo());
-    };
+    });
 
     // Listen for online/offline events
     window.addEventListener("online", updateConnection);
@@ -94,8 +94,8 @@ export const ConnectionProvider = memo(function({ children }: { children: ReactN
       connection?: {
         addEventListener: (event: string, handler: () => void) => void;
         removeEventListener: (event: string, handler: () => void) => void;
-      };
-    };
+      });
+    });
 
     if (nav.connection) {
       nav.connection.addEventListener("change", updateConnection);
@@ -158,7 +158,7 @@ export const ConnectionIndicator = memo(function({
     sm: "h-4 w-4",
     md: "h-5 w-5",
     lg: "h-6 w-6",
-  };
+  });
 
   const iconClass = sizeClasses[size];
 
@@ -179,7 +179,7 @@ export const ConnectionIndicator = memo(function({
     default:
       return <Wifi className={cn(iconClass, "text-muted-foreground")} />;
     }
-  };
+  });
 
   const getLabel = () => {
     if (!isOnline) return "Offline";
@@ -190,7 +190,7 @@ export const ConnectionIndicator = memo(function({
     case "poor": return "Fraca";
     default: return "Conectado";
     }
-  };
+  });
 
   return (
     <div className={cn("flex items-center gap-1.5", className)}>
@@ -261,7 +261,7 @@ export function withConnectionAware<P extends object>(
     }
 
     return <Component {...props} connection={connection} />;
-  };
+  });
 }
 
 // Conditional rendering based on connection
@@ -328,5 +328,5 @@ export function useAdaptiveFetch<T>(
     fetch,
     isOnline,
     isSlowConnection,
-  };
+  });
 });

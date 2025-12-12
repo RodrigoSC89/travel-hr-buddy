@@ -110,11 +110,11 @@ const SmartAlerts = () => {
         title: "Error",
         description: "Failed to load smart alerts",
         variant: "destructive",
-      };
+      });
     } finally {
       setLoading(false);
     }
-  };
+  });
 
   const loadAIInsights = async () => {
     try {
@@ -131,7 +131,7 @@ const SmartAlerts = () => {
           predictedIssues,
           totalAlerts: alerts.filter(a => !a.resolved).length
         }
-      };
+      });
       
       if (response.message) {
         setAiInsight(response.message);
@@ -139,7 +139,7 @@ const SmartAlerts = () => {
     } catch (error) {
       console.error("Error loading AI insights:", error);
     }
-  };
+  });
 
   const handleAcknowledge = async (alertId: string) => {
     try {
@@ -153,7 +153,7 @@ const SmartAlerts = () => {
       toast({
         title: "Success",
         description: "Alert acknowledged",
-      };
+      });
 
       loadSmartAlerts();
     } catch (error) {
@@ -162,9 +162,9 @@ const SmartAlerts = () => {
         title: "Error",
         description: "Failed to acknowledge alert",
         variant: "destructive",
-      };
+      });
     }
-  };
+  });
 
   const handleResolve = async (alertId: string) => {
     try {
@@ -178,7 +178,7 @@ const SmartAlerts = () => {
       toast({
         title: "Success",
         description: "Alert resolved",
-      };
+      });
 
       loadSmartAlerts();
     } catch (error) {
@@ -187,9 +187,9 @@ const SmartAlerts = () => {
         title: "Error",
         description: "Failed to resolve alert",
         variant: "destructive",
-      };
+      });
     }
-  };
+  });
 
   const getLevelBadge = (level: string, predicted: boolean) => {
     if (predicted) {

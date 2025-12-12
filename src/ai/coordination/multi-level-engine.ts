@@ -463,7 +463,7 @@ export class MultiLevelCoordinationEngine {
         overriddenLevel: resolution.overriddenLevel,
       },
       outcome: resolution.rationale,
-    };
+    });
 
     this.logs.push(log);
 
@@ -492,7 +492,7 @@ export class MultiLevelCoordinationEngine {
       eventType,
       details,
       outcome: `${eventType} at ${level} level`,
-    };
+    });
 
     this.logs.push(log);
 
@@ -548,7 +548,7 @@ export class MultiLevelCoordinationEngine {
       tactical: this.getDecisions("tactical"),
       conflicts: this.conflicts,
       logs: this.logs,
-    };
+    });
   }
 }
 

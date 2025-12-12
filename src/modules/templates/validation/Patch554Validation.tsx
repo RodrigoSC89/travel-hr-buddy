@@ -35,13 +35,13 @@ export default function Patch554Validation() {
         templateEditable: !templatesError || !aiTemplatesError,
         variablesRendered: !templatesError,
         pdfExport: true, // PDF export is available via jspdf library
-      };
+      });
     } catch (error) {
       console.error("Validation error:", error);
     } finally {
       setLoading(false);
     }
-  };
+  });
 
   const allPassed = Object.values(checks).every(Boolean);
 

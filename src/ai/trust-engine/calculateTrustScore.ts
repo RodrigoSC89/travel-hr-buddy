@@ -166,7 +166,7 @@ export async function calculateTrustScore(input: TrustInput): Promise<TrustScore
         incidentHistory,
       },
       recommendation,
-    };
+    });
   } catch (error) {
     console.error("Error calculating trust score:", error);
     console.error("Error calculating trust score:", error);

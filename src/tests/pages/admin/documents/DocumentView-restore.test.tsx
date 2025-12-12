@@ -34,7 +34,7 @@ const mockSupabase = {
       error: null,
     })),
   },
-};
+});
 
 // Mock supabase client
 vi.mock("@/integrations/supabase/client", () => ({

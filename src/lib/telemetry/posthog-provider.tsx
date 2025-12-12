@@ -45,7 +45,7 @@ export const TelemetryProvider = memo(function({ children }: TelemetryProviderPr
     isEnabled: status.enabled,
     hasConsent: status.hasConsent,
     status,
-  };
+  });
 
   return (
     <TelemetryContext.Provider value={value}>

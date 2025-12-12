@@ -63,11 +63,11 @@ export const ShipmentTracking = memo(() => {
         title: "Error loading shipments",
         description: error.message,
         variant: "destructive",
-      };
+      });
     } finally {
       setLoading(false);
     }
-  };
+  });
 
   const getStatusIcon = (status: string) => {
     switch (status) {
@@ -325,7 +325,7 @@ export const ShipmentTracking = memo(() => {
                               toast({
                                 title: "Copied",
                                 description: "Tracking number copied to clipboard",
-                              };
+                              });
                             }}
                           >
                             Copy

@@ -76,13 +76,13 @@ export const SmartSuggestionCard = memo(function({
   const handleDismiss = () => {
     trigger("light");
     onDismiss?.(suggestion.id);
-  };
+  });
   
   const handleAction = () => {
     trigger("success");
     suggestion.action?.();
     onAction?.();
-  };
+  });
   
   if (variant === "compact") {
     return (

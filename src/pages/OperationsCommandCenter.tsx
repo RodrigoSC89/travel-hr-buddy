@@ -267,7 +267,7 @@ export default function OperationsCommandCenter() {
         fuelConsumption: Math.floor(Math.random() * 5000) + 10000,
         maintenancePending: maintenanceCount || 0,
         complianceRate: 95 + Math.floor(Math.random() * 5),
-      };
+      });
 
       setVesselDistribution([
         { name: "Em Operação", value: vesselsInOperation, color: "hsl(var(--chart-1))" },

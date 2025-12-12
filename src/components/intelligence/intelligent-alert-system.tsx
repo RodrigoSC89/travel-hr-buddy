@@ -276,11 +276,11 @@ export const IntelligentAlertSystem = memo(() => {
         title: "Erro",
         description: "Erro ao carregar dados inteligentes",
         variant: "destructive"
-      };
+      });
     } finally {
       setLoading(false);
     }
-  };
+  });
 
   const setupRealTimeUpdates = () => {
     // Set up real-time updates for critical alerts

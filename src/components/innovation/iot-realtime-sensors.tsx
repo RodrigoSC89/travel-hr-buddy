@@ -138,7 +138,7 @@ const IoTRealtimeSensors: React.FC = () => {
     case "offline": return "text-muted-foreground";
     default: return "text-muted-foreground";
     }
-  };
+  });
 
   const getStatusBadge = (status: string) => {
     switch (status) {

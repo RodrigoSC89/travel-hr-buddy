@@ -146,7 +146,7 @@ export const usePerformanceMonitor = (options?: UsePerformanceMonitorOptions) =>
       observersRef.current.forEach(observer => observer.disconnect());
       observersRef.current = [];
     }
-  };
+  });
 };
 
 /**

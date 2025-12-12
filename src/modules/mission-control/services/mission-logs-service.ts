@@ -147,7 +147,7 @@ export class MissionLogsService {
       createdBy: data.created_by,
       createdAt: data.created_at,
       updatedAt: data.updated_at
-    };
+    });
   }
 }
 

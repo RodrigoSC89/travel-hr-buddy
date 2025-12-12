@@ -76,11 +76,11 @@ export const WellbeingHistory: React.FC = () => {
         title: "Error",
         description: "Failed to load wellbeing history",
         variant: "destructive",
-      };
+      });
     } finally {
       setLoading(false);
     }
-  };
+  });
 
   if (loading) {
     return (

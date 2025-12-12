@@ -290,9 +290,9 @@ Por favor, forneça mais detalhes sobre a situação específica que está enfre
         title: `ASOG: ${scenario.category}`,
         description: scenario.description,
         variant: level === "red" ? "destructive" : "default"
-      };
+      });
     }
-  };
+  });
 
   const quickActions = [
     { label: "Status ASOG", query: "Qual o status atual do ASOG?" },

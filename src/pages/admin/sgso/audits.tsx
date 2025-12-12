@@ -114,7 +114,7 @@ export default function SGSOAudits() {
           action: "sgso_audit_created",
           resource: "sgso_audits",
           details: { title: formData.title },
-        };
+        });
 
         toast.success("Audit created successfully");
       }
@@ -127,13 +127,13 @@ export default function SGSOAudits() {
         criticality: "minor",
         responsible: "",
         status: "open",
-      };
+      });
       loadAudits();
     } catch (error) {
       logger.error("Failed to save audit", error);
       toast.error("Failed to save audit");
     }
-  };
+  });
 
   const handleDelete = async (id: string) => {
     if (!confirm("Are you sure you want to delete this audit?")) return;
@@ -148,7 +148,7 @@ export default function SGSOAudits() {
         action: "sgso_audit_deleted",
         resource: "sgso_audits",
         details: { audit_id: id },
-      };
+      });
 
       toast.success("Audit deleted successfully");
       loadAudits();
@@ -156,7 +156,7 @@ export default function SGSOAudits() {
       logger.error("Failed to delete audit", error);
       toast.error("Failed to delete audit");
     }
-  };
+  });
 
   const handleEdit = (audit: Audit) => {
     setFormData(audit);

@@ -59,7 +59,7 @@ export const OrganizationStatsCards: React.FC = () => {
         activeUsers: usersCount || 0,
         vessels: vesselsCount || 0,
         storageUsed: usageData?.storage_used_gb || 0
-      };
+      });
 
     } catch (error) {
       logger.error("Error fetching organization stats:", error);
@@ -67,11 +67,11 @@ export const OrganizationStatsCards: React.FC = () => {
         title: "Erro ao carregar estatísticas",
         description: "Não foi possível carregar os dados da organização",
         variant: "destructive"
-      };
+      });
     } finally {
       setIsLoading(false);
     }
-  };
+  });
 
   if (!currentOrganization) {
     return null;

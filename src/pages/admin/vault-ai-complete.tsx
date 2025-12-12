@@ -97,7 +97,7 @@ export default function VaultAIComplete() {
         title: "Atenção",
         description: "Digite uma consulta de busca",
         variant: "destructive"
-      };
+      });
       return;
     }
 
@@ -129,7 +129,7 @@ export default function VaultAIComplete() {
       toast({
         title: "Busca Concluída",
         description: `${results.length} resultados encontrados em ${searchDuration}ms`
-      };
+      });
 
       loadSearchLogs();
     } catch (error) {
@@ -138,11 +138,11 @@ export default function VaultAIComplete() {
         title: "Erro",
         description: "Falha ao realizar busca",
         variant: "destructive"
-      };
+      });
     } finally {
       setLoading(false);
     }
-  };
+  });
 
   const performMockVectorSearch = (query: string, docs: VaultDocument[]): SearchResult[] => {
     const queryLower = query.toLowerCase();

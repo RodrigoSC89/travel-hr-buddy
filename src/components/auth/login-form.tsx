@@ -40,12 +40,12 @@ export const LoginForm: React.FC = () => {
           title: "Erro no login",
           description: error.message,
           variant: "destructive",
-        };
+        });
       } else {
         toast({
           title: "Login realizado",
           description: "Bem-vindo de volta!",
-        };
+        });
         navigate("/");
       }
     } catch (err) {
@@ -53,7 +53,7 @@ export const LoginForm: React.FC = () => {
     } finally {
       setIsLoading(false);
     }
-  };
+  });
 
   return (
     <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-primary/10 via-background to-secondary/10 p-4">

@@ -32,7 +32,7 @@ export class AudioRecorder {
       this.processor.onaudioprocess = (e) => {
         const inputData = e.inputBuffer.getChannelData(0);
         this.onAudioData(new Float32Array(inputData));
-      };
+      });
       
       this.source.connect(this.processor);
       this.processor.connect(this.audioContext.destination);
@@ -222,7 +222,7 @@ export class RealtimeChat {
       const answer = {
         type: "answer" as RTCSdpType,
         sdp: await sdpResponse.text(),
-      };
+      });
       
       await this.pc.setRemoteDescription(answer);
       logger.info("WebRTC connection established");
@@ -281,7 +281,7 @@ export class RealtimeChat {
           }
         ]
       }
-    };
+    });
 
     this.dc.send(JSON.stringify(event));
     this.dc.send(JSON.stringify({type: "response.create"}));

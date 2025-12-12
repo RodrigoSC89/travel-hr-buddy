@@ -93,11 +93,11 @@ export const TemplateLibrary: React.FC = () => {
         title: "Error",
         description: "Failed to load templates",
         variant: "destructive"
-      };
+      });
     } finally {
       setLoading(false);
     }
-  };
+  });
 
   const loadVersions = async (templateId: string) => {
     try {
@@ -172,7 +172,7 @@ export const TemplateLibrary: React.FC = () => {
       toast({
         title: "Success",
         description: "Template created successfully"
-      };
+      });
 
       setIsCreateOpen(false);
       resetForm();
@@ -183,9 +183,9 @@ export const TemplateLibrary: React.FC = () => {
         title: "Error",
         description: "Failed to create template",
         variant: "destructive"
-      };
+      });
     }
-  };
+  });
 
   const handleDelete = async (id: string) => {
     if (!confirm("Are you sure you want to delete this template?")) return;
@@ -201,7 +201,7 @@ export const TemplateLibrary: React.FC = () => {
       toast({
         title: "Success",
         description: "Template deleted successfully"
-      };
+      });
 
       loadTemplates();
     } catch (error) {
@@ -210,9 +210,9 @@ export const TemplateLibrary: React.FC = () => {
         title: "Error",
         description: "Failed to delete template",
         variant: "destructive"
-      };
+      });
     }
-  };
+  });
 
   const openGenerateDialog = (template: Template) => {
     setSelectedTemplate(template);
@@ -268,7 +268,7 @@ export const TemplateLibrary: React.FC = () => {
       toast({
         title: "Success",
         description: "PDF generated successfully"
-      };
+      });
 
       setIsGenerateOpen(false);
     } catch (error) {
@@ -277,9 +277,9 @@ export const TemplateLibrary: React.FC = () => {
         title: "Error",
         description: "Failed to generate PDF",
         variant: "destructive"
-      };
+      });
     }
-  };
+  });
 
   const resetForm = () => {
     setFormData({
@@ -288,8 +288,8 @@ export const TemplateLibrary: React.FC = () => {
       category: "general",
       content: "",
       is_public: false
-    };
-  };
+    });
+  });
 
   const getCategoryBadge = (category: string) => {
     const variants: Record<string, string> = {

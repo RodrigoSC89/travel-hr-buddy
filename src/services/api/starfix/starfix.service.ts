@@ -129,7 +129,7 @@ export async function registerVesselInStarFix(vessel: StarFixVessel): Promise<{ 
     return { 
       success: false, 
       error: error instanceof Error ? error.message : "Unknown error" 
-    };
+    });
   }
 }
 

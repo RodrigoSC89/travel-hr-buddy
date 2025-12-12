@@ -35,7 +35,7 @@ export const AddCrewDialog = memo(function({ open, onOpenChange, onSuccess }: Ad
         title: "Erro",
         description: "Nome completo é obrigatório",
         variant: "destructive",
-      };
+      });
       return;
     }
 
@@ -61,7 +61,7 @@ export const AddCrewDialog = memo(function({ open, onOpenChange, onSuccess }: Ad
       toast({
         title: "Sucesso",
         description: "Tripulante adicionado com sucesso!",
-      };
+      });
 
       setFormData({
         full_name: "",
@@ -72,7 +72,7 @@ export const AddCrewDialog = memo(function({ open, onOpenChange, onSuccess }: Ad
         employee_id: "",
         status: "active",
         join_date: new Date().toISOString().split("T")[0],
-      };
+      });
 
       onSuccess();
       onOpenChange(false);
@@ -82,11 +82,11 @@ export const AddCrewDialog = memo(function({ open, onOpenChange, onSuccess }: Ad
         title: "Erro",
         description: "Falha ao adicionar tripulante",
         variant: "destructive",
-      };
+      });
     } finally {
       setIsSubmitting(false);
     }
-  };
+  });
 
   return (
     <Dialog open={open} onOpenChange={onOpenChange}>

@@ -106,7 +106,7 @@ export const EmployeeDossierSummary: React.FC = () => {
           rank: nullToUndefined(newMember.rank) || "Ordinary Seaman",
           status: newMember.status || "available",
           experience_years: newMember.experience_years || 0
-        };
+        });
         setCrewMember(mappedNewMember);
       } else {
         const mappedMember: CrewMember = {
@@ -167,11 +167,11 @@ export const EmployeeDossierSummary: React.FC = () => {
         title: "Erro",
         description: "Erro ao carregar dados do dossiê",
         variant: "destructive"
-      };
+      });
     } finally {
       setLoading(false);
     }
-  };
+  });
 
   const getStatusColor = (status: string) => {
     switch (status) {

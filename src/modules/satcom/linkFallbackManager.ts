@@ -352,7 +352,7 @@ class LinkFallbackManager {
       ...event,
       id: `fallback_${Date.now()}_${Math.random().toString(36).slice(2, 9)}`,
       timestamp: new Date()
-    };
+    });
 
     this.eventHistory.unshift(newEvent);
 

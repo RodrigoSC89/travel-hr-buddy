@@ -133,19 +133,19 @@ export const DocumentValidator: React.FC<DocumentValidatorProps> = ({
         title: result.isValid ? "Documento válido" : "Documento precisa de revisão",
         description: `Confiança: ${result.confidence}%`,
         variant: result.isValid ? "default" : "destructive"
-      };
+      });
 
     } catch (error) {
       toast({
         title: "Erro na validação",
         description: "Não foi possível validar o documento",
         variant: "destructive"
-      };
+      });
     } finally {
       setIsValidating(false);
       setValidationProgress(0);
     }
-  };
+  });
 
   // Convert file to base64
   const fileToBase64 = (file: File): Promise<string> => {

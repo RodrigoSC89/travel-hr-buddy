@@ -78,7 +78,7 @@ class AutonomyLayer {
             success: true,
             action: "restart",
             description: `Module ${event.module} restarted successfully`,
-          };
+          });
         } catch (error) {
           logger.error("[AutonomyLayer] Failed to restart module", {
             module: event.module,
@@ -90,7 +90,7 @@ class AutonomyLayer {
             action: "restart",
             description: `Failed to restart module ${event.module}`,
             requiresHumanReview: true,
-          };
+          });
         }
       },
     });
@@ -122,14 +122,14 @@ class AutonomyLayer {
             success: true,
             action: "notify",
             description: "Notification sent for high latency",
-          };
+          });
         } catch (error) {
           logger.error("[AutonomyLayer] Failed to send notification", { error });
           return {
             success: false,
             action: "notify",
             description: "Failed to send notification",
-          };
+          });
         }
       },
     });
@@ -170,7 +170,7 @@ class AutonomyLayer {
             action: "disable",
             description: `Feature ${event.data.feature} in ${event.module} disabled`,
             requiresHumanReview: true,
-          };
+          });
         } catch (error) {
           logger.error("[AutonomyLayer] Failed to disable feature", { error });
           return {
@@ -178,7 +178,7 @@ class AutonomyLayer {
             action: "disable",
             description: "Failed to disable feature",
             requiresHumanReview: true,
-          };
+          });
         }
       },
     });
@@ -206,7 +206,7 @@ class AutonomyLayer {
             success: true,
             action: "fallback",
             description: `Fallback route activated for ${event.module}`,
-          };
+          });
         } catch (error) {
           logger.error("[AutonomyLayer] Failed to activate fallback", { error });
           return {
@@ -214,7 +214,7 @@ class AutonomyLayer {
             action: "fallback",
             description: "Failed to activate fallback route",
             requiresHumanReview: true,
-          };
+          });
         }
       },
     });
@@ -239,14 +239,14 @@ class AutonomyLayer {
             success: true,
             action: "cache_flush",
             description: `Cache flushed for ${event.module}`,
-          };
+          });
         } catch (error) {
           logger.error("[AutonomyLayer] Failed to flush cache", { error });
           return {
             success: false,
             action: "cache_flush",
             description: "Failed to flush cache",
-          };
+          });
         }
       },
     });

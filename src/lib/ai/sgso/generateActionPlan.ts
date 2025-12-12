@@ -136,7 +136,7 @@ function generateMockActionPlan(incident: SGSOIncident): SGSOActionPlan {
       preventive_action: "Estabelecer programa de manutenção preventiva baseado em horas de operação e condição de equipamentos.",
       recommendation: "Implementar sistema CMMS (Computerized Maintenance Management System) para rastreamento completo de manutenções.",
     },
-  };
+  });
 
   // Get response for category or use default
   const plan = responses[sgso_category] || {

@@ -106,7 +106,7 @@ class OfflineQueue {
     this.listeners.push(callback);
     return () => {
       this.listeners = this.listeners.filter(l => l !== callback);
-    };
+    });
   }
 
   private async notifyChange(): Promise<void> {
@@ -263,7 +263,7 @@ export function useOfflineData<T>(options: OfflineDataOptions<T>) {
       if (isStale) {
         fetchData(false);
       }
-    };
+    });
 
     window.addEventListener("online", handleOnline);
     return () => window.removeEventListener("online", handleOnline);

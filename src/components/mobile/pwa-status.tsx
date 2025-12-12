@@ -81,34 +81,34 @@ export const PWAStatus: React.FC = () => {
       toast({
         title: "App Instalado",
         description: "Nautilus One foi instalado com sucesso!",
-      };
+      });
     }
     
     setDeferredPrompt(null);
     setIsInstallable(false);
-  };
+  });
 
   const handleSync = async () => {
     toast({
       title: "Sincronizando",
       description: "Sincronizando dados offline...",
-    };
+    });
     
     await syncPendingChanges();
     
     toast({
       title: "Sincronização Concluída",
       description: "Dados sincronizados com sucesso!",
-    };
-  };
+    });
+  });
 
   const handleClearCache = async () => {
     await clearCache();
     toast({
       title: "Cache Limpo",
       description: "Cache local foi limpo com sucesso!",
-    };
-  };
+    });
+  });
 
   const getDeviceType = () => {
     const userAgent = navigator.userAgent;

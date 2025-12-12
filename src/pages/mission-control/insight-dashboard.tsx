@@ -80,18 +80,18 @@ export default function InsightDashboard() {
       toast({
         title: "Relatório Gerado",
         description: "Análise de IA concluída com sucesso",
-      };
+      });
     } catch (error) {
       console.error("Erro ao gerar relatório:", error);
       toast({
         title: "Erro",
         description: "Falha ao gerar relatório com IA",
         variant: "destructive"
-      };
+      });
     } finally {
       setIsGenerating(false);
     }
-  };
+  });
 
   const downloadReport = () => {
     const reportContent = `
@@ -132,15 +132,15 @@ ${logs.slice(0, 10).map(log =>
     toast({
       title: "Relatório Baixado",
       description: "Arquivo salvo com sucesso",
-    };
-  };
+    });
+  });
 
   const sendReportByEmail = async () => {
     toast({
       title: "Enviando Relatório",
       description: "Funcionalidade em desenvolvimento (Supabase Edge Function)",
-    };
-  };
+    });
+  });
 
   // Chart colors
   const COLORS = ["#3b82f6", "#10b981", "#f59e0b", "#ef4444", "#8b5cf6"];

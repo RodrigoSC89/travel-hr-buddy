@@ -68,7 +68,7 @@ export interface SpaceWeatherStatus {
     latitude: number;
     longitude: number;
     altitude_m: number;
-  };
+  });
   analysis_window_hours: number;
 }
 
@@ -307,7 +307,7 @@ export function useDPGateStatus(latitude: number, longitude: number, hours = 6) 
     status: status?.dp_gate || "UNKNOWN",
     loading,
     error,
-  };
+  });
 }
 
 /**
@@ -327,7 +327,7 @@ export function useKpIndex(refreshInterval = 10 * 60 * 1000) {
     loading,
     error,
     lastUpdate,
-  };
+  });
 }
 
 /**
@@ -355,5 +355,5 @@ export function usePDOPTimeline(
     loading,
     error,
     lastUpdate,
-  };
+  });
 }

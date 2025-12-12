@@ -166,7 +166,7 @@ export const CollectiveDashboard: React.FC = () => {
     logger.info("[CollectiveDashboard] Exporting PDF report...");
     // In real implementation, this would generate a PDF
     alert("PDF export feature - would generate comprehensive report");
-  };
+  });
 
   const getStatusColor = (status: string): string => {
     switch (status) {

@@ -38,17 +38,17 @@ export default function CodeHealth() {
       toast({
         title: "Analysis Complete",
         description: `Overall Grade: ${result.grade} (${result.overallScore}/100)`,
-      };
+      });
     } catch (error) {
       toast({
         title: "Analysis Failed",
         description: "Unable to complete code health analysis",
         variant: "destructive"
-      };
+      });
     } finally {
       setIsAnalyzing(false);
     }
-  };
+  });
 
   const getGradeColor = (grade: string) => {
     switch (grade) {

@@ -53,11 +53,11 @@ export default function UserManagementRBAC() {
         title: "Error",
         description: "Failed to load user groups",
         variant: "destructive",
-      };
+      });
     } finally {
       setLoading(false);
     }
-  };
+  });
 
   const fetchAuditLogs = async () => {
     setLoading(true);
@@ -76,11 +76,11 @@ export default function UserManagementRBAC() {
         title: "Error",
         description: "Failed to load audit logs",
         variant: "destructive",
-      };
+      });
     } finally {
       setLoading(false);
     }
-  };
+  });
 
   const createGroup = async (name: string, description: string) => {
     try {
@@ -93,7 +93,7 @@ export default function UserManagementRBAC() {
       toast({
         title: "Success",
         description: "User group created successfully",
-      };
+      });
       fetchGroups();
     } catch (error) {
       logger.error("Error creating group:", error);
@@ -101,9 +101,9 @@ export default function UserManagementRBAC() {
         title: "Error",
         description: "Failed to create user group",
         variant: "destructive",
-      };
+      });
     }
-  };
+  });
 
   const addUserToGroup = async (userId: string, groupId: string) => {
     try {
@@ -117,16 +117,16 @@ export default function UserManagementRBAC() {
       toast({
         title: "Success",
         description: "User added to group successfully",
-      };
+      });
     } catch (error) {
       logger.error("Error adding user to group:", error);
       toast({
         title: "Error",
         description: "Failed to add user to group",
         variant: "destructive",
-      };
+      });
     }
-  };
+  });
 
   return (
     <div className="container mx-auto p-6 space-y-6">

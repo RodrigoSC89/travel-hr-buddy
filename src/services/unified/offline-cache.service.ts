@@ -201,7 +201,7 @@ class IndexedDBCache {
           store.put(action);
         }
         resolve();
-      };
+      });
       request.onerror = () => reject(request.error);
     });
   }
@@ -220,7 +220,7 @@ class IndexedDBCache {
           pending_actions: pendingActions.length,
           cached_data_size: 0,
         });
-      };
+      });
       request.onerror = () => reject(request.error);
     });
   }
@@ -362,4 +362,4 @@ export const offlineCache = localStorageCache;
 export default {
   indexedDB: indexedDBCache,
   localStorage: localStorageCache,
-};
+});

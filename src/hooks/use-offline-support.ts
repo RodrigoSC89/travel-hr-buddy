@@ -162,7 +162,7 @@ export function useOfflineData<T>(
       if (isStale) {
         fetchData(false);
       }
-    };
+    });
 
     window.addEventListener("online", handleOnline);
     return () => window.removeEventListener("online", handleOnline);

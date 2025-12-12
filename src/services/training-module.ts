@@ -207,7 +207,7 @@ export class TrainingModuleService {
       passed_count: passedCount,
       pass_rate: totalCompletions > 0 ? (passedCount / totalCompletions) * 100 : 0,
       average_score: averageScore
-    };
+    });
   }
 
   /**

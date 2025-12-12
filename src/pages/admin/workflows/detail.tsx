@@ -132,16 +132,16 @@ export default function WorkflowDetailPage() {
       toast({
         title: "Sucesso",
         description: "PDF exportado com sucesso!",
-      };
+      });
     } catch (error) {
       console.error("Error exporting PDF:", error);
       toast({
         title: "Erro",
         description: "Não foi possível exportar o PDF",
         variant: "destructive",
-      };
+      });
     }
-  };
+  });
 
   async function fetchWorkflow() {
     if (!id) return;
@@ -162,7 +162,7 @@ export default function WorkflowDetailPage() {
         title: "Erro",
         description: "Não foi possível carregar o fluxo de trabalho",
         variant: "destructive"
-      };
+      });
     } finally {
       setIsLoading(false);
     }
@@ -200,7 +200,7 @@ export default function WorkflowDetailPage() {
         title: "Erro",
         description: "Não foi possível carregar as etapas",
         variant: "destructive"
-      };
+      });
     }
   }
 
@@ -220,7 +220,7 @@ export default function WorkflowDetailPage() {
           position: steps.length,
           assigned_to: user?.id,
           created_by: user?.id
-        };
+        });
       
       if (error) throw error;
       
@@ -228,7 +228,7 @@ export default function WorkflowDetailPage() {
       toast({
         title: "Sucesso",
         description: "Tarefa adicionada com sucesso!"
-      };
+      });
       fetchSteps();
     } catch (error) {
       console.error("Error adding step:", error);
@@ -236,7 +236,7 @@ export default function WorkflowDetailPage() {
         title: "Erro",
         description: "Não foi possível adicionar a tarefa",
         variant: "destructive"
-      };
+      });
     } finally {
       setIsCreating(false);
     }
@@ -268,7 +268,7 @@ export default function WorkflowDetailPage() {
         toast({
           title: "Sucesso",
           description: "Tarefa atualizada com sucesso!"
-        };
+        });
       } else {
         // Create new step
         const { error } = await supabase
@@ -283,14 +283,14 @@ export default function WorkflowDetailPage() {
             due_date: taskForm.due_date || null,
             priority: taskForm.priority,
             created_by: user?.id
-          };
+          });
         
         if (error) throw error;
         
         toast({
           title: "Sucesso",
           description: "Tarefa criada com sucesso!"
-        };
+        });
       }
       
       setIsDialogOpen(false);
@@ -303,7 +303,7 @@ export default function WorkflowDetailPage() {
         title: "Erro",
         description: "Não foi possível salvar a tarefa",
         variant: "destructive"
-      };
+      });
     } finally {
       setIsCreating(false);
     }
@@ -321,7 +321,7 @@ export default function WorkflowDetailPage() {
       toast({
         title: "Sucesso",
         description: "Tarefa excluída com sucesso!"
-      };
+      });
       fetchSteps();
     } catch (error) {
       console.error("Error deleting step:", error);
@@ -329,7 +329,7 @@ export default function WorkflowDetailPage() {
         title: "Erro",
         description: "Não foi possível excluir a tarefa",
         variant: "destructive"
-      };
+      });
     } finally {
       setDeleteStepId(null);
     }
@@ -343,7 +343,7 @@ export default function WorkflowDetailPage() {
       assigned_to: "",
       due_date: "",
       priority: "medium"
-    };
+    });
   }
 
   function openCreateDialog() {
@@ -377,7 +377,7 @@ export default function WorkflowDetailPage() {
       toast({
         title: "Sucesso",
         description: "Status atualizado com sucesso!"
-      };
+      });
       fetchSteps();
     } catch (error) {
       console.error("Error updating step status:", error);
@@ -385,7 +385,7 @@ export default function WorkflowDetailPage() {
         title: "Erro",
         description: "Não foi possível atualizar o status",
         variant: "destructive"
-      };
+      });
     }
   }
 
@@ -418,7 +418,7 @@ export default function WorkflowDetailPage() {
       toast({
         title: "Sucesso",
         description: `Tarefa movida para ${targetStatus.replace("_", " ")}!`
-      };
+      });
       fetchSteps();
     } catch (error) {
       console.error("Error updating step status:", error);
@@ -426,7 +426,7 @@ export default function WorkflowDetailPage() {
         title: "Erro",
         description: "Não foi possível mover a tarefa",
         variant: "destructive"
-      };
+      });
     } finally {
       setDraggedStep(null);
     }
@@ -446,14 +446,14 @@ export default function WorkflowDetailPage() {
       toast({
         title: "Sucesso",
         description: "Título atualizado com sucesso!"
-      };
+      });
     } catch (error) {
       console.error("Error updating step title:", error);
       toast({
         title: "Erro",
         description: "Não foi possível atualizar o título",
         variant: "destructive"
-      };
+      });
     }
   }
 
@@ -461,7 +461,7 @@ export default function WorkflowDetailPage() {
     if (e.key === "Enter") {
       addStep();
     }
-  };
+  });
 
   useEffect(() => {
     fetchWorkflow();

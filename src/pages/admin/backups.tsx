@@ -66,11 +66,11 @@ export default function BackupsPage() {
         title: "Error",
         description: "Failed to load backups",
         variant: "destructive",
-      };
+      });
     } finally {
       setLoading(false);
     }
-  };
+  });
 
   const loadStats = async () => {
     try {
@@ -92,7 +92,7 @@ export default function BackupsPage() {
       toast({
         title: "Backup Started",
         description: "Manual backup is being created...",
-      };
+      });
 
       const { data: { session } } = await supabase.auth.getSession();
       if (!session) {
@@ -119,7 +119,7 @@ export default function BackupsPage() {
       toast({
         title: "Success",
         description: "Backup completed successfully",
-      };
+      });
 
       loadBackups();
       loadStats();
@@ -128,11 +128,11 @@ export default function BackupsPage() {
         title: "Error",
         description: error instanceof Error ? error.message : "Failed to trigger backup",
         variant: "destructive",
-      };
+      });
     } finally {
       setTriggering(false);
     }
-  };
+  });
 
   const downloadBackup = async (backup: BackupSnapshot) => {
     try {
@@ -159,15 +159,15 @@ export default function BackupsPage() {
       toast({
         title: "Success",
         description: "Backup downloaded successfully",
-      };
+      });
     } catch (error) {
       toast({
         title: "Error",
         description: "Failed to download backup",
         variant: "destructive",
-      };
+      });
     }
-  };
+  });
 
   const formatBytes = (bytes: number): string => {
     if (bytes === 0) return "0 Bytes";

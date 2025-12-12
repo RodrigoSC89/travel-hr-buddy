@@ -400,7 +400,7 @@ class AdaptiveMetricsEngine {
       timeoutDuration: this.parameters.get("timeoutDuration")!,
       cacheExpiry: this.parameters.get("cacheExpiry")!,
       maxConcurrency: this.parameters.get("maxConcurrency")!,
-    };
+    });
   }
 
   /**

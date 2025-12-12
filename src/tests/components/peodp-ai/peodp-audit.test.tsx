@@ -27,7 +27,7 @@ describe("PEODPAuditComponent", () => {
         <PEODPAuditComponent />
       </QueryClientProvider>
     );
-  };
+  });
 
   it("renders the component with title", () => {
     renderComponent();

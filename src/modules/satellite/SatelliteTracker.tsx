@@ -81,7 +81,7 @@ const SatelliteTracker = () => {
       } finally {
         setIsLoadingVessels(false);
       }
-    };
+    });
 
     fetchVessels();
     fetchSatelliteOrbits();

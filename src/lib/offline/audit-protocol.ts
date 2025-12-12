@@ -181,7 +181,7 @@ class AuditProtocol {
       timestamp: new Date(),
       sessionId: this.currentSessionId,
       synced: false
-    };
+    });
 
     fullEntry.hash = this.generateHash(fullEntry);
     
@@ -357,7 +357,7 @@ class AuditProtocol {
       byModule,
       byAction,
       entries
-    };
+    });
   }
 
   /**
@@ -439,7 +439,7 @@ class AuditProtocol {
       byModule,
       oldestEntry: timestamps.length > 0 ? new Date(Math.min(...timestamps)) : undefined,
       newestEntry: timestamps.length > 0 ? new Date(Math.max(...timestamps)) : undefined
-    };
+    });
   }
 }
 

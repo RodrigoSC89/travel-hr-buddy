@@ -136,7 +136,7 @@ class UnifiedAPIClient {
           status: 202, // Accepted - queued for later
           cached: false,
           timestamp: Date.now(),
-        };
+        });
       }
 
       // Return cached data if available

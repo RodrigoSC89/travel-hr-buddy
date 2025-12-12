@@ -47,7 +47,7 @@ export function useMemoryPressure(threshold = 80): MemoryState {
           percentage,
         });
       }
-    };
+    });
 
     checkMemory();
     const interval = setInterval(checkMemory, 10000);

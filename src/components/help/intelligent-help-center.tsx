@@ -189,7 +189,7 @@ export const IntelligentHelpCenter: React.FC = () => {
           context: "help_search",
           modules: modules.map(m => m.id)
         }
-      };
+      });
 
       // Cast results to proper types - in production this would be properly mapped
       setSearchResults((searchResults || []) as unknown as (Tutorial | FAQ)[]);
@@ -197,18 +197,18 @@ export const IntelligentHelpCenter: React.FC = () => {
       toast({
         title: "Busca realizada",
         description: `Encontrados ${searchResults?.length || 0} resultados para "${query}"`,
-      };
+      });
 
     } catch (error) {
       toast({
         title: "Erro na busca",
         description: "Não foi possível realizar a busca",
         variant: "destructive",
-      };
+      });
     } finally {
       setIsLoading(false);
     }
-  };
+  });
 
   const trackAnalytics = async (action: string, itemId?: string, data?: Record<string, unknown>) => {
     try {
@@ -219,24 +219,24 @@ export const IntelligentHelpCenter: React.FC = () => {
           action_type: action,
           session_data: data ? (data as unknown) : {},
           user_id: null // Seria auth.uid() se autenticado
-        };
+        });
     } catch (error) {
       logger.error("Failed to track user action:", error);
     }
-  };
+  });
 
   const handleExportMaterial = async (type: "pdf" | "video" | "image", content: Tutorial | FAQ) => {
     toast({
       title: "Exportando material",
       description: `Preparando ${type.toUpperCase()} para download...`,
-    };
+    });
     
     // Implementar exportação real
     setTimeout(() => {
       toast({
         title: "Download iniciado",
         description: "O arquivo será baixado em breve",
-      };
+      });
     }, 2000);
   };
 

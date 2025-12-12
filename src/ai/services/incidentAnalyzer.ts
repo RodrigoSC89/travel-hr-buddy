@@ -92,7 +92,7 @@ Critérios para riskLevel:
     // Fallback analysis
     return generateFallbackAnalysis(incidentDescription, additionalContext);
   }
-};
+});
 
 /**
  * Parse AI response and validate structure

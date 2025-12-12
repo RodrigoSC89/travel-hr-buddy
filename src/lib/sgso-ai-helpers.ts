@@ -378,7 +378,7 @@ export async function processNonConformity(nonConformity: NonConformity): Promis
     correctiveActions,
     preventiveActions,
     timeline
-  };
+  });
 }
 
 /**

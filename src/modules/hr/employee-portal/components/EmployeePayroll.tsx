@@ -74,11 +74,11 @@ export const EmployeePayroll: React.FC = () => {
         title: "Error loading payroll",
         description: error.message,
         variant: "destructive",
-      };
+      });
     } finally {
       setLoading(false);
     }
-  };
+  });
 
   const viewRecord = (record: PayrollRecord) => {
     setSelectedRecord(record);
@@ -93,9 +93,9 @@ export const EmployeePayroll: React.FC = () => {
         title: "Payslip not available",
         description: "Payslip document is not available for this period",
         variant: "destructive",
-      };
+      });
     }
-  };
+  });
 
   const getStatusBadge = (status: string) => {
     const config: Record<string, { label: string; className: string; icon: unknown: unknown: unknown }> = {

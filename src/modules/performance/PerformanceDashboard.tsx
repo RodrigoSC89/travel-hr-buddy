@@ -144,7 +144,7 @@ const PerformanceDashboard: React.FC = () => {
       toast({
         title: "Dashboard Atualizado",
         description: "Dados de performance carregados com sucesso",
-      };
+      });
 
     } catch (error) {
       console.error("[Performance Dashboard] Error loading data:", error);
@@ -153,11 +153,11 @@ const PerformanceDashboard: React.FC = () => {
         title: "Erro",
         description: "Falha ao carregar dados de performance",
         variant: "destructive",
-      };
+      });
     } finally {
       setIsLoading(false);
     }
-  };
+  });
 
   const handleExportPDF = async () => {
     try {
@@ -166,7 +166,7 @@ const PerformanceDashboard: React.FC = () => {
       toast({
         title: "Gerando PDF",
         description: "Preparando relatório de performance...",
-      };
+      });
 
       await exportPerformancePDF({
         metrics,
@@ -192,9 +192,9 @@ const PerformanceDashboard: React.FC = () => {
         title: "Erro",
         description: "Falha ao gerar PDF",
         variant: "destructive",
-      };
+      });
     }
-  };
+  });
 
   const getStatusBadge = (status: string) => {
     const variants: Record<string, { variant: "default" | "destructive" | "outline" | "secondary", label: string }> = {

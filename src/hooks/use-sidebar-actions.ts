@@ -23,7 +23,7 @@ export const useSidebarActions = () => {
         variant: "destructive"
       });
     }
-  };
+  });
 
   const handleModuleAccess = (moduleKey: string) => {
     // Map module keys to their routes

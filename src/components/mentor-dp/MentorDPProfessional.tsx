@@ -383,7 +383,7 @@ export default function MentorDPProfessional() {
       title: score >= 70 ? "Parabéns!" : "Continue Estudando",
       description: `Você acertou ${correctCount} de ${activeQuiz.questions.length} questões (${score}%)`,
       variant: score >= 70 ? "default" : "destructive",
-    };
+    });
 
     // Update quiz history with score
     setQuizHistory(prev => prev.map((q, i) => i === 0 ? { ...q, score, completedAt: new Date() } : q));

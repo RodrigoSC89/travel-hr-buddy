@@ -547,7 +547,7 @@ export default function NotificationCenterProfessional() {
       dateRange: "all",
       showRead: true,
       showUnread: true,
-    };
+    });
     setSelectedType(null);
     setSearchQuery("");
     toast({ title: "Filtros limpos" });

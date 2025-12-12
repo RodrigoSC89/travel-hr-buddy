@@ -59,7 +59,7 @@ class NotificationService {
       sent: this.sent.length,
       failed: this.failed.length,
       successRate: this.sent.length / (this.sent.length + this.failed.length) || 0,
-    };
+    });
   }
 
   clear() {

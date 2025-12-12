@@ -100,7 +100,7 @@ export const PainelSGSO: React.FC = () => {
         jsPDF: { unit: "in", format: "a4", orientation: "portrait" },
       })
       .save();
-  };
+  });
 
   return (
     <div className="space-y-6">

@@ -72,7 +72,7 @@ const OceanSonar: React.FC = () => {
     if (stats) {
       setSonarStats(stats);
     }
-  };
+  });
 
   const startScan = async () => {
     setIsScanning(true);

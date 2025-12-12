@@ -37,7 +37,7 @@ export const PreviewValidator = memo(function({
     } finally {
       setLoading(false);
     }
-  };
+  });
 
   const getSeverityColor = (severity: string) => {
     switch (severity) {
@@ -47,7 +47,7 @@ export const PreviewValidator = memo(function({
     case "low": return "text-blue-500";
     default: return "text-muted-foreground";
     }
-  };
+  });
 
   const getSeverityIcon = (severity: string) => {
     switch (severity) {
@@ -59,7 +59,7 @@ export const PreviewValidator = memo(function({
     default:
       return <CheckCircle2 className="h-4 w-4" />;
     }
-  };
+  });
 
   return (
     <Card className="w-full">
@@ -219,7 +219,7 @@ function MetricCard({
     good: "text-green-500",
     bad: "text-red-500",
     neutral: "text-muted-foreground"
-  };
+  });
 
   return (
     <div className="p-3 rounded-md border bg-card">

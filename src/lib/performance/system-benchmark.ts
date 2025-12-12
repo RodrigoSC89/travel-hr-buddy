@@ -59,7 +59,7 @@ class SystemBenchmark {
       details: { diskRead, diskWrite, memory, cpu, network, aiResponse, rendering },
       recommendations,
       timestamp: Date.now()
-    };
+    });
 
     this.saveResult(result);
     

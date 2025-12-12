@@ -195,7 +195,7 @@ export function useDroneState(options: UseDroneStateOptions = {}) {
         command,
         message: error instanceof Error ? error.message : "Unknown error",
         timestamp: new Date().toISOString()
-      };
+      });
     } finally {
       setIsSending(false);
     }

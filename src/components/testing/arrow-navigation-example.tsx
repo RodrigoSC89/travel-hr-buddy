@@ -158,7 +158,7 @@ const MyMenu = () => {
     onClose: () => setIsOpen(false),
     orientation: 'vertical', // or 'horizontal'
     loop: true, // cycle from last to first
-  };
+  });
 
   return (
     <div>

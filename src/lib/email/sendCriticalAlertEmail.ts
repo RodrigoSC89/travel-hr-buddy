@@ -62,6 +62,6 @@ export async function sendCriticalAlertEmail(
     return {
       success: false,
       error: err instanceof Error ? err.message : "Unknown error occurred",
-    };
+    });
   }
 }

@@ -61,7 +61,7 @@ const NautilusLLM: React.FC = () => {
   const loadStats = async () => {
     const iaStats = await getIAStats();
     setStats(iaStats);
-  };
+  });
 
   const handleSend = async () => {
     if (!prompt.trim()) return;
@@ -101,11 +101,11 @@ const NautilusLLM: React.FC = () => {
         title: "Erro na IA",
         description: "Não foi possível obter resposta da IA. Tentando fallback...",
         variant: "destructive"
-      };
+      });
     } finally {
       setIsLoading(false);
     }
-  };
+  });
 
   const handleQuickCommand = async (command: string) => {
     setIsLoading(true);
@@ -140,11 +140,11 @@ const NautilusLLM: React.FC = () => {
         title: "Erro no Comando",
         description: "Não foi possível executar o comando rápido.",
         variant: "destructive"
-      };
+      });
     } finally {
       setIsLoading(false);
     }
-  };
+  });
 
   const quickCommands = [
     { id: "status", label: "Status Geral", icon: Activity },

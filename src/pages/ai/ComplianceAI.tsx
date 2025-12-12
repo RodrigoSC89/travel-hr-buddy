@@ -174,18 +174,18 @@ Formate a resposta em markdown estruturado.`,
       toast({
         title: "Análise concluída!",
         description: "Verificação de compliance atualizada.",
-      };
+      });
     } catch (error) {
       console.error("Error analyzing compliance:", error);
       toast({
         title: "Erro na análise",
         description: "Não foi possível analisar o compliance. Tente novamente.",
         variant: "destructive",
-      };
+      });
     } finally {
       setIsLoading(false);
     }
-  };
+  });
 
   useEffect(() => {
     analyzeCompliance();

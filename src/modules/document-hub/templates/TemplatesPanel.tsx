@@ -94,7 +94,7 @@ export default function TemplatesPanel() {
     }
     
     return [...new Set(matches)]; // Remove duplicates
-  };
+  });
 
   const handleCreateTemplate = () => {
     if (!newTemplate.name || !newTemplate.content) {

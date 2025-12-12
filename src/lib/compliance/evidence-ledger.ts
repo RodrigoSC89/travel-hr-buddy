@@ -146,7 +146,7 @@ export async function recordEvidence(
       signature,
       vesselId,
       metadata
-    };
+    });
 
     evidenceLedger.push(entry);
     blockCounter++;
@@ -229,7 +229,7 @@ export async function verifyLedgerIntegrity(): Promise<{
       isValid: false,
       corruptedBlocks: [],
       message: "Error during verification"
-    };
+    });
   }
 }
 

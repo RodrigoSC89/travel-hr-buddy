@@ -113,8 +113,8 @@ export const AIAssistant: React.FC<AIAssistantProps> = ({
           title: "Erro no reconhecimento de voz",
           description: "Não foi possível capturar o áudio",
           variant: "destructive"
-        };
-      };
+        });
+      });
 
       recognition.onend = () => {
         setIsListening(false);
@@ -154,7 +154,7 @@ export const AIAssistant: React.FC<AIAssistantProps> = ({
         title: "Recurso não disponível",
         description: "Reconhecimento de voz não é suportado neste navegador",
         variant: "destructive"
-      };
+      });
       return;
     }
 
@@ -165,7 +165,7 @@ export const AIAssistant: React.FC<AIAssistantProps> = ({
       recognition.start();
       setIsListening(true);
     }
-  };
+  });
 
   const handleSendMessage = async () => {
     if (!input.trim() || isLoading) return;
@@ -227,11 +227,11 @@ export const AIAssistant: React.FC<AIAssistantProps> = ({
         title: "Erro no assistente",
         description: "Não foi possível processar sua mensagem",
         variant: "destructive"
-      };
+      });
     } finally {
       setIsLoading(false);
     }
-  };
+  });
 
   const handleSuggestionClick = (suggestion: string) => {
     setInput(suggestion);
@@ -245,8 +245,8 @@ export const AIAssistant: React.FC<AIAssistantProps> = ({
     toast({
       title: "Ação executada",
       description: `${action} foi executado com sucesso`,
-    };
-  };
+    });
+  });
 
   const renderMessage = (message: Message) => {
     const isUser = message.type === "user";

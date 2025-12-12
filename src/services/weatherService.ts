@@ -183,7 +183,7 @@ export async function getCurrentWeather(
       description: data.weather[0].description,
       icon: data.weather[0].icon,
       timestamp: new Date().toISOString(),
-    };
+    });
 
     // Maritime-specific data (if available from marine API)
     if (data.waves) {

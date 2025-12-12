@@ -51,7 +51,7 @@ export const SignatureDialog: React.FC<SignatureDialogProps> = ({
         title: "Assinatura vazia",
         description: "Por favor, assine no campo acima",
         variant: "destructive",
-};
+});
       return;
     }
 
@@ -60,7 +60,7 @@ export const SignatureDialog: React.FC<SignatureDialogProps> = ({
         title: "Campos obrigatórios",
         description: "Preencha nome e cargo",
         variant: "destructive",
-      };
+      });
       return;
     }
 
@@ -71,7 +71,7 @@ export const SignatureDialog: React.FC<SignatureDialogProps> = ({
       signatory_name: signatoryName,
       signatory_role: signatoryRole,
       signed_at: new Date().toISOString(),
-    };
+    });
 
     onSave(signatureData);
     handleClear();
@@ -82,8 +82,8 @@ export const SignatureDialog: React.FC<SignatureDialogProps> = ({
     toast({
       title: "Assinatura registrada",
       description: "A assinatura foi salva com sucesso",
-    };
-  };
+    });
+  });
 
   return (
     <Dialog open={open} onOpenChange={onOpenChange}>

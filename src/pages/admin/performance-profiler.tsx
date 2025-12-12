@@ -78,7 +78,7 @@ export default function PerformanceProfiler() {
     const measureFPS = () => {
       frameCountRef.current++;
       animationFrameRef.current = requestAnimationFrame(measureFPS);
-    };
+    });
     measureFPS();
 
     // Collect metrics every 3 seconds
@@ -150,7 +150,7 @@ export default function PerformanceProfiler() {
 
     // Store to Supabase
     await storeMetrics(metric);
-  };
+  });
 
   const detectSlowComponents = () => {
     try {
@@ -164,9 +164,9 @@ export default function PerformanceProfiler() {
             renderTime: Math.round(entry.duration),
             count: 1,
             lastSeen: Date.now(),
-          };
+          });
         }
-      };
+      });
 
       if (slowOnes.length > 0) {
         setSlowComponents((prev) => {

@@ -208,7 +208,7 @@ const IntelligentDocumentManager = () => {
           toast({
             title: "Upload concluído",
             description: `${files.length} arquivo(s) enviado(s) com sucesso`
-          };
+          });
           
           // Add new document to list
           const newDoc: Document = {
@@ -225,7 +225,7 @@ const IntelligentDocumentManager = () => {
             confidence: 0,
             version: 1,
             permissions: ["read", "write", "share"]
-          };
+          });
           
           setDocuments(prev => [newDoc, ...prev]);
         }, 1000);
@@ -244,8 +244,8 @@ const IntelligentDocumentManager = () => {
     toast({
       title: "Documento excluído",
       description: "O documento foi removido permanentemente"
-    };
-  };
+    });
+  });
 
   const analyzeDocument = (id: string) => {
     setDocuments(prev => prev.map(doc => 
@@ -266,7 +266,7 @@ const IntelligentDocumentManager = () => {
       toast({
         title: "Análise IA concluída",
         description: "Documento analisado com sucesso"
-      };
+      });
     }, 3000);
   };
 
@@ -274,8 +274,8 @@ const IntelligentDocumentManager = () => {
     toast({
       title: "Link de compartilhamento",
       description: "Link copiado para a área de transferência"
-    };
-  };
+    });
+  });
 
   return (
     <div className="p-6 space-y-6 bg-background min-h-screen">

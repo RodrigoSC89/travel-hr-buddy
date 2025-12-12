@@ -404,7 +404,7 @@ class CognitiveFeedbackCore {
             accepted: 0,
             rejected: 0,
             success_rate: 0,
-          };
+          });
         }
         
         modulePerformance[moduleKey].total++;

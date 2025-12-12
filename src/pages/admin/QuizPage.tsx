@@ -164,7 +164,7 @@ export default function QuizPage() {
     }
 
     return allQuestions;
-  };
+  });
 
   const handleAnswerSelect = () => {
     if (!selectedAnswer || !currentQuestion) return;
@@ -236,7 +236,7 @@ export default function QuizPage() {
     } catch (error) {
       logger.error("Error saving quiz result", { error });
     }
-  };
+  });
 
   const restartQuiz = () => {
     setQuizStarted(false);

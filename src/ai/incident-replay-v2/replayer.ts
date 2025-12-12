@@ -408,7 +408,7 @@ Respond only with valid JSON.`,
         confidence: 0.7,
         impact: "Analysis pending",
         lessons: [],
-      };
+      });
     }
 
     return {
@@ -544,7 +544,7 @@ Respond only with valid JSON.`,
         improvementAreas: ["Response time optimization"],
         successfulActions: ["Timely detection", "Effective coordination"],
         failedActions: [],
-      };
+      });
     }
   }
 
