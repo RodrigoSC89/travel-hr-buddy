@@ -115,7 +115,7 @@ export default function UserProfilePage() {
         title: "Erro",
         description: "Não foi possível carregar o perfil",
         variant: "destructive"
-      };
+      });
     } finally {
       setIsLoading(false);
     }
