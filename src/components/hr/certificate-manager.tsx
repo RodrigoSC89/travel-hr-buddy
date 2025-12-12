@@ -101,7 +101,7 @@ export const CertificateManager: React.FC<CertificateManagerProps> = ({ employee
         title: "Erro",
         description: "Erro ao carregar certificados",
         variant: "destructive"
-      };
+      });
     }
   };
 
@@ -112,7 +112,7 @@ export const CertificateManager: React.FC<CertificateManagerProps> = ({ employee
         allowEditing: true,
         resultType: CameraResultType.DataUrl,
         source: CameraSource.Camera,
-      };
+      });
 
       if (image.dataUrl) {
         setCapturedImage(image.dataUrl);
@@ -160,7 +160,7 @@ export const CertificateManager: React.FC<CertificateManagerProps> = ({ employee
         title: "Campos obrigatórios",
         description: "Preencha todos os campos e selecione um arquivo",
         variant: "destructive"
-      };
+      });
       return;
     }
 

@@ -77,7 +77,7 @@ export const UserFeedbackSystem: React.FC = () => {
         title: "Erro",
         description: "Não foi possível carregar os feedbacks",
         variant: "destructive"
-      };
+      });
     } finally {
       setIsLoading(false);
     }
@@ -90,7 +90,7 @@ export const UserFeedbackSystem: React.FC = () => {
         title: "Campos obrigatórios",
         description: "Por favor, preencha título e descrição",
         variant: "destructive"
-      };
+      });
       return;
     }
 

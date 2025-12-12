@@ -282,7 +282,7 @@ export const SharedAlerts = memo(() => {
         title: "Erro",
         description: "Preencha todos os campos obrigatórios.",
         variant: "destructive",
-      };
+      });
       return;
     }
 

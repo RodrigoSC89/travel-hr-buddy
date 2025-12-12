@@ -87,7 +87,7 @@ export const EmployeePersonalDocuments: React.FC = () => {
         title: "Error loading documents",
         description: error.message,
         variant: "destructive",
-      };
+      });
     } finally {
       setLoading(false);
     }

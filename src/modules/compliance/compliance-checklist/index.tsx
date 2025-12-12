@@ -134,7 +134,7 @@ const ComplianceChecklist = () => {
           compliantCount,
           totalChecklists: currentRecords.filter(r => r.completion_status === "completed").length
         }
-      };
+      });
       
       if (response.message) {
         setAiInsight(response.message);

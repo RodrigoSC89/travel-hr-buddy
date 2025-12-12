@@ -209,7 +209,7 @@ export const PriceAnalyticsDashboard: React.FC = () => {
         date: date.toLocaleDateString("pt-BR"),
         viagens: 800 + Math.random() * 400,
         hospedagem: 300 + Math.random() * 200,
-      };
+      });
     }
     return data;
   };
@@ -311,14 +311,14 @@ export const PriceAnalyticsDashboard: React.FC = () => {
       toast({
         title: "PDF Exportado",
         description: "Arquivo baixado com sucesso",
-      };
+      });
     } catch (error) {
       console.error("Export error:", error);
       toast({
         title: "Erro na exportação",
         description: "Não foi possível exportar o PDF",
         variant: "destructive",
-      };
+      });
     } finally {
       setIsExporting(false);
     }

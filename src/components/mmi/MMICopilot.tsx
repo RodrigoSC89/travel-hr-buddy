@@ -18,7 +18,7 @@ export default function MMICopilot() {
         title: "Atenção",
         description: "Por favor, descreva o problema de manutenção.",
         variant: "default",
-      };
+      });
       return;
     }
 

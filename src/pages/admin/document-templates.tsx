@@ -106,7 +106,7 @@ export default function DocumentTemplates() {
         title: "Error",
         description: "Failed to load templates",
         variant: "destructive",
-      };
+      });
     } finally {
       setLoading(false);
     }
@@ -230,7 +230,7 @@ export default function DocumentTemplates() {
       toast({
         title: "Document Generated",
         description: "Document created successfully",
-      };
+      });
 
       fetchGeneratedDocuments();
     } catch (error) {

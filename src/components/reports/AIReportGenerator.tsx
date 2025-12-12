@@ -65,7 +65,7 @@ const AIReportGenerator: React.FC<AIReportGeneratorProps> = ({ onReportGenerated
         title: "Erro",
         description: "Selecione um tipo de relatório",
         variant: "destructive",
-      };
+      });
       return;
     }
 

@@ -259,7 +259,7 @@ export default function SatelliteTracker() {
       toast({
         title: "Tracking Stopped",
         description: "Satellite tracking session ended",
-      };
+      });
     } catch (error) {
       logger.error("Error stopping satellite tracking", { error, trackingSessionId });
     }

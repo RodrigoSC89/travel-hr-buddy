@@ -47,13 +47,13 @@ const AnalyticsCore = () => {
       toast({
         title: "Insights Generated",
         description: `${generatedInsights.length} AI insights have been generated`
-      };
+      });
     } catch (error) {
       toast({
         title: "Error",
         description: "Failed to generate insights",
         variant: "destructive"
-      };
+      });
     } finally {
       setIsLoadingInsights(false);
     }
@@ -107,7 +107,7 @@ const AnalyticsCore = () => {
       toast({
         title: "Export Complete",
         description: "CSV file has been downloaded"
-      };
+      });
     } catch (error) {
       toast({
         title: "Export Failed",

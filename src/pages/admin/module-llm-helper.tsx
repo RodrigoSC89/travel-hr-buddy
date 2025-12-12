@@ -96,13 +96,13 @@ export const ModuleLLMHelper: React.FC = () => {
       toast({
         title: "Copiado!",
         description: "Prompt copiado para a área de transferência",
-      };
+      });
     } catch (error) {
       toast({
         title: "Erro",
         description: "Falha ao copiar prompt",
         variant: "destructive",
-      };
+      });
     }
   };
 

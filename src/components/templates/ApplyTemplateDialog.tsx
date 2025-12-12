@@ -140,7 +140,7 @@ export const ApplyTemplateDialog = memo(function({
       toast({
         title: "Template applied",
         description: `${appliedResult.appliedVariables.length} variables applied`,
-      };
+      });
       onOpenChange(false);
     }
   };

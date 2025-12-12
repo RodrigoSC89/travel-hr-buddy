@@ -145,7 +145,7 @@ export const IncidentDetailDialog: React.FC<IncidentDetailDialogProps> = ({
         title: "Campos obrigatórios",
         description: "Preencha descrição e responsável",
         variant: "destructive"
-      };
+      });
       return;
     }
 

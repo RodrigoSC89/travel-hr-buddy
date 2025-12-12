@@ -122,7 +122,7 @@ export const TemplatesDynamic = memo(() => {
         title: "Error loading templates",
         description: error.message,
         variant: "destructive",
-      };
+      });
     }
   };
 
@@ -237,7 +237,7 @@ export const TemplatesDynamic = memo(() => {
         title: "Missing fields",
         description: "Please provide template name and content",
         variant: "destructive",
-      };
+      });
       return;
     }
 

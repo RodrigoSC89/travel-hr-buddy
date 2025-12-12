@@ -220,7 +220,7 @@ export const AdvancedPriceAlerts: React.FC = () => {
         title: "Campos obrigatórios",
         description: "Preencha todos os campos obrigatórios",
         variant: "destructive"
-      };
+      });
       return;
     }
 
@@ -338,13 +338,13 @@ export const AdvancedPriceAlerts: React.FC = () => {
       toast({
         title: "Preços atualizados!",
         description: `${data?.checked_alerts || 0} alertas foram verificados`,
-      };
+      });
     } catch (error) {
       toast({
         title: "Erro",
         description: "Não foi possível atualizar os preços",
         variant: "destructive"
-      };
+      });
     } finally {
       setIsRefreshing(false);
     }

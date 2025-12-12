@@ -76,7 +76,7 @@ export const MFAPrompt: React.FC<MFAPromptProps> = ({ onSuccess, onCancel }) => 
         title: "Código Inválido",
         description: "Digite um código de 6 dígitos",
         variant: "destructive"
-      };
+      });
       return;
     }
 
@@ -90,7 +90,7 @@ export const MFAPrompt: React.FC<MFAPromptProps> = ({ onSuccess, onCancel }) => 
         factorId,
         challengeId: challenge.id,
         code
-      };
+      });
 
       if (error) throw error;
 

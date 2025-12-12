@@ -51,7 +51,7 @@ export const DocumentProcessor: React.FC = () => {
         title: "Arquivo muito grande",
         description: "O arquivo deve ter no máximo 10MB",
         variant: "destructive",
-      };
+      });
       return;
     }
 

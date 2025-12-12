@@ -253,13 +253,13 @@ export const EnhancedDocumentScanner: React.FC = () => {
         title: `Documento: ${result.fileName}`,
         text: result.extractedText,
         url: result.imageUrl
-      };
+      });
     } else {
       navigator.clipboard.writeText(result.extractedText);
       toast({
         title: "Texto copiado",
         description: "Texto extraído copiado para a área de transferência"
-      };
+      });
     }
   };
 

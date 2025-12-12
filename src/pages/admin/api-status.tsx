@@ -96,7 +96,7 @@ export default function ApiStatusPage() {
         message: result.message,
         responseTime: result.responseTime,
         error: result.error,
-      };
+      });
       setStatus({ ...results });
       setResponseData({ ...dataResults });
     }

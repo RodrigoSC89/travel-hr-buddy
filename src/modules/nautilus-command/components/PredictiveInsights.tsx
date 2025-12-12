@@ -64,7 +64,7 @@ export const PredictiveInsights: React.FC<PredictiveInsightsProps> = ({ systemSt
         confidence: 92,
         action: "Agendar manutenções urgentes",
         module: "Manutenção"
-      };
+      });
     }
 
     // Crew certificate predictions

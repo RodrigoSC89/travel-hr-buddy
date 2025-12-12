@@ -63,7 +63,7 @@ export const ShipmentTracking = memo(() => {
         title: "Error loading shipments",
         description: error.message,
         variant: "destructive",
-      };
+      });
     } finally {
       setLoading(false);
     }

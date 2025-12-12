@@ -89,7 +89,7 @@ export const ScheduledReports: React.FC = () => {
         title: "Missing Fields",
         description: "Please fill in all required fields",
         variant: "destructive",
-      };
+      });
       return;
     }
 
@@ -103,7 +103,7 @@ export const ScheduledReports: React.FC = () => {
         frequency: formData.frequency,
         next_run: nextRun,
         is_active: true,
-      };
+      });
 
       if (error) {
       }

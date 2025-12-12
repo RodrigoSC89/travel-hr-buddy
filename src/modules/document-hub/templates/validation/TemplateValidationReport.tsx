@@ -40,7 +40,7 @@ export default function TemplateValidationReport() {
           ? "Editor TipTap carregado e funcional" 
           : "Editor disponível mas não montado nesta página",
         details: "Componente TemplateEditor.tsx com rich text editing completo"
-      };
+      });
     } catch (error) {
       testResults.push({
         test: "Editor Funcional",

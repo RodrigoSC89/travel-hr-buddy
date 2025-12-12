@@ -86,7 +86,7 @@ export const MaintenancePanel: React.FC<MaintenancePanelProps> = ({
         title: "Erro",
         description: "Preencha todos os campos obrigatórios",
         variant: "destructive"
-      };
+      });
       return;
     }
 

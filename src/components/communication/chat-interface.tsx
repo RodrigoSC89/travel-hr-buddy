@@ -395,7 +395,7 @@ export const ChatInterface = memo(() => {
         title: "Erro",
         description: "Não foi possível enviar a mensagem",
         variant: "destructive",
-      };
+      });
     }
   };
 

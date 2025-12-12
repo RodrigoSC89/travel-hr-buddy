@@ -590,7 +590,7 @@ export default function ChannelManagerProfessional() {
         sender_name: "Você",
         message_content: messageContent,
         created_at: new Date().toISOString(),
-      };
+      });
       setMessages(prev => [...prev, newMessage]);
       setMessageContent("");
     }

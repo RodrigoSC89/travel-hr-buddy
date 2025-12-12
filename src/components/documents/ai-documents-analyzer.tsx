@@ -282,7 +282,7 @@ export const AIDocumentsAnalyzer = memo(function() {
         title: "Nenhum arquivo selecionado",
         description: "Por favor, selecione um arquivo primeiro",
         variant: "destructive",
-      };
+      });
       return;
     }
 
@@ -425,7 +425,7 @@ export const AIDocumentsAnalyzer = memo(function() {
         title: "Erro ao carregar documentos",
         description: "Tente novamente mais tarde",
         variant: "destructive",
-      };
+      });
     }
   };
 

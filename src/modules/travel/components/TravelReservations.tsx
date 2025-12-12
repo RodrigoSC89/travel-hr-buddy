@@ -86,7 +86,7 @@ export const TravelReservations: React.FC = () => {
         title: "Error",
         description: "Failed to load reservations",
         variant: "destructive"
-      };
+      });
     } finally {
       setLoading(false);
     }
@@ -117,7 +117,7 @@ export const TravelReservations: React.FC = () => {
       toast({
         title: "Success",
         description: "Reservation created successfully"
-      };
+      });
 
       setIsCreateOpen(false);
       resetForm();

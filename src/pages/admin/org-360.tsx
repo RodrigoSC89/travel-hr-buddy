@@ -23,7 +23,7 @@ export default function Org360Dashboard() {
         database: 97,
         ai: 92,
         storage: 94,
-      };
+      });
     },
     refetchInterval: 30000,
   });

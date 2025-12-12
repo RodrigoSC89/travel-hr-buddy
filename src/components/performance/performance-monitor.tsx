@@ -188,7 +188,7 @@ export const PerformanceMonitor: React.FC = () => {
         title: "No data to export",
         description: "Historical data is not available yet",
         variant: "destructive",
-      };
+      });
       return;
     }
 

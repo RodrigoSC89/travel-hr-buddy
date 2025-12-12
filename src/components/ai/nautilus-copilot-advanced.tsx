@@ -212,7 +212,7 @@ What would you like assistance with today?`,
           "Show related metrics",
           "Set up monitoring alert"
         ]
-      };
+      });
 
       setMessages(prev => [...prev, aiResponse]);
       setIsProcessing(false);

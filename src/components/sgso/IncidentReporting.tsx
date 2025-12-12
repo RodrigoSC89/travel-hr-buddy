@@ -213,7 +213,7 @@ export const IncidentReporting: React.FC = () => {
         title: "Campos obrigatórios",
         description: "Preencha título, tipo e severidade",
         variant: "destructive"
-      };
+      });
       return;
     }
     toast({

@@ -189,7 +189,7 @@ export default function AcademyDashboard() {
       toast({ 
         title: "Análise IA completa", 
         description: `${totalInsights} insights e recomendações gerados com sucesso!` 
-      };
+      });
     } catch (error) {
       console.error("AI generation error:", error);
       toast({ 

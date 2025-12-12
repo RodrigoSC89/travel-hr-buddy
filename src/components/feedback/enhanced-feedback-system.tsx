@@ -195,7 +195,7 @@ export const EnhancedFeedbackSystem: React.FC = () => {
       toast({
         title: "Feedback enviado",
         description: "Obrigado pelo seu feedback! Analisaremos em breve.",
-      };
+      });
 
       // Resetar formulário
       setNewFeedback({

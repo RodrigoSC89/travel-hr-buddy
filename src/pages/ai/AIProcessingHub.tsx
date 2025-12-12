@@ -71,7 +71,7 @@ const AIProcessingHub: React.FC = () => {
         gpu: Math.floor(70 + Math.random() * 25),
         memory: Math.floor(60 + Math.random() * 30),
         throughput: Math.floor(800 + Math.random() * 400)
-      };
+      });
   };
     setRealtimeMetrics(initialData);
 

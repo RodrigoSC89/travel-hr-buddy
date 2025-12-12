@@ -89,7 +89,7 @@ export default function CertificationsTab({
       toast({
         title: "Renovação Agendada",
         description: `A renovação de ${selectedCert.name} foi agendada com sucesso.`,
-      };
+      });
       setShowRenewDialog(false);
       setSelectedCert(null);
     }

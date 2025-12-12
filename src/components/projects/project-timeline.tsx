@@ -115,7 +115,7 @@ export const ProjectTimeline: React.FC<ProjectTimelineProps> = () => {
         title: "Error",
         description: "Failed to load tasks",
         variant: "destructive"
-      };
+      });
     } finally {
       setLoading(false);
     }

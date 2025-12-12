@@ -72,7 +72,7 @@ export const ReservationsDashboard: React.FC = () => {
         title: "Erro",
         description: "Erro ao carregar reservas",
         variant: "destructive"
-      };
+      });
     } finally {
       setLoading(false);
     }

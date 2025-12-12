@@ -46,7 +46,7 @@ export const SessionManagement: React.FC = () => {
         title: "Erro",
         description: error,
         variant: "destructive",
-      };
+      });
     }
   }, [error, toast]);
 
@@ -77,14 +77,14 @@ export const SessionManagement: React.FC = () => {
       toast({
         title: "Sessões Revogadas",
         description: "Todas as outras sessões foram encerradas com sucesso.",
-      };
+      });
     } catch (error) {
       logger.error("[SessionManagement] Error revoking other sessions:", error as Error);
       toast({
         title: "Erro",
         description: "Não foi possível revogar as outras sessões.",
         variant: "destructive",
-      };
+      });
     } finally {
       setRevokingOthers(false);
     }

@@ -51,7 +51,7 @@ export default function ApplyTemplate({ template }: ApplyTemplateProps) {
         title: "Erro",
         description: "Por favor, gere o preview antes de salvar.",
         variant: "destructive",
-      };
+      });
       return;
     }
 

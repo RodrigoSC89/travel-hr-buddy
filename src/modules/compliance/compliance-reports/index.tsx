@@ -311,7 +311,7 @@ const ComplianceReports = () => {
         title: "Campos obrigatórios",
         description: "Preencha título e template",
         variant: "destructive"
-      };
+      });
       return;
     }
 

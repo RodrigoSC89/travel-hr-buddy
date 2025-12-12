@@ -154,7 +154,7 @@ export default function CollaborationPage() {
         title: "Erro",
         description: "Por favor, escreva um comentário.",
         variant: "destructive",
-      };
+      });
       return;
     }
 

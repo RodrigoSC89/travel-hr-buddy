@@ -486,7 +486,7 @@ const RequirementForm: React.FC<{
         corrective_action: "",
         responsible_person: "",
         target_date: ""
-      };
+      });
     }
     
     toast({

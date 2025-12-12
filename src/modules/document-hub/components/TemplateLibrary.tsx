@@ -93,7 +93,7 @@ export const TemplateLibrary: React.FC = () => {
         title: "Error",
         description: "Failed to load templates",
         variant: "destructive"
-      };
+      });
     } finally {
       setLoading(false);
     }

@@ -43,7 +43,7 @@ const FuelOptimizer = () => {
         title: "Dados incompletos",
         description: "Preencha todos os campos obrigatórios",
         variant: "destructive"
-      };
+      });
       return;
     }
 

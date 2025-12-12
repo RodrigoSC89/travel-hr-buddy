@@ -232,13 +232,13 @@ export const DocumentManagement: React.FC = () => {
         name: "",
         description: "",
         color: "#3b82f6"
-      };
+      });
       setShowAddCategoryDialog(false);
       
       toast({
         title: "Categoria Criada",
         description: `${category.name} foi criada com sucesso`
-      };
+      });
     } catch (error) {
       toast({
         title: "Erro",

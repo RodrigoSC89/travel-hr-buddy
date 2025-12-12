@@ -123,7 +123,7 @@ export const SgsoDashboard: React.FC = () => {
         title: "Campos obrigatórios",
         description: "Preencha todos os campos obrigatórios",
         variant: "destructive"
-      };
+      });
       return;
     }
     
@@ -141,7 +141,7 @@ export const SgsoDashboard: React.FC = () => {
         title: "Campos obrigatórios",
         description: "Preencha todos os campos obrigatórios",
         variant: "destructive"
-      };
+      });
       return;
     }
     
@@ -165,7 +165,7 @@ export const SgsoDashboard: React.FC = () => {
         title: "Campos obrigatórios",
         description: "Preencha todos os campos obrigatórios",
         variant: "destructive"
-      };
+      });
       return;
     }
     

@@ -48,7 +48,7 @@ export const ManagerAlerts: React.FC = () => {
         title: "Error",
         description: "Failed to load wellbeing alerts",
         variant: "destructive",
-      };
+      });
     } finally {
       setLoading(false);
     }

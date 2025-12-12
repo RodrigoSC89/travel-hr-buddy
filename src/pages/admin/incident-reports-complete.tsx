@@ -118,7 +118,7 @@ export default function IncidentReportsComplete() {
         title: "Erro",
         description: "Falha ao carregar incidentes",
         variant: "destructive"
-      };
+      });
     } finally {
       setLoading(false);
     }

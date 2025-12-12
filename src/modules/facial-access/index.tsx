@@ -108,7 +108,7 @@ export default function FacialAccess() {
         success,
         message: success ? "Identificação confirmada" : "Usuário não reconhecido",
         confidence
-      };
+      });
       
       const newLog: AccessLog = {
         id: Date.now().toString(),

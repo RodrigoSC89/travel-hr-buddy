@@ -122,7 +122,7 @@ export const EmployeePortal: React.FC = () => {
         title: "Erro",
         description: "Preencha todos os campos obrigatórios",
         variant: "destructive"
-      };
+      });
       return;
     }
 
@@ -147,7 +147,7 @@ export const EmployeePortal: React.FC = () => {
         title: "Erro",
         description: "Selecione as datas de início e fim",
         variant: "destructive"
-      };
+      });
       return;
     }
 

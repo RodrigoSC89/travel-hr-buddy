@@ -154,7 +154,7 @@ export const AIAssistant: React.FC<AIAssistantProps> = ({
         title: "Recurso não disponível",
         description: "Reconhecimento de voz não é suportado neste navegador",
         variant: "destructive"
-      };
+      });
       return;
     }
 

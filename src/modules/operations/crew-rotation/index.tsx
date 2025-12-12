@@ -186,7 +186,7 @@ export default function CrewRotationModule() {
         title: "Conflitos detectados",
         description: conflicts.map(c => c.message).join(". "),
         variant: "destructive"
-      };
+      });
       return;
     }
 

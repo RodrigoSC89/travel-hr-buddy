@@ -170,7 +170,7 @@ export const SatelliteGlobeMap: React.FC<SatelliteGlobeMapProps> = ({
         center: [selectedSatellite.longitude, selectedSatellite.latitude],
         zoom: 3,
         duration: 1500
-      };
+      });
     }
   }, [selectedSatellite]);
 

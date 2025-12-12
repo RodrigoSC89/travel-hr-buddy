@@ -209,7 +209,7 @@ export const DiagnosticPanel: React.FC<DiagnosticPanelProps> = ({
         to_provider: conn2.provider,
         reason: `Stress test iteration ${i + 1}`,
         success: true,
-      };
+      });
 
       await new Promise((resolve) => setTimeout(resolve, 300));
     }

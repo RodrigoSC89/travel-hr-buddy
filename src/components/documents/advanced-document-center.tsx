@@ -328,7 +328,7 @@ export const AdvancedDocumentCenter: React.FC = () => {
         title: "Nenhum arquivo selecionado",
         description: "Por favor, selecione pelo menos um arquivo para upload.",
         variant: "destructive"
-      };
+      });
       return;
     }
 
@@ -385,7 +385,7 @@ export const AdvancedDocumentCenter: React.FC = () => {
         title: "Título obrigatório",
         description: "Por favor, informe o título do documento.",
         variant: "destructive"
-      };
+      });
       return;
     }
 
@@ -512,7 +512,7 @@ Este é um documento de demonstração do Centro de Documentos.
         title: "Campos obrigatórios",
         description: `Por favor, preencha: ${missingFields.join(", ")}`,
         variant: "destructive"
-      };
+      });
       return;
     }
 

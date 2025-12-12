@@ -156,14 +156,14 @@ export const ARInterface: React.FC = () => {
         title: "Permissão Necessária",
         description: "Permita o acesso à câmera para usar AR",
         variant: "destructive"
-      };
+      });
       return;
     }
 
     try {
       const stream = await navigator.mediaDevices.getUserMedia({ 
         video: { facingMode: "environment" } 
-      };
+      });
       
       if (videoRef.current) {
         videoRef.current.srcObject = stream;

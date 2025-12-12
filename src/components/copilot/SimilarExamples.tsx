@@ -17,7 +17,7 @@ export default function SimilarExamples({ input, onSelect }: { input: string, on
         title: "⚠️ Campo vazio",
         description: "Por favor, digite uma descrição antes de buscar exemplos similares.",
         variant: "destructive",
-      };
+      });
       return;
     }
 

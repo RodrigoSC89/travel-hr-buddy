@@ -222,7 +222,7 @@ const AnalyticsCoreProfessional: React.FC = () => {
       toast({
         title: "Dados atualizados",
         description: "Os dados foram atualizados com sucesso"
-      };
+      });
     } finally {
       setIsRefreshing(false);
     }
@@ -616,7 +616,7 @@ const AnalyticsCoreProfessional: React.FC = () => {
       toast({
         title: "Gerando PDF",
         description: "Preparando relatório para download..."
-      };
+      });
 
       // Dynamic import of jsPDF
       const { default: jsPDF } = await import("jspdf");
@@ -841,7 +841,7 @@ Este relatório apresenta uma análise abrangente dos principais indicadores de 
         title: "Erro ao copiar",
         description: "Não foi possível copiar o relatório",
         variant: "destructive"
-      };
+      });
     }
   };
 

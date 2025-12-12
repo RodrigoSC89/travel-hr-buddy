@@ -74,7 +74,7 @@ export const EmployeePayroll: React.FC = () => {
         title: "Error loading payroll",
         description: error.message,
         variant: "destructive",
-      };
+      });
     } finally {
       setLoading(false);
     }

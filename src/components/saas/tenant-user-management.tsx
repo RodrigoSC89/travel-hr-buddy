@@ -160,7 +160,7 @@ export const TenantUserManagement: React.FC = () => {
         title: "Campos obrigatórios",
         description: "Preencha todos os campos.",
         variant: "destructive"
-      };
+      });
       return;
     }
 

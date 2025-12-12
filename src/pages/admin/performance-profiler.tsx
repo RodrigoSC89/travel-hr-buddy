@@ -166,7 +166,7 @@ export default function PerformanceProfiler() {
             lastSeen: Date.now(),
           };
         }
-      };
+      });
 
       if (slowOnes.length > 0) {
         setSlowComponents((prev) => {

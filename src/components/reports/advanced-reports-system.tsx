@@ -56,13 +56,13 @@ const AdvancedReportsSystem = () => {
       toast({
         title: "Relatório Gerado",
         description: "O relatório foi gerado com sucesso!",
-      };
+      });
     } catch (error) {
       toast({
         title: "Erro ao Gerar Relatório",
         description: "Ocorreu um erro ao gerar o relatório.",
         variant: "destructive",
-      };
+      });
     } finally {
       setIsGenerating(false);
     }

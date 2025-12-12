@@ -89,7 +89,7 @@ export const PriceAlertDashboardLegacy = memo(() => {
         title: "Erro",
         description: "Não foi possível carregar os alertas",
         variant: "destructive"
-      };
+      });
     } finally {
       setIsLoading(false);
     }
@@ -135,7 +135,7 @@ export const PriceAlertDashboardLegacy = memo(() => {
         title: "Erro",
         description: "Preencha todos os campos obrigatórios",
         variant: "destructive"
-      };
+      });
       return;
     }
 

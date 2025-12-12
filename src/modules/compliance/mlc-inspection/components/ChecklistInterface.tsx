@@ -51,7 +51,7 @@ export const ChecklistInterface = memo(function({ inspectionId, onUpdate }: Chec
         title: "Error",
         description: "Failed to load findings",
         variant: "destructive",
-      };
+      });
     } finally {
       setLoading(false);
     }

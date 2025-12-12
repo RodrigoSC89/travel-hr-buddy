@@ -90,7 +90,7 @@ export default function AITemplatesPage() {
         title: "Erro ao carregar templates",
         description: "Não foi possível carregar a lista de templates.",
         variant: "destructive",
-      };
+      });
     } finally {
       setLoading(false);
     }
@@ -202,7 +202,7 @@ export default function AITemplatesPage() {
         title: "Erro de validação",
         description: "Título e conteúdo são obrigatórios.",
         variant: "destructive",
-      };
+      });
       return;
     }
 
@@ -316,7 +316,7 @@ export default function AITemplatesPage() {
       setFormData({
         ...formData,
         tags: [...formData.tags, tagInput.trim()],
-      };
+      });
       setTagInput("");
     }
   };

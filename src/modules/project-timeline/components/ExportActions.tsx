@@ -115,7 +115,7 @@ export const ExportActions: React.FC<ExportActionsProps> = ({ tasks }) => {
         title: "No tasks to export",
         description: "Create some tasks first",
         variant: "destructive",
-      };
+      });
       return;
     }
 

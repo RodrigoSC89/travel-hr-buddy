@@ -213,7 +213,7 @@ export const WebhookBuilder: React.FC = () => {
       toast({
         title: "Webhook Criado",
         description: `Webhook "${webhookConfig.name}" foi criado com sucesso.`,
-      };
+      });
       
       // Reset form
       setWebhookConfig({

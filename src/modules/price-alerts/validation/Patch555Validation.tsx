@@ -28,14 +28,14 @@ export default function Patch555Validation() {
         tableRenders: true, // Service exists and can fetch data
         uiComplete: alerts !== null,
         notificationsActive: notifications !== null,
-      };
+      });
     } catch (error) {
       console.error("Validation error:", error);
       setChecks({
         tableRenders: false,
         uiComplete: false,
         notificationsActive: false,
-      };
+      });
     } finally {
       setLoading(false);
     }

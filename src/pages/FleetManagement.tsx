@@ -113,7 +113,7 @@ const MaritimeFleetManagement = () => {
       toast({
         title: "Exportando dados da frota",
         description: "O relatório será gerado em breve...",
-      };
+      });
       
       // Simulate export process
       setTimeout(() => {
@@ -127,7 +127,7 @@ const MaritimeFleetManagement = () => {
         title: "Erro na exportação",
         description: "Não foi possível exportar os dados da frota",
         variant: "destructive"
-      };
+      });
     }
   };
 

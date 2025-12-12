@@ -81,7 +81,7 @@ export const PWAStatus: React.FC = () => {
       toast({
         title: "App Instalado",
         description: "Nautilus One foi instalado com sucesso!",
-      };
+      });
     }
     
     setDeferredPrompt(null);

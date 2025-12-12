@@ -66,7 +66,7 @@ export default function BackupsPage() {
         title: "Error",
         description: "Failed to load backups",
         variant: "destructive",
-      };
+      });
     } finally {
       setLoading(false);
     }
@@ -92,7 +92,7 @@ export default function BackupsPage() {
       toast({
         title: "Backup Started",
         description: "Manual backup is being created...",
-      };
+      });
 
       const { data: { session } } = await supabase.auth.getSession();
       if (!session) {

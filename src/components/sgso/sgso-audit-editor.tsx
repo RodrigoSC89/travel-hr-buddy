@@ -120,7 +120,7 @@ export default function SGSOAuditEditor() {
         title: "Erro",
         description: "Selecione uma embarcação",
         variant: "destructive"
-      };
+      });
       return;
     }
 

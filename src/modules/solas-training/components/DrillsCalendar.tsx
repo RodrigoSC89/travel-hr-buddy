@@ -91,7 +91,7 @@ export default function DrillsCalendar({ drills, onStartDrill, onScheduleDrill, 
       toast({
         title: "Drill Agendado",
         description: `${selectedDrill.name} agendado para ${format(selectedDate, "dd/MM/yyyy", { locale: ptBR })} às ${scheduleTime}`,
-      };
+      });
       setShowScheduleDialog(false);
       setSelectedDrill(null);
     }
@@ -108,7 +108,7 @@ export default function DrillsCalendar({ drills, onStartDrill, onScheduleDrill, 
       toast({
         title: "Drill Iniciado",
         description: `${selectedDrill.name} foi iniciado. Registre a participação da tripulação.`,
-      };
+      });
       setShowStartDialog(false);
       setSelectedDrill(null);
       setDrillNotes("");

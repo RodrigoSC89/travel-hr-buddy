@@ -156,7 +156,7 @@ const TravelManagement = () => {
         title: "Error loading itineraries",
         description: error.message,
         variant: "destructive",
-      };
+      });
     } finally {
       setLoading(false);
     }
@@ -192,7 +192,7 @@ const TravelManagement = () => {
       toast({
         title: "✅ Itinerary Created",
         description: "Your travel itinerary has been created",
-      };
+      });
 
       setShowNewItinerary(false);
       setFormData({

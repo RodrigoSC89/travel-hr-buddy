@@ -132,7 +132,7 @@ export const ModernEmployeePortal: React.FC = () => {
         title: "Erro",
         description: "Erro ao carregar dados do portal",
         variant: "destructive"
-      };
+      });
     } finally {
       setLoading(false);
     }

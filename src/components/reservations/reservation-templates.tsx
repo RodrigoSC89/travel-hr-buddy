@@ -122,7 +122,7 @@ export const ReservationTemplates: React.FC<ReservationTemplatesProps> = ({
         title: "Erro de validação",
         description: "Nome e título são obrigatórios",
         variant: "destructive"
-      };
+      });
       return;
     }
 

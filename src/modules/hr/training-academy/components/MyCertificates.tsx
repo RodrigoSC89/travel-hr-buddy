@@ -37,7 +37,7 @@ export const MyCertificates: React.FC = () => {
         title: "Error loading certificates",
         description: error.message,
         variant: "destructive",
-      };
+      });
     } finally {
       setIsLoading(false);
     }

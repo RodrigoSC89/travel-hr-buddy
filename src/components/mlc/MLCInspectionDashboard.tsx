@@ -60,7 +60,7 @@ export const MLCInspectionDashboard: React.FC = () => {
           "Authorization": `Bearer ${import.meta.env.VITE_SUPABASE_PUBLISHABLE_KEY}`,
         },
         body: JSON.stringify({ messages: [...aiMessages, userMessage] }),
-      };
+      });
 
       if (!response.ok) throw new Error("AI request failed");
 

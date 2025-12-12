@@ -24,7 +24,7 @@ export default function JobFormWithExamples({ onSubmit }: JobFormWithExamplesPro
         title: "Campos obrigatórios",
         description: "Por favor, preencha o componente e a descrição.",
         variant: "destructive",
-      };
+      });
       return;
     }
 

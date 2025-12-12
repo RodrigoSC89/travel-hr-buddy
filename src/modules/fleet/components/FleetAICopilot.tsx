@@ -120,7 +120,7 @@ export const FleetAICopilot: React.FC<FleetAICopilotProps> = ({
         role: "assistant",
         content: responseContent,
         timestamp: new Date()
-      };
+      });
       setMessages(prev => [...prev, assistantMessage]);
 
     } catch (error) {

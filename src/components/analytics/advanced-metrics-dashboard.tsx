@@ -147,7 +147,7 @@ export const AdvancedMetricsDashboard: React.FC = () => {
       toast({
         title: "Relatório gerado",
         description: "O relatório de análise foi gerado com sucesso",
-      };
+      });
     } catch (error) {
       toast({
         title: "Erro ao gerar relatório",

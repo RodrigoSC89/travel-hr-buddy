@@ -104,7 +104,7 @@ export const IntegrationsHubEnhanced = memo(() => {
         title: "Error loading integrations",
         description: error.message,
         variant: "destructive",
-      };
+      });
     } finally {
       setLoading(false);
     }
@@ -199,7 +199,7 @@ export const IntegrationsHubEnhanced = memo(() => {
         title: "URL required",
         description: "Please enter a webhook URL",
         variant: "destructive",
-      };
+      });
       return;
     }
 

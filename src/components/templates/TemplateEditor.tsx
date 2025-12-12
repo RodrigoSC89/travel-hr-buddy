@@ -59,7 +59,7 @@ export default function TemplateEditor() {
         title: "Erro ao salvar",
         description: "Por favor, preencha o título do template.",
         variant: "destructive",
-      };
+      });
       return;
     }
 
@@ -160,7 +160,7 @@ export default function TemplateEditor() {
       toast({
         title: "HTML exportado com sucesso!",
         description: "O arquivo foi baixado para o seu dispositivo.",
-      };
+      });
     } catch (error) {
       console.error("Error exporting HTML:", error);
       toast({
@@ -177,7 +177,7 @@ export default function TemplateEditor() {
         title: "Nome necessário",
         description: "Por favor, preencha o nome do placeholder.",
         variant: "destructive",
-      };
+      });
       return;
     }
 
@@ -197,7 +197,7 @@ export default function TemplateEditor() {
         title: "Título necessário",
         description: "Por favor, preencha o título do template antes de gerar com IA.",
         variant: "destructive",
-      };
+      });
       return;
     }
 

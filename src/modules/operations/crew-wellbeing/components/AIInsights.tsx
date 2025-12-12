@@ -40,7 +40,7 @@ export const AIInsights = memo(() => {
 
       const { data, error } = await supabase.functions.invoke("crew-ai-analysis" as unknown, {
         body: { crewMemberId: user.id, analysisType: "wellbeing" }
-      };
+      });
 
       if (error) throw error;
 

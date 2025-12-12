@@ -154,7 +154,7 @@ export default function PeoDpWizardComplete() {
         incidents: incidentsData.data || [],
         training: trainingData.data || [],
         audits: auditsData.data || []
-      };
+      });
 
       // Run initial inference
       runInference(formData);

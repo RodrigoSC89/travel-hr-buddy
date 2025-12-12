@@ -111,7 +111,7 @@ export const IntegrationsTab: React.FC<IntegrationsTabProps> = ({
         title: "Erro",
         description: "Nome e URL são obrigatórios",
         variant: "destructive"
-      };
+      });
       return;
     }
 

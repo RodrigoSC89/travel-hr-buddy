@@ -206,7 +206,7 @@ export default function ExecutionLogsPage() {
         date: format(date, "dd/MM"),
         success: 0,
         failed: 0,
-      };
+      });
   });
 
     filteredExecutions.forEach(exec => {

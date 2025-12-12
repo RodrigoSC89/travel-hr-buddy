@@ -81,7 +81,7 @@ const NautilusLLM: React.FC = () => {
       const response = await nautilusRespond({
         prompt: userMessage.content,
         mode
-      };
+      });
 
       const assistantMessage: Message = {
         id: response.sessionId,

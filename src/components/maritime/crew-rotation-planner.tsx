@@ -194,7 +194,7 @@ export const CrewRotationPlanner: React.FC = () => {
       toast({
         title: "✅ Otimização Concluída",
         description: "Economia potencial de R$ 15.500 identificada!",
-      };
+      });
     }, 2000);
   };
 

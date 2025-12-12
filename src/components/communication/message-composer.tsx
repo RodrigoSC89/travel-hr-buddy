@@ -293,7 +293,7 @@ export const MessageComposer: React.FC<MessageComposerProps> = ({
       toast({
         title: "Sucesso",
         description: "Rascunho salvo com sucesso"
-      };
+      });
     } catch (error) {
       toast({
         title: "Erro",

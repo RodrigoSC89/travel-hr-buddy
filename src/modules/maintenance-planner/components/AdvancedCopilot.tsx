@@ -233,7 +233,7 @@ export default function AdvancedCopilot() {
         title: "Não suportado",
         description: "Reconhecimento de voz não disponível neste navegador",
         variant: "destructive",
-      };
+      });
       return;
     }
 

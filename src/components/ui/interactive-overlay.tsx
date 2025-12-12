@@ -202,7 +202,7 @@ const StatusWidget = () => {
         performance: 97,
         health: 100,
         efficiency: 94
-      };
+      });
     }, 1500);
     return () => clearTimeout(timer);
   }, []);

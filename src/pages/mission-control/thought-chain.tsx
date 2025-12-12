@@ -23,7 +23,7 @@ const ThoughtChainPage = () => {
         title: "Erro",
         description: "Por favor, adicione pelo menos um passo.",
         variant: "destructive",
-      };
+      });
       return;
     }
 

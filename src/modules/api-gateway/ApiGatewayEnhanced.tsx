@@ -230,7 +230,7 @@ const ApiGatewayEnhanced = () => {
       toast({
         title: "✅ Route Created",
         description: `API route "${routeFormData.route_name}" has been created`,
-      };
+      });
 
       setShowNewRoute(false);
       setRouteFormData({

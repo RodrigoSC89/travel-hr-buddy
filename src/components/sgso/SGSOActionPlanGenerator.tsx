@@ -74,7 +74,7 @@ export const SGSOActionPlanGenerator: React.FC = () => {
         title: "Erro de validação",
         description: "Por favor, insira a descrição do incidente.",
         variant: "destructive",
-      };
+      });
       return;
     }
 
@@ -83,7 +83,7 @@ export const SGSOActionPlanGenerator: React.FC = () => {
         title: "Erro de validação",
         description: "Por favor, selecione a categoria SGSO.",
         variant: "destructive",
-      };
+      });
       return;
     }
 

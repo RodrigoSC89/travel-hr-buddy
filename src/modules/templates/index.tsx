@@ -319,7 +319,7 @@ export const CompleteTemplateEditor: React.FC = () => {
           properties: {},
           children: paragraphs
         }]
-      };
+      });
 
       const blob = await Packer.toBlob(doc);
       const filename = `${templateTitle || "document"}_${new Date().toISOString().split("T")[0]}.docx`;

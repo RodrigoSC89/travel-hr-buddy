@@ -42,7 +42,7 @@ export const FindingsManager = memo(function() {
         title: "Error loading findings",
         description: error.message,
         variant: "destructive",
-      };
+      });
     } finally {
       setLoading(false);
     }

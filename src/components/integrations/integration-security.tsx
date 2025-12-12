@@ -150,7 +150,7 @@ export const IntegrationSecurity: React.FC = () => {
       toast({
         title: "Scan Concluído",
         description: "Nenhuma vulnerabilidade crítica encontrada",
-      };
+      });
     }, 3000);
   };
 

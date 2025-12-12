@@ -158,7 +158,7 @@ export const TaskManagement: React.FC = () => {
         tags: [],
         related_vessel: "",
         related_crew: ""
-      };
+      });
       setShowAddDialog(false);
       
       toast({

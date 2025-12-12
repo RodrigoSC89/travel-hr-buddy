@@ -99,7 +99,7 @@ const ApiGateway = () => {
         title: "Error",
         description: "Please enter a key name",
         variant: "destructive"
-      };
+      });
       return;
     }
 
@@ -137,7 +137,7 @@ const ApiGateway = () => {
         title: "Error",
         description: "Please fill in all fields",
         variant: "destructive"
-      };
+      });
       return;
     }
 

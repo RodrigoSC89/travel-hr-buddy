@@ -101,7 +101,7 @@ export const IMCAAuditManager = memo(function({
         title: "Campos obrigatórios",
         description: "Preencha categoria e pergunta.",
         variant: "destructive"
-      };
+      });
       return;
     }
 
@@ -151,7 +151,7 @@ export const IMCAAuditManager = memo(function({
         title: "Campos obrigatórios",
         description: "Preencha código e nome da categoria.",
         variant: "destructive"
-      };
+      });
       return;
     }
 

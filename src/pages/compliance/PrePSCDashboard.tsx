@@ -41,7 +41,7 @@ export default function PrePSCDashboard() {
         title: "Error",
         description: "Failed to load inspection statistics",
         variant: "destructive",
-      };
+      });
     }
   };
 

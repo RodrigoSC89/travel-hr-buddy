@@ -72,7 +72,7 @@ export default function UsageMetrics() {
         totalSessions: 1547,
         avgPagesPerSession: 8.3,
         bounceRate: 12.4,
-      };
+      });
     },
   });
 

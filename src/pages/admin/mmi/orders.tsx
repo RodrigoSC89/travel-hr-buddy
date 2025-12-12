@@ -40,7 +40,7 @@ export default function MMIOrdersPage() {
         title: "Erro ao carregar ordens de serviço",
         description: error instanceof Error ? error.message : "Erro desconhecido",
         variant: "destructive",
-      };
+      });
     } finally {
       setLoading(false);
     }

@@ -103,7 +103,7 @@ export const NotificationSettings = memo(() => {
       toast({
         title: "Configurações salvas",
         description: "Suas preferências de notificação foram atualizadas.",
-      };
+      });
     } catch (error) {
       toast({
         title: "Erro",

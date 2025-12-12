@@ -36,7 +36,7 @@ export const PriceRangeConfig = memo(function() {
         title: "Erro",
         description: "Você precisa estar autenticado",
         variant: "destructive"
-      };
+      });
       return;
     }
 
@@ -45,7 +45,7 @@ export const PriceRangeConfig = memo(function() {
         title: "Campos obrigatórios",
         description: "Preencha origem, destino e preço máximo",
         variant: "destructive"
-      };
+      });
       return;
     }
 

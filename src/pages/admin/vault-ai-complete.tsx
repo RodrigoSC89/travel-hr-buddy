@@ -97,7 +97,7 @@ export default function VaultAIComplete() {
         title: "Atenção",
         description: "Digite uma consulta de busca",
         variant: "destructive"
-      };
+      });
       return;
     }
 

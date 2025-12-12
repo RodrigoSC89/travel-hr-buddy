@@ -118,7 +118,7 @@ export const EvidenceManager: React.FC<EvidenceManagerProps> = ({
         const blob = new Blob(chunks, { type: "audio/wav" });
         await uploadAudioBlob(blob);
         stream.getTracks().forEach(track => track.stop());
-      };
+      });
 
       recorder.start();
       setMediaRecorder(recorder);

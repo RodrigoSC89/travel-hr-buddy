@@ -53,7 +53,7 @@ export default function UserManagementRBAC() {
         title: "Error",
         description: "Failed to load user groups",
         variant: "destructive",
-      };
+      });
     } finally {
       setLoading(false);
     }
@@ -76,7 +76,7 @@ export default function UserManagementRBAC() {
         title: "Error",
         description: "Failed to load audit logs",
         variant: "destructive",
-      };
+      });
     } finally {
       setLoading(false);
     }

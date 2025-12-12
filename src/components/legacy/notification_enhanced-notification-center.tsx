@@ -112,7 +112,7 @@ export const EnhancedNotificationCenter: React.FC = () => {
       toast({
         title: "Sucesso",
         description: "Todas as notificações foram marcadas como lidas"
-      };
+      });
     } catch (error) {
       toast({
         title: "Erro",

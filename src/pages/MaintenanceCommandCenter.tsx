@@ -100,7 +100,7 @@ const MaintenanceCommandCenter = () => {
         efficiency: 94,
         activeTasks: 15,
         pendingForecasts: 5
-      };
+      });
     } catch (error) {
       console.error("Error fetching maintenance stats:", error);
     } finally {

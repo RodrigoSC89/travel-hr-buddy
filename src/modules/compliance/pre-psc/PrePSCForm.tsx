@@ -65,7 +65,7 @@ export default function PrePSCForm({ inspectionId, onComplete }: PrePSCFormProps
         title: "Error",
         description: "Failed to load inspection",
         variant: "destructive",
-      };
+      });
     } finally {
       setLoading(false);
     }

@@ -80,7 +80,7 @@ export default function InsightDashboard() {
       toast({
         title: "Relatório Gerado",
         description: "Análise de IA concluída com sucesso",
-      };
+      });
     } catch (error) {
       console.error("Erro ao gerar relatório:", error);
       toast({

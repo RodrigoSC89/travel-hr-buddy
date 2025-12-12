@@ -72,7 +72,7 @@ const WorkflowEngine = () => {
         title: "Erro",
         description: "Workflow precisa de nome e pelo menos um passo",
         variant: "destructive",
-      };
+      });
       return;
     }
 

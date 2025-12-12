@@ -89,7 +89,7 @@ export const OperationalCommandCenter: React.FC = () => {
         title: "Erro ao carregar dados",
         description: "Não foi possível carregar os dados do centro de comando.",
         variant: "destructive"
-      };
+      });
     } finally {
       setIsLoading(false);
     }

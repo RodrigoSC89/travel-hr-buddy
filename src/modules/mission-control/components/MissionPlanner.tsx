@@ -58,7 +58,7 @@ export const MissionPlanner: React.FC = () => {
         title: "Error",
         description: "Failed to load missions",
         variant: "destructive",
-      };
+      });
     } finally {
       setLoading(false);
     }

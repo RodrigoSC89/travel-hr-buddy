@@ -154,7 +154,7 @@ export const PeotramPermissionsManager: React.FC = () => {
       toast({
         title: "Sucesso",
         description: "Permissão criada com sucesso!",
-      };
+      });
 
       setIsDialogOpen(false);
       setPermissionForm({

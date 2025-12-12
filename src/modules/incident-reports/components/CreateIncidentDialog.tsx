@@ -65,7 +65,7 @@ export const CreateIncidentDialog: React.FC<CreateIncidentDialogProps> = ({
         title: "GPS não disponível",
         description: "Seu navegador não suporta geolocalização",
         variant: "destructive",
-      };
+      });
       return;
     }
 

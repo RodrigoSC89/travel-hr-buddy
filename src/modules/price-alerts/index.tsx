@@ -178,7 +178,7 @@ export const CompletePriceAlertsUI: React.FC = () => {
         visual_notifications: newAlert.visual_notifications,
         is_active: true,
         user_id: user?.id,
-      };
+      });
 
       if (error) throw error;
 
