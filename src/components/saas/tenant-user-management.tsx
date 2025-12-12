@@ -1,4 +1,4 @@
-import { useState } from "react";;
+import { useState, useCallback } from "react";;
 import React, { useState } from "react";
 import { Card, CardHeader, CardTitle, CardContent } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
@@ -270,7 +270,7 @@ export const TenantUserManagement: React.FC = () => {
                   type="email"
                   placeholder="usuario@empresa.com"
                   value={newUserEmail}
-                  onChange={(e) => setNewUserEmail(e.target.value)}
+                  onChange={handleChange}
                 />
               </div>
               
@@ -291,7 +291,7 @@ export const TenantUserManagement: React.FC = () => {
               <div className="flex justify-end space-x-2">
                 <Button 
                   variant="outline" 
-                  onClick={() => setIsInviteDialogOpen(false)}
+                  onClick={handleSetIsInviteDialogOpen}
                 >
                   Cancelar
                 </Button>
@@ -369,7 +369,7 @@ export const TenantUserManagement: React.FC = () => {
                 <Input
                   placeholder="Buscar por nome ou email..."
                   value={searchTerm}
-                  onChange={(e) => setSearchTerm(e.target.value)}
+                  onChange={handleChange}
                   className="pl-10"
                 />
               </div>
@@ -473,26 +473,26 @@ export const TenantUserManagement: React.FC = () => {
                         </DropdownMenuTrigger>
                         <DropdownMenuContent align="end">
                           <DropdownMenuItem 
-                            onClick={() => handleRoleChange(user.id, "admin")}
+                            onClick={() => handlehandleRoleChange}
                             disabled={user.role === "admin"}
                           >
                             Promover a Admin
                           </DropdownMenuItem>
                           <DropdownMenuItem 
-                            onClick={() => handleRoleChange(user.id, "manager")}
+                            onClick={() => handlehandleRoleChange}
                             disabled={user.role === "manager"}
                           >
                             Tornar Gerente
                           </DropdownMenuItem>
                           <DropdownMenuItem 
-                            onClick={() => handleRoleChange(user.id, "member")}
+                            onClick={() => handlehandleRoleChange}
                             disabled={user.role === "member"}
                           >
                             Tornar Membro
                           </DropdownMenuItem>
                           {user.status === "active" && (
                             <DropdownMenuItem 
-                              onClick={() => handleStatusChange(user.id, "suspended")}
+                              onClick={() => handlehandleStatusChange}
                               className="text-red-600"
                             >
                               Suspender
@@ -500,7 +500,7 @@ export const TenantUserManagement: React.FC = () => {
                           )}
                           {user.status === "suspended" && (
                             <DropdownMenuItem 
-                              onClick={() => handleStatusChange(user.id, "active")}
+                              onClick={() => handlehandleStatusChange}
                               className="text-green-600"
                             >
                               Reativar

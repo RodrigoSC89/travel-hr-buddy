@@ -1,5 +1,5 @@
 /**
-import { useState } from "react";;
+import { useState, useMemo, useCallback } from "react";;
  * PATCH: App Móvel Personalizado por Função
  * Interface adaptativa baseada no cargo do tripulante
  */
@@ -228,7 +228,7 @@ export default function MobileApp() {
                   return (
                     <button
                       key={role.id}
-                      onClick={() => setSelectedRole(role)}
+                      onClick={handleSetSelectedRole}
                       className={`w-full p-4 rounded-lg border text-left transition-all ${
                         selectedRole.id === role.id
                           ? "border-primary bg-primary/10"
@@ -308,7 +308,7 @@ export default function MobileApp() {
                         return (
                           <button
                             key={action.action}
-                            onClick={() => handleQuickAction(action.label)}
+                            onClick={() => handlehandleQuickAction}
                             className="flex flex-col items-center gap-1 p-2 rounded-lg bg-muted/50 hover:bg-muted transition-colors"
                           >
                             <div className="p-2 rounded-full bg-primary/10">

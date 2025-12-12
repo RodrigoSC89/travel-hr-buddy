@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";;
+import { useEffect, useState, useCallback, useMemo } from "react";;
 import React, { useState, useEffect } from "react";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
@@ -284,7 +284,7 @@ export const OperationalWindowMonitor: React.FC = () => {
               <select
                 className="border rounded-md px-3 py-2 text-sm"
                 value={selectedProfile.id}
-                onChange={(e) => setSelectedProfile(mockASOGProfiles.find(p => p.id === e.target.value) || mockASOGProfiles[0])}
+                onChange={handleChange}
               >
                 {mockASOGProfiles.map(profile => (
                   <option key={profile.id} value={profile.id}>{profile.name}</option>
@@ -444,7 +444,7 @@ export const OperationalWindowMonitor: React.FC = () => {
                         </div>
                       </div>
                       {!alert.acknowledged && (
-                        <Button size="sm" onClick={() => handleAcknowledgeAlert(alert.id)}>
+                        <Button size="sm" onClick={() => handlehandleAcknowledgeAlert}>
                           <CheckCircle className="w-4 h-4 mr-1" />Reconhecer
                         </Button>
                       )}

@@ -1,5 +1,5 @@
 /**
-import { useEffect, useState } from "react";;
+import { useEffect, useState, useCallback } from "react";;
  * PATCH 392 - Performance Monitoring Alerts System
  * Automated threshold-based alerts
  */
@@ -200,7 +200,7 @@ export const AlertsSystem: React.FC = () => {
                     <Button
                       variant="ghost"
                       size="sm"
-                      onClick={() => resolveAlert(alert.id)}
+                      onClick={() => handleresolveAlert}
                       title="Resolve alert"
                     >
                       <X className="h-4 w-4" />

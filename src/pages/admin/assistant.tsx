@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";;;
+import { useState, useMemo, useCallback } from "react";;;
 import { useNavigate } from "react-router-dom";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
@@ -100,7 +100,7 @@ export default function AssistantPage() {
         </div>
         <Button
           variant="outline"
-          onClick={() => navigate("/admin/assistant/logs")}
+          onClick={() => handlenavigate}
         >
           <History className="w-4 h-4 mr-2" />
           Ver Histórico
@@ -189,7 +189,7 @@ export default function AssistantPage() {
                 <Input
                   placeholder="Pergunte algo... (ex: 'criar checklist', 'resumir documento')"
                   value={input}
-                  onChange={(e) => setInput(e.target.value)}
+                  onChange={handleChange}
                   onKeyDown={(e) => e.key === "Enter" && !loading && sendMessage()}
                   disabled={loading}
                   className="flex-1"
@@ -220,7 +220,7 @@ export default function AssistantPage() {
                     key={idx}
                     variant="outline"
                     className="w-full justify-start text-left h-auto py-2"
-                    onClick={() => sendMessage(cmd.command)}
+                    onClick={() => handlesendMessage}
                     disabled={loading}
                   >
                     <span className="mr-2">{cmd.icon}</span>

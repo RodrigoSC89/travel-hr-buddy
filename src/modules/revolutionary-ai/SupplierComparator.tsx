@@ -1,5 +1,5 @@
 /**
-import { useMemo, useState } from "react";;
+import { useMemo, useState, useCallback } from "react";;
  * REVOLUTIONARY AI - Supplier Comparator
  * Funcionalidade 14: Comparador de fornecedores com IA
  */
@@ -169,7 +169,7 @@ export const SupplierComparator = memo(function() {
                 placeholder="Buscar fornecedor..."
                 className="pl-9"
                 value={searchTerm}
-                onChange={(e) => setSearchTerm(e.target.value)}
+                onChange={handleChange}
               />
             </div>
             <div className="flex items-center gap-2">
@@ -185,7 +185,7 @@ export const SupplierComparator = memo(function() {
                   key={option.key}
                   variant={sortBy === option.key ? "default" : "outline"}
                   size="sm"
-                  onClick={() => setSortBy(option.key)}
+                  onClick={handleSetSortBy}
                 >
                   {option.label}
                 </Button>
@@ -209,7 +209,7 @@ export const SupplierComparator = memo(function() {
                 className={`cursor-pointer transition-all hover:border-primary/50 ${
                   selectedSupplier?.id === supplier.id ? "border-primary ring-2 ring-primary/20" : ""
                 } ${supplier.aiRecommendation ? "bg-gradient-to-r from-primary/5 to-transparent" : ""}`}
-                onClick={() => setSelectedSupplier(supplier)}
+                onClick={handleSetSelectedSupplier}
               >
                 <CardContent className="p-5">
                   <div className="flex items-start justify-between mb-4">

@@ -1,5 +1,5 @@
 /**
-import { useEffect, useState } from "react";;
+import { useEffect, useState, useCallback, useMemo } from "react";;
  * PATCH UNIFY-11.1: AI Command Center
  * Fusão de: IA Revolucionária + Dashboard IA + Insights de IA + Automação IA + Métricas de Adoção
  * 
@@ -510,7 +510,7 @@ export default function AICommandCenter() {
                       key={feature.id}
                       whileHover={{ scale: 1.02 }}
                       whileTap={{ scale: 0.98 }}
-                      onClick={() => setActiveFeature(feature.id)}
+                      onClick={handleSetActiveFeature}
                       className={`flex items-center gap-2 px-4 py-2 rounded-lg whitespace-nowrap transition-all ${
                         isActive 
                           ? "bg-primary text-primary-foreground shadow-lg" 
@@ -954,7 +954,7 @@ export default function AICommandCenter() {
                               </div>
                             </div>
                             {!alert.resolved_at && (
-                              <Button variant="ghost" size="sm" onClick={() => resolveAlert(alert.id, "Resolvido manualmente")}>
+                              <Button variant="ghost" size="sm" onClick={() => handleresolveAlert}>
                                 Resolver
                               </Button>
                             )}

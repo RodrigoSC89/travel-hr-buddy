@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";;
+import { useEffect, useState, useCallback } from "react";;
 
 import React, { useState, useEffect } from "react";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
@@ -360,7 +360,7 @@ const VesselManagementSystem: React.FC<VesselManagementProps> = ({ onStatsUpdate
                   <Input
                     id="name"
                     value={newVessel.name}
-                    onChange={(e) => setNewVessel({ ...newVessel, name: e.target.value })}
+                    onChange={handleChange})}
                     placeholder="Ex: MV Atlântico Explorer"
                   />
                 </div>
@@ -369,7 +369,7 @@ const VesselManagementSystem: React.FC<VesselManagementProps> = ({ onStatsUpdate
                   <Input
                     id="imo"
                     value={newVessel.imo_number}
-                    onChange={(e) => setNewVessel({ ...newVessel, imo_number: e.target.value })}
+                    onChange={handleChange})}
                     placeholder="Ex: 9876543"
                   />
                 </div>
@@ -397,7 +397,7 @@ const VesselManagementSystem: React.FC<VesselManagementProps> = ({ onStatsUpdate
                   <Input
                     id="flag"
                     value={newVessel.flag_state}
-                    onChange={(e) => setNewVessel({ ...newVessel, flag_state: e.target.value })}
+                    onChange={handleChange})}
                     placeholder="Ex: Brasil"
                   />
                 </div>
@@ -407,7 +407,7 @@ const VesselManagementSystem: React.FC<VesselManagementProps> = ({ onStatsUpdate
                     id="crew"
                     type="number"
                     value={newVessel.crew_count}
-                    onChange={(e) => setNewVessel({ ...newVessel, crew_count: e.target.value })}
+                    onChange={handleChange})}
                     placeholder="Ex: 24"
                   />
                 </div>
@@ -417,7 +417,7 @@ const VesselManagementSystem: React.FC<VesselManagementProps> = ({ onStatsUpdate
                     id="capacity"
                     type="number"
                     value={newVessel.cargo_capacity}
-                    onChange={(e) => setNewVessel({ ...newVessel, cargo_capacity: e.target.value })}
+                    onChange={handleChange})}
                     placeholder="Ex: 12000"
                   />
                 </div>
@@ -428,7 +428,7 @@ const VesselManagementSystem: React.FC<VesselManagementProps> = ({ onStatsUpdate
                     type="number"
                     step="0.1"
                     value={newVessel.fuel_consumption}
-                    onChange={(e) => setNewVessel({ ...newVessel, fuel_consumption: e.target.value })}
+                    onChange={handleChange})}
                     placeholder="Ex: 15.2"
                   />
                 </div>
@@ -437,7 +437,7 @@ const VesselManagementSystem: React.FC<VesselManagementProps> = ({ onStatsUpdate
                   <Input
                     id="port"
                     value={newVessel.next_port}
-                    onChange={(e) => setNewVessel({ ...newVessel, next_port: e.target.value })}
+                    onChange={handleChange})}
                     placeholder="Ex: Santos"
                   />
                 </div>
@@ -447,7 +447,7 @@ const VesselManagementSystem: React.FC<VesselManagementProps> = ({ onStatsUpdate
                     id="eta"
                     type="datetime-local"
                     value={newVessel.eta}
-                    onChange={(e) => setNewVessel({ ...newVessel, eta: e.target.value })}
+                    onChange={handleChange})}
                   />
                 </div>
               </div>
@@ -455,7 +455,7 @@ const VesselManagementSystem: React.FC<VesselManagementProps> = ({ onStatsUpdate
                 <Button onClick={handleAddVessel} className="flex-1">
                   Adicionar Embarcação
                 </Button>
-                <Button variant="outline" onClick={() => setShowAddDialog(false)}>
+                <Button variant="outline" onClick={handleSetShowAddDialog}>
                   Cancelar
                 </Button>
               </div>
@@ -473,7 +473,7 @@ const VesselManagementSystem: React.FC<VesselManagementProps> = ({ onStatsUpdate
               <Input
                 placeholder="Buscar por nome, tipo ou IMO..."
                 value={searchTerm}
-                onChange={(e) => setSearchTerm(e.target.value)}
+                onChange={handleChange}
                 className="pl-10"
               />
             </div>
@@ -525,7 +525,7 @@ const VesselManagementSystem: React.FC<VesselManagementProps> = ({ onStatsUpdate
                 : "Adicione a primeira embarcação à sua frota"}
             </p>
             {!searchTerm && statusFilter === "all" && typeFilter === "all" && (
-              <Button onClick={() => setShowAddDialog(true)}>
+              <Button onClick={handleSetShowAddDialog}>
                 <Plus className="h-4 w-4 mr-2" />
                 Adicionar Embarcação
               </Button>

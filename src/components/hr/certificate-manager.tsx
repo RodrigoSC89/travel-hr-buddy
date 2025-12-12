@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";;
+import { useEffect, useState, useCallback } from "react";;
 import React, { useState, useEffect } from "react";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
@@ -311,7 +311,7 @@ export const CertificateManager: React.FC<CertificateManagerProps> = ({ employee
           {/* Add Certificate Button */}
           <div className="flex justify-between items-center">
             <h3 className="text-lg font-semibold">Certificados ({certificates.length})</h3>
-            <Button onClick={() => setIsAddingCertificate(true)}>
+            <Button onClick={handleSetIsAddingCertificate}>
               <Plus className="mr-2 h-4 w-4" />
               Adicionar Certificado
             </Button>
@@ -361,14 +361,14 @@ export const CertificateManager: React.FC<CertificateManagerProps> = ({ employee
                       <Button 
                         variant="outline" 
                         size="sm"
-                        onClick={() => downloadCertificate(certificate)}
+                        onClick={() => handledownloadCertificate}
                       >
                         <Download className="h-4 w-4" />
                       </Button>
                       <Button 
                         variant="destructive" 
                         size="sm"
-                        onClick={() => deleteCertificate(certificate)}
+                        onClick={() => handledeleteCertificate}
                       >
                         <Trash2 className="h-4 w-4" />
                       </Button>
@@ -385,7 +385,7 @@ export const CertificateManager: React.FC<CertificateManagerProps> = ({ employee
                 <p className="text-muted-foreground mb-4">
                   Adicione certificados para este funcionário
                 </p>
-                <Button onClick={() => setIsAddingCertificate(true)}>
+                <Button onClick={handleSetIsAddingCertificate}>
                   <Plus className="mr-2 h-4 w-4" />
                   Adicionar Primeiro Certificado
                 </Button>
@@ -458,7 +458,7 @@ export const CertificateManager: React.FC<CertificateManagerProps> = ({ employee
                     <Input
                       id="cert-name"
                       value={newCertificate.certificate_name}
-                      onChange={(e) => setNewCertificate(prev => ({ ...prev, certificate_name: e.target.value }))}
+                      onChange={handleChange}))}
                       placeholder="Ex: Certificado STCW Básico"
                     />
                   </div>
@@ -485,7 +485,7 @@ export const CertificateManager: React.FC<CertificateManagerProps> = ({ employee
                     <Input
                       id="issuer"
                       value={newCertificate.issuer}
-                      onChange={(e) => setNewCertificate(prev => ({ ...prev, issuer: e.target.value }))}
+                      onChange={handleChange}))}
                       placeholder="Ex: IMO, IATA, etc."
                     />
                   </div>
@@ -535,7 +535,7 @@ export const CertificateManager: React.FC<CertificateManagerProps> = ({ employee
               </div>
 
               <DialogFooter>
-                <Button variant="outline" onClick={() => setIsAddingCertificate(false)}>
+                <Button variant="outline" onClick={handleSetIsAddingCertificate}>
                   Cancelar
                 </Button>
                 <Button onClick={uploadCertificate} disabled={isUploading}>

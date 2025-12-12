@@ -1,4 +1,4 @@
-import { useState } from "react";;
+import { useState, useMemo, useCallback } from "react";;
 import React, { useState } from "react";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
@@ -140,16 +140,16 @@ export default function MaintenancePlanner() {
       {/* Actions Bar */}
       <div className="flex justify-between items-center mb-4">
         <div className="flex gap-2">
-          <Button onClick={() => setFilter("all")} variant={filter === "all" ? "default" : "outline"}>
+          <Button onClick={handleSetFilter} variant={filter === "all" ? "default" : "outline"}>
             Todas
           </Button>
-          <Button onClick={() => setFilter("pending")} variant={filter === "pending" ? "default" : "outline"}>
+          <Button onClick={handleSetFilter} variant={filter === "pending" ? "default" : "outline"}>
             Pendentes
           </Button>
-          <Button onClick={() => setFilter("completed")} variant={filter === "completed" ? "default" : "outline"}>
+          <Button onClick={handleSetFilter} variant={filter === "completed" ? "default" : "outline"}>
             Concluídas
           </Button>
-          <Button onClick={() => setFilter("overdue")} variant={filter === "overdue" ? "default" : "outline"}>
+          <Button onClick={handleSetFilter} variant={filter === "overdue" ? "default" : "outline"}>
             Atrasadas
           </Button>
         </div>

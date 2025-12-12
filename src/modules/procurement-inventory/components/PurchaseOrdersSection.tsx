@@ -1,4 +1,4 @@
-import { useState } from "react";;
+import { useState, useMemo, useCallback } from "react";;
 import React, { useState } from "react";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
@@ -277,7 +277,7 @@ export default function PurchaseOrdersSection({ searchQuery }: PurchaseOrdersSec
             <Download className="h-4 w-4 mr-2" />
             Exportar
           </Button>
-          <Button onClick={() => setShowNewOrder(true)}>
+          <Button onClick={handleSetShowNewOrder}>
             <Plus className="h-4 w-4 mr-2" />
             Novo Pedido
           </Button>
@@ -577,7 +577,7 @@ export default function PurchaseOrdersSection({ searchQuery }: PurchaseOrdersSec
             <p className="text-sm mt-2">
               Assim você garante o fluxo de aprovação e rastreabilidade completa.
             </p>
-            <Button className="mt-4" onClick={() => setShowNewOrder(false)}>
+            <Button className="mt-4" onClick={handleSetShowNewOrder}>
               Ir para Requisições
             </Button>
           </div>
@@ -640,7 +640,7 @@ function ReceiveItemsForm({
                 min={0}
                 max={item.quantity - item.receivedQty}
                 value={item.receivingQty}
-                onChange={(e) => updateQty(item.id, Number(e.target.value))}
+                onChange={handleChange}
               />
               <span className="text-sm text-muted-foreground">{item.unit}</span>
             </div>

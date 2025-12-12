@@ -1,4 +1,4 @@
-import { useState } from "react";;;
+import { useState, useMemo, useCallback } from "react";;;
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
@@ -147,7 +147,7 @@ export default function CrewTraining({
                 placeholder="Buscar tripulante..." 
                 className="pl-10"
                 value={searchTerm}
-                onChange={(e) => setSearchTerm(e.target.value)}
+                onChange={handleChange}
               />
             </div>
             <Select value={departmentFilter} onValueChange={setDepartmentFilter}>
@@ -244,7 +244,7 @@ export default function CrewTraining({
                         </Badge>
                       </TableCell>
                       <TableCell className="text-right">
-                        <Button variant="ghost" size="sm" onClick={() => handleViewDetails(member)}>
+                        <Button variant="ghost" size="sm" onClick={() => handlehandleViewDetails}>
                           <Eye className="h-4 w-4 mr-2" />
                           Ver Detalhes
                         </Button>
@@ -325,12 +325,12 @@ export default function CrewTraining({
                         </div>
                       </div>
                       <div className="flex gap-2 mt-2">
-                        <Button variant="ghost" size="sm" onClick={() => handleViewCertificate(cert)}>
+                        <Button variant="ghost" size="sm" onClick={() => handlehandleViewCertificate}>
                           <Eye className="h-3 w-3 mr-1" />
                           Ver
                         </Button>
                         {(cert.status === "expiring" || cert.status === "expired") && (
-                          <Button variant="ghost" size="sm" onClick={() => onScheduleRenewal(cert)}>
+                          <Button variant="ghost" size="sm" onClick={() => handleonScheduleRenewal}>
                             <Calendar className="h-3 w-3 mr-1" />
                             Agendar Renovação
                           </Button>
@@ -343,7 +343,7 @@ export default function CrewTraining({
             </div>
           </div>
           <DialogFooter>
-            <Button variant="outline" onClick={() => setShowDetailsDialog(false)}>Fechar</Button>
+            <Button variant="outline" onClick={handleSetShowDetailsDialog}>Fechar</Button>
             <Button>
               <Download className="h-4 w-4 mr-2" />
               Exportar Perfil
@@ -392,7 +392,7 @@ export default function CrewTraining({
             </div>
           </div>
           <DialogFooter>
-            <Button variant="outline" onClick={() => setShowCertDialog(false)}>Fechar</Button>
+            <Button variant="outline" onClick={handleSetShowCertDialog}>Fechar</Button>
             <Button>
               <Download className="h-4 w-4 mr-2" />
               Baixar Certificado

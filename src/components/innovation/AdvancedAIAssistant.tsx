@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";;
+import { useEffect, useState, useCallback, useMemo } from "react";;
 import React, { useState, useEffect } from "react";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
@@ -286,7 +286,7 @@ export const AdvancedAIAssistant = memo(() => {
                 <Input
                   placeholder="Descreva o que precisa analisar ou otimizar..."
                   value={inputMessage}
-                  onChange={(e) => setInputMessage(e.target.value)}
+                  onChange={handleChange}
                   onKeyPress={(e) => e.key === "Enter" && sendMessage()}
                   className="flex-1"
                 />
@@ -333,7 +333,7 @@ export const AdvancedAIAssistant = memo(() => {
                     key={action.id}
                     variant="outline"
                     size="sm"
-                    onClick={() => handleQuickAction(action)}
+                    onClick={() => handlehandleQuickAction}
                     className="w-full justify-start h-auto p-3"
                   >
                     <IconComponent className="w-4 h-4 mr-2 flex-shrink-0" />

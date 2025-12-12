@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";;
+import { useEffect, useState, useCallback, useMemo } from "react";;
 import React, { useState, useEffect } from "react";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
@@ -125,7 +125,7 @@ export const ChecklistInterface = memo(function({ inspectionId, onUpdate }: Chec
                     <Button
                       variant="ghost"
                       size="sm"
-                      onClick={() => setExpandedItem(isExpanded ? null : index)}
+                      onClick={handleSetExpandedItem}
                     >
                       {isExpanded ? "Collapse" : "Inspect"}
                     </Button>
@@ -219,7 +219,7 @@ function InspectionForm({ item, onSubmit, onCancel }: {
               id={`action-${item.regulation}`}
               placeholder="Describe the corrective action needed..."
               value={correctiveAction}
-              onChange={(e) => setCorrectiveAction(e.target.value)}
+              onChange={handleChange}
               rows={3}
             />
           </div>
@@ -229,7 +229,7 @@ function InspectionForm({ item, onSubmit, onCancel }: {
       <div className="flex gap-2">
         <Button
           type="button"
-          onClick={() => onSubmit(compliance, compliance ? undefined : severity, compliance ? undefined : correctiveAction)}
+          onClick={() => handleonSubmit}
         >
           Save Finding
         </Button>

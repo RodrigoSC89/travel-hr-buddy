@@ -1,4 +1,4 @@
-import { useState } from "react";;
+import { useState, useCallback } from "react";;
 import React, { useState } from "react";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
@@ -129,11 +129,11 @@ export default function ReportsSection() {
               <SelectItem value="1year">Último ano</SelectItem>
             </SelectContent>
           </Select>
-          <Button variant="outline" onClick={() => handleExport("pdf")}>
+          <Button variant="outline" onClick={() => handlehandleExport}>
             <Download className="h-4 w-4 mr-2" />
             PDF
           </Button>
-          <Button variant="outline" onClick={() => handleExport("excel")}>
+          <Button variant="outline" onClick={() => handlehandleExport}>
             <FileText className="h-4 w-4 mr-2" />
             Excel
           </Button>

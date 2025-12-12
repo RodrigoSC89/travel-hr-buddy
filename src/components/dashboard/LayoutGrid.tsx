@@ -3,7 +3,7 @@
  * PATCH 625 - Performance-optimized responsive layout
  */
 
-import { memo, memo, ReactNode } from "react";
+import { memo, memo, ReactNode, useMemo } from "react";
 
 interface LayoutGridProps {
   children: ReactNode;

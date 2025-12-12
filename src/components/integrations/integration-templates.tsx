@@ -1,4 +1,4 @@
-import { useState } from "react";;
+import { useState, useCallback } from "react";;
 import React, { useState } from "react";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
@@ -228,7 +228,7 @@ export const IntegrationTemplates: React.FC = () => {
                 <Input
                   placeholder="Buscar templates..."
                   value={searchTerm}
-                  onChange={(e) => setSearchTerm(e.target.value)}
+                  onChange={handleChange}
                   className="pl-10"
                 />
               </div>
@@ -239,7 +239,7 @@ export const IntegrationTemplates: React.FC = () => {
                   key={category.id}
                   variant={selectedCategory === category.id ? "default" : "outline"}
                   size="sm"
-                  onClick={() => setSelectedCategory(category.id)}
+                  onClick={handleSetSelectedCategory}
                   className="whitespace-nowrap"
                 >
                   {category.id !== "all" && getCategoryIcon(category.id as IntegrationTemplate["category"])}

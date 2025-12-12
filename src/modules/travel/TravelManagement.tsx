@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";;
+import { useEffect, useState, useCallback } from "react";;
 
 /**
  * PATCH 298: Travel Management Component
@@ -410,7 +410,7 @@ const TravelManagement = () => {
                           <Input
                             id="departure_location"
                             value={formData.departure_location}
-                            onChange={(e) => setFormData({ ...formData, departure_location: e.target.value })}
+                            onChange={handleChange})}
                             placeholder="e.g., New York, USA"
                           />
                         </div>
@@ -419,7 +419,7 @@ const TravelManagement = () => {
                           <Input
                             id="arrival_location"
                             value={formData.arrival_location}
-                            onChange={(e) => setFormData({ ...formData, arrival_location: e.target.value })}
+                            onChange={handleChange})}
                             placeholder="e.g., London, UK"
                           />
                         </div>
@@ -431,7 +431,7 @@ const TravelManagement = () => {
                             id="departure_date"
                             type="datetime-local"
                             value={formData.departure_date}
-                            onChange={(e) => setFormData({ ...formData, departure_date: e.target.value })}
+                            onChange={handleChange})}
                           />
                         </div>
                         <div>
@@ -440,7 +440,7 @@ const TravelManagement = () => {
                             id="arrival_date"
                             type="datetime-local"
                             value={formData.arrival_date}
-                            onChange={(e) => setFormData({ ...formData, arrival_date: e.target.value })}
+                            onChange={handleChange})}
                           />
                         </div>
                       </div>
@@ -449,14 +449,14 @@ const TravelManagement = () => {
                         <Textarea
                           id="travel_purpose"
                           value={formData.travel_purpose}
-                          onChange={(e) => setFormData({ ...formData, travel_purpose: e.target.value })}
+                          onChange={handleChange})}
                           placeholder="Describe the purpose of this travel..."
                           rows={3}
                         />
                       </div>
                     </div>
                     <DialogFooter>
-                      <Button variant="outline" onClick={() => setShowNewItinerary(false)}>
+                      <Button variant="outline" onClick={handleSetShowNewItinerary}>
                         Cancel
                       </Button>
                       <Button onClick={createItinerary}>
@@ -543,7 +543,7 @@ const TravelManagement = () => {
                           <Button
                             size="sm"
                             variant="outline"
-                            onClick={() => exportToPDF(itinerary)}
+                            onClick={() => handleexportToPDF}
                           >
                             <Download className="h-4 w-4 mr-1" />
                             Export PDF
@@ -597,7 +597,7 @@ const TravelManagement = () => {
                           </div>
                           <Button
                             size="sm"
-                            onClick={() => resolveConflict(conflict.id)}
+                            onClick={() => handleresolveConflict}
                           >
                             Resolve
                           </Button>

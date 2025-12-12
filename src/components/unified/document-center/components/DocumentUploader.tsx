@@ -1,5 +1,5 @@
 /**
-import { useRef, useState } from "react";;
+import { useRef, useState, useCallback } from "react";;
  * Document Uploader Component
  * 
  * Provides file upload interface
@@ -169,7 +169,7 @@ export const DocumentUploader: React.FC<DocumentUploaderProps> = ({
                 <Button
                   variant="ghost"
                   size="icon"
-                  onClick={() => setFile(null)}
+                  onClick={handleSetFile}
                 >
                   <X className="w-4 h-4" />
                 </Button>
@@ -192,10 +192,7 @@ export const DocumentUploader: React.FC<DocumentUploaderProps> = ({
                   type="file"
                   className="hidden"
                   accept={acceptedTypes}
-                  onChange={(e) => {
-                    if (e.target.files?.[0]) {
-                      handleFileSelect(e.target.files[0]);
-                    }
+                  onChange={handleChange}
                   }}
                 />
               </>
@@ -210,8 +207,7 @@ export const DocumentUploader: React.FC<DocumentUploaderProps> = ({
                 <Input
                   id="title"
                   value={metadata.title}
-                  onChange={(e) =>
-                    setMetadata((prev) => ({ ...prev, title: e.target.value }))
+                  onChange={handleChange}))
                   }
                   placeholder="Document title"
                 />
@@ -222,8 +218,7 @@ export const DocumentUploader: React.FC<DocumentUploaderProps> = ({
                 <Textarea
                   id="description"
                   value={metadata.description}
-                  onChange={(e) =>
-                    setMetadata((prev) => ({ ...prev, description: e.target.value }))
+                  onChange={handleChange}))
                   }
                   placeholder="Document description"
                   rows={3}
@@ -283,11 +278,7 @@ export const DocumentUploader: React.FC<DocumentUploaderProps> = ({
                 <Input
                   id="tags"
                   value={metadata.tags?.join(", ")}
-                  onChange={(e) =>
-                    setMetadata((prev) => ({
-                      ...prev,
-                      tags: e.target.value.split(",").map((t) => t.trim()).filter(Boolean),
-                    }))
+                  onChange={handleChange}))
                   }
                   placeholder="tag1, tag2, tag3"
                 />

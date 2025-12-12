@@ -1,4 +1,4 @@
-import { useState } from "react";;
+import { useState, useMemo, useCallback } from "react";;
 import React, { useState } from "react";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
@@ -277,7 +277,7 @@ export default function MobilityDashboard() {
               <Input
                 placeholder="Pergunte sobre seu voo, hotel..."
                 value={chatMessage}
-                onChange={(e) => setChatMessage(e.target.value)}
+                onChange={handleChange}
                 onKeyPress={(e) => e.key === "Enter" && handleSendMessage()}
               />
               <Button size="icon" onClick={handleSendMessage}>
@@ -285,13 +285,13 @@ export default function MobilityDashboard() {
               </Button>
             </div>
             <div className="flex flex-wrap gap-2 mt-3">
-              <Button variant="outline" size="sm" onClick={() => setChatMessage("Qual meu próximo voo?")}>
+              <Button variant="outline" size="sm" onClick={handleSetChatMessage}>
                 Meu voo
               </Button>
-              <Button variant="outline" size="sm" onClick={() => setChatMessage("Onde fica meu hotel?")}>
+              <Button variant="outline" size="sm" onClick={handleSetChatMessage}>
                 Meu hotel
               </Button>
-              <Button variant="outline" size="sm" onClick={() => setChatMessage("Horário do transfer?")}>
+              <Button variant="outline" size="sm" onClick={handleSetChatMessage}>
                 Transfer
               </Button>
             </div>

@@ -1,4 +1,4 @@
-import { useState } from "react";;
+import { useState, useMemo, useCallback } from "react";;
 import React, { useState } from "react";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
@@ -228,7 +228,7 @@ export const SgsoDashboard: React.FC = () => {
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
         <Card 
           className="bg-gradient-to-br from-red-50 to-red-100 dark:from-red-950/30 dark:to-red-900/20 border-red-200 dark:border-red-800 hover:shadow-lg transition-shadow cursor-pointer"
-          onClick={() => navigateToTab("incidents")}
+          onClick={() => handlenavigateToTab}
         >
           <CardContent className="p-6">
             <div className="flex items-center justify-between mb-4">
@@ -245,7 +245,7 @@ export const SgsoDashboard: React.FC = () => {
 
         <Card 
           className="bg-gradient-to-br from-orange-50 to-orange-100 dark:from-orange-950/30 dark:to-orange-900/20 border-orange-200 dark:border-orange-800 hover:shadow-lg transition-shadow cursor-pointer"
-          onClick={() => navigateToTab("risks")}
+          onClick={() => handlenavigateToTab}
         >
           <CardContent className="p-6">
             <div className="flex items-center justify-between mb-4">
@@ -262,7 +262,7 @@ export const SgsoDashboard: React.FC = () => {
 
         <Card 
           className="bg-gradient-to-br from-blue-50 to-blue-100 dark:from-blue-950/30 dark:to-blue-900/20 border-blue-200 dark:border-blue-800 hover:shadow-lg transition-shadow cursor-pointer"
-          onClick={() => navigateToTab("audits")}
+          onClick={() => handlenavigateToTab}
         >
           <CardContent className="p-6">
             <div className="flex items-center justify-between mb-4">
@@ -279,7 +279,7 @@ export const SgsoDashboard: React.FC = () => {
 
         <Card 
           className="bg-gradient-to-br from-green-50 to-green-100 dark:from-green-950/30 dark:to-green-900/20 border-green-200 dark:border-green-800 hover:shadow-lg transition-shadow cursor-pointer"
-          onClick={() => navigateToTab("training")}
+          onClick={() => handlenavigateToTab}
         >
           <CardContent className="p-6">
             <div className="flex items-center justify-between mb-4">
@@ -428,7 +428,7 @@ export const SgsoDashboard: React.FC = () => {
                         <div 
                           key={index} 
                           className="flex items-start gap-3 p-3 bg-muted/50 rounded-lg border cursor-pointer hover:bg-muted transition-colors"
-                          onClick={() => navigateToTab(activity.tab)}
+                          onClick={() => handlenavigateToTab}
                         >
                           <div className={`p-2 rounded-full ${
                             activity.severity === "high" ? "bg-red-100 dark:bg-red-900/30" :
@@ -467,7 +467,7 @@ export const SgsoDashboard: React.FC = () => {
                         <div 
                           key={index} 
                           className="flex items-center justify-between p-3 bg-muted/50 rounded-lg border cursor-pointer hover:bg-muted transition-colors"
-                          onClick={() => navigateToTab(task.tab)}
+                          onClick={() => handlenavigateToTab}
                         >
                           <div className="flex items-center gap-3">
                             <Clock className={`h-4 w-4 ${
@@ -518,7 +518,7 @@ export const SgsoDashboard: React.FC = () => {
                               id="incident-title"
                               placeholder="Descreva brevemente o incidente"
                               value={incidentForm.title}
-                              onChange={(e) => setIncidentForm(prev => ({ ...prev, title: e.target.value }))}
+                              onChange={handleChange}))}
                             />
                           </div>
                           <div className="grid grid-cols-2 gap-4">
@@ -559,7 +559,7 @@ export const SgsoDashboard: React.FC = () => {
                                 id="incident-vessel"
                                 placeholder="Nome da embarcação"
                                 value={incidentForm.vessel}
-                                onChange={(e) => setIncidentForm(prev => ({ ...prev, vessel: e.target.value }))}
+                                onChange={handleChange}))}
                               />
                             </div>
                             <div className="space-y-2">
@@ -568,7 +568,7 @@ export const SgsoDashboard: React.FC = () => {
                                 id="incident-location"
                                 placeholder="Local do incidente"
                                 value={incidentForm.location}
-                                onChange={(e) => setIncidentForm(prev => ({ ...prev, location: e.target.value }))}
+                                onChange={handleChange}))}
                               />
                             </div>
                           </div>
@@ -579,7 +579,7 @@ export const SgsoDashboard: React.FC = () => {
                               placeholder="Descreva o incidente em detalhes..."
                               rows={3}
                               value={incidentForm.description}
-                              onChange={(e) => setIncidentForm(prev => ({ ...prev, description: e.target.value }))}
+                              onChange={handleChange}))}
                             />
                           </div>
                           <Button className="w-full bg-red-600 hover:bg-red-700" onClick={handleSubmitIncident}>
@@ -615,7 +615,7 @@ export const SgsoDashboard: React.FC = () => {
                               id="risk-title"
                               placeholder="Ex: Falha no sistema de combate a incêndio"
                               value={riskForm.title}
-                              onChange={(e) => setRiskForm(prev => ({ ...prev, title: e.target.value }))}
+                              onChange={handleChange}))}
                             />
                           </div>
                           <div className="space-y-2">
@@ -672,7 +672,7 @@ export const SgsoDashboard: React.FC = () => {
                               placeholder="Descreva as medidas de controle e mitigação..."
                               rows={3}
                               value={riskForm.mitigation}
-                              onChange={(e) => setRiskForm(prev => ({ ...prev, mitigation: e.target.value }))}
+                              onChange={handleChange}))}
                             />
                           </div>
                           <Button className="w-full bg-orange-600 hover:bg-orange-700" onClick={handleSubmitRisk}>
@@ -708,7 +708,7 @@ export const SgsoDashboard: React.FC = () => {
                               id="audit-title"
                               placeholder="Ex: Auditoria Prática 13 - MOC"
                               value={auditForm.title}
-                              onChange={(e) => setAuditForm(prev => ({ ...prev, title: e.target.value }))}
+                              onChange={handleChange}))}
                             />
                           </div>
                           <div className="grid grid-cols-2 gap-4">
@@ -732,7 +732,7 @@ export const SgsoDashboard: React.FC = () => {
                                 id="audit-date"
                                 type="date"
                                 value={auditForm.scheduledDate}
-                                onChange={(e) => setAuditForm(prev => ({ ...prev, scheduledDate: e.target.value }))}
+                                onChange={handleChange}))}
                               />
                             </div>
                           </div>
@@ -742,7 +742,7 @@ export const SgsoDashboard: React.FC = () => {
                               id="audit-auditor"
                               placeholder="Nome do auditor"
                               value={auditForm.auditor}
-                              onChange={(e) => setAuditForm(prev => ({ ...prev, auditor: e.target.value }))}
+                              onChange={handleChange}))}
                             />
                           </div>
                           <div className="space-y-2">
@@ -752,7 +752,7 @@ export const SgsoDashboard: React.FC = () => {
                               placeholder="Descreva o escopo e as práticas a serem auditadas..."
                               rows={3}
                               value={auditForm.scope}
-                              onChange={(e) => setAuditForm(prev => ({ ...prev, scope: e.target.value }))}
+                              onChange={handleChange}))}
                             />
                           </div>
                           <Button className="w-full bg-blue-600 hover:bg-blue-700" onClick={handleSubmitAudit}>

@@ -204,7 +204,7 @@ export const DashboardActions: React.FC<DashboardActionsProps> = ({
               <DropdownMenuContent align="end" className="w-48">
                 <DropdownMenuLabel>Mais ações</DropdownMenuLabel>
                 <DropdownMenuSeparator />
-                <DropdownMenuItem onClick={() => setIsExportDialogOpen(true)}>
+                <DropdownMenuItem onClick={handleSetIsExportDialogOpen}>
                   <Download className="h-4 w-4 mr-2" />
                   Exportar Dados
                 </DropdownMenuItem>
@@ -217,11 +217,11 @@ export const DashboardActions: React.FC<DashboardActionsProps> = ({
                   Compartilhar
                 </DropdownMenuItem>
                 <DropdownMenuSeparator />
-                <DropdownMenuItem onClick={() => navigate("/analytics")}>
+                <DropdownMenuItem onClick={() => handlenavigate}>
                   <BarChart3 className="h-4 w-4 mr-2" />
                   Analytics
                 </DropdownMenuItem>
-                <DropdownMenuItem onClick={() => navigate("/settings")}>
+                <DropdownMenuItem onClick={() => handlenavigate}>
                   <Settings className="h-4 w-4 mr-2" />
                   Configurações
                 </DropdownMenuItem>
@@ -245,7 +245,7 @@ export const DashboardActions: React.FC<DashboardActionsProps> = ({
             <Button
               variant="outline"
               className="h-24 flex-col gap-2"
-              onClick={() => handleExport("csv")}
+              onClick={() => handlehandleExport}
               disabled={isExporting}
             >
               {isExporting && exportType === "csv" ? (
@@ -258,7 +258,7 @@ export const DashboardActions: React.FC<DashboardActionsProps> = ({
             <Button
               variant="outline"
               className="h-24 flex-col gap-2"
-              onClick={() => handleExport("json")}
+              onClick={() => handlehandleExport}
               disabled={isExporting}
             >
               {isExporting && exportType === "json" ? (
@@ -271,7 +271,7 @@ export const DashboardActions: React.FC<DashboardActionsProps> = ({
           </div>
 
           <DialogFooter>
-            <Button variant="ghost" onClick={() => setIsExportDialogOpen(false)}>
+            <Button variant="ghost" onClick={handleSetIsExportDialogOpen}>
               Cancelar
             </Button>
           </DialogFooter>

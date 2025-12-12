@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";;;
+import { useEffect, useState, useCallback } from "react";;;
 import html2pdf from "html2pdf.js";
 import { logger } from "@/lib/logger";
 import { Textarea } from "@/components/ui/textarea";
@@ -254,7 +254,7 @@ export default function SGSOAuditPage() {
             
             <Button
               variant="outline"
-              onClick={() => handleExplainWithAI(idx)}
+              onClick={() => handlehandleExplainWithAI}
               disabled={explainLoading === idx}
             >
               🤖 {explainLoading === idx ? "Carregando..." : "Explicar com IA"}

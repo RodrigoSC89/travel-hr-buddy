@@ -1,4 +1,4 @@
-import { useState } from "react";;
+import { useState, useMemo, useCallback } from "react";;
 import React, { useState } from "react";
 import { Card, CardHeader, CardTitle, CardContent } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
@@ -171,7 +171,7 @@ export const TenantSetupWizard: React.FC = () => {
                 <Input
                   id="name"
                   value={formData.name}
-                  onChange={(e) => updateFormData("name", e.target.value)}
+                  onChange={handleChange}
                   placeholder="Ex: Blue Shipping"
                 />
               </div>
@@ -182,7 +182,7 @@ export const TenantSetupWizard: React.FC = () => {
                   <Input
                     id="subdomain"
                     value={formData.subdomain}
-                    onChange={(e) => updateFormData("subdomain", e.target.value.toLowerCase())}
+                    onChange={handleChange}
                     placeholder="blueshipping"
                     className="rounded-r-none"
                   />
@@ -197,7 +197,7 @@ export const TenantSetupWizard: React.FC = () => {
                 <Textarea
                   id="description"
                   value={formData.description}
-                  onChange={(e) => updateFormData("description", e.target.value)}
+                  onChange={handleChange}
                   placeholder="Descreva brevemente a empresa e suas atividades..."
                 />
               </div>
@@ -246,7 +246,7 @@ export const TenantSetupWizard: React.FC = () => {
                     className={`cursor-pointer transition-colors ${
                       formData.plan_id === plan.id ? "ring-2 ring-primary" : "hover:bg-muted/50"
                     }`}
-                    onClick={() => updateFormData("plan_id", plan.id)}
+                    onClick={() => handleupdateFormData}
                   >
                     <CardContent className="p-6">
                       <div className="flex items-center justify-between">
@@ -329,7 +329,7 @@ export const TenantSetupWizard: React.FC = () => {
                 <Input
                   id="admin_name"
                   value={formData.admin_name}
-                  onChange={(e) => updateFormData("admin_name", e.target.value)}
+                  onChange={handleChange}
                   placeholder="Nome completo"
                 />
               </div>
@@ -340,7 +340,7 @@ export const TenantSetupWizard: React.FC = () => {
                   id="admin_email"
                   type="email"
                   value={formData.admin_email}
-                  onChange={(e) => updateFormData("admin_email", e.target.value)}
+                  onChange={handleChange}
                   placeholder="admin@empresa.com"
                 />
               </div>
@@ -350,7 +350,7 @@ export const TenantSetupWizard: React.FC = () => {
                 <Input
                   id="admin_phone"
                   value={formData.admin_phone}
-                  onChange={(e) => updateFormData("admin_phone", e.target.value)}
+                  onChange={handleChange}
                   placeholder="+55 (11) 99999-9999"
                 />
               </div>
@@ -361,7 +361,7 @@ export const TenantSetupWizard: React.FC = () => {
           <div className="flex justify-between pt-6">
             <Button
               variant="outline"
-              onClick={() => setCurrentStep(prev => prev - 1)}
+              onClick={handleSetCurrentStep}
               disabled={currentStep === 1}
             >
               Voltar

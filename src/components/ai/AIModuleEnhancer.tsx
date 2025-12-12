@@ -1,5 +1,5 @@
 /**
-import { useState } from "react";;
+import { useState, useCallback } from "react";;
  * AI Module Enhancer - Componente reutilizável para adicionar IA a qualquer módulo
  */
 
@@ -162,7 +162,7 @@ export const AIModuleEnhancer = memo(function({
       <div className={`flex items-center gap-2 ${className}`}>
         <Input
           value={input}
-          onChange={(e) => setInput(e.target.value)}
+          onChange={handleChange}
           onKeyPress={(e) => e.key === "Enter" && handleSend()}
           placeholder="Pergunte à IA..."
           className="flex-1"
@@ -207,7 +207,7 @@ export const AIModuleEnhancer = memo(function({
               key={action.id}
               variant="outline"
               size="sm"
-              onClick={() => handleQuery(action)}
+              onClick={() => handlehandleQuery}
               disabled={isLoading}
               className="text-xs"
             >
@@ -221,7 +221,7 @@ export const AIModuleEnhancer = memo(function({
         <div className="flex gap-2">
           <Input
             value={input}
-            onChange={(e) => setInput(e.target.value)}
+            onChange={handleChange}
             onKeyPress={(e) => e.key === "Enter" && handleSend()}
             placeholder="Ou faça sua pergunta..."
             disabled={isLoading}
@@ -265,7 +265,7 @@ export const AIModuleEnhancer = memo(function({
                     variant="secondary"
                     size="sm"
                     className="text-xs h-7"
-                    onClick={() => setInput(s)}
+                    onClick={handleSetInput}
                   >
                     <Lightbulb className="h-3 w-3 mr-1" />
                     {s}

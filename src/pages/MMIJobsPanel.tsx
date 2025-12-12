@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";;;
+import { useEffect, useState, useCallback } from "react";;;
 import { createClient } from "@supabase/supabase-js";
 import { logger } from "@/lib/logger";
 import { Card, CardContent } from "@/components/ui/card";
@@ -49,7 +49,7 @@ export default function MMIJobsPanel() {
       <Input
         placeholder="🔍 Buscar por sistema, componente..."
         value={search}
-        onChange={(e) => setSearch(e.target.value)}
+        onChange={handleChange}
       />
 
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
@@ -62,7 +62,7 @@ export default function MMIJobsPanel() {
                 <p>📅 Previsão: <strong>{job.forecast || "N/A"}</strong></p>
                 <p>⏱ Horímetro: <strong>{job.hours || 0}h</strong></p>
                 <p>👨‍🔧 Responsável: {job.responsible || "N/A"}</p>
-                <Button variant="outline" onClick={() => handleExport(job)}>
+                <Button variant="outline" onClick={() => handlehandleExport}>
                   📤 Exportar PDF
                 </Button>
               </CardContent>

@@ -3,7 +3,7 @@
  * PATCH 549 - Crew Management 2.0
  */
 
-import { useEffect, useState } from "react";;;
+import { useEffect, useState, useCallback, useMemo } from "react";;;
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";

@@ -1,4 +1,4 @@
-import { useState } from "react";;
+import { useState, useCallback } from "react";;
 import React, { useState } from "react";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
@@ -375,7 +375,7 @@ const APITester = () => {
                         </div>
                       </div>
                       <Button
-                        onClick={() => runTest(test.id)}
+                        onClick={() => handlerunTest}
                         disabled={test.status === "loading"}
                         size="sm"
                         className="min-w-[80px]"

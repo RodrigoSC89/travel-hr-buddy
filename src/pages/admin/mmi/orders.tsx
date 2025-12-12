@@ -1,5 +1,5 @@
 
-import { useEffect, useState } from "react";;;
+import { useEffect, useState, useCallback } from "react";;;
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -268,7 +268,7 @@ function WorkOrderCard({ order, onUpdate, isSaving }: WorkOrderCardProps) {
             <select
               id={`status-${order.id}`}
               value={status}
-              onChange={(e) => setStatus(e.target.value)}
+              onChange={handleChange}
               disabled={isCompleted || isSaving}
               className="w-full px-3 py-2 border rounded-md"
             >
@@ -285,7 +285,7 @@ function WorkOrderCard({ order, onUpdate, isSaving }: WorkOrderCardProps) {
               id={`executed-at-${order.id}`}
               type="datetime-local"
               value={executedAt}
-              onChange={(e) => setExecutedAt(e.target.value)}
+              onChange={handleChange}
               disabled={isCompleted || isSaving}
             />
           </div>
@@ -296,7 +296,7 @@ function WorkOrderCard({ order, onUpdate, isSaving }: WorkOrderCardProps) {
               id={`comment-${order.id}`}
               placeholder="Adicione observações técnicas sobre a execução..."
               value={technicianComment}
-              onChange={(e) => setTechnicianComment(e.target.value)}
+              onChange={handleChange}
               disabled={isCompleted || isSaving}
               rows={3}
             />

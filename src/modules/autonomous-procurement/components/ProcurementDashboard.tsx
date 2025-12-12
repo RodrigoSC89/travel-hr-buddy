@@ -1,4 +1,4 @@
-import { useState } from "react";;
+import { useState, useMemo, useCallback } from "react";;
 import React, { useState } from "react";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
@@ -207,7 +207,7 @@ export default function ProcurementDashboard() {
               <Input
                 placeholder="Pergunte sobre pedidos, fornecedores..."
                 value={chatMessage}
-                onChange={(e) => setChatMessage(e.target.value)}
+                onChange={handleChange}
                 onKeyPress={(e) => e.key === "Enter" && handleSendMessage()}
               />
               <Button size="icon" onClick={handleSendMessage}>
@@ -215,13 +215,13 @@ export default function ProcurementDashboard() {
               </Button>
             </div>
             <div className="flex flex-wrap gap-2 mt-3">
-              <Button variant="outline" size="sm" onClick={() => setChatMessage("Listar pedidos atrasados")}>
+              <Button variant="outline" size="sm" onClick={handleSetChatMessage}>
                 Atrasados
               </Button>
-              <Button variant="outline" size="sm" onClick={() => setChatMessage("Pedidos críticos?")}>
+              <Button variant="outline" size="sm" onClick={handleSetChatMessage}>
                 Críticos
               </Button>
-              <Button variant="outline" size="sm" onClick={() => setChatMessage("Melhor fornecedor?")}>
+              <Button variant="outline" size="sm" onClick={handleSetChatMessage}>
                 Fornecedor
               </Button>
             </div>

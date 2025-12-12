@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";;
+import { useEffect, useState, useCallback, useMemo } from "react";;
 
 import React, { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
@@ -492,7 +492,7 @@ export const EnhancedDashboard = memo(() => {
                         key={period}
                         variant={selectedPeriod === period ? "default" : "ghost"} 
                         size="sm"
-                        onClick={() => setSelectedPeriod(period)}
+                        onClick={handleSetSelectedPeriod}
                         className="rounded-lg hover:scale-105 transition-all duration-200 relative overflow-hidden"
                       >
                         {selectedPeriod === period && (

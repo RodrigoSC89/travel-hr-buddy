@@ -1,4 +1,4 @@
-import { useState } from "react";;
+import { useState, useCallback } from "react";;
 import React, { useState } from "react";
 import { QrCode, Scan, Plus, Edit, Trash2, MapPin, AlertTriangle } from "lucide-react";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
@@ -142,7 +142,7 @@ export const QREquipmentManager = memo(() => {
                 </div>
               </div>
               <div className="flex justify-end space-x-2">
-                <Button variant="outline" onClick={() => setIsCreateOpen(false)}>
+                <Button variant="outline" onClick={handleSetIsCreateOpen}>
                   Cancelar
                 </Button>
                 <Button onClick={handleCreateEquipment}>

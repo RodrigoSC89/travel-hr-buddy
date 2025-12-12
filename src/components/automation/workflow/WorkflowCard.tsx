@@ -151,17 +151,17 @@ export const WorkflowCard: React.FC<WorkflowCardProps> = ({
                 </Button>
               </DropdownMenuTrigger>
               <DropdownMenuContent align="end">
-                <DropdownMenuItem onClick={() => onEdit(workflow)}>
+                <DropdownMenuItem onClick={() => handleonEdit}>
                   <Edit className="h-4 w-4 mr-2" />
                   Editar
                 </DropdownMenuItem>
-                <DropdownMenuItem onClick={() => onDuplicate(workflow)}>
+                <DropdownMenuItem onClick={() => handleonDuplicate}>
                   <Copy className="h-4 w-4 mr-2" />
                   Duplicar
                 </DropdownMenuItem>
                 <DropdownMenuSeparator />
                 <DropdownMenuItem 
-                  onClick={() => onDelete(workflow.id)}
+                  onClick={() => handleonDelete}
                   className="text-destructive focus:text-destructive"
                 >
                   <Trash2 className="h-4 w-4 mr-2" />
@@ -244,7 +244,7 @@ export const WorkflowCard: React.FC<WorkflowCardProps> = ({
             <Button 
               size="sm" 
               variant="outline"
-              onClick={() => onDetails(workflow)}
+              onClick={() => handleonDetails}
             >
               <FileText className="h-3 w-3 mr-1" />
               Detalhes
@@ -253,7 +253,7 @@ export const WorkflowCard: React.FC<WorkflowCardProps> = ({
             {workflow.status === "draft" || workflow.status === "paused" ? (
               <Button
                 size="sm"
-                onClick={() => onStart(workflow.id)}
+                onClick={() => handleonStart}
                 className="bg-green-600 hover:bg-green-700"
               >
                 <Play className="h-3 w-3 mr-1" />
@@ -263,7 +263,7 @@ export const WorkflowCard: React.FC<WorkflowCardProps> = ({
               <Button
                 size="sm"
                 variant="outline"
-                onClick={() => onPause(workflow.id)}
+                onClick={() => handleonPause}
                 className="border-orange-500/50 text-orange-600 hover:bg-orange-500/10"
               >
                 <Pause className="h-3 w-3 mr-1" />

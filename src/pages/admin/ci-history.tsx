@@ -1,4 +1,4 @@
-import { useMemo, useState } from "react";;
+import { useMemo, useState, useCallback } from "react";;
 import React, { useState, useMemo } from "react";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
@@ -246,7 +246,7 @@ export default function CIHistoryPage() {
               type="text" 
               placeholder="Filtrar por branch..." 
               value={branch} 
-              onChange={(e) => setBranch(e.target.value)} 
+              onChange={handleChange} 
             />
             <Select value={status || "all"} onValueChange={(val) => setStatus(val === "all" ? "" : val)}>
               <SelectTrigger className="w-40">
@@ -261,12 +261,12 @@ export default function CIHistoryPage() {
             <Input 
               type="date" 
               value={startDate} 
-              onChange={(e) => setStartDate(e.target.value)} 
+              onChange={handleChange} 
             />
             <Input 
               type="date" 
               value={endDate} 
-              onChange={(e) => setEndDate(e.target.value)} 
+              onChange={handleChange} 
             />
             <Button onClick={exportCSV}>📤 Exportar CSV</Button>
           </div>
@@ -319,8 +319,8 @@ export default function CIHistoryPage() {
               </Table>
 
               <div className="flex justify-between pt-4">
-                <Button variant="outline" disabled={page === 0} onClick={() => setPage((p) => p - 1)}>⬅️ Anterior</Button>
-                <Button variant="outline" disabled={(page + 1) * pageSize >= filtered.length} onClick={() => setPage((p) => p + 1)}>Próxima ➡️</Button>
+                <Button variant="outline" disabled={page === 0} onClick={handleSetPage}>⬅️ Anterior</Button>
+                <Button variant="outline" disabled={(page + 1) * pageSize >= filtered.length} onClick={handleSetPage}>Próxima ➡️</Button>
               </div>
             </CardContent>
           </Card>

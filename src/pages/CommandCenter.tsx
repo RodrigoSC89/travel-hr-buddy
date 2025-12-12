@@ -1,4 +1,4 @@
-import { useEffect, useRef, useState } from "react";;
+import { useEffect, useRef, useState, useCallback, useMemo } from "react";;
 import React, { useState, useEffect, useRef } from "react";
 import { useNavigate } from "react-router-dom";
 import { OrganizationLayout } from "@/components/layout/organization-layout";
@@ -391,7 +391,7 @@ export default function CommandCenter() {
               </Button>
               
               <Button 
-                onClick={() => openBrain("Command Center - Dashboard Executivo e Operacional")}
+                onClick={() => handleopenBrain}
                 className="bg-gradient-to-r from-purple-600 to-pink-500 hover:from-purple-700 hover:to-pink-600"
               >
                 <Brain className="h-4 w-4 mr-2" />
@@ -438,7 +438,7 @@ export default function CommandCenter() {
                           className={`${selectedPeriod === period
                             ? "bg-primary text-primary-foreground"
                             : "bg-secondary text-secondary-foreground shadow-sm border border-border"}`}
-                          onClick={() => setSelectedPeriod(period)}
+                          onClick={handleSetSelectedPeriod}
                         >
                           {period === "weekly" ? "Semanal" :
                             period === "monthly" ? "Mensal" :
@@ -542,7 +542,7 @@ export default function CommandCenter() {
                         </div>
                         <Button 
                           className="w-full mt-4 bg-blue-600 hover:bg-blue-700 text-white font-semibold"
-                          onClick={() => navigate("/peo-dp")}
+                          onClick={() => handlenavigate}
                         >
                           Acessar PEO-DP
                         </Button>
@@ -574,7 +574,7 @@ export default function CommandCenter() {
                         </div>
                         <Button 
                           className="w-full mt-4 bg-red-600 hover:bg-red-700 text-white font-semibold"
-                          onClick={() => navigate("/sgso")}
+                          onClick={() => handlenavigate}
                         >
                           Acessar SGSO
                         </Button>
@@ -606,7 +606,7 @@ export default function CommandCenter() {
                         </div>
                         <Button 
                           className="w-full mt-4 bg-green-600 hover:bg-green-700 text-white font-semibold"
-                          onClick={() => navigate("/peotram")}
+                          onClick={() => handlenavigate}
                         >
                           Acessar PEOTRAM
                         </Button>

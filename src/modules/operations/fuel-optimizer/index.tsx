@@ -1,4 +1,4 @@
-import { useState } from "react";;
+import { useState, useCallback } from "react";;
 import React, { useState } from "react";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
@@ -134,7 +134,7 @@ const FuelOptimizer = () => {
               <Label>Origem</Label>
               <Input
                 value={routeData.origin}
-                onChange={(e) => setRouteData({ ...routeData, origin: e.target.value })}
+                onChange={handleChange})}
                 placeholder="Porto de origem"
               />
             </div>
@@ -142,7 +142,7 @@ const FuelOptimizer = () => {
               <Label>Destino</Label>
               <Input
                 value={routeData.destination}
-                onChange={(e) => setRouteData({ ...routeData, destination: e.target.value })}
+                onChange={handleChange})}
                 placeholder="Porto de destino"
               />
             </div>
@@ -151,7 +151,7 @@ const FuelOptimizer = () => {
               <Input
                 type="number"
                 value={routeData.cargo_weight}
-                onChange={(e) => setRouteData({ ...routeData, cargo_weight: e.target.value })}
+                onChange={handleChange})}
                 placeholder="0"
               />
             </div>
@@ -160,7 +160,7 @@ const FuelOptimizer = () => {
               <select
                 className="w-full p-2 border rounded-md bg-background"
                 value={routeData.weather_condition}
-                onChange={(e) => setRouteData({ ...routeData, weather_condition: e.target.value })}
+                onChange={handleChange})}
               >
                 <option value="normal">Normal</option>
                 <option value="adversa">Adversa</option>

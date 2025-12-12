@@ -1,5 +1,5 @@
 /**
-import { useMemo, useState } from "react";;
+import { useMemo, useState, useCallback } from "react";;
  * PATCH 655 - Module Control Admin Page
  * Dynamic module activation panel
  */
@@ -192,7 +192,7 @@ export const ModuleControl: React.FC = () => {
               <Input
                 placeholder="Search modules..."
                 value={searchQuery}
-                onChange={(e) => setSearchQuery(e.target.value)}
+                onChange={handleChange}
                 className="pl-10"
               />
             </div>

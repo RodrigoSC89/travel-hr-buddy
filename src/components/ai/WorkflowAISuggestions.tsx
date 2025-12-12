@@ -1,5 +1,5 @@
 /**
-import { useCallback, useEffect, useState } from "react";;
+import { useCallback, useMemo, useEffect, useState } from "react";;
  * PATCH 653.1 - Workflow AI Suggestions Component
  * Complete AI-powered workflow suggestions with LLM integration
  */
@@ -527,7 +527,7 @@ Gere sugestões em formato JSON array.`
                               variant="ghost"
                               size="icon"
                               className="h-8 w-8 text-green-500 hover:text-green-600 hover:bg-green-500/10"
-                              onClick={() => handleApply(suggestion)}
+                              onClick={() => handlehandleApply}
                               title="Aplicar sugestão"
                             >
                               <Play className="h-4 w-4" />
@@ -536,7 +536,7 @@ Gere sugestões em formato JSON array.`
                               variant="ghost"
                               size="icon"
                               className="h-8 w-8 text-muted-foreground hover:text-destructive"
-                              onClick={() => handleDismiss(suggestion)}
+                              onClick={() => handlehandleDismiss}
                               title="Descartar"
                             >
                               <X className="h-4 w-4" />

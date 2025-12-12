@@ -1,4 +1,4 @@
-import { useState } from "react";;
+import { useState, useCallback } from "react";;
 import React, { useState } from "react";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
@@ -221,7 +221,7 @@ const HelpCenter = () => {
         <Input
           placeholder="Buscar artigos, tutoriais..."
           value={searchTerm}
-          onChange={(e) => setSearchTerm(e.target.value)}
+          onChange={handleChange}
           className="pl-10"
         />
       </div>
@@ -233,7 +233,7 @@ const HelpCenter = () => {
             key={category.id}
             variant={selectedCategory === category.id ? "default" : "outline"}
             size="sm"
-            onClick={() => setSelectedCategory(category.id)}
+            onClick={handleSetSelectedCategory}
             className="flex items-center gap-2"
           >
             <category.icon className="w-4 h-4" />

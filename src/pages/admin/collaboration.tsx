@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";;;
+import { useEffect, useState, useCallback } from "react";;;
 import { useNavigate } from "react-router-dom";
 import { supabase } from "@/integrations/supabase/client";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
@@ -316,7 +316,7 @@ export default function CollaborationPage() {
       <div className="flex items-center justify-between">
         <Button 
           variant="outline" 
-          onClick={() => navigate("/admin")}
+          onClick={() => handlenavigate}
         >
           <ArrowLeft className="h-4 w-4 mr-2" />
           Voltar
@@ -333,7 +333,7 @@ export default function CollaborationPage() {
             <Textarea
               placeholder="💬 Deixe seu comentário..."
               value={newComment}
-              onChange={(e) => setNewComment(e.target.value)}
+              onChange={handleChange}
               disabled={submitting}
               rows={4}
             />
@@ -389,7 +389,7 @@ export default function CollaborationPage() {
                             <Button
                               variant="outline"
                               size="sm"
-                              onClick={() => addReaction(comment.id, "👍")}
+                              onClick={() => handleaddReaction}
                               className="h-8 px-3"
                             >
                               👍 {comment.reactions?.["👍"] || 0}
@@ -397,7 +397,7 @@ export default function CollaborationPage() {
                             <Button
                               variant="outline"
                               size="sm"
-                              onClick={() => addReaction(comment.id, "❤️")}
+                              onClick={() => handleaddReaction}
                               className="h-8 px-3"
                             >
                               ❤️ {comment.reactions?.["❤️"] || 0}
@@ -405,7 +405,7 @@ export default function CollaborationPage() {
                             <Button
                               variant="outline"
                               size="sm"
-                              onClick={() => addReaction(comment.id, "👏")}
+                              onClick={() => handleaddReaction}
                               className="h-8 px-3"
                             >
                               👏 {comment.reactions?.["👏"] || 0}
@@ -434,13 +434,13 @@ export default function CollaborationPage() {
                               <Textarea
                                 placeholder="Escreva uma resposta..."
                                 value={replyTexts[comment.id] || ""}
-                                onChange={(e) => setReplyTexts((prev) => ({ ...prev, [comment.id]: e.target.value }))}
+                                onChange={handleChange}))}
                                 rows={2}
                                 className="text-sm"
                               />
                               <Button
                                 size="sm"
-                                onClick={() => submitReply(comment.id)}
+                                onClick={() => handlesubmitReply}
                                 disabled={!replyTexts[comment.id]?.trim()}
                               >
                                 ➕ Responder

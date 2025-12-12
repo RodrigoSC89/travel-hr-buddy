@@ -1,4 +1,4 @@
-import { useState } from "react";;
+import { useState, useMemo, useCallback } from "react";;
 import React, { useState } from "react";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
@@ -204,7 +204,7 @@ export const NauticalRoutineChecklist: React.FC<NauticalRoutineChecklistProps> =
           <Input
             type="number"
             value={String(item.value || "")}
-            onChange={(e) => handleItemChange(item.id, "value", parseFloat(e.target.value))}
+            onChange={handleChange}
             placeholder={`Min: ${item.minValue}, Max: ${item.maxValue}`}
             className="w-32"
           />
@@ -216,7 +216,7 @@ export const NauticalRoutineChecklist: React.FC<NauticalRoutineChecklistProps> =
       return (
         <Input
           value={String(item.value || "")}
-          onChange={(e) => handleItemChange(item.id, "value", e.target.value)}
+          onChange={handleChange}
           placeholder="Digite sua resposta..."
           className="w-full"
         />
@@ -295,7 +295,7 @@ export const NauticalRoutineChecklist: React.FC<NauticalRoutineChecklistProps> =
                   <Button
                     variant={selectedCategory === "all" ? "default" : "outline"}
                     size="sm"
-                    onClick={() => setSelectedCategory("all")}
+                    onClick={handleSetSelectedCategory}
                   >
                     Todas as Categorias
                   </Button>
@@ -304,7 +304,7 @@ export const NauticalRoutineChecklist: React.FC<NauticalRoutineChecklistProps> =
                       key={category}
                       variant={selectedCategory === category ? "default" : "outline"}
                       size="sm"
-                      onClick={() => setSelectedCategory(category)}
+                      onClick={handleSetSelectedCategory}
                       className="flex items-center gap-2"
                     >
                       {getCategoryIcon(category)}
@@ -355,7 +355,7 @@ export const NauticalRoutineChecklist: React.FC<NauticalRoutineChecklistProps> =
                           <label className="text-sm font-medium">Observações:</label>
                           <Textarea
                             value={item.notes || ""}
-                            onChange={(e) => handleItemChange(item.id, "notes", e.target.value)}
+                            onChange={handleChange}
                             placeholder="Adicione observações sobre este item..."
                             className="mt-1"
                             rows={2}

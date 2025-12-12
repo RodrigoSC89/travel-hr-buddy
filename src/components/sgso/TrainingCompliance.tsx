@@ -1,4 +1,4 @@
-import { useState } from "react";;
+import { useState, useCallback } from "react";;
 import { useMaritimeActions } from "@/hooks/useMaritimeActions";
 import React, { useState } from "react";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
@@ -204,42 +204,42 @@ export const TrainingCompliance: React.FC = () => {
           <div className="flex flex-wrap gap-2">
             <Button
               variant={selectedCategory === "all" ? "default" : "outline"}
-              onClick={() => setSelectedCategory("all")}
+              onClick={handleSetSelectedCategory}
               className="min-h-[44px]"
             >
               Todos
             </Button>
             <Button
               variant={selectedCategory === "sgso" ? "default" : "outline"}
-              onClick={() => setSelectedCategory("sgso")}
+              onClick={handleSetSelectedCategory}
               className="min-h-[44px]"
             >
               SGSO
             </Button>
             <Button
               variant={selectedCategory === "safety" ? "default" : "outline"}
-              onClick={() => setSelectedCategory("safety")}
+              onClick={handleSetSelectedCategory}
               className="min-h-[44px]"
             >
               Segurança
             </Button>
             <Button
               variant={selectedCategory === "environmental" ? "default" : "outline"}
-              onClick={() => setSelectedCategory("environmental")}
+              onClick={handleSetSelectedCategory}
               className="min-h-[44px]"
             >
               Ambiental
             </Button>
             <Button
               variant={selectedCategory === "operational" ? "default" : "outline"}
-              onClick={() => setSelectedCategory("operational")}
+              onClick={handleSetSelectedCategory}
               className="min-h-[44px]"
             >
               Operacional
             </Button>
             <Button
               variant={selectedCategory === "technical" ? "default" : "outline"}
-              onClick={() => setSelectedCategory("technical")}
+              onClick={handleSetSelectedCategory}
               className="min-h-[44px]"
             >
               Técnico
@@ -311,7 +311,7 @@ export const TrainingCompliance: React.FC = () => {
                           variant="outline" 
                           size="sm"
                           className="min-h-[44px] px-6"
-                          onClick={() => handleViewDetails("training", training.id)} disabled={isLoading}
+                          onClick={() => handlehandleViewDetails} disabled={isLoading}
                         >
                           <FileText className="h-4 w-4 mr-2" />
                           Detalhes
@@ -319,7 +319,7 @@ export const TrainingCompliance: React.FC = () => {
                         <Button 
                           size="sm"
                           className="min-h-[44px] px-6 bg-blue-600 hover:bg-blue-700 text-white"
-                          onClick={() => showInfo("Agendando Treinamento", "Abrindo agenda")} disabled={isLoading}
+                          onClick={() => handleshowInfo} disabled={isLoading}
                         >
                           <Calendar className="h-4 w-4 mr-2" />
                           Agendar
@@ -351,7 +351,7 @@ export const TrainingCompliance: React.FC = () => {
           <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
             <Button 
               className="bg-green-600 hover:bg-green-700 text-white min-h-[56px] flex-col gap-2"
-              onClick={() => handleCreate("Treinamento")} disabled={isLoading}
+              onClick={() => handlehandleCreate} disabled={isLoading}
             >
               <Award className="h-6 w-6" />
               <span className="font-semibold">Novo Treinamento</span>

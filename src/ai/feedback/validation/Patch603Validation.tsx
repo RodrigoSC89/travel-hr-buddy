@@ -138,7 +138,7 @@ export const Patch603Validation = memo(function() {
           <Input
             placeholder="Enter text feedback..."
             value={textInput}
-            onChange={(e) => setTextInput(e.target.value)}
+            onChange={handleChange}
             onKeyPress={(e) => e.key === "Enter" && submitText()}
           />
           <Button onClick={submitText}>Send</Button>

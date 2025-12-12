@@ -1,5 +1,5 @@
 /**
-import { useState } from "react";;
+import { useState, useCallback } from "react";;
  * ESG Dashboard
  * Compliance Ambiental e Emissões
  */
@@ -103,7 +103,7 @@ export const ESGDashboard = memo(function() {
               key={period}
               variant={selectedPeriod === period ? "default" : "outline"}
               size="sm"
-              onClick={() => setSelectedPeriod(period)}
+              onClick={handleSetSelectedPeriod}
             >
               {period === "week" && "Semana"}
               {period === "month" && "Mês"}

@@ -1,5 +1,5 @@
 
-import { useEffect, useRef, useState } from "react";;;
+import { useEffect, useRef, useState, useCallback, useMemo } from "react";;;
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -349,7 +349,7 @@ export default function SatelliteTracker() {
                       className={`cursor-pointer hover:bg-accent transition-colors ${
                         selectedSatellite === satellite.id ? "border-primary" : ""
                       }`}
-                      onClick={() => startTracking(satellite.id)}
+                      onClick={() => handlestartTracking}
                     >
                       <CardContent className="p-3">
                         <div className="flex items-center justify-between">
@@ -424,7 +424,7 @@ export default function SatelliteTracker() {
                           size="sm" 
                           variant="outline" 
                           className="mt-2 w-full"
-                          onClick={() => resolveAlert(alert.id)}
+                          onClick={() => handleresolveAlert}
                         >
                           Resolve
                         </Button>

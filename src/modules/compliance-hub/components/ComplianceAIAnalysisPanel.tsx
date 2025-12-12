@@ -1,5 +1,5 @@
 /**
-import { useEffect, useState } from "react";;
+import { useEffect, useState, useCallback, useMemo } from "react";;
  * Compliance AI Analysis Panel Component
  * Painel de análise preditiva e insights de IA
  */
@@ -98,7 +98,7 @@ export const ComplianceAIAnalysisPanel = memo(function({
           <Button
             variant="outline"
             size="sm"
-            onClick={() => onRunAnalysis(complianceItems, audits, certificates)}
+            onClick={() => handleonRunAnalysis}
             disabled={loading}
           >
             {loading ? (
@@ -288,7 +288,7 @@ export const ComplianceAIAnalysisPanel = memo(function({
                           variant="outline"
                           size="sm"
                           className="text-xs"
-                          onClick={() => setQuestion(q)}
+                          onClick={handleSetQuestion}
                         >
                           {q}
                         </Button>
@@ -329,7 +329,7 @@ export const ComplianceAIAnalysisPanel = memo(function({
               <Textarea
                 placeholder="Pergunte sobre ISM, SOLAS, PSC, MLC..."
                 value={question}
-                onChange={(e) => setQuestion(e.target.value)}
+                onChange={handleChange}
                 onKeyDown={(e) => e.key === "Enter" && !e.shiftKey && (e.preventDefault(), handleAskQuestion())}
                 className="min-h-[40px] resize-none"
               />

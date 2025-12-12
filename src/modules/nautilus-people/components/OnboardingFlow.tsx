@@ -1,5 +1,5 @@
 /**
-import { useState } from "react";;
+import { useState, useMemo, useCallback } from "react";;
  * Onboarding Flow - Fluxo de Integração Digital
  */
 
@@ -228,7 +228,7 @@ const OnboardingFlow: React.FC = () => {
                 className={`p-4 rounded-lg border cursor-pointer transition-all hover:border-primary/50 ${
                   selectedEmployee?.id === employee.id ? "border-primary bg-primary/5" : ""
                 }`}
-                onClick={() => setSelectedEmployee(employee)}
+                onClick={handleSetSelectedEmployee}
               >
                 <div className="flex items-center gap-3">
                   <Avatar>

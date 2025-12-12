@@ -5,7 +5,7 @@
  * into a workflow detail page with real AI-generated suggestions.
  */
 
-import { memo, memo, useEffect, useState } from "react";;;
+import { memo, memo, useEffect, useState, useCallback } from "react";;;
 import { KanbanAISuggestions, type Suggestion } from "@/components/workflows";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { supabase } from "@/integrations/supabase/client";

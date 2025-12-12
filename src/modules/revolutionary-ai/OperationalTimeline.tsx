@@ -1,5 +1,5 @@
 /**
-import { useState } from "react";;
+import { useState, useMemo, useCallback } from "react";;
  * Operational Timeline
  * Histórico vivo de eventos por embarcação
  */
@@ -175,7 +175,7 @@ export const OperationalTimeline = memo(function() {
                 <Input
                   placeholder="Buscar eventos..."
                   value={searchTerm}
-                  onChange={(e) => setSearchTerm(e.target.value)}
+                  onChange={handleChange}
                   className="pl-9"
                 />
               </div>
@@ -187,7 +187,7 @@ export const OperationalTimeline = memo(function() {
                   key={vessel}
                   variant={selectedVessel === vessel ? "default" : "outline"}
                   size="sm"
-                  onClick={() => setSelectedVessel(selectedVessel === vessel ? null : vessel)}
+                  onClick={handleSetSelectedVessel}
                 >
                   <Ship className="h-3 w-3 mr-1" />
                   {vessel}
@@ -203,7 +203,7 @@ export const OperationalTimeline = memo(function() {
                 key={type}
                 variant={selectedTypes.includes(type) ? "default" : "outline"}
                 className="cursor-pointer"
-                onClick={() => toggleType(type)}
+                onClick={() => handletoggleType}
               >
                 {getEventIcon(type)}
                 <span className="ml-1 capitalize">{type}</span>
@@ -246,7 +246,7 @@ export const OperationalTimeline = memo(function() {
 
                       <div 
                         className={`p-4 rounded-lg border ${getEventColor(event.type, event.severity)} cursor-pointer transition-all hover:shadow-md`}
-                        onClick={() => setExpandedEvent(expandedEvent === event.id ? null : event.id)}
+                        onClick={handleSetExpandedEvent}
                       >
                         <div className="flex items-start justify-between">
                           <div className="flex items-start gap-3">

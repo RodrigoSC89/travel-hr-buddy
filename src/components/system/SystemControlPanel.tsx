@@ -164,7 +164,7 @@ const LanguageControls = () => {
               key={lang.code}
               variant={currentLang === lang.code ? "default" : "outline"}
               size="sm"
-              onClick={() => setCurrentLang(lang.code)}
+              onClick={handleSetCurrentLang}
               className="gap-1"
             >
               <span>{lang.flag}</span>

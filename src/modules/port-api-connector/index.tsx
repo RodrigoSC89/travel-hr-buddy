@@ -1,5 +1,5 @@
 /**
-import { useState } from "react";;
+import { useState, useMemo, useCallback } from "react";;
  * PATCH: Conector API Universal para Portos
  * Integração com sistemas portuários globais
  */
@@ -324,7 +324,7 @@ export default function PortAPIConnector() {
                       variant="outline" 
                       size="sm" 
                       className="flex-1"
-                      onClick={() => testConnection(conn.id)}
+                      onClick={() => handletestConnection}
                     >
                       <Zap className="h-3 w-3 mr-1" />
                       Testar
@@ -333,7 +333,7 @@ export default function PortAPIConnector() {
                       variant={conn.status === "connected" ? "destructive" : "default"}
                       size="sm" 
                       className="flex-1"
-                      onClick={() => toggleConnection(conn.id)}
+                      onClick={() => handletoggleConnection}
                     >
                       {conn.status === "connected" ? "Desconectar" : "Conectar"}
                     </Button>

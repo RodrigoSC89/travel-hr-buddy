@@ -60,7 +60,7 @@ export const OVIDNonConformities: React.FC<OVIDNonConformitiesProps> = ({ answer
                     )}
                   </div>
                   <div className="flex gap-2">
-                    <Button size="sm" variant="outline" onClick={() => onGenerateActionPlan(nc.questionId)}>
+                    <Button size="sm" variant="outline" onClick={() => handleonGenerateActionPlan}>
                       <FileText className="w-4 h-4 mr-1" />
                       Plano
                     </Button>

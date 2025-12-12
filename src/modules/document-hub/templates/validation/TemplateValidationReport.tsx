@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";;
+import { useEffect, useState, useCallback, useMemo } from "react";;
 
 /**
  * VALIDAÇÃO COMPLETA - Editor de Templates

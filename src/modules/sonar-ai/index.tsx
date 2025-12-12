@@ -1,5 +1,5 @@
 /**
-import { useEffect, useState } from "react";;
+import { useEffect, useState, useCallback, useMemo } from "react";;
  * PATCH 435 - Sonar AI Enhancement
  * Enhanced AI sonar data interpretation with risk detection
  * PATCH 479 - Added ONNX classification and detailed dashboard
@@ -269,7 +269,7 @@ const SonarAI: React.FC = () => {
                   <Input
                     type="number"
                     value={scanDepth}
-                    onChange={(e) => setScanDepth(parseFloat(e.target.value))}
+                    onChange={handleChange}
                     className="bg-zinc-900/50 border-zinc-700 text-white"
                     disabled={isScanning || autoScan}
                   />
@@ -279,7 +279,7 @@ const SonarAI: React.FC = () => {
                   <Input
                     type="number"
                     value={scanRadius}
-                    onChange={(e) => setScanRadius(parseFloat(e.target.value))}
+                    onChange={handleChange}
                     className="bg-zinc-900/50 border-zinc-700 text-white"
                     disabled={isScanning || autoScan}
                   />
@@ -289,7 +289,7 @@ const SonarAI: React.FC = () => {
                   <Input
                     type="number"
                     value={numPings}
-                    onChange={(e) => setNumPings(parseInt(e.target.value))}
+                    onChange={handleChange}
                     className="bg-zinc-900/50 border-zinc-700 text-white"
                     disabled={isScanning || autoScan}
                   />
@@ -315,7 +315,7 @@ const SonarAI: React.FC = () => {
                   )}
                 </Button>
                 <Button
-                  onClick={() => setAutoScan(!autoScan)}
+                  onClick={handleSetAutoScan}
                   variant={autoScan ? "destructive" : "outline"}
                   className={autoScan ? "" : "border-zinc-600"}
                 >

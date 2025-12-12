@@ -1,5 +1,5 @@
 /**
-import { useCallback, useEffect, useState } from "react";;
+import { useCallback, useMemo, useEffect, useState } from "react";;
  * Fleet Command Center - Unified Fleet Module
  * Fusão de: Gestão de Frota, Fleet Dashboard, Fleet Tracking
  * Versão 192.0
@@ -169,7 +169,7 @@ const TrackingMapPanel = ({ vessels, onSelectVessel, selectedVessel }: unknown: 
                 className={`p-3 rounded-lg cursor-pointer transition-all hover:bg-muted/50 ${
                   selectedVessel?.id === vessel.id ? "ring-2 ring-primary bg-primary/5" : "border"
                 }`}
-                onClick={() => onSelectVessel(vessel)}
+                onClick={() => handleonSelectVessel}
               >
                 <div className="flex items-center justify-between">
                   <span className="font-medium text-sm">{vessel.name}</span>
@@ -302,7 +302,7 @@ const FleetAICopilot = ({ vessels }: { vessels: unknown[] }) => {
             <Input
               placeholder="Pergunte ao AI Copilot..."
               value={query}
-              onChange={(e) => setQuery(e.target.value)}
+              onChange={handleChange}
               className="text-sm"
             />
             <Button size="sm" disabled={!query.trim() || thinking}>
@@ -440,8 +440,8 @@ export default function FleetCommandCenter() {
                 <DialogDescription>Adicione uma embarcação à frota</DialogDescription>
               </DialogHeader>
               <div className="space-y-4 py-4">
-                <div><Label>Nome *</Label><Input value={newVessel.name} onChange={(e) => setNewVessel(p => ({ ...p, name: e.target.value }))} placeholder="MV Ocean Star" /></div>
-                <div><Label>IMO</Label><Input value={newVessel.imo_number} onChange={(e) => setNewVessel(p => ({ ...p, imo_number: e.target.value }))} placeholder="9123456" /></div>
+                <div><Label>Nome *</Label><Input value={newVessel.name} onChange={handleChange}))} placeholder="MV Ocean Star" /></div>
+                <div><Label>IMO</Label><Input value={newVessel.imo_number} onChange={handleChange}))} placeholder="9123456" /></div>
                 <div><Label>Tipo</Label>
                   <Select value={newVessel.vessel_type} onValueChange={(v) => setNewVessel(p => ({ ...p, vessel_type: v }))}>
                     <SelectTrigger><SelectValue /></SelectTrigger>
@@ -453,10 +453,10 @@ export default function FleetCommandCenter() {
                     </SelectContent>
                   </Select>
                 </div>
-                <div><Label>Localização</Label><Input value={newVessel.location} onChange={(e) => setNewVessel(p => ({ ...p, location: e.target.value }))} placeholder="Porto de Santos" /></div>
+                <div><Label>Localização</Label><Input value={newVessel.location} onChange={handleChange}))} placeholder="Porto de Santos" /></div>
               </div>
               <DialogFooter>
-                <Button variant="outline" onClick={() => setShowAddDialog(false)}>Cancelar</Button>
+                <Button variant="outline" onClick={handleSetShowAddDialog}>Cancelar</Button>
                 <Button onClick={handleAddVessel}>Adicionar</Button>
               </DialogFooter>
             </DialogContent>
@@ -489,7 +489,7 @@ export default function FleetCommandCenter() {
             <div className="xl:col-span-2">
               <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                 {vessels.slice(0, 4).map(vessel => (
-                  <VesselCard key={vessel.id} vessel={vessel} onClick={() => setSelectedVessel(vessel)} />
+                  <VesselCard key={vessel.id} vessel={vessel} onClick={handleSetSelectedVessel} />
                 ))}
               </div>
             </div>
@@ -508,7 +508,7 @@ export default function FleetCommandCenter() {
         <TabsContent value="vessels">
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4">
             {vessels.map(vessel => (
-              <VesselCard key={vessel.id} vessel={vessel} onClick={() => setSelectedVessel(vessel)} />
+              <VesselCard key={vessel.id} vessel={vessel} onClick={handleSetSelectedVessel} />
             ))}
             {vessels.length === 0 && !loading && (
               <Card className="col-span-full">
@@ -516,7 +516,7 @@ export default function FleetCommandCenter() {
                   <Ship className="h-16 w-16 text-muted-foreground mb-4" />
                   <h3 className="text-lg font-semibold">Nenhuma embarcação cadastrada</h3>
                   <p className="text-muted-foreground mb-4">Adicione sua primeira embarcação</p>
-                  <Button onClick={() => setShowAddDialog(true)}><Plus className="h-4 w-4 mr-2" />Nova Embarcação</Button>
+                  <Button onClick={handleSetShowAddDialog}><Plus className="h-4 w-4 mr-2" />Nova Embarcação</Button>
                 </CardContent>
               </Card>
             )}

@@ -1,4 +1,4 @@
-import { useEffect, useRef, useState } from "react";;
+import { useEffect, useRef, useState, useCallback, useMemo } from "react";;
 import React, { useState, useRef, useEffect } from "react";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
@@ -267,7 +267,7 @@ export const MMICopilot: React.FC<MMICopilotProps> = ({ onJobCreated, context })
                         variant="outline"
                         size="sm"
                         className="text-xs h-7"
-                        onClick={() => sendMessage(acao)}
+                        onClick={() => handlesendMessage}
                       >
                         {acao}
                       </Button>
@@ -301,7 +301,7 @@ export const MMICopilot: React.FC<MMICopilotProps> = ({ onJobCreated, context })
               variant="outline"
               size="sm"
               className="whitespace-nowrap text-xs"
-              onClick={() => sendMessage(action.prompt)}
+              onClick={() => handlesendMessage}
               disabled={isLoading}
             >
               {action.label}
@@ -313,15 +313,12 @@ export const MMICopilot: React.FC<MMICopilotProps> = ({ onJobCreated, context })
       {/* Input */}
       <CardContent className="pt-0 pb-4">
         <form
-          onSubmit={(e) => {
-            e.preventDefault();
-            sendMessage(input);
-          }}
+          onSubmit={handleSubmit}
           className="flex gap-2"
         >
           <Input
             value={input}
-            onChange={(e) => setInput(e.target.value)}
+            onChange={handleChange}
             placeholder="Ex: Criar job urgente para vazamento na bomba STBD..."
             disabled={isLoading}
             className="flex-1"

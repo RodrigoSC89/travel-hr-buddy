@@ -60,7 +60,7 @@ export const LanguageSelector = memo(function({ variant = "icon", className }: L
         {languages.map((lang) => (
           <DropdownMenuItem
             key={lang.code}
-            onClick={() => changeLanguage(lang.code)}
+            onClick={() => handlechangeLanguage}
             className="flex items-center gap-3 cursor-pointer"
           >
             <span className="text-xl">{languageFlags[lang.code]}</span>
@@ -89,7 +89,7 @@ export const LanguageSelectorCompact = memo(function() {
       {languages.map((lang) => (
         <button
           key={lang.code}
-          onClick={() => changeLanguage(lang.code)}
+          onClick={() => handlechangeLanguage}
           className={cn(
             "p-2 rounded-lg transition-colors text-lg",
             language === lang.code

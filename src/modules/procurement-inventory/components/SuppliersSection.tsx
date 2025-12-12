@@ -1,4 +1,4 @@
-import { useState } from "react";;
+import { useState, useMemo, useCallback } from "react";;
 import React, { useState } from "react";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
@@ -282,7 +282,7 @@ export default function SuppliersSection({ searchQuery }: SuppliersSectionProps)
           </Select>
         </div>
 
-        <Button onClick={() => setShowAddSupplier(true)}>
+        <Button onClick={handleSetShowAddSupplier}>
           <Plus className="h-4 w-4 mr-2" />
           Novo Fornecedor
         </Button>
@@ -639,7 +639,7 @@ export default function SuppliersSection({ searchQuery }: SuppliersSectionProps)
             </div>
           </div>
           <DialogFooter>
-            <Button variant="outline" onClick={() => setShowAddSupplier(false)}>Cancelar</Button>
+            <Button variant="outline" onClick={handleSetShowAddSupplier}>Cancelar</Button>
             <Button onClick={() => {
               toast.success("Fornecedor adicionado com sucesso!");
               setShowAddSupplier(false);

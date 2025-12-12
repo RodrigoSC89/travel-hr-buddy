@@ -1,5 +1,5 @@
 /**
-import { useEffect, useRef, useState } from "react";;
+import { useEffect, useRef, useState, useCallback, useMemo } from "react";;
  * AI Copilot - Processamento de Linguagem Natural
  * Página de chat com IA integrada via Lovable AI Gateway
  */
@@ -221,7 +221,7 @@ const AICopilot: React.FC = () => {
                               variant="ghost"
                               size="sm"
                               className="h-6 px-2"
-                              onClick={() => handleCopy(message.content, message.id)}
+                              onClick={() => handlehandleCopy}
                             >
                               {copiedId === message.id ? (
                                 <Check className="h-3 w-3" />
@@ -258,15 +258,12 @@ const AICopilot: React.FC = () => {
             {/* Input */}
             <div className="p-4">
               <form
-                onSubmit={(e) => {
-                  e.preventDefault();
-                  handleSend();
-                }}
+                onSubmit={handleSubmit}
                 className="flex gap-2"
               >
                 <Input
                   value={input}
-                  onChange={(e) => setInput(e.target.value)}
+                  onChange={handleChange}
                   placeholder="Digite sua pergunta..."
                   disabled={isLoading}
                   className="flex-1"
@@ -299,7 +296,7 @@ const AICopilot: React.FC = () => {
                   variant="outline"
                   size="sm"
                   className="w-full justify-start text-left h-auto py-2 px-3"
-                  onClick={() => handleSend(question)}
+                  onClick={() => handlehandleSend}
                   disabled={isLoading}
                 >
                   <span className="line-clamp-2 text-xs">{question}</span>

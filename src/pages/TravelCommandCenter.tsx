@@ -1,5 +1,5 @@
 /**
-import { useEffect, useState } from "react";;
+import { useEffect, useState, useCallback, useMemo } from "react";;
  * TRAVEL COMMAND CENTER
  * Módulo unificado de Viagens + Smart Mobility + Reservas
  * Gestão completa de viagens corporativas, mobilidade e reservas
@@ -418,7 +418,7 @@ export default function TravelCommandCenter() {
               <Download className="h-4 w-4 mr-2" />
               Exportar
             </Button>
-            <Button onClick={() => setIsFormOpen(true)}>
+            <Button onClick={handleSetIsFormOpen}>
               <Plus className="h-4 w-4 mr-2" />
               Nova Reserva
             </Button>
@@ -520,7 +520,7 @@ export default function TravelCommandCenter() {
                     <Input
                       placeholder="Pergunte sobre seu voo, hotel..."
                       value={chatMessage}
-                      onChange={(e) => setChatMessage(e.target.value)}
+                      onChange={handleChange}
                       onKeyPress={(e) => e.key === "Enter" && handleSendMessage()}
                     />
                     <Button size="icon" onClick={handleSendMessage}>
@@ -528,13 +528,13 @@ export default function TravelCommandCenter() {
                     </Button>
                   </div>
                   <div className="flex flex-wrap gap-2 mt-3">
-                    <Button variant="outline" size="sm" onClick={() => setChatMessage("Qual meu próximo voo?")}>
+                    <Button variant="outline" size="sm" onClick={handleSetChatMessage}>
                       Meu voo
                     </Button>
-                    <Button variant="outline" size="sm" onClick={() => setChatMessage("Onde fica meu hotel?")}>
+                    <Button variant="outline" size="sm" onClick={handleSetChatMessage}>
                       Meu hotel
                     </Button>
-                    <Button variant="outline" size="sm" onClick={() => setChatMessage("Horário do transfer?")}>
+                    <Button variant="outline" size="sm" onClick={handleSetChatMessage}>
                       Transfer
                     </Button>
                   </div>
@@ -791,7 +791,7 @@ export default function TravelCommandCenter() {
                 <CardContent className="p-8 text-center">
                   <Calendar className="h-16 w-16 text-muted-foreground mx-auto mb-4" />
                   <h3 className="text-lg font-semibold mb-2">Nenhuma reserva encontrada</h3>
-                  <Button onClick={() => setIsFormOpen(true)}>
+                  <Button onClick={handleSetIsFormOpen}>
                     <Plus className="h-4 w-4 mr-2" />
                     Nova Reserva
                   </Button>

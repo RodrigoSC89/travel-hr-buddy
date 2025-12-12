@@ -1,5 +1,5 @@
 /**
-import { useEffect, useState } from "react";;
+import { useEffect, useState, useCallback, useMemo } from "react";;
  * PEO-DP Panel
  * Interface completa para Sistema Inteligente de Auditoria DP
  * Baseado em NORMAM-101 e IMCA M 117
@@ -225,7 +225,7 @@ export default function PEODPPanel() {
                   <Input
                     id="vessel"
                     value={vesselName}
-                    onChange={(e) => setVesselName(e.target.value)}
+                    onChange={handleChange}
                     placeholder="Nome da embarcação"
                   />
                 </div>
@@ -384,7 +384,7 @@ export default function PEODPPanel() {
                   <Label>Embarcação</Label>
                   <Input
                     value={vesselName}
-                    onChange={(e) => setVesselName(e.target.value)}
+                    onChange={handleChange}
                     disabled={isMonitoring}
                   />
                 </div>

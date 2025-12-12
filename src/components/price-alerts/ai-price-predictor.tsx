@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";;
+import { useEffect, useState, useCallback, useMemo } from "react";;
 
 import React, { useState, useEffect } from "react";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
@@ -255,7 +255,7 @@ export const AIPricePredictor: React.FC = () => {
               <Input
                 id="product_name"
                 value={selectedProduct}
-                onChange={(e) => setSelectedProduct(e.target.value)}
+                onChange={handleChange}
                 placeholder="Ex: Passagem São Paulo - Rio de Janeiro"
                 className="border-primary/20 focus:border-primary"
               />
@@ -265,7 +265,7 @@ export const AIPricePredictor: React.FC = () => {
               <Input
                 id="product_url"
                 value={productUrl}
-                onChange={(e) => setProductUrl(e.target.value)}
+                onChange={handleChange}
                 placeholder="https://exemplo.com/produto"
                 className="border-primary/20 focus:border-primary"
               />

@@ -1,4 +1,4 @@
-import { memo, memo, useState } from "react";;;
+import { memo, memo, useState, useCallback, useMemo } from "react";;;
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
@@ -175,7 +175,7 @@ export const CertificationsPanel = memo(function({ certificates, crewMembers }: 
             <Input
               placeholder="Buscar certificado..."
               value={searchTerm}
-              onChange={(e) => setSearchTerm(e.target.value)}
+              onChange={handleChange}
               className="pl-10"
             />
           </div>

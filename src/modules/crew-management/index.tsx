@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";;;
+import { useEffect, useState, useCallback } from "react";;;
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Button } from "@/components/ui/button";
 import { supabase } from "@/integrations/supabase/client";

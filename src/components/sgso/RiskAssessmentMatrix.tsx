@@ -1,4 +1,4 @@
-import { useState } from "react";;
+import { useState, useMemo, useCallback } from "react";;
 import React, { useState } from "react";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
@@ -191,7 +191,7 @@ export const RiskAssessmentMatrix: React.FC = () => {
                         <div
                           key={`cell-${probability}-${impact}`}
                           className={`${getRiskColor(riskLevel)} p-4 rounded cursor-pointer hover:opacity-90 transition-all border-2 flex flex-col items-center justify-center min-h-[100px] relative`}
-                          onClick={() => setSelectedCell({ probability, impact })}
+                          onClick={handleSetSelectedCell}
                         >
                           <div className="text-center">
                             <div className="font-bold text-lg mb-1">{score}</div>
@@ -254,7 +254,7 @@ export const RiskAssessmentMatrix: React.FC = () => {
                         <span>Score: <strong className="text-red-600">{risk.riskScore}</strong></span>
                       </div>
                     </div>
-                    <Button variant="outline" size="sm" className="bg-white" onClick={() => handleViewDetails(risk.title)}>
+                    <Button variant="outline" size="sm" className="bg-white" onClick={() => handlehandleViewDetails}>
                       Ver Detalhes
                     </Button>
                   </div>

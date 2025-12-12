@@ -1,4 +1,4 @@
-import { useState } from "react";;
+import { useState, useMemo, useCallback } from "react";;
 import React, { useState } from "react";
 import { ResponsiveDashboard } from "./responsive-dashboard";
 import { EnhancedDashboard } from "./enhanced-dashboard";
@@ -99,7 +99,7 @@ export const GlobalDashboard: React.FC<GlobalDashboardProps> = ({ onNavigate }) 
                   return (
                     <button
                       key={tab.id}
-                      onClick={() => setActiveTab(tab.id)}
+                      onClick={handleSetActiveTab}
                       className={`
                         relative flex items-center gap-3 px-4 py-3 rounded-xl transition-all duration-300 min-w-fit
                         ${isActive 

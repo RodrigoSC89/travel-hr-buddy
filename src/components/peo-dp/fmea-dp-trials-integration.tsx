@@ -1,4 +1,4 @@
-import { useState } from "react";;
+import { useState, useMemo, useCallback } from "react";;
 import React, { useState } from "react";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
@@ -323,7 +323,7 @@ export const FMEADPTrialsIntegration: React.FC = () => {
                   className={`p-4 border rounded-lg cursor-pointer transition-colors ${
                     selectedReport?.id === report.id ? "bg-primary/5 border-primary" : "hover:bg-muted/50"
                   }`}
-                  onClick={() => setSelectedReport(report)}
+                  onClick={handleSetSelectedReport}
                 >
                   <div className="flex items-center justify-between">
                     <div className="flex items-center gap-4">

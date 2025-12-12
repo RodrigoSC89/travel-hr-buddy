@@ -1,5 +1,5 @@
 /**
-import { useState } from "react";;
+import { useState, useCallback } from "react";;
  * PATCH 410: Mission Autonomy Submodule
  * AI optimization settings, insights, risk mitigation
  */

@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";;
+import { useEffect, useState, useCallback, useMemo } from "react";;
 
 import React, { useState, useEffect } from "react";
 import { useVoiceRecording, useTextToSpeech } from "@/hooks/use-voice-conversation";
@@ -439,7 +439,7 @@ export const AdvancedCrewDossierInteraction: React.FC<VoiceInteractionPanelProps
         ].map(({ id, label, icon: Icon }) => (
           <button
             key={id}
-            onClick={() => setActiveTab(id as unknown)}
+            onClick={handleSetActiveTab}
             className={`flex-1 flex items-center justify-center gap-2 py-2 px-4 rounded-md transition-colors ${
               activeTab === id
                 ? "bg-background text-foreground shadow-sm"

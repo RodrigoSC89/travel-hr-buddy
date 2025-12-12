@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";;
+import { useEffect, useState, useCallback, useMemo } from "react";;
 
 import React, { useState, useEffect } from "react";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
@@ -282,7 +282,7 @@ export default function LogisticsHub() {
                       <div className="flex gap-2 mt-4">
                         <Button
                           size="sm"
-                          onClick={() => handleApproval(request.id!, true)}
+                          onClick={() => handlehandleApproval}
                         >
                           <CheckCircle className="mr-2 h-4 w-4" />
                           Approve
@@ -290,7 +290,7 @@ export default function LogisticsHub() {
                         <Button
                           size="sm"
                           variant="destructive"
-                          onClick={() => handleApproval(request.id!, false)}
+                          onClick={() => handlehandleApproval}
                         >
                           <XCircle className="mr-2 h-4 w-4" />
                           Reject
@@ -301,7 +301,7 @@ export default function LogisticsHub() {
                     {request.status === "approved" && (
                       <Button
                         size="sm"
-                        onClick={() => handleDelivered(request.id!)}
+                        onClick={() => handlehandleDelivered}
                       >
                         <Truck className="mr-2 h-4 w-4" />
                         Mark as Delivered
@@ -377,8 +377,7 @@ export default function LogisticsHub() {
                   <Input
                     id="material_name"
                     value={requestForm.material_name}
-                    onChange={(e) =>
-                      setRequestForm({ ...requestForm, material_name: e.target.value })
+                    onChange={handleChange})
                     }
                     required
                   />
@@ -391,11 +390,7 @@ export default function LogisticsHub() {
                       id="quantity"
                       type="number"
                       value={requestForm.quantity}
-                      onChange={(e) =>
-                        setRequestForm({
-                          ...requestForm,
-                          quantity: parseInt(e.target.value),
-                        })
+                      onChange={handleChange})
                       }
                       required
                     />
@@ -450,8 +445,7 @@ export default function LogisticsHub() {
                   <Input
                     id="requested_by"
                     value={requestForm.requested_by}
-                    onChange={(e) =>
-                      setRequestForm({ ...requestForm, requested_by: e.target.value })
+                    onChange={handleChange})
                     }
                     required
                   />
@@ -462,8 +456,7 @@ export default function LogisticsHub() {
                   <Textarea
                     id="notes"
                     value={requestForm.notes}
-                    onChange={(e) =>
-                      setRequestForm({ ...requestForm, notes: e.target.value })
+                    onChange={handleChange})
                     }
                   />
                 </div>

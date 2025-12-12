@@ -1,4 +1,4 @@
-import { useMemo, useState } from "react";;
+import { useMemo, useState, useCallback } from "react";;
 import React, { useState, useMemo } from "react";
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
@@ -140,7 +140,7 @@ export const FuelSimulator: React.FC = () => {
               <Input
                 type="number"
                 value={fuelPrice}
-                onChange={(e) => setFuelPrice(parseFloat(e.target.value) || 0)}
+                onChange={handleChange}
                 step={0.10}
                 min={0}
               />

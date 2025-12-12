@@ -98,15 +98,15 @@ export const MissionExecution: React.FC<MissionExecutionProps> = ({ missions, ta
                     </div>
 
                     <div className="flex gap-2">
-                      <Button size="sm" variant="outline" onClick={() => handleStart(mission.id)}>
+                      <Button size="sm" variant="outline" onClick={() => handlehandleStart}>
                         <Play className="h-3 w-3 mr-1" />
                         Resume
                       </Button>
-                      <Button size="sm" variant="outline" onClick={() => handlePause(mission.id)}>
+                      <Button size="sm" variant="outline" onClick={() => handlehandlePause}>
                         <Pause className="h-3 w-3 mr-1" />
                         Pause
                       </Button>
-                      <Button size="sm" variant="outline" onClick={() => handleComplete(mission.id)}>
+                      <Button size="sm" variant="outline" onClick={() => handlehandleComplete}>
                         <Square className="h-3 w-3 mr-1" />
                         Complete
                       </Button>

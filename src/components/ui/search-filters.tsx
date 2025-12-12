@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";;
+import { useEffect, useState, useCallback } from "react";;
 import React, { useState, useEffect } from "react";
 import { Search, Filter, SortAsc, SortDesc, X } from "lucide-react";
 import { Input } from "@/components/ui/input";
@@ -65,7 +65,7 @@ export const SearchFilters: React.FC<SearchFiltersProps> = ({
         <Input
           placeholder={placeholder}
           value={searchQuery}
-          onChange={(e) => onSearchChange(e.target.value)}
+          onChange={handleChange}
           className="pl-10"
         />
         {searchQuery && (
@@ -73,7 +73,7 @@ export const SearchFilters: React.FC<SearchFiltersProps> = ({
             variant="ghost"
             size="sm"
             className="absolute right-1 top-1/2 transform -translate-y-1/2 h-7 w-7 p-0"
-            onClick={() => onSearchChange("")}
+            onClick={() => handleonSearchChange}
           >
             <X className="h-3 w-3" />
           </Button>

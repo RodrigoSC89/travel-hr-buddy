@@ -1,5 +1,5 @@
 
-import { memo, memo, useEffect, useState } from "react";;;
+import { memo, memo, useEffect, useState, useMemo } from "react";;;
 import { supabase } from "@/integrations/supabase/client";
 import { CrewHealthRecord, WellbeingAlert } from "@/types/modules";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";

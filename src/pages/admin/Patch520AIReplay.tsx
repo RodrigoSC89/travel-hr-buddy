@@ -1,5 +1,5 @@
 /**
-import { useEffect, useState } from "react";;
+import { useEffect, useState, useCallback, useMemo } from "react";;
  * PATCH 520 – AI Replay de Missões
  * Replay temporal de missões com análise de decisões e desvios
  */
@@ -351,7 +351,7 @@ export default function Patch520AIReplay() {
                 key={speed}
                 variant={playbackSpeed === speed ? "default" : "outline"}
                 size="sm"
-                onClick={() => setPlaybackSpeed(speed)}
+                onClick={handleSetPlaybackSpeed}
               >
                 {speed}x
               </Button>

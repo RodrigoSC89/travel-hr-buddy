@@ -1,5 +1,5 @@
 /**
-import { useEffect, useRef, useState } from "react";;
+import { useEffect, useRef, useState, useCallback, useMemo } from "react";;
  * Weather Map Component
  * Interactive weather map with OpenWeatherMap tiles as primary source
  * Falls back to static visualization if APIs unavailable
@@ -301,7 +301,7 @@ export const WindyMap: React.FC<WindyMapProps> = ({
                   key={layer.id}
                   variant={selectedLayer === layer.id ? "default" : "outline"}
                   size="sm"
-                  onClick={() => setSelectedLayer(layer.id)}
+                  onClick={handleSetSelectedLayer}
                   className="h-8"
                 >
                   <layer.icon className="h-3 w-3 mr-1" />

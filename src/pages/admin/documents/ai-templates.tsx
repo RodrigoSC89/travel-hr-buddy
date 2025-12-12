@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useState } from "react";;;
+import { useEffect, useState, useCallback, useMemo } from "react";;;
 import { useNavigate } from "react-router-dom";
 import { supabase } from "@/integrations/supabase/client";
 import { useAuth } from "@/contexts/AuthContext";
@@ -346,7 +346,7 @@ export default function AITemplatesPage() {
             <Plus className="w-4 h-4 mr-2" />
             Novo Template
           </Button>
-          <Button variant="outline" onClick={() => navigate("/admin/documents/ai")}>
+          <Button variant="outline" onClick={() => handlenavigate}>
             <FileText className="w-4 h-4 mr-2" />
             Editor
           </Button>
@@ -366,7 +366,7 @@ export default function AITemplatesPage() {
             <Input
               placeholder="Digite para buscar..."
               value={searchTerm}
-              onChange={(e) => setSearchTerm(e.target.value)}
+              onChange={handleChange}
               className="pl-10"
             />
           </div>
@@ -391,7 +391,7 @@ export default function AITemplatesPage() {
                 : "Comece criando seu primeiro template"}
             </p>
             {!searchTerm && (
-              <Button onClick={() => setShowCreateDialog(true)}>
+              <Button onClick={handleSetShowCreateDialog}>
                 <Plus className="w-4 h-4 mr-2" />
                 Criar Primeiro Template
               </Button>
@@ -436,7 +436,7 @@ export default function AITemplatesPage() {
                 <div className="flex gap-2 flex-wrap">
                   <Button
                     size="sm"
-                    onClick={() => handleApplyTemplate(template)}
+                    onClick={() => handlehandleApplyTemplate}
                   >
                     <CheckCircle className="w-4 h-4 mr-1" />
                     Aplicar
@@ -445,7 +445,7 @@ export default function AITemplatesPage() {
                   <Button
                     size="sm"
                     variant="outline"
-                    onClick={() => handleCopyTemplate(template)}
+                    onClick={() => handlehandleCopyTemplate}
                   >
                     <Copy className="w-4 h-4 mr-1" />
                     Copiar
@@ -456,7 +456,7 @@ export default function AITemplatesPage() {
                       <Button
                         size="sm"
                         variant="ghost"
-                        onClick={() => handleToggleFavorite(template)}
+                        onClick={() => handlehandleToggleFavorite}
                       >
                         <Star 
                           className={`w-4 h-4 ${template.is_favorite ? "fill-yellow-500 text-yellow-500" : ""}`} 
@@ -466,7 +466,7 @@ export default function AITemplatesPage() {
                       <Button
                         size="sm"
                         variant="ghost"
-                        onClick={() => handleTogglePrivate(template)}
+                        onClick={() => handlehandleTogglePrivate}
                       >
                         {template.is_private ? (
                           <Lock className="w-4 h-4" />
@@ -478,7 +478,7 @@ export default function AITemplatesPage() {
                       <Button
                         size="sm"
                         variant="ghost"
-                        onClick={() => handleEditTemplate(template)}
+                        onClick={() => handlehandleEditTemplate}
                       >
                         <Edit className="w-4 h-4" />
                       </Button>
@@ -486,7 +486,7 @@ export default function AITemplatesPage() {
                       <Button
                         size="sm"
                         variant="ghost"
-                        onClick={() => handleDeleteTemplate(template.id)}
+                        onClick={() => handlehandleDeleteTemplate}
                       >
                         <Trash2 className="w-4 h-4 text-destructive" />
                       </Button>
@@ -520,7 +520,7 @@ export default function AITemplatesPage() {
                 id="title"
                 placeholder="Ex: Relatório Mensal"
                 value={formData.title}
-                onChange={(e) => setFormData({ ...formData, title: e.target.value })}
+                onChange={handleChange})}
               />
             </div>
 
@@ -531,7 +531,7 @@ export default function AITemplatesPage() {
                 placeholder="Digite o conteúdo do template..."
                 rows={8}
                 value={formData.content}
-                onChange={(e) => setFormData({ ...formData, content: e.target.value })}
+                onChange={handleChange})}
               />
             </div>
 
@@ -542,7 +542,7 @@ export default function AITemplatesPage() {
                   id="tags"
                   placeholder="Adicionar tag..."
                   value={tagInput}
-                  onChange={(e) => setTagInput(e.target.value)}
+                  onChange={handleChange}
                   onKeyPress={(e) => e.key === "Enter" && handleAddTag()}
                 />
                 <Button type="button" onClick={handleAddTag} variant="outline">
@@ -555,7 +555,7 @@ export default function AITemplatesPage() {
                     <Badge key={index} variant="secondary">
                       {tag}
                       <button
-                        onClick={() => handleRemoveTag(tag)}
+                        onClick={() => handlehandleRemoveTag}
                         className="ml-1 hover:text-destructive"
                       >
                         ×

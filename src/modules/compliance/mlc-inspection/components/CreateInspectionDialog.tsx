@@ -1,4 +1,4 @@
-import { useState } from "react";;
+import { useState, useCallback } from "react";;
 import React, { useState } from "react";
 import { Dialog, DialogContent, DialogDescription, DialogFooter, DialogHeader, DialogTitle } from "@/components/ui/dialog";
 import { Button } from "@/components/ui/button";
@@ -95,7 +95,7 @@ export const CreateInspectionDialog = memo(function({ open, onOpenChange, onInsp
                 id="vessel_id"
                 placeholder="Enter vessel ID"
                 value={formData.vessel_id}
-                onChange={(e) => setFormData({ ...formData, vessel_id: e.target.value })}
+                onChange={handleChange})}
                 required
               />
             </div>
@@ -106,7 +106,7 @@ export const CreateInspectionDialog = memo(function({ open, onOpenChange, onInsp
                 id="inspector_name"
                 placeholder="Enter inspector name"
                 value={formData.inspector_name}
-                onChange={(e) => setFormData({ ...formData, inspector_name: e.target.value })}
+                onChange={handleChange})}
                 required
               />
             </div>
@@ -136,14 +136,14 @@ export const CreateInspectionDialog = memo(function({ open, onOpenChange, onInsp
                 id="notes"
                 placeholder="Enter any initial notes..."
                 value={formData.notes}
-                onChange={(e) => setFormData({ ...formData, notes: e.target.value })}
+                onChange={handleChange})}
                 rows={3}
               />
             </div>
           </div>
 
           <DialogFooter>
-            <Button type="button" variant="outline" onClick={() => onOpenChange(false)}>
+            <Button type="button" variant="outline" onClick={() => handleonOpenChange}>
               Cancel
             </Button>
             <Button type="submit" disabled={loading}>

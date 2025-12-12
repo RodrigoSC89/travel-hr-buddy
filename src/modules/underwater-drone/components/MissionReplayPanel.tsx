@@ -1,5 +1,5 @@
 /**
-import { useEffect, useRef, useState } from "react";;
+import { useEffect, useRef, useState, useCallback, useMemo } from "react";;
  * PATCH 533 - Mission Replay Component
  * Interactive replay interface with timeline control
  */
@@ -186,7 +186,7 @@ export const MissionReplayPanel: React.FC<MissionReplayProps> = ({ recording, on
                 key={speed}
                 variant={playbackSpeed === speed ? "default" : "outline"}
                 size="sm"
-                onClick={() => setPlaybackSpeed(speed)}
+                onClick={handleSetPlaybackSpeed}
               >
                 {speed}x
               </Button>

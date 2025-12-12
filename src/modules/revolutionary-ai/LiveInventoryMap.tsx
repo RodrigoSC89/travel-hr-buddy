@@ -1,5 +1,5 @@
 /**
-import { useMemo, useState } from "react";;
+import { useMemo, useState, useCallback } from "react";;
  * REVOLUTIONARY AI - Live Inventory Map
  * Funcionalidade 4: Visualização Inteligente de Estoque Marítimo
  */
@@ -280,9 +280,7 @@ export const LiveInventoryMap = memo(function() {
                         ? "border-primary ring-2 ring-primary/20" 
                         : "hover:border-primary/50"
                     }`}
-                    onClick={() => setSelectedLocation(
-                      selectedLocation?.id === location.id ? null : location
-                    )}
+                    onClick={handleSetSelectedLocation}
                   >
                     <CardContent className="p-3">
                       <div className="flex items-center gap-3">
@@ -346,13 +344,13 @@ export const LiveInventoryMap = memo(function() {
                       placeholder="Buscar..."
                       className="pl-8 w-48"
                       value={searchTerm}
-                      onChange={(e) => setSearchTerm(e.target.value)}
+                      onChange={handleChange}
                     />
                   </div>
                   <select
                     className="px-3 py-2 rounded-md border bg-background text-sm"
                     value={filterStatus}
-                    onChange={(e) => setFilterStatus(e.target.value)}
+                    onChange={handleChange}
                   >
                     <option value="all">Todos</option>
                     <option value="critical">Crítico</option>

@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";;
+import { useEffect, useState, useCallback } from "react";;
 import React, { useState, useEffect } from "react";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
@@ -103,7 +103,7 @@ export const LiveSearch = ({
         <MapPin className="absolute left-3 top-1/2 transform -translate-y-1/2 text-muted-foreground" size={16} />
         <Input
           value={value}
-          onChange={(e) => onChange(e.target.value)}
+          onChange={handleChange}
           onFocus={() => value.length === 0 && setIsOpen(true)}
           onBlur={() => setTimeout(() => setIsOpen(false), 200)}
           placeholder={placeholder}

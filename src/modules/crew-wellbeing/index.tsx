@@ -1,4 +1,4 @@
-import { useState } from "react";;
+import { useState, useMemo, useCallback } from "react";;
 import React, { useState } from "react";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
@@ -364,7 +364,7 @@ export default function CrewWellbeing() {
                     variant={member.fatigueLevel === "critical" ? "destructive" : "outline"}
                     size="sm" 
                     className="flex-1"
-                    onClick={() => handleRecommendRealocation(member.id)}
+                    onClick={() => handlehandleRecommendRealocation}
                   >
                     <RefreshCw className="h-4 w-4 mr-2" />
                     Sugerir Realocação

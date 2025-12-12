@@ -1,4 +1,4 @@
-import { useEffect, useRef, useState } from "react";;;
+import { useEffect, useRef, useState, useCallback, useMemo } from "react";;;
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Textarea } from "@/components/ui/textarea";
@@ -329,7 +329,7 @@ export default function AdvancedCopilot() {
               <Button
                 variant="ghost"
                 size="icon"
-                onClick={() => setVoiceEnabled(!voiceEnabled)}
+                onClick={handleSetVoiceEnabled}
                 title={voiceEnabled ? "Desativar voz" : "Ativar voz"}
               >
                 {voiceEnabled ? (
@@ -356,13 +356,13 @@ export default function AdvancedCopilot() {
                     Descreva problemas, crie jobs por voz ou texto, e receba diagnósticos baseados em IA.
                   </p>
                   <div className="flex flex-wrap justify-center gap-2 mt-4">
-                    <Badge variant="outline" className="cursor-pointer hover:bg-muted" onClick={() => setInput("Criar job urgente para vazamento na bomba hidráulica STBD")}>
+                    <Badge variant="outline" className="cursor-pointer hover:bg-muted" onClick={handleSetInput}>
                       "Criar job urgente..."
                     </Badge>
-                    <Badge variant="outline" className="cursor-pointer hover:bg-muted" onClick={() => setInput("Qual procedimento para blackout parcial no bus B?")}>
+                    <Badge variant="outline" className="cursor-pointer hover:bg-muted" onClick={handleSetInput}>
                       "Procedimento blackout..."
                     </Badge>
-                    <Badge variant="outline" className="cursor-pointer hover:bg-muted" onClick={() => setInput("Gerar relatório de conformidade da semana")}>
+                    <Badge variant="outline" className="cursor-pointer hover:bg-muted" onClick={handleSetInput}>
                       "Relatório conformidade..."
                     </Badge>
                   </div>
@@ -425,7 +425,7 @@ export default function AdvancedCopilot() {
             <Textarea
               placeholder="Descreva o problema ou comando... (voz ou texto)"
               value={input}
-              onChange={(e) => setInput(e.target.value)}
+              onChange={handleChange}
               onKeyDown={(e) => {
                 if (e.key === "Enter" && !e.shiftKey) {
                   e.preventDefault();
@@ -488,7 +488,7 @@ export default function AdvancedCopilot() {
               <Card
                 key={suggestion.id}
                 className="cursor-pointer hover:bg-muted/50 transition-colors"
-                onClick={() => handleSuggestionAction(suggestion)}
+                onClick={() => handlehandleSuggestionAction}
               >
                 <CardContent className="p-3">
                   <div className="flex items-start gap-2">

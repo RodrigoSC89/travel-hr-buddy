@@ -1,4 +1,4 @@
-import { memo, memo, useState } from "react";;;
+import { memo, memo, useState, useCallback } from "react";;;
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Label } from "@/components/ui/label";
 import { Input } from "@/components/ui/input";
@@ -110,7 +110,7 @@ export const PriceRangeConfig = memo(function() {
               id="origin"
               placeholder="Ex: São Paulo"
               value={origin}
-              onChange={(e) => setOrigin(e.target.value)}
+              onChange={handleChange}
             />
           </div>
           <div className="space-y-2">
@@ -119,7 +119,7 @@ export const PriceRangeConfig = memo(function() {
               id="destination"
               placeholder="Ex: Rio de Janeiro"
               value={destination}
-              onChange={(e) => setDestination(e.target.value)}
+              onChange={handleChange}
             />
           </div>
         </div>
@@ -154,7 +154,7 @@ export const PriceRangeConfig = memo(function() {
               type="number"
               placeholder="Ex: 500.00"
               value={maxPrice}
-              onChange={(e) => setMaxPrice(e.target.value)}
+              onChange={handleChange}
             />
           </div>
         </div>
@@ -203,7 +203,7 @@ export const PriceRangeConfig = memo(function() {
                 <input
                   type="checkbox"
                   checked={emailEnabled}
-                  onChange={(e) => setEmailEnabled(e.target.checked)}
+                  onChange={handleChange}
                   className="w-4 h-4"
                 />
                 <span className="text-sm">Email</span>
@@ -212,7 +212,7 @@ export const PriceRangeConfig = memo(function() {
                 <input
                   type="checkbox"
                   checked={pushEnabled}
-                  onChange={(e) => setPushEnabled(e.target.checked)}
+                  onChange={handleChange}
                   className="w-4 h-4"
                 />
                 <span className="text-sm">Push</span>

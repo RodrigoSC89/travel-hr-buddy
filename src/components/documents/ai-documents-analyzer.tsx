@@ -1,5 +1,5 @@
 
-import { memo, memo, useEffect, useState } from "react";;;
+import { memo, memo, useEffect, useState, useCallback } from "react";;;
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -609,7 +609,7 @@ export const AIDocumentsAnalyzer = memo(function() {
                   <Card
                     key={doc.id}
                     className="cursor-pointer hover:bg-accent transition-colors"
-                    onClick={() => loadDocumentDetails(doc.id)}
+                    onClick={() => handleloadDocumentDetails}
                   >
                     <CardContent className="p-4">
                       <div className="flex items-center justify-between">
@@ -717,7 +717,7 @@ export const AIDocumentsAnalyzer = memo(function() {
                 <Input
                   placeholder="Digite sua busca..."
                   value={searchQuery}
-                  onChange={(e) => setSearchQuery(e.target.value)}
+                  onChange={handleChange}
                   onKeyDown={(e) => e.key === "Enter" && handleSearch()}
                 />
                 <Button onClick={handleSearch}>
@@ -735,7 +735,7 @@ export const AIDocumentsAnalyzer = memo(function() {
                     <Card
                       key={result.document_id}
                       className="cursor-pointer hover:bg-accent transition-colors"
-                      onClick={() => loadDocumentDetails(result.document_id)}
+                      onClick={() => handleloadDocumentDetails}
                     >
                       <CardContent className="p-4">
                         <div className="flex items-center justify-between">

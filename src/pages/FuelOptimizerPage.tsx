@@ -1,4 +1,4 @@
-import { useCallback, useEffect, useState } from "react";;
+import { useCallback, useMemo, useEffect, useState } from "react";;
 import * as React from "react";
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
@@ -386,7 +386,7 @@ const FuelOptimizerPage = () => {
             <RefreshCw className={`h-4 w-4 mr-2 ${loading ? "animate-spin" : ""}`} />
             Atualizar
           </Button>
-          <Button onClick={() => setIsCreating(true)} className="bg-gradient-to-r from-orange-500 to-red-600">
+          <Button onClick={handleSetIsCreating} className="bg-gradient-to-r from-orange-500 to-red-600">
             <Plus className="h-4 w-4 mr-2" />
             Nova Análise IA
           </Button>
@@ -534,7 +534,7 @@ const FuelOptimizerPage = () => {
                     <Card 
                       key={opt.id} 
                       className="cursor-pointer hover:border-primary transition-colors"
-                      onClick={() => setSelectedOptimization(opt)}
+                      onClick={handleSetSelectedOptimization}
                     >
                       <CardContent className="pt-4">
                         <div className="flex items-start justify-between mb-3">
@@ -608,7 +608,7 @@ const FuelOptimizerPage = () => {
                       Análise completa com recomendações de IA
                     </CardDescription>
                   </div>
-                  <Button variant="outline" onClick={() => setSelectedOptimization(null)}>
+                  <Button variant="outline" onClick={handleSetSelectedOptimization}>
                     Voltar
                   </Button>
                 </div>
@@ -764,7 +764,7 @@ const FuelOptimizerPage = () => {
               <p className="text-muted-foreground mb-4">
                 Clique em uma análise na aba Visão Geral para ver detalhes
               </p>
-              <Button onClick={() => setActiveTab("overview")}>
+              <Button onClick={handleSetActiveTab}>
                 Ver Análises
               </Button>
             </Card>
@@ -884,7 +884,7 @@ const FuelOptimizerPage = () => {
               <Label>Nome da Rota *</Label>
               <Input
                 value={newRoute.route_name}
-                onChange={(e) => setNewRoute({...newRoute, route_name: e.target.value})}
+                onChange={handleChange})}
                 placeholder="Ex: Santos → Rio de Janeiro"
               />
             </div>
@@ -893,7 +893,7 @@ const FuelOptimizerPage = () => {
                 <Label>Origem</Label>
                 <Input
                   value={newRoute.origin}
-                  onChange={(e) => setNewRoute({...newRoute, origin: e.target.value})}
+                  onChange={handleChange})}
                   placeholder="Porto de origem"
                 />
               </div>
@@ -901,7 +901,7 @@ const FuelOptimizerPage = () => {
                 <Label>Destino</Label>
                 <Input
                   value={newRoute.destination}
-                  onChange={(e) => setNewRoute({...newRoute, destination: e.target.value})}
+                  onChange={handleChange})}
                   placeholder="Porto de destino"
                 />
               </div>
@@ -912,7 +912,7 @@ const FuelOptimizerPage = () => {
                 <Input
                   type="number"
                   value={newRoute.distance_nm}
-                  onChange={(e) => setNewRoute({...newRoute, distance_nm: e.target.value})}
+                  onChange={handleChange})}
                   placeholder="220"
                 />
               </div>
@@ -922,7 +922,7 @@ const FuelOptimizerPage = () => {
                   type="number"
                   step="0.01"
                   value={newRoute.estimated_consumption}
-                  onChange={(e) => setNewRoute({...newRoute, estimated_consumption: e.target.value})}
+                  onChange={handleChange})}
                   placeholder="45.5"
                 />
               </div>
@@ -949,7 +949,7 @@ const FuelOptimizerPage = () => {
                   type="number"
                   step="0.1"
                   value={newRoute.current_speed}
-                  onChange={(e) => setNewRoute({...newRoute, current_speed: e.target.value})}
+                  onChange={handleChange})}
                   placeholder="12"
                 />
               </div>

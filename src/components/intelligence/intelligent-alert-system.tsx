@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";;
+import { useEffect, useState, useCallback, useMemo } from "react";;
 import React, { useState, useEffect } from "react";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
@@ -440,35 +440,35 @@ export const IntelligentAlertSystem = memo(() => {
                 <Button 
                   variant={filterType === "all" ? "default" : "outline"} 
                   size="sm"
-                  onClick={() => setFilterType("all")}
+                  onClick={handleSetFilterType}
                 >
                   Todos
                 </Button>
                 <Button 
                   variant={filterType === "maintenance" ? "default" : "outline"} 
                   size="sm"
-                  onClick={() => setFilterType("maintenance")}
+                  onClick={handleSetFilterType}
                 >
                   Manutenção
                 </Button>
                 <Button 
                   variant={filterType === "safety" ? "default" : "outline"} 
                   size="sm"
-                  onClick={() => setFilterType("safety")}
+                  onClick={handleSetFilterType}
                 >
                   Segurança
                 </Button>
                 <Button 
                   variant={filterType === "efficiency" ? "default" : "outline"} 
                   size="sm"
-                  onClick={() => setFilterType("efficiency")}
+                  onClick={handleSetFilterType}
                 >
                   Eficiência
                 </Button>
                 <Button 
                   variant={filterType === "crew" ? "default" : "outline"} 
                   size="sm"
-                  onClick={() => setFilterType("crew")}
+                  onClick={handleSetFilterType}
                 >
                   Tripulação
                 </Button>

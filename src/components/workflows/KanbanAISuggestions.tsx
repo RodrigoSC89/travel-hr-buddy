@@ -1,4 +1,4 @@
-import { useState } from "react";;
+import { useState, useCallback } from "react";;
 "use client";
 
 import { Card, CardContent } from "@/components/ui/card";
@@ -94,7 +94,7 @@ export const KanbanAISuggestions = memo(function({ suggestions = [] }: KanbanAIS
               </div>
               
               {!accepted.includes(s.etapa) && (
-                <Button onClick={() => handleAccept(s.etapa, s)} className="mt-4">
+                <Button onClick={() => handlehandleAccept} className="mt-4">
                   ✅ Aceitar sugestão
                 </Button>
               )}

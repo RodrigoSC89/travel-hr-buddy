@@ -1,5 +1,5 @@
 /**
-import { useEffect, useState } from "react";;
+import { useEffect, useState, useCallback } from "react";;
  * Compliance Hub Dashboard Complete
  * Dashboard principal do módulo de conformidade com IA integrada
  */
@@ -140,11 +140,11 @@ export const ComplianceHubDashboard = memo(function() {
           </div>
         </div>
         <div className="flex items-center gap-2">
-          <Button variant="outline" size="sm" onClick={() => setShowSettings(true)}>
+          <Button variant="outline" size="sm" onClick={handleSetShowSettings}>
             <Settings className="h-4 w-4 mr-2" />
             Configurações
           </Button>
-          <Button size="sm" onClick={() => setShowCreateAudit(true)}>
+          <Button size="sm" onClick={handleSetShowCreateAudit}>
             <FileCheck className="h-4 w-4 mr-2" />
             Nova Auditoria
           </Button>

@@ -71,7 +71,7 @@ export default function JobFormWithExamples({ onSubmit }: JobFormWithExamplesPro
               id="component"
               placeholder="Componente (ex: 603.0004.02)"
               value={component}
-              onChange={(e) => setComponent(e.target.value)}
+              onChange={handleChange}
             />
           </div>
 
@@ -81,7 +81,7 @@ export default function JobFormWithExamples({ onSubmit }: JobFormWithExamplesPro
               id="description"
               placeholder="Descreva o problema ou ação necessária..."
               value={description}
-              onChange={(e) => setDescription(e.target.value)}
+              onChange={handleChange}
               rows={4}
               className="resize-none"
             />

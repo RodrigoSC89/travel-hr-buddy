@@ -1,4 +1,4 @@
-import { useState } from "react";;
+import { useState, useCallback } from "react";;
 import React, { useState } from "react";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
@@ -186,7 +186,7 @@ export const IntegrationTesting: React.FC = () => {
                   </label>
                   <select 
                     value={selectedEndpoint}
-                    onChange={(e) => setSelectedEndpoint(e.target.value)}
+                    onChange={handleChange}
                     className="w-full p-2 border border-border rounded-lg bg-background text-foreground"
                   >
                     {endpoints.map(endpoint => (

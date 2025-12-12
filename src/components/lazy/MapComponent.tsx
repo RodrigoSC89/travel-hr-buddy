@@ -1,5 +1,5 @@
 /**
-import { useEffect, useRef } from "react";;
+import { useEffect, useRef, useCallback } from "react";;
  * MapComponent - Componente interno de mapa
  * Carregado apenas quando necessário
  */

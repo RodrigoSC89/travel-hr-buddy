@@ -1,4 +1,4 @@
-import { useState } from "react";;
+import { useState, useMemo, useCallback } from "react";;
 import React, { useState } from "react";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
@@ -531,15 +531,15 @@ export const APIHubNautilus: React.FC = () => {
 
                     {/* Actions */}
                     <div className="flex gap-2">
-                      <Button size="sm" variant="outline" className="flex-1" onClick={() => handleTestAPI(endpoint.name)}>
+                      <Button size="sm" variant="outline" className="flex-1" onClick={() => handlehandleTestAPI}>
                         <Code className="h-4 w-4 mr-2" />
                         Testar API
                       </Button>
-                      <Button size="sm" variant="outline" className="flex-1" onClick={() => handleViewDocumentation(endpoint.name)}>
+                      <Button size="sm" variant="outline" className="flex-1" onClick={() => handlehandleViewDocumentation}>
                         <Book className="h-4 w-4 mr-2" />
                         Documentação
                       </Button>
-                      <Button size="sm" variant="outline" onClick={() => handleDownloadExamples(endpoint.name)}>
+                      <Button size="sm" variant="outline" onClick={() => handlehandleDownloadExamples}>
                         <Download className="h-4 w-4 mr-2" />
                         Exemplos
                       </Button>
@@ -620,13 +620,13 @@ export const APIHubNautilus: React.FC = () => {
 
                     {/* Actions */}
                     <div className="flex gap-2">
-                      <Button size="sm" variant="outline" className="flex-1" onClick={() => handleConfigureIntegration(integration.name)}>
+                      <Button size="sm" variant="outline" className="flex-1" onClick={() => handlehandleConfigureIntegration}>
                         Configurar
                       </Button>
-                      <Button size="sm" variant="outline" className="flex-1" onClick={() => handleViewLogs(integration.name)}>
+                      <Button size="sm" variant="outline" className="flex-1" onClick={() => handlehandleViewLogs}>
                         Logs
                       </Button>
-                      <Button size="sm" variant="outline" onClick={() => handleTestIntegration(integration.name)}>
+                      <Button size="sm" variant="outline" onClick={() => handlehandleTestIntegration}>
                         Testar
                       </Button>
                     </div>
@@ -655,7 +655,7 @@ export const APIHubNautilus: React.FC = () => {
                         <div className="font-medium">{sdk.name}</div>
                         <div className="text-sm text-muted-foreground">v{sdk.version} • {sdk.downloads} downloads</div>
                       </div>
-                      <Button size="sm" variant="outline" onClick={() => handleDownloadSDK(sdk.name)}>
+                      <Button size="sm" variant="outline" onClick={() => handlehandleDownloadSDK}>
                         <Download className="h-4 w-4 mr-2" />
                         Download
                       </Button>

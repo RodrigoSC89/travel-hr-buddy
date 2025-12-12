@@ -1,4 +1,4 @@
-import { useCallback, useEffect, useRef, useState } from "react";;
+import { useCallback, useMemo, useEffect, useRef, useState } from "react";;
 
 /**
  * PATCH 370 - Operations Dashboard - Real Data Integration
@@ -473,7 +473,7 @@ export const OperationsDashboardRealTime: React.FC = () => {
         <div className="flex gap-2 flex-wrap">
           <Button
             variant="outline"
-            onClick={() => setAutoRefresh(!autoRefresh)}
+            onClick={handleSetAutoRefresh}
           >
             <RefreshCw className={`h-4 w-4 mr-2 ${autoRefresh ? "animate-spin" : ""}`} />
             {autoRefresh ? "Auto" : "Manual"}
@@ -553,13 +553,7 @@ export const OperationsDashboardRealTime: React.FC = () => {
             <div className="flex items-end">
               <Button
                 variant="outline"
-                onClick={() =>
-                  setFilter({
-                    operation_type: "all",
-                    time_range: "24h",
-                    criticality: "all",
-                  })
-                }
+                onClick={handleSetFilter}
                 className="w-full"
               >
                 Reset Filters

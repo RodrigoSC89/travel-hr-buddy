@@ -1,5 +1,5 @@
 /**
-import { useCallback, useState } from "react";;
+import { useCallback, useMemo, useState } from "react";;
  * PATCH UNIFY-12.0 - Workflow Command Center
  * Centro Unificado de Workflows - Fusão de 4 módulos:
  * - Workflow Visual IA (/workflow-visual)
@@ -253,7 +253,7 @@ export default function WorkflowCommandCenter() {
               <BarChart3 className="h-4 w-4 mr-2" />
               Exportar
             </Button>
-            <Button onClick={() => setShowNewWorkflow(true)}>
+            <Button onClick={handleSetShowNewWorkflow}>
               <Plus className="h-4 w-4 mr-2" />
               Novo Workflow
             </Button>
@@ -380,7 +380,7 @@ export default function WorkflowCommandCenter() {
                     <div 
                       key={workflow.id} 
                       className="p-4 border rounded-lg hover:bg-accent/50 transition-colors cursor-pointer"
-                      onClick={() => setSelectedVisualWorkflow(workflow)}
+                      onClick={handleSetSelectedVisualWorkflow}
                     >
                       <div className="flex items-center justify-between mb-3">
                         <h4 className="font-medium">{workflow.name}</h4>
@@ -452,7 +452,7 @@ export default function WorkflowCommandCenter() {
                 <Card className="p-8 text-center">
                   <Workflow className="h-12 w-12 mx-auto text-muted-foreground mb-3" />
                   <p className="text-muted-foreground">Nenhum workflow encontrado</p>
-                  <Button className="mt-4" onClick={() => setShowNewWorkflow(true)}>
+                  <Button className="mt-4" onClick={handleSetShowNewWorkflow}>
                     <Plus className="h-4 w-4 mr-2" />
                     Criar Workflow
                   </Button>
@@ -490,7 +490,7 @@ export default function WorkflowCommandCenter() {
                     <Card 
                       key={workflow.id} 
                       className="hover:shadow-md transition-shadow cursor-pointer"
-                      onClick={() => setSelectedVisualWorkflow(workflow)}
+                      onClick={handleSetSelectedVisualWorkflow}
                     >
                       <CardHeader className="pb-2">
                         <div className="flex items-center justify-between">
@@ -582,7 +582,7 @@ export default function WorkflowCommandCenter() {
                         <Button size="sm" variant="outline">
                           <Settings className="h-4 w-4" />
                         </Button>
-                        <Button size="sm" variant={rule.is_active ? "destructive" : "default"} onClick={() => toggleAutomationRule(rule.id)}>
+                        <Button size="sm" variant={rule.is_active ? "destructive" : "default"} onClick={() => handletoggleAutomationRule}>
                           {rule.is_active ? "Desativar" : "Ativar"}
                         </Button>
                       </div>
@@ -650,7 +650,7 @@ export default function WorkflowCommandCenter() {
                         <p className="text-sm text-muted-foreground mb-3">{template.description}</p>
                         <div className="flex items-center justify-between">
                           <span className="text-sm text-muted-foreground">{template.steps.length} etapas</span>
-                          <Button size="sm" onClick={() => handleUseTemplate(template)}>
+                          <Button size="sm" onClick={() => handlehandleUseTemplate}>
                             <Sparkles className="h-3 w-3 mr-1" />
                             Usar Template
                           </Button>
@@ -758,12 +758,12 @@ export default function WorkflowCommandCenter() {
               <Input 
                 placeholder="Nome do workflow" 
                 value={newWorkflowData.name} 
-                onChange={(e) => setNewWorkflowData(p => ({ ...p, name: e.target.value }))} 
+                onChange={handleChange}))} 
               />
               <Textarea 
                 placeholder="Descrição" 
                 value={newWorkflowData.description} 
-                onChange={(e) => setNewWorkflowData(p => ({ ...p, description: e.target.value }))} 
+                onChange={handleChange}))} 
               />
               <div className="grid grid-cols-2 gap-4">
                 <Select value={newWorkflowData.category} onValueChange={(v) => setNewWorkflowData(p => ({ ...p, category: v }))}>
@@ -788,7 +788,7 @@ export default function WorkflowCommandCenter() {
               </div>
             </div>
             <DialogFooter>
-              <Button variant="outline" onClick={() => setShowNewWorkflow(false)}>Cancelar</Button>
+              <Button variant="outline" onClick={handleSetShowNewWorkflow}>Cancelar</Button>
               <Button onClick={handleNewWorkflow}>Criar Workflow</Button>
             </DialogFooter>
           </DialogContent>
@@ -821,7 +821,7 @@ export default function WorkflowCommandCenter() {
               </div>
             )}
             <DialogFooter>
-              <Button variant="outline" onClick={() => setShowDetails(false)}>Fechar</Button>
+              <Button variant="outline" onClick={handleSetShowDetails}>Fechar</Button>
             </DialogFooter>
           </DialogContent>
         </Dialog>
@@ -890,7 +890,7 @@ export default function WorkflowCommandCenter() {
               </div>
             )}
             <DialogFooter>
-              <Button variant="outline" onClick={() => setSelectedVisualWorkflow(null)}>Fechar</Button>
+              <Button variant="outline" onClick={handleSetSelectedVisualWorkflow}>Fechar</Button>
               <Button>
                 <Play className="h-4 w-4 mr-2" />
                 Executar

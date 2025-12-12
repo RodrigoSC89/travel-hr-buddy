@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";;
+import { useEffect, useState, useCallback, useMemo } from "react";;
 import React, { useState, useEffect } from "react";
 import { Dialog, DialogContent, DialogHeader, DialogTitle } from "@/components/ui/dialog";
 import { Input } from "@/components/ui/input";
@@ -214,7 +214,7 @@ export const AdvancedSearch: React.FC<AdvancedSearchProps> = ({ open, onOpenChan
             <Input
               placeholder="Digite para buscar páginas, documentos, funcionários..."
               value={query}
-              onChange={(e) => setQuery(e.target.value)}
+              onChange={handleChange}
               onKeyDown={handleKeyDown}
               className="pl-10 text-base"
               autoFocus
@@ -227,7 +227,7 @@ export const AdvancedSearch: React.FC<AdvancedSearchProps> = ({ open, onOpenChan
                 key={filter.key}
                 variant={activeFilter === filter.key ? "default" : "outline"}
                 size="sm"
-                onClick={() => setActiveFilter(filter.key)}
+                onClick={handleSetActiveFilter}
                 className="flex items-center gap-1"
               >
                 {filter.icon}
@@ -251,7 +251,7 @@ export const AdvancedSearch: React.FC<AdvancedSearchProps> = ({ open, onOpenChan
                       <div
                         key={result.id}
                         className="flex items-center gap-3 p-3 rounded-lg border hover:bg-muted/50 cursor-pointer transition-colors group"
-                        onClick={() => handleResultClick(result)}
+                        onClick={() => handlehandleResultClick}
                       >
                         <div className="flex-shrink-0 text-primary">
                           {result.icon}
@@ -313,7 +313,7 @@ export const AdvancedSearch: React.FC<AdvancedSearchProps> = ({ open, onOpenChan
                     <div
                       key={search.id}
                       className="flex items-center gap-3 p-3 rounded-lg border hover:bg-muted/50 cursor-pointer transition-colors"
-                      onClick={() => handleResultClick(search)}
+                      onClick={() => handlehandleResultClick}
                     >
                       {search.icon}
                       <span className="text-sm ml-2">{search.title}</span>
@@ -335,7 +335,7 @@ export const AdvancedSearch: React.FC<AdvancedSearchProps> = ({ open, onOpenChan
                     <div
                       key={favorite.id}
                       className="flex items-center gap-3 p-3 rounded-lg border hover:bg-muted/50 cursor-pointer transition-colors"
-                      onClick={() => handleResultClick(favorite)}
+                      onClick={() => handlehandleResultClick}
                     >
                       <div className="flex-shrink-0 text-primary">
                         {favorite.icon}

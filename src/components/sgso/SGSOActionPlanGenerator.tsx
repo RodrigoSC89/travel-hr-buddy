@@ -1,5 +1,5 @@
 /**
-import { useState } from "react";;
+import { useState, useCallback } from "react";;
  * SGSO Action Plan Generator Component
  * AI-powered action plan generation for classified incidents
  * Features: Form input, GPT-4 integration, mock mode fallback, visual results
@@ -177,7 +177,7 @@ export const SGSOActionPlanGenerator: React.FC = () => {
               id="description"
               placeholder="Descreva o incidente em detalhes..."
               value={description}
-              onChange={(e) => setDescription(e.target.value)}
+              onChange={handleChange}
               rows={4}
               className="resize-none"
             />
@@ -223,7 +223,7 @@ export const SGSOActionPlanGenerator: React.FC = () => {
               id="rootCause"
               placeholder="Descreva a causa raiz identificada..."
               value={rootCause}
-              onChange={(e) => setRootCause(e.target.value)}
+              onChange={handleChange}
               rows={2}
               className="resize-none"
             />

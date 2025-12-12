@@ -1,5 +1,5 @@
 /**
-import { useEffect, useState } from "react";;
+import { useEffect, useState, useCallback, useMemo } from "react";;
  * ALERTS COMMAND CENTER - Unified Alert Management System
  * Fusion of: Price Alerts + Intelligent Alerts
  * 
@@ -613,14 +613,14 @@ const AlertsCommandCenter = () => {
                 <Button 
                   variant={filterType === "all" ? "default" : "outline"} 
                   size="sm"
-                  onClick={() => setFilterType("all")}
+                  onClick={handleSetFilterType}
                 >
                   Todos
                 </Button>
                 <Button 
                   variant={filterType === "maintenance" ? "default" : "outline"} 
                   size="sm"
-                  onClick={() => setFilterType("maintenance")}
+                  onClick={handleSetFilterType}
                 >
                   <Ship className="h-4 w-4 mr-1" />
                   Manutenção
@@ -628,7 +628,7 @@ const AlertsCommandCenter = () => {
                 <Button 
                   variant={filterType === "safety" ? "default" : "outline"} 
                   size="sm"
-                  onClick={() => setFilterType("safety")}
+                  onClick={handleSetFilterType}
                 >
                   <Shield className="h-4 w-4 mr-1" />
                   Segurança
@@ -636,7 +636,7 @@ const AlertsCommandCenter = () => {
                 <Button 
                   variant={filterType === "efficiency" ? "default" : "outline"} 
                   size="sm"
-                  onClick={() => setFilterType("efficiency")}
+                  onClick={handleSetFilterType}
                 >
                   <TrendingUp className="h-4 w-4 mr-1" />
                   Eficiência
@@ -644,7 +644,7 @@ const AlertsCommandCenter = () => {
                 <Button 
                   variant={filterType === "crew" ? "default" : "outline"} 
                   size="sm"
-                  onClick={() => setFilterType("crew")}
+                  onClick={handleSetFilterType}
                 >
                   <Users className="h-4 w-4 mr-1" />
                   Tripulação
@@ -652,7 +652,7 @@ const AlertsCommandCenter = () => {
                 <Button 
                   variant={filterType === "weather" ? "default" : "outline"} 
                   size="sm"
-                  onClick={() => setFilterType("weather")}
+                  onClick={handleSetFilterType}
                 >
                   <Thermometer className="h-4 w-4 mr-1" />
                   Clima
@@ -660,7 +660,7 @@ const AlertsCommandCenter = () => {
                 <Button 
                   variant={filterType === "price" ? "default" : "outline"} 
                   size="sm"
-                  onClick={() => setFilterType("price")}
+                  onClick={handleSetFilterType}
                 >
                   <DollarSign className="h-4 w-4 mr-1" />
                   Preços

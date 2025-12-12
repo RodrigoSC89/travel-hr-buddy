@@ -1,4 +1,4 @@
-import { useState } from "react";;;
+import { useState, useCallback } from "react";;;
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
@@ -197,20 +197,20 @@ export default function WorkOrderManager() {
               <Input
                 placeholder="Título da OS"
                 value={newOS.title}
-                onChange={(e) => setNewOS((prev) => ({ ...prev, title: e.target.value }))}
+                onChange={handleChange}))}
               />
               <Textarea
                 placeholder="Descrição detalhada"
                 value={newOS.description}
-                onChange={(e) => setNewOS((prev) => ({ ...prev, description: e.target.value }))}
+                onChange={handleChange}))}
               />
               <Input
                 placeholder="Equipamento"
                 value={newOS.equipment}
-                onChange={(e) => setNewOS((prev) => ({ ...prev, equipment: e.target.value }))}
+                onChange={handleChange}))}
               />
               <div className="flex gap-2">
-                <Button variant="outline" onClick={() => setIsCreating(false)}>
+                <Button variant="outline" onClick={handleSetIsCreating}>
                   Cancelar
                 </Button>
                 <Button onClick={handleCreateOS}>Criar OS</Button>
@@ -226,7 +226,7 @@ export default function WorkOrderManager() {
             key={status}
             variant={filter === status ? "default" : "outline"}
             size="sm"
-            onClick={() => setFilter(status)}
+            onClick={handleSetFilter}
           >
             {status === "all" ? "Todas" : 
               status === "pending" ? "Pendentes" :
@@ -295,7 +295,7 @@ export default function WorkOrderManager() {
               )}
 
               {os.status === "pending" && (
-                <Button size="sm" className="w-full" onClick={() => handleApprove(os.id)}>
+                <Button size="sm" className="w-full" onClick={() => handlehandleApprove}>
                   Aprovar OS
                 </Button>
               )}

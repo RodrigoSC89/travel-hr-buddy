@@ -1,4 +1,4 @@
-import { useRef, useState } from "react";;
+import { useRef, useState, useCallback, useMemo } from "react";;
 import React, { useState, useRef } from "react";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
@@ -270,7 +270,7 @@ export const ComputerVisionInspector: React.FC = () => {
                   <div
                     key={result.id}
                     className={`p-3 rounded-lg border cursor-pointer transition-all hover:shadow-md ${selectedResult?.id === result.id ? "border-primary bg-primary/5" : ""}`}
-                    onClick={() => setSelectedResult(result)}
+                    onClick={handleSetSelectedResult}
                   >
                     <div className="flex items-start gap-3">
                       {getStatusIcon(result.status)}

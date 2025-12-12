@@ -1,5 +1,5 @@
 /**
-import { useState } from "react";;
+import { useState, useCallback } from "react";;
  * PATCH 837: PWA Update Prompt
  * Prompt users to update the app
  */
@@ -57,7 +57,7 @@ export const UpdatePrompt = memo(function() {
                     Atualizar
                   </Button>
                   <Button
-                    onClick={() => setDismissed(true)}
+                    onClick={handleSetDismissed}
                     variant="ghost"
                     size="sm"
                   >
@@ -67,7 +67,7 @@ export const UpdatePrompt = memo(function() {
               </div>
 
               <button
-                onClick={() => setDismissed(true)}
+                onClick={handleSetDismissed}
                 className="text-muted-foreground hover:text-foreground transition-colors"
               >
                 <X className="w-4 h-4" />

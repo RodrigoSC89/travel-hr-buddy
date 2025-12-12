@@ -1,5 +1,5 @@
 /**
-import { useState } from "react";;
+import { useState, useCallback } from "react";;
  * Quantum Computing Page
  * Simulações avançadas com computação quântica
  */
@@ -280,7 +280,7 @@ const QuantumComputingPage: React.FC = () => {
 
                       <div className="flex gap-2 ml-4">
                         {exp.status === "queued" && (
-                          <Button size="sm" onClick={() => handleRunExperiment(exp.id)}>
+                          <Button size="sm" onClick={() => handlehandleRunExperiment}>
                             <Play className="h-4 w-4 mr-1" />
                             Iniciar
                           </Button>
@@ -292,7 +292,7 @@ const QuantumComputingPage: React.FC = () => {
                           </Button>
                         )}
                         {exp.status === "failed" && (
-                          <Button size="sm" variant="outline" onClick={() => handleRunExperiment(exp.id)}>
+                          <Button size="sm" variant="outline" onClick={() => handlehandleRunExperiment}>
                             <RefreshCw className="h-4 w-4 mr-1" />
                             Retry
                           </Button>

@@ -1,4 +1,4 @@
-import { useState } from "react";;
+import { useState, useMemo, useCallback } from "react";;
 import React, { useState } from "react";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
@@ -219,7 +219,7 @@ export const OrganizationSetupWizard: React.FC = () => {
             <Input
               id="name"
               value={orgData.name}
-              onChange={(e) => setOrgData(prev => ({ ...prev, name: e.target.value }))}
+              onChange={handleChange}))}
               placeholder="Ex: Empresa Marítima LTDA"
             />
           </div>
@@ -229,7 +229,7 @@ export const OrganizationSetupWizard: React.FC = () => {
             <Textarea
               id="description"
               value={orgData.description}
-              onChange={(e) => setOrgData(prev => ({ ...prev, description: e.target.value }))}
+              onChange={handleChange}))}
               placeholder="Breve descrição da sua empresa..."
               rows={3}
             />
@@ -320,12 +320,12 @@ export const OrganizationSetupWizard: React.FC = () => {
                 type="color"
                 id="color"
                 value={orgData.primary_color}
-                onChange={(e) => setOrgData(prev => ({ ...prev, primary_color: e.target.value }))}
+                onChange={handleChange}))}
                 className="w-12 h-12 rounded border"
               />
               <Input
                 value={orgData.primary_color}
-                onChange={(e) => setOrgData(prev => ({ ...prev, primary_color: e.target.value }))}
+                onChange={handleChange}))}
                 placeholder="#3b82f6"
                 className="flex-1"
               />

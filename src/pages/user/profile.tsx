@@ -3,7 +3,7 @@
  * Displays user profile and active session information
  */
 
-import { useEffect, useState } from "react";;;
+import { useEffect, useState, useCallback } from "react";;;
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { ActiveSessionDisplay } from "@/components/auth/ActiveSessionDisplay";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
@@ -228,7 +228,7 @@ export default function UserProfilePage() {
                   <Input
                     id="fullName"
                     value={profile.full_name}
-                    onChange={(e) => setProfile({ ...profile, full_name: e.target.value })}
+                    onChange={handleChange})}
                     placeholder="Seu nome completo"
                   />
                 </div>
@@ -241,7 +241,7 @@ export default function UserProfilePage() {
                       id="email"
                       type="email"
                       value={profile.email}
-                      onChange={(e) => setProfile({ ...profile, email: e.target.value })}
+                      onChange={handleChange})}
                       className="pl-10"
                       placeholder="seu@email.com"
                     />
@@ -255,7 +255,7 @@ export default function UserProfilePage() {
                     <Input
                       id="phone"
                       value={profile.phone}
-                      onChange={(e) => setProfile({ ...profile, phone: e.target.value })}
+                      onChange={handleChange})}
                       className="pl-10"
                       placeholder="+55 (11) 99999-9999"
                     />
@@ -269,7 +269,7 @@ export default function UserProfilePage() {
                     <Input
                       id="department"
                       value={profile.department}
-                      onChange={(e) => setProfile({ ...profile, department: e.target.value })}
+                      onChange={handleChange})}
                       className="pl-10"
                       placeholder="Seu departamento"
                     />
@@ -379,7 +379,7 @@ export default function UserProfilePage() {
                 <select
                   id="language"
                   value={preferences.language}
-                  onChange={(e) => setPreferences({ ...preferences, language: e.target.value })}
+                  onChange={handleChange})}
                   className="w-full p-2 border border-border rounded-md bg-background text-foreground"
                 >
                   <option value="pt-BR">Português (Brasil)</option>

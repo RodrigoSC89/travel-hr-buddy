@@ -1,4 +1,4 @@
-import { useState } from "react";;
+import { useState, useCallback } from "react";;
 import React, { useState } from "react";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
@@ -331,7 +331,7 @@ export default function DPHistory() {
                   <Input
                     placeholder="Buscar por evento ou detalhes..."
                     value={filters.searchText}
-                    onChange={(e) => setFilters({ ...filters, searchText: e.target.value })}
+                    onChange={handleChange})}
                   />
                 </div>
 
@@ -374,7 +374,7 @@ export default function DPHistory() {
                     <Input
                       type="date"
                       value={filters.dateFrom}
-                      onChange={(e) => setFilters({ ...filters, dateFrom: e.target.value })}
+                      onChange={handleChange})}
                     />
                   </div>
                   <div className="space-y-2">
@@ -382,7 +382,7 @@ export default function DPHistory() {
                     <Input
                       type="date"
                       value={filters.dateTo}
-                      onChange={(e) => setFilters({ ...filters, dateTo: e.target.value })}
+                      onChange={handleChange})}
                     />
                   </div>
                 </div>
@@ -416,7 +416,7 @@ export default function DPHistory() {
                   <Button
                     variant="outline"
                     className="w-full justify-start"
-                    onClick={() => handleExport("csv")}
+                    onClick={() => handlehandleExport}
                   >
                     <FileText className="h-4 w-4 mr-2" />
                     Exportar como CSV
@@ -424,7 +424,7 @@ export default function DPHistory() {
                   <Button
                     variant="outline"
                     className="w-full justify-start"
-                    onClick={() => handleExport("json")}
+                    onClick={() => handlehandleExport}
                   >
                     <FileText className="h-4 w-4 mr-2" />
                     Exportar como JSON
@@ -432,7 +432,7 @@ export default function DPHistory() {
                   <Button
                     variant="outline"
                     className="w-full justify-start"
-                    onClick={() => handleExport("pdf")}
+                    onClick={() => handlehandleExport}
                   >
                     <FileText className="h-4 w-4 mr-2" />
                     Exportar como Relatório

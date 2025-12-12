@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";;
+import { useEffect, useState, useCallback, useMemo } from "react";;
 import React, { useState, useEffect } from "react";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
@@ -329,7 +329,7 @@ export default function MaritimeConnectivity() {
                   variant="outline" 
                   size="sm" 
                   className="flex-1"
-                  onClick={() => handleForceSync(conn.id)}
+                  onClick={() => handlehandleForceSync}
                   disabled={conn.status === "offline"}
                 >
                   <RefreshCw className="h-4 w-4 mr-2" />

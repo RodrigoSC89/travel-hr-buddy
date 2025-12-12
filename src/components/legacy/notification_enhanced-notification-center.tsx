@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";;
+import { useEffect, useState, useCallback, useMemo } from "react";;
 import React, { useState, useEffect } from "react";
 import { supabase } from "@/integrations/supabase/client";
 import { useToast } from "@/hooks/use-toast";
@@ -277,7 +277,7 @@ export const EnhancedNotificationCenter: React.FC = () => {
               key={filterType}
               variant={filter === filterType ? "default" : "outline"}
               size="sm"
-              onClick={() => setFilter(filterType as unknown)}
+              onClick={handleSetFilter}
             >
               {filterType === "all" && "Todas"}
               {filterType === "unread" && "Não lidas"}
@@ -345,7 +345,7 @@ export const EnhancedNotificationCenter: React.FC = () => {
                       <Button
                         variant="ghost"
                         size="sm"
-                        onClick={() => markAsRead(notification.id)}
+                        onClick={() => handlemarkAsRead}
                       >
                         <CheckCircle className="w-4 h-4" />
                       </Button>
@@ -353,7 +353,7 @@ export const EnhancedNotificationCenter: React.FC = () => {
                     <Button
                       variant="ghost"
                       size="sm"
-                      onClick={() => deleteNotification(notification.id)}
+                      onClick={() => handledeleteNotification}
                     >
                       <Trash2 className="w-4 h-4" />
                     </Button>

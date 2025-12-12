@@ -1,4 +1,4 @@
-import { useRef, useState } from "react";;;
+import { useRef, useState, useCallback, useMemo } from "react";;;
 import { logger } from "@/lib/logger";
 import html2pdf from "html2pdf.js";
 import { Button } from "@/components/ui/button";

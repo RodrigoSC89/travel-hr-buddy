@@ -231,7 +231,7 @@ Autoridade Marítima do Brasil`,
             <Textarea
               placeholder="Cole aqui o texto do documento para análise..."
               value={documentText}
-              onChange={(e) => setDocumentText(e.target.value)}
+              onChange={handleChange}
               className="min-h-[300px] font-mono text-sm"
             />
 
@@ -279,7 +279,7 @@ Autoridade Marítima do Brasil`,
                     key={idx}
                     variant="outline"
                     size="sm"
-                    onClick={() => setDocumentText(doc.text)}
+                    onClick={handleSetDocumentText}
                   >
                     {doc.title}
                   </Button>

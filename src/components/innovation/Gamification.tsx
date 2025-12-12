@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";;
+import { useEffect, useState, useCallback, useMemo } from "react";;
 import React, { useState, useEffect } from "react";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
@@ -337,7 +337,7 @@ export const Gamification = memo(() => {
                           {achievement.unlocked ? (
                             <Button 
                               size="sm" 
-                              onClick={() => claimReward(achievement.id)}
+                              onClick={() => handleclaimReward}
                               className="h-6 text-xs"
                             >
                               <Gift className="w-3 h-3 mr-1" />

@@ -1,4 +1,4 @@
-import { useRef, useState } from "react";;
+import { useRef, useState, useCallback } from "react";;
 
 // PATCH 393 - Incident Reports: Enhanced with photo upload, GPS, and unique IDs
 import React, { useState, useRef } from "react";
@@ -234,7 +234,7 @@ export const CreateIncidentDialog: React.FC<CreateIncidentDialogProps> = ({
             <Input
               required
               value={formData.title}
-              onChange={(e) => setFormData({ ...formData, title: e.target.value })}
+              onChange={handleChange})}
               placeholder="Descrição breve do incidente"
             />
           </div>
@@ -303,7 +303,7 @@ export const CreateIncidentDialog: React.FC<CreateIncidentDialogProps> = ({
               <Label>Local</Label>
               <Input
                 value={formData.incident_location}
-                onChange={(e) => setFormData({ ...formData, incident_location: e.target.value })}
+                onChange={handleChange})}
                 placeholder="Onde ocorreu o incidente?"
               />
             </div>
@@ -313,7 +313,7 @@ export const CreateIncidentDialog: React.FC<CreateIncidentDialogProps> = ({
               <div className="flex gap-2">
                 <Input
                   value={formData.gps_coordinates}
-                  onChange={(e) => setFormData({ ...formData, gps_coordinates: e.target.value })}
+                  onChange={handleChange})}
                   placeholder="Lat, Long ou clique em capturar"
                   className="flex-1"
                 />
@@ -334,7 +334,7 @@ export const CreateIncidentDialog: React.FC<CreateIncidentDialogProps> = ({
             <Textarea
               required
               value={formData.description}
-              onChange={(e) => setFormData({ ...formData, description: e.target.value })}
+              onChange={handleChange})}
               placeholder="Descrição detalhada do incidente..."
               rows={6}
             />
@@ -378,7 +378,7 @@ export const CreateIncidentDialog: React.FC<CreateIncidentDialogProps> = ({
                       />
                       <button
                         type="button"
-                        onClick={() => removePhoto(index)}
+                        onClick={() => handleremovePhoto}
                         className="absolute -top-2 -right-2 bg-destructive text-destructive-foreground rounded-full p-1 opacity-0 group-hover:opacity-100 transition-opacity"
                       >
                         <X className="h-3 w-3" />
@@ -391,7 +391,7 @@ export const CreateIncidentDialog: React.FC<CreateIncidentDialogProps> = ({
           </div>
 
           <div className="flex justify-end gap-2 pt-4">
-            <Button type="button" variant="outline" onClick={() => onOpenChange(false)}>
+            <Button type="button" variant="outline" onClick={() => handleonOpenChange}>
               Cancelar
             </Button>
             <Button type="submit" disabled={submitting}>

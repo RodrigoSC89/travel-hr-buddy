@@ -1,4 +1,4 @@
-import { useCallback, useContext, useEffect, useState } from "react";;
+import { useCallback, useMemo, useContext, useEffect, useState } from "react";;
 
 /**
  * Accessibility Provider Component
@@ -101,8 +101,8 @@ export const AccessibilityProvider = memo(function({
           focus:translate-y-0 focus:outline-none focus:ring-2 focus:ring-ring
           ${isSkipLinkVisible ? "translate-y-0" : "-translate-y-full"}
         `}
-        onFocus={() => setIsSkipLinkVisible(true)}
-        onBlur={() => setIsSkipLinkVisible(false)}
+        onFocus={handleSetIsSkipLinkVisible}
+        onBlur={handleSetIsSkipLinkVisible}
         onClick={(e) => {
           e.preventDefault();
           skipToMain();

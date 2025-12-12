@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";;
+import { useEffect, useState, useCallback } from "react";;
 
 /**
  * PATCH 501: Satellite Alerts Component
@@ -135,7 +135,7 @@ export const SatelliteAlerts: React.FC<SatelliteAlertsProps> = ({ satelliteId })
                   <Button
                     size="sm"
                     variant="outline"
-                    onClick={() => handleResolve(alert.id)}
+                    onClick={() => handlehandleResolve}
                   >
                     Resolver
                   </Button>

@@ -1,5 +1,5 @@
 /**
-import { useEffect, useState } from "react";;
+import { useEffect, useState, useCallback, useMemo } from "react";;
  * Edge Computing Dashboard
  * Processamento distribuído na borda da rede
  */
@@ -218,7 +218,7 @@ const EdgeComputingPage: React.FC = () => {
                     </>
                   )}
                   <div className="flex gap-2">
-                    <Button size="sm" variant="outline" className="flex-1" onClick={() => handleRestartNode(node.id)}>
+                    <Button size="sm" variant="outline" className="flex-1" onClick={() => handlehandleRestartNode}>
                       <RefreshCw className="h-4 w-4 mr-1" />
                       Reiniciar
                     </Button>

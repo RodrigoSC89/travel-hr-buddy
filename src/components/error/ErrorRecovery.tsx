@@ -3,7 +3,7 @@
  * Provides user-friendly error handling with recovery options
  */
 
-import { memo, memo, useState } from "react";;;
+import { memo, memo, useState, useCallback } from "react";;;
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardFooter, CardHeader, CardTitle } from "@/components/ui/card";
 import { 

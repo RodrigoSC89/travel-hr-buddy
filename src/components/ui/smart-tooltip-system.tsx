@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";;
+import { useEffect, useState, useCallback, useMemo } from "react";;
 import React, { useState, useEffect } from "react";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
@@ -269,7 +269,7 @@ const SmartTooltipSystem: React.FC = () => {
                 <Button
                   variant="ghost"
                   size="sm"
-                  onClick={() => dismissAssistant(assistant.id)}
+                  onClick={() => handledismissAssistant}
                   className="h-auto p-1"
                 >
                   <X className="w-4 h-4" />
@@ -369,7 +369,7 @@ const SmartTooltipSystem: React.FC = () => {
             <Button
               variant="outline"
               className="w-full justify-start btn-harbor"
-              onClick={() => showAssistant("performance-tip")}
+              onClick={() => handleshowAssistant}
             >
               <Zap className="w-4 h-4 mr-2" />
               Dicas de Produtividade
@@ -378,7 +378,7 @@ const SmartTooltipSystem: React.FC = () => {
             <Button
               variant="outline"
               className="w-full justify-start btn-harbor"
-              onClick={() => showAssistant("new-feature")}
+              onClick={() => handleshowAssistant}
             >
               <Star className="w-4 h-4 mr-2" />
               Novidades do Sistema

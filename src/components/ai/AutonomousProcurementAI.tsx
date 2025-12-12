@@ -1,5 +1,5 @@
 /**
-import { useEffect, useState } from "react";;
+import { useEffect, useState, useCallback, useMemo } from "react";;
  * AUTONOMOUS PROCUREMENT AI - Automação de Compras Inteligente
  * Compras automáticas, sugestões de fornecedores, ordens de compra inteligentes
  */
@@ -364,7 +364,7 @@ export const AutonomousProcurementAI: React.FC = () => {
 
                     <div className="flex flex-col gap-2">
                       <Button 
-                        onClick={() => executeAutoPurchase(rec)}
+                        onClick={() => handleexecuteAutoPurchase}
                         className={rec.urgency === "immediate" ? "bg-red-500 hover:bg-red-600" : ""}
                       >
                         <ShoppingCart className="h-4 w-4 mr-2" />

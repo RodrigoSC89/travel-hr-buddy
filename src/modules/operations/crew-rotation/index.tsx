@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";;
+import { useEffect, useState, useCallback } from "react";;
 
 /**
  * PATCH 366 - Crew Management - Rotation & Alerts
@@ -288,7 +288,7 @@ export default function CrewRotationModule() {
                 <Input
                   placeholder="ID do tripulante"
                   value={newRotation.crew_member_id}
-                  onChange={(e) => setNewRotation({...newRotation, crew_member_id: e.target.value})}
+                  onChange={handleChange})}
                 />
               </div>
               
@@ -297,7 +297,7 @@ export default function CrewRotationModule() {
                 <Input
                   placeholder="ID da embarcação"
                   value={newRotation.vessel_id}
-                  onChange={(e) => setNewRotation({...newRotation, vessel_id: e.target.value})}
+                  onChange={handleChange})}
                 />
               </div>
 
@@ -307,7 +307,7 @@ export default function CrewRotationModule() {
                   <Input
                     type="date"
                     value={newRotation.start_date}
-                    onChange={(e) => setNewRotation({...newRotation, start_date: e.target.value})}
+                    onChange={handleChange})}
                   />
                 </div>
                 
@@ -316,7 +316,7 @@ export default function CrewRotationModule() {
                   <Input
                     type="date"
                     value={newRotation.end_date}
-                    onChange={(e) => setNewRotation({...newRotation, end_date: e.target.value})}
+                    onChange={handleChange})}
                   />
                 </div>
               </div>

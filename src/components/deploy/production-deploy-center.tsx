@@ -336,7 +336,7 @@ const ProductionDeployCenter: React.FC = () => {
                       id="domain"
                       placeholder="exemplo.com.br"
                       value={deployConfig.domain}
-                      onChange={(e) => setDeployConfig(prev => ({ ...prev, domain: e.target.value }))}
+                      onChange={handleChange}))}
                     />
                   </div>
 
@@ -346,7 +346,7 @@ const ProductionDeployCenter: React.FC = () => {
                       id="subdomain"
                       placeholder="nautilus"
                       value={deployConfig.subdomain}
-                      onChange={(e) => setDeployConfig(prev => ({ ...prev, subdomain: e.target.value }))}
+                      onChange={handleChange}))}
                     />
                   </div>
 

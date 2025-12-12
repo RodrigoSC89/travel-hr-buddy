@@ -1,4 +1,4 @@
-import { useState } from "react";;
+import { useState, useCallback } from "react";;
 import React, { useState } from "react";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
@@ -208,7 +208,7 @@ export const POPsLibrary: React.FC = () => {
           <Input
             placeholder="Buscar por título, código ou tag..."
             value={searchTerm}
-            onChange={(e) => setSearchTerm(e.target.value)}
+            onChange={handleChange}
             className="pl-10"
           />
         </div>
@@ -216,7 +216,7 @@ export const POPsLibrary: React.FC = () => {
           <Button
             variant={selectedCategory === "all" ? "default" : "outline"}
             size="sm"
-            onClick={() => setSelectedCategory("all")}
+            onClick={handleSetSelectedCategory}
           >
             Todos
           </Button>
@@ -225,7 +225,7 @@ export const POPsLibrary: React.FC = () => {
               key={cat}
               variant={selectedCategory === cat ? "default" : "outline"}
               size="sm"
-              onClick={() => setSelectedCategory(cat)}
+              onClick={handleSetSelectedCategory}
             >
               {cat}
             </Button>
@@ -296,7 +296,7 @@ export const POPsLibrary: React.FC = () => {
         <TabsContent value="all">
           <div className="grid grid-cols-2 gap-4">
             {filteredPOPs.map(pop => (
-              <Card key={pop.id} className="hover:shadow-lg transition-all cursor-pointer" onClick={() => handleViewPOP(pop)}>
+              <Card key={pop.id} className="hover:shadow-lg transition-all cursor-pointer" onClick={() => handlehandleViewPOP}>
                 <CardHeader className="pb-2">
                   <div className="flex items-start justify-between">
                     <div className="flex items-center gap-2">
@@ -342,7 +342,7 @@ export const POPsLibrary: React.FC = () => {
         <TabsContent value="favorites">
           <div className="grid grid-cols-2 gap-4">
             {favorites.map(pop => (
-              <Card key={pop.id} className="hover:shadow-lg transition-all cursor-pointer border-yellow-500/30" onClick={() => handleViewPOP(pop)}>
+              <Card key={pop.id} className="hover:shadow-lg transition-all cursor-pointer border-yellow-500/30" onClick={() => handlehandleViewPOP}>
                 <CardHeader className="pb-2">
                   <div className="flex items-start justify-between">
                     <Badge variant="outline" className="font-mono text-xs">{pop.code}</Badge>
@@ -365,7 +365,7 @@ export const POPsLibrary: React.FC = () => {
           <ScrollArea className="h-[400px]">
             <div className="space-y-2">
               {pops.sort((a, b) => new Date(b.lastUpdated).getTime() - new Date(a.lastUpdated).getTime()).map(pop => (
-                <div key={pop.id} className="p-3 rounded-lg border hover:shadow-md transition-all cursor-pointer" onClick={() => handleViewPOP(pop)}>
+                <div key={pop.id} className="p-3 rounded-lg border hover:shadow-md transition-all cursor-pointer" onClick={() => handlehandleViewPOP}>
                   <div className="flex items-center justify-between">
                     <div className="flex items-center gap-3">
                       <Badge variant="outline" className="font-mono">{pop.code}</Badge>

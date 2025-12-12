@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";;
+import { useEffect, useState, useCallback } from "react";;
 import React, { useState, useEffect } from "react";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
@@ -276,7 +276,7 @@ export const EnhancedReservationsDashboard: React.FC = () => {
             <Download className="h-4 w-4 mr-2" />
             Exportar
           </Button>
-          <Button onClick={() => setIsFormOpen(true)}>
+          <Button onClick={handleSetIsFormOpen}>
             <Plus className="h-4 w-4 mr-2" />
             Nova Reserva
           </Button>
@@ -338,7 +338,7 @@ export const EnhancedReservationsDashboard: React.FC = () => {
                     : "Crie sua primeira reserva para começar"
                   }
                 </p>
-                <Button onClick={() => setIsFormOpen(true)}>
+                <Button onClick={handleSetIsFormOpen}>
                   <Plus className="h-4 w-4 mr-2" />
                   Nova Reserva
                 </Button>

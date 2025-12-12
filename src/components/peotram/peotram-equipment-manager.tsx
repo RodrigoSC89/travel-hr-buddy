@@ -1,4 +1,4 @@
-import { useState } from "react";;
+import { useState, useMemo, useCallback } from "react";;
 import React, { useState } from "react";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
@@ -235,10 +235,10 @@ export const PeotramEquipmentManager: React.FC = () => {
                   <Input id="equipment-location" placeholder="Local de instalação" />
                 </div>
                 <div className="flex justify-end gap-2">
-                  <Button variant="outline" onClick={() => setIsNewEquipmentOpen(false)}>
+                  <Button variant="outline" onClick={handleSetIsNewEquipmentOpen}>
                     Cancelar
                   </Button>
-                  <Button onClick={() => setIsNewEquipmentOpen(false)}>
+                  <Button onClick={handleSetIsNewEquipmentOpen}>
                     Cadastrar
                   </Button>
                 </div>

@@ -1,5 +1,5 @@
 /**
-import { useState } from "react";;
+import { useState, useMemo, useCallback } from "react";;
  * Procurement Intelligence AI - Diferencial vs ShipServ
  * - Previsão de necessidades
  * - Análise de TCO
@@ -298,7 +298,7 @@ export const ProcurementIntelligenceAI = memo(function() {
                           />
                         </div>
                         <div className="flex justify-end mt-2">
-                          <Button size="sm" variant="outline" onClick={() => findSuppliers(item.name)}>
+                          <Button size="sm" variant="outline" onClick={() => handlefindSuppliers}>
                             <Search className="h-3 w-3 mr-1" />
                             Buscar Fornecedores
                           </Button>
@@ -363,7 +363,7 @@ export const ProcurementIntelligenceAI = memo(function() {
                             <ShoppingCart className="h-3 w-3 mr-1" />
                             Criar Pedido
                           </Button>
-                          <Button size="sm" variant="outline" onClick={() => findSuppliers(pred.itemName)}>
+                          <Button size="sm" variant="outline" onClick={() => handlefindSuppliers}>
                             <Truck className="h-3 w-3 mr-1" />
                             Ver Fornecedores
                           </Button>
@@ -387,10 +387,10 @@ export const ProcurementIntelligenceAI = memo(function() {
                 <div className="flex gap-2">
                   <Input
                     value={searchTerm}
-                    onChange={(e) => setSearchTerm(e.target.value)}
+                    onChange={handleChange}
                     placeholder="Buscar item para encontrar fornecedores..."
                   />
-                  <Button onClick={() => findSuppliers(searchTerm)}>
+                  <Button onClick={() => handlefindSuppliers}>
                     <Search className="h-4 w-4" />
                   </Button>
                 </div>

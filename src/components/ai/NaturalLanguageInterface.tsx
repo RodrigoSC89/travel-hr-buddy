@@ -2,7 +2,7 @@
  * Natural Language Interface - Execute commands via text/voice
  */
 
-import { memo, memo, useEffect, useRef, useState } from "react";;;
+import { memo, memo, useEffect, useRef, useState, useCallback } from "react";;;
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -176,7 +176,7 @@ export const NaturalLanguageInterface = memo(function() {
           <div className="relative flex-1">
             <Input
               value={input}
-              onChange={(e) => setInput(e.target.value)}
+              onChange={handleChange}
               onKeyDown={(e) => e.key === "Enter" && executeCommand(input)}
               placeholder="Digite um comando em linguagem natural..."
               className="pr-10"
@@ -195,7 +195,7 @@ export const NaturalLanguageInterface = memo(function() {
               )}
             </Button>
           </div>
-          <Button onClick={() => executeCommand(input)} disabled={isLoading || !input.trim()}>
+          <Button onClick={() => handleexecuteCommand} disabled={isLoading || !input.trim()}>
             {isLoading ? <Loader2 className="h-4 w-4 animate-spin" /> : <Send className="h-4 w-4" />}
           </Button>
         </div>
@@ -211,7 +211,7 @@ export const NaturalLanguageInterface = memo(function() {
                   variant="outline"
                   size="sm"
                   className="text-xs h-7"
-                  onClick={() => executeCommand(cmd.text)}
+                  onClick={() => handleexecuteCommand}
                 >
                   {MODULE_ICONS[cmd.module]}
                   <span className="ml-1 truncate max-w-[200px]">{cmd.text}</span>

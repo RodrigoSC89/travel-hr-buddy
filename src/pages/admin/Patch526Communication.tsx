@@ -1,5 +1,5 @@
 /**
-import { useState } from "react";;
+import { useState, useCallback } from "react";;
  * PATCH 526 - Comunicação (consolidação)
  */
 

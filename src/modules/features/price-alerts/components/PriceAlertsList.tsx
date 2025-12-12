@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";;
+import { useEffect, useState, useCallback, useMemo } from "react";;
 import React, { useState, useEffect } from "react";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
@@ -103,21 +103,21 @@ export const PriceAlertsList: React.FC<PriceAlertsListProps> = ({ onEdit, refres
           <Button
             variant={sortBy === "created" ? "default" : "outline"}
             size="sm"
-            onClick={() => setSortBy("created")}
+            onClick={handleSetSortBy}
           >
             Recentes
           </Button>
           <Button
             variant={sortBy === "target" ? "default" : "outline"}
             size="sm"
-            onClick={() => setSortBy("target")}
+            onClick={handleSetSortBy}
           >
             Preço
           </Button>
           <Button
             variant={sortBy === "status" ? "default" : "outline"}
             size="sm"
-            onClick={() => setSortBy("status")}
+            onClick={handleSetSortBy}
           >
             Status
           </Button>
@@ -181,7 +181,7 @@ export const PriceAlertsList: React.FC<PriceAlertsListProps> = ({ onEdit, refres
                   <Button
                     variant="outline"
                     size="sm"
-                    onClick={() => handleToggle(alert)}
+                    onClick={() => handlehandleToggle}
                   >
                     {alert.is_active ? (
                       <>
@@ -198,7 +198,7 @@ export const PriceAlertsList: React.FC<PriceAlertsListProps> = ({ onEdit, refres
                   <Button
                     variant="outline"
                     size="sm"
-                    onClick={() => onEdit(alert)}
+                    onClick={() => handleonEdit}
                   >
                     <Edit className="w-4 h-4 mr-1" />
                     Editar
@@ -206,7 +206,7 @@ export const PriceAlertsList: React.FC<PriceAlertsListProps> = ({ onEdit, refres
                   <Button
                     variant="destructive"
                     size="sm"
-                    onClick={() => handleDelete(alert.id)}
+                    onClick={() => handlehandleDelete}
                   >
                     <Trash2 className="w-4 h-4 mr-1" />
                     Excluir

@@ -1,4 +1,4 @@
-import { useState } from "react";;;
+import { useState, useMemo, useCallback } from "react";;;
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -179,10 +179,10 @@ export default function HourometerManager() {
                     type="number"
                     placeholder="Novas horas"
                     value={newHours}
-                    onChange={(e) => setNewHours(e.target.value)}
+                    onChange={handleChange}
                     className="h-8"
                   />
-                  <Button size="sm" onClick={() => handleUpdateHours(h.id)}>
+                  <Button size="sm" onClick={() => handlehandleUpdateHours}>
                     Salvar
                   </Button>
                 </div>

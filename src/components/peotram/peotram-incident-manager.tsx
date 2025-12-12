@@ -1,4 +1,4 @@
-import { useState } from "react";;
+import { useState, useCallback } from "react";;
 import React, { useState } from "react";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
@@ -294,10 +294,10 @@ export const PeotramIncidentManager: React.FC = () => {
                   <Input id="incident-witnesses" placeholder="Nomes das testemunhas (separados por vírgula)" />
                 </div>
                 <div className="flex justify-end gap-2">
-                  <Button variant="outline" onClick={() => setIsNewIncidentOpen(false)}>
+                  <Button variant="outline" onClick={handleSetIsNewIncidentOpen}>
                     Cancelar
                   </Button>
-                  <Button onClick={() => setIsNewIncidentOpen(false)}>
+                  <Button onClick={handleSetIsNewIncidentOpen}>
                     Reportar Incidente
                   </Button>
                 </div>
@@ -418,7 +418,7 @@ export const PeotramIncidentManager: React.FC = () => {
                       variant="outline" 
                       size="sm" 
                       className="flex-1"
-                      onClick={() => handleAnalyzeWithAI(incident)}
+                      onClick={() => handlehandleAnalyzeWithAI}
                     >
                       <Brain className="w-3 h-3 mr-1" />
                       Analisar com IA

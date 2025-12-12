@@ -1,5 +1,5 @@
 /**
-import { useCallback, useEffect, useState } from "react";;
+import { useCallback, useMemo, useEffect, useState } from "react";;
  * Mission Command Center
  * PATCH UNIFY-8.0 - Fusão dos módulos de Missão
  * 
@@ -328,7 +328,7 @@ const MissionCommandCenter: React.FC = () => {
                     <Label>Mission Name</Label>
                     <Input
                       value={formData.missionName}
-                      onChange={(e) => setFormData({ ...formData, missionName: e.target.value })}
+                      onChange={handleChange})}
                       required
                       className="bg-zinc-800 border-zinc-700"
                     />
@@ -339,7 +339,7 @@ const MissionCommandCenter: React.FC = () => {
                       <Input
                         type="date"
                         value={formData.missionDate}
-                        onChange={(e) => setFormData({ ...formData, missionDate: e.target.value })}
+                        onChange={handleChange})}
                         required
                         className="bg-zinc-800 border-zinc-700"
                       />
@@ -363,7 +363,7 @@ const MissionCommandCenter: React.FC = () => {
                     <Label>Location</Label>
                     <Input
                       value={formData.location}
-                      onChange={(e) => setFormData({ ...formData, location: e.target.value })}
+                      onChange={handleChange})}
                       className="bg-zinc-800 border-zinc-700"
                     />
                   </div>
@@ -371,7 +371,7 @@ const MissionCommandCenter: React.FC = () => {
                     <Label>Crew Members (comma-separated)</Label>
                     <Input
                       value={formData.crewMembers?.join(", ")}
-                      onChange={(e) => setFormData({ ...formData, crewMembers: e.target.value.split(",").map(s => s.trim()) })}
+                      onChange={handleChange})}
                       className="bg-zinc-800 border-zinc-700"
                     />
                   </div>
@@ -379,7 +379,7 @@ const MissionCommandCenter: React.FC = () => {
                     <Label>Description</Label>
                     <Textarea
                       value={formData.description}
-                      onChange={(e) => setFormData({ ...formData, description: e.target.value })}
+                      onChange={handleChange})}
                       rows={4}
                       className="bg-zinc-800 border-zinc-700"
                     />

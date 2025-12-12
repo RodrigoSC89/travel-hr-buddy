@@ -1,5 +1,5 @@
 /**
-import { useMemo, useState } from "react";;
+import { useMemo, useState, useCallback } from "react";;
  * Templates Module - Complete Professional Version
  * PATCH 1100: Full functionality with dialogs, AI integration, and all buttons working
  */
@@ -384,7 +384,7 @@ const Templates = () => {
             Templates marítimos padronizados para operações, compliance e gestão
           </p>
         </div>
-        <Button className="gap-2" onClick={() => setShowCreateDialog(true)}>
+        <Button className="gap-2" onClick={handleSetShowCreateDialog}>
           <Plus className="h-4 w-4" />
           Novo Template
         </Button>
@@ -397,7 +397,7 @@ const Templates = () => {
           <Input
             placeholder="Buscar templates..."
             value={searchQuery}
-            onChange={(e) => setSearchQuery(e.target.value)}
+            onChange={handleChange}
             className="pl-10"
           />
         </div>
@@ -430,7 +430,7 @@ const Templates = () => {
                 <p className="text-muted-foreground mt-1">
                   Tente ajustar os filtros ou criar um novo template
                 </p>
-                <Button className="mt-4 gap-2" onClick={() => setShowCreateDialog(true)}>
+                <Button className="mt-4 gap-2" onClick={handleSetShowCreateDialog}>
                   <Plus className="h-4 w-4" />
                   Criar Template
                 </Button>
@@ -461,7 +461,7 @@ const Templates = () => {
                                 variant="ghost"
                                 size="icon"
                                 className="h-6 w-6 opacity-0 group-hover:opacity-100 transition-opacity"
-                                onClick={() => handleEdit(template)}
+                                onClick={() => handlehandleEdit}
                               >
                                 <Edit className="h-3 w-3" />
                               </Button>
@@ -482,7 +482,7 @@ const Templates = () => {
                               variant="outline"
                               size="sm"
                               className="flex-1 gap-1"
-                              onClick={() => handlePreview(template)}
+                              onClick={() => handlehandlePreview}
                             >
                               <Eye className="h-3 w-3" />
                               Ver
@@ -491,7 +491,7 @@ const Templates = () => {
                               variant="outline"
                               size="sm"
                               className="flex-1 gap-1"
-                              onClick={() => handleDuplicate(template)}
+                              onClick={() => handlehandleDuplicate}
                             >
                               <Copy className="h-3 w-3" />
                               Duplicar
@@ -499,7 +499,7 @@ const Templates = () => {
                             <Button
                               size="sm"
                               className="flex-1 gap-1"
-                              onClick={() => handleDownload(template)}
+                              onClick={() => handlehandleDownload}
                             >
                               <Download className="h-3 w-3" />
                               Baixar
@@ -599,7 +599,7 @@ const Templates = () => {
                 <Label>Nome do Template</Label>
                 <Input
                   value={newTemplate.name}
-                  onChange={(e) => setNewTemplate(prev => ({ ...prev, name: e.target.value }))}
+                  onChange={handleChange}))}
                   placeholder="Ex: Relatório de Inspeção"
                 />
               </div>
@@ -647,7 +647,7 @@ const Templates = () => {
               <Label>Descrição</Label>
               <Input
                 value={newTemplate.description}
-                onChange={(e) => setNewTemplate(prev => ({ ...prev, description: e.target.value }))}
+                onChange={handleChange}))}
                 placeholder="Breve descrição do template"
               />
             </div>
@@ -677,7 +677,7 @@ const Templates = () => {
               </div>
               <Textarea
                 value={newTemplate.content}
-                onChange={(e) => setNewTemplate(prev => ({ ...prev, content: e.target.value }))}
+                onChange={handleChange}))}
                 placeholder="Conteúdo do template... Use {{variavel}} para campos dinâmicos"
                 className="min-h-[200px] font-mono text-sm"
               />
@@ -688,7 +688,7 @@ const Templates = () => {
           </div>
 
           <DialogFooter>
-            <Button variant="outline" onClick={() => setShowCreateDialog(false)}>
+            <Button variant="outline" onClick={handleSetShowCreateDialog}>
               Cancelar
             </Button>
             <Button onClick={handleCreateTemplate} disabled={!newTemplate.name}>
@@ -715,7 +715,7 @@ const Templates = () => {
                 <Label>Nome do Template</Label>
                 <Input
                   value={newTemplate.name}
-                  onChange={(e) => setNewTemplate(prev => ({ ...prev, name: e.target.value }))}
+                  onChange={handleChange}))}
                 />
               </div>
               <div className="space-y-2">
@@ -762,7 +762,7 @@ const Templates = () => {
               <Label>Descrição</Label>
               <Input
                 value={newTemplate.description}
-                onChange={(e) => setNewTemplate(prev => ({ ...prev, description: e.target.value }))}
+                onChange={handleChange}))}
               />
             </div>
 
@@ -770,7 +770,7 @@ const Templates = () => {
               <Label>Conteúdo</Label>
               <Textarea
                 value={newTemplate.content}
-                onChange={(e) => setNewTemplate(prev => ({ ...prev, content: e.target.value }))}
+                onChange={handleChange}))}
                 className="min-h-[200px] font-mono text-sm"
               />
             </div>
@@ -787,7 +787,7 @@ const Templates = () => {
               <Trash2 className="h-4 w-4 mr-2" />
               Excluir
             </Button>
-            <Button variant="outline" onClick={() => setShowEditDialog(false)}>
+            <Button variant="outline" onClick={handleSetShowEditDialog}>
               Cancelar
             </Button>
             <Button onClick={handleUpdateTemplate}>

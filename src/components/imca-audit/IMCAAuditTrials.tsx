@@ -1,4 +1,4 @@
-import { useState } from "react";;
+import { useState, useMemo, useCallback } from "react";;
 import React, { useState } from "react";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
@@ -433,7 +433,7 @@ export const IMCAAuditTrials = memo(function({ selectedDPClass }: Props) {
           )}
 
           <DialogFooter>
-            <Button variant="outline" onClick={() => setIsExecuteOpen(false)}>
+            <Button variant="outline" onClick={handleSetIsExecuteOpen}>
               Cancelar
             </Button>
             <Button onClick={handleExecuteTest}>

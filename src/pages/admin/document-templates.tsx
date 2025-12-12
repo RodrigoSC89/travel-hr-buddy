@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";;;
+import { useEffect, useState, useCallback, useMemo } from "react";;;
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -321,7 +321,7 @@ export default function DocumentTemplates() {
             Create and manage document templates with dynamic variables
           </p>
         </div>
-        <Button onClick={() => setSelectedTemplate(null)}>
+        <Button onClick={handleSetSelectedTemplate}>
           <Plus className="mr-2 h-4 w-4" />
           New Template
         </Button>
@@ -343,7 +343,7 @@ export default function DocumentTemplates() {
                     className={`cursor-pointer hover:bg-accent transition-colors ${
                       selectedTemplate?.id === template.id ? "border-primary" : ""
                     }`}
-                    onClick={() => setSelectedTemplate(template)}
+                    onClick={handleSetSelectedTemplate}
                   >
                     <CardContent className="p-3">
                       <div className="flex items-start justify-between">
@@ -379,7 +379,7 @@ export default function DocumentTemplates() {
                 <Button 
                   variant="outline" 
                   size="sm"
-                  onClick={() => setShowPreview(!showPreview)}
+                  onClick={handleSetShowPreview}
                 >
                   <Eye className="mr-2 h-4 w-4" />
                   {showPreview ? "Hide" : "Show"} Preview
@@ -409,7 +409,7 @@ export default function DocumentTemplates() {
                     <Input
                       id="name"
                       value={templateName}
-                      onChange={(e) => setTemplateName(e.target.value)}
+                      onChange={handleChange}
                       placeholder="Enter template name"
                     />
                   </div>
@@ -436,7 +436,7 @@ export default function DocumentTemplates() {
                     <Input
                       id="description"
                       value={templateDescription}
-                      onChange={(e) => setTemplateDescription(e.target.value)}
+                      onChange={handleChange}
                       placeholder="Enter description"
                     />
                   </div>
@@ -446,7 +446,7 @@ export default function DocumentTemplates() {
                     <Textarea
                       id="content"
                       value={templateContent}
-                      onChange={(e) => setTemplateContent(e.target.value)}
+                      onChange={handleChange}
                       placeholder="Enter template content. Use {{variable_name}} for dynamic values."
                       className="min-h-[300px] font-mono text-sm"
                     />
@@ -479,11 +479,7 @@ export default function DocumentTemplates() {
                       <Input
                         id={variable.name}
                         value={variableValues[variable.name] || ""}
-                        onChange={(e) =>
-                          setVariableValues({
-                            ...variableValues,
-                            [variable.name]: e.target.value
-                          })
+                        onChange={handleChange})
                         }
                         placeholder={`Enter ${variable.name}`}
                       />
@@ -515,7 +511,7 @@ export default function DocumentTemplates() {
                             <Button 
                               variant="outline" 
                               size="sm"
-                              onClick={() => rollbackVersion(version.version)}
+                              onClick={() => handlerollbackVersion}
                             >
                               Restore
                             </Button>
@@ -560,7 +556,7 @@ export default function DocumentTemplates() {
                           variant="outline" 
                           size="sm" 
                           className="flex-1"
-                          onClick={() => exportDocument(doc.id, "pdf")}
+                          onClick={() => handleexportDocument}
                         >
                           <Download className="mr-2 h-3 w-3" />
                           PDF
@@ -569,7 +565,7 @@ export default function DocumentTemplates() {
                           variant="outline" 
                           size="sm" 
                           className="flex-1"
-                          onClick={() => exportDocument(doc.id, "docx")}
+                          onClick={() => handleexportDocument}
                         >
                           <Download className="mr-2 h-3 w-3" />
                           DOCX

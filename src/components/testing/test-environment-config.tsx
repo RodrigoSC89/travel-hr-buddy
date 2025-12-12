@@ -1,4 +1,4 @@
-import { useState } from "react";;
+import { useState, useCallback } from "react";;
 import React, { useState } from "react";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
@@ -133,19 +133,19 @@ export const TestEnvironmentConfig: React.FC = () => {
           <div className="flex gap-2">
             <Button
               variant={config.environment === "development" ? "default" : "outline"}
-              onClick={() => handleConfigChange("environment", "development")}
+              onClick={() => handlehandleConfigChange}
             >
               Desenvolvimento
             </Button>
             <Button
               variant={config.environment === "staging" ? "default" : "outline"}
-              onClick={() => handleConfigChange("environment", "staging")}
+              onClick={() => handlehandleConfigChange}
             >
               Homologação
             </Button>
             <Button
               variant={config.environment === "production" ? "default" : "outline"}
-              onClick={() => handleConfigChange("environment", "production")}
+              onClick={() => handlehandleConfigChange}
             >
               Produção
             </Button>

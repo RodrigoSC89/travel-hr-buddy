@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";;
+import { useEffect, useState, useCallback } from "react";;
 
 /**
  * PATCH 299: Document Templates Manager
@@ -398,7 +398,7 @@ const DocumentTemplatesManager = () => {
                       <Input
                         id="name"
                         value={formData.name}
-                        onChange={(e) => setFormData({ ...formData, name: e.target.value })}
+                        onChange={handleChange})}
                         placeholder="e.g., Inspection Report"
                       />
                     </div>
@@ -428,7 +428,7 @@ const DocumentTemplatesManager = () => {
                     <Input
                       id="description"
                       value={formData.description}
-                      onChange={(e) => setFormData({ ...formData, description: e.target.value })}
+                      onChange={handleChange})}
                       placeholder="Brief description of this template"
                     />
                   </div>
@@ -437,7 +437,7 @@ const DocumentTemplatesManager = () => {
                     <Textarea
                       id="content"
                       value={formData.content}
-                      onChange={(e) => setFormData({ ...formData, content: e.target.value })}
+                      onChange={handleChange})}
                       placeholder="Use {{vessel_name}}, {{commander}}, {{date}}, etc."
                       rows={10}
                       className="font-mono"
@@ -451,13 +451,13 @@ const DocumentTemplatesManager = () => {
                     <Input
                       id="tags"
                       value={formData.tags}
-                      onChange={(e) => setFormData({ ...formData, tags: e.target.value })}
+                      onChange={handleChange})}
                       placeholder="e.g., vessel, inspection, report"
                     />
                   </div>
                 </div>
                 <DialogFooter>
-                  <Button variant="outline" onClick={() => setShowNewTemplate(false)}>
+                  <Button variant="outline" onClick={handleSetShowNewTemplate}>
                     Cancel
                   </Button>
                   <Button onClick={createTemplate}>
@@ -546,7 +546,7 @@ const DocumentTemplatesManager = () => {
                         <Button
                           size="sm"
                           variant="outline"
-                          onClick={() => deleteTemplate(template.id)}
+                          onClick={() => handledeleteTemplate}
                         >
                           <Trash2 className="h-4 w-4" />
                         </Button>
@@ -578,10 +578,7 @@ const DocumentTemplatesManager = () => {
                     <Input
                       id={variable}
                       value={previewVariables[variable] || ""}
-                      onChange={(e) => setPreviewVariables({
-                        ...previewVariables,
-                        [variable]: e.target.value
-                      })}
+                      onChange={handleChange})}
                       placeholder={`Enter ${variable}`}
                     />
                   </div>
@@ -599,20 +596,20 @@ const DocumentTemplatesManager = () => {
             </div>
           )}
           <DialogFooter>
-            <Button variant="outline" onClick={() => setShowPreview(false)}>
+            <Button variant="outline" onClick={handleSetShowPreview}>
               Close
             </Button>
             {selectedTemplate && (
               <>
                 <Button
                   variant="outline"
-                  onClick={() => exportToPDF(selectedTemplate, previewVariables)}
+                  onClick={() => handleexportToPDF}
                 >
                   <Download className="h-4 w-4 mr-1" />
                   Export PDF
                 </Button>
                 <Button
-                  onClick={() => exportToWord(selectedTemplate, previewVariables)}
+                  onClick={() => handleexportToWord}
                 >
                   <Download className="h-4 w-4 mr-1" />
                   Export Word

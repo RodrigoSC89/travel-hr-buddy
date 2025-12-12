@@ -1,5 +1,5 @@
 
-import { memo, memo, useState } from "react";;;
+import { memo, memo, useState, useCallback } from "react";;;
 import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
 import { supabase } from "@/integrations/supabase/client";
 import { Button } from "@/components/ui/button";
@@ -182,7 +182,7 @@ export const EmployeeRequests = memo(function() {
                 <label className="text-sm font-medium">Título</label>
                 <Input
                   value={title}
-                  onChange={(e) => setTitle(e.target.value)}
+                  onChange={handleChange}
                   placeholder="Ex: Férias de Janeiro"
                 />
               </div>
@@ -191,7 +191,7 @@ export const EmployeeRequests = memo(function() {
                 <label className="text-sm font-medium">Descrição</label>
                 <Textarea
                   value={description}
-                  onChange={(e) => setDescription(e.target.value)}
+                  onChange={handleChange}
                   placeholder="Descreva sua solicitação..."
                   rows={3}
                 />
@@ -204,7 +204,7 @@ export const EmployeeRequests = memo(function() {
                     <Input
                       type="date"
                       value={startDate}
-                      onChange={(e) => setStartDate(e.target.value)}
+                      onChange={handleChange}
                     />
                   </div>
                   <div>
@@ -212,7 +212,7 @@ export const EmployeeRequests = memo(function() {
                     <Input
                       type="date"
                       value={endDate}
-                      onChange={(e) => setEndDate(e.target.value)}
+                      onChange={handleChange}
                     />
                   </div>
                 </div>
@@ -223,7 +223,7 @@ export const EmployeeRequests = memo(function() {
                   <label className="text-sm font-medium">Tipo de Certificado</label>
                   <Input
                     value={certificateType}
-                    onChange={(e) => setCertificateType(e.target.value)}
+                    onChange={handleChange}
                     placeholder="Ex: STCW, ISO..."
                   />
                 </div>
@@ -235,7 +235,7 @@ export const EmployeeRequests = memo(function() {
                     <label className="text-sm font-medium">Destino</label>
                     <Input
                       value={destination}
-                      onChange={(e) => setDestination(e.target.value)}
+                      onChange={handleChange}
                       placeholder="Ex: Santos, SP"
                     />
                   </div>
@@ -245,7 +245,7 @@ export const EmployeeRequests = memo(function() {
                       <Input
                         type="date"
                         value={startDate}
-                        onChange={(e) => setStartDate(e.target.value)}
+                        onChange={handleChange}
                       />
                     </div>
                     <div>
@@ -253,7 +253,7 @@ export const EmployeeRequests = memo(function() {
                       <Input
                         type="date"
                         value={endDate}
-                        onChange={(e) => setEndDate(e.target.value)}
+                        onChange={handleChange}
                       />
                     </div>
                   </div>

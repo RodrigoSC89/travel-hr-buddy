@@ -1,5 +1,5 @@
 
-import { useState } from "react";;;
+import { useState, useCallback } from "react";;;
 import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
 import { supabase } from "@/integrations/supabase/client";
 import { Button } from "@/components/ui/button";
@@ -108,7 +108,7 @@ export default function SGSOManager() {
                 <label className="text-sm font-medium">Nome do Plano</label>
                 <Input
                   value={planName}
-                  onChange={(e) => setPlanName(e.target.value)}
+                  onChange={handleChange}
                   placeholder="Ex: Plano de Segurança Q1 2025"
                 />
               </div>
@@ -116,7 +116,7 @@ export default function SGSOManager() {
                 <label className="text-sm font-medium">Descrição</label>
                 <Textarea
                   value={planContent}
-                  onChange={(e) => setPlanContent(e.target.value)}
+                  onChange={handleChange}
                   placeholder="Descreva os objetivos e escopo do plano..."
                   rows={4}
                 />

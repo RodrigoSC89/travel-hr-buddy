@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";;
+import { useEffect, useState, useCallback } from "react";;
 import React, { useState, useEffect } from "react";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
@@ -129,7 +129,7 @@ export const EnhancedCommunicationCenter = memo(() => {
               variant="outline" 
               size="sm" 
               className="gap-2"
-              onClick={() => setActiveTab("notifications")}
+              onClick={handleSetActiveTab}
             >
               <Bell className="h-4 w-4" />
               Notificações
@@ -142,7 +142,7 @@ export const EnhancedCommunicationCenter = memo(() => {
             <Button 
               size="sm" 
               className="gap-2"
-              onClick={() => setActiveTab("compose")}
+              onClick={handleSetActiveTab}
             >
               <PlusCircle className="h-4 w-4" />
               Nova Mensagem
@@ -242,7 +242,7 @@ export const EnhancedCommunicationCenter = memo(() => {
                 <Button 
                   variant="destructive" 
                   size="sm"
-                  onClick={() => setActiveTab("inbox")}
+                  onClick={handleSetActiveTab}
                 >
                   Ver Agora
                 </Button>

@@ -3,7 +3,7 @@
  * Automatic optimizations for connections < 2 Mbps
  */
 
-import { memo, memo, ReactNode, createContext, useContext, useEffect, useState } from "react";;;
+import { memo, memo, ReactNode, createContext, useContext, useEffect, useState, useCallback, useMemo } from "react";;;
 import { logger } from "@/lib/logger";
 
 // ===== Types =====

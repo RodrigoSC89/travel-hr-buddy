@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";;
+import { useEffect, useState, useCallback, useMemo } from "react";;
 import React, { useState, useEffect } from "react";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
@@ -289,7 +289,7 @@ export const TaskManagement: React.FC = () => {
                 <Input
                   id="title"
                   value={newTask.title}
-                  onChange={(e) => setNewTask({ ...newTask, title: e.target.value })}
+                  onChange={handleChange})}
                   placeholder="Ex: Inspeção de Segurança"
                 />
               </div>
@@ -298,7 +298,7 @@ export const TaskManagement: React.FC = () => {
                 <Textarea
                   id="description"
                   value={newTask.description}
-                  onChange={(e) => setNewTask({ ...newTask, description: e.target.value })}
+                  onChange={handleChange})}
                   placeholder="Descreva os detalhes da tarefa..."
                   rows={3}
                 />
@@ -325,7 +325,7 @@ export const TaskManagement: React.FC = () => {
                   <Input
                     id="assigned"
                     value={newTask.assigned_to}
-                    onChange={(e) => setNewTask({ ...newTask, assigned_to: e.target.value })}
+                    onChange={handleChange})}
                     placeholder="Nome do responsável"
                   />
                 </div>
@@ -336,7 +336,7 @@ export const TaskManagement: React.FC = () => {
                   id="due_date"
                   type="datetime-local"
                   value={newTask.due_date}
-                  onChange={(e) => setNewTask({ ...newTask, due_date: e.target.value })}
+                  onChange={handleChange})}
                 />
               </div>
               <div className="grid grid-cols-2 gap-4">
@@ -378,7 +378,7 @@ export const TaskManagement: React.FC = () => {
               <Button onClick={handleAddTask} className="flex-1">
                 Criar Tarefa
               </Button>
-              <Button variant="outline" onClick={() => setShowAddDialog(false)}>
+              <Button variant="outline" onClick={handleSetShowAddDialog}>
                 Cancelar
               </Button>
             </div>
@@ -452,7 +452,7 @@ export const TaskManagement: React.FC = () => {
               <Input
                 placeholder="Buscar tarefas..."
                 value={searchTerm}
-                onChange={(e) => setSearchTerm(e.target.value)}
+                onChange={handleChange}
                 className="w-64"
               />
             </div>
@@ -487,7 +487,7 @@ export const TaskManagement: React.FC = () => {
                         className={`p-4 border rounded-lg cursor-pointer transition-colors hover:bg-muted/50 ${
                           selectedTask?.id === task.id ? "border-primary bg-primary/5" : ""
                         }`}
-                        onClick={() => setSelectedTask(task)}
+                        onClick={handleSetSelectedTask}
                       >
                         <div className="flex items-start justify-between">
                           <div className="flex-1">
@@ -612,7 +612,7 @@ export const TaskManagement: React.FC = () => {
                       {selectedTask.status === "pending" && (
                         <Button 
                           className="w-full"
-                          onClick={() => updateTaskStatus(selectedTask.id, "in_progress")}
+                          onClick={() => handleupdateTaskStatus}
                         >
                           Iniciar Tarefa
                         </Button>
@@ -620,7 +620,7 @@ export const TaskManagement: React.FC = () => {
                       {selectedTask.status === "in_progress" && (
                         <Button 
                           className="w-full"
-                          onClick={() => updateTaskStatus(selectedTask.id, "completed")}
+                          onClick={() => handleupdateTaskStatus}
                         >
                           Marcar como Concluída
                         </Button>

@@ -1,4 +1,4 @@
-import { useState } from "react";;
+import { useState, useMemo, useCallback } from "react";;
 import React, { useState } from "react";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
@@ -95,7 +95,7 @@ export const HealthCheckin: React.FC = () => {
               max="24"
               step="0.5"
               value={metrics.sleep_hours}
-              onChange={(e) => setMetrics({ ...metrics, sleep_hours: parseFloat(e.target.value) })}
+              onChange={handleChange})}
               className="w-full"
             />
             
@@ -209,7 +209,7 @@ export const HealthCheckin: React.FC = () => {
               min="0"
               max="300"
               value={metrics.exercise_minutes}
-              onChange={(e) => setMetrics({ ...metrics, exercise_minutes: parseInt(e.target.value) })}
+              onChange={handleChange})}
             />
           </div>
 
@@ -222,7 +222,7 @@ export const HealthCheckin: React.FC = () => {
               max="10"
               step="0.1"
               value={metrics.water_intake_liters}
-              onChange={(e) => setMetrics({ ...metrics, water_intake_liters: parseFloat(e.target.value) })}
+              onChange={handleChange})}
             />
           </div>
 
@@ -232,7 +232,7 @@ export const HealthCheckin: React.FC = () => {
             <Textarea
               placeholder="Any concerns or notes about your wellbeing..."
               value={metrics.notes}
-              onChange={(e) => setMetrics({ ...metrics, notes: e.target.value })}
+              onChange={handleChange})}
               className="min-h-[100px]"
             />
           </div>

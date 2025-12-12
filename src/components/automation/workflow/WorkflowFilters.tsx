@@ -50,7 +50,7 @@ export const WorkflowFilters: React.FC<WorkflowFiltersProps> = ({
         <Input
           placeholder="Buscar workflows..."
           value={searchTerm}
-          onChange={(e) => onSearchChange(e.target.value)}
+          onChange={handleChange}
           className="pl-9 pr-9"
         />
         {searchTerm && (
@@ -58,7 +58,7 @@ export const WorkflowFilters: React.FC<WorkflowFiltersProps> = ({
             variant="ghost"
             size="icon"
             className="absolute right-1 top-1/2 -translate-y-1/2 h-7 w-7"
-            onClick={() => onSearchChange("")}
+            onClick={() => handleonSearchChange}
           >
             <X className="h-4 w-4" />
           </Button>

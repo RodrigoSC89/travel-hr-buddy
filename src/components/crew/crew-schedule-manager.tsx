@@ -1,4 +1,4 @@
-import { useState } from "react";;
+import { useState, useCallback } from "react";;
 import React, { useState } from "react";
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
@@ -351,10 +351,10 @@ export const CrewScheduleManager = memo(() => {
                       </Select>
                     </div>
                     <div className="flex justify-end gap-2 pt-4">
-                      <Button variant="outline" onClick={() => setIsNewScheduleOpen(false)}>
+                      <Button variant="outline" onClick={handleSetIsNewScheduleOpen}>
                         Cancelar
                       </Button>
-                      <Button onClick={() => setIsNewScheduleOpen(false)}>
+                      <Button onClick={handleSetIsNewScheduleOpen}>
                         Criar Escala
                       </Button>
                     </div>
@@ -372,7 +372,7 @@ export const CrewScheduleManager = memo(() => {
               <Input
                 placeholder="Buscar por tripulante ou embarcação..."
                 value={searchTerm}
-                onChange={(e) => setSearchTerm(e.target.value)}
+                onChange={handleChange}
                 className="pl-10"
               />
             </div>

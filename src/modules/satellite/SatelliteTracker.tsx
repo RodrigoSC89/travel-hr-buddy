@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";;
+import { useEffect, useState, useCallback, useMemo } from "react";;
 import React, { useState, useEffect } from "react";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
@@ -262,14 +262,14 @@ const SatelliteTracker = () => {
             <Button
               variant={typeFilter === "all" ? "default" : "outline"}
               size="sm"
-              onClick={() => setTypeFilter("all")}
+              onClick={handleSetTypeFilter}
             >
               Todos ({satelliteOrbits.length})
             </Button>
             <Button
               variant={typeFilter === "communication" ? "default" : "outline"}
               size="sm"
-              onClick={() => setTypeFilter("communication")}
+              onClick={handleSetTypeFilter}
             >
               Comunicação ({satelliteOrbits.filter(s => s.type === "communication").length})
             </Button>

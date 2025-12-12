@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";;
+import { useEffect, useState, useCallback, useMemo } from "react";;
 import React, { useState, useEffect } from "react";
 import { useOptimizedPolling } from "@/hooks/use-optimized-polling";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
@@ -402,7 +402,7 @@ export const RealTimeFleetMonitor = memo(() => {
                   </div>
                 ) : (
                   <div className="text-center py-8">
-                    <Button onClick={() => updateWeatherForVessel(selectedVesselData.id, selectedVesselData.location)}>
+                    <Button onClick={() => handleupdateWeatherForVessel}>
                       Carregar Dados Meteorológicos
                     </Button>
                   </div>

@@ -1,5 +1,5 @@
 /**
-import { useEffect, useRef, useState } from "react";;
+import { useEffect, useRef, useState, useCallback, useMemo } from "react";;
  * Onboarding Overlay - PATCH 836
  * Interactive onboarding spotlight and tooltips
  */

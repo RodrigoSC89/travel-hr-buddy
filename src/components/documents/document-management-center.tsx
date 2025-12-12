@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";;
+import { useEffect, useState, useCallback } from "react";;
 import React, { useState, useEffect } from "react";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
@@ -352,10 +352,10 @@ export const DocumentManagementCenter = memo(() => {
                 </div>
               
                 <div className="flex justify-end gap-2 mt-6">
-                  <Button variant="outline" onClick={() => setIsUploadDialogOpen(false)}>
+                  <Button variant="outline" onClick={handleSetIsUploadDialogOpen}>
                   Cancelar
                   </Button>
-                  <Button onClick={() => setIsUploadDialogOpen(false)}>
+                  <Button onClick={handleSetIsUploadDialogOpen}>
                   Fazer Upload
                   </Button>
                 </div>
@@ -423,7 +423,7 @@ export const DocumentManagementCenter = memo(() => {
                       <Input
                         placeholder="Buscar documentos, tags ou descrições..."
                         value={searchTerm}
-                        onChange={(e) => setSearchTerm(e.target.value)}
+                        onChange={handleChange}
                         className="pl-10"
                       />
                     </div>

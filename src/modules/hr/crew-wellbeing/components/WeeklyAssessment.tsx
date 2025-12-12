@@ -1,4 +1,4 @@
-import { useState } from "react";;
+import { useState, useCallback } from "react";;
 
 import React, { useState } from "react";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
@@ -138,7 +138,7 @@ export const WeeklyAssessment: React.FC = () => {
                   max="24"
                   step="0.5"
                   value={formData.sleep_hours}
-                  onChange={(e) => setFormData({ ...formData, sleep_hours: parseFloat(e.target.value) })}
+                  onChange={handleChange})}
                 />
               </div>
               
@@ -225,7 +225,7 @@ export const WeeklyAssessment: React.FC = () => {
                   type="number"
                   min="0"
                   value={formData.exercise_minutes}
-                  onChange={(e) => setFormData({ ...formData, exercise_minutes: parseInt(e.target.value) })}
+                  onChange={handleChange})}
                 />
               </div>
               
@@ -236,7 +236,7 @@ export const WeeklyAssessment: React.FC = () => {
                   min="0"
                   step="0.1"
                   value={formData.water_intake_liters}
-                  onChange={(e) => setFormData({ ...formData, water_intake_liters: parseFloat(e.target.value) })}
+                  onChange={handleChange})}
                 />
               </div>
             </div>
@@ -254,7 +254,7 @@ export const WeeklyAssessment: React.FC = () => {
               <Input
                 placeholder="e.g., headache, fatigue, anxiety"
                 value={formData.concerns}
-                onChange={(e) => setFormData({ ...formData, concerns: e.target.value })}
+                onChange={handleChange})}
               />
             </div>
             
@@ -263,7 +263,7 @@ export const WeeklyAssessment: React.FC = () => {
               <Textarea
                 placeholder="Any other information you'd like to share..."
                 value={formData.notes}
-                onChange={(e) => setFormData({ ...formData, notes: e.target.value })}
+                onChange={handleChange})}
                 rows={4}
               />
             </div>

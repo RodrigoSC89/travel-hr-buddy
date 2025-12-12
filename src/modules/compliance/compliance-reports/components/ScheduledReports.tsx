@@ -1,5 +1,5 @@
 /**
-import { useEffect, useState } from "react";;
+import { useEffect, useState, useCallback } from "react";;
  * PATCH 395 - Scheduled Compliance Reports
  * Automated report generation with recurrent scheduling
  */
@@ -235,7 +235,7 @@ export const ScheduledReports: React.FC = () => {
             <CardTitle>Scheduled Reports</CardTitle>
             <CardDescription>Automated compliance report generation</CardDescription>
           </div>
-          <Button onClick={() => setShowForm(!showForm)}>
+          <Button onClick={handleSetShowForm}>
             <Calendar className="h-4 w-4 mr-2" />
             New Schedule
           </Button>
@@ -249,7 +249,7 @@ export const ScheduledReports: React.FC = () => {
                 <Label>Report Title</Label>
                 <Input
                   value={formData.title}
-                  onChange={(e) => setFormData({ ...formData, title: e.target.value })}
+                  onChange={handleChange})}
                   placeholder="Monthly Compliance Report"
                 />
               </div>
@@ -308,7 +308,7 @@ export const ScheduledReports: React.FC = () => {
                 <Button onClick={createScheduledReport} className="flex-1">
                   Create Schedule
                 </Button>
-                <Button variant="outline" onClick={() => setShowForm(false)}>
+                <Button variant="outline" onClick={handleSetShowForm}>
                   Cancel
                 </Button>
               </div>
@@ -341,7 +341,7 @@ export const ScheduledReports: React.FC = () => {
                   )}
                 </div>
                 <div className="flex gap-2">
-                  <Button size="sm" variant="outline" onClick={() => runReportNow(report.id)}>
+                  <Button size="sm" variant="outline" onClick={() => handlerunReportNow}>
                     <Play className="h-4 w-4 mr-1" />
                     Run Now
                   </Button>
@@ -354,7 +354,7 @@ export const ScheduledReports: React.FC = () => {
                   <Button
                     size="sm"
                     variant="ghost"
-                    onClick={() => deleteSchedule(report.id)}
+                    onClick={() => handledeleteSchedule}
                   >
                     <Trash2 className="h-4 w-4" />
                   </Button>

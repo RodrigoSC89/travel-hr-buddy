@@ -264,7 +264,7 @@ export const CrewRealtimeWorkspace = memo(() => {
                   <Input
                     placeholder="Digite sua mensagem..."
                     value={messageInput}
-                    onChange={(e) => setMessageInput(e.target.value)}
+                    onChange={handleChange}
                     onKeyDown={(e) => e.key === "Enter" && handleSendMessage()}
                     className="flex-1"
                   />

@@ -1,5 +1,5 @@
 /**
-import { useEffect, useState } from "react";;
+import { useEffect, useState, useCallback } from "react";;
  * Activity Feed - PATCH 837
  * Real-time activity and events feed
  */

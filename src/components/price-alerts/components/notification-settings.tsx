@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";;
+import { useEffect, useState, useCallback } from "react";;
 import React, { useState, useEffect } from "react";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
@@ -276,7 +276,7 @@ export const NotificationSettings = memo(() => {
                 type="number"
                 placeholder="0"
                 value={settings.price_drop_threshold}
-                onChange={(e) => updateSetting("price_drop_threshold", Number(e.target.value))}
+                onChange={handleChange}
                 className="w-32"
                 min="0"
                 step="0.01"

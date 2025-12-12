@@ -1,4 +1,4 @@
-import { useState } from "react";;
+import { useState, useCallback } from "react";;
 import React, { useState } from "react";
 import { Navigate } from "react-router-dom";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
@@ -138,7 +138,7 @@ const Auth: React.FC = () => {
         <Button
           type="button"
           variant="outline"
-          onClick={() => handleOAuthSignIn("google")}
+          onClick={() => handlehandleOAuthSignIn}
           disabled={!!oauthLoading || isLoading}
           className="w-full"
         >
@@ -170,7 +170,7 @@ const Auth: React.FC = () => {
         <Button
           type="button"
           variant="outline"
-          onClick={() => handleOAuthSignIn("github")}
+          onClick={() => handlehandleOAuthSignIn}
           disabled={!!oauthLoading || isLoading}
           className="w-full"
         >
@@ -187,7 +187,7 @@ const Auth: React.FC = () => {
         <Button
           type="button"
           variant="outline"
-          onClick={() => handleOAuthSignIn("azure")}
+          onClick={() => handlehandleOAuthSignIn}
           disabled={!!oauthLoading || isLoading}
           className="w-full"
         >
@@ -320,7 +320,7 @@ const Auth: React.FC = () => {
                           variant="ghost"
                           size="sm"
                           className="absolute right-0 top-0 h-full px-3 hover:bg-transparent"
-                          onClick={() => setShowPassword(!showPassword)}
+                          onClick={handleSetShowPassword}
                         >
                           {showPassword ? <EyeOff className="h-4 w-4" /> : <Eye className="h-4 w-4" />}
                         </Button>
@@ -344,7 +344,7 @@ const Auth: React.FC = () => {
                     <Button
                       variant="link"
                       className="text-sm text-muted-foreground"
-                      onClick={() => setActiveTab("reset")}
+                      onClick={handleSetActiveTab}
                     >
                         Esqueceu sua senha?
                     </Button>
@@ -406,7 +406,7 @@ const Auth: React.FC = () => {
                           variant="ghost"
                           size="sm"
                           className="absolute right-0 top-0 h-full px-3 hover:bg-transparent"
-                          onClick={() => setShowPassword(!showPassword)}
+                          onClick={handleSetShowPassword}
                         >
                           {showPassword ? <EyeOff className="h-4 w-4" /> : <Eye className="h-4 w-4" />}
                         </Button>
@@ -480,7 +480,7 @@ const Auth: React.FC = () => {
                       <Button
                         variant="link"
                         className="text-sm text-muted-foreground"
-                        onClick={() => setActiveTab("signin")}
+                        onClick={handleSetActiveTab}
                       >
                         Voltar ao login
                       </Button>

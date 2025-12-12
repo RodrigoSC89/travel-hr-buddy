@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";;
+import { useEffect, useState, useCallback, useMemo } from "react";;
 import React, { useState, useEffect } from "react";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
@@ -357,7 +357,7 @@ export const PeotramAuditWizard: React.FC<PeotramAuditWizardProps> = ({
             <Input
               id="auditPeriod"
               value={auditData.auditPeriod}
-              onChange={(e) => setAuditData(prev => ({ ...prev, auditPeriod: e.target.value }))}
+              onChange={handleChange}))}
               placeholder="Ex: 2024-Q4"
             />
           </div>
@@ -368,7 +368,7 @@ export const PeotramAuditWizard: React.FC<PeotramAuditWizardProps> = ({
               id="auditDate"
               type="date"
               value={auditData.auditDate}
-              onChange={(e) => setAuditData(prev => ({ ...prev, auditDate: e.target.value }))}
+              onChange={handleChange}))}
             />
           </div>
 
@@ -377,7 +377,7 @@ export const PeotramAuditWizard: React.FC<PeotramAuditWizardProps> = ({
             <Input
               id="auditorName"
               value={auditData.auditorName}
-              onChange={(e) => setAuditData(prev => ({ ...prev, auditorName: e.target.value }))}
+              onChange={handleChange}))}
               placeholder="Nome completo do auditor responsável"
             />
           </div>
@@ -394,9 +394,7 @@ export const PeotramAuditWizard: React.FC<PeotramAuditWizardProps> = ({
                 <Label>Nome da Embarcação</Label>
                 <Input
                   value={auditData.vessel?.name || ""}
-                  onChange={(e) => setAuditData(prev => ({
-                    ...prev,
-                    vessel: { ...prev.vessel!, name: e.target.value }
+                  onChange={handleChange}
                   }))}
                   placeholder="Nome da embarcação"
                 />
@@ -405,9 +403,7 @@ export const PeotramAuditWizard: React.FC<PeotramAuditWizardProps> = ({
                 <Label>Indicação Petrobras</Label>
                 <Input
                   value={auditData.vessel?.indication || ""}
-                  onChange={(e) => setAuditData(prev => ({
-                    ...prev,
-                    vessel: { ...prev.vessel!, indication: e.target.value }
+                  onChange={handleChange}
                   }))}
                   placeholder="Código de indicação Petrobras"
                 />
@@ -427,9 +423,7 @@ export const PeotramAuditWizard: React.FC<PeotramAuditWizardProps> = ({
                 <Label>Base/Terminal</Label>
                 <Input
                   value={auditData.location?.base || ""}
-                  onChange={(e) => setAuditData(prev => ({
-                    ...prev,
-                    location: { ...prev.location!, base: e.target.value }
+                  onChange={handleChange}
                   }))}
                   placeholder="Nome da base ou terminal"
                 />
@@ -438,9 +432,7 @@ export const PeotramAuditWizard: React.FC<PeotramAuditWizardProps> = ({
                 <Label>Cidade</Label>
                 <Input
                   value={auditData.location?.city || ""}
-                  onChange={(e) => setAuditData(prev => ({
-                    ...prev,
-                    location: { ...prev.location!, city: e.target.value }
+                  onChange={handleChange}
                   }))}
                   placeholder="Cidade"
                 />
@@ -449,9 +441,7 @@ export const PeotramAuditWizard: React.FC<PeotramAuditWizardProps> = ({
                 <Label>Estado</Label>
                 <Input
                   value={auditData.location?.state || ""}
-                  onChange={(e) => setAuditData(prev => ({
-                    ...prev,
-                    location: { ...prev.location!, state: e.target.value }
+                  onChange={handleChange}
                   }))}
                   placeholder="Estado"
                 />
@@ -466,7 +456,7 @@ export const PeotramAuditWizard: React.FC<PeotramAuditWizardProps> = ({
             <Textarea
               id="scope"
               value={auditData.scope}
-              onChange={(e) => setAuditData(prev => ({ ...prev, scope: e.target.value }))}
+              onChange={handleChange}))}
               placeholder="Descreva o escopo e objetivos da auditoria..."
               rows={3}
             />
@@ -477,7 +467,7 @@ export const PeotramAuditWizard: React.FC<PeotramAuditWizardProps> = ({
             <Textarea
               id="operationSummary"
               value={auditData.operationSummary}
-              onChange={(e) => setAuditData(prev => ({ ...prev, operationSummary: e.target.value }))}
+              onChange={handleChange}))}
               placeholder="Descreva as principais operações realizadas..."
               rows={3}
             />
@@ -488,7 +478,7 @@ export const PeotramAuditWizard: React.FC<PeotramAuditWizardProps> = ({
             <Textarea
               id="observations"
               value={auditData.observations}
-              onChange={(e) => setAuditData(prev => ({ ...prev, observations: e.target.value }))}
+              onChange={handleChange}))}
               placeholder="Observações gerais sobre a auditoria..."
               rows={3}
             />
@@ -571,7 +561,7 @@ export const PeotramAuditWizard: React.FC<PeotramAuditWizardProps> = ({
                   <Button
                     variant="outline"
                     size="sm"
-                    onClick={() => setCurrentRequirement(prev => prev - 1)}
+                    onClick={handleSetCurrentRequirement}
                   >
                     <ChevronLeft className="w-4 h-4" />
                     Anterior
@@ -581,7 +571,7 @@ export const PeotramAuditWizard: React.FC<PeotramAuditWizardProps> = ({
                   <Button
                     variant="outline"
                     size="sm"
-                    onClick={() => setCurrentRequirement(prev => prev + 1)}
+                    onClick={handleSetCurrentRequirement}
                   >
                     Próximo
                     <ChevronRight className="w-4 h-4" />
@@ -667,9 +657,7 @@ export const PeotramAuditWizard: React.FC<PeotramAuditWizardProps> = ({
                 <Textarea
                   id="comments"
                   value={requirement.comments || ""}
-                  onChange={(e) => updateRequirement(currentElement, currentRequirement, { 
-                    comments: e.target.value 
-                  })}
+                  onChange={handleChange})}
                   placeholder="Descreva as observações, evidências encontradas e justificativas para a pontuação..."
                   rows={4}
                 />
@@ -699,9 +687,7 @@ export const PeotramAuditWizard: React.FC<PeotramAuditWizardProps> = ({
                   <Textarea
                     id="justification"
                     value={requirement.justification}
-                    onChange={(e) => updateRequirement(currentElement, currentRequirement, { 
-                      justification: e.target.value 
-                    })}
+                    onChange={handleChange})}
                     placeholder="Justifique a não conformidade e as ações corretivas necessárias..."
                     rows={3}
                   />
@@ -863,7 +849,7 @@ export const PeotramAuditWizard: React.FC<PeotramAuditWizardProps> = ({
           <div className="flex justify-between pt-6 border-t">
             <Button
               variant="outline"
-              onClick={() => setCurrentStep(prev => Math.max(0, prev - 1))}
+              onClick={handleSetCurrentStep}
               disabled={currentStep === 0}
             >
               <ChevronLeft className="w-4 h-4 mr-2" />
@@ -871,7 +857,7 @@ export const PeotramAuditWizard: React.FC<PeotramAuditWizardProps> = ({
             </Button>
 
             <Button
-              onClick={() => setCurrentStep(prev => Math.min(2, prev + 1))}
+              onClick={handleSetCurrentStep}
               disabled={currentStep === 1 && overallProgress < 100}
             >
               Próxima Etapa

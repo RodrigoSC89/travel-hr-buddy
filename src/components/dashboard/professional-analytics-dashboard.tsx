@@ -3,7 +3,7 @@
  * Dashboard de analytics com métricas avançadas e visualizações de BI
  */
 
-import { memo, memo, useState } from "react";;;
+import { memo, memo, useState, useMemo } from "react";;;
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";

@@ -1,5 +1,5 @@
 /**
-import { useState } from "react";;
+import { useState, useMemo, useCallback } from "react";;
  * Crew Health Management Tab
  */
 
@@ -84,11 +84,11 @@ export default function CrewHealthTab() {
             <Input
               placeholder="Buscar tripulante..."
               value={searchQuery}
-              onChange={(e) => setSearchQuery(e.target.value)}
+              onChange={handleChange}
               className="pl-10"
             />
           </div>
-          <Button variant="outline" size="icon" onClick={() => setShowFilters(!showFilters)}>
+          <Button variant="outline" size="icon" onClick={handleSetShowFilters}>
             <Filter className="h-4 w-4" />
           </Button>
         </div>
@@ -116,28 +116,28 @@ export default function CrewHealthTab() {
               <Button 
                 variant={statusFilter === null ? "default" : "outline"} 
                 size="sm"
-                onClick={() => setStatusFilter(null)}
+                onClick={handleSetStatusFilter}
               >
                 Todos ({mockCrewMembers.length})
               </Button>
               <Button 
                 variant={statusFilter === "fit" ? "default" : "outline"} 
                 size="sm"
-                onClick={() => setStatusFilter("fit")}
+                onClick={handleSetStatusFilter}
               >
                 Aptos ({statusCounts.fit})
               </Button>
               <Button 
                 variant={statusFilter === "restricted" ? "default" : "outline"} 
                 size="sm"
-                onClick={() => setStatusFilter("restricted")}
+                onClick={handleSetStatusFilter}
               >
                 Com Restrição ({statusCounts.restricted})
               </Button>
               <Button 
                 variant={statusFilter === "unfit" ? "default" : "outline"} 
                 size="sm"
-                onClick={() => setStatusFilter("unfit")}
+                onClick={handleSetStatusFilter}
               >
                 Inaptos ({statusCounts.unfit})
               </Button>
@@ -272,7 +272,7 @@ export default function CrewHealthTab() {
                   <DialogTrigger asChild>
                     <div 
                       className="p-4 rounded-lg border bg-card hover:bg-muted/50 cursor-pointer transition-colors"
-                      onClick={() => setSelectedCrew(member)}
+                      onClick={handleSetSelectedCrew}
                     >
                       <div className="flex items-center justify-between">
                         <div className="flex items-center gap-4">

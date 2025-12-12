@@ -1,5 +1,5 @@
 /**
-import { useEffect, useState } from "react";;
+import { useEffect, useState, useCallback } from "react";;
  * LazyMap - FASE 2.5 Lazy Loading
  * Wrapper lazy para Mapbox GL (1.65MB)
  */

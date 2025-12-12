@@ -143,7 +143,7 @@ export const ProgressiveUpload = memo(function({
             type="file"
             accept={accept}
             multiple={multiple}
-            onChange={(e) => e.target.files && handleFiles(e.target.files)}
+            onChange={handleChange}
             className="hidden"
           />
           <Button variant="outline" size="sm" asChild>
@@ -211,7 +211,7 @@ export const ProgressiveUpload = memo(function({
                   variant="ghost"
                   size="icon"
                   className="h-8 w-8 shrink-0"
-                  onClick={() => removeFile(file.id)}
+                  onClick={() => handleremoveFile}
                 >
                   <X className="h-4 w-4" />
                 </Button>

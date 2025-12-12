@@ -3,7 +3,7 @@
  * Automatically adjusts image quality based on connection speed
  */
 
-import { memo, memo, useEffect, useMemo, useRef, useState } from "react";;;
+import { memo, memo, useEffect, useMemo, useRef, useState, useCallback } from "react";;;
 import { cn } from "@/lib/utils";
 import { useSlowNetwork } from "@/components/performance/SlowNetworkOptimizer";
 import { Skeleton } from "./skeleton";

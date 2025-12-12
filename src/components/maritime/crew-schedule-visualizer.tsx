@@ -1,4 +1,4 @@
-import { useState } from "react";;
+import { useState, useMemo, useCallback } from "react";;
 import React, { useState } from "react";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
@@ -197,14 +197,14 @@ export const CrewScheduleVisualizer: React.FC = () => {
               <Button
                 variant={viewMode === "gantt" ? "default" : "outline"}
                 size="sm"
-                onClick={() => setViewMode("gantt")}
+                onClick={handleSetViewMode}
               >
                 Gantt
               </Button>
               <Button
                 variant={viewMode === "calendar" ? "default" : "outline"}
                 size="sm"
-                onClick={() => setViewMode("calendar")}
+                onClick={handleSetViewMode}
               >
                 Calendário
               </Button>
@@ -226,7 +226,7 @@ export const CrewScheduleVisualizer: React.FC = () => {
               <Button
                 variant={selectedVessel === "all" ? "default" : "outline"}
                 size="sm"
-                onClick={() => setSelectedVessel("all")}
+                onClick={handleSetSelectedVessel}
               >
                 Todas
               </Button>
@@ -235,7 +235,7 @@ export const CrewScheduleVisualizer: React.FC = () => {
                   key={vessel}
                   variant={selectedVessel === vessel ? "default" : "outline"}
                   size="sm"
-                  onClick={() => setSelectedVessel(vessel)}
+                  onClick={handleSetSelectedVessel}
                 >
                   {vessel.replace("MV ", "")}
                 </Button>

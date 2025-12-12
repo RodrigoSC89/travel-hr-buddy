@@ -1,5 +1,5 @@
 /**
-import { useState } from "react";;
+import { useState, useCallback } from "react";;
  * PATCH 410: Mission Planning Submodule
  * Mission scheduling, crew allocation, and equipment checks
  */

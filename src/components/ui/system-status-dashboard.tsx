@@ -1,4 +1,4 @@
-import { useState } from "react";;
+import { useState, useMemo, useCallback } from "react";;
 import React, { useState } from "react";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
@@ -260,11 +260,11 @@ const SystemStatusDashboard = () => {
           </div>
           
           <div className="flex gap-2">
-            <Button variant="outline" size="sm" onClick={() => setShowLogsDialog(true)}>
+            <Button variant="outline" size="sm" onClick={handleSetShowLogsDialog}>
               <Eye className="w-4 h-4 mr-2" />
               Logs Detalhados
             </Button>
-            <Button variant="outline" size="sm" onClick={() => setShowHistoryDialog(true)}>
+            <Button variant="outline" size="sm" onClick={handleSetShowHistoryDialog}>
               <Activity className="w-4 h-4 mr-2" />
               Histórico
             </Button>

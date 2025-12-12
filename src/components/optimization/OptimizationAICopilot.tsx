@@ -1,4 +1,4 @@
-import { useEffect, useRef, useState } from "react";;
+import { useEffect, useRef, useState, useCallback, useMemo } from "react";;
 import React, { useState, useRef, useEffect } from "react";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
@@ -360,7 +360,7 @@ Métricas de Sistema:
                 variant="outline"
                 size="sm"
                 className="text-xs hover-lift"
-                onClick={() => sendMessage(action.prompt)}
+                onClick={() => handlesendMessage}
                 disabled={isLoading}
               >
                 <action.icon className="h-3 w-3 mr-1" />
@@ -435,7 +435,7 @@ Métricas de Sistema:
           <div className="flex gap-2">
             <Textarea
               value={input}
-              onChange={(e) => setInput(e.target.value)}
+              onChange={handleChange}
               placeholder="Pergunte sobre otimização, performance, UX..."
               className="min-h-[40px] max-h-[100px] resize-none"
               onKeyDown={(e) => {

@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";;
+import { useEffect, useState, useCallback, useMemo } from "react";;
 import React, { useState, useEffect } from "react";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
@@ -294,7 +294,7 @@ export const HealthStatusDashboard: React.FC = () => {
                       <Button
                         variant="outline"
                         size="sm"
-                        onClick={() => resetCircuitBreaker(name)}
+                        onClick={() => handleresetCircuitBreaker}
                       >
                         Resetar Circuit Breaker
                       </Button>

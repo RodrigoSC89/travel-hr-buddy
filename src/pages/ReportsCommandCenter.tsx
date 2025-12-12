@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";;;
+import { useEffect, useState, useCallback, useMemo } from "react";;;
 import { ModulePageWrapper } from "@/components/ui/module-page-wrapper";
 import { ModuleHeader } from "@/components/ui/module-header";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
@@ -214,7 +214,7 @@ const ReportsCommandCenter = () => {
                 </>
               ) : (
                 <>
-                  <Card className="cursor-pointer hover:shadow-md transition-shadow" onClick={() => setActiveTab("ai-reports")}>
+                  <Card className="cursor-pointer hover:shadow-md transition-shadow" onClick={handleSetActiveTab}>
                     <CardContent className="pt-6">
                       <div className="flex items-center justify-between">
                         <div>
@@ -231,7 +231,7 @@ const ReportsCommandCenter = () => {
                     </CardContent>
                   </Card>
 
-                  <Card className="cursor-pointer hover:shadow-md transition-shadow" onClick={() => setActiveTab("incidents")}>
+                  <Card className="cursor-pointer hover:shadow-md transition-shadow" onClick={handleSetActiveTab}>
                     <CardContent className="pt-6">
                       <div className="flex items-center justify-between">
                         <div>
@@ -304,7 +304,7 @@ const ReportsCommandCenter = () => {
                   <Button 
                     variant="outline" 
                     className="h-auto py-4 flex flex-col items-center gap-2"
-                    onClick={() => setActiveTab("ai-reports")}
+                    onClick={handleSetActiveTab}
                   >
                     <Brain className="h-6 w-6 text-primary" />
                     <span className="font-medium">Gerar Relatório IA</span>
@@ -314,7 +314,7 @@ const ReportsCommandCenter = () => {
                   <Button 
                     variant="outline" 
                     className="h-auto py-4 flex flex-col items-center gap-2"
-                    onClick={() => setActiveTab("incidents")}
+                    onClick={handleSetActiveTab}
                   >
                     <AlertTriangle className="h-6 w-6 text-orange-500" />
                     <span className="font-medium">Ver Incidentes DP</span>
@@ -324,7 +324,7 @@ const ReportsCommandCenter = () => {
                   <Button 
                     variant="outline" 
                     className="h-auto py-4 flex flex-col items-center gap-2"
-                    onClick={() => setActiveTab("dashboard")}
+                    onClick={handleSetActiveTab}
                   >
                     <BarChart3 className="h-6 w-6 text-blue-500" />
                     <span className="font-medium">Dashboard</span>
@@ -334,7 +334,7 @@ const ReportsCommandCenter = () => {
                   <Button 
                     variant="outline" 
                     className="h-auto py-4 flex flex-col items-center gap-2"
-                    onClick={() => setActiveTab("analytics")}
+                    onClick={handleSetActiveTab}
                   >
                     <TrendingUp className="h-6 w-6 text-green-500" />
                     <span className="font-medium">Analytics</span>
@@ -371,7 +371,7 @@ const ReportsCommandCenter = () => {
                       <Button 
                         variant="link" 
                         className="mt-2"
-                        onClick={() => setActiveTab("ai-reports")}
+                        onClick={handleSetActiveTab}
                       >
                         Gerar primeiro relatório
                       </Button>

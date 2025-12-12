@@ -152,7 +152,7 @@ export const CollaborativeDocumentEditor = memo(function({
             <FileText className="h-5 w-5" />
             <Input
               value={title}
-              onChange={(e) => setTitle(e.target.value)}
+              onChange={handleChange}
               className="text-lg font-semibold border-0 p-0 h-auto focus-visible:ring-0"
               placeholder="Document Title"
             />

@@ -4,7 +4,7 @@
  * Loading state com progress bar para operações longas
  */
 
-import { memo, memo, useEffect, useState } from "react";;;
+import { memo, memo, useEffect, useState, useCallback } from "react";;;
 import { cn } from "@/lib/utils";
 import { Progress } from "@/components/ui/progress";
 

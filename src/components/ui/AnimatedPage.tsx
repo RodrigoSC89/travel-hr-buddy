@@ -5,7 +5,7 @@
  */
 
 import { motion } from "framer-motion";
-import { memo, memo, ReactNode } from "react";
+import { memo, memo, ReactNode, useCallback } from "react";
 
 interface AnimatedPageProps {
   children: ReactNode;

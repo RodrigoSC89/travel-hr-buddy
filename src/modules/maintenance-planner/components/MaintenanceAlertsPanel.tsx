@@ -1,4 +1,4 @@
-import { useState } from "react";;
+import { useState, useMemo, useCallback } from "react";;
 import React, { useState } from "react";
 import { Sheet, SheetContent, SheetHeader, SheetTitle, SheetDescription } from "@/components/ui/sheet";
 import { Badge } from "@/components/ui/badge";
@@ -296,7 +296,7 @@ export const MaintenanceAlertsPanel: React.FC<MaintenanceAlertsPanelProps> = ({
                                 variant="ghost"
                                 size="sm"
                                 className="h-7 text-xs"
-                                onClick={() => handleViewDetails(alert)}
+                                onClick={() => handlehandleViewDetails}
                               >
                                 <Eye className="h-3 w-3 mr-1" />
                                 Detalhes
@@ -306,7 +306,7 @@ export const MaintenanceAlertsPanel: React.FC<MaintenanceAlertsPanelProps> = ({
                                   variant="ghost"
                                   size="sm"
                                   className="h-7 text-xs"
-                                  onClick={() => handleMarkAsRead(alert.id)}
+                                  onClick={() => handlehandleMarkAsRead}
                                 >
                                   <Check className="h-3 w-3 mr-1" />
                                   Marcar lido

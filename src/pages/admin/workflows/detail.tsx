@@ -1,7 +1,7 @@
 
 "use client";
 
-import { useEffect, useState } from "react";;;
+import { useEffect, useState, useCallback, useMemo } from "react";;;
 import { useParams, Link } from "react-router-dom";
 import { supabase } from "@/integrations/supabase/client";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
@@ -546,7 +546,7 @@ export default function WorkflowDetailPage() {
                     <Input
                       id="title"
                       value={taskForm.title}
-                      onChange={(e) => setTaskForm({ ...taskForm, title: e.target.value })}
+                      onChange={handleChange})}
                       placeholder="Digite o título da tarefa"
                     />
                   </div>
@@ -556,7 +556,7 @@ export default function WorkflowDetailPage() {
                     <Textarea
                       id="description"
                       value={taskForm.description}
-                      onChange={(e) => setTaskForm({ ...taskForm, description: e.target.value })}
+                      onChange={handleChange})}
                       placeholder="Adicione detalhes sobre a tarefa"
                       rows={3}
                     />
@@ -625,13 +625,13 @@ export default function WorkflowDetailPage() {
                         id="due_date"
                         type="date"
                         value={taskForm.due_date}
-                        onChange={(e) => setTaskForm({ ...taskForm, due_date: e.target.value })}
+                        onChange={handleChange})}
                       />
                     </div>
                   </div>
                 </div>
                 <DialogFooter>
-                  <Button variant="outline" onClick={() => setIsDialogOpen(false)}>
+                  <Button variant="outline" onClick={handleSetIsDialogOpen}>
                     Cancelar
                   </Button>
                   <Button onClick={saveTask} disabled={isCreating || !taskForm.title.trim()}>
@@ -747,7 +747,7 @@ export default function WorkflowDetailPage() {
                                     <Button
                                       size="sm"
                                       variant="default"
-                                      onClick={() => updateStepStatus(step.id, "em_progresso")}
+                                      onClick={() => handleupdateStepStatus}
                                       className="text-xs h-7"
                                     >
                                       Iniciar
@@ -759,7 +759,7 @@ export default function WorkflowDetailPage() {
                                       <Button
                                         size="sm"
                                         variant="outline"
-                                        onClick={() => updateStepStatus(step.id, "pendente")}
+                                        onClick={() => handleupdateStepStatus}
                                         className="text-xs h-7"
                                       >
                                         Voltar
@@ -767,7 +767,7 @@ export default function WorkflowDetailPage() {
                                       <Button
                                         size="sm"
                                         variant="default"
-                                        onClick={() => updateStepStatus(step.id, "concluido")}
+                                        onClick={() => handleupdateStepStatus}
                                         className="text-xs h-7"
                                       >
                                         Concluir
@@ -779,7 +779,7 @@ export default function WorkflowDetailPage() {
                                     <Button
                                       size="sm"
                                       variant="outline"
-                                      onClick={() => updateStepStatus(step.id, "em_progresso")}
+                                      onClick={() => handleupdateStepStatus}
                                       className="text-xs h-7"
                                     >
                                       Reabrir
@@ -789,7 +789,7 @@ export default function WorkflowDetailPage() {
                                   <Button
                                     size="sm"
                                     variant="ghost"
-                                    onClick={() => openEditDialog(step)}
+                                    onClick={() => handleopenEditDialog}
                                     className="text-xs h-7 ml-auto"
                                   >
                                     <Edit2 className="w-3 h-3" />
@@ -798,7 +798,7 @@ export default function WorkflowDetailPage() {
                                   <Button
                                     size="sm"
                                     variant="ghost"
-                                    onClick={() => setDeleteStepId(step.id)}
+                                    onClick={handleSetDeleteStepId}
                                     className="text-xs h-7 text-destructive hover:text-destructive"
                                   >
                                     <Trash2 className="w-3 h-3" />

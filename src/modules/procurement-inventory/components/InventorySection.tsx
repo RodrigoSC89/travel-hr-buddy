@@ -1,4 +1,4 @@
-import { useState } from "react";;
+import { useState, useMemo, useCallback } from "react";;
 import React, { useState } from "react";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
@@ -323,7 +323,7 @@ export default function InventorySection({ searchQuery }: InventorySectionProps)
               <Download className="h-4 w-4" />
             </Button>
 
-            <Button onClick={() => setShowAddItem(true)}>
+            <Button onClick={handleSetShowAddItem}>
               <Plus className="h-4 w-4 mr-2" />
               Novo Item
             </Button>
@@ -336,20 +336,20 @@ export default function InventorySection({ searchQuery }: InventorySectionProps)
               <Table>
                 <TableHeader>
                   <TableRow>
-                    <TableHead className="cursor-pointer" onClick={() => handleSort("sku")}>
+                    <TableHead className="cursor-pointer" onClick={() => handlehandleSort}>
                       <div className="flex items-center gap-1">
                         SKU
                         {sortField === "sku" && (sortDirection === "asc" ? <ArrowUp className="h-3 w-3" /> : <ArrowDown className="h-3 w-3" />)}
                       </div>
                     </TableHead>
-                    <TableHead className="cursor-pointer" onClick={() => handleSort("name")}>
+                    <TableHead className="cursor-pointer" onClick={() => handlehandleSort}>
                       <div className="flex items-center gap-1">
                         Descrição
                         {sortField === "name" && (sortDirection === "asc" ? <ArrowUp className="h-3 w-3" /> : <ArrowDown className="h-3 w-3" />)}
                       </div>
                     </TableHead>
                     <TableHead>Categoria</TableHead>
-                    <TableHead className="text-center cursor-pointer" onClick={() => handleSort("quantity")}>
+                    <TableHead className="text-center cursor-pointer" onClick={() => handlehandleSort}>
                       <div className="flex items-center justify-center gap-1">
                         Qtd
                         {sortField === "quantity" && (sortDirection === "asc" ? <ArrowUp className="h-3 w-3" /> : <ArrowDown className="h-3 w-3" />)}
@@ -556,7 +556,7 @@ export default function InventorySection({ searchQuery }: InventorySectionProps)
               <Input 
                 placeholder="FIL-OLE-007"
                 value={newItem.sku}
-                onChange={(e) => setNewItem(prev => ({ ...prev, sku: e.target.value }))}
+                onChange={handleChange}))}
               />
             </div>
             <div className="space-y-2">
@@ -564,7 +564,7 @@ export default function InventorySection({ searchQuery }: InventorySectionProps)
               <Input 
                 placeholder="Nome do item"
                 value={newItem.name}
-                onChange={(e) => setNewItem(prev => ({ ...prev, name: e.target.value }))}
+                onChange={handleChange}))}
               />
             </div>
             <div className="space-y-2">
@@ -608,7 +608,7 @@ export default function InventorySection({ searchQuery }: InventorySectionProps)
               <Input 
                 type="number"
                 value={newItem.quantity}
-                onChange={(e) => setNewItem(prev => ({ ...prev, quantity: Number(e.target.value) }))}
+                onChange={handleChange}))}
               />
             </div>
             <div className="space-y-2">
@@ -617,7 +617,7 @@ export default function InventorySection({ searchQuery }: InventorySectionProps)
                 type="number"
                 step="0.01"
                 value={newItem.unitCost}
-                onChange={(e) => setNewItem(prev => ({ ...prev, unitCost: Number(e.target.value) }))}
+                onChange={handleChange}))}
               />
             </div>
             <div className="space-y-2">
@@ -625,7 +625,7 @@ export default function InventorySection({ searchQuery }: InventorySectionProps)
               <Input 
                 type="number"
                 value={newItem.minStock}
-                onChange={(e) => setNewItem(prev => ({ ...prev, minStock: Number(e.target.value) }))}
+                onChange={handleChange}))}
               />
             </div>
             <div className="space-y-2">
@@ -633,7 +633,7 @@ export default function InventorySection({ searchQuery }: InventorySectionProps)
               <Input 
                 type="number"
                 value={newItem.maxStock}
-                onChange={(e) => setNewItem(prev => ({ ...prev, maxStock: Number(e.target.value) }))}
+                onChange={handleChange}))}
               />
             </div>
             <div className="space-y-2">
@@ -641,7 +641,7 @@ export default function InventorySection({ searchQuery }: InventorySectionProps)
               <Input 
                 placeholder="A1-01"
                 value={newItem.location}
-                onChange={(e) => setNewItem(prev => ({ ...prev, location: e.target.value }))}
+                onChange={handleChange}))}
               />
             </div>
             <div className="space-y-2">
@@ -649,7 +649,7 @@ export default function InventorySection({ searchQuery }: InventorySectionProps)
               <Input 
                 placeholder="L2024-XXX"
                 value={newItem.lot}
-                onChange={(e) => setNewItem(prev => ({ ...prev, lot: e.target.value }))}
+                onChange={handleChange}))}
               />
             </div>
             <div className="space-y-2 col-span-2">
@@ -657,12 +657,12 @@ export default function InventorySection({ searchQuery }: InventorySectionProps)
               <Input 
                 type="date"
                 value={newItem.expiryDate}
-                onChange={(e) => setNewItem(prev => ({ ...prev, expiryDate: e.target.value }))}
+                onChange={handleChange}))}
               />
             </div>
           </div>
           <DialogFooter>
-            <Button variant="outline" onClick={() => setShowAddItem(false)}>Cancelar</Button>
+            <Button variant="outline" onClick={handleSetShowAddItem}>Cancelar</Button>
             <Button onClick={handleAddItem}>
               <Plus className="h-4 w-4 mr-2" />
               Adicionar Item
@@ -709,7 +709,7 @@ export default function InventorySection({ searchQuery }: InventorySectionProps)
                 <Input 
                   type="number"
                   value={movementData.quantity}
-                  onChange={(e) => setMovementData(prev => ({ ...prev, quantity: Number(e.target.value) }))}
+                  onChange={handleChange}))}
                 />
               </div>
 
@@ -718,7 +718,7 @@ export default function InventorySection({ searchQuery }: InventorySectionProps)
                 <Textarea 
                   placeholder="Descreva o motivo da movimentação..."
                   value={movementData.reason}
-                  onChange={(e) => setMovementData(prev => ({ ...prev, reason: e.target.value }))}
+                  onChange={handleChange}))}
                 />
               </div>
 
@@ -727,13 +727,13 @@ export default function InventorySection({ searchQuery }: InventorySectionProps)
                 <Input 
                   placeholder="OS-2024-XXX"
                   value={movementData.reference}
-                  onChange={(e) => setMovementData(prev => ({ ...prev, reference: e.target.value }))}
+                  onChange={handleChange}))}
                 />
               </div>
             </div>
           )}
           <DialogFooter>
-            <Button variant="outline" onClick={() => setShowMovement(false)}>Cancelar</Button>
+            <Button variant="outline" onClick={handleSetShowMovement}>Cancelar</Button>
             <Button onClick={handleMovement}>
               <CheckCircle2 className="h-4 w-4 mr-2" />
               Confirmar Movimentação

@@ -1,5 +1,5 @@
 /**
-import { useState } from "react";;
+import { useState, useCallback } from "react";;
  * PATCH 452 - Mission Planning Component
  * Tab for planning and creating missions
  */
@@ -106,7 +106,7 @@ export const MissionPlanning: React.FC<MissionPlanningProps> = ({ missions, onRe
                     <label className="text-sm font-medium">Code</label>
                     <Input
                       value={formData.code}
-                      onChange={(e) => setFormData({...formData, code: e.target.value})}
+                      onChange={handleChange})}
                       placeholder="MSN-001"
                       required
                     />
@@ -115,7 +115,7 @@ export const MissionPlanning: React.FC<MissionPlanningProps> = ({ missions, onRe
                     <label className="text-sm font-medium">Name</label>
                     <Input
                       value={formData.name}
-                      onChange={(e) => setFormData({...formData, name: e.target.value})}
+                      onChange={handleChange})}
                       placeholder="Mission Name"
                       required
                     />
@@ -156,7 +156,7 @@ export const MissionPlanning: React.FC<MissionPlanningProps> = ({ missions, onRe
                   <label className="text-sm font-medium">Description</label>
                   <Textarea
                     value={formData.description}
-                    onChange={(e) => setFormData({...formData, description: e.target.value})}
+                    onChange={handleChange})}
                     placeholder="Mission description..."
                     rows={3}
                   />
@@ -167,7 +167,7 @@ export const MissionPlanning: React.FC<MissionPlanningProps> = ({ missions, onRe
                     <Input
                       type="date"
                       value={formData.startDate}
-                      onChange={(e) => setFormData({...formData, startDate: e.target.value})}
+                      onChange={handleChange})}
                     />
                   </div>
                   <div>
@@ -175,12 +175,12 @@ export const MissionPlanning: React.FC<MissionPlanningProps> = ({ missions, onRe
                     <Input
                       type="date"
                       value={formData.endDate}
-                      onChange={(e) => setFormData({...formData, endDate: e.target.value})}
+                      onChange={handleChange})}
                     />
                   </div>
                 </div>
                 <div className="flex justify-end gap-2">
-                  <Button type="button" variant="outline" onClick={() => setShowDialog(false)}>
+                  <Button type="button" variant="outline" onClick={handleSetShowDialog}>
                     Cancel
                   </Button>
                   <Button type="submit">

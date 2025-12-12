@@ -2,7 +2,7 @@
  * DEPRECATED: Este módulo foi fundido no Travel Command Center
  * Redireciona para /travel-command
  */
-import { useEffect } from "react";;;
+import { useEffect, useCallback } from "react";;;
 import { useNavigate } from "react-router-dom";
 
 const Travel = () => {

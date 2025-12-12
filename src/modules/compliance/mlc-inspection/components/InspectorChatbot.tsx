@@ -1,4 +1,4 @@
-import { useState } from "react";;
+import { useState, useMemo, useCallback } from "react";;
 import React, { useState } from "react";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
@@ -129,7 +129,7 @@ export const InspectorChatbot = memo(function() {
             <Input
               placeholder="Ask about MLC regulations..."
               value={input}
-              onChange={(e) => setInput(e.target.value)}
+              onChange={handleChange}
               onKeyPress={handleKeyPress}
               disabled={loading}
             />

@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";;
+import { useEffect, useState, useCallback } from "react";;
 import React, { useState, useEffect } from "react";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
@@ -390,7 +390,7 @@ export default function IncidentReportsComplete() {
                 <Label>Título</Label>
                 <Input
                   value={newIncident.title}
-                  onChange={(e) => setNewIncident({...newIncident, title: e.target.value})}
+                  onChange={handleChange})}
                   placeholder="Título breve do incidente"
                 />
               </div>
@@ -398,7 +398,7 @@ export default function IncidentReportsComplete() {
                 <Label>Descrição</Label>
                 <Textarea
                   value={newIncident.description}
-                  onChange={(e) => setNewIncident({...newIncident, description: e.target.value})}
+                  onChange={handleChange})}
                   placeholder="Descreva o incidente detalhadamente"
                   rows={4}
                 />
@@ -439,7 +439,7 @@ export default function IncidentReportsComplete() {
                   <Label>Local</Label>
                   <Input
                     value={newIncident.incident_location}
-                    onChange={(e) => setNewIncident({...newIncident, incident_location: e.target.value})}
+                    onChange={handleChange})}
                     placeholder="Local do incidente"
                   />
                 </div>
@@ -460,7 +460,7 @@ export default function IncidentReportsComplete() {
               </div>
             </div>
             <DialogFooter>
-              <Button variant="outline" onClick={() => setIsCreateDialogOpen(false)}>
+              <Button variant="outline" onClick={handleSetIsCreateDialogOpen}>
                 Cancelar
               </Button>
               <Button onClick={createIncident}>
@@ -558,7 +558,7 @@ export default function IncidentReportsComplete() {
           <ScrollArea className="h-[600px]">
             <div className="space-y-4">
               {getFilteredIncidents().map((incident) => (
-                <Card key={incident.id} className="cursor-pointer hover:shadow-md transition-shadow" onClick={() => openIncidentDetail(incident)}>
+                <Card key={incident.id} className="cursor-pointer hover:shadow-md transition-shadow" onClick={() => handleopenIncidentDetail}>
                   <CardContent className="pt-4">
                     <div className="flex items-start justify-between">
                       <div className="flex-1 space-y-2">
@@ -710,7 +710,7 @@ export default function IncidentReportsComplete() {
                         <Label>Descrição</Label>
                         <Textarea
                           value={newFollowup.description}
-                          onChange={(e) => setNewFollowup({...newFollowup, description: e.target.value})}
+                          onChange={handleChange})}
                           placeholder="Descreva a atualização"
                           rows={3}
                         />
@@ -738,7 +738,7 @@ export default function IncidentReportsComplete() {
                 </TabsContent>
                 
                 <TabsContent value="actions" className="space-y-4">
-                  <Button onClick={() => exportToPDF(selectedIncident)} className="w-full">
+                  <Button onClick={() => handleexportToPDF} className="w-full">
                     <Download className="h-4 w-4 mr-2" />
                     Exportar para PDF
                   </Button>

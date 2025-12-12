@@ -1,5 +1,5 @@
 /**
-import { useEffect, useRef, useState } from "react";;
+import { useEffect, useRef, useState, useCallback, useMemo } from "react";;
  * Technical Diagnostic Assistant - PHASE 4
  * IA dedicada para apoiar engenheiros de bordo na diagnose de falhas técnicas
  */
@@ -319,7 +319,7 @@ Enquanto isso, verifiquei o histórico desta embarcação e não encontrei ocorr
               <Input
                 placeholder="Descreva o problema ou informe o código de erro..."
                 value={input}
-                onChange={(e) => setInput(e.target.value)}
+                onChange={handleChange}
                 onKeyDown={(e) => e.key === "Enter" && !isLoading && handleSend()}
                 disabled={isLoading}
               />
@@ -339,7 +339,7 @@ Enquanto isso, verifiquei o histórico desta embarcação e não encontrei ocorr
                   variant="ghost"
                   size="sm"
                   className="text-xs"
-                  onClick={() => setInput(suggestion)}
+                  onClick={handleSetInput}
                 >
                   {suggestion}
                 </Button>
@@ -372,7 +372,7 @@ Enquanto isso, verifiquei o histórico desta embarcação e não encontrei ocorr
                 {commonIssues.map((issue) => (
                   <button
                     key={issue.code}
-                    onClick={() => setInput(`Código de erro ${issue.code} no ${issue.equipment}`)}
+                    onClick={handleSetInput}
                     className="w-full text-left p-3 rounded-lg border hover:bg-muted transition-colors"
                   >
                     <div className="flex items-center justify-between">

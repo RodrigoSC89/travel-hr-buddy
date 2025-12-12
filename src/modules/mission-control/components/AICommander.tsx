@@ -1,4 +1,4 @@
-import { useState } from "react";;
+import { useState, useCallback } from "react";;
 import React, { useState } from "react";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
@@ -77,7 +77,7 @@ export const AICommander: React.FC = () => {
           <Input
             placeholder="Ask AI Commander... (e.g., 'status', 'fleet', 'weather')"
             value={query}
-            onChange={(e) => setQuery(e.target.value)}
+            onChange={handleChange}
             onKeyPress={handleKeyPress}
             className="flex-1 bg-zinc-900/50 border-zinc-700 text-white placeholder:text-zinc-500"
             disabled={isProcessing}
@@ -115,7 +115,7 @@ export const AICommander: React.FC = () => {
                 key={cmd}
                 variant="outline"
                 size="sm"
-                onClick={() => setQuery(cmd)}
+                onClick={handleSetQuery}
                 className="text-xs bg-zinc-800/50 border-zinc-700 hover:bg-zinc-700"
               >
                 {cmd}

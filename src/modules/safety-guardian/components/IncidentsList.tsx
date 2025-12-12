@@ -1,5 +1,5 @@
 /**
-import { useState } from "react";;
+import { useState, useCallback } from "react";;
  * Incidents List Component
  * Lista de ocorrências com filtros e ações
  */
@@ -97,14 +97,14 @@ export const IncidentsList: React.FC<IncidentsListProps> = ({
               <Input
                 placeholder="Buscar ocorrências..."
                 value={filters.searchTerm || ""}
-                onChange={(e) => onFilterChange({ ...filters, searchTerm: e.target.value })}
+                onChange={handleChange})}
                 className="pl-9"
               />
             </div>
             <Button
               variant="outline"
               size="icon"
-              onClick={() => setShowFilters(!showFilters)}
+              onClick={handleSetShowFilters}
               className={showFilters ? "bg-primary/10" : ""}
             >
               <Filter className="h-4 w-4" />
@@ -238,11 +238,11 @@ export const IncidentsList: React.FC<IncidentsListProps> = ({
                           </Button>
                         </DropdownMenuTrigger>
                         <DropdownMenuContent align="end">
-                          <DropdownMenuItem onClick={() => onViewDetails(incident)}>
+                          <DropdownMenuItem onClick={() => handleonViewDetails}>
                             <Eye className="h-4 w-4 mr-2" />
                             Ver Detalhes
                           </DropdownMenuItem>
-                          <DropdownMenuItem onClick={() => onAnalyze(incident)}>
+                          <DropdownMenuItem onClick={() => handleonAnalyze}>
                             <Brain className="h-4 w-4 mr-2" />
                             Analisar com IA
                           </DropdownMenuItem>

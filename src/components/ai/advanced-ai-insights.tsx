@@ -1,4 +1,4 @@
-import { useState } from "react";;
+import { useState, useCallback } from "react";;
 import React, { useState } from "react";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
@@ -192,7 +192,7 @@ const AdvancedAIInsights = () => {
         <div className="flex items-center gap-2">
           <Button 
             variant="outline"
-            onClick={() => toast({ title: "Relatório", description: "Exportando insights..." })}
+            onClick={() => handletoast}
           >
             <Download className="w-4 h-4 mr-2" />
             Exportar
@@ -327,7 +327,7 @@ const AdvancedAIInsights = () => {
                         {insight.estimatedSavings}
                       </span>
                     </div>
-                    <Button size="sm" variant="outline" onClick={() => handleImplementInsight(insight.title)}>
+                    <Button size="sm" variant="outline" onClick={() => handlehandleImplementInsight}>
                       Implementar
                     </Button>
                   </div>
@@ -501,7 +501,7 @@ const AdvancedAIInsights = () => {
                         </Badge>
                       </div>
                     </div>
-                    <Button onClick={() => handleImplementInsight(rec.title)}>Implementar</Button>
+                    <Button onClick={() => handlehandleImplementInsight}>Implementar</Button>
                   </div>
                 </CardContent>
               </Card>

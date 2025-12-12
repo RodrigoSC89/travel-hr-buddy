@@ -1,4 +1,4 @@
-import { useRef, useState } from "react";;
+import { useRef, useState, useCallback } from "react";;
 import React, { useState, useRef } from "react";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
@@ -315,14 +315,14 @@ const IntelligentDocumentManager = () => {
           <Input
             placeholder="Buscar documentos, tags ou conteúdo..."
             value={searchTerm}
-            onChange={(e) => setSearchTerm(e.target.value)}
+            onChange={handleChange}
             className="pl-10"
           />
         </div>
         
         <select 
           value={selectedCategory}
-          onChange={(e) => setSelectedCategory(e.target.value)}
+          onChange={handleChange}
           className="bg-background border border-border rounded px-3 py-2"
         >
           {categories.map(category => (
@@ -340,13 +340,13 @@ const IntelligentDocumentManager = () => {
             </Button>
           </DropdownMenuTrigger>
           <DropdownMenuContent>
-            <DropdownMenuItem onClick={() => setSortBy("lastModified")}>
+            <DropdownMenuItem onClick={handleSetSortBy}>
               Última modificação
             </DropdownMenuItem>
-            <DropdownMenuItem onClick={() => setSortBy("name")}>
+            <DropdownMenuItem onClick={handleSetSortBy}>
               Nome
             </DropdownMenuItem>
-            <DropdownMenuItem onClick={() => setSortBy("size")}>
+            <DropdownMenuItem onClick={handleSetSortBy}>
               Tamanho
             </DropdownMenuItem>
           </DropdownMenuContent>
@@ -356,14 +356,14 @@ const IntelligentDocumentManager = () => {
           <Button
             variant={viewMode === "grid" ? "default" : "outline"}
             size="sm"
-            onClick={() => setViewMode("grid")}
+            onClick={handleSetViewMode}
           >
             <Grid className="w-4 h-4" />
           </Button>
           <Button
             variant={viewMode === "list" ? "default" : "outline"}
             size="sm"
-            onClick={() => setViewMode("list")}
+            onClick={handleSetViewMode}
           >
             <List className="w-4 h-4" />
           </Button>
@@ -452,16 +452,16 @@ const IntelligentDocumentManager = () => {
                         <Eye className="w-4 h-4 mr-2" />
                         Visualizar
                       </DropdownMenuItem>
-                      <DropdownMenuItem onClick={() => shareDocument(document)}>
+                      <DropdownMenuItem onClick={() => handleshareDocument}>
                         <Share2 className="w-4 h-4 mr-2" />
                         Compartilhar
                       </DropdownMenuItem>
-                      <DropdownMenuItem onClick={() => analyzeDocument(document.id)}>
+                      <DropdownMenuItem onClick={() => handleanalyzeDocument}>
                         <Brain className="w-4 h-4 mr-2" />
                         Analisar IA
                       </DropdownMenuItem>
                       <DropdownMenuItem 
-                        onClick={() => deleteDocument(document.id)}
+                        onClick={() => handledeleteDocument}
                         className="text-red-600"
                       >
                         <Trash2 className="w-4 h-4 mr-2" />
@@ -481,7 +481,7 @@ const IntelligentDocumentManager = () => {
                     <Button
                       variant="ghost"
                       size="sm"
-                      onClick={() => toggleFavorite(document.id)}
+                      onClick={() => handletoggleFavorite}
                     >
                       {document.favorite ? 
                         <Star className="w-4 h-4 fill-yellow-400 text-yellow-400" /> :
@@ -551,7 +551,7 @@ const IntelligentDocumentManager = () => {
                     <Button variant="ghost" size="sm">
                       <Eye className="w-4 h-4" />
                     </Button>
-                    <Button variant="ghost" size="sm" onClick={() => shareDocument(document)}>
+                    <Button variant="ghost" size="sm" onClick={() => handleshareDocument}>
                       <Share2 className="w-4 h-4" />
                     </Button>
                     <DropdownMenu>
@@ -561,11 +561,11 @@ const IntelligentDocumentManager = () => {
                         </Button>
                       </DropdownMenuTrigger>
                       <DropdownMenuContent>
-                        <DropdownMenuItem onClick={() => analyzeDocument(document.id)}>
+                        <DropdownMenuItem onClick={() => handleanalyzeDocument}>
                           <Brain className="w-4 h-4 mr-2" />
                           Analisar IA
                         </DropdownMenuItem>
-                        <DropdownMenuItem onClick={() => deleteDocument(document.id)}>
+                        <DropdownMenuItem onClick={() => handledeleteDocument}>
                           <Trash2 className="w-4 h-4 mr-2" />
                           Excluir
                         </DropdownMenuItem>

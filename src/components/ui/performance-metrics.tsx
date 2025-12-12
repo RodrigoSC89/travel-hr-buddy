@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";;
+import { useEffect, useState, useCallback } from "react";;
 
 import React, { useState, useEffect } from "react";
 import { cn } from "@/lib/utils";
@@ -259,7 +259,7 @@ export const PerformanceMetrics = ({ className, compact = false }: PerformanceMe
           {["24h", "7d", "30d"].map((period) => (
             <button
               key={period}
-              onClick={() => setSelectedPeriod(period as unknown)}
+              onClick={handleSetSelectedPeriod}
               className={cn(
                 "px-3 py-1 rounded-lg text-sm font-medium transition-colors",
                 selectedPeriod === period

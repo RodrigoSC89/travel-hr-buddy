@@ -1,5 +1,5 @@
 /**
-import { useState } from "react";;
+import { useState, useCallback } from "react";;
  * Incident Details Dialog Component
  * Visualização detalhada de incidentes com análise de IA
  */
@@ -341,7 +341,7 @@ export const IncidentDetailsDialog: React.FC<IncidentDetailsDialogProps> = ({
         </Tabs>
 
         <div className="flex gap-3 pt-4 border-t">
-          <Button variant="outline" className="flex-1" onClick={() => onOpenChange(false)}>
+          <Button variant="outline" className="flex-1" onClick={() => handleonOpenChange}>
             Fechar
           </Button>
           <Button className="flex-1">Editar Ocorrência</Button>

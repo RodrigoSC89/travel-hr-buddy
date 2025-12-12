@@ -1,5 +1,5 @@
 /**
-import { useState } from "react";;
+import { useState, useMemo, useCallback } from "react";;
  * PEO-DP Audit Component
  * Interface para auditoria PEO-DP Inteligente
  */
@@ -137,7 +137,7 @@ export const PEODPAuditComponent = memo(function() {
                   id="vesselName"
                   placeholder="Ex: PSV Ocean Explorer"
                   value={vesselName}
-                  onChange={(e) => setVesselName(e.target.value)}
+                  onChange={handleChange}
                 />
               </div>
 

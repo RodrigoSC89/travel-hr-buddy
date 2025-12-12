@@ -1,4 +1,4 @@
-import { useState } from "react";;
+import { useState, useCallback } from "react";;
 import React, { useState } from "react";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
@@ -84,7 +84,7 @@ export const CreateAlertForm: React.FC<CreateAlertFormProps> = ({
             <Input
               id="product_name"
               value={formData.product_name}
-              onChange={(e) => setFormData({ ...formData, product_name: e.target.value })}
+              onChange={handleChange})}
               placeholder="Ex: Passagem São Paulo - Rio de Janeiro"
               required
             />
@@ -96,7 +96,7 @@ export const CreateAlertForm: React.FC<CreateAlertFormProps> = ({
               id="product_url"
               type="url"
               value={formData.product_url}
-              onChange={(e) => setFormData({ ...formData, product_url: e.target.value })}
+              onChange={handleChange})}
               placeholder="https://..."
               required
             />
@@ -107,7 +107,7 @@ export const CreateAlertForm: React.FC<CreateAlertFormProps> = ({
             <Input
               id="route"
               value={formData.route || ""}
-              onChange={(e) => setFormData({ ...formData, route: e.target.value })}
+              onChange={handleChange})}
               placeholder="Ex: GRU-SDU"
             />
           </div>
@@ -120,7 +120,7 @@ export const CreateAlertForm: React.FC<CreateAlertFormProps> = ({
                 type="number"
                 step="0.01"
                 value={formData.target_price}
-                onChange={(e) => setFormData({ ...formData, target_price: parseFloat(e.target.value) })}
+                onChange={handleChange})}
                 required
               />
             </div>
@@ -132,10 +132,7 @@ export const CreateAlertForm: React.FC<CreateAlertFormProps> = ({
                 type="number"
                 step="0.01"
                 value={formData.current_price || ""}
-                onChange={(e) => setFormData({ 
-                  ...formData, 
-                  current_price: e.target.value ? parseFloat(e.target.value) : undefined 
-                })}
+                onChange={handleChange})}
               />
             </div>
           </div>

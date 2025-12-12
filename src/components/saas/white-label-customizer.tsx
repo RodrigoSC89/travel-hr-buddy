@@ -1,4 +1,4 @@
-import { useState } from "react";;
+import { useState, useCallback } from "react";;
 import React, { useState } from "react";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
@@ -216,7 +216,7 @@ export const WhiteLabelCustomizer: React.FC = () => {
                   <Input
                     id="company_name"
                     value={formData.company_name}
-                    onChange={(e) => handleInputChange("company_name", e.target.value)}
+                    onChange={handleChange}
                     placeholder="Digite o nome da sua empresa"
                   />
                 </div>
@@ -226,7 +226,7 @@ export const WhiteLabelCustomizer: React.FC = () => {
                     <Input
                       id="logo_url"
                       value={formData.logo_url}
-                      onChange={(e) => handleInputChange("logo_url", e.target.value)}
+                      onChange={handleChange}
                       placeholder="https://exemplo.com/logo.png"
                     />
                     <Button variant="outline" size="icon">
@@ -242,7 +242,7 @@ export const WhiteLabelCustomizer: React.FC = () => {
                   <Input
                     id="favicon_url"
                     value={formData.favicon_url}
-                    onChange={(e) => handleInputChange("favicon_url", e.target.value)}
+                    onChange={handleChange}
                     placeholder="https://exemplo.com/favicon.ico"
                   />
                   <Button variant="outline" size="icon">
@@ -274,12 +274,12 @@ export const WhiteLabelCustomizer: React.FC = () => {
                       type="color"
                       id="primary_color"
                       value={formData.primary_color}
-                      onChange={(e) => handleInputChange("primary_color", e.target.value)}
+                      onChange={handleChange}
                       className="w-12 h-10 border rounded cursor-pointer"
                     />
                     <Input
                       value={formData.primary_color}
-                      onChange={(e) => handleInputChange("primary_color", e.target.value)}
+                      onChange={handleChange}
                       placeholder="#2563eb"
                     />
                   </div>
@@ -292,12 +292,12 @@ export const WhiteLabelCustomizer: React.FC = () => {
                       type="color"
                       id="secondary_color"
                       value={formData.secondary_color}
-                      onChange={(e) => handleInputChange("secondary_color", e.target.value)}
+                      onChange={handleChange}
                       className="w-12 h-10 border rounded cursor-pointer"
                     />
                     <Input
                       value={formData.secondary_color}
-                      onChange={(e) => handleInputChange("secondary_color", e.target.value)}
+                      onChange={handleChange}
                       placeholder="#64748b"
                     />
                   </div>
@@ -310,12 +310,12 @@ export const WhiteLabelCustomizer: React.FC = () => {
                       type="color"
                       id="accent_color"
                       value={formData.accent_color}
-                      onChange={(e) => handleInputChange("accent_color", e.target.value)}
+                      onChange={handleChange}
                       className="w-12 h-10 border rounded cursor-pointer"
                     />
                     <Input
                       value={formData.accent_color}
-                      onChange={(e) => handleInputChange("accent_color", e.target.value)}
+                      onChange={handleChange}
                       placeholder="#7c3aed"
                     />
                   </div>

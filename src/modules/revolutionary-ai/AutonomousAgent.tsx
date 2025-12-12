@@ -1,5 +1,5 @@
 /**
-import { useEffect, useState } from "react";;
+import { useEffect, useState, useCallback, useMemo } from "react";;
  * REVOLUTIONARY AI - Autonomous Agent (AI Ops)
  * Funcionalidade 6 & 10: Gestor Digital Autônomo + Agente Autônomo de Decisão
  */
@@ -270,7 +270,7 @@ export const AutonomousAgent = memo(function() {
                           className={`cursor-pointer transition-all hover:border-primary/50 ${
                             selectedAction?.id === action.id ? "border-primary ring-2 ring-primary/20" : ""
                           }`}
-                          onClick={() => setSelectedAction(action)}
+                          onClick={handleSetSelectedAction}
                         >
                           <CardContent className="p-4">
                             <div className="flex items-start gap-3">
@@ -406,7 +406,7 @@ export const AutonomousAgent = memo(function() {
                     <div className="flex gap-2 pt-2">
                       <Button 
                         className="flex-1 bg-green-600 hover:bg-green-700"
-                        onClick={() => handleApprove(selectedAction.id)}
+                        onClick={() => handlehandleApprove}
                       >
                         <ThumbsUp className="h-4 w-4 mr-2" />
                         Aprovar
@@ -414,7 +414,7 @@ export const AutonomousAgent = memo(function() {
                       <Button 
                         variant="destructive"
                         className="flex-1"
-                        onClick={() => handleReject(selectedAction.id)}
+                        onClick={() => handlehandleReject}
                       >
                         <ThumbsDown className="h-4 w-4 mr-2" />
                         Rejeitar

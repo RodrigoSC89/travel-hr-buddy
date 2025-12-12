@@ -1,5 +1,5 @@
 /**
-import { useCallback, useEffect, useRef, useState } from "react";;
+import { useCallback, useMemo, useEffect, useRef, useState } from "react";;
  * REVOLUTIONARY AI - Natural Language Command Interface
  * Funcionalidade 1: Comando Universal por Linguagem Natural
  */
@@ -169,7 +169,7 @@ export const NaturalLanguageCommand = memo(function() {
             <Textarea
               ref={textareaRef}
               value={command}
-              onChange={(e) => setCommand(e.target.value)}
+              onChange={handleChange}
               placeholder="Ex: 'Agende manutenção preventiva para o motor principal do Navio Atlas na próxima semana'"
               className="min-h-[100px] pr-24 resize-none bg-background/50 border-border/50 focus:border-primary/50"
               onKeyDown={(e) => {
@@ -221,7 +221,7 @@ export const NaturalLanguageCommand = memo(function() {
                       initial={{ opacity: 0, scale: 0.9 }}
                       animate={{ opacity: 1, scale: 1 }}
                       transition={{ delay: i * 0.1 }}
-                      onClick={() => handleSuggestionClick(suggestion)}
+                      onClick={() => handlehandleSuggestionClick}
                       className={`px-3 py-1.5 rounded-full text-xs border transition-all hover:scale-105 ${getCategoryColor(suggestion.category)}`}
                     >
                       {suggestion.text.substring(0, 40)}...
@@ -239,7 +239,7 @@ export const NaturalLanguageCommand = memo(function() {
               {COMMAND_EXAMPLES.map((ex, i) => (
                 <button
                   key={i}
-                  onClick={() => setCommand(ex.text)}
+                  onClick={handleSetCommand}
                   className="text-xs px-2 py-1 rounded bg-muted/50 hover:bg-muted transition-colors text-muted-foreground hover:text-foreground"
                 >
                   {ex.text.substring(0, 35)}...

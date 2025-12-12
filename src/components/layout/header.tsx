@@ -48,7 +48,7 @@ export const Header: React.FC = () => {
                     variant="ghost"
                     size="sm"
                     className="h-9 w-9 p-0 cursor-pointer hover:bg-accent transition-colors"
-                    onClick={() => navigate("/settings")}
+                    onClick={() => handlenavigate}
                     aria-label="Configurações"
                   >
                     <Settings className="h-4 w-4 text-foreground" />

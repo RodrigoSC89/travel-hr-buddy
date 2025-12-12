@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";;
+import { useEffect, useState, useCallback, useMemo } from "react";;
 import React, { useState, useEffect } from "react";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
@@ -118,7 +118,7 @@ const DashboardKPIWidget: React.FC<{
             <Button 
               variant="ghost" 
               size="sm" 
-              onClick={() => onExport(kpi.id, "excel")}
+              onClick={() => handleonExport}
               className="opacity-0 group-hover:opacity-100 transition-opacity"
             >
               <Download className="h-3 w-3" />
@@ -189,7 +189,7 @@ const DashboardExportPanel: React.FC<{
             <Button 
               variant="outline" 
               size="sm"
-              onClick={() => onExport(option.format)}
+              onClick={() => handleonExport}
               disabled={isExporting}
             >
               {isExporting ? (
@@ -204,7 +204,7 @@ const DashboardExportPanel: React.FC<{
         
         <div className="pt-4 border-t">
           <Button 
-            onClick={() => onExport("full")}
+            onClick={() => handleonExport}
             disabled={isExporting}
             className="w-full"
           >
@@ -275,7 +275,7 @@ const DashboardFilters: React.FC<{
               <input 
                 type="date" 
                 value={dateRange.start}
-                onChange={(e) => setDateRange(prev => ({ ...prev, start: e.target.value }))}
+                onChange={handleChange}))}
                 className="w-full mt-1 px-3 py-2 text-sm border rounded-md"
               />
             </div>
@@ -284,7 +284,7 @@ const DashboardFilters: React.FC<{
               <input 
                 type="date" 
                 value={dateRange.end}
-                onChange={(e) => setDateRange(prev => ({ ...prev, end: e.target.value }))}
+                onChange={handleChange}))}
                 className="w-full mt-1 px-3 py-2 text-sm border rounded-md"
               />
             </div>
@@ -300,10 +300,7 @@ const DashboardFilters: React.FC<{
                 <input 
                   type="checkbox" 
                   checked={selectedModules.includes(module.id)}
-                  onChange={(e) => {
-                    if (e.target.checked) {
-                      setSelectedModules(prev => [...prev, module.id]);
-                    } else {
+                  onChange={handleChange} else {
                       setSelectedModules(prev => prev.filter(id => id !== module.id));
                     }
                   }}
@@ -324,10 +321,7 @@ const DashboardFilters: React.FC<{
                 <input 
                   type="checkbox" 
                   checked={selectedVessels.includes(vessel.id)}
-                  onChange={(e) => {
-                    if (e.target.checked) {
-                      setSelectedVessels(prev => [...prev, vessel.id]);
-                    } else {
+                  onChange={handleChange} else {
                       setSelectedVessels(prev => prev.filter(id => id !== vessel.id));
                     }
                   }}

@@ -1,5 +1,5 @@
 /**
-import { useEffect, useRef, useState } from "react";;
+import { useEffect, useRef, useState, useCallback, useMemo } from "react";;
  * Lazy-loaded Mapbox wrapper to reduce initial bundle size (~350KB savings)
  */
 

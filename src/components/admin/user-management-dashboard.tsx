@@ -1,4 +1,4 @@
-import { useState } from "react";;
+import { useState, useCallback } from "react";;
 
 import React, { useState } from "react";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
@@ -253,7 +253,7 @@ const UserManagementDashboard = () => {
                       id="search"
                       placeholder="Nome ou email..."
                       value={searchTerm}
-                      onChange={(e) => setSearchTerm(e.target.value)}
+                      onChange={handleChange}
                       className="pl-10"
                     />
                   </div>
@@ -340,21 +340,21 @@ const UserManagementDashboard = () => {
                           <Button 
                             size="sm" 
                             variant="outline"
-                            onClick={() => handleUserAction("Editar", user.id)}
+                            onClick={() => handlehandleUserAction}
                           >
                             <Edit className="w-4 h-4" />
                           </Button>
                           <Button 
                             size="sm" 
                             variant="outline"
-                            onClick={() => handleUserAction("Configurar", user.id)}
+                            onClick={() => handlehandleUserAction}
                           >
                             <Settings className="w-4 h-4" />
                           </Button>
                           <Button 
                             size="sm" 
                             variant="outline"
-                            onClick={() => handleUserAction("Desativar", user.id)}
+                            onClick={() => handlehandleUserAction}
                           >
                             <Trash2 className="w-4 h-4" />
                           </Button>

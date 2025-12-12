@@ -1,4 +1,4 @@
-import { useCallback, useEffect, useState } from "react";;
+import { useCallback, useMemo, useEffect, useState } from "react";;
 
 import React, { useState, useEffect, useCallback } from "react";
 import { Card, CardHeader, CardTitle, CardContent } from "@/components/ui/card";
@@ -339,21 +339,21 @@ export const AISuggestionsPanel: React.FC = () => {
           <Button
             variant={filter === "all" ? "default" : "outline"}
             size="sm"
-            onClick={() => setFilter("all")}
+            onClick={handleSetFilter}
           >
             Todas
           </Button>
           <Button
             variant={filter === "action" ? "default" : "outline"}
             size="sm"
-            onClick={() => setFilter("action")}
+            onClick={handleSetFilter}
           >
             Ações
           </Button>
           <Button
             variant={filter === "optimization" ? "default" : "outline"}
             size="sm"
-            onClick={() => setFilter("optimization")}
+            onClick={handleSetFilter}
           >
             Otimizações
           </Button>
@@ -424,7 +424,7 @@ export const AISuggestionsPanel: React.FC = () => {
                           {(suggestion.type === "action" || suggestion.action_data?.route) && !suggestion.is_acted_upon && (
                             <Button
                               size="sm"
-                              onClick={() => handleAction(suggestion, "accept")}
+                              onClick={() => handlehandleAction}
                               className="h-8 px-3"
                             >
                               Executar
@@ -434,7 +434,7 @@ export const AISuggestionsPanel: React.FC = () => {
                           <Button
                             variant="ghost"
                             size="sm"
-                            onClick={() => handleAction(suggestion, "dismiss")}
+                            onClick={() => handlehandleAction}
                             className="h-8 w-8 p-0"
                           >
                             <X className="w-4 h-4" />

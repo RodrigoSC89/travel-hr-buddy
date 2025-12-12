@@ -1,5 +1,5 @@
 /**
-import { useState } from "react";;
+import { useState, useCallback } from "react";;
  * Example React components showing how to use the MMI Jobs Similarity Search API
  * 
  * These components demonstrate both GET and POST modes of operation
@@ -44,7 +44,7 @@ export const SimilarJobsByIdExample = memo(function() {
           <Input
             placeholder="Enter job ID..."
             value={jobId}
-            onChange={(e) => setJobId(e.target.value)}
+            onChange={handleChange}
           />
           <Button onClick={handleSearch} disabled={loading || !jobId}>
             {loading ? <Loader2 className="h-4 w-4 animate-spin" /> : "Search"}
@@ -96,7 +96,7 @@ export const SemanticSearchExample = memo(function() {
           <Input
             placeholder="Enter search query..."
             value={query}
-            onChange={(e) => setQuery(e.target.value)}
+            onChange={handleChange}
           />
           <Button onClick={handleSearch} disabled={loading || !query}>
             {loading ? <Loader2 className="h-4 w-4 animate-spin" /> : "Search"}
@@ -158,7 +158,7 @@ export const DuplicateDetectionExample = memo(function() {
           <Input
             placeholder="Describe the job..."
             value={query}
-            onChange={(e) => setQuery(e.target.value)}
+            onChange={handleChange}
           />
           <Button onClick={handleCheckDuplicates} disabled={loading || !query}>
             {loading ? <Loader2 className="h-4 w-4 animate-spin" /> : "Check"}

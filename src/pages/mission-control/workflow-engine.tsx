@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";;
+import { useEffect, useState, useCallback } from "react";;
 import React, { useState, useEffect } from "react";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
@@ -165,7 +165,7 @@ const WorkflowEngine = () => {
             </p>
           </div>
         </div>
-        <Button onClick={() => setIsCreating(!isCreating)}>
+        <Button onClick={handleSetIsCreating}>
           <Plus className="h-4 w-4 mr-2" />
           Novo Workflow
         </Button>
@@ -213,7 +213,7 @@ const WorkflowEngine = () => {
               <Label>Nome do Workflow</Label>
               <Input
                 value={newWorkflow.name}
-                onChange={(e) => setNewWorkflow({ ...newWorkflow, name: e.target.value })}
+                onChange={handleChange})}
                 placeholder="Ex: Análise Diária de Saúde"
               />
             </div>
@@ -222,7 +222,7 @@ const WorkflowEngine = () => {
               <Label>Descrição</Label>
               <Textarea
                 value={newWorkflow.description}
-                onChange={(e) => setNewWorkflow({ ...newWorkflow, description: e.target.value })}
+                onChange={handleChange})}
                 placeholder="Descreva o objetivo deste workflow"
                 rows={2}
               />
@@ -247,7 +247,7 @@ const WorkflowEngine = () => {
                           <Button
                             size="sm"
                             variant="ghost"
-                            onClick={() => removeStep(index)}
+                            onClick={() => handleremoveStep}
                           >
                             <Trash2 className="h-3 w-3" />
                           </Button>
@@ -255,7 +255,7 @@ const WorkflowEngine = () => {
 
                         <Input
                           value={step.name}
-                          onChange={(e) => updateStep(index, "name", e.target.value)}
+                          onChange={handleChange}
                           placeholder="Nome do passo"
                         />
 
@@ -275,7 +275,7 @@ const WorkflowEngine = () => {
 
                         <Textarea
                           value={step.description}
-                          onChange={(e) => updateStep(index, "description", e.target.value)}
+                          onChange={handleChange}
                           placeholder="Descrição ou prompt"
                           rows={2}
                         />
@@ -284,9 +284,7 @@ const WorkflowEngine = () => {
                           <input
                             type="checkbox"
                             checked={step.requires_approval}
-                            onChange={(e) =>
-                              updateStep(index, "requires_approval", e.target.checked)
-                            }
+                            onChange={handleChange}
                             className="rounded"
                           />
                           <Label className="text-sm">Requer aprovação manual</Label>
@@ -300,7 +298,7 @@ const WorkflowEngine = () => {
 
             <div className="flex gap-2">
               <Button onClick={createWorkflow}>Criar Workflow</Button>
-              <Button variant="outline" onClick={() => setIsCreating(false)}>
+              <Button variant="outline" onClick={handleSetIsCreating}>
                 Cancelar
               </Button>
             </div>
@@ -333,7 +331,7 @@ const WorkflowEngine = () => {
                         </div>
                       </div>
                       <Button
-                        onClick={() => executeWorkflow(workflow.id!)}
+                        onClick={() => handleexecuteWorkflow}
                         disabled={!!activeExecution}
                       >
                         <Play className="h-4 w-4 mr-2" />

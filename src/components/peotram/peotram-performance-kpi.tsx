@@ -1,4 +1,4 @@
-import { useState } from "react";;
+import { useState, useMemo, useCallback } from "react";;
 import React, { useState } from "react";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
@@ -402,7 +402,7 @@ export const PeotramPerformanceKPI: React.FC = () => {
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
             {Object.entries(categoryStats).map(([category, count]) => (
               <Card key={category} className="cursor-pointer hover:shadow-md transition-shadow"
-                onClick={() => setSelectedCategory(category)}>
+                onClick={handleSetSelectedCategory}>
                 <CardContent key={CardContent.id || index} className="p-6 text-center">
                   <div className={`inline-flex items-center justify-center w-12 h-12 rounded-full mb-4 ${getCategoryColor(category)}`}>
                     {getCategoryIcon(category)}

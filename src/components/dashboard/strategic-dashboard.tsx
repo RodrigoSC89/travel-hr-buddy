@@ -1,4 +1,4 @@
-import { useCallback, useEffect, useRef, useState } from "react";;
+import { useCallback, useMemo, useEffect, useRef, useState } from "react";;
 import React, { useState, useEffect, useCallback, useRef } from "react";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
@@ -412,7 +412,7 @@ const StrategicDashboard: React.FC = () => {
               <Input
                 placeholder="Buscar métricas, alertas, atividades..."
                 value={searchTerm}
-                onChange={(e) => setSearchTerm(e.target.value)}
+                onChange={handleChange}
                 className="pl-10"
               />
             </div>
@@ -624,7 +624,7 @@ const StrategicDashboard: React.FC = () => {
                       key={item.title}
                       variant="outline" 
                       className="h-20 flex flex-col items-center gap-2 hover:shadow-md transition-all"
-                      onClick={() => navigate(item.route)}
+                      onClick={() => handlenavigate}
                     >
                       <item.icon className={`h-6 w-6 ${item.color}`} />
                       <span className="text-sm font-medium">{item.title}</span>

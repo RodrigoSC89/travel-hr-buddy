@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";;
+import { useEffect, useState, useCallback } from "react";;
 import React, { useState, useEffect } from "react";
 import { cn } from "@/lib/utils";
 import { 
@@ -167,7 +167,7 @@ export const NotificationSystem = ({ className }: NotificationSystemProps) => {
     <div className={cn("relative", className)}>
       {/* Notification Bell */}
       <button
-        onClick={() => setIsOpen(!isOpen)}
+        onClick={handleSetIsOpen}
         className="relative p-2 rounded-lg hover:bg-azure-600/20 transition-colors"
       >
         <Bell size={20} className="text-azure-50" />
@@ -188,7 +188,7 @@ export const NotificationSystem = ({ className }: NotificationSystemProps) => {
         <>
           <div 
             className="fixed inset-0 z-40" 
-            onClick={() => setIsOpen(false)}
+            onClick={handleSetIsOpen}
           />
           <div className="absolute right-0 top-12 w-96 max-h-[500px] bg-card border border-border rounded-xl shadow-nautical z-50 overflow-hidden">
             {/* Header */}
@@ -205,7 +205,7 @@ export const NotificationSystem = ({ className }: NotificationSystemProps) => {
                     Marcar como lidas
                   </Button>
                   <button
-                    onClick={() => setIsOpen(false)}
+                    onClick={handleSetIsOpen}
                     className="p-1 hover:bg-azure-600/20 rounded text-azure-50"
                   >
                     <X size={16} />
@@ -218,7 +218,7 @@ export const NotificationSystem = ({ className }: NotificationSystemProps) => {
                 {["all", "unread", "critical"].map((filterType) => (
                   <button
                     key={filterType}
-                    onClick={() => setFilter(filterType as unknown)}
+                    onClick={handleSetFilter}
                     className={cn(
                       "px-3 py-1 rounded-lg text-xs font-medium transition-colors",
                       filter === filterType
@@ -251,7 +251,7 @@ export const NotificationSystem = ({ className }: NotificationSystemProps) => {
                         "p-4 border-b border-border hover:bg-accent/50 transition-colors cursor-pointer",
                         !notification.read && "bg-accent/20"
                       )}
-                      onClick={() => markAsRead(notification.id)}
+                      onClick={() => handlemarkAsRead}
                     >
                       <div className="flex items-start space-x-3">
                         <div className={cn(

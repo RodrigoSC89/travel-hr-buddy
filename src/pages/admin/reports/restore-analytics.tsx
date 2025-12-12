@@ -2,7 +2,7 @@
 
 "use client";
 
-import { useEffect, useState } from "react";;;
+import { useEffect, useState, useCallback } from "react";;;
 import { useNavigate } from "react-router-dom";
 import { supabase } from "@/integrations/supabase/client";
 import { Card } from "@/components/ui/card";
@@ -239,7 +239,7 @@ export default function RestoreAnalyticsPage() {
         <Button
           variant="ghost"
           size="sm"
-          onClick={() => navigate("/admin")}
+          onClick={() => handlenavigate}
         >
           <ArrowLeft className="w-4 h-4 mr-2" />
           Voltar
@@ -252,7 +252,7 @@ export default function RestoreAnalyticsPage() {
         <Input
           placeholder="Filtrar por e-mail"
           value={filterEmail}
-          onChange={(e) => setFilterEmail(e.target.value)}
+          onChange={handleChange}
         />
         <Button onClick={fetchStats} disabled={loading}>
           🔍 Buscar

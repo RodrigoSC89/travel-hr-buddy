@@ -1,4 +1,4 @@
-import { useState } from "react";;
+import { useState, useCallback } from "react";;
 
 import React, { useState } from "react";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
@@ -399,7 +399,7 @@ export default function SGSOAuditEditor() {
                     <Label>Comentários</Label>
                     <Textarea
                       value={result.comments}
-                      onChange={(e) => handleUpdateResult(index, { comments: e.target.value })}
+                      onChange={handleChange})}
                       placeholder="Observações, evidências e ações necessárias..."
                       rows={3}
                     />

@@ -1,4 +1,4 @@
-import { useEffect, useRef, useState } from "react";;
+import { useEffect, useRef, useState, useCallback, useMemo } from "react";;
 import React, { useState, useRef, useEffect } from "react";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
@@ -285,7 +285,7 @@ export const AIAssistant: React.FC<AIAssistantProps> = ({
                   key={index}
                   variant="outline"
                   className="cursor-pointer hover:bg-accent"
-                  onClick={() => handleSuggestionClick(suggestion)}
+                  onClick={() => handlehandleSuggestionClick}
                 >
                   <Lightbulb className="w-3 h-3 mr-1" />
                   {suggestion}
@@ -302,7 +302,7 @@ export const AIAssistant: React.FC<AIAssistantProps> = ({
                   key={index}
                   variant="outline"
                   size="sm"
-                  onClick={() => handleActionClick(action.action, action.data)}
+                  onClick={() => handlehandleActionClick}
                   className="h-8"
                 >
                   <Sparkles className="w-3 h-3 mr-1" />
@@ -353,7 +353,7 @@ export const AIAssistant: React.FC<AIAssistantProps> = ({
         <div className="flex gap-2 pt-4 border-t">
           <Input
             value={input}
-            onChange={(e) => setInput(e.target.value)}
+            onChange={handleChange}
             placeholder="Digite sua mensagem ou use o microfone..."
             onKeyPress={(e) => e.key === "Enter" && handleSendMessage()}
             className="flex-1"

@@ -1,4 +1,4 @@
-import { useCallback, useEffect, useRef, useState } from "react";;
+import { useCallback, useMemo, useEffect, useRef, useState } from "react";;
 import React, { useState, useEffect, useRef, useCallback } from "react";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
@@ -542,7 +542,7 @@ const EnhancedAIChatbot: React.FC = () => {
                         <Input
                           ref={inputRef}
                           value={inputMessage}
-                          onChange={(e) => setInputMessage(e.target.value)}
+                          onChange={handleChange}
                           placeholder="Digite sua pergunta... (Ctrl+K para focar, Ctrl+Enter para enviar)"
                           onKeyPress={(e) => {
                             if (e.key === "Enter" && !e.shiftKey) {
@@ -665,7 +665,7 @@ const EnhancedAIChatbot: React.FC = () => {
                             variant="ghost"
                             size="sm"
                             className="w-full text-left justify-start h-auto py-3 px-3 hover:bg-primary/5 group transition-all duration-300"
-                            onClick={() => handleQuickCommand(command.text, command.category)}
+                            onClick={() => handlehandleQuickCommand}
                           >
                             <command.icon className="w-4 h-4 mr-2 group-hover:scale-110 transition-transform" />
                             <span className="text-xs leading-relaxed">{command.text}</span>

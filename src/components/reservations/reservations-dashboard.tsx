@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";;
+import { useEffect, useState, useCallback } from "react";;
 import React, { useState, useEffect } from "react";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
@@ -247,7 +247,7 @@ export const ReservationsDashboard: React.FC = () => {
                 <label className="text-sm font-medium">Título</label>
                 <Input
                   value={formData.title}
-                  onChange={(e) => setFormData({ ...formData, title: e.target.value })}
+                  onChange={handleChange})}
                   placeholder="Título da reserva"
                   required
                 />
@@ -276,7 +276,7 @@ export const ReservationsDashboard: React.FC = () => {
                   <Input
                     type="datetime-local"
                     value={formData.start_date}
-                    onChange={(e) => setFormData({ ...formData, start_date: e.target.value })}
+                    onChange={handleChange})}
                     required
                   />
                 </div>
@@ -285,7 +285,7 @@ export const ReservationsDashboard: React.FC = () => {
                   <Input
                     type="datetime-local"
                     value={formData.end_date}
-                    onChange={(e) => setFormData({ ...formData, end_date: e.target.value })}
+                    onChange={handleChange})}
                     required
                   />
                 </div>
@@ -294,7 +294,7 @@ export const ReservationsDashboard: React.FC = () => {
                 <label className="text-sm font-medium">Local</label>
                 <Input
                   value={formData.location}
-                  onChange={(e) => setFormData({ ...formData, location: e.target.value })}
+                  onChange={handleChange})}
                   placeholder="Local da reserva"
                 />
               </div>
@@ -302,7 +302,7 @@ export const ReservationsDashboard: React.FC = () => {
                 <label className="text-sm font-medium">Descrição</label>
                 <Textarea
                   value={formData.description}
-                  onChange={(e) => setFormData({ ...formData, description: e.target.value })}
+                  onChange={handleChange})}
                   placeholder="Descrição adicional"
                   rows={3}
                 />
@@ -332,7 +332,7 @@ export const ReservationsDashboard: React.FC = () => {
                 <Button
                   type="button"
                   variant="outline"
-                  onClick={() => setIsDialogOpen(false)}
+                  onClick={handleSetIsDialogOpen}
                 >
                   Cancelar
                 </Button>
@@ -436,7 +436,7 @@ export const ReservationsDashboard: React.FC = () => {
                 <Button
                   variant="outline"
                   size="sm"
-                  onClick={() => openEditDialog(reservation)}
+                  onClick={() => handleopenEditDialog}
                   className="flex-1"
                 >
                   <Edit className="h-4 w-4 mr-1" />
@@ -445,7 +445,7 @@ export const ReservationsDashboard: React.FC = () => {
                 <Button
                   variant="outline"
                   size="sm"
-                  onClick={() => handleDelete(reservation.id)}
+                  onClick={() => handlehandleDelete}
                   className="text-red-600 hover:text-red-700"
                 >
                   <Trash2 className="h-4 w-4" />

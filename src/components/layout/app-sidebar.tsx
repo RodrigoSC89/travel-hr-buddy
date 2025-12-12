@@ -1,4 +1,4 @@
-import { useMemo, useState } from "react";;
+import { useMemo, useState, useCallback } from "react";;
 import React, { useState, useMemo } from "react";
 import { useSidebarActions } from "@/hooks/use-sidebar-actions";
 import { 
@@ -914,7 +914,7 @@ export const AppSidebar = memo(function({ activeItem, onItemChange }: AppSidebar
                                 {item.items.map((subItem) => (
                                   <SidebarMenuSubItem key={subItem.url || subItem.title}>
                                     <SidebarMenuSubButton 
-                                      onClick={() => handleItemClick(subItem.url || "")}
+                                      onClick={() => handlehandleItemClick}
                                       isActive={isItemActive(subItem.url || "")}
                                       className="w-full focus:outline-none focus-visible:ring-2 focus-visible:ring-[var(--nautilus-primary)]"
                                       tabIndex={0}
@@ -938,7 +938,7 @@ export const AppSidebar = memo(function({ activeItem, onItemChange }: AppSidebar
                   return (
                     <SidebarMenuItem key={item.url || item.title}>
                       <SidebarMenuButton 
-                        onClick={() => handleItemClick(item.url ?? "")}
+                        onClick={() => handlehandleItemClick}
                         isActive={isItemActive(item.url ?? "")}
                         className="w-full justify-start focus:outline-none focus-visible:ring-2 focus-visible:ring-[var(--nautilus-primary)]"
                         title={collapsed ? item.title : undefined}
@@ -957,7 +957,7 @@ export const AppSidebar = memo(function({ activeItem, onItemChange }: AppSidebar
                 {canAccessModule("admin") && !hasUrl("/admin") && (
                   <SidebarMenuItem>
                     <SidebarMenuButton 
-                      onClick={() => handleItemClick("/admin")}
+                      onClick={() => handlehandleItemClick}
                       isActive={isItemActive("/admin")}
                       className="w-full justify-start"
                       title={collapsed ? "Administração" : undefined}
@@ -972,7 +972,7 @@ export const AppSidebar = memo(function({ activeItem, onItemChange }: AppSidebar
                 {!hasUrl("/automation") && (
                   <SidebarMenuItem>
                     <SidebarMenuButton 
-                      onClick={() => handleItemClick("/automation")}
+                      onClick={() => handlehandleItemClick}
                       isActive={isItemActive("/automation")}
                       className="w-full justify-start"
                       title={collapsed ? "Automação IA" : undefined}
@@ -987,7 +987,7 @@ export const AppSidebar = memo(function({ activeItem, onItemChange }: AppSidebar
                 {userRole === "admin" && (
                   <SidebarMenuItem>
                     <SidebarMenuButton 
-                      onClick={() => navigate("/saas-manager")}
+                      onClick={() => handlenavigate}
                       isActive={location.pathname === "/saas-manager"}
                       className="w-full justify-start"
                       title={collapsed ? "SaaS Manager" : undefined}
@@ -1002,7 +1002,7 @@ export const AppSidebar = memo(function({ activeItem, onItemChange }: AppSidebar
                 {(userRole === "admin" || userRole === "hr_manager" || userRole === "department_manager") && !hasUrl("/executive-dashboard") && (
                   <SidebarMenuItem>
                     <SidebarMenuButton 
-                      onClick={() => handleItemClick("/executive-dashboard")}
+                      onClick={() => handlehandleItemClick}
                       isActive={isItemActive("/executive-dashboard")}
                       className="w-full justify-start"
                       title={collapsed ? "Dashboard Executivo" : undefined}
@@ -1016,7 +1016,7 @@ export const AppSidebar = memo(function({ activeItem, onItemChange }: AppSidebar
                 {/* Visão Geral do Sistema */}
                 <SidebarMenuItem>
                   <SidebarMenuButton 
-                    onClick={() => handleItemClick("system-overview")}
+                    onClick={() => handlehandleItemClick}
                     isActive={isItemActive("system-overview")}
                     className="w-full justify-start"
                     title={collapsed ? "Visão Geral" : undefined}

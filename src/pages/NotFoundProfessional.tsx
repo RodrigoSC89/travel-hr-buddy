@@ -108,7 +108,7 @@ const NotFoundProfessional: React.FC = () => {
                         key={route.path}
                         variant="outline"
                         className="justify-start h-auto py-3"
-                        onClick={() => navigate(route.path)}
+                        onClick={() => handlenavigate}
                       >
                         <Icon className="h-4 w-4 mr-2 text-primary" />
                         <span className="text-sm">{route.label}</span>
@@ -122,14 +122,14 @@ const NotFoundProfessional: React.FC = () => {
               <div className="flex flex-col sm:flex-row gap-3">
                 <Button
                   variant="outline"
-                  onClick={() => navigate(-1)}
+                  onClick={() => handlenavigate}
                   className="flex-1"
                 >
                   <ArrowLeft className="h-4 w-4 mr-2" />
                   Voltar
                 </Button>
                 <Button
-                  onClick={() => navigate("/")}
+                  onClick={() => handlenavigate}
                   className="flex-1 bg-gradient-to-r from-primary to-primary/80"
                 >
                   <Home className="h-4 w-4 mr-2" />

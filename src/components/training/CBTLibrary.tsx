@@ -1,4 +1,4 @@
-import { memo, memo, useMemo, useState } from "react";;;
+import { memo, memo, useMemo, useState, useCallback } from "react";;;
 import { useQuery } from "@tanstack/react-query";
 import { supabase } from "@/integrations/supabase/client";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
@@ -217,7 +217,7 @@ export const CBTLibrary = memo(function() {
             placeholder="Buscar cursos..." 
             className="pl-10 bg-muted/30"
             value={searchQuery}
-            onChange={(e) => setSearchQuery(e.target.value)}
+            onChange={handleChange}
           />
         </div>
         <Select value={filterCategory} onValueChange={setFilterCategory}>

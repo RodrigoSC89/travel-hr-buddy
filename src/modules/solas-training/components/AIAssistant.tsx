@@ -1,4 +1,4 @@
-import { useEffect, useRef, useState } from "react";;;
+import { useEffect, useRef, useState, useCallback, useMemo } from "react";;;
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
@@ -98,7 +98,7 @@ export default function AIAssistant() {
         <div className="mt-4 space-y-3">
           <div className="flex flex-wrap gap-2">
             {quickActions.map((action, i) => (
-              <Button key={i} variant="outline" size="sm" onClick={() => setInput(action)} disabled={isLoading}>
+              <Button key={i} variant="outline" size="sm" onClick={handleSetInput} disabled={isLoading}>
                 {action}
               </Button>
             ))}
@@ -107,7 +107,7 @@ export default function AIAssistant() {
             <Input
               placeholder="Pergunte sobre drills, SOLAS, STCW..."
               value={input}
-              onChange={(e) => setInput(e.target.value)}
+              onChange={handleChange}
               onKeyPress={(e) => e.key === "Enter" && handleSend()}
               disabled={isLoading}
             />

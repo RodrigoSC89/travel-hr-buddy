@@ -1,5 +1,5 @@
 /**
-import { useEffect, useState } from "react";;
+import { useEffect, useState, useCallback } from "react";;
  * PATCH 368 - Reservations - Payment & Calendar Integration
  * Complete reservation system with payment processing and calendar sync
  */
@@ -526,7 +526,7 @@ END:VCALENDAR`;
                   {reservation.payment_status !== "paid" && reservation.status !== "cancelled" && (
                     <Button
                       size="sm"
-                      onClick={() => initiatePayment(reservation)}
+                      onClick={() => handleinitiatePayment}
                     >
                       <CreditCard className="h-4 w-4 mr-2" />
                       Pay Now
@@ -550,7 +550,7 @@ END:VCALENDAR`;
                       <Button
                         size="sm"
                         variant="outline"
-                        onClick={() => sendConfirmationEmail(reservation.id)}
+                        onClick={() => handlesendConfirmationEmail}
                       >
                         <Mail className="h-4 w-4 mr-2" />
                         Resend Confirmation
@@ -562,7 +562,7 @@ END:VCALENDAR`;
                     <Button
                       size="sm"
                       variant="destructive"
-                      onClick={() => cancelReservation(reservation.id)}
+                      onClick={() => handlecancelReservation}
                     >
                       <X className="h-4 w-4 mr-2" />
                       Cancel
@@ -608,7 +608,7 @@ END:VCALENDAR`;
                 <CardTitle>{reservation.title}</CardTitle>
               </CardHeader>
               <CardContent>
-                <Button onClick={() => initiatePayment(reservation)}>
+                <Button onClick={() => handleinitiatePayment}>
                   <CreditCard className="h-4 w-4 mr-2" />
                   Complete Payment
                 </Button>
@@ -674,7 +674,7 @@ END:VCALENDAR`;
             <div className="flex gap-2">
               <Button
                 variant="outline"
-                onClick={() => setIsPaymentDialogOpen(false)}
+                onClick={handleSetIsPaymentDialogOpen}
                 className="flex-1"
               >
                 Cancel

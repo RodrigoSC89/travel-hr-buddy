@@ -1,4 +1,4 @@
-import { useState } from "react";;
+import { useState, useCallback } from "react";;
 import React, { useState } from "react";
 import { FileText, Download, Calendar, Filter, BarChart3, TrendingUp, AlertTriangle } from "lucide-react";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
@@ -210,7 +210,7 @@ export const ChecklistReports = memo(() => {
                     <Button 
                       variant="outline" 
                       size="sm"
-                      onClick={() => handleDownloadReport(report.id)}
+                      onClick={() => handlehandleDownloadReport}
                     >
                       <Download className="h-4 w-4 mr-1" />
                       Download

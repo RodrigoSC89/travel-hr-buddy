@@ -1,4 +1,4 @@
-import { useState } from "react";;;
+import { useState, useMemo, useCallback } from "react";;;
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
@@ -154,7 +154,7 @@ export default function DrillsCalendar({ drills, onStartDrill, onScheduleDrill, 
           <CardHeader>
             <CardTitle className="flex items-center justify-between">
               <span>Drills - {format(selectedDate, "dd 'de' MMMM 'de' yyyy", { locale: ptBR })}</span>
-              <Button size="sm" onClick={() => handleSchedule(drills[0])}>
+              <Button size="sm" onClick={() => handlehandleSchedule}>
                 <Plus className="h-4 w-4 mr-2" />
                 Agendar Novo
               </Button>
@@ -208,18 +208,18 @@ export default function DrillsCalendar({ drills, onStartDrill, onScheduleDrill, 
                       <div className="flex gap-2 mt-4">
                         {drill.status !== "completed" && (
                           <>
-                            <Button size="sm" onClick={() => handleStartDrill(drill)}>
+                            <Button size="sm" onClick={() => handlehandleStartDrill}>
                               <Play className="h-4 w-4 mr-2" />
                               Iniciar Drill
                             </Button>
-                            <Button variant="outline" size="sm" onClick={() => handleSchedule(drill)}>
+                            <Button variant="outline" size="sm" onClick={() => handlehandleSchedule}>
                               <CalendarIcon className="h-4 w-4 mr-2" />
                               Reagendar
                             </Button>
                           </>
                         )}
                         {drill.reportGenerated && (
-                          <Button variant="outline" size="sm" onClick={() => onViewReport(drill)}>
+                          <Button variant="outline" size="sm" onClick={() => handleonViewReport}>
                             <FileText className="h-4 w-4 mr-2" />
                             Ver Relatório
                           </Button>
@@ -273,7 +273,7 @@ export default function DrillsCalendar({ drills, onStartDrill, onScheduleDrill, 
                               drill.status === "scheduled" ? "Agendado" : "Pendente"}
                         </Badge>
                         {drill.status !== "completed" && (
-                          <Button variant="outline" size="sm" onClick={() => handleSchedule(drill)}>
+                          <Button variant="outline" size="sm" onClick={() => handlehandleSchedule}>
                             Agendar
                           </Button>
                         )}
@@ -316,7 +316,7 @@ export default function DrillsCalendar({ drills, onStartDrill, onScheduleDrill, 
                 <Input 
                   type="date" 
                   value={format(selectedDate, "yyyy-MM-dd")}
-                  onChange={(e) => setSelectedDate(new Date(e.target.value))}
+                  onChange={handleChange}
                 />
               </div>
               <div className="space-y-2">
@@ -324,7 +324,7 @@ export default function DrillsCalendar({ drills, onStartDrill, onScheduleDrill, 
                 <Input 
                   type="time" 
                   value={scheduleTime}
-                  onChange={(e) => setScheduleTime(e.target.value)}
+                  onChange={handleChange}
                 />
               </div>
             </div>
@@ -334,7 +334,7 @@ export default function DrillsCalendar({ drills, onStartDrill, onScheduleDrill, 
             </div>
           </div>
           <DialogFooter>
-            <Button variant="outline" onClick={() => setShowScheduleDialog(false)}>Cancelar</Button>
+            <Button variant="outline" onClick={handleSetShowScheduleDialog}>Cancelar</Button>
             <Button onClick={handleConfirmSchedule}>
               <Check className="h-4 w-4 mr-2" />
               Confirmar Agendamento
@@ -366,12 +366,12 @@ export default function DrillsCalendar({ drills, onStartDrill, onScheduleDrill, 
               <Textarea 
                 placeholder="Condições, observações pré-exercício..."
                 value={drillNotes}
-                onChange={(e) => setDrillNotes(e.target.value)}
+                onChange={handleChange}
               />
             </div>
           </div>
           <DialogFooter>
-            <Button variant="outline" onClick={() => setShowStartDialog(false)}>Cancelar</Button>
+            <Button variant="outline" onClick={handleSetShowStartDialog}>Cancelar</Button>
             <Button onClick={handleConfirmStart}>
               <Play className="h-4 w-4 mr-2" />
               Iniciar Exercício

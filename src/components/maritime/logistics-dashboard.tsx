@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";;
+import { useEffect, useState, useCallback, useMemo } from "react";;
 import React, { useState, useEffect } from "react";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
@@ -485,7 +485,7 @@ export const MaritimeLogisticsDashboard: React.FC = () => {
                       className={`p-3 border rounded-lg cursor-pointer transition-colors ${
                         selectedVessel?.id === vessel.id ? "bg-primary/10 border-primary" : "hover:bg-muted/50"
                       }`}
-                      onClick={() => setSelectedVessel(vessel)}
+                      onClick={handleSetSelectedVessel}
                     >
                       <h3 className="font-semibold">{vessel.name}</h3>
                       <p className="text-sm text-muted-foreground">{vessel.type}</p>

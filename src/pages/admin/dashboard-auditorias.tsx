@@ -1,4 +1,4 @@
-import { useRef, useState } from "react";;;
+import { useRef, useState, useCallback } from "react";;;
 import { Link } from "react-router-dom";
 import { Card, CardContent } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
@@ -142,7 +142,7 @@ export default function DashboardAuditorias() {
                 id="dataInicio"
                 type="date"
                 value={dataInicio}
-                onChange={(e) => setDataInicio(e.target.value)}
+                onChange={handleChange}
               />
             </div>
             <div>
@@ -151,7 +151,7 @@ export default function DashboardAuditorias() {
                 id="dataFim"
                 type="date"
                 value={dataFim}
-                onChange={(e) => setDataFim(e.target.value)}
+                onChange={handleChange}
               />
             </div>
             <div>
@@ -159,7 +159,7 @@ export default function DashboardAuditorias() {
               <Input
                 id="userId"
                 value={userId}
-                onChange={(e) => setUserId(e.target.value)}
+                onChange={handleChange}
                 placeholder="Opcional"
               />
             </div>

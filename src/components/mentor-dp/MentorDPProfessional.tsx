@@ -1,4 +1,4 @@
-import { useCallback, useEffect, useRef, useState } from "react";;
+import { useCallback, useMemo, useEffect, useRef, useState } from "react";;
 import React, { useState, useRef, useEffect, useCallback } from "react";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
@@ -609,7 +609,7 @@ export default function MentorDPProfessional() {
                         </p>
                         <div className="flex flex-wrap gap-2 justify-center max-w-lg">
                           {quickTopics.map((topic, i) => (
-                            <Button key={i} variant="outline" size="sm" onClick={() => sendMessage(topic)} className="text-xs">
+                            <Button key={i} variant="outline" size="sm" onClick={() => handlesendMessage} className="text-xs">
                               {topic}
                             </Button>
                           ))}
@@ -646,7 +646,7 @@ export default function MentorDPProfessional() {
                   </ScrollArea>
                   <div className="p-4 border-t">
                     <div className="flex gap-2">
-                      <Input value={inputMessage} onChange={(e) => setInputMessage(e.target.value)} onKeyDown={(e) => e.key === "Enter" && !e.shiftKey && sendMessage()} placeholder="Faça uma pergunta sobre DP..." disabled={isLoading} className="flex-1" />
+                      <Input value={inputMessage} onChange={handleChange} onKeyDown={(e) => e.key === "Enter" && !e.shiftKey && sendMessage()} placeholder="Faça uma pergunta sobre DP..." disabled={isLoading} className="flex-1" />
                       <Button onClick={() => sendMessage()} disabled={isLoading || !inputMessage.trim()}>
                         {isLoading ? <Loader2 className="h-4 w-4 animate-spin" /> : <Send className="h-4 w-4" />}
                       </Button>
@@ -659,10 +659,10 @@ export default function MentorDPProfessional() {
                 <Card>
                   <CardHeader className="pb-3"><CardTitle className="text-sm font-medium">Ações Rápidas</CardTitle></CardHeader>
                   <CardContent className="space-y-2">
-                    <Button variant="outline" size="sm" className="w-full justify-start gap-2" onClick={() => setActiveTab("academy")}><GraduationCap className="h-4 w-4 text-purple-500" />Iniciar Lição</Button>
-                    <Button variant="outline" size="sm" className="w-full justify-start gap-2" onClick={() => setActiveTab("simulator")}><Play className="h-4 w-4 text-green-500" />Nova Simulação</Button>
-                    <Button variant="outline" size="sm" className="w-full justify-start gap-2" onClick={() => setShowQuizDialog(true)}><ClipboardList className="h-4 w-4 text-amber-500" />Gerar Quiz</Button>
-                    <Button variant="outline" size="sm" className="w-full justify-start gap-2" onClick={() => sendMessage("Avalie minha proficiência atual em DP")}><Award className="h-4 w-4 text-rose-500" />Avaliar Proficiência</Button>
+                    <Button variant="outline" size="sm" className="w-full justify-start gap-2" onClick={handleSetActiveTab}><GraduationCap className="h-4 w-4 text-purple-500" />Iniciar Lição</Button>
+                    <Button variant="outline" size="sm" className="w-full justify-start gap-2" onClick={handleSetActiveTab}><Play className="h-4 w-4 text-green-500" />Nova Simulação</Button>
+                    <Button variant="outline" size="sm" className="w-full justify-start gap-2" onClick={handleSetShowQuizDialog}><ClipboardList className="h-4 w-4 text-amber-500" />Gerar Quiz</Button>
+                    <Button variant="outline" size="sm" className="w-full justify-start gap-2" onClick={() => handlesendMessage}><Award className="h-4 w-4 text-rose-500" />Avaliar Proficiência</Button>
                   </CardContent>
                 </Card>
                 <Card>
@@ -698,7 +698,7 @@ export default function MentorDPProfessional() {
                     <SelectItem value="expert">Expert</SelectItem>
                   </SelectContent>
                 </Select>
-                <Button onClick={() => setShowNewModuleDialog(true)}><Plus className="h-4 w-4 mr-2" />Nova Trilha</Button>
+                <Button onClick={handleSetShowNewModuleDialog}><Plus className="h-4 w-4 mr-2" />Nova Trilha</Button>
               </div>
             </div>
 
@@ -733,7 +733,7 @@ export default function MentorDPProfessional() {
                       <span className="flex items-center gap-1"><Clock className="h-3 w-3" />{module.duration}</span>
                     </div>
                     <Progress value={module.progress || 0} className="h-1.5 mb-3" />
-                    <Button className="w-full" size="sm" onClick={() => generateLesson(module)} disabled={isLoading}>
+                    <Button className="w-full" size="sm" onClick={() => handlegenerateLesson} disabled={isLoading}>
                       {isLoading ? <Loader2 className="h-4 w-4 animate-spin mr-2" /> : <Play className="h-4 w-4 mr-2" />}
                       {(module.progress || 0) > 0 ? "Continuar" : "Iniciar Lição"}
                     </Button>
@@ -750,7 +750,7 @@ export default function MentorDPProfessional() {
                 <h2 className="text-xl font-semibold">Simulador Embarcado</h2>
                 <p className="text-muted-foreground">Cenários interativos com avaliação de IA</p>
               </div>
-              <Button onClick={() => setShowNewScenarioDialog(true)}><Plus className="h-4 w-4 mr-2" />Novo Cenário</Button>
+              <Button onClick={handleSetShowNewScenarioDialog}><Plus className="h-4 w-4 mr-2" />Novo Cenário</Button>
             </div>
 
             <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-4">
@@ -771,7 +771,7 @@ export default function MentorDPProfessional() {
                       <span className="flex items-center gap-1"><AlertTriangle className="h-3 w-3" />{scenario.type.replace("_", " ")}</span>
                       <span className="flex items-center gap-1"><Clock className="h-3 w-3" />{scenario.duration}</span>
                     </div>
-                    <Button className="w-full" size="sm" onClick={() => startSimulation(scenario)} disabled={isLoading}>
+                    <Button className="w-full" size="sm" onClick={() => handlestartSimulation} disabled={isLoading}>
                       {isLoading && activeSimulation?.id === scenario.id ? <Loader2 className="h-4 w-4 animate-spin mr-2" /> : <Play className="h-4 w-4 mr-2" />}
                       Iniciar Simulação
                     </Button>
@@ -788,7 +788,7 @@ export default function MentorDPProfessional() {
                 <h2 className="text-xl font-semibold">Avaliações e Quizzes</h2>
                 <p className="text-muted-foreground">Teste seus conhecimentos com quizzes adaptativos</p>
               </div>
-              <Button onClick={() => setShowQuizDialog(true)}><Sparkles className="h-4 w-4 mr-2" />Gerar Novo Quiz</Button>
+              <Button onClick={handleSetShowQuizDialog}><Sparkles className="h-4 w-4 mr-2" />Gerar Novo Quiz</Button>
             </div>
 
             {activeQuiz ? (
@@ -807,7 +807,7 @@ export default function MentorDPProfessional() {
                       <div className="space-y-2">
                         {q.options.map((opt: unknown, optIdx: number) => (
                           <label key={optIdx} className={`flex items-center gap-3 p-3 rounded-lg cursor-pointer transition-colors ${quizAnswers[idx] === (opt.key || String.fromCharCode(97 + optIdx)) ? "bg-primary/10 border border-primary" : "bg-background hover:bg-muted"}`}>
-                            <input type="radio" name={`q${idx}`} value={opt.key || String.fromCharCode(97 + optIdx)} checked={quizAnswers[idx] === (opt.key || String.fromCharCode(97 + optIdx))} onChange={(e) => setQuizAnswers(prev => ({ ...prev, [idx]: e.target.value }))} className="sr-only" />
+                            <input type="radio" name={`q${idx}`} value={opt.key || String.fromCharCode(97 + optIdx)} checked={quizAnswers[idx] === (opt.key || String.fromCharCode(97 + optIdx))} onChange={handleChange}))} className="sr-only" />
                             <div className={`w-4 h-4 rounded-full border-2 flex items-center justify-center ${quizAnswers[idx] === (opt.key || String.fromCharCode(97 + optIdx)) ? "border-primary bg-primary" : "border-muted-foreground"}`}>
                               {quizAnswers[idx] === (opt.key || String.fromCharCode(97 + optIdx)) && <div className="w-2 h-2 rounded-full bg-primary-foreground" />}
                             </div>
@@ -837,7 +837,7 @@ export default function MentorDPProfessional() {
                           <span className="text-muted-foreground">10 questões</span>
                           <Badge variant="outline">Intermediário</Badge>
                         </div>
-                        <Button variant="outline" size="sm" className="w-full" onClick={() => generateQuiz(topic)} disabled={isLoading}>
+                        <Button variant="outline" size="sm" className="w-full" onClick={() => handlegenerateQuiz} disabled={isLoading}>
                           {isLoading ? <Loader2 className="h-4 w-4 animate-spin mr-2" /> : <ClipboardList className="h-4 w-4 mr-2" />}
                           Iniciar Quiz
                         </Button>
@@ -893,7 +893,7 @@ export default function MentorDPProfessional() {
                     <p className="text-muted-foreground max-w-md mx-auto mb-4">
                       Comece a interagir com o Mentor DP para que suas dúvidas, simulações e aprendizados sejam registrados automaticamente aqui.
                     </p>
-                    <Button onClick={() => setActiveTab("mentor")}><MessageSquare className="h-4 w-4 mr-2" />Iniciar Conversa</Button>
+                    <Button onClick={handleSetActiveTab}><MessageSquare className="h-4 w-4 mr-2" />Iniciar Conversa</Button>
                   </div>
                 ) : (
                   <div className="space-y-4">
@@ -935,9 +935,9 @@ export default function MentorDPProfessional() {
               <div className="flex gap-2">
                 <div className="relative">
                   <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 h-4 w-4 text-muted-foreground" />
-                  <Input placeholder="Buscar no repositório..." className="w-64 pl-10" value={searchQuery} onChange={(e) => setSearchQuery(e.target.value)} />
+                  <Input placeholder="Buscar no repositório..." className="w-64 pl-10" value={searchQuery} onChange={handleChange} />
                 </div>
-                <Button onClick={() => setShowNewQuestionDialog(true)}><Plus className="h-4 w-4 mr-2" />Nova Pergunta</Button>
+                <Button onClick={handleSetShowNewQuestionDialog}><Plus className="h-4 w-4 mr-2" />Nova Pergunta</Button>
               </div>
             </div>
 
@@ -976,7 +976,7 @@ export default function MentorDPProfessional() {
             <div className="space-y-4 py-4">
               <div className="space-y-2">
                 <label className="text-sm font-medium">Tópico</label>
-                <Input value={quizTopic} onChange={(e) => setQuizTopic(e.target.value)} placeholder="Ex: Sensores de referência, Procedimentos de emergência..." />
+                <Input value={quizTopic} onChange={handleChange} placeholder="Ex: Sensores de referência, Procedimentos de emergência..." />
               </div>
               <div className="space-y-2">
                 <label className="text-sm font-medium">Dificuldade</label>
@@ -992,7 +992,7 @@ export default function MentorDPProfessional() {
               </div>
             </div>
             <div className="flex justify-end gap-2">
-              <Button variant="outline" onClick={() => setShowQuizDialog(false)}>Cancelar</Button>
+              <Button variant="outline" onClick={handleSetShowQuizDialog}>Cancelar</Button>
               <Button onClick={() => generateQuiz()} disabled={!quizTopic.trim() || isLoading}>
                 {isLoading ? <Loader2 className="h-4 w-4 animate-spin mr-2" /> : <Sparkles className="h-4 w-4 mr-2" />}
                 Gerar Quiz
@@ -1011,11 +1011,11 @@ export default function MentorDPProfessional() {
             <div className="space-y-4 py-4">
               <div className="space-y-2">
                 <label className="text-sm font-medium">Nome da Trilha</label>
-                <Input value={newModuleName} onChange={(e) => setNewModuleName(e.target.value)} placeholder="Ex: Operações em Waters Profundas..." />
+                <Input value={newModuleName} onChange={handleChange} placeholder="Ex: Operações em Waters Profundas..." />
               </div>
               <div className="space-y-2">
                 <label className="text-sm font-medium">Descrição</label>
-                <Textarea value={newModuleDescription} onChange={(e) => setNewModuleDescription(e.target.value)} placeholder="Descreva os objetivos desta trilha..." />
+                <Textarea value={newModuleDescription} onChange={handleChange} placeholder="Descreva os objetivos desta trilha..." />
               </div>
               <div className="space-y-2">
                 <label className="text-sm font-medium">Dificuldade</label>
@@ -1031,7 +1031,7 @@ export default function MentorDPProfessional() {
               </div>
             </div>
             <div className="flex justify-end gap-2">
-              <Button variant="outline" onClick={() => setShowNewModuleDialog(false)}>Cancelar</Button>
+              <Button variant="outline" onClick={handleSetShowNewModuleDialog}>Cancelar</Button>
               <Button onClick={createNewModule}><Plus className="h-4 w-4 mr-2" />Criar Trilha</Button>
             </div>
           </DialogContent>
@@ -1047,11 +1047,11 @@ export default function MentorDPProfessional() {
             <div className="space-y-4 py-4">
               <div className="space-y-2">
                 <label className="text-sm font-medium">Nome do Cenário</label>
-                <Input value={newScenarioName} onChange={(e) => setNewScenarioName(e.target.value)} placeholder="Ex: Falha de Gyro durante manobra..." />
+                <Input value={newScenarioName} onChange={handleChange} placeholder="Ex: Falha de Gyro durante manobra..." />
               </div>
               <div className="space-y-2">
                 <label className="text-sm font-medium">Descrição</label>
-                <Textarea value={newScenarioDescription} onChange={(e) => setNewScenarioDescription(e.target.value)} placeholder="Descreva as condições e o cenário..." />
+                <Textarea value={newScenarioDescription} onChange={handleChange} placeholder="Descreva as condições e o cenário..." />
               </div>
               <div className="space-y-2">
                 <label className="text-sm font-medium">Tipo de Falha</label>
@@ -1081,7 +1081,7 @@ export default function MentorDPProfessional() {
               </div>
             </div>
             <div className="flex justify-end gap-2">
-              <Button variant="outline" onClick={() => setShowNewScenarioDialog(false)}>Cancelar</Button>
+              <Button variant="outline" onClick={handleSetShowNewScenarioDialog}>Cancelar</Button>
               <Button onClick={createNewScenario}><Plus className="h-4 w-4 mr-2" />Criar Cenário</Button>
             </div>
           </DialogContent>
@@ -1097,7 +1097,7 @@ export default function MentorDPProfessional() {
             <div className="space-y-4 py-4">
               <div className="space-y-2">
                 <label className="text-sm font-medium">Sua Pergunta</label>
-                <Textarea value={newQuestion} onChange={(e) => setNewQuestion(e.target.value)} placeholder="Digite sua pergunta sobre DP..." />
+                <Textarea value={newQuestion} onChange={handleChange} placeholder="Digite sua pergunta sobre DP..." />
               </div>
               <div className="space-y-2">
                 <label className="text-sm font-medium">Categoria</label>
@@ -1116,7 +1116,7 @@ export default function MentorDPProfessional() {
               </div>
             </div>
             <div className="flex justify-end gap-2">
-              <Button variant="outline" onClick={() => setShowNewQuestionDialog(false)}>Cancelar</Button>
+              <Button variant="outline" onClick={handleSetShowNewQuestionDialog}>Cancelar</Button>
               <Button onClick={addNewQuestion}><Plus className="h-4 w-4 mr-2" />Adicionar Pergunta</Button>
             </div>
           </DialogContent>
@@ -1153,7 +1153,7 @@ export default function MentorDPProfessional() {
                 <ThumbsUp className="h-4 w-4 mr-2" />
                 Útil ({selectedQuestion?.votes})
               </Button>
-              <Button variant="outline" onClick={() => setShowQuestionDialog(false)}>Fechar</Button>
+              <Button variant="outline" onClick={handleSetShowQuestionDialog}>Fechar</Button>
             </div>
           </DialogContent>
         </Dialog>

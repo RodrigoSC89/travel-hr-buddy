@@ -1,4 +1,4 @@
-import { useEffect, useRef, useState } from "react";;
+import { useEffect, useRef, useState, useCallback, useMemo } from "react";;
 
 /**
  * PATCH 617 - Live Performance Profiler

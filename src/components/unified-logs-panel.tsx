@@ -355,7 +355,7 @@ export const UnifiedLogsPanel = memo(function() {
               <Input
                 placeholder="Buscar nos logs..."
                 value={searchTerm}
-                onChange={(e) => setSearchTerm(e.target.value)}
+                onChange={handleChange}
                 className="pl-8"
               />
             </div>

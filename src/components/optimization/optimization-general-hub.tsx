@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";;
+import { useEffect, useState, useCallback, useMemo } from "react";;
 import React, { useState, useEffect } from "react";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
@@ -530,7 +530,7 @@ export const OptimizationGeneralHub = memo(() => {
                     <Button
                       variant={selectedCategory === "all" ? "default" : "outline"}
                       size="sm"
-                      onClick={() => setSelectedCategory("all")}
+                      onClick={handleSetSelectedCategory}
                     >
                       Todas
                     </Button>
@@ -539,7 +539,7 @@ export const OptimizationGeneralHub = memo(() => {
                         key={category}
                         variant={selectedCategory === category ? "default" : "outline"}
                         size="sm"
-                        onClick={() => setSelectedCategory(category)}
+                        onClick={handleSetSelectedCategory}
                         className="capitalize"
                       >
                         {category}
@@ -601,7 +601,7 @@ export const OptimizationGeneralHub = memo(() => {
                                   </Badge>
                                 ) : (
                                   <Button 
-                                    onClick={() => applyOptimization(optimization.id)}
+                                    onClick={() => handleapplyOptimization}
                                     size="sm"
                                     className="flex items-center gap-1"
                                   >

@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";;;
+import { useEffect, useState, useCallback } from "react";;;
 import { supabase } from "@/integrations/supabase/client";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
@@ -168,7 +168,7 @@ export default function MMITasksPage() {
                       <Button
                         variant="outline"
                         size="sm"
-                        onClick={() => setSelectedTask(task)}
+                        onClick={handleSetSelectedTask}
                       >
                         <FileText className="w-4 h-4 mr-2" />
                         Ver Detalhes
@@ -179,7 +179,7 @@ export default function MMITasksPage() {
                           <Button
                             variant="outline"
                             size="sm"
-                            onClick={() => handleStatusChange(task.id, "em_andamento")}
+                            onClick={() => handlehandleStatusChange}
                           >
                             <PlayCircle className="w-4 h-4 mr-2" />
                             Iniciar
@@ -188,7 +188,7 @@ export default function MMITasksPage() {
                           <Button
                             variant="default"
                             size="sm"
-                            onClick={() => handleCreateOS(task)}
+                            onClick={() => handlehandleCreateOS}
                             disabled={creatingOS}
                           >
                             <AlertCircle className="w-4 h-4 mr-2" />
@@ -201,7 +201,7 @@ export default function MMITasksPage() {
                         <Button
                           variant="default"
                           size="sm"
-                          onClick={() => handleStatusChange(task.id, "concluido")}
+                          onClick={() => handlehandleStatusChange}
                         >
                           Concluir
                         </Button>
@@ -276,7 +276,7 @@ export default function MMITasksPage() {
               <div className="flex gap-2 justify-end pt-4 border-t">
                 <Button
                   variant="outline"
-                  onClick={() => setSelectedTask(null)}
+                  onClick={handleSetSelectedTask}
                 >
                   Fechar
                 </Button>

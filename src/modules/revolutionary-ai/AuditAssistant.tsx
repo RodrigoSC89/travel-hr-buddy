@@ -1,5 +1,5 @@
 /**
-import { useState } from "react";;
+import { useState, useMemo, useCallback } from "react";;
  * REVOLUTIONARY AI - Audit Assistant
  * Funcionalidade 5 & 13: Assistente para auditorias e fiscalizações
  */
@@ -202,7 +202,7 @@ export const AuditAssistant = memo(function() {
                   placeholder="Buscar..."
                   className="w-48"
                   value={searchTerm}
-                  onChange={(e) => setSearchTerm(e.target.value)}
+                  onChange={handleChange}
                 />
               </CardTitle>
             </CardHeader>
@@ -218,7 +218,7 @@ export const AuditAssistant = memo(function() {
                     className={`cursor-pointer transition-all hover:border-primary/50 ${
                       selectedPackage?.id === pkg.id ? "border-primary ring-2 ring-primary/20" : ""
                     }`}
-                    onClick={() => setSelectedPackage(pkg)}
+                    onClick={handleSetSelectedPackage}
                   >
                     <CardContent className="p-4">
                       <div className="flex items-start justify-between mb-3">

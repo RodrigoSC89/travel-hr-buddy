@@ -1,5 +1,5 @@
 /**
-import { useState } from "react";;
+import { useState, useCallback } from "react";;
  * Document Filters Component
  * 
  * Provides filtering interface for documents
@@ -68,7 +68,7 @@ export const DocumentFilters: React.FC<DocumentFiltersProps> = ({ className }) =
           <Input
             placeholder="Search documents..."
             value={localSearchTerm}
-            onChange={(e) => handleSearch(e.target.value)}
+            onChange={handleChange}
             className="pl-9 pr-9"
           />
           {localSearchTerm && (
@@ -76,7 +76,7 @@ export const DocumentFilters: React.FC<DocumentFiltersProps> = ({ className }) =
               variant="ghost"
               size="icon"
               className="absolute right-1 top-1/2 -translate-y-1/2 h-7 w-7"
-              onClick={() => handleSearch("")}
+              onClick={() => handlehandleSearch}
             >
               <X className="w-4 h-4" />
             </Button>
@@ -197,7 +197,7 @@ export const DocumentFilters: React.FC<DocumentFiltersProps> = ({ className }) =
           {filter.searchTerm && (
             <Badge variant="secondary" className="gap-1">
               Search: {filter.searchTerm}
-              <button onClick={() => handleSearch("")} className="ml-1">
+              <button onClick={() => handlehandleSearch} className="ml-1">
                 <X className="w-3 h-3" />
               </button>
             </Badge>
@@ -205,7 +205,7 @@ export const DocumentFilters: React.FC<DocumentFiltersProps> = ({ className }) =
           {filter.types?.map((type) => (
             <Badge key={type} variant="secondary" className="gap-1">
               Type: {type}
-              <button onClick={() => handleTypeFilter([])} className="ml-1">
+              <button onClick={() => handlehandleTypeFilter} className="ml-1">
                 <X className="w-3 h-3" />
               </button>
             </Badge>
@@ -213,7 +213,7 @@ export const DocumentFilters: React.FC<DocumentFiltersProps> = ({ className }) =
           {filter.statuses?.map((status) => (
             <Badge key={status} variant="secondary" className="gap-1">
               Status: {status}
-              <button onClick={() => handleStatusFilter([])} className="ml-1">
+              <button onClick={() => handlehandleStatusFilter} className="ml-1">
                 <X className="w-3 h-3" />
               </button>
             </Badge>
@@ -221,7 +221,7 @@ export const DocumentFilters: React.FC<DocumentFiltersProps> = ({ className }) =
           {filter.categories?.map((category) => (
             <Badge key={category} variant="secondary" className="gap-1">
               Category: {category}
-              <button onClick={() => handleCategoryFilter([])} className="ml-1">
+              <button onClick={() => handlehandleCategoryFilter} className="ml-1">
                 <X className="w-3 h-3" />
               </button>
             </Badge>

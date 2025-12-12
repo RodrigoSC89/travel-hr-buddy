@@ -1,5 +1,5 @@
 /**
-import { useEffect, useRef, useState } from "react";;
+import { useEffect, useRef, useState, useCallback, useMemo } from "react";;
  * PATCH 546 - Incident Timeline Generator
  * Visual timeline of incidents with month-based grouping and severity sorting
  */
@@ -264,7 +264,7 @@ export const IncidentTimeline: React.FC<IncidentTimelineProps> = ({
               <Input
                 type="date"
                 value={dateFrom}
-                onChange={(e) => setDateFrom(e.target.value)}
+                onChange={handleChange}
               />
             </div>
             <div className="space-y-2">
@@ -272,7 +272,7 @@ export const IncidentTimeline: React.FC<IncidentTimelineProps> = ({
               <Input
                 type="date"
                 value={dateTo}
-                onChange={(e) => setDateTo(e.target.value)}
+                onChange={handleChange}
               />
             </div>
             <div className="flex items-end">

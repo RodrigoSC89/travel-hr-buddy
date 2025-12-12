@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";;
+import { useEffect, useState, useCallback, useMemo } from "react";;
 import React, { useState, useEffect } from "react";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
@@ -641,7 +641,7 @@ export const EnhancedSettingsHub: React.FC = () => {
                   type="text"
                   placeholder="Buscar configurações..."
                   value={searchQuery}
-                  onChange={(e) => setSearchQuery(e.target.value)}
+                  onChange={handleChange}
                   className="pl-10 pr-4 py-2 border rounded-lg bg-background/80 backdrop-blur-sm min-w-[200px] focus:outline-none focus:ring-2 focus:ring-primary/20"
                 />
               </div>
@@ -682,7 +682,7 @@ export const EnhancedSettingsHub: React.FC = () => {
 
               {/* Action Buttons */}
               <div className="flex items-center gap-2">
-                <Button variant="outline" size="sm" onClick={() => setAutoSave(!autoSave)}>
+                <Button variant="outline" size="sm" onClick={handleSetAutoSave}>
                   <Zap className={`w-4 h-4 mr-2 ${autoSave ? "text-yellow-500" : ""}`} />
                   {autoSave ? "Auto-Save ON" : "Auto-Save OFF"}
                 </Button>

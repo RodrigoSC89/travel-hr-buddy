@@ -1,4 +1,4 @@
-import { useState } from "react";;
+import { useState, useMemo, useCallback } from "react";;
 import React, { useState } from "react";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
@@ -82,7 +82,7 @@ export const EnhancedDashboardFilters: React.FC<DashboardFiltersProps> = ({
         <Button
           variant="outline"
           size="sm"
-          onClick={() => setIsFiltersOpen(!isFiltersOpen)}
+          onClick={handleSetIsFiltersOpen}
         >
           <Filter className="w-4 h-4 mr-2" />
           Filtros Avançados
@@ -128,7 +128,7 @@ export const EnhancedDashboardFilters: React.FC<DashboardFiltersProps> = ({
                         ? "border-primary bg-primary/5" 
                         : "border-border"
                     }`}
-                    onClick={() => onKPIToggle(kpi.id)}
+                    onClick={() => handleonKPIToggle}
                   >
                     <div className="flex items-center gap-3">
                       <kpi.icon className={`w-5 h-5 ${kpi.color}`} />
@@ -150,7 +150,7 @@ export const EnhancedDashboardFilters: React.FC<DashboardFiltersProps> = ({
                 <Button 
                   variant="outline" 
                   size="sm" 
-                  onClick={() => handleLayoutChange("compacto")}
+                  onClick={() => handlehandleLayoutChange}
                   className={selectedLayout === "compacto" ? "border-primary" : ""}
                 >
                   <div className="text-center">
@@ -161,7 +161,7 @@ export const EnhancedDashboardFilters: React.FC<DashboardFiltersProps> = ({
                 <Button 
                   variant="outline" 
                   size="sm" 
-                  onClick={() => handleLayoutChange("grade")}
+                  onClick={() => handlehandleLayoutChange}
                   className={selectedLayout === "grade" ? "border-primary" : ""}
                 >
                   <div className="text-center">
@@ -177,7 +177,7 @@ export const EnhancedDashboardFilters: React.FC<DashboardFiltersProps> = ({
                 <Button 
                   variant="outline" 
                   size="sm" 
-                  onClick={() => handleLayoutChange("lista")}
+                  onClick={() => handlehandleLayoutChange}
                   className={selectedLayout === "lista" ? "border-primary" : ""}
                 >
                   <div className="text-center">
@@ -193,10 +193,10 @@ export const EnhancedDashboardFilters: React.FC<DashboardFiltersProps> = ({
 
             {/* Save Preferences */}
             <div className="flex justify-end gap-2 pt-4 border-t">
-              <Button variant="outline" onClick={() => setIsFiltersOpen(false)}>
+              <Button variant="outline" onClick={handleSetIsFiltersOpen}>
                 Cancelar
               </Button>
-              <Button onClick={() => setIsFiltersOpen(false)}>
+              <Button onClick={handleSetIsFiltersOpen}>
                 Salvar Preferências
               </Button>
             </div>

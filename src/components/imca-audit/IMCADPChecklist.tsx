@@ -1,4 +1,4 @@
-import { useState } from "react";;
+import { useState, useMemo, useCallback } from "react";;
 import React, { useState } from "react";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
@@ -99,7 +99,7 @@ export const IMCADPChecklist = memo(function({ selectedDPClass, auditData, setAu
                             <Textarea
                               placeholder="Notas do auditor..."
                               value={auditData[item.id]?.notes || ""}
-                              onChange={(e) => updateItem(item.id, "notes", e.target.value)}
+                              onChange={handleChange}
                               className="min-h-[60px]"
                             />
                           </div>

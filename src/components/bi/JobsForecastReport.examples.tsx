@@ -155,7 +155,7 @@ export const IntegrateInExistingPage = memo(function() {
         <input
           type="checkbox"
           checked={showForecast}
-          onChange={(e) => setShowForecast(e.target.checked)}
+          onChange={handleChange}
           id="show-forecast"
         />
         <label htmlFor="show-forecast">Show AI Forecast</label>

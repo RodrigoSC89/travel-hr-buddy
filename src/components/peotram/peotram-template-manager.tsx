@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";;
+import { useEffect, useState, useCallback } from "react";;
 import React, { useState, useEffect } from "react";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
@@ -143,7 +143,7 @@ export const PeotramTemplateManager: React.FC<TemplateManagerProps> = ({
                     <Button
                       variant="outline"
                       size="sm"
-                      onClick={() => toggleTemplateStatus(template)}
+                      onClick={() => handletoggleTemplateStatus}
                     >
                       {template.is_active ? "Desativar" : "Ativar"}
                     </Button>
@@ -197,7 +197,7 @@ export const PeotramTemplateManager: React.FC<TemplateManagerProps> = ({
                     <Button
                       variant="outline"
                       size="sm"
-                      onClick={() => toggleTemplateStatus(template)}
+                      onClick={() => handletoggleTemplateStatus}
                     >
                       {template.is_active ? "Desativar" : "Ativar"}
                     </Button>
@@ -252,7 +252,7 @@ export const PeotramTemplateManager: React.FC<TemplateManagerProps> = ({
           )}
           
           <div className="flex justify-end gap-2 pt-4 border-t">
-            <Button variant="outline" onClick={() => setIsEditDialogOpen(false)}>
+            <Button variant="outline" onClick={handleSetIsEditDialogOpen}>
               Cancelar
             </Button>
             <Button 

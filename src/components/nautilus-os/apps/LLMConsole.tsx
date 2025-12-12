@@ -1,4 +1,4 @@
-import { useState } from "react";;
+import { useState, useCallback } from "react";;
 import React, { useState } from "react";
 import { Send, Loader2 } from "lucide-react";
 import { Button } from "@/components/ui/button";
@@ -37,7 +37,7 @@ export const LLMConsole = memo(function() {
       <form onSubmit={handleSubmit} className="flex gap-2">
         <Input
           value={prompt}
-          onChange={(e) => setPrompt(e.target.value)}
+          onChange={handleChange}
           placeholder="Digite seu comando..."
           disabled={isLoading}
           className="flex-1"

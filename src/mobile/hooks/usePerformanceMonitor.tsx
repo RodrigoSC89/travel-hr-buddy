@@ -5,7 +5,7 @@
  * Tracks metrics and provides optimization recommendations
  */
 
-import { memo, memo, useCallback, useEffect, useRef, useState } from "react";;;
+import { memo, memo, useCallback, useEffect, useRef, useState, useMemo } from "react";;;
 
 interface PerformanceMetrics {
   fps: number;

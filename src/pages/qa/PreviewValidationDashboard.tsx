@@ -144,7 +144,7 @@ export default function PreviewValidationDashboard() {
                     key={component.name}
                     variant={selectedComponent === component.name ? "default" : "outline"}
                     className="justify-between h-auto py-4"
-                    onClick={() => setSelectedComponent(component.name)}
+                    onClick={handleSetSelectedComponent}
                   >
                     <div className="flex flex-col items-start gap-1">
                       <span className="font-medium">{component.name}</span>

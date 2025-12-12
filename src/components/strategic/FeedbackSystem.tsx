@@ -1,4 +1,4 @@
-import { useState } from "react";;
+import { useState, useMemo, useCallback } from "react";;
 import React, { useState } from "react";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
@@ -219,7 +219,7 @@ export const FeedbackSystem = memo(() => {
                 <Input
                   placeholder="Descreva sua sugestão em poucas palavras"
                   value={newFeedback.title}
-                  onChange={(e) => setNewFeedback({...newFeedback, title: e.target.value})}
+                  onChange={handleChange})}
                 />
               </div>
               <div>
@@ -261,7 +261,7 @@ export const FeedbackSystem = memo(() => {
               <Textarea
                 placeholder="Descreva sua sugestão ou problema detalhadamente..."
                 value={newFeedback.description}
-                onChange={(e) => setNewFeedback({...newFeedback, description: e.target.value})}
+                onChange={handleChange})}
                 rows={4}
               />
             </div>

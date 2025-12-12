@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";;
+import { useEffect, useState, useCallback } from "react";;
 
 import React, { useState, useEffect } from "react";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
@@ -100,7 +100,7 @@ export const PlansList: React.FC<PlansListProps> = ({ onSelectPlan, onRefresh })
               <Button
                 size="sm"
                 variant="outline"
-                onClick={() => onSelectPlan(plan)}
+                onClick={() => handleonSelectPlan}
               >
                 <Eye className="h-4 w-4 mr-1" />
                 View
@@ -108,7 +108,7 @@ export const PlansList: React.FC<PlansListProps> = ({ onSelectPlan, onRefresh })
               <Button
                 size="sm"
                 variant="outline"
-                onClick={() => handleExportPDF(plan)}
+                onClick={() => handlehandleExportPDF}
               >
                 <Download className="h-4 w-4 mr-1" />
                 PDF

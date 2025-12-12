@@ -1,5 +1,5 @@
 /**
-import { useMemo, useState } from "react";;
+import { useMemo, useState, useCallback } from "react";;
  * REVOLUTIONARY AI - Predictive Maintenance Scheduler
  * Funcionalidade 3: Roteirizador de Manutenção Preditiva + Inventário
  */
@@ -200,7 +200,7 @@ export const PredictiveMaintenanceScheduler = memo(function() {
                       key={priority}
                       variant={selectedPriority === priority ? "default" : "outline"}
                       size="sm"
-                      onClick={() => setSelectedPriority(priority)}
+                      onClick={handleSetSelectedPriority}
                       className="text-xs"
                     >
                       {priority === "all" ? "Todas" : priority.charAt(0).toUpperCase() + priority.slice(1)}
@@ -222,7 +222,7 @@ export const PredictiveMaintenanceScheduler = memo(function() {
                       className={`cursor-pointer transition-all hover:border-primary/50 ${
                         selectedMaintenance?.id === prediction.id ? "border-primary ring-2 ring-primary/20" : ""
                       }`}
-                      onClick={() => setSelectedMaintenance(prediction)}
+                      onClick={handleSetSelectedMaintenance}
                     >
                       <CardContent className="p-4">
                         <div className="flex items-start justify-between mb-3">

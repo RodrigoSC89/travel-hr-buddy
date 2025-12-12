@@ -1,5 +1,5 @@
 /**
-import { useState } from "react";;
+import { useState, useCallback } from "react";;
  * Telemetry Exporter Component
  * PDF and data export functionality
  */

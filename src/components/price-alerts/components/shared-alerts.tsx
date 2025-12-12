@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";;
+import { useEffect, useState, useCallback } from "react";;
 import React, { useState, useEffect } from "react";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
@@ -381,7 +381,7 @@ export const SharedAlerts = memo(() => {
                     id="alert-select"
                     className="w-full p-2 border rounded-md"
                     value={shareForm.alert_id}
-                    onChange={(e) => setShareForm(prev => ({ ...prev, alert_id: e.target.value }))}
+                    onChange={handleChange}))}
                   >
                     <option value="">Escolha um alerta</option>
                     {userAlerts.map(alert => (
@@ -397,7 +397,7 @@ export const SharedAlerts = memo(() => {
                   <Input
                     id="title"
                     value={shareForm.title}
-                    onChange={(e) => setShareForm(prev => ({ ...prev, title: e.target.value }))}
+                    onChange={handleChange}))}
                     placeholder="Ex: Ótima oportunidade para smartphone!"
                   />
                 </div>
@@ -407,7 +407,7 @@ export const SharedAlerts = memo(() => {
                   <Textarea
                     id="description"
                     value={shareForm.description}
-                    onChange={(e) => setShareForm(prev => ({ ...prev, description: e.target.value }))}
+                    onChange={handleChange}))}
                     placeholder="Conte por que este é um bom negócio..."
                     rows={3}
                   />
@@ -417,7 +417,7 @@ export const SharedAlerts = memo(() => {
                   <Button onClick={handleShareAlert} className="flex-1">
                     Compartilhar
                   </Button>
-                  <Button variant="outline" onClick={() => setIsShareDialogOpen(false)}>
+                  <Button variant="outline" onClick={handleSetIsShareDialogOpen}>
                     Cancelar
                   </Button>
                 </div>
@@ -495,7 +495,7 @@ export const SharedAlerts = memo(() => {
               Seja o primeiro a compartilhar uma oferta incrível com a comunidade!
             </p>
             {user && userAlerts.length > 0 && (
-              <Button onClick={() => setIsShareDialogOpen(true)}>
+              <Button onClick={handleSetIsShareDialogOpen}>
                 <Share2 className="h-4 w-4 mr-2" />
                 Compartilhar Alerta
               </Button>
@@ -600,7 +600,7 @@ const SharedAlertCard: React.FC<SharedAlertCardProps> = ({
                 <Button
                   variant={alert.user_vote === "upvote" ? "default" : "outline"}
                   size="sm"
-                  onClick={() => onVote(alert.id, "upvote")}
+                  onClick={() => handleonVote}
                   className="flex items-center gap-1"
                 >
                   <ThumbsUp className="h-4 w-4" />
@@ -610,7 +610,7 @@ const SharedAlertCard: React.FC<SharedAlertCardProps> = ({
                 <Button
                   variant={alert.user_vote === "downvote" ? "destructive" : "outline"}
                   size="sm"
-                  onClick={() => onVote(alert.id, "downvote")}
+                  onClick={() => handleonVote}
                   className="flex items-center gap-1"
                 >
                   <ThumbsDown className="h-4 w-4" />
@@ -624,7 +624,7 @@ const SharedAlertCard: React.FC<SharedAlertCardProps> = ({
             <Button
               variant="outline"
               size="sm"
-              onClick={() => onCopyUrl(alert.alert.product_url, alert.alert.product_name)}
+              onClick={() => handleonCopyUrl}
               className="flex items-center gap-1"
             >
               {copiedUrl === alert.alert.product_url ? (

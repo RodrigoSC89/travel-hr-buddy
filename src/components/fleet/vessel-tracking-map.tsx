@@ -1,4 +1,4 @@
-import { useEffect, useRef, useState } from "react";;
+import { useEffect, useRef, useState, useCallback, useMemo } from "react";;
 import React, { useEffect, useRef, useState } from "react";
 import { useOptimizedPolling } from "@/hooks/use-optimized-polling";
 import { loadMapboxGL } from "@/lib/performance/heavy-libs-loader";
@@ -281,7 +281,7 @@ const VesselTrackingMap = () => {
                 className={`cursor-pointer transition-all hover:shadow-md ${
                   selectedVessel?.id === vessel.id ? "ring-2 ring-primary" : ""
                 }`}
-                onClick={() => centerOnVessel(vessel)}
+                onClick={() => handlecenterOnVessel}
               >
                 <CardContent className="p-4">
                   <div className="space-y-2">

@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";;
+import { useEffect, useState, useCallback } from "react";;
 import React, { useState, useEffect } from "react";
 import { Dialog, DialogContent, DialogDescription, DialogHeader, DialogTitle } from "@/components/ui/dialog";
 import { Button } from "@/components/ui/button";
@@ -249,7 +249,7 @@ export const ReservationForm: React.FC<ReservationFormProps> = ({
               <Button
                 type="button"
                 variant="outline"
-                onClick={() => setShowTemplates(true)}
+                onClick={handleSetShowTemplates}
                 className="flex items-center gap-2"
               >
                 <Bookmark className="h-4 w-4" />
@@ -271,7 +271,7 @@ export const ReservationForm: React.FC<ReservationFormProps> = ({
                     <Input
                       id="title"
                       value={formData.title}
-                      onChange={(e) => setFormData({ ...formData, title: e.target.value })}
+                      onChange={handleChange})}
                       placeholder="Ex: Hotel Santos Dumont - Rio de Janeiro"
                       required
                     />
@@ -308,7 +308,7 @@ export const ReservationForm: React.FC<ReservationFormProps> = ({
                   <Textarea
                     id="description"
                     value={formData.description}
-                    onChange={(e) => setFormData({ ...formData, description: e.target.value })}
+                    onChange={handleChange})}
                     placeholder="Detalhes adicionais sobre a reserva..."
                     rows={3}
                   />
@@ -332,7 +332,7 @@ export const ReservationForm: React.FC<ReservationFormProps> = ({
                       id="start_date"
                       type="datetime-local"
                       value={formData.start_date}
-                      onChange={(e) => setFormData({ ...formData, start_date: e.target.value })}
+                      onChange={handleChange})}
                       required
                     />
                   </div>
@@ -342,7 +342,7 @@ export const ReservationForm: React.FC<ReservationFormProps> = ({
                       id="end_date"
                       type="datetime-local"
                       value={formData.end_date}
-                      onChange={(e) => setFormData({ ...formData, end_date: e.target.value })}
+                      onChange={handleChange})}
                       required
                     />
                   </div>
@@ -354,7 +354,7 @@ export const ReservationForm: React.FC<ReservationFormProps> = ({
                     <Input
                       id="location"
                       value={formData.location}
-                      onChange={(e) => setFormData({ ...formData, location: e.target.value })}
+                      onChange={handleChange})}
                       placeholder="Ex: Rio de Janeiro, RJ"
                     />
                   </div>
@@ -363,7 +363,7 @@ export const ReservationForm: React.FC<ReservationFormProps> = ({
                     <Input
                       id="address"
                       value={formData.address}
-                      onChange={(e) => setFormData({ ...formData, address: e.target.value })}
+                      onChange={handleChange})}
                       placeholder="Rua, número, bairro, CEP"
                     />
                   </div>
@@ -383,7 +383,7 @@ export const ReservationForm: React.FC<ReservationFormProps> = ({
                     <Input
                       id="confirmation_number"
                       value={formData.confirmation_number}
-                      onChange={(e) => setFormData({ ...formData, confirmation_number: e.target.value })}
+                      onChange={handleChange})}
                       placeholder="Ex: ABC123456"
                     />
                   </div>
@@ -392,7 +392,7 @@ export const ReservationForm: React.FC<ReservationFormProps> = ({
                     <Input
                       id="room_type"
                       value={formData.room_type}
-                      onChange={(e) => setFormData({ ...formData, room_type: e.target.value })}
+                      onChange={handleChange})}
                       placeholder="Ex: Quarto duplo standard"
                     />
                   </div>
@@ -408,7 +408,7 @@ export const ReservationForm: React.FC<ReservationFormProps> = ({
                         type="number"
                         step="0.01"
                         value={formData.total_amount}
-                        onChange={(e) => setFormData({ ...formData, total_amount: e.target.value })}
+                        onChange={handleChange})}
                         placeholder="0.00"
                         className="pl-10"
                       />
@@ -467,7 +467,7 @@ export const ReservationForm: React.FC<ReservationFormProps> = ({
                       <Input
                         id="contact_info"
                         value={formData.contact_info}
-                        onChange={(e) => setFormData({ ...formData, contact_info: e.target.value })}
+                        onChange={handleChange})}
                         placeholder="Telefone, email, etc."
                         className="pl-10"
                       />
@@ -481,7 +481,7 @@ export const ReservationForm: React.FC<ReservationFormProps> = ({
                         id="supplier_url"
                         type="url"
                         value={formData.supplier_url}
-                        onChange={(e) => setFormData({ ...formData, supplier_url: e.target.value })}
+                        onChange={handleChange})}
                         placeholder="https://..."
                         className="pl-10"
                       />
@@ -494,7 +494,7 @@ export const ReservationForm: React.FC<ReservationFormProps> = ({
                   <Textarea
                     id="notes"
                     value={formData.notes}
-                    onChange={(e) => setFormData({ ...formData, notes: e.target.value })}
+                    onChange={handleChange})}
                     placeholder="Observações internas, requisitos especiais, etc."
                     rows={3}
                   />

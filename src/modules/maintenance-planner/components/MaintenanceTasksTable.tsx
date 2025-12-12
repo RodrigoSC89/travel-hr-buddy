@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";;
+import { useEffect, useState, useCallback, useMemo } from "react";;
 import React, { useState, useEffect } from "react";
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
@@ -304,7 +304,7 @@ export const MaintenanceTasksTable: React.FC<MaintenanceTasksTableProps> = ({ on
                 placeholder="Buscar por título, equipamento ou responsável..."
                 className="pl-8"
                 value={searchTerm}
-                onChange={(e) => setSearchTerm(e.target.value)}
+                onChange={handleChange}
               />
             </div>
           </div>
@@ -402,13 +402,13 @@ export const MaintenanceTasksTable: React.FC<MaintenanceTasksTableProps> = ({ on
                             Ver Detalhes
                           </DropdownMenuItem>
                           {task.status === "pending" && (
-                            <DropdownMenuItem onClick={() => handleStartTask(task.id)}>
+                            <DropdownMenuItem onClick={() => handlehandleStartTask}>
                               <Play className="h-4 w-4 mr-2" />
                               Iniciar Tarefa
                             </DropdownMenuItem>
                           )}
                           {(task.status === "pending" || task.status === "in_progress" || task.status === "overdue") && (
-                            <DropdownMenuItem onClick={() => handleCompleteTask(task.id)}>
+                            <DropdownMenuItem onClick={() => handlehandleCompleteTask}>
                               <CheckCheck className="h-4 w-4 mr-2" />
                               Marcar Concluído
                             </DropdownMenuItem>

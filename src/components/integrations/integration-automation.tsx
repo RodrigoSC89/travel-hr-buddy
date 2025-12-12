@@ -1,4 +1,4 @@
-import { useState } from "react";;
+import { useState, useCallback } from "react";;
 import React, { useState } from "react";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
@@ -234,7 +234,7 @@ export const IntegrationAutomation: React.FC = () => {
               <h3 className="text-lg font-semibold text-foreground">Regras de Automação</h3>
               <p className="text-sm text-muted-foreground">Configure ações automáticas baseadas em eventos</p>
             </div>
-            <Button onClick={() => setIsCreatingRule(true)} className="bg-primary hover:bg-primary/90">
+            <Button onClick={handleSetIsCreatingRule} className="bg-primary hover:bg-primary/90">
               <Zap className="w-4 h-4 mr-2" />
               Nova Regra
             </Button>
@@ -324,7 +324,7 @@ export const IntegrationAutomation: React.FC = () => {
                   <Input
                     id="endpoint"
                     value={config.endpoint || ""}
-                    onChange={(e) => setConfig({...config, endpoint: e.target.value})}
+                    onChange={handleChange})}
                     placeholder="https://api.exemplo.com/v1"
                   />
                 </div>

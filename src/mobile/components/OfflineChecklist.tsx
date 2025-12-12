@@ -1,5 +1,5 @@
 /**
-import { useEffect, useState } from "react";;
+import { useEffect, useState, useCallback, useMemo } from "react";;
  * PATCH 161.0 - Offline Checklist Component
  * Operational checklists that work offline-first
  */
@@ -176,8 +176,7 @@ export const OfflineChecklist: React.FC<OfflineChecklistProps> = ({
                     <Textarea
                       placeholder="Add notes..."
                       value={notes[item.id] || item.notes || ""}
-                      onChange={(e) => {
-                        setNotes({ ...notes, [item.id]: e.target.value });
+                      onChange={handleChange});
                       }}
                       onBlur={() => {
                         if (notes[item.id] !== item.notes) {

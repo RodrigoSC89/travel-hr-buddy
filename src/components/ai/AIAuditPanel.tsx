@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";;
+import { useEffect, useState, useCallback } from "react";;
 import React, { useState, useEffect } from "react";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
@@ -185,7 +185,7 @@ export const AIAuditPanel: React.FC = () => {
                 <Input 
                   placeholder="Buscar nos logs..."
                   value={searchTerm}
-                  onChange={(e) => setSearchTerm(e.target.value)}
+                  onChange={handleChange}
                   className="pl-10"
                 />
               </div>
@@ -196,7 +196,7 @@ export const AIAuditPanel: React.FC = () => {
                   key={f}
                   variant={filter === f ? "default" : "outline"}
                   size="sm"
-                  onClick={() => setFilter(f)}
+                  onClick={handleSetFilter}
                 >
                   {f === "all" && "Todos"}
                   {f === "approved" && "Aprovados"}

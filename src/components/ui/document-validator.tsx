@@ -1,4 +1,4 @@
-import { useState } from "react";;
+import { useState, useMemo, useCallback } from "react";;
 import React, { useState } from "react";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
@@ -245,7 +245,7 @@ export const DocumentValidator: React.FC<DocumentValidatorProps> = ({
               <Input
                 id="documentNumber"
                 value={manualData.documentNumber}
-                onChange={(e) => setManualData(prev => ({ ...prev, documentNumber: e.target.value }))}
+                onChange={handleChange}))}
                 placeholder="Ex: ABC123456"
               />
             </div>
@@ -254,7 +254,7 @@ export const DocumentValidator: React.FC<DocumentValidatorProps> = ({
               <Input
                 id="issuer"
                 value={manualData.issuer}
-                onChange={(e) => setManualData(prev => ({ ...prev, issuer: e.target.value }))}
+                onChange={handleChange}))}
                 placeholder="Ex: Marinha do Brasil"
               />
             </div>
@@ -264,7 +264,7 @@ export const DocumentValidator: React.FC<DocumentValidatorProps> = ({
                 id="issueDate"
                 type="date"
                 value={manualData.issueDate}
-                onChange={(e) => setManualData(prev => ({ ...prev, issueDate: e.target.value }))}
+                onChange={handleChange}))}
               />
             </div>
             <div>
@@ -273,7 +273,7 @@ export const DocumentValidator: React.FC<DocumentValidatorProps> = ({
                 id="expiryDate"
                 type="date"
                 value={manualData.expiryDate}
-                onChange={(e) => setManualData(prev => ({ ...prev, expiryDate: e.target.value }))}
+                onChange={handleChange}))}
               />
             </div>
           </div>
@@ -283,7 +283,7 @@ export const DocumentValidator: React.FC<DocumentValidatorProps> = ({
             <Textarea
               id="notes"
               value={manualData.notes}
-              onChange={(e) => setManualData(prev => ({ ...prev, notes: e.target.value }))}
+              onChange={handleChange}))}
               placeholder="Informações adicionais sobre o documento..."
               rows={3}
             />

@@ -1,5 +1,5 @@
 /**
-import { useEffect, useState } from "react";;
+import { useEffect, useState, useCallback } from "react";;
  * PATCH 101.0 - Analytics Core Complete
  * Enhanced with data collection, custom dashboards, AI insights, and export functionality
  */

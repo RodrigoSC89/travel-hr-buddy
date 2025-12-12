@@ -1,5 +1,5 @@
 /**
-import { useEffect, useRef, useState } from "react";;
+import { useEffect, useRef, useState, useCallback, useMemo } from "react";;
  * NAUTILUS BRAIN - IA Central do Sistema
  * Assistente inteligente com LLM para toda operação marítima
  */
@@ -326,7 +326,7 @@ Qual área você gostaria de explorar em detalhes?`;
                   {/* Actions for assistant messages */}
                   {message.role === "assistant" && (
                     <div className="flex items-center gap-2 mt-3 pt-2 border-t border-border/50">
-                      <Button variant="ghost" size="sm" onClick={() => copyMessage(message.content)}>
+                      <Button variant="ghost" size="sm" onClick={() => handlecopyMessage}>
                         <Copy className="h-3 w-3 mr-1" />
                         Copiar
                       </Button>
@@ -348,7 +348,7 @@ Qual área você gostaria de explorar em detalhes?`;
                           variant="outline"
                           size="sm"
                           className="text-xs"
-                          onClick={() => handleSuggestionClick(suggestion)}
+                          onClick={() => handlehandleSuggestionClick}
                         >
                           <Lightbulb className="h-3 w-3 mr-1" />
                           {suggestion}
@@ -384,14 +384,14 @@ Qual área você gostaria de explorar em detalhes?`;
               variant="outline"
               size="icon"
               className={isListening ? "bg-red-100 text-red-600" : ""}
-              onClick={() => setIsListening(!isListening)}
+              onClick={handleSetIsListening}
             >
               <Mic className={`h-4 w-4 ${isListening ? "animate-pulse" : ""}`} />
             </Button>
             <Input
               ref={inputRef}
               value={input}
-              onChange={(e) => setInput(e.target.value)}
+              onChange={handleChange}
               onKeyPress={(e) => e.key === "Enter" && handleSend()}
               placeholder="Pergunte ao Nautilus Brain..."
               className="flex-1"

@@ -1,5 +1,5 @@
 /**
-import { useEffect, useRef, useState } from "react";;
+import { useEffect, useRef, useState, useCallback, useMemo } from "react";;
  * Satellite AI Copilot Component
  * AI assistant for satellite tracking analysis
  */
@@ -291,7 +291,7 @@ Para informações mais específicas, pergunte sobre:
               key={index}
               variant="outline"
               size="sm"
-              onClick={() => handleQuickAction(action.prompt)}
+              onClick={() => handlehandleQuickAction}
               disabled={isLoading}
               className="text-xs"
             >
@@ -357,14 +357,14 @@ Para informações mais específicas, pergunte sobre:
         <div className="flex gap-2 pt-2 border-t">
           <Input
             value={input}
-            onChange={(e) => setInput(e.target.value)}
+            onChange={handleChange}
             onKeyPress={(e) => e.key === "Enter" && sendMessage(input)}
             placeholder="Pergunte sobre satélites, órbitas, passagens..."
             disabled={isLoading}
             className="flex-1"
           />
           <Button 
-            onClick={() => sendMessage(input)} 
+            onClick={() => handlesendMessage} 
             disabled={isLoading || !input.trim()}
             size="icon"
           >

@@ -173,7 +173,7 @@ export const NotificationsAlertsTab: React.FC<NotificationsAlertsTabProps> = ({
                 id="scheduleStart"
                 type="time"
                 value={settings.scheduleStart}
-                onChange={(e) => onUpdate({ scheduleStart: e.target.value })}
+                onChange={handleChange})}
               />
               <p className="text-xs text-muted-foreground">
                 Início do período para envio de notificações
@@ -186,7 +186,7 @@ export const NotificationsAlertsTab: React.FC<NotificationsAlertsTabProps> = ({
                 id="scheduleEnd"
                 type="time"
                 value={settings.scheduleEnd}
-                onChange={(e) => onUpdate({ scheduleEnd: e.target.value })}
+                onChange={handleChange})}
               />
               <p className="text-xs text-muted-foreground">
                 Fim do período para envio de notificações

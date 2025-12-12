@@ -1,4 +1,4 @@
-import { useState } from "react";;
+import { useState, useCallback } from "react";;
 import React, { useState } from "react";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
@@ -155,7 +155,7 @@ export const PriceAlertsDashboard: React.FC = () => {
                 <RefreshCw className="w-4 h-4 mr-2" />
                 Refresh
               </Button>
-              <Button size="sm" onClick={() => setShowCreateDialog(true)}>
+              <Button size="sm" onClick={handleSetShowCreateDialog}>
                 <Plus className="w-4 h-4 mr-2" />
                 New Alert
               </Button>

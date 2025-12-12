@@ -1,4 +1,4 @@
-import { useState } from "react";;
+import { useState, useMemo, useCallback } from "react";;
 
 import React, { useState } from "react";
 import { Card, CardHeader, CardTitle, CardContent } from "@/components/ui/card";
@@ -170,7 +170,7 @@ export const BillingManagement: React.FC = () => {
                 {formatCurrency(currentPlan?.price_monthly || 0)}
               </div>
               <div className="text-sm text-muted-foreground">/mês</div>
-              <Button onClick={() => setIsUpgradeDialogOpen(true)}>
+              <Button onClick={handleSetIsUpgradeDialogOpen}>
                 Alterar Plano
               </Button>
             </div>

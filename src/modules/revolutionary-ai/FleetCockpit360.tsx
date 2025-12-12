@@ -1,5 +1,5 @@
 /**
-import { useEffect, useState } from "react";;
+import { useEffect, useState, useCallback, useMemo } from "react";;
  * REVOLUTIONARY AI - Fleet Cockpit 360°
  * Funcionalidade 2: Visão 360º de cada embarcação com IA contextual
  */
@@ -127,7 +127,7 @@ export const FleetCockpit360 = memo(function() {
                   ? "border-primary ring-2 ring-primary/20" 
                   : "border-border/50 hover:border-primary/50"
               }`}
-              onClick={() => setSelectedVessel(vessel)}
+              onClick={handleSetSelectedVessel}
             >
               <CardContent className="p-4">
                 <div className="flex items-start justify-between mb-3">

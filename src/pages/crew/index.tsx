@@ -1,4 +1,4 @@
-import { useEffect, useMemo, useState } from "react";;
+import { useEffect, useMemo, useState, useCallback } from "react";;
 
 /**
  * PATCH 416: Consolidated Crew Management Page
@@ -245,7 +245,7 @@ export const ConsolidatedCrewManagement = memo(() => {
             <Input
               placeholder="Search crew members..."
               value={searchTerm}
-              onChange={(e) => setSearchTerm(e.target.value)}
+              onChange={handleChange}
               className="max-w-sm"
             />
           </div>

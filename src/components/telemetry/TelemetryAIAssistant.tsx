@@ -1,5 +1,5 @@
 /**
-import { useEffect, useRef, useState } from "react";;
+import { useEffect, useRef, useState, useCallback, useMemo } from "react";;
  * Telemetry AI Assistant Component
  * Interactive LLM-powered assistant for telemetry analysis
  */
@@ -251,7 +251,7 @@ export const TelemetryAIAssistant = memo(function({
         <div className="flex gap-2">
           <Input
             value={input}
-            onChange={(e) => setInput(e.target.value)}
+            onChange={handleChange}
             placeholder="Pergunte sobre os dados de telemetria..."
             onKeyDown={(e) => e.key === "Enter" && handleSendMessage()}
             disabled={isLoading}

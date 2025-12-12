@@ -219,7 +219,7 @@ export const DocumentEditor = memo(function({
           <label className="text-sm font-medium">Título</label>
           <Input
             value={title}
-            onChange={(e) => setTitle(e.target.value)}
+            onChange={handleChange}
             placeholder="Título do documento"
           />
         </div>
@@ -228,7 +228,7 @@ export const DocumentEditor = memo(function({
           <label className="text-sm font-medium">Conteúdo</label>
           <Textarea
             value={content}
-            onChange={(e) => setContent(e.target.value)}
+            onChange={handleChange}
             placeholder="Digite o conteúdo do documento aqui..."
             rows={15}
             className="font-mono"

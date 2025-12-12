@@ -715,7 +715,7 @@ export default function ChannelManagerProfessional() {
 
             <Tooltip>
               <TooltipTrigger asChild>
-                <Button variant="outline" size="icon" onClick={() => setIsAiDialogOpen(true)}>
+                <Button variant="outline" size="icon" onClick={handleSetIsAiDialogOpen}>
                   <Sparkles className="h-4 w-4" />
                 </Button>
               </TooltipTrigger>
@@ -724,14 +724,14 @@ export default function ChannelManagerProfessional() {
 
             <Tooltip>
               <TooltipTrigger asChild>
-                <Button variant="outline" size="icon" onClick={() => setIsSettingsDialogOpen(true)}>
+                <Button variant="outline" size="icon" onClick={handleSetIsSettingsDialogOpen}>
                   <Settings className="h-4 w-4" />
                 </Button>
               </TooltipTrigger>
               <TooltipContent>Configurações</TooltipContent>
             </Tooltip>
 
-            <Button onClick={() => setIsCreateDialogOpen(true)} className="gap-2">
+            <Button onClick={handleSetIsCreateDialogOpen} className="gap-2">
               <Plus className="h-4 w-4" />
               Novo Canal
             </Button>
@@ -776,7 +776,7 @@ export default function ChannelManagerProfessional() {
                 <Button
                   variant="ghost"
                   size="sm"
-                  onClick={() => setShowFavoritesOnly(!showFavoritesOnly)}
+                  onClick={handleSetShowFavoritesOnly}
                   className={showFavoritesOnly ? "text-yellow-500" : ""}
                 >
                   <Star className={`h-4 w-4 ${showFavoritesOnly ? "fill-yellow-500" : ""}`} />
@@ -789,7 +789,7 @@ export default function ChannelManagerProfessional() {
                 <Input
                   placeholder="Buscar canais..."
                   value={searchQuery}
-                  onChange={(e) => setSearchQuery(e.target.value)}
+                  onChange={handleChange}
                   className="pl-9 bg-background/50"
                 />
               </div>
@@ -838,7 +838,7 @@ export default function ChannelManagerProfessional() {
                             ? "bg-primary/10 border-primary/30"
                             : "bg-background/50 border-transparent hover:bg-accent/50 hover:border-border"
                         }`}
-                        onClick={() => setSelectedChannel(channel)}
+                        onClick={handleSetSelectedChannel}
                       >
                         <div className="flex items-start justify-between">
                           <div className="flex items-center gap-2 flex-1 min-w-0">
@@ -993,7 +993,7 @@ export default function ChannelManagerProfessional() {
                     <div className="flex items-center gap-2">
                       <Tooltip>
                         <TooltipTrigger asChild>
-                          <Button variant="outline" size="icon" onClick={() => setIsMembersDialogOpen(true)}>
+                          <Button variant="outline" size="icon" onClick={handleSetIsMembersDialogOpen}>
                             <Users className="h-4 w-4" />
                           </Button>
                         </TooltipTrigger>
@@ -1001,7 +1001,7 @@ export default function ChannelManagerProfessional() {
                       </Tooltip>
                       <Tooltip>
                         <TooltipTrigger asChild>
-                          <Button variant="outline" size="icon" onClick={() => setIsUploadDialogOpen(true)}>
+                          <Button variant="outline" size="icon" onClick={handleSetIsUploadDialogOpen}>
                             <Upload className="h-4 w-4" />
                           </Button>
                         </TooltipTrigger>
@@ -1017,7 +1017,7 @@ export default function ChannelManagerProfessional() {
                       </Tooltip>
                       <Tooltip>
                         <TooltipTrigger asChild>
-                          <Button variant="outline" size="icon" onClick={() => setIsShareDialogOpen(true)}>
+                          <Button variant="outline" size="icon" onClick={handleSetIsShareDialogOpen}>
                             <Share2 className="h-4 w-4" />
                           </Button>
                         </TooltipTrigger>
@@ -1030,16 +1030,16 @@ export default function ChannelManagerProfessional() {
                           </Button>
                         </DropdownMenuTrigger>
                         <DropdownMenuContent align="end">
-                          <DropdownMenuItem onClick={() => setIsEditDialogOpen(true)}>
+                          <DropdownMenuItem onClick={handleSetIsEditDialogOpen}>
                             <Edit className="h-4 w-4 mr-2" />
                             Editar Canal
                           </DropdownMenuItem>
-                          <DropdownMenuItem onClick={() => handleToggleChannel(selectedChannel)}>
+                          <DropdownMenuItem onClick={() => handlehandleToggleChannel}>
                             <Power className="h-4 w-4 mr-2" />
                             {selectedChannel.is_active ? "Desativar" : "Ativar"}
                           </DropdownMenuItem>
                           <DropdownMenuSeparator />
-                          <DropdownMenuItem className="text-destructive" onClick={() => setIsDeleteDialogOpen(true)}>
+                          <DropdownMenuItem className="text-destructive" onClick={handleSetIsDeleteDialogOpen}>
                             <Trash2 className="h-4 w-4 mr-2" />
                             Excluir Canal
                           </DropdownMenuItem>
@@ -1129,7 +1129,7 @@ export default function ChannelManagerProfessional() {
                           <div className="flex-1 flex items-center gap-2 bg-background/50 rounded-lg border px-3">
                             <Tooltip>
                               <TooltipTrigger asChild>
-                                <Button variant="ghost" size="icon" className="h-8 w-8" onClick={() => setIsUploadDialogOpen(true)}>
+                                <Button variant="ghost" size="icon" className="h-8 w-8" onClick={handleSetIsUploadDialogOpen}>
                                   <Paperclip className="h-4 w-4" />
                                 </Button>
                               </TooltipTrigger>
@@ -1137,7 +1137,7 @@ export default function ChannelManagerProfessional() {
                             </Tooltip>
                             <Input
                               value={messageContent}
-                              onChange={(e) => setMessageContent(e.target.value)}
+                              onChange={handleChange}
                               placeholder="Digite sua mensagem..."
                               className="border-0 bg-transparent focus-visible:ring-0"
                               onKeyPress={(e) => {
@@ -1292,7 +1292,7 @@ export default function ChannelManagerProfessional() {
 
                         <div className="pt-4 border-t">
                           <h3 className="font-medium text-destructive mb-4">Zona de Perigo</h3>
-                          <Button variant="destructive" className="gap-2" onClick={() => setIsDeleteDialogOpen(true)}>
+                          <Button variant="destructive" className="gap-2" onClick={handleSetIsDeleteDialogOpen}>
                             <Trash2 className="h-4 w-4" />
                             Excluir Canal
                           </Button>
@@ -1311,7 +1311,7 @@ export default function ChannelManagerProfessional() {
                     Escolha um canal na lista à esquerda para visualizar mensagens, 
                     gerenciar membros e configurações.
                   </p>
-                  <Button className="mt-4 gap-2" onClick={() => setIsCreateDialogOpen(true)}>
+                  <Button className="mt-4 gap-2" onClick={handleSetIsCreateDialogOpen}>
                     <Plus className="h-4 w-4" />
                     Criar Novo Canal
                   </Button>
@@ -1338,7 +1338,7 @@ export default function ChannelManagerProfessional() {
                 <Label>Nome do Canal *</Label>
                 <Input
                   value={newChannelName}
-                  onChange={(e) => setNewChannelName(e.target.value)}
+                  onChange={handleChange}
                   placeholder="Ex: Operações - Navio A"
                 />
               </div>
@@ -1346,7 +1346,7 @@ export default function ChannelManagerProfessional() {
                 <Label>Descrição</Label>
                 <Textarea
                   value={newChannelDescription}
-                  onChange={(e) => setNewChannelDescription(e.target.value)}
+                  onChange={handleChange}
                   placeholder="Descreva o propósito deste canal..."
                   rows={3}
                 />
@@ -1375,7 +1375,7 @@ export default function ChannelManagerProfessional() {
               </div>
             </div>
             <DialogFooter>
-              <Button variant="outline" onClick={() => setIsCreateDialogOpen(false)}>
+              <Button variant="outline" onClick={handleSetIsCreateDialogOpen}>
                 Cancelar
               </Button>
               <Button onClick={handleCreateChannel} disabled={!newChannelName.trim()}>
@@ -1402,19 +1402,19 @@ export default function ChannelManagerProfessional() {
                 <Label>Pergunta ou Análise</Label>
                 <Textarea
                   value={aiPrompt}
-                  onChange={(e) => setAiPrompt(e.target.value)}
+                  onChange={handleChange}
                   placeholder="Ex: Analise a eficiência da comunicação neste canal..."
                   rows={3}
                 />
               </div>
               <div className="flex gap-2 flex-wrap">
-                <Button variant="outline" size="sm" onClick={() => setAiPrompt("Analise a atividade e sugira melhorias")}>
+                <Button variant="outline" size="sm" onClick={handleSetAiPrompt}>
                   Análise de Atividade
                 </Button>
-                <Button variant="outline" size="sm" onClick={() => setAiPrompt("Gere um resumo das conversas recentes")}>
+                <Button variant="outline" size="sm" onClick={handleSetAiPrompt}>
                   Resumo de Conversas
                 </Button>
-                <Button variant="outline" size="sm" onClick={() => setAiPrompt("Sugira membros para adicionar ao canal")}>
+                <Button variant="outline" size="sm" onClick={handleSetAiPrompt}>
                   Sugerir Membros
                 </Button>
               </div>
@@ -1557,7 +1557,7 @@ export default function ChannelManagerProfessional() {
               </div>
             </div>
             <DialogFooter>
-              <Button onClick={() => setIsSettingsDialogOpen(false)}>
+              <Button onClick={handleSetIsSettingsDialogOpen}>
                 Salvar
               </Button>
             </DialogFooter>
@@ -1646,7 +1646,7 @@ export default function ChannelManagerProfessional() {
               </div>
             </div>
             <DialogFooter>
-              <Button variant="outline" onClick={() => setIsEditDialogOpen(false)}>Cancelar</Button>
+              <Button variant="outline" onClick={handleSetIsEditDialogOpen}>Cancelar</Button>
               <Button onClick={() => { setIsEditDialogOpen(false); toast({ title: "Canal atualizado!" }); }}>
                 Salvar
               </Button>

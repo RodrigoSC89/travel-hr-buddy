@@ -1,4 +1,4 @@
-import { useCallback, useEffect, useState } from "react";;
+import { useCallback, useMemo, useEffect, useState } from "react";;
 
 /**
  * PATCH 366 - Crew Management - Rotation & Alerts
@@ -482,8 +482,7 @@ END:VCALENDAR`;
                   <Input
                     type="date"
                     value={newRotation.scheduled_date || ""}
-                    onChange={(e) =>
-                      setNewRotation({ ...newRotation, scheduled_date: e.target.value })
+                    onChange={handleChange})
                     }
                   />
                 </div>
@@ -492,8 +491,7 @@ END:VCALENDAR`;
                     <Label>Departure Port</Label>
                     <Input
                       value={newRotation.departure_port || ""}
-                      onChange={(e) =>
-                        setNewRotation({ ...newRotation, departure_port: e.target.value })
+                      onChange={handleChange})
                       }
                     />
                   </div>
@@ -501,8 +499,7 @@ END:VCALENDAR`;
                     <Label>Arrival Port</Label>
                     <Input
                       value={newRotation.arrival_port || ""}
-                      onChange={(e) =>
-                        setNewRotation({ ...newRotation, arrival_port: e.target.value })
+                      onChange={handleChange})
                       }
                     />
                   </div>
@@ -511,13 +508,12 @@ END:VCALENDAR`;
                   <Label>Notes</Label>
                   <Textarea
                     value={newRotation.notes || ""}
-                    onChange={(e) =>
-                      setNewRotation({ ...newRotation, notes: e.target.value })
+                    onChange={handleChange})
                     }
                   />
                 </div>
                 <div className="flex justify-end gap-2">
-                  <Button variant="outline" onClick={() => setIsDialogOpen(false)}>
+                  <Button variant="outline" onClick={handleSetIsDialogOpen}>
                     Cancel
                   </Button>
                   <Button onClick={handleCreateRotation}>Create Rotation</Button>
@@ -683,7 +679,7 @@ END:VCALENDAR`;
                     <Button
                       variant="ghost"
                       size="sm"
-                      onClick={() => exportToCalendar(rotation)}
+                      onClick={() => handleexportToCalendar}
                     >
                       <CalendarIcon className="h-4 w-4" />
                     </Button>

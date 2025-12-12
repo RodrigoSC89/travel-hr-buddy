@@ -1,5 +1,5 @@
 /**
-import { useState } from "react";;
+import { useState, useMemo, useCallback } from "react";;
  * Nautilus Assistant - Módulo Unificado de Assistentes
  * PATCH UNIFY-3.0 - Fusão dos módulos de Assistentes
  * 
@@ -190,7 +190,7 @@ const NautilusAssistant: React.FC = () => {
             <Textarea 
               placeholder="Digite sua mensagem..."
               value={chatInput}
-              onChange={(e) => setChatInput(e.target.value)}
+              onChange={handleChange}
               onKeyDown={(e) => {
                 if (e.key === "Enter" && !e.shiftKey) {
                   e.preventDefault();

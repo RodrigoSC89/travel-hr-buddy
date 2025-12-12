@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";;
+import { useEffect, useState, useCallback, useMemo } from "react";;
 import React, { useState, useEffect } from "react";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
@@ -259,7 +259,7 @@ const OceanSonar: React.FC = () => {
                   type="number"
                   step="0.0001"
                   value={centerLat}
-                  onChange={(e) => setCenterLat(parseFloat(e.target.value))}
+                  onChange={handleChange}
                   className="bg-zinc-900/50 border-zinc-700 text-white"
                   disabled={isScanning}
                 />
@@ -270,7 +270,7 @@ const OceanSonar: React.FC = () => {
                   type="number"
                   step="0.0001"
                   value={centerLon}
-                  onChange={(e) => setCenterLon(parseFloat(e.target.value))}
+                  onChange={handleChange}
                   className="bg-zinc-900/50 border-zinc-700 text-white"
                   disabled={isScanning}
                 />
@@ -280,7 +280,7 @@ const OceanSonar: React.FC = () => {
                 <Input
                   type="number"
                   value={radiusKm}
-                  onChange={(e) => setRadiusKm(parseInt(e.target.value))}
+                  onChange={handleChange}
                   className="bg-zinc-900/50 border-zinc-700 text-white"
                   disabled={isScanning}
                 />

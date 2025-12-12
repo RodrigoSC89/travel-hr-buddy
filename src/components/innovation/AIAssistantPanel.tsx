@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";;
+import { useEffect, useState, useCallback } from "react";;
 import React, { useState, useEffect } from "react";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
@@ -233,7 +233,7 @@ export const AIAssistantPanel = memo(() => {
             <Input
               placeholder="Ex: 'Analisar eficiência da frota no último trimestre'"
               value={query}
-              onChange={(e) => setQuery(e.target.value)}
+              onChange={handleChange}
               onKeyPress={(e) => e.key === "Enter" && handleQuery()}
               disabled={isProcessing}
             />

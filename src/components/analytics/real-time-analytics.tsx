@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";;
+import { useEffect, useState, useCallback, useMemo } from "react";;
 import React, { useState, useEffect } from "react";
 import { useOptimizedPolling } from "@/hooks/use-optimized-polling";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
@@ -205,7 +205,7 @@ const RealTimeAnalytics = () => {
           <Button
             variant={isLive ? "destructive" : "default"}
             size="sm"
-            onClick={() => setIsLive(!isLive)}
+            onClick={handleSetIsLive}
             className="gap-2"
           >
             <RefreshCw className={`w-4 h-4 ${isLive ? "animate-spin" : ""}`} />
@@ -221,7 +221,7 @@ const RealTimeAnalytics = () => {
           <select 
             className="bg-background border border-border rounded px-3 py-1"
             value={selectedTimeRange}
-            onChange={(e) => setSelectedTimeRange(e.target.value)}
+            onChange={handleChange}
           >
             <option value="1h">Última hora</option>
             <option value="24h">Últimas 24h</option>

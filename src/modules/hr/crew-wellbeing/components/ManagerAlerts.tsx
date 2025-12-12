@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";;
+import { useEffect, useState, useCallback } from "react";;
 
 import React, { useEffect, useState } from "react";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
@@ -222,11 +222,11 @@ export const ManagerAlerts: React.FC = () => {
                     <Button
                       size="sm"
                       variant="outline"
-                      onClick={() => acknowledgeAlert(alert.id)}
+                      onClick={() => handleacknowledgeAlert}
                     >
                       Acknowledge
                     </Button>
-                    <Button size="sm" onClick={() => resolveAlert(alert.id)}>
+                    <Button size="sm" onClick={() => handleresolveAlert}>
                       Resolve
                     </Button>
                   </div>
@@ -259,7 +259,7 @@ export const ManagerAlerts: React.FC = () => {
                     {new Date(alert.created_at).toLocaleString()}
                   </p>
                 </div>
-                <Button size="sm" onClick={() => resolveAlert(alert.id)}>
+                <Button size="sm" onClick={() => handleresolveAlert}>
                   Resolve
                 </Button>
               </div>

@@ -5,7 +5,7 @@
 
 "use client";
 
-import { useEffect, useState } from "react";;;
+import { useEffect, useState, useCallback } from "react";;;
 import { useNavigate, useSearchParams } from "react-router-dom";
 import { supabase } from "@/integrations/supabase/client";
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "@/components/ui/card";
@@ -379,7 +379,7 @@ export default function RestoreDashboard() {
           <Button
             variant="ghost"
             size="sm"
-            onClick={() => navigate("/admin")}
+            onClick={() => handlenavigate}
           >
             <ArrowLeft className="w-4 h-4 mr-2" />
             Voltar ao Painel Admin
@@ -419,7 +419,7 @@ export default function RestoreDashboard() {
               <Input
                 placeholder="Filtrar por e-mail (pressione Enter)"
                 value={filterEmail}
-                onChange={(e) => setFilterEmail(e.target.value)}
+                onChange={handleChange}
                 onKeyPress={handleKeyPress}
                 className="flex-1"
               />

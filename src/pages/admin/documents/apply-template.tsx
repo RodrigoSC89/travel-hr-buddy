@@ -1,4 +1,4 @@
-import { useState } from "react";;;
+import { useState, useCallback } from "react";;;
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { createDocument } from "@/lib/documents/api";
@@ -85,7 +85,7 @@ export default function ApplyTemplate({ template }: ApplyTemplateProps) {
         <Input
           key={key}
           placeholder={`Preencher: ${key}`}
-          onChange={(e) => handleChange(key, e.target.value)}
+          onChange={handleChange}
         />
       ))}
 

@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";;
+import { useEffect, useState, useCallback } from "react";;
 import React, { useState, useEffect } from "react";
 import { logger } from "@/lib/logger";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
@@ -482,7 +482,7 @@ export default function TrainingAcademyEnhanced() {
                           </div>
                           <Button 
                             size="sm" 
-                            onClick={() => downloadCertificatePDF(cert)}
+                            onClick={() => handledownloadCertificatePDF}
                           >
                             <Download className="h-4 w-4 mr-2" />
                             Baixar PDF

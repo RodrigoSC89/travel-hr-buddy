@@ -329,11 +329,11 @@ const AIModelsLab: React.FC = () => {
                   <div className="flex gap-2">
                     {model.status === "ready" && (
                       <>
-                        <Button size="sm" className="flex-1" onClick={() => handleExportModel(model.id)}>
+                        <Button size="sm" className="flex-1" onClick={() => handlehandleExportModel}>
                           <Download className="h-4 w-4 mr-1" />
                           Exportar
                         </Button>
-                        <Button size="sm" variant="outline" onClick={() => handleStartTraining(model.id)}>
+                        <Button size="sm" variant="outline" onClick={() => handlehandleStartTraining}>
                           <RefreshCw className="h-4 w-4 mr-1" />
                           Re-treinar
                         </Button>
@@ -346,7 +346,7 @@ const AIModelsLab: React.FC = () => {
                       </Button>
                     )}
                     {model.status === "failed" && (
-                      <Button size="sm" variant="outline" className="w-full" onClick={() => handleStartTraining(model.id)}>
+                      <Button size="sm" variant="outline" className="w-full" onClick={() => handlehandleStartTraining}>
                         <Play className="h-4 w-4 mr-1" />
                         Reiniciar
                       </Button>

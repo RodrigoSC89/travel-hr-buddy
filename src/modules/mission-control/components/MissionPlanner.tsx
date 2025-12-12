@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";;
+import { useEffect, useState, useCallback } from "react";;
 
 // PATCH 284: Mission Control - Mission Planner Component
 import React, { useState, useEffect } from "react";
@@ -233,7 +233,7 @@ export const MissionPlanner: React.FC = () => {
                 {(mission.status === "ready" || mission.status === "planning") && (
                   <Button
                     size="sm"
-                    onClick={() => activateMission(mission.id)}
+                    onClick={() => handleactivateMission}
                     disabled={activating === mission.id}
                     className="ml-4"
                   >

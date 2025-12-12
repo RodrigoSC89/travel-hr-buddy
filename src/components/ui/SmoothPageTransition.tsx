@@ -5,7 +5,7 @@
 
 import { motion, AnimatePresence } from "framer-motion";
 import { useLocation } from "react-router-dom";
-import { memo, memo, ReactNode, useMemo } from "react";;;
+import { memo, memo, ReactNode, useMemo, useCallback } from "react";;;
 
 interface SmoothPageTransitionProps {
   children: ReactNode;

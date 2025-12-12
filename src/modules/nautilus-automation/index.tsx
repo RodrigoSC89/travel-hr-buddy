@@ -1,5 +1,5 @@
 /**
-import { useState } from "react";;
+import { useState, useMemo, useCallback } from "react";;
  * Nautilus Automation - Módulo Unificado de Automação
  * PATCH UNIFY-2.0 - Fusão dos módulos de automação
  * 
@@ -352,7 +352,7 @@ const NautilusAutomation: React.FC = () => {
                     <Button 
                       variant="outline" 
                       size="sm"
-                      onClick={() => runWorkflow(workflow.id)}
+                      onClick={() => handlerunWorkflow}
                       disabled={workflow.status !== "active"}
                     >
                       <Play className="h-4 w-4" />
@@ -360,7 +360,7 @@ const NautilusAutomation: React.FC = () => {
                     <Button 
                       variant="outline" 
                       size="sm"
-                      onClick={() => toggleWorkflow(workflow.id)}
+                      onClick={() => handletoggleWorkflow}
                     >
                       {workflow.status === "active" ? <Pause className="h-4 w-4" /> : <Play className="h-4 w-4" />}
                     </Button>

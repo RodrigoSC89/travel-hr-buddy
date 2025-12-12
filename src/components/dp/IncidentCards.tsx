@@ -5,7 +5,7 @@
  * - Analisar com IA: real AI analysis using Lovable AI
  */
 "use client";
-import { useEffect, useState } from "react";;;
+import { useEffect, useState, useCallback, useMemo } from "react";;;
 import { Card, CardContent } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
@@ -367,7 +367,7 @@ export default function IncidentCards() {
                 <Button 
                   size="sm" 
                   variant="outline"
-                  onClick={() => handleViewReport(incident)}
+                  onClick={() => handlehandleViewReport}
                 >
                   <FileText className="mr-1 h-4 w-4" />
                   Ver Relatório
@@ -375,7 +375,7 @@ export default function IncidentCards() {
                 <Button 
                   size="sm" 
                   variant="default"
-                  onClick={() => handleAnalyzeWithAI(incident)}
+                  onClick={() => handlehandleAnalyzeWithAI}
                 >
                   <Brain className="mr-1 h-4 w-4" />
                   Analisar com IA
@@ -605,7 +605,7 @@ export default function IncidentCards() {
                   <Textarea
                     placeholder="Faça uma pergunta adicional sobre este incidente..."
                     value={customPrompt}
-                    onChange={(e) => setCustomPrompt(e.target.value)}
+                    onChange={handleChange}
                     className="resize-none"
                     rows={2}
                   />

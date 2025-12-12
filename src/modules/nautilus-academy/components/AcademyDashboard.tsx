@@ -1,4 +1,4 @@
-import { useCallback, useState } from "react";;
+import { useCallback, useMemo, useState } from "react";;
 import React, { useState, useCallback } from "react";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
@@ -354,7 +354,7 @@ export default function AcademyDashboard() {
             </div>
           </div>
           <div className="flex flex-wrap items-center gap-2">
-            <Button variant="outline" size="sm" onClick={() => setShowNotifications(true)} className="relative">
+            <Button variant="outline" size="sm" onClick={handleSetShowNotifications} className="relative">
               <Bell className="h-4 w-4" />
               {unreadCount > 0 && (
                 <Badge variant="destructive" className="absolute -top-1 -right-1 h-5 w-5 p-0 text-xs flex items-center justify-center">
@@ -362,7 +362,7 @@ export default function AcademyDashboard() {
                 </Badge>
               )}
             </Button>
-            <Button variant="outline" size="sm" onClick={() => setShowSettings(true)} title="Configurações">
+            <Button variant="outline" size="sm" onClick={handleSetShowSettings} title="Configurações">
               <Settings className="h-4 w-4" />
             </Button>
             <Button variant="outline" size="sm" onClick={refetch} title="Atualizar dados">
@@ -371,13 +371,13 @@ export default function AcademyDashboard() {
             <Button variant="outline" size="sm" onClick={exportData}>
               <Download className="h-4 w-4 mr-1" />Exportar
             </Button>
-            <Button variant="outline" size="sm" onClick={() => setShowNewCrew(true)}>
+            <Button variant="outline" size="sm" onClick={handleSetShowNewCrew}>
               <UserPlus className="h-4 w-4 mr-1" />Tripulante
             </Button>
-            <Button variant="outline" size="sm" onClick={() => setShowAICourseGenerator(true)}>
+            <Button variant="outline" size="sm" onClick={handleSetShowAICourseGenerator}>
               <Sparkles className="h-4 w-4 mr-1" />Gerar com IA
             </Button>
-            <Button size="sm" onClick={() => setShowNewCourse(true)}>
+            <Button size="sm" onClick={handleSetShowNewCourse}>
               <Plus className="h-4 w-4 mr-1" />Novo Curso
             </Button>
           </div>
@@ -452,7 +452,7 @@ export default function AcademyDashboard() {
               </Badge>
             </CardTitle>
             <div className="flex gap-2">
-              <Button variant="outline" size="sm" onClick={() => setShowAIChat(true)}>
+              <Button variant="outline" size="sm" onClick={handleSetShowAIChat}>
                 <MessageSquare className="h-4 w-4 mr-2" />Chat IA
               </Button>
               <Button size="sm" onClick={handleGenerateAI} disabled={isAnalyzing}>
@@ -479,7 +479,7 @@ export default function AcademyDashboard() {
                 {suggestion.type === "recommendation" && <Target className="h-5 w-5 text-amber-500" />}
                 {suggestion.type === "optimization" && <TrendingUp className="h-5 w-5 text-muted-foreground" />}
                 <span className="flex-1 text-sm">{suggestion.message}</span>
-                <Button size="sm" variant="outline" onClick={() => handleSuggestionAction(suggestion.type)}>
+                <Button size="sm" variant="outline" onClick={() => handlehandleSuggestionAction}>
                   Ação
                 </Button>
               </div>
@@ -516,7 +516,7 @@ export default function AcademyDashboard() {
               <Input
                 placeholder="Buscar cursos..."
                 value={searchTerm}
-                onChange={(e) => setSearchTerm(e.target.value)}
+                onChange={handleChange}
                 className="pl-10"
               />
             </div>
@@ -592,20 +592,20 @@ export default function AcademyDashboard() {
                           <Badge variant="outline">{progress.status === "completed" ? "Concluído" : "Em andamento"}</Badge>
                         </div>
                         <div className="flex gap-2">
-                          <Button size="sm" className="flex-1" onClick={() => handleContinueCourse(course, progress)}>
+                          <Button size="sm" className="flex-1" onClick={() => handlehandleContinueCourse}>
                             <Play className="h-4 w-4 mr-1" />Continuar
                           </Button>
-                          <Button size="sm" variant="outline" onClick={() => handleViewCourseDetails(course)}>
+                          <Button size="sm" variant="outline" onClick={() => handlehandleViewCourseDetails}>
                             <Eye className="h-4 w-4" />
                           </Button>
                         </div>
                       </div>
                     ) : (
                       <div className="flex gap-2">
-                        <Button size="sm" className="flex-1" onClick={() => handleEnrollInCourse(course.id)}>
+                        <Button size="sm" className="flex-1" onClick={() => handlehandleEnrollInCourse}>
                           <GraduationCap className="h-4 w-4 mr-1" />Inscrever-se
                         </Button>
-                        <Button size="sm" variant="outline" onClick={() => handleViewCourseDetails(course)}>
+                        <Button size="sm" variant="outline" onClick={() => handlehandleViewCourseDetails}>
                           <Eye className="h-4 w-4" />
                         </Button>
                       </div>
@@ -626,7 +626,7 @@ export default function AcademyDashboard() {
                   <CardTitle>Status de Treinamento da Tripulação</CardTitle>
                   <CardDescription>Acompanhamento centralizado de todos os tripulantes</CardDescription>
                 </div>
-                <Button onClick={() => setShowNewCrew(true)}>
+                <Button onClick={handleSetShowNewCrew}>
                   <UserPlus className="h-4 w-4 mr-2" />Novo Tripulante
                 </Button>
               </div>
@@ -659,7 +659,7 @@ export default function AcademyDashboard() {
                           </Badge>
                         )}
                       </div>
-                      <Button variant="outline" size="sm" onClick={() => handleViewCrewDetails(crew)}>
+                      <Button variant="outline" size="sm" onClick={() => handlehandleViewCrewDetails}>
                         <Eye className="h-4 w-4 mr-1" />Detalhes
                       </Button>
                     </div>
@@ -740,7 +740,7 @@ export default function AcademyDashboard() {
                   <h4 className="font-medium">{insight.title}</h4>
                   <p className="text-sm text-muted-foreground mt-1">{insight.description}</p>
                   {insight.actionRequired && insight.suggestedAction && (
-                    <Button size="sm" variant="outline" className="mt-2 w-full" onClick={() => toast({ title: "Ação iniciada", description: insight.suggestedAction })}>
+                    <Button size="sm" variant="outline" className="mt-2 w-full" onClick={() => handletoast}>
                       <CheckCircle2 className="h-4 w-4 mr-1" />{insight.suggestedAction}
                     </Button>
                   )}
@@ -887,7 +887,7 @@ export default function AcademyDashboard() {
               <Input
                 placeholder="Ex: Segurança Marítima Avançada"
                 value={newCourseData.course_name}
-                onChange={(e) => setNewCourseData((p) => ({ ...p, course_name: e.target.value }))}
+                onChange={handleChange}))}
               />
             </div>
             <div className="space-y-2">
@@ -895,7 +895,7 @@ export default function AcademyDashboard() {
               <Textarea
                 placeholder="Descreva o conteúdo e objetivos do curso..."
                 value={newCourseData.course_description}
-                onChange={(e) => setNewCourseData((p) => ({ ...p, course_description: e.target.value }))}
+                onChange={handleChange}))}
               />
             </div>
             <div className="grid grid-cols-3 gap-3">
@@ -904,7 +904,7 @@ export default function AcademyDashboard() {
                 <Input
                   type="number"
                   value={newCourseData.duration_hours}
-                  onChange={(e) => setNewCourseData((p) => ({ ...p, duration_hours: Number(e.target.value) }))}
+                  onChange={handleChange}))}
                 />
               </div>
               <div className="space-y-2">
@@ -936,7 +936,7 @@ export default function AcademyDashboard() {
             </div>
           </div>
           <DialogFooter>
-            <Button variant="outline" onClick={() => setShowNewCourse(false)}>Cancelar</Button>
+            <Button variant="outline" onClick={handleSetShowNewCourse}>Cancelar</Button>
             <Button onClick={handleCreateCourse}>Criar Curso</Button>
           </DialogFooter>
         </DialogContent>
@@ -955,7 +955,7 @@ export default function AcademyDashboard() {
               <Input
                 placeholder="Ex: João Silva Santos"
                 value={newCrewData.name}
-                onChange={(e) => setNewCrewData((p) => ({ ...p, name: e.target.value }))}
+                onChange={handleChange}))}
               />
             </div>
             <div className="grid grid-cols-2 gap-3">
@@ -964,7 +964,7 @@ export default function AcademyDashboard() {
                 <Input
                   placeholder="Ex: Marinheiro"
                   value={newCrewData.position}
-                  onChange={(e) => setNewCrewData((p) => ({ ...p, position: e.target.value }))}
+                  onChange={handleChange}))}
                 />
               </div>
               <div className="space-y-2">
@@ -988,7 +988,7 @@ export default function AcademyDashboard() {
                   type="email"
                   placeholder="email@exemplo.com"
                   value={newCrewData.email}
-                  onChange={(e) => setNewCrewData((p) => ({ ...p, email: e.target.value }))}
+                  onChange={handleChange}))}
                 />
               </div>
               <div className="space-y-2">
@@ -996,13 +996,13 @@ export default function AcademyDashboard() {
                 <Input
                   placeholder="(00) 00000-0000"
                   value={newCrewData.phone}
-                  onChange={(e) => setNewCrewData((p) => ({ ...p, phone: e.target.value }))}
+                  onChange={handleChange}))}
                 />
               </div>
             </div>
           </div>
           <DialogFooter>
-            <Button variant="outline" onClick={() => setShowNewCrew(false)}>Cancelar</Button>
+            <Button variant="outline" onClick={handleSetShowNewCrew}>Cancelar</Button>
             <Button onClick={handleCreateCrew}>Cadastrar</Button>
           </DialogFooter>
         </DialogContent>
@@ -1076,7 +1076,7 @@ export default function AcademyDashboard() {
             </div>
           </div>
           <DialogFooter>
-            <Button variant="outline" onClick={() => setShowSettings(false)}>Cancelar</Button>
+            <Button variant="outline" onClick={handleSetShowSettings}>Cancelar</Button>
             <Button onClick={handleSaveSettings}>Salvar Configurações</Button>
           </DialogFooter>
         </DialogContent>
@@ -1117,11 +1117,11 @@ export default function AcademyDashboard() {
                     </div>
                     <div className="flex gap-1">
                       {!notif.read && (
-                        <Button variant="ghost" size="icon" className="h-8 w-8" onClick={() => handleMarkAsRead(notif.id)}>
+                        <Button variant="ghost" size="icon" className="h-8 w-8" onClick={() => handlehandleMarkAsRead}>
                           <Check className="h-4 w-4" />
                         </Button>
                       )}
-                      <Button variant="ghost" size="icon" className="h-8 w-8" onClick={() => handleDeleteNotification(notif.id)}>
+                      <Button variant="ghost" size="icon" className="h-8 w-8" onClick={() => handlehandleDeleteNotification}>
                         <Trash2 className="h-4 w-4" />
                       </Button>
                     </div>
@@ -1180,7 +1180,7 @@ export default function AcademyDashboard() {
             )}
           </div>
           <DialogFooter>
-            <Button variant="outline" onClick={() => setShowCourseDetails(false)}>Fechar</Button>
+            <Button variant="outline" onClick={handleSetShowCourseDetails}>Fechar</Button>
             <Button onClick={() => { handleEnrollInCourse(selectedCourse!.id); setShowCourseDetails(false); }}>
               <GraduationCap className="h-4 w-4 mr-2" />Inscrever-se
             </Button>
@@ -1223,14 +1223,14 @@ export default function AcademyDashboard() {
                 {courses.slice(0, 3).map((course) => (
                   <div key={course.id} className="flex items-center justify-between p-2 border rounded">
                     <span className="text-sm">{course.course_name}</span>
-                    <Button size="sm" variant="ghost" onClick={() => handleEnrollInCourse(course.id)}>Inscrever</Button>
+                    <Button size="sm" variant="ghost" onClick={() => handlehandleEnrollInCourse}>Inscrever</Button>
                   </div>
                 ))}
               </div>
             </div>
           </div>
           <DialogFooter>
-            <Button variant="outline" onClick={() => setShowCrewDetails(false)}>Fechar</Button>
+            <Button variant="outline" onClick={handleSetShowCrewDetails}>Fechar</Button>
             <Button>
               <FileText className="h-4 w-4 mr-2" />Ver Histórico Completo
             </Button>
@@ -1266,7 +1266,7 @@ export default function AcademyDashboard() {
                 Progresso: {selectedProgress?.progress_percent || 0}%
               </p>
               <div className="flex gap-2">
-                <Button variant="outline" onClick={() => setShowCoursePlayer(false)}>Sair</Button>
+                <Button variant="outline" onClick={handleSetShowCoursePlayer}>Sair</Button>
                 <Button onClick={handleUpdateCourseProgress}>
                   <CheckCircle2 className="h-4 w-4 mr-2" />Avançar
                 </Button>
@@ -1316,7 +1316,7 @@ export default function AcademyDashboard() {
               <Input
                 placeholder="Digite sua pergunta..."
                 value={chatInput}
-                onChange={(e) => setChatInput(e.target.value)}
+                onChange={handleChange}
                 onKeyDown={(e) => e.key === "Enter" && handleChatSend()}
               />
               <Button onClick={handleChatSend} disabled={isChatLoading}>
@@ -1358,13 +1358,13 @@ export default function AcademyDashboard() {
               <Textarea
                 placeholder="Ex: Treinamento de resposta a emergências baseado no incidente de derramamento de óleo..."
                 value={aiCoursePrompt}
-                onChange={(e) => setAiCoursePrompt(e.target.value)}
+                onChange={handleChange}
                 className="min-h-[120px]"
               />
             </div>
           </div>
           <DialogFooter>
-            <Button variant="outline" onClick={() => setShowAICourseGenerator(false)}>Cancelar</Button>
+            <Button variant="outline" onClick={handleSetShowAICourseGenerator}>Cancelar</Button>
             <Button onClick={handleGenerateAICourse} disabled={isGeneratingCourse}>
               {isGeneratingCourse ? (
                 <>

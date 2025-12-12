@@ -1,5 +1,5 @@
 /**
-import { useEffect, useState } from "react";;
+import { useEffect, useState, useCallback, useMemo } from "react";;
  * Session Management Component
  * PATCH 124.0 - Token & Session Security Engine
  * 
@@ -214,7 +214,7 @@ export const SessionManagement: React.FC = () => {
                         <Button
                           variant={isCurrentSession ? "outline" : "destructive"}
                           size="sm"
-                          onClick={() => handleRevokeSession(session.id)}
+                          onClick={() => handlehandleRevokeSession}
                           disabled={revoking === session.id}
                         >
                           {revoking === session.id ? (

@@ -1,5 +1,5 @@
 /**
-import { useCallback, useEffect, useState } from "react";;
+import { useCallback, useMemo, useEffect, useState } from "react";;
  * Advanced Voice Commands
  * Reconhecimento de voz contextual por perfil
  */
@@ -284,7 +284,7 @@ export const VoiceCommandsAdvanced = memo(function() {
             <Button 
               variant="ghost" 
               size="sm"
-              onClick={() => setShowHelp(!showHelp)}
+              onClick={handleSetShowHelp}
             >
               <HelpCircle className="h-4 w-4" />
             </Button>

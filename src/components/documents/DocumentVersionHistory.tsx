@@ -1,5 +1,5 @@
 
-import { memo, memo, useEffect, useState } from "react";;;
+import { memo, memo, useEffect, useState, useCallback } from "react";;;
 import { supabase } from "@/integrations/supabase/client";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
@@ -195,7 +195,7 @@ export const DocumentVersionHistory = memo(function({ documentId, onRestore }: D
                     <Button
                       variant="outline"
                       size="sm"
-                      onClick={() => handleRestoreClick(version)}
+                      onClick={() => handlehandleRestoreClick}
                       className="ml-4 shrink-0"
                     >
                       <RotateCcw className="w-4 h-4 mr-2" />
@@ -239,7 +239,7 @@ export const DocumentVersionHistory = memo(function({ documentId, onRestore }: D
           <DialogFooter>
             <Button
               variant="outline"
-              onClick={() => setShowRestoreDialog(false)}
+              onClick={handleSetShowRestoreDialog}
               disabled={restoring}
             >
               Cancelar

@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";;
+import { useEffect, useState, useCallback } from "react";;
 import React, { useState } from "react";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
@@ -75,7 +75,7 @@ export const ChecklistsPage = memo(function() {
           placeholder="Descreva seu checklist..."
           className="min-w-[250px]"
           value={title}
-          onChange={(e) => setTitle(e.target.value)}
+          onChange={handleChange}
         />
         <Button onClick={handleCreateManual} disabled={!title}>
           <PlusCircle className="w-4 h-4 mr-1" /> Criar Manual

@@ -1,4 +1,4 @@
-import { useState } from "react";;
+import { useState, useCallback } from "react";;
 import React, { useState } from "react";
 import { useEditor, EditorContent } from "@tiptap/react";
 import StarterKit from "@tiptap/starter-kit";
@@ -246,7 +246,7 @@ export default function TemplateEditor() {
             type="text"
             placeholder="Digite o título do template..."
             value={title}
-            onChange={(e) => setTitle(e.target.value)}
+            onChange={handleChange}
             className="w-full"
           />
         </div>
@@ -357,7 +357,7 @@ export default function TemplateEditor() {
                         id="placeholder"
                         placeholder="Ex: nome, data, empresa..."
                         value={placeholderName}
-                        onChange={(e) => setPlaceholderName(e.target.value)}
+                        onChange={handleChange}
                         onKeyDown={(e) => {
                           if (e.key === "Enter") {
                             e.preventDefault();
@@ -368,7 +368,7 @@ export default function TemplateEditor() {
                     </div>
                   </div>
                   <div className="flex justify-end gap-2">
-                    <Button variant="outline" onClick={() => setShowPlaceholderDialog(false)}>
+                    <Button variant="outline" onClick={handleSetShowPlaceholderDialog}>
                       Cancelar
                     </Button>
                     <Button onClick={insertPlaceholder}>

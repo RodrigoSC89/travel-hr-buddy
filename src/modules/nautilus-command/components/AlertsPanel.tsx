@@ -100,7 +100,7 @@ export const AlertsPanel: React.FC<AlertsPanelProps> = ({ alerts, onDismiss, exp
                       variant="ghost"
                       size="icon"
                       className="absolute top-2 right-2 h-6 w-6"
-                      onClick={() => onDismiss(alert.id)}
+                      onClick={() => handleonDismiss}
                     >
                       <X className="h-3 w-3" />
                     </Button>

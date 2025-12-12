@@ -1,5 +1,5 @@
 /**
-import { useState } from "react";;
+import { useState, useCallback } from "react";;
  * Reports Tab
  */
 
@@ -25,21 +25,21 @@ export default function ReportsTab() {
   return (
     <div className="space-y-6">
       <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-        <Card className="cursor-pointer hover:border-primary/50" onClick={() => handleGenerate("MLC 2006")}>
+        <Card className="cursor-pointer hover:border-primary/50" onClick={() => handlehandleGenerate}>
           <CardContent className="pt-6 text-center">
             <Shield className="h-12 w-12 mx-auto mb-4 text-blue-500" />
             <h3 className="font-medium">Relatório MLC 2006</h3>
             <p className="text-sm text-muted-foreground">Conformidade Maritime Labour Convention</p>
           </CardContent>
         </Card>
-        <Card className="cursor-pointer hover:border-primary/50" onClick={() => handleGenerate("Port State")}>
+        <Card className="cursor-pointer hover:border-primary/50" onClick={() => handlehandleGenerate}>
           <CardContent className="pt-6 text-center">
             <FileText className="h-12 w-12 mx-auto mb-4 text-green-500" />
             <h3 className="font-medium">Relatório Port State</h3>
             <p className="text-sm text-muted-foreground">Inspeção de Estado do Porto</p>
           </CardContent>
         </Card>
-        <Card className="cursor-pointer hover:border-primary/50" onClick={() => handleGenerate("Mensal")}>
+        <Card className="cursor-pointer hover:border-primary/50" onClick={() => handlehandleGenerate}>
           <CardContent className="pt-6 text-center">
             <BarChart3 className="h-12 w-12 mx-auto mb-4 text-purple-500" />
             <h3 className="font-medium">Relatório Mensal</h3>
@@ -68,7 +68,7 @@ export default function ReportsTab() {
                   <Badge variant={report.status === "completed" ? "default" : "secondary"}>
                     {report.status === "completed" ? "Concluído" : "Rascunho"}
                   </Badge>
-                  <Button variant="outline" size="sm" onClick={() => handleDownload(report.id)}>
+                  <Button variant="outline" size="sm" onClick={() => handlehandleDownload}>
                     <Download className="h-4 w-4" />
                   </Button>
                 </div>

@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useState } from "react";;;
+import { useEffect, useState, useCallback } from "react";;;
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { format } from "date-fns";
@@ -317,7 +317,7 @@ export default function ForecastPage() {
                       <Button 
                         size="sm" 
                         variant="secondary" 
-                        onClick={() => handleGenerateOrder(f)}
+                        onClick={() => handlehandleGenerateOrder}
                         disabled={generatingOrderId === f.id}
                       >
                         {generatingOrderId === f.id ? "⏳ Gerando..." : "➕ Gerar OS"}

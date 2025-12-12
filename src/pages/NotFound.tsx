@@ -6,7 +6,7 @@
  */
 
 import { useNavigate, useLocation } from "react-router-dom";
-import { useEffect } from "react";;;
+import { useEffect, useCallback } from "react";;;
 import { AlertTriangle, Home, ArrowLeft } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { logger } from "@/lib/logger";
@@ -60,14 +60,14 @@ const NotFound = () => {
         <div className="flex flex-col sm:flex-row gap-3">
           <Button
             variant="outline"
-            onClick={() => navigate(-1)}
+            onClick={() => handlenavigate}
             className="flex-1"
           >
             <ArrowLeft className="w-4 h-4 mr-2" />
             Voltar
           </Button>
           <Button
-            onClick={() => navigate("/")}
+            onClick={() => handlenavigate}
             className="flex-1"
           >
             <Home className="w-4 h-4 mr-2" />

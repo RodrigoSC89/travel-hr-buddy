@@ -3,7 +3,7 @@
  * Visual dashboard for system health monitoring
  */
 
-import { useEffect, useState } from "react";;;
+import { useEffect, useState, useCallback, useMemo } from "react";;;
 import { performHealthCheck, HealthStatus } from "@/lib/module-health";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";

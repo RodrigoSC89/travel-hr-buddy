@@ -1,5 +1,5 @@
 /**
-import { useCallback, useEffect, useRef, useState } from "react";;
+import { useCallback, useMemo, useEffect, useRef, useState } from "react";;
  * NAUTILUS BRAIN GLOBAL - IA Central Acessível de Qualquer Módulo
  * PATCH 850.3 - Fixed useToast hook usage
  */
@@ -373,7 +373,7 @@ Como posso ajudar?`;
         className="fixed bottom-4 right-4 z-50"
       >
         <Button
-          onClick={() => setIsMinimized(false)}
+          onClick={handleSetIsMinimized}
           className="h-14 w-14 rounded-full bg-gradient-to-br from-purple-600 to-pink-500 shadow-lg hover:shadow-xl"
         >
           <Brain className="h-6 w-6 text-white" />
@@ -417,7 +417,7 @@ Como posso ajudar?`;
               </div>
             </div>
             <div className="flex items-center gap-1">
-              <Button variant="ghost" size="icon" onClick={() => setIsMinimized(true)}>
+              <Button variant="ghost" size="icon" onClick={handleSetIsMinimized}>
                 <Minimize2 className="h-4 w-4" />
               </Button>
               <Button variant="ghost" size="icon" onClick={onClose}>
@@ -466,7 +466,7 @@ Como posso ajudar?`;
                     
                     {message.role === "assistant" && message.content && (
                       <div className="flex items-center gap-2 mt-2 pt-2 border-t border-border/50">
-                        <Button variant="ghost" size="sm" className="h-7 text-xs" onClick={() => copyMessage(message.content)}>
+                        <Button variant="ghost" size="sm" className="h-7 text-xs" onClick={() => handlecopyMessage}>
                           <Copy className="h-3 w-3 mr-1" />
                           Copiar
                         </Button>
@@ -487,7 +487,7 @@ Como posso ajudar?`;
                             variant="outline"
                             size="sm"
                             className="text-xs h-7"
-                            onClick={() => handleSuggestionClick(suggestion)}
+                            onClick={() => handlehandleSuggestionClick}
                           >
                             <Lightbulb className="h-3 w-3 mr-1" />
                             {suggestion}
@@ -522,7 +522,7 @@ Como posso ajudar?`;
               <Input
                 ref={inputRef}
                 value={input}
-                onChange={(e) => setInput(e.target.value)}
+                onChange={handleChange}
                 onKeyDown={handleKeyDown}
                 placeholder="Pergunte sobre a operação..."
                 className="flex-1"

@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";;
+import { useEffect, useState, useCallback, useMemo } from "react";;
 import React, { useState, useEffect } from "react";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
@@ -193,7 +193,7 @@ export const PredictiveMaintenanceSystem = memo(() => {
               key={timeframe}
               variant={selectedTimeframe === timeframe ? "default" : "outline"}
               size="sm"
-              onClick={() => setSelectedTimeframe(timeframe)}
+              onClick={handleSetSelectedTimeframe}
             >
               {timeframe === "7d" ? "7 Dias" : timeframe === "30d" ? "30 Dias" : "90 Dias"}
             </Button>

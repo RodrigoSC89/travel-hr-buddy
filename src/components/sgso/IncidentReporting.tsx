@@ -1,4 +1,4 @@
-import { useState } from "react";;
+import { useState, useCallback } from "react";;
 import React, { useState } from "react";
 import { logger } from "@/lib/logger";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
@@ -333,7 +333,7 @@ export const IncidentReporting: React.FC = () => {
                       <Input
                         placeholder="Descreva brevemente o incidente"
                         value={incidentForm.title}
-                        onChange={(e) => setIncidentForm(prev => ({ ...prev, title: e.target.value }))}
+                        onChange={handleChange}))}
                       />
                     </div>
                     <div className="grid grid-cols-2 gap-4">
@@ -368,7 +368,7 @@ export const IncidentReporting: React.FC = () => {
                         <Input
                           placeholder="Nome da embarcação"
                           value={incidentForm.vessel}
-                          onChange={(e) => setIncidentForm(prev => ({ ...prev, vessel: e.target.value }))}
+                          onChange={handleChange}))}
                         />
                       </div>
                       <div className="space-y-2">
@@ -376,7 +376,7 @@ export const IncidentReporting: React.FC = () => {
                         <Input
                           placeholder="Nome do responsável"
                           value={incidentForm.reportedBy}
-                          onChange={(e) => setIncidentForm(prev => ({ ...prev, reportedBy: e.target.value }))}
+                          onChange={handleChange}))}
                         />
                       </div>
                     </div>
@@ -386,7 +386,7 @@ export const IncidentReporting: React.FC = () => {
                         placeholder="Descreva o incidente em detalhes..."
                         rows={3}
                         value={incidentForm.description}
-                        onChange={(e) => setIncidentForm(prev => ({ ...prev, description: e.target.value }))}
+                        onChange={handleChange}))}
                       />
                     </div>
                     <Button className="w-full bg-red-600 hover:bg-red-700" onClick={handleSubmitIncident}>
@@ -417,7 +417,7 @@ export const IncidentReporting: React.FC = () => {
                       <Input
                         placeholder="Buscar incidentes..."
                         value={searchQuery}
-                        onChange={(e) => setSearchQuery(e.target.value)}
+                        onChange={handleChange}
                         className="w-full"
                       />
                       <p className="text-xs text-muted-foreground mt-2">
@@ -528,7 +528,7 @@ export const IncidentReporting: React.FC = () => {
                 <Card 
                   key={incident.id}
                   className="border-2 hover:shadow-lg transition-all cursor-pointer"
-                  onClick={() => setSelectedIncident(incident)}
+                  onClick={handleSetSelectedIncident}
                 >
                   <CardContent className="p-4">
                     <div className="flex items-start justify-between gap-4">

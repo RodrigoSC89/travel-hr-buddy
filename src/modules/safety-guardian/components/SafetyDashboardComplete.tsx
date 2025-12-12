@@ -1,5 +1,5 @@
 /**
-import { useEffect, useState } from "react";;
+import { useEffect, useState, useCallback } from "react";;
  * Safety Guardian Dashboard - Complete Version
  * Dashboard principal com todas as abas funcionais
  */
@@ -274,7 +274,7 @@ export const SafetyDashboardComplete: React.FC = () => {
 
           <Button 
             className="bg-destructive hover:bg-destructive/90"
-            onClick={() => setReportDialogOpen(true)}
+            onClick={handleSetReportDialogOpen}
           >
             <Plus className="h-4 w-4 mr-2" />
             Reportar Ocorrência

@@ -1,4 +1,4 @@
-import { memo, memo, useState } from "react";;;
+import { memo, memo, useState, useCallback } from "react";;;
 import { toast } from "sonner";
 
 interface Incident {

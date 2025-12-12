@@ -1,5 +1,5 @@
 /**
-import { useEffect, useState } from "react";;
+import { useEffect, useState, useCallback, useMemo } from "react";;
  * Safety Guardian Dashboard
  * Monitoramento de segurança, incidentes e análise preditiva
  * Integrado com Supabase para dados reais
@@ -226,7 +226,7 @@ export const SafetyDashboard: React.FC = () => {
                 <Textarea 
                   placeholder="Descreva a ocorrência em detalhes..."
                   value={reportDescription}
-                  onChange={(e) => setReportDescription(e.target.value)}
+                  onChange={handleChange}
                   rows={4}
                 />
               </div>

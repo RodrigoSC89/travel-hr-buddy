@@ -1,4 +1,4 @@
-import { useEffect, useRef, useState } from "react";;
+import { useEffect, useRef, useState, useCallback, useMemo } from "react";;
 import React, { useState, useEffect, useRef } from "react";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
@@ -385,7 +385,7 @@ const RealTimeWorkspace: React.FC = () => {
                 <Button
                   variant={myStatus === "online" ? "default" : "outline"}
                   size="sm"
-                  onClick={() => changeStatus("online")}
+                  onClick={() => handlechangeStatus}
                   className="text-xs"
                 >
                   <Circle className="h-3 w-3 mr-1 fill-current text-green-500" />
@@ -394,7 +394,7 @@ const RealTimeWorkspace: React.FC = () => {
                 <Button
                   variant={myStatus === "busy" ? "default" : "outline"}
                   size="sm"
-                  onClick={() => changeStatus("busy")}
+                  onClick={() => handlechangeStatus}
                   className="text-xs"
                 >
                   <AlertTriangle className="h-3 w-3 mr-1 text-red-500" />
@@ -403,7 +403,7 @@ const RealTimeWorkspace: React.FC = () => {
                 <Button
                   variant={myStatus === "away" ? "default" : "outline"}
                   size="sm"
-                  onClick={() => changeStatus("away")}
+                  onClick={() => handlechangeStatus}
                   className="text-xs"
                 >
                   <Clock className="h-3 w-3 mr-1 text-yellow-500" />
@@ -450,7 +450,7 @@ const RealTimeWorkspace: React.FC = () => {
             <Button 
               size="sm" 
               className="w-full justify-start"
-              onClick={() => sendWorkspaceUpdate("emergency_drill", "Simulado de emergência iniciado", "high")}
+              onClick={() => handlesendWorkspaceUpdate}
             >
               <AlertTriangle className="h-4 w-4 mr-2" />
               Simulado de Emergência
@@ -459,7 +459,7 @@ const RealTimeWorkspace: React.FC = () => {
               size="sm" 
               variant="outline"
               className="w-full justify-start"
-              onClick={() => sendWorkspaceUpdate("shift_change", "Troca de turno em andamento", "medium")}
+              onClick={() => handlesendWorkspaceUpdate}
             >
               <Clock className="h-4 w-4 mr-2" />
               Troca de Turno
@@ -468,7 +468,7 @@ const RealTimeWorkspace: React.FC = () => {
               size="sm" 
               variant="outline"
               className="w-full justify-start"
-              onClick={() => sendWorkspaceUpdate("maintenance_alert", "Manutenção programada", "low")}
+              onClick={() => handlesendWorkspaceUpdate}
             >
               <Activity className="h-4 w-4 mr-2" />
               Alerta de Manutenção
@@ -559,7 +559,7 @@ const RealTimeWorkspace: React.FC = () => {
                     <Input
                       placeholder="Digite sua mensagem..."
                       value={newMessage}
-                      onChange={(e) => setNewMessage(e.target.value)}
+                      onChange={handleChange}
                       onKeyPress={(e) => e.key === "Enter" && sendMessage()}
                       className="flex-1"
                     />

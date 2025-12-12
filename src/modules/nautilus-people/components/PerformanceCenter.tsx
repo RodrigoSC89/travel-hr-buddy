@@ -1,5 +1,5 @@
 /**
-import { useState } from "react";;
+import { useState, useMemo, useCallback } from "react";;
  * Performance Center - Avaliações, OKRs, Feedback e 9-Box
  * Versão funcional completa
  */
@@ -355,7 +355,7 @@ const PerformanceCenter: React.FC = () => {
                         variant="outline" 
                         size="sm" 
                         className="flex-1"
-                        onClick={() => handleContinueAvaliacao(avaliacao)}
+                        onClick={() => handlehandleContinueAvaliacao}
                       >
                         <Eye className="w-4 h-4 mr-2" />
                         Ver Detalhes
@@ -412,7 +412,7 @@ const PerformanceCenter: React.FC = () => {
                     <Input 
                       placeholder="Ex: Aumentar eficiência operacional"
                       value={newOKR.objetivo}
-                      onChange={(e) => setNewOKR({...newOKR, objetivo: e.target.value})}
+                      onChange={handleChange})}
                     />
                   </div>
                   <div className="space-y-2">
@@ -421,7 +421,7 @@ const PerformanceCenter: React.FC = () => {
                       placeholder="Reduzir tempo de parada em 20%&#10;Aumentar OEE para 85%"
                       rows={4}
                       value={newOKR.keyResults}
-                      onChange={(e) => setNewOKR({...newOKR, keyResults: e.target.value})}
+                      onChange={handleChange})}
                     />
                   </div>
                   <div className="grid grid-cols-2 gap-4">
@@ -444,13 +444,13 @@ const PerformanceCenter: React.FC = () => {
                       <Input 
                         type="date"
                         value={newOKR.prazo}
-                        onChange={(e) => setNewOKR({...newOKR, prazo: e.target.value})}
+                        onChange={handleChange})}
                       />
                     </div>
                   </div>
                 </div>
                 <DialogFooter>
-                  <Button variant="outline" onClick={() => setIsNewOKROpen(false)}>Cancelar</Button>
+                  <Button variant="outline" onClick={handleSetIsNewOKROpen}>Cancelar</Button>
                   <Button onClick={handleCreateOKR} disabled={isLoading}>
                     {isLoading ? <Loader2 className="w-4 h-4 mr-2 animate-spin" /> : <CheckCircle className="w-4 h-4 mr-2" />}
                     Criar OKR
@@ -525,13 +525,13 @@ const PerformanceCenter: React.FC = () => {
                 placeholder="Digite seu feedback..." 
                 rows={4}
                 value={feedbackText}
-                onChange={(e) => setFeedbackText(e.target.value)}
+                onChange={handleChange}
               />
               <div className="flex gap-2">
                 <Button 
                   variant={feedbackType === "reconhecimento" ? "default" : "outline"} 
                   className="flex-1"
-                  onClick={() => setFeedbackType("reconhecimento")}
+                  onClick={handleSetFeedbackType}
                 >
                   <ThumbsUp className="w-4 h-4 mr-2" />
                   Reconhecimento
@@ -539,7 +539,7 @@ const PerformanceCenter: React.FC = () => {
                 <Button 
                   variant={feedbackType === "construtivo" ? "default" : "outline"} 
                   className="flex-1"
-                  onClick={() => setFeedbackType("construtivo")}
+                  onClick={handleSetFeedbackType}
                 >
                   <MessageSquare className="w-4 h-4 mr-2" />
                   Construtivo

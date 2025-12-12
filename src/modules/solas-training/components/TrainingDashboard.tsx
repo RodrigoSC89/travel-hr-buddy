@@ -1,4 +1,4 @@
-import { useState } from "react";;
+import { useState, useMemo, useCallback } from "react";;
 import React, { useState } from "react";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
@@ -190,7 +190,7 @@ export default function TrainingDashboard() {
               <Input
                 placeholder="Pergunte sobre drills, SOLAS..."
                 value={chatMessage}
-                onChange={(e) => setChatMessage(e.target.value)}
+                onChange={handleChange}
                 onKeyPress={(e) => e.key === "Enter" && handleSendMessage()}
               />
               <Button size="icon" onClick={handleSendMessage}>
@@ -198,13 +198,13 @@ export default function TrainingDashboard() {
               </Button>
             </div>
             <div className="flex flex-wrap gap-2 mt-3">
-              <Button variant="outline" size="sm" onClick={() => setChatMessage("Procedimento incêndio")}>
+              <Button variant="outline" size="sm" onClick={handleSetChatMessage}>
                 Incêndio
               </Button>
-              <Button variant="outline" size="sm" onClick={() => setChatMessage("Como fazer abandono?")}>
+              <Button variant="outline" size="sm" onClick={handleSetChatMessage}>
                 Abandono
               </Button>
-              <Button variant="outline" size="sm" onClick={() => setChatMessage("Verificar vencimentos")}>
+              <Button variant="outline" size="sm" onClick={handleSetChatMessage}>
                 Vencimentos
               </Button>
             </div>

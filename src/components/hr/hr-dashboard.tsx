@@ -1,4 +1,4 @@
-import { useState } from "react";;
+import { useState, useMemo, useCallback } from "react";;
 import React, { useState } from "react";
 import { Card } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
@@ -345,7 +345,7 @@ export const HRDashboard = memo(() => {
         <div className="flex items-center space-x-2 mt-4 md:mt-0">
           <Button 
             variant="outline" 
-            onClick={() => setShowTable(!showTable)}
+            onClick={handleSetShowTable}
             className={showTable ? "bg-accent" : ""}
           >
             {showTable ? "Ver Cards" : "Ver Tabela"}
@@ -372,7 +372,7 @@ export const HRDashboard = memo(() => {
                   <Input
                     id="name"
                     value={newEmployee.name || ""}
-                    onChange={(e) => setNewEmployee(prev => ({ ...prev, name: e.target.value }))}
+                    onChange={handleChange}))}
                     className="col-span-3"
                   />
                 </div>
@@ -383,7 +383,7 @@ export const HRDashboard = memo(() => {
                   <Input
                     id="position"
                     value={newEmployee.position || ""}
-                    onChange={(e) => setNewEmployee(prev => ({ ...prev, position: e.target.value }))}
+                    onChange={handleChange}))}
                     className="col-span-3"
                   />
                 </div>
@@ -413,7 +413,7 @@ export const HRDashboard = memo(() => {
                     id="email"
                     type="email"
                     value={newEmployee.email || ""}
-                    onChange={(e) => setNewEmployee(prev => ({ ...prev, email: e.target.value }))}
+                    onChange={handleChange}))}
                     className="col-span-3"
                   />
                 </div>
@@ -424,7 +424,7 @@ export const HRDashboard = memo(() => {
                   <Input
                     id="phone"
                     value={newEmployee.phone || ""}
-                    onChange={(e) => setNewEmployee(prev => ({ ...prev, phone: e.target.value }))}
+                    onChange={handleChange}))}
                     className="col-span-3"
                   />
                 </div>
@@ -435,7 +435,7 @@ export const HRDashboard = memo(() => {
                   <Input
                     id="location"
                     value={newEmployee.location || ""}
-                    onChange={(e) => setNewEmployee(prev => ({ ...prev, location: e.target.value }))}
+                    onChange={handleChange}))}
                     className="col-span-3"
                   />
                 </div>
@@ -472,7 +472,7 @@ export const HRDashboard = memo(() => {
             <Input
               placeholder="Buscar funcionários..."
               value={searchTerm}
-              onChange={(e) => setSearchTerm(e.target.value)}
+              onChange={handleChange}
               className="pl-10"
             />
           </div>
@@ -480,7 +480,7 @@ export const HRDashboard = memo(() => {
             <Filter size={20} className="text-muted-foreground" />
             <select
               value={selectedDepartment}
-              onChange={(e) => setSelectedDepartment(e.target.value)}
+              onChange={handleChange}
               className="px-3 py-2 border border-border rounded-lg bg-background text-foreground"
             >
               <option value="all">Todos os Departamentos</option>
@@ -588,7 +588,7 @@ export const HRDashboard = memo(() => {
                   variant="outline" 
                   size="sm" 
                   className="flex-1"
-                  onClick={() => handleViewProfile(employee)}
+                  onClick={() => handlehandleViewProfile}
                 >
                   Ver Perfil
                 </Button>
@@ -596,7 +596,7 @@ export const HRDashboard = memo(() => {
                   variant="outline" 
                   size="sm" 
                   className="ml-2"
-                  onClick={() => handleOpenCertificates(employee)}
+                  onClick={() => handlehandleOpenCertificates}
                 >
                   <FileText size={16} />
                 </Button>
@@ -605,7 +605,7 @@ export const HRDashboard = memo(() => {
                   className={`flex-1 ${
                     selectedEmployees.includes(employee.id) ? "bg-success hover:bg-success/90" : "gradient-ocean"
                   }`}
-                  onClick={() => handleEmployeeSelect(employee.id)}
+                  onClick={() => handlehandleEmployeeSelect}
                 >
                   {selectedEmployees.includes(employee.id) ? "Selecionado ✓" : "Selecionar"}
                 </Button>
@@ -631,7 +631,7 @@ export const HRDashboard = memo(() => {
                     <AlertDialogFooter>
                       <AlertDialogCancel>Cancelar</AlertDialogCancel>
                       <AlertDialogAction 
-                        onClick={() => handleRemoveEmployee(employee)}
+                        onClick={() => handlehandleRemoveEmployee}
                         className="bg-destructive text-destructive-foreground hover:bg-destructive/90"
                       >
                         Remover
@@ -731,7 +731,7 @@ export const HRDashboard = memo(() => {
             </div>
           )}
           <DialogFooter>
-            <Button variant="outline" onClick={() => setEmployeeProfileOpen(false)}>
+            <Button variant="outline" onClick={handleSetEmployeeProfileOpen}>
               Fechar
             </Button>
             <Button onClick={() => {

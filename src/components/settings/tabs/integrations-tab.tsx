@@ -1,4 +1,4 @@
-import { useState } from "react";;
+import { useState, useCallback } from "react";;
 import React, { useState } from "react";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
@@ -253,7 +253,7 @@ export const IntegrationsTab: React.FC<IntegrationsTabProps> = ({
                               variant="ghost"
                               size="sm"
                               className="absolute right-0 top-0 h-full px-3"
-                              onClick={() => toggleKeyVisibility(`${service.id}_${field}`)}
+                              onClick={() => handletoggleKeyVisibility}
                             >
                               {showKeys[`${service.id}_${field}`] ? (
                                 <EyeOff className="w-4 h-4" />
@@ -295,7 +295,7 @@ export const IntegrationsTab: React.FC<IntegrationsTabProps> = ({
                       id="webhookName"
                       placeholder="Nome descritivo do webhook"
                       value={newWebhook.name}
-                      onChange={(e) => setNewWebhook(prev => ({ ...prev, name: e.target.value }))}
+                      onChange={handleChange}))}
                     />
                   </div>
                   <div className="space-y-2">
@@ -304,7 +304,7 @@ export const IntegrationsTab: React.FC<IntegrationsTabProps> = ({
                       id="webhookUrl"
                       placeholder="https://api.exemplo.com/webhook"
                       value={newWebhook.url}
-                      onChange={(e) => setNewWebhook(prev => ({ ...prev, url: e.target.value }))}
+                      onChange={handleChange}))}
                     />
                   </div>
                 </div>
@@ -337,7 +337,7 @@ export const IntegrationsTab: React.FC<IntegrationsTabProps> = ({
                       )}
                     </div>
                     <div className="flex items-center gap-2">
-                      <Button variant="outline" size="sm" onClick={() => testWebhook(webhook)}>
+                      <Button variant="outline" size="sm" onClick={() => handletestWebhook}>
                         Testar
                       </Button>
                       <Button variant="outline" size="sm">
@@ -346,7 +346,7 @@ export const IntegrationsTab: React.FC<IntegrationsTabProps> = ({
                       <Button 
                         variant="outline" 
                         size="sm"
-                        onClick={() => removeWebhook(webhook.id)}
+                        onClick={() => handleremoveWebhook}
                       >
                         <Trash2 className="w-4 h-4" />
                       </Button>

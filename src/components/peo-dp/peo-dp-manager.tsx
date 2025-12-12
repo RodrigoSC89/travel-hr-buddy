@@ -1,4 +1,4 @@
-import { useState } from "react";;
+import { useState, useMemo, useCallback } from "react";;
 import React, { useState } from "react";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
@@ -469,7 +469,7 @@ export const PeoDpManager: React.FC = () => {
           </TabsList>
 
           <div className="flex gap-2">
-            <Button variant="outline" onClick={() => setIsAuditDialogOpen(true)}>
+            <Button variant="outline" onClick={handleSetIsAuditDialogOpen}>
               <ClipboardCheck className="h-4 w-4 mr-2" />
               Nova Auditoria
             </Button>
@@ -626,7 +626,7 @@ export const PeoDpManager: React.FC = () => {
                     className={`p-4 border rounded-lg cursor-pointer transition-colors ${
                       selectedPlan?.id === plan.id ? "bg-primary/5 border-primary" : "hover:bg-muted/50"
                     }`}
-                    onClick={() => setSelectedPlan(plan)}
+                    onClick={handleSetSelectedPlan}
                   >
                     <div className="flex items-center justify-between">
                       <div className="flex items-center gap-3">
@@ -675,7 +675,7 @@ export const PeoDpManager: React.FC = () => {
                       Histórico de auditorias realizadas com checklist baseado no programa Petrobras
                     </CardDescription>
                   </div>
-                  <Button onClick={() => setIsAuditDialogOpen(true)}>
+                  <Button onClick={handleSetIsAuditDialogOpen}>
                     <Plus className="h-4 w-4 mr-2" />
                     Nova Auditoria
                   </Button>
@@ -689,7 +689,7 @@ export const PeoDpManager: React.FC = () => {
                     <Button 
                       variant="outline" 
                       className="mt-4"
-                      onClick={() => setIsAuditDialogOpen(true)}
+                      onClick={handleSetIsAuditDialogOpen}
                     >
                       Iniciar Primeira Auditoria
                     </Button>
@@ -861,7 +861,7 @@ export const PeoDpManager: React.FC = () => {
                 id="vesselName"
                 placeholder="Ex: PSV Atlantic Explorer"
                 value={newAuditVessel}
-                onChange={(e) => setNewAuditVessel(e.target.value)}
+                onChange={handleChange}
               />
             </div>
             <div className="space-y-2">
@@ -885,7 +885,7 @@ export const PeoDpManager: React.FC = () => {
             </div>
           </div>
           <div className="flex justify-end gap-2">
-            <Button variant="outline" onClick={() => setIsAuditDialogOpen(false)}>
+            <Button variant="outline" onClick={handleSetIsAuditDialogOpen}>
               Cancelar
             </Button>
             <Button onClick={handleStartAudit}>

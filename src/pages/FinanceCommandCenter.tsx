@@ -1,5 +1,5 @@
 /**
-import { useCallback, useEffect, useState } from "react";;
+import { useCallback, useMemo, useEffect, useState } from "react";;
  * Finance Command Center - Unified Financial Operations
  * PATCH UNIFY-FINANCE - Fusion of Finance Hub + Route Cost Analysis
  * Complete financial management with cost analysis per route
@@ -597,7 +597,7 @@ const FinanceCommandCenter: React.FC = () => {
           </div>
         </div>
         <div className="flex gap-2">
-          <Button variant="outline" onClick={() => fetchData(true)} disabled={isRefreshing}>
+          <Button variant="outline" onClick={() => handlefetchData} disabled={isRefreshing}>
             <RefreshCw className={`h-4 w-4 mr-2 ${isRefreshing ? "animate-spin" : ""}`} />
             Atualizar
           </Button>
@@ -613,17 +613,17 @@ const FinanceCommandCenter: React.FC = () => {
                 <FileText className="h-4 w-4 mr-2" />
                 Relatório PDF
               </DropdownMenuItem>
-              <DropdownMenuItem onClick={() => exportData("csv")}>
+              <DropdownMenuItem onClick={() => handleexportData}>
                 <FileText className="h-4 w-4 mr-2" />
                 Exportar CSV
               </DropdownMenuItem>
-              <DropdownMenuItem onClick={() => exportData("json")}>
+              <DropdownMenuItem onClick={() => handleexportData}>
                 <FileText className="h-4 w-4 mr-2" />
                 Exportar JSON
               </DropdownMenuItem>
             </DropdownMenuContent>
           </DropdownMenu>
-          <Button onClick={() => setShowNewExpense(true)}>
+          <Button onClick={handleSetShowNewExpense}>
             <Plus className="h-4 w-4 mr-2" />
             Nova Despesa
           </Button>
@@ -816,7 +816,7 @@ const FinanceCommandCenter: React.FC = () => {
             <CardHeader>
               <div className="flex items-center justify-between">
                 <CardTitle>Todas as Transações</CardTitle>
-                <Button variant="outline" size="sm" onClick={() => setShowFilters(true)}>
+                <Button variant="outline" size="sm" onClick={handleSetShowFilters}>
                   <Filter className="h-4 w-4 mr-2" />
                   Filtros
                 </Button>
@@ -1160,10 +1160,10 @@ const FinanceCommandCenter: React.FC = () => {
                       <div className="flex items-center gap-3">
                         <p className="text-lg font-bold text-red-500">{formatCurrency(-approval.amount)}</p>
                         <div className="flex gap-2">
-                          <Button size="sm" variant="outline" className="text-red-500 hover:bg-red-500/10" onClick={() => handleReject(approval.id)}>
+                          <Button size="sm" variant="outline" className="text-red-500 hover:bg-red-500/10" onClick={() => handlehandleReject}>
                             <X className="h-4 w-4" />
                           </Button>
-                          <Button size="sm" className="bg-green-500 hover:bg-green-600" onClick={() => handleApprove(approval.id)}>
+                          <Button size="sm" className="bg-green-500 hover:bg-green-600" onClick={() => handlehandleApprove}>
                             <Check className="h-4 w-4" />
                           </Button>
                         </div>
@@ -1233,7 +1233,7 @@ const FinanceCommandCenter: React.FC = () => {
                 id="description"
                 placeholder="Ex: Manutenção preventiva do motor"
                 value={newExpense.description}
-                onChange={(e) => setNewExpense(prev => ({ ...prev, description: e.target.value }))}
+                onChange={handleChange}))}
               />
             </div>
             <div className="space-y-2">
@@ -1243,7 +1243,7 @@ const FinanceCommandCenter: React.FC = () => {
                 type="number"
                 placeholder="0.00"
                 value={newExpense.amount}
-                onChange={(e) => setNewExpense(prev => ({ ...prev, amount: e.target.value }))}
+                onChange={handleChange}))}
               />
             </div>
             <div className="space-y-2">
@@ -1268,12 +1268,12 @@ const FinanceCommandCenter: React.FC = () => {
                 id="notes"
                 placeholder="Detalhes adicionais..."
                 value={newExpense.notes}
-                onChange={(e) => setNewExpense(prev => ({ ...prev, notes: e.target.value }))}
+                onChange={handleChange}))}
               />
             </div>
           </div>
           <DialogFooter>
-            <Button variant="outline" onClick={() => setShowNewExpense(false)}>
+            <Button variant="outline" onClick={handleSetShowNewExpense}>
               Cancelar
             </Button>
             <Button onClick={handleCreateExpense}>
@@ -1308,7 +1308,7 @@ const FinanceCommandCenter: React.FC = () => {
               <Input
                 type="number"
                 value={settings.refreshInterval}
-                onChange={(e) => setSettings((prev: unknown: unknown: unknown) => ({ ...prev, refreshInterval: parseInt(e.target.value) }))}
+                onChange={handleChange}))}
                 disabled={!settings.autoRefresh}
               />
             </div>

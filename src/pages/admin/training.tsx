@@ -1,4 +1,4 @@
-import { useState } from "react";;
+import { useState, useCallback } from "react";;
 import React, { useState } from "react";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
@@ -177,14 +177,14 @@ export default function TrainingPage() {
               <Button
                 variant={viewMode === "modules" ? "default" : "outline"}
                 size="sm"
-                onClick={() => setViewMode("modules")}
+                onClick={handleSetViewMode}
               >
                 Módulos de Treinamento
               </Button>
               <Button
                 variant={viewMode === "records" ? "default" : "outline"}
                 size="sm"
-                onClick={() => setViewMode("records")}
+                onClick={handleSetViewMode}
               >
                 Registros de Certificação
               </Button>
@@ -196,7 +196,7 @@ export default function TrainingPage() {
             <Button
               variant={selectedCategory === null ? "default" : "outline"}
               size="sm"
-              onClick={() => setSelectedCategory(null)}
+              onClick={handleSetSelectedCategory}
             >
               Todas as Categorias
             </Button>
@@ -205,7 +205,7 @@ export default function TrainingPage() {
                 key={category}
                 variant={selectedCategory === category ? "default" : "outline"}
                 size="sm"
-                onClick={() => setSelectedCategory(category)}
+                onClick={handleSetSelectedCategory}
               >
                 {category}
               </Button>

@@ -1,4 +1,4 @@
-import { useEffect, useRef, useState } from "react";;
+import { useEffect, useRef, useState, useCallback, useMemo } from "react";;
 import React, { useState, useEffect, useRef } from "react";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
@@ -272,7 +272,7 @@ const NauticalCopilot: React.FC = () => {
                   key={mode}
                   variant={activeMode === mode ? "default" : "outline"}
                   size="sm"
-                  onClick={() => setActiveMode(mode as unknown)}
+                  onClick={handleSetActiveMode}
                   className="capitalize"
                 >
                   {mode === "chat" && <MessageSquare className="w-4 h-4 mr-1" />}
@@ -346,7 +346,7 @@ const NauticalCopilot: React.FC = () => {
                   <div className="flex gap-2">
                     <Input
                       value={inputMessage}
-                      onChange={(e) => setInputMessage(e.target.value)}
+                      onChange={handleChange}
                       onKeyPress={(e) => e.key === "Enter" && handleSendMessage()}
                       placeholder="Digite sua pergunta sobre operações marítimas..."
                       className="flex-1"
@@ -424,7 +424,7 @@ const NauticalCopilot: React.FC = () => {
                   <Button
                     key={index}
                     variant="outline"
-                    onClick={() => handleQuickAction(action.action)}
+                    onClick={() => handlehandleQuickAction}
                     className="h-auto flex-col gap-2 p-4 hover:scale-105 transition-transform"
                   >
                     <Icon className="w-5 h-5" />

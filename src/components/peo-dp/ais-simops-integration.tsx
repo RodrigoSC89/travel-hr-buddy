@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";;
+import { useEffect, useState, useCallback, useMemo } from "react";;
 import React, { useState, useEffect } from "react";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
@@ -231,7 +231,7 @@ export const AISSimopsIntegration: React.FC = () => {
                         <p className="text-sm font-medium">{alert.vesselName}</p>
                         <p className="text-xs text-muted-foreground">{alert.message}</p>
                       </div>
-                      <Button size="sm" variant="outline" onClick={() => handleAcknowledgeAlert(alert.id)}>
+                      <Button size="sm" variant="outline" onClick={() => handlehandleAcknowledgeAlert}>
                         Reconhecer
                       </Button>
                     </div>
@@ -354,7 +354,7 @@ export const AISSimopsIntegration: React.FC = () => {
                       left: `calc(50% + ${x}px)`,
                       transform: "translate(-50%, -50%)"
                     }}
-                    onClick={() => setSelectedVessel(vessel)}
+                    onClick={handleSetSelectedVessel}
                   >
                     {getStatusIcon(vessel.status)}
                     {/* Course indicator */}
@@ -437,7 +437,7 @@ export const AISSimopsIntegration: React.FC = () => {
                     <div
                       key={vessel.mmsi}
                       className={`p-2 rounded-lg border cursor-pointer transition-all hover:shadow-md ${selectedVessel?.mmsi === vessel.mmsi ? "border-primary bg-primary/5" : ""}`}
-                      onClick={() => setSelectedVessel(vessel)}
+                      onClick={handleSetSelectedVessel}
                     >
                       <div className="flex items-center justify-between">
                         <div className="flex items-center gap-2">

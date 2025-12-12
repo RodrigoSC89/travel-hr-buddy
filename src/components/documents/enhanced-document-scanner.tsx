@@ -363,7 +363,7 @@ export const EnhancedDocumentScanner: React.FC = () => {
                 Capturar Novamente
               </Button>
               <Button 
-                onClick={() => processDocument(capturedImage)} 
+                onClick={() => handleprocessDocument} 
                 className="gap-2"
               >
                 <Brain className="h-4 w-4" />
@@ -430,7 +430,7 @@ export const EnhancedDocumentScanner: React.FC = () => {
                       <Button
                         size="sm"
                         variant="outline"
-                        onClick={() => setSelectedResult(result)}
+                        onClick={handleSetSelectedResult}
                         className="gap-1"
                       >
                         <Eye className="h-3 w-3" />
@@ -441,14 +441,14 @@ export const EnhancedDocumentScanner: React.FC = () => {
                         <Button
                           size="sm"
                           variant="ghost"
-                          onClick={() => shareResult(result)}
+                          onClick={() => handleshareResult}
                         >
                           <Share2 className="h-3 w-3" />
                         </Button>
                         <Button
                           size="sm"
                           variant="ghost"
-                          onClick={() => downloadResult(result)}
+                          onClick={() => handledownloadResult}
                         >
                           <Download className="h-3 w-3" />
                         </Button>
@@ -471,7 +471,7 @@ export const EnhancedDocumentScanner: React.FC = () => {
               <Button
                 size="sm"
                 variant="ghost"
-                onClick={() => setSelectedResult(null)}
+                onClick={handleSetSelectedResult}
               >
                 <X className="h-4 w-4" />
               </Button>

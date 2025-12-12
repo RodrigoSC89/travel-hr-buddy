@@ -1,5 +1,5 @@
 /**
-import { useEffect, useState } from "react";;
+import { useEffect, useState, useCallback } from "react";;
  * Offline Status Bar Component
  * PATCH 850: Visual indicator for offline/sync status
  */

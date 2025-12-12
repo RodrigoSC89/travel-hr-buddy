@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";;
+import { useEffect, useState, useCallback, useMemo } from "react";;
 import React, { useState, useEffect } from "react";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
@@ -182,7 +182,7 @@ export const BaseChecklistManager: React.FC<BaseChecklistManagerProps> = ({
             Gerencie inspeções e rotinas operacionais
           </p>
         </div>
-        <Button onClick={() => onTemplateSelect(templates[0])}>
+        <Button onClick={() => handleonTemplateSelect}>
           <PlusCircle className="w-4 h-4 mr-2" />
           Novo Checklist
         </Button>
@@ -202,7 +202,7 @@ export const BaseChecklistManager: React.FC<BaseChecklistManagerProps> = ({
               <Input
                 placeholder="Buscar checklists..."
                 value={searchTerm}
-                onChange={(e) => setSearchTerm(e.target.value)}
+                onChange={handleChange}
                 className="pl-10"
               />
             </div>
@@ -287,7 +287,7 @@ export const BaseChecklistManager: React.FC<BaseChecklistManagerProps> = ({
 
                     <Button 
                       className="w-full mt-4" 
-                      onClick={() => onChecklistSelect(checklist)}
+                      onClick={() => handleonChecklistSelect}
                     >
                       <FileText className="w-4 h-4 mr-2" />
                       Abrir Checklist
@@ -339,7 +339,7 @@ export const BaseChecklistManager: React.FC<BaseChecklistManagerProps> = ({
 
                   <Button 
                     className="w-full mt-4" 
-                    onClick={() => onTemplateSelect(template)}
+                    onClick={() => handleonTemplateSelect}
                   >
                     <PlusCircle className="w-4 h-4 mr-2" />
                     Criar Checklist

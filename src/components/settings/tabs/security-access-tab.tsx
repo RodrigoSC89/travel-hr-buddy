@@ -92,7 +92,7 @@ export const SecurityAccessTab: React.FC<SecurityAccessTabProps> = ({
                   min="6"
                   max="32"
                   value={settings.passwordRules.minLength}
-                  onChange={(e) => updatePasswordRule("minLength", parseInt(e.target.value))}
+                  onChange={handleChange}
                 />
                 <p className="text-xs text-muted-foreground">
                   Número mínimo de caracteres (recomendado: 12+)
@@ -204,7 +204,7 @@ export const SecurityAccessTab: React.FC<SecurityAccessTabProps> = ({
                 min="1"
                 max="10"
                 value={settings.maxLoginAttempts}
-                onChange={(e) => onUpdate({ maxLoginAttempts: parseInt(e.target.value) })}
+                onChange={handleChange})}
               />
               <p className="text-xs text-muted-foreground">
                 Conta será bloqueada temporariamente após este número de tentativas

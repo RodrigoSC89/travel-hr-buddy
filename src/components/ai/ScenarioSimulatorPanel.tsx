@@ -2,7 +2,7 @@
  * Scenario Simulator Panel - What-If analysis with AI
  */
 
-import { memo, memo, useState } from "react";;;
+import { memo, memo, useState, useCallback, useMemo } from "react";;;
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
@@ -273,7 +273,7 @@ export const ScenarioSimulatorPanel = memo(function() {
               <Button 
                 variant="outline" 
                 size="sm" 
-                onClick={() => loadPreset(scenario.id)}
+                onClick={() => handleloadPreset}
                 className="w-full"
               >
                 Carregar Parâmetros

@@ -1,4 +1,4 @@
-import { useState } from "react";;
+import { useState, useMemo, useCallback } from "react";;
 import React, { useState } from "react";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
@@ -330,7 +330,7 @@ export const CrewCertificationsManager = memo(function({ crewMembers = [] }: Cre
                     </div>
                   </div>
                   <div className="flex justify-end gap-2 mt-4">
-                    <Button variant="outline" onClick={() => setIsAddDialogOpen(false)}>
+                    <Button variant="outline" onClick={handleSetIsAddDialogOpen}>
                       Cancelar
                     </Button>
                     <Button onClick={handleAddCertification}>
@@ -352,7 +352,7 @@ export const CrewCertificationsManager = memo(function({ crewMembers = [] }: Cre
                   placeholder="Buscar por nome, tipo ou número..."
                   className="pl-8"
                   value={searchTerm}
-                  onChange={(e) => setSearchTerm(e.target.value)}
+                  onChange={handleChange}
                 />
               </div>
             </div>
@@ -421,7 +421,7 @@ export const CrewCertificationsManager = memo(function({ crewMembers = [] }: Cre
                     <Button 
                       variant="outline" 
                       size="sm"
-                      onClick={() => handleRenew(cert.id)}
+                      onClick={() => handlehandleRenew}
                     >
                       <RefreshCw className="h-4 w-4 mr-1" />
                       Renovar

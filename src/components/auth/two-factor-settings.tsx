@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";;
+import { useEffect, useState, useCallback } from "react";;
 import React, { useState, useEffect } from "react";
 import { logger } from "@/lib/logger";
 import {
@@ -235,7 +235,7 @@ export const TwoFactorSettings: React.FC<TwoFactorSettingsProps> = ({ onClose })
               <Button
                 variant="outline"
                 size="icon"
-                onClick={() => copyToClipboard(secret)}
+                onClick={() => handlecopyToClipboard}
               >
                 {copied ? <Check className="h-4 w-4" /> : <Copy className="h-4 w-4" />}
               </Button>
@@ -249,7 +249,7 @@ export const TwoFactorSettings: React.FC<TwoFactorSettingsProps> = ({ onClose })
         <Input
           id="code"
           value={verificationCode}
-          onChange={(e) => setVerificationCode(e.target.value.replace(/\D/g, "").slice(0, 6))}
+          onChange={handleChange}
           placeholder="000000"
           className="text-center font-mono text-lg tracking-widest"
           maxLength={6}
@@ -259,7 +259,7 @@ export const TwoFactorSettings: React.FC<TwoFactorSettingsProps> = ({ onClose })
       <div className="flex gap-2">
         <Button
           variant="outline"
-          onClick={() => setStep("setup")}
+          onClick={handleSetStep}
           className="flex-1"
         >
           Voltar
@@ -317,7 +317,7 @@ export const TwoFactorSettings: React.FC<TwoFactorSettingsProps> = ({ onClose })
                 <Button
                   variant="outline"
                   size="sm"
-                  onClick={() => disableTwoFactor(factor.id)}
+                  onClick={() => handledisableTwoFactor}
                   disabled={isLoading}
                 >
                   <Trash2 className="h-4 w-4" />
@@ -330,7 +330,7 @@ export const TwoFactorSettings: React.FC<TwoFactorSettingsProps> = ({ onClose })
 
       {factors.length === 0 && (
         <Button 
-          onClick={() => setStep("setup")} 
+          onClick={handleSetStep} 
           variant="outline"
           className="w-full"
         >

@@ -1,4 +1,4 @@
-import { useState } from "react";;
+import { useState, useMemo, useCallback } from "react";;
 import React, { useState } from "react";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
@@ -162,7 +162,7 @@ export const PeotramRiskAssessment: React.FC = () => {
           </p>
         </div>
         <Button 
-          onClick={() => setIsNewAssessment(true)}
+          onClick={handleSetIsNewAssessment}
           className="bg-primary hover:bg-primary/90"
         >
           <Plus className="w-4 h-4 mr-2" />
@@ -196,7 +196,7 @@ export const PeotramRiskAssessment: React.FC = () => {
               <Card
                 key={assessment.id}
                 className="cursor-pointer hover:shadow-lg transition-all duration-300 hover:scale-[1.02] bg-gradient-to-br from-card to-accent/5"
-                onClick={() => setSelectedAssessment(assessment)}
+                onClick={handleSetSelectedAssessment}
               >
                 <CardHeader className="pb-3">
                   <div className="flex items-center justify-between">

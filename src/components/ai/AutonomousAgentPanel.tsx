@@ -2,7 +2,7 @@
  * Autonomous Agent Panel - Proactive AI monitoring and actions
  */
 
-import { memo, memo, useEffect, useState } from "react";;;
+import { memo, memo, useEffect, useState, useCallback, useMemo } from "react";;;
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
@@ -150,7 +150,7 @@ export const AutonomousAgentPanel = memo(function() {
             <Button
               variant="ghost"
               size="icon"
-              onClick={() => setIsActive(!isActive)}
+              onClick={handleSetIsActive}
             >
               {isActive ? <Pause className="h-4 w-4" /> : <Play className="h-4 w-4" />}
             </Button>
@@ -234,14 +234,14 @@ export const AutonomousAgentPanel = memo(function() {
                             size="sm"
                             variant="ghost"
                             className="h-6 px-2"
-                            onClick={() => handleReject(action.id)}
+                            onClick={() => handlehandleReject}
                           >
                             <X className="h-3 w-3" />
                           </Button>
                           <Button
                             size="sm"
                             className="h-6 px-2"
-                            onClick={() => handleApprove(action.id)}
+                            onClick={() => handlehandleApprove}
                           >
                             <CheckCircle2 className="h-3 w-3 mr-1" />
                             Aprovar

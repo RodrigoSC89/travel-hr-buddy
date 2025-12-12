@@ -3,7 +3,7 @@
  * PATCH 541 - Automated validation and monitoring
  */
 
-import { useState } from "react";;;
+import { useState, useMemo, useCallback } from "react";;;
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";

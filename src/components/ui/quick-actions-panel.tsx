@@ -1,4 +1,4 @@
-import { useState } from "react";;
+import { useState, useCallback } from "react";;
 import React, { useState } from "react";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
@@ -106,7 +106,7 @@ export const QuickActionsPanel: React.FC = () => {
             <Input
               placeholder="Buscar módulo..."
               value={searchTerm}
-              onChange={(e) => setSearchTerm(e.target.value)}
+              onChange={handleChange}
               className="pl-10"
             />
           </div>
@@ -117,7 +117,7 @@ export const QuickActionsPanel: React.FC = () => {
                 key={category}
                 variant={selectedCategory === category ? "default" : "outline"}
                 size="sm"
-                onClick={() => setSelectedCategory(category)}
+                onClick={handleSetSelectedCategory}
                 className="text-xs"
               >
                 {category}
@@ -135,7 +135,7 @@ export const QuickActionsPanel: React.FC = () => {
               <Card 
                 key={index}
                 className="cursor-pointer transition-all duration-300 hover:shadow-lg hover:-translate-y-1 bg-gradient-to-br from-card to-secondary/5 group"
-                onClick={() => handleQuickAction(action.module)}
+                onClick={() => handlehandleQuickAction}
               >
                 <CardContent className="p-4">
                   <div className="flex items-start justify-between mb-3">

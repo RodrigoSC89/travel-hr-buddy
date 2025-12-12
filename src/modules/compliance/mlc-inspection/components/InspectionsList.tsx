@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";;
+import { useEffect, useState, useCallback, useMemo } from "react";;
 import React, { useState, useEffect } from "react";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
@@ -86,7 +86,7 @@ export const InspectionsList = memo(function({ onSelectInspection, onStatsUpdate
         <Card 
           key={inspection.id}
           className="cursor-pointer hover:shadow-lg transition-shadow"
-          onClick={() => onSelectInspection(inspection.id)}
+          onClick={() => handleonSelectInspection}
         >
           <CardHeader>
             <div className="flex items-center justify-between">

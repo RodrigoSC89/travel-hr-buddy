@@ -1,5 +1,5 @@
 /**
-import { useEffect, useState } from "react";;
+import { useEffect, useState, useCallback } from "react";;
  * PATCH 648 - AI Suggestions Dashboard
  * Proactive AI insights and automation recommendations
  */
@@ -351,7 +351,7 @@ const AISuggestionsDashboard: React.FC = () => {
                             <div className="flex gap-2">
                               <Button
                                 size="sm"
-                                onClick={() => applySuggestion(suggestion.id)}
+                                onClick={() => handleapplySuggestion}
                                 className="bg-green-500 hover:bg-green-600"
                               >
                                 <CheckCircle className="h-4 w-4 mr-1" />
@@ -360,7 +360,7 @@ const AISuggestionsDashboard: React.FC = () => {
                               <Button
                                 size="sm"
                                 variant="outline"
-                                onClick={() => rejectSuggestion(suggestion.id)}
+                                onClick={() => handlerejectSuggestion}
                               >
                                 <XCircle className="h-4 w-4 mr-1" />
                                 Reject

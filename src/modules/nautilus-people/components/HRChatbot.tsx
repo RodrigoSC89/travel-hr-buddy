@@ -1,5 +1,5 @@
 /**
-import { useEffect, useRef, useState } from "react";;
+import { useEffect, useRef, useState, useCallback, useMemo } from "react";;
  * HR Chatbot - Assistente Virtual de RH com LLM
  */
 
@@ -132,7 +132,7 @@ const HRChatbot: React.FC = () => {
             variant="outline"
             size="sm"
             className="shrink-0"
-            onClick={() => handleSend(action.query)}
+            onClick={() => handlehandleSend}
           >
             <action.icon className="w-3 h-3 mr-1" />
             {action.label}
@@ -176,7 +176,7 @@ const HRChatbot: React.FC = () => {
                           key={idx}
                           variant="secondary"
                           className="cursor-pointer hover:bg-primary/10"
-                          onClick={() => handleSend(suggestion)}
+                          onClick={() => handlehandleSend}
                         >
                           {suggestion}
                         </Badge>
@@ -222,7 +222,7 @@ const HRChatbot: React.FC = () => {
           <Input
             placeholder="Digite sua pergunta..."
             value={input}
-            onChange={(e) => setInput(e.target.value)}
+            onChange={handleChange}
             onKeyDown={(e) => e.key === "Enter" && handleSend()}
             disabled={isLoading}
           />
@@ -262,7 +262,7 @@ const HRChatbot: React.FC = () => {
           <Button
             variant="ghost"
             size="icon"
-            onClick={() => setIsExpanded(!isExpanded)}
+            onClick={handleSetIsExpanded}
           >
             {isExpanded ? <Minimize2 className="w-4 h-4" /> : <Maximize2 className="w-4 h-4" />}
           </Button>

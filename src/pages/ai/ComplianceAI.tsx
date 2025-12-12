@@ -1,5 +1,5 @@
 /**
-import { useEffect, useState } from "react";;
+import { useEffect, useState, useCallback } from "react";;
  * AI Compliance - Compliance Marítimo com IA
  * Verificação automatizada de conformidade regulatória
  */
@@ -300,7 +300,7 @@ Formate a resposta em markdown estruturado.`,
             key={cat.id}
             variant={selectedCategory === cat.id ? "default" : "outline"}
             size="sm"
-            onClick={() => setSelectedCategory(cat.id)}
+            onClick={handleSetSelectedCategory}
             className="whitespace-nowrap"
           >
             {cat.icon}

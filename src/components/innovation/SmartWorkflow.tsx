@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";;
+import { useEffect, useState, useCallback, useMemo } from "react";;
 import React, { useState, useEffect } from "react";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
@@ -270,7 +270,7 @@ export const SmartWorkflow = memo(() => {
                         <Button
                           variant="outline"
                           size="sm"
-                          onClick={() => toggleWorkflow(workflow.id)}
+                          onClick={() => handletoggleWorkflow}
                         >
                           {workflow.status === "running" ? (
                             <Pause className="h-4 w-4" />

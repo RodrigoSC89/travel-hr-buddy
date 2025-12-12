@@ -342,7 +342,7 @@ export const SettingsPanel = memo(() => {
                   <Label>Nome de Exibição</Label>
                   <Input
                     value={settings.profile.display_name}
-                    onChange={(e) => updateSettings("profile", { display_name: e.target.value })}
+                    onChange={handleChange})}
                     placeholder="Seu nome completo"
                   />
                 </div>
@@ -351,7 +351,7 @@ export const SettingsPanel = memo(() => {
                   <Label>Assinatura</Label>
                   <Textarea
                     value={settings.profile.signature}
-                    onChange={(e) => updateSettings("profile", { signature: e.target.value })}
+                    onChange={handleChange})}
                     placeholder="Assinatura para suas mensagens"
                     className="min-h-20"
                   />
@@ -418,7 +418,7 @@ export const SettingsPanel = memo(() => {
                   <Label>URL do Avatar</Label>
                   <Input
                     value={settings.profile.avatar_url}
-                    onChange={(e) => updateSettings("profile", { avatar_url: e.target.value })}
+                    onChange={handleChange})}
                     placeholder="https://exemplo.com/avatar.jpg"
                   />
                 </div>

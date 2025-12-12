@@ -1,4 +1,4 @@
-import { useState } from "react";;
+import { useState, useMemo, useCallback } from "react";;
 import React, { useState } from "react";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
@@ -221,7 +221,7 @@ export const OptimizationReportsManager = memo(() => {
         
         <div className="flex gap-2">
           <Button
-            onClick={() => generateReport("weekly")}
+            onClick={() => handlegenerateReport}
             variant="outline"
             className="flex items-center gap-2"
           >
@@ -229,7 +229,7 @@ export const OptimizationReportsManager = memo(() => {
             Relatório Semanal
           </Button>
           <Button
-            onClick={() => generateReport("monthly")}
+            onClick={() => handlegenerateReport}
             variant="outline"
             className="flex items-center gap-2"
           >
@@ -237,7 +237,7 @@ export const OptimizationReportsManager = memo(() => {
             Relatório Mensal
           </Button>
           <Button
-            onClick={() => generateReport("quarterly")}
+            onClick={() => handlegenerateReport}
             className="flex items-center gap-2"
           >
             <FileText className="h-4 w-4" />
@@ -342,7 +342,7 @@ export const OptimizationReportsManager = memo(() => {
                         </Badge>
                       ) : (
                         <Button
-                          onClick={() => exportReport(report.id)}
+                          onClick={() => handleexportReport}
                           size="sm"
                           className="flex items-center gap-1"
                         >

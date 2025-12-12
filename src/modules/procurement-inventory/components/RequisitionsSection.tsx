@@ -1,4 +1,4 @@
-import { useState } from "react";;
+import { useState, useCallback } from "react";;
 import React, { useState } from "react";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
@@ -322,7 +322,7 @@ export default function RequisitionsSection({ searchQuery }: RequisitionsSection
           </Select>
         </div>
 
-        <Button onClick={() => setShowNewRequisition(true)}>
+        <Button onClick={handleSetShowNewRequisition}>
           <Plus className="h-4 w-4 mr-2" />
           Nova Requisição
         </Button>
@@ -412,7 +412,7 @@ export default function RequisitionsSection({ searchQuery }: RequisitionsSection
                             variant="ghost"
                             size="icon"
                             className="text-green-600 hover:text-green-700"
-                            onClick={() => handleApprove(req)}
+                            onClick={() => handlehandleApprove}
                           >
                             <ThumbsUp className="h-4 w-4" />
                           </Button>
@@ -420,7 +420,7 @@ export default function RequisitionsSection({ searchQuery }: RequisitionsSection
                             variant="ghost"
                             size="icon"
                             className="text-red-600 hover:text-red-700"
-                            onClick={() => handleReject(req, "Requisição rejeitada pelo aprovador.")}
+                            onClick={() => handlehandleReject}
                           >
                             <ThumbsDown className="h-4 w-4" />
                           </Button>
@@ -430,7 +430,7 @@ export default function RequisitionsSection({ searchQuery }: RequisitionsSection
                         <Button
                           variant="ghost"
                           size="sm"
-                          onClick={() => handleConvertToPO(req)}
+                          onClick={() => handlehandleConvertToPO}
                         >
                           <Send className="h-4 w-4 mr-1" />
                           Gerar PO
@@ -468,7 +468,7 @@ export default function RequisitionsSection({ searchQuery }: RequisitionsSection
                 <Input
                   placeholder="Título da requisição"
                   value={newReq.title}
-                  onChange={(e) => setNewReq(prev => ({ ...prev, title: e.target.value }))}
+                  onChange={handleChange}))}
                 />
               </div>
               <div className="col-span-2 space-y-2">
@@ -476,7 +476,7 @@ export default function RequisitionsSection({ searchQuery }: RequisitionsSection
                 <Textarea
                   placeholder="Descreva a necessidade..."
                   value={newReq.description}
-                  onChange={(e) => setNewReq(prev => ({ ...prev, description: e.target.value }))}
+                  onChange={handleChange}))}
                 />
               </div>
               <div className="space-y-2">
@@ -519,7 +519,7 @@ export default function RequisitionsSection({ searchQuery }: RequisitionsSection
                 <Input
                   placeholder="CC-XXX-000"
                   value={newReq.costCenter}
-                  onChange={(e) => setNewReq(prev => ({ ...prev, costCenter: e.target.value }))}
+                  onChange={handleChange}))}
                 />
               </div>
             </div>
@@ -539,7 +539,7 @@ export default function RequisitionsSection({ searchQuery }: RequisitionsSection
                       <Input
                         placeholder="Nome do item"
                         value={item.name}
-                        onChange={(e) => updateItem(index, "name", e.target.value)}
+                        onChange={handleChange}
                       />
                     </div>
                     <div className="col-span-2">
@@ -547,7 +547,7 @@ export default function RequisitionsSection({ searchQuery }: RequisitionsSection
                         type="number"
                         placeholder="Qtd"
                         value={item.quantity}
-                        onChange={(e) => updateItem(index, "quantity", Number(e.target.value))}
+                        onChange={handleChange}
                       />
                     </div>
                     <div className="col-span-2">
@@ -572,7 +572,7 @@ export default function RequisitionsSection({ searchQuery }: RequisitionsSection
                         type="number"
                         placeholder="Custo unit."
                         value={item.estimatedUnitCost}
-                        onChange={(e) => updateItem(index, "estimatedUnitCost", Number(e.target.value))}
+                        onChange={handleChange}
                       />
                     </div>
                     <div className="col-span-2 text-right">
@@ -591,7 +591,7 @@ export default function RequisitionsSection({ searchQuery }: RequisitionsSection
             </div>
           </div>
           <DialogFooter>
-            <Button variant="outline" onClick={() => setShowNewRequisition(false)}>Cancelar</Button>
+            <Button variant="outline" onClick={handleSetShowNewRequisition}>Cancelar</Button>
             <Button onClick={handleCreateRequisition}>
               <Send className="h-4 w-4 mr-2" />
               Criar Requisição

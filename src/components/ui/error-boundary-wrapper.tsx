@@ -108,7 +108,7 @@ const ErrorFallback: React.FC<ErrorFallbackProps> = ({ error, onRetry }) => {
             </Button>
             <Button 
               variant="outline" 
-              onClick={() => navigate("/")}
+              onClick={() => handlenavigate}
               className="w-full"
             >
               <Home className="h-4 w-4 mr-2" />

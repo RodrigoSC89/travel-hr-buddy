@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";;
+import { useEffect, useState, useCallback, useMemo } from "react";;
 import React, { useState, useEffect } from "react";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
@@ -277,7 +277,7 @@ export const NeuralRouteOptimizer: React.FC = () => {
                   className={`cursor-pointer transition-all ${
                     selectedRoute?.id === route.id ? "border-primary border-2" : "hover:border-primary/50"
                   }`}
-                  onClick={() => setSelectedRoute(route)}
+                  onClick={handleSetSelectedRoute}
                 >
                   <CardContent className="p-4">
                     <div className="flex items-start justify-between mb-4">

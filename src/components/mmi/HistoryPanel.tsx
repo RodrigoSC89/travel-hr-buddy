@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";;;
+import { useEffect, useState, useCallback } from "react";;;
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
@@ -265,7 +265,7 @@ export default function HistoryPanel() {
                   </div>
 
                   <Button
-                    onClick={() => exportSinglePDF(history)}
+                    onClick={() => handleexportSinglePDF}
                     variant="outline"
                     size="sm"
                   >

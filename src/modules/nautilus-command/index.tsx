@@ -1,5 +1,5 @@
 /**
-import { useEffect, useState } from "react";;
+import { useEffect, useState, useCallback, useMemo } from "react";;
  * NAUTILUS COMMAND CENTER - O Cérebro Central do Sistema
  * Centro de Comando Unificado com IA Embarcada
  * 
@@ -274,7 +274,7 @@ const NautilusCommandCenter = () => {
             </Button>
 
             <Button 
-              onClick={() => setShowBrain(true)}
+              onClick={handleSetShowBrain}
               className="bg-gradient-to-r from-purple-600 to-pink-500 hover:from-purple-700 hover:to-pink-600"
             >
               <Brain className="h-4 w-4 mr-2" />
@@ -545,7 +545,7 @@ const IntegratedModuleCard: React.FC<IntegratedModuleCardProps> = ({ icon, title
 
   return (
     <button
-      onClick={() => navigate(path)}
+      onClick={() => handlenavigate}
       className={`relative flex flex-col items-center justify-center p-4 rounded-xl transition-all ${colorClasses[color]} cursor-pointer group`}
     >
       {alerts > 0 && (

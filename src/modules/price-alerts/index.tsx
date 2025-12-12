@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";;
+import { useEffect, useState, useCallback, useMemo } from "react";;
 
 /**
  * PATCH 464 - Complete Price Alerts UI
@@ -347,7 +347,7 @@ export const CompletePriceAlertsUI: React.FC = () => {
             <RefreshCw className="h-4 w-4 mr-2" />
             Check Prices
           </Button>
-          <Button onClick={() => setShowCreateDialog(true)}>
+          <Button onClick={handleSetShowCreateDialog}>
             <Plus className="h-4 w-4 mr-2" />
             New Alert
           </Button>
@@ -409,7 +409,7 @@ export const CompletePriceAlertsUI: React.FC = () => {
                     className={`cursor-pointer transition-colors ${
                       selectedAlert?.id === alert.id ? "border-primary" : ""
                     }`}
-                    onClick={() => setSelectedAlert(alert)}
+                    onClick={handleSetSelectedAlert}
                   >
                     <CardContent className="p-4">
                       <div className="flex items-start justify-between mb-2">
@@ -528,8 +528,7 @@ export const CompletePriceAlertsUI: React.FC = () => {
               <Input
                 id="origin"
                 value={newAlert.origin}
-                onChange={(e) =>
-                  setNewAlert({ ...newAlert, origin: e.target.value })
+                onChange={handleChange})
                 }
                 placeholder="e.g., New York"
               />
@@ -540,8 +539,7 @@ export const CompletePriceAlertsUI: React.FC = () => {
               <Input
                 id="destination"
                 value={newAlert.destination}
-                onChange={(e) =>
-                  setNewAlert({ ...newAlert, destination: e.target.value })
+                onChange={handleChange})
                 }
                 placeholder="e.g., London"
               />
@@ -553,8 +551,7 @@ export const CompletePriceAlertsUI: React.FC = () => {
                 id="target_price"
                 type="number"
                 value={newAlert.target_price}
-                onChange={(e) =>
-                  setNewAlert({ ...newAlert, target_price: e.target.value })
+                onChange={handleChange})
                 }
                 placeholder="e.g., 500"
               />
@@ -601,7 +598,7 @@ export const CompletePriceAlertsUI: React.FC = () => {
             </div>
           </div>
           <DialogFooter>
-            <Button variant="outline" onClick={() => setShowCreateDialog(false)}>
+            <Button variant="outline" onClick={handleSetShowCreateDialog}>
               Cancel
             </Button>
             <Button onClick={createAlert}>Create Alert</Button>

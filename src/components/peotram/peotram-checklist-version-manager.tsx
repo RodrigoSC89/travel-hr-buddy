@@ -1,4 +1,4 @@
-import { useState } from "react";;
+import { useState, useMemo, useCallback } from "react";;
 import React, { useState } from "react";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
@@ -325,7 +325,7 @@ export const PeotramChecklistVersionManager: React.FC = () => {
                     ? "bg-primary/5 border-primary"
                     : "hover:bg-muted/50"
                 }`}
-                onClick={() => setSelectedTemplate(template)}
+                onClick={handleSetSelectedTemplate}
               >
                 <div className="flex items-center justify-between mb-2">
                   <div className="flex items-center gap-2">
@@ -399,7 +399,7 @@ export const PeotramChecklistVersionManager: React.FC = () => {
                     <Button
                       size="sm"
                       variant="outline"
-                      onClick={() => exportTemplate("json")}
+                      onClick={() => handleexportTemplate}
                     >
                       <FileJson className="h-4 w-4 mr-2" />
                       JSON
@@ -407,7 +407,7 @@ export const PeotramChecklistVersionManager: React.FC = () => {
                     <Button
                       size="sm"
                       variant="outline"
-                      onClick={() => exportTemplate("excel")}
+                      onClick={() => handleexportTemplate}
                     >
                       <FileSpreadsheet className="h-4 w-4 mr-2" />
                       Excel
@@ -415,7 +415,7 @@ export const PeotramChecklistVersionManager: React.FC = () => {
                     <Button
                       size="sm"
                       variant="outline"
-                      onClick={() => exportTemplate("pdf")}
+                      onClick={() => handleexportTemplate}
                     >
                       <FileText className="h-4 w-4 mr-2" />
                       PDF
@@ -426,7 +426,7 @@ export const PeotramChecklistVersionManager: React.FC = () => {
                         Salvar
                       </Button>
                     ) : (
-                      <Button onClick={() => setIsEditing(true)}>
+                      <Button onClick={handleSetIsEditing}>
                         <Edit className="h-4 w-4 mr-2" />
                         Editar
                       </Button>
@@ -442,11 +442,7 @@ export const PeotramChecklistVersionManager: React.FC = () => {
                     <Input
                       type="number"
                       value={selectedTemplate.year}
-                      onChange={(e) =>
-                        setSelectedTemplate({
-                          ...selectedTemplate,
-                          year: parseInt(e.target.value),
-                        })
+                      onChange={handleChange})
                       }
                       disabled={!isEditing}
                     />
@@ -455,11 +451,7 @@ export const PeotramChecklistVersionManager: React.FC = () => {
                     <Label>Versão</Label>
                     <Input
                       value={selectedTemplate.version}
-                      onChange={(e) =>
-                        setSelectedTemplate({
-                          ...selectedTemplate,
-                          version: e.target.value,
-                        })
+                      onChange={handleChange})
                       }
                       disabled={!isEditing}
                     />
@@ -469,11 +461,7 @@ export const PeotramChecklistVersionManager: React.FC = () => {
                     <select
                       className="w-full px-3 py-2 border rounded-md"
                       value={selectedTemplate.vesselType}
-                      onChange={(e) =>
-                        setSelectedTemplate({
-                          ...selectedTemplate,
-                          vesselType: e.target.value as unknown,
-                        })
+                      onChange={handleChange})
                       }
                       disabled={!isEditing}
                     >
@@ -514,12 +502,7 @@ export const PeotramChecklistVersionManager: React.FC = () => {
                         <div className="flex-1">
                           <Input
                             value={element.name}
-                            onChange={(e) =>
-                              setSelectedTemplate({
-                                ...selectedTemplate,
-                                elements: selectedTemplate.elements.map(elem =>
-                                  elem.id === element.id
-                                    ? { ...elem, name: e.target.value }
+                            onChange={handleChange}
                                     : elem
                                 ),
                               })
@@ -539,10 +522,7 @@ export const PeotramChecklistVersionManager: React.FC = () => {
                           <div key={req.id} className="flex items-center gap-2 p-2 bg-muted/30 rounded">
                             <Input
                               value={req.description}
-                              onChange={(e) =>
-                                updateRequirement(element.id, req.id, {
-                                  description: e.target.value,
-                                })
+                              onChange={handleChange})
                               }
                               disabled={!isEditing}
                               className="flex-1"
@@ -551,10 +531,7 @@ export const PeotramChecklistVersionManager: React.FC = () => {
                             <Input
                               type="number"
                               value={req.weight}
-                              onChange={(e) =>
-                                updateRequirement(element.id, req.id, {
-                                  weight: parseInt(e.target.value) || 1,
-                                })
+                              onChange={handleChange})
                               }
                               disabled={!isEditing}
                               className="w-20"
@@ -563,10 +540,7 @@ export const PeotramChecklistVersionManager: React.FC = () => {
                             <input
                               type="checkbox"
                               checked={req.mandatory}
-                              onChange={(e) =>
-                                updateRequirement(element.id, req.id, {
-                                  mandatory: e.target.checked,
-                                })
+                              onChange={handleChange})
                               }
                               disabled={!isEditing}
                               className="w-4 h-4"
@@ -576,7 +550,7 @@ export const PeotramChecklistVersionManager: React.FC = () => {
                               <Button
                                 size="sm"
                                 variant="ghost"
-                                onClick={() => deleteRequirement(element.id, req.id)}
+                                onClick={() => handledeleteRequirement}
                               >
                                 <Trash2 className="h-4 w-4 text-destructive" />
                               </Button>
@@ -587,7 +561,7 @@ export const PeotramChecklistVersionManager: React.FC = () => {
                           <Button
                             size="sm"
                             variant="outline"
-                            onClick={() => addRequirement(element.id)}
+                            onClick={() => handleaddRequirement}
                           >
                             <Plus className="h-3 w-3 mr-2" />
                             Adicionar Requisito

@@ -1,4 +1,4 @@
-import { useState } from "react";;
+import { useState, useCallback } from "react";;
 import React, { useState } from "react";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
@@ -148,7 +148,7 @@ export const HealthCheckInForm: React.FC<{ onSuccess: () => void }> = ({ onSucce
                   type="number"
                   step="0.5"
                   value={formData.sleep_hours}
-                  onChange={(e) => setFormData({ ...formData, sleep_hours: parseFloat(e.target.value) })}
+                  onChange={handleChange})}
                   min="0"
                   max="24"
                 />
@@ -185,7 +185,7 @@ export const HealthCheckInForm: React.FC<{ onSuccess: () => void }> = ({ onSucce
                   type="number"
                   placeholder="120"
                   value={formData.blood_pressure_systolic}
-                  onChange={(e) => setFormData({ ...formData, blood_pressure_systolic: e.target.value })}
+                  onChange={handleChange})}
                 />
               </div>
 
@@ -195,7 +195,7 @@ export const HealthCheckInForm: React.FC<{ onSuccess: () => void }> = ({ onSucce
                   type="number"
                   placeholder="80"
                   value={formData.blood_pressure_diastolic}
-                  onChange={(e) => setFormData({ ...formData, blood_pressure_diastolic: e.target.value })}
+                  onChange={handleChange})}
                 />
               </div>
             </div>
@@ -206,7 +206,7 @@ export const HealthCheckInForm: React.FC<{ onSuccess: () => void }> = ({ onSucce
                 type="number"
                 placeholder="72"
                 value={formData.heart_rate}
-                onChange={(e) => setFormData({ ...formData, heart_rate: e.target.value })}
+                onChange={handleChange})}
               />
             </div>
 
@@ -228,7 +228,7 @@ export const HealthCheckInForm: React.FC<{ onSuccess: () => void }> = ({ onSucce
             <Label>Additional Notes (Optional)</Label>
             <Textarea
               value={formData.notes}
-              onChange={(e) => setFormData({ ...formData, notes: e.target.value })}
+              onChange={handleChange})}
               placeholder="Any symptoms, concerns, or additional information..."
               rows={3}
             />

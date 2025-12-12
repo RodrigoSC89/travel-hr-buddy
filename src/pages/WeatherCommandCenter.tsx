@@ -1,5 +1,5 @@
 /**
-import { useEffect, useState } from "react";;
+import { useEffect, useState, useCallback, useMemo } from "react";;
  * PATCH UNIFY-10.0: Weather Command Center
  * Fusão de: Dashboard Meteorológico + Previsão Global
  * 
@@ -301,7 +301,7 @@ export default function WeatherCommandCenter() {
             <Input
               placeholder="Buscar localização..."
               value={searchQuery}
-              onChange={(e) => setSearchQuery(e.target.value)}
+              onChange={handleChange}
               onKeyPress={(e) => e.key === "Enter" && handleSearch()}
               className="w-64"
             />
@@ -382,7 +382,7 @@ export default function WeatherCommandCenter() {
             key={location.id}
             variant={selectedLocation === location.name ? "default" : "outline"}
             size="sm"
-            onClick={() => fetchWeatherData(location.lat, location.lon, location.name)}
+            onClick={() => handlefetchWeatherData}
           >
             <MapPin className="h-4 w-4 mr-2" />
             {location.name}
@@ -646,7 +646,7 @@ export default function WeatherCommandCenter() {
                       className={`cursor-pointer hover:shadow-lg transition-all ${
                         selectedLocation === location.name ? "ring-2 ring-primary" : ""
                       }`}
-                      onClick={() => fetchWeatherData(location.lat, location.lon, location.name)}
+                      onClick={() => handlefetchWeatherData}
                     >
                       <CardHeader className="pb-2">
                         <div className="flex items-center justify-between">

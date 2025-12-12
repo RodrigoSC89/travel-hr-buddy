@@ -165,7 +165,7 @@ export const TemplateWYSIWYGEditor: React.FC<TemplateWYSIWYGEditorProps> = ({
             {commonVariables.map((variable) => (
               <DropdownMenuItem
                 key={variable.value}
-                onClick={() => insertVariable(variable.value)}
+                onClick={() => handleinsertVariable}
               >
                 {variable.label} - {`{{${variable.value}}}`}
               </DropdownMenuItem>

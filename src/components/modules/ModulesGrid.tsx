@@ -1,6 +1,6 @@
 // ✅ Grid de Módulos — Interface Inteligente para Nautilus One
 
-import { useState } from "react";;;
+import { useState, useMemo, useCallback } from "react";;;
 import { useNavigate } from "react-router-dom";
 import { Input } from "@/components/ui/input";
 import { Card, CardContent } from "@/components/ui/card";
@@ -125,7 +125,7 @@ export default function ModulesGrid() {
           <Input
             placeholder="🔍 Buscar módulo..."
             value={search}
-            onChange={(e) => setSearch(e.target.value)}
+            onChange={handleChange}
             className="max-w-xs"
           />
         </div>
@@ -135,7 +135,7 @@ export default function ModulesGrid() {
           <Button
             variant={selectedCategory === "all" ? "default" : "outline"}
             size="sm"
-            onClick={() => setSelectedCategory("all")}
+            onClick={handleSetSelectedCategory}
           >
             Todos
           </Button>
@@ -144,7 +144,7 @@ export default function ModulesGrid() {
               key={category}
               variant={selectedCategory === category ? "default" : "outline"}
               size="sm"
-              onClick={() => setSelectedCategory(category)}
+              onClick={handleSetSelectedCategory}
             >
               {category}
             </Button>
@@ -192,7 +192,7 @@ export default function ModulesGrid() {
                     <Button
                       variant={isDisabled ? "ghost" : "outline"}
                       size="sm"
-                      onClick={() => handleModuleClick(mod.slug, mod.status)}
+                      onClick={() => handlehandleModuleClick}
                       disabled={isDisabled}
                       className="w-full"
                     >

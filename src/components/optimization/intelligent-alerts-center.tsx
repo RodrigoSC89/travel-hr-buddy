@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";;
+import { useEffect, useState, useCallback, useMemo } from "react";;
 import React, { useState, useEffect } from "react";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
@@ -427,7 +427,7 @@ export const IntelligentAlertsCenter = memo(() => {
                         <Button 
                           size="sm" 
                           variant="ghost"
-                          onClick={() => markAsRead(alert.id)}
+                          onClick={() => handlemarkAsRead}
                         >
                           Marcar como lido
                         </Button>

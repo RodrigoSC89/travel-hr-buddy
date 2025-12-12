@@ -3,7 +3,7 @@
  * Interactive AI assistant sidebar with hotkey support
  */
 
-import { useEffect, useState } from "react";;;
+import { useEffect, useState, useCallback } from "react";;;
 import { Dialog, DialogContent, DialogHeader, DialogTitle } from "@/components/ui/dialog";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -119,7 +119,7 @@ export default function CopilotV2() {
       {/* Floating Action Button */}
       <Button
         className="fixed bottom-6 right-6 h-14 w-14 rounded-full shadow-lg"
-        onClick={() => setOpen(true)}
+        onClick={handleSetOpen}
         size="icon"
         aria-label="Open Nautilus Copilot AI Assistant"
         aria-expanded={open}
@@ -154,7 +154,7 @@ export default function CopilotV2() {
               <Input
                 placeholder="Ask me anything or type a command..."
                 value={input}
-                onChange={(e) => setInput(e.target.value)}
+                onChange={handleChange}
                 onKeyPress={(e) => e.key === "Enter" && handleTextInput()}
                 className="flex-1"
               />
@@ -199,7 +199,7 @@ export default function CopilotV2() {
                   <Card
                     key={cmd.id}
                     className="hover:bg-accent cursor-pointer transition-colors"
-                    onClick={() => handleCommand(cmd.id)}
+                    onClick={() => handlehandleCommand}
                   >
                     <CardHeader className="py-3">
                       <div className="flex items-center justify-between">
@@ -269,7 +269,7 @@ export default function CopilotV2() {
                   </CardDescription>
                 </CardHeader>
                 <CardContent>
-                  <Button onClick={() => handleCommand("training-mode")} className="w-full">
+                  <Button onClick={() => handlehandleCommand} className="w-full">
                     <GraduationCap className="h-4 w-4 mr-2" />
                     Start Training Session
                   </Button>

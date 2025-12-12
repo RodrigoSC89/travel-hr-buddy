@@ -137,7 +137,7 @@ const VesselCard: React.FC<{ vessel: Vessel; onViewDetails: (v: Vessel) => void;
             <Button 
               variant="outline" 
               className="flex-1"
-              onClick={() => onViewDetails(vessel)}
+              onClick={() => handleonViewDetails}
             >
               <Eye className="h-4 w-4 mr-2" />
               Detalhes

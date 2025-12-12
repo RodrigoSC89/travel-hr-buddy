@@ -1,5 +1,5 @@
 /**
-import { useContext, useState } from "react";;
+import { useContext, useState, useCallback } from "react";;
  * Global Brain Provider - Permite acesso ao Nautilus Brain de qualquer lugar
  */
 

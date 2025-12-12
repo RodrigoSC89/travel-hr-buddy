@@ -3,7 +3,7 @@ import { CheckCircle2, XCircle, Satellite, Radio, Activity, Database } from "luc
 import { Badge } from "@/components/ui/badge";
 import { SatelliteMap } from "@/modules/satellite-tracker/components/SatelliteMap";
 import { OrbitVisualization } from "@/modules/satellite-tracker/components/OrbitVisualization";
-import { useEffect, useState } from "react";;;
+import { useEffect, useState, useCallback, useMemo } from "react";;;
 
 export default function Patch511SatelliteTracker() {
   const [satelliteData, setSatelliteData] = useState({

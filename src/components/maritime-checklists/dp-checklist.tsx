@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";;
+import { useEffect, useState, useCallback, useMemo } from "react";;
 import React, { useState, useEffect } from "react";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
@@ -184,7 +184,7 @@ export const DPChecklist: React.FC<DPChecklistProps> = ({
           <Input
             type="number"
             value={String(item.value || "")}
-            onChange={(e) => handleItemChange(item.id, "value", parseFloat(e.target.value))}
+            onChange={handleChange}
             placeholder={`Min: ${item.minValue}, Max: ${item.maxValue}`}
             className="w-32"
           />
@@ -196,7 +196,7 @@ export const DPChecklist: React.FC<DPChecklistProps> = ({
       return (
         <Input
           value={String(item.value || "")}
-          onChange={(e) => handleItemChange(item.id, "value", e.target.value)}
+          onChange={handleChange}
           placeholder="Digite sua resposta..."
           className="w-full"
         />
@@ -263,7 +263,7 @@ export const DPChecklist: React.FC<DPChecklistProps> = ({
                   <Button
                     variant={selectedCategory === "all" ? "default" : "outline"}
                     size="sm"
-                    onClick={() => setSelectedCategory("all")}
+                    onClick={handleSetSelectedCategory}
                   >
                     Todas as Categorias
                   </Button>
@@ -272,7 +272,7 @@ export const DPChecklist: React.FC<DPChecklistProps> = ({
                       key={category}
                       variant={selectedCategory === category ? "default" : "outline"}
                       size="sm"
-                      onClick={() => setSelectedCategory(category)}
+                      onClick={handleSetSelectedCategory}
                     >
                       {category}
                     </Button>
@@ -318,7 +318,7 @@ export const DPChecklist: React.FC<DPChecklistProps> = ({
                           <label className="text-sm font-medium">Observações:</label>
                           <Textarea
                             value={item.notes || ""}
-                            onChange={(e) => handleItemChange(item.id, "notes", e.target.value)}
+                            onChange={handleChange}
                             placeholder="Adicione observações sobre este item..."
                             className="mt-1"
                             rows={2}

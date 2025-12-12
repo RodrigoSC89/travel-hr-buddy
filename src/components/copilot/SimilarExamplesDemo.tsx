@@ -70,7 +70,7 @@ export default function SimilarExamplesDemo() {
                 id="title"
                 placeholder="Ex: Falha no gerador STBD"
                 value={jobTitle}
-                onChange={(e) => setJobTitle(e.target.value)}
+                onChange={handleChange}
               />
             </div>
 
@@ -81,7 +81,7 @@ export default function SimilarExamplesDemo() {
                 id="component"
                 placeholder="Ex: Gerador Diesel, Bomba Hidráulica"
                 value={component}
-                onChange={(e) => setComponent(e.target.value)}
+                onChange={handleChange}
               />
             </div>
 
@@ -92,7 +92,7 @@ export default function SimilarExamplesDemo() {
                 id="description"
                 placeholder="Descreva o problema de manutenção em detalhes..."
                 value={jobDescription}
-                onChange={(e) => setJobDescription(e.target.value)}
+                onChange={handleChange}
                 rows={4}
                 className="resize-none"
               />

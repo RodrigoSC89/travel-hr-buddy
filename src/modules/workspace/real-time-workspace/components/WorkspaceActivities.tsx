@@ -1,4 +1,4 @@
-import { useMemo, useState } from "react";;
+import { useMemo, useState, useCallback } from "react";;
 import React, { useState, useMemo } from "react";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
@@ -274,7 +274,7 @@ export const WorkspaceActivities: React.FC<WorkspaceActivitiesProps> = ({
                           key={option.value}
                           variant={dateRange === option.value ? "default" : "outline"}
                           size="sm"
-                          onClick={() => setDateRange(option.value as typeof dateRange)}
+                          onClick={handleSetDateRange}
                           className="w-full"
                         >
                           {option.label}

@@ -78,7 +78,7 @@ export const NotificationsPanel: React.FC<NotificationsPanelProps> = ({
                       <Button
                         variant="ghost"
                         size="sm"
-                        onClick={() => onMarkAsRead(notification.id)}
+                        onClick={() => handleonMarkAsRead}
                         disabled={loading}
                       >
                         <Check className="w-4 h-4" />

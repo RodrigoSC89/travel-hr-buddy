@@ -1,5 +1,5 @@
 /**
-import { useState } from "react";;
+import { useState, useCallback } from "react";;
  * PATCH 410: Mission Execution Submodule
  * Active mission monitoring, progress tracking, pause/resume
  */
@@ -67,7 +67,7 @@ export const MissionExecution = memo(function() {
                 <Button
                   size="sm"
                   variant="outline"
-                  onClick={() => handleToggleStatus(mission.id)}
+                  onClick={() => handlehandleToggleStatus}
                   className="flex items-center gap-2"
                 >
                   {mission.status === "in-progress" ? (

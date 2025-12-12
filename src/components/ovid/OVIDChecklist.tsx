@@ -73,7 +73,7 @@ export const OVIDChecklist: React.FC<OVIDChecklistProps> = ({
                                 size="sm"
                                 variant={answer === "yes" ? "default" : "outline"}
                                 className={answer === "yes" ? "bg-green-600 hover:bg-green-700" : ""}
-                                onClick={() => onAnswerChange(question.id, "yes")}
+                                onClick={() => handleonAnswerChange}
                               >
                                 <CheckCircle className="w-4 h-4" />
                               </Button>
@@ -81,7 +81,7 @@ export const OVIDChecklist: React.FC<OVIDChecklistProps> = ({
                                 size="sm"
                                 variant={answer === "no" ? "default" : "outline"}
                                 className={answer === "no" ? "bg-red-600 hover:bg-red-700" : ""}
-                                onClick={() => onAnswerChange(question.id, "no")}
+                                onClick={() => handleonAnswerChange}
                               >
                                 <XCircle className="w-4 h-4" />
                               </Button>
@@ -89,7 +89,7 @@ export const OVIDChecklist: React.FC<OVIDChecklistProps> = ({
                                 size="sm"
                                 variant={answer === "na" ? "default" : "outline"}
                                 className={answer === "na" ? "bg-gray-600 hover:bg-gray-700" : ""}
-                                onClick={() => onAnswerChange(question.id, "na")}
+                                onClick={() => handleonAnswerChange}
                               >
                                 <MinusCircle className="w-4 h-4" />
                               </Button>
@@ -99,7 +99,7 @@ export const OVIDChecklist: React.FC<OVIDChecklistProps> = ({
                             <Textarea
                               placeholder="Observação obrigatória para resposta 'Não'..."
                               value={answers[question.id]?.observation || ""}
-                              onChange={(e) => onAnswerChange(question.id, "no", e.target.value)}
+                              onChange={handleChange}
                               className="text-sm"
                             />
                           )}

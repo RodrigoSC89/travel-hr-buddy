@@ -1,4 +1,4 @@
-import { useEffect, useRef, useState } from "react";;
+import { useEffect, useRef, useState, useCallback, useMemo } from "react";;
 import React, { useState, useRef, useEffect } from "react";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
@@ -332,13 +332,13 @@ export const DPAIAdvisor: React.FC = () => {
                             )}
                             {message.role === "assistant" && message.id !== "welcome" && (
                               <div className="flex items-center gap-2 mt-2 pt-2 border-t border-border/50">
-                                <Button size="sm" variant="ghost" className="h-6 px-2" onClick={() => handleRating(message.id, "positive")}>
+                                <Button size="sm" variant="ghost" className="h-6 px-2" onClick={() => handlehandleRating}>
                                   <ThumbsUp className={`h-3 w-3 ${message.rating === "positive" ? "text-green-500 fill-green-500" : ""}`} />
                                 </Button>
-                                <Button size="sm" variant="ghost" className="h-6 px-2" onClick={() => handleRating(message.id, "negative")}>
+                                <Button size="sm" variant="ghost" className="h-6 px-2" onClick={() => handlehandleRating}>
                                   <ThumbsDown className={`h-3 w-3 ${message.rating === "negative" ? "text-red-500 fill-red-500" : ""}`} />
                                 </Button>
-                                <Button size="sm" variant="ghost" className="h-6 px-2" onClick={() => handleCopy(message.content)}>
+                                <Button size="sm" variant="ghost" className="h-6 px-2" onClick={() => handlehandleCopy}>
                                   <Copy className="h-3 w-3" />
                                 </Button>
                               </div>
@@ -366,7 +366,7 @@ export const DPAIAdvisor: React.FC = () => {
                   <Input
                     placeholder="Digite sua pergunta sobre DP..."
                     value={input}
-                    onChange={(e) => setInput(e.target.value)}
+                    onChange={handleChange}
                     onKeyPress={(e) => e.key === "Enter" && handleSend()}
                     disabled={isLoading}
                   />
@@ -394,7 +394,7 @@ export const DPAIAdvisor: React.FC = () => {
                   key={q.id}
                   variant="outline"
                   className="w-full justify-start text-left h-auto py-2 px-3"
-                  onClick={() => handleQuickQuestion(q.question)}
+                  onClick={() => handlehandleQuickQuestion}
                 >
                   <div className="flex items-start gap-2">
                     {q.icon}

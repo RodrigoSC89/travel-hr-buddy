@@ -1,4 +1,4 @@
-import { useState } from "react";;
+import { useState, useCallback } from "react";;
 import React, { useState } from "react";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
@@ -212,10 +212,10 @@ export const PeotramIntegrationHub: React.FC = () => {
                   <Textarea id="integration-description" placeholder="Descrição da integração" />
                 </div>
                 <div className="flex justify-end gap-2">
-                  <Button variant="outline" onClick={() => setIsConfigOpen(false)}>
+                  <Button variant="outline" onClick={handleSetIsConfigOpen}>
                     Cancelar
                   </Button>
-                  <Button onClick={() => setIsConfigOpen(false)}>
+                  <Button onClick={handleSetIsConfigOpen}>
                     Configurar
                   </Button>
                 </div>
@@ -323,7 +323,7 @@ export const PeotramIntegrationHub: React.FC = () => {
                       variant="outline" 
                       size="sm" 
                       className="flex-1"
-                      onClick={() => setSelectedIntegration(integration)}
+                      onClick={handleSetSelectedIntegration}
                     >
                       <Settings className="w-3 h-3 mr-1" />
                       Configurar
@@ -332,7 +332,7 @@ export const PeotramIntegrationHub: React.FC = () => {
                       variant="outline" 
                       size="sm" 
                       className="flex-1"
-                      onClick={() => syncIntegration(integration.id)}
+                      onClick={() => handlesyncIntegration}
                       disabled={integration.status !== "connected"}
                     >
                       <RefreshCw className="w-3 h-3 mr-1" />

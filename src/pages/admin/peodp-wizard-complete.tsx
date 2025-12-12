@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";;
+import { useEffect, useState, useCallback } from "react";;
 
 import React, { useState, useEffect } from "react";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
@@ -618,7 +618,7 @@ export default function PeoDpWizardComplete() {
                       <Textarea
                         id={field}
                         value={formData[field] || ""}
-                        onChange={(e) => handleFieldChange(field, e.target.value)}
+                        onChange={handleChange}
                         placeholder={`Digite ${field.replace(/_/g, " ")}`}
                         rows={4}
                       />
@@ -637,7 +637,7 @@ export default function PeoDpWizardComplete() {
                       <Input
                         id={field}
                         value={formData[field] || ""}
-                        onChange={(e) => handleFieldChange(field, e.target.value)}
+                        onChange={handleChange}
                         placeholder={`Digite ${field.replace(/_/g, " ")}`}
                       />
                     )}

@@ -1,5 +1,5 @@
 /**
-import { useContext, useEffect, useState } from "react";;
+import { useContext, useEffect, useState, useCallback } from "react";;
  * Emergency Mode - PATCH 960
  * Modo emergencial para operação offline crítica
  */
@@ -189,7 +189,7 @@ function EmergencyModeOverlay() {
             <Button 
               size="sm" 
               variant="secondary"
-              onClick={() => setShowDetails(true)}
+              onClick={handleSetShowDetails}
             >
               Detalhes
             </Button>

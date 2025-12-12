@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";;;
+import { useEffect, useState, useCallback, useMemo } from "react";;;
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -203,17 +203,17 @@ export default function AuditDashboard() {
             <Input
               placeholder="User ID"
               value={filters.user_id}
-              onChange={(e) => handleFilterChange("user_id", e.target.value)}
+              onChange={handleChange}
             />
             <Input
               placeholder="IP Address"
               value={filters.ip_address}
-              onChange={(e) => handleFilterChange("ip_address", e.target.value)}
+              onChange={handleChange}
             />
             <Input
               placeholder="Module/Route"
               value={filters.module_accessed}
-              onChange={(e) => handleFilterChange("module_accessed", e.target.value)}
+              onChange={handleChange}
             />
             <Select value={filters.result || "all"} onValueChange={(value) => handleFilterChange("result", value === "all" ? "" : value)}>
               <SelectTrigger>
@@ -311,14 +311,14 @@ export default function AuditDashboard() {
                 </div>
                 <div className="flex gap-2">
                   <Button
-                    onClick={() => setPage(p => Math.max(1, p - 1))}
+                    onClick={handleSetPage}
                     disabled={page === 1}
                     variant="outline"
                   >
                     Previous
                   </Button>
                   <Button
-                    onClick={() => setPage(p => Math.min(totalPages, p + 1))}
+                    onClick={handleSetPage}
                     disabled={page === totalPages}
                     variant="outline"
                   >

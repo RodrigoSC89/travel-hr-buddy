@@ -1,5 +1,5 @@
 /**
-import { useState } from "react";;
+import { useState, useCallback } from "react";;
  * New Emergency Plan Dialog
  * Form to create a new emergency response plan
  */
@@ -138,7 +138,7 @@ export const NewEmergencyPlanDialog: React.FC<NewEmergencyPlanDialogProps> = ({
               <Input
                 id="title"
                 value={formData.title}
-                onChange={(e) => handleChange("title", e.target.value)}
+                onChange={handleChange}
                 placeholder="Ex: Plano de Combate a Incêndio"
               />
             </div>
@@ -165,7 +165,7 @@ export const NewEmergencyPlanDialog: React.FC<NewEmergencyPlanDialogProps> = ({
             <Textarea
               id="description"
               value={formData.description}
-              onChange={(e) => handleChange("description", e.target.value)}
+              onChange={handleChange}
               placeholder="Descreva o objetivo e escopo do plano..."
               rows={3}
             />
@@ -181,7 +181,7 @@ export const NewEmergencyPlanDialog: React.FC<NewEmergencyPlanDialogProps> = ({
               <Input
                 id="responsible"
                 value={formData.responsible}
-                onChange={(e) => handleChange("responsible", e.target.value)}
+                onChange={handleChange}
                 placeholder="Nome do responsável"
               />
             </div>
@@ -190,7 +190,7 @@ export const NewEmergencyPlanDialog: React.FC<NewEmergencyPlanDialogProps> = ({
               <Input
                 id="alternateResponsible"
                 value={formData.alternateResponsible}
-                onChange={(e) => handleChange("alternateResponsible", e.target.value)}
+                onChange={handleChange}
                 placeholder="Nome do suplente"
               />
             </div>
@@ -222,7 +222,7 @@ export const NewEmergencyPlanDialog: React.FC<NewEmergencyPlanDialogProps> = ({
             <Textarea
               id="procedures"
               value={formData.procedures}
-              onChange={(e) => handleChange("procedures", e.target.value)}
+              onChange={handleChange}
               placeholder="Liste os procedimentos de resposta..."
               rows={4}
             />
@@ -234,7 +234,7 @@ export const NewEmergencyPlanDialog: React.FC<NewEmergencyPlanDialogProps> = ({
             <Textarea
               id="equipmentRequired"
               value={formData.equipmentRequired}
-              onChange={(e) => handleChange("equipmentRequired", e.target.value)}
+              onChange={handleChange}
               placeholder="Liste os equipamentos necessários..."
               rows={2}
             />
@@ -249,7 +249,7 @@ export const NewEmergencyPlanDialog: React.FC<NewEmergencyPlanDialogProps> = ({
             <Textarea
               id="contacts"
               value={formData.contacts}
-              onChange={(e) => handleChange("contacts", e.target.value)}
+              onChange={handleChange}
               placeholder="Liste os contatos relevantes..."
               rows={2}
             />
@@ -257,7 +257,7 @@ export const NewEmergencyPlanDialog: React.FC<NewEmergencyPlanDialogProps> = ({
         </div>
 
         <DialogFooter>
-          <Button variant="outline" onClick={() => onOpenChange(false)}>
+          <Button variant="outline" onClick={() => handleonOpenChange}>
             Cancelar
           </Button>
           <Button onClick={handleSubmit} disabled={isSubmitting}>

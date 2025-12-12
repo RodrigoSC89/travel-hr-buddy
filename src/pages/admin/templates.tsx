@@ -505,7 +505,7 @@ export default function TemplatesPage() {
                   <Input
                     placeholder="Título do Template"
                     value={title}
-                    onChange={(e) => setTitle(e.target.value)}
+                    onChange={handleChange}
                     className="flex-1"
                   />
                   <Button
@@ -525,7 +525,7 @@ export default function TemplatesPage() {
                   rows={3}
                   placeholder="Descreva o que você quer gerar... (opcional)"
                   value={prompt}
-                  onChange={(e) => setPrompt(e.target.value)}
+                  onChange={handleChange}
                 />
               </div>
 
@@ -571,7 +571,7 @@ export default function TemplatesPage() {
                   rows={12}
                   placeholder="Digite ou gere o conteúdo do template..."
                   value={content}
-                  onChange={(e) => setContent(e.target.value)}
+                  onChange={handleChange}
                   className="font-mono"
                 />
               </div>
@@ -613,14 +613,14 @@ export default function TemplatesPage() {
                   <Input
                     placeholder="Buscar templates..."
                     value={searchTerm}
-                    onChange={(e) => setSearchTerm(e.target.value)}
+                    onChange={handleChange}
                     className="pl-10"
                   />
                 </div>
                 <Button
                   variant={filterFavorites ? "default" : "outline"}
                   size="sm"
-                  onClick={() => setFilterFavorites(!filterFavorites)}
+                  onClick={handleSetFilterFavorites}
                 >
                   <Star className="w-4 h-4 mr-2" />
                   Favoritos
@@ -628,7 +628,7 @@ export default function TemplatesPage() {
                 <Button
                   variant={filterPrivate ? "default" : "outline"}
                   size="sm"
-                  onClick={() => setFilterPrivate(!filterPrivate)}
+                  onClick={handleSetFilterPrivate}
                 >
                   <Lock className="w-4 h-4 mr-2" />
                   Privados
@@ -690,7 +690,7 @@ export default function TemplatesPage() {
                       <Button
                         variant="outline"
                         size="sm"
-                        onClick={() => editTemplate(template.id)}
+                        onClick={() => handleeditTemplate}
                       >
                         <Edit className="w-3 h-3 mr-1" />
                         Editar
@@ -699,7 +699,7 @@ export default function TemplatesPage() {
                       <Button
                         variant="outline"
                         size="sm"
-                        onClick={() => duplicateTemplate(template)}
+                        onClick={() => handleduplicateTemplate}
                       >
                         <Copy className="w-3 h-3 mr-1" />
                         Duplicar
@@ -708,7 +708,7 @@ export default function TemplatesPage() {
                       <Button
                         variant="outline"
                         size="sm"
-                        onClick={() => applyTemplate(template)}
+                        onClick={() => handleapplyTemplate}
                       >
                         <FileCheck className="w-3 h-3 mr-1" />
                         Aplicar
@@ -719,7 +719,7 @@ export default function TemplatesPage() {
                       <Button
                         variant="ghost"
                         size="sm"
-                        onClick={() => toggleFavorite(template)}
+                        onClick={() => handletoggleFavorite}
                       >
                         {template.is_favorite ? (
                           <StarOff className="w-3 h-3 mr-1" />
@@ -732,7 +732,7 @@ export default function TemplatesPage() {
                       <Button
                         variant="ghost"
                         size="sm"
-                        onClick={() => togglePrivate(template)}
+                        onClick={() => handletogglePrivate}
                       >
                         {template.is_private ? (
                           <Unlock className="w-3 h-3 mr-1" />
@@ -745,7 +745,7 @@ export default function TemplatesPage() {
                       <Button
                         variant="ghost"
                         size="sm"
-                        onClick={() => exportToPDF(template)}
+                        onClick={() => handleexportToPDF}
                         disabled={exporting}
                       >
                         <Download className="w-3 h-3 mr-1" />
@@ -781,7 +781,7 @@ export default function TemplatesPage() {
             </AlertDialogDescription>
           </AlertDialogHeader>
           <AlertDialogFooter>
-            <AlertDialogCancel onClick={() => setTemplateToDelete(null)}>
+            <AlertDialogCancel onClick={handleSetTemplateToDelete}>
               Cancelar
             </AlertDialogCancel>
             <AlertDialogAction

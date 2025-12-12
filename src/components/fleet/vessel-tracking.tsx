@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";;
+import { useEffect, useState, useCallback, useMemo } from "react";;
 import React, { useState, useEffect } from "react";
 import { useOptimizedPolling } from "@/hooks/use-optimized-polling";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
@@ -180,7 +180,7 @@ export const VesselTracking = memo(() => {
                       ? "border-primary bg-primary/5" 
                       : "border-border hover:bg-accent"
                   }`}
-                  onClick={() => setSelectedVessel(vessel)}
+                  onClick={handleSetSelectedVessel}
                 >
                   <div className="flex items-center justify-between mb-2">
                     <h4 className="font-medium">{vessel.name}</h4>

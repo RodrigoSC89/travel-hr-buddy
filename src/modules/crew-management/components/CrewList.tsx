@@ -1,4 +1,4 @@
-import { memo, memo, useState } from "react";;;
+import { memo, memo, useState, useCallback, useMemo } from "react";;;
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
@@ -111,7 +111,7 @@ export const CrewList = memo(function({ crewMembers, onViewMember, onAddMember, 
             <Input
               placeholder="Buscar por nome, posição ou ID..."
               value={searchTerm}
-              onChange={(e) => setSearchTerm(e.target.value)}
+              onChange={handleChange}
               className="pl-10"
             />
           </div>
@@ -203,7 +203,7 @@ export const CrewList = memo(function({ crewMembers, onViewMember, onAddMember, 
                         <Button 
                           variant="ghost" 
                           size="icon"
-                          onClick={() => onViewMember(member)}
+                          onClick={() => handleonViewMember}
                         >
                           <Eye className="h-4 w-4" />
                         </Button>
@@ -214,7 +214,7 @@ export const CrewList = memo(function({ crewMembers, onViewMember, onAddMember, 
                             </Button>
                           </DropdownMenuTrigger>
                           <DropdownMenuContent align="end">
-                            <DropdownMenuItem onClick={() => onViewMember(member)}>
+                            <DropdownMenuItem onClick={() => handleonViewMember}>
                               <Eye className="h-4 w-4 mr-2" />
                               Ver Detalhes
                             </DropdownMenuItem>

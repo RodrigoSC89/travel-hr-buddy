@@ -3,7 +3,7 @@
  * Admin interface for viewing and managing the immutable evidence ledger
  */
 
-import { useEffect, useState } from "react";;;
+import { useEffect, useState, useCallback } from "react";;;
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
@@ -308,7 +308,7 @@ export default function EvidenceLedgerPage() {
               <Label>Module ID</Label>
               <Input
                 value={filterModule}
-                onChange={(e) => setFilterModule(e.target.value)}
+                onChange={handleChange}
                 placeholder="e.g., ism-code"
               />
             </div>
@@ -333,7 +333,7 @@ export default function EvidenceLedgerPage() {
               <div
                 key={entry.id}
                 className="border rounded-lg p-4 hover:bg-accent cursor-pointer transition-colors"
-                onClick={() => setSelectedEntry(entry)}
+                onClick={handleSetSelectedEntry}
               >
                 <div className="flex justify-between items-start mb-2">
                   <div className="flex items-center gap-2">

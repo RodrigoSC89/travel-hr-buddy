@@ -137,7 +137,7 @@ export const MFAPrompt: React.FC<MFAPromptProps> = ({ onSuccess, onCancel }) => 
             <Input
               id="mfa-code"
               value={code}
-              onChange={(e) => setCode(e.target.value.replace(/\D/g, "").slice(0, 6))}
+              onChange={handleChange}
               placeholder="000000"
               className="text-center font-mono text-xl tracking-widest"
               maxLength={6}

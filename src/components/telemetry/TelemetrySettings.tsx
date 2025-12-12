@@ -1,5 +1,5 @@
 /**
-import { useState } from "react";;
+import { useState, useCallback } from "react";;
  * Telemetry Settings Modal Component
  * Configuration panel for telemetry module
  */

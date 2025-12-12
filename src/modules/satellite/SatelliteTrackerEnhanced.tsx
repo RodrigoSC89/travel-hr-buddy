@@ -312,13 +312,13 @@ export const SatelliteTrackerEnhanced = memo(() => {
               id="auto-refresh"
               type="checkbox"
               checked={autoRefresh}
-              onChange={(e) => setAutoRefresh(e.target.checked)}
+              onChange={handleChange}
               className="h-4 w-4"
             />
             <Input
               type="number"
               value={refreshInterval}
-              onChange={(e) => setRefreshInterval(Number(e.target.value))}
+              onChange={handleChange}
               className="w-20"
               min="10"
               max="300"
@@ -412,7 +412,7 @@ export const SatelliteTrackerEnhanced = memo(() => {
                 <TableRow
                   key={sat.id}
                   className="cursor-pointer hover:bg-muted/50"
-                  onClick={() => setSelectedSatellite(sat)}
+                  onClick={handleSetSelectedSatellite}
                 >
                   <TableCell className="font-medium">
                     <div className="flex items-center gap-2">

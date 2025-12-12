@@ -1,4 +1,4 @@
-import { useState } from "react";;
+import { useState, useMemo, useCallback } from "react";;
 import React, { useState } from "react";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
@@ -208,7 +208,7 @@ export const CommunicationModule = memo(() => {
                     key={index}
                     variant="outline"
                     className="w-full justify-start h-auto p-4 hover:scale-105 transition-all duration-200"
-                    onClick={() => setActiveTab("chat")}
+                    onClick={handleSetActiveTab}
                   >
                     <div className={`p-2 rounded-lg ${action.color} mr-3`}>
                       <Icon className="h-4 w-4 text-azure-50" />

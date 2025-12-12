@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";;;
+import { useState, useCallback } from "react";;;
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { createDocument } from "@/lib/documents/api";
@@ -148,7 +148,7 @@ export default function CreateFromTemplate({
         <Input
           placeholder="Título do Documento"
           value={title}
-          onChange={(e) => setTitle(e.target.value)}
+          onChange={handleChange}
           className="text-lg"
         />
 
@@ -163,7 +163,7 @@ export default function CreateFromTemplate({
                   <label className="text-sm font-medium">{key}</label>
                   <Input
                     placeholder={`Valor para ${key}`}
-                    onChange={(e) => handleChangeVar(key, e.target.value)}
+                    onChange={handleChange}
                     value={variables[key] || ""}
                   />
                 </div>

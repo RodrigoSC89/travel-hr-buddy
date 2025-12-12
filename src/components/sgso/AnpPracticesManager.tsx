@@ -1,4 +1,4 @@
-import { useState } from "react";;
+import { useState, useMemo, useCallback } from "react";;
 import React, { useState } from "react";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
@@ -172,7 +172,7 @@ export const AnpPracticesManager: React.FC = () => {
                 <Card 
                   key={practice.id}
                   className="border-2 hover:shadow-lg transition-all cursor-pointer"
-                  onClick={() => setSelectedPractice(practice)}
+                  onClick={handleSetSelectedPractice}
                 >
                   <CardContent className="p-4">
                     <div className="flex items-start justify-between gap-4">
@@ -221,7 +221,7 @@ export const AnpPracticesManager: React.FC = () => {
                   <Card 
                     key={practice.id}
                     className="border-2 hover:shadow-lg transition-all cursor-pointer"
-                    onClick={() => setSelectedPractice(practice)}
+                    onClick={handleSetSelectedPractice}
                   >
                     <CardContent className="p-4">
                       <div className="flex items-start justify-between gap-4">

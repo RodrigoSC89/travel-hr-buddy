@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useMemo, useState } from "react";;;
+import { useEffect, useMemo, useState, useCallback } from "react";;;
 import { supabase } from "@/integrations/supabase/client";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { format, subDays, startOfWeek, startOfMonth } from "date-fns";
@@ -550,7 +550,7 @@ export default function ExecutionLogsPage() {
         <Input
           type="date"
           value={startDate}
-          onChange={(e) => setStartDate(e.target.value)}
+          onChange={handleChange}
           placeholder="Data inicial"
           className={dateError ? "border-red-500" : ""}
         />
@@ -558,7 +558,7 @@ export default function ExecutionLogsPage() {
         <Input
           type="date"
           value={endDate}
-          onChange={(e) => setEndDate(e.target.value)}
+          onChange={handleChange}
           placeholder="Data final"
           className={dateError ? "border-red-500" : ""}
         />
@@ -681,7 +681,7 @@ export default function ExecutionLogsPage() {
           <Button
             variant="ghost"
             disabled={page === 1}
-            onClick={() => setPage((prev) => prev - 1)}
+            onClick={handleSetPage}
           >
             ⬅️ Anterior
           </Button>
@@ -691,7 +691,7 @@ export default function ExecutionLogsPage() {
           <Button
             variant="ghost"
             disabled={page * pageSize >= filteredExecutions.length}
-            onClick={() => setPage((prev) => prev + 1)}
+            onClick={handleSetPage}
           >
             Próxima ➡️
           </Button>

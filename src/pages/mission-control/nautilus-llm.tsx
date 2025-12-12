@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";;
+import { useEffect, useState, useCallback, useMemo } from "react";;
 import React, { useState, useEffect } from "react";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
@@ -287,7 +287,7 @@ const NautilusLLM: React.FC = () => {
               <Input
                 placeholder="Digite sua pergunta ou comando..."
                 value={prompt}
-                onChange={(e) => setPrompt(e.target.value)}
+                onChange={handleChange}
                 onKeyPress={(e) => e.key === "Enter" && handleSend()}
                 disabled={isLoading}
               />
@@ -313,7 +313,7 @@ const NautilusLLM: React.FC = () => {
                   key={cmd.id}
                   variant="outline"
                   className="w-full justify-start"
-                  onClick={() => handleQuickCommand(cmd.id)}
+                  onClick={() => handlehandleQuickCommand}
                   disabled={isLoading}
                 >
                   <cmd.icon className="h-4 w-4 mr-2" />

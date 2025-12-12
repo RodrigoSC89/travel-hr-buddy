@@ -3,7 +3,7 @@
  * Integrated with Supabase for real-time data
  */
 
-import { memo, memo, useEffect, useState } from "react";;;
+import { memo, memo, useEffect, useState, useCallback, useMemo } from "react";;;
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
@@ -210,7 +210,7 @@ export const SmartInventory = memo(function() {
           <Input
             placeholder="Buscar itens..."
             value={searchTerm}
-            onChange={(e) => setSearchTerm(e.target.value)}
+            onChange={handleChange}
             className="pl-9"
           />
         </div>
@@ -220,7 +220,7 @@ export const SmartInventory = memo(function() {
               key={cat}
               variant={categoryFilter === cat ? "default" : "outline"}
               size="sm"
-              onClick={() => setCategoryFilter(cat)}
+              onClick={handleSetCategoryFilter}
             >
               {cat === "all" ? "Todos" : cat}
             </Button>
@@ -297,7 +297,7 @@ export const SmartInventory = memo(function() {
                         size="sm" 
                         variant="destructive" 
                         className="w-full mt-3"
-                        onClick={() => handleRequestRestock(item.id, item.name)}
+                        onClick={() => handlehandleRequestRestock}
                       >
                         Solicitar Reposição
                       </Button>

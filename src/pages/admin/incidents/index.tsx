@@ -1,5 +1,5 @@
 /**
-import { useEffect, useState } from "react";;
+import { useEffect, useState, useCallback } from "react";;
  * PATCH 454 - Incidents Consolidated
  * Unified incident detection, documentation, and closure system
  * Consolidates: incident-reports/ + incidents/

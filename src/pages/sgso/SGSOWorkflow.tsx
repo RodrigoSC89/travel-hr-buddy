@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";;
+import { useEffect, useState, useCallback } from "react";;
 
 import React, { useState, useEffect } from "react";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
@@ -92,7 +92,7 @@ export default function SGSOWorkflow() {
             Complete audit workflow: submission, approval, and non-conformity tracking
           </p>
         </div>
-        <Button onClick={() => setShowSubmissionForm(true)} className="flex items-center gap-2">
+        <Button onClick={handleSetShowSubmissionForm} className="flex items-center gap-2">
           <Plus className="h-4 w-4" />
           New Audit Submission
         </Button>

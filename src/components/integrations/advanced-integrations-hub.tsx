@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";;
+import { useEffect, useState, useCallback, useMemo } from "react";;
 import React, { useState, useEffect } from "react";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
@@ -483,7 +483,7 @@ export const AdvancedIntegrationsHub: React.FC = () => {
                 <Input
                   placeholder="Buscar integrações..."
                   value={searchTerm}
-                  onChange={(e) => setSearchTerm(e.target.value)}
+                  onChange={handleChange}
                   className="pl-10"
                 />
               </div>
@@ -494,7 +494,7 @@ export const AdvancedIntegrationsHub: React.FC = () => {
                   key={category}
                   variant={selectedCategory === category ? "default" : "outline"}
                   size="sm"
-                  onClick={() => setSelectedCategory(category)}
+                  onClick={handleSetSelectedCategory}
                   className="capitalize"
                 >
                   {category === "all" ? "Todas" : category}
@@ -643,7 +643,7 @@ const IntegrationCard: React.FC<{
           <Button 
             variant="outline" 
             size="sm"
-            onClick={() => onTest(integration.id)}
+            onClick={() => handleonTest}
             className="flex-1"
           >
             <RefreshCw className="w-4 h-4 mr-1" />
@@ -819,7 +819,7 @@ const IntegrationTemplates: React.FC<{
                 <h4 className="font-semibold text-lg text-foreground mb-2">{template.name}</h4>
                 <p className="text-sm text-muted-foreground mb-4">{template.description}</p>
                 <Button 
-                  onClick={() => onSelect(template.name)} 
+                  onClick={() => handleonSelect} 
                   className="w-full bg-primary hover:bg-primary/90 text-primary-foreground"
                 >
                   Configurar Agora
@@ -1009,7 +1009,7 @@ const IntegrationWizard: React.FC<{
               {["REST API", "Webhook", "OAuth 2.0", "Database"].map((type) => (
                 <Card key={type} className={`cursor-pointer transition-all hover:shadow-md border ${
                   formData.type === type ? "border-primary bg-primary/5" : "border-border"
-                }`} onClick={() => setFormData(prev => ({ ...prev, type }))}>
+                }`} onClick={handleSetFormData}>
                   <CardContent key={CardContent.id || index} className="p-4 text-center">
                     <p className="font-medium text-foreground">{type}</p>
                   </CardContent>
@@ -1028,7 +1028,7 @@ const IntegrationWizard: React.FC<{
                 <Input
                   id="name"
                   value={formData.name}
-                  onChange={(e) => setFormData(prev => ({ ...prev, name: e.target.value }))}
+                  onChange={handleChange}))}
                   placeholder="Ex: Sistema ERP Interno"
                 />
               </div>
@@ -1037,7 +1037,7 @@ const IntegrationWizard: React.FC<{
                 <Input
                   id="endpoint"
                   value={formData.endpoint}
-                  onChange={(e) => setFormData(prev => ({ ...prev, endpoint: e.target.value }))}
+                  onChange={handleChange}))}
                   placeholder="https://api.exemplo.com/v1"
                 />
               </div>
@@ -1045,7 +1045,7 @@ const IntegrationWizard: React.FC<{
                 <Label htmlFor="method">Método HTTP</Label>
                 <select 
                   value={formData.method}
-                  onChange={(e) => setFormData(prev => ({ ...prev, method: e.target.value }))}
+                  onChange={handleChange}))}
                   className="w-full px-3 py-2 border border-border rounded-md bg-background text-foreground"
                 >
                   <option value="GET">GET</option>
@@ -1066,7 +1066,7 @@ const IntegrationWizard: React.FC<{
                 <Label htmlFor="auth">Tipo de Autenticação</Label>
                 <select 
                   value={formData.auth}
-                  onChange={(e) => setFormData(prev => ({ ...prev, auth: e.target.value }))}
+                  onChange={handleChange}))}
                   className="w-full px-3 py-2 border border-border rounded-md bg-background text-foreground"
                 >
                   <option value="">Selecione...</option>
@@ -1107,7 +1107,7 @@ const IntegrationWizard: React.FC<{
       <div className="flex justify-between">
         <Button 
           variant="outline" 
-          onClick={() => setCurrentStep(Math.max(1, currentStep - 1))}
+          onClick={handleSetCurrentStep}
           disabled={currentStep === 1}
         >
           Anterior

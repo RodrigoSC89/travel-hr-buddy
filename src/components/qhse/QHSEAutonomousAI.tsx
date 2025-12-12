@@ -1,5 +1,5 @@
 /**
-import { useState } from "react";;
+import { useState, useCallback } from "react";;
  * QHSE Autônomo com IA - Compliance ISM/ISPS/TMSA
  * - Monitoramento contínuo de compliance
  * - Geração automática de evidências
@@ -324,7 +324,7 @@ export const QHSEAutonomousAI = memo(function() {
                         </div>
                         <div className="text-right">
                           <p className="text-2xl font-bold">{item.score}%</p>
-                          <Button size="sm" variant="outline" onClick={() => generateEvidence(item.standard)}>
+                          <Button size="sm" variant="outline" onClick={() => handlegenerateEvidence}>
                             <FileText className="h-3 w-3 mr-1" />
                             Gerar Evidência
                           </Button>

@@ -1,5 +1,5 @@
 /**
-import { useEffect, useState } from "react";;
+import { useEffect, useState, useCallback } from "react";;
  * AI Processing Hub - Centro de Processamento IA
  * Processamento de dados em tempo real com GPU acelerada
  */

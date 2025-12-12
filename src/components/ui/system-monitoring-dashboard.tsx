@@ -1,4 +1,4 @@
-import { useState } from "react";;
+import { useState, useMemo, useCallback } from "react";;
 import React, { useState } from "react";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
@@ -141,7 +141,7 @@ export const SystemMonitoringDashboard: React.FC = () => {
                   className={`p-4 cursor-pointer transition-all hover:shadow-md ${
                     selectedMetric === metric.title ? "ring-2 ring-primary" : ""
                   }`}
-                  onClick={() => setSelectedMetric(selectedMetric === metric.title ? null : metric.title)}
+                  onClick={handleSetSelectedMetric}
                 >
                   <div className="flex items-center justify-between mb-3">
                     <div className={`p-2 rounded-lg bg-opacity-20 ${metric.color}`}>

@@ -1,4 +1,4 @@
-import { useState } from "react";;
+import { useState, useCallback } from "react";;
 import React, { useState } from "react";
 import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
@@ -66,7 +66,7 @@ export const ModuleActionButton: React.FC<ModuleActionButtonProps> = ({
       >
         <FloatingShortcutButton
           icon={moduleIcon}
-          onClick={() => setIsMinimized(false)}
+          onClick={handleSetIsMinimized}
           label={`Ações ${moduleName}`}
           bgColor="bg-azure-700 hover:bg-azure-800"
           iconColor="text-azure-50"
@@ -95,7 +95,7 @@ export const ModuleActionButton: React.FC<ModuleActionButtonProps> = ({
           <Button
             variant="ghost"
             size="sm"
-            onClick={() => setIsMinimized(true)}
+            onClick={handleSetIsMinimized}
             className="ml-auto h-6 w-6 p-0"
           >
             <ChevronDown className="h-3 w-3" />

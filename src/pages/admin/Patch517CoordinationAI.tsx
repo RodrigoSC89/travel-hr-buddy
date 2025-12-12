@@ -1,5 +1,5 @@
 /**
-import { useState } from "react";;
+import { useState, useMemo, useCallback } from "react";;
  * PATCH 517 – Coordination AI
  * IA de coordenação para orquestração de múltiplos módulos
  */
@@ -264,7 +264,7 @@ export default function Patch517CoordinationAI() {
                       </div>
                       {decision.status === "pending" && (
                         <div className="flex gap-2">
-                          <Button size="sm" onClick={() => approveDecision(decision.id)}>
+                          <Button size="sm" onClick={() => handleapproveDecision}>
                             <CheckCircle className="h-3 w-3 mr-1" />
                             Aprovar
                           </Button>
@@ -274,7 +274,7 @@ export default function Patch517CoordinationAI() {
                         </div>
                       )}
                       {decision.status === "approved" && (
-                        <Button size="sm" onClick={() => executeDecision(decision.id)}>
+                        <Button size="sm" onClick={() => handleexecuteDecision}>
                           <Zap className="h-3 w-3 mr-1" />
                           Executar
                         </Button>

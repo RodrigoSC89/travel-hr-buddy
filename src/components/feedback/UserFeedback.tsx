@@ -1,5 +1,5 @@
 /**
-import { useState } from "react";;
+import { useState, useCallback } from "react";;
  * User Feedback Component
  * Quick feedback collection for user experience
  */
@@ -86,7 +86,7 @@ export const UserFeedback = memo(function UserFeedback({
           <Button
             variant={rating === "positive" ? "default" : "outline"}
             size="sm"
-            onClick={() => setRating("positive")}
+            onClick={handleSetRating}
             className={cn(rating === "positive" && "bg-green-500 hover:bg-green-600")}
           >
             <ThumbsUp className="h-4 w-4 mr-1" />
@@ -112,7 +112,7 @@ export const UserFeedback = memo(function UserFeedback({
           <Textarea
             placeholder="Como podemos melhorar? (opcional)"
             value={comment}
-            onChange={(e) => setComment(e.target.value)}
+            onChange={handleChange}
             rows={2}
             className="text-sm"
           />
@@ -123,7 +123,7 @@ export const UserFeedback = memo(function UserFeedback({
             <Button 
               variant="ghost" 
               size="sm" 
-              onClick={() => setShowComment(false)}
+              onClick={handleSetShowComment}
             >
               Cancelar
             </Button>
@@ -139,7 +139,7 @@ export const UserFeedback = memo(function UserFeedback({
           <Button
             variant="ghost"
             size="sm"
-            onClick={() => setShowComment(true)}
+            onClick={handleSetShowComment}
           >
             <MessageSquare className="h-4 w-4 mr-1" />
             Adicionar comentário

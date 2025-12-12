@@ -1,4 +1,4 @@
-import { useState } from "react";;
+import { useState, useCallback } from "react";;
 import React, { useState } from "react";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
@@ -159,21 +159,21 @@ export const JobsCenter: React.FC<JobsCenterProps> = ({ onCreateJob }) => {
                 placeholder="Buscar job ou equipamento..."
                 className="pl-8"
                 value={searchTerm}
-                onChange={(e) => setSearchTerm(e.target.value)}
+                onChange={handleChange}
               />
             </div>
             <div className="flex border rounded-lg">
               <Button
                 variant={viewMode === "grid" ? "secondary" : "ghost"}
                 size="icon"
-                onClick={() => setViewMode("grid")}
+                onClick={handleSetViewMode}
               >
                 <LayoutGrid className="h-4 w-4" />
               </Button>
               <Button
                 variant={viewMode === "list" ? "secondary" : "ghost"}
                 size="icon"
-                onClick={() => setViewMode("list")}
+                onClick={handleSetViewMode}
               >
                 <List className="h-4 w-4" />
               </Button>
@@ -191,14 +191,14 @@ export const JobsCenter: React.FC<JobsCenterProps> = ({ onCreateJob }) => {
           <Button
             variant={activeFilter === "all" ? "default" : "outline"}
             size="sm"
-            onClick={() => setActiveFilter("all")}
+            onClick={handleSetActiveFilter}
           >
             Todos ({counts.all})
           </Button>
           <Button
             variant={activeFilter === "criticos" ? "default" : "outline"}
             size="sm"
-            onClick={() => setActiveFilter("criticos")}
+            onClick={handleSetActiveFilter}
             className={activeFilter === "criticos" ? "" : "border-red-500/50 text-red-500 hover:bg-red-500/10"}
           >
             <AlertTriangle className="h-4 w-4 mr-1" />
@@ -207,7 +207,7 @@ export const JobsCenter: React.FC<JobsCenterProps> = ({ onCreateJob }) => {
           <Button
             variant={activeFilter === "vencidos" ? "destructive" : "outline"}
             size="sm"
-            onClick={() => setActiveFilter("vencidos")}
+            onClick={handleSetActiveFilter}
           >
             <Clock className="h-4 w-4 mr-1" />
             Vencidos ({counts.vencidos})
@@ -215,14 +215,14 @@ export const JobsCenter: React.FC<JobsCenterProps> = ({ onCreateJob }) => {
           <Button
             variant={activeFilter === "pendentes" ? "default" : "outline"}
             size="sm"
-            onClick={() => setActiveFilter("pendentes")}
+            onClick={handleSetActiveFilter}
           >
             Pendentes ({counts.pendentes})
           </Button>
           <Button
             variant={activeFilter === "andamento" ? "default" : "outline"}
             size="sm"
-            onClick={() => setActiveFilter("andamento")}
+            onClick={handleSetActiveFilter}
           >
             Em Andamento ({counts.andamento})
           </Button>

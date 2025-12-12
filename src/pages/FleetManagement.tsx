@@ -335,7 +335,7 @@ const MaritimeFleetManagement = () => {
                 <CardDescription>Programação e histórico</CardDescription>
               </CardHeader>
               <CardContent>
-                <Button variant="outline" onClick={() => navigate("/maintenance/planner")}>
+                <Button variant="outline" onClick={() => handlenavigate}>
                   Ir para Planejador de Manutenção
                 </Button>
               </CardContent>
@@ -349,7 +349,7 @@ const MaritimeFleetManagement = () => {
                 <CardDescription>Centro de documentos da frota</CardDescription>
               </CardHeader>
               <CardContent>
-                <Button variant="outline" onClick={() => navigate("/dashboard/document-hub")}>
+                <Button variant="outline" onClick={() => handlenavigate}>
                   Ir para Document Hub
                 </Button>
               </CardContent>
@@ -391,7 +391,7 @@ const MaritimeFleetManagement = () => {
                 <CardDescription>Notificações e avisos críticos</CardDescription>
               </CardHeader>
               <CardContent>
-                <Button variant="outline" onClick={() => navigate("/notifications-center")}>
+                <Button variant="outline" onClick={() => handlenavigate}>
                   Ir para Central de Notificações
                 </Button>
               </CardContent>
@@ -405,7 +405,7 @@ const MaritimeFleetManagement = () => {
                 <CardDescription>Compliance regulatório</CardDescription>
               </CardHeader>
               <CardContent>
-                <Button variant="outline" onClick={() => navigate("/compliance-hub")}>
+                <Button variant="outline" onClick={() => handlenavigate}>
                   Ir para Compliance Hub
                 </Button>
               </CardContent>
@@ -419,7 +419,7 @@ const MaritimeFleetManagement = () => {
                 <CardDescription>Central de comunicação</CardDescription>
               </CardHeader>
               <CardContent>
-                <Button variant="outline" onClick={() => navigate("/notifications-center")}>
+                <Button variant="outline" onClick={() => handlenavigate}>
                   Ir para Central de Notificações
                 </Button>
               </CardContent>

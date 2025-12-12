@@ -1,4 +1,4 @@
-import { useEffect, useRef, useState } from "react";;
+import { useEffect, useRef, useState, useCallback, useMemo } from "react";;
 import React, { useState, useRef, useEffect } from "react";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
@@ -187,28 +187,28 @@ const AICommandCenter = () => {
                   <Button
                     variant="outline"
                     size="sm"
-                    onClick={() => setInput("Qual o status geral do sistema?")}
+                    onClick={handleSetInput}
                   >
                     Status do sistema
                   </Button>
                   <Button
                     variant="outline"
                     size="sm"
-                    onClick={() => setInput("Há algum alerta ativo?")}
+                    onClick={handleSetInput}
                   >
                     Verificar alertas
                   </Button>
                   <Button
                     variant="outline"
                     size="sm"
-                    onClick={() => setInput("Mostre as últimas decisões autônomas")}
+                    onClick={handleSetInput}
                   >
                     Decisões recentes
                   </Button>
                   <Button
                     variant="outline"
                     size="sm"
-                    onClick={() => setInput("Analise a performance dos módulos")}
+                    onClick={handleSetInput}
                   >
                     Performance
                   </Button>
@@ -246,15 +246,12 @@ const AICommandCenter = () => {
 
           <div className="p-4 border-t">
             <form
-              onSubmit={(e) => {
-                e.preventDefault();
-                sendMessage();
-              }}
+              onSubmit={handleSubmit}
               className="flex gap-2"
             >
               <Input
                 value={input}
-                onChange={(e) => setInput(e.target.value)}
+                onChange={handleChange}
                 placeholder="Digite um comando ou pergunta..."
                 disabled={isLoading}
                 className="flex-1"

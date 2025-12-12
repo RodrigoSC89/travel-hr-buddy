@@ -1,4 +1,4 @@
-import { useState } from "react";;
+import { useState, useMemo, useCallback } from "react";;
 import React, { useState } from "react";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
@@ -103,7 +103,7 @@ export const OVIDAIAssistant: React.FC<OVIDAIAssistantProps> = ({ vesselType }) 
       <CardContent className="flex-1 flex flex-col">
         <div className="flex flex-wrap gap-2 mb-4">
           {quickActions.map((action, i) => (
-            <Button key={i} variant="outline" size="sm" onClick={() => sendMessage(action.prompt)} disabled={isLoading}>
+            <Button key={i} variant="outline" size="sm" onClick={() => handlesendMessage} disabled={isLoading}>
               <action.icon className="w-4 h-4 mr-1" />
               {action.label}
             </Button>
@@ -133,7 +133,7 @@ export const OVIDAIAssistant: React.FC<OVIDAIAssistantProps> = ({ vesselType }) 
           <Textarea
             placeholder="Pergunte sobre OVIQ4, evidências, observações..."
             value={input}
-            onChange={(e) => setInput(e.target.value)}
+            onChange={handleChange}
             onKeyDown={(e) => e.key === "Enter" && !e.shiftKey && (e.preventDefault(), sendMessage())}
             className="resize-none"
             rows={2}

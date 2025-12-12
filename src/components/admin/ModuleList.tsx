@@ -1,4 +1,4 @@
-import { useState } from "react";;
+import { useState, useCallback } from "react";;
 import React, { useState } from "react";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
@@ -93,7 +93,7 @@ export const ModuleList: React.FC = () => {
             <Input
               placeholder="Buscar módulos..."
               value={searchTerm}
-              onChange={(e) => setSearchTerm(e.target.value)}
+              onChange={handleChange}
               className="pl-9"
             />
           </div>
@@ -101,21 +101,21 @@ export const ModuleList: React.FC = () => {
             <Button
               variant={filterStatus === "all" ? "default" : "outline"}
               size="sm"
-              onClick={() => setFilterStatus("all")}
+              onClick={handleSetFilterStatus}
             >
               Todos
             </Button>
             <Button
               variant={filterStatus === "functional" ? "default" : "outline"}
               size="sm"
-              onClick={() => setFilterStatus("functional")}
+              onClick={handleSetFilterStatus}
             >
               Funcionais
             </Button>
             <Button
               variant={filterStatus === "pending" ? "default" : "outline"}
               size="sm"
-              onClick={() => setFilterStatus("pending")}
+              onClick={handleSetFilterStatus}
             >
               Pendentes
             </Button>

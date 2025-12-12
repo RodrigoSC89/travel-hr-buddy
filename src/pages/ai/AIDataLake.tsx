@@ -1,5 +1,5 @@
 /**
-import { useState } from "react";;
+import { useState, useCallback } from "react";;
  * AI Data Lake - Lago de Dados para IA
  * Repositório centralizado de dados para treinamento de modelos
  */
@@ -278,7 +278,7 @@ const AIDataLake: React.FC = () => {
                 placeholder="Buscar fontes de dados..." 
                 className="pl-10"
                 value={searchQuery}
-                onChange={(e) => setSearchQuery(e.target.value)}
+                onChange={handleChange}
               />
             </div>
             <div className="flex gap-2 flex-wrap">
@@ -287,7 +287,7 @@ const AIDataLake: React.FC = () => {
                   key={category}
                   variant={selectedCategory === category ? "default" : "outline"}
                   size="sm"
-                  onClick={() => setSelectedCategory(category === "Todos" ? null : category)}
+                  onClick={handleSetSelectedCategory}
                 >
                   {category}
                 </Button>
@@ -343,11 +343,11 @@ const AIDataLake: React.FC = () => {
                   </div>
 
                   <div className="flex gap-2">
-                    <Button size="sm" className="flex-1" onClick={() => handleExploreData(source.id)}>
+                    <Button size="sm" className="flex-1" onClick={() => handlehandleExploreData}>
                       <Eye className="h-4 w-4 mr-1" />
                       Explorar
                     </Button>
-                    <Button size="sm" variant="outline" onClick={() => handleSyncData(source.id)}>
+                    <Button size="sm" variant="outline" onClick={() => handlehandleSyncData}>
                       <RefreshCw className="h-4 w-4 mr-1" />
                       Sincronizar
                     </Button>

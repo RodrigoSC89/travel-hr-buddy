@@ -6,7 +6,7 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/com
 import { Checkbox } from "@/components/ui/checkbox";
 import { Badge } from "@/components/ui/badge";
 import { CheckCircle2, Bell, Settings, TrendingUp, Zap } from "lucide-react";
-import { useState } from "react";;;
+import { useState, useCallback } from "react";;;
 
 export default function PriceAlertsFinalizadoValidation() {
   const [checks, setChecks] = useState({

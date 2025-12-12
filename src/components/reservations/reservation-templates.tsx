@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";;
+import { useEffect, useState, useCallback } from "react";;
 import React, { useState, useEffect } from "react";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
@@ -378,7 +378,7 @@ export const ReservationTemplates: React.FC<ReservationTemplatesProps> = ({
                       <div className="flex gap-2 pt-2">
                         <Button
                           size="sm"
-                          onClick={() => handleUseTemplate(template)}
+                          onClick={() => handlehandleUseTemplate}
                           className="flex-1"
                         >
                           <Copy className="h-4 w-4 mr-1" />
@@ -390,14 +390,14 @@ export const ReservationTemplates: React.FC<ReservationTemplatesProps> = ({
                             <Button
                               size="sm"
                               variant="outline"
-                              onClick={() => handleEditTemplate(template)}
+                              onClick={() => handlehandleEditTemplate}
                             >
                               <Edit className="h-4 w-4" />
                             </Button>
                             <Button
                               size="sm"
                               variant="outline"
-                              onClick={() => handleDeleteTemplate(template.id)}
+                              onClick={() => handlehandleDeleteTemplate}
                               className="text-red-600 hover:text-red-700"
                             >
                               <Trash2 className="h-4 w-4" />
@@ -438,7 +438,7 @@ export const ReservationTemplates: React.FC<ReservationTemplatesProps> = ({
                 <label className="text-sm font-medium">Nome do Template *</label>
                 <Input
                   value={formData.name}
-                  onChange={(e) => setFormData({ ...formData, name: e.target.value })}
+                  onChange={handleChange})}
                   placeholder="Ex: Hotel Padrão Santos"
                 />
               </div>
@@ -446,11 +446,7 @@ export const ReservationTemplates: React.FC<ReservationTemplatesProps> = ({
                 <label className="text-sm font-medium">Tipo de Reserva</label>
                 <select
                   value={formData.reservation_type}
-                  onChange={(e) => setFormData({ 
-                    ...formData, 
-                    reservation_type: e.target.value as unknown,
-                    template_type: e.target.value 
-                  })}
+                  onChange={handleChange})}
                   className="w-full px-3 py-2 border border-gray-300 rounded-md"
                 >
                   <option value="hotel">Hotel</option>
@@ -466,7 +462,7 @@ export const ReservationTemplates: React.FC<ReservationTemplatesProps> = ({
               <label className="text-sm font-medium">Título da Reserva *</label>
               <Input
                 value={formData.title}
-                onChange={(e) => setFormData({ ...formData, title: e.target.value })}
+                onChange={handleChange})}
                 placeholder="Ex: Hotel Santos Dumont"
               />
             </div>
@@ -475,7 +471,7 @@ export const ReservationTemplates: React.FC<ReservationTemplatesProps> = ({
               <label className="text-sm font-medium">Descrição</label>
               <Textarea
                 value={formData.description}
-                onChange={(e) => setFormData({ ...formData, description: e.target.value })}
+                onChange={handleChange})}
                 placeholder="Descrição padrão para este tipo de reserva..."
                 rows={3}
               />
@@ -486,7 +482,7 @@ export const ReservationTemplates: React.FC<ReservationTemplatesProps> = ({
                 <label className="text-sm font-medium">Local</label>
                 <Input
                   value={formData.location}
-                  onChange={(e) => setFormData({ ...formData, location: e.target.value })}
+                  onChange={handleChange})}
                   placeholder="Ex: Santos, SP"
                 />
               </div>
@@ -494,7 +490,7 @@ export const ReservationTemplates: React.FC<ReservationTemplatesProps> = ({
                 <label className="text-sm font-medium">Tipo de Quarto/Serviço</label>
                 <Input
                   value={formData.room_type}
-                  onChange={(e) => setFormData({ ...formData, room_type: e.target.value })}
+                  onChange={handleChange})}
                   placeholder="Ex: Quarto duplo standard"
                 />
               </div>
@@ -504,7 +500,7 @@ export const ReservationTemplates: React.FC<ReservationTemplatesProps> = ({
               <label className="text-sm font-medium">Endereço</label>
               <Input
                 value={formData.address}
-                onChange={(e) => setFormData({ ...formData, address: e.target.value })}
+                onChange={handleChange})}
                 placeholder="Endereço completo..."
               />
             </div>
@@ -514,7 +510,7 @@ export const ReservationTemplates: React.FC<ReservationTemplatesProps> = ({
                 <label className="text-sm font-medium">Contato</label>
                 <Input
                   value={formData.contact_info}
-                  onChange={(e) => setFormData({ ...formData, contact_info: e.target.value })}
+                  onChange={handleChange})}
                   placeholder="Telefone, email..."
                 />
               </div>
@@ -522,7 +518,7 @@ export const ReservationTemplates: React.FC<ReservationTemplatesProps> = ({
                 <label className="text-sm font-medium">Link do Fornecedor</label>
                 <Input
                   value={formData.supplier_url}
-                  onChange={(e) => setFormData({ ...formData, supplier_url: e.target.value })}
+                  onChange={handleChange})}
                   placeholder="https://..."
                 />
               </div>
@@ -532,7 +528,7 @@ export const ReservationTemplates: React.FC<ReservationTemplatesProps> = ({
               <label className="text-sm font-medium">Observações</label>
               <Textarea
                 value={formData.notes}
-                onChange={(e) => setFormData({ ...formData, notes: e.target.value })}
+                onChange={handleChange})}
                 placeholder="Observações padrão..."
                 rows={2}
               />
@@ -543,7 +539,7 @@ export const ReservationTemplates: React.FC<ReservationTemplatesProps> = ({
                 type="checkbox"
                 id="is_public"
                 checked={formData.is_public}
-                onChange={(e) => setFormData({ ...formData, is_public: e.target.checked })}
+                onChange={handleChange})}
               />
               <label htmlFor="is_public" className="text-sm">
                 Tornar este template público (outros usuários poderão vê-lo)

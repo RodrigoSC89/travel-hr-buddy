@@ -1,5 +1,5 @@
 /**
-import { useEffect, useState } from "react";;
+import { useEffect, useState, useCallback, useMemo } from "react";;
  * PATCH 536 - Coordination AI Engine v1.0
  * Multi-agent coordination system with priority-based task distribution
  */
@@ -312,7 +312,7 @@ const CoordinationAIEnginePage: React.FC = () => {
                   <Input
                     id="agent-name"
                     value={newAgentName}
-                    onChange={(e) => setNewAgentName(e.target.value)}
+                    onChange={handleChange}
                     placeholder="e.g., Analyzer Agent 1"
                   />
                 </div>
@@ -356,7 +356,7 @@ const CoordinationAIEnginePage: React.FC = () => {
                   <Input
                     id="task-name"
                     value={newTaskName}
-                    onChange={(e) => setNewTaskName(e.target.value)}
+                    onChange={handleChange}
                     placeholder="e.g., Analyze sensor data"
                   />
                 </div>
@@ -365,7 +365,7 @@ const CoordinationAIEnginePage: React.FC = () => {
                   <Input
                     id="task-type"
                     value={newTaskType}
-                    onChange={(e) => setNewTaskType(e.target.value)}
+                    onChange={handleChange}
                     placeholder="e.g., analysis"
                   />
                 </div>
@@ -379,7 +379,7 @@ const CoordinationAIEnginePage: React.FC = () => {
                     min="1"
                     max="10"
                     value={newTaskPriority}
-                    onChange={(e) => setNewTaskPriority(parseInt(e.target.value))}
+                    onChange={handleChange}
                   />
                 </div>
                 <Button onClick={handleCreateTask} disabled={loading} className="w-full">

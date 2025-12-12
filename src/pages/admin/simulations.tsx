@@ -1,4 +1,4 @@
-import { useState } from "react";;
+import { useState, useCallback } from "react";;
 import React, { useState } from "react";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
@@ -128,7 +128,7 @@ export default function SimulationsPage() {
             <Button
               variant={selectedType === null ? "default" : "outline"}
               size="sm"
-              onClick={() => setSelectedType(null)}
+              onClick={handleSetSelectedType}
             >
               Todos
             </Button>
@@ -137,7 +137,7 @@ export default function SimulationsPage() {
                 key={type}
                 variant={selectedType === type ? "default" : "outline"}
                 size="sm"
-                onClick={() => setSelectedType(type)}
+                onClick={handleSetSelectedType}
               >
                 {type}
               </Button>

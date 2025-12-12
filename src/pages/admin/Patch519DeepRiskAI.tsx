@@ -1,5 +1,5 @@
 /**
-import { useState } from "react";;
+import { useState, useMemo, useCallback } from "react";;
  * PATCH 519 – Deep Risk AI
  * Motor de análise de risco com IA para avaliação contextual
  */
@@ -247,7 +247,7 @@ export default function Patch519DeepRiskAI() {
             <Textarea
               id="context"
               value={context}
-              onChange={(e) => setContext(e.target.value)}
+              onChange={handleChange}
               placeholder="Descreva a operação, condições, objetivos e quaisquer fatores relevantes..."
               rows={4}
             />
@@ -258,8 +258,7 @@ export default function Patch519DeepRiskAI() {
               <Input
                 id="weather"
                 value={variables.weatherCondition}
-                onChange={(e) =>
-                  setVariables((prev) => ({ ...prev, weatherCondition: e.target.value }))
+                onChange={handleChange}))
                 }
                 placeholder="Ex: Tempestade categoria 2"
               />
@@ -269,8 +268,7 @@ export default function Patch519DeepRiskAI() {
               <Input
                 id="crew"
                 value={variables.crewExperience}
-                onChange={(e) =>
-                  setVariables((prev) => ({ ...prev, crewExperience: e.target.value }))
+                onChange={handleChange}))
                 }
                 placeholder="Ex: 5 anos de experiência média"
               />
@@ -280,8 +278,7 @@ export default function Patch519DeepRiskAI() {
               <Input
                 id="equipment"
                 value={variables.equipmentStatus}
-                onChange={(e) =>
-                  setVariables((prev) => ({ ...prev, equipmentStatus: e.target.value }))
+                onChange={handleChange}))
                 }
                 placeholder="Ex: Manutenção recente concluída"
               />
@@ -291,8 +288,7 @@ export default function Patch519DeepRiskAI() {
               <Input
                 id="complexity"
                 value={variables.missionComplexity}
-                onChange={(e) =>
-                  setVariables((prev) => ({ ...prev, missionComplexity: e.target.value }))
+                onChange={handleChange}))
                 }
                 placeholder="Ex: Alta - exploração em zona desconhecida"
               />
@@ -314,7 +310,7 @@ export default function Patch519DeepRiskAI() {
                 <BarChart3 className="h-5 w-5" />
                 Resultado da Análise
               </span>
-              <Button variant="outline" size="sm" onClick={() => exportAnalysis(selectedAnalysis)}>
+              <Button variant="outline" size="sm" onClick={() => handleexportAnalysis}>
                 <Download className="h-4 w-4 mr-2" />
                 Exportar
               </Button>
@@ -424,7 +420,7 @@ export default function Patch519DeepRiskAI() {
                 <Card
                   key={analysis.id}
                   className="p-3 cursor-pointer hover:bg-accent transition-colors"
-                  onClick={() => setSelectedAnalysis(analysis)}
+                  onClick={handleSetSelectedAnalysis}
                 >
                   <div className="flex items-center justify-between">
                     <div className="flex-1">

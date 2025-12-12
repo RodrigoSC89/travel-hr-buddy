@@ -1,5 +1,5 @@
 /**
-import { useEffect, useMemo, useState } from "react";;
+import { useEffect, useMemo, useState, useCallback } from "react";;
  * System Hub - Unified System Operations Center
  * PATCH 990: Fusion of SystemDiagnostic + SystemMonitor + ProductRoadmap
  * 
@@ -546,7 +546,7 @@ export default function SystemHub() {
               <Button
                 key={phase.id}
                 variant={selectedPhase === phase.id ? "default" : "outline"}
-                onClick={() => setSelectedPhase(phase.id)}
+                onClick={handleSetSelectedPhase}
                 className="flex-shrink-0"
               >
                 <span className={`w-2 h-2 rounded-full ${phase.color} mr-2`} />

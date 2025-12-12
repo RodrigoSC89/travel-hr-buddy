@@ -1,4 +1,4 @@
-import { useState } from "react";;
+import { useState, useMemo, useCallback } from "react";;
 import React, { useState } from "react";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
@@ -253,7 +253,7 @@ export const IntegrationSecurity: React.FC = () => {
                   <Button
                     variant={policy.enabled ? "default" : "outline"}
                     size="sm"
-                    onClick={() => togglePolicy(policy.id)}
+                    onClick={() => handletogglePolicy}
                   >
                     {policy.enabled ? "Ativo" : "Inativo"}
                   </Button>
@@ -300,7 +300,7 @@ export const IntegrationSecurity: React.FC = () => {
                     <Button
                       variant="outline"
                       size="sm"
-                      onClick={() => setShowApiKeys(!showApiKeys)}
+                      onClick={handleSetShowApiKeys}
                     >
                       {showApiKeys ? <EyeOff className="w-4 h-4" /> : <Eye className="w-4 h-4" />}
                     </Button>

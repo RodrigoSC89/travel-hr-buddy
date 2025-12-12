@@ -1,5 +1,5 @@
 /**
-import { useState } from "react";;
+import { useState, useMemo, useCallback } from "react";;
  * Climate & Engagement - Clima Organizacional e Engajamento
  * Versão funcional completa com todas as ações
  */
@@ -449,7 +449,7 @@ const ClimateEngagement: React.FC = () => {
                     key={mood.value}
                     whileHover={{ scale: 1.1 }}
                     whileTap={{ scale: 0.95 }}
-                    onClick={() => setSelectedMood(mood.value)}
+                    onClick={handleSetSelectedMood}
                     className={`p-4 rounded-full transition-all ${mood.color} ${
                       selectedMood === mood.value ? "ring-2 ring-offset-2 ring-primary bg-primary/10" : ""
                     }`}
@@ -470,7 +470,7 @@ const ClimateEngagement: React.FC = () => {
                     placeholder="Digite aqui..." 
                     rows={3}
                     value={moodComment}
-                    onChange={(e) => setMoodComment(e.target.value)}
+                    onChange={handleChange}
                   />
                   <Button className="w-full" onClick={handleRegisterMood}>
                     <Send className="w-4 h-4 mr-2" />
@@ -494,13 +494,13 @@ const ClimateEngagement: React.FC = () => {
                 placeholder="Digite sua sugestão, elogio ou crítica..." 
                 rows={4}
                 value={feedbackText}
-                onChange={(e) => setFeedbackText(e.target.value)}
+                onChange={handleChange}
               />
               <div className="flex gap-2">
                 <Button 
                   variant={feedbackType === "elogio" ? "default" : "outline"} 
                   className="flex-1"
-                  onClick={() => setFeedbackType("elogio")}
+                  onClick={handleSetFeedbackType}
                 >
                   <ThumbsUp className="w-4 h-4 mr-2" />
                   Elogio
@@ -508,7 +508,7 @@ const ClimateEngagement: React.FC = () => {
                 <Button 
                   variant={feedbackType === "sugestao" ? "default" : "outline"} 
                   className="flex-1"
-                  onClick={() => setFeedbackType("sugestao")}
+                  onClick={handleSetFeedbackType}
                 >
                   <MessageSquare className="w-4 h-4 mr-2" />
                   Sugestão
@@ -516,7 +516,7 @@ const ClimateEngagement: React.FC = () => {
                 <Button 
                   variant={feedbackType === "critica" ? "default" : "outline"} 
                   className="flex-1"
-                  onClick={() => setFeedbackType("critica")}
+                  onClick={handleSetFeedbackType}
                 >
                   <ThumbsDown className="w-4 h-4 mr-2" />
                   Crítica

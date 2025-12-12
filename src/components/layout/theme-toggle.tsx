@@ -1,4 +1,4 @@
-import { memo } from 'react';
+import { memo, useCallback } from "react";
 import { Moon, Sun, Palette } from "lucide-react";
 
 import { Button } from "@/components/ui/button";
@@ -30,20 +30,20 @@ export const ThemeToggle = memo(function() {
         </Button>
       </DropdownMenuTrigger>
       <DropdownMenuContent align="end" className="z-[110]" sideOffset={8}>
-        <DropdownMenuItem onClick={() => setTheme("light")} className="cursor-pointer">
+        <DropdownMenuItem onClick={handleSetTheme} className="cursor-pointer">
           Claro
         </DropdownMenuItem>
-        <DropdownMenuItem onClick={() => setTheme("dark")} className="cursor-pointer">
+        <DropdownMenuItem onClick={handleSetTheme} className="cursor-pointer">
           Escuro
         </DropdownMenuItem>
-        <DropdownMenuItem onClick={() => setTheme("nautilus")} className="cursor-pointer">
+        <DropdownMenuItem onClick={handleSetTheme} className="cursor-pointer">
           <Palette className="mr-2 h-4 w-4" />
           Nautilus
         </DropdownMenuItem>
-        <DropdownMenuItem onClick={() => setTheme("high-contrast")} className="cursor-pointer">
+        <DropdownMenuItem onClick={handleSetTheme} className="cursor-pointer">
           Alto Contraste
         </DropdownMenuItem>
-        <DropdownMenuItem onClick={() => setTheme("system")} className="cursor-pointer">
+        <DropdownMenuItem onClick={handleSetTheme} className="cursor-pointer">
           Sistema
         </DropdownMenuItem>
       </DropdownMenuContent>

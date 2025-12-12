@@ -278,7 +278,7 @@ Forneça análises detalhadas e recomendações de segurança.`;
                 <Input
                   placeholder="Ex: Quais são os principais riscos de segurança atuais?"
                   value={query}
-                  onChange={(e) => setQuery(e.target.value)}
+                  onChange={handleChange}
                   onKeyDown={(e) => e.key === "Enter" && analyzeWithAI()}
                   disabled={isAnalyzing}
                 />
@@ -308,7 +308,7 @@ Forneça análises detalhadas e recomendações de segurança.`;
                 <Button
                   variant="outline"
                   className="justify-start"
-                  onClick={() => setQuery("Analise os alertas críticos atuais")}
+                  onClick={handleSetQuery}
                 >
                   <AlertTriangle className="h-4 w-4 mr-2" />
                   Analisar alertas críticos
@@ -316,7 +316,7 @@ Forneça análises detalhadas e recomendações de segurança.`;
                 <Button
                   variant="outline"
                   className="justify-start"
-                  onClick={() => setQuery("Recomende melhorias de segurança")}
+                  onClick={handleSetQuery}
                 >
                   <Shield className="h-4 w-4 mr-2" />
                   Recomendações de segurança
@@ -324,7 +324,7 @@ Forneça análises detalhadas e recomendações de segurança.`;
                 <Button
                   variant="outline"
                   className="justify-start"
-                  onClick={() => setQuery("Verifique conformidade de segurança")}
+                  onClick={handleSetQuery}
                 >
                   <CheckCircle2 className="h-4 w-4 mr-2" />
                   Verificar conformidade

@@ -1,5 +1,5 @@
 /**
-import { useState } from "react";;
+import { useState, useMemo, useCallback } from "react";;
  * Voyage Command Center - Módulo Unificado de Planejamento de Viagens
  * PATCH UNIFY-12.0 - Fusão dos módulos de viagem
  * 
@@ -357,7 +357,7 @@ export default function VoyageCommandCenter() {
             <Download className="h-4 w-4 mr-2" />
             Exportar
           </Button>
-          <Button onClick={() => setCreateDialogOpen(true)}>
+          <Button onClick={handleSetCreateDialogOpen}>
             <Plus className="h-4 w-4 mr-2" />
             Nova Viagem
           </Button>
@@ -633,7 +633,7 @@ export default function VoyageCommandCenter() {
                   <Button 
                     variant="outline" 
                     className="flex-1"
-                    onClick={() => handleOptimizeRoute(voyage.id)}
+                    onClick={() => handlehandleOptimizeRoute}
                     disabled={isOptimizing || voyage.status === "completed" || voyage.status === "cancelled"}
                   >
                     <Brain className="h-4 w-4 mr-2" />
@@ -652,7 +652,7 @@ export default function VoyageCommandCenter() {
                   <Button 
                     variant="outline" 
                     className="text-destructive"
-                    onClick={() => handleDeleteVoyage(voyage.id)}
+                    onClick={() => handlehandleDeleteVoyage}
                   >
                     <Trash2 className="h-4 w-4" />
                   </Button>
@@ -1025,7 +1025,7 @@ export default function VoyageCommandCenter() {
             </div>
           </div>
           <DialogFooter>
-            <Button variant="outline" onClick={() => setCreateDialogOpen(false)}>
+            <Button variant="outline" onClick={handleSetCreateDialogOpen}>
               Cancelar
             </Button>
             <Button onClick={handleCreateVoyage}>
@@ -1112,7 +1112,7 @@ export default function VoyageCommandCenter() {
             </div>
           )}
           <DialogFooter>
-            <Button variant="outline" onClick={() => setDetailsDialogOpen(false)}>
+            <Button variant="outline" onClick={handleSetDetailsDialogOpen}>
               Fechar
             </Button>
             <Button onClick={() => {

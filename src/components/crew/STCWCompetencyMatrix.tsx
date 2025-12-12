@@ -208,7 +208,7 @@ export const STCWCompetencyMatrix = memo(function() {
             placeholder="Buscar competência por nome ou código..." 
             className="pl-10 bg-muted/30"
             value={searchQuery}
-            onChange={(e) => setSearchQuery(e.target.value)}
+            onChange={handleChange}
           />
         </div>
         <Select value={filterArea} onValueChange={setFilterArea}>

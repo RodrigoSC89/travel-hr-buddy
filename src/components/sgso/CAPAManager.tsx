@@ -1,4 +1,4 @@
-import { useState } from "react";;
+import { useState, useMemo, useCallback } from "react";;
 import React, { useState } from "react";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
@@ -387,7 +387,7 @@ export const CAPAManager: React.FC = () => {
                         </div>
 
                         <div className="flex flex-col gap-2 ml-4">
-                          <Button variant="outline" size="sm" onClick={() => setSelectedCAPA(capa)}>
+                          <Button variant="outline" size="sm" onClick={handleSetSelectedCAPA}>
                             <FileText className="h-4 w-4 mr-1" />
                             Detalhes
                           </Button>

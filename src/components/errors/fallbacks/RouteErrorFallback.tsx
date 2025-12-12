@@ -100,7 +100,7 @@ export const RouteErrorFallback: React.FC<RouteErrorFallbackProps> = ({
 
         <CardFooter className="flex flex-wrap gap-3 justify-center">
           <Button
-            onClick={() => navigate("/")}
+            onClick={() => handlenavigate}
             variant="default"
             className="gap-2"
           >
@@ -109,14 +109,14 @@ export const RouteErrorFallback: React.FC<RouteErrorFallbackProps> = ({
           </Button>
           
           <Button
-            onClick={() => navigate(-1)}
+            onClick={() => handlenavigate}
             variant="outline"
           >
             Voltar
           </Button>
 
           <Button
-            onClick={() => navigate("/search")}
+            onClick={() => handlenavigate}
             variant="outline"
             className="gap-2"
           >

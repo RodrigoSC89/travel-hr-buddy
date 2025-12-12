@@ -1,4 +1,4 @@
-import { useState } from "react";;
+import { useState, useCallback } from "react";;
 import React, { useState } from "react";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
@@ -247,7 +247,7 @@ export const EvidenceManager: React.FC<EvidenceManagerProps> = ({
             <input
               type="file"
               accept="image/*"
-              onChange={(e) => e.target.files && handleFileUpload(e.target.files, "photo")}
+              onChange={handleChange}
               className="absolute inset-0 w-full h-full opacity-0 cursor-pointer"
               disabled={uploading}
             />
@@ -272,7 +272,7 @@ export const EvidenceManager: React.FC<EvidenceManagerProps> = ({
             <input
               type="file"
               accept=".pdf,.doc,.docx,.txt"
-              onChange={(e) => e.target.files && handleFileUpload(e.target.files, "document")}
+              onChange={handleChange}
               className="absolute inset-0 w-full h-full opacity-0 cursor-pointer"
               disabled={uploading}
             />
@@ -319,7 +319,7 @@ export const EvidenceManager: React.FC<EvidenceManagerProps> = ({
                   <Button
                     variant="ghost"
                     size="sm"
-                    onClick={() => removeEvidence(item.id)}
+                    onClick={() => handleremoveEvidence}
                   >
                     <X className="w-4 h-4" />
                   </Button>

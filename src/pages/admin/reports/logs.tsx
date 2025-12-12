@@ -301,7 +301,7 @@ export default function RestoreReportLogsPage() {
               <Button
                 variant="ghost"
                 size="sm"
-                onClick={() => navigate("/admin")}
+                onClick={() => handlenavigate}
               >
                 <ArrowLeft className="w-4 h-4 mr-2" />
                 Voltar
@@ -343,7 +343,7 @@ export default function RestoreReportLogsPage() {
                 PDF
               </Button>
               <Button 
-                onClick={() => fetchLogs(true)} 
+                onClick={() => handlefetchLogs} 
                 variant="outline" 
                 size="sm"
               >
@@ -378,7 +378,7 @@ export default function RestoreReportLogsPage() {
                   <Input
                     type="date"
                     value={startDate}
-                    onChange={(e) => setStartDate(e.target.value)}
+                    onChange={handleChange}
                     placeholder="Selecione"
                   />
                 </div>
@@ -387,7 +387,7 @@ export default function RestoreReportLogsPage() {
                   <Input
                     type="date"
                     value={endDate}
-                    onChange={(e) => setEndDate(e.target.value)}
+                    onChange={handleChange}
                     placeholder="Selecione"
                   />
                 </div>

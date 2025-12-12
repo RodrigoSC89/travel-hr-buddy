@@ -1,4 +1,4 @@
-import { useState } from "react";;;
+import { useState, useCallback } from "react";;;
 import { useNavigate } from "react-router-dom";
 import { CollaborativeDocumentEditor } from "@/components/documents/CollaborativeDocumentEditor";
 import { RoleBasedAccess } from "@/components/auth/role-based-access";
@@ -42,7 +42,7 @@ export default function DocumentEditorDemo() {
             </div>
             <Button 
               variant="outline" 
-              onClick={() => navigate("/admin/documents")}
+              onClick={() => handlenavigate}
             >
               <ArrowLeft className="h-4 w-4 mr-2" />
               Back

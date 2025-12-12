@@ -1,4 +1,4 @@
-import { useEffect, useRef, useState } from "react";;
+import { useEffect, useRef, useState, useCallback } from "react";;
 import React, { useState, useRef, useEffect } from "react";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
@@ -234,7 +234,7 @@ export const FleetAICopilot: React.FC<FleetAICopilotProps> = ({
         <Button
           variant="ghost"
           size="icon"
-          onClick={() => setIsExpanded(!isExpanded)}
+          onClick={handleSetIsExpanded}
         >
           {isExpanded ? <Minimize2 className="h-4 w-4" /> : <Maximize2 className="h-4 w-4" />}
         </Button>
@@ -248,7 +248,7 @@ export const FleetAICopilot: React.FC<FleetAICopilotProps> = ({
               key={action.id}
               variant="outline"
               size="sm"
-              onClick={() => sendMessage("", action.action)}
+              onClick={() => handlesendMessage}
               disabled={isLoading}
               className="shrink-0"
             >
@@ -328,7 +328,7 @@ export const FleetAICopilot: React.FC<FleetAICopilotProps> = ({
         <form onSubmit={handleSubmit} className="mt-4 flex gap-2">
           <Input
             value={input}
-            onChange={(e) => setInput(e.target.value)}
+            onChange={handleChange}
             placeholder="Pergunte sobre a frota..."
             disabled={isLoading}
             className="flex-1"

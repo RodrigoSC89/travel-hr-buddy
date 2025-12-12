@@ -1,5 +1,5 @@
 
-import { memo, memo, useEffect, useState } from "react";;;
+import { memo, memo, useEffect, useState, useCallback, useMemo } from "react";;;
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
@@ -199,7 +199,7 @@ export const BehavioralEvolutionDashboard = memo(function() {
         </div>
         <Button
           variant={showPerformanceMonitor ? "default" : "outline"}
-          onClick={() => setShowPerformanceMonitor(!showPerformanceMonitor)}
+          onClick={handleSetShowPerformanceMonitor}
         >
           <Shield className="h-4 w-4 mr-2" />
           {showPerformanceMonitor ? "Hide" : "Show"} Performance Monitor

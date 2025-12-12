@@ -1,4 +1,4 @@
-import { useCallback, useEffect, useState } from "react";;
+import { useCallback, useMemo, useEffect, useState } from "react";;
 
 import React, { useEffect, useState, useCallback } from "react";
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "@/components/ui/card";
@@ -333,7 +333,7 @@ export const PerformanceMonitor: React.FC = () => {
           </p>
         </div>
         <div className="flex gap-2">
-          <Button variant="outline" size="sm" onClick={() => setShowSettings(!showSettings)}>
+          <Button variant="outline" size="sm" onClick={handleSetShowSettings}>
             <Settings className="h-4 w-4 mr-2" />
             Thresholds
           </Button>

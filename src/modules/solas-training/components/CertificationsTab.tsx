@@ -1,4 +1,4 @@
-import { useState } from "react";;;
+import { useState, useMemo, useCallback } from "react";;;
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
@@ -183,7 +183,7 @@ export default function CertificationsTab({
                 placeholder="Buscar certificação, tripulante ou código..." 
                 className="pl-10"
                 value={searchTerm}
-                onChange={(e) => setSearchTerm(e.target.value)}
+                onChange={handleChange}
               />
             </div>
             <Select value={statusFilter} onValueChange={setStatusFilter}>
@@ -306,7 +306,7 @@ export default function CertificationsTab({
             </div>
           </div>
           <DialogFooter>
-            <Button variant="outline" onClick={() => setShowRenewDialog(false)}>Cancelar</Button>
+            <Button variant="outline" onClick={handleSetShowRenewDialog}>Cancelar</Button>
             <Button onClick={handleConfirmRenew}>
               <Calendar className="h-4 w-4 mr-2" />
               Agendar
@@ -342,7 +342,7 @@ export default function CertificationsTab({
             </div>
           </div>
           <DialogFooter>
-            <Button variant="outline" onClick={() => setShowUploadDialog(false)}>Cancelar</Button>
+            <Button variant="outline" onClick={handleSetShowUploadDialog}>Cancelar</Button>
           </DialogFooter>
         </DialogContent>
       </Dialog>
@@ -416,17 +416,17 @@ function CertificationsList({
                     </div>
                   </div>
                   <div className="flex gap-2 mt-3">
-                    <Button variant="ghost" size="sm" onClick={() => onView(cert)}>
+                    <Button variant="ghost" size="sm" onClick={() => handleonView}>
                       <Eye className="h-4 w-4 mr-1" />
                       Ver Certificado
                     </Button>
                     {(cert.status === "expiring" || cert.status === "expired") && (
-                      <Button variant="ghost" size="sm" onClick={() => onRenew(cert)}>
+                      <Button variant="ghost" size="sm" onClick={() => handleonRenew}>
                         <RefreshCw className="h-4 w-4 mr-1" />
                         Renovar
                       </Button>
                     )}
-                    <Button variant="ghost" size="sm" onClick={() => onUpload(cert)}>
+                    <Button variant="ghost" size="sm" onClick={() => handleonUpload}>
                       <Upload className="h-4 w-4 mr-1" />
                       Atualizar Doc
                     </Button>

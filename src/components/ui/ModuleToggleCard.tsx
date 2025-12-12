@@ -108,13 +108,13 @@ export const ModuleToggleCard: React.FC<ModuleToggleCardProps> = ({
               </DropdownMenuTrigger>
               <DropdownMenuContent align="end">
                 {path && onNavigate && (
-                  <DropdownMenuItem onClick={() => onNavigate(path)}>
+                  <DropdownMenuItem onClick={() => handleonNavigate}>
                     <ExternalLink className="mr-2 h-4 w-4" />
                     Open Module
                   </DropdownMenuItem>
                 )}
                 {onViewHistory && (
-                  <DropdownMenuItem onClick={() => onViewHistory(id)}>
+                  <DropdownMenuItem onClick={() => handleonViewHistory}>
                     <History className="mr-2 h-4 w-4" />
                     View History
                   </DropdownMenuItem>

@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";;;
+import { useEffect, useState, useCallback } from "react";;;
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { CommandDialog, CommandEmpty, CommandGroup, CommandInput, CommandItem, CommandList } from "@/components/ui/command";
@@ -195,7 +195,7 @@ export const SimpleGlobalSearch: React.FC = () => {
       <Button
         variant="outline"
         className="relative w-full justify-start text-sm text-muted-foreground h-9"
-        onClick={() => setOpen(true)}
+        onClick={handleSetOpen}
       >
         <Search className="mr-2 h-4 w-4" />
         <span className="hidden lg:inline-flex">Buscar no sistema...</span>

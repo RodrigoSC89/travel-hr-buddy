@@ -1,5 +1,5 @@
 /**
-import { useContext, useEffect } from "react";;
+import { useContext, useEffect, useCallback } from "react";;
  * PATCH 499: PostHog Provider Component
  * React provider for PostHog telemetry
  */

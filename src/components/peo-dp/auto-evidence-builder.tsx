@@ -1,4 +1,4 @@
-import { useState } from "react";;
+import { useState, useMemo, useCallback } from "react";;
 import React, { useState } from "react";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
@@ -361,7 +361,7 @@ export const AutoEvidenceBuilder: React.FC = () => {
                       <Button 
                         size="sm" 
                         variant="outline" 
-                        onClick={() => handleGenerateAISummary(pkg)}
+                        onClick={() => handlehandleGenerateAISummary}
                         disabled={generatingSummary === pkg.id}
                       >
                         {generatingSummary === pkg.id ? (
@@ -371,14 +371,14 @@ export const AutoEvidenceBuilder: React.FC = () => {
                         )}
                         Resumo IA
                       </Button>
-                      <Button size="sm" variant="outline" onClick={() => handleGeneratePDF(pkg)}>
+                      <Button size="sm" variant="outline" onClick={() => handlehandleGeneratePDF}>
                         <Download className="w-3 h-3 mr-1" />PDF
                       </Button>
                       <Button size="sm" variant="outline">
                         <Eye className="w-3 h-3 mr-1" />Visualizar
                       </Button>
                       {pkg.status === "ready" && (
-                        <Button size="sm" onClick={() => handleSubmitPackage(pkg)}>
+                        <Button size="sm" onClick={() => handlehandleSubmitPackage}>
                           <Send className="w-3 h-3 mr-1" />Enviar
                         </Button>
                       )}
@@ -411,7 +411,7 @@ export const AutoEvidenceBuilder: React.FC = () => {
             <CardContent className="pt-4">
               <div className="relative">
                 <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 h-4 w-4 text-muted-foreground" />
-                <Input placeholder="Buscar evidências..." value={searchTerm} onChange={(e) => setSearchTerm(e.target.value)} className="pl-10" />
+                <Input placeholder="Buscar evidências..." value={searchTerm} onChange={handleChange} className="pl-10" />
               </div>
             </CardContent>
           </Card>
@@ -462,7 +462,7 @@ export const AutoEvidenceBuilder: React.FC = () => {
                 <div className="flex items-center justify-between">
                   <p className="font-medium">{selectedItems.length} itens selecionados</p>
                   <div className="flex gap-2">
-                    <Button variant="outline" onClick={() => setSelectedItems([])}>Limpar</Button>
+                    <Button variant="outline" onClick={handleSetSelectedItems}>Limpar</Button>
                     <Button><FilePlus className="w-4 h-4 mr-2" />Criar Pacote</Button>
                   </div>
                 </div>

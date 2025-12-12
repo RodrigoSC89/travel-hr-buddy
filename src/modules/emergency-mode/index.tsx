@@ -1,4 +1,4 @@
-import { useCallback, useEffect, useState } from "react";;
+import { useCallback, useMemo, useEffect, useState } from "react";;
 
 /**
  * MODO EMERGÊNCIA COM IA DE CRISE
@@ -458,7 +458,7 @@ const EmergencyMode = () => {
               size="lg"
               variant="destructive"
               className="text-lg px-8 py-6"
-              onClick={() => setShowActivationDialog(true)}
+              onClick={handleSetShowActivationDialog}
             >
               <AlertOctagon className="h-6 w-6 mr-2" />
               ATIVAR MODO EMERGÊNCIA
@@ -468,7 +468,7 @@ const EmergencyMode = () => {
           <div className="grid grid-cols-2 md:grid-cols-4 gap-4 max-w-4xl mx-auto">
             {Object.entries(emergencyProtocols).slice(0, 8).map(([key, proto]) => (
               <Card key={key} className="text-center p-4 hover:border-red-300 transition-colors cursor-pointer"
-                onClick={() => activateEmergency(key as EmergencyType)}>
+                onClick={() => handleactivateEmergency}>
                 <div key={div.id || index} className="flex flex-col items-center gap-2">
                   <div className="p-3 rounded-full bg-red-100 dark:bg-red-900/30 text-red-600">
                     {getEmergencyIcon(key as EmergencyType)}
@@ -675,7 +675,7 @@ const EmergencyMode = () => {
                 <div className="flex gap-2 mt-4">
                   <Input
                     value={aiInput}
-                    onChange={(e) => setAiInput(e.target.value)}
+                    onChange={handleChange}
                     placeholder="Pergunte à IA..."
                     className="bg-red-800/50 border-red-700 text-white placeholder:text-red-400"
                     onKeyDown={(e) => e.key === "Enter" && askAI()}

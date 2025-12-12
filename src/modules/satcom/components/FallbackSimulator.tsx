@@ -1,5 +1,5 @@
 /**
-import { useState } from "react";;
+import { useState, useMemo, useCallback } from "react";;
  * Fallback Simulator Component
  * Simulates and tests fallback scenarios for offline connectivity
  * Patch 142.1 - Enhanced with actual simulation controls
@@ -69,7 +69,7 @@ export const FallbackSimulator: React.FC<FallbackSimulatorProps> = ({
                     ? "border-primary bg-primary/10"
                     : "hover:bg-accent"
                 }`}
-                onClick={() => setSelectedConnection(conn.id)}
+                onClick={handleSetSelectedConnection}
               >
                 <div className="flex items-center gap-3">
                   <div

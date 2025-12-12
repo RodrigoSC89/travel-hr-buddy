@@ -297,7 +297,7 @@ const SmartAutomationPage: React.FC = () => {
                   </div>
 
                   <div className="flex gap-2 mt-4 pt-4 border-t">
-                    <Button size="sm" variant="outline" onClick={() => handleRunWorkflow(workflow.id)}>
+                    <Button size="sm" variant="outline" onClick={() => handlehandleRunWorkflow}>
                       <Play className="h-4 w-4 mr-1" />
                       Executar
                     </Button>

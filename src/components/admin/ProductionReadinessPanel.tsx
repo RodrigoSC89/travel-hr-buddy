@@ -1,5 +1,5 @@
 /**
-import { useState } from "react";;
+import { useState, useMemo, useCallback } from "react";;
  * Production Readiness Panel
  * PATCH 950: Painel de validação para go-live
  */
@@ -100,7 +100,7 @@ function TestCaseItem({ test }: { test: TestCase }) {
       <Button 
         variant="ghost" 
         size="sm" 
-        onClick={() => setExpanded(!expanded)}
+        onClick={handleSetExpanded}
         className="text-xs"
       >
         {expanded ? "Ocultar detalhes" : "Ver procedimento"}
@@ -247,7 +247,7 @@ export const ProductionReadinessPanel = memo(function() {
                   <Badge
                     variant={activeCategory === "all" ? "default" : "outline"}
                     className="cursor-pointer"
-                    onClick={() => setActiveCategory("all")}
+                    onClick={handleSetActiveCategory}
                   >
                     Todos
                   </Badge>
@@ -256,7 +256,7 @@ export const ProductionReadinessPanel = memo(function() {
                       key={cat}
                       variant={activeCategory === cat ? "default" : "outline"}
                       className="cursor-pointer"
-                      onClick={() => setActiveCategory(cat)}
+                      onClick={handleSetActiveCategory}
                     >
                       {categoryIcons[cat]}
                       <span className="ml-1">{cat}</span>

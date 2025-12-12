@@ -196,7 +196,7 @@ export const PainelBI = memo(function() {
               <select
                 className="border rounded-md p-2 bg-background text-foreground"
                 value={filtroMes}
-                onChange={(e) => setFiltroMes(e.target.value)}
+                onChange={handleChange}
               >
                 <option value="">Todos os meses</option>
                 {mesesDisponiveis.map((mes) => (

@@ -1,4 +1,4 @@
-import { useState } from "react";;
+import { useState, useMemo, useCallback } from "react";;
 import React, { useState } from "react";
 import { Card, CardContent } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
@@ -149,7 +149,7 @@ export const SmartJobCard: React.FC<SmartJobCardProps> = ({
                   </>
                 )}
                 <DropdownMenuSeparator />
-                <DropdownMenuItem onClick={() => setShowPostponeDialog(true)}>
+                <DropdownMenuItem onClick={handleSetShowPostponeDialog}>
                   <Clock className="h-4 w-4 mr-2" />
                   Postergar
                 </DropdownMenuItem>
@@ -240,7 +240,7 @@ export const SmartJobCard: React.FC<SmartJobCardProps> = ({
           <Textarea
             placeholder="Ex: Aguardando chegada de peças de reposição..."
             value={postponeReason}
-            onChange={(e) => setPostponeReason(e.target.value)}
+            onChange={handleChange}
             rows={4}
           />
           {isUrgent && (
@@ -250,7 +250,7 @@ export const SmartJobCard: React.FC<SmartJobCardProps> = ({
             </div>
           )}
           <DialogFooter>
-            <Button variant="outline" onClick={() => setShowPostponeDialog(false)}>
+            <Button variant="outline" onClick={handleSetShowPostponeDialog}>
               Cancelar
             </Button>
             <Button onClick={handlePostpone} disabled={!postponeReason.trim()}>
