@@ -854,7 +854,7 @@ export const EnhancedSettingsHub: React.FC = () => {
           <TabsContent value="security" className="space-y-6">
             <SecurityAccessTab 
               settings={settings.security}
-              onUpdate={(updates) => updateSettings("security", updates)
+              onUpdate={(updates) => updateSettings("security", updates)}
               testMode={testMode}
             />
           </TabsContent>
@@ -866,7 +866,7 @@ export const EnhancedSettingsHub: React.FC = () => {
           <TabsContent value="notifications" className="space-y-6">
             <NotificationsAlertsTab 
               settings={settings.notifications}
-              onUpdate={(updates) => updateSettings("notifications", updates)
+              onUpdate={(updates) => updateSettings("notifications", updates)}
               testMode={testMode}
             />
           </TabsContent>
@@ -874,7 +874,7 @@ export const EnhancedSettingsHub: React.FC = () => {
           <TabsContent value="integrations" className="space-y-6">
             <IntegrationsTab 
               settings={settings.integrations}
-              onUpdate={(updates) => updateSettings("integrations", updates)
+              onUpdate={(updates) => updateSettings("integrations", updates)}
               testMode={testMode}
             />
           </TabsContent>
@@ -882,7 +882,7 @@ export const EnhancedSettingsHub: React.FC = () => {
           <TabsContent value="advanced" className="space-y-6">
             <AdvancedFeaturesTab 
               settings={settings.advanced}
-              onUpdate={(updates) => updateSettings("advanced", updates)
+              onUpdate={(updates) => updateSettings("advanced", updates)}
               testMode={testMode}
             />
           </TabsContent>
@@ -890,7 +890,7 @@ export const EnhancedSettingsHub: React.FC = () => {
           <TabsContent value="monitoring" className="space-y-6">
             <SystemMonitoringTab 
               settings={settings.monitoring}
-              onUpdate={(updates) => updateSettings("monitoring", updates)
+              onUpdate={(updates) => updateSettings("monitoring", updates)}
               testMode={testMode}
             />
           </TabsContent>
