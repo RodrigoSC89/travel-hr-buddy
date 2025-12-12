@@ -71,6 +71,6 @@ export const SmartLayout = memo(function() {
       </div>
     </ThemeProvider>
   );
-}
+});
 
 export default SmartLayout;
