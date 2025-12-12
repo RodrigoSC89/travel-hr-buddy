@@ -84,7 +84,7 @@ if (typeof window !== "undefined" && import.meta.env.PROD) {
   window.addEventListener("load", () => {
     // Service Worker
     if ("serviceWorker" in navigator) {
-      navigator.serviceWorker.register("/sw.js", { scope: "/" )).catch(() => {});
+      navigator.serviceWorker.register("/sw.js", { scope: "/" }).catch(() => {});
     }
     
     // Web Vitals (deferred)
