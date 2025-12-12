@@ -1,4 +1,5 @@
 /**
+import { useEffect, useState } from "react";;
  * PWA Install Prompt Component
  * PATCH 833: User-friendly PWA installation prompt
  */

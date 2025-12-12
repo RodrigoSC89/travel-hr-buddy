@@ -1,4 +1,4 @@
-import { createContext, useContext, useEffect, useState } from "react";
+import { createContext, useContext, useEffect, useState } from "react";;;
 
 // PATCH 620: Extended theme support with nautilus theme
 type Theme = "dark" | "light" | "system" | "nautilus" | "high-contrast";

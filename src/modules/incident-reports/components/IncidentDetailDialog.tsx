@@ -1,3 +1,4 @@
+import { useEffect, useState } from "react";;
 
 // PATCH 393 - Enhanced with signatures, corrective actions, and PDF export
 // PATCH 653 - Lazy loading for jsPDF

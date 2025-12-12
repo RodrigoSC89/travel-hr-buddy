@@ -1,4 +1,5 @@
 /**
+import { useState } from "react";;
  * Example React components showing how to use the MMI Jobs Similarity Search API
  * 
  * These components demonstrate both GET and POST modes of operation

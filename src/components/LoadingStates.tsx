@@ -1,3 +1,4 @@
+import { useEffect, useState } from "react";;
 
 /**
  * Loading States - Design Profissional para Conexões Lentas

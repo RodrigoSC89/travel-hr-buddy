@@ -1,3 +1,4 @@
+import { useEffect, useState } from "react";;
 
 /**
  * PATCH 499: Telemetry Consent Banner

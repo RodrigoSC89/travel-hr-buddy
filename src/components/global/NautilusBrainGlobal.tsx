@@ -1,4 +1,5 @@
 /**
+import { useCallback, useEffect, useRef, useState } from "react";;
  * NAUTILUS BRAIN GLOBAL - IA Central Acessível de Qualquer Módulo
  * PATCH 850.3 - Fixed useToast hook usage
  */

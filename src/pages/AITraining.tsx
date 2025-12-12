@@ -1,4 +1,5 @@
 // PATCH 598: AI Training Dashboard Page
+import { useEffect, useState } from "react";;
 import React, { useState, useEffect } from "react";
 import { Brain, BookOpen, Trophy, TrendingUp, Download } from "lucide-react";
 import { Button } from "@/components/ui/button";

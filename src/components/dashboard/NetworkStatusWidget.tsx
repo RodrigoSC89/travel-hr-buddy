@@ -1,4 +1,5 @@
 /**
+import { useCallback, useEffect, useState } from "react";;
  * PATCH 900 - Network Status Widget Otimizado
  * Removidos intervals excessivos
  */

@@ -3,7 +3,7 @@
  * Displays user profile and active session information
  */
 
-import { useState, useEffect } from "react";
+import { useEffect, useState } from "react";;;
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { ActiveSessionDisplay } from "@/components/auth/ActiveSessionDisplay";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";

@@ -1,4 +1,5 @@
 /**
+import { useRef, useState } from "react";;
  * Image Recognition for Inspections - PHASE 8
  * IA para análise de fotos e vídeos de inspeção
  */

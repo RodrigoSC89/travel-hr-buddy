@@ -1,4 +1,5 @@
 /**
+import { useState } from "react";;
  * Fallback Simulator Component
  * Simulates and tests fallback scenarios for offline connectivity
  * Patch 142.1 - Enhanced with actual simulation controls

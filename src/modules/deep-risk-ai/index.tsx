@@ -1,4 +1,5 @@
 /**
+import { useEffect, useState } from "react";;
  * PATCH 433 - Deep Sea Risk Analysis AI
  * Comprehensive AI-powered risk assessment for deep sea operations
  * Integrated with analytics-core, incident logs, and forecast data

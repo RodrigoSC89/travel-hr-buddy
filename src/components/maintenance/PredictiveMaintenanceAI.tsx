@@ -1,4 +1,5 @@
 /**
+import { useEffect, useState } from "react";;
  * Manutenção Preditiva com IA - Diferencial vs AMOS/TM Master
  * - Previsão de falhas baseada em padrões
  * - Geração automática de OS

@@ -1,4 +1,5 @@
 /**
+import { useEffect, useState } from "react";;
  * PATCH 800: Enhanced Lazy Loading System for Low Bandwidth
  * Provides optimized lazy loading with retry, timeout, and fallback support
  */

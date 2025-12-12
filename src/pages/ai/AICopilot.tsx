@@ -1,4 +1,5 @@
 /**
+import { useEffect, useRef, useState } from "react";;
  * AI Copilot - Processamento de Linguagem Natural
  * Página de chat com IA integrada via Lovable AI Gateway
  */

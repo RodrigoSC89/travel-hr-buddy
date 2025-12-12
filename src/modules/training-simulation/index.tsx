@@ -1,4 +1,5 @@
 /**
+import { useState } from "react";;
  * PATCH: Módulo de Treinamento & Simulação
  * Simulações interativas com cenários de emergência e operações
  */

@@ -1,3 +1,4 @@
+import { useEffect, useState } from "react";;
 
 /**
  * PATCH 417: Document Templates WYSIWYG Editor

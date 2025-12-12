@@ -1,4 +1,5 @@
 /**
+import { useEffect, useState } from "react";;
  * NAUTILUS COMMAND CENTER - O Cérebro Central do Sistema
  * Centro de Comando Unificado com IA Embarcada
  * 

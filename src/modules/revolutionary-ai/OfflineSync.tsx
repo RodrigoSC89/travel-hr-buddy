@@ -1,4 +1,5 @@
 /**
+import { useEffect, useState } from "react";;
  * Offline Sync Module
  * Sincronização inteligente para operação offline
  */

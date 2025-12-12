@@ -1,4 +1,5 @@
 /**
+import { useMemo, useState } from "react";;
  * REVOLUTIONARY AI - Scenario Simulator
  * Funcionalidade 7: Simulador de Impacto Financeiro e Operacional
  */

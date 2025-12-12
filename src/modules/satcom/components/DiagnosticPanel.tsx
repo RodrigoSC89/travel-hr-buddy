@@ -1,4 +1,5 @@
 /**
+import { useState } from "react";;
  * PATCH 442 - SATCOM Diagnostic Panel
  * Interactive test panel for SATCOM failover testing
  */

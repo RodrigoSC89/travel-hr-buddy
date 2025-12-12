@@ -1,3 +1,4 @@
+import { useEffect, useState } from "react";;
 
 /**
  * PATCH 547 - Trust Score Display Component

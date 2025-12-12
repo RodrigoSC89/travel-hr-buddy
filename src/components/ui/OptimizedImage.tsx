@@ -3,7 +3,7 @@
  * Connection-aware image loading with lazy loading and placeholders
  */
 
-import { useState, useRef, useEffect, memo } from "react";
+import { memo, useEffect, useRef, useState } from "react";;;
 import { useConnectionAware } from "@/hooks/use-connection-aware";
 import { cn } from "@/lib/utils";
 

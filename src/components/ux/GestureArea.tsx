@@ -1,4 +1,5 @@
 /**
+import { useEffect, useRef, useState } from "react";;
  * Gesture Area - PATCH 836
  * Container with gesture detection
  */

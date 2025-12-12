@@ -1,4 +1,5 @@
 /**
+import { useState } from "react";;
  * Training Matrix Panel Component
  * Painel de matriz de treinamentos com IA integrada
  */

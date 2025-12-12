@@ -1,4 +1,5 @@
 /**
+import { useCallback, useEffect, useMemo, useState } from "react";;
  * PATCH 215.2 - Telemetry Dashboard 360 (Painel Cognitivo Operacional)
  * 
  * Complete, integrated, and professional telemetry dashboard with LLM integration,

@@ -1,4 +1,5 @@
 /**
+import { useEffect, useRef, useState } from "react";;
  * AI Advisor Panel - Copiloto Adaptativo para PEO-DP
  * Interface de chat com personalidade baseada no perfil do usuário
  */

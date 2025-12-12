@@ -1,4 +1,5 @@
 /**
+import { useState } from "react";;
  * Climate & Engagement - Clima Organizacional e Engajamento
  * Versão funcional completa com todas as ações
  */

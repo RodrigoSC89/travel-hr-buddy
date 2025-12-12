@@ -1,4 +1,5 @@
 /**
+import { useState } from "react";;
  * API Documentation Component - PHASE 2
  * Documentação interativa da API pública do Nautilus One
  */

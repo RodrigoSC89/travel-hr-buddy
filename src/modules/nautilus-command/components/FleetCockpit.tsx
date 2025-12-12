@@ -1,4 +1,5 @@
 /**
+import { useEffect, useState } from "react";;
  * Fleet Cockpit - Visualização em tempo real da frota
  */
 

@@ -1,4 +1,5 @@
 /**
+import { useEffect, useState } from "react";;
  * PATCH 476: Enhanced SATCOM Connectivity Panel
  * Shows real-time connectivity status with ping simulation
  */

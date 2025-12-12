@@ -1,4 +1,5 @@
 /**
+import { useEffect, useState } from "react";;
  * PATCH 95.0 - Performance Dashboard Module
  * Dashboard with operational KPIs and AI-powered performance analysis
  */

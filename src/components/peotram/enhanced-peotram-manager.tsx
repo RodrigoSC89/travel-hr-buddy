@@ -1,3 +1,4 @@
+import { useEffect, useState } from "react";;
 import React, { useState, useEffect, lazy, Suspense } from "react";
 
 // PATCH 549: Lazy load components to prevent bundle bloat and freezing

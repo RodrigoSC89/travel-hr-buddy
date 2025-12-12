@@ -1,4 +1,5 @@
 /**
+import { useState } from "react";;
  * PATCH: Reabastecimento Logístico Inteligente
  * Sistema de gestão de suprimentos com IA preditiva
  */

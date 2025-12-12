@@ -3,7 +3,7 @@
  * Shows connection status and handles reconnection
  */
 
-import { useState, useEffect } from "react";
+import { useEffect, useState } from "react";;;
 import { useNetworkStatus } from "@/hooks/use-network-status";
 import { offlineSyncManager } from "@/lib/offline/sync-manager";
 import { Button } from "@/components/ui/button";

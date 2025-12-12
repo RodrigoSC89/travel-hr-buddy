@@ -1,4 +1,5 @@
 /**
+import { useEffect, useState } from "react";;
  * PATCH UNIFY-11.1: AI Command Center
  * Fusão de: IA Revolucionária + Dashboard IA + Insights de IA + Automação IA + Métricas de Adoção
  * 

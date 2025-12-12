@@ -1,4 +1,5 @@
 /**
+import { useEffect, useRef, useState } from "react";;
  * Satellite Globe Map Component
  * Interactive 3D globe showing satellite positions
  */

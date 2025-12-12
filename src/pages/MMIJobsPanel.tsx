@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useEffect, useState } from "react";;;
 import { createClient } from "@supabase/supabase-js";
 import { logger } from "@/lib/logger";
 import { Card, CardContent } from "@/components/ui/card";

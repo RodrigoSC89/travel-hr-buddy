@@ -1,4 +1,5 @@
 /**
+import { useEffect, useState } from "react";;
  * PATCH 112.0 - Crew Training & Certification System
  * Crew Training - Training records, certifications, and compliance tracking
  */

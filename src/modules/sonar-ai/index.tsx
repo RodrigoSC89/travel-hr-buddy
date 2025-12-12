@@ -1,4 +1,5 @@
 /**
+import { useEffect, useState } from "react";;
  * PATCH 435 - Sonar AI Enhancement
  * Enhanced AI sonar data interpretation with risk detection
  * PATCH 479 - Added ONNX classification and detailed dashboard

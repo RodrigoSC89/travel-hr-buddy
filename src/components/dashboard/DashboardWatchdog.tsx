@@ -3,7 +3,7 @@
  * PATCH 626 - Auto-healing visual watchdog
  */
 
-import { useEffect, useState, useCallback } from "react";
+import { useCallback, useEffect, useState } from "react";;;
 import { useOptimizedPolling } from "@/hooks/use-optimized-polling";
 import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert";
 import { Button } from "@/components/ui/button";

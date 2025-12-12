@@ -1,4 +1,5 @@
 /**
+import { useEffect, useState } from "react";;
  * PATCH 839: Production Readiness Checklist
  * Visual checklist for go-live validation
  */

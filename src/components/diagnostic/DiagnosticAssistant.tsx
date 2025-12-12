@@ -1,4 +1,5 @@
 /**
+import { useEffect, useRef, useState } from "react";;
  * Technical Diagnostic Assistant - PHASE 4
  * IA dedicada para apoiar engenheiros de bordo na diagnose de falhas técnicas
  */

@@ -1,4 +1,5 @@
 /**
+import { useState } from "react";;
  * Voyage Command Center - Módulo Unificado de Planejamento de Viagens
  * PATCH UNIFY-12.0 - Fusão dos módulos de viagem
  * 

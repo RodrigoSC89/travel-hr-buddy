@@ -2,7 +2,7 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/com
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { CheckCircle2, XCircle, AlertTriangle, ArrowRight } from "lucide-react";
-import { useState } from "react";
+import { useState } from "react";;;
 
 export default function Patch496ModuleConsolidation() {
   const [validationResults, setValidationResults] = useState({

@@ -3,7 +3,7 @@
  * PATCH 900: Removidos intervals excessivos
  */
 
-import { useState, memo, useMemo } from "react";
+import { memo, useMemo, useState } from "react";;;
 import { Badge } from "@/components/ui/badge";
 import { 
   Ship, 

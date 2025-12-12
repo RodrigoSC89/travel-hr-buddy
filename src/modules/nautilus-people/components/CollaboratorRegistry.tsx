@@ -1,4 +1,5 @@
 /**
+import { useState } from "react";;
  * Collaborator Registry - Cadastro Completo de Colaboradores
  * Versão funcional com todas as ações implementadas
  */

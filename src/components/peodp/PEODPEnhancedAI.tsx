@@ -1,4 +1,5 @@
 /**
+import { useState } from "react";;
  * PEO-DP Enhanced AI - Conformidade Petrobras com IA
  * - Monitoramento ASOG em tempo real
  * - Geração automática de evidências

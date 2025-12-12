@@ -1,4 +1,5 @@
 /**
+import { useState } from "react";;
  * Crew Intelligence AI - Diferencial vs Adonis/Seafair/OneOcean
  * - Matching inteligente tripulante-embarcação
  * - Análise de fadiga (MLC 2006)

@@ -1,4 +1,5 @@
 /**
+import { useEffect, useState } from "react";;
  * PATCH 94.0 - Logs Center
  * Centralized technical logs with filtering, AI audit, and PDF export
  */

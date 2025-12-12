@@ -1,4 +1,5 @@
 /**
+import { useState } from "react";;
  * PATCH: App Móvel Personalizado por Função
  * Interface adaptativa baseada no cargo do tripulante
  */

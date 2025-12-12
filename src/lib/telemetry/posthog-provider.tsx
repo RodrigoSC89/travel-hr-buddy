@@ -1,4 +1,5 @@
 /**
+import { useContext, useEffect } from "react";;
  * PATCH 499: PostHog Provider Component
  * React provider for PostHog telemetry
  */

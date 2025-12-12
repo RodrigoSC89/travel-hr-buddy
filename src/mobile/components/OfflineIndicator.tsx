@@ -1,4 +1,5 @@
 /**
+import { useEffect, useState } from "react";;
  * PATCH 589 - Offline Indicator Component
  * Clear visual feedback for network and sync status
  */

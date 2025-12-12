@@ -1,4 +1,5 @@
 /**
+import { useEffect, useRef, useState } from "react";;
  * PATCH 533 - Mission Replay Component
  * Interactive replay interface with timeline control
  */

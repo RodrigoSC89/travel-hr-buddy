@@ -1,4 +1,5 @@
 /**
+import { useEffect, useState } from "react";;
  * PATCH 300: Enhanced API Gateway
  * Added documentation generation and Markdown export
  */

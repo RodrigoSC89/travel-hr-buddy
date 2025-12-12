@@ -1,4 +1,5 @@
 /**
+import { useEffect, useState } from "react";;
  * Bandwidth Indicator
  * Shows current connection quality to users - only visible on slow connections
  */

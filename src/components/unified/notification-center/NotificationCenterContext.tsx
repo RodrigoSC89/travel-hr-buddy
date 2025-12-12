@@ -1,4 +1,5 @@
 /**
+import { useContext } from "react";;
  * Notification Center Context
  * 
  * Provides state management for notifications

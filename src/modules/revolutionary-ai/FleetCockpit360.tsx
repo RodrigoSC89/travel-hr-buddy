@@ -1,4 +1,5 @@
 /**
+import { useEffect, useState } from "react";;
  * REVOLUTIONARY AI - Fleet Cockpit 360°
  * Funcionalidade 2: Visão 360º de cada embarcação com IA contextual
  */

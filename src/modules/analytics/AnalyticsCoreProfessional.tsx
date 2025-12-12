@@ -1,4 +1,5 @@
 /**
+import { useCallback, useEffect, useState } from "react";;
  * Analytics Core Professional - Complete Module
  * Full-featured analytics with real data, AI insights, notifications, and export
  */

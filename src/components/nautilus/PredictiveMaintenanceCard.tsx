@@ -1,4 +1,5 @@
 /**
+import { useEffect, useState } from "react";;
  * Predictive Maintenance Card - AI-powered maintenance predictions
  */
 

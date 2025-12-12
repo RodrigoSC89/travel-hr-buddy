@@ -1,4 +1,5 @@
 /**
+import { useEffect, useState } from "react";;
  * DGNSS Satellite Tracking Dashboard
  * Combines satellite tracking with Windy weather visualization
  */

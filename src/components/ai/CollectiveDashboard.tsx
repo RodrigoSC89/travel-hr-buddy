@@ -1,4 +1,5 @@
 /**
+import { useEffect, useState } from "react";;
  * PATCH 220 - Collective Dashboard
  * Unified dashboard showing decisions, contexts, conflicts, AI suggestions, learning, and performance
  */

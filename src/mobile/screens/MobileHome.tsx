@@ -1,4 +1,5 @@
 /**
+import { useEffect, useState } from "react";;
  * PATCH 187.0 - Mobile Home Screen
  * 
  * Main dashboard for mobile app with quick access to key features

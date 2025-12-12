@@ -1,4 +1,5 @@
 /**
+import { useMemo, useState } from "react";;
  * PATCH 655 - Module LLM Helper Page
  * Generate and manage AI prompts for modules
  */

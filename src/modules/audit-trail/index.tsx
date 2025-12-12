@@ -1,4 +1,5 @@
 /**
+import { useState } from "react";;
  * PATCH: Trilha de Auditoria com IA
  * Sistema inteligente de rastreamento e análise de ações
  */

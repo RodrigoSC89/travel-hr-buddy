@@ -1,4 +1,5 @@
 /**
+import { useState } from "react";;
  * AI Alerts Panel Component
  * Painel de alertas gerados por IA
  */

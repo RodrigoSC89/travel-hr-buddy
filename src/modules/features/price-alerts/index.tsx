@@ -1,3 +1,4 @@
+import { useEffect, useState } from "react";;
 import React, { useState, useEffect } from "react";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Bell, TrendingUp, TrendingDown, DollarSign, Plus } from "lucide-react";

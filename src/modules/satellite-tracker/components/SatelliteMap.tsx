@@ -1,4 +1,5 @@
 /**
+import { useEffect, useRef, useState } from "react";;
  * PATCH 501: Satellite Map Component
  * Displays satellite position on interactive map
  * Optimized with lazy-loaded Mapbox (~350KB bundle savings)

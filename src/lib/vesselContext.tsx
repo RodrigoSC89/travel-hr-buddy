@@ -1,4 +1,5 @@
 /**
+import { useContext, useEffect, useState } from "react";;
  * PATCH 204.0 - Multi-Vessel Context Provider
  * 
  * Provides vessel-scoped data isolation and filtering across the entire application.

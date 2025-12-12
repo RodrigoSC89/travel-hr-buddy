@@ -1,4 +1,5 @@
 /**
+import { useState } from "react";;
  * Modularized Executive Dashboard
  * PATCHES 622-626 - Performance-optimized dashboard with lazy loading
  */

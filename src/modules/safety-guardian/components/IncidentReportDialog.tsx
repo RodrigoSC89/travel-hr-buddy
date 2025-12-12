@@ -1,4 +1,5 @@
 /**
+import { useState } from "react";;
  * Incident Report Dialog Component
  * Formulário completo para reportar ocorrências
  */

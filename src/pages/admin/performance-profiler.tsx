@@ -1,3 +1,4 @@
+import { useEffect, useRef, useState } from "react";;
 
 /**
  * PATCH 617 - Live Performance Profiler

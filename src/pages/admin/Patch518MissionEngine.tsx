@@ -1,4 +1,5 @@
 /**
+import { useState } from "react";;
  * PATCH 518 – Mission Engine Unificado
  * Workflow completo de missão configurável com estados sincronizados
  */

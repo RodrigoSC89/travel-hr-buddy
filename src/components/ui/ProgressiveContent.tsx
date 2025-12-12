@@ -1,4 +1,5 @@
 /**
+import { useCallback, useEffect, useState } from "react";;
  * Progressive Content Loading
  * Loads content progressively based on connection speed
  */

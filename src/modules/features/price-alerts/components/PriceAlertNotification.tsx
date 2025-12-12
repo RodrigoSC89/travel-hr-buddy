@@ -1,3 +1,4 @@
+import { useEffect, useState } from "react";;
 
 /**
  * PATCH 418: Price Alerts Notification Integration

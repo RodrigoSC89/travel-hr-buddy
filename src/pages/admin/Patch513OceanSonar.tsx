@@ -1,7 +1,7 @@
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { CheckCircle2, XCircle, Radio, Activity, Database, Waves } from "lucide-react";
 import { Badge } from "@/components/ui/badge";
-import { useState, useEffect } from "react";
+import { useEffect, useState } from "react";;;
 
 export default function Patch513OceanSonar() {
   const [sonarData, setSonarData] = useState<Array<{ angle: number; distance: number; intensity: number }>>([]);

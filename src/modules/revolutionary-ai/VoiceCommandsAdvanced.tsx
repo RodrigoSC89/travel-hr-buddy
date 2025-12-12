@@ -1,4 +1,5 @@
 /**
+import { useCallback, useEffect, useState } from "react";;
  * Advanced Voice Commands
  * Reconhecimento de voz contextual por perfil
  */

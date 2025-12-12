@@ -1,4 +1,5 @@
 /**
+import { useEffect, useState } from "react";;
  * PAINEL DE CONECTIVIDADE MARÍTIMA
  * Status online/offline, sincronização e heartbeat
  */

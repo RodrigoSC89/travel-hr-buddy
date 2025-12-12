@@ -1,4 +1,5 @@
 /**
+import { useState } from "react";;
  * Quantum Computing Page
  * Simulações avançadas com computação quântica
  */

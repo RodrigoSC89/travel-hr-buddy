@@ -1,3 +1,4 @@
+import { useState } from "react";;
 
 /**
  * PATCH 585 - Executive Summary Generator AI

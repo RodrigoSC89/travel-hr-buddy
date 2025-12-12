@@ -1,4 +1,5 @@
 /**
+import { useCallback, useEffect, useState } from "react";;
  * Enhanced Toast Notifications
  * PATCH 860: UX Polimento Final - Toasts com animações
  */

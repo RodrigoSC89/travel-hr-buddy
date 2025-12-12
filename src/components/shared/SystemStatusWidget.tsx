@@ -1,4 +1,5 @@
 /**
+import { useEffect, useState } from "react";;
  * System Status Widget
  * Shows real-time status of all system modules
  */

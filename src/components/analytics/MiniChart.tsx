@@ -1,4 +1,5 @@
 /**
+import { useMemo } from "react";;
  * Mini Chart Component
  * Compact sparkline-style chart for inline metrics
  */

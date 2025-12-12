@@ -1,4 +1,5 @@
 /**
+import { useEffect, useState } from "react";;
  * UNIFIED Connection-Aware Feedback Components
  * 
  * Componentes visuais para feedback em conexões lentas:

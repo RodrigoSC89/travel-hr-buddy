@@ -1,4 +1,5 @@
 /**
+import { useEffect, useState } from "react";;
  * REVOLUTIONARY AI - Autonomous Agent (AI Ops)
  * Funcionalidade 6 & 10: Gestor Digital Autônomo + Agente Autônomo de Decisão
  */

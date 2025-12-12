@@ -3,7 +3,7 @@
  * Hook React para internacionalização com fallback AI
  */
 
-import { useState, useEffect, useCallback } from "react";
+import { useCallback, useContext, useEffect, useState } from "react";;;
 import { aiTranslator, SupportedLanguage, TranslationResult } from "./translator";
 import { logger } from "@/lib/logger";
 

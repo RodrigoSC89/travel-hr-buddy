@@ -1,4 +1,5 @@
 /**
+import { useState } from "react";;
  * Subsea Operations - Módulo Unificado de Operações Submarinas
  * PATCH UNIFY-2.0 - Fusão dos módulos Subsea/Sonar
  * 

@@ -1,4 +1,5 @@
 /**
+import { useMemo, useState } from "react";;
  * REVOLUTIONARY AI - Supplier Comparator
  * Funcionalidade 14: Comparador de fornecedores com IA
  */

@@ -1,3 +1,4 @@
+import { useEffect, useState } from "react";;
 
 /**
  * PATCH 378: Enhanced Channel Manager with Permissions & Real-time

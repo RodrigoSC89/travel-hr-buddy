@@ -1,4 +1,5 @@
 /**
+import { useState } from "react";;
  * Certificates Panel Component
  * Painel completo de certificados com funcionalidades avançadas
  */

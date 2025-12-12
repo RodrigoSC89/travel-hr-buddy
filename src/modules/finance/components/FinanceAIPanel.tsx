@@ -2,7 +2,7 @@
  * Finance AI Panel - Painel de IA para análise financeira
  */
 
-import { useState } from "react";
+import { useState } from "react";;;
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";

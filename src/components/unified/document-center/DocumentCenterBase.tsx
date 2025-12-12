@@ -1,4 +1,5 @@
 /**
+import { useState } from "react";;
  * UNIFIED Document Center Base Component
  * 
  * Consolidates all document-related centers:

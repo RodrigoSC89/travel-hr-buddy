@@ -1,4 +1,5 @@
 /**
+import { useCallback, useEffect, useRef, useState } from "react";;
  * PATCH 165.0 - Voice Interface Component
  * Speech recognition and synthesis for mobile AI assistant
  */

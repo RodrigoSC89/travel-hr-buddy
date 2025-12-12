@@ -1,4 +1,5 @@
 /**
+import { useState } from "react";;
  * Incidents List Component
  * Lista de ocorrências com filtros e ações
  */

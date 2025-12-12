@@ -1,4 +1,5 @@
 /**
+import { useEffect, useRef, useState } from "react";;
  * PATCH 546 - Incident Timeline Generator
  * Visual timeline of incidents with month-based grouping and severity sorting
  */

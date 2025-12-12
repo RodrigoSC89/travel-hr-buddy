@@ -1,4 +1,5 @@
 /**
+import { useState } from "react";;
  * PATCH 652 - Performance Dashboard
  * Real-time visualization of Core Web Vitals and performance metrics
  */

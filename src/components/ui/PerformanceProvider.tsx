@@ -1,4 +1,5 @@
 /**
+import { useContext, useEffect, useState } from "react";;
  * Performance Provider
  * PATCH 624 - Context provider para funcionalidades de performance
  */

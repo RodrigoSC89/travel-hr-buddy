@@ -1,3 +1,4 @@
+import { useCallback, useEffect, useState } from "react";;
 
 /**
  * MODO EMERGÊNCIA COM IA DE CRISE

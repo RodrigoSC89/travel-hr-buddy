@@ -1,4 +1,5 @@
 /**
+import { useState } from "react";;
  * PATCH 517 – Coordination AI
  * IA de coordenação para orquestração de múltiplos módulos
  */

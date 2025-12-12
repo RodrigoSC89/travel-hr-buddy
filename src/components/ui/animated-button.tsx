@@ -1,4 +1,5 @@
 /**
+import { useState } from "react";;
  * Animated Button Component
  * PATCH 860: UX Polimento Final - Botões com feedback tátil
  */

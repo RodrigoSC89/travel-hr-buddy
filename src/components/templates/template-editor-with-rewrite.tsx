@@ -1,4 +1,5 @@
 // Componente de editor com botão para reescrever seleção com IA
+import { useState } from "react";;
 "use client";
 import React, { useState } from "react";
 import { useEditor, EditorContent } from "@tiptap/react";

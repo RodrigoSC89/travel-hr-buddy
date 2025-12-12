@@ -1,4 +1,5 @@
 /**
+import { useEffect, useState } from "react";;
  * Compliance AI Analysis Panel Component
  * Painel de análise preditiva e insights de IA
  */

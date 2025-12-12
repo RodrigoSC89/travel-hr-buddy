@@ -3,7 +3,7 @@
  * User-friendly loading states for slow connections
  */
 
-import { useEffect, useState } from "react";
+import { useEffect, useState } from "react";;;
 import { cn } from "@/lib/utils";
 import { useSlowNetwork } from "@/components/performance/SlowNetworkOptimizer";
 import { Skeleton } from "./skeleton";

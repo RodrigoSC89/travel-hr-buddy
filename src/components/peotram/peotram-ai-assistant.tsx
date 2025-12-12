@@ -1,4 +1,5 @@
 /**
+import { useEffect, useRef, useState } from "react";;
  * PEOTRAM AI Assistant Component
  * LLM integrada para geração de evidências, análise de conformidade e
  * consultas sobre auditorias PEOTRAM, legislação marítima e melhores práticas.

@@ -1,4 +1,5 @@
 /**
+import { useCallback, useEffect, useState } from "react";;
  * PATCH 501+: Enhanced Satellite Tracker Dashboard
  * Real-time satellite tracking with AI Copilot, DGNSS integration, and demo data
  */

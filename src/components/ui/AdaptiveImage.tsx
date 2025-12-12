@@ -3,7 +3,7 @@
  * Carrega versões menores em conexões lentas
  */
 
-import { useState, useEffect, useRef } from "react";
+import { useEffect, useRef, useState } from "react";;;
 import { cn } from "@/lib/utils";
 import { connectionAdaptive } from "@/lib/performance/connection-adaptive";
 

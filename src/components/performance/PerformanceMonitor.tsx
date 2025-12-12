@@ -1,4 +1,5 @@
 /**
+import { useEffect, useState } from "react";;
  * Performance Monitor Component
  * PATCH 833: Real-time performance metrics display
  */

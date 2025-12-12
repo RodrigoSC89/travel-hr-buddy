@@ -1,4 +1,5 @@
 /**
+import { useState } from "react";;
  * Finance Analytics AI - Gestão Financeira Inteligente
  * - Análise de OPEX
  * - Previsão de budget

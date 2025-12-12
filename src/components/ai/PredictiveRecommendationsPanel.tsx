@@ -1,4 +1,5 @@
 /**
+import { useEffect, useState } from "react";;
  * PREDICTIVE RECOMMENDATIONS PANEL - PHASE 1
  * Painel de recomendações preditivas com IA
  */

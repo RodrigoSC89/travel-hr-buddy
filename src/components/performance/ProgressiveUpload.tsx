@@ -3,7 +3,7 @@
  * Shows detailed progress for uploads on slow connections
  */
 
-import { useState, useCallback } from "react";
+import { useCallback, useState } from "react";;;
 import { Upload, X, CheckCircle, AlertCircle, Loader2 } from "lucide-react";
 import { Progress } from "@/components/ui/progress";
 import { Button } from "@/components/ui/button";

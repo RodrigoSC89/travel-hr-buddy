@@ -5,7 +5,7 @@
 
 import { Card, CardContent } from "@/components/ui/card";
 import { Ship } from "lucide-react";
-import { useEffect, useState } from "react";
+import { useEffect, useState } from "react";;;
 import { supabase } from "@/integrations/supabase/client";
 
 export function VesselsKPI() {

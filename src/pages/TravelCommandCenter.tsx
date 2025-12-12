@@ -1,4 +1,5 @@
 /**
+import { useEffect, useState } from "react";;
  * TRAVEL COMMAND CENTER
  * Módulo unificado de Viagens + Smart Mobility + Reservas
  * Gestão completa de viagens corporativas, mobilidade e reservas

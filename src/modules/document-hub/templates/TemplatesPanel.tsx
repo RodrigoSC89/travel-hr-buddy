@@ -1,4 +1,5 @@
 /**
+import { useEffect, useState } from "react";;
  * PATCH 275 - Document Templates Editor
  * Create and manage document templates with variable support
  */

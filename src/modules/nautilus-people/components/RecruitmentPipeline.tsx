@@ -1,4 +1,5 @@
 /**
+import { useState } from "react";;
  * Recruitment Pipeline - Pipeline de Recrutamento com IA
  * Versão funcional com drag-and-drop e todas as ações
  */

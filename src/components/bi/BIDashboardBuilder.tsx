@@ -1,4 +1,5 @@
 /**
+import { useState } from "react";;
  * BI Dashboard Builder - PHASE 3
  * Dashboards customizáveis com IA para consultas inteligentes
  */

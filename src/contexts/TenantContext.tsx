@@ -1,4 +1,5 @@
 /**
+import { useCallback, useContext, useEffect, useMemo, useState } from "react";;
  * TenantContext - PATCH 853.0 - Definitive React Hook Fix
  * 
  * Uses standard React import pattern.

@@ -1,4 +1,5 @@
 /**
+import { useState } from "react";;
  * Settings Dialog - Modal de configurações do sistema
  */
 

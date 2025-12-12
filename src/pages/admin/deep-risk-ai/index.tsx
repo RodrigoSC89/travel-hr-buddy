@@ -1,4 +1,5 @@
 /**
+import { useEffect, useState } from "react";;
  * PATCH 455 - Deep Risk AI Complete
  * AI-powered risk detection with deep learning
  */

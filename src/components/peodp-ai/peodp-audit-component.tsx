@@ -1,4 +1,5 @@
 /**
+import { useState } from "react";;
  * PEO-DP Audit Component
  * Interface para auditoria PEO-DP Inteligente
  */

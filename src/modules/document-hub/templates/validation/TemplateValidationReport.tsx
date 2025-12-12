@@ -1,3 +1,4 @@
+import { useEffect, useState } from "react";;
 
 /**
  * VALIDAÇÃO COMPLETA - Editor de Templates

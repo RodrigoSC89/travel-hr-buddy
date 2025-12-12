@@ -1,4 +1,5 @@
 /**
+import { useState } from "react";;
  * Incident Details Dialog Component
  * Visualização detalhada de incidentes com análise de IA
  */

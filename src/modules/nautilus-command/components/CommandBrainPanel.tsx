@@ -1,4 +1,5 @@
 /**
+import { useEffect, useRef, useState } from "react";;
  * Command Brain Panel - Painel de Chat com IA otimizado
  */
 

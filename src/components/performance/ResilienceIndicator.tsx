@@ -1,4 +1,5 @@
 /**
+import { useCallback } from "react";;
  * Resilience Indicator Component - PATCH 901
  * Visual indicator for system resilience status
  * Uses semantic design tokens

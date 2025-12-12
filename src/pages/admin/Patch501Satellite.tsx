@@ -2,7 +2,7 @@ import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Satellite, CheckCircle2, XCircle, Radio, Map, Database, TrendingUp } from "lucide-react";
-import { useState, useEffect } from "react";
+import { useEffect, useState } from "react";;;
 import { SatelliteMap } from "@/modules/satellite-tracker/components/SatelliteMap";
 import { OrbitVisualization } from "@/modules/satellite-tracker/components/OrbitVisualization";
 import { CoverageMap } from "@/modules/satellite-tracker/components/CoverageMap";

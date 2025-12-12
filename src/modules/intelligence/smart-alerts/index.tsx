@@ -1,4 +1,5 @@
 /**
+import { useEffect, useState } from "react";;
  * PATCH 114.0 - Smart Alerts with AI Predictive Analysis
  * Smart Alerts - Intelligent operational alerts with anomaly detection
  */

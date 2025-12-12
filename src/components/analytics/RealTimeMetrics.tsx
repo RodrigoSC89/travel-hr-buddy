@@ -1,4 +1,5 @@
 /**
+import { useEffect, useState } from "react";;
  * Real-Time Metrics Dashboard - PATCH 837
  * Live analytics and performance metrics
  */

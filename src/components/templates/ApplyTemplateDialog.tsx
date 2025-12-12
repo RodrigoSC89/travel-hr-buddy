@@ -1,4 +1,5 @@
 /**
+import { useEffect, useMemo, useState } from "react";;
  * PATCH 409: Apply Template Dialog Component
  * Dialog for applying templates to documents with real-time preview
  */

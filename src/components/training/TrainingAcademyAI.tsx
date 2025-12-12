@@ -1,4 +1,5 @@
 /**
+import { useState } from "react";;
  * Training Academy AI - Diferencial vs OLP/Seagull/Videotel
  * - Trilhas adaptativas personalizadas
  * - Tutor IA 24/7

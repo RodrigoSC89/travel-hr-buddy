@@ -1,4 +1,5 @@
 /**
+import { useState } from "react";;
  * FASE 3.3 - Error Fallback (Genérico)
  * Componente de fallback UI elegante para erros genéricos
  */

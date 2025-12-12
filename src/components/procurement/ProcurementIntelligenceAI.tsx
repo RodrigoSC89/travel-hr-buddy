@@ -1,4 +1,5 @@
 /**
+import { useState } from "react";;
  * Procurement Intelligence AI - Diferencial vs ShipServ
  * - Previsão de necessidades
  * - Análise de TCO

@@ -1,4 +1,5 @@
 /**
+import { useState } from "react";;
  * Adaptive Interface
  * Interface modular adaptativa por perfil de uso
  */

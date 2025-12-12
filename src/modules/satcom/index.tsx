@@ -1,4 +1,5 @@
 /**
+import { useEffect, useState } from "react";;
  * SATCOM Dashboard - Main Component
  * Monitors satellite communication connectivity (Iridium, Starlink, etc.)
  * PATCH 171.0 - Enhanced with redundancy engine, fallback management, and alert handling

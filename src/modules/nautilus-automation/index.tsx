@@ -1,4 +1,5 @@
 /**
+import { useState } from "react";;
  * Nautilus Automation - Módulo Unificado de Automação
  * PATCH UNIFY-2.0 - Fusão dos módulos de automação
  * 

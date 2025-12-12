@@ -1,4 +1,5 @@
 /**
+import { useState } from "react";;
  * SGSO Action Plan Generator Component
  * AI-powered action plan generation for classified incidents
  * Features: Form input, GPT-4 integration, mock mode fallback, visual results

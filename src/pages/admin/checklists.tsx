@@ -1,4 +1,5 @@
 /**
+import { useEffect, useState } from "react";;
  * Smart Checklists Module - Complete Professional Version
  * PATCH 1101: Full functionality with AI generation, analytics dashboard, and all buttons working
  */

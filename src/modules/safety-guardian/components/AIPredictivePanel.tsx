@@ -1,4 +1,5 @@
 /**
+import { useState } from "react";;
  * AI Predictive Panel - Análises Preditivas e Insights de IA
  */
 
