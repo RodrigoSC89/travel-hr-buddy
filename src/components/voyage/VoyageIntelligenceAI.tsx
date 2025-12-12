@@ -440,6 +440,6 @@ export const VoyageIntelligenceAI = memo(function() {
       </Tabs>
     </div>
   );
-}
+});
 
 export default VoyageIntelligenceAI;
