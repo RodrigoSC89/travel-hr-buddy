@@ -57,7 +57,7 @@ export default function HealthCheckPage() {
         {status.toUpperCase()}
       </Badge>
     );
-  });
+  };
 
   if (!health) {
     return (
